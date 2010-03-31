@@ -1,0 +1,9 @@
+[Ilwis]
+Description=Unknown Coordinate System
+Time=814571275
+Type=CoordSystem
+
+[CoordSystem]
+Width=27
+Decimals=2
+Type=BoundsOnly

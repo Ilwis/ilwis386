@@ -1,0 +1,9 @@
+[Ilwis]
+Description=Geographic Coordinates in degrees
+Time=814571275
+Type=CoordSystem
+
+[CoordSystem]
+Type=LatLon
+CoordBounds=-180 -90 180 90
+Width=-1

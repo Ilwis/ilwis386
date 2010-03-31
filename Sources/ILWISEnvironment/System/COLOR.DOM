@@ -1,0 +1,6 @@
+[Ilwis]
+Description=Color Domain
+Type=Domain
+
+[Domain]
+Type=DomainColor

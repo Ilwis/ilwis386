@@ -1,0 +1,21 @@
+[Ilwis]
+Description=Shadow North Filter
+Time=1118234270
+Version=3.1
+Class=Filter
+DomainChangeable=Yes
+ValueRangeChangeable=Yes
+Type=Function
+[Function]
+Type=Filter
+[Filter]
+FilterRows=3
+FilterColumns=3
+Type=FilterLinear
+[FilterLinear]
+UseRealMatrix=No
+Matrix_Size=3 3
+Matrix_Row0=-2 -3 -2             
+Matrix_Row1=-1 1 -1             
+Matrix_Row2=2 4 2             
+Gain=1.000000

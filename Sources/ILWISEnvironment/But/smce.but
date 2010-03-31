@@ -1,0 +1,38 @@
+3628 FileOpen
+3629 FileSave
+
+3623 SMCEModePD
+3624 SMCEModeMCE
+
+3611 SMCESetAlternatives
+3619 SMCEInsertGroup
+3620 SMCEInsertFactor
+3621 SMCEInsertConstraint
+3644 SMCEInsertScoreFactor
+3645 SMCEInsertScoreConstraint
+3609 Properties
+3608 Delete
+
+3646 FUNCTION
+3647 SMCECancelAggregation
+
+3622 SMCEStandardize
+3652 SMCEShowStandardized
+
+3610 SMCEWeigh
+
+3605 SMCEGenSelectedMap
+3606 SMCEGenAllMaps
+
+3641 MAPVIEW
+
+3626 DspMap16Ico
+3635 HIST
+3636 AggregateValueMulti
+3637 SMCESlice
+3638 SMCEShowSliced
+3639 SMCEHistogramSliced
+3640 SMCEAggregateSliced
+
+3648 SMCEGenContourMaps
+3649 SMCEShowContourMaps

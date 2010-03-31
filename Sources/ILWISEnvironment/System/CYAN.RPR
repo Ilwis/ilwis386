@@ -1,0 +1,25 @@
+[Ilwis]
+Description=Gradually from black to cyan
+Time=845052726
+DataReadOnly=no
+PropertiesReadOnly=no
+Type=Representation
+
+[Representation]
+Domain=value.dom
+BoundaryColor=0
+BoundaryWidth=1
+Type=RepresentationGradual
+DomainInfo=value.dom;Real;value;0;-1000000000000.0000:1000000000000.0000:0.0001:offset=0;
+
+[RepresentationGradual]
+Limits=2
+StretchSteps=16
+Limit0=0.000000
+Color0=0
+Step1=Stretch
+Limit1=1.000000
+Color1=ffff00
+
+[AdditionalInfo]
+Lines=0

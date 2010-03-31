@@ -1,0 +1,6 @@
+[Ilwis]
+Description=CoordBuf Domain
+Type=Domain
+
+[Domain]
+Type=DomainCoordBuf

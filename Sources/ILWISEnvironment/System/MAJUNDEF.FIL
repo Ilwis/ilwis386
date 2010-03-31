@@ -1,0 +1,14 @@
+[Ilwis]
+Type=Function
+Description=Majority Filter (undefined values only)
+
+[Function]
+Type=Filter
+
+[Filter]
+Type=FilterMajority
+FilterRows=3
+FilterColumns=3
+
+[FilterMajority]
+Type=Undef

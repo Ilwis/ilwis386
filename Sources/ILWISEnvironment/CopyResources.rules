@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VisualStudioToolFile
+	Name="Copy Resources"
+	Version="8.00"
+	>
+	<Rules>
+		<CustomBuildRule
+			Name="dummybuild"
+			DisplayName="dummy build"
+			CommandLine="echo &quot;dummy&quot; &gt; dummy.txt"
+			Outputs="$(SolutionDir)Projects\ILWISEnviroment\dummy.txt"
+			FileExtensions="*.chm"
+			ExecutionDescription="processing"
+			>
+			<Properties>
+			</Properties>
+		</CustomBuildRule>
+	</Rules>
+</VisualStudioToolFile>

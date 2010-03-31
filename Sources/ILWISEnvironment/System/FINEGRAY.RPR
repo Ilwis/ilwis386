@@ -1,0 +1,24 @@
+[Ilwis]
+Type=Representation
+Description=Gradually from black to white, in fine steps
+Time=823650524
+DataReadOnly=no
+PropertiesReadOnly=no
+
+[Representation]
+Domain=value.dom
+Type=RepresentationGradual
+BoundaryColor=0
+BoundaryWidth=1
+
+[RepresentationGradual]
+Limits=3
+StretchSteps=30
+Limit0=0
+Color0=0
+Step1=Stretch
+Limit1=0.5
+Color1=808080
+Step2=Stretch
+Limit2=1.0
+Color2=ffffff

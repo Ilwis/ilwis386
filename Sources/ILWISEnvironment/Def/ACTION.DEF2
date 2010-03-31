@@ -1,0 +1,44 @@
+; ILWIS 3.3 Action Definition
+; (C) Copyright Geo Software Development ITC 2005
+;
+; This file defines:
+; 1. the menu structure of the Operations menu in the Main window as:
+;    1a. Menu, 1b. Submenu, 1c. Menucommand,
+;    Menu = "-" means not in Operations menu,
+;    Submenu or Menucommand = "" means no sub-menu or not in menu,
+; 2. the Operations that appear in the Operation-list,
+; 3. the icon of each Operation in the Operation-list;
+;    icons used are internal 16x16 icons,
+; 4. the extensions determine on which context-sensitive menus a menu command will appear, 
+; 5. the ILWIS command that is generated on the command line when an operation
+;    is double-clicked in the Operation-list, or a menu command is selected, and
+; 6. the popup help topic number
+; 7. the descriptions that appear on the status line when a menu command is highlighted, or
+;    when floating with the mouse over an operation in the Operation-list.
+; 8. the descriptions as they appear on the status line when a menu command of the context-
+;    sensitive menu is highlighted. %S is replaced by the base filename.
+;
+;Operations menu	Submenu MenuCommand		Operation-list	Icon	Active on	Command  HelpTopic  Description
+;							
+""		""	"Edit Map"	"Edit"	DspMap16Ico	""	edit	7001 "Edit a map in a map window"
+;
+""	""	""	""		DspMap16Ico	""	
+"Visuali&zation"	""	"&Show Map"		"Show"		DspMap16Ico	""	open	     7010   "Show a map in a new map window"
+"Visuali&zation"	""	"Show &Table"		""		""		""	tbl	     7011   "Show a table in a new table window"
+""	""	""	""		DspMap16Ico	""	
+"Visuali&zation" "Show Map &List" "as &Color Composite"	"Color Composite Interactive"	DspMap16Ico	".mpl"	colorcomp    7014   "Show a map list as a color composite in a new window"
+"Visuali&zation" "Show Map &List" "as &Slide Show"	"Slide Show"	DspMap16Ico	".mpl"	slideshow    7013   "Show a map list as a slide show in a new window"
+"Visuali&zation"	""	"&Display 3D"		"Display 3D"	DspMap16Ico	""	display3d    7002   "Edit a 3D georeference to display a map in three dimensions"
+"Visuali&zation"	""	"&Apply 3D"		"Apply 3D"	ExeMap16Ico	""	apply3d      4102   "Apply a 3D georeference on a map"
+""	""	""	""		".stp"	""	
+"Visuali&zation"	"Show Stereo Pair"	"as &Anaglyph"		"Anaglyph"	".stp"	".stp"	anaglyph   7017  "Show a Stereo Pair as anaglyph in a Map Window"
+"Visuali&zation"	"Show Stereo Pair"	"with &Stereoscope"		"Stereoscope"	".stp"	".stp"	stereoscope  7016  "Show a Stereo Pair in a Stereoscope Window with two views"
+;							
+;							
+""	"Import/Export"	"" "Import Map"	Exe16Ico	""	 import      7006   "Import a map from another software format into ILWIS"
+""	"Import/Export"	"" "Import Table"	".tbt"	""	 "import -tablewizard"     7006   "Import a table from another software format into ILWIS"
+""	"Import/Export"	"" "Import Via GDAL"	".mpr"	""	 "import -gdal" 7006   "Use GDAL to import a file from another software format into ILWIS"
+""	"Import/Export"	"" "Import General Raster"	".mpr"	""	 "import -generalraster"     7006   "Import a general raster file from another software format into ILWIS"
+""	"Import/Export"	"Export"	"Export"	Exe16Ico	".mpr.mpa.mps.mpp.tbt.mpl.his.hss.hsa.hsp"	 export      7008   "Export an ILWIS object to another software format"
+;
+""  ""	"&Run"	""  ".isl"  ".isl"   run   -1   "Run the script"

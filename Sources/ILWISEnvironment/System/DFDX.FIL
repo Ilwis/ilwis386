@@ -1,0 +1,20 @@
+[Ilwis]
+Type=Function
+Description=d ... / dx
+
+[Function]
+Type=Filter
+DefaultDomain=value.dom
+DefaultValueRange=-100:100:0.01
+
+[Filter]
+Type=FilterLinear
+FilterRows=1
+FilterColumns=5
+
+[FilterLinear]
+Matrix_Size=1 5
+Matrix_Row0= 1 -8 0 8 -1
+Gain=0.08333333
+DomainChangeable=yes
+ValueRangeChangeable=yes

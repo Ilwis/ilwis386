@@ -1,0 +1,38 @@
+// general ILWISDLL.RC file
+#include "../AdditionalHeaders/Shared/version.h"
+#include "afxres.h"
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION VERSION_FILEVERSIONNR
+ PRODUCTVERSION VERSION_PRODUCTVERSIONNR
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x3L
+#else
+ FILEFLAGS 0x2L
+#endif
+ FILEOS 0x40004L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "000004b0"
+        BEGIN
+            VALUE "Comments", "DLL needed for ILWIS\0"
+            VALUE "CompanyName", "ITC\0"
+            VALUE "FileDescription", "Ilwis30 DLL\0"
+            VALUE "FileVersion", VERSION_FILEVERSION
+            VALUE "LegalCopyright", "Copyright © 2001 ITC\0"
+            VALUE "PrivateBuild", VERSION_PRIVATEBUILD
+            VALUE "ProductName", "ITC Ilwis30\0"
+            VALUE "ProductVersion", VERSION_PRODUCTVERSION
+            VALUE "SpecialBuild", VERSION_SPECIALBUILD
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0, 1200
+    END
+END
+

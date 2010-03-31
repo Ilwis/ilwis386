@@ -1,0 +1,21 @@
+[Ilwis]
+Type=Function
+Description=Edge Enhancement Filter  (original minus laplace)
+
+[Function]
+Type=Filter
+
+[Filter]
+Type=FilterLinear
+FilterRows=3
+FilterColumns=3
+
+[FilterLinear]
+Matrix_Size=3 3
+Matrix_Row0= -1 -1 -1
+Matrix_Row1= -1 16 -1
+Matrix_Row2= -1 -1 -1
+Gain=0.125
+DomainChangeable=no
+ValueRangeChangeable=no
+

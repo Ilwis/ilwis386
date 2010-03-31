@@ -1,0 +1,18 @@
+[Ilwis]
+Description=Radar images (0..32767)
+Type=Domain
+Time=0
+
+[Domain]
+Type=DomainValue
+Width=5
+Representation=gray.rpr
+
+[DomainValue]
+Type=DomainValueInt
+
+[DomainValueInt]
+Min=0
+Max=32767
+Fixed Range=true
+

@@ -1,0 +1,22 @@
+[Ilwis]
+Description=Count Domain
+Type=Domain
+Time=847299924
+DataReadOnly=yes
+PropertiesReadOnly=yes
+
+[Domain]
+Type=DomainValue
+Width=10
+Representation=gray.rpr
+
+[DomainValue]
+Type=DomainValueInt
+
+[DomainValueInt]
+Min=0
+Max=999999999
+Fixed Range=false
+
+[AdditionalInfo]
+Lines=0

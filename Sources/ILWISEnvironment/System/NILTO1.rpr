@@ -1,0 +1,25 @@
+[Ilwis]
+Description=Gradually from red to yellow to green
+Time=1025691322
+Version=3.1
+Class=Representation Value
+Type=Representation
+
+[Representation]
+Domain=NILTO1.dom
+DomainInfo=NILTO1.dom;Byte;value;0;0.00:1.00:0.01:offset=-1;
+BoundaryColor=0
+BoundaryWidth=1
+Type=RepresentationValue
+
+[RepresentationGradual]
+Limits=3
+StretchSteps=10
+Limit0=0.000000
+Color0=ff
+Step1=Stretch
+Limit1=0.500000
+Color1=ffff
+Step2=Stretch
+Limit2=1.000000
+Color2=38d830

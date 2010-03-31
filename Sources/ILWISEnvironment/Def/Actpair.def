@@ -1,0 +1,311 @@
+; ILWIS 2.2 Action Pair Definition
+; (C) Copyright ILWIS System Development ITC 1998
+;
+; This file defines:
+; which objects can be dragged from the Catalog to an operation in the Operation-list,
+; and which objects can be dragged in the Catalog to another object in the Catalog. 
+, It shows the ILWIS command that is generated on the command line when dragging, and
+; the description that appears on the status line.
+;
+; ""    	extension	command 	Double-click action
+; operation	extension	command 	Description = Drag object to operation
+; extension	extension 	command 	Description = Drag object to object
+;
+; Double-click actions
+;			
+""	".mpr"	open	
+""	".mpa"	open	
+""	".mps"	open	
+""	".mpp"	open	
+""	".mpv"	open	
+""	".tbt"	open	
+""	".ta2"	open
+""	".mpl"	open
+""	".dom"	open	
+""	".rpr"	open	
+""	".grf"	open	
+""	".csy"	open	
+""	".his"	open	
+""	".hsa"	open
+""	".hss"	open
+""	".hsp"	open
+""	".sms"	open	
+""	".mat"	open	
+""	".fil"	open	
+""	".fun"	open	
+""	".isl"	open
+""	".atx"	open
+""  ".ioc"	open
+""  ".ilo"	open
+""  ".grh"	open
+""	".stp"  stereoscope
+""  ".smc"	open
+;			
+Visualization
+;			
+open	".mpr"	open	"Show raster map %S in a new map window"
+open	".mpa"	open	"Show polygon map %S in a new map window"
+open	".mps"	open	"Show segment map %S in a new map window"
+open	".mpp"	open	"Show point map %S in a new map window"
+open	".mpv"	open	"Show map view %S in a new map window"
+open	".tbt"	open	"Show table %S in a new table window"
+open	".mpl"	open	"Show map list %S"
+open	".dom"	open	"Show domain %S"
+open	".rpr"	open	"Show representation %S"
+open	".grf"	open	"Show georeference %S"
+open	".csy"	open	"Show coordinate system %S"
+open	".his"	open	"Show the histogram %S" 
+open	".sms"	open	"Open sample set %S"
+open	".mat"	open	"Show matrix %S"
+open	".fil"	open	"Show user-defined-filter %S"
+open	".fun"	open	"Show user-defined function %S"
+open	".isl"	open	"Show ILWIS script %S"
+open	".ioc"	open	"Show Collection %S"
+open	".ta2"	open	"Show 2-dimensional table %S in a new table window"
+open	".atx"	open	"Show annotation text %S in a new table window"
+stereoscope ".stp"  stereoscope "Show stereopair %S in a stereoscope window"
+;
+edit	".mpr"	edit	"Edit raster map %S in a new window"
+edit	".mpa"	edit	"Edit polygon map %S in a new window"
+edit	".mps"	edit	"Edit segment map %S in a new window"
+edit	".mpp"	edit	"Edit point map %S in a new window"
+edit	".mpv"	edit	"Show/Edit map view %S in a new map window"
+edit	".tbt"	edit	"Edit table %S in a new table window"
+edit	".mpl"	edit	"Edit map list %S"
+edit	".dom"	edit	"Edit domain %S"
+edit	".rpr"	edit	"Edit representation %S"
+edit	".grf"	edit	"Edit georeference %S"
+edit	".csy"	edit	"Edit coordinate system %S"
+edit	".sms"	edit	"Edit sample set %S"
+edit	".fil"	edit	"Edit user-defined filter %S"
+edit	".fun"	edit	"Edit user-defined function %S"
+edit	".isl"	edit	"Edit ILWIS script %S"
+tbl	".tbt"	open	"Show/edit table %S in a new window"
+edit	".ta2"	edit	"Show/edit 2-dimensional table %S in a new table window"
+edit	".atx"	edit	"Show annotation text %S in a new table window"
+;
+; PixelInfo
+;
+pixelinfo ".mpr" pixelinfo "Open raster map %S in a new PixelInfo window"
+pixelinfo ".mpa" pixelinfo "Open polygon map %S in a new PixelInfo window"
+pixelinfo ".mps" pixelinfo "Open segment map %S in a new PixelInfo window"
+pixelinfo ".mpp" pixelinfo "Open point map %S in a new PixelInfo window"
+pixelinfo ".mpl" pixelinfo "Open maplist %S in a new PixelInfo window"
+pixelinfo ".csy" pixelinfo "Open coordinate system %S in a new PixelInfo window"
+;
+; Creating new data
+;
+"create map"  ".dom"  "create map"   ""
+"create map"  ".grf"  "create map"   ""
+"create seg"  ".dom"  "create seg"   ""
+"create seg"  ".csy"  "create seg"   ""
+"create pol"  ".dom"  "create pol"   ""
+"create pol"  ".csy"  "create pol"   ""
+"create pnt"  ".dom"  "create pnt"   ""
+"create pnt"  ".csy"  "create pnt"   ""
+"create tbl"  ".dom"  "create tbl"   ""
+"create tb2"  ".dom"  "create tb2"   ""
+"create rpr"  ".dom"  "create rpr"   ""
+"create grf"  ".csy"  "create grf"   ""
+"create sms"  ".mpl"  "create sms"   ""
+"create sms"  ".dom"  "create sms"   ""
+;			
+colorcomp	".mpl"	colorcomp	"Show a color composite from map list %S"
+slideshow 	".mpl"	slideshow	"Show a slide show from map list %S"
+apply3d ".mpr" apply3d "Perform the Apply 3D operation on raster map %S"
+;			
+; Raster Operations
+;			
+attribras	".mpr"	attribras	"Create an attribute map from raster map %S"
+;".mpr" 	".mpr"	cross   	"Cross raster maps %1 and %2"
+cross   	".mpr"	cross   	"Cross raster map %S with another raster map"
+aggregate	".mpr"	aggregate	"Aggregate"
+aggregate	".mpl"	aggregate	"Aggregate"
+distance	".mpr"	distance	"Perform a distance calculation on raster map %S: a distance map is calculated"
+areanumb	".mpr"	areanumb	"Perform an area numbering on raster map %S: distinct codes are assigned"
+subras		".mpr"	subras		"Copy part of raster map %S into a new sub map"
+subras		".mpl"	subras		"Copy part of map list %S into a new sub map list"
+glueras   ".mpr"  glueras   "Glue raster map %S with other raster maps together"
+mirror  	".mpr"	mirror  	"Mirror or rotate raster map %S"
+mirror  	".mpl"	mirror  	"Mirror or rotate map list %S"
+smce	".smc"	open	"Open criteria tree %S in the criteria tree editor"
+fillsinks  	".mpr"	fillsinks  	"Calculate a depression-free DEM %S"
+flowdirection  	".mpr"	flowdirection  	"Calculate a flow direction map from a Digital Elevation Model (DEM) %S"
+flowaccumulation	".mpr"	flowaccumulation  	"Calculate a flow accumulation map from a flow direction map %S"
+demoptimization	".mpr"	demoptimization  	"Modify the elevation of DEM with drainage features %S"
+topologicalOptimization	".mpr"	TopologicalOptimization  	"Add draigan streams over undefined area to ensure continuous topology %S"
+drainagenetworkextraction  	".mpr"	drainagenetworkextraction  	"Calculate a the basic drainage network raster based on the stream threshold method %S"
+drainagenetworkordering  	".mpr"	drainagenetworkordering  	"Define fully the drainage network, the drainage links are ordered according to Strahler and Shreve system %S"
+overlandflowlength ".mpr"	overlandflowlength  	"Calculate overlanf flow length %S"
+catchmentextraction  	".mpr"	catchmentextraction  	"Delineate fully the sub catchments based on the drainage network %S"
+catchmentmerge  	".mpr"	catchmentmerge  	"Merge Sub-catchments"
+hortonplots  	".mpr"	hortonplots  	"Compute parameters for Horton plots"
+;			
+; Image Processing
+;			
+filter  	".mpr"	filter  	"Filter raster map %S"
+filter  	".fil"	filter  	"Filter a raster map with filter %S"
+filter  	".mpl"	filter  	"Filter map list %S"
+".mpr"  	".fil"	filter  	"Filter raster map %1 with filter %2"
+stretch  	".mpr"	stretch  	"Stretch raster map %S"
+stretch  	".mpl"	stretch  	"Stretch map list %S"
+slicing 	".mpr"	slicing  	"Slice/Classify raster map %S according to a domain Group"
+colorsep	".mpr"	colorsep	"Extract one band from a color or picture map %S"
+mapcolorcomp	".mpr"	mapcolorcomp	"Create a color composite: raster map %S is the first input band"
+cluster 	".mpr"	cluster 	"Perform automatic classification from multiple maps to a number of clusters"
+sample  	".sms"	sample  	"Continue selecting training pixels in sample set %S"
+classify	".sms"	classify	"Perform an image classification according to training pixels in sample set %S"
+classify	".clf"	classify	"Classify a map list according to a sample set and using classifier %S"
+".sms"  	".clf"	classify	"Classify a map list according to sample set %1 and using classifier %2"
+resample	".mpr"	resample	"Resample raster map %S to another georeference"
+resample	".mpl"	resample	"Resample map list %S to another georeference"
+resample	".grf"	resample	"Resample a raster map to georeference %S"
+".mpr"  	".grf"	resample	"Resample raster map %1 to georeference %2"
+".mpl"  	".grf"	resample	"Resample map list %1 to georeference %2"
+;			
+; Statistics			
+;			
+histogram	".mpr"	histogram	"Calculate the histogram of raster map %S"
+histogram	".mpa"	histogram	"Calculate the histogram of polygon map %S"
+histogram	".mps"	histogram	"Calculate the histogram of segment map %S"
+histogram	".mpp"	histogram	"Calculate the histogram of point map %S"
+autocorr	".mpr"	autocorr	"Calculate the autocorrelation and create a semivariogram for raster map %S"
+princcmp	".mpl"	princcmp	"Perform a principle components analysis on map list %S"
+factanal	".mpl"	factanal	"Perform a factor analysis on map list %S"
+matvarcov	".mpl"	matvarcov	"Calculate the variance-covariance matrix of map list %S"
+matcorr 	".mpl"	matcorr 	"Calculate the correlation matrix of map list %S"
+maplistgraph 	".mpl"	maplistgraph 	"Show a z-graph of map list %S"
+;maplistspectra 	".mpl"	maplistspectra 	"Show spectra of pixels from map list %S"
+mapliststatistics 	".mpl"	mapliststatistics 	"Calculate a map with statistics from map list %S"
+histnbpol	".mpa"	histnbpol	"Calculate the histogram of neighbour polygons of polygon map %S"
+histsegdir	".mps"	histsegdir	"Calculate the total length of segments in segment map %S per direction"
+spatcorr	".mpp"	spatcorr	"Calculate the spatial correlation between points in point map %S"
+pattanal	".mpp"	pattanal	"Perform a pattern analysis on points in point map %S"
+;			
+; Interpolation
+;			
+densras 	".mpr"	densras 	"Reduce the pixel size of raster map %S by an interpolation"
+densras 	".mpl"	densras 	"Reduce the pixel size of map list %S by an interpolation"
+krigingras  ".mpr" krigingras  "Perform Ordinary Kriging on a raster map"
+interpolseg	".mps"	interpolseg	"Perform an interpolation on contour lines in segment map %S and return a raster map"
+interpolseg	".grf"	interpolseg	"Perform an interpolation on a contour lines segment map using georeference %S"
+nearestpnt	".mpp"	nearestpnt	"Assign to each output pixel the code of the nearest point in point map %S; Create a Thiessen map"
+trendsurface	".mpp"	trendsurface	"Perform an interpolation with trend surface on point values in point map %S and return a raster map"
+movaverage	".mpp"	movaverage	"Perform an interpolation with moving average on point values in point map %S and return a raster map"
+movsurface	".mpp"	movsurface	"Perform an interpolation with moving surface on point values in point map %S and return a raster map"
+kriging 	".mpp"	kriging 	"Perform an interpolation with Kriging on point values in point map %S and return a raster map"
+anisotrkriging 	".mpp"	anisotrkriging 	"Perform an interpolation with anisotropic Kriging on point values in point map %S and return a raster map"
+univkriging 	".mpp"	univkriging 	"Perform an interpolation with universal Kriging on point values in point map %S and return a raster map"
+cokriging 	".mpp"	cokriging 	"Perform an interpolation with cokriging on point values in point map %S and return a raster map"
+nearestpnt	".grf"	nearestpnt	"Assign to each output pixel the code of the nearest point in a point map; Create a Thiessen map, using georeference %S"
+trendsurface	".grf"	trendsurface	"Perform an interpolation with trend surface on point values in a point map using georeference %S"
+movaverage	".grf"	movaverage	"Perform an interpolation with moving average on point values in a point map using georeference %S"
+movsurface	".grf"	movsurface	"Perform an interpolation with moving surface on point values in a point map using georeference %S"
+kriging 	".grf"	kriging 	"Perform an interpolation with Kriging on point values in a point map using georeference %S"
+anisotrkriging 	".grf"	anisotrkriging 	"Perform an interpolation with anisotropic Kriging on point values in a point map using georeference %S"
+univkriging 	".grf"	univkriging 	"Perform an interpolation with universal Kriging on point values in a point map using georeference %S"
+cokriging 	".grf"	cokriging 	"Perform an interpolation with cokriging on point values in a point map using georeference %S"
+;			
+; Vector Operations
+;
+uniqueid	".mpp"	uniqueid	""
+uniqueid	".mps"	uniqueid	""
+uniqueid	".mpa"	uniqueid	""
+;
+attribpol	".mpa"	attribpol	"Create an attribute polygon map from polygon map %S"
+maskpol 	".mpa"	maskpol 	"Selectively copy polygons from polygon map %S into a new polygon map"
+labelpol	".mpa"	labelpol	"Recode polygons in polygon map %S according to label points"
+labelpol	".mpp"	labelpol	"Recode polygons in a polygon map according to label points in point map %S"
+;".mpa" 	".mpp"	labelpol	"Recode polygons in polygon map %1 according to label points in point map %2"
+transfpol	".mpa"	transfpol	"Transform polygons in map %S to a new coordinate system"
+transfpol	".csy"	transfpol	"Transform polygons in a polygon map to coordinate system %S"
+".mpa"		".csy"	transfpol	"Transform polygons in polygon map %1 to coordinate system %2"
+;
+attribseg	".mps"	attribseg	"Create an attribute segment map from segment map %S"
+maskseg 	".mps"	maskseg 	"Selectively copy segments from segment map %S into a new segment map"
+labelseg	".mps"	labelseg	"Recode segments in segment map %S according to label points"
+labelseg	".mpp"	labelseg	"Recode segments in a segment map according to label points in point map %S"
+;".mps" 	".mpp"	labelseg	"Recode segments in map %1 according to label points in point map %2"
+subseg  	".mps"	subseg  	"Copy part of segment map %S into a new sub map"
+glueseg 	".mps"	glueseg 	"Glue segment map %S and with other segment maps to one map"
+densseg 	".mps"	densseg 	""
+transfseg	".mps"	transfseg	"Transform segments in map %S to a new coordinate system"
+transfseg	".csy"	transfseg	"Transform segments in a segment map to coordinate system %S"
+".mps"  	".csy"	transfseg	"Transform segments in map %1 to coordinate system %2"
+tunnelseg	".mps"	tunnelseg	"Tunnel segments in segment map %S"
+cleanseg	".mps"	cleanseg	"Clean segments in segment map %S: remove double segments/insert nodes"
+;
+attribpnt	".mpp"	attribpnt	"Create an attribute point map from point map %S"
+maskpnt 	".mpp"	maskpnt 	"Selectively copy points from point map %S into a new point map"
+subpnt  	".mpp"	subpnt  	"Copy part of point map %S into a new sub map"
+gluepnt 	".mpp"	gluepnt 	""
+transfpnt	".mpp"	transfpnt	"Transform points in point map %S to a new coordinate system"
+transfpnt	".csy"	transfpnt	"Transform points in a point map to coordinate system %S"
+".mpp"  	".csy"	transfpnt	"Transform points in point map %1 to coordinate system %2"
+transform	".csy"	transform	"Transform coordinates from coordinate system %S to another"
+finddatumparms  ".mpp" finddatumparms "Find, and optionally save, datum parameters between two coordinate systems"
+transformheight ".csy"	transform	"Transform coordinates and heights from coordinate system %S to coordinate system, both with datum"
+transformtogeocentric ".csy"	transform	"Transform coordinates and heights from coordinate system %S to geocentric x,y,z co-ordinates"
+transformfromgeocentric ".csy"	transform	"Transform coordinates and heights to coordinate system %S from geocentric x,y,z co-ordinates"
+transformviageocentric ".csy"	transform	"Transform coordinates and heights from coordinate system %S via geocentric x,y,z co-ordinates"
+;			
+; Rasterize
+;			
+polras  	".mpa"	polras  	"Rasterize polygon map %S"
+polras  	".grf"	polras  	"Rasterize a polygon map to georeference %S"
+".mpa"  	".grf"	polras  	"Rasterize polygon map %1 to georeference %2"
+segras  	".mps"	segras  	"Rasterize segment map %S"
+segras  	".grf"	segras  	"Rasterize a segment map to georeference %S"
+".mps"  	".grf"	segras  	"Rasterize segment map %1 to georeference %2"
+segdensity	".mps"	segdensity	"Calculate the density of segment map %S per pixel"
+segdensity	".grf"	segdensity	"Calculate the density of segments per pixel using georeference %S"
+pntras  	".mpp"	pntras  	"Rasterize point map %S"
+pntras  	".grf"	pntras  	"Rasterize a point map to georeference %S"
+".mpp"  	".grf"	pntras  	"Rasterize point map %1 to georeference %2"
+pntdensity	".mpp"	pntdensity	"Calculate the density of points in point map %S per pixel"
+pntdensity	".grf"	pntdensity	"Calculate the density of points per pixel using georeference %S"
+;			
+; Vectorize
+;			
+raspol		".mpr"	raspol		"Vectorize raster map %S to a polygon map"
+rasseg		".mpr"	rasseg		"Vectorize raster map %S to a segment map"
+raspnt  	".mpr"	raspnt  	"Extract a point from each pixel in raster map %S"
+polseg		".mpa"	polseg		"Extract boundaries from polygon map %S"
+polpnt  	".mpa"	polpnt  	"Extract a point from each polygon in polygon map %S"
+segpol  	".mps"	segpol  	"Polygonize segment map %S"
+segpnt  	".mps"	segpnt  	"Extract points from segments in segment map %S"
+;			
+; Table Operations
+;			
+transpose	".tbt"	transpose	"Transpose table %S"
+tblpnt		".tbt"	tblpnt		"Extract points from the X and Y columns of table %S"
+tblchdom  ".tbt"  tblchdom  "Create a new table with another domain from table %S"
+tblglue   ".tbt"  tblglue   "Glue table %S together with other tables"
+;
+; Hydrologic Flow Operations
+;
+fillsinks  	".mpr"	fillsinks  	"Remove local depressions from DEM %S"
+demoptimization	".mpr"	demoptimization  	"Enhance DEM %S with drainage features"
+flowdirection  	".mpr"	flowdirection  	"Calculate a flow direction map from DEM %S"
+flowaccumulation	".mpr"	flowaccumulation  	"Calculate a flow accumulation map from flow direction map %S"			
+;
+; Miscellaneous
+;
+export  	".mpr"	export  	"Export raster map %S to another package"
+export  	".mpa"	export  	"Export polygon map %S to another package"
+export  	".mps"	export  	"Export segment map %S to another package"
+export  	".mpp"	export  	"Export point map %S to another package"
+export  	".tbt"	export  	"Export table %S to another package"
+export  	".mpl"	export  	"Export map list %S to another package"
+export  	".his"	export  	"Export histogram %S to another package"
+export  	".hss"	export  	"Export segment histogram %S to another package"
+export  	".hsa"	export  	"Export polygon histogram %S to another package"
+export  	".hsp"	export  	"Export point histogram %S to another package"
+export14	".mpr"	export14	"Export raster map %S to ILWIS 1.4"
+export14	".mpa"	export14	"Export polygon map %S to ILWIS 1.4"
+export14	".mps"	export14	"Export segment map %S to ILWIS 1.4"
+export14	".mpp"	export14	"Export point map %S to ILWIS 1.4"
+export14	".tbt"	export14	"Export table %S to ILWIS 1.4"
+;			
+; End of ActPair.def
+;			

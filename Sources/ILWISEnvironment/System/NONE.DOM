@@ -1,0 +1,6 @@
+[Ilwis]
+Description=No Domain
+Type=Domain
+
+[Domain]
+Type=DomainNone

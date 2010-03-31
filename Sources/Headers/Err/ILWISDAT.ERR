@@ -1,0 +1,49 @@
+/* ilwisdat.err  Error codes for data objects
+*/
+
+#ifndef ILWISDAT_ERR
+#define ILWISDAT_ERR
+
+// Segment map 
+#define errSegmentMap  1900
+#define errMAXSEG      errSegmentMap + 87
+
+// MAP LIST:
+#define errMapList		2000
+
+// SAMPLESET:
+#define errSampleSet		2010
+
+// FILTER:
+#define errFilter		2020
+
+// FUNCUSER:
+#define errFuncUser		2050
+
+
+// SCRIPT:
+#define errScript		2100
+// needs more error codes
+
+// COORDSYSTEM:
+#define errCoordSys		2200
+// needs more error codes
+#define errProjection		2250
+// needs more error codes
+#define errEllipsoid		2250
+
+
+
+
+// CLASSIFIER:
+#define errClassifier 2250
+
+// FILE:
+#define errFile 1100
+
+// GeoRef:
+#define errGeoRef3D 2300
+
+
+
+#endif

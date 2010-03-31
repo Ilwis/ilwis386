@@ -1,0 +1,557 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+EXEMAPICONL             ICON                    "EXE16MAPL.ICO"
+EXEPOLICONL             ICON                    "EXE16POLL.ICO"
+EXESEGICONL             ICON                    "EXE16SEGL.ICO"
+EXEPNTICONL             ICON                    "EXE16PNTL.ICO"
+EXETBLICONL             ICON                    "EXE16TBLL.ICO"
+EXEMATICONL             ICON                    "EXE16MATL.ICO"
+EXE16ICOL               ICON                    "Exe16L.ico"
+ILWIS32                 ICON                    "ilwis.ico"
+LOGOICON                ICON                    "ilwis.ico"
+ITCICON                 ICON                    "itc.ico"
+MAPICON                 ICON                    "map.ico"
+POLICON                 ICON                    "pol.ico"
+SEGICON                 ICON                    "seg.ico"
+PNTICON                 ICON                    "pnt.ico"
+MPVICON                 ICON                    "mpv.ico"
+MAPVIEWICON             ICON                    "mpv.ico"
+MPLICON                 ICON                    "mpl.ico"
+MAPLISTICON             ICON                    "mpl.ico"
+TBTICON                 ICON                    "tbt.ico"
+TABLEICON               ICON                    "tbt.ico"
+TA2ICON                 ICON                    "ta2.ico"
+TABLE2ICON              ICON                    "ta2.ico"
+DOMICON                 ICON                    "dom.ico"
+DOMAINICON              ICON                    "dom.ico"
+RPRICON                 ICON                    "rpr.ico"
+GRFICON                 ICON                    "grf.ico"
+CSYICON                 ICON                    "csy.ico"
+HISICON                 ICON                    "his.ico"
+HISTOGRAMICON           ICON                    "his.ico"
+HSAICON                 ICON                    "hsa.ico"
+HISTOGRAMPOLICON        ICON                    "hsa.ico"
+HSSICON                 ICON                    "hss.ico"
+HISTOGRAMSEGICON        ICON                    "hss.ico"
+HSPICON                 ICON                    "hsp.ico"
+HISTOGRAMPNTICON        ICON                    "hsp.ico"
+SMSICON                 ICON                    "sms.ico"
+MATICON                 ICON                    "mat.ico"
+MATRIXICON              ICON                    "mat.ico"
+FLTICON                 ICON                    "flt.ico"
+FILTERICON              ICON                    "flt.ico"
+FUNICON                 ICON                    "fun.ico"
+FUNCTIONICON            ICON                    "fun.ico"
+ISLICON                 ICON                    "isl.ico"
+SCRIPTICON              ICON                    "isl.ico"
+GRAPHOBJECTICON         ICON                    "graph.ico"
+GRAPHICON               ICON                    "graph.ico"
+AXISICON                ICON                    "axis.ico"
+AUXICON                 ICON                    "ilwaux.ico"
+ATXICON                 ICON                    "atx.ico"
+STEREOPAIRICON          ICON                    "stereo.ico"
+OBJECTCOLLECTIONICON    ICON                    "objcol.ico"
+ILOICON                 ICON                    "ilo.ico"
+LAYOUTICON              ICON                    "ilo.ico"
+DIRICON                 ICON                    "clsdfold.ico"
+DRIVEICON               ICON                    "drive.ico"
+COLUMNICON              ICON                    "column.ico"
+GRIDICON                ICON                    "grid.ico"
+GRATICON                ICON                    "grat.ico"
+INFOICON                ICON                    "info.ico"
+PROPICON                ICON                    "prop.ico"
+LEGENDICON              ICON                    "legend.ico"
+EXEICON                 ICON                    "exe16.ico"
+EXEGENICON              ICON                    "exe16gmp.ico"
+EXEMAPICON              ICON                    "exe16map.ico"
+EXEMATICON              ICON                    "exe16mat.ico"
+EXEPNTICON              ICON                    "exe16pnt.ico"
+EXEPOLICON              ICON                    "exe16pol.ico"
+EXESEGICON              ICON                    "exe16seg.ico"
+EXETBLICON              ICON                    "exe16tbl.ico"
+EXE16ICO                ICON                    "exe16.ico"
+EXEDOS16ICO             ICON                    "exe16dos.ico"
+EXEMAP16ICO             ICON                    "exe16map.ico"
+EXEPOL16ICO             ICON                    "exe16pol.ico"
+EXESEG16ICO             ICON                    "exe16seg.ico"
+EXEPNT16ICO             ICON                    "exe16pnt.ico"
+EXETBL16ICO             ICON                    "exe16tbl.ico"
+EXEMAT16ICO             ICON                    "exe16mat.ico"
+EXEARN16ICO             ICON                    "exe16arn.ico"
+EXEDST16ICO             ICON                    "exe16dst.ico"
+EXEMIP16ICO             ICON                    "exe16mip.ico"
+EXEGENMAP16ICO          ICON                    "exe16gmp.ico"
+DSPMAPICON              ICON                    "dspmap.ico"
+OVLSYSTEMICON           ICON                    "ovl_system.ico"
+OVLINFOICON             ICON                    "ovl_info.ico"
+SCALEBARICON            ICON                    "sclb.ico"
+NORTHARROWICON          ICON                    "narw.ico"
+TEXTICON                ICON                    "titl.ico"
+PICTUREICON             ICON                    "picture.ico"
+BITMAPICON              ICON                    "bitmap.ico"
+BOXICON                 ICON                    "box.ico"
+HISTORY                 ICON                    "history.ico"
+OPENDIRICON             ICON                    "openfold.ico"
+MAPTABICON              ICON                    "maptab.ico"
+POLTABICON              ICON                    "poltab.ico"
+SEGTABICON              ICON                    "segtab.ico"
+PNTTABICON              ICON                    "pnttab.ico"
+FOREIGNICON             ICON                    "ForeignDoc.ico"
+CDDRIVEICON             ICON                    "cdrom.ico"
+NETDRIVEICON            ICON                    "netdrv.ico"
+FLOPPYICON              ICON                    "floppy.ico"
+MAPBORDERICON           ICON                    "mapborder.ico"
+OVLUSEAS                ICON                    "ovl_useas.ico"
+SMCEICON                ICON                    "smc.ico"
+CALCULATIONMULTI16ICON  ICON                    "calculat.ICO"
+CALCULATIONSINGLE16ICON ICON                    "calculatsingle.ICO"
+PIXINFOICON             ICON                    "pixinfo.ico"
+SMCERANKSAME            ICON                    "smcrksame.ico"
+SMCERANKLOWER           ICON                    "smcrklowr.ico"
+SMCERANKBACK            ICON                    "smcrkback.ico"
+CREATEBUT               ICON                    "create2.ico"
+ANN16ICO                ICON                    "16ann.ico"
+ATX16ICO                ICON                    "16atx.ico"
+AXIS16ICO               ICON                    "16axis.ico"
+CLM16ICO                ICON                    "16clm.ico"
+COL16ICO                ICON                    "16col1.ico"
+CRD16ICO                ICON                    "16crd.ico"
+CSY16ICO                ICON                    "16csy.ico"
+DOM16ICO                ICON                    "16dom.ico"
+DMC16ICO                ICON                    "16dmc.ico"
+DMI16ICO                ICON                    "16dmi.ico"
+DMP16ICO                ICON                    "16dmp.ico"
+DMV16ICO                ICON                    "16dmv.ico"
+FIL16ICO                ICON                    "16flt.ico"
+FUN16ICO                ICON                    "16fun.ico"
+GRF16ICO                ICON                    "16grf.ico"
+GRP16ICO                ICON                    "16grp.ico"
+GRH16ICO                ICON                    "16grh.ico"
+HIS16ICO                ICON                    "16his.ico"
+HSA16ICO                ICON                    "16hsa.ico"
+HSS16ICO                ICON                    "16hss.ico"
+HSP16ICO                ICON                    "16hsp.ico"
+ILW16ICO                ICON                    "16ilw.ico"
+ISL16ICO                ICON                    "16isl.ico"
+MAT16ICO                ICON                    "16mat.ico"
+MPV16ICO                ICON                    "16mapeye.ico"
+MPR16ICO                ICON                    "16map2.ico"
+MPL16ICO                ICON                    "16mpl.ico"
+MPP16ICO                ICON                    "16pnt.ico"
+MPA16ICO                ICON                    "16pol.ico"
+MPS16ICO                ICON                    "16seg2.ico"
+RPR16ICO                ICON                    "16rpr.ico"
+SMC16ICO                ICON                    "16smc.ico"
+SMS16ICO                ICON                    "16sms.ico"
+SVM16ICO                ICON                    "16svm.ico"
+TA216ICO                ICON                    "16tb2.ico"
+TBT16ICO                ICON                    "16tbl.ico"
+TXI16ICO                ICON                    "16txi.ico"
+STP16ICO                ICON                    "16stereo.ico"
+XXX16ICO                ICON                    "16xxx.ico"
+DIR16ICO                ICON                    "16dir.ico"
+DIRO16ICO               ICON                    "16diro.ico"
+DRV16ICO                ICON                    "16drv.ico"
+TTFONT16ICO             ICON                    "16ttfont.ico"
+GRID16ICO               ICON                    "16grid.ico"
+GR3D16ICO               ICON                    "16gr3d.ico"
+GRAT16ICO               ICON                    "16grat.ico"
+LGND16ICO               ICON                    "16lgnd.ico"
+NARW16ICO               ICON                    "16narw.ico"
+SCLB16ICO               ICON                    "16sclb.ico"
+LGBX16ICO               ICON                    "16lgbx.ico"
+TITL16ICO               ICON                    "16titl.ico"
+BMP16ICO                ICON                    "16bmp.ico"
+WMF16ICO                ICON                    "16wmf.ico"
+CREATE16ICO             ICON                    "16create.ico"
+DSPMAP16ICO             ICON                    "16dspmap.ico"
+DSPTBL16ICO             ICON                    "16dsptbl.ico"
+DSPINF16ICO             ICON                    "16dspinf.ico"
+OPRLST16ICO             ICON                    "16oprlst.ico"
+ILWIS16ICO              ICON                    "16ilw.ico"
+ENDEDIT16ICO            ICON                    "16stpedt.ico"
+FSPACE16ICO             ICON                    "16fspace.ico"
+FILTCAT16ICO            ICON                    "16cat.ico"
+ENTIREMAP16ICO          ICON                    "16zmall.ico"
+ZOOMIN16ICO             ICON                    "16zmin.ico"
+ZOOMOUT16ICO            ICON                    "16zmout.ico"
+SELECTAREA16ICO         ICON                    "16zmprt.ico"
+SIZELARGER16ICO         ICON                    "16szlg.ico"
+SIZESMALLER16ICO        ICON                    "16szsm.ico"
+REDRAW16ICO             ICON                    "16redraw.ico"
+MEASURE16ICO            ICON                    "16msdist.ico"
+EDITSELECT16ICO         ICON                    "edt16sel.ico"
+EDITMOVE16ICO           ICON                    "edt16mov.ico"
+EDITINSERT16ICO         ICON                    "edt16ins.ico"
+EDITBOUND16ICO          ICON                    "edt16bnd.ico"
+EDITDELETE16ICO         ICON                    "edt16del.ico"
+EDITSPLIT16ICO          ICON                    "edt16spl.ico"
+GRFTRANSF16ICO          ICON                    "trnsf16.ico"
+CHECKBOXEMPTYICO        ICON                    "checkbox empty.ico"
+CHECKBOXCHECKEDICO      ICON                    "checkbox checked.ico"
+PROPICO                 ICON                    "prop.ico"
+IOC16ICO                ICON                    "16IOC.ICO"
+DIR32ICO                ICON                    "CLSDFOLD.ICO"
+ILO16ICO                ICON                    "16ILO.ICO"
+IOC32ICON               ICON                    "IOC32ICO.ICO"
+DRIVENET                ICON                    "DRIVENET.ICO"
+CDDRIVE                 ICON                    "CDDRIVE.ICO"
+INET                    ICON                    "inet.ico"
+PBSQUARE                ICON                    "PBSquare.ico"
+PBROUND                 ICON                    "PBRound.ico"
+PBBUTT                  ICON                    "PBButt.ico"
+TOUCHES                 ICON                    "touches.ico"
+INTERSECT               ICON                    "intersect.ico"
+OVERLAPS                ICON                    "overlaps.ico"
+CONTAINS                ICON                    "contains.ico"
+COVERS                  ICON                    "covers.ico"
+COVEREDBY               ICON                    "coveredby.ico"
+EQUALS                  ICON                    "Equals.ico"
+WITHIN                  ICON                    "Within.ico"
+CROSSES                 ICON                    "Crosses.ico"
+DISJOINT                ICON                    "Disjoint.ico"
+ILWIS32Remove           ICON                    "ilwisRemove.ico"
+A                       ICON                    "ilwis33.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Cursor
+//
+
+SPLITCOLCURSOR          CURSOR                  "splitcol.cur"
+AREASELCURSOR           CURSOR                  "areasel1.cur"
+ZOOMTOOLCURSOR          CURSOR                  "zoomtool.cur"
+ZOOMOUTCURSOR           CURSOR                  "zoomout.cur"
+MEASURECURSOR           CURSOR                  "measdist.cur"
+ANN16CUR                CURSOR                  "16ann.cur"
+CLM16CUR                CURSOR                  "16clm.cur"
+MPR16CUR                CURSOR                  "16map.cur"
+MPS16CUR                CURSOR                  "16seg.cur"
+MPP16CUR                CURSOR                  "16pnt.cur"
+MPA16CUR                CURSOR                  "16pol.cur"
+GRID16CUR               CURSOR                  "16grid.cur"
+GR3D16CUR               CURSOR                  "16gr3d.cur"
+GRAT16CUR               CURSOR                  "16grat.cur"
+LGND16CUR               CURSOR                  "16lgnd.cur"
+NARW16CUR               CURSOR                  "16narw.cur"
+SCLB16CUR               CURSOR                  "16sclb.cur"
+LGBX16CUR               CURSOR                  "16lgbx.cur"
+TITL16CUR               CURSOR                  "16titl.cur"
+BMP16CUR                CURSOR                  "16bmp.cur"
+WMF16CUR                CURSOR                  "16wmf.cur"
+ARRMPVCUR               CURSOR                  "arreye.cur"
+ARRMPRCUR               CURSOR                  "arrmap.cur"
+ARRMPSCUR               CURSOR                  "arrseg.cur"
+ARRMPPCUR               CURSOR                  "arrpnt.cur"
+ARRMPACUR               CURSOR                  "arrpol.cur"
+ARRTBTCUR               CURSOR                  "arrtbl.cur"
+ARREXECUR               CURSOR                  "arrexe.cur"
+ARRFILCUR               CURSOR                  "arrfil.cur"
+ARRGRFCUR               CURSOR                  "arrgrf.cur"
+ARRRPRCUR               CURSOR                  "arrrpr.cur"
+EDITCURSOR              CURSOR                  "edit.cur"
+EDITPNTCURSOR           CURSOR                  "potlood.cur"
+EDITPNTMOVECURSOR       CURSOR                  "pincet.cur"
+EDITPNTMOVINGCURSOR     CURSOR                  "pincetc.cur"
+EDITSPLITCURSOR         CURSOR                  "scissors.cur"
+EDITSPLITTINGCURSOR     CURSOR                  "scissorc.cur"
+HANDCURSOR              CURSOR                  "hand.cur"
+PLUSCURSOR              CURSOR                  "plus.cur"
+PLUSBOXCURSOR           CURSOR                  "plusbox.cur"
+SETFIDUCIAL01           CURSOR                  "setfid01.cur"
+SETFIDUCIAL02           CURSOR                  "setfid02.cur"
+SETFIDUCIAL03           CURSOR                  "setfid03.cur"
+SETFIDUCIAL04           CURSOR                  "setfid04.cur"
+SETOFP01                CURSOR                  "setofp01.cur"
+SETOFP02                CURSOR                  "setofp02.cur"
+SETPP                   CURSOR                  "setpp.cur"
+SETTPP                  CURSOR                  "settpp.cur"
+DRAGOK                  CURSOR                  "dragok.cur"
+DRAGPROHIBITED          CURSOR                  "dragprohibited.cur"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+DSPINF16ICO             BITMAP                  "dspinf.bmp"
+DSPMAP16ICO             BITMAP                  "dspmap.bmp"
+DSPTBL16ICO             BITMAP                  "dsptbl.bmp"
+EDITBOUND16ICO          BITMAP                  "editbnd.bmp"
+EDITDELETE16ICO         BITMAP                  "editdel.bmp"
+EDITINSERT16ICO         BITMAP                  "editins.bmp"
+EDITMOVE16ICO           BITMAP                  "editmove.bmp"
+EDITSELECT16ICO         BITMAP                  "editsel.bmp"
+EDITSPLIT16ICO          BITMAP                  "editsplt.bmp"
+ENDEDIT16ICO            BITMAP                  "stopedit.bmp"
+ENTIREMAP16ICO          BITMAP                  "zoomall.bmp"
+FILTCAT16ICO            BITMAP                  "filtcat.bmp"
+FSPACE16ICO             BITMAP                  "fspace.bmp"
+GRAT16ICO               BITMAP                  "grat.bmp"
+GRFTRANSF16ICO          BITMAP                  "trnsform.bmp"
+GRID16ICO               BITMAP                  "anngrid.bmp"
+LGBX16ICO               BITMAP                  "annbox.bmp"
+LGND16ICO               BITMAP                  "legend.bmp"
+MEASURE16ICO            BITMAP                  "measure.bmp"
+MPA16ICO                BITMAP                  "polmap.bmp"
+MPP16ICO                BITMAP                  "pntmap.bmp"
+MPR16ICO                BITMAP                  "map.bmp"
+MPS16ICO                BITMAP                  "segmap.bmp"
+NARW16ICO               BITMAP                  "northarr.bmp"
+OPRLST16ICO             BITMAP                  "operlist.bmp"
+REDRAW16ICO             BITMAP                  "redraw.bmp"
+SCALEBAR                BITMAP                  "scalebar.bmp"
+SCALETEXT               BITMAP                  "scaletext.bmp"
+SIZELARGER16ICO         BITMAP                  "larger.bmp"
+SIZESMALLER16ICO        BITMAP                  "smaller.bmp"
+MAPVIEW                 BITMAP                  "mapview.bmp"
+WMF16ICO                BITMAP                  "annwmf.bmp"
+ZOOMIN16ICO             BITMAP                  "zoomin.bmp"
+ZOOMOUT16ICO            BITMAP                  "zoomout.bmp"
+EDITADDDOM              BITMAP                  "dominsert.bmp"
+EDITEDITDOM             BITMAP                  "domedit.bmp"
+EDITDELDOM              BITMAP                  "domdelete.bmp"
+EDITCUT                 BITMAP                  "cut.bmp"
+EDITCOPY                BITMAP                  "copy.bmp"
+EDITPASTE               BITMAP                  "paste.bmp"
+EDITSORT                BITMAP                  "sortasc.bmp"
+EDITSORTCODE            BITMAP                  "sortcode.bmp"
+EDITSORTNUM             BITMAP                  "sortnum.bmp"
+EDITSORTCODENUM         BITMAP                  "sortcnum.bmp"
+EDITMANUALSORT          BITMAP                  "sortman.bmp"
+EDITMERGE               BITMAP                  "dommerge.bmp"
+EDITREPRESENT           BITMAP                  "rpr.bmp"
+PROPERTIES              BITMAP                  "prop.bmp"
+PRINT                   BITMAP                  "print.bmp"
+FILEOPEN                BITMAP                  "OPEN.BMP"
+FILESAVE                BITMAP                  "save.bmp"
+EDITFIND                BITMAP                  "EDITFIND.BMP"
+FILERUN                 BITMAP                  "run.bmp"
+SORTARROW               BITMAP                  "sortarrow.bmp"
+DELETE                  BITMAP                  "delete.bmp"
+RECORDLAST              BITMAP                  "RecordLast.bmp"
+RECORDPREV              BITMAP                  "RecordPrev.bmp"
+RECORDNEXT              BITMAP                  "RecordNext.bmp"
+RECORDFIRST             BITMAP                  "RecordFirst.bmp"
+RECORDGOTO              BITMAP                  "RecordGoto.bmp"
+COLUMNUPDATEALL         BITMAP                  "ColumnUpdateAll.bmp"
+COORDSYS                BITMAP                  "Coordsy.bmp"
+DOMAIN                  BITMAP                  "Domain.bmp"
+ANNTXT                  BITMAP                  "ANNTXT.BMP"
+HIST                    BITMAP                  "Hist.bmp"
+FUNCTION                BITMAP                  "FUNC.BMP"
+GEOREF                  BITMAP                  "GEOREF.BMP"
+HISTPNT                 BITMAP                  "Hispnt.bmp"
+HISTPOL                 BITMAP                  "Hispol.bmp"
+HISTSEG                 BITMAP                  "Hisseg.bmp"
+DRIVE                   BITMAP                  "DRIVE.BMP"
+MATRIX                  BITMAP                  "MATRIX.BMP"
+TABLE2D                 BITMAP                  "TB2.BMP"
+MAPLIST                 BITMAP                  "Mpl.bmp"
+SCRIPT                  BITMAP                  "SCRIPT.BMP"
+DIR                     BITMAP                  "DIR.BMP"
+TABLE                   BITMAP                  "Table.bmp"
+OBJCOL                  BITMAP                  "ObjectCol.bmp"
+LAYOUT                  BITMAP                  "Layout.bmp"
+SAMPLE                  BITMAP                  "Sample.bmp"
+ILWIS                   BITMAP                  "Ilwis316.bmp"
+MAPBORDER               BITMAP                  "MapBorder.bmp"
+TEXT                    BITMAP                  "Title.bmp"
+SIZEMAP                 BITMAP                  "SizeMap.bmp"
+RPR                     BITMAP                  "rpr2.bmp"
+FLT                     BITMAP                  "flt.bmp"
+DETAILS                 BITMAP                  "details.bmp"
+LIST                    BITMAP                  "list.bmp"
+UNDO                    BITMAP                  "undo.bmp"
+ARROW                   BITMAP                  "arrow.bmp"
+HAND                    BITMAP                  "hand.bmp"
+NEW                     BITMAP                  "new.bmp"
+MAPINSERT               BITMAP                  "mapinsert.bmp"
+MAPREMOVE               BITMAP                  "mapremove.bmp"
+FILM                    BITMAP                  "film.bmp"
+UP1LVL                  BITMAP                  "up1lvl.bmp"
+INFO                    BITMAP                  "info.bmp"
+DELRPRVBAND             BITMAP                  "DeleteBand.bmp"
+INSRPRVBAND             BITMAP                  "InsertBand.bmp"
+GRAPH                   BITMAP                  "graph.bmp"
+ADDMAP                  BITMAP                  "addmap.bmp"
+REMOVEMAP               BITMAP                  "deletemap.bmp"
+WHITEPAGE               BITMAP                  "whitepage.bmp"
+MARKFIDUCIALS           BITMAP                  "MarkFiducials.bmp"
+MARKPPOINT              BITMAP                  "MarkPPoint.bmp"
+MARKTPPOINT             BITMAP                  "MarkTPPoint.bmp"
+MARKSCALINGPTS          BITMAP                  "MarkScalingPts.bmp"
+ACTIVATELEFT            BITMAP                  "ActivateLeft.bmp"
+ACTIVATERIGHT           BITMAP                  "ActivateRight.bmp"
+UNLOCKHSCROLL           BITMAP                  "UnlockHScroll.bmp"
+STEREOPAIR              BITMAP                  "StereoPair.bmp"
+SMCETREE                BITMAP                  "SMCETree.bmp"
+SMCEGROUP               BITMAP                  "SMCEGroup.bmp"
+SMCEMAPEFFECT           BITMAP                  "SMCEMapEffect.bmp"
+SMCEMAPCONSTRAINT       BITMAP                  "SMCEMapConstraint.bmp"
+SMCEAGGREGATEDMAPEFFECT BITMAP                  "SMCEAggregatedMapEffect.bmp"
+SMCEAGGREGATEDMAPCONSTRAINT BITMAP                  "SMCEAggregatedMapConstraint.bmp"
+SMCESCOREEFFECT         BITMAP                  "SMCEScoreEffect.bmp"
+SMCESCORECONSTRAINT     BITMAP                  "SMCEScoreConstraint.bmp"
+SMCEWEIGH               BITMAP                  "SMCEWeigh.bmp"
+SMCESETALTERNATIVES     BITMAP                  "SMCESetAlternatives.bmp"
+SMCEGENSELECTEDMAP      BITMAP                  "SMCEGenSelectedMap.bmp"
+SMCEGENALLMAPS          BITMAP                  "SMCEGenAllMaps.bmp"
+SMCEMODEPD              BITMAP                  "SMCEModePD.bmp"
+SMCEMODEMCE             BITMAP                  "SMCEModeMCE.bmp"
+SMCEINSERTGROUP         BITMAP                  "SMCEInsertGroup.bmp"
+SMCEINSERTFACTOR        BITMAP                  "SMCEInsertFactor.bmp"
+SMCEINSERTCONSTRAINT    BITMAP                  "SMCEInsertConstraint.bmp"
+SMCEINSERTSCOREFACTOR   BITMAP                  "SMCEInsertScoreFactor.bmp"
+SMCEINSERTSCORECONSTRAINT BITMAP                  "SMCEInsertScoreConstraint.bmp"
+SMCESTANDARDIZE         BITMAP                  "SMCEStandardize.bmp"
+AGGREGATEVALUEMULTI     BITMAP                  "Calculat.bmp"
+SMCESLICE               BITMAP                  "Slice.bmp"
+SMCESHOWSLICED          BITMAP                  "ShowSliced.bmp"
+SMCEHISTOGRAMSLICED     BITMAP                  "HistogramSliced.bmp"
+SMCEAGGREGATESLICED     BITMAP                  "AggregateSliced.bmp"
+SMCECANCELAGGREGATION   BITMAP                  "SMCECancelAggregation.bmp"
+SMCEGENCONTOURMAPS      BITMAP                  "SMCEGenContourMaps.bmp"
+SMCESHOWCONTOURMAPS     BITMAP                  "SMCEShowContourMaps.bmp"
+SMCESHOWSTANDARDIZED    BITMAP                  "SMCEShowStandardized.bmp"
+START                   BITMAP                  "Ilwis_startup.bmp"
+IDB_BITMAP1             BITMAP                  "bitmap1.bmp"
+n52                     BITMAP                  "n52.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+TRANQBOX DIALOG  100, 80, 185, 170
+STYLE DS_SETFONT | WS_MINIMIZEBOX | WS_POPUP | WS_CAPTION
+CAPTION "Tranquilizer"
+FONT 8, "Helv"
+BEGIN
+END
+
+ABOUTDIALOG DIALOG  100, 80, 185, 114
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About ILWIS"
+FONT 8, "Helv"
+BEGIN
+    ICON            "LogoIcon",99,10,10,20,20
+    ICON            "ITCIcon",-1,150,10,20,20
+    DEFPUSHBUTTON   "OK",IDOK,67,94,45,15
+    CTEXT           "ILWIS Open",-1,30,10,115,10
+    CTEXT           "© 52 North, March 2009",-1,32,20,115,10
+    LTEXT           "Version 3.7",-1,10,35,160,8
+    LTEXT           "Credits:",-1,10,50,160,8
+    LTEXT           "Wim Koolhoven, Jan Hendrikse, Willem Nieuwenhuis,",-1,10,60,170,8
+    LTEXT           "Bas Retsios, Martin Schouwenburg, Lichun Wang,",-1,10,68,170,8
+    LTEXT           "Petra Budde and Raymond Nijmeijer.",-1,10,76,170,8
+END
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 3,7,0,0
+ PRODUCTVERSION 3,7,0,0
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x40004L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "000004b0"
+        BEGIN
+            VALUE "CompanyName", "52N"
+            VALUE "FileDescription", "Ilwis37"
+            VALUE "FileVersion", "3, 7, 0, 1"
+            VALUE "InternalName", "Ilwis37"
+            VALUE "LegalCopyright", "Copyright © 2007 52N"
+            VALUE "OriginalFilename", "Ilwis.exe"
+            VALUE "ProductName", "52N Ilwis37"
+            VALUE "ProductVersion", "3, 7"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0, 1200
+    END
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

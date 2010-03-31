@@ -1,0 +1,7 @@
+[Ilwis]
+Description=Image Domain (0..255)
+Type=Domain
+
+[Domain]
+Type=DomainImage
+Representation=gray.rpr

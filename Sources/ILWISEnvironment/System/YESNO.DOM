@@ -1,0 +1,14 @@
+[Ilwis]
+Description=Yes/No Domain
+Type=Domain
+Time=847299918
+DataReadOnly=yes
+PropertiesReadOnly=yes
+
+[Domain]
+Type=DomainBool
+Width=3
+
+[DomainBool]
+True=Yes
+False=No

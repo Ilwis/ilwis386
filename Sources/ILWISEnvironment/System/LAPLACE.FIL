@@ -1,0 +1,23 @@
+[Ilwis]
+Type=Function
+Description=Laplace Filter
+
+[Function]
+Type=Filter
+DefaultDomain=value.dom
+DefaultValueRange=-100:100:1
+
+[Filter]
+Type=FilterLinear
+FilterRows=3
+FilterColumns=3
+
+[FilterLinear]
+Matrix_Size=3 3
+Matrix_Row0= 1 1 1
+Matrix_Row1= 1 -8 1
+Matrix_Row2= 1 1 1
+Gain=1
+DomainChangeable=true
+ValueRangeChangeable=true
+

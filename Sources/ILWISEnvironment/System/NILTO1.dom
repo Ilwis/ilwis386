@@ -1,0 +1,23 @@
+[Ilwis]
+Description=Value Domain 0.00 .. 1.00
+Time=1025688242
+Version=3.1
+Class=Domain Value
+Type=Domain
+DataReadOnly=yes
+PropertiesReadOnly=yes
+
+[Domain]
+Type=DomainValue
+Width=4
+Representation=NILTO1.rpr
+
+[DomainValue]
+Type=DomainValueReal
+
+[DomainValueReal]
+Min=0
+Max=1
+Step=0.01
+Fixed Precision=false
+Fixed Range=true

@@ -1,0 +1,5 @@
+ilwis2      "ILWIS version 2.x format .ilw"
+E00         "Arc/Info .E00 file .xxx"
+Shapefile   "ArcView Shapefile .SHP .xxx"
+DXF	        "AutoCad .DXF .xxx"
+Infocam     "Infocam .SEQ .xxx"

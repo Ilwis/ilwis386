@@ -1,0 +1,26 @@
+[Ilwis]
+Description=Distance Domain
+Type=Domain
+Time=847131494
+DataReadOnly=yes
+PropertiesReadOnly=yes
+
+[Domain]
+Type=DomainValue
+Width=12
+Representation=pseudo.rpr
+
+[DomainValue]
+Type=DomainValueReal
+Unit=m
+
+[DomainValueReal]
+Min=0
+Max=1000000000
+Step=0.1
+Fixed Range=false
+Fixed Precision=false
+
+
+
+

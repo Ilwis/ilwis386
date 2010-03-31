@@ -1,0 +1,22 @@
+[Ilwis]
+Type=Function
+Description= Average 3x3 Filter
+
+[Function]
+Type=Filter
+
+
+[Filter]
+Type=FilterLinear
+FilterRows=3
+FilterColumns=3
+
+[FilterLinear]
+Matrix_Size=3 3
+Matrix_Row0= 1 1 1
+Matrix_Row1= 1 1 1
+Matrix_Row2= 1 1 1
+Gain=0.11111111
+DomainChangeable=no
+ValueRangeChangeable=yes
+Type=FilterAverage

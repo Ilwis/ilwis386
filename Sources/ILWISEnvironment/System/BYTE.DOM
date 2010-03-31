@@ -1,0 +1,22 @@
+[Ilwis]
+Description=Byte Domain  1 .. 255
+Type=Domain
+Time=847126874
+DataReadOnly=yes
+PropertiesReadOnly=yes
+
+[Domain]
+Type=DomainValue
+Width=3
+Representation=gray.rpr
+
+[DomainValue]
+Type=DomainValueReal
+
+[DomainValueReal]
+Min=1
+Max=255
+Step=1
+Fixed Range=true
+Fixed Precision=true
+

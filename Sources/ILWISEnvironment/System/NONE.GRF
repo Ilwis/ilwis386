@@ -1,0 +1,6 @@
+[Ilwis]
+Description=No GeoReference
+Type=GeoRef
+
+[GeoRef]
+Type=GeoRefNone

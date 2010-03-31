@@ -1,0 +1,14 @@
+[Ilwis]
+Description=Standard Color Composite Colors
+Time=832107698
+DataReadOnly=yes
+PropertiesReadOnly=yes
+Type=Domain
+
+[Domain]
+Width=10
+Type=DomainPicture
+Representation=colorcmp.rpr
+
+[DomainPicture]
+Colors=216

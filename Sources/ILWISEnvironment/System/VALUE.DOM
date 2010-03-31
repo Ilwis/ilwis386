@@ -1,0 +1,23 @@
+[Ilwis]
+Description=Default Value Domain
+Type=Domain
+Time=824416653
+DataReadOnly=yes
+PropertiesReadOnly=yes
+
+[Domain]
+Type=DomainValue
+Width=12
+Representation=BLUE.rpr
+
+[DomainValue]
+Type=DomainValueReal
+
+[DomainValueReal]
+Min=-9999999.9
+Max=9999999.9
+Step=0.1
+Fixed Precision=false
+Fixed Range=false
+
+

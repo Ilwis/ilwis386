@@ -1,0 +1,14 @@
+[Ilwis]
+Type=Function
+Description=3 x 3 Median Filter
+
+[Function]
+Type=Filter
+
+[Filter]
+Type=FilterRankOrder
+FilterRows=3
+FilterColumns=3
+
+[FilterRankOrder]
+Type=FilterMedian

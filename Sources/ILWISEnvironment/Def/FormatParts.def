@@ -1,0 +1,5 @@
+; some file formats have multiple parts.  
+; format : main extension[, sub-parts extension]*
+.shp;.dbf;.shx;.sbn;.sbx
+.e00;.e001;.e002;.e003;.e004;.e005;.e006;.e007;.e008;.e009
+.doc;.img

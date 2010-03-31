@@ -1,0 +1,44 @@
+[Table]
+Description=Circular Representation for Flow Direction
+Time=1049815312
+Version=3.1
+Class=Table
+Domain=FlowDirection.dom
+DomainInfo=FlowDirection.dom;Byte;class;8;;
+Columns=1
+Records=8
+Type=TableStore
+[TableStore]
+Data=FlowDirection.rp#
+UseAs=No
+Col0=Color
+Type=TableBinary
+StoreTime=1048863072
+[Col:Color]
+Description=Color
+Time=1049817134
+Version=3.1
+Class=Column
+Domain=Color.dom
+DomainInfo=Color.dom;Long;color;0;;
+ReadOnly=No
+OwnedByTable=Yes
+StoreType=Long
+Stored=Yes
+Type=ColumnStore
+[Ilwis]
+Description=Circular Representation for Flow Direction
+Time=1049815312
+Version=3.1
+Class=Representation Class
+Type=Representation
+[Representation]
+Domain=FlowDirection.dom
+DomainInfo=FlowDirection.dom;Byte;class;8;;
+BoundaryColor=0
+BoundaryWidth=1
+Type=RepresentationClass
+[TableView]
+StatPaneVisible=No
+RecordView=No
+ButtonWidth=15

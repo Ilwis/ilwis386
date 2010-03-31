@@ -1,0 +1,32 @@
+import "unknwn.idl";
+
+	[
+		object, 
+		uuid(0895F1BD-DF1C-411a-A352-3575319B592D),
+		helpstring("IILWIS_CommandLine interface"),
+		pointer_default(unique)
+	]
+	interface IILWIS_CommandLine : IUnknown
+	{
+		HRESULT Execute([in] BSTR sCmd);
+	};
+
+[
+	uuid(5DFF0D69-7639-4983-8ECC-1B26B8737FB1),
+	version(1.0),
+	helpstring("ILWIS Commandline 1.0 Type Library")
+]
+library CommandLineLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	[
+		uuid(524BCEF4-4370-4021-92D3-CEC162577C08),
+		helpstring("ILWIS Commandline class")
+	]
+	coclass ILWIS_CommandLine
+	{
+		[default] interface IILWIS_CommandLine;
+	};
+};

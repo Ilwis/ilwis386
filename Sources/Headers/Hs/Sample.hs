@@ -1,0 +1,32 @@
+// Sample Set Strings
+// Titles
+#define SSSTitleCreateSampleSet        ILWSF("Sample", 1)
+#define SSSTitleSampleSet_s            ILWSF("Sample", 2)
+#define SSSTitleFeatureSpace           ILWSF("Sample", 3)
+#define SSSTitleMergeClasses           ILWSF("Sample", 4)
+#define SSSTitleDeleteClass            ILWSF("Sample", 5)
+#define SSSTitleSampleStatistics       ILWSF("Sample", 6)
+#define SSSTitleSampling               ILWSF("Sample", 7)
+#define SSSTitleFeatureSpace_ss        ILWSF("Sample", 8)
+// Remarks
+#define SSSRemSmplStat                 ILWSF("Sample", 100)
+#define SSSRemCurrSel                  ILWSF("Sample", 101)
+#define SSSRemSmsExists                ILWSF("Sample", 102)
+#define SSSRemNotValidSmsName          ILWSF("Sample", 103)
+// Errors
+#define SSSErrCreateSampleSet          ILWSF("Sample", 200)
+#define SSSErrNotSameGeoRef            ILWSF("Sample", 201)
+#define SSSErrNotSameGeoRefSmp         ILWSF("Sample", 202)
+#define SSSErrDiffDomsSmsAndMap        ILWSF("Sample", 203)
+// Items
+#define SSSUiSampleSetName             ILWSF("Sample", 300)
+#define SSSUiDomain                    ILWSF("Sample", 301)
+#define SSSUiMapList                   ILWSF("Sample", 302)
+#define SSSUiBackground                ILWSF("Sample", 303)
+#define SSSUiBand1                     ILWSF("Sample", 304)
+#define SSSUiBand2                     ILWSF("Sample", 305)
+#define SSSUiClass1                    ILWSF("Sample", 306)
+#define SSSUiClass2                    ILWSF("Sample", 307)
+#define SSSUiClass                     ILWSF("Sample", 308)
+#define SSSUiSampleSet                 ILWSF("Sample", 309)
+#define SSSUiDescription               ILWSF("Sample", 310)

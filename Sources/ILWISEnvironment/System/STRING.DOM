@@ -1,0 +1,6 @@
+[Ilwis]
+Description=Text Domain
+Type=Domain
+
+[Domain]
+Type=DomainString

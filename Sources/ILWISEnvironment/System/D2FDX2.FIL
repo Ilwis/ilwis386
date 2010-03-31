@@ -1,0 +1,21 @@
+[Ilwis]
+Type=Function
+Description=d^2 ... / d x^2
+
+[Function]
+Type=Filter
+DefaultDomain=value.dom
+DefaultValueRange=-100:100:0.01
+
+[Filter]
+Type=FilterLinear
+FilterRows=1
+FilterColumns=5
+
+[FilterLinear]
+Matrix_Size=1 5
+Matrix_Row0= -1 16 -30 16 -1
+Gain=0.04166666667
+DomainChangeable=yes
+ValueRangeChangeable=yes
+

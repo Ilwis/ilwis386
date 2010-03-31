@@ -1,0 +1,17 @@
+[Ilwis]
+Description=Geographic Coordinates on WGS84 in degrees
+Time=965379454
+Version=3.0
+Class=Coordinate System LatLon
+Type=CoordSystem
+
+[Domain]
+Type=DomainCoord
+
+[CoordSystem]
+CoordBounds=-180 -90 180 90
+Width=28
+Decimals=2
+Type=LatLon
+Datum=WGS 1984
+Datum Area=

@@ -1,0 +1,18 @@
+[Ilwis]
+Description=NOAA images (0..1023)
+Type=Domain
+Time=0
+
+[Domain]
+Type=DomainValue
+Width=4
+Representation=gray.rpr
+
+[DomainValue]
+Type=DomainValueInt
+
+[DomainValueInt]
+Min=0
+Max=1023
+Fixed Range=true
+

@@ -1,0 +1,84 @@
+/* HelpTopics for ILWIS.HLP
+   All windows and editors
+
+   by Petra Budde, october 1995   
+   Ilwis System Development ITC
+	Last change:  WK    9 Oct 96    5:44 pm
+*/   
+
+// F1 KEY IN ILWIS WINDOWS : NAAR ILWIS.HLP
+#define htpContentsIlwis      3000
+#define htpContentsMainWindow 3001
+#define htpContentsMapWindow  3002
+#define htpContentsTblWindow  3003
+#define htpContentsPixelInfo  3004
+#define htpDomainWindow       3005	
+#define htpReprClassWindow    3006
+#define htpReprValueWindow    3007
+
+#define htpPixelEditor	      3011
+#define htpPointEditor	      3012
+#define htpSegmentEditor      3013
+#define htpPolygonEditor      3014
+#define htpGeoRefEditor       3015  
+#define htpSampleEditor	      3016	
+#define htpLayoutWindow       3017
+#define htpGeoRef3DEditor     3018
+#define htpAnnotationTextEditor   3019
+#define htpCoordSystemEditor      3040
+#define htpGraphWindow        3041
+#define htpStereoPairEpipolarWindow 3042
+#define htpStereoscopeWindow  3043
+#define htpSMCEWindow 3044
+
+#define htpProgressManager  3070
+
+//ILWIS Help Menu: direct springen naar:
+#define htpIndex 	      3020	
+#define htpGlossary	      3021	
+#define htpHowTo	      3022		
+#define htpMapCalcTabCalc     3023
+#define htpIlwisExpressions   3024
+#define htpIlwisScriptSyntax 3025
+
+#define htpScriptWindow  3051
+#define htpFunctionWindow 3053
+
+#define htp2DimTableObject 3060
+#define htpObjectCollection 3061
+#define htpMapListObject 3062 
+#define htpFilterObject 3063
+#define htpMatrixObject 3064
+#define htpHistogramObject 3065
+#define htpProgressManager 3070
+
+// ILWIS popups about Objects
+#define htpPopupMPR   1000
+#define htpPopupMPA   1001
+#define htpPopupMPS   1002
+#define htpPopupMPP   1003
+#define htpPopupMPL   1004
+#define htpPopupTBT   1005
+
+#define htpPopupDOM   1010
+#define htpPopupRPR   1011
+#define htpPopupGRF   1012
+#define htpPopupCSY   1013
+
+#define htpPopupMPV   1020
+#define htpPopupHIS   1021
+#define htpPopupHSA   1021
+#define htpPopupHSS   1021
+#define htpPopupHSP   1021
+#define htpPopupSMS   1022
+#define htpPopupMAT   1023
+#define htpPopupFIL   1024
+#define htpPopupFUN   1025
+#define htpPopupISL   1026
+#define htpPopupTA2   1027
+#define htpPopupATX   1028
+#define htpPopupIOC   1029
+#define htpPopupILO   1030
+#define htpPopupGRH   1031
+#define htpPopupSTP   1032
+#define htpPopupSMC   1033

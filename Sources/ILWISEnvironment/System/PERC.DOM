@@ -1,0 +1,23 @@
+[Ilwis]
+Description=Percentage Domain
+Type=Domain
+Time=847299924
+DataReadOnly=yes
+PropertiesReadOnly=yes
+
+[Domain]
+Type=DomainValue
+Width=6
+Representation=gray.rpr
+
+[DomainValue]
+Type=DomainValueReal
+Unit=%
+
+[DomainValueReal]
+Min=0
+Max=100
+Step=0.01
+Fixed Precision=false
+Fixed Range=false
+

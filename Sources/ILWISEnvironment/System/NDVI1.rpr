@@ -1,0 +1,35 @@
+[Ilwis]
+Description=Standard absolute representation for NDVI maps with domain value
+Time=1120032318
+Version=3.1
+Class=Representation Value
+Type=Representation
+[Representation]
+Domain=value.dom
+DomainInfo=value.dom;Long;value;0;-9999999.9:9999999.9:0.1:offset=0;
+BoundaryColor=0
+BoundaryWidth=1
+Type=RepresentationValue
+[RepresentationGradual]
+Limits=7
+StretchSteps=21
+Limit0=-1.000000
+Color0=fba900
+Step1=Lower
+Limit1=0.000000
+Color1=212189
+Step2=Stretch
+Limit2=0.100000
+Color2=3aeff3
+Step3=Stretch
+Limit3=0.300000
+Color3=88ff
+Step4=Stretch
+Limit4=0.400000
+Color4=33d578
+Step5=Stretch
+Limit5=0.600000
+Color5=1e8034
+Step6=Stretch
+Limit6=1.000000
+Color6=135121

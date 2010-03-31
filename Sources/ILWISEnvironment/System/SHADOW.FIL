@@ -1,0 +1,27 @@
+[Ilwis]
+Type=Function
+Description=Shadow Filter
+Time=835718970
+DataReadOnly=yes
+PropertiesReadOnly=yes
+
+[Function]
+Type=Filter
+DefaultDomain=value.dom
+DefaultValueRange=-100:100
+
+[Filter]
+Type=FilterLinear
+FilterRows=3
+FilterColumns=3
+
+[FilterLinear]
+Matrix_Size=3 3
+Matrix_Row0=-3 -2 -1
+Matrix_Row1=-2 1 2
+Matrix_Row2=-1 2 4
+Gain=1
+DomainChangeable=yes
+ValueRangeChangeable=yes
+UseRealMatrix=no
+

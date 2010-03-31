@@ -1,0 +1,5 @@
+ilwis2    "ILWIS version 2.x format .ilw"
+ilwis14   "ILWIS version 1.4 format .ilw"
+dBase     "dBase III/IV table .DBF .xxx"
+dBaseSDF  "dBase SDF table .SDF .xxx"
+Delimited "Delimited text .TXT .xxx"

@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VisualStudioToolFile
+	Name="Build language file"
+	Version="8.00"
+	>
+	<Rules>
+		<CustomBuildRule
+			Name="IlwisStrings"
+			DisplayName="IlwisStrings"
+			CommandLine="$(SolutionDir)Sources\IlwisStrings\s2hs.exe $(SolutionDir)Sources\IlwisStrings\$(InputName).s $(SolutionDir)Sources\Headers\Hs\$(InputName).hs $(SolutionDir)$(ConfigurationName)\Ilwis3\Resources\Strings\$(InputName).eng $(InputName)"
+			Outputs="$(InputName).hs $(InputName).eng $(InputName)"
+			FileExtensions="*.s"
+			ExecutionDescription="Executing tool..."
+			>
+			<Properties>
+			</Properties>
+		</CustomBuildRule>
+	</Rules>
+</VisualStudioToolFile>

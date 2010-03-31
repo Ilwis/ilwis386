@@ -1,0 +1,596 @@
+/* $Log: /ILWIS 3.0/AdditionalHeaders/Htp/Ilwismen.htp $
+ * 
+ * 51    28-04-04 16:14 Retsios
+ * Alternate help topic for Aggregate Value form
+ * 
+ * 50    29-03-04 14:42 Retsios
+ * Help topic for slicing form
+ * 
+ * 49    2/19/04 4:06p Martin
+ * added help topic for Aggregatevalue
+ * 
+ * 48    23-10-03 15:06 Retsios
+ * Help topics for SMCE
+ * 
+ * 47    8/01/02 12:48p Martin
+ * added htp numbers for ASTER
+ * 
+ * 46    5-02-02 18:30 Koolhoven
+ * htpShowDomBool
+ * (htp for Domain Bool editor) switched on
+ * 
+ * 45    22-01-02 17:21 Koolhoven
+ * added htpPreferences 12063
+ * 
+ * 44    5-12-01 17:24 Koolhoven
+ * added htp numbers for open stereopair forms
+ * 
+ * 43    4-12-01 18:29 Koolhoven
+ *  htp numbers for StereoPairs
+ *  
+ * 
+ * 43    30-11-01 15:02 Koolhoven
+ * htp numbers for StereoPairs
+ * 
+ * 42    11/21/01 9:55a Martin
+ * added extra htp numbers for pages of the wizard
+ * 
+ * 41    5-11-01 14:41 Koolhoven
+ * added help topic for SetBoundaries() form
+ * 
+ * 40    22-10-01 11:51 Koolhoven
+ * added  htpPropInfoGraph  and htpPropInfoStereoPair 
+ * 
+ * 39    26-09-01 19:09 Koolhoven
+ * switched  edit field forms htp numbers on
+ * 
+ * 38    13-09-01 18:54 Koolhoven
+ * added htpPixGrfCnf - add georeference in PixelInfoWindow
+ * 
+ * 37    29-08-01 18:01 Koolhoven
+ * added create graph numbers
+ * 
+ * 36    21-08-01 18:40 Koolhoven
+ * added htp numbers for GraphWindow
+ * 
+ * 35    15-08-01 9:56 Koolhoven
+ * Join Wizard now has htp numbers set
+ * 
+ * 34    24-07-01 14:58 Koolhoven
+ * added  htpSegEditorAskValueNewSeg  13177
+ * 
+ * 33    18-04-01 14:33 Koolhoven
+ * given the pages of the import table wizard seperate htp numbers
+ * 
+ * 32    17-04-01 11:48 Koolhoven
+ * added htp for import table wizard
+ * 
+ * 31    21-03-01 18:02 Koolhoven
+ * MapBorder pages now have individual help topic numbers for the
+ * different sheets
+ * 
+ * 30    16-03-01 18:38 Koolhoven
+ * removed htpPasteBitmapPicture and htpDspCopyToClipboard
+ * 
+ * 29    16-03-01 18:36 Koolhoven
+ * removed htpAddAnnotation and  htpLayerMan because they are nolonger
+ * used
+ * 
+ * 28    13-03-01 18:24 Koolhoven
+ * added htpReplaceMapView
+ * 
+ * 27    12/03/01 15:16 Willem
+ * Added help topic ID for MapView in property form
+ * 
+ * 26    9-03-01 13:00 Koolhoven
+ * added helptopics for LayoutWindow
+ * 
+ * 25    7-03-01 19:16 Koolhoven
+ * added htpOpenLayout  13132
+ * 
+ * 24    6-03-01 15:39 Koolhoven
+ *  htpCnfAnnScaleText         12136
+ * added helptopics for LayoutWindow: MapBorderItem and
+ * ScaleTextLayoutItem
+ * 
+ * 23    1-03-01 17:41 Koolhoven
+ * removed no longer used htp numbers
+ * 
+ * 22    28-02-01 13:05 Koolhoven
+ * added htpImportGeoGateway
+ * 
+ * 21    27-02-01 19:01 Koolhoven
+ * added htpInsertMapView
+ * switched off topics of multi record/field edit
+ * 
+ * 20    16-02-01 12:18 Koolhoven
+ * htpCnfMapDrawerColor      12120 switched on
+ * 
+ * 19    15-02-01 10:00 Koolhoven
+ * htpSegEditCheckClosedSegments 13205 switched on
+ * 
+ * 18    13-12-00 18:36 Koolhoven
+ * added option "Check Closed Segments" to SegmentEditor
+ * 
+ * 17    18-10-00 18:06 Koolhoven
+ * added htpDigSetPortSettings
+ * 
+ * 16    13-10-00 10:01 Koolhoven
+ * added htp numbers for customize catalog pages
+ * 
+ * 15    20-09-00 8:57a Martin
+ * added htp number htpRprInsertMultipleLimits
+ * 
+ * 14    4-09-00 16:21 Koolhoven
+ * dig setup has now a number
+ * 
+ * 13    11/07/00 10:38 Willem
+ * Added htp constants for property forms (Filter, ObjectCollection,
+ * Matrix, AnnText and Layout)
+ * 
+ * 12    12-05-00 18:17 Koolhoven
+ * added htpCreateObjectCollection
+ * 
+ * 11    19-04-00 9:47 Koolhoven
+ * 
+ * 10    3/29/00 2:55p Wind
+ * #define htpColSlicing             14016
+ * #define htpTblEditMultiRecords	14040
+ * #define htpTblEditMultiFields	14041
+ * 
+ * 9     23/03/00 14:08 Willem
+ * Added help topic for change domain prefix
+ * 
+ * 8     21-12-99 15:32 Koolhoven
+ * All htp numbers in ilwismen added 10000
+ * 
+ * 7     9-09-99 15:15 Koolhoven
+ * 2.22 Changes
+ * 
+ * 6     17/08/99 12:39 Willem
+ * Added htpGrfSubmap
+ * 
+ * 5     18-06-99 9:08a Martin
+ * 
+ * 4     2/06/99 18:00 Willem
+ * Added DomainBoolForm help constant
+ * 
+ * 3     1/06/99 16:38 Willem
+ * 
+ * 2     1/06/99 16:38 Willem
+*/
+/* HelpTopics for ILWISMEN.HLP
+   All forms which are part of the display interface
+   and not an operation
+   
+   Use in source: 
+   SetMenHelpTopic(htp);
+   where 'htp' is the value defined here.
+   
+   by Wim Koolhoven, october 1995
+   Ilwis System Development ITC
+	Last change:  WK   14 May 97    4:21 pm
+*/   
+
+// create
+#define htpCreateMap          12000
+#define htpCreateSegmentMap   12001
+#define htpCreatePolygonMap   12002
+#define htpCreatePointMap     12003
+#define htpCreateTable        12004
+#define htpCreateTable2Dim    12005
+#define htpCreateAnnotationText 12006
+#define htpCreateObjectCollection 12007
+#define htpCreateGraph        12008
+#define htpCreateRoseDiagram  12009
+
+// edit
+#define htpEditBaseMap        12010
+#define htpEditMapSample      12011
+#define htpEditDisplay3D      12012
+
+// open
+#define htpOpenBaseMap        12020
+#define htpOpenStereoPairWithStereoscope 12021
+#define htpOpenStereoPairAsAnaglyph  12022
+#define htpOpenTable	      12026
+#define htpOpenMapListSlideShow   12028
+#define htpOpenAsTable	      12029
+#define htpOpenMapListColorComp  12030
+
+// select object to ...
+#define htpSelChangeProp      12031
+#define htpSelDelete          12032
+#define htpSelCopy            12033
+#define htpSelExport	     -2034
+
+// copy
+#define htpCopyObject         12040
+
+// digitizer
+#define htpDigSetPort	      12050
+#define htpDigSetup	        12051
+#define htpDigMapRef	      12052
+#define htpDigSizeSetup     12053
+#define htpDigAutoSetup     12054
+#define htpDigRefStart	    12055
+#define htpDigSetPortSettings 12056
+
+// catalogue
+#define htpCatFilter	      12060
+#define htpCatVisible	      12061
+#define htpCatQuery	        12062
+#define htpPreferences      12063
+
+// EditPropertyForms
+#define htpPropMap	     -2070
+#define htpPropSegMap	     -2071
+#define htpPropPolMap	     -2072
+#define htpPropPntMap	     -2073
+#define htpPropDomain	     -2074
+#define htpPropRpr	     -2075
+#define htpPropTable	     -2076
+#define htpPropGeoRef	     -2077
+#define htpPropObject	     -2078
+
+// DefinitionForms
+#define htpDefMap	      12080
+#define htpDefPolMap	     -2081
+#define htpDefSegMap	     -2082
+#define htpDefPntMap	     -2083
+#define htpDefTable	     -2084
+
+// PropertyForms
+#define htpPropInfo	      12090
+#define htpPropInfoRasMap     12091
+#define htpPropInfoTable      12092
+#define htpPropInfoPolMap     12093
+#define htpPropInfoSegMap     12094
+#define htpPropInfoPntMap     12095
+#define htpPropInfoTable2Dim  12096
+#define htpPropInfoMapList    12097
+#define htpPropInfoHistogram  12098
+
+#define htpPropInfoDomain     12250
+#define htpPropInfoRepresentation  12251
+#define htpPropInfoGeoRef     12252
+#define htpPropInfoCoordSys   12253
+#define htpPropInfoSampleSet  12254
+#define htpPropInfoFunction   12255
+#define htpPropInfoScript     12256
+#define htpPropInfoFilter     12257
+#define htpPropInfoObjectCollection 12258
+#define htpPropInfoMatrix     12259
+#define htpPropInfoAnnotationText   12260
+#define htpPropInfoLayout     12261
+#define htpPropInfoMapView    12262
+#define htpPropInfoGraph      12263
+#define htpPropInfoStereoPair 12264
+#define htpPropInfoSMCE		  12265
+
+// MapWindow
+
+#define htpCnfMapDrawer           12100
+#define htpCnfSegmentMapDrawer    12101
+#define htpCnfPolygonMapDrawer    12102
+#define htpCnfPointMapDrawer      12103
+#define htpCnfMapDrawerBit        12104
+#define htpCnfMapDrawerClass      12105
+#define htpCnfMapDrawerID         12106
+#define htpCnfMapDrawerImage      12107
+#define htpCnfMapDrawerValue      12108
+#define htpCnfMapDrawerPicture    12109
+#define htpCnfMapDrawerColor      12120
+#define htpCnfPointMapDrawerSymbol  12121
+#define htpCnfPointMapDrawerSymbolStretch  12122
+#define htpCnfMapDrawerBool       12123
+#define htpCnfMapList             12124
+#define htpCnfGrid3D              12125
+#define htpCnfMapListColorComp    12126
+#define htpCnfPointMapDrawerArrow 12127
+#define htpCnfPointMapDrawerGraph 12128
+#define htpCnfPointMapDrawerAttribute 12129
+
+#define htpCnfGrid		  12110
+#define htpCnfGraticule 	  12111
+#define htpCnfAnnText             12112
+#define htpCnfAnnLegendClass      12113
+#define htpCnfAnnBox              12114
+#define htpCnfAnnScale            12115
+#define htpCnfAnnNorth            12116
+#define htpCnfAnnLegendValue      12117
+#define htpCnfAnnLegendSelect     12118
+#define htpCnfAnnLegendPointValue  12130
+#define htpCnfAnnLegendPointGraph  12131
+#define htpCnfAnnLegendPointArrow  12132
+#define htpCnfAnnLegendPointBlock  12133
+#define htpCnfAnnLegendSizeOrColor 12134
+#define htpInsertMapView           12135
+#define htpCnfAnnScaleText         12136
+#define htpCnfAnnMapBorderNeatLine 12137
+#define htpReplaceMapView          12138
+#define htpCnfAnnMapBorderGrid     12139
+#define htpCnfAnnMapBorderGrat     12140
+#define htpCnfAnnMapBorderCorners  12141
+#define htpCnfAnnMapBorderOutline  12142
+#define htpCnfAnaglyphDrawer       12145
+
+//layers
+#define htpAddLayer		  13111
+
+#define htpAddRasMap		  13120
+#define htpAddSegMap		  13121
+#define htpAddPolMap		  13122
+#define htpAddPntMap		  13123
+#define htpAddBitmapPicture       13124
+#define htpAddAnnText		  13126
+
+#define htpSaveView		  13130
+#define htpRasSaveAs              13131
+#define htpOpenLayout  13132
+#define htpExportToBitmap 13133
+
+#define htpDspExtend		  13140
+#define htpDspBounds		  13141
+#define htpDspBackground	  13142
+#define htpDspDblClkAction	  13143
+#define htpPrintLayout		  13145
+#define htpDspChangeCS		  13146
+#define htpPageSetup             13147
+#define htpChooseFont             13148
+#define htpChooseColor            13149
+
+#define htpDspEditPixMap	  13150
+#define htpDspEditSegMap	  13151
+#define htpDspEditPolMap	  13152
+#define htpDspEditPntMap	  13153
+
+// formulieren in de editors
+#define htpEditorAskValue	 -3160
+#define htpSegEditCnf		  13161
+#define htpPntEditAdd		  13162
+#define htpGrfEditCnf		  13163
+#define htpGrfEditTransf	  13164
+#define htpGrfEditAddPoint	  13165
+#define htpPolEditCnf		  13166
+#define htpPntEditCnf		  13167
+
+#define htpPixEditorAskValue  13170
+#define htpSegEditorAskValue  13171
+#define htpPolEditorAskValue  13172
+#define htpPntEditorAskValue  13173
+#define htpSmplEditorAskValue  13174
+#define htpSegEditorAskInsertCode  13175
+#define htpPolEditorAskInsertCode  13176
+#define htpSegEditorAskValueNewSeg  13177
+
+#define htpFeatureSpace  13180
+#define htpDelClass      13181
+#define htpMergeClass    13182
+
+// Segment Editor
+#define htpSegEditPolMapFromSeg   13200
+#define htpSegEditCheckSelf       13201
+#define htpSegEditCheckConnected  13202
+#define htpSegEditCheckIntersects  13203
+#define htpSegEditCheckCodeConsistency  13204
+#define htpSegEditCheckClosedSegments 13205
+#define htpSegEditSetBoundaries 13206
+
+// Polygon Editor
+#define htpPolEditCreateLabels  13220
+#define htpPolEditApplyLabels   13221
+#define htpPolEditCreateSegMap  13222
+
+// Point Editor
+#define htpPntEditSetBoundaries 13230
+
+// GeoRef Editor
+#define htpGrfEditDelPoint   13300
+#define htpGrfFiducialMarks  13310
+
+// GeoRef3D Editor
+#define htpGrf3DEditForm  13400
+
+// Annotation Text Editor
+#define htpAnnTextEditSingle  13500
+#define htpAnnTextEditMultiple  13501
+#define htpAnnTextEditOptions  13502
+
+// SMCE
+#define htpSMCENewCriteriaTree			13600
+#define htpSMCEOpenCriteriaTree			13601
+#define htpSMCEEditGroup				13602
+#define htpSMCEEditFactor				13603
+#define htpSMCEEditConstraint			13604
+#define htpSMCEEditAlternatives			13605
+#define htpSMCEStandardizeValue			13606
+#define htpSMCEStandardizeClass			13607
+#define htpSMCEStandardizeBool			13608
+#define htpSMCEWeighDirect				13609
+#define htpSMCEWeighPairwise			13610
+#define htpSMCEWeighRankOrder			13611
+#define htpSMCEGenerateSelectedMap		13612
+#define htpSMCEGenerateAllMaps			13613
+#define htpSMCEAggregateValue			13614
+#define htpSMCESlice					13615
+#define htpSMCEAggregateValueSliced		13616
+
+// TblWindow
+#define htpColManage		  14000
+#define htpColProp		  14001
+#define htpTblGotoRec		  14002
+#define htpTblSort		  14003
+#define htpTblGotoCol		  14004
+#define htpTblNewCol		  14005
+#define htpTblPrint 		  14006
+#define htpConfusionMatrix        14007
+#define htpTblStatistics	14008
+
+// Dependent Columns
+//#define htpColJoin                14010
+#define htpColAggregate           14011
+#define htpColCumulative          14012
+#define htpColLeastSquares        14013
+#define htpColCreateDomain        14014
+#define htpColSemiVar             14015
+#define htpColSlicing             14016
+
+// Join Wizard
+#define htpJoinWizardInput     14050
+#define htpJoinWizardType      14051
+#define htpJoinWizardKeys      14052
+#define htpJoinWizardAggr      14053
+#define htpJoinWizardOutput    14054
+
+
+// Graph forms
+#define htpAddGraph               14020
+#define htpEditGraph              14021
+#define htpAddLineGraph           14022
+#define htpAddLsfGraph            14023
+#define htpAddSemiVarGraph        14024
+#define htpEditGraphFormula       14025
+#define htpEditGraphLsf           14026
+#define htpEditGraphSemiVar       14027
+#define htpOpenGraph              14029
+#define htpGraphXAxis             14031
+#define htpGraphYAxisLeft         14032
+#define htpGraphYAxisRight        14033
+#define htpGraphTitle             14034
+#define htpPrintGraph             14035
+#define htpNewRoseDiagram         14036
+#define htpEditRoseDiagram        14037
+#define htpRoseDiagramXAxis       14038
+#define htpRoseDiagramYAxis       14039
+
+// edit field forms
+#define htpTblEditMultiRecords	14040
+#define htpTblEditMultiFields	  14041
+
+// PixelInfo
+
+#define htpPixCnf		  12300
+#define htpPixAddMap		  12301
+#define htpCrdCnf		  12302
+#define htpPixPrint		  12303
+#define htpPixGrfCnf		  -12304
+
+// Domain Class
+
+#define htpDomEdit          12400
+#define htpDomEditGroup     12401
+#define htpDomAdd           12402
+#define htpDomAddGroup      12403
+#define htpDomMerge         12404
+#define htpDomPrefix        12405
+
+#define htpDomCreate              12410
+
+// Domain Other
+
+#define htpEditDomValue           12420
+#define htpShowDomSystem         -2421
+#define htpShowDomReadOnly       -2422
+#define htpShowDomBool           12423
+
+// Representation
+
+#define htpRprColWidth		  12500
+#define htpRprEditPix		  12501
+#define htpRprEditSeg		  12502
+#define htpRprEditPol		  12503
+#define htpRprEditPnt		  12504
+#define htpRprEditLimit 	  12505
+#define htpRprEditSteps 	  12506
+#define htpRprInsertLimit 	  12507
+#define htpRprInsertMultipleLimits 	  12508
+
+
+#define htpRprCreate		  12510
+#define htpRprMultiple		  12511
+#define htpRprLineSymbol	  12512
+
+// GeoReference
+
+#define htpGrfCorners         12601
+#define htpGrfSmpl           -2602
+#define htpGrfFactor         -2603
+#define htpGrfMirrorRotate   -2604
+#define htpGrfSubMap         -2605
+
+#define htpGrfCreate              12610
+#define htpGrfCreateRC		  12611
+#define htpGrfCreateOnlyCorners   12612 // Rasterize
+#define htpGrfCreateOnlyTiepoints 12613 // from within Map Window
+#define htpGrfCreate3D            12614
+
+
+// CoordSystem
+#define htpCSEditProj		  12700
+#define htpChangePrj		  12701
+#define htpChangeEll		  12702
+#define htpChangeDatum		  12703
+#define htpCSEditLatLon		  12704
+#define htpCSEdit		  12705
+#define htpCSEditFormula          12706
+#define htpCSCreate		  12710
+#define htpCSCreateMapWindow      12711
+#define htpCSEditAddPoint         12720
+#define htpCSEditDelPoint         12721
+#define htpCSEditTransf           12722
+#define htpCSEditBounds           12723
+#define htpCSEditCnf              12724
+
+
+// Special
+
+#define htpMapListCreate          12800
+#define htpSampleMapCreate	  12801
+#define htpFilterCreate 	  12803
+#define htpStereoPairEpiPolarCreate 12804
+
+// Import
+#define htpImport14               12900
+#define htpImport14SegmentMap     12902
+#define htpImport14PolygonMap     12903
+#define htpImport14PointMap       12904
+#define htpImport14Table          12905
+#define htpImport14PointMapNoName 12906
+#define htpImport14TableNoName	  12907
+
+#define htpImport14MapBit	  12910
+#define htpImport14MapInf	  12911
+#define htpImport14MapCol	  12912
+#define htpImport14MapByte	  12913
+#define htpImport14MapInt	  12914
+
+#define htpImportGeoGateway 12920
+#define htpImportTableWizardInput   12921
+#define htpImportTableWizardFormat  12922
+#define htpImportTableWizardView    12923
+#define htpImportTableWizardColumns 12924
+#define htpImportTableWizardOutput  12925
+#define htpImportTableWizardSelectMethod 12926
+#define htpImportTableWizardSelectTableDomain 12927
+#define htpImportTableWizardSQLQuery 12928
+#define htpImportASTER 12940
+
+
+
+// Functions
+
+#define htpFunEdit		  13000
+#define htpFunCreate		  13001
+#define htpIslEdit		  13011
+#define htpIslCreate		  13010
+
+
+
+// Export forms
+
+#define htpExport		  12200
+#define htpImport		  12201
+#define htpImportGenRas 12202
+
+// Annotation will be enhanced

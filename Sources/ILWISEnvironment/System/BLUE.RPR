@@ -1,0 +1,21 @@
+[Ilwis]
+Description=Gradually from black to blue
+Time=845052586
+DataReadOnly=no
+PropertiesReadOnly=no
+Type=Representation
+
+[Representation]
+Domain=value.dom
+BoundaryColor=0
+BoundaryWidth=1
+Type=RepresentationGradual
+
+[RepresentationGradual]
+Limits=2
+StretchSteps=16
+Limit0=0
+Color0=0
+Step1=Stretch
+Limit1=1
+Color1=ff0000

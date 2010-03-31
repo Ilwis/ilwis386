@@ -1,0 +1,167 @@
+/* ilwisapp.err  Error codes for applictations
+	Last change:  WK   24 Jan 97    1:49 pm
+*/
+
+#ifndef ILWISAPP_ERR
+#define ILWISAPP_ERR
+#include "ilwisdat.err"
+
+// RASTER MAP FROM RASTER MAP
+#define errMapAttribute		4000		
+#define errMapAreaNumbering	4010		
+#define errMapCalculate		4020		
+#define errMapClassify		4030		
+#define errMapDensify		4040		
+#define errMapDistance		4050		
+#define errMapFilter		4060		
+#define errMapGlue	4070
+#define errMapMirrorRotate	4080		
+#define errMapResample		4090			//(oude GeoCorr)
+#define errMapApply3D		4100	
+// #define errMapStereoPair	4100	//not in beta	
+// #define errMapSubMap		4110	//not in beta	
+// #define errMapNeighbourhood	4130	//not in beta	//(Mcalc neighbourhood operations)
+#define errMapSlicing 4140
+#define errMapStretch 4150
+#define errMapSubMap 4160
+#define errMapThiessen 4170
+#define errMapColorSep 4180
+#define errMapAggregate 4190
+#define errMapIterator 4900
+#define errMapVariogramSurfaceRas		4910
+#define errMapKrigingFromRaster		4920
+#define errMapFlowAccumulation		4930
+
+#define errMapDrainageNetworkExtraction		4940
+#define errMapDrainageNetworkOrdering		4950
+#define errMapSlopeLengths					4960
+#define errMapFlowLengthToOutlet			4965
+#define errMapCatchmentExtraction		    4970
+#define errMapCatchmentMerging				4980
+#define errTableHortonPlots				    4990
+#define errTopologicalOptimization		    7010
+#define errMapVariableThresholdComputation	7020
+
+// MAP FROM MAP LIST:
+#define errMapCross		4200
+#define errMapCluster	4210
+#define errMapHeckbert		4220
+#define errMapListCalculate	4230
+#define errMapColorComp	4240
+// #define errMapListPrincCmp	4250	//not in beta?	
+			
+// RASTER MAP FROM POINT MAP:
+#define errMapRasterizePoint			4300
+#define errMapNearestPoint		4320
+#define errMapMovingAverage		4330
+#define errMapTrendSurface		4340
+#define errMapMovingSurface          4350	//not in beta	
+#define errMapKriging		4360
+#define errMapVariogramSurfacePnt		4380
+#define errMapCoKriging		4390
+
+//RASTER MAP FROM POLYGON MAP:
+#define errMapRasterizePolygon		4400
+
+//RASTER MAP FROM SEGMENT MAP:
+#define errMapRasterizeSegment		4500
+#define errMapInterpolContour		4510		
+#define errMapSegmentDensity		4520
+			
+// POLYGON MAP:
+#define errPolygonMapAttribute	4600
+// #define errPolygonMapFromRas		4610	//not in beta	//(oude rasvec)
+#define errPolygonMapFromSegment		4620
+#define errPolygonMapLabels		4630
+#define errPolygonMapMask		4640
+#define errPolygonMapTransform		4650
+#define errPolygonMapFromRas		4660
+
+// POINT MAP:
+#define errPointMapAttribute		4700
+#define errPointMapFromRas 		4710
+#define errPointMapSegNodes		4720
+#define errPointMapSegDist		4730	
+#define errPointMapSegCoords		4740
+#define errPointMapPolLabels		4750	
+#define errPointMapTransform	4760	
+#define errPointMapSubMap 4770
+#define errPointMapGlue 4780
+#define errPointMapFromTable 4790
+
+// SEGMENT MAP:
+#define errSegmentMapCleaning		4800
+#define errSegmentMapMask		4810
+#define errSegmentMapAttribute	4820
+#define errSegmentMapTunneling	4860
+#define errSegmentMapRemoveNodes	4830
+#define errSegmentMapLabels	4840
+#define errSegmentMapTransform 4850
+#define errSegmentMapSubMap 4860
+#define errSegmentMapDensifyCoords 4870
+#define errSegmentMapGlue 4880
+#define errSegmentMapPolBoundaries 4890
+#define errSegmentMapFromRasAreaBnd 4900
+// #define errSegmentMapResample	4830	//not in beta	//(monoplot)
+// #define errSegmentMapFromRas		4840	//not in beta	//(oude RasVec)
+			
+
+// TABLE FROM MAP:
+#define errTable		5000
+#define errTableAutoCorrSemiVar		5010			//(from point map)
+// #define errTableCross		5040	//not in beta	//(from raster map)
+#define errTableLineament		5050
+#define errTableNeighbourPol 5060
+#define errTablePattAnal		5020
+#define errTableSpatCorr		5030
+#define errTableTranspose	5070
+#define errTableGlue     	5080
+#define errTableCrossVar	5090
+
+// TABLE FROM MAP LIST:
+// #define errTableMultivariate		5100	//not in beta?	//(from map list: var/cov/corr/sd)
+			
+// SPECIAL TABLES:
+#define errTableHistogram		5200
+#define errCross		5210
+// #define errTableClassify		5220	//not in beta	// naam ligt nog niet vast!
+// #define errTableTwoDim		5230	//not in beta	// naam ligt nog niet vast!
+#define errTableHistogramSeg		5240
+#define errTableHistogramPol		5250
+#define errTableHistogramPnt		5260
+#define errTableBursaWolf				5270
+			
+
+// Projections zijn nog niet genoemd.
+
+// COLUMN
+#define errColumnCalculate 6000
+#define errColumnAggregate 6010
+#define errColumnCumulative 6020
+#define errColumnPolArea 6030
+#define errColumnPolLength 6040
+#define errColumnSegLength 6050
+#define errColumnSemiVariogram 6060
+
+// EXPORT
+#define errMapExport  6100
+#define errSegmentMapExport  6110
+#define errPolygonMapExport  6120
+#define errPointMapExport  6130
+#define errTableExport  6140
+
+// MATRIX
+#define errMatrixConfusion  6200
+#define errMatrixPrincComp  6210
+#define errMatrixVarCovCorr  6220
+
+// simple calculator
+#define errCalculate  7000
+
+// general tools
+// Least Squares Fit
+#define errLeastSquaresFit 8000
+#define errSemiVariogram   8010
+#define errMapCrossVariogramSurfaceRas 8020
+
+#endif

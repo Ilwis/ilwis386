@@ -1,0 +1,6 @@
+[Ilwis]
+Description=Binary Domain
+Type=Domain
+
+[Domain]
+Type=DomainBinary

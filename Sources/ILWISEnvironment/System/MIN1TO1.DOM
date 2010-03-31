@@ -1,0 +1,23 @@
+[Ilwis]
+Description=Value Domain  -1.00 .. 1.00
+Type=Domain
+Time=847126874
+DataReadOnly=yes
+PropertiesReadOnly=yes
+
+[Domain]
+Type=DomainValue
+Width=5
+Representation=gray.rpr
+
+[DomainValue]
+Type=DomainValueReal
+
+[DomainValueReal]
+Min=-1
+Max=1
+Step=0.01
+Fixed Precision=false
+Fixed Range=true
+
+

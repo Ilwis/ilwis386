@@ -1,0 +1,490 @@
+/* $Log: /ILWIS 3.0/AdditionalHeaders/Htp/Ilwisapp.htp $
+ * 
+ * 16    6/16/05 11:46a Lichun
+ * 
+ * 15    6/01/05 1:06p Lichun
+ * merged from hydro-dem branch
+ * 
+ * 20    6/01/05 10:13a Lichun
+ * 
+ * 19    4/05/05 17:40 Lichun
+ * various fixes
+ * 
+ * 18    2/05/05 16:28 Lichun
+ * 
+ * 17    25/04/05 12:20 Lichun
+ * 
+ * 16    31/03/05 17:39 Lichun
+ * added help number for catchment parameters
+ * 
+ * 14    23-10-03 15:06 Retsios
+ * Help topics for SMCE
+ * 
+ * 13    16-10-03 12:10 Hendrikse
+ * added #define htpDatumParmsInput		        4775
+ * #define htpDatumParmsMethod		        4776
+ * #define htpDatumParmsOutput		        4777
+ * 
+ * 12    23/09/03 11:22 Budde
+ * 
+ * 11    23/09/03 9:43 Budde
+ * htpnrs for FillSinks and DemOptimization
+ * 
+ * 10    29/04/03 12:35 Budde
+ * added htpnrs for Flow Accumulation
+ * 
+ * 9     8/04/03 15:37 Budde
+ * added htp nrs for Help 
+ * for FlowDirection operation
+ * 
+ * 8     8-01-03 14:42 Koolhoven
+ * added PolygonMapGrid
+ * 
+ * 7     11-07-02 17:52 Koolhoven
+ * added htp number for StereoPairFromDTM
+ * 
+ * 6     23-11-01 15:33 Koolhoven
+ * popup htp's for stereocopy stuff
+ * 
+ * 5     4-09-00 10:59 Koolhoven
+ * Kriging From Raster htp switched on
+ * 
+ * 4     3-08-00 17:23 Koolhoven
+ * added htpMapKrigingFromRaster
+ * 
+ * 3     8-09-99 8:43a Martin
+ * //->/*
+ * 
+ * 2     8-09-99 8:42a Martin
+ * added 2.22 items
+// Revision 1.14  1997-10-08 21:00:35+02  Wim
+// Switch principal components and factor analysis on
+//
+// Revision 1.13  1997-10-06 14:26:38+02  Wim
+// Latest chanegs
+//
+// Revision 1.12  1997-09-22 12:44:53+02  Wim
+// MapIterator 4910 etc.
+//
+// Revision 1.11  1997-09-09 18:36:51+02  Wim
+// Changes for H1
+//
+// Revision 1.10  1997-09-03 12:50:04+02  Wim
+// PointSubMap on
+//
+// Revision 1.9  1997-09-03 12:47:45+02  Wim
+// MapGlue on
+//
+// Revision 1.8  1997-09-01 15:08:52+02  Wim
+// Changed all htpTableHistogramT's to 5201
+//
+// Revision 1.7  1997-08-27 19:53:16+02  Wim
+// Several applications switched on
+//
+// Revision 1.6  1997-08-22 11:35:24+02  Wim
+// Switched off htmpMapGlue
+//
+// Revision 1.5  1997-08-11 14:21:45+02  Wim
+// Apply 3d
+//
+// Revision 1.4  1997-08-06 13:50:52+02  Wim
+// Slide show help popup 7013
+//
+// Revision 1.3  1997-08-04 18:54:08+02  Wim
+// Added htpMapSubMap
+//
+// Revision 1.2  1997-07-28 14:29:08+02  Wim
+// Several chanegs
+//
+/* APPLICATIONS: HELP ON FORMS AND TRANQUILIZERS : NAAR ILWISAPP.HLP
+// De nummertjes voor de help button op forms eindigen op 0
+// De namen met een T op het eind zijn voor de tranquilizers 1
+// F1 on an application form doet alsof de Help button ingedrukt wordt,
+//   gaat naar ILWISAPP.HLP
+	Last change:  WK   23 Jul 97   11:56 am
+*/
+
+// RASTER MAP FROM RASTER MAP
+#define htpMapAttribute		4000		
+#define htpMapAttributeT	4001		
+// Popup                        4002
+#define htpMapAreaNumbering	4010		
+#define htpMapAreaNumberingT	4011		
+// Popup                        4012
+#define htpMapCalculate         4020
+#define htpMapCalculateT        4021
+// Popup                        4022
+#define htpMapClassify		4030
+#define htpMapClassifyT 	4031
+// Popup                        4032
+#define htpMapDensify		4040		
+#define htpMapDensifyT		4041		
+// Popup                        4042
+#define htpMapDistance		4050		
+#define htpMapDistanceT		4051		
+#define htpMapThiessenT	        4051
+// Popup                        4052
+#define htpMapFilter		4060		
+#define htpMapFilterT		4061		
+// Popup                        4062
+#define htpMapMirrorRotate      4080
+#define htpMapMirrorRotateT     4081
+// Popup                        4082
+#define htpMapGlue              4070
+#define htpMapGlueT             4071
+// Popup                        4072
+
+#define htpMapApply3D		4100
+#define htpMapApply3DT 	        4101
+// Popup                        4102
+#define htpMapResample		4090
+#define htpMapResampleT 	4091
+// Popup                        4092
+
+#define htpMapSlicing		4140
+#define htpMapSlicingT		4141
+// Popup                        4142
+#define htpMapStretch	        4150
+#define htpMapStretchT	        4151
+// Popup                        4152
+#define htpMapSubMap	        4160
+#define htpMapSubMapT	        4161
+// Popup                        4162
+#define htpMapColorSep	        4180
+#define htpMapColorSepT         4181
+// Popup                        4182
+#define htpMapAggregate	        4190
+#define htpMapAggregateT        4191
+// Popup                        4192
+#define htpMapKrigingFromRaster 4110
+#define htpMapKrigingFromRasterT 4111
+// popup                         4112
+
+#define htpMapIterator          4910
+#define htpMapIteratorT         4911
+// Popup                        4912
+
+
+
+
+// MAP FROM MAP LIST:
+#define htpMapCross		4200
+#define htpMapCrossT		4201
+// Popup                        4202
+#define htpMapCluster	        4210
+#define htpMapClusterT	        4211
+// Popup                        4212
+#define htpMapHeckbert		4220
+#define htpMapHeckbertT		4221		
+#define htpMapColorCompT	4221
+// Popup                        4222
+			
+// RASTER MAP FROM POINT MAP:
+#define htpMapRasterizePoint		        4300
+#define htpMapRasterizePointT		        4301
+// Popup                                        4302
+#define htpMapRasterizePointCount 	        4310
+#define htpMapRasterizePointCountT	        4311
+// Popup                                        4312
+#define htpMapRasterizePointSumT	       -4371
+
+#define htpMapNearestPoint		4320
+#define htpMapNearestPointT		4321
+// Popup                                4322
+#define htpMapMovingAverage		4330
+#define htpMapMovingAverageT		4331
+// Popup                                4332
+#define htpMapTrendSurface	        4340
+#define htpMapTrendSurfaceT	        4341
+// Popup                                4342
+#define htpMapMovingSurface	        4350
+#define htpMapMovingSurfaceT	        4351
+// Popup                                4352
+#define htpMapKriging	                4360
+#define htpMapKrigingT	                4361
+// Popup                                4362
+#define htpMapUniversalKriging	        4363
+#define htpMapUniversalKrigingT         4367
+// Popup                                4365
+#define htpMapAnisotropicKriging        4364
+#define htpMapAnisotropicKrigingT       4368
+// Popup                                4366
+
+#define htpMapVariogramSurface          4370
+#define htpMapVariogramSurfacePntT      4371
+#define htpMapVariogramSurfaceRasT      4371
+// Popup                                4372
+
+#define htpMapCoKriging	                4380
+#define htpMapCoKrigingT                4381
+// Popup                                4382
+			
+//RASTER MAP FROM POLYGON MAP:
+#define htpMapRasterizePolygon	        4400
+#define htpMapRasterizePolygonT         4401
+// Popup                                4402
+
+//RASTER MAP FROM SEGMENT MAP:
+#define htpMapRasterizeSegment		4500
+#define htpMapRasterizeSegmentT		4501		
+// Popup                                4502
+#define htpMapInterpolContour		4510		
+#define htpMapInterpolContourT		4511		
+// Popup                                4512
+#define htpMapSegmentDensity	        4520
+#define htpMapSegmentDensityT	        4521
+// Popup                                4522
+
+			
+// POLYGON MAP:
+#define htpPolygonMapAttribute	     4600
+#define htpPolygonMapAttributeT      4601
+// Popup                             4602
+#define htpPolygonMapFromSegment     4610
+#define htpPolygonMapFromSegmentT    4611
+// Popup                             4612
+#define htpPolygonMapLabels	     4620
+#define htpPolygonMapLabelsT	     4621
+// Popup                             4622
+#define htpPolygonMapTransform	     4630
+#define htpPolygonMapTransformT      4631
+// Popup                             4632
+#define htpPolygonMapMask	     4640
+#define htpPolygonMapMaskT	     4641
+// Popup                             4642
+#define htpPolygonMapFromRas         4650
+#define htpPolygonMapFromRasT	     4651
+// Popup                             4652
+#define htpPolygonMapSubMap        -4660
+#define htpPolygonMapSubMapT	    -4661
+// Popup                             4662
+#define htpPolygonMapNumbering       5500
+#define htpPolygonMapNumberingT	     5501
+// Popup                             5502
+#define htpPolygonMapGrid            4670
+#define htpPolygonMapGridT	         4671
+// Popup                             4672
+
+// POINT MAP:
+#define htpPointMapAttribute	        4700
+#define htpPointMapAttributeT	        4701
+// Popup                                4702
+#define htpPointMapFromRas	        4710
+#define htpPointMapFromRasT	        4711
+// Popup                                4712
+#define htpPointMapSegments	        4720
+#define htpPointMapSegNodesT	        4721
+#define htpPointMapSegDistT	        4721
+#define htpPointMapSegCoordsT	        4721
+// Popup                                4724
+#define htpPointMapPolygons	        4730
+#define htpPointMapPolLabelsT	        4731
+// Popup                                4732
+#define htpPointMapTransform	        4740
+#define htpPointMapTransformT	        4741
+// Popup                                4742
+#define htpPointMapSubMap	        4750
+#define htpPointMapSubMapT	        4751
+// Popup                                4752
+#define htpPointMapGlue 	        4760
+#define htpPointMapGlueT	        4761
+// Popup                                4762
+#define htpCoordinateTransform	        4770
+// Popup                                4772
+#define htpDatumParmsInput		        4775
+#define htpDatumParmsMethod		        4776
+#define htpDatumParmsOutput		        4777
+// Popup                                4778
+#define htpPointMapMask	                4780
+#define htpPointMapMaskT	        4781
+// Popup                                4782
+#define htpPointMapFromTable            4790
+#define htpPointMapFromTableT           4790
+// Popup                                4792
+#define htpPointMapNumbering         5500
+#define htpPointMapNumberingT	     5501
+// Popup                             5502
+
+
+
+// SEGMENT MAP:
+#define htpSegmentMapCleaning	        4800
+#define htpSegmentMapCleaningT	        4801
+// Popup                                4802
+#define htpSegmentMapTunneling	        4850
+#define htpSegmentMapTunnelingT         4851
+// Popup                                4852
+#define htpSegmentMapMask	        4810
+#define htpSegmentMapMaskT	        4811
+// Popup                                4812
+#define htpSegmentMapAttribute	        4820
+#define htpSegmentMapAttributeT         4821
+// Popup                                4822
+#define htpSegmentMapLabels	        4830
+#define htpSegmentMapLabelsT	        4831
+// Popup                                4832
+#define htpSegmentMapTransform	        4840
+#define htpSegmentMapTransformT         4841
+// Popup                                4842
+#define htpSegmentMapSubMap		4860
+#define htpSegmentMapSubMapT		4861
+// Popup                                4862
+#define htpSegmentMapDensifyCoords      4870
+#define htpSegmentMapDensifyCoordsT     4871
+// Popup                                4872
+#define htpSegmentMapGlue               4880
+#define htpSegmentMapGlueT              4881
+// Popup                                4882
+#define htpSegmentMapPolBoundaries      4890
+#define htpSegmentMapPolBoundariesT     4891
+// Popup                                4892
+#define htpSegmentMapFromRas            4900
+#define htpSegmentMapFromRasAreaBndT    4901
+// Popup                                4902
+#define htpSegmentMapNumbering          5500
+#define htpSegmentMapNumberingT         5501
+// Popup                                5502
+
+
+
+
+// TABLE FROM MAP:
+#define htpTableAutoCorrSemiVar         5000
+#define htpTableAutoCorrSemiVarT        5001
+// Popup                                5002
+#define htpTableLineament	        5010
+#define htpTableLineamentT	        5011
+// Popup seghistdir                     5012
+#define htpTableNeighbourPol            5020
+#define htpTableNeighbourPolT           5021
+// Popup                                5022
+#define htpTablePattAnal	        5030
+#define htpTablePattAnalT	        5031
+// Popup                                5032
+#define htpTableSpatCorr	        5040
+#define htpTableSpatCorrT	        5041
+// Popup                                5042
+#define htpTableCross		        4200
+#define htpTableCrossT		        4201
+#define htpTableCrossVariogram	        5070
+#define htpTableCrossVariogramT         5071
+// Popup                                5072
+
+// SPECIAL TABLES:
+#define htpTableHistogram		5200
+#define htpTableHistogramT		5201
+#define htpTableHistogramSegT	        5201
+#define htpTableHistogramPolT	        5201
+#define htpTableHistogramPntT	        5201
+// Popup                                5205
+#define htpTableTranspose	        5050
+#define htpTableTransposeT	        5051
+// Popup                                5052
+#define htpTableChangeDomain	        5060
+#define htpTableChangeDomainT	        5060
+// Popup                                5062
+#define htpTableGlue        	        5080
+#define htpTableGlueT        	        5080
+// Popup                                5082
+
+
+
+// General Map
+#define htpGenMapUniqueID     5500
+// Popup                      5502
+
+
+// MATRICES
+#define htpMatrixPrincCmp	        6000
+#define htpMatrixPrincCmpT	        6001
+// Popup                                6002
+#define htpMatrixFactorAnal	        6010
+#define htpMatrixFactorAnalT	        6011
+// Popup                                6012
+#define htpMatrixVarCov 	        6020
+#define htpMatrixVarCovT	        6021
+// Popup                                6022
+#define htpMatrixCorr		        6030
+#define htpMatrixCorrT		        6031
+// Popup                                6032
+#define htpMatrixConfusion             -6040
+#define htpMatrixConfusionT	       -6041
+
+
+// StereoPairs
+#define htpStereoPairFromDTM     6100
+#define htpStereoPairFromDTMT    6101
+
+// HYDROLOGIC FLOW OPERATIONS
+#define htpFlowDirection     	8010
+#define htpFlowDirectionT    	8011
+// Popup                        8012
+#define htpFlowAccumulation    	8015
+#define htpFlowAccumulationT   	8016
+// Popup                        8017
+#define htpFillSinks     	8020
+#define htpFillSinksT    	8021
+// Popup                        8022
+#define htpDemOptimization    	8025
+#define htpDemOptimizationT   	8026
+// Popup                        8027
+
+//DRAINAGE NETWORK EXTRACTION
+#define htpNetworkExtraction     	8030
+#define htpNetworkExtractionT    	8031
+// Popup                        8032
+#define htpNetworkOrdering    	8035
+#define htpNetworkOrderingT   	8036
+// Popup                        8037
+#define htpOverlandFlowLength     	8040
+#define htpOverlandFlowLengthT    	8041
+// Popup                        8042
+#define htpCatchmentExtraction    	8045
+#define htpCatchmentExtractionT   	8046
+// Popup                        8047
+#define htpCatchmentMerging     	8050
+#define htpCatchmentMergingT    	8051
+// Popup                        8052
+#define htpHorntonPlots   	8055
+#define htpHorntonPlotsT   	8056
+// Popup                        8057
+#define htpTopologicalOptimization    	8060
+#define htpTopologicalOptimizationT   	8061
+// Popup                        8062
+#define htpVariableThresholdComputation    	8065
+#define htpVariableThresholdComputationT   	8066
+// Popup                        8067
+
+// Popup DEM_Visualization                   8070
+// Popup Compound_Parameter_Extraction       8071
+// Popup aggregate_statistics                8072
+// Popup cumulative_hypsometric_curve        8073
+// Popup class_coverage_statistics           8074
+
+
+// SMCE
+// Popup						8110
+
+// extra popups
+// show         7000
+// edit         7001
+// display3d    7002
+// sample       7003
+// pixel info   7004
+// new dir      7005
+// import       7006
+// import 14    7007
+// export       7008
+// export 14    7009
+// show map     7010
+// show tbl     7011
+// convert 14   7012
+// slide show   7013
+// colorcomp    7014
+// Epipolar Stereo Pair	7015
+// Stereoscope	7016
+// Anaglyph   	7017
+
+#define htpAppOperationsExpanded  8000
+
+

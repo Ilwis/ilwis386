@@ -1,0 +1,6 @@
+[Ilwis]
+Description=Bit domain
+Type=Domain
+
+[Domain]
+Type=DomainBit

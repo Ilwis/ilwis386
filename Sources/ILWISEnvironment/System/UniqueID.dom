@@ -1,0 +1,9 @@
+[Ilwis]
+Description=Unique Identifier
+Type=Domain
+Time=0
+DataReadOnly=yes
+PropertiesReadOnly=yes
+
+[Domain]
+Type=DomainUniqueID

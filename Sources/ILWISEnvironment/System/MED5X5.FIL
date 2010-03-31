@@ -1,0 +1,14 @@
+[Ilwis]
+Type=Function
+Description=5 x 5 Median Filter
+
+[Function]
+Type=Filter
+
+[Filter]
+Type=FilterRankOrder
+FilterRows=5
+FilterColumns=5
+
+[FilterRankOrder]
+Type=FilterMedian

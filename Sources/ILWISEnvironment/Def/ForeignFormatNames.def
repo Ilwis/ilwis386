@@ -1,0 +1,11 @@
+[Formats]
+.dbf=DBase
+.mdb=MSAccess
+.db=Paradox
+.xls=Excel
+[Default method]
+DBase=ADO
+MSAccess=ADO
+Paradox=ADO
+Excel=ADO
+ASTER=ASTER
