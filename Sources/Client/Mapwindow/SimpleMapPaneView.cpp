@@ -259,57 +259,65 @@ BOOL SimpleMapPaneView::OnEraseBkgnd(CDC* cdc)
   return TRUE;
 }
 
+void SimpleMapPaneView::InitOpenGL(HDC hDC) {
+
+}
+
 void SimpleMapPaneView::OnDraw(CDC* cdc)
 {
 	MapCompositionDoc* mcd = GetDocument();
+	mcd->rootDrawer->prepare(NewDrawer::ptALL, cdc);
+	mcd->rootDrawer->draw();
+	SwapBuffers(cdc->m_hDC);
 
-	zRect rect;
-	GetClientRect(&rect);
 
-	CRect rBounds = rctPos(mcd->mmBounds());
-	CRgn rgnBounds;
-  rgnBounds.CreateRectRgnIndirect(&rBounds);
-  
-	// gray window background is drawn in OnEraseBkgnd()
-	// clip to map boundaries
-	cdc->SelectClipRgn(&rgnBounds);
-  
-	if (fRedrawing && !fDrawAlsoWhenLoading)
-	{
-  	CPen penRect(PS_SOLID,1,mcd->colBackground);
-  	CBrush brRect(mcd->colBackground);
-  	CPen* penOld = cdc->SelectObject(&penRect);
-  	CBrush* brOld = cdc->SelectObject(&brRect);
-  	CRect rctBounds = rctPos(mcd->mmBounds());
-  	cdc->Rectangle(rctBounds);
-  	cdc->SelectObject(penOld);
-  	cdc->SelectObject(brOld);
-  } 
-	else 
-  {
-		MinMax mm = mmRect(rect);
-		GeoRef georef = mcd->georef;
-		DefaultPositioner psn(this, mm, georef);  
-  
-		if (edit) 
-			edit->PreDraw();
-		csDcView.Lock();
-		if (dcView)
-			cdc->BitBlt(0,0,rect.width(),rect.height(),dcView,0,0,SRCCOPY);
-		csDcView.Unlock();
+	//zRect rect;
+	//GetClientRect(&rect);
 
-		// set clipping off
-		cdc->SelectClipRgn(0);
+	//CRect rBounds = rctPos(mcd->mmBounds());
+	//CRgn rgnBounds;
+ // rgnBounds.CreateRectRgnIndirect(&rBounds);
+ // 
+	//// gray window background is drawn in OnEraseBkgnd()
+	//// clip to map boundaries
+	//cdc->SelectClipRgn(&rgnBounds);
+ // 
+	//if (fRedrawing && !fDrawAlsoWhenLoading)
+	//{
+ // 	CPen penRect(PS_SOLID,1,mcd->colBackground);
+ // 	CBrush brRect(mcd->colBackground);
+ // 	CPen* penOld = cdc->SelectObject(&penRect);
+ // 	CBrush* brOld = cdc->SelectObject(&brRect);
+ // 	CRect rctBounds = rctPos(mcd->mmBounds());
+ // 	cdc->Rectangle(rctBounds);
+ // 	cdc->SelectObject(penOld);
+ // 	cdc->SelectObject(brOld);
+ // } 
+	//else 
+ // {
+	//	MinMax mm = mmRect(rect);
+	//	GeoRef georef = mcd->georef;
+	//	DefaultPositioner psn(this, mm, georef);  
+ // 
+	//	if (edit) 
+	//		edit->PreDraw();
+	//	csDcView.Lock();
+	//	if (dcView)
+	//		cdc->BitBlt(0,0,rect.width(),rect.height(),dcView,0,0,SRCCOPY);
+	//	csDcView.Unlock();
 
-		// draw editor
-		if (edit) {
-			CPaintDC *pdc = dynamic_cast<CPaintDC*>(cdc);
-			if (0 != pdc)
-				rect = CRect(pdc->m_ps.rcPaint);
-			edit->draw(cdc, rect, &psn, &fDrawStop);
-		}
-	}
-  rgnBounds.DeleteObject();
+	//	// set clipping off
+	//	cdc->SelectClipRgn(0);
+
+	//	// draw editor
+	//	if (edit) {
+	//		CPaintDC *pdc = dynamic_cast<CPaintDC*>(cdc);
+	//		if (0 != pdc)
+	//			rect = CRect(pdc->m_ps.rcPaint);
+	//		edit->draw(cdc, rect, &psn, &fDrawStop);
+	//	}
+	//}
+ // rgnBounds.DeleteObject();
 }
 
 void SimpleMapPaneView::OnMeasureDist()
@@ -586,8 +594,8 @@ void SimpleMapPaneView::RedrawInThread()
 {
 	if ( true) {
 		MapCompositionDoc* mcd = GetDocument();
-		(*(mcd->drawers.begin()))->prepare();
-		(*(mcd->drawers.begin()))->draw();
+	//	(*(mcd->drawers.begin()))->prepare();
+	//	(*(mcd->drawers.begin()))->draw();
 		return;
 	}
 

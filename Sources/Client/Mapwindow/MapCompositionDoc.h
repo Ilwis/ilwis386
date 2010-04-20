@@ -52,6 +52,7 @@
 #endif
 
 #include "Client/MapWindow/Drawers/Drawer_n.h"
+#include "Client/MapWindow/Drawers/RootDrawer.h"
 
 class MapCompositionSrvItem;
 
@@ -81,7 +82,7 @@ public:
   virtual IlwisObject obj() const;
   virtual zIcon icon() const;
 
- 	list<ILWIS::NewDrawer *> drawers;
+	ILWIS::RootDrawer *rootDrawer;
 	ILWIS::DrawerContext *drawContext;
 
 // Overrides

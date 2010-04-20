@@ -191,7 +191,7 @@ MapPaneView::~MapPaneView()
 /////////////////////////////////////////////////////////////////////////////
 // MapPaneView drawing
 
-void MapPaneView::OnInitialUpdate()
+void MapPaneView::OnInitialUpdate() 
 {
 	odt->Register(this);
 	//fStarting = true; // prevent too early start (moved to constructor)
