@@ -8,7 +8,7 @@ class PointDrawer : public FeatureDrawer {
 	public:
 		PointDrawer(ILWIS::DrawerContext *c);
 		virtual void draw();
-		void prepare(PreparationType t=ptALL);
+		void prepare(PreparationType t=ptALL,CDC *dc = 0);
 	protected:
 		Coord cNorm;
 

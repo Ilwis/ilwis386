@@ -9,8 +9,7 @@ class FeatureLayerDrawer : public AbstractDrawer {
 
 		FeatureLayerDrawer(DrawerContext *context);
 		virtual ~FeatureLayerDrawer();
-		virtual void draw();
-		virtual void prepare(PreparationType t=ptALL);
+		virtual void prepare(PreparationType t=ptALL,CDC *dc = 0);
 		void setDataSource(void *bm);
 	protected:
 		BaseMap basemap;

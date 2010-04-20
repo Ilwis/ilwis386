@@ -18,12 +18,7 @@ FeatureLayerDrawer::FeatureLayerDrawer(DrawerContext *context) : AbstractDrawer(
 FeatureLayerDrawer::~FeatureLayerDrawer() {
 }
 
-void FeatureLayerDrawer::draw(){
-		for(int i=0; i < drawers.size(); ++i)
-			drawers[i]->draw();
-}
-
-void FeatureLayerDrawer::prepare(PreparationType t){
+void FeatureLayerDrawer::prepare(PreparationType t,CDC *dc){
 	for(int i=0; i < basemap->iFeatures(); ++i) {
 		Feature *p = CFEATURE(basemap->getFeature(i));
 		if ( p && p->fValid()){
