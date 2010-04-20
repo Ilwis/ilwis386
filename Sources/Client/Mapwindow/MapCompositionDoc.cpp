@@ -178,11 +178,13 @@ MapCompositionDoc::MapCompositionDoc()
 	szPrefSize = CSize(0,0);
 	fRaster = false;
 	fGrid3DDrawer = false;
+	rootDrawer = new RootDrawer();
 }
 
 MapCompositionDoc::~MapCompositionDoc()
 {
-// DeleteContents() is already called 
+// DeleteContents() is already called
+	delete rootDrawer;
 }
 
 void MapCompositionDoc::DeleteContents()
@@ -1148,13 +1150,13 @@ BOOL MapCompositionDoc::OnOpenPointMap(const PointMap& pm, OpenType ot)
   dw->fNew = false;
   dl.push_back(dw);
   //================================================ TEST!!!!!!!
-    drawContext = new ILWIS::DrawerContext;
-	drawContext->setCoordBounds(pm->cb());
-	drawContext->setCoordinateSystem(pm->cs());
-	drawContext->setPixArea(RowCol(100,100));							
-	ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer("FeatureLayerDrawer",drawContext);
+
+
+	ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer("FeatureLayerDrawer",rootDrawer->getDrawerContext());
 	drawer->setDataSource((void *)&pm);
-	drawers.push_back(drawer);
+	rootDrawer->setCoordSystem(pm->cs());
+	rootDrawer->addCoordBounds(pm->cb());
+	rootDrawer->addDrawer(drawer);
  //===============================================
 
   if (ot & otEDIT) {
@@ -1764,11 +1766,8 @@ Drawer* MapCompositionDoc::drAppend(const PointMap& mp)
     if (!mp->fCalculated())
       return 0;
 
-	//--------------------------------------------------------- TODO, testing code
-		PointMapDrawer* dr = new PointMapDrawer(this, mp);
 	
-
-	  dl.push_back(dr);
+	 // dl.push_back(dr);
 		ChangeState();
 //    if (sSegName.length() == 0)
 //      sSegName = map->sName(true);
