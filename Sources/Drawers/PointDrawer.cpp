@@ -7,6 +7,7 @@
 
 using namespace ILWIS;
 
+
 ILWIS::NewDrawer *createPointDrawer(DrawerContext *context) {
 	return new PointDrawer(context);
 }
@@ -14,26 +15,35 @@ ILWIS::NewDrawer *createPointDrawer(DrawerContext *context) {
 PointDrawer::PointDrawer(DrawerContext *context) : FeatureDrawer(context,"PointDrawerSimple") {
 }
 
-void PointDrawer::draw(){
-
+void PointDrawer::draw(bool norecursion){
+	CoordBounds cb = getDrawerContext()->getCoordBounds();
+	double fx = -1.0 + 2 * ( cNorm.x - cb.cMin.x ) / cb.width();
+	double fy = -1.0 + 2 * ( cNorm.y - cb.cMin.y ) / cb.height();
+	double fz = 0;
+	CoordBounds canvas = getDrawerContext()->getCanvas();
+	fx *= canvas.width() / 2.0;
+	fy *= canvas.height() / 2.0;
+    
 	glLoadIdentity();	
 	glMatrixMode (GL_PROJECTION);
-	glOrtho (0, 200, 200, 0, 0, 1);
 	glColor3f(1.0,0.0,0.0);
 	glLoadIdentity();
 	glTranslatef(0.0, 0.0, 0.0);
-	glBegin(GL_TRIANGLES);						// Drawing Using Triangles
-		glVertex2f( 0.0f, 1.0f);				// Top
-		glVertex2f(-1.0f,-1.0f);				// Bottom Left
-		glVertex2f( 1.0f,-1.0f);				// Bottom Right
+	double symbolScale = 0.01;
+	glBegin(GL_QUADS);						
+		glVertex3f( fx - symbolScale, fy - symbolScale,fz);	
+		glVertex3f( fx - symbolScale, fy + symbolScale,fz);	
+		glVertex3f( fx + symbolScale, fy + symbolScale,fz);
+		glVertex3f( fx + symbolScale, fy - symbolScale,fz);
 	glEnd();
 	glMatrixMode (GL_MODELVIEW);
 }
 
 void PointDrawer::prepare(PreparationType t,CDC *dc){
-	if ( t == ptALL || ptGEOMETRY) {
+	if ( t == ptALL || t == ptGEOMETRY) {
 		ILWIS::Point *point = (ILWIS::Point *)feature;
-		if ( drawcontext->getCoordinateSystem() == csy) {
+		FileName fn = drawcontext->getCoordinateSystem()->fnObj;
+		if ( drawcontext->getCoordinateSystem()->fnObj == csy->fnObj) {
 			cNorm = *(point->getCoordinate());
 		}
 		else {

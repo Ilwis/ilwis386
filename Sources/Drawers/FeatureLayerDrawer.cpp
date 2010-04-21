@@ -19,6 +19,7 @@ FeatureLayerDrawer::~FeatureLayerDrawer() {
 }
 
 void FeatureLayerDrawer::prepare(PreparationType t,CDC *dc){
+	clear();
 	for(int i=0; i < basemap->iFeatures(); ++i) {
 		Feature *p = CFEATURE(basemap->getFeature(i));
 		if ( p && p->fValid()){
