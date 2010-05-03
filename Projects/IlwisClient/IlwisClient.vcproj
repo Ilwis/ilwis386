@@ -81,7 +81,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/ignore:4099"
-				AdditionalDependencies="ILWISEngine.lib htmlhelp.lib geosd.lib"
+				AdditionalDependencies="ILWISEngine.lib htmlhelp.lib geosd.lib opengl32.lib glu32.lib"
 				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\Ilwis.exe"
 				Version="3.5"
 				LinkIncremental="2"
@@ -2518,6 +2518,14 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\DrawerContext.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\DrawerContext.h"
+						>
+					</File>
+					<File
 						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\FeatureDrawer.cpp"
 						>
 					</File>
@@ -2562,7 +2570,19 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\RootDrawer.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\RootDrawer.h"
+						>
+					</File>
+					<File
 						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SegmentMapDrawer.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SelectionRectangle.cpp"
 						>
 					</File>
 					<File
@@ -2639,6 +2659,10 @@
 						</File>
 						<File
 							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SegmentMapDrawer.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SelectionRectangle.h"
 							>
 						</File>
 					</Filter>
