@@ -48,6 +48,7 @@
 #include "Client\Mapwindow\AreaSelector.h"
 #include "Client\Mapwindow\ZoomableView.h"
 #include "Client\Mapwindow\Drawers\WMSMapDrawer.h"
+#include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Engine\SpatialReference\Gr.h"
 #include "Engine\SpatialReference\Grsmpl.h"
 #include "Engine\SpatialReference\Grcornrs.h"
@@ -57,6 +58,8 @@
 #include "Client\Mapwindow\Positioner.h"
 #include "Headers\constant.h"
 #include "Client\Mapwindow\MapPaneView.h"
+#include "Client\Mapwindow\Drawers\DrawerContext.h"
+#include "Client\Mapwindow\Drawers\SelectionRectangle.h"
 #include "Engine\SpatialReference\prj.h"
 
 
@@ -98,6 +101,8 @@ ZoomableView::ZoomableView()
 	fAdjustSize = false;
 	fScrollBarsVisible = true;
 	iActiveTool = 0;
+	xOld = yOld = iUNDEF;
+	zoomf = 0.0;
 }
 
 ZoomableView::~ZoomableView()
@@ -302,19 +307,29 @@ void ZoomableView::CalcFalseOffsets()
 void ZoomableView::OnSize(UINT nType, int cx, int cy) 
 {
 	CView::OnSize(nType, cx, cy);
-	if (0 == cx || 0 == cy)
-		return;
-	dim = zDimension(cx, cy);
-	if(!wms(CRect(0,0,cx,cy), cResize) ) {
-		if (rUNDEF == _rScale)  // not yet InitialUpdate()
-			return;
-		MinMax mm = mmBounds();
-		iXsize = mm.width();
-		iYsize = mm.height();
+
+	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(GetDocument());
+	if ( mcd) {
+		RowCol rc(cy, cx);
+		dim = zDimension(cx, cy);
+		mcd->rootDrawer->getDrawerContext()->setViewPort(rc);
+		SetDirty();
+		
 	}
-	CalcFalseOffsets();
-	setScrollBars();
-	SetDirty();
+
+	//if (0 == cx || 0 == cy)
+	//	return;
+	//dim = zDimension(cx, cy);
+	//if(!wms(CRect(0,0,cx,cy), cResize) ) {
+	//	if (rUNDEF == _rScale)  // not yet InitialUpdate()
+	//		return;
+	//	MinMax mm = mmBounds();
+	//	iXsize = mm.width();
+	//	iYsize = mm.height();
+	//}
+	//CalcFalseOffsets();
+	//setScrollBars();
+	//SetDirty();
 }
 
 void ZoomableView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
@@ -785,36 +800,17 @@ void ZoomableView::OnZoomOut()
 		return;
 	}
 	if (fAdjustSize)
-		as = new AreaSelector(this, this, (NotifyRectProc)&ZoomableView::ZoomOutAreaSelected);
+		as = new AreaSelector(this, this, (NotifyRectProc)&ZoomableView::AreaSelected);
 	else 
-		as = new AreaSelector(this, this, (NotifyRectProc)&ZoomableView::ZoomOutAreaSelected, dim);
+		as = new AreaSelector(this, this, (NotifyRectProc)&ZoomableView::AreaSelected, dim);
 	as->SetCursor(zCursor("ZoomOutCursor"));
 	iActiveTool = ID_ZOOMOUT;
-/*
-  iXpos -= scale(dim.width()) / 2;
-  iYpos -= scale(dim.height()) / 2;
-	if (_rScale > 0) {
-    _rScale /= 2;
-	  if (_rScale < 1.0)
-			_rScale = -1/_rScale;
-	}
-	else
-		_rScale *= 2;
-	CalcFalseOffsets();
-  setScrollBars();
-	SetDirty();
-	CFrameWnd* pFrame = GetParentFrame();
-	ASSERT_VALID(pFrame);
-	CRect rect;
-	pFrame->GetWindowRect(&rect);
-	pFrame->SetWindowPos(NULL, 0, 0, rect.Width(), rect.Height(),
-		SWP_NOMOVE|SWP_NOZORDER|SWP_NOACTIVATE);
-*/
 }
 
 void ZoomableView::OnSelectArea()
 {
 	OnNoTool();
+
 	if (fAdjustSize)
 		as = new AreaSelector(this, this, (NotifyRectProc)&ZoomableView::AreaSelected);
 	else 
@@ -924,17 +920,25 @@ void ZoomableView::ShowArea(double rScale, long iX, long iY)
 
 void ZoomableView::AreaSelected(CRect rect)
 {
-	rect.NormalizeRect();
-	if (rect.Width() < 3 && rect.Height() < 3)
-		ZoomInPnt(rect.TopLeft());
-	else if (rect.Width() < 3 || rect.Height() < 3)
-		return;
-	else {
-		if(!wms(rect, cZoomIn)) {
-			MinMax mmWish = mmRect(rect);
-			ShowArea(mmWish);
-		}
-	}
+	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(GetDocument());
+	mcd->rootDrawer->getDrawerContext()->setZoom(rect);
+	CoordBounds zoom = mcd->rootDrawer->getDrawerContext()->getCoordBoundsZoom(true);
+
+	glMatrixMode(GL_PROJECTION);
+	glOrtho(zoom.cMin.x,zoom.cMax.x,zoom.cMin.y,zoom.cMax.y,-1,1.0);
+	
+	mcd->rootDrawer->draw();
+	//rect.NormalizeRect();
+	//if (rect.Width() < 3 && rect.Height() < 3)
+	//	ZoomInPnt(rect.TopLeft());
+	//else if (rect.Width() < 3 || rect.Height() < 3)
+	//	return;
+	//else {
+	//	if(!wms(rect, cZoomIn)) {
+	//		MinMax mmWish = mmRect(rect);
+	//		ShowArea(mmWish);
+	//	}
+	//}
 }
 
 void ZoomableView::ZoomOutAreaSelected(CRect rect)

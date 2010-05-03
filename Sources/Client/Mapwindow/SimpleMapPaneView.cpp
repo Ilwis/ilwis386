@@ -65,6 +65,7 @@
 #include "Engine\SpatialReference\Cslatlon.h"
 #include "Engine\Representation\Rprclass.h"
 #include "Client\Mapwindow\MapPaneView.h"
+#include "Client\Mapwindow\Drawers\DrawerContext.h"
 #include "Client\Mapwindow\OverviewMapPaneView.h"
 
 #ifdef _DEBUG
@@ -229,33 +230,16 @@ zPoint SimpleMapPaneView::pntPos(Coord crd)
  
 BOOL SimpleMapPaneView::OnEraseBkgnd(CDC* cdc)
 {
-	MapCompositionDoc* mcd = GetDocument();
+	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(GetDocument());
+	if ( mcd) {
+	/*	CRect rct;
+		GetClientRect(&rct);
+		mcd->rootDrawer->getDrawerContext()->setViewPort(RowCol(rct.Height(), rct.Width()));
+		mcd->rootDrawer->prepare(NewDrawer::ptALL);*/
+		//mcd->rootDrawer->draw(true);
+		//SwapBuffers(cdc->m_hDC);
+	}
 
-	zRect rect;
-	GetClientRect(&rect);
-
-	CRect rBounds = rctPos(mcd->mmBounds());
-	CRgn rgn, rgnRect, rgnBounds;
-  rgn.CreateRectRgn(0,0,0,0);
-  rgnRect.CreateRectRgnIndirect(&rect);
-  rgnBounds.CreateRectRgnIndirect(&rBounds);
-  rgn.CombineRgn(&rgnRect, &rgnBounds, RGN_DIFF);
-	cdc->SelectClipRgn(&rgn);
-  
-	// gray window background
-	SysColor colBG(COLOR_APPWORKSPACE);
-	CPen pen(PS_SOLID,1,colBG);
-	CBrush br(colBG);
-	CPen* penOld = cdc->SelectObject(&pen);
-	CBrush* brOld = cdc->SelectObject(&br);
-	cdc->Rectangle(rect);
-	cdc->SelectObject(penOld);
-	cdc->SelectObject(brOld);
-
-	cdc->SelectClipRgn(0);
-  rgnRect.DeleteObject();
-  rgnBounds.DeleteObject();
-	rgn.DeleteObject();
   return TRUE;
 }
 
@@ -265,59 +249,18 @@ void SimpleMapPaneView::InitOpenGL(HDC hDC) {
 
 void SimpleMapPaneView::OnDraw(CDC* cdc)
 {
+	CDC *dc = cdc == 0 ? GetDC() : cdc;
 	MapCompositionDoc* mcd = GetDocument();
-	mcd->rootDrawer->prepare(NewDrawer::ptALL, cdc);
+	mcd->rootDrawer->prepare(NewDrawer::ptALL, dc);
+
+	CRect rct;
+	GetClientRect(&rct);
+	RowCol rc(rct.Height(), rct.Width());
+	mcd->rootDrawer->getDrawerContext()->setViewPort(rc);
 	mcd->rootDrawer->draw();
-	SwapBuffers(cdc->m_hDC);
+	
+	SwapBuffers(dc->m_hDC);
 
-
-	//zRect rect;
-	//GetClientRect(&rect);
-
-	//CRect rBounds = rctPos(mcd->mmBounds());
-	//CRgn rgnBounds;
- // rgnBounds.CreateRectRgnIndirect(&rBounds);
- // 
-	//// gray window background is drawn in OnEraseBkgnd()
-	//// clip to map boundaries
-	//cdc->SelectClipRgn(&rgnBounds);
- // 
-	//if (fRedrawing && !fDrawAlsoWhenLoading)
-	//{
- // 	CPen penRect(PS_SOLID,1,mcd->colBackground);
- // 	CBrush brRect(mcd->colBackground);
- // 	CPen* penOld = cdc->SelectObject(&penRect);
- // 	CBrush* brOld = cdc->SelectObject(&brRect);
- // 	CRect rctBounds = rctPos(mcd->mmBounds());
- // 	cdc->Rectangle(rctBounds);
- // 	cdc->SelectObject(penOld);
- // 	cdc->SelectObject(brOld);
- // } 
-	//else 
- // {
-	//	MinMax mm = mmRect(rect);
-	//	GeoRef georef = mcd->georef;
-	//	DefaultPositioner psn(this, mm, georef);  
- // 
-	//	if (edit) 
-	//		edit->PreDraw();
-	//	csDcView.Lock();
-	//	if (dcView)
-	//		cdc->BitBlt(0,0,rect.width(),rect.height(),dcView,0,0,SRCCOPY);
-	//	csDcView.Unlock();
-
-	//	// set clipping off
-	//	cdc->SelectClipRgn(0);
-
-	//	// draw editor
-	//	if (edit) {
-	//		CPaintDC *pdc = dynamic_cast<CPaintDC*>(cdc);
-	//		if (0 != pdc)
-	//			rect = CRect(pdc->m_ps.rcPaint);
-	//		edit->draw(cdc, rect, &psn, &fDrawStop);
-	//	}
-	//}
- // rgnBounds.DeleteObject();
 }
 
 void SimpleMapPaneView::OnMeasureDist()

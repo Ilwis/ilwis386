@@ -83,7 +83,6 @@ public:
   virtual zIcon icon() const;
 
 	ILWIS::RootDrawer *rootDrawer;
-	ILWIS::DrawerContext *drawContext;
 
 // Overrides
 	// ClassWizard generated virtual function overrides

@@ -48,7 +48,9 @@
 // AreaSelector.h : header file
 //
 
-typedef void (CCmdTarget::*NotifyRectProc)(CRect);
+//typedef void (CCmdTarget::*NotifyRectProc)(CRect);
+
+#include "Client\Mapwindow\Drawers\SelectionRectangle.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // AreaSelector command target
@@ -71,6 +73,7 @@ protected:
 	CPoint pStart, pEnd;
 	zDimension dim;
 	bool fDown, fKeepDimensions;
+	ILWIS::SelectionRectangle *selectionDrawer;
 };
 
 /////////////////////////////////////////////////////////////////////////////

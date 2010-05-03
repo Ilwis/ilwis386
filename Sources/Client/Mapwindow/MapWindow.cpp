@@ -245,23 +245,23 @@ int MapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 			CRect(0,0,0,0), &ltb, 100, 0);
 
   // half of the requested height will be assigned
-	gbOverview.Create(this, 125, CSize(150,300));
-  gbOverview.m_szFloat = CSize(150,150);
-	gbOverview.EnableDocking(CBRS_ALIGN_LEFT|CBRS_ALIGN_RIGHT);
-  gbOverview.view = new OverviewMapPaneView;
-  gbOverview.view->Create(NULL,NULL,AFX_WS_DEFAULT_VIEW,CRect(0,0,0,0),&gbOverview,100.0);
-  gbOverview.SetWindowText(SMWTitleOverviewWindow.scVal());
+//	gbOverview.Create(this, 125, CSize(150,300));
+  //gbOverview.m_szFloat = CSize(150,150);
+//	gbOverview.EnableDocking(CBRS_ALIGN_LEFT|CBRS_ALIGN_RIGHT);
+ // gbOverview.view = new OverviewMapPaneView;
+  //gbOverview.view->Create(NULL,NULL,AFX_WS_DEFAULT_VIEW,CRect(0,0,0,0),&gbOverview,100.0);
+ // gbOverview.SetWindowText(SMWTitleOverviewWindow.scVal());
 
 	if (0 == pFirstView) 
 		pFirstView = dynamic_cast<CView*>(GetDescendantWindow(AFX_IDW_PANE_FIRST, TRUE));
 	pFirstView->GetDocument()->AddView(ltb.view);
-	pFirstView->GetDocument()->AddView(gbOverview.view);
+	//pFirstView->GetDocument()->AddView(gbOverview.view);
 
 	DockControlBar(&ltb,AFX_IDW_DOCKBAR_LEFT);
   RecalcLayout();
   ltb.GetWindowRect(&rect);
 	rect.OffsetRect(0,1);
-	DockControlBar(&gbOverview,AFX_IDW_DOCKBAR_LEFT,rect);
+	//DockControlBar(&gbOverview,AFX_IDW_DOCKBAR_LEFT,rect);
 
 	return 0;
 }
@@ -448,8 +448,8 @@ void MapWindow::OnOverviewWindow()
 
 void MapWindow::OnUpdateOverviewWindow(CCmdUI* pCmdUI)
 {
-	bool fCheck = gbOverview.IsWindowVisible() != 0;
-	pCmdUI->SetCheck(fCheck);
+	//bool fCheck = gbOverview.IsWindowVisible() != 0;
+	//pCmdUI->SetCheck(fCheck);
 }
 
 BOOL MapWindow::OnCmdMsg(UINT nID, int nCode, void* pExtra,

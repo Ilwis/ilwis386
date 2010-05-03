@@ -47,6 +47,7 @@
 #include "Client\MainWindow\Catalog\CatalogDocument.h"
 #include "Engine\Map\Mapview.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
+#include "Client\Mapwindow\Drawers\SelectionRectangle.h"
 #include "Client\Mapwindow\MapPaneView.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\Mapwindow\AreaSelector.h"
@@ -59,6 +60,8 @@ static char THIS_FILE[] = __FILE__;
 
 /////////////////////////////////////////////////////////////////////////////
 // AreaSelector
+
+using namespace ILWIS;
 
 AreaSelector::AreaSelector(ZoomableView* mappaneview, 
 													 CCmdTarget* cmdTarget, 
@@ -82,6 +85,7 @@ AreaSelector::AreaSelector(ZoomableView* mappaneview,
 , fDown(false)
 , dim(dimension)
 , fKeepDimensions(true)
+, selectionDrawer(0)
 {
 	SetCursor(zCursor("AreaSelCursor"));
 }
@@ -98,7 +102,6 @@ AreaSelector::~AreaSelector()
 void AreaSelector::OnMouseMove(UINT nFlags, CPoint point) 
 {
 	if (fDown) {
-		DrawRect();
 		pEnd = point;
 		DrawRect();
 	}
@@ -108,16 +111,27 @@ void AreaSelector::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	pStart = point;
 	pEnd = pStart;
-	DrawRect();
 	fDown = true;
+
+	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(mpv->GetDocument());
+	ILWIS::DrawerParameters *sp = new ILWIS::DrawerParameters;
+	sp->context = mcd->rootDrawer->getDrawerContext();
+
+	selectionDrawer = (SelectionRectangle *)IlwWinApp()->getDrawer("SelectionRectangle", sp);
+	mcd->rootDrawer->addDrawer(selectionDrawer);
 	mpv->SetCapture();
+	DrawRect();
 }
 
 void AreaSelector::OnLButtonUp(UINT nFlags, CPoint point) 
 {
 	DrawRect();
 	fDown = false;
-  pEnd = point;
+    pEnd = point;
+
+	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(mpv->GetDocument());
+	mcd->rootDrawer->removeDrawer(selectionDrawer->getId());
+
 	(cmt->*np)(rect());
 	ReleaseCapture();
 }
@@ -143,20 +157,14 @@ CRect AreaSelector::rect() const
   if (abs(x1-x2) < 3) x2 = x1;
   if (abs(y1-y2) < 3) y2 = y1;
   CRect rect(x1,y1,x2,y2);
-	rect.NormalizeRect();
-	return rect;
+  rect.NormalizeRect();
+
+ 
+  return rect;
 }
 
 void AreaSelector::DrawRect()
 {
-	CClientDC cdc(mpv);
-	int iROP = cdc.SetROP2(R2_XORPEN);
-  CRect rct = rect();
-	CGdiObject* br = cdc.SelectStockObject(HOLLOW_BRUSH);
-	CGdiObject* pn = cdc.SelectStockObject(WHITE_PEN);
-	cdc.Rectangle(&rct);
-	cdc.SelectObject(br);
-	cdc.SelectObject(pn);
-	cdc.SetROP2(iROP);
+	selectionDrawer->calcWorldCoordinates(rect());
+	mpv->OnDraw(0);
 }
-

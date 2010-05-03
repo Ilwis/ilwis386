@@ -59,6 +59,8 @@ class WMSMapDrawer;
 /////////////////////////////////////////////////////////////////////////////
 // ZoomableView view
 
+#include "Client\Mapwindow\Drawers\SelectionRectangle.h"
+
 class IMPEXP ZoomableView : public CView
 {
 public:
@@ -153,6 +155,9 @@ public:
 	bool fAdjustSize;
 	int iActiveTool;
 	bool fScrollBarsVisible;
+
+	long xOld,yOld;
+	double zoomf;
 
 	DECLARE_DYNCREATE(ZoomableView)
 	DECLARE_MESSAGE_MAP()

@@ -1152,7 +1152,9 @@ BOOL MapCompositionDoc::OnOpenPointMap(const PointMap& pm, OpenType ot)
   //================================================ TEST!!!!!!!
 
 
-	ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer("FeatureLayerDrawer",rootDrawer->getDrawerContext());
+  ILWIS::DrawerParameters *parms = new ILWIS::DrawerParameters;
+  parms->context = rootDrawer->getDrawerContext();
+	ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer("FeatureLayerDrawer", parms);
 	drawer->setDataSource((void *)&pm);
 	rootDrawer->setCoordSystem(pm->cs());
 	rootDrawer->addCoordBounds(pm->cb());
