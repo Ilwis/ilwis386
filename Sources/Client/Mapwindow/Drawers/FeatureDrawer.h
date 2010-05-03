@@ -5,7 +5,7 @@ namespace ILWIS	{
 
 	class _export FeatureDrawer : public AbstractDrawer {
 	public:
-		FeatureDrawer(DrawerContext *context, const String& ty);
+		FeatureDrawer(DrawerParameters *parms, const String& ty);
 		~FeatureDrawer();
 		void setDataSource(void *p);
 		void setCoordinateSystem(const CoordSystem& cs);

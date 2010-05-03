@@ -1,49 +1,52 @@
 #pragma once
 
+#include <gl/gl.h>
+#include <gl/glu.h>
 #include "Engine\SpatialReference\Coordsys.h"
-#include "Engine\Map\Feature.h"
 #include "Engine\Domain\dm.h"
 
 namespace ILWIS {
-	class _export DrawerContext {
-	public:
-		CoordBounds getCoordBounds() const { return cb; }
-		CoordSystem getCoordinateSystem() const { return cs;}
-		RowCol getViewPort() const { return pixArea; }
-		void setCoordinateSystem(CoordSystem _cs) { cs = _cs; }
-		void setCoordBounds(CoordBounds _cb) { cb = _cb; }
-		void setPixArea(RowCol rc) { pixArea = rc; }
+	class DrawerContext;
 
-	private:
-		CoordBounds cb;
-		CoordSystem cs;
-		RowCol pixArea;
-		//Georef grf;
+	struct DrawerParameters {
+		DrawerContext *context;
 	};
 
 	class _export NewDrawer {
 	public:
-		enum PreparationType{ptALL,ptRENDER,ptGEOMETRY};
-		virtual void draw() = 0;
-		virtual void prepare(PreparationType t=ptALL) =0;
+		enum PreparationType{ptALL=1,ptRENDER=2,ptGEOMETRY=4,ptINITOPENGL=8};
+		virtual void draw(bool norecursion = false) = 0;
+		virtual void prepare(PreparationType t=ptALL,CDC *dc = 0) =0;
 		virtual String getType() const =0;
 		virtual void setDataSource(void *) = 0;
+		virtual DrawerContext *getDrawerContext() = 0;
+		virtual String getId() const = 0;
 	};
 
 	class _export AbstractDrawer : public NewDrawer {
 	public:
+		AbstractDrawer() {};
 		String getType() const;
+		DrawerContext *getDrawerContext();
+		void draw(bool norecursion = false);
+		void prepare(PreparationType t=ptALL,CDC *dc = 0);
+		virtual String addDrawer(NewDrawer *drw);
+		virtual void removeDrawer(const String& did);
+		void setDataSource(void *){}
+		void clear();
+		virtual String getId() const;
 	protected:
-		AbstractDrawer(DrawerContext *context, const String& ty);
+		AbstractDrawer(DrawerParameters *context, const String& ty);
 		~AbstractDrawer();
 		String type;
 		vector<NewDrawer *> drawers;
 		DrawerContext *drawcontext;
+		String id;
 	} ;
 
 }
 
-typedef ILWIS::NewDrawer* (*DrawerCreate)(ILWIS::DrawerContext *c);
+typedef ILWIS::NewDrawer* (*DrawerCreate)(ILWIS::DrawerParameters *parms);
 
 struct DrawerInfo {
 	DrawerInfo(const String& n, DrawerCreate func) : name(n), createFunc(func) {}

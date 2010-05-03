@@ -1,10 +1,11 @@
 #include "headers\toolspch.h"
 #include "Drawer_n.h"
+#include "Engine\Map\Feature.h"
 #include "Client\Mapwindow\Drawers\FeatureDrawer.h"
 
 using namespace ILWIS;
 
-FeatureDrawer::FeatureDrawer(DrawerContext *context, const String& ty) : AbstractDrawer(context, ty){
+FeatureDrawer::FeatureDrawer(DrawerParameters *parms, const String& ty) : AbstractDrawer(parms, ty){
 }
 
 FeatureDrawer::~FeatureDrawer() {
