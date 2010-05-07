@@ -3,7 +3,7 @@
 
 using namespace ILWIS;
 
-DrawerContext::DrawerContext() : mhRC(0),aspectRatio(0),xview(0),yview(0),hview(0),wview(0){
+DrawerContext::DrawerContext() : mhRC(0),aspectRatio(0){
 }
 
 bool DrawerContext::initOpenGL(CDC *dc) {
@@ -29,33 +29,21 @@ bool DrawerContext::initOpenGL(CDC *dc) {
 	glViewport(0,0,10000,10000);
 	glClearColor(0.75,0.75,0.75,0.0);
 
+	CWnd * wnd = dc->GetWindow();
+	CRect rct;
+	wnd->GetClientRect(&rct);
+	RowCol rc(rct.Height(), rct.Width());
+	setViewPort(rc);
+
 	return true;
 }
 
 void DrawerContext::setViewPort(const RowCol& rc) {
 	pixArea = rc;
-	//if ( !mhRC || aspectRatio == 0)
-	//	return ;
-	//double delta = 1.0;
-	//if ( aspectRatio <= 1.0 ) {
-	//	if ( hview != rc.Row){
-	//		delta = rc.Row * aspectRatio;
-	//		xview = rc.Col / 2.0 - delta/2.0;
-	//		yview = 0;
-	//		wview  = delta;
-	//		hview = rc.Row;
-	//	}
-	//} else {
-	//	if ( wview != rc.Col){
-	//		delta = rc.Col * aspectRatio;
-	//		xview = 0;
-	//		yview = rc.Row / 2.0 - delta/2.0;
-	//		wview  = rc.Col;
-	//		hview = delta;
-	//	}
-	//}
-	//glViewport(xview,yview,wview, hview);
 	glViewport(0,0,rc.Col, rc.Row);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+    glOrtho(cbZoom.cMin.x,cbZoom.cMax.x,cbZoom.cMin.y,cbZoom.cMax.y,-1,1.0);
 }
 
 DrawerContext::~DrawerContext() {
@@ -81,32 +69,38 @@ void DrawerContext::setCoordinateSystem(const CoordSystem& _cs, bool overrule){
 
 void DrawerContext::setCoordBoundsView(const CoordBounds& _cb, bool overrule){
 	if ( overrule || cbView.fUndef()) {
-		cbView = _cb;
-		cbZoom = _cb;
-		cbZoomWorld = toWorld(_cb);
+		cbMap = _cb;
+		aspectRatio = cbMap.width()/ cbMap.height();
+		double pxar = (double)pixArea.Col / pixArea.Row;
+		if ( pxar >= 1.0) {
+			double w = _cb.width();
+			double h = _cb.height();
+			double pixwidth = (double)pixArea.Row * aspectRatio;
+			double fracofWidth = 1.0 - (pixArea.Col - pixwidth) / pixArea.Col;
+			double crdWidth = w / fracofWidth;
+			double deltax = (crdWidth - w) / 2.0;
+			cbView =  CoordBounds(Coord(_cb.MinX() - deltax,_cb.MinY()), 
+			                      Coord(_cb.MaxX() + deltax,_cb.MaxY()));
+			cbZoom = cbView;
+			glMatrixMode(GL_PROJECTION);
+			glLoadIdentity();
+			glOrtho(cbView.cMin.x,cbView.cMax.x,cbView.cMin.y,cbView.cMax.y,-1,1.0);
+		}
 
 	} else {
 		cbView += _cb;
+		aspectRatio = cbView.width()/ cbView.height();
 	}
-	aspectRatio = cbView.width()/ cbView.height();
+	
 }
 
 void DrawerContext::setCoordBoundsZoom(const CoordBounds& cb) {
 	cbZoom = cb;
 }
 
-CoordBounds  DrawerContext::toWorld(const CoordBounds& cb) {
-	if ( aspectRatio <= 1.0) {
-		double vx = (double)pixArea.Row / pixArea.Col;
-		double y1 = 2.0 * ( cb.MinY() - cbView.MinY()) / cbView.height() - 1.0;
-		double y2 = 2.0 * ( cb.MaxY() - cbView.MinY()) / cbView.height() - 1.0;
-		double x1 =  (2.0 *( cb.MinX() - cbView.MinX()) / cbView.width() - 1.0 ) * aspectRatio * vx;
-		double x2 =  (2.0 *( cb.MaxX() - cbView.MinX()) / cbView.width() - 1.0 ) * aspectRatio * vx; 
-		cbZoomWorld =  CoordBounds(Coord(x1,y1), Coord(x2,y2));
-	}
-	return cbZoomWorld;
+CoordBounds DrawerContext::getMapCoordBoubnds() const{
+	return cbMap;
 }
-
 
 double DrawerContext::getAspectRatio() const {
 	return aspectRatio;
@@ -114,22 +108,12 @@ double DrawerContext::getAspectRatio() const {
 
 Coord DrawerContext::screenToWorld(const RowCol& rc) {
 
-	int port[4];
-	Coord c;
-	//double zoom = cbZoom.width() / cbView.width();
-	glGetIntegerv(GL_VIEWPORT, port);
-	double vx = (double)pixArea.Row / pixArea.Col;
-	double colIntern = rc.Col - ( 1.0 + cbZoomWorld.MinX()) * port[2]/2.0;
-	double rowIntern = rc.Row - ( 1.0 + cbZoomWorld.MinY()) * port[3]/2.0;
-	double deltax1 = colIntern/port[2];
-	double deltay1 = rowIntern/port[3];
-	deltax1 = cbZoom.MinX() + deltax1 * cbZoom.width();
-	deltay1 = cbZoom.MinY() + deltay1 * cbZoom.height();
-	double x1 =  (2.0 *( deltax1 - cbView.MinX()) / cbView.width() - 1.0 ) * aspectRatio * vx;
-	double y1 = 2.0 * ( deltay1 - cbView.MinY()) / cbView.height() - 1.0;
+	double fractX = (double)rc.Col / pixArea.Col;
+	double fractY = (double)rc.Row / pixArea.Row;
+	double x = cbZoom.MinX() + cbZoom.width() * fractX;
+	double y = cbZoom.MinY() + cbZoom.height() * fractY;
 
-
-	return Coord(x1,y1);
+	return Coord(x,y);
 }
 
 RowCol DrawerContext::worldToScreen(const Coord& crd){
@@ -143,15 +127,12 @@ RowCol DrawerContext::worldToScreen(const Coord& crd){
 void DrawerContext::setZoom(const CRect& rect) {
 	Coord c1 = screenToWorld(RowCol(rect.top, rect.left));
 	Coord c2 = screenToWorld(RowCol(rect.bottom, rect.right));
-	cbZoomWorld = CoordBounds(c1,c2);
-	cbZoom.cMin.x = cbZoom.cMin.x + (1.0 + c1.x * cbZoom.width());
-	cbZoom.cMin.y = cbZoom.cMin.y + (1.0 + c1.y * cbZoom.height());
-	cbZoom.cMax.x = cbZoom.cMax.x + (1.0 + c2.x * cbZoom.width());
-	cbZoom.cMax.y = cbZoom.cMax.y + (1.0 + c2.y * cbZoom.height());
+	cbZoom = CoordBounds(c1,c2);
+
+	glMatrixMode(GL_PROJECTION);
+	glOrtho(cbZoom.cMin.x,cbZoom.cMax.x,cbZoom.cMin.y,cbZoom.cMax.y,-1,1.0);
 }
 
-CoordBounds DrawerContext::getCoordBoundsZoom(bool world) const  {
-	if ( world)
-		return cbZoomWorld;
+CoordBounds DrawerContext::getCoordBoundsZoom() const  {
 	return cbZoom;
 }

@@ -32,16 +32,6 @@ void SelectionRectangle::draw(bool norecursion ){
 }
 
 void SelectionRectangle::calcWorldCoordinates(const CRect & rctZoom) {
-	/*int port[4];
-	glGetIntegerv(GL_VIEWPORT, port);
-	double deltax1 = rctZoom.left - port[0];
-	double deltay1 = rctZoom.top - port[1];
-	double deltax2 = deltax1 + rctZoom.Width();
-	double deltay2 = deltay1 + rctZoom.Height();
-	c1.x = (2.0*deltax1/port[2]) - 1.0;
-	c1.y = 1.0 - (2.0*deltay1/port[3]);
-	c2.x = (2.0*deltax2/port[2]) - 1.0;
-	c2.y = 1.0 - (2.0*deltay2/port[3]);*/
 	c1 = getDrawerContext()->screenToWorld(RowCol(rctZoom.top,rctZoom.left));
 	c2 = getDrawerContext()->screenToWorld(RowCol(rctZoom.bottom,rctZoom.right));
 }

@@ -316,20 +316,13 @@ void ZoomableView::OnSize(UINT nType, int cx, int cy)
 		SetDirty();
 		
 	}
+}
 
-	//if (0 == cx || 0 == cy)
-	//	return;
-	//dim = zDimension(cx, cy);
-	//if(!wms(CRect(0,0,cx,cy), cResize) ) {
-	//	if (rUNDEF == _rScale)  // not yet InitialUpdate()
-	//		return;
-	//	MinMax mm = mmBounds();
-	//	iXsize = mm.width();
-	//	iYsize = mm.height();
-	//}
-	//CalcFalseOffsets();
-	//setScrollBars();
-	//SetDirty();
+void ZoomableView::AreaSelected(CRect rect)
+{
+	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(GetDocument());
+	mcd->rootDrawer->getDrawerContext()->setZoom(rect);
+	mcd->rootDrawer->draw();
 }
 
 void ZoomableView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
@@ -916,29 +909,6 @@ void ZoomableView::ShowArea(double rScale, long iX, long iY)
 	CalcFalseOffsets();
 	setScrollBars();
 	SetDirty();
-}
-
-void ZoomableView::AreaSelected(CRect rect)
-{
-	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(GetDocument());
-	mcd->rootDrawer->getDrawerContext()->setZoom(rect);
-	CoordBounds zoom = mcd->rootDrawer->getDrawerContext()->getCoordBoundsZoom(true);
-
-	glMatrixMode(GL_PROJECTION);
-	glOrtho(zoom.cMin.x,zoom.cMax.x,zoom.cMin.y,zoom.cMax.y,-1,1.0);
-	
-	mcd->rootDrawer->draw();
-	//rect.NormalizeRect();
-	//if (rect.Width() < 3 && rect.Height() < 3)
-	//	ZoomInPnt(rect.TopLeft());
-	//else if (rect.Width() < 3 || rect.Height() < 3)
-	//	return;
-	//else {
-	//	if(!wms(rect, cZoomIn)) {
-	//		MinMax mmWish = mmRect(rect);
-	//		ShowArea(mmWish);
-	//	}
-	//}
 }
 
 void ZoomableView::ZoomOutAreaSelected(CRect rect)

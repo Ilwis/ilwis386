@@ -12,7 +12,8 @@ namespace ILWIS {
 		~DrawerContext();
 		DrawerContext();
 		CoordBounds getCoordBoundsView() const { return cbView; }
-		CoordBounds getCoordBoundsZoom(bool world=false) const; 
+		CoordBounds getCoordBoundsZoom() const; 
+		CoordBounds getMapCoordBoubnds() const;
 		CoordSystem getCoordinateSystem() const { return cs;}
 		RowCol getViewPort() const { return pixArea; }
 		void setCoordinateSystem(const CoordSystem& _cs, bool overrule) ;
@@ -22,7 +23,6 @@ namespace ILWIS {
 		void setViewPort(const RowCol& rc);
 		Coord screenToWorld(const RowCol& rc);
 		RowCol worldToScreen(const Coord& crd);
-		CoordBounds toWorld(const CoordBounds& cb);
 		double getAspectRatio() const;
 		bool initOpenGL(CDC *dc);
 		void clear();
@@ -31,10 +31,9 @@ namespace ILWIS {
 
 		CoordBounds cbView;
 		CoordBounds cbZoom;
-		CoordBounds cbZoomWorld;
+		CoordBounds cbMap;
 		CoordSystem cs;
 		RowCol pixArea;
-		double xview,yview,wview,hview;
 		double aspectRatio;
 		HGLRC mhRC;
 	};

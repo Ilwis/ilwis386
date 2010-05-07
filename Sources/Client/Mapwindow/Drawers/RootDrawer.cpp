@@ -18,7 +18,7 @@ void  RootDrawer::prepare(PreparationType t,CDC *dc){
 	if ( dc && (  v1 || v2 ))
 		getDrawerContext()->initOpenGL(dc);
 	if ( !(t & RootDrawer::ptINITOPENGL))
-		AbstractDrawer::prepare(t,dc); 
+		AbstractDrawer::prepare(t,dc);
 }
 
 void RootDrawer::setCoordSystem(const CoordSystem& cs, bool overrule){
@@ -41,7 +41,7 @@ void RootDrawer::draw(bool norecursion){
 	if ( aspect < 1.0) {
 		
 	}
-	CoordBounds cb = getDrawerContext()->toWorld(getDrawerContext()->getCoordBoundsView());
+	CoordBounds cb = getDrawerContext()->getMapCoordBoubnds();
 
 	glLoadIdentity();
 	glBegin(GL_QUADS);						
@@ -52,11 +52,11 @@ void RootDrawer::draw(bool norecursion){
 		glVertex3f(cb.MaxX(), cb.MinY(),z);
 	glEnd();
 
+
 	if ( !norecursion) {
 		for(int i=0; i < drawers.size(); ++i)
 			drawers[i]->draw();
 	}
-	glFlush();
 }
 
 void RootDrawer::setDataSource(void *) {

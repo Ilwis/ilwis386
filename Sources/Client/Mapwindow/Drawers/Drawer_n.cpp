@@ -17,7 +17,7 @@ String AbstractDrawer::getType() const {
 	return type;
 }
 
-AbstractDrawer::~AbstractDrawer() { 
+AbstractDrawer::~AbstractDrawer() {
 	clear();
 }
 
@@ -45,6 +45,7 @@ void AbstractDrawer::prepare(PreparationType t,CDC *dc){
 
 String AbstractDrawer::addDrawer(NewDrawer *drw) {
 	drawers.push_back(drw);
+	drawersById[drw->getId()] = drw;
 	return drw->getId();
 }
 
@@ -53,6 +54,9 @@ void AbstractDrawer::removeDrawer(const String& did) {
 		if ( drawers.at(i)->getId() == did ) {
 			delete drawers.at(i);
 			drawers.erase(drawers.begin() + i);
+			map<String, NewDrawer *>::iterator cur= drawersById.find(did);
+			if ( cur != drawersById.end())
+				drawersById.erase(cur);
 			break;
 		}
 	}
@@ -60,6 +64,14 @@ void AbstractDrawer::removeDrawer(const String& did) {
 
 String AbstractDrawer::getId() const{
 	return id;
+}
+
+NewDrawer *AbstractDrawer::getDrawer(const String& did) {
+	map<String, NewDrawer *>::iterator cur= drawersById.find(did);
+	if ( cur != drawersById.end())
+		return (*cur).second;
+	return NULL;
+
 }
 //----------------------------------------------------------------------------
 

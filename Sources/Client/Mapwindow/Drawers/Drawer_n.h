@@ -21,6 +21,7 @@ namespace ILWIS {
 		virtual void setDataSource(void *) = 0;
 		virtual DrawerContext *getDrawerContext() = 0;
 		virtual String getId() const = 0;
+		virtual NewDrawer *getDrawer(const String& did) = 0;
 	};
 
 	class _export AbstractDrawer : public NewDrawer {
@@ -35,11 +36,13 @@ namespace ILWIS {
 		void setDataSource(void *){}
 		void clear();
 		virtual String getId() const;
+		NewDrawer *getDrawer(const String& did);
 	protected:
 		AbstractDrawer(DrawerParameters *context, const String& ty);
 		~AbstractDrawer();
 		String type;
 		vector<NewDrawer *> drawers;
+		map<String, NewDrawer *> drawersById;
 		DrawerContext *drawcontext;
 		String id;
 	} ;
