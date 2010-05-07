@@ -8,11 +8,11 @@
 
 using namespace ILWIS;
 
-ILWIS::NewDrawer *createFeatureLayerDrawer(DrawerContext *context) {
-	return new FeatureLayerDrawer(context);
+ILWIS::NewDrawer *createFeatureLayerDrawer(DrawerParameters *parms) {
+	return new FeatureLayerDrawer(parms);
 }
 
-FeatureLayerDrawer::FeatureLayerDrawer(DrawerContext *context) : AbstractDrawer(context,"FeatureLayerDrawer"){
+FeatureLayerDrawer::FeatureLayerDrawer(DrawerParameters *parms) : AbstractDrawer(parms,"FeatureLayerDrawer"){
 }
 
 FeatureLayerDrawer::~FeatureLayerDrawer() {
@@ -23,7 +23,9 @@ void FeatureLayerDrawer::prepare(PreparationType t,CDC *dc){
 	for(int i=0; i < basemap->iFeatures(); ++i) {
 		Feature *p = CFEATURE(basemap->getFeature(i));
 		if ( p && p->fValid()){
-			FeatureDrawer *pdrw = (FeatureDrawer *)IlwWinApp()->getDrawer("PointDrawerSimple",drawcontext);
+			ILWIS::DrawerParameters *dp = new ILWIS::DrawerParameters;
+			dp->context = drawcontext;
+			FeatureDrawer *pdrw = (FeatureDrawer *)IlwWinApp()->getDrawer("PointDrawerSimple",dp);
 			pdrw->setCoordinateSystem(basemap->cs());
 			pdrw->setDomain(basemap->dm());
 			pdrw->setDataSource(p);
