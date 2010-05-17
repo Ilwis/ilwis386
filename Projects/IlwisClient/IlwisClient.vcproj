@@ -2486,6 +2486,22 @@
 					Name="Drawers"
 					>
 					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\AbstractMapDrawer.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\AbstractMapDrawer.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\AbstractObjectDrawer.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\AbstractObjectDrawer.h"
+						>
+					</File>
+					<File
 						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\AnaglyphDrawer.cpp"
 						>
 					</File>
