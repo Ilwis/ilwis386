@@ -46,10 +46,10 @@
 /////////////////////////////////////////////////////////////////////////////
 // LayerTreeView view
 
-class LayerTreeView : public CTreeView
+class _export LayerTreeView : public CTreeView
 {
 public:
-	_export LayerTreeView();           
+	LayerTreeView();           
 	virtual ~LayerTreeView();
 	MapCompositionDoc* GetDocument();
 	void EditNamedLayer(const FileName& fn);

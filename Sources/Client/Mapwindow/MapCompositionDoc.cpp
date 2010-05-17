@@ -1067,16 +1067,18 @@ BOOL MapCompositionDoc::OnOpenSegmentMap(const SegmentMap& sm, OpenType ot)
 
   SetTitle(sm);
 
-  SegmentMapDrawer* dw = new SegmentMapDrawer(this, sm);
-	bool fShowForm = !(ot & (otNOASK|otEDIT));
-	if ( fShowForm )
-			fShowForm = dw->fShowDisplayOptions();
-	if (!dw->Configure(fShowForm)) {
-		delete dw;
-		return FALSE;
-	}
-  dw->fNew = false;
-  dl.push_back(dw);
+   //================================================ TEST!!!!!!!
+
+
+	ILWIS::DrawerParameters parms(rootDrawer->getDrawerContext());
+	ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer("FeatureLayerDrawer", &parms);
+	drawer->setDataSource((void *)&sm);
+	rootDrawer->setCoordSystem(sm->cs());
+	rootDrawer->addCoordBounds(sm->cb());
+	ILWIS::PreparationParameters pp(RootDrawer::ptALL);
+	drawer->prepare(&pp);
+	rootDrawer->addDrawer(drawer);
+ //===============================================
 
   if (ot & otEDIT) {
 		::AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_EDITLAYER, 0);
@@ -1114,6 +1116,7 @@ BOOL MapCompositionDoc::OnOpenPolygonMap(const PolygonMap& pm, OpenType ot)
   dw->fNew = false;
   dl.push_back(dw);
 
+ 
   if (ot & otEDIT) {
 		::AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_EDITLAYER, 0);
 	}
@@ -1152,12 +1155,13 @@ BOOL MapCompositionDoc::OnOpenPointMap(const PointMap& pm, OpenType ot)
   //================================================ TEST!!!!!!!
 
 
-  ILWIS::DrawerParameters *parms = new ILWIS::DrawerParameters;
-  parms->context = rootDrawer->getDrawerContext();
-	ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer("FeatureLayerDrawer", parms);
+    ILWIS::DrawerParameters dp(rootDrawer->getDrawerContext());
+	ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer("FeatureLayerDrawer", &dp);
 	drawer->setDataSource((void *)&pm);
 	rootDrawer->setCoordSystem(pm->cs());
 	rootDrawer->addCoordBounds(pm->cb());
+	ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER);
+	drawer->prepare(&pp);
 	rootDrawer->addDrawer(drawer);
  //===============================================
 
@@ -2372,7 +2376,10 @@ BOOL MapCompositionDoc::OnOpenGeoRef3D(const GeoRef& gr3D, OpenType ot )
 
 bool MapCompositionDoc::fIsEmpty() const
 {
-	return dl.size() == 0;
+	if ( !rootDrawer)
+		return true;
+
+	return rootDrawer->getDrawerCount() == 0;
 }
 
 void MapCompositionDoc::initBounds(MinMax mm) {

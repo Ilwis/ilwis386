@@ -114,10 +114,8 @@ void AreaSelector::OnLButtonDown(UINT nFlags, CPoint point)
 	fDown = true;
 
 	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(mpv->GetDocument());
-	ILWIS::DrawerParameters *sp = new ILWIS::DrawerParameters;
-	sp->context = mcd->rootDrawer->getDrawerContext();
-
-	selectionDrawer = (SelectionRectangle *)IlwWinApp()->getDrawer("SelectionRectangle", sp);
+	ILWIS::DrawerParameters sp(mcd->rootDrawer->getDrawerContext());
+	selectionDrawer = (ILWIS::SelectionRectangle *)IlwWinApp()->getDrawer("SelectionRectangle", &sp);
 	mcd->rootDrawer->addDrawer(selectionDrawer);
 	mpv->SetCapture();
 	DrawRect();
@@ -131,6 +129,7 @@ void AreaSelector::OnLButtonUp(UINT nFlags, CPoint point)
 
 	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(mpv->GetDocument());
 	mcd->rootDrawer->removeDrawer(selectionDrawer->getId());
+	selectionDrawer = NULL;
 
 	(cmt->*np)(rect());
 	ReleaseCapture();
@@ -165,6 +164,8 @@ CRect AreaSelector::rect() const
 
 void AreaSelector::DrawRect()
 {
-	selectionDrawer->calcWorldCoordinates(rect());
-	mpv->OnDraw(0);
+	if ( selectionDrawer) {
+		selectionDrawer->calcWorldCoordinates(rect());
+		mpv->OnDraw(0);
+	}
 }

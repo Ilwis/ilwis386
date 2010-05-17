@@ -13,7 +13,7 @@ namespace ILWIS {
 		DrawerContext();
 		CoordBounds getCoordBoundsView() const { return cbView; }
 		CoordBounds getCoordBoundsZoom() const; 
-		CoordBounds getMapCoordBoubnds() const;
+		CoordBounds getMapCoordBounds() const;
 		CoordSystem getCoordinateSystem() const { return cs;}
 		RowCol getViewPort() const { return pixArea; }
 		void setCoordinateSystem(const CoordSystem& _cs, bool overrule) ;

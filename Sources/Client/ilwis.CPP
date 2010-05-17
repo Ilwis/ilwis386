@@ -127,6 +127,7 @@ $Header: /ILWIS 3.0/Main/ilwis.CPP 329   10-06-05 15:09 Retsios $
 #include "Client\Editors\Georef\grsubcoordedit.h"
 #include "Client\Editors\Georef\grsubcornersedit.h"
 #include "Client\Editors\Georef\GrMirRotEdit.h"
+#include "Client\Mapwindow\Drawers\SelectionRectangle.h"
 #include "Client\Mapwindow\MapWindow.h"
 #include "Client\Mapwindow\MapPaneView.h"
 #include "Engine\Map\Mapview.h"
@@ -1158,12 +1159,12 @@ void IlwisWinApp::InitImage(string sExt, const char* sIcon, int iNr)
 	ilLarge.Replace(iNr, hIcon);                               
 }
 
-void IlwisWinApp::InitImageLists()
+void IlwisWinApp::InitImageLists()    
 {
 	ilSmall.Create(16,16,TRUE,4,4);
 	ilLarge.Create(32,32,TRUE,4,4);
-	ilSmall.SetImageCount(71);
-	ilLarge.SetImageCount(71);
+	ilSmall.SetImageCount(75);
+	ilLarge.SetImageCount(75);
 
 	int i = 0;
 	InitImage("ilwis", "LogoIcon", i++);
@@ -1248,6 +1249,10 @@ void IlwisWinApp::InitImageLists()
 	InitImage("CalculationMultiple", "CalculationMulti16Icon", i++);		
 	InitImage("Calculationsingle", "CalculationSingle16Icon", i++);			
 	InitImage("WMF", "WMF16ICO", i++);			
+	InitImage("Transparent", "Transparent", i++);			
+	InitImage("Valuerange", "ValueRange", i++);			
+	InitImage("Colors", "Colors", i++);			
+	InitImage("SingleColor", "SingleColor", i++);			
 }
 
 int IlwisWinApp::iImage(const string& sExt)
@@ -2362,7 +2367,7 @@ vector<Action *> IlwisWinApp::CreateActions() {
 	return commandUI->CreateActions();
 }
 
-ILWIS::NewDrawer *IlwisWinApp::getDrawer(const String& type, ILWIS::DrawerContext *c)  {
+ILWIS::NewDrawer *IlwisWinApp::getDrawer(const String& type, ILWIS::DrawerParameters *c)  {
 	if ( drawers.find(type) != drawers.end()) {
 		DrawerCreate func = drawers[type];
 		return func(c);

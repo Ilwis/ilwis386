@@ -1,4 +1,10 @@
 #include "headers\toolspch.h"
+#include "Client\ilwis.h"
+#include "Engine\Spatialreference\gr.h"
+#include "Engine\Map\Raster\Map.h"
+#include "Engine\Base\System\RegistrySettings.h"
+#include "Client\Mapwindow\MapCompositionDoc.h"
+#include "Client\Mapwindow\LayerTreeView.h"
 #include "Drawer_n.h"
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
 
@@ -11,6 +17,9 @@ AbstractDrawer::AbstractDrawer(DrawerParameters *parms, const String& ty) : type
 	::StringFromGUID2(gd,buf,39);
 	CString str(buf);
 	id = str;
+	name = "Unknown";
+	drm = drmRPR;
+	editable = true;
 }
 
 String AbstractDrawer::getType() const {
@@ -38,9 +47,7 @@ void AbstractDrawer::draw(bool norecursion){
 	}
 }
 
-void AbstractDrawer::prepare(PreparationType t,CDC *dc){
-	for(int i=0; i < drawers.size(); ++i)
-		drawers[i]->prepare(t,dc);
+void AbstractDrawer::prepare(PreparationParameters *parms){
 }
 
 String AbstractDrawer::addDrawer(NewDrawer *drw) {
@@ -72,6 +79,58 @@ NewDrawer *AbstractDrawer::getDrawer(const String& did) {
 		return (*cur).second;
 	return NULL;
 
+}
+
+int AbstractDrawer::getDrawerCount() const{
+	return drawers.size();
+}
+NewDrawer * AbstractDrawer::getDrawer(int index){
+	if ( index < drawers.size()) {
+		return drawers.at(index);
+	}
+	return NULL;
+}
+
+String AbstractDrawer::getName() const {
+	return name;
+}
+
+bool AbstractDrawer::isActive() const {
+	return active;
+}
+
+void AbstractDrawer::setActive(bool yesno){
+	active = yesno;
+}
+
+NewDrawer::DrawMethod AbstractDrawer::getDrawMethod() const{
+	return drm;
+}
+void AbstractDrawer::setDrawMethod(DrawMethod method) {
+	drm = method;
+}
+
+bool  AbstractDrawer::isEditable() const{
+	return editable;
+}
+void  AbstractDrawer::setEditable(bool yesno){
+	editable = yesno;
+}
+
+bool AbstractDrawer::hasInfo() const {
+	return info;
+}
+
+void AbstractDrawer::setInfo(bool yesno) {
+	info = yesno;
+}
+
+HTREEITEM AbstractDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
+	String sName = String("Info");
+	int iImg = IlwWinApp()->iImage("info");
+	HTREEITEM htiDisplayOptions = tv->GetTreeCtrl().InsertItem(sName.scVal(), iImg, iImg, parent);
+	tv->GetTreeCtrl().SetCheck(htiDisplayOptions, active);
+	return parent;
 }
 //----------------------------------------------------------------------------
 

@@ -143,7 +143,7 @@ public:
 	bool fUseOldStyleTranquilizers() { return fOldTranquilizers; }
 	IlwisAppContext*    Context() { return ilwapp; }
 	CommandHandlerUI			*getCommands() { return commandUI; }
-	ILWIS::NewDrawer _export *getDrawer(const String& type, ILWIS::DrawerContext *c) ;
+	ILWIS::NewDrawer _export *getDrawer(const String& type, ILWIS::DrawerParameters *parms) ;
 	void  addDrawer(const String& type, DrawerCreate);
 	
 	//{{AFX_MSG(IlwisWinApp)

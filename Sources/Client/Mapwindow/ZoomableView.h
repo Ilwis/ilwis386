@@ -55,6 +55,7 @@ class WMSMapDrawer;
 #define IMPEXP __declspec(dllimport)
 #endif
 
+#define SCROLL_SIZE 10000
 
 /////////////////////////////////////////////////////////////////////////////
 // ZoomableView view

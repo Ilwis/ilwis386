@@ -249,14 +249,11 @@ void SimpleMapPaneView::InitOpenGL(HDC hDC) {
 
 void SimpleMapPaneView::OnDraw(CDC* cdc)
 {
+	fStarting  = false;
 	CDC *dc = cdc == 0 ? GetDC() : cdc;
 	MapCompositionDoc* mcd = GetDocument();
-	mcd->rootDrawer->prepare(NewDrawer::ptALL, dc);
-
-	CRect rct;
-	GetClientRect(&rct);
-	RowCol rc(rct.Height(), rct.Width());
-	mcd->rootDrawer->getDrawerContext()->setViewPort(rc);
+	PreparationParameters pp(NewDrawer::ptINITOPENGL, dc);
+	mcd->rootDrawer->prepare(&pp);
 	mcd->rootDrawer->draw();
 	
 	SwapBuffers(dc->m_hDC);
@@ -754,9 +751,8 @@ void SimpleMapPaneView::SetDirty()
 		fDrawStop = true;
 	if (!fRedrawing) {
 		fRedrawing = true;
-	  CRect rect;
-	  GetClientRect(rect);
-	  AfxBeginThread(SimpleMapPaneView::RedrawPaneInThread, (LPVOID)this); 
+		OnDraw(0);
+		fRedrawing = false;
 	}
 	fDrawAlsoWhenLoading = false;
 }

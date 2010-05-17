@@ -48,14 +48,13 @@
 #include "Engine\Map\Mapview.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\LayerTreeView.h"
-#include "Client\Mapwindow\Drawers\BaseDrawer.h"
-#include "Client\Mapwindow\Drawers\Drawer.h"
 #include "Headers\Hs\Drwforms.hs"
 #include "Client\FormElements\fldcol.h"
 #include "Client\FormElements\fldrpr.h"
 #include "Client\FormElements\fldcolor.h"
-#include "Client\Mapwindow\Drawers\BaseMapDrawer.h"
-#include "Client\Mapwindow\Drawers\MapDrawer.h"
+#include "Client\Mapwindow\Drawers\drawer_n.h"
+#include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
+#include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\LayerTreeItem.h"
 #include "Headers\constant.h"
 #include "Client\FormElements\syscolor.h"
@@ -110,7 +109,7 @@ void LayerTreeItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 // DrawerLayerTreeItem
 //////////////////////////////////////////////////////////////////////
 
-DrawerLayerTreeItem::DrawerLayerTreeItem(LayerTreeView* ltv, Drawer* drw)
+DrawerLayerTreeItem::DrawerLayerTreeItem(LayerTreeView* ltv, NewDrawer* drw)
 : LayerTreeItem(ltv)
 {
 	dr = drw;
@@ -123,17 +122,17 @@ DrawerLayerTreeItem::~DrawerLayerTreeItem()
 
 void DrawerLayerTreeItem::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
-	if ((dr)->Configure()) 
-	{
-		MapCompositionDoc* doc = ltv->GetDocument();
-		doc->ChangeState();
-		doc->UpdateAllViews(0,2);
-	}
+	//if ((dr)->Configure()) 
+	//{
+	//	MapCompositionDoc* doc = ltv->GetDocument();
+	//	doc->ChangeState();
+	//	doc->UpdateAllViews(0,2);
+	//}
 }
 
 void DrawerLayerTreeItem::SwitchCheckBox(bool fOn)
 {
-	dr->fAct = fOn;
+	dr->setActive(fOn);
 	MapCompositionDoc* doc = ltv->GetDocument();
 	doc->ChangeState();
 	doc->UpdateAllViews(ltv,0);
@@ -141,32 +140,27 @@ void DrawerLayerTreeItem::SwitchCheckBox(bool fOn)
 
 void DrawerLayerTreeItem::OnContextMenu(CWnd* w, CPoint p)
 {
-	IlwisObject obj = dr->obj();	
+	AbstractObjectDrawer *objdrw = dynamic_cast<AbstractObjectDrawer *>(dr);
+	if (!objdrw)
+		return;
+	IlwisObject obj = objdrw->getObject();	
 	CMenu men;
 	men.CreatePopupMenu();
 	pmadd(ID_LAYEROPTIONS);
 	men.SetDefaultItem(ID_LAYEROPTIONS);
-	if (dr->fEditable())
+	if (dr->isEditable())
 		pmadd(ID_EDITLAYER);
-	if (dr->fProperty())
+	if (objdrw)
 		pmadd(ID_PROPLAYER);
 	pmadd(ID_REMOVELAYER);
-  int iCmd = men.TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON|TPM_NONOTIFY|TPM_RETURNCMD, p.x, p.y, w);
+    int iCmd = men.TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON|TPM_NONOTIFY|TPM_RETURNCMD, p.x, p.y, w);
 	switch (iCmd) 
 	{
-		case ID_LAYEROPTIONS:
-			if ((dr)->Configure())
-			{
-				MapCompositionDoc* doc = ltv->GetDocument();
-				doc->ChangeState();
-				doc->UpdateAllViews(0,2);
-			}
-			break;
 		case ID_EDITLAYER: 
-			dr->Edit();
+			//dr->Edit();
 			break;
 		case ID_PROPLAYER:
-			dr->Prop();
+			IlwWinApp()->Execute(String("prop %S", obj->fnObj.sFullNameQuoted()));
 			break;
 		case ID_REMOVELAYER:
 			ltv->OnRemoveLayer();
@@ -184,7 +178,7 @@ void DrawerLayerTreeItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 			return;
 		case CDDS_ITEMPOSTPAINT:
 			*pResult = CDRF_DODEFAULT;
-			if (dr->fSelectable)
+			if (dr->hasInfo())
 			{
 				int	iImgOvlInfo =	IlwWinApp()->iImage("OverlayInfo");
 				CDC cdc;
@@ -236,7 +230,7 @@ void ObjectLayerTreeItem::OnContextMenu(CWnd* w, CPoint p)
 // LegendLayerTreeItem
 //////////////////////////////////////////////////////////////////////
 
-LegendLayerTreeItem::LegendLayerTreeItem(LayerTreeView* ltv, Drawer* drw) 
+LegendLayerTreeItem::LegendLayerTreeItem(LayerTreeView* ltv, NewDrawer* drw) 
 : LayerTreeItem(ltv)
 {
 	dr = drw;
@@ -248,12 +242,15 @@ LegendLayerTreeItem::~LegendLayerTreeItem()
 
 void LegendLayerTreeItem::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
-	dr->EditRepresentation();
+//	dr->EditRepresentation();
 }
 
 void LegendLayerTreeItem::OnContextMenu(CWnd* w, CPoint p)
 {
-	Representation rpr = dr->rpr();
+	AbstractMapDrawer *mdrw = dynamic_cast<AbstractMapDrawer *>(dr);
+	if (!mdrw)
+		return;
+	Representation rpr = mdrw->getRepresentation();
 	if (rpr.fValid())
 		IlwWinApp()->ShowPopupMenu(w, p, rpr->fnObj);
 }
@@ -308,7 +305,7 @@ ChooseColumnComboBox::ChooseColumnComboBox(CWnd* wnd, ColumnLayerTreeItem* lti, 
          CBS_DROPDOWNLIST|WS_BORDER|CBS_AUTOHSCROLL|CBS_NOINTEGRALHEIGHT,
 	       rect, wnd, 0);
 
-	Table tbl = clti->bmd->basemap()->tblAtt();
+  Table tbl = clti->mdr()->getBaseMap()->tblAtt();
   for (int i = 0; i < tbl->iCols(); ++i) {
     Column col = tbl->col(i);
     Domain dm = col->dm();
@@ -319,11 +316,11 @@ ChooseColumnComboBox::ChooseColumnComboBox(CWnd* wnd, ColumnLayerTreeItem* lti, 
 			AddString(sCol.scVal());
 		}
   }
-	if (clti->bmd->colAtt.fValid()) {
-		String sCol = clti->bmd->colAtt->sName();
+  if (clti->mdr()->getAtttributeColumn().fValid()) {
+		String sCol = clti->mdr()->getAtttributeColumn()->sName();
 		SelectString(-1, sCol.scVal());
-	}
-	ShowWindow(SW_SHOW);
+  }
+  ShowWindow(SW_SHOW);
 }
 
 void ChooseColumnComboBox::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -340,17 +337,17 @@ void ChooseColumnComboBox::OnSelChange(NMHDR* pNotifyStruct, LRESULT* result)
 {
 	CString str;
 	GetWindowText(str);
-	Table tbl = clti->bmd->basemap()->tblAtt();
-	clti->bmd->colAtt = tbl->col(String(str));
+	Table tbl = clti->mdr()->getBaseMap()->tblAtt();
+	clti->mdr()->setAttributeColumn(String(str));
 	clti->ltv->GetDocument()->UpdateAllViews(clti->ltv, 0);
 }
 
 
 
-ColumnLayerTreeItem::ColumnLayerTreeItem(LayerTreeView* ltv, BaseMapDrawer* drw, HTREEITEM htiClm) 
+ColumnLayerTreeItem::ColumnLayerTreeItem(LayerTreeView* ltv, AbstractMapDrawer* drw, HTREEITEM htiClm) 
 : LayerTreeItem(ltv), cccb(0), hti(htiClm)
 {
-	bmd = drw;
+	dr = drw;
 }
 
 ColumnLayerTreeItem::~ColumnLayerTreeItem()
@@ -368,7 +365,7 @@ void ColumnLayerTreeItem::OnContextMenu(CWnd* w, CPoint p)
 
 void ColumnLayerTreeItem::SwitchCheckBox(bool fOn)
 {
-	bmd->fAttTable = fOn;
+	mdr()->setUseAttributeTable(fOn);
 	if (fOn)
 		ShowColumnField();
 	MapCompositionDoc* doc = ltv->GetDocument();
@@ -398,7 +395,7 @@ void ColumnLayerTreeItem::FinishColumnField()
 // LegendClassLayerTreeItem
 //////////////////////////////////////////////////////////////////////
 
-LegendClassLayerTreeItem::LegendClassLayerTreeItem(LayerTreeView* ltv, Drawer* _dr, Domain _dm, int iR)
+LegendClassLayerTreeItem::LegendClassLayerTreeItem(LayerTreeView* ltv, NewDrawer* _dr, Domain _dm, int iR)
 : LayerTreeItem(ltv), dr(_dr), iRaw(iR), dm(_dm)
 {
 }
@@ -409,17 +406,17 @@ LegendClassLayerTreeItem::~LegendClassLayerTreeItem()
 
 void LegendClassLayerTreeItem::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
-	FormBaseDialog* frm = dr->wEditRpr(ltv, iRaw);
-	if (0 == frm)
-		return;
-	if (frm->fOkClicked()) {
-		MapCompositionDoc* doc = ltv->GetDocument();
-		doc->ChangeState();
-		doc->UpdateAllViews(ltv, 0);
-		ltv->Invalidate();
-	}
-	delete frm;
-	ltv->SetFocus();
+	//FormBaseDialog* frm = dr->wEditRpr(ltv, iRaw);
+	//if (0 == frm)
+	//	return;
+	//if (frm->fOkClicked()) {
+	//	MapCompositionDoc* doc = ltv->GetDocument();
+	//	doc->ChangeState();
+	//	doc->UpdateAllViews(ltv, 0);
+	//	ltv->Invalidate();
+	//}
+	//delete frm;
+	//ltv->SetFocus();
 }
 
 void LegendClassLayerTreeItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
@@ -462,7 +459,7 @@ void LegendClassLayerTreeItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
         CRgn rgn;
         rgn.CreateRectRgnIndirect(&rect);
         cdc.SelectClipRgn(&rgn);
-				dr->DrawLegendRect(&cdc, rect, iRaw);
+				//dr->DrawLegendRect(&cdc, rect, iRaw);
         cdc.SelectClipRgn(0);
         
 	      String sText = dm->sValueByRaw(iRaw,0);
@@ -488,7 +485,7 @@ void LegendClassLayerTreeItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 }
 
 
-LegendValueLayerTreeItem::LegendValueLayerTreeItem(LayerTreeView* ltv, Drawer* _dr, DomainValueRangeStruct _dvrs, double rValue)
+LegendValueLayerTreeItem::LegendValueLayerTreeItem(LayerTreeView* ltv, AbstractMapDrawer* _dr, DomainValueRangeStruct _dvrs, double rValue)
 : LayerTreeItem(ltv), dr(_dr), rVal(rValue), dvrs(_dvrs)
 {
 }
@@ -533,7 +530,7 @@ void LegendValueLayerTreeItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 				int iHeight = rect.Height();
 				int iWidth = 1.5 * iHeight;
 				rect.right = rect.left + iWidth;
-				dr->DrawValueLegendRect(&cdc, rect, rVal);
+				//dr->DrawValueLegendRect(&cdc, rect, rVal);
 	      String sText = dvrs.sValue(rVal,0);
         DomainValue* dv = dvrs.dm()->pdv();
         if (dv->fUnit())
@@ -558,4 +555,111 @@ void LegendValueLayerTreeItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 			}
 			return;
 	}
+}
+//-----------------------------------
+DisplayOptionTreeItem::DisplayOptionTreeItem(LayerTreeView* ltv, NewDrawer *dr, DisplayOptionItemFunc f,HTREEITEM item, SetChecks *ch,SetCheckFunc f2)
+: LayerTreeItem(ltv),
+func(f),
+drw(dr),
+hti(item),
+checks(ch),
+setCheckFunc(f2)
+{
+	if ( checks)
+		checks->addItem(hti);
+}
+
+DisplayOptionTreeItem::~DisplayOptionTreeItem()
+{
+}
+
+void DisplayOptionTreeItem::OnLButtonDblClk(UINT nFlags, CPoint point)
+{
+	if ( func) {
+ 		func(drw, ltv);
+		SwitchCheckBox(true);
+	}
+}
+
+void DisplayOptionTreeItem::SwitchCheckBox(bool fOn) {
+	if (checks) {
+		checks->checkItem(hti);
+		setCheckFunc(drw,&fOn);
+	}
+}
+
+//----------------------------------
+DisplayOptionTree::DisplayOptionTree(LayerTreeView* ltv, HTREEITEM hti)
+: LayerTreeItem(ltv),
+  htiStart(hti)
+
+{
+}
+
+DisplayOptionTree::~DisplayOptionTree()
+{
+}
+
+void DisplayOptionTree::OnLButtonDblClk(UINT nFlags, CPoint point)
+{
+	HTREEITEM hItem = htiStart;
+	HTREEITEM hStop= ltv->GetTreeCtrl().GetNextItem(hItem, TVGN_NEXTVISIBLE);
+
+	while (hItem != NULL && hItem != hStop)
+	{
+		ltv->GetTreeCtrl().Expand(hItem,TVE_EXPAND);
+		hItem= ltv->GetTreeCtrl().GetNextItem(hItem, TVGN_NEXTVISIBLE);
+	}
+}
+
+//--------------------------------------------
+DisplayOptionAttTable::DisplayOptionAttTable(LayerTreeView* ltv, HTREEITEM hti,AbstractMapDrawer *dr, DisplayOptionItemFunc f)
+: LayerTreeItem(ltv),
+func(f),
+drw(dr),
+htiStart(hti),
+htiCurrent(0)
+{
+}
+
+DisplayOptionAttTable::~DisplayOptionAttTable()
+{
+}
+
+void DisplayOptionAttTable::OnLButtonDblClk(UINT nFlags, CPoint point)
+{
+	if ( func)
+ 		func(drw, ltv);
+}
+
+void DisplayOptionAttTable::SwitchCheckBox(bool fOn) {
+	drw->setUseAttributeTable(fOn);
+	BaseMap bm = drw->getBaseMap();
+	if ( drw->useAttributeTable() && bm->fTblAtt() ) {
+		//ltv->GetTreeCtrl().SetItemData(htiDisplayOptions, (DWORD_PTR)new DisplayOptionTreeItem(tv, this, 0));
+		int iImg = IlwWinApp()->iImage("column");
+		htiCurrent = ltv->GetTreeCtrl().InsertItem(String("Column : %S", drw->getAtttributeColumn()->sName()).scVal(), iImg, iImg, htiStart);
+	} else {
+		if ( htiCurrent != 0) {
+			ltv->GetTreeCtrl().DeleteItem(htiCurrent);
+			htiCurrent = 0;
+		}
+	}
+}
+
+SetChecks::SetChecks(LayerTreeView *v, AbstractMapDrawer *dr){
+	tv = v;
+	drw = dr;
+}
+void SetChecks::addItem(HTREEITEM hti){
+	checkedItems.push_back(hti);
+}
+
+void SetChecks::checkItem(HTREEITEM hti) {
+	CTreeCtrl& tree = tv->GetTreeCtrl();
+	for(int i = 0; i< checkedItems.size(); ++i) {
+		HTREEITEM ht = checkedItems.at(i);
+		tree.SetCheck(ht, false);
+	}
+	tree.SetCheck(hti,true);
 }

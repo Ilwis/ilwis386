@@ -57,6 +57,8 @@
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\Positioner.h"
 #include "Headers\constant.h"
+#include "Engine\Base\System\Engine.h"
+#include "Engine\Base\System\LOGGER.H"
 #include "Client\Mapwindow\MapPaneView.h"
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
 #include "Client\Mapwindow\Drawers\SelectionRectangle.h"
@@ -321,8 +323,11 @@ void ZoomableView::OnSize(UINT nType, int cx, int cy)
 void ZoomableView::AreaSelected(CRect rect)
 {
 	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(GetDocument());
-	mcd->rootDrawer->getDrawerContext()->setZoom(rect);
-	mcd->rootDrawer->draw();
+	if ( mcd) {
+		mcd->rootDrawer->getDrawerContext()->setZoom(rect);
+		setScrollBars();
+		OnDraw(0);
+	}
 }
 
 void ZoomableView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
@@ -407,10 +412,10 @@ void ZoomableView::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 		vertLineMove(1);
 		break;
 	case SB_PAGEUP:
-		vertPageMove(-1);
+		vertPageMove(1);
 		break;
 	case SB_PAGEDOWN:
-		vertPageMove(1);
+		vertPageMove(-1);
 		break;
 	case SB_THUMBTRACK:
 		vertThumbPos(nPos);
@@ -442,15 +447,17 @@ BOOL ZoomableView::OnMouseWheel(UINT nFlags, short zDelta, CPoint point)
 
 int ZoomableView::vertLineMove(int iMove)
 {
-	if (iYpage > 100)
-		iMove *= iYpage / 100;
-  return vertPixMove(iMove);
+	SCROLLINFO si;
+	GetScrollInfo(SB_VERT,&si);
+	long delta = int(si.nPage) * iMove / 100;
+	return vertPixMove(delta);
 }
 
 int ZoomableView::vertPageMove(int iMove)
 {
-  iMove *= scale(dim.height()) / 3;
-  return vertPixMove(iMove);
+	SCROLLINFO si;
+	GetScrollInfo(SB_VERT,&si);
+    return vertPixMove(si.nPage * iMove);
 }
 
 int ZoomableView::vertTop()
@@ -465,21 +472,24 @@ int ZoomableView::vertBottom()
 
 int ZoomableView::vertThumbPos(int nPos)
 {
-  long iYnew = iYmin + (long)(nPos / 32000.0 * iYsize);
-  return vertPixMove(iYnew - iYpos);
+  SCROLLINFO si;
+  GetScrollInfo(SB_VERT,&si);
+  return vertPixMove(si.nPos - nPos);
 }
 
 int ZoomableView::horzLineMove(int iMove)
 {
-	if (iXpage > 100)
-		iMove *= iXpage / 100;
-  return horzPixMove(iMove);
+	SCROLLINFO si;
+	GetScrollInfo(SB_HORZ,&si);
+	long delta = int(si.nPage) * iMove / 100;
+    return horzPixMove(delta);
 }
 
 int ZoomableView::horzPageMove(int iMove)
 {
-  iMove *= scale(dim.width()) / 3;
-  return horzPixMove(iMove);
+	SCROLLINFO si;
+	GetScrollInfo(SB_HORZ,&si);
+    return horzPixMove(si.nPage * iMove);
 }
 
 int ZoomableView::horzLeft()
@@ -494,107 +504,75 @@ int ZoomableView::horzRight()
 
 int ZoomableView::horzThumbPos(int nPos)
 {
-  long iXnew = iXmin + nPos / 32000.0 * iXsize;
-  return horzPixMove(iXnew - iXpos);
+  SCROLLINFO si;
+  GetScrollInfo(SB_HORZ,&si);
+  return horzPixMove(nPos - int(si.nPos));
 }
 
 int ZoomableView::vertPixMove(long iDiff, bool fPreScroll)
 {
-	if (!wmsPan(iDiff, true)) {
-		long iYnew = iYpos + iDiff;
-		if (iYnew > iYmax) {
-			iYnew = iYmax;
-			iDiff = iYnew - iYpos;
-		}
-		if (iYnew < iYmin) {
-			iYnew = iYmin;
-			iDiff = iYnew - iYpos;
-		}
-		if (iYpos == iYnew)
-			return 0;
-		iYpos = iYnew;
-		if (fPreScroll) {
-			long iWinDiff;
-			iWinDiff = scale(iDiff, 1);
-			if (iWinDiff < dim.height())
-				ScrollWindow(0,-iWinDiff);
-		}
+	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(GetDocument());
+	if ( mcd) {
+		DrawerContext * context = mcd->rootDrawer->getDrawerContext();
+		CoordBounds cbZoom = context->getCoordBoundsZoom();
+		CoordBounds cbMap = context->getMapCoordBounds();
+		double deltay = cbMap.height() * iDiff / SCROLL_SIZE;
+		cbZoom.cMin.y += deltay;
+		cbZoom.cMax.y += deltay;
+		context->setCoordBoundsZoom(cbZoom);
+		setScrollBars();
+		OnDraw(0);
 	}
-	SetDirty();
-	setScrollBars();
+
   return 0;
 }
 
 int ZoomableView::horzPixMove(long iDiff, bool fPreScroll)
 {
-	if (!wmsPan(iDiff, false)) {
-		long iXnew = iXpos + iDiff;
-		if (iXnew > iXmax) {
-			iXnew = iXmax;
-			iDiff = iXnew - iXpos;
-		}
-		if (iXnew < iXmin) {
-			iXnew = iXmin;
-			iDiff = iXnew - iXpos;
-		}
-		if (iXpos == iXnew)
-			return 0;
-		iXpos = iXnew;
-		if (fPreScroll) {
-			long iWinDiff;
-			iWinDiff = scale(iDiff, 1);
-			if (iWinDiff < dim.width())
-				ScrollWindow(-iWinDiff,0);
-		}
+	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(GetDocument());
+	if ( mcd) {
+		DrawerContext * context = mcd->rootDrawer->getDrawerContext();
+		CoordBounds cbZoom = context->getCoordBoundsZoom();
+		CoordBounds cbMap = context->getMapCoordBounds();
+		double deltax = cbMap.width() * iDiff / SCROLL_SIZE;
+		cbZoom.cMin.x += deltax;
+		cbZoom.cMax.x += deltax;
+		context->setCoordBoundsZoom(cbZoom);
+		setScrollBars();
+		OnDraw(0);
 	}
-	SetDirty();
-	setScrollBars();
 	return 0;
 }
 
 void ZoomableView::setScrollBars() 
 {
-	if (!wmsScrollbars()) {
-		CalcMax();
-		if (iXpos > iXmax) 
-			iXpos = iXmax;
-		if (iYpos > iYmax) 
-			iYpos = iYmax;
-		if (iXpos < iXmin) 
-			iXpos = iXmin;
-		if (iYpos < iYmin) 
-			iYpos = iYmin;
-		if (!fScrollBarsVisible)
-			return;
+
+	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(GetDocument());
+	if ( mcd) {
+		DrawerContext * context = mcd->rootDrawer->getDrawerContext();
+		CoordBounds cbMap = context->getMapCoordBounds();
+		CoordBounds cbZoom = context->getCoordBoundsZoom();
+	
 		SCROLLINFO si;
 		si.cbSize = sizeof(si);
 		si.fMask = SIF_ALL | SIF_DISABLENOSCROLL;
-		si.nMin = 0;
-		si.nMax = 32000;
 
-		if (iYmax == iYmin)
-			si.nMax = 0;
-		if (iYsize <= 0) {
-			si.nPage = 32000;
-			si.nPos = 0;
-		}
-		else {
-			si.nPage = iYpage * 32000 / iYsize;
-			si.nPos = (iYpos - iYmin) * 32000 / iYsize;
-		}
-		SetScrollInfo(SB_VERT, &si);
-		si.nMax = 32000;
-		if (iXmax == iXmin)
-			si.nMax = 0;
-		if (iXsize <= 0) {
-			si.nPage = 32000;
-			si.nPos = 0;
-		}
-		else {
-			si.nPage = iXpage * 32000 / iXsize;
-			si.nPos = (iXpos - iXmin) * 32000 / iXsize;
-		}
+		double xfrac = abs(cbMap.MinX() - cbZoom.MinX())/cbMap.width();
+		double xpages = cbMap.width() / cbZoom.width();
+		si.nMin = 0;
+		si.nMax = xpages > 1.0 ? SCROLL_SIZE : 0;
+		si.nPage = SCROLL_SIZE / xpages;
+		si.nPos = xfrac * SCROLL_SIZE;
 		SetScrollInfo(SB_HORZ, &si);
+
+		double yfrac = abs(cbMap.MaxY() - cbZoom.MaxY())/cbMap.height();
+		double ypages = cbMap.height() / cbZoom.height();
+		si.nMin = 0;
+		si.nMax = ypages > 1.0 ? SCROLL_SIZE : 0;
+		si.nPage = SCROLL_SIZE / ypages;
+		si.nPos = yfrac * SCROLL_SIZE;
+		SetScrollInfo(SB_VERT, &si);
+
 	}
 }
 
@@ -677,11 +655,13 @@ zPoint ZoomableView::pntPos(double rRow, double rCol) const
 void ZoomableView::OnUpdateZoomOut(CCmdUI* pCmdUI)
 {
 	bool fMapOpen = false;
-	IlwisDocument *doc = (IlwisDocument *)GetDocument();
+	MapCompositionDoc *doc = (MapCompositionDoc *)GetDocument();
 	if ( !doc->fIsEmpty())			
 		fMapOpen = true;
-	bool fTooSmall = scale(iXsize,true) < 5 || scale(iYsize,true) < 5;
-	pCmdUI->Enable(fMapOpen && !fTooSmall);
+	DrawerContext *context = doc->rootDrawer->getDrawerContext();
+	bool zoomedIn = (context->getMapCoordBounds().width() > context->getCoordBoundsZoom().width()) || 
+				     (context->getMapCoordBounds().height() > context->getCoordBoundsZoom().height());
+	pCmdUI->Enable(fMapOpen && zoomedIn);
 	if (0 == as)
 		iActiveTool = 0;
 	pCmdUI->SetRadio(ID_ZOOMOUT == iActiveTool);

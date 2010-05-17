@@ -38,14 +38,11 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_LAYERTREEITEM_H__0340C284_8C41_11D3_B809_00A0C9D5342F__INCLUDED_)
-#define AFX_LAYERTREEITEM_H__0340C284_8C41_11D3_B809_00A0C9D5342F__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
 
-class LayerTreeItem  
+using namespace ILWIS;
+
+class _export LayerTreeItem  
 {
 public:
 	LayerTreeItem(LayerTreeView*);
@@ -62,15 +59,15 @@ protected:
 class DrawerLayerTreeItem: public LayerTreeItem
 {
 public:
-	DrawerLayerTreeItem(LayerTreeView*, Drawer*);
+	DrawerLayerTreeItem(LayerTreeView*, ILWIS::NewDrawer*);
 	virtual ~DrawerLayerTreeItem();
 	virtual void OnLButtonDblClk(UINT nFlags, CPoint point);
 	virtual void SwitchCheckBox(bool fOn);
 	virtual void OnContextMenu(CWnd* pWnd, CPoint pos);
 	virtual void OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult); 
-	Drawer* drw() const { return dr; }
+	ILWIS::NewDrawer* drw() const { return dr; }
 protected:
-	Drawer* dr;		 
+	ILWIS::NewDrawer* dr;		 
 	enum { eNAME, eDESCR, eNAMEDESCR } eText;
 };
 
@@ -80,6 +77,7 @@ public:
 	ObjectLayerTreeItem(LayerTreeView*, IlwisObjectPtr*);
 	virtual ~ObjectLayerTreeItem();
 	virtual void OnLButtonDblClk(UINT nFlags, CPoint point);
+	//void SwitchCheckBox(bool fOn);
 	virtual void OnContextMenu(CWnd* pWnd, CPoint pos);
 private:
 	IlwisObjectPtr* ptr;
@@ -88,12 +86,13 @@ private:
 class LegendLayerTreeItem: public LayerTreeItem
 {
 public:
-	LegendLayerTreeItem(LayerTreeView*, Drawer*);
+	LegendLayerTreeItem(LayerTreeView*, ILWIS::NewDrawer*);
 	virtual ~LegendLayerTreeItem();
 	virtual void OnLButtonDblClk(UINT nFlags, CPoint point);
 	virtual void OnContextMenu(CWnd* pWnd, CPoint pos);
 private:
-	Drawer* dr;		 
+	ILWIS::NewDrawer *dr;
+	 
 };
 
 class PropertiesLayerTreeItem: public LayerTreeItem
@@ -111,15 +110,16 @@ class ColumnLayerTreeItem: public LayerTreeItem
 {
 	friend class ChooseColumnComboBox;
 public:
-	ColumnLayerTreeItem(LayerTreeView*, BaseMapDrawer*, HTREEITEM hti);
+	ColumnLayerTreeItem(LayerTreeView*, ILWIS::AbstractMapDrawer*, HTREEITEM hti);
 	virtual ~ColumnLayerTreeItem();
 	virtual void SwitchCheckBox(bool fOn);
 	virtual void OnLButtonDown(UINT nFlags, CPoint point);
 	virtual void OnContextMenu(CWnd* pWnd, CPoint pos);
+	AbstractMapDrawer * mdr() { return dr;}
 private:
 	void ShowColumnField();
+	ILWIS::AbstractMapDrawer *dr;
 	void FinishColumnField();
-	BaseMapDrawer* bmd;		 
 	HTREEITEM hti;
 	ChooseColumnComboBox* cccb;
 };
@@ -127,29 +127,80 @@ private:
 class LegendClassLayerTreeItem: public LayerTreeItem
 {
 public:
-	LegendClassLayerTreeItem(LayerTreeView*, Drawer*, Domain _dm, int iRaw);
+	LegendClassLayerTreeItem(LayerTreeView*, ILWIS::NewDrawer*, Domain _dm, int iRaw);
 	virtual ~LegendClassLayerTreeItem();
 	virtual void OnLButtonDblClk(UINT nFlags, CPoint point);
 	virtual void OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult); 
 private:
-	Drawer* dr;
 	Domain dm;
 	int iRaw;
+
+	ILWIS::NewDrawer *dr;
+
 };
 
 class LegendValueLayerTreeItem: public LayerTreeItem
 {
 public:
-	LegendValueLayerTreeItem(LayerTreeView*, Drawer*, DomainValueRangeStruct _dvrs, double rValue);
+	LegendValueLayerTreeItem(LayerTreeView*, AbstractMapDrawer*, DomainValueRangeStruct _dvrs, double rValue);
 	virtual ~LegendValueLayerTreeItem();
 	virtual void OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult); 
 private:
-	Drawer* dr;
 	DomainValueRangeStruct dvrs;
 	double rVal;
+	AbstractMapDrawer *dr;
+};
+
+class DisplayOptionTree: public LayerTreeItem
+{
+public:
+	DisplayOptionTree(LayerTreeView*, HTREEITEM hti);
+	virtual ~DisplayOptionTree();
+	virtual void OnLButtonDblClk(UINT nFlags, CPoint point);
+private:
+	HTREEITEM htiStart;
+};
+
+class _export DisplayOptionTreeItem: public LayerTreeItem
+{
+public:
+	DisplayOptionTreeItem(LayerTreeView*, ILWIS::NewDrawer *dr, DisplayOptionItemFunc f,HTREEITEM item=0, SetChecks *ch=0,SetCheckFunc f2=0);
+	virtual ~DisplayOptionTreeItem();
+	virtual void OnLButtonDblClk(UINT nFlags, CPoint point);
+	void SwitchCheckBox(bool fOn);
+private: 
+	DisplayOptionItemFunc func;
+	SetCheckFunc setCheckFunc;
+	ILWIS::NewDrawer *drw;
+	SetChecks *checks;
+	HTREEITEM hti;
+};
+
+class DisplayOptionAttTable: public LayerTreeItem
+{
+public:
+	DisplayOptionAttTable(LayerTreeView*, HTREEITEM hti,AbstractMapDrawer *dr, DisplayOptionItemFunc f);
+	virtual ~DisplayOptionAttTable();
+	virtual void OnLButtonDblClk(UINT nFlags, CPoint point);
+	virtual void SwitchCheckBox(bool fOn);
+private:
+	HTREEITEM htiStart;
+	HTREEITEM htiCurrent;
+	AbstractMapDrawer *drw;
+	DisplayOptionItemFunc func;
+};
+
+class SetChecks {
+public:
+	SetChecks(LayerTreeView*, AbstractMapDrawer *dr);
+	void addItem(HTREEITEM hti);
+	void checkItem(HTREEITEM hti);
+private:
+	vector<HTREEITEM> checkedItems;
+	LayerTreeView *tv;
+	AbstractMapDrawer *drw;
+
 };
 
 
 
-
-#endif // !defined(AFX_LAYERTREEITEM_H__0340C284_8C41_11D3_B809_00A0C9D5342F__INCLUDED_)
