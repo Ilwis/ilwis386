@@ -1,7 +1,10 @@
-#include "headers\toolspch.h"
+#include "Client\Headers\formelementspch.h"
 #include "Engine\Map\basemap.h"
 #include "Engine\Map\Point\ilwPoint.h"
 #include "Client\Mapwindow\Drawers\Drawer_n.h"
+#include "Client\Ilwis.h"
+#include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
+#include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\Drawers\FeatureDrawer.h"
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
 #include "drawers\pointdrawer.h"
@@ -13,29 +16,17 @@ ILWIS::NewDrawer *createPointDrawer(DrawerParameters *parms) {
 	return new PointDrawer(parms);
 }
 
-PointDrawer::PointDrawer(DrawerParameters *parms) : FeatureDrawer(parms,"PointDrawerSimple") {
-	delete parms;
+PointDrawer::PointDrawer(DrawerParameters *parms) : FeatureDrawer(parms,"PointDrawer") {
 }
 
-void PointDrawer::draw(bool norecursion){
-	CoordBounds cb = getDrawerContext()->getCoordBoundsZoom();
-	double fx = cNorm.x;
-	double fy = cNorm.y;
-	double fz = 0;
-	
-	glColor3f(1.0,0.0,0.0);
-	double symbolScale = cb.width() / 200;
-	glBegin(GL_QUADS);						
-		glVertex3f( fx - symbolScale, fy - symbolScale,fz);	
-		glVertex3f( fx - symbolScale, fy + symbolScale,fz);	
-		glVertex3f( fx + symbolScale, fy + symbolScale,fz);
-		glVertex3f( fx + symbolScale, fy - symbolScale,fz);
-	glEnd();
-	//glMatrixMode (GL_MODELVIEW);
+PointDrawer::PointDrawer(DrawerParameters *parms, const String& name) : FeatureDrawer(parms,name) {
 }
 
-void PointDrawer::prepare(PreparationType t,CDC *dc){
-	if ( t == ptALL || t == ptGEOMETRY) {
+void PointDrawer::prepare(PreparationParameters *p){
+	FeatureDrawer::prepare(p);
+	if ( (p->type & ptALL) ||  (p->type & ptGEOMETRY)) {
+		AbstractMapDrawer *drw = dynamic_cast<AbstractMapDrawer *>(p->parentDrawer);
+	    CoordSystem csy = drw->getBaseMap()->cs();
 		ILWIS::Point *point = (ILWIS::Point *)feature;
 		FileName fn = drawcontext->getCoordinateSystem()->fnObj;
 		if ( drawcontext->getCoordinateSystem()->fnObj == csy->fnObj) {
