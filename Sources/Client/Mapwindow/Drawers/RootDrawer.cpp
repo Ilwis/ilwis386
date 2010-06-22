@@ -12,13 +12,13 @@ RootDrawer::RootDrawer() {
 RootDrawer::~RootDrawer() {
 	delete drawcontext;
 }
-void  RootDrawer::prepare(PreparationType t,CDC *dc){
-	bool v1 = t & RootDrawer::ptINITOPENGL;
-	bool v2 = t & RootDrawer::ptALL;
-	if ( dc && (  v1 || v2 ))
-		getDrawerContext()->initOpenGL(dc);
-	if ( !(t & RootDrawer::ptINITOPENGL))
-		AbstractDrawer::prepare(t,dc);
+void  RootDrawer::prepare(PreparationParameters *pp){
+	bool v1 = pp->type & RootDrawer::ptINITOPENGL;
+	bool v2 = pp->type & RootDrawer::ptALL;
+	if ( pp->dc && (  v1 || v2 ))
+		getDrawerContext()->initOpenGL(pp->dc);
+	if ( !(pp->type & RootDrawer::ptINITOPENGL))
+		AbstractDrawer::prepare(pp);
 }
 
 void RootDrawer::setCoordSystem(const CoordSystem& cs, bool overrule){
@@ -35,13 +35,8 @@ void RootDrawer::draw(bool norecursion){
 	
 	double z =0.0;
 	glMatrixMode(GL_MODELVIEW);
-	double aspect = getDrawerContext()->getAspectRatio();
-	RowCol port = getDrawerContext()->getViewPort();
-	double shiftx = 1.0, shifty = 1.0;
-	if ( aspect < 1.0) {
-		
-	}
-	CoordBounds cb = getDrawerContext()->getMapCoordBoubnds();
+
+	CoordBounds cb = getDrawerContext()->getMapCoordBounds();
 
 	glLoadIdentity();
 	glBegin(GL_QUADS);						
@@ -61,6 +56,9 @@ void RootDrawer::draw(bool norecursion){
 
 void RootDrawer::setDataSource(void *) {
 }
+
+
+
 
 
 

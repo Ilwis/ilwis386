@@ -13,9 +13,6 @@ ILWIS::NewDrawer *createSelectionRectangle(DrawerParameters *parms) {
 SelectionRectangle::SelectionRectangle(DrawerParameters *parms) : 
 AbstractDrawer(parms, "SelectionRectangle")
 {
-	/*c1 = Coord(-0.4, -0.2);
-	c2 = Coord(+0.6, +0.2);*/
-	delete parms;
 }
 
 SelectionRectangle::~SelectionRectangle() {
