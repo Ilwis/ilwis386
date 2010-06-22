@@ -71,7 +71,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ILWISEngine.lib htmlhelp.lib IlwisClient.lib IlwisApplications.lib geosd.lib opengl32.lib"
+				AdditionalDependencies="ILWISEngine.lib htmlhelp.lib IlwisClient.lib IlwisApplications.lib geosd.lib opengl32.lib glu32.lib"
 				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\Extensions\ILWISDrawers.dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)libraries\import&quot;;&quot;$(SolutionDir)libraries\$(ConfigurationName)&quot;"
@@ -212,11 +212,19 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Drawers\FeatureLayerDrawer.cpp"
+				RelativePath="..\..\Sources\Drawers\LineDrawer.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\Sources\Drawers\PointDrawer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\PointSymbolDrawer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\PolygonDrawer.cpp"
 				>
 			</File>
 		</Filter>
@@ -225,11 +233,19 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			>
 			<File
-				RelativePath="..\..\Sources\Drawers\FeatureLayerDrawer.h"
+				RelativePath="..\..\Sources\Drawers\LineDrawer.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\Sources\Drawers\PointDrawer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\PointSymbolDrawer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\PolygonDrawer.h"
 				>
 			</File>
 		</Filter>
