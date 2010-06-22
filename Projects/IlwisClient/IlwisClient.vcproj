@@ -2606,14 +2606,6 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\SelectionRectangle.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\SelectionRectangle.h"
-						>
-					</File>
-					<File
 						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\WMSMapDrawer.cpp"
 						>
 					</File>
