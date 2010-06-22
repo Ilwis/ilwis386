@@ -14,7 +14,7 @@ class LineDrawer : public FeatureDrawer {
 		LineDrawer(DrawerParameters *parms, const String& name);
 
 		CoordinateSequence *points;
-		Color lineColor;
+		CoordBounds cb;
 
 	};
 }

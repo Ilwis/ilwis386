@@ -8,9 +8,9 @@
 #include "drawers\linedrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
-//#include "Client\Mapwindow\Drawers\DrawerForms.h"
-#include "Drawers\FeatureLayerDrawer.h"
+#include "Client\Mapwindow\Drawers\DrawerForms.h"
 #include "drawers\PointSymbolDrawer.h"
+#include "drawers\polygondrawer.h"
 
 using namespace ILWIS;
 
@@ -19,8 +19,8 @@ DrawerInfoVector *createDrawer() {
 	DrawerInfoVector *infos = new DrawerInfoVector();
 	infos->push_back(new DrawerInfo("PointDrawer",createPointDrawer));
 	infos->push_back(new DrawerInfo("LineDrawer",createLineDrawer));
-	infos->push_back(new DrawerInfo("FeatureLayerDrawer",createFeatureLayerDrawer));
 	infos->push_back(new DrawerInfo("PointSymbolDrawer",createPointSymbolDrawer));
+	infos->push_back(new DrawerInfo("PolygonDrawer",createPolygonDrawer));
 
 	return infos;
 }
