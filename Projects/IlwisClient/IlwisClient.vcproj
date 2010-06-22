@@ -2490,15 +2490,7 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\AbstractMapDrawer.h"
-						>
-					</File>
-					<File
 						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\AbstractObjectDrawer.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\AbstractObjectDrawer.h"
 						>
 					</File>
 					<File
@@ -2542,11 +2534,23 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\DrawingColor.cpp"
+						>
+					</File>
+					<File
 						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\FeatureDrawer.cpp"
 						>
 					</File>
 					<File
 						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\FeatureDrawer.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\FeatureLayerDrawer.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\FeatureLayerDrawer.h"
 						>
 					</File>
 					<File
@@ -2602,6 +2606,14 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\SelectionRectangle.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\SelectionRectangle.h"
+						>
+					</File>
+					<File
 						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\WMSMapDrawer.cpp"
 						>
 					</File>
@@ -2613,6 +2625,14 @@
 						Name="headers"
 						Filter=".h"
 						>
+						<File
+							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\AbstractMapDrawer.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\AbstractObjectDrawer.h"
+							>
+						</File>
 						<File
 							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\AnaglyphDrawer.h"
 							>
@@ -2635,6 +2655,10 @@
 						</File>
 						<File
 							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\Drawer.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\DrawingColor.h"
 							>
 						</File>
 						<File
