@@ -238,8 +238,12 @@ EQUALS                  ICON                    "Equals.ico"
 WITHIN                  ICON                    "Within.ico"
 CROSSES                 ICON                    "Crosses.ico"
 DISJOINT                ICON                    "Disjoint.ico"
-ILWIS32Remove           ICON                    "ilwisRemove.ico"
+ILWIS32REMOVE           ICON                    "ilwisRemove.ico"
 A                       ICON                    "ilwis33.ico"
+Transparent             ICON                    "transparent.ico"
+ValueRange              ICON                    "valuerange.ico"
+Colors                  ICON                    "colors.ico"
+SingleColor             ICON                    "singlecolor.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -444,7 +448,7 @@ SMCESHOWCONTOURMAPS     BITMAP                  "SMCEShowContourMaps.bmp"
 SMCESHOWSTANDARDIZED    BITMAP                  "SMCEShowStandardized.bmp"
 START                   BITMAP                  "Ilwis_startup.bmp"
 IDB_BITMAP1             BITMAP                  "bitmap1.bmp"
-n52                     BITMAP                  "n52.bmp"
+N52                     BITMAP                  "n52.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

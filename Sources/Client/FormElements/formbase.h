@@ -65,7 +65,7 @@ enum FormBaseStyle
 	fbsSHOWALWAYS = 0x01, fbsMODAL = 0x02, fbsHIDEONOK = 0x04, fbsNOOKBUTTON = 0x08, 
 	fbsNOCANCELBUTTON = 0x10, fbsBUTTONSUNDER = 0x20, fbsNOPARENTRESIZE = 0x40, fbsNOBEVEL=0x80,
 	fbsAPPLIC = 0x100, fbsHIDEONCLOSE = 0x200, fbsTOPMOST = 0x400, fbsCALC = 0x800,
-	fbsOKHASCLOSETEXT = 0x1000, fbsNoCheckData=0x2000
+	fbsOKHASCLOSETEXT = 0x1000, fbsNoCheckData=0x2000, fbsApplyButton=0x4000
 };
 
 
@@ -159,7 +159,7 @@ protected:
   CWnd                *dummyWindow; // to be able to get text properties before dialog is created
   int                 fbs;                        // style flags
 
-  CButton butOK, butCancel, butHelp;
+    CButton butOK, butCancel, butHelp;
 	CButton butShow, butDefine; 
 	Bevel               bevel;
 	bool fNoCheckData;
@@ -192,8 +192,8 @@ protected:
   void shutdown(int iReturn=IDCANCEL); 
   void Copy();
   void Print();
-  afx_msg void OnCancel();                             // called if Cancel button clicked
-  afx_msg void OnHelp();                             // called if Cancel button clicked
+  afx_msg virtual void OnCancel();                   // called if Cancel button clicked
+  afx_msg void OnHelp();                             
 	afx_msg LRESULT OnCommandHelp(WPARAM, LPARAM lParam);
   afx_msg void OnDrawItem( int nIDCtl, LPDRAWITEMSTRUCT lpDrawItemStruct );
   afx_msg void OnMeasureItem( int nIDCtl, LPMEASUREITEMSTRUCT mi );

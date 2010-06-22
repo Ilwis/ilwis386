@@ -73,7 +73,7 @@ protected:
 	CPoint pStart, pEnd;
 	zDimension dim;
 	bool fDown, fKeepDimensions;
-	ILWIS::SelectionRectangle *selectionDrawer;
+	ILWIS::SelectionRectangle * selectionDrawer;
 };
 
 /////////////////////////////////////////////////////////////////////////////

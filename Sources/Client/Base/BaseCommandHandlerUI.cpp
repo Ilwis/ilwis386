@@ -35,13 +35,21 @@
  Created on: 2007-02-8
  ***************************************************************/
 
-#include "Headers\toolspch.h"
+#include "Client\Headers\formelementspch.h"
 #include "Client\Mapwindow\Drawers\Drawer_n.h"
 #include "Client\ilwis.h"
 #include "Engine\Base\System\LOGGER.H"
 #include "Engine\Base\DataObjects\Version.h"
 #include "Client\Base\BaseCommandHandlerUI.h"
-#include "Client\Mapwindow\Drawers\Drawer_n.h"
+#include "Client\Mapwindow\MapPaneView.h"
+#include "Client\Mapwindow\MapPaneViewTool.h"
+#include "Engine\Base\System\RegistrySettings.h"
+#include "Client\Mapwindow\MapCompositionDoc.h"
+#include "Client\Mapwindow\Drawers\RootDrawer.h"
+#include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
+#include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
+#include "Client\Mapwindow\Drawers\SelectionRectangle.h"
+#include "Client\Mapwindow\Drawers\FeatureLayerDrawer.h" 
 #include "Engine\Base\System\Engine.h"
 //#include "Engine\Applications\ModuleMap.h"
 
@@ -121,6 +129,8 @@ void BaseCommandHandlerUI::addModules() {
 			for ( int i=0 ; i < infos->size(); ++i) {
 				IlwWinApp()->addDrawer(infos->at(i)->name, infos->at(i)->createFunc);
 			}
+			IlwWinApp()->addDrawer("SelectionRectangle",createSelectionRectangle);
+			IlwWinApp()->addDrawer("FeatureLayerDrawer",createFeatureLayerDrawer);
 		}
 		++index;
 

@@ -355,7 +355,7 @@ CFrameWnd* BaseDocTemplate::CreateNewFrame(CDocument* pDoc, CFrameWnd* pOther)
 
 	String clsName("ILWIS");
 	if (!pFrame->Create(NULL, clsName.scVal(), WS_OVERLAPPEDWINDOW|FWS_ADDTOTITLE, CFrameWnd::rectDefault,
-		NULL, NULL, 0, &context)) 
+		::AfxGetMainWnd(), NULL, 0, &context)) 
 	{
 		TRACE0("Warning: BaseDocTemplate couldn't create a frame.\n");
 		// frame will be deleted in PostNcDestroy cleanup
