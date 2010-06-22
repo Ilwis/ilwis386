@@ -75,6 +75,7 @@
 #include "Client\Mapwindow\Drawers\PolygonMapDrawer.h"
 #include "Client\Mapwindow\Drawers\PointMapDrawer.h"
 #include "Client\Mapwindow\Drawers\AnaglyphDrawer.h"
+#include "Client\Mapwindow\Drawers\DrawerContext.h"
 #include "Headers\constant.h"
 #include "Headers\Hs\Mapwind.hs"
 #include "Headers\Hs\Coordsys.hs"
@@ -1105,17 +1106,14 @@ BOOL MapCompositionDoc::OnOpenPolygonMap(const PolygonMap& pm, OpenType ot)
 
   SetTitle(pm);
 
-  PolygonMapDrawer* dw = new PolygonMapDrawer(this, pm);
-	bool fShowForm = !(ot & (otNOASK|otEDIT));
-	if ( fShowForm )
-			fShowForm = dw->fShowDisplayOptions();
-	if (!dw->Configure(fShowForm)) {
-		delete dw;
-		return FALSE;
-	}
-  dw->fNew = false;
-  dl.push_back(dw);
-
+	ILWIS::DrawerParameters parms(rootDrawer->getDrawerContext());
+	ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer("FeatureLayerDrawer", &parms);
+	drawer->setDataSource((void *)&pm);
+	rootDrawer->setCoordSystem(pm->cs());
+	rootDrawer->addCoordBounds(pm->cb());
+	ILWIS::PreparationParameters pp(RootDrawer::ptALL);
+	drawer->prepare(&pp);
+	rootDrawer->addDrawer(drawer);
  
   if (ot & otEDIT) {
 		::AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_EDITLAYER, 0);
@@ -1137,21 +1135,8 @@ BOOL MapCompositionDoc::OnOpenPointMap(const PointMap& pm, OpenType ot)
   if (!pm->fCalculated())
 		return FALSE;
 
-	mmMapBounds = mmInitGeoRef(pm);
-  mmSize = mmMapBounds;
-
   SetTitle(pm);
 
-  PointMapDrawer* dw = new PointMapDrawer(this, pm);
-	bool fShowForm = !(ot & (otNOASK|otEDIT));
-	if ( fShowForm )
-			fShowForm = dw->fShowDisplayOptions();
-	if (!dw->Configure(fShowForm)) {
-		delete dw;
-		return FALSE;
-	}
-  dw->fNew = false;
-  dl.push_back(dw);
   //================================================ TEST!!!!!!!
 
 
@@ -1578,16 +1563,7 @@ bool MapCompositionDoc::fCoordSystemOk(const BaseMap& bmap)
 {
   if (!bmap.fValid()) 
     return false;
-  if (bmap->cs() == georef->cs())
-    return true;
-  else if (georef->cs()->fConvertFrom(bmap->cs()))
-    return true;
-  else {
-    String s(SCSErrWrongCoordSys_SSS.sVal(), 
-             georef->cs()->sName(), bmap->sName(), bmap->cs()->sName());
-    AfxGetMainWnd()->MessageBox(s.sVal(), SMWUiAddDataLayer.sVal(), MB_OK|MB_ICONEXCLAMATION);
-    return false;  
-  }  
+  return true;
 }
 
 bool MapCompositionDoc::fGeoRefOk(const Map& rasmap)
@@ -1712,25 +1688,28 @@ Drawer* MapCompositionDoc::drAppend(const MapList& maplist)
 
 Drawer* MapCompositionDoc::drAppend(const SegmentMap& mp)
 {
-  if (fCoordSystemOk(mp)) {
-    if (!mp->fCalculated())
+	if (fCoordSystemOk(mp)) {
+		if (!mp->fCalculated())
 		{
-	    int iPrior = AfxGetThread()->GetThreadPriority();
-	    AfxGetThread()->SetThreadPriority(THREAD_PRIORITY_LOWEST);
+			int iPrior = AfxGetThread()->GetThreadPriority();
+			AfxGetThread()->SetThreadPriority(THREAD_PRIORITY_LOWEST);
 
-      mp->Calc();
-	    AfxGetThread()->SetThreadPriority(iPrior);
+			mp->Calc();
+			AfxGetThread()->SetThreadPriority(iPrior);
 		}
-    if (!mp->fCalculated())
-      return 0;
-		SegmentMapDrawer* dr = new SegmentMapDrawer(this, mp);
-	  dl.push_back(dr);
+		if (!mp->fCalculated())
+			return 0;
+
+		ILWIS::DrawerParameters parms(rootDrawer->getDrawerContext());
+		ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer("FeatureLayerDrawer", &parms);
+		drawer->setDataSource((void *)&mp);
+		ILWIS::PreparationParameters pp(RootDrawer::ptALL);
+		drawer->prepare(&pp);
+		rootDrawer->addDrawer(drawer);
 		ChangeState();
-//    if (sSegName.length() == 0)
-//      sSegName = map->sName(true);
-    return dr;
-  }    
-  return 0;
+		UpdateAllViews(0);
+	}    
+	return 0;
 }
 
 Drawer* MapCompositionDoc::drAppend(const PolygonMap& mp)

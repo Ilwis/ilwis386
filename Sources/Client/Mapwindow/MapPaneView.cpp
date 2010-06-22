@@ -54,6 +54,7 @@
 #include "Client\Mapwindow\Drawers\Drawer.h"
 #include "Headers\constant.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
+#include "Client\Mapwindow\Drawers\DrawerContext.h"
 #include "Client\Mapwindow\AreaSelector.h"
 #include "winuser.h"
 #include "Headers\Hs\Mapwind.hs"
@@ -270,34 +271,42 @@ void MapPaneView::OnDefaultScale()
 
 void MapPaneView::OnEntireMap()
 {
-  _rScale = 1;
-  iXpos = iXmin;
-  iYpos = iYmin;
+ // _rScale = 1;
+ // iXpos = iXmin;
+ // iYpos = iYmin;
 
-	MinMax mm = mmBounds();
-  int iWidth = scale(mm.width(), true);
-  int iHeight = scale(mm.height(), true);
-	double rScaleX = double(dim.width()) / iWidth;
-	double rScaleY = double(dim.height()) / iHeight;
-	// choose the smallest of the scales as the correct one
-	double rScale = min(rScaleX, rScaleY);
+	//MinMax mm = mmBounds();
+ // int iWidth = scale(mm.width(), true);
+ // int iHeight = scale(mm.height(), true);
+	//double rScaleX = double(dim.width()) / iWidth;
+	//double rScaleY = double(dim.height()) / iHeight;
+	//// choose the smallest of the scales as the correct one
+	//double rScale = min(rScaleX, rScaleY);
 
-	// change to 'Ilwis scale'
-	_rScale = rScale >= 1.0 ? rScale : -1.0/rScale;
+	//// change to 'Ilwis scale'
+	//_rScale = rScale >= 1.0 ? rScale : -1.0/rScale;
 
-  fStarting = false;
-  	CRect rect;
-	GetClientRect(&rect);
-	wms(rect, cEntire);
-	CalcFalseOffsets();
-	setScrollBars();
-	SetDirty();
+ // fStarting = false;
+ // 	CRect rect;
+	//GetClientRect(&rect);
+	//wms(rect, cEntire);
+	//CalcFalseOffsets();
+	//SetDirty();
+
+	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(GetDocument());
+	if ( mcd) {
+		DrawerContext * context = mcd->rootDrawer->getDrawerContext();
+		context->setCoordBoundsView(context->getMapCoordBounds(),true);
+		setScrollBars();
+		fStarting = false;
+		OnDraw(0);
+	}
 }
 
 void MapPaneView::OnUpdateEntireMap(CCmdUI* pCmdUI)
 {
 	MapCompositionDoc* mcd = GetDocument();
-	pCmdUI->Enable(!mcd->dl.empty());
+	pCmdUI->Enable(mcd->rootDrawer->getDrawerCount() > 0);
 }
 
 void MapPaneView::ZoomInOn(Coord crd, double rDist)

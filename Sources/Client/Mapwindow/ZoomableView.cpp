@@ -766,17 +766,26 @@ void ZoomableView::OnZoomOut()
 		return;
 	}
 	OnNoTool();
-	if (HIWORD(AfxGetThreadState()->m_lastSentMsg.wParam) == 1)
-	{
-		zPoint p(dim.width()/2,dim.height()/2);
-		ZoomOutPnt(p);
-		return;
-	}
-	if (fAdjustSize)
-		as = new AreaSelector(this, this, (NotifyRectProc)&ZoomableView::AreaSelected);
-	else 
-		as = new AreaSelector(this, this, (NotifyRectProc)&ZoomableView::AreaSelected, dim);
-	as->SetCursor(zCursor("ZoomOutCursor"));
+	MapCompositionDoc *doc = (MapCompositionDoc *)GetDocument();
+	DrawerContext *context = doc->rootDrawer->getDrawerContext();
+	CoordBounds cb = context->getCoordBoundsZoom();
+	cb *= 1.41;
+	context->setCoordBoundsZoom(cb);
+	setScrollBars();
+	OnDraw(0);
+
+
+	//if (HIWORD(AfxGetThreadState()->m_lastSentMsg.wParam) == 1)
+	//{
+	//	zPoint p(dim.width()/2,dim.height()/2);
+	//	ZoomOutPnt(p);
+	//	return;
+	//}
+	//if (fAdjustSize)
+	//	as = new AreaSelector(this, this, (NotifyRectProc)&ZoomableView::AreaSelected);
+	//else 
+	//	as = new AreaSelector(this, this, (NotifyRectProc)&ZoomableView::AreaSelected, dim);
+	//as->SetCursor(zCursor("ZoomOutCursor"));
 	iActiveTool = ID_ZOOMOUT;
 }
 

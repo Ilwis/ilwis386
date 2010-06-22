@@ -357,7 +357,7 @@ void LayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 				Representation rpr = adr->getRepresentation();
 				tc.SetItemData(htiLeg, (DWORD_PTR)new ObjectLayerTreeItem(this, rpr.pointer()));		
 				DomainValueRangeStruct dvs = bmp->dvrs();					
-				RangeReal rr = adr->getStretchRange();
+				RangeReal rr = adr->getStretchRangeReal();
 				int iItems = 5;
 				for (int i = 0; i < iItems; ++i) {
 					double rMaxItem = iItems - 1;

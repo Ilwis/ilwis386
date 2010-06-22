@@ -445,38 +445,38 @@ void SimpleMapPaneView::OnMouseMove(UINT nFlags, CPoint point)
 
 void SimpleMapPaneView::OnLButtonDown(UINT nFlags, CPoint point) 
 {
-  Coord c = crdPnt(point);
-	MapCompositionDoc* mcd = GetDocument();
-	GeoRef georef = mcd->georef;
-  if (!georef.fValid()) 
-		return;
-	cwcsButtonDown = CoordWithCoordSystem(c, georef->cs());
-	if (edit && edit->OnLButtonDown(nFlags, point)) {
-		IlwWinApp()->SendUpdateCoordMessages(cmMOUSECLICK, &cwcsButtonDown);
-		return;
-	}
-  if (c.fUndef()) return;
-  bool fNone = georef->fGeoRefNone();
-	SetCapture();
-  for (list<Drawer*>::iterator iter = mcd->dl.begin(); iter != mcd->dl.end(); ++iter)
-	{
-		Drawer* dr = *iter;
-		if (dr->fSelectable && dr->fAct) 
-		{
-      Coord crd = c;
-      BaseMapDrawer* bmd = dynamic_cast<BaseMapDrawer*>(dr);
-      if (bmd && bmd->basemap()->cs() != mcd->georef->cs())
-      {
-        crd = bmd->basemap()->cs()->cConv(mcd->georef->cs(), c);
-      }
-			String s = dr->sInfo(crd);
-			if (s != "") 
-				info->text(point,s);
-			break;
-		}
-	}
-	if (!fNone)
-		IlwWinApp()->SendUpdateCoordMessages(cmMOUSECLICK, &cwcsButtonDown);
+	//MapCompositionDoc* mcd = GetDocument();
+	//RowCol rc(point.y, point.x);
+	//DrawerContext *context = mcd->rootDrawer->getDrawerContext();
+	//Coord c = context->screenToWorld(rc);
+	//cwcsButtonDown = CoordWithCoordSystem(c, context->getCoordinateSystem());
+	//if (edit && edit->OnLButtonDown(nFlags, point)) {
+	//	IlwWinApp()->SendUpdateCoordMessages(cmMOUSECLICK, &cwcsButtonDown);
+	//	return;
+	//}
+	//if (c.fUndef()) return;
+	//SetCapture();
+	//for (int i = 0; i < mcd->rootDrawer->getDrawerCount(); ++i)
+	//{
+	//	NewDrawer* dr = mcd->rootDrawer->getDrawer(i);
+	//	if (dr->isActive()) 
+	//	{
+	//		Coord crd = c;
+	//		AbstractMapDrawer* bmd = dynamic_cast<AbstractMapDrawer*>(dr);
+	//		if ( bmd) {
+	//			BaseMap bmp = bmd->getBaseMap();
+	//			if (bmp->cs() != context->cs())
+	//			{
+	//				crd = context->cs()->cConv(bmp->cs(), c);
+	//			}
+	//		}
+	//		/*String s = dr->sInfo(crd);
+	//		if (s != "") 
+	//			info->text(point,s);*/
+	//		break;
+	//	}
+	//}
+	IlwWinApp()->SendUpdateCoordMessages(cmMOUSECLICK, &cwcsButtonDown);
 }
 
 void SimpleMapPaneView::OnLButtonUp(UINT nFlags, CPoint point) 
