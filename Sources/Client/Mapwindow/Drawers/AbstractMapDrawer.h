@@ -9,20 +9,26 @@ enum FontStyle { FS_ITALIC    = 0x0001,
                  FS_UNDERLINE	= 0x0002,
                  FS_STRIKEOUT	= 0x0004 };
 
+class DrawingColor;
+
 class _export AbstractMapDrawer : public AbstractObjectDrawer {
 	friend class AbstractMapDrawerForm;
 
 	public:
+		enum StretchMethod { smLINEAR, smLOGARITHMIC };
+
 		AbstractMapDrawer(DrawerParameters *parms);
 		virtual ~AbstractMapDrawer();
 		virtual void prepare(PreparationParameters *pp);
-		void setDataSource(void *bm);
+		void setDataSource(void *bm, int options=0);
 		BaseMap getBaseMap() const;
 		Representation getRepresentation() const;
 		void setRepresentation(const Representation& rp);
 		bool isLegendUsefull() const;
-		RangeReal getStretchRange() const;
-		void setStretchRange(const RangeReal& rr);
+		RangeReal getStretchRangeReal() const;
+		void setStretchRangeReal(const RangeReal& rr);
+		RangeInt getStretchRangeInt() const;
+		void setStretchRangeInt(const RangeInt& rr);
 		bool isStretched() const;
 		RangeReal getLegendRange() const;
 		void setLegendRange(const RangeReal& rr);
@@ -32,15 +38,21 @@ class _export AbstractMapDrawer : public AbstractObjectDrawer {
 		void setAttributeColumn(const String& name);
 		bool useAttributeTable() const;
 		void setUseAttributeTable(bool yesno);
+		StretchMethod getStretchMethod() const;
+		void setStretchMethod(StretchMethod sm);
+		DrawingColor *drwColor() const;
 
 	protected:
 		Representation rpr;
 		RangeReal rrStretch;
+		RangeInt riStretch;
 		RangeReal rrLegendRange;
 		bool stretched;
+		StretchMethod stretchMethod;
 		Table attTable;
 		Column attColumn;
 		bool useAttTable;
+		DrawingColor *drawColor;
 		SetChecks *colorCheck;
 
 		HTREEITEM  configure(LayerTreeView  *tv, HTREEITEM parent);
@@ -50,39 +62,35 @@ class _export AbstractMapDrawer : public AbstractObjectDrawer {
 	};
 
 
-	class RepresentationForm : public FormBaseDialog {
+	class RepresentationForm : public DisplayOptionsForm {
 		public:
 		RepresentationForm(CWnd *wPar, AbstractMapDrawer *dr);
-		int exec();
-		afx_msg virtual void OnCancel(); 
+		void apply(); 
 	private:
 		String rpr;
-		AbstractMapDrawer *drw;
-		LayerTreeView *view;
 		FieldRepresentation *fldRpr;
 
 	};
 
-	class ChooseAttributeColumnForm : public FormBaseDialog {
+	class ChooseAttributeColumnForm : public DisplayOptionsForm {
 		public:
 		ChooseAttributeColumnForm(CWnd *wPar, AbstractMapDrawer *dr);
-		int exec();
-		afx_msg virtual void OnCancel(); 
+		void apply(); 
 	private:
 		Table attTable;
 		String attColumn;
-		AbstractMapDrawer *drw;
-
 	};
 
-	class SetStretchForm : public FormBaseDialog {
+	class SetStretchForm : public DisplayOptionsForm {
 		public:
 		SetStretchForm(CWnd *wPar, AbstractMapDrawer *dr);
-		int exec();
-		afx_msg virtual void OnCancel(); 
+		void apply(); 
 	private:
 		RangeReal rr;
-		AbstractMapDrawer *drw;
+		RangeInt ri;
+		bool fReal;
+		FieldRangeReal *strReal;
+		FieldRangeInt *strInt;
 
 	};
 

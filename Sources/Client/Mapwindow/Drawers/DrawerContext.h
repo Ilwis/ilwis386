@@ -19,6 +19,7 @@ namespace ILWIS {
 		void setCoordinateSystem(const CoordSystem& _cs, bool overrule) ;
 		void setCoordBoundsView(const CoordBounds& _cb, bool overrule); 
 		void setCoordBoundsZoom(const CoordBounds& _cb);
+		void setCoordBoundsMap(const CoordBounds& cb);
 		void setZoom(const CRect& rct);
 		void setViewPort(const RowCol& rc);
 		Coord screenToWorld(const RowCol& rc);

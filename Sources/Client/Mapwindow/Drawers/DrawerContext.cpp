@@ -65,7 +65,7 @@ void DrawerContext::setViewPort(const RowCol& rc) {
 				double f = (double)rc.Col / pixArea.Col;
 				double h = cbZoom.height();
 				double deltay = h / f;
-				cbZoom.cMax.y = cbZoom.cMin.x + deltay;
+				cbZoom.cMax.y = cbZoom.cMin.y + deltay;
 			}
 		}
 	}
@@ -112,10 +112,10 @@ void DrawerContext::setCoordBoundsView(const CoordBounds& _cb, bool overrule){
 			cbView =  CoordBounds(Coord(_cb.MinX() - delta,_cb.MinY()), 
 			                  Coord(_cb.MaxX() + delta,_cb.MaxY()));
 		} else {
-			double pixheight = (double)pixArea.Col * aspectRatio;
-			double fracofHeight = 1.0 - (pixArea.Row - pixheight) / pixArea.Row;
+			double pixheight = (double)pixArea.Col / aspectRatio;
+			double fracofHeight = 1.0 - abs(pixArea.Row - pixheight) / (double)pixArea.Row;
 			double crdHeight = h / fracofHeight;
-			double delta = (crdHeight - w) / 2.0;
+			double delta = (crdHeight - h) / 2.0;
 			cbView =  CoordBounds(Coord(_cb.MinX(),_cb.MinY()  - delta), 
 			                      Coord(_cb.MaxX(),_cb.MaxY()  + delta));
 
@@ -139,6 +139,9 @@ void DrawerContext::setCoordBoundsZoom(const CoordBounds& cb) {
 	glOrtho(cbZoom.cMin.x,cbZoom.cMax.x,cbZoom.cMin.y,cbZoom.cMax.y,-1,1.0);
 }
 
+void DrawerContext::setCoordBoundsMap(const CoordBounds& cb) {
+	cbMap = cb;
+}
 CoordBounds DrawerContext::getMapCoordBounds() const{
 	return cbMap;
 }

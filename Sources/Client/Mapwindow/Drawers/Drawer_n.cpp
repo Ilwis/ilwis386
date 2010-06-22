@@ -1,4 +1,5 @@
 #include "headers\toolspch.h"
+#include "Client\Base\events.h"
 #include "Client\ilwis.h"
 #include "Engine\Spatialreference\gr.h"
 #include "Engine\Map\Raster\Map.h"

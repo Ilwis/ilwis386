@@ -9,10 +9,13 @@
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
+#include "Client\Mapwindow\Drawers\DrawingColor.h" 
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h"
+#include "Client\Mapwindow\Drawers\DrawingColor.h" 
 #include "Client\Mapwindow\Drawers\FeatureDrawer.h"
+#include "Client\Mapwindow\Drawers\DrawerContext.h"
 #include "Client\FormElements\fldcol.h"
 #include "client\formelements\fldrpr.h"
 #include "client\formelements\fentvalr.h"
@@ -41,7 +44,9 @@ AbstractMapDrawer::AbstractMapDrawer(DrawerParameters *parms) :
 	AbstractObjectDrawer(parms,"AbstractMapDrawer"),
 	stretched(false),
 	useAttTable(false),
-	colorCheck(0)
+	colorCheck(0),
+	stretchMethod(smLINEAR),
+	drawColor(0)
 {
 }
 
@@ -49,16 +54,20 @@ AbstractMapDrawer::AbstractMapDrawer(DrawerParameters *parms, const String& name
 	AbstractObjectDrawer(parms,name),
 	stretched(false),
 	useAttTable(false),
-	colorCheck(0)
+	colorCheck(0),
+	stretchMethod(smLINEAR),
+	drawColor(0)
 {
 }
 
 AbstractMapDrawer::~AbstractMapDrawer() {
 	delete colorCheck;
+	delete drawColor;
 }
 
 void AbstractMapDrawer::prepare(PreparationParameters *pp){
 	AbstractObjectDrawer::prepare(pp);
+	drawColor = new DrawingColor(this);
 }
 
 
@@ -68,9 +77,9 @@ BaseMap AbstractMapDrawer::getBaseMap() const {
 		return BaseMap(ptr->fnObj);
 	return BaseMap();
 }
-void AbstractMapDrawer::setDataSource(void *bmap) 
+void AbstractMapDrawer::setDataSource(void *bmap,int options) 
 {
-	AbstractObjectDrawer::setDataSource(bmap);
+	AbstractObjectDrawer::setDataSource(bmap, options);
 	BaseMap bm = getBaseMap();
 	if ( bm.fValid()) {
 		rpr = bm->dm()->rpr();
@@ -83,6 +92,15 @@ void AbstractMapDrawer::setDataSource(void *bmap)
 		} else if (  bm->fTblAtt() && attColumn.fValid() && attColumn->dm()->pdv()) {
 			rrStretch = attColumn->vr()->rrMinMax();
 		}
+		DrawerContext *context = getDrawerContext();
+		CoordBounds cb = bm->cb();
+		if ( bm->cs() != context->getCoordinateSystem()) {
+			cb.cMin = context->getCoordinateSystem()->cConv(bm->cs(),cb.cMin);
+			cb.cMax = context->getCoordinateSystem()->cConv(bm->cs(),cb.cMax);
+		}
+		CoordBounds cbMap = context->getMapCoordBounds();
+		cbMap += cb;
+		context->setCoordBoundsMap(cbMap);
 	}
 }
 
@@ -101,14 +119,24 @@ bool AbstractMapDrawer::isLegendUsefull() const {
 	return drm != drmSINGLE;
 }
 
-RangeReal AbstractMapDrawer::getStretchRange() const{
+RangeReal AbstractMapDrawer::getStretchRangeReal() const{
 	return rrStretch;
 }
 
-void AbstractMapDrawer::setStretchRange(const RangeReal& rr){
-	if ( rr != rrStretch && !rrStretch.fValid())
+void AbstractMapDrawer::setStretchRangeReal(const RangeReal& rr){
+	if ( rr != rrStretch && rr.fValid())
 		stretched = true;
 	rrStretch = rr;
+}
+
+RangeInt AbstractMapDrawer::getStretchRangeInt() const{
+	return riStretch;
+}
+
+void AbstractMapDrawer::setStretchRangeInt(const RangeInt& ri){
+	if ( ri != riStretch && ri.fValid())
+		stretched = true;
+	riStretch = ri;
 }
 
 RangeReal AbstractMapDrawer::getLegendRange() const{
@@ -145,6 +173,10 @@ bool AbstractMapDrawer::isStretched() const {
 	return stretched;
 }
 
+DrawingColor *AbstractMapDrawer::drwColor() const {
+	return drawColor;
+}
+
 HTREEITEM AbstractMapDrawer:: configure(LayerTreeView  *tv, HTREEITEM parent) {
 	HTREEITEM hti = AbstractObjectDrawer::configure(tv,parent);
 	BaseMap bm = getBaseMap();
@@ -166,13 +198,26 @@ HTREEITEM AbstractMapDrawer:: configure(LayerTreeView  *tv, HTREEITEM parent) {
 		HTREEITEM htiDisplayOptions = tv->GetTreeCtrl().InsertItem(sName.scVal(), iImg, iImg, parent);
 		tv->GetTreeCtrl().SetItemData(htiDisplayOptions, (DWORD_PTR)new DisplayOptionTreeItem(tv, this, displayOptionStretch));
 		iImg = IlwWinApp()->iImage("Calculationsingle");
-		RangeReal rr =getStretchRange();
-		tv->GetTreeCtrl().InsertItem(String("Lower : %f",rr.rLo()).scVal(), iImg, iImg, htiDisplayOptions);
-		tv->GetTreeCtrl().InsertItem(String("Upper : %f",rr.rHi()).scVal(), iImg, iImg, htiDisplayOptions);
+		RangeReal rr =getStretchRangeReal();
+		if ( rr.fValid()) {
+			tv->GetTreeCtrl().InsertItem(String("Lower : %f",rr.rLo()).scVal(), iImg, iImg, htiDisplayOptions);
+			tv->GetTreeCtrl().InsertItem(String("Upper : %f",rr.rHi()).scVal(), iImg, iImg, htiDisplayOptions);
+		} else if ( getStretchRangeInt().fValid()) {
+			RangeInt ri = getStretchRangeInt();
+			tv->GetTreeCtrl().InsertItem(String("Lower : %d",ri.iLo()).scVal(), iImg, iImg, htiDisplayOptions);
+			tv->GetTreeCtrl().InsertItem(String("Upper : %d",ri.iHi()).scVal(), iImg, iImg, htiDisplayOptions);
+		}
 	}
 
 
 	return hti;
+}
+
+AbstractMapDrawer::StretchMethod AbstractMapDrawer::getStretchMethod() const{
+	return stretchMethod;
+}
+void AbstractMapDrawer::setStretchMethod(StretchMethod sm){
+	stretchMethod = sm;
 }
 
 HTREEITEM AbstractMapDrawer::SetColors(LayerTreeView  *tv, HTREEITEM parent,const BaseMap& bm) {
@@ -197,64 +242,64 @@ HTREEITEM AbstractMapDrawer::SetColors(LayerTreeView  *tv, HTREEITEM parent,cons
 
 //--------------------------------
 RepresentationForm::RepresentationForm(CWnd *wPar, AbstractMapDrawer *dr) : 
-	FormBaseDialog(wPar,String("Representation of %S",dr->getName()),fbsApplyButton | fbsBUTTONSUNDER | fbsOKHASCLOSETEXT | fbsSHOWALWAYS),
-	rpr(dr->getRepresentation()->sName()),
-	drw(dr),
-	view((LayerTreeView *)wPar)
+	DisplayOptionsForm(dr,wPar,"Set Representation"),
+	rpr(((AbstractMapDrawer *)dr)->getRepresentation()->sName())
 {
 	fldRpr = new FieldRepresentation(root, "Representation", &rpr);
 	create();
 }
 
-int RepresentationForm::exec() {
-	return 1;
-}
-
-void  RepresentationForm::OnCancel() {
+void  RepresentationForm::apply() {
 	fldRpr->StoreData();
-	drw->setRepresentation(Representation(FileName(rpr)));
+	AbstractMapDrawer *adr = (AbstractMapDrawer *)drw;
+	adr->setRepresentation(Representation(FileName(rpr)));
 	PreparationParameters pp(NewDrawer::ptRENDER, 0, drw);
-	drw->prepare(&pp);
-	MapCompositionDoc* doc = view->GetDocument();
-	doc->ChangeState();
-	doc->UpdateAllViews(0,0);
+	adr->prepare(&pp);
+	updateViews();
 }
 
 //--------------------------------------
 ChooseAttributeColumnForm::ChooseAttributeColumnForm(CWnd *wPar, AbstractMapDrawer *dr) : 
-	FormBaseDialog(wPar,String("Attribute Column of %S",dr->getName()),fbsApplyButton | fbsBUTTONSUNDER | fbsOKHASCLOSETEXT | fbsSHOWALWAYS),
-	attTable(dr->getAtttributeTable()),
-	attColumn(dr->getAtttributeColumn()->sName()),
-	drw(dr)
-
+	DisplayOptionsForm(dr,wPar,"Choose attribute column"),
+	attTable(((AbstractMapDrawer *)dr)->getAtttributeTable()),
+	attColumn(((AbstractMapDrawer *)dr)->getAtttributeColumn()->sName())
 {
 	new FieldColumn(root, "Column", attTable, &attColumn);
 	create();
 }
 
-int ChooseAttributeColumnForm::exec() {
-	return 1;
-}
 
-void  ChooseAttributeColumnForm::OnCancel() {
+void  ChooseAttributeColumnForm::apply() {
 }
 
 //-------------------------------------
 SetStretchForm::SetStretchForm(CWnd *wPar, AbstractMapDrawer *dr) : 
-	FormBaseDialog(wPar,String("Stretch Values of %S",dr->getName()),fbsApplyButton | fbsBUTTONSUNDER | fbsOKHASCLOSETEXT | fbsSHOWALWAYS),
-	rr(dr->getStretchRange()),
-	drw(dr)
+	DisplayOptionsForm(dr,wPar,"Set stretch"),
+	rr(((AbstractMapDrawer *)dr)->getStretchRangeReal()),
+	ri(((AbstractMapDrawer *)dr)->getStretchRangeInt()),
+	strReal(0),
+	strInt(0)
 
 {
-	new FieldRangeReal(root,"Stretch",&rr);
+	if ( rr.fValid())
+		strReal = new FieldRangeReal(root,"Stretch",&rr);
+	else
+		strInt = new FieldRangeInt(root,"Stretch",&ri);
 	create();
 }
 
-int SetStretchForm::exec() {
-	return 1;
-}
+void  SetStretchForm::apply() {
+	if ( strReal)
+		strReal->StoreData();
+	else
+		strInt->StoreData();
 
-void  SetStretchForm::OnCancel() {
+	((AbstractMapDrawer *)drw)->setStretchRangeReal(rr);
+	((AbstractMapDrawer *)drw)->setStretchRangeInt(ri);
+
+	PreparationParameters pp(NewDrawer::ptRENDER, 0, drw);
+	drw->prepare(&pp);
+	updateViews();
 }
 //------------------------------------------------------
 

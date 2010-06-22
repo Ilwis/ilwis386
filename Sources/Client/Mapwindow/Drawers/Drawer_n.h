@@ -22,10 +22,11 @@ namespace ILWIS {
 		enum DrawMethod	{ drmRPR, drmSINGLE, drmMULTIPLE, drmIMAGE,	drmCOLOR, drmBOOL, drmBYATTRIBUTE, drmARROW, drmGRAPH };
 		enum DrawColors { drcLIGHT, drcNORMAL, drcDARK, drcGREY };
 		enum PreparationType{ptALL=1,ptRENDER=2,ptGEOMETRY=4,ptINITOPENGL=8};
+		enum DataSourceMergeOptions{dsmEXTENDCB=1};
 		virtual void draw(bool norecursion = false) = 0;
 		virtual void prepare(PreparationParameters *) =0;
 		virtual String getType() const =0;
-		virtual void setDataSource(void *) = 0;
+		virtual void setDataSource(void *, int options=0) = 0;
 		virtual DrawerContext *getDrawerContext() = 0;
 		virtual String getId() const = 0;
 		virtual NewDrawer *getDrawer(const String& did) = 0;
@@ -53,7 +54,7 @@ namespace ILWIS {
 		void prepare(PreparationParameters *);
 		virtual String addDrawer(NewDrawer *drw);
 		virtual void removeDrawer(const String& did);
-		void setDataSource(void *){}
+		void setDataSource(void *,int options=0){}
 		void clear();
 		String getId() const;
 		String getName() const;

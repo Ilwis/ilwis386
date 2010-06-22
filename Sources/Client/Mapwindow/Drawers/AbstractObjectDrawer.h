@@ -13,10 +13,11 @@ namespace ILWIS{
 		IlwisObject getObject() const;
 		int getTransparency() const;
 		void setTransperency(int value);
-		void setDataSource(void *bmap);
+		void setDataSource(void *bmap, int options=0);
 		
 	protected:
 		IlwisObjectPtr *obj;
+		IlwisObject *object; //  only to keep reference to object alive
 		int transparency; // in percentage, 100% means transparent
 		Color clrText;
 		String sFaceName;
@@ -29,15 +30,25 @@ namespace ILWIS{
 		AbstractObjectDrawer(DrawerParameters *parms, const String& name);
 		HTREEITEM  configure(LayerTreeView  *tv, HTREEITEM parent);
 	};
-	class TransparencyForm : public FormBaseDialog {
+
+	class _export DisplayOptionsForm : public FormBaseDialog {
+	public:
+		DisplayOptionsForm(AbstractObjectDrawer *dr,CWnd *par, const String& title);
+		afx_msg virtual void OnCancel();
+		int exec();
+		virtual void apply();
+	protected:
+		void updateViews();
+		AbstractObjectDrawer *drw;
+		LayerTreeView *view;
+	};
+
+	class TransparencyForm : public DisplayOptionsForm {
 		public:
 		TransparencyForm(CWnd *wPar, AbstractObjectDrawer *dr);
-		int exec();
-		afx_msg virtual void OnCancel(); 
+		void apply(); 
 	private:
 		int transparency;
-		AbstractObjectDrawer *drw;
-
 	};
 
 	

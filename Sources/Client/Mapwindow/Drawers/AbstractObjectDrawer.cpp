@@ -31,11 +31,13 @@ AbstractObjectDrawer::AbstractObjectDrawer(DrawerParameters *parms, const String
 	iFStyle(0),
 	iWidth(0),
 	hasText(false),
-	transparency(0)
+	transparency(0),
+	object(0)
 {
 }
 
 AbstractObjectDrawer::~AbstractObjectDrawer() {
+	delete object;
 }
 
 void AbstractObjectDrawer::prepare(PreparationParameters *pp){
@@ -54,9 +56,10 @@ void AbstractObjectDrawer::setTransperency(int value) {
 	transparency = value;
 }
 
-void AbstractObjectDrawer::setDataSource(void *bmap) {
-	IlwisObject object = *((IlwisObject *)bmap);
-	obj = object.pointer();
+void AbstractObjectDrawer::setDataSource(void *bmap, int options) {
+	IlwisObject *o = (IlwisObject *)bmap;
+	object = new IlwisObject(*o);
+	obj = object->pointer();
 	name = obj->sName();
 
 }
@@ -88,22 +91,14 @@ HTREEITEM AbstractObjectDrawer:: configure(LayerTreeView  *tv, HTREEITEM parent)
 
 //--------------------------------
 TransparencyForm::TransparencyForm(CWnd *wPar, AbstractObjectDrawer *dr) : 
-	FormBaseDialog(wPar,"Transparency",fbsApplyButton | fbsBUTTONSUNDER | fbsOKHASCLOSETEXT | fbsSHOWALWAYS),
-	transparency(dr->getTransparency()),
-	drw(dr)
-
+	DisplayOptionsForm(dr,wPar,"Transparency"),
+	transparency(dr->getTransparency())
 {
 	new FieldInt(root, "Transparency(0-100)", &transparency, RangeInt(0,100), true);
 	create();
 }
 
-int TransparencyForm::exec() {
-	
-	drw->setTransperency(transparency);
-	return 1;
-}
-
-void  TransparencyForm::OnCancel() {
+void  TransparencyForm::apply() {
 
 	//FormBaseDialog::OnCancel();
 }
@@ -155,6 +150,30 @@ void ILWIS::displayOptionsText(NewDrawer &drw, CWnd *parent) {
 										 | lf.lfUnderline ? FS_UNDERLINE : 0;
         drawer.sFaceName = lf.lfFaceName;
     }
+}
+
+DisplayOptionsForm::DisplayOptionsForm(AbstractObjectDrawer *dr,CWnd *par, const String& title) : 
+FormBaseDialog(par,title,fbsApplyButton | fbsBUTTONSUNDER | fbsOKHASCLOSETEXT | fbsSHOWALWAYS),
+view((LayerTreeView *)par),
+drw(dr)
+{
+}
+
+void DisplayOptionsForm::OnCancel() {
+	apply();
+}
+
+int DisplayOptionsForm::exec() {
+	return 1;
+}
+
+void DisplayOptionsForm::apply() {
+}
+
+void DisplayOptionsForm::updateViews() {
+	MapCompositionDoc* doc = view->GetDocument();
+	doc->ChangeState();
+	doc->UpdateAllViews(0,0);
 }
 
 

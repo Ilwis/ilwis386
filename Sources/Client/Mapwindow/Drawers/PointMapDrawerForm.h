@@ -38,12 +38,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_POINTMAPDRAWERFORM_H__D88C99E6_1CA7_11D3_B774_00A0C9D5342F__INCLUDED_)
-#define AFX_POINTMAPDRAWERFORM_H__D88C99E6_1CA7_11D3_B774_00A0C9D5342F__INCLUDED_
-
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
+#pragma once;
 
 class PointMapDrawerForm : public BaseMapDrawerForm  
 {
@@ -78,4 +73,4 @@ private:
   int iSymbolType; // Single, by Attribute, Special
 };
 
-#endif // !defined(AFX_POINTMAPDRAWERFORM_H__D88C99E6_1CA7_11D3_B774_00A0C9D5342F__INCLUDED_)
+
