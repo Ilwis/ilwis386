@@ -2,14 +2,14 @@
 
 typedef void (CCmdTarget::*NotifyRectProc)(CRect);
 
-#include "Client\Mapwindow\Drawers\Drawer_n.h"
+#include "Client\MapWindow\Drawers\SimpleDrawer.h"
 
 class ZoomableView;
 
 ILWIS::NewDrawer *createSelectionRectangle(ILWIS::DrawerParameters *parms);
 
 namespace ILWIS {
-	class _export SelectionRectangle : public ComplexDrawer  {
+	class _export SelectionRectangle : public SimpleDrawer  {
 	public:
 		SelectionRectangle(DrawerParameters *parms);
 		virtual ~SelectionRectangle();
@@ -18,6 +18,7 @@ namespace ILWIS {
 		void calcWorldCoordinates(const CRect & rctZoom);
 		CoordBounds getWorldCoordinates() const;
 	protected:
+		virtual HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent) { return 0;}
 		Coord c1,c2;
 	};
 

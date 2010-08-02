@@ -1,7 +1,7 @@
 #include "Client\Headers\formelementspch.h"
 #include "Engine\Map\basemap.h"
 #include "Engine\Map\Point\ilwPoint.h"
-#include "Client\MapWindow\Drawers\drawer_n.h"
+#include "Client\MapWindow\Drawers\ComplexDrawer.h"
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
 #include "Engine\Spatialreference\gr.h"
 #include "Engine\Map\Raster\Map.h"
@@ -77,7 +77,7 @@ void AbstractMapDrawer::addDataSource(void *bmap,int options)
 		context->setCoordBoundsMap(cbMap);
 		if ( bm->fnObj == bm->dm()->fnObj)
 			internalDomain = true;
-		MouseClickInfoDrawer *mid = (MouseClickInfoDrawer *)getRootDrawer()->getDrawer("MouseClickInfoDrawer");
+		MouseClickInfoDrawer *mid = (MouseClickInfoDrawer *)((ComplexDrawer *)getRootDrawer())->getDrawer("MouseClickInfoDrawer");
 		if ( mid)
 			mid->addDataSource(&bm);
 	}

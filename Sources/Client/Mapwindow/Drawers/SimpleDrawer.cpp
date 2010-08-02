@@ -57,7 +57,7 @@ String SimpleDrawer::getId() const{
 }
 
 void SimpleDrawer::prepare(PreparationParameters *parms){
-	rootDrawer = (RootDrawer *)parentDrawer->getRootDrawer();
+	rootDrawer = parentDrawer->getRootDrawer();
 }
 
 

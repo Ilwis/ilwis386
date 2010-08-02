@@ -1,5 +1,5 @@
 #include "Client\Headers\formelementspch.h"
-#include "Client\MapWindow\Drawers\drawer_n.h"
+#include "Client\MapWindow\Drawers\ComplexDrawer.h"
 #include "Client\Ilwis.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
@@ -42,7 +42,7 @@ void AbstractObjectDrawer::addDataSource(void *bmap, int options) {
 //--------------------------------
 
 
-DisplayOptionsForm::DisplayOptionsForm(NewDrawer *dr,CWnd *par, const String& title) : 
+DisplayOptionsForm::DisplayOptionsForm(ComplexDrawer *dr,CWnd *par, const String& title) : 
 FormBaseDialog(par,title,fbsApplyButton | fbsBUTTONSUNDER | fbsOKHASCLOSETEXT | fbsSHOWALWAYS),
 view((LayerTreeView *)par),
 drw(dr)

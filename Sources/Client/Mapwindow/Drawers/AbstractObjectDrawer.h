@@ -26,13 +26,13 @@ namespace ILWIS{
 
 	class _export DisplayOptionsForm : public FormBaseDialog {
 	public:
-		DisplayOptionsForm(NewDrawer *dr,CWnd *par, const String& title);
+		DisplayOptionsForm(ComplexDrawer *dr,CWnd *par, const String& title);
 		afx_msg virtual void OnCancel();
 		int exec();
 		virtual void apply();
 	protected:
 		void updateMapView();
-		NewDrawer *drw;
+		ComplexDrawer *drw;
 		LayerTreeView *view;
 	};
 

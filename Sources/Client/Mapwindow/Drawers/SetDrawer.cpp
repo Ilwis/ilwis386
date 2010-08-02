@@ -3,7 +3,7 @@
 #include "Client\FormElements\FieldRealSlider.h"
 #include "Engine\Map\basemap.h"
 #include "Engine\Map\Point\ilwPoint.h"
-#include "Client\MapWindow\Drawers\drawer_n.h"
+#include "Client\MapWindow\Drawers\ComplexDrawer.h"
 #include "Client\Ilwis.h"
 #include "Engine\Representation\Rpr.h"
 #include "Client\FormElements\fldcol.h"
@@ -310,7 +310,7 @@ void  SetStretchForm::apply() {
 //--------------------------------
 TransparencyForm::TransparencyForm(CWnd *wPar, SetDrawer *dr) : 
 	DisplayOptionsForm(dr,wPar,"Transparency"),
-	transparency(dr->getTransparency())
+	transparency(100 *(1.0-dr->getTransparency()))
 {
 	slider = new FieldIntSliderEx(root,"Transparency(0-100)", &transparency,ValueRange(0,100),true);
 	create();

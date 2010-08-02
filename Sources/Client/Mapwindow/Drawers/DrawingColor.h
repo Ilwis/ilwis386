@@ -11,7 +11,7 @@ class _export DrawingColor {
 public:
 	DrawingColor(SetDrawer *dr);
 	Color clrVal(double rVal) const;
-	Color clrRaw(long iRaw, AbstractMapDrawer::DrawMethod drm) const;
+	Color clrRaw(long iRaw, NewDrawer::DrawMethod drm) const;
 	Color clrRandom(int iRaw) const;
 	Color clrPrimary(int iNr) const;
 

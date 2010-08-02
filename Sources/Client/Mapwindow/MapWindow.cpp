@@ -237,7 +237,7 @@ int MapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	rect.OffsetRect(1,0);
 	DockControlBar(&barScale,AFX_IDW_DOCKBAR_TOP,rect);
 
-	ltb.Create(this, 124, CSize(150,200));
+	ltb.Create(this, 124, CSize(200,200));
   ltb.SetWindowText(SMWTitleLayerManagement.scVal());
 	ltb.EnableDocking(CBRS_ALIGN_LEFT|CBRS_ALIGN_RIGHT);
   ltb.view = new LayerTreeView;

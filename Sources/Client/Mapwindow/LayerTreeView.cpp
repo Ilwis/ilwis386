@@ -189,6 +189,7 @@ void LayerTreeView::collectStructure(HTREEITEM parent, const String& name) {
 		hItem= GetTreeCtrl().GetNextItem(hItem, TVGN_NEXT);
 	}
 }
+
 void LayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint) 
 {
 	if (lHint == 4) // maplistdrawer replaces map
@@ -203,37 +204,33 @@ void LayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 	DeleteAllItems();
 
 	int iImgProp = IlwWinApp()->iImage("prop");
+	vector<NewDrawer *> allDrawers;
 
 	MapCompositionDoc* mcd = GetDocument();
 	int drCount = mcd->rootDrawer->getDrawerCount();
 	for(int index = 0; index < drCount; ++index)
 	{
+		int iImg;
 		ComplexDrawer* dr = (ComplexDrawer *)mcd->rootDrawer->getDrawer(index);
 		AbstractMapDrawer *adr = dynamic_cast<AbstractMapDrawer *>(dr);
 		ILWISSingleLock csl(&dr->cs, TRUE, SOURCE_LOCATION);
-		FileName fn;
-		if ( adr)
-			fn = adr->getObject()->fnObj;
-		String sName = fn.sShortName(false);
-		BaseMap bmp = adr->getBaseMap();
-		if (bmp.fValid()) {
+		
+		AbstractMapDrawer *mapDrawer = dynamic_cast<AbstractMapDrawer *>(dr);
+		if (mapDrawer) {
+			BaseMap bmp = mapDrawer->getBaseMap();
+			//String sName = bmp->fnObj.sShortName(false);
+			iImg = IlwWinApp()->iImage( bmp->fnObj.sExt);
+			String sName = dr->getName();
 			String sDescr = bmp->sDescr();
 			if ("" != sDescr) 
 				sName = String("%S - %S", sName, sDescr);
-		}
 
-		int iImg = IlwWinApp()->iImage(fn.sExt);
-		HTREEITEM hti = tc.InsertItem(sName.scVal(),iImg,iImg,TVI_ROOT,TVI_FIRST);
-		if (0 == hti)
-			return;
-		tc.SetItemData(hti, (DWORD_PTR)new DrawerLayerTreeItem(this, dr));		
-		tc.SetCheck(hti, dr->isActive());
+			HTREEITEM hti = tc.InsertItem(sName.scVal(),iImg,iImg,TVI_ROOT,TVI_FIRST);
+			tc.SetItemData(hti, (DWORD_PTR)new DrawerLayerTreeItem(this, dr));		
+			tc.SetCheck(hti, dr->isActive());
 
-		if (adr == 0) 
-			continue;
-		Domain dm;
-		dm = bmp->dm();
-		if (adr) {
+			Domain dm = bmp->dm();
+
 			sName = String("Display options");
 			iImg = IlwWinApp()->iImage(".mpv");
 			HTREEITEM htiDisplayOptions = tc.InsertItem(sName.scVal(), iImg, iImg, hti);

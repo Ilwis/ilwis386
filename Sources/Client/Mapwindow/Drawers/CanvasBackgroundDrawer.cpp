@@ -9,14 +9,14 @@ ILWIS::NewDrawer *createCanvasBackgroundDrawer(DrawerParameters *parms) {
 	return new CanvasBackgroundDrawer(parms);
 }
 
-CanvasBackgroundDrawer::CanvasBackgroundDrawer(DrawerParameters *parms) : ComplexDrawer(parms,"CanvasBackgroundDrawer"){
+CanvasBackgroundDrawer::CanvasBackgroundDrawer(DrawerParameters *parms) : SimpleDrawer(parms,"CanvasBackgroundDrawer"){
 	id = name = "CanvasBackgroundDrawer";
 }
 
 CanvasBackgroundDrawer::~CanvasBackgroundDrawer() {
 }
 void  CanvasBackgroundDrawer::prepare(PreparationParameters *pp){
-	ComplexDrawer::prepare(pp);
+	SimpleDrawer::prepare(pp);
 
 }
 
