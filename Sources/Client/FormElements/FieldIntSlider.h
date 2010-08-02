@@ -47,7 +47,7 @@
 
 #include "Client\FormElements\fentbase.h"
 
-class OwnSliderCtrl : public CSliderCtrl, public BaseZapp
+class _export OwnSliderCtrl : public CSliderCtrl, public BaseZapp
 {
 public:
 	OwnSliderCtrl(FormEntry *f);
@@ -78,6 +78,29 @@ private:
 	CSliderCtrl *slc;
 	ValueRange vri;
 	DWORD m_dwStyle;
+};
+
+class _export FieldIntSliderEx : public FormEntry {
+public:
+	FieldIntSliderEx(FormEntry * parent, const String& question, int *val, const ValueRange& valrange, bool horiz);
+	virtual ~FieldIntSliderEx();
+	void create();             // overriden
+	void show(int sw);         // overriden
+	void SetVal(int iVal);
+	int iVal();               // return current value
+	void StoreData();
+	void Enable();
+	void Disable();
+	void SetFocus();
+	FormEntry* CheckData();
+private:
+	int SliderCallBackFunc(Event *ev);
+	int EditCallBackFunc(Event *ev);
+	FieldIntSlider *slider;
+	FieldInt *edit;
+	bool initial;
+	int setRace;
+
 };
 
 #endif // !defined(AFX_FIELDINTSLIDER_H__1B5F582F_0B46_4B10_B793_E9EF001C8F10__INCLUDED_)

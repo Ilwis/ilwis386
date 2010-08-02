@@ -11,7 +11,7 @@ ILWIS::NewDrawer *createSelectionRectangle(DrawerParameters *parms) {
 }
 
 SelectionRectangle::SelectionRectangle(DrawerParameters *parms) : 
-AbstractDrawer(parms, "SelectionRectangle")
+ComplexDrawer(parms, "SelectionRectangle")
 {
 }
 

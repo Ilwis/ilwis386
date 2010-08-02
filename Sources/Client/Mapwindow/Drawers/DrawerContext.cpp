@@ -1,14 +1,15 @@
 #include "headers\toolspch.h"
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
+#include "RootDrawer.h"
 
 using namespace ILWIS;
 
-DrawerContext::DrawerContext() : mhRC(0),aspectRatio(0){
+DrawerContext::DrawerContext(RootDrawer *dr) : mhRC(0),aspectRatio(0), rootDrawer(dr) {
 }
 
 bool DrawerContext::initOpenGL(CDC *dc) {
 	if ( mhRC)
-		return true;
+		return false;// no init needed, already done
 
 	PIXELFORMATDESCRIPTOR pfd;
 	ZeroMemory( &pfd, sizeof( pfd ) );
@@ -193,3 +194,9 @@ void DrawerContext::setZoom(const CRect& rect) {
 CoordBounds DrawerContext::getCoordBoundsZoom() const  {
 	return cbZoom;
 }
+
+RootDrawer *DrawerContext::getRootDrawer() const {
+	return rootDrawer;
+}
+
+

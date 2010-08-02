@@ -204,7 +204,7 @@ int SegmentMapDrawer::draw(CDC* cdc, zRect rect, Positioner* psn, volatile bool*
 		++iTranquilizer;
 		if (*fDrawStop)
 			break;
-		if (!fBoundCheck || cbIntern.fContains(s->crdBounds())) {
+		if (!fBoundCheck || cbIntern.fContains(s->cbBounds())) {
 			if (fMask) {
 				if (!fSegInMask(s))
 					continue;

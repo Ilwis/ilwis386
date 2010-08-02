@@ -9,7 +9,7 @@ class ZoomableView;
 ILWIS::NewDrawer *createSelectionRectangle(ILWIS::DrawerParameters *parms);
 
 namespace ILWIS {
-	class _export SelectionRectangle : public AbstractDrawer  {
+	class _export SelectionRectangle : public ComplexDrawer  {
 	public:
 		SelectionRectangle(DrawerParameters *parms);
 		virtual ~SelectionRectangle();

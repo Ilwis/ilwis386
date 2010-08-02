@@ -1,21 +1,24 @@
 #pragma once
 
+class MapCompositionDoc;
+
 namespace ILWIS {
 
 	class AbstractMapDrawer;
+	class SetDrawer;
 
-class DrawingColor {
+class _export DrawingColor {
 public:
-	DrawingColor(AbstractMapDrawer *dr);
+	DrawingColor(SetDrawer *dr);
 	Color clrVal(double rVal) const;
-	Color clrRaw(long iRaw) const;
+	Color clrRaw(long iRaw, AbstractMapDrawer::DrawMethod drm) const;
 	Color clrRandom(int iRaw) const;
 	Color clrPrimary(int iNr) const;
 
 private:
 	void InitClrRandom();
 
-	AbstractMapDrawer *drw;
+	SetDrawer *drw;
 	MapCompositionDoc *mcd;
     vector<Color> m_clrRandom;
 	Color clr1;

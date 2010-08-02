@@ -2,11 +2,14 @@
 
 #include "drawer_n.h"
 
+
+ILWIS::NewDrawer *createCanvasBackgroundDrawer(ILWIS::DrawerParameters *parms);
+
 namespace ILWIS {
-class RootDrawer : public ComplexDrawer {
+class CanvasBackgroundDrawer : public ComplexDrawer {
 public:
-	RootDrawer();
-	~RootDrawer();
+	CanvasBackgroundDrawer(DrawerParameters *parms);
+	~CanvasBackgroundDrawer();
 	virtual void prepare(PreparationParameters *pp);
 	void setCoordSystem(const CoordSystem& cs, bool overrule=false);
 	void addCoordBounds(const CoordBounds& cb, bool overrule=true);

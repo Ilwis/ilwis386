@@ -5,18 +5,23 @@ namespace ILWIS	{
 
 	class FeatureLayerDrawer;
 
-	class _export FeatureDrawer : public AbstractDrawer {
+	class _export FeatureDrawer : public SimpleDrawer {
 	public:
 		FeatureDrawer(DrawerParameters *parms, const String& ty);
 		~FeatureDrawer();
-		void setDataSource(void *p);
+		void addDataSource(void *p,int options=0);
 		void prepare(PreparationParameters *pp);
+		void draw(bool norecursion);
 	protected:
-//		virtual void setColor(const BaseMap& mp, ILWIS::FeatureLayerDrawer *fdr);
+		HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent);
+		void setColor(const Color& color);
+		void setOpenGLColor() const;
 
 		Feature *feature;
-		Color color1;
-		Color color2;
+		CoordBounds cb;
+		double red;
+		double green;
+		double blue;
 	};
 
 }

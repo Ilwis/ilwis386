@@ -1159,12 +1159,12 @@ void IlwisWinApp::InitImage(string sExt, const char* sIcon, int iNr)
 	ilLarge.Replace(iNr, hIcon);                               
 }
 
-void IlwisWinApp::InitImageLists()    
+void IlwisWinApp::InitImageLists()
 {
 	ilSmall.Create(16,16,TRUE,4,4);
 	ilLarge.Create(32,32,TRUE,4,4);
-	ilSmall.SetImageCount(75);
-	ilLarge.SetImageCount(75);
+	ilSmall.SetImageCount(79);
+	ilLarge.SetImageCount(79);
 
 	int i = 0;
 	InitImage("ilwis", "LogoIcon", i++);
@@ -1253,6 +1253,12 @@ void IlwisWinApp::InitImageLists()
 	InitImage("Valuerange", "ValueRange", i++);			
 	InitImage("Colors", "Colors", i++);			
 	InitImage("SingleColor", "SingleColor", i++);			
+	InitImage("MultipleColors", "MultipleColors", i++);
+	InitImage("Active", "Active", i++);
+	InitImage("Mask", "Mask", i++);
+	InitImage("Set", "Set", i++);
+
+
 }
 
 int IlwisWinApp::iImage(const string& sExt)
@@ -2367,16 +2373,28 @@ vector<Action *> IlwisWinApp::CreateActions() {
 	return commandUI->CreateActions();
 }
 
-ILWIS::NewDrawer *IlwisWinApp::getDrawer(const String& type, ILWIS::DrawerParameters *c)  {
-	if ( drawers.find(type) != drawers.end()) {
-		DrawerCreate func = drawers[type];
-		return func(c);
-	}
+ILWIS::NewDrawer *IlwisWinApp::getDrawer(const String& type, const String& subtype, ILWIS::DrawerParameters *c)  {
+	String fullType = type + "|" + subtype;
+	map<String, DrawerCreate>::const_iterator item = drawers.find(fullType);
+	if ( item != drawers.end())
+		return ((*item).second)(c);
+	//if ( drawers.find(fullType) != drawers.end()) {
+	//	DrawerCreate func = drawers[type];
+	//	return func(c);
+	//}
 	return NULL;
 }
 
-void IlwisWinApp::addDrawer(const String& type, DrawerCreate func) {
-	drawers[type] = func;
+ILWIS::NewDrawer *IlwisWinApp::getDrawer(const String& type, ILWIS::PreparationParameters *parms, ILWIS::DrawerParameters *c)  {
+	if ( parms->typeMapping.size() == 0)
+		return getDrawer(type,"Ilwis38",c);
+	map<String,String>::iterator item = parms->typeMapping.find(type);
+	String subType =  item == parms->typeMapping.end() ? "Ilwis38" : (*item).second;
+	return getDrawer(type,subType,c);
+}
+
+void IlwisWinApp::addDrawer(const String& type, const String& subtype, DrawerCreate func) {
+	drawers[type + "|" + subtype] = func;
 }
 
 

@@ -64,9 +64,7 @@ void OwnSliderCtrl::VScroll(UINT nSBCode, UINT nPos)
 		fProcess(NotificationEvent(GetDlgCtrlID(), TB_ENDTRACK, (LPARAM)m_hWnd));
 }
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------
 
 FieldIntSlider::FieldIntSlider(FormEntry* p, int *piVal, const ValueRange& valri, DWORD dwStyle)
 : FormEntry(p, 0, true)
@@ -76,7 +74,7 @@ FieldIntSlider::FieldIntSlider(FormEntry* p, int *piVal, const ValueRange& valri
 , vri(valri)
 , m_dwStyle(dwStyle)
 {
-	if (m_dwStyle && TBS_HORZ)
+	if (m_dwStyle == TBS_HORZ)
 	{
 		psn->iMinWidth = 120;//FLDSLIDERWIDTH;
 		psn->iMinHeight = 30;//FLDSLIDERHEIGHT;
@@ -172,4 +170,85 @@ FormEntry* FieldIntSlider::CheckData()
 				return this;
   }  
   return FormEntry::CheckData();
+}
+
+//---------------------------------------------------
+FieldIntSliderEx::FieldIntSliderEx(FormEntry * parent, const String& question, int *val, const ValueRange& valrange, bool horiz) : 
+	FormEntry(parent,0,true),
+	edit(0),
+	slider(0),
+	initial(true),
+	setRace(-1)
+{
+	FieldGroup *fg = new FieldGroup(parent);
+	edit = new FieldInt(fg,question,val,valrange);
+	slider = new FieldIntSlider(fg,val,valrange,horiz ? TBS_HORZ : TBS_VERT);
+	new FieldBlank(fg);
+	slider->Align(edit,AL_AFTER);
+
+}
+
+FieldIntSliderEx::~FieldIntSliderEx(){
+}
+
+void FieldIntSliderEx::create(){
+	FormEntry::CreateChildren();
+	slider->SetCallBack((NotifyProc)&FieldIntSliderEx::SliderCallBackFunc,this);
+	edit->SetCallBack((NotifyProc)&FieldIntSliderEx::EditCallBackFunc,this);
+	initial = false;
+}
+
+void FieldIntSliderEx::show(int sw){
+	if (edit)
+		edit->show(sw);
+	if ( slider)
+		slider->show(sw);
+}
+void FieldIntSliderEx::SetVal(int iVal){
+	edit->SetVal(iVal);
+	slider->SetVal(iVal);
+}
+int FieldIntSliderEx::iVal(){
+	return slider->iVal();
+}
+void FieldIntSliderEx::StoreData(){
+	edit->StoreData();
+}
+void FieldIntSliderEx::Enable(){
+	edit->Enable();
+	slider->Enable();
+}
+void FieldIntSliderEx::Disable(){
+	edit->Disable();
+	slider->Disable();
+}
+void FieldIntSliderEx::SetFocus(){
+	edit->SetFocus();
+}
+FormEntry* FieldIntSliderEx::CheckData(){
+	FormEntry *frm = edit->CheckData();
+	if ( frm)
+		return frm;
+	frm = slider->CheckData();
+	return frm;
+}
+
+int FieldIntSliderEx::SliderCallBackFunc(Event *ev) {
+	if ( initial || setRace == 1)
+		return 1;
+	setRace = 0;
+	int val = slider->iVal();
+	edit->SetVal(val);
+	setRace = -1;
+	return 1;
+}
+
+int FieldIntSliderEx::EditCallBackFunc(Event *ev) {
+	if ( initial || setRace == 0)
+		return 1;
+	setRace = 1;
+	int val = edit->iVal();
+	slider->SetVal(val);
+	setRace = -1;
+	return 1;
 }

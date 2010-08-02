@@ -244,6 +244,10 @@ Transparent             ICON                    "transparent.ico"
 ValueRange              ICON                    "valuerange.ico"
 Colors                  ICON                    "colors.ico"
 SingleColor             ICON                    "singlecolor.ico"
+MultipleColors          ICON                    "multiplecolors.ico"
+Mask                    ICON                    "mask.ico"
+Active                  ICON                    "active.ico"
+Set                     ICON                    "set.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //

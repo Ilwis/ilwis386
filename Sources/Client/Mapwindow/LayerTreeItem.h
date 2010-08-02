@@ -51,7 +51,8 @@ public:
 	virtual void OnLButtonDblClk(UINT nFlags, CPoint point);
 	virtual void SwitchCheckBox(bool fOn);
 	virtual void OnContextMenu(CWnd* pWnd, CPoint pos);
-	virtual void OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult); 
+	virtual void OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult);
+	LayerTreeView *getTreeView() { return ltv; }
 protected:
 	LayerTreeView* ltv;
 };
@@ -106,6 +107,7 @@ private:
 };
 
 class ChooseColumnComboBox;
+
 class ColumnLayerTreeItem: public LayerTreeItem
 {
 	friend class ChooseColumnComboBox;
@@ -164,41 +166,60 @@ private:
 class _export DisplayOptionTreeItem: public LayerTreeItem
 {
 public:
-	DisplayOptionTreeItem(LayerTreeView*, ILWIS::NewDrawer *dr, DisplayOptionItemFunc f,HTREEITEM item=0, SetChecks *ch=0,SetCheckFunc f2=0);
+	DisplayOptionTreeItem(LayerTreeView*, HTREEITEM parent, ILWIS::NewDrawer *dr, DisplayOptionItemFunc f,HTREEITEM item=0, SetChecks *checks=0);
+	DisplayOptionTreeItem(LayerTreeView*, HTREEITEM parent, ILWIS::NewDrawer *dr, SetCheckFunc f,DisplayOptionItemFunc fun=0, ILWIS::NewDrawer *_altHandler=0);
 	virtual ~DisplayOptionTreeItem();
 	virtual void OnLButtonDblClk(UINT nFlags, CPoint point);
 	void SwitchCheckBox(bool fOn);
+	HTREEITEM getParent() { return parent;}
+	void setTreeItem(HTREEITEM it) ;
+	
 private: 
 	DisplayOptionItemFunc func;
 	SetCheckFunc setCheckFunc;
 	ILWIS::NewDrawer *drw;
+	ILWIS::NewDrawer *altHandler;
 	SetChecks *checks;
 	HTREEITEM hti;
+	HTREEITEM parent;
 };
 
-class DisplayOptionAttTable: public LayerTreeItem
+class _export DisplayOptionColorItem: public DisplayOptionTreeItem
 {
 public:
-	DisplayOptionAttTable(LayerTreeView*, HTREEITEM hti,AbstractMapDrawer *dr, DisplayOptionItemFunc f);
-	virtual ~DisplayOptionAttTable();
-	virtual void OnLButtonDblClk(UINT nFlags, CPoint point);
-	virtual void SwitchCheckBox(bool fOn);
-private:
-	HTREEITEM htiStart;
-	HTREEITEM htiCurrent;
-	AbstractMapDrawer *drw;
-	DisplayOptionItemFunc func;
+	DisplayOptionColorItem(LayerTreeView*, HTREEITEM parent, ILWIS::NewDrawer *dr, DisplayOptionItemFunc f,HTREEITEM item=0, SetChecks *checks=0);
+	//DisplayOptionColorItem(LayerTreeView*, ILWIS::NewDrawer *dr, SetCheckFunc f,DisplayOptionItemFunc fun=0, HTREEITEM item=0, ILWIS::NewDrawer *_altHandler=0);
+	void OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult); 
+private: 
+
 };
 
+
+
+//class DisplayOptionAttTable: public LayerTreeItem
+//{
+//public:
+//	DisplayOptionAttTable(LayerTreeView*, HTREEITEM hti,AbstractMapDrawer *dr, DisplayOptionItemFunc f);
+//	virtual ~DisplayOptionAttTable();
+//	virtual void OnLButtonDblClk(UINT nFlags, CPoint point);
+//	virtual void SwitchCheckBox(bool fOn);
+//private:
+//	HTREEITEM htiStart;
+//	HTREEITEM htiCurrent;
+//	AbstractMapDrawer *drw;
+//	DisplayOptionItemFunc func;
+//};
+//
 class SetChecks {
 public:
-	SetChecks(LayerTreeView*, AbstractMapDrawer *dr);
+	SetChecks(LayerTreeView*, NewDrawer *dr,SetCheckFunc _f);
 	void addItem(HTREEITEM hti);
-	void checkItem(HTREEITEM hti);
+	void checkItem(HTREEITEM hti,bool fOn);
 private:
 	vector<HTREEITEM> checkedItems;
 	LayerTreeView *tv;
-	AbstractMapDrawer *drw;
+	NewDrawer *drw;
+	SetCheckFunc fun;
 
 };
 

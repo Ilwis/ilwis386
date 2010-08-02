@@ -90,6 +90,7 @@ BEGIN_MESSAGE_MAP(LayerTreeView, CTreeView)
 	ON_WM_MOUSEMOVE()
 	ON_WM_LBUTTONUP()	
 	ON_COMMAND(ID_REMOVELAYER, OnRemoveLayer)
+	ON_NOTIFY_REFLECT(TVN_ITEMEXPANDING, OnExpanding)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -155,7 +156,39 @@ void LayerTreeView::DeleteAllItems(HTREEITEM hti)
 		delete lti;
 }
 
+void LayerTreeView::NextNode(HTREEITEM hItem, const String& name) {
+	TreeItem titem;
 
+	if ( getItem(hItem, TVIF_TEXT | TVIF_HANDLE,titem)) {
+		String part("%S|%s", name, titem.item.pszText);
+		nodes[part] = NodeInfo(hItem);
+		collectStructure(hItem,part);
+	}
+}
+
+void LayerTreeView::collectStructure(HTREEITEM parent, const String& name) {
+	if ( name == "") { // start at root
+		nodes.clear();
+		HTREEITEM hItem = GetTreeCtrl().GetNextItem(TVI_ROOT, TVGN_ROOT);
+		TreeItem titem;
+		GetTreeCtrl().GetItem(&titem.item);
+		if (getItem(hItem,TVIF_TEXT | TVIF_HANDLE,titem))
+			collectStructure(hItem, String("%s", titem.item.pszText));
+		else
+			return;
+	}
+	set<String> names;
+	HTREEITEM hItem= GetTreeCtrl().GetNextItem(parent, TVGN_CHILD);
+	if ( hItem) {
+		NextNode(hItem,name);
+
+	}
+	hItem= GetTreeCtrl().GetNextItem(hItem, TVGN_NEXT);
+	while ( hItem) {
+		NextNode(hItem,name);
+		hItem= GetTreeCtrl().GetNextItem(hItem, TVGN_NEXT);
+	}
+}
 void LayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint) 
 {
 	if (lHint == 4) // maplistdrawer replaces map
@@ -174,9 +207,8 @@ void LayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 	MapCompositionDoc* mcd = GetDocument();
 	int drCount = mcd->rootDrawer->getDrawerCount();
 	for(int index = 0; index < drCount; ++index)
-	//for (list<Drawer*>::iterator iter = mcd->dl.begin(); iter != mcd->dl.end(); ++iter) 
 	{
-		AbstractDrawer* dr = (AbstractDrawer *)mcd->rootDrawer->getDrawer(index);
+		ComplexDrawer* dr = (ComplexDrawer *)mcd->rootDrawer->getDrawer(index);
 		AbstractMapDrawer *adr = dynamic_cast<AbstractMapDrawer *>(dr);
 		ILWISSingleLock csl(&dr->cs, TRUE, SOURCE_LOCATION);
 		FileName fn;
@@ -296,78 +328,78 @@ void LayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 			//}
 		}
 
-		bool fLegend = adr->isLegendUsefull();
-		if (fLegend) {
-			if (dm->pdc()) {
-				sName = SDCRemLegend;
-				int iImgLeg = IlwWinApp()->iImage("legend");
-				HTREEITEM htiLeg = tc.InsertItem(sName.scVal(), iImgLeg, iImgLeg, hti);
-				if (0 == htiLeg)
-					return;
-				tc.SetItemData(htiLeg, (DWORD_PTR)new LegendLayerTreeItem(this, dr));		
-				DomainClass* dc = dm->pdc();
-				int iItems = dc->iNettoSize();
-				for (int i = 1; i <= iItems; ++i) {
-					int iRaw = dc->iKey(i);
-					String sName = dc->sValueByRaw(iRaw, 0);
-					HTREEITEM hti = tc.InsertItem(sName.scVal(), htiLeg);
-					tc.SetItemData(hti, (DWORD_PTR)new LegendClassLayerTreeItem(this, dr, dm, iRaw));		
-				}
-				tc.Expand(htiLeg, TVE_EXPAND);
-			}
-			else if (dm->pdbool()) {
-				sName = SDCRemLegend;
-				int iImgLeg = IlwWinApp()->iImage("legend");
-				HTREEITEM htiLeg = tc.InsertItem(sName.scVal(), iImgLeg, iImgLeg, hti);
-				if (0 == htiLeg)
-					return;
-				int iItems = 2;
-				for (int i = 2; i > 0; --i) {
-					int iRaw = i;
-					String sName = dm->sValueByRaw(iRaw, 0);
-					HTREEITEM hti = tc.InsertItem(sName.scVal(), htiLeg);
-					tc.SetItemData(hti, (DWORD_PTR)new LegendClassLayerTreeItem(this, dr, dm, iRaw));		
-				}
-				tc.Expand(htiLeg, TVE_EXPAND);
-			}
-			else if (dm->pdid()) {
-				DomainSort* ds = dm->pdsrt();
-				int iItems = ds->iNettoSize();
-				if (iItems <= 128 && dr->getDrawMethod() == NewDrawer::drmMULTIPLE) {
-					sName = SDCRemLegend;
-					int iImgLeg = IlwWinApp()->iImage("legend");
-					HTREEITEM htiLeg = tc.InsertItem(sName.scVal(), iImgLeg, iImgLeg, hti);
-					if (0 == htiLeg)
-						return;
-					for (int i = 1; i <= iItems; ++i) {
-						int iRaw = ds->iKey(i);
-						String sName = ds->sValueByRaw(iRaw, 0);
-						HTREEITEM hti = tc.InsertItem(sName.scVal(), htiLeg);
-						tc.SetItemData(hti, (DWORD_PTR)new LegendClassLayerTreeItem(this, dr, dm, iRaw));		
-					}
-				}
-				//tc.Expand(htiLeg, TVE_EXPAND);
-			}
-			else if (dm->pdi()) {
-				sName = SDCRemLegend;
-				int iImgLeg = IlwWinApp()->iImage("legend");
-				HTREEITEM htiLeg = tc.InsertItem(sName.scVal(), iImgLeg, iImgLeg, hti);
-				if (0 == htiLeg)
-					return;
-				Representation rpr = adr->getRepresentation();
-				tc.SetItemData(htiLeg, (DWORD_PTR)new ObjectLayerTreeItem(this, rpr.pointer()));		
-				DomainValueRangeStruct dvs = bmp->dvrs();					
-				RangeReal rr = adr->getStretchRangeReal();
-				int iItems = 5;
-				for (int i = 0; i < iItems; ++i) {
-					double rMaxItem = iItems - 1;
-					long iVal = rr.rLo() + i / rMaxItem * rr.rWidth();
-					String sName = dvs.sValue(iVal, 0);
-					HTREEITEM hti = tc.InsertItem(sName.scVal(), htiLeg);
-					tc.SetItemData(hti, (DWORD_PTR)new LegendClassLayerTreeItem(this, dr, dm, iVal));		
-				}
-				tc.Expand(htiLeg, TVE_EXPAND);
-			}
+		//bool fLegend = adr->isLegendUsefull();
+		//if (fLegend) {
+		//	if (dm->pdc()) {
+		//		sName = SDCRemLegend;
+		//		int iImgLeg = IlwWinApp()->iImage("legend");
+		//		HTREEITEM htiLeg = tc.InsertItem(sName.scVal(), iImgLeg, iImgLeg, hti);
+		//		if (0 == htiLeg)
+		//			return;
+		//		tc.SetItemData(htiLeg, (DWORD_PTR)new LegendLayerTreeItem(this, dr));		
+		//		DomainClass* dc = dm->pdc();
+		//		int iItems = dc->iNettoSize();
+		//		for (int i = 1; i <= iItems; ++i) {
+		//			int iRaw = dc->iKey(i);
+		//			String sName = dc->sValueByRaw(iRaw, 0);
+		//			HTREEITEM hti = tc.InsertItem(sName.scVal(), htiLeg);
+		//			tc.SetItemData(hti, (DWORD_PTR)new LegendClassLayerTreeItem(this, dr, dm, iRaw));		
+		//		}
+		//		tc.Expand(htiLeg, TVE_EXPAND);
+		//	}
+		//	else if (dm->pdbool()) {
+		//		sName = SDCRemLegend;
+		//		int iImgLeg = IlwWinApp()->iImage("legend");
+		//		HTREEITEM htiLeg = tc.InsertItem(sName.scVal(), iImgLeg, iImgLeg, hti);
+		//		if (0 == htiLeg)
+		//			return;
+		//		int iItems = 2;
+		//		for (int i = 2; i > 0; --i) {
+		//			int iRaw = i;
+		//			String sName = dm->sValueByRaw(iRaw, 0);
+		//			HTREEITEM hti = tc.InsertItem(sName.scVal(), htiLeg);
+		//			tc.SetItemData(hti, (DWORD_PTR)new LegendClassLayerTreeItem(this, dr, dm, iRaw));		
+		//		}
+		//		tc.Expand(htiLeg, TVE_EXPAND);
+		//	}
+		//	else if (dm->pdid()) {
+		//		DomainSort* ds = dm->pdsrt();
+		//		int iItems = ds->iNettoSize();
+		//		if (iItems <= 128 && dr->getDrawMethod() == NewDrawer::drmMULTIPLE) {
+		//			sName = SDCRemLegend;
+		//			int iImgLeg = IlwWinApp()->iImage("legend");
+		//			HTREEITEM htiLeg = tc.InsertItem(sName.scVal(), iImgLeg, iImgLeg, hti);
+		//			if (0 == htiLeg)
+		//				return;
+		//			for (int i = 1; i <= iItems; ++i) {
+		//				int iRaw = ds->iKey(i);
+		//				String sName = ds->sValueByRaw(iRaw, 0);
+		//				HTREEITEM hti = tc.InsertItem(sName.scVal(), htiLeg);
+		//				tc.SetItemData(hti, (DWORD_PTR)new LegendClassLayerTreeItem(this, dr, dm, iRaw));		
+		//			}
+		//		}
+		//		//tc.Expand(htiLeg, TVE_EXPAND);
+		//	}
+		//	else if (dm->pdi()) {
+		//		sName = SDCRemLegend;
+		//		int iImgLeg = IlwWinApp()->iImage("legend");
+		//		HTREEITEM htiLeg = tc.InsertItem(sName.scVal(), iImgLeg, iImgLeg, hti);
+		//		if (0 == htiLeg)
+		//			return;
+		//		Representation rpr = adr->getRepresentation();
+		//		tc.SetItemData(htiLeg, (DWORD_PTR)new ObjectLayerTreeItem(this, rpr.pointer()));		
+		//		DomainValueRangeStruct dvs = bmp->dvrs();					
+		//		RangeReal rr = adr->getStretchRangeReal();
+		//		int iItems = 5;
+		//		for (int i = 0; i < iItems; ++i) {
+		//			double rMaxItem = iItems - 1;
+		//			long iVal = rr.rLo() + i / rMaxItem * rr.rWidth();
+		//			String sName = dvs.sValue(iVal, 0);
+		//			HTREEITEM hti = tc.InsertItem(sName.scVal(), htiLeg);
+		//			tc.SetItemData(hti, (DWORD_PTR)new LegendClassLayerTreeItem(this, dr, dm, iVal));		
+		//		}
+		//		tc.Expand(htiLeg, TVE_EXPAND);
+		/*	}
 			else if (dm->pdbit()) {
 				sName = SDCRemLegend;
 				int iImgLeg = IlwWinApp()->iImage("legend");
@@ -407,16 +439,28 @@ void LayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 					tc.SetItemData(hti, (DWORD_PTR)new LegendValueLayerTreeItem(this, adr, dvs, rVal));		
 				}
 				tc.Expand(htiLeg, TVE_EXPAND);
-			}
-		}
+			}*/
+		//}
 
-		tc.Expand(hti, TVE_EXPAND);
+		//tc.Expand(hti, TVE_EXPAND);
 	}
-
+	resetState();
 	tc.SetRedraw(TRUE);
 	Invalidate();
 }
 
+void LayerTreeView::resetState() {
+	HTREEITEM hItem = GetTreeCtrl().GetNextItem(TVI_ROOT, TVGN_ROOT);
+	GetTreeCtrl().Expand(hItem,TVE_EXPAND);
+	BOOL ret;
+	for(map<String,NodeInfo>::iterator cur = nodes.begin(); cur != nodes.end(); ++cur) {
+		if ( (*cur).second.expanded ){
+			ret = GetTreeCtrl().Expand((*cur).second.hItem,TVE_EXPAND);
+		}
+	}
+
+
+}
 void LayerTreeView::OnInitialUpdate() 
 {
 	odt->Register(this);
@@ -432,6 +476,9 @@ void LayerTreeView::OnInitialUpdate()
 	ilStates.Replace(1, icoEmpty);
 	ilStates.Replace(2, icoChecked);
 	tc.SetImageList(&ilStates, TVSIL_STATE);
+
+	collectStructure();
+
 }
 
 void LayerTreeView::OnLButtonDown(UINT nFlags, CPoint point) 
@@ -485,6 +532,36 @@ void LayerTreeView::SwitchCheckBox(HTREEITEM hti)
 	if (lti)
 		lti->SwitchCheckBox(!fCheck);
 	tc.SetCheck(hti, !fCheck);
+}
+
+void LayerTreeView::OnExpanding(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMTREEVIEW pNMTreeView = reinterpret_cast<LPNMTREEVIEW>(pNMHDR);
+
+	NMTREEVIEW* pnmtv = (NMTREEVIEW*) pNMHDR;
+	HTREEITEM hItem = pnmtv->itemNew.hItem;
+
+	String nodeName;
+	for(map<String,NodeInfo>::iterator cur = nodes.begin(); cur != nodes.end(); ++cur) {
+		if ( (*cur).second.hItem == hItem) {
+			nodeName = (*cur).first;
+			break;
+		}
+	}
+
+	if ( nodeName == "")
+		return;
+
+	if ( pnmtv->action == TVE_EXPAND )
+	{
+		nodes[nodeName].expanded = true;
+	}	
+	else if ( pnmtv->action == TVE_COLLAPSE )
+	{
+		nodes[nodeName].expanded = false;
+	}
+
+*pResult = 0;
 }
 
 void LayerTreeView::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult) 
@@ -770,6 +847,36 @@ void LayerTreeView::OnRemoveLayer()
 		mcd->rootDrawer->removeDrawer(drw->getId());
 		mcd->UpdateAllViews(0);
 	}  
+}
+
+String LayerTreeView::getItemName(HTREEITEM item) const {
+	for(map<String, NodeInfo>::const_iterator cur = nodes.begin(); cur != nodes.end(); ++cur) {
+		if ( (*cur).second.hItem == item)
+			return (*cur).first;
+	}
+	return sUNDEF;
+}
+
+HTREEITEM LayerTreeView::getAncestor(HTREEITEM current, int depth) {
+	String name = getItemName(current);
+	while(depth != 0) {
+		int index = name.find_last_of("|");
+		name = name.sLeft(index);
+		--depth;
+	}
+	for(map<String, NodeInfo>::const_iterator cur = nodes.begin(); cur != nodes.end(); ++cur) {
+		if ( (*cur).first == name)
+			return (*cur).second.hItem;
+	}
+	return 0;
+
+}
+
+bool LayerTreeView::getItem(HTREEITEM hItem, UINT mask, TreeItem& treeitem) const{
+	treeitem.item.hItem = hItem;
+	treeitem.item.mask = mask;
+	BOOL ok =  GetTreeCtrl().GetItem(&(treeitem.item));
+	return ok == TRUE;
 }
 
 #ifdef _DEBUG

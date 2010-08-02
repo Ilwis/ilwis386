@@ -40,11 +40,27 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-// LayerTreeView.h : header file
-//
 
-/////////////////////////////////////////////////////////////////////////////
-// LayerTreeView view
+struct NodeInfo{
+	NodeInfo(HTREEITEM it=0, bool ex = false) : hItem(it), expanded(ex) {}
+	HTREEITEM hItem;
+	bool expanded;
+};
+
+struct TreeItem{
+	TreeItem()  {
+		item.pszText = new char[1024];
+		item.cchTextMax = 1024;
+	}
+	TreeItem(TVITEM& _item) : item(_item) {
+		item.pszText = new char[1024];
+		item.cchTextMax = 1024;
+	}
+	operator TVITEM() { return item; }
+	~TreeItem() { delete item.pszText; }
+
+	TVITEM item;
+};
 
 class _export LayerTreeView : public CTreeView
 {
@@ -54,19 +70,13 @@ public:
 	MapCompositionDoc* GetDocument();
 	void EditNamedLayer(const FileName& fn);
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(LayerTreeView)
 	virtual void OnInitialUpdate();
 	virtual DROPEFFECT OnDragEnter(COleDataObject* pDataObject, DWORD dwKeyState, CPoint point);
 	virtual void OnDragLeave();
 	virtual DROPEFFECT OnDragOver(COleDataObject* pDataObject, DWORD dwKeyState, CPoint point);
 	virtual BOOL OnDrop(COleDataObject* pDataObject, DROPEFFECT dropEffect, CPoint point);
 	virtual void OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint);
-	//}}AFX_VIRTUAL
 
-	// Generated message map functions
-	//{{AFX_MSG(LayerTreeView)
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
@@ -74,9 +84,15 @@ public:
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg void OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnBeginDrag(NMHDR* pNMHDR, LRESULT* pResult);
+	void OnExpanding(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnRemoveLayer();
+
+	String getItemName(HTREEITEM item) const;
+	HTREEITEM getAncestor(HTREEITEM current, int depth);
+	bool getItem(HTREEITEM hItem, UINT mask, TreeItem& item) const;
+	void collectStructure(HTREEITEM parent=0, const String& name="");
 	//}}AFX_MSG
 protected:
 	void SwitchCheckBox(HTREEITEM hti);
@@ -86,6 +102,9 @@ protected:
 //	void AddPropItems(HTREEITEM hti, int iImg, const IlwisObject& obj);
 	CImageList ilStates;
 private:
+	void NextNode(HTREEITEM hItem, const String& name);
+	void resetState();
+	map<String, NodeInfo> nodes;
 	COleDropTarget* odt;
 	bool fDragging;
 	HTREEITEM hDraggedItem;	

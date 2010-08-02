@@ -1071,12 +1071,12 @@ BOOL MapCompositionDoc::OnOpenSegmentMap(const SegmentMap& sm, OpenType ot)
    //================================================ TEST!!!!!!!
 
 
-	ILWIS::DrawerParameters parms(rootDrawer->getDrawerContext());
-	ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer("FeatureLayerDrawer", &parms);
-	drawer->setDataSource((void *)&sm);
+	ILWIS::DrawerParameters parms(rootDrawer->getDrawerContext(), rootDrawer);
+	ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer("FeatureLayerDrawer", "Ilwis38", &parms);
+	drawer->addDataSource((void *)&sm);
 	rootDrawer->setCoordSystem(sm->cs());
 	rootDrawer->addCoordBounds(sm->cb());
-	ILWIS::PreparationParameters pp(RootDrawer::ptALL);
+	ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
 	drawer->prepare(&pp);
 	rootDrawer->addDrawer(drawer);
  //===============================================
@@ -1106,12 +1106,12 @@ BOOL MapCompositionDoc::OnOpenPolygonMap(const PolygonMap& pm, OpenType ot)
 
   SetTitle(pm);
 
-	ILWIS::DrawerParameters parms(rootDrawer->getDrawerContext());
-	ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer("FeatureLayerDrawer", &parms);
-	drawer->setDataSource((void *)&pm);
+	ILWIS::DrawerParameters parms(rootDrawer->getDrawerContext(), rootDrawer);
+	ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer("FeatureLayerDrawer", "Ilwis38", &parms);
+	drawer->addDataSource((void *)&pm);
 	rootDrawer->setCoordSystem(pm->cs());
 	rootDrawer->addCoordBounds(pm->cb());
-	ILWIS::PreparationParameters pp(RootDrawer::ptALL);
+	ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
 	drawer->prepare(&pp);
 	rootDrawer->addDrawer(drawer);
  
@@ -1140,12 +1140,12 @@ BOOL MapCompositionDoc::OnOpenPointMap(const PointMap& pm, OpenType ot)
   //================================================ TEST!!!!!!!
 
 
-    ILWIS::DrawerParameters dp(rootDrawer->getDrawerContext());
-	ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer("FeatureLayerDrawer", &dp);
-	drawer->setDataSource((void *)&pm);
+    ILWIS::DrawerParameters dp(rootDrawer->getDrawerContext(), rootDrawer);
+	ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer("FeatureLayerDrawer", "Ilwis38", &dp);
+	drawer->addDataSource((void *)&pm);
 	rootDrawer->setCoordSystem(pm->cs());
 	rootDrawer->addCoordBounds(pm->cb());
-	ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER);
+	ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
 	drawer->prepare(&pp);
 	rootDrawer->addDrawer(drawer);
  //===============================================
@@ -1700,9 +1700,9 @@ Drawer* MapCompositionDoc::drAppend(const SegmentMap& mp)
 		if (!mp->fCalculated())
 			return 0;
 
-		ILWIS::DrawerParameters parms(rootDrawer->getDrawerContext());
-		ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer("FeatureLayerDrawer", &parms);
-		drawer->setDataSource((void *)&mp);
+		ILWIS::DrawerParameters parms(rootDrawer->getDrawerContext(), rootDrawer);
+		ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer("FeatureLayerDrawer", "Ilwis38", &parms);
+		drawer->addDataSource((void *)&mp);
 		ILWIS::PreparationParameters pp(RootDrawer::ptALL);
 		drawer->prepare(&pp);
 		rootDrawer->addDrawer(drawer);

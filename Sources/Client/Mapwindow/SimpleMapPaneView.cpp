@@ -62,6 +62,10 @@
 #include "Client\Mapwindow\Drawers\AnnotationTextDrawer.h" // for a dynamic_cast
 #include "Client\Mapwindow\Drawers\Grid3DDrawer.h" // for a dynamic_cast
 #include "Client\Mapwindow\Drawers\WMSMapDrawer.h"
+#include "Client\MapWindow\Drawers\drawer_n.h"
+#include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
+#include "Client\Mapwindow\Drawers\TextDrawer.h"
+#include "Client\Mapwindow\Drawers\MouseClickInfoDrawer.h"
 #include "Engine\SpatialReference\Cslatlon.h"
 #include "Engine\Representation\Rprclass.h"
 #include "Client\Mapwindow\MapPaneView.h"
@@ -445,43 +449,34 @@ void SimpleMapPaneView::OnMouseMove(UINT nFlags, CPoint point)
 
 void SimpleMapPaneView::OnLButtonDown(UINT nFlags, CPoint point) 
 {
-	//MapCompositionDoc* mcd = GetDocument();
-	//RowCol rc(point.y, point.x);
-	//DrawerContext *context = mcd->rootDrawer->getDrawerContext();
-	//Coord c = context->screenToWorld(rc);
-	//cwcsButtonDown = CoordWithCoordSystem(c, context->getCoordinateSystem());
-	//if (edit && edit->OnLButtonDown(nFlags, point)) {
-	//	IlwWinApp()->SendUpdateCoordMessages(cmMOUSECLICK, &cwcsButtonDown);
-	//	return;
-	//}
-	//if (c.fUndef()) return;
-	//SetCapture();
-	//for (int i = 0; i < mcd->rootDrawer->getDrawerCount(); ++i)
-	//{
-	//	NewDrawer* dr = mcd->rootDrawer->getDrawer(i);
-	//	if (dr->isActive()) 
-	//	{
-	//		Coord crd = c;
-	//		AbstractMapDrawer* bmd = dynamic_cast<AbstractMapDrawer*>(dr);
-	//		if ( bmd) {
-	//			BaseMap bmp = bmd->getBaseMap();
-	//			if (bmp->cs() != context->cs())
-	//			{
-	//				crd = context->cs()->cConv(bmp->cs(), c);
-	//			}
-	//		}
-	//		/*String s = dr->sInfo(crd);
-	//		if (s != "") 
-	//			info->text(point,s);*/
-	//		break;
-	//	}
-	//}
+	MapCompositionDoc* mcd = GetDocument();
+	RowCol rc(point.y, point.x);
+	DrawerContext *context = mcd->rootDrawer->getDrawerContext();
+	Coord c = context->screenToWorld(rc);
+	cwcsButtonDown = CoordWithCoordSystem(c, context->getCoordinateSystem());
+	if (edit && edit->OnLButtonDown(nFlags, point)) {
+		IlwWinApp()->SendUpdateCoordMessages(cmMOUSECLICK, &cwcsButtonDown);
+		return;
+	}
+	if (c.fUndef()) return;
+	SetCapture();
+	ILWIS::MouseClickInfoDrawer *mid = (ILWIS::MouseClickInfoDrawer *)(mcd->rootDrawer->getDrawer("MouseClickInfoDrawer"));
+	if ( mid) {
+		mid->setActivePoint(c);
+		ILWIS::PreparationParameters pp(ILWIS::NewDrawer::ptALL,0);
+		mid->prepare(&pp);
+		mcd->mpvGetView()->Invalidate();
+	}
 	IlwWinApp()->SendUpdateCoordMessages(cmMOUSECLICK, &cwcsButtonDown);
 }
 
 void SimpleMapPaneView::OnLButtonUp(UINT nFlags, CPoint point) 
 {
-	info->text(point,"");
+	MapCompositionDoc* mcd = GetDocument();
+	ILWIS::MouseClickInfoDrawer *mid = (ILWIS::MouseClickInfoDrawer *)mcd->rootDrawer->getDrawer("MouseClickInfoDrawer");
+	if (mid) {
+		mid->setActivePoint(Coord());
+	}
 	ReleaseCapture();
 	if (edit && edit->OnLButtonUp(nFlags, point)) {
 		return;

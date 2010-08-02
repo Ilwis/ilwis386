@@ -7,10 +7,11 @@
 #include "Engine\Domain\dm.h"
 
 namespace ILWIS {
+	class RootDrawer;
 	class _export DrawerContext {
 	public:
 		~DrawerContext();
-		DrawerContext();
+		DrawerContext(RootDrawer *dr);
 		CoordBounds getCoordBoundsView() const { return cbView; }
 		CoordBounds getCoordBoundsZoom() const; 
 		CoordBounds getMapCoordBounds() const;
@@ -27,6 +28,8 @@ namespace ILWIS {
 		double getAspectRatio() const;
 		bool initOpenGL(CDC *dc);
 		void clear();
+		RootDrawer *getRootDrawer() const;
+		void setRootDrawer(RootDrawer *dr);
 
 	private:
 
@@ -36,6 +39,7 @@ namespace ILWIS {
 		CoordSystem cs;
 		RowCol pixArea;
 		double aspectRatio;
+		RootDrawer *rootDrawer;
 		HGLRC mhRC;
 	};
 }

@@ -1,4 +1,5 @@
 #include "Client\Headers\formelementspch.h"
+#include "Client\FormElements\FieldIntSlider.h"
 #include "Engine\Base\DataObjects\Color.h"
 #include "Engine\Spatialreference\gr.h"
 #include "Engine\Map\Raster\Map.h"
@@ -9,33 +10,34 @@
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
-#include "Client\Mapwindow\Drawers\FeatureLayerDrawer.h"
+#include "Client\Mapwindow\Drawers\SetDrawer.h"
+#include "Client\Mapwindow\Drawers\FeatureSetDrawer.h"
 #include "Client\Mapwindow\Drawers\DrawingColor.h" 
 
 using namespace ILWIS;
 
-DrawingColor::DrawingColor(AbstractMapDrawer *dr) : 
+DrawingColor::DrawingColor(SetDrawer *dr) : 
 drw(dr),
 clr1(0,176,20),
 clr2(168,168,168),
 iMultColors(0),
-gamma(0)
+gamma(0),
+mcd(0)
 {
 }
 Color DrawingColor::clrVal(double rVal) const
 {
 	Color cRet;
-	BaseMap bmap = drw->getBaseMap();
 	Representation rpr = drw->getRepresentation();
 	if (!rpr.fValid())
 		return cRet;
 	if (drw->isStretched()) {
 		switch (drw->getStretchMethod())
 		{
-		case AbstractMapDrawer::smLINEAR:
+		case SetDrawer::smLINEAR:
 			cRet = (Color)rpr->clr(rVal, drw->getStretchRangeReal());
 			break;
-		case  AbstractMapDrawer::smLOGARITHMIC:
+		case  SetDrawer::smLOGARITHMIC:
 			{
 				RangeReal rr = drw->getStretchRangeReal();
 				double rMax = 1 + rr.rHi() - rr.rLo();
@@ -47,22 +49,23 @@ Color DrawingColor::clrVal(double rVal) const
 			} break;
 		}
 	}
-	else if (AbstractMapDrawer::drmIMAGE == drw->getDrawMethod())
+	else if (NewDrawer::drmIMAGE == drw->getDrawMethod())
 		cRet = (Color)rpr->clr(rVal,RangeReal(0,255));
 	else
 		cRet = (Color)rpr->clr(rVal);
 	return cRet; //.clrDraw(gamma);
 }
 
-Color DrawingColor::clrRaw(long iRaw) const
+Color DrawingColor::clrRaw(long iRaw, AbstractMapDrawer::DrawMethod drm) const
 {
 	if (iUNDEF == iRaw)
 		return mcd->colBackground;
 	Color cRet;
-	BaseMap bmap = drw->getBaseMap();
+	AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)drw->getParentDrawer();
+	BaseMap bmap = mapDrawer->getBaseMap();
 	Representation rpr = drw->getRepresentation();
-	switch (drw->getDrawMethod()) {
-	case AbstractMapDrawer::drmRPR:
+	switch (drm) {
+	case NewDrawer::drmRPR:
 		if (bmap->dm()->pdv()) {
 			double rVal = bmap->dvrs().rValue(iRaw);
 			return clrVal(rVal);
@@ -70,16 +73,16 @@ Color DrawingColor::clrRaw(long iRaw) const
 		else
 			cRet = Color(rpr->clrRaw(iRaw));
 		break;
-	case AbstractMapDrawer::drmSINGLE:
+	case NewDrawer::drmSINGLE:
 		if ((long)clr2 == -1)
 			cRet = GetSysColor(COLOR_WINDOWTEXT);
 		else {
-			FeatureLayerDrawer *fdr = dynamic_cast<FeatureLayerDrawer *>(drw);
+			FeatureSetDrawer *fdr = dynamic_cast<FeatureSetDrawer *>(drw);
 			if ( fdr)
 				cRet = fdr->getSingleColor();
 		}
 		break;
-	case AbstractMapDrawer::drmMULTIPLE: 
+	case NewDrawer::drmMULTIPLE: 
 		if (3 == iMultColors)
 			cRet = clrRandom(iRaw);
 		else {
@@ -92,7 +95,7 @@ Color DrawingColor::clrRaw(long iRaw) const
 			cRet = clrPrimary(1+iRaw%iStep);
 		}  
 		break;
-	case AbstractMapDrawer::drmIMAGE: {
+	case NewDrawer::drmIMAGE: {
 		RangeInt riStretch = drw->getStretchRangeInt();
 		int iMin = 0, iMax = 255;
 		if (drw->isStretched()) {
@@ -107,10 +110,10 @@ Color DrawingColor::clrRaw(long iRaw) const
 		int iVal = (int)(floor(255 * float(iRaw - iMin) / iDiff));
 		cRet = Color(iVal,iVal,iVal);
 									  } break;
-	case AbstractMapDrawer::drmCOLOR:
+	case NewDrawer::drmCOLOR:
 		cRet = Color(iRaw);
 		break;
-	case AbstractMapDrawer::drmBOOL:
+	case NewDrawer::drmBOOL:
 		switch (iRaw) {
 	case 0: return mcd->colBackground;
 	case 1: cRet = clr1; break;
@@ -135,8 +138,7 @@ Color DrawingColor::clrRandom(int iRaw) const
 void DrawingColor::InitClrRandom()
 { 
 	m_clrRandom.clear();
-	BaseMap bmap = drw->getBaseMap();
-	DomainSort* ds = bmap->dm()->pdsrt();
+	DomainSort* ds = drw->getRepresentation()->dm()->pdsrt();
 	int iSize = 1000;
 	if (ds)
 		iSize = 1 + ds->iSize();

@@ -70,6 +70,8 @@ static char THIS_FILE[]=__FILE__;
 #define sMen(ID) ILWSF("men",ID).scVal()
 #define pmadd(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 
+using namespace ILWIS;
+
 
 //////////////////////////////////////////////////////////////////////
 // LayerTreeItem
@@ -557,18 +559,37 @@ void LegendValueLayerTreeItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 	}
 }
 //-----------------------------------
-DisplayOptionTreeItem::DisplayOptionTreeItem(LayerTreeView* ltv, NewDrawer *dr, DisplayOptionItemFunc f,HTREEITEM item, SetChecks *ch,SetCheckFunc f2)
+DisplayOptionTreeItem::DisplayOptionTreeItem(LayerTreeView* ltv, HTREEITEM _parent, NewDrawer *dr, SetCheckFunc f,DisplayOptionItemFunc fun, NewDrawer *_altHandler)
+: LayerTreeItem(ltv),
+func(fun),
+drw(dr),
+hti(0),
+checks(0),
+setCheckFunc(f),
+altHandler(_altHandler),
+parent(_parent)
+{
+}
+
+DisplayOptionTreeItem::DisplayOptionTreeItem(LayerTreeView* ltv, HTREEITEM _parent, NewDrawer *dr, DisplayOptionItemFunc f,HTREEITEM item, SetChecks *ch)
 : LayerTreeItem(ltv),
 func(f),
 drw(dr),
 hti(item),
 checks(ch),
-setCheckFunc(f2)
+setCheckFunc(0),
+altHandler(0),
+parent(_parent)
 {
-	if ( checks)
-		checks->addItem(hti);
 }
 
+void DisplayOptionTreeItem::setTreeItem(HTREEITEM it) 
+{ 
+	hti = it; 
+	if ( checks)
+		checks->addItem(hti);
+
+}
 DisplayOptionTreeItem::~DisplayOptionTreeItem()
 {
 }
@@ -576,16 +597,19 @@ DisplayOptionTreeItem::~DisplayOptionTreeItem()
 void DisplayOptionTreeItem::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
 	if ( func) {
- 		func(drw, ltv);
+ 		(drw->*func)(ltv);
 		SwitchCheckBox(true);
 	}
 }
 
 void DisplayOptionTreeItem::SwitchCheckBox(bool fOn) {
 	if (checks) {
-		checks->checkItem(hti);
-		setCheckFunc(drw,&fOn);
+		checks->checkItem(hti,fOn);
 	}
+	if ( setCheckFunc && altHandler == 0)
+		(drw->*setCheckFunc)(&fOn, ltv);
+	if ( altHandler != 0)
+		(altHandler->*setCheckFunc)(&fOn, ltv);
 }
 
 //----------------------------------
@@ -613,53 +637,93 @@ void DisplayOptionTree::OnLButtonDblClk(UINT nFlags, CPoint point)
 }
 
 //--------------------------------------------
-DisplayOptionAttTable::DisplayOptionAttTable(LayerTreeView* ltv, HTREEITEM hti,AbstractMapDrawer *dr, DisplayOptionItemFunc f)
-: LayerTreeItem(ltv),
-func(f),
-drw(dr),
-htiStart(hti),
-htiCurrent(0)
-{
+DisplayOptionColorItem::DisplayOptionColorItem(LayerTreeView* t, HTREEITEM parent, ILWIS::NewDrawer *dr, DisplayOptionItemFunc f,HTREEITEM item, SetChecks *checks) :
+DisplayOptionTreeItem(t, parent, dr,f,item,checks) {
 }
 
-DisplayOptionAttTable::~DisplayOptionAttTable()
-{
-}
-
-void DisplayOptionAttTable::OnLButtonDblClk(UINT nFlags, CPoint point)
-{
-	if ( func)
- 		func(drw, ltv);
-}
-
-void DisplayOptionAttTable::SwitchCheckBox(bool fOn) {
-	drw->setUseAttributeTable(fOn);
-	BaseMap bm = drw->getBaseMap();
-	if ( drw->useAttributeTable() && bm->fTblAtt() ) {
-		//ltv->GetTreeCtrl().SetItemData(htiDisplayOptions, (DWORD_PTR)new DisplayOptionTreeItem(tv, this, 0));
-		int iImg = IlwWinApp()->iImage("column");
-		htiCurrent = ltv->GetTreeCtrl().InsertItem(String("Column : %S", drw->getAtttributeColumn()->sName()).scVal(), iImg, iImg, htiStart);
-	} else {
-		if ( htiCurrent != 0) {
-			ltv->GetTreeCtrl().DeleteItem(htiCurrent);
-			htiCurrent = 0;
+void DisplayOptionColorItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult){
+	LPNMTVCUSTOMDRAW lptvcd = (LPNMTVCUSTOMDRAW) pNMHDR;
+	switch (lptvcd->nmcd.dwDrawStage) 
+	{
+	case CDDS_ITEMPREPAINT:
+		// post paint otherwise line is not drawn at left side
+		*pResult = CDRF_NOTIFYPOSTPAINT;
+		return;
+	case CDDS_ITEMPOSTPAINT:
+		{
+			CDC cdc;
+			cdc.Attach(lptvcd->nmcd.hdc);
+			CRect rect = lptvcd->nmcd.rc;
+			HTREEITEM hti = ltv->GetTreeCtrl().HitTest(rect.TopLeft());
+			ltv->GetTreeCtrl().GetItemRect(hti, &rect, TRUE);
+			rect.left -= 20;
+			rect.bottom += 1;
+			rect.right += 1000;
+			Color clrText = SysColor(COLOR_WINDOWTEXT);
+			Color clrBack = SysColor(COLOR_WINDOW);
+			Color clrTextSel = SysColor(COLOR_HIGHLIGHTTEXT);
+			Color clrSel  = SysColor(COLOR_HIGHLIGHT);
+			CPen penNull(PS_NULL,0,Color(0,0,0));
+			CPen penBlack(PS_SOLID,1,clrText);
+			CBrush brWhite(clrBack);
+			CPen* penOld = cdc.SelectObject(&penNull);
+			CBrush* brOld = cdc.SelectObject(&brWhite);
+			cdc.Rectangle(rect);
+			cdc.SelectObject(penOld);
+			penOld = cdc.SelectObject(&penBlack);
+			rect.top += 1;
+			rect.bottom -= 1;
+			int iHeight = rect.Height();
+			int iWidth = 1.5 * iHeight;
+			rect.right = rect.left + iWidth;
+			//dr->DrawValueLegendRect(&cdc, rect, rVal);
+			String sText = "Single Color";
+			
+			CPoint pt;
+			pt.x = rect.right + 2;
+			pt.y = rect.top;
+			if (ltv->GetTreeCtrl().GetItemState(hti, TVIS_SELECTED)) {
+				cdc.SetTextColor(clrTextSel);
+				cdc.SetBkColor(clrSel);
+			}
+			else {
+				cdc.SetTextColor(clrText);
+				cdc.SetBkColor(clrBack);
+			}
+			cdc.SetBkMode(OPAQUE);
+			cdc.TextOut(pt.x, pt.y, sText.scVal(), sText.length());
+			cdc.SelectObject(penOld);
+			cdc.SelectObject(brOld);
+			cdc.Detach();
 		}
+		return;
 	}
 }
 
-SetChecks::SetChecks(LayerTreeView *v, AbstractMapDrawer *dr){
+SetChecks::SetChecks(LayerTreeView *v, NewDrawer *dr,SetCheckFunc _f){
 	tv = v;
 	drw = dr;
+	fun = _f;
 }
 void SetChecks::addItem(HTREEITEM hti){
 	checkedItems.push_back(hti);
 }
 
-void SetChecks::checkItem(HTREEITEM hti) {
+void SetChecks::checkItem(HTREEITEM hti,bool fOn) {
 	CTreeCtrl& tree = tv->GetTreeCtrl();
+	//for(int i = 0; i< checkedItems.size(); ++i) {
+	//	HTREEITEM ht = checkedItems.at(i);
+	//	if ( hti == ht && tree.GetCheck(ht)) {
+	//	// you can not uncheck yourself; this would leave no check marks checked which is not intended
+	//		tree.SetCheck(hti);
+	//		return;
+	//	}
+	//}
+
 	for(int i = 0; i< checkedItems.size(); ++i) {
 		HTREEITEM ht = checkedItems.at(i);
-		tree.SetCheck(ht, false);
+		tree.SetCheck(ht, FALSE);
 	}
-	tree.SetCheck(hti,true);
+	(drw->*fun)(&hti, tv);
+	tree.SetCheck(hti,fOn);
 }
