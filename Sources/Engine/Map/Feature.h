@@ -24,6 +24,9 @@ public:
 	bool fDeleted() const;
 	String getGuid() const;
 	bool EnvelopeIntersectsWith(Geometry *g2, bool useMargine=false);
+	CoordBounds Feature::cbBounds() const;
+	virtual void Feature::getBoundaries(vector<CoordinateSequence*>& boundaries) const = 0;
+
 protected:
 	CCriticalSection csAccess;
 

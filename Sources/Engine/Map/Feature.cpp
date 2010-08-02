@@ -37,3 +37,20 @@ bool Feature::EnvelopeIntersectsWith(Geometry *g2, bool useMargine) {
 	const geos::geom::Envelope *env2 = g2->getEnvelopeInternal();
 	return env1->intersects(env2);
 }
+
+CoordBounds Feature::cbBounds() const // bounding rectangle
+{
+	ILWISSingleLock sl(const_cast<CCriticalSection *>(&csAccess), TRUE);
+	const Geometry *geometry = dynamic_cast<const geos::geom::Geometry *>(this);
+	Geometry *geom = geometry->getEnvelope();
+	CoordinateSequence *seq = geom->getCoordinates();
+	CoordBounds cb;
+	for(int i = 0; i < seq->size(); ++i) {
+		Coord crd(seq->getAt(i));
+		cb += crd;
+	}
+	delete seq;
+	return cb;	
+}
+
+
