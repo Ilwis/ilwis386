@@ -731,7 +731,7 @@ void ObjectWriter::WriteSegment(BNAEntity& bna)
 	seg->PutVal(m_mps->iFeatures());
 
 	CoordBounds cb = m_mps->cb();
-	cb += seg->crdBounds();
+	cb += seg->cbBounds();
 	m_mps->SetCoordBounds(cb);
 
 	DomainSort *pds = m_mps->dm()->pdsrt();

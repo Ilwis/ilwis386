@@ -219,7 +219,7 @@ void Shapefile_Arc::ArcWrite() {
 }
 
 void Shapefile_Arc::Update(const ILWIS::Segment* seg) {
-  CoordBounds cb = seg->crdBounds();
+  CoordBounds cb = seg->cbBounds();
   Coord& crd = cb.cMin;
   aArc.rBox[0] = crd.x;
   aArc.rBox[1] = crd.y;
