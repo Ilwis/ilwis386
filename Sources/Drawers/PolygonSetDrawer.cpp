@@ -1,7 +1,7 @@
 #include "Client\Headers\formelementspch.h"
 #include "Engine\Map\basemap.h"
 #include "Engine\Map\Point\ilwPoint.h"
-#include "Client\MapWindow\Drawers\drawer_n.h"
+#include "Client\Mapwindow\Drawers\ComplexDrawer.h"
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
 #include "Client\Ilwis.h"
 #include "Engine\Base\System\RegistrySettings.h"
@@ -35,7 +35,7 @@ PolygonSetDrawer::PolygonSetDrawer(DrawerParameters *parms) :
 	fsd->setSingleColor(Color(0,0,0));
 	fsd->setDrawMethod(NewDrawer::drmSINGLE);
 	fsd->prepare(&pp);
-	getParentDrawer()->addPostDrawer(100,fsd);
+	((ComplexDrawer *)getParentDrawer())->addPostDrawer(100,fsd);
 }
 
 PolygonSetDrawer::~PolygonSetDrawer() {

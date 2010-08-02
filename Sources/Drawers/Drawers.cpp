@@ -5,7 +5,7 @@
 #include "Engine\Base\System\Module.h"
 #include "Engine\Map\basemap.h"
 #include "Engine\Map\Point\ilwPoint.h"
-#include "client\mapwindow\drawers\drawer_n.h"
+#include "Client\Mapwindow\Drawers\ComplexDrawer.h"
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
 #include "Client\Mapwindow\Drawers\FeatureDrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"

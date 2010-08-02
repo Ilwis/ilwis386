@@ -1,7 +1,7 @@
 #include "Client\Headers\formelementspch.h"
 #include "Engine\Map\basemap.h"
 #include "Engine\Map\Polygon\POL.h"
-#include "Client\Mapwindow\Drawers\Drawer_n.h"
+#include "Client\Mapwindow\Drawers\ComplexDrawer.h"
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
 #include "Client\Ilwis.h"
 #include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
@@ -46,7 +46,7 @@ void PolygonDrawer::draw(bool norecursion) {
 	setOpenGLColor();
 	glShadeModel(GL_FLAT);
 	for(int i=0; i < triangleStrips.size(); ++i){
-	//	glBegin(GL_LINE_STRIP);
+	//glBegin(GL_LINE_STRIP);
 	glBegin(GL_TRIANGLE_STRIP);
 		for(int j=0; j < triangleStrips.at(i).size(); ++j) {
 			Coord c = triangleStrips.at(i).at(j);
