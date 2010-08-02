@@ -134,7 +134,7 @@ public:
 	Polygon(geos::geom::Polygon *pol);
 	void				addBoundary(LinearRing *ring);
 	void				addHole(LinearRing * ring);
-	CoordBounds			cbBounds() const; // bounding rectangle
+	//CoordBounds			cbBounds() const; // bounding rectangle
 	Coord				crdGravity() const; // center of gravity
 	bool				fValid() const;
 	bool				fInMask(const DomainValueRangeStruct& dvrs, const Mask&) const;
@@ -144,6 +144,7 @@ public:
 	Coord				crdFindPointInPol() const; // a nicely located point;
 	Coord				crdFindPointInPol2() const; // a 100% certain point not ending up in holes or similar
 	virtual				FeatureType getType() const;
+	virtual	void		getBoundaries(vector<CoordinateSequence*>& boundaries) const;
 
 protected:
 	String				sName(short iWidth=0, short iDec=-1) const;

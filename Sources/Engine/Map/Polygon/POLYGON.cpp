@@ -142,19 +142,19 @@ void ILWIS::Polygon::addHole(LinearRing * ring) {
 }
 
 
-CoordBounds ILWIS::Polygon::cbBounds() const // bounding rectangle
-{
-	ILWISSingleLock sl(const_cast<CCriticalSection *>(&csAccess), TRUE);
-	Geometry *geom = getEnvelope();
-	CoordinateSequence *seq = geom->getCoordinates();
-	CoordBounds cb;
-	for(int i = 0; i < seq->size(); ++i) {
-		Coord crd(seq->getAt(i));
-		cb += crd;
-	}
-	delete seq;
-	return cb;	
-}
+//CoordBounds ILWIS::Polygon::cbBounds() const // bounding rectangle
+//{
+//	ILWISSingleLock sl(const_cast<CCriticalSection *>(&csAccess), TRUE);
+//	Geometry *geom = getEnvelope();
+//	CoordinateSequence *seq = geom->getCoordinates();
+//	CoordBounds cb;
+//	for(int i = 0; i < seq->size(); ++i) {
+//		Coord crd(seq->getAt(i));
+//		cb += crd;
+//	}
+//	delete seq;
+//	return cb;	
+//}
 
 double ILWIS::Polygon::rArea() const {
 	return getArea();
@@ -232,6 +232,14 @@ Geometry * ILWIS::Polygon::copy(ILWIS::Polygon *p) const {
 
 Feature::FeatureType ILWIS::Polygon::getType() const {
 	return ftPOLYGON;
+}
+
+void ILWIS::Polygon::getBoundaries(vector<CoordinateSequence*>& boundaries) const{
+	boundaries.push_back(getExteriorRing()->getCoordinates());
+	for ( int i = 0; i < getNumInteriorRing(); ++i) {
+		boundaries.push_back(getInteriorRingN(i)->getCoordinates());
+	}
+
 }
 
 
