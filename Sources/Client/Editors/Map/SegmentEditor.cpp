@@ -468,7 +468,7 @@ int SegmentEditor::draw(CDC* cdc, zRect rect, Positioner* psn, volatile bool* fD
 		for (SLIter<ILWIS::Segment *> iter(&segList); iter.fValid(); ++iter) {
 			//      if (mappane->fDrawCheck())
 			//        break;
-			if (cbIntern.fContains(iter()->crdBounds())) 
+			if (cbIntern.fContains(iter()->cbBounds())) 
 				drawSegment(cdc,iter(),true);
 		}	
 		if (!fOnlySelected) 
@@ -485,7 +485,7 @@ int SegmentEditor::draw(CDC* cdc, zRect rect, Positioner* psn, volatile bool* fD
 			continue;
 		//    if (mappane->fDrawCheck())
 		//      break;
-		if (cbIntern.fContains(s->crdBounds())) 
+		if (cbIntern.fContains(s->cbBounds())) 
 			drawSegment(cdc,s,false);
 	}
 	if (fUndelete) {
@@ -495,7 +495,7 @@ int SegmentEditor::draw(CDC* cdc, zRect rect, Positioner* psn, volatile bool* fD
 			ILWIS::Segment *s = (ILWIS::Segment *)sm->getFeature(i);
 			if ( !(s && s->fValid()))
 				continue;
-			if (s->fDeleted() && cbIntern.fContains(s->crdBounds()))
+			if (s->fDeleted() && cbIntern.fContains(s->cbBounds()))
 				drawSegment(cdc,s,true);
 		}	
 		cdc->SelectObject(penO);
@@ -509,7 +509,7 @@ int SegmentEditor::draw(CDC* cdc, zRect rect, Positioner* psn, volatile bool* fD
 				continue;
 			if (iUNDEF != s->iValue())
 				continue;
-			CoordBounds cb = s->crdBounds();
+			CoordBounds cb = s->cbBounds();
 			if (!cbIntern.fContains(cb))
 				continue;
 			drawSegment(cdc,s,true);
@@ -1444,7 +1444,7 @@ void SegmentEditor::Mode(enumMode Mode)
 
 void SegmentEditor::SetDirty(ILWIS::Segment *s)
 {
-  CoordBounds cb = s->crdBounds();
+  CoordBounds cb = s->cbBounds();
   zPoint p1 = mpv->pntPos(cb.cMin);
   zPoint p2 = mpv->pntPos(cb.cMax);
   zPoint p3 = mpv->pntPos(Coord(cb.MinX(), cb.MaxY()));
@@ -3094,7 +3094,7 @@ bool SegmentEditor::fCheckIntersects(Tranquilizer& trq, long iStartSeg) // retur
 			if (fMask && !s->fInMask(sm->dvrs(), mask))
 				continue;
 			int i = j;
-			acb[i] = s->crdBounds();
+			acb[i] = s->cbBounds();
 		}
 
 		for (int j = iStartSeg; j < sm->iFeatures(); ++j) {
@@ -3462,7 +3462,7 @@ private:
 	  for (int i = 0; i < sm->iFeatures(); ++i)  {
 		ILWIS::Segment *s = (ILWIS::Segment *)sm->getFeature(i);
 		if ( s && s->fValid())
-			cb += s->crdBounds();
+			cb += s->cbBounds();
 	  }
   }
   int DefaultButton(Event*)
