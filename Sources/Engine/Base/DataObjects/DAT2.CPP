@@ -189,13 +189,29 @@ MinMax& MinMax::operator += (const MinMax& mm) // change this so that mm is insi
 bool Coord::operator == (const Coord& crd) const
 { return fabs(x - crd.x) < 1e-10 && fabs(y - crd.y) < 1e-10 && fabs(z - crd.z) < 1e-10; }
 
-
 CoordBounds::CoordBounds(const CoordBuf& cBuf)
 {
 	for(int i=0; i<cBuf.iSize(); ++i)
 		operator+=(cBuf[0]);
 }
 
+Coord CoordBounds::middle() const {
+	return Coord((cMax.x + cMin.x) / 2.0, (cMax.y + cMin.y) / 2.0);
+}
+
+CoordBounds& CoordBounds::operator *=(double fact) {
+	double dw = width() * fact / 2.0;
+	double dh = height() * fact / 2.0;
+	Coord cm = middle();
+	double maxx = cm.x + dw;
+	double maxy = cm.y + dh;
+	double minx = cm.x - dw;
+	double miny = cm.y - dh;
+	cMax = Coord(maxx,maxy);
+	cMin = Coord(minx,miny);
+
+	return *this;
+}
 void CoordBounds::Check()  // makesure that rcMin < rcMax bith with Row and Col
 {
   double rTmp;

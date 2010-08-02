@@ -20,6 +20,8 @@ void PolygonMapStoreFormat37::Load()
 		pol->addBoundary(ReadRing(binaryFile));
 		double value;
 		binaryFile.Read(8,&value);
+		if ( value == rUNDEF)
+			continue;
 		pol->PutVal(value);
 		long numberOfHoles;
 		binaryFile.Read(4,&numberOfHoles);

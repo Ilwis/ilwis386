@@ -183,6 +183,7 @@ struct CoordBounds
   void _export Check();    // make sure that cMin < cMax both with x and y
   CoordBounds _export &operator += (Coord);   // change this so that point is inside
   CoordBounds _export &operator += (const CoordBounds&);  // change this so that cb is inside
+  CoordBounds _export &operator *= (double);
   double MinX() const { return cMin.x; }
   double MaxX() const { return cMax.x; }
   double MinY() const { return cMin.y; }
@@ -210,6 +211,8 @@ struct CoordBounds
   bool operator == (const CoordBounds& cb) const {
     return cMin == cb.cMin && cMax == cb.cMax;
   }
+  Coord _export middle() const;
+
   Coord cMin, cMax;
 };
 
