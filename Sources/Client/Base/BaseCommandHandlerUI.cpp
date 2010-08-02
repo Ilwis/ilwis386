@@ -49,7 +49,11 @@
 #include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\Drawers\SelectionRectangle.h"
-#include "Client\Mapwindow\Drawers\FeatureLayerDrawer.h" 
+#include "Client\Mapwindow\Drawers\FeatureLayerDrawer.h"
+#include "Client\Mapwindow\Drawers\CanvasBackgroundDrawer.h"
+#include "Client\Mapwindow\Drawers\SimpleDrawer.h"
+#include "Client\Mapwindow\Drawers\TextDrawer.h"
+#include "Client\Mapwindow\Drawers\MouseClickInfoDrawer.h" 
 #include "Engine\Base\System\Engine.h"
 //#include "Engine\Applications\ModuleMap.h"
 
@@ -127,10 +131,12 @@ void BaseCommandHandlerUI::addModules() {
 		if ( drawFuncs) {
 			DrawerInfoVector *infos = drawFuncs();
 			for ( int i=0 ; i < infos->size(); ++i) {
-				IlwWinApp()->addDrawer(infos->at(i)->name, infos->at(i)->createFunc);
+				IlwWinApp()->addDrawer(infos->at(i)->name, infos->at(i)->subtype,infos->at(i)->createFunc);
 			}
-			IlwWinApp()->addDrawer("SelectionRectangle",createSelectionRectangle);
-			IlwWinApp()->addDrawer("FeatureLayerDrawer",createFeatureLayerDrawer);
+			IlwWinApp()->addDrawer("SelectionRectangle","ilwis38", createSelectionRectangle);
+			IlwWinApp()->addDrawer("FeatureLayerDrawer","ilwis38", createFeatureLayerDrawer);
+			IlwWinApp()->addDrawer("CanvasBackgroundDrawer","ilwis38", createCanvasBackgroundDrawer);
+			IlwWinApp()->addDrawer("MouseClickInfoDrawer","ilwis38",createMouseClickInfoDrawer);
 		}
 		++index;
 
