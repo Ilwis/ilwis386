@@ -18,6 +18,7 @@ public:
 	virtual Geometry *clone()const=0;
 	virtual bool fValid() const;
 	virtual FeatureType getType() const;
+	virtual	void getBoundaries(vector<CoordinateSequence*>& boundaries) const;
 };
 
 class _export LPoint : public Point {

@@ -50,6 +50,10 @@ Feature::FeatureType ILWIS::Point::getType() const {
 	return ftPOINT;
 }
 
+void ILWIS::Point::getBoundaries(vector<CoordinateSequence*>& boundaries) const{
+	boundaries.push_back(getCoordinates());
+}
+
 //--------------------------------------------------------------
 ILWIS::LPoint::LPoint(geos::geom::Point *pnt) : ILWIS::Point(pnt), value(iUNDEF) {
 	
