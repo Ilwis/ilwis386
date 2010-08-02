@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="IlwisClient"
 	ProjectGUID="{12042408-86EA-4501-8797-F358A5447A86}"
 	RootNamespace="IlwisClient"
@@ -81,7 +81,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/ignore:4099"
-				AdditionalDependencies="ILWISEngine.lib htmlhelp.lib geosd.lib opengl32.lib glu32.lib"
+				AdditionalDependencies="ILWISEngine.lib htmlhelp.lib geosd.lib opengl32.lib glu32.lib freetype.lib"
 				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\Ilwis.exe"
 				Version="3.5"
 				LinkIncremental="2"
@@ -2514,6 +2514,14 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\CanvasBackgroundDrawer.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\CanvasBackgroundDrawer.h"
+						>
+					</File>
+					<File
 						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\Drawer.cpp"
 						>
 					</File>
@@ -2554,6 +2562,14 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\FeatureSetDrawer.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\FeatureSetDrawer.h"
+						>
+					</File>
+					<File
 						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\GraticuleDrawer.cpp"
 						>
 					</File>
@@ -2575,6 +2591,22 @@
 					</File>
 					<File
 						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\MapListDrawer.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\MouseClickInfoDrawer.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\MouseClickInfoDrawer.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Base\OpenGLFont.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Base\OpenGLFont.h"
 						>
 					</File>
 					<File
@@ -2603,6 +2635,30 @@
 					</File>
 					<File
 						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SelectionRectangle.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SetDrawer.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SetDrawer.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SimpleDrawer.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SimpleDrawer.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\TextDrawer.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\TextDrawer.h"
 						>
 					</File>
 					<File
@@ -3162,6 +3218,14 @@
 				</File>
 				<File
 					RelativePath="..\..\Sources\Client\FormElements\FieldPicture.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Client\FormElements\FieldRealSlider.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Client\FormElements\FieldRealSlider.h"
 					>
 				</File>
 				<File
@@ -5396,11 +5460,47 @@
 			</Filter>
 		</Filter>
 		<File
+			RelativePath="..\..\Sources\Client\Resources\active.ico"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\colors.ico"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\domicon1.ico"
+			>
+		</File>
+		<File
 			RelativePath="..\..\Sources\Client\Resources\ilwis33.ico"
 			>
 		</File>
 		<File
 			RelativePath="..\..\Sources\Client\Resources\ilwisRemove.ico"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\mask.ico"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\multiplecolors.ico"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\set.ico"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\singlecolor.ico"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\transparent.ico"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\valuerange.ico"
 			>
 		</File>
 	</Files>
