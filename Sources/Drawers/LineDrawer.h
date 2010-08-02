@@ -1,5 +1,7 @@
 #pragma once
 
+class FieldColor;
+
 ILWIS::NewDrawer *createLineDrawer(ILWIS::DrawerParameters *parms);
 
 namespace ILWIS{
@@ -12,9 +14,9 @@ class LineDrawer : public FeatureDrawer {
 		void prepare(PreparationParameters *);
 	protected:
 		LineDrawer(DrawerParameters *parms, const String& name);
+		void clear();
 
-		CoordinateSequence *points;
-		CoordBounds cb;
-
+		vector<CoordinateSequence *> lines;
 	};
+
 }

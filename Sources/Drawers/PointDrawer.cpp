@@ -2,11 +2,16 @@
 #include "Engine\Map\basemap.h"
 #include "Engine\Map\Point\ilwPoint.h"
 #include "Client\Mapwindow\Drawers\Drawer_n.h"
+#include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
 #include "Client\Ilwis.h"
 #include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
+#include "Client\Mapwindow\Drawers\featurelayerdrawer.h"
+#include "Client\Mapwindow\Drawers\SetDrawer.h"
+#include "Client\Mapwindow\Drawers\FeatureSetDrawer.h"
 #include "Client\Mapwindow\Drawers\FeatureDrawer.h"
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
+#include "Client\Mapwindow\Drawers\DrawingColor.h" 
 #include "drawers\pointdrawer.h"
 
 using namespace ILWIS;
@@ -24,9 +29,9 @@ PointDrawer::PointDrawer(DrawerParameters *parms, const String& name) : FeatureD
 
 void PointDrawer::prepare(PreparationParameters *p){
 	FeatureDrawer::prepare(p);
+	FeatureSetDrawer *fdr = dynamic_cast<FeatureSetDrawer *>(parentDrawer);
 	if ( (p->type & ptALL) ||  (p->type & ptGEOMETRY)) {
-		AbstractMapDrawer *drw = dynamic_cast<AbstractMapDrawer *>(p->parentDrawer);
-	    CoordSystem csy = drw->getBaseMap()->cs();
+	    CoordSystem csy = fdr->getCoordSystem();
 		ILWIS::Point *point = (ILWIS::Point *)feature;
 		FileName fn = drawcontext->getCoordinateSystem()->fnObj;
 		if ( drawcontext->getCoordinateSystem()->fnObj == csy->fnObj) {
@@ -36,5 +41,13 @@ void PointDrawer::prepare(PreparationParameters *p){
 			cNorm = csy->cConv(drawcontext->getCoordinateSystem(), Coord(*(point->getCoordinate())));
 		}
 	}
+	if (  p->type == ptALL || p->type & ptRENDER) {
+		setColor(fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod()));
+	}
+}
+
+void PointDrawer::draw(bool norecursion) {
+	FeatureDrawer::draw(norecursion);
+
 }
 

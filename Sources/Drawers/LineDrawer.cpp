@@ -3,6 +3,8 @@
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
 #include "Engine\Map\Segment\seg.h"
 #include "Client\MapWindow\Drawers\drawer_n.h"
+#include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
+#include "Client\Mapwindow\Drawers\TextDrawer.h"
 #include "Client\Ilwis.h"
 #include "Engine\Spatialreference\gr.h"
 #include "Engine\Map\Raster\Map.h"
@@ -13,76 +15,84 @@
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h"
+#include "Client\Mapwindow\Drawers\DrawingColor.h" 
 #include "Client\Mapwindow\Drawers\featurelayerdrawer.h"
+#include "Client\Mapwindow\Drawers\SetDrawer.h"
+#include "Client\Mapwindow\Drawers\FeatureSetDrawer.h"
 #include "Client\Mapwindow\Drawers\FeatureDrawer.h"
 #include "drawers\linedrawer.h"
 
 using namespace ILWIS;
-
 
 ILWIS::NewDrawer *createLineDrawer(DrawerParameters *parms) {
 	return new LineDrawer(parms);
 }
 
 LineDrawer::LineDrawer(DrawerParameters *parms) : 
-	FeatureDrawer(parms,"LineDrawer"),
-		points(0)
+	FeatureDrawer(parms,"LineDrawer")
 {
 }
 
 LineDrawer::LineDrawer(DrawerParameters *parms, const String& name) : 
-	FeatureDrawer(parms,name), 
-	points(0)
+	FeatureDrawer(parms,name)
 {
 }
 
 LineDrawer::~LineDrawer() {
-	delete points;
+	clear();
+}
+
+void LineDrawer::clear() {
+	for(int i = 0; i < lines.size(); ++i) {
+		delete lines.at(i);
+	}
+	lines.clear();
 }
 
 void LineDrawer::draw(bool norecursion){
-	if (!points)
+	if (lines.size() == 0)
 		return;
 	if ( !getDrawerContext()->getCoordBoundsZoom().fContains(cb))
 		return;
-	double r = (double)color1.red() / 255.0;
-	double g = (double)color1.green() / 255.0;
-	double b = (double)color1.blue() / 255.0;
-	glColor3f(r,g,b);
-	glBegin(GL_LINE_STRIP);
-	for(int i=0; i<points->size(); ++i) {
-		Coordinate c = points->getAt(i);
-		c.z = 0;
-		glVertex3d( c.x, c.y, c.z);	
+	setOpenGLColor();
+	for(int j = 0; j < lines.size(); ++j) {
+		CoordinateSequence *points = lines.at(j);
+		glBegin(GL_LINE_STRIP);
+
+		for(int i=0; i<points->size(); ++i) {
+			Coordinate c = points->getAt(i);
+			c.z = 0;
+			glVertex3d( c.x, c.y, c.z);	
+		}
+		glEnd();
 	}
-	glEnd();
 }
 
 void LineDrawer::prepare(PreparationParameters *p){
 	FeatureDrawer::prepare(p);
-	FeatureLayerDrawer *fdr = dynamic_cast<FeatureLayerDrawer *>(p->parentDrawer);
-	BaseMap bm = fdr->getBaseMap();
-	if (  p->type == ptALL ||  p->type == ptGEOMETRY) {
-		CoordSystem csy = bm->cs();
-		ILWIS::Segment *line = (ILWIS::Segment *)feature;
-		cb = line->crdBounds();
+	FeatureSetDrawer *fdr = dynamic_cast<FeatureSetDrawer *>(parentDrawer);
+	if (  p->type == ptALL ||  p->type & ptGEOMETRY) {
+		CoordSystem csy = fdr->getCoordSystem();
+		cb = feature->cbBounds();
+		clear();
+		feature->getBoundaries(lines);
 		FileName fn = drawcontext->getCoordinateSystem()->fnObj;
-		if ( drawcontext->getCoordinateSystem()->fnObj == csy->fnObj) {
-			points = line->getCoordinates();
-		}
-		else {
-			if ( points){
-				delete points;
-				points = 0;
+		bool sameCsy = drawcontext->getCoordinateSystem()->fnObj == csy->fnObj;
+		if ( !sameCsy ) {
+			for(int j = 0; j < lines.size(); ++j) {
+				CoordinateSequence *seq = lines.at(j);
+		
+				for(int  i = 0; i < seq->size(); ++i) {
+					Coord c = csy->cConv(drawcontext->getCoordinateSystem(), Coord(seq->getAt(i)));
+					seq->setAt(c,i);
+				}
 			}
-			CoordinateSequence *seq = line->getCoordinates();
-			points = new CoordinateArraySequence(seq->size());
-
-			for(int  i = 0; i < seq->size(); ++i) {
-				Coord c = csy->cConv(drawcontext->getCoordinateSystem(), Coord(seq->getAt(i)));
-				points->setAt(c,i);
-			}
-			delete seq;
 		}
 	}
+	if (  p->type == ptALL || p->type & RootDrawer::ptRENDER) {
+		setColor(fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod()));
+		double tr = fdr->getTransparency();
+		setTransparency(tr);
+	}
 }
+

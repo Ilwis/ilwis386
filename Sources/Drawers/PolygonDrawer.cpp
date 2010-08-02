@@ -2,211 +2,134 @@
 #include "Engine\Map\basemap.h"
 #include "Engine\Map\Polygon\POL.h"
 #include "Client\Mapwindow\Drawers\Drawer_n.h"
+#include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
 #include "Client\Ilwis.h"
 #include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
+#include "Engine\Base\System\RegistrySettings.h"
+#include "Client\Mapwindow\MapCompositionDoc.h"
+#include "Client\Mapwindow\Drawers\RootDrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\Drawers\FeatureDrawer.h"
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
 #include "Client\Mapwindow\Drawers\featurelayerdrawer.h"
-#include "drawers\polygondrawer.h"
+#include "Client\Mapwindow\Drawers\SetDrawer.h"
+#include "Client\Mapwindow\Drawers\FeatureSetDrawer.h"
 #include "geos\algorithm\CGAlgorithms.h"
+#include "Client\Mapwindow\Drawers\DrawingColor.h" 
+#include "Drawers\gpc.h"
+#include "Drawers\gpc.c"
+#include "drawers\polygondrawer.h"
+
 
 using namespace ILWIS;
-
-void CALLBACK vertexCallback(void *vertex)
-{
-	const double *pointer;
-
-	pointer = (double *) vertex;
-	double x = pointer[0];
-	double y = pointer[1];
-	double z = pointer[2];
-	double r = pointer[3];
-	double g = pointer[4];
-	double b = pointer[5];
-	double t = pointer[6];
-	glColor4d(r,g,b,t);
-	glVertex3d(x,y,z);
-}
-
-void CALLBACK combineCallback(double coords[3], 
-							  double *vertex_data[4],
-							  float weight[4], double **dataOut )
-{
-	double *vertex;
-	int i;
-
-	vertex = (double *) malloc(7 * sizeof(double));
-	vertex[0] = coords[0];
-	vertex[1] = coords[1];
-	vertex[2] = coords[2];
-	for (i = 3; i < 7; i++)
-		vertex[i] = weight[0] * vertex_data[0][i] 
-	+ weight[1] * vertex_data[1][i]
-	+ weight[2] * vertex_data[2][i] 
-	+ weight[3] * vertex_data[3][i];
-	*dataOut = vertex;
-}
-
-void CALLBACK beginCallback(GLenum which)
-{
-	glBegin(which);
-}
-
-void CALLBACK endCallback(void)
-{
-	glEnd();
-}
-
-void CALLBACK errorCallback(GLenum errorCode)
-{
-	const byte *estring;
-
-	estring = gluErrorString(errorCode);
-	fprintf (stderr, "Tessellation Error: %s\n", estring);
-	//exit (0);
-}
-
 
 ILWIS::NewDrawer *createPolygonDrawer(DrawerParameters *parms) {
 	return new PolygonDrawer(parms);
 }
 
-PolygonDrawer::PolygonDrawer(DrawerParameters *parms) : FeatureDrawer(parms,"PolygonDrawer"), exterior(0),tesselator(0),listIndex(0) {
+PolygonDrawer::PolygonDrawer(DrawerParameters *parms) : FeatureDrawer(parms,"PolygonDrawer") {
+	setDrawMethod(NewDrawer::drmRPR);
 }
 
-PolygonDrawer::PolygonDrawer(DrawerParameters *parms, const String& name) : FeatureDrawer(parms,name), exterior(0),tesselator(0),listIndex(0) {
+PolygonDrawer::PolygonDrawer(DrawerParameters *parms, const String& name) : FeatureDrawer(parms,name) {
+	setDrawMethod(NewDrawer::drmRPR);
 }
 
 PolygonDrawer::~PolygonDrawer() {
-	delete exterior;
-	gluDeleteTess(tesselator);
-	glDeleteLists(listIndex,1);
 }
 
 void PolygonDrawer::draw(bool norecursion) {
-	if ( listIndex == 0)
-		prepareList();
-	glCallList(listIndex);
+	if (triangleStrips.size() == 0)
+		return;
+	if ( !getDrawerContext()->getCoordBoundsZoom().fContains(cb))
+		return;
+	setOpenGLColor();
+	glShadeModel(GL_FLAT);
+	for(int i=0; i < triangleStrips.size(); ++i){
+	//	glBegin(GL_LINE_STRIP);
+	glBegin(GL_TRIANGLE_STRIP);
+		for(int j=0; j < triangleStrips.at(i).size(); ++j) {
+			Coord c = triangleStrips.at(i).at(j);
+			glVertex3d(c.x,c.y,0);
+		}
+	glEnd();
+	}
 }
-
-typedef double*  pdouble;
 
 void PolygonDrawer::prepare(PreparationParameters *p){
 	FeatureDrawer::prepare(p);
-	FeatureLayerDrawer *fdr = dynamic_cast<FeatureLayerDrawer *>(p->parentDrawer);
-	BaseMap bm = fdr->getBaseMap();
-	CoordSystem csy = fdr->getBaseMap()->cs();
-	ILWIS::Polygon *polygon = (ILWIS::Polygon *)feature;
-	FileName fn = drawcontext->getCoordinateSystem()->fnObj;
-	if ( drawcontext->getCoordinateSystem()->fnObj == csy->fnObj) {
-		const LineString *line = polygon->getExteriorRing();
-		exteriorPoints = line->getNumPoints() - 1;
-		exterior = new pdouble[exteriorPoints];
-			CoordinateSequence *seq = line->getCoordinates();
-			int pp = geos::algorithm::CGAlgorithms::isCCW(line->getCoordinates());
-		 for(int i = 0; i <exteriorPoints; ++i)  {
-			//Coordinate c = line->getCoordinateN(exteriorPoints - i - 1);
-			Coordinate c = line->getCoordinateN(i);
-			exterior[i] = new double[7];
-			exterior[i][0] = c.x;
-			exterior[i][1] = c.y;
-			exterior[i][2] = c.z == rUNDEF ? 0 : c.z;
-			exterior[i][3] = (double)color1.red() / 255.0;
-			exterior[i][4] = (double)color1.green() / 255.0;
-			exterior[i][5] = (double)color1.blue() / 255.0;
-			exterior[i][6] = 1;
-		}
+	FeatureSetDrawer *fdr = dynamic_cast<FeatureSetDrawer *>(parentDrawer);
+	if (  p->type & ptALL ||  p->type & ptGEOMETRY) {
+		CoordSystem csy = fdr->getCoordSystem();
+		ILWIS::Polygon *polygon = (ILWIS::Polygon *)feature;
+		if ( !polygon)
+			return;
+		cb = polygon->cbBounds();
+		gpc_vertex_list exteriorBoundary;
+		vector<gpc_vertex_list> holes;
+		bool coordNeedsConversion = drawcontext->getCoordinateSystem()->fnObj == csy->fnObj;
+
+		const LineString *ring = polygon->getExteriorRing();
+		exteriorBoundary.num_vertices = ring->getNumPoints() - 1;
+		exteriorBoundary.vertex = makeVertexList(ring, coordNeedsConversion,csy);
+		holes.resize(polygon->getNumInteriorRing());
 		for(int i = 0; i < polygon->getNumInteriorRing(); ++i) {
 			const LineString * ring = polygon->getInteriorRingN(i);
-			CoordinateSequence *seq = ring->getCoordinates();
-			int pp = geos::algorithm::CGAlgorithms::isCCW(seq);
-			
-			int npoints = ring->getNumPoints() - 1;
-			holePoints.push_back(npoints);
-			double **hole = new pdouble[npoints];
-			for(int j = 0; j < npoints; ++j) {
-				Coordinate c = ring->getCoordinateN(npoints - j - 1);
-				//Coordinate c = ring->getCoordinateN(j);
-				hole[j] = new double[7];
-				hole[j][0] = c.x;
-				hole[j][1] = c.y;
-				hole[j][2] =  c.z == rUNDEF ? 0 : c.z;
-				hole[j][3] = 1;
-				hole[j][4] = 1;
-				hole[j][5] = 1;
-				hole[j][6] = 0;
-
-			}
-			holes.push_back(hole);
+			holes[i].num_vertices = ring->getNumPoints() - 1;
+			holes[i].vertex = makeVertexList(ring,coordNeedsConversion,csy);
 		}
+		prepareList(exteriorBoundary, holes);
+		for(int i = 0; i < holes.size(); ++i) {
+			delete [] holes[i].vertex	;
+		}
+		delete [] exteriorBoundary.vertex;
 	}
-	//	else {
-	//		//const LineString *line = polygon->getExteriorRing();
-	//		//CoordinateSequence *seq = line->getCoordinates();
-	//		//exterior = new CoordinateArraySequence(seq->size());
-	//		//for(int i = 0; i < seq->size(); ++i) {
-	//		//	Coordinate c = seq->getAt(i);
-	//		//	exterior->setAt(csy->cConv(drawcontext->getCoordinateSystem(), c),i);
-	//		//}
-	//		//delete seq;
-	//		//for(int i = 0; i < polygon->getNumInteriorRing(); ++i) {
-	//		//	const LineString * hole = polygon->getInteriorRingN(i);
-	//		//	CoordinateSequence *seq = line->getCoordinates();
-	//		//	CoordinateSequence *points = new CoordinateArraySequence(hole->getNumPoints());
-	//		//	for(int j=0; j < seq->size(); ++j) {
-	//		//		Coordinate c = seq->getAt(i);
-	//		//		points->setAt(csy->cConv(drawcontext->getCoordinateSystem(), c),j);
-	//		//	}
-	//		//	delete seq;
-	//		//	holes.push_back(points);
-	//		//}
-	//	}
+	if (  p->type & ptALL || p->type & RootDrawer::ptRENDER) {
+		setColor(fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod()));
+	}
 }
 
-void PolygonDrawer::prepareList() {
-
-	if( tesselator)
-		gluDeleteTess(tesselator);	
-
-	listIndex = glGenLists(2);
-	tesselator = gluNewTess();
-
-	gluTessCallback(tesselator, GLU_TESS_VERTEX,
-		(void (__stdcall *) ()) &vertexCallback);
-	gluTessCallback(tesselator, GLU_TESS_BEGIN,
-		(void (__stdcall *) ()) &beginCallback);
-	gluTessCallback(tesselator, GLU_TESS_END,
-		(void (__stdcall *) ()) &endCallback);
-	gluTessCallback(tesselator, GLU_TESS_ERROR,
-		(void (__stdcall *) ()) &errorCallback);
-	//gluTessCallback(tesselator, GLU_TESS_COMBINE,
-	//	(void (__stdcall *) ()) &combineCallback);
-	gluTessProperty(tesselator, GLU_TESS_WINDING_RULE, GLU_TESS_WINDING_ODD);
-	glNewList(listIndex, GL_COMPILE);
-	glShadeModel(GL_FLAT);
-	glColor3f(1.0,0.0,0.0);
-	gluTessBeginPolygon(tesselator,NULL);
-	gluTessBeginContour(tesselator);
-	for(int i = 0 ; i < exteriorPoints  ; ++i) {
-		gluTessVertex(tesselator, exterior[i], exterior[i]);
+gpc_vertex *PolygonDrawer::makeVertexList(const LineString* ring, bool coordNeedsConversion, const CoordSystem& csy) const{
+	int npoints = ring->getNumPoints() - 1;
+	gpc_vertex *vertices = new gpc_vertex[npoints];
+	for(int j = 0; j < npoints; ++j) {
+		Coordinate c = ring->getCoordinateN(j);
+		if ( coordNeedsConversion)
+			c = drawcontext->getCoordinateSystem()->cConv(csy,c);
+		gpc_vertex vertex;
+		vertex.x = c.x;
+		vertex.y = c.y;
+		vertices[j] = vertex;
 	}
-	gluTessEndContour(tesselator);
+	return vertices;
+}
+void PolygonDrawer::prepareList(gpc_vertex_list& exteriorBoundary, vector<gpc_vertex_list>& holes) {
+
+	triangleStrips.clear();
+	gpc_polygon polygon;
+	polygon.contour = 0;
+	polygon.hole = 0;
+	polygon.num_contours = 0;
+
+	gpc_add_contour(&polygon,&exteriorBoundary,0);
 
 	for(int i = 0 ; i < holes.size(); ++i) {
-		gluTessBeginContour(tesselator);
-		for(int j = 0 ; j < holePoints[j]; ++j)
-			gluTessVertex(tesselator,holes[i][j],holes[i][j]);
-		gluTessEndContour(tesselator);
-	}
-	gluTessEndPolygon(tesselator);
-	glEndList();
-}
-
-void PolygonDrawer::fff() {
-	int error = glGetError();
-	if (error != GL_NO_ERROR) {
-		std::cout << "An OpenGL error has occured: " << gluErrorString(error) << std::endl;
+		gpc_add_contour(&polygon,&(holes[i]),1);
 	}
 
+	gpc_tristrip tristrip;
+	tristrip.num_strips = 0;
+	tristrip.strip = 0;
+	gpc_polygon_to_tristrip(&polygon, &tristrip);
+	triangleStrips.resize(tristrip.num_strips);
+	for(int i = 0; i < tristrip.num_strips; ++i) {
+		gpc_vertex_list list = tristrip.strip[i];
+		int n = list.num_vertices;
+		triangleStrips[i].resize(n);
+		for(int j = 0; j < n; ++j) {
+			gpc_vertex b = list.vertex[j];
+			triangleStrips.at(i)[j] = (Coord(b.x, b.y));
+		}
+	}
 }
+
