@@ -379,7 +379,7 @@ void SegmentMapStore::Store()
 			ILWIS::Segment *seg = (ILWIS::Segment *)geometries->at(i);	
 			if ( seg->fDeleted()) continue;
 			++actual;
-			CoordBounds cb = seg->crdBounds();
+			CoordBounds cb = seg->cbBounds();
 			tblSegment->recNew();
 			const CoordinateSequence *seq = seg->getCoordinates();
 			colCrdBuf->PutVal(actual,seq, seq->size());
@@ -802,7 +802,7 @@ Coord SegmentMapStore::crdPoint(Coord crd, ILWIS::Segment** seg, long& iAft,
 		ILWIS::Segment *s = (ILWIS::Segment *)geometries->at(i);
 		if ( s == NULL || s->fValid()== false)
 			continue;
-		if (s->crdBounds().fNear(crd,rMinDist)) {
+		if (s->cbBounds().fNear(crd,rMinDist)) {
 			CoordinateSequence *buf = s->getCoordinates();
 			for (int i = 0; i < buf->size()-1; ++i) {
 				CoordBounds cb(buf->getAt(i),buf->getAt(i+1));
@@ -865,7 +865,7 @@ void SegmentMapStore::GetDataFiles(Array<FileName>& afnDat, Array<String>* asSec
 bool SegmentMapStore::fSegExist(const ILWIS::Segment& segNew, Tranquilizer* trq) const
 {
   CoordinateSequence *crdBufNew = segNew.getCoordinates();
-  bool ret =  fSegExist(crdBufNew, segNew.crdBounds(), trq);
+  bool ret =  fSegExist(crdBufNew, segNew.cbBounds(), trq);
   delete crdBufNew;
   return ret;
 }
@@ -877,7 +877,7 @@ bool SegmentMapStore::fSegExist(const CoordinateSequence *crdBufNew,
 	  ILWIS::Segment *seg = (ILWIS::Segment *)geometries->at(i);
     if (0 != trq)
       trq->fAborted();
-    if (!crdBoundsNew.fContains(seg->crdBounds()))
+    if (!crdBoundsNew.fContains(seg->cbBounds()))
       continue;
 	CoordinateSequence * crdBuf = seg->getCoordinates();
 	if (crdBuf->size() != crdBufNew->size())

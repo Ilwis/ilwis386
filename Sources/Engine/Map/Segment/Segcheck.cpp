@@ -106,7 +106,7 @@ static void FillCB(SegmentMapPtr* sm,
 			continue;
 		if (fMask && !s->fInMask(sm->dvrs(), mask))
 			continue;
-		acb[i] = s->crdBounds();
+		acb[i] = s->cbBounds();
 	}
 }
 

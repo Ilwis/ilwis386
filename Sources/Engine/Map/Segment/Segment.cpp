@@ -194,19 +194,19 @@ ILWIS::Segment::Segment(geos::geom::LineString *line) :
   fAcceptDeleted = false;
 }
 
-CoordBounds ILWIS::Segment::crdBounds() const 
-{
-	ILWISSingleLock sl(const_cast<CCriticalSection *>(&csAccess), TRUE, SOURCE_LOCATION);
-	Geometry *geom = getEnvelope();
-	const CoordinateSequence *seq = geom->getCoordinates();
-	CoordBounds cb;
-	for(int i = 0; i < seq->size(); ++i) {
-		Coord crd(seq->getAt(i));
-		cb += crd;
-	}
-	delete seq;
-	return cb;
-}
+//CoordBounds ILWIS::Segment::crdBounds() const 
+//{
+//	ILWISSingleLock sl(const_cast<CCriticalSection *>(&csAccess), TRUE, SOURCE_LOCATION);
+//	Geometry *geom = getEnvelope();
+//	const CoordinateSequence *seq = geom->getCoordinates();
+//	CoordBounds cb;
+//	for(int i = 0; i < seq->size(); ++i) {
+//		Coord crd(seq->getAt(i));
+//		cb += crd;
+//	}
+//	delete seq;
+//	return cb;
+//}
 
 Coord ILWIS::Segment::crdBegin() 
 {
@@ -529,7 +529,7 @@ bool ILWIS::Segment::fIntersects(bool& fOverlay, long& iAft, Coord& crdAt,
 {
   CoordinateSequence *crdBuf = getCoordinates();
   CoordinateSequence *crdBufS = s->getCoordinates();
-  CoordBounds cbS = s->crdBounds();
+  CoordBounds cbS = s->cbBounds();
 
   CoordBounds cbA, cbB;
   Coord crdA1, crdA2, crdB1, crdB2, crdDA, crdDB;
@@ -648,6 +648,11 @@ bool ILWIS::Segment::fIntersects(bool& fOverlay, long& iAft, Coord& crdAt,
 
 Feature::FeatureType ILWIS::Segment::getType() const {
 	return ftSEGMENT;
+}
+
+void ILWIS::Segment::getBoundaries(vector<geos::geom::CoordinateSequence*>& boundaries) const{
+	boundaries.push_back(getCoordinates());
+
 }
 
 //-----[LSEGMENT]-----------------------------------------------------------------------

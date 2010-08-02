@@ -145,7 +145,7 @@ namespace ILWIS {
 {
 public:
 	Segment(geos::geom::LineString *seg=NULL);
-	CoordBounds		crdBounds() const; // new 3.0
+	//CoordBounds		crdBounds() const; // new 3.0
 	long			iBegin() const;   // begin node  - id in node table
 	long			iEnd() const;	   // end node	  - id in node table
 	Coord			crdBegin() ; //3.0
@@ -161,6 +161,7 @@ public:
 	bool			fInMask(const DomainValueRangeStruct& dvrs, const Mask&) const;
 
 	virtual			FeatureType getType() const;
+	virtual	void    getBoundaries(std::vector<geos::geom::CoordinateSequence*>& boundaries) const;
 
 
 	double			rLength() const;
