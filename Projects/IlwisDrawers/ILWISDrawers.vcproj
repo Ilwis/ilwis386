@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="ILWISDrawers"
 	ProjectGUID="{FD4E2ECC-451A-40CD-9391-6806EBEC9BF4}"
 	RootNamespace="ILWISDrawers"
@@ -212,7 +212,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Drawers\gpc.c"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Drawers\LineDrawer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\LineSetDrawer.cpp"
 				>
 			</File>
 			<File
@@ -220,11 +228,23 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Drawers\PointSetDrawer.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Drawers\PointSymbolDrawer.cpp"
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Drawers\PointSymbolDrawer.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Drawers\PolygonDrawer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\PolygonSetDrawer.cpp"
 				>
 			</File>
 		</Filter>
@@ -233,7 +253,15 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			>
 			<File
+				RelativePath="..\..\Sources\Drawers\gpc.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Drawers\LineDrawer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\LineSetDrawer.h"
 				>
 			</File>
 			<File
@@ -241,11 +269,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Drawers\PointSymbolDrawer.h"
+				RelativePath="..\..\Sources\Drawers\PointSetDrawer.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\Sources\Drawers\PolygonDrawer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\PolygonSetDrawer.h"
 				>
 			</File>
 		</Filter>
