@@ -12,21 +12,13 @@ public:
 	~MouseClickInfoDrawer();
 	virtual void prepare(PreparationParameters *pp);
 	void setActivePoint(const Coord& c);
-	void draw(bool);
+	bool draw(bool norecursion = false, const CoordBounds& cbArea=CoordBounds()) const;
 	void addDataSource(void *);
 private:
-	HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent);
-	void displayOptionsText(CWnd *parent);
 	Coord activePoint;
 	vector<BaseMap> maps;
 	String sInfo;
 
-	Color clrText;
-	String sFaceName;
-	short iFHeight;
-	short iFWeight;
-	short iFStyle;
-	short iWidth;
 	bool hasText;
 };
 }

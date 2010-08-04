@@ -18,7 +18,7 @@ SimpleDrawer(parms, "SelectionRectangle")
 SelectionRectangle::~SelectionRectangle() {
 }
 
-void SelectionRectangle::draw(bool norecursion ){
+bool SelectionRectangle::draw(bool norecursion , const CoordBounds& cb) const{
 	glBegin(GL_LINE_STRIP);
 	glVertex2d(c1.x, c1.y);
 	glVertex2d(c1.x, c2.y);
@@ -26,6 +26,8 @@ void SelectionRectangle::draw(bool norecursion ){
 	glVertex2d(c2.x, c1.y);
 	glVertex2d(c1.x, c1.y);
 	glEnd();
+
+	return true;
 }
 
 void SelectionRectangle::calcWorldCoordinates(const CRect & rctZoom) {

@@ -27,6 +27,7 @@ class _export AbstractMapDrawer : public AbstractObjectDrawer {
 		void setUseAttributeTable(bool yesno);
 		RangeReal getStretchRangeReal() const;
 		bool useInternalDomain() const;
+		HTREEITEM  configure(LayerTreeView  *tv, HTREEITEM parent);
 
 	protected:
 		Table attTable;
@@ -35,7 +36,6 @@ class _export AbstractMapDrawer : public AbstractObjectDrawer {
 		bool internalDomain;
 		BaseMap bm;
 
-		HTREEITEM  configure(LayerTreeView  *tv, HTREEITEM parent);
 		AbstractMapDrawer(DrawerParameters *parms, const String& name);
 		void displayOptionAttColumn(CWnd *parent);
 		void setColumnCheckumn(void *w, LayerTreeView *view);

@@ -47,6 +47,11 @@ struct NodeInfo{
 	bool expanded;
 };
 
+namespace ILWIS {
+	class AbstractMapDrawer;
+	class TextSetDrawer;
+}
+
 struct TreeItem{
 	TreeItem()  {
 		item.pszText = new char[1024];
@@ -102,6 +107,8 @@ protected:
 //	void AddPropItems(HTREEITEM hti, int iImg, const IlwisObject& obj);
 	CImageList ilStates;
 private:
+	HTREEITEM addMapItem(ILWIS::AbstractMapDrawer *mapDrawer);
+	HTREEITEM addInfoDrawer(ILWIS::TextSetDrawer* infoDrawer);
 	void NextNode(HTREEITEM hItem, const String& name);
 	void resetState();
 	map<String, NodeInfo> nodes;

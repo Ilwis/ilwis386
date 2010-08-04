@@ -14,7 +14,8 @@ namespace ILWIS {
 	public:
 		String getType() const;
 		DrawerContext *getDrawerContext();
-		void draw(bool norecursion = false) = 0;
+		DrawerContext *getDrawerContext() const;
+		bool draw(bool norecursion = false, const CoordBounds& cb=CoordBounds()) const = 0;
 		void prepare(PreparationParameters *);
 		virtual void addDataSource(void *,int options=0) {};
 		virtual void removeDataSource(void *){}

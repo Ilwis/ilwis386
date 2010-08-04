@@ -17,7 +17,6 @@
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
-#include "Client\Mapwindow\Drawers\FeatureDrawer.h"
 #include "Client\FormElements\fldcolor.h"
 #include "Client\Mapwindow\Drawers\SetDrawer.h"
 #include "Client\Mapwindow\Drawers\FeatureSetDrawer.h"

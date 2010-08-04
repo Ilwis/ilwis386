@@ -1,7 +1,8 @@
-#include "headers\toolspch.h"
+#include "Client\Headers\formelementspch.h"
 #include "Client\Ilwis.h"
 #include "Engine\Map\basemap.h"
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
+#include "ComplexDrawer.h"
 #include "Client\Mapwindow\Drawers\CanvasBackgroundDrawer.h"
 #include "RootDrawer.h"
 
@@ -13,6 +14,7 @@ RootDrawer::RootDrawer() {
 	ILWIS::PreparationParameters pp(RootDrawer::ptALL,0);
 	addPreDrawer(1,IlwWinApp()->getDrawer("CanvasBackgroundDrawer", &pp, &dp));
 	addPostDrawer(900,IlwWinApp()->getDrawer("MouseClickInfoDrawer", &pp, &dp));
+	addPostDrawer(800,IlwWinApp()->getDrawer("GridDrawer", &pp, &dp));
 }
 
 RootDrawer::~RootDrawer() {
@@ -24,6 +26,7 @@ void  RootDrawer::prepare(PreparationParameters *pp){
 	if ( pp->dc && (  v1 || v2 )) {
 		if ( getDrawerContext()->initOpenGL(pp->dc)) {
 			DrawerParameters dp(getDrawerContext(), this);
+			ComplexDrawer::prepare(pp);
 		}
 	}
 	if ( !(pp->type & RootDrawer::ptINITOPENGL))
@@ -39,13 +42,13 @@ void RootDrawer::addCoordBounds(const CoordBounds& cb, bool overrule){
 		drawcontext->setCoordBoundsView(cb, overrule);
 }
 
-void RootDrawer::draw(bool norecursion){
+bool RootDrawer::draw(bool norecursion, const CoordBounds& cb) const{
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		// Clear The Screen And The Depth Buffer
 	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	ComplexDrawer::draw(norecursion);
+	return ComplexDrawer::draw(norecursion, cb);
 
 }
 

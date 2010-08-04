@@ -14,7 +14,6 @@
 //#include "Client\Mapwindow\Drawers\DrawingColor.h" 
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h"
-#include "Client\Mapwindow\Drawers\FeatureDrawer.h"
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
 #include "Client\Mapwindow\Drawers\TextDrawer.h"
 #include "Client\Mapwindow\Drawers\MouseClickInfoDrawer.h"

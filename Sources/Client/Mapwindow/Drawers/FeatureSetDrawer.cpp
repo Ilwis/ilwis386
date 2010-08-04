@@ -17,7 +17,6 @@
 #include "Client\Mapwindow\Drawers\FeatureLayerDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
-#include "Client\Mapwindow\Drawers\FeatureDrawer.h"
 #include "Client\FormElements\fldcolor.h"
 #include "Client\Mapwindow\Drawers\SetDrawer.h"
 #include "Client\Mapwindow\Drawers\FeatureSetDrawer.h"
@@ -47,10 +46,10 @@ void FeatureSetDrawer::prepare(PreparationParameters *parms){
 		drawers.resize(features.size());
 		for(int i=0; i < features.size(); ++i) {
 			Feature *feature = features.at(i);
-			FeatureDrawer *pdrw;
+			NewDrawer *pdrw;
 			if ( feature && feature->fValid()){
 				ILWIS::DrawerParameters dp(drawcontext, this);
-				pdrw = (FeatureDrawer *)createElementDrawer(parms, &dp);
+				pdrw = createElementDrawer(parms, &dp);
 				pdrw->addDataSource(feature);
 				PreparationParameters fp((int)parms->type, 0);
 				pdrw->prepare(&fp);

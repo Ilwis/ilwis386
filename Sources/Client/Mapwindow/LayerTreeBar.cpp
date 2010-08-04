@@ -57,6 +57,7 @@
 #include "Client\Editors\Editor.h"
 #include "Client\Editors\Utils\SYMBOL.H"
 #include "Client\Editors\Utils\sizecbar.h"
+#include "Client\Mapwindow\Drawers\ComplexDrawer.h"
 #include "Client\Mapwindow\LayerTreeBar.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Headers\Hs\Mapwind.hs"

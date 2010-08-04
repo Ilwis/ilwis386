@@ -48,6 +48,11 @@ Created on: 2007-02-8
 #include <afxole.h>
 #include "Engine\Map\Mapview.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
+#include "Client\Mapwindow\Drawers\ComplexDrawer.h"
+#include "Client\Mapwindow\Drawers\SimpleDrawer.h"
+#include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
+#include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
+#include "Client\Mapwindow\Drawers\TextDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\Positioner.h"
 #include "Client\Mapwindow\Drawers\BaseDrawer.h"
@@ -60,9 +65,6 @@ Created on: 2007-02-8
 #include "Client\FormElements\fldcolor.h"
 #include "Client\Mapwindow\Drawers\BaseMapDrawer.h"
 #include "Client\Mapwindow\Drawers\MapDrawer.h"
-#include "Client\Mapwindow\Drawers\drawer_n.h"
-#include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
-#include "Client\Mapwindow\Drawers\AbstractMapDrawer.h" 
 #include "Client\Mapwindow\LayerTreeItem.h"
 #include "Client\Mapwindow\MapPaneView.h"
 #include "Engine\Domain\dmclass.h"
@@ -190,6 +192,102 @@ void LayerTreeView::collectStructure(HTREEITEM parent, const String& name) {
 	}
 }
 
+HTREEITEM LayerTreeView::addMapItem(ILWIS::AbstractMapDrawer *mapDrawer) {
+	CTreeCtrl& tc = GetTreeCtrl();
+	BaseMap bmp = mapDrawer->getBaseMap();
+	int iImg = IlwWinApp()->iImage( bmp->fnObj.sExt);
+	String sName = mapDrawer->getName();
+	String sDescr = bmp->sDescr();
+	if ("" != sDescr) 
+		sName = String("%S - %S", sName, sDescr);
+
+	HTREEITEM htiMap = tc.InsertItem(sName.scVal(),iImg,iImg,TVI_ROOT,TVI_FIRST);
+	tc.SetItemData(htiMap, (DWORD_PTR)new DrawerLayerTreeItem(this, mapDrawer));		
+	tc.SetCheck(htiMap, mapDrawer->isActive());
+
+	Domain dm = bmp->dm();
+
+	sName = String("Display options");
+	iImg = IlwWinApp()->iImage(".mpv");
+	HTREEITEM htiDisplayOptions = tc.InsertItem(sName.scVal(), iImg, iImg, htiMap);
+	//mapDrawer->configure(this, htiDisplayOptions);
+	tc.SetItemData(htiDisplayOptions, (DWORD_PTR)new DisplayOptionTree(this,htiDisplayOptions));
+
+	sName = "Properties";
+	int iImgProp = IlwWinApp()->iImage("prop");
+	HTREEITEM htiProp = tc.InsertItem(sName.scVal(), iImgProp, iImgProp, htiMap);
+	if (0 == htiProp)
+		return htiDisplayOptions;
+	tc.SetItemData(htiProp, (DWORD_PTR)new PropertiesLayerTreeItem(this, bmp.ptr()));		
+
+	if (bmp.fValid()) {
+
+		sName = String("%S - %S", dm->sName(), dm->sType());
+		iImg = IlwWinApp()->iImage(".dom");
+		HTREEITEM htiDom = tc.InsertItem(sName.scVal(), iImg, iImg, htiProp);
+		if (0 == htiDom)
+			return htiDisplayOptions;
+
+		tc.SetItemData(htiDom, (DWORD_PTR)new ObjectLayerTreeItem(this, dm.pointer()));		
+
+		Representation rpr = mapDrawer->getRepresentation();
+		if (rpr.fValid()) {
+			sName = String("%S - %S", rpr->sName(), rpr->sType());
+			iImg = IlwWinApp()->iImage(".rpr");
+			HTREEITEM htiRpr = tc.InsertItem(sName.scVal(), iImg, iImg, htiDom);
+			if (0 == htiRpr)
+				return htiDisplayOptions;
+			tc.SetItemData(htiRpr, (DWORD_PTR)new ObjectLayerTreeItem(this, rpr.pointer()));		
+		}
+		HTREEITEM htiGrf = htiProp;
+		MapPtr* mp = dynamic_cast<MapPtr*>(bmp.ptr());
+		if (mp) {
+			GeoRef grf =  mp->gr();
+			sName = String("%S - %S", grf->sName(), grf->sType());
+			iImg = IlwWinApp()->iImage(".grf");
+			htiGrf = tc.InsertItem(sName.scVal(), iImg, iImg, htiProp);
+			if (0 == htiGrf)
+				return htiDisplayOptions;
+
+			tc.SetItemData(htiGrf, (DWORD_PTR)new ObjectLayerTreeItem(this, grf.pointer()));		
+		}
+		CoordSystem csy = bmp->cs();
+		sName = String("%S - %S", csy->sName(), csy->sType());
+		iImg = IlwWinApp()->iImage(".csy");
+		HTREEITEM htiCsy = tc.InsertItem(sName.scVal(), iImg, iImg, htiGrf);
+		if (0 != htiCsy)
+			tc.SetItemData(htiCsy, (DWORD_PTR)new ObjectLayerTreeItem(this, csy.pointer()));		
+	
+		if (bmp->fTblAtt()) {	
+			Table tbl = bmp->tblAtt();
+			if (tbl.fValid()) {
+				sName = tbl->sName();
+				String sDescr = tbl->sDescr();
+				if ("" != sDescr) 
+					sName = String("%S - %S", sName, sDescr);
+				iImg = IlwWinApp()->iImage(".tbt");
+				HTREEITEM htiTbl = tc.InsertItem(sName.scVal(), iImg, iImg, htiProp);
+				if (0 == htiTbl)
+					return htiDisplayOptions;
+				//						AddPropItems(htiTbl, iImg, tbl);
+				tc.SetItemData(htiTbl, (DWORD_PTR)new ObjectLayerTreeItem(this, tbl.pointer()));		
+			}
+		}
+	}
+	return htiDisplayOptions;
+}
+
+HTREEITEM LayerTreeView::addInfoDrawer(ILWIS::TextSetDrawer* infoDrawer) {
+	CTreeCtrl& tc = GetTreeCtrl();
+	int iImg = IlwWinApp()->iImage("info");
+	String sName = "Info";
+	HTREEITEM hti = tc.InsertItem(sName.scVal(),iImg,iImg,TVI_ROOT,TVI_FIRST);
+	tc.SetItemData(hti, (DWORD_PTR)new DrawerLayerTreeItem(this, infoDrawer));		
+	tc.SetCheck(hti, infoDrawer->isActive());
+	//infoDrawer->configure(this, hti);
+	return hti;
+}
+
 void LayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint) 
 {
 	if (lHint == 4) // maplistdrawer replaces map
@@ -203,127 +301,72 @@ void LayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 	tc.SetRedraw(FALSE);
 	DeleteAllItems();
 
-	int iImgProp = IlwWinApp()->iImage("prop");
-	vector<NewDrawer *> allDrawers;
-
 	MapCompositionDoc* mcd = GetDocument();
+
+	vector<NewDrawer *> allDrawers;
+	DrawerMap& preDrawers = mcd->rootDrawer->getDrawers(false);
+	for(DrawerIter cur = preDrawers.begin(); cur != preDrawers.end(); ++cur)
+		allDrawers.push_back((*cur).second);
+
 	int drCount = mcd->rootDrawer->getDrawerCount();
 	for(int index = 0; index < drCount; ++index)
+		allDrawers.push_back(mcd->rootDrawer->getDrawer(index));
+
+	DrawerMap& postDrawers = mcd->rootDrawer->getDrawers(true);
+	for(DrawerIter cur = postDrawers.begin(); cur != postDrawers.end(); ++cur)
+		allDrawers.push_back((*cur).second);
+
+
+	for(int index = 0; index < allDrawers.size(); ++index) 
 	{
-		int iImg;
-		ComplexDrawer* dr = (ComplexDrawer *)mcd->rootDrawer->getDrawer(index);
-		AbstractMapDrawer *adr = dynamic_cast<AbstractMapDrawer *>(dr);
+		ComplexDrawer* dr = (ComplexDrawer *)allDrawers.at(index);
 		ILWISSingleLock csl(&dr->cs, TRUE, SOURCE_LOCATION);
-		
+		HTREEITEM item = 0;
 		AbstractMapDrawer *mapDrawer = dynamic_cast<AbstractMapDrawer *>(dr);
 		if (mapDrawer) {
-			BaseMap bmp = mapDrawer->getBaseMap();
-			//String sName = bmp->fnObj.sShortName(false);
-			iImg = IlwWinApp()->iImage( bmp->fnObj.sExt);
-			String sName = dr->getName();
-			String sDescr = bmp->sDescr();
-			if ("" != sDescr) 
-				sName = String("%S - %S", sName, sDescr);
+			item = addMapItem(mapDrawer);
 
-			HTREEITEM hti = tc.InsertItem(sName.scVal(),iImg,iImg,TVI_ROOT,TVI_FIRST);
-			tc.SetItemData(hti, (DWORD_PTR)new DrawerLayerTreeItem(this, dr));		
-			tc.SetCheck(hti, dr->isActive());
-
-			Domain dm = bmp->dm();
-
-			sName = String("Display options");
-			iImg = IlwWinApp()->iImage(".mpv");
-			HTREEITEM htiDisplayOptions = tc.InsertItem(sName.scVal(), iImg, iImg, hti);
-			dr->configure(this, htiDisplayOptions);
-			tc.SetItemData(htiDisplayOptions, (DWORD_PTR)new DisplayOptionTree(this,htiDisplayOptions));
-
-			sName = "Properties";
-			HTREEITEM htiProp = tc.InsertItem(sName.scVal(), iImgProp, iImgProp, hti);
-			if (0 == htiProp)
-				return;
-			tc.SetItemData(htiProp, (DWORD_PTR)new PropertiesLayerTreeItem(this, bmp.ptr()));		
-
-			if (bmp.fValid()) {
-
-				sName = String("%S - %S", dm->sName(), dm->sType());
-				iImg = IlwWinApp()->iImage(".dom");
-				HTREEITEM htiDom = tc.InsertItem(sName.scVal(), iImg, iImg, htiProp);
-				if (0 == htiDom)
-					return;
-
-				tc.SetItemData(htiDom, (DWORD_PTR)new ObjectLayerTreeItem(this, dm.pointer()));		
-
-				Representation rpr = adr->getRepresentation();
-				if (rpr.fValid()) {
-					sName = String("%S - %S", rpr->sName(), rpr->sType());
-					iImg = IlwWinApp()->iImage(".rpr");
-					HTREEITEM htiRpr = tc.InsertItem(sName.scVal(), iImg, iImg, htiDom);
-					if (0 == htiRpr)
-						return;
-					tc.SetItemData(htiRpr, (DWORD_PTR)new ObjectLayerTreeItem(this, rpr.pointer()));		
-				}
-				HTREEITEM htiGrf = htiProp;
-				MapPtr* mp = dynamic_cast<MapPtr*>(bmp.ptr());
-				if (mp) {
-					GeoRef grf =  mp->gr();
-					sName = String("%S - %S", grf->sName(), grf->sType());
-					iImg = IlwWinApp()->iImage(".grf");
-					htiGrf = tc.InsertItem(sName.scVal(), iImg, iImg, htiProp);
-					if (0 == htiGrf)
-						return;
-
-					tc.SetItemData(htiGrf, (DWORD_PTR)new ObjectLayerTreeItem(this, grf.pointer()));		
-				}
-				CoordSystem csy = bmp->cs();
-				sName = String("%S - %S", csy->sName(), csy->sType());
-				iImg = IlwWinApp()->iImage(".csy");
-				HTREEITEM htiCsy = tc.InsertItem(sName.scVal(), iImg, iImg, htiGrf);
-				if (0 == htiCsy)
-					return;
-				//				AddPropItems(htiCsy, iImg, csy);
-				tc.SetItemData(htiCsy, (DWORD_PTR)new ObjectLayerTreeItem(this, csy.pointer()));		
-				//tc.SetItemData(htiCsy, (DWORD)csy.pointer());		
-				//tc.InsertItem(csy->sDescr().scVal(), iImgProp, iImgProp, htiCsy);
-
-				if (bmp->fTblAtt()) {	
-					Table tbl = bmp->tblAtt();
-					if (tbl.fValid()) {
-						sName = tbl->sName();
-						String sDescr = tbl->sDescr();
-						if ("" != sDescr) 
-							sName = String("%S - %S", sName, sDescr);
-						iImg = IlwWinApp()->iImage(".tbt");
-						HTREEITEM htiTbl = tc.InsertItem(sName.scVal(), iImg, iImg, htiProp);
-						if (0 == htiTbl)
-							return;
-						//						AddPropItems(htiTbl, iImg, tbl);
-						tc.SetItemData(htiTbl, (DWORD_PTR)new ObjectLayerTreeItem(this, tbl.pointer()));		
-					}
-				}
-			}
-			//MapListPtr* mpl = dynamic_cast<MapListPtr*>(obp);
-			//if (mpl) {
-			//	HTREEITEM htiGrf = htiProp;
-			//	GeoRef grf =  mpl->gr();
-			//	sName = String("%S - %S", grf->sName(), grf->sType());
-			//	iImg = IlwWinApp()->iImage(".grf");
-			//	htiGrf = tc.InsertItem(sName.scVal(), iImg, iImg, htiProp);
-			//	if (0 == htiGrf)
-			//		return;
-			//	//				AddPropItems(htiGrf, iImg, grf);
-			//	tc.SetItemData(htiGrf, (DWORD_PTR)new ObjectLayerTreeItem(this, grf.pointer()));		
-			//	//tc.SetItemData(htiGrf, (DWORD)grf.pointer());		
-			//	//tc.InsertItem(grf->sDescr().scVal(), iImgProp, iImgProp, htiGrf);
-			//	CoordSystem csy = grf->cs();
-			//	sName = String("%S - %S", csy->sName(), csy->sType());
-			//	iImg = IlwWinApp()->iImage(".csy");
-			//	HTREEITEM htiCsy = tc.InsertItem(sName.scVal(), iImg, iImg, htiGrf);
-			//	if (0 == htiCsy)
-			//		return;
-			//	//				AddPropItems(htiCsy, iImg, csy);
-			//	tc.SetItemData(htiCsy, (DWORD_PTR)new ObjectLayerTreeItem(this, csy.pointer()));		
-			//}
+				//MapListPtr* mpl = dynamic_cast<MapListPtr*>(obp);
+				//if (mpl) {
+				//	HTREEITEM htiGrf = htiProp;
+				//	GeoRef grf =  mpl->gr();
+				//	sName = String("%S - %S", grf->sName(), grf->sType());
+				//	iImg = IlwWinApp()->iImage(".grf");
+				//	htiGrf = tc.InsertItem(sName.scVal(), iImg, iImg, htiProp);
+				//	if (0 == htiGrf)
+				//		return;
+				//	//				AddPropItems(htiGrf, iImg, grf);
+				//	tc.SetItemData(htiGrf, (DWORD_PTR)new ObjectLayerTreeItem(this, grf.pointer()));		
+				//	//tc.SetItemData(htiGrf, (DWORD)grf.pointer());		
+				//	//tc.InsertItem(grf->sDescr().scVal(), iImgProp, iImgProp, htiGrf);
+				//	CoordSystem csy = grf->cs();
+				//	sName = String("%S - %S", csy->sName(), csy->sType());
+				//	iImg = IlwWinApp()->iImage(".csy");
+				//	HTREEITEM htiCsy = tc.InsertItem(sName.scVal(), iImg, iImg, htiGrf);
+				//	if (0 == htiCsy)
+				//		return;
+				//	//				AddPropItems(htiCsy, iImg, csy);
+				//	tc.SetItemData(htiCsy, (DWORD_PTR)new ObjectLayerTreeItem(this, csy.pointer()));		
+				//}
 		}
+		TextSetDrawer *infoDrawer = dynamic_cast<TextSetDrawer *>(dr);
+		if ( infoDrawer)
+			item = addInfoDrawer(infoDrawer);
+
+		if ( dr->getId() == "CanvasBackgroundDrawer"){
+			int iImg = IlwWinApp()->iImage("MapPane");
+			String sName = "Background area";
+			item = tc.InsertItem(sName.scVal(),iImg,iImg,TVI_ROOT,TVI_FIRST);
+			tc.SetItemData(item, (DWORD_PTR)new DrawerLayerTreeItem(this, dr));
+		}
+
+		if ( dr->getId() == "GridDrawer"){
+			dr->configure(this,0);
+		}
+
+
+		if ( item !=0)
+			dr->configure(this, item);
 
 		//bool fLegend = adr->isLegendUsefull();
 		//if (fLegend) {
@@ -397,46 +440,46 @@ void LayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 		//		}
 		//		tc.Expand(htiLeg, TVE_EXPAND);
 		/*	}
-			else if (dm->pdbit()) {
-				sName = SDCRemLegend;
-				int iImgLeg = IlwWinApp()->iImage("legend");
-				HTREEITEM htiLeg = tc.InsertItem(sName.scVal(), iImgLeg, iImgLeg, hti);
-				if (0 == htiLeg)
-					return;
-				HTREEITEM hti = tc.InsertItem("0", htiLeg);
-				tc.SetItemData(hti, (DWORD_PTR)new LegendClassLayerTreeItem(this, dr, dm, iUNDEF));		
-				hti = tc.InsertItem("1", htiLeg);
-				tc.SetItemData(hti, (DWORD_PTR)new LegendClassLayerTreeItem(this, dr, dm, 1));		
-				tc.Expand(htiLeg, TVE_EXPAND);
-			}
-			else if (dm->pdv()) {
-				sName = SDCRemLegend;
-				int iImgLeg = IlwWinApp()->iImage("legend");
-				HTREEITEM htiLeg = tc.InsertItem(sName.scVal(), iImgLeg, iImgLeg, hti);
-				if (0 == htiLeg)
-					return;
-				Representation rpr = adr->getRepresentation();
-				tc.SetItemData(htiLeg, (DWORD_PTR)new ObjectLayerTreeItem(this, rpr.pointer()));
-				DomainValueRangeStruct dvs = bmp->dvrs() ;					
-				RangeReal rr = adr->getLegendRange();
-				int iItems = 5;
-				double rStep = dvs.rStep();
-				if (rStep > 1e-6) {
-					int iSteps = 1 + round(rr.rWidth() / rStep);
-					if (iSteps < 2)
-						iSteps = 2;
-					if (iSteps <= 11)
-						iItems = iSteps;
-				}
-				for (int i = 0; i < iItems; ++i) {
-					double rMaxItem = iItems - 1;
-					double rVal = rr.rLo() + i / rMaxItem * rr.rWidth();
-					String sName = dvs.sValue(rVal, 0);
-					HTREEITEM hti = tc.InsertItem(sName.scVal(), htiLeg);
-					tc.SetItemData(hti, (DWORD_PTR)new LegendValueLayerTreeItem(this, adr, dvs, rVal));		
-				}
-				tc.Expand(htiLeg, TVE_EXPAND);
-			}*/
+		else if (dm->pdbit()) {
+		sName = SDCRemLegend;
+		int iImgLeg = IlwWinApp()->iImage("legend");
+		HTREEITEM htiLeg = tc.InsertItem(sName.scVal(), iImgLeg, iImgLeg, hti);
+		if (0 == htiLeg)
+		return;
+		HTREEITEM hti = tc.InsertItem("0", htiLeg);
+		tc.SetItemData(hti, (DWORD_PTR)new LegendClassLayerTreeItem(this, dr, dm, iUNDEF));		
+		hti = tc.InsertItem("1", htiLeg);
+		tc.SetItemData(hti, (DWORD_PTR)new LegendClassLayerTreeItem(this, dr, dm, 1));		
+		tc.Expand(htiLeg, TVE_EXPAND);
+		}
+		else if (dm->pdv()) {
+		sName = SDCRemLegend;
+		int iImgLeg = IlwWinApp()->iImage("legend");
+		HTREEITEM htiLeg = tc.InsertItem(sName.scVal(), iImgLeg, iImgLeg, hti);
+		if (0 == htiLeg)
+		return;
+		Representation rpr = adr->getRepresentation();
+		tc.SetItemData(htiLeg, (DWORD_PTR)new ObjectLayerTreeItem(this, rpr.pointer()));
+		DomainValueRangeStruct dvs = bmp->dvrs() ;					
+		RangeReal rr = adr->getLegendRange();
+		int iItems = 5;
+		double rStep = dvs.rStep();
+		if (rStep > 1e-6) {
+		int iSteps = 1 + round(rr.rWidth() / rStep);
+		if (iSteps < 2)
+		iSteps = 2;
+		if (iSteps <= 11)
+		iItems = iSteps;
+		}
+		for (int i = 0; i < iItems; ++i) {
+		double rMaxItem = iItems - 1;
+		double rVal = rr.rLo() + i / rMaxItem * rr.rWidth();
+		String sName = dvs.sValue(rVal, 0);
+		HTREEITEM hti = tc.InsertItem(sName.scVal(), htiLeg);
+		tc.SetItemData(hti, (DWORD_PTR)new LegendValueLayerTreeItem(this, adr, dvs, rVal));		
+		}
+		tc.Expand(htiLeg, TVE_EXPAND);
+		}*/
 		//}
 
 		//tc.Expand(hti, TVE_EXPAND);

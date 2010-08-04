@@ -19,16 +19,17 @@ namespace ILWIS {
 	public:
 		enum DrawMethod	{ drmNOTSET, drmINIT, drmRPR, drmSINGLE, drmMULTIPLE, drmIMAGE,	drmCOLOR, drmBOOL, drmBYATTRIBUTE, drmARROW, drmGRAPH };
 		enum DrawColors { drcLIGHT, drcNORMAL, drcDARK, drcGREY };
-		enum PreparationType{ptALL=1,ptRENDER=2,ptGEOMETRY=4,ptINITOPENGL=8,ptUI=16};
+		enum PreparationType{ptNONE=0,ptRENDER=1,ptGEOMETRY=2,ptINITOPENGL=4,ptUI=8,ptALL=4294967295};
 		enum DataSourceMergeOptions{dsmEXTENDCB=1};
-		enum UICode{ucALL=1, ucBOUNDARIES=2};
+		enum UICode{ucNONE=0, ucNOREPRESENTATION=2, ucNOINFO=4, ucNOMASK=8, ucNOMULTICOLOR=16,ucNOTRANSPARENCY=32,ucALL=4294967295};
 
-		virtual void draw(bool norecursion = false) = 0;
+		virtual bool draw(bool norecursion = false, const CoordBounds& cb=CoordBounds()) const = 0;
 		virtual void prepare(PreparationParameters *) =0;
 		virtual String getType() const =0;
 		virtual void addDataSource(void *, int options=0) = 0;
 		virtual void removeDataSource(void *) = 0;
 		virtual DrawerContext *getDrawerContext() = 0;
+		virtual DrawerContext *getDrawerContext() const = 0;
 		virtual String getName() const = 0;
 		virtual void setName(const String&) = 0;
 		virtual bool isActive() const = 0;

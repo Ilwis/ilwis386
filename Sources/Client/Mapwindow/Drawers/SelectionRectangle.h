@@ -13,7 +13,7 @@ namespace ILWIS {
 	public:
 		SelectionRectangle(DrawerParameters *parms);
 		virtual ~SelectionRectangle();
-		virtual void draw(bool norecursion = false);
+		virtual bool draw(bool norecursion = false, const CoordBounds& cbArea=CoordBounds()) const;
 		virtual void prepare(PreparationType t=ptALL,CDC *dc = 0);
 		void calcWorldCoordinates(const CRect & rctZoom);
 		CoordBounds getWorldCoordinates() const;

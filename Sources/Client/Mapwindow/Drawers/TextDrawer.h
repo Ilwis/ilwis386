@@ -17,7 +17,15 @@ public:
 	virtual void prepare(PreparationParameters *pp);
 	OpenGLFont *getFont() const;
 	void setFont(OpenGLFont *f);
+	HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent);
 private:
+	void displayOptionsText(CWnd *parent);
+	Color clrText;
+	String sFaceName;
+	short iFHeight;
+	short iFWeight;
+	short iFStyle;
+	short iWidth;
 	OpenGLFont *font;
 };
 

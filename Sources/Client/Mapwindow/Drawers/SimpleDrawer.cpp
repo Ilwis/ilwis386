@@ -51,6 +51,10 @@ DrawerContext *SimpleDrawer::getDrawerContext() {
 	return drawcontext;
 }
 
+DrawerContext *SimpleDrawer::getDrawerContext() const {
+	return drawcontext;
+}
+
 
 String SimpleDrawer::getId() const{
 	return id;

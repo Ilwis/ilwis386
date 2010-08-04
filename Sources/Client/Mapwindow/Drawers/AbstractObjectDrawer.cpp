@@ -42,28 +42,6 @@ void AbstractObjectDrawer::addDataSource(void *bmap, int options) {
 //--------------------------------
 
 
-DisplayOptionsForm::DisplayOptionsForm(ComplexDrawer *dr,CWnd *par, const String& title) : 
-FormBaseDialog(par,title,fbsApplyButton | fbsBUTTONSUNDER | fbsOKHASCLOSETEXT | fbsSHOWALWAYS),
-view((LayerTreeView *)par),
-drw(dr)
-{
-}
-
-void DisplayOptionsForm::OnCancel() {
-	apply();
-}
-
-int DisplayOptionsForm::exec() {
-	return 1;
-}
-
-void DisplayOptionsForm::apply() {
-}
-
-void DisplayOptionsForm::updateMapView() {
-	MapCompositionDoc* doc = view->GetDocument();
-	doc->mpvGetView()->Invalidate();
-}
 
 
 
