@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="ILWISDrawers"
 	ProjectGUID="{FD4E2ECC-451A-40CD-9391-6806EBEC9BF4}"
 	RootNamespace="ILWISDrawers"
@@ -216,7 +216,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Drawers\GridDrawer.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Drawers\LineDrawer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\LineFeatureDrawer.cpp"
 				>
 			</File>
 			<File
@@ -228,19 +236,23 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Drawers\PointFeatureDrawer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\PointFeatureDrawer.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Drawers\PointSetDrawer.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Drawers\PointSymbolDrawer.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\Drawers\PointSymbolDrawer.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\Sources\Drawers\PolygonDrawer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\PolygonFeatureDrawer.cpp"
 				>
 			</File>
 			<File
@@ -257,7 +269,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Drawers\GridDrawer.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Drawers\LineDrawer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\LineFeatureDrawer.h"
 				>
 			</File>
 			<File
@@ -274,6 +294,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Drawers\PolygonDrawer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\PolygonFeatureDrawer.h"
 				>
 			</File>
 			<File
