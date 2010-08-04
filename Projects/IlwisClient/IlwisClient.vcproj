@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="IlwisClient"
 	ProjectGUID="{12042408-86EA-4501-8797-F358A5447A86}"
 	RootNamespace="IlwisClient"
@@ -2522,11 +2522,15 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\Drawer.cpp"
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\ComplexDrawer.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\Drawer_n.cpp"
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\ComplexDrawer.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\Drawer.cpp"
 						>
 					</File>
 					<File
@@ -2543,14 +2547,6 @@
 					</File>
 					<File
 						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\DrawingColor.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\FeatureDrawer.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\FeatureDrawer.h"
 						>
 					</File>
 					<File
@@ -5477,6 +5473,10 @@
 		</File>
 		<File
 			RelativePath="..\..\Sources\Client\Resources\ilwisRemove.ico"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\MapPane1.ico"
 			>
 		</File>
 		<File
