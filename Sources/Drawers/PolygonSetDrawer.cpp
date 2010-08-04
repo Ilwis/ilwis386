@@ -11,7 +11,6 @@
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
-#include "Client\Mapwindow\Drawers\FeatureDrawer.h"
 #include "Client\Mapwindow\Drawers\SetDrawer.h"
 #include "Client\Mapwindow\Drawers\FeatureSetDrawer.h"
 #include "Drawers\PolygonSetDrawer.h"
@@ -30,7 +29,7 @@ PolygonSetDrawer::PolygonSetDrawer(DrawerParameters *parms) :
 	PreparationParameters pp(NewDrawer::ptALL, 0);
 	pp.csy = ((AbstractMapDrawer *)getParentDrawer())->getBaseMap()->cs();
 	FeatureSetDrawer *fsd = (FeatureSetDrawer *)IlwWinApp()->getDrawer("LineSetDrawer", &pp, parms); // boundaries 
-	fsd->setUICode(NewDrawer::ucBOUNDARIES);
+	fsd->setUICode(NewDrawer::ucNOINFO | NewDrawer::ucNOMASK);
 	fsd->setName("Boundaries");
 	fsd->setSingleColor(Color(0,0,0));
 	fsd->setDrawMethod(NewDrawer::drmSINGLE);
@@ -42,7 +41,7 @@ PolygonSetDrawer::~PolygonSetDrawer() {
 }
 
 NewDrawer *PolygonSetDrawer::createElementDrawer(PreparationParameters *pp, ILWIS::DrawerParameters* parms) const{
-	return IlwWinApp()->getDrawer("PolygonDrawer",pp, parms);
+	return IlwWinApp()->getDrawer("PolygonFeatureDrawer",pp, parms);
 
 }
 

@@ -4,18 +4,20 @@ ILWIS::NewDrawer *createPolygonDrawer(ILWIS::DrawerParameters *parms);
 
 namespace ILWIS{
 
-class PolygonDrawer : public FeatureDrawer {
+class PolygonDrawer : public SimpleDrawer {
 	public:
 		PolygonDrawer(ILWIS::DrawerParameters *parms);
 		~PolygonDrawer();
-		virtual void draw(bool norecursion = false);
+		virtual bool draw(bool norecursion = false, const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *);
+		void setDrawColor(const Color& col);
 	protected:
 		PolygonDrawer(DrawerParameters *parms, const String& name);
-		void prepareList(gpc_vertex_list& exteriorBoundary, vector<gpc_vertex_list>& holes);
-		gpc_vertex *makeVertexList(const LineString* ring, bool coordConversion, const CoordSystem& csy) const;
+		HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent) ;
 
 		vector<vector<Coord> > triangleStrips;
+		Color drawColor;
+		CoordBounds cb;
 
 	};
 }

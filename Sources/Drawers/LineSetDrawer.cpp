@@ -11,7 +11,6 @@
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
-#include "Client\Mapwindow\Drawers\FeatureDrawer.h"
 #include "Client\Mapwindow\Drawers\SetDrawer.h"
 #include "Client\Mapwindow\Drawers\FeatureSetDrawer.h"
 #include "Drawers\LineSetDrawer.h"
@@ -34,13 +33,13 @@ LineSetDrawer::~LineSetDrawer() {
 }
 
 NewDrawer *LineSetDrawer::createElementDrawer(PreparationParameters *pp, ILWIS::DrawerParameters* parms) const{
-	return IlwWinApp()->getDrawer("LineDrawer",pp, parms);
+	return IlwWinApp()->getDrawer("LineFeatureDrawer",pp, parms);
 
 }
 
 HTREEITEM LineSetDrawer:: configure(LayerTreeView  *tv, HTREEITEM parent) {
 	HTREEITEM hti = FeatureSetDrawer::configure(tv,parent);
-	if ( getUICode() == NewDrawer::ucBOUNDARIES)
+	if ( getUICode() & NewDrawer::ucNOINFO)
 		setSingleColor(Color(0,0,0));
 	return hti;
 }

@@ -11,7 +11,6 @@
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
-#include "Client\Mapwindow\Drawers\FeatureDrawer.h"
 #include "Client\Mapwindow\Drawers\SetDrawer.h"
 #include "Client\Mapwindow\Drawers\FeatureSetDrawer.h"
 #include "Drawers\PointSetDrawer.h"
@@ -33,7 +32,7 @@ PointSetDrawer::~PointSetDrawer() {
 }
 
 NewDrawer *PointSetDrawer::createElementDrawer(PreparationParameters *pp, ILWIS::DrawerParameters* parms) const{
-	return IlwWinApp()->getDrawer("PointSymbolDrawer", pp,parms);
+	return IlwWinApp()->getDrawer("PointFeatureDrawer", pp,parms);
 
 }
 

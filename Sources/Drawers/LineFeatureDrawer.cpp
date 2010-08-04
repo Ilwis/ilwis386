@@ -19,59 +19,43 @@
 #include "Client\Mapwindow\Drawers\featurelayerdrawer.h"
 #include "Client\Mapwindow\Drawers\SetDrawer.h"
 #include "Client\Mapwindow\Drawers\FeatureSetDrawer.h"
-#include "Client\Mapwindow\Drawers\FeatureDrawer.h"
 #include "drawers\linedrawer.h"
+#include "drawers\linefeaturedrawer.h"
 
 using namespace ILWIS;
 
-ILWIS::NewDrawer *createLineDrawer(DrawerParameters *parms) {
-	return new LineDrawer(parms);
+ILWIS::NewDrawer *createLineFeatureDrawer(DrawerParameters *parms) {
+	return new LineFeatureDrawer(parms);
 }
 
-LineDrawer::LineDrawer(DrawerParameters *parms) : 
-	FeatureDrawer(parms,"LineDrawer")
+LineFeatureDrawer::LineFeatureDrawer(DrawerParameters *parms) : 
+	LineDrawer(parms,"LineFeatureDrawer")
+{
+	drawColor = Color(0,167,18);
+}
+
+LineFeatureDrawer::LineFeatureDrawer(DrawerParameters *parms, const String& name) : 
+	LineDrawer(parms,name)
 {
 }
 
-LineDrawer::LineDrawer(DrawerParameters *parms, const String& name) : 
-	FeatureDrawer(parms,name)
-{
+LineFeatureDrawer::~LineFeatureDrawer() {
 }
 
-LineDrawer::~LineDrawer() {
-	clear();
+bool LineFeatureDrawer::draw(bool norecursion, const CoordBounds& cbArea) const {
+	return LineDrawer::draw(norecursion, cbArea);
 }
 
-void LineDrawer::clear() {
-	for(int i = 0; i < lines.size(); ++i) {
-		delete lines.at(i);
-	}
-	lines.clear();
+void LineFeatureDrawer::addDataSource(void *f, int options) {
+	feature = (Feature *)f;
+
 }
 
-void LineDrawer::draw(bool norecursion){
-	if (lines.size() == 0)
-		return;
-	if ( !getDrawerContext()->getCoordBoundsZoom().fContains(cb))
-		return;
-	setOpenGLColor();
-	for(int j = 0; j < lines.size(); ++j) {
-		CoordinateSequence *points = lines.at(j);
-		glBegin(GL_LINE_STRIP);
 
-		for(int i=0; i<points->size(); ++i) {
-			Coordinate c = points->getAt(i);
-			c.z = 0;
-			glVertex3d( c.x, c.y, c.z);	
-		}
-		glEnd();
-	}
-}
-
-void LineDrawer::prepare(PreparationParameters *p){
-	FeatureDrawer::prepare(p);
+void LineFeatureDrawer::prepare(PreparationParameters *p){
+	LineDrawer::prepare(p);
 	FeatureSetDrawer *fdr = dynamic_cast<FeatureSetDrawer *>(parentDrawer);
-	if (  p->type == ptALL ||  p->type & ptGEOMETRY) {
+	if ( p->type & ptGEOMETRY) {
 		CoordSystem csy = fdr->getCoordSystem();
 		cb = feature->cbBounds();
 		clear();
@@ -90,7 +74,7 @@ void LineDrawer::prepare(PreparationParameters *p){
 		}
 	}
 	if (  p->type == ptALL || p->type & RootDrawer::ptRENDER) {
-		setColor(fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod()));
+		drawColor = (fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod()));
 		double tr = fdr->getTransparency();
 		setTransparency(tr);
 	}
