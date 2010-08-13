@@ -12,7 +12,8 @@ ILWIS::NewDrawer *createLineDrawer(DrawerParameters *parms) {
 }
 
 LineDrawer::LineDrawer(DrawerParameters *parms) : 
-	SimpleDrawer(parms,"LineDrawer")
+	SimpleDrawer(parms,"LineDrawer"),
+		thickness(1.0)
 {
 }
 
@@ -49,6 +50,7 @@ bool LineDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 	glDisable(GL_DEPTH_TEST);
 
 	glColor4f(drawColor.redP(),drawColor.greenP(), drawColor.blueP(), getTransparency());
+	glLineWidth(thickness);
 
 	for(int j = 0; j < lines.size(); ++j) {
 		CoordinateSequence *points = lines.at(j);
@@ -61,6 +63,7 @@ bool LineDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 		}
 		glEnd();
 	}
+	glLineWidth(1);
 	return true;
 }
 
@@ -70,5 +73,9 @@ void LineDrawer::prepare(PreparationParameters *p){
 
 void LineDrawer::setDrawColor(const Color& col) {
 	drawColor = col;
+}
+
+void LineDrawer::setThickness(float t) {
+	thickness = t;
 }
 

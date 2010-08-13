@@ -13,7 +13,9 @@
 #include "Client\Mapwindow\LayerTreeItem.h" 
 #include "Client\Mapwindow\Drawers\SetDrawer.h"
 #include "Client\Mapwindow\Drawers\FeatureSetDrawer.h"
+#include "Client\Editors\Utils\line.h"
 #include "Drawers\LineSetDrawer.h"
+#include "drawers\linedrawer.h"
 //#include "Client\Mapwindow\Drawers\PointMapDrawerForm.h"
 #include "Headers\Hs\Drwforms.hs"
 
@@ -24,7 +26,10 @@ ILWIS::NewDrawer *createLineSetDrawer(DrawerParameters *parms) {
 }
 
 LineSetDrawer::LineSetDrawer(DrawerParameters *parms) : 
-	FeatureSetDrawer(parms,"LineSetDrawer")
+	FeatureSetDrawer(parms,"LineSetDrawer"),
+	linestyle(ldtSingle),
+	linethickness(1),
+	styleItem(0)
 {
 	setDrawMethod(drmSINGLE); // default;
 }
@@ -37,13 +42,43 @@ NewDrawer *LineSetDrawer::createElementDrawer(PreparationParameters *pp, ILWIS::
 
 }
 
-HTREEITEM LineSetDrawer:: configure(LayerTreeView  *tv, HTREEITEM parent) {
+void LineSetDrawer::prepare(PreparationParameters *parm){
+	FeatureSetDrawer::prepare(parm);
+	for(int i=0; i < drawers.size(); ++i) {
+		LineDrawer *ld = (LineDrawer *)drawers.at(i);
+		ld->setThickness(linethickness);
+	}
+}
+
+void LineSetDrawer::modifyLineStyleItem(LayerTreeView  *tv, bool remove) {
+	if (!remove) {
+		if ( styleItem == 0 ) {
+		DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,portrayalItem,this,(DisplayOptionItemFunc)&LineSetDrawer::displayOptionSetLineStyle);
+		String linestyle("Line style");
+		styleItem = InsertItem(linestyle,"LineStyle", item, -1);
+		}
+	} else {
+		if ( styleItem) {
+			tv->GetTreeCtrl().DeleteItem(styleItem);
+			styleItem = 0;
+		}
+	}
+}
+HTREEITEM LineSetDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 	HTREEITEM hti = FeatureSetDrawer::configure(tv,parent);
 	if ( getUICode() & NewDrawer::ucNOINFO)
 		setSingleColor(Color(0,0,0));
+	if ( rpr.fValid() && !rpr->prc()) {
+		modifyLineStyleItem(tv);
+	}
 	return hti;
 }
 
+void LineSetDrawer::displayOptionSetLineStyle(CWnd *parent) {
+	new LineStyleForm(parent, this);
+}
+
+ 
 void LineSetDrawer::setDrawMethod(DrawMethod method) {
 	if ( method == drmINIT) {
 		if ( useInternalDomain() || !rpr.fValid())
@@ -53,4 +88,30 @@ void LineSetDrawer::setDrawMethod(DrawMethod method) {
 
 	} else
 		drm = method;
+}
+
+LineDspType LineSetDrawer::getLineStyle() const {
+	return linestyle ;
+}
+int LineSetDrawer::getLineThickness() const {
+	return linethickness;
+}
+
+//-----------------------------------------------
+LineStyleForm::LineStyleForm(CWnd *par, LineSetDrawer *ldr) 
+	: DisplayOptionsForm(ldr, par, "Line Style")
+{
+
+  fi = new FieldReal(root, "Line thickness", &ldr->linethickness, ValueRange(1.0,100.0));
+  flt = new FieldLineType(root, SDCUiLineType, &ldr->linestyle);
+
+  create();
+}
+
+void  LineStyleForm::apply() {
+	fi->StoreData();
+	flt->StoreData();
+	PreparationParameters pp(NewDrawer::ptRENDER);
+	drw->prepare(&pp);
+	updateMapView();
 }

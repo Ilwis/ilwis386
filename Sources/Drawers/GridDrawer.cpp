@@ -1,5 +1,6 @@
 #include "Client\Headers\formelementspch.h"
 #include "Client\FormElements\syscolor.h"
+#include "Client\FormElements\FieldIntSlider.h"
 #include "Engine\Base\Round.h"
 #include "Engine\Map\basemap.h"
 #include "Client\Mapwindow\MapPaneView.h"
@@ -17,7 +18,7 @@
 #include "Client\Mapwindow\LayerTreeItem.h" 
 #include "Drawers\LineDrawer.h"
 #include "Drawers\GridDrawer.h"
-//#include "Client\Editors\Utils\line.h"
+#include "Client\Editors\Utils\line.h"
 #include "Client\FormElements\fldcolor.h"
 #include "drawers\linedrawer.h"
 #include "Headers\Hs\Drwforms.hs"
@@ -34,6 +35,7 @@ ComplexDrawer(parms,"GridDrawer")
 	setDrawMethod(drmSINGLE); // default;
 	id = name = "GridDrawer";
 	rDist = rUNDEF;
+	setActive(false);
 }
 
 GridDrawer::~GridDrawer() {
@@ -64,28 +66,9 @@ void GridDrawer::gridActive(void *v, LayerTreeView *tv) {
 	doc->mpvGetView()->Invalidate();
 }
 
-//bool GridDrawer::draw(bool norecursion, const CoordBounds& cbArea) const{
-//	if (!isActive())
-//		return false;
-//	if (lines.size() == 0)
-//		return false;
-//	glClearColor(1.0,1.0,1.0,0.0);
-//	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-//	glEnable(GL_BLEND);
-//	glDisable(GL_DEPTH_TEST);
-//	glColor4f(color.redP(), color.greenP(), color.blueP(), getTransparency());
-//	for(int j = 0; j < lines.size(); ++j) {
-//		CoordinateSequence *points = lines.at(j);
-//		glBegin(GL_LINE_STRIP);
-//		for(int i=0; i<points->size(); ++i) {
-//			Coordinate c = points->getAt(i);
-//			c.z = 0;
-//			glVertex3d( c.x, c.y, c.z);	
-//		}
-//		glEnd();
-//	}
-//	return true;
-//}
+bool GridDrawer::draw(bool norecursion, const CoordBounds& cbArea) const{
+	return ComplexDrawer::draw(norecursion, cbArea);
+}
 
 void GridDrawer::prepare(PreparationParameters *pp) {
 	ILWISSingleLock csl(&cs, TRUE, SOURCE_LOCATION);
@@ -192,13 +175,15 @@ void GridLine::addDataSource(void *crd, int options) {
 
 //-------------------------------
 GridForm::GridForm(CWnd *par, GridDrawer *gdr) 
-	: DisplayOptionsForm(gdr, par, SDCTitleGrid)
+	: DisplayOptionsForm(gdr, par, SDCTitleGrid),
+	transparency(100 *(1.0-gdr->getTransparency()))
 {
   iImg = IlwWinApp()->iImage(".grid");
 
   fr = new FieldReal(root, SDCUiGridDistance, &gdr->rDist, ValueRange(0.0,1e10,0.001));
  // new FieldLineType(root, SDCUiLineType, &gdr->ldt);
   fc = new FieldColor(root, SDCUiColor, &gdr->color);
+  slider = new FieldIntSliderEx(root,"Transparency(0-100)", &transparency,ValueRange(0,100),true);
 
   create();
 }
@@ -206,7 +191,9 @@ GridForm::GridForm(CWnd *par, GridDrawer *gdr)
 void  GridForm::apply() {
 	fc->StoreData();
 	fr->StoreData();
-	PreparationParameters pp(NewDrawer::ptGEOMETRY);
+	slider->StoreData();
+	PreparationParameters pp(NewDrawer::ptRENDER);
+	drw->setTransparency(1.0 - (double)transparency/100.0);
 	drw->prepare(&pp);
 	updateMapView();
 }

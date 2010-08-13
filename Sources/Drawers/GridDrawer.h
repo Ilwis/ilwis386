@@ -5,6 +5,7 @@ ILWIS::NewDrawer *createGridDrawer(ILWIS::DrawerParameters *parms);
 ILWIS::NewDrawer *createGridLine(ILWIS::DrawerParameters *parms);
 
 class FieldColor;
+enum LineDspType;
 
 namespace ILWIS{
 
@@ -18,7 +19,7 @@ namespace ILWIS{
 		GridDrawer(DrawerParameters *parms);
 		virtual ~GridDrawer();
 		HTREEITEM  configure(LayerTreeView  *tv, HTREEITEM parent);
-		//bool draw(bool norecursion = false, const CoordBounds& cbArea=CoordBounds()) const;
+		bool draw(bool norecursion = false, const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *pp);
 
 	protected:
@@ -52,5 +53,7 @@ namespace ILWIS{
 		FieldReal *fr;
 		FieldColor *fc;
 		GridDrawer *gd;
+		int transparency;
+		FieldIntSliderEx *slider;
 	};
 }
