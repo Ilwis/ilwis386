@@ -4,6 +4,7 @@
 
 typedef map<String, ILWIS::NewDrawer *> DrawerMap;
 typedef DrawerMap::iterator DrawerIter;
+typedef DrawerMap::const_iterator DrawerIter_C;
 
 namespace ILWIS {
 
@@ -22,7 +23,7 @@ class _export ComplexDrawer : public NewDrawer {
 		virtual void removeDrawer(const String& did);
 		virtual void addPostDrawer(int order, NewDrawer *drw);
 		virtual void addPreDrawer(int order, NewDrawer *drw);
-		DrawerMap& getDrawers(bool post) ;
+		void getDrawers(vector<NewDrawer *>&) ;
 		virtual void addDataSource(void *,int options=0){}
 		virtual void removeDataSource(void *) {}
 		void clear();

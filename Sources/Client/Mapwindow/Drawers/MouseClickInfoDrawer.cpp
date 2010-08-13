@@ -1,6 +1,6 @@
 #include "Client\Headers\formelementspch.h"
-#include "Client\Base\OpenGLFont.h"
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
+#include "Client\Base\OpenGLText.h"
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
 #include "Client\Mapwindow\Drawers\TextDrawer.h"
 #include "Client\Mapwindow\Drawers\MouseClickInfoDrawer.h" 
@@ -20,7 +20,7 @@ MouseClickInfoDrawer::MouseClickInfoDrawer(DrawerParameters *parms) :
 	hasText(false)
 {
 	name = id = "MouseClickInfoDrawer";
-	setFont(new OpenGLFont("c:\\windows\\fonts\\arial.ttf", 36));
+	setFont(new OpenGLText("arial.ttf",25));
 }
 
 MouseClickInfoDrawer::~MouseClickInfoDrawer() {
@@ -31,13 +31,15 @@ void  MouseClickInfoDrawer::prepare(PreparationParameters *pp){
 	sInfo = "";
 	for(int i =0; i < maps.size(); ++i) {
 		BaseMap bm = maps[i];
-		sInfo += bm->sValue(activePoint);
+		vector<String> values = bm->vsValue(activePoint);
+		if ( values.size() > 0)
+			sInfo += values[0];
 	}
 }
 
 bool MouseClickInfoDrawer::draw(bool norecursion, const CoordBounds& cbArea) const {
 	if (getFont() && !activePoint.fUndef())
-		getFont()->renderText(activePoint, sInfo);
+		getFont()->renderText(getDrawerContext(),activePoint, sInfo);
 	return true;
 }
 

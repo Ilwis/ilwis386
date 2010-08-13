@@ -1163,8 +1163,8 @@ void IlwisWinApp::InitImageLists()
 {
 	ilSmall.Create(16,16,TRUE,4,4);
 	ilLarge.Create(32,32,TRUE,4,4);
-	ilSmall.SetImageCount(80);
-	ilLarge.SetImageCount(80);
+	ilSmall.SetImageCount(81);
+	ilLarge.SetImageCount(81);
 
 	int i = 0;
 	InitImage("ilwis", "LogoIcon", i++);
@@ -1258,6 +1258,7 @@ void IlwisWinApp::InitImageLists()
 	InitImage("Mask", "Mask", i++);
 	InitImage("Set", "Set", i++);
 	InitImage("MapPane", "MapPane", i++);
+	InitImage("LineStyle", "LineStyle", i++);
 
 
 

@@ -1,7 +1,7 @@
 #include "Client\Headers\formelementspch.h"
-#include "Client\Base\OpenGLFont.h"
 #include "Engine\Map\basemap.h"
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
+#include "Client\Base\OpenGLText.h"
 #include "client\mapwindow\drawers\drawer_n.h"
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
 #include "Client\Mapwindow\Drawers\TextDrawer.h"
@@ -34,10 +34,10 @@ void  TextSetDrawer::prepare(PreparationParameters *pp){
 	ComplexDrawer::prepare(pp);
 }
 
-OpenGLFont *TextSetDrawer::getFont() const {
+OpenGLText *TextSetDrawer::getFont() const {
 	return font;
 }
-void TextSetDrawer::setFont(OpenGLFont *f) {
+void TextSetDrawer::setFont(OpenGLText *f) {
 	if ( font)
 		delete font;
 	font = f;
@@ -123,7 +123,7 @@ void  TextDrawer::prepare(PreparationParameters *pp){
 void TextDrawer::draw(bool norecursion){
 	TextSetDrawer *set = (TextSetDrawer *)parentDrawer;
 	if ( set->getFont()) {
-		set->getFont()->renderText(c, text);
+		set->getFont()->renderText(getDrawerContext(),c, text);
 	}
 }
 

@@ -249,6 +249,7 @@ MASK                    ICON                    "mask.ico"
 ACTIVE                  ICON                    "active.ico"
 SET                     ICON                    "set.ico"
 MapPane                 ICON                    "MapPane1.ico"
+LineStyle               ICON                    "linestyle.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //

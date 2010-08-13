@@ -2,11 +2,10 @@
 
 #include "Client\Mapwindow\Drawers\ComplexDrawer.h"
 
-class OpenGLFont;
-
 enum FontStyle { FS_ITALIC    = 0x0001, 
                  FS_UNDERLINE	= 0x0002,
                  FS_STRIKEOUT	= 0x0004 };
+class OpenGLText;
 
 namespace ILWIS {
 
@@ -15,8 +14,8 @@ public:
 	TextSetDrawer(DrawerParameters *parms, const String& type);
 	~TextSetDrawer();
 	virtual void prepare(PreparationParameters *pp);
-	OpenGLFont *getFont() const;
-	void setFont(OpenGLFont *f);
+	OpenGLText *getFont() const;
+	void setFont(OpenGLText *f);
 	HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent);
 private:
 	void displayOptionsText(CWnd *parent);
@@ -26,7 +25,7 @@ private:
 	short iFWeight;
 	short iFStyle;
 	short iWidth;
-	OpenGLFont *font;
+	OpenGLText *font;
 };
 
 

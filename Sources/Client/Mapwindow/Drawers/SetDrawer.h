@@ -42,6 +42,7 @@ class _export SetDrawer : public ComplexDrawer {
 		void displayOptionStretch(CWnd *parent);
 		void displayOptionTransparency(CWnd *parent);
 		void insertStretchItem(LayerTreeView  *tv, HTREEITEM parent);
+		virtual void modifyLineStyleItem(LayerTreeView  *tv, bool remove=false) {}
 
 		Representation rpr;
 		CoordSystem csy;
@@ -54,6 +55,7 @@ class _export SetDrawer : public ComplexDrawer {
 		StretchMethod stretchMethod;
 		HTREEITEM rprItem;
 		HTREEITEM itemTransparent ;
+		HTREEITEM portrayalItem;
 	};
 
 	class RepresentationForm : public DisplayOptionsForm {

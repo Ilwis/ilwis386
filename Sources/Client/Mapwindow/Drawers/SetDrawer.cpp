@@ -49,6 +49,8 @@ SetDrawer::~SetDrawer() {
 void SetDrawer::prepare(PreparationParameters *parm){
 	delete drawColor;
 	delete colorCheck;
+	drawColor = 0;
+	colorCheck = 0;
 	ComplexDrawer::prepare(parm);
 	csy = parm->csy;
 	if ( getUICode() == NewDrawer::ucALL) {
@@ -69,12 +71,12 @@ HTREEITEM SetDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 	itemTransparent = InsertItem(transp,"Transparent", item, -1);
 
 	NewDrawer::DrawMethod method = getDrawMethod();
-	HTREEITEM potrayalItem = InsertItem(tv,parent, "Portrayal", "Colors");
+	portrayalItem = InsertItem(tv,parent, "Portrayal", "Colors");
 	
 	colorCheck = new SetChecks(tv,this,(SetCheckFunc)&SetDrawer::setcheckRpr);
 	if ( rpr.fValid() ) {
 		bool usesRpr = method == NewDrawer::drmRPR;
-		item = new DisplayOptionTreeItem(tv,potrayalItem,this,(DisplayOptionItemFunc)&SetDrawer::displayOptionSubRpr,0,colorCheck);
+		item = new DisplayOptionTreeItem(tv,portrayalItem,this,(DisplayOptionItemFunc)&SetDrawer::displayOptionSubRpr,0,colorCheck);
 		rprItem = InsertItem("Representation", ".rpr", item, (int)usesRpr);
 
 		if ( usesRpr)
@@ -131,6 +133,7 @@ void SetDrawer::setcheckRpr(void *value, LayerTreeView *tree) {
 	else if ( method == "Multiple Colors"){
 		setDrawMethod(NewDrawer::drmMULTIPLE);
 	}
+	modifyLineStyleItem(tree, (getDrawMethod() == NewDrawer::drmRPR && rpr.fValid() && rpr->prc()));
 	PreparationParameters pp(NewDrawer::ptRENDER, 0);
 	prepareChildDrawers(&pp);
 	MapCompositionDoc* doc = tree->GetDocument();

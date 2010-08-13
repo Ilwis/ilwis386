@@ -253,10 +253,16 @@ void ComplexDrawer::setTransparency(double value){
 		throw ErrorObject(String("Wrong transparency value %d", value));
 }
 
-map<String, NewDrawer *>& ComplexDrawer::getDrawers(bool post) {
-	if ( post)
-		return postDrawers;
-	return preDrawers;
+void ComplexDrawer::getDrawers(vector<NewDrawer *>& allDrawers) {
+	for(DrawerIter_C cur = preDrawers.begin(); cur != preDrawers.end(); ++cur)
+		allDrawers.push_back((*cur).second);
+
+	int drCount = getDrawerCount();
+	for(int index = 0; index < drCount; ++index)
+		allDrawers.push_back(getDrawer(index));
+
+	for(DrawerIter_C cur = postDrawers.begin(); cur != postDrawers.end(); ++cur)
+		allDrawers.push_back((*cur).second);
 }
 
 

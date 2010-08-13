@@ -483,7 +483,7 @@ void MapCompositionDoc::OnSaveView()
 void MapCompositionDoc::OnSaveViewAs()
 {
 	fUseSerialize = true;
-  class SaveViewForm: public FormWithDest
+  class SaveViewForm: public FormWithDest 
   {
   public:
     SaveViewForm(CWnd* parent, String* sName, String* sTitle)
@@ -1706,8 +1706,12 @@ Drawer* MapCompositionDoc::drAppend(const SegmentMap& mp)
 		ILWIS::PreparationParameters pp(RootDrawer::ptALL);
 		drawer->prepare(&pp);
 		rootDrawer->addDrawer(drawer);
+		NewDrawer *grid = rootDrawer->getDrawer("GridDrawer");
+		if ( grid)
+			grid->prepare(0);
 		ChangeState();
 		UpdateAllViews(0);
+		mpvGetView()->Invalidate();
 	}    
 	return 0;
 }

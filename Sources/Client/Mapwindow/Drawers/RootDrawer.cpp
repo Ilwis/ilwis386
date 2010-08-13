@@ -3,6 +3,11 @@
 #include "Engine\Map\basemap.h"
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
 #include "ComplexDrawer.h"
+#include "Engine\Base\System\RegistrySettings.h"
+#include "Client\Mapwindow\MapCompositionDoc.h"
+#include "Client\Mapwindow\Drawers\RootDrawer.h"
+#include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
+#include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\Drawers\CanvasBackgroundDrawer.h"
 #include "RootDrawer.h"
 
@@ -20,6 +25,7 @@ RootDrawer::RootDrawer() {
 RootDrawer::~RootDrawer() {
 	delete drawcontext;
 }
+
 void  RootDrawer::prepare(PreparationParameters *pp){
 	bool v1 = pp->type & RootDrawer::ptINITOPENGL;
 	bool v2 = pp->type & RootDrawer::ptALL;
@@ -31,6 +37,23 @@ void  RootDrawer::prepare(PreparationParameters *pp){
 	}
 	if ( !(pp->type & RootDrawer::ptINITOPENGL))
 		ComplexDrawer::prepare(pp);
+}
+
+String RootDrawer::addDrawer(NewDrawer *drw) {
+	AbstractMapDrawer *mapdrw = dynamic_cast<AbstractMapDrawer *>(drw);
+	if ( mapdrw) {
+		CoordBounds cb = mapdrw->getBaseMap()->cb();
+		vector<NewDrawer *> allDrawers;
+		getDrawers(allDrawers);
+		for(int i = 0; i < allDrawers.size(); ++i) {
+			AbstractMapDrawer *drw = dynamic_cast<AbstractMapDrawer *>(allDrawers.at(i));
+			if ( drw) {
+				cb += drw->getBaseMap()->cb();
+			}
+		}
+		getDrawerContext()->setCoordBoundsMap(cb);
+	}
+	return ComplexDrawer::addDrawer(drw);
 }
 
 void RootDrawer::setCoordSystem(const CoordSystem& cs, bool overrule){
@@ -47,6 +70,10 @@ bool RootDrawer::draw(bool norecursion, const CoordBounds& cb) const{
 	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+	///*NewDrawer *dr = const_cast<RootDrawer *>(this)->getDrawer("CanvasBackgroundDrawer");
+	//return dr->draw(norecursion, cb);*/
+	//NewDrawer *dr = const_cast<RootDrawer *>(this)->getDrawer("MouseClickInfoDrawer");
+	//return dr->draw(norecursion, cb);
 
 	return ComplexDrawer::draw(norecursion, cb);
 

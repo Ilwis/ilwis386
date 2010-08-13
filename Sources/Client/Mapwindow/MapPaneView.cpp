@@ -427,7 +427,7 @@ void MapPaneView::ShowRecord(const Ilwis::Record& rec)
 
 void MapPaneView::OnLButtonDblClk(UINT nFlags, CPoint point) 
 {
-	if (edit && edit->OnLButtonDblClk(nFlags, point)) 
+	//if (edit && edit->OnLButtonDblClk(nFlags, point)) 
 		return;
 
 	Coord c = crdPnt(point);

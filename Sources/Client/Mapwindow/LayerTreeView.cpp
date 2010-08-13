@@ -304,18 +304,7 @@ void LayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 	MapCompositionDoc* mcd = GetDocument();
 
 	vector<NewDrawer *> allDrawers;
-	DrawerMap& preDrawers = mcd->rootDrawer->getDrawers(false);
-	for(DrawerIter cur = preDrawers.begin(); cur != preDrawers.end(); ++cur)
-		allDrawers.push_back((*cur).second);
-
-	int drCount = mcd->rootDrawer->getDrawerCount();
-	for(int index = 0; index < drCount; ++index)
-		allDrawers.push_back(mcd->rootDrawer->getDrawer(index));
-
-	DrawerMap& postDrawers = mcd->rootDrawer->getDrawers(true);
-	for(DrawerIter cur = postDrawers.begin(); cur != postDrawers.end(); ++cur)
-		allDrawers.push_back((*cur).second);
-
+	mcd->rootDrawer->getDrawers(allDrawers);
 
 	for(int index = 0; index < allDrawers.size(); ++index) 
 	{

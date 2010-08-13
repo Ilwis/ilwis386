@@ -183,6 +183,7 @@ FieldIntSliderEx::FieldIntSliderEx(FormEntry * parent, const String& question, i
 	FieldGroup *fg = new FieldGroup(parent);
 	edit = new FieldInt(fg,question,val,valrange);
 	slider = new FieldIntSlider(fg,val,valrange,horiz ? TBS_HORZ : TBS_VERT);
+	fg->SetIndependentPos();
 	new FieldBlank(fg);
 	slider->Align(edit,AL_AFTER);
 

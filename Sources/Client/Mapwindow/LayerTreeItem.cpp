@@ -711,15 +711,6 @@ void SetChecks::addItem(HTREEITEM hti){
 
 void SetChecks::checkItem(HTREEITEM hti,bool fOn) {
 	CTreeCtrl& tree = tv->GetTreeCtrl();
-	//for(int i = 0; i< checkedItems.size(); ++i) {
-	//	HTREEITEM ht = checkedItems.at(i);
-	//	if ( hti == ht && tree.GetCheck(ht)) {
-	//	// you can not uncheck yourself; this would leave no check marks checked which is not intended
-	//		tree.SetCheck(hti);
-	//		return;
-	//	}
-	//}
-
 	for(int i = 0; i< checkedItems.size(); ++i) {
 		HTREEITEM ht = checkedItems.at(i);
 		tree.SetCheck(ht, FALSE);
