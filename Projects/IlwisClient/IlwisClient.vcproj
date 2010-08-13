@@ -81,7 +81,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/ignore:4099"
-				AdditionalDependencies="ILWISEngine.lib htmlhelp.lib geosd.lib opengl32.lib glu32.lib freetype.lib"
+				AdditionalDependencies="ILWISEngine.lib htmlhelp.lib geosd.lib opengl32.lib glu32.lib ftgl.lib freetype.lib"
 				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\Ilwis.exe"
 				Version="3.5"
 				LinkIncremental="2"
@@ -2598,11 +2598,11 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\Sources\Client\Base\OpenGLFont.cpp"
+						RelativePath="..\..\Sources\Client\Base\OpenGLText.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\Sources\Client\Base\OpenGLFont.h"
+						RelativePath="..\..\Sources\Client\Base\OpenGLText.h"
 						>
 					</File>
 					<File
@@ -5473,6 +5473,10 @@
 		</File>
 		<File
 			RelativePath="..\..\Sources\Client\Resources\ilwisRemove.ico"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\linestyle.ico"
 			>
 		</File>
 		<File
