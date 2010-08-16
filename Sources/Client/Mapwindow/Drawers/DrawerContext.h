@@ -30,8 +30,16 @@ namespace ILWIS {
 		void clear();
 		RootDrawer *getRootDrawer() const;
 		void setRootDrawer(RootDrawer *dr);
+		void set3D(bool yeno);
+		bool is3D() const;
+		void setViewPoint(const Coord& c);
+		void setEyePoint(const Coord& c);
+		Coord getViewPoint() const;
+		Coord getEyePoint() const;
+	    double getFakeZ() const;
 
 	private:
+		void setProjection(const CoordBounds& cb);
 
 		CoordBounds cbView;
 		CoordBounds cbZoom;
@@ -41,5 +49,9 @@ namespace ILWIS {
 		double aspectRatio;
 		RootDrawer *rootDrawer;
 		HGLRC mhRC;
+		bool threeD;
+		Coordinate eyePoint;
+		Coordinate viewPoint;
+		double fakeZ;
 	};
 }

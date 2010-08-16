@@ -19,7 +19,7 @@ class _export FeatureSetDrawer : public SetDrawer {
 		void setSingleColor(const Color& c);
 		Color getSingleColor() const;
 		HTREEITEM  configure(LayerTreeView  *tv, HTREEITEM parent);
-		virtual NewDrawer *createElementDrawer(PreparationParameters *pp, ILWIS::DrawerParameters* parms) const = 0;
+		virtual NewDrawer *createElementDrawer(PreparationParameters *pp, ILWIS::DrawerParameters* parms) const { return 0;}
 
 	protected:
 		void displayOptionMask(CWnd *parent);

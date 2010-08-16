@@ -43,7 +43,7 @@ void FeatureSetDrawer::prepare(PreparationParameters *parms){
 	if ( parms->type == ptALL || parms->type & RootDrawer::ptGEOMETRY){
 		mapDrawer->getFeatures(features);
 		clear();
-		drawers.resize(features.size());
+		drawers.resize( features.size());
 		for(int i=0; i < features.size(); ++i) {
 			Feature *feature = features.at(i);
 			NewDrawer *pdrw;

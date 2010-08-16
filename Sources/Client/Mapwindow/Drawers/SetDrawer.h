@@ -35,6 +35,7 @@ class _export SetDrawer : public ComplexDrawer {
 		CoordSystem getCoordSystem() const;
 		bool useInternalDomain() const;
 		void setActiveMode(void *v,LayerTreeView *tv);
+		HTREEITEM set3D(bool yeno, LayerTreeView  *tvm, HTREEITEM parent=0,SetCheckFunc f=0);
 	
 	protected:
 		void setcheckRpr(void *value, LayerTreeView *);
@@ -43,6 +44,7 @@ class _export SetDrawer : public ComplexDrawer {
 		void displayOptionTransparency(CWnd *parent);
 		void insertStretchItem(LayerTreeView  *tv, HTREEITEM parent);
 		virtual void modifyLineStyleItem(LayerTreeView  *tv, bool remove=false) {}
+		void SetthreeD(void *v, LayerTreeView *tv);
 
 		Representation rpr;
 		CoordSystem csy;
@@ -56,6 +58,7 @@ class _export SetDrawer : public ComplexDrawer {
 		HTREEITEM rprItem;
 		HTREEITEM itemTransparent ;
 		HTREEITEM portrayalItem;
+		HTREEITEM threeDItem;
 	};
 
 	class RepresentationForm : public DisplayOptionsForm {

@@ -248,8 +248,9 @@ MULTIPLECOLORS          ICON                    "multiplecolors.ico"
 MASK                    ICON                    "mask.ico"
 ACTIVE                  ICON                    "active.ico"
 SET                     ICON                    "set.ico"
-MapPane                 ICON                    "MapPane1.ico"
-LineStyle               ICON                    "linestyle.ico"
+MAPPANE                 ICON                    "MapPane1.ico"
+LINESTYLE               ICON                    "linestyle.ico"
+3D                      ICON                    "ThreeD.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //

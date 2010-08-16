@@ -14,6 +14,7 @@ public:
 	void setActivePoint(const Coord& c);
 	bool draw(bool norecursion = false, const CoordBounds& cbArea=CoordBounds()) const;
 	void addDataSource(void *);
+	HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent);
 private:
 	Coord activePoint;
 	vector<BaseMap> maps;

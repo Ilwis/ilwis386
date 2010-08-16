@@ -10,6 +10,7 @@
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h"
 #include "Client\Mapwindow\Drawers\CanvasBackgroundDrawer.h"
+#include "Client\Ilwis.h"
 
 using namespace ILWIS;
 
@@ -32,29 +33,41 @@ void  CanvasBackgroundDrawer::prepare(PreparationParameters *pp){
 
 HTREEITEM CanvasBackgroundDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 	ComplexDrawer::configure(tv,parent);
-	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,parent,this, 
+	CTreeCtrl& tc = tv->GetTreeCtrl();
+	int iImg = IlwWinApp()->iImage("MapPane");
+	String sName = "Background area";
+	HTREEITEM hti = tc.InsertItem(sName.scVal(),iImg,iImg,TVI_ROOT,TVI_FIRST);
+
+	tc.SetItemData(hti, (DWORD_PTR)new DrawerLayerTreeItem(tv, this));
+	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,hti,this, 
 					(DisplayOptionItemFunc)&CanvasBackgroundDrawer::displayOptionOutsideColor);
 	InsertItem("Outside map","SingleColor",item, -1);
 
-	item = new DisplayOptionTreeItem(tv,parent,this,
+	item = new DisplayOptionTreeItem(tv,hti,this,
 					(DisplayOptionItemFunc)&CanvasBackgroundDrawer::displayOptionInsideColor);
 	InsertItem("Inside map","SingleColor",item, -1);
 
-	return parent;
+	return hti;
 }
 
 bool CanvasBackgroundDrawer::draw(bool norecursion, const CoordBounds& cb) const{
 	CoordBounds cbView = getDrawerContext()->getCoordBoundsView();
+	CoordBounds cbMap = getDrawerContext()->getMapCoordBounds();
 	glColor3d(outside.redP(), outside.greenP(), outside.blueP());
 	double z =0.0;
 	glBegin(GL_QUADS);						
 		glVertex3f(cbView.MinX(), cbView.MinY(),z);				
 		glVertex3f(cbView.MinX(), cbView.MaxY(),z);				
+		glVertex3f(cbMap.MinX(), cbView.MaxY(),z);				
+		glVertex3f(cbMap.MinX(), cbView.MinY(),z);
+	glEnd();
+
+	glBegin(GL_QUADS);						
+		glVertex3f(cbMap.MaxX(), cbView.MinY(),z);				
+		glVertex3f(cbMap.MaxX(), cbView.MaxY(),z);				
 		glVertex3f(cbView.MaxX(), cbView.MaxY(),z);				
 		glVertex3f(cbView.MaxX(), cbView.MinY(),z);
 	glEnd();
-
-	CoordBounds cbMap = getDrawerContext()->getMapCoordBounds();
 
 	glColor3f(inside.redP(), inside.greenP(), inside.blueP());
 	glBegin(GL_QUADS);						

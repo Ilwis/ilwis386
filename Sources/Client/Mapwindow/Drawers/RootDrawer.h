@@ -12,8 +12,10 @@ public:
 	void setCoordSystem(const CoordSystem& cs, bool overrule=false);
 	void addCoordBounds(const CoordBounds& cb, bool overrule=true);
 	bool draw(bool norecursion = false, const CoordBounds& cb=CoordBounds()) const;
+	HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent);
 private:
 	void calcCanvas();
 	void addDataSource(void *);
+	void SetthreeD(void *v, LayerTreeView *tv); 
 };
 }

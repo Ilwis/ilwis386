@@ -41,6 +41,8 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+class MapCompositionDoc;
+
 struct NodeInfo{
 	NodeInfo(HTREEITEM it=0, bool ex = false) : hItem(it), expanded(ex) {}
 	HTREEITEM hItem;
@@ -108,7 +110,6 @@ protected:
 	CImageList ilStates;
 private:
 	HTREEITEM addMapItem(ILWIS::AbstractMapDrawer *mapDrawer);
-	HTREEITEM addInfoDrawer(ILWIS::TextSetDrawer* infoDrawer);
 	void NextNode(HTREEITEM hItem, const String& name);
 	void resetState();
 	map<String, NodeInfo> nodes;

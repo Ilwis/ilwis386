@@ -1,10 +1,13 @@
 #include "Client\Headers\formelementspch.h"
 #include "Client\Ilwis.h"
 #include "Engine\Map\basemap.h"
+#include "Client\Mapwindow\MapPaneView.h"
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
 #include "ComplexDrawer.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
+#include "Client\Mapwindow\LayerTreeView.h"
+#include "Client\Mapwindow\LayerTreeItem.h"
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
@@ -70,10 +73,13 @@ bool RootDrawer::draw(bool norecursion, const CoordBounds& cb) const{
 	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	///*NewDrawer *dr = const_cast<RootDrawer *>(this)->getDrawer("CanvasBackgroundDrawer");
-	//return dr->draw(norecursion, cb);*/
-	//NewDrawer *dr = const_cast<RootDrawer *>(this)->getDrawer("MouseClickInfoDrawer");
-	//return dr->draw(norecursion, cb);
+	if (getDrawerContext()->is3D()) {
+		Coord cView = getDrawerContext()->getViewPoint();
+		Coord cEye = getDrawerContext()->getEyePoint();
+		gluLookAt(cEye.x, cEye.y, cEye.z,
+			      cView.x, cView.y, cView.z, 
+				  0.0, 0.0, 1.0 );
+	}
 
 	return ComplexDrawer::draw(norecursion, cb);
 
@@ -81,6 +87,26 @@ bool RootDrawer::draw(bool norecursion, const CoordBounds& cb) const{
 
 void RootDrawer::addDataSource(void *) {
 }
+
+HTREEITEM RootDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
+	CTreeCtrl& tc = tv->GetTreeCtrl();
+	int iImg = IlwWinApp()->iImage("3D");
+	HTREEITEM hti = tc.InsertItem("3D",iImg,iImg,TVI_ROOT,TVI_FIRST);
+	tc.SetItemData(hti, (DWORD_PTR)new DisplayOptionTreeItem(tv,hti,this,
+		(SetCheckFunc)&RootDrawer::SetthreeD));	
+	tc.SetCheck(hti, getDrawerContext()->is3D());
+	return parent;
+}
+
+void RootDrawer::SetthreeD(void *v, LayerTreeView *tv) {
+	bool value = *(bool *)(v);
+	getDrawerContext()->set3D(value);
+	MapCompositionDoc* doc = tv->GetDocument();
+	set3D(value,tv);
+	doc->mpvGetView()->Invalidate();
+}
+
+
 
 
 

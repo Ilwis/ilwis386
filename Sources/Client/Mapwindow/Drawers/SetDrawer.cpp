@@ -37,6 +37,7 @@ SetDrawer::SetDrawer(DrawerParameters *parms, const String& name) :
 	colorCheck(0),
 	rprItem(0),
 	itemTransparent(0)
+	threeDItem(0)
 {
 	setInfo(true);
 }
@@ -61,6 +62,20 @@ void SetDrawer::prepare(PreparationParameters *parm){
 	}
 	drawColor = new DrawingColor(this);
 	setDrawMethod();
+}
+
+HTREEITEM SetDrawer::set3D(bool yesno, LayerTreeView  *tv, HTREEITEM parent,SetCheckFunc f){
+	if ( yesno) {
+		HTREEITEM parent = tv->getAncestor(itemTransparent,1);
+		threeDItem = ComplexDrawer::set3D(yesno,tv,parent, (SetCheckFunc)&SetDrawer::SetthreeD);
+	} else {
+		tv->GetTreeCtrl().DeleteItem(threeDItem);
+		threeDItem = 0;
+	}
+	return threeDItem;
+}
+
+void SetDrawer::SetthreeD(void *v, LayerTreeView *tv) {
 }
 
 HTREEITEM SetDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {

@@ -9,6 +9,7 @@
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h"
+#include "Client\Mapwindow\Drawers\SetDrawer.h"
 #include "Headers\Hs\Drwforms.hs"
 
 using namespace ILWIS;

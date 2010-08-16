@@ -277,17 +277,6 @@ HTREEITEM LayerTreeView::addMapItem(ILWIS::AbstractMapDrawer *mapDrawer) {
 	return htiDisplayOptions;
 }
 
-HTREEITEM LayerTreeView::addInfoDrawer(ILWIS::TextSetDrawer* infoDrawer) {
-	CTreeCtrl& tc = GetTreeCtrl();
-	int iImg = IlwWinApp()->iImage("info");
-	String sName = "Info";
-	HTREEITEM hti = tc.InsertItem(sName.scVal(),iImg,iImg,TVI_ROOT,TVI_FIRST);
-	tc.SetItemData(hti, (DWORD_PTR)new DrawerLayerTreeItem(this, infoDrawer));		
-	tc.SetCheck(hti, infoDrawer->isActive());
-	//infoDrawer->configure(this, hti);
-	return hti;
-}
-
 void LayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint) 
 {
 	if (lHint == 4) // maplistdrawer replaces map
@@ -304,6 +293,8 @@ void LayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 	MapCompositionDoc* mcd = GetDocument();
 
 	vector<NewDrawer *> allDrawers;
+	mcd->rootDrawer->configure(this,0);
+
 	mcd->rootDrawer->getDrawers(allDrawers);
 
 	for(int index = 0; index < allDrawers.size(); ++index) 
@@ -312,10 +303,9 @@ void LayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 		ILWISSingleLock csl(&dr->cs, TRUE, SOURCE_LOCATION);
 		HTREEITEM item = 0;
 		AbstractMapDrawer *mapDrawer = dynamic_cast<AbstractMapDrawer *>(dr);
-		if (mapDrawer) {
+		if (mapDrawer)
 			item = addMapItem(mapDrawer);
-
-				//MapListPtr* mpl = dynamic_cast<MapListPtr*>(obp);
+			//MapListPtr* mpl = dynamic_cast<MapListPtr*>(obp);
 				//if (mpl) {
 				//	HTREEITEM htiGrf = htiProp;
 				//	GeoRef grf =  mpl->gr();
@@ -337,25 +327,7 @@ void LayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 				//	//				AddPropItems(htiCsy, iImg, csy);
 				//	tc.SetItemData(htiCsy, (DWORD_PTR)new ObjectLayerTreeItem(this, csy.pointer()));		
 				//}
-		}
-		TextSetDrawer *infoDrawer = dynamic_cast<TextSetDrawer *>(dr);
-		if ( infoDrawer)
-			item = addInfoDrawer(infoDrawer);
-
-		if ( dr->getId() == "CanvasBackgroundDrawer"){
-			int iImg = IlwWinApp()->iImage("MapPane");
-			String sName = "Background area";
-			item = tc.InsertItem(sName.scVal(),iImg,iImg,TVI_ROOT,TVI_FIRST);
-			tc.SetItemData(item, (DWORD_PTR)new DrawerLayerTreeItem(this, dr));
-		}
-
-		if ( dr->getId() == "GridDrawer"){
-			dr->configure(this,0);
-		}
-
-
-		if ( item !=0)
-			dr->configure(this, item);
+		dr->configure(this, item);
 
 		//bool fLegend = adr->isLegendUsefull();
 		//if (fLegend) {

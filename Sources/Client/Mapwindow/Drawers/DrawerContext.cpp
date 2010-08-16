@@ -4,7 +4,7 @@
 
 using namespace ILWIS;
 
-DrawerContext::DrawerContext(RootDrawer *dr) : mhRC(0),aspectRatio(0), rootDrawer(dr) {
+DrawerContext::DrawerContext(RootDrawer *dr) : mhRC(0),aspectRatio(0), rootDrawer(dr), threeD(false),fakeZ(0) {
 }
 
 bool DrawerContext::initOpenGL(CDC *dc) {
@@ -72,9 +72,7 @@ void DrawerContext::setViewPort(const RowCol& rc) {
 	}
 	pixArea = rc;
 	glViewport(0,0,rc.Col, rc.Row);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho(cbZoom.cMin.x,cbZoom.cMax.x,cbZoom.cMin.y,cbZoom.cMax.y,-1,1.0);
+	setProjection(cbZoom);
 }
 
 DrawerContext::~DrawerContext() {
@@ -110,34 +108,32 @@ void DrawerContext::setCoordBoundsView(const CoordBounds& _cb, bool overrule){
 			double fracofWidth = 1.0 - (pixArea.Col - pixwidth) / pixArea.Col;
 			double crdWidth = w / fracofWidth;
 			double delta = (crdWidth - w) / 2.0;
-			cbView =  CoordBounds(Coord(_cb.MinX() - delta,_cb.MinY()), 
-			                  Coord(_cb.MaxX() + delta,_cb.MaxY()));
+			cbView =  CoordBounds(Coord(_cb.MinX() - delta,_cb.MinY(),0), 
+			                  Coord(_cb.MaxX() + delta,_cb.MaxY(),0));
 		} else {
 			double pixheight = (double)pixArea.Col / aspectRatio;
 			double fracofHeight = 1.0 - abs(pixArea.Row - pixheight) / (double)pixArea.Row;
 			double crdHeight = h / fracofHeight;
 			double delta = (crdHeight - h) / 2.0;
-			cbView =  CoordBounds(Coord(_cb.MinX(),_cb.MinY()  - delta), 
-			                      Coord(_cb.MaxX(),_cb.MaxY()  + delta));
+			cbView =  CoordBounds(Coord(_cb.MinX(),_cb.MinY()  - delta,0), 
+			                      Coord(_cb.MaxX(),_cb.MaxY()  + delta,0));
 
 		}
 		cbZoom = cbView;
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glOrtho(cbView.cMin.x,cbView.cMax.x,cbView.cMin.y,cbView.cMax.y,-1,1.0);
-
+		setViewPoint(cbView.middle());
+		setProjection(cbView);
 	} else {
 		cbView += _cb;
 		aspectRatio = cbView.width()/ cbView.height();
 	}
+	fakeZ = cbView.width() * 0.001;
 	
 }
 
 void DrawerContext::setCoordBoundsZoom(const CoordBounds& cb) {
 	cbZoom = cb;
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho(cbZoom.cMin.x,cbZoom.cMax.x,cbZoom.cMin.y,cbZoom.cMax.y,-1,1.0);
+	setViewPoint(cbZoom.middle());
+	setProjection(cb);
 }
 
 void DrawerContext::setCoordBoundsMap(const CoordBounds& cb) {
@@ -187,6 +183,7 @@ void DrawerContext::setZoom(const CRect& rect) {
 		c1 = screenToWorld(RowCol(rect.top, rect.left));
 		c2 = screenToWorld(RowCol(rect.bottom, rect.right));
 	}
+	c1.z = c2.z = 0;
 	CoordBounds cb(c1,c2);
 	setCoordBoundsZoom(cb);
 }
@@ -198,5 +195,54 @@ CoordBounds DrawerContext::getCoordBoundsZoom() const  {
 RootDrawer *DrawerContext::getRootDrawer() const {
 	return rootDrawer;
 }
+
+void DrawerContext::setProjection(const CoordBounds& cb) {
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	if ( threeD) {
+		double zBase = max(cb.height(), cb.width());
+		gluPerspective(30, aspectRatio,zBase, 2.7 * zBase);
+	} else {
+		glOrtho(cb.cMin.x,cb.cMax.x,cb.cMin.y,cb.cMax.y,-1,1.0);
+	}
+}
+
+void DrawerContext::set3D(bool yesno) {
+	if ( yesno != threeD) {
+		threeD = yesno;
+		eyePoint.x = viewPoint.x + cbZoom.width() ;
+		eyePoint.y = viewPoint.y + cbZoom.height();
+		eyePoint.z = cbZoom.width() * 2;
+		setProjection(cbZoom);
+
+	}
+	if ( threeD) {
+		glEnable(GL_DEPTH_TEST);
+	}
+	else {
+		glDisable(GL_DEPTH_TEST);
+	}
+}
+bool DrawerContext::is3D() const {
+	return threeD;
+}
+
+void DrawerContext::setViewPoint(const Coord& c){
+	viewPoint = c;
+}
+void DrawerContext::setEyePoint(const Coord& c){
+	eyePoint = c;
+}
+Coord DrawerContext::getViewPoint() const{
+	return viewPoint;
+}
+Coord DrawerContext::getEyePoint() const{
+	return eyePoint;
+}
+
+double DrawerContext::getFakeZ() const {
+	return fakeZ;
+}
+
 
 

@@ -319,6 +319,25 @@ void ComplexDrawer::prepareChildDrawers(PreparationParameters *parms) {
 	}
 }
 
+HTREEITEM ComplexDrawer::set3D(bool yesno,LayerTreeView  *tv, HTREEITEM parent,SetCheckFunc f) {
+	threeD = yesno;
+	HTREEITEM hti = 0;
+	if ( parent != 0) {
+		DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,parent,this,f);
+		hti = InsertItem("3D","3D",item,threeD);
+	}
+	for(int i = 0; i < drawers.size(); ++i) {
+		ComplexDrawer *pdrw = dynamic_cast<ComplexDrawer *>(drawers.at(i));
+		if ( pdrw) {
+			pdrw->set3D(yesno, tv);
+		}
+	}
+	return hti;
+}
+bool ComplexDrawer::is3D() const {
+	return threeD;
+}
+
 //----------------------------------------------------------------------------
 
 DisplayOptionsForm::DisplayOptionsForm(ComplexDrawer *dr,CWnd *par, const String& title) : 

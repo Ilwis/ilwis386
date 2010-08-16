@@ -45,6 +45,8 @@ class _export ComplexDrawer : public NewDrawer {
 		virtual int getUICode() const;
 		virtual void setUICode(int c);
 		virtual NewDrawer *getRootDrawer() const;
+		virtual HTREEITEM set3D(bool yeno, LayerTreeView  *tvm, HTREEITEM parent=0,SetCheckFunc f=0);
+		bool is3D() const;
 
 		CCriticalSection cs;
 	protected:
@@ -53,6 +55,10 @@ class _export ComplexDrawer : public NewDrawer {
 		DrawerMap preDrawers;
 		DrawerMap drawersById;
 
+		int uiCode;
+		bool info;
+		DrawMethod drm;
+		double transparency;
 		DrawerContext *drawcontext;
 		NewDrawer *parentDrawer;
 		String type;
@@ -60,11 +66,7 @@ class _export ComplexDrawer : public NewDrawer {
 		String name;
 		bool active;
 		bool editable;
-		int uiCode;
-		bool info;
-		DrawMethod drm;
-		double transparency;
-
+		
 		ComplexDrawer(DrawerParameters *context, const String& ty);
 		ComplexDrawer();
 		virtual ~ComplexDrawer();
@@ -74,6 +76,7 @@ class _export ComplexDrawer : public NewDrawer {
 		void setInfoMode(void *v,LayerTreeView *tv);
 	private:
 		void init();
+		bool threeD;
 	} ;
 
 	class _export DisplayOptionsForm : public FormBaseDialog {
