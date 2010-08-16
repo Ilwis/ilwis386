@@ -20,6 +20,7 @@ class LineDrawer : public SimpleDrawer {
 		void prepare(PreparationParameters *);
 		void setDrawColor(const Color& col);
 		void setThickness(float t);
+
 	protected:
 		HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent);
 		LineDrawer(DrawerParameters *parms, const String& name);

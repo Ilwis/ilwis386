@@ -47,7 +47,8 @@ bool LineDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 	glClearColor(1.0,1.0,1.0,0.0);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
-	glDisable(GL_DEPTH_TEST);
+	bool is3D = getDrawerContext()->is3D();
+	double fakeZ = getDrawerContext()->getFakeZ();
 
 	glColor4f(drawColor.redP(),drawColor.greenP(), drawColor.blueP(), getTransparency());
 	glLineWidth(thickness);
@@ -58,7 +59,7 @@ bool LineDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 
 		for(int i=0; i<points->size(); ++i) {
 			Coordinate c = points->getAt(i);
-			c.z = 0;
+			c.z = is3D ? fakeZ : 0;
 			glVertex3d( c.x, c.y, c.z);	
 		}
 		glEnd();
@@ -78,4 +79,6 @@ void LineDrawer::setDrawColor(const Color& col) {
 void LineDrawer::setThickness(float t) {
 	thickness = t;
 }
+
+
 
