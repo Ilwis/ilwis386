@@ -68,6 +68,9 @@ public:
 	byte red()   const { return rgb.r; }
 	byte green() const { return rgb.g; }
 	byte blue()  const { return rgb.b; }
+	double redP()   const { return (double)rgb.r / 255.0; }
+	double greenP() const { return (double)rgb.g / 255.0; }
+	double blueP()  const { return (double)rgb.b / 255.0; }
 	byte yellow()   const { return 255-rgb.b; }
 	byte magenta() const { return 255-rgb.g; }
 	byte cyan()  const { return 255-rgb.r; }
