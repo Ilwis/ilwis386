@@ -208,7 +208,27 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			>
 			<File
+				RelativePath="..\..\Sources\Drawers\AnimationDrawer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\CanvasBackgroundDrawer.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Drawers\Drawers.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\DrawingColor.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\FeatureLayerDrawer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\FeatureSetDrawer.cpp"
 				>
 			</File>
 			<File
@@ -259,11 +279,43 @@
 				RelativePath="..\..\Sources\Drawers\PolygonSetDrawer.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\RasterLayerDrawer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\RasterSetDrawer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\SetDrawer.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			>
+			<File
+				RelativePath="..\..\Sources\Drawers\AnimationDrawer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\CanvasBackgroundDrawer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\DrawingColor.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\FeatureLayerDrawer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\FeatureSetDrawer.h"
+				>
+			</File>
 			<File
 				RelativePath="..\..\Sources\Drawers\gpc.h"
 				>
@@ -302,6 +354,18 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Drawers\PolygonSetDrawer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\RasterLayerDrawer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\RasterSetDrawer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\SetDrawer.h"
 				>
 			</File>
 		</Filter>
