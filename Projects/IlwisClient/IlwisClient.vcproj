@@ -2479,6 +2479,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SVGOpenGLRenderer.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SVGOpenGLRenderer.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Sources\Client\Mapwindow\ZoomableView.cpp"
 					>
 				</File>
@@ -2514,14 +2522,6 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\CanvasBackgroundDrawer.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\CanvasBackgroundDrawer.h"
-						>
-					</File>
-					<File
 						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\ComplexDrawer.cpp"
 						>
 					</File>
@@ -2543,26 +2543,6 @@
 					</File>
 					<File
 						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\DrawerContext.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\DrawingColor.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\FeatureLayerDrawer.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\FeatureLayerDrawer.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\FeatureSetDrawer.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\FeatureSetDrawer.h"
 						>
 					</File>
 					<File
@@ -2634,14 +2614,6 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SetDrawer.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SetDrawer.h"
-						>
-					</File>
-					<File
 						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SimpleDrawer.cpp"
 						>
 					</File>
@@ -2663,6 +2635,14 @@
 					</File>
 					<File
 						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\WMSMapDrawer.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\ZValueMaker.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\ZValueMaker.h"
 						>
 					</File>
 					<Filter
@@ -2699,10 +2679,6 @@
 						</File>
 						<File
 							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\Drawer.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\DrawingColor.h"
 							>
 						</File>
 						<File
@@ -5497,6 +5473,10 @@
 		</File>
 		<File
 			RelativePath="..\..\Sources\Client\Resources\singlecolor.ico"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\ThreeD.ico"
 			>
 		</File>
 		<File
