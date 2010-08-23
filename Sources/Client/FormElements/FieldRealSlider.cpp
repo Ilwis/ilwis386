@@ -82,6 +82,7 @@ void FieldRealSlider::create()
 	slc->Create(m_dwStyle,	CRect(pntFld, dimFld), _frm->wnd(), Id());
 	slc->SetRange(rLo, rHi);
 	slc->SetPos(_rVal);
+	slc->setContinuous(continuous);
 
   CreateChildren();
 }
@@ -151,17 +152,25 @@ FormEntry* FieldRealSlider::CheckData()
 }
 
 //---------------------------------------------------
-FieldRealSliderEx::FieldRealSliderEx(FormEntry * parent, const String& question, double *val, const ValueRange& valrange, bool horiz) : 
+FieldRealSliderEx::FieldRealSliderEx(FormEntry * parent, const String& question, double *val, const ValueRange& valrange, bool txt) : 
 	FormEntry(parent,0,true),
 	edit(0),
 	slider(0),
 	initial(true),
-	setRace(-1)
+	setRace(-1),
+	continuous(0),
+	rangeText(txt)
 {
-	edit = new FieldReal(this,question,val,valrange);
-	slider = new FieldRealSlider(this,val,valrange,horiz ? TBS_HORZ : TBS_VERT);
+	FieldGroup *fg = new FieldGroup(parent);
+	edit = new FieldReal(fg,question,val,valrange);
+	slider = new FieldRealSlider(fg,val,valrange,TBS_HORZ);
 	slider->Align(edit,AL_AFTER);
-	FieldBlank *fb = new FieldBlank(this,0.0);
+	if ( rangeText) {
+		StaticText *st = new StaticText(fg,String("(%S)",valrange->sRange()));
+		st->Align(slider, AL_AFTER);
+	}
+		
+	FieldBlank *fb = new FieldBlank(fg,0.0);
 	fb->Align(edit, AL_UNDER);
 	
 
@@ -183,6 +192,12 @@ void FieldRealSliderEx::show(int sw){
 	if ( slider)
 		slider->show(sw);
 }
+
+void FieldRealSliderEx::setContinuousMode(int m) {
+	continuous = m;
+}
+
+
 void FieldRealSliderEx::SetVal(double rVal){
 	edit->SetVal(rVal);
 	slider->SetVal(rVal);

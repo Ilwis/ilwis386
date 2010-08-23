@@ -112,9 +112,9 @@ public:
 	Drawer* drAppend(const FileName&);
 	Drawer* drAppend(const Map&);
 	Drawer* drAppend(const MapList&);
-	Drawer* drAppend(const SegmentMap&);
-	Drawer* drAppend(const PolygonMap&);
-	Drawer* drAppend(const PointMap&);
+	Drawer* drAppend(const BaseMap&);
+	//Drawer* drAppend(const PolygonMap&);
+	//Drawer* drAppend(const PointMap&);
 	Drawer* drAppend(const AnnotationText&);
 //	Drawer* drAppend(HENHMETAFILE);
 //	Drawer* drAppend(HBITMAP);

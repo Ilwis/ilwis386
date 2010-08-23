@@ -124,11 +124,13 @@ DrawerLayerTreeItem::~DrawerLayerTreeItem()
 
 void DrawerLayerTreeItem::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
-	//if ((dr)->Configure()) 
+	//HTREEITEM hItem = htiStart;
+	//HTREEITEM hStop= ltv->GetTreeCtrl().GetNextItem(hItem, TVGN_CHILD);
+
+	//while (hItem != NULL && hItem != hStop)
 	//{
-	//	MapCompositionDoc* doc = ltv->GetDocument();
-	//	doc->ChangeState();
-	//	doc->UpdateAllViews(0,2);
+	//	ltv->GetTreeCtrl().Expand(hItem,TVE_EXPAND);
+	//	hItem= ltv->GetTreeCtrl().GetNextItem(hItem, TVGN_NEXTVISIBLE);
 	//}
 }
 
@@ -447,7 +449,7 @@ void LegendClassLayerTreeItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 				CPen penNull(PS_NULL,0,Color(0,0,0));
 				CPen penBlack(PS_SOLID,1,clrText);
 				CBrush brWhite(clrBack);
-				CPen* penOld = cdc.SelectObject(&penNull);
+				CPen* penOld = cdc.SelectObject(&penBlack);
 				CBrush* brOld = cdc.SelectObject(&brWhite);
 				cdc.Rectangle(rect);
 				cdc.SelectObject(penOld);
@@ -670,17 +672,22 @@ void DisplayOptionColorItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult){
 			CBrush* brOld = cdc.SelectObject(&brWhite);
 			cdc.Rectangle(rect);
 			cdc.SelectObject(penOld);
-			penOld = cdc.SelectObject(&penBlack);
+			penOld = cdc.SelectObject(&penNull);
+			CBrush brushColor(color);
+			cdc.SelectObject(&brushColor);
 			rect.top += 1;
 			rect.bottom -= 1;
-			int iHeight = rect.Height();
+			int iHeight = rect.Height() ;
 			int iWidth = 1.5 * iHeight;
-			rect.right = rect.left + iWidth;
-			//dr->DrawValueLegendRect(&cdc, rect, rVal);
+			rect.right = rect.left + iWidth ;
+			CRect rctColor(rect);
+			rctColor.DeflateRect(iWidth * 0.8, iHeight * 0.7);
+
+			cdc.Rectangle(rctColor);
 			String sText = "Single Color";
 			
 			CPoint pt;
-			pt.x = rect.right + 2;
+			pt.x = rect.left + 1.5 * iHeight + 2;
 			pt.y = rect.top;
 			if (ltv->GetTreeCtrl().GetItemState(hti, TVIS_SELECTED)) {
 				cdc.SetTextColor(clrTextSel);
@@ -698,6 +705,14 @@ void DisplayOptionColorItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult){
 		}
 		return;
 	}
+}
+
+void DisplayOptionColorItem::setColor(Color c) {
+	color = c;
+	ltv->UpdateWindow();
+}
+
+SetChecks::~SetChecks() {
 }
 
 SetChecks::SetChecks(LayerTreeView *v, NewDrawer *dr,SetCheckFunc _f){

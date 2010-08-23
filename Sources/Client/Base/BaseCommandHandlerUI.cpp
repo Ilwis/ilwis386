@@ -134,8 +134,6 @@ void BaseCommandHandlerUI::addModules() {
 				IlwWinApp()->addDrawer(infos->at(i)->name, infos->at(i)->subtype,infos->at(i)->createFunc);
 			}
 			IlwWinApp()->addDrawer("SelectionRectangle","ilwis38", createSelectionRectangle);
-			IlwWinApp()->addDrawer("FeatureLayerDrawer","ilwis38", createFeatureLayerDrawer);
-			IlwWinApp()->addDrawer("CanvasBackgroundDrawer","ilwis38", createCanvasBackgroundDrawer);
 			IlwWinApp()->addDrawer("MouseClickInfoDrawer","ilwis38",createMouseClickInfoDrawer);
 		}
 		++index;

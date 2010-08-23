@@ -34,6 +34,7 @@ namespace ILWIS {
 		double getTransparency() const { return parentDrawer->getTransparency();}
 		void setTransparency(double value) {};
 		virtual NewDrawer *getRootDrawer() const { return (NewDrawer *)rootDrawer; }
+		virtual HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent) { return parent;}
 
 		CCriticalSection cs;
 	protected:

@@ -6,9 +6,15 @@ typedef map<String, ILWIS::NewDrawer *> DrawerMap;
 typedef DrawerMap::iterator DrawerIter;
 typedef DrawerMap::const_iterator DrawerIter_C;
 
+class FieldIntSliderEx;
+
 namespace ILWIS {
 
+class ZValueMaker;
+
 class _export ComplexDrawer : public NewDrawer {
+		friend class TransparencyForm;
+
 	public:
 		String getType() const;
 		DrawerContext *getDrawerContext();
@@ -45,8 +51,9 @@ class _export ComplexDrawer : public NewDrawer {
 		virtual int getUICode() const;
 		virtual void setUICode(int c);
 		virtual NewDrawer *getRootDrawer() const;
-		virtual HTREEITEM set3D(bool yeno, LayerTreeView  *tvm, HTREEITEM parent=0,SetCheckFunc f=0);
+		virtual HTREEITEM set3D(bool yeno, LayerTreeView  *tvm);
 		bool is3D() const;
+		ZValueMaker *getZMaker();
 
 		CCriticalSection cs;
 	protected:
@@ -66,17 +73,20 @@ class _export ComplexDrawer : public NewDrawer {
 		String name;
 		bool active;
 		bool editable;
+		ZValueMaker *zmaker;
+		bool threeD;
+		HTREEITEM itemTransparent;
 		
 		ComplexDrawer(DrawerParameters *context, const String& ty);
 		ComplexDrawer();
 		virtual ~ComplexDrawer();
-		HTREEITEM InsertItem(const String& name,const String& icon, DisplayOptionTreeItem *item=0, int checkstatus = -1);
-		HTREEITEM InsertItem(LayerTreeView  *tv,HTREEITEM parent, const String& name,const String& icon);
+		HTREEITEM InsertItem(const String& name,const String& icon, DisplayOptionTreeItem *item=0, int checkstatus = -1, HTREEITEM after=TVI_LAST);
+		HTREEITEM InsertItem(LayerTreeView  *tv,HTREEITEM parent, const String& name,const String& icon, HTREEITEM after=TVI_LAST);
 		HTREEITEM findTreeItemByName(LayerTreeView  *tv, HTREEITEM parent, const String& name) const;
+		void displayOptionTransparency(CWnd *parent) ;
 		void setInfoMode(void *v,LayerTreeView *tv);
 	private:
 		void init();
-		bool threeD;
 	} ;
 
 	class _export DisplayOptionsForm : public FormBaseDialog {
@@ -89,5 +99,16 @@ class _export ComplexDrawer : public NewDrawer {
 		void updateMapView();
 		ComplexDrawer *drw;
 		LayerTreeView *view;
+	};
+
+	class TransparencyForm : public DisplayOptionsForm {
+		public:
+		TransparencyForm(CWnd *wPar, ComplexDrawer *dr);
+		void apply(); 
+	private:
+		int setTransparency(Event *ev);
+
+		int transparency;
+		FieldIntSliderEx *slider;
 	};
 }

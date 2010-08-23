@@ -100,16 +100,16 @@ public:
 	HTREEITEM getAncestor(HTREEITEM current, int depth);
 	bool getItem(HTREEITEM hItem, UINT mask, TreeItem& item) const;
 	void collectStructure(HTREEITEM parent=0, const String& name="");
+	void DeleteAllItems(HTREEITEM hti);
 	//}}AFX_MSG
 protected:
 	void SwitchCheckBox(HTREEITEM hti);
 	void DeleteAllItems();
-	void DeleteAllItems(HTREEITEM hti);
 	void OnDestroy();
 //	void AddPropItems(HTREEITEM hti, int iImg, const IlwisObject& obj);
 	CImageList ilStates;
 private:
-	HTREEITEM addMapItem(ILWIS::AbstractMapDrawer *mapDrawer);
+	HTREEITEM addMapItem(ILWIS::AbstractMapDrawer *mapDrawer, HTREEITEM after);
 	void NextNode(HTREEITEM hItem, const String& name);
 	void resetState();
 	map<String, NodeInfo> nodes;

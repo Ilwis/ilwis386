@@ -11,7 +11,6 @@
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
-#include "Client\Mapwindow\Drawers\CanvasBackgroundDrawer.h"
 #include "RootDrawer.h"
 
 using namespace ILWIS;
@@ -23,6 +22,7 @@ RootDrawer::RootDrawer() {
 	addPreDrawer(1,IlwWinApp()->getDrawer("CanvasBackgroundDrawer", &pp, &dp));
 	addPostDrawer(900,IlwWinApp()->getDrawer("MouseClickInfoDrawer", &pp, &dp));
 	addPostDrawer(800,IlwWinApp()->getDrawer("GridDrawer", &pp, &dp));
+	setTransparency(rUNDEF);
 }
 
 RootDrawer::~RootDrawer() {
@@ -34,7 +34,8 @@ void  RootDrawer::prepare(PreparationParameters *pp){
 	bool v2 = pp->type & RootDrawer::ptALL;
 	if ( pp->dc && (  v1 || v2 )) {
 		if ( getDrawerContext()->initOpenGL(pp->dc)) {
-			DrawerParameters dp(getDrawerContext(), this);
+			//DrawerParameters dp(getDrawerContext(), this);
+			pp->type |= NewDrawer::ptGEOMETRY;
 			ComplexDrawer::prepare(pp);
 		}
 	}
@@ -78,7 +79,7 @@ bool RootDrawer::draw(bool norecursion, const CoordBounds& cb) const{
 		Coord cEye = getDrawerContext()->getEyePoint();
 		gluLookAt(cEye.x, cEye.y, cEye.z,
 			      cView.x, cView.y, cView.z, 
-				  0.0, 0.0, 1.0 );
+				  0, 0, 1.0 );
 	}
 
 	return ComplexDrawer::draw(norecursion, cb);
@@ -89,13 +90,9 @@ void RootDrawer::addDataSource(void *) {
 }
 
 HTREEITEM RootDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
-	CTreeCtrl& tc = tv->GetTreeCtrl();
-	int iImg = IlwWinApp()->iImage("3D");
-	HTREEITEM hti = tc.InsertItem("3D",iImg,iImg,TVI_ROOT,TVI_FIRST);
-	tc.SetItemData(hti, (DWORD_PTR)new DisplayOptionTreeItem(tv,hti,this,
-		(SetCheckFunc)&RootDrawer::SetthreeD));	
-	tc.SetCheck(hti, getDrawerContext()->is3D());
-	return parent;
+	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,parent,this,
+		(SetCheckFunc)&RootDrawer::SetthreeD);	
+	return InsertItem("3D","3D",item,getDrawerContext()->is3D(),TVI_FIRST);
 }
 
 void RootDrawer::SetthreeD(void *v, LayerTreeView *tv) {

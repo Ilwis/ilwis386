@@ -52,6 +52,7 @@
 
 #include "Client\Mapwindow\Drawers\SelectionRectangle.h"
 
+
 /////////////////////////////////////////////////////////////////////////////
 // AreaSelector command target
 

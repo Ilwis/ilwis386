@@ -60,7 +60,7 @@ class WMSMapDrawer;
 /////////////////////////////////////////////////////////////////////////////
 // ZoomableView view
 
-#include "Client\Mapwindow\Drawers\SelectionRectangle.h"
+//#include "Client\Mapwindow\Drawers\SelectionRectangle.h"
 
 class IMPEXP ZoomableView : public CView
 {
@@ -139,6 +139,7 @@ public:
 	//}}AFX_MSG
 	void ZoomInPnt(zPoint);
 	void ZoomOutPnt(zPoint);
+	void moveEyePoint(const CPoint& pnt, UINT message); 
 	void PanMove(CPoint pt);
 	bool wms(CRect rect, Case c=cNone);
 	void wmsDrawerState(WMSMapDrawer *drw, CRect rect, Case c);
@@ -156,6 +157,7 @@ public:
 	bool fAdjustSize;
 	int iActiveTool;
 	bool fScrollBarsVisible;
+	CPoint beginMovePoint;
 
 	long xOld,yOld;
 	double zoomf;

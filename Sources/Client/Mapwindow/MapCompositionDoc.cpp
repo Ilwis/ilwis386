@@ -1421,17 +1421,9 @@ Drawer* MapCompositionDoc::drAppend(const FileName& fn)
   }    
 	Drawer* dr = 0;
 	// add layer
-	if (".mps" == fn.sExt) {
-		SegmentMap sm(fn);
-		dr = drAppend(sm);
-	}
-	else if (".mpa" == fn.sExt) {
-		PolygonMap pm(fn);
-		dr = drAppend(pm);
-	}
-	else if (".mpp" == fn.sExt) {
-		PointMap pm(fn);
-		dr = drAppend(pm);
+	if (".mps" == fn.sExt || ".mpa" == fn.sExt || ".mpp" == fn.sExt) {
+		BaseMap bm(fn);
+		dr = drAppend(bm);
 	}
 	else if (".mpr" == fn.sExt) {
 		Map mp(fn);
@@ -1686,7 +1678,7 @@ Drawer* MapCompositionDoc::drAppend(const MapList& maplist)
 }
 
 
-Drawer* MapCompositionDoc::drAppend(const SegmentMap& mp)
+Drawer* MapCompositionDoc::drAppend(const BaseMap& mp)
 {
 	if (fCoordSystemOk(mp)) {
 		if (!mp->fCalculated())
@@ -1706,63 +1698,11 @@ Drawer* MapCompositionDoc::drAppend(const SegmentMap& mp)
 		ILWIS::PreparationParameters pp(RootDrawer::ptALL);
 		drawer->prepare(&pp);
 		rootDrawer->addDrawer(drawer);
-		NewDrawer *grid = rootDrawer->getDrawer("GridDrawer");
-		if ( grid)
-			grid->prepare(0);
 		ChangeState();
 		UpdateAllViews(0);
 		mpvGetView()->Invalidate();
 	}    
 	return 0;
-}
-
-Drawer* MapCompositionDoc::drAppend(const PolygonMap& mp)
-{
-  if (fCoordSystemOk(mp)) {
-    if (!mp->fCalculated())
-		{
-			int iPrior = AfxGetThread()->GetThreadPriority();
-			AfxGetThread()->SetThreadPriority(THREAD_PRIORITY_LOWEST);
-
-      mp->Calc();
-	
-			AfxGetThread()->SetThreadPriority(iPrior);
-		}
-    if (!mp->fCalculated())
-      return 0;
-		PolygonMapDrawer* dr = new PolygonMapDrawer(this, mp);
-	  dl.push_back(dr);
-		ChangeState();
-//    if (sSegName.length() == 0)
-//      sSegName = map->sName(true);
-    return dr;
-  }    
-  return 0;
-}
-
-Drawer* MapCompositionDoc::drAppend(const PointMap& mp)
-{
-  if (fCoordSystemOk(mp)) {
-    if (!mp->fCalculated())
-		{
-	    int iPrior = AfxGetThread()->GetThreadPriority();
-	    AfxGetThread()->SetThreadPriority(THREAD_PRIORITY_LOWEST);
-
-      mp->Calc();
-
-			AfxGetThread()->SetThreadPriority(iPrior);
-		}
-    if (!mp->fCalculated())
-      return 0;
-
-	
-	 // dl.push_back(dr);
-		ChangeState();
-//    if (sSegName.length() == 0)
-//      sSegName = map->sName(true);
-    return NULL;
-  }    
-  return 0;
 }
 
 /*

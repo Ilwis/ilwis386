@@ -52,7 +52,6 @@ Created on: 2007-02-8
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
-#include "Client\Mapwindow\Drawers\TextDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\Positioner.h"
 #include "Client\Mapwindow\Drawers\BaseDrawer.h"
@@ -156,6 +155,7 @@ void LayerTreeView::DeleteAllItems(HTREEITEM hti)
 	LayerTreeItem* lti = (LayerTreeItem*)tc.GetItemData(hti);
 	if (lti)
 		delete lti;
+	collectStructure();
 }
 
 void LayerTreeView::NextNode(HTREEITEM hItem, const String& name) {
@@ -192,7 +192,7 @@ void LayerTreeView::collectStructure(HTREEITEM parent, const String& name) {
 	}
 }
 
-HTREEITEM LayerTreeView::addMapItem(ILWIS::AbstractMapDrawer *mapDrawer) {
+HTREEITEM LayerTreeView::addMapItem(ILWIS::AbstractMapDrawer *mapDrawer, HTREEITEM after) {
 	CTreeCtrl& tc = GetTreeCtrl();
 	BaseMap bmp = mapDrawer->getBaseMap();
 	int iImg = IlwWinApp()->iImage( bmp->fnObj.sExt);
@@ -201,7 +201,7 @@ HTREEITEM LayerTreeView::addMapItem(ILWIS::AbstractMapDrawer *mapDrawer) {
 	if ("" != sDescr) 
 		sName = String("%S - %S", sName, sDescr);
 
-	HTREEITEM htiMap = tc.InsertItem(sName.scVal(),iImg,iImg,TVI_ROOT,TVI_FIRST);
+	HTREEITEM htiMap = tc.InsertItem(sName.scVal(),iImg,iImg,TVI_ROOT,after);
 	tc.SetItemData(htiMap, (DWORD_PTR)new DrawerLayerTreeItem(this, mapDrawer));		
 	tc.SetCheck(htiMap, mapDrawer->isActive());
 
@@ -293,7 +293,7 @@ void LayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 	MapCompositionDoc* mcd = GetDocument();
 
 	vector<NewDrawer *> allDrawers;
-	mcd->rootDrawer->configure(this,0);
+	HTREEITEM threeDNode = mcd->rootDrawer->configure(this,0);
 
 	mcd->rootDrawer->getDrawers(allDrawers);
 
@@ -304,7 +304,7 @@ void LayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 		HTREEITEM item = 0;
 		AbstractMapDrawer *mapDrawer = dynamic_cast<AbstractMapDrawer *>(dr);
 		if (mapDrawer)
-			item = addMapItem(mapDrawer);
+			item = addMapItem(mapDrawer,threeDNode);
 			//MapListPtr* mpl = dynamic_cast<MapListPtr*>(obp);
 				//if (mpl) {
 				//	HTREEITEM htiGrf = htiProp;

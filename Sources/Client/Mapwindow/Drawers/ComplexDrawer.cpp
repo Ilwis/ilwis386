@@ -1,4 +1,6 @@
 #include "Client\Headers\formelementspch.h"
+#include "Client\FormElements\FieldIntSlider.h"
+#include "Client\FormElements\FieldRealSlider.h"
 #include "Client\Base\events.h"
 #include "Client\ilwis.h"
 #include "Engine\Spatialreference\gr.h"
@@ -6,12 +8,11 @@
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\Drawers\ComplexDrawer.h"
-#include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
-#include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h"
 #include "Client\Mapwindow\MapPaneView.h"
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
+#include "Client\Mapwindow\Drawers\ZValueMaker.h"
 
 using namespace ILWIS;
 
@@ -38,7 +39,9 @@ void ComplexDrawer::init() {
 	info = false;
 	transparency = 1.0;
 	parentDrawer = 0;
-	uiCode = NewDrawer::ucALL;;
+	uiCode = NewDrawer::ucALL;
+	zmaker = new ILWIS::ZValueMaker();
+	itemTransparent = 0;
 }
 
 String ComplexDrawer::getType() const {
@@ -46,6 +49,7 @@ String ComplexDrawer::getType() const {
 }
 
 ComplexDrawer::~ComplexDrawer() {
+	delete zmaker;
 	clear();
 }
 
@@ -122,8 +126,6 @@ String ComplexDrawer::getId() const{
 }
 
 void ComplexDrawer::prepare(PreparationParameters *parms){
-	if ( parentDrawer)
-		setTransparency(parentDrawer->getTransparency());
 	for(map<String,NewDrawer *>::iterator cur = preDrawers.begin(); cur != preDrawers.end(); ++cur) {
 		(*cur).second->prepare(parms);
 	}
@@ -247,7 +249,7 @@ void ComplexDrawer::setUICode(int code) {
 }
 
 void ComplexDrawer::setTransparency(double value){
-	if ( value >= 0.0 && value <= 1.0)
+	if ( (value >= 0.0 && value <= 1.0) || value == rUNDEF)
 		transparency = value;
 	else
 		throw ErrorObject(String("Wrong transparency value %d", value));
@@ -265,16 +267,49 @@ void ComplexDrawer::getDrawers(vector<NewDrawer *>& allDrawers) {
 		allDrawers.push_back((*cur).second);
 }
 
+void ComplexDrawer::setInfoMode(void *v,LayerTreeView *tv) {
+	bool value = *(bool *)v;
+	info = value;
+}
 
-HTREEITEM ComplexDrawer::InsertItem(LayerTreeView *tv, HTREEITEM parent,const String& name,const String& icon) {
+void ComplexDrawer::prepareChildDrawers(PreparationParameters *parms) {
+	for(int i = 0; i < drawers.size(); ++i) {
+		NewDrawer *pdrw = drawers.at(i);
+		PreparationParameters pp((int)parms->type, parms->dc);
+		pdrw->prepare(&pp);
+	}
+}
+
+HTREEITEM ComplexDrawer::set3D(bool yesno,LayerTreeView  *tv) {
+	threeD = yesno;
+	HTREEITEM hti = 0;
+	for(int i = 0; i < drawers.size(); ++i) {
+		ComplexDrawer *pdrw = dynamic_cast<ComplexDrawer *>(drawers.at(i));
+		if ( pdrw) {
+			pdrw->getZMaker()->setThreeDPossible(yesno);
+			pdrw->set3D(yesno, tv);
+		}
+	}
+	return hti;
+}
+bool ComplexDrawer::is3D() const {
+	return threeD;
+}
+
+ZValueMaker *ComplexDrawer::getZMaker() {
+	return zmaker;
+}
+
+//--------------------------------- UI ------------------------------------------------------------------------
+HTREEITEM ComplexDrawer::InsertItem(LayerTreeView *tv, HTREEITEM parent,const String& name,const String& icon, HTREEITEM after) {
 	int iImg = IlwWinApp()->iImage(icon);
-	HTREEITEM htiDisplayOptions = tv->GetTreeCtrl().InsertItem(name.scVal(), iImg, iImg, parent);
+	HTREEITEM htiDisplayOptions = tv->GetTreeCtrl().InsertItem(name.scVal(), iImg, iImg, parent,after);
 	return htiDisplayOptions; 
 }
 
-HTREEITEM ComplexDrawer::InsertItem(const String& name,const String& icon, DisplayOptionTreeItem *item, int checkstatus){
+HTREEITEM ComplexDrawer::InsertItem(const String& name,const String& icon, DisplayOptionTreeItem *item, int checkstatus, HTREEITEM after){
 	int iImg = IlwWinApp()->iImage(icon);
-	HTREEITEM htiDisplayOptions = item->getTreeView()->GetTreeCtrl().InsertItem(name.scVal(), iImg, iImg, item->getParent());
+	HTREEITEM htiDisplayOptions = item->getTreeView()->GetTreeCtrl().InsertItem(name.scVal(), iImg, iImg, item->getParent(), after);
 	item->setTreeItem(htiDisplayOptions);
 	if ( checkstatus >=0) {
 		item->getTreeView()->GetTreeCtrl().SetCheck(htiDisplayOptions, checkstatus );
@@ -303,40 +338,18 @@ HTREEITEM ComplexDrawer::findTreeItemByName(LayerTreeView  *tv, HTREEITEM parent
 }
 
 HTREEITEM ComplexDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
+	if ( transparency != rUNDEF) {
+		DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,parent,this,(DisplayOptionItemFunc)&ComplexDrawer::displayOptionTransparency);
+		String transp("Transparency (%d)", 100 * getTransparency());
+		itemTransparent = InsertItem(transp,"Transparent", item, -1);
+	}
 	return parent;
 }
 
-void ComplexDrawer::setInfoMode(void *v,LayerTreeView *tv) {
-	bool value = *(bool *)v;
-	info = value;
+void ComplexDrawer::displayOptionTransparency(CWnd *parent) {
+	new TransparencyForm(parent, this);
 }
 
-void ComplexDrawer::prepareChildDrawers(PreparationParameters *parms) {
-	for(int i = 0; i < drawers.size(); ++i) {
-		NewDrawer *pdrw = drawers.at(i);
-		PreparationParameters pp((int)parms->type, parms->dc);
-		pdrw->prepare(&pp);
-	}
-}
-
-HTREEITEM ComplexDrawer::set3D(bool yesno,LayerTreeView  *tv, HTREEITEM parent,SetCheckFunc f) {
-	threeD = yesno;
-	HTREEITEM hti = 0;
-	if ( parent != 0) {
-		DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,parent,this,f);
-		hti = InsertItem("3D","3D",item,threeD);
-	}
-	for(int i = 0; i < drawers.size(); ++i) {
-		ComplexDrawer *pdrw = dynamic_cast<ComplexDrawer *>(drawers.at(i));
-		if ( pdrw) {
-			pdrw->set3D(yesno, tv);
-		}
-	}
-	return hti;
-}
-bool ComplexDrawer::is3D() const {
-	return threeD;
-}
 
 //----------------------------------------------------------------------------
 
@@ -361,6 +374,37 @@ void DisplayOptionsForm::apply() {
 void DisplayOptionsForm::updateMapView() {
 	MapCompositionDoc* doc = view->GetDocument();
 	doc->mpvGetView()->Invalidate();
+}
+
+//--------------------------------
+TransparencyForm::TransparencyForm(CWnd *wPar, ComplexDrawer *dr) : 
+	DisplayOptionsForm(dr,wPar,"Transparency"),
+	transparency(100 *(1.0-dr->getTransparency()))
+{
+	slider = new FieldIntSliderEx(root,"Transparency(0-100)", &transparency,ValueRange(0,100),true);
+	slider->SetCallBack((NotifyProc)&TransparencyForm::setTransparency);
+	slider->setContinuous(true);
+	create();
+}
+
+int TransparencyForm::setTransparency(Event *ev) {
+	apply();
+	return 1;
+}
+
+void  TransparencyForm::apply() {
+	slider->StoreData();
+	drw->setTransparency(1.0 - (double)transparency/100.0);
+	PreparationParameters pp(NewDrawer::ptRENDER, 0);
+	drw->prepareChildDrawers(&pp);
+	String transp("Transparency (%d)",transparency);
+	TreeItem titem;
+	view->getItem(drw->itemTransparent,TVIF_TEXT | TVIF_HANDLE | TVIF_IMAGE | TVIF_PARAM | TVIS_SELECTED,titem);
+	
+	strcpy(titem.item.pszText,transp.scVal());
+	view->GetTreeCtrl().SetItem(&titem.item);
+	updateMapView();
+
 }
 
 

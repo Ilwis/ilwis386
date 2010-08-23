@@ -132,6 +132,7 @@ void ZoomableView::OnInitialUpdate()
 	si.nMax = 10;
 	si.nPage = 1;
 	si.nPos = 1;
+	beginMovePoint.x = iUNDEF;
 	if ( fScrollBarsVisible )
 	{
 	  SetScrollInfo(SB_VERT, &si);
@@ -169,38 +170,79 @@ DataWindow* ZoomableView::dwParent()
 	return dynamic_cast<DataWindow*>(fw);
 }
 
+
 BOOL ZoomableView::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 {
-	if (as) {
-		CPoint point((DWORD)lParam);
-		switch (message) {
-			case WM_MOUSEMOVE:
-				as->OnMouseMove(wParam, point);
-				return CView::OnWndMsg(message, wParam, lParam, pResult);
-				return FALSE;
-			case WM_LBUTTONDBLCLK:
-				as->OnLButtonDblClk(wParam, point);
-				return FALSE;
-			case WM_LBUTTONDOWN:
-				as->OnLButtonDown(wParam, point);
-				return FALSE;
-			case WM_LBUTTONUP:
-				as->OnLButtonUp(wParam, point);
-				return FALSE;
-			case WM_RBUTTONDBLCLK:
-				as->OnRButtonDblClk(wParam, point);
-				return FALSE;
-			case WM_RBUTTONDOWN:
-				as->OnRButtonDown(wParam, point);
-				return FALSE;
-			case WM_RBUTTONUP:
-				as->OnRButtonUp(wParam, point);
-				return FALSE;
-		}
+	CPoint point((DWORD)lParam);
+	switch (message) {
+		case WM_MOUSEMOVE:
+			if (as) as->OnMouseMove(wParam, point);
+			else if (wParam & MK_CONTROL) moveEyePoint(point, message);
+//			return CView::OnWndMsg(message, wParam, lParam, pResult);
+			return FALSE;
+		case WM_LBUTTONDBLCLK:
+			if (as) as->OnLButtonDblClk(wParam, point);
+			return FALSE;
+		case WM_LBUTTONDOWN:
+			if (as) as->OnLButtonDown(wParam, point);
+			else if (wParam & MK_CONTROL) moveEyePoint(point,message);
+			return FALSE;
+		case WM_LBUTTONUP:
+			if (as) as->OnLButtonUp(wParam, point);
+			else if (wParam & MK_CONTROL) moveEyePoint(point,message);
+			return FALSE;
+		case WM_RBUTTONDBLCLK:
+			if (as) as->OnRButtonDblClk(wParam, point);
+			return FALSE;
+		case WM_RBUTTONDOWN:
+			if (as) as->OnRButtonDown(wParam, point);
+			return FALSE;
+		case WM_RBUTTONUP:
+			if (as) as->OnRButtonUp(wParam, point);
+			return FALSE;
 	}
 	return CView::OnWndMsg(message, wParam, lParam, pResult);
 }
 
+void ZoomableView::moveEyePoint(const CPoint& pnt, UINT message) {
+	if ( message == WM_LBUTTONDOWN) {
+		beginMovePoint = pnt;
+	}
+	else if ( message == WM_LBUTTONUP){
+		beginMovePoint = CPoint(iUNDEF,iUNDEF);
+		MapCompositionDoc *doc = (MapCompositionDoc *)GetDocument();
+		DrawerContext *context = doc->rootDrawer->getDrawerContext();
+		Coord eyePoint = context->getEyePoint();
+	} else if (message == WM_MOUSEMOVE && beginMovePoint.x != iUNDEF) {
+		double deltax = beginMovePoint.x - pnt.x;
+		double deltay = beginMovePoint.y - pnt.y;
+		if ( deltax == 0 && deltay == 0)
+			return;
+		double xfract = deltax / 500.0;
+		double yfract = deltay / 500.0;
+
+		MapCompositionDoc *doc = (MapCompositionDoc *)GetDocument();
+		DrawerContext *context = doc->rootDrawer->getDrawerContext();
+		Coord eyePoint = context->getEyePoint();
+		Coord viewPoint = context->getViewPoint();
+		double deltaXEyeView = eyePoint.x - viewPoint.x;
+		double deltaYEyeView = eyePoint.y - viewPoint.y;
+		double deltaZEyeView = eyePoint.z - viewPoint.z;
+		double distance2 = deltaXEyeView * deltaXEyeView + deltaYEyeView * deltaYEyeView + deltaZEyeView * deltaZEyeView;
+		double x = eyePoint.x + context->getCoordBoundsZoom().width() * xfract;
+		double y = eyePoint.y + context->getCoordBoundsZoom().height() * yfract;
+		double dx = x - viewPoint.x;
+		double dy = y - viewPoint.y;
+		double r2 = distance2 - dx* dx - dy*dy;
+		double z = sqrt(r2 );
+		z = abs(viewPoint.z + z  - eyePoint.z) <  abs(viewPoint.z - z  - eyePoint.z) ? viewPoint.z + z : viewPoint.z - z;
+	
+		Coord newEye(x,y,z);
+		context->setEyePoint(newEye);
+		beginMovePoint = pnt;
+		doc->mpvGetView()->Invalidate();
+	}
+}
 
 MinMax ZoomableView::mmRect(zRect r)   // Windows coordinates -> internal RowCol
 {
@@ -436,7 +478,7 @@ BOOL ZoomableView::OnMouseWheel(UINT nFlags, short zDelta, CPoint point)
 	else
 		if (!fShift) {
 			ScreenToClient(&point);
-			if (zDelta > 0) 
+			if ( zDelta > 0)
 				ZoomInPnt(point);
 			else
 				ZoomOutPnt(point);
@@ -669,50 +711,36 @@ void ZoomableView::OnUpdateZoomOut(CCmdUI* pCmdUI)
 
 void ZoomableView::ZoomInPnt(zPoint p)
 {
-	//wms(p, cZoomIn);
 
-	iXpos += scale(long(p.x - dim.width() / 2));
-	iYpos += scale(long(p.y - dim.height() / 2));
-	if ( !wms(p, cZoomIn)) {
-		if (_rScale < 0) {
-			_rScale /= 2;
-			if (_rScale > -1.0)
-				_rScale = -1/_rScale;
-		}
-		else
-			_rScale *= 2;
-	}
-	CalcFalseOffsets();
-	CalcMax();
-	iXpos += scale(dim.width()) / 2;
-	iYpos += scale(dim.height()) / 2;
-	setScrollBars();
-	SetDirty();
-	bool fTooSmall = scale(dim.width()) < 5 || scale(dim.height()) < 5;
-	if (fTooSmall)
-		OnNoTool();
+	MapCompositionDoc *doc = (MapCompositionDoc *)GetDocument();
+	DrawerContext *context = doc->rootDrawer->getDrawerContext();
+	Coord eyePoint = context->getEyePoint();
+	Coord viewPoint = context->getViewPoint();
+	double deltaXEyeView = eyePoint.x - viewPoint.x;
+	double deltaYEyeView = eyePoint.y - viewPoint.y;
+	double deltaZEyeView = eyePoint.z - viewPoint.z;
+	Coord newEyePoint(eyePoint.x - deltaXEyeView/10.0,
+		eyePoint.y - deltaYEyeView/10.0,
+		eyePoint.z - deltaZEyeView/10.0);
+	context->setEyePoint(newEyePoint);
+	doc->mpvGetView()->Invalidate();
+
 }
 
 void ZoomableView::ZoomOutPnt(zPoint p)
 {
-	iXpos += scale(long(p.x - dim.width()));
-	iYpos += scale(long(p.y - dim.height()));
-	if (!wms(p, cZoomOut) ) {
-		if (_rScale > 0) {
-			_rScale /= 2;
-			if (_rScale < 1.0)
-				_rScale = -1/_rScale;
-		}
-		else
-			_rScale *= 2;
-	}
-	CalcFalseOffsets();
-	CalcMax();
-	setScrollBars();
-	SetDirty();
-	bool fTooSmall = scale(iXsize,true) < 5 || scale(iYsize,true) < 5;
-	if (fTooSmall)
-		OnNoTool();
+	MapCompositionDoc *doc = (MapCompositionDoc *)GetDocument();
+	DrawerContext *context = doc->rootDrawer->getDrawerContext();
+	Coord eyePoint = context->getEyePoint();
+	Coord viewPoint = context->getViewPoint();
+	double deltaXEyeView = eyePoint.x - viewPoint.x;
+	double deltaYEyeView = eyePoint.y - viewPoint.y;
+	double deltaZEyeView = eyePoint.z - viewPoint.z;
+	Coord newEyePoint(eyePoint.x + deltaXEyeView/10.0,
+		eyePoint.y + deltaYEyeView/10.0,
+		eyePoint.z + deltaZEyeView/10.0);
+	context->setEyePoint(newEyePoint);
+	doc->mpvGetView()->Invalidate();
 }
 
 void ZoomableView::OnUpdateZoomIn(CCmdUI* pCmdUI)

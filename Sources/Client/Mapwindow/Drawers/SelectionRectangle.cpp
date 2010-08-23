@@ -19,12 +19,15 @@ SelectionRectangle::~SelectionRectangle() {
 }
 
 bool SelectionRectangle::draw(bool norecursion , const CoordBounds& cb) const{
+	bool is3D = getDrawerContext()->is3D();
+	double fakeZ = getDrawerContext()->getFakeZ();
+	double z = is3D ? fakeZ : 0;
 	glBegin(GL_LINE_STRIP);
-	glVertex2d(c1.x, c1.y);
-	glVertex2d(c1.x, c2.y);
-	glVertex2d(c2.x, c2.y);
-	glVertex2d(c2.x, c1.y);
-	glVertex2d(c1.x, c1.y);
+	glVertex3d(c1.x, c1.y,z);
+	glVertex3d(c1.x, c2.y,z);
+	glVertex3d(c2.x, c2.y,z);
+	glVertex3d(c2.x, c1.y,z);
+	glVertex3d(c1.x, c1.y,z);
 	glEnd();
 
 	return true;

@@ -40,6 +40,8 @@ namespace ILWIS {
 
 	private:
 		void setProjection(const CoordBounds& cb);
+		void setEyePoint();
+		void modifyCBZoomView(double dv, double dz, double f);
 
 		CoordBounds cbView;
 		CoordBounds cbZoom;

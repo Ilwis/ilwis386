@@ -38,35 +38,34 @@ bool DrawerContext::initOpenGL(CDC *dc) {
 	return true;
 }
 
+void DrawerContext::modifyCBZoomView(double dv, double dz, double f) {
+	double deltaxv = dv * f;
+	double deltaxz = dz * f;
+	Coord cMiddle = cbZoom.middle();
+	cbView.cMin.x = cMiddle.x - deltaxv / 2.0;
+	cbView.cMax.x = cMiddle.x + deltaxv / 2.0;
+	cbZoom.cMin.x = cMiddle.x - deltaxz / 2.0;
+	cbZoom.cMax.x = cMiddle.x + deltaxz / 2.0;
+}
+
 void DrawerContext::setViewPort(const RowCol& rc) {
 	if (  aspectRatio  != 0 && pixArea.Col != iUNDEF) {
 		// this code adapts the cbZoom if the window size changes
 		if ( aspectRatio <= 1.0) { // y > x
 			if ( rc.Col != pixArea.Col){ // make sure the zoomsize is changed if the cols changes
-				double f = (double)rc.Col / pixArea.Col;
-				double w = cbZoom.width();
-				double deltax = w * f;
-				cbZoom.cMax.x = cbZoom.cMin.x + deltax;
+				modifyCBZoomView(cbView.width(), cbZoom.width(),(double)rc.Col / pixArea.Col); 
 			}
 			if ( rc.Row != pixArea.Row) { // make sure the zoomsize is changed if the cols change
-				double f = (double)rc.Row / pixArea.Row;
-				double w = cbZoom.width();
-				double deltax = w / f;
-				cbZoom.cMax.x = cbZoom.cMin.x + deltax;
+				modifyCBZoomView(cbView.width(), cbZoom.width(),(double)pixArea.Col / rc.Col); 
 			}
 	
 		} else { // x < y
 			if ( rc.Row != pixArea.Row){
-				double f = (double)rc.Row / pixArea.Row;
-				double h = cbZoom.height();
-				double deltay = h * f;
-				cbZoom.cMax.y = cbZoom.cMin.y + deltay;
+				modifyCBZoomView(cbView.height(), cbZoom.height(),pixArea.Col / (double)rc.Col ); 
+
 			}
 			if ( rc.Col != pixArea.Col) {
-				double f = (double)rc.Col / pixArea.Col;
-				double h = cbZoom.height();
-				double deltay = h / f;
-				cbZoom.cMax.y = cbZoom.cMin.y + deltay;
+				modifyCBZoomView(cbView.height(), cbZoom.height(),(double)rc.Col / pixArea.Col); 
 			}
 		}
 	}
@@ -121,6 +120,7 @@ void DrawerContext::setCoordBoundsView(const CoordBounds& _cb, bool overrule){
 		}
 		cbZoom = cbView;
 		setViewPoint(cbView.middle());
+		setEyePoint();
 		setProjection(cbView);
 	} else {
 		cbView += _cb;
@@ -133,7 +133,14 @@ void DrawerContext::setCoordBoundsView(const CoordBounds& _cb, bool overrule){
 void DrawerContext::setCoordBoundsZoom(const CoordBounds& cb) {
 	cbZoom = cb;
 	setViewPoint(cbZoom.middle());
+	setEyePoint();
 	setProjection(cb);
+}
+
+void DrawerContext::setEyePoint() {
+	eyePoint.x = viewPoint.x - cbZoom.width() ;
+	eyePoint.y = viewPoint.y - cbZoom.height();
+	eyePoint.z = cbZoom.width() * 2;
 }
 
 void DrawerContext::setCoordBoundsMap(const CoordBounds& cb) {
@@ -149,13 +156,24 @@ double DrawerContext::getAspectRatio() const {
 
 Coord DrawerContext::screenToWorld(const RowCol& rc) {
 
-	double fractX = (double)rc.Col / pixArea.Col;
-	double fractY = (double)rc.Row / pixArea.Row;
-	double x = cbZoom.MinX() + cbZoom.width() * fractX;
-	double y = cbZoom.MaxY() - cbZoom.height() * fractY;
+	GLint viewport[4];
+	double modelview[16];
+	double projection[16];
+	double winX, winY, winZ;
+	double posX, posY, posZ;
 
+	glGetDoublev( GL_MODELVIEW_MATRIX, modelview );
+	glGetDoublev( GL_PROJECTION_MATRIX, projection );
+	glGetIntegerv( GL_VIEWPORT, viewport );
 
-	return Coord(x,y);
+	winX = (double)rc.Col;
+	winY = (double)viewport[3] - (double)rc.Row;
+	glReadPixels( winX, int(winY), 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ );
+
+	gluUnProject( winX, winY, winZ, modelview, projection, viewport, &posX, &posY, &posZ);
+
+	return Coord(posX, posY, 0); 
+
 }
 
 RowCol DrawerContext::worldToScreen(const Coord& crd){
@@ -200,19 +218,17 @@ void DrawerContext::setProjection(const CoordBounds& cb) {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	if ( threeD) {
-		double zBase = max(cb.height(), cb.width());
-		gluPerspective(30, aspectRatio,zBase, 2.7 * zBase);
+		double zBase = max(abs(eyePoint.x - viewPoint.x), abs(eyePoint.y - eyePoint.y));
+		gluPerspective(40, aspectRatio,zBase/2.0, 4.0 * zBase);
 	} else {
-		glOrtho(cb.cMin.x,cb.cMax.x,cb.cMin.y,cb.cMax.y,-1,1.0);
+		glOrtho(cb.cMin.x,cb.cMax.x,cb.cMin.y,cb.cMax.y,-1,1);
 	}
 }
 
 void DrawerContext::set3D(bool yesno) {
 	if ( yesno != threeD) {
 		threeD = yesno;
-		eyePoint.x = viewPoint.x + cbZoom.width() ;
-		eyePoint.y = viewPoint.y + cbZoom.height();
-		eyePoint.z = cbZoom.width() * 2;
+		setEyePoint();
 		setProjection(cbZoom);
 
 	}
@@ -232,6 +248,7 @@ void DrawerContext::setViewPoint(const Coord& c){
 }
 void DrawerContext::setEyePoint(const Coord& c){
 	eyePoint = c;
+	setProjection(cbZoom);
 }
 Coord DrawerContext::getViewPoint() const{
 	return viewPoint;

@@ -5,14 +5,10 @@
 #include "Engine\Map\Raster\Map.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
-
 #include "Drawer_n.h"
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
-#include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
-#include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h"
-#include "Client\Mapwindow\Drawers\RootDrawer.h"
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
 
 using namespace ILWIS;

@@ -48,12 +48,16 @@ END_MESSAGE_MAP()
 
 OwnSliderCtrl::OwnSliderCtrl(FormEntry *f)
 : CSliderCtrl()
-, BaseZapp(f)
+, BaseZapp(f),
+continuous(false)
 {
 }
 
 void OwnSliderCtrl::HScroll(UINT nSBCode, UINT nPos)
 {
+	if (nSBCode == TB_THUMBTRACK && continuous) {
+		fProcess(NotificationEvent(GetDlgCtrlID(), TB_THUMBTRACK, (LPARAM)m_hWnd));
+	} 
 	if (nSBCode == TB_ENDTRACK)
 		fProcess(NotificationEvent(GetDlgCtrlID(), TB_ENDTRACK, (LPARAM)m_hWnd));
 }
@@ -62,6 +66,9 @@ void OwnSliderCtrl::VScroll(UINT nSBCode, UINT nPos)
 {
 	if (nSBCode == TB_ENDTRACK)
 		fProcess(NotificationEvent(GetDlgCtrlID(), TB_ENDTRACK, (LPARAM)m_hWnd));
+	if (nSBCode == TB_THUMBTRACK && continuous) {
+		fProcess(NotificationEvent(GetDlgCtrlID(), TB_THUMBTRACK, (LPARAM)m_hWnd));
+	} 
 }
 
 //------------------------------------------------------------
@@ -104,6 +111,7 @@ void FieldIntSlider::create()
 	slc->Create(m_dwStyle,	CRect(pntFld, dimFld), _frm->wnd(), Id());
 	slc->SetRange(iLo, iHi);
 	slc->SetPos(_iVal);
+	slc->setContinuous(continuous);
 
   CreateChildren();
 }
@@ -173,7 +181,7 @@ FormEntry* FieldIntSlider::CheckData()
 }
 
 //---------------------------------------------------
-FieldIntSliderEx::FieldIntSliderEx(FormEntry * parent, const String& question, int *val, const ValueRange& valrange, bool horiz) : 
+FieldIntSliderEx::FieldIntSliderEx(FormEntry * parent, const String& question, int *val, const ValueRange& valrange, bool rangeText) : 
 	FormEntry(parent,0,true),
 	edit(0),
 	slider(0),
@@ -182,10 +190,14 @@ FieldIntSliderEx::FieldIntSliderEx(FormEntry * parent, const String& question, i
 {
 	FieldGroup *fg = new FieldGroup(parent);
 	edit = new FieldInt(fg,question,val,valrange);
-	slider = new FieldIntSlider(fg,val,valrange,horiz ? TBS_HORZ : TBS_VERT);
+	slider = new FieldIntSlider(fg,val,valrange,TBS_HORZ);
 	fg->SetIndependentPos();
-	new FieldBlank(fg);
 	slider->Align(edit,AL_AFTER);
+	if ( rangeText) {
+		StaticText *st = new StaticText(fg,String("(%S)",valrange->sRange()));
+		st->Align(slider, AL_AFTER);
+	}
+	new FieldBlank(fg);
 
 }
 
@@ -241,6 +253,8 @@ int FieldIntSliderEx::SliderCallBackFunc(Event *ev) {
 	int val = slider->iVal();
 	edit->SetVal(val);
 	setRace = -1;
+	if ( _npChanged)
+		(_cb->*_npChanged)(ev);
 	return 1;
 }
 

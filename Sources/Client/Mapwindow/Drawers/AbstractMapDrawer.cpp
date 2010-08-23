@@ -135,6 +135,18 @@ void AbstractMapDrawer::setUseAttributeTable(bool yesno){
 	useAttTable = yesno;
 }
 
+void AbstractMapDrawer::setColumnCheckumn(void *w, LayerTreeView *view) {
+	bool yesno = *(bool *)w;
+	setUseAttributeTable(yesno);
+}
+
+
+void AbstractMapDrawer::setInfoMode(void *v,LayerTreeView *tv) {
+	bool value = *(bool *)v;
+	setInfo(value);
+}
+
+//------------------------------------UI--------------------------------
 
 HTREEITEM AbstractMapDrawer:: configure(LayerTreeView  *tv, HTREEITEM parent) {
 	HTREEITEM hti = AbstractObjectDrawer::configure(tv,parent);
@@ -159,17 +171,6 @@ HTREEITEM AbstractMapDrawer:: configure(LayerTreeView  *tv, HTREEITEM parent) {
 void AbstractMapDrawer::displayOptionAttColumn(CWnd *w) {
 	if (useAttributeTable())
 		new ChooseAttributeColumnForm(w, this);
-}
-
-void AbstractMapDrawer::setColumnCheckumn(void *w, LayerTreeView *view) {
-	bool yesno = *(bool *)w;
-	setUseAttributeTable(yesno);
-}
-
-
-void AbstractMapDrawer::setInfoMode(void *v,LayerTreeView *tv) {
-	bool value = *(bool *)v;
-	setInfo(value);
 }
 
 

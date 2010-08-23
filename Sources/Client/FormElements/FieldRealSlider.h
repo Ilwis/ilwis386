@@ -42,6 +42,7 @@
 
 
 #include "Client\FormElements\fentbase.h"
+class OwnSliderCtrl;
 
 class _export FieldRealSlider : public FormEntry  
 {
@@ -58,18 +59,20 @@ public:
 	void Disable();
 	void SetFocus();
 	FormEntry* CheckData();
+	void setContinuous(bool v) { continuous = v; }
 
 private:
 	double *_prVal;                // place holder for pointer to result
 	double _rVal;									// local copy with most recent value; StoreData writes this to _piVal
-	CSliderCtrl *slc;
+	OwnSliderCtrl *slc;
 	ValueRange vrr;
 	DWORD m_dwStyle;
+	bool continuous;
 };
 
 class _export FieldRealSliderEx : public FormEntry {
 public:
-	FieldRealSliderEx(FormEntry * parent, const String& question, double *val, const ValueRange& valrange, bool horiz);
+	FieldRealSliderEx(FormEntry * parent, const String& question, double *val, const ValueRange& valrang, bool txt);
 	virtual ~FieldRealSliderEx();
 	void create();             // overriden
 	void show(int sw);         // overriden
@@ -80,11 +83,15 @@ public:
 	void Disable();
 	void SetFocus();
 	FormEntry* CheckData();
+	void setContinuous(bool v) { if (slider) slider->setContinuous(v); }
 private:
 	int SliderCallBackFunc(Event *ev);
 	int EditCallBackFunc(Event *ev);
+	void setContinuousMode(int m);
 	FieldRealSlider *slider;
 	FieldReal *edit;
+	bool rangeText;
+	int continuous;
 	bool initial;
 	int setRace;
 

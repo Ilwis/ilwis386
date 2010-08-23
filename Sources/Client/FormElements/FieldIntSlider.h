@@ -53,7 +53,11 @@ public:
 	OwnSliderCtrl(FormEntry *f);
 	afx_msg void HScroll(UINT nSBCode, UINT nPos);
 	afx_msg void VScroll(UINT nSBCode, UINT nPos);
+	void setContinuous(bool v) { continuous = v; }
+
 	DECLARE_MESSAGE_MAP();
+private:
+	bool continuous;
 };
 
 class _export FieldIntSlider : public FormEntry  
@@ -71,13 +75,15 @@ public:
 	void Disable();
 	void SetFocus();
 	FormEntry* CheckData();
+	void setContinuous(bool v) { continuous = v; }
 
 private:
 	int *_piVal;                // place holder for pointer to result
 	int _iVal;									// local copy with most recent value; StoreData writes this to _piVal
-	CSliderCtrl *slc;
+	OwnSliderCtrl *slc;
 	ValueRange vri;
 	DWORD m_dwStyle;
+	bool continuous;
 };
 
 class _export FieldIntSliderEx : public FormEntry {
@@ -93,6 +99,7 @@ public:
 	void Disable();
 	void SetFocus();
 	FormEntry* CheckData();
+	void setContinuous(bool v) { if (slider) slider->setContinuous(v); }
 private:
 	int SliderCallBackFunc(Event *ev);
 	int EditCallBackFunc(Event *ev);
