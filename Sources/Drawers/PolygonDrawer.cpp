@@ -5,6 +5,8 @@
 #include "Client\Ilwis.h"
 #include "geos\algorithm\CGAlgorithms.h"
 #include "drawers\polygondrawer.h"
+#include "Client\Mapwindow\Drawers\ComplexDrawer.h"
+#include "Client\Mapwindow\Drawers\ZValueMaker.h"
 
 
 using namespace ILWIS;
@@ -34,18 +36,31 @@ bool PolygonDrawer::draw(bool norecursion, const CoordBounds& cbArea) const{
 	glClearColor(1.0,1.0,1.0,0.0);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
-	glDisable(GL_DEPTH_TEST);
 	glShadeModel(GL_FLAT);
+
+	ComplexDrawer *cdrw = (ComplexDrawer *)getParentDrawer();
+	bool is3D = getDrawerContext()->is3D() && cdrw->getZMaker()->getThreeDPossible();
+	double zscale = cdrw->getZMaker()->getZScale();
+	double zoffset = cdrw->getZMaker()->getOffset();
+
+	if ( is3D) {
+		glPushMatrix();
+		glScaled(1,1,zscale);
+		glTranslated(0,0,zoffset);
+	}
 
 	glColor4f(drawColor.redP(),drawColor.greenP(), drawColor.blueP(), getTransparency());
 	for(int i=0; i < triangleStrips.size(); ++i){
-	//glBegin(GL_LINE_STRIP);
-	glBegin(GL_TRIANGLE_STRIP);
+		glBegin(GL_TRIANGLE_STRIP);
 		for(int j=0; j < triangleStrips.at(i).size(); ++j) {
 			Coord c = triangleStrips.at(i).at(j);
-			glVertex3d(c.x,c.y,0);
+			double z = is3D ? c.z : 0;
+			glVertex3d(c.x,c.y,z);
 		}
-	glEnd();
+		glEnd();
+	}
+	if ( is3D) {
+		glPopMatrix();
 	}
 	return true;
 }

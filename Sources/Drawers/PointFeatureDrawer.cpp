@@ -11,12 +11,13 @@
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h"
-#include "Client\Mapwindow\Drawers\DrawingColor.h" 
-#include "Client\Mapwindow\Drawers\featurelayerdrawer.h"
-#include "Client\Mapwindow\Drawers\SetDrawer.h"
-#include "Client\Mapwindow\Drawers\FeatureSetDrawer.h"
+#include "Drawers\DrawingColor.h" 
+#include "Drawers\featurelayerdrawer.h"
+#include "Drawers\SetDrawer.h"
+#include "Drawers\FeatureSetDrawer.h"
 #include "drawers\pointdrawer.h"
 #include "drawers\PointFeatureDrawer.h"
+#include "Client\Mapwindow\Drawers\ZValueMaker.h"
 
 using namespace ILWIS;
 
@@ -42,7 +43,7 @@ bool PointFeatureDrawer::draw(bool norecursion, const CoordBounds& cbArea) const
 void PointFeatureDrawer::prepare(PreparationParameters *p){
 	PointDrawer::prepare(p);
 	FeatureSetDrawer *fdr = dynamic_cast<FeatureSetDrawer *>(parentDrawer);
-	if ( (p->type & ptALL) ||  (p->type & ptGEOMETRY)) {
+	if ( p->type & ptGEOMETRY) {
 	    CoordSystem csy = fdr->getCoordSystem();
 		ILWIS::Point *point = (ILWIS::Point *)feature;
 		FileName fn = drawcontext->getCoordinateSystem()->fnObj;
@@ -53,6 +54,11 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 			cNorm = csy->cConv(drawcontext->getCoordinateSystem(), Coord(*(point->getCoordinate())));
 		}
 		cb += cNorm;
+	}
+	if ( p->type & NewDrawer::pt3D) {
+		ZValueMaker *zmaker = ((ComplexDrawer *)parentDrawer)->getZMaker();
+		double zv = zmaker->getValue(cNorm,feature);
+		cNorm.z = zv;
 	}
 	if (  p->type == ptALL || p->type & ptRENDER) {
 		drawColor = fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod());

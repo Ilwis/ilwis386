@@ -15,12 +15,13 @@
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h"
-#include "Client\Mapwindow\Drawers\DrawingColor.h" 
-#include "Client\Mapwindow\Drawers\featurelayerdrawer.h"
-#include "Client\Mapwindow\Drawers\SetDrawer.h"
-#include "Client\Mapwindow\Drawers\FeatureSetDrawer.h"
+#include "Drawers\DrawingColor.h" 
+#include "Drawers\featurelayerdrawer.h"
+#include "Drawers\SetDrawer.h"
+#include "Drawers\FeatureSetDrawer.h"
 #include "drawers\linedrawer.h"
 #include "drawers\linefeaturedrawer.h"
+#include "Client\Mapwindow\Drawers\ZValueMaker.h"
 
 using namespace ILWIS;
 
@@ -67,13 +68,27 @@ void LineFeatureDrawer::prepare(PreparationParameters *p){
 				CoordinateSequence *seq = lines.at(j);
 		
 				for(int  i = 0; i < seq->size(); ++i) {
-					Coord c = csy->cConv(drawcontext->getCoordinateSystem(), Coord(seq->getAt(i)));
+					Coord cOld = seq->getAt(i);
+					Coord c = csy->cConv(drawcontext->getCoordinateSystem(), Coord(cOld));
+					c.z = cOld.z;
 					seq->setAt(c,i);
 				}
 			}
 		}
 	}
-	if (  p->type == ptALL || p->type & RootDrawer::ptRENDER) {
+	if ( p->type & NewDrawer::pt3D) {
+		ZValueMaker *zmaker = ((ComplexDrawer *)parentDrawer)->getZMaker();
+		for(int j = 0; j < lines.size(); ++j) {
+			CoordinateSequence *seq = lines.at(j);
+			for(int  i = 0; i < seq->size(); ++i) {
+				Coord c = seq->getAt(i);
+				double zv = zmaker->getValue(c,feature);
+				c.z = zv;
+				seq->setAt(c,i);
+			}
+		}
+	}
+	if (  p->type & RootDrawer::ptRENDER) {
 		drawColor = (fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod()));
 		double tr = fdr->getTransparency();
 		setTransparency(tr);

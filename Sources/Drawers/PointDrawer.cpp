@@ -4,8 +4,10 @@
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
 #include "Client\Ilwis.h"
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
-#include "Client\Mapwindow\Drawers\DrawingColor.h" 
+#include "Drawers\DrawingColor.h" 
 #include "drawers\pointdrawer.h"
+#include "Client\Mapwindow\Drawers\ComplexDrawer.h"
+#include "Client\Mapwindow\Drawers\ZValueMaker.h"
 
 using namespace ILWIS;
 
@@ -35,13 +37,24 @@ bool PointDrawer::draw(bool norecursion, const CoordBounds& cbArea) const {
 	glClearColor(1.0,1.0,1.0,0.0);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
-	glDisable(GL_DEPTH_TEST);
+
+	ComplexDrawer *cdrw = (ComplexDrawer *)getParentDrawer();
+	ZValueMaker *zmaker = cdrw->getZMaker();
+	bool is3D = getDrawerContext()->is3D() && zmaker->getThreeDPossible();
+	double zscale = zmaker->getZScale();
+	double zoffset = zmaker->getOffset();
 
 	double fx = cNorm.x;
 	double fy = cNorm.y;
-	double fz = 0;
+	double fz = is3D ? cNorm.z : 0;;
 
 	glColor4f(drawColor.redP(),drawColor.greenP(), drawColor.blueP(), getTransparency());
+
+	if ( is3D) {
+		glPushMatrix();
+		glScaled(1,1,zscale);
+		glTranslated(0,0,zoffset);
+	}
 	
 	double symbolScale = cbZoom.width() / 200;
 	glBegin(GL_QUADS);						
@@ -50,6 +63,10 @@ bool PointDrawer::draw(bool norecursion, const CoordBounds& cbArea) const {
 		glVertex3f( fx + symbolScale, fy + symbolScale,fz);
 		glVertex3f( fx + symbolScale, fy - symbolScale,fz);
 	glEnd();
+
+	if ( is3D) {
+		glPopMatrix();
+	}
 
 	return true;
 }

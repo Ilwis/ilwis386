@@ -7,9 +7,11 @@ class FieldColor;
 
 namespace ILWIS{
 
+class SetDrawer;
+
 class FeatureLayerDrawer : public AbstractMapDrawer {
 	public:
-		ILWIS::NewDrawer *createFeatureLayerDrawer(DrawerParameters *parms);
+//		ILWIS::NewDrawer *createFeatureLayerDrawer(DrawerParameters *parms);
 
 		FeatureLayerDrawer(DrawerParameters *parms);
 		virtual ~FeatureLayerDrawer();
@@ -19,23 +21,14 @@ class FeatureLayerDrawer : public AbstractMapDrawer {
 		void setSingleColor(const Color& c);
 		Color getSingleColor() const;
 		HTREEITEM  configure(LayerTreeView  *tv, HTREEITEM parent);
+		void getFeatures(vector<Feature *>& features) const;
 
 	protected:
-		HTREEITEM SetColors(LayerTreeView  *tv, HTREEITEM parent,const BaseMap& bm);
+		void addSetDrawer(const BaseMap& basemap, ILWIS::PreparationParameters *pp, ILWIS::SetDrawer *fsd, const String& name="");
+
 		String mask;
 		Color singleColor;
 
 	};
 
-	class SetSingleColorForm : public FormBaseDialog {
-		public:
-		SetSingleColorForm(CWnd *wPar, FeatureLayerDrawer *dr);
-		int exec();
-		afx_msg virtual void OnCancel(); 
-	private:
-		Color c;
-		FeatureLayerDrawer *drw;
-		FieldColor* fc;
-		LayerTreeView *view;
-	};
 }

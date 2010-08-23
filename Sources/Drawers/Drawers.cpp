@@ -9,9 +9,8 @@
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
 #include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
-#include "Client\Mapwindow\Drawers\SetDrawer.h"
-#include "Client\Mapwindow\Drawers\FeatureSetDrawer.h"
-#include "Client\Mapwindow\Drawers\FeaturePortrayal.h"
+#include "Drawers\SetDrawer.h"
+#include "Drawers\FeatureSetDrawer.h"
 #include "Drawers\PolygonSetDrawer.h"
 #include "Drawers\LineSetDrawer.h"
 #include "Drawers\PointSetDrawer.h"
@@ -22,6 +21,10 @@
 #include "Drawers\gpc.h"
 #include "drawers\polygondrawer.h"
 #include "drawers\polygonfeaturedrawer.h"
+#include "Drawers\FeatureLayerDrawer.h"
+#include "Drawers\CanvasBackgroundDrawer.h"
+#include "Drawers\RasterLayerDrawer.h"
+#include "Drawers\RasterSetDrawer.h"
 #include "Drawers\GridDrawer.h"
 
 using namespace ILWIS;
@@ -37,6 +40,10 @@ DrawerInfoVector *createDrawer() {
 	infos->push_back(new DrawerInfo("PolygonSetDrawer","ilwis38",createPolygonSetDrawer));
 	infos->push_back(new DrawerInfo("GridDrawer","ilwis38",createGridDrawer));
 	infos->push_back(new DrawerInfo("GridLine","ilwis38",createGridLine));
+	infos->push_back(new DrawerInfo("FeatureLayerDrawer","ilwis38", createFeatureLayerDrawer));
+	infos->push_back(new DrawerInfo("CanvasBackgroundDrawer","ilwis38", createCanvasBackgroundDrawer));
+	infos->push_back(new DrawerInfo("RasterLayerDrawer","ilwis38", createRasterLayerDrawer));
+	infos->push_back(new DrawerInfo("RasterSetDrawer","ilwis38", createRasterSetDrawer));
 
 	return infos;
 }

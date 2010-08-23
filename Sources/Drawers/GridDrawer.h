@@ -12,6 +12,7 @@ namespace ILWIS{
 	class GridDrawer : public ComplexDrawer {
 		friend class GridForm;
 		friend class GridLine;
+		friend class GridLineStyleForm;
 
 	public:
 		ILWIS::NewDrawer *createGridDrawer(DrawerParameters *parms);
@@ -21,16 +22,22 @@ namespace ILWIS{
 		HTREEITEM  configure(LayerTreeView  *tv, HTREEITEM parent);
 		bool draw(bool norecursion = false, const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *pp);
+		bool is3D() const { return threeD; }
 
 	protected:
 		void AddGridLine(Coord c1, Coord c2);
-		//void DrawCurvedLine(Coord c1, Coord c2);
+		void displayOptionSetLineStyle(CWnd *parent);
 		void gridOptions(CWnd *parent);
 		void gridActive(void *value, LayerTreeView *v);
+		void grid3D(void *v, LayerTreeView *tv);
+		void prepareGrid(double maxz, double zplanes, double rDist, const Coord& cMax, const Coord& cMin );
+		void prepareVerticals(double maxz, double rDist,const Coord& cMax, const Coord& cMin);
 
 		double          rDist;
 		Color           color;
-		LineDspType		ldt;
+		LineDspType linestyle;
+		double linethickness;
+		bool threeD;
 	};
 
 	class GridLine: public LineDrawer {
@@ -53,7 +60,16 @@ namespace ILWIS{
 		FieldReal *fr;
 		FieldColor *fc;
 		GridDrawer *gd;
-		int transparency;
-		FieldIntSliderEx *slider;
+	};
+
+	class GridLineStyleForm: public DisplayOptionsForm
+	{
+	public:
+		GridLineStyleForm(CWnd *par, GridDrawer *gdr);
+		void apply();
+	private:
+		FieldReal *fi;
+		FieldLineType *flt;
+		FieldColor *fc;
 	};
 }

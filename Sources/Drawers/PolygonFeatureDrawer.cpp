@@ -10,15 +10,16 @@
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
-#include "Client\Mapwindow\Drawers\featurelayerdrawer.h"
-#include "Client\Mapwindow\Drawers\SetDrawer.h"
-#include "Client\Mapwindow\Drawers\FeatureSetDrawer.h"
+#include "Drawers\featurelayerdrawer.h"
+#include "Drawers\SetDrawer.h"
+#include "Drawers\FeatureSetDrawer.h"
 #include "geos\algorithm\CGAlgorithms.h"
-#include "Client\Mapwindow\Drawers\DrawingColor.h" 
+#include "Drawers\DrawingColor.h" 
 #include "Drawers\gpc.h"
 #include "Drawers\gpc.c"
 #include "drawers\polygondrawer.h"
 #include "Drawers\PolygonFeatureDrawer.h"
+#include "Client\Mapwindow\Drawers\ZValueMaker.h"
 
 
 using namespace ILWIS;
@@ -49,7 +50,7 @@ void PolygonFeatureDrawer::addDataSource(void *f, int options) {
 void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 	PolygonDrawer::prepare(p);
 	FeatureSetDrawer *fdr = dynamic_cast<FeatureSetDrawer *>(parentDrawer);
-	if (  p->type & ptALL ||  p->type & ptGEOMETRY) {
+	if (  p->type & ptGEOMETRY) {
 		CoordSystem csy = fdr->getCoordSystem();
 		ILWIS::Polygon *polygon = (ILWIS::Polygon *)feature;
 		if ( !polygon)
@@ -73,6 +74,16 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 			delete [] holes[i].vertex	;
 		}
 		delete [] exteriorBoundary.vertex;
+	}
+	if ( p->type & NewDrawer::pt3D) {
+		ZValueMaker *zmaker = ((ComplexDrawer *)parentDrawer)->getZMaker();
+		for(int i = 0; i < triangleStrips.size(); ++i) {
+			for(int j = 0; j < triangleStrips.at(i).size(); ++j) {
+				Coord &c = triangleStrips.at(i).at(j);
+				double zv = zmaker->getValue(c,feature);
+				c.z = zv;
+			}
+		}
 	}
 	if (  p->type & ptALL || p->type & RootDrawer::ptRENDER) {
 		drawColor = fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod());

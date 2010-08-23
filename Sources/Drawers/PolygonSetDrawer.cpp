@@ -11,10 +11,10 @@
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
-#include "Client\Mapwindow\Drawers\SetDrawer.h"
-#include "Client\Mapwindow\Drawers\FeatureSetDrawer.h"
+#include "Drawers\SetDrawer.h"
+#include "Drawers\FeatureSetDrawer.h"
 #include "Drawers\PolygonSetDrawer.h"
-//#include "Client\Mapwindow\Drawers\PointMapDrawerForm.h"
+#include "Client\Mapwindow\Drawers\ZValueMaker.h"
 #include "Headers\Hs\Drwforms.hs"
 
 using namespace ILWIS;
@@ -33,6 +33,7 @@ PolygonSetDrawer::PolygonSetDrawer(DrawerParameters *parms) :
 	fsd->setName("Boundaries");
 	fsd->setSingleColor(Color(0,0,0));
 	fsd->setDrawMethod(NewDrawer::drmSINGLE);
+	fsd->getZMaker()->setSpatialSourceMap(((AbstractMapDrawer *)getParentDrawer())->getBaseMap());
 	fsd->prepare(&pp);
 	((ComplexDrawer *)getParentDrawer())->addPostDrawer(100,fsd);
 }
