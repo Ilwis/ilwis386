@@ -649,9 +649,9 @@ ILWIS::Segment *SegmentMapPtr::seg(const Coord& crd, double rPrx) const
 vector<String> SegmentMapPtr::vsValue(const Coord& crd, short iWidth, short, double rPrx) const
 {
   ILWISSingleLock sl(const_cast<CCriticalSection*>(&csAccess), TRUE, SOURCE_LOCATION);
-  ILWIS::Segment *sg = seg(crd, rPrx);
   vector<String> strings;
-  if (!sg->fValid())
+  ILWIS::Segment *sg = seg(crd, rPrx);
+  if (!sg || !sg->fValid())
     return strings;
   String s = sg->sValue(dvrs());
   strings.push_back(s)	;

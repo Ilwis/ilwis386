@@ -557,6 +557,8 @@ vector<String> PolygonMapPtr::vsValue(const Coord& crd, short iWidth, short iDec
 		values.push_back(sUNDEF);
 	  else if ( dvrs().fValues())
 		values.push_back(dvrs().sValue(p->rValue(), iWidth, iDec));
+	  else if ( dvrs().fRawAvailable())
+		  values.push_back(dvrs().sValueByRaw(p->iValue(), iWidth, iDec));
 	  else
 		values.push_back(dvrs().sValue(p->iValue(), iWidth, iDec));
   }

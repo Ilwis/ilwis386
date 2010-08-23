@@ -633,9 +633,12 @@ void BaseMapPtr::KeepOpen(bool f)
   fKeepOpen = f;
 }
 
-long BaseMapPtr::iRaw(const Coord&, double rPrx) const
+long BaseMapPtr::iRaw(const Coord& c, double rPrx) const
 {
-  return iUNDEF;
+	vector<long> values = viRaw(c,rPrx);
+	if ( values.size() > 0)
+		return values.at(0);
+	return iUNDEF;
 }
 
 vector<long> BaseMapPtr::viRaw(const Coord&, double rPrx) const

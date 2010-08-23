@@ -196,7 +196,7 @@ CoordBounds::CoordBounds(const CoordBuf& cBuf)
 }
 
 Coord CoordBounds::middle() const {
-	return Coord((cMax.x + cMin.x) / 2.0, (cMax.y + cMin.y) / 2.0);
+	return Coord((cMax.x + cMin.x) / 2.0, (cMax.y + cMin.y) / 2.0,(cMax.z + cMin.z) / 2.0);
 }
 
 CoordBounds& CoordBounds::operator *=(double fact) {
