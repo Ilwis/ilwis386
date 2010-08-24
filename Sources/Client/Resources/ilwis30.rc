@@ -251,6 +251,7 @@ SET                     ICON                    "set.ico"
 MAPPANE                 ICON                    "MapPane1.ico"
 LINESTYLE               ICON                    "linestyle.ico"
 3D                      ICON                    "ThreeD.ico"
+ANIMATION               ICON                    "animation.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
