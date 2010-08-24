@@ -179,7 +179,7 @@ MapCompositionDoc::MapCompositionDoc()
 	szPrefSize = CSize(0,0);
 	fRaster = false;
 	fGrid3DDrawer = false;
-	rootDrawer = new RootDrawer();
+	rootDrawer = new RootDrawer(this);
 }
 
 MapCompositionDoc::~MapCompositionDoc()
@@ -1315,15 +1315,30 @@ Drawer* MapCompositionDoc::drDrawer(const MapView& view, const char* sSection)
 class AddLayerForm: public FormWithDest
 {
 public:
-  AddLayerForm(CWnd* parent, String* sName)
-  : FormWithDest(parent, SMWTitleAddLayer)
+  AddLayerForm(CWnd* parent, String* sName, bool *asAnimation = 0)
+  : FormWithDest(parent, SMWTitleAddLayer), asAnim(asAnimation)
   {
     new FieldBlank(root);
-    new FieldDataTypeLarge(root, sName, ".mpr.mpl.mps.mpa.mpp.atx");
+    fdtl = new FieldDataTypeLarge(root, sName, ".mpr.mpl.mps.mpa.mpp.atx");
 //    new FieldSegmentMap(root, SDUiSegMap, sName);
+	if ( asAnimation != 0) {
+		CheckBox *cb = new CheckBox(root,SMWUiAnimationLayer,asAnimation);
+		cb->SetCallBack((NotifyProc)&AddLayerForm::changeFilter);
+	}
     SetMenHelpTopic(htpAddLayer);
     create();
   }
+private:
+	bool * asAnim;
+	FieldDataTypeLarge * fdtl;
+	int changeFilter(Event *ev) {
+		if ( *asAnim) {
+			fdtl->SetExt(".mpl.mpr.mps.mpa.ioc.mpp");
+		} else {
+			fdtl->SetExt(".mpr.mpl.mps.mpa.mpp.atx");
+		}
+		return 1;
+	}
 };
 
 class AddRasForm: public FormWithDest
@@ -1409,7 +1424,7 @@ bool MapCompositionDoc::fAppendable(const FileName& fn)
 	return fOk;
 }
 
-Drawer* MapCompositionDoc::drAppend(const FileName& fn)
+Drawer* MapCompositionDoc::drAppend(const FileName& fn, bool asAnimation)
 {
 	if (!fAppendable(fn))
   {
@@ -1423,15 +1438,15 @@ Drawer* MapCompositionDoc::drAppend(const FileName& fn)
 	// add layer
 	if (".mps" == fn.sExt || ".mpa" == fn.sExt || ".mpp" == fn.sExt) {
 		BaseMap bm(fn);
-		dr = drAppend(bm);
+		dr = drAppend(bm,asAnimation);
 	}
 	else if (".mpr" == fn.sExt) {
 		Map mp(fn);
-		dr = drAppend(mp);
+		dr = drAppend(mp,asAnimation);
 	}
 	else if (".mpl" == fn.sExt) {
 		MapList ml(fn);
-		dr = drAppend(ml);
+		dr = drAppend(ml,asAnimation);
 	}
 	else if (".atx" == fn.sExt) {
     AnnotationText atx(fn);
@@ -1453,20 +1468,21 @@ Drawer* MapCompositionDoc::drAppend(const FileName& fn)
 void MapCompositionDoc::OnAddLayer()
 {
 	String sName;
-	AddLayerForm frm(wndGetActiveView(), &sName);
+	bool asAnimation = false;
+	AddLayerForm frm(wndGetActiveView(), &sName, &asAnimation);
 	bool fOk = frm.fOkClicked();
 	if (fOk) {
 		FileName fn(sName);
-		Drawer* dr = drAppend(fn);
-		if (dr)	// could be null
-			if (!dr->Configure()) {
-				dl.remove(dr);
-			  delete dr;
-			}
-			else {
-				ChangeState();
-				UpdateAllViews(0,2);
-			}
+		drAppend(fn, asAnimation);
+		//if (dr)	// could be null
+		//	if (!dr->Configure()) {
+		//		dl.remove(dr);
+		//	  delete dr;
+		//	}
+		//	else {
+		//		ChangeState();
+		//		UpdateAllViews(0,2);
+		//	}
 	}
 }
 
@@ -1575,7 +1591,7 @@ void MapCompositionDoc::RemoveDrawer(Drawer* drw)
   delete drw;
 }
 
-Drawer* MapCompositionDoc::drAppend(const Map& rasmap)
+Drawer* MapCompositionDoc::drAppend(const Map& rasmap, bool asAnimation)
 {
   if (!fGeoRefOk(rasmap))
   {
@@ -1620,7 +1636,7 @@ Drawer* MapCompositionDoc::drAppend(const Map& rasmap)
 	return dr;
 }
 
-Drawer* MapCompositionDoc::drAppend(const MapList& maplist)
+Drawer* MapCompositionDoc::drAppend(const MapList& maplist, bool asAnimation)
 {
   class AppendMapListForm: public FormWithDest
   {
@@ -1678,7 +1694,7 @@ Drawer* MapCompositionDoc::drAppend(const MapList& maplist)
 }
 
 
-Drawer* MapCompositionDoc::drAppend(const BaseMap& mp)
+Drawer* MapCompositionDoc::drAppend(const BaseMap& mp, bool asAnimation)
 {
 	if (fCoordSystemOk(mp)) {
 		if (!mp->fCalculated())
@@ -1693,7 +1709,11 @@ Drawer* MapCompositionDoc::drAppend(const BaseMap& mp)
 			return 0;
 
 		ILWIS::DrawerParameters parms(rootDrawer->getDrawerContext(), rootDrawer);
-		ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer("FeatureLayerDrawer", "Ilwis38", &parms);
+		ILWIS::NewDrawer *drawer;
+		if ( asAnimation)
+			drawer = IlwWinApp()->getDrawer("AnimationDrawer", "Ilwis38", &parms);
+		else 
+			drawer = IlwWinApp()->getDrawer("FeatureLayerDrawer", "Ilwis38", &parms);
 		drawer->addDataSource((void *)&mp);
 		ILWIS::PreparationParameters pp(RootDrawer::ptALL);
 		drawer->prepare(&pp);

@@ -54,6 +54,9 @@ class _export ComplexDrawer : public NewDrawer {
 		virtual HTREEITEM set3D(bool yeno, LayerTreeView  *tvm);
 		bool is3D() const;
 		ZValueMaker *getZMaker();
+		virtual void timedEvent(UINT timerid);
+		virtual String description() const { return "?";}
+		virtual String iconName(const String& subtype="?") const { return "?";}
 
 		CCriticalSection cs;
 	protected:

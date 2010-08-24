@@ -123,6 +123,7 @@ protected:
 	afx_msg void OnCreateSampleSet();
 	afx_msg void OnCreateSubMap();
 	afx_msg void OnUpdateEntireMap(CCmdUI* pCmdUI);
+	afx_msg void OnTimer(UINT timerID);
 	void OnShowRecordView();
 	void OnUpdateShowRecordView(CCmdUI* pCmdUI);
 private:

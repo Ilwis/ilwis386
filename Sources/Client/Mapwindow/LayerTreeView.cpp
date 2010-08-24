@@ -195,12 +195,9 @@ void LayerTreeView::collectStructure(HTREEITEM parent, const String& name) {
 HTREEITEM LayerTreeView::addMapItem(ILWIS::AbstractMapDrawer *mapDrawer, HTREEITEM after) {
 	CTreeCtrl& tc = GetTreeCtrl();
 	BaseMap bmp = mapDrawer->getBaseMap();
-	int iImg = IlwWinApp()->iImage( bmp->fnObj.sExt);
-	String sName = mapDrawer->getName();
-	String sDescr = bmp->sDescr();
-	if ("" != sDescr) 
-		sName = String("%S - %S", sName, sDescr);
-
+	int iImg = IlwWinApp()->iImage(mapDrawer->iconName());
+	String sName = mapDrawer->description();
+	
 	HTREEITEM htiMap = tc.InsertItem(sName.scVal(),iImg,iImg,TVI_ROOT,after);
 	tc.SetItemData(htiMap, (DWORD_PTR)new DrawerLayerTreeItem(this, mapDrawer));		
 	tc.SetCheck(htiMap, mapDrawer->isActive());
@@ -297,11 +294,11 @@ void LayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 
 	mcd->rootDrawer->getDrawers(allDrawers);
 
+	HTREEITEM item = 0;
 	for(int index = 0; index < allDrawers.size(); ++index) 
 	{
 		ComplexDrawer* dr = (ComplexDrawer *)allDrawers.at(index);
 		ILWISSingleLock csl(&dr->cs, TRUE, SOURCE_LOCATION);
-		HTREEITEM item = 0;
 		AbstractMapDrawer *mapDrawer = dynamic_cast<AbstractMapDrawer *>(dr);
 		if (mapDrawer)
 			item = addMapItem(mapDrawer,threeDNode);

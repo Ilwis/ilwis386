@@ -158,6 +158,7 @@ BEGIN_MESSAGE_MAP(MapPaneView, SimpleMapPaneView)
 	ON_WM_MOUSEACTIVATE()
 	ON_COMMAND(ID_PASTE, OnPaste)
 	ON_COMMAND(ID_COPY, OnCopy)
+	ON_WM_TIMER()
   ON_UPDATE_COMMAND_UI(ID_PASTE, OnUpdatePaste)
 	ON_COMMAND(ID_CREATEPNTMAP, OnCreatePntMap)
 	ON_COMMAND(ID_CREATESEGMAP, OnCreateSegMap)
@@ -1306,4 +1307,10 @@ void MapPaneView::OnUpdateShowRecordView(CCmdUI* pCmdUI)
 {
   pCmdUI->Enable(0 != recBar && 0 != recBar->GetSafeHwnd());
 	pCmdUI->SetCheck(0 != recBar && 0 != recBar->GetSafeHwnd() && recBar->IsVisible());
+}
+
+void MapPaneView::OnTimer(UINT timerID) {
+	MapCompositionDoc *doc = GetDocument();
+	doc->rootDrawer->timedEvent(timerID);
+
 }

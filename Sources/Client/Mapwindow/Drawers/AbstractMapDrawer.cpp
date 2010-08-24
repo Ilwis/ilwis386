@@ -46,6 +46,18 @@ void AbstractMapDrawer::prepare(PreparationParameters *pp){
 	AbstractObjectDrawer::prepare(pp);
 }
 
+String AbstractMapDrawer::description() const {
+	String sName = getName();
+	String sDescr = bm->sDescr();
+	if ("" != sDescr) 
+		sName = String("%S - %S", sName, sDescr);
+	return sName;
+}
+
+String AbstractMapDrawer::iconName(const String& subtype) const 
+{ 
+	return getBaseMap()->fnObj.sExt;
+}
 
 BaseMap AbstractMapDrawer::getBaseMap() const {
 	if ( bm.fValid())

@@ -6,12 +6,14 @@
 //#include "Engine\Map\Feature.h"
 #include "Engine\Domain\dm.h"
 
+class MapCompositionDoc;
+
 namespace ILWIS {
 	class RootDrawer;
 	class _export DrawerContext {
 	public:
 		~DrawerContext();
-		DrawerContext(RootDrawer *dr);
+		DrawerContext(MapCompositionDoc *, RootDrawer *dr);
 		CoordBounds getCoordBoundsView() const { return cbView; }
 		CoordBounds getCoordBoundsZoom() const; 
 		CoordBounds getMapCoordBounds() const;
@@ -37,6 +39,7 @@ namespace ILWIS {
 		Coord getViewPoint() const;
 		Coord getEyePoint() const;
 	    double getFakeZ() const;
+		MapCompositionDoc * getDocument() const;
 
 	private:
 		void setProjection(const CoordBounds& cb);
@@ -55,5 +58,6 @@ namespace ILWIS {
 		Coordinate eyePoint;
 		Coordinate viewPoint;
 		double fakeZ;
+		MapCompositionDoc *doc;
 	};
 }

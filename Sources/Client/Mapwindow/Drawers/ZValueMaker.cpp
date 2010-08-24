@@ -28,10 +28,27 @@ void ZValueMaker::setSpatialSourceMap(const BaseMap& mp) {
 
 void ZValueMaker::setTable(const Table& tbl, const String& colName) {
 	table = tbl;
-	column  = tbl->col(colName);
+	columns.clear();
+	Column column = tbl->col(colName);
+	columns.push_back(tbl->col(colName));
 	threeDPossible = column->dm()->dmt() != dmtVALUE ? false : true;
 	datasourcemap = BaseMap();
 	range = column->rrMinMax();
+	type = IlwisObject::iotObjectType(table->fnObj);
+	offset = 0;
+	zscale = DEFAULT_SCALE;
+}
+
+void ZValueMaker::setTable(const Table& tbl, const vector<String>& names) {
+	table = tbl;
+	columns.clear();
+	for(int i = 0; i < names.size(); ++i) {
+		Column column = tbl->col(names[i]);
+		columns.push_back(column);
+		threeDPossible = column->dm()->dmt() != dmtVALUE ? false : true;
+		datasourcemap = BaseMap();
+		range += column->rrMinMax();
+	}
 	type = IlwisObject::iotObjectType(table->fnObj);
 	offset = 0;
 	zscale = DEFAULT_SCALE;
@@ -58,7 +75,7 @@ double ZValueMaker::getValue(const Coord& crd, Feature *f ){
 	if ( type == IlwisObject::iotRASMAP)
 		value = datasourcemap->rValue(crd);
 	if (table.fValid()) {
-		value =  column->rValue(f->iValue());
+		value =  columns[0]->rValue(f->iValue());
 	}
 	if ( value == rUNDEF)
 		return 0;
@@ -88,8 +105,8 @@ void ZValueMaker::setThreeDPossible(bool v) {
 	if ( datasourcemap.fValid()) {
 		threeDPossible = v && (datasourcemap->dm()->dmt() != dmtVALUE ? false : true);
 	}
-	else if ( column.fValid()) {
-		threeDPossible = v && (column->dm()->dmt() != dmtVALUE ? false : true); 
+	else if ( columns.size() > 0) {
+		threeDPossible = v && (columns[0]->dm()->dmt() != dmtVALUE ? false : true); 
 	}
 	else
 		threeDPossible = v;
@@ -106,3 +123,4 @@ double ZValueMaker::getZScale() const{
 void ZValueMaker::setZScale(double v){
 	zscale = v;
 }
+

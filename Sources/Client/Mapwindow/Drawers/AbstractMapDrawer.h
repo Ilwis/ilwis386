@@ -28,6 +28,8 @@ class _export AbstractMapDrawer : public AbstractObjectDrawer {
 		RangeReal getStretchRangeReal() const;
 		bool useInternalDomain() const;
 		HTREEITEM  configure(LayerTreeView  *tv, HTREEITEM parent);
+		virtual String description() const;
+		String iconName(const String& subtype="?") const;
 
 	protected:
 		Table attTable;

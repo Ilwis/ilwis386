@@ -8,6 +8,7 @@ public:
 	void setSpatialSourceMap(const BaseMap& mp);
 	void setDataSourceMap(const BaseMap& mp);
 	void setTable(const Table& tbl, const String& colName);
+	void setTable(const Table& tbl, const vector<String>& names);
 	void setScaleType(ZValueTypeScaling t);
 	double getValue(const Coord& crd, Feature *f = 0);
 	void setOffset(double u=rUNDEF);
@@ -22,7 +23,7 @@ private:
 	BaseMap spatialsourcemap;
 	BaseMap datasourcemap;
 	Table table;
-	Column column;
+	vector<Column> columns;
 	ZValueTypeScaling scalingType;
 	double offset;
 	RangeReal range;

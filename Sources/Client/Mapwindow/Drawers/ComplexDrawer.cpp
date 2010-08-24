@@ -248,6 +248,9 @@ void ComplexDrawer::setUICode(int code) {
 	uiCode = code;
 }
 
+void ComplexDrawer::timedEvent(UINT timerid) {
+}
+
 void ComplexDrawer::setTransparency(double value){
 	if ( (value >= 0.0 && value <= 1.0) || value == rUNDEF)
 		transparency = value;
@@ -275,8 +278,10 @@ void ComplexDrawer::setInfoMode(void *v,LayerTreeView *tv) {
 void ComplexDrawer::prepareChildDrawers(PreparationParameters *parms) {
 	for(int i = 0; i < drawers.size(); ++i) {
 		NewDrawer *pdrw = drawers.at(i);
-		PreparationParameters pp((int)parms->type, parms->dc);
-		pdrw->prepare(&pp);
+		if ( pdrw) {
+			PreparationParameters pp((int)parms->type, parms->dc);
+			pdrw->prepare(&pp);
+		}
 	}
 }
 

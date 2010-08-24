@@ -15,8 +15,8 @@
 
 using namespace ILWIS;
 
-RootDrawer::RootDrawer() {
-    drawcontext = new ILWIS::DrawerContext(this);
+RootDrawer::RootDrawer(MapCompositionDoc *doc) {
+    drawcontext = new ILWIS::DrawerContext(doc, this);
 	ILWIS::DrawerParameters dp(drawcontext, this);
 	ILWIS::PreparationParameters pp(RootDrawer::ptALL,0);
 	addPreDrawer(1,IlwWinApp()->getDrawer("CanvasBackgroundDrawer", &pp, &dp));
@@ -87,6 +87,12 @@ bool RootDrawer::draw(bool norecursion, const CoordBounds& cb) const{
 }
 
 void RootDrawer::addDataSource(void *) {
+}
+
+void RootDrawer::timedEvent(UINT timerID) {
+	for(DrawerMap::iterator cur = drawersById.begin(); cur != drawersById.end(); ++cur) {
+		(*cur).second->timedEvent(timerID);
+	}
 }
 
 HTREEITEM RootDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {

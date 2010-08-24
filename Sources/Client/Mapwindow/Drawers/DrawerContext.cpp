@@ -1,10 +1,20 @@
 #include "Client\Headers\formelementspch.h"
+#include "Client\Ilwis.h"
+#include "Engine\Base\System\RegistrySettings.h"
+#include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
 #include "RootDrawer.h"
 
 using namespace ILWIS;
 
-DrawerContext::DrawerContext(RootDrawer *dr) : mhRC(0),aspectRatio(0), rootDrawer(dr), threeD(false),fakeZ(0) {
+DrawerContext::DrawerContext(MapCompositionDoc *d, RootDrawer *dr) : 
+mhRC(0),
+aspectRatio(0), 
+rootDrawer(dr), 
+threeD(false),
+fakeZ(0), 
+doc(d) 
+{
 }
 
 bool DrawerContext::initOpenGL(CDC *dc) {
@@ -259,6 +269,10 @@ Coord DrawerContext::getEyePoint() const{
 
 double DrawerContext::getFakeZ() const {
 	return fakeZ;
+}
+
+MapCompositionDoc *DrawerContext::getDocument() const {
+	return doc;
 }
 
 
