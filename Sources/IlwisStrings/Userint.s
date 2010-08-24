@@ -13,6 +13,7 @@ SUIShow   "&Show"
 SUIDefine "&Define"
 SUICalc   "&Calculate"
 SUIClose  "Close"
+SUIApply  "Apply"
 
 // Data Type Large object names
 SUIObjMaps     "All Maps.ilw"
