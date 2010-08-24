@@ -35,7 +35,7 @@ class _export SetDrawer : public ComplexDrawer {
 		bool useInternalDomain() const;
 		void setActiveMode(void *v,LayerTreeView *tv);
 		void SetthreeD(void *v, LayerTreeView *tv);
-		//void setDataSource(void *);
+		String iconName(const String& subtype="?") const ;
 	
 			
 	protected:

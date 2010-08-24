@@ -25,6 +25,7 @@
 #include "Drawers\CanvasBackgroundDrawer.h"
 #include "Drawers\RasterLayerDrawer.h"
 #include "Drawers\RasterSetDrawer.h"
+#include "Drawers\AnimationDrawer.h"
 #include "Drawers\GridDrawer.h"
 
 using namespace ILWIS;
@@ -44,7 +45,7 @@ DrawerInfoVector *createDrawer() {
 	infos->push_back(new DrawerInfo("CanvasBackgroundDrawer","ilwis38", createCanvasBackgroundDrawer));
 	infos->push_back(new DrawerInfo("RasterLayerDrawer","ilwis38", createRasterLayerDrawer));
 	infos->push_back(new DrawerInfo("RasterSetDrawer","ilwis38", createRasterSetDrawer));
-
+	infos->push_back(new DrawerInfo("AnimationDrawer","ilwis38", createAnimationDrawer));
 	return infos;
 }
 

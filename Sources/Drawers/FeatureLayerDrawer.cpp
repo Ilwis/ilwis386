@@ -49,7 +49,8 @@ FeatureLayerDrawer::~FeatureLayerDrawer() {
 void FeatureLayerDrawer::prepare(PreparationParameters *pp){
 	AbstractMapDrawer::prepare(pp);
 	if ( pp->type == ptALL || pp->type & RootDrawer::ptGEOMETRY) {
-		clear();
+		if ( !(pp->type & NewDrawer::ptANIMATION))
+			clear();
 		BaseMap basemap = getBaseMap();
 		FeatureSetDrawer *fsd;
 		ILWIS::DrawerParameters dp(drawcontext, this);
@@ -125,7 +126,7 @@ HTREEITEM FeatureLayerDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 		NewDrawer *draw = (*cur).second;
 		if ( !singleSet)
 			
-			hti = InsertItem(draw->getName(),"Set",
+			hti = InsertItem(draw->getName(),draw->iconName(),
 							 new DisplayOptionTreeItem(tv,parent, this,(SetCheckFunc)&SetDrawer::setActiveMode,0,draw),
 							 draw->isActive());
 		draw->configure(tv,hti);
@@ -134,7 +135,7 @@ HTREEITEM FeatureLayerDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 		FeatureSetDrawer *fsd = (FeatureSetDrawer *)drawers.at(i);
 		if ( !singleSet)
 			
-			hti = InsertItem(fsd->getName(),"Set", 
+			hti = InsertItem(fsd->getName(),fsd->iconName(), 
 							 new DisplayOptionTreeItem(tv,parent, this,(SetCheckFunc)&SetDrawer::setActiveMode, 0, fsd)
 							,fsd->isActive());
 			                
@@ -143,7 +144,7 @@ HTREEITEM FeatureLayerDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 	for(map<String, NewDrawer *>::iterator cur = postDrawers.begin(); cur != postDrawers.end(); ++cur) {
 		NewDrawer *draw = (*cur).second;
 		if ( !singleSet)
-			hti = InsertItem(draw->getName(),"Set",
+			hti = InsertItem(draw->getName(),draw->iconName(),
 							 new DisplayOptionTreeItem(tv,parent, this,(SetCheckFunc)&SetDrawer::setActiveMode,0,draw),
 							 draw->isActive());
 		draw->configure(tv,hti);

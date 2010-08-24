@@ -71,6 +71,11 @@ void SetDrawer::SetthreeD(void *v, LayerTreeView *tv) {
 	doc->mpvGetView()->Invalidate();
 }
 
+String SetDrawer::iconName(const String& subtype) const 
+{ 
+	return "Set";
+}
+
 HTREEITEM SetDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 	HTREEITEM hti = ComplexDrawer::configure(tv,parent);
 
