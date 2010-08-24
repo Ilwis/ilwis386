@@ -583,11 +583,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Client\Resources\active.ico"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Client\Resources\AddMap.bmp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\AggregateSliced.BMP"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\animation.ico"
 				>
 			</File>
 			<File
@@ -707,6 +715,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Client\Resources\colors.ico"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Client\Resources\column.ico"
 				>
 			</File>
@@ -792,6 +804,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\domedit.bmp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\domicon1.ico"
 				>
 			</File>
 			<File
@@ -1111,11 +1127,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Client\Resources\ilwis33.ico"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Client\Resources\Ilwis35_startup.bmp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\Ilwis_startup.bmp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\ilwisRemove.ico"
 				>
 			</File>
 			<File
@@ -1171,6 +1195,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Client\Resources\linestyle.ico"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Client\Resources\List.bmp"
 				>
 			</File>
@@ -1192,6 +1220,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\mapinsert.bmp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\MapPane1.ico"
 				>
 			</File>
 			<File
@@ -1223,6 +1255,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Client\Resources\mask.ico"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Client\Resources\MAT.ICO"
 				>
 			</File>
@@ -1248,6 +1284,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\MPV.ICO"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\multiplecolors.ico"
 				>
 			</File>
 			<File
@@ -1475,6 +1515,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Client\Resources\set.ico"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Client\Resources\SETFID01.CUR"
 				>
 			</File>
@@ -1508,6 +1552,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\ShowSliced.bmp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\singlecolor.ico"
 				>
 			</File>
 			<File
@@ -1699,6 +1747,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Client\Resources\ThreeD.ico"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Client\Resources\TITL.ICO"
 				>
 			</File>
@@ -1708,6 +1760,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\touches.ico"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\transparent.ico"
 				>
 			</File>
 			<File
@@ -1728,6 +1784,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\Up1lvl.bmp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\valuerange.ico"
 				>
 			</File>
 			<File
@@ -5431,62 +5491,6 @@
 				</File>
 			</Filter>
 		</Filter>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\active.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\colors.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\domicon1.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\ilwis33.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\ilwisRemove.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\linestyle.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\MapPane1.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\mask.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\multiplecolors.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\set.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\singlecolor.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\ThreeD.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\transparent.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\valuerange.ico"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>
