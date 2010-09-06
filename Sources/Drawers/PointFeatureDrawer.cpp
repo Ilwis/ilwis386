@@ -55,7 +55,7 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 		}
 		cb += cNorm;
 	}
-	if ( p->type & NewDrawer::pt3D) {
+	if ( fdr->is3D() && p->type & NewDrawer::pt3D) {
 		ZValueMaker *zmaker = ((ComplexDrawer *)parentDrawer)->getZMaker();
 		double zv = zmaker->getValue(cNorm,feature);
 		cNorm.z = zv;

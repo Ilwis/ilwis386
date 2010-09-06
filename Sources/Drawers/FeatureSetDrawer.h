@@ -23,18 +23,20 @@ class _export FeatureSetDrawer : public SetDrawer {
 		HTREEITEM  configure(LayerTreeView  *tv, HTREEITEM parent);
 		virtual NewDrawer *createElementDrawer(PreparationParameters *pp, ILWIS::DrawerParameters* parms) const { return 0;}
 
+
 	protected:
 		HTREEITEM set3D(bool yeno, LayerTreeView  *tvm);
 		void displayOptionMask(CWnd *parent);
 		void displayOptionSingleColor(CWnd *parent);
 		void displayZOption3D(CWnd *parent);
 		void displayZScaling(CWnd *parent);
+		void setExtrusion(void *value, LayerTreeView *tree);
 
 		String mask;
 		bool useMask;
 		Color singleColor;
 		DisplayOptionColorItem *colorItem;
-
+	
 	};
 	class SetMaskForm : public DisplayOptionsForm {
 	public:

@@ -24,7 +24,7 @@ ILWIS::NewDrawer *createRasterSetDrawer(DrawerParameters *parms) {
 RasterSetDrawer::RasterSetDrawer(DrawerParameters *parms) : 
 	SetDrawer(parms,"RasterSetDrawer")
 {
-	setTransparency(rUNDEF);
+	setTransparency(1);
 }
 
 RasterSetDrawer::~RasterSetDrawer(){

@@ -19,8 +19,10 @@ private:
 	void displayOptionInsideColor(CWnd *parent);
 	void calcCanvas();
 	void addDataSource(void *);
-	Color inside;
-	Color outside;
+	Color inside2D;
+	Color outside2D;
+	Color inside3D;
+	Color outside3D;
 };
 
 class SetColorForm : public DisplayOptionsForm {

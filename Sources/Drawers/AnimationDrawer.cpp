@@ -1,6 +1,8 @@
 #include "Client\Headers\formelementspch.h"
 #include "Client\FormElements\selector.h"
 #include "Client\Editors\Utils\MULTICOL.H"
+#include "Client\FormElements\FieldIntSlider.h"
+#include "Client\FormElements\FieldRealSlider.h"
 #include "Client\FormElements\objlist.h"
 #include "Engine\Map\basemap.h"
 #include "Engine\Map\Point\ilwPoint.h"
@@ -33,14 +35,14 @@ ILWIS::NewDrawer *createAnimationDrawer(DrawerParameters *parms) {
 AnimationDrawer::AnimationDrawer(DrawerParameters *parms) : 
 	ComplexDrawer(parms,"AnimationDrawer"),
 	timerid(iUNDEF),
-	interval(rUNDEF),
+	interval(2.0),
 	datasource(0),
 	sourceType(sotUNKNOWN),
 	featurelayer(0),
-	loop(true)
+	loop(true),
+	index(0)
 {
 	setTransparency(1);
-	timerid = timerIdCounter++;
 }
 
 AnimationDrawer::~AnimationDrawer(){
@@ -59,32 +61,36 @@ String AnimationDrawer::description() const {
 void AnimationDrawer::prepare(PreparationParameters *pp){
 	ComplexDrawer::prepare(pp);
 	if ( sourceType == sotFEATURE ) {
-		BaseMap basemap((*datasource)->fnObj);
-		ILWIS::DrawerParameters parms(getDrawerContext(), getDrawerContext()->getRootDrawer());
-		if ( drawers.size() > 0) {
-			clear();
-		}
-		featurelayer = (FeatureLayerDrawer *)IlwWinApp()->getDrawer("FeatureLayerDrawer", "Ilwis38", &parms);
-		featurelayer->setActive(true);
-		featurelayer->addDataSource(&basemap);
-		if ( basemap->fTblAtt()) {
-			for(int i = 0; i< names.size(); ++i) {
-				PreparationParameters parms(NewDrawer::ptGEOMETRY | NewDrawer::ptANIMATION);
-				featurelayer->prepare(&parms);
-			}
-			vector<NewDrawer *> allDrawers;
-			featurelayer->getDrawers(allDrawers);
-			for(int i=0; i < allDrawers.size(); ++i) {
-				FeatureSetDrawer *fset = (FeatureSetDrawer *)allDrawers.at(i);
-				fset->setActive(false);
-				fset->getZMaker()->setTable(basemap->tblAtt(), names.at(i));
-				fset->getZMaker()->setThreeDPossible(true);
-			}
-			//featurelayer->getZMaker()->setTable(basemap->tblAtt(),names);
-			//featurelayer->getZMaker()->setThreeDPossible(true);
-		}
-		addDrawer(featurelayer);
+			if ( pp->type & NewDrawer::ptGEOMETRY) {
+				BaseMap basemap((*datasource)->fnObj);
+				setName(basemap->sName());
+				ILWIS::DrawerParameters parms(getDrawerContext(), getDrawerContext()->getRootDrawer());
+				if ( drawers.size() > 0) {
+					clear();
+				}
+				featurelayer = (FeatureLayerDrawer *)IlwWinApp()->getDrawer("FeatureLayerDrawer", "Ilwis38", &parms);
+				featurelayer->setActive(true);
+				featurelayer->addDataSource(&basemap);
+				if ( basemap->fTblAtt()) {
+					for(int i = 0; i< names.size(); ++i) {
+						PreparationParameters parms(NewDrawer::ptGEOMETRY | NewDrawer::ptANIMATION);
+						featurelayer->prepare(&parms);
+					}
+					vector<NewDrawer *> allDrawers;
+					featurelayer->getDrawers(allDrawers);
+					for(int i=0; i < allDrawers.size(); ++i) {
+						FeatureSetDrawer *fset = (FeatureSetDrawer *)allDrawers.at(i);
+						fset->setActive(i == 0 ? true : false);
+						fset->getZMaker()->setTable(basemap->tblAtt(), names.at(i));
+						fset->getZMaker()->setThreeDPossible(true);
+					}
+				}
+				addDrawer(featurelayer);
 
+			} if ( pp->type & NewDrawer::pt3D) {
+				for(int i=0; i < drawers.size(); ++i)
+					drawers.at(i)->prepare(pp);
+			}
 	}
 
 }
@@ -99,7 +105,7 @@ void AnimationDrawer::addDataSource(void *data, int options){
 			 type == IlwisObject::iotPOLYGONMAP) {
 			 sourceType = sotFEATURE;
 		}
-		if ( type == IlwisObject::iotRASMAP) {
+		if ( type == IlwisObject::iotMAPLIST) {
 			sourceType = sotMAPLIST;
 		}
 	}
@@ -151,8 +157,10 @@ void AnimationDrawer::timedEvent(UINT _timerid) {
 				featurelayer->getDrawer(index)->setActive(false);
 				featurelayer->getDrawer(++index)->setActive(true);
 			} else {
-				if (loop)
+				if (loop) {
+					featurelayer->getDrawer(index)->setActive(false);
 					index = 0;
+				}
 			}
 		}
 		getDrawerContext()->getDocument()->mpvGetView()->Invalidate();
@@ -164,14 +172,20 @@ AnimationTiming::AnimationTiming(CWnd *par, AnimationDrawer *ldr)
 	: DisplayOptionsForm(ldr, par, "Time")
 {
 
-  frSecondsPerFrame = new FieldReal(root, "Seconds per frame",&ldr->interval,ValueRangeReal(0.1,1000,0.1));
-  create();
+	slider = new FieldRealSliderEx(root,"Transparency", &ldr->interval,ValueRangeReal(0.1,1000,0.1),false);
+	slider->SetCallBack((NotifyProc)&AnimationTiming::setTiming);
+	slider->setContinuous(true);
+	create();
+}
+
+int AnimationTiming::setTiming(Event *ev) {
+	apply();
+	return 1;
 }
 
 void  AnimationTiming::apply() {
-	frSecondsPerFrame->StoreData();
+	slider->StoreData();
 	AnimationDrawer *andr = (AnimationDrawer *)drw;
-	andr->interval = andr->interval * 1000.0;
 	PreparationParameters pp(NewDrawer::ptRENDER);
 	drw->prepare(&pp);
 	updateMapView();
@@ -179,24 +193,61 @@ void  AnimationTiming::apply() {
 
 //----------------------------------------------------------
 AnimationControl::AnimationControl(CWnd *par, AnimationDrawer *ldr) 
-	: DisplayOptionsForm(ldr, par, "Time")
+	: DisplayOptionsForm2(ldr, par, "Time")
 {
-	
+	FlatIconButton *fi1 = new FlatIconButton(root,"Begin","",(NotifyProc)&AnimationControl::begin, FileName());
+	FlatIconButton *fi2 = new FlatIconButton(root,"Pause","",(NotifyProc)&AnimationControl::pause, FileName());
+	fi2->Align(fi1,AL_AFTER,-10);
+	fi1 = new FlatIconButton(root,"Run","",(NotifyProc)&AnimationControl::run, FileName());
+	fi1->Align(fi2,AL_AFTER,-10);
+	fi2 = new FlatIconButton(root,"Stop","",(NotifyProc)&AnimationControl::stop, FileName());
+	fi2->Align(fi1, AL_AFTER,-10);
+	fi1 = new FlatIconButton(root,"End","",(NotifyProc)&AnimationControl::end, FileName());
+	fi1->Align(fi2, AL_AFTER,-10);
+
   create();
 }
 
-void  AnimationControl::apply() {
+int AnimationControl::stop(Event  *ev) {
 	AnimationDrawer *andr = (AnimationDrawer *)drw;
+	drw->getDrawerContext()->getDocument()->mpvGetView()->KillTimer(andr->timerid);
 	andr->index = 0;
-	drw->getDrawerContext()->getDocument()->mpvGetView()->SetTimer(andr->timerid,andr->interval,0);
+	andr->timerid = iUNDEF;
+	return 1;
+}
+
+int AnimationControl::pause(Event  *ev) {
+	AnimationDrawer *andr = (AnimationDrawer *)drw;
+	drw->getDrawerContext()->getDocument()->mpvGetView()->KillTimer(andr->timerid);
+	return 1;
+}
+
+int AnimationControl::end(Event  *ev) {
+	return 1;
+}
+
+int AnimationControl::run(Event  *ev) {
+	AnimationDrawer *andr = (AnimationDrawer *)drw;
+	if ( andr->timerid != iUNDEF)
+		return 1;
+
+	andr->timerid = AnimationDrawer::timerIdCounter++;
+	drw->getDrawerContext()->getDocument()->mpvGetView()->SetTimer(andr->timerid,andr->interval * 1000.0,0);
 	PreparationParameters pp(NewDrawer::ptRENDER);
 	drw->prepare(&pp);
 	updateMapView();
+	return 1;
+}
+
+int AnimationControl::begin(Event  *ev) {
+	AnimationDrawer *andr = (AnimationDrawer *)drw;
+	andr->index = 0;
+	return 1;
 }
 
 //----------------------------------------------------------
 AnimationSourceUsage::AnimationSourceUsage(CWnd *par, AnimationDrawer *ldr) 
-	: DisplayOptionsForm(ldr, par, "Time"), mcs(0), rg(0)
+	: DisplayOptionsForm2(ldr, par, "Time"), mcs(0), rg(0)
 {
 	if ( ldr->sourceType == AnimationDrawer::sotFEATURE) {
 		BaseMap basemap((*(ldr->datasource))->fnObj);
@@ -213,7 +264,7 @@ AnimationSourceUsage::AnimationSourceUsage(CWnd *par, AnimationDrawer *ldr)
   create();
 }
 
-void  AnimationSourceUsage::apply() {
+int  AnimationSourceUsage::exec() {
 	if ( rg) rg->StoreData();
 	if ( mcs) {
 		//mcs->StoreData();
@@ -225,7 +276,9 @@ void  AnimationSourceUsage::apply() {
 		}
 
 	}
-	PreparationParameters pp(NewDrawer::ptRENDER);
+	PreparationParameters pp(NewDrawer::ptGEOMETRY);
 	drw->prepare(&pp);
 	updateMapView();
+
+	return 1;
 }

@@ -22,7 +22,8 @@ LineDrawer::LineDrawer(DrawerParameters *parms) :
 
 LineDrawer::LineDrawer(DrawerParameters *parms, const String& name) : 
 	SimpleDrawer(parms,name),
-    linestyle(0xFFFF)
+    linestyle(0xFFFF),
+	thickness(1.0)
 {
 	drawColor = SysColor(COLOR_WINDOWTEXT);
 }

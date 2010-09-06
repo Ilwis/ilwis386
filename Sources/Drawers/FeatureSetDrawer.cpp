@@ -11,6 +11,7 @@
 #include "Engine\Spatialreference\gr.h"
 #include "Engine\Map\Raster\Map.h"
 #include "Engine\Base\System\RegistrySettings.h"
+#include "Client\Mapwindow\MapPaneView.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
@@ -87,6 +88,7 @@ Color FeatureSetDrawer::getSingleColor() const {
 //-------------------------------------- UI --------------------------------------------------------
 HTREEITEM FeatureSetDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 	HTREEITEM hti = SetDrawer::configure(tv,parent);
+	threeDItem = 0;
 	DisplayOptionTreeItem *item;
 	if ( getUICode() == NewDrawer::ucALL) {
 		item = new DisplayOptionTreeItem(tv,parent,this,(DisplayOptionItemFunc)&FeatureSetDrawer::displayOptionMask);
@@ -97,7 +99,7 @@ HTREEITEM FeatureSetDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 	if ( portrayalItem) {
 		bool useSingleColor = getDrawMethod() == NewDrawer::drmSINGLE;
 		bool useRpr = getDrawMethod() == NewDrawer::drmRPR;
-		colorItem = new DisplayOptionColorItem(tv,portrayalItem,this,
+		colorItem = new DisplayOptionColorItem("Single color", tv,portrayalItem,this,
 						(DisplayOptionItemFunc)&FeatureSetDrawer::displayOptionSingleColor,0,colorCheck);
 		colorItem->setColor(singleColor);
 		HTREEITEM singleColorItem = InsertItem("Single Color","SingleColor",colorItem, useSingleColor & !useRpr);
@@ -110,6 +112,7 @@ HTREEITEM FeatureSetDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 }
 
 HTREEITEM FeatureSetDrawer::set3D(bool yesno, LayerTreeView  *tv){
+	threeD = yesno;
 	if ( yesno) {
 		HTREEITEM parent = tv->getAncestor(portrayalItem,1);
 		if ( parent != 0) {
@@ -119,6 +122,8 @@ HTREEITEM FeatureSetDrawer::set3D(bool yesno, LayerTreeView  *tv){
 			InsertItem("Data source", ".mpv",item);
 			item = new DisplayOptionTreeItem(tv,threeDItem,this,(DisplayOptionItemFunc)&FeatureSetDrawer::displayZScaling);
 			InsertItem("Scaling", "ScaleBar",item);
+			item = new DisplayOptionTreeItem(tv,threeDItem,this,(SetCheckFunc)&FeatureSetDrawer::setExtrusion);
+			InsertItem("Extrusion","Extrusion",item,getSpecialDrawingOption(sdoExtrusion));
 			InsertItem(tv, threeDItem, "Axis", "Axis");
 		}
 	}
@@ -134,6 +139,12 @@ HTREEITEM FeatureSetDrawer::set3D(bool yesno, LayerTreeView  *tv){
 	return threeDItem;
 }
 
+void FeatureSetDrawer::setExtrusion(void *value, LayerTreeView *tree) {
+	bool v = *(bool *)value;
+	setSpecialDrawingOptions(sdoExtrusion, v);
+	tree->GetDocument()->mpvGetView()->Invalidate();
+
+}
 
 void FeatureSetDrawer::displayOptionMask(CWnd *parent) {
 	new SetMaskForm(parent, this);

@@ -16,11 +16,11 @@ ILWIS::NewDrawer *createPointDrawer(DrawerParameters *parms) {
 	return new PointDrawer(parms);
 }
 
-PointDrawer::PointDrawer(DrawerParameters *parms) : SimpleDrawer(parms,"PointDrawer") {
+PointDrawer::PointDrawer(DrawerParameters *parms) : SimpleDrawer(parms,"PointDrawer"), extrusion(false) {
 	drawColor = SysColor(COLOR_WINDOWTEXT);
 }
 
-PointDrawer::PointDrawer(DrawerParameters *parms, const String& name) : SimpleDrawer(parms,name) {
+PointDrawer::PointDrawer(DrawerParameters *parms, const String& name) : SimpleDrawer(parms,name), extrusion(false) {
 }
 
 void PointDrawer::prepare(PreparationParameters *p){
@@ -33,10 +33,10 @@ bool PointDrawer::draw(bool norecursion, const CoordBounds& cbArea) const {
 	CoordBounds cbZoom = getDrawerContext()->getCoordBoundsZoom();
 	if ( !cbZoom.fContains(cNorm))
 		return false;
-
 	glClearColor(1.0,1.0,1.0,0.0);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
+	bool extrusion = getSpecialDrawingOption(NewDrawer::sdoExtrusion);
 
 	ComplexDrawer *cdrw = (ComplexDrawer *)getParentDrawer();
 	ZValueMaker *zmaker = cdrw->getZMaker();
@@ -65,6 +65,13 @@ bool PointDrawer::draw(bool norecursion, const CoordBounds& cbArea) const {
 	glEnd();
 
 	if ( is3D) {
+		if ( extrusion) {
+			glBegin(GL_LINE_STRIP) ;
+			glVertex3d(cNorm.x,cNorm.y,0);
+			glVertex3d(cNorm.x, cNorm.y,fz);
+			glEnd();
+		}
+
 		glPopMatrix();
 	}
 
@@ -78,4 +85,6 @@ HTREEITEM PointDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 void PointDrawer::setDrawColor(const Color& col) {
 	drawColor = col;
 }
+
+
 

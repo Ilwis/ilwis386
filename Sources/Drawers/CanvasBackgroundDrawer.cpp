@@ -20,8 +20,10 @@ ILWIS::NewDrawer *createCanvasBackgroundDrawer(DrawerParameters *parms) {
 
 CanvasBackgroundDrawer::CanvasBackgroundDrawer(DrawerParameters *parms) : ComplexDrawer(parms,"CanvasBackgroundDrawer"){
 	id = name = "CanvasBackgroundDrawer";
-	outside = Color(179,179,179);
-	inside = Color(255,255,255);
+	outside2D = Color(179,179,179);
+	inside2D = Color(255,255,255);
+	outside3D = Color(235,242,235);
+	inside3D = Color(245,245,245);
 }
 
 CanvasBackgroundDrawer::~CanvasBackgroundDrawer() {
@@ -34,8 +36,13 @@ void  CanvasBackgroundDrawer::prepare(PreparationParameters *pp){
 bool CanvasBackgroundDrawer::draw(bool norecursion, const CoordBounds& cb) const{
 	CoordBounds cbView = getDrawerContext()->getCoordBoundsView();
 	CoordBounds cbMap = getDrawerContext()->getMapCoordBounds();
-	glColor4d(outside.redP(), outside.greenP(), outside.blueP(),getTransparency());
 	bool is3D = getDrawerContext()->is3D();
+	if ( is3D) {
+		glColor4d(outside3D.redP(), outside3D.greenP(), outside3D.blueP(),getTransparency());
+	}
+	else {
+		glColor4d(outside2D.redP(), outside2D.greenP(), outside2D.blueP(),getTransparency());
+	}
 	double z = is3D ? -getDrawerContext()->getFakeZ() : 0;
 	glBegin(GL_QUADS);						
 		glVertex3f(cbView.MinX(), cbView.MinY(),z);				
@@ -51,7 +58,12 @@ bool CanvasBackgroundDrawer::draw(bool norecursion, const CoordBounds& cb) const
 		glVertex3f(cbView.MaxX(), cbView.MinY(),z);
 	glEnd();
 
-	glColor4f(inside.redP(), inside.greenP(), inside.blueP(),getTransparency());
+	if ( is3D) {
+		glColor4d(inside3D.redP(), inside3D.greenP(), inside3D.blueP(),getTransparency());
+	}
+	else {
+		glColor4d(inside2D.redP(), inside2D.greenP(), inside2D.blueP(),getTransparency());
+	}
 	glBegin(GL_QUADS);						
 		glVertex3f(cbMap.MinX(), cbMap.MinY(),z);				
 		glVertex3f(cbMap.MinX(), cbMap.MaxY(),z);				
@@ -66,24 +78,27 @@ bool CanvasBackgroundDrawer::draw(bool norecursion, const CoordBounds& cb) const
 HTREEITEM CanvasBackgroundDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 	HTREEITEM hti = InsertItem(tv,TVI_ROOT,"Background Area","MapPane", TVI_LAST);
 	ComplexDrawer::configure(tv,hti);
+	bool is3D = getDrawerContext()->is3D();
 
-	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,hti,this, 
+	DisplayOptionColorItem *item = new DisplayOptionColorItem("Outside", tv,hti,this, 
 					(DisplayOptionItemFunc)&CanvasBackgroundDrawer::displayOptionOutsideColor);
+	item->setColor(is3D ? outside3D : outside2D);
 	InsertItem("Outside map","SingleColor",item, -1);
 
-	item = new DisplayOptionTreeItem(tv,hti,this,
+	item = new DisplayOptionColorItem("Inside", tv,hti,this,
 					(DisplayOptionItemFunc)&CanvasBackgroundDrawer::displayOptionInsideColor);
 	InsertItem("Inside map","SingleColor",item, -1);
+	item->setColor(is3D ? inside3D : inside2D);
 
 	return hti;
 }
 
 void CanvasBackgroundDrawer::displayOptionOutsideColor(CWnd *parent) {
-	new SetColorForm("Outside map", parent, this, &outside);
+	new SetColorForm("Outside map", parent, this, getDrawerContext()->is3D() ? &outside3D : &outside2D);
 }
 
 void CanvasBackgroundDrawer::displayOptionInsideColor(CWnd *parent) {
-	new SetColorForm("Inside map", parent, this, &inside);
+	new SetColorForm("Inside map", parent, this, getDrawerContext()->is3D() ? &inside3D : &inside2D);
 }
 
 //------------------------------------------------

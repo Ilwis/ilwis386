@@ -41,22 +41,27 @@ namespace ILWIS{
 		AnimationTiming(CWnd *par, AnimationDrawer *gdr);
 		void apply();
 	private:
-		FieldReal *frSecondsPerFrame;
+		int setTiming(Event *ev);
+		FieldRealSliderEx *slider;
 	};
 
-	class AnimationControl: public DisplayOptionsForm
+	class AnimationControl: public DisplayOptionsForm2
 	{
 	public:
 		AnimationControl(CWnd *par, AnimationDrawer *gdr);
-		void apply();
 	private:
+		int begin(Event  *ev);
+		int end(Event  *ev);
+		int pause(Event  *ev);
+		int run(Event  *ev);
+		int stop(Event  *ev);
 	};
 
-	class AnimationSourceUsage: public DisplayOptionsForm
+	class AnimationSourceUsage: public DisplayOptionsForm2
 	{
 	public:
 		AnimationSourceUsage(CWnd *par, AnimationDrawer *gdr);
-		void apply();
+		int exec();
 	private:
 		RadioGroup *rg;
 		MultiColumnSelector *mcs;
