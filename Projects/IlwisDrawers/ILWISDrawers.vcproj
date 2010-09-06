@@ -244,6 +244,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Drawers\LineEditDrawer.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Drawers\LineFeatureDrawer.cpp"
 				>
 			</File>
@@ -326,6 +330,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Drawers\LineDrawer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\LineEditDrawer.h"
 				>
 			</File>
 			<File
