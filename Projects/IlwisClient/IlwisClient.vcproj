@@ -5491,6 +5491,38 @@
 				</File>
 			</Filter>
 		</Filter>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\begin.ico"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\end.ico"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\extrusion.ico"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\pause.ico"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\run.ico"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\run1.ico"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\stop.ico"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\stop1.ico"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
