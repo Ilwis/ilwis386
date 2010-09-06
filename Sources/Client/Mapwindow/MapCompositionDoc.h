@@ -1,39 +1,39 @@
 /***************************************************************
- ILWIS integrates image, vector and thematic data in one unique 
- and powerful package on the desktop. ILWIS delivers a wide 
- range of feautures including import/export, digitizing, editing, 
- analysis and display of data as well as production of 
- quality mapsinformation about the sensor mounting platform
- 
- Exclusive rights of use by 52°North Initiative for Geospatial 
- Open Source Software GmbH 2007, Germany
+ILWIS integrates image, vector and thematic data in one unique 
+and powerful package on the desktop. ILWIS delivers a wide 
+range of feautures including import/export, digitizing, editing, 
+analysis and display of data as well as production of 
+quality mapsinformation about the sensor mounting platform
 
- Copyright (C) 2007 by 52°North Initiative for Geospatial
- Open Source Software GmbH
+Exclusive rights of use by 52°North Initiative for Geospatial 
+Open Source Software GmbH 2007, Germany
 
- Author: Jan Hendrikse, Willem Nieuwenhuis,Wim Koolhoven 
- Bas Restsios, Martin Schouwenburg, Lichun Wang, Jelle Wind 
+Copyright (C) 2007 by 52°North Initiative for Geospatial
+Open Source Software GmbH
 
- Contact: Martin Schouwenburg; schouwenburg@itc.nl; 
- tel +31-534874371
+Author: Jan Hendrikse, Willem Nieuwenhuis,Wim Koolhoven 
+Bas Restsios, Martin Schouwenburg, Lichun Wang, Jelle Wind 
 
- This program is free software; you can redistribute it and/or
- modify it under the terms of the GNU General Public License
- version 2 as published by the Free Software Foundation.
+Contact: Martin Schouwenburg; schouwenburg@itc.nl; 
+tel +31-534874371
 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU General Public License for more details.
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+version 2 as published by the Free Software Foundation.
 
- You should have received a copy of the GNU General Public License
- along with this program (see gnu-gpl v2.txt); if not, write to
- the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- Boston, MA 02111-1307, USA or visit the web page of the Free
- Software Foundation, http://www.fsf.org.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
 
- Created on: 2007-02-8
- ***************************************************************/
+You should have received a copy of the GNU General Public License
+along with this program (see gnu-gpl v2.txt); if not, write to
+the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+Boston, MA 02111-1307, USA or visit the web page of the Free
+Software Foundation, http://www.fsf.org.
+
+Created on: 2007-02-8
+***************************************************************/
 #if !defined(AFX_MAPCOMPOSITIONDOC_H__8A842674_E359_11D2_B73E_00A0C9D5342F__INCLUDED_)
 #define AFX_MAPCOMPOSITIONDOC_H__8A842674_E359_11D2_B73E_00A0C9D5342F__INCLUDED_
 
@@ -79,12 +79,12 @@ public:
 	static const CLSID clsid;
 	MapCompositionDoc();           // protected constructor used by dynamic creation
 	virtual ~MapCompositionDoc();
-  virtual IlwisObject obj() const;
-  virtual zIcon icon() const;
+	virtual IlwisObject obj() const;
+	virtual zIcon icon() const;
 
 	ILWIS::RootDrawer *rootDrawer;
 
-// Overrides
+	// Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(MapCompositionDoc)
 	virtual void Serialize(CArchive& ar);   // overridden for document i/o
@@ -101,20 +101,20 @@ public:
 	BOOL fSaveModified(bool fAllowCancel);
 
 	MapCompositionSrvItem* GetEmbeddedItem()
-		{ return (MapCompositionSrvItem*)CatalogDocument::GetEmbeddedItem(); }
+	{ return (MapCompositionSrvItem*)CatalogDocument::GetEmbeddedItem(); }
 	MapPaneView* mpvGetView() const;
 
 	BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo); 
 	void initBounds(MinMax mm);
-  bool fCoordSystemOk(const BaseMap& bmap);
-  bool fGeoRefOk(const Map& map);
+	bool fCoordSystemOk(const BaseMap& bmap);
+	bool fGeoRefOk(const Map& map);
 	bool fAppendable(const FileName&);
 	Drawer* drAppend(const FileName&, bool asAnimation=false);
 	Drawer* drAppend(const Map&, bool asAnimation=false);
 	Drawer* drAppend(const MapList&, bool asAnimation=false);
 	Drawer* drAppend(const BaseMap&, bool asAnimation=false);
 	Drawer* drAppend(const AnnotationText&);
-	void RemoveDrawer(Drawer* dr);
+	void RemoveDrawer(ILWIS::NewDrawer* dr);
 	void SetCoordSystem(const CoordSystem&);
 	void SetCoordSystem(const GeoRef&);
 	void SetGeoRef(const GeoRef&); // no checks!
@@ -124,18 +124,18 @@ public:
 	void SetOffset(RowCol rc) { rcDfltOffset = rc; }
 	afx_msg void OnSaveView();
 	afx_msg void OnSaveViewAs();
-  Map mp;
-  GeoRef georef;
-  Color colBackground;
+	Map mp;
+	GeoRef georef;
+	Color colBackground;
 	MinMax mmBounds() const;
-  void menLayers(CMenu& men, int iBaseId);
+	void menLayers(CMenu& men, int iBaseId);
 	int iState() const { return iListState; }
 	void ChangeState();
-  void SetBounds(const MinMax&);
-  void SetBounds(const CoordBounds&);
+	void SetBounds(const MinMax&);
+	void SetBounds(const CoordBounds&);
 	bool fIsEmpty() const;
 
-    list<Drawer*> dl;
+	list<Drawer*> dl;
 	bool fShowRowCol;
 	bool fRaster, fGrid3DDrawer;
 	CSize szPrefSize;
@@ -144,7 +144,7 @@ protected:
 	MapView mpv;
 	Drawer* drDrawer(const MapView&, const char* sSection);
 private:
-  void SetTitle(const IlwisObject& obj);
+	void SetTitle(const IlwisObject& obj);
 	void StoreView();
 	String getForeignType(const Map& mp);
 	BOOL OnOpenRasterMap(const Map&, OpenType ot);
@@ -170,8 +170,6 @@ private:
 	afx_msg void OnUpdateAddGrid(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateAddGraticule(CCmdUI* pCmdUI);
 	afx_msg void OnAddAnnText();
-//	afx_msg void OnAddNorthArrow();
-//	afx_msg void OnAddBitmap();
 	afx_msg void OnChangeCoordSystem();
 	afx_msg void OnUpdateChangeCoordSystem(CCmdUI* pCmdUI);
 	afx_msg void OnOpen();
@@ -179,22 +177,23 @@ private:
 
 	afx_msg void OnCopyScaleBarLink();
 	afx_msg void OnOpenPixelInfo();
-  afx_msg void OnDataLayer(UINT nID);	
-  afx_msg void OnEditLayer(UINT nID);	
-  afx_msg void OnDomainLayer(UINT nID);	
-  afx_msg void OnRprLayer(UINT nID);	
-  afx_msg void OnPropLayer(UINT nID);	
-  afx_msg void OnUpdateDataLayer(CCmdUI* pCmdUI);	
-  afx_msg void OnUpdateEditLayer(CCmdUI* pCmdUI);	
-  afx_msg void OnUpdateDomainLayer(CCmdUI* pCmdUI);	
-  afx_msg void OnUpdateRprLayer(CCmdUI* pCmdUI);	
-  afx_msg void OnUpdatePropLayer(CCmdUI* pCmdUI);	
+	afx_msg void OnDataLayer(UINT nID);	
+	afx_msg void OnEditLayer(UINT nID);	
+	afx_msg void OnDomainLayer(UINT nID);	
+	afx_msg void OnRprLayer(UINT nID);	
+	afx_msg void OnPropLayer(UINT nID);	
+	afx_msg void OnUpdateDataLayer(CCmdUI* pCmdUI);	
+	afx_msg void OnUpdateEditLayer(CCmdUI* pCmdUI);	
+	afx_msg void OnUpdateDomainLayer(CCmdUI* pCmdUI);	
+	afx_msg void OnUpdateRprLayer(CCmdUI* pCmdUI);	
+	afx_msg void OnUpdatePropLayer(CCmdUI* pCmdUI);	
 
 	afx_msg void OnBackgroundColor();
 	afx_msg void OnShowHistogram();
-  afx_msg void OnUpdateShowHistogram(CCmdUI* pCmdUI);	
+	afx_msg void OnUpdateShowHistogram(CCmdUI* pCmdUI);	
 private:
-	MinMax mmInitGeoRef(const BaseMap& bm);	
+	MinMax mmInitGeoRef(const BaseMap& bm);
+	bool fDomainEditable( const BaseMap& bmap) ;
 
 	MinMax mmMapBounds, mmSize;
 	int iListState; // with every change increases

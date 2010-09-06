@@ -2843,7 +2843,7 @@ void SegmentEditor::OnPolygonize()
 				// remove SegmentDrawer before editor Polygon Map
 				if (Editor::drw) {
 					MapCompositionDoc* mcd = mpv->GetDocument();
-					mcd->RemoveDrawer(Editor::drw);
+					//mcd->RemoveDrawer(Editor::drw);
 					Editor::drw = 0;
 				}
 				mpv->SetFocus();

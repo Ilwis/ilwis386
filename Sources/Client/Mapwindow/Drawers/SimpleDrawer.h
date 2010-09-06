@@ -38,6 +38,8 @@ namespace ILWIS {
 		virtual void timedEvent(UINT timerid) {};
 		virtual String description() const { return "?";}
 		virtual String iconName(const String& subtype="?") const { return "?";}
+		void setSpecialDrawingOptions(SpecialDrawingOptions option, bool add) { parentDrawer->setSpecialDrawingOptions(option,add);}
+		int getSpecialDrawingOption(SpecialDrawingOptions opt=sdoNone) const { return parentDrawer->getSpecialDrawingOption(opt);}
 
 		CCriticalSection cs;
 	protected:

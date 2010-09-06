@@ -57,6 +57,8 @@ class _export ComplexDrawer : public NewDrawer {
 		virtual void timedEvent(UINT timerid);
 		virtual String description() const { return "?";}
 		virtual String iconName(const String& subtype="?") const { return "?";}
+		void setSpecialDrawingOptions(SpecialDrawingOptions option, bool add) ;
+		int getSpecialDrawingOption(SpecialDrawingOptions opt=sdoNone) const;
 
 		CCriticalSection cs;
 	protected:
@@ -79,6 +81,7 @@ class _export ComplexDrawer : public NewDrawer {
 		ZValueMaker *zmaker;
 		bool threeD;
 		HTREEITEM itemTransparent;
+		int specialOptions;
 		
 		ComplexDrawer(DrawerParameters *context, const String& ty);
 		ComplexDrawer();
@@ -98,6 +101,16 @@ class _export ComplexDrawer : public NewDrawer {
 		afx_msg virtual void OnCancel();
 		int exec();
 		virtual void apply();
+	protected:
+		void updateMapView();
+		ComplexDrawer *drw;
+		LayerTreeView *view;
+	};
+
+	class _export DisplayOptionsForm2 : public FormBaseDialog {
+	public:
+		DisplayOptionsForm2(ComplexDrawer *dr,CWnd *par, const String& title);
+		int exec();
 	protected:
 		void updateMapView();
 		ComplexDrawer *drw;

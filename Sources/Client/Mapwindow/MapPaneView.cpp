@@ -965,8 +965,8 @@ BOOL MapPaneView::AddFiles(vector<FileName>& afn)
     if (dr) {
 			if (dr->Configure()) 
 				fOk = true;
-			else
-				mcd->RemoveDrawer(dr);
+			//else
+				//mcd->RemoveDrawer(dr);
 		}
 	}
 	if (fOk) {

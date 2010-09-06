@@ -639,8 +639,10 @@ void DisplayOptionTree::OnLButtonDblClk(UINT nFlags, CPoint point)
 }
 
 //--------------------------------------------
-DisplayOptionColorItem::DisplayOptionColorItem(LayerTreeView* t, HTREEITEM parent, ILWIS::NewDrawer *dr, DisplayOptionItemFunc f,HTREEITEM item, SetChecks *checks) :
-DisplayOptionTreeItem(t, parent, dr,f,item,checks) {
+DisplayOptionColorItem::DisplayOptionColorItem(const String& sTxt, LayerTreeView* t, HTREEITEM parent, ILWIS::NewDrawer *dr, DisplayOptionItemFunc f,HTREEITEM item, SetChecks *checks) :
+DisplayOptionTreeItem(t, parent, dr,f,item,checks) ,
+sText(sTxt)
+{
 }
 
 void DisplayOptionColorItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult){
@@ -684,7 +686,6 @@ void DisplayOptionColorItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult){
 			rctColor.DeflateRect(iWidth * 0.8, iHeight * 0.7);
 
 			cdc.Rectangle(rctColor);
-			String sText = "Single Color";
 			
 			CPoint pt;
 			pt.x = rect.left + 1.5 * iHeight + 2;

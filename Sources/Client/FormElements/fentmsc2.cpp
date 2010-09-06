@@ -752,12 +752,26 @@ PushButton::PushButton(FormEntry* parent, const String& sQuestion, NotifyProc np
 {}
 
 
+FlatIconButton::FlatIconButton(FormEntry* p, const String& iconName, String sCaption, NotifyProc np, 
+							   const FileName& fnObject, bool fParent, int fbs) 
+: FormEntry(p, 0, true), fPar(fParent), m_fbs(fbs)
+{
+	int iImage = IlwWinApp()->iImage(iconName);
+	HICON icon = IlwWinApp()->ilSmall.ExtractIcon(iImage);
+	hIcon = icon;
+	setup(sCaption, fnObject, np);
+}
+
 FlatIconButton::FlatIconButton(FormEntry* p, HICON hicon, String sCaption, NotifyProc np, 
 							   const FileName& fnObject, bool fParent, int fbs)
  : FormEntry(p, 0, true), fPar(fParent), m_fbs(fbs)
 {
-	_np = np;
 	hIcon = hicon;
+	setup(sCaption, fnObject, np);
+}
+
+void FlatIconButton::setup(const String sCaption, const FileName& fnObject, NotifyProc np) {
+	_np = np;
 	m_sCaption = sCaption;
 	m_fnObject = fnObject;
 

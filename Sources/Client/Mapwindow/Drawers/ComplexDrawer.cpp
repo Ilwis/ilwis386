@@ -42,6 +42,7 @@ void ComplexDrawer::init() {
 	uiCode = NewDrawer::ucALL;
 	zmaker = new ILWIS::ZValueMaker();
 	itemTransparent = 0;
+	specialOptions = sdoNone;
 }
 
 String ComplexDrawer::getType() const {
@@ -218,6 +219,20 @@ void ComplexDrawer::setDrawMethod(DrawMethod method) {
 	drm = method;
 }
 
+void ComplexDrawer::setSpecialDrawingOptions(SpecialDrawingOptions option, bool add){
+	if ( add)
+		specialOptions |= option;
+	else
+		specialOptions &= !option;
+}
+
+int ComplexDrawer::getSpecialDrawingOption(SpecialDrawingOptions opt) const {
+	if ( opt == sdoNone)
+		return specialOptions;
+	else
+		return specialOptions & opt;
+}
+
 bool  ComplexDrawer::isEditable() const{
 	return editable;
 }
@@ -381,6 +396,22 @@ void DisplayOptionsForm::updateMapView() {
 	doc->mpvGetView()->Invalidate();
 }
 
+//--------------------------------
+DisplayOptionsForm2::DisplayOptionsForm2(ComplexDrawer *dr,CWnd *par, const String& title) : 
+FormBaseDialog(par,title,fbsBUTTONSUNDER | fbsSHOWALWAYS | fbsNOCANCELBUTTON),
+view((LayerTreeView *)par),
+drw(dr)
+{
+}
+
+int DisplayOptionsForm2::exec() {
+	return 1;
+}
+
+void DisplayOptionsForm2::updateMapView() {
+	MapCompositionDoc* doc = view->GetDocument();
+	doc->mpvGetView()->Invalidate();
+}
 //--------------------------------
 TransparencyForm::TransparencyForm(CWnd *wPar, ComplexDrawer *dr) : 
 	DisplayOptionsForm(dr,wPar,"Transparency"),

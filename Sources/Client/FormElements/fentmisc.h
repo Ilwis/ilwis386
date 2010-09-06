@@ -694,6 +694,8 @@ class FlatIconButton: public FormEntry
 {
 public:
 	enum FlatButtonStyle { fbsNORMAL = 1, fbsTITLE = 2, fbsNOCONTEXTMENU=4 };
+	_export FlatIconButton(FormEntry* p, const String& iconName, String sCaption, NotifyProc np, 
+		const FileName& fnObject, bool fParent=false, int fbs=fbsNORMAL);
 	_export FlatIconButton(FormEntry* parent, HICON hIcon, String sCaption, NotifyProc np, const FileName& fnObject, bool fParent = false, int fbs = fbsNORMAL);
 	~FlatIconButton();
 	void show(int sw);         // overriden
@@ -702,6 +704,7 @@ public:
 	void SetFocus();           // overriden
 
 protected:
+	void setup(const String sCaption, const FileName& fnObject, NotifyProc np);
 	int OnContext(MouseClickEvent* evt);
 
 private:

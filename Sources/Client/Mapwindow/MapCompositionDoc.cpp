@@ -1,39 +1,39 @@
 /***************************************************************
- ILWIS integrates image, vector and thematic data in one unique 
- and powerful package on the desktop. ILWIS delivers a wide 
- range of feautures including import/export, digitizing, editing, 
- analysis and display of data as well as production of 
- quality mapsinformation about the sensor mounting platform
- 
- Exclusive rights of use by 52°North Initiative for Geospatial 
- Open Source Software GmbH 2007, Germany
+ILWIS integrates image, vector and thematic data in one unique 
+and powerful package on the desktop. ILWIS delivers a wide 
+range of feautures including import/export, digitizing, editing, 
+analysis and display of data as well as production of 
+quality mapsinformation about the sensor mounting platform
 
- Copyright (C) 2007 by 52°North Initiative for Geospatial
- Open Source Software GmbH
+Exclusive rights of use by 52°North Initiative for Geospatial 
+Open Source Software GmbH 2007, Germany
 
- Author: Jan Hendrikse, Willem Nieuwenhuis,Wim Koolhoven 
- Bas Restsios, Martin Schouwenburg, Lichun Wang, Jelle Wind 
+Copyright (C) 2007 by 52°North Initiative for Geospatial
+Open Source Software GmbH
 
- Contact: Martin Schouwenburg; schouwenburg@itc.nl; 
- tel +31-534874371
+Author: Jan Hendrikse, Willem Nieuwenhuis,Wim Koolhoven 
+Bas Restsios, Martin Schouwenburg, Lichun Wang, Jelle Wind 
 
- This program is free software; you can redistribute it and/or
- modify it under the terms of the GNU General Public License
- version 2 as published by the Free Software Foundation.
+Contact: Martin Schouwenburg; schouwenburg@itc.nl; 
+tel +31-534874371
 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU General Public License for more details.
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+version 2 as published by the Free Software Foundation.
 
- You should have received a copy of the GNU General Public License
- along with this program (see gnu-gpl v2.txt); if not, write to
- the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- Boston, MA 02111-1307, USA or visit the web page of the Free
- Software Foundation, http://www.fsf.org.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
 
- Created on: 2007-02-8
- ***************************************************************/
+You should have received a copy of the GNU General Public License
+along with this program (see gnu-gpl v2.txt); if not, write to
+the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+Boston, MA 02111-1307, USA or visit the web page of the Free
+Software Foundation, http://www.fsf.org.
+
+Created on: 2007-02-8
+***************************************************************/
 // MapCompositionDoc.cpp : implementation file
 //
 
@@ -49,6 +49,9 @@
 #include "Client\Mapwindow\MapWindow.h"
 #include "Engine\Map\Mapview.h"
 #include "Engine\Base\DataObjects\URL.h"
+#include "Client\Mapwindow\Drawers\RootDrawer.h"
+#include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
+#include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\FormElements\syscolor.h"
 #include "Engine\Map\Segment\Seg.h"
@@ -106,15 +109,16 @@
 #include "Engine\SampleSet\SAMPLSET.H"
 #include "Client\Editors\Editor.h"
 
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
-   
+
 // {8A842674-E359-11D2-B73E-00A0C9D5342F}
 const CLSID MapCompositionDoc::clsid =
-	{ 0x8A842674, 0xE359, 0x11D2, { 0xB7, 0x3E, 0x00, 0xA0, 0xC9, 0xD5, 0x34, 0x2F } };
+{ 0x8A842674, 0xE359, 0x11D2, { 0xB7, 0x3E, 0x00, 0xA0, 0xC9, 0xD5, 0x34, 0x2F } };
 
 /////////////////////////////////////////////////////////////////////////////
 // MapCompositionDoc
@@ -140,8 +144,7 @@ BEGIN_MESSAGE_MAP(MapCompositionDoc, CatalogDocument)
 	ON_UPDATE_COMMAND_UI(ID_ADD_GRATICULE, OnUpdateAddGraticule)
 	ON_UPDATE_COMMAND_UI(ID_ADDGRATICULE, OnUpdateAddGraticule)
 	ON_COMMAND(ID_ADDANNTEXT, OnAddAnnText)
-//	ON_COMMAND(ID_ADDNORTH_ARROW, OnAddNorthArrow)
-//	ON_COMMAND(ID_ADDBITMAP, OnAddBitmap)
+
 	ON_COMMAND(ID_COORDSYSTEM, OnChangeCoordSystem)
 	ON_UPDATE_COMMAND_UI(ID_COORDSYSTEM, OnUpdateChangeCoordSystem)
 	ON_COMMAND(ID_SAVEVIEW, OnSaveView)
@@ -171,7 +174,7 @@ END_MESSAGE_MAP()
 MapCompositionDoc::MapCompositionDoc()
 : gbHist(0)
 {
-  colBackground = SysColor(COLOR_WINDOW);
+	colBackground = SysColor(COLOR_WINDOW);
 	iListState = 0;
 	fInCmdMsg = false;
 	rDfltScale = rUNDEF;
@@ -184,20 +187,20 @@ MapCompositionDoc::MapCompositionDoc()
 
 MapCompositionDoc::~MapCompositionDoc()
 {
-// DeleteContents() is already called
+	// DeleteContents() is already called
 	delete rootDrawer;
 }
 
 void MapCompositionDoc::DeleteContents()
 {
-  list<Drawer*>::iterator iter = dl.begin();
-  for (; iter != dl.end(); ++iter) {
+	list<Drawer*>::iterator iter = dl.begin();
+	for (; iter != dl.end(); ++iter) {
 		delete (*iter);
 		*iter = 0;
 	}
 	dl.clear();
 	delete gbHist;
-  gbHist = 0;
+	gbHist = 0;
 }
 
 BOOL MapCompositionDoc::OnNewDocument()
@@ -287,7 +290,7 @@ BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPath, ParmList& pm)
 		}
 		ForeignCollection::CreateImplicitObject(fn, pm);
 	}
-	 if ( IlwisObject::iotObjectType(fn) > IlwisObject::iotRASMAP && IlwisObject::iotObjectType(fn) < IlwisObject::iotTABLE) 
+	if ( IlwisObject::iotObjectType(fn) > IlwisObject::iotRASMAP && IlwisObject::iotObjectType(fn) < IlwisObject::iotTABLE) 
 	{
 		int ot = pm.sGet("mode").iVal();
 		if ( ot == iUNDEF) ot = 0;
@@ -308,7 +311,7 @@ BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPathName, OpenType ot)
 {
 	try {
 		DeleteContents();
-	//	RegisterIfServerAttached(NULL, TRUE);
+		//	RegisterIfServerAttached(NULL, TRUE);
 
 		FileName fn(lpszPathName);
 		if (".mpv" == fn.sExt || lpszPathName == 0) 
@@ -434,7 +437,7 @@ BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPathName, OpenType ot)
 			if (!OnOpenMapList(mpl,otNORMAL))
 				return FALSE;
 			mpvGetView()->EditNamedLayer(fn);
-	//		::AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_EDITSMS, 0);
+			//		::AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_EDITSMS, 0);
 			return TRUE;
 		}
 		else if (".stp" == fn.sExt) {
@@ -454,7 +457,7 @@ BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPathName, OpenType ot)
 void MapCompositionDoc::OnCreateLayout()
 {
 	OnSaveView();
-  if (!mpv.fValid())
+	if (!mpv.fValid())
 		return;
 	String sViewName = mpv->sName(true);
 	if ("" == sViewName)
@@ -474,64 +477,64 @@ void MapCompositionDoc::OnCreateLayout()
 void MapCompositionDoc::OnSaveView()
 {
 	fUseSerialize = true;
-  if (!mpv.fValid())
-    OnSaveViewAs();
-  else 
+	if (!mpv.fValid())
+		OnSaveViewAs();
+	else 
 		OnFileSave();
 }
 
 void MapCompositionDoc::OnSaveViewAs()
 {
 	fUseSerialize = true;
-  class SaveViewForm: public FormWithDest 
-  {
-  public:
-    SaveViewForm(CWnd* parent, String* sName, String* sTitle)
-    : FormWithDest(parent, SMWTitleSaveView)
-    {
+	class SaveViewForm: public FormWithDest 
+	{
+	public:
+		SaveViewForm(CWnd* parent, String* sName, String* sTitle)
+			: FormWithDest(parent, SMWTitleSaveView)
+		{
 			iImg = IlwWinApp()->iImage(".mpv");
 
-      new FieldBlank(root);
-      new FieldViewCreate(root, SMWUiViewName, sName);
-      FieldString *fs = new FieldString(root, SMWUiViewTitle, sTitle);
-      fs->SetWidth(120);
-//      SetHelpTopic(htpSaveViewForms);
-      SetMenHelpTopic(htpSaveView);
-      create();
-    }
-  };
-  String sViewName, sTitle;
+			new FieldBlank(root);
+			new FieldViewCreate(root, SMWUiViewName, sName);
+			FieldString *fs = new FieldString(root, SMWUiViewTitle, sTitle);
+			fs->SetWidth(120);
+			//      SetHelpTopic(htpSaveViewForms);
+			SetMenHelpTopic(htpSaveView);
+			create();
+		}
+	};
+	String sViewName, sTitle;
 	if (mpv.fValid()) {
 		sViewName = mpv->sName();
 		sTitle = mpv->sDescription;
 	}
-  SaveViewForm frm(wndGetActiveView(), &sViewName, &sTitle);
-  if (frm.fOkClicked()) {
-    FileName fn(sViewName, ".mpv", true);
-    if (fn.fExist()) {
-      String sErr(SAFMsgAlreadyExistsOverwrite_S.scVal(), fn.sFullPath(true));
-      if (IDYES != MessageBox(0, sErr.scVal(), SAFMsgAlreadyExists.scVal(), MB_YESNO|MB_ICONEXCLAMATION))
-        return;
-    }
+	SaveViewForm frm(wndGetActiveView(), &sViewName, &sTitle);
+	if (frm.fOkClicked()) {
+		FileName fn(sViewName, ".mpv", true);
+		if (fn.fExist()) {
+			String sErr(SAFMsgAlreadyExistsOverwrite_S.scVal(), fn.sFullPath(true));
+			if (IDYES != MessageBox(0, sErr.scVal(), SAFMsgAlreadyExists.scVal(), MB_YESNO|MB_ICONEXCLAMATION))
+				return;
+		}
 		mpv = MapView(sViewName, true);
 		mpv->sDescription = sTitle;
 		sViewName = mpv->fnObj.sFullName();
 		DoSave(sViewName.scVal());
 		SetTitle(mpv);
-  }
+	}
 }
 
 void MapCompositionDoc::StoreView()
 {
-  ObjectDependency objdep;
-  mpv->Store();
-  mpv->WriteElement("MapView", "GeoRef", georef);
-  objdep.Add(georef);
-  mpv->WriteElement("MapView", "CoordSystem", georef->cs());
-  objdep.Add(georef->cs());
-  mpv->WriteElement("MapView", "MinMax", mmBounds());
-  mpv->WriteElement("MapView", "MapBounds", mmMapBounds);
-  mpv->WriteElement("MapView", "Background", colBackground);
+	ObjectDependency objdep;
+	mpv->Store();
+	mpv->WriteElement("MapView", "GeoRef", georef);
+	objdep.Add(georef);
+	mpv->WriteElement("MapView", "CoordSystem", georef->cs());
+	objdep.Add(georef->cs());
+	mpv->WriteElement("MapView", "MinMax", mmBounds());
+	mpv->WriteElement("MapView", "MapBounds", mmMapBounds);
+	mpv->WriteElement("MapView", "Background", colBackground);
 
 	mpv->WriteElement("MapView", "Scale", rDfltScale);
 	mpv->WriteElement("MapView", "Offset", rcDfltOffset);
@@ -544,31 +547,31 @@ void MapCompositionDoc::StoreView()
 		mpv->WriteElement("MapView", "Height", rect.Height());
 	}
 
-  int iLayers = 0;
-  for (list<Drawer*>::iterator iter = dl.begin(); 
-	     iter != dl.end(); 
-			 ++iter)
+	int iLayers = 0;
+	for (list<Drawer*>::iterator iter = dl.begin(); 
+		iter != dl.end(); 
+		++iter)
 	{  
-    Drawer* dw = *iter;  
-    objdep.Add(dw->obj());
-    iLayers += 1;
-    String sSection("Layer%i", iLayers);
-    dw->WriteLayer(mpv, sSection.scVal());
-  }
-  mpv->WriteElement("MapView", "Layers", (long)iLayers);
-  objdep.Store(mpv.ptr());
+		Drawer* dw = *iter;  
+		objdep.Add(dw->obj());
+		iLayers += 1;
+		String sSection("Layer%i", iLayers);
+		dw->WriteLayer(mpv, sSection.scVal());
+	}
+	mpv->WriteElement("MapView", "Layers", (long)iLayers);
+	objdep.Store(mpv.ptr());
 }
 
 void MapCompositionDoc::SetTitle(const IlwisObject& obj)
 {
-  //fnObj = obj->fnObj;
-  String s = obj->sName();
+	//fnObj = obj->fnObj;
+	String s = obj->sName();
 	if ("" == s)
 		return;
-  if (obj->sDescription.length()) {
-    s &= ": ";
-    s &= obj->sDescription;
-  }
+	if (obj->sDescription.length()) {
+		s &= ": ";
+		s &= obj->sDescription;
+	}
 	CDocument::SetTitle(s.sVal());
 }
 
@@ -580,190 +583,198 @@ MinMax MapCompositionDoc::mmBounds() const
 
 void MapCompositionDoc::OnExtPerc()
 {
-  class ExtendForm: public FormWithDest
-  {
-  public:
-    ExtendForm(CWnd* wParent,
-	       double* rTop, double* rBottom, double* rLeft, double* rRight)
-    : FormWithDest(wParent, SMWTitleExtWnd)
-    {
-      ValueRange vrr(-99, 1000, 1);
-      frTop = new FieldReal(root, SMWUiPrcTop, rTop, vrr);
-      new FieldReal(root, SMWUiPrcBot, rBottom, vrr);
-      new FieldReal(root, SMWUiPrcLft, rLeft  , vrr);
-      new FieldReal(root, SMWUiPrcRgt, rRight , vrr);
-      SetMenHelpTopic(htpDspExtend);
-      create();
-    }
-    FormEntry* feDefaultFocus()
-    { 
-      return frTop;
-    }
-  private:  
-    FieldReal* frTop;
-  };
-  double rTop, rBottom, rLeft, rRight;
-  rTop = (mmMapBounds.MinRow() - mmSize.MinRow()) * 100.0 / mmMapBounds.height();
-  rTop = floor(100 * rTop) / 100;
-  rBottom = (mmSize.MaxRow() - mmMapBounds.MaxRow()) * 100.0 / mmMapBounds.height();
-  rBottom = floor(100 * rBottom) / 100;
-  rLeft = (mmMapBounds.MinCol() - mmSize.MinCol()) * 100.0 / mmMapBounds.width();
-  rLeft = floor(100 * rLeft) / 100;
-  rRight = (mmSize.MaxCol() - mmMapBounds.MaxCol()) * 100.0 / mmMapBounds.width();
-  rRight = floor(100 * rRight) / 100;
-  ExtendForm frm(0,&rTop,&rBottom,&rLeft,&rRight);
-  if (frm.fOkClicked()) 
-  {
-    MinMax mm;
-    mm.MinRow() = mmMapBounds.MinRow() - rounding(rTop / 100.0 * mmMapBounds.height());
-    mm.MaxRow() = mmMapBounds.MaxRow() + rounding(rBottom / 100.0 * mmMapBounds.height());
-    mm.MinCol() = mmMapBounds.MinCol() - rounding(rLeft / 100.0 * mmMapBounds.width());
-    mm.MaxCol() = mmMapBounds.MaxCol() + rounding(rRight / 100.0 * mmMapBounds.width());
-    SetBounds(mm);
-  }
+	class ExtendForm: public FormWithDest
+	{
+	public:
+		ExtendForm(CWnd* wParent,
+			double* rTop, double* rBottom, double* rLeft, double* rRight)
+			: FormWithDest(wParent, SMWTitleExtWnd)
+		{
+			ValueRange vrr(-99, 1000, 1);
+			frTop = new FieldReal(root, SMWUiPrcTop, rTop, vrr);
+			new FieldReal(root, SMWUiPrcBot, rBottom, vrr);
+			new FieldReal(root, SMWUiPrcLft, rLeft  , vrr);
+			new FieldReal(root, SMWUiPrcRgt, rRight , vrr);
+			SetMenHelpTopic(htpDspExtend);
+			create();
+		}
+		FormEntry* feDefaultFocus()
+		{ 
+			return frTop;
+		}
+	private:  
+		FieldReal* frTop;
+	};
+	double rTop, rBottom, rLeft, rRight;
+	rTop = (mmMapBounds.MinRow() - mmSize.MinRow()) * 100.0 / mmMapBounds.height();
+	rTop = floor(100 * rTop) / 100;
+	rBottom = (mmSize.MaxRow() - mmMapBounds.MaxRow()) * 100.0 / mmMapBounds.height();
+	rBottom = floor(100 * rBottom) / 100;
+	rLeft = (mmMapBounds.MinCol() - mmSize.MinCol()) * 100.0 / mmMapBounds.width();
+	rLeft = floor(100 * rLeft) / 100;
+	rRight = (mmSize.MaxCol() - mmMapBounds.MaxCol()) * 100.0 / mmMapBounds.width();
+	rRight = floor(100 * rRight) / 100;
+	ExtendForm frm(0,&rTop,&rBottom,&rLeft,&rRight);
+	if (frm.fOkClicked()) 
+	{
+		MinMax mm;
+		mm.MinRow() = mmMapBounds.MinRow() - rounding(rTop / 100.0 * mmMapBounds.height());
+		mm.MaxRow() = mmMapBounds.MaxRow() + rounding(rBottom / 100.0 * mmMapBounds.height());
+		mm.MinCol() = mmMapBounds.MinCol() - rounding(rLeft / 100.0 * mmMapBounds.width());
+		mm.MaxCol() = mmMapBounds.MaxCol() + rounding(rRight / 100.0 * mmMapBounds.width());
+		SetBounds(mm);
+	}
 }
 
 void MapCompositionDoc::OnExtCoord()
 {
-  class BoundsForm: public FormWithDest
-  {
-  public:
-    BoundsForm(CWnd* parent, Coord* cMin, Coord* cMax)
-    : FormWithDest(parent, SMWTitleWndBnd)
-    {
-      fcMin = new FieldCoord(root, SMWUiMinXY, cMin);
-      new FieldCoord(root, SMWUiMaxXY, cMax);
-      SetMenHelpTopic(htpDspBounds);
-      create();
-    }
-    FormEntry* feDefaultFocus()
-    { 
-      return fcMin;
-    }
-  private:  
-    FieldCoord* fcMin;
-  };
-  MinMax mm = mmBounds();
-  CoordBounds cb;
-  cb += georef->cConv(mm.rcMin);
-  cb += georef->cConv(mm.rcMax);
-  cb += georef->cConv(RowCol(mm.MinRow(), mm.MaxCol()));
-  cb += georef->cConv(RowCol(mm.MaxRow(), mm.MinCol()));
-  BoundsForm frm(0,&cb.cMin,&cb.cMax);
-  if (frm.fOkClicked()) 
-  {
-    SetBounds(cb);
-  }
+	class BoundsForm: public FormWithDest
+	{
+	public:
+		BoundsForm(CWnd* parent, Coord* cMin, Coord* cMax)
+			: FormWithDest(parent, SMWTitleWndBnd)
+		{
+			fcMin = new FieldCoord(root, SMWUiMinXY, cMin);
+			new FieldCoord(root, SMWUiMaxXY, cMax);
+			SetMenHelpTopic(htpDspBounds);
+			create();
+		}
+		FormEntry* feDefaultFocus()
+		{ 
+			return fcMin;
+		}
+	private:  
+		FieldCoord* fcMin;
+	};
+	MinMax mm = mmBounds();
+	CoordBounds cb;
+	cb += georef->cConv(mm.rcMin);
+	cb += georef->cConv(mm.rcMax);
+	cb += georef->cConv(RowCol(mm.MinRow(), mm.MaxCol()));
+	cb += georef->cConv(RowCol(mm.MaxRow(), mm.MinCol()));
+	BoundsForm frm(0,&cb.cMin,&cb.cMax);
+	if (frm.fOkClicked()) 
+	{
+		SetBounds(cb);
+	}
 }
 
 void MapCompositionDoc::OnUpdateExtCoord(CCmdUI* pCmdUI)
 {
 	BOOL fEnable = georef->fNorthOriented();
-  pCmdUI->Enable(fEnable);
+	pCmdUI->Enable(fEnable);
 }
 
 
 void MapCompositionDoc::SetBounds(const MinMax& mm)
 {
-  mmSize = mm;
+	mmSize = mm;
 	ChangeState();
-  UpdateAllViews(0,1);
+	UpdateAllViews(0,1);
 }
 
 void MapCompositionDoc::SetBounds(const CoordBounds& cb)
 {
-  MinMax mm;
-  mm += georef->rcConv(cb.cMin);
-  mm += georef->rcConv(cb.cMax);
-  mm += georef->rcConv(Coord(cb.MinX(), cb.MaxY()));
-  mm += georef->rcConv(Coord(cb.MaxX(), cb.MinY()));
-  SetBounds(mm);
+	MinMax mm;
+	mm += georef->rcConv(cb.cMin);
+	mm += georef->rcConv(cb.cMax);
+	mm += georef->rcConv(Coord(cb.MinX(), cb.MaxY()));
+	mm += georef->rcConv(Coord(cb.MaxX(), cb.MinY()));
+	SetBounds(mm);
 }
 
 
 void MapCompositionDoc::menLayers(CMenu& men, int iBaseId)
 {
-  BOOL fOk = true;
-  int i, id;
-  for (id = iBaseId; fOk; ++id)
-    fOk = men.DeleteMenu(id, MF_BYCOMMAND);
+	BOOL fOk = true;
+	int id;
+	for (id = iBaseId; fOk; ++id)
+		fOk = men.DeleteMenu(id, MF_BYCOMMAND);
 
 	CClientDC cdc(wndGetActiveView());
-  list<Drawer*>::iterator iter = dl.begin();
-  for (i = 1, id = iBaseId; 
-	     iter != dl.end(); 
-			 ++iter, ++i, ++id)
+
+	//list<Drawer*>::iterator iter = dl.begin();
+	//for (i = 1, id = iBaseId; 
+	//	iter != dl.end(); 
+	//	++iter, ++i, ++id)
+	for(int i =0,id = iBaseId; i < rootDrawer->getDrawerCount(); ++i,++id)
 	{  
-    char s[512];
-    String str = (*iter)->sName();
-    FileName fn = str;
-    if (".mpr" == fn.sExt)
-      str = String("map %S", fn.sFile);
-    else if (".mps" == fn.sExt)
-      str = String("seg %S", fn.sFile);
-    else if (".mpa" == fn.sExt)
-      str = String("pol %S", fn.sFile); 
-    else if (".mpp" == fn.sExt)
-      str = String("pnt %S", fn.sFile);
-    else if (".atx" == fn.sExt)
-      str = String("txt %S", fn.sFile);
-    else
-      str = fn.sFile;
-    sprintf(s, "&%i %s", i, str.scVal());
-    men.AppendMenu(MF_STRING, id, s);
-/*
--- Wim 21/7/99: Nice idea, but does not work
-   owner draw menu items are perhaps a better idea.
-		CBitmap* bm = (*iter)->bmMenu(&cdc);
-		men.SetMenuItemBitmaps(id, MF_BYCOMMAND, bm, bm);
-		- problems: - bitmap should be smaller!
-								- colors not correct yet, palette?
-*/
+		char s[512];
+		AbstractMapDrawer *mapdrawer = dynamic_cast<AbstractMapDrawer *>(rootDrawer->getDrawer(i));
+		if (!mapdrawer)
+			continue;
+		String str = mapdrawer->getBaseMap()->fnObj.sFullName();
+		FileName fn = str;
+		if (".mpr" == fn.sExt)
+			str = String("map %S", fn.sFile);
+		else if (".mps" == fn.sExt)
+			str = String("seg %S", fn.sFile);
+		else if (".mpa" == fn.sExt)
+			str = String("pol %S", fn.sFile); 
+		else if (".mpp" == fn.sExt)
+			str = String("pnt %S", fn.sFile);
+		else if (".atx" == fn.sExt)
+			str = String("txt %S", fn.sFile);
+		else
+			str = fn.sFile;
+		sprintf(s, "&%i %s", i+1, str.scVal());
+		men.AppendMenu(MF_STRING, id, s);
 		UINT iFlag;
-    switch (iBaseId) {
-      case ID_LAYFIRST:
-				iFlag = (*iter)->fAct 
-					    ? MF_CHECKED : MF_UNCHECKED;
-        men.CheckMenuItem(id, MF_BYCOMMAND | iFlag);
-        break;
-      case ID_ATTLAYER:  
-				iFlag = !(*iter)->fAct || !(*iter)->fAttributes() 
-					    ? MF_GRAYED : MF_ENABLED;
-        men.EnableMenuItem(id, MF_BYCOMMAND | iFlag);
-        break;
-      case ID_RPRLAYER:  
-				iFlag = !(*iter)->fAct || !(*iter)->fRepresentation()
-					    ? MF_GRAYED : MF_ENABLED;
-        men.EnableMenuItem(id, MF_BYCOMMAND | iFlag);
-        break;
-      case ID_EDITLAYER:  
-				iFlag = !(*iter)->fEditable()
-					    ? MF_GRAYED : MF_ENABLED;
-        men.EnableMenuItem(id, MF_BYCOMMAND | iFlag);
-        break;
-      case ID_PROPLAYER:  
-				iFlag = !(*iter)->fProperty()
-					    ? MF_GRAYED : MF_ENABLED;
-        men.EnableMenuItem(id, MF_BYCOMMAND | iFlag);
-        break;
-      case ID_DOMLAYER:  
-				iFlag = !(*iter)->fEditDomain()
-					    ? MF_GRAYED : MF_ENABLED;
-        men.EnableMenuItem(id, MF_BYCOMMAND | iFlag);
-        break;
-    }    
-  }
+		switch (iBaseId) {
+	  case ID_LAYFIRST:
+		  iFlag = mapdrawer->isActive() 
+			  ? MF_CHECKED : MF_UNCHECKED;
+		  men.CheckMenuItem(id, MF_BYCOMMAND | iFlag);
+		  break;
+	  case ID_ATTLAYER:  
+		  iFlag = !mapdrawer->isActive() || !mapdrawer->getAtttributeTable().fValid()
+			  ? MF_GRAYED : MF_ENABLED;
+		  men.EnableMenuItem(id, MF_BYCOMMAND | iFlag);
+		  break;
+	  case ID_RPRLAYER:  
+		  iFlag = !mapdrawer->isActive() || ! mapdrawer->getBaseMap()->dm()->rpr().fValid()
+			  ? MF_GRAYED : MF_ENABLED;
+		  men.EnableMenuItem(id, MF_BYCOMMAND | iFlag);
+		  break;
+	  case ID_EDITLAYER:  
+		  iFlag = !mapdrawer->isEditable()
+			  ? MF_GRAYED : MF_ENABLED;
+		  men.EnableMenuItem(id, MF_BYCOMMAND | iFlag);
+		  break;
+	  case ID_PROPLAYER:  
+		  iFlag = MF_ENABLED;
+		  men.EnableMenuItem(id, MF_BYCOMMAND | iFlag);
+		  break;
+	  case ID_DOMLAYER:  
+		  iFlag = !fDomainEditable(mapdrawer->getBaseMap())
+			  ? MF_GRAYED : MF_ENABLED;
+		  men.EnableMenuItem(id, MF_BYCOMMAND | iFlag);
+		  break;
+		}    
+	}
+}
+
+bool MapCompositionDoc::fDomainEditable( const BaseMap& bmap) {
+  if (bmap->dm()->fDataReadOnly())
+    return false;
+  if (0 != bmap->dm()->pdsrt())
+    return true;
+  if (0 != bmap->dm()->pdvi())
+    return true;
+  if (0 != bmap->dm()->pdvr())
+    return true;
+  return false;  
 }
 
 void MapCompositionDoc::OnDataLayer(UINT nID)
 {
-  list<Drawer*>::iterator iter = dl.begin();
+	list<Drawer*>::iterator iter = dl.begin();
 	int i, id;
-  for (i = 1, id = ID_LAYFIRST;
-	     iter != dl.end(); 
-			 ++iter, ++i, ++id)
+	for (i = 1, id = ID_LAYFIRST;
+		iter != dl.end(); 
+		++iter, ++i, ++id)
 	{  
-    if (id == nID) {
+		if (id == nID) {
 			if ((*iter)->Configure()) {
 				ChangeState();
 				UpdateAllViews(0,2);
@@ -776,42 +787,40 @@ void MapCompositionDoc::OnUpdateDataLayer(CCmdUI* pCmdUI)
 {
 	MapPaneView* mpv = mpvGetView();
 	bool fEnable = true;
-  if (0 != mpv) 
-  {
-    const Editor* edit = mpv->editGet();
-    if (0 != edit)
-    {
-  		list<Drawer*>::iterator iter = dl.begin();
-  		int i, id;
-  		for (i = 1, id = ID_LAYFIRST;
-  	     iter != dl.end(); 
-  			 ++iter, ++i, ++id)
-  		{  
-  	    if (id == pCmdUI->m_nID) {
-  				Drawer* dr = *iter;
-  				fEnable = edit->dr() != dr;
-  				break;
-  			}
-  		}
-    }
-  }
+	if (0 != mpv) 
+	{
+		const Editor* edit = mpv->editGet();
+		if (0 != edit)
+		{
+			list<Drawer*>::iterator iter = dl.begin();
+			int i, id;
+			for (i = 1, id = ID_LAYFIRST;
+				iter != dl.end(); 
+				++iter, ++i, ++id)
+			{  
+				if (id == pCmdUI->m_nID) {
+					Drawer* dr = *iter;
+					fEnable = edit->dr() != dr;
+					break;
+				}
+			}
+		}
+	}
 	pCmdUI->Enable(fEnable);
 }
 
 void MapCompositionDoc::OnEditLayer(UINT nID)	
 {
-  list<Drawer*>::iterator iter = dl.begin();
+	list<Drawer*>::iterator iter = dl.begin();
 	int i, id;
-  for (i = 1, id = ID_EDITLAYER;
-	     iter != dl.end(); 
-			 ++iter, ++i, ++id)
+	for(int i =0,id = ID_EDITLAYER; i < rootDrawer->getDrawerCount(); ++i,++id)
 	{  
 		if (id == nID) {
-			Drawer* dr = *iter;
-			if (dr->fEditable()) {
+			AbstractMapDrawer *mapdrawer = dynamic_cast<AbstractMapDrawer *>(rootDrawer->getDrawer(i));
+			if (mapdrawer->isEditable()) {
 				MapPaneView* mpv = mpvGetView();
 				if (0 != mpv)
-					mpv->EditNamedLayer(dr->obj()->fnObj);
+					mpv->EditNamedLayer(mapdrawer->getBaseMap()->fnObj);
 			}
 			return;
 		}
@@ -822,11 +831,11 @@ void MapCompositionDoc::OnUpdateEditLayer(CCmdUI* pCmdUI)
 {
 	list<Drawer*>::iterator iter = dl.begin();
 	int i, id;
-  for (i = 1, id = ID_EDITLAYER;
-	     iter != dl.end(); 
-			 ++iter, ++i, ++id)
+	for (i = 1, id = ID_EDITLAYER;
+		iter != dl.end(); 
+		++iter, ++i, ++id)
 	{  
-    if (id == pCmdUI->m_nID) {
+		if (id == pCmdUI->m_nID) {
 			bool fEnable = (*iter)->fEditable();
 			MapPaneView* mpv = mpvGetView();
 			if (0 == mpv)
@@ -838,13 +847,13 @@ void MapCompositionDoc::OnUpdateEditLayer(CCmdUI* pCmdUI)
 
 void MapCompositionDoc::OnDomainLayer(UINT nID)
 {
-  list<Drawer*>::iterator iter = dl.begin();
+	list<Drawer*>::iterator iter = dl.begin();
 	int i, id;
-  for (i = 1, id = ID_DOMLAYER;
-	     iter != dl.end(); 
-			 ++iter, ++i, ++id)
+	for (i = 1, id = ID_DOMLAYER;
+		iter != dl.end(); 
+		++iter, ++i, ++id)
 	{  
-    if (id == nID) 
+		if (id == nID) 
 			(*iter)->EditDomain();
 	}
 }
@@ -853,11 +862,11 @@ void MapCompositionDoc::OnUpdateDomainLayer(CCmdUI* pCmdUI)
 {
 	list<Drawer*>::iterator iter = dl.begin();
 	int i, id;
-  for (i = 1, id = ID_DOMLAYER;
-	     iter != dl.end(); 
-			 ++iter, ++i, ++id)
+	for (i = 1, id = ID_DOMLAYER;
+		iter != dl.end(); 
+		++iter, ++i, ++id)
 	{  
-    if (id == pCmdUI->m_nID) {
+		if (id == pCmdUI->m_nID) {
 			bool fEnable = (*iter)->fEditDomain();
 			pCmdUI->Enable(fEnable);
 		}
@@ -866,13 +875,13 @@ void MapCompositionDoc::OnUpdateDomainLayer(CCmdUI* pCmdUI)
 
 void MapCompositionDoc::OnRprLayer(UINT nID)
 {
-  list<Drawer*>::iterator iter = dl.begin();
+	list<Drawer*>::iterator iter = dl.begin();
 	int i, id;
-  for (i = 1, id = ID_RPRLAYER;
-	     iter != dl.end(); 
-			 ++iter, ++i, ++id)
+	for (i = 1, id = ID_RPRLAYER;
+		iter != dl.end(); 
+		++iter, ++i, ++id)
 	{  
-    if (id == nID) 
+		if (id == nID) 
 			(*iter)->EditRepresentation();
 	}
 }
@@ -881,11 +890,11 @@ void MapCompositionDoc::OnUpdateRprLayer(CCmdUI* pCmdUI)
 {
 	list<Drawer*>::iterator iter = dl.begin();
 	int i, id;
-  for (i = 1, id = ID_RPRLAYER;
-	     iter != dl.end(); 
-			 ++iter, ++i, ++id)
+	for (i = 1, id = ID_RPRLAYER;
+		iter != dl.end(); 
+		++iter, ++i, ++id)
 	{  
-    if (id == pCmdUI->m_nID) {
+		if (id == pCmdUI->m_nID) {
 			bool fEnable = (*iter)->fRepresentation();
 			pCmdUI->Enable(fEnable);
 		}
@@ -894,11 +903,11 @@ void MapCompositionDoc::OnUpdateRprLayer(CCmdUI* pCmdUI)
 
 void MapCompositionDoc::OnPropLayer(UINT nID)	
 {
-  list<Drawer*>::iterator iter = dl.begin();
+	list<Drawer*>::iterator iter = dl.begin();
 	int i, id;
-  for (i = 1, id = ID_PROPLAYER;
-	     iter != dl.end(); 
-			 ++iter, ++i, ++id)
+	for (i = 1, id = ID_PROPLAYER;
+		iter != dl.end(); 
+		++iter, ++i, ++id)
 	{  
 		if (id == nID) {
 			Drawer* dr = *iter;
@@ -912,11 +921,11 @@ void MapCompositionDoc::OnUpdatePropLayer(CCmdUI* pCmdUI)
 {
 	list<Drawer*>::iterator iter = dl.begin();
 	int i, id;
-  for (i = 1, id = ID_PROPLAYER;
-	     iter != dl.end(); 
-			 ++iter, ++i, ++id)
+	for (i = 1, id = ID_PROPLAYER;
+		iter != dl.end(); 
+		++iter, ++i, ++id)
 	{  
-    if (id == pCmdUI->m_nID) {
+		if (id == pCmdUI->m_nID) {
 			bool fEnable = (*iter)->fProperty();
 			pCmdUI->Enable(fEnable);
 		}
@@ -927,24 +936,24 @@ void MapCompositionDoc::OnUpdatePropLayer(CCmdUI* pCmdUI)
 
 MinMax MapCompositionDoc::mmInitGeoRef(const BaseMap& bm)
 {
-  CoordBounds cb = bm->cb();
-  double rGrid = max(cb.width(), cb.height());
-  long iSize = 0x4000; //32767L;  // by this change no scrollbars appear when moving the pressed mouse outside the window
-  rGrid /= iSize;
-  long iXSize = 1 + (long)(cb.width()  / rGrid);
-  long iYSize = 1 + (long)(cb.height() / rGrid);
-  float a11,a12,a21,a22,b1,b2;
-  a11 = (float)(1.0 / rGrid);
-  a21 = 0;
-  a12 = 0;
-  a22 = (float)(-1.0/ rGrid);
-  b1  = (float)(- cb.MinX() / rGrid);
-  b2  = (float)(cb.MaxY() / rGrid);
-  georef = GeoRef(bm->cs(),RowCol(iYSize,iXSize),a11,a12,a21,a22,b1,b2);
-  MinMax mm;
-  mm.rcMin = RowCol(0L,0L);
-  mm.rcMax = RowCol(iYSize,iXSize);
-  return mm;
+	CoordBounds cb = bm->cb();
+	double rGrid = max(cb.width(), cb.height());
+	long iSize = 0x4000; //32767L;  // by this change no scrollbars appear when moving the pressed mouse outside the window
+	rGrid /= iSize;
+	long iXSize = 1 + (long)(cb.width()  / rGrid);
+	long iYSize = 1 + (long)(cb.height() / rGrid);
+	float a11,a12,a21,a22,b1,b2;
+	a11 = (float)(1.0 / rGrid);
+	a21 = 0;
+	a12 = 0;
+	a22 = (float)(-1.0/ rGrid);
+	b1  = (float)(- cb.MinX() / rGrid);
+	b2  = (float)(cb.MaxY() / rGrid);
+	georef = GeoRef(bm->cs(),RowCol(iYSize,iXSize),a11,a12,a21,a22,b1,b2);
+	MinMax mm;
+	mm.rcMin = RowCol(0L,0L);
+	mm.rcMax = RowCol(iYSize,iXSize);
+	return mm;
 }
 
 BOOL MapCompositionDoc::OnOpenRasterMap(const Map& m, OpenType ot) 
@@ -1013,39 +1022,39 @@ BOOL MapCompositionDoc::OnOpenMapList(const MapList& maplist, OpenType ot)
 	mp = maplist[maplist->iLower()];
 	if (!mp.fValid())
 		return FALSE;
-  georef = mp->gr();
+	georef = mp->gr();
 	fShowRowCol = true;
 	fRaster = true;
-  SetTitle(maplist);
+	SetTitle(maplist);
 
-  enum { eFilm, eColorComp } eType;
-  if (ot & otSLIDESHOW)
-    eType = eFilm;
-  else
-    eType = eColorComp;
+	enum { eFilm, eColorComp } eType;
+	if (ot & otSLIDESHOW)
+		eType = eFilm;
+	else
+		eType = eColorComp;
 
-  Drawer* dw = 0;
-  switch (eType) {
-    case eFilm:
-      dw = new MapListDrawer(this, maplist);
-      break;
-    case eColorComp:
-      dw = new MapListColorCompDrawer(this, maplist);
-      break;
-  }
+	Drawer* dw = 0;
+	switch (eType) {
+	case eFilm:
+		dw = new MapListDrawer(this, maplist);
+		break;
+	case eColorComp:
+		dw = new MapListColorCompDrawer(this, maplist);
+		break;
+	}
 	bool fShowForm = !(ot & (otNOASK|otEDIT));
 	if (!dw->Configure(fShowForm)) {
 		delete dw;
 		return FALSE;
 	}
-  dw->fNew = false;
-  dl.push_back(dw);
+	dw->fNew = false;
+	dl.push_back(dw);
 
-  mmMapBounds.MinCol() = 0;
-  mmMapBounds.MaxCol() = mp->iCols();
-  mmMapBounds.MinRow() = 0;
-  mmMapBounds.MaxRow() = mp->iLines();
-  mmSize = mmMapBounds;
+	mmMapBounds.MinCol() = 0;
+	mmMapBounds.MaxCol() = mp->iCols();
+	mmMapBounds.MinRow() = 0;
+	mmMapBounds.MaxRow() = mp->iLines();
+	mmSize = mmMapBounds;
 
 	return TRUE;
 }
@@ -1054,21 +1063,21 @@ BOOL MapCompositionDoc::OnOpenSegmentMap(const SegmentMap& sm, OpenType ot)
 {
 	if (!sm.fValid())
 		return FALSE;
-  if (!sm->fCalculated()) {
-    int iPrior = AfxGetThread()->GetThreadPriority();
-    AfxGetThread()->SetThreadPriority(THREAD_PRIORITY_LOWEST);
+	if (!sm->fCalculated()) {
+		int iPrior = AfxGetThread()->GetThreadPriority();
+		AfxGetThread()->SetThreadPriority(THREAD_PRIORITY_LOWEST);
 		sm->Calc();
-    AfxGetThread()->SetThreadPriority(iPrior);
-  }
+		AfxGetThread()->SetThreadPriority(iPrior);
+	}
 	if (!sm->fCalculated())
 		return FALSE;
 
 	mmMapBounds = mmInitGeoRef(sm);
-  mmSize = mmMapBounds;
+	mmSize = mmMapBounds;
 
-  SetTitle(sm);
+	SetTitle(sm);
 
-   //================================================ TEST!!!!!!!
+	//================================================ TEST!!!!!!!
 
 
 	ILWIS::DrawerParameters parms(rootDrawer->getDrawerContext(), rootDrawer);
@@ -1079,9 +1088,9 @@ BOOL MapCompositionDoc::OnOpenSegmentMap(const SegmentMap& sm, OpenType ot)
 	ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
 	drawer->prepare(&pp);
 	rootDrawer->addDrawer(drawer);
- //===============================================
+	//===============================================
 
-  if (ot & otEDIT) {
+	if (ot & otEDIT) {
 		::AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_EDITLAYER, 0);
 	}
 
@@ -1092,19 +1101,19 @@ BOOL MapCompositionDoc::OnOpenPolygonMap(const PolygonMap& pm, OpenType ot)
 {
 	if (!pm.fValid())
 		return FALSE;
-  if (!pm->fCalculated()) {
-    int iPrior = AfxGetThread()->GetThreadPriority();
-    AfxGetThread()->SetThreadPriority(THREAD_PRIORITY_LOWEST);
+	if (!pm->fCalculated()) {
+		int iPrior = AfxGetThread()->GetThreadPriority();
+		AfxGetThread()->SetThreadPriority(THREAD_PRIORITY_LOWEST);
 		pm->Calc();
-    AfxGetThread()->SetThreadPriority(iPrior);
-  }
+		AfxGetThread()->SetThreadPriority(iPrior);
+	}
 	if (!pm->fCalculated())
 		return FALSE;
 
 	mmMapBounds = mmInitGeoRef(pm);
-  mmSize = mmMapBounds;
+	mmSize = mmMapBounds;
 
-  SetTitle(pm);
+	SetTitle(pm);
 
 	ILWIS::DrawerParameters parms(rootDrawer->getDrawerContext(), rootDrawer);
 	ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer("FeatureLayerDrawer", "Ilwis38", &parms);
@@ -1114,8 +1123,8 @@ BOOL MapCompositionDoc::OnOpenPolygonMap(const PolygonMap& pm, OpenType ot)
 	ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
 	drawer->prepare(&pp);
 	rootDrawer->addDrawer(drawer);
- 
-  if (ot & otEDIT) {
+
+	if (ot & otEDIT) {
 		::AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_EDITLAYER, 0);
 	}
 
@@ -1126,21 +1135,21 @@ BOOL MapCompositionDoc::OnOpenPointMap(const PointMap& pm, OpenType ot)
 {
 	if (!pm.fValid())
 		return FALSE;
-  if (!pm->fCalculated()) {
-    int iPrior = AfxGetThread()->GetThreadPriority();
-    AfxGetThread()->SetThreadPriority(THREAD_PRIORITY_LOWEST);
+	if (!pm->fCalculated()) {
+		int iPrior = AfxGetThread()->GetThreadPriority();
+		AfxGetThread()->SetThreadPriority(THREAD_PRIORITY_LOWEST);
 		pm->Calc();
-    AfxGetThread()->SetThreadPriority(iPrior);
-  }	
-  if (!pm->fCalculated())
+		AfxGetThread()->SetThreadPriority(iPrior);
+	}	
+	if (!pm->fCalculated())
 		return FALSE;
 
-  SetTitle(pm);
+	SetTitle(pm);
 
-  //================================================ TEST!!!!!!!
+	//================================================ TEST!!!!!!!
 
 
-    ILWIS::DrawerParameters dp(rootDrawer->getDrawerContext(), rootDrawer);
+	ILWIS::DrawerParameters dp(rootDrawer->getDrawerContext(), rootDrawer);
 	ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer("FeatureLayerDrawer", "Ilwis38", &dp);
 	drawer->addDataSource((void *)&pm);
 	rootDrawer->setCoordSystem(pm->cs());
@@ -1148,9 +1157,9 @@ BOOL MapCompositionDoc::OnOpenPointMap(const PointMap& pm, OpenType ot)
 	ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
 	drawer->prepare(&pp);
 	rootDrawer->addDrawer(drawer);
- //===============================================
+	//===============================================
 
-  if (ot & otEDIT) {
+	if (ot & otEDIT) {
 		::AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_EDITLAYER, 0);
 	}
 
@@ -1161,25 +1170,25 @@ BOOL MapCompositionDoc::OnOpenStereoPair(const StereoPair& stp, OpenType ot)
 {
 	if (!stp.fValid())
 		return FALSE;
-  if (!stp->fCalculated()) {
-    int iPrior = AfxGetThread()->GetThreadPriority();
-    AfxGetThread()->SetThreadPriority(THREAD_PRIORITY_LOWEST);
+	if (!stp->fCalculated()) {
+		int iPrior = AfxGetThread()->GetThreadPriority();
+		AfxGetThread()->SetThreadPriority(THREAD_PRIORITY_LOWEST);
 		stp->Calc();
-    AfxGetThread()->SetThreadPriority(iPrior);
-  }	
-  if (!stp->fCalculated())
+		AfxGetThread()->SetThreadPriority(iPrior);
+	}	
+	if (!stp->fCalculated())
 		return FALSE;
 
-  georef = stp->gr();
+	georef = stp->gr();
 	fShowRowCol = true;
 	fRaster = true;
 
-  SetTitle(stp);
+	SetTitle(stp);
 
-  AnaglyphDrawer* dw = new AnaglyphDrawer(this, stp);
+	AnaglyphDrawer* dw = new AnaglyphDrawer(this, stp);
 	bool fShowForm = !(ot & (otNOASK));
 	if (fShowForm)
-    fShowForm = dw->fShowDisplayOptions();
+		fShowForm = dw->fShowDisplayOptions();
 	if (!dw->Configure(fShowForm)) 
 	{
 		delete dw;
@@ -1187,23 +1196,23 @@ BOOL MapCompositionDoc::OnOpenStereoPair(const StereoPair& stp, OpenType ot)
 	}
 	if (!stp->mapLeft->fHasPyramidFile() || !stp->mapRight->fHasPyramidFile())
 	{
-			IlwisSettings settings("DefaultSettings");
-      if (settings.fValue("CreatePyrWhenFirstDisplayed", false))
-      {
-				stp->mapLeft->CreatePyramidLayer();				
-				stp->mapRight->CreatePyramidLayer();				
-      }
+		IlwisSettings settings("DefaultSettings");
+		if (settings.fValue("CreatePyrWhenFirstDisplayed", false))
+		{
+			stp->mapLeft->CreatePyramidLayer();				
+			stp->mapRight->CreatePyramidLayer();				
+		}
 	}			
-  dw->fNew = false;
-  dl.push_back(dw);
+	dw->fNew = false;
+	dl.push_back(dw);
 
-  mmMapBounds.MinCol() = 0;
-  mmMapBounds.MaxCol() = stp->mapLeft->iCols();
-  mmMapBounds.MinRow() = 0;
-  mmMapBounds.MaxRow() = stp->mapLeft->iLines();
-  mmSize = mmMapBounds;
+	mmMapBounds.MinCol() = 0;
+	mmMapBounds.MaxCol() = stp->mapLeft->iCols();
+	mmMapBounds.MinRow() = 0;
+	mmMapBounds.MaxRow() = stp->mapLeft->iLines();
+	mmSize = mmMapBounds;
 
-  return TRUE;
+	return TRUE;
 }
 
 BOOL MapCompositionDoc::OnOpenMapView(const MapView& mapview)
@@ -1283,51 +1292,51 @@ BOOL MapCompositionDoc::OnOpenMapView(const MapView& mapview)
 
 Drawer* MapCompositionDoc::drDrawer(const MapView& view, const char* sSection)
 {
-  String sType;
-  view->ReadElement(sSection, "Type", sType);
-  if ("MapDrawer" == sType)
-    return new MapDrawer(this, view, sSection);
-  else if ("MapListDrawer" == sType)
-    return new MapListDrawer(this, view, sSection);
-  else if ("MapListColorCompDrawer" == sType)
-    return new MapListColorCompDrawer(this, view, sSection);
-  else if ("SegmentMapDrawer" == sType)
-    return new SegmentMapDrawer(this, view, sSection);
-  else if ("PolygonMapDrawer" == sType)
-    return new PolygonMapDrawer(this, view, sSection);
-  else if ("GridDrawer" == sType)
-    return new GridDrawer(this, view, sSection);
-  else if ("Grid3DDrawer" == sType) {
-    fGrid3DDrawer = true; 
+	String sType;
+	view->ReadElement(sSection, "Type", sType);
+	if ("MapDrawer" == sType)
+		return new MapDrawer(this, view, sSection);
+	else if ("MapListDrawer" == sType)
+		return new MapListDrawer(this, view, sSection);
+	else if ("MapListColorCompDrawer" == sType)
+		return new MapListColorCompDrawer(this, view, sSection);
+	else if ("SegmentMapDrawer" == sType)
+		return new SegmentMapDrawer(this, view, sSection);
+	else if ("PolygonMapDrawer" == sType)
+		return new PolygonMapDrawer(this, view, sSection);
+	else if ("GridDrawer" == sType)
+		return new GridDrawer(this, view, sSection);
+	else if ("Grid3DDrawer" == sType) {
+		fGrid3DDrawer = true; 
 		return new Grid3DDrawer(this, view, sSection);
 	}
-  else if ("PointMapDrawer" == sType || "PointDrawer" == sType )
-    return new PointMapDrawer(this, view, sSection);
-  else if ("AnnotationTextDrawer" == sType)
-    return new AnnotationTextDrawer(this, view, sSection);
-  else if ("GraticuleDrawer"==sType )
-    return new GraticuleDrawer(this, view, sSection);
-  else if ("AnaglyphDrawer" == sType)
-    return new AnaglyphDrawer(this, view, sSection);
-  return 0;
+	else if ("PointMapDrawer" == sType || "PointDrawer" == sType )
+		return new PointMapDrawer(this, view, sSection);
+	else if ("AnnotationTextDrawer" == sType)
+		return new AnnotationTextDrawer(this, view, sSection);
+	else if ("GraticuleDrawer"==sType )
+		return new GraticuleDrawer(this, view, sSection);
+	else if ("AnaglyphDrawer" == sType)
+		return new AnaglyphDrawer(this, view, sSection);
+	return 0;
 }
 
 class AddLayerForm: public FormWithDest
 {
 public:
-  AddLayerForm(CWnd* parent, String* sName, bool *asAnimation = 0)
-  : FormWithDest(parent, SMWTitleAddLayer), asAnim(asAnimation)
-  {
-    new FieldBlank(root);
-    fdtl = new FieldDataTypeLarge(root, sName, ".mpr.mpl.mps.mpa.mpp.atx");
-//    new FieldSegmentMap(root, SDUiSegMap, sName);
-	if ( asAnimation != 0) {
-		CheckBox *cb = new CheckBox(root,SMWUiAnimationLayer,asAnimation);
-		cb->SetCallBack((NotifyProc)&AddLayerForm::changeFilter);
+	AddLayerForm(CWnd* parent, String* sName, bool *asAnimation = 0)
+		: FormWithDest(parent, SMWTitleAddLayer), asAnim(asAnimation)
+	{
+		new FieldBlank(root);
+		fdtl = new FieldDataTypeLarge(root, sName, ".mpr.mpl.mps.mpa.mpp.atx");
+		//    new FieldSegmentMap(root, SDUiSegMap, sName);
+		if ( asAnimation != 0) {
+			CheckBox *cb = new CheckBox(root,SMWUiAnimationLayer,asAnimation);
+			cb->SetCallBack((NotifyProc)&AddLayerForm::changeFilter);
+		}
+		SetMenHelpTopic(htpAddLayer);
+		create();
 	}
-    SetMenHelpTopic(htpAddLayer);
-    create();
-  }
 private:
 	bool * asAnim;
 	FieldDataTypeLarge * fdtl;
@@ -1344,78 +1353,78 @@ private:
 class AddRasForm: public FormWithDest
 {
 public:
-  AddRasForm(CWnd* parent, String* sName)
-  : FormWithDest(parent, SMWTitleAddSegMap)
-  {
-    new FieldBlank(root);
-    new FieldDataTypeLarge(root, sName, ".mpr");
-//    new FieldSegmentMap(root, SDUiSegMap, sName);
-    SetMenHelpTopic(htpAddRasMap);
-    create();
-  }
+	AddRasForm(CWnd* parent, String* sName)
+		: FormWithDest(parent, SMWTitleAddSegMap)
+	{
+		new FieldBlank(root);
+		new FieldDataTypeLarge(root, sName, ".mpr");
+		//    new FieldSegmentMap(root, SDUiSegMap, sName);
+		SetMenHelpTopic(htpAddRasMap);
+		create();
+	}
 };
 
 class AddSegForm: public FormWithDest
 {
 public:
-  AddSegForm(CWnd* parent, String* sName)
-  : FormWithDest(parent, SMWTitleAddSegMap)
-  {
-    new FieldBlank(root);
-    new FieldDataTypeLarge(root, sName, ".mps");
-//    new FieldSegmentMap(root, SDUiSegMap, sName);
-    SetMenHelpTopic(htpAddSegMap);
-    create();
-  }
+	AddSegForm(CWnd* parent, String* sName)
+		: FormWithDest(parent, SMWTitleAddSegMap)
+	{
+		new FieldBlank(root);
+		new FieldDataTypeLarge(root, sName, ".mps");
+		//    new FieldSegmentMap(root, SDUiSegMap, sName);
+		SetMenHelpTopic(htpAddSegMap);
+		create();
+	}
 };
 
 class AddPolForm: public FormWithDest
 {
 public:
-  AddPolForm(CWnd* parent, String* sName)
-  : FormWithDest(parent, SMWTitleAddPolMap)
-  {
-    new FieldBlank(root);
-    new FieldDataTypeLarge(root, sName, ".mpa");
-//    new FieldSegmentMap(root, SDUiSegMap, sName);
-    SetMenHelpTopic(htpAddPolMap);
-    create();
-  }
+	AddPolForm(CWnd* parent, String* sName)
+		: FormWithDest(parent, SMWTitleAddPolMap)
+	{
+		new FieldBlank(root);
+		new FieldDataTypeLarge(root, sName, ".mpa");
+		//    new FieldSegmentMap(root, SDUiSegMap, sName);
+		SetMenHelpTopic(htpAddPolMap);
+		create();
+	}
 };
 
 class AddPntForm: public FormWithDest
 {
 public:
-  AddPntForm(CWnd* parent, String* sName)
-  : FormWithDest(parent, SMWTitleAddPntMap)
-  {
-    new FieldBlank(root);
-    new FieldDataTypeLarge(root, sName, ".mpp");
-//    new FieldSegmentMap(root, SDUiSegMap, sName);
-    SetMenHelpTopic(htpAddPntMap);
-    create();
-  }
+	AddPntForm(CWnd* parent, String* sName)
+		: FormWithDest(parent, SMWTitleAddPntMap)
+	{
+		new FieldBlank(root);
+		new FieldDataTypeLarge(root, sName, ".mpp");
+		//    new FieldSegmentMap(root, SDUiSegMap, sName);
+		SetMenHelpTopic(htpAddPntMap);
+		create();
+	}
 };
 
 bool MapCompositionDoc::fAppendable(const FileName& fn)
 {
 	bool fOk = false;
 	if (fn.sExt == ".mps" || fn.sExt == ".mpa" || 
-		  fn.sExt == ".mpp" ||
-			fn.sExt == ".atx") {
-		fOk = true;
-		// melding op status regel?
+		fn.sExt == ".mpp" ||
+		fn.sExt == ".atx") {
+			fOk = true;
+			// melding op status regel?
 	}
 	else if (fn.sExt == ".mpr")
-  {
-    Map mp(fn);
-    fOk = fGeoRefOk(mp);
+	{
+		Map mp(fn);
+		fOk = fGeoRefOk(mp);
 	}
-  else if (fn.sExt == ".mpl") 
-  {
-    MapList mpl(fn);
-    fOk = fGeoRefOk(mpl[mpl->iLower()]);
-  }
+	else if (fn.sExt == ".mpl") 
+	{
+		MapList mpl(fn);
+		fOk = fGeoRefOk(mpl[mpl->iLower()]);
+	}
 	else if (fn.sExt == ".grf" || fn.sExt == ".csy") {
 		if (!fRaster && !fGrid3DDrawer) 
 			fOk = true; 
@@ -1427,13 +1436,13 @@ bool MapCompositionDoc::fAppendable(const FileName& fn)
 Drawer* MapCompositionDoc::drAppend(const FileName& fn, bool asAnimation)
 {
 	if (!fAppendable(fn))
-  {
-    String sErr(SMWErrCannotBeAdded_S.scVal(), fn.sShortName());
-    AfxGetMainWnd()->MessageBox(sErr.scVal(), SMWUiAddDataLayer.sVal(), MB_OK|MB_ICONEXCLAMATION);
-    return 0;
-    
+	{
+		String sErr(SMWErrCannotBeAdded_S.scVal(), fn.sShortName());
+		AfxGetMainWnd()->MessageBox(sErr.scVal(), SMWUiAddDataLayer.sVal(), MB_OK|MB_ICONEXCLAMATION);
 		return 0;
-  }    
+
+		return 0;
+	}    
 	Drawer* dr = 0;
 	// add layer
 	if (".mps" == fn.sExt || ".mpa" == fn.sExt || ".mpp" == fn.sExt) {
@@ -1449,16 +1458,16 @@ Drawer* MapCompositionDoc::drAppend(const FileName& fn, bool asAnimation)
 		dr = drAppend(ml,asAnimation);
 	}
 	else if (".atx" == fn.sExt) {
-    AnnotationText atx(fn);
+		AnnotationText atx(fn);
 		dr = drAppend(atx);
 	}
 	// set coordsystem
 	else if (".csy" == fn.sExt) {
-    CoordSystem csy(fn);
+		CoordSystem csy(fn);
 		SetCoordSystem(csy);
 	}
 	else if (".grf" == fn.sExt) {
-    GeoRef grf(fn);
+		GeoRef grf(fn);
 		SetCoordSystem(grf);
 	}
 
@@ -1498,7 +1507,7 @@ void MapCompositionDoc::OnAddRasMap()
 		if (dr)	// could be null
 			if (!dr->Configure()) {
 				dl.remove(dr);
-			  delete dr;
+				delete dr;
 			}
 			else {
 				ChangeState();
@@ -1516,7 +1525,7 @@ void MapCompositionDoc::OnAddSegMap()
 		FileName fn(sName);
 		SegmentMap sm(fn);
 		Drawer* dr = drAppend(sm);
-    if (!dr->Configure()) {
+		if (!dr->Configure()) {
 			dl.remove(dr);
 			delete dr;
 		}
@@ -1536,7 +1545,7 @@ void MapCompositionDoc::OnAddPolMap()
 		FileName fn(sName);
 		PolygonMap pm(fn);
 		Drawer* dr = drAppend(pm);
-    if (!dr->Configure()) {
+		if (!dr->Configure()) {
 			dl.remove(dr);
 			delete dr;
 		}
@@ -1556,7 +1565,7 @@ void MapCompositionDoc::OnAddPntMap()
 		FileName fn(sName);
 		PointMap pm(fn);
 		Drawer* dr = drAppend(pm);
-    if (!dr->Configure()) {
+		if (!dr->Configure()) {
 			dl.remove(dr);
 			delete dr;
 		}
@@ -1569,46 +1578,45 @@ void MapCompositionDoc::OnAddPntMap()
 
 bool MapCompositionDoc::fCoordSystemOk(const BaseMap& bmap)
 {
-  if (!bmap.fValid()) 
-    return false;
-  return true;
+	if (!bmap.fValid()) 
+		return false;
+	return true;
 }
 
 bool MapCompositionDoc::fGeoRefOk(const Map& rasmap)
 {
-  if (!rasmap.fValid())
-    return false;
-  if (fShowRowCol || fGrid3DDrawer)
-    return rasmap->gr() == georef;
-  return true;
+	if (!rasmap.fValid())
+		return false;
+	if (fShowRowCol || fGrid3DDrawer)
+		return rasmap->gr() == georef;
+	return true;
 }
 
-void MapCompositionDoc::RemoveDrawer(Drawer* drw)
+void MapCompositionDoc::RemoveDrawer(ILWIS::NewDrawer* drw)
 {
 	ChangeState();
-	dl.remove(drw);
+	rootDrawer->removeDrawer(drw->getId());
 	ChangeState();
-  delete drw;
 }
 
 Drawer* MapCompositionDoc::drAppend(const Map& rasmap, bool asAnimation)
 {
-  if (!fGeoRefOk(rasmap))
-  {
-    AfxGetMainWnd()->MessageBox(SMWErrNotSameGeoRef.sVal(), SMWUiAddDataLayer.sVal(), MB_OK|MB_ICONEXCLAMATION);
-    return 0;
-  }
-  if (!rasmap->fCalculated())
+	if (!fGeoRefOk(rasmap))
 	{
-    int iPrior = AfxGetThread()->GetThreadPriority();
-    AfxGetThread()->SetThreadPriority(THREAD_PRIORITY_LOWEST);
-
-    rasmap->Calc();
-		
-    AfxGetThread()->SetThreadPriority(iPrior);
+		AfxGetMainWnd()->MessageBox(SMWErrNotSameGeoRef.sVal(), SMWUiAddDataLayer.sVal(), MB_OK|MB_ICONEXCLAMATION);
+		return 0;
 	}
-  if (!rasmap->fCalculated() && !rasmap->fDefOnlyPossible())
-    return 0;
+	if (!rasmap->fCalculated())
+	{
+		int iPrior = AfxGetThread()->GetThreadPriority();
+		AfxGetThread()->SetThreadPriority(THREAD_PRIORITY_LOWEST);
+
+		rasmap->Calc();
+
+		AfxGetThread()->SetThreadPriority(iPrior);
+	}
+	if (!rasmap->fCalculated() && !rasmap->fDefOnlyPossible())
+		return 0;
 	bool fGeoRefChanged = false;
 	Drawer* dr = 0;
 	if ( rasmap->gr()->pgWMS() == 0)
@@ -1616,15 +1624,15 @@ Drawer* MapCompositionDoc::drAppend(const Map& rasmap, bool asAnimation)
 	else 
 		dr = new WMSMapDrawer(this, rasmap);
 
-  if (fRaster)
-  	dl.push_back(dr);
-  else
-	  dl.push_front(dr);
+	if (fRaster)
+		dl.push_back(dr);
+	else
+		dl.push_front(dr);
 	ChangeState();
 	fShowRowCol = true;
 	fRaster = true;
-  if (rasmap->gr() != georef) 
-  {
+	if (rasmap->gr() != georef) 
+	{
 		georef = rasmap->gr();
 		MinMax mm;
 		mm.rcMin = RowCol(0L,0L);
@@ -1638,30 +1646,30 @@ Drawer* MapCompositionDoc::drAppend(const Map& rasmap, bool asAnimation)
 
 Drawer* MapCompositionDoc::drAppend(const MapList& maplist, bool asAnimation)
 {
-  class AppendMapListForm: public FormWithDest
-  {
-  public:
-    AppendMapListForm(CWnd* wPar, const MapList& ml, int* iOption)
-    : FormWithDest(wPar, SMWTitleShowMapList)
-    {
-      String sMapList = ml->sName();
-      String s(SMWMsgShowMapListAs_S.scVal(), sMapList);
-      RadioGroup* rg = new RadioGroup(root, s, iOption);
-      RadioButton* rbCc = new RadioButton(rg, SMWUiColorComposite);
-      new RadioButton(rg, SMWUiSlideShow);
-      if (0 == ml[ml->iLower()]->dm()->pdv())
-        rbCc->Disable();
-      create();
-    }
-  };
-  if (!fGeoRefOk(maplist[maplist->iLower()]))
-    return 0;
-  int iOption = 0;
-  AppendMapListForm frm(wndGetActiveView(), maplist, &iOption);
-  if (!frm.fOkClicked())
-    return false;
+	class AppendMapListForm: public FormWithDest
+	{
+	public:
+		AppendMapListForm(CWnd* wPar, const MapList& ml, int* iOption)
+			: FormWithDest(wPar, SMWTitleShowMapList)
+		{
+			String sMapList = ml->sName();
+			String s(SMWMsgShowMapListAs_S.scVal(), sMapList);
+			RadioGroup* rg = new RadioGroup(root, s, iOption);
+			RadioButton* rbCc = new RadioButton(rg, SMWUiColorComposite);
+			new RadioButton(rg, SMWUiSlideShow);
+			if (0 == ml[ml->iLower()]->dm()->pdv())
+				rbCc->Disable();
+			create();
+		}
+	};
+	if (!fGeoRefOk(maplist[maplist->iLower()]))
+		return 0;
+	int iOption = 0;
+	AppendMapListForm frm(wndGetActiveView(), maplist, &iOption);
+	if (!frm.fOkClicked())
+		return false;
 	bool fGeoRefChanged = false;
-  if (maplist->gr() != georef) 
+	if (maplist->gr() != georef) 
 	{
 		fGeoRefChanged = true;
 		georef = maplist->gr();
@@ -1671,18 +1679,18 @@ Drawer* MapCompositionDoc::drAppend(const MapList& maplist, bool asAnimation)
 		mmSize = mmMapBounds = mm;
 	}	
 	Drawer* dr = 0;
-  switch (iOption) {
-    case 0:
-      dr = new MapListColorCompDrawer(this, maplist);
-      break;
-    case 1:
-      dr = new MapListDrawer(this, maplist);
-      break;
-  }
-  if (fRaster)
-  	dl.push_back(dr);
-  else
-	  dl.push_front(dr);
+	switch (iOption) {
+case 0:
+	dr = new MapListColorCompDrawer(this, maplist);
+	break;
+case 1:
+	dr = new MapListDrawer(this, maplist);
+	break;
+	}
+	if (fRaster)
+		dl.push_back(dr);
+	else
+		dl.push_front(dr);
 	ChangeState();
 	fShowRowCol = true;
 	fRaster = true;
@@ -1725,61 +1733,62 @@ Drawer* MapCompositionDoc::drAppend(const BaseMap& mp, bool asAnimation)
 	return 0;
 }
 
+
 /*
 void MapCompositionDoc::OnAddNorthArrow()
 {
-  Drawer *dr = new NorthDrawer(this);
-  if (!dr->Configure()) {
-    dr->fAct = false;
-		delete dr;
-	}
-	else {
-	  dl.push_back(dr);
-		ChangeState();
-		UpdateAllViews(0,2);
-	}
+Drawer *dr = new NorthDrawer(this);
+if (!dr->Configure()) {
+dr->fAct = false;
+delete dr;
+}
+else {
+dl.push_back(dr);
+ChangeState();
+UpdateAllViews(0,2);
+}
 }
 */
 
 class _export AddAnnTextForm: public FormWithDest
 {
 public:
-  AddAnnTextForm(CWnd* parent, String* sName)
-  : FormWithDest(parent, SMWTitleAddAnnText)
-	//, mw(parent)
-  {
-    new FieldBlank(root);
-    new FieldDataTypeLarge(root, sName, ".ATX");
-//    new PushButton(root, SMWUiCreate, (NotifyProc)&AddAnnTextForm::CreateAtx);
-    SetMenHelpTopic(htpAddAnnText);
-    create();
-  }
+	AddAnnTextForm(CWnd* parent, String* sName)
+		: FormWithDest(parent, SMWTitleAddAnnText)
+		//, mw(parent)
+	{
+		new FieldBlank(root);
+		new FieldDataTypeLarge(root, sName, ".ATX");
+		//    new PushButton(root, SMWUiCreate, (NotifyProc)&AddAnnTextForm::CreateAtx);
+		SetMenHelpTopic(htpAddAnnText);
+		create();
+	}
 private:
-/*
-  int CreateAtx(zEvent*) {
-    String sAtx;
-    bool fOk;
-    {
-      zRect rect;
-      mw->mppn->getInterior(rect);
-      MinMax mm = mw->mppn->mps->mmRect(rect);
-      zPrinterDisplay *pd = mw->mppn->prDisplay();
-      PrinterPositioner psn(pd, mm, mw->mppn->georef);
-      double rWorkScale = psn.rScale();
+	/*
+	int CreateAtx(zEvent*) {
+	String sAtx;
+	bool fOk;
+	{
+	zRect rect;
+	mw->mppn->getInterior(rect);
+	MinMax mm = mw->mppn->mps->mmRect(rect);
+	zPrinterDisplay *pd = mw->mppn->prDisplay();
+	PrinterPositioner psn(pd, mm, mw->mppn->georef);
+	double rWorkScale = psn.rScale();
 
-      FormCreateAnnotationText frm(this, &sAtx, rWorkScale);
-      fOk = frm.fOkClicked();
-    }
-    if (fOk) {
-      FileName fn(sAtx);
-      fn.sExt = ".atx";
-      mw->mppn->EditNamedLayer(fn);
-      return endCancel(0);
-    }
-    return 0;
-  }
-  MapWindow* mw;
-*/
+	FormCreateAnnotationText frm(this, &sAtx, rWorkScale);
+	fOk = frm.fOkClicked();
+	}
+	if (fOk) {
+	FileName fn(sAtx);
+	fn.sExt = ".atx";
+	mw->mppn->EditNamedLayer(fn);
+	return endCancel(0);
+	}
+	return 0;
+	}
+	MapWindow* mw;
+	*/
 };
 
 
@@ -1792,7 +1801,7 @@ void MapCompositionDoc::OnAddAnnText()
 		FileName fn(sName);
 		AnnotationText at(fn);
 		Drawer* dr = drAppend(at);
-    if (!dr->Configure()) {
+		if (!dr->Configure()) {
 			dl.remove(dr);
 			delete dr;
 		}
@@ -1806,46 +1815,46 @@ void MapCompositionDoc::OnAddAnnText()
 Drawer* MapCompositionDoc::drAppend(const AnnotationText& at)
 {
 	AnnotationTextDrawer* dr = new AnnotationTextDrawer(this, at);
-  dl.push_back(dr);
+	dl.push_back(dr);
 	ChangeState();
-  return dr;
+	return dr;
 }
 
-  class BackgroundForm: public FormWithDest
-  {
-  public:
-    BackgroundForm(CWnd* parent, Color* col)
-    : FormWithDest(parent, SMWTitleBackground)
-    {
-      new FieldBlank(root);
-      new FieldColor(root, SMWUiBackground, col);
-      SetMenHelpTopic(htpDspBackground);
-      create();
-    }
-  };
+class BackgroundForm: public FormWithDest
+{
+public:
+	BackgroundForm(CWnd* parent, Color* col)
+		: FormWithDest(parent, SMWTitleBackground)
+	{
+		new FieldBlank(root);
+		new FieldColor(root, SMWUiBackground, col);
+		SetMenHelpTopic(htpDspBackground);
+		create();
+	}
+};
 
 void MapCompositionDoc::OnBackgroundColor()
 {
-  Color col = colBackground;
-  BackgroundForm frm(wndGetActiveView(), &col);
-  if (frm.fOkClicked()) {
-    if (col != colBackground) {
-      colBackground = col;
+	Color col = colBackground;
+	BackgroundForm frm(wndGetActiveView(), &col);
+	if (frm.fOkClicked()) {
+		if (col != colBackground) {
+			colBackground = col;
 			ChangeState();
 			UpdateAllViews(0);
-    }
-  }
+		}
+	}
 }
 
 void MapCompositionDoc::OnAddGrid()
 {
-  Drawer *dr = new GridDrawer(this);
-  if (!dr->Configure()) {
-    dr->fAct = false;
+	Drawer *dr = new GridDrawer(this);
+	if (!dr->Configure()) {
+		dr->fAct = false;
 		delete dr;
 	}
 	else {
-	  dl.push_back(dr);
+		dl.push_back(dr);
 		ChangeState();
 		UpdateAllViews(0,2);
 	}
@@ -1853,13 +1862,13 @@ void MapCompositionDoc::OnAddGrid()
 
 void MapCompositionDoc::OnAddGraticule()
 {
-  Drawer *dr = new GraticuleDrawer(this);
-  if (!dr->Configure()) {
-    dr->fAct = false;
+	Drawer *dr = new GraticuleDrawer(this);
+	if (!dr->Configure()) {
+		dr->fAct = false;
 		delete dr;
 	}
 	else {
-	  dl.push_back(dr);
+		dl.push_back(dr);
 		ChangeState();
 		UpdateAllViews(0,2);
 	}
@@ -1882,106 +1891,106 @@ void MapCompositionDoc::OnUpdateAddGraticule(CCmdUI* pCmdUI)
 /*
 void MapCompositionDoc::OnAddBitmap()
 {
-  class BmForm: public FormWithDest
-  {
-  public:
-    BmForm(CWnd* parent, String* sName, bool* fIsotropic)
-    : FormWithDest(parent, SMWTitleAddBitmapOrPicture)
-    {
-      new FieldDataTypeLarge(root, sName, ".bmp.wmf.emf");
-      new CheckBox(root, SMWUiIsotropic, fIsotropic);
-      SetMenHelpTopic(htpAddBitmapPicture);
-      create();
-    }
-  };
-  String sName;
-  bool fIsotropic;
-  BmForm form(wndGetActiveView(), &sName, &fIsotropic);
-  if (form.fOkClicked()) {
-    FileName fn(sName);
-		Drawer* dr = 0;
-    if (".bmp" == fn.sExt)
-			dr = new BitmapDrawer(this, fn, fIsotropic);
-    else if (".wmf" == fn.sExt || ".emf" == fn.sExt)  
-			dr = new MetaFileDrawer(this, fn, fIsotropic);
-		if (dr)	{
-			dl.push_back(dr);
-			ChangeState();
-			UpdateAllViews(0,2);
-		}
-  }
+class BmForm: public FormWithDest
+{
+public:
+BmForm(CWnd* parent, String* sName, bool* fIsotropic)
+: FormWithDest(parent, SMWTitleAddBitmapOrPicture)
+{
+new FieldDataTypeLarge(root, sName, ".bmp.wmf.emf");
+new CheckBox(root, SMWUiIsotropic, fIsotropic);
+SetMenHelpTopic(htpAddBitmapPicture);
+create();
+}
+};
+String sName;
+bool fIsotropic;
+BmForm form(wndGetActiveView(), &sName, &fIsotropic);
+if (form.fOkClicked()) {
+FileName fn(sName);
+Drawer* dr = 0;
+if (".bmp" == fn.sExt)
+dr = new BitmapDrawer(this, fn, fIsotropic);
+else if (".wmf" == fn.sExt || ".emf" == fn.sExt)  
+dr = new MetaFileDrawer(this, fn, fIsotropic);
+if (dr)	{
+dl.push_back(dr);
+ChangeState();
+UpdateAllViews(0,2);
+}
+}
 }
 
 Drawer* MapCompositionDoc::drAppend(HENHMETAFILE hmf)
 {
-	Drawer* dr = new MetaFileDrawer(this, hmf);
-	if (dr)	{
-	  dl.push_back(dr);
-		ChangeState();
-		UpdateAllViews(0,2);
-	}
-	return dr;
+Drawer* dr = new MetaFileDrawer(this, hmf);
+if (dr)	{
+dl.push_back(dr);
+ChangeState();
+UpdateAllViews(0,2);
+}
+return dr;
 }
 
 Drawer* MapCompositionDoc::drAppend(HBITMAP hbm)
 {
-	Drawer* dr = new BitmapDrawer(this, hbm);
-	if (dr)	{
-		dl.push_back(dr);
-		ChangeState();
-		UpdateAllViews(0,2);
-	}
-	return dr;
+Drawer* dr = new BitmapDrawer(this, hbm);
+if (dr)	{
+dl.push_back(dr);
+ChangeState();
+UpdateAllViews(0,2);
+}
+return dr;
 }
 */
 
 void MapCompositionDoc::SetCoordSystem(const CoordSystem& cs)
 {
-  if (!cs.fValid() || fRaster) 
-    return;
-  if (georef->cs() == cs) 
-    return;		// nothing to be done
-  if (!cs->fConvertFrom(georef->cs())) {
-    String s(SMWErrCSUnusable);
-    wndGetActiveView()->MessageBox(s.scVal(), SMWMsgRplCsy.scVal(), MB_OK|MB_ICONEXCLAMATION);
-    return;  
-  }  
-  LatLon llMin, llMax;
-  double rGrid;
-  Drawer::CalcBounds(georef, mmBounds(), llMin, llMax);
-  rGrid = llMax.Lat - llMin.Lat;
-  rGrid /= 10;
-  llMin.Lat -= rGrid;
-  llMax.Lat += rGrid;
-  rGrid = llMax.Lon - llMin.Lon;
-  rGrid /= 10;
-  llMin.Lon -= rGrid;
-  llMax.Lon += rGrid;
-  CoordBounds cb;
-  Drawer::CalcBounds(cs, llMin, llMax, cb);
-  rGrid = max(cb.width(), cb.height());
-  rGrid /= 10;
-  cb.MinX() -= rGrid;
-  cb.MaxX() += rGrid;
-  cb.MinY() -= rGrid;
-  cb.MaxY() += rGrid;
-  rGrid = max(cb.width(), cb.height());
-  long iSize = 0x4000; //32767L;
-  rGrid /= iSize;
-  long iXSize = (long)(cb.width()  / rGrid);
-  long iYSize = (long)(cb.height() / rGrid);
-  float a11,a12,a21,a22,b1,b2;
-  a11 = (float)(1.0 / rGrid);
-  a21 = 0;
-  a12 = 0;
-  a22 = (float)(-1.0/ rGrid);
-  b1  = (float)(- cb.MinX() / rGrid);
-  b2  = (float)(cb.MaxY() / rGrid);
-  georef = GeoRef(cs,RowCol(iYSize,iXSize),a11,a12,a21,a22,b1,b2);
-  MinMax mm;
-  mm.rcMin = RowCol(0L,0L);
-  mm.rcMax = georef->rcSize();
-  mmSize = mmMapBounds = mm;
+	if (!cs.fValid() || fRaster) 
+		return;
+	if (georef->cs() == cs) 
+		return;		// nothing to be done
+	if (!cs->fConvertFrom(georef->cs())) {
+		String s(SMWErrCSUnusable);
+		wndGetActiveView()->MessageBox(s.scVal(), SMWMsgRplCsy.scVal(), MB_OK|MB_ICONEXCLAMATION);
+		return;  
+	}  
+	LatLon llMin, llMax;
+	double rGrid;
+	Drawer::CalcBounds(georef, mmBounds(), llMin, llMax);
+	rGrid = llMax.Lat - llMin.Lat;
+	rGrid /= 10;
+	llMin.Lat -= rGrid;
+	llMax.Lat += rGrid;
+	rGrid = llMax.Lon - llMin.Lon;
+	rGrid /= 10;
+	llMin.Lon -= rGrid;
+	llMax.Lon += rGrid;
+	CoordBounds cb;
+	Drawer::CalcBounds(cs, llMin, llMax, cb);
+	rGrid = max(cb.width(), cb.height());
+	rGrid /= 10;
+	cb.MinX() -= rGrid;
+	cb.MaxX() += rGrid;
+	cb.MinY() -= rGrid;
+	cb.MaxY() += rGrid;
+	rGrid = max(cb.width(), cb.height());
+	long iSize = 0x4000; //32767L;
+	rGrid /= iSize;
+	long iXSize = (long)(cb.width()  / rGrid);
+	long iYSize = (long)(cb.height() / rGrid);
+	float a11,a12,a21,a22,b1,b2;
+	a11 = (float)(1.0 / rGrid);
+	a21 = 0;
+	a12 = 0;
+	a22 = (float)(-1.0/ rGrid);
+	b1  = (float)(- cb.MinX() / rGrid);
+	b2  = (float)(cb.MaxY() / rGrid);
+	georef = GeoRef(cs,RowCol(iYSize,iXSize),a11,a12,a21,a22,b1,b2);
+	MinMax mm;
+	mm.rcMin = RowCol(0L,0L);
+	mm.rcMax = georef->rcSize();
+	mmSize = mmMapBounds = mm;
 	ChangeState();
 	UpdateAllViews(0,3);
 	fShowRowCol = false;
@@ -1989,26 +1998,26 @@ void MapCompositionDoc::SetCoordSystem(const CoordSystem& cs)
 
 void MapCompositionDoc::SetCoordSystem(const GeoRef& grf)
 {
-  if (!grf.fValid() || fRaster) 
-    return;
-  if (grf->cs() != georef->cs()) {
-    if (!grf->cs()->fConvertFrom(georef->cs())) {
-      String s(SCSErrWrongCSofGeoRef_SSS.sVal(), 
-               georef->cs()->sName(), grf->sName(), grf->cs()->sName());
-      wndGetActiveView()->MessageBox(s.scVal(), SMWMsgRplGeoRef.scVal(), MB_OK|MB_ICONEXCLAMATION);
-      return;  
-    }  
-  }  
+	if (!grf.fValid() || fRaster) 
+		return;
+	if (grf->cs() != georef->cs()) {
+		if (!grf->cs()->fConvertFrom(georef->cs())) {
+			String s(SCSErrWrongCSofGeoRef_SSS.sVal(), 
+				georef->cs()->sName(), grf->sName(), grf->cs()->sName());
+			wndGetActiveView()->MessageBox(s.scVal(), SMWMsgRplGeoRef.scVal(), MB_OK|MB_ICONEXCLAMATION);
+			return;  
+		}  
+	}  
 	SetGeoRef(grf);
 }
 
 void MapCompositionDoc::SetGeoRef(const GeoRef& grf)
 {
-  MinMax mm;
-  mm.rcMin = RowCol(0L,0L);
-  mm.rcMax = grf->rcSize();
-  mmSize = mmMapBounds = mm;
-  georef = grf;
+	MinMax mm;
+	mm.rcMin = RowCol(0L,0L);
+	mm.rcMax = grf->rcSize();
+	mmSize = mmMapBounds = mm;
+	georef = grf;
 	ChangeState();
 	UpdateAllViews(0,3);
 	fShowRowCol = true;
@@ -2016,32 +2025,32 @@ void MapCompositionDoc::SetGeoRef(const GeoRef& grf)
 
 void MapCompositionDoc::OnChangeCoordSystem()
 {
-  class CCSForm: public FormWithDest
-  {
-  public:
-    CCSForm(CWnd* parent, String* sName)
-    : FormWithDest(parent, SMWTitleChangeCoordSystem)
-    {
-      new FieldDataTypeLarge(root, sName, ".csy.grf");
-      SetMenHelpTopic(htpDspChangeCS);
-      create();
-    }
-  };
-  String sName = georef->fnObj.sShortName();
-  if (sName == "")
-    sName = georef->cs()->fnObj.sShortName();
-  CCSForm form(wndGetActiveView(), &sName);
-  if (form.fOkClicked()) {
-    FileName fn(sName);
-    if (fn.sExt == ".grf") {
-      GeoRef grf(fn);
-      SetCoordSystem(grf);
-    }
-    else if (fn.sExt == ".csy") {
-      CoordSystem csy(fn);
-      SetCoordSystem(csy);
-    }
-  }
+	class CCSForm: public FormWithDest
+	{
+	public:
+		CCSForm(CWnd* parent, String* sName)
+			: FormWithDest(parent, SMWTitleChangeCoordSystem)
+		{
+			new FieldDataTypeLarge(root, sName, ".csy.grf");
+			SetMenHelpTopic(htpDspChangeCS);
+			create();
+		}
+	};
+	String sName = georef->fnObj.sShortName();
+	if (sName == "")
+		sName = georef->cs()->fnObj.sShortName();
+	CCSForm form(wndGetActiveView(), &sName);
+	if (form.fOkClicked()) {
+		FileName fn(sName);
+		if (fn.sExt == ".grf") {
+			GeoRef grf(fn);
+			SetCoordSystem(grf);
+		}
+		else if (fn.sExt == ".csy") {
+			CoordSystem csy(fn);
+			SetCoordSystem(csy);
+		}
+	}
 }
 
 void MapCompositionDoc::OnUpdateChangeCoordSystem(CCmdUI* pCmdUI)
@@ -2062,7 +2071,7 @@ void MapCompositionDoc::OnShowHistogram()
 	CFrameWnd* fw = wnd->GetTopLevelFrame();
 	if (0 == fw)
 		return;
-  for (list<Drawer*>::iterator iter = dl.begin(); iter != dl.end(); ++iter) 
+	for (list<Drawer*>::iterator iter = dl.begin(); iter != dl.end(); ++iter) 
 	{
 		Drawer* dr = *iter;
 		MapListColorCompDrawer* mlccd = dynamic_cast<MapListColorCompDrawer*>(dr);
@@ -2084,9 +2093,9 @@ void MapCompositionDoc::OnShowHistogram()
 		MapDrawer* md = dynamic_cast<MapDrawer*>(dr);
 		if (md) // && md->dm()->pdv()) 
 		{
-      HistogramGraphDoc* hgd = new HistogramGraphDoc;
-      TableHistogramInfo thi(md->mpGet());
-      hgd->OnOpenDocument(thi.tbl());
+			HistogramGraphDoc* hgd = new HistogramGraphDoc;
+			TableHistogramInfo thi(md->mpGet());
+			hgd->OnOpenDocument(thi.tbl());
 			HistogramGraphView* hgv = new HistogramGraphView;
 			gbHist = new GeneralBar;
 			gbHist->view = hgv;
@@ -2160,32 +2169,32 @@ void MapCompositionDoc::ChangeState()
 MapPaneView* MapCompositionDoc::mpvGetView() const
 {
 	POSITION pos = GetFirstViewPosition();
-  while (0 != pos) {
+	while (0 != pos) {
 		CView* vw = GetNextView(pos);
 		MapPaneView* mpv = dynamic_cast<MapPaneView*>(vw);
 		if (mpv)
 			return mpv;
 	}
-  return 0;
+	return 0;
 }
 
 void MapCompositionDoc::OnOpen() 
 {
 	class ShowBaseMapForm: public FormWithDest
-  {
-  public:
-    ShowBaseMapForm(CWnd* parent, String* sName)
-    : FormWithDest(parent, SMSTitleShowMap)
-    {
-      new FieldDataObject(root, sName);
-      SetMenHelpTopic(htpOpenBaseMap);
-      create();
-    }
-  };
+	{
+	public:
+		ShowBaseMapForm(CWnd* parent, String* sName)
+			: FormWithDest(parent, SMSTitleShowMap)
+		{
+			new FieldDataObject(root, sName);
+			SetMenHelpTopic(htpOpenBaseMap);
+			create();
+		}
+	};
 	if (!SaveModified())
 		return;
-  String sMap;
-  ShowBaseMapForm frm(wndGetActiveView(), &sMap);
+	String sMap;
+	ShowBaseMapForm frm(wndGetActiveView(), &sMap);
 	if (frm.fOkClicked()) {
 		OnNewDocument();
 		UpdateAllViews(0,0);
@@ -2272,8 +2281,8 @@ void MapCompositionDoc::OnOpenPixelInfo()
 {
 	String sList;
 	list<Drawer*>::iterator iter = dl.begin();
-  if ("" != georef->fnObj.sFile)
-    sList &= georef->fnObj.sFullNameQuoted();
+	if ("" != georef->fnObj.sFile)
+		sList &= georef->fnObj.sFullNameQuoted();
 	for (; iter != dl.end(); ++iter)
 	{
 		Drawer* dr = *iter;
@@ -2292,26 +2301,26 @@ BOOL MapCompositionDoc::OnOpenGeoRef3D(const GeoRef& gr3D, OpenType ot )
 {
 	fShowRowCol = false;
 	fRaster = false;
-  SetTitle(gr3D);
+	SetTitle(gr3D);
 
-  Drawer* dw = 0;
+	Drawer* dw = 0;
 	SetGeoRef(gr3D);	
 	dw = new Grid3DDrawer(this);
 	if (!dw->Configure()) {
 		delete dw;
 		return FALSE;
 	}
-  dw->fNew = false;
-  dl.push_back(dw);
+	dw->fNew = false;
+	dl.push_back(dw);
 
-  mmMapBounds.MinCol() = 0;
-  mmMapBounds.MaxCol() = georef->rcSize().Col;
-  mmMapBounds.MinRow() = 0;
-  mmMapBounds.MaxRow() = georef->rcSize().Row;
-  mmSize = mmMapBounds;
+	mmMapBounds.MinCol() = 0;
+	mmMapBounds.MaxCol() = georef->rcSize().Col;
+	mmMapBounds.MinRow() = 0;
+	mmMapBounds.MaxRow() = georef->rcSize().Row;
+	mmSize = mmMapBounds;
 	fGrid3DDrawer = true;
 
- 	if (ot & otEDIT) 
+	if (ot & otEDIT) 
 		::AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_EDITGRF, 0);
 	return TRUE;
 }

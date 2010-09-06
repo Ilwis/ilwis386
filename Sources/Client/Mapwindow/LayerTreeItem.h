@@ -188,12 +188,13 @@ private:
 class _export DisplayOptionColorItem: public DisplayOptionTreeItem
 {
 public:
-	DisplayOptionColorItem(LayerTreeView*, HTREEITEM parent, ILWIS::NewDrawer *dr, DisplayOptionItemFunc f,HTREEITEM item=0, SetChecks *checks=0);
+	DisplayOptionColorItem(const String& sText, LayerTreeView*, HTREEITEM parent, ILWIS::NewDrawer *dr, DisplayOptionItemFunc f,HTREEITEM item=0, SetChecks *checks=0);
 	//DisplayOptionColorItem(LayerTreeView*, ILWIS::NewDrawer *dr, SetCheckFunc f,DisplayOptionItemFunc fun=0, HTREEITEM item=0, ILWIS::NewDrawer *_altHandler=0);
 	void OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult);
 	void setColor(Color c) ;
 private:
 	Color color;
+	String sText;
 
 };
 
