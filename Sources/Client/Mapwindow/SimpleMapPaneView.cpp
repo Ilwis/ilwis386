@@ -452,6 +452,7 @@ void SimpleMapPaneView::OnLButtonDown(UINT nFlags, CPoint point)
 	MapCompositionDoc* mcd = GetDocument();
 	RowCol rc(point.y, point.x);
 	DrawerContext *context = mcd->rootDrawer->getDrawerContext();
+	CPoint pnt(rc.Col, rc.Row);
 	Coord c = context->screenToWorld(rc);
 	cwcsButtonDown = CoordWithCoordSystem(c, context->getCoordinateSystem());
 	if (edit && edit->OnLButtonDown(nFlags, point)) {
@@ -476,6 +477,7 @@ void SimpleMapPaneView::OnLButtonUp(UINT nFlags, CPoint point)
 	ILWIS::MouseClickInfoDrawer *mid = (ILWIS::MouseClickInfoDrawer *)mcd->rootDrawer->getDrawer("MouseClickInfoDrawer");
 	if (mid) {
 		mid->setActivePoint(Coord());
+		mcd->mpvGetView()->Invalidate();
 	}
 	ReleaseCapture();
 	if (edit && edit->OnLButtonUp(nFlags, point)) {

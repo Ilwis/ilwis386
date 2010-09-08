@@ -23,7 +23,7 @@ MouseClickInfoDrawer::MouseClickInfoDrawer(DrawerParameters *parms) :
 	hasText(false)
 {
 	name = id = "MouseClickInfoDrawer";
-	setFont(new OpenGLText("arial.ttf",25));
+	setFont(new OpenGLText("arial.ttf",20));
 }
 
 MouseClickInfoDrawer::~MouseClickInfoDrawer() {

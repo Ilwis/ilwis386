@@ -105,6 +105,7 @@ ZoomableView::ZoomableView()
 	iActiveTool = 0;
 	xOld = yOld = iUNDEF;
 	zoomf = 0.0;
+	beginMovePoint = CPoint(iUNDEF, iUNDEF);
 }
 
 ZoomableView::~ZoomableView()
@@ -186,11 +187,11 @@ BOOL ZoomableView::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT*
 		case WM_LBUTTONDOWN:
 			if (as) as->OnLButtonDown(wParam, point);
 			else if (wParam & MK_CONTROL) moveEyePoint(point,message);
-			return FALSE;
+			break;
 		case WM_LBUTTONUP:
 			if (as) as->OnLButtonUp(wParam, point);
 			else if (wParam & MK_CONTROL) moveEyePoint(point,message);
-			return FALSE;
+			break;
 		case WM_RBUTTONDBLCLK:
 			if (as) as->OnRButtonDblClk(wParam, point);
 			return FALSE;
@@ -218,8 +219,8 @@ void ZoomableView::moveEyePoint(const CPoint& pnt, UINT message) {
 		double deltay = beginMovePoint.y - pnt.y;
 		if ( deltax == 0 && deltay == 0)
 			return;
-		double xfract = deltax / 500.0;
-		double yfract = deltay / 500.0;
+		double roll = deltax / 50.0;
+		double yaw = deltay / 50.0;
 
 		MapCompositionDoc *doc = (MapCompositionDoc *)GetDocument();
 		DrawerContext *context = doc->rootDrawer->getDrawerContext();
@@ -228,21 +229,25 @@ void ZoomableView::moveEyePoint(const CPoint& pnt, UINT message) {
 		double deltaXEyeView = eyePoint.x - viewPoint.x;
 		double deltaYEyeView = eyePoint.y - viewPoint.y;
 		double deltaZEyeView = eyePoint.z - viewPoint.z;
-		double distance2 = deltaXEyeView * deltaXEyeView + deltaYEyeView * deltaYEyeView + deltaZEyeView * deltaZEyeView;
-		double x = eyePoint.x + context->getCoordBoundsZoom().width() * xfract;
-		double y = eyePoint.y + context->getCoordBoundsZoom().height() * yfract;
-		double dx = x - viewPoint.x;
-		double dy = y - viewPoint.y;
-		double r2 = distance2 - dx* dx - dy*dy;
-		double z = sqrt(r2 );
-		z = abs(viewPoint.z + z  - eyePoint.z) <  abs(viewPoint.z - z  - eyePoint.z) ? viewPoint.z + z : viewPoint.z - z;
+		double distance = sqrt(deltaXEyeView * deltaXEyeView + deltaYEyeView * deltaYEyeView + deltaZEyeView * deltaZEyeView);
+		double theta = M_PI_2 - atan2( deltaZEyeView ,sqrt( deltaXEyeView*deltaXEyeView + deltaYEyeView * deltaYEyeView));
+		double phi = atan2(deltaYEyeView,deltaXEyeView);
+		theta += yaw;
+		phi += roll;
+		double x = distance * cos(phi) * sin(theta);
+		double y = distance * sin(theta) * sin(phi);
+		double z = distance * cos(theta);
+		double xe =  x + viewPoint.x;
+		double ye = y + viewPoint.y;
+		double ze = z + viewPoint.z;
 	
-		Coord newEye(x,y,z);
+		Coord newEye(xe,ye,ze);
 		context->setEyePoint(newEye);
 		beginMovePoint = pnt;
 		doc->mpvGetView()->Invalidate();
 	}
 }
+
 
 MinMax ZoomableView::mmRect(zRect r)   // Windows coordinates -> internal RowCol
 {

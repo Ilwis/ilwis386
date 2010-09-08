@@ -14,7 +14,8 @@ OpenGLText::OpenGLText(const String& name, int h) : height(h), actualHeight(iUND
 		String file("%s\\fonts\\%S",szPath, name);
 		fn = FileName(file);
     }
-	font = new FTTextureFont(fn.sFullPath().scVal());
+	//font = new FTTextureFont(fn.sFullPath().scVal());
+	font = new FTPolygonFont(fn.sFullPath().scVal());
 	color = Color(0,0,0);
 }
 
@@ -29,6 +30,10 @@ void OpenGLText::renderText(ILWIS::DrawerContext *context,const Coordinate& c, c
 		font->FaceSize(400);
 	}
 	glColor3d(color.redP(), color.greenP(), color.blueP());
-	font->Render(text.scVal(),text.size(),FTPoint(c.x,c.y));
+	glEnable (GL_POLYGON_SMOOTH);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+	glHint (GL_POLYGON_SMOOTH, GL_DONT_CARE);
+	font->Render(text.scVal(),text.size(),FTPoint(c.x,c.y,c.z));
 }
 

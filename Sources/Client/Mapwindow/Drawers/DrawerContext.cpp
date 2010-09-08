@@ -169,8 +169,9 @@ Coord DrawerContext::screenToWorld(const RowCol& rc) {
 	GLint viewport[4];
 	double modelview[16];
 	double projection[16];
-	double winX, winY, winZ;
+	double winX, winY;
 	double posX, posY, posZ;
+	float winZ;
 
 	glGetDoublev( GL_MODELVIEW_MATRIX, modelview );
 	glGetDoublev( GL_PROJECTION_MATRIX, projection );
@@ -182,7 +183,11 @@ Coord DrawerContext::screenToWorld(const RowCol& rc) {
 
 	gluUnProject( winX, winY, winZ, modelview, projection, viewport, &posX, &posY, &posZ);
 
-	return Coord(posX, posY, 0); 
+	double z = 0;
+	if ( is3D()) {
+		z = abs(posZ) < fakeZ ? fakeZ : posZ;
+	}
+	return Coord(posX, posY, z ); 
 
 }
 
@@ -228,8 +233,9 @@ void DrawerContext::setProjection(const CoordBounds& cb) {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	if ( threeD) {
-		double zBase = max(abs(eyePoint.x - viewPoint.x), abs(eyePoint.y - eyePoint.y));
-		gluPerspective(40, aspectRatio,zBase/2.0, 4.0 * zBase);
+		double zBase = max(abs(eyePoint.x - viewPoint.x), abs(eyePoint.y - viewPoint.y));
+		double w = max(cbZoom.width(), cbZoom.height());
+		gluPerspective(40, aspectRatio,zBase/2.0, w * 4);
 	} else {
 		glOrtho(cb.cMin.x,cb.cMax.x,cb.cMin.y,cb.cMax.y,-1,1);
 	}

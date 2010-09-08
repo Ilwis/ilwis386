@@ -1727,7 +1727,7 @@ Drawer* MapCompositionDoc::drAppend(const BaseMap& mp, bool asAnimation)
 		drawer->prepare(&pp);
 		rootDrawer->addDrawer(drawer);
 		ChangeState();
-		UpdateAllViews(0);
+		UpdateAllViews(0,3);
 		mpvGetView()->Invalidate();
 	}    
 	return 0;
