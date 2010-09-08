@@ -95,7 +95,7 @@ HTREEITEM FeatureSetDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 		HTREEITEM maskItem = InsertItem("Mask", "Mask", item, (int)useMask);
 		InsertItem(tv, maskItem,String("Value : %S",mask),"Mask");
 	}
-	HTREEITEM portrayalItem = findTreeItemByName(tv,parent,"Portrayal");
+	portrayalItem = findTreeItemByName(tv,parent,"Portrayal");
 	if ( portrayalItem) {
 		bool useSingleColor = getDrawMethod() == NewDrawer::drmSINGLE;
 		bool useRpr = getDrawMethod() == NewDrawer::drmRPR;
@@ -106,7 +106,10 @@ HTREEITEM FeatureSetDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 		item = new DisplayOptionTreeItem(tv,portrayalItem,this, 0,0,colorCheck);									
 		HTREEITEM multiColorItem = InsertItem("Multiple Colors","MultipleColors",item, !useSingleColor & !useRpr);
 	}
-
+	if ( getDrawerContext()->is3D()) {
+		set3D(true, tv);
+	}
+	
 
 	return hti;
 }
@@ -114,9 +117,8 @@ HTREEITEM FeatureSetDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 HTREEITEM FeatureSetDrawer::set3D(bool yesno, LayerTreeView  *tv){
 	threeD = yesno;
 	if ( yesno) {
-		HTREEITEM parent = tv->getAncestor(portrayalItem,1);
-		if ( parent != 0) {
-			DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,parent,this,(SetCheckFunc)&SetDrawer::SetthreeD);
+		if ( portrayalItem != 0) {
+			DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,portrayalItem,this,(SetCheckFunc)&SetDrawer::SetthreeD);
 			threeDItem = InsertItem("3D properties","3D",item,threeD);
 			item = new DisplayOptionTreeItem(tv,threeDItem,this,(DisplayOptionItemFunc)&FeatureSetDrawer::displayZOption3D);
 			InsertItem("Data source", ".mpv",item);
