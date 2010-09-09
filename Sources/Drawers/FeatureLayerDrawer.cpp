@@ -118,6 +118,15 @@ Color FeatureLayerDrawer::getSingleColor() const {
 	return singleColor;
 }
 
+String FeatureLayerDrawer::store(const FileName& fnView, const String& parentSection, SubType subtype) const{
+	String currentSection = parentSection + "::" + "FeatureLayerDrawer";
+	AbstractMapDrawer::store(fnView, currentSection, subtype);
+	return currentSection;
+}
+
+void FeatureLayerDrawer::load(const FileName& fnView, const String& parentSection){
+}
+
 //-------------------------------------- UI ----------------------------------------------
 HTREEITEM FeatureLayerDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 	HTREEITEM hti = AbstractMapDrawer::configure(tv,parent);

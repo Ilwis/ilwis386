@@ -27,6 +27,8 @@ class LineSetDrawer : public FeatureSetDrawer {
 		virtual NewDrawer *createElementDrawer(PreparationParameters *pp,ILWIS::DrawerParameters* parms) const;
 		void setDrawMethod(DrawMethod method=drmINIT);
 		void displayOptionSetLineStyle(CWnd *parent);
+		String store(const FileName& fnView, const String& parenSection, SubType subtype) const;
+		void load(const FileName& fnView, const String& parenSection);
 
 		LineDspType linestyle;
 		double linethickness;

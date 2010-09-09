@@ -76,45 +76,6 @@ String SetDrawer::iconName(const String& subtype) const
 	return "Set";
 }
 
-HTREEITEM SetDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
-	HTREEITEM hti = ComplexDrawer::configure(tv,parent);
-
-	NewDrawer::DrawMethod method = getDrawMethod();
-	portrayalItem = InsertItem(tv,parent, "Portrayal", "Colors");
-	
-	colorCheck = new SetChecks(tv,this,(SetCheckFunc)&SetDrawer::setcheckRpr);
-	if ( rpr.fValid() ) {
-		bool usesRpr = method == NewDrawer::drmRPR;
-		DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,portrayalItem,this,(DisplayOptionItemFunc)&SetDrawer::displayOptionSubRpr,0,colorCheck);
-		rprItem = InsertItem("Representation", ".rpr", item, (int)usesRpr);
-
-		if ( usesRpr)
-			InsertItem(tv, rprItem,String("Value : %S",rpr->sName()),".rpr");
-
-	}
-	return hti;
-}
-
-void SetDrawer::insertStretchItem(LayerTreeView  *tv, HTREEITEM parent) {
-	AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)parentDrawer;
-	Column attColumn = mapDrawer->getAtttributeColumn();
-	if ( rpr->prg()) {
-		if ( rpr->dm()->pdv() || (attColumn.fValid() && attColumn->dm()->pdv())) {
-			DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,parent,this,(DisplayOptionItemFunc)&SetDrawer::displayOptionStretch);
-			HTREEITEM itemStretch = InsertItem("Stretch","Valuerange", item,-1); 
-			RangeReal rr = getStretchRangeReal();
-			if ( rr.fValid()) {
-				InsertItem(tv,itemStretch, String("Lower : %f",rr.rLo()), "Calculationsingle");
-				InsertItem(tv,itemStretch, String("Upper : %f",rr.rHi()), "Calculationsingle");
-			} else if ( getStretchRangeInt().fValid()) {
-				RangeInt ri = getStretchRangeInt();
-				InsertItem(tv,itemStretch, String("Lower : %d",ri.iLo()), "Calculationsingle");
-				InsertItem(tv,itemStretch, String("Upper : %d",ri.iHi()), "Calculationsingle");
-			}
-		}
-	}
-}
-
 bool SetDrawer::useInternalDomain() const {
 	AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)getParentDrawer();
 	if ( !mapDrawer)
@@ -231,7 +192,61 @@ void SetDrawer::displayOptionStretch(CWnd *parent) {
 	new SetStretchForm(parent, this);
 }
 
-//--------------------------------
+String SetDrawer::store(const FileName& fnView, const String& parentSection, SubType subtype) const{
+	String currentSection = parentSection + "::" + "SetDrawer";
+	ComplexDrawer::store(fnView, currentSection, subtype);
+	ObjectInfo::WriteElement(currentSection.scVal(),"CoordinateSystem",fnView, csy);
+	ObjectInfo::WriteElement(currentSection.scVal(),"Representation",fnView, rpr);
+	ObjectInfo::WriteElement(currentSection.scVal(),"StretchReal",fnView, rrStretch);
+	ObjectInfo::WriteElement(currentSection.scVal(),"StretchInt",fnView, riStretch);
+	ObjectInfo::WriteElement(currentSection.scVal(),"IsStretched",fnView, stretched);
+	ObjectInfo::WriteElement(currentSection.scVal(),"StretchMethod",fnView, stretchMethod);
+	return currentSection;
+}
+
+void SetDrawer::load(const FileName& fnView, const String& parenSection){
+}
+//---------------UI---------------
+
+HTREEITEM SetDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
+	HTREEITEM hti = ComplexDrawer::configure(tv,parent);
+
+	NewDrawer::DrawMethod method = getDrawMethod();
+	portrayalItem = InsertItem(tv,parent, "Portrayal", "Colors");
+	
+	colorCheck = new SetChecks(tv,this,(SetCheckFunc)&SetDrawer::setcheckRpr);
+	if ( rpr.fValid() ) {
+		bool usesRpr = method == NewDrawer::drmRPR;
+		DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,portrayalItem,this,(DisplayOptionItemFunc)&SetDrawer::displayOptionSubRpr,0,colorCheck);
+		rprItem = InsertItem("Representation", ".rpr", item, (int)usesRpr);
+
+		if ( usesRpr)
+			InsertItem(tv, rprItem,String("Value : %S",rpr->sName()),".rpr");
+
+	}
+	return hti;
+}
+
+void SetDrawer::insertStretchItem(LayerTreeView  *tv, HTREEITEM parent) {
+	AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)parentDrawer;
+	Column attColumn = mapDrawer->getAtttributeColumn();
+	if ( rpr->prg()) {
+		if ( rpr->dm()->pdv() || (attColumn.fValid() && attColumn->dm()->pdv())) {
+			DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,parent,this,(DisplayOptionItemFunc)&SetDrawer::displayOptionStretch);
+			HTREEITEM itemStretch = InsertItem("Stretch","Valuerange", item,-1); 
+			RangeReal rr = getStretchRangeReal();
+			if ( rr.fValid()) {
+				InsertItem(tv,itemStretch, String("Lower : %f",rr.rLo()), "Calculationsingle");
+				InsertItem(tv,itemStretch, String("Upper : %f",rr.rHi()), "Calculationsingle");
+			} else if ( getStretchRangeInt().fValid()) {
+				RangeInt ri = getStretchRangeInt();
+				InsertItem(tv,itemStretch, String("Lower : %d",ri.iLo()), "Calculationsingle");
+				InsertItem(tv,itemStretch, String("Upper : %d",ri.iHi()), "Calculationsingle");
+			}
+		}
+	}
+}
+
 RepresentationForm::RepresentationForm(CWnd *wPar, SetDrawer *dr) : 
 	DisplayOptionsForm(dr,wPar,"Set Representation"),
 	rpr(dr->getRepresentation()->sName())

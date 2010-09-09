@@ -42,6 +42,15 @@ HTREEITEM PointSetDrawer:: configure(LayerTreeView  *tv, HTREEITEM parent) {
 	return hti;
 }
 
+String PointSetDrawer::store(const FileName& fnView, const String& parentSection, SubType subtype) const{
+	String currentSection = parentSection + "::" + "PointSetDrawer";
+	SetDrawer::store(fnView, currentSection, subtype);
+	return currentSection;
+}
+
+void PointSetDrawer::load(const FileName& fnView, const String& parenSection){
+}
+
 void PointSetDrawer::setDrawMethod(DrawMethod method) {
 	if ( method == drmINIT) { 
 		if ( useInternalDomain() || !rpr.fValid()) {

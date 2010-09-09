@@ -39,13 +39,15 @@ class _export SetDrawer : public ComplexDrawer {
 	
 			
 	protected:
+		String store(const FileName& fnView, const String& parenSection, SubType subtype) const;
+		void load(const FileName& fnView, const String& parenSection);
 		void setcheckRpr(void *value, LayerTreeView *);
 		void displayOptionSubRpr(CWnd *parent);
 		void displayOptionStretch(CWnd *parent);
 		void insertStretchItem(LayerTreeView  *tv, HTREEITEM parent);
 		virtual void modifyLineStyleItem(LayerTreeView  *tv, bool remove=false) {}
 
-		BaseMap basemap;
+		//BaseMap basemap;
 		Representation rpr;
 		CoordSystem csy;
 		DrawingColor *drawColor;

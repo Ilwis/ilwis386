@@ -49,6 +49,7 @@ void FeatureSetDrawer::prepare(PreparationParameters *parms){
 		mapDrawer->getFeatures(features);
 		clear();
 		drawers.resize( features.size());
+		int count = 0;
 		for(int i=0; i < features.size(); ++i) {
 			Feature *feature = features.at(i);
 			NewDrawer *pdrw;
@@ -59,8 +60,11 @@ void FeatureSetDrawer::prepare(PreparationParameters *parms){
 				PreparationParameters fp((int)parms->type, 0);
 				pdrw->prepare(&fp);
 				drawers.at(i) = pdrw;
+				++count;
 			}
 		}
+		if ( count < features.size())
+			drawers.resize(count);
 	} else {
 		if ( parms->type & NewDrawer::ptRENDER || parms->type & NewDrawer::pt3D) {
 			prepareChildDrawers(parms);
@@ -83,6 +87,14 @@ void FeatureSetDrawer:: setSingleColor(const Color& c){
 
 Color FeatureSetDrawer::getSingleColor() const {
 	return singleColor;
+}
+
+String FeatureSetDrawer::store(const FileName& fnView, const String& parentSection, SubType subtype) const{
+	String currentSection = parentSection + "::" + "FeatureSetDrawer";
+	return SetDrawer::store(fnView, currentSection, subtype);
+}
+
+void FeatureSetDrawer::load(const FileName& fnView, const String& parenSection){
 }
 
 //-------------------------------------- UI --------------------------------------------------------
