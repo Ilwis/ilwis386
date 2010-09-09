@@ -37,6 +37,7 @@ void ComplexDrawer::init() {
 	editable = true;
 	active = true;
 	info = false;
+	threeD=false;
 	transparency = 1.0;
 	parentDrawer = 0;
 	uiCode = NewDrawer::ucALL;
@@ -319,6 +320,81 @@ bool ComplexDrawer::is3D() const {
 ZValueMaker *ComplexDrawer::getZMaker() {
 	return zmaker;
 }
+
+String ComplexDrawer::store(const FileName& fnView, const String& parenSection, SubType subtype) const{
+	String currentSection;
+	if ( parenSection !="") {
+		currentSection = parenSection + "::" + getName();
+		ObjectInfo::WriteElement(parenSection.scVal(),"Child",fnView, (int)subtype);
+	}
+	else
+		currentSection = getName();
+	ObjectInfo::WriteElement(currentSection.scVal(),"SubType",fnView, (int)subtype);
+	ObjectInfo::WriteElement(currentSection.scVal(),"UiCode",fnView, uiCode);
+	ObjectInfo::WriteElement(currentSection.scVal(),"HasInfo",fnView, info);
+	ObjectInfo::WriteElement(currentSection.scVal(),"DrawMethod",fnView, drm);
+	ObjectInfo::WriteElement(currentSection.scVal(),"Transparency",fnView, transparency);
+	ObjectInfo::WriteElement(currentSection.scVal(),"Type",fnView, type);
+	ObjectInfo::WriteElement(currentSection.scVal(),"IsActive",fnView, active);
+	ObjectInfo::WriteElement(currentSection.scVal(),"editable",fnView, editable);
+	ObjectInfo::WriteElement(currentSection.scVal(),"HasInfo",fnView, info);
+	ObjectInfo::WriteElement(currentSection.scVal(),"IsThreeD",fnView, threeD);
+
+	int count = 0;
+	for(DrawerIter_C cur = preDrawers.begin(); cur != preDrawers.end(); ++cur) {
+		String child = (*cur).second->store(fnView, currentSection, subtPRE);
+		if ( child !="")
+			ObjectInfo::WriteElement(currentSection.scVal(),String("PreDrawer%d",count++).scVal(),fnView, child);
+	}
+	count = 0;
+	int drCount = getDrawerCount();
+	for(int index = 0; index < drCount; ++index) {
+		String child = drawers[index]->store(fnView, currentSection, subtMAIN);
+		if ( child !="")
+			ObjectInfo::WriteElement(currentSection.scVal(),String("Drawer%d",count++).scVal(),fnView, child);
+
+	}
+	count = 0;
+	for(DrawerIter_C cur = postDrawers.begin(); cur != postDrawers.end(); ++cur) {
+		String child = (*cur).second->store(fnView, currentSection, subtPOST);
+		if ( child !="")
+			ObjectInfo::WriteElement(currentSection.scVal(),String("PostDrawer%d",count++).scVal(),fnView, child);
+	}
+
+	return currentSection;
+}
+
+void ComplexDrawer::load(const FileName& fnView, const String& parenSection){
+	String currentSection;
+	if ( parenSection !="")
+		currentSection = parenSection + "::" + getName();
+	else
+		currentSection = getName();
+	int subtype = 0;
+	ObjectInfo::ReadElement(currentSection.scVal(),"SubType",fnView, subtype);
+	ObjectInfo::ReadElement(currentSection.scVal(),"UiCode",fnView, uiCode);
+	ObjectInfo::ReadElement(currentSection.scVal(),"HasInfo",fnView, info);
+	int temp;
+	ObjectInfo::ReadElement(currentSection.scVal(),"DrawMethod",fnView, temp);
+	drm = (ILWIS::NewDrawer::DrawMethod)temp;
+	ObjectInfo::ReadElement(currentSection.scVal(),"Transparency",fnView, transparency);
+	ObjectInfo::ReadElement(currentSection.scVal(),"Type",fnView, type);
+	ObjectInfo::ReadElement(currentSection.scVal(),"IsActive",fnView, active);
+	ObjectInfo::ReadElement(currentSection.scVal(),"editable",fnView, editable);
+	ObjectInfo::ReadElement(currentSection.scVal(),"HasInfo",fnView, info);
+	ObjectInfo::ReadElement(currentSection.scVal(),"IsThreeD",fnView, threeD);
+
+	for(DrawerIter_C cur = preDrawers.begin(); cur != preDrawers.end(); ++cur)
+		(*cur).second->load(fnView, currentSection);
+
+	int drCount = getDrawerCount();
+	for(int index = 0; index < drCount; ++index)
+		drawers[index]->load(fnView, currentSection);
+
+	for(DrawerIter_C cur = postDrawers.begin(); cur != postDrawers.end(); ++cur)
+		(*cur).second->load(fnView, currentSection);
+}
+
 
 //--------------------------------- UI ------------------------------------------------------------------------
 HTREEITEM ComplexDrawer::InsertItem(LayerTreeView *tv, HTREEITEM parent,const String& name,const String& icon, HTREEITEM after) {

@@ -12,6 +12,8 @@ namespace ILWIS{
 		virtual void prepare(PreparationParameters *pp);
 		IlwisObject getObject() const;
 		void addDataSource(void *bmap, int options=0);
+		virtual String store(const FileName& fnView, const String& parenSection, SubType subtype) const;
+		virtual void load(const FileName& fnView, const String& parenSection);
 		
 	protected:
 		IlwisObjectPtr *obj;

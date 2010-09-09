@@ -23,6 +23,7 @@ RootDrawer::RootDrawer(MapCompositionDoc *doc) {
 	addPostDrawer(900,IlwWinApp()->getDrawer("MouseClickInfoDrawer", &pp, &dp));
 	addPostDrawer(800,IlwWinApp()->getDrawer("GridDrawer", &pp, &dp));
 	setTransparency(rUNDEF);
+	setName("RootDrawer");
 }
 
 RootDrawer::~RootDrawer() {
@@ -95,6 +96,22 @@ void RootDrawer::timedEvent(UINT timerID) {
 	}
 }
 
+void RootDrawer::store(const FileName& fnView, const String parenSection, SubType subtype) const{
+	ObjectInfo::WriteElement("RootDrawer","CoordinateSystem",fnView, getDrawerContext()->getCoordinateSystem());
+	ObjectInfo::WriteElement("RootDrawer","CoordBoundsZoom",fnView, getDrawerContext()->getCoordBoundsZoom());
+	ObjectInfo::WriteElement("RootDrawer","CoordBoundsView",fnView, getDrawerContext()->getCoordBoundsView());
+	ObjectInfo::WriteElement("RootDrawer","CoordBoundsMap",fnView, getDrawerContext()->getMapCoordBounds());
+	ObjectInfo::WriteElement("RootDrawer","AspectRatio",fnView, getDrawerContext()->getAspectRatio());
+	ObjectInfo::WriteElement("RootDrawer","EyePoint",fnView, getDrawerContext()->getEyePoint());
+	ObjectInfo::WriteElement("RootDrawer","ViewPoint",fnView, getDrawerContext()->getViewPoint());
+	ObjectInfo::WriteElement("RootDrawer","ViewPort",fnView, getDrawerContext()->getViewPort());
+
+	ComplexDrawer::store(fnView, "", subtype);
+}
+
+void RootDrawer::load(const FileName& fnView, const String parenSection){
+}
+//----------------------------------UI-------------------------------------
 HTREEITEM RootDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,parent,this,
 		(SetCheckFunc)&RootDrawer::SetthreeD);	

@@ -16,6 +16,8 @@ public:
 	bool draw(bool norecursion = false, const CoordBounds& cb=CoordBounds()) const;
 	HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent);
 	void timedEvent(UINT timerID);
+	void store(const FileName& fnView, const String parenSection, SubType subtype) const;
+	void load(const FileName& fnView, const String parenSection);
 private:
 	void calcCanvas();
 	void addDataSource(void *);

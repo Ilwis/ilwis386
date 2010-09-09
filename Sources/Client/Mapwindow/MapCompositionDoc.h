@@ -77,16 +77,13 @@ class IMPEXP MapCompositionDoc : public CatalogDocument
 {
 public:
 	static const CLSID clsid;
-	MapCompositionDoc();           // protected constructor used by dynamic creation
+	MapCompositionDoc();           
 	virtual ~MapCompositionDoc();
 	virtual IlwisObject obj() const;
 	virtual zIcon icon() const;
 
 	ILWIS::RootDrawer *rootDrawer;
 
-	// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(MapCompositionDoc)
 	virtual void Serialize(CArchive& ar);   // overridden for document i/o
 	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
 	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName, OpenType ot);
@@ -97,7 +94,6 @@ public:
 	virtual void OnDeactivate();
 	virtual BOOL GetFileTypeString(CString& rString);
 	void OnExtPerc();	
-	//}}AFX_VIRTUAL
 	BOOL fSaveModified(bool fAllowCancel);
 
 	MapCompositionSrvItem* GetEmbeddedItem()
@@ -134,6 +130,8 @@ public:
 	void SetBounds(const MinMax&);
 	void SetBounds(const CoordBounds&);
 	bool fIsEmpty() const;
+	void setViewName(const FileName& fn);
+	FileName getViewName() const;
 
 	list<Drawer*> dl;
 	bool fShowRowCol;
@@ -201,6 +199,7 @@ private:
 	RowCol rcDfltOffset;
 	GeneralBar* gbHist;
 	bool fInCmdMsg;
+	FileName fnView;
 	DECLARE_DYNCREATE(MapCompositionDoc)
 	DECLARE_MESSAGE_MAP()
 };

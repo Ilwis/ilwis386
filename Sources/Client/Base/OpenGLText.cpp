@@ -29,6 +29,7 @@ void OpenGLText::renderText(ILWIS::DrawerContext *context,const Coordinate& c, c
 		actualHeight = h;
 		font->FaceSize(400);
 	}
+
 	glColor3d(color.redP(), color.greenP(), color.blueP());
 	glEnable (GL_POLYGON_SMOOTH);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

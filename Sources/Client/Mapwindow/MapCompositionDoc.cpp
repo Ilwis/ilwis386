@@ -183,6 +183,7 @@ MapCompositionDoc::MapCompositionDoc()
 	fRaster = false;
 	fGrid3DDrawer = false;
 	rootDrawer = new RootDrawer(this);
+	fnView = FileName("mapview.mpv");
 }
 
 MapCompositionDoc::~MapCompositionDoc()
@@ -528,14 +529,6 @@ void MapCompositionDoc::StoreView()
 {
 	ObjectDependency objdep;
 	mpv->Store();
-	mpv->WriteElement("MapView", "GeoRef", georef);
-	objdep.Add(georef);
-	mpv->WriteElement("MapView", "CoordSystem", georef->cs());
-	objdep.Add(georef->cs());
-	mpv->WriteElement("MapView", "MinMax", mmBounds());
-	mpv->WriteElement("MapView", "MapBounds", mmMapBounds);
-	mpv->WriteElement("MapView", "Background", colBackground);
-
 	mpv->WriteElement("MapView", "Scale", rDfltScale);
 	mpv->WriteElement("MapView", "Offset", rcDfltOffset);
 
@@ -548,17 +541,7 @@ void MapCompositionDoc::StoreView()
 	}
 
 	int iLayers = 0;
-	for (list<Drawer*>::iterator iter = dl.begin(); 
-		iter != dl.end(); 
-		++iter)
-	{  
-		Drawer* dw = *iter;  
-		objdep.Add(dw->obj());
-		iLayers += 1;
-		String sSection("Layer%i", iLayers);
-		dw->WriteLayer(mpv, sSection.scVal());
-	}
-	mpv->WriteElement("MapView", "Layers", (long)iLayers);
+	rootDrawer->store(mpv->fnObj,"",ILWIS::NewDrawer::subtMAIN);
 	objdep.Store(mpv.ptr());
 }
 
@@ -812,7 +795,7 @@ void MapCompositionDoc::OnUpdateDataLayer(CCmdUI* pCmdUI)
 void MapCompositionDoc::OnEditLayer(UINT nID)	
 {
 	list<Drawer*>::iterator iter = dl.begin();
-	int i, id;
+	//int i, id;
 	for(int i =0,id = ID_EDITLAYER; i < rootDrawer->getDrawerCount(); ++i,++id)
 	{  
 		if (id == nID) {
@@ -2336,4 +2319,12 @@ bool MapCompositionDoc::fIsEmpty() const
 
 void MapCompositionDoc::initBounds(MinMax mm) {
 	mmSize = mmMapBounds = mm;
+}
+
+void MapCompositionDoc::setViewName(const FileName& fn) {
+	fnView = fn;
+}
+
+FileName MapCompositionDoc::getViewName() const{
+	return fnView;
 }

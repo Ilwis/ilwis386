@@ -39,6 +39,15 @@ void AbstractObjectDrawer::addDataSource(void *bmap, int options) {
 
 }
 
+String AbstractObjectDrawer::store(const FileName& fnView, const String& parentSection, SubType subtype) const{
+
+	String currentSection = parentSection + "::" + "AbstractObjectDrawer";
+	return ComplexDrawer::store(fnView, currentSection, subtype);
+}
+
+void AbstractObjectDrawer::load(const FileName& fnView, const String& parenSection){
+}
+
 //--------------------------------
 
 

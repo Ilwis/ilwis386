@@ -59,7 +59,7 @@ class _export ComplexDrawer : public NewDrawer {
 		virtual String iconName(const String& subtype="?") const { return "?";}
 		void setSpecialDrawingOptions(SpecialDrawingOptions option, bool add) ;
 		int getSpecialDrawingOption(SpecialDrawingOptions opt=sdoNone) const;
-
+		
 		CCriticalSection cs;
 	protected:
 		vector<NewDrawer *> drawers;
@@ -86,6 +86,8 @@ class _export ComplexDrawer : public NewDrawer {
 		ComplexDrawer(DrawerParameters *context, const String& ty);
 		ComplexDrawer();
 		virtual ~ComplexDrawer();
+		String store(const FileName& fnView, const String& parenSection, SubType subtype) const;
+		void load(const FileName& fnView, const String& parenSection);
 		HTREEITEM InsertItem(const String& name,const String& icon, DisplayOptionTreeItem *item=0, int checkstatus = -1, HTREEITEM after=TVI_LAST);
 		HTREEITEM InsertItem(LayerTreeView  *tv,HTREEITEM parent, const String& name,const String& icon, HTREEITEM after=TVI_LAST);
 		HTREEITEM findTreeItemByName(LayerTreeView  *tv, HTREEITEM parent, const String& name) const;

@@ -32,11 +32,13 @@ MouseClickInfoDrawer::~MouseClickInfoDrawer() {
 void  MouseClickInfoDrawer::prepare(PreparationParameters *pp){
 	TextSetDrawer::prepare(pp);
 	sInfo = "";
-	for(int i =0; i < maps.size(); ++i) {
-		BaseMap bm = maps[i];
-		vector<String> values = bm->vsValue(activePoint);
-		if ( values.size() > 0)
-			sInfo += values[0];
+	if ( !activePoint.fUndef()) {
+		for(int i =0; i < maps.size(); ++i) {
+			BaseMap bm = maps[i];
+			vector<String> values = bm->vsValue(activePoint);
+			if ( values.size() > 0 && values[0] != sUNDEF)
+				sInfo += values[0];
+		}
 	}
 }
 

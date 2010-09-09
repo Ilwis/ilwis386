@@ -158,6 +158,20 @@ void AbstractMapDrawer::setInfoMode(void *v,LayerTreeView *tv) {
 	setInfo(value);
 }
 
+String AbstractMapDrawer::store(const FileName& fnView, const String& parentSection, SubType subtype) const{
+	String currentSection = parentSection + "::" + "AbstractMapDrawer";
+	AbstractObjectDrawer::store(fnView, currentSection, subtype);
+	ObjectInfo::WriteElement(currentSection.scVal(),"AttributeTable",fnView, attTable);
+	ObjectInfo::WriteElement(currentSection.scVal(),"AttributeColumn",fnView, attColumn);
+	ObjectInfo::WriteElement(currentSection.scVal(),"UseAttributes",fnView, useAttTable);
+	ObjectInfo::WriteElement(currentSection.scVal(),"BaseMap",fnView, bm);
+
+	return currentSection;
+}
+
+void AbstractMapDrawer::load(const FileName& fnView, const String& parenSection){
+}
+
 //------------------------------------UI--------------------------------
 
 HTREEITEM AbstractMapDrawer:: configure(LayerTreeView  *tv, HTREEITEM parent) {
