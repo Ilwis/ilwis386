@@ -321,7 +321,7 @@ ZValueMaker *ComplexDrawer::getZMaker() {
 	return zmaker;
 }
 
-void ComplexDrawer::store(const FileName& fnView, const String& parentSection) const{
+String ComplexDrawer::store(const FileName& fnView, const String& parentSection) const{
 	ObjectInfo::WriteElement(parentSection.scVal(),"UiCode",fnView, uiCode);
 	ObjectInfo::WriteElement(parentSection.scVal(),"HasInfo",fnView, info);
 	ObjectInfo::WriteElement(parentSection.scVal(),"DrawMethod",fnView, drm);
@@ -369,7 +369,7 @@ void ComplexDrawer::store(const FileName& fnView, const String& parentSection) c
 
 }
 
-String ComplexDrawer::load(const FileName& fnView, const String& parenSection){
+void ComplexDrawer::load(const FileName& fnView, const String& parenSection){
 	String currentSection;
 	if ( parenSection !="")
 		currentSection = parenSection + "::" + getName();
