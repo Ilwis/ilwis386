@@ -369,7 +369,7 @@ void ComplexDrawer::store(const FileName& fnView, const String& parentSection) c
 
 }
 
-void ComplexDrawer::load(const FileName& fnView, const String& parenSection){
+String ComplexDrawer::load(const FileName& fnView, const String& parenSection){
 	String currentSection;
 	if ( parenSection !="")
 		currentSection = parenSection + "::" + getName();
