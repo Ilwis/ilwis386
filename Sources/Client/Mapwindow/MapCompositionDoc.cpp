@@ -541,7 +541,7 @@ void MapCompositionDoc::StoreView()
 	}
 
 	int iLayers = 0;
-	rootDrawer->store(mpv->fnObj,"",ILWIS::NewDrawer::subtMAIN);
+	rootDrawer->store(mpv->fnObj,"");
 	objdep.Store(mpv.ptr());
 }
 

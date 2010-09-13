@@ -96,7 +96,7 @@ void RootDrawer::timedEvent(UINT timerID) {
 	}
 }
 
-void RootDrawer::store(const FileName& fnView, const String parenSection, SubType subtype) const{
+String RootDrawer::store(const FileName& fnView, const String parenSection) const{
 	ObjectInfo::WriteElement("RootDrawer","CoordinateSystem",fnView, getDrawerContext()->getCoordinateSystem());
 	ObjectInfo::WriteElement("RootDrawer","CoordBoundsZoom",fnView, getDrawerContext()->getCoordBoundsZoom());
 	ObjectInfo::WriteElement("RootDrawer","CoordBoundsView",fnView, getDrawerContext()->getCoordBoundsView());
@@ -106,7 +106,9 @@ void RootDrawer::store(const FileName& fnView, const String parenSection, SubTyp
 	ObjectInfo::WriteElement("RootDrawer","ViewPoint",fnView, getDrawerContext()->getViewPoint());
 	ObjectInfo::WriteElement("RootDrawer","ViewPort",fnView, getDrawerContext()->getViewPort());
 
-	ComplexDrawer::store(fnView, "", subtype);
+	ComplexDrawer::store(fnView, "RootDrawer");
+
+	return "RootDrawer";
 }
 
 void RootDrawer::load(const FileName& fnView, const String parenSection){

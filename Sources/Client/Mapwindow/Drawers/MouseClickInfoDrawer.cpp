@@ -58,6 +58,16 @@ void MouseClickInfoDrawer::setActivePoint(const Coord& c) {
 	activePoint = c;
 }
 
+String MouseClickInfoDrawer::store(const FileName& fnView, const String& parentSection) const{
+	String currentSection = getType() + "::" + parentSection;
+	TextSetDrawer::store(fnView, currentSection);
+
+	return currentSection;
+}
+
+void MouseClickInfoDrawer::load(const FileName& fnView, const String& parenSection){
+}
+
 HTREEITEM MouseClickInfoDrawer::configure(LayerTreeView  *tv, HTREEITEM parent){
 	CTreeCtrl& tc = tv->GetTreeCtrl();
 	int iImg = IlwWinApp()->iImage("info");

@@ -42,7 +42,7 @@ class _export AbstractMapDrawer : public AbstractObjectDrawer {
 		void displayOptionAttColumn(CWnd *parent);
 		void setColumnCheckumn(void *w, LayerTreeView *view);
 		void setInfoMode(void *v,LayerTreeView *tv);
-		String store(const FileName& fnView, const String& parenSection, SubType subtype) const;
+		String store(const FileName& fnView, const String& parenSection) const;
 		void load(const FileName& fnView, const String& parenSection);
 
 	};

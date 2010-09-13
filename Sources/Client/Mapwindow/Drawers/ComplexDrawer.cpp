@@ -321,47 +321,52 @@ ZValueMaker *ComplexDrawer::getZMaker() {
 	return zmaker;
 }
 
-String ComplexDrawer::store(const FileName& fnView, const String& parenSection, SubType subtype) const{
-	String currentSection;
-	if ( parenSection !="") {
-		currentSection = parenSection + "::" + getName();
-		ObjectInfo::WriteElement(parenSection.scVal(),"Child",fnView, (int)subtype);
-	}
-	else
-		currentSection = getName();
-	ObjectInfo::WriteElement(currentSection.scVal(),"SubType",fnView, (int)subtype);
-	ObjectInfo::WriteElement(currentSection.scVal(),"UiCode",fnView, uiCode);
-	ObjectInfo::WriteElement(currentSection.scVal(),"HasInfo",fnView, info);
-	ObjectInfo::WriteElement(currentSection.scVal(),"DrawMethod",fnView, drm);
-	ObjectInfo::WriteElement(currentSection.scVal(),"Transparency",fnView, transparency);
-	ObjectInfo::WriteElement(currentSection.scVal(),"Type",fnView, type);
-	ObjectInfo::WriteElement(currentSection.scVal(),"IsActive",fnView, active);
-	ObjectInfo::WriteElement(currentSection.scVal(),"editable",fnView, editable);
-	ObjectInfo::WriteElement(currentSection.scVal(),"HasInfo",fnView, info);
-	ObjectInfo::WriteElement(currentSection.scVal(),"IsThreeD",fnView, threeD);
+void ComplexDrawer::store(const FileName& fnView, const String& parentSection) const{
+	ObjectInfo::WriteElement(parentSection.scVal(),"UiCode",fnView, uiCode);
+	ObjectInfo::WriteElement(parentSection.scVal(),"HasInfo",fnView, info);
+	ObjectInfo::WriteElement(parentSection.scVal(),"DrawMethod",fnView, drm);
+	ObjectInfo::WriteElement(parentSection.scVal(),"Transparency",fnView, transparency);
+	ObjectInfo::WriteElement(parentSection.scVal(),"Type",fnView, type);
+	ObjectInfo::WriteElement(parentSection.scVal(),"IsActive",fnView, active);
+	ObjectInfo::WriteElement(parentSection.scVal(),"editable",fnView, editable);
+	ObjectInfo::WriteElement(parentSection.scVal(),"HasInfo",fnView, info);
+	ObjectInfo::WriteElement(parentSection.scVal(),"IsThreeD",fnView, threeD);
 
 	int count = 0;
 	for(DrawerIter_C cur = preDrawers.begin(); cur != preDrawers.end(); ++cur) {
-		String child = (*cur).second->store(fnView, currentSection, subtPRE);
-		if ( child !="")
-			ObjectInfo::WriteElement(currentSection.scVal(),String("PreDrawer%d",count++).scVal(),fnView, child);
+		String currentSection("%S%d",parentSection,count);
+		NewDrawer *drw = (*cur).second;
+		if ( !drw->isSimple() ) {
+			drw->store(fnView, currentSection);
+			ObjectInfo::WriteElement(parentSection.scVal(),String("PreDrawer%02d",count++).scVal(),fnView, currentSection);
+		}
 	}
-	count = 0;
+	ObjectInfo::WriteElement(parentSection.scVal(),"PreDrawerCount",fnView, count);
 	int drCount = getDrawerCount();
+	count = 0; 
 	for(int index = 0; index < drCount; ++index) {
-		String child = drawers[index]->store(fnView, currentSection, subtMAIN);
-		if ( child !="")
-			ObjectInfo::WriteElement(currentSection.scVal(),String("Drawer%d",count++).scVal(),fnView, child);
+		String currentSection("%S%d",parentSection,index);
+		NewDrawer *drw = drawers[index];
+		if ( !drw->isSimple() ) {
+			drw->store(fnView, currentSection);
+			ObjectInfo::WriteElement(parentSection.scVal(),String("Drawer%02d",count++).scVal(),fnView, currentSection);
+		}
 
 	}
+	ObjectInfo::WriteElement(parentSection.scVal(),"DrawerCount",fnView, count);
 	count = 0;
 	for(DrawerIter_C cur = postDrawers.begin(); cur != postDrawers.end(); ++cur) {
-		String child = (*cur).second->store(fnView, currentSection, subtPOST);
-		if ( child !="")
-			ObjectInfo::WriteElement(currentSection.scVal(),String("PostDrawer%d",count++).scVal(),fnView, child);
+		String currentSection("%S%d",parentSection,count);
+		NewDrawer *drw = (*cur).second;
+		if ( !drw->isSimple() ) {
+			String section = drw->store(fnView, currentSection);
+			ObjectInfo::WriteElement(parentSection.scVal(),String("PostDrawer%02d",count++).scVal(),fnView, section);
+		}
 	}
+	ObjectInfo::WriteElement(parentSection.scVal(),"PostDrawerCount",fnView, count);
 
-	return currentSection;
+	return parentSection;
+
 }
 
 void ComplexDrawer::load(const FileName& fnView, const String& parenSection){

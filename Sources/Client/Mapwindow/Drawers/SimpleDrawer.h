@@ -40,8 +40,9 @@ namespace ILWIS {
 		virtual String iconName(const String& subtype="?") const { return "?";}
 		void setSpecialDrawingOptions(SpecialDrawingOptions option, bool add) { parentDrawer->setSpecialDrawingOptions(option,add);}
 		int getSpecialDrawingOption(SpecialDrawingOptions opt=sdoNone) const { return parentDrawer->getSpecialDrawingOption(opt);}
-		String store(const FileName& fnView, const String& parenSection, SubType subtype) const { return "";}
+		String store(const FileName& fnView, const String& parenSection) const { return parenSection;}
 		void load(const FileName& fnView, const String& parenSection) {};
+		bool isSimple() const { return true;}
 
 		CCriticalSection cs;
 	protected:

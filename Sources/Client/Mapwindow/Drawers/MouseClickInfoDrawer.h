@@ -16,6 +16,9 @@ public:
 	void addDataSource(void *);
 	HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent);
 private:
+	String store(const FileName& fnView, const String& parenSection) const;
+	void load(const FileName& fnView, const String& parenSection);
+
 	Coord activePoint;
 	vector<BaseMap> maps;
 	String sInfo;
