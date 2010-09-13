@@ -31,7 +31,7 @@ class _export FeatureSetDrawer : public SetDrawer {
 		void displayZOption3D(CWnd *parent);
 		void displayZScaling(CWnd *parent);
 		void setExtrusion(void *value, LayerTreeView *tree);
-		String store(const FileName& fnView, const String& parenSection, SubType subtype) const;
+		String store(const FileName& fnView, const String& parenSection) const;
 		void load(const FileName& fnView, const String& parenSection);
 
 		String mask;

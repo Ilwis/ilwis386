@@ -16,7 +16,7 @@ class PointSetDrawer : public FeatureSetDrawer {
 		HTREEITEM  configure(LayerTreeView  *tv, HTREEITEM parent);
 
 	protected:
-		String store(const FileName& fnView, const String& parenSection, SubType subtype) const;
+		String store(const FileName& fnView, const String& parenSection) const;
 		void load(const FileName& fnView, const String& parenSection);
 		virtual NewDrawer *createElementDrawer(PreparationParameters *pp, ILWIS::DrawerParameters* parms) const;
 		void setDrawMethod(DrawMethod method=drmINIT);

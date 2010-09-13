@@ -201,6 +201,15 @@ void GridDrawer::AddGridLine(Coord c1, Coord c2)
 //	}
 //}
 
+String GridDrawer::store(const FileName& fnView, const String& parentSection) const{
+	String currentSection = getType() + "::" + parentSection;
+	ComplexDrawer::store(fnView, currentSection);
+
+	return currentSection;
+}
+
+void GridDrawer::load(const FileName& fnView, const String& parenSection){
+}
 //------------------------------------------- UI -------------------------------
 
 HTREEITEM GridDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {

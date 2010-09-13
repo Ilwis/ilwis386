@@ -22,7 +22,7 @@ class FeatureLayerDrawer : public AbstractMapDrawer {
 		Color getSingleColor() const;
 		HTREEITEM  configure(LayerTreeView  *tv, HTREEITEM parent);
 		void getFeatures(vector<Feature *>& features) const;
-		String store(const FileName& fnView, const String& parenSection, SubType subtype) const;
+		String store(const FileName& fnView, const String& parenSection) const;
 		void load(const FileName& fnView, const String& parenSection);
 
 	protected:

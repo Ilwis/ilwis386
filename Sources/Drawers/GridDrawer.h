@@ -32,6 +32,8 @@ namespace ILWIS{
 		void grid3D(void *v, LayerTreeView *tv);
 		void prepareGrid(double maxz, double zplanes, double rDist, const Coord& cMax, const Coord& cMin );
 		void prepareVerticals(double maxz, double rDist,const Coord& cMax, const Coord& cMin);
+		String store(const FileName& fnView, const String& parenSection) const;
+		void load(const FileName& fnView, const String& parenSection);
 
 		double          rDist;
 		Color           color;

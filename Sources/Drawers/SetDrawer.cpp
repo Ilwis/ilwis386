@@ -192,16 +192,16 @@ void SetDrawer::displayOptionStretch(CWnd *parent) {
 	new SetStretchForm(parent, this);
 }
 
-String SetDrawer::store(const FileName& fnView, const String& parentSection, SubType subtype) const{
-	String currentSection = parentSection + "::" + "SetDrawer";
-	ComplexDrawer::store(fnView, currentSection, subtype);
-	ObjectInfo::WriteElement(currentSection.scVal(),"CoordinateSystem",fnView, csy);
-	ObjectInfo::WriteElement(currentSection.scVal(),"Representation",fnView, rpr);
-	ObjectInfo::WriteElement(currentSection.scVal(),"StretchReal",fnView, rrStretch);
-	ObjectInfo::WriteElement(currentSection.scVal(),"StretchInt",fnView, riStretch);
-	ObjectInfo::WriteElement(currentSection.scVal(),"IsStretched",fnView, stretched);
-	ObjectInfo::WriteElement(currentSection.scVal(),"StretchMethod",fnView, stretchMethod);
-	return currentSection;
+String SetDrawer::store(const FileName& fnView, const String& parentSection) const{
+	ComplexDrawer::store(fnView, parentSection);
+	ObjectInfo::WriteElement(parentSection.scVal(),"CoordinateSystem",fnView, csy);
+	ObjectInfo::WriteElement(parentSection.scVal(),"Representation",fnView, rpr);
+	ObjectInfo::WriteElement(parentSection.scVal(),"StretchReal",fnView, rrStretch);
+	ObjectInfo::WriteElement(parentSection.scVal(),"StretchInt",fnView, riStretch);
+	ObjectInfo::WriteElement(parentSection.scVal(),"IsStretched",fnView, stretched);
+	ObjectInfo::WriteElement(parentSection.scVal(),"StretchMethod",fnView, stretchMethod);
+
+	return parentSection;
 }
 
 void SetDrawer::load(const FileName& fnView, const String& parenSection){

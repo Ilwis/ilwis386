@@ -118,9 +118,10 @@ Color FeatureLayerDrawer::getSingleColor() const {
 	return singleColor;
 }
 
-String FeatureLayerDrawer::store(const FileName& fnView, const String& parentSection, SubType subtype) const{
-	String currentSection = parentSection + "::" + "FeatureLayerDrawer";
-	AbstractMapDrawer::store(fnView, currentSection, subtype);
+String FeatureLayerDrawer::store(const FileName& fnView, const String& parentSection) const{
+	String currentSection = "FeatureLayerDrawer::" + parentSection;
+	AbstractMapDrawer::store(fnView, currentSection);
+
 	return currentSection;
 }
 

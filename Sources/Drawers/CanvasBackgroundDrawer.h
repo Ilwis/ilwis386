@@ -17,6 +17,8 @@ public:
 private:
 	void displayOptionOutsideColor(CWnd *parent);
 	void displayOptionInsideColor(CWnd *parent);
+	String store(const FileName& fnView, const String& parenSection) const;
+	void load(const FileName& fnView, const String& parenSection);
 	void calcCanvas();
 	void addDataSource(void *);
 	Color inside2D;

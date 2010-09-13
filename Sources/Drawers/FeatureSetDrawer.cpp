@@ -89,9 +89,8 @@ Color FeatureSetDrawer::getSingleColor() const {
 	return singleColor;
 }
 
-String FeatureSetDrawer::store(const FileName& fnView, const String& parentSection, SubType subtype) const{
-	String currentSection = parentSection + "::" + "FeatureSetDrawer";
-	return SetDrawer::store(fnView, currentSection, subtype);
+String FeatureSetDrawer::store(const FileName& fnView, const String& parentSection) const{
+	return SetDrawer::store(fnView, parentSection);
 }
 
 void FeatureSetDrawer::load(const FileName& fnView, const String& parenSection){

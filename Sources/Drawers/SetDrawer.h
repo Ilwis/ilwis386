@@ -39,7 +39,7 @@ class _export SetDrawer : public ComplexDrawer {
 	
 			
 	protected:
-		String store(const FileName& fnView, const String& parenSection, SubType subtype) const;
+		String store(const FileName& fnView, const String& parenSection) const;
 		void load(const FileName& fnView, const String& parenSection);
 		void setcheckRpr(void *value, LayerTreeView *);
 		void displayOptionSubRpr(CWnd *parent);

@@ -74,6 +74,15 @@ bool CanvasBackgroundDrawer::draw(bool norecursion, const CoordBounds& cb) const
 	return true;
 }
 
+String CanvasBackgroundDrawer::store(const FileName& fnView, const String& parentSection) const{
+	String currentSection = getType() + "::" + parentSection;
+	ComplexDrawer::store(fnView, currentSection);
+	return currentSection;
+}
+
+void CanvasBackgroundDrawer::load(const FileName& fnView, const String& parenSection){
+}
+
 //------------------------------------ UI -----------------------------------------
 HTREEITEM CanvasBackgroundDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 	HTREEITEM hti = InsertItem(tv,TVI_ROOT,"Background Area","MapPane", TVI_LAST);
