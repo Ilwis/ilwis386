@@ -75,12 +75,20 @@ bool CanvasBackgroundDrawer::draw(bool norecursion, const CoordBounds& cb) const
 }
 
 String CanvasBackgroundDrawer::store(const FileName& fnView, const String& parentSection) const{
-	String currentSection = getType() + "::" + parentSection;
-	ComplexDrawer::store(fnView, currentSection);
-	return currentSection;
+	ComplexDrawer::store(fnView, getType());
+	ObjectInfo::WriteElement(getType().scVal(),"InSideColor2D",fnView, inside2D);
+	ObjectInfo::WriteElement(getType().scVal(),"InSideColor3D",fnView, inside3D);
+	ObjectInfo::WriteElement(getType().scVal(),"OutSideColor2D",fnView, outside2D);
+	ObjectInfo::WriteElement(getType().scVal(),"OutSideColor3D",fnView, outside3D);
+	return getType();
 }
 
-void CanvasBackgroundDrawer::load(const FileName& fnView, const String& parenSection){
+void CanvasBackgroundDrawer::load(const FileName& fnView, const String& parentSection){
+	ComplexDrawer::load(fnView, getType());
+	ObjectInfo::ReadElement(getType().scVal(),"InSideColor2D",fnView, inside2D);
+	ObjectInfo::ReadElement(getType().scVal(),"InSideColor3D",fnView, inside3D);
+	ObjectInfo::ReadElement(getType().scVal(),"OutSideColor2D",fnView, outside2D);
+	ObjectInfo::ReadElement(getType().scVal(),"OutSideColor3D",fnView, outside3D);
 }
 
 //------------------------------------ UI -----------------------------------------

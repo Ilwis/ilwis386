@@ -90,10 +90,15 @@ Color FeatureSetDrawer::getSingleColor() const {
 }
 
 String FeatureSetDrawer::store(const FileName& fnView, const String& parentSection) const{
-	return SetDrawer::store(fnView, parentSection);
+	SetDrawer::store(fnView, parentSection);
+	ObjectInfo::WriteElement(parentSection.scVal(),"SingleColor",fnView, singleColor);
+	return parentSection;
 }
 
-void FeatureSetDrawer::load(const FileName& fnView, const String& parenSection){
+void FeatureSetDrawer::load(const FileName& fnView, const String& parentSection){
+	SetDrawer::store(fnView, parentSection);
+	ObjectInfo::ReadElement(parentSection.scVal(),"SingleColor",fnView, singleColor);
+
 }
 
 //-------------------------------------- UI --------------------------------------------------------

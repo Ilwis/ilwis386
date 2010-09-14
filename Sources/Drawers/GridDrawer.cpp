@@ -202,10 +202,9 @@ void GridDrawer::AddGridLine(Coord c1, Coord c2)
 //}
 
 String GridDrawer::store(const FileName& fnView, const String& parentSection) const{
-	String currentSection = getType() + "::" + parentSection;
-	ComplexDrawer::store(fnView, currentSection);
+	ComplexDrawer::store(fnView, getType());
 
-	return currentSection;
+	return getType();
 }
 
 void GridDrawer::load(const FileName& fnView, const String& parenSection){
@@ -216,7 +215,7 @@ HTREEITEM GridDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,TVI_ROOT,this,
 					(SetCheckFunc)&GridDrawer::gridActive,
 					(DisplayOptionItemFunc)&GridDrawer::gridOptions);
-	HTREEITEM htiGrid = InsertItem("Gird",".grid",item, isActive(),TVI_FIRST);
+	HTREEITEM htiGrid = InsertItem("Grid",".grid",item, isActive(),TVI_FIRST);
 	ComplexDrawer::configure(tv, htiGrid);
 
 	item = new DisplayOptionTreeItem(tv,htiGrid,this,(DisplayOptionItemFunc)&GridDrawer::displayOptionSetLineStyle);

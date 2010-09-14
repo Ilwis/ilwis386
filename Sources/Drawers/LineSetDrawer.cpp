@@ -62,15 +62,22 @@ int LineSetDrawer::getLineThickness() const {
 }
 
 String LineSetDrawer::store(const FileName& fnView, const String& parentSection) const{
+	FeatureSetDrawer::store(fnView, parentSection);
 	String currentSection = "LineSetDrawer::" + parentSection;
-	FeatureSetDrawer::store(fnView, currentSection);
 	ObjectInfo::WriteElement(currentSection.scVal(),"LineStyle",fnView, linestyle);
 	ObjectInfo::WriteElement(currentSection.scVal(),"LineThickness",fnView, linethickness);
 
 	return currentSection;
 }
 
-void LineSetDrawer::load(const FileName& fnView, const String& parenSection){
+void LineSetDrawer::load(const FileName& fnView, const String& parentSection){
+	String currentSection = parentSection;
+	FeatureSetDrawer::load(fnView, currentSection);
+	int ls;
+	ObjectInfo::ReadElement(currentSection.scVal(),"LineStyle",fnView, ls);
+	ls = (LineDspType)linestyle;
+	ObjectInfo::ReadElement(currentSection.scVal(),"LineThickness",fnView, linethickness);
+
 }
 
 //--------------------------------- UI ----------------------------

@@ -204,7 +204,16 @@ String SetDrawer::store(const FileName& fnView, const String& parentSection) con
 	return parentSection;
 }
 
-void SetDrawer::load(const FileName& fnView, const String& parenSection){
+void SetDrawer::load(const FileName& fnView, const String& parentSection){
+	ComplexDrawer::load(fnView, parentSection);
+	ObjectInfo::ReadElement(parentSection.scVal(),"CoordinateSystem",fnView, csy);
+	ObjectInfo::ReadElement(parentSection.scVal(),"Representation",fnView, rpr);
+	ObjectInfo::ReadElement(parentSection.scVal(),"StretchReal",fnView, rrStretch);
+	ObjectInfo::ReadElement(parentSection.scVal(),"StretchInt",fnView, riStretch);
+	ObjectInfo::ReadElement(parentSection.scVal(),"IsStretched",fnView, stretched);
+	long method;
+	ObjectInfo::ReadElement(parentSection.scVal(),"StretchMethod",fnView, method);
+	stretchMethod = (StretchMethod)method;
 }
 //---------------UI---------------
 

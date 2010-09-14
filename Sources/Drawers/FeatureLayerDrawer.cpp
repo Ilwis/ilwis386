@@ -37,8 +37,7 @@ ILWIS::NewDrawer *createFeatureLayerDrawer(DrawerParameters *parms) {
 }
 
 FeatureLayerDrawer::FeatureLayerDrawer(DrawerParameters *parms) : 
-	AbstractMapDrawer(parms,"FeatureLayerDrawer"),
-	singleColor(Color(0,176,20))
+	AbstractMapDrawer(parms,"FeatureLayerDrawer")
 {
 	setTransparency(rUNDEF);
 }
@@ -101,22 +100,22 @@ void FeatureLayerDrawer::getFeatures(vector<Feature *>& features) const{
 	}
 }
 
-
-String FeatureLayerDrawer::getMask() const{
-	return mask;
-}
-
-void FeatureLayerDrawer::setMask(const String& sm){
-	mask = sm;
-}
-
-void FeatureLayerDrawer:: setSingleColor(const Color& c){
-	singleColor = c;
-}
-
-Color FeatureLayerDrawer::getSingleColor() const {
-	return singleColor;
-}
+//
+//String FeatureLayerDrawer::getMask() const{
+//	return mask;
+//}
+//
+//void FeatureLayerDrawer::setMask(const String& sm){
+//	mask = sm;
+//}
+//
+//void FeatureLayerDrawer:: setSingleColor(const Color& c){
+//	singleColor = c;
+//}
+//
+//Color FeatureLayerDrawer::getSingleColor() const {
+//	return singleColor;
+//}
 
 String FeatureLayerDrawer::store(const FileName& fnView, const String& parentSection) const{
 	String currentSection = "FeatureLayerDrawer::" + parentSection;
@@ -126,6 +125,7 @@ String FeatureLayerDrawer::store(const FileName& fnView, const String& parentSec
 }
 
 void FeatureLayerDrawer::load(const FileName& fnView, const String& parentSection){
+	AbstractMapDrawer::load(fnView, parentSection);
 }
 
 //-------------------------------------- UI ----------------------------------------------

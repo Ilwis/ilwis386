@@ -16,10 +16,10 @@ class FeatureLayerDrawer : public AbstractMapDrawer {
 		FeatureLayerDrawer(DrawerParameters *parms);
 		virtual ~FeatureLayerDrawer();
 		virtual void prepare(PreparationParameters *pp);
-		String getMask() const;
+	/*	String getMask() const;
 		void setMask(const String& sM);
 		void setSingleColor(const Color& c);
-		Color getSingleColor() const;
+		Color getSingleColor() const;*/
 		HTREEITEM  configure(LayerTreeView  *tv, HTREEITEM parent);
 		void getFeatures(vector<Feature *>& features) const;
 		String store(const FileName& fnView, const String& parenSection) const;
@@ -28,8 +28,8 @@ class FeatureLayerDrawer : public AbstractMapDrawer {
 	protected:
 		void addSetDrawer(const BaseMap& basemap, ILWIS::PreparationParameters *pp, ILWIS::SetDrawer *fsd, const String& name="");
 
-		String mask;
-		Color singleColor;
+//		String mask;
+//		Color singleColor;
 
 	};
 
