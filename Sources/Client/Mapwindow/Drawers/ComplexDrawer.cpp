@@ -348,8 +348,8 @@ String ComplexDrawer::store(const FileName& fnView, const String& parentSection)
 		String currentSection("%S%d",parentSection,index);
 		NewDrawer *drw = drawers[index];
 		if ( !drw->isSimple() ) {
-			drw->store(fnView, currentSection);
-			ObjectInfo::WriteElement(parentSection.scVal(),String("Drawer%02d",count++).scVal(),fnView, currentSection);
+			String section = drw->store(fnView, currentSection);
+			ObjectInfo::WriteElement(parentSection.scVal(),String("Drawer%02d",count++).scVal(),fnView, section);
 		}
 
 	}
