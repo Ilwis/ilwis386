@@ -94,6 +94,7 @@ class _export ComplexDrawer : public NewDrawer {
 		HTREEITEM findTreeItemByName(LayerTreeView  *tv, HTREEITEM parent, const String& name) const;
 		void displayOptionTransparency(CWnd *parent) ;
 		void setInfoMode(void *v,LayerTreeView *tv);
+		NewDrawer *loadDrawer(const FileName& fnView, const String& drawerSection);
 	private:
 		void init();
 	} ;

@@ -101,7 +101,7 @@ String RootDrawer::store(const FileName& fnView, const String parenSection) cons
 	ObjectInfo::WriteElement("RootDrawer","CoordBoundsZoom",fnView, getDrawerContext()->getCoordBoundsZoom());
 	ObjectInfo::WriteElement("RootDrawer","CoordBoundsView",fnView, getDrawerContext()->getCoordBoundsView());
 	ObjectInfo::WriteElement("RootDrawer","CoordBoundsMap",fnView, getDrawerContext()->getMapCoordBounds());
-	ObjectInfo::WriteElement("RootDrawer","AspectRatio",fnView, getDrawerContext()->getAspectRatio());
+	//ObjectInfo::WriteElement("RootDrawer","AspectRatio",fnView, getDrawerContext()->getAspectRatio());
 	ObjectInfo::WriteElement("RootDrawer","EyePoint",fnView, getDrawerContext()->getEyePoint());
 	ObjectInfo::WriteElement("RootDrawer","ViewPoint",fnView, getDrawerContext()->getViewPoint());
 	ObjectInfo::WriteElement("RootDrawer","ViewPort",fnView, getDrawerContext()->getViewPort());
@@ -112,6 +112,30 @@ String RootDrawer::store(const FileName& fnView, const String parenSection) cons
 }
 
 void RootDrawer::load(const FileName& fnView, const String parenSection){
+	CoordSystem csy;
+	ObjectInfo::ReadElement("RootDrawer","CoordinateSystem",fnView, csy);
+	CoordBounds cbZoom,cbView,cbMap;
+	ObjectInfo::ReadElement("RootDrawer","CoordBoundsZoom",fnView, cbZoom);
+	ObjectInfo::ReadElement("RootDrawer","CoordBoundsView",fnView, cbView);
+	ObjectInfo::ReadElement("RootDrawer","CoordBoundsMap",fnView, cbMap);
+	/*double aspect;
+	ObjectInfo::ReadElement("RootDrawer","AspectRatio",fnView, aspect);*/
+	Coord eyePoint,viewPoint;
+	ObjectInfo::ReadElement("RootDrawer","EyePoint",fnView, eyePoint);
+	ObjectInfo::ReadElement("RootDrawer","ViewPoint",fnView, viewPoint);
+	RowCol viewPort;
+	ObjectInfo::ReadElement("RootDrawer","ViewPort",fnView, viewPort);
+	getDrawerContext()->setCoordinateSystem(csy, false);
+	getDrawerContext()->setViewPort(viewPort);
+	getDrawerContext()->setCoordBoundsMap(cbMap);
+	getDrawerContext()->setCoordBoundsView(cbView, false);
+	getDrawerContext()->setCoordBoundsZoom(cbZoom);
+	getDrawerContext()->setEyePoint(eyePoint);
+	getDrawerContext()->setViewPoint(viewPoint);
+
+	ComplexDrawer::load(fnView,"RootDrawer");
+
+
 }
 //----------------------------------UI-------------------------------------
 HTREEITEM RootDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {

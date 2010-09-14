@@ -59,10 +59,9 @@ void MouseClickInfoDrawer::setActivePoint(const Coord& c) {
 }
 
 String MouseClickInfoDrawer::store(const FileName& fnView, const String& parentSection) const{
-	String currentSection = getType() + "::" + parentSection;
-	TextSetDrawer::store(fnView, currentSection);
+	TextSetDrawer::store(fnView, getType());
 
-	return currentSection;
+	return getType();
 }
 
 void MouseClickInfoDrawer::load(const FileName& fnView, const String& parenSection){

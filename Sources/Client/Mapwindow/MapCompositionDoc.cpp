@@ -1223,7 +1223,7 @@ BOOL MapCompositionDoc::OnOpenMapView(const MapView& mapview)
 			s &= mpv->sDescription;
 			CDocument::SetTitle(s.sVal());
 		}
-		mpv->ReadElement("MapView", "GeoRef", georef);
+	/*	mpv->ReadElement("MapView", "GeoRef", georef);
 		if (!georef.fValid())
 			return FALSE;
 		CoordSystem cs;
@@ -1232,38 +1232,12 @@ BOOL MapCompositionDoc::OnOpenMapView(const MapView& mapview)
 		{
 			georef->SetCoordSystem(cs);
 			georef->fChanged=false;
-		}
-		mpv->ReadElement("MapView", "MinMax", mmSize);
-		mmMapBounds = mmSize;
-		mpv->ReadElement("MapView", "MapBounds", mmMapBounds);
-		if (mmSize.fUndef())
-			mmSize = mmMapBounds;
-		mpv->ReadElement("MapView", "Scale", rDfltScale);
-		if (rDfltScale < 0)
-			rDfltScale = mmMapBounds.width() * georef->rPixSize() / 0.15; // dflt 15 cm width
-		int iSc = mpv->iReadElement("MapView", "ZoomFactor");
-		rcDfltOffset = RowCol(0,0);
-		mpv->ReadElement("MapView", "Offset", rcDfltOffset);
-		szPrefSize = CSize(0,0);
+		}*/
 		mpv->ReadElement("MapView", "Width", szPrefSize.cx);
 		mpv->ReadElement("MapView", "Height", szPrefSize.cy);
+		FileName fn = GetPathName();
+		rootDrawer->load(fn,"");
 
-		int iLayers = mpv->iReadElement("MapView", "Layers");
-		for (int i = 1; i <= iLayers; ++i) {
-			String sSection("Layer%i", i);
-			Drawer* dw = drDrawer(mpv, sSection.scVal());
-			if (0 == dw) // protection against faulty .mpv files
-				continue;
-			dw->Setup();
-			dl.push_back(dw);
-			MapDrawer* mdw = dynamic_cast<MapDrawer*>(dw);
-			if (mdw) {
-				fRaster = true;
-				fShowRowCol = true;
-				mp = mdw->mpGet();
-			}
-		}
-		mpv->ReadElement("MapView", "Background", colBackground);
 		return TRUE;
 	}
 	catch (ErrorObject& err) 

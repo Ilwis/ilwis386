@@ -334,33 +334,37 @@ String ComplexDrawer::store(const FileName& fnView, const String& parentSection)
 
 	int count = 0;
 	for(DrawerIter_C cur = preDrawers.begin(); cur != preDrawers.end(); ++cur) {
-		String currentSection("%S%d",parentSection,count);
+		String currentSection("%S%03d",parentSection,count);
 		NewDrawer *drw = (*cur).second;
+		String order = String("%03d", (*cur).first.sHead("|").iVal());
 		if ( !drw->isSimple() ) {
-			drw->store(fnView, currentSection);
-			ObjectInfo::WriteElement(parentSection.scVal(),String("PreDrawer%02d",count++).scVal(),fnView, currentSection);
+			String section = drw->store(fnView, currentSection);
+			ObjectInfo::WriteElement(section.scVal(),"Order",fnView, order);
+			ObjectInfo::WriteElement(parentSection.scVal(),String("PreDrawer%03d",count++).scVal(),fnView, section);
 		}
 	}
 	ObjectInfo::WriteElement(parentSection.scVal(),"PreDrawerCount",fnView, count);
 	int drCount = getDrawerCount();
 	count = 0; 
 	for(int index = 0; index < drCount; ++index) {
-		String currentSection("%S%d",parentSection,index);
+		String currentSection("%S%03d",parentSection,index);
 		NewDrawer *drw = drawers[index];
 		if ( !drw->isSimple() ) {
 			String section = drw->store(fnView, currentSection);
-			ObjectInfo::WriteElement(parentSection.scVal(),String("Drawer%02d",count++).scVal(),fnView, section);
+			ObjectInfo::WriteElement(parentSection.scVal(),String("Drawer%03d",count++).scVal(),fnView, section);
 		}
 
 	}
 	ObjectInfo::WriteElement(parentSection.scVal(),"DrawerCount",fnView, count);
 	count = 0;
 	for(DrawerIter_C cur = postDrawers.begin(); cur != postDrawers.end(); ++cur) {
-		String currentSection("%S%d",parentSection,count);
+		String currentSection("%S%03d",parentSection,count);
+		String order = String("%03d", (*cur).first.sHead("|").iVal());
 		NewDrawer *drw = (*cur).second;
 		if ( !drw->isSimple() ) {
 			String section = drw->store(fnView, currentSection);
-			ObjectInfo::WriteElement(parentSection.scVal(),String("PostDrawer%02d",count++).scVal(),fnView, section);
+			ObjectInfo::WriteElement(section.scVal(),"Order",fnView, order);
+			ObjectInfo::WriteElement(parentSection.scVal(),String("PostDrawer%03d",count++).scVal(),fnView, section);
 		}
 	}
 	ObjectInfo::WriteElement(parentSection.scVal(),"PostDrawerCount",fnView, count);
@@ -369,37 +373,50 @@ String ComplexDrawer::store(const FileName& fnView, const String& parentSection)
 
 }
 
-void ComplexDrawer::load(const FileName& fnView, const String& parenSection){
-	String currentSection;
-	if ( parenSection !="")
-		currentSection = parenSection + "::" + getName();
-	else
-		currentSection = getName();
-	int subtype = 0;
-	ObjectInfo::ReadElement(currentSection.scVal(),"SubType",fnView, subtype);
-	ObjectInfo::ReadElement(currentSection.scVal(),"UiCode",fnView, uiCode);
-	ObjectInfo::ReadElement(currentSection.scVal(),"HasInfo",fnView, info);
+void ComplexDrawer::load(const FileName& fnView, const String& parentSection){
+	ObjectInfo::ReadElement(parentSection.scVal(),"UiCode",fnView, uiCode);
+	ObjectInfo::ReadElement(parentSection.scVal(),"HasInfo",fnView, info);
 	int temp;
-	ObjectInfo::ReadElement(currentSection.scVal(),"DrawMethod",fnView, temp);
+	ObjectInfo::ReadElement(parentSection.scVal(),"DrawMethod",fnView, temp);
 	drm = (ILWIS::NewDrawer::DrawMethod)temp;
-	ObjectInfo::ReadElement(currentSection.scVal(),"Transparency",fnView, transparency);
-	ObjectInfo::ReadElement(currentSection.scVal(),"Type",fnView, type);
-	ObjectInfo::ReadElement(currentSection.scVal(),"IsActive",fnView, active);
-	ObjectInfo::ReadElement(currentSection.scVal(),"editable",fnView, editable);
-	ObjectInfo::ReadElement(currentSection.scVal(),"HasInfo",fnView, info);
-	ObjectInfo::ReadElement(currentSection.scVal(),"IsThreeD",fnView, threeD);
+	ObjectInfo::ReadElement(parentSection.scVal(),"Transparency",fnView, transparency);
+	ObjectInfo::ReadElement(parentSection.scVal(),"Type",fnView, type);
+	ObjectInfo::ReadElement(parentSection.scVal(),"IsActive",fnView, active);
+	ObjectInfo::ReadElement(parentSection.scVal(),"editable",fnView, editable);
+	ObjectInfo::ReadElement(parentSection.scVal(),"HasInfo",fnView, info);
+	ObjectInfo::ReadElement(parentSection.scVal(),"IsThreeD",fnView, threeD);
 
-	for(DrawerIter_C cur = preDrawers.begin(); cur != preDrawers.end(); ++cur)
-		(*cur).second->load(fnView, currentSection);
+	long count, order;
+	String drawerSection;
+	ObjectInfo::ReadElement(parentSection.scVal(),"PreDrawerCount",fnView, count);
+	for(int i = 0; i < count ; ++i) {
+		ObjectInfo::ReadElement(parentSection.scVal(),String("PreDrawer%03d",i).scVal(),fnView, drawerSection);
+		ObjectInfo::ReadElement(drawerSection.scVal(),"Order",fnView, order);
+		addPreDrawer(order,loadDrawer(fnView, drawerSection ));
+	}
 
-	int drCount = getDrawerCount();
-	for(int index = 0; index < drCount; ++index)
-		drawers[index]->load(fnView, currentSection);
+	ObjectInfo::ReadElement(parentSection.scVal(),"DrawerCount",fnView, count);
+	for(int i = 0; i < count; ++i) {
+		ObjectInfo::ReadElement(parentSection.scVal(),String("Drawer%03d",i).scVal(),fnView, drawerSection);
+		addDrawer(loadDrawer(fnView, drawerSection));
+	}
 
-	for(DrawerIter_C cur = postDrawers.begin(); cur != postDrawers.end(); ++cur)
-		(*cur).second->load(fnView, currentSection);
+	ObjectInfo::ReadElement(parentSection.scVal(),"PostDrawerCount",fnView, count);
+	for(int i = 0; i < count ; ++i) {
+		ObjectInfo::ReadElement(parentSection.scVal(),String("PostDrawer%03d",i).scVal(),fnView, drawerSection);
+		ObjectInfo::ReadElement(drawerSection.scVal(),"Order",fnView, order);
+		addPreDrawer(order,loadDrawer(fnView, drawerSection));
+	}
 }
 
+NewDrawer *ComplexDrawer::loadDrawer(const FileName& fnView, const String& drawerSection) {
+	Array<String> parts;
+	Split(drawerSection,parts,"::");
+	ILWIS::DrawerParameters dp(getDrawerContext(), this);
+	ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer(parts[0], "Ilwis38", &dp);
+	drawer->load(fnView,drawerSection);
+	return drawer;
+}
 
 //--------------------------------- UI ------------------------------------------------------------------------
 HTREEITEM ComplexDrawer::InsertItem(LayerTreeView *tv, HTREEITEM parent,const String& name,const String& icon, HTREEITEM after) {

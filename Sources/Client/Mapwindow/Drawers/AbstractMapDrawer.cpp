@@ -160,8 +160,10 @@ void AbstractMapDrawer::setInfoMode(void *v,LayerTreeView *tv) {
 
 String AbstractMapDrawer::store(const FileName& fnView, const String& parentSection) const{
 	AbstractObjectDrawer::store(fnView, parentSection);
-	ObjectInfo::WriteElement(parentSection.scVal(),"AttributeTable",fnView, attTable);
-	ObjectInfo::WriteElement(parentSection.scVal(),"AttributeColumn",fnView, attColumn);
+	if ( attTable.fValid())
+		ObjectInfo::WriteElement(parentSection.scVal(),"AttributeTable",fnView, attTable);
+	if ( attColumn.fValid())
+		ObjectInfo::WriteElement(parentSection.scVal(),"AttributeColumn",fnView, attColumn->sName());
 	ObjectInfo::WriteElement(parentSection.scVal(),"UseAttributes",fnView, useAttTable);
 	ObjectInfo::WriteElement(parentSection.scVal(),"BaseMap",fnView, bm);
 
@@ -169,7 +171,19 @@ String AbstractMapDrawer::store(const FileName& fnView, const String& parentSect
 
 }
 
-void AbstractMapDrawer::load(const FileName& fnView, const String& parenSection){
+void AbstractMapDrawer::load(const FileName& fnView, const String& parentSection){
+	AbstractObjectDrawer::load(fnView, parentSection);
+	ObjectInfo::ReadElement(parentSection.scVal(),"AttributeTable",fnView, attTable);
+	if ( attTable.fValid()) {
+		String colname;
+		ObjectInfo::ReadElement(parentSection.scVal(),"AttributeColumn",fnView, colname);
+		attColumn = attTable->col(colname);
+	}
+	ObjectInfo::ReadElement(parentSection.scVal(),"UseAttributes",fnView, useAttTable);
+	FileName fn;
+	ObjectInfo::ReadElement(parentSection.scVal(),"BaseMap",fnView, fn);
+	bm = BaseMap(fn);
+
 }
 
 //------------------------------------UI--------------------------------

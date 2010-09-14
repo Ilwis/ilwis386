@@ -45,6 +45,7 @@ String AbstractObjectDrawer::store(const FileName& fnView, const String& parentS
 }
 
 void AbstractObjectDrawer::load(const FileName& fnView, const String& parenSection){
+	ComplexDrawer::load(fnView,parenSection);
 }
 
 //--------------------------------
