@@ -18,6 +18,8 @@ public:
 	bool getThreeDPossible() const;
 	double getZScale() const;
 	void setZScale(double v);
+	void store(const FileName& fn, const String& section);
+	void load(const FileName& fn, const String& section);
 
 private:
 	BaseMap spatialsourcemap;

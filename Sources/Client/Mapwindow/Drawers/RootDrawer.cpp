@@ -40,8 +40,20 @@ void  RootDrawer::prepare(PreparationParameters *pp){
 			ComplexDrawer::prepare(pp);
 		}
 	}
-	if ( !(pp->type & RootDrawer::ptINITOPENGL))
-		ComplexDrawer::prepare(pp);
+	if ( !(pp->type & RootDrawer::ptINITOPENGL)) {
+		for(map<String,NewDrawer *>::iterator cur = preDrawers.begin(); cur != preDrawers.end(); ++cur) {
+			(*cur).second->prepare(pp);
+		}
+
+		for(int i=0; i < drawers.size(); ++i) {
+			drawers[i]->prepare(pp);
+		}
+
+		for(map<String,NewDrawer *>::iterator cur = postDrawers.begin(); cur != postDrawers.end(); ++cur) {
+			(*cur).second->prepare(pp);
+		}
+	}
+		
 }
 
 String RootDrawer::addDrawer(NewDrawer *drw) {

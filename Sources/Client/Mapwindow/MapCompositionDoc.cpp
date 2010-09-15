@@ -1237,6 +1237,8 @@ BOOL MapCompositionDoc::OnOpenMapView(const MapView& mapview)
 		mpv->ReadElement("MapView", "Height", szPrefSize.cy);
 		FileName fn = GetPathName();
 		rootDrawer->load(fn,"");
+		ILWIS::PreparationParameters pp(NewDrawer::ptRESTORE,0);
+		rootDrawer->prepare(&pp);
 
 		return TRUE;
 	}

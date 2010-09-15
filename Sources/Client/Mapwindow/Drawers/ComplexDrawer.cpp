@@ -128,13 +128,9 @@ String ComplexDrawer::getId() const{
 }
 
 void ComplexDrawer::prepare(PreparationParameters *parms){
-	for(map<String,NewDrawer *>::iterator cur = preDrawers.begin(); cur != preDrawers.end(); ++cur) {
-		(*cur).second->prepare(parms);
-	}
-	for(map<String,NewDrawer *>::iterator cur = postDrawers.begin(); cur != postDrawers.end(); ++cur) {
-		(*cur).second->prepare(parms);
-	}
-
+	// no general prepares here as for some prepare a local preparation is needed and doing 
+	// that on a general level (see e.g. rootdrawer) would not work correctly. Each drawer is when needed;
+	// responsible for its own preparation.
 }
 
 String ComplexDrawer::addDrawer(NewDrawer *drw) {
@@ -331,6 +327,7 @@ String ComplexDrawer::store(const FileName& fnView, const String& parentSection)
 	ObjectInfo::WriteElement(parentSection.scVal(),"editable",fnView, editable);
 	ObjectInfo::WriteElement(parentSection.scVal(),"HasInfo",fnView, info);
 	ObjectInfo::WriteElement(parentSection.scVal(),"IsThreeD",fnView, threeD);
+	ObjectInfo::WriteElement(parentSection.scVal(),"Name",fnView, name);
 
 	int count = 0;
 	for(DrawerIter_C cur = preDrawers.begin(); cur != preDrawers.end(); ++cur) {
@@ -385,6 +382,7 @@ void ComplexDrawer::load(const FileName& fnView, const String& parentSection){
 	ObjectInfo::ReadElement(parentSection.scVal(),"editable",fnView, editable);
 	ObjectInfo::ReadElement(parentSection.scVal(),"HasInfo",fnView, info);
 	ObjectInfo::ReadElement(parentSection.scVal(),"IsThreeD",fnView, threeD);
+	ObjectInfo::ReadElement(parentSection.scVal(),"Name",fnView, name);
 
 	long count, order;
 	String drawerSection;
@@ -405,7 +403,7 @@ void ComplexDrawer::load(const FileName& fnView, const String& parentSection){
 	for(int i = 0; i < count ; ++i) {
 		ObjectInfo::ReadElement(parentSection.scVal(),String("PostDrawer%03d",i).scVal(),fnView, drawerSection);
 		ObjectInfo::ReadElement(drawerSection.scVal(),"Order",fnView, order);
-		addPreDrawer(order,loadDrawer(fnView, drawerSection));
+		addPostDrawer(order,loadDrawer(fnView, drawerSection));
 	}
 }
 

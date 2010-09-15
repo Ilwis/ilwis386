@@ -39,6 +39,23 @@ void ZValueMaker::setTable(const Table& tbl, const String& colName) {
 	zscale = DEFAULT_SCALE;
 }
 
+void ZValueMaker::store(const FileName& fnView, const String& section) {
+	//if ( table.fValid())
+	//	ObjectInfo::WriteElement(section.scVal(),"Table",fnView, uiCode);
+	//if ( spatialsourcemap.fValid()) 
+	//	ObjectInfo::WriteElement(section.scVal(),"Spatialsourcemap",fnView, spatialsourcemap);
+	//if ( datasourcemap.fValid())
+	//	ObjectInfo::WriteElement(section.scVal(),"Datasourcemap",fnView, datasourcemap);
+	//if ( range.fValid())
+	//	ObjectInfo::WriteElement(section.scVal(),"Range",fnView, range);
+	//ObjectInfo::WriteElement(section.scVal(),"Self",fnView, self);
+	//ObjectInfo::WriteElement(section.scVal(),"Zscale",fnView, zscale);
+	//ObjectInfo::WriteElement(section.scVal(),"Range",fnView, offset);
+}
+
+//void ZValueMaker::load(const FileName& fn) {
+//}
+
 void ZValueMaker::setTable(const Table& tbl, const vector<String>& names) {
 	table = tbl;
 	columns.clear();
