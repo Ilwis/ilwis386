@@ -56,7 +56,7 @@ void LineFeatureDrawer::addDataSource(void *f, int options) {
 void LineFeatureDrawer::prepare(PreparationParameters *p){
 	LineDrawer::prepare(p);
 	FeatureSetDrawer *fdr = dynamic_cast<FeatureSetDrawer *>(parentDrawer);
-	if ( p->type & ptGEOMETRY) {
+	if ( p->type & ptGEOMETRY | p->type & ptRESTORE) {
 		CoordSystem csy = fdr->getCoordSystem();
 		cb = feature->cbBounds();
 		clear();
@@ -88,7 +88,7 @@ void LineFeatureDrawer::prepare(PreparationParameters *p){
 			}
 		}
 	}
-	if (  p->type & RootDrawer::ptRENDER) {
+	if (  p->type & RootDrawer::ptRENDER || p->type & ptRESTORE) {
 		drawColor = (fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod()));
 		double tr = fdr->getTransparency();
 		setTransparency(tr);

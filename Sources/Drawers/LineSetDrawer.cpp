@@ -62,8 +62,8 @@ int LineSetDrawer::getLineThickness() const {
 }
 
 String LineSetDrawer::store(const FileName& fnView, const String& parentSection) const{
-	FeatureSetDrawer::store(fnView, parentSection);
 	String currentSection = "LineSetDrawer::" + parentSection;
+	FeatureSetDrawer::store(fnView, currentSection);
 	ObjectInfo::WriteElement(currentSection.scVal(),"LineStyle",fnView, linestyle);
 	ObjectInfo::WriteElement(currentSection.scVal(),"LineThickness",fnView, linethickness);
 

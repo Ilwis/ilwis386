@@ -50,7 +50,7 @@ void PolygonFeatureDrawer::addDataSource(void *f, int options) {
 void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 	PolygonDrawer::prepare(p);
 	FeatureSetDrawer *fdr = dynamic_cast<FeatureSetDrawer *>(parentDrawer);
-	if (  p->type & ptGEOMETRY) {
+	if (  p->type & ptGEOMETRY | p->type & ptRESTORE) {
 		CoordSystem csy = fdr->getCoordSystem();
 		ILWIS::Polygon *polygon = (ILWIS::Polygon *)feature;
 		if ( !polygon)

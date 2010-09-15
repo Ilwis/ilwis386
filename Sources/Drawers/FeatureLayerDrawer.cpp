@@ -47,10 +47,10 @@ FeatureLayerDrawer::~FeatureLayerDrawer() {
 
 void FeatureLayerDrawer::prepare(PreparationParameters *pp){
 	AbstractMapDrawer::prepare(pp);
-	if ( pp->type == ptALL || pp->type & RootDrawer::ptGEOMETRY) {
+	BaseMap basemap = getBaseMap();
+	if ( pp->type & RootDrawer::ptGEOMETRY) {
 		if ( !(pp->type & NewDrawer::ptANIMATION))
 			clear();
-		BaseMap basemap = getBaseMap();
 		FeatureSetDrawer *fsd;
 		ILWIS::DrawerParameters dp(drawcontext, this);
 		IlwisObject::iotIlwisObjectType otype = IlwisObject::iotObjectType(basemap->fnObj);
@@ -69,14 +69,16 @@ void FeatureLayerDrawer::prepare(PreparationParameters *pp){
 				break;
 		}
 	} else {
-		if ( pp->type & RootDrawer::ptRENDER) {
+		if ( pp->type & NewDrawer::ptRENDER | pp->type & NewDrawer::ptRESTORE) {
 			for(int i = 0; i < drawers.size(); ++i) {
 				FeatureSetDrawer *fsd = (FeatureSetDrawer *)drawers.at(i);
 				PreparationParameters fp((int)pp->type, 0);
+				fp.csy = basemap->cs();
 				fsd->prepare(&fp);
 			}
 		}
 	}
+
 }
 
 void FeatureLayerDrawer::addSetDrawer(const BaseMap& basemap,PreparationParameters *pp,SetDrawer *fsd, const String& name) {

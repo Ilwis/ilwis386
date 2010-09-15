@@ -45,7 +45,7 @@ void FeatureSetDrawer::prepare(PreparationParameters *parms){
 	SetDrawer::prepare(parms);
 	FeatureLayerDrawer *mapDrawer = (FeatureLayerDrawer *)parentDrawer;
 	vector<Feature *> features;
-	if ( parms->type & RootDrawer::ptGEOMETRY){
+	if ( parms->type & RootDrawer::ptGEOMETRY | parms->type & NewDrawer::ptRESTORE){
 		mapDrawer->getFeatures(features);
 		clear();
 		drawers.resize( features.size());

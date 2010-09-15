@@ -43,15 +43,16 @@ bool PointFeatureDrawer::draw(bool norecursion, const CoordBounds& cbArea) const
 void PointFeatureDrawer::prepare(PreparationParameters *p){
 	PointDrawer::prepare(p);
 	FeatureSetDrawer *fdr = dynamic_cast<FeatureSetDrawer *>(parentDrawer);
-	if ( p->type & ptGEOMETRY) {
+	if ( p->type & ptGEOMETRY | p->type & ptRESTORE) {
 	    CoordSystem csy = fdr->getCoordSystem();
 		ILWIS::Point *point = (ILWIS::Point *)feature;
+		Coord c = *(point->getCoordinate());
 		FileName fn = drawcontext->getCoordinateSystem()->fnObj;
 		if ( drawcontext->getCoordinateSystem()->fnObj == csy->fnObj) {
-			cNorm = *(point->getCoordinate());
+			cNorm = c;
 		}
 		else {
-			cNorm = csy->cConv(drawcontext->getCoordinateSystem(), Coord(*(point->getCoordinate())));
+			cNorm = csy->cConv(drawcontext->getCoordinateSystem(), c);
 		}
 		cb += cNorm;
 	}
@@ -60,7 +61,7 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 		double zv = zmaker->getValue(cNorm,feature);
 		cNorm.z = zv;
 	}
-	if (  p->type == ptALL || p->type & ptRENDER) {
+	if (  p->type == ptALL || p->type & ptRENDER || p->type & ptRESTORE) {
 		drawColor = fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod());
 	}
 }

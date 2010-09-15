@@ -43,7 +43,7 @@ HTREEITEM PointSetDrawer:: configure(LayerTreeView  *tv, HTREEITEM parent) {
 }
 
 String PointSetDrawer::store(const FileName& fnView, const String& parentSection) const{
-	String currentSection = parentSection;
+	String currentSection = getType() + "::" + parentSection;
 	SetDrawer::store(fnView, currentSection);
 
 	return currentSection;
