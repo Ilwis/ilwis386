@@ -366,6 +366,8 @@ String ComplexDrawer::store(const FileName& fnView, const String& parentSection)
 	}
 	ObjectInfo::WriteElement(parentSection.scVal(),"PostDrawerCount",fnView, count);
 
+	zmaker->store(fnView,parentSection);
+
 	return parentSection;
 
 }
@@ -405,6 +407,7 @@ void ComplexDrawer::load(const FileName& fnView, const String& parentSection){
 		ObjectInfo::ReadElement(drawerSection.scVal(),"Order",fnView, order);
 		addPostDrawer(order,loadDrawer(fnView, drawerSection));
 	}
+	zmaker->load(fnView, parentSection);
 }
 
 NewDrawer *ComplexDrawer::loadDrawer(const FileName& fnView, const String& drawerSection) {

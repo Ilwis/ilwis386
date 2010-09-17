@@ -146,6 +146,7 @@ void RootDrawer::load(const FileName& fnView, const String parenSection){
 	getDrawerContext()->setViewPoint(viewPoint);
 
 	ComplexDrawer::load(fnView,"RootDrawer");
+	getDrawerContext()->set3D(threeD);
 
 
 }

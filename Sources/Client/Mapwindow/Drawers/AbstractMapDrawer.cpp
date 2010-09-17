@@ -97,8 +97,11 @@ void AbstractMapDrawer::addDataSource(void *bmap,int options)
 Representation AbstractMapDrawer::getRepresentation() const {
 	BaseMap basemap = getBaseMap();
 	if ( basemap.fValid()) {
-		if ( useAttTable && attColumn.fValid())
-			return attColumn->dm()->rpr();
+		if ( useAttTable && attColumn.fValid()) {
+			Column col = getAtttributeColumn();
+			if ( col.fValid())
+				return attColumn->dm()->rpr();
+		}
 		else
 			return basemap->dm()->rpr();
 	}
@@ -124,6 +127,11 @@ void AbstractMapDrawer::setRepresentation(const Representation& rp){
 }
 
 Table AbstractMapDrawer::getAtttributeTable() const{
+	if ( !attTable.fValid()) {
+		if( getBaseMap()->fTblAtt()) {
+			(const_cast<AbstractMapDrawer *>(this))->attTable = getBaseMap()->tblAtt();
+		}
+	}
 	return attTable;
 }
 void AbstractMapDrawer::setAttributeTable(const Table& tbl){
@@ -136,7 +144,10 @@ Column AbstractMapDrawer::getAtttributeColumn() const{
 	return "";
 }
 void AbstractMapDrawer::setAttributeColumn(const String& name){
-	attColumn = attTable->col(name);
+	Table tbl = getAtttributeTable();
+	if ( tbl.fValid()) {
+		attColumn = getAtttributeTable()->col(name);
+	}
 }
 
 bool AbstractMapDrawer::useAttributeTable() const{
