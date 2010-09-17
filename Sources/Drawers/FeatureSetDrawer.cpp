@@ -96,7 +96,7 @@ String FeatureSetDrawer::store(const FileName& fnView, const String& parentSecti
 }
 
 void FeatureSetDrawer::load(const FileName& fnView, const String& parentSection){
-	SetDrawer::store(fnView, parentSection);
+	SetDrawer::load(fnView, parentSection);
 	ObjectInfo::ReadElement(parentSection.scVal(),"SingleColor",fnView, singleColor);
 
 }
