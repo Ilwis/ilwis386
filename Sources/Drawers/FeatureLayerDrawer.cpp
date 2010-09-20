@@ -117,36 +117,7 @@ void FeatureLayerDrawer::load(const FileName& fnView, const String& parentSectio
 
 //-------------------------------------- UI ----------------------------------------------
 HTREEITEM FeatureLayerDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
-	HTREEITEM hti = AbstractMapDrawer::configure(tv,parent);
-	bool singleSet = (drawers.size() + preDrawers.size() + postDrawers.size())  == 1;
-	for(map<String, NewDrawer *>::iterator cur = preDrawers.begin(); cur != preDrawers.end(); ++cur) {
-		NewDrawer *draw = (*cur).second;
-		if ( !singleSet)
-			
-			hti = InsertItem(draw->getName(),draw->iconName(),
-							 new DisplayOptionTreeItem(tv,parent, this,(SetCheckFunc)&SetDrawer::setActiveMode,0,draw),
-							 draw->isActive());
-		draw->configure(tv,hti);
-	}
-	for(int i = 0; i < drawers.size(); ++i) {
-		FeatureSetDrawer *fsd = (FeatureSetDrawer *)drawers.at(i);
-		if ( !singleSet)
-			
-			hti = InsertItem(fsd->getName(),fsd->iconName(), 
-							 new DisplayOptionTreeItem(tv,parent, this,(SetCheckFunc)&SetDrawer::setActiveMode, 0, fsd)
-							,fsd->isActive());
-			                
-		fsd->configure(tv,hti);
-	}
-	for(map<String, NewDrawer *>::iterator cur = postDrawers.begin(); cur != postDrawers.end(); ++cur) {
-		NewDrawer *draw = (*cur).second;
-		if ( !singleSet)
-			hti = InsertItem(draw->getName(),draw->iconName(),
-							 new DisplayOptionTreeItem(tv,parent, this,(SetCheckFunc)&SetDrawer::setActiveMode,0,draw),
-							 draw->isActive());
-		draw->configure(tv,hti);
-	}
-	return hti;
+	return AbstractMapDrawer::configure(tv,parent);
 }
 
 
