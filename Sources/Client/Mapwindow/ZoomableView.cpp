@@ -357,6 +357,8 @@ void ZoomableView::OnSize(UINT nType, int cx, int cy)
 
 	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(GetDocument());
 	if ( mcd) {
+		if ( cy == 0 || cx == 0)
+			return;
 		RowCol rc(cy, cx);
 		dim = zDimension(cx, cy);
 		mcd->rootDrawer->setViewPort(rc);

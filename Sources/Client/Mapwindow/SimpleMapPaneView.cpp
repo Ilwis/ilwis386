@@ -240,7 +240,7 @@ BOOL SimpleMapPaneView::OnEraseBkgnd(CDC* cdc)
 		GetClientRect(&rct);
 		mcd->rootDrawer->getDrawerContext()->setViewPort(RowCol(rct.Height(), rct.Width()));
 		mcd->rootDrawer->prepare(NewDrawer::ptALL);*/
-		//mcd->rootDrawer->draw(true);
+		//mcd->rootDrawer->draw();
 		//SwapBuffers(cdc->m_hDC);
 	}
 
@@ -261,7 +261,6 @@ void SimpleMapPaneView::OnDraw(CDC* cdc)
 	mcd->rootDrawer->draw();
 	
 	SwapBuffers(dc->m_hDC);
-
 }
 
 void SimpleMapPaneView::OnMeasureDist()

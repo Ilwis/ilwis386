@@ -2,6 +2,7 @@
 #include "Client\Ilwis.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
+#include "Client\Mapwindow\MapPaneView.h"
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
 #include "RootDrawer.h"
 
@@ -35,12 +36,11 @@ bool DrawerContext::initOpenGL(CDC *dc) {
 	glDisable(GL_DEPTH_TEST);
 	glClearColor(0.75,0.75,0.75,0.0);
 
-	CWnd * wnd = dc->GetWindow();
+	/*CWnd * wnd = dc->GetWindow();
 	CRect rct;
 	wnd->GetClientRect(&rct);
 	RowCol rc(rct.Height(), rct.Width());
-	//setViewPort(rc);
-
+	setViewPort(rc);*/
 	return true;
 }
 

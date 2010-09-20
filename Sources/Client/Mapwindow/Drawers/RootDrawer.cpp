@@ -24,6 +24,7 @@ RootDrawer::RootDrawer(MapCompositionDoc *doc) {
 	setTransparency(rUNDEF);
 	setName("RootDrawer");
 	threeD = false;
+	aspectRatio = 0;
 }
 
 RootDrawer::~RootDrawer() {
@@ -35,7 +36,11 @@ void  RootDrawer::prepare(PreparationParameters *pp){
 	if ( pp->dc && (  v1 || v2 )) {
 		if ( getDrawerContext()->initOpenGL(pp->dc)) {
 			pp->type |= NewDrawer::ptGEOMETRY;
-			ComplexDrawer::prepare(pp);
+			CWnd * wnd = pp->dc->GetWindow();
+			CRect rct;
+			wnd->GetClientRect(&rct);
+			RowCol rc(rct.Height(), rct.Width());
+			setViewPort(rc);
 		}
 	}
 	if ( !(pp->type & RootDrawer::ptINITOPENGL)) {
@@ -155,7 +160,7 @@ void RootDrawer::modifyCBZoomView(double dv, double dz, double f) {
 }
 
 void RootDrawer::setViewPort(const RowCol& rc) {
-	if (  aspectRatio  != 0 && pixArea.Col != iUNDEF) {
+	if (  aspectRatio  != 0.0 && pixArea.Col != iUNDEF) {
 		// this code adapts the cbZoom if the window size changes
 		if ( aspectRatio <= 1.0) { // y > x
 			if ( rc.Col != pixArea.Col){ // make sure the zoomsize is changed if the cols changes
@@ -174,6 +179,7 @@ void RootDrawer::setViewPort(const RowCol& rc) {
 				modifyCBZoomView(cbView.height(), cbZoom.height(),(double)rc.Col / pixArea.Col); 
 			}
 		}
+
 	}
 	pixArea = rc;
 	glViewport(0,0,rc.Col, rc.Row);
