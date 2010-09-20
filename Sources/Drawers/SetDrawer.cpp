@@ -108,13 +108,6 @@ void SetDrawer::setcheckRpr(void *value, LayerTreeView *tree) {
 	doc->mpvGetView()->Invalidate();
 }
 
-void SetDrawer::setActiveMode(void *v,LayerTreeView *tv) {
-	bool value = *(bool *)v;
-	setActive(value);
-	MapCompositionDoc* doc = tv->GetDocument();
-	doc->mpvGetView()->Invalidate();
-
-}
 Representation SetDrawer::getRepresentation() const { // avoiding copy constructotrs
 	return rpr;
 }

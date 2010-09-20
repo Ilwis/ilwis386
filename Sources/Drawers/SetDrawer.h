@@ -33,7 +33,6 @@ class _export SetDrawer : public ComplexDrawer {
 		ILWIS::DrawingColor *getDrawingColor() const;
 		CoordSystem getCoordSystem() const;
 		bool useInternalDomain() const;
-		void setActiveMode(void *v,LayerTreeView *tv);
 		void SetthreeD(void *v, LayerTreeView *tv);
 		String iconName(const String& subtype="?") const ;
 	
