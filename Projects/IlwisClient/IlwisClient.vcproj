@@ -81,7 +81,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/ignore:4099"
-				AdditionalDependencies="ILWISEngine.lib htmlhelp.lib geosd.lib opengl32.lib glu32.lib ftgl.lib freetype.lib"
+				AdditionalDependencies="ILWISEngine.lib htmlhelp.lib geosd.lib opengl32.lib glu32.lib xerces-c_2D.lib ftgl.lib freetype.lib"
 				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\Ilwis.exe"
 				Version="3.5"
 				LinkIncremental="2"
@@ -2539,14 +2539,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SVGOpenGLRenderer.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SVGOpenGLRenderer.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\Sources\Client\Mapwindow\ZoomableView.cpp"
 					>
 				</File>
@@ -2555,10 +2547,6 @@
 					>
 					<File
 						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\AbstractMapDrawer.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\AbstractObjectDrawer.cpp"
 						>
 					</File>
 					<File
@@ -2682,6 +2670,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SVGContainer.cpp"
+						>
+					</File>
+					<File
 						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\TextDrawer.cpp"
 						>
 					</File>
@@ -2711,10 +2703,6 @@
 						>
 						<File
 							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\AbstractMapDrawer.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\AbstractObjectDrawer.h"
 							>
 						</File>
 						<File
@@ -2783,6 +2771,10 @@
 						</File>
 						<File
 							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SelectionRectangle.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SVGContainer.h"
 							>
 						</File>
 					</Filter>
