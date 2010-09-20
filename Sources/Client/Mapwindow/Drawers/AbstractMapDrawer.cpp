@@ -212,6 +212,36 @@ HTREEITEM AbstractMapDrawer:: configure(LayerTreeView  *tv, HTREEITEM parent) {
 		if ( useAttributeTable() && attColumn.fValid())
 			InsertItem(tv,itemColumn,String("Column : %S",attColumn->sName()),"column");
 	}
+
+	bool singleSet = (drawers.size() + preDrawers.size() + postDrawers.size())  == 1;
+	for(map<String, NewDrawer *>::iterator cur = preDrawers.begin(); cur != preDrawers.end(); ++cur) {
+		NewDrawer *draw = (*cur).second;
+		if ( !singleSet)
+			
+			hti = InsertItem(draw->getName(),draw->iconName(),
+							 new DisplayOptionTreeItem(tv,parent, this,(SetCheckFunc)&ComplexDrawer::setActiveMode,0,draw),
+							 draw->isActive());
+		draw->configure(tv,hti);
+	}
+	for(int i = 0; i < drawers.size(); ++i) {
+		NewDrawer *draw = (NewDrawer *)drawers.at(i);
+		if ( !singleSet)
+			
+			hti = InsertItem(draw->getName(),draw->iconName(), 
+							 new DisplayOptionTreeItem(tv,parent, this,(SetCheckFunc)&ComplexDrawer::setActiveMode, 0, draw)
+							,draw->isActive());
+			                
+		draw->configure(tv,hti);
+	}
+	for(map<String, NewDrawer *>::iterator cur = postDrawers.begin(); cur != postDrawers.end(); ++cur) {
+		NewDrawer *draw = (*cur).second;
+		if ( !singleSet)
+			hti = InsertItem(draw->getName(),draw->iconName(),
+							 new DisplayOptionTreeItem(tv,parent, this,(SetCheckFunc)&ComplexDrawer::setActiveMode,0,draw),
+							 draw->isActive());
+		draw->configure(tv,hti);
+	}
+
 	return hti;
 }
 
