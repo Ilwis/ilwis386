@@ -12,6 +12,8 @@ public:
 	DrawingColor(SetDrawer *dr);
 	Color clrVal(double rVal) const;
 	Color clrRaw(long iRaw, NewDrawer::DrawMethod drm) const;
+	void clrVal(const RealBuf & buf, LongBuf & bufOut) const;
+	void clrRaw(LongBuf & buf, NewDrawer::DrawMethod drm) const;
 	Color clrRandom(int iRaw) const;
 	Color clrPrimary(int iNr) const;
 
@@ -26,6 +28,5 @@ private:
 	int iMultColors;
 	double gamma;
 	BaseMap bmap;
-
 };
 }

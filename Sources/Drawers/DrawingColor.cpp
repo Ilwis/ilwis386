@@ -57,20 +57,21 @@ Color DrawingColor::clrVal(double rVal) const
 	return cRet; //.clrDraw(gamma);
 }
 
-Color DrawingColor::clrRaw(long iRaw, AbstractMapDrawer::DrawMethod drm) const
+Color DrawingColor::clrRaw(long iRaw, NewDrawer::DrawMethod drm) const
 {
 	if (iUNDEF == iRaw)
 		return mcd->colBackground;
 	Color cRet;
-	Representation rpr = drw->getRepresentation();
 	switch (drm) {
 	case NewDrawer::drmRPR:
 		if (bmap->dm()->pdv()) {
 			double rVal = bmap->dvrs().rValue(iRaw);
 			return clrVal(rVal);
 		}
-		else
+		else {
+			Representation rpr = drw->getRepresentation();
 			cRet = Color(rpr->clrRaw(iRaw));
+		}
 		break;
 	case NewDrawer::drmSINGLE:
 		if ((long)clr2 == -1)
@@ -103,7 +104,7 @@ Color DrawingColor::clrRaw(long iRaw, AbstractMapDrawer::DrawMethod drm) const
 		}
 		int iDiff = iMax - iMin;
 		if (iRaw < iMin)
-			iRaw = 0;
+			iRaw = iMin;
 		else if (iRaw > iMax)
 			iRaw = iMax;
 		int iVal = (int)(floor(255 * float(iRaw - iMin) / iDiff));
@@ -124,6 +125,143 @@ Color DrawingColor::clrRaw(long iRaw, AbstractMapDrawer::DrawMethod drm) const
 		return mcd->colBackground;
 	else
 		return cRet;//.clrDraw(gamma);
+}
+
+void DrawingColor::clrVal(const RealBuf & buf, LongBuf & bufOut) const
+{
+	Representation rpr = drw->getRepresentation();
+	if (!rpr.fValid())
+		return;
+	long iLen = buf.iSize();
+	if (drw->isStretched()) {
+		switch (drw->getStretchMethod())
+		{
+		case SetDrawer::smLINEAR:
+			for (long i = 0; i < iLen; ++i)
+				bufOut[i] = rpr->clr(buf[i], drw->getStretchRangeReal());
+			break;
+		case SetDrawer::smLOGARITHMIC:
+			{
+				RangeReal rr = drw->getStretchRangeReal();
+				double rMax = 1 + rr.rHi() - rr.rLo();
+				rr = RangeReal(0, log(rMax));
+				for (long i = 0; i < iLen; ++i)
+					bufOut[i] = rpr->clr(log(buf[i] - rr.rLo()), rr);
+			} break;
+		}
+	}
+	else if (NewDrawer::drmIMAGE == drw->getDrawMethod()) {
+		RangeReal rr = RangeReal(0, 255);
+		for (long i = 0; i < iLen; ++i)
+			bufOut[i] = rpr->clr(buf[i], rr);
+	}
+	else {
+		for (long i = 0; i < iLen; ++i)
+			bufOut[i] = rpr->clr(buf[i]);
+	}
+}
+
+void DrawingColor::clrRaw(LongBuf & buf, NewDrawer::DrawMethod drm) const
+{
+	long iLen = buf.iSize();
+	switch (drm) {
+	case NewDrawer::drmRPR:
+		{
+			Representation rpr = drw->getRepresentation();
+			if (bmap->dm()->pdv()) {
+				if (drw->isStretched()) {
+					switch (drw->getStretchMethod())
+					{
+					case SetDrawer::smLINEAR: {
+						RangeReal rr = drw->getStretchRangeReal();
+						DomainValueRangeStruct dvrs = bmap->dvrs();
+						for (long i = 0; i < iLen; ++i)
+							buf[i] = rpr->clr(dvrs.rValue(buf[i]), rr);
+					} break;
+					case SetDrawer::smLOGARITHMIC:
+						{
+							RangeReal rr = drw->getStretchRangeReal();
+							double rMax = 1 + rr.rHi() - rr.rLo();
+							rr = RangeReal(0, log(rMax));
+							DomainValueRangeStruct dvrs = bmap->dvrs();
+							for (long i = 0; i < iLen; ++i)
+								buf[i] = rpr->clr(log(dvrs.rValue(buf[i]) - rr.rLo()), rr);
+						} break;
+					}
+				}
+				else if (NewDrawer::drmIMAGE == drw->getDrawMethod()) {
+					RangeReal rr = RangeReal(0, 255);
+					DomainValueRangeStruct dvrs = bmap->dvrs();
+					for (long i = 0; i < iLen; ++i)
+						buf[i] = rpr->clr(dvrs.rValue(buf[i]), rr);
+				}
+				else {
+					DomainValueRangeStruct dvrs = bmap->dvrs();
+					for (long i = 0; i < iLen; ++i)
+						buf[i] = rpr->clr(dvrs.rValue(buf[i]));
+				}
+			}
+			else {
+				for (long i = 0; i < iLen; ++i)
+					buf[i] = rpr->clrRaw(buf[i]);
+			}
+		} break;
+	case NewDrawer::drmSINGLE: {
+		Color col;
+		if ((long)clr2 == -1)
+			col = GetSysColor(COLOR_WINDOWTEXT);
+		else {
+			FeatureSetDrawer *fdr = dynamic_cast<FeatureSetDrawer *>(drw);
+			if ( fdr)
+				col = fdr->getSingleColor();
+		}
+		for (long i = 0; i < iLen; ++i)
+			buf[i] = col; // you asked for it (!)
+	} break;
+	case NewDrawer::drmMULTIPLE: 
+		if (3 == iMultColors) {
+			for (long i = 0; i < iLen; ++i)
+				buf[i] = clrRandom(buf[i]);
+		}
+		else {
+			int iStep = 7;
+			switch (iMultColors) {
+			case 0: iStep = 7; break;
+			case 1: iStep = 15; break;
+			case 2: iStep = 31; break;
+			}
+			for (long i = 0; i < iLen; ++i)
+				buf[i] = clrPrimary(1 + buf[i] % iStep);
+		}  
+		break;
+	case NewDrawer::drmIMAGE: {
+		RangeInt riStretch = drw->getStretchRangeInt();
+		int iMin = 0, iMax = 255;
+		if (drw->isStretched()) {
+			iMin = riStretch.iLo();
+			iMax = riStretch.iHi();
+		}
+		int iDiff = iMax - iMin;
+		for (long i = 0; i < iLen; ++i) {
+			long iRaw = buf[i];
+			if (iRaw < iMin)
+				iRaw = iMin;
+			else if (iRaw > iMax)
+				iRaw = iMax;
+			int iVal = (int)(floor(255 * float(iRaw - iMin) / iDiff));
+			buf[i] = Color(iVal,iVal,iVal);
+		}
+	  } break;
+	case NewDrawer::drmCOLOR:
+		// cRet = Color(iRaw);
+		break; // no change !!
+	case NewDrawer::drmBOOL: 
+		for (long i = 0; i < iLen; ++i) {
+			long iRaw = buf[i];
+			buf[i] = (iRaw == 1)?clr1:((iRaw == 2)?clr2:mcd->colBackground);
+		}
+	break;
+	}
 }
 
 Color DrawingColor::clrRandom(int iRaw) const
