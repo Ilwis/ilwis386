@@ -14,7 +14,6 @@ namespace ILWIS{
 		bool draw(bool norecursion , const CoordBounds& cbArea) const;
 		
 	protected:
-
-
+		void addSetDrawer(const BaseMap& basemap, ILWIS::PreparationParameters *pp, ILWIS::SetDrawer *rsd, const String& name="");
 	};
 }

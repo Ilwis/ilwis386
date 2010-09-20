@@ -14,6 +14,7 @@
 #include "Drawers\SetDrawer.h"
 #include "Drawers\RasterLayerDrawer.h"
 #include "Client\Mapwindow\Drawers\ZValueMaker.h"
+#include "Drawers\RasterSetDrawer.h"
 
 using namespace ILWIS;
 
@@ -32,9 +33,44 @@ RasterLayerDrawer::~RasterLayerDrawer(){
 
 void RasterLayerDrawer::prepare(PreparationParameters *pp){
 	AbstractMapDrawer::prepare(pp);
+	if ( pp->type == ptALL || pp->type & RootDrawer::ptGEOMETRY) {
+		if ( !(pp->type & NewDrawer::ptANIMATION))
+			clear();
+		BaseMapPtr *bmptr = getBaseMap();
+		BaseMap basemap;
+		basemap.SetPointer(bmptr);
+		RasterSetDrawer *rsd;
+		ILWIS::DrawerParameters dp(getRootDrawer(), this);
+		IlwisObject::iotIlwisObjectType otype = IlwisObject::iotObjectType(basemap->fnObj);
+		switch ( otype) {
+			case IlwisObject::iotRASMAP:
+				rsd = (RasterSetDrawer *)IlwWinApp()->getDrawer("RasterSetDrawer", pp, &dp); 
+				addSetDrawer(basemap,pp,rsd);
+				break;
+		}
+	} else {
+		if ( pp->type & RootDrawer::ptRENDER) {
+			for(int i = 0; i < drawers.size(); ++i) {
+				RasterSetDrawer *rsd = (RasterSetDrawer *)drawers.at(i);
+				PreparationParameters fp((int)pp->type, 0);
+				rsd->prepare(&fp);
+			}
+		}
+	}
+}
+
+void RasterLayerDrawer::addSetDrawer(const BaseMap& basemap,PreparationParameters *pp,SetDrawer *rsd, const String& name) {
+	PreparationParameters fp((int)pp->type, 0);
+	fp.csy = basemap->cs();
+	rsd->setName(name);
+	rsd->getZMaker()->setSpatialSourceMap(basemap);
+	rsd->getZMaker()->setDataSourceMap(basemap);
+	rsd->prepare(&fp);
+	addDrawer(rsd);
 }
 
 void RasterLayerDrawer::addDataSource(void *bmap, int options){
+	AbstractMapDrawer::addDataSource(bmap, options);
 }
 
 HTREEITEM RasterLayerDrawer::configure(LayerTreeView  *tv, HTREEITEM parent){
@@ -42,5 +78,6 @@ HTREEITEM RasterLayerDrawer::configure(LayerTreeView  *tv, HTREEITEM parent){
 }
 
 bool RasterLayerDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
+	AbstractMapDrawer::draw(norecursion, cbArea);
 	return true;
 }
