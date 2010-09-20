@@ -8,7 +8,7 @@ namespace ILWIS{
 
 class DrawingColor;
 
-class _export AbstractMapDrawer : public AbstractObjectDrawer {
+class _export AbstractMapDrawer : public ComplexDrawer {
 	friend class AbstractMapDrawerForm;
 
 	public:
@@ -16,7 +16,7 @@ class _export AbstractMapDrawer : public AbstractObjectDrawer {
 		virtual ~AbstractMapDrawer();
 		virtual void prepare(PreparationParameters *pp);
 		void addDataSource(void *bm, int options=0);
-		BaseMap getBaseMap() const;
+		BaseMapPtr *getBaseMap() const;
 		Representation getRepresentation() const;
 		void setRepresentation(const Representation& rp);
 		Table getAtttributeTable() const;

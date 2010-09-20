@@ -212,8 +212,7 @@ void ZoomableView::moveEyePoint(const CPoint& pnt, UINT message) {
 	else if ( message == WM_LBUTTONUP){
 		beginMovePoint = CPoint(iUNDEF,iUNDEF);
 		MapCompositionDoc *doc = (MapCompositionDoc *)GetDocument();
-		DrawerContext *context = doc->rootDrawer->getDrawerContext();
-		Coord eyePoint = context->getEyePoint();
+		Coord eyePoint = doc->rootDrawer->getEyePoint();
 	} else if (message == WM_MOUSEMOVE && beginMovePoint.x != iUNDEF) {
 		double deltax = beginMovePoint.x - pnt.x;
 		double deltay = beginMovePoint.y - pnt.y;
@@ -223,9 +222,8 @@ void ZoomableView::moveEyePoint(const CPoint& pnt, UINT message) {
 		double yaw = deltay / 50.0;
 
 		MapCompositionDoc *doc = (MapCompositionDoc *)GetDocument();
-		DrawerContext *context = doc->rootDrawer->getDrawerContext();
-		Coord eyePoint = context->getEyePoint();
-		Coord viewPoint = context->getViewPoint();
+		Coord eyePoint = doc->rootDrawer->getEyePoint();
+		Coord viewPoint = doc->rootDrawer->getViewPoint();
 		double deltaXEyeView = eyePoint.x - viewPoint.x;
 		double deltaYEyeView = eyePoint.y - viewPoint.y;
 		double deltaZEyeView = eyePoint.z - viewPoint.z;
@@ -242,7 +240,7 @@ void ZoomableView::moveEyePoint(const CPoint& pnt, UINT message) {
 		double ze = z + viewPoint.z;
 	
 		Coord newEye(xe,ye,ze);
-		context->setEyePoint(newEye);
+		doc->rootDrawer->setEyePoint(newEye);
 		beginMovePoint = pnt;
 		doc->mpvGetView()->Invalidate();
 	}
@@ -361,7 +359,7 @@ void ZoomableView::OnSize(UINT nType, int cx, int cy)
 	if ( mcd) {
 		RowCol rc(cy, cx);
 		dim = zDimension(cx, cy);
-		mcd->rootDrawer->getDrawerContext()->setViewPort(rc);
+		mcd->rootDrawer->setViewPort(rc);
 		SetDirty();
 		
 	}
@@ -371,7 +369,7 @@ void ZoomableView::AreaSelected(CRect rect)
 {
 	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(GetDocument());
 	if ( mcd) {
-		mcd->rootDrawer->getDrawerContext()->setZoom(rect);
+		mcd->rootDrawer->setZoom(rect);
 		setScrollBars();
 		OnDraw(0);
 	}
@@ -560,13 +558,12 @@ int ZoomableView::vertPixMove(long iDiff, bool fPreScroll)
 {
 	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(GetDocument());
 	if ( mcd) {
-		DrawerContext * context = mcd->rootDrawer->getDrawerContext();
-		CoordBounds cbZoom = context->getCoordBoundsZoom();
-		CoordBounds cbMap = context->getMapCoordBounds();
+		CoordBounds cbZoom = mcd->rootDrawer->getCoordBoundsZoom();
+		CoordBounds cbMap = mcd->rootDrawer->getMapCoordBounds();
 		double deltay = cbMap.height() * iDiff / SCROLL_SIZE;
 		cbZoom.cMin.y += deltay;
 		cbZoom.cMax.y += deltay;
-		context->setCoordBoundsZoom(cbZoom);
+		mcd->rootDrawer->setCoordBoundsZoom(cbZoom);
 		setScrollBars();
 		OnDraw(0);
 	}
@@ -578,13 +575,12 @@ int ZoomableView::horzPixMove(long iDiff, bool fPreScroll)
 {
 	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(GetDocument());
 	if ( mcd) {
-		DrawerContext * context = mcd->rootDrawer->getDrawerContext();
-		CoordBounds cbZoom = context->getCoordBoundsZoom();
-		CoordBounds cbMap = context->getMapCoordBounds();
+		CoordBounds cbZoom = mcd->rootDrawer->getCoordBoundsZoom();
+		CoordBounds cbMap = mcd->rootDrawer->getMapCoordBounds();
 		double deltax = cbMap.width() * iDiff / SCROLL_SIZE;
 		cbZoom.cMin.x += deltax;
 		cbZoom.cMax.x += deltax;
-		context->setCoordBoundsZoom(cbZoom);
+		mcd->rootDrawer->setCoordBoundsZoom(cbZoom);
 		setScrollBars();
 		OnDraw(0);
 	}
@@ -596,9 +592,8 @@ void ZoomableView::setScrollBars()
 
 	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(GetDocument());
 	if ( mcd) {
-		DrawerContext * context = mcd->rootDrawer->getDrawerContext();
-		CoordBounds cbMap = context->getMapCoordBounds();
-		CoordBounds cbZoom = context->getCoordBoundsZoom();
+		CoordBounds cbMap = mcd->rootDrawer->getMapCoordBounds();
+		CoordBounds cbZoom = mcd->rootDrawer->getCoordBoundsZoom();
 	
 		SCROLLINFO si;
 		si.cbSize = sizeof(si);
@@ -702,12 +697,11 @@ zPoint ZoomableView::pntPos(double rRow, double rCol) const
 void ZoomableView::OnUpdateZoomOut(CCmdUI* pCmdUI)
 {
 	bool fMapOpen = false;
-	MapCompositionDoc *doc = (MapCompositionDoc *)GetDocument();
-	if ( !doc->fIsEmpty())			
+	MapCompositionDoc *mcd = (MapCompositionDoc *)GetDocument();
+	if ( !mcd->fIsEmpty())			
 		fMapOpen = true;
-	DrawerContext *context = doc->rootDrawer->getDrawerContext();
-	bool zoomedIn = (context->getMapCoordBounds().width() > context->getCoordBoundsZoom().width()) || 
-				     (context->getMapCoordBounds().height() > context->getCoordBoundsZoom().height());
+	bool zoomedIn = (mcd->rootDrawer->getMapCoordBounds().width() > mcd->rootDrawer->getCoordBoundsZoom().width()) || 
+				     (mcd->rootDrawer->getMapCoordBounds().height() > mcd->rootDrawer->getCoordBoundsZoom().height());
 	pCmdUI->Enable(fMapOpen && zoomedIn);
 	if (0 == as)
 		iActiveTool = 0;
@@ -717,35 +711,33 @@ void ZoomableView::OnUpdateZoomOut(CCmdUI* pCmdUI)
 void ZoomableView::ZoomInPnt(zPoint p)
 {
 
-	MapCompositionDoc *doc = (MapCompositionDoc *)GetDocument();
-	DrawerContext *context = doc->rootDrawer->getDrawerContext();
-	Coord eyePoint = context->getEyePoint();
-	Coord viewPoint = context->getViewPoint();
+	MapCompositionDoc *mcd = (MapCompositionDoc *)GetDocument();
+	Coord eyePoint = mcd->rootDrawer->getEyePoint();
+	Coord viewPoint = mcd->rootDrawer->getViewPoint();
 	double deltaXEyeView = eyePoint.x - viewPoint.x;
 	double deltaYEyeView = eyePoint.y - viewPoint.y;
 	double deltaZEyeView = eyePoint.z - viewPoint.z;
 	Coord newEyePoint(eyePoint.x - deltaXEyeView/10.0,
 		eyePoint.y - deltaYEyeView/10.0,
 		eyePoint.z - deltaZEyeView/10.0);
-	context->setEyePoint(newEyePoint);
-	doc->mpvGetView()->Invalidate();
+	mcd->rootDrawer->setEyePoint(newEyePoint);
+	mcd->mpvGetView()->Invalidate();
 
 }
 
 void ZoomableView::ZoomOutPnt(zPoint p)
 {
-	MapCompositionDoc *doc = (MapCompositionDoc *)GetDocument();
-	DrawerContext *context = doc->rootDrawer->getDrawerContext();
-	Coord eyePoint = context->getEyePoint();
-	Coord viewPoint = context->getViewPoint();
+	MapCompositionDoc *mcd = (MapCompositionDoc *)GetDocument();
+	Coord eyePoint = mcd->rootDrawer->getEyePoint();
+	Coord viewPoint = mcd->rootDrawer->getViewPoint();
 	double deltaXEyeView = eyePoint.x - viewPoint.x;
 	double deltaYEyeView = eyePoint.y - viewPoint.y;
 	double deltaZEyeView = eyePoint.z - viewPoint.z;
 	Coord newEyePoint(eyePoint.x + deltaXEyeView/10.0,
 		eyePoint.y + deltaYEyeView/10.0,
 		eyePoint.z + deltaZEyeView/10.0);
-	context->setEyePoint(newEyePoint);
-	doc->mpvGetView()->Invalidate();
+	mcd->rootDrawer->setEyePoint(newEyePoint);
+	mcd->mpvGetView()->Invalidate();
 }
 
 void ZoomableView::OnUpdateZoomIn(CCmdUI* pCmdUI)
@@ -799,26 +791,13 @@ void ZoomableView::OnZoomOut()
 		return;
 	}
 	OnNoTool();
-	MapCompositionDoc *doc = (MapCompositionDoc *)GetDocument();
-	DrawerContext *context = doc->rootDrawer->getDrawerContext();
-	CoordBounds cb = context->getCoordBoundsZoom();
+	MapCompositionDoc *mcd = (MapCompositionDoc *)GetDocument();
+	CoordBounds cb = mcd->rootDrawer->getCoordBoundsZoom();
 	cb *= 1.41;
-	context->setCoordBoundsZoom(cb);
+	mcd->rootDrawer->setCoordBoundsZoom(cb);
 	setScrollBars();
 	OnDraw(0);
-
-
-	//if (HIWORD(AfxGetThreadState()->m_lastSentMsg.wParam) == 1)
-	//{
-	//	zPoint p(dim.width()/2,dim.height()/2);
-	//	ZoomOutPnt(p);
-	//	return;
-	//}
-	//if (fAdjustSize)
-	//	as = new AreaSelector(this, this, (NotifyRectProc)&ZoomableView::AreaSelected);
-	//else 
-	//	as = new AreaSelector(this, this, (NotifyRectProc)&ZoomableView::AreaSelected, dim);
-	//as->SetCursor(zCursor("ZoomOutCursor"));
+	
 	iActiveTool = ID_ZOOMOUT;
 }
 

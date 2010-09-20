@@ -296,11 +296,10 @@ void MapPaneView::OnEntireMap()
 
 	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(GetDocument());
 	if ( mcd) {
-		DrawerContext * context = mcd->rootDrawer->getDrawerContext();
-		context->setCoordBoundsView(context->getMapCoordBounds(),true);
+		mcd->rootDrawer->setCoordBoundsView(mcd->rootDrawer->getMapCoordBounds(),true);
 		setScrollBars();
 		fStarting = false;
-		OnDraw(0);
+		mcd->mpvGetView()->Invalidate();
 	}
 }
 

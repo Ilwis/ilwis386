@@ -9,9 +9,7 @@
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
-#include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
-//#include "Client\Mapwindow\Drawers\DrawingColor.h" 
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h"
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
@@ -26,14 +24,14 @@ using namespace ILWIS;
 
 //--------------------------------------------------------------------
 AbstractMapDrawer::AbstractMapDrawer(DrawerParameters *parms) : 
-	AbstractObjectDrawer(parms,"AbstractMapDrawer"),
+	ComplexDrawer(parms,"AbstractMapDrawer"),
 	useAttTable(false),
 	internalDomain(false)
 {
 }
 
 AbstractMapDrawer::AbstractMapDrawer(DrawerParameters *parms, const String& name) : 
-	AbstractObjectDrawer(parms,name),
+	ComplexDrawer(parms,name),
 	useAttTable(false),
 	internalDomain(false)
 {
@@ -43,7 +41,7 @@ AbstractMapDrawer::~AbstractMapDrawer() {
 }
 
 void AbstractMapDrawer::prepare(PreparationParameters *pp){
-	AbstractObjectDrawer::prepare(pp);
+	ComplexDrawer::prepare(pp);
 }
 
 String AbstractMapDrawer::description() const {
@@ -59,57 +57,55 @@ String AbstractMapDrawer::iconName(const String& subtype) const
 	return getBaseMap()->fnObj.sExt;
 }
 
-BaseMap AbstractMapDrawer::getBaseMap() const {
+BaseMapPtr* AbstractMapDrawer::getBaseMap() const { // we return the pointer to avoid copy constructors
 	if ( bm.fValid())
-		return bm;
-	BaseMapPtr *ptr = dynamic_cast<BaseMapPtr *>(obj);
-	if ( ptr){
-		(const_cast<AbstractMapDrawer *>(this))->bm =  BaseMap(ptr->fnObj);
-	}
-	return bm;
+		return bm.ptr();
+	return 0;
 }
 void AbstractMapDrawer::addDataSource(void *bmap,int options) 
 {
-	AbstractObjectDrawer::addDataSource(bmap, options);
-	BaseMap bm = getBaseMap();
+	bm = BaseMap((*((BaseMap *)(bmap)))->fnObj);
 	if ( bm.fValid()) {
 		if ( bm->fTblAtt()) {
 			attTable = bm->tblAtt();
 			attColumn = attTable->col(0);
 		}
-		DrawerContext *context = getDrawerContext();
+		RootDrawer *rootdrawer = getRootDrawer();
 		CoordBounds cb = bm->cb();
-		if ( bm->cs() != context->getCoordinateSystem()) {
-			cb.cMin = context->getCoordinateSystem()->cConv(bm->cs(),cb.cMin);
-			cb.cMax = context->getCoordinateSystem()->cConv(bm->cs(),cb.cMax);
+		if ( bm->cs() != rootdrawer->getCoordinateSystem()) {
+			cb.cMin = rootdrawer->getCoordinateSystem()->cConv(bm->cs(),cb.cMin);
+			cb.cMax = rootdrawer->getCoordinateSystem()->cConv(bm->cs(),cb.cMax);
 		}
-		CoordBounds cbMap = context->getMapCoordBounds();
+		CoordBounds cbMap = rootdrawer->getMapCoordBounds();
 		cbMap += cb;
-		context->setCoordBoundsMap(cbMap);
+		rootdrawer->setCoordBoundsMap(cbMap);
 		if ( bm->fnObj == bm->dm()->fnObj)
 			internalDomain = true;
-		MouseClickInfoDrawer *mid = (MouseClickInfoDrawer *)((ComplexDrawer *)getRootDrawer())->getDrawer("MouseClickInfoDrawer");
+		MouseClickInfoDrawer *mid = (MouseClickInfoDrawer *)(rootdrawer)->getDrawer("MouseClickInfoDrawer");
 		if ( mid)
 			mid->addDataSource(&bm);
 	}
 }
 
-Representation AbstractMapDrawer::getRepresentation() const {
-	BaseMap basemap = getBaseMap();
-	if ( basemap.fValid()) {
+Representation AbstractMapDrawer::getRepresentation() const { // we return the pointer to avoid copy constructors
+	BaseMapPtr *basemap = getBaseMap();
+	if ( basemap != 0) {
 		if ( useAttTable && attColumn.fValid()) {
 			Column col = getAtttributeColumn();
-			if ( col.fValid())
+			if ( col.fValid() && attColumn->dm()->rpr().fValid() )
 				return attColumn->dm()->rpr();
 		}
-		else
-			return basemap->dm()->rpr();
+		else {
+			if (basemap->dm()->rpr().fValid()) {
+				return basemap->dm()->rpr();
+			}
+		}
 	}
 	return Representation();
 }
 
 RangeReal AbstractMapDrawer::getStretchRangeReal() const{
-	BaseMap basemap = getBaseMap();
+	BaseMapPtr *basemap = getBaseMap();
 	if ( basemap->dm()->pdv()) {
 		return basemap->vr()->rrMinMax();
 	} else if (  basemap->fTblAtt() && attColumn.fValid() && attColumn->dm()->pdv()) {
@@ -170,7 +166,7 @@ void AbstractMapDrawer::setInfoMode(void *v,LayerTreeView *tv) {
 }
 
 String AbstractMapDrawer::store(const FileName& fnView, const String& parentSection) const{
-	AbstractObjectDrawer::store(fnView, parentSection);
+	ComplexDrawer::store(fnView, parentSection);
 	if ( attTable.fValid())
 		ObjectInfo::WriteElement(parentSection.scVal(),"AttributeTable",fnView, attTable);
 	if ( attColumn.fValid())
@@ -183,7 +179,7 @@ String AbstractMapDrawer::store(const FileName& fnView, const String& parentSect
 }
 
 void AbstractMapDrawer::load(const FileName& fnView, const String& parentSection){
-	AbstractObjectDrawer::load(fnView, parentSection);
+	ComplexDrawer::load(fnView, parentSection);
 	ObjectInfo::ReadElement(parentSection.scVal(),"AttributeTable",fnView, attTable);
 	if ( attTable.fValid()) {
 		String colname;
@@ -200,12 +196,12 @@ void AbstractMapDrawer::load(const FileName& fnView, const String& parentSection
 //------------------------------------UI--------------------------------
 
 HTREEITEM AbstractMapDrawer:: configure(LayerTreeView  *tv, HTREEITEM parent) {
-	HTREEITEM hti = AbstractObjectDrawer::configure(tv,parent);
+	HTREEITEM hti = ComplexDrawer::configure(tv,parent);
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,parent,this,(SetCheckFunc)&AbstractMapDrawer::setInfoMode);
 	InsertItem("Info","info", item, info);
 
-	BaseMap bm = getBaseMap();
-	if ( !bm.fValid())
+	BaseMapPtr *basemap = getBaseMap();
+	if (!basemap )
 		return parent;
 	if ( bm->dm()->pdsrt()) {
 		item = new DisplayOptionTreeItem(tv,parent,this,

@@ -2,32 +2,31 @@
 #include "Client\Ilwis.h"
 #include "Engine\Map\basemap.h"
 #include "Client\Mapwindow\MapPaneView.h"
-#include "Client\Mapwindow\Drawers\DrawerContext.h"
 #include "ComplexDrawer.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h"
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
-#include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
+#include "Client\Mapwindow\Drawers\DrawerContext.h"
 #include "RootDrawer.h"
 
 using namespace ILWIS;
 
 RootDrawer::RootDrawer(MapCompositionDoc *doc) {
-    drawcontext = new ILWIS::DrawerContext(doc, this);
-	ILWIS::DrawerParameters dp(drawcontext, this);
+	drawercontext = new ILWIS::DrawerContext(doc);
+	ILWIS::DrawerParameters dp(this, this);
 	ILWIS::PreparationParameters pp(RootDrawer::ptALL,0);
 	addPreDrawer(1,IlwWinApp()->getDrawer("CanvasBackgroundDrawer", &pp, &dp));
 	addPostDrawer(900,IlwWinApp()->getDrawer("MouseClickInfoDrawer", &pp, &dp));
 	addPostDrawer(800,IlwWinApp()->getDrawer("GridDrawer", &pp, &dp));
 	setTransparency(rUNDEF);
 	setName("RootDrawer");
+	threeD = false;
 }
 
 RootDrawer::~RootDrawer() {
-	delete drawcontext;
 }
 
 void  RootDrawer::prepare(PreparationParameters *pp){
@@ -35,7 +34,6 @@ void  RootDrawer::prepare(PreparationParameters *pp){
 	bool v2 = pp->type & RootDrawer::ptALL;
 	if ( pp->dc && (  v1 || v2 )) {
 		if ( getDrawerContext()->initOpenGL(pp->dc)) {
-			//DrawerParameters dp(getDrawerContext(), this);
 			pp->type |= NewDrawer::ptGEOMETRY;
 			ComplexDrawer::prepare(pp);
 		}
@@ -68,18 +66,13 @@ String RootDrawer::addDrawer(NewDrawer *drw) {
 				cb += drw->getBaseMap()->cb();
 			}
 		}
-		getDrawerContext()->setCoordBoundsMap(cb);
+		setCoordBoundsMap(cb);
 	}
 	return ComplexDrawer::addDrawer(drw);
 }
 
-void RootDrawer::setCoordSystem(const CoordSystem& cs, bool overrule){
-	if ( drawcontext)
-		drawcontext->setCoordinateSystem(cs, overrule);
-}
 void RootDrawer::addCoordBounds(const CoordBounds& cb, bool overrule){
-	if ( drawcontext)
-		drawcontext->setCoordBoundsView(cb, overrule);
+		setCoordBoundsView(cb, overrule);
 }
 
 bool RootDrawer::draw(bool norecursion, const CoordBounds& cb) const{
@@ -87,9 +80,9 @@ bool RootDrawer::draw(bool norecursion, const CoordBounds& cb) const{
 	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	if (getDrawerContext()->is3D()) {
-		Coord cView = getDrawerContext()->getViewPoint();
-		Coord cEye = getDrawerContext()->getEyePoint();
+	if (is3D()) {
+		Coord cView = getViewPoint();
+		Coord cEye = getEyePoint();
 		gluLookAt(cEye.x, cEye.y, cEye.z,
 			      cView.x, cView.y, cView.z, 
 				  0, 0, 1.0 );
@@ -109,14 +102,14 @@ void RootDrawer::timedEvent(UINT timerID) {
 }
 
 String RootDrawer::store(const FileName& fnView, const String parenSection) const{
-	ObjectInfo::WriteElement("RootDrawer","CoordinateSystem",fnView, getDrawerContext()->getCoordinateSystem());
-	ObjectInfo::WriteElement("RootDrawer","CoordBoundsZoom",fnView, getDrawerContext()->getCoordBoundsZoom());
-	ObjectInfo::WriteElement("RootDrawer","CoordBoundsView",fnView, getDrawerContext()->getCoordBoundsView());
-	ObjectInfo::WriteElement("RootDrawer","CoordBoundsMap",fnView, getDrawerContext()->getMapCoordBounds());
-	//ObjectInfo::WriteElement("RootDrawer","AspectRatio",fnView, getDrawerContext()->getAspectRatio());
-	ObjectInfo::WriteElement("RootDrawer","EyePoint",fnView, getDrawerContext()->getEyePoint());
-	ObjectInfo::WriteElement("RootDrawer","ViewPoint",fnView, getDrawerContext()->getViewPoint());
-	ObjectInfo::WriteElement("RootDrawer","ViewPort",fnView, getDrawerContext()->getViewPort());
+	ObjectInfo::WriteElement("RootDrawer","CoordinateSystem",fnView, getCoordinateSystem());
+	ObjectInfo::WriteElement("RootDrawer","CoordBoundsZoom",fnView, getCoordBoundsZoom());
+	ObjectInfo::WriteElement("RootDrawer","CoordBoundsView",fnView, getCoordBoundsView());
+	ObjectInfo::WriteElement("RootDrawer","CoordBoundsMap",fnView, getMapCoordBounds());
+	//ObjectInfo::WriteElement("RootDrawer","AspectRatio",fnView, getAspectRatio());
+	ObjectInfo::WriteElement("RootDrawer","EyePoint",fnView, getEyePoint());
+	ObjectInfo::WriteElement("RootDrawer","ViewPoint",fnView, getViewPoint());
+	ObjectInfo::WriteElement("RootDrawer","ViewPort",fnView, getViewPort());
 
 	ComplexDrawer::store(fnView, "RootDrawer");
 
@@ -137,31 +130,242 @@ void RootDrawer::load(const FileName& fnView, const String parenSection){
 	ObjectInfo::ReadElement("RootDrawer","ViewPoint",fnView, viewPoint);
 	RowCol viewPort;
 	ObjectInfo::ReadElement("RootDrawer","ViewPort",fnView, viewPort);
-	getDrawerContext()->setCoordinateSystem(csy, false);
-	getDrawerContext()->setViewPort(viewPort);
-	getDrawerContext()->setCoordBoundsMap(cbMap);
-	getDrawerContext()->setCoordBoundsView(cbView, false);
-	getDrawerContext()->setCoordBoundsZoom(cbZoom);
-	getDrawerContext()->setEyePoint(eyePoint);
-	getDrawerContext()->setViewPoint(viewPoint);
+	setCoordinateSystem(csy, false);
+	setViewPort(viewPort);
+	setCoordBoundsMap(cbMap);
+	setCoordBoundsView(cbView, false);
+	setCoordBoundsZoom(cbZoom);
+	setEyePoint(eyePoint);
+	setViewPoint(viewPoint);
 
 	ComplexDrawer::load(fnView,"RootDrawer");
-	getDrawerContext()->set3D(threeD);
+	set3D(threeD);
 
 
 }
+
+void RootDrawer::modifyCBZoomView(double dv, double dz, double f) {
+	double deltaxv = dv * f;
+	double deltaxz = dz * f;
+	Coord cMiddle = cbZoom.middle();
+	cbView.cMin.x = cMiddle.x - deltaxv / 2.0;
+	cbView.cMax.x = cMiddle.x + deltaxv / 2.0;
+	cbZoom.cMin.x = cMiddle.x - deltaxz / 2.0;
+	cbZoom.cMax.x = cMiddle.x + deltaxz / 2.0;
+}
+
+void RootDrawer::setViewPort(const RowCol& rc) {
+	if (  aspectRatio  != 0 && pixArea.Col != iUNDEF) {
+		// this code adapts the cbZoom if the window size changes
+		if ( aspectRatio <= 1.0) { // y > x
+			if ( rc.Col != pixArea.Col){ // make sure the zoomsize is changed if the cols changes
+				modifyCBZoomView(cbView.width(), cbZoom.width(),(double)rc.Col / pixArea.Col); 
+			}
+			if ( rc.Row != pixArea.Row) { // make sure the zoomsize is changed if the cols change
+				modifyCBZoomView(cbView.width(), cbZoom.width(),(double)pixArea.Col / rc.Col); 
+			}
+	
+		} else { // x < y
+			if ( rc.Row != pixArea.Row){
+				modifyCBZoomView(cbView.height(), cbZoom.height(),pixArea.Col / (double)rc.Col ); 
+
+			}
+			if ( rc.Col != pixArea.Col) {
+				modifyCBZoomView(cbView.height(), cbZoom.height(),(double)rc.Col / pixArea.Col); 
+			}
+		}
+	}
+	pixArea = rc;
+	glViewport(0,0,rc.Col, rc.Row);
+	setProjection(cbZoom);
+}
+
+void RootDrawer::setCoordinateSystem(const CoordSystem& _cs, bool overrule){
+	if (overrule || cs->fUnknown()) {
+		cs = _cs;
+	}
+}
+
+void RootDrawer::setCoordBoundsView(const CoordBounds& _cb, bool overrule){
+	if ( overrule || cbView.fUndef()) {
+		cbMap = _cb;
+		aspectRatio = cbMap.width()/ cbMap.height();
+		double w = _cb.width();
+		double h = _cb.height();
+		double delta = 0;
+		if ( aspectRatio <= 1.0) {
+			double pixwidth = (double)pixArea.Row * aspectRatio;
+			double fracofWidth = 1.0 - (pixArea.Col - pixwidth) / pixArea.Col;
+			double crdWidth = w / fracofWidth;
+			double delta = (crdWidth - w) / 2.0;
+			cbView =  CoordBounds(Coord(_cb.MinX() - delta,_cb.MinY(),0), 
+			                  Coord(_cb.MaxX() + delta,_cb.MaxY(),0));
+		} else {
+			double pixheight = (double)pixArea.Col / aspectRatio;
+			double fracofHeight = 1.0 - abs(pixArea.Row - pixheight) / (double)pixArea.Row;
+			double crdHeight = h / fracofHeight;
+			double delta = (crdHeight - h) / 2.0;
+			cbView =  CoordBounds(Coord(_cb.MinX(),_cb.MinY()  - delta,0), 
+			                      Coord(_cb.MaxX(),_cb.MaxY()  + delta,0));
+
+		}
+		cbZoom = cbView;
+		setViewPoint(cbView.middle());
+		setEyePoint();
+		setProjection(cbView);
+	} else {
+		cbView += _cb;
+		aspectRatio = cbView.width()/ cbView.height();
+	}
+	fakeZ = cbView.width() * 0.001;
+	
+}
+
+void RootDrawer::setCoordBoundsZoom(const CoordBounds& cb) {
+	cbZoom = cb;
+	setViewPoint(cbZoom.middle());
+	setEyePoint();
+	setProjection(cb);
+}
+
+void RootDrawer::setEyePoint() {
+	eyePoint.x = viewPoint.x - cbZoom.width() ;
+	eyePoint.y = viewPoint.y - cbZoom.height();
+	eyePoint.z = cbZoom.width() * 2;
+}
+
+void RootDrawer::setCoordBoundsMap(const CoordBounds& cb) {
+	cbMap = cb;
+}
+CoordBounds RootDrawer::getMapCoordBounds() const{
+	return cbMap;
+}
+
+double RootDrawer::getAspectRatio() const {
+	return aspectRatio;
+}
+
+Coord RootDrawer::screenToWorld(const RowCol& rc) {
+
+	GLint viewport[4];
+	double modelview[16];
+	double projection[16];
+	double winX, winY;
+	double posX, posY, posZ;
+	float winZ;
+
+	glGetDoublev( GL_MODELVIEW_MATRIX, modelview );
+	glGetDoublev( GL_PROJECTION_MATRIX, projection );
+	glGetIntegerv( GL_VIEWPORT, viewport );
+
+	winX = (double)rc.Col;
+	winY = (double)viewport[3] - (double)rc.Row;
+	glReadPixels( winX, int(winY), 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ );
+
+	gluUnProject( winX, winY, winZ, modelview, projection, viewport, &posX, &posY, &posZ);
+
+	double z = 0;
+	if ( is3D()) {
+		z = abs(posZ) < fakeZ ? fakeZ : posZ;
+	}
+	return Coord(posX, posY, z ); 
+
+}
+
+RowCol RootDrawer::worldToScreen(const Coord& crd){
+	int vp[4];
+	glGetIntegerv(GL_VIEWPORT, vp);
+	int x = vp[0] + crd.x * vp[2];
+	int y = vp[1] + crd.y * vp[3];
+	return RowCol(y,x);
+}
+
+void RootDrawer::setZoom(const CRect& rect) {
+	Coord c1,c2;
+	if ( rect.Width() == 0 || rect.Height() == 0) { // case of clicking on the map in zoom mode
+		Coord c = screenToWorld(RowCol(rect.top, rect.left));
+		CoordBounds cb = cbZoom; // == cbView ? cbMap : cbZoom;
+		double w = cb.width() / (2.0 * 1.41);
+		double h = cb.height() / (2.0 * 1.41);
+		c1.x = c.x - w;
+		c1.y = c.y - h;
+		c2.x = c.x + w;
+		c2.y = c.y + h;
+
+	}
+	else {
+		c1 = screenToWorld(RowCol(rect.top, rect.left));
+		c2 = screenToWorld(RowCol(rect.bottom, rect.right));
+	}
+	c1.z = c2.z = 0;
+	CoordBounds cb(c1,c2);
+	setCoordBoundsZoom(cb);
+}
+
+CoordBounds RootDrawer::getCoordBoundsZoom() const  {
+	return cbZoom;
+}
+
+void RootDrawer::setProjection(const CoordBounds& cb) {
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	if ( threeD) {
+		double zBase = max(abs(eyePoint.x - viewPoint.x), abs(eyePoint.y - viewPoint.y));
+		double w = max(cbZoom.width(), cbZoom.height());
+		gluPerspective(40, aspectRatio,zBase/2.0, w * 4);
+	} else {
+		glOrtho(cb.cMin.x,cb.cMax.x,cb.cMin.y,cb.cMax.y,-1,1);
+	}
+}
+
+void RootDrawer::set3D(bool yesno) {
+	if ( yesno != threeD) {
+		threeD = yesno;
+		setEyePoint();
+		setProjection(cbZoom);
+
+	}
+	if ( threeD) {
+		glEnable(GL_DEPTH_TEST);
+	}
+	else {
+		glDisable(GL_DEPTH_TEST);
+	}
+}
+bool RootDrawer::is3D() const {
+	return threeD;
+}
+
+void RootDrawer::setViewPoint(const Coord& c){
+	viewPoint = c;
+}
+void RootDrawer::setEyePoint(const Coord& c){
+	eyePoint = c;
+	setProjection(cbZoom);
+}
+Coord RootDrawer::getViewPoint() const{
+	return viewPoint;
+}
+Coord RootDrawer::getEyePoint() const{
+	return eyePoint;
+}
+
+double RootDrawer::getFakeZ() const {
+	return fakeZ;
+}
+
 //----------------------------------UI-------------------------------------
 HTREEITEM RootDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,parent,this,
 		(SetCheckFunc)&RootDrawer::SetthreeD);	
-	return InsertItem("3D","3D",item,getDrawerContext()->is3D(),TVI_FIRST);
+	return InsertItem("3D","3D",item,is3D(),TVI_FIRST);
 }
 
 void RootDrawer::SetthreeD(void *v, LayerTreeView *tv) {
 	bool value = *(bool *)(v);
-	getDrawerContext()->set3D(value);
+	set3D(value);
 	MapCompositionDoc* doc = tv->GetDocument();
-	set3D(value,tv);
+	make3D(value,tv);
 	doc->mpvGetView()->Invalidate();
 }
 

@@ -44,7 +44,7 @@ void  MouseClickInfoDrawer::prepare(PreparationParameters *pp){
 
 bool MouseClickInfoDrawer::draw(bool norecursion, const CoordBounds& cbArea) const {
 	if (getFont() && !activePoint.fUndef())
-		getFont()->renderText(getDrawerContext(),activePoint, sInfo);
+		getFont()->renderText(getRootDrawer(),activePoint, sInfo);
 	return true;
 }
 

@@ -13,8 +13,6 @@ namespace ILWIS {
 	class _export SimpleDrawer : public NewDrawer {
 	public:
 		String getType() const;
-		DrawerContext *getDrawerContext();
-		DrawerContext *getDrawerContext() const;
 		bool draw(bool norecursion = false, const CoordBounds& cb=CoordBounds()) const = 0;
 		void prepare(PreparationParameters *);
 		virtual void addDataSource(void *,int options=0) {};
@@ -33,7 +31,8 @@ namespace ILWIS {
 		NewDrawer *getParentDrawer() const;
 		double getTransparency() const { return parentDrawer->getTransparency();}
 		void setTransparency(double value) {};
-		virtual NewDrawer *getRootDrawer() const { return (NewDrawer *)rootDrawer; }
+		virtual RootDrawer *getRootDrawer() const { return rootDrawer; }
+		virtual RootDrawer *getRootDrawer() { return rootDrawer; }
 		virtual HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent) { return parent;}
 		virtual void timedEvent(UINT timerid) {};
 		virtual String description() const { return "?";}
@@ -47,9 +46,8 @@ namespace ILWIS {
 		CCriticalSection cs;
 	protected:
 	
-		DrawerContext *drawcontext;
 		NewDrawer *parentDrawer;
-		NewDrawer *rootDrawer;
+		RootDrawer *rootDrawer;
 		String type;
 		String id;
 		String name;

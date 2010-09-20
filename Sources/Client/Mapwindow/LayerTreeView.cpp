@@ -50,7 +50,6 @@ Created on: 2007-02-8
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\Drawers\ComplexDrawer.h"
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h"
-#include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\Positioner.h"
@@ -194,7 +193,7 @@ void LayerTreeView::collectStructure(HTREEITEM parent, const String& name) {
 
 HTREEITEM LayerTreeView::addMapItem(ILWIS::AbstractMapDrawer *mapDrawer, HTREEITEM after) {
 	CTreeCtrl& tc = GetTreeCtrl();
-	BaseMap bmp = mapDrawer->getBaseMap();
+	BaseMapPtr *bmp = mapDrawer->getBaseMap();
 	int iImg = IlwWinApp()->iImage(mapDrawer->iconName());
 	String sName = mapDrawer->description();
 	
@@ -215,9 +214,9 @@ HTREEITEM LayerTreeView::addMapItem(ILWIS::AbstractMapDrawer *mapDrawer, HTREEIT
 	HTREEITEM htiProp = tc.InsertItem(sName.scVal(), iImgProp, iImgProp, htiMap);
 	if (0 == htiProp)
 		return htiDisplayOptions;
-	tc.SetItemData(htiProp, (DWORD_PTR)new PropertiesLayerTreeItem(this, bmp.ptr()));		
+	tc.SetItemData(htiProp, (DWORD_PTR)new PropertiesLayerTreeItem(this, bmp));		
 
-	if (bmp.fValid()) {
+	if (bmp != 0) {
 
 		sName = String("%S - %S", dm->sName(), dm->sType());
 		iImg = IlwWinApp()->iImage(".dom");
@@ -234,10 +233,10 @@ HTREEITEM LayerTreeView::addMapItem(ILWIS::AbstractMapDrawer *mapDrawer, HTREEIT
 			HTREEITEM htiRpr = tc.InsertItem(sName.scVal(), iImg, iImg, htiDom);
 			if (0 == htiRpr)
 				return htiDisplayOptions;
-			tc.SetItemData(htiRpr, (DWORD_PTR)new ObjectLayerTreeItem(this, rpr.pointer()));		
+			tc.SetItemData(htiRpr, (DWORD_PTR)new ObjectLayerTreeItem(this, rpr.ptr()));		
 		}
 		HTREEITEM htiGrf = htiProp;
-		MapPtr* mp = dynamic_cast<MapPtr*>(bmp.ptr());
+		MapPtr* mp = dynamic_cast<MapPtr*>(bmp);
 		if (mp) {
 			GeoRef grf =  mp->gr();
 			sName = String("%S - %S", grf->sName(), grf->sType());

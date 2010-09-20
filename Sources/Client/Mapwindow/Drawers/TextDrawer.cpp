@@ -1,6 +1,6 @@
 #include "Client\Headers\formelementspch.h"
 #include "Engine\Map\basemap.h"
-#include "Client\Mapwindow\Drawers\DrawerContext.h"
+#include "Client\Mapwindow\Drawers\RootDrawer.h"
 #include "Client\Base\OpenGLText.h"
 #include "client\mapwindow\drawers\drawer_n.h"
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
@@ -123,7 +123,7 @@ void  TextDrawer::prepare(PreparationParameters *pp){
 void TextDrawer::draw(bool norecursion){
 	TextSetDrawer *set = (TextSetDrawer *)parentDrawer;
 	if ( set->getFont()) {
-		set->getFont()->renderText(getDrawerContext(),c, text);
+		set->getFont()->renderText(getRootDrawer(),c, text);
 	}
 }
 

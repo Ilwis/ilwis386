@@ -1,6 +1,6 @@
 
 #include "Client\Headers\formelementspch.h"
-#include "Client\Mapwindow\Drawers\DrawerContext.h"
+#include "Client\Mapwindow\Drawers\RootDrawer.h"
 #include "Client\Mapwindow\Drawers\SelectionRectangle.h"
 #include "Client\Mapwindow\MapPaneView.h"
 
@@ -19,8 +19,8 @@ SelectionRectangle::~SelectionRectangle() {
 }
 
 bool SelectionRectangle::draw(bool norecursion , const CoordBounds& cb) const{
-	bool is3D = getDrawerContext()->is3D();
-	double fakeZ = getDrawerContext()->getFakeZ();
+	bool is3D = getRootDrawer()->is3D();
+	double fakeZ = getRootDrawer()->getFakeZ();
 	double z = is3D ? fakeZ : 0;
 	glBegin(GL_LINE_STRIP);
 	glVertex3d(c1.x, c1.y,z);
@@ -34,8 +34,8 @@ bool SelectionRectangle::draw(bool norecursion , const CoordBounds& cb) const{
 }
 
 void SelectionRectangle::calcWorldCoordinates(const CRect & rctZoom) {
-	c1 = getDrawerContext()->screenToWorld(RowCol(rctZoom.top,rctZoom.left));
-	c2 = getDrawerContext()->screenToWorld(RowCol(rctZoom.bottom,rctZoom.right));
+	c1 = getRootDrawer()->screenToWorld(RowCol(rctZoom.top,rctZoom.left));
+	c2 = getRootDrawer()->screenToWorld(RowCol(rctZoom.bottom,rctZoom.right));
 }
 
 void SelectionRectangle::prepare(PreparationType t,CDC *dc){

@@ -1,6 +1,6 @@
-#include "Headers\toolspch.h"
+#include "Client\Headers\formelementspch.h"
 #include <shfolder.h>
-#include "Client\Mapwindow\Drawers\DrawerContext.h"
+#include "Client\Mapwindow\Drawers\RootDrawer.h"
 #include "Client\Base\OpenGLText.h"
 
 
@@ -23,8 +23,8 @@ OpenGLText::~OpenGLText() {
 	delete font;
 }
 
-void OpenGLText::renderText(ILWIS::DrawerContext *context,const Coordinate& c, const String& text) {
-	int h = ((double)height / 100.0)* context->getCoordBoundsZoom().height();
+void OpenGLText::renderText(ILWIS::RootDrawer *rootdrawer,const Coordinate& c, const String& text) {
+	int h = ((double)height / 100.0)* rootdrawer->getCoordBoundsZoom().height();
 	if ( h != actualHeight) {
 		actualHeight = h;
 		font->FaceSize(400);

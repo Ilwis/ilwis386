@@ -20,7 +20,7 @@ ComplexDrawer::ComplexDrawer() {
 	init();
 }
 
-ComplexDrawer::ComplexDrawer(DrawerParameters *parms, const String& ty) : type(ty), drawcontext(parms->context){
+ComplexDrawer::ComplexDrawer(DrawerParameters *parms, const String& ty) : type(ty), rootDrawer(parms->rootDrawer){
 	init();
 	parentDrawer = parms->parent;
 }
@@ -66,12 +66,12 @@ void ComplexDrawer::clear() {
 	drawersById.clear();
 }
 
-DrawerContext *ComplexDrawer::getDrawerContext() {
-	return drawcontext;
+RootDrawer *ComplexDrawer::getRootDrawer() {
+	return rootDrawer;
 }
 
-DrawerContext *ComplexDrawer::getDrawerContext() const{
-	return drawcontext;
+RootDrawer *ComplexDrawer::getRootDrawer() const{
+	return rootDrawer;
 }
 
 void ComplexDrawer::addPostDrawer(int order, NewDrawer *drw) {
@@ -174,13 +174,6 @@ void ComplexDrawer::removeDrawer(const String& did) {
 			break;
 		}
 	}
-}
-
-NewDrawer *ComplexDrawer::getRootDrawer() const{
-	NewDrawer *current = parentDrawer;
-	while (current != 0)
-		current = current->getParentDrawer();
-	return parentDrawer;
 }
 
 int ComplexDrawer::getDrawerCount() const{
@@ -297,14 +290,14 @@ void ComplexDrawer::prepareChildDrawers(PreparationParameters *parms) {
 	}
 }
 
-HTREEITEM ComplexDrawer::set3D(bool yesno,LayerTreeView  *tv) {
+HTREEITEM ComplexDrawer::make3D(bool yesno,LayerTreeView  *tv) {
 	threeD = yesno;
 	HTREEITEM hti = 0;
 	for(int i = 0; i < drawers.size(); ++i) {
 		ComplexDrawer *pdrw = dynamic_cast<ComplexDrawer *>(drawers.at(i));
 		if ( pdrw) {
 			pdrw->getZMaker()->setThreeDPossible(yesno);
-			pdrw->set3D(yesno, tv);
+			pdrw->make3D(yesno, tv);
 		}
 	}
 	return hti;
@@ -413,7 +406,7 @@ void ComplexDrawer::load(const FileName& fnView, const String& parentSection){
 NewDrawer *ComplexDrawer::loadDrawer(const FileName& fnView, const String& drawerSection) {
 	Array<String> parts;
 	Split(drawerSection,parts,"::");
-	ILWIS::DrawerParameters dp(getDrawerContext(), this);
+	ILWIS::DrawerParameters dp(rootDrawer, this);
 	ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer(parts[0], "Ilwis38", &dp);
 	drawer->load(fnView,drawerSection);
 	return drawer;

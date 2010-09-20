@@ -451,10 +451,9 @@ void SimpleMapPaneView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	MapCompositionDoc* mcd = GetDocument();
 	RowCol rc(point.y, point.x);
-	DrawerContext *context = mcd->rootDrawer->getDrawerContext();
 	CPoint pnt(rc.Col, rc.Row);
-	Coord c = context->screenToWorld(rc);
-	cwcsButtonDown = CoordWithCoordSystem(c, context->getCoordinateSystem());
+	Coord c = mcd->rootDrawer->screenToWorld(rc);
+	cwcsButtonDown = CoordWithCoordSystem(c, mcd->rootDrawer->getCoordinateSystem());
 	if (edit && edit->OnLButtonDown(nFlags, point)) {
 		IlwWinApp()->SendUpdateCoordMessages(cmMOUSECLICK, &cwcsButtonDown);
 		return;

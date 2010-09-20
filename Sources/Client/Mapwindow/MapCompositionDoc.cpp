@@ -50,7 +50,6 @@ Created on: 2007-02-8
 #include "Engine\Map\Mapview.h"
 #include "Engine\Base\DataObjects\URL.h"
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
-#include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\FormElements\syscolor.h"
@@ -728,10 +727,13 @@ void MapCompositionDoc::menLayers(CMenu& men, int iBaseId)
 		  iFlag = MF_ENABLED;
 		  men.EnableMenuItem(id, MF_BYCOMMAND | iFlag);
 		  break;
-	  case ID_DOMLAYER:  
-		  iFlag = !fDomainEditable(mapdrawer->getBaseMap())
-			  ? MF_GRAYED : MF_ENABLED;
+	  case ID_DOMLAYER:
+		  {  
+			BaseMap bm;
+			bm.SetPointer(mapdrawer->getBaseMap());
+			iFlag = !fDomainEditable(bm) ? MF_GRAYED : MF_ENABLED;
 		  men.EnableMenuItem(id, MF_BYCOMMAND | iFlag);
+		   }
 		  break;
 		}    
 	}
@@ -1063,10 +1065,10 @@ BOOL MapCompositionDoc::OnOpenSegmentMap(const SegmentMap& sm, OpenType ot)
 	//================================================ TEST!!!!!!!
 
 
-	ILWIS::DrawerParameters parms(rootDrawer->getDrawerContext(), rootDrawer);
+	ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
 	ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer("FeatureLayerDrawer", "Ilwis38", &parms);
 	drawer->addDataSource((void *)&sm);
-	rootDrawer->setCoordSystem(sm->cs());
+	rootDrawer->setCoordinateSystem(sm->cs());
 	rootDrawer->addCoordBounds(sm->cb());
 	ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
 	drawer->prepare(&pp);
@@ -1098,10 +1100,10 @@ BOOL MapCompositionDoc::OnOpenPolygonMap(const PolygonMap& pm, OpenType ot)
 
 	SetTitle(pm);
 
-	ILWIS::DrawerParameters parms(rootDrawer->getDrawerContext(), rootDrawer);
+	ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
 	ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer("FeatureLayerDrawer", "Ilwis38", &parms);
 	drawer->addDataSource((void *)&pm);
-	rootDrawer->setCoordSystem(pm->cs());
+	rootDrawer->setCoordinateSystem(pm->cs());
 	rootDrawer->addCoordBounds(pm->cb());
 	ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
 	drawer->prepare(&pp);
@@ -1132,10 +1134,10 @@ BOOL MapCompositionDoc::OnOpenPointMap(const PointMap& pm, OpenType ot)
 	//================================================ TEST!!!!!!!
 
 
-	ILWIS::DrawerParameters dp(rootDrawer->getDrawerContext(), rootDrawer);
+	ILWIS::DrawerParameters dp(rootDrawer, rootDrawer);
 	ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer("FeatureLayerDrawer", "Ilwis38", &dp);
 	drawer->addDataSource((void *)&pm);
-	rootDrawer->setCoordSystem(pm->cs());
+	rootDrawer->setCoordinateSystem(pm->cs());
 	rootDrawer->addCoordBounds(pm->cb());
 	ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
 	drawer->prepare(&pp);
@@ -1675,7 +1677,7 @@ Drawer* MapCompositionDoc::drAppend(const BaseMap& mp, bool asAnimation)
 		if (!mp->fCalculated())
 			return 0;
 
-		ILWIS::DrawerParameters parms(rootDrawer->getDrawerContext(), rootDrawer);
+		ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
 		ILWIS::NewDrawer *drawer;
 		if ( asAnimation)
 			drawer = IlwWinApp()->getDrawer("AnimationDrawer", "Ilwis38", &parms);

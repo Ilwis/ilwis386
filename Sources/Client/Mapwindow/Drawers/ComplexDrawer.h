@@ -17,8 +17,8 @@ class _export ComplexDrawer : public NewDrawer {
 
 	public:
 		String getType() const;
-		DrawerContext *getDrawerContext();
-		DrawerContext *getDrawerContext() const;
+		RootDrawer *getRootDrawer();
+		RootDrawer *getRootDrawer() const;
 		bool draw(bool norecursion = false, const CoordBounds& cb=CoordBounds()) const;
 		void prepare(PreparationParameters *);
 		void prepareChildDrawers(PreparationParameters *);
@@ -50,8 +50,7 @@ class _export ComplexDrawer : public NewDrawer {
 		void setTransparency(double value);
 		virtual int getUICode() const;
 		virtual void setUICode(int c);
-		virtual NewDrawer *getRootDrawer() const;
-		virtual HTREEITEM set3D(bool yeno, LayerTreeView  *tvm);
+		virtual HTREEITEM make3D(bool yeno, LayerTreeView  *tvm);
 		bool is3D() const;
 		ZValueMaker *getZMaker();
 		virtual void timedEvent(UINT timerid);
@@ -72,7 +71,7 @@ class _export ComplexDrawer : public NewDrawer {
 		bool info;
 		DrawMethod drm;
 		double transparency;
-		DrawerContext *drawcontext;
+		RootDrawer *rootDrawer;
 		NewDrawer *parentDrawer;
 		String type;
 		String id;

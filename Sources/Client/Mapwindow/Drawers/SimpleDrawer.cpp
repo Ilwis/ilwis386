@@ -17,7 +17,7 @@ SimpleDrawer::SimpleDrawer() {
 	init();
 }
 
-SimpleDrawer::SimpleDrawer(DrawerParameters *parms, const String& ty) : type(ty), drawcontext(parms->context){
+SimpleDrawer::SimpleDrawer(DrawerParameters *parms, const String& ty) : type(ty), rootDrawer(parms->rootDrawer){
 	init();
 	parentDrawer = parms->parent;
 }
@@ -42,15 +42,6 @@ void SimpleDrawer::init() {
 String SimpleDrawer::getType() const {
 	return type;
 }
-
-DrawerContext *SimpleDrawer::getDrawerContext() {
-	return drawcontext;
-}
-
-DrawerContext *SimpleDrawer::getDrawerContext() const {
-	return drawcontext;
-}
-
 
 String SimpleDrawer::getId() const{
 	return id;

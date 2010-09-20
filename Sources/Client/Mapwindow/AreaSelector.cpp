@@ -114,7 +114,7 @@ void AreaSelector::OnLButtonDown(UINT nFlags, CPoint point)
 	fDown = true;
 
 	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(mpv->GetDocument());
-	ILWIS::DrawerParameters sp(mcd->rootDrawer->getDrawerContext(), mcd->rootDrawer);
+	ILWIS::DrawerParameters sp(mcd->rootDrawer, mcd->rootDrawer);
 	selectionDrawer = (ILWIS::SelectionRectangle *)IlwWinApp()->getDrawer("SelectionRectangle", "Ilwis38", &sp);
 	mcd->rootDrawer->addDrawer(selectionDrawer);
 	mpv->SetCapture();

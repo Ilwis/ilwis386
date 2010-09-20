@@ -11,7 +11,7 @@ class SetChecks;
 class DisplayOptionTreeItem;
 
 namespace ILWIS {
-	class DrawerContext;
+	class RootDrawer;
 	struct PreparationParameters;
 
 
@@ -29,8 +29,8 @@ namespace ILWIS {
 		virtual String getType() const =0;
 		virtual void addDataSource(void *, int options=0) = 0;
 		virtual void removeDataSource(void *) = 0;
-		virtual DrawerContext *getDrawerContext() = 0;
-		virtual DrawerContext *getDrawerContext() const = 0;
+		virtual RootDrawer *getRootDrawer() = 0;
+		virtual RootDrawer *getRootDrawer() const = 0;
 		virtual String getName() const = 0;
 		virtual void setName(const String&) = 0;
 		virtual bool isActive() const = 0;
@@ -45,7 +45,6 @@ namespace ILWIS {
 		virtual HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent)=0;
 		virtual double getTransparency() const = 0;
 		virtual void setTransparency(double value) = 0;
-		virtual NewDrawer *getRootDrawer() const = 0;
 		virtual String getId() const = 0;
 		virtual void timedEvent(UINT eventid) = 0;
 		virtual String description() const = 0;
@@ -59,8 +58,8 @@ namespace ILWIS {
 	};
 
 	struct DrawerParameters {
-		DrawerParameters(DrawerContext *c, NewDrawer *p) : context(c), parent(p) {}
-		DrawerContext *context;
+		DrawerParameters(RootDrawer *c, NewDrawer *p) : rootDrawer(c), parent(p) {}
+		RootDrawer *rootDrawer;
 		NewDrawer *parent;
 	};
 

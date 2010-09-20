@@ -53,7 +53,6 @@
 #include "Client\FormElements\fldrpr.h"
 #include "Client\FormElements\fldcolor.h"
 #include "Client\Mapwindow\Drawers\drawer_n.h"
-#include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\LayerTreeItem.h"
 #include "Headers\constant.h"
@@ -144,17 +143,17 @@ void DrawerLayerTreeItem::SwitchCheckBox(bool fOn)
 
 void DrawerLayerTreeItem::OnContextMenu(CWnd* w, CPoint p)
 {
-	AbstractObjectDrawer *objdrw = dynamic_cast<AbstractObjectDrawer *>(dr);
-	if (!objdrw)
+	AbstractMapDrawer *mapdrw = dynamic_cast<AbstractMapDrawer *>(dr);
+	if (!mapdrw)
 		return;
-	IlwisObject obj = objdrw->getObject();	
+	BaseMapPtr *mptr = mapdrw->getBaseMap();
 	CMenu men;
 	men.CreatePopupMenu();
 	pmadd(ID_LAYEROPTIONS);
 	men.SetDefaultItem(ID_LAYEROPTIONS);
 	if (dr->isEditable())
 		pmadd(ID_EDITLAYER);
-	if (objdrw)
+	if (mapdrw)
 		pmadd(ID_PROPLAYER);
 	pmadd(ID_REMOVELAYER);
     int iCmd = men.TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON|TPM_NONOTIFY|TPM_RETURNCMD, p.x, p.y, w);
@@ -164,7 +163,7 @@ void DrawerLayerTreeItem::OnContextMenu(CWnd* w, CPoint p)
 			//dr->Edit();
 			break;
 		case ID_PROPLAYER:
-			IlwWinApp()->Execute(String("prop %S", obj->fnObj.sFullNameQuoted()));
+			IlwWinApp()->Execute(String("prop %S", mptr->fnObj.sFullNameQuoted()));
 			break;
 		case ID_REMOVELAYER:
 			ltv->OnRemoveLayer();
