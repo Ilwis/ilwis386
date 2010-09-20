@@ -80,6 +80,10 @@ void RootDrawer::addCoordBounds(const CoordBounds& cb, bool overrule){
 		setCoordBoundsView(cb, overrule);
 }
 
+/*
+	Note: calls to RootDrawer::draw are meaningless without an OpenGL context in the current thread.
+	Therefore all calls to RootDrawer::draw must be preceded by a call to DrawerContext::TakeContext and followed by a call to ReleaseContext
+*/
 bool RootDrawer::draw(bool norecursion, const CoordBounds& cb) const{
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		// Clear The Screen And The Depth Buffer
 	
@@ -179,11 +183,12 @@ void RootDrawer::setViewPort(const RowCol& rc) {
 				modifyCBZoomView(cbView.height(), cbZoom.height(),(double)rc.Col / pixArea.Col); 
 			}
 		}
-
 	}
 	pixArea = rc;
+	drawercontext->TakeContext(true);
 	glViewport(0,0,rc.Col, rc.Row);
 	setProjection(cbZoom);
+	drawercontext->ReleaseContext();
 }
 
 void RootDrawer::setCoordinateSystem(const CoordSystem& _cs, bool overrule){
@@ -218,7 +223,9 @@ void RootDrawer::setCoordBoundsView(const CoordBounds& _cb, bool overrule){
 		cbZoom = cbView;
 		setViewPoint(cbView.middle());
 		setEyePoint();
+		drawercontext->TakeContext(true);
 		setProjection(cbView);
+		drawercontext->ReleaseContext();
 	} else {
 		cbView += _cb;
 		aspectRatio = cbView.width()/ cbView.height();
@@ -231,7 +238,9 @@ void RootDrawer::setCoordBoundsZoom(const CoordBounds& cb) {
 	cbZoom = cb;
 	setViewPoint(cbZoom.middle());
 	setEyePoint();
+	drawercontext->TakeContext(true);
 	setProjection(cb);
+	drawercontext->ReleaseContext();
 }
 
 void RootDrawer::setEyePoint() {
@@ -260,6 +269,8 @@ Coord RootDrawer::screenToWorld(const RowCol& rc) {
 	double posX, posY, posZ;
 	float winZ;
 
+	drawercontext->TakeContext(true);
+
 	glGetDoublev( GL_MODELVIEW_MATRIX, modelview );
 	glGetDoublev( GL_PROJECTION_MATRIX, projection );
 	glGetIntegerv( GL_VIEWPORT, viewport );
@@ -269,6 +280,8 @@ Coord RootDrawer::screenToWorld(const RowCol& rc) {
 	glReadPixels( winX, int(winY), 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ );
 
 	gluUnProject( winX, winY, winZ, modelview, projection, viewport, &posX, &posY, &posZ);
+
+	drawercontext->ReleaseContext();
 
 	double z = 0;
 	if ( is3D()) {
@@ -280,7 +293,9 @@ Coord RootDrawer::screenToWorld(const RowCol& rc) {
 
 RowCol RootDrawer::worldToScreen(const Coord& crd){
 	int vp[4];
+	drawercontext->TakeContext(true);
 	glGetIntegerv(GL_VIEWPORT, vp);
+	drawercontext->ReleaseContext();
 	int x = vp[0] + crd.x * vp[2];
 	int y = vp[1] + crd.y * vp[3];
 	return RowCol(y,x);
@@ -312,6 +327,10 @@ CoordBounds RootDrawer::getCoordBoundsZoom() const  {
 	return cbZoom;
 }
 
+/*
+	Note: calls to RootDrawer::setProjection are meaningless without an OpenGL context in the current thread.
+	Therefore all calls to RootDrawer::setProjection must be preceded by a call to DrawerContext::TakeContext and followed by a call to ReleaseContext
+*/
 void RootDrawer::setProjection(const CoordBounds& cb) {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -325,6 +344,7 @@ void RootDrawer::setProjection(const CoordBounds& cb) {
 }
 
 void RootDrawer::set3D(bool yesno) {
+	drawercontext->TakeContext(true);
 	if ( yesno != threeD) {
 		threeD = yesno;
 		setEyePoint();
@@ -337,6 +357,7 @@ void RootDrawer::set3D(bool yesno) {
 	else {
 		glDisable(GL_DEPTH_TEST);
 	}
+	drawercontext->ReleaseContext();
 }
 bool RootDrawer::is3D() const {
 	return threeD;
@@ -347,7 +368,9 @@ void RootDrawer::setViewPoint(const Coord& c){
 }
 void RootDrawer::setEyePoint(const Coord& c){
 	eyePoint = c;
+	drawercontext->TakeContext(true);
 	setProjection(cbZoom);
+	drawercontext->ReleaseContext();
 }
 Coord RootDrawer::getViewPoint() const{
 	return viewPoint;
