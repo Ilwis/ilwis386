@@ -45,6 +45,7 @@ class _export ComplexDrawer : public NewDrawer {
 		bool hasInfo() const;
 		void setInfo(bool yesno);
 		HTREEITEM  configure(LayerTreeView  *tv, HTREEITEM parent);
+		void setActiveMode(void *v,LayerTreeView *tv);
 		NewDrawer *getParentDrawer() const;
 		double getTransparency() const;
 		void setTransparency(double value);

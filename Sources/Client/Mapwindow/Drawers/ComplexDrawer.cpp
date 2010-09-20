@@ -458,6 +458,14 @@ HTREEITEM ComplexDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 	return parent;
 }
 
+void ComplexDrawer::setActiveMode(void *v,LayerTreeView *tv) {
+	bool value = *(bool *)v;
+	setActive(value);
+	MapCompositionDoc* doc = tv->GetDocument();
+	doc->mpvGetView()->Invalidate();
+
+}
+
 void ComplexDrawer::displayOptionTransparency(CWnd *parent) {
 	new TransparencyForm(parent, this);
 }
