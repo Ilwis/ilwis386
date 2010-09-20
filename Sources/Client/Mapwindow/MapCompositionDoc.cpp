@@ -955,36 +955,50 @@ BOOL MapCompositionDoc::OnOpenRasterMap(const Map& m, OpenType ot)
 	if (!mp->fCalculated())
 		return FALSE;
 
-	georef = mp->gr();
-	fShowRowCol = true;
-	fRaster = true;
+	//georef = mp->gr();
+	//fShowRowCol = true;
+	//fRaster = true;
 
 	SetTitle(mp);
 
-	String sType;
-	MapDrawer* dw;
-	if ( georef->pgWMS())
-		dw = new WMSMapDrawer(this, mp);
-	else
-		dw = new MapDrawer(this, mp);
+	//================================================ TEST!!!!!!!
 
-	bool fShowForm = !(ot & (otNOASK|otEDIT));
-	if ( fShowForm )
-		fShowForm = dw->fShowDisplayOptions();
-	if (!dw->Configure(fShowForm)) 
-	{
-		delete dw;
-		return FALSE;
-	}
 
-	dw->fNew = false;
-	dl.push_back(dw);
+	ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
+	ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer("RasterLayerDrawer", "Ilwis38", &parms);
+	drawer->addDataSource((void *)&m);
+	rootDrawer->setCoordinateSystem(m->cs());
+	rootDrawer->addCoordBounds(m->cb());
+	ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
+	drawer->prepare(&pp);
+	rootDrawer->addDrawer(drawer);
+	//===============================================
 
-	mmMapBounds.MinCol() = 0;
-	mmMapBounds.MaxCol() = mp->iCols();
-	mmMapBounds.MinRow() = 0;
-	mmMapBounds.MaxRow() = mp->iLines();
-	mmSize = mmMapBounds;
+
+	//String sType;
+	//MapDrawer* dw;
+	//if ( georef->pgWMS())
+	//	dw = new WMSMapDrawer(this, mp);
+	//else
+	//	dw = new MapDrawer(this, mp);
+
+	//bool fShowForm = !(ot & (otNOASK|otEDIT));
+	//if ( fShowForm )
+	//	fShowForm = dw->fShowDisplayOptions();
+	//if (!dw->Configure(fShowForm)) 
+	//{
+	//	delete dw;
+	//	return FALSE;
+	//}
+
+	//dw->fNew = false;
+	//dl.push_back(dw);
+
+	//mmMapBounds.MinCol() = 0;
+	//mmMapBounds.MaxCol() = mp->iCols();
+	//mmMapBounds.MinRow() = 0;
+	//mmMapBounds.MaxRow() = mp->iLines();
+	//mmSize = mmMapBounds;
 
 	if (ot & otEDIT) {
 		::AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_EDITLAYER, 0);
