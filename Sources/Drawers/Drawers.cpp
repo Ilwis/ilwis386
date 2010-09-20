@@ -7,7 +7,6 @@
 #include "Engine\Map\Point\ilwPoint.h"
 #include "Client\Mapwindow\Drawers\ComplexDrawer.h"
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
-#include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Drawers\SetDrawer.h"
 #include "Drawers\FeatureSetDrawer.h"

@@ -7,7 +7,6 @@
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
-#include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
@@ -118,7 +117,7 @@ void LineSetDrawer::modifyLineStyleItem(LayerTreeView  *tv, bool remove) {
 HTREEITEM LineSetDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 	HTREEITEM hti = FeatureSetDrawer::configure(tv,parent);
     FeatureLayerDrawer *fdr = dynamic_cast<FeatureLayerDrawer *>(getParentDrawer());
-	BaseMap mp = fdr->getBaseMap();
+	BaseMapPtr *mp = fdr->getBaseMap();
 	if ( IlwisObject::iotObjectType(mp->fnObj) == IlwisObject::iotPOLYGONMAP )
 		setSingleColor(Color(0,0,0));
 	if ( rpr.fValid() && !rpr->prc()) {

@@ -1,6 +1,6 @@
 #include "Client\Headers\formelementspch.h"
 #include "Client\FormElements\syscolor.h"
-#include "Client\Mapwindow\Drawers\DrawerContext.h"
+#include "Client\Mapwindow\Drawers\RootDrawer.h"
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
 #include "Client\Ilwis.h"
 #include "drawers\linedrawer.h"
@@ -42,14 +42,14 @@ void LineDrawer::clear() {
 bool LineDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 	if (lines.size() == 0)
 		return false;
-	if ( !getDrawerContext()->getCoordBoundsZoom().fContains(cb))
+	if ( !getRootDrawer()->getCoordBoundsZoom().fContains(cb))
 		return false;
 
 	glClearColor(1.0,1.0,1.0,0.0);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 	ComplexDrawer *cdrw = (ComplexDrawer *)getParentDrawer();
-	bool is3D = getDrawerContext()->is3D() && cdrw->getZMaker()->getThreeDPossible();
+	bool is3D = getRootDrawer()->is3D() && cdrw->getZMaker()->getThreeDPossible();
 	double zscale = cdrw->getZMaker()->getZScale();
 	double zoffset = cdrw->getZMaker()->getOffset();
 

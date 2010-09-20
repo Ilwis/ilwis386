@@ -13,7 +13,6 @@
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
-#include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
@@ -47,12 +46,14 @@ FeatureLayerDrawer::~FeatureLayerDrawer() {
 
 void FeatureLayerDrawer::prepare(PreparationParameters *pp){
 	AbstractMapDrawer::prepare(pp);
-	BaseMap basemap = getBaseMap();
+	BaseMapPtr *bmptr = getBaseMap();
+	BaseMap basemap;
+	basemap.SetPointer(bmptr);
 	if ( pp->type & RootDrawer::ptGEOMETRY) {
 		if ( !(pp->type & NewDrawer::ptANIMATION))
 			clear();
 		FeatureSetDrawer *fsd;
-		ILWIS::DrawerParameters dp(drawcontext, this);
+		ILWIS::DrawerParameters dp(getRootDrawer(), this);
 		IlwisObject::iotIlwisObjectType otype = IlwisObject::iotObjectType(basemap->fnObj);
 		switch ( otype) {
 			case IlwisObject::iotPOINTMAP:
@@ -85,6 +86,7 @@ void FeatureLayerDrawer::addSetDrawer(const BaseMap& basemap,PreparationParamete
 	PreparationParameters fp((int)pp->type, 0);
 	fp.csy = basemap->cs();
 	fsd->setName(name);
+	fsd->setRepresentation(basemap->dm()->rpr()); //  default choice
 	fsd->getZMaker()->setSpatialSourceMap(basemap);
 	fsd->getZMaker()->setDataSourceMap(basemap);
 	fsd->prepare(&fp);
@@ -92,7 +94,7 @@ void FeatureLayerDrawer::addSetDrawer(const BaseMap& basemap,PreparationParamete
 }
 
 void FeatureLayerDrawer::getFeatures(vector<Feature *>& features) const{
-	BaseMap basemap = getBaseMap();
+	BaseMapPtr *basemap = getBaseMap();
 	features.clear();
 	int numberOfFeatures = basemap->iFeatures();
 	features.resize(numberOfFeatures);
@@ -101,23 +103,6 @@ void FeatureLayerDrawer::getFeatures(vector<Feature *>& features) const{
 		features.at(i) = feature;
 	}
 }
-
-//
-//String FeatureLayerDrawer::getMask() const{
-//	return mask;
-//}
-//
-//void FeatureLayerDrawer::setMask(const String& sm){
-//	mask = sm;
-//}
-//
-//void FeatureLayerDrawer:: setSingleColor(const Color& c){
-//	singleColor = c;
-//}
-//
-//Color FeatureLayerDrawer::getSingleColor() const {
-//	return singleColor;
-//}
 
 String FeatureLayerDrawer::store(const FileName& fnView, const String& parentSection) const{
 	String currentSection = "FeatureLayerDrawer::" + parentSection;

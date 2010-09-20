@@ -4,7 +4,6 @@
 #include "Client\Mapwindow\Drawers\ComplexDrawer.h"
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
 #include "Client\Ilwis.h"
-#include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
@@ -58,7 +57,7 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 		cb = polygon->cbBounds();
 		gpc_vertex_list exteriorBoundary;
 		vector<gpc_vertex_list> holes;
-		bool coordNeedsConversion = drawcontext->getCoordinateSystem()->fnObj == csy->fnObj;
+		bool coordNeedsConversion = getRootDrawer()->getCoordinateSystem()->fnObj == csy->fnObj;
 
 		const LineString *ring = polygon->getExteriorRing();
 		exteriorBoundary.num_vertices = ring->getNumPoints() - 1;
@@ -96,7 +95,7 @@ gpc_vertex *PolygonFeatureDrawer::makeVertexList(const LineString* ring, bool co
 	for(int j = 0; j < npoints; ++j) {
 		Coordinate c = ring->getCoordinateN(j);
 		if ( coordNeedsConversion)
-			c = drawcontext->getCoordinateSystem()->cConv(csy,c);
+			c = getRootDrawer()->getCoordinateSystem()->cConv(csy,c);
 		gpc_vertex vertex;
 		vertex.x = c.x;
 		vertex.y = c.y;

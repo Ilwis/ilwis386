@@ -14,7 +14,6 @@
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
-#include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
@@ -64,7 +63,7 @@ void AnimationDrawer::prepare(PreparationParameters *pp){
 			if ( pp->type & NewDrawer::ptGEOMETRY) {
 				BaseMap basemap((*datasource)->fnObj);
 				setName(basemap->sName());
-				ILWIS::DrawerParameters parms(getDrawerContext(), getDrawerContext()->getRootDrawer());
+				ILWIS::DrawerParameters parms(getRootDrawer(), getRootDrawer());
 				if ( drawers.size() > 0) {
 					clear();
 				}
@@ -163,7 +162,7 @@ void AnimationDrawer::timedEvent(UINT _timerid) {
 				}
 			}
 		}
-		getDrawerContext()->getDocument()->mpvGetView()->Invalidate();
+		getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->Invalidate();
 	}
 }
 
@@ -210,7 +209,7 @@ AnimationControl::AnimationControl(CWnd *par, AnimationDrawer *ldr)
 
 int AnimationControl::stop(Event  *ev) {
 	AnimationDrawer *andr = (AnimationDrawer *)drw;
-	drw->getDrawerContext()->getDocument()->mpvGetView()->KillTimer(andr->timerid);
+	drw->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->KillTimer(andr->timerid);
 	andr->index = 0;
 	andr->timerid = iUNDEF;
 	return 1;
@@ -218,7 +217,7 @@ int AnimationControl::stop(Event  *ev) {
 
 int AnimationControl::pause(Event  *ev) {
 	AnimationDrawer *andr = (AnimationDrawer *)drw;
-	drw->getDrawerContext()->getDocument()->mpvGetView()->KillTimer(andr->timerid);
+	drw->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->KillTimer(andr->timerid);
 	return 1;
 }
 
@@ -232,7 +231,7 @@ int AnimationControl::run(Event  *ev) {
 		return 1;
 
 	andr->timerid = AnimationDrawer::timerIdCounter++;
-	drw->getDrawerContext()->getDocument()->mpvGetView()->SetTimer(andr->timerid,andr->interval * 1000.0,0);
+	drw->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->SetTimer(andr->timerid,andr->interval * 1000.0,0);
 	PreparationParameters pp(NewDrawer::ptRENDER);
 	drw->prepare(&pp);
 	updateMapView();

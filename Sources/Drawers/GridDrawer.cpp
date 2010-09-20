@@ -12,8 +12,6 @@
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
-//#include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
-//#include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
 #include "Client\Editors\Utils\line.h"
@@ -58,7 +56,7 @@ void GridDrawer::prepare(PreparationParameters *pp) {
 		Color clr;
 		clear();
 		getZMaker()->setThreeDPossible(true);
-		CoordBounds cbMap = getDrawerContext()->getMapCoordBounds();
+		CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
 		cMin = cbMap.cMin;
 		cMax = cbMap.cMax;
 		double maxz = min(cbMap.width(), cbMap.height()) / 2.0;
@@ -102,7 +100,7 @@ void GridDrawer::prepareVerticals(double maxz, double rDist,const Coord& cMax, c
 		{
 			c1.x = x;
 			c1.y = y;
-			c1.z =  getDrawerContext()->getFakeZ();
+			c1.z =  getRootDrawer()->getFakeZ();
 			c2.x = x;
 			c2.y = y;
 			c2.z = maxz;
@@ -110,31 +108,31 @@ void GridDrawer::prepareVerticals(double maxz, double rDist,const Coord& cMax, c
 		}
 	}
 	c1 = cMin;
-	c1.z  = getDrawerContext()->getFakeZ();
+	c1.z  = getRootDrawer()->getFakeZ();
 	c2 = c1;
 	c2.z = maxz;
 	AddGridLine(c1,c2);
 	c1.x = cMin.x;
 	c1.y = cMax.y;
-	c1.z  = getDrawerContext()->getFakeZ();
+	c1.z  = getRootDrawer()->getFakeZ();
 	c2 = c1;
 	c2.z = maxz;
 	AddGridLine(c1,c2);
 	c1 = cMax;
-	c1.z  = getDrawerContext()->getFakeZ();
+	c1.z  = getRootDrawer()->getFakeZ();
 	c2 = c1;
 	c2.z = maxz;
 	AddGridLine(c1,c2);
 	c1.x = cMax.x;
 	c1.y = cMin.y;
-	c1.z  = getDrawerContext()->getFakeZ();
+	c1.z  = getRootDrawer()->getFakeZ();
 	c2 = c1;
 	c2.z = maxz;
 
 }
 void GridDrawer::prepareGrid(double maxz, double zplanes, double rDist, const Coord& cMax, const Coord& cMin ) {
 	Coord c1, c2;
-	double z = 	getDrawerContext()->getFakeZ();
+	double z = 	getRootDrawer()->getFakeZ();
 	double zdist = maxz / zplanes;
 	for(int i=0; i <= zplanes; ++i) {
 		c1.z = c2.z = z;
@@ -164,7 +162,7 @@ void GridDrawer::prepareGrid(double maxz, double zplanes, double rDist, const Co
 }
 void GridDrawer::AddGridLine(Coord c1, Coord c2)
 {
-	ILWIS::DrawerParameters dp(drawcontext, this);
+	ILWIS::DrawerParameters dp(getRootDrawer(), this);
 	PreparationParameters pp(NewDrawer::ptGEOMETRY);
 	GridLine *line = (GridLine *)IlwWinApp()->getDrawer("GridLine", &pp, &dp);
 	line->addDataSource(&c1);
@@ -245,6 +243,8 @@ void GridDrawer::gridOptions(CWnd *parent) {
 void GridDrawer::gridActive(void *v, LayerTreeView *tv) {
 	bool value = *(bool *)v;
 	setActive(value);
+	PreparationParameters pp(NewDrawer::ptGEOMETRY);
+	prepare(&pp);
 	MapCompositionDoc* doc = tv->GetDocument();
 	doc->mpvGetView()->Invalidate();
 }

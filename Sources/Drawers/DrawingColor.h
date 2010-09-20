@@ -25,6 +25,7 @@ private:
 	Color clr2;
 	int iMultColors;
 	double gamma;
+	BaseMap bmap;
 
 };
 }

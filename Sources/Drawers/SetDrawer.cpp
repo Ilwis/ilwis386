@@ -15,7 +15,6 @@
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\MapPaneView.h"
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
-#include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
@@ -38,7 +37,6 @@ SetDrawer::SetDrawer(DrawerParameters *parms, const String& name) :
 	colorCheck(0),
 	rprItem(0),
 	threeDItem(0)
-
 {
 	setInfo(true);
 	setTransparency(1);
@@ -56,7 +54,7 @@ void SetDrawer::prepare(PreparationParameters *parm){
 	csy = parm->csy;
 	if ( getUICode() == NewDrawer::ucALL) {
 		AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)parentDrawer;
-		rpr = mapDrawer->getRepresentation();
+		Representation rpr = mapDrawer->getRepresentation();
 		if ( rpr.fValid() && !rpr->prv())
 			setStretchRangeReal(mapDrawer->getStretchRangeReal());
 	}
@@ -117,11 +115,11 @@ void SetDrawer::setActiveMode(void *v,LayerTreeView *tv) {
 	doc->mpvGetView()->Invalidate();
 
 }
-Representation SetDrawer::getRepresentation() const {
+Representation SetDrawer::getRepresentation() const { // avoiding copy constructotrs
 	return rpr;
 }
 
-void SetDrawer::setRepresentation(const Representation& rp){
+void SetDrawer::setRepresentation( const Representation& rp){
 	rpr = rp;
 	stretched = false;
 	AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)parentDrawer;
@@ -135,8 +133,8 @@ CoordSystem SetDrawer::getCoordSystem() const {
 
 bool SetDrawer::isLegendUsefull() const {
 	AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)getParentDrawer();
-	BaseMap bm = mapDrawer->getBaseMap();
-	if (bm.fValid() && bm->dm()->pdv() && stretched) 
+	BaseMapPtr *bm = mapDrawer->getBaseMap();
+	if (bm != 0 && bm->dm()->pdv() && stretched) 
 		return true;
 	return drm != drmSINGLE;
 }
@@ -267,7 +265,7 @@ RepresentationForm::RepresentationForm(CWnd *wPar, SetDrawer *dr) :
 void  RepresentationForm::apply() {
 	fldRpr->StoreData();
 	SetDrawer *setDrawer = (SetDrawer *)drw;
-	setDrawer->setRepresentation(Representation(FileName(rpr)));
+	setDrawer->setRepresentation(rpr);
 	PreparationParameters pp(NewDrawer::ptRENDER, 0);
 	drw->prepareChildDrawers(&pp);
 	updateMapView();

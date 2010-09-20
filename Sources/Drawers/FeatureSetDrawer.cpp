@@ -14,7 +14,6 @@
 #include "Client\Mapwindow\MapPaneView.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
-#include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Drawers\FeatureLayerDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
@@ -54,7 +53,7 @@ void FeatureSetDrawer::prepare(PreparationParameters *parms){
 			Feature *feature = features.at(i);
 			NewDrawer *pdrw;
 			if ( feature && feature->fValid()){
-				ILWIS::DrawerParameters dp(drawcontext, this);
+				ILWIS::DrawerParameters dp(getRootDrawer(), this);
 				pdrw = createElementDrawer(parms, &dp);
 				pdrw->addDataSource(feature);
 				PreparationParameters fp((int)parms->type, 0);
@@ -122,15 +121,15 @@ HTREEITEM FeatureSetDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 		item = new DisplayOptionTreeItem(tv,portrayalItem,this, 0,0,colorCheck);									
 		HTREEITEM multiColorItem = InsertItem("Multiple Colors","MultipleColors",item, !useSingleColor & !useRpr);
 	}
-	if ( getDrawerContext()->is3D()) {
-		set3D(true, tv);
+	if ( getRootDrawer()->is3D()) {
+		make3D(true, tv);
 	}
 	
 
 	return hti;
 }
 
-HTREEITEM FeatureSetDrawer::set3D(bool yesno, LayerTreeView  *tv){
+HTREEITEM FeatureSetDrawer::make3D(bool yesno, LayerTreeView  *tv){
 	threeD = yesno;
 	if ( yesno) {
 		if ( portrayalItem != 0) {
@@ -257,7 +256,7 @@ DisplayOptionsForm(dr,wPar,"3D Options"), sourceIndex(0)
 {
 	FeatureLayerDrawer *fdrw = (FeatureLayerDrawer *)dr->getParentDrawer();
 	attTable = fdrw->getAtttributeTable();
-	bmp = fdrw->getBaseMap();
+	bmp.SetPointer(fdrw->getBaseMap());
 	rg = new RadioGroup(root,"Data Source",&sourceIndex);
 	new RadioButton(rg,"Self");
 	RadioButton *rbMap = new RadioButton(rg,"Raster Map");

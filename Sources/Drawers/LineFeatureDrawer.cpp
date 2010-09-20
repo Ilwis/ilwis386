@@ -11,7 +11,6 @@
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
-#include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h"
@@ -61,15 +60,15 @@ void LineFeatureDrawer::prepare(PreparationParameters *p){
 		cb = feature->cbBounds();
 		clear();
 		feature->getBoundaries(lines);
-		FileName fn = drawcontext->getCoordinateSystem()->fnObj;
-		bool sameCsy = drawcontext->getCoordinateSystem()->fnObj == csy->fnObj;
+		FileName fn = getRootDrawer()->getCoordinateSystem()->fnObj;
+		bool sameCsy = getRootDrawer()->getCoordinateSystem()->fnObj == csy->fnObj;
 		if ( !sameCsy ) {
 			for(int j = 0; j < lines.size(); ++j) {
 				CoordinateSequence *seq = lines.at(j);
 		
 				for(int  i = 0; i < seq->size(); ++i) {
 					Coord cOld = seq->getAt(i);
-					Coord c = csy->cConv(drawcontext->getCoordinateSystem(), Coord(cOld));
+					Coord c = csy->cConv(getRootDrawer()->getCoordinateSystem(), Coord(cOld));
 					c.z = cOld.z;
 					seq->setAt(c,i);
 				}

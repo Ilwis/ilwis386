@@ -1,13 +1,12 @@
 #include "Client\Headers\formelementspch.h"
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
-#include "Client\Mapwindow\Drawers\DrawerContext.h"
+#include "Client\Mapwindow\Drawers\RootDrawer.h"
 #include "Engine\Map\Point\ilwPoint.h"
 #include "Engine\Spatialreference\gr.h"
 #include "Engine\Map\Raster\Map.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
-#include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h"
@@ -47,12 +46,12 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 	    CoordSystem csy = fdr->getCoordSystem();
 		ILWIS::Point *point = (ILWIS::Point *)feature;
 		Coord c = *(point->getCoordinate());
-		FileName fn = drawcontext->getCoordinateSystem()->fnObj;
-		if ( drawcontext->getCoordinateSystem()->fnObj == csy->fnObj) {
+		FileName fn = getRootDrawer()->getCoordinateSystem()->fnObj;
+		if ( getRootDrawer()->getCoordinateSystem()->fnObj == csy->fnObj) {
 			cNorm = c;
 		}
 		else {
-			cNorm = csy->cConv(drawcontext->getCoordinateSystem(), c);
+			cNorm = csy->cConv(getRootDrawer()->getCoordinateSystem(), c);
 		}
 		cb += cNorm;
 	}

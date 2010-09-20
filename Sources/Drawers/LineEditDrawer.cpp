@@ -1,6 +1,4 @@
 #include "Client\Headers\formelementspch.h"
-//#include "Engine\Map\basemap.h"
-//#include "Client\MapWindow\Drawers\ComplexDrawer.h"
 #include "Client\MapWindow\Drawers\drawer_n.h"
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
 #include "Client\Ilwis.h"
@@ -45,13 +43,13 @@ HTREEITEM LineEditDrawer::configure(LayerTreeView  *tv, HTREEITEM parent){
 bool LineEditDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 	if (lines.size() == 0)
 		return false;
-	if ( !getDrawerContext()->getCoordBoundsZoom().fContains(cb))
+	if ( !getRootDrawer()->getCoordBoundsZoom().fContains(cb))
 		return false;
 
 	LineDrawer::draw(norecursion, cbArea);
 
 	ComplexDrawer *cdrw = (ComplexDrawer *)getParentDrawer();
-	bool is3D = getDrawerContext()->is3D() && cdrw->getZMaker()->getThreeDPossible();
+	bool is3D = getRootDrawer()->is3D() && cdrw->getZMaker()->getThreeDPossible();
 	if ( is3D) // for the moment no editing in 3D
 		return false;
 
@@ -71,7 +69,7 @@ bool LineEditDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 		glScaled(1,1,zscale);
 		glTranslated(0,0,zoffset);
 	}
-	CoordBounds cbZoom = getDrawerContext()->getCoordBoundsZoom();
+	CoordBounds cbZoom = getRootDrawer()->getCoordBoundsZoom();
 	double symbolScale = cbZoom.width() / 200;
 
 	for(int j = 0; j < lines.size(); ++j) {

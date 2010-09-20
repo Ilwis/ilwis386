@@ -7,7 +7,6 @@
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
-#include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
@@ -33,7 +32,9 @@ PolygonSetDrawer::PolygonSetDrawer(DrawerParameters *parms) :
 	fsd->setName("Boundaries");
 	fsd->setSingleColor(Color(0,0,0));
 	fsd->setDrawMethod(NewDrawer::drmSINGLE);
-	fsd->getZMaker()->setSpatialSourceMap(((AbstractMapDrawer *)getParentDrawer())->getBaseMap());
+	BaseMap bmp;
+	bmp.SetPointer(((AbstractMapDrawer *)getParentDrawer())->getBaseMap());
+	fsd->getZMaker()->setSpatialSourceMap(bmp);
 	fsd->prepare(&pp);
 	((ComplexDrawer *)getParentDrawer())->addPostDrawer(100,fsd);
 }

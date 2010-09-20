@@ -5,7 +5,6 @@
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
 #include "Client\MapWindow\Drawers\ComplexDrawer.h"
-#include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h"
@@ -34,16 +33,16 @@ void  CanvasBackgroundDrawer::prepare(PreparationParameters *pp){
 }
 
 bool CanvasBackgroundDrawer::draw(bool norecursion, const CoordBounds& cb) const{
-	CoordBounds cbView = getDrawerContext()->getCoordBoundsView();
-	CoordBounds cbMap = getDrawerContext()->getMapCoordBounds();
-	bool is3D = getDrawerContext()->is3D();
+	CoordBounds cbView = getRootDrawer()->getCoordBoundsView();
+	CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
+	bool is3D = getRootDrawer()->is3D();
 	if ( is3D) {
 		glColor4d(outside3D.redP(), outside3D.greenP(), outside3D.blueP(),getTransparency());
 	}
 	else {
 		glColor4d(outside2D.redP(), outside2D.greenP(), outside2D.blueP(),getTransparency());
 	}
-	double z = is3D ? -getDrawerContext()->getFakeZ() : 0;
+	double z = is3D ? -getRootDrawer()->getFakeZ() : 0;
 	glBegin(GL_QUADS);						
 		glVertex3f(cbView.MinX(), cbView.MinY(),z);				
 		glVertex3f(cbView.MinX(), cbView.MaxY(),z);				
@@ -95,7 +94,7 @@ void CanvasBackgroundDrawer::load(const FileName& fnView, const String& parentSe
 HTREEITEM CanvasBackgroundDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 	HTREEITEM hti = InsertItem(tv,TVI_ROOT,"Background Area","MapPane", TVI_LAST);
 	ComplexDrawer::configure(tv,hti);
-	bool is3D = getDrawerContext()->is3D();
+	bool is3D = getRootDrawer()->is3D();
 
 	DisplayOptionColorItem *item = new DisplayOptionColorItem("Outside", tv,hti,this, 
 					(DisplayOptionItemFunc)&CanvasBackgroundDrawer::displayOptionOutsideColor);
@@ -111,11 +110,11 @@ HTREEITEM CanvasBackgroundDrawer::configure(LayerTreeView  *tv, HTREEITEM parent
 }
 
 void CanvasBackgroundDrawer::displayOptionOutsideColor(CWnd *parent) {
-	new SetColorForm("Outside map", parent, this, getDrawerContext()->is3D() ? &outside3D : &outside2D);
+	new SetColorForm("Outside map", parent, this, getRootDrawer()->is3D() ? &outside3D : &outside2D);
 }
 
 void CanvasBackgroundDrawer::displayOptionInsideColor(CWnd *parent) {
-	new SetColorForm("Inside map", parent, this, getDrawerContext()->is3D() ? &inside3D : &inside2D);
+	new SetColorForm("Inside map", parent, this, getRootDrawer()->is3D() ? &inside3D : &inside2D);
 }
 
 //------------------------------------------------

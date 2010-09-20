@@ -8,7 +8,6 @@
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
-#include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Drawers\SetDrawer.h"
 #include "Drawers\FeatureSetDrawer.h"
@@ -24,12 +23,14 @@ iMultColors(0),
 gamma(0),
 mcd(0)
 {
+	AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)drw->getParentDrawer();
+	bmap.SetPointer(mapDrawer->getBaseMap());
 }
 Color DrawingColor::clrVal(double rVal) const
 {
 	Color cRet;
 	Representation rpr = drw->getRepresentation();
-	if (!rpr.fValid())
+	if (rpr.fValid())
 		return cRet;
 	if (drw->isStretched()) {
 		switch (drw->getStretchMethod())
@@ -61,8 +62,6 @@ Color DrawingColor::clrRaw(long iRaw, AbstractMapDrawer::DrawMethod drm) const
 	if (iUNDEF == iRaw)
 		return mcd->colBackground;
 	Color cRet;
-	AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)drw->getParentDrawer();
-	BaseMap bmap = mapDrawer->getBaseMap();
 	Representation rpr = drw->getRepresentation();
 	switch (drm) {
 	case NewDrawer::drmRPR:

@@ -3,7 +3,7 @@
 #include "Engine\Map\basemap.h"
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
 #include "Client\Ilwis.h"
-#include "Client\Mapwindow\Drawers\DrawerContext.h"
+#include "Client\Mapwindow\Drawers\RootDrawer.h"
 #include "Drawers\DrawingColor.h" 
 #include "drawers\pointdrawer.h"
 #include "Client\Mapwindow\Drawers\ComplexDrawer.h"
@@ -30,7 +30,7 @@ void PointDrawer::prepare(PreparationParameters *p){
 bool PointDrawer::draw(bool norecursion, const CoordBounds& cbArea) const {
 	if ( cNorm.fUndef())
 		return false;
-	CoordBounds cbZoom = getDrawerContext()->getCoordBoundsZoom();
+	CoordBounds cbZoom = getRootDrawer()->getCoordBoundsZoom();
 	if ( !cbZoom.fContains(cNorm))
 		return false;
 	glClearColor(1.0,1.0,1.0,0.0);
@@ -40,7 +40,7 @@ bool PointDrawer::draw(bool norecursion, const CoordBounds& cbArea) const {
 
 	ComplexDrawer *cdrw = (ComplexDrawer *)getParentDrawer();
 	ZValueMaker *zmaker = cdrw->getZMaker();
-	bool is3D = getDrawerContext()->is3D() && zmaker->getThreeDPossible();
+	bool is3D = getRootDrawer()->is3D() && zmaker->getThreeDPossible();
 	double zscale = zmaker->getZScale();
 	double zoffset = zmaker->getOffset();
 
