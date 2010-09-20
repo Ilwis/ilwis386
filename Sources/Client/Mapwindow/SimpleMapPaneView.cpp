@@ -258,9 +258,10 @@ void SimpleMapPaneView::OnDraw(CDC* cdc)
 	MapCompositionDoc* mcd = GetDocument();
 	PreparationParameters pp(NewDrawer::ptINITOPENGL, dc);
 	mcd->rootDrawer->prepare(&pp);
+	mcd->rootDrawer->getDrawerContext()->TakeContext(true);
 	mcd->rootDrawer->draw();
-	
 	SwapBuffers(dc->m_hDC);
+	mcd->rootDrawer->getDrawerContext()->ReleaseContext();
 }
 
 void SimpleMapPaneView::OnMeasureDist()
