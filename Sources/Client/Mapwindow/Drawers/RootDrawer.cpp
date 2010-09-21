@@ -28,6 +28,7 @@ RootDrawer::RootDrawer(MapCompositionDoc *doc) {
 }
 
 RootDrawer::~RootDrawer() {
+	delete drawercontext;
 }
 
 void  RootDrawer::prepare(PreparationParameters *pp){
