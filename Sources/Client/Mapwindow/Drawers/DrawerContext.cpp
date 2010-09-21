@@ -84,6 +84,10 @@ void DrawerContext::clear() {
 
 	if (hrc)
 		::wglDeleteContext(hrc);
+	
+	m_hdc = 0;
+	m_hrc = 0;
+	m_wnd = 0;
 
 	csOpenglContext.Unlock();
 }
