@@ -254,7 +254,8 @@ void SimpleMapPaneView::InitOpenGL(HDC hDC) {
 void SimpleMapPaneView::OnDraw(CDC* cdc)
 {
 	fStarting  = false;
-	CDC *dc = cdc == 0 ? GetDC() : cdc;
+	// CDC *dc = cdc == 0 ? GetDC() : cdc;
+	CDC *dc = GetDC(); // apparently the cdc can come with an invalid m_hDC handle (the reason is not properly understood yet, but the maps are not drawn)
 	MapCompositionDoc* mcd = GetDocument();
 	PreparationParameters pp(NewDrawer::ptINITOPENGL, dc);
 	mcd->rootDrawer->prepare(&pp);
