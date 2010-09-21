@@ -296,6 +296,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Drawers\Texture.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\TextureHeap.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Drawers\SVGDrawer.cpp"
 				>
 			</File>
@@ -382,6 +390,14 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Drawers\SetDrawer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\Texture.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\TextureHeap.h"
 				>
 			</File>
 			<File
