@@ -1,10 +1,6 @@
 #pragma once
 
 #include <gl/gl.h>
-#include <gl/glu.h>
-#include "Engine\SpatialReference\Coordsys.h"
-//#include "Engine\Map\Feature.h"
-#include "Engine\Domain\dm.h"
 
 class MapCompositionDoc;
 
@@ -21,18 +17,16 @@ namespace ILWIS {
 
 		void TakeContext(bool urgent);
 		void ReleaseContext();
-		bool isUrgentRequestWaiting();
 		void InvalidateWindow();
 		bool fUrgentRequestWaiting; // intentionally public!! used in volatile* to abort texture generation in thread
 
 	private:
 		MapCompositionDoc *doc;
 		GLint maxTextureSize;
-
+		CCriticalSection csOpenglContext;
 		HDC m_hdc;
 		HGLRC m_hrc;
 		CWnd * m_wnd;
-		bool glBusy;
 		bool fGLInitialized;
 	};
 }

@@ -1,16 +1,12 @@
 #include "Client\Headers\formelementspch.h"
-#include "Client\Ilwis.h"
-#include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
-
 
 using namespace ILWIS;
 
 DrawerContext::DrawerContext(MapCompositionDoc *d)
 : doc(d)
 , maxTextureSize(128)
-, glBusy(false)
 , fUrgentRequestWaiting(false)
 , fGLInitialized(false)
 , m_hdc(0)
@@ -39,7 +35,6 @@ bool DrawerContext::initOpenGL(CDC *dc) {
 	m_hdc = dc->m_hDC;
 	m_hrc = wglCreateContext( m_hdc );    
 	m_wnd = dc->GetWindow();
-	// wglMakeCurrent( dc->m_hDC, mhRC );
 
 	TakeContext(true);
 	glDisable(GL_DEPTH_TEST);
@@ -63,27 +58,16 @@ void DrawerContext::InvalidateWindow()
 
 void DrawerContext::TakeContext(bool urgent)
 {
-	this->fUrgentRequestWaiting = urgent;
-	if (urgent)
-	{
-		while(glBusy)
-			Sleep(1);
-		this->fUrgentRequestWaiting = false;
-	}
-	else
-	{
-		while (glBusy)
-			Sleep(100);
-	}
-
-	glBusy = true;
+	fUrgentRequestWaiting = urgent;
+	csOpenglContext.Lock();
+	fUrgentRequestWaiting = false;
 	wglMakeCurrent(m_hdc, m_hrc);
 }
 
 void DrawerContext::ReleaseContext()
 {
 	wglMakeCurrent(NULL, NULL);
-	glBusy = false;
+	csOpenglContext.Unlock();
 }
 
 DrawerContext::~DrawerContext() {
@@ -91,17 +75,8 @@ DrawerContext::~DrawerContext() {
 }
 
 void DrawerContext::clear() {
-
-  //  if ( mhRC )
-  //  {
-  //      wglMakeCurrent( NULL, NULL );
-  //      wglDeleteContext( mhRC );
-		//mhRC = 0;
-  //  }
-
-	this->fUrgentRequestWaiting = true;
-	while(glBusy)
-		Sleep(100);
+	fUrgentRequestWaiting = true;
+	csOpenglContext.Lock();
 
 	HGLRC hrc = ::wglGetCurrentContext();
 
@@ -109,6 +84,8 @@ void DrawerContext::clear() {
 
 	if (hrc)
 		::wglDeleteContext(hrc);
+
+	csOpenglContext.Unlock();
 }
 
 MapCompositionDoc *DrawerContext::getDocument() const {
