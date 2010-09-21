@@ -142,8 +142,6 @@ bool RasterSetDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 	if (data->textureHeap == 0)
 		return false;
 
-	glEnable(GL_TEXTURE_2D);
-
 	data->textureHeap->ClearQueuedTextures();
 
 	// Extend the image so that its width and height become ^2
