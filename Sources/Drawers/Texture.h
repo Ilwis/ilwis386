@@ -19,7 +19,7 @@ namespace ILWIS {
 	class Texture  
 	{
 	public:
-		Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDrawer::DrawMethod drm, const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, char * scrap_data_mipmap, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, volatile bool* fDrawStop);
+		Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDrawer::DrawMethod drm, const long offsetX, const long offsetY, const long sizeX, const long sizeY, char * scrap_data_mipmap, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, volatile bool* fDrawStop);
 		virtual ~Texture();
 
 		void BindMe(); // To be called before glBegin
@@ -30,9 +30,9 @@ namespace ILWIS {
 		bool fValid();
 
 	private:
-		void ConvLine(LongBuf& buf, int iLine, char * outbuf);
-		void ConvLine(const RealBuf& buf, int iLine, char * outbuf);
-		void DrawTexture(unsigned int offsetX, unsigned int offsetY, unsigned int sizeX, unsigned int sizeY, unsigned int zoomFactor, char * outbuf, volatile bool* fDrawStop);
+		void ConvLine(LongBuf& buf, const int iLine, const long texSizeX, char * outbuf);
+		void ConvLine(const RealBuf& buf, const int iLine, const long texSizeX, char * outbuf);
+		void DrawTexture(long offsetX, long offsetY, long texSizeX, long texSizeY, unsigned int zoomFactor, char * outbuf, volatile bool* fDrawStop);
 		Map mp;
 		GLuint texture;
 		GLdouble xMin, yMin, xMax, yMax; // These are in world coordinates !! These are to be mapped to texture coordinates 0 to 1

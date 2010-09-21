@@ -17,7 +17,7 @@ using namespace ILWIS;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-Texture::Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDrawer::DrawMethod drm, const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, char * scrap_data_mipmap, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, volatile bool* fDrawStop)
+Texture::Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDrawer::DrawMethod drm, const long offsetX, const long offsetY, const long sizeX, const long sizeY, char * scrap_data_mipmap, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, volatile bool* fDrawStop)
 : mp(mp)
 , drawColor(drawColor)
 , drm(drm)
@@ -105,11 +105,11 @@ void Texture::ConvLine(LongBuf& buf, int iLine, char * outbuf)
 }
 */
 
-void Texture::ConvLine(LongBuf& buf, int iLine, char * outbuf)
+void Texture::ConvLine(LongBuf& buf, const int iLine, const long texSizeX, char * outbuf)
 {
 	drawColor->clrRaw(buf, drm);
 	long iLen = buf.iSize();
-	char *c = &outbuf[iLine * iLen * 4];
+	char *c = &outbuf[iLine * texSizeX * 4];
 	for (long i = 0; i < iLen; ++i)
 		if (iUNDEF == buf[i]) {
 			*c++ = 0;
@@ -146,12 +146,12 @@ void Texture::ConvLine(const RealBuf& buf, int iLine, char * outbuf)
 }
 */
 
-void Texture::ConvLine(const RealBuf& buf, int iLine, char * outbuf)
+void Texture::ConvLine(const RealBuf& buf, const int iLine, const long texSizeX, char * outbuf)
 {
 	long iLen = buf.iSize();
 	LongBuf bufCol (iLen);
 	drawColor->clrVal(buf, bufCol);
-	char *c = &outbuf[iLine * iLen * 4];
+	char *c = &outbuf[iLine * texSizeX * 4];
 	for (long i = 0; i < iLen; ++i)
 		if (rUNDEF == buf[i]) {
 			*c++ = 0;
@@ -167,13 +167,20 @@ void Texture::ConvLine(const RealBuf& buf, int iLine, char * outbuf)
 		}
 }
 
-void Texture::DrawTexture(unsigned int offsetX, unsigned int offsetY, unsigned int sizeX, unsigned int sizeY, unsigned int zoomFactor, char * outbuf, volatile bool* fDrawStop)
+void Texture::DrawTexture(long offsetX, long offsetY, long texSizeX, long texSizeY, unsigned int zoomFactor, char * outbuf, volatile bool* fDrawStop)
 {
-	if (sizeX == 0 || sizeY == 0)
-		return;
 	RowCol rcSize = mp->rcSize();
 	long imageWidth = rcSize.Col;
 	long imageHeight = rcSize.Row;
+	long sizeX = texSizeX;
+	long sizeY = texSizeY;
+	if (offsetX + sizeX > imageWidth)
+		sizeX = imageWidth - offsetX;
+	if (offsetY + sizeY > imageHeight)
+		sizeY = imageHeight - offsetY;
+	if (sizeX == 0 || sizeY == 0)
+		return;
+
 	ValueRange vr = mp->vr();
 	if (mp->dm()->pdbool())
 		vr = ValueRange();
@@ -198,7 +205,7 @@ void Texture::DrawTexture(unsigned int offsetX, unsigned int offsetY, unsigned i
 				if (*fDrawStop)
 					break;
 				mp->GetLineVal(iDataInYPos + offsetY, bufIn, offsetX, sizeX);
-				ConvLine(bufIn, iDataInYPos, outbuf);
+				ConvLine(bufIn, iDataInYPos, texSizeX, outbuf);
 			}
 		}
 		else 
@@ -212,29 +219,33 @@ void Texture::DrawTexture(unsigned int offsetX, unsigned int offsetY, unsigned i
 					mp->GetLineVal(iDataInYPos + offsetY, bufIn, offsetX, sizeX);
 				else
 					mp->GetLineRaw(iDataInYPos + offsetY, bufIn, offsetX, sizeX);
-				ConvLine(bufIn, iDataInYPos, outbuf);
+				ConvLine(bufIn, iDataInYPos, texSizeX, outbuf);
 			}
 		}                                                                         
 	}
 	else // zoomFactor > 1; expected in outbuf: sizeX * sizeY * 4 / (zoomFactor * zoomFactor) bytes (for RGB colors)
 	{
+		const long xSizeOut = (long)ceil((double)sizeX / ((double)zoomFactor));
+		const long ySizeOut = (long)ceil((double)sizeY / ((double)zoomFactor));
+		texSizeX /= zoomFactor;
+		texSizeY /= zoomFactor;
+
+		// If pyramid layers are available, they will handle part of the zoomFactor, and GetLineRaw/GetLineVal will read shorter lines
+		// We only have to accomodate for the remaining zoomFactor
 		int iPyrLayer = (int)(mp->fHasPyramidFile() ? max(0, log10((double)zoomFactor) / log10(2.0)) : 0);	
 		if (iPyrLayer > mp->iNoOfPyramidLayers())
 			iPyrLayer = mp->iNoOfPyramidLayers();
+		long zoomByPyramid = (long)pow(2.0, iPyrLayer);
 		if (iPyrLayer > 0) {
-			offsetX /= (long)pow(2.0, iPyrLayer);			
-			offsetY /= (long)pow(2.0, iPyrLayer);
-			sizeX /= (long)pow(2.0, iPyrLayer);
-			sizeY /= (long)pow(2.0, iPyrLayer);				
-			zoomFactor /= (long)pow(2.0, iPyrLayer);
+			offsetX /= zoomByPyramid;
+			offsetY /= zoomByPyramid;
+			sizeX = (long)ceil((double)sizeX / (double)zoomByPyramid);
+			sizeY = (long)ceil((double)sizeY / (double)zoomByPyramid);
+			zoomFactor /= zoomByPyramid;
 		}
 		
-		// If pyramid layers are available, they will handle part of the zoomFactor, and GetLineRaw/GetLineVal will read shorter lines
-		// We only have to accomodate for the remaining zoomFactor
-		// Note that offsetX, offsetY, sizeX, sizeY are ^2, so they're alvays perfectly divisible by pow(2)
-
-		const unsigned int xSizeOut = sizeX / zoomFactor;
-		const unsigned int ySizeOut = sizeY / zoomFactor;
+		// Note that offsetX, offsetY, texSizeX, texSizeY are ^2, so they're alvays perfectly divisible by pow(2)
+		// For division of sizeX and sizeY we take the ceiling, otherwise the last line / column is missing in a non-perfect division.
 
 		if (fRealMap) 
 		{
@@ -249,7 +260,7 @@ void Texture::DrawTexture(unsigned int offsetX, unsigned int offsetY, unsigned i
 				mp->GetLineVal(iDataInYPos + offsetY, bufIn, offsetX, sizeX, iPyrLayer);
 				for (long iDataOutXPos = 0, iDataInXPos = 0; iDataOutXPos < xSizeOut; ++iDataOutXPos, iDataInXPos += zoomFactor)
 					bufIntermediate[iDataOutXPos] = bufIn[iDataInXPos];
-				ConvLine(bufIntermediate, iDataOutYPos, outbuf);
+				ConvLine(bufIntermediate, iDataOutYPos, texSizeX, outbuf);
 			}
 		}
 		else // !fRealMap
@@ -266,7 +277,7 @@ void Texture::DrawTexture(unsigned int offsetX, unsigned int offsetY, unsigned i
 					mp->GetLineRaw(iDataInYPos + offsetY, bufIn, offsetX, sizeX, iPyrLayer);
 				for (long iDataOutXPos = 0, iDataInXPos = 0; iDataOutXPos < xSizeOut; ++iDataOutXPos, iDataInXPos += zoomFactor)
 					bufOut[iDataOutXPos] = bufIn[iDataInXPos];
-				ConvLine(bufOut, iDataOutYPos, outbuf);
+				ConvLine(bufOut, iDataOutYPos, texSizeX, outbuf);
 			}
 		}                 
 	}
