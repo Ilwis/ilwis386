@@ -30,7 +30,7 @@ Color DrawingColor::clrVal(double rVal) const
 {
 	Color cRet;
 	Representation rpr = drw->getRepresentation();
-	if (rpr.fValid())
+	if (!rpr.fValid())
 		return cRet;
 	if (drw->isStretched()) {
 		switch (drw->getStretchMethod())
