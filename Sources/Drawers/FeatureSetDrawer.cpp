@@ -41,6 +41,9 @@ FeatureSetDrawer::~FeatureSetDrawer() {
 }
 
 void FeatureSetDrawer::prepare(PreparationParameters *parms){
+	if ( !isActive())
+		return;
+
 	SetDrawer::prepare(parms);
 	FeatureLayerDrawer *mapDrawer = (FeatureLayerDrawer *)parentDrawer;
 	vector<Feature *> features;
