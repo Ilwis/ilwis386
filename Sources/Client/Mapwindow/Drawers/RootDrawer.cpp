@@ -186,7 +186,7 @@ void RootDrawer::setViewPort(const RowCol& rc) {
 		}
 	}
 	pixArea = rc;
-	drawercontext->TakeContext(true);
+	drawercontext->TakeContext();
 	glViewport(0,0,rc.Col, rc.Row);
 	setProjection(cbZoom);
 	drawercontext->ReleaseContext();
@@ -224,7 +224,7 @@ void RootDrawer::setCoordBoundsView(const CoordBounds& _cb, bool overrule){
 		cbZoom = cbView;
 		setViewPoint(cbView.middle());
 		setEyePoint();
-		drawercontext->TakeContext(true);
+		drawercontext->TakeContext();
 		setProjection(cbView);
 		drawercontext->ReleaseContext();
 	} else {
@@ -239,7 +239,7 @@ void RootDrawer::setCoordBoundsZoom(const CoordBounds& cb) {
 	cbZoom = cb;
 	setViewPoint(cbZoom.middle());
 	setEyePoint();
-	drawercontext->TakeContext(true);
+	drawercontext->TakeContext();
 	setProjection(cb);
 	drawercontext->ReleaseContext();
 }
@@ -270,7 +270,7 @@ Coord RootDrawer::screenToWorld(const RowCol& rc) {
 	double posX, posY, posZ;
 	float winZ;
 
-	drawercontext->TakeContext(true);
+	drawercontext->TakeContext();
 
 	glGetDoublev( GL_MODELVIEW_MATRIX, modelview );
 	glGetDoublev( GL_PROJECTION_MATRIX, projection );
@@ -294,7 +294,7 @@ Coord RootDrawer::screenToWorld(const RowCol& rc) {
 
 RowCol RootDrawer::worldToScreen(const Coord& crd){
 	int vp[4];
-	drawercontext->TakeContext(true);
+	drawercontext->TakeContext();
 	glGetIntegerv(GL_VIEWPORT, vp);
 	drawercontext->ReleaseContext();
 	int x = vp[0] + crd.x * vp[2];
@@ -346,7 +346,7 @@ void RootDrawer::setProjection(const CoordBounds& cb) {
 }
 
 void RootDrawer::set3D(bool yesno) {
-	drawercontext->TakeContext(true);
+	drawercontext->TakeContext();
 
 	if ( yesno != threeD) {
 		threeD = yesno;
@@ -371,7 +371,7 @@ void RootDrawer::setViewPoint(const Coord& c){
 }
 void RootDrawer::setEyePoint(const Coord& c){
 	eyePoint = c;
-	drawercontext->TakeContext(true);
+	drawercontext->TakeContext();
 	setProjection(cbZoom);
 	drawercontext->ReleaseContext();
 }
