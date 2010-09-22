@@ -54,54 +54,51 @@ void RasterSetDrawer::prepare(PreparationParameters *pp){
 
 	BaseMapPtr *bmptr = ((AbstractMapDrawer*)getParentDrawer())->getBaseMap();
 	if (bmptr != 0) {
-		MapPtr* pmp = dynamic_cast<MapPtr*>(bmptr);
-		if (0 != pmp) {
-			mp.SetPointer(pmp);
-			// The following is from MapDrawer::MapDrawer
-			Domain _dm = mp->dm();
-			bool fImage = 0 != _dm->pdi();
-			if (fImage)
-				drm = drmIMAGE;
-			else if (mp->dm()->pdcol())
-				drm = drmCOLOR;
-			ValueRange vr = mp->vr();
-			if (mp->dm()->pdbool())
-				vr = ValueRange();
-			if (vr.fValid() || fImage) {
-				stretched = true;
-				if (!fImage && vr->vrr()) {
-					rrStretch = mp->rrPerc1(true);
-					if (rrStretch.rLo() >= rrStretch.rHi())
-						rrStretch = mp->rrMinMax();
-					if (rrStretch.rLo() >= rrStretch.rHi())
-						rrStretch = vr->rrMinMax();
-					riStretch.iLo() = (long)(rounding(rrStretch.rLo()));
-					riStretch.iHi() = (long)(rounding(rrStretch.rHi()));
-				} else {
-					riStretch = mp->riPerc1(true);
-					if (riStretch.iLo() >= riStretch.iHi())
-						riStretch = mp->riMinMax();
-					if (riStretch.iLo() >= riStretch.iHi())
-						if (fImage)
-							riStretch = RangeInt(0,255);
-						else if (vr.fValid())
-							riStretch = vr->riMinMax();
-						rrStretch.rLo() = doubleConv(riStretch.iLo());
-						rrStretch.rHi() = doubleConv(riStretch.iHi());
-				}
+		mp.SetPointer(bmptr);
+		// The following is from MapDrawer::MapDrawer
+		Domain _dm = mp->dm();
+		bool fImage = 0 != _dm->pdi();
+		if (fImage)
+			drm = drmIMAGE;
+		else if (mp->dm()->pdcol())
+			drm = drmCOLOR;
+		ValueRange vr = mp->vr();
+		if (mp->dm()->pdbool())
+			vr = ValueRange();
+		if (vr.fValid() || fImage) {
+			stretched = true;
+			if (!fImage && vr->vrr()) {
+				rrStretch = mp->rrPerc1(true);
+				if (rrStretch.rLo() >= rrStretch.rHi())
+					rrStretch = mp->rrMinMax();
+				if (rrStretch.rLo() >= rrStretch.rHi())
+					rrStretch = vr->rrMinMax();
+				riStretch.iLo() = (long)(rounding(rrStretch.rLo()));
+				riStretch.iHi() = (long)(rounding(rrStretch.rHi()));
+			} else {
+				riStretch = mp->riPerc1(true);
+				if (riStretch.iLo() >= riStretch.iHi())
+					riStretch = mp->riMinMax();
+				if (riStretch.iLo() >= riStretch.iHi())
+					if (fImage)
+						riStretch = RangeInt(0,255);
+					else if (vr.fValid())
+						riStretch = vr->riMinMax();
+					rrStretch.rLo() = doubleConv(riStretch.iLo());
+					rrStretch.rHi() = doubleConv(riStretch.iHi());
 			}
-			if (0 != _dm->pdid())
-				drm = drmMULTIPLE;
-			else if (0 != _dm->pdp())
-				drm = drmRPR;
-
-			String sStretchMethod;
-			ObjectInfo::ReadElement("Display", "Stretching", mp->fnObj, sStretchMethod);
-			if ("Linear" == sStretchMethod)
-				stretchMethod = smLINEAR;
-			else if ("Logarithmic" == sStretchMethod)
-				stretchMethod = smLOGARITHMIC;
 		}
+		if (0 != _dm->pdid())
+			drm = drmMULTIPLE;
+		else if (0 != _dm->pdp())
+			drm = drmRPR;
+
+		String sStretchMethod;
+		ObjectInfo::ReadElement("Display", "Stretching", mp->fnObj, sStretchMethod);
+		if ("Linear" == sStretchMethod)
+			stretchMethod = smLINEAR;
+		else if ("Logarithmic" == sStretchMethod)
+			stretchMethod = smLOGARITHMIC;
 	}
 }
 
