@@ -68,6 +68,7 @@ namespace ILWIS {
 		bool fStopThread;
 		DrawerContext * drawerContext;
 		CCriticalSection csChangeTexCreatorList;
+		CCriticalSection csThread;
 	};
 }
 

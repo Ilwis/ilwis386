@@ -70,8 +70,8 @@ TextureHeap::~TextureHeap()
 	{
 		fStopThread = true;
 		textureThread->ResumeThread();
-		while (fStopThread)
-			Sleep(200);
+		csThread.Lock(); // wait here til thread exits
+		csThread.Unlock();
 	}
 
 	ClearQueuedTextures();
@@ -149,6 +149,8 @@ UINT TextureHeap::GenerateTexturesInThread(LPVOID pParam)
 		return 1;
 	}
 
+	pObject->csThread.Lock();
+
 	while (!pObject->fStopThread)
 	{
 		pObject->csChangeTexCreatorList.Lock();
@@ -180,6 +182,7 @@ UINT TextureHeap::GenerateTexturesInThread(LPVOID pParam)
 	}
 
 	pObject->fStopThread = false;
+	pObject->csThread.Unlock();
 
 	return 0;
 }
