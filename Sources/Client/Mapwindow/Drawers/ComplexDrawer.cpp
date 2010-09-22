@@ -11,7 +11,6 @@
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h"
 #include "Client\Mapwindow\MapPaneView.h"
-#include "Client\Mapwindow\Drawers\DrawerContext.h"
 #include "Client\Mapwindow\Drawers\ZValueMaker.h"
 
 using namespace ILWIS;
@@ -128,9 +127,10 @@ String ComplexDrawer::getId() const{
 }
 
 void ComplexDrawer::prepare(PreparationParameters *parms){
-	// no general prepares here as for some prepare a local preparation is needed and doing 
-	// that on a general level (see e.g. rootdrawer) would not work correctly. Each drawer is when needed;
-	// responsible for its own preparation.
+	if ( parms->parentDrawer != 0)
+		parentDrawer = parms->parentDrawer;
+	if ( parms->rootDrawer !=0)
+		rootDrawer = (RootDrawer *)parms->rootDrawer;
 }
 
 String ComplexDrawer::addDrawer(NewDrawer *drw) {
@@ -293,8 +293,22 @@ void ComplexDrawer::prepareChildDrawers(PreparationParameters *parms) {
 HTREEITEM ComplexDrawer::make3D(bool yesno,LayerTreeView  *tv) {
 	threeD = yesno;
 	HTREEITEM hti = 0;
+	for(map<String,NewDrawer *>::iterator cur = preDrawers.begin(); cur != preDrawers.end(); ++cur) {
+		ComplexDrawer *pdrw = dynamic_cast<ComplexDrawer *>((*cur).second);
+		if ( pdrw) {
+			pdrw->getZMaker()->setThreeDPossible(yesno);
+			pdrw->make3D(yesno, tv);
+		}
+	}
 	for(int i = 0; i < drawers.size(); ++i) {
 		ComplexDrawer *pdrw = dynamic_cast<ComplexDrawer *>(drawers.at(i));
+		if ( pdrw) {
+			pdrw->getZMaker()->setThreeDPossible(yesno);
+			pdrw->make3D(yesno, tv);
+		}
+	}
+	for(map<String,NewDrawer *>::iterator cur =postDrawers.begin(); cur != postDrawers.end(); ++cur) {
+		ComplexDrawer *pdrw = dynamic_cast<ComplexDrawer *>((*cur).second);
 		if ( pdrw) {
 			pdrw->getZMaker()->setThreeDPossible(yesno);
 			pdrw->make3D(yesno, tv);

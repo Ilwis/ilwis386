@@ -47,7 +47,6 @@ $Header: /ILWIS 3.0/Main/ilwis.CPP 329   10-06-05 15:09 Retsios $
 #include "Client\MainWindow\CommandHandlerUI.h"
 #include "Client\MainWindow\ACTION.H"
 #include "Engine\Base\DataObjects\URL.h"
-#include "Client\ilwis.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Editors\Utils\BaseBar.h"
 #include "Client\Editors\Utils\sizecbar.h"
@@ -490,6 +489,8 @@ BOOL IlwisWinApp::InitInstance()
 		CloseLogoWindow();
 		lockMWCreated.Unlock();
 		commandUI->initModules();
+		svgContainer = new ILWIS::SVGLoader();
+		svgContainer->load();
 
 		if ( m_sCommand != "") {
 			Script::Exec(m_sCommand);
@@ -2397,7 +2398,7 @@ ILWIS::NewDrawer *IlwisWinApp::getDrawer(const String& type, const String& subty
 }
 
 ILWIS::NewDrawer *IlwisWinApp::getDrawer(const String& type, ILWIS::PreparationParameters *parms, ILWIS::DrawerParameters *c)  {
-	if ( parms->typeMapping.size() == 0)
+	if ( parms == 0 || parms->typeMapping.size() == 0)
 		return getDrawer(type,"Ilwis38",c);
 	map<String,String>::iterator item = parms->typeMapping.find(type);
 	String subType =  item == parms->typeMapping.end() ? "Ilwis38" : (*item).second;
@@ -2409,13 +2410,6 @@ void IlwisWinApp::addDrawer(const String& type, const String& subtype, DrawerCre
 }
 
 
-#ifdef BETA_VERSION
-bool IlwisWinApp::fCheckBeta(const CTime & tExpiryDate)
-//Behavior: "reports to the user what's going on, and returns true if the
-//user is allowed to run ILWIS, otherwise false"
-{
-	bool fReturn=true; // Be pessimistic
 
-	return fReturn;
-}
-#endif
+
+

@@ -257,11 +257,11 @@ void SimpleMapPaneView::OnDraw(CDC* cdc)
 	// CDC *dc = cdc == 0 ? GetDC() : cdc;
 	CDC *dc = GetDC(); // apparently the cdc can come with an invalid m_hDC handle (the reason is not properly understood yet, but the maps are not drawn)
 	MapCompositionDoc* mcd = GetDocument();
-	PreparationParameters pp(NewDrawer::ptINITOPENGL, dc);
+	PreparationParameters pp(NewDrawer::ptINITOPENGL, GetDC());
 	mcd->rootDrawer->prepare(&pp);
 	mcd->rootDrawer->getDrawerContext()->TakeContext(true);
 	mcd->rootDrawer->draw();
-	SwapBuffers(dc->m_hDC);
+	SwapBuffers(GetDC()->m_hDC);
 	mcd->rootDrawer->getDrawerContext()->ReleaseContext();
 }
 

@@ -342,10 +342,12 @@ void RootDrawer::setProjection(const CoordBounds& cb) {
 	} else {
 		glOrtho(cb.cMin.x,cb.cMax.x,cb.cMin.y,cb.cMax.y,-1,1);
 	}
+	
 }
 
 void RootDrawer::set3D(bool yesno) {
 	drawercontext->TakeContext(true);
+
 	if ( yesno != threeD) {
 		threeD = yesno;
 		setEyePoint();
@@ -384,6 +386,21 @@ double RootDrawer::getFakeZ() const {
 	return fakeZ;
 }
 
+void RootDrawer::debug() {
+	GLdouble m_projMatrix[16];
+	GLdouble m_modelMatrix[16];
+	GLint m_viewport[4]; // x,y,width,height
+	memset(m_projMatrix, 0, 16 * 8);
+	memset(m_modelMatrix, 0, 16 * 8);
+	memset(m_viewport, 0, 4 * 4);
+	// viewport
+
+	// get the matrices and the viewport
+	glGetDoublev(GL_MODELVIEW_MATRIX, m_modelMatrix);
+	glGetDoublev(GL_PROJECTION_MATRIX, m_projMatrix);
+	glGetIntegerv(GL_VIEWPORT, m_viewport);
+}
+
 //----------------------------------UI-------------------------------------
 HTREEITEM RootDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,parent,this,
@@ -393,8 +410,11 @@ HTREEITEM RootDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 
 void RootDrawer::SetthreeD(void *v, LayerTreeView *tv) {
 	bool value = *(bool *)(v);
+
 	set3D(value);
 	MapCompositionDoc* doc = tv->GetDocument();
+  
+
 	make3D(value,tv);
 	doc->mpvGetView()->Invalidate();
 }

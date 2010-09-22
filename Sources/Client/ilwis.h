@@ -75,6 +75,11 @@ enum CoordMessage {
 
 class CoordWithCoordSystem;
 
+namespace ILWIS {
+	class SVGElement;
+	class SVGLoader;
+}
+
 class IlwisWinApp: public CWinApp
 {
 public:
@@ -234,6 +239,7 @@ private:
 	COleTemplateServer otsMapComposition;
 	HWND hWndLogo;
 	static bool fShowHelpNumbers;
+	ILWIS::SVGLoader		*svgContainer;
 	
 	CWinThread       *thrDdeServer;
 	COMServerHandler *chCOMServerHandler;

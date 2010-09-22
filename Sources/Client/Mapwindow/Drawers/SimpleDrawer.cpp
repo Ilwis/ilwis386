@@ -48,6 +48,8 @@ String SimpleDrawer::getId() const{
 }
 
 void SimpleDrawer::prepare(PreparationParameters *parms){
+	if ( parms->parentDrawer != 0)
+		parentDrawer = parms->parentDrawer;
 	rootDrawer = parentDrawer->getRootDrawer();
 }
 

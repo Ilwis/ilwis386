@@ -50,6 +50,7 @@ namespace ILWIS {
 		void calcCanvas();
 		void addDataSource(void *);
 		void SetthreeD(void *v, LayerTreeView *tv);
+		void debug();
 
 		CoordBounds cbView;
 		CoordBounds cbZoom;

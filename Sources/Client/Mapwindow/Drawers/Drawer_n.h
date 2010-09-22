@@ -70,12 +70,14 @@ namespace ILWIS {
 
 	struct PreparationParameters {
 		PreparationParameters(const PreparationParameters* parms) :
-			type(parms->type),dc(parms->dc) {}
-		PreparationParameters(int t=1,CDC *_dc = 0) : type(t),dc(_dc) {} 
+			type(parms->type),dc(parms->dc),rootDrawer(0),parentDrawer(0) {}
+		PreparationParameters(int t=1,CDC *_dc = 0) : type(t),dc(_dc),rootDrawer(0),parentDrawer(0) {} 
 		int type;
 		CDC *dc;
 		CoordSystem csy;
 		map<String,String> typeMapping;
+		NewDrawer *rootDrawer;
+		NewDrawer *parentDrawer;
 	};
 
 }
