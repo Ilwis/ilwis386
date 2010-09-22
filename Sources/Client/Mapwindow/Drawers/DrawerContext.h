@@ -15,10 +15,9 @@ namespace ILWIS {
 		MapCompositionDoc * getDocument() const;
 		GLint getMaxTextureSize() const { return maxTextureSize; };
 
-		void TakeContext(bool urgent);
+		void TakeContext();
 		void ReleaseContext();
 		void InvalidateWindow();
-		bool fUrgentRequestWaiting; // intentionally public!! used in volatile* to abort texture generation in thread
 
 	private:
 		MapCompositionDoc *doc;

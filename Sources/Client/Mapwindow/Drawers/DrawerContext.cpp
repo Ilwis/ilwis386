@@ -7,7 +7,6 @@ using namespace ILWIS;
 DrawerContext::DrawerContext(MapCompositionDoc *d)
 : doc(d)
 , maxTextureSize(128)
-, fUrgentRequestWaiting(false)
 , fGLInitialized(false)
 , m_hdc(0)
 , m_hrc(0)
@@ -36,7 +35,7 @@ bool DrawerContext::initOpenGL(CDC *dc) {
 	m_hrc = wglCreateContext( m_hdc );    
 	m_wnd = dc->GetWindow();
 
-	TakeContext(true);
+	TakeContext();
 	glDisable(GL_DEPTH_TEST);
 	glClearColor(0.75,0.75,0.75,0.0);
 	glEnable(GL_TEXTURE_2D);
@@ -56,11 +55,9 @@ void DrawerContext::InvalidateWindow()
 		m_wnd->Invalidate(FALSE);
 }
 
-void DrawerContext::TakeContext(bool urgent)
+void DrawerContext::TakeContext()
 {
-	fUrgentRequestWaiting = urgent;
 	csOpenglContext.Lock();
-	fUrgentRequestWaiting = false;
 	wglMakeCurrent(m_hdc, m_hrc);
 }
 
@@ -75,7 +72,6 @@ DrawerContext::~DrawerContext() {
 }
 
 void DrawerContext::clear() {
-	fUrgentRequestWaiting = true;
 	csOpenglContext.Lock();
 
 	HGLRC hrc = ::wglGetCurrentContext();
