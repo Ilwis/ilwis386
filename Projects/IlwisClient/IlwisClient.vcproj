@@ -2670,7 +2670,15 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SVGContainer.cpp"
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SVGElements.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SVGElements.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SVGLoader.cpp"
 						>
 					</File>
 					<File
@@ -2774,7 +2782,7 @@
 							>
 						</File>
 						<File
-							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SVGContainer.h"
+							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SVGLoader.h"
 							>
 						</File>
 					</Filter>
