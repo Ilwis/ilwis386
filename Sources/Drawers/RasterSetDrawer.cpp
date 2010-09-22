@@ -13,8 +13,6 @@
 #include "Drawers\RasterSetDrawer.h"
 #include "Client\Mapwindow\Drawers\ZValueMaker.h"
 #include <GL/glu.h>
-
-#include "Client\Mapwindow\Drawers\AbstractObjectdrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
 #include "Texture.h"
