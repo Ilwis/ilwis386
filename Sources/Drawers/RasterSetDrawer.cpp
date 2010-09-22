@@ -224,11 +224,14 @@ void RasterSetDrawer::DisplayImagePortion(double x1, double y1, double x2, doubl
 	// if not, split the quad into 4 equal parts, and re-apply the procedure to each of the 4 quads
 	// if yes, calculate the quad and display it
 
-	boolean split = false;
+	boolean xSplit = false;
+	boolean ySplit = false;
 
-	if ((imageSizeX > 1 && imageSizeY > 1) && (imageSizeX / zoomFactor > data->maxTextureSize || imageSizeY / zoomFactor > data->maxTextureSize)) // imageSizeXY / zoomFactor is the required pixels of the quad
-		split = true;
-	if (split)
+	if ((imageSizeX > 1) && (imageSizeX / zoomFactor > data->maxTextureSize)) // imageSizeXY / zoomFactor is the required pixels of the quad
+		xSplit = true;
+	if ((imageSizeY > 1) && (imageSizeY / zoomFactor > data->maxTextureSize)) // imageSizeXY / zoomFactor is the required pixels of the quad
+		ySplit = true;
+	if (xSplit && ySplit)
 	{
 		double dx = (x2 - x1) / 2.0;
 		double dy = (y2 - y1) / 2.0;
@@ -242,6 +245,24 @@ void RasterSetDrawer::DisplayImagePortion(double x1, double y1, double x2, doubl
 		DisplayImagePortion(x1 + dx, y1 + dy, x2, y2, imageOffsetX + sizeX2, imageOffsetY + sizeY2, sizeX2, sizeY2);
 		// Q4
 		DisplayImagePortion(x1, y1 + dy, x1 + dx, y2, imageOffsetX, imageOffsetY + sizeY2, sizeX2, sizeY2);
+	}
+	else if (xSplit)
+	{
+		double dx = (x2 - x1) / 2.0;
+		int sizeX2 = imageSizeX / 2;
+		// Q1
+		DisplayImagePortion(x1, y1, x1 + dx, y2, imageOffsetX, imageOffsetY, sizeX2, imageSizeY);
+		// Q2
+		DisplayImagePortion(x1 + dx, y1, x2, y2, imageOffsetX + sizeX2, imageOffsetY, sizeX2, imageSizeY);
+	}
+	else if (ySplit)
+	{
+		double dy = (y2 - y1) / 2.0;
+		int sizeY2 = imageSizeY / 2;
+		// Q1
+		DisplayImagePortion(x1, y1, x2, y1 + dy, imageOffsetX, imageOffsetY, imageSizeX, sizeY2);
+		// Q2
+		DisplayImagePortion(x1, y1 + dy, x2, y2, imageOffsetX, imageOffsetY + sizeY2, imageSizeX, sizeY2);
 	}
 	else
 		DisplayTexture(x1, y1, x2, y2, imageOffsetX, imageOffsetY, imageSizeX, imageSizeY, zoomFactor);
