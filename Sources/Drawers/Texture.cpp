@@ -3,6 +3,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Client\Headers\formelementspch.h"
+#include "Client\MapWindow\Drawers\DrawerContext.h"
 #include "Texture.h"
 
 #ifdef _DEBUG
@@ -17,7 +18,7 @@ using namespace ILWIS;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-Texture::Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDrawer::DrawMethod drm, const long offsetX, const long offsetY, const long sizeX, const long sizeY, char * scrap_data_mipmap, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, volatile bool* fDrawStop)
+Texture::Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDrawer::DrawMethod drm, const long offsetX, const long offsetY, const long sizeX, const long sizeY, char * scrap_data_mipmap, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, DrawerContext * drawerContext, volatile bool* fDrawStop)
 : mp(mp)
 , drawColor(drawColor)
 , drm(drm)
@@ -30,7 +31,11 @@ Texture::Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDr
 {
 	fValue = 0 != mp->dm()->pdvi() || 0 != mp->dm()->pdvr();
 	fAttTable = false;
+	DrawTexture(offsetX, offsetY, sizeX, sizeY, zoomFactor, scrap_data_mipmap, fDrawStop);
+	if (*fDrawStop)
+		return;
 
+	drawerContext->TakeContext();
 	glGenTextures(1, &texture);
 	glBindTexture( GL_TEXTURE_2D, texture );
 	glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
@@ -39,13 +44,10 @@ Texture::Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDr
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
-	DrawTexture(offsetX, offsetY, sizeX, sizeY, zoomFactor, scrap_data_mipmap, fDrawStop);
-	if (*fDrawStop)
-		return;
-
 	glPixelStorei( GL_UNPACK_SKIP_PIXELS, 0);
 	glPixelStorei( GL_UNPACK_SKIP_ROWS, 0);
 	glTexImage2D( GL_TEXTURE_2D, 0, 4, sizeX / zoomFactor, sizeY / zoomFactor, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, scrap_data_mipmap);
+	drawerContext->ReleaseContext();
 	this->valid = true;
 }
 

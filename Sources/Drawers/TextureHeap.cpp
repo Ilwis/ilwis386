@@ -15,7 +15,7 @@ static char THIS_FILE[]=__FILE__;
 
 using namespace ILWIS;
 
-TextureCreator::TextureCreator(const Map & _mp, const DrawingColor * drawColor, const NewDrawer::DrawMethod drm, const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, char * scrap_data_mipmap, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor)
+TextureCreator::TextureCreator(const Map & _mp, const DrawingColor * drawColor, const NewDrawer::DrawMethod drm, const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, char * scrap_data_mipmap, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, DrawerContext * drawerContext, unsigned int zoomFactor)
 : mp(_mp)
 , drawColor(drawColor)
 , drm(drm)
@@ -23,6 +23,7 @@ TextureCreator::TextureCreator(const Map & _mp, const DrawingColor * drawColor, 
 , offsetY(offsetY)
 , sizeX(sizeX)
 , sizeY(sizeY)
+, drawerContext(drawerContext)
 , scrap_data_mipmap(scrap_data_mipmap)
 , xMin(xMin)
 , xMax(xMax)
@@ -39,7 +40,7 @@ TextureCreator::~TextureCreator()
 
 Texture * TextureCreator::CreateTexture(volatile bool * fDrawStop)
 {
-	return new Texture(mp, drawColor, drm, offsetX, offsetY, sizeX, sizeY, scrap_data_mipmap, xMin, yMin, xMax, yMax, zoomFactor, fDrawStop);
+	return new Texture(mp, drawColor, drm, offsetX, offsetY, sizeX, sizeY, scrap_data_mipmap, xMin, yMin, xMax, yMax, zoomFactor, drawerContext, fDrawStop);
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -55,6 +56,7 @@ TextureHeap::TextureHeap(const Map & _mp, const DrawingColor * drawColor, const 
 , drm(drm)
 , drawerContext(drawerContext)
 , textureThread(0)
+, fAbortTexGen(false)
 , fStopThread(false)
 {
 	for (int i = 0; i < 10000; ++i)
@@ -84,11 +86,15 @@ TextureHeap::~TextureHeap()
 
 void TextureHeap::ClearQueuedTextures()
 {
+	fAbortTexGen = true;
+	csChangeTexCreatorList.Lock(); // wait for TexGen thread to stop
+	fAbortTexGen = false;
 	while (readpos != writepos)
 	{
 		delete textureCreators[readpos];
 		readpos = (readpos + 1) % 1000;
 	}
+	csChangeTexCreatorList.Unlock();
 }
 
 Texture * TextureHeap::GetTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor)
@@ -125,7 +131,7 @@ void TextureHeap::GenerateTexture(const unsigned int offsetX, const unsigned int
 {
 	if (((writepos + 1) % 1000) != readpos)
 	{
-		textureCreators[writepos] = new TextureCreator(mp, drawColor, drm, offsetX, offsetY, sizeX, sizeY, scrap_data_mipmap, xMin, yMin, xMax, yMax, zoomFactor);
+		textureCreators[writepos] = new TextureCreator(mp, drawColor, drm, offsetX, offsetY, sizeX, sizeY, scrap_data_mipmap, xMin, yMin, xMax, yMax, drawerContext, zoomFactor);
 		writepos = (writepos + 1) % 1000;
 	}
 	if (!textureThread)
@@ -145,14 +151,13 @@ UINT TextureHeap::GenerateTexturesInThread(LPVOID pParam)
 
 	while (!pObject->fStopThread)
 	{
+		pObject->csChangeTexCreatorList.Lock();
 		if (pObject->readpos != pObject->writepos)
 		{
-			pObject->drawerContext->TakeContext(false);
-
-			while (!pObject->drawerContext->fUrgentRequestWaiting && !pObject->fStopThread && pObject->readpos != pObject->writepos)
+			while (!pObject->fAbortTexGen && !pObject->fStopThread && pObject->readpos != pObject->writepos)
 			{
 				clock_t start = clock();
-				Texture * tex = pObject->textureCreators[pObject->readpos]->CreateTexture(&pObject->drawerContext->fUrgentRequestWaiting);
+				Texture * tex = pObject->textureCreators[pObject->readpos]->CreateTexture(&pObject->fAbortTexGen);
 				clock_t end = clock();
 				double duration = 1000.0 * (double)(end - start) / CLOCKS_PER_SEC;
 				TRACE("Texture generated in %2.2f milliseconds;\n", duration);
@@ -166,10 +171,10 @@ UINT TextureHeap::GenerateTexturesInThread(LPVOID pParam)
 					delete tex;
 			}
 
-			pObject->drawerContext->ReleaseContext();
-			if (!pObject->fStopThread)
+			if (!pObject->fAbortTexGen && !pObject->fStopThread)
 				pObject->drawerContext->InvalidateWindow();
 		}
+		pObject->csChangeTexCreatorList.Unlock();
 		if (!pObject->fStopThread)
 			pObject->textureThread->SuspendThread(); // wait here, and dont consume CPU time either
 	}
