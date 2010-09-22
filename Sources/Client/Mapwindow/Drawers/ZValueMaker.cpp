@@ -15,7 +15,7 @@ void ZValueMaker::setDataSourceMap(const BaseMap& mp){
 	threeDPossible =  mp->dm()->dmt() != dmtVALUE ? false : true;
 	datasourcemap = mp;
 	table = Table();
-	range = mp->rrMinMax();
+	range = mp->dvrs().rrMinMax();
 	type = IlwisObject::iotObjectType(datasourcemap->fnObj);
 	self =  spatialsourcemap == datasourcemap;
 	offset = 0;

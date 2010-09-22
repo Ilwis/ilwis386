@@ -20,7 +20,7 @@ private:
 	void load(const FileName& fnView, const String& parenSection);
 
 	Coord activePoint;
-	vector<BaseMap> maps;
+	vector<NewDrawer *> drawers;
 	String sInfo;
 
 	bool hasText;

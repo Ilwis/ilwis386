@@ -5,6 +5,7 @@
 #include "Client\Mapwindow\Drawers\TextDrawer.h"
 #include "Client\Mapwindow\Drawers\MouseClickInfoDrawer.h" 
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
+#include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h"
@@ -33,11 +34,17 @@ void  MouseClickInfoDrawer::prepare(PreparationParameters *pp){
 	TextSetDrawer::prepare(pp);
 	sInfo = "";
 	if ( !activePoint.fUndef()) {
-		for(int i =0; i < maps.size(); ++i) {
-			BaseMap bm = maps[i];
-			vector<String> values = bm->vsValue(activePoint);
-			if ( values.size() > 0 && values[0] != sUNDEF)
-				sInfo += values[0];
+		for(int i =0; i < drawers.size(); ++i) {
+			NewDrawer *drw = drawers[i];
+			if ( drw->hasInfo() && drw->isActive()) {
+				AbstractMapDrawer *amdrw = dynamic_cast<AbstractMapDrawer *>(drw);
+				if ( amdrw) {
+					BaseMapPtr *bm = amdrw->getBaseMap();
+					vector<String> values = bm->vsValue(activePoint);
+					if ( values.size() > 0 && values[0] != sUNDEF)
+						sInfo += values[0];
+				}
+			}
 		}
 	}
 }
@@ -49,9 +56,9 @@ bool MouseClickInfoDrawer::draw(bool norecursion, const CoordBounds& cbArea) con
 }
 
 void MouseClickInfoDrawer::addDataSource(void *v) {
-	BaseMap *pbm = dynamic_cast<BaseMap *>((BaseMap *)v);
-	if ( pbm)
-		maps.push_back(*pbm);
+	NewDrawer *drw = dynamic_cast<NewDrawer *>((NewDrawer *)v);
+	if ( drw)
+		drawers.push_back(drw);
 }
 
 void MouseClickInfoDrawer::setActivePoint(const Coord& c) {

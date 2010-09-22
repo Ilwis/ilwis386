@@ -83,7 +83,7 @@ void AbstractMapDrawer::addDataSource(void *bmap,int options)
 			internalDomain = true;
 		MouseClickInfoDrawer *mid = (MouseClickInfoDrawer *)(rootdrawer)->getDrawer("MouseClickInfoDrawer");
 		if ( mid)
-			mid->addDataSource(&bm);
+			mid->addDataSource(this);
 	}
 }
 
