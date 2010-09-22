@@ -296,19 +296,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Drawers\SVGDrawers.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\SVGSetDrawer.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Drawers\Texture.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\Sources\Drawers\TextureHeap.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\Drawers\SVGDrawer.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\Drawers\SVGSetDrawer.cpp"
 				>
 			</File>
 		</Filter>
@@ -393,19 +393,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Drawers\SVGDrawers.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\SVGSetDrawer.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Drawers\Texture.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\Sources\Drawers\TextureHeap.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\Drawers\SVGDrawer.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\Drawers\SVGSetDrawer.h"
 				>
 			</File>
 		</Filter>
