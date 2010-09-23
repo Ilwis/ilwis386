@@ -20,6 +20,7 @@
 #include "Drawers\FeatureLayerDrawer.h"
 #include "Drawers\SetDrawer.h"
 #include "Drawers\FeatureSetDrawer.h"
+#include "Drawers\RasterSetDrawer.h"
 #include "Drawers\AnimationDrawer.h"
 #include "Client\Mapwindow\Drawers\ZValueMaker.h"
 
@@ -32,7 +33,7 @@ ILWIS::NewDrawer *createAnimationDrawer(DrawerParameters *parms) {
 }
 
 AnimationDrawer::AnimationDrawer(DrawerParameters *parms) : 
-	ComplexDrawer(parms,"AnimationDrawer"),
+	AbstractMapDrawer(parms,"AnimationDrawer"),
 	timerid(iUNDEF),
 	interval(2.0),
 	datasource(0),
@@ -58,40 +59,72 @@ String AnimationDrawer::description() const {
 }
 
 void AnimationDrawer::prepare(PreparationParameters *pp){
-	ComplexDrawer::prepare(pp);
+	AbstractMapDrawer::prepare(pp);
 	if ( sourceType == sotFEATURE ) {
-			if ( pp->type & NewDrawer::ptGEOMETRY) {
-				BaseMap basemap((*datasource)->fnObj);
-				setName(basemap->sName());
-				ILWIS::DrawerParameters parms(getRootDrawer(), getRootDrawer());
-				if ( drawers.size() > 0) {
-					clear();
-				}
-				featurelayer = (FeatureLayerDrawer *)IlwWinApp()->getDrawer("FeatureLayerDrawer", "Ilwis38", &parms);
-				featurelayer->setActive(true);
-				featurelayer->addDataSource(&basemap);
-				if ( basemap->fTblAtt()) {
-					for(int i = 0; i< names.size(); ++i) {
-						PreparationParameters parms(NewDrawer::ptGEOMETRY | NewDrawer::ptANIMATION);
-						featurelayer->prepare(&parms);
-					}
-					vector<NewDrawer *> allDrawers;
-					featurelayer->getDrawers(allDrawers);
-					for(int i=0; i < allDrawers.size(); ++i) {
-						FeatureSetDrawer *fset = (FeatureSetDrawer *)allDrawers.at(i);
-						fset->setActive(i == 0 ? true : false);
-						fset->getZMaker()->setTable(basemap->tblAtt(), names.at(i));
-						fset->getZMaker()->setThreeDPossible(true);
-					}
-				}
-				addDrawer(featurelayer);
-
-			} if ( pp->type & NewDrawer::pt3D) {
-				for(int i=0; i < drawers.size(); ++i)
-					drawers.at(i)->prepare(pp);
+		if ( pp->type & NewDrawer::ptGEOMETRY) {
+			BaseMap basemap((*datasource)->fnObj);
+			setName(basemap->sName());
+			ILWIS::DrawerParameters parms(getRootDrawer(), getRootDrawer());
+			if ( drawers.size() > 0) {
+				clear();
 			}
+			featurelayer = (FeatureLayerDrawer *)IlwWinApp()->getDrawer("FeatureLayerDrawer", "Ilwis38", &parms);
+			featurelayer->setActive(true);
+			featurelayer->addDataSource(&basemap);
+			if ( basemap->fTblAtt()) {
+				for(int i = 0; i< names.size(); ++i) {
+					PreparationParameters parms(NewDrawer::ptGEOMETRY | NewDrawer::ptANIMATION);
+					featurelayer->prepare(&parms);
+				}
+				vector<NewDrawer *> allDrawers;
+				featurelayer->getDrawers(allDrawers);
+				for(int i=0; i < allDrawers.size(); ++i) {
+					FeatureSetDrawer *fset = (FeatureSetDrawer *)allDrawers.at(i);
+					fset->setActive(i == 0 ? true : false);
+					fset->getZMaker()->setTable(basemap->tblAtt(), names.at(i));
+					fset->getZMaker()->setThreeDPossible(true);
+				}
+			}
+			addDrawer(featurelayer);
+
+		} 
+	}
+	if ( sourceType == sotMAPLIST) {
+		if ( pp->type & NewDrawer::ptGEOMETRY) {
+			MapList mlist((*datasource)->fnObj);
+			setName(mlist->sName());
+			ILWIS::DrawerParameters parms(getRootDrawer(), getRootDrawer());
+			if ( drawers.size() > 0) {
+				clear();
+			}
+			for(int i = 0; i < mlist->iSize(); ++i) {
+				ILWIS::DrawerParameters parms(getRootDrawer(), this);
+				Map mp = mlist->map(i);
+				RasterSetDrawer *rasterset = (RasterSetDrawer *)IlwWinApp()->getDrawer("RasterSetDrawer", "Ilwis38", &parms); 
+				addSetDrawer(mp,pp,rasterset);
+				rasterset->setActive(i == 0 ? true : false);
+			}
+		}
+	}
+	if ( pp->type & NewDrawer::pt3D) {
+		for(int i=0; i < drawers.size(); ++i)
+			drawers.at(i)->prepare(pp);
 	}
 
+}
+
+void AnimationDrawer::addSetDrawer(const BaseMap& basemap,PreparationParameters *pp,SetDrawer *rsd, const String& name) {
+	PreparationParameters fp((int)pp->type | NewDrawer::ptANIMATION, 0);
+	fp.rootDrawer = getRootDrawer();
+	fp.parentDrawer = this;
+	fp.csy = basemap->cs();
+	rsd->setName(name);
+	rsd->setRepresentation(basemap->dm()->rpr()); //  default choice
+	rsd->getZMaker()->setSpatialSourceMap(basemap);
+	rsd->getZMaker()->setDataSourceMap(basemap);
+	rsd->addDataSource(basemap.ptr());
+	rsd->prepare(&fp);
+	addDrawer(rsd);
 }
 
 void AnimationDrawer::addDataSource(void *data, int options){
@@ -106,32 +139,29 @@ void AnimationDrawer::addDataSource(void *data, int options){
 		}
 		if ( type == IlwisObject::iotMAPLIST) {
 			sourceType = sotMAPLIST;
+			MapList mlist((*datasource)->fnObj);
+			AbstractMapDrawer::addDataSource((void *)&(mlist->map(0)));
 		}
 	}
 
 }
 
 HTREEITEM AnimationDrawer::configure(LayerTreeView  *tv, HTREEITEM displayOptionsLastItem){
-	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,TVI_ROOT,this, (DisplayOptionItemFunc)&AnimationDrawer::animationControl);
-				
-	HTREEITEM after = tv->GetTreeCtrl().GetParentItem(displayOptionsLastItem);
-	HTREEITEM htiAnimation = InsertItem(description(),"Animation",item, isActive(), after); 
-
-	ComplexDrawer::configure(tv,htiAnimation);
-	DisplayOptionTreeItem *item2 = new DisplayOptionTreeItem(tv,htiAnimation,this,
+	ComplexDrawer::configure(tv,displayOptionsLastItem);
+	DisplayOptionTreeItem *item2 = new DisplayOptionTreeItem(tv,displayOptionsLastItem,this,
 					0,
 					(DisplayOptionItemFunc)&AnimationDrawer::animationTiming);
 	InsertItem("Timing","History",item2);
-	item2 = new DisplayOptionTreeItem(tv,htiAnimation,this,
+	item2 = new DisplayOptionTreeItem(tv,displayOptionsLastItem,this,
 					0,
 					(DisplayOptionItemFunc)&AnimationDrawer::animationSourceUsage);
 	InsertItem("Source usage",".mpv",item2);
-	return htiAnimation;
+	return displayOptionsLastItem;
 
 }
 
 bool AnimationDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
-	ComplexDrawer::draw(norecursion, cbArea);
+	AbstractMapDrawer::draw(norecursion, cbArea);
 	/*if ( featurelayer)
 		featurelayer->draw(norecursion, cbArea);*/
 	return true;
@@ -162,8 +192,25 @@ void AnimationDrawer::timedEvent(UINT _timerid) {
 				}
 			}
 		}
+		if ( sourceType == sotMAPLIST) {
+			MapList mlist;
+			mlist.SetPointer(datasource->pointer());
+			if ( mlist->iSize() > 0 && index < mlist->iSize() - 1) {
+				getDrawer(index)->setActive(false);
+				getDrawer(++index)->setActive(true);
+			} else {
+				if (loop) {
+					getDrawer(index)->setActive(false);
+					index = 0;
+				}
+			}
+		}
 		getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->Invalidate();
 	}
+}
+
+String AnimationDrawer::iconName(const String& subtype) const {
+	return "Animation";
 }
 
 //---------------------------------------------------------

@@ -5,7 +5,7 @@ class MultiColumnSelector;
 ILWIS::NewDrawer *createAnimationDrawer(ILWIS::DrawerParameters *parms);
 namespace ILWIS{
 
-	class _export AnimationDrawer : public ComplexDrawer {
+	class _export AnimationDrawer : public AbstractMapDrawer {
 		friend class AnimationTiming;
 		friend class AnimationSourceUsage;
 		friend class AnimationControl;
@@ -21,6 +21,7 @@ namespace ILWIS{
 		
 	protected:
 		enum SourceType{sotUNKNOWN, sotFEATURE, sotMAPLIST, sotOBJECTCOLLECTION};
+		virtual String iconName(const String& subtype="?") const;
 		void animationTiming(CWnd *w);
 		void animationControl(CWnd *w);
 		void animationSourceUsage(CWnd *parent);
@@ -33,6 +34,8 @@ namespace ILWIS{
 		static int timerIdCounter;
 		int index;
 		bool loop;
+
+		void addSetDrawer(const BaseMap& basemap, ILWIS::PreparationParameters *pp, ILWIS::SetDrawer *rsd, const String& name="");
 	};
 
 	class AnimationTiming: public DisplayOptionsForm
