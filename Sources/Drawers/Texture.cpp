@@ -46,7 +46,7 @@ Texture::Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDr
 
 	glPixelStorei( GL_UNPACK_SKIP_PIXELS, 0);
 	glPixelStorei( GL_UNPACK_SKIP_ROWS, 0);
-	glTexImage2D( GL_TEXTURE_2D, 0, 4, sizeX / zoomFactor, sizeY / zoomFactor, 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, scrap_data_mipmap);
+	glTexImage2D( GL_TEXTURE_2D, 0, 4, sizeX / zoomFactor, sizeY / zoomFactor, 0, GL_RGBA, GL_UNSIGNED_BYTE, scrap_data_mipmap);
 	drawerContext->ReleaseContext();
 	this->valid = true;
 }
@@ -111,20 +111,14 @@ void Texture::ConvLine(LongBuf& buf, const int iLine, const long texSizeX, char 
 {
 	drawColor->clrRaw(buf, drm);
 	long iLen = buf.iSize();
+	long * inBuf = buf.buf();
 	char *c = &outbuf[iLine * texSizeX * 4];
-	for (long i = 0; i < iLen; ++i)
-		if (iUNDEF == buf[i]) {
-			*c++ = 0;
-			*c++ = 0;
-			*c++ = 0;
-			*c++ = (char)0; // alpha = 0
-		} else {
-			Color col (buf[i]);
-			*c++ = col.blue();
-			*c++ = col.green();
-			*c++ = col.red();
-			*c++ = (char)255; // alpha = max
-		}
+	memcpy(c, inBuf, iLen * 4);
+	c += 3; // point to the last byte of the Color struct
+	for (long i = 0; i < iLen; ++i) {
+		(iUNDEF == inBuf[i])?*c&=0:*c|=255; // alpha = 0 or alpha = max
+		c += 4;
+	}
 }
 
 /*
@@ -153,20 +147,14 @@ void Texture::ConvLine(const RealBuf& buf, const int iLine, const long texSizeX,
 	long iLen = buf.iSize();
 	LongBuf bufCol (iLen);
 	drawColor->clrVal(buf, bufCol);
+	long * inBuf = bufCol.buf();
 	char *c = &outbuf[iLine * texSizeX * 4];
-	for (long i = 0; i < iLen; ++i)
-		if (rUNDEF == buf[i]) {
-			*c++ = 0;
-			*c++ = 0;
-			*c++ = 0;
-			*c++ = (char)0; // alpha = 0
-		} else {
-			Color col (bufCol[i]);
-			*c++ = col.blue();
-			*c++ = col.green();
-			*c++ = col.red();
-			*c++ = (char)255; // alpha = max
-		}
+	memcpy(c, inBuf, iLen * 4);
+	c += 3; // point to the last byte of the Color struct
+	for (long i = 0; i < iLen; ++i) {
+		(iUNDEF == inBuf[i])?*c&=0:*c|=255; // alpha = 0 or alpha = max
+		c += 4;
+	}
 }
 
 void Texture::DrawTexture(long offsetX, long offsetY, long texSizeX, long texSizeY, unsigned int zoomFactor, char * outbuf, volatile bool* fDrawStop)
