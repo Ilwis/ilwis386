@@ -164,11 +164,11 @@ bool RasterSetDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 
 void RasterSetDrawer::DisplayImagePortion(double x1, double y1, double x2, double y2, unsigned int imageOffsetX, unsigned int imageOffsetY, unsigned int imageSizeX, unsigned int imageSizeY) const
 {
-	// if quad describes the "added" portion of the map, do not display
+	// if patch describes the "added" portion of the map, do not display
 	if (x1 > data->cb.MaxX() || y1 < data->cb.MinY())
 		return;
 
-	// if quad is entirely outside viewport, do not display
+	// if patch is entirely outside viewport, do not display
 
 	// for repetitive calls to get the feedback buffer
 	GLfloat feedbackBuffer [2];
@@ -201,35 +201,26 @@ void RasterSetDrawer::DisplayImagePortion(double x1, double y1, double x2, doubl
 	GLdouble m_winy[4];
 	GLdouble m_winz[4];
 
-	// project the quad to 2D
+	// project the patch to 2D
 	gluProject(x1, y1, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[0], &m_winy[0], &m_winz[0]);
 	gluProject(x1, y2, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[1], &m_winy[1], &m_winz[1]);
 	gluProject(x2, y2, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[2], &m_winy[2], &m_winz[2]);
 	gluProject(x2, y1, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[3], &m_winy[3], &m_winz[3]);
 
-	double zoom = getMinZoom(imageSizeX, imageSizeY, m_winx, m_winy); // the minimum zoomout-factor, indicating that it is necessary to plot the quad more accurately
+	double zoom = getMinZoom(imageSizeX, imageSizeY, m_winx, m_winy); // the minimum zoomout-factor, indicating that it is necessary to plot the patch more accurately
 
 	double log2zoom = log(zoom)/log(2.0);
 	log2zoom = floor(log2zoom);
 	const unsigned int zoomFactor = min(64, max(1, pow(2, log2zoom)));
 
-	// split the visible portion of the image into a number of quads, depending on the accuracy needed
-
-	// Divide the image into quads, as follows:
-	// can we display the image with one quad?
-	// // no, if the texture would be too small or too big
-	// // yes, if the image is zoomed out so far that splitting the quad is unnecessary
-	// // what is the required resolution of the quad?
-	// // if the current quad meets the required resolution, do not split it, unless the texture would be too big
-	// if not, split the quad into 4 equal parts, and re-apply the procedure to each of the 4 quads
-	// if yes, calculate the quad and display it
+	// split the visible portion of the image into a number of patches, depending on the accuracy needed
 
 	boolean xSplit = false;
 	boolean ySplit = false;
 
-	if ((imageSizeX > 1) && (imageSizeX / zoomFactor > data->maxTextureSize)) // imageSizeXY / zoomFactor is the required pixels of the quad
+	if ((imageSizeX > 1) && (imageSizeX / zoomFactor > data->maxTextureSize)) // imageSizeX / zoomFactor is the required pixels of the patch in the x-direction
 		xSplit = true;
-	if ((imageSizeY > 1) && (imageSizeY / zoomFactor > data->maxTextureSize)) // imageSizeXY / zoomFactor is the required pixels of the quad
+	if ((imageSizeY > 1) && (imageSizeY / zoomFactor > data->maxTextureSize)) // imageSizeY / zoomFactor is the required pixels of the patch in the y-direction
 		ySplit = true;
 	if (xSplit && ySplit)
 	{
