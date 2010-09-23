@@ -109,14 +109,14 @@ void Texture::ConvLine(LongBuf& buf, int iLine, char * outbuf)
 
 void Texture::ConvLine(LongBuf& buf, const int iLine, const long texSizeX, char * outbuf)
 {
-	drawColor->clrRaw(buf, drm);
 	long iLen = buf.iSize();
-	long * inBuf = buf.buf();
+	long * ptrBuf = buf.buf();
+	drawColor->clrRaw(ptrBuf, iLen, drm);
 	char *c = &outbuf[iLine * texSizeX * 4];
-	memcpy(c, inBuf, iLen * 4);
+	memcpy(c, ptrBuf, iLen * 4);
 	c += 3; // point to the last byte of the Color struct
 	for (long i = 0; i < iLen; ++i) {
-		(iUNDEF == inBuf[i])?*c&=0:*c|=255; // alpha = 0 or alpha = max
+		(iUNDEF == ptrBuf[i])?*c&=0:*c|=255; // alpha = 0 or alpha = max
 		c += 4;
 	}
 }
@@ -145,14 +145,14 @@ void Texture::ConvLine(const RealBuf& buf, int iLine, char * outbuf)
 void Texture::ConvLine(const RealBuf& buf, const int iLine, const long texSizeX, char * outbuf)
 {
 	long iLen = buf.iSize();
-	LongBuf bufCol (iLen);
-	drawColor->clrVal(buf, bufCol);
-	long * inBuf = bufCol.buf();
+	LongBuf bufColor (iLen);
+	long * ptrBufColor = bufColor.buf();
+	drawColor->clrVal(buf.buf(), iLen, ptrBufColor);
 	char *c = &outbuf[iLine * texSizeX * 4];
-	memcpy(c, inBuf, iLen * 4);
+	memcpy(c, ptrBufColor, iLen * 4);
 	c += 3; // point to the last byte of the Color struct
 	for (long i = 0; i < iLen; ++i) {
-		(iUNDEF == inBuf[i])?*c&=0:*c|=255; // alpha = 0 or alpha = max
+		(iUNDEF == ptrBufColor[i])?*c&=0:*c|=255; // alpha = 0 or alpha = max
 		c += 4;
 	}
 }

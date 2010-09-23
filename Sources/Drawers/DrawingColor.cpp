@@ -127,12 +127,11 @@ Color DrawingColor::clrRaw(long iRaw, NewDrawer::DrawMethod drm) const
 		return cRet;//.clrDraw(gamma);
 }
 
-void DrawingColor::clrVal(const RealBuf & buf, LongBuf & bufOut) const
+void DrawingColor::clrVal(const double * buf, long iLen, long * bufOut) const
 {
 	Representation rpr = drw->getRepresentation();
 	if (!rpr.fValid())
 		return;
-	long iLen = buf.iSize();
 	if (drw->isStretched()) {
 		switch (drw->getStretchMethod())
 		{
@@ -161,9 +160,8 @@ void DrawingColor::clrVal(const RealBuf & buf, LongBuf & bufOut) const
 	}
 }
 
-void DrawingColor::clrRaw(LongBuf & buf, NewDrawer::DrawMethod drm) const
+void DrawingColor::clrRaw(long * buf, long iLen, NewDrawer::DrawMethod drm) const
 {
-	long iLen = buf.iSize();
 	switch (drm) {
 	case NewDrawer::drmRPR:
 		{
