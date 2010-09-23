@@ -61,11 +61,14 @@ void RasterLayerDrawer::prepare(PreparationParameters *pp){
 
 void RasterLayerDrawer::addSetDrawer(const BaseMap& basemap,PreparationParameters *pp,SetDrawer *rsd, const String& name) {
 	PreparationParameters fp((int)pp->type, 0);
+	fp.rootDrawer = getRootDrawer();
+	fp.parentDrawer = this;
 	fp.csy = basemap->cs();
 	rsd->setName(name);
 	rsd->setRepresentation(basemap->dm()->rpr()); //  default choice
 	rsd->getZMaker()->setSpatialSourceMap(basemap);
 	rsd->getZMaker()->setDataSourceMap(basemap);
+	rsd->addDataSource(basemap.ptr());
 	rsd->prepare(&fp);
 	addDrawer(rsd);
 }
