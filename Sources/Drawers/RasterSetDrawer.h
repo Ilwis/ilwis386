@@ -37,6 +37,7 @@ namespace ILWIS{
 		bool draw(bool norecursion , const CoordBounds& cbArea) const;
 		
 	protected:
+		Map rastermap;
 
 	private:
 
