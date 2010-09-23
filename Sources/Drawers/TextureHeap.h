@@ -56,7 +56,8 @@ namespace ILWIS {
 		Texture * GenerateNextTexture(bool fInThread);
 		//vector<Texture*> textures;
 		Texture* textures [10000];
-		TextureCreator * textureCreators [1000];
+		static const int BUF_SIZE = 100;
+		TextureCreator * textureCreators [BUF_SIZE];
 		const Map mp;
 		const DrawingColor * drawColor;
 		const NewDrawer::DrawMethod drm;

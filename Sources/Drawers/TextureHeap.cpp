@@ -92,7 +92,7 @@ void TextureHeap::ClearQueuedTextures()
 	while (readpos != writepos)
 	{
 		delete textureCreators[readpos];
-		readpos = (readpos + 1) % 1000;
+		readpos = (readpos + 1) % BUF_SIZE;
 	}
 	csChangeTexCreatorList.Unlock();
 }
@@ -132,10 +132,10 @@ Texture * TextureHeap::GetTexture(const unsigned int offsetX, const unsigned int
 
 Texture * TextureHeap::GenerateTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, bool fInThread)
 {
-	if (((writepos + 1) % 1000) != readpos)
+	if (((writepos + 1) % BUF_SIZE) != readpos)
 	{
 		textureCreators[writepos] = new TextureCreator(mp, drawColor, drm, offsetX, offsetY, sizeX, sizeY, scrap_data_mipmap, xMin, yMin, xMax, yMax, drawerContext, zoomFactor);
-		writepos = (writepos + 1) % 1000;
+		writepos = (writepos + 1) % BUF_SIZE;
 	}
 	if (fInThread) {
 		if (!textureThread)
@@ -158,7 +158,7 @@ Texture * TextureHeap::GenerateNextTexture(bool fInThread)
 		textures[texturesArraySize++] = tex;
 		delete textureCreators[readpos];
 		textureCreators[readpos] = 0;
-		readpos = (readpos + 1) % 1000;
+		readpos = (readpos + 1) % BUF_SIZE;
 	} else {
 		delete tex;
 		tex = 0;
