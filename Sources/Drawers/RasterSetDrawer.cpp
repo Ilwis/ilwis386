@@ -25,11 +25,11 @@ ILWIS::NewDrawer *createRasterSetDrawer(DrawerParameters *parms) {
 }
 
 RasterSetDrawer::RasterSetDrawer(DrawerParameters *parms) : 
-	SetDrawer(parms,"RasterSetDrawer")
-	, data(new RasterSetData())
+SetDrawer(parms,"RasterSetDrawer")
+, data(new RasterSetData())
 {
-//	setTransparency(1); // default
-//	setDrawMethod(drmNOTSET); // default
+	//	setTransparency(1); // default
+	//	setDrawMethod(drmNOTSET); // default
 }
 
 RasterSetDrawer::~RasterSetDrawer(){
@@ -52,54 +52,54 @@ void RasterSetDrawer::prepare(PreparationParameters *pp){
 	riStretch = RangeInt(0,255);
 	rrStretch = RangeReal(0,100);
 
-	BaseMapPtr *bmptr = ((AbstractMapDrawer*)getParentDrawer())->getBaseMap();
-	if (bmptr != 0) {
-		mp.SetPointer(bmptr);
+	//BaseMapPtr *bmptr = ((AbstractMapDrawer*)getParentDrawer())->getBaseMap();
+	if (rastermap.fValid() ) {
 		// The following is from MapDrawer::MapDrawer
-		Domain _dm = mp->dm();
+		Domain _dm = rastermap->dm();
 		bool fImage = 0 != _dm->pdi();
 		if (fImage)
 			drm = drmIMAGE;
-		else if (mp->dm()->pdcol())
+		else if (rastermap->dm()->pdcol())
 			drm = drmCOLOR;
-		ValueRange vr = mp->vr();
-		if (mp->dm()->pdbool())
+		ValueRange vr = rastermap->vr();
+		if (rastermap->dm()->pdbool())
 			vr = ValueRange();
 		if (vr.fValid() || fImage) {
 			stretched = true;
 			if (!fImage && vr->vrr()) {
-				rrStretch = mp->rrPerc1(true);
+				rrStretch = rastermap->rrPerc1(true);
 				if (rrStretch.rLo() >= rrStretch.rHi())
-					rrStretch = mp->rrMinMax();
+					rrStretch = rastermap->rrMinMax();
 				if (rrStretch.rLo() >= rrStretch.rHi())
 					rrStretch = vr->rrMinMax();
 				riStretch.iLo() = (long)(rounding(rrStretch.rLo()));
 				riStretch.iHi() = (long)(rounding(rrStretch.rHi()));
 			} else {
-				riStretch = mp->riPerc1(true);
+				riStretch = rastermap->riPerc1(true);
 				if (riStretch.iLo() >= riStretch.iHi())
-					riStretch = mp->riMinMax();
+					riStretch = rastermap->riMinMax();
 				if (riStretch.iLo() >= riStretch.iHi())
 					if (fImage)
 						riStretch = RangeInt(0,255);
 					else if (vr.fValid())
 						riStretch = vr->riMinMax();
-					rrStretch.rLo() = doubleConv(riStretch.iLo());
-					rrStretch.rHi() = doubleConv(riStretch.iHi());
+				rrStretch.rLo() = doubleConv(riStretch.iLo());
+				rrStretch.rHi() = doubleConv(riStretch.iHi());
 			}
 		}
 		if (0 != _dm->pdid())
 			drm = drmMULTIPLE;
 		else if (0 != _dm->pdp())
 			drm = drmRPR;
-
-		String sStretchMethod;
-		ObjectInfo::ReadElement("Display", "Stretching", mp->fnObj, sStretchMethod);
-		if ("Linear" == sStretchMethod)
-			stretchMethod = smLINEAR;
-		else if ("Logarithmic" == sStretchMethod)
-			stretchMethod = smLOGARITHMIC;
 	}
+
+	String sStretchMethod;
+	ObjectInfo::ReadElement("Display", "Stretching", mp->fnObj, sStretchMethod);
+	if ("Linear" == sStretchMethod)
+		stretchMethod = smLINEAR;
+	else if ("Logarithmic" == sStretchMethod)
+		stretchMethod = smLOGARITHMIC;
+
 }
 
 void RasterSetDrawer::init() const
@@ -125,6 +125,8 @@ void RasterSetDrawer::init() const
 }
 
 void RasterSetDrawer::addDataSource(void *bmap, int options){
+	BaseMapPtr *ptr =  (BaseMapPtr *)bmap;
+	mp.SetPointer(ptr);
 }
 
 HTREEITEM RasterSetDrawer::configure(LayerTreeView  *tv, HTREEITEM parent){
@@ -158,7 +160,7 @@ bool RasterSetDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 	minY = maxY + (minY - maxY) * (double)height / (double)data->imageHeight;
 
 	DisplayImagePortion(minX, maxY, maxX, minY, 0, 0, width, height);
-	
+
 	return true;
 }
 
@@ -179,7 +181,7 @@ void RasterSetDrawer::DisplayImagePortion(double x1, double y1, double x2, doubl
 	// viewport
 	GLint m_viewport[4]; // x,y,width,height
 
-		// get the matrices and the viewport
+	// get the matrices and the viewport
 	glGetDoublev(GL_MODELVIEW_MATRIX, m_modelMatrix);
 	glGetDoublev(GL_PROJECTION_MATRIX, m_projMatrix);
 	glGetIntegerv(GL_VIEWPORT, m_viewport);
@@ -201,7 +203,7 @@ void RasterSetDrawer::DisplayImagePortion(double x1, double y1, double x2, doubl
 	GLdouble m_winy[4];
 	GLdouble m_winz[4];
 
-		// project the quad to 2D
+	// project the quad to 2D
 	gluProject(x1, y1, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[0], &m_winy[0], &m_winz[0]);
 	gluProject(x1, y2, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[1], &m_winy[1], &m_winz[1]);
 	gluProject(x2, y2, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[2], &m_winy[2], &m_winz[2]);
@@ -270,32 +272,32 @@ void RasterSetDrawer::DisplayImagePortion(double x1, double y1, double x2, doubl
 
 void RasterSetDrawer::DisplayTexture(double x1, double y1, double x2, double y2, unsigned int imageOffsetX, unsigned int imageOffsetY, unsigned int imageSizeX, unsigned int imageSizeY, unsigned int zoomFactor) const
 {
-		Texture* tex = data->textureHeap->GetTexture(imageOffsetX, imageOffsetY, imageSizeX, imageSizeY, x1, y1, x2, y2, zoomFactor);
+	Texture* tex = data->textureHeap->GetTexture(imageOffsetX, imageOffsetY, imageSizeX, imageSizeY, x1, y1, x2, y2, zoomFactor);
 
-		if (tex != 0)
-		{
+	if (tex != 0)
+	{
 
-			// avoid plotting the "added" portion of the map
-			x2 = min(x2, data->cb.MaxX());
-			y2 = max(y2, data->cb.MinY());
+		// avoid plotting the "added" portion of the map
+		x2 = min(x2, data->cb.MaxX());
+		y2 = max(y2, data->cb.MinY());
 
-			// make the quad
-			glBegin (GL_QUADS);
+		// make the quad
+		glBegin (GL_QUADS);
 
-			tex->TexCoord2d(x1, y1);
-			glVertex3d(x1, y1, 0.0);
+		tex->TexCoord2d(x1, y1);
+		glVertex3d(x1, y1, 0.0);
 
-			tex->TexCoord2d(x2, y1);
-			glVertex3d( x2, y1, 0.0);
+		tex->TexCoord2d(x2, y1);
+		glVertex3d( x2, y1, 0.0);
 
-			tex->TexCoord2d(x2, y2);
-			glVertex3d( x2, y2, 0.0);
+		tex->TexCoord2d(x2, y2);
+		glVertex3d( x2, y2, 0.0);
 
-			tex->TexCoord2d(x1, y2);
-			glVertex3d(x1, y2, 0.0);
+		tex->TexCoord2d(x1, y2);
+		glVertex3d(x1, y2, 0.0);
 
-			glEnd();
-		}
+		glEnd();
+	}
 }
 
 double RasterSetDrawer::getMinZoom(unsigned int imageSizeX, unsigned int imageSizeY, GLdouble * m_winx, GLdouble * m_winy) const
