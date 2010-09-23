@@ -188,8 +188,7 @@ void Texture::DrawTexture(long offsetX, long offsetY, long texSizeX, long texSiz
 		if (fRealMap) 
 		{
 			RealBuf bufIn(sizeX);
-			for (int i = 0; i < bufIn.iSize(); ++i)  // to prevent NAN values in bufIn.
-				bufIn[i]= 0;
+			memset(bufIn.buf(), 0, sizeX * 8); // to prevent NAN values in bufIn.
 			for (long iDataInYPos = 0; iDataInYPos < sizeY; ++iDataInYPos)
 			{
 				if (*fDrawStop)
@@ -240,23 +239,27 @@ void Texture::DrawTexture(long offsetX, long offsetY, long texSizeX, long texSiz
 		if (fRealMap) 
 		{
 			RealBuf bufIn(sizeX);
+			double * ptrBufIn = bufIn.buf();
 			RealBuf bufIntermediate(xSizeOut);
-			for (int i = 0; i < bufIn.iSize(); ++i)  // to prevent NAN values in bufIn.
-				bufIn[i]= 0;
+			double * ptrBufIntermediate = bufIntermediate.buf();
+			memset(ptrBufIn, 0, sizeX * 8); // to prevent NAN values in bufIn.
+
 			for (long iDataOutYPos = 0, iDataInYPos = 0; iDataOutYPos < ySizeOut; ++iDataOutYPos, iDataInYPos += zoomFactor)
 			{
 				if (*fDrawStop)
 					break;
 				mp->GetLineVal(iDataInYPos + offsetY, bufIn, offsetX, sizeX, iPyrLayer);
 				for (long iDataOutXPos = 0, iDataInXPos = 0; iDataOutXPos < xSizeOut; ++iDataOutXPos, iDataInXPos += zoomFactor)
-					bufIntermediate[iDataOutXPos] = bufIn[iDataInXPos];
+					ptrBufIntermediate[iDataOutXPos] = ptrBufIn[iDataInXPos];
 				ConvLine(bufIntermediate, iDataOutYPos, texSizeX, outbuf);
 			}
 		}
 		else // !fRealMap
 		{
 			LongBuf bufIn(sizeX);
+			long * ptrBufIn = bufIn.buf();
 			LongBuf bufOut(xSizeOut);
+			long * ptrBufOut = bufOut.buf();
 			for (long iDataOutYPos = 0, iDataInYPos = 0; iDataOutYPos < ySizeOut; ++iDataOutYPos, iDataInYPos += zoomFactor)
 			{
 				if (*fDrawStop)
@@ -266,7 +269,7 @@ void Texture::DrawTexture(long offsetX, long offsetY, long texSizeX, long texSiz
 				else
 					mp->GetLineRaw(iDataInYPos + offsetY, bufIn, offsetX, sizeX, iPyrLayer);
 				for (long iDataOutXPos = 0, iDataInXPos = 0; iDataOutXPos < xSizeOut; ++iDataOutXPos, iDataInXPos += zoomFactor)
-					bufOut[iDataOutXPos] = bufIn[iDataInXPos];
+					ptrBufOut[iDataOutXPos] = ptrBufIn[iDataInXPos];
 				ConvLine(bufOut, iDataOutYPos, texSizeX, outbuf);
 			}
 		}                 
