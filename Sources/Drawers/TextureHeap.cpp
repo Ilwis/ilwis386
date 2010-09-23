@@ -169,11 +169,11 @@ UINT TextureHeap::GenerateTexturesInThread(LPVOID pParam)
 					delete pObject->textureCreators[pObject->readpos];
 					pObject->textureCreators[pObject->readpos] = 0;
 					pObject->readpos = (pObject->readpos + 1) % 1000;
-					if (!pObject->fAbortTexGen && !pObject->fStopThread)
-						pObject->drawerContext->InvalidateWindow();
 				} else
 					delete tex;
 			}
+			if (!pObject->fAbortTexGen && !pObject->fStopThread)
+				pObject->drawerContext->InvalidateWindow();
 		}
 		pObject->csChangeTexCreatorList.Unlock();
 		if (!pObject->fStopThread)
