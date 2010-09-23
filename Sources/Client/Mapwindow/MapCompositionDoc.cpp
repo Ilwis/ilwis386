@@ -729,26 +729,26 @@ void MapCompositionDoc::menLayers(CMenu& men, int iBaseId)
 		  break;
 	  case ID_DOMLAYER:
 		  {  
-			BaseMap bm;
-			bm.SetPointer(mapdrawer->getBaseMap());
-			iFlag = !fDomainEditable(bm) ? MF_GRAYED : MF_ENABLED;
-		  men.EnableMenuItem(id, MF_BYCOMMAND | iFlag);
-		   }
+			  BaseMap bm;
+			  bm.SetPointer(mapdrawer->getBaseMap());
+			  iFlag = !fDomainEditable(bm) ? MF_GRAYED : MF_ENABLED;
+			  men.EnableMenuItem(id, MF_BYCOMMAND | iFlag);
+		  }
 		  break;
 		}    
 	}
 }
 
 bool MapCompositionDoc::fDomainEditable( const BaseMap& bmap) {
-  if (bmap->dm()->fDataReadOnly())
-    return false;
-  if (0 != bmap->dm()->pdsrt())
-    return true;
-  if (0 != bmap->dm()->pdvi())
-    return true;
-  if (0 != bmap->dm()->pdvr())
-    return true;
-  return false;  
+	if (bmap->dm()->fDataReadOnly())
+		return false;
+	if (0 != bmap->dm()->pdsrt())
+		return true;
+	if (0 != bmap->dm()->pdvi())
+		return true;
+	if (0 != bmap->dm()->pdvr())
+		return true;
+	return false;  
 }
 
 void MapCompositionDoc::OnDataLayer(UINT nID)
@@ -1239,15 +1239,15 @@ BOOL MapCompositionDoc::OnOpenMapView(const MapView& mapview)
 			s &= mpv->sDescription;
 			CDocument::SetTitle(s.sVal());
 		}
-	/*	mpv->ReadElement("MapView", "GeoRef", georef);
+		/*	mpv->ReadElement("MapView", "GeoRef", georef);
 		if (!georef.fValid())
-			return FALSE;
+		return FALSE;
 		CoordSystem cs;
 		mpv->ReadElement("MapView", "CoordSystem", cs);
 		if (cs.fValid())
 		{
-			georef->SetCoordSystem(cs);
-			georef->fChanged=false;
+		georef->SetCoordSystem(cs);
+		georef->fChanged=false;
 		}*/
 		mpv->ReadElement("MapView", "Width", szPrefSize.cx);
 		mpv->ReadElement("MapView", "Height", szPrefSize.cy);
@@ -1643,37 +1643,25 @@ Drawer* MapCompositionDoc::drAppend(const MapList& maplist, bool asAnimation)
 	AppendMapListForm frm(wndGetActiveView(), maplist, &iOption);
 	if (!frm.fOkClicked())
 		return false;
-	bool fGeoRefChanged = false;
-	if (maplist->gr() != georef) 
-	{
-		fGeoRefChanged = true;
-		georef = maplist->gr();
-		MinMax mm;
-		mm.rcMin = RowCol(0L,0L);
-		mm.rcMax = georef->rcSize();
-		mmSize = mmMapBounds = mm;
-	}	
-	Drawer* dr = 0;
 	switch (iOption) {
-case 0:
-	dr = new MapListColorCompDrawer(this, maplist);
-	break;
-case 1:
-	dr = new MapListDrawer(this, maplist);
-	break;
+	case 0:
+		//dr = new MapListColorCompDrawer(this, maplist);
+		break;
+	case 1: 
+		{
+			ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
+			ILWIS::NewDrawer *drawer;
+			drawer = IlwWinApp()->getDrawer("AnimationDrawer", "Ilwis38", &parms);
+			drawer->addDataSource((void *)&maplist);
+			ILWIS::PreparationParameters pp(RootDrawer::ptALL);
+			drawer->prepare(&pp);
+			rootDrawer->addDrawer(drawer);
+			ChangeState();
+			UpdateAllViews(0,3);
+			mpvGetView()->Invalidate();
+		}
 	}
-	if (fRaster)
-		dl.push_back(dr);
-	else
-		dl.push_front(dr);
-	ChangeState();
-	fShowRowCol = true;
-	fRaster = true;
-	if (fGeoRefChanged) {
-		ChangeState();
-		UpdateAllViews(0,3);
-	}
-	return dr;
+	return 0;
 }
 
 
