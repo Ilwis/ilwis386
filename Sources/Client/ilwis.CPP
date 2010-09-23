@@ -1260,7 +1260,7 @@ void IlwisWinApp::InitImageLists()
 	InitImage("Set", "Set", i++);
 	InitImage("MapPane", "MapPane", i++);
 	InitImage("LineStyle", "LineStyle", i++);
-	InitImage("3D", "3D", i++);
+	InitImage("3D", "ThreeD", i++);
 	InitImage("Animation","Animation", i++);
 	InitImage("Run","Run", i++);
 	InitImage("Stop","Stop", i++);
