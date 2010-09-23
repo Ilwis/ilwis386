@@ -91,23 +91,22 @@ void RasterSetDrawer::prepare(PreparationParameters *pp){
 			drm = drmMULTIPLE;
 		else if (0 != _dm->pdp())
 			drm = drmRPR;
+
+		String sStretchMethod;
+		ObjectInfo::ReadElement("Display", "Stretching", rastermap->fnObj, sStretchMethod);
+		if ("Linear" == sStretchMethod)
+			stretchMethod = smLINEAR;
+		else if ("Logarithmic" == sStretchMethod)
+			stretchMethod = smLOGARITHMIC;
 	}
-
-	String sStretchMethod;
-	ObjectInfo::ReadElement("Display", "Stretching", mp->fnObj, sStretchMethod);
-	if ("Linear" == sStretchMethod)
-		stretchMethod = smLINEAR;
-	else if ("Logarithmic" == sStretchMethod)
-		stretchMethod = smLOGARITHMIC;
-
 }
 
 void RasterSetDrawer::init() const
 {
 	// fetch the image's coordinate bounds
-	if (mp.fValid())
+	if (rastermap.fValid())
 	{
-		data->cb = mp->cb();
+		data->cb = rastermap->cb();
 		DrawerContext* drawcontext = (getRootDrawer())->getDrawerContext();
 		data->maxTextureSize = drawcontext->getMaxTextureSize();
 		int iXScreen = GetSystemMetrics(SM_CXFULLSCREEN); // maximum X size of client area (regardless of current viewport)
@@ -117,16 +116,15 @@ void RasterSetDrawer::init() const
 		if (iYScreen < data->maxTextureSize)
 			data->maxTextureSize = iYScreen;
 
-		data->textureHeap = new TextureHeap(mp, getDrawingColor(), getDrawMethod(), drawcontext);
-		data->imageWidth = mp->rcSize().Col;
-		data->imageHeight = mp->rcSize().Row;
+		data->textureHeap = new TextureHeap(rastermap, getDrawingColor(), getDrawMethod(), drawcontext);
+		data->imageWidth = rastermap->rcSize().Col;
+		data->imageHeight = rastermap->rcSize().Row;
 	}
 	data->init = true;
 }
 
 void RasterSetDrawer::addDataSource(void *bmap, int options){
-	BaseMapPtr *ptr =  (BaseMapPtr *)bmap;
-	mp.SetPointer(ptr);
+	rastermap.SetPointer((BaseMapPtr *)bmap);
 }
 
 HTREEITEM RasterSetDrawer::configure(LayerTreeView  *tv, HTREEITEM parent){
@@ -272,7 +270,7 @@ void RasterSetDrawer::DisplayImagePortion(double x1, double y1, double x2, doubl
 
 void RasterSetDrawer::DisplayTexture(double x1, double y1, double x2, double y2, unsigned int imageOffsetX, unsigned int imageOffsetY, unsigned int imageSizeX, unsigned int imageSizeY, unsigned int zoomFactor) const
 {
-	Texture* tex = data->textureHeap->GetTexture(imageOffsetX, imageOffsetY, imageSizeX, imageSizeY, x1, y1, x2, y2, zoomFactor);
+	Texture* tex = data->textureHeap->GetTexture(imageOffsetX, imageOffsetY, imageSizeX, imageSizeY, x1, y1, x2, y2, zoomFactor, true);
 
 	if (tex != 0)
 	{

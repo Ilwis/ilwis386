@@ -46,7 +46,6 @@ namespace ILWIS{
 		double getMinZoom(unsigned int imageSizeX, unsigned int imageSizeY, GLdouble * m_winx, GLdouble * m_winy) const;
 		void init() const;
 
-		Map mp;
 		RasterSetData * data;
 	};
 }
