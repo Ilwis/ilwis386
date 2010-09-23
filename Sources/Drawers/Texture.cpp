@@ -18,7 +18,7 @@ using namespace ILWIS;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-Texture::Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDrawer::DrawMethod drm, const long offsetX, const long offsetY, const long sizeX, const long sizeY, char * scrap_data_mipmap, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, DrawerContext * drawerContext, volatile bool* fDrawStop)
+Texture::Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDrawer::DrawMethod drm, const long offsetX, const long offsetY, const long sizeX, const long sizeY, char * scrap_data_mipmap, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, DrawerContext * drawerContext, bool fInThread, volatile bool* fDrawStop)
 : mp(mp)
 , drawColor(drawColor)
 , drm(drm)
@@ -35,7 +35,8 @@ Texture::Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDr
 	if (*fDrawStop)
 		return;
 
-	drawerContext->TakeContext();
+	if (fInThread)
+		drawerContext->TakeContext();
 	glGenTextures(1, &texture);
 	glBindTexture( GL_TEXTURE_2D, texture );
 	glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
@@ -47,7 +48,8 @@ Texture::Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDr
 	glPixelStorei( GL_UNPACK_SKIP_PIXELS, 0);
 	glPixelStorei( GL_UNPACK_SKIP_ROWS, 0);
 	glTexImage2D( GL_TEXTURE_2D, 0, 4, sizeX / zoomFactor, sizeY / zoomFactor, 0, GL_RGBA, GL_UNSIGNED_BYTE, scrap_data_mipmap);
-	drawerContext->ReleaseContext();
+	if (fInThread)
+		drawerContext->ReleaseContext();
 	this->valid = true;
 }
 

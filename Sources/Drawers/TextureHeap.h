@@ -23,7 +23,7 @@ namespace ILWIS {
 	public:
 		TextureCreator(const Map & _mp, const DrawingColor * drawColor, const NewDrawer::DrawMethod drm, const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, char * scrap_data_mipmap, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, DrawerContext * drawerContext, unsigned int zoomFactor);
 		virtual ~TextureCreator();
-		Texture * CreateTexture(volatile bool * fDrawStop);
+		Texture * CreateTexture(bool fInThread, volatile bool * fDrawStop);
 	private:
 		const Map mp;
 		const DrawingColor * drawColor;
@@ -47,12 +47,13 @@ namespace ILWIS {
 		TextureHeap(const Map & _mp, const DrawingColor * drawColor, const NewDrawer::DrawMethod drm, DrawerContext * drawerContext);
 		virtual ~TextureHeap();
 
-		Texture * GetTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor);
+		Texture * GetTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, bool fInThread);
 		void ClearQueuedTextures();
 
 	private:
-		void GenerateTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor);
+		Texture * GenerateTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, bool fInThread);
 		static UINT GenerateTexturesInThread(LPVOID pParam);
+		Texture * GenerateNextTexture(bool fInThread);
 		//vector<Texture*> textures;
 		Texture* textures [10000];
 		TextureCreator * textureCreators [1000];
