@@ -38,7 +38,6 @@ bool DrawerContext::initOpenGL(CDC *dc) {
 	TakeContext();
 	glDisable(GL_DEPTH_TEST);
 	glClearColor(0.75,0.75,0.75,0.0);
-	glEnable(GL_TEXTURE_2D);
 	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);
 	if (maxTextureSize > 512) // performance decreases from 1024 onwards on my computer
 		maxTextureSize = 512;
