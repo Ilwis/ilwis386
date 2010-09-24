@@ -178,7 +178,7 @@ CDocument* BaseDocTemplate::OpenDocumentFile(
 	return pDocument;
 }
 
-IlwisDocument* BaseDocTemplate::OpenDocumentFile(LPCTSTR lpszPathName, IlwisDocument::OpenType ot)
+IlwisDocument* BaseDocTemplate::OpenDocumentFile( IlwisDocument::OpenType ot, LPCTSTR lpszPathName)
 {
 	// largely copied from CMultiDocTemplate::OpenDocumentFile
 	IlwisDocument* pDocument = dynamic_cast<IlwisDocument*>(CreateNewDocument());

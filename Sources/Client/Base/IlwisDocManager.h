@@ -52,7 +52,8 @@ public:
 	virtual ~IlwisDocManager();
 	virtual BOOL DoPromptFileName(CString& fileName, UINT nIDSTitle,
 			DWORD lFlags, BOOL bOpenFileDialog, CDocTemplate* pTemplate);
-	CDocument* IlwisDocManager::OpenDocumentFile(LPCTSTR lpszFileName);
+	CDocument* OpenDocumentFile(LPCTSTR lpszFileName);
+	CDocument* OpenDocumentAsAnimation(LPCTSTR lpszFileName);
 };
 
 #endif // !defined(AFX_ILWISDOCMANAGER_H__34A20524_4B76_11D4_B8D0_00A0C9D5342F__INCLUDED_)

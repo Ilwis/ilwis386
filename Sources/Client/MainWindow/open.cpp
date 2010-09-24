@@ -143,6 +143,8 @@ LRESULT OpenIlwisMaps(CWnd *parent, const String& sCmd) {
 		IlwWinApp()->OpenDocumentFile(fnFile.sFullNameQuoted().scVal(), IlwisDocument::otMPS);
 	else if (pm.fExist("mpp"))
 		IlwWinApp()->OpenDocumentFile(fnFile.sFullNameQuoted().scVal(), IlwisDocument::otMPP);
+	else if (fnFile.sExt == ".mpl" && pm.fExist("animation"))
+		IlwWinApp()->OpenDocumentFile(fnFile.sFullNameQuoted().scVal(), IlwisDocument::otANIMATION);
 	else
 		IlwWinApp()->OpenDocumentFile(fnFile.sFullNameQuoted().scVal());
 

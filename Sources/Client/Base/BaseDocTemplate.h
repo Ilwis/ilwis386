@@ -57,7 +57,7 @@ public:
 	virtual CFrameWnd* CreateNewFrame(CDocument* pDoc, CFrameWnd* pOther);
 	virtual CDocument* OpenDocumentFile(LPCTSTR lpszPathName, BOOL bMakeVisible = TRUE);
 	CDocument* OpenDocumentFile(CDocument* pDoc, BOOL bMakeVisible = TRUE);
-	IlwisDocument* OpenDocumentFile(LPCTSTR lpszPathName, IlwisDocument::OpenType);
+	IlwisDocument* OpenDocumentFile(IlwisDocument::OpenType, LPCTSTR lpszPathName);
 	virtual IlwisDocument* OpenDocumentFile(LPCTSTR lpszPathName, ParmList& pm);
 	virtual Confidence MatchDocType(LPCTSTR lpszPathName, CDocument*& rpDocMatch);
 	virtual Confidence MatchDocType(const FileName& fn, CDocument*& rpDocMatch, const String& sMethod);	

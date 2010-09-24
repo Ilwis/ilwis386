@@ -1026,35 +1026,21 @@ BOOL MapCompositionDoc::OnOpenMapList(const MapList& maplist, OpenType ot)
 	fRaster = true;
 	SetTitle(maplist);
 
-	enum { eFilm, eColorComp } eType;
-	if (ot & otSLIDESHOW)
-		eType = eFilm;
-	else
-		eType = eColorComp;
-
-	Drawer* dw = 0;
-	switch (eType) {
-	case eFilm:
-		dw = new MapListDrawer(this, maplist);
-		break;
-	case eColorComp:
-		dw = new MapListColorCompDrawer(this, maplist);
-		break;
+	if (ot & otANIMATION) {
+		ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
+		ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer("AnimationDrawer", "Ilwis38", &parms);
+		drawer->addDataSource((void *)&maplist);
+		rootDrawer->setCoordinateSystem(mp->cs());
+		rootDrawer->addCoordBounds(mp->cb());
+		ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
+		drawer->prepare(&pp);
+		rootDrawer->addDrawer(drawer);
 	}
-	bool fShowForm = !(ot & (otNOASK|otEDIT));
-	if (!dw->Configure(fShowForm)) {
-		delete dw;
-		return FALSE;
+	else {
+	//	eType = eColorComp;
 	}
-	dw->fNew = false;
-	dl.push_back(dw);
 
-	mmMapBounds.MinCol() = 0;
-	mmMapBounds.MaxCol() = mp->iCols();
-	mmMapBounds.MinRow() = 0;
-	mmMapBounds.MaxRow() = mp->iLines();
-	mmSize = mmMapBounds;
-
+	
 	return TRUE;
 }
 
@@ -1239,16 +1225,6 @@ BOOL MapCompositionDoc::OnOpenMapView(const MapView& mapview)
 			s &= mpv->sDescription;
 			CDocument::SetTitle(s.sVal());
 		}
-		/*	mpv->ReadElement("MapView", "GeoRef", georef);
-		if (!georef.fValid())
-		return FALSE;
-		CoordSystem cs;
-		mpv->ReadElement("MapView", "CoordSystem", cs);
-		if (cs.fValid())
-		{
-		georef->SetCoordSystem(cs);
-		georef->fChanged=false;
-		}*/
 		mpv->ReadElement("MapView", "Width", szPrefSize.cx);
 		mpv->ReadElement("MapView", "Height", szPrefSize.cy);
 		FileName fn = GetPathName();

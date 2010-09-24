@@ -231,6 +231,7 @@ void MapListDoc::OnOpenColorComp()
 
 void MapListDoc::OnOpenFilm()
 {
-	String sCmd("slideshow %S", mpl->fnObj.sFullNameQuoted());
+	//String sCmd("slideshow %S", mpl->fnObj.sFullNameQuoted());
+	String sCmd("open %S -animation", mpl->fnObj.sFullNameQuoted());
 	IlwWinApp()->Execute(sCmd);
 }

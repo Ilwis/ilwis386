@@ -29,7 +29,7 @@ class _export AbstractMapDrawer : public ComplexDrawer {
 		bool useInternalDomain() const;
 		HTREEITEM  configure(LayerTreeView  *tv, HTREEITEM parent);
 		virtual String description() const;
-		String iconName(const String& subtype="?") const;
+		virtual String iconName(const String& subtype="?") const;
 
 	protected:
 		Table attTable;

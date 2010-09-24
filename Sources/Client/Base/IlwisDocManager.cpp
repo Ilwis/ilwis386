@@ -132,16 +132,6 @@ BOOL IlwisDocManager::DoPromptFileName(CString& fileName, UINT nIDSTitle, DWORD 
 		}
 	}
 
-	// do NOT append the "*.*" all files filter
-/*
-	CString allFilter;
-	VERIFY(allFilter.LoadString(AFX_IDS_ALLFILTER));
-	strFilter += allFilter;
-	strFilter += (TCHAR)'\0';   // next string please
-	strFilter += _T("*.*");
-	strFilter += (TCHAR)'\0';   // last string
-	dlgFile.m_ofn.nMaxCustFilter++;
-*/
 	dlgFile.m_ofn.lpstrFilter = strFilter;
 	dlgFile.m_ofn.lpstrTitle = title;
 	dlgFile.m_ofn.lpstrFile = fileName.GetBuffer(_MAX_PATH);
@@ -151,6 +141,96 @@ BOOL IlwisDocManager::DoPromptFileName(CString& fileName, UINT nIDSTitle, DWORD 
 	int nResult = dlgFile.DoModal();
 	fileName.ReleaseBuffer();
 	return nResult == IDOK;
+}
+
+CDocument* IlwisDocManager::OpenDocumentAsAnimation(LPCTSTR lpszFileName) {
+if (lpszFileName == NULL)
+	{
+		AfxThrowInvalidArgException();
+	}
+	// find the highest confidence
+	POSITION pos = m_templateList.GetHeadPosition();
+	CDocTemplate::Confidence bestMatch = CDocTemplate::noAttempt;
+	CDocTemplate* pBestTemplate = NULL;
+	CDocument* pOpenDocument = NULL;
+
+	TCHAR szPath[_MAX_PATH];
+	ASSERT(lstrlen(lpszFileName) < _countof(szPath));
+	TCHAR szTemp[_MAX_PATH];
+	if (lpszFileName[0] == '\"')
+		++lpszFileName;
+	Checked::tcsncpy_s(szTemp, _countof(szTemp), lpszFileName, _TRUNCATE);
+	LPTSTR lpszLast = _tcsrchr(szTemp, '\"');
+	if (lpszLast != NULL)
+		*lpszLast = 0;
+	
+	if( AfxFullPath(szPath, szTemp) == FALSE )
+	{
+		ASSERT(FALSE);
+		return NULL; // We won't open the file. MFC requires paths with
+		             // length < _MAX_PATH
+	}
+
+	TCHAR szLinkName[_MAX_PATH];
+	if (AfxResolveShortcut(AfxGetMainWnd(), szPath, szLinkName, _MAX_PATH))
+		Checked::tcscpy_s(szPath, _countof(szPath), szLinkName);
+
+	while (pos != NULL)
+	{
+		CDocTemplate* pTemplate = (CDocTemplate*)m_templateList.GetNext(pos);
+		ASSERT_KINDOF(CDocTemplate, pTemplate);
+
+		CDocTemplate::Confidence match;
+		ASSERT(pOpenDocument == NULL);
+		IlwisDocTemplate *templ = (IlwisDocTemplate *)pTemplate;
+		if ( templ->sGetObjectType() == "ILWIS Animation") {
+			pBestTemplate = pTemplate;
+			match = pTemplate->MatchDocType(szPath, pOpenDocument);
+			break;     
+		}
+
+	 // stop here
+	}
+
+	if (pOpenDocument != NULL)
+	{
+		POSITION posOpenDoc = pOpenDocument->GetFirstViewPosition();
+		if (posOpenDoc != NULL)
+		{
+			CView* pView = pOpenDocument->GetNextView(posOpenDoc); // get first one
+			ASSERT_VALID(pView);
+			CFrameWnd* pFrame = pView->GetParentFrame();
+
+			if (pFrame == NULL)
+				TRACE(traceAppMsg, 0, "Error: Can not find a frame for document to activate.\n");
+			else
+			{
+				pFrame->ActivateFrame();
+
+				if (pFrame->GetParent() != NULL)
+				{
+					CFrameWnd* pAppFrame;
+					if (pFrame != (pAppFrame = (CFrameWnd*)AfxGetApp()->m_pMainWnd))
+					{
+						ASSERT_KINDOF(CFrameWnd, pAppFrame);
+						pAppFrame->ActivateFrame();
+					}
+				}
+			}
+		}
+		else
+			TRACE(traceAppMsg, 0, "Error: Can not find a view for document to activate.\n");
+
+		return pOpenDocument;
+	}
+
+	if (pBestTemplate == NULL)
+	{
+		AfxMessageBox(AFX_IDP_FAILED_TO_OPEN_DOC);
+		return NULL;
+	}
+
+	return ((BaseDocTemplate *)pBestTemplate)->OpenDocumentFile(IlwisDocument::otANIMATION, szPath);
 }
 
 CDocument* IlwisDocManager::OpenDocumentFile(LPCTSTR lpszFileName)

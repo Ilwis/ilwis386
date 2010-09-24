@@ -859,6 +859,15 @@ void IlwisWinApp::RegisterDocTemplates()
 		RUNTIME_CLASS(Catalog));
 	AddDocTemplate(dtMapList);
 
+	dtAnimation = new IlwisDocTemplate(
+		".mpl", 
+		"MapList", 
+		"ILWIS Animation",
+		RUNTIME_CLASS(MapCompositionDoc),
+		RUNTIME_CLASS(MapWindow),
+		RUNTIME_CLASS(MapPaneView));
+	AddDocTemplate(dtAnimation);
+
 	dtObjectCollection = new IlwisMDIDocTemplate(
 		".ioc", 
 		"ObjectCollection", 
@@ -1639,8 +1648,12 @@ CDocument* IlwisWinApp::OpenDocumentFile(LPCTSTR lpszFileName, IlwisDocument::Op
 		bool fCalculated = ml->fCalculated();
 		// prevent dead lock
 		ml.SetPointer(0);
-		if (fCalculated)
-			m_pDocManager->OpenDocumentFile(fn.sFullName().scVal());
+		if (fCalculated) {
+			if ( ot == IlwisDocument::otANIMATION)
+				((IlwisDocManager *)m_pDocManager)->OpenDocumentAsAnimation(fn.sFullName().scVal());
+			else
+				m_pDocManager->OpenDocumentFile(fn.sFullName().scVal());
+		}
 		else
 			AfxBeginThread(CommandHandler::CalcObjectAndShow, (LPVOID)(new String(fn.sFullName(true))));
 	}

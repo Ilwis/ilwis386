@@ -233,6 +233,7 @@ private:
 	IlwisDocTemplate *dtLayout;
 	IlwisDocTemplate *dtGraph, *dtRoseDiagram;
 	IlwisDocTemplate *dtSMCE;
+	IlwisDocTemplate *dtAnimation;
 	IlwisMDIDocTemplate *dtObjectCollection;
 	IlwisMDIDocTemplate *dtMapList;
 	ForeignMultiDocTemplate *dtForeign;
