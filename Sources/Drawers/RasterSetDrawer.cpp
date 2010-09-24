@@ -43,7 +43,6 @@ void RasterSetDrawer::prepare(PreparationParameters *pp){
 
 	if ( pp->type & NewDrawer::ptRENDER)
 	{
-
 		drm = drmRPR;
 		stretched = false;
 		riStretch = RangeInt(0,255);
@@ -155,7 +154,9 @@ bool RasterSetDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 	maxX = minX + (maxX - minX) * (double)width / (double)data->imageWidth;
 	minY = maxY + (minY - maxY) * (double)height / (double)data->imageHeight;
 
+	glEnable(GL_TEXTURE_2D);
 	DisplayImagePortion(minX, maxY, maxX, minY, 0, 0, width, height);
+	glDisable(GL_TEXTURE_2D);
 
 	return true;
 }
