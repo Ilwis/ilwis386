@@ -289,7 +289,7 @@ CDocument* WinThread::OpenDocumentFile(CDocManager* pdm, LPCTSTR lpszFileName, I
 	}
 	IlwisDocTemplate* idt = dynamic_cast<IlwisDocTemplate*>(pBestTemplate);
 	if (idt)
-		return idt->OpenDocumentFile(lpszFileName, ot);
+		return idt->OpenDocumentFile(ot, lpszFileName);
 	else
 		return pBestTemplate->OpenDocumentFile(lpszFileName);
 }
