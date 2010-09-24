@@ -9,14 +9,14 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "Client\MapWindow\Drawers\Drawer_n.h" // otherwise DrawingColor can't compile
-#include "Drawers\DrawingColor.h"
+#include "Client\MapWindow\Drawers\Drawer_n.h" // for DrawMethod
 
 #include <GL/gl.h>
 
 namespace ILWIS {
 
 	class Texture;
+	class DrawingColor;
 
 	class TextureCreator
 	{
