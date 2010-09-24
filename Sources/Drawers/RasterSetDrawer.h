@@ -35,6 +35,7 @@ namespace ILWIS{
 		void addDataSource(void *bmap, int options=0);
 		HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent);
 		bool draw(bool norecursion , const CoordBounds& cbArea) const;
+		void setThreaded(bool yesno);
 		
 	protected:
 		Map rastermap;
@@ -47,5 +48,6 @@ namespace ILWIS{
 		void init() const;
 
 		RasterSetData * data;
+		bool isThreaded;
 	};
 }

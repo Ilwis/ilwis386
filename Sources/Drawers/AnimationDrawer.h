@@ -45,7 +45,7 @@ namespace ILWIS{
 		AnimationControl(CWnd *par, AnimationDrawer *gdr);
 	private:
 		int setTiming(Event *ev);
-		FieldRealSliderEx *slider;
+		FieldReal *frtime;
 		FlatIconButton *fbBegin; 
 		int begin(Event  *ev);
 		int end(Event  *ev);
@@ -64,6 +64,7 @@ namespace ILWIS{
 		MultiColumnSelector *mcs;
 		int columnUsage;
 	};
+
 
 
 }

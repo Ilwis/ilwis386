@@ -27,6 +27,7 @@
 using namespace ILWIS;
 
 int AnimationDrawer::timerIdCounter=5000;
+int mycount = 0;
 
 ILWIS::NewDrawer *createAnimationDrawer(DrawerParameters *parms) {
 	return new AnimationDrawer(parms);
@@ -101,6 +102,7 @@ void AnimationDrawer::prepare(PreparationParameters *pp){
 				ILWIS::DrawerParameters parms(getRootDrawer(), this);
 				Map mp = mlist->map(i);
 				RasterSetDrawer *rasterset = (RasterSetDrawer *)IlwWinApp()->getDrawer("RasterSetDrawer", "Ilwis38", &parms); 
+				rasterset->setThreaded(false);
 				addSetDrawer(mp,pp,rasterset);
 				rasterset->setActive(i == 0 ? true : false);
 			}
@@ -136,6 +138,7 @@ void AnimationDrawer::addDataSource(void *data, int options){
 			 type == IlwisObject::iotPOINTMAP || 
 			 type == IlwisObject::iotPOLYGONMAP) {
 			 sourceType = sotFEATURE;
+			 AbstractMapDrawer::addDataSource(data);
 		}
 		if ( type == IlwisObject::iotMAPLIST) {
 			sourceType = sotMAPLIST;
@@ -210,23 +213,6 @@ String AnimationDrawer::iconName(const String& subtype) const {
 }
 
 //---------------------------------------------------------
-//AnimationTiming::AnimationTiming(CWnd *par, AnimationDrawer *ldr) 
-//	: DisplayOptionsForm(ldr, par, "Time")
-//{
-//
-//
-//	create();
-//}
-//
-//void  AnimationTiming::apply() {
-//	slider->StoreData();
-//	AnimationDrawer *andr = (AnimationDrawer *)drw;
-//	PreparationParameters pp(NewDrawer::ptRENDER);
-//	drw->prepare(&pp);
-//	updateMapView();
-//}
-
-//----------------------------------------------------------
 AnimationControl::AnimationControl(CWnd *par, AnimationDrawer *ldr) 
 	: DisplayOptionsForm2(ldr, par, "Time")
 {
@@ -242,18 +228,17 @@ AnimationControl::AnimationControl(CWnd *par, AnimationDrawer *ldr)
 	fi1 = new FlatIconButton(fg,"End","",(NotifyProc)&AnimationControl::end, FileName());
 	fi1->Align(fi2, AL_AFTER,-10);
 
-	slider = new FieldRealSliderEx(root,"Interval", &ldr->interval,ValueRangeReal(0.1,1000,0.1),false);
-	slider->SetCallBack((NotifyProc)&AnimationControl::setTiming);
-	slider->setContinuous(true);
-	slider->Align(fbBegin, AL_UNDER);
+	frtime = new FieldReal(root,"Interval", &ldr->interval,ValueRangeReal(0.1,1000,0.1));
+	frtime->SetCallBack((NotifyProc)&AnimationControl::setTiming);
+	frtime->Align(fbBegin, AL_UNDER);
 	PushButton *pb = new PushButton(root,"apply",(NotifyProc)&AnimationControl::setTiming);
-	//pb->Align(slider, AL_AFTER);
+	pb->Align(frtime, AL_AFTER);
 
   create();
 }
 
 int AnimationControl::setTiming(Event *ev) {
-	slider->StoreData();
+	frtime->StoreData();
 	AnimationDrawer *andr = (AnimationDrawer *)drw;
  /*   ILWISSingleLock sl(&(andr->csAccess), TRUE,SOURCE_LOCATION);
 	drw->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->KillTimer(andr->timerid);
@@ -284,7 +269,7 @@ int AnimationControl::end(Event  *ev) {
 }
 
 int AnimationControl::run(Event  *ev) {
-	slider->StoreData();
+	frtime->StoreData();
 	AnimationDrawer *andr = (AnimationDrawer *)drw;
 	if ( andr->timerid != iUNDEF)
 		return 1;

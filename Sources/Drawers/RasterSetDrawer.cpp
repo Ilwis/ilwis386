@@ -26,7 +26,7 @@ ILWIS::NewDrawer *createRasterSetDrawer(DrawerParameters *parms) {
 
 RasterSetDrawer::RasterSetDrawer(DrawerParameters *parms) : 
 SetDrawer(parms,"RasterSetDrawer")
-, data(new RasterSetData())
+, data(new RasterSetData()), isThreaded(true)
 {
 	//	setTransparency(1); // default
 	//	setDrawMethod(drmNOTSET); // default
@@ -41,63 +41,61 @@ RasterSetDrawer::~RasterSetDrawer(){
 void RasterSetDrawer::prepare(PreparationParameters *pp){
 	SetDrawer::prepare(pp);
 
-	bool v1 = pp->type & RootDrawer::ptINITOPENGL;
-	bool v2 = pp->type & RootDrawer::ptALL;
-	if ( pp->dc && (  v1 || v2 )) {
+	if ( pp->type & NewDrawer::ptRENDER)
+	{
 
-	}
+		drm = drmRPR;
+		stretched = false;
+		riStretch = RangeInt(0,255);
+		rrStretch = RangeReal(0,100);
 
-	drm = drmRPR;
-	stretched = false;
-	riStretch = RangeInt(0,255);
-	rrStretch = RangeReal(0,100);
-
-	//BaseMapPtr *bmptr = ((AbstractMapDrawer*)getParentDrawer())->getBaseMap();
-	if (rastermap.fValid() ) {
-		// The following is from MapDrawer::MapDrawer
-		Domain _dm = rastermap->dm();
-		bool fImage = 0 != _dm->pdi();
-		if (fImage)
-			drm = drmIMAGE;
-		else if (rastermap->dm()->pdcol())
-			drm = drmCOLOR;
-		ValueRange vr = rastermap->vr();
-		if (rastermap->dm()->pdbool())
-			vr = ValueRange();
-		if (vr.fValid() || fImage) {
-			stretched = true;
-			if (!fImage && vr->vrr()) {
-				rrStretch = rastermap->rrPerc1(true);
-				if (rrStretch.rLo() >= rrStretch.rHi())
-					rrStretch = rastermap->rrMinMax();
-				if (rrStretch.rLo() >= rrStretch.rHi())
-					rrStretch = vr->rrMinMax();
-				riStretch.iLo() = (long)(rounding(rrStretch.rLo()));
-				riStretch.iHi() = (long)(rounding(rrStretch.rHi()));
-			} else {
-				riStretch = rastermap->riPerc1(true);
-				if (riStretch.iLo() >= riStretch.iHi())
-					riStretch = rastermap->riMinMax();
-				if (riStretch.iLo() >= riStretch.iHi())
-					if (fImage)
-						riStretch = RangeInt(0,255);
-					else if (vr.fValid())
-						riStretch = vr->riMinMax();
-				rrStretch.rLo() = doubleConv(riStretch.iLo());
-				rrStretch.rHi() = doubleConv(riStretch.iHi());
+		//BaseMapPtr *bmptr = ((AbstractMapDrawer*)getParentDrawer())->getBaseMap();
+		if (rastermap.fValid() ) {
+			// The following is from MapDrawer::MapDrawer
+			Domain _dm = rastermap->dm();
+			bool fImage = 0 != _dm->pdi();
+			if (fImage)
+				drm = drmIMAGE;
+			else if (rastermap->dm()->pdcol())
+				drm = drmCOLOR;
+			ValueRange vr = rastermap->vr();
+			if (rastermap->dm()->pdbool())
+				vr = ValueRange();
+			if (vr.fValid() || fImage) {
+				stretched = true;
+				if (!fImage && vr->vrr()) {
+					rrStretch = rastermap->rrPerc1(true);
+					if (rrStretch.rLo() >= rrStretch.rHi())
+						rrStretch = rastermap->rrMinMax();
+					if (rrStretch.rLo() >= rrStretch.rHi())
+						rrStretch = vr->rrMinMax();
+					riStretch.iLo() = (long)(rounding(rrStretch.rLo()));
+					riStretch.iHi() = (long)(rounding(rrStretch.rHi()));
+				} else {
+					riStretch = rastermap->riPerc1(true);
+					if (riStretch.iLo() >= riStretch.iHi())
+						riStretch = rastermap->riMinMax();
+					if (riStretch.iLo() >= riStretch.iHi())
+						if (fImage)
+							riStretch = RangeInt(0,255);
+						else if (vr.fValid())
+							riStretch = vr->riMinMax();
+					rrStretch.rLo() = doubleConv(riStretch.iLo());
+					rrStretch.rHi() = doubleConv(riStretch.iHi());
+				}
 			}
-		}
-		if (0 != _dm->pdid())
-			drm = drmMULTIPLE;
-		else if (0 != _dm->pdp())
-			drm = drmRPR;
+			if (0 != _dm->pdid())
+				drm = drmMULTIPLE;
+			else if (0 != _dm->pdp())
+				drm = drmRPR;
 
-		String sStretchMethod;
-		ObjectInfo::ReadElement("Display", "Stretching", rastermap->fnObj, sStretchMethod);
-		if ("Linear" == sStretchMethod)
-			stretchMethod = smLINEAR;
-		else if ("Logarithmic" == sStretchMethod)
-			stretchMethod = smLOGARITHMIC;
+			String sStretchMethod;
+			ObjectInfo::ReadElement("Display", "Stretching", rastermap->fnObj, sStretchMethod);
+			if ("Linear" == sStretchMethod)
+				stretchMethod = smLINEAR;
+			else if ("Logarithmic" == sStretchMethod)
+				stretchMethod = smLOGARITHMIC;
+		}
 	}
 }
 
@@ -261,7 +259,7 @@ void RasterSetDrawer::DisplayImagePortion(double x1, double y1, double x2, doubl
 
 void RasterSetDrawer::DisplayTexture(double x1, double y1, double x2, double y2, unsigned int imageOffsetX, unsigned int imageOffsetY, unsigned int imageSizeX, unsigned int imageSizeY, unsigned int zoomFactor) const
 {
-	Texture* tex = data->textureHeap->GetTexture(imageOffsetX, imageOffsetY, imageSizeX, imageSizeY, x1, y1, x2, y2, zoomFactor, true);
+	Texture* tex = data->textureHeap->GetTexture(imageOffsetX, imageOffsetY, imageSizeX, imageSizeY, x1, y1, x2, y2, zoomFactor, isThreaded);
 
 	if (tex != 0)
 	{
@@ -296,4 +294,8 @@ double RasterSetDrawer::getMinZoom(unsigned int imageSizeX, unsigned int imageSi
 	double screenPixelsY2 = sqrt(sqr(m_winx[3]-m_winx[2])+sqr(m_winy[3]-m_winy[2]));
 	double screenPixelsX2 = sqrt(sqr(m_winx[0]-m_winx[3])+sqr(m_winy[0]-m_winy[3]));
 	return min(imageSizeX/screenPixelsX1, min(imageSizeX/screenPixelsX2, min(imageSizeY/screenPixelsY1, imageSizeY/screenPixelsY2)));
+}
+
+void RasterSetDrawer::setThreaded(bool yesno) {
+	isThreaded = yesno;
 }
