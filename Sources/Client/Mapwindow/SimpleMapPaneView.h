@@ -122,6 +122,7 @@ private:
   HMODULE hmodMsimg32;
   typedef BOOL (WINAPI *AlphaBlendFunc)(HDC,int,int,int,int,HDC,int,int,int,int,BLENDFUNCTION);
   AlphaBlendFunc alphablendfunc;
+  CDC * pDC;
   
 	DECLARE_DYNCREATE(SimpleMapPaneView)
 	DECLARE_MESSAGE_MAP()

@@ -102,7 +102,7 @@ void SimpleMapPaneView::MoveMouse(short xInc, short yInc)
 const int RepresentationClass::iSIZE_FACTOR=3; // MapWindow to Layout ratio; never make this 0; currently only int ratio supported
 
 SimpleMapPaneView::SimpleMapPaneView()
-: info(0), edit(0), dcView(0), cwcsButtonDown(Coord()), fwPar(0), bmView(0), hBmOld(0)
+: info(0), edit(0), dcView(0), cwcsButtonDown(Coord()), fwPar(0), bmView(0), hBmOld(0), pDC(0)
 {
 	fDirty = false;
 	fRedrawing = false;
@@ -153,6 +153,7 @@ SimpleMapPaneView::~SimpleMapPaneView()
 		bmView->DeleteObject(); // encapsulating dc is gone, so this should be ok now
 		delete bmView;
 	}
+
   FreeLibrary(hmodMsimg32);
 }
 
@@ -255,13 +256,16 @@ void SimpleMapPaneView::OnDraw(CDC* cdc)
 {
 	fStarting  = false;
 	// CDC *dc = cdc == 0 ? GetDC() : cdc;
-	CDC *dc = GetDC(); // apparently the cdc can come with an invalid m_hDC handle (the reason is not properly understood yet, but the maps are not drawn)
+	// CDC *dc = GetDC(); // apparently the cdc can come with an invalid m_hDC handle (the reason is not properly understood yet, but the maps are not drawn)
+	if (pDC)
+		ReleaseDC(pDC);
+	pDC = GetDC();
 	MapCompositionDoc* mcd = GetDocument();
-	PreparationParameters pp(NewDrawer::ptINITOPENGL, dc);
+	PreparationParameters pp(NewDrawer::ptINITOPENGL, pDC);
 	mcd->rootDrawer->prepare(&pp);
 	mcd->rootDrawer->getDrawerContext()->TakeContext();
 	mcd->rootDrawer->draw();
-	SwapBuffers(dc->m_hDC);
+	SwapBuffers(pDC->m_hDC);
 	mcd->rootDrawer->getDrawerContext()->ReleaseContext();
 }
 
