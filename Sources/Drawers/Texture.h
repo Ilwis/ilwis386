@@ -12,10 +12,12 @@
 #include <GL/gl.h>
 
 #include "Client\MapWindow\Drawers\ComplexDrawer.h" // for DrawMethod
-#include "Client\MapWindow\Drawers\Drawer_n.h" // otherwise DrawingColor can't compile
-#include "Drawers\DrawingColor.h"
 
 namespace ILWIS {
+
+	class DrawingColor;
+	class DrawerContext;
+
 	class Texture  
 	{
 	public:

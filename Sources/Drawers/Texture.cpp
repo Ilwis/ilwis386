@@ -3,8 +3,9 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Client\Headers\formelementspch.h"
-#include "Client\MapWindow\Drawers\DrawerContext.h"
 #include "Texture.h"
+#include "Client\MapWindow\Drawers\DrawerContext.h"
+#include "Drawers\DrawingColor.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
