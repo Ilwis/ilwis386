@@ -150,8 +150,8 @@ HTREEITEM AnimationDrawer::configure(LayerTreeView  *tv, HTREEITEM displayOption
 	ComplexDrawer::configure(tv,displayOptionsLastItem);
 	DisplayOptionTreeItem *item2 = new DisplayOptionTreeItem(tv,displayOptionsLastItem,this,
 					0,
-					(DisplayOptionItemFunc)&AnimationDrawer::animationTiming);
-	InsertItem("Timing","History",item2);
+					(DisplayOptionItemFunc)&AnimationDrawer::animationControl);
+	InsertItem("Run","History",item2);
 	item2 = new DisplayOptionTreeItem(tv,displayOptionsLastItem,this,
 					0,
 					(DisplayOptionItemFunc)&AnimationDrawer::animationSourceUsage);
@@ -161,14 +161,9 @@ HTREEITEM AnimationDrawer::configure(LayerTreeView  *tv, HTREEITEM displayOption
 }
 
 bool AnimationDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
+    ILWISSingleLock sl(const_cast<CCriticalSection *>(&csAccess), TRUE,SOURCE_LOCATION);
 	AbstractMapDrawer::draw(norecursion, cbArea);
-	/*if ( featurelayer)
-		featurelayer->draw(norecursion, cbArea);*/
 	return true;
-}
-
-void AnimationDrawer::animationTiming(CWnd *parent) {
-	new AnimationTiming(parent, this);
 }
 
 void AnimationDrawer::animationControl(CWnd *parent) {
@@ -180,6 +175,7 @@ void AnimationDrawer::animationSourceUsage(CWnd *parent) {
 }
 
 void AnimationDrawer::timedEvent(UINT _timerid) {
+    ILWISSingleLock sl(&csAccess, TRUE,SOURCE_LOCATION);
 	if ( timerid == _timerid) {
 		if ( featurelayer){
 			if ( names.size() > 0 && index < names.size()-1) {
@@ -214,44 +210,57 @@ String AnimationDrawer::iconName(const String& subtype) const {
 }
 
 //---------------------------------------------------------
-AnimationTiming::AnimationTiming(CWnd *par, AnimationDrawer *ldr) 
-	: DisplayOptionsForm(ldr, par, "Time")
-{
-
-	slider = new FieldRealSliderEx(root,"Transparency", &ldr->interval,ValueRangeReal(0.1,1000,0.1),false);
-	slider->SetCallBack((NotifyProc)&AnimationTiming::setTiming);
-	slider->setContinuous(true);
-	create();
-}
-
-int AnimationTiming::setTiming(Event *ev) {
-	apply();
-	return 1;
-}
-
-void  AnimationTiming::apply() {
-	slider->StoreData();
-	AnimationDrawer *andr = (AnimationDrawer *)drw;
-	PreparationParameters pp(NewDrawer::ptRENDER);
-	drw->prepare(&pp);
-	updateMapView();
-}
+//AnimationTiming::AnimationTiming(CWnd *par, AnimationDrawer *ldr) 
+//	: DisplayOptionsForm(ldr, par, "Time")
+//{
+//
+//
+//	create();
+//}
+//
+//void  AnimationTiming::apply() {
+//	slider->StoreData();
+//	AnimationDrawer *andr = (AnimationDrawer *)drw;
+//	PreparationParameters pp(NewDrawer::ptRENDER);
+//	drw->prepare(&pp);
+//	updateMapView();
+//}
 
 //----------------------------------------------------------
 AnimationControl::AnimationControl(CWnd *par, AnimationDrawer *ldr) 
 	: DisplayOptionsForm2(ldr, par, "Time")
 {
-	FlatIconButton *fi1 = new FlatIconButton(root,"Begin","",(NotifyProc)&AnimationControl::begin, FileName());
-	FlatIconButton *fi2 = new FlatIconButton(root,"Pause","",(NotifyProc)&AnimationControl::pause, FileName());
+	FieldGroup *fg = new FieldGroup(root, true);
+	FlatIconButton *fi1 = new FlatIconButton(fg,"Begin","",(NotifyProc)&AnimationControl::begin, FileName());
+	fbBegin = fi1;
+	FlatIconButton *fi2 = new FlatIconButton(fg,"Pause","",(NotifyProc)&AnimationControl::pause, FileName());
 	fi2->Align(fi1,AL_AFTER,-10);
-	fi1 = new FlatIconButton(root,"Run","",(NotifyProc)&AnimationControl::run, FileName());
+	fi1 = new FlatIconButton(fg,"Run","",(NotifyProc)&AnimationControl::run, FileName());
 	fi1->Align(fi2,AL_AFTER,-10);
-	fi2 = new FlatIconButton(root,"Stop","",(NotifyProc)&AnimationControl::stop, FileName());
+	fi2 = new FlatIconButton(fg,"Stop","",(NotifyProc)&AnimationControl::stop, FileName());
 	fi2->Align(fi1, AL_AFTER,-10);
-	fi1 = new FlatIconButton(root,"End","",(NotifyProc)&AnimationControl::end, FileName());
+	fi1 = new FlatIconButton(fg,"End","",(NotifyProc)&AnimationControl::end, FileName());
 	fi1->Align(fi2, AL_AFTER,-10);
 
+	slider = new FieldRealSliderEx(root,"Interval", &ldr->interval,ValueRangeReal(0.1,1000,0.1),false);
+	slider->SetCallBack((NotifyProc)&AnimationControl::setTiming);
+	slider->setContinuous(true);
+	slider->Align(fbBegin, AL_UNDER);
+	PushButton *pb = new PushButton(root,"apply",(NotifyProc)&AnimationControl::setTiming);
+	//pb->Align(slider, AL_AFTER);
+
   create();
+}
+
+int AnimationControl::setTiming(Event *ev) {
+	slider->StoreData();
+	AnimationDrawer *andr = (AnimationDrawer *)drw;
+ /*   ILWISSingleLock sl(&(andr->csAccess), TRUE,SOURCE_LOCATION);
+	drw->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->KillTimer(andr->timerid);
+	andr->timerid = iUNDEF;*/
+	stop(0);
+	run(0);
+	return 1;
 }
 
 int AnimationControl::stop(Event  *ev) {
@@ -269,10 +278,13 @@ int AnimationControl::pause(Event  *ev) {
 }
 
 int AnimationControl::end(Event  *ev) {
+	AnimationDrawer *andr = (AnimationDrawer *)drw;
+	andr->index = andr->drawers.size();
 	return 1;
 }
 
 int AnimationControl::run(Event  *ev) {
+	slider->StoreData();
 	AnimationDrawer *andr = (AnimationDrawer *)drw;
 	if ( andr->timerid != iUNDEF)
 		return 1;

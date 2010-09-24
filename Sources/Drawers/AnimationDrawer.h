@@ -34,18 +34,9 @@ namespace ILWIS{
 		static int timerIdCounter;
 		int index;
 		bool loop;
+		CCriticalSection csAccess;
 
 		void addSetDrawer(const BaseMap& basemap, ILWIS::PreparationParameters *pp, ILWIS::SetDrawer *rsd, const String& name="");
-	};
-
-	class AnimationTiming: public DisplayOptionsForm
-	{
-	public:
-		AnimationTiming(CWnd *par, AnimationDrawer *gdr);
-		void apply();
-	private:
-		int setTiming(Event *ev);
-		FieldRealSliderEx *slider;
 	};
 
 	class AnimationControl: public DisplayOptionsForm2
@@ -53,6 +44,9 @@ namespace ILWIS{
 	public:
 		AnimationControl(CWnd *par, AnimationDrawer *gdr);
 	private:
+		int setTiming(Event *ev);
+		FieldRealSliderEx *slider;
+		FlatIconButton *fbBegin; 
 		int begin(Event  *ev);
 		int end(Event  *ev);
 		int pause(Event  *ev);
