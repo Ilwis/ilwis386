@@ -1971,7 +1971,7 @@ void CalendarSelect::create()
   zDimension dimFld = zDimension(psn->iWidth,psn->iMinHeight);
   calendar = new CalendarCtrl();
   BOOL ret = calendar->Create(NULL,NULL,WS_BORDER|WS_CHILD|WS_VISIBLE|FMC_AUTOSETTINGS,CRect(pntFld, dimFld),frm()->wnd(),763);
-  if ( tempDate == "")
+  if ( tempDate == tUNDEF)
 	calendar->SetDate(COleDateTime::GetCurrentTime());
   else
     SetDate(tempDate);
@@ -2003,15 +2003,19 @@ COleDateTime CalendarSelect::GetDate() {
 	return COleDateTime();
 }
 
-void CalendarSelect::SetDate(const String& date) {
-	if ( calendar && date != "1-1-1900" && date != "0-0-0") {
-		Array<String> parts;
-		Split(date,parts,"-");
+void CalendarSelect::SetDate(const ILWIS::Time& tim) {
+	if ( calendar && tim != tUNDEF) {
+		int year, month, day;
+		year = tim.get(ILWIS::Time::tpYEAR);
+		month = tim.get(ILWIS::Time::tpMONTH);
+		day = tim.get(ILWIS::Time::tpDAYOFMONTH);
 		COleDateTime cdate;
-		cdate.SetDate(parts[2].iVal(), parts[1].iVal(), parts[0].iVal());
-		calendar->SetDate(cdate);
-		calendar->SetCurrentMonthAndYear(parts[1].iVal(), parts[2].iVal());
+		cdate.SetDate(year, month, day);
+		if ( year > 100) { // limitation of  COleDateTime
+			calendar->SetDate(cdate);
+			calendar->SetCurrentMonthAndYear(month, year);
+		}
 	} else {
-		tempDate = date;
+		tempDate = tim;
 	}
 }

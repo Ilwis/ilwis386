@@ -271,7 +271,7 @@ int ColumnManageForm::Select(Event* Evt)
     if (col->fOwnedByTable())
       stRemark->SetVal(STBRemColIsTblOwned);
     else if (col->fDependent()) {
-      Time timNewest = 0;
+      ObjectTime timNewest = 0;
       String sObjName, s;
       col->GetNewestDependentObject(sObjName, timNewest);
       switch (timNewest) {

@@ -2573,7 +2573,7 @@ void DependsOnPropPage::BuildPage()
 	bool fIsUpToDate = true;
 	if (m_obj->fCalculated())
 	{
-		Time timNewest = 0;
+		ObjectTime timNewest = 0;
 		String sObjName;
 		m_obj->GetNewestDependentObject(sObjName, timNewest);
 		fIsUpToDate = timNewest == 0;

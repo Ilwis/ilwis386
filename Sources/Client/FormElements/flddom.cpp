@@ -126,9 +126,12 @@ FormCreateDomain::FormCreateDomain(CWnd* wPar, String* sDom, long types)
 	, wParent(wPar)
 	, fDomainInfo(false)
 	, fiNrItems(0)
+	, useDate(true),
+	timeFormat(0)
+
 {
 	if (dmTypes == 0)
-		dmTypes = dmCLASS | dmIDENT | dmVALUE | dmBOOL;
+		dmTypes = dmCLASS | dmIDENT | dmVALUE | dmBOOL | dmTIME;
 
 	sNewName = *sDomain;
 	dmType type = dmCLASS;
@@ -144,6 +147,7 @@ FormCreateDomain::FormCreateDomain(CWnd* wPar, String* sDom, long types)
 				if (dm->pdc())         type = dmCLASS;
 				else if (dm->pdid())   type = dmIDENT;
 				else if (dm->pdbool()) type = dmBOOL;
+				else if ( dm->pdtime()) type = dmTIME;
 				else if (dm->pdv()) 
 				{
 					type = dmVALUE;
@@ -165,6 +169,7 @@ FormCreateDomain::FormCreateDomain(CWnd* wPar, String* sDom, const DomainInfo& d
 	, fDomainInfo(true)
 	, dmInf(dminf)
 	, fiNrItems(0)
+	, rgTime(0)
 {
 	if (dmTypes == 0)
 		dmTypes = dmCLASS | dmIDENT | dmVALUE | dmBOOL;
@@ -182,6 +187,7 @@ FormCreateDomain::FormCreateDomain(CWnd* wPar, String* sDom, const DomainInfo& d
 		case dmtID:    type = dmIDENT; break;
 		case dmtBOOL:  type = dmBOOL;  break;
 		case dmtVALUE: type = dmVALUE; break;
+		case dmtTIME: type = dmTIME; break;
 		default:
 			type = dmVALUE; break;
 	}
@@ -259,8 +265,31 @@ void FormCreateDomain::init(dmType type)
 	}
 
 	// Width field
+	RadioButton *rbTime = 0;
+	if ( dmTIME & dmTypes) {
+		mode = ILWIS::Time::mDATETIME;
+		if ( type == dmTIME)
+			iRgVal = iRg;
+		dmt[iRg++] = dmTIME;
+		rbTime = new RadioButton(rg, "Time");
+		rgTime = new RadioGroup(rbTime, "",&timeFormat, true);
+		rgTime->SetIndependentPos();
+		rgTime->Align(rbTime, AL_AFTER);
+		RadioButton * rbDateTime = new RadioButton(rgTime,"Date & Time");
+		RadioButton * rbDateOnly = new RadioButton(rgTime,"Date only");
+		RadioButton * rbTimeOnly = new RadioButton(rgTime,"Day Time only");
+		rgTime->SetCallBack((NotifyProc)&FormCreateDomain::SetUseDate, this);
+		interval = ILWIS::TimeInterval(ILWIS::Time("*"),ILWIS::Time("*"),ILWIS::Duration(""));
+		fInterval =  new FieldTimeInterval(rbTime, "", &interval,0,&mode);
+		fInterval->Align(rgTime, AL_UNDER);
+		FieldBlank *fb = new FieldBlank(root);
+		fb->Align(rbTime, AL_UNDER, 20);
+	}
+
+
+
 	fiWidth = new FieldInt(root, SDMUiWidth, &iWidth);
-	fiWidth->Align(rg, AL_UNDER);
+	//fiWidth->Align(fb, AL_UNDER);
 
 	// Description field
 	StaticText* st = new StaticText(root, SDMUiDescription);
@@ -282,6 +311,19 @@ void FormCreateDomain::init(dmType type)
 	create();
 }
 
+int FormCreateDomain::SetUseDate(Event *ev) {
+	if ( rgTime) {
+		rgTime->StoreData();
+		if ( timeFormat == 0)
+			fInterval->setMode(ILWIS::Time::mDATETIME);
+		else if ( timeFormat == 1)
+			fInterval->setMode(ILWIS::Time::mDATE);
+		else if ( timeFormat == 2) {
+			fInterval->setMode(ILWIS::Time::mTIME);
+		}
+	}
+	return 1;
+}
 FormCreateDomain::~FormCreateDomain()
 {
 }
@@ -310,6 +352,14 @@ int FormCreateDomain::exec()
 			case dmBOOL:
 				dm = Domain(fn, "False", "True");
 				dm->SetWidth(iWidth);
+				break;
+			case dmTIME:
+				{
+				if ( timeFormat == 0) mode = ILWIS::Time::mDATETIME;
+				else if ( timeFormat == 0) mode = ILWIS::Time::mDATE;
+				else if ( timeFormat == 0) mode = ILWIS::Time::mTIME;
+				dm = Domain(fn,interval,mode);
+				}
 				break;
 			case dmVALUE:
 				{

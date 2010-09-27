@@ -215,7 +215,7 @@ static const String sCHECK_OBJECT_ONLY("@CheckOb!jectOnly!@"); // special consta
 enum dmType { dmCLASS = 0x01, dmIDENT = 0x02, dmVALUE = 0x04, dmGROUP = 0x08,
               dmIMAGE = 0x10, dmNONE = 0x20, dmPICT = 0x40, dmCOLOR = 0x80,
               dmBOOL = 0x100, dmBIT = 0x200, dmSTRING = 0x400, dmCOORD = 0x800,
-							dmUNIQUEID = 0x1000 };
+							dmUNIQUEID = 0x1000, dmTIME=0x2000 };
 
 inline int dmtype(DomainType dmt)
 {
@@ -233,6 +233,7 @@ inline int dmtype(DomainType dmt)
     case dmtCOLOR:    return dmCOLOR;
     case dmtCOORD:    return dmCOORD;
     case dmtBOOL:     return dmBOOL;
+	case dmtTIME:	  return dmTIME;
     case dmtBINARY:   return 0;
     default: return 0;
   }

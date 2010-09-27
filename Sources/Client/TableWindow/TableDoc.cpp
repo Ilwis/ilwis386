@@ -1,39 +1,39 @@
 /***************************************************************
- ILWIS integrates image, vector and thematic data in one unique 
- and powerful package on the desktop. ILWIS delivers a wide 
- range of feautures including import/export, digitizing, editing, 
- analysis and display of data as well as production of 
- quality mapsinformation about the sensor mounting platform
- 
- Exclusive rights of use by 52°North Initiative for Geospatial 
- Open Source Software GmbH 2007, Germany
+ILWIS integrates image, vector and thematic data in one unique 
+and powerful package on the desktop. ILWIS delivers a wide 
+range of feautures including import/export, digitizing, editing, 
+analysis and display of data as well as production of 
+quality mapsinformation about the sensor mounting platform
 
- Copyright (C) 2007 by 52°North Initiative for Geospatial
- Open Source Software GmbH
+Exclusive rights of use by 52°North Initiative for Geospatial 
+Open Source Software GmbH 2007, Germany
 
- Author: Jan Hendrikse, Willem Nieuwenhuis,Wim Koolhoven 
- Bas Restsios, Martin Schouwenburg, Lichun Wang, Jelle Wind 
+Copyright (C) 2007 by 52°North Initiative for Geospatial
+Open Source Software GmbH
 
- Contact: Martin Schouwenburg; schouwenburg@itc.nl; 
- tel +31-534874371
+Author: Jan Hendrikse, Willem Nieuwenhuis,Wim Koolhoven 
+Bas Restsios, Martin Schouwenburg, Lichun Wang, Jelle Wind 
 
- This program is free software; you can redistribute it and/or
- modify it under the terms of the GNU General Public License
- version 2 as published by the Free Software Foundation.
+Contact: Martin Schouwenburg; schouwenburg@itc.nl; 
+tel +31-534874371
 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU General Public License for more details.
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+version 2 as published by the Free Software Foundation.
 
- You should have received a copy of the GNU General Public License
- along with this program (see gnu-gpl v2.txt); if not, write to
- the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- Boston, MA 02111-1307, USA or visit the web page of the Free
- Software Foundation, http://www.fsf.org.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
 
- Created on: 2007-02-8
- ***************************************************************/
+You should have received a copy of the GNU General Public License
+along with this program (see gnu-gpl v2.txt); if not, write to
+the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+Boston, MA 02111-1307, USA or visit the web page of the Free
+Software Foundation, http://www.fsf.org.
+
+Created on: 2007-02-8
+***************************************************************/
 // TableDoc.cpp : implementation file
 //
 
@@ -67,6 +67,7 @@
 #include "Client\FormElements\fldaggr.h"
 #include "Client\FormElements\fldsmv.h"
 #include "Engine\Table\tblinfo.h"
+#include "Engine\Domain\DomainTime.h"
 #include "Engine\DataExchange\ForeignFormat.h"
 #include "Client\TableWindow\ColumnPropForm.h"
 #include "Engine\Base\File\Directory.h"
@@ -95,8 +96,8 @@ BEGIN_MESSAGE_MAP(TableDoc, IlwisDocument)
 	ON_COMMAND(ID_ROSE, OnNewRoseDiagram)
 	ON_UPDATE_COMMAND_UI(ID_FILE_SAVE_AS, OnUpdateSaveAs)
 	ON_COMMAND(ID_FILE_SAVE_AS, OnFileSaveAs)	
-//	ON_COMMAND(ID_SORT, OnSort)
-//	ON_COMMAND(ID_UPDATEALLCOLS, OnUpdateAllColumns)
+	//	ON_COMMAND(ID_SORT, OnSort)
+	//	ON_COMMAND(ID_UPDATEALLCOLS, OnUpdateAllColumns)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -155,12 +156,12 @@ void TableDoc::Serialize(CArchive& ar)
 
 const Table& TableDoc::table() const
 {
-  return tbl;
+	return tbl;
 }
 
 IlwisObject TableDoc::obj() const
 {
-  return tbl;
+	return tbl;
 }
 
 BOOL TableDoc::OnOpenDocument(LPCTSTR lpszPath, ParmList& pm) 
@@ -211,27 +212,27 @@ BOOL TableDoc::OnOpenDocument(LPCTSTR lpszOpenString)
 BOOL TableDoc::OnOpenDocument(const Table& table)
 {
 	tbl = table;
-  if (!tbl.fValid())
+	if (!tbl.fValid())
 		return FALSE;
-  if (!tbl->fCalculated()) {
+	if (!tbl->fCalculated()) {
 		CWaitCursor wc;
-	  tbl->Calc();
-    if (!tbl->fCalculated())
-      return FALSE;
-  } 
+		tbl->Calc();
+		if (!tbl->fCalculated())
+			return FALSE;
+	} 
 	String s = tbl->sTypeName();
 	if (s != tbl->sDescription && "" != tbl->sDescription)
 		s = String("%S - %S", s, tbl->sDescription);
-  SetTitle(s.scVal());
+	SetTitle(s.scVal());
 	if ( tvw )
 		delete tvw;
 	tvw = new TableView(tbl);
 	return TRUE;
 }
- 
+
 zIcon TableDoc::icon() const
 {
-  return zIcon("TableIcon");
+	return zIcon("TableIcon");
 }
 
 int TableDoc::iCols() const
@@ -254,7 +255,7 @@ long TableDoc::iRow(const String sRec) const
 		return 1;
 	return tvw->iRow(sRec);
 }
- 
+
 ColumnView& TableDoc::cv(int i)
 {
 	return tvw->cv(i);
@@ -308,10 +309,10 @@ bool TableDoc::fCmdCalc(const String sCom)
 	TextInput ip(sCmd);
 	TokenizerBase tokenize(&ip);
 	tokenize.SetComposed(sComposed);
-	
+
 	Token tok = tokenize.tokGet();
 	String sCol = tok.sVal();
-	
+
 	Domain dom;
 	ValueRange vr;
 	tok = tokenize.tokGet();
@@ -365,7 +366,7 @@ bool TableDoc::fCmdCalc(const String sCom)
 				else {
 					col = Column(tbl, sCol, sExpres);
 				}
-				
+
 			}
 			catch (const ErrorObject& err) {
 				err.Show(tvw->sName());
@@ -455,93 +456,128 @@ bool TableDoc::fCmdCalc(const String sCom)
 
 void TableDoc::MoveCol(int iFrom, int iTo)
 {
-  if (iTo < 0)
-    iTo = 0;
-  if (iTo >= tvw->iCols())
-    iTo = tvw->iCols() - 1;
+	if (iTo < 0)
+		iTo = 0;
+	if (iTo >= tvw->iCols())
+		iTo = tvw->iCols() - 1;
 	if (iFrom == iTo)
 		return;
-  tvw->MoveCol(iFrom,iTo);
+	tvw->MoveCol(iFrom,iTo);
 	UpdateAllViews(0);
 }
 
 void TableDoc::SetColPos(int iCol, int iPos)
 {
-  iPos -= 1;
-  if (iPos != iCol) {
-    if (iPos >= tvw->iCols())
-      iPos = tvw->iCols() - 1;
-    MoveCol(iCol,iPos);
-  }
+	iPos -= 1;
+	if (iPos != iCol) {
+		if (iPos >= tvw->iCols())
+			iPos = tvw->iCols() - 1;
+		MoveCol(iCol,iPos);
+	}
 }
 
 void TableDoc::OnAddColumn()
 {
-  class NewColumnForm: public FormWithDest
-  {
-  public:
-    NewColumnForm(CWnd* parent)
-    : FormWithDest(parent, STBTitleAddCol),
-      vr(0,100,1)
-    {
-      sDomName = "value.dom";
-      new FieldString(root, STBUiColName, &sColName, Domain(), false);
-      fdc = new FieldDomainC(root, STBUiDom, &sDomName, dmCLASS|dmIDENT|dmGROUP|dmVALUE|dmIMAGE|dmBOOL|dmCOORD|dmCOLOR|dmSTRING|dmPICT);
-      fvr = new FieldValueRange(root, STBUiRange, &vr, fdc);
-      fdc->SetCallBack((NotifyProc)&FieldValueRange::DomainCallBack, fvr);
-      fvr->Align(fdc, AL_UNDER);  
-      StaticText* st = new StaticText(root,STBUiDescription);
-      st->psn->SetBound(0,0,0,0);
-      st->SetIndependentPos();
-      FieldString* fs = new FieldString(root, "", &sDescr);
-      fs->SetWidth(120);
-      fs->SetIndependentPos();
+	class NewColumnForm: public FormWithDest
+	{
+	public:
+		NewColumnForm(CWnd* parent)
+			: FormWithDest(parent, STBTitleAddCol),
+			vr(0,100,1)
+		{
+			sDomName = "value.dom";
+			new FieldString(root, STBUiColName, &sColName, Domain(), false);
+			fdc = new FieldDomainC(root, STBUiDom, &sDomName, dmCLASS|dmIDENT|dmGROUP|dmVALUE|dmIMAGE|dmBOOL|dmCOORD|dmCOLOR|dmSTRING|dmPICT|dmTIME);
+			fvr = new FieldValueRange(root, STBUiRange, &vr, fdc);
+			ftiv = new FieldTimeInterval(root,"Interval",&tiv,fdc);
 
-      SetMenHelpTopic(htpTblNewCol);
-      create();
-    }
-    String sColName;
-    String sDomName;
-    String sDescr;
-    ValueRange vr;
-  private:  
-    FieldDomainC* fdc;
-    FieldValueRange* fvr;  
-  };
-  if (tbl->fDataReadOnly()) 
-    return;  
-  try {
-    NewColumnForm frm(wndGetActiveView());
-    if (frm.fOkClicked()) {
-      if ("" == frm.sColName)
-        return;
-      Domain dm(frm.sDomName);
-      if (!dm.fValid())
-        return;
-      DomainValueRangeStruct dvrs(dm, frm.vr);
-	  Column col;
-	  try
-	  {
-		col = Column(tbl, frm.sColName, dvrs);
-	  }
-	  catch (CMemoryException* err)
-	  {
-		  AfxMessageBox(STBErrCreateColumnNoMemory.scVal());
-		  err->Delete();
-	  }
-      if (!col.fValid()) 
-        return;
-      col->SetDescription(frm.sDescr);  
-      if (tbl.ptr())
-        tbl->AddCol(col);
-      col->Fill();
-      int iCol = tvw->iAddCol(col);
+			fdc->SetCallBack((NotifyProc)&NewColumnForm::DomainCallBack);
+			fvr->Align(fdc, AL_UNDER);  
+			StaticText* st = new StaticText(root,STBUiDescription);
+			st->psn->SetBound(0,0,0,0);
+			st->SetIndependentPos();
+			FieldString* fs = new FieldString(root, "", &sDescr);
+			st->Align(fvr, AL_UNDER);
+			fs->SetWidth(120);
+			fs->SetIndependentPos();
+			fvr->Hide();
+			ftiv->Hide();
+
+			SetMenHelpTopic(htpTblNewCol);
+			create();
+		}
+		String sColName;
+		String sDomName;
+		String sDescr;
+		ValueRange vr;
+		ILWIS::TimeInterval tiv;
+	private:
+		int DomainCallBack(Event *ev) {
+			fdc->StoreData();
+			String sDom = fdc->sName();
+			Domain dm;
+			if ("" == sDom)
+				return 0;
+			try {
+				dm = Domain(sDom);
+			}
+			catch (const ErrorObject&) {
+				return 0;
+			}
+			if (!dm.fValid())
+				return 0;
+			ftiv->Hide();
+			fvr->Hide();
+			if ( dm->pdtime()){
+				ftiv->DomainCallBack(0);
+				ftiv->setMode(dm->pdtime()->getMode());
+				ftiv->Show();
+			}
+			else if ( dm->pdv()) {
+				fvr->DomainCallBack(0);
+				fvr->Show();
+			}
+			return 1;
+
+		}
+		FieldDomainC* fdc;
+		FieldValueRange* fvr;
+		FieldTimeInterval *ftiv;
+	};
+	if (tbl->fDataReadOnly()) 
+		return;  
+	try {
+		NewColumnForm frm(wndGetActiveView());
+		if (frm.fOkClicked()) {
+			if ("" == frm.sColName)
+				return;
+			Domain dm(frm.sDomName);
+			if (!dm.fValid())
+				return;
+			DomainValueRangeStruct dvrs(dm, dm->pdtime() ? ValueRange(frm.tiv) : frm.vr);
+			Column col;
+			try
+			{
+				col = Column(tbl, frm.sColName, dvrs);
+			}
+			catch (CMemoryException* err)
+			{
+				AfxMessageBox(STBErrCreateColumnNoMemory.scVal());
+				err->Delete();
+			}
+			if (!col.fValid()) 
+				return;
+			col->SetDescription(frm.sDescr);  
+			if (tbl.ptr())
+				tbl->AddCol(col);
+			col->Fill();
+			int iCol = tvw->iAddCol(col);
 			UpdateAllViews(0);
-    }    
-  }
-  catch (ErrorObject& err) {
-    err.Show();
-  }
+		}    
+	}
+	catch (ErrorObject& err) {
+		err.Show();
+	}
 }
 
 
@@ -552,34 +588,34 @@ const Domain& TableDoc::dm() const
 
 bool TableDoc::fDelColumn(int iCol)
 {
-  Column col = tvw->cv(iCol);
-  if (!col.fValid())
-    return false;
-  if (col.fUsedInOpenColumns()) {
-    String s(STBErrDelColUsed_S.sVal(), col->sNam);
-    wndGetActiveView()->MessageBox(s.sVal(), STBMsgDelColumn.sVal(),
-                 MB_OK|MB_ICONSTOP);
-    return false;
-  }
-  if (col->fOwnedByTable()) {
-    String s(STBErrDelColTblOwned_S.sVal(), col->sNam);
-    wndGetActiveView()->MessageBox(s.sVal(), STBMsgDelColumn.sVal(),
-                 MB_OK|MB_ICONSTOP);
-    return false;
-  }
-  if (col->fReadOnly()) {
-    String s(STBErrDelColReadOnly_S.sVal(), col->sNam);
-    wndGetActiveView()->MessageBox(s.sVal(), STBMsgDelColumn.sVal(),
-                 MB_OK|MB_ICONSTOP);
-    return false;
-  }
-  String s(STBMsgDelColumn_S.sVal(), col->sNam);
-  int iRet = wndGetActiveView()->MessageBox(s.sVal(), STBMsgDelColumn.sVal(),
-               MB_YESNOCANCEL|MB_ICONQUESTION|MB_DEFBUTTON2);
-  if (IDYES == iRet) {
-    tvw->RemoveCol(iCol);
+	Column col = tvw->cv(iCol);
+	if (!col.fValid())
+		return false;
+	if (col.fUsedInOpenColumns()) {
+		String s(STBErrDelColUsed_S.sVal(), col->sNam);
+		wndGetActiveView()->MessageBox(s.sVal(), STBMsgDelColumn.sVal(),
+			MB_OK|MB_ICONSTOP);
+		return false;
+	}
+	if (col->fOwnedByTable()) {
+		String s(STBErrDelColTblOwned_S.sVal(), col->sNam);
+		wndGetActiveView()->MessageBox(s.sVal(), STBMsgDelColumn.sVal(),
+			MB_OK|MB_ICONSTOP);
+		return false;
+	}
+	if (col->fReadOnly()) {
+		String s(STBErrDelColReadOnly_S.sVal(), col->sNam);
+		wndGetActiveView()->MessageBox(s.sVal(), STBMsgDelColumn.sVal(),
+			MB_OK|MB_ICONSTOP);
+		return false;
+	}
+	String s(STBMsgDelColumn_S.sVal(), col->sNam);
+	int iRet = wndGetActiveView()->MessageBox(s.sVal(), STBMsgDelColumn.sVal(),
+		MB_YESNOCANCEL|MB_ICONQUESTION|MB_DEFBUTTON2);
+	if (IDYES == iRet) {
+		tvw->RemoveCol(iCol);
 		return true;
-  }    
+	}    
 	else if (IDCANCEL == iRet)
 		return false;
 	else
@@ -595,12 +631,12 @@ void TableDoc::OnUpdateAddColumn(CCmdUI* pCmdUI)
 
 void TableDoc::OnNewGraph()
 {
-  IlwWinApp()->OpenDocumentAsGraph(obj()->sNameQuoted(true).scVal());
+	IlwWinApp()->OpenDocumentAsGraph(obj()->sNameQuoted(true).scVal());
 }
 
 void TableDoc::OnNewRoseDiagram()
 {
-  IlwWinApp()->OpenDocumentAsRoseDiagram(obj()->sNameQuoted(true).scVal());
+	IlwWinApp()->OpenDocumentAsRoseDiagram(obj()->sNameQuoted(true).scVal());
 }
 
 void TableDoc::OnFileSaveAs()
@@ -610,9 +646,9 @@ void TableDoc::OnFileSaveAs()
 	CString sNewName(fn.sRelative().scVal());
 	CDocTemplate* pTemplate = GetDocTemplate();	
 	if (!AfxGetApp()->DoPromptFileName(sNewName,
-		  TRUE ? AFX_IDS_SAVEFILE : AFX_IDS_SAVEFILECOPY,
-		  OFN_HIDEREADONLY | OFN_PATHMUSTEXIST, FALSE, pTemplate))
-			return ;     	
+		TRUE ? AFX_IDS_SAVEFILE : AFX_IDS_SAVEFILECOPY,
+		OFN_HIDEREADONLY | OFN_PATHMUSTEXIST, FALSE, pTemplate))
+		return ;     	
 	IlwisDocument::DoSave(sNewName, TRUE);
 }
 
@@ -632,10 +668,10 @@ BOOL TableDoc::OnSaveDocument(LPCTSTR lpszPathName)
 
 		IlwWinApp()->Context()->SetThreadLocalVar(IlwisAppContext::tlvNOUPDATECATALOG, fNoUpdate);
 		FileName fnTempTbl = FileName::fnUnique(fnFrom);
-		
+
 		ObjectCopierUI cop2(NULL, fnFrom, fnTempTbl); // save the orignal table to a temporary, changes in data may not end up the original
 		// if a save as is done. So temporary rename it, will be placed back at the end
-		Time tim = tbl->objtime;
+		ObjectTime tim = tbl->objtime;
 		cop2.Copy(true);
 		tbl->DoNotStore(false);
 		tbl->Store();

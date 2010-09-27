@@ -564,6 +564,7 @@ bool DomainLister::fOK(const FileName& fn, const String&)
   if ((dmTypes & dmBOOL)  && (fCIStrEqual("DomainBool" , sType))) return true;
   if ((dmTypes & dmBIT)   && (fCIStrEqual("DomainBit" , sType))) return true;
   if ((dmTypes & dmSTRING) && (fCIStrEqual("DomainString" , sType))) return true;
+  if ((dmTypes & dmTIME) && (fCIStrEqual("DomainTime" , sType))) return true;
   if (((dmTypes & dmIDENT) || (dmTypes & dmUNIQUEID)) && (fCIStrEqual("DomainUniqueId", sType))) 
 	{
 		// new UniqueID is created by selecting uniqueid.dom, this should only be possible if asking for it explicitly
@@ -598,6 +599,7 @@ bool DomainAllExtLister::fOK(const FileName& fn, const String&)
   if ((dmTypes & dmBOOL)  && (fCIStrEqual("DomainBool" , sType))) return true;
   if ((dmTypes & dmBIT)   && (fCIStrEqual("DomainBit" , sType))) return true;
   if ((dmTypes & dmSTRING) && (fCIStrEqual("DomainString" , sType))) return true;
+  if ((dmTypes & dmTIME) && (fCIStrEqual("DomainTime" , sType))) return true;
   if (((dmTypes & dmIDENT) || (dmTypes & dmUNIQUEID)) && (fCIStrEqual("DomainUniqueId", sType))) 
 	{
 		// new UniqueID is created by selecting uniqueid.dom, this should only be possible if asking for it explicitly

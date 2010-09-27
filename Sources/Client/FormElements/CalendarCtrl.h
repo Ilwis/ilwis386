@@ -298,11 +298,11 @@ public:
   void setDirty() { calendar->Invalidate(); }
   bool fValid();
   COleDateTime GetDate();
-  void SetDate(const String& date);
+  void SetDate(const ILWIS::Time& date);
 
 private:
 	CalendarCtrl *calendar;
-	String tempDate;
+	ILWIS::Time tempDate;
 
 	void create();
 	void SetFocus() { if(calendar) calendar->SetFocus(); } // overriden

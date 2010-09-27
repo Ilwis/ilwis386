@@ -43,6 +43,7 @@
 
 #include "Client\Headers\formelementspch.h"
 #include "Client\FormElements\CalendarCtrl.h"
+#include "Engine\Domain\DomainTime.h"
 #include "Client\ilwis.h"
 
 
@@ -1112,14 +1113,16 @@ FieldDate::FieldDate(FormEntry* p, const String& sQuestion,
   : FormEntry(p),year(0),month(0),day(0)
 {
    Init(sQuestion);
-   _sTime = 0;
 }
 
 FieldDate::FieldDate(FormEntry* p, const String& sQuestion,
-                               String* sTime )
+					 ILWIS::Time* tm )
   : FormEntry(p),year(0),month(0),day(0)
 {
-   _sTime = sTime;
+  time = tm;
+  day = time->get(ILWIS::Time::tpDAYOFMONTH);
+  year = time->get(ILWIS::Time::tpYEAR);
+  month = time->get(ILWIS::Time::tpMONTH);
   Init(sQuestion);
 }
 
@@ -1146,7 +1149,7 @@ void FieldDate::Init(const String& sQuestion)
   frYear = new FieldIntSimple(parGroup, &year, vrrYear, false);
   frYear->SetFieldWidth(30);
   frYear->Align(frMonth, AL_AFTER,2);
-  pbCalendar = new OwnButtonSimple(parGroup,"date",(NotifyProc)&FieldDate::showCalendar, this);
+  pbCalendar = new OwnButtonSimple(parGroup,"time",(NotifyProc)&FieldDate::showCalendar, this);
   pbCalendar->SetHeight(frYear->psn->iHeight);
   pbCalendar->Align(frYear, AL_AFTER);
 
@@ -1161,7 +1164,7 @@ int FieldDate::showCalendar(Event *ev) {
 	frYear->StoreData();
 	int x = pbCalendar->psn->iPosX;
 	int y = pbCalendar->psn->iPosY;
-	CalendarForm *frm = new CalendarForm(this->frm()->wnd(),String("%d-%d-%d",day,month,year));
+	CalendarForm *frm = new CalendarForm(this->frm()->wnd(),ILWIS::Time(year,month,day));
 	if ( frm->fOkClicked()) {
 		COleDateTime dt = frm->GetDate();
 		frDay->SetVal(dt.GetDay());
@@ -1172,26 +1175,12 @@ int FieldDate::showCalendar(Event *ev) {
 	return 1;
 }
 
-void FieldDate::SetVal(const String& data) {
-	Array<String> parts;
-	SplitOn(data, parts, "/");
-	if ( parts.size() == 3) {
-		day = parts[0].iVal();
-		month = parts[1].iVal();
-		year = parts[2].iVal();
-	}  else {
-		Array<String> differentParts;
-		Split(data, differentParts, "-");
-		if ( differentParts.size() == 3) {
-			String sday = differentParts[2]; 
-			day = sday.sHead(" ").iVal();
-			month = differentParts[1].iVal();
-			year = differentParts[0].iVal();
-		} else {
-			year = month = day = 0;
-		}
+void FieldDate::SetVal(const ILWIS::Time& tim) {
 
-	}
+	long year, month, day;
+	year = time->get(ILWIS::Time::tpYEAR);
+	month = time->get(ILWIS::Time::tpMONTH); //0 based
+	day = time->get(ILWIS::Time::tpDAYOFMONTH); // 0 based
 	frYear->SetVal(year);
 	frMonth->SetVal(month);
 	frDay->SetVal(day);
@@ -1257,8 +1246,6 @@ void FieldDate::StoreData()
   frDay->StoreData();
   frMonth->StoreData();
   frYear->StoreData();
-  if (_sTime != 0) 
-    *_sTime = sGetText();
   FormEntry::StoreData();
 }
 
@@ -1274,6 +1261,14 @@ void FieldDate::SetWidth(short iWidth)
   frDay->SetWidth(iWidth); 
   frMonth->SetWidth(iWidth); 
   frYear->SetWidth(iWidth); 
+}
+
+void FieldDate::show(int mode)            // set show or hide
+{
+	frDay->show(mode);
+	frYear->show(mode);
+	frMonth->show(mode);
+	pbCalendar->show(mode);
 }
 
 void FieldDate::Enable() {
@@ -1292,7 +1287,7 @@ void FieldDate::Disable() {
 	frMonth->Disable();
 }
 
-CalendarForm::CalendarForm(CWnd *wnd, const String& date) : FormWithDest(wnd,"Select Date") {
+CalendarForm::CalendarForm(CWnd *wnd, const ILWIS::Time& date) : FormWithDest(wnd,"Select Date") {
 	calendar = new CalendarSelect(root);
 	calendar->SetDate(date);
 
@@ -1305,7 +1300,7 @@ COleDateTime CalendarForm::GetDate() {
 	return COleDateTime();
 }
 
-void CalendarForm::SetDate(const String& date) {
+void CalendarForm::SetDate(const ILWIS::Time& date) {
 	if ( calendar)
 			calendar->SetDate(date);
 }
@@ -1320,42 +1315,84 @@ RadBut::RadBut(FormEntry* f, CWnd *w, const CRect& siz, DWORD style, const char*
     : ZappButton(f, w, siz, style, sQuest, id)
 { ilwapp = IlwWinApp()->Context(); }
 
- FieldTimeSimple::FieldTimeSimple(FormEntry *f) :
-	FormEntry(f)
- {
-   FieldBlank *p = new FieldBlank(this,0.1);
-   p->SetIndependentPos();
- }
 
-void FieldTimeSimple::create() {
-  zPoint pntFld = zPoint(psn->iPosX,psn->iPosY);
-  zDimension dimFld = zDimension(psn->iWidth,psn->iMinHeight + 5);
-  timeCtrl.Create(WS_VISIBLE | WS_BORDER | WS_CHILD | WS_TABSTOP|DTS_TIMEFORMAT,CRect(pntFld, dimFld),frm()->wnd(),Id());
-  timeCtrl.SetFont(frm()->fnt);
-  CreateChildren();
-}
-
-FieldTime::FieldTime(FormEntry *f, const String& sQuestion,bool _includeDate) :
+FieldTime::FieldTime(FormEntry *f, const String& sQuestion,ILWIS::Time *ti,  const DomainTime* dt, ILWIS::Time::Mode m) :
 	FormEntry(f,0,true),
-	fldtime(0),
-	includeDate(_includeDate)
+	time(ti),
+	mode(m)
 {
+	if ( dt == 0 && mode == ILWIS::Time::mUNKNOWN)
+		mode = ILWIS::Time::mDATETIME;
+	if ( dt != 0 && mode == ILWIS::Time::mUNKNOWN)
+		mode = dt->getMode();
+
+	//int fieldsize = mode == ILWIS::Time::mDATETIME ? 60 : 30;
+	int fieldsize = 55;
+
 	if (sQuestion.length() != 0)
 		st = new StaticTextSimple(this, sQuestion);
 	else
 		st = 0;
-	FieldTimeSimple *fld = new FieldTimeSimple(this);
-	if ( includeDate) {
-		FieldDate *flddate = new FieldDate(this,"",&date);
-		flddate->Align(fld,AL_AFTER);
+	sTime = ti->toString(true, mode);
+	fsTime = new FieldStringSimple(this,&sTime,ES_AUTOHSCROLL|WS_TABSTOP|WS_GROUP|WS_BORDER);
+	fsTime->SetWidth(fieldsize);
+	fsTime->SetCallBack((NotifyProc)&FieldTime::checkFormat,this);
+	fsTime->Hide();
+	if (st)
+		fsTime->Align(st, AL_AFTER);
+}
+
+int FieldTime::checkFormat(Event *ev) {
+	fsTime->StoreData();
+	sTime = fsTime->sVal();
+	for(int i=0; i < sTime.size(); ++i) {
+		bool valid = false;
+		char c = sTime[i];
+		if ( sTime[i] >= '0' && sTime[i] <= '9')
+			valid=true;
+		if ( c == '-' || c == '+' || c == '*')
+			valid = true;
+		if ( mode != ILWIS::Time::mDURATION && (c == '.' || c == 'T' || c == ':' )) 
+			valid = true;
+		if ( mode == ILWIS::Time::mDURATION && ( c == 'P' || c == 'Y' || c =='D' || c == 'M' ||
+			 c == 'H' || c == 'S' || c == 'T' || c == '.'))
+			 valid = true;
+		if ( valid == false) {
+			sTime = sTime.substr(0,i);
+			fsTime->SetVal(sTime);
+			break;
+		}
 	}
-	if ( st)
-		fld->Align(st, AL_AFTER);
+
+	return 1;
 }
 
 void FieldTime::create()
 {
-  zPoint pntFld = zPoint(psn->iPosX,psn->iPosY);
-  zDimension dimFld = zDimension(psn->iWidth,psn->iMinHeight);
-  CreateChildren();
+	CreateChildren();
+}
+
+void FieldTime::show(int state)            // set show or hide
+{
+	fsTime->show(state);
+}
+
+void FieldTime::SetUseDate(bool yesno) {
+}
+
+void FieldTime::StoreData()
+{
+	fsTime->StoreData();
+	if ( mode != ILWIS::Time::mDURATION) {
+		ILWIS::Time t(sTime);
+		*time = (double)t;
+	} else {
+		ILWIS::Duration d(sTime);
+		*time = (double)d;
+	}
+}
+
+void FieldTime::SetVal(const ILWIS::Time ti, ILWIS::Time::Mode m) {
+	mode = m;
+	fsTime->SetVal(ti.toString(true, m));
 }

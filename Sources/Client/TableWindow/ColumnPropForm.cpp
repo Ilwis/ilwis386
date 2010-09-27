@@ -48,6 +48,7 @@
 #include "Client\FormElements\flddom.h"
 #include "Client\FormElements\FieldObjShow.h"
 #include "Client\TableWindow\ColumnPropForm.h"
+#include "Engine\Domain\DomainTime.h"
 #include "Headers\Hs\Table.hs"
 #include "Headers\Hs\Mainwind.hs"
 #include "Headers\Hs\DOMAIN.hs"
@@ -130,11 +131,25 @@ ColumnPropForm::ColumnPropForm(CWnd* parent, ColumnView& cv,
 		stRemark->SetIndependentPos();
 		if (cv->vr().fValid() && !cv->dm()->pdnone())
 			vr = cv->vr();
-		fvr = new FieldValueRange(root, STBUiRange, &vr, fd);
-		fvr->Align(stRemark, AL_UNDER);
-		fvr->SetCallBack((NotifyProc)&ColumnPropForm::ValueRangeCallBack);
-		FieldBlank* fb = new FieldBlank(root);
-		fb->Align(fvr, AL_UNDER);
+		if ( cv->dm()->pdtime()) {
+			DomainTime *dt = cv->dm()->pdtime();
+			begin = dt->getInterval().getBegin();
+			end = dt->getInterval().getBegin();
+			duration = 	dt->getInterval().getStep();
+			ft1 = new FieldTime(root,STBUiRange,&begin,dt);
+			ft2 = new FieldTime(root,"a",&end,dt);
+			ft2->Align(ft1, AL_AFTER);
+			FieldBlank* fb = new FieldBlank(root);
+			fb->Align(ft1, AL_UNDER);
+
+		}
+		else {
+			fvr = new FieldValueRange(root, STBUiRange, &vr, fd);
+			fvr->Align(stRemark, AL_UNDER);
+			fvr->SetCallBack((NotifyProc)&ColumnPropForm::ValueRangeCallBack);
+			FieldBlank* fb = new FieldBlank(root);
+			fb->Align(fvr, AL_UNDER);
+		}
 	}
 	// MinMax
 	if (!fNew && cv->dm()->pdv() && !cv->dm()->pdbool()) {
@@ -179,7 +194,7 @@ ColumnPropForm::ColumnPropForm(CWnd* parent, ColumnView& cv,
 			StaticText* st = new StaticText(root, s);
 			st->psn->SetBound(0,0,0,0);
 			st->SetIndependentPos();
-			Time timNewest = 0;
+			ObjectTime timNewest = 0;
 			String sObjName;
 			cv->GetNewestDependentObject(sObjName, timNewest);
 			fUpToDate = timNewest == 0;
@@ -298,7 +313,8 @@ int ColumnPropForm::CallBackDomainChange(Event*)
 	}  
 	if (dm.fValid()) {
 		stRemark->SetVal(dm->sDescription);
-		fvr->DomainCallBack(0);
+		if ( fvr)
+			fvr->DomainCallBack(0);
 	}
 	return 0;
 }

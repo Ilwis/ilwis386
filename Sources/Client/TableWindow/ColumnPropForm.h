@@ -66,6 +66,14 @@ private:
   bool fReadOnly;
   String sExpr, sDomain;
   ValueRange vr;
+  ILWIS::Time begin;
+  ILWIS::Time end;
+  ILWIS::Duration duration;
+  FieldTime *ft1;
+  FieldTime *ft2;
+  FieldTime *ftStep;
+
+
   bool fSetDescFromExpr;
   Column col; 
   StaticText* stRemark;

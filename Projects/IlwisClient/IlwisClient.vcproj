@@ -3868,6 +3868,14 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\Sources\Client\Editors\Domain\DomainTimeView.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Editors\Domain\DomainTimeView.h"
+						>
+					</File>
+					<File
 						RelativePath="..\..\Sources\Client\Editors\Domain\DomainUniqueIDFormView.cpp"
 						>
 					</File>
