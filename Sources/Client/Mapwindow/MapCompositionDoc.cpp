@@ -1657,8 +1657,10 @@ Drawer* MapCompositionDoc::drAppend(const BaseMap& mp, bool asAnimation)
 
 		ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
 		ILWIS::NewDrawer *drawer;
-		if ( asAnimation)
+		if ( asAnimation) {
 			drawer = IlwWinApp()->getDrawer("AnimationDrawer", "Ilwis38", &parms);
+			drawer->addDataSource((void *)&mp);
+		}
 		else 
 			drawer = IlwWinApp()->getDrawer("FeatureLayerDrawer", "Ilwis38", &parms);
 		drawer->addDataSource((void *)&mp);

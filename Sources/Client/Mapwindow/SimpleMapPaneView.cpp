@@ -1,39 +1,39 @@
 /***************************************************************
- ILWIS integrates image, vector and thematic data in one unique 
- and powerful package on the desktop. ILWIS delivers a wide 
- range of feautures including import/export, digitizing, editing, 
- analysis and display of data as well as production of 
- quality mapsinformation about the sensor mounting platform
- 
- Exclusive rights of use by 52°North Initiative for Geospatial 
- Open Source Software GmbH 2007, Germany
+ILWIS integrates image, vector and thematic data in one unique 
+and powerful package on the desktop. ILWIS delivers a wide 
+range of feautures including import/export, digitizing, editing, 
+analysis and display of data as well as production of 
+quality mapsinformation about the sensor mounting platform
 
- Copyright (C) 2007 by 52°North Initiative for Geospatial
- Open Source Software GmbH
+Exclusive rights of use by 52°North Initiative for Geospatial 
+Open Source Software GmbH 2007, Germany
 
- Author: Jan Hendrikse, Willem Nieuwenhuis,Wim Koolhoven 
- Bas Restsios, Martin Schouwenburg, Lichun Wang, Jelle Wind 
+Copyright (C) 2007 by 52°North Initiative for Geospatial
+Open Source Software GmbH
 
- Contact: Martin Schouwenburg; schouwenburg@itc.nl; 
- tel +31-534874371
+Author: Jan Hendrikse, Willem Nieuwenhuis,Wim Koolhoven 
+Bas Restsios, Martin Schouwenburg, Lichun Wang, Jelle Wind 
 
- This program is free software; you can redistribute it and/or
- modify it under the terms of the GNU General Public License
- version 2 as published by the Free Software Foundation.
+Contact: Martin Schouwenburg; schouwenburg@itc.nl; 
+tel +31-534874371
 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU General Public License for more details.
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+version 2 as published by the Free Software Foundation.
 
- You should have received a copy of the GNU General Public License
- along with this program (see gnu-gpl v2.txt); if not, write to
- the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- Boston, MA 02111-1307, USA or visit the web page of the Free
- Software Foundation, http://www.fsf.org.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
 
- Created on: 2007-02-8
- ***************************************************************/
+You should have received a copy of the GNU General Public License
+along with this program (see gnu-gpl v2.txt); if not, write to
+the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+Boston, MA 02111-1307, USA or visit the web page of the Free
+Software Foundation, http://www.fsf.org.
+
+Created on: 2007-02-8
+***************************************************************/
 // SimpleMapPaneView.cpp: implementation of the SimpleMapPaneView class.
 //
 //////////////////////////////////////////////////////////////////////
@@ -84,7 +84,7 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(SimpleMapPaneView, ZoomableView)
 
 BEGIN_MESSAGE_MAP(SimpleMapPaneView, ZoomableView)
-  ON_WM_ERASEBKGND()
+	ON_WM_ERASEBKGND()
 	ON_WM_KEYDOWN()
 	ON_WM_MOUSEMOVE()
 	ON_WM_LBUTTONDOWN()
@@ -102,7 +102,7 @@ void SimpleMapPaneView::MoveMouse(short xInc, short yInc)
 const int RepresentationClass::iSIZE_FACTOR=3; // MapWindow to Layout ratio; never make this 0; currently only int ratio supported
 
 SimpleMapPaneView::SimpleMapPaneView()
-: info(0), edit(0), dcView(0), cwcsButtonDown(Coord()), fwPar(0), bmView(0), hBmOld(0), pDC(0)
+: info(0), edit(0), dcView(0), cwcsButtonDown(Coord()), fwPar(0), bmView(0), hBmOld(0),pDC(0)
 {
 	fDirty = false;
 	fRedrawing = false;
@@ -110,15 +110,15 @@ SimpleMapPaneView::SimpleMapPaneView()
 	fStarting = true; // prevent too early start
 	fDrawAlsoWhenLoading = false;
 
-  hmodMsimg32 = LoadLibrary("msimg32.dll");
-  if (hmodMsimg32 <= 0)
-  {
-    hmodMsimg32 = 0;
-    alphablendfunc = 0;
-  }
-  else {
-    alphablendfunc = (AlphaBlendFunc)GetProcAddress(hmodMsimg32, "AlphaBlend");
-  }
+	hmodMsimg32 = LoadLibrary("msimg32.dll");
+	if (hmodMsimg32 <= 0)
+	{
+		hmodMsimg32 = 0;
+		alphablendfunc = 0;
+	}
+	else {
+		alphablendfunc = (AlphaBlendFunc)GetProcAddress(hmodMsimg32, "AlphaBlend");
+	}
 }
 
 SimpleMapPaneView::~SimpleMapPaneView()
@@ -153,91 +153,90 @@ SimpleMapPaneView::~SimpleMapPaneView()
 		bmView->DeleteObject(); // encapsulating dc is gone, so this should be ok now
 		delete bmView;
 	}
-
-  FreeLibrary(hmodMsimg32);
+	FreeLibrary(hmodMsimg32);
 }
 
 MapCompositionDoc* SimpleMapPaneView::GetDocument()
 {
-  return (MapCompositionDoc*)m_pDocument;
+	return (MapCompositionDoc*)m_pDocument;
 }
 
 void SimpleMapPaneView::OnInitialUpdate()
 {
 	if (0 == fwPar) {
 		CFrameWnd* fw = GetTopLevelFrame();
-	  fwPar = dynamic_cast<FrameWindow*>(fw);
+		fwPar = dynamic_cast<FrameWindow*>(fw);
 	}
 	ZoomableView::OnInitialUpdate();
 	_rScale = rUNDEF; // derived class has to set rScale in some way on a valid value
-  info = new InfoLine(this);
+	info = new InfoLine(this);
 }
 
 MinMax SimpleMapPaneView::mmBounds()
 {
-  return GetDocument()->mmBounds();
+	return GetDocument()->mmBounds();
 }
 
 void SimpleMapPaneView::Coord2RowCol(Coord crd, double& rRow, double &rCol)
 {
-  try {
-    GetDocument()->georef->Coord2RowCol(crd,rRow,rCol);
-  }
-  catch (...) {
+	try {
+		GetDocument()->georef->Coord2RowCol(crd,rRow,rCol);
+	}
+	catch (...) {
 	}
 }
 
 Coord SimpleMapPaneView::cConv(RowCol rc)
 {
-  try {
-    return GetDocument()->georef->cConv(rc);
-  }
-  catch (...) {
-    return Coord();
-  }  
+	try {
+		return GetDocument()->georef->cConv(rc);
+	}
+	catch (...) {
+		return Coord();
+	}  
 }
 
 RowCol SimpleMapPaneView::rcConv(Coord crd)
 {
-  try {
-    return GetDocument()->georef->rcConv(crd);
-  }
-  catch (...) {
+	try {
+		return GetDocument()->georef->rcConv(crd);
+	}
+	catch (...) {
 		return RowCol();
 	}
 }
 
 Coord SimpleMapPaneView::crdPnt(zPoint pnt)
 {
-  Coord crd;
-  double rRow, rCol;
-  Pnt2RowCol(pnt, rRow, rCol);
-  try {
-    GetDocument()->georef->RowCol2Coord(rRow,rCol,crd);
-  }
-  catch (...) {
-    crd = Coord();
-  }  
-  return crd;
+	Coord crd;
+	double rRow, rCol;
+	Pnt2RowCol(pnt, rRow, rCol);
+	try {
+		GetDocument()->georef->RowCol2Coord(rRow,rCol,crd);
+	}
+	catch (...) {
+		crd = Coord();
+	}  
+	return crd;
 }
 
 zPoint SimpleMapPaneView::pntPos(Coord crd)
 {
-  try {
+	try {
 		double rRow, rCol;
-    GetDocument()->georef->Coord2RowCol(crd, rRow, rCol);
+		GetDocument()->georef->Coord2RowCol(crd, rRow, rCol);
 		return pntPos(rRow, rCol);
-  }
-  catch (...) {
-    return zPoint(shUNDEF, shUNDEF);
-  }  
+	}
+	catch (...) {
+		return zPoint(shUNDEF, shUNDEF);
+	}  
 }
- 
+
 BOOL SimpleMapPaneView::OnEraseBkgnd(CDC* cdc)
 {
 	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(GetDocument());
 	if ( mcd) {
-	/*	CRect rct;
+		/*	CRect rct;
 		GetClientRect(&rct);
 		mcd->rootDrawer->getDrawerContext()->setViewPort(RowCol(rct.Height(), rct.Width()));
 		mcd->rootDrawer->prepare(NewDrawer::ptALL);*/
@@ -245,7 +244,7 @@ BOOL SimpleMapPaneView::OnEraseBkgnd(CDC* cdc)
 		//SwapBuffers(cdc->m_hDC);
 	}
 
-  return TRUE;
+	return TRUE;
 }
 
 void SimpleMapPaneView::InitOpenGL(HDC hDC) {
@@ -296,34 +295,34 @@ void SimpleMapPaneView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	}
 	if (edit && edit->OnKeyDown(nChar, nRepCnt, nFlags))
 		return;
-  bool fCtrl = GetKeyState(VK_CONTROL) & 0x8000 ? true : false;
-  switch (nChar) {
+	bool fCtrl = GetKeyState(VK_CONTROL) & 0x8000 ? true : false;
+	switch (nChar) {
 		// mouse movement
-    case VK_LEFT:
-      if (fCtrl)
-        MoveMouse(-10, 0);
-      else  
-        MoveMouse(-1, 0);
-      return;
-    case VK_UP:
-      if (fCtrl)
-        MoveMouse(0, -10);
-      else  
-        MoveMouse(0, -1);
-      return;
-    case VK_RIGHT:
-      if (fCtrl)
-        MoveMouse(10, 0);
-      else  
-        MoveMouse(1, 0);
-      return;
-    case VK_DOWN:
-      if (fCtrl)
-        MoveMouse(0, 10);
-      else  
-        MoveMouse(0, 1);
-      return;
-  }
+	case VK_LEFT:
+		if (fCtrl)
+			MoveMouse(-10, 0);
+		else  
+			MoveMouse(-1, 0);
+		return;
+	case VK_UP:
+		if (fCtrl)
+			MoveMouse(0, -10);
+		else  
+			MoveMouse(0, -1);
+		return;
+	case VK_RIGHT:
+		if (fCtrl)
+			MoveMouse(10, 0);
+		else  
+			MoveMouse(1, 0);
+		return;
+	case VK_DOWN:
+		if (fCtrl)
+			MoveMouse(0, 10);
+		else  
+			MoveMouse(0, 1);
+		return;
+	}
 	ZoomableView::OnKeyDown(nChar, nRepCnt, nFlags);
 }
 
@@ -334,24 +333,20 @@ void SimpleMapPaneView::OnMouseMove(UINT nFlags, CPoint point)
 	MapCompositionDoc* mcd = GetDocument();
 
 	GeoRef georef = mcd->georef;
-  if (!georef.fValid()) 
+	if (!georef.fValid()) 
 		return;
 
 	CRect rctBounds = rctPos(mcd->mmBounds());
-	bool fOutside = !rctBounds.PtInRect(point);
+	bool fOutside = false; //!rctBounds.PtInRect(point);
 
-  bool fNone = georef->fGeoRefNone();
-  double rRow, rCol;
-  Coord c;
-  Pnt2RowCol(point, rRow, rCol);
-  bool fValid = true;
-  try {
-    georef->RowCol2Coord(rRow,rCol,c);
-  }
-  catch (...) {
-    fValid = false;
-  }  
+	bool fNone = georef->fGeoRefNone();
+	double rRow, rCol;
+	Coord c;
+	//Pnt2RowCol(point, rRow, rCol);
+	bool fValid = true;
+	c = mcd->rootDrawer->screenToWorld(RowCol(point.y,point.x));
 	MapStatusBar* msb = 0;
+	CoordSystem csy = mcd->rootDrawer->getCoordinateSystem();
 	if (fwPar) 
 		msb = dynamic_cast<MapStatusBar*>(fwPar->status);
 
@@ -371,15 +366,15 @@ void SimpleMapPaneView::OnMouseMove(UINT nFlags, CPoint point)
 			msb->ShowLatLon(LatLon());
 		}
 		else {    
-			msb->ShowCoord(georef->cs()->sValue(c));
-			if (georef->cs()->pcsDirect()) {
-				CoordSystemDirect *pcsd = georef->cs()->pcsDirect();
+			msb->ShowCoord(csy->sValue(c));
+			if (csy->pcsDirect()) {
+				CoordSystemDirect *pcsd = csy->pcsDirect();
 				CoordSystemPtr * pcs = pcsd->csOther.ptr();
 				Coord crd = pcsd->cInverseConv(pcs,c);
 				msb->ShowRelCoord(pcsd->csOther->sValue(crd));
 			}
-			if (georef->cs()->fCoord2LatLon()) {
-				LatLon ll = georef->cs()->llConv(c);
+			if (csy->fCoord2LatLon()) {
+				LatLon ll = csy->llConv(c);
 				msb->ShowLatLon(ll);
 			}
 			else
@@ -387,64 +382,64 @@ void SimpleMapPaneView::OnMouseMove(UINT nFlags, CPoint point)
 		}  
 	}
 	if (0 == as && (MK_LBUTTON & nFlags)) {
-    zRect rect;
+		zRect rect;
 		GetClientRect(&rect);
-    if (!rect.PtInRect(point)) {
-      info->text(point,"");
-      int xInc = 0;
-      int yInc = 0;
-      if (point.x < rect.left()) {
-        int iDiff = point.x - rect.left();
+		if (!rect.PtInRect(point)) {
+			info->text(point,"");
+			int xInc = 0;
+			int yInc = 0;
+			if (point.x < rect.left()) {
+				int iDiff = point.x - rect.left();
 				horzPixMove(iDiff);
 				xInc = 1;
-      }
-      if (point.x > rect.right()) {
-        int iDiff = point.x - rect.right();
+			}
+			if (point.x > rect.right()) {
+				int iDiff = point.x - rect.right();
 				horzPixMove(iDiff);
 				xInc = -1;
-      }
-      if (point.y < rect.top()) {
-        int iDiff = point.y - rect.top();
+			}
+			if (point.y < rect.top()) {
+				int iDiff = point.y - rect.top();
 				vertPixMove(iDiff);
 				yInc = 1;
-      }
-      if (point.y > rect.bottom()) {
-        int iDiff = point.y - rect.bottom();
+			}
+			if (point.y > rect.bottom()) {
+				int iDiff = point.y - rect.bottom();
 				vertPixMove(iDiff);
 				yInc = -1;
-      }
-      MoveMouse(xInc, yInc);
-      UpdateWindow();
-    }
-    else {
-      bool fHide = true;
+			}
+			MoveMouse(xInc, yInc);
+			UpdateWindow();
+		}
+		else {
+			bool fHide = true;
 			if (fValid && !fOutside)
 				for (list<Drawer*>::reverse_iterator iter = mcd->dl.rbegin(); iter != mcd->dl.rend(); ++iter)
 				{
 					Drawer* dr = *iter;
 					if (dr->fSelectable) 
 					{
-            Coord crd = c;
-            BaseMapDrawer* bmd = dynamic_cast<BaseMapDrawer*>(dr);
-            if (bmd && bmd->basemap()->cs() != mcd->georef->cs())
-            {
-              crd = bmd->basemap()->cs()->cConv(mcd->georef->cs(), c);
-            }
+						Coord crd = c;
+						BaseMapDrawer* bmd = dynamic_cast<BaseMapDrawer*>(dr);
+						if (bmd && bmd->basemap()->cs() != mcd->georef->cs())
+						{
+							crd = bmd->basemap()->cs()->cConv(mcd->georef->cs(), c);
+						}
 						String s = dr->sInfo(crd);
 						if (s != "") {
-              DomainValue* dv = dr->dm()->pdv();
-              if (0 != dv && dv->fUnit())
-                s = String("%S %S", s, dv->sUnit());
+							DomainValue* dv = dr->dm()->pdv();
+							if (0 != dv && dv->fUnit())
+								s = String("%S %S", s, dv->sUnit());
 							info->text(point,s);
 							fHide = false;
 							break;
 						}
 					}
 				}
-      if (fHide)
-				info->text(point,"");
-    }
-  }
+				if (fHide)
+					info->text(point,"");
+		}
+	}
 	if (!fNone && fValid && !fOutside) {
 		CoordWithCoordSystem cwcs(c, georef->cs());
 		IlwWinApp()->SendUpdateCoordMessages(cmMOUSEMOVE, &cwcs);
@@ -492,7 +487,7 @@ void SimpleMapPaneView::OnLButtonUp(UINT nFlags, CPoint point)
 BOOL SimpleMapPaneView::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo) 
 {
 	if (edit && edit->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
-		 return TRUE;
+		return TRUE;
 	return ZoomableView::OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
 }
 
@@ -517,15 +512,15 @@ UINT SimpleMapPaneView::RedrawPaneInThread(LPVOID lp)
 	try {
 		while (mpv->fDirty) 
 			mpv->RedrawInThread();
-// invalidate only after finished redrawing
-	  if (mpv->m_hWnd != 0)
-		  mpv->Invalidate();
-// be sure to set the cursor by moving the mouse
-    MoveMouse(-1, 0);
-    MoveMouse(1, 0);
+		// invalidate only after finished redrawing
+		if (mpv->m_hWnd != 0)
+			mpv->Invalidate();
+		// be sure to set the cursor by moving the mouse
+		MoveMouse(-1, 0);
+		MoveMouse(1, 0);
 	}
 	catch(ErrorObject& err)
-  {
+	{
 		err.Show();
 	}
 	return FALSE;
@@ -535,8 +530,8 @@ void SimpleMapPaneView::RedrawInThread()
 {
 	if ( true) {
 		MapCompositionDoc* mcd = GetDocument();
-	//	(*(mcd->drawers.begin()))->prepare();
-	//	(*(mcd->drawers.begin()))->draw();
+		//	(*(mcd->drawers.begin()))->prepare();
+		//	(*(mcd->drawers.begin()))->draw();
 		return;
 	}
 
@@ -726,8 +721,8 @@ double SimpleMapPaneView::rScaleShow()
 	if (rUNDEF == rPixSize)
 		return rUNDEF;
 	CoordSystemLatLon* csll = mcd->georef->cs()->pcsLatLon();
-  if (0 != csll)
-    rPixSize *= M_PI / 180 * csll->ell.a;
+	if (0 != csll)
+		rPixSize *= M_PI / 180 * csll->ell.a;
 	if (rScale() > 0)
 		rPixSize /= rScale();
 	else if (rScale() < 0)
@@ -735,7 +730,7 @@ double SimpleMapPaneView::rScaleShow()
 
 	CClientDC dc(this);
 	int iPixPerInchY = dc.GetDeviceCaps(LOGPIXELSY);
-  double rPixPermm = iPixPerInchY / 25.4;         // (pixel per mm)
+	double rPixPermm = iPixPerInchY / 25.4;         // (pixel per mm)
 
 	rPixSize *= rPixPermm;
 	rPixSize *= 1000; // 1000 mm per m
@@ -766,14 +761,14 @@ void SimpleMapPaneView::SetDirtySilent()
 	fDirty = true;
 	if (!fRedrawing) {
 		fRedrawing = true;
-	  AfxBeginThread(SimpleMapPaneView::RedrawPaneInThread, (LPVOID)this); 
+		AfxBeginThread(SimpleMapPaneView::RedrawPaneInThread, (LPVOID)this); 
 	}
 	fDrawAlsoWhenLoading = true;
 }
 
 const Editor* SimpleMapPaneView::editGet() const
 {
-  return edit;
+	return edit;
 }
 
 #ifdef _DEBUG

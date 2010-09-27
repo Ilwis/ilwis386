@@ -180,7 +180,8 @@ BOOL ZoomableView::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT*
 			if (as) as->OnMouseMove(wParam, point);
 			else if (wParam & MK_CONTROL) moveEyePoint(point, message);
 //			return CView::OnWndMsg(message, wParam, lParam, pResult);
-			return FALSE;
+			//return TRUE;
+			break;
 		case WM_LBUTTONDBLCLK:
 			if (as) as->OnLButtonDblClk(wParam, point);
 			return FALSE;
