@@ -60,8 +60,7 @@ void LineFeatureDrawer::prepare(PreparationParameters *p){
 		cb = feature->cbBounds();
 		clear();
 		feature->getBoundaries(lines);
-		FileName fn = getRootDrawer()->getCoordinateSystem()->fnObj;
-		bool sameCsy = getRootDrawer()->getCoordinateSystem()->fnObj == csy->fnObj;
+		bool sameCsy = getRootDrawer()->getCoordinateSystem()->fEqual(*(getRootDrawer()->getCoordinateSystem().ptr()));
 		if ( !sameCsy ) {
 			for(int j = 0; j < lines.size(); ++j) {
 				CoordinateSequence *seq = lines.at(j);
