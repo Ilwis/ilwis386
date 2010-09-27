@@ -128,7 +128,7 @@ public:
  // void ReOpenForWriting();
   void Flush();   // flushes internal buffers to file
 
-  Time filetime();   // return file creation time
+  ObjectTime filetime();   // return file creation time
 	static void SetFileTime(const FileName&);  // set file time at current date and time
 	static void SetFileTime(const FileName&,
 													const FILETIME *lpCreationTime,   // creation time

@@ -119,7 +119,7 @@ public:
 	void _export         BreakDependency(); // only keeps calculated result, if nothing has been calculated it calculates first
 	void                 CreateColumnStore();
 	void  _export        SetOwnedByTable(bool f=true);
-	virtual void _export GetNewestDependentObject(String& sObjName, Time& tmNewer) const;
+	virtual void _export GetNewestDependentObject(String& sObjName, ObjectTime& tmNewer) const;
 	virtual void         DependencyNames(Array<String>& asNames) const; // read from file
 	virtual void         Rename(const String& sNewColName);
 	virtual void _export Updated();

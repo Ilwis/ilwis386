@@ -1910,6 +1910,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\Sources\Engine\Domain\DomainTime.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\Domain\DomainTime.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Sources\Engine\Domain\DomainUniqueID.cpp"
 					>
 				</File>

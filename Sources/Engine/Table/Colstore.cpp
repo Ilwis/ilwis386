@@ -585,7 +585,7 @@ bool ColumnStore::fConvertTo(const DomainValueRangeStruct& _dvrsTo, const Column
   if (col.fValid())
     dvrsTo = col->dvrs();
   Table tbl(ptr.fnTbl);
-  Column colNew(tbl, String("#tm%li", abs(Time::timCurr()) % 10000L), dvrsTo);
+  Column colNew(tbl, String("#tm%li", abs(ObjectTime::timCurr()) % 10000L), dvrsTo);
   tbl->RemoveCol(colNew);
   colNew->fErase = true;
   if (dvrs().fValues()) {

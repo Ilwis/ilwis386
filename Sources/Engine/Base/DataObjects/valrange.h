@@ -59,6 +59,7 @@ public:
   _export ValueRange(double rMin, double rMax, double rStep=1);
   _export ValueRange(const String& sRange);
   _export ValueRange(const ValueRange& vr);
+  _export ValueRange(const ILWIS::TimeInterval& tiv);
   _export ~ValueRange();
 
   void _export   operator = (const ValueRange& vr)
@@ -162,6 +163,7 @@ public:
   _export ValueRangeReal(double min, double max, double step=1, double rRaw0=rUNDEF);
   ValueRangeReal(const RangeReal&, double step=1);
   ValueRangeReal(const Domain&);
+  ValueRangeReal(const ILWIS::TimeInterval& tiv);
 
   virtual double    rStep() const;
   virtual int       iDec() const;

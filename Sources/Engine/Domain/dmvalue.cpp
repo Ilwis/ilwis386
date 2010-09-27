@@ -43,6 +43,7 @@
 #include "Headers\toolspch.h"
 #include "Engine\Domain\dm.h"
 #include "Engine\Domain\Dmvalue.h"
+#include "Engine\Domain\DomainTime.h"
 
 DomainValue::DomainValue(const FileName& fn, bool fCreate)
 : DomainPtr(fn, fCreate)
@@ -57,7 +58,7 @@ DomainValue* DomainValue::create(const FileName& fn)
   if (fCIStrEqual(sType , "DomainValueInt"))
     return new DomainValueInt(fn);
   else if (fCIStrEqual(sType , "DomainValueReal"))
-    return new DomainValueReal(fn);
+	  return DomainValueReal::create(fn);
   InvalidTypeError(fn, "DomainValue", sType);
   return 0;
 }
@@ -120,6 +121,18 @@ String DomainValue::sUnit() const
 
 
 /////////////////////////////////////////
+
+DomainValue* DomainValueReal::create(const FileName& fn)
+{
+  String sType;
+  ObjectInfo::ReadElement("DomainValueReal", "Type", fn, sType );
+  if (fCIStrEqual(sType , ""))
+    return new DomainValueReal(fn);
+  else if (fCIStrEqual(sType , "DomainTime"))
+	  return new DomainTime(fn);
+  InvalidTypeError(fn, "DomainValueReal", sType);
+  return 0;
+}
 
 DomainValueReal::DomainValueReal(const FileName& fn)
 : DomainValue(fn)

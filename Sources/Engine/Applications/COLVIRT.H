@@ -109,12 +109,14 @@ protected:
     virtual long _export  iComputeVal(long iKey) const;
     virtual double _export       rComputeVal(long iKey) const;
     virtual Coord  _export    cComputeVal(long iKey) const;
+	virtual ILWIS::Time  _export    tComputeVal(long iKey) const;
     virtual String _export    sComputeVal(long iKey, short iWidth=-1, short iDec=-1) const;
     virtual void _export  ComputeBufRaw(ByteBuf&, long iKey, long iNum) const;
     virtual void _export  ComputeBufRaw(IntBuf& , long iKey, long iNum) const;
     virtual void _export  ComputeBufRaw(LongBuf&, long iKey, long iNum) const;
     virtual void _export  ComputeBufVal(LongBuf&, long iKey, long iNum) const;
     virtual void _export  ComputeBufVal(RealBuf&, long iKey, long iNum) const;
+	virtual void _export  ComputeBufVal(Buf<ILWIS::Time>&, long iKey, long iNum) const;
     virtual void _export  ComputeBufVal(StringBuf&, long iKey, long iNum, short iWid=-1, short iDec=-1) const;
     virtual void _export  ComputeBufVal(CoordBuf&, long iKey, long iNum) const;
     static String _export sTblSearch(String& sExpression);

@@ -377,7 +377,7 @@ BaseMapPtr::BaseMapPtr(const FileName& fn, bool fCreate)
     return;
   if (!File::fExist(fn))
     NotFoundError(fn);
-  Time tim = objtime;
+  ObjectTime tim = objtime;
 
 	// CoordSystem for raster is determined by GeoRef so skip it here
   if (!fCIStrEqual(fn.sExt, ".mpr"))

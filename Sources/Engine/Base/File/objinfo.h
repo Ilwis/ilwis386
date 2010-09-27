@@ -136,6 +136,8 @@ public:
                           const FileName& filename, IntMatrix& mat);
   static int _export ReadElement(const char* sSection, const char* sEntry,
                           const FileName& filename, Coord& crd);
+  static int _export ReadElement(const char* sSection, const char* sEntry, 
+							const FileName& fnObj,ILWIS::TimeInterval& interval);
   static int _export ReadElement(const char* sSection, const char* sEntry,
                           const FileName& filename, LatLon& ll);
   static int _export ReadElement(const char* sSection, const char* sEntry,
@@ -153,7 +155,7 @@ public:
   static int _export ReadElement(const char* sSection, const char* sEntry,
                          const FileName& filename, RangeReal& rng);
   static int _export ReadElement(const char* sSection, const char* sEntry,
-                          const FileName& filename, Time& tim);
+                          const FileName& filename, ObjectTime& tim);
   static int _export ReadElement(const char* sSection, const char* sEntry,
                           const FileName& filename, ValueRange& vr);
   static int _export ReadElement(const char* sSection, const char* sEntry,
@@ -211,9 +213,11 @@ public:
   static bool _export WriteElement(const char* sSection, const char* sEntry,
                            const FileName& fnObj, const RangeInt& rng);
   static bool _export WriteElement(const char* sSection, const char* sEntry,
+							  const FileName& fnObj, const ILWIS::TimeInterval& interval);
+  static bool _export WriteElement(const char* sSection, const char* sEntry,
                            const FileName& fnObj, const RangeReal& rng);
   static bool _export WriteElement(const char* sSection, const char* sEntry,
-                           const FileName& filename, const Time& tim);
+                           const FileName& filename, const ObjectTime& tim);
   static bool _export WriteElement(const char* sSection, const char* sEntry,
                           const FileName& filename, const Domain& dm);
   static bool _export WriteElement(const char* sSection, const char* sEntry,

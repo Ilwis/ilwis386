@@ -113,7 +113,7 @@ DomainGroup::DomainGroup(const FileName& fn)
   dsType = dsAUTO;
   if (tbl.fValid())
     colBnd = tbl->col("Bounds");
-  Time tim = objtime, timTbl;
+  ObjectTime tim = objtime, timTbl;
   if (tbl.fValid()) {
     timTbl = tbl->objtime;
     Sort();

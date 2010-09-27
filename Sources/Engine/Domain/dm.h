@@ -132,12 +132,13 @@ class DATEXPORT DomainBool;
 class DomainUniqueID;
 class DomainCoordBuf;
 class ObjectStructure;
+class DomainTime;
 
 enum DomainType { dmtCLASS, dmtID, dmtVALUE, dmtIMAGE, dmtPICTURE,
                   dmtBIT, dmtNONE, dmtSTRING, dmtGROUP, dmtCOLOR, dmtCOORD, 
-                  dmtBOOL, dmtBINARY, dmtCOORDBUF, dmtUNIQUEID, dmtUNKNOWN};
+                  dmtBOOL, dmtBINARY, dmtCOORDBUF, dmtUNIQUEID, dmtTIME, dmtUNKNOWN};
 enum StoreType { stBIT, stDUET, stNIBBLE, stBYTE, stINT, stLONG,
-                 stREAL, stCRD, stSTRING, stBINARY, stFLOAT, stCOORDBUF, stFOREIGNFORMAT, stCRD3D,stCOORDBUF3D};
+                 stREAL, stCRD, stSTRING, stBINARY, stFLOAT, stCOORDBUF, stFOREIGNFORMAT, stCRD3D, stCOORDBUF3D};
                   
 class Domain: public IlwisObject
 {
@@ -149,6 +150,7 @@ public:
     _export Domain(const FileName&, long iNr, DomainType dmt, const String& sPrefix); // DomainClass/Identifier
     _export Domain(const FileName&, long iNr, DomainType dmt = dmtCLASS);  // DomainClass/Group/Identifier/Picture
     _export Domain(const FileName& fn, const CoordSystem& csy, bool threedD=false);
+	_export Domain(const FileName& fn, const ILWIS::TimeInterval& interval, ILWIS::Time::Mode m = ILWIS::Time::mDATETIME);
     _export Domain(const FileName&);
     _export Domain(const Domain& dm);
     _export Domain(const String& sExpression);
@@ -223,6 +225,7 @@ public:
     DomainBinary _export     *pdbin() const;
     DomainColor _export      *pdcol() const;
     DomainBool _export       *pdbool() const;
+	DomainTime _export       *pdtime() const;
 		DomainCoordBuf _export   *pdmcb() const;
 		DomainUniqueID _export   *pdUniqueID() const;
     static StoreType         st(unsigned long iNr);

@@ -72,7 +72,7 @@ private:
   Column col1, col2, colFreq;
   DomainSort *pdsrt, *pdsrt2;
   bool fDiffDoms;
-  Time tmCalc;
+  ObjectTime tmCalc;
   ObjectDependency objdep;
   RealArray arAcc, arRel;
   LongArray aiTotals;

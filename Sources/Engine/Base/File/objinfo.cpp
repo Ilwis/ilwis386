@@ -978,10 +978,10 @@ long ObjectInfo::iTotalFileSize(const Array<FileName>& afn)
 
 bool ObjectInfo::fUpToDate(const FileName& fn)
 {
-	Time objtime;
+	ObjectTime objtime;
 	ReadElement("Ilwis", "Time", fn, objtime);
 	String sObjName;
-	Time tmNewer;
+	ObjectTime tmNewer;
 	Array<FileName> afnChecked;
 	ObjectDependency::GetNewestDependentObject(fn, String(), objtime, sObjName, tmNewer, afnChecked);
 	return sObjName.length() == 0;
@@ -1004,10 +1004,10 @@ bool ObjectInfo::fSystemObject(const FileName& fn)
 
 bool ObjectInfo::fUpToDate(const FileName& fn, const String& sCol)
 {
-	Time objtime;
+	ObjectTime objtime;
 	ReadElement(String("Col:%S", sCol).scVal(), "Time", fn, objtime);
 	String sObjName;
-	Time tmNewer;
+	ObjectTime tmNewer;
 	Array<FileName> afnChecked;
 	ObjectDependency::GetNewestDependentObject(fn, sCol, objtime, sObjName, tmNewer, afnChecked);
 	return sObjName.length() == 0;

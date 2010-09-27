@@ -95,6 +95,7 @@
 #define sCOORD         "coord"
 #define sVALUE         "value"
 #define sCOLOR         "color"
+#define sTime		   "time"
 
 
 

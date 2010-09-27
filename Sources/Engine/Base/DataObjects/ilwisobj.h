@@ -157,7 +157,7 @@ public:
 	virtual void           Updated();
 	virtual void           UpdateTime(); // calls Updated and writes time to object def file
 	virtual void           GetObjectDependencies(Array<FileName>& afnObjDep);
-	virtual void           GetNewestDependentObject(String& sObjName, Time& tmNewer) const;        
+	virtual void           GetNewestDependentObject(String& sObjName, ObjectTime& tmNewer) const;        
 	virtual void           Store();
 	void                   SetReadOnly(bool f = true);
 	virtual void           GetDataFiles(Array<FileName>& afnDat, Array<String>* asSection=0, Array<String>* asEntry=0) const;
@@ -202,9 +202,11 @@ public:
 							 { return ObjectInfo::ReadElement(sSection, sEntry, fnObj, rng); }
 	int                    ReadElement(const char* sSection, const char* sEntry, RangeReal& rng) const     //RangeReal
 							 { return ObjectInfo::ReadElement(sSection, sEntry, fnObj, rng); }
+	int                    ReadElement(const char* sSection, const char* sEntry, ILWIS::TimeInterval& interval) const     //Time interval
+							 { return ObjectInfo::ReadElement(sSection, sEntry, fnObj, interval); }
 	int                    ReadElement(const char* sSection, const char* sEntry, FileName& fn) const       //FileName
 							 { return ObjectInfo::ReadElement(sSection, sEntry, fnObj, fn); }
-	int                    ReadElement(const char* sSection, const char* sEntry, Time& tim) const          //Time
+	int                    ReadElement(const char* sSection, const char* sEntry, ObjectTime& tim) const          //ObjectTime
 							 { return ObjectInfo::ReadElement(sSection, sEntry, fnObj, tim); }
 	int                    ReadElement(const char* sSection, const char* sEntry, Domain& dm) const         //Domain
 							 { return ObjectInfo::ReadElement(sSection, sEntry, fnObj, dm); }
@@ -269,9 +271,11 @@ public:
 							 { return ObjectInfo::WriteElement(sSection, sEntry, fnObj, rValue); }
 	bool                   WriteElement(const char* sSection, const char* sEntry, const RangeInt& rng)     //RangeInt
 							 { return ObjectInfo::WriteElement(sSection, sEntry, fnObj, rng); }
+	bool				   WriteElement(const char* sSection, const char* sEntry, const ILWIS::TimeInterval& interval)     //Time interval
+							 { return ObjectInfo::WriteElement(sSection, sEntry, fnObj, interval); }
 	bool                   WriteElement(const char* sSection, const char* sEntry, const RangeReal& rng)    //RangeReal
 							 { return ObjectInfo::WriteElement(sSection, sEntry, fnObj, rng); }
-	bool                   WriteElement(const char* sSection, const char* sEntry, const Time& tim)         //Time
+	bool                   WriteElement(const char* sSection, const char* sEntry, const ObjectTime& tim)         //ObjectTime
 							 { return ObjectInfo::WriteElement(sSection, sEntry, fnObj, tim); }
 	bool                   WriteElement(const char* sSection, const char* sEntry, const FileName& fn)      //FileName
 							 { return ObjectInfo::WriteElement(sSection, sEntry, fnObj, fn); }
@@ -309,7 +313,7 @@ public:
 	int                    iRef;
 	const ElementContainer fnObj;
 	String                 sDescription;
-	Time                   objtime;
+	ObjectTime                   objtime;
 	bool                   fErase;
 	bool                   fUpdateCatalog;
 

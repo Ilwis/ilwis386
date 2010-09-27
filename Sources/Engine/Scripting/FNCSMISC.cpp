@@ -142,6 +142,24 @@ void isundefraw_so(StackObject* soRes, const StackObject* so)
   }
 }
 
+void time_so(StackObject* soRes, const StackObject* so)
+{
+	StringBuf buf;
+	LongBuf bufRes;
+	so->GetVal(buf);
+	bufRes.Size(soRes->iSize());
+	for (short i=0; i<soRes->iSize(); i++) {
+		if (buf[i] == sUNDEF){
+			bufRes[i] = 0;
+		}
+		else{
+			bufRes[i] = (double)ILWIS::Duration(buf[i]);
+			//soRes->dvs.SetDomain(Domain("d:\\Data\\ILWIS\\at2.dom"));
+		}
+	}
+	soRes->PutVal(bufRes);
+}
+
 void iff_so(StackObject* soRes, const StackObject* so0, const StackObject* so1, const StackObject* so2)
 {
   bool fUseValues = so1->dvs.fValues();

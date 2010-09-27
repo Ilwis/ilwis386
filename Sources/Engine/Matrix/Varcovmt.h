@@ -67,7 +67,7 @@ public:
 private:  
   MapList mpl;
   bool fCorrMat;
-  Time tmCalc;
+  ObjectTime tmCalc;
   ObjectDependency objdep;
 };
 

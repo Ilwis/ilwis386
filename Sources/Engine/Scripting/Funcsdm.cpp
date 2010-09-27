@@ -34,86 +34,6 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/* $Log: /ILWIS 3.0/Calculator/Funcsdm.cpp $
- * 
- * 15    7-01-05 13:31 Retsios
- * [bug=6566]
- * ifnotundef with 2 parameters should ignore the domain of the first
- * parameter.
- * 
- * 14    10-05-04 17:17 Retsios
- * [bug=6521] ifundef/ifnotundef now allow "undefined" as one of the
- * parameters in case they are called with 3 parameters.
- * Also some code cleanup / readability improvement.
- * 
- * 13    2/18/02 3:00p Martin
- * typo in the check routines for AddDomains (and substract). I assume the
- * the check was meant for Hi and Low of a value range and not only for
- * the low (in which case the second part of the check is quite strange)
- * 
- * 12    11/07/01 2:05p Martin
- * function cnt also works on domain sort now
- * 
- * 11    11/05/01 11:32a Martin
- * added function for checking "value domains" this will also accept color
- * domains
- * 
- * 10    22-02-01 3:48p Martin
- * ifnotundef used the same function to check if valid params were given
- * as ifundef. The functions are not symetric if they have two params so
- * the function of ifundef was appropriate. ifnotundef has now its own
- * function
- * 
- * 9     25-07-00 3:29p Martin
- * bit domain changed to bool when choosing a domain
- * 
- * 8     22-11-99 12:44 Wind
- * buf with ifundef, ifnotundef and 2 params (bug 939)
- * 
- * 7     10/13/99 5:00p Wind
- * debugged domain checking for IfUndef
- * debugged string compatible domains, to not allow values
- * 
- * 6     9/15/99 9:31a Wind
- * see previous
- * 
- * 5     9/15/99 9:17a Wind
- * change for 2.23 was copied wrongly
- * 
- * 4     15-09-99 8:33a Martin
- * added 2.23 stuff
- * 
- * 3     8/24/99 9:43a Wind
- * function BoolDomain() did not take operators with 1 operand (like
- * 'not')
- * 
- * 2     3/12/99 3:05p Martin
- * Added support for case insensitive
-// Revision 1.7  1998/10/08 15:29:52  Wim
-// Added fSortDomains()
-//
-// Revision 1.6  1998-09-16 18:30:36+01  Wim
-// 22beta2
-//
-// Revision 1.5  1997/09/08 12:10:22  Wim
-// Allow in fIffCheckDomains and fIfUndefCheckDomains() also
-// color domains
-//
-// Revision 1.4  1997-08-26 16:44:04+02  Wim
-// Added MinHalfPiToHalfPiDomain(), MinPiToPiDomain, ZeroToPiDomain()
-//
-// Revision 1.3  1997-08-06 10:28:15+02  Wim
-// LongDomain() changed to LongPosDomain()
-// it makes sure that the resulting dvs has a ValueRangeInt which only accepts positive values
-//
-// Revision 1.2  1997-07-25 16:38:02+02  Wim
-// Changed default value range for RealDomain
-// and domain name for Min1To1Domain
-//
-/* funcsdm.c
-	Last change:  WK    8 Oct 98    4:28 pm
-*/
-
 #include "Engine\Table\Col.h"
 #include "Engine\Map\Raster\Map.h"
 #include "Engine\Domain\Dmvalue.h"
@@ -126,6 +46,7 @@
 #include "Engine\Scripting\FUNCS.H"
 #include "Engine\Base\Algorithm\Random.h"
 #include "Engine\Base\DataObjects\Buf.h"
+#include "Engine\Domain\DomainTime.h"
 
 
 bool fDontCare(const Array<CalcVariable>& acv, int iStartIndex, int& iWrongParm)
@@ -389,18 +310,64 @@ static double max2(double r1, double r2)
   return r1 > r2 ? r1 : r2;
 }
 
+void handleTime(DomainValueRangeStruct& dvs, StackObjectType& sot,const CalcVariable& cv1, const CalcVariable& cv2){
+  ValueRange vr;
+  RangeReal rr0, rr1;
+  rr0 = cv1->dvs.rrMinMax();
+  rr1 = cv2->dvs.rrMinMax();
+  double rStep = 1;
+  int validstate;
+  if ( rr0.rLo() == -1.e308 && rr1.rLo() == -1.e308)
+	  validstate = 0;
+  else if ( rr0.rLo() == -1.e308)
+	  validstate = 2;
+  else if ( rr1.rLo() == -1.e308)
+	  validstate = 1;
+  else
+	  validstate = 3;
+
+  String sName;
+  if ( validstate == 1) {
+	  vr = ValueRange(rr0.rLo(),rr0.rHi(),cv1->dvs.rStep());
+	  sName = cv1->dvs.dm()->sName();
+  } else if ( validstate == 2) {
+	  vr = ValueRange(rr1.rLo(),rr1.rHi(),cv2->dvs.rStep());
+	  sName = cv2->dvs.dm()->sName();
+  } else if ( validstate == 3) {
+	  double rStep = min(cv1->dvs.rStep(), cv2->dvs.rStep());
+	  double rMin= min( rr0.rLo(), rr1.rLo());
+	  double rMax = min(rr1.rLo(), rr0.rLo());
+	  vr = ValueRange(rMin, rMax, rStep);
+	  sName = cv1->dvs.dm()->sName();
+	 /* ILWIS::TimeInterval iv(ILWIS::Time(rMin), ILWIS::Time(rMax),ILWIS::Duration(rStep));
+	  DomainTime dmt(FileName(sName),iv);
+	  dmt.Store();*/
+  } 
+  dvs = DomainValueRangeStruct(Domain(sName), vr);
+  sot = sotRealVal;
+}
+
 void AddDomains(DomainValueRangeStruct& dvs, StackObjectType& sot,
                        FuncMath, const Array<CalcVariable>& acv)
 {
   String sDomName;
+  if ( acv[0]->dvs.dm()->pdtime() || acv[1]->dvs.dm()->pdtime()) {
+	  handleTime(dvs, sot,acv[0], acv[1]);
+	  return;
+  }
+
   if (fCIStrEqual(acv[0]->dvs.dm()->sName() , acv[1]->dvs.dm()->sName())) {
     if (acv[0]->dvs.fRawIsValue() || acv[0]->dvs.dm()->pdi())
       sDomName = "value";
     else
       sDomName = acv[0]->dvs.dm()->sName();
   }
-  else
-    sDomName = "value";
+  else {
+	  if ( acv[0]->dvs.dm()->pdtime()) {
+		sDomName = acv[0]->dvs.dm()->sName();
+	  } else
+		sDomName = "value";
+  }
   ValueRange vr;
   RangeReal rr0, rr1;
   rr0 = acv[0]->dvs.rrMinMax();
@@ -408,8 +375,17 @@ void AddDomains(DomainValueRangeStruct& dvs, StackObjectType& sot,
   double rStep = 1;
   rStep = min2(rStep, acv[0]->dvs.rStep());
   rStep = min2(rStep, acv[1]->dvs.rStep());
-  vr = ValueRange(rr0.rLo()+rr1.rLo(),
+  if ( rr1.fValid() && rr0.fValid()) {
+		vr = ValueRange(rr0.rLo()+rr1.rLo(),
                   rr0.rHi()+rr1.rHi(),rStep);
+  } else if ( rr0.fValid()) {
+		vr = ValueRange(rr0.rLo(),
+                  rr0.rHi(),rStep);
+  } else if ( rr1.fValid()) {
+		vr = ValueRange(rr1.rLo(),
+              rr1.rHi(),rStep);
+  }
+
   if ((vr->riMinMax().iLo() >= 0) && (vr->riMinMax().iHi() <= 255)) 
 	{
     // if one of operands has image domain and other is constant
@@ -436,6 +412,10 @@ void SubtractDomains(DomainValueRangeStruct& dvs, StackObjectType& sot,
                             FuncMath, const Array<CalcVariable>& acv)
 {
   String sDomName;
+  if ( acv[0]->dvs.dm()->pdtime() || acv[1]->dvs.dm()->pdtime()) {
+	  handleTime(dvs, sot,acv[0], acv[1]);
+	  return;
+  }
   if (fCIStrEqual(acv[0]->dvs.dm()->sName() , acv[1]->dvs.dm()->sName())) {
     if (acv[0]->dvs.fRawIsValue() || acv[0]->dvs.dm()->pdi())
       sDomName = "value";

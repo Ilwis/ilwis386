@@ -319,7 +319,7 @@ void PrincCompPtr::Freeze()
 
 		CalcEigen(matrix);
 
-		m_tmCalc = Time::timCurr();
+		m_tmCalc = ObjectTime::timCurr();
 		ptr.Updated();   // make sure the time is set properly!
 		ptr.SetAdditionalInfoFlag(true);
 		ptr.SetAdditionalInfo(sSummary());

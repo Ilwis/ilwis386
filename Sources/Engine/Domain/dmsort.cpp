@@ -1811,7 +1811,7 @@ void DomainSort::Load()
 		MessageBox(0, sMsg.scVal(), "", MB_OK | MB_ICONINFORMATION | MB_TOPMOST);
 		Store(); // ?? bah but Updated() did not work
 	}
-	Time tim = objtime;
+	ObjectTime tim = objtime;
 	CalcIndex(false);
 	fChanged = false;
 	objtime = tim;

@@ -186,7 +186,7 @@ public:
 private:  
   ColumnStoreBase* csb;
   ColumnPtr& ptr;
-  Time timStore;
+  ObjectTime timStore;
   Representation rpr; // only for column with DomainPicture (for efficiency)
   bool fLoaded;
 

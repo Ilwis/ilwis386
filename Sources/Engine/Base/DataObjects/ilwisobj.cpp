@@ -349,7 +349,7 @@ IlwisObjectPtr::IlwisObjectPtr(const FileName& fn, bool fCreate, const char* pcD
 
 			if (fnObj.sExt != "")
 				fUpdateCatalog = true;
-			objtime = Time::timCurr();
+			objtime = ObjectTime::timCurr();
 			fErase = fnObj.sFile[0] == '$';
 			return;
 		}
@@ -442,10 +442,10 @@ void IlwisObjectPtr::ReadBaseInfo(const char* sSection)
 	if (objtime == iUNDEF)
 	{
 		if (File::fExist(fnObj))
-			objtime = Time(fnObj);
+			objtime = ObjectTime(fnObj);
 	}
 	if (objtime == 0)
-		objtime = Time::timCurr();
+		objtime = ObjectTime::timCurr();
 	
 	if (0 == ReadElement(sSection, "DomainChangeable", _fDomainChangeable))
 		_fDomainChangeable = false;
@@ -757,7 +757,7 @@ void IlwisObjectPtr::Updated()
 {
 	if (fReadOnly()) return;
 	fChanged = true;
-	objtime = Time::timCurr();
+	objtime = ObjectTime::timCurr();
 }
 
 void IlwisObjectPtr::UpdateTime()
@@ -890,7 +890,7 @@ bool IlwisObjectPtr::fUpToDate() const
 	if (!fCalculated())
 		return false;
 	String s;
-	Time tim;
+	ObjectTime tim;
 	GetNewestDependentObject(s, tim);
 	return s.length() == 0;
 }
@@ -981,7 +981,7 @@ void IlwisObjectPtr::InitName(const FileName& fn)
 {
 }
 
-void IlwisObjectPtr::GetNewestDependentObject(String& sObjName, Time& tmNewer) const
+void IlwisObjectPtr::GetNewestDependentObject(String& sObjName, ObjectTime& tmNewer) const
 {
 	Array<FileName> afnChecked;
 	afnChecked &= fnObj;

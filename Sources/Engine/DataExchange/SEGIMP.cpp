@@ -329,7 +329,7 @@ void SegmentMapImport::Store()
 {
   FileName fn = fnObj;
   fn.sExt = ".sg#";
-  objtime = Time(fn);
+  objtime = ObjectTime(fn);
   SegmentMapPtr::Store();
   WriteElement("SegmentMap", "Type", "SegmentMapStore");
   WriteElement("SegmentMapStore", "DataSeg", fn);

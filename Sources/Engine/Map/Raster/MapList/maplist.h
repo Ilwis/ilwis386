@@ -220,7 +220,7 @@ private:
   RealMatrix                  _mtCorr;
   CVector                     _vecMean;
   CVector                     _vecStd;
-  Time                        tmCalcStat;
+  ObjectTime                        tmCalcStat;
   ObjectDependency            objdep;
   String                      _sBandPreFix;
   long                        iOffset;

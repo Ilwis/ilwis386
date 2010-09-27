@@ -98,7 +98,7 @@ void Logger::init(Mode m)
 
 void Logger::LogTime(ofstream& os)
 {
-  Time tm(time(0));
+  ObjectTime tm(time(0));
   os << tm.sTime().sVal() << " " << tm.sDate().sVal();
 }
 

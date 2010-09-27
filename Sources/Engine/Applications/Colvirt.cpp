@@ -40,6 +40,9 @@
 	Last change:  WK    1 Jul 98   10:00 am
 */
 #define COLVIRT_C
+#include "Headers\toolspch.h"
+#include "Engine\Domain\dm.h"
+#include "Engine\Domain\domaintime.h"
 #include "Engine\Table\COLSTORE.H"
 #include "Engine\Applications\COLVIRT.H"
 #include "Engine\Domain\Dmvalue.h"
@@ -343,6 +346,11 @@ Coord ColumnVirtual::cComputeVal(long) const
   return crdUNDEF;
 } 
 
+ILWIS::Time ColumnVirtual::tComputeVal(long) const
+{
+  return tUNDEF;
+} 
+
 long ColumnVirtual::iComputeVal(long iKey) const
 {
   if (!dvrs().fValues())
@@ -397,6 +405,13 @@ void ColumnVirtual::ComputeBufVal(RealBuf& buf, long iKey, long iNr) const
   long key = iKey;
   for (long i = 0; i < iNr; ++i, ++key)
     buf[i] = rComputeVal(key);
+}
+
+void ColumnVirtual::ComputeBufVal(Buf<ILWIS::Time>& buf, long iKey, long iNr) const
+{
+  long key = iKey;
+  for (long i = 0; i < iNr; ++i, ++key)
+    buf[i] = tComputeVal(key);
 }
 
 void ColumnVirtual::ComputeBufVal(StringBuf& buf, long iKey, long iNr, short iWid, short iDec) const

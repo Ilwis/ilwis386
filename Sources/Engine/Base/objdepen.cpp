@@ -292,7 +292,7 @@ bool ObjectDependency::fUpdateAll()
   return true;
 }
 
-bool ObjectDependency::fAllOlder(const Time& tm) const
+bool ObjectDependency::fAllOlder(const ObjectTime& tm) const
 {
   for (unsigned int i=0; i < objs.iSize(); i++) 
     if ((*objs[i])->objtime > tm)
@@ -319,9 +319,9 @@ bool ObjectDependency::fAllOlder(const Time& tm) const
   return true;
 }
 
-Time ObjectDependency::tmNewest() const
+ObjectTime ObjectDependency::tmNewest() const
 {
-  Time tm;
+  ObjectTime tm;
   for (unsigned int i=0; i < objs.iSize(); i++)
     if ((*objs[i])->objtime > tm)
       tm = (*objs[i])->objtime;
@@ -537,7 +537,7 @@ void ObjectDependency::Read(const FileName& fnObj, Array<FileName>& afnObj)
   }    
 }
 
-void ObjectDependency::GetNewestDependentObject(const FileName& fn, const String& sColN, Time tmObj, String& sObjName, Time& tmNewer, Array<FileName>& afnChecked)
+void ObjectDependency::GetNewestDependentObject(const FileName& fn, const String& sColN, ObjectTime tmObj, String& sObjName, ObjectTime& tmNewer, Array<FileName>& afnChecked)
 {
 	if (!File::fExist(fn)) {
 		sObjName = fn.sFullNameQuoted();
@@ -550,7 +550,7 @@ void ObjectDependency::GetNewestDependentObject(const FileName& fn, const String
 	Array<String> asColName;
 	FileName fnTbl;
 	String sCol;
-	Time tm;
+	ObjectTime tm;
 	String sSection = "ObjectDependency";
 	if (sColN.length() != 0)
 		sSection = String("Col:%S", sColN);

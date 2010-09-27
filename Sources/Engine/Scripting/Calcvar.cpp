@@ -405,11 +405,6 @@ CalcVarConstReal::CalcVarConstReal(double rVal, const String& sVal)
   }
   _rVal = rVal; 
 }
-/*
-CalcVariablePtr* CalcVarConstReal::cvCopy()
-{ 
-  return new CalcVarConstReal(rValue(), dvs.sValue(rValue())); 
-} */
 
 CalcVarConstString::CalcVarConstString(const String& sVal, InstConstString* icstr)
 : CalcVariablePtr(Domain("string"), vtSTRING)

@@ -114,7 +114,7 @@ BaseMatrix<T>::BaseMatrix(int iRow, int iCol)
    _iCols = (iCol == 0 ? iRow : iCol);
    _iLen  = (long)iRows() * iCols();
    if (0 != iLen()) {
-     p = (T *) ::operator new ((unsigned long)(iLen() * sizeof(T)));
+     p = (T *) ::operator new ((size_t)(iLen() * sizeof(T)));
      if (0 == p)
        MemAllocError();
    }
@@ -130,7 +130,7 @@ BaseMatrix<T>::BaseMatrix(const BaseMatrix<T>& a)
    _iRows = a.iRows();
    _iCols = a.iCols();
    _iLen = a.iLen();
-   p = (T *) ::operator new ((unsigned long)(iLen() * sizeof(T)));
+   p = (T *) ::operator new ((size_t)(iLen() * sizeof(T)));
    if ((0 != iLen()) && (0 == p))
      MemAllocError();
    if (p) 
@@ -156,7 +156,7 @@ void BaseMatrix<T>::operator = (const BaseMatrix<T>& a)
 	_iLen = a.iLen();
 	if (iLen() == 0)
 		return;
-	p = (T *) ::operator new ((unsigned long)(iLen() * sizeof(T)));
+	p = (T *) ::operator new ((size_t)(iLen() * sizeof(T)));
 	if ((iLen() != 0) && (0 == p))
 		MemAllocError();
 	if (p) 

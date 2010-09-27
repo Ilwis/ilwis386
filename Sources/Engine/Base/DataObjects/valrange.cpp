@@ -34,130 +34,13 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/*$Log: /ILWIS 3.0/BasicDataStructures/valrange.cpp $
- * 
- * 17    15-09-04 13:13 Hendrikse
- * in sValRangeReal replaced dec = 6; by dec = max(dec,6); to make that in
- * the CoordTransFormHeights the latlons are displayed with enough
- * decimals  in the D.DDD notation (so that cm precision can be used as
- * input from LatLon data)
- * 
- * 16    11-10-02 15:13 Willem
- * - Changed: The DomainValueRangeStruct class is now rewritten to only
- * use methods instead of members to get domain and valuerange information
- * - Removed: lots of commented code
- * 
- * 15    5-07-02 19:37 Koolhoven
- * prevent warnings with Visual Studio .Net
- * 
- * 14    3-06-02 11:57 Koolhoven
- * DomainValueRangeStruct::SetPrivateMembers(): calculation of _st for
- * domain image  now works properly (vr exists, but info should be atken
- * from dm)
- * 
- * 13    2/28/02 9:34a Martin
- * oops, forgot to check this one in. wrong range check in valrange
- * prevented working of changing precission in columns when changed in
- * definition form (anyhow this was a wrong check)
- * 
- * 12    11/05/01 11:57a Martin
- * the epsilon of values is now based on the stepsize. This avoids any
- * rounding problems. Values are stepsize apart from each other so the
- * stepsize is a safe method (apart from stepsize 0, which is special).
- * 
- * 11    17-08-01 15:10 Koolhoven
- * in SetValueRange() take fFixedRange() and fFixedPrecision() flags of
- * domain into account
- * in constructor based on domain, also initialize properly for image or
- * bit domain 
- * 
- * 10    8/07/01 12:08p Martin
- * the fEqual of valrangerreal did not handle doubles properly. it checked
- * on their being equal without uisng an delta range. some double that
- * were eqaul were not equal because of that
- * 
- * 9     5-02-01 20:09 Koolhoven
- * maximum nr of decimals is 10 instead of 6
- * 
- * 8     10-11-00 14:52 Koolhoven
- * if (_rStep < 1e-06) (rStep is written to odf with 6 decimals) when
- * always make it storetype real
- * 
- * 7     10-10-00 4:35p Martin
- * valuerange did not use the iDec correct when the step size became
- * smaller than 10e-9. Now if step is smaller then 10e-9, the storetype
- * will become stREAL.
- * 
- * 6     14/07/00 11:38 Willem
- * rrMinMax() function now does not use a temporary object anymore
- * 
- * 5     19/05/00 12:50 Willem
- * Added #pragma for 4503 and 4786 to suppress the very long warning
- * messages
- * 
- * 4     21-12-99 12:58p Martin
- * added a domain and column Coordbuf based on domain binary to be able to
- * read and store dynamically coordbufs in a table
- * 
- * 3     9-09-99 4:36p Martin
- * correct some ported 2.22 linking problems
- * 
- * 2     8-09-99 1:05p Martin
-// Revision 1.15  1998/10/19 09:38:31  Wim
-// Exceptional large ranges are now written away in sRange() correctly
-//
-// Revision 1.14  1998-09-16 18:22:46+01  Wim
-// 22beta2
-//
-// Revision 1.13  1997/09/16 17:44:31  Wim
-// Also reset valuerange when setdomain(image)
-//
-// Revision 1.12  1997-09-16 19:29:35+02  Wim
-// dvrs::SetDomain() sets the valuerange on nothing if 0==dm->pdv()
-//
-// Revision 1.11  1997-09-11 21:57:55+02  Wim
-// Domain image has never a vr
-//
-// Revision 1.10  1997/09/11 14:50:21  Wim
-// set vr of domain bool in dvrs on 0:1
-//
-// Revision 1.9  1997-09-10 18:53:22+02  Wim
-// Do not allow to set a valuerange with domain bool or image in DomainValueRangeStruct
-//
-// Revision 1.8  1997-08-20 09:21:52+02  Wim
-// dvrs::fValid(): also DomainBool should use domain and not vr() to check
-// validity. Why DomainBool has a ValueRange is still unclear to me
-//
-// Revision 1.7  1997-08-13 10:38:20+02  Wim
-// Disallow negative step size. Correct automatically to 0.
-//
-// Revision 1.6  1997-08-11 11:32:09+02  Wim
-// DomainValueRangeStruct::fValid(s) now uses value range when available
-//
-// Revision 1.5  1997-08-05 15:18:51+02  Wim
-// Changed ValueRangeReal::iRaw(rVal), floating point error in ?exp(100)
-//
-// Revision 1.4  1997-07-30 19:44:20+02  Wim
-// Allow "::step" for a valuerange. Range wil be invalid.
-// DomainValueRangeStruct::SetValueRange(vr) sets only step size when range is invalid.
-//
-// Revision 1.3  1997-07-30 18:33:24+02  Wim
-// SetValueRange(vr) sets only the precision in case the rrMinMax() is not valid.
-//
-// Revision 1.2  1997-07-28 17:48:18+02  Wim
-// ValueRangeInt and ValueRangeReal ::FEqual() now checks on both lower and upper bound
-//
-/* ValueRange
-   Copyright Ilwis System Development ITC
-   october 1995, by Wim Koolhoven
-	Last change:  WK   19 Oct 98   10:36 am
-*/
 
 #pragma warning( disable : 4503 )
 #pragma warning( disable : 4786 )
 
 #include "Engine\Domain\Dmvalue.h"
 #include "Engine\Domain\dmcoord.h"
+#include "Engine\Domain\DomainTime.h"
 #include "Engine\Base\DataObjects\valrange.h"
 
 static const double rDELTA=1.0e-9;
@@ -259,6 +142,15 @@ ValueRange::ValueRange(const RangeReal& rr, double rStep)
     }  
   }  
   SetPointer(new ValueRangeReal(rr.rLo(), rr.rHi(), rStep));
+}
+
+ValueRange::ValueRange(const ILWIS::TimeInterval& tiv)
+{
+  ptr = 0;
+  double rStep = tiv.getStep();
+  if (rStep < 0)
+    rStep = 0;
+  SetPointer(new ValueRangeReal(tiv));
 }
  
 ValueRange::ValueRange(const ValueRangeReal& rr)
@@ -695,6 +587,14 @@ ValueRangeReal::ValueRangeReal(double min, double max, double step, double rRaw0
   : ValueRangePtr(), RangeReal(min,max), _rStep(step)
 {
   init(rRaw0);
+}
+
+ValueRangeReal::ValueRangeReal(const ILWIS::TimeInterval& tiv)
+  : ValueRangePtr(), RangeReal(tiv.rLo(), tiv.rHi()), _rStep(tiv.getStep())
+{
+	st = stREAL;
+	_iDec = 10;
+	_r0 = 0;
 }
 
 ValueRangeReal::ValueRangeReal(const RangeReal& rr, double step)
@@ -1213,12 +1113,12 @@ String DomainValueRangeStruct::sValue(double rValue, short iWidth, short iDec) c
 {
 	if (!fValues())
 		return sUNDEF;
-	if (vr().fValid())
+	if (vr().fValid() && dm()->pdtime() == 0)
 	{
 		long raw = iRaw(rValue);
 		if (raw != iUNDEF)
 			return sValueByRaw(raw, iWidth, iDec);
-		if (vr()->vrr())
+		if (vr()->vrr() )
 			return vr()->vrr()->sValue(rValue, iWidth, iDec);
 	}
 	return dm()->pdv()->sValue(rValue, iWidth, iDec);
@@ -1271,6 +1171,8 @@ double DomainValueRangeStruct::rValue(long iRaw) const
 
 double DomainValueRangeStruct::rValue(const String& sValue) const
 {
+	if ( dm()->pdtime())
+		return dm()->pdtime()->tValue(sValue);
 	if (!fValues())
 		return rUNDEF;
 	return sValue.rVal();
@@ -1303,7 +1205,7 @@ long DomainValueRangeStruct::iRaw(double rValue) const
 bool DomainValueRangeStruct::fValid(const String& sValue) const
 {
 	if (0 == dm()->pdbool() && vr().fValid()) {
-		double r = sValue.rVal();
+		double r = dm()->pdtime() ? ILWIS::Time(sValue) : sValue.rVal();
 		RangeReal rr = vr()->rrMinMax();
 		return ((r >= rr.rLo()) && (r <= rr.rHi()));
 	}
@@ -1333,6 +1235,9 @@ StoreType DomainValueRangeStruct::st() const
 {
 	if (!dm().fValid())
 		return stBIT;  // the first in the enum
+
+	if ( dm()->pdtime())
+		return stREAL;
 
 	return !vr().fValid() || 0 != dm()->pdi() ? dm()->stNeeded() : vr()->stUsed();
 }

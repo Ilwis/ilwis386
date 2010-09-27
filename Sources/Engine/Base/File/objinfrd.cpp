@@ -34,173 +34,10 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/* $Log: /ILWIS 3.0/BasicDataStructures/objinfrd.cpp $
- * 
- * 40    22-03-02 10:39 Koolhoven
- * after some thinking made check in ObjectInfo::ReadElement() on ec equal
- * to check in base function
- * 
- * 39    21-03-02 19:11 Koolhoven
- * Correction of change 37. Domain in an ElementContainer has to be read.
- * why 37 is there at all is not clear to me, so I do not dare to remove
- * it all together
- * 
- * 38    11/21/01 9:37 Willem
- * The discrimination between GeoRef expression was not complete:
- * There are three input possibilities:
- *    1. Regular GeoRef with extension
- *    2. Regular GeoRef without extension
- *    3. Internal GeoRef
- * 3. is tried first, if it fails 1. and 2. are combined by setting the
- * extension and tried
- * 
- * 37    10/30/01 12:33p Martin
- * from non existing files the domains section should not be read.
- * 
- * 36    16-08-01 19:01 Koolhoven
- * ReadElement() of RealMatrix now does not crash anymore on zero size
- * matrix
- * 
- * 35    7-08-01 11:26 Koolhoven
- * ObjectInfo::ReadElement(): replace invalid georef by none.grf
- * 
- * 34    6/21/01 9:55 Willem
- * ReadElement for GeoRefs now first checks if the xtension of the value
- * in the ODF exist. If not the extension is set to  .GRF. This is
- * necessary because only then the system directory is checked for this
- * georef.
- * 
- * 33    26/02/01 15:22 Willem
- * ReadEelement(): When reading a filename from a MapView ODF the path
- * information was lost (current directory was set instead)
- * 
- * 32    12-02-01 9:22a Martin
- * throws an error instead of showing it locally in read. Better handling
- * is than possible
- * 
- * 31    6-11-00 8:36a Martin
- * ReadElement checks if it is an ilwisobject before attempting toe read
- * (else it will try to access huge binary files, consumes too much time).
- * 
- * 30    31-10-00 12:54 Koolhoven
- * in ReadElement(...,fn) if fnObj has no valid path use current directory
- * as default
- * 
- * 29    25-09-00 15:30 Koolhoven
- * just to be sure sSize.scVal() instead of sVal()
- * 
- * 28    20-09-00 19:19 Koolhoven
- * replaced short by int, because sscanf(  %i  ) asks for an int
- * 
- * 27    19-07-00 9:25a Martin
- * forgot one to check one find error
- * 
- * 26    17-07-00 1:43p Martin
- * forgot to block one find error (if needed)
- * 
- * 25    17-07-00 9:05a Martin
- * changed the handling of Current Directory. Is now stored in thread
- * local storage through Tls mechanism. IlwisWinApp has now some access
- * function to Set/Get/Initialize and remove the thread local. AppContext
- * is no longer used for this
- * 
- * 24    19/05/00 12:50 Willem
- * Added #pragma for 4503 and 4786 to suppress the very long warning
- * messages
- * 
- * 23    17-05-00 19:58 Koolhoven
- * :ReadElement(    fn)
- * should take fnObj directory as default
- * 
- * 22    3/27/00 4:04p Wind
- * added functions to read/write a CObject (stored in hex string)
- * 
- * 21    14-03-00 19:03 Koolhoven
- * Added ReadElement and WriteElement for a char* and a length
- * (storage as hexstring)
- * 
- * 20    9-03-00 10:47 Koolhoven
- * Erroneaously the ReadElement() for RowCol and MinMax was fallen away
- * 
- * 19    8-03-00 18:47 Koolhoven
- * Added ReadElement() and WriteElement() for CSize and CRect
- * 
- * 18    6-03-00 12:28 Wind
- * change title of error message when loading non existing domain
- * 
- * 17    22-12-99 18:13 Koolhoven
- * Derived ElementContainer from FileName
- * it has ElementMap* as a member.
- * In ObjectInfo::ReadElement and ObjectInfo::WriteElement the ElementMap
- * is used when available instead of the file.
- * ElementMap is initialized in MapCompositionDoc::Serialize to load/store
- * a MapView.
- * Further has IlwisObjectPtr now a SetFileName() function to prevent
- * everythere the const_casts of fnObj.
- * 
- * 16    21-12-99 12:58p Martin
- * added a domain and column Coordbuf based on domain binary to be able to
- * read and store dynamically coordbufs in a table
- * 
- * 15    13-12-99 12:46 Wind
- * arrays are now zero based, ReadElement and WriteElement adapted
- * 
- * 14    29-10-99 9:20 Wind
- * thread save stuff
- * 
- * 13    20-10-99 15:55 Wind
- * 
- * 12    10/18/99 1:03p Wind
- * made thread save by removing static variable
- * 
- * 11    9/29/99 11:00a Wind
- * added support for use of FileName::sSectionPostFix
- * 
- * 10    23-09-99 12:26 Koolhoven
- * Corrected protection against null pointers in ReadElement()
- * 
- * 9     22-09-99 15:51 Koolhoven
- * ReadElement() protected against empty strings
- * 
- * 8     9/08/99 10:08a Wind
- * adpated to use of quoted file and column names
- * 
- * 7     13/07/99 12:50 Willem
- * The atof() strtod() fucntion gave strange problems. (also during
- * linking). The functions have been renamed to be unique. They are now
- * called by their real name. The C library functions atof() and strtod()
- * are not used directly anymore
- * 
- * 6     26/05/99 8:52 Willem
- * ReadElement for string values now leaves the capitalization as is.
- * 
- * 5     15-03-99 17:04 Willem
- * Adjusted to write "Yes"/"No" to ODF for boolean values; ILWIS 2.x does
- * not recognize "true" and "false"
- * 
- * 4     3/11/99 12:15p Martin
- * Added support for Case insesitive 
- * 
- * 3     3/10/99 11:28a Martin
- * further case insesitive support added
- * 
- * 2     3/10/99 9:27a Martin
- * Added case insensitive string compare
-// Revision 1.3  1998/09/16 17:22:46  Wim
-// 22beta2
-//
-// Revision 1.2  1997/08/04 08:13:59  Wim
-// ReadElement(  String) had a maximum of 255 characters. Elarged till 32000.
-//
-/* ObjectInfo ReadElement functions
-   Copyright Ilwis System Development ITC
-   may 1996, by Jelle Wind
-	Last change:  WK    4 Aug 97   10:11 am
-*/
-
 #pragma warning( disable : 4503 )
 #pragma warning( disable : 4786 )
 
+#include "Headers\toolspch.h"
 #include "Engine\Domain\dm.h"
 #include "Engine\Domain\dminfo.h"
 #include "Engine\SpatialReference\Gr.h"
@@ -306,7 +143,19 @@ int ObjectInfo::ReadElement(const char* sSection, const char* sEntry,
     fValue = false;
   return iRet;  
 }                         
-                         
+
+int ObjectInfo::ReadElement(const char* sSection, const char* sEntry, const FileName& fnObj,
+							ILWIS::TimeInterval& interval)
+{
+  String sValue;
+  int iRet = ReadElement(sSection, sEntry, fnObj, sValue);	
+  Array<String> parts;
+  Split(sValue, parts,"::");
+  interval = ILWIS::TimeInterval(parts[0].rVal(), parts[1].rVal(), parts[2].rVal());
+
+  return iRet;
+}
+
 int ObjectInfo::ReadElement(const char* sSection, const char* sEntry,
                             const FileName& fnObj, FileName& fn)
 {
@@ -355,15 +204,15 @@ int ObjectInfo::ReadElement(const char* sSection, const char* sEntry,
 }
 
 int ObjectInfo::ReadElement(const char* sSection, const char* sEntry,
-                          const FileName& fnObj, Time& tim)
+                          const FileName& fnObj, ObjectTime& tim)
 {
   String sValue;
   int iRet = ReadElement(sSection, sEntry, fnObj, sValue);
   long l =sValue.iVal();
   if (l != iUNDEF)
-    tim = Time(l);
+    tim = ObjectTime(l);
   else
-    tim = Time(0);
+    tim = ObjectTime(0);
   return iRet;
 }
 

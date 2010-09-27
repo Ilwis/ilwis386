@@ -128,7 +128,7 @@ VarCovCorrMatrix::VarCovCorrMatrix(const MapList& maplist, bool fCorr)
     rmt = mpl->mtVarCov(false);
   if (0 != rmt) {
     mat = *rmt;
-    tmCalc = Time::timCurr();
+    tmCalc = ObjectTime::timCurr();
     SetAdditionalInfoFlag(true);
     SetAdditionalInfo(sSummary());
   }
@@ -194,7 +194,7 @@ void VarCovCorrMatrix::MakeUsable()
     mat = *rmt;
     SetAdditionalInfoFlag(true);
     SetAdditionalInfo(sSummary());
-    tmCalc = Time::timCurr();
+    tmCalc = ObjectTime::timCurr();
   }
   else
     tmCalc = 0;

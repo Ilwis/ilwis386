@@ -41,6 +41,7 @@ const long   iUNDEF  = ((long)-LONG_MAX);
 #define sUNDEF "?"
 #define crdUNDEF Coord(rUNDEF, rUNDEF)
 #define rcUNDEF   RowCol(iUNDEF, iUNDEF)
+#define tUNDEF ILWIS::Time(0)
 
 
 template <class T> inline T* undef(const T*) { return 0; }

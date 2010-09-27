@@ -103,7 +103,7 @@ protected:
 	void CalcBounds();
 	PolygonMapPtr& ptr;  // the SegmentMapPtr of which this is a member
 	const FileName& fnObj; // fnObj from ptr (for convenience)
-	Time timStore; // time of last change in data
+	ObjectTime timStore; // time of last change in data
 	
 private:
 	void StoreRing(File& binaryFile, const LineString *ls);

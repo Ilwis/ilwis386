@@ -163,7 +163,7 @@ public:
 protected:
 	SegmentMapPtr& ptr;  // the SegmentMapPtr of which this is a member
 	void SetCoordSystem(const CoordSystem& cs);	
-	Time timStore; // time of last change in data
+	ObjectTime timStore; // time of last change in data
 	
 private:
 	void Truncate(); // remove all contents, make empty

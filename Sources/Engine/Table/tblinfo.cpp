@@ -138,7 +138,7 @@ long TableInfo::iRecs() const
   return _iRecs;
 }
 
-Time TableInfo::objtime() const
+ObjectTime TableInfo::objtime() const
 {
   return _objtime;
 }

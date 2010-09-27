@@ -83,6 +83,7 @@ class DATEXPORT DomainValueReal: public DomainValue
 {
   friend DomainValue;
   friend class DomainValueFormView;
+  friend class DomainTimeView;
 protected:
   DomainValueReal(const FileName&);
   virtual void Store();
@@ -92,6 +93,7 @@ public:
   virtual String sName(bool fExt, const String& sDirRelative) const;
   virtual bool fEqual(const IlwisObjectPtr&) const;
   virtual unsigned long iValues(bool& fReal) const;
+  static DomainValue *create(const FileName& fn);
 
   String sValueByRaw(long iRaw, short iWidth=-1, short iDec=-1) const;
   long iRaw(const String& sValue) const;

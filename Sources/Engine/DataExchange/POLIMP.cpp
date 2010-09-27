@@ -353,7 +353,7 @@ void PolygonMapImport::Store()
 {
   FileName fn = fnObj;
   fn.sExt = ".pl#";
-  objtime = Time(fn);
+  objtime = ObjectTime(fn);
   PolygonMapPtr::Store();
   WriteElement("PolygonMap", "Type", "PolygonMapStore");
   WriteElement("PolygonMapStore", "DataPol", fn);

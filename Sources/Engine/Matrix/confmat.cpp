@@ -406,7 +406,7 @@ void MatrixConfusion::MakeUsable()
 		}
 		SetAdditionalInfoFlag(true);
 		SetAdditionalInfo(sSummary());
-		tmCalc = Time::timCurr();
+		tmCalc = ObjectTime::timCurr();
 }
 
 bool MatrixConfusion::fUsable() const

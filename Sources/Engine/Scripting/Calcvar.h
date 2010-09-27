@@ -168,6 +168,17 @@ private:
   double _rVal;
 };
 
+class CALCEXPORT CalcVarConstTime : public CalcVariablePtr {
+public:
+  CalcVarConstTime(double rVal, const String& sVal);
+  virtual long iValue() const;
+  virtual double rValue() const;
+  virtual String sValue() const;
+protected:
+private:
+  double _rVal;
+};
+
 
 class CALCEXPORT CalcVarConstString  : public CalcVariablePtr {
 public:
@@ -248,6 +259,20 @@ public:
 class CALCEXPORT CalcVarReal  : public CalcVarSimple {
 public:
   CalcVarReal(const String& sName);
+  virtual long iValue() const;
+  virtual double rValue() const;
+  virtual String sValue() const;
+  virtual void PutVal(long iVal);
+  virtual void PutVal(double rVal);
+  virtual void PutVal(const String& sVal);
+protected:
+private:
+  double _rVal;
+};
+
+class CALCEXPORT CalcVarTime  : public CalcVarReal {
+public:
+  CalcVarTime(const String& sName);
   virtual long iValue() const;
   virtual double rValue() const;
   virtual String sValue() const;

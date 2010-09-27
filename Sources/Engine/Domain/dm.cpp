@@ -227,6 +227,7 @@
 
 #include "Headers\toolspch.h"
 #include "Engine\Domain\dm.h"
+#include "Engine\Domain\domaintime.h"
 #include "Engine\Base\DataObjects\ObjectStructure.h"
 #include "Engine\Domain\Dmvalue.h"
 #include "Engine\Domain\dmclass.h"
@@ -334,6 +335,14 @@ Domain::Domain(const FileName& fn, const CoordSystem& csy, bool threeD)
 {
 	MutexFileName mut(fn);
 	SetPointer(new DomainCoord(fn, csy,threeD));
+	ptr()->Store();
+}
+
+Domain::Domain(const FileName& fn, const ILWIS::TimeInterval& intervm ,ILWIS::Time::Mode m)
+	: IlwisObject(listDom)
+{
+	MutexFileName mut(fn);
+	SetPointer(new DomainTime(fn,intervm,m));
 	ptr()->Store();
 }
 
@@ -469,6 +478,8 @@ DomainType Domain::dmt(const FileName& fn)
 		return dmtCOLOR;
 	else if ( fCIStrEqual(sDomType , "DomainBinary"))
 		return dmtBINARY;
+	else if ( fCIStrEqual(sDomType , "DomainTime"))
+		return dmtTIME;
 	return dmtNONE;
 }
 
@@ -502,6 +513,8 @@ DomainType DomainPtr::dmt() const
 		return dmtCOORDBUF;
 	if (0 != pdcol())
 		return dmtCOLOR;
+	if ( 0 != pdtime())
+		return dmtTIME;
 	return dmtNONE;
 }
 
@@ -692,6 +705,8 @@ DomainPtr* DomainPtr::create(const FileName& fn)
     }
     else if (fCIStrEqual("DomainPicture" , sType))
       return new DomainPicture(filnam);
+	else if (fCIStrEqual("DomainTime" , sType))
+      return new DomainTime(filnam);
     else if (fCIStrEqual("DomainString" , sType)) {
       DomainPtr* p = new DomainString();
       ObjectInfo::ReadElement("Ilwis", "Description", filnam, p->sDescription);
@@ -846,6 +861,12 @@ DomainGroup* DomainPtr::pdgrp() const
 DomainColor* DomainPtr::pdcol() const
 {
   return dynamic_cast<DomainColor*>
+    (const_cast<DomainPtr*>(this));
+}
+
+DomainTime* DomainPtr::pdtime() const
+{
+  return dynamic_cast<DomainTime*>
     (const_cast<DomainPtr*>(this));
 }
 
@@ -1131,6 +1152,8 @@ DomainType Domain::dmt(const String& sDomType)
 		return dmtCOLOR;
 	if ( fCIStrEqual(sDomType , "binary"))
 		return dmtBINARY;
+	if ( fCIStrEqual(sDomType , "time"))
+		return dmtTIME;
 	return dmtNONE;
 }
 
@@ -1163,6 +1186,8 @@ String Domain::sDomainType(DomainType dmt)
       return "coordbuf";
     case dmtVALUE : 
       return "value";
+	case dmtTIME : 
+      return "time";
     case dmtBINARY : 
       return "binary";
 		case dmtUNIQUEID:

@@ -108,7 +108,7 @@ protected:
     Array<Column>         ac;
 	
 private:
-    Time                  timStore; // time of last change in data
+    ObjectTime                  timStore; // time of last change in data
     bool                  fErase;
 	bool                  fLoaded;
 };

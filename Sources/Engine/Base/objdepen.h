@@ -66,11 +66,11 @@ public:
     // returns false if a dependency object is not frozen
 //bool fAllFrozenValid() const;
     // returns true if all dependencies are valid in frozen form
-  bool _export fAllOlder(const Time& tm) const; 
+  bool _export fAllOlder(const ObjectTime& tm) const; 
     // returns true if all dependencies are older than tm
   bool fUpToDate() const;
     // returns true if all dependencies are up to date
-  Time _export tmNewest() const;
+  ObjectTime _export tmNewest() const;
 //  void Copy(const FileName& fn) const;
     // copy all dependent objects to the directory of fn
   void _export Store(IlwisObjectPtr* ptr, const String& sSection = "");
@@ -95,8 +95,8 @@ public:
   static void _export Read(const String& sSection, const FileName& fn, Array<FileName>& afnObj, Array<String>& asColName);
   // returns file names of dependencies in section sSection
   // and names of columns
-  static void _export GetNewestDependentObject(const FileName& fn, const String& sColN, Time tmObj,
-                                      String& sObjName, Time& tmNewer, Array<FileName>& afnChecked);
+  static void _export GetNewestDependentObject(const FileName& fn, const String& sColN, ObjectTime tmObj,
+                                      String& sObjName, ObjectTime& tmNewer, Array<FileName>& afnChecked);
   // return (printable, columns preceded by the word Column) name and time of a dependent 
   // object that is newer than the current object
 private:

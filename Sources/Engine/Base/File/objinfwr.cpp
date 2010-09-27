@@ -113,8 +113,12 @@ bool ObjectInfo::WriteElement(const char* sSection, const char* sEntry,
 {
   if (rUNDEF == rValue)
     return WriteElement(sSection, sEntry, fn, "?");
-  else
-    return WriteElement(sSection, sEntry, fn, String("%f", rValue));
+  else {
+	  if ( abs(rValue) < 1e12)
+		return WriteElement(sSection, sEntry, fn, String("%.12f", rValue));
+	  else
+		return WriteElement(sSection, sEntry, fn, String("%e", rValue));
+  }
 }
 
 bool ObjectInfo::WriteElement(const char* sSection, const char* sEntry,
@@ -181,6 +185,15 @@ bool ObjectInfo::WriteElement(const char* sSection, const char* sEntry,
 }
 
 bool ObjectInfo::WriteElement(const char* sSection, const char* sEntry,
+							  const FileName& fnObj, const ILWIS::TimeInterval& interval)
+{
+	double b = interval.getBegin();
+	double e = interval.getEnd();
+	double s = interval.getStep();
+	return WriteElement(sSection, sEntry, fnObj, String("%f::%f::%f", b, e, s));
+}
+
+bool ObjectInfo::WriteElement(const char* sSection, const char* sEntry,
                           const FileName& fnObj, const LatLon& ll)
 {
   return WriteElement(sSection, sEntry, fnObj, String("%lg %lg", ll.Lat, ll.Lon));
@@ -233,7 +246,7 @@ bool ObjectInfo::WriteElement(const char* sSection, const char* sEntry,
 }
 
 bool ObjectInfo::WriteElement(const char* sSection, const char* sEntry,
-                          const FileName& fnObj, const Time& tim)
+                          const FileName& fnObj, const ObjectTime& tim)
 {
   if (tim != 0)
     return WriteElement(sSection, sEntry, fnObj, String("%li", (long)tim));

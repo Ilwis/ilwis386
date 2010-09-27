@@ -58,7 +58,7 @@ public:
   long _export iCols() const;
   long iOffset() const;
   long iRecs() const;
-  Time objtime() const;
+  ObjectTime objtime() const;
   String sDescription() const;
   bool fReadOnly() const;
   bool fDataReadOnly() const;
@@ -75,7 +75,7 @@ private:
   FileName _fnTbl;
   long _iCols, _iRecs, _iOffset;
   DomainInfo _dminf;
-  Time _objtime;
+  ObjectTime _objtime;
   String _sDescription;
   bool _fDependent;
   String _sExpression;

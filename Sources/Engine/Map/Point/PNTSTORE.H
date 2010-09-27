@@ -92,7 +92,7 @@ public:
 protected:
   const FileName& fnObj; // fnObj from ptr (for convenience)
   PointMapPtr& ptr;  // the PointMapPtr of which this is a member
-  Time timStore; // time of last change in data
+  ObjectTime timStore; // time of last change in data
   //Table tbl;
   //Column colVal, colCoord;
   void SetCoordSystem(const CoordSystem& cs);

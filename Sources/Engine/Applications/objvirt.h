@@ -113,7 +113,7 @@ protected:
                         { return ObjectInfo::ReadElement(sSection, sEntry, fnObj, rng); }
     int               ReadElement(const char* sSection, const char* sEntry, FileName& fn) const
                         { return ObjectInfo::ReadElement(sSection, sEntry, fnObj, fn); }
-    int               ReadElement(const char* sSection, const char* sEntry, Time& tim) const
+    int               ReadElement(const char* sSection, const char* sEntry, ObjectTime& tim) const
                         { return ObjectInfo::ReadElement(sSection, sEntry, fnObj, tim); }
     int               ReadElement(const char* sSection, const char* sEntry, Domain& dm) const
                         { return ObjectInfo::ReadElement(sSection, sEntry, fnObj, dm); }
@@ -183,7 +183,7 @@ protected:
     const             FileName& fnObj;
     IlwisObjectPtr&   optr;
     ObjectDependency& objdep;
-    Time&             objtime;
+    ObjectTime&             objtime;
     bool              fNeedFreeze;
     HelpTopic         htpFreeze;
     String            sFreezeTitle;

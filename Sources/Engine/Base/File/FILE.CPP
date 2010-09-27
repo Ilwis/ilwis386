@@ -255,7 +255,7 @@ void File::Flush()
  // empty, relic of previous eras 
 }
 
-Time File::filetime() 
+ObjectTime File::filetime() 
 // return file creation time
 {
   ILWISSingleLock sl(&csAccess, TRUE,SOURCE_LOCATION);

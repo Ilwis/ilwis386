@@ -240,7 +240,7 @@ private:
 	MapStoreBase* mpsb;
 	const FileName& fnObj; // fnObj from ptr (for convenience)
 	MapPtr& ptr;  // the MapPtr of which this is a member
-	Time timStore; // time of last change in data
+	ObjectTime timStore; // time of last change in data
 	bool fUseAs;
 };
 

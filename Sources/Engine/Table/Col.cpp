@@ -462,7 +462,7 @@ Column::Column(const Table& tblDefault, const String& sColName, const DomainValu
     tblDefault->AddCol(*this);
   }
   if (pointer())
-    pointer()->objtime = Time::timCurr();
+    pointer()->objtime = ObjectTime::timCurr();
 }
 
 Column::Column(const Table& tblDefault, const String& sColName,
@@ -539,7 +539,7 @@ bool Column::fInitForConstructor(const Table& tblDefault, const String& sColName
 	}
 
 	if (pointer())
-		pointer()->objtime = Time::timCurr();
+		pointer()->objtime = ObjectTime::timCurr();
 	
 	return fReturn;
 }
@@ -595,7 +595,7 @@ bool Column::fInitForConstructor(const Table& tblDefault, const String& sColName
 	}
 
 	if (pointer())
-		pointer()->objtime = Time::timCurr();
+		pointer()->objtime = ObjectTime::timCurr();
 	
 	return fReturn;
 }
@@ -869,7 +869,7 @@ ColumnPtr::ColumnPtr(const Table& t, const String& sColName, const DomainValueRa
   _iOffset = t->iOffset();
   _iRecs = t->iRecs();
   fnTbl = t->fnObj;
-  objtime = Time::timCurr();
+  objtime = ObjectTime::timCurr();
 	ptrTbl = dynamic_cast<TablePtr *>(t.pointer());
   pcs = new ColumnStore(t, sColName, *this, dvs);
 }
@@ -1750,7 +1750,7 @@ String ColumnPtr::sObjectSection() const
   return sSection().scVal();
 }
 
-void ColumnPtr::GetNewestDependentObject(String& sObjName, Time& tmNewer) const
+void ColumnPtr::GetNewestDependentObject(String& sObjName, ObjectTime& tmNewer) const
 {
 	Array<FileName> afnChecked;
 	ObjectDependency::GetNewestDependentObject(fnObj, sName(), objtime, sObjName, tmNewer, afnChecked);

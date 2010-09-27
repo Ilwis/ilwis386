@@ -75,7 +75,7 @@ private:
 	PrincCompPtr(const FileName& fn, MatrixObjectPtr& ptr, const MapList& maplist, bool fFacAnal, int iOutBands=iUNDEF);
 	
 	MapList         m_mpl;
-	Time            m_tmCalc;
+	ObjectTime            m_tmCalc;
 	CVector         m_vecEigVal;
 	void CalcEigen(RealMatrix*);
 	bool            m_fFactorAnal;

@@ -569,7 +569,7 @@ MapListPtr::MapListPtr(const FileName& fn)
 : IlwisObjectPtr(FileName(fn, ".mpl"))
 , pmlv(0)
 {
-	Time tim = objtime;
+	ObjectTime tim = objtime;
 
 	bool fUseAs;
 	if (0 == ReadElement("Ilwis", "UseAs", fUseAs))
@@ -847,10 +847,10 @@ void MapListPtr::CheckGeoRefs() const
 
 RealMatrix* MapListPtr::mtVarCov(bool fForce)
 {
-	Time tmMaps = objtime;
+	ObjectTime tmMaps = objtime;
 	for (int i = iLower(); i <= iUpper(); ++i) 
 	{
-		Time tm = ma[i]->objtime;
+		ObjectTime tm = ma[i]->objtime;
 		if (tm > tmMaps)
 			tmMaps = tm;
 	}
@@ -863,10 +863,10 @@ RealMatrix* MapListPtr::mtVarCov(bool fForce)
 
 RealMatrix* MapListPtr::mtCorr(bool fForce)
 {
-	Time tmMaps = objtime;
+	ObjectTime tmMaps = objtime;
 	for (int i = iLower(); i <= iUpper(); ++i) 
 	{
-		Time tm = ma[i]->objtime;
+		ObjectTime tm = ma[i]->objtime;
 		if (tm > tmMaps)
 			tmMaps = tm;
 	}
@@ -911,7 +911,7 @@ void MapListPtr::CalculateStats()
 		return;
 	}
 	CalcCorr();
-	tmCalcStat = Time::timCurr();
+	tmCalcStat = ObjectTime::timCurr();
 	
 	// to check OIF calculation, can be removed in final version
 	Array<String> asBands;

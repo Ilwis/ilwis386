@@ -221,7 +221,7 @@ RangeReal ColumnInfo::rrMinMax() const
   return _rrMinMax;
 }
 
-Time ColumnInfo::objtime() const
+ObjectTime ColumnInfo::objtime() const
 {
   return _objtime;
 }

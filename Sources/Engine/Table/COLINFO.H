@@ -70,7 +70,7 @@ public:
     long                    iRecs() const;
     RangeInt                riMinMax() const;
     RangeReal _export       rrMinMax() const;
-    Time                    objtime() const;
+    ObjectTime              objtime() const;
     String                  sDescription() const;
     bool                    fReadOnly() const;
     bool                    fDataReadOnly() const;
@@ -90,7 +90,7 @@ private:
     long                    _iRecs;
     RangeInt                _riMinMax;
     RangeReal               _rrMinMax;
-    Time                    _objtime;
+    ObjectTime              _objtime;
     String                  _sDescription;
     bool                    _fDependent;
     bool                    _fOwnedByTable;

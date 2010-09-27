@@ -202,6 +202,7 @@ static void add2_so (StackObject* soRes, const StackObject* so0, const StackObje
     for (short i=0; i<soRes->iSize(); i++)
       bufRes[i] = add_r(buf0[i], buf1[i]);
     soRes->PutVal(bufRes);
+	//soRes->dvs.SetDomain(Domain("d:\\Data\\ILWIS\\at2.dom"));
   }
   else 
 	{
@@ -786,6 +787,9 @@ void InternFuncDesc::CreateInternFuncs(Array<InternFuncDesc*>& fdl)
                             1, vtVALUE, vtVALUE );
   fdl &= new InternFuncDesc("isundef",  (InternalFunc)isundefraw_so, 0,
                             BitDomain,  (FuncCheckDomains)fStringCompatibleDomains,
+                            1, vtVALUE, vtSTRING );
+  fdl &= new InternFuncDesc("time",  (InternalFunc)time_so, 0,
+                            RealDomain,  (FuncCheckDomains)fStringCompatibleDomains,
                             1, vtVALUE, vtSTRING );
 
   fdl &= new InternFuncDesc(operPLUS,   (InternalFunc)add2_so, 0,
