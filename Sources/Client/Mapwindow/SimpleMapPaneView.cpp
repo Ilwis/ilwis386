@@ -340,7 +340,7 @@ void SimpleMapPaneView::OnMouseMove(UINT nFlags, CPoint point)
 	bool fOutside = false; //!rctBounds.PtInRect(point);
 
 	bool fNone = georef->fGeoRefNone();
-	double rRow, rCol;
+	double rRow=0, rCol=0;
 	Coord c;
 	//Pnt2RowCol(point, rRow, rCol);
 	bool fValid = true;

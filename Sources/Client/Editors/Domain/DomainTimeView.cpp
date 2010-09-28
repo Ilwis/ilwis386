@@ -111,7 +111,7 @@ void DomainTimeView::CreateForm()
 
 int DomainTimeView::exec()
 {
-	if ( !fDataHasChanged() ) return 0;
+	//if ( !fDataHasChanged() ) return 0;
 	
 	GeneralFormView::exec();
 	Domain dm = GetDocument()->dm();

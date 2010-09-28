@@ -3453,6 +3453,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\Sources\Client\FormElements\TimeGraphSlider.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Client\FormElements\TimeGraphSlider.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Sources\Client\FormElements\TreeSelector.cpp"
 					>
 				</File>

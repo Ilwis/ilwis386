@@ -82,6 +82,7 @@ $Header: /ILWIS 3.0/Main/ilwis.CPP 329   10-06-05 15:09 Retsios $
 #include "Client\Editors\Domain\DomainValueFormView.h"
 #include "Client\Editors\Domain\DomainValueIntFormView.h"
 #include "Client\Editors\Domain\DomainUniqueIDFormView.h"
+#include "Client\Editors\Domain\DomainTimeView.h"
 #include "Engine\Representation\Rprclass.h"
 #include "Engine\Representation\Rprgrad.h"
 #include "Client\Editors\Utils\colorScroll.h"
@@ -728,6 +729,16 @@ void IlwisWinApp::RegisterDocTemplates()
 		RUNTIME_CLASS(DataFormWindow),
 		RUNTIME_CLASS(DomainValueIntFormView));
 	AddDocTemplate(idt);
+
+	idt = new IlwisDocTemplate(
+		".dom", 
+		"DomainTime",
+		"ILWIS Domain",
+		RUNTIME_CLASS(DomainDoc),
+		RUNTIME_CLASS(DataFormWindow),
+		RUNTIME_CLASS(DomainTimeView));
+	AddDocTemplate(idt);
+
 
 	idt = new IlwisDocTemplate(
 		".dom", 

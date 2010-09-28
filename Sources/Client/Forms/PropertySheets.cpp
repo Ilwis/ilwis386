@@ -2293,13 +2293,13 @@ MapListPropPage::MapListPropPage(const IlwisObject& obj)
 	m_fInGRCallBack = false;
 	m_stPyramids = 0;
 	pbPyramids = 0;
+	mpl.SetPointer(obj.pointer());
 }
 
 void MapListPropPage::BuildPage()
 {
 	BasicPropertyFormPage::BuildPage();
 	
-	MapList mpl(m_obj->fnObj);
 	
 	if (mpl->fUseAs())
 	{
@@ -2341,6 +2341,7 @@ void MapListPropPage::BuildPage()
 		Domain dom1 = mpl[mpl->iLower()]->dm();
 		new FieldObjShow(m_fgPageRoot, dom1);
 	}
+	SetAttribTableField();
 	
 	String s('X', 55);
 	m_stRemark = new InfoText(m_fgPageRoot, s);
@@ -2378,6 +2379,80 @@ void MapListPropPage::BuildPage()
 			}
 		}		
 	}    
+}
+
+void MapListPropPage::SetAttribTableField()
+{
+	fAttrTable = mpl->fTblAtt();
+	if (fAttrTable)
+	{
+		sAttrTable = mpl->sName(false);
+		sAttrTable &= ".tbt";
+		Table tbl = mpl->tblAtt();
+		if (tbl.fValid())
+			sAttrTable = tbl->sName(true);
+		else
+			fAttrTable = false;
+	}  
+	else
+		sAttrTable = String();
+
+	if (m_fReadOnly)
+	{
+		if (fAttrTable)
+		{
+			String s = SMSUiAttrTable;
+			s &= " ";
+			s &= sAttrTable;
+			new InfoText(m_fgPageRoot, s);
+		}
+	} 
+	else
+	{
+		CheckBox* cb = new CheckBox(m_fgPageRoot, SMSUiAttrTable, &fAttrTable);
+		ftAttTable = new FieldTableC(cb, "", &sAttrTable, Domain("none"));
+		ftAttTable->SetCallBack((NotifyProc)&MapListPropPage::CallBackAttTableChange); 
+
+		String s('X', 50);
+		stAttTable = new InfoText(cb, s);
+		stAttTable->SetVal(String());
+		stAttTable->Align(cb, AL_UNDER);
+	}  
+}
+
+int MapListPropPage::CallBackAttTableChange(Event*)
+{
+	if ( !fAttrTable ) return 1;
+	DataChanged(0);
+	
+	ftAttTable->StoreData();
+	if (sAttrTable.length() == 0)
+	{
+		stAttTable->SetVal("");
+		return 0;
+	}
+
+	FileName fn(sAttrTable, ".tbt");
+	String sRemark;
+	Table tbl;
+	try
+	{
+		tbl = Table(fn);
+		if ( tbl->iRecs() < mpl->iSize())
+			throw ErrorObject(TR("Attribute table doesnt match number of maps"));
+	}
+	catch (ErrorObject& err)
+	{
+		err.Show(SMSErrAttrTableChange);
+	}
+
+	if (tbl.fValid()) 
+		sRemark = tbl->sDescription;
+	else  
+		sRemark = "";
+
+	stAttTable->SetVal(sRemark);
+	return 0;
 }
 
 int MapListPropPage::CallBackPyramids(Event *)
@@ -2514,8 +2589,7 @@ int MapListPropPage::exec()
 {
 	BasicPropertyFormPage::exec();
 
-	MapListPtr* pml = dynamic_cast<MapListPtr*>(m_obj.pointer());
-	if (!pml)
+	if (!mpl.fValid())
 		return 0;
 
 	// Change Georeference
@@ -2523,12 +2597,19 @@ int MapListPropPage::exec()
 	{
 		FileName fnGR = IlwisObjectPtr::fnCheckPath(FileName(m_sNewGR, ".grf"));
 		String sRem;
-		if (fnGR != pml->gr()->fnObj || !fCheckGeoRefConsistent(sRem))
+		if (fnGR != mpl->gr()->fnObj || !fCheckGeoRefConsistent(sRem))
 		{
 			GeoRef gr(fnGR);
 			if (gr.fValid())
-				pml->SetGeoRef(gr);
+				mpl->SetGeoRef(gr);
 		}
+	}
+	if ( fAttrTable) {
+		FileName fn(sAttrTable, ".tbt");
+		if ( !mpl->tblAtt().fValid() || mpl->tblAtt()->fnObj != fn) {
+			mpl->SetAttributeTable(Table(fn));
+		}
+
 	}
 
 	return 0;

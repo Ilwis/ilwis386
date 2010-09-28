@@ -322,12 +322,19 @@ private:
 	FieldGeoRefC *m_fgr;
 	StaticText   *m_stPyramids;
 	PushButton   *pbPyramids;
+	FieldTableC       *ftAttTable;
+	StaticText        *stAttTable;
 	
 	bool       m_fInGRCallBack;
 	String     m_sNewGR;
+	MapList	   mpl;
+	bool  fAttrTable;
+	String sAttrTable;
 
 	int GeoRefChange(Event*);
-	int CallBackPyramids(Event *)	;		
+	int CallBackPyramids(Event *)	;	
+	int CallBackAttTableChange(Event*);
+	void SetAttribTableField();
 
 	bool fCheckGeoRefConsistent(String& sRemark);
 	
