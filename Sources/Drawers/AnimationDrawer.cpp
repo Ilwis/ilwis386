@@ -208,13 +208,6 @@ void AnimationDrawer::timedEvent(UINT _timerid) {
 				}
 			}
 		}
-	/*	POSITION pos = doc->GetFirstViewPosition();
-		while (pos != NULL)
-		{
-			CView* pView = doc->GetNextView(pos);
-			if ( dynamic_cast<LayerTreeView *>(pView) )
-				pView->SendMessageToDescendants(ID_TIME_TICK);
-		}	*/
 		if ( animcontrol)
 			animcontrol->PostMessage(ID_TIME_TICK,index, TRUE);
 		doc->mpvGetView()->Invalidate();
@@ -227,6 +220,9 @@ String AnimationDrawer::iconName(const String& subtype) const {
 
 void AnimationDrawer::setIndex(int ind) {
 	ILWISSingleLock sl(&csAccess, TRUE,SOURCE_LOCATION);
+	for(int i =0 ; i < drawers.size(); ++i)
+		getDrawer(i)->setActive(false);
+
 	index = ind;
 }
 
@@ -311,7 +307,6 @@ int AnimationControl::setTiming(Event *ev) {
  /*   ILWISSingleLock sl(&(andr->csAccess), TRUE,SOURCE_LOCATION);
 	drw->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->KillTimer(andr->timerid);
 	andr->timerid = iUNDEF;*/
-	stop(0);
 	run(0);
 	return 1;
 }
@@ -319,7 +314,7 @@ int AnimationControl::setTiming(Event *ev) {
 int AnimationControl::stop(Event  *ev) {
 	AnimationDrawer *andr = (AnimationDrawer *)drw;
 	drw->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->KillTimer(andr->timerid);
-	andr->index = 0;
+	andr->setIndex(0);
 	andr->timerid = iUNDEF;
 	return 1;
 }
@@ -344,15 +339,15 @@ int AnimationControl::run(Event  *ev) {
 
 	andr->timerid = AnimationDrawer::timerIdCounter++;
 	drw->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->SetTimer(andr->timerid,andr->interval * 1000.0,0);
-	PreparationParameters pp(NewDrawer::ptRENDER);
-	drw->prepare(&pp);
+	/*PreparationParameters pp(NewDrawer::ptRENDER);
+	drw->prepare(&pp);*/
 	updateMapView();
 	return 1;
 }
 
 int AnimationControl::begin(Event  *ev) {
 	AnimationDrawer *andr = (AnimationDrawer *)drw;
-	andr->index = 0;
+	andr->setIndex(0);
 	return 1;
 }
 
