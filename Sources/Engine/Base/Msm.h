@@ -51,6 +51,8 @@
 
 #include <map>
 
+String _export TR(const String& text);
+
 String _export ILWSF(const String& sMod, long id);
 
 class StringManager 

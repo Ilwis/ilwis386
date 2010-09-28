@@ -122,6 +122,10 @@ String ILWSF(const String& sMod, long id)
 	return String();
 }
 
+String TR(const String& text) {
+	return text;
+	//return getEngine()->getContext()->sm()->translate(text);
+}
 StringManager::StringManager()
 {
 }

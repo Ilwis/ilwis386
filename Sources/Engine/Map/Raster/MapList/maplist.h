@@ -186,6 +186,9 @@ public:
   virtual _export String sExpression() const;
 	virtual IlwisObjectVirtual *pGetVirtualObject() const;
   void _export SetDomainValueRangeStruct(const DomainValueRangeStruct&); // for virtual maplist
+   bool _export         		fTblAtt() const;
+   Table _export        		tblAtt() const;
+   void _export         		SetAttributeTable(const Table& tbl);
 
 protected:
   _export MapListPtr(const FileName& fn);
@@ -224,6 +227,7 @@ private:
   ObjectDependency            objdep;
   String                      _sBandPreFix;
   long                        iOffset;
+  Table						  attTable;
 
   MapListVirtual* pmlv;
 };  

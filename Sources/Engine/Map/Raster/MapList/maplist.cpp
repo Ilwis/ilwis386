@@ -572,9 +572,11 @@ MapListPtr::MapListPtr(const FileName& fn)
 	ObjectTime tim = objtime;
 
 	bool fUseAs;
+
 	if (0 == ReadElement("Ilwis", "UseAs", fUseAs))
 		fUseAs = false;
 	SetUseAs(fUseAs);
+	ReadElement("MapList", "AttributeTable", attTable);
 	int iMaps = iReadElement("MapList", "Maps");
     // Corrupted ODF can have no key for the number of maps, so check
     if (iMaps == iUNDEF)
@@ -763,6 +765,7 @@ void MapListPtr::Store()
 	IlwisObjectPtr::Store();
 	WriteElement("Ilwis", "Type", "MapList");
 	WriteElement("MapList", "GeoRef", gr());
+	WriteElement("MapList", "AttributeTable", attTable);
 	WriteElement("MapList", "Size", rcSize());
 	WriteElement("MapList", "Maps", iSize());
 	WriteElement("MapList", "BandPreFix", _sBandPreFix);
@@ -1489,4 +1492,15 @@ void MapListPtr::SetDomainValueRangeStruct(const DomainValueRangeStruct& dvrs)
 	OpenMapListVirtual();
 	if (0 != pmlv)
 		pmlv->SetDomainValueRangeStruct(dvrs);
+}
+
+bool MapListPtr::fTblAtt() const {
+	return attTable.fValid();
+}
+Table MapListPtr::tblAtt() const {
+	return attTable;
+}
+void MapListPtr::SetAttributeTable(const Table& tbl){
+	attTable = tbl;
+	fChanged = true;
 }
