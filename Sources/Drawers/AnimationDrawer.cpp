@@ -3,6 +3,8 @@
 #include "Client\Editors\Utils\MULTICOL.H"
 #include "Client\FormElements\FieldIntSlider.h"
 #include "Client\FormElements\FieldRealSlider.h"
+#include "Client\FormElements\TimeGraphSlider.h"
+#include "Client\FormElements\fldcol.h"
 #include "Client\FormElements\objlist.h"
 #include "Engine\Map\basemap.h"
 #include "Engine\Map\Point\ilwPoint.h"
@@ -41,7 +43,8 @@ AnimationDrawer::AnimationDrawer(DrawerParameters *parms) :
 	sourceType(sotUNKNOWN),
 	featurelayer(0),
 	loop(true),
-	index(0)
+	index(0),
+	animcontrol(0)
 {
 	setTransparency(1);
 }
@@ -170,7 +173,7 @@ bool AnimationDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 }
 
 void AnimationDrawer::animationControl(CWnd *parent) {
-	new AnimationControl(parent, this);
+	animcontrol = new AnimationControl(parent, this);
 }
 
 void AnimationDrawer::animationSourceUsage(CWnd *parent) {
@@ -179,6 +182,7 @@ void AnimationDrawer::animationSourceUsage(CWnd *parent) {
 
 void AnimationDrawer::timedEvent(UINT _timerid) {
     ILWISSingleLock sl(&csAccess, TRUE,SOURCE_LOCATION);
+	MapCompositionDoc *doc = getRootDrawer()->getDrawerContext()->getDocument();
 	if ( timerid == _timerid) {
 		if ( featurelayer){
 			if ( names.size() > 0 && index < names.size()-1) {
@@ -204,7 +208,16 @@ void AnimationDrawer::timedEvent(UINT _timerid) {
 				}
 			}
 		}
-		getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->Invalidate();
+	/*	POSITION pos = doc->GetFirstViewPosition();
+		while (pos != NULL)
+		{
+			CView* pView = doc->GetNextView(pos);
+			if ( dynamic_cast<LayerTreeView *>(pView) )
+				pView->SendMessageToDescendants(ID_TIME_TICK);
+		}	*/
+		if ( animcontrol)
+			animcontrol->PostMessage(ID_TIME_TICK,index, TRUE);
+		doc->mpvGetView()->Invalidate();
 	}
 }
 
@@ -212,9 +225,27 @@ String AnimationDrawer::iconName(const String& subtype) const {
 	return "Animation";
 }
 
+void AnimationDrawer::setIndex(int ind) {
+	ILWISSingleLock sl(&csAccess, TRUE,SOURCE_LOCATION);
+	index = ind;
+}
+
 //---------------------------------------------------------
-AnimationControl::AnimationControl(CWnd *par, AnimationDrawer *ldr) 
-	: DisplayOptionsForm2(ldr, par, "Time")
+BEGIN_MESSAGE_MAP(AnimationControl, DisplayOptionsForm2)
+	ON_MESSAGE(ID_TIME_TICK, OnTimeTick)
+END_MESSAGE_MAP()
+
+LRESULT AnimationControl::OnTimeTick( WPARAM wParam, LPARAM lParam ) {
+	AnimationDrawer *adrw = (AnimationDrawer *)drw;
+	if ( lParam == TRUE)
+		graphSlider->setIndex(wParam);
+	else
+		adrw->setIndex(wParam);
+	return 1;
+}
+
+AnimationControl::AnimationControl(CWnd *par, AnimationDrawer *adr) 
+	: DisplayOptionsForm2(adr, par, "Time")
 {
 	FieldGroup *fg = new FieldGroup(root, true);
 	FlatIconButton *fi1 = new FlatIconButton(fg,"Begin","",(NotifyProc)&AnimationControl::begin, FileName());
@@ -228,15 +259,52 @@ AnimationControl::AnimationControl(CWnd *par, AnimationDrawer *ldr)
 	fi1 = new FlatIconButton(fg,"End","",(NotifyProc)&AnimationControl::end, FileName());
 	fi1->Align(fi2, AL_AFTER,-10);
 
-	frtime = new FieldReal(root,"Interval", &ldr->interval,ValueRangeReal(0.1,1000,0.1));
+	frtime = new FieldReal(root,"Interval", &adr->interval,ValueRangeReal(0.1,1000,0.1));
 	frtime->SetCallBack((NotifyProc)&AnimationControl::setTiming);
 	frtime->Align(fbBegin, AL_UNDER);
-	PushButton *pb = new PushButton(root,"apply",(NotifyProc)&AnimationControl::setTiming);
-	pb->Align(frtime, AL_AFTER);
+	setSlider();
+	//PushButton *pb = new PushButton(root,"apply",(NotifyProc)&AnimationControl::setTiming);
+	//pb->Align(frtime, AL_AFTER);
 
   create();
 }
 
+void AnimationControl::setSlider() {
+	AnimationDrawer *adrw = (AnimationDrawer *)drw;
+	IlwisObject *source = adrw->datasource;
+	IlwisObject::iotIlwisObjectType type = IlwisObject::iotObjectType((*source)->fnObj);
+	if ( type == IlwisObject::iotRASMAP ||  IlwisObject::iotSEGMENTMAP || 
+		IlwisObject::iotPOINTMAP || IlwisObject::iotPOLYGONMAP) {
+	}
+	if ( type ==IlwisObject::iotMAPLIST) {
+		MapList mpl((*source)->fnObj);
+		if ( mpl->fTblAtt()) {
+			fcol = new FieldColumn(root,TR("Reference Attribute"),mpl->tblAtt(),&colName,dmVALUE);
+			fcol->SetCallBack((NotifyProc)&AnimationControl::changeColum);
+		}
+	}
+
+	graphSlider = new TimeGraphSlider(root);
+
+}
+
+int AnimationControl::changeColum(Event *) {
+	fcol->StoreData();
+	if ( colName != "") {
+		AnimationDrawer *adrw = (AnimationDrawer *)drw;
+		IlwisObject *source = adrw->datasource;
+		IlwisObject::iotIlwisObjectType type = IlwisObject::iotObjectType((*source)->fnObj);
+		Table tbl;
+		if (  type ==IlwisObject::iotMAPLIST) {
+			MapList mpl((*source)->fnObj);
+			tbl = mpl->tblAtt();
+		}
+		graphSlider->setSourceTable(tbl);
+		graphSlider->setSourceColumn(colName);
+	}
+	return 1;
+
+}
 int AnimationControl::setTiming(Event *ev) {
 	frtime->StoreData();
 	AnimationDrawer *andr = (AnimationDrawer *)drw;
@@ -286,6 +354,12 @@ int AnimationControl::begin(Event  *ev) {
 	AnimationDrawer *andr = (AnimationDrawer *)drw;
 	andr->index = 0;
 	return 1;
+}
+
+void AnimationControl::shutdown(int iReturn) {
+	AnimationDrawer *andr = (AnimationDrawer *)drw;
+	andr->animcontrol = 0;
+	return DisplayOptionsForm2::shutdown();
 }
 
 //----------------------------------------------------------

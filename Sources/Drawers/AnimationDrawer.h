@@ -1,6 +1,9 @@
 #pragma once
 
 class MultiColumnSelector;
+class TimeGraphSlider;
+
+//#define ID_TIME_TICK WM_USER+345
 
 ILWIS::NewDrawer *createAnimationDrawer(ILWIS::DrawerParameters *parms);
 namespace ILWIS{
@@ -25,6 +28,7 @@ namespace ILWIS{
 		void animationTiming(CWnd *w);
 		void animationControl(CWnd *w);
 		void animationSourceUsage(CWnd *parent);
+		void setIndex(int index);
 		double interval;
 		UINT timerid;
 		IlwisObject *datasource;
@@ -35,6 +39,7 @@ namespace ILWIS{
 		int index;
 		bool loop;
 		CCriticalSection csAccess;
+		AnimationControl *animcontrol;
 
 		void addSetDrawer(const BaseMap& basemap, ILWIS::PreparationParameters *pp, ILWIS::SetDrawer *rsd, const String& name="");
 	};
@@ -45,6 +50,14 @@ namespace ILWIS{
 		AnimationControl(CWnd *par, AnimationDrawer *gdr);
 	private:
 		int setTiming(Event *ev);
+		int changeColum(Event *);
+		LRESULT OnTimeTick( WPARAM wParam, LPARAM lParam );
+		void setSlider();
+		void setIndex(int index);
+		void shutdown(int iReturn=2);
+		TimeGraphSlider *graphSlider;
+		FieldColumn *fcol;
+		String colName;
 		FieldReal *frtime;
 		FlatIconButton *fbBegin; 
 		int begin(Event  *ev);
@@ -52,6 +65,8 @@ namespace ILWIS{
 		int pause(Event  *ev);
 		int run(Event  *ev);
 		int stop(Event  *ev);
+
+		DECLARE_MESSAGE_MAP();
 	};
 
 	class AnimationSourceUsage: public DisplayOptionsForm2
