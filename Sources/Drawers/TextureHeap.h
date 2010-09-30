@@ -17,17 +17,21 @@ namespace ILWIS {
 
 	class Texture;
 	class DrawingColor;
+	class DrawerContext;
 
 	class TextureCreator
 	{
 	public:
-		TextureCreator(const Map & _mp, const DrawingColor * drawColor, const NewDrawer::DrawMethod drm, const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, char * scrap_data_mipmap, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, DrawerContext * drawerContext, unsigned int zoomFactor);
+		TextureCreator(const Map & _mp, const DrawingColor * drawColor, const NewDrawer::DrawMethod drm, const bool fUsePalette, const unsigned int iPaletteSize, const RangeReal & rrMinMaxMap, const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, char * scrap_data_mipmap, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, DrawerContext * drawerContext, unsigned int zoomFactor);
 		virtual ~TextureCreator();
 		Texture * CreateTexture(bool fInThread, volatile bool * fDrawStop);
 	private:
 		const Map mp;
 		const DrawingColor * drawColor;
 		const NewDrawer::DrawMethod drm;
+		const bool fUsePalette;
+		const unsigned int iPaletteSize;
+		const RangeReal rrMinMaxMap;
 		const unsigned int offsetX;
 		const unsigned int offsetY;
 		const unsigned int sizeX;
@@ -41,17 +45,40 @@ namespace ILWIS {
 		unsigned int zoomFactor;
 	};
 
+	class Palette
+	{
+	public:
+		Palette(const bool fRealMap, const DrawingColor * drawColor, const NewDrawer::DrawMethod drm, const unsigned int iPaletteSize, const RangeReal & rrMinMaxMap);
+		virtual ~Palette();
+		void MakeCurrent();
+		void SetNotCurrent();
+		void Refresh();
+	private:
+		void Cleanup();
+		float * palette_reds;
+		float * palette_greens;
+		float * palette_blues;
+		float * palette_alphas;
+		unsigned int iSize;
+		bool fCurrent;
+		const bool fRealMap;
+		const DrawingColor * drawColor;
+		const NewDrawer::DrawMethod drm;
+		const unsigned int iPaletteSize;
+		const RangeReal rrMinMaxMap;
+	};
+
 	class TextureHeap  
 	{
 	public:
-		TextureHeap(const Map & _mp, const DrawingColor * drawColor, const NewDrawer::DrawMethod drm, DrawerContext * drawerContext);
+		TextureHeap(const Map & _mp, const DrawingColor * drawColor, const NewDrawer::DrawMethod drm, const unsigned int iPaletteSize, const RangeReal & rrMinMaxMap, DrawerContext * drawerContext);
 		virtual ~TextureHeap();
 
-		Texture * GetTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, bool fInThread);
+		Texture * GetTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, const bool fUsePalette, bool fInThread);
 		void ClearQueuedTextures();
 
 	private:
-		Texture * GenerateTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, bool fInThread);
+		Texture * GenerateTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, const bool fUsePalette, bool fInThread);
 		static UINT GenerateTexturesInThread(LPVOID pParam);
 		Texture * GenerateNextTexture(bool fInThread);
 		//vector<Texture*> textures;
@@ -61,6 +88,8 @@ namespace ILWIS {
 		const Map mp;
 		const DrawingColor * drawColor;
 		const NewDrawer::DrawMethod drm;
+		const unsigned int iPaletteSize;
+		const RangeReal rrMinMaxMap;
 		char * scrap_data_mipmap;
 		int texturesArraySize;
 		int readpos;

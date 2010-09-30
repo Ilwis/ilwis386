@@ -3,9 +3,11 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Client\Headers\formelementspch.h"
-#include "Client\MapWindow\Drawers\DrawerContext.h"
 #include "TextureHeap.h"
 #include "Texture.h"
+#include "Client\MapWindow\Drawers\DrawerContext.h"
+#include "DrawingColor.h"
+
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -15,10 +17,17 @@ static char THIS_FILE[]=__FILE__;
 
 using namespace ILWIS;
 
-TextureCreator::TextureCreator(const Map & _mp, const DrawingColor * drawColor, const NewDrawer::DrawMethod drm, const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, char * scrap_data_mipmap, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, DrawerContext * drawerContext, unsigned int zoomFactor)
+//////////////////////////////////////////////////
+// TextureCreator
+//////////////////////////////////////////////////
+
+TextureCreator::TextureCreator(const Map & _mp, const DrawingColor * drawColor, const NewDrawer::DrawMethod drm,  const bool fUsePalette, const unsigned int iPaletteSize, const RangeReal & rrMinMaxMap, const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, char * scrap_data_mipmap, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, DrawerContext * drawerContext, unsigned int zoomFactor)
 : mp(_mp)
 , drawColor(drawColor)
 , drm(drm)
+, fUsePalette(fUsePalette)
+, iPaletteSize(iPaletteSize)
+, rrMinMaxMap(rrMinMaxMap)
 , offsetX(offsetX)
 , offsetY(offsetY)
 , sizeX(sizeX)
@@ -40,20 +49,126 @@ TextureCreator::~TextureCreator()
 
 Texture * TextureCreator::CreateTexture(bool fInThread, volatile bool * fDrawStop)
 {
-	return new Texture(mp, drawColor, drm, offsetX, offsetY, sizeX, sizeY, scrap_data_mipmap, xMin, yMin, xMax, yMax, zoomFactor, drawerContext, fInThread, fDrawStop);
+	Texture * tex = 0;
+	if (fUsePalette)
+		tex = new Texture(mp, offsetX, offsetY, sizeX, sizeY, scrap_data_mipmap, xMin, yMin, xMax, yMax, zoomFactor, iPaletteSize, rrMinMaxMap, drawerContext, fInThread, fDrawStop);
+	else
+		tex = new Texture(mp, drawColor, drm, offsetX, offsetY, sizeX, sizeY, scrap_data_mipmap, xMin, yMin, xMax, yMax, zoomFactor, drawerContext, fInThread, fDrawStop);
+	if (!tex->fValid()) {
+		delete tex;
+		tex = 0;
+	}
+	return tex;
+}
+
+//////////////////////////////////////////////////
+// Palette
+//////////////////////////////////////////////////
+
+Palette::Palette(const bool fRealMap, const DrawingColor * drawColor, const NewDrawer::DrawMethod drm, const unsigned int iPaletteSize, const RangeReal & rrMinMaxMap)
+: fRealMap(fRealMap)
+, drawColor(drawColor)
+, drm(drm)
+, iPaletteSize(iPaletteSize)
+, rrMinMaxMap(rrMinMaxMap)
+, palette_reds(0)
+, palette_greens(0)
+, palette_blues(0)
+, palette_alphas(0)
+, iSize(0)
+, fCurrent(false)
+{
+}
+
+Palette::~Palette()
+{
+	Cleanup();
+}
+
+void Palette::Cleanup()
+{
+	if (palette_reds)
+		delete [] palette_reds;
+	if (palette_greens)
+		delete [] palette_greens;
+	if (palette_blues)
+		delete [] palette_blues;
+	if (palette_alphas)
+		delete [] palette_alphas;
+}
+
+void Palette::MakeCurrent()
+{
+	if (!fCurrent) {
+		glPixelMapfv(GL_PIXEL_MAP_I_TO_R, iPaletteSize, palette_reds);
+		glPixelMapfv(GL_PIXEL_MAP_I_TO_G, iPaletteSize, palette_greens);
+		glPixelMapfv(GL_PIXEL_MAP_I_TO_B, iPaletteSize, palette_blues);
+		glPixelMapfv(GL_PIXEL_MAP_I_TO_A, iPaletteSize, palette_alphas);
+		fCurrent = true;
+	}
+}
+
+void Palette::SetNotCurrent()
+{
+	fCurrent = false;
+}
+
+void Palette::Refresh()
+{
+	Cleanup();
+
+	palette_reds = new float [iPaletteSize];
+	palette_greens = new float [iPaletteSize];
+	palette_blues = new float [iPaletteSize];
+	palette_alphas = new float [iPaletteSize];
+
+	palette_alphas[iPaletteSize - 1] = 0.0; // by definition, last index reserved for UNDEF	
+
+	unsigned int nrMapValues = iPaletteSize - 1;
+	double width = rrMinMaxMap.rWidth();
+	double minMapVal = rrMinMaxMap.rLo();
+
+	long * bufColor = new long [nrMapValues];
+
+	if (fRealMap) {
+		double * buf = new double [nrMapValues];
+		for (int i = 0; i < nrMapValues; ++i)
+			buf[i] = minMapVal + i * width / (nrMapValues - 1);
+		drawColor->clrVal(buf, bufColor, nrMapValues);
+		delete [] buf;
+	} else {
+		long * buf = new long [nrMapValues];
+		for (int i = 0; i < nrMapValues; ++i)
+			buf[i] = minMapVal + i * width / (nrMapValues - 1);
+		drawColor->clrRaw(buf, bufColor, nrMapValues, drm);
+		delete [] buf;
+	}
+
+	for (int i = 0; i < nrMapValues; ++i) {
+		palette_reds[i] = ((Color)(bufColor[i])).red() / 255.0;
+		palette_greens[i] = ((Color)(bufColor[i])).green() / 255.0;
+		palette_blues[i] = ((Color)(bufColor[i])).blue() / 255.0;
+		palette_alphas[i] = 1.0;
+	}
+
+	delete [] bufColor;
+
+	fCurrent = false;
 }
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-TextureHeap::TextureHeap(const Map & _mp, const DrawingColor * drawColor, const NewDrawer::DrawMethod drm, DrawerContext * drawerContext)
+TextureHeap::TextureHeap(const Map & _mp, const DrawingColor * drawColor, const NewDrawer::DrawMethod drm, const unsigned int iPaletteSize, const RangeReal & rrMinMaxMap, DrawerContext * drawerContext)
 : texturesArraySize(0)
 , readpos(0)
 , writepos(0)
 , mp(_mp)
 , drawColor(drawColor)
 , drm(drm)
+, iPaletteSize(iPaletteSize)
+, rrMinMaxMap(rrMinMaxMap)
 , drawerContext(drawerContext)
 , textureThread(0)
 , fAbortTexGen(false)
@@ -97,7 +212,7 @@ void TextureHeap::ClearQueuedTextures()
 	csChangeTexCreatorList.Unlock();
 }
 
-Texture * TextureHeap::GetTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, bool fInThread)
+Texture * TextureHeap::GetTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, const bool fUsePalette, bool fInThread)
 {
 	Texture * tex = 0;
 	if (fInThread) { // call Invalidate when done, to redraw the mapwindow
@@ -114,14 +229,14 @@ Texture * TextureHeap::GetTexture(const unsigned int offsetX, const unsigned int
 			}
 		}
 
-		GenerateTexture(offsetX, offsetY, sizeX, sizeY, xMin, yMin, xMax, yMax, zoomFactor, fInThread);
+		GenerateTexture(offsetX, offsetY, sizeX, sizeY, xMin, yMin, xMax, yMax, zoomFactor, fUsePalette, fInThread);
 	} else { // caller is waiting for the Texture*
 		for (int i = 0; i < texturesArraySize; ++i) {
 			if (textures[i]->equals(xMin, yMin, xMax, yMax, zoomFactor))
 				tex = textures[i];
 		}
 		if (0 == tex)
-			tex = GenerateTexture(offsetX, offsetY, sizeX, sizeY, xMin, yMin, xMax, yMax, zoomFactor, fInThread);
+			tex = GenerateTexture(offsetX, offsetY, sizeX, sizeY, xMin, yMin, xMax, yMax, zoomFactor, fUsePalette, fInThread);
 	}
 
 	if (tex != 0)
@@ -130,11 +245,11 @@ Texture * TextureHeap::GetTexture(const unsigned int offsetX, const unsigned int
 	return tex;
 }
 
-Texture * TextureHeap::GenerateTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, bool fInThread)
+Texture * TextureHeap::GenerateTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, const bool fUsePalette, bool fInThread)
 {
 	if (((writepos + 1) % BUF_SIZE) != readpos)
 	{
-		textureCreators[writepos] = new TextureCreator(mp, drawColor, drm, offsetX, offsetY, sizeX, sizeY, scrap_data_mipmap, xMin, yMin, xMax, yMax, drawerContext, zoomFactor);
+		textureCreators[writepos] = new TextureCreator(mp, drawColor, drm, fUsePalette, iPaletteSize, rrMinMaxMap, offsetX, offsetY, sizeX, sizeY, scrap_data_mipmap, xMin, yMin, xMax, yMax, drawerContext, zoomFactor);
 		writepos = (writepos + 1) % BUF_SIZE;
 	}
 	if (fInThread) {
@@ -142,26 +257,35 @@ Texture * TextureHeap::GenerateTexture(const unsigned int offsetX, const unsigne
 			textureThread = AfxBeginThread(GenerateTexturesInThread, this);
 		else
 			textureThread->ResumeThread();
-	} else
-		return GenerateNextTexture(fInThread);
+	} else {
+		Texture * tex = GenerateNextTexture(fInThread);
+		if (tex != 0)
+			return tex;
+	}
 	return 0;
 }
 
 Texture * TextureHeap::GenerateNextTexture(bool fInThread)
 {
-	clock_t start = clock();
-	Texture * tex = textureCreators[readpos]->CreateTexture(fInThread, &fAbortTexGen);
-	clock_t end = clock();
-	double duration = 1000.0 * (double)(end - start) / CLOCKS_PER_SEC;
-	TRACE("Texture generated in %2.2f milliseconds;\n", duration);
-	if (tex->fValid()) {
-		textures[texturesArraySize++] = tex;
-		delete textureCreators[readpos];
+	Texture * tex = 0;
+	TextureCreator * texCreator = 0;
+	csChangeTexCreatorList.Lock();
+	if (!fAbortTexGen && !fStopThread && readpos != writepos) {
+		texCreator = textureCreators[readpos];
 		textureCreators[readpos] = 0;
 		readpos = (readpos + 1) % BUF_SIZE;
-	} else {
-		delete tex;
-		tex = 0;
+	}
+	csChangeTexCreatorList.Unlock();
+
+	if (texCreator != 0) {
+		clock_t start = clock();
+		tex = texCreator->CreateTexture(fInThread, &fAbortTexGen);
+		clock_t end = clock();
+		double duration = 1000.0 * (double)(end - start) / CLOCKS_PER_SEC;
+		TRACE("Texture generated in %2.2f milliseconds;\n", duration);
+		delete texCreator;
+		if (tex != 0)
+			textures[texturesArraySize++] = tex;
 	}
 	return tex;
 }
@@ -179,15 +303,11 @@ UINT TextureHeap::GenerateTexturesInThread(LPVOID pParam)
 
 	while (!pObject->fStopThread)
 	{
-		pObject->csChangeTexCreatorList.Lock();
-		if (pObject->readpos != pObject->writepos)
-		{
-			while (!pObject->fAbortTexGen && !pObject->fStopThread && pObject->readpos != pObject->writepos)
-				pObject->GenerateNextTexture(true);
-			if (!pObject->fAbortTexGen && !pObject->fStopThread)
-				pObject->drawerContext->InvalidateWindow();
-		}
-		pObject->csChangeTexCreatorList.Unlock();
+		Texture * tex = pObject->GenerateNextTexture(true);
+		while (tex != 0)
+			tex = pObject->GenerateNextTexture(true);
+		if (!pObject->fAbortTexGen && !pObject->fStopThread)
+			pObject->drawerContext->InvalidateWindow();
 		if (!pObject->fStopThread)
 			pObject->textureThread->SuspendThread(); // wait here, and dont consume CPU time either
 	}
@@ -197,3 +317,4 @@ UINT TextureHeap::GenerateTexturesInThread(LPVOID pParam)
 
 	return 0;
 }
+
