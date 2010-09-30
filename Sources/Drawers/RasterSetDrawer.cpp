@@ -26,7 +26,7 @@ ILWIS::NewDrawer *createRasterSetDrawer(DrawerParameters *parms) {
 
 RasterSetDrawer::RasterSetDrawer(DrawerParameters *parms) : 
 SetDrawer(parms,"RasterSetDrawer")
-, data(new RasterSetData()), isThreaded(true)
+, data(new RasterSetData()), isThreaded(true), sameCsy(true), fUsePalette(false)
 {
 	//	setTransparency(1); // default
 	//	setDrawMethod(drmNOTSET); // default
@@ -35,14 +35,15 @@ SetDrawer(parms,"RasterSetDrawer")
 RasterSetDrawer::~RasterSetDrawer(){
 	if (data->textureHeap)
 		delete data->textureHeap;
+	if (data->palette)
+		delete data->palette;
 	delete data;
 }
 
 void RasterSetDrawer::prepare(PreparationParameters *pp){
 	SetDrawer::prepare(pp);
 
-	if ( pp->type & NewDrawer::ptRENDER)
-	{
+	if ( pp->type & NewDrawer::ptRENDER) {
 		drm = drmRPR;
 		stretched = false;
 		riStretch = RangeInt(0,255);
@@ -95,6 +96,12 @@ void RasterSetDrawer::prepare(PreparationParameters *pp){
 			else if ("Logarithmic" == sStretchMethod)
 				stretchMethod = smLOGARITHMIC;
 		}
+		fUsePalette = drm != drmCOLOR;
+		if (fUsePalette && data->palette)
+			data->palette->Refresh();
+	}
+	if ( pp->type & ptGEOMETRY | pp->type & ptRESTORE) {
+		sameCsy = getRootDrawer()->getCoordinateSystem()->fnObj == csy->fnObj;
 	}
 }
 
@@ -113,9 +120,26 @@ void RasterSetDrawer::init() const
 		if (iYScreen < data->maxTextureSize)
 			data->maxTextureSize = iYScreen;
 
-		data->textureHeap = new TextureHeap(rastermap, getDrawingColor(), getDrawMethod(), drawcontext);
+		RangeReal rrMinMax = rastermap->rrMinMax(true);
+		if (rrStretch.rLo() >= rrStretch.rHi())
+			rrMinMax = rastermap->vr()->rrMinMax();
+
+		ValueRange vr = rastermap->vr();
+		if (rastermap->dm()->pdbool())
+			vr = ValueRange();
+		bool fRealMap;
+		if (vr.fValid()) // when integers are not good enough to represent the map treat it as a real map
+			fRealMap = (vr->rStep() < 1) || (vr->stUsed() == stREAL);
+		else
+			fRealMap = false;
+
+		data->textureHeap = new TextureHeap(rastermap, getDrawingColor(), getDrawMethod(), drawcontext->getMaxPaletteSize(), rrMinMax, drawcontext);
+		data->palette = new Palette(fRealMap, getDrawingColor(), getDrawMethod(), drawcontext->getMaxPaletteSize(), rrMinMax);
 		data->imageWidth = rastermap->rcSize().Col;
 		data->imageHeight = rastermap->rcSize().Row;
+
+		if (fUsePalette)
+			data->palette->Refresh();
 	}
 	data->init = true;
 }
@@ -155,6 +179,8 @@ bool RasterSetDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 	minY = maxY + (minY - maxY) * (double)height / (double)data->imageHeight;
 
 	glEnable(GL_TEXTURE_2D);
+	if (fUsePalette)
+		data->palette->MakeCurrent(); // for now this is the only call .. officially it should also be called before generating textures in a separate thread, however currently the only way two palettes would interfere is with the AnimationDrawer, and there textures are generated in the current thread
 	DisplayImagePortion(minX, maxY, maxX, minY, 0, 0, width, height);
 	glDisable(GL_TEXTURE_2D);
 
@@ -260,7 +286,7 @@ void RasterSetDrawer::DisplayImagePortion(double x1, double y1, double x2, doubl
 
 void RasterSetDrawer::DisplayTexture(double x1, double y1, double x2, double y2, unsigned int imageOffsetX, unsigned int imageOffsetY, unsigned int imageSizeX, unsigned int imageSizeY, unsigned int zoomFactor) const
 {
-	Texture* tex = data->textureHeap->GetTexture(imageOffsetX, imageOffsetY, imageSizeX, imageSizeY, x1, y1, x2, y2, zoomFactor, isThreaded);
+	Texture* tex = data->textureHeap->GetTexture(imageOffsetX, imageOffsetY, imageSizeX, imageSizeY, x1, y1, x2, y2, zoomFactor, fUsePalette, isThreaded);
 
 	if (tex != 0)
 	{
@@ -272,18 +298,36 @@ void RasterSetDrawer::DisplayTexture(double x1, double y1, double x2, double y2,
 		// make the quad
 		glBegin (GL_QUADS);
 
-		tex->TexCoord2d(x1, y1);
-		glVertex3d(x1, y1, 0.0);
+		if (sameCsy) {
+			tex->TexCoord2d(x1, y1);
+			glVertex3d(x1, y1, 0.0);
 
-		tex->TexCoord2d(x2, y1);
-		glVertex3d( x2, y1, 0.0);
+			tex->TexCoord2d(x2, y1);
+			glVertex3d(x2, y1, 0.0);
 
-		tex->TexCoord2d(x2, y2);
-		glVertex3d( x2, y2, 0.0);
+			tex->TexCoord2d(x2, y2);
+			glVertex3d(x2, y2, 0.0);
 
-		tex->TexCoord2d(x1, y2);
-		glVertex3d(x1, y2, 0.0);
+			tex->TexCoord2d(x1, y2);
+			glVertex3d(x1, y2, 0.0);
+		} else {
+			tex->TexCoord2d(x1, y1);
+			Coord c = csy->cConv(getRootDrawer()->getCoordinateSystem(), Coord(x1, y1, 0.0));
+			glVertex3d(c.x, c.y, 0.0);
 
+			tex->TexCoord2d(x2, y1);
+			c = csy->cConv(getRootDrawer()->getCoordinateSystem(), Coord(x2, y1, 0.0));
+			glVertex3d(c.x, c.y, 0.0);
+
+			tex->TexCoord2d(x2, y2);
+			c = csy->cConv(getRootDrawer()->getCoordinateSystem(), Coord(x2, y2, 0.0));
+			glVertex3d(c.x, c.y, 0.0);
+
+			tex->TexCoord2d(x1, y2);
+			c = csy->cConv(getRootDrawer()->getCoordinateSystem(), Coord(x1, y2, 0.0));
+			glVertex3d(c.x, c.y, 0.0);
+		}
+	
 		glEnd();
 	}
 }
