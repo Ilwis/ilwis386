@@ -7,6 +7,7 @@ using namespace ILWIS;
 DrawerContext::DrawerContext(MapCompositionDoc *d)
 : doc(d)
 , maxTextureSize(128)
+, maxPaletteSize(256)
 , fGLInitialized(false)
 , m_hdc(0)
 , m_hrc(0)
@@ -41,6 +42,9 @@ bool DrawerContext::initOpenGL(CDC *dc) {
 	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);
 	if (maxTextureSize > 512) // performance decreases from 1024 onwards on my computer
 		maxTextureSize = 512;
+	glGetIntegerv(GL_MAX_PIXEL_MAP_TABLE, &maxPaletteSize);
+	if (maxPaletteSize > 65536)
+		maxPaletteSize = 65536;
 	ReleaseContext();
 
 	fGLInitialized = true;

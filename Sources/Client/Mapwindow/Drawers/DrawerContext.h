@@ -14,6 +14,7 @@ namespace ILWIS {
 		void clear();
 		MapCompositionDoc * getDocument() const;
 		GLint getMaxTextureSize() const { return maxTextureSize; };
+		GLint getMaxPaletteSize() const { return maxPaletteSize; };
 
 		void TakeContext();
 		void ReleaseContext();
@@ -22,6 +23,7 @@ namespace ILWIS {
 	private:
 		MapCompositionDoc *doc;
 		GLint maxTextureSize;
+		GLint maxPaletteSize;
 		CCriticalSection csOpenglContext;
 		HDC m_hdc;
 		HGLRC m_hrc;
