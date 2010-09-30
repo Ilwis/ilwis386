@@ -12,8 +12,8 @@ public:
 	DrawingColor(SetDrawer *dr);
 	Color clrVal(double rVal) const;
 	Color clrRaw(long iRaw, NewDrawer::DrawMethod drm) const;
-	void clrVal(const double * buf, long iLen, long * bufOut) const;
-	void clrRaw(long * buf, long iLen, NewDrawer::DrawMethod drm) const;
+	void clrVal(const double * buf, long * bufOut, long iLen) const;
+	void clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer::DrawMethod drm) const;
 	Color clrRandom(int iRaw) const;
 	Color clrPrimary(int iNr) const;
 

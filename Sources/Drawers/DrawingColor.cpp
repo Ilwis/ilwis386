@@ -127,7 +127,7 @@ Color DrawingColor::clrRaw(long iRaw, NewDrawer::DrawMethod drm) const
 		return cRet;//.clrDraw(gamma);
 }
 
-void DrawingColor::clrVal(const double * buf, long iLen, long * bufOut) const
+void DrawingColor::clrVal(const double * buf, long * bufOut, long iLen) const
 {
 	Representation rpr = drw->getRepresentation();
 	if (!rpr.fValid())
@@ -160,7 +160,7 @@ void DrawingColor::clrVal(const double * buf, long iLen, long * bufOut) const
 	}
 }
 
-void DrawingColor::clrRaw(long * buf, long iLen, NewDrawer::DrawMethod drm) const
+void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer::DrawMethod drm) const
 {
 	switch (drm) {
 	case NewDrawer::drmRPR:
@@ -174,7 +174,7 @@ void DrawingColor::clrRaw(long * buf, long iLen, NewDrawer::DrawMethod drm) cons
 						RangeReal rr = drw->getStretchRangeReal();
 						DomainValueRangeStruct dvrs = bmap->dvrs();
 						for (long i = 0; i < iLen; ++i)
-							buf[i] = rpr->clr(dvrs.rValue(buf[i]), rr);
+							bufOut[i] = rpr->clr(dvrs.rValue(buf[i]), rr);
 					} break;
 					case SetDrawer::smLOGARITHMIC:
 						{
@@ -183,7 +183,7 @@ void DrawingColor::clrRaw(long * buf, long iLen, NewDrawer::DrawMethod drm) cons
 							rr = RangeReal(0, log(rMax));
 							DomainValueRangeStruct dvrs = bmap->dvrs();
 							for (long i = 0; i < iLen; ++i)
-								buf[i] = rpr->clr(log(dvrs.rValue(buf[i]) - rr.rLo()), rr);
+								bufOut[i] = rpr->clr(log(dvrs.rValue(buf[i]) - rr.rLo()), rr);
 						} break;
 					}
 				}
@@ -191,17 +191,17 @@ void DrawingColor::clrRaw(long * buf, long iLen, NewDrawer::DrawMethod drm) cons
 					RangeReal rr = RangeReal(0, 255);
 					DomainValueRangeStruct dvrs = bmap->dvrs();
 					for (long i = 0; i < iLen; ++i)
-						buf[i] = rpr->clr(dvrs.rValue(buf[i]), rr);
+						bufOut[i] = rpr->clr(dvrs.rValue(buf[i]), rr);
 				}
 				else {
 					DomainValueRangeStruct dvrs = bmap->dvrs();
 					for (long i = 0; i < iLen; ++i)
-						buf[i] = rpr->clr(dvrs.rValue(buf[i]));
+						bufOut[i] = rpr->clr(dvrs.rValue(buf[i]));
 				}
 			}
 			else {
 				for (long i = 0; i < iLen; ++i)
-					buf[i] = rpr->clrRaw(buf[i]);
+					bufOut[i] = rpr->clrRaw(buf[i]);
 			}
 		} break;
 	case NewDrawer::drmSINGLE: {
@@ -214,12 +214,12 @@ void DrawingColor::clrRaw(long * buf, long iLen, NewDrawer::DrawMethod drm) cons
 				col = fdr->getSingleColor();
 		}
 		for (long i = 0; i < iLen; ++i)
-			buf[i] = col; // you asked for it (!)
+			bufOut[i] = col; // you asked for it (!)
 	} break;
 	case NewDrawer::drmMULTIPLE: 
 		if (3 == iMultColors) {
 			for (long i = 0; i < iLen; ++i)
-				buf[i] = clrRandom(buf[i]);
+				bufOut[i] = clrRandom(buf[i]);
 		}
 		else {
 			int iStep = 7;
@@ -229,7 +229,7 @@ void DrawingColor::clrRaw(long * buf, long iLen, NewDrawer::DrawMethod drm) cons
 			case 2: iStep = 31; break;
 			}
 			for (long i = 0; i < iLen; ++i)
-				buf[i] = clrPrimary(1 + buf[i] % iStep);
+				bufOut[i] = clrPrimary(1 + buf[i] % iStep);
 		}  
 		break;
 	case NewDrawer::drmIMAGE: {
@@ -247,7 +247,7 @@ void DrawingColor::clrRaw(long * buf, long iLen, NewDrawer::DrawMethod drm) cons
 			else if (iRaw > iMax)
 				iRaw = iMax;
 			int iVal = (int)(floor(255 * float(iRaw - iMin) / iDiff));
-			buf[i] = Color(iVal,iVal,iVal);
+			bufOut[i] = Color(iVal,iVal,iVal);
 		}
 	  } break;
 	case NewDrawer::drmCOLOR:
@@ -256,7 +256,7 @@ void DrawingColor::clrRaw(long * buf, long iLen, NewDrawer::DrawMethod drm) cons
 	case NewDrawer::drmBOOL: 
 		for (long i = 0; i < iLen; ++i) {
 			long iRaw = buf[i];
-			buf[i] = (iRaw == 1)?clr1:((iRaw == 2)?clr2:mcd->colBackground);
+			bufOut[i] = (iRaw == 1)?clr1:((iRaw == 2)?clr2:mcd->colBackground);
 		}
 	break;
 	}
