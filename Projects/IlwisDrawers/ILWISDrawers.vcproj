@@ -311,6 +311,10 @@
 				RelativePath="..\..\Sources\Drawers\TextureHeap.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\ValueSlicer.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -406,6 +410,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Drawers\TextureHeap.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\ValueSlicer.h"
 				>
 			</File>
 		</Filter>
