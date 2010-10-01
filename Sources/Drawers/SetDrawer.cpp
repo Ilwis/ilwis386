@@ -48,8 +48,8 @@ SetDrawer::~SetDrawer() {
 }
 
 void SetDrawer::prepare(PreparationParameters *parm){
-	delete drawColor;
-	drawColor = 0;
+	//delete drawColor; // the drawColor is still in use elsewhere (a local pointer is kept for efficiency). Unless there's a good reason to fully renew it here, I try commenting this out for now.
+	//drawColor = 0;
 	ComplexDrawer::prepare(parm);
 	csy = parm->csy;
 	if ( getUICode() == NewDrawer::ucALL) {
@@ -58,7 +58,8 @@ void SetDrawer::prepare(PreparationParameters *parm){
 		if ( rpr.fValid() && !rpr->prv())
 			setStretchRangeReal(mapDrawer->getStretchRangeReal());
 	}
-	drawColor = new DrawingColor(this);
+	if (!drawColor)
+		drawColor = new DrawingColor(this);
 	setDrawMethod();
 }
 
