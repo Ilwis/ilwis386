@@ -78,6 +78,15 @@ RepresentationGradual::RepresentationGradual(const FileName& fn, const Domain& d
 : RepresentationPtr(fn,dom),
   ac(2), acr(1), aiIndex(2), arLimits(2)
 {
+	reset();
+}
+
+void RepresentationGradual::reset() {
+	ac.resize(2);
+	acr.resize(1);
+	aiIndex.resize(2);
+	arLimits.resize(2);
+
 	iStretchSteps = 5;
 	ac[0] = Color(0,0,0);
 	ac[1] = Color(255,255,255);
@@ -86,7 +95,6 @@ RepresentationGradual::RepresentationGradual(const FileName& fn, const Domain& d
 	arLimits[1] = 1;
 	init();
 }
-
 void RepresentationGradual::init()
 {
 	iClrSteps = 1;
