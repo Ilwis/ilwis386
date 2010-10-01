@@ -231,21 +231,9 @@ MolodenskyDatum::MolodenskyDatum(const String& sN, const String& sA)
 		} else if (parts.iSize() > 3 ) {
 			dx = parts[1].rVal();
 			dy = parts[2].rVal();
-			dx = parts[3].rVal();
+			dz = parts[3].rVal();
 			sDescription = parts[4];
 		}
-/*		for (s = sBuf1; *s; ++s)
-			if (isspace(*s)) *s = '_';
-		s = strchr(sBuf1, ',');
-		if (s) { 
-			*s++ = 0;
-			sscanf(s, "%lf,%lf,%lf,%s", &dx, &dy, &dz, sDesc);
-		} 
-		if (0 != dx || 0 != dy || 0 != dz) 
-			sShifts &= String(" SHIFTS:%.2f,%.2f,%.2f",dx,dy,dz);
-		for (s = sBuf1; *s; ++s)
-			if (*s == '_') *s = ' ';
-		sEll = sBuf1;*/
 	}    
 	if (sArea.length() > 0 && GetPrivateProfileString(sName().scVal(), sArea.scVal(), "", sBuf2, 1024, sPath.scVal())) {
 		for (s = sBuf2; *s; ++s)
