@@ -54,6 +54,9 @@ namespace ILWIS {
 		virtual String store(const FileName& fnView, const String& parenSection) const = 0;
 		virtual void load(const FileName& fnView, const String& parenSection) = 0;
 		virtual bool isSimple() const =0;
+		virtual bool isDirty() const =0;
+		virtual void setDirty(bool yesno) = 0;
+
 
 	};
 
