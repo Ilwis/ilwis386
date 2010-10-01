@@ -42,6 +42,8 @@ namespace ILWIS {
 		String store(const FileName& fnView, const String& parenSection) const { return parenSection;}
 		void load(const FileName& fnView, const String& parenSection) {};
 		bool isSimple() const { return true;}
+		bool isDirty() const { return true;} 
+		void setDirty(bool yesno) {}
 
 		CCriticalSection cs;
 	protected:
