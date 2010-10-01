@@ -133,7 +133,7 @@ void RasterSetDrawer::init() const
 			data->maxTextureSize = iYScreen;
 
 		RangeReal rrMinMax = rastermap->rrMinMax(true);
-		if (rrStretch.rLo() >= rrStretch.rHi())
+		if (rrMinMax.rLo() >= rrMinMax.rHi())
 			rrMinMax = rastermap->vr()->rrMinMax();
 
 		ValueRange vr = rastermap->vr();
