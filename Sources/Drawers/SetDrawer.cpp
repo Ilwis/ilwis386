@@ -298,7 +298,7 @@ SetStretchForm::SetStretchForm(CWnd *wPar, SetDrawer *dr) :
 {
 	sliderLow = new FieldRealSliderEx(root,"Lower", &low,ValueRange(rr),true);
 	sliderHigh = new FieldRealSliderEx(root,"Upper", &high,ValueRange(rr),true);
-	sliderHigh->Align(sliderLow, AL_UNDER, -25);
+	sliderHigh->Align(sliderLow, AL_UNDER);
 	sliderLow->SetCallBack((NotifyProc)&SetStretchForm::check);
 	sliderHigh->SetCallBack((NotifyProc)&SetStretchForm::check);
 	create();

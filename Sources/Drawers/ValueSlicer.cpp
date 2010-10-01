@@ -1,6 +1,11 @@
 #include "Client\Headers\formelementspch.h"
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
+#include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\FormElements\fldcolor.cpp"
+#include "Engine\Map\basemap.h"
+#include "Client\Mapwindow\MapCompositionDoc.h"
+#include "Client\Mapwindow\MapPaneView.h"
+#include "Client\Mapwindow\Drawers\DrawerContext.h"
 #include "Drawers\DrawingColor.h"
 #include "Client\ilwis.h"
 #include "Engine\Representation\Rprgrad.h"
@@ -62,6 +67,7 @@ void ValueSlicer::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 		double v1 =  fldslicer->bounds[i-1];
 		double v2 = fldslicer->bounds[i];
 		Color c = fldslicer->drawingcolor->clrVal((v1 + v2)/2.0);
+		//TRACE(String("%f %f %d %d %d\n",v1,v2).scVal(),c.red, c.green\);
 		CBrush brush(c);
 		oldBrush = SelectObject(lpDIS->hDC, brush);
 		int yup = rct.bottom - y - (v2 - v1) * yscale;
@@ -108,7 +114,7 @@ void ValueSlicer::OnMouseMove(UINT nFlags, CPoint point) {
 		for(; index < ylimits.size(); ++index) {
 			int delta = abs(ylimits[index] - point.y);
 			int tolerance = (double)rct.Height() * 0.02;
-			TRACE(String("delta %d, tolerance %d,index %d yl %d yp %d\n", delta, tolerance,index, ylimits[index], point.y).scVal());
+			//TRACE(String("delta %d, tolerance %d,index %d yl %d yp %d\n", delta, tolerance,index, ylimits[index], point.y).scVal());
 			if (  delta < tolerance) {
 				break;
 			}
@@ -117,11 +123,21 @@ void ValueSlicer::OnMouseMove(UINT nFlags, CPoint point) {
 			return;
 		fldslicer->bounds[index] = v;
 		fldslicer->rprgrad->SetLimitValue(index, v);
+
+		ILWIS::AbstractMapDrawer *parentDrw = (ILWIS::AbstractMapDrawer *)fldslicer->drawer->getParentDrawer();
+		for(int i =0; i < parentDrw->getDrawerCount(); ++i) {
+			ILWIS::SetDrawer *setdrw = (ILWIS::SetDrawer *)parentDrw->getDrawer(i);
+			Representation rpr;
+			rpr.SetPointer(fldslicer->rprgrad);
+			setdrw->setRepresentation(rpr);
+		}
+
 		activePoint.y = point.y;
 	
 		Invalidate();
-
+		fldslicer->drawer->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->Invalidate();
 	}
+
 }
 
 void ValueSlicer::OnLButtonDown(UINT nFlags, CPoint point) {
@@ -135,7 +151,6 @@ void ValueSlicer::OnLButtonDown(UINT nFlags, CPoint point) {
 		double delta = abs(limitVal - v);
 		if ( limitVal >= v ) {
 			fldslicer->selectedIndex = i - 1;
-			TRACE(String("down Index = %d\n", fldslicer->selectedIndex).scVal());
 		}
 		if ( delta < abs(fldslicer->valrange->rrMinMax().rWidth() * 0.02)) {
 			double yscale = rct.Height() / fldslicer->valrange->rrMinMax().rWidth();
@@ -252,7 +267,12 @@ void ValueSlicerSlider::init() {
 		}
 		if ( rprCreated) {
 			rpr.SetPointer(rprgrad);
-			drawer->setRepresentation(rpr);
+			ILWIS::AbstractMapDrawer *parentDrw = (ILWIS::AbstractMapDrawer *)drawer->getParentDrawer();
+			for(int i =0; i < parentDrw->getDrawerCount(); ++i) {
+				ILWIS::SetDrawer *setdrw = (ILWIS::SetDrawer *)parentDrw->getDrawer(i);
+				setdrw->setRepresentation(rpr);
+			}
+			//drawer->setRepresentation(rpr);
 			drawingcolor = new ILWIS::DrawingColor(drawer);
 		}
 	}

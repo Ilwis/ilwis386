@@ -33,6 +33,7 @@ namespace ILWIS{
 		void animationSourceUsage(CWnd *parent);
 		void setIndex(int index);
 		void animationPortrayal(CWnd *parent);
+		void setTransparency(double v);
 		double interval;
 		UINT timerid;
 		IlwisObject *datasource;

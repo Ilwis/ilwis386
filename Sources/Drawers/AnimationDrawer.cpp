@@ -120,6 +120,12 @@ void AnimationDrawer::prepare(PreparationParameters *pp){
 	}
 
 }
+void AnimationDrawer::setTransparency(double v) {
+	for(int i = 0; i < getDrawerCount(); ++i) {
+		NewDrawer *drw = getDrawer(i);
+		drw->setTransparency(v);
+	}
+}
 
 void AnimationDrawer::addSetDrawer(const BaseMap& basemap,PreparationParameters *pp,SetDrawer *rsd, const String& name) {
 	PreparationParameters fp((int)pp->type | NewDrawer::ptANIMATION, 0);
@@ -384,12 +390,6 @@ AnimationPortrayal::AnimationPortrayal(CWnd *par, AnimationDrawer *adr)
 	fldSteps->SetWidth(vs->psn->iWidth/2);
 
 
-	//fint = new FieldInt(fg, TR("Number of steps"),&steps,ValueRange(0,10),true);
-	//PushButton *pb = new PushButton(fg,TR("Apply"),(NotifyProc)&AnimationPortrayal::createSteps);
-	//StaticText *st = new StaticText(fg, TR("Edit step"));
-	//fldSteps = new FieldStringList(fg,&currentStep,stepsArray);
-	//fldSteps->SetCallBack((NotifyProc)&AnimationPortrayal::processChoice);
-	//fg->Align(vs, AL_AFTER);
 	create();
 }
 
