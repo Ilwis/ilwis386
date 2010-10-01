@@ -224,6 +224,7 @@ void AnimationDrawer::timedEvent(UINT _timerid) {
 				if (loop) {
 					getDrawer(index)->setActive(false);
 					index = 0;
+					getDrawer(0)->setActive(true);
 				}
 			}
 		}
