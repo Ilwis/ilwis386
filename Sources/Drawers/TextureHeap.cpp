@@ -194,6 +194,12 @@ void TextureHeap::ClearQueuedTextures()
 	csChangeTexCreatorList.Unlock();
 }
 
+void TextureHeap::PaletteChanged()
+{
+	for (int i = 0; i < texturesArraySize; ++i)
+		textures[i]->PaletteChanged();	
+}
+
 Texture * TextureHeap::GetTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, const bool fUsePalette, bool fInThread)
 {
 	Texture * tex = 0;
