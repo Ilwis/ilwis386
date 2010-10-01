@@ -43,6 +43,7 @@ void ComplexDrawer::init() {
 	zmaker = new ILWIS::ZValueMaker();
 	itemTransparent = 0;
 	specialOptions = sdoNone;
+	dirty = true;
 }
 
 String ComplexDrawer::getType() const {
@@ -424,6 +425,13 @@ NewDrawer *ComplexDrawer::loadDrawer(const FileName& fnView, const String& drawe
 	ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer(parts[0], "Ilwis38", &dp);
 	drawer->load(fnView,drawerSection);
 	return drawer;
+}
+
+bool ComplexDrawer::isDirty() const {
+	return dirty;
+}
+void ComplexDrawer::setDirty(bool yesno) {
+	dirty = yesno;
 }
 
 //--------------------------------- UI ------------------------------------------------------------------------

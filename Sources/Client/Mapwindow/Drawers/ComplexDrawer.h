@@ -60,8 +60,9 @@ class _export ComplexDrawer : public NewDrawer {
 		void setSpecialDrawingOptions(SpecialDrawingOptions option, bool add) ;
 		int getSpecialDrawingOption(SpecialDrawingOptions opt=sdoNone) const;
 		bool isSimple() const { return false;}
+		bool isDirty() const;
+		void setDirty(bool yesno);
 		
-		CCriticalSection cs;
 	protected:
 		vector<NewDrawer *> drawers;
 		DrawerMap postDrawers;
@@ -83,6 +84,7 @@ class _export ComplexDrawer : public NewDrawer {
 		bool threeD;
 		HTREEITEM itemTransparent;
 		int specialOptions;
+		bool dirty;
 		
 		ComplexDrawer(DrawerParameters *context, const String& ty);
 		ComplexDrawer();
