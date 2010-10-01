@@ -3265,6 +3265,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\Sources\Client\FormElements\FieldStringList.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Client\FormElements\FieldStringList.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Sources\Client\FormElements\FieldUsedByTree.cpp"
 					>
 				</File>
