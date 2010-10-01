@@ -21,8 +21,8 @@ namespace ILWIS {
 	class Texture  
 	{
 	public:
-		Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDrawer::DrawMethod drm, const long offsetX, const long offsetY, const long sizeX, const long sizeY, char * scrap_data_mipmap, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, DrawerContext * drawerContext, bool fInThread, volatile bool* fDrawStop);
-		Texture(const Map & mp, const long offsetX, const long offsetY, const long sizeX, const long sizeY, char * scrap_data_mipmap, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, unsigned int iPaletteSize, const RangeReal & rrMinMaxMap, DrawerContext * drawerContext, bool fInThread, volatile bool* fDrawStop);
+		Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDrawer::DrawMethod drm, const long offsetX, const long offsetY, const long sizeX, const long sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, DrawerContext * drawerContext, bool fInThread, volatile bool* fDrawStop);
+		Texture(const Map & mp, const long offsetX, const long offsetY, const long sizeX, const long sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, unsigned int iPaletteSize, const RangeReal & rrMinMaxMap, DrawerContext * drawerContext, bool fInThread, volatile bool* fDrawStop);
 		virtual ~Texture();
 
 		void BindMe(); // To be called before glBegin
@@ -30,6 +30,7 @@ namespace ILWIS {
 		bool equals(GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor);
 		bool contains(GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax);
 		unsigned int getZoomFactor();
+		void SetDirty();
 		bool fValid();
 
 	private:
@@ -45,7 +46,9 @@ namespace ILWIS {
 		void DrawTexturePaletted(long offsetX, long offsetY, long texSizeX, long texSizeY, unsigned int zoomFactor, char * outbuf, volatile bool* fDrawStop);
 		Map mp;
 		GLuint texture;
+		char * texture_data;
 		GLdouble xMin, yMin, xMax, yMax; // These are in world coordinates !! These are to be mapped to texture coordinates 0 to 1
+		const long sizeX, sizeY;
 		unsigned int zoomFactor;
 		const DrawingColor * drawColor;
 		ComplexDrawer::DrawMethod drm;
@@ -54,6 +57,7 @@ namespace ILWIS {
 		bool fValue;
 		bool fAttTable;
 		const bool fUsePalette;
+		bool fDirty;
 		bool valid;
 	};
 }

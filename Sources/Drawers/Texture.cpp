@@ -21,10 +21,13 @@ using namespace ILWIS;
 
 // RGB texture
 
-Texture::Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDrawer::DrawMethod drm, const long offsetX, const long offsetY, const long sizeX, const long sizeY, char * scrap_data_mipmap, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, DrawerContext * drawerContext, bool fInThread, volatile bool* fDrawStop)
+Texture::Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDrawer::DrawMethod drm, const long offsetX, const long offsetY, const long sizeX, const long sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, DrawerContext * drawerContext, bool fInThread, volatile bool* fDrawStop)
 : mp(mp)
+, texture_data(0)
 , drawColor(drawColor)
 , drm(drm)
+, sizeX(sizeX)
+, sizeY(sizeY)
 , xMin(xMin)
 , xMax(xMax)
 , yMin(yMin)
@@ -35,7 +38,8 @@ Texture::Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDr
 {
 	fValue = 0 != mp->dm()->pdvi() || 0 != mp->dm()->pdvr();
 	fAttTable = false;
-	DrawTexture(offsetX, offsetY, sizeX, sizeY, zoomFactor, scrap_data_mipmap, fDrawStop);
+	texture_data = (char*)malloc((sizeX / zoomFactor) * (sizeY / zoomFactor) * 4);
+	DrawTexture(offsetX, offsetY, sizeX, sizeY, zoomFactor, texture_data, fDrawStop);
 	if (*fDrawStop)
 		return;
 
@@ -52,7 +56,7 @@ Texture::Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDr
 	glPixelTransferf(GL_MAP_COLOR, false);
 	glPixelStorei( GL_UNPACK_SKIP_PIXELS, 0);
 	glPixelStorei( GL_UNPACK_SKIP_ROWS, 0);
-	glTexImage2D( GL_TEXTURE_2D, 0, 4, sizeX / zoomFactor, sizeY / zoomFactor, 0, GL_RGBA, GL_UNSIGNED_BYTE, scrap_data_mipmap);
+	glTexImage2D( GL_TEXTURE_2D, 0, 4, sizeX / zoomFactor, sizeY / zoomFactor, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture_data);
 	if (fInThread)
 		drawerContext->ReleaseContext();
 	this->valid = true;
@@ -61,8 +65,11 @@ Texture::Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDr
 // Paletted texture, thus less colors, but fast palete-swap option
 // An OpenGL palette GL_PIXEL_MAP_I_TO_R GL_PIXEL_MAP_I_TO_G GL_PIXEL_MAP_I_TO_B GL_PIXEL_MAP_I_TO_A must be defined prior to drawing this texture
 
-Texture::Texture(const Map & mp, const long offsetX, const long offsetY, const long sizeX, const long sizeY, char * scrap_data_mipmap, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, unsigned int iPaletteSize, const RangeReal & rrMinMaxMap, DrawerContext * drawerContext, bool fInThread, volatile bool* fDrawStop)
+Texture::Texture(const Map & mp, const long offsetX, const long offsetY, const long sizeX, const long sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, unsigned int iPaletteSize, const RangeReal & rrMinMaxMap, DrawerContext * drawerContext, bool fInThread, volatile bool* fDrawStop)
 : mp(mp)
+, texture_data(0)
+, sizeX(sizeX)
+, sizeY(sizeY)
 , xMin(xMin)
 , xMax(xMax)
 , yMin(yMin)
@@ -75,7 +82,8 @@ Texture::Texture(const Map & mp, const long offsetX, const long offsetY, const l
 {
 	fValue = 0 != mp->dm()->pdvi() || 0 != mp->dm()->pdvr();
 	fAttTable = false;
-	DrawTexturePaletted(offsetX, offsetY, sizeX, sizeY, zoomFactor, scrap_data_mipmap, fDrawStop);
+	texture_data = (char*)malloc((sizeX / zoomFactor) * (sizeY / zoomFactor) * 2);
+	DrawTexturePaletted(offsetX, offsetY, sizeX, sizeY, zoomFactor, texture_data, fDrawStop);
 	if (*fDrawStop)
 		return;
 
@@ -92,7 +100,7 @@ Texture::Texture(const Map & mp, const long offsetX, const long offsetY, const l
 	glPixelTransferf(GL_MAP_COLOR, true);
 	glPixelStorei( GL_UNPACK_SKIP_PIXELS, 0);
 	glPixelStorei( GL_UNPACK_SKIP_ROWS, 0);
-	glTexImage2D( GL_TEXTURE_2D, 0, 4, sizeX / zoomFactor, sizeY / zoomFactor, 0, GL_COLOR_INDEX, GL_UNSIGNED_SHORT, scrap_data_mipmap);
+	glTexImage2D( GL_TEXTURE_2D, 0, 4, sizeX / zoomFactor, sizeY / zoomFactor, 0, GL_COLOR_INDEX, GL_UNSIGNED_SHORT, texture_data);
 	if (fInThread)
 		drawerContext->ReleaseContext();
 	this->valid = true;
@@ -101,6 +109,8 @@ Texture::Texture(const Map & mp, const long offsetX, const long offsetY, const l
 Texture::~Texture()
 {
 	glDeleteTextures(1, &texture);
+	if (texture_data)
+		free(texture_data);
 }
 
 bool Texture::fValid()
@@ -111,6 +121,15 @@ bool Texture::fValid()
 void Texture::BindMe()
 {
 	glBindTexture(GL_TEXTURE_2D, texture);
+	if (fDirty && fUsePalette) {
+		glTexImage2D( GL_TEXTURE_2D, 0, 4, sizeX / zoomFactor, sizeY / zoomFactor, 0, GL_COLOR_INDEX, GL_UNSIGNED_SHORT, texture_data);
+		fDirty = false;
+	}
+}
+
+void Texture::SetDirty()
+{
+	fDirty = true;
 }
 
 void Texture::TexCoord2d(GLdouble x, GLdouble y)
