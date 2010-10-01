@@ -4,6 +4,8 @@
 
 BEGIN_MESSAGE_MAP(TimeGraph, CStatic)
 	ON_WM_LBUTTONUP()
+	//ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTA, 0, 0xFFFF, OnToolTipNotify)
+	ON_NOTIFY(TTN_GETDISPINFOA,0, OnToolTipNotify)
 END_MESSAGE_MAP()
 
 TimeGraph::TimeGraph(TimeGraphSlider *f, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID) : BaseZapp(f) 
@@ -12,6 +14,44 @@ TimeGraph::TimeGraph(TimeGraphSlider *f, DWORD dwStyle, const RECT& rect, CWnd* 
 	if (!CStatic::Create(0,dwStyle | SS_OWNERDRAW | SS_NOTIFY, rect, pParentWnd, nID))
 		throw ErrorObject(TR("Could not create Time graph"));
 	timePoint = CPoint(100000, 100000);
+	EnableToolTips(TRUE);
+}
+
+int TimeGraph::OnToolHitTest(CPoint point, TOOLINFO *pTI) const
+{
+	pTI->hwnd = m_hWnd;
+	pTI->uFlags = 0; // we need to differ tools by ID not window handle
+	pTI->lpszText = LPSTR_TEXTCALLBACK; // tell tooltips to send TTN_NEEDTEXT
+	pTI->uId = GetDlgCtrlID();
+	CRect rct;
+	GetClientRect(rct);
+	pTI->rect = rct;
+	return GetDlgCtrlID(); 
+}
+
+void TimeGraph::OnToolTipNotify(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	char m_szTipBufA[MAX_PATH];
+	*pResult = 1;	
+	// need to handle both ANSI and UNICODE versions of the message
+	TOOLTIPTEXTA* pTTTA = (TOOLTIPTEXTA*)pNMHDR;
+	
+	CString csToolText;
+	
+	UINT uiID = pNMHDR->idFrom;
+	
+	int iID = GetDlgCtrlID();
+
+	CString csIn;
+	GetWindowText(csIn);
+	csToolText.Format("Tip from control %s ID = %d in zone %d", csIn, GetDlgCtrlID(), uiID);
+
+	if (pNMHDR->code == TTN_NEEDTEXT)
+	{ 
+		lstrcpyn(m_szTipBufA, csToolText, _countof(m_szTipBufA)); 
+		pTTTA->lpszText = m_szTipBufA;
+	}
+	//return TRUE;
 }
 
 void TimeGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
@@ -59,7 +99,6 @@ void TimeGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 		::MoveToEx(lpDIS->hDC, timePoint.x, rct.bottom,0);
 		::LineTo(lpDIS->hDC, timePoint.x, rct.top);
 	}
-
 
 	delete [] pts;
 	SelectObject(lpDIS->hDC,oldPen);

@@ -10,12 +10,13 @@ public:
    void DrawItem(LPDRAWITEMSTRUCT lpDIS);
    void OnLButtonUp(UINT nFlags, CPoint point);
    void setIndex(int index);
+   int OnToolHitTest(CPoint point, TOOLINFO *pTI) const;
+	void OnToolTipNotify(NMHDR *pNMHDR, LRESULT *pResult);
 
    DECLARE_MESSAGE_MAP();
 private:
 	TimeGraphSlider *fldGraph;
 	CPoint timePoint;
-
 };
 
 class _export TimeGraphSlider : public FormEntry {
@@ -27,6 +28,7 @@ public:
 	void setRecordRange(const RangeInt& rng);
 	void create();
 	void setIndex(int index);
+	
 private:
 	TimeGraph *timegraph;
 	Table sourceTable;
