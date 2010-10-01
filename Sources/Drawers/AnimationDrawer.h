@@ -2,6 +2,9 @@
 
 class MultiColumnSelector;
 class TimeGraphSlider;
+class FieldStringList;
+class FieldOneSelectTextOnly;
+class ValueSlicerSlider;
 
 //#define ID_TIME_TICK WM_USER+345
 
@@ -29,6 +32,7 @@ namespace ILWIS{
 		void animationControl(CWnd *w);
 		void animationSourceUsage(CWnd *parent);
 		void setIndex(int index);
+		void animationPortrayal(CWnd *parent);
 		double interval;
 		UINT timerid;
 		IlwisObject *datasource;
@@ -57,6 +61,7 @@ namespace ILWIS{
 		void shutdown(int iReturn=2);
 		TimeGraphSlider *graphSlider;
 		FieldColumn *fcol;
+		StaticText *st;
 		String colName;
 		FieldReal *frtime;
 		FlatIconButton *fbBegin; 
@@ -65,10 +70,21 @@ namespace ILWIS{
 		int pause(Event  *ev);
 		int run(Event  *ev);
 		int stop(Event  *ev);
+		bool initial;
 
 		DECLARE_MESSAGE_MAP();
 	};
 
+	class AnimationPortrayal : public DisplayOptionsForm2 {
+	public:
+		AnimationPortrayal(CWnd *par, AnimationDrawer *gdr);
+	private:
+		FieldOneSelectTextOnly *fldSteps;
+		int createSteps(Event*);
+		String steps;
+		ValueSlicerSlider *vs;
+
+	};
 	class AnimationSourceUsage: public DisplayOptionsForm2
 	{
 	public:

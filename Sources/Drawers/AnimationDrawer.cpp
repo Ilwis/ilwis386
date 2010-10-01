@@ -4,6 +4,8 @@
 #include "Client\FormElements\FieldIntSlider.h"
 #include "Client\FormElements\FieldRealSlider.h"
 #include "Client\FormElements\TimeGraphSlider.h"
+#include "Client\FormElements\fldlist.h"
+#include "Client\FormElements\FldOneSelectTextOnly.h"
 #include "Client\FormElements\fldcol.h"
 #include "Client\FormElements\objlist.h"
 #include "Engine\Map\basemap.h"
@@ -21,6 +23,7 @@
 #include "Client\Mapwindow\LayerTreeItem.h" 
 #include "Drawers\FeatureLayerDrawer.h"
 #include "Drawers\SetDrawer.h"
+#include "Drawers\ValueSlicer.h"
 #include "Drawers\FeatureSetDrawer.h"
 #include "Drawers\RasterSetDrawer.h"
 #include "Drawers\AnimationDrawer.h"
@@ -38,7 +41,7 @@ ILWIS::NewDrawer *createAnimationDrawer(DrawerParameters *parms) {
 AnimationDrawer::AnimationDrawer(DrawerParameters *parms) : 
 	AbstractMapDrawer(parms,"AnimationDrawer"),
 	timerid(iUNDEF),
-	interval(2.0),
+	interval(1.0),
 	datasource(0),
 	sourceType(sotUNKNOWN),
 	featurelayer(0),
@@ -158,12 +161,22 @@ HTREEITEM AnimationDrawer::configure(LayerTreeView  *tv, HTREEITEM displayOption
 					0,
 					(DisplayOptionItemFunc)&AnimationDrawer::animationControl);
 	InsertItem("Run","History",item2);
+
 	item2 = new DisplayOptionTreeItem(tv,displayOptionsLastItem,this,
 					0,
 					(DisplayOptionItemFunc)&AnimationDrawer::animationSourceUsage);
 	InsertItem("Source usage",".mpv",item2);
+
+	item2 = new DisplayOptionTreeItem(tv,displayOptionsLastItem,this,
+					0,
+					(DisplayOptionItemFunc)&AnimationDrawer::animationPortrayal);
+	InsertItem("Portrayal","Colors",item2);
+
 	return displayOptionsLastItem;
 
+}
+void AnimationDrawer::animationPortrayal(CWnd *parent) {
+	new AnimationPortrayal(parent,this);
 }
 
 bool AnimationDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
@@ -233,6 +246,9 @@ END_MESSAGE_MAP()
 
 LRESULT AnimationControl::OnTimeTick( WPARAM wParam, LPARAM lParam ) {
 	AnimationDrawer *adrw = (AnimationDrawer *)drw;
+	if ( adrw->getDrawerCount() - 1 == (int)wParam )
+		st->Hide();
+
 	if ( lParam == TRUE)
 		graphSlider->setIndex(wParam);
 	else
@@ -243,6 +259,7 @@ LRESULT AnimationControl::OnTimeTick( WPARAM wParam, LPARAM lParam ) {
 AnimationControl::AnimationControl(CWnd *par, AnimationDrawer *adr) 
 	: DisplayOptionsForm2(adr, par, "Time")
 {
+	initial = true;
 	FieldGroup *fg = new FieldGroup(root, true);
 	FlatIconButton *fi1 = new FlatIconButton(fg,"Begin","",(NotifyProc)&AnimationControl::begin, FileName());
 	fbBegin = fi1;
@@ -259,8 +276,8 @@ AnimationControl::AnimationControl(CWnd *par, AnimationDrawer *adr)
 	frtime->SetCallBack((NotifyProc)&AnimationControl::setTiming);
 	frtime->Align(fbBegin, AL_UNDER);
 	setSlider();
-	//PushButton *pb = new PushButton(root,"apply",(NotifyProc)&AnimationControl::setTiming);
-	//pb->Align(frtime, AL_AFTER);
+	st = new StaticText(root,"Preparing . . .");
+	
 
   create();
 }
@@ -304,9 +321,7 @@ int AnimationControl::changeColum(Event *) {
 int AnimationControl::setTiming(Event *ev) {
 	frtime->StoreData();
 	AnimationDrawer *andr = (AnimationDrawer *)drw;
- /*   ILWISSingleLock sl(&(andr->csAccess), TRUE,SOURCE_LOCATION);
-	drw->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->KillTimer(andr->timerid);
-	andr->timerid = iUNDEF;*/
+	
 	run(0);
 	return 1;
 }
@@ -334,13 +349,14 @@ int AnimationControl::end(Event  *ev) {
 int AnimationControl::run(Event  *ev) {
 	frtime->StoreData();
 	AnimationDrawer *andr = (AnimationDrawer *)drw;
-	if ( andr->timerid != iUNDEF)
-		return 1;
-
-	andr->timerid = AnimationDrawer::timerIdCounter++;
+	if ( andr->timerid != iUNDEF) {
+		drw->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->KillTimer(andr->timerid);
+	}else{
+		andr->timerid = AnimationDrawer::timerIdCounter++;
+	}
 	drw->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->SetTimer(andr->timerid,andr->interval * 1000.0,0);
-	/*PreparationParameters pp(NewDrawer::ptRENDER);
-	drw->prepare(&pp);*/
+	//PreparationParameters pp(NewDrawer::ptRENDER);
+	//drw->prepare(&pp);
 	updateMapView();
 	return 1;
 }
@@ -356,7 +372,40 @@ void AnimationControl::shutdown(int iReturn) {
 	andr->animcontrol = 0;
 	return DisplayOptionsForm2::shutdown();
 }
+//----------------------------------------------------------
+AnimationPortrayal::AnimationPortrayal(CWnd *par, AnimationDrawer *adr) 
+	: DisplayOptionsForm2(adr, par, TR("Portrayal"))
+{
+	vs = new ValueSlicerSlider(root, ((SetDrawer *)adr->getDrawer(0)));
+	FieldGroup *fg = new FieldGroup(root);
+	fldSteps = new FieldOneSelectTextOnly(fg, &steps);
+	fldSteps->SetCallBack((NotifyProc)&AnimationPortrayal::createSteps);
+	fldSteps->Align(vs, AL_UNDER);
+	fldSteps->SetWidth(vs->psn->iWidth/2);
 
+
+	//fint = new FieldInt(fg, TR("Number of steps"),&steps,ValueRange(0,10),true);
+	//PushButton *pb = new PushButton(fg,TR("Apply"),(NotifyProc)&AnimationPortrayal::createSteps);
+	//StaticText *st = new StaticText(fg, TR("Edit step"));
+	//fldSteps = new FieldStringList(fg,&currentStep,stepsArray);
+	//fldSteps->SetCallBack((NotifyProc)&AnimationPortrayal::processChoice);
+	//fg->Align(vs, AL_AFTER);
+	create();
+}
+
+int AnimationPortrayal::createSteps(Event*) {
+	if (fldSteps->ose->GetCount() == 0) {
+		for(int i = 2 ; i <= 10; ++i)
+			fldSteps->AddString(String("%d",i));
+		fldSteps->ose->SelectString(0,"2");
+	} else {
+		int index = fldSteps->ose->GetCurSel();
+		if ( index != -1) {
+			vs->setNumberOfBounds(index +2);
+		}
+	}
+	return 1;
+}
 //----------------------------------------------------------
 AnimationSourceUsage::AnimationSourceUsage(CWnd *par, AnimationDrawer *ldr) 
 	: DisplayOptionsForm2(ldr, par, "Time"), mcs(0), rg(0)
@@ -364,12 +413,12 @@ AnimationSourceUsage::AnimationSourceUsage(CWnd *par, AnimationDrawer *ldr)
 	if ( ldr->sourceType == AnimationDrawer::sotFEATURE) {
 		BaseMap basemap((*(ldr->datasource))->fnObj);
 		if ( basemap->fTblAtt()) {
-			new StaticText(root, "Columns to be used");
+			new StaticText(root, TR("Columns to be used"));
 			mcs = new MultiColumnSelector(root,basemap->tblAtt().ptr(), dmVALUE);
-			RadioGroup *rg = new RadioGroup(root,"Type of use",&columnUsage);
-			new RadioButton(rg, "As Z value");
-			new RadioButton(rg, "As feature size");
-			new RadioButton(rg, "As Coordinates");
+			RadioGroup *rg = new RadioGroup(root,TR("Type of use"),&columnUsage);
+			new RadioButton(rg, TR("As Z value"));
+			new RadioButton(rg, TR("As feature size"));
+			new RadioButton(rg, TR("As Coordinates"));
 				
 		}
 	}
