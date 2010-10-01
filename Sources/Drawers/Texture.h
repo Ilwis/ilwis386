@@ -30,7 +30,7 @@ namespace ILWIS {
 		bool equals(GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor);
 		bool contains(GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax);
 		unsigned int getZoomFactor();
-		void SetDirty();
+		void PaletteChanged();
 		bool fValid();
 
 	private:
@@ -57,7 +57,7 @@ namespace ILWIS {
 		bool fValue;
 		bool fAttTable;
 		const bool fUsePalette;
-		bool fDirty;
+		bool fPaletteChanged;
 		bool valid;
 	};
 }

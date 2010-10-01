@@ -57,6 +57,7 @@ Texture::Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDr
 	glPixelStorei( GL_UNPACK_SKIP_PIXELS, 0);
 	glPixelStorei( GL_UNPACK_SKIP_ROWS, 0);
 	glTexImage2D( GL_TEXTURE_2D, 0, 4, sizeX / zoomFactor, sizeY / zoomFactor, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture_data);
+	fPaletteChanged = false;
 	if (fInThread)
 		drawerContext->ReleaseContext();
 	this->valid = true;
@@ -101,6 +102,7 @@ Texture::Texture(const Map & mp, const long offsetX, const long offsetY, const l
 	glPixelStorei( GL_UNPACK_SKIP_PIXELS, 0);
 	glPixelStorei( GL_UNPACK_SKIP_ROWS, 0);
 	glTexImage2D( GL_TEXTURE_2D, 0, 4, sizeX / zoomFactor, sizeY / zoomFactor, 0, GL_COLOR_INDEX, GL_UNSIGNED_SHORT, texture_data);
+	fPaletteChanged = false;
 	if (fInThread)
 		drawerContext->ReleaseContext();
 	this->valid = true;
@@ -121,15 +123,15 @@ bool Texture::fValid()
 void Texture::BindMe()
 {
 	glBindTexture(GL_TEXTURE_2D, texture);
-	if (fDirty && fUsePalette) {
+	if (fUsePalette && fPaletteChanged) {
 		glTexImage2D( GL_TEXTURE_2D, 0, 4, sizeX / zoomFactor, sizeY / zoomFactor, 0, GL_COLOR_INDEX, GL_UNSIGNED_SHORT, texture_data);
-		fDirty = false;
+		fPaletteChanged = false;
 	}
 }
 
-void Texture::SetDirty()
+void Texture::PaletteChanged()
 {
-	fDirty = true;
+	fPaletteChanged = true;
 }
 
 void Texture::TexCoord2d(GLdouble x, GLdouble y)
