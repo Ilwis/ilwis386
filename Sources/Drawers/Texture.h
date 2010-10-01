@@ -18,13 +18,14 @@ namespace ILWIS {
 	class DrawingColor;
 	class DrawerContext;
 
-	class Texture  
+	class Texture
 	{
 	public:
-		Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDrawer::DrawMethod drm, const long offsetX, const long offsetY, const long sizeX, const long sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, DrawerContext * drawerContext, bool fInThread, volatile bool* fDrawStop);
-		Texture(const Map & mp, const long offsetX, const long offsetY, const long sizeX, const long sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, unsigned int iPaletteSize, const RangeReal & rrMinMaxMap, DrawerContext * drawerContext, bool fInThread, volatile bool* fDrawStop);
+		Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDrawer::DrawMethod drm, const long offsetX, const long offsetY, const long sizeX, const long sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor);
+		Texture(const Map & mp, const long offsetX, const long offsetY, const long sizeX, const long sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, unsigned int iPaletteSize, const RangeReal & rrMinMaxMap);
 		virtual ~Texture();
 
+		void CreateTexture(DrawerContext * drawerContext, bool fInThread, volatile bool * fDrawStop);
 		void BindMe(); // To be called before glBegin
 		void TexCoord2d(GLdouble x, GLdouble y); // To be called repeatedly between glBegin and glEnd // These are in world coordinates !!
 		bool equals(GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor);
@@ -49,6 +50,7 @@ namespace ILWIS {
 		char * texture_data;
 		GLdouble xMin, yMin, xMax, yMax; // These are in world coordinates !! These are to be mapped to texture coordinates 0 to 1
 		const long sizeX, sizeY;
+		const long offsetX, offsetY;
 		unsigned int zoomFactor;
 		const DrawingColor * drawColor;
 		ComplexDrawer::DrawMethod drm;

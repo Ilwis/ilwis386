@@ -21,11 +21,13 @@ using namespace ILWIS;
 
 // RGB texture
 
-Texture::Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDrawer::DrawMethod drm, const long offsetX, const long offsetY, const long sizeX, const long sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, DrawerContext * drawerContext, bool fInThread, volatile bool* fDrawStop)
+Texture::Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDrawer::DrawMethod drm, const long offsetX, const long offsetY, const long sizeX, const long sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor)
 : mp(mp)
 , texture_data(0)
 , drawColor(drawColor)
 , drm(drm)
+, offsetX(offsetX)
+, offsetY(offsetY)
 , sizeX(sizeX)
 , sizeY(sizeY)
 , xMin(xMin)
@@ -36,39 +38,16 @@ Texture::Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDr
 , fUsePalette(false)
 , valid(false)
 {
-	fValue = 0 != mp->dm()->pdvi() || 0 != mp->dm()->pdvr();
-	fAttTable = false;
-	texture_data = (char*)malloc((sizeX / zoomFactor) * (sizeY / zoomFactor) * 4);
-	DrawTexture(offsetX, offsetY, sizeX, sizeY, zoomFactor, texture_data, fDrawStop);
-	if (*fDrawStop)
-		return;
-
-	if (fInThread)
-		drawerContext->TakeContext();
-	glGenTextures(1, &texture);
-	glBindTexture( GL_TEXTURE_2D, texture );
-	glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-
-	glPixelTransferf(GL_MAP_COLOR, false);
-	glPixelStorei( GL_UNPACK_SKIP_PIXELS, 0);
-	glPixelStorei( GL_UNPACK_SKIP_ROWS, 0);
-	glTexImage2D( GL_TEXTURE_2D, 0, 4, sizeX / zoomFactor, sizeY / zoomFactor, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture_data);
-	fPaletteChanged = false;
-	if (fInThread)
-		drawerContext->ReleaseContext();
-	this->valid = true;
 }
 
 // Paletted texture, thus less colors, but fast palete-swap option
 // An OpenGL palette GL_PIXEL_MAP_I_TO_R GL_PIXEL_MAP_I_TO_G GL_PIXEL_MAP_I_TO_B GL_PIXEL_MAP_I_TO_A must be defined prior to drawing this texture
 
-Texture::Texture(const Map & mp, const long offsetX, const long offsetY, const long sizeX, const long sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, unsigned int iPaletteSize, const RangeReal & rrMinMaxMap, DrawerContext * drawerContext, bool fInThread, volatile bool* fDrawStop)
+Texture::Texture(const Map & mp, const long offsetX, const long offsetY, const long sizeX, const long sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, unsigned int iPaletteSize, const RangeReal & rrMinMaxMap)
 : mp(mp)
 , texture_data(0)
+, offsetX(offsetX)
+, offsetY(offsetY)
 , sizeX(sizeX)
 , sizeY(sizeY)
 , xMin(xMin)
@@ -81,10 +60,28 @@ Texture::Texture(const Map & mp, const long offsetX, const long offsetY, const l
 , fUsePalette(true)
 , valid(false)
 {
+}
+
+Texture::~Texture()
+{
+	if (valid)
+		glDeleteTextures(1, &texture);
+	if (texture_data)
+		free(texture_data);
+}
+
+void Texture::CreateTexture(DrawerContext * drawerContext, bool fInThread, volatile bool * fDrawStop)
+{
 	fValue = 0 != mp->dm()->pdvi() || 0 != mp->dm()->pdvr();
 	fAttTable = false;
-	texture_data = (char*)malloc((sizeX / zoomFactor) * (sizeY / zoomFactor) * 2);
-	DrawTexturePaletted(offsetX, offsetY, sizeX, sizeY, zoomFactor, texture_data, fDrawStop);
+	if (fUsePalette) {
+		texture_data = (char*)malloc((sizeX / zoomFactor) * (sizeY / zoomFactor) * 2);
+		DrawTexturePaletted(offsetX, offsetY, sizeX, sizeY, zoomFactor, texture_data, fDrawStop);
+	} else {
+		texture_data = (char*)malloc((sizeX / zoomFactor) * (sizeY / zoomFactor) * 4);
+		DrawTexture(offsetX, offsetY, sizeX, sizeY, zoomFactor, texture_data, fDrawStop);
+	}
+
 	if (*fDrawStop)
 		return;
 
@@ -98,21 +95,17 @@ Texture::Texture(const Map & mp, const long offsetX, const long offsetY, const l
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
-	glPixelTransferf(GL_MAP_COLOR, true);
+	glPixelTransferf(GL_MAP_COLOR, fUsePalette);
 	glPixelStorei( GL_UNPACK_SKIP_PIXELS, 0);
 	glPixelStorei( GL_UNPACK_SKIP_ROWS, 0);
-	glTexImage2D( GL_TEXTURE_2D, 0, 4, sizeX / zoomFactor, sizeY / zoomFactor, 0, GL_COLOR_INDEX, GL_UNSIGNED_SHORT, texture_data);
+	if (fUsePalette)
+		glTexImage2D( GL_TEXTURE_2D, 0, 4, sizeX / zoomFactor, sizeY / zoomFactor, 0, GL_COLOR_INDEX, GL_UNSIGNED_SHORT, texture_data);
+	else
+		glTexImage2D( GL_TEXTURE_2D, 0, 4, sizeX / zoomFactor, sizeY / zoomFactor, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture_data);
 	fPaletteChanged = false;
 	if (fInThread)
 		drawerContext->ReleaseContext();
 	this->valid = true;
-}
-
-Texture::~Texture()
-{
-	glDeleteTextures(1, &texture);
-	if (texture_data)
-		free(texture_data);
 }
 
 bool Texture::fValid()

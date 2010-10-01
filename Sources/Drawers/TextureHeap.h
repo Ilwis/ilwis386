@@ -19,31 +19,6 @@ namespace ILWIS {
 	class DrawingColor;
 	class DrawerContext;
 
-	class TextureCreator
-	{
-	public:
-		TextureCreator(const Map & _mp, const DrawingColor * drawColor, const NewDrawer::DrawMethod drm, const bool fUsePalette, const unsigned int iPaletteSize, const RangeReal & rrMinMaxMap, const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, DrawerContext * drawerContext, unsigned int zoomFactor);
-		virtual ~TextureCreator();
-		Texture * CreateTexture(bool fInThread, volatile bool * fDrawStop);
-	private:
-		const Map mp;
-		const DrawingColor * drawColor;
-		const NewDrawer::DrawMethod drm;
-		const bool fUsePalette;
-		const unsigned int iPaletteSize;
-		const RangeReal rrMinMaxMap;
-		const unsigned int offsetX;
-		const unsigned int offsetY;
-		const unsigned int sizeX;
-		const unsigned int sizeY;
-		DrawerContext * drawerContext;
-		GLdouble xMin;
-		GLdouble yMin;
-		GLdouble xMax;
-		GLdouble yMax;
-		unsigned int zoomFactor;
-	};
-
 	class Palette
 	{
 	public:
@@ -82,7 +57,7 @@ namespace ILWIS {
 		//vector<Texture*> textures;
 		Texture* textures [10000];
 		static const int BUF_SIZE = 100;
-		TextureCreator * textureCreators [BUF_SIZE];
+		Texture * textureRequest [BUF_SIZE];
 		const Map mp;
 		const DrawingColor * drawColor;
 		const NewDrawer::DrawMethod drm;
