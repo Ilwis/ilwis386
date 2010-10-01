@@ -95,5 +95,9 @@ MapCompositionDoc *DrawerContext::getDocument() const {
 	return doc;
 }
 
+void DrawerContext::swapBuffers() const{
+	SwapBuffers(m_hdc);
+}
+
 
 
