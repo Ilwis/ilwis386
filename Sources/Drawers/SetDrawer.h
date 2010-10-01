@@ -19,7 +19,7 @@ class _export SetDrawer : public ComplexDrawer {
 		virtual void prepare(PreparationParameters *pp);
 		HTREEITEM  configure(LayerTreeView  *tv, HTREEITEM parent);
 		Representation getRepresentation() const;
-		void setRepresentation(const Representation& rp);
+		virtual void setRepresentation(const Representation& rp);
 		bool isLegendUsefull() const;
 		RangeReal getStretchRangeReal() const;
 		void setStretchRangeReal(const RangeReal& rr);
