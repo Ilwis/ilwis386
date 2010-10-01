@@ -21,7 +21,7 @@ using namespace ILWIS;
 // TextureCreator
 //////////////////////////////////////////////////
 
-TextureCreator::TextureCreator(const Map & _mp, const DrawingColor * drawColor, const NewDrawer::DrawMethod drm,  const bool fUsePalette, const unsigned int iPaletteSize, const RangeReal & rrMinMaxMap, const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, char * scrap_data_mipmap, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, DrawerContext * drawerContext, unsigned int zoomFactor)
+TextureCreator::TextureCreator(const Map & _mp, const DrawingColor * drawColor, const NewDrawer::DrawMethod drm,  const bool fUsePalette, const unsigned int iPaletteSize, const RangeReal & rrMinMaxMap, const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, DrawerContext * drawerContext, unsigned int zoomFactor)
 : mp(_mp)
 , drawColor(drawColor)
 , drm(drm)
@@ -33,7 +33,6 @@ TextureCreator::TextureCreator(const Map & _mp, const DrawingColor * drawColor, 
 , sizeX(sizeX)
 , sizeY(sizeY)
 , drawerContext(drawerContext)
-, scrap_data_mipmap(scrap_data_mipmap)
 , xMin(xMin)
 , xMax(xMax)
 , yMin(yMin)
@@ -51,9 +50,9 @@ Texture * TextureCreator::CreateTexture(bool fInThread, volatile bool * fDrawSto
 {
 	Texture * tex = 0;
 	if (fUsePalette)
-		tex = new Texture(mp, offsetX, offsetY, sizeX, sizeY, scrap_data_mipmap, xMin, yMin, xMax, yMax, zoomFactor, iPaletteSize, rrMinMaxMap, drawerContext, fInThread, fDrawStop);
+		tex = new Texture(mp, offsetX, offsetY, sizeX, sizeY, xMin, yMin, xMax, yMax, zoomFactor, iPaletteSize, rrMinMaxMap, drawerContext, fInThread, fDrawStop);
 	else
-		tex = new Texture(mp, drawColor, drm, offsetX, offsetY, sizeX, sizeY, scrap_data_mipmap, xMin, yMin, xMax, yMax, zoomFactor, drawerContext, fInThread, fDrawStop);
+		tex = new Texture(mp, drawColor, drm, offsetX, offsetY, sizeX, sizeY, xMin, yMin, xMax, yMax, zoomFactor, drawerContext, fInThread, fDrawStop);
 	if (!tex->fValid()) {
 		delete tex;
 		tex = 0;
@@ -71,21 +70,18 @@ Palette::Palette(const bool fRealMap, const DrawingColor * drawColor, const NewD
 , drm(drm)
 , iPaletteSize(iPaletteSize)
 , rrMinMaxMap(rrMinMaxMap)
-, palette_reds(0)
-, palette_greens(0)
-, palette_blues(0)
-, palette_alphas(0)
-, iSize(0)
 , fCurrent(false)
 {
+	palette_reds = new float [iPaletteSize];
+	palette_greens = new float [iPaletteSize];
+	palette_blues = new float [iPaletteSize];
+	palette_alphas = new float [iPaletteSize];
+	for (int i = 0; i < iPaletteSize - 1; ++i)
+		palette_alphas[i] = 1.0;
+	palette_alphas[iPaletteSize - 1] = 0.0; // by definition, last index reserved for UNDEF
 }
 
 Palette::~Palette()
-{
-	Cleanup();
-}
-
-void Palette::Cleanup()
 {
 	if (palette_reds)
 		delete [] palette_reds;
@@ -115,15 +111,6 @@ void Palette::SetNotCurrent()
 
 void Palette::Refresh()
 {
-	Cleanup();
-
-	palette_reds = new float [iPaletteSize];
-	palette_greens = new float [iPaletteSize];
-	palette_blues = new float [iPaletteSize];
-	palette_alphas = new float [iPaletteSize];
-
-	palette_alphas[iPaletteSize - 1] = 0.0; // by definition, last index reserved for UNDEF	
-
 	unsigned int nrMapValues = iPaletteSize - 1;
 	double width = rrMinMaxMap.rWidth();
 	double minMapVal = rrMinMaxMap.rLo();
@@ -145,10 +132,9 @@ void Palette::Refresh()
 	}
 
 	for (int i = 0; i < nrMapValues; ++i) {
-		palette_reds[i] = ((Color)(bufColor[i])).red() / 255.0;
-		palette_greens[i] = ((Color)(bufColor[i])).green() / 255.0;
-		palette_blues[i] = ((Color)(bufColor[i])).blue() / 255.0;
-		palette_alphas[i] = 1.0;
+		palette_reds[i] = ((Color)(bufColor[i])).redP();
+		palette_greens[i] = ((Color)(bufColor[i])).greenP();
+		palette_blues[i] = ((Color)(bufColor[i])).blueP();
 	}
 
 	delete [] bufColor;
@@ -176,7 +162,6 @@ TextureHeap::TextureHeap(const Map & _mp, const DrawingColor * drawColor, const 
 {
 	for (int i = 0; i < 10000; ++i)
 		textures[i] = 0;
-	scrap_data_mipmap = (char*)malloc(drawerContext->getMaxTextureSize() * drawerContext->getMaxTextureSize() * 4 * sizeof(char));
 }
 
 TextureHeap::~TextureHeap()
@@ -190,9 +175,6 @@ TextureHeap::~TextureHeap()
 	}
 
 	ClearQueuedTextures();
-
-	if (scrap_data_mipmap)
-		free(scrap_data_mipmap);
 
 	for (int i = 0; i < texturesArraySize; ++i)
 		if (textures[i] != 0)
@@ -249,7 +231,7 @@ Texture * TextureHeap::GenerateTexture(const unsigned int offsetX, const unsigne
 {
 	if (((writepos + 1) % BUF_SIZE) != readpos)
 	{
-		textureCreators[writepos] = new TextureCreator(mp, drawColor, drm, fUsePalette, iPaletteSize, rrMinMaxMap, offsetX, offsetY, sizeX, sizeY, scrap_data_mipmap, xMin, yMin, xMax, yMax, drawerContext, zoomFactor);
+		textureCreators[writepos] = new TextureCreator(mp, drawColor, drm, fUsePalette, iPaletteSize, rrMinMaxMap, offsetX, offsetY, sizeX, sizeY, xMin, yMin, xMax, yMax, drawerContext, zoomFactor);
 		writepos = (writepos + 1) % BUF_SIZE;
 	}
 	if (fInThread) {
