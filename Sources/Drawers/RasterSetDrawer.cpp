@@ -28,8 +28,9 @@ RasterSetDrawer::RasterSetDrawer(DrawerParameters *parms) :
 SetDrawer(parms,"RasterSetDrawer")
 , data(new RasterSetData()), isThreaded(true), sameCsy(true), fUsePalette(false)
 {
-	//	setTransparency(1); // default
+	setTransparency(1); // default, opaque
 	//	setDrawMethod(drmNOTSET); // default
+	//drawers.push_back(this); // nasty: i am my own child drawer
 }
 
 RasterSetDrawer::~RasterSetDrawer(){
@@ -157,6 +158,11 @@ bool RasterSetDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 		init();
 	if (data->textureHeap == 0)
 		return false;
+
+	//glClearColor(1.0,1.0,1.0,0.0);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+	glColor4f(1, 1, 1, transparency);
 
 	data->textureHeap->ClearQueuedTextures();
 
