@@ -297,7 +297,7 @@ void LayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 	for(int index = 0; index < allDrawers.size(); ++index) 
 	{
 		ComplexDrawer* dr = (ComplexDrawer *)allDrawers.at(index);
-		ILWISSingleLock csl(&dr->cs, TRUE, SOURCE_LOCATION);
+		//ILWISSingleLock csl(&dr->cs, TRUE, SOURCE_LOCATION);
 		AbstractMapDrawer *mapDrawer = dynamic_cast<AbstractMapDrawer *>(dr);
 		if (mapDrawer)
 			item = addMapItem(mapDrawer,threeDNode);
