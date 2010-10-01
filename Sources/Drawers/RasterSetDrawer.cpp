@@ -98,11 +98,22 @@ void RasterSetDrawer::prepare(PreparationParameters *pp){
 				stretchMethod = smLOGARITHMIC;
 		}
 		fUsePalette = drm != drmCOLOR;
-		if (fUsePalette && data->palette)
+		if (fUsePalette && data->palette) {
 			data->palette->Refresh();
+			data->textureHeap->PaletteChanged();
+		}
 	}
 	if ( pp->type & ptGEOMETRY | pp->type & ptRESTORE) {
 		sameCsy = getRootDrawer()->getCoordinateSystem()->fnObj == csy->fnObj;
+	}
+}
+
+void RasterSetDrawer::setRepresentation(const Representation& rp)
+{
+	SetDrawer::setRepresentation(rp);
+	if (fUsePalette && data->palette) {
+		data->palette->Refresh();
+		data->textureHeap->PaletteChanged();
 	}
 }
 

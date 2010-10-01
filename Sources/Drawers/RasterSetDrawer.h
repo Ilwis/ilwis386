@@ -34,6 +34,7 @@ namespace ILWIS{
 		RasterSetDrawer(DrawerParameters *parms);
 		virtual ~RasterSetDrawer();
 		virtual void prepare(PreparationParameters *pp);
+		virtual void setRepresentation(const Representation& rp);
 		void addDataSource(void *bmap, int options=0);
 		HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent);
 		bool draw(bool norecursion , const CoordBounds& cbArea) const;
