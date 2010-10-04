@@ -37,6 +37,7 @@ void SimpleDrawer::init() {
 	editable = true;
 	info = false;
 	parentDrawer = 0;
+	extrTransparency = 0.2;
 }
 
 String SimpleDrawer::getType() const {
@@ -79,6 +80,28 @@ void SimpleDrawer::setInfo(bool yesno) {
 
 NewDrawer *SimpleDrawer::getParentDrawer() const {
 	return parentDrawer;
+}
+
+void SimpleDrawer::drawExtrusion(const Coord& c1, const Coord& c2, double z, bool filled) const {
+	Coord c3 = c1;
+	Coord c4 = c2;
+	c3.z = z;
+	c4.z = z;
+	if ( filled) {
+		glBegin(GL_QUADS); // temporary, should be changed when svg symbols are there						
+			glVertex3f( c1.x, c1.y, c1.z);	
+			glVertex3f( c2.x, c2.y, c2.z);	
+			glVertex3f( c4.x, c4.y, c4.z);
+			glVertex3f( c3.x, c3.y, c3.z);
+		glEnd();
+	} else {
+		glBegin(GL_LINE_STRIP); // temporary, should be changed when svg symbols are there						
+			glVertex3f( c1.x, c1.y, c1.z);	
+			glVertex3f( c2.x, c2.y, c2.z);	
+			glVertex3f( c4.x, c4.y, c4.z);
+			glVertex3f( c3.x, c3.y, c3.z);
+		glEnd();
+	}
 }
 
 

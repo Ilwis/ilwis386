@@ -250,7 +250,7 @@ ACTIVE                  ICON                    "active.ico"
 SET                     ICON                    "set.ico"
 MAPPANE                 ICON                    "MapPane1.ico"
 LINESTYLE               ICON                    "linestyle.ico"
-ThreeD                  ICON                    "ThreeD.ico"
+THREED                  ICON                    "ThreeD.ico"
 ANIMATION               ICON                    "animation.ico"
 RUN                     ICON                    "run.ico"
 STOP                    ICON                    "stop.ico"
@@ -259,6 +259,8 @@ STOP1                   ICON                    "stop1.ico"
 BEGIN                   ICON                    "begin.ico"
 END                     ICON                    "end.ico"
 EXTRUSION               ICON                    "extrusion.ico"
+Slicing                 ICON                    "slicing.ico"
+SelectArea              ICON                    "SelectArea.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //

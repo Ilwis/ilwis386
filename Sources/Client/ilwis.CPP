@@ -1184,8 +1184,8 @@ void IlwisWinApp::InitImageLists()
 {
 	ilSmall.Create(16,16,TRUE,4,4);
 	ilLarge.Create(32,32,TRUE,4,4);
-	ilSmall.SetImageCount(89);
-	ilLarge.SetImageCount(89);
+	ilSmall.SetImageCount(91);
+	ilLarge.SetImageCount(91);
 
 	int i = 0;
 	InitImage("ilwis", "LogoIcon", i++);
@@ -1288,6 +1288,8 @@ void IlwisWinApp::InitImageLists()
 	InitImage("End","End", i++);
 	InitImage("Pause","Pause", i++);
 	InitImage("Extrusion","Extrusion",i++);
+	InitImage("Slicing","Slicing",i++);
+	InitImage("SelectArea","SelectArea",i++);
 
 
 

@@ -1,11 +1,12 @@
 #include "Client\Headers\formelementspch.h"
+#include "Client\ilwis.h"
 #include "Client\FormElements\TimeGraphSlider.h"
 
 
 BEGIN_MESSAGE_MAP(TimeGraph, CStatic)
 	ON_WM_LBUTTONUP()
-	//ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTA, 0, 0xFFFF, OnToolTipNotify)
-	ON_NOTIFY(TTN_GETDISPINFOA,0, OnToolTipNotify)
+	ON_NOTIFY(TTN_NEEDTEXTW, 0, OnToolTipNotify)
+	ON_NOTIFY(TTN_NEEDTEXTA, 0, OnToolTipNotify)
 END_MESSAGE_MAP()
 
 TimeGraph::TimeGraph(TimeGraphSlider *f, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID) : BaseZapp(f) 
@@ -13,8 +14,9 @@ TimeGraph::TimeGraph(TimeGraphSlider *f, DWORD dwStyle, const RECT& rect, CWnd* 
 	fldGraph = f;
 	if (!CStatic::Create(0,dwStyle | SS_OWNERDRAW | SS_NOTIFY, rect, pParentWnd, nID))
 		throw ErrorObject(TR("Could not create Time graph"));
+	ModifyStyleEx(0, WS_EX_NOPARENTNOTIFY, SWP_FRAMECHANGED);
 	timePoint = CPoint(100000, 100000);
-	EnableToolTips(TRUE);
+	EnableTrackingToolTips();
 }
 
 int TimeGraph::OnToolHitTest(CPoint point, TOOLINFO *pTI) const
@@ -26,7 +28,7 @@ int TimeGraph::OnToolHitTest(CPoint point, TOOLINFO *pTI) const
 	CRect rct;
 	GetClientRect(rct);
 	pTI->rect = rct;
-	return GetDlgCtrlID(); 
+	return GetDlgCtrlID();
 }
 
 void TimeGraph::OnToolTipNotify(NMHDR *pNMHDR, LRESULT *pResult)
@@ -35,61 +37,71 @@ void TimeGraph::OnToolTipNotify(NMHDR *pNMHDR, LRESULT *pResult)
 	*pResult = 1;	
 	// need to handle both ANSI and UNICODE versions of the message
 	TOOLTIPTEXTA* pTTTA = (TOOLTIPTEXTA*)pNMHDR;
-	
+
 	CString csToolText;
-	
+
 	UINT uiID = pNMHDR->idFrom;
-	
+
 	int iID = GetDlgCtrlID();
 
-	CString csIn;
-	GetWindowText(csIn);
-	csToolText.Format("Tip from control %s ID = %d in zone %d", csIn, GetDlgCtrlID(), uiID);
-
-	if (pNMHDR->code == TTN_NEEDTEXT)
-	{ 
-		lstrcpyn(m_szTipBufA, csToolText, _countof(m_szTipBufA)); 
-		pTTTA->lpszText = m_szTipBufA;
-	}
 	//return TRUE;
 }
 
 void TimeGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
+	bool useDefault = false;
+	Column col ;
 	if ( !fldGraph->sourceTable.fValid() || fldGraph->sourceColumn == "")
-		return;
-	Column col = fldGraph->sourceTable->col(fldGraph->sourceColumn);
-	//Column col = fldGraph->sourceTable->col("numbers");
-	if ( !col.fValid())
-		return;
-	RangeReal rr = col->rrMinMax();
-	CRect rct;
-	
-	GetClientRect(rct);
-	Color bkColor = GetBkColor(lpDIS->hDC);
-	CBrush brushBk(RGB(0, 50, 100));
+		useDefault = true;;
+	if (!useDefault) {
+		col = fldGraph->sourceTable->col(fldGraph->sourceColumn);
+		if ( !col.fValid())
+			useDefault = true;
+	}
+	RangeReal rr = !useDefault ? col->rrMinMax() : RangeReal(0.0, 1.0);
+	CRect crct;
+	GetClientRect(crct);
+	Color c(GetSysColor(COLOR_3DFACE));
+	CBrush brushBk(c);
+	CPen pen(PS_SOLID,1,c);
 	HGDIOBJ oldBrush = SelectObject(lpDIS->hDC, brushBk);
-	::Rectangle(lpDIS->hDC, rct.left, rct.top, rct.right, rct.bottom);
+	HGDIOBJ oldPen = SelectObject(lpDIS->hDC, pen);
+	::Rectangle(lpDIS->hDC, crct.left, crct.top, crct.right, crct.bottom);
+	SelectObject(lpDIS->hDC, oldBrush);
+	SelectObject(lpDIS->hDC, oldPen);
+
+	CRect rct = CRect(crct.left, crct.top,crct.right, crct.bottom-20 );
+	Color bkColor = GetBkColor(lpDIS->hDC);
+	CBrush bbrushBk(RGB(0, 50, 100));
+	SelectObject(lpDIS->hDC, bbrushBk);
+	::Rectangle(lpDIS->hDC, rct.left,rct.top, rct.right, rct.bottom);
 	SelectObject(lpDIS->hDC, oldBrush);
 
+	CFont* fnt = IlwWinApp()->GetFont(IlwisWinApp::sfFORM);
+	HGDIOBJ fntOld = SelectObject(lpDIS->hDC, fnt);
+	 String s("%d", fldGraph->recordRange.iLo());
+	 ::TextOut(lpDIS->hDC,crct.left, crct.bottom - 16,s.scVal(),s.size());
 	double yscale = rct.Height() / rr.rWidth();
 	double y0 = rr.rWidth() * yscale;
-	double xscale = rct.Width() / fldGraph->recordRange.iWidth();
+	double xscale = (double)rct.Width() / fldGraph->recordRange.iWidth();
 	CPoint *pts = new CPoint[fldGraph->recordRange.iWidth() + 3];
 	double rx = 0;
 	for(int i = fldGraph->recordRange.iLo(); i <= fldGraph->recordRange.iHi(); ++i) {
-		int y = y0 - ( col->rValue(i) - rr.rLo()) * yscale;
-		pts[i-1] = CPoint(rx,y);
+		double v = !useDefault ?  col->rValue(i) : (double)i / fldGraph->recordRange.iWidth();
+		int y = y0 - ( v - rr.rLo()) * yscale;
+		pts[!useDefault ? i-1 : i] = CPoint(rx,y);
 		rx += xscale;
 	}
+	s = String("%d", fldGraph->recordRange.iHi());
+	::TextOut(lpDIS->hDC,crct.right-14, crct.bottom - 16, s.scVal(),s.size());
 	pts[fldGraph->recordRange.iWidth() + 1] = CPoint(rct.Width(), rct.Height());
 	pts[fldGraph->recordRange.iWidth() + 2] = CPoint(0, rct.Height());
 
 
-	CPen pen(PS_SOLID, 1, RGB(0, 0, 200));
-	HGDIOBJ oldPen =  SelectObject(lpDIS->hDC, pen);
+	CPen bpen(PS_SOLID, 1, RGB(0, 0, 200));
+	SelectObject(lpDIS->hDC, bpen);
 
-   // and a solid red brush
-    CBrush brush(RGB(50, 150, 50));
+	// and a solid red brush
+	CBrush brush(RGB(50, 150, 50));
 	oldBrush = SelectObject(lpDIS->hDC, brush);
 	::Polygon(lpDIS->hDC,pts,fldGraph->recordRange.iWidth() + 3);
 
@@ -98,23 +110,31 @@ void TimeGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 		SelectObject(lpDIS->hDC, redPen);
 		::MoveToEx(lpDIS->hDC, timePoint.x, rct.bottom,0);
 		::LineTo(lpDIS->hDC, timePoint.x, rct.top);
+		int index = (int)(0.5 + (double)timePoint.x / xscale);
+		s = String("%d", index);
+		::TextOut(lpDIS->hDC,timePoint.x -4, crct.bottom - 16, s.scVal(),s.size());
 	}
 
 	delete [] pts;
 	SelectObject(lpDIS->hDC,oldPen);
 	SelectObject(lpDIS->hDC, oldBrush);
+	SelectObject(lpDIS->hDC, fntOld);
 }
 
 void TimeGraph::OnLButtonUp(UINT nFlags, CPoint point) {	
 	timePoint = point;
 	CWnd *wnd =  GetParent();
 	if ( wnd) {
+		bool useDefault = false;
+		Column col;
 		if ( !fldGraph->sourceTable.fValid() || fldGraph->sourceColumn == "")
-			return;
-		Column col = fldGraph->sourceTable->col(fldGraph->sourceColumn);
-		if ( !col.fValid())
-			return;
-		RangeReal rr = col->rrMinMax();
+				useDefault = true;
+		if ( !useDefault) {
+			Column col = fldGraph->sourceTable->col(fldGraph->sourceColumn);
+			if ( !col.fValid())
+				useDefault = true;
+		}
+		RangeReal rr = !useDefault ? col->rrMinMax() : RangeReal(0.0, 1.0);
 		CRect rct;
 		GetClientRect(rct);
 		double xscale = rct.Width() / fldGraph->recordRange.iWidth();
@@ -126,38 +146,39 @@ void TimeGraph::OnLButtonUp(UINT nFlags, CPoint point) {
 
 }
 void TimeGraph::setIndex(int index) {
-	if ( !fldGraph->sourceTable.fValid() || fldGraph->sourceColumn == "")
-		return;
-	Column col = fldGraph->sourceTable->col(fldGraph->sourceColumn);
-	//Column col = fldGraph->sourceTable->col("numbers");
-	if ( !col.fValid())
-		return;
-	RangeReal rr = col->rrMinMax();
 	CRect rct;
 	GetClientRect(rct);
-	double xscale = rct.Width() / fldGraph->recordRange.iWidth();
+	double xscale = (double)rct.Width() / fldGraph->recordRange.iWidth();
 	timePoint = CPoint(xscale * index, (rct.bottom + rct.top)/2.0); // y doesnt matter but anyway
 	Invalidate();
 
 }
-//----------------------------------------------------
-TimeGraphSlider::TimeGraphSlider(FormEntry* par) :
-	FormEntry(par,0,true),
-    timegraph(0)
+
+void TimeGraph::PreSubclassWindow() 
 {
-  psn->iMinWidth = psn->iWidth = 250;
-  psn->iMinHeight = psn->iHeight = 40;
-  SetIndependentPos();
+	EnableToolTips();
+	
+	CStatic::PreSubclassWindow();
+}
+//----------------------------------------------------
+TimeGraphSlider::TimeGraphSlider(FormEntry* par, RangeInt defaultRange) :
+FormEntry(par,0,true),
+timegraph(0)
+{
+	psn->iMinWidth = psn->iWidth = 250;
+	psn->iMinHeight = psn->iHeight = 60;
+	SetIndependentPos();
+	recordRange = defaultRange;
 }
 
 void TimeGraphSlider::create()
 {
-  zPoint pntFld = zPoint(psn->iPosX,psn->iPosY);
-  zDimension dimFld = zDimension(psn->iWidth,psn->iMinHeight);
-  timegraph = new TimeGraph(this, WS_VISIBLE | WS_BORDER | WS_CHILD | WS_TABSTOP,
-              CRect(pntFld, dimFld) , frm()->wnd() , Id());
-  timegraph->SetFont(frm()->fnt);
-  CreateChildren();
+	zPoint pntFld = zPoint(psn->iPosX,psn->iPosY);
+	zDimension dimFld = zDimension(psn->iWidth,psn->iMinHeight);
+	timegraph = new TimeGraph(this, WS_VISIBLE | WS_CHILD ,
+		CRect(pntFld, dimFld) , frm()->wnd() , Id());
+	timegraph->SetFont(frm()->fnt);
+	CreateChildren();
 }
 
 void TimeGraphSlider::setSourceTable(const Table& tbl) {

@@ -553,8 +553,8 @@ int TransparencyForm::setTransparency(Event *ev) {
 void  TransparencyForm::apply() {
 	slider->StoreData();
 	drw->setTransparency(1.0 - (double)transparency/100.0);
-	PreparationParameters pp(NewDrawer::ptRENDER, 0);
-	drw->prepareChildDrawers(&pp);
+	/*PreparationParameters pp(NewDrawer::ptRENDER, 0);
+	drw->prepareChildDrawers(&pp);*/
 	String transp("Transparency (%d)",transparency);
 	TreeItem titem;
 	view->getItem(drw->itemTransparent,TVIF_TEXT | TVIF_HANDLE | TVIF_IMAGE | TVIF_PARAM | TVIS_SELECTED,titem);

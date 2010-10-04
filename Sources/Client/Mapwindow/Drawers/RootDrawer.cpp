@@ -62,7 +62,7 @@ void  RootDrawer::prepare(PreparationParameters *pp){
 
 String RootDrawer::addDrawer(NewDrawer *drw) {
 	AbstractMapDrawer *mapdrw = dynamic_cast<AbstractMapDrawer *>(drw);
-	if ( mapdrw) {
+	if ( mapdrw && mapdrw->getBaseMap() != 0) {
 		CoordBounds cb = mapdrw->getBaseMap()->cb();
 		vector<NewDrawer *> allDrawers;
 		getDrawers(allDrawers);

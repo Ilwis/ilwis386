@@ -181,7 +181,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ILWISEngine.lib htmlhelp.lib geos.lib"
+				AdditionalDependencies="ILWISEngine.lib htmlhelp.lib geos.lib opengl32.lib glu32.lib ftgl.lib freetype.lib xerces-c_2.lib"
 				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\Ilwis.exe"
 				Version="3.7"
 				LinkIncremental="1"
@@ -671,6 +671,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Client\Resources\begin.ico"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Client\Resources\bitmap.ico"
 				>
 			</File>
@@ -911,6 +915,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Client\Resources\end.ico"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Client\Resources\Equals.ico"
 				>
 			</File>
@@ -988,6 +996,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\EXE16TBLL.ICO"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\extrusion.ico"
 				>
 			</File>
 			<File
@@ -1351,6 +1363,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Client\Resources\pause.ico"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Client\Resources\PBButt.ico"
 				>
 			</File>
@@ -1471,6 +1487,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Client\Resources\run.ico"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\run1.ico"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Client\Resources\SAMPLE.BMP"
 				>
 			</File>
@@ -1512,6 +1536,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\SEGTab.ico"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\SelectArea.ico"
 				>
 			</File>
 			<File
@@ -1564,6 +1592,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\Slice.BMP"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\slicing.ico"
 				>
 			</File>
 			<File
@@ -1724,6 +1756,14 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\StereoPair.bmp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\stop.ico"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\stop1.ico"
 				>
 			</File>
 			<File
@@ -5515,38 +5555,6 @@
 				</File>
 			</Filter>
 		</Filter>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\begin.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\end.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\extrusion.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\pause.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\run.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\run1.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\stop.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\stop1.ico"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

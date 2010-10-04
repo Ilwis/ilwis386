@@ -55,10 +55,12 @@ namespace ILWIS {
 		String name;
 		bool info;
 		bool editable;
+		double extrTransparency;
 
 		SimpleDrawer(DrawerParameters *context, const String& ty);
 		SimpleDrawer();
 		virtual ~SimpleDrawer();
+		void drawExtrusion(const Coord& c1, const Coord& c2, double z, bool filled = false) const;
 	private:
 		void init();
 	} ;
