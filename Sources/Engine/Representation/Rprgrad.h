@@ -44,7 +44,7 @@ Last change:  WK   25 Aug 98    3:50 pm
 #define ILWRPRGRADUAL_H
 #include "Engine\Domain\dm.h"
 
-class DATEXPORT RepresentationGradual: public RepresentationPtr
+class _export RepresentationGradual: public RepresentationPtr
 {
 	friend class RepresentationPtr;
 protected:  
@@ -53,43 +53,40 @@ public:
 	enum ColorRange { crUPPER, crLOWER, crSTRETCH };
 
 	RepresentationGradual(const FileName&, const Domain&);
-	virtual ~RepresentationGradual();
-	virtual String sType() const;
-	virtual void Store();
-	virtual void GetColors(ColorBuf&) const;
-	virtual void GetColorLut(ColorBuf&) const;
+	virtual	~RepresentationGradual();
 
-	virtual Color		clrRaw(long iRaw) const;        // 0 <  iRaw <= iClrSteps
+	virtual String			sType() const;
+	virtual void			Store();
+	virtual void			GetColors(ColorBuf&) const;
+	virtual void			GetColorLut(ColorBuf&) const;
+
+	virtual Color			clrRaw(long iRaw) const;        // 0 <  iRaw <= iClrSteps
 	virtual					byte iColor(double rValue) const;  // 0..1
-	int							iLimits() const { return arLimits.iSize(); }
+	int						iLimits() const { return arLimits.iSize(); }
 	double					rValue(int iLim) const { return arLimits[iLim]; }
-	int							iNoColors() 
-	{ return ac.iSize(); }
-	ColorRange			GetColorMethod(int iIndex) 
-	{ return acr[iIndex]; }
-	void _export		SetColorMethod(int iIndex, ColorRange rng);
-	double _export 	rGetLimitValue(int iIndex) ;
-	void _export		SetLimitValue(int iIndex, double rV);
-	Color						GetColor(int iIndex) 
-	{ return ac[iIndex] ; }
-	void _export		SetLimitColor(int iIndex, Color c);
-	int							iGetColorIndex(int iIndex) 
-	{ return aiIndex[iIndex]; }
-	int							iGetStretchSteps() 
-	{ return iStretchSteps; }
-	void _export		SetStretchSteps(int iSteps);
-	void _export		insert(double rVal, Color clr);
-	void _export		remove(unsigned int);
+	int						iNoColors() { return ac.iSize(); }
+	ColorRange				GetColorMethod(int iIndex) { return acr[iIndex]; }
+	void 					SetColorMethod(int iIndex, ColorRange rng);
+	double  				rGetLimitValue(int iIndex) ;
+	void 					SetLimitValue(int iIndex, double rV);
+	Color					GetColor(int iIndex) { return ac[iIndex] ; }
+	void 					SetLimitColor(int iIndex, Color c);
+	int						iGetColorIndex(int iIndex) { return aiIndex[iIndex]; }
+	int						iGetStretchSteps() 	{ return iStretchSteps; }
+	void 					SetStretchSteps(int iSteps);
+	void 					insert(double rVal, Color clr);
+	void 					remove(unsigned int);
+	void					reset();
 
 protected:
-	void						init();
+	void					init();
 
-	Array<Color>		ac;
-	Array<ColorRange> acr;
-	Array<int>			aiIndex;
-	Array<double>		arLimits;
-	int							iStretchSteps;  
-	int							iClrSteps;
+	Array<Color>			ac;
+	Array<ColorRange>		acr;
+	Array<int>				aiIndex;
+	Array<double>			arLimits;
+	int						iStretchSteps;  
+	int						iClrSteps;
 };
 
 #endif // ILWRPRGRADUAL_H
