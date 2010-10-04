@@ -166,23 +166,34 @@ HTREEITEM AnimationDrawer::configure(LayerTreeView  *tv, HTREEITEM displayOption
 	DisplayOptionTreeItem *item2 = new DisplayOptionTreeItem(tv,displayOptionsLastItem,this,
 					0,
 					(DisplayOptionItemFunc)&AnimationDrawer::animationControl);
-	InsertItem("Run","History",item2);
+	InsertItem(TR("Run"),"History",item2);
 
 	item2 = new DisplayOptionTreeItem(tv,displayOptionsLastItem,this,
 					0,
 					(DisplayOptionItemFunc)&AnimationDrawer::animationSourceUsage);
-	InsertItem("Source usage",".mpv",item2);
+	InsertItem(TR("Source usage"),".mpv",item2);
 
-	item2 = new DisplayOptionTreeItem(tv,displayOptionsLastItem,this,
-					0,
-					(DisplayOptionItemFunc)&AnimationDrawer::animationPortrayal);
-	InsertItem("Portrayal","Colors",item2);
+	//item2 = new DisplayOptionTreeItem(tv,displayOptionsLastItem,this,0);
+	HTREEITEM portrayalItem = InsertItem(tv, displayOptionsLastItem, TR("Portrayal"),"Colors");
+
+	DisplayOptionTreeItem * itemSlicing = new DisplayOptionTreeItem(tv, portrayalItem,this,
+		0,(DisplayOptionItemFunc)&AnimationDrawer::animationSlicing);
+	InsertItem(TR("Interactive Slicing"),"Slicing",itemSlicing);
+
+	DisplayOptionTreeItem * itemSelect = new DisplayOptionTreeItem(tv, portrayalItem,this,
+		0,(DisplayOptionItemFunc)&AnimationDrawer::animationSelection);
+	InsertItem(TR("Selection"),"SelectArea",itemSelect);
+
 
 	return displayOptionsLastItem;
 
 }
-void AnimationDrawer::animationPortrayal(CWnd *parent) {
-	new AnimationPortrayal(parent,this);
+void AnimationDrawer::animationSlicing(CWnd *parent) {
+	new AnimationSlicing(parent,this);
+}
+
+void AnimationDrawer::animationSelection(CWnd *parent) {
+	new AnimationSelection(parent,this);
 }
 
 bool AnimationDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
@@ -211,11 +222,13 @@ void AnimationDrawer::timedEvent(UINT _timerid) {
 				if (loop) {
 					featurelayer->getDrawer(index)->setActive(false);
 					index = 0;
+					featurelayer->getDrawer(0)->setActive(false);
 				}
 			}
 		}
 		if ( sourceType == sotMAPLIST) {
 			MapList mlist;
+			TRACE(String("%d\n", index).scVal());
 			mlist.SetPointer(datasource->pointer());
 			if ( mlist->iSize() > 0 && index < mlist->iSize() - 1) {
 				getDrawer(index)->setActive(false);
@@ -286,25 +299,28 @@ AnimationControl::AnimationControl(CWnd *par, AnimationDrawer *adr)
 	st = new StaticText(root,"Preparing . . .");
 	
 
-  create();
+	create();
+
 }
 
 void AnimationControl::setSlider() {
 	AnimationDrawer *adrw = (AnimationDrawer *)drw;
 	IlwisObject *source = adrw->datasource;
 	IlwisObject::iotIlwisObjectType type = IlwisObject::iotObjectType((*source)->fnObj);
+	RangeInt setRange;
 	if ( type == IlwisObject::iotRASMAP ||  IlwisObject::iotSEGMENTMAP || 
 		IlwisObject::iotPOINTMAP || IlwisObject::iotPOLYGONMAP) {
 	}
 	if ( type ==IlwisObject::iotMAPLIST) {
 		MapList mpl((*source)->fnObj);
+		setRange = RangeInt(0, mpl->iSize());
 		if ( mpl->fTblAtt()) {
 			fcol = new FieldColumn(root,TR("Reference Attribute"),mpl->tblAtt(),&colName,dmVALUE);
 			fcol->SetCallBack((NotifyProc)&AnimationControl::changeColum);
 		}
 	}
 
-	graphSlider = new TimeGraphSlider(root);
+	graphSlider = new TimeGraphSlider(root, setRange);
 
 }
 
@@ -380,13 +396,13 @@ void AnimationControl::shutdown(int iReturn) {
 	return DisplayOptionsForm2::shutdown();
 }
 //----------------------------------------------------------
-AnimationPortrayal::AnimationPortrayal(CWnd *par, AnimationDrawer *adr) 
-	: DisplayOptionsForm2(adr, par, TR("Portrayal"))
+AnimationSlicing::AnimationSlicing(CWnd *par, AnimationDrawer *adr) 
+	: DisplayOptionsForm2(adr, par, TR("Slicing"))
 {
 	vs = new ValueSlicerSlider(root, ((SetDrawer *)adr->getDrawer(0)));
 	FieldGroup *fg = new FieldGroup(root);
 	fldSteps = new FieldOneSelectTextOnly(fg, &steps);
-	fldSteps->SetCallBack((NotifyProc)&AnimationPortrayal::createSteps);
+	fldSteps->SetCallBack((NotifyProc)&AnimationSlicing::createSteps);
 	fldSteps->Align(vs, AL_UNDER);
 	fldSteps->SetWidth(vs->psn->iWidth/2);
 
@@ -394,7 +410,7 @@ AnimationPortrayal::AnimationPortrayal(CWnd *par, AnimationDrawer *adr)
 	create();
 }
 
-int AnimationPortrayal::createSteps(Event*) {
+int AnimationSlicing::createSteps(Event*) {
 	if (fldSteps->ose->GetCount() == 0) {
 		for(int i = 2 ; i <= 10; ++i)
 			fldSteps->AddString(String("%d",i));
@@ -404,6 +420,41 @@ int AnimationPortrayal::createSteps(Event*) {
 		if ( index != -1) {
 			vs->setNumberOfBounds(index +2);
 		}
+		drw->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->Invalidate();
+	}
+	return 1;
+}
+
+//----------------------------------------------------------
+AnimationSelection::AnimationSelection(CWnd *par, AnimationDrawer *adr) 
+	: DisplayOptionsForm2(adr, par, TR("Selection"))
+{
+	vs = new ValueSlicerSlider(root, ((SetDrawer *)adr->getDrawer(0)));
+	vs->setLowColor(GetSysColor(COLOR_3DFACE));
+	vs->setHighColor(GetSysColor(COLOR_3DFACE));
+	vs->setNumberOfBounds(3);
+	FieldGroup *fg = new FieldGroup(root);
+	fldSteps = new FieldOneSelectTextOnly(fg, &steps);
+	fldSteps->SetCallBack((NotifyProc)&AnimationSelection::createSteps);
+	fldSteps->Align(vs, AL_UNDER);
+	fldSteps->SetWidth(vs->psn->iWidth/2);
+
+	create();
+
+	vs->setBoundColor(1,Color(120,230,0));
+}
+
+int AnimationSelection::createSteps(Event*) {
+	if (fldSteps->ose->GetCount() == 0) {
+		for(int i = 2 ; i <= 10; ++i)
+			fldSteps->AddString(String("%d",i));
+		fldSteps->ose->SelectString(0,"3");
+	} else {
+		int index = fldSteps->ose->GetCurSel();
+		if ( index != -1) {
+			vs->setNumberOfBounds(index +2);
+		}
+		drw->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->Invalidate();
 	}
 	return 1;
 }

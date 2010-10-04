@@ -32,7 +32,8 @@ namespace ILWIS{
 		void animationControl(CWnd *w);
 		void animationSourceUsage(CWnd *parent);
 		void setIndex(int index);
-		void animationPortrayal(CWnd *parent);
+		void animationSlicing(CWnd *parent);
+		void animationSelection(CWnd *parent);
 		void setTransparency(double v);
 		double interval;
 		UINT timerid;
@@ -76,9 +77,9 @@ namespace ILWIS{
 		DECLARE_MESSAGE_MAP();
 	};
 
-	class AnimationPortrayal : public DisplayOptionsForm2 {
+	class AnimationSlicing : public DisplayOptionsForm2 {
 	public:
-		AnimationPortrayal(CWnd *par, AnimationDrawer *gdr);
+		AnimationSlicing(CWnd *par, AnimationDrawer *gdr);
 	private:
 		FieldOneSelectTextOnly *fldSteps;
 		int createSteps(Event*);
@@ -86,6 +87,18 @@ namespace ILWIS{
 		ValueSlicerSlider *vs;
 
 	};
+
+	class AnimationSelection : public DisplayOptionsForm2 {
+	public:
+		AnimationSelection(CWnd *par, AnimationDrawer *gdr);
+	private:
+		FieldOneSelectTextOnly *fldSteps;
+		int createSteps(Event*);
+		String steps;
+		ValueSlicerSlider *vs;
+
+	};
+
 	class AnimationSourceUsage: public DisplayOptionsForm2
 	{
 	public:

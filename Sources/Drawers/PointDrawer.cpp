@@ -16,11 +16,11 @@ ILWIS::NewDrawer *createPointDrawer(DrawerParameters *parms) {
 	return new PointDrawer(parms);
 }
 
-PointDrawer::PointDrawer(DrawerParameters *parms) : SimpleDrawer(parms,"PointDrawer"), extrusion(false) {
+PointDrawer::PointDrawer(DrawerParameters *parms) : SimpleDrawer(parms,"PointDrawer") {
 	drawColor = SysColor(COLOR_WINDOWTEXT);
 }
 
-PointDrawer::PointDrawer(DrawerParameters *parms, const String& name) : SimpleDrawer(parms,name), extrusion(false) {
+PointDrawer::PointDrawer(DrawerParameters *parms, const String& name) : SimpleDrawer(parms,name){
 }
 
 void PointDrawer::prepare(PreparationParameters *p){
@@ -37,12 +37,14 @@ bool PointDrawer::draw(bool norecursion, const CoordBounds& cbArea) const {
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 	bool extrusion = getSpecialDrawingOption(NewDrawer::sdoExtrusion);
+	bool filledExtr = getSpecialDrawingOption(NewDrawer::sdoFilled);
 
 	ComplexDrawer *cdrw = (ComplexDrawer *)getParentDrawer();
 	ZValueMaker *zmaker = cdrw->getZMaker();
 	bool is3D = getRootDrawer()->is3D() && zmaker->getThreeDPossible();
 	double zscale = zmaker->getZScale();
 	double zoffset = zmaker->getOffset();
+	double fakez = getRootDrawer()->getFakeZ();
 
 	double fx = cNorm.x;
 	double fy = cNorm.y;
@@ -66,10 +68,18 @@ bool PointDrawer::draw(bool norecursion, const CoordBounds& cbArea) const {
 
 	if ( is3D) {
 		if ( extrusion) {
-			glBegin(GL_LINE_STRIP) ;
-			glVertex3d(cNorm.x,cNorm.y,0);
-			glVertex3d(cNorm.x, cNorm.y,fz);
-			glEnd();
+			if (!filledExtr) {
+				glBegin(GL_LINE_STRIP) ;
+				glVertex3d(cNorm.x,cNorm.y,0);
+				glVertex3d(cNorm.x, cNorm.y,fz);
+				glEnd();
+			} else {
+				glColor4f(drawColor.redP(),drawColor.greenP(), drawColor.blueP(), extrTransparency);
+				drawExtrusion(Coord(fx - symbolScale, fy - symbolScale,fz),Coord(fx - symbolScale, fy + symbolScale, fz),fakez,true); 
+				drawExtrusion(Coord(fx - symbolScale, fy + symbolScale,fz),Coord(fx + symbolScale, fy + symbolScale, fz),fakez, true);
+				drawExtrusion(Coord(fx + symbolScale, fy + symbolScale,fz),Coord(fx + symbolScale, fy - symbolScale, fz),fakez, true); 
+				drawExtrusion(Coord(fx + symbolScale, fy - symbolScale,fz),Coord(fx - symbolScale, fy - symbolScale, fz),fakez, true); 
+			}
 		}
 
 		glPopMatrix();

@@ -28,5 +28,6 @@ private:
 	int iMultColors;
 	double gamma;
 	BaseMap bmap;
+	IlwisObject::iotIlwisObjectType type;
 };
 }

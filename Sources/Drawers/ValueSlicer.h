@@ -17,6 +17,7 @@ public:
    void OnLButtonDblClk(UINT nFlags, CPoint point);
    void OnMouseMove(UINT nFlags, CPoint point);
    	CRect makeDrawRect();
+	void updateRepresentations();
   /* int OnToolHitTest(CPoint point, TOOLINFO *pTI) const;
    void OnToolTipNotify(NMHDR *pNMHDR, LRESULT *pResult);*/
 
@@ -38,9 +39,13 @@ public:
 	void setNumberOfBounds(int n);
 	void create();
 	bool isValid() const;
+	void setHighColor(Color c);
+	void setLowColor(Color c);
+	void setBoundColor(int index, Color c);
 	
 private:
 	void init();
+	Color nextColor(int i);
 	ValueSlicer *valueslicer;
 	ValueRange valrange;
 	ILWIS::SetDrawer *drawer;
@@ -49,6 +54,8 @@ private:
 	Representation rpr;
 	vector<double> bounds;
 	int selectedIndex;
+	Color lowColor;
+	Color highColor;
 };
 
 //----------------------------

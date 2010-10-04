@@ -162,7 +162,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ILWISEngine.lib htmlhelp.lib IlwisClient.lib IlwisApplications.lib geos.lib"
+				AdditionalDependencies="ILWISEngine.lib htmlhelp.lib IlwisClient.lib geos.lib opengl32.lib glu32.lib"
 				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\Extensions\ILWISDrawers.dll"
 				Version="3.7"
 				LinkIncremental="1"

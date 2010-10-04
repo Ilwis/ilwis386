@@ -90,6 +90,7 @@ void LineFeatureDrawer::prepare(PreparationParameters *p){
 		drawColor = (fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod()));
 		double tr = fdr->getTransparency();
 		setTransparency(tr);
+		extrTransparency = fdr->getExtrusionTransparency();
 	}
 }
 

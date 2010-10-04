@@ -25,6 +25,7 @@ mcd(0)
 {
 	AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)drw->getParentDrawer();
 	bmap.SetPointer(mapDrawer->getBaseMap());
+	type = IlwisObject::iotObjectType(bmap->fnObj);
 }
 Color DrawingColor::clrVal(double rVal) const
 {
@@ -36,7 +37,10 @@ Color DrawingColor::clrVal(double rVal) const
 		switch (drw->getStretchMethod())
 		{
 		case SetDrawer::smLINEAR:
-			cRet = (Color)rpr->clr(rVal, drw->getStretchRangeReal());
+			if ( type != IlwisObject::iotRASMAP)
+				cRet = (Color)rpr->clr(rVal, drw->getStretchRangeReal());
+			else
+				cRet = (Color)rpr->clr(rVal);
 			break;
 		case  SetDrawer::smLOGARITHMIC:
 			{

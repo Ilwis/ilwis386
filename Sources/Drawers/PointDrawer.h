@@ -17,7 +17,5 @@ class PointDrawer : public SimpleDrawer {
 
 		Coord cNorm;
 		Color drawColor;
-		bool extrusion;
-
 	};
 }

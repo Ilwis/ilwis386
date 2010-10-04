@@ -62,12 +62,18 @@ void ValueSlicer::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	HGDIOBJ fntOld = SelectObject(lpDIS->hDC, fnt);
 
 	double y = 0;
+	String txt = fldslicer->valrange->vri() ? String("%d",(int)fldslicer->bounds[0]) : String("%.03f", fldslicer->bounds[0]);
+	::TextOut(lpDIS->hDC,rct.right, rct.bottom - y - 8, txt.scVal(),txt.size());
 	for(int i = 1; i < fldslicer->bounds.size(); ++i) {
 		
 		double v1 =  fldslicer->bounds[i-1];
 		double v2 = fldslicer->bounds[i];
-		Color c = fldslicer->drawingcolor->clrVal((v1 + v2)/2.0);
-		//TRACE(String("%f %f %d %d %d\n",v1,v2).scVal(),c.red, c.green\);
+		double cv = (v1 + v2) / 2.0;
+		Color c = fldslicer->drawingcolor->clrVal(cv);
+		if ( c.red() == 176 && i  == 2) {
+			fldslicer->drawingcolor->clrVal(cv);
+		}
+		//TRACE(String("%f %f %d %d %d\n",v1,v2,(int)c.red(), (int)c.green(), (int)c.blue()).scVal());
 		CBrush brush(c);
 		oldBrush = SelectObject(lpDIS->hDC, brush);
 		int yup = rct.bottom - y - (v2 - v1) * yscale;
@@ -123,23 +129,26 @@ void ValueSlicer::OnMouseMove(UINT nFlags, CPoint point) {
 			return;
 		fldslicer->bounds[index] = v;
 		fldslicer->rprgrad->SetLimitValue(index, v);
+	    activePoint.y = point.y;
+		updateRepresentations();
 
-		ILWIS::AbstractMapDrawer *parentDrw = (ILWIS::AbstractMapDrawer *)fldslicer->drawer->getParentDrawer();
-		for(int i =0; i < parentDrw->getDrawerCount(); ++i) {
-			ILWIS::SetDrawer *setdrw = (ILWIS::SetDrawer *)parentDrw->getDrawer(i);
-			Representation rpr;
-			rpr.SetPointer(fldslicer->rprgrad);
-			setdrw->setRepresentation(rpr);
-		}
-
-		activePoint.y = point.y;
+			
 	
-		Invalidate();
-		fldslicer->drawer->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->Invalidate();
 	}
 
 }
 
+void ValueSlicer::updateRepresentations() {
+	ILWIS::AbstractMapDrawer *parentDrw = (ILWIS::AbstractMapDrawer *)fldslicer->drawer->getParentDrawer();
+	for(int i =0; i < parentDrw->getDrawerCount(); ++i) {
+		ILWIS::SetDrawer *setdrw = (ILWIS::SetDrawer *)parentDrw->getDrawer(i);
+		Representation rpr;
+		rpr.SetPointer(fldslicer->rprgrad);
+		setdrw->setRepresentation(rpr);
+	}
+	Invalidate();
+	fldslicer->drawer->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->Invalidate();
+}
 void ValueSlicer::OnLButtonDown(UINT nFlags, CPoint point) {
 	CRect rct = makeDrawRect();
 	fldslicer->selectedIndex = -1;
@@ -166,9 +175,11 @@ void ValueSlicer::OnLButtonDblClk(UINT nFlags, CPoint point) {
 	SlicingStepColor frm(this,&clr);
 	if ( frm.fOkClicked()) {
 		fldslicer->rprgrad->SetLimitColor(fldslicer->selectedIndex  , clr);
+		if ( fldslicer->selectedIndex == fldslicer->bounds.size() -2)
+			fldslicer->rprgrad->SetLimitColor(fldslicer->selectedIndex+1  , clr);
 		Invalidate();
+		updateRepresentations();
 	}
-
 }
 //----------------------------------------------------
 ValueSlicerSlider::ValueSlicerSlider(FormEntry* par, ILWIS::SetDrawer *sdrw) :
@@ -185,6 +196,8 @@ ValueSlicerSlider::ValueSlicerSlider(FormEntry* par, ILWIS::SetDrawer *sdrw) :
   setDrawer(sdrw);
   RangeReal rr = sdrw->getStretchRangeReal();
   setValueRange(ValueRange(rr,0));
+  highColor = Color(70,255,30);
+  lowColor = Color(20, 60,0);
   init();
 }
 
@@ -244,6 +257,16 @@ bool ValueSlicerSlider::isValid() const {
 	return valrange.fValid() && drawer!= 0;
 }
 
+void ValueSlicerSlider::setBoundColor(int index, Color c) {
+	if ( index < bounds.size() -1) {
+		rprgrad->SetLimitColor(index,c);
+		if ( valueslicer) {
+			valueslicer->Invalidate();
+			valueslicer->updateRepresentations();
+		}
+	}
+}
+
 void ValueSlicerSlider::init() {
 	if ( isValid()) {
 		bool rprCreated = false;
@@ -255,31 +278,48 @@ void ValueSlicerSlider::init() {
 			rprCreated = true;
 		}
 		rprgrad->reset();
-		int colorStep = 255 / bounds.size();
 		rprgrad->SetLimitValue(0,bounds[0]);
 		rprgrad->SetLimitValue(1, bounds[bounds.size() -1]);
-		rprgrad->SetLimitColor(0, Color(50,50,50));
-		rprgrad->SetLimitColor(1, Color(min(50 + bounds.size() * colorStep, 255), 50,50));
+		rprgrad->SetLimitColor(0, lowColor);
+		rprgrad->SetLimitColor(1, highColor);
+		rprgrad->SetStretchSteps(1);
+		rprgrad->SetColorMethod(0, RepresentationGradual::crLOWER);
 		for(int i = 1; i < bounds.size()-1; ++i) {
-			Color clr(50 + i * colorStep,50,50);
+			Color clr = nextColor(i);
 			rprgrad->insert(bounds[i], clr);
 			rprgrad->SetColorMethod(i,RepresentationGradual::crLOWER);
 		}
-		if ( rprCreated) {
-			rpr.SetPointer(rprgrad);
-			ILWIS::AbstractMapDrawer *parentDrw = (ILWIS::AbstractMapDrawer *)drawer->getParentDrawer();
-			for(int i =0; i < parentDrw->getDrawerCount(); ++i) {
-				ILWIS::SetDrawer *setdrw = (ILWIS::SetDrawer *)parentDrw->getDrawer(i);
-				setdrw->setRepresentation(rpr);
-			}
-			//drawer->setRepresentation(rpr);
-			drawingcolor = new ILWIS::DrawingColor(drawer);
+		rpr.SetPointer(rprgrad);
+		ILWIS::AbstractMapDrawer *parentDrw = (ILWIS::AbstractMapDrawer *)drawer->getParentDrawer();
+		for(int i =0; i < parentDrw->getDrawerCount(); ++i) {
+			ILWIS::SetDrawer *setdrw = (ILWIS::SetDrawer *)parentDrw->getDrawer(i);
+			setdrw->setRepresentation(rpr);
 		}
+			//drawer->setRepresentation(rpr);
+		drawingcolor = new ILWIS::DrawingColor(drawer);
+//		rpr->Store();
 	}
 	if (valueslicer)
 		valueslicer->Invalidate();
 }
 
+Color ValueSlicerSlider::nextColor(int i) {
+	int deltar = highColor.red() - lowColor.red();
+	int deltag = highColor.green() - lowColor.green();
+	int deltab = highColor.blue() - lowColor.blue();
+	int rstep = deltar / (bounds.size() - 2);
+	int gstep = deltag / (bounds.size() - 2);
+	int bstep = deltab / (bounds.size() - 2);
+	return Color(lowColor.red() + rstep * i, lowColor.green() + gstep * i, lowColor.blue() + bstep * i);
+}
+
+
+void ValueSlicerSlider::setHighColor(Color c){
+	highColor = c;
+}
+void ValueSlicerSlider::setLowColor(Color c){
+	lowColor = c;
+}
 //----------------------------------------------------------
 SlicingStepColor::SlicingStepColor(CWnd* parent, Color* clr) :
 FormWithDest(parent, TR("Step Color"))

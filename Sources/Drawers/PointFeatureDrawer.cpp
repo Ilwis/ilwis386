@@ -36,6 +36,7 @@ void PointFeatureDrawer::addDataSource(void *f, int options) {
 }
 
 bool PointFeatureDrawer::draw(bool norecursion, const CoordBounds& cbArea) const{
+
 	return PointDrawer::draw(norecursion, cbArea);
 }
 
@@ -60,7 +61,8 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 		double zv = zmaker->getValue(cNorm,feature);
 		cNorm.z = zv;
 	}
-	if (  p->type == ptALL || p->type & ptRENDER || p->type & ptRESTORE) {
+	if (  p->type & ptRENDER || p->type & ptRESTORE) {
 		drawColor = fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod());
+		extrTransparency = fdr->getExtrusionTransparency();
 	}
 }

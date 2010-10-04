@@ -1,4 +1,5 @@
 #include "Client\Headers\formelementspch.h"
+#include "Client\FormElements\FieldIntSlider.h"
 #include "Engine\Map\basemap.h"
 #include "Engine\Map\Point\ilwPoint.h"
 #include "Client\MapWindow\Drawers\ComplexDrawer.h"
@@ -91,6 +92,10 @@ Color FeatureSetDrawer::getSingleColor() const {
 	return singleColor;
 }
 
+double FeatureSetDrawer::getExtrusionTransparency() const {
+	return extrTransparency;
+}
+
 String FeatureSetDrawer::store(const FileName& fnView, const String& parentSection) const{
 	SetDrawer::store(fnView, parentSection);
 	ObjectInfo::WriteElement(parentSection.scVal(),"SingleColor",fnView, singleColor);
@@ -142,7 +147,7 @@ HTREEITEM FeatureSetDrawer::make3D(bool yesno, LayerTreeView  *tv){
 			InsertItem("Data source", ".mpv",item);
 			item = new DisplayOptionTreeItem(tv,threeDItem,this,(DisplayOptionItemFunc)&FeatureSetDrawer::displayZScaling);
 			InsertItem("Scaling", "ScaleBar",item);
-			item = new DisplayOptionTreeItem(tv,threeDItem,this,(SetCheckFunc)&FeatureSetDrawer::setExtrusion);
+			item = new DisplayOptionTreeItem(tv,threeDItem,this,(SetCheckFunc)&FeatureSetDrawer::setExtrusion,(DisplayOptionItemFunc)&FeatureSetDrawer::extrusionOptions);
 			InsertItem("Extrusion","Extrusion",item,getSpecialDrawingOption(sdoExtrusion));
 			InsertItem(tv, threeDItem, "Axis", "Axis");
 		}
@@ -157,6 +162,10 @@ HTREEITEM FeatureSetDrawer::make3D(bool yesno, LayerTreeView  *tv){
 	PreparationParameters pp(NewDrawer::pt3D);
 	prepare(&pp);
 	return threeDItem;
+}
+
+void FeatureSetDrawer::extrusionOptions(CWnd *p) {
+	new ExtrusionOptions(p, this);
 }
 
 void FeatureSetDrawer::setExtrusion(void *value, LayerTreeView *tree) {
@@ -255,18 +264,18 @@ void ZDataScaling::apply() {
 
 //--------------------------------
 DisplayZDataSourceForm::DisplayZDataSourceForm(CWnd *wPar, SetDrawer *dr) : 
-DisplayOptionsForm(dr,wPar,"3D Options"), sourceIndex(0) 
+DisplayOptionsForm(dr,wPar,TR("3D Options")), sourceIndex(0) 
 {
 	FeatureLayerDrawer *fdrw = (FeatureLayerDrawer *)dr->getParentDrawer();
 	attTable = fdrw->getAtttributeTable();
 	bmp.SetPointer(fdrw->getBaseMap());
-	rg = new RadioGroup(root,"Data Source",&sourceIndex);
+	rg = new RadioGroup(root,TR("Data Source"),&sourceIndex);
 	new RadioButton(rg,"Self");
-	RadioButton *rbMap = new RadioButton(rg,"Raster Map");
+	RadioButton *rbMap = new RadioButton(rg,TR("Raster Map"));
 	fmap = new FieldMap(rbMap,"",&mapName, new MapListerDomainType(dmVALUE|dmIMAGE));
 
 	if ( attTable.fValid()) {
-		RadioButton *rbTable = new RadioButton(rg,"Attribute column");
+		RadioButton *rbTable = new RadioButton(rg,TR("Attribute column"));
 		FieldColumn *fcol = new FieldColumn(rbTable,"",attTable,&colName,dmVALUE&dmIMAGE);
 	}
 
@@ -298,5 +307,40 @@ void DisplayZDataSourceForm::apply() {
 	updateMapView();
 }
 
+//-----------------------------------------
+ExtrusionOptions::ExtrusionOptions(CWnd *p, FeatureSetDrawer *fsd) :
+DisplayOptionsForm(fsd, p, TR("Extrusion options") )
+{
+	transparency = 100 *(1.0-fsd->extrTransparency);
+	line = fsd->specialOptions & ( NewDrawer::sdoFilled| NewDrawer::sdoExtrusion) ? 0 : 1;
+	rg = new RadioGroup(root, TR("Appearence"),&line);
+	new RadioButton(rg, TR("Line"));
+	new RadioButton(rg,TR("Filled"));
+	slider = new FieldIntSliderEx(root,"Transparency(0-100)", &transparency,ValueRange(0,100),true);
+	slider->SetCallBack((NotifyProc)&ExtrusionOptions::setTransparency);
+	slider->setContinuous(true);
 
+	create();
+
+}
+
+int ExtrusionOptions::setTransparency(Event *ev) {
+	slider->StoreData();
+	((FeatureSetDrawer *)drw)->extrTransparency = 1.0 - (double)transparency/100.0;
+	PreparationParameters pp(NewDrawer::ptRENDER);
+	drw->prepare(&pp);
+	updateMapView();
+	return 1;
+}
+void ExtrusionOptions::apply() {
+	rg->StoreData();
+	slider->StoreData();
+	if ( line == 1)
+		((FeatureSetDrawer *)drw)->specialOptions |= NewDrawer::sdoFilled;
+	else
+		((FeatureSetDrawer *)drw)->specialOptions &= ~NewDrawer::sdoFilled;
+	((FeatureSetDrawer *)drw)->extrTransparency = 1.0 - (double)transparency/100.0;
+	updateMapView();
+
+}
 
