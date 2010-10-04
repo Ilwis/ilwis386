@@ -21,8 +21,7 @@ namespace ILWIS {
 	class Texture
 	{
 	public:
-		Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDrawer::DrawMethod drm, const long offsetX, const long offsetY, const long sizeX, const long sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor);
-		Texture(const Map & mp, const long offsetX, const long offsetY, const long sizeX, const long sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, unsigned int iPaletteSize, const RangeReal & rrMinMaxMap);
+		Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDrawer::DrawMethod drm, const long offsetX, const long offsetY, const long sizeX, const long sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, unsigned int iPaletteSize, const RangeReal & rrMinMaxMap, bool fUsePalette);
 		virtual ~Texture();
 
 		void CreateTexture(DrawerContext * drawerContext, bool fInThread, volatile bool * fDrawStop);
@@ -45,17 +44,17 @@ namespace ILWIS {
 		void StretchLine(const RealBuf& buf, IntBuf& bufData);
 		void StretchLine(const LongBuf& buf, IntBuf& bufData);
 		void DrawTexturePaletted(long offsetX, long offsetY, long texSizeX, long texSizeY, unsigned int zoomFactor, char * outbuf, volatile bool* fDrawStop);
-		Map mp;
+		const Map mp;
 		GLuint texture;
 		char * texture_data;
-		GLdouble xMin, yMin, xMax, yMax; // These are in world coordinates !! These are to be mapped to texture coordinates 0 to 1
+		const GLdouble xMin, yMin, xMax, yMax; // These are in world coordinates !! These are to be mapped to texture coordinates 0 to 1
 		const long sizeX, sizeY;
 		const long offsetX, offsetY;
-		unsigned int zoomFactor;
+		const unsigned int zoomFactor;
 		const DrawingColor * drawColor;
-		ComplexDrawer::DrawMethod drm;
-		unsigned int iPaletteSize;
-		RangeReal rrMinMaxMap;
+		const ComplexDrawer::DrawMethod drm;
+		const unsigned int iPaletteSize;
+		const RangeReal rrMinMaxMap;
 		bool fValue;
 		bool fAttTable;
 		const bool fUsePalette;

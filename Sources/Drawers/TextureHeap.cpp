@@ -192,13 +192,8 @@ Texture * TextureHeap::GetTexture(const unsigned int offsetX, const unsigned int
 
 Texture * TextureHeap::GenerateTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, const bool fUsePalette, bool fInThread)
 {
-	if (((writepos + 1) % BUF_SIZE) != readpos)
-	{
-		if (fUsePalette)
-			textureRequest[writepos] = new Texture(mp, offsetX, offsetY, sizeX, sizeY, xMin, yMin, xMax, yMax, zoomFactor, iPaletteSize, rrMinMaxMap);
-		else
-			textureRequest[writepos] = new Texture(mp, drawColor, drm, offsetX, offsetY, sizeX, sizeY, xMin, yMin, xMax, yMax, zoomFactor);
-
+	if (((writepos + 1) % BUF_SIZE) != readpos) {
+		textureRequest[writepos] = new Texture(mp, drawColor, drm, offsetX, offsetY, sizeX, sizeY, xMin, yMin, xMax, yMax, zoomFactor, iPaletteSize, rrMinMaxMap, fUsePalette);
 		writepos = (writepos + 1) % BUF_SIZE;
 	}
 	if (fInThread) {

@@ -19,9 +19,7 @@ using namespace ILWIS;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-// RGB texture
-
-Texture::Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDrawer::DrawMethod drm, const long offsetX, const long offsetY, const long sizeX, const long sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor)
+Texture::Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDrawer::DrawMethod drm, const long offsetX, const long offsetY, const long sizeX, const long sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, unsigned int iPaletteSize, const RangeReal & rrMinMaxMap, bool fUsePalette)
 : mp(mp)
 , texture_data(0)
 , drawColor(drawColor)
@@ -35,29 +33,9 @@ Texture::Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDr
 , yMin(yMin)
 , yMax(yMax)
 , zoomFactor(zoomFactor)
-, fUsePalette(false)
-, valid(false)
-{
-}
-
-// Paletted texture, thus less colors, but fast palete-swap option
-// An OpenGL palette GL_PIXEL_MAP_I_TO_R GL_PIXEL_MAP_I_TO_G GL_PIXEL_MAP_I_TO_B GL_PIXEL_MAP_I_TO_A must be defined prior to drawing this texture
-
-Texture::Texture(const Map & mp, const long offsetX, const long offsetY, const long sizeX, const long sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, unsigned int iPaletteSize, const RangeReal & rrMinMaxMap)
-: mp(mp)
-, texture_data(0)
-, offsetX(offsetX)
-, offsetY(offsetY)
-, sizeX(sizeX)
-, sizeY(sizeY)
-, xMin(xMin)
-, xMax(xMax)
-, yMin(yMin)
-, yMax(yMax)
-, zoomFactor(zoomFactor)
 , iPaletteSize(iPaletteSize)
 , rrMinMaxMap(rrMinMaxMap)
-, fUsePalette(true)
+, fUsePalette(fUsePalette)
 , valid(false)
 {
 }
@@ -147,7 +125,7 @@ unsigned int Texture::getZoomFactor()
 	return zoomFactor;
 }
 
-// For RGB textures
+// RGB textures
 
 void Texture::PutLine(const RealBuf& bufOriginal, const LongBuf& bufColor, const int iLine, const long texSizeX, char * outbuf)
 {
@@ -315,7 +293,8 @@ void Texture::DrawTexture(long offsetX, long offsetY, long texSizeX, long texSiz
 	mp->KeepOpen(false);
 }
 
-// For paletted textures
+// Paletted textures, thus less colors, but fast palete-swap option
+// An OpenGL palette GL_PIXEL_MAP_I_TO_R GL_PIXEL_MAP_I_TO_G GL_PIXEL_MAP_I_TO_B GL_PIXEL_MAP_I_TO_A must be defined prior to drawing this texture
 
 void Texture::PutLineData(const RealBuf& bufOriginal, const IntBuf& bufData, const int iLine, const long texSizeX, char * outbuf)
 {
