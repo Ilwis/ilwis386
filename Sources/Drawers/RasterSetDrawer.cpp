@@ -45,58 +45,6 @@ void RasterSetDrawer::prepare(PreparationParameters *pp){
 	SetDrawer::prepare(pp);
 
 	if ( pp->type & NewDrawer::ptRENDER) {
-		drm = drmRPR;
-		stretched = false;
-		riStretch = RangeInt(0,255);
-		rrStretch = RangeReal(0,100);
-
-		//BaseMapPtr *bmptr = ((AbstractMapDrawer*)getParentDrawer())->getBaseMap();
-		if (rastermap.fValid() ) {
-			// The following is from MapDrawer::MapDrawer
-			Domain _dm = rastermap->dm();
-			bool fImage = 0 != _dm->pdi();
-			if (fImage)
-				drm = drmIMAGE;
-			else if (rastermap->dm()->pdcol())
-				drm = drmCOLOR;
-			ValueRange vr = rastermap->vr();
-			if (rastermap->dm()->pdbool())
-				vr = ValueRange();
-			if (vr.fValid() || fImage) {
-				stretched = true;
-				if (!fImage && vr->vrr()) {
-					rrStretch = rastermap->rrPerc1(true);
-					if (rrStretch.rLo() >= rrStretch.rHi())
-						rrStretch = rastermap->rrMinMax();
-					if (rrStretch.rLo() >= rrStretch.rHi())
-						rrStretch = vr->rrMinMax();
-					riStretch.iLo() = (long)(rounding(rrStretch.rLo()));
-					riStretch.iHi() = (long)(rounding(rrStretch.rHi()));
-				} else {
-					riStretch = rastermap->riPerc1(true);
-					if (riStretch.iLo() >= riStretch.iHi())
-						riStretch = rastermap->riMinMax();
-					if (riStretch.iLo() >= riStretch.iHi())
-						if (fImage)
-							riStretch = RangeInt(0,255);
-						else if (vr.fValid())
-							riStretch = vr->riMinMax();
-					rrStretch.rLo() = doubleConv(riStretch.iLo());
-					rrStretch.rHi() = doubleConv(riStretch.iHi());
-				}
-			}
-			if (0 != _dm->pdid())
-				drm = drmMULTIPLE;
-			else if (0 != _dm->pdp())
-				drm = drmRPR;
-
-			String sStretchMethod;
-			ObjectInfo::ReadElement("Display", "Stretching", rastermap->fnObj, sStretchMethod);
-			if ("Linear" == sStretchMethod)
-				stretchMethod = smLINEAR;
-			else if ("Logarithmic" == sStretchMethod)
-				stretchMethod = smLOGARITHMIC;
-		}
 		fUsePalette = drm != drmCOLOR;
 		if (fUsePalette && data->palette) {
 			data->palette->Refresh();
@@ -106,6 +54,25 @@ void RasterSetDrawer::prepare(PreparationParameters *pp){
 	if ( pp->type & ptGEOMETRY | pp->type & ptRESTORE) {
 		sameCsy = getRootDrawer()->getCoordinateSystem()->fnObj == csy->fnObj;
 	}
+}
+
+void RasterSetDrawer::setDrawMethod(DrawMethod method) {
+
+	if ( method == drmINIT) {
+		drm = drmRPR;
+		if (rastermap.fValid() ) {
+			Domain _dm = rastermap->dm();
+			if (0 != _dm->pdi())
+				drm = drmIMAGE;
+			else if (0 != _dm->pdcol())
+				drm = drmCOLOR;
+			else if (0 != _dm->pdid())
+				drm = drmMULTIPLE;
+			else if (0 != _dm->pdp())
+				drm = drmRPR;
+		}
+	} else
+		drm = method;
 }
 
 void RasterSetDrawer::setRepresentation(const Representation& rp)
