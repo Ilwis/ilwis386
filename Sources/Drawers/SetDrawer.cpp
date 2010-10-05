@@ -145,6 +145,8 @@ void SetDrawer::setStretchRangeReal(const RangeReal& rr){
 	if ( rr.fValid())
 		stretched = true;
 	rrStretch = rr;
+	riStretch.iLo() = (long)(rounding(rrStretch.rLo()));
+	riStretch.iHi() = (long)(rounding(rrStretch.rHi()));
 }
 
 RangeInt SetDrawer::getStretchRangeInt() const{
@@ -155,6 +157,8 @@ void SetDrawer::setStretchRangeInt(const RangeInt& ri){
 	if ( ri != riStretch && ri.fValid())
 		stretched = true;
 	riStretch = ri;
+	rrStretch.rLo() = doubleConv(riStretch.iLo());
+	rrStretch.rHi() = doubleConv(riStretch.iHi());
 }
 
 RangeReal SetDrawer::getLegendRange() const{
