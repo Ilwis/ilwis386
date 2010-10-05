@@ -40,6 +40,7 @@ namespace ILWIS{
 		HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent);
 		bool draw(bool norecursion , const CoordBounds& cbArea) const;
 		void setThreaded(bool yesno);
+		void setMinMax(const RangeReal & rrMinMax);
 		
 	protected:
 		Map rastermap;
@@ -52,6 +53,7 @@ namespace ILWIS{
 		void init() const;
 
 		RasterSetData * data;
+		RangeReal rrMinMax;
 		bool isThreaded;
 		bool sameCsy;
 		bool fUsePalette;

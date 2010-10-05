@@ -41,6 +41,11 @@ RasterSetDrawer::~RasterSetDrawer(){
 	delete data;
 }
 
+void RasterSetDrawer::setMinMax(const RangeReal & rrMinMax)
+{
+	this->rrMinMax = rrMinMax;
+}
+
 void RasterSetDrawer::prepare(PreparationParameters *pp){
 	SetDrawer::prepare(pp);
 
@@ -98,10 +103,6 @@ void RasterSetDrawer::init() const
 			data->maxTextureSize = iXScreen;
 		if (iYScreen < data->maxTextureSize)
 			data->maxTextureSize = iYScreen;
-
-		RangeReal rrMinMax = rastermap->rrMinMax(true);
-		if (rrMinMax.rLo() >= rrMinMax.rHi())
-			rrMinMax = rastermap->vr()->rrMinMax();
 
 		ValueRange vr = rastermap->vr();
 		if (rastermap->dm()->pdbool())
