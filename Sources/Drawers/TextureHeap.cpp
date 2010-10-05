@@ -83,7 +83,7 @@ void Palette::Refresh()
 	} else {
 		long * buf = new long [nrMapValues];
 		for (int i = 0; i < nrMapValues; ++i)
-			buf[i] = minMapVal + i * width / (nrMapValues - 1);
+			buf[i] = minMapVal + round(i * width / (nrMapValues - 1));
 		drawColor->clrRaw(buf, bufColor, nrMapValues, drm);
 		delete [] buf;
 	}
