@@ -44,7 +44,15 @@ void RasterLayerDrawer::prepare(PreparationParameters *pp){
 		IlwisObject::iotIlwisObjectType otype = IlwisObject::iotObjectType(basemap->fnObj);
 		switch ( otype) {
 			case IlwisObject::iotRASMAP:
-				rsd = (RasterSetDrawer *)IlwWinApp()->getDrawer("RasterSetDrawer", pp, &dp); 
+				rsd = (RasterSetDrawer *)IlwWinApp()->getDrawer("RasterSetDrawer", pp, &dp);
+				RangeReal rrMinMax (0, 255);
+				if ( basemap->dm()->pdv()) {
+					rrMinMax = basemap->rrMinMax();
+					if (rrMinMax.rLo() >= rrMinMax.rHi())
+						rrMinMax = basemap->vr()->rrMinMax();
+				} else if (  basemap->fTblAtt() && attColumn.fValid() && attColumn->dm()->pdv())
+					rrMinMax = attColumn->vr()->rrMinMax();
+				rsd->setMinMax(rrMinMax);
 				addSetDrawer(basemap,pp,rsd);
 				break;
 		}

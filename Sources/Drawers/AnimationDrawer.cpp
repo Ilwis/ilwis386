@@ -104,11 +104,36 @@ void AnimationDrawer::prepare(PreparationParameters *pp){
 			if ( drawers.size() > 0) {
 				clear();
 			}
+			// Calculate the min/max over the whole maplist. This is used for palette and texture generation.
+			RangeReal rrMinMax (0, 255);
+			if (mlist->iSize() > 0) {
+				if (mlist->map(0)->dm()->pdv()) {
+					for (int i = 0; i < mlist->iSize(); ++i) {
+						Map mp = mlist->map(i);
+						RangeReal rrMinMaxMap = mp->rrMinMax();
+						if (rrMinMaxMap.rLo() >= rrMinMaxMap.rHi())
+							rrMinMaxMap = mp->vr()->rrMinMax();
+						if (i > 0)
+							rrMinMax += rrMinMaxMap;
+						else
+							rrMinMax = rrMinMaxMap;
+					}
+				} else if (mlist->map(0)->fTblAtt() && attColumn.fValid() && attColumn->dm()->pdv()) {
+					for (int i = 0; i < mlist->iSize(); ++i) {
+						Map mp = mlist->map(i);
+						if (i > 0)
+							rrMinMax += attColumn->vr()->rrMinMax();
+						else
+							rrMinMax = attColumn->vr()->rrMinMax();
+					}
+				}
+			}
 			for(int i = 0; i < mlist->iSize(); ++i) {
 				ILWIS::DrawerParameters parms(getRootDrawer(), this);
 				Map mp = mlist->map(i);
 				RasterSetDrawer *rasterset = (RasterSetDrawer *)IlwWinApp()->getDrawer("RasterSetDrawer", "Ilwis38", &parms); 
 				rasterset->setThreaded(false);
+				rasterset->setMinMax(rrMinMax);
 				addSetDrawer(mp,pp,rasterset);
 				rasterset->setActive(i == 0 ? true : false);
 			}
