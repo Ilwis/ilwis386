@@ -107,7 +107,7 @@ Representation AbstractMapDrawer::getRepresentation() const { // we return the p
 RangeReal AbstractMapDrawer::getStretchRangeReal() const{
 	BaseMapPtr *basemap = getBaseMap();
 	if ( basemap->dm()->pdv()) {
-		return basemap->rrPerc1();
+		return basemap->rrPerc1(true);
 	} else if (  basemap->fTblAtt() && attColumn.fValid() && attColumn->dm()->pdv()) {
 		return attColumn->vr()->rrMinMax();
 	}
