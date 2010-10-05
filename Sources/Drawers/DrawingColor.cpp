@@ -140,9 +140,11 @@ void DrawingColor::clrVal(const double * buf, long * bufOut, long iLen) const
 		switch (drw->getStretchMethod())
 		{
 		case SetDrawer::smLINEAR:
-			for (long i = 0; i < iLen; ++i)
-				bufOut[i] = rpr->clr(buf[i], drw->getStretchRangeReal());
-			break;
+			{
+				RangeReal rr = drw->getStretchRangeReal();
+				for (long i = 0; i < iLen; ++i)
+					bufOut[i] = rpr->clr(buf[i], rr);
+			} break;
 		case SetDrawer::smLOGARITHMIC:
 			{
 				RangeReal rr = drw->getStretchRangeReal();
@@ -255,8 +257,8 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 		}
 	  } break;
 	case NewDrawer::drmCOLOR:
-		// cRet = Color(iRaw);
-		break; // no change !!
+		memcpy(bufOut, buf, iLen * sizeof(long)); // no change !!
+		break;
 	case NewDrawer::drmBOOL: 
 		for (long i = 0; i < iLen; ++i) {
 			long iRaw = buf[i];
