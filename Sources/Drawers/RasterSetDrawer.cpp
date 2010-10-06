@@ -4,7 +4,7 @@
 #include "Client\Ilwis.h"
 #include "Engine\Map\Raster\Map.h"
 #include "Engine\Base\System\RegistrySettings.h"
-#include "Client\Mapwindow\MapCompositionDoc.h"
+//#include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
 #include "Drawers\DrawingColor.h" 
 #include "Drawers\SetDrawer.h"
@@ -26,7 +26,7 @@ ILWIS::NewDrawer *createRasterSetDrawer(DrawerParameters *parms) {
 
 RasterSetDrawer::RasterSetDrawer(DrawerParameters *parms) : 
 SetDrawer(parms,"RasterSetDrawer")
-, data(new RasterSetData()), isThreaded(true), sameCsy(true), fUsePalette(false), palette(new Palette()), textureHeap(new TextureHeap())
+, data(new RasterSetData()), isThreaded(true), sameCsy(true), fUsePalette(false), fPaletteOwner(false), palette(0), textureHeap(new TextureHeap())
 {
 	setTransparency(1); // default, opaque
 	//	setDrawMethod(drmNOTSET); // default
@@ -35,7 +35,8 @@ SetDrawer(parms,"RasterSetDrawer")
 
 RasterSetDrawer::~RasterSetDrawer(){
 	delete textureHeap;
-	delete palette;
+	if (fPaletteOwner)
+		delete palette;
 	delete data;
 }
 
@@ -49,10 +50,11 @@ void RasterSetDrawer::prepare(PreparationParameters *pp){
 
 	if ( pp->type & NewDrawer::ptRENDER) {
 		fUsePalette = drm != drmCOLOR;
-		if (fUsePalette && palette->fValid()) {
-			palette->Refresh();
-			textureHeap->PaletteChanged();
+		if (fPaletteOwner) {
+			if (fUsePalette && palette->fValid())
+				palette->Refresh();
 		}
+		textureHeap->PaletteChanged();
 	}
 	if ( pp->type & ptGEOMETRY | pp->type & ptRESTORE) {
 		sameCsy = getRootDrawer()->getCoordinateSystem()->fnObj == csy->fnObj;
@@ -81,10 +83,28 @@ void RasterSetDrawer::setDrawMethod(DrawMethod method) {
 void RasterSetDrawer::setRepresentation(const Representation& rp)
 {
 	SetDrawer::setRepresentation(rp);
-	if (fUsePalette && palette->fValid()) {
-		palette->Refresh();
-		textureHeap->PaletteChanged();
+	if (fPaletteOwner) {
+		if (fUsePalette && palette->fValid())
+			palette->Refresh();
 	}
+	textureHeap->PaletteChanged();
+}
+
+Palette * RasterSetDrawer::SetPaletteOwner()
+{
+	if (fPaletteOwner && palette)
+		delete palette;
+	palette = new Palette();
+	fPaletteOwner = true;
+	return palette;
+}
+
+void RasterSetDrawer::SetPalette(Palette * palette)
+{
+	if (fPaletteOwner && palette)
+		delete palette;
+	this->palette = palette;
+	fPaletteOwner = false;
 }
 
 void RasterSetDrawer::init() const
@@ -103,12 +123,14 @@ void RasterSetDrawer::init() const
 			data->maxTextureSize = iYScreen;
 
 		textureHeap->SetData(rastermap, getDrawingColor(), getDrawMethod(), drawcontext->getMaxPaletteSize(), rrMinMax, drawcontext);
-		palette->SetData(rastermap, this, drawcontext->getMaxPaletteSize(), rrMinMax);
+		if (fPaletteOwner)
+			palette->SetData(rastermap, this, drawcontext->getMaxPaletteSize(), rrMinMax);
 		data->imageWidth = rastermap->rcSize().Col;
 		data->imageHeight = rastermap->rcSize().Row;
 
-		if (fUsePalette)
-			palette->Refresh();
+		if (fPaletteOwner)
+			if (fUsePalette)
+				palette->Refresh();
 	}
 	data->init = true;
 }
@@ -183,13 +205,25 @@ void RasterSetDrawer::DisplayImagePortion(double x1, double y1, double x2, doubl
 	glGetDoublev(GL_PROJECTION_MATRIX, m_projMatrix);
 	glGetIntegerv(GL_VIEWPORT, m_viewport);
 
+	Coord c1, c2, c3, c4;
 	glFeedbackBuffer(2, GL_2D, feedbackBuffer);
 	glRenderMode(GL_FEEDBACK);
 	glBegin (GL_QUADS);
-	glVertex3d(x1, y1, 0.0);
-	glVertex3d(x2, y1, 0.0);
-	glVertex3d(x2, y2, 0.0);
-	glVertex3d(x1, y2, 0.0);
+	if (sameCsy) {
+		glVertex3d(x1, y1, 0.0);
+		glVertex3d(x2, y1, 0.0);
+		glVertex3d(x2, y2, 0.0);
+		glVertex3d(x1, y2, 0.0);
+	} else {
+		c1 = csy->cConv(getRootDrawer()->getCoordinateSystem(), Coord(x1, y1, 0.0));
+		c2 = csy->cConv(getRootDrawer()->getCoordinateSystem(), Coord(x2, y1, 0.0));
+		c3 = csy->cConv(getRootDrawer()->getCoordinateSystem(), Coord(x2, y2, 0.0));
+		c4 = csy->cConv(getRootDrawer()->getCoordinateSystem(), Coord(x1, y2, 0.0));
+		glVertex3d(c1.x, c1.y, 0.0);
+		glVertex3d(c2.x, c2.y, 0.0);
+		glVertex3d(c3.x, c3.y, 0.0);
+		glVertex3d(c4.x, c4.y, 0.0);
+	}
 	glEnd();
 	if (0 == glRenderMode(GL_RENDER))
 		return;
@@ -201,10 +235,17 @@ void RasterSetDrawer::DisplayImagePortion(double x1, double y1, double x2, doubl
 	GLdouble m_winz[4];
 
 	// project the patch to 2D
-	gluProject(x1, y1, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[0], &m_winy[0], &m_winz[0]);
-	gluProject(x1, y2, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[1], &m_winy[1], &m_winz[1]);
-	gluProject(x2, y2, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[2], &m_winy[2], &m_winz[2]);
-	gluProject(x2, y1, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[3], &m_winy[3], &m_winz[3]);
+	if (sameCsy) {
+		gluProject(x1, y1, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[0], &m_winy[0], &m_winz[0]);
+		gluProject(x1, y2, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[1], &m_winy[1], &m_winz[1]);
+		gluProject(x2, y2, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[2], &m_winy[2], &m_winz[2]);
+		gluProject(x2, y1, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[3], &m_winy[3], &m_winz[3]);
+	} else {
+		gluProject(c1.x, c1.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[0], &m_winy[0], &m_winz[0]);
+		gluProject(c2.x, c2.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[1], &m_winy[1], &m_winz[1]);
+		gluProject(c3.x, c3.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[2], &m_winy[2], &m_winz[2]);
+		gluProject(c4.x, c4.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[3], &m_winy[3], &m_winz[3]);
+	}
 
 	double zoom = getMinZoom(imageSizeX, imageSizeY, m_winx, m_winy); // the minimum zoomout-factor, indicating that it is necessary to plot the patch more accurately
 
@@ -255,10 +296,10 @@ void RasterSetDrawer::DisplayImagePortion(double x1, double y1, double x2, doubl
 		DisplayImagePortion(x1, y1 + dy, x2, y2, imageOffsetX, imageOffsetY + sizeY2, imageSizeX, sizeY2);
 	}
 	else
-		DisplayTexture(x1, y1, x2, y2, imageOffsetX, imageOffsetY, imageSizeX, imageSizeY, zoomFactor);
+		DisplayTexture(x1, y1, x2, y2, c1, c2, c3, c4, imageOffsetX, imageOffsetY, imageSizeX, imageSizeY, zoomFactor);
 }
 
-void RasterSetDrawer::DisplayTexture(double x1, double y1, double x2, double y2, unsigned int imageOffsetX, unsigned int imageOffsetY, unsigned int imageSizeX, unsigned int imageSizeY, unsigned int zoomFactor) const
+void RasterSetDrawer::DisplayTexture(double x1, double y1, double x2, double y2, Coord & c1, Coord & c2, Coord & c3, Coord & c4, unsigned int imageOffsetX, unsigned int imageOffsetY, unsigned int imageSizeX, unsigned int imageSizeY, unsigned int zoomFactor) const
 {
 	Texture* tex = textureHeap->GetTexture(imageOffsetX, imageOffsetY, imageSizeX, imageSizeY, x1, y1, x2, y2, zoomFactor, fUsePalette, isThreaded);
 
@@ -286,20 +327,16 @@ void RasterSetDrawer::DisplayTexture(double x1, double y1, double x2, double y2,
 			glVertex3d(x1, y2, 0.0);
 		} else {
 			tex->TexCoord2d(x1, y1);
-			Coord c = csy->cConv(getRootDrawer()->getCoordinateSystem(), Coord(x1, y1, 0.0));
-			glVertex3d(c.x, c.y, 0.0);
+			glVertex3d(c1.x, c1.y, 0.0);
 
 			tex->TexCoord2d(x2, y1);
-			c = csy->cConv(getRootDrawer()->getCoordinateSystem(), Coord(x2, y1, 0.0));
-			glVertex3d(c.x, c.y, 0.0);
+			glVertex3d(c2.x, c2.y, 0.0);
 
 			tex->TexCoord2d(x2, y2);
-			c = csy->cConv(getRootDrawer()->getCoordinateSystem(), Coord(x2, y2, 0.0));
-			glVertex3d(c.x, c.y, 0.0);
+			glVertex3d(c3.x, c3.y, 0.0);
 
 			tex->TexCoord2d(x1, y2);
-			c = csy->cConv(getRootDrawer()->getCoordinateSystem(), Coord(x1, y2, 0.0));
-			glVertex3d(c.x, c.y, 0.0);
+			glVertex3d(c4.x, c4.y, 0.0);
 		}
 	
 		glEnd();
