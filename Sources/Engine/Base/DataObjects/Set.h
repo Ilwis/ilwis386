@@ -97,7 +97,7 @@ public:
 	{ return fContains(ri.iLo()) && fContains(ri.iHi()); }
 	RangeInt& operator+=( const RangeInt& ri) {
 		_iLo = min(_iLo,ri.iLo());
-		_iHi = max(_iLo, ri.iHi());
+		_iHi = max(_iHi, ri.iHi());
 		return *this;
 	}
 	long& iLo() { return _iLo; }        // return lower boundary
@@ -143,7 +143,7 @@ public:
 	}
 	RangeReal& operator+=( const RangeReal& ri) {
 		_rLo = min(_rLo,ri.rLo());
-		_rHi = max(_rLo, ri.rHi());
+		_rHi = max(_rHi, ri.rHi());
 		return *this;
 	}
 	bool fContains(const RangeReal& rr)
