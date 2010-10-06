@@ -18,11 +18,12 @@ namespace ILWIS {
 	class Texture;
 	class DrawingColor;
 	class DrawerContext;
+	class SetDrawer;
 
 	class Palette
 	{
 	public:
-		Palette(const bool fRealMap, const DrawingColor * drawColor, const NewDrawer::DrawMethod drm, const unsigned int iPaletteSize, const RangeReal & rrMinMaxMap);
+		Palette(const Map & mp, const SetDrawer * rsd, const unsigned int iPaletteSize, const RangeReal & rrMinMaxMap);
 		virtual ~Palette();
 		void MakeCurrent();
 		void SetNotCurrent();
@@ -33,11 +34,10 @@ namespace ILWIS {
 		float * palette_blues;
 		float * palette_alphas;
 		bool fCurrent;
-		const bool fRealMap;
-		const DrawingColor * drawColor;
-		const NewDrawer::DrawMethod drm;
+		bool fRealMap;
 		const unsigned int iPaletteSize;
 		const RangeReal rrMinMaxMap;
+		const SetDrawer * rsd;
 	};
 
 	class TextureHeap  

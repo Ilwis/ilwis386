@@ -104,17 +104,8 @@ void RasterSetDrawer::init() const
 		if (iYScreen < data->maxTextureSize)
 			data->maxTextureSize = iYScreen;
 
-		ValueRange vr = rastermap->vr();
-		if (rastermap->dm()->pdbool())
-			vr = ValueRange();
-		bool fRealMap;
-		if (vr.fValid()) // when integers are not good enough to represent the map treat it as a real map
-			fRealMap = (vr->rStep() < 1) || (vr->stUsed() == stREAL);
-		else
-			fRealMap = false;
-
 		data->textureHeap = new TextureHeap(rastermap, getDrawingColor(), getDrawMethod(), drawcontext->getMaxPaletteSize(), rrMinMax, drawcontext);
-		data->palette = new Palette(fRealMap, getDrawingColor(), getDrawMethod(), drawcontext->getMaxPaletteSize(), rrMinMax);
+		data->palette = new Palette(rastermap, this, drawcontext->getMaxPaletteSize(), rrMinMax);
 		data->imageWidth = rastermap->rcSize().Col;
 		data->imageHeight = rastermap->rcSize().Row;
 

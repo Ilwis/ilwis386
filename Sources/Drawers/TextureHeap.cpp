@@ -7,6 +7,7 @@
 #include "Texture.h"
 #include "Client\MapWindow\Drawers\DrawerContext.h"
 #include "DrawingColor.h"
+#include "SetDrawer.h"
 
 
 #ifdef _DEBUG
@@ -21,14 +22,20 @@ using namespace ILWIS;
 // Palette
 //////////////////////////////////////////////////
 
-Palette::Palette(const bool fRealMap, const DrawingColor * drawColor, const NewDrawer::DrawMethod drm, const unsigned int iPaletteSize, const RangeReal & rrMinMaxMap)
-: fRealMap(fRealMap)
-, drawColor(drawColor)
-, drm(drm)
+Palette::Palette(const Map & mp, const SetDrawer * rsd, const unsigned int iPaletteSize, const RangeReal & rrMinMaxMap)
+: rsd(rsd)
 , iPaletteSize(iPaletteSize)
 , rrMinMaxMap(rrMinMaxMap)
 , fCurrent(false)
 {
+	ValueRange vr = mp->vr();
+	if (mp->dm()->pdbool())
+		vr = ValueRange();
+	if (vr.fValid()) // when integers are not good enough to represent the map treat it as a real map
+		fRealMap = (vr->rStep() < 1) || (vr->stUsed() == stREAL);
+	else
+		fRealMap = false;
+
 	palette_reds = new float [iPaletteSize];
 	palette_greens = new float [iPaletteSize];
 	palette_blues = new float [iPaletteSize];
@@ -72,6 +79,7 @@ void Palette::Refresh()
 	double width = rrMinMaxMap.rWidth();
 	double minMapVal = rrMinMaxMap.rLo();
 
+	const DrawingColor * drawColor = rsd->getDrawingColor();
 	long * bufColor = new long [nrMapValues];
 
 	if (fRealMap) {
@@ -81,6 +89,7 @@ void Palette::Refresh()
 		drawColor->clrVal(buf, bufColor, nrMapValues);
 		delete [] buf;
 	} else {
+		const NewDrawer::DrawMethod drm = rsd->getDrawMethod();
 		long * buf = new long [nrMapValues];
 		for (int i = 0; i < nrMapValues; ++i)
 			buf[i] = minMapVal + round(i * width / (nrMapValues - 1));
