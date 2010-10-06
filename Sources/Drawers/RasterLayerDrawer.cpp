@@ -53,6 +53,7 @@ void RasterLayerDrawer::prepare(PreparationParameters *pp){
 				} else if (  basemap->fTblAtt() && attColumn.fValid() && attColumn->dm()->pdv())
 					rrMinMax = attColumn->vr()->rrMinMax();
 				rsd->setMinMax(rrMinMax);
+				rsd->SetPaletteOwner(); // this set has the only available palette
 				addSetDrawer(basemap,pp,rsd);
 				break;
 		}
