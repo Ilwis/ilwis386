@@ -128,12 +128,17 @@ void AnimationDrawer::prepare(PreparationParameters *pp){
 					}
 				}
 			}
+			Palette * palette;
 			for(int i = 0; i < mlist->iSize(); ++i) {
 				ILWIS::DrawerParameters parms(getRootDrawer(), this);
 				Map mp = mlist->map(i);
 				RasterSetDrawer *rasterset = (RasterSetDrawer *)IlwWinApp()->getDrawer("RasterSetDrawer", "Ilwis38", &parms); 
 				rasterset->setThreaded(false);
 				rasterset->setMinMax(rrMinMax);
+				if (i == 0)
+					palette = rasterset->SetPaletteOwner(); // create only the palette of the first rasterset, and share it with the other rastersets
+				else
+					rasterset->SetPalette(palette);
 				addSetDrawer(mp,pp,rasterset);
 				rasterset->setActive(i == 0 ? true : false);
 			}
