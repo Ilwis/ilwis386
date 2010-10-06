@@ -10,19 +10,13 @@ namespace ILWIS{
 	class RasterSetData {
 	public:
 		RasterSetData() :
-			textureHeap(0),
-			palette(0),
 			init(false)
 		{
 		};
 		~RasterSetData()
 		{
-			if (textureHeap)
-				delete textureHeap;
 		}
 
-		TextureHeap * textureHeap;
-		Palette * palette;
 		GLint maxTextureSize;
 		CoordBounds cb;
 		long imageWidth, imageHeight;
@@ -57,5 +51,7 @@ namespace ILWIS{
 		bool isThreaded;
 		bool sameCsy;
 		bool fUsePalette;
+		Palette * palette;
+		TextureHeap * textureHeap;
 	};
 }

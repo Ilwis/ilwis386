@@ -22,27 +22,15 @@ using namespace ILWIS;
 // Palette
 //////////////////////////////////////////////////
 
-Palette::Palette(const Map & mp, const SetDrawer * rsd, const unsigned int iPaletteSize, const RangeReal & rrMinMaxMap)
-: rsd(rsd)
-, iPaletteSize(iPaletteSize)
-, rrMinMaxMap(rrMinMaxMap)
+Palette::Palette()
+: rsd(0)
+, iPaletteSize(0)
 , fCurrent(false)
+, palette_reds(0)
+, palette_greens(0)
+, palette_blues(0)
+, palette_alphas(0)
 {
-	ValueRange vr = mp->vr();
-	if (mp->dm()->pdbool())
-		vr = ValueRange();
-	if (vr.fValid()) // when integers are not good enough to represent the map treat it as a real map
-		fRealMap = (vr->rStep() < 1) || (vr->stUsed() == stREAL);
-	else
-		fRealMap = false;
-
-	palette_reds = new float [iPaletteSize];
-	palette_greens = new float [iPaletteSize];
-	palette_blues = new float [iPaletteSize];
-	palette_alphas = new float [iPaletteSize];
-	for (int i = 0; i < iPaletteSize - 1; ++i)
-		palette_alphas[i] = 1.0;
-	palette_alphas[iPaletteSize - 1] = 0.0; // by definition, last index reserved for UNDEF
 }
 
 Palette::~Palette()
@@ -55,6 +43,45 @@ Palette::~Palette()
 		delete [] palette_blues;
 	if (palette_alphas)
 		delete [] palette_alphas;
+}
+
+void Palette::SetData(const Map & mp, const SetDrawer * rsd, const unsigned int iPaletteSize, const RangeReal & rrMinMaxMap)
+{
+	ValueRange vr = mp->vr();
+	if (mp->dm()->pdbool())
+		vr = ValueRange();
+	if (vr.fValid()) // when integers are not good enough to represent the map treat it as a real map
+		fRealMap = (vr->rStep() < 1) || (vr->stUsed() == stREAL);
+	else
+		fRealMap = false;
+	
+	this->rsd = rsd;
+	this->rrMinMaxMap.rLo() = rrMinMaxMap.rLo();
+	this->rrMinMaxMap.rHi() = rrMinMaxMap.rHi();
+
+	if (this->iPaletteSize != iPaletteSize && iPaletteSize > 2) {
+		this->iPaletteSize = iPaletteSize;
+		if (palette_reds)
+			delete [] palette_reds;
+		if (palette_greens)
+			delete [] palette_greens;
+		if (palette_blues)
+			delete [] palette_blues;
+		if (palette_alphas)
+			delete [] palette_alphas;
+		palette_reds = new float [iPaletteSize];
+		palette_greens = new float [iPaletteSize];
+		palette_blues = new float [iPaletteSize];
+		palette_alphas = new float [iPaletteSize];
+		for (int i = 0; i < iPaletteSize - 1; ++i)
+			palette_alphas[i] = 1.0;
+		palette_alphas[iPaletteSize - 1] = 0.0; // by definition, last index reserved for UNDEF
+	}
+}
+
+bool Palette::fValid()
+{
+	return iPaletteSize > 2; // a vaild palette has at least colors for mapMin, mapMax and UNDEF.
 }
 
 void Palette::MakeCurrent()
@@ -75,53 +102,49 @@ void Palette::SetNotCurrent()
 
 void Palette::Refresh()
 {
-	unsigned int nrMapValues = iPaletteSize - 1;
-	double width = rrMinMaxMap.rWidth();
-	double minMapVal = rrMinMaxMap.rLo();
+	if (fValid()) {
+		unsigned int nrMapValues = iPaletteSize - 1;
+		double width = rrMinMaxMap.rWidth();
+		double minMapVal = rrMinMaxMap.rLo();
 
-	const DrawingColor * drawColor = rsd->getDrawingColor();
-	long * bufColor = new long [nrMapValues];
+		const DrawingColor * drawColor = rsd->getDrawingColor();
+		long * bufColor = new long [nrMapValues];
 
-	if (fRealMap) {
-		double * buf = new double [nrMapValues];
-		for (int i = 0; i < nrMapValues; ++i)
-			buf[i] = minMapVal + i * width / (nrMapValues - 1);
-		drawColor->clrVal(buf, bufColor, nrMapValues);
-		delete [] buf;
-	} else {
-		const NewDrawer::DrawMethod drm = rsd->getDrawMethod();
-		long * buf = new long [nrMapValues];
-		for (int i = 0; i < nrMapValues; ++i)
-			buf[i] = minMapVal + round(i * width / (nrMapValues - 1));
-		drawColor->clrRaw(buf, bufColor, nrMapValues, drm);
-		delete [] buf;
+		if (fRealMap) {
+			double * buf = new double [nrMapValues];
+			for (int i = 0; i < nrMapValues; ++i)
+				buf[i] = minMapVal + i * width / (nrMapValues - 1);
+			drawColor->clrVal(buf, bufColor, nrMapValues);
+			delete [] buf;
+		} else {
+			const NewDrawer::DrawMethod drm = rsd->getDrawMethod();
+			long * buf = new long [nrMapValues];
+			for (int i = 0; i < nrMapValues; ++i)
+				buf[i] = minMapVal + round(i * width / (nrMapValues - 1));
+			drawColor->clrRaw(buf, bufColor, nrMapValues, drm);
+			delete [] buf;
+		}
+
+		for (int i = 0; i < nrMapValues; ++i) {
+			palette_reds[i] = ((Color)(bufColor[i])).redP();
+			palette_greens[i] = ((Color)(bufColor[i])).greenP();
+			palette_blues[i] = ((Color)(bufColor[i])).blueP();
+		}
+
+		delete [] bufColor;
+
+		fCurrent = false;
 	}
-
-	for (int i = 0; i < nrMapValues; ++i) {
-		palette_reds[i] = ((Color)(bufColor[i])).redP();
-		palette_greens[i] = ((Color)(bufColor[i])).greenP();
-		palette_blues[i] = ((Color)(bufColor[i])).blueP();
-	}
-
-	delete [] bufColor;
-
-	fCurrent = false;
 }
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-TextureHeap::TextureHeap(const Map & _mp, const DrawingColor * drawColor, const NewDrawer::DrawMethod drm, const unsigned int iPaletteSize, const RangeReal & rrMinMaxMap, DrawerContext * drawerContext)
+TextureHeap::TextureHeap()
 : texturesArraySize(0)
 , readpos(0)
 , writepos(0)
-, mp(_mp)
-, drawColor(drawColor)
-, drm(drm)
-, iPaletteSize(iPaletteSize)
-, rrMinMaxMap(rrMinMaxMap)
-, drawerContext(drawerContext)
 , textureThread(0)
 , fAbortTexGen(false)
 , fStopThread(false)
@@ -145,6 +168,22 @@ TextureHeap::~TextureHeap()
 	for (int i = 0; i < texturesArraySize; ++i)
 		if (textures[i] != 0)
 			delete textures[i];
+}
+
+void TextureHeap::SetData(const Map & _mp, const DrawingColor * drawColor, const NewDrawer::DrawMethod drm, const unsigned int iPaletteSize, const RangeReal & rrMinMaxMap, DrawerContext * drawerContext)
+{
+	this->mp.SetPointer(_mp.pointer());
+	this->drawColor = drawColor;
+	this->drm = drm;
+	this->iPaletteSize = iPaletteSize;
+	this->rrMinMaxMap.rLo() = rrMinMaxMap.rLo();
+	this->rrMinMaxMap.rHi() = rrMinMaxMap.rHi();
+	this->drawerContext = drawerContext;
+}
+
+bool TextureHeap::fValid()
+{
+	return drawerContext != 0;
 }
 
 void TextureHeap::ClearQueuedTextures()

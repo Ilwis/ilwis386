@@ -26,7 +26,7 @@ ILWIS::NewDrawer *createRasterSetDrawer(DrawerParameters *parms) {
 
 RasterSetDrawer::RasterSetDrawer(DrawerParameters *parms) : 
 SetDrawer(parms,"RasterSetDrawer")
-, data(new RasterSetData()), isThreaded(true), sameCsy(true), fUsePalette(false)
+, data(new RasterSetData()), isThreaded(true), sameCsy(true), fUsePalette(false), palette(new Palette()), textureHeap(new TextureHeap())
 {
 	setTransparency(1); // default, opaque
 	//	setDrawMethod(drmNOTSET); // default
@@ -34,10 +34,8 @@ SetDrawer(parms,"RasterSetDrawer")
 }
 
 RasterSetDrawer::~RasterSetDrawer(){
-	if (data->textureHeap)
-		delete data->textureHeap;
-	if (data->palette)
-		delete data->palette;
+	delete textureHeap;
+	delete palette;
 	delete data;
 }
 
@@ -51,9 +49,9 @@ void RasterSetDrawer::prepare(PreparationParameters *pp){
 
 	if ( pp->type & NewDrawer::ptRENDER) {
 		fUsePalette = drm != drmCOLOR;
-		if (fUsePalette && data->palette) {
-			data->palette->Refresh();
-			data->textureHeap->PaletteChanged();
+		if (fUsePalette && palette->fValid()) {
+			palette->Refresh();
+			textureHeap->PaletteChanged();
 		}
 	}
 	if ( pp->type & ptGEOMETRY | pp->type & ptRESTORE) {
@@ -83,9 +81,9 @@ void RasterSetDrawer::setDrawMethod(DrawMethod method) {
 void RasterSetDrawer::setRepresentation(const Representation& rp)
 {
 	SetDrawer::setRepresentation(rp);
-	if (fUsePalette && data->palette) {
-		data->palette->Refresh();
-		data->textureHeap->PaletteChanged();
+	if (fUsePalette && palette->fValid()) {
+		palette->Refresh();
+		textureHeap->PaletteChanged();
 	}
 }
 
@@ -104,13 +102,13 @@ void RasterSetDrawer::init() const
 		if (iYScreen < data->maxTextureSize)
 			data->maxTextureSize = iYScreen;
 
-		data->textureHeap = new TextureHeap(rastermap, getDrawingColor(), getDrawMethod(), drawcontext->getMaxPaletteSize(), rrMinMax, drawcontext);
-		data->palette = new Palette(rastermap, this, drawcontext->getMaxPaletteSize(), rrMinMax);
+		textureHeap->SetData(rastermap, getDrawingColor(), getDrawMethod(), drawcontext->getMaxPaletteSize(), rrMinMax, drawcontext);
+		palette->SetData(rastermap, this, drawcontext->getMaxPaletteSize(), rrMinMax);
 		data->imageWidth = rastermap->rcSize().Col;
 		data->imageHeight = rastermap->rcSize().Row;
 
 		if (fUsePalette)
-			data->palette->Refresh();
+			palette->Refresh();
 	}
 	data->init = true;
 }
@@ -126,7 +124,7 @@ HTREEITEM RasterSetDrawer::configure(LayerTreeView  *tv, HTREEITEM parent){
 bool RasterSetDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 	if (!data->init)
 		init();
-	if (data->textureHeap == 0)
+	if (!textureHeap->fValid())
 		return false;
 
 	//glClearColor(1.0,1.0,1.0,0.0);
@@ -134,7 +132,7 @@ bool RasterSetDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 	glColor4f(1, 1, 1, transparency);
 
-	data->textureHeap->ClearQueuedTextures();
+	textureHeap->ClearQueuedTextures();
 
 	// Extend the image so that its width and height become ^2
 
@@ -156,7 +154,7 @@ bool RasterSetDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 
 	glEnable(GL_TEXTURE_2D);
 	if (fUsePalette)
-		data->palette->MakeCurrent(); // for now this is the only call .. officially it should also be called before generating textures in a separate thread, however currently the only way two palettes would interfere is with the AnimationDrawer, and there textures are generated in the current thread
+		palette->MakeCurrent(); // for now this is the only call .. officially it should also be called before generating textures in a separate thread, however currently the only way two palettes would interfere is with the AnimationDrawer, and there textures are generated in the current thread
 	DisplayImagePortion(minX, maxY, maxX, minY, 0, 0, width, height);
 	glDisable(GL_TEXTURE_2D);
 
@@ -262,7 +260,7 @@ void RasterSetDrawer::DisplayImagePortion(double x1, double y1, double x2, doubl
 
 void RasterSetDrawer::DisplayTexture(double x1, double y1, double x2, double y2, unsigned int imageOffsetX, unsigned int imageOffsetY, unsigned int imageSizeX, unsigned int imageSizeY, unsigned int zoomFactor) const
 {
-	Texture* tex = data->textureHeap->GetTexture(imageOffsetX, imageOffsetY, imageSizeX, imageSizeY, x1, y1, x2, y2, zoomFactor, fUsePalette, isThreaded);
+	Texture* tex = textureHeap->GetTexture(imageOffsetX, imageOffsetY, imageSizeX, imageSizeY, x1, y1, x2, y2, zoomFactor, fUsePalette, isThreaded);
 
 	if (tex != 0)
 	{

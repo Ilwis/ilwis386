@@ -23,8 +23,10 @@ namespace ILWIS {
 	class Palette
 	{
 	public:
-		Palette(const Map & mp, const SetDrawer * rsd, const unsigned int iPaletteSize, const RangeReal & rrMinMaxMap);
+		Palette();
 		virtual ~Palette();
+		void SetData(const Map & mp, const SetDrawer * rsd, const unsigned int iPaletteSize, const RangeReal & rrMinMaxMap);
+		bool fValid();
 		void MakeCurrent();
 		void SetNotCurrent();
 		void Refresh();
@@ -35,17 +37,19 @@ namespace ILWIS {
 		float * palette_alphas;
 		bool fCurrent;
 		bool fRealMap;
-		const unsigned int iPaletteSize;
-		const RangeReal rrMinMaxMap;
+		unsigned int iPaletteSize;
+		RangeReal rrMinMaxMap;
 		const SetDrawer * rsd;
 	};
 
 	class TextureHeap  
 	{
 	public:
-		TextureHeap(const Map & _mp, const DrawingColor * drawColor, const NewDrawer::DrawMethod drm, const unsigned int iPaletteSize, const RangeReal & rrMinMaxMap, DrawerContext * drawerContext);
+		TextureHeap();
 		virtual ~TextureHeap();
 
+		void SetData(const Map & _mp, const DrawingColor * drawColor, const NewDrawer::DrawMethod drm, const unsigned int iPaletteSize, const RangeReal & rrMinMaxMap, DrawerContext * drawerContext);
+		bool fValid();
 		Texture * GetTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, const bool fUsePalette, bool fInThread);
 		void ClearQueuedTextures();
 		void PaletteChanged();
@@ -58,11 +62,11 @@ namespace ILWIS {
 		Texture* textures [10000];
 		static const int BUF_SIZE = 100;
 		Texture * textureRequest [BUF_SIZE];
-		const Map mp;
+		Map mp;
 		const DrawingColor * drawColor;
-		const NewDrawer::DrawMethod drm;
-		const unsigned int iPaletteSize;
-		const RangeReal rrMinMaxMap;
+		NewDrawer::DrawMethod drm;
+		unsigned int iPaletteSize;
+		RangeReal rrMinMaxMap;
 		int texturesArraySize;
 		int readpos;
 		int writepos;
