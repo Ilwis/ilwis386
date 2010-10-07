@@ -13,7 +13,7 @@ namespace ILWIS {
 		~RootDrawer();
 		virtual void prepare(PreparationParameters *pp);
 		String addDrawer(NewDrawer *drw);
-		void addCoordBounds(const CoordBounds& cb, bool overrule=true);
+		void addCoordBounds(const CoordSystem& _cs, const CoordBounds& cb, bool overrule=true);
 		bool draw(bool norecursion = false, const CoordBounds& cb=CoordBounds()) const;
 		HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent);
 		void timedEvent(UINT timerID);
@@ -25,7 +25,7 @@ namespace ILWIS {
 		CoordSystem getCoordinateSystem() const { return cs;}
 		RowCol getViewPort() const { return pixArea; }
 		void setCoordinateSystem(const CoordSystem& _cs, bool overrule=false) ;
-		void setCoordBoundsView(const CoordBounds& _cb, bool overrule=false); 
+		void setCoordBoundsView(const CoordSystem& _cs, const CoordBounds& _cb, bool overrule=false); 
 		void setCoordBoundsZoom(const CoordBounds& _cb);
 		void setCoordBoundsMap(const CoordBounds& cb);
 		void setZoom(const CRect& rct);

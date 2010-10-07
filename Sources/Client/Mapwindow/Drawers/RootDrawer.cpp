@@ -66,19 +66,19 @@ String RootDrawer::addDrawer(NewDrawer *drw) {
 		CoordBounds cb = mapdrw->getBaseMap()->cb();
 		vector<NewDrawer *> allDrawers;
 		getDrawers(allDrawers);
-		for(int i = 0; i < allDrawers.size(); ++i) {
+	/*	for(int i = 0; i < allDrawers.size(); ++i) {
 			AbstractMapDrawer *drw = dynamic_cast<AbstractMapDrawer *>(allDrawers.at(i));
 			if ( drw) {
 				cb += drw->getBaseMap()->cb();
 			}
 		}
-		setCoordBoundsMap(cb);
+		setCoordBoundsMap(cb);*/
 	}
 	return ComplexDrawer::addDrawer(drw);
 }
 
-void RootDrawer::addCoordBounds(const CoordBounds& cb, bool overrule){
-		setCoordBoundsView(cb, overrule);
+void RootDrawer::addCoordBounds(const CoordSystem& _cs, const CoordBounds& cb, bool overrule){
+		setCoordBoundsView(_cs, cb, overrule);
 }
 
 /*
@@ -143,7 +143,7 @@ void RootDrawer::load(const FileName& fnView, const String parenSection){
 	setCoordinateSystem(csy, false);
 	setViewPort(viewPort);
 	setCoordBoundsMap(cbMap);
-	setCoordBoundsView(cbView, false);
+	setCoordBoundsView(csy, cbView, false);
 	setCoordBoundsZoom(cbZoom);
 	setEyePoint(eyePoint);
 	setViewPoint(viewPoint);
@@ -194,31 +194,35 @@ void RootDrawer::setViewPort(const RowCol& rc) {
 
 void RootDrawer::setCoordinateSystem(const CoordSystem& _cs, bool overrule){
 	if (overrule || cs->fUnknown()) {
+		if ( overrule) {
+			cbMap = _cs->cbConv(_cs, cbMap);
+		}
 		cs = _cs;
 	}
 }
 
-void RootDrawer::setCoordBoundsView(const CoordBounds& _cb, bool overrule){
+void RootDrawer::setCoordBoundsView(const CoordSystem& _cs, const CoordBounds& _cb, bool overrule){
+	CoordBounds cb = cs.fEqual(_cs) ? _cb : cs->cbConv(_cs,_cb);
 	if ( overrule || cbView.fUndef()) {
-		cbMap = _cb;
+		cbMap = cb;
 		aspectRatio = cbMap.width()/ cbMap.height();
-		double w = _cb.width();
-		double h = _cb.height();
+		double w = cb.width();
+		double h = cb.height();
 		double delta = 0;
 		if ( aspectRatio <= 1.0) {
 			double pixwidth = (double)pixArea.Row * aspectRatio;
 			double fracofWidth = 1.0 - (pixArea.Col - pixwidth) / pixArea.Col;
 			double crdWidth = w / fracofWidth;
 			double delta = (crdWidth - w) / 2.0;
-			cbView =  CoordBounds(Coord(_cb.MinX() - delta,_cb.MinY(),0), 
-			                  Coord(_cb.MaxX() + delta,_cb.MaxY(),0));
+			cbView =  CoordBounds(Coord(cb.MinX() - delta,cb.MinY(),0), 
+			                  Coord(cb.MaxX() + delta,cb.MaxY(),0));
 		} else {
 			double pixheight = (double)pixArea.Col / aspectRatio;
 			double fracofHeight = 1.0 - abs(pixArea.Row - pixheight) / (double)pixArea.Row;
 			double crdHeight = h / fracofHeight;
 			double delta = (crdHeight - h) / 2.0;
-			cbView =  CoordBounds(Coord(_cb.MinX(),_cb.MinY()  - delta,0), 
-			                      Coord(_cb.MaxX(),_cb.MaxY()  + delta,0));
+			cbView =  CoordBounds(Coord(cb.MinX(),cb.MinY()  - delta,0), 
+			                      Coord(cb.MaxX(),cb.MaxY()  + delta,0));
 
 		}
 		cbZoom = cbView;
@@ -227,10 +231,10 @@ void RootDrawer::setCoordBoundsView(const CoordBounds& _cb, bool overrule){
 		drawercontext->TakeContext();
 		setProjection(cbView);
 		drawercontext->ReleaseContext();
-	} else {
-		cbView += _cb;
+	} /* else {
+		//cbView += cb;
 		aspectRatio = cbView.width()/ cbView.height();
-	}
+	}*/
 	fakeZ = cbView.width() * 0.001;
 	
 }
