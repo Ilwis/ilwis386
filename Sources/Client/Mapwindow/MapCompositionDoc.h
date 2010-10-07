@@ -34,14 +34,7 @@ Software Foundation, http://www.fsf.org.
 
 Created on: 2007-02-8
 ***************************************************************/
-#if !defined(AFX_MAPCOMPOSITIONDOC_H__8A842674_E359_11D2_B73E_00A0C9D5342F__INCLUDED_)
-#define AFX_MAPCOMPOSITIONDOC_H__8A842674_E359_11D2_B73E_00A0C9D5342F__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// MapCompositionDoc.h : header file
-//
 
 #ifndef CATALOGDOCUMENT_H
 #include "Client\MainWindow\Catalog\CatalogDocument.h"
@@ -54,16 +47,9 @@ Created on: 2007-02-8
 #include "Client/MapWindow/Drawers/Drawer_n.h"
 #include "Client/MapWindow/Drawers/RootDrawer.h"
 
+using namespace ILWIS;
+
 class MapCompositionSrvItem;
-
-
-#undef IMPEXP
-#ifdef ILWISCLIENT
-#define IMPEXP __declspec(dllexport)
-#else
-#define IMPEXP __declspec(dllimport)
-#endif
-
 class Drawer;
 class GeneralBar;
 class Palette;
@@ -103,44 +89,31 @@ public:
 	BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo); 
 	void initBounds(MinMax mm);
 	bool fCoordSystemOk(const BaseMap& bmap);
-	bool fGeoRefOk(const Map& map);
+	bool fGeoRefOk(const Map& map) { return true; } // might change
 	bool fAppendable(const FileName&);
-	Drawer* drAppend(const FileName&, bool asAnimation=false);
-	Drawer* drAppend(const Map&, bool asAnimation=false);
-	Drawer* drAppend(const MapList&, bool asAnimation=false);
-	Drawer* drAppend(const BaseMap&, bool asAnimation=false);
-	Drawer* drAppend(const AnnotationText&);
+	NewDrawer* drAppend(const FileName&, bool asAnimation=false);
+	NewDrawer* drAppend(const Map&, bool asAnimation=false);
+	NewDrawer* drAppend(const MapList&, bool asAnimation=false);
+	NewDrawer* drAppend(const BaseMap&, bool asAnimation=false);
 	void RemoveDrawer(ILWIS::NewDrawer* dr);
 	void SetCoordSystem(const CoordSystem&);
-	void SetCoordSystem(const GeoRef&);
-	void SetGeoRef(const GeoRef&); // no checks!
 	double rPrefScale() const { return rDfltScale; }
-	RowCol rcPrefOffset() const { return rcDfltOffset; }
 	void SetScale(double rScale) { rDfltScale = rScale; }
-	void SetOffset(RowCol rc) { rcDfltOffset = rc; }
 	afx_msg void OnSaveView();
 	afx_msg void OnSaveViewAs();
-	Map mp;
-	GeoRef georef;
-	Color colBackground;
-	MinMax mmBounds() const;
 	void menLayers(CMenu& men, int iBaseId);
 	int iState() const { return iListState; }
 	void ChangeState();
-	void SetBounds(const MinMax&);
-	void SetBounds(const CoordBounds&);
+	bool fDomainEditable( const BaseMap& bmap);
 	bool fIsEmpty() const;
 	void setViewName(const FileName& fn);
 	FileName getViewName() const;
-
-	list<Drawer*> dl;
-	bool fShowRowCol;
-	bool fRaster, fGrid3DDrawer;
-	CSize szPrefSize;
+	NewDrawer *getSelectedDrawer() const { return selectedDrawer; }
+	void setSelectedDrawer(NewDrawer *drw) { selectedDrawer = drw; }
 
 protected:
 	MapView mpv;
-	Drawer* drDrawer(const MapView&, const char* sSection);
+	NewDrawer* drDrawer(const MapView&, const char* sSection);
 private:
 	void SetTitle(const IlwisObject& obj);
 	void StoreView();
@@ -151,9 +124,9 @@ private:
 	BOOL OnOpenPolygonMap(const PolygonMap&, OpenType ot);
 	BOOL OnOpenPointMap(const PointMap&, OpenType ot);
 	BOOL OnOpenMapView(const MapView&);
-	BOOL OnOpenGeoRef3D(const GeoRef& grf, OpenType ot);
 	BOOL OnOpenStereoPair(const StereoPair&, OpenType ot);
 	virtual void DeleteContents();
+	ILWIS::NewDrawer *createBaseMapDrawer(const BaseMap& bmp, const String& type, const String& subtype);
 
 private:
 	afx_msg void OnExtCoord();
@@ -190,21 +163,17 @@ private:
 	afx_msg void OnShowHistogram();
 	afx_msg void OnUpdateShowHistogram(CCmdUI* pCmdUI);	
 private:
-	MinMax mmInitGeoRef(const BaseMap& bm);
-	bool fDomainEditable( const BaseMap& bmap) ;
-
-	MinMax mmMapBounds, mmSize;
 	int iListState; // with every change increases
 	double rDfltScale;
-	RowCol rcDfltOffset;
 	GeneralBar* gbHist;
 	bool fInCmdMsg;
 	FileName fnView;
+	NewDrawer *selectedDrawer;
 	DECLARE_DYNCREATE(MapCompositionDoc)
 	DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
 
-#endif // !defined(AFX_MAPCOMPOSITIONDOC_H__8A842674_E359_11D2_B73E_00A0C9D5342F__INCLUDED_)
+
+
+

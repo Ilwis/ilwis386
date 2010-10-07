@@ -39,12 +39,11 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Client\Headers\formelementspch.h"
-
+#include "Client\Mapwindow\Drawers\RootDrawer.h"
+#include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\OverviewMapPaneView.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\MapPaneView.h"
-#include "Client\Mapwindow\Drawers\MapDrawer.h"
-#include "Client\Mapwindow\Drawers\WMSMapDrawer.h"
 #include "Client\Mapwindow\AreaSelector.h"
 #include "Client\Mapwindow\DragRectTool.h"
 #include "Headers\constant.h"
@@ -254,11 +253,11 @@ void OverviewMapPaneView::OnLButtonDown(UINT nFlags, CPoint point)
 }
 
 bool OverviewMapPaneView::hasWMSDrawer() {
-	MapCompositionDoc* mcd = (MapCompositionDoc*)GetDocument();
+	/*MapCompositionDoc* mcd = (MapCompositionDoc*)GetDocument();
 	for (list<Drawer*>::iterator iter = mcd->dl.begin(); iter != mcd->dl.end(); ++iter) {
 		WMSMapDrawer *drw = dynamic_cast<WMSMapDrawer *>((*iter));
 		return drw != NULL;
-	}
+	}*/
 	return false;
 }
 

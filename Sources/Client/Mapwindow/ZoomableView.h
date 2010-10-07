@@ -141,11 +141,6 @@ public:
 	void ZoomOutPnt(zPoint);
 	void moveEyePoint(const CPoint& pnt, UINT message); 
 	void PanMove(CPoint pt);
-	bool wms(CRect rect, Case c=cNone);
-	void wmsDrawerState(WMSMapDrawer *drw, CRect rect, Case c);
-	bool wms(CPoint p, Case c);
-	bool wmsScrollbars();
-	bool wmsPan(int dif, bool vertical);
 
 
 	long iXpos, iYpos;

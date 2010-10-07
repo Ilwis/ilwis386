@@ -475,9 +475,8 @@ void MapWindow::InitSettings()
 
 		CRect rect, rectView;
 		GetWindowRect(&rect);
-	
 		MapPaneView* mpv = dynamic_cast<MapPaneView*>(pFirstView);
-		CSize sz, szPref = mpv->GetDocument()->szPrefSize;
+		CSize sz, szPref = CSize(0,0);
 		if (szPref.cx > 0 && szPref.cy > 0) {
 			mpv->GetClientRect(&rectView);
 			rect.right += szPref.cx - rectView.Width();
@@ -516,7 +515,7 @@ void MapWindow::InitialUpdate(CDocument* pDoc, BOOL bMakeVisible)
 	sz.cx = settings.iValue("XSize0");
 	sz.cy = settings.iValue("YSize0");
 	
-	CSize szPref = mcd->szPrefSize;
+	CSize szPref = CSize(0,0);
 	CRect rect;
 	GetWindowRect(&rect);
 	

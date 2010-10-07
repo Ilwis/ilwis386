@@ -1,39 +1,39 @@
 /***************************************************************
- ILWIS integrates image, vector and thematic data in one unique 
- and powerful package on the desktop. ILWIS delivers a wide 
- range of feautures including import/export, digitizing, editing, 
- analysis and display of data as well as production of 
- quality mapsinformation about the sensor mounting platform
- 
- Exclusive rights of use by 52°North Initiative for Geospatial 
- Open Source Software GmbH 2007, Germany
+ILWIS integrates image, vector and thematic data in one unique 
+and powerful package on the desktop. ILWIS delivers a wide 
+range of feautures including import/export, digitizing, editing, 
+analysis and display of data as well as production of 
+quality mapsinformation about the sensor mounting platform
 
- Copyright (C) 2007 by 52°North Initiative for Geospatial
- Open Source Software GmbH
+Exclusive rights of use by 52°North Initiative for Geospatial 
+Open Source Software GmbH 2007, Germany
 
- Author: Jan Hendrikse, Willem Nieuwenhuis,Wim Koolhoven 
- Bas Restsios, Martin Schouwenburg, Lichun Wang, Jelle Wind 
+Copyright (C) 2007 by 52°North Initiative for Geospatial
+Open Source Software GmbH
 
- Contact: Martin Schouwenburg; schouwenburg@itc.nl; 
- tel +31-534874371
+Author: Jan Hendrikse, Willem Nieuwenhuis,Wim Koolhoven 
+Bas Restsios, Martin Schouwenburg, Lichun Wang, Jelle Wind 
 
- This program is free software; you can redistribute it and/or
- modify it under the terms of the GNU General Public License
- version 2 as published by the Free Software Foundation.
+Contact: Martin Schouwenburg; schouwenburg@itc.nl; 
+tel +31-534874371
 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU General Public License for more details.
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+version 2 as published by the Free Software Foundation.
 
- You should have received a copy of the GNU General Public License
- along with this program (see gnu-gpl v2.txt); if not, write to
- the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- Boston, MA 02111-1307, USA or visit the web page of the Free
- Software Foundation, http://www.fsf.org.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
 
- Created on: 2007-02-8
- ***************************************************************/
+You should have received a copy of the GNU General Public License
+along with this program (see gnu-gpl v2.txt); if not, write to
+the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+Boston, MA 02111-1307, USA or visit the web page of the Free
+Software Foundation, http://www.fsf.org.
+
+Created on: 2007-02-8
+***************************************************************/
 // SimpleMapPaneView.h: interface for the SimpleMapPaneView class.
 //
 //////////////////////////////////////////////////////////////////////
@@ -69,23 +69,18 @@ public:
 	MapCompositionDoc* GetDocument();
 	virtual void OnInitialUpdate();     
 	virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
-  
+
 	double rScaleShow();	// returns 1:.... value
-  void Coord2RowCol(Coord crd, double& rRow, double &rCol);
-	Coord cConv(RowCol rc);
-	RowCol rcConv(Coord crd);
-  Coord crdPnt(zPoint pnt);
+	void Coord2RowCol(Coord crd, double& rRow, double &rCol);
+	Coord crdPnt(zPoint pnt);
 	zPoint pntPos(Coord crd);
-	zPoint pntPos(RowCol rc) const
-		{ return ZoomableView::pntPos(rc); }
-	zPoint pntPos(double rRow, double rCol) const
-		{ return ZoomableView::pntPos(rRow, rCol); }
+
 	InfoLine* info;
 	const Editor* editGet() const;
-  
+
 protected:  
 	virtual void OnDraw(CDC* pDC); 
-  BOOL OnEraseBkgnd(CDC* pDC);
+	BOOL OnEraseBkgnd(CDC* pDC);
 	void SetDirty();	
 	void SetDirtySilent();
 	void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
@@ -95,7 +90,6 @@ protected:
 	void OnMeasureDist();
 	void OnUpdateMeasureDist(CCmdUI* pCmdUI);
 	BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
-	MinMax mmBounds();
 	bool volatile fDirty;
 	bool volatile fRedrawing;
 	bool volatile fDrawStop;
@@ -117,13 +111,13 @@ private:
 	CCriticalSection csDcView;
 	CBitmap* bmView; // bmView contains our own bm and should be cleaned up at next cycle
 	HBITMAP hBmOld; // The old bitmap that popped out of SelectObject and after reinserting
-									// frees our own bm from GDI. Note that we prefer a handle and not a
-									// CBitmap* because the handles are permanent and the TempGDIObjects not
-  HMODULE hmodMsimg32;
-  typedef BOOL (WINAPI *AlphaBlendFunc)(HDC,int,int,int,int,HDC,int,int,int,int,BLENDFUNCTION);
-  AlphaBlendFunc alphablendfunc;
-  CDC * pDC;
-  
+	// frees our own bm from GDI. Note that we prefer a handle and not a
+	// CBitmap* because the handles are permanent and the TempGDIObjects not
+	HMODULE hmodMsimg32;
+	typedef BOOL (WINAPI *AlphaBlendFunc)(HDC,int,int,int,int,HDC,int,int,int,int,BLENDFUNCTION);
+	AlphaBlendFunc alphablendfunc;
+	CDC * pDC;
+
 	DECLARE_DYNCREATE(SimpleMapPaneView)
 	DECLARE_MESSAGE_MAP()
 };

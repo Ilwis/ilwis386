@@ -119,7 +119,6 @@ protected:
 	afx_msg void OnCreateRasMap();
 	afx_msg void OnCreateGeoRef();
 	afx_msg void OnCreateCoordSys();
-	afx_msg void OnCreateAnnText();
 	afx_msg void OnCreateSampleSet();
 	afx_msg void OnCreateSubMap();
 	afx_msg void OnUpdateEntireMap(CCmdUI* pCmdUI);

@@ -53,16 +53,10 @@ Created on: 2007-02-8
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\Positioner.h"
-#include "Client\Mapwindow\Drawers\BaseDrawer.h"
-#include "Client\Mapwindow\Drawers\Drawer.h"
-#include "Engine\SpatialReference\GR3D.H"
-#include "Client\Mapwindow\Drawers\Grid3DDrawer.h"
 #include "Headers\Hs\Drwforms.hs"
 #include "Client\FormElements\fldcol.h"
 #include "Client\FormElements\fldrpr.h"
 #include "Client\FormElements\fldcolor.h"
-#include "Client\Mapwindow\Drawers\BaseMapDrawer.h"
-#include "Client\Mapwindow\Drawers\MapDrawer.h"
 #include "Client\Mapwindow\LayerTreeItem.h"
 #include "Client\Mapwindow\MapPaneView.h"
 #include "Engine\Domain\dmclass.h"
@@ -483,13 +477,19 @@ void LayerTreeView::OnLButtonDown(UINT nFlags, CPoint point)
 	CTreeCtrl& tc = GetTreeCtrl();
 	UINT uFlags=0;	
 	HTREEITEM hti = tc.HitTest(point,&uFlags);
+	GetDocument()->setSelectedDrawer(0);
 	if(uFlags & TVHT_ONITEMSTATEICON)	
 		SwitchCheckBox(hti);
 	else {
 		CTreeView::OnLButtonDown(nFlags, point);
 		LayerTreeItem* lti = 0;
-		if (hti)
+		if (hti) {
 			lti = (LayerTreeItem*)tc.GetItemData(hti);
+			DrawerLayerTreeItem *drawerItem;
+			if ( (drawerItem = dynamic_cast<DrawerLayerTreeItem *>(lti))) {
+				GetDocument()->setSelectedDrawer(drawerItem->drw());
+			} 
+		}
 		if (lti)
 			lti->OnLButtonDown(nFlags, point);
 	}
@@ -694,14 +694,7 @@ BOOL LayerTreeView::OnDrop(COleDataObject* pDataObject, DROPEFFECT dropEffect, C
 			if (fnSys.fExist())
 				fn = fnSys;
 		}
-		Drawer* dr = mcd->drAppend(fn);
-		// configure new drawer (option: no show?)
-		if (dr) {
-			if (dr->Configure()) 
-				fOk = true;
-			else
-				dr->fAct = false;
-		}
+		mcd->drAppend(fn);
 	}
 	if (fOk)
 		mcd->UpdateAllViews(0,2);

@@ -39,15 +39,11 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Client\Headers\formelementspch.h"
-#include "Client\Mapwindow\Drawers\BaseDrawer.h"
-#include "Client\Mapwindow\Drawers\Drawer.h"
+#include "Client\Mapwindow\Drawers\RootDrawer.h"
+#include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\MapStatusBar.h"
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
+using namespace ILWIS;
 
 BEGIN_MESSAGE_MAP(MapStatusBar, CStatusBar)
 	//{{AFX_MSG_MAP(MapStatusBar)
@@ -195,14 +191,14 @@ void MapStatusBar::ResizeProgressCtrl()
 
 void MapStatusBar::UpdateProgressCtrl()
 {
-	Drawer* drw = const_cast<Drawer*>(dr); // dr is volatile
+	ComplexDrawer* drw = dynamic_cast<ComplexDrawer*>(dr); // dr is volatile
 	if (0 == drw)
 		return;
-	prctl.SetRange32(drw->riTranquilizer.iLo(), drw->riTranquilizer.iHi());
-	prctl.SetPos(drw->iTranquilizer);
+	prctl.SetRange32(0, drw->getDrawerCount());
+	prctl.SetPos(drw->getCurrentIndex());
 }
 
-void MapStatusBar::SetActiveDrawer(Drawer* drw)
+void MapStatusBar::SetActiveDrawer(NewDrawer* drw)
 { 
 	bool fWasActive = 0 != dr;
 	dr = drw; 

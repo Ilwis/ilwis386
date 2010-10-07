@@ -38,19 +38,10 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#if !defined(AFX_MAPSTATUSBAR_H__B048FAC6_4E59_11D4_B8D5_00A0C9D5342F__INCLUDED_)
-#define AFX_MAPSTATUSBAR_H__B048FAC6_4E59_11D4_B8D5_00A0C9D5342F__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-
-#undef IMPEXP
-#ifdef ILWISCLIENT
-#define IMPEXP __declspec(dllexport)
-#else
-#define IMPEXP __declspec(dllimport)
-#endif
+namespace ILWIS {
+	class NewDrawer;
+}
 
 class IMPEXP MapStatusBar: public CStatusBar  
 {
@@ -65,7 +56,7 @@ public:
 	void ShowCoord(const String&);
 	void ShowRelCoord(const String&);
 	void ShowLatLon(LatLon);
-	void SetActiveDrawer(Drawer* drw);
+	void SetActiveDrawer(ILWIS::NewDrawer* drw);
 	virtual void OnUpdateCmdUI(CFrameWnd*, BOOL);
 	//{{AFX_VIRTUAL(MapStatusBar)
 	//}}AFX_VIRTUAL
@@ -81,8 +72,8 @@ private:
 	bool fRowBeforeCol; // use row,col instead of col,row
 	int iRowCol, iCoord, iRelCoord, iLatLon;
 	CProgressCtrl prctl;
-	volatile Drawer* dr;
+	ILWIS::NewDrawer* dr;
 	DECLARE_MESSAGE_MAP()
 };
 
-#endif // !defined(AFX_MAPSTATUSBAR_H__B048FAC6_4E59_11D4_B8D5_00A0C9D5342F__INCLUDED_)
+
