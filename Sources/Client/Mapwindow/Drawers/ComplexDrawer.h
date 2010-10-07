@@ -62,12 +62,17 @@ class _export ComplexDrawer : public NewDrawer {
 		bool isSimple() const { return false;}
 		bool isDirty() const;
 		void setDirty(bool yesno);
-		
+		String getInfo(const Coord& crd) const;
+		//Tranquilizer getTranquilizer() { return trq; }
+		long getCurrentIndex() const;
+		void setCurrentIndex(long i);
 	protected:
 		vector<NewDrawer *> drawers;
 		DrawerMap postDrawers;
 		DrawerMap preDrawers;
 		DrawerMap drawersById;
+		//Tranquilizer trq;
+		long currentIndex; // for tranquilizer purposes;
 
 		int uiCode;
 		bool info;

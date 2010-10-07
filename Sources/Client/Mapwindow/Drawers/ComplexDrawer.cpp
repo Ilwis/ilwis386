@@ -44,6 +44,7 @@ void ComplexDrawer::init() {
 	itemTransparent = 0;
 	specialOptions = sdoNone;
 	dirty = true;
+	currentIndex = 0;
 }
 
 String ComplexDrawer::getType() const {
@@ -100,20 +101,27 @@ bool ComplexDrawer::draw(bool norecursion, const CoordBounds& cb) const{
 	if (!isActive())
 		return false;
 
+	long& count = (const_cast<ComplexDrawer *>(this))->currentIndex;
+	count = 0;
 	if ( preDrawers.size() > 0) {
 		for(map<String,NewDrawer *>::const_iterator cur = preDrawers.begin(); cur != preDrawers.end(); ++cur) {
+			++count;
 			NewDrawer *drw = (*cur).second;
 			if ( drw)
 				drw->draw(norecursion, cb);
 		}
 	}
+	count = 0;
 	if ( !norecursion) {
 		for(int i=0; i < drawers.size(); ++i) {
+			++count;
 			if ( drawers[i] && drawers[i]->isActive())
 				drawers[i]->draw(norecursion, cb);
 		}
 	}
+	count = 0;
 	if ( postDrawers.size() > 0) {
+		++count;
 		for(map<String,NewDrawer *>::const_iterator cur = postDrawers.begin(); cur != postDrawers.end(); ++cur) {
 			NewDrawer *drw = (*cur).second;
 			if ( drw)
@@ -237,6 +245,10 @@ bool ComplexDrawer::hasInfo() const {
 
 void ComplexDrawer::setInfo(bool yesno) {
 	info = yesno;
+}
+
+String ComplexDrawer::getInfo(const Coord& crd) const {
+	return "TO be Done";
 }
 
 NewDrawer *ComplexDrawer::getParentDrawer() const {
@@ -432,6 +444,14 @@ bool ComplexDrawer::isDirty() const {
 }
 void ComplexDrawer::setDirty(bool yesno) {
 	dirty = yesno;
+}
+
+long ComplexDrawer::getCurrentIndex() const{
+	return currentIndex;
+}
+void ComplexDrawer::setCurrentIndex(long i){
+	if ( i >= 0 && i < drawers.size())
+		currentIndex = i;	
 }
 
 //--------------------------------- UI ------------------------------------------------------------------------

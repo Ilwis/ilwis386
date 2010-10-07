@@ -41,6 +41,7 @@ namespace ILWIS {
 		virtual void setEditable(bool yesno) = 0;
 		virtual bool hasInfo() const = 0;
 		virtual void setInfo(bool yesno) = 0;
+		virtual String getInfo(const Coord& crd) const = 0;
 		virtual NewDrawer *getParentDrawer() const = 0;
 		virtual HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent)=0;
 		virtual double getTransparency() const = 0;
