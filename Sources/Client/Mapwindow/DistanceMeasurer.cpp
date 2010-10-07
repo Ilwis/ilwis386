@@ -72,7 +72,7 @@ DistanceMeasurer::DistanceMeasurer(SimpleMapPaneView* mappaneview)
   mpv(mappaneview) 
 {
 	SetCursor(zCursor("MeasureCursor"));
-	csy = mpv->GetDocument()->georef->cs();
+	csy = mpv->GetDocument()->rootDrawer->getCoordinateSystem();
   fDown = FALSE;
 }
 
