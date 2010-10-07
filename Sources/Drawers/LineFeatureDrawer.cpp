@@ -60,15 +60,17 @@ void LineFeatureDrawer::prepare(PreparationParameters *p){
 		cb = feature->cbBounds();
 		clear();
 		feature->getBoundaries(lines);
-		bool sameCsy = getRootDrawer()->getCoordinateSystem()->fEqual(*(getRootDrawer()->getCoordinateSystem().ptr()));
+		bool sameCsy = getRootDrawer()->getCoordinateSystem()->fEqual(*(csy.ptr()));
 		if ( !sameCsy ) {
+			cb = CoordBounds();
 			for(int j = 0; j < lines.size(); ++j) {
 				CoordinateSequence *seq = lines.at(j);
 		
 				for(int  i = 0; i < seq->size(); ++i) {
 					Coord cOld = seq->getAt(i);
-					Coord c = csy->cConv(getRootDrawer()->getCoordinateSystem(), Coord(cOld));
+					Coord c = getRootDrawer()->getCoordinateSystem()->cConv( csy, cOld);
 					c.z = cOld.z;
+					cb += c;
 					seq->setAt(c,i);
 				}
 			}
