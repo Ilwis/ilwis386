@@ -62,10 +62,14 @@
 
 class CartesianGraphDrawer;
 
+namespace ILWIS {
+	class AbstractMapDrawer;
+}
+
 class IMPEXP HistogramRGBGraphView: public GraphView   
 {
 public:
-	HistogramRGBGraphView(const Map& mpRed, const Map& mpGreen, const Map& mpBlue);
+	HistogramRGBGraphView(ILWIS::AbstractMapDrawer *dr);
 	virtual ~HistogramRGBGraphView();
 protected:
 	Map mp[3];

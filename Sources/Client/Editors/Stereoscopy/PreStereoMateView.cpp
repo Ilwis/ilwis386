@@ -129,7 +129,7 @@ void PreStereoMateView::SetDirty(Coord crd)
   Symbol smb;
   smb.smb = smbPlus;
 	smb.iSize = 15;
-  zPoint p = pntPos(crd.x+0.5, crd.y+0.5);
+  zPoint p = pntPos(Coord(crd.x+0.5, crd.y+0.5));
   // zPoint p = pntPos(rc);
   zRect rect(p,p);
   rect.top()   -= smb.iSize / 2 + 1;
@@ -176,33 +176,34 @@ void PreStereoMateView::SetEpipolarDocument(MakeEpipolarDocument * d)
 
 void PreStereoMateView::OnLButtonDown(UINT nFlags, CPoint point) 
 {
+	throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
 	SetFocus();
-	MapCompositionDoc* mcd = GetDocument();
-	if (mcd && mcd->mp.fValid())
-	{
-		CRect rctBounds = rctPos(mcd->mmBounds());
-		bool fInside = (0 != rctBounds.PtInRect(point));
-		if (fInside)
-		{
-			RowCol rc = rcPos(point);
-			// rc.Row += 1;
-			// rc.Col += 1;
-			if (med)
-			{
-				med->SetRowCol(rc);
-				int lHint = med->iGetHintFromState();
-				med->AdvanceSubState();
+	//MapCompositionDoc* mcd = GetDocument();
+	//if (mcd )
+	//{
+	//	CRect rctBounds = rctPos(mcd->mmBounds());
+	//	bool fInside = (0 != rctBounds.PtInRect(point));
+	//	if (fInside)
+	//	{
+	//		RowCol rc = rcPos(point);
+	//		// rc.Row += 1;
+	//		// rc.Col += 1;
+	//		if (med)
+	//		{
+	//			med->SetRowCol(rc);
+	//			int lHint = med->iGetHintFromState();
+	//			med->AdvanceSubState();
 
-				Coord crdOld (med->crdGetOldRC()); // Erase previous point (if any)
-				if (!crdOld.fUndef())
-					SetDirty(crdOld);
-				if (!rc.fUndef())
-					SetDirty(Coord(rc.Row, rc.Col));
+	//			Coord crdOld (med->crdGetOldRC()); // Erase previous point (if any)
+	//			if (!crdOld.fUndef())
+	//				SetDirty(crdOld);
+	//			if (!rc.fUndef())
+	//				SetDirty(Coord(rc.Row, rc.Col));
 
-				med->UpdateAllEpipolarViews(this, lHint);
-			}
-		}
-	}
+	//			med->UpdateAllEpipolarViews(this, lHint);
+	//		}
+	//	}
+	//}
 }
 
 void PreStereoMateView::drawElement(CDC* cdc, zPoint pnt, Symbol smb, String sDescription)
@@ -216,113 +217,115 @@ void PreStereoMateView::drawElement(CDC* cdc, zPoint pnt, Symbol smb, String sDe
 
 void PreStereoMateView::drawAllElements(CDC* cdc)
 {
+	throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
 	// For the time being, we still need a list of elements.
 	// However, this is retrieved on-the-fly from the MakeEpipolarDocument
-	list <Element> eList = med->ElementList();
+	//list <Element> eList = med->ElementList();
 
-	for (list <Element>::iterator eIterator = eList.begin(); eIterator != eList.end(); ++eIterator)
-	{
-		zPoint pnt (pntPos(eIterator->crd.x+0.5, eIterator->crd.y+0.5)); // Screen point for drawing the element
-		// zPoint pnt (pntPos(eIterator->rc)); // Screen point for drawing the element
-		if (fPointElementInCDC(pnt)) // if not in clipregion, no need to (re-)draw it
-		{
-			Symbol smb; // Symbol used for drawing the element
-			String sDescription = eIterator->sDescription; // Description of the element
-			switch (eIterator->iType)
-			{
-				case 0 : // fiducial
-					smb.smb = smbPlus;
-					smb.col = colFidMarks;
-					break;
-				case 1 : // pp
-					smb.smb = smbCross;
-					smb.col = colPrincPnts;
-					smb.iSize = 15;
-					break;
-				case 2 : // tpp
-					smb.smb = smbCross;
-					smb.col = colPrincPnts;
-					smb.iSize = 15;
-					break;
-				case 3 : // ofp
-					smb.smb = smbPlus;
-					smb.col = colScalePnts;
-					break;
-				case 4 : // upp
-					smb.smb = smbCross;
-					smb.col = colUserPrincPnts;
-					smb.iSize = 15;
-					break;
-			}
-			drawElement(cdc, pnt, smb, sDescription);
-		}
-	}
+	//for (list <Element>::iterator eIterator = eList.begin(); eIterator != eList.end(); ++eIterator)
+	//{
+	//	//zPoint pnt (pntPos(eIterator->crd.x+0.5, eIterator->crd.y+0.5)); // Screen point for drawing the element
+	//	// zPoint pnt (pntPos(eIterator->rc)); // Screen point for drawing the element
+	//	if (fPointElementInCDC(pnt)) // if not in clipregion, no need to (re-)draw it
+	//	{
+	//		Symbol smb; // Symbol used for drawing the element
+	//		String sDescription = eIterator->sDescription; // Description of the element
+	//		switch (eIterator->iType)
+	//		{
+	//			case 0 : // fiducial
+	//				smb.smb = smbPlus;
+	//				smb.col = colFidMarks;
+	//				break;
+	//			case 1 : // pp
+	//				smb.smb = smbCross;
+	//				smb.col = colPrincPnts;
+	//				smb.iSize = 15;
+	//				break;
+	//			case 2 : // tpp
+	//				smb.smb = smbCross;
+	//				smb.col = colPrincPnts;
+	//				smb.iSize = 15;
+	//				break;
+	//			case 3 : // ofp
+	//				smb.smb = smbPlus;
+	//				smb.col = colScalePnts;
+	//				break;
+	//			case 4 : // upp
+	//				smb.smb = smbCross;
+	//				smb.col = colUserPrincPnts;
+	//				smb.iSize = 15;
+	//				break;
+	//		}
+	//		drawElement(cdc, pnt, smb, sDescription);
+	//	}
+	//}
 }
 
 BOOL PreStereoMateView::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 {
-	bool fStop = false;
-	if (as) // only go to MapPaneView::OnSetCursor if needed (prevents flickering of cursor)
-		fStop = (TRUE == MapPaneView::OnSetCursor(pWnd, nHitTest, message)); // translate BOOL to bool
-	// if MapPaneView::OnSetCursor() returns TRUE,
-	// we shouldn't replace the cursor with our own (we may be in zoom or pan mode)
-	MapCompositionDoc* mcd = GetDocument(); // also check if we have a map, otherwise the fiducial cursor would appear
-	if (!fStop && (HTCLIENT == nHitTest) && (0 != med) && (0 != mcd) && (mcd->mp.fValid()))
-	{
-		MakeEpipolarDocument::iFormStateTP ifsState = med->ifsGetState();
-		int iSubState = med->iGetSubState();
-		HCURSOR curActive = 0;
-		switch (ifsState)
-		{
-			case MakeEpipolarDocument::ifsFIDUCIALS :
-				switch (iSubState)
-				{
-					case 0 :
-						curActive = curSetFiducial01;
-						break;
-					case 1 :
-						curActive = curSetFiducial02;
-						break;
-					case 2 :
-						curActive = curSetFiducial03;
-						break;
-					case 3 :
-						curActive = curSetFiducial04;
-						break;
-				}
-				break;
-			case MakeEpipolarDocument::ifsPP :
-				curActive = curSetPP;
-				break;
-			case MakeEpipolarDocument::ifsTPP :
-				curActive = curSetTPP;
-				break;
-			case MakeEpipolarDocument::ifsOFFFLIGHTPTS :
-				switch (iSubState)
-				{
-					case 0 :
-						curActive = curSetOFP01;
-						break;
-					case 1 :
-						curActive = curSetOFP02;
-						break;
-				}
-				break;
-		}
-		if ((HCURSOR)0 != curActive)
-		{
-			SetCursor(curActive);
-			return TRUE;
-		}
-		else
-			return FALSE; // we're not interested in setting a cursor: allow someone else to do so
-	}
-	else
-	{
-		if (!as)
-			SetCursor(curNormal); // otherwise the custom cursor stays too long (even in context menus etc)
-		return fStop?TRUE:FALSE; // translate bool to BOOL
-	}
+	throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
+	//bool fStop = false;
+	//if (as) // only go to MapPaneView::OnSetCursor if needed (prevents flickering of cursor)
+	//	fStop = (TRUE == MapPaneView::OnSetCursor(pWnd, nHitTest, message)); // translate BOOL to bool
+	//// if MapPaneView::OnSetCursor() returns TRUE,
+	//// we shouldn't replace the cursor with our own (we may be in zoom or pan mode)
+	//MapCompositionDoc* mcd = GetDocument(); // also check if we have a map, otherwise the fiducial cursor would appear
+	//if (!fStop && (HTCLIENT == nHitTest) && (0 != med) && (0 != mcd) && (mcd->mp.fValid()))
+	//{
+	//	MakeEpipolarDocument::iFormStateTP ifsState = med->ifsGetState();
+	//	int iSubState = med->iGetSubState();
+	//	HCURSOR curActive = 0;
+	//	switch (ifsState)
+	//	{
+	//		case MakeEpipolarDocument::ifsFIDUCIALS :
+	//			switch (iSubState)
+	//			{
+	//				case 0 :
+	//					curActive = curSetFiducial01;
+	//					break;
+	//				case 1 :
+	//					curActive = curSetFiducial02;
+	//					break;
+	//				case 2 :
+	//					curActive = curSetFiducial03;
+	//					break;
+	//				case 3 :
+	//					curActive = curSetFiducial04;
+	//					break;
+	//			}
+	//			break;
+	//		case MakeEpipolarDocument::ifsPP :
+	//			curActive = curSetPP;
+	//			break;
+	//		case MakeEpipolarDocument::ifsTPP :
+	//			curActive = curSetTPP;
+	//			break;
+	//		case MakeEpipolarDocument::ifsOFFFLIGHTPTS :
+	//			switch (iSubState)
+	//			{
+	//				case 0 :
+	//					curActive = curSetOFP01;
+	//					break;
+	//				case 1 :
+	//					curActive = curSetOFP02;
+	//					break;
+	//			}
+	//			break;
+	//	}
+	//	if ((HCURSOR)0 != curActive)
+	//	{
+	//		SetCursor(curActive);
+	//		return TRUE;
+	//	}
+	//	else
+	//		return FALSE; // we're not interested in setting a cursor: allow someone else to do so
+	//}
+	//else
+	//{
+	//	if (!as)
+	//		SetCursor(curNormal); // otherwise the custom cursor stays too long (even in context menus etc)
+	//	return fStop?TRUE:FALSE; // translate bool to BOOL
+	//}
 }
 
 #define sMen(ID) ILWSF("men",ID).scVal()

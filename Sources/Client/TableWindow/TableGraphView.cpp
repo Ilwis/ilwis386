@@ -53,7 +53,6 @@
 #include "Client\GraphWindow\GraphAxis.h"
 #include "Client\GraphWindow\GraphLayer.h"
 #include "Client\GraphWindow\GraphDrawer.h"
-#include "Client\Mapwindow\Drawers\BaseDrawer.h"
 #include "Headers\constant.h"
 #include "Client\Editors\Utils\GeneralBar.h"
 
@@ -418,7 +417,8 @@ bool TableGraphView::NewGraphLayer(bool fColX, const String& sColX, const String
 
 	bool fOk = true;
 	cgd->agl.push_back(gl);
-	gl->color	= BaseDrawer::clrPrimary(cgd->agl.iSize());
+	throw ErrorObject(String("TO DO %s %s", __LINE__, __FILE__));
+	//gl->color	= BaseDrawer::clrPrimary(cgd->agl.iSize());
 	if (fConfigLayer)
   	fOk = gl->fConfig();
 	return fOk;
@@ -429,7 +429,8 @@ bool TableGraphView::AddFormulaGraph(const String& sExpr, bool fConfigLayer)
 {
 	FormulaGraphLayer* gl = new FormulaGraphLayer(cgd, sExpr);
   cgd->agl.push_back(gl);
-	gl->color	= BaseDrawer::clrPrimary(cgd->agl.iSize());
+  throw ErrorObject(String("TO DO %s %s", __LINE__, __FILE__));
+	//gl->color	= BaseDrawer::clrPrimary(cgd->agl.iSize());
 	if (fConfigLayer)
 		return gl->fConfig();
 	else 
@@ -449,7 +450,8 @@ bool TableGraphView::AddLsfGraph(const String& sColX, const String& sColY, const
 
 	LsfGraphLayer* gl = new LsfGraphLayer(cgd, tbl, colX, colY, sFunc, iTerms); 
   cgd->agl.push_back(gl);
-	gl->color	= BaseDrawer::clrPrimary(cgd->agl.iSize());
+  throw ErrorObject(String("TO DO %s %s", __LINE__, __FILE__));
+	//gl->color	= BaseDrawer::clrPrimary(cgd->agl.iSize());
 	if (fConfigLayer)
 		return gl->fConfig();
 	else 
@@ -461,7 +463,8 @@ bool TableGraphView::AddSmvGraph(const SemiVariogram& smv, bool fConfigLayer)
 {
 	SmvGraphLayer* gl = new SmvGraphLayer(cgd, smv); 
   cgd->agl.push_back(gl);
-	gl->color	= BaseDrawer::clrPrimary(cgd->agl.iSize());
+  throw ErrorObject(String("TO DO %s %s", __LINE__, __FILE__));
+	//gl->color	= BaseDrawer::clrPrimary(cgd->agl.iSize());
 	if (fConfigLayer)
 		return gl->fConfig();
 	else 

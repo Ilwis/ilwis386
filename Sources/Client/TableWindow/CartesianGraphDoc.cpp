@@ -52,7 +52,6 @@
 #include "Client\FormElements\fldaggr.h"
 #include "Client\FormElements\fldsmv.h"
 #include "Client\FormElements\flddat.h"
-#include "Client\Mapwindow\Drawers\BaseDrawer.h"
 #include "Headers\Hs\Graph.hs"
 #include "Headers\Hs\Table.hs"
 #include "Headers\constant.h"
@@ -267,7 +266,8 @@ BOOL CartesianGraphDoc::OnNewDocument()
 	gl->fYAxisLeft = true;
   
 	cgd->agl.push_back(gl);
-	gl->smb.col = gl->line.clrLine() = gl->color = BaseDrawer::clrPrimary(cgd->agl.iSize());
+	throw ErrorObject(String("TO DO %s %s", __LINE__, __FILE__));
+	//gl->smb.col = gl->line.clrLine() = gl->color = BaseDrawer::clrPrimary(cgd->agl.iSize());
   gl->smb.iSize = 5;
 
   UpdateAllViews(0);
@@ -357,7 +357,8 @@ void CartesianGraphDoc::OnAddColumnGraph()
   // updating of axis ??
 	gl->fYAxisLeft = true;
 	cgd->agl.push_back(gl);
-	gl->smb.col = gl->line.clrLine() = gl->color	= BaseDrawer::clrPrimary(cgd->agl.iSize());
+	throw ErrorObject(String("TO DO %s %s", __LINE__, __FILE__));
+	//gl->smb.col = gl->line.clrLine() = gl->color	= BaseDrawer::clrPrimary(cgd->agl.iSize());
   gl->smb.iSize = 5;
   // config layer ??
 	SetModifiedFlag();
@@ -387,7 +388,8 @@ void CartesianGraphDoc::OnAddFormulaGraph()
     return;
 	FormulaGraphLayer* gl = new FormulaGraphLayer(cgd, frm.sExpr);
   cgd->agl.push_back(gl);
-	gl->line.clrLine() = gl->color = BaseDrawer::clrPrimary(cgd->agl.iSize());
+  throw ErrorObject(String("TO DO %s %s", __LINE__, __FILE__));
+	//gl->line.clrLine() = gl->color = BaseDrawer::clrPrimary(cgd->agl.iSize());
 	SetModifiedFlag();
   UpdateAllViews(0);
 }
@@ -463,7 +465,8 @@ void CartesianGraphDoc::OnAddLsfGraph()
 
 	LsfGraphLayer* gl = new LsfGraphLayer(cgd, tbl, colX, colY, *frm.sFunc, frm.iTerms); 
   cgd->agl.push_back(gl);
-	gl->line.clrLine() = gl->color = BaseDrawer::clrPrimary(cgd->agl.iSize());
+  throw ErrorObject(String("TO DO %s %s", __LINE__, __FILE__));
+	//gl->line.clrLine() = gl->color = BaseDrawer::clrPrimary(cgd->agl.iSize());
 	SetModifiedFlag();
   UpdateAllViews(0);
 }
@@ -488,7 +491,8 @@ void CartesianGraphDoc::OnAddSvmGraph()
 
 	SmvGraphLayer* gl = new SmvGraphLayer(cgd, frm.smv); 
   cgd->agl.push_back(gl);
-	gl->line.clrLine() = gl->color = BaseDrawer::clrPrimary(cgd->agl.iSize());
+  throw ErrorObject(String("TO DO %s %s", __LINE__, __FILE__));
+	//gl->line.clrLine() = gl->color = BaseDrawer::clrPrimary(cgd->agl.iSize());
 	SetModifiedFlag();
   UpdateAllViews(0);
 }

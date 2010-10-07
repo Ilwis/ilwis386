@@ -2571,10 +2571,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\Sources\Client\Mapwindow\ScaleBarSrvItem.cpp"
-					>
-				</File>
-				<File
 					RelativePath="..\..\Sources\Client\Mapwindow\SimpleMapPaneView.cpp"
 					>
 				</File>
@@ -2590,35 +2586,11 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\AnaglyphDrawer.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\AnnotationTextDrawer.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\AnnotationTextEditor.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\BaseDrawer.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\BaseMapDrawer.cpp"
-						>
-					</File>
-					<File
 						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\ComplexDrawer.cpp"
 						>
 					</File>
 					<File
 						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\ComplexDrawer.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\Drawer.cpp"
 						>
 					</File>
 					<File
@@ -2631,30 +2603,6 @@
 					</File>
 					<File
 						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\DrawerContext.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\GraticuleDrawer.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\Grid3DDrawer.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\GridDrawer.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\MapDrawer.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\MapListColorCompDrawer.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\MapListDrawer.cpp"
 						>
 					</File>
 					<File
@@ -2674,27 +2622,11 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\PointMapDrawer.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\PointMapDrawerForm.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\PolygonMapDrawer.cpp"
-						>
-					</File>
-					<File
 						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\RootDrawer.cpp"
 						>
 					</File>
 					<File
 						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\RootDrawer.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SegmentMapDrawer.cpp"
 						>
 					</File>
 					<File
@@ -2727,14 +2659,6 @@
 					</File>
 					<File
 						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\TextDrawer.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\WMSMapDrawer.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\WMSMapDrawer.h"
 						>
 					</File>
 					<File
@@ -4276,74 +4200,6 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\Sources\Client\Editors\Layout\LegendBlockDrawer.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\Layout\LegendBlockDrawer.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\Layout\LegendClassDrawer.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\Layout\LegendClassDrawer.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\Layout\LegendDrawer.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\Layout\LegendDrawer.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\Layout\LegendItemDrawer.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\Layout\LegendItemDrawer.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\Layout\LegendLayoutItem.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\Layout\LegendLayoutItem.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\Layout\LegendPointDrawers.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\Layout\LegendPointDrawers.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\Layout\LegendPolygonClassDrawer.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\Layout\LegendRasterClassDrawer.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\Layout\LegendSegmentClassDrawer.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\Layout\LegendValueDrawer.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\Layout\LegendValueDrawer.h"
-						>
-					</File>
-					<File
 						RelativePath="..\..\Sources\Client\Editors\Layout\MapBorderItem.cpp"
 						>
 					</File>
@@ -4768,30 +4624,6 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\Sources\Client\Editors\Georef\GeoRef3DDirectionPane.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\Georef\GeoRef3DDirectionPane.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\Georef\GeoRef3DDirectionTool.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\Georef\GeoRef3DDirectionTool.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\Georef\GeoRef3DEditor.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\Georef\GeoRef3DEditor.h"
-						>
-					</File>
-					<File
 						RelativePath="..\..\Sources\Client\Editors\Georef\GeoRefDoc.cpp"
 						>
 					</File>
@@ -4921,66 +4753,6 @@
 					</File>
 					<File
 						RelativePath="..\..\Sources\Client\Editors\Map\EditField.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\Map\PixelEditor.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\Map\PixelEditor.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\Map\PointEditor.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\Map\PointEditor.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\Map\PolygonEditor.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\Map\PolygonEditor.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\Map\SegmentEditor.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\Map\SegmentEditor.h"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="SampleSet"
-					>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\SampleSet\FSWindow.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\SampleSet\FSWindow.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\SampleSet\SampleSetEditor.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\SampleSet\SampleSetEditor.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\SampleSet\SampleStatWindow.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\SampleSet\SampleStatWindow.h"
 						>
 					</File>
 				</Filter>

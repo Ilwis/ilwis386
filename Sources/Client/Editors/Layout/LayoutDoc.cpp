@@ -62,7 +62,6 @@
 #include "Client\Editors\Layout\ScaleTextLayoutItem.h"
 #include "Client\Editors\Layout\ScaleBarLayoutItem.h"
 #include "Client\Editors\Layout\NorthArrowLayoutItem.h"
-#include "Client\Editors\Layout\LegendLayoutItem.h"
 #include "Client\Editors\Layout\PictureLayoutItem.h"
 #include "Client\Editors\Layout\MapBorderItem.h"
 #include "Client\Editors\Layout\BitmapLayoutItem.h"
@@ -331,8 +330,8 @@ void LayoutDoc::Serialize(CArchive& ar)
 				li = new ScaleBarLayoutItem(this);
 			else if (sType == "NorthArrow")
 				li = new NorthArrowLayoutItem(this);
-			else if (sType == "Legend")
-				li = new LegendLayoutItem(this);
+			/*else if (sType == "Legend")
+				li = new LegendLayoutItem(this);*/
 			else if (sType == "MapView") {
 				MapCompositionDoc* mcd = new MapCompositionDoc;
 				dtViews.AddDocument(mcd);

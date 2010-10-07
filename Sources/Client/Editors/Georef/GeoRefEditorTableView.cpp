@@ -54,7 +54,6 @@
 #include "Engine\Map\Segment\Seg.h"
 #include "Engine\Map\Polygon\POL.H"
 #include "Client\Mapwindow\Positioner.h"
-#include "Client\Mapwindow\Drawers\BaseDrawer.h"
 #include "Client\Editors\Editor.h"
 #include "Client\Editors\Utils\SYMBOL.H"
 #include "Client\Editors\Utils\sizecbar.h"

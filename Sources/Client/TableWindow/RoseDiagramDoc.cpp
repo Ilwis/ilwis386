@@ -51,7 +51,6 @@
 #include "Client\FormElements\fldtbl.h"
 #include "Client\FormElements\fldcol.h"
 #include "Client\FormElements\flddat.h"
-#include "Client\Mapwindow\Drawers\BaseDrawer.h"
 #include "Headers\Hs\Graph.hs"
 #include "Headers\Hs\Table.hs"
 #include "Headers\constant.h"
@@ -233,7 +232,8 @@ BOOL RoseDiagramDoc::OnNewDocument()
 	}
   
   rdd->agl.push_back(rdl);
-	rdl->color	= BaseDrawer::clrPrimary(rdd->agl.iSize());
+  throw ErrorObject(String("TO DO %s %s", __LINE__, __FILE__));
+	//rdl->color	= BaseDrawer::clrPrimary(rdd->agl.iSize());
 
   UpdateAllViews(0);
 	SetModifiedFlag();
@@ -294,7 +294,8 @@ void RoseDiagramDoc::OnAddGraph()
 
   RoseDiagramLayer* rdl = new RoseDiagramLayer(rdd, tbl, colX, colY);
 	rdd->agl.push_back(rdl);
-	rdl->line.clrLine() = rdl->color = BaseDrawer::clrPrimary(rdd->agl.iSize());
+	throw ErrorObject(String("TO DO %s %s", __LINE__, __FILE__));
+	//rdl->line.clrLine() = rdl->color = BaseDrawer::clrPrimary(rdd->agl.iSize());
   // config layer ??
 	SetModifiedFlag();
   UpdateAllViews(0);

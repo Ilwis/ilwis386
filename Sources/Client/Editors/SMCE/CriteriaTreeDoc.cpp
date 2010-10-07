@@ -54,14 +54,11 @@
 #include "Headers\messages.h" // for ILWM_EXECUTE
 #include "Client\Mapwindow\MapCompositionDoc.h" // for creating MapViews
 #include "Client\Base\IlwisDocTemplate.h"
-#include "Client\Mapwindow\Drawers\Drawer.h"
 #include "Engine\Base\DataObjects\ObjectStructure.h"
 
 #include "Client\Mapwindow\MapPaneView.h" // for MapPaneView
 
-#include "Client\Mapwindow\Drawers\BaseMapDrawer.h"
 #include "Engine\Map\Segment\Seg.h"
-#include "Client\Mapwindow\Drawers\SegmentMapDrawer.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // CriteriaTreeDoc
@@ -766,48 +763,47 @@ class MapCompositionDocEx: public MapCompositionDoc
 public:
 	void ApplyMapViewTemplate(const MapView& mapview)
 	{
-		try {
-			if (!mapview.fValid())
-				return;
-
-			int iLayers = mapview->iReadElement("MapView", "Layers");
-			int iStartLayer = 1;
-			String sType;
-			// skip first layer if MapView has > 1 layer and the first is a raster map layer
-			if (iLayers > 1)
-			{
-				mapview->ReadElement("Layer1", "Type", sType);
-				if ("MapDrawer" == sType)
-					++iStartLayer;
-			}
-			for (int i = iStartLayer; i <= iLayers; ++i) {
-				String sSection("Layer%i", i);
-				mapview->ReadElement(sSection.scVal(), "Type", sType);
-				Drawer* dw = drDrawer(mapview, sSection.scVal());
-				if (0 == dw) // protection against faulty .mpv files
-					continue;
-				dw->Setup();
-				if ("MapDrawer" == sType)
-				{
-					if (fRaster)
-						dl.push_back(dw);
-					else
-						dl.push_front(dw);
-					fRaster = true;
-					FileName fnMap;
-					mapview->ReadElement(sSection.scVal(), "Map", fnMap);
-					Map rasmap(fnMap);
-					if (rasmap->gr() != georef) 
-						SetGeoRef(rasmap->gr());
-				}
-				else
-					dl.push_back(dw);
-			}
-		}
-		catch (ErrorObject& err) 
-		{
-			err.Show();
-		}
+		//try {
+		//	if (!mapview.fValid())
+		//		return;
+			throw ErrorObject("TO DO");
+		//	int iLayers = mapview->iReadElement("MapView", "Layers");
+		//	int iStartLayer = 1;
+		//	String sType;
+		//	// skip first layer if MapView has > 1 layer and the first is a raster map layer
+		//	if (iLayers > 1)
+		//	{
+		//		mapview->ReadElement("Layer1", "Type", sType);
+		//		if ("MapDrawer" == sType)
+		//			++iStartLayer;
+		//	}
+		//	for (int i = iStartLayer; i <= iLayers; ++i) {
+		//		String sSection("Layer%i", i);
+		//		mapview->ReadElement(sSection.scVal(), "Type", sType);
+		//		NewDrawer* dw = drDrawer(mapview, sSection.scVal());
+		//		if (0 == dw) // protection against faulty .mpv files
+		//			continue;
+		//		if ("MapDrawer" == sType)
+		//		{
+		//			if (fRaster)
+		//				dl.push_back(dw);
+		//			else
+		//				dl.push_front(dw);
+		//			fRaster = true;
+		//			FileName fnMap;
+		//			mapview->ReadElement(sSection.scVal(), "Map", fnMap);
+		//			Map rasmap(fnMap);
+		//			if (rasmap->gr() != georef) 
+		//				SetGeoRef(rasmap->gr());
+		//		}
+		//		else
+		//			dl.push_back(dw);
+		//	}
+		//}
+		//catch (ErrorObject& err) 
+		//{
+		//	err.Show();
+		//}
 	}
 };
 
@@ -885,9 +881,8 @@ public:
 			
 			for (unsigned int i = 1; i < m_vfnMaps.size(); ++i) // any other maps specified?
 			{
-				Drawer* dr = mcdex->drAppend(m_vfnMaps[i]);
-				if (dr)	// could be null
-					dr->Configure(false);
+				mcdex->drAppend(m_vfnMaps[i]);
+			
 			}
 
 			if (m_fUseMapViewTemplate)
@@ -895,27 +890,26 @@ public:
 
 			for (unsigned int i = 0; i < m_vfnInvisibleMaps.size(); ++i) // these maps should be added as layers, but switched off.
 			{
-				Drawer* dr = mcdex->drAppend(m_vfnInvisibleMaps[i]);
+				ILWIS::NewDrawer* dr = mcdex->drAppend(m_vfnInvisibleMaps[i]);
 				if (dr)	// could be null
 				{
-					dr->Configure(false);
-					dr->fAct = false;
+					dr->setActive(false);
 				}
 			}
-
-			for (list<Drawer*>::iterator it = mcdex->dl.begin(); it != mcdex->dl.end(); ++it)
-			{
-				SegmentMapDrawer* smd = dynamic_cast<SegmentMapDrawer*>(*it);
-				if (smd)
-				{
-					ValueRange vr = m_vstrvrCustomValueRanges[smd->basemap()->fnObj.sFileExt()];
-					if (vr.fValid()) // thicker lines, custom legend
-					{
-						smd->SetWidth(smd->iGetWidth() * 2);
-						smd->SetCustomLegendValueRange(vr);
-					}
-				}
-			}
+			throw ErrorObject("TO DO");
+			//for (list<Drawer*>::iterator it = mcdex->dl.begin(); it != mcdex->dl.end(); ++it)
+			//{
+			//	AbstractMapDrawer* smd = dynamic_cast<AbstractMapDrawer*>(*it);
+			//	if (smd)
+			//	{
+			//		ValueRange vr = m_vstrvrCustomValueRanges[smd->basemap()->fnObj.sFileExt()];
+			//		if (vr.fValid()) // thicker lines, custom legend
+			//		{
+			//			smd->SetWidth(smd->iGetWidth() * 2);
+			//			smd->SetCustomLegendValueRange(vr);
+			//		}
+			//	}
+			//}
 
 			CFrameWnd* pFrame;
 			if (m_fSmceMapWindow)

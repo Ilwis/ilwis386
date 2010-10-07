@@ -81,10 +81,6 @@
 #include "Client\FormElements\fldrpr.h"
 #include "Client\Mapwindow\Positioner.h"
 #include "Client\Mapwindow\MapPaneView.h"
-#include "Client\Mapwindow\Drawers\BaseDrawer.h"
-#include "Client\Mapwindow\Drawers\Drawer.h"
-#include "Client\Mapwindow\Drawers\BaseMapDrawer.h"
-#include "Client\Mapwindow\Drawers\MapDrawer.h"
 #include "Client\Editors\Representation\RprEditForms.h"
 #include "Client\Base\Framewin.h"
 

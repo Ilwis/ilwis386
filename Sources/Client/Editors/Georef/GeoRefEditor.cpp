@@ -1,50 +1,51 @@
 /***************************************************************
- ILWIS integrates image, vector and thematic data in one unique 
- and powerful package on the desktop. ILWIS delivers a wide 
- range of feautures including import/export, digitizing, editing, 
- analysis and display of data as well as production of 
- quality mapsinformation about the sensor mounting platform
- 
- Exclusive rights of use by 52°North Initiative for Geospatial 
- Open Source Software GmbH 2007, Germany
+ILWIS integrates image, vector and thematic data in one unique 
+and powerful package on the desktop. ILWIS delivers a wide 
+range of feautures including import/export, digitizing, editing, 
+analysis and display of data as well as production of 
+quality mapsinformation about the sensor mounting platform
 
- Copyright (C) 2007 by 52°North Initiative for Geospatial
- Open Source Software GmbH
+Exclusive rights of use by 52°North Initiative for Geospatial 
+Open Source Software GmbH 2007, Germany
 
- Author: Jan Hendrikse, Willem Nieuwenhuis,Wim Koolhoven 
- Bas Restsios, Martin Schouwenburg, Lichun Wang, Jelle Wind 
+Copyright (C) 2007 by 52°North Initiative for Geospatial
+Open Source Software GmbH
 
- Contact: Martin Schouwenburg; schouwenburg@itc.nl; 
- tel +31-534874371
+Author: Jan Hendrikse, Willem Nieuwenhuis,Wim Koolhoven 
+Bas Restsios, Martin Schouwenburg, Lichun Wang, Jelle Wind 
 
- This program is free software; you can redistribute it and/or
- modify it under the terms of the GNU General Public License
- version 2 as published by the Free Software Foundation.
+Contact: Martin Schouwenburg; schouwenburg@itc.nl; 
+tel +31-534874371
 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU General Public License for more details.
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+version 2 as published by the Free Software Foundation.
 
- You should have received a copy of the GNU General Public License
- along with this program (see gnu-gpl v2.txt); if not, write to
- the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- Boston, MA 02111-1307, USA or visit the web page of the Free
- Software Foundation, http://www.fsf.org.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
 
- Created on: 2007-02-8
- ***************************************************************/
+You should have received a copy of the GNU General Public License
+along with this program (see gnu-gpl v2.txt); if not, write to
+the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+Boston, MA 02111-1307, USA or visit the web page of the Free
+Software Foundation, http://www.fsf.org.
+
+Created on: 2007-02-8
+***************************************************************/
 // GeoRefEditor.cpp: implementation of the GeoRefEditor class.
 //
 //////////////////////////////////////////////////////////////////////
 
 #include "Client\Headers\formelementspch.h"
+#include "Client\Mapwindow\Drawers\RootDrawer.h"
+#include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapPaneView.h"
 #include "Engine\Map\Segment\Seg.h"
 #include "Engine\Map\Polygon\POL.H"
 #include "Client\Mapwindow\Positioner.h"
-#include "Client\Mapwindow\Drawers\BaseDrawer.h"
 #include "Client\Editors\Editor.h"
 #include "Client\Editors\Utils\SYMBOL.H"
 #include "Client\ilwis.h"
@@ -58,8 +59,6 @@
 #include "Client\TableWindow\TablePaneView.h"
 #include "Engine\Map\Segment\Seg.h"
 #include "Engine\Map\Polygon\POL.H"
-#include "Client\Mapwindow\Positioner.h"
-#include "Client\Mapwindow\Drawers\BaseDrawer.h"
 #include "Client\Editors\Utils\SYMBOL.H"
 #include "Client\Editors\Utils\sizecbar.h"
 #include "Client\Editors\Georef\GeoRefEditorTableView.h"
@@ -81,16 +80,11 @@
 #include "Client\MainWindow\Catalog\CatalogDocument.h"
 #include "Engine\Map\Mapview.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
-#include "Client\Mapwindow\Drawers\Drawer.h"
 #include "Client\Editors\Georef\EditFiducialMarksForm.h"
 #include "Client\Editors\Digitizer\DIGITIZR.H"
 
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
+using namespace ILWIS;
 
 
 
@@ -111,79 +105,79 @@ END_MESSAGE_MAP()
 GeoRefEditor::GeoRefEditor(MapPaneView* mpvw, GeoRef georef)
 : TiePointEditor(mpvw), atpf(0), efmf(0), grf(georef), fInCalc(false), rSigma(0)
 {
-  grc = georef->pgCTP();
-  if (0 == grc) {
-    mpv->MessageBox(SGRErrGrfNotEditable.sVal(),SGRErrGrfEditor.sVal(),MB_OK|MB_ICONSTOP);
-    fOk = false;
-    return;
-  }
-  else
-	  fLatLon = ( 0 != grc->cs()->pcsLatLon());
+	grc = georef->pgCTP();
+	if (0 == grc) {
+		mpv->MessageBox(SGRErrGrfNotEditable.sVal(),SGRErrGrfEditor.sVal(),MB_OK|MB_ICONSTOP);
+		fOk = false;
+		return;
+	}
+	else
+		fLatLon = ( 0 != grc->cs()->pcsLatLon());
 
 	MapCompositionDoc* mcd = mpv->GetDocument();
-  for (list<Drawer*>::iterator iter = mcd->dl.begin(); iter != mcd->dl.end(); ++iter) 
+	for(int i = 0; i < mcd->rootDrawer->getDrawerCount(); ++i)
 	{
-		Drawer* dr = *iter;
-    FileName fn = dr->sName();
-    if (fn.sExt == ".mpr" || fn.sExt == ".mpl") {
-      grc->fnBackgroundMap = fn;
-      break;
-    }  
+		AbstractMapDrawer* dr = CMAPDRW(mcd->rootDrawer, i);
+		FileName fn = dr->getName();
+		if (fn.sExt == ".mpr" || fn.sExt == ".mpl") {
+			grc->fnBackgroundMap = fn;
+			break;
+		}  
 	}
 
-  GeoRefDirectLinear* grdl = grc->pgDirectLinear();
-  if (grdl) 
-    mapDTM = grdl->mapDTM; 
-  GeoRefOrthoPhoto* grop = grc->pgOrthoPhoto();
-  if (grop)
-    mapDTM = grop->mapDTM;
+	GeoRefDirectLinear* grdl = grc->pgDirectLinear();
+	if (grdl) 
+		mapDTM = grdl->mapDTM; 
+	GeoRefOrthoPhoto* grop = grc->pgOrthoPhoto();
+	if (grop)
+		mapDTM = grop->mapDTM;
 	GeoRefParallelProjective* grpp = grc->pgParallelProjective();
 	if (grpp)
-    mapDTM = grpp->mapDTM;
+		mapDTM = grpp->mapDTM;
 
-  if (mapDTM.fValid()) {
-    DomainValueRangeStruct dvrsZ(-99999,99999,0.01);
-    colZdem = grc->tbl()->col("Z_dtm");
-    if (!colZdem.fValid())
-      colZdem = grc->tbl()->colNew("Z_dtm", dvrsZ);
+	if (mapDTM.fValid()) {
+		DomainValueRangeStruct dvrsZ(-99999,99999,0.01);
+		colZdem = grc->tbl()->col("Z_dtm");
+		if (!colZdem.fValid())
+			colZdem = grc->tbl()->colNew("Z_dtm", dvrsZ);
 		colZdem->sDescription = "Terrain Elevation (DTM height)";
-    colZdem->SetReadOnly();
-	  colZdem->SetOwnedByTable(true);
-  }
-  DomainValueRangeStruct dvrsRes(-9999,9999,0.01);
-  colDRow = grc->tbl()->colNew("DRow", dvrsRes);
-  colDCol = grc->tbl()->colNew("DCol", dvrsRes);
-  colDRow->SetReadOnly();
-  colDRow->SetOwnedByTable(true);
-  colDCol->SetReadOnly();
-  colDCol->SetOwnedByTable(true);
+		colZdem->SetReadOnly();
+		colZdem->SetOwnedByTable(true);
+	}
+	DomainValueRangeStruct dvrsRes(-9999,9999,0.01);
+	colDRow = grc->tbl()->colNew("DRow", dvrsRes);
+	colDCol = grc->tbl()->colNew("DCol", dvrsRes);
+	colDRow->SetReadOnly();
+	colDRow->SetOwnedByTable(true);
+	colDCol->SetReadOnly();
+	colDCol->SetOwnedByTable(true);
 	if (grdl || grpp) {
-    colZdiff = grc->tbl()->colNew("Z_diff", dvrsRes);
+		colZdiff = grc->tbl()->colNew("Z_diff", dvrsRes);
 		colZdiff->SetReadOnly();
-	  colZdiff->SetOwnedByTable(true);
+		colZdiff->SetOwnedByTable(true);
 		colZdiff->sDescription = "Vertical Distance from Trend Plane";
-  }
-  CMenu men;
+	}
+	CMenu men;
 	men.CreateMenu();
-  addmen(ID_FILE_PRINT);
-  addmen(ID_CONFIGURE);
-  men.AppendMenu(MF_SEPARATOR);
+	addmen(ID_FILE_PRINT);
+	addmen(ID_CONFIGURE);
+	men.AppendMenu(MF_SEPARATOR);
 	addmen(ID_EXITEDITOR);
 	hmenFile = men.GetSafeHmenu();
 	men.Detach();
 
 	men.CreateMenu();
-  addmen(ID_CUT  );
-  addmen(ID_COPY );
-  addmen(ID_PASTE);
-  addmen(ID_CLEAR);
-  men.AppendMenu(MF_SEPARATOR);
-  addmen(ID_EDITGRFADDPNT);
-  addmen(ID_EDITGRFDELPNT);
-  if (grc->pgCTPplanar())
-    addmen(ID_EDITGRFTRANSF)
-  else if (grc->pgOrthoPhoto())
-    addmen(ID_EDITGRFFIDMARKS);
+	addmen(ID_CUT  );
+	addmen(ID_COPY );
+	addmen(ID_PASTE);
+	addmen(ID_CLEAR);
+	men.AppendMenu(MF_SEPARATOR);
+	addmen(ID_EDITGRFADDPNT);
+	addmen(ID_EDITGRFDELPNT);
+	if (grc->pgCTPplanar())
+		addmen(ID_EDITGRFTRANSF)
+	else if (grc->pgOrthoPhoto())
+	addmen(ID_EDITGRFFIDMARKS);
 	hmenEdit = men.GetSafeHmenu();
 	men.Detach();
 	UpdateMenu();
@@ -191,8 +185,8 @@ GeoRefEditor::GeoRefEditor(MapPaneView* mpvw, GeoRef georef)
 	MapWindow* mw = mpv->mwParent();
 	DataWindow* dw = mpv->dwParent();
 	if (0 == dw) {
-    fOk = false;
-    return;
+		fOk = false;
+		return;
 	}
 
 	gretBar.Create(mpv->GetParentFrame(), this);
@@ -205,7 +199,7 @@ GeoRefEditor::GeoRefEditor(MapPaneView* mpvw, GeoRef georef)
 	CWindowDC dc(CWnd::GetDesktopWindow());
 	TEXTMETRIC tm;
 	dc.GetTextMetrics(&tm);
-  int iHeight = tm.tmHeight * 8;
+	int iHeight = tm.tmHeight * 8;
 	int iWidth = tm.tmAveCharWidth * 20;
 	if (grdl != 0 || grop != 0 || grpp != 0) //extra text for georef dirlin, orthoph and parall
 		iWidth *= 5;
@@ -253,7 +247,7 @@ GeoRefEditor::GeoRefEditor(MapPaneView* mpvw, GeoRef georef)
 	ai[0] = ID_EDITGRFTRANSF;
 	ai[1] = ID_SEPARATOR;
 	bbTxt.SetButtons(ai,2);
-//	bbTxt.SetButtonInfo(0, 201,	TBBS_BUTTON, iWidth);
+	//	bbTxt.SetButtonInfo(0, 201,	TBBS_BUTTON, iWidth);
 	iHeight = tm.tmHeight;
 	bbTxt.GetItemRect(0, &rect);
 	bbTxt.SetButtonInfo(1, 201,	TBBS_SEPARATOR, iWidth - rect.Width());
@@ -268,8 +262,8 @@ GeoRefEditor::GeoRefEditor(MapPaneView* mpvw, GeoRef georef)
 	edTxt.SetFont(&fnt);
 
 	// hide scale bar
-  if (mw)
-	  mw->ShowControlBar(&mw->barScale,FALSE,FALSE);
+	if (mw)
+		mw->ShowControlBar(&mw->barScale,FALSE,FALSE);
 
 	dw->RecalcLayout();
 	dw->bbDataWindow.GetWindowRect(&rect);
@@ -279,51 +273,51 @@ GeoRefEditor::GeoRefEditor(MapPaneView* mpvw, GeoRef georef)
 	dw->DockControlBar(&bbTxt,AFX_IDW_DOCKBAR_TOP,rect);
 
 	dw->RecalcLayout();
-  Calc();
+	Calc();
 
-  htpTopic = htpGeoRefEditor;
+	htpTopic = htpGeoRefEditor;
 	sHelpKeywords = "Georeference tiepoints editor";
 
-  if (grc->pgOrthoPhoto())
-	  dw->PostMessage(WM_COMMAND, ID_EDITGRFFIDMARKS, 0);
+	if (grc->pgOrthoPhoto())
+		dw->PostMessage(WM_COMMAND, ID_EDITGRFFIDMARKS, 0);
 }
 
 GeoRefEditor::~GeoRefEditor()
 {
-  grc->Store();
-/*
+	grc->Store();
+	/*
 	CReBar& rebar = mpv->mwParent()->rebar;
 	CReBarCtrl& rbc = rebar.GetReBarCtrl();
 	int iBand = rbc.IDToIndex(ID_EDITGRFTRANSF);
 	rbc.DeleteBand(iBand);
 	iBand = rbc.IDToIndex(1000);
 	rbc.DeleteBand(iBand);
-*/
+	*/
 }
 
 bool GeoRefEditor::OnContextMenu(CWnd* pWnd, CPoint point)
 {
-  CMenu men, menSub;
+	CMenu men, menSub;
 	men.CreatePopupMenu();
 	addmen(ID_NORMAL);
 	addmen(ID_ZOOMIN);
 	addmen(ID_ZOOMOUT);
 	addmen(ID_PANAREA);
-  men.AppendMenu(MF_SEPARATOR);
-  addmen(ID_EDITGRFADDPNT);
-  addmen(ID_EDITGRFDELPNT);
-  if (grc->pgCTPplanar())
-    addmen(ID_EDITGRFTRANSF)
-  else if (grc->pgOrthoPhoto())
-    addmen(ID_EDITGRFFIDMARKS);
-  men.AppendMenu(MF_SEPARATOR);
-  addmen(ID_CONFIGURE);
-  addmen(ID_EXITEDITOR);
-  menSub.CreateMenu();
-  men.TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON, point.x, point.y, pWnd);
+	men.AppendMenu(MF_SEPARATOR);
+	addmen(ID_EDITGRFADDPNT);
+	addmen(ID_EDITGRFDELPNT);
+	if (grc->pgCTPplanar())
+		addmen(ID_EDITGRFTRANSF)
+	else if (grc->pgOrthoPhoto())
+	addmen(ID_EDITGRFFIDMARKS);
+	men.AppendMenu(MF_SEPARATOR);
+	addmen(ID_CONFIGURE);
+	addmen(ID_EXITEDITOR);
+	menSub.CreateMenu();
+	men.TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON, point.x, point.y, pWnd);
 	return true;
 }
-																									 
+
 
 
 IlwisObject GeoRefEditor::obj() const
@@ -338,24 +332,24 @@ zIcon GeoRefEditor::icon() const
 
 String GeoRefEditor::sTitle() const
 {
-  String s(SGRTitleGrfEditor_s.sVal(), grf->sName());
+	String s(SGRTitleGrfEditor_s.sVal(), grf->sName());
 	return s;
 }
 
 int GeoRefEditor::draw(CDC* cdc, zRect rect, Positioner* psn, volatile bool* fDrawStop)
 {
 	cdc->SetTextAlign(TA_LEFT|TA_TOP); //	default
-  cdc->SetBkMode(TRANSPARENT);
-  MinMax mm = psn->mmSize();
-  for (long r = 1; r <= grc->iNr(); ++r) {
+	cdc->SetBkMode(TRANSPARENT);
+	MinMax mm = psn->mmSize();
+	for (long r = 1; r <= grc->iNr(); ++r) {
 		Color clr;
 		if (grc->fActive(r))
 		{
 			if (rSigma <= 0)
 				clr = colActive;
 			else {
-	      double rRow = colDRow->rValue(r);
-		    double rCol = colDCol->rValue(r);			
+				double rRow = colDRow->rValue(r);
+				double rCol = colDCol->rValue(r);			
 				double rErr = sqrt(rRow * rRow + rCol * rCol);
 				if (rErr < 1.2 * rSigma)
 					clr = colActGood;
@@ -367,8 +361,8 @@ int GeoRefEditor::draw(CDC* cdc, zRect rect, Positioner* psn, volatile bool* fDr
 		}
 		else
 			clr = colPassive;
-    cdc->SetTextColor(clr);
-    smb.col = clr;
+		cdc->SetTextColor(clr);
+		smb.col = clr;
 		zPoint pnt;
 		if (!grc->fSubPixelPrecision)
 		{
@@ -380,88 +374,88 @@ int GeoRefEditor::draw(CDC* cdc, zRect rect, Positioner* psn, volatile bool* fDr
 			Coord crdRC = grc->crdRC(r);
 			pnt = psn->pntPos(crdRC.x-0.5,crdRC.y-0.5);
 		}
-    zPoint pntText = smb.pntText(cdc, pnt);
-    String s("%li", r);
-    cdc->TextOut(pntText.x,pntText.y,s.sVal());
-    smb.drawSmb(cdc, 0, pnt);
-  }
+		zPoint pntText = smb.pntText(cdc, pnt);
+		String s("%li", r);
+		cdc->TextOut(pntText.x,pntText.y,s.sVal());
+		smb.drawSmb(cdc, 0, pnt);
+	}
 	if (efmf) {
 		efmf->draw(cdc, rect, psn);
 		efmf->drawPrincPoint(cdc, rect, psn);
-		}
+	}
 	return 0;
 }
 
 class AddTiePointForm: public FormWithDest
 {
 public: 
-  AddTiePointForm(CWnd* wPar, GeoRefEditor* gre, RowCol rcDflt, Coord crdRCDflt, 
-									Coord crdDflt, int iNr, bool fLatLong)  
-  : FormWithDest(wPar, SGRTitleAddTiePoint),
-    edit(gre), rc(rcDflt), crdRC(crdRCDflt), crd(crdDflt), frDTMheight(0)
-  {
-    String s(SGRRemAddTiepointNr_i.sVal(), iNr);
-    StaticText* st = new StaticText(root, s);
-    st->SetIndependentPos();
+	AddTiePointForm(CWnd* wPar, GeoRefEditor* gre, RowCol rcDflt, Coord crdRCDflt, 
+		Coord crdDflt, int iNr, bool fLatLong)  
+		: FormWithDest(wPar, SGRTitleAddTiePoint),
+		edit(gre), rc(rcDflt), crdRC(crdRCDflt), crd(crdDflt), frDTMheight(0)
+	{
+		String s(SGRRemAddTiepointNr_i.sVal(), iNr);
+		StaticText* st = new StaticText(root, s);
+		st->SetIndependentPos();
 		if (!gre->grc->fHasSubpixelPrecision())
 			new FieldRowCol(root, SGRUiRowCol, &rc);
 		else
 			new FieldCoord(root, SGRUiRowCol, &crdRC);
-	//edit->fLatLon = ( 0 != edit->grc->cs()->pcsLatLon());
+		//edit->fLatLon = ( 0 != edit->grc->cs()->pcsLatLon());
 		if (!fLatLong)
 			fldCrd = new FieldCoord(root, SGRUiXY, &crd);
 		else {
 			ll = edit->grc->cs()->llConv(crd);
 			fldLL = new FieldLatLon(root, SGRUiLatLon, &ll);
 		}
-    fZ = false;
-    rZ = rUNDEF;
-    if (edit->mapDTM.fValid()) {
-      CheckBox* cb = new CheckBox(root, SGRUiZ, &fZ);
-      frDTMheight = new FieldReal(cb, "", &rZ);
-    }
-    SetMenHelpTopic(htpGrfEditAddPoint);
-    edit->atpf = this;
-    create();
-  }
-  ~AddTiePointForm() {
-    edit->atpf = 0;
-  }
-  void SetCoord(Coord c) {
+		fZ = false;
+		rZ = rUNDEF;
+		if (edit->mapDTM.fValid()) {
+			CheckBox* cb = new CheckBox(root, SGRUiZ, &fZ);
+			frDTMheight = new FieldReal(cb, "", &rZ);
+		}
+		SetMenHelpTopic(htpGrfEditAddPoint);
+		edit->atpf = this;
+		create();
+	}
+	~AddTiePointForm() {
+		edit->atpf = 0;
+	}
+	void SetCoord(Coord c) {
 		if (edit->fLatLon) {
 			LatLon ll = edit->grc->cs()->llConv(c);
 			fldLL->SetVal(ll);
 		}
 		else
 			fldCrd->SetVal(c);
-    if (frDTMheight) {
-      double rZ = edit->mapDTM->rValue(c);
-      frDTMheight->SetVal(rZ);
-    }
-  }  /*
-  void SetLatLon(const LatLon ll) {
-    fldLL->SetVal(ll);
-	Coord c = edit->grc->cs()->cConv(ll);
-    if (frDTMheight) {
-      double rZ = edit->mapDTM->rValue(c);
-      frDTMheight->SetVal(rZ);
-    }
-  }  */
-  FormEntry* feDefaultFocus()
-  {
-    FormEntry* fe = FormWithDest::feDefaultFocus();
-    if (fe)
-      return fe;
-    else {
+		if (frDTMheight) {
+			double rZ = edit->mapDTM->rValue(c);
+			frDTMheight->SetVal(rZ);
+		}
+	}  /*
+	   void SetLatLon(const LatLon ll) {
+	   fldLL->SetVal(ll);
+	   Coord c = edit->grc->cs()->cConv(ll);
+	   if (frDTMheight) {
+	   double rZ = edit->mapDTM->rValue(c);
+	   frDTMheight->SetVal(rZ);
+	   }
+	   }  */
+	FormEntry* feDefaultFocus()
+	{
+		FormEntry* fe = FormWithDest::feDefaultFocus();
+		if (fe)
+			return fe;
+		else {
 			bool fLL = edit->fLatLon;
 			if (!fLL)
 				return fldCrd; 
 			else
 				return fldLL;
 		}
-  }
-  int exec() {
-    FormWithDest::exec();
+	}
+	int exec() {
+		FormWithDest::exec();
 		bool fLL = edit->fLatLon;
 		if (fLL) {
 			crd.x = ll.Lon;
@@ -475,35 +469,35 @@ public:
 				edit->EditFieldCoordOK(rc,crd);
 		}
 		else
-    {
+		{
 			if (fZ)
 				edit->EditFieldCoordOK(crdRC,crd,rZ);
 			else
 				edit->EditFieldCoordOK(crdRC,crd);
 		}
-    return 0;
-  }
+		return 0;
+	}
 private:
-  GeoRefEditor* edit;
-  FieldCoord* fldCrd;
-  FieldReal* frDTMheight;
-  FieldLatLon* fldLL;
-  RowCol rc;
-  Coord crdRC;
-  Coord crd;
-  LatLon ll;
-  bool fZ;
-  double rZ;
+	GeoRefEditor* edit;
+	FieldCoord* fldCrd;
+	FieldReal* frDTMheight;
+	FieldLatLon* fldLL;
+	RowCol rc;
+	Coord crdRC;
+	Coord crd;
+	LatLon ll;
+	bool fZ;
+	double rZ;
 };
 
 
 void GeoRefEditor::OnAddPoint()
 {
-  RowCol rc; //(0L,0L);
-  Coord crdRC;
-  Coord crd; //(0,0);
-  LatLon ll;
-  int iNr = grc->iNr() + 1;
+	RowCol rc; //(0L,0L);
+	Coord crdRC;
+	Coord crd; //(0,0);
+	LatLon ll;
+	int iNr = grc->iNr() + 1;
 	//if (!grc->fSubPixelPrecision)
 	//	AddTiePointForm frm(mpv, this, rc, crd, iNr, fLatLon);
 	//else
@@ -512,78 +506,78 @@ void GeoRefEditor::OnAddPoint()
 
 void GeoRefEditor::EditFieldCoordOK(RowCol rc, Coord crd)
 {
-  int iPnt = grc->AddRec(rc, crd);
-  drawPoint(iPnt);
+	int iPnt = grc->AddRec(rc, crd);
+	drawPoint(iPnt);
 	grtd->CheckNrRecs();
-  Calc();
+	Calc();
 }
 
 void GeoRefEditor::EditFieldCoordOK(RowCol rc, Coord crd, double rZ)
 {
-  int iPnt = grc->AddRec(rc, crd);
-  Column colZ = grc->tbl()->col("Z");
-  if (colZ.fValid())
-    colZ->PutVal(iPnt, rZ);
-  drawPoint(iPnt);
+	int iPnt = grc->AddRec(rc, crd);
+	Column colZ = grc->tbl()->col("Z");
+	if (colZ.fValid())
+		colZ->PutVal(iPnt, rZ);
+	drawPoint(iPnt);
 	grtd->CheckNrRecs();
-  Calc();
+	Calc();
 }
 
 void GeoRefEditor::EditFieldLatLonOK(RowCol rc, LatLon ll)
 {
-  int iPnt = grc->AddRec(rc, ll);
-  drawPoint(iPnt);
+	int iPnt = grc->AddRec(rc, ll);
+	drawPoint(iPnt);
 	grtd->CheckNrRecs();
-  Calc();
+	Calc();
 }
 
 void GeoRefEditor::EditFieldLatLonOK(RowCol rc, LatLon ll, double rZ)
 {
-  int iPnt = grc->AddRec(rc, ll);
-  Column colZ = grc->tbl()->col("Z");
-  if (colZ.fValid())
-    colZ->PutVal(iPnt, rZ);
-  drawPoint(iPnt);
+	int iPnt = grc->AddRec(rc, ll);
+	Column colZ = grc->tbl()->col("Z");
+	if (colZ.fValid())
+		colZ->PutVal(iPnt, rZ);
+	drawPoint(iPnt);
 	grtd->CheckNrRecs();
-  Calc();
+	Calc();
 }
 
 void GeoRefEditor::EditFieldCoordOK(Coord crdRC, Coord crd)
 {
-  int iPnt = grc->AddRec(crdRC, crd);
-  drawPoint(iPnt);
+	int iPnt = grc->AddRec(crdRC, crd);
+	drawPoint(iPnt);
 	grtd->CheckNrRecs();
-  Calc();
+	Calc();
 }
 
 void GeoRefEditor::EditFieldCoordOK(Coord crdRC, Coord crd, double rZ)
 {
-  int iPnt = grc->AddRec(crdRC, crd);
-  Column colZ = grc->tbl()->col("Z");
-  if (colZ.fValid())
-    colZ->PutVal(iPnt, rZ);
-  drawPoint(iPnt);
+	int iPnt = grc->AddRec(crdRC, crd);
+	Column colZ = grc->tbl()->col("Z");
+	if (colZ.fValid())
+		colZ->PutVal(iPnt, rZ);
+	drawPoint(iPnt);
 	grtd->CheckNrRecs();
-  Calc();
+	Calc();
 }
 
 void GeoRefEditor::EditFieldLatLonOK(Coord crdRC, LatLon ll)
 {
-  int iPnt = grc->AddRec(crdRC, ll);
-  drawPoint(iPnt);
+	int iPnt = grc->AddRec(crdRC, ll);
+	drawPoint(iPnt);
 	grtd->CheckNrRecs();
-  Calc();
+	Calc();
 }
 
 void GeoRefEditor::EditFieldLatLonOK(Coord crdRC, LatLon ll, double rZ)
 {
-  int iPnt = grc->AddRec(crdRC, ll);
-  Column colZ = grc->tbl()->col("Z");
-  if (colZ.fValid())
-    colZ->PutVal(iPnt, rZ);
-  drawPoint(iPnt);
+	int iPnt = grc->AddRec(crdRC, ll);
+	Column colZ = grc->tbl()->col("Z");
+	if (colZ.fValid())
+		colZ->PutVal(iPnt, rZ);
+	drawPoint(iPnt);
 	grtd->CheckNrRecs();
-  Calc();
+	Calc();
 }
 zRect GeoRefEditor::rectPoint(long iNr)
 {
@@ -591,29 +585,29 @@ zRect GeoRefEditor::rectPoint(long iNr)
 	Coord crdRC = grc->crdRC(iNr);
 	zPoint pnt;
 	if (!grc->fSubPixelPrecision)
-		pnt = mpv->pntPos(rc.Row-0.5,rc.Col-0.5);
+		pnt = mpv->pntPos(Coord(rc.Row-0.5,rc.Col-0.5));
 	else
-		pnt = mpv->pntPos(crdRC.x-0.5,crdRC.y-0.5);
-  zRect rect(pnt,pnt);
-  rect.top()   -= smb.iSize / 2 + 1;
-  rect.left()  -= smb.iSize / 2 + 1;
-  rect.bottom()+= smb.iSize / 2 + 2;
-  rect.right() += smb.iSize / 2 + 2;
+		pnt = mpv->pntPos(Coord(crdRC.x-0.5,crdRC.y-0.5));
+	zRect rect(pnt,pnt);
+	rect.top()   -= smb.iSize / 2 + 1;
+	rect.left()  -= smb.iSize / 2 + 1;
+	rect.bottom()+= smb.iSize / 2 + 2;
+	rect.right() += smb.iSize / 2 + 2;
 	CClientDC cdc(mpv);
-  zPoint pntText = smb.pntText(&cdc, pnt);
-  CSize siz = cdc.GetTextExtent("123", 3);
-  pntText.x += siz.cx + 1;
-  pntText.y += siz.cy + 1;
-  rect.bottom() = max(rect.bottom(), pntText.y);
-  rect.right() = max(rect.right(), pntText.x);
-  return rect;
+	zPoint pntText = smb.pntText(&cdc, pnt);
+	CSize siz = cdc.GetTextExtent("123", 3);
+	pntText.x += siz.cx + 1;
+	pntText.y += siz.cy + 1;
+	rect.bottom() = max(rect.bottom(), pntText.y);
+	rect.right() = max(rect.right(), pntText.x);
+	return rect;
 }
 
 int GeoRefEditor::drawPoint(long iNr)
 {
-  zRect rect = rectPoint(iNr);
-  mpv->InvalidateRect(&rect);
-  return 0;
+	zRect rect = rectPoint(iNr);
+	mpv->InvalidateRect(&rect);
+	return 0;
 }
 
 void GeoRefEditor::Calc()
@@ -625,136 +619,136 @@ void GeoRefEditor::Calc()
 	fInCalc = true;
 	rSigma = 0;
 
-  if (grc->tbl()->fChanged)
-    grc->Updated();
+	if (grc->tbl()->fChanged)
+		grc->Updated();
 	if (grc->fChanged)
 		grc->Store();	 // to make Additional Info usable
 
-  if (mapDTM.fValid())
-    for (int i = 1; i <= grc->iNr(); ++i) {
-      Coord crd = grc->crd(i);
-      double rZ = mapDTM->rValue(crd);
-      colZdem->PutVal(i, rZ);
-    }
-  int iRes = grc->Compute();
-  if (iRes) {
-    switch (iRes) {
-      case -1:
-      case -2:
-        edTxt.SetWindowText(SGRRemNotEnoughPoints.scVal());
-        break;
-      case -3:
-        edTxt.SetWindowText(SGRRemSingularMatrix.scVal());
-        break;
-      case -4:
-        edTxt.SetWindowText("Incorrect Heights");
-        break;
-      case -5:
-        edTxt.SetWindowText("No valid DTM");
-        break;
-      default:  
-        edTxt.SetWindowText(SGRRemError.scVal());
-        break;
-    }    
-    for (int i = 1; i <= grc->iNr(); ++i) {
-      colDRow->PutVal(i, rUNDEF);
-      colDCol->PutVal(i, rUNDEF);
-    }
-  }  
-  else {
-		int iNr = 0;
-		GeoRefDirectLinear* grdl = grc->pgDirectLinear();
-		GeoRefOrthoPhoto* grop = grc->pgOrthoPhoto();
-		GeoRefParallelProjective* grpp = grc->pgParallelProjective();
+	if (mapDTM.fValid())
+		for (int i = 1; i <= grc->iNr(); ++i) {
+			Coord crd = grc->crd(i);
+			double rZ = mapDTM->rValue(crd);
+			colZdem->PutVal(i, rZ);
+		}
+		int iRes = grc->Compute();
+		if (iRes) {
+			switch (iRes) {
+case -1:
+case -2:
+	edTxt.SetWindowText(SGRRemNotEnoughPoints.scVal());
+	break;
+case -3:
+	edTxt.SetWindowText(SGRRemSingularMatrix.scVal());
+	break;
+case -4:
+	edTxt.SetWindowText("Incorrect Heights");
+	break;
+case -5:
+	edTxt.SetWindowText("No valid DTM");
+	break;
+default:  
+	edTxt.SetWindowText(SGRRemError.scVal());
+	break;
+			}    
+			for (int i = 1; i <= grc->iNr(); ++i) {
+				colDRow->PutVal(i, rUNDEF);
+				colDCol->PutVal(i, rUNDEF);
+			}
+		}  
+		else {
+			int iNr = 0;
+			GeoRefDirectLinear* grdl = grc->pgDirectLinear();
+			GeoRefOrthoPhoto* grop = grc->pgOrthoPhoto();
+			GeoRefParallelProjective* grpp = grc->pgParallelProjective();
 
-    for (int i = 1; i <= grc->iNr(); ++i) {
-      double rRow, rCol;
-      Coord crd = grc->crd(i);
-      grc->Coord2RowCol(crd, rRow, rCol);
-			if (!grc->fSubPixelPrecision)
-			{
-				RowCol rc = grc->rc(i);
-				rRow -= rc.Row - 0.5;
-				rCol -= rc.Col - 0.5;
-			}
-			else
-			{
-				Coord crdRC = grc->crdRC(i);
-				rRow -= crdRC.x - 0.5;
-				rCol -= crdRC.y - 0.5;
-			}
-      colDRow->PutVal(i, -rRow);
-      colDCol->PutVal(i, -rCol);			
-      if (grc->fActive(i)) {
-        iNr += 1;
-        rSigma += rRow * rRow + rCol * rCol;
-        if (grdl != 0)
-					colZdiff->PutVal(i, grdl->rVerticDist[i-1]);
-				if (grpp != 0)
-					colZdiff->PutVal(i, grpp->rVerticDist[i-1]);
-      }
-			else {
-				if (grdl != 0 || grpp != 0)
+			for (int i = 1; i <= grc->iNr(); ++i) {
+				double rRow, rCol;
+				Coord crd = grc->crd(i);
+				grc->Coord2RowCol(crd, rRow, rCol);
+				if (!grc->fSubPixelPrecision)
+				{
+					RowCol rc = grc->rc(i);
+					rRow -= rc.Row - 0.5;
+					rCol -= rc.Col - 0.5;
+				}
+				else
+				{
+					Coord crdRC = grc->crdRC(i);
+					rRow -= crdRC.x - 0.5;
+					rCol -= crdRC.y - 0.5;
+				}
+				colDRow->PutVal(i, -rRow);
+				colDCol->PutVal(i, -rCol);			
+				if (grc->fActive(i)) {
+					iNr += 1;
+					rSigma += rRow * rRow + rCol * rCol;
+					if (grdl != 0)
+						colZdiff->PutVal(i, grdl->rVerticDist[i-1]);
+					if (grpp != 0)
+						colZdiff->PutVal(i, grpp->rVerticDist[i-1]);
+				}
+				else {
+					if (grdl != 0 || grpp != 0)
 						colZdiff->PutVal(i, rUNDEF);
+				}
 			}
-    }
-    if (iNr >= grc->iMinNr()) {
-			String s;
-			if (iNr == grc->iMinNr()){
-				rSigma = rUNDEF;
-				s = "Sigma = ? ";
+			if (iNr >= grc->iMinNr()) {
+				String s;
+				if (iNr == grc->iMinNr()){
+					rSigma = rUNDEF;
+					s = "Sigma = ? ";
+				}
+				else {
+					rSigma = sqrt(rSigma / (2 * (iNr - grc->iMinNr())));
+					s = String(SGRRemSigma_f.sVal(), rSigma);
+				}
+				GeoRefCTPplanar* grcp = grc->pgCTPplanar();
+				if (grcp != 0)
+					grcp->SetSigma(rSigma);
+				CVector cvPC;
+				if (grdl != 0)
+					cvPC = grdl->cvGetProjectionCenter();
+				if (grop != 0)
+					cvPC = grop->cvGetProjectionCenter();
+
+				if (grdl != 0 || grop != 0) {
+					double rNadX = cvPC(0);
+					double rNadY = cvPC(1);
+					Coord cNadir = Coord(rNadX, rNadY);
+					double rPCz = cvPC(2);
+					double rDTMz = mapDTM->rValue(cNadir);
+					//double rFlyH = (double)(cvPC(2) - mapDTM->rValue(cNadir));
+					double rFlyH = (double)(rPCz - rDTMz);
+					s &= String("   Flying Height: %.0f m" , rFlyH);			
+					s &= String("  Nadir: (%.0f, %.0f) " , rNadX, rNadY);
+				}
+				if (grdl != 0) {
+					double rNonCopla = grdl->rGetNonCoplanarity();
+					s &= String("    NC = %.1f m," , rNonCopla);
+					double rZconf = grdl->rGetZConfidRange();
+					s &= String("  Z-Conf = %.1f m" , rZconf);				
+				}
+				if (grpp != 0) {
+					double rNonCopla = grpp->rGetNonCoplanarity();
+					s &= String("    NC = %.1f m," , rNonCopla);
+					double rZconf = grpp->rGetZConfidRange();
+					s &= String("  Z-Conf = %.1f m" , rZconf);				
+				}
+				if (grop != 0) {				
+					Coord cPP = grop->crdGetPrincipalPoint();
+					s &= String("  Princ. Point: row %.1f, col %.1f " , cPP.x, cPP.y);
+				}
+				edTxt.SetWindowText(s.scVal());
 			}
 			else {
-				rSigma = sqrt(rSigma / (2 * (iNr - grc->iMinNr())));
-				s = String(SGRRemSigma_f.sVal(), rSigma);
+				edTxt.SetWindowText("");
+				rSigma = 0;
 			}
-			GeoRefCTPplanar* grcp = grc->pgCTPplanar();
-			if (grcp != 0)
-				grcp->SetSigma(rSigma);
-			CVector cvPC;
-			if (grdl != 0)
-				cvPC = grdl->cvGetProjectionCenter();
-			if (grop != 0)
-				cvPC = grop->cvGetProjectionCenter();
-
-			if (grdl != 0 || grop != 0) {
-				double rNadX = cvPC(0);
-				double rNadY = cvPC(1);
-				Coord cNadir = Coord(rNadX, rNadY);
-				double rPCz = cvPC(2);
-				double rDTMz = mapDTM->rValue(cNadir);
-				//double rFlyH = (double)(cvPC(2) - mapDTM->rValue(cNadir));
-				double rFlyH = (double)(rPCz - rDTMz);
-				s &= String("   Flying Height: %.0f m" , rFlyH);			
-				s &= String("  Nadir: (%.0f, %.0f) " , rNadX, rNadY);
-			}
-			if (grdl != 0) {
-				double rNonCopla = grdl->rGetNonCoplanarity();
-				s &= String("    NC = %.1f m," , rNonCopla);
-				double rZconf = grdl->rGetZConfidRange();
-				s &= String("  Z-Conf = %.1f m" , rZconf);				
-			}
-			if (grpp != 0) {
-				double rNonCopla = grpp->rGetNonCoplanarity();
-				s &= String("    NC = %.1f m," , rNonCopla);
-				double rZconf = grpp->rGetZConfidRange();
-				s &= String("  Z-Conf = %.1f m" , rZconf);				
-			}
-			if (grop != 0) {				
-				Coord cPP = grop->crdGetPrincipalPoint();
-			s &= String("  Princ. Point: row %.1f, col %.1f " , cPP.x, cPP.y);
-			}
-			edTxt.SetWindowText(s.scVal());
-    }
-    else {
-      edTxt.SetWindowText("");
-			rSigma = 0;
-    }
-  }  
-  for (int i = 1; i <= grc->iNr(); ++i) 
-	  drawPoint(i);
-	grtd->UpdateAllViews(0);
-	fInCalc = false;
+		}  
+		for (int i = 1; i <= grc->iNr(); ++i) 
+			drawPoint(i);
+		grtd->UpdateAllViews(0);
+		fInCalc = false;
 }
 
 void GeoRefEditor::OnTransfChanged()
@@ -812,9 +806,9 @@ bool GeoRefEditor::OnLButtonDown(UINT nFlags, CPoint point)
 		} 
 		int i;
 		if (!grc->fSubPixelPrecision)
-				i = grc->iRec(rc);
-			else
-				i = grc->iRec(crdRC);
+			i = grc->iRec(rc);
+		else
+			i = grc->iRec(crdRC);
 		if (i > 0)
 			crd = grc->crd(i);
 		else
@@ -830,119 +824,119 @@ LRESULT GeoRefEditor::OnUpdate(WPARAM wParam, LPARAM lParam)
 		return 0;
 	CoordMessage cm = (CoordMessage) wParam;
 	switch (cm) {
-		case cmMOUSECLICK:
-		case cmDIGICLICK1:
-		{
-		  CoordWithCoordSystem* c = (CoordWithCoordSystem*)(void*) lParam;
-			//Coord crd = (*c)->cConv(grc->cs(), *c);	
-			Coord crd = grc->cs()->cConv((CoordSystem)*c, *c);
-			atpf->SetCoord(crd);
-			atpf->SetFocus();
-		}
+case cmMOUSECLICK:
+case cmDIGICLICK1:
+	{
+		CoordWithCoordSystem* c = (CoordWithCoordSystem*)(void*) lParam;
+		//Coord crd = (*c)->cConv(grc->cs(), *c);	
+		Coord crd = grc->cs()->cConv((CoordSystem)*c, *c);
+		atpf->SetCoord(crd);
+		atpf->SetFocus();
+	}
 	}
 	return 0;
 }
 
 void GeoRefEditor::OnDelPoint()
 {
-  class DelTiePointForm: public FormWithDest
-  {
-  public:
-    DelTiePointForm(CWnd* wPar, int* iNr, const RangeInt& ri)
-    : FormWithDest(wPar, SGRTitleDelTiePoint)
-    {
-      fi = new FieldInt(root, SGRUiTiePointNumber, iNr, ri);
-      SetMenHelpTopic(htpGrfEditDelPoint);
-      create();
-    }
-  private:
-    FormEntry* feDefaultFocus()
-    { return fi;
-    }
-    FieldInt* fi;  
-  };  
-  int iNr = grc->iNr();
-  if (iNr <= 0)
-    return;
-  int iDel = iNr;  
-  RangeInt ri(1, iNr);
-  DelTiePointForm frm(mpv, &iDel, ri);
-  if (frm.fOkClicked()) 
+	class DelTiePointForm: public FormWithDest
+	{
+	public:
+		DelTiePointForm(CWnd* wPar, int* iNr, const RangeInt& ri)
+			: FormWithDest(wPar, SGRTitleDelTiePoint)
+		{
+			fi = new FieldInt(root, SGRUiTiePointNumber, iNr, ri);
+			SetMenHelpTopic(htpGrfEditDelPoint);
+			create();
+		}
+	private:
+		FormEntry* feDefaultFocus()
+		{ return fi;
+		}
+		FieldInt* fi;  
+	};  
+	int iNr = grc->iNr();
+	if (iNr <= 0)
+		return;
+	int iDel = iNr;  
+	RangeInt ri(1, iNr);
+	DelTiePointForm frm(mpv, &iDel, ri);
+	if (frm.fOkClicked()) 
 		DelPoints(iDel,1);
 }
-				 
+
 void GeoRefEditor::DelPoints(int iDel, int iRecs)
 {
 	CWaitCursor cur;
 	if (iRecs <= 0)
 		return;
-  int iMax = grc->iNr();
-  if (iMax <= 0)
-    return;
+	int iMax = grc->iNr();
+	if (iMax <= 0)
+		return;
 	for (int i = iDel; i <= iMax; ++i)
-    drawPoint(i);
+		drawPoint(i);
 	grc->tbl()->DeleteRec(iDel, iRecs);
 	grtd->CheckNrRecs();
-  Calc();
+	Calc();
 }
 
 void GeoRefEditor::OnTransformation()
 {
-  class TransfForm: public FormWithDest
-  {
-  public:
-    TransfForm(CWnd* wPar, int* transf)
-    : FormWithDest(wPar, SGRTitleTransf)
-    { // same sequence as in enum GeoRefCTP::Transf
-      RadioGroup* rg = new RadioGroup(root, SGRUiTransf, transf);
-      new RadioButton(rg, SGRUiConform);
-      new RadioButton(rg, SGRUiAffine);
-      new RadioButton(rg, SGRUiSecondOrder);
-      new RadioButton(rg, SGRUiFullSecondOrder);
-      new RadioButton(rg, SGRUiThirdOrder);
-      new RadioButton(rg, SGRUiProjective);
-//    SetHelpTopic(htpGeoRefEditor);
-      SetMenHelpTopic(htpGrfEditTransf);
-      create();
-    }
-  };
-  if (0 == grc->pgCTPplanar())
-    return;
-  int transf = grc->transf;  
-  TransfForm frm(mpv, &transf);
-  if (frm.fOkClicked()) {
-    grc->transf = static_cast<GeoRefCTP::Transf>(transf); 
-    grc->Updated();
+	class TransfForm: public FormWithDest
+	{
+	public:
+		TransfForm(CWnd* wPar, int* transf)
+			: FormWithDest(wPar, SGRTitleTransf)
+		{ // same sequence as in enum GeoRefCTP::Transf
+			RadioGroup* rg = new RadioGroup(root, SGRUiTransf, transf);
+			new RadioButton(rg, SGRUiConform);
+			new RadioButton(rg, SGRUiAffine);
+			new RadioButton(rg, SGRUiSecondOrder);
+			new RadioButton(rg, SGRUiFullSecondOrder);
+			new RadioButton(rg, SGRUiThirdOrder);
+			new RadioButton(rg, SGRUiProjective);
+			//    SetHelpTopic(htpGeoRefEditor);
+			SetMenHelpTopic(htpGrfEditTransf);
+			create();
+		}
+	};
+	if (0 == grc->pgCTPplanar())
+		return;
+	int transf = grc->transf;  
+	TransfForm frm(mpv, &transf);
+	if (frm.fOkClicked()) {
+		grc->transf = static_cast<GeoRefCTP::Transf>(transf); 
+		grc->Updated();
 		cbTransf.SetCurSel(grc->transf);
-    Calc();
-  }
+		Calc();
+	}
 }
 
-  class GreConfigForm: public FormWithDest
-  {
-  public:
-    GreConfigForm(CWnd* parent, GeoRefEditor* gre)
-    : FormWithDest(parent, SGRTitleConfGrfEditor)
-    {
-      new FieldColor(root, SGRUiActGoodColor, &gre->colActGood);
-      new FieldColor(root, SGRUiActMedColor, &gre->colActive);
-      new FieldColor(root, SGRUiActBadColor, &gre->colActBad);
-      new FieldColor(root, SGRUiPassiveColor, &gre->colPassive);
-      if (0 != gre->efmf)
-        new FieldColor(root, SGRUiFidMarkColor, &gre->efmf->colFidMarks);
-      new FieldInt(root, SGRUiSmbSize, &gre->smb.iSize, ValueRange(1L,100L),true);
-      SetMenHelpTopic(htpGrfEditCnf);
-      create();
-    }
-  };  
-  
+class GreConfigForm: public FormWithDest
+{
+public:
+	GreConfigForm(CWnd* parent, GeoRefEditor* gre)
+		: FormWithDest(parent, SGRTitleConfGrfEditor)
+	{
+		new FieldColor(root, SGRUiActGoodColor, &gre->colActGood);
+		new FieldColor(root, SGRUiActMedColor, &gre->colActive);
+		new FieldColor(root, SGRUiActBadColor, &gre->colActBad);
+		new FieldColor(root, SGRUiPassiveColor, &gre->colPassive);
+		if (0 != gre->efmf)
+			new FieldColor(root, SGRUiFidMarkColor, &gre->efmf->colFidMarks);
+		new FieldInt(root, SGRUiSmbSize, &gre->smb.iSize, ValueRange(1L,100L),true);
+		SetMenHelpTopic(htpGrfEditCnf);
+		create();
+	}
+};  
+
 void GeoRefEditor::OnConfigure()
 {
-  GreConfigForm frm(mpv, this);
-  if (frm.fOkClicked()) {
-    int iNr = grc->iNr();
-    for (int i = 1; i <= iNr; ++i)
-      drawPoint(i);
+	GreConfigForm frm(mpv, this);
+	if (frm.fOkClicked()) {
+		int iNr = grc->iNr();
+		for (int i = 1; i <= iNr; ++i)
+			drawPoint(i);
 
 		IlwisSettings settings("Map Window\\TiePoint Editor");
 
@@ -951,36 +945,36 @@ void GeoRefEditor::OnConfigure()
 		settings.SetValue("Bad Color", colActBad);
 		settings.SetValue("Passive Color", colPassive);
 		settings.SetValue("Symbol Size", smb.iSize);
-    if (efmf) {
+		if (efmf) {
 			settings.SetValue("Passive Color", efmf->colFidMarks);
-    }
-  }  
+		}
+	}  
 }
 
 void GeoRefEditor::OnEditFiducialMarks()
 {
-  if (0 == grc->pgOrthoPhoto())
-    return;
-  if (efmf) {
-    efmf->SetFocus();  
-    return;
-  }  
-  efmf = new EditFiducialMarksForm(mpv, grc->pgOrthoPhoto());
-  efmf->create();
+	if (0 == grc->pgOrthoPhoto())
+		return;
+	if (efmf) {
+		efmf->SetFocus();  
+		return;
+	}  
+	efmf = new EditFiducialMarksForm(mpv, grc->pgOrthoPhoto());
+	efmf->create();
 	DataWindow* dw = mpv->dwParent();
 	dw->ShowControlBar(&gretBar,FALSE,FALSE);
 }
 
 void GeoRefEditor::OnStopFiducialMarks()
 {
-  efmf = 0;
-  int iRes = grc->Compute();
-  if (iRes < -10) { 
+	efmf = 0;
+	int iRes = grc->Compute();
+	if (iRes < -10) { 
 		OnExit();
 		return;
-  }
+	}
 	DataWindow* dw = mpv->dwParent();
 	dw->ShowControlBar(&gretBar,TRUE,FALSE);
-  Calc();
+	Calc();
 }
 

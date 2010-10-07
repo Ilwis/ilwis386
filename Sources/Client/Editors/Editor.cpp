@@ -44,7 +44,6 @@
 #include "Engine\Map\Segment\Seg.h"
 #include "Engine\Map\Polygon\POL.H"
 #include "Client\Mapwindow\Positioner.h"
-#include "Client\Mapwindow\Drawers\BaseDrawer.h"
 #include "Client\Editors\Editor.h"
 #include "Headers\constant.h"
 #include "Client\Editors\Map\EditField.h"
@@ -65,7 +64,7 @@ static char THIS_FILE[]=__FILE__;
 #endif
 
 
-BEGIN_MESSAGE_MAP(Editor, BaseDrawer)
+BEGIN_MESSAGE_MAP(Editor, CCmdTarget)
 	//{{AFX_MSG_MAP(Editor)
 	ON_COMMAND(ID_EXIT, OnExit)
 	ON_COMMAND(ID_EXITEDITOR, OnExit)

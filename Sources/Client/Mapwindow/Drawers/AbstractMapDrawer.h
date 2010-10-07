@@ -30,6 +30,7 @@ class _export AbstractMapDrawer : public ComplexDrawer {
 		HTREEITEM  configure(LayerTreeView  *tv, HTREEITEM parent);
 		virtual String description() const;
 		virtual String iconName(const String& subtype="?") const;
+		Ilwis::Record AbstractMapDrawer::rec(const Coord& crd);
 
 	protected:
 		Table attTable;
@@ -57,5 +58,6 @@ class _export AbstractMapDrawer : public ComplexDrawer {
 		String attColumn;
 		FieldColumn *fc;
 	};
+	#define CMAPDRW(root,i) (dynamic_cast<AbstractMapDrawer *>(root->getDrawer(i)))
 
 }

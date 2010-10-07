@@ -39,6 +39,8 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Client\Headers\formelementspch.h"
+#include "Client\Mapwindow\Drawers\RootDrawer.h"
+#include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\ilwis.h"
 #include "Client\Base\IlwisDocument.h"
 #include "Client\TableWindow\TableDoc.h"
@@ -54,12 +56,15 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
+using namespace ILWIS;
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-HistogramRGBGraphView::HistogramRGBGraphView(const Map& mpRed, const Map& mpGreen, const Map& mpBlue)
+HistogramRGBGraphView::HistogramRGBGraphView(AbstractMapDrawer *drw)
 {
+  Map mpRed, mpGreen, mpBlue;
   grdrw = cgd = new CartesianGraphDrawer(this);
   grdrw->grleg->fShow = false;
 	mp[0] = mpRed;

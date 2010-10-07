@@ -48,7 +48,7 @@
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\Drawers\SelectionRectangle.h"
-#include "Client\Mapwindow\Drawers\FeatureLayerDrawer.h"
+//#include "Client\Mapwindow\Drawers\FeatureLayerDrawer.h"
 #include "Client\Mapwindow\Drawers\CanvasBackgroundDrawer.h"
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h"
 #include "Client\Mapwindow\Drawers\TextDrawer.h"

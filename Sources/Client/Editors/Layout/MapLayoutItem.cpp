@@ -52,7 +52,6 @@
 #include "Client\Editors\Layout\ScaleTextLayoutItem.h"
 #include "Client\Editors\Layout\ScaleBarLayoutItem.h"
 #include "Client\Editors\Layout\NorthArrowLayoutItem.h"
-#include "Client\Editors\Layout\LegendLayoutItem.h"
 #include "Client\Editors\Layout\MapBorderItem.h"
 #include "Client\Editors\Layout\LayoutDoc.h"
 #include "Headers\Hs\Layout.hs"
@@ -207,86 +206,87 @@ void MapLayoutItem::OnDraw(CDC* cdc)
 
 void MapLayoutItem::SetPosition(MinMax mm, int iHit)
 {
-	MinMax mmOld = mmPosition();
-	if (fKeepScale) {
-		int iDiffWidth = mm.width() - mmOld.width();
-		int iDiffHeight = mm.height() - mmOld.height();
-		if (iDiffWidth == 0 && iDiffHeight == 0) 
-		{
-			LayoutItem::SetPosition(mm, iHit);
-			return;
-		}
+	throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
+	//MinMax mmOld = mmPosition();
+	//if (fKeepScale) {
+	//	int iDiffWidth = mm.width() - mmOld.width();
+	//	int iDiffHeight = mm.height() - mmOld.height();
+	//	if (iDiffWidth == 0 && iDiffHeight == 0) 
+	//	{
+	//		LayoutItem::SetPosition(mm, iHit);
+	//		return;
+	//	}
 
-		MapCompositionDoc* mcd = mcsi->GetDocument();
-		if (0 == mcd || !mcd->georef.fValid()) 
-			return;
-		double rPixSize = mcd->georef->rPixSize();
-		MinMax mmBnds = mcd->mmBounds();
-		RowCol rcMaxSize(mmBnds.height(), mmBnds.width());
-		RowCol rcOffset = mcsi->rcOffset();
-		RowCol rcSize; 
-		double rScale = m_rScale;
-		if (rUNDEF == rPixSize || rScale <= 0) 
-		{
-			LayoutItem::SetPosition(mm, iHit);
-			return;
-		}
-		rScale /= 10000; // 0.1 mm units per m
-		rcSize.Row = rounding(mm.height() / rPixSize * rScale);
-		rcSize.Col = rounding(mm.width() / rPixSize * rScale);
-		if (rcSize.Row > rcMaxSize.Row)
-			rcSize.Row = rcMaxSize.Row;
-		if (rcSize.Col > rcMaxSize.Col)
-			rcSize.Col = rcMaxSize.Col;
+	//	MapCompositionDoc* mcd = mcsi->GetDocument();
+	//	if (0 == mcd ) 
+	//		return;
+	//	double rPixSize = mcd->georef->rPixSize();
+	//	MinMax mmBnds = mcd->mmBounds();
+	//	RowCol rcMaxSize(mmBnds.height(), mmBnds.width());
+	//	RowCol rcOffset = mcsi->rcOffset();
+	//	RowCol rcSize; 
+	//	double rScale = m_rScale;
+	//	if (rUNDEF == rPixSize || rScale <= 0) 
+	//	{
+	//		LayoutItem::SetPosition(mm, iHit);
+	//		return;
+	//	}
+	//	rScale /= 10000; // 0.1 mm units per m
+	//	rcSize.Row = rounding(mm.height() / rPixSize * rScale);
+	//	rcSize.Col = rounding(mm.width() / rPixSize * rScale);
+	//	if (rcSize.Row > rcMaxSize.Row)
+	//		rcSize.Row = rcMaxSize.Row;
+	//	if (rcSize.Col > rcMaxSize.Col)
+	//		rcSize.Col = rcMaxSize.Col;
 
-		if (iHit == CRectTracker::hitLeft ||
-		    iHit == CRectTracker::hitTopLeft ||
-		    iHit == CRectTracker::hitBottomLeft)
-		{
-			int iDiffCol = rounding(iDiffWidth / rPixSize * rScale);
-			rcOffset.Col -= iDiffCol;
-		}
+	//	if (iHit == CRectTracker::hitLeft ||
+	//	    iHit == CRectTracker::hitTopLeft ||
+	//	    iHit == CRectTracker::hitBottomLeft)
+	//	{
+	//		int iDiffCol = rounding(iDiffWidth / rPixSize * rScale);
+	//		rcOffset.Col -= iDiffCol;
+	//	}
 
-		if (iHit == CRectTracker::hitTop ||
-		    iHit == CRectTracker::hitTopLeft ||
-		    iHit == CRectTracker::hitTopRight)
-		{
-			int iDiffRow = rounding(iDiffHeight / rPixSize * rScale);
-			rcOffset.Row -= iDiffRow;
-		}
+	//	if (iHit == CRectTracker::hitTop ||
+	//	    iHit == CRectTracker::hitTopLeft ||
+	//	    iHit == CRectTracker::hitTopRight)
+	//	{
+	//		int iDiffRow = rounding(iDiffHeight / rPixSize * rScale);
+	//		rcOffset.Row -= iDiffRow;
+	//	}
 
-		// if (rcOffset.Row + rcSize.Row > rcMaxSize.Row)
-		// 	rcOffset.Row = rcMaxSize.Row - rcSize.Row;
-		// if (rcOffset.Col + rcSize.Col > rcMaxSize.Col)
-		// 	rcOffset.Col = rcMaxSize.Col - rcSize.Col;
+	//	// if (rcOffset.Row + rcSize.Row > rcMaxSize.Row)
+	//	// 	rcOffset.Row = rcMaxSize.Row - rcSize.Row;
+	//	// if (rcOffset.Col + rcSize.Col > rcMaxSize.Col)
+	//	// 	rcOffset.Col = rcMaxSize.Col - rcSize.Col;
 
-		// guard against invalid offset
-		if (rcOffset.Row + rcSize.Row > mmBnds.MaxRow())
-			rcOffset.Row = mmBnds.MaxRow() - rcSize.Row;
-		if (rcOffset.Row < mmBnds.MinRow())
-			rcOffset.Row = mmBnds.MinRow();
-		if (rcOffset.Col + rcSize.Col > mmBnds.MaxCol())
-			rcOffset.Col = mmBnds.MaxCol() - rcSize.Col;
-		if (rcOffset.Col < mmBnds.MinCol())
-			rcOffset.Col = mmBnds.MinCol();
+	//	// guard against invalid offset
+	//	if (rcOffset.Row + rcSize.Row > mmBnds.MaxRow())
+	//		rcOffset.Row = mmBnds.MaxRow() - rcSize.Row;
+	//	if (rcOffset.Row < mmBnds.MinRow())
+	//		rcOffset.Row = mmBnds.MinRow();
+	//	if (rcOffset.Col + rcSize.Col > mmBnds.MaxCol())
+	//		rcOffset.Col = mmBnds.MaxCol() - rcSize.Col;
+	//	if (rcOffset.Col < mmBnds.MinCol())
+	//		rcOffset.Col = mmBnds.MinCol();
 
-		mcsi->SetOffsetSize(rcOffset, rcSize);
+	//	mcsi->SetOffsetSize(rcOffset, rcSize);
 
-		double rWidth = rcSize.Col * rPixSize / rScale;
-		double rHeight = rcSize.Row * rPixSize / rScale;
+	//	double rWidth = rcSize.Col * rPixSize / rScale;
+	//	double rHeight = rcSize.Row * rPixSize / rScale;
 
-		mm.MaxCol() = mm.MinCol() + rounding(rWidth);
-		mm.MaxRow() = mm.MinRow() + rounding(rHeight);
+	//	mm.MaxCol() = mm.MinCol() + rounding(rWidth);
+	//	mm.MaxRow() = mm.MinRow() + rounding(rHeight);
 
-		LayoutItem::SetPosition(mm, iHit);
-		InitMetafile();
-	}
-	else {
-		LayoutItem::SetPosition(mm, iHit);
-		// on move do not change scale
-		if (iHit != CRectTracker::hitMiddle && mmOld.width() != mm.width())
-			InitScale();
-	}
+	//	LayoutItem::SetPosition(mm, iHit);
+	//	InitMetafile();
+	//}
+	//else {
+	//	LayoutItem::SetPosition(mm, iHit);
+	//	// on move do not change scale
+	//	if (iHit != CRectTracker::hitMiddle && mmOld.width() != mm.width())
+	//		InitScale();
+	//}
 }
 
 bool MapLayoutItem::fIsotropic() const
@@ -311,61 +311,64 @@ double MapLayoutItem::rScale() const
 
 void MapLayoutItem::InitScale()
 {
-	MapCompositionDoc* mcd = mcsi->GetDocument();
-	if (0 == mcd || !mcd->georef.fValid())
-		return;
-	double rPixSize = mcd->georef->rPixSize();
-	if (rUNDEF == rPixSize)
-		return;
-	RowCol rcSize = mcsi->rcSize();
-	MinMax mm = mmPosition();
-	m_rScale = rcSize.Col * rPixSize / mm.width();
-	m_rScale *= 10000; // 0.1 mm units per m
+	throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
+	//MapCompositionDoc* mcd = mcsi->GetDocument();
+	//if (0 == mcd || !mcd->georef.fValid())
+	//	return;
+	//double rPixSize = mcd->georef->rPixSize();
+	//if (rUNDEF == rPixSize)
+	//	return;
+	//RowCol rcSize = mcsi->rcSize();
+	//MinMax mm = mmPosition();
+	//m_rScale = rcSize.Col * rPixSize / mm.width();
+	//m_rScale *= 10000; // 0.1 mm units per m
 }
 
 void MapLayoutItem::SetScale(double rScale)
 {
-	MapCompositionDoc* mcd = mcsi->GetDocument();
-	if (0 == mcd || !mcd->georef.fValid())
-		return;
-	double rPixSize = mcd->georef->rPixSize();
-	if (rUNDEF == rPixSize)
-		return;
-	mcd->SetScale(rScale);
-	m_rScale = rScale;
-	RowCol rcSize = mcsi->rcSize();
-	MinMax mm = mmPosition();
-	
-	rScale /= 10000; // 0.1 mm units per m
-	double rWidth = ( rcSize.Col - mcd->rcPrefOffset().Col) * rPixSize / rScale;
-	double rHeight = ( rcSize.Row - mcd->rcPrefOffset().Row ) * rPixSize / rScale;
+	throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
+	//MapCompositionDoc* mcd = mcsi->GetDocument();
+	//if (0 == mcd || !mcd->georef.fValid())
+	//	return;
+	//double rPixSize = mcd->georef->rPixSize();
+	//if (rUNDEF == rPixSize)
+	//	return;
+	//mcd->SetScale(rScale);
+	//m_rScale = rScale;
+	//RowCol rcSize = mcsi->rcSize();
+	//MinMax mm = mmPosition();
+	//
+	//rScale /= 10000; // 0.1 mm units per m
+	//double rWidth = ( rcSize.Col - mcd->rcPrefOffset().Col) * rPixSize / rScale;
+	//double rHeight = ( rcSize.Row - mcd->rcPrefOffset().Row ) * rPixSize / rScale;
 
-	mm.MaxCol() = mm.MinCol() + rounding(rWidth);
-	mm.MaxRow() = mm.MinRow() + rounding(rHeight);
-	LayoutItem::SetPosition(mm,-1);
-	ld->UpdateAllViews(0, LayoutDoc::hintITEM, this);
+	//mm.MaxCol() = mm.MinCol() + rounding(rWidth);
+	//mm.MaxRow() = mm.MinRow() + rounding(rHeight);
+	//LayoutItem::SetPosition(mm,-1);
+	//ld->UpdateAllViews(0, LayoutDoc::hintITEM, this);
 }
 
 double MapLayoutItem::rAzimuth() const
 {
-	MapCompositionDoc* mcd = mcsi->GetDocument();
-	if (0 == mcd || !mcd->georef.fValid())
-		return rUNDEF;
-	GeoRef grf = mcd->georef;
-	if (grf->fNorthOriented())
-		return 0;
-	RowCol rc = grf->rcSize();
-	rc.Row /= 2;
-	rc.Col /= 2;
-	Coord c1 = grf->cConv(rc);
-	rc.Row += 1;
-	Coord c2 = grf->cConv(rc);
-	double rDX = c2.x - c1.x;
-	double rDY = c2.y - c1.y;
-	double rAz = atan2(rDX, -rDY);
-	if (rAz == 0 && rDY < 0)
-		rAz = M_PI_2;
-	return rAz;
+	throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
+	//MapCompositionDoc* mcd = mcsi->GetDocument();
+	//if (0 == mcd || !mcd->georef.fValid())
+	//	return rUNDEF;
+	//GeoRef grf = mcd->georef;
+	//if (grf->fNorthOriented())
+	//	return 0;
+	//RowCol rc = grf->rcSize();
+	//rc.Row /= 2;
+	//rc.Col /= 2;
+	//Coord c1 = grf->cConv(rc);
+	//rc.Row += 1;
+	//Coord c2 = grf->cConv(rc);
+	//double rDX = c2.x - c1.x;
+	//double rDY = c2.y - c1.y;
+	//double rAz = atan2(rDX, -rDY);
+	//if (rAz == 0 && rDY < 0)
+	//	rAz = M_PI_2;
+	//return rAz;
 }
 
 void MapLayoutItem::OnAddScaleText()
@@ -397,11 +400,11 @@ void MapLayoutItem::OnAddNorthArrow()
 
 void MapLayoutItem::OnAddLegend()
 {
-	LegendLayoutItem* lli = new LegendLayoutItem(ld, this);
-	if (lli->fConfigure())
-		ld->AddItem(lli);
-	else
-		delete lli;
+	//LegendLayoutItem* lli = new LegendLayoutItem(ld, this);
+	//if (lli->fConfigure())
+	//	ld->AddItem(lli);
+	//else
+	//	delete lli;
 }
 
 void MapLayoutItem::OnEntireMap()
@@ -510,41 +513,43 @@ void MapLayoutItem::OnAddMapBorder()
 
 CoordBounds MapLayoutItem::cbBounds() const
 {
-	return mcd()->georef->cb();
+	return mcd()->rootDrawer->getCoordinateSystem()->cb;
 }
 
 Coord MapLayoutItem::cConv(CPoint pt) const
 {
-	RowCol rcSize = mcsi->rcSize();
-	RowCol rcOffset = mcsi->rcOffset();
-	MinMax mm = mmPosition();
-	double rX = pt.x - mm.MinCol();
-	double rY = pt.y - mm.MinRow();
-	rX /= mm.width();
-	rY /= mm.height();
-	rX *= rcSize.Col;
-	rY *= rcSize.Row;
-	rX += rcOffset.Col;
-	rY += rcOffset.Row;
-	Coord crd;
-	mcd()->georef->RowCol2Coord(rY,rX,crd);
-	return crd;
+	throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
+	//RowCol rcSize = mcsi->rcSize();
+	//RowCol rcOffset = mcsi->rcOffset();
+	//MinMax mm = mmPosition();
+	//double rX = pt.x - mm.MinCol();
+	//double rY = pt.y - mm.MinRow();
+	//rX /= mm.width();
+	//rY /= mm.height();
+	//rX *= rcSize.Col;
+	//rY *= rcSize.Row;
+	//rX += rcOffset.Col;
+	//rY += rcOffset.Row;
+	//Coord crd;
+	//mcd()->georef->RowCol2Coord(rY,rX,crd);
+	return Coord();
 }
 												
 LatLon MapLayoutItem::llConv(const Coord& crd) const
 {
-	return mcd()->georef->cs()->llConv(crd);
+	return mcd()->rootDrawer->getCoordinateSystem()->llConv(crd);
 }
 
 LatLon MapLayoutItem::llConv(CPoint pt) const	// pt in 0.1 mm units
 {
 	Coord crd = cConv(pt);
-	return mcd()->georef->cs()->llConv(crd);
+	return mcd()->rootDrawer->getCoordinateSystem()->llConv(crd);
 }
 
 CPoint MapLayoutItem::ptConv(double rRow, double rCol) const
 {
-	RowCol rcSize = mcsi->rcSize();
+	throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
+	/*RowCol rcSize = mcsi->rcSize();
 	RowCol rcOffset = mcsi->rcOffset();
 	MinMax mm = mmPosition();
 	rRow -= rcOffset.Row;
@@ -554,7 +559,7 @@ CPoint MapLayoutItem::ptConv(double rRow, double rCol) const
 	rRow *= mm.height();
 	rCol *= mm.width();
 	rRow += mm.MinRow();
-	rCol += mm.MinCol();
+	rCol += mm.MinCol();*/
 	return CPoint(rounding(rCol), rounding(rRow));
 }
 
@@ -641,7 +646,8 @@ double rFindNull(ValFinder& vf, double rDflt)
 
 CPoint MapLayoutItem::ptBorderX(Side side, double rX) const
 {
-	GeoRef grf = mcd()->georef;
+	throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
+	/*GeoRef grf = mcd()->georef;
 	RowCol rcSize = mcsi->rcSize();
 	RowCol rcOffset = mcsi->rcOffset();
 	RowCol rc;
@@ -665,99 +671,102 @@ CPoint MapLayoutItem::ptBorderX(Side side, double rX) const
 		case sideRIGHT:
 			r = rFindNull(ValFinder(grf,crd,false,true,rcOffset.Col+rcSize.Col), crd.y);
 			return ptConv(r,rcOffset.Col+rcSize.Col);
-	}
+	}*/
 	return CPoint(0,0);
 }
 
 CPoint MapLayoutItem::ptBorderY(Side side, double rY) const
 {
-	GeoRef grf = mcd()->georef;
-	RowCol rcSize = mcsi->rcSize();
-	RowCol rcOffset = mcsi->rcOffset();
-	RowCol rc;
-	rc.Row = rcOffset.Row + rcSize.Row/2;
-	rc.Col = rcOffset.Col + rcSize.Col/2;
-	Coord crd = grf->cConv(rc);
-	crd.y = rY;
-	double r;
+	throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
+	//GeoRef grf = mcd()->georef;
+	//RowCol rcSize = mcsi->rcSize();
+	//RowCol rcOffset = mcsi->rcOffset();
+	//RowCol rc;
+	//rc.Row = rcOffset.Row + rcSize.Row/2;
+	//rc.Col = rcOffset.Col + rcSize.Col/2;
+	//Coord crd = grf->cConv(rc);
+	//crd.y = rY;
+	//double r;
 
-	switch (side)
-	{
-		case sideTOP: 
-			r = rFindNull(ValFinder(grf,crd,true,false,rcOffset.Row), crd.x);
-			return ptConv(rcOffset.Row,r);
-		case sideBOTTOM:
-			r = rFindNull(ValFinder(grf,crd,true,false,rcOffset.Row+rcSize.Row), crd.x);
-			return ptConv(rcOffset.Row+rcSize.Row,r);
-		case sideLEFT:
-			r = rFindNull(ValFinder(grf,crd,true,true,rcOffset.Col), crd.x);
-			return ptConv(r,rcOffset.Col);
-		case sideRIGHT:
-			r = rFindNull(ValFinder(grf,crd,true,true,rcOffset.Col+rcSize.Col), crd.x);
-			return ptConv(r,rcOffset.Col+rcSize.Col);
-	}
+	//switch (side)
+	//{
+	//	case sideTOP: 
+	//		r = rFindNull(ValFinder(grf,crd,true,false,rcOffset.Row), crd.x);
+	//		return ptConv(rcOffset.Row,r);
+	//	case sideBOTTOM:
+	//		r = rFindNull(ValFinder(grf,crd,true,false,rcOffset.Row+rcSize.Row), crd.x);
+	//		return ptConv(rcOffset.Row+rcSize.Row,r);
+	//	case sideLEFT:
+	//		r = rFindNull(ValFinder(grf,crd,true,true,rcOffset.Col), crd.x);
+	//		return ptConv(r,rcOffset.Col);
+	//	case sideRIGHT:
+	//		r = rFindNull(ValFinder(grf,crd,true,true,rcOffset.Col+rcSize.Col), crd.x);
+	//		return ptConv(r,rcOffset.Col+rcSize.Col);
+	//}
 	return CPoint(0,0);
 }
 
 CPoint MapLayoutItem::ptBorderLat(Side side, double rLat) const
 {
-	GeoRef grf = mcd()->georef;
-	RowCol rcSize = mcsi->rcSize();
-	RowCol rcOffset = mcsi->rcOffset();
-	RowCol rc;
-	rc.Row = rcOffset.Row + rcSize.Row/2;
-	rc.Col = rcOffset.Col + rcSize.Col/2;
-	Coord crd = grf->cConv(rc);
-	LatLon ll = grf->cs()->llConv(crd);
-	ll.Lat = rLat;
-	double r;
+	throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
+	//GeoRef grf = mcd()->georef;
+	//RowCol rcSize = mcsi->rcSize();
+	//RowCol rcOffset = mcsi->rcOffset();
+	//RowCol rc;
+	//rc.Row = rcOffset.Row + rcSize.Row/2;
+	//rc.Col = rcOffset.Col + rcSize.Col/2;
+	//Coord crd = grf->cConv(rc);
+	//LatLon ll = grf->cs()->llConv(crd);
+	//ll.Lat = rLat;
+	//double r;
 
-	switch (side)
-	{
-		case sideTOP: 
-			r = rFindNull(ValFinderLatLon(grf,ll,false,false,rcOffset.Row), ll.Lon*1e6);
-			return ptConv(rcOffset.Row,r);
-		case sideBOTTOM:
-			r = rFindNull(ValFinderLatLon(grf,ll,false,false,rcOffset.Row+rcSize.Row), ll.Lon*1e6);
-			return ptConv(rcOffset.Row+rcSize.Row,r);
-		case sideLEFT:
-			r = rFindNull(ValFinderLatLon(grf,ll,false,true,rcOffset.Col), ll.Lon*1e6);
-			return ptConv(r,rcOffset.Col);
-		case sideRIGHT:
-			r = rFindNull(ValFinderLatLon(grf,ll,false,true,rcOffset.Col+rcSize.Col), ll.Lon*1e6);
-			return ptConv(r,rcOffset.Col+rcSize.Col);
-	}
+	//switch (side)
+	//{
+	//	case sideTOP: 
+	//		r = rFindNull(ValFinderLatLon(grf,ll,false,false,rcOffset.Row), ll.Lon*1e6);
+	//		return ptConv(rcOffset.Row,r);
+	//	case sideBOTTOM:
+	//		r = rFindNull(ValFinderLatLon(grf,ll,false,false,rcOffset.Row+rcSize.Row), ll.Lon*1e6);
+	//		return ptConv(rcOffset.Row+rcSize.Row,r);
+	//	case sideLEFT:
+	//		r = rFindNull(ValFinderLatLon(grf,ll,false,true,rcOffset.Col), ll.Lon*1e6);
+	//		return ptConv(r,rcOffset.Col);
+	//	case sideRIGHT:
+	//		r = rFindNull(ValFinderLatLon(grf,ll,false,true,rcOffset.Col+rcSize.Col), ll.Lon*1e6);
+	//		return ptConv(r,rcOffset.Col+rcSize.Col);
+	//}
 	return CPoint(0,0);
 }
 
 CPoint MapLayoutItem::ptBorderLon(Side side, double rLon) const
 {
-	GeoRef grf = mcd()->georef;
-	RowCol rcSize = mcsi->rcSize();
-	RowCol rcOffset = mcsi->rcOffset();
-	RowCol rc;
-	rc.Row = rcOffset.Row + rcSize.Row/2;
-	rc.Col = rcOffset.Col + rcSize.Col/2;
-	Coord crd = grf->cConv(rc);
-	LatLon ll = grf->cs()->llConv(crd);
-	ll.Lon = rLon;
-	double r;
+	throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
+	//GeoRef grf = mcd()->georef;
+	//RowCol rcSize = mcsi->rcSize();
+	//RowCol rcOffset = mcsi->rcOffset();
+	//RowCol rc;
+	//rc.Row = rcOffset.Row + rcSize.Row/2;
+	//rc.Col = rcOffset.Col + rcSize.Col/2;
+	//Coord crd = grf->cConv(rc);
+	//LatLon ll = grf->cs()->llConv(crd);
+	//ll.Lon = rLon;
+	//double r;
 
-	switch (side)
-	{
-		case sideTOP: 
-			r = rFindNull(ValFinderLatLon(grf,ll,true,false,rcOffset.Row), ll.Lat*1e6);
-			return ptConv(rcOffset.Row,r);
-		case sideBOTTOM:
-			r = rFindNull(ValFinderLatLon(grf,ll,true,false,rcOffset.Row+rcSize.Row), ll.Lat*1e6);
-			return ptConv(rcOffset.Row+rcSize.Row,r);
-		case sideLEFT:
-			r = rFindNull(ValFinderLatLon(grf,ll,true,true,rcOffset.Col), ll.Lat*1e6);
-			return ptConv(r,rcOffset.Col);
-		case sideRIGHT:
-			r = rFindNull(ValFinderLatLon(grf,ll,true,true,rcOffset.Col+rcSize.Col), ll.Lat*1e6);
-			return ptConv(r,rcOffset.Col+rcSize.Col);
-	}
+	//switch (side)
+	//{
+	//	case sideTOP: 
+	//		r = rFindNull(ValFinderLatLon(grf,ll,true,false,rcOffset.Row), ll.Lat*1e6);
+	//		return ptConv(rcOffset.Row,r);
+	//	case sideBOTTOM:
+	//		r = rFindNull(ValFinderLatLon(grf,ll,true,false,rcOffset.Row+rcSize.Row), ll.Lat*1e6);
+	//		return ptConv(rcOffset.Row+rcSize.Row,r);
+	//	case sideLEFT:
+	//		r = rFindNull(ValFinderLatLon(grf,ll,true,true,rcOffset.Col), ll.Lat*1e6);
+	//		return ptConv(r,rcOffset.Col);
+	//	case sideRIGHT:
+	//		r = rFindNull(ValFinderLatLon(grf,ll,true,true,rcOffset.Col+rcSize.Col), ll.Lat*1e6);
+	//		return ptConv(r,rcOffset.Col+rcSize.Col);
+	//}
 	return CPoint(0,0);
 }
 
@@ -867,57 +876,58 @@ void MapLayoutItem::OnSelectArea(ZoomableView* zvw)
 
 void MapLayoutItem::AreaSelected(CRect rect)
 {
-  if (rect.Width() < 3 || rect.Height() < 3)
-		return;
-	MinMax mm = zv->mmRect(rect); // mm in 0.1 mm units
-	MinMax mmOldPos = mmPosition();
+	throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
+ // if (rect.Width() < 3 || rect.Height() < 3)
+	//	return;
+	//MinMax mm = zv->mmRect(rect); // mm in 0.1 mm units
+	//MinMax mmOldPos = mmPosition();
 
-	MapCompositionDoc* mcd = mcsi->GetDocument();
-	if (0 == mcd || !mcd->georef.fValid()) 
-		return;
-	double rPixSize = mcd->georef->rPixSize();
-	if (rUNDEF == rPixSize) 
-		rPixSize = 1;
-	RowCol rcMaxSize = mcd->georef->rcSize();
-	RowCol rcOffset = mcsi->rcOffset();
+	//MapCompositionDoc* mcd = mcsi->GetDocument();
+	//if (0 == mcd || ) 
+	//	return;
+	//double rPixSize = mcd->georef->rPixSize();
+	//if (rUNDEF == rPixSize) 
+	//	rPixSize = 1;
+	//RowCol rcMaxSize = mcd->georef->rcSize();
+	//RowCol rcOffset = mcsi->rcOffset();
 
-	RowCol rcSize; 
-	double rScale = m_rScale;
-	rScale /= 10000; // 0.1 mm units per m
+	//RowCol rcSize; 
+	//double rScale = m_rScale;
+	//rScale /= 10000; // 0.1 mm units per m
 
-	int iDiffTop = mm.MinRow() - mmOldPos.MinRow();
-	int iDiffLeft = mm.MinCol() - mmOldPos.MinCol();
-	rcOffset.Row += rounding(iDiffTop / rPixSize * rScale);
-	rcOffset.Col += rounding(iDiffLeft / rPixSize * rScale);
-	if (rcOffset.Col > rcMaxSize.Col - 2 || 
-		  rcOffset.Row > rcMaxSize.Row - 2) 
-	{
-		OnEntireMap();
-		return;
-	}
-	if (rcOffset.Col < 0)
-		rcOffset.Col = 0;
-	if (rcOffset.Row < 0)
-		rcOffset.Row = 0;
+	//int iDiffTop = mm.MinRow() - mmOldPos.MinRow();
+	//int iDiffLeft = mm.MinCol() - mmOldPos.MinCol();
+	//rcOffset.Row += rounding(iDiffTop / rPixSize * rScale);
+	//rcOffset.Col += rounding(iDiffLeft / rPixSize * rScale);
+	//if (rcOffset.Col > rcMaxSize.Col - 2 || 
+	//	  rcOffset.Row > rcMaxSize.Row - 2) 
+	//{
+	//	OnEntireMap();
+	//	return;
+	//}
+	//if (rcOffset.Col < 0)
+	//	rcOffset.Col = 0;
+	//if (rcOffset.Row < 0)
+	//	rcOffset.Row = 0;
 
-	rcSize.Row = rounding(mm.height() / rPixSize * rScale);
-	rcSize.Col = rounding(mm.width() / rPixSize * rScale);
+	//rcSize.Row = rounding(mm.height() / rPixSize * rScale);
+	//rcSize.Col = rounding(mm.width() / rPixSize * rScale);
 
-	if (rcOffset.Row + rcSize.Row > rcMaxSize.Row)
-		rcOffset.Row = rcMaxSize.Row - rcSize.Row;
-	if (rcOffset.Col + rcSize.Col > rcMaxSize.Col)
-		rcOffset.Col = rcMaxSize.Col - rcSize.Col;
-	if (rcOffset.Row < 0 || rcOffset.Col < 0) 
-	{
-		OnEntireMap();
-		return;
-	}
+	//if (rcOffset.Row + rcSize.Row > rcMaxSize.Row)
+	//	rcOffset.Row = rcMaxSize.Row - rcSize.Row;
+	//if (rcOffset.Col + rcSize.Col > rcMaxSize.Col)
+	//	rcOffset.Col = rcMaxSize.Col - rcSize.Col;
+	//if (rcOffset.Row < 0 || rcOffset.Col < 0) 
+	//{
+	//	OnEntireMap();
+	//	return;
+	//}
 
-	mcsi->SetOffsetSize(rcOffset, rcSize);
-	InitScale();
-	InitMetafile();
-	ld->SetModifiedFlag();
-	ld->UpdateAllViews(0, LayoutDoc::hintITEM, this);
+	//mcsi->SetOffsetSize(rcOffset, rcSize);
+	//InitScale();
+	//InitMetafile();
+	//ld->SetModifiedFlag();
+	//ld->UpdateAllViews(0, LayoutDoc::hintITEM, this);
 }
 
 void MapLayoutItem::OnPanRect(ZoomableView* zvw)
@@ -989,11 +999,12 @@ void MapLayoutItem::OnItemReplaceMapView()
 
 void MapLayoutItem::OnUpdateValidGeoRef(CCmdUI* pCmdUI)
 {
-	MapCompositionDoc* mcd = mcsi->GetDocument();
-	if (0 == mcd || !mcd->georef.fValid() || mcd->georef->fGeoRefNone()) 
-		pCmdUI->Enable(FALSE);
-	else
-		pCmdUI->Enable(TRUE);
+	throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
+	//MapCompositionDoc* mcd = mcsi->GetDocument();
+	//if (0 == mcd || !mcd->georef.fValid() || mcd->georef->fGeoRefNone()) 
+	//	pCmdUI->Enable(FALSE);
+	//else
+	//	pCmdUI->Enable(TRUE);
 }
 
 void MapLayoutItem::OnUpdateValidScale(CCmdUI* pCmdUI)

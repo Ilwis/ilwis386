@@ -394,7 +394,7 @@ void EditFiducialMarksForm::OnLButtonDownRC(Coord c)
 
 void EditFiducialMarksForm::SetDirty(RowCol rc)
 {
-	SetDirty(mpv->pntPos(rc));
+//	SetDirty(mpv->pntPos(rc));
 }
 
 void EditFiducialMarksForm::SetDirty(Coord crd)

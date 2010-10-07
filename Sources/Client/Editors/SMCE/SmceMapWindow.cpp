@@ -41,8 +41,6 @@
 #include "Client\Headers\formelementspch.h"
 #include "Headers\constant.h"
 #include "Client\Editors\SMCE\SmceMapWindow.h"
-
-#include "Client\Mapwindow\Drawers\Drawer.h"
 #include "Client\Mapwindow\MapStatusBar.h"
 #include "Headers\Hs\Mapwind.hs"
 #include "Client\Mapwindow\LayerTreeView.h"
