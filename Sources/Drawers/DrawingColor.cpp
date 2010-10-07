@@ -64,7 +64,7 @@ Color DrawingColor::clrVal(double rVal) const
 Color DrawingColor::clrRaw(long iRaw, NewDrawer::DrawMethod drm) const
 {
 	if (iUNDEF == iRaw)
-		return mcd->colBackground;
+		return Color(0,0,0);
 	Color cRet;
 	switch (drm) {
 	case NewDrawer::drmRPR:
@@ -119,14 +119,14 @@ Color DrawingColor::clrRaw(long iRaw, NewDrawer::DrawMethod drm) const
 		break;
 	case NewDrawer::drmBOOL:
 		switch (iRaw) {
-	case 0: return mcd->colBackground;
+	case 0: return Color(0,0,0);
 	case 1: cRet = clr1; break;
 	case 2: cRet = clr2;  break;
 		}
 		break;
 	}
 	if ((long)cRet < 0)
-		return mcd->colBackground;
+		return Color(0,0,0);
 	else
 		return cRet;//.clrDraw(gamma);
 }
@@ -262,7 +262,7 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 	case NewDrawer::drmBOOL: 
 		for (long i = 0; i < iLen; ++i) {
 			long iRaw = buf[i];
-			bufOut[i] = (iRaw == 1)?clr1:((iRaw == 2)?clr2:mcd->colBackground);
+			bufOut[i] = (iRaw == 1)?clr1:((iRaw == 2)?clr2:Color(0,0,0));
 		}
 	break;
 	}
