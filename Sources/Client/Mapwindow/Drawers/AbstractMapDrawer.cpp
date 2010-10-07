@@ -6,6 +6,8 @@
 #include "Engine\Spatialreference\gr.h"
 #include "Engine\Map\Raster\Map.h"
 #include "Client\Ilwis.h"
+#include "Engine\Table\tbl.h"
+#include "Engine\Table\Rec.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
@@ -66,6 +68,7 @@ void AbstractMapDrawer::addDataSource(void *bmap,int options)
 {
 	bm = BaseMap((*((BaseMap *)(bmap)))->fnObj);
 	if ( bm.fValid()) {
+		setName(bm->sName());
 		if ( bm->fTblAtt()) {
 			attTable = bm->tblAtt();
 			attColumn = attTable->col(0);
@@ -163,6 +166,17 @@ void AbstractMapDrawer::setColumnCheckumn(void *w, LayerTreeView *view) {
 void AbstractMapDrawer::setInfoMode(void *v,LayerTreeView *tv) {
 	bool value = *(bool *)v;
 	setInfo(value);
+}
+
+Ilwis::Record AbstractMapDrawer::rec(const Coord& crd)
+{
+  long iRec = getBaseMap()->iRaw(crd);
+  if (iRec > 0) {
+    Table tbl = getBaseMap()->tblAtt();
+    if (tbl.fValid()) 
+      return tbl->rec(iRec);
+  }  
+  return Ilwis::Record();
 }
 
 String AbstractMapDrawer::store(const FileName& fnView, const String& parentSection) const{
