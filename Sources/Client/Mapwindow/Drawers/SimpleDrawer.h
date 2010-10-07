@@ -44,6 +44,7 @@ namespace ILWIS {
 		bool isSimple() const { return true;}
 		bool isDirty() const { return true;} 
 		void setDirty(bool yesno) {}
+		String getInfo(const Coord& crd) const;
 
 		CCriticalSection cs;
 	protected:
