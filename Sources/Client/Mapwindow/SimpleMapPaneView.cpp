@@ -48,21 +48,15 @@ Created on: 2007-02-8
 #include "Client\Mapwindow\Positioner.h"
 #include "Client\Mapwindow\InfoLine.h"
 #include "Client\Editors\Editor.h"
-#include "Client\Mapwindow\Drawers\Drawer.h"
 #include "Client\Mapwindow\DistanceMeasurer.h"
 #include "Client\Mapwindow\MapStatusBar.h"
 #include "Engine\SpatialReference\csdirect.h"
 #include "Client\FormElements\syscolor.h"
+#include "Client\Mapwindow\Drawers\RootDrawer.h"
+#include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Headers\constant.h"
 #include "Headers\Hs\Mapwind.hs"
 #include "Engine\Domain\Dmvalue.h"
-#include "Client\Mapwindow\Drawers\BaseMapDrawer.h"
-#include "Client\Mapwindow\Drawers\MapDrawer.h" // for a dynamic_cast
-#include "Engine\Map\txtann.h" // for the next include to work
-#include "Client\Mapwindow\Drawers\AnnotationTextDrawer.h" // for a dynamic_cast
-#include "Client\Mapwindow\Drawers\Grid3DDrawer.h" // for a dynamic_cast
-#include "Client\Mapwindow\Drawers\WMSMapDrawer.h"
-#include "Client\MapWindow\Drawers\drawer_n.h"
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
 #include "Client\Mapwindow\Drawers\TextDrawer.h"
 #include "Client\Mapwindow\Drawers\MouseClickInfoDrawer.h"
@@ -172,64 +166,32 @@ void SimpleMapPaneView::OnInitialUpdate()
 	info = new InfoLine(this);
 }
 
-MinMax SimpleMapPaneView::mmBounds()
-{
-	return GetDocument()->mmBounds();
-}
-
-void SimpleMapPaneView::Coord2RowCol(Coord crd, double& rRow, double &rCol)
-{
-	try {
-		GetDocument()->georef->Coord2RowCol(crd,rRow,rCol);
-	}
-	catch (...) {
-	}
-}
-
-Coord SimpleMapPaneView::cConv(RowCol rc)
-{
-	try {
-		return GetDocument()->georef->cConv(rc);
-	}
-	catch (...) {
-		return Coord();
-	}  
-}
-
-RowCol SimpleMapPaneView::rcConv(Coord crd)
-{
-	try {
-		return GetDocument()->georef->rcConv(crd);
-	}
-	catch (...) {
-		return RowCol();
-	}
-}
-
 Coord SimpleMapPaneView::crdPnt(zPoint pnt)
 {
-	Coord crd;
-	double rRow, rCol;
-	Pnt2RowCol(pnt, rRow, rCol);
-	try {
-		GetDocument()->georef->RowCol2Coord(rRow,rCol,crd);
-	}
-	catch (...) {
-		crd = Coord();
-	}  
-	return crd;
+	throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
+	//Coord crd;
+	//double rRow, rCol;
+	//Pnt2RowCol(pnt, rRow, rCol);
+	//try {
+	//	GetDocument()->georef->RowCol2Coord(rRow,rCol,crd);
+	//}
+	//catch (...) {
+	//	crd = Coord();
+	//}  
+	//return crd;
 }
 
 zPoint SimpleMapPaneView::pntPos(Coord crd)
 {
-	try {
-		double rRow, rCol;
-		GetDocument()->georef->Coord2RowCol(crd, rRow, rCol);
-		return pntPos(rRow, rCol);
-	}
-	catch (...) {
-		return zPoint(shUNDEF, shUNDEF);
-	}  
+	throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
+	//try {
+	//	double rRow, rCol;
+	//	GetDocument()->georef->Coord2RowCol(crd, rRow, rCol);
+	//	return pntPos(rRow, rCol);
+	//}
+	//catch (...) {
+	//	return zPoint(shUNDEF, shUNDEF);
+	//}  
 }
 
 BOOL SimpleMapPaneView::OnEraseBkgnd(CDC* cdc)
@@ -277,14 +239,15 @@ void SimpleMapPaneView::OnMeasureDist()
 
 void SimpleMapPaneView::OnUpdateMeasureDist(CCmdUI* pCmdUI)
 {
-	bool fGeoRefNone = true; // pessimistic
-	GeoRef gr (GetDocument()->georef);
-	if (gr.fValid()) // then we can recalculate the boolean
-		fGeoRefNone = gr->fGeoRefNone();
-	pCmdUI->Enable(!fGeoRefNone);
-	if (0 == as)
-		iActiveTool = 0;
-	pCmdUI->SetRadio(ID_MEASUREDIST == iActiveTool);
+	//throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
+	//bool fGeoRefNone = true; // pessimistic
+	//GeoRef gr (GetDocument()->georef);
+	//if (gr.fValid()) // then we can recalculate the boolean
+	//	fGeoRefNone = gr->fGeoRefNone();
+	//pCmdUI->Enable(!fGeoRefNone);
+	//if (0 == as)
+	//	iActiveTool = 0;
+	//pCmdUI->SetRadio(ID_MEASUREDIST == iActiveTool);
 }
 
 void SimpleMapPaneView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
@@ -328,122 +291,120 @@ void SimpleMapPaneView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 void SimpleMapPaneView::OnMouseMove(UINT nFlags, CPoint point) 
 {
-	if (edit && edit->OnMouseMove(nFlags, point)) 
-		return;
-	MapCompositionDoc* mcd = GetDocument();
+	//throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
+	//if (edit && edit->OnMouseMove(nFlags, point)) 
+	//	return;
+	//MapCompositionDoc* mcd = GetDocument();
 
-	GeoRef georef = mcd->georef;
-	if (!georef.fValid()) 
-		return;
+	//CRect rctBounds = rctPos(mcd->mmBounds());
+	//bool fOutside = false; //!rctBounds.PtInRect(point);
 
-	CRect rctBounds = rctPos(mcd->mmBounds());
-	bool fOutside = false; //!rctBounds.PtInRect(point);
+	//bool fNone = georef->fGeoRefNone();
+	//double rRow=0, rCol=0;
+	//Coord c;
+	////Pnt2RowCol(point, rRow, rCol);
+	//bool fValid = true;
+	//c = mcd->rootDrawer->screenToWorld(RowCol(point.y,point.x));
+	//MapStatusBar* msb = 0;
+	//CoordSystem csy = mcd->rootDrawer->getCoordinateSystem();
+	//if (fwPar) 
+	//	msb = dynamic_cast<MapStatusBar*>(fwPar->status);
 
-	bool fNone = georef->fGeoRefNone();
-	double rRow=0, rCol=0;
-	Coord c;
-	//Pnt2RowCol(point, rRow, rCol);
-	bool fValid = true;
-	c = mcd->rootDrawer->screenToWorld(RowCol(point.y,point.x));
-	MapStatusBar* msb = 0;
-	CoordSystem csy = mcd->rootDrawer->getCoordinateSystem();
-	if (fwPar) 
-		msb = dynamic_cast<MapStatusBar*>(fwPar->status);
-
-	if (msb && !fOutside) {
-		if (mcd->fShowRowCol) {
-			RowCol rc((long)floor(1+rRow), (long)floor(1+rCol));
-			msb->ShowRowCol(rc);
-		}
-		if (c.fUndef())
-			fValid = false; // fNone = true;  
-		if (fNone) {
-			msb->ShowCoord(SMWRem__NoCoords);
-			msb->ShowLatLon(LatLon());
-		}
-		else if (!fValid) {
-			msb->ShowCoord(SMWRem__NoCoordsCalculated);
-			msb->ShowLatLon(LatLon());
-		}
-		else {    
-			msb->ShowCoord(csy->sValue(c));
-			if (csy->pcsDirect()) {
-				CoordSystemDirect *pcsd = csy->pcsDirect();
-				CoordSystemPtr * pcs = pcsd->csOther.ptr();
-				Coord crd = pcsd->cInverseConv(pcs,c);
-				msb->ShowRelCoord(pcsd->csOther->sValue(crd));
-			}
-			if (csy->fCoord2LatLon()) {
-				LatLon ll = csy->llConv(c);
-				msb->ShowLatLon(ll);
-			}
-			else
-				msb->ShowLatLon(LatLon());
-		}  
-	}
-	if (0 == as && (MK_LBUTTON & nFlags)) {
-		zRect rect;
-		GetClientRect(&rect);
-		if (!rect.PtInRect(point)) {
-			info->text(point,"");
-			int xInc = 0;
-			int yInc = 0;
-			if (point.x < rect.left()) {
-				int iDiff = point.x - rect.left();
-				horzPixMove(iDiff);
-				xInc = 1;
-			}
-			if (point.x > rect.right()) {
-				int iDiff = point.x - rect.right();
-				horzPixMove(iDiff);
-				xInc = -1;
-			}
-			if (point.y < rect.top()) {
-				int iDiff = point.y - rect.top();
-				vertPixMove(iDiff);
-				yInc = 1;
-			}
-			if (point.y > rect.bottom()) {
-				int iDiff = point.y - rect.bottom();
-				vertPixMove(iDiff);
-				yInc = -1;
-			}
-			MoveMouse(xInc, yInc);
-			UpdateWindow();
-		}
-		else {
-			bool fHide = true;
-			if (fValid && !fOutside)
-				for (list<Drawer*>::reverse_iterator iter = mcd->dl.rbegin(); iter != mcd->dl.rend(); ++iter)
-				{
-					Drawer* dr = *iter;
-					if (dr->fSelectable) 
-					{
-						Coord crd = c;
-						BaseMapDrawer* bmd = dynamic_cast<BaseMapDrawer*>(dr);
-						if (bmd && bmd->basemap()->cs() != mcd->georef->cs())
-						{
-							crd = bmd->basemap()->cs()->cConv(mcd->georef->cs(), c);
-						}
-						String s = dr->sInfo(crd);
-						if (s != "") {
-							DomainValue* dv = dr->dm()->pdv();
-							if (0 != dv && dv->fUnit())
-								s = String("%S %S", s, dv->sUnit());
-							info->text(point,s);
-							fHide = false;
-							break;
-						}
-					}
-				}
-				if (fHide)
-					info->text(point,"");
-		}
-	}
-	if (!fNone && fValid && !fOutside) {
-		CoordWithCoordSystem cwcs(c, georef->cs());
-		IlwWinApp()->SendUpdateCoordMessages(cmMOUSEMOVE, &cwcs);
-	}
+	//if (msb && !fOutside) {
+	//	if (mcd->fShowRowCol) {
+	//		RowCol rc((long)floor(1+rRow), (long)floor(1+rCol));
+	//		msb->ShowRowCol(rc);
+	//	}
+	//	if (c.fUndef())
+	//		fValid = false; // fNone = true;  
+	//	if (fNone) {
+	//		msb->ShowCoord(SMWRem__NoCoords);
+	//		msb->ShowLatLon(LatLon());
+	//	}
+	//	else if (!fValid) {
+	//		msb->ShowCoord(SMWRem__NoCoordsCalculated);
+	//		msb->ShowLatLon(LatLon());
+	//	}
+	//	else {    
+	//		msb->ShowCoord(csy->sValue(c));
+	//		if (csy->pcsDirect()) {
+	//			CoordSystemDirect *pcsd = csy->pcsDirect();
+	//			CoordSystemPtr * pcs = pcsd->csOther.ptr();
+	//			Coord crd = pcsd->cInverseConv(pcs,c);
+	//			msb->ShowRelCoord(pcsd->csOther->sValue(crd));
+	//		}
+	//		if (csy->fCoord2LatLon()) {
+	//			LatLon ll = csy->llConv(c);
+	//			msb->ShowLatLon(ll);
+	//		}
+	//		else
+	//			msb->ShowLatLon(LatLon());
+	//	}  
+	//}
+	//if (0 == as && (MK_LBUTTON & nFlags)) {
+	//	zRect rect;
+	//	GetClientRect(&rect);
+	//	if (!rect.PtInRect(point)) {
+	//		info->text(point,"");
+	//		int xInc = 0;
+	//		int yInc = 0;
+	//		if (point.x < rect.left()) {
+	//			int iDiff = point.x - rect.left();
+	//			horzPixMove(iDiff);
+	//			xInc = 1;
+	//		}
+	//		if (point.x > rect.right()) {
+	//			int iDiff = point.x - rect.right();
+	//			horzPixMove(iDiff);
+	//			xInc = -1;
+	//		}
+	//		if (point.y < rect.top()) {
+	//			int iDiff = point.y - rect.top();
+	//			vertPixMove(iDiff);
+	//			yInc = 1;
+	//		}
+	//		if (point.y > rect.bottom()) {
+	//			int iDiff = point.y - rect.bottom();
+	//			vertPixMove(iDiff);
+	//			yInc = -1;
+	//		}
+	//		MoveMouse(xInc, yInc);
+	//		UpdateWindow();
+	//	}
+	//	else {
+	//		bool fHide = true;
+	//		if (fValid && !fOutside)
+	//			for (int i = 0; i < mcd->rootDrawer->getDrawerCount(); ++i) 
+	//			{
+	//				NewDrawer* dr = mcd->rootDrawer->getDrawer(i);
+	//				if (dr->isActive()) 
+	//				{
+	//					Coord crd = c;
+	//					AbstractMapDrawer* bmd = dynamic_cast<AbstractMapDrawer*>(dr);
+	//					BaseMapPtr *bmptr = bmd->getBaseMap();
+	//					if (bmptr->cs() != mcd->rootDrawer->getCoordinateSystem())
+	//					{
+	//						crd = bmptr->cs()->cConv(mcd->rootDrawer->getCoordinateSystem(), c);
+	//					}
+	//					String s = dr->getInfo(crd);
+	//					if (s != "") {
+	//						DomainValue* dv = bmptr->dm()->pdv();
+	//						if (0 != dv && dv->fUnit())
+	//							s = String("%S %S", s, dv->sUnit());
+	//						info->text(point,s);
+	//						fHide = false;
+	//						break;
+	//					}
+	//				}
+	//			}
+	//			if (fHide)
+	//				info->text(point,"");
+	//	}
+	//}
+	//if (!fNone && fValid && !fOutside) {
+	//	CoordWithCoordSystem cwcs(c, georef->cs());
+	//	IlwWinApp()->SendUpdateCoordMessages(cmMOUSEMOVE, &cwcs);
+	//}
 	CView::OnMouseMove(nFlags, point);
 }
 
@@ -486,8 +447,8 @@ void SimpleMapPaneView::OnLButtonUp(UINT nFlags, CPoint point)
 
 BOOL SimpleMapPaneView::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo) 
 {
-	if (edit && edit->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
-		return TRUE;
+	//if (edit && edit->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
+	//	return TRUE;
 	return ZoomableView::OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
 }
 
@@ -528,213 +489,214 @@ UINT SimpleMapPaneView::RedrawPaneInThread(LPVOID lp)
 
 void SimpleMapPaneView::RedrawInThread()
 {
-	if ( true) {
-		MapCompositionDoc* mcd = GetDocument();
-		//	(*(mcd->drawers.begin()))->prepare();
-		//	(*(mcd->drawers.begin()))->draw();
-		return;
-	}
+	//if ( true) {
+	//	MapCompositionDoc* mcd = GetDocument();
+	//	//	(*(mcd->drawers.begin()))->prepare();
+	//	//	(*(mcd->drawers.begin()))->draw();
+	//	return;
+	//}
 
-	fRedrawing = true;
-	CWaitCursor curWait;
-	fDirty = false;
-	fDrawStop = false;
-	MapCompositionDoc* mcd = GetDocument();
-	MapStatusBar* msb = 0;
-	if (fwPar) 
-		msb = dynamic_cast<MapStatusBar*>(fwPar->status);
-	CRect rect;
-	GetClientRect(rect);
-	MinMax mm = mmRect(rect);
-	double rSc = rScale();
-	BitmapPositioner psnBm(rSc,mm,mcd->georef);
+	//fRedrawing = true;
+	//CWaitCursor curWait;
+	//fDirty = false;
+	//fDrawStop = false;
+	//MapCompositionDoc* mcd = GetDocument();
+	//MapStatusBar* msb = 0;
+	//if (fwPar) 
+	//	msb = dynamic_cast<MapStatusBar*>(fwPar->status);
+	//CRect rect;
+	//GetClientRect(rect);
+	//MinMax mm = mmRect(rect);
+	//double rSc = rScale();
+	//BitmapPositioner psnBm(rSc,mm,mcd->georef);
 
-	CClientDC cdc(this);
-	CDC* dcBm = new CDC; // will be cleaned up at next cycle or at destructor
-	CBitmap * bm = new CBitmap; // will be cleaned up at next cycle or at destructor
-	bm->CreateCompatibleBitmap(&cdc,rect.Width(),rect.Height()); // will be released at next cycle or at destructor
-	dcBm->CreateCompatibleDC(&cdc); // will be released at next cycle or at destructor
-	CBitmap * bmToRestore = dcBm->SelectObject(bm); // NOTE: bmToRestore belongs to dcBm
+	//CClientDC cdc(this);
+	//CDC* dcBm = new CDC; // will be cleaned up at next cycle or at destructor
+	//CBitmap * bm = new CBitmap; // will be cleaned up at next cycle or at destructor
+	//bm->CreateCompatibleBitmap(&cdc,rect.Width(),rect.Height()); // will be released at next cycle or at destructor
+	//dcBm->CreateCompatibleDC(&cdc); // will be released at next cycle or at destructor
+	//CBitmap * bmToRestore = dcBm->SelectObject(bm); // NOTE: bmToRestore belongs to dcBm
 
-	Color colBackground = mcd->colBackground;
-	//  if (0 != alphablendfunc)
-	//    colBackground.alpha() = 255;
+	//Color colBackground = mcd->colBackground;
+	////  if (0 != alphablendfunc)
+	////    colBackground.alpha() = 255;
 
-	CPen penRect(PS_SOLID,1,colBackground);
-	CBrush brRect(colBackground);
-	CPen* penOld = dcBm->SelectObject(&penRect);
-	CBrush* brOld = dcBm->SelectObject(&brRect);
-	CRect rctBounds = rctPos(mcd->mmBounds());
-	dcBm->Rectangle(rect);
-	dcBm->SelectObject(penOld);
-	dcBm->SelectObject(brOld);
+	//CPen penRect(PS_SOLID,1,colBackground);
+	//CBrush brRect(colBackground);
+	//CPen* penOld = dcBm->SelectObject(&penRect);
+	//CBrush* brOld = dcBm->SelectObject(&brRect);
+	//CRect rctBounds = rctPos(mcd->mmBounds());
+	//dcBm->Rectangle(rect);
+	//dcBm->SelectObject(penOld);
+	//dcBm->SelectObject(brOld);
 
-	int iState = mcd->iState();
-	for (list<Drawer*>::iterator iter = mcd->dl.begin(); iter != mcd->dl.end(); ++iter) 
-	{
-		if (fDrawStop)
-			break;
-		if (iState != mcd->iState()) 
-			break;
-		Drawer* dr = *iter;
-		if (msb)
-			msb->SetActiveDrawer(dr);
-		if (iState != mcd->iState()) 
-			break;
-		if (dr->fScaleLimits) {
-			double rScale = rounding(rScaleShow());
-			if (rScale < dr->riScaleLimits.iLo())
-				continue;
-			if (rScale >= dr->riScaleLimits.iHi())
-				continue;
-		}
-		if (0 != edit && dr == edit->dr())
-			continue;
-		if (dr->fTransparency && 0 != alphablendfunc)
-		{
-			CBitmap bmLayer;
-			bmLayer.CreateCompatibleBitmap(&cdc,rect.Width(),rect.Height());
-			CDC dcLayer;
-			dcLayer.CreateCompatibleDC(&cdc);
-			dcLayer.SelectObject(&bmLayer);
+	//int iState = mcd->iState();
+	//for (list<Drawer*>::iterator iter = mcd->dl.begin(); iter != mcd->dl.end(); ++iter) 
+	//{
+	//	if (fDrawStop)
+	//		break;
+	//	if (iState != mcd->iState()) 
+	//		break;
+	//	Drawer* dr = *iter;
+	//	if (msb)
+	//		msb->SetActiveDrawer(dr);
+	//	if (iState != mcd->iState()) 
+	//		break;
+	//	if (dr->fScaleLimits) {
+	//		double rScale = rounding(rScaleShow());
+	//		if (rScale < dr->riScaleLimits.iLo())
+	//			continue;
+	//		if (rScale >= dr->riScaleLimits.iHi())
+	//			continue;
+	//	}
+	//	if (0 != edit && dr == edit->dr())
+	//		continue;
+	//	if (dr->fTransparency && 0 != alphablendfunc)
+	//	{
+	//		CBitmap bmLayer;
+	//		bmLayer.CreateCompatibleBitmap(&cdc,rect.Width(),rect.Height());
+	//		CDC dcLayer;
+	//		dcLayer.CreateCompatibleDC(&cdc);
+	//		dcLayer.SelectObject(&bmLayer);
 
-			CPen penRect(PS_SOLID,1,Color(0));
-			CBrush brRect(Color(0));
-			CPen* penOld = dcLayer.SelectObject(&penRect);
-			CBrush* brOld = dcLayer.SelectObject(&brRect);
-			dcLayer.Rectangle(rect);
-			dcLayer.SelectObject(penOld);
-			dcLayer.SelectObject(brOld);
+	//		CPen penRect(PS_SOLID,1,Color(0));
+	//		CBrush brRect(Color(0));
+	//		CPen* penOld = dcLayer.SelectObject(&penRect);
+	//		CBrush* brOld = dcLayer.SelectObject(&brRect);
+	//		dcLayer.Rectangle(rect);
+	//		dcLayer.SelectObject(penOld);
+	//		dcLayer.SelectObject(brOld);
 
-			dr->draw(&dcLayer, rect, &psnBm, &fDrawStop);
-			if (fDrawStop)
-				break;
-			BLENDFUNCTION blendfunc;
-			blendfunc.BlendOp = AC_SRC_OVER;
-			blendfunc.BlendFlags = 0;
-			blendfunc.SourceConstantAlpha = (byte)(255 * (100 - dr->iTransparence)/100.0);
-			blendfunc.AlphaFormat = 1;
+	//		dr->draw(&dcLayer, rect, &psnBm, &fDrawStop);
+	//		if (fDrawStop)
+	//			break;
+	//		BLENDFUNCTION blendfunc;
+	//		blendfunc.BlendOp = AC_SRC_OVER;
+	//		blendfunc.BlendFlags = 0;
+	//		blendfunc.SourceConstantAlpha = (byte)(255 * (100 - dr->iTransparence)/100.0);
+	//		blendfunc.AlphaFormat = 1;
 
-			alphablendfunc(*dcBm, 0,0, rect.Width(), rect.Height(), 
-				dcLayer,0,0,rect.Width(),rect.Height(),blendfunc);
-		}
-		else
-		{
-			if ((dynamic_cast<MapDrawer*>(dr) != 0) || (dynamic_cast<AnnotationTextDrawer*>(dr) != 0) || (dynamic_cast<Grid3DDrawer*>(dr) != 0)) {
-				WMSMapDrawer *wmsdr = dynamic_cast<WMSMapDrawer*>(dr);
-				bool overview = wmsdr == 0 || dynamic_cast<OverviewMapPaneView *>(this) == 0;
-				if ( overview)
-					dr->draw(dcBm, rect, &psnBm, &fDrawStop);
-			}
-			else
-			{
-				// special handling for non raster-layers - reduce thickness
+	//		alphablendfunc(*dcBm, 0,0, rect.Width(), rect.Height(), 
+	//			dcLayer,0,0,rect.Width(),rect.Height(),blendfunc);
+	//	}
+	//	else
+	//	{
+	//		if ((dynamic_cast<MapDrawer*>(dr) != 0) || (dynamic_cast<AnnotationTextDrawer*>(dr) != 0) || (dynamic_cast<Grid3DDrawer*>(dr) != 0)) {
+	//			WMSMapDrawer *wmsdr = dynamic_cast<WMSMapDrawer*>(dr);
+	//			bool overview = wmsdr == 0 || dynamic_cast<OverviewMapPaneView *>(this) == 0;
+	//			if ( overview)
+	//				dr->draw(dcBm, rect, &psnBm, &fDrawStop);
+	//		}
+	//		else
+	//		{
+	//			// special handling for non raster-layers - reduce thickness
 
-				int iOldMapMode = dcBm->SetMapMode(MM_ANISOTROPIC);
-				SetGraphicsMode(dcBm->GetSafeHdc(), GM_ADVANCED); // otherwise fonts can't be scaled and rotated at the same time!
-				CSize szOldWindowExt = dcBm->ScaleWindowExt(RepresentationClass::iSIZE_FACTOR, 1, RepresentationClass::iSIZE_FACTOR, 1);
+	//			int iOldMapMode = dcBm->SetMapMode(MM_ANISOTROPIC);
+	//			SetGraphicsMode(dcBm->GetSafeHdc(), GM_ADVANCED); // otherwise fonts can't be scaled and rotated at the same time!
+	//			CSize szOldWindowExt = dcBm->ScaleWindowExt(RepresentationClass::iSIZE_FACTOR, 1, RepresentationClass::iSIZE_FACTOR, 1);
 
-				// only influence thicknesses - not positions, so alter the positioner
-				if (rSc < 0) // scale correction for historical reasons - negative scale number had special meaning
-					rSc = -1 / rSc;
-				BitmapPositioner psnBmScaled(rSc * RepresentationClass::iSIZE_FACTOR, mm, mcd->georef);
+	//			// only influence thicknesses - not positions, so alter the positioner
+	//			if (rSc < 0) // scale correction for historical reasons - negative scale number had special meaning
+	//				rSc = -1 / rSc;
+	//			BitmapPositioner psnBmScaled(rSc * RepresentationClass::iSIZE_FACTOR, mm, mcd->georef);
 
-				// now draw
-				dr->draw(dcBm, rect, &psnBmScaled, &fDrawStop);
-				// then restore window properties
-				dcBm->SetWindowExt(szOldWindowExt);
-				dcBm->SetMapMode(iOldMapMode);
-			}
-		}
-	}
-	// Now we need to do {dcBm->SelectObject(bmToRestore); bm->DeleteObject(); delete bm;}
-	// This would release and free bm, but it is too early.
-	// I don't remember exactly why, but either the map disappears from the display, or
-	// at a slideshow there is a black bitmap shown between slides
+	//			// now draw
+	//			dr->draw(dcBm, rect, &psnBmScaled, &fDrawStop);
+	//			// then restore window properties
+	//			dcBm->SetWindowExt(szOldWindowExt);
+	//			dcBm->SetMapMode(iOldMapMode);
+	//		}
+	//	}
+	//}
+	//// Now we need to do {dcBm->SelectObject(bmToRestore); bm->DeleteObject(); delete bm;}
+	//// This would release and free bm, but it is too early.
+	//// I don't remember exactly why, but either the map disappears from the display, or
+	//// at a slideshow there is a black bitmap shown between slides
 
-	// The solution is to do it at the next redraw cycle or at the destructor
-	// For this we need to maintain pointers to the old CDC, bitmap and popped bitmap
-	// (resp. dcView, bmView and bmOld) while the new CDC, bitmab and popped bitmap
-	// (resp. dcBm, bm and bmToRestore) are being created
+	//// The solution is to do it at the next redraw cycle or at the destructor
+	//// For this we need to maintain pointers to the old CDC, bitmap and popped bitmap
+	//// (resp. dcView, bmView and bmOld) while the new CDC, bitmab and popped bitmap
+	//// (resp. dcBm, bm and bmToRestore) are being created
 
-	// Hence the code below and in the destructor
+	//// Hence the code below and in the destructor
 
-	if (msb && !fDrawStop)
-		msb->SetActiveDrawer(0);
-	if (iState != mcd->iState()) 
-	{
-		// First attempt to clean up GDI and memory: according to the "official" way
-		CBitmap * bmOut = dcBm->SelectObject(bmToRestore); // To return the bm of the previous redraw
-		// we keep bmOut for fail-safety.. it is a TempGDIObject equal to our bm
-		if (bmOut) // If the bm appeared, clean it up !! don't clean up objs still selected!!
-		{
-			bm->DeleteObject();
-			delete bm;
-			bm = 0;
-		}
-		dcBm->DeleteDC();
-		delete dcBm;
-		// one more attempt to clean up GDI and memory
-		if (bm)
-		{
-			bm->DeleteObject(); // encapsulating dc is gone, so this should be ok now
-			delete bm;
-		}
-		fDirty = true;
-		return;
-	}
-	csDcView.Lock();
-	if (dcView)
-	{
-		// First attempt to clean up GDI and memory: according to the "official" way
-		CBitmap * bmOut = dcView->SelectObject(CBitmap::FromHandle(hBmOld)); // To return the bm of the previous redraw
-		// we keep bmOut for fail-safety.. it is a TempGDIObject equal to our bmView
-		if (bmOut) // If the bm appeared, clean it up !! don't clean up objs still selected!!
-		{
-			bmView->DeleteObject();
-			delete bmView;
-			bmView = 0;
-		}
-		dcView->DeleteDC();
-		delete dcView;
-	}
-	// one more attempt to clean up GDI and memory
-	if (bmView)
-	{
-		bmView->DeleteObject(); // encapsulating dc is gone, so this should be ok now
-		delete bmView;
-	}
-	dcView = dcBm;			 // bmToRestore belongs to dcBm, just like bmOld belongs to dcView
-	bmView = bm;				 // bmView and dcView must be cleaned up at next round or destructor
-	hBmOld = (HBITMAP)bmToRestore->GetSafeHandle(); // hBmOld helps freeing our bitmap from CDC with SelectObject
-	csDcView.Unlock();
-	fRedrawing = false;
+	//if (msb && !fDrawStop)
+	//	msb->SetActiveDrawer(0);
+	//if (iState != mcd->iState()) 
+	//{
+	//	// First attempt to clean up GDI and memory: according to the "official" way
+	//	CBitmap * bmOut = dcBm->SelectObject(bmToRestore); // To return the bm of the previous redraw
+	//	// we keep bmOut for fail-safety.. it is a TempGDIObject equal to our bm
+	//	if (bmOut) // If the bm appeared, clean it up !! don't clean up objs still selected!!
+	//	{
+	//		bm->DeleteObject();
+	//		delete bm;
+	//		bm = 0;
+	//	}
+	//	dcBm->DeleteDC();
+	//	delete dcBm;
+	//	// one more attempt to clean up GDI and memory
+	//	if (bm)
+	//	{
+	//		bm->DeleteObject(); // encapsulating dc is gone, so this should be ok now
+	//		delete bm;
+	//	}
+	//	fDirty = true;
+	//	return;
+	//}
+	//csDcView.Lock();
+	//if (dcView)
+	//{
+	//	// First attempt to clean up GDI and memory: according to the "official" way
+	//	CBitmap * bmOut = dcView->SelectObject(CBitmap::FromHandle(hBmOld)); // To return the bm of the previous redraw
+	//	// we keep bmOut for fail-safety.. it is a TempGDIObject equal to our bmView
+	//	if (bmOut) // If the bm appeared, clean it up !! don't clean up objs still selected!!
+	//	{
+	//		bmView->DeleteObject();
+	//		delete bmView;
+	//		bmView = 0;
+	//	}
+	//	dcView->DeleteDC();
+	//	delete dcView;
+	//}
+	//// one more attempt to clean up GDI and memory
+	//if (bmView)
+	//{
+	//	bmView->DeleteObject(); // encapsulating dc is gone, so this should be ok now
+	//	delete bmView;
+	//}
+	//dcView = dcBm;			 // bmToRestore belongs to dcBm, just like bmOld belongs to dcView
+	//bmView = bm;				 // bmView and dcView must be cleaned up at next round or destructor
+	//hBmOld = (HBITMAP)bmToRestore->GetSafeHandle(); // hBmOld helps freeing our bitmap from CDC with SelectObject
+	//csDcView.Unlock();
+	//fRedrawing = false;
 }
 
 // returns 1:.... value
 double SimpleMapPaneView::rScaleShow()
 {
-	MapCompositionDoc* mcd = GetDocument();
-	if (0 == mcd || !mcd->georef.fValid())
-		return rUNDEF;
-	double rPixSize = mcd->georef->rPixSize();
-	if (rUNDEF == rPixSize)
-		return rUNDEF;
-	CoordSystemLatLon* csll = mcd->georef->cs()->pcsLatLon();
-	if (0 != csll)
-		rPixSize *= M_PI / 180 * csll->ell.a;
-	if (rScale() > 0)
-		rPixSize /= rScale();
-	else if (rScale() < 0)
-		rPixSize *= -rScale();
+	//throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
+	//MapCompositionDoc* mcd = GetDocument();
+	//if (0 == mcd || !mcd->georef.fValid())
+	//	return rUNDEF;
+	//double rPixSize = mcd->georef->rPixSize();
+	//if (rUNDEF == rPixSize)
+	//	return rUNDEF;
+	//CoordSystemLatLon* csll = mcd->georef->cs()->pcsLatLon();
+	//if (0 != csll)
+	//	rPixSize *= M_PI / 180 * csll->ell.a;
+	//if (rScale() > 0)
+	//	rPixSize /= rScale();
+	//else if (rScale() < 0)
+	//	rPixSize *= -rScale();
 
-	CClientDC dc(this);
-	int iPixPerInchY = dc.GetDeviceCaps(LOGPIXELSY);
-	double rPixPermm = iPixPerInchY / 25.4;         // (pixel per mm)
+	//CClientDC dc(this);
+	//int iPixPerInchY = dc.GetDeviceCaps(LOGPIXELSY);
+	//double rPixPermm = iPixPerInchY / 25.4;         // (pixel per mm)
 
-	rPixSize *= rPixPermm;
-	rPixSize *= 1000; // 1000 mm per m
-	return rPixSize;
+	//rPixSize *= rPixPermm;
+	//rPixSize *= 1000; // 1000 mm per m
+	return 1;
 }
 
 void SimpleMapPaneView::SetDirty()
