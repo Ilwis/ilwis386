@@ -37,10 +37,10 @@ Color DrawingColor::clrVal(double rVal) const
 		switch (drw->getStretchMethod())
 		{
 		case SetDrawer::smLINEAR:
-			if ( type != IlwisObject::iotRASMAP)
+			//if ( type != IlwisObject::iotRASMAP)
 				cRet = (Color)rpr->clr(rVal, drw->getStretchRangeReal());
-			else
-				cRet = (Color)rpr->clr(rVal);
+			//else
+			//	cRet = (Color)rpr->clr(rVal);
 			break;
 		case  SetDrawer::smLOGARITHMIC:
 			{

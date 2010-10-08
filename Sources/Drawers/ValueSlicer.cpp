@@ -8,6 +8,7 @@
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
 #include "Drawers\DrawingColor.h"
 #include "Client\ilwis.h"
+#include "Engine\Representation\Rprvalue.h"
 #include "Engine\Representation\Rprgrad.h"
 #include "Engine\Base\DataObjects\valrange.h"
 #include "Drawers\ValueSlicer.h"
@@ -275,7 +276,7 @@ void ValueSlicerSlider::init() {
 			for(int i=0; i < bounds.size(); ++i) {
 				bounds[i] = valrange->rrMinMax().rLo() + i * (valrange->rrMinMax().rWidth() / (bounds.size() - 1));
 			}
-			rprgrad = new RepresentationGradual(FileName(), Domain("value"));
+			rprgrad = new RepresentationValue(FileName(), Domain("value"));
 			rprCreated = true;
 		}
 		rprgrad->reset();
