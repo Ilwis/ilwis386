@@ -130,7 +130,7 @@ void TimeGraph::OnLButtonUp(UINT nFlags, CPoint point) {
 		if ( !fldGraph->sourceTable.fValid() || fldGraph->sourceColumn == "")
 				useDefault = true;
 		if ( !useDefault) {
-			Column col = fldGraph->sourceTable->col(fldGraph->sourceColumn);
+			col = fldGraph->sourceTable->col(fldGraph->sourceColumn);
 			if ( !col.fValid())
 				useDefault = true;
 		}
