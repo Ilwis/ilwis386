@@ -73,17 +73,17 @@ void ValueSlicer::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 		if ( c.red() == 176 && i  == 2) {
 			fldslicer->drawingcolor->clrVal(cv);
 		}
-		//TRACE(String("%f %f %d %d %d\n",v1,v2,(int)c.red(), (int)c.green(), (int)c.blue()).scVal());
 		CBrush brush(c);
-		oldBrush = SelectObject(lpDIS->hDC, brush);
+		HGDIOBJ prevBrush = SelectObject(lpDIS->hDC, brush);
 		int yup = rct.bottom - y - (v2 - v1) * yscale;
 		int ydown = rct.bottom - y;
 		::Rectangle(lpDIS->hDC, rct.left, ydown, rct.right, yup);
+		//TRACE(String("%f %f %f %d %f\n",v2,v1, v2-v1,(int)((v2 - v1) * yscale),yscale).scVal());
 		y += (v2 - v1) * yscale;
 		String txt = fldslicer->valrange->vri() ? String("%d",(int)v2) : String("%.03f", v2);
 		::TextOut(lpDIS->hDC,rct.right, rct.bottom - y - 8, txt.scVal(),txt.size());
 		ylimits[i] = rct.bottom - y;
-		SelectObject(lpDIS->hDC, oldBrush);
+		SelectObject(lpDIS->hDC, prevBrush);
 		
 	}
 	if ( activePoint.x != UNDEFPOINT) {
@@ -119,7 +119,8 @@ void ValueSlicer::OnMouseMove(UINT nFlags, CPoint point) {
 		int index = 0;
 		for(; index < ylimits.size(); ++index) {
 			int delta = abs(ylimits[index] - point.y);
-			int tolerance = (double)rct.Height() * 0.02;
+			int tolerance = (double)rct.Height() * 0.04; // NB this hit value is a bit processor dependent
+			if ( index == 1)
 			//TRACE(String("delta %d, tolerance %d,index %d yl %d yp %d\n", delta, tolerance,index, ylimits[index], point.y).scVal());
 			if (  delta < tolerance) {
 				break;
