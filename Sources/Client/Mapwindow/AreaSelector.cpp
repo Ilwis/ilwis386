@@ -127,9 +127,11 @@ void AreaSelector::OnLButtonUp(UINT nFlags, CPoint point)
 	fDown = false;
     pEnd = point;
 
-	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(mpv->GetDocument());
-	mcd->rootDrawer->removeDrawer(selectionDrawer->getId());
-	selectionDrawer = NULL;
+	if (selectionDrawer != 0) {
+		MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(mpv->GetDocument());
+		mcd->rootDrawer->removeDrawer(selectionDrawer->getId());
+		selectionDrawer = NULL;
+	}
 
 	(cmt->*np)(rect());
 	ReleaseCapture();
