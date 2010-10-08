@@ -2590,19 +2590,7 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\ComplexDrawer.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\Drawer_n.h"
-						>
-					</File>
-					<File
 						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\DrawerContext.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\DrawerContext.h"
 						>
 					</File>
 					<File
@@ -2618,15 +2606,7 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\Sources\Client\Base\OpenGLText.h"
-						>
-					</File>
-					<File
 						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\RootDrawer.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\RootDrawer.h"
 						>
 					</File>
 					<File
@@ -2638,15 +2618,7 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SimpleDrawer.h"
-						>
-					</File>
-					<File
 						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SVGElements.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SVGElements.h"
 						>
 					</File>
 					<File
@@ -2658,15 +2630,7 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\TextDrawer.h"
-						>
-					</File>
-					<File
 						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\ZValueMaker.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\ZValueMaker.h"
 						>
 					</File>
 					<Filter
@@ -2678,67 +2642,23 @@
 							>
 						</File>
 						<File
-							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\AnaglyphDrawer.h"
+							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\ComplexDrawer.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\AnnotationTextDrawer.h"
+							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\Drawer_n.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\AnnotationTextEditor.h"
+							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\DrawerContext.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\BaseDrawer.h"
+							RelativePath="..\..\Sources\Client\Base\OpenGLText.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\BaseMapDrawer.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\Drawer.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\GraticuleDrawer.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\Grid3DDrawer.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\GridDrawer.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\MapDrawer.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\MapListColorCompDrawer.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\MapListDrawer.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\PointMapDrawer.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\PointMapDrawerForm.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\PolygonMapDrawer.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SegmentMapDrawer.h"
+							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\RootDrawer.h"
 							>
 						</File>
 						<File
@@ -2746,7 +2666,23 @@
 							>
 						</File>
 						<File
+							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SimpleDrawer.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SVGElements.h"
+							>
+						</File>
+						<File
 							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SVGLoader.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\TextDrawer.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\ZValueMaker.h"
 							>
 						</File>
 					</Filter>
