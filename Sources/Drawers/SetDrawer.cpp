@@ -10,6 +10,7 @@
 #include "client\formelements\fldrpr.h"
 #include "client\formelements\fentvalr.h"
 #include "Engine\Spatialreference\gr.h"
+#include "Engine\Domain\Dmvalue.h"
 #include "Engine\Map\Raster\Map.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
@@ -139,6 +140,30 @@ bool SetDrawer::isStretched() const {
 
 RangeReal SetDrawer::getStretchRangeReal() const{
 	return rrStretch;
+}
+
+String SetDrawer::getInfo(const Coord& c) const {
+	if ( !hasInfo() || !isActive())
+		return "";
+	Coord crd = c;
+	AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)parentDrawer;
+	BaseMapPtr *bmptr = mapDrawer->getBaseMap();
+	if (bmptr->cs() != rootDrawer->getCoordinateSystem())
+	{
+		crd = bmptr->cs()->cConv(rootDrawer->getCoordinateSystem(), c);
+	}
+	vector<String> infos = bmptr->vsValue(crd);
+	String info;
+	DomainValue* dv = bmptr->dm()->pdv();
+	for(int i = 0; i < infos.size(); ++i) {
+		String s = infos[i].sTrimSpaces();
+		if ( s == "?")
+			continue;
+		if (0 != dv && dv->fUnit())
+			s = String("%S %S", s, dv->sUnit());
+		info += i == 0 ? s : ";" + s;
+	}
+	return info;
 }
 
 void SetDrawer::setStretchRangeReal(const RangeReal& rr){
