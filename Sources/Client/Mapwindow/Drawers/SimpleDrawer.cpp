@@ -105,7 +105,7 @@ void SimpleDrawer::drawExtrusion(const Coord& c1, const Coord& c2, double z, boo
 }
 
 String SimpleDrawer::getInfo(const Coord& crd) const {
-	return "boem!!";
+	return "";
 }
 
 

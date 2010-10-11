@@ -292,119 +292,97 @@ void SimpleMapPaneView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 void SimpleMapPaneView::OnMouseMove(UINT nFlags, CPoint point) 
 {
 	//throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
-	//if (edit && edit->OnMouseMove(nFlags, point)) 
-	//	return;
-	//MapCompositionDoc* mcd = GetDocument();
+	if (edit && edit->OnMouseMove(nFlags, point)) 
+		return;
+	MapCompositionDoc* mcd = GetDocument();
 
-	//CRect rctBounds = rctPos(mcd->mmBounds());
-	//bool fOutside = false; //!rctBounds.PtInRect(point);
+	bool fOutside = false; //!rctBounds.PtInRect(point);
 
-	//bool fNone = georef->fGeoRefNone();
-	//double rRow=0, rCol=0;
-	//Coord c;
-	////Pnt2RowCol(point, rRow, rCol);
-	//bool fValid = true;
-	//c = mcd->rootDrawer->screenToWorld(RowCol(point.y,point.x));
-	//MapStatusBar* msb = 0;
-	//CoordSystem csy = mcd->rootDrawer->getCoordinateSystem();
-	//if (fwPar) 
-	//	msb = dynamic_cast<MapStatusBar*>(fwPar->status);
+	Coord c;
+	//Pnt2RowCol(point, rRow, rCol);
+	bool fValid = true;
+	c = mcd->rootDrawer->screenToWorld(RowCol(point.y,point.x));
+	MapStatusBar* msb = 0;
+	CoordSystem csy = mcd->rootDrawer->getCoordinateSystem();
+	if (fwPar) 
+		msb = dynamic_cast<MapStatusBar*>(fwPar->status);
 
-	//if (msb && !fOutside) {
-	//	if (mcd->fShowRowCol) {
-	//		RowCol rc((long)floor(1+rRow), (long)floor(1+rCol));
-	//		msb->ShowRowCol(rc);
-	//	}
-	//	if (c.fUndef())
-	//		fValid = false; // fNone = true;  
-	//	if (fNone) {
-	//		msb->ShowCoord(SMWRem__NoCoords);
-	//		msb->ShowLatLon(LatLon());
-	//	}
-	//	else if (!fValid) {
-	//		msb->ShowCoord(SMWRem__NoCoordsCalculated);
-	//		msb->ShowLatLon(LatLon());
-	//	}
-	//	else {    
-	//		msb->ShowCoord(csy->sValue(c));
-	//		if (csy->pcsDirect()) {
-	//			CoordSystemDirect *pcsd = csy->pcsDirect();
-	//			CoordSystemPtr * pcs = pcsd->csOther.ptr();
-	//			Coord crd = pcsd->cInverseConv(pcs,c);
-	//			msb->ShowRelCoord(pcsd->csOther->sValue(crd));
-	//		}
-	//		if (csy->fCoord2LatLon()) {
-	//			LatLon ll = csy->llConv(c);
-	//			msb->ShowLatLon(ll);
-	//		}
-	//		else
-	//			msb->ShowLatLon(LatLon());
-	//	}  
-	//}
-	//if (0 == as && (MK_LBUTTON & nFlags)) {
-	//	zRect rect;
-	//	GetClientRect(&rect);
-	//	if (!rect.PtInRect(point)) {
-	//		info->text(point,"");
-	//		int xInc = 0;
-	//		int yInc = 0;
-	//		if (point.x < rect.left()) {
-	//			int iDiff = point.x - rect.left();
-	//			horzPixMove(iDiff);
-	//			xInc = 1;
-	//		}
-	//		if (point.x > rect.right()) {
-	//			int iDiff = point.x - rect.right();
-	//			horzPixMove(iDiff);
-	//			xInc = -1;
-	//		}
-	//		if (point.y < rect.top()) {
-	//			int iDiff = point.y - rect.top();
-	//			vertPixMove(iDiff);
-	//			yInc = 1;
-	//		}
-	//		if (point.y > rect.bottom()) {
-	//			int iDiff = point.y - rect.bottom();
-	//			vertPixMove(iDiff);
-	//			yInc = -1;
-	//		}
-	//		MoveMouse(xInc, yInc);
-	//		UpdateWindow();
-	//	}
-	//	else {
-	//		bool fHide = true;
-	//		if (fValid && !fOutside)
-	//			for (int i = 0; i < mcd->rootDrawer->getDrawerCount(); ++i) 
-	//			{
-	//				NewDrawer* dr = mcd->rootDrawer->getDrawer(i);
-	//				if (dr->isActive()) 
-	//				{
-	//					Coord crd = c;
-	//					AbstractMapDrawer* bmd = dynamic_cast<AbstractMapDrawer*>(dr);
-	//					BaseMapPtr *bmptr = bmd->getBaseMap();
-	//					if (bmptr->cs() != mcd->rootDrawer->getCoordinateSystem())
-	//					{
-	//						crd = bmptr->cs()->cConv(mcd->rootDrawer->getCoordinateSystem(), c);
-	//					}
-	//					String s = dr->getInfo(crd);
-	//					if (s != "") {
-	//						DomainValue* dv = bmptr->dm()->pdv();
-	//						if (0 != dv && dv->fUnit())
-	//							s = String("%S %S", s, dv->sUnit());
-	//						info->text(point,s);
-	//						fHide = false;
-	//						break;
-	//					}
-	//				}
-	//			}
-	//			if (fHide)
-	//				info->text(point,"");
-	//	}
-	//}
-	//if (!fNone && fValid && !fOutside) {
-	//	CoordWithCoordSystem cwcs(c, georef->cs());
-	//	IlwWinApp()->SendUpdateCoordMessages(cmMOUSEMOVE, &cwcs);
-	//}
+	if (msb && !fOutside) {
+		//if (mcd->fShowRowCol) {
+			//RowCol rc((long)floor(1+rRow), (long)floor(1+rCol));
+			//msb->ShowRowCol(rc);
+		//}
+		if (c.fUndef())
+			fValid = false; // fNone = true;  
+		//if (fNone) {
+		//	msb->ShowCoord(SMWRem__NoCoords);
+		//	msb->ShowLatLon(LatLon());
+		//}
+		//else if (!fValid) {
+		//	msb->ShowCoord(SMWRem__NoCoordsCalculated);
+		//	msb->ShowLatLon(LatLon());
+		//}
+		else {    
+			msb->ShowCoord(csy->sValue(c));
+			if (csy->pcsDirect()) {
+				CoordSystemDirect *pcsd = csy->pcsDirect();
+				CoordSystemPtr * pcs = pcsd->csOther.ptr();
+				Coord crd = pcsd->cInverseConv(pcs,c);
+				msb->ShowRelCoord(pcsd->csOther->sValue(crd));
+			}
+			if (csy->fCoord2LatLon()) {
+				LatLon ll = csy->llConv(c);
+				msb->ShowLatLon(ll);
+			}
+			else
+				msb->ShowLatLon(LatLon());
+		}  
+	}
+	if (0 == as && (MK_LBUTTON & nFlags)) {
+		zRect rect;
+		GetClientRect(&rect);
+		if (!rect.PtInRect(point)) {
+			info->text(point,"");
+			int xInc = 0;
+			int yInc = 0;
+			if (point.x < rect.left()) {
+				int iDiff = point.x - rect.left();
+				horzPixMove(iDiff);
+				xInc = 1;
+			}
+			if (point.x > rect.right()) {
+				int iDiff = point.x - rect.right();
+				horzPixMove(iDiff);
+				xInc = -1;
+			}
+			if (point.y < rect.top()) {
+				int iDiff = point.y - rect.top();
+				vertPixMove(iDiff);
+				yInc = 1;
+			}
+			if (point.y > rect.bottom()) {
+				int iDiff = point.y - rect.bottom();
+				vertPixMove(iDiff);
+				yInc = -1;
+			}
+			MoveMouse(xInc, yInc);
+			UpdateWindow();
+		}
+		else {
+			bool fHide = true;
+			if (fValid && !fOutside){
+				String s = mcd->rootDrawer->getInfo(c);
+				if (s != "") {
+					info->text(point,s);
+					info->ShowWindow(SW_SHOW);
+				}
+			}
+		}
+	}
+	if (fValid && !fOutside) {
+		CoordWithCoordSystem cwcs(c, mcd->rootDrawer->getCoordinateSystem());
+		IlwWinApp()->SendUpdateCoordMessages(cmMOUSEMOVE, &cwcs);
+	}
 	CView::OnMouseMove(nFlags, point);
 }
 
@@ -421,28 +399,25 @@ void SimpleMapPaneView::OnLButtonDown(UINT nFlags, CPoint point)
 	}
 	if (c.fUndef()) return;
 	SetCapture();
-	ILWIS::MouseClickInfoDrawer *mid = (ILWIS::MouseClickInfoDrawer *)(mcd->rootDrawer->getDrawer("MouseClickInfoDrawer"));
-	if ( mid) {
-		mid->setActivePoint(c);
-		ILWIS::PreparationParameters pp(ILWIS::NewDrawer::ptALL,0);
-		mid->prepare(&pp);
-		mcd->mpvGetView()->Invalidate();
+	String s = mcd->rootDrawer->getInfo(c);
+	if (s != "") {
+		info->text(point,s);
+		info->ShowWindow(SW_SHOW);
 	}
+
+	//mcd->mpvGetView()->Invalidate();
 	IlwWinApp()->SendUpdateCoordMessages(cmMOUSECLICK, &cwcsButtonDown);
 }
 
 void SimpleMapPaneView::OnLButtonUp(UINT nFlags, CPoint point) 
 {
 	MapCompositionDoc* mcd = GetDocument();
-	ILWIS::MouseClickInfoDrawer *mid = (ILWIS::MouseClickInfoDrawer *)mcd->rootDrawer->getDrawer("MouseClickInfoDrawer");
-	if (mid) {
-		mid->setActivePoint(Coord());
-		mcd->mpvGetView()->Invalidate();
-	}
+	info->ShowWindow(SW_HIDE);
 	ReleaseCapture();
 	if (edit && edit->OnLButtonUp(nFlags, point)) {
 		return;
 	}
+	mcd->mpvGetView()->Invalidate();
 }
 
 BOOL SimpleMapPaneView::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo) 

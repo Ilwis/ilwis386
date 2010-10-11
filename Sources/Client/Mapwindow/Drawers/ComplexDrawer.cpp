@@ -245,10 +245,59 @@ bool ComplexDrawer::hasInfo() const {
 
 void ComplexDrawer::setInfo(bool yesno) {
 	info = yesno;
+	for(map<String,NewDrawer *>::const_iterator cur = preDrawers.begin(); cur != preDrawers.end(); ++cur) {
+		NewDrawer *drw = (*cur).second;
+		if ( drw) {
+			drw->setInfo(yesno);
+		}
+	}
+	for(int i=0; i < drawers.size(); ++i) {
+		if ( drawers[i] && drawers[i]->isActive()){
+			drawers[i]->setInfo(yesno);
+		}
+	}
+	for(map<String,NewDrawer *>::const_iterator cur = postDrawers.begin(); cur != postDrawers.end(); ++cur) {
+		NewDrawer *drw = (*cur).second;
+		if ( drw){
+			drw->setInfo(yesno);
+		}
+	}
 }
 
 String ComplexDrawer::getInfo(const Coord& crd) const {
-	return "TO be Done";
+	String info;
+	if ( preDrawers.size() > 0) {
+		for(map<String,NewDrawer *>::const_iterator cur = preDrawers.begin(); cur != preDrawers.end(); ++cur) {
+			NewDrawer *drw = (*cur).second;
+			if ( drw) {
+				String txt = drw->getInfo(crd);
+				if ( txt != "") {
+					info += info.size() ? "; " + txt : txt;
+				}
+
+			}
+		}
+	}
+	for(int i=0; i < drawers.size(); ++i) {
+		if ( drawers[i] && drawers[i]->isActive()){
+			String txt = drawers[i]->getInfo(crd);
+			if ( txt != "") {
+				info += info.size() ? "; " + txt : txt;
+			}
+		}
+	}
+	if ( postDrawers.size() > 0) {
+		for(map<String,NewDrawer *>::const_iterator cur = postDrawers.begin(); cur != postDrawers.end(); ++cur) {
+			NewDrawer *drw = (*cur).second;
+			if ( drw){
+				String txt = drw->getInfo(crd);
+				if ( txt != "") {
+					info += info.size() ? "; " + txt : txt;
+				}
+			}
+		}
+	}
+	return info;
 }
 
 NewDrawer *ComplexDrawer::getParentDrawer() const {
@@ -476,17 +525,17 @@ HTREEITEM ComplexDrawer::InsertItem(const String& name,const String& icon, Displ
 HTREEITEM ComplexDrawer::findTreeItemByName(LayerTreeView  *tv, HTREEITEM parent, const String& name) const {
 	HTREEITEM currentItem = tv->GetTreeCtrl().GetNextItem(parent, TVGN_CHILD);
 	while(currentItem != 0) {
-	  TVITEM item;
-      TCHAR szText[1024];
-      item.hItem = currentItem;
-      item.mask = TVIF_TEXT | TVIF_HANDLE;
-      item.pszText = szText;
-      item.cchTextMax = 1024;
+		TVITEM item;
+		TCHAR szText[1024];
+		item.hItem = currentItem;
+		item.mask = TVIF_TEXT | TVIF_HANDLE;
+		item.pszText = szText;
+		item.cchTextMax = 1024;
 
-      BOOL bWorked = tv->GetTreeCtrl().GetItem(&item);
-	  if ( name == item.pszText )
-		  return item.hItem;
-	  currentItem =tv->GetTreeCtrl().GetNextItem(currentItem, TVGN_NEXT);
+		BOOL bWorked = tv->GetTreeCtrl().GetItem(&item);
+		if ( name == item.pszText )
+			return item.hItem;
+		currentItem =tv->GetTreeCtrl().GetNextItem(currentItem, TVGN_NEXT);
 	}
 	return 0;
 }
@@ -556,8 +605,8 @@ void DisplayOptionsForm2::updateMapView() {
 }
 //--------------------------------
 TransparencyForm::TransparencyForm(CWnd *wPar, ComplexDrawer *dr) : 
-	DisplayOptionsForm(dr,wPar,"Transparency"),
-	transparency(100 *(1.0-dr->getTransparency()))
+DisplayOptionsForm(dr,wPar,"Transparency"),
+transparency(100 *(1.0-dr->getTransparency()))
 {
 	slider = new FieldIntSliderEx(root,"Transparency(0-100)", &transparency,ValueRange(0,100),true);
 	slider->SetCallBack((NotifyProc)&TransparencyForm::setTransparency);
@@ -578,7 +627,7 @@ void  TransparencyForm::apply() {
 	String transp("Transparency (%d)",transparency);
 	TreeItem titem;
 	view->getItem(drw->itemTransparent,TVIF_TEXT | TVIF_HANDLE | TVIF_IMAGE | TVIF_PARAM | TVIS_SELECTED,titem);
-	
+
 	strcpy(titem.item.pszText,transp.scVal());
 	view->GetTreeCtrl().SetItem(&titem.item);
 	updateMapView();

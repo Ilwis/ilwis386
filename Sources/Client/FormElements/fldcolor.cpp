@@ -40,13 +40,14 @@
 	Last change:  WK   21 Oct 98    1:07 pm
 */
 #include "Client\Headers\formelementspch.h"
+#include "Client\FormElements\FieldIntSlider.h"
 #include "Client\FormElements\fldcolor.h"
 #include "Engine\Base\System\mutex.h"
 #include "Headers\Hs\COLORS.hs"
 #include "afxdlgs.h"
 
 FieldColorSimple::FieldColorSimple(FormEntry* p, Color* color)
-  : FieldOneSelect(p,(long*)color)
+  : FieldOneSelect(p,(long*)color), fldc((FieldColor *)p)
 {
   psn->iMinWidth = 1.5 * FLDNAMEWIDTH;
   SetHelpTopic(htpUiColor);
@@ -205,6 +206,10 @@ int FieldColorSimple::SelChanged(Event* )
   ose->GetLBText(id, s);
   if (id == idCustom)
     CreateColor(0);
+  if ( fldc->slider != 0) {
+	  Color c = (Color)ose->GetItemData(id);
+	  fldc->slider->SetVal(c.transparency());
+  }
   return 0;
 }
 
@@ -256,6 +261,10 @@ void FieldColorSimple::SetVal(Color clr)
   }
   ose->SetItemData(idCustom,clr);
   ose->SetCurSel(idCustom);
+  if (  fldc->slider) {
+	  fldc->slider->SetVal(clr.transparency()/ 2.55);
+  }
+
 }
 
 int FieldColorSimple::CreateColor(void * Evt) 
@@ -277,11 +286,13 @@ int FieldColorSimple::CreateColor(void * Evt)
 
 //---------[ FieldColor ]---------------------------------------------------------------------------------------
 FieldColor::FieldColor(FormEntry* p, const String& sQuestion,
-            Color* color)
+            Color* color, bool useTransparency)
    : FieldGroup(p)
 {
+  clr = color;
+  StaticTextSimple *st = 0;
   if (sQuestion.length() != 0)
-    new StaticTextSimple(this, sQuestion);
+    st = new StaticTextSimple(this, sQuestion);
   fcs = new FieldColorSimple(this, color);
   if (children.iSize() > 1) // also static text
     children[1]->Align(children[0], AL_AFTER);
@@ -289,6 +300,10 @@ FieldColor::FieldColor(FormEntry* p, const String& sQuestion,
   pbCreate = new OwnButtonSimple(this, "CreateBut",
 				 (NotifyProc)&FieldColor::CreateColor, 
 				 true, false);
+  if ( useTransparency) {
+	  slider = new FieldIntSliderEx(this,TR("Transparency"),&transp,ValueRangeInt(0,100), true);
+	  slider->Align(st ? (FormEntry *)st : (FormEntry *)fcs, AL_UNDER);
+  }
   pbCreate->Align(fcs, AL_AFTER);
   pbCreate->SetIndependentPos();
 }
@@ -303,6 +318,14 @@ void FieldColor::create()
 int FieldColor::CreateColor(void* Evt) 
 {
   return fcs->CreateColor(Evt);
+}
+
+void FieldColor::StoreData() {
+	fcs->StoreData();
+	if ( slider) {
+		slider->StoreData();
+		clr->transparency() = 255.0 *(1.0-transp/100.0);
+	}
 }
 
 FieldFillColor::FieldFillColor(FormEntry* parent, const String& sQuestion,

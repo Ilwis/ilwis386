@@ -44,8 +44,10 @@
 
 #include "Client\FormElements\selector.h"
 
+class FieldIntSliderEx;
 Color _export clrStd(int iNr);
 void _export WEP_Color();
+class FieldColor;
 
 class FieldColorSimple: public FieldOneSelect
 {
@@ -60,19 +62,26 @@ protected:
   bool _export fDrawIcon();
   int SelChanged(Event *);
   int idCustom;
+  FieldColor *fldc;
 };
 
 
 class FieldColor: public FieldGroup
 {
+	friend class FieldColorSimple;
 public:
-  _export FieldColor(FormEntry* parent, const String& sQuestion, Color*);
+  _export FieldColor(FormEntry* parent, const String& sQuestion, Color*, bool useTranspareny=false);
   void _export SetVal(Color clr) { fcs->SetVal(clr); }
   void create();
+  void setTransparency(unsigned char tr) { transp = tr;}
+  void StoreData();
 private:
   FieldColorSimple* fcs;  
   OwnButtonSimple *pbCreate;
+  FieldIntSliderEx *slider;
   int CreateColor(void *);
+  int transp;
+  Color *clr;
 };
 
 class FieldFillColorSimple: public FieldColorSimple
