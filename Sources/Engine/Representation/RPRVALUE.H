@@ -45,7 +45,7 @@
 #include "Engine\Domain\dm.h"
 #include "Engine\Representation\Rprgrad.h"
 
-class DATEXPORT RepresentationValue: public RepresentationGradual
+class _export RepresentationValue: public RepresentationGradual
 {
   friend class RepresentationPtr;
 //  friend class RprValueForm;

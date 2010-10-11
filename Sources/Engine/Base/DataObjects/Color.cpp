@@ -64,11 +64,11 @@ void Color::SetHSI(byte hue, byte sat, byte intens)
     X = -sat / sqrt(1 + F*F); Y = F * X;
   }  
   int iBlue = (int)(((int)intens - X/3 - Y * sqrt(3.0)/3)*255.0/240);
-	rgb.b = iBlue < 0 ? 0 : iBlue > 255 ? 255 : iBlue;
-  int iGreen = (int)((2 * ((int)intens - X/3) - (int)rgb.b)*255/240.0);
-	rgb.g = iGreen < 0 ? 0 : iGreen > 255 ? 255 : iGreen;
-  int iRed = (int)((3.0 * (int)intens - (int)rgb.b - (int)rgb.g)*255/240.0);
-	rgb.r = iRed < 0 ? 0 : iRed > 255 ? 255 : iRed;
+	m_blue = iBlue < 0 ? 0 : iBlue > 255 ? 255 : iBlue;
+  int iGreen = (int)((2 * ((int)intens - X/3) - (int)m_blue)*255/240.0);
+	m_green = iGreen < 0 ? 0 : iGreen > 255 ? 255 : iGreen;
+  int iRed = (int)((3.0 * (int)intens - (int)m_blue - (int)m_green)*255/240.0);
+	m_red = iRed < 0 ? 0 : iRed > 255 ? 255 : iRed;
 }
 
 byte Color::hue() const 
@@ -125,6 +125,26 @@ Color Color::clrDraw(DrawColors drc) const
     }  
   }
   return c;
+}
+
+inline Color::operator long() const 
+{ 
+ long color = 0; 
+ color= (red() << 16) | (green() << 8) | blue(); 
+ return color;
+}
+
+inline long Color::iVal() const 
+{
+	long c = m_red + 256 * m_green + 256 * 256 * m_blue + 256 * 256 * 256 * m_transparency;
+	return c;
+}
+
+inline void Color::setVal(long _iVal) {
+	red() =  _iVal & 0xff;
+	green() = _iVal >> 8;
+	blue() =  _iVal  >> 16; 
+	transparency() = _iVal >> 24;
 }
 
 Color Color::clrPrimary(int iNr)

@@ -168,6 +168,7 @@ public:
 	long   _export iValue(const Coord&, double rPrx=rUNDEF) const;
 	double _export rValue(const Coord&, double rPrx=rUNDEF) const;
 	String _export sValue(const Coord&, short iWidth=-1, short iDec=-1, double rPrx=rUNDEF) const;
+	vector<String> vsValue(const Coord& crd, short iWidth, short iDec, double rPrx) const;
 	
 	// Get a line
 	void _export GetLineRaw(long iLine, ByteBuf&, long iFrom=0, long iNum=0, int iPyrLayer = 0) const;

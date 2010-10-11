@@ -42,8 +42,8 @@
 #define ILW_COLORH
 #include "Engine\Base\DataObjects\Buf.h"
 
-
-class structRGB { public: byte r, g, b, mode; };
+#define TRANSP  0
+class structRGB { public: byte r, g, b, transparency; };
 
 enum DrawColors { drcLIGHT, drcNORMAL, drcDARK, drcGREY };
 
@@ -52,43 +52,47 @@ class _export Color
 public:
 	static Color clrPrimary(int iNr);
 
-	Color() { iVal = 0;}
-	Color(byte rd, byte gr, byte bl, int palRel=0)
-	    { rgb.r = rd; rgb.g = gr; rgb.b = bl; rgb.mode = palRel; }
+	Color() { m_red = m_green = m_blue = m_transparency = 0; }
+	Color(byte rd, byte gr, byte bl, byte alpha=TRANSP)
+	    { m_red = rd; m_green = gr; m_blue = bl; m_transparency = alpha; }
 	Color(const Color& c)
-		{ iVal = c.iVal; }
+	{ red() = c.red(); blue() = c.blue(); green() = c.green(); transparency() = c.transparency();}
 	Color& operator=(const Color& c)
-		{ iVal = c.iVal; return *this; }
+	{ setVal(c.iVal()); return *this; }
 	Color(long _iVal)
-		{ iVal = _iVal; }
+	{ 
+		setVal(_iVal);
+	}
+	void setVal(long _iVal);
 	void SetHSI(byte hue, byte sat, byte intens);
-	byte& red()   { return rgb.r; }
-	byte& green() { return rgb.g; }
-	byte& blue()  { return rgb.b; }
-	byte red()   const { return rgb.r; }
-	byte green() const { return rgb.g; }
-	byte blue()  const { return rgb.b; }
-	double redP()   const { return (double)rgb.r / 255.0; }
-	double greenP() const { return (double)rgb.g / 255.0; }
-	double blueP()  const { return (double)rgb.b / 255.0; }
-	byte yellow()   const { return 255-rgb.b; }
-	byte magenta() const { return 255-rgb.g; }
-	byte cyan()  const { return 255-rgb.r; }
+	byte& red()   { return m_red; }
+	byte& green() { return m_green; }
+	byte& blue()  { return m_blue; }
+	byte& transparency() { return m_transparency; }
+	byte red()   const { return m_red; }
+	byte green() const { return m_green; }
+	byte blue()  const { return m_blue; }
+	byte transparency() const { return m_transparency; }
+	double redP()   const { return (double)m_red / 255.0; }
+	double greenP() const { return (double)m_green / 255.0; }
+	double blueP()  const { return (double)m_blue / 255.0; }
+	double transparencyP()  const { return (double)m_transparency / 255.0; }
+	byte yellow()   const { return 255-m_blue; }
+	byte magenta() const { return 255-m_green; }
+	byte cyan()  const { return 255-m_red; }
 	bool operator==(const Color& c)
-		{ return (rgb.r==c.red()) && (rgb.g==c.green()) && (rgb.b==c.blue()); }
+	{ return (m_red==c.red()) && (m_green==c.green()) && (m_blue==c.blue() && m_blue==c.transparency()); }
 	bool operator!=(const Color& c)
 		{ return !(*this == c); }
-	operator long() const { return iVal; }
+	operator long() const ; // for COLORREF conversion; so it will ignore the transparency
+	long iVal() const ;
 	byte hue() const; 
 	byte sat() const; 
 	byte intens() const; 
 	byte grey() const; 
 	Color clrDraw(DrawColors drc) const;
 private:
-	union {
-		structRGB rgb;
-		long iVal;
-	};
+	byte m_red, m_green, m_blue,m_transparency;
 };
 
 #ifdef TLSTMPL_C

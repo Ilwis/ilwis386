@@ -1893,3 +1893,11 @@ int MapPtr::iNoOfPyramidLayers()
 
 	return 0;
 }
+
+vector<String> MapPtr::vsValue(const Coord& crd, short iWidth, short iDec, double rPrx) const
+{
+	vector<String> values;
+	values.push_back(sValue(crd, iWidth, iDec, rPrx));
+
+	return values;
+}
