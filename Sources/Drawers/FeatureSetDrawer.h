@@ -37,6 +37,7 @@ class _export FeatureSetDrawer : public SetDrawer {
 		void setExtrusion(void *value, LayerTreeView *tree);
 		String store(const FileName& fnView, const String& parenSection) const;
 		void load(const FileName& fnView, const String& parenSection);
+		String getInfo(const Coord& crd) const;
 
 		String mask;
 		bool useMask;

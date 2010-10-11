@@ -134,8 +134,6 @@ void ValueSlicer::OnMouseMove(UINT nFlags, CPoint point) {
 	    activePoint.y = point.y;
 		updateRepresentations();
 
-			
-	
 	}
 
 }
@@ -326,7 +324,7 @@ void ValueSlicerSlider::setLowColor(Color c){
 SlicingStepColor::SlicingStepColor(CWnd* parent, Color* clr) :
 FormWithDest(parent, TR("Step Color"))
 {
-	new FieldColor(root,TR("Step Color"), clr);
+	new FieldColor(root,TR("Step Color"), clr,true);
 	create();
 }
 

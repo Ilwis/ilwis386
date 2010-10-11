@@ -13,6 +13,8 @@
 #include "Engine\Map\Raster\Map.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapPaneView.h"
+#include "Engine\Domain\Dmvalue.h"
+#include "Engine\Map\basemap.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
@@ -36,6 +38,7 @@ FeatureSetDrawer::FeatureSetDrawer(DrawerParameters *parms, const String& name) 
 	colorItem(0)
 {
 	setDrawMethod(drmNOTSET); // default
+	setInfo(false);
 }
 
 FeatureSetDrawer::~FeatureSetDrawer() {
@@ -73,6 +76,30 @@ void FeatureSetDrawer::prepare(PreparationParameters *parms){
 			prepareChildDrawers(parms);
 		}
 	}
+}
+
+String FeatureSetDrawer::getInfo(const Coord& c) const {
+	if ( !hasInfo() || !isActive())
+		return "";
+	Coord crd = c;
+	FeatureLayerDrawer *mapDrawer = (FeatureLayerDrawer *)parentDrawer;
+	BaseMapPtr *bmptr = mapDrawer->getBaseMap();
+	if (bmptr->cs() != rootDrawer->getCoordinateSystem())
+	{
+		crd = bmptr->cs()->cConv(rootDrawer->getCoordinateSystem(), c);
+	}
+	vector<String> infos = bmptr->vsValue(crd);
+	String info;
+	DomainValue* dv = bmptr->dm()->pdv();
+	for(int i = 0; i < infos.size(); ++i) {
+		String s = infos[i].sTrimSpaces();
+		if ( s == "?")
+			continue;
+		if (0 != dv && dv->fUnit())
+			s = String("%S %S", s, dv->sUnit());
+		info += i == 0 ? s : ";" + s;
+	}
+	return info;
 }
 
 String FeatureSetDrawer::getMask() const{
