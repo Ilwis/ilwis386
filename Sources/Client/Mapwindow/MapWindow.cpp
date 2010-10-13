@@ -46,6 +46,7 @@
 #include "Client\Mapwindow\MapPaneView.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Headers\Htp\Ilwis.htp"
+#include "Client\TableWindow\BaseTablePaneView.h"
 #include "Client\Mapwindow\MapStatusBar.h"
 #include "Client\Mapwindow\OverviewMapPaneView.h"
 #include "Headers\Hs\Mapwind.hs"
@@ -238,31 +239,22 @@ int MapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	DockControlBar(&barScale,AFX_IDW_DOCKBAR_TOP,rect);
 
 	ltb.Create(this, 124, CSize(200,200));
-  ltb.SetWindowText(SMWTitleLayerManagement.scVal());
+    ltb.SetWindowText(SMWTitleLayerManagement.scVal());
 	ltb.EnableDocking(CBRS_ALIGN_LEFT|CBRS_ALIGN_RIGHT);
-  ltb.view = new LayerTreeView;
+    ltb.view = new LayerTreeView;
 	ltb.view->Create(NULL, NULL, AFX_WS_DEFAULT_VIEW|TVS_HASLINES|TVS_LINESATROOT|TVS_HASBUTTONS,
 			CRect(0,0,0,0), &ltb, 100, 0);
-
-  // half of the requested height will be assigned
-//	gbOverview.Create(this, 125, CSize(150,300));
-  //gbOverview.m_szFloat = CSize(150,150);
-//	gbOverview.EnableDocking(CBRS_ALIGN_LEFT|CBRS_ALIGN_RIGHT);
- // gbOverview.view = new OverviewMapPaneView;
-  //gbOverview.view->Create(NULL,NULL,AFX_WS_DEFAULT_VIEW,CRect(0,0,0,0),&gbOverview,100.0);
- // gbOverview.SetWindowText(SMWTitleOverviewWindow.scVal());
 
 	if (0 == pFirstView) 
 		pFirstView = dynamic_cast<CView*>(GetDescendantWindow(AFX_IDW_PANE_FIRST, TRUE));
 	pFirstView->GetDocument()->AddView(ltb.view);
-	//pFirstView->GetDocument()->AddView(gbOverview.view);
-
 	DockControlBar(&ltb,AFX_IDW_DOCKBAR_LEFT);
+
+	
+ 
   RecalcLayout();
   ltb.GetWindowRect(&rect);
 	rect.OffsetRect(0,1);
-	//DockControlBar(&gbOverview,AFX_IDW_DOCKBAR_LEFT,rect);
-
 	return 0;
 }
 

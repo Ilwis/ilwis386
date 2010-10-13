@@ -51,6 +51,7 @@ Created on: 2007-02-8
 #include "Engine\Base\DataObjects\URL.h"
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
+#include "Client\Mapwindow\PixelInfoDoc.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\FormElements\syscolor.h"
 #include "Engine\Map\Segment\Seg.h"
@@ -67,6 +68,7 @@ Created on: 2007-02-8
 #include "Client\Editors\Utils\MULTICOL.H"
 #include "Client\Mapwindow\ZoomableView.h"
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
+#include "Client\Mapwindow\PixelInfoDoc.h"
 #include "Engine\Stereoscopy\StereoPair.h"
 #include "Headers\constant.h"
 #include "Headers\Hs\Mapwind.hs"
@@ -156,6 +158,7 @@ MapCompositionDoc::MapCompositionDoc()
 	rootDrawer = new RootDrawer(this);
 	fnView = FileName("mapview.mpv");
 	selectedDrawer = 0;
+	pixInfoDoc = 0;
 }
 
 MapCompositionDoc::~MapCompositionDoc()
@@ -857,6 +860,7 @@ ILWIS::NewDrawer *MapCompositionDoc::createBaseMapDrawer(const BaseMap& bmp, con
 	ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
 	drawer->prepare(&pp);
 	rootDrawer->addDrawer(drawer);
+	addToPixelInfo(bmp);
 
 	return drawer;
 }
@@ -918,6 +922,10 @@ BOOL MapCompositionDoc::OnOpenMapList(const MapList& maplist, OpenType ot)
 		ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
 		drawer->prepare(&pp);
 		rootDrawer->addDrawer(drawer);
+		/*if (!pixInfoDoc) 
+			pixInfoDoc = new PixelInfoDoc();
+		pixInfoDoc->OnOpenDocument(mp->fnObj.sFullPath().scVal());
+		pixInfoDoc->UpdateAllViews(0,2);*/
 	}
 	else {
 	//	eType = eColorComp;
@@ -945,7 +953,7 @@ BOOL MapCompositionDoc::OnOpenSegmentMap(const SegmentMap& sm, OpenType ot)
 	//================================================ TEST!!!!!!!
 	createBaseMapDrawer(sm,"FeatureLayerDrawer", "Ilwis38");
 	//===============================================
-
+	
 	if (ot & otEDIT) {
 		::AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_EDITLAYER, 0);
 	}
@@ -1000,8 +1008,15 @@ BOOL MapCompositionDoc::OnOpenPointMap(const PointMap& pm, OpenType ot)
 	if (ot & otEDIT) {
 		::AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_EDITLAYER, 0);
 	}
-
 	return TRUE;
+}
+
+void MapCompositionDoc::addToPixelInfo(const BaseMap& bm) {
+	if (!pixInfoDoc) 
+		pixInfoDoc = new PixelInfoDoc();
+
+	pixInfoDoc->OnOpenDocument(bm->fnObj.sFullPath().scVal());
+	pixInfoDoc->UpdateAllViews(0,2);
 }
 
 BOOL MapCompositionDoc::OnOpenStereoPair(const StereoPair& stp, OpenType ot)

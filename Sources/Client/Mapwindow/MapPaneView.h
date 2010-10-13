@@ -58,6 +58,7 @@ class MapWindow;
 class MapPaneViewTool;
 class RecordBar;
 class COleDropTarget;
+class PixelInfoBar;
 
 /////////////////////////////////////////////////////////////////////////////
 // MapPaneView view
@@ -123,9 +124,13 @@ protected:
 	afx_msg void OnCreateSubMap();
 	afx_msg void OnUpdateEntireMap(CCmdUI* pCmdUI);
 	afx_msg void OnTimer(UINT timerID);
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	void OnShowRecordView();
 	void OnUpdateShowRecordView(CCmdUI* pCmdUI);
+protected:
+	PixelInfoBar *pib;
 private:
+	void createPixInfoBar() ;
 	enum DoubleClickAction { dcaRECORD, dcaRPR, dcaACTION };
 	DoubleClickAction dca;
 	MapWindow* mwPar;

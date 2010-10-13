@@ -2543,6 +2543,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\Sources\Client\Mapwindow\PixelInfoBar.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Client\Mapwindow\PixelInfoBar.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Sources\Client\Mapwindow\PixelInfoDoc.cpp"
 					>
 				</File>
@@ -2689,6 +2697,7 @@
 				</Filter>
 				<Filter
 					Name="headers"
+					Filter="h"
 					>
 					<File
 						RelativePath="..\..\Sources\Client\Mapwindow\AreaSelector.h"

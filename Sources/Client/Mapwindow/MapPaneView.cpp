@@ -88,6 +88,9 @@ Created on: 2007-02-8
 #include "Client\FormElements\fldgrf.h"
 #include "Client\FormElements\fldantxt.h"
 #include "Client\FormElements\fldmsmpl.h"
+#include "Client\Mapwindow\PixelInfoDoc.h"
+#include "Client\Mapwindow\PixelInfoBar.h"
+#include "Client\Mapwindow\PixelInfoView.h"
 #include "Client\Mapwindow\MapCompositionSrvItem.h"
 #include "Client\FormElements\fldmap.h"
 #include "Engine\SampleSet\SAMPLSET.H"
@@ -142,6 +145,7 @@ BEGIN_MESSAGE_MAP(MapPaneView, SimpleMapPaneView)
 	ON_COMMAND(ID_PASTE, OnPaste)
 	ON_COMMAND(ID_COPY, OnCopy)
 	ON_WM_TIMER()
+	ON_WM_MOUSEMOVE()
 	ON_UPDATE_COMMAND_UI(ID_PASTE, OnUpdatePaste)
 	ON_COMMAND(ID_CREATEPNTMAP, OnCreatePntMap)
 	ON_COMMAND(ID_CREATESEGMAP, OnCreateSegMap)
@@ -164,12 +168,14 @@ MapPaneView::MapPaneView()
 {
 	dca = dcaRECORD;
 	odt = new COleDropTarget;
+	pib = 0;
 }
 
 MapPaneView::~MapPaneView()
 {
 	delete odt;
 	delete recBar;
+	delete pib;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -187,11 +193,28 @@ void MapPaneView::OnInitialUpdate()
 	}
 
 	MapCompositionDoc* mcd = GetDocument();
+	createPixInfoBar();
 	double rSc = mcd->rPrefScale();
 	if (rSc > 0)
 		PostMessage(WM_COMMAND, ID_DEFAULTSCALE, 0);
 	else
 		PostMessage(WM_COMMAND, ID_ENTIREMAP, 0);
+}
+
+void MapPaneView::createPixInfoBar() {
+	if ( !pib && GetDocument()->pixInfoDoc) {
+		pib = new PixelInfoBar();
+		pib->Create(mwParent());
+		pib->SetWindowText(TR("Pixel Info").scVal());
+		pib->EnableDocking(CBRS_ALIGN_LEFT|CBRS_ALIGN_RIGHT);
+		GetDocument()->pixInfoDoc->AddView(pib->pixview);
+		mwParent()->RecalcLayout();
+		CRect rct;
+		mwParent()->ltb.GetWindowRect(&rct);
+		rct.OffsetRect(0,1);
+		mwParent()->DockControlBar(pib, AFX_IDW_DOCKBAR_LEFT,&rct);
+
+	}
 }
 
 MapWindow* MapPaneView::mwParent()
@@ -207,6 +230,10 @@ void MapPaneView::OnPrepareDC(CDC* pDC, CPrintInfo* pInfo)
 {
 	// TODO: Add your specialized code here and/or call the base class
 
+}
+
+void MapPaneView::OnMouseMove(UINT nFlags, CPoint point) {
+	SimpleMapPaneView::OnMouseMove(nFlags, point);
 }
 
 void MapPaneView::OnScaleOneToOne()
@@ -688,6 +715,10 @@ void MapPaneView::OnUpdateCoordSysEdit(CCmdUI* pCmdUI)
 
 LRESULT MapPaneView::OnUpdate(WPARAM wParam, LPARAM lParam)
 {
+	if (pib){
+		MapCompositionDoc* mcd = GetDocument();
+		//mcd->pixInfoDoc->SendMessage(ILW_UPDATE, wParam, lParam);
+	}
 	if (edit)
 		return edit->OnUpdate(wParam,lParam);
 	return 0;
@@ -906,6 +937,7 @@ BOOL MapPaneView::AddFiles(vector<FileName>& afn)
 		}
 		return fOk;
 	}
+	return FALSE;
 }
 
 struct FilesInThreadStruct

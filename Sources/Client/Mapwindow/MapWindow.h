@@ -56,7 +56,6 @@
 #define IMPEXP __declspec(dllimport)
 #endif
 
-
 class IMPEXP MapWindow: public DataWindow
 {
 public:
@@ -74,6 +73,7 @@ public:
 	//}}AFX_VIRTUAL
 	CView* vwFirst() { return pFirstView; }
 	ScaleBar barScale;
+	GeneralBar ltb;
 
 	//{{AFX_MSG(MapWindow)
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
@@ -99,7 +99,7 @@ protected:
   CMenu menDataLayer, menEditLayer, menPropLayer, 
         menRprLayer, menAttLayer, menDomLayer;
 	HMENU hMenFile, hMenEdit;
-	GeneralBar ltb, gbOverview;
+	GeneralBar gbOverview;
 	CView* pFirstView;
 
 	DECLARE_DYNCREATE(MapWindow)

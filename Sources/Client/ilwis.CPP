@@ -1112,7 +1112,7 @@ void IlwisWinApp::RegisterDocTemplates()
 		"", "",
 		"ILWIS PixelInfo",
 		RUNTIME_CLASS(PixelInfoDoc),
-		RUNTIME_CLASS(PixelInfoWindow),
+		RUNTIME_CLASS(MapWindow),
 		RUNTIME_CLASS(PixelInfoView));
 	AddDocTemplate(dtPixelInfo);
 

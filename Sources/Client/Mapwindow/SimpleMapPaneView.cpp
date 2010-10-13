@@ -51,12 +51,15 @@ Created on: 2007-02-8
 #include "Client\Mapwindow\DistanceMeasurer.h"
 #include "Client\Mapwindow\MapStatusBar.h"
 #include "Engine\SpatialReference\csdirect.h"
+#include "Client\TableWindow\BaseTablePaneView.h"
 #include "Client\FormElements\syscolor.h"
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Headers\constant.h"
 #include "Headers\Hs\Mapwind.hs"
 #include "Engine\Domain\Dmvalue.h"
+#include "Client\Mapwindow\PixelInfoBar.h"
+#include "Client\Mapwindow\PixelInfoView.h"
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
 #include "Client\Mapwindow\Drawers\TextDrawer.h"
 #include "Client\Mapwindow\Drawers\MouseClickInfoDrawer.h"
@@ -338,6 +341,7 @@ void SimpleMapPaneView::OnMouseMove(UINT nFlags, CPoint point)
 				msb->ShowLatLon(LatLon());
 		}  
 	}
+
 	if (0 == as && (MK_LBUTTON & nFlags)) {
 		zRect rect;
 		GetClientRect(&rect);
@@ -379,6 +383,7 @@ void SimpleMapPaneView::OnMouseMove(UINT nFlags, CPoint point)
 			}
 		}
 	}
+
 	if (fValid && !fOutside) {
 		CoordWithCoordSystem cwcs(c, mcd->rootDrawer->getCoordinateSystem());
 		IlwWinApp()->SendUpdateCoordMessages(cmMOUSEMOVE, &cwcs);

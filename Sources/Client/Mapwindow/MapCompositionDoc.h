@@ -55,6 +55,7 @@ class GeneralBar;
 class Palette;
 class MapPaneView;
 class StereoPair;
+class PixelInfoDoc;
 
 /////////////////////////////////////////////////////////////////////////////
 // MapCompositionDoc document
@@ -110,6 +111,8 @@ public:
 	FileName getViewName() const;
 	NewDrawer *getSelectedDrawer() const { return selectedDrawer; }
 	void setSelectedDrawer(NewDrawer *drw) { selectedDrawer = drw; }
+	void addToPixelInfo(const BaseMap& bm);
+	PixelInfoDoc *pixInfoDoc;
 
 protected:
 	MapView mpv;

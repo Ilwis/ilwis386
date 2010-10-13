@@ -60,19 +60,19 @@ class IMPEXP PixelInfoDoc : public IlwisDocument
 {
   friend class PixelInfoConfigureForm;
 protected:
-	PixelInfoDoc();           // protected constructor used by dynamic creation
-	DECLARE_DYNCREATE(PixelInfoDoc)
 
 public:
+	PixelInfoDoc();           // protected constructor used by dynamic creation
+	DECLARE_DYNCREATE(PixelInfoDoc)
   int iSize() const;
   String sName(int) const;
   String sValue(int) const;
 	zIcon icon() const;
   FileName fn(int) const;
 	virtual void Serialize(CArchive& ar);   // overridden for document i/o
+	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
 protected:
 	virtual BOOL OnNewDocument();
-	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
 	virtual void OnCloseDocument();
 public:
 	virtual ~PixelInfoDoc();
