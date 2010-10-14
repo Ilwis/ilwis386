@@ -878,17 +878,10 @@ BOOL MapCompositionDoc::OnOpenRasterMap(const Map& mp, OpenType ot)
 	if (!mp->fCalculated())
 		return FALSE;
 
-	//georef = mp->gr();
-	//fShowRowCol = true;
-	//fRaster = true;
 
 	SetTitle(mp);
 
-	//================================================ TEST!!!!!!!
-
 	createBaseMapDrawer(mp, "RasterLayerDrawer", "Ilwis38");	
-
-	//===============================================
 
 	if (ot & otEDIT) {
 		::AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_EDITLAYER, 0);
@@ -914,7 +907,7 @@ BOOL MapCompositionDoc::OnOpenMapList(const MapList& maplist, OpenType ot)
 	SetTitle(maplist);
 
 	if (ot & otANIMATION) {
-		ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
+	ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
 		ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer("AnimationDrawer", "Ilwis38", &parms);
 		drawer->addDataSource((void *)&maplist);
 		rootDrawer->setCoordinateSystem(mp->cs());
@@ -922,10 +915,6 @@ BOOL MapCompositionDoc::OnOpenMapList(const MapList& maplist, OpenType ot)
 		ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
 		drawer->prepare(&pp);
 		rootDrawer->addDrawer(drawer);
-		/*if (!pixInfoDoc) 
-			pixInfoDoc = new PixelInfoDoc();
-		pixInfoDoc->OnOpenDocument(mp->fnObj.sFullPath().scVal());
-		pixInfoDoc->UpdateAllViews(0,2);*/
 	}
 	else {
 	//	eType = eColorComp;

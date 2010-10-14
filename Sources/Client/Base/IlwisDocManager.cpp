@@ -178,18 +178,15 @@ if (lpszFileName == NULL)
 	while (pos != NULL)
 	{
 		CDocTemplate* pTemplate = (CDocTemplate*)m_templateList.GetNext(pos);
+        
 		ASSERT_KINDOF(CDocTemplate, pTemplate);
 
-		CDocTemplate::Confidence match;
 		ASSERT(pOpenDocument == NULL);
-		IlwisDocTemplate *templ = (IlwisDocTemplate *)pTemplate;
-		if ( templ->sGetObjectType() == "ILWIS Animation") {
+		IlwisDocTemplate *templ = dynamic_cast<IlwisDocTemplate *>(pTemplate);
+		if ( templ && templ->sGetObjectType() == "ILWIS Animation") {
 			pBestTemplate = pTemplate;
-			match = pTemplate->MatchDocType(szPath, pOpenDocument);
 			break;     
 		}
-
-	 // stop here
 	}
 
 	if (pOpenDocument != NULL)
@@ -231,6 +228,7 @@ if (lpszFileName == NULL)
 	}
 
 	return ((BaseDocTemplate *)pBestTemplate)->OpenDocumentFile(IlwisDocument::otANIMATION, szPath);
+
 }
 
 CDocument* IlwisDocManager::OpenDocumentFile(LPCTSTR lpszFileName)

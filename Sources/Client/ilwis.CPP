@@ -308,6 +308,9 @@ IlwisWinApp::~IlwisWinApp()
 		settings.DeleteKey();
 	}		
 	Context()->RemoveThreadLocalVars();
+#ifdef _DEBUG
+	_CrtDumpMemoryLeaks();
+#endif 
 }
 
 void IlwisWinApp::SendCommandLine(CWnd* wnd) const
@@ -861,6 +864,7 @@ void IlwisWinApp::RegisterDocTemplates()
 	AddDocTemplate(idt);
 
 	// MapList
+
 	dtMapList = new IlwisMDIDocTemplate(
 		".mpl", 
 		"MapList", 
@@ -1662,8 +1666,13 @@ CDocument* IlwisWinApp::OpenDocumentFile(LPCTSTR lpszFileName, IlwisDocument::Op
 		// prevent dead lock
 		ml.SetPointer(0);
 		if (fCalculated) {
-			if ( ot == IlwisDocument::otANIMATION)
-				((IlwisDocManager *)m_pDocManager)->OpenDocumentAsAnimation(fn.sFullName().scVal());
+			if ( ot == IlwisDocument::otANIMATION) {
+				//((IlwisDocManager *)m_pDocManager)->OpenDocumentAsAnimation(fn.sFullName().scVal());
+				WinThread *thr = new WinThread(m_pDocManager, pLongFileName, ot);
+				if ( thr)
+					thr->CreateThread(0,0);
+
+			}
 			else
 				m_pDocManager->OpenDocumentFile(fn.sFullName().scVal());
 		}

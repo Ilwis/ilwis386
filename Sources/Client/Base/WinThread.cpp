@@ -242,6 +242,18 @@ CDocument* WinThread::OpenDocumentFile(CDocManager* pdm, LPCTSTR lpszFileName, I
 
 		CDocTemplate::Confidence match;
 		ASSERT(pOpenDocument == NULL);
+		if ( FileName(lpszFileName).sExt == ".mpl") {
+			int kk=0;
+			++kk;
+		}
+		BaseDocTemplate *templ = dynamic_cast<BaseDocTemplate *>(pTemplate);
+		if ( templ && templ->sGetObjectType() == "ILWIS Animation" &&  ot ==  IlwisDocument::otANIMATION) {
+			pBestTemplate = pTemplate;
+			break;     
+		}
+		if ( FileName(lpszFileName).sExt == ".mpl"){ // temporary until colorcompisite has its own map
+			continue;     
+		}
 		match = pTemplate->MatchDocType(lpszFileName, pOpenDocument);
 		if (match > bestMatch)
 		{

@@ -166,7 +166,6 @@ void LayerTreeView::collectStructure(HTREEITEM parent, const String& name) {
 		nodes.clear();
 		HTREEITEM hItem = GetTreeCtrl().GetNextItem(TVI_ROOT, TVGN_ROOT);
 		TreeItem titem;
-		GetTreeCtrl().GetItem(&titem.item);
 		if (getItem(hItem,TVIF_TEXT | TVIF_HANDLE,titem))
 			collectStructure(hItem, String("%s", titem.item.pszText));
 		else

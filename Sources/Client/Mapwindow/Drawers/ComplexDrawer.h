@@ -32,7 +32,7 @@ class _export ComplexDrawer : public NewDrawer {
 		void getDrawers(vector<NewDrawer *>&) ;
 		virtual void addDataSource(void *,int options=0){}
 		virtual void removeDataSource(void *) {}
-		void clear();
+		virtual void clear();
 		String getId() const;
 		String getName() const;
 		virtual void setName(const String&);

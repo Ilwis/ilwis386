@@ -35,7 +35,7 @@ namespace ILWIS {
 		double getAspectRatio() const;
 		DrawerContext *getDrawerContext() { return drawercontext; }
 
-		void clear();
+		//void clear();
 		void set3D(bool yeno);
 		bool is3D() const;
 		void setViewPoint(const Coord& c);
