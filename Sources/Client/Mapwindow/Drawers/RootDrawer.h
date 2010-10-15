@@ -44,7 +44,7 @@ namespace ILWIS {
 		Coord getEyePoint() const;
 		double getFakeZ() const;
 	private:
-		void setProjection(const CoordBounds& cb);
+		void setProjection(const CoordBounds& cb) const;
 		void setEyePoint();
 		void modifyCBZoomView(double dv, double dz, double f);
 		void calcCanvas();

@@ -99,7 +99,7 @@ void SimpleMapPaneView::MoveMouse(short xInc, short yInc)
 const int RepresentationClass::iSIZE_FACTOR=3; // MapWindow to Layout ratio; never make this 0; currently only int ratio supported
 
 SimpleMapPaneView::SimpleMapPaneView()
-: info(0), edit(0), dcView(0), cwcsButtonDown(Coord()), fwPar(0), bmView(0), hBmOld(0),pDC(0)
+: info(0), edit(0), dcView(0), cwcsButtonDown(Coord()), fwPar(0), bmView(0), hBmOld(0), pDC(0), drawThread(0), fStopDrawThread(false), fDrawRequest(false)
 {
 	fDirty = false;
 	fRedrawing = false;
@@ -120,6 +120,13 @@ SimpleMapPaneView::SimpleMapPaneView()
 
 SimpleMapPaneView::~SimpleMapPaneView()
 {
+	if (drawThread) {
+		fStopDrawThread = true;
+		drawThread->ResumeThread();
+		csThread.Lock(); // wait here til thread exits
+		csThread.Unlock();
+	}
+
 	while (fRedrawing) {
 		fDrawStop = true;
 		Sleep(10);
@@ -221,15 +228,53 @@ void SimpleMapPaneView::OnDraw(CDC* cdc)
 	fStarting  = false;
 	// CDC *dc = cdc == 0 ? GetDC() : cdc;
 	// CDC *dc = GetDC(); // apparently the cdc can come with an invalid m_hDC handle (the reason is not properly understood yet, but the maps are not drawn)
-	if (pDC)
-		ReleaseDC(pDC);
-	pDC = GetDC();
+	if (!pDC) {
+		pDC = GetDC();
+		MapCompositionDoc* mcd = GetDocument();
+		PreparationParameters pp(NewDrawer::ptINITOPENGL, pDC);
+		mcd->rootDrawer->prepare(&pp);
+	}
+	RequestRedraw();
+}
+
+void SimpleMapPaneView::RequestRedraw()
+{
+	fDrawRequest = true;
+	if (!drawThread)
+		drawThread = AfxBeginThread(SimpleMapPaneView::DrawInThread, (LPVOID)this); 
+	else
+		drawThread->ResumeThread();
+}
+
+UINT SimpleMapPaneView::DrawInThread(LPVOID lp)
+{
+	SimpleMapPaneView* mpv = (SimpleMapPaneView*)lp;
+	mpv->csThread.Lock();
+	try {
+		while (!mpv->fStopDrawThread) {
+			while (mpv->fDrawRequest)
+				mpv->Draw();
+			if (!mpv->fStopDrawThread)
+				mpv->drawThread->SuspendThread(); // wait here, and dont consume CPU time either
+		}
+	}
+	catch(ErrorObject& err)
+	{
+		err.Show();
+	}
+	mpv->fStopDrawThread = false;
+	mpv->drawThread = 0;
+	mpv->csThread.Unlock();
+	return FALSE;
+}
+
+void SimpleMapPaneView::Draw()
+{
+	fDrawRequest = false;
 	MapCompositionDoc* mcd = GetDocument();
-	PreparationParameters pp(NewDrawer::ptINITOPENGL, pDC);
-	mcd->rootDrawer->prepare(&pp);
 	mcd->rootDrawer->getDrawerContext()->TakeContext();
 	mcd->rootDrawer->draw();
-	SwapBuffers(pDC->m_hDC);
+	mcd->rootDrawer->getDrawerContext()->swapBuffers();
 	mcd->rootDrawer->getDrawerContext()->ReleaseContext();
 }
 

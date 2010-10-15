@@ -102,6 +102,13 @@ protected:
 private:  
 	void RedrawInThread();
 	static UINT RedrawPaneInThread(LPVOID);
+	void Draw();
+	void RequestRedraw();
+	CWinThread * drawThread;
+	bool fDrawRequest;
+	bool fStopDrawThread;
+	CCriticalSection csThread;
+	static UINT DrawInThread(LPVOID);
 	static void MoveMouse(short xInc, short yInc) ;
 #ifdef _DEBUG
 	virtual void AssertValid() const;
