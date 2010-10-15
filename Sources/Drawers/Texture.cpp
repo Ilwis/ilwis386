@@ -54,13 +54,13 @@ void Texture::CreateTexture(DrawerContext * drawerContext, bool fInThread, volat
 	fAttTable = false;
 	if (fUsePalette) {
 		texture_data = (char*)malloc((sizeX / zoomFactor) * (sizeY / zoomFactor) * 2);
-		DrawTexturePaletted(offsetX, offsetY, sizeX, sizeY, zoomFactor, texture_data, fDrawStop);
+		this->valid = DrawTexturePaletted(offsetX, offsetY, sizeX, sizeY, zoomFactor, texture_data, fDrawStop);
 	} else {
 		texture_data = (char*)malloc((sizeX / zoomFactor) * (sizeY / zoomFactor) * 4);
-		DrawTexture(offsetX, offsetY, sizeX, sizeY, zoomFactor, texture_data, fDrawStop);
+		this->valid = DrawTexture(offsetX, offsetY, sizeX, sizeY, zoomFactor, texture_data, fDrawStop);
 	}
 
-	if (*fDrawStop)
+	if (!valid)
 		return;
 
 	if (fInThread)
@@ -83,7 +83,6 @@ void Texture::CreateTexture(DrawerContext * drawerContext, bool fInThread, volat
 	fPaletteChanged = false;
 	if (fInThread)
 		drawerContext->ReleaseContext();
-	this->valid = true;
 }
 
 bool Texture::fValid()
@@ -165,7 +164,7 @@ void Texture::ConvLine(const LongBuf& buf, LongBuf& bufColor)
 	drawColor->clrRaw(buf.buf(), bufColor.buf(), buf.iSize(), drm);
 }
 
-void Texture::DrawTexture(long offsetX, long offsetY, long texSizeX, long texSizeY, unsigned int zoomFactor, char * outbuf, volatile bool* fDrawStop)
+bool Texture::DrawTexture(long offsetX, long offsetY, long texSizeX, long texSizeY, unsigned int zoomFactor, char * outbuf, volatile bool* fDrawStop)
 {
 	RowCol rcSize = mp->rcSize();
 	long imageWidth = rcSize.Col;
@@ -177,7 +176,7 @@ void Texture::DrawTexture(long offsetX, long offsetY, long texSizeX, long texSiz
 	if (offsetY + sizeY > imageHeight)
 		sizeY = imageHeight - offsetY;
 	if (sizeX == 0 || sizeY == 0)
-		return;
+		return false;
 
 	ValueRange vr = mp->vr();
 	if (mp->dm()->pdbool())
@@ -189,7 +188,7 @@ void Texture::DrawTexture(long offsetX, long offsetY, long texSizeX, long texSiz
 		fRealMap = false;
 
 	if (*fDrawStop)
-		return;
+		return false;
 	mp->KeepOpen(true);
 	if (zoomFactor == 1) // 1:1 a pixel is a rastel; expected in outbuf: sizeX * sizeY * 4 bytes (for RGBA colors)
 	{
@@ -200,8 +199,10 @@ void Texture::DrawTexture(long offsetX, long offsetY, long texSizeX, long texSiz
 			memset(bufIn.buf(), 0, sizeX * 8); // to prevent NAN values in bufIn.
 			for (long iDataInYPos = 0; iDataInYPos < sizeY; ++iDataInYPos)
 			{
-				if (*fDrawStop)
-					break;
+				if (*fDrawStop) {
+					mp->KeepOpen(false);
+					return false;
+				}
 				mp->GetLineVal(iDataInYPos + offsetY, bufIn, offsetX, sizeX);
 				ConvLine(bufIn, bufColor);
 				PutLine(bufIn, bufColor, iDataInYPos, texSizeX, outbuf);
@@ -213,8 +214,10 @@ void Texture::DrawTexture(long offsetX, long offsetY, long texSizeX, long texSiz
 			LongBuf bufColor(sizeX);
 			for (long iDataInYPos = 0; iDataInYPos < sizeY; ++iDataInYPos) 
 			{
-				if (*fDrawStop)
-					break;
+				if (*fDrawStop) {
+					mp->KeepOpen(false);
+					return false;
+				}
 				if (fValue && !fAttTable)
 					mp->GetLineVal(iDataInYPos + offsetY, bufIn, offsetX, sizeX);
 				else
@@ -259,8 +262,10 @@ void Texture::DrawTexture(long offsetX, long offsetY, long texSizeX, long texSiz
 
 			for (long iDataOutYPos = 0, iDataInYPos = 0; iDataOutYPos < ySizeOut; ++iDataOutYPos, iDataInYPos += zoomFactor)
 			{
-				if (*fDrawStop)
-					break;
+				if (*fDrawStop) {
+					mp->KeepOpen(false);
+					return false;
+				}
 				mp->GetLineVal(iDataInYPos + offsetY, bufIn, offsetX, sizeX, iPyrLayer);
 				for (long iDataOutXPos = 0, iDataInXPos = 0; iDataOutXPos < xSizeOut; ++iDataOutXPos, iDataInXPos += zoomFactor)
 					ptrBufIntermediate[iDataOutXPos] = ptrBufIn[iDataInXPos];
@@ -277,8 +282,10 @@ void Texture::DrawTexture(long offsetX, long offsetY, long texSizeX, long texSiz
 			LongBuf bufColor(xSizeOut);
 			for (long iDataOutYPos = 0, iDataInYPos = 0; iDataOutYPos < ySizeOut; ++iDataOutYPos, iDataInYPos += zoomFactor)
 			{
-				if (*fDrawStop)
-					break;
+				if (*fDrawStop) {
+					mp->KeepOpen(false);
+					return false;
+				}
 				if (fValue && !fAttTable)
 					mp->GetLineVal(iDataInYPos + offsetY, bufIn, offsetX, sizeX, iPyrLayer);
 				else
@@ -291,6 +298,7 @@ void Texture::DrawTexture(long offsetX, long offsetY, long texSizeX, long texSiz
 		}                 
 	}
 	mp->KeepOpen(false);
+	return true;
 }
 
 // Paletted textures, thus less colors, but fast palete-swap option
@@ -347,7 +355,7 @@ void Texture::StretchLine(const LongBuf& buf, IntBuf& bufData)
 		ptrBufData[i] = (ptrBuf[i] - minMapVal) * (nrMapValues - 1) / width; // reserve last index for UNDEF
 }
 
-void Texture::DrawTexturePaletted(long offsetX, long offsetY, long texSizeX, long texSizeY, unsigned int zoomFactor, char * outbuf, volatile bool* fDrawStop)
+bool Texture::DrawTexturePaletted(long offsetX, long offsetY, long texSizeX, long texSizeY, unsigned int zoomFactor, char * outbuf, volatile bool* fDrawStop)
 {
 	RowCol rcSize = mp->rcSize();
 	long imageWidth = rcSize.Col;
@@ -359,7 +367,7 @@ void Texture::DrawTexturePaletted(long offsetX, long offsetY, long texSizeX, lon
 	if (offsetY + sizeY > imageHeight)
 		sizeY = imageHeight - offsetY;
 	if (sizeX == 0 || sizeY == 0)
-		return;
+		return false;
 
 	ValueRange vr = mp->vr();
 	if (mp->dm()->pdbool())
@@ -371,7 +379,7 @@ void Texture::DrawTexturePaletted(long offsetX, long offsetY, long texSizeX, lon
 		fRealMap = false;
 
 	if (*fDrawStop)
-		return;
+		return false;
 	mp->KeepOpen(true);
 	if (zoomFactor == 1) // 1:1 a pixel is a rastel; expected in outbuf: sizeX * sizeY * 4 bytes (for RGBA colors)
 	{
@@ -382,8 +390,10 @@ void Texture::DrawTexturePaletted(long offsetX, long offsetY, long texSizeX, lon
 			memset(bufIn.buf(), 0, sizeX * 8); // to prevent NAN values in bufIn.
 			for (long iDataInYPos = 0; iDataInYPos < sizeY; ++iDataInYPos)
 			{
-				if (*fDrawStop)
-					break;
+				if (*fDrawStop) {
+					mp->KeepOpen(false);
+					return false;
+				}
 				mp->GetLineVal(iDataInYPos + offsetY, bufIn, offsetX, sizeX);
 				StretchLine(bufIn, bufData);
 				PutLineData(bufIn, bufData, iDataInYPos, texSizeX, outbuf);
@@ -395,8 +405,10 @@ void Texture::DrawTexturePaletted(long offsetX, long offsetY, long texSizeX, lon
 			IntBuf bufData(sizeX);
 			for (long iDataInYPos = 0; iDataInYPos < sizeY; ++iDataInYPos) 
 			{
-				if (*fDrawStop)
-					break;
+				if (*fDrawStop) {
+					mp->KeepOpen(false);
+					return false;
+				}
 				if (fValue && !fAttTable)
 					mp->GetLineVal(iDataInYPos + offsetY, bufIn, offsetX, sizeX);
 				else
@@ -441,8 +453,10 @@ void Texture::DrawTexturePaletted(long offsetX, long offsetY, long texSizeX, lon
 
 			for (long iDataOutYPos = 0, iDataInYPos = 0; iDataOutYPos < ySizeOut; ++iDataOutYPos, iDataInYPos += zoomFactor)
 			{
-				if (*fDrawStop)
-					break;
+				if (*fDrawStop) {
+					mp->KeepOpen(false);
+					return false;
+				}
 				mp->GetLineVal(iDataInYPos + offsetY, bufIn, offsetX, sizeX, iPyrLayer);
 				for (long iDataOutXPos = 0, iDataInXPos = 0; iDataOutXPos < xSizeOut; ++iDataOutXPos, iDataInXPos += zoomFactor)
 					ptrBufIntermediate[iDataOutXPos] = ptrBufIn[iDataInXPos];
@@ -459,8 +473,10 @@ void Texture::DrawTexturePaletted(long offsetX, long offsetY, long texSizeX, lon
 			IntBuf bufData(xSizeOut);
 			for (long iDataOutYPos = 0, iDataInYPos = 0; iDataOutYPos < ySizeOut; ++iDataOutYPos, iDataInYPos += zoomFactor)
 			{
-				if (*fDrawStop)
-					break;
+				if (*fDrawStop) {
+					mp->KeepOpen(false);
+					return false;
+				}
 				if (fValue && !fAttTable)
 					mp->GetLineVal(iDataInYPos + offsetY, bufIn, offsetX, sizeX, iPyrLayer);
 				else
@@ -473,4 +489,5 @@ void Texture::DrawTexturePaletted(long offsetX, long offsetY, long texSizeX, lon
 		}                 
 	}
 	mp->KeepOpen(false);
+	return true;
 }

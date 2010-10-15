@@ -38,12 +38,12 @@ namespace ILWIS {
 		void PutLine(const LongBuf& bufOriginal, const LongBuf& bufColor, const int iLine, const long texSizeX, char * outbuf);
 		void ConvLine(const RealBuf& buf, LongBuf& bufColor);
 		void ConvLine(const LongBuf& buf, LongBuf& bufColor);
-		void DrawTexture(long offsetX, long offsetY, long texSizeX, long texSizeY, unsigned int zoomFactor, char * outbuf, volatile bool* fDrawStop);
+		bool DrawTexture(long offsetX, long offsetY, long texSizeX, long texSizeY, unsigned int zoomFactor, char * outbuf, volatile bool* fDrawStop);
 		void PutLineData(const RealBuf& bufOriginal, const IntBuf& bufData, const int iLine, const long texSizeX, char * outbuf);
 		void PutLineData(const LongBuf& bufOriginal, const IntBuf& bufData, const int iLine, const long texSizeX, char * outbuf);
 		void StretchLine(const RealBuf& buf, IntBuf& bufData);
 		void StretchLine(const LongBuf& buf, IntBuf& bufData);
-		void DrawTexturePaletted(long offsetX, long offsetY, long texSizeX, long texSizeY, unsigned int zoomFactor, char * outbuf, volatile bool* fDrawStop);
+		bool DrawTexturePaletted(long offsetX, long offsetY, long texSizeX, long texSizeY, unsigned int zoomFactor, char * outbuf, volatile bool* fDrawStop);
 		const Map mp;
 		GLuint texture;
 		char * texture_data;
