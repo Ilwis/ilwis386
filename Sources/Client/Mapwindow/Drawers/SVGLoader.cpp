@@ -1,8 +1,9 @@
-#include "Headers\toolspch.h"
+#include "Client\Headers\formelementspch.h"
 #include "Client\ilwis.h"
 #include "Engine\base\system\engine.h"
 #include <map>
-#include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
+#include "Client\Mapwindow\Drawers\SimpleDrawer.h"
+#include "Client\Mapwindow\Drawers\ComplexDrawer.h"
 #include "Client\Mapwindow\Drawers\SVGLoader.h"
 #include "Client\Mapwindow\Drawers\SVGElements.h"
 
@@ -51,11 +52,17 @@ void SVGLoader::parseFile(const FileName& fn) {
 	for(int i = 0; i < children->getLength(); ++i) {
 		DOMNode* node = children->item(i);
 		DOMNamedNodeMap *map = node->getAttributes();
+		if (! map)
+			continue;
 		ILWIS::DrawerParameters dp(0, 0);
-		String id = getAttributeValue(map,"id");
+		String nodeName = CString(node->getNodeName());
+		String id = fn.sFile;
 		SVGElement *element = (SVGElement *)IlwWinApp()->getDrawer(id, 0, &dp);
 		if ( element) {
 			element->parse(node);
+			if ( element->getId() != "")
+				(*this)[element->getId()+"|ilwis38"] = element;
+			break;
 		}
 	}
 }

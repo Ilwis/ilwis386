@@ -15,7 +15,7 @@
 namespace ILWIS {
 	class SVGElement ;
 
-	class SVGLoader {
+	class SVGLoader : public map<String, SVGElement *> {
 	public:
 		SVGLoader();
 		~SVGLoader();

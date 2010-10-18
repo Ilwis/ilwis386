@@ -12,25 +12,35 @@
 #include <xercesc/parsers/XercesDOMParser.hpp>
 #include <xercesc\dom\DOMImplementationLS.hpp>
 
-namespace ILWIS {
+#define colorUNDEF Color(1,2,3)
+#define colorUSERDEF Color(3,2,1)
 
-	class _export SVGElement : public SimpleDrawer{
+namespace ILWIS {
+	class _export SVGElement : public ComplexDrawer{
 	public:
 		enum ShapeType{sRECTANGLE, sCIRCLE,sELLIPSE,sLINE,sPOLYLINE,sPOLYGON,sPATH};
 
 		SVGElement();
-		bool draw(bool norecursion, const CoordBounds& cbArea) const;
-		virtual void parse(XERCES_CPP_NAMESPACE::DOMNode* node) {};
-		void prepare(PreparationParameters *p);
+		bool draw(bool norecursion, const CoordBounds& cbArea) const { return true;}
+		virtual void drawSVG(const CoordBounds& cbElement,const NewDrawer *dr, double z=0) const;
+		virtual void parse(XERCES_CPP_NAMESPACE::DOMNode* node);
+		void prepare(PreparationParameters *p) {};
+
 	protected:
 		SVGElement(DrawerParameters *parms, const String& name);
 		void initSvgData();
 		Color getColor(const String& name) const;
 		String getAttributeValue(XERCES_CPP_NAMESPACE::DOMNamedNodeMap *map, const String& key) const;
-		String id;
+		String parseStyle(const String& style);
+
 		int ewidth, eheight;
+		Color fillColor;
+		Color strokeColor;
+		int rx, ry, rwidth, rheight;
+		int borderThickness;
+		double opacity;
+
 	private:
 		static map<String, Color> svgcolors;
-
 	};
 }
