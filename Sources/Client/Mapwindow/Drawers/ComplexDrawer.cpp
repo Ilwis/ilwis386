@@ -59,7 +59,7 @@ ComplexDrawer::~ComplexDrawer() {
 void ComplexDrawer::clear() {
 	for(map<String,NewDrawer *>::iterator cur = drawersById.begin(); cur != drawersById.end(); ++cur) {
 		NewDrawer *drw = (*cur).second;
-		if ( !isSimple())
+		if ( !drw->isSimple())
 			((ComplexDrawer *)drw)->clear();
 		delete drw;
 	}

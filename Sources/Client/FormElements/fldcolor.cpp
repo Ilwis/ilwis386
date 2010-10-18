@@ -287,7 +287,7 @@ int FieldColorSimple::CreateColor(void * Evt)
 //---------[ FieldColor ]---------------------------------------------------------------------------------------
 FieldColor::FieldColor(FormEntry* p, const String& sQuestion,
             Color* color, bool useTransparency)
-   : FieldGroup(p)
+   : FieldGroup(p), slider(0)
 {
   clr = color;
   StaticTextSimple *st = 0;
