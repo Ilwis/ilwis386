@@ -12,6 +12,12 @@
 #define _AFXDLL
 #endif
 
+#ifdef _DEBUG
+#include <stdlib.h>
+#include <crtdbg.h>
+#pragma strict_gs_check(on)
+#endif
+
 #include <afxwin.h>
 #include <afxmt.h>
 #include <afxcmn.h>

@@ -395,6 +395,8 @@ void PointMapStore::SetErase(bool f)
 
 long PointMapStore::iRaw(long iRec) const
 {
+	if ( iRec == iUNDEF)
+		return iUNDEF;
 	Geometry *pnt = geometries->at(iRec);
 	long raw = ((ILWIS::Point *)pnt)->iValue();
 	return raw;
@@ -402,6 +404,9 @@ long PointMapStore::iRaw(long iRec) const
 
 long PointMapStore::iValue(long iRec) const
 {
+	if ( iRec == iUNDEF)
+		return iUNDEF;
+
 	long value = iUNDEF;
 	if ( iRec < geometries->size() && geometries->at(iRec) != NULL)	{
 		ILWIS::LPoint *pnt = (ILWIS::LPoint *)geometries->at(iRec - 1);

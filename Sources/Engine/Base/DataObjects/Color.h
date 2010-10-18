@@ -81,7 +81,7 @@ public:
 	byte magenta() const { return 255-m_green; }
 	byte cyan()  const { return 255-m_red; }
 	bool operator==(const Color& c)
-	{ return (m_red==c.red()) && (m_green==c.green()) && (m_blue==c.blue() && m_blue==c.transparency()); }
+	{ return (m_red==c.red()) && (m_green==c.green()) && (m_blue==c.blue() && m_transparency==c.transparency()); }
 	bool operator!=(const Color& c)
 		{ return !(*this == c); }
 	operator long() const ; // for COLORREF conversion; so it will ignore the transparency
@@ -92,7 +92,9 @@ public:
 	byte grey() const; 
 	Color clrDraw(DrawColors drc) const;
 private:
+	struct{
 	byte m_red, m_green, m_blue,m_transparency;
+	};
 };
 
 #ifdef TLSTMPL_C

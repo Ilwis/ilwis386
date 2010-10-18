@@ -49,9 +49,10 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="/GS"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)Sources\Headers&quot;;&quot;$(SolutionDir)Sources&quot;"
-				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;ILWISENGINE;_WIN32_DCOM;_WIN32_WINNT=0x0400;_WIN32_IE=0x0400;_CRT_SECURE_NO_WARNINGS;_SECURE_SCL=0;_HAS_ITERATOR_DEBUGGING=0"
+				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;ILWISENGINE;_WIN32_DCOM;_CRTDBG_MAP_ALLOC;_WIN32_WINNT=0x0400;_WIN32_IE=0x0400;_CRT_SECURE_NO_WARNINGS;_SECURE_SCL=0;_HAS_ITERATOR_DEBUGGING=0"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"

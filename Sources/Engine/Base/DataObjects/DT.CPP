@@ -721,13 +721,19 @@ Duration::Duration(const String& duration) {
 		else if ( c == 'y' || c == 'd' || c == 'h' || c == 's') {
 			double value = v.rVal();
 			values[String(c)] += value;
+			v = "";
 		}
 		else if ( c == 't') {
 			timePart = true;
-		} else if ( c == 'm' && timePart )
+			v = "";
+		} else if ( c == 'm' && timePart ) {
 			values["min"] += v.rVal();
-		else if ( c == 'm')
+			v = "";
+		}
+		else if ( c == 'm') {
 			values["m"] += v.rVal();
+			v = "";
+		}
 	}
 	int year, month, day, hour, minute;
 	double seconds;
@@ -751,8 +757,8 @@ Duration::Duration(const String& duration) {
 		hour = hour - day * 24;
 	}
 	if (  day > 365) {
-		day = 0;
-		rest = day;
+		year += day / 365;
+		day = day % 365;
 	}
 	if ( month > 12) {
 		year += month % 12;
@@ -774,9 +780,11 @@ String ILWIS::Duration::toString(bool local, ILWIS::Time::Mode mode) const{
 	int year, month, day, hour, minutes;
 	double seconds;
 	julianToGregorian(year,month,day,hour,minutes,seconds);
-    year = year != -4712 ? year : 0;
-	month = year != -4712 && month == 1 ? 0 : month - 1;
-	day = year != -4712 && day == 1 ? 0 : day - 1;
+	// time says year, month, day have a minimum of 1 and go up to max but ofc for duration this is not true
+	// duration goes from 0-max-1;
+	year += 4712;
+	month -= 1; 
+	day -= 1;
 
 	String dur = "P";
 	if ( year != 0)
