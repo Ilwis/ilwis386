@@ -8,7 +8,7 @@ namespace ILWIS {
 class CanvasBackgroundDrawer : public ComplexDrawer {
 public:
 	CanvasBackgroundDrawer(DrawerParameters *parms);
-	~CanvasBackgroundDrawer();
+	virtual ~CanvasBackgroundDrawer();
 	virtual void prepare(PreparationParameters *pp);
 	void setCoordSystem(const CoordSystem& cs, bool overrule=false);
 	void addCoordBounds(const CoordBounds& cb, bool overrule=true);

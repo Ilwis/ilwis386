@@ -31,10 +31,12 @@ namespace ILWIS{
 		void animationTiming(CWnd *w);
 		void animationControl(CWnd *w);
 		void animationSourceUsage(CWnd *parent);
-		void setIndex(int index);
+		void setMapIndex(int index);
 		void animationSlicing(CWnd *parent);
 		void animationSelection(CWnd *parent);
 		void setTransparency(double v);
+		bool timerPerIndex() ;
+		bool timerPerTime() ;
 		double interval;
 		UINT timerid;
 		IlwisObject *datasource;
@@ -43,7 +45,12 @@ namespace ILWIS{
 		FeatureLayerDrawer *featurelayer;
 		static int timerIdCounter;
 		int index;
+		int mapIndex;
 		bool loop;
+		bool useTime;
+		String colTime;
+
+		ILWIS::Duration timestep;
 		CCriticalSection csAccess;
 		AnimationControl *animcontrol;
 
@@ -58,12 +65,19 @@ namespace ILWIS{
 		int setTiming(Event *ev);
 		int changeColum(Event *);
 		LRESULT OnTimeTick( WPARAM wParam, LPARAM lParam );
-		void setSlider();
-		void setIndex(int index);
+		void setSlider(FormEntry *entry);
+		void setTimeElements(FormEntry *entry);
+		void setMapIndex(int index);
 		void shutdown(int iReturn=2);
+		double calcNiceStep(Duration time);
+		int changeDuration(Event *ev);
 		TimeGraphSlider *graphSlider;
+		FieldGroup *fgTime;
 		FieldColumn *fcol;
+		FieldColumn *fcolTime;
+		FieldTime *ftime;
 		StaticText *st;
+		CheckBox *cbTime;
 		String colName;
 		FieldReal *frtime;
 		FlatIconButton *fbBegin; 
@@ -72,6 +86,8 @@ namespace ILWIS{
 		int pause(Event  *ev);
 		int run(Event  *ev);
 		int stop(Event  *ev);
+		int changeTimeColumn(Event *);
+		int setTimingMode(Event *ev);
 		bool initial;
 
 		DECLARE_MESSAGE_MAP();

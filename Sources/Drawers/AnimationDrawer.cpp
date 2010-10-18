@@ -8,6 +8,7 @@
 #include "Client\FormElements\FldOneSelectTextOnly.h"
 #include "Client\FormElements\fldcol.h"
 #include "Client\FormElements\objlist.h"
+#include "Engine\Domain\DomainTime.h" 
 #include "Engine\Map\basemap.h"
 #include "Engine\Map\Point\ilwPoint.h"
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
@@ -33,6 +34,7 @@ using namespace ILWIS;
 
 int AnimationDrawer::timerIdCounter=5000;
 int mycount = 0;
+#define REAL_TIME_INTERVAL 10
 
 ILWIS::NewDrawer *createAnimationDrawer(DrawerParameters *parms) {
 	return new AnimationDrawer(parms);
@@ -47,7 +49,9 @@ AnimationDrawer::AnimationDrawer(DrawerParameters *parms) :
 	featurelayer(0),
 	loop(true),
 	index(0),
-	animcontrol(0)
+	animcontrol(0), 
+	useTime(false),
+	mapIndex(0)
 {
 	setTransparency(1);
 }
@@ -243,50 +247,93 @@ void AnimationDrawer::animationSourceUsage(CWnd *parent) {
 void AnimationDrawer::timedEvent(UINT _timerid) {
     ILWISSingleLock sl(&csAccess, TRUE,SOURCE_LOCATION);
 	MapCompositionDoc *doc = getRootDrawer()->getDrawerContext()->getDocument();
+	bool redraw = false;
 	if ( timerid == _timerid) {
-		if ( featurelayer){
-			if ( names.size() > 0 && index < names.size()-1) {
-				featurelayer->getDrawer(index)->setActive(false);
-				featurelayer->getDrawer(++index)->setActive(true);
-			} else {
-				if (loop) {
-					featurelayer->getDrawer(index)->setActive(false);
-					index = 0;
-					featurelayer->getDrawer(0)->setActive(false);
-				}
-			}
-		}
-		if ( sourceType == sotMAPLIST) {
-			MapList mlist;
-			TRACE(String("%d\n", index).scVal());
-			mlist.SetPointer(datasource->pointer());
-			if ( mlist->iSize() > 0 && index < mlist->iSize() - 1) {
-				getDrawer(index)->setActive(false);
-				getDrawer(++index)->setActive(true);
-			} else {
-				if (loop) {
-					getDrawer(index)->setActive(false);
-					index = 0;
-					getDrawer(0)->setActive(true);
-				}
-			}
+		if ( useTime) {
+			redraw = timerPerTime();
+		} else {
+			redraw = timerPerIndex();
 		}
 		if ( animcontrol)
-			animcontrol->PostMessage(ID_TIME_TICK,index, TRUE);
-		doc->mpvGetView()->Invalidate();
+				animcontrol->PostMessage(ID_TIME_TICK,mapIndex, TRUE);
+		if ( redraw) {
+			/*if ( animcontrol)
+				animcontrol->PostMessage(ID_TIME_TICK,mapIndex, TRUE);*/
+			doc->mpvGetView()->Invalidate();
+		}
 	}
+}
+
+bool AnimationDrawer::timerPerIndex() {
+	if ( featurelayer){
+		if ( names.size() > 0 && mapIndex < names.size()-1) {
+			featurelayer->getDrawer(mapIndex)->setActive(false);
+			featurelayer->getDrawer(++mapIndex)->setActive(true);
+		} else {
+			if (loop) {
+				featurelayer->getDrawer(mapIndex)->setActive(false);
+				mapIndex = 0;
+				featurelayer->getDrawer(0)->setActive(false);
+			}
+		}
+	}
+	if ( sourceType == sotMAPLIST) {
+		MapList mlist;
+		mlist.SetPointer(datasource->pointer());
+		if ( mlist->iSize() > 0 && mapIndex < mlist->iSize() - 1) {
+			getDrawer(mapIndex)->setActive(false);
+			getDrawer(++mapIndex)->setActive(true);
+		} else {
+			if (loop) {
+				getDrawer(mapIndex)->setActive(false);
+				mapIndex = 0;
+				getDrawer(0)->setActive(true);
+			}
+		}
+	}
+	return true;
+}
+
+bool AnimationDrawer::timerPerTime() {
+	if ( (double)timestep == rUNDEF || (double)timestep == 0.0)
+		return false;
+
+	MapList mpl;
+	mpl.SetPointer(datasource->pointer());
+	Column col = mpl->tblAtt()->col(colTime);
+	ILWIS::Duration duration = (col->rrMinMax().rHi() - col->rrMinMax().rLo());
+	double steps = 1000.0 / REAL_TIME_INTERVAL;
+	bool redraw = false;
+	double currentTime = col->rrMinMax().rLo() +  timestep * (double)index / steps;
+	if ( mapIndex < col->iRecs() -1 && col->rValue(mapIndex) < currentTime){
+		getDrawer(mapIndex)->setActive(false);
+		getDrawer(++mapIndex)->setActive(true);
+		redraw = true;
+	} else {
+		if (loop && mapIndex >= mpl->iSize() -1 ) {
+			getDrawer(mapIndex)->setActive(false);
+			mapIndex = 0;
+			index = 0;
+			getDrawer(0)->setActive(true);
+			redraw = true;
+		}
+	}
+	++index;
+
+	return redraw;
+
 }
 
 String AnimationDrawer::iconName(const String& subtype) const {
 	return "Animation";
 }
 
-void AnimationDrawer::setIndex(int ind) {
+void AnimationDrawer::setMapIndex(int ind) {
 	ILWISSingleLock sl(&csAccess, TRUE,SOURCE_LOCATION);
 	for(int i =0 ; i < drawers.size(); ++i)
 		getDrawer(i)->setActive(false);
 
-	index = ind;
+	mapIndex = ind;
 }
 
 //---------------------------------------------------------
@@ -302,15 +349,16 @@ LRESULT AnimationControl::OnTimeTick( WPARAM wParam, LPARAM lParam ) {
 	if ( lParam == TRUE)
 		graphSlider->setIndex(wParam);
 	else
-		adrw->setIndex(wParam);
+		adrw->setMapIndex(wParam);
 	return 1;
 }
 
 AnimationControl::AnimationControl(CWnd *par, AnimationDrawer *adr) 
-	: DisplayOptionsForm2(adr, par, "Time")
+	: DisplayOptionsForm2(adr, par, "Time"), fgTime(0)
 {
 	initial = true;
 	FieldGroup *fg = new FieldGroup(root, true);
+	fg->SetBevelStyle(FormEntry::bsRAISED);
 	FlatIconButton *fi1 = new FlatIconButton(fg,"Begin","",(NotifyProc)&AnimationControl::begin, FileName());
 	fbBegin = fi1;
 	FlatIconButton *fi2 = new FlatIconButton(fg,"Pause","",(NotifyProc)&AnimationControl::pause, FileName());
@@ -321,11 +369,16 @@ AnimationControl::AnimationControl(CWnd *par, AnimationDrawer *adr)
 	fi2->Align(fi1, AL_AFTER,-10);
 	fi1 = new FlatIconButton(fg,"End","",(NotifyProc)&AnimationControl::end, FileName());
 	fi1->Align(fi2, AL_AFTER,-10);
+	cbTime = new CheckBox(root,TR("Use Time"), &adr->useTime);
+	cbTime->Align(fbBegin, AL_UNDER);
+	cbTime->SetCallBack((NotifyProc)&AnimationControl::setTimingMode);
 
 	frtime = new FieldReal(root,"Interval", &adr->interval,ValueRangeReal(0.1,1000,0.1));
 	frtime->SetCallBack((NotifyProc)&AnimationControl::setTiming);
-	frtime->Align(fbBegin, AL_UNDER);
-	setSlider();
+	frtime->Align(cbTime, AL_UNDER);
+
+	setTimeElements(cbTime);
+	setSlider(cbTime);
 	st = new StaticText(root,"Preparing . . .");
 	
 
@@ -333,11 +386,127 @@ AnimationControl::AnimationControl(CWnd *par, AnimationDrawer *adr)
 
 }
 
-void AnimationControl::setSlider() {
+int AnimationControl::setTimingMode(Event *ev) {
+	cbTime->StoreData();
+	AnimationDrawer *adrw = (AnimationDrawer *)drw;
+	frtime->Hide();
+	fgTime->Hide();
+	if ( adrw->useTime) {
+		fgTime->Show();
+		IlwisObject *source = adrw->datasource;
+		MapList mpl((*source)->fnObj);
+		if ( mpl->fTblAtt()) {
+			Column col = mpl->tblAtt()->col(adrw->colTime);
+			TimeInterval interval(col->rrMinMax().rLo(),col->rrMinMax().rHi());
+			graphSlider->setTimeInterval(interval);
+			graphSlider->setTimes(col);
+		}
+	} else {
+		frtime->Show();
+		graphSlider->setTimeInterval(TimeInterval());
+	}
+	stop(0);
+	run(0);
+	return 1;
+}
+
+void AnimationControl::setTimeElements(FormEntry *entry) {
+	AnimationDrawer *adrw = (AnimationDrawer *)drw;
+	IlwisObject *source = adrw->datasource;
+	IlwisObject::iotIlwisObjectType type = IlwisObject::iotObjectType((*source)->fnObj);
+	if ( type == IlwisObject::iotRASMAP ||  IlwisObject::iotSEGMENTMAP || 
+		IlwisObject::iotPOINTMAP || IlwisObject::iotPOLYGONMAP) {
+	}
+	if ( type ==IlwisObject::iotMAPLIST) {
+		MapList mpl((*source)->fnObj);
+		if ( mpl->fTblAtt()) {
+			fgTime = new FieldGroup(entry,true);
+			fcolTime = new FieldColumn(fgTime,TR("Time attributes"),mpl->tblAtt(),&adrw->colTime,dmTIME);
+			fcolTime->SetCallBack((NotifyProc)&AnimationControl::changeTimeColumn);
+			ftime = new FieldTime(fgTime,"",&adrw->timestep, 0, ILWIS::Time::mDURATION);
+			ftime->SetWidth(20);
+			ftime->SetCallBack((NotifyProc)&AnimationControl::changeDuration);
+			StaticText *stTime = new StaticText(fgTime,TR("per second"));
+			ftime->Align(fcolTime, AL_AFTER, -10);
+			stTime->Align(ftime, AL_AFTER, -5);
+			fgTime->Align(entry, AL_UNDER);
+		}
+	} 
+}
+
+int AnimationControl::changeDuration(Event *ev) {
+	AnimationDrawer *adrw = (AnimationDrawer *)drw;
+	if ( adrw->colTime != "" && adrw->useTime) {
+		ftime->StoreData();
+	}
+	return 1;
+}
+int AnimationControl::changeTimeColumn(Event *e) {
+	fcolTime->StoreData();
+	AnimationDrawer *adrw = (AnimationDrawer *)drw;
+	if ( adrw->colTime != "") {
+		AnimationDrawer *adrw = (AnimationDrawer *)drw;
+		IlwisObject *source = adrw->datasource;
+		IlwisObject::iotIlwisObjectType type = IlwisObject::iotObjectType((*source)->fnObj);
+		if ( type == IlwisObject::iotRASMAP ||  IlwisObject::iotSEGMENTMAP || 
+			IlwisObject::iotPOINTMAP || IlwisObject::iotPOLYGONMAP) {
+		}
+		if ( type ==IlwisObject::iotMAPLIST) {
+			MapList mpl((*source)->fnObj);
+			if ( mpl->fTblAtt()) {
+				Column col = mpl->tblAtt()->col(adrw->colTime);
+				adrw->timestep = calcNiceStep((col->rrMinMax().rHi() - col->rrMinMax().rLo()) / mpl->iSize());
+				ftime->SetVal(adrw->timestep, ILWIS::Time::mDURATION);
+			}
+		} 
+		
+	}
+	return 1;
+}
+
+double AnimationControl::calcNiceStep(Duration time) {
+	int yr = 4712 + time.get(Time::tpYEAR);
+	int mnt = time.get(Time::tpMONTH);
+	int dy = time.get(Time::tpDAYOFMONTH);
+	int hr = time.get(Time::tpHOUR);
+	int min = time.get(Time::tpMINUTE);
+	int sec = time.get(Time::tpSECOND);
+
+	if ( yr > 10) {
+		int l10 = log10((double)yr);
+		int p10 = pow(10.0, l10);
+		int y = (int)(yr / p10) * p10;
+		int rest = yr - y;
+		if ( rest * 2 > p10 )
+			yr = y + 5 * p10 / 10;
+		else
+			yr = y;
+	}
+	if ( yr > 0) {
+		dy = hr = min = sec = 0;
+		if ( mnt > 6)
+			mnt = 6;
+		else 
+			mnt = 0;
+	} else if ( mnt > 0) {
+		hr = min = sec = 0;
+	} else if ( dy > 0) {
+		min = sec = 0;
+	}
+	if ( yr > 5) {
+		mnt = 0;
+	}
+
+	return Duration(String("P%04dY%02dM%02dDT%02dH%02dM%02ds",yr,mnt,dy,hr,min,sec));
+	
+}
+void AnimationControl::setSlider(FormEntry *entry) {
 	AnimationDrawer *adrw = (AnimationDrawer *)drw;
 	IlwisObject *source = adrw->datasource;
 	IlwisObject::iotIlwisObjectType type = IlwisObject::iotObjectType((*source)->fnObj);
 	RangeInt setRange;
+	graphSlider = new TimeGraphSlider(root, setRange);
+	graphSlider->SetWidth(165);
 	if ( type == IlwisObject::iotRASMAP ||  IlwisObject::iotSEGMENTMAP || 
 		IlwisObject::iotPOINTMAP || IlwisObject::iotPOLYGONMAP) {
 	}
@@ -349,8 +518,7 @@ void AnimationControl::setSlider() {
 			fcol->SetCallBack((NotifyProc)&AnimationControl::changeColum);
 		}
 	}
-
-	graphSlider = new TimeGraphSlider(root, setRange);
+	graphSlider->Align(entry, AL_UNDER, 23);
 
 }
 
@@ -382,7 +550,8 @@ int AnimationControl::setTiming(Event *ev) {
 int AnimationControl::stop(Event  *ev) {
 	AnimationDrawer *andr = (AnimationDrawer *)drw;
 	drw->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->KillTimer(andr->timerid);
-	andr->setIndex(0);
+	andr->setMapIndex(0);
+	andr->index = 0;
 	andr->timerid = iUNDEF;
 	return 1;
 }
@@ -395,7 +564,8 @@ int AnimationControl::pause(Event  *ev) {
 
 int AnimationControl::end(Event  *ev) {
 	AnimationDrawer *andr = (AnimationDrawer *)drw;
-	andr->index = andr->drawers.size();
+	andr->mapIndex = andr->drawers.size();
+	andr->index = 0;
 	return 1;
 }
 
@@ -407,16 +577,19 @@ int AnimationControl::run(Event  *ev) {
 	}else{
 		andr->timerid = AnimationDrawer::timerIdCounter++;
 	}
-	drw->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->SetTimer(andr->timerid,andr->interval * 1000.0,0);
-	//PreparationParameters pp(NewDrawer::ptRENDER);
-	//drw->prepare(&pp);
+	if ( andr->useTime) {
+		drw->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->SetTimer(andr->timerid,REAL_TIME_INTERVAL,0);
+	} else {
+		drw->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->SetTimer(andr->timerid,andr->interval * 1000.0,0);
+	}
 	updateMapView();
 	return 1;
 }
 
 int AnimationControl::begin(Event  *ev) {
 	AnimationDrawer *andr = (AnimationDrawer *)drw;
-	andr->setIndex(0);
+	andr->setMapIndex(0);
+	andr->index = 0;
 	return 1;
 }
 
@@ -446,9 +619,9 @@ int AnimationSlicing::createSteps(Event*) {
 			fldSteps->AddString(String("%d",i));
 		fldSteps->ose->SelectString(0,"2");
 	} else {
-		int index = fldSteps->ose->GetCurSel();
-		if ( index != -1) {
-			vs->setNumberOfBounds(index +2);
+		int mapIndex = fldSteps->ose->GetCurSel();
+		if ( mapIndex != -1) {
+			vs->setNumberOfBounds(mapIndex +2);
 		}
 		drw->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->Invalidate();
 	}
@@ -480,9 +653,9 @@ int AnimationSelection::createSteps(Event*) {
 			fldSteps->AddString(String("%d",i));
 		fldSteps->ose->SelectString(0,"3");
 	} else {
-		int index = fldSteps->ose->GetCurSel();
-		if ( index != -1) {
-			vs->setNumberOfBounds(index +2);
+		int mapIndex = fldSteps->ose->GetCurSel();
+		if ( mapIndex != -1) {
+			vs->setNumberOfBounds(mapIndex +2);
 		}
 		drw->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->Invalidate();
 	}

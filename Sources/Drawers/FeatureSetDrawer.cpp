@@ -115,11 +115,11 @@ HTREEITEM FeatureSetDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 	HTREEITEM hti = SetDrawer::configure(tv,parent);
 	threeDItem = 0;
 	DisplayOptionTreeItem *item;
-	if ( getUICode() == NewDrawer::ucALL) {
-		item = new DisplayOptionTreeItem(tv,parent,this,(DisplayOptionItemFunc)&FeatureSetDrawer::displayOptionMask);
-		HTREEITEM maskItem = InsertItem("Mask", "Mask", item, (int)useMask);
-		InsertItem(tv, maskItem,String("Value : %S",mask),"Mask");
-	}
+	//if ( getUICode() == NewDrawer::ucALL) {
+	//	item = new DisplayOptionTreeItem(tv,parent,this,(DisplayOptionItemFunc)&FeatureSetDrawer::displayOptionMask);
+	//	HTREEITEM maskItem = InsertItem("Mask", "Mask", item, (int)useMask);
+	//	InsertItem(tv, maskItem,String("Value : %S",mask),"Mask");
+	//}
 	portrayalItem = findTreeItemByName(tv,parent,"Portrayal");
 	if ( portrayalItem) {
 		bool useSingleColor = getDrawMethod() == NewDrawer::drmSINGLE;

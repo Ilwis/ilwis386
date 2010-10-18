@@ -37,7 +37,8 @@ SetDrawer::SetDrawer(DrawerParameters *parms, const String& name) :
 	drawColor(0),
 	colorCheck(0),
 	rprItem(0),
-	threeDItem(0)
+	threeDItem(0),
+	portrayalItem(0)
 {
 	setInfo(true);
 	setTransparency(1);

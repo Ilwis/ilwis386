@@ -15,18 +15,26 @@
 void addSVGDrawers(DrawerInfoVector *infos);
 
 namespace ILWIS{
-	class  SVGRectangleElement : public SVGElement {
+	class  SVGRectangle : public SVGElement {
 	public:
-		SVGRectangleElement(ILWIS::DrawerParameters *parms);
+		SVGRectangle(ILWIS::DrawerParameters *parms);
 		virtual void parse(XERCES_CPP_NAMESPACE::DOMNode* node);
-		virtual bool draw(bool norecursion = false, const CoordBounds& cbArea=CoordBounds()) const;
-		void prepare(PreparationParameters *);
+		void drawSVG(const CoordBounds& cbElement,const NewDrawer *dr, double z=0) const;
 	protected:
-		SVGRectangleElement(ILWIS::DrawerParameters *parms, const String& name);
-		Color fillColor;
-		Color strokeColor;
-		int rx, ry, rwidth, rheight;
+		SVGRectangle(ILWIS::DrawerParameters *parms, const String& name);
+	
+	};
 
+	class  SVGEllipse : public SVGElement {
+	public:
+		SVGEllipse(ILWIS::DrawerParameters *parms);
+		virtual void parse(XERCES_CPP_NAMESPACE::DOMNode* node);
+		void drawSVG(const CoordBounds& cbElement,const NewDrawer *dr, double z=0) const;
+	protected:
+		SVGEllipse(ILWIS::DrawerParameters *parms, const String& name);
+		double radius, radiusx,radiusy;
+		int cx,cy;
+	
 	};
 }
 

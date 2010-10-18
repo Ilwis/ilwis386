@@ -123,7 +123,6 @@ void ValueSlicer::OnMouseMove(UINT nFlags, CPoint point) {
 			int tolerance = (double)rct.Height() * 0.04; // NB this hit value is a bit processor dependent
 
 			if (  delta < tolerance) {
-				TRACE(String("delta %d, tolerance %d,index %d yl %d yp %d\n", delta, tolerance,index, ylimits[index], point.y).scVal());
 				break;
 			}
 		}
