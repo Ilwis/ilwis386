@@ -132,14 +132,15 @@ ColumnPropForm::ColumnPropForm(CWnd* parent, ColumnView& cv,
 		if (cv->vr().fValid() && !cv->dm()->pdnone())
 			vr = cv->vr();
 		if ( cv->dm()->pdtime()) {
+			FieldGroup *fgTime = new FieldGroup(root,true);
 			DomainTime *dt = cv->dm()->pdtime();
 			begin = dt->getInterval().getBegin();
-			end = dt->getInterval().getBegin();
+			end = dt->getInterval().getEnd();
 			duration = 	dt->getInterval().getStep();
-			ft1 = new FieldTime(root,STBUiRange,&begin,dt);
-			ft2 = new FieldTime(root,"a",&end,dt);
+			ft1 = new FieldTime(fgTime,STBUiRange,&begin,dt);
+			ft2 = new FieldTime(fgTime,"",&end,dt);
 			ft2->Align(ft1, AL_AFTER);
-			FieldBlank* fb = new FieldBlank(root);
+			FieldBlank* fb = new FieldBlank(fgTime);
 			fb->Align(ft1, AL_UNDER);
 
 		}

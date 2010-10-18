@@ -1326,8 +1326,8 @@ FieldTime::FieldTime(FormEntry *f, const String& sQuestion,ILWIS::Time *ti,  con
 	if ( dt != 0 && mode == ILWIS::Time::mUNKNOWN)
 		mode = dt->getMode();
 
-	//int fieldsize = mode == ILWIS::Time::mDATETIME ? 60 : 30;
-	int fieldsize = 55;
+	int fieldsize = mode == ILWIS::Time::mDURATION ? 30 : 55;
+	//int fieldsize = 55;
 
 	if (sQuestion.length() != 0)
 		st = new StaticTextSimple(this, sQuestion);
@@ -1345,8 +1345,9 @@ FieldTime::FieldTime(FormEntry *f, const String& sQuestion,ILWIS::Time *ti,  con
 int FieldTime::checkFormat(Event *ev) {
 	fsTime->StoreData();
 	sTime = fsTime->sVal();
+	bool valid = false;
 	for(int i=0; i < sTime.size(); ++i) {
-		bool valid = false;
+		valid = false;
 		char c = sTime[i];
 		if ( sTime[i] >= '0' && sTime[i] <= '9')
 			valid=true;
@@ -1363,7 +1364,8 @@ int FieldTime::checkFormat(Event *ev) {
 			break;
 		}
 	}
-
+	if ( valid && _npChanged && _cb)
+		 (_cb->*_npChanged)(ev);
 	return 1;
 }
 
@@ -1392,7 +1394,7 @@ void FieldTime::StoreData()
 	}
 }
 
-void FieldTime::SetVal(const ILWIS::Time ti, ILWIS::Time::Mode m) {
+void FieldTime::SetVal(const ILWIS::Time& ti, ILWIS::Time::Mode m) {
 	mode = m;
 	fsTime->SetVal(ti.toString(true, m));
 }

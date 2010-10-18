@@ -837,7 +837,7 @@ public:
 	void SetUseDate(bool yesno);
 	void show(int state) ;
 	void StoreData();
-	void SetVal(const ILWIS::Time ti, ILWIS::Time::Mode m);
+	void SetVal(const ILWIS::Time& ti, ILWIS::Time::Mode m);
 
 private:
 	int checkFormat(Event *ev);

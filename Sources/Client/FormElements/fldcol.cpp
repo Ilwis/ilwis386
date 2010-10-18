@@ -174,6 +174,7 @@ void FieldColumn::FillWithColumns(TablePtr *t)
         bool fAdd = false;
         if ((dmTypes & dmCLASS) && 0 != dm->pdc()) fAdd = true;
         else if ((dmTypes & dmIDENT) && 0 != dm->pdid()) fAdd = true;
+        else if ((dmTypes & dmTIME) && 0 != dm->pdtime()) fAdd = true;
         else if ((dmTypes & dmVALUE) && 0 != dm->pdv() && 0 == dm->pdbool()) fAdd = true;
         else if ((dmTypes & dmGROUP) && 0 != dm->pdgrp()) fAdd = true;
         else if ((dmTypes & dmIMAGE) && 0 != dm->pdi()) fAdd = true;
