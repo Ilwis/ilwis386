@@ -158,10 +158,11 @@ NewDrawer *ComplexDrawer::getDrawer(const String& did) {
 
 }
 
-void ComplexDrawer::removeDrawer(const String& did) {
+void ComplexDrawer::removeDrawer(const String& did, bool dodelete) {
 	for(int i=0; i < drawers.size(); ++i) {
 		if ( drawers.at(i)->getId() == did ) {
-			delete drawers.at(i);
+			if ( dodelete)
+				delete drawers.at(i);
 			drawers.erase(drawers.begin() + i);
 			drawersById.erase(did);
 			break;
@@ -172,7 +173,8 @@ void ComplexDrawer::removeDrawer(const String& did) {
 		if ( drw->getId() == did ) {
 			preDrawers.erase(did);
 			drawersById.erase(did);
-			delete drw;
+			if ( dodelete)
+				delete drw;
 			break;
 		}
 	}
@@ -181,7 +183,8 @@ void ComplexDrawer::removeDrawer(const String& did) {
 		if ( drw->getId() == did ) {
 			postDrawers.erase(did);
 			drawersById.erase(did);
-			delete drw;
+			if ( dodelete)
+				delete drw;
 			break;
 		}
 	}

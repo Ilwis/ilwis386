@@ -26,7 +26,7 @@ class _export ComplexDrawer : public NewDrawer {
 		NewDrawer * getDrawer(int index);
 		NewDrawer *getDrawer(const String& did);
 		virtual String addDrawer(NewDrawer *drw);
-		virtual void removeDrawer(const String& did);
+		virtual void removeDrawer(const String& did, bool dodelete=true);
 		virtual void addPostDrawer(int order, NewDrawer *drw);
 		virtual void addPreDrawer(int order, NewDrawer *drw);
 		void getDrawers(vector<NewDrawer *>&) ;
