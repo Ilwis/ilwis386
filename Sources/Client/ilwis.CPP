@@ -2421,18 +2421,25 @@ vector<Action *> IlwisWinApp::CreateActions() {
 }
 
 ILWIS::NewDrawer *IlwisWinApp::getDrawer(const String& type, const String& subtype, ILWIS::DrawerParameters *c)  {
+	if ( type == "")
+		return 0;
+
 	String fullType = type + "|" + subtype;
-	map<String, DrawerCreate>::const_iterator item = drawers.find(fullType);
-	if ( item != drawers.end())
-		return ((*item).second)(c);
-	//if ( drawers.find(fullType) != drawers.end()) {
-	//	DrawerCreate func = drawers[type];
-	//	return func(c);
-	//}
+	if ( c != 0) {
+		map<String, DrawerCreate>::const_iterator item = drawers.find(fullType);
+		if ( item != drawers.end())
+			return ((*item).second)(c);
+	}
+	map<String, ILWIS::SVGElement *>::iterator svgItem = svgContainer->find(fullType);
+	if ( svgItem != svgContainer->end())
+		return (ILWIS::NewDrawer *)(*svgItem).second;
 	return NULL;
 }
 
 ILWIS::NewDrawer *IlwisWinApp::getDrawer(const String& type, ILWIS::PreparationParameters *parms, ILWIS::DrawerParameters *c)  {
+	if ( type == "")
+		return 0;
+
 	if ( parms == 0 || parms->typeMapping.size() == 0)
 		return getDrawer(type,"Ilwis38",c);
 	map<String,String>::iterator item = parms->typeMapping.find(type);

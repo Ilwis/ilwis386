@@ -149,8 +149,9 @@ public:
 	IlwisAppContext*    Context() { return ilwapp; }
 	CommandHandlerUI			*getCommands() { return commandUI; }
 	ILWIS::NewDrawer _export *getDrawer(const String& type, const String& subType, ILWIS::DrawerParameters *parms) ;
-	ILWIS::NewDrawer _export *getDrawer(const String& type, ILWIS::PreparationParameters *pp, ILWIS::DrawerParameters *parms) ;
+	ILWIS::NewDrawer _export *getDrawer(const String& type, ILWIS::PreparationParameters *pp=0, ILWIS::DrawerParameters *parms=0) ;
 	void  addDrawer(const String& type, const String& subtype, DrawerCreate);
+	ILWIS::SVGLoader *getSVGContainer() const { return svgContainer; }
 	
 	//{{AFX_MSG(IlwisWinApp)
 	afx_msg void OnAbout();
