@@ -254,11 +254,9 @@ void AnimationDrawer::timedEvent(UINT _timerid) {
 		} else {
 			redraw = timerPerIndex();
 		}
-		if ( animcontrol)
-				animcontrol->PostMessage(ID_TIME_TICK,mapIndex, TRUE);
 		if ( redraw) {
-			/*if ( animcontrol)
-				animcontrol->PostMessage(ID_TIME_TICK,mapIndex, TRUE);*/
+			if ( animcontrol)
+				animcontrol->PostMessage(ID_TIME_TICK,mapIndex, TRUE);
 			doc->mpvGetView()->Invalidate();
 		}
 	}
