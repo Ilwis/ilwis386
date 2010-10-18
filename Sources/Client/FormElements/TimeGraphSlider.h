@@ -30,10 +30,14 @@ public:
 	void setRecordRange(const RangeInt& rng);
 	void create();
 	void setIndex(int index);
+	void setTimeInterval(ILWIS::TimeInterval in);
+	void setTimes(const Column& col);
 	TimeGraph *timegraph;	
 private:
 
 	Table sourceTable;
 	RangeInt recordRange;
+	Column timeCol;
+	ILWIS::TimeInterval interval;
 	String sourceColumn;
 };

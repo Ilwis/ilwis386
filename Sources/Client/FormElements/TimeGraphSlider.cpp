@@ -33,7 +33,7 @@ int TimeGraph::OnToolHitTest(CPoint point, TOOLINFO *pTI) const
 
 void TimeGraph::OnToolTipNotify(NMHDR *pNMHDR, LRESULT *pResult)
 {
-	char m_szTipBufA[MAX_PATH];
+	//char m_szTipBufA[MAX_PATH];
 	*pResult = 1;	
 	// need to handle both ANSI and UNICODE versions of the message
 	TOOLTIPTEXTA* pTTTA = (TOOLTIPTEXTA*)pNMHDR;
@@ -76,9 +76,19 @@ void TimeGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	::Rectangle(lpDIS->hDC, rct.left,rct.top, rct.right, rct.bottom);
 	SelectObject(lpDIS->hDC, oldBrush);
 
-	CFont* fnt = IlwWinApp()->GetFont(IlwisWinApp::sfFORM);
-	HGDIOBJ fntOld = SelectObject(lpDIS->hDC, fnt);
-	 String s("%d", fldGraph->recordRange.iLo());
+	//CFont* fnt = IlwWinApp()->GetFont(IlwisWinApp::sfFORM);
+
+	CFont* fnt = new CFont();
+	BOOL vvv = fnt->CreatePointFont(80,"Arial");
+	CDC *dc = CDC::FromHandle(lpDIS->hDC);
+
+	HGDIOBJ fntOld = dc->SelectObject(fnt);
+	String s;
+	if ( fldGraph->interval.fValid() == false)
+		s = String("%d", fldGraph->recordRange.iLo());
+	else {
+		s = fldGraph->interval.getBegin().toString(true, ILWIS::Time::mDATE);
+	}
 	 ::TextOut(lpDIS->hDC,crct.left, crct.bottom - 16,s.scVal(),s.size());
 	double yscale = rct.Height() / rr.rWidth();
 	double y0 = rr.rWidth() * yscale;
@@ -91,8 +101,13 @@ void TimeGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 		pts[!useDefault ? i-1 : i] = CPoint(rx,y);
 		rx += xscale;
 	}
-	s = String("%d", fldGraph->recordRange.iHi());
-	::TextOut(lpDIS->hDC,crct.right-14, crct.bottom - 16, s.scVal(),s.size());
+	if ( fldGraph->interval.fValid() == false)
+		s = String("%d", fldGraph->recordRange.iHi());
+	else {
+		s = fldGraph->interval.getEnd().toString(true, ILWIS::Time::mDATE);
+	}
+	CSize szTxt = dc->GetTextExtent(s.scVal());
+	::TextOut(lpDIS->hDC,crct.right - szTxt.cx, crct.bottom - 16, s.scVal(),s.size());
 	pts[fldGraph->recordRange.iWidth() + 1] = CPoint(rct.Width(), rct.Height());
 	pts[fldGraph->recordRange.iWidth() + 2] = CPoint(0, rct.Height());
 
@@ -107,18 +122,28 @@ void TimeGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 
 	if ( timePoint.x != 100000) {
 		CPen redPen(PS_SOLID,2, RGB(255,0,0));
-		SelectObject(lpDIS->hDC, redPen);
-		::MoveToEx(lpDIS->hDC, timePoint.x, rct.bottom,0);
-		::LineTo(lpDIS->hDC, timePoint.x, rct.top);
+		dc->SelectObject(redPen);
+		dc->MoveTo(timePoint.x, rct.bottom);
+		dc->LineTo(timePoint.x, rct.top);
 		int index = (int)(0.5 + (double)timePoint.x / xscale);
 		s = String("%d", index);
-		::TextOut(lpDIS->hDC,timePoint.x -4, crct.bottom - 16, s.scVal(),s.size());
+		if ( fldGraph->interval.fValid() == false)
+			s = s = String("%d", index);
+		else {
+			ILWIS::Time time(fldGraph->timeCol->rValue(index));
+			ILWIS::Time::Mode m = fldGraph->interval.rWidth() > 3 ? ILWIS::Time::mDATE : ILWIS::Time::mTIME;
+			s = time.toString(true,m);
+		}
+		CSize szTxt = dc->GetTextExtent(s.scVal());
+		::TextOut(lpDIS->hDC,timePoint.x - szTxt.cx/2, crct.top+2, s.scVal(),s.size());
 	}
 
 	delete [] pts;
 	SelectObject(lpDIS->hDC,oldPen);
 	SelectObject(lpDIS->hDC, oldBrush);
 	SelectObject(lpDIS->hDC, fntOld);
+	fnt->DeleteObject();
+	delete fnt;
 }
 
 void TimeGraph::OnLButtonUp(UINT nFlags, CPoint point) {	
@@ -166,7 +191,7 @@ FormEntry(par,0,true),
 timegraph(0)
 {
 	psn->iMinWidth = psn->iWidth = 250;
-	psn->iMinHeight = psn->iHeight = 60;
+	psn->iMinHeight = psn->iHeight = 80;
 	SetIndependentPos();
 	recordRange = defaultRange;
 }
@@ -203,4 +228,12 @@ void TimeGraphSlider::setRecordRange(const RangeInt& rng) {
 void TimeGraphSlider::setIndex(int index) {
 	if ( timegraph)
 		timegraph->setIndex(index);
+}
+
+void TimeGraphSlider::setTimeInterval(ILWIS::TimeInterval in) {
+	interval = in;
+}
+
+void TimeGraphSlider::setTimes(const Column& col) {
+	timeCol = col;
 }
