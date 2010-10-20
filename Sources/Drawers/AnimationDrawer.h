@@ -5,6 +5,7 @@ class TimeGraphSlider;
 class FieldStringList;
 class FieldOneSelectTextOnly;
 class ValueSlicerSlider;
+class FieldLister;
 
 #define RSELECTDRAWER 323
 
@@ -16,6 +17,7 @@ namespace ILWIS{
 		friend class AnimationSourceUsage;
 		friend class AnimationControl;
 		friend class AnimationSelection;
+		friend class TimeSelection;
 	public:
 		AnimationDrawer(DrawerParameters *parms);
 		virtual ~AnimationDrawer();
@@ -46,6 +48,7 @@ namespace ILWIS{
 		IlwisObject *datasource;
 		SourceType sourceType;
 		vector<String> names;
+		vector<int> activeMaps;
 		FeatureLayerDrawer *featurelayer;
 		static int timerIdCounter;
 		int index;
@@ -133,9 +136,14 @@ namespace ILWIS{
 	class TimeSelection: public DisplayOptionsForm2
 	{
 	public:
-		TimeSelection(CWnd *par, AnimationDrawer *gdr);
+		TimeSelection(CWnd *par, AnimationDrawer *gdr, vector<int>& _activeMaps);
 		int exec();
 	private:
+		void FillData();
+		FieldLister *fl;
+		vector<String> data;
+		vector<String> cols;
+		vector<int>& activeMaps;
 	};
 
 

@@ -1,4 +1,5 @@
 #include "Client\Headers\formelementspch.h"
+#include "Client\FormElements\FieldList.h"
 #include "Client\FormElements\selector.h"
 #include "Client\Editors\Utils\MULTICOL.H"
 #include "Client\FormElements\FieldIntSlider.h"
@@ -220,6 +221,9 @@ void AnimationDrawer::addDataSource(void *data, int options){
 			sourceType = sotMAPLIST;
 			MapList mlist((*datasource)->fnObj);
 			AbstractMapDrawer::addDataSource((void *)&(mlist->map(0)));
+			for(int i = 0; i < mlist->iSize(); ++i) {
+				activeMaps.push_back(i);
+			}
 		}
 	}
 
@@ -261,7 +265,7 @@ void AnimationDrawer::animationSlicing(CWnd *parent) {
 }
 
 void AnimationDrawer::timeSelection(CWnd *parent) {
-	new TimeSelection(parent,this);
+	new TimeSelection(parent,this, activeMaps);
 }
 
 void AnimationDrawer::animationSelection(CWnd *parent) {
@@ -302,12 +306,12 @@ void AnimationDrawer::timedEvent(UINT _timerid) {
 
 bool AnimationDrawer::timerPerIndex() {
 	if ( featurelayer){
-		if ( names.size() > 0 && mapIndex < names.size()-1) {
-			featurelayer->getDrawer(mapIndex)->setActive(false);
-			featurelayer->getDrawer(++mapIndex)->setActive(true);
+		if ( names.size() > 0 && mapIndex < activeMaps.size()-1) {
+			featurelayer->getDrawer(activeMaps[mapIndex])->setActive(false);
+			featurelayer->getDrawer(activeMaps[++mapIndex])->setActive(true);
 		} else {
 			if (loop) {
-				featurelayer->getDrawer(mapIndex)->setActive(false);
+				featurelayer->getDrawer(activeMaps[mapIndex])->setActive(false);
 				mapIndex = 0;
 				featurelayer->getDrawer(0)->setActive(false);
 			}
@@ -316,14 +320,14 @@ bool AnimationDrawer::timerPerIndex() {
 	if ( sourceType == sotMAPLIST) {
 		MapList mlist;
 		mlist.SetPointer(datasource->pointer());
-		if ( mlist->iSize() > 0 && mapIndex < mlist->iSize() - 1) {
-			getDrawer(mapIndex)->setActive(false);
-			getDrawer(++mapIndex)->setActive(true);
+		if ( mlist->iSize() > 0 && mapIndex < activeMaps.size() - 1) {
+			getDrawer(activeMaps[mapIndex])->setActive(false);
+			getDrawer(activeMaps[++mapIndex])->setActive(true);
 		} else {
 			if (loop) {
-				getDrawer(mapIndex)->setActive(false);
+				getDrawer(activeMaps[mapIndex])->setActive(false);
 				mapIndex = 0;
-				getDrawer(0)->setActive(true);
+				getDrawer(activeMaps[0])->setActive(true);
 			}
 		}
 	}
@@ -341,16 +345,16 @@ bool AnimationDrawer::timerPerTime() {
 	double steps = 1000.0 / REAL_TIME_INTERVAL;
 	bool redraw = false;
 	double currentTime = col->rrMinMax().rLo() +  timestep * (double)index / steps;
-	if ( mapIndex < col->iRecs() -1 && col->rValue(mapIndex) < currentTime){
-		getDrawer(mapIndex)->setActive(false);
-		getDrawer(++mapIndex)->setActive(true);
+	if ( mapIndex < col->iRecs() -1 && col->rValue(activeMaps[mapIndex]) < currentTime){
+		getDrawer(activeMaps[mapIndex])->setActive(false);
+		getDrawer(activeMaps[++mapIndex])->setActive(true);
 		redraw = true;
 	} else {
-		if (loop && mapIndex >= mpl->iSize() -1 ) {
-			getDrawer(mapIndex)->setActive(false);
+		if (loop && mapIndex >= activeMaps.size() -1 ) {
+			getDrawer(activeMaps[mapIndex])->setActive(false);
 			mapIndex = 0;
 			index = 0;
-			getDrawer(0)->setActive(true);
+			getDrawer(activeMaps[0])->setActive(true);
 			redraw = true;
 		}
 	}
@@ -750,12 +754,53 @@ int  AnimationSourceUsage::exec() {
 }
 
 //----------------------------------------------------------
-TimeSelection::TimeSelection(CWnd *par, AnimationDrawer *ldr) 
-	: DisplayOptionsForm2(ldr, par, "Time selection")
+TimeSelection::TimeSelection(CWnd *par, AnimationDrawer *ldr, vector<int>& _activeMaps) 
+	: DisplayOptionsForm2(ldr, par, "Time selection"), activeMaps(_activeMaps)
 {
+	FillData();	
+	fl = new FieldLister(root,data, cols);
+	fl->SetWidth(100 + (cols.size() - 2) * 32 );
+	fl->SetHeight(120 + min(160, data.size() * 16));
   create();
 }
 
+void TimeSelection::FillData() {
+	IlwisObject *source = ((AnimationDrawer *)drw)->datasource;
+	IlwisObject::iotIlwisObjectType type = IlwisObject::iotObjectType((*source)->fnObj);
+	if ( type == IlwisObject::iotRASMAP ||  IlwisObject::iotSEGMENTMAP || 
+		IlwisObject::iotPOINTMAP || IlwisObject::iotPOLYGONMAP) {
+	}
+	if ( type ==IlwisObject::iotMAPLIST) {
+		MapList mpl((*source)->fnObj);
+		Table tbl;
+		cols.push_back("Name");
+		cols.push_back("Index");
+		if ( mpl->fTblAtt()) {
+			tbl = mpl->tblAtt();
+			for(int c=0; c < tbl->iCols(); ++c) {
+				if ( tbl->col(c)->dm()->pdtime()) {
+					cols.push_back(tbl->col(c)->sName());
+				}
+			}
+		}
+		for(int i = 0; i < mpl->iSize(); ++i) {
+			int index = mpl->iLower() + i;
+			String d("%S;%d", mpl[index]->sName(), index+1);
+			if ( tbl.fValid()) {
+				for(int c=0; c < tbl->iCols(); ++c) {
+					if ( tbl->col(c)->dm()->pdtime()) {
+						d += ";" + tbl->col(c)->sValue(i+1);
+					}
+				}
+			}
+			data.push_back(d);
+		}
+	}
+}
 int  TimeSelection::exec() {
+	//vector<int> indexes;
+	activeMaps.clear();
+	fl->getSelectedIndexes(activeMaps);
+	
 	return 1;
 }
