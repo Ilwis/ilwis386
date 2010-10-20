@@ -18,14 +18,17 @@ public:
    void OnMouseMove(UINT nFlags, CPoint point);
    	CRect makeDrawRect();
 	void updateRepresentations();
+	void setRprBase(const Representation& rprB);
   /* int OnToolHitTest(CPoint point, TOOLINFO *pTI) const;
    void OnToolTipNotify(NMHDR *pNMHDR, LRESULT *pResult);*/
 
    DECLARE_MESSAGE_MAP();
 private:
+	void drawRprBase(LPDRAWITEMSTRUCT lpDIS, const CRect rct);
 	ValueSlicerSlider *fldslicer;
 	vector<int> ylimits;
 	CPoint activePoint;
+	Representation rprBase;
 };
 
 class _export ValueSlicerSlider : public FormEntry {
@@ -42,6 +45,8 @@ public:
 	void setHighColor(Color c);
 	void setLowColor(Color c);
 	void setBoundColor(int index, Color c);
+	void setRprBase(const Representation& rprB);
+	Representation getRpr() const;
 	
 private:
 	void init();
@@ -56,7 +61,9 @@ private:
 	int selectedIndex;
 	Color lowColor;
 	Color highColor;
+	Representation rprBase;
 };
+
 
 //----------------------------
 class SlicingStepColor : public FormWithDest {

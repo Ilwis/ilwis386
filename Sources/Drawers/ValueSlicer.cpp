@@ -13,6 +13,8 @@
 #include "Engine\Base\DataObjects\valrange.h"
 #include "Drawers\ValueSlicer.h"
 #include "Drawers\SetDrawer.h"
+#include "Drawers\FeatureLayerDrawer.h"
+#include "Drawers\AnimationDrawer.h"
 
 
 
@@ -36,6 +38,32 @@ ValueSlicer::ValueSlicer(ValueSlicerSlider *f, DWORD dwStyle, const RECT& rect, 
 	EnableToolTips(TRUE);
 }
 
+
+void ValueSlicer::drawRprBase(LPDRAWITEMSTRUCT lpDIS, const CRect rct) {
+	RepresentationGradual *rpg = rprBase->prg();
+	double yscale = rct.Height();
+	double y = 0;
+	for(int i = 1; i < rpg->iLimits(); ++i) {
+		
+		double v1 = rpg->rGetLimitValue(i-1);
+		double v2 = rpg->rGetLimitValue(i);
+		double rStep = (v2 - v1) / rpg->iGetStretchSteps();
+		for(int j=0; j < rpg->iGetStretchSteps(); ++j) {
+			double cv = v1 + j * rStep;
+			Color c = rpg->clr(cv + rStep / 2.0);
+			CBrush brush(c);
+			CPen pen(PS_SOLID,1,c);
+			HGDIOBJ open = SelectObject(lpDIS->hDC, pen);
+			HGDIOBJ prevBrush = SelectObject(lpDIS->hDC, brush);
+			int yup = rct.bottom - y - rStep * yscale;
+			int ydown = rct.bottom - y;
+			::Rectangle(lpDIS->hDC, rct.left, ydown, rct.right, yup);
+			y += rStep * yscale;
+			SelectObject(lpDIS->hDC, prevBrush);
+			SelectObject(lpDIS->hDC, open);
+		}
+	}
+}
 
 void ValueSlicer::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	if ( !fldslicer->valrange.fValid() || !fldslicer)
@@ -61,6 +89,8 @@ void ValueSlicer::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	double yscale = rct.Height() / fldslicer->valrange->rrMinMax().rWidth();
 	CFont* fnt = IlwWinApp()->GetFont(IlwisWinApp::sfFORM);
 	HGDIOBJ fntOld = SelectObject(lpDIS->hDC, fnt);
+	if ( rprBase.fValid())
+		drawRprBase(lpDIS, rct);
 
 	double y = 0;
 	String txt = fldslicer->valrange->vri() ? String("%d",(int)fldslicer->bounds[0]) : String("%.03f", fldslicer->bounds[0]);
@@ -71,20 +101,19 @@ void ValueSlicer::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 		double v2 = fldslicer->bounds[i];
 		double cv = (v1 + v2) / 2.0;
 		Color c = fldslicer->drawingcolor->clrVal(cv);
-		if ( c.red() == 176 && i  == 2) {
-			fldslicer->drawingcolor->clrVal(cv);
+		if ( c != colorUNDEF) {
+			CBrush brush(c);
+			HGDIOBJ prevBrush = SelectObject(lpDIS->hDC, brush);
+			int yup = rct.bottom - y - (v2 - v1) * yscale;
+			int ydown = rct.bottom - y;
+			::Rectangle(lpDIS->hDC, rct.left, ydown, rct.right, yup);
+			//TRACE(String("%f %f %f %d %f\n",v2,v1, v2-v1,(int)((v2 - v1) * yscale),yscale).scVal());
+			SelectObject(lpDIS->hDC, prevBrush);
 		}
-		CBrush brush(c);
-		HGDIOBJ prevBrush = SelectObject(lpDIS->hDC, brush);
-		int yup = rct.bottom - y - (v2 - v1) * yscale;
-		int ydown = rct.bottom - y;
-		::Rectangle(lpDIS->hDC, rct.left, ydown, rct.right, yup);
-		//TRACE(String("%f %f %f %d %f\n",v2,v1, v2-v1,(int)((v2 - v1) * yscale),yscale).scVal());
 		y += (v2 - v1) * yscale;
 		String txt = fldslicer->valrange->vri() ? String("%d",(int)v2) : String("%.03f", v2);
 		::TextOut(lpDIS->hDC,rct.right, rct.bottom - y - 8, txt.scVal(),txt.size());
 		ylimits[i] = rct.bottom - y;
-		SelectObject(lpDIS->hDC, prevBrush);
 		
 	}
 	if ( activePoint.x != UNDEFPOINT) {
@@ -140,7 +169,16 @@ void ValueSlicer::OnMouseMove(UINT nFlags, CPoint point) {
 void ValueSlicer::updateRepresentations() {
 	ILWIS::AbstractMapDrawer *parentDrw = (ILWIS::AbstractMapDrawer *)fldslicer->drawer->getParentDrawer();
 	for(int i =0; i < parentDrw->getDrawerCount(); ++i) {
-		ILWIS::SetDrawer *setdrw = (ILWIS::SetDrawer *)parentDrw->getDrawer(i);
+		ILWIS::SetDrawer *setdrw;
+		if ( rprBase.fValid()){
+			setdrw = (ILWIS::SetDrawer *)parentDrw->getDrawer(i);
+			setdrw = (ILWIS::SetDrawer *)setdrw->getDrawer(RSELECTDRAWER,ComplexDrawer::dtPOST);
+		}
+		else
+			setdrw = (ILWIS::SetDrawer *)parentDrw->getDrawer(i);
+		if (!setdrw)
+			return;
+
 		Representation rpr;
 		rpr.SetPointer(fldslicer->rprgrad);
 		setdrw->setRepresentation(rpr);
@@ -180,6 +218,10 @@ void ValueSlicer::OnLButtonDblClk(UINT nFlags, CPoint point) {
 		updateRepresentations();
 	}
 }
+
+void ValueSlicer::setRprBase(const Representation& rprB) {
+	rprBase = rprB;
+}
 //----------------------------------------------------
 ValueSlicerSlider::ValueSlicerSlider(FormEntry* par, ILWIS::SetDrawer *sdrw) :
 	FormEntry(par,0,true),
@@ -211,6 +253,7 @@ void ValueSlicerSlider::create()
   valueslicer = new ValueSlicer(this, WS_VISIBLE |  WS_CHILD | WS_TABSTOP,
               CRect(pntFld, dimFld) , frm()->wnd() , Id());
   valueslicer->SetFont(frm()->fnt);
+  valueslicer->setRprBase(rprBase);
   CreateChildren();
 }
 
@@ -294,22 +337,24 @@ void ValueSlicerSlider::init() {
 			ILWIS::SetDrawer *setdrw = (ILWIS::SetDrawer *)parentDrw->getDrawer(i);
 			setdrw->setRepresentation(rpr);
 		}
-			//drawer->setRepresentation(rpr);
 		drawingcolor = new ILWIS::DrawingColor(drawer);
-//		rpr->Store();
 	}
 	if (valueslicer)
 		valueslicer->Invalidate();
 }
 
 Color ValueSlicerSlider::nextColor(int i) {
+	if ( highColor == colorUNDEF || lowColor == colorUNDEF)
+		return colorUNDEF;
 	int deltar = highColor.red() - lowColor.red();
 	int deltag = highColor.green() - lowColor.green();
 	int deltab = highColor.blue() - lowColor.blue();
+	int deltat = highColor.transparency() - lowColor.transparency();
 	int rstep = deltar / (bounds.size() - 2);
 	int gstep = deltag / (bounds.size() - 2);
 	int bstep = deltab / (bounds.size() - 2);
-	return Color(lowColor.red() + rstep * i, lowColor.green() + gstep * i, lowColor.blue() + bstep * i);
+	int tstep = deltat / ( bounds.size() - 2);
+	return Color(lowColor.red() + rstep * i, lowColor.green() + gstep * i, lowColor.blue() + bstep * i, lowColor.transparency() + tstep * i);
 }
 
 
@@ -318,6 +363,14 @@ void ValueSlicerSlider::setHighColor(Color c){
 }
 void ValueSlicerSlider::setLowColor(Color c){
 	lowColor = c;
+}
+
+void ValueSlicerSlider::setRprBase(const Representation& rprB) {
+	rprBase = rprB;
+}
+
+Representation ValueSlicerSlider::getRpr() const {
+	return rpr;
 }
 //----------------------------------------------------------
 SlicingStepColor::SlicingStepColor(CWnd* parent, Color* clr) :

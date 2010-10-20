@@ -6,7 +6,7 @@ class FieldStringList;
 class FieldOneSelectTextOnly;
 class ValueSlicerSlider;
 
-//#define ID_TIME_TICK WM_USER+345
+#define RSELECTDRAWER 323
 
 ILWIS::NewDrawer *createAnimationDrawer(ILWIS::DrawerParameters *parms);
 namespace ILWIS{
@@ -15,6 +15,7 @@ namespace ILWIS{
 		friend class AnimationTiming;
 		friend class AnimationSourceUsage;
 		friend class AnimationControl;
+		friend class AnimationSelection;
 	public:
 		AnimationDrawer(DrawerParameters *parms);
 		virtual ~AnimationDrawer();
@@ -34,9 +35,12 @@ namespace ILWIS{
 		void setMapIndex(int index);
 		void animationSlicing(CWnd *parent);
 		void animationSelection(CWnd *parent);
+		void timeSelection(CWnd *parent);
 		void setTransparency(double v);
 		bool timerPerIndex() ;
 		bool timerPerTime() ;
+		void addSelectionDrawers(const Representation& rpr);
+		RangeReal getMinMax(const MapList& mlist) const;
 		double interval;
 		UINT timerid;
 		IlwisObject *datasource;
@@ -54,7 +58,7 @@ namespace ILWIS{
 		CCriticalSection csAccess;
 		AnimationControl *animcontrol;
 
-		void addSetDrawer(const BaseMap& basemap, ILWIS::PreparationParameters *pp, ILWIS::SetDrawer *rsd, const String& name="");
+		void addSetDrawer(const BaseMap& basemap, ILWIS::PreparationParameters *pp, ILWIS::SetDrawer *rsd, const String& name="", bool post=false);
 	};
 
 	class AnimationControl: public DisplayOptionsForm2
@@ -124,6 +128,14 @@ namespace ILWIS{
 		RadioGroup *rg;
 		MultiColumnSelector *mcs;
 		int columnUsage;
+	};
+
+	class TimeSelection: public DisplayOptionsForm2
+	{
+	public:
+		TimeSelection(CWnd *par, AnimationDrawer *gdr);
+		int exec();
+	private:
 	};
 
 

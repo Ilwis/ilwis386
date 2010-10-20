@@ -69,6 +69,57 @@ String AnimationDrawer::description() const {
 	return sName;
 }
 
+RangeReal AnimationDrawer::getMinMax(const MapList& mlist) const{
+	RangeReal rrMinMax (0, 255);
+	if (mlist->iSize() > 0) {
+		if (mlist->map(0)->dm()->pdv()) {
+			for (int i = 0; i < mlist->iSize(); ++i) {
+				Map mp = mlist->map(i);
+				RangeReal rrMinMaxMap = mp->rrMinMax();
+				if (rrMinMaxMap.rLo() >= rrMinMaxMap.rHi())
+					rrMinMaxMap = mp->vr()->rrMinMax();
+				if (i > 0)
+					rrMinMax += rrMinMaxMap;
+				else
+					rrMinMax = rrMinMaxMap;
+			}
+		} else if (mlist->map(0)->fTblAtt() && attColumn.fValid() && attColumn->dm()->pdv()) {
+			for (int i = 0; i < mlist->iSize(); ++i) {
+				Map mp = mlist->map(i);
+				if (i > 0)
+					rrMinMax += attColumn->vr()->rrMinMax();
+				else
+					rrMinMax = attColumn->vr()->rrMinMax();
+			}
+		}
+	}
+	return rrMinMax;
+}
+
+void AnimationDrawer::addSelectionDrawers(const Representation& rpr) {
+	MapList mlist((*datasource)->fnObj);
+	RangeReal rrMinMax = getMinMax(mlist);
+	Palette * palette;
+	for(int i = 0; i < getDrawerCount(); ++i) {
+		RasterSetDrawer *drw = (RasterSetDrawer*)getDrawer(i);
+		ILWIS::DrawerParameters parms(getRootDrawer(), this);
+		Map mp = mlist->map(i);
+		RasterSetDrawer *rasterset = (RasterSetDrawer *)IlwWinApp()->getDrawer("RasterSetDrawer", "Ilwis38", &parms); 
+		rasterset->setThreaded(false);
+		rasterset->setRepresentation(rpr);
+		rasterset->setMinMax(rrMinMax);
+		if (i == 0)
+			palette = rasterset->SetPaletteOwner(); // create only the palette of the first rasterset, and share it with the other rastersets
+		else
+			rasterset->SetPalette(palette);
+		PreparationParameters pp(NewDrawer::ptGEOMETRY);
+		addSetDrawer(mp,&pp,rasterset,"", true);
+		drw->addPostDrawer(RSELECTDRAWER,rasterset);
+		rasterset->setActive(i == 0 ? true : false);
+
+	}
+}
+
 void AnimationDrawer::prepare(PreparationParameters *pp){
 	AbstractMapDrawer::prepare(pp);
 	if ( sourceType == sotFEATURE ) {
@@ -109,29 +160,7 @@ void AnimationDrawer::prepare(PreparationParameters *pp){
 				clear();
 			}
 			// Calculate the min/max over the whole maplist. This is used for palette and texture generation.
-			RangeReal rrMinMax (0, 255);
-			if (mlist->iSize() > 0) {
-				if (mlist->map(0)->dm()->pdv()) {
-					for (int i = 0; i < mlist->iSize(); ++i) {
-						Map mp = mlist->map(i);
-						RangeReal rrMinMaxMap = mp->rrMinMax();
-						if (rrMinMaxMap.rLo() >= rrMinMaxMap.rHi())
-							rrMinMaxMap = mp->vr()->rrMinMax();
-						if (i > 0)
-							rrMinMax += rrMinMaxMap;
-						else
-							rrMinMax = rrMinMaxMap;
-					}
-				} else if (mlist->map(0)->fTblAtt() && attColumn.fValid() && attColumn->dm()->pdv()) {
-					for (int i = 0; i < mlist->iSize(); ++i) {
-						Map mp = mlist->map(i);
-						if (i > 0)
-							rrMinMax += attColumn->vr()->rrMinMax();
-						else
-							rrMinMax = attColumn->vr()->rrMinMax();
-					}
-				}
-			}
+			RangeReal rrMinMax = getMinMax(mlist);
 			Palette * palette;
 			for(int i = 0; i < mlist->iSize(); ++i) {
 				ILWIS::DrawerParameters parms(getRootDrawer(), this);
@@ -161,7 +190,7 @@ void AnimationDrawer::setTransparency(double v) {
 	}
 }
 
-void AnimationDrawer::addSetDrawer(const BaseMap& basemap,PreparationParameters *pp,SetDrawer *rsd, const String& name) {
+void AnimationDrawer::addSetDrawer(const BaseMap& basemap,PreparationParameters *pp,SetDrawer *rsd, const String& name, bool post) {
 	PreparationParameters fp((int)pp->type | NewDrawer::ptANIMATION, 0);
 	fp.rootDrawer = getRootDrawer();
 	fp.parentDrawer = this;
@@ -172,7 +201,8 @@ void AnimationDrawer::addSetDrawer(const BaseMap& basemap,PreparationParameters 
 	rsd->getZMaker()->setDataSourceMap(basemap);
 	rsd->addDataSource(basemap.ptr());
 	rsd->prepare(&fp);
-	addDrawer(rsd);
+	if (!post)
+		addDrawer(rsd);
 }
 
 void AnimationDrawer::addDataSource(void *data, int options){
@@ -216,7 +246,11 @@ HTREEITEM AnimationDrawer::configure(LayerTreeView  *tv, HTREEITEM displayOption
 
 	DisplayOptionTreeItem * itemSelect = new DisplayOptionTreeItem(tv, portrayalItem,this,
 		0,(DisplayOptionItemFunc)&AnimationDrawer::animationSelection);
-	InsertItem(TR("Selection"),"SelectArea",itemSelect);
+	InsertItem(TR("Attribute Selection"),"SelectArea",itemSelect);
+
+	DisplayOptionTreeItem * itemFrameSelect = new DisplayOptionTreeItem(tv, portrayalItem,this,
+		0,(DisplayOptionItemFunc)&AnimationDrawer::timeSelection);
+	InsertItem(TR("Time Selection"),"TimeSelection",itemFrameSelect);
 
 
 	return displayOptionsLastItem;
@@ -224,6 +258,10 @@ HTREEITEM AnimationDrawer::configure(LayerTreeView  *tv, HTREEITEM displayOption
 }
 void AnimationDrawer::animationSlicing(CWnd *parent) {
 	new AnimationSlicing(parent,this);
+}
+
+void AnimationDrawer::timeSelection(CWnd *parent) {
+	new TimeSelection(parent,this);
 }
 
 void AnimationDrawer::animationSelection(CWnd *parent) {
@@ -355,7 +393,33 @@ AnimationControl::AnimationControl(CWnd *par, AnimationDrawer *adr)
 	: DisplayOptionsForm2(adr, par, "Time"), fgTime(0)
 {
 	initial = true;
+	IlwisObject *source = adr->datasource;
+	IlwisObject::iotIlwisObjectType type = IlwisObject::iotObjectType((*source)->fnObj);
+	if ( type == IlwisObject::iotRASMAP ||  IlwisObject::iotSEGMENTMAP || 
+		IlwisObject::iotPOINTMAP || IlwisObject::iotPOLYGONMAP) {
+	}
+	if ( type ==IlwisObject::iotMAPLIST) {
+		MapList mpl((*source)->fnObj);
+		if ( mpl->fTblAtt()) {
+			fcol = new FieldColumn(root,TR("Reference Attribute"),mpl->tblAtt(),&colName,dmVALUE);
+			fcol->SetCallBack((NotifyProc)&AnimationControl::changeColum);
+		}
+	}
+
+	cbTime = new CheckBox(root,TR("Use Time"), &adr->useTime);
+	//cbTime->Align(fbBegin, AL_UNDER);
+	cbTime->SetCallBack((NotifyProc)&AnimationControl::setTimingMode);
+
+	frtime = new FieldReal(root,TR("Interval"), &adr->interval,ValueRangeReal(0.1,1000,0.1));
+	frtime->SetCallBack((NotifyProc)&AnimationControl::setTiming);
+	frtime->Align(cbTime, AL_UNDER);
+
+	setTimeElements(cbTime);
+	setSlider(cbTime);
+	st = new StaticText(root,"Preparing . . .");
+
 	FieldGroup *fg = new FieldGroup(root, true);
+
 	fg->SetBevelStyle(FormEntry::bsRAISED);
 	FlatIconButton *fi1 = new FlatIconButton(fg,"Begin","",(NotifyProc)&AnimationControl::begin, FileName());
 	fbBegin = fi1;
@@ -367,17 +431,6 @@ AnimationControl::AnimationControl(CWnd *par, AnimationDrawer *adr)
 	fi2->Align(fi1, AL_AFTER,-10);
 	fi1 = new FlatIconButton(fg,"End","",(NotifyProc)&AnimationControl::end, FileName());
 	fi1->Align(fi2, AL_AFTER,-10);
-	cbTime = new CheckBox(root,TR("Use Time"), &adr->useTime);
-	cbTime->Align(fbBegin, AL_UNDER);
-	cbTime->SetCallBack((NotifyProc)&AnimationControl::setTimingMode);
-
-	frtime = new FieldReal(root,"Interval", &adr->interval,ValueRangeReal(0.1,1000,0.1));
-	frtime->SetCallBack((NotifyProc)&AnimationControl::setTiming);
-	frtime->Align(cbTime, AL_UNDER);
-
-	setTimeElements(cbTime);
-	setSlider(cbTime);
-	st = new StaticText(root,"Preparing . . .");
 	
 
 	create();
@@ -418,7 +471,7 @@ void AnimationControl::setTimeElements(FormEntry *entry) {
 	if ( type ==IlwisObject::iotMAPLIST) {
 		MapList mpl((*source)->fnObj);
 		if ( mpl->fTblAtt()) {
-			fgTime = new FieldGroup(entry,true);
+			fgTime = new FieldGroup(entry);
 			fcolTime = new FieldColumn(fgTime,TR("Time attributes"),mpl->tblAtt(),&adrw->colTime,dmTIME);
 			fcolTime->SetCallBack((NotifyProc)&AnimationControl::changeTimeColumn);
 			ftime = new FieldTime(fgTime,"",&adrw->timestep, 0, ILWIS::Time::mDURATION);
@@ -502,21 +555,13 @@ void AnimationControl::setSlider(FormEntry *entry) {
 	AnimationDrawer *adrw = (AnimationDrawer *)drw;
 	IlwisObject *source = adrw->datasource;
 	IlwisObject::iotIlwisObjectType type = IlwisObject::iotObjectType((*source)->fnObj);
-	RangeInt setRange;
-	graphSlider = new TimeGraphSlider(root, setRange);
-	graphSlider->SetWidth(165);
-	if ( type == IlwisObject::iotRASMAP ||  IlwisObject::iotSEGMENTMAP || 
-		IlwisObject::iotPOINTMAP || IlwisObject::iotPOLYGONMAP) {
-	}
 	if ( type ==IlwisObject::iotMAPLIST) {
 		MapList mpl((*source)->fnObj);
-		setRange = RangeInt(0, mpl->iSize());
-		if ( mpl->fTblAtt()) {
-			fcol = new FieldColumn(root,TR("Reference Attribute"),mpl->tblAtt(),&colName,dmVALUE);
-			fcol->SetCallBack((NotifyProc)&AnimationControl::changeColum);
-		}
+		RangeInt setRange = RangeInt(0, mpl->iSize());
+		graphSlider = new TimeGraphSlider(root, setRange);
+		graphSlider->SetWidth(165);
+		graphSlider->Align(entry, AL_UNDER, 23);
 	}
-	graphSlider->Align(entry, AL_UNDER, 23);
 
 }
 
@@ -631,18 +676,20 @@ AnimationSelection::AnimationSelection(CWnd *par, AnimationDrawer *adr)
 	: DisplayOptionsForm2(adr, par, TR("Selection"))
 {
 	vs = new ValueSlicerSlider(root, ((SetDrawer *)adr->getDrawer(0)));
-	vs->setLowColor(GetSysColor(COLOR_3DFACE));
-	vs->setHighColor(GetSysColor(COLOR_3DFACE));
+	vs->setRprBase( ((AbstractMapDrawer *)adr)->getBaseMap()->dm()->rpr());
+	vs->setLowColor(colorUNDEF);
+	vs->setHighColor(colorUNDEF);
 	vs->setNumberOfBounds(3);
 	FieldGroup *fg = new FieldGroup(root);
 	fldSteps = new FieldOneSelectTextOnly(fg, &steps);
 	fldSteps->SetCallBack((NotifyProc)&AnimationSelection::createSteps);
 	fldSteps->Align(vs, AL_UNDER);
 	fldSteps->SetWidth(vs->psn->iWidth/2);
+	adr->addSelectionDrawers(vs->getRpr());
 
 	create();
 
-	vs->setBoundColor(1,Color(120,230,0));
+	//vs->setBoundColor(1,Color(120,230,0));
 }
 
 int AnimationSelection::createSteps(Event*) {
@@ -654,6 +701,11 @@ int AnimationSelection::createSteps(Event*) {
 		int mapIndex = fldSteps->ose->GetCurSel();
 		if ( mapIndex != -1) {
 			vs->setNumberOfBounds(mapIndex +2);
+			for(int i = 0; i < mapIndex + 2; ++i) {
+				if ( i % 2 == 1) {
+					vs->setBoundColor(i,Color(200,0,0));
+				}
+			}
 		}
 		drw->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->Invalidate();
 	}
@@ -694,5 +746,16 @@ int  AnimationSourceUsage::exec() {
 	drw->prepare(&pp);
 	updateMapView();
 
+	return 1;
+}
+
+//----------------------------------------------------------
+TimeSelection::TimeSelection(CWnd *par, AnimationDrawer *ldr) 
+	: DisplayOptionsForm2(ldr, par, "Time selection")
+{
+  create();
+}
+
+int  TimeSelection::exec() {
 	return 1;
 }
