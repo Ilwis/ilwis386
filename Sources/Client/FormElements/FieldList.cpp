@@ -59,8 +59,8 @@
 #include "Client\FormElements\FieldList.h"
 #include <vector>
 
-FieldLister::FieldLister(FormEntry* feParent, vector<String> &vsList)
-	: FormEntry(feParent, 0, true), m_vsList(vsList)
+FieldLister::FieldLister(FormEntry* feParent, vector<String> &vsList, vector<String>& _columns)
+	: FormEntry(feParent, 0, true), m_vsList(vsList), columns(_columns)
 {
 	psn->iMinWidth = psn->iWidth = 100;
 	psn->iMinHeight = psn->iHeight = 150;
@@ -91,9 +91,12 @@ void FieldLister::create()
 	m_clctrl.ShowWindow(SW_HIDE);
 }
 
-String& FieldLister::sListItem(int iItem)
+String& FieldLister::sListItem(int iItem, int iSubItem)
 {
-	return m_vsList[iItem];
+	Array<String> parts;
+	Split(m_vsList[iItem], parts, ";");
+	part = parts[iSubItem];
+	return part;
 }
 
 void FieldLister::SetListItem(int iItem, const String& sField)
@@ -135,11 +138,12 @@ void FieldLister::BuildColumns()
 	CSize isHeader;
 	CString sColName, sDummy;
 
-	sColName = "Column width";
-
-	sDummy = CString('x', 15);
-	isHeader = m_clctrl.GetStringWidth(sDummy);
-	m_clctrl.InsertColumn(iCurCol++, sColName, LVCFMT_LEFT, iCheckWidth + isHeader.cx);
+	for(int i = 0; i < columns.size(); ++i) {
+		sColName = columns[i].scVal();
+		sDummy = CString('x', 15);
+		isHeader = m_clctrl.GetStringWidth(sDummy);
+		m_clctrl.InsertColumn(iCurCol++, sColName, LVCFMT_LEFT, iCheckWidth + isHeader.cx);
+	}
 }
 
 void FieldLister::Fill()
@@ -159,4 +163,8 @@ void FieldLister::show(int sw)
 	if (m_clctrl.GetSafeHwnd() != NULL) {
 			m_clctrl.ShowWindow(sw);
 	}
+}
+
+void FieldLister::getSelectedIndexes(vector<int>& indexes) {
+	m_clctrl.getSelectedIndex(indexes);
 }

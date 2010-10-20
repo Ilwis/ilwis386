@@ -63,7 +63,7 @@
 class _export FieldLister : public FormEntry
 {
 public:
-	FieldLister(FormEntry* feParent, vector<String> &vsList);
+	FieldLister(FormEntry* feParent, vector<String> &vsList, vector<String>& _columns);
 	virtual ~FieldLister();
 
 	virtual void create();
@@ -73,12 +73,13 @@ public:
 	void SetRowCount(int iNrItems);
 
 	// get details of the item container
-	String& sListItem(int iItem);
+	String& sListItem(int iItem, int iSubItem=0);
 	void SetListItem(int iItem, const String& sField);
 	int iNrItems();
 
 	void CallChangeCallback();
 	void show(int sw);
+	void getSelectedIndexes(vector<int>& indexes);
 
 protected:
 	void Fill();
@@ -88,7 +89,9 @@ private:
 
 	String m_sName;
 	String *m_psName;
+	String part;
 	vector<String>& m_vsList;
+	vector<String>& columns;
 	ListCtrlList m_clctrl;
 };
 

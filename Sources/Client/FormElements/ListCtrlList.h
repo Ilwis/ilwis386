@@ -67,6 +67,7 @@ public:
 	virtual ~ListCtrlList();
 
 	void SetParentField(FieldLister*);
+	void getSelectedIndex(vector<int>& indexes);
 
 private:
 	FieldLister *m_fclParent;

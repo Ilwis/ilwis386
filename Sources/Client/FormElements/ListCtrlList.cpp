@@ -95,6 +95,10 @@ void ListCtrlList::SetParentField(FieldLister* fcl)
 void ListCtrlList::OnGetDispInfo(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	LV_DISPINFO* pDispInfo = (LV_DISPINFO*)pNMHDR;
+	if ( pDispInfo->item.iSubItem != 0) {
+		int kk =0;
+		++kk;
+	}
 
 	if (pDispInfo->item.mask & LVIF_TEXT)
 	{
@@ -102,7 +106,7 @@ void ListCtrlList::OnGetDispInfo(NMHDR* pNMHDR, LRESULT* pResult)
 
 		CString sField;
 		if (m_fclParent->iNrItems() > pDispInfo->item.iItem)
-			sField = m_fclParent->sListItem(pDispInfo->item.iItem).scVal();
+			sField = m_fclParent->sListItem(pDispInfo->item.iItem, iSubItem).scVal();
 		else
 			sField = "";
 
@@ -200,4 +204,20 @@ void ListCtrlList::OnEndLabelEdit(NMHDR* pNMHDR, LRESULT* pResult)
 afx_msg void ListCtrlList::OnChange(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	m_fclParent->CallChangeCallback();
+}
+
+void ListCtrlList::getSelectedIndex(vector<int>& indexes) {
+	UINT i, uSelectedCount = GetSelectedCount();
+	int  nItem = -1;
+
+	if (uSelectedCount > 0)
+	{
+		for (i=0;i < uSelectedCount;i++)
+		{
+			nItem = GetNextItem(nItem, LVNI_SELECTED);
+			if ( nItem != -1) {
+				indexes.push_back(nItem);	
+			}
+		}
+	}
 }
