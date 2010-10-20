@@ -80,7 +80,7 @@ RootDrawer *ComplexDrawer::getRootDrawer() const{
 void ComplexDrawer::addPostDrawer(int order, NewDrawer *drw) {
 	if ( !drw )
 		return;
-	String name("%3d|%S", order, drw->getName());
+	String name("%3d", order);
 	map<String, NewDrawer *>::iterator here = postDrawers.find(name);
 	if (  here != postDrawers.end())
 		delete (*here).second;
@@ -91,7 +91,7 @@ void ComplexDrawer::addPostDrawer(int order, NewDrawer *drw) {
 void ComplexDrawer::addPreDrawer(int order, NewDrawer *drw) {
 	if ( !drw )
 		return;
-	String name("%3d|%S", order, drw->getName());
+	String name("%3d", order);
 	map<String, NewDrawer *>::iterator here = preDrawers.find(name);
 	if (  here != preDrawers.end())
 		delete (*here).second;
@@ -193,9 +193,21 @@ void ComplexDrawer::removeDrawer(const String& did, bool dodelete) {
 int ComplexDrawer::getDrawerCount() const{
 	return drawers.size();
 }
-NewDrawer * ComplexDrawer::getDrawer(int index){
-	if ( index < drawers.size()) {
-		return drawers.at(index);
+NewDrawer * ComplexDrawer::getDrawer(int index, DrawerType type){
+	if ( type == dtMAIN) {
+		if ( index < drawers.size()) {
+			return drawers.at(index);
+		}
+	} else  if ( type == dtPRE) {
+		String name("%3d", index);
+		map<String, NewDrawer *>::iterator here = preDrawers.find(name);
+		if (  here != preDrawers.end())
+			return (*here).second;
+	} else  if ( type == dtPOST ){
+		String name("%3d", index);
+		map<String, NewDrawer *>::iterator here = postDrawers.find(name);
+		if (  here != postDrawers.end())
+			return (*here).second;
 	}
 	return NULL;
 }

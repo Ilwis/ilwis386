@@ -12,7 +12,7 @@
 #include <xercesc/parsers/XercesDOMParser.hpp>
 #include <xercesc\dom\DOMImplementationLS.hpp>
 
-#define colorUNDEF Color(1,2,3)
+//#define colorUNDEF Color(1,2,3)
 #define colorUSERDEF Color(3,2,1)
 
 namespace ILWIS {

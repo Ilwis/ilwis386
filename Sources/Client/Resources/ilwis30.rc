@@ -259,8 +259,9 @@ STOP1                   ICON                    "stop1.ico"
 BEGIN                   ICON                    "begin.ico"
 END                     ICON                    "end.ico"
 EXTRUSION               ICON                    "extrusion.ico"
-Slicing                 ICON                    "slicing.ico"
-SelectArea              ICON                    "SelectArea.ico"
+SLICING                 ICON                    "slicing.ico"
+SELECTAREA              ICON                    "SelectArea.ico"
+TimeSelection           ICON                    "TimeSelection.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //

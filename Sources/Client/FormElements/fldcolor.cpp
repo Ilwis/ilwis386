@@ -236,7 +236,8 @@ bool FieldColorSimple::DrawObject(long value, DRAWITEMSTRUCT* ds)
   else {
     delete brush;
     brush = new CBrush();
-    brush->CreateSolidBrush(value);
+	Color clr3(value);
+    brush->CreateSolidBrush(clr3);
   }
   HBRUSH oldBrush=(HBRUSH)SelectObject(ds->hDC, *brush);
   HPEN oldPen=(HPEN)SelectObject(ds->hDC, *pen);

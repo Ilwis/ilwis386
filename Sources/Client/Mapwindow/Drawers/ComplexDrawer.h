@@ -16,6 +16,7 @@ class _export ComplexDrawer : public NewDrawer {
 		friend class TransparencyForm;
 
 	public:
+		enum DrawerType{dtPOST, dtPRE, dtMAIN};
 		String getType() const;
 		RootDrawer *getRootDrawer();
 		RootDrawer *getRootDrawer() const;
@@ -23,7 +24,7 @@ class _export ComplexDrawer : public NewDrawer {
 		void prepare(PreparationParameters *);
 		void prepareChildDrawers(PreparationParameters *);
 		int getDrawerCount() const;
-		NewDrawer * getDrawer(int index);
+		NewDrawer * getDrawer(int index, DrawerType type=dtMAIN);
 		NewDrawer *getDrawer(const String& did);
 		virtual String addDrawer(NewDrawer *drw);
 		virtual void removeDrawer(const String& did, bool dodelete=true);

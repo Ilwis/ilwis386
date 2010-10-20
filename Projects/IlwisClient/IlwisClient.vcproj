@@ -5272,6 +5272,10 @@
 				</File>
 			</Filter>
 		</Filter>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\TimeSelection.ico"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
