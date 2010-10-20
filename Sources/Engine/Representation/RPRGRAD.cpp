@@ -44,7 +44,7 @@
 #include "Engine\Base\AssertD.h"
 
 RepresentationGradual::RepresentationGradual(const FileName& fn)
-: RepresentationPtr(fn)
+: RepresentationPtr(fn), iClrSteps(1)
 {
   int iLimits = iReadElement("RepresentationGradual", "Limits");
   iStretchSteps = iReadElement("RepresentationGradual", "StretchSteps");
@@ -76,9 +76,27 @@ RepresentationGradual::RepresentationGradual(const FileName& fn)
 
 RepresentationGradual::RepresentationGradual(const FileName& fn, const Domain& dom)
 : RepresentationPtr(fn,dom),
-  ac(2), acr(1), aiIndex(2), arLimits(2)
+ac(2), acr(1), aiIndex(2), arLimits(2), iClrSteps(1)
 {
 	reset();
+}
+
+RepresentationGradual::RepresentationGradual(const FileName& fn, const RepresentationGradual* rprg) : RepresentationPtr(fn) {
+	ac.resize(rprg->ac.iSize());
+	acr.resize(rprg->acr.iSize());
+	aiIndex.resize(rprg->aiIndex.iSize());
+	arLimits.resize(rprg->arLimits.iSize());
+	for(int i =0; i < ac.size(); ++i)
+		ac[i] = rprg->ac[i];
+	for(int i=0; i < acr.size(); ++i)
+		acr[i] = rprg->acr[i];
+	for(int i=0; i < aiIndex.size(); ++i)
+		aiIndex[i] = rprg->aiIndex[i];
+	for(int i=0; i < arLimits.size(); ++i)
+		arLimits[i] = rprg->arLimits[i];
+	iStretchSteps = rprg->iStretchSteps;
+	iClrSteps = rprg->iClrSteps;
+
 }
 
 void RepresentationGradual::reset() {
@@ -234,12 +252,12 @@ byte RepresentationGradual::iColor(double rValue) const
 	return 0;
 }
 
-void RepresentationGradual::insert(double rVal, Color clr)
+int RepresentationGradual::insert(double rVal, Color clr, ColorRange rng)
 {
 	if (rVal < arLimits[0])
-		return;
+		return iUNDEF;
 	if (rVal > arLimits[arLimits.iSize()-1])    
-		return;
+		return iUNDEF;
 	
 	int iNew = 0;
 	while (arLimits[iNew] < rVal) ++iNew;
@@ -256,12 +274,17 @@ void RepresentationGradual::insert(double rVal, Color clr)
 		
 		ac[iNew] = clr;
 		acr.Insert(iNew,1);
-		acr[iNew] = acr[iNew-1];
+		if ( rng == crUNDEF)
+			acr[iNew] = acr[iNew-1];
+		else
+			acr[iNew] = rng;
 		
 		aiIndex.Append(1);
 		init();
 		Updated();
+		return iNew;
 	}
+	return iUNDEF;
 }
 
 void RepresentationGradual::remove(unsigned int id)

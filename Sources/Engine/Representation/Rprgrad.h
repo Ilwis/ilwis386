@@ -50,9 +50,10 @@ class _export RepresentationGradual: public RepresentationPtr
 protected:  
 	RepresentationGradual(const FileName&);
 public:
-	enum ColorRange { crUPPER, crLOWER, crSTRETCH };
+	enum ColorRange { crUPPER, crLOWER, crSTRETCH, crUNDEF };
 
 	RepresentationGradual(const FileName&, const Domain&);
+	RepresentationGradual(const FileName& fn,const RepresentationGradual* rprg); // copy
 	virtual	~RepresentationGradual();
 
 	virtual String			sType() const;
@@ -74,7 +75,7 @@ public:
 	int						iGetColorIndex(int iIndex) { return aiIndex[iIndex]; }
 	int						iGetStretchSteps() 	{ return iStretchSteps; }
 	void 					SetStretchSteps(int iSteps);
-	void 					insert(double rVal, Color clr);
+	int 					insert(double rVal, Color clr, ColorRange rng=crUNDEF);
 	void 					remove(unsigned int);
 	void					reset();
 

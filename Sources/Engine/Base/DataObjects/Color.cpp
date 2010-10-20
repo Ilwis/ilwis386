@@ -130,7 +130,7 @@ Color Color::clrDraw(DrawColors drc) const
 inline Color::operator long() const 
 { 
  long color = 0; 
- color= (red() << 16) | (green() << 8) | blue(); 
+ color= red()  | (green() << 8) | blue() << 16; 
  return color;
 }
 

@@ -47,6 +47,8 @@ class structRGB { public: byte r, g, b, transparency; };
 
 enum DrawColors { drcLIGHT, drcNORMAL, drcDARK, drcGREY };
 
+#define colorUNDEF Color(1,2,3,4)
+
 class _export Color
 {
 public:
