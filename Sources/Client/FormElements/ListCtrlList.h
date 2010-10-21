@@ -68,6 +68,8 @@ public:
 
 	void SetParentField(FieldLister*);
 	void getSelectedIndex(vector<int>& indexes);
+	void setReadOnly(bool yesno) { isReadOnly = yesno;}
+	bool readOnly() const { return isReadOnly; }
 
 private:
 	FieldLister *m_fclParent;
@@ -78,6 +80,7 @@ private:
 	CString m_sPool[3];
 	LPTSTR m_psPool[3];
 	LPTSTR AddPool(CString* ps);
+	bool isReadOnly;
 
 	afx_msg void OnGetDispInfo(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnBeginLabelEdit(NMHDR* pNMHDR, LRESULT* pResult);

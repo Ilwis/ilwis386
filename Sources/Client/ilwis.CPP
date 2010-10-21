@@ -1295,6 +1295,7 @@ void IlwisWinApp::InitImageLists()
 	InitImage("Slicing","Slicing",i++);
 	InitImage("SelectArea","SelectArea",i++);
 	InitImage("TimeSelection","TimeSelection",i++);
+	InitImage("Select","Select",i++);
 
 
 

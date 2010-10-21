@@ -76,6 +76,7 @@ ListCtrlList::ListCtrlList()
 	m_psPool[1] =
 	m_psPool[2] = NULL;
 	m_iNextFree = 0;
+	isReadOnly = false;
 }
 
 ListCtrlList::~ListCtrlList()
@@ -160,6 +161,9 @@ void ListCtrlList::OnClick(NMHDR* pNMHDR, LRESULT* pResult)
 */
 void ListCtrlList::OnBeginLabelEdit(NMHDR* pNMHDR, LRESULT* pResult) 
 {
+	if ( isReadOnly)
+		return;
+
 	*pResult = 0;
 
 	if (m_iSubItem == -1)
@@ -185,6 +189,9 @@ void ListCtrlList::OnBeginLabelEdit(NMHDR* pNMHDR, LRESULT* pResult)
 
 void ListCtrlList::OnEndLabelEdit(NMHDR* pNMHDR, LRESULT* pResult) 
 {
+	if ( isReadOnly)
+		return;
+
 	LV_DISPINFO* pDispInfo = (LV_DISPINFO*)pNMHDR;
 
 	if (pDispInfo->item.pszText != 0)

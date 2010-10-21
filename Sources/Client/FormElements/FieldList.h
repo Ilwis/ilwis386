@@ -73,13 +73,14 @@ public:
 	void SetRowCount(int iNrItems);
 
 	// get details of the item container
-	String& sListItem(int iItem, int iSubItem=0);
+	String sListItem(int iItem, int iSubItem=0);
 	void SetListItem(int iItem, const String& sField);
 	int iNrItems();
 
 	void CallChangeCallback();
 	void show(int sw);
 	void getSelectedIndexes(vector<int>& indexes);
+	void setReadOnly(bool yesno) { m_clctrl.setReadOnly(yesno); }
 
 protected:
 	void Fill();

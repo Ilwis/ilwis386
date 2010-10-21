@@ -91,16 +91,23 @@ void FieldLister::create()
 	m_clctrl.ShowWindow(SW_HIDE);
 }
 
-String& FieldLister::sListItem(int iItem, int iSubItem)
+String FieldLister::sListItem(int iItem, int iSubItem)
 {
 	Array<String> parts;
 	Split(m_vsList[iItem], parts, ";");
-	part = parts[iSubItem];
+	part="";
+	if ( iSubItem < parts.size()) {
+		part = parts[iSubItem];
+	}
+
 	return part;
 }
 
 void FieldLister::SetListItem(int iItem, const String& sField)
 {
+	if ( m_clctrl.readOnly())
+		return;
+
 	if (iItem >= m_vsList.size())
 		m_vsList.resize(iItem + 1);
 
@@ -150,6 +157,10 @@ void FieldLister::Fill()
 
 {
 	SetRowCount(m_vsList.size());
+	for(int i = 0; i < m_vsList.size(); ++i){
+		m_clctrl.SetSelectionMark(i);
+		m_clctrl.SetItemState(i, LVIS_SELECTED, LVIS_SELECTED);
+	}
 }
 
 void FieldLister::CallChangeCallback()

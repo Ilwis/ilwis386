@@ -5273,6 +5273,10 @@
 			</Filter>
 		</Filter>
 		<File
+			RelativePath="..\..\Sources\Client\Resources\select.ico"
+			>
+		</File>
+		<File
 			RelativePath="..\..\Sources\Client\Resources\TimeSelection.ico"
 			>
 		</File>
