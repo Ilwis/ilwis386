@@ -56,6 +56,7 @@ namespace ILWIS{
 		bool loop;
 		bool useTime;
 		String colTime;
+		clock_t last;
 
 		ILWIS::Duration timestep;
 		CCriticalSection csAccess;

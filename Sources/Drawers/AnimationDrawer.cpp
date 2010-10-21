@@ -35,7 +35,7 @@ using namespace ILWIS;
 
 int AnimationDrawer::timerIdCounter=5000;
 int mycount = 0;
-#define REAL_TIME_INTERVAL 10
+#define REAL_TIME_INTERVAL 100
 
 ILWIS::NewDrawer *createAnimationDrawer(DrawerParameters *parms) {
 	return new AnimationDrawer(parms);
@@ -55,6 +55,7 @@ AnimationDrawer::AnimationDrawer(DrawerParameters *parms) :
 	mapIndex(0)
 {
 	setTransparency(1);
+	last = 0;
 }
 
 AnimationDrawer::~AnimationDrawer(){
@@ -242,7 +243,7 @@ HTREEITEM AnimationDrawer::configure(LayerTreeView  *tv, HTREEITEM displayOption
 	InsertItem(TR("Source usage"),".mpv",item2);
 
 	//item2 = new DisplayOptionTreeItem(tv,displayOptionsLastItem,this,0);
-	HTREEITEM portrayalItem = InsertItem(tv, displayOptionsLastItem, TR("Portrayal"),"Colors");
+	HTREEITEM portrayalItem = InsertItem(tv, displayOptionsLastItem, TR("Selections"),"Select");
 
 	DisplayOptionTreeItem * itemSlicing = new DisplayOptionTreeItem(tv, portrayalItem,this,
 		0,(DisplayOptionItemFunc)&AnimationDrawer::animationSlicing);
@@ -250,7 +251,7 @@ HTREEITEM AnimationDrawer::configure(LayerTreeView  *tv, HTREEITEM displayOption
 
 	DisplayOptionTreeItem * itemSelect = new DisplayOptionTreeItem(tv, portrayalItem,this,
 		0,(DisplayOptionItemFunc)&AnimationDrawer::animationSelection);
-	InsertItem(TR("Attribute Selection"),"SelectArea",itemSelect);
+	InsertItem(TR("Attribute thresholds"),"SelectArea",itemSelect);
 
 	DisplayOptionTreeItem * itemFrameSelect = new DisplayOptionTreeItem(tv, portrayalItem,this,
 		0,(DisplayOptionItemFunc)&AnimationDrawer::timeSelection);
@@ -318,6 +319,10 @@ bool AnimationDrawer::timerPerIndex() {
 		}
 	}
 	if ( sourceType == sotMAPLIST) {
+	//clock_t start = clock();
+	//double duration2 = 1000.0 * (double)(start - last ) / CLOCKS_PER_SEC;
+	//last = start;
+	//TRACE("tick in %2.2f milliseconds;\n", duration2);
 		MapList mlist;
 		mlist.SetPointer(datasource->pointer());
 		if ( mlist->iSize() > 0 && mapIndex < activeMaps.size() - 1) {
@@ -345,12 +350,14 @@ bool AnimationDrawer::timerPerTime() {
 	double steps = 1000.0 / REAL_TIME_INTERVAL;
 	bool redraw = false;
 	double currentTime = col->rrMinMax().rLo() +  timestep * (double)index / steps;
-	if ( mapIndex < col->iRecs() -1 && col->rValue(activeMaps[mapIndex]) < currentTime){
+	//TRACE(String("%f %f\n",currentTime,col->rValue(activeMaps[mapIndex])).scVal());
+	if ( mapIndex < activeMaps.size() - 1 && col->rValue(activeMaps[mapIndex]) < currentTime){
 		getDrawer(activeMaps[mapIndex])->setActive(false);
 		getDrawer(activeMaps[++mapIndex])->setActive(true);
+		//TRACE(String("%d %d\n",mapIndex,activeMaps[mapIndex]).scVal());
 		redraw = true;
 	} else {
-		if (loop && mapIndex >= activeMaps.size() -1 ) {
+		if (loop && mapIndex >= activeMaps.size() -1 && currentTime >= col->rValue(col->iRecs() - 1)) {
 			getDrawer(activeMaps[mapIndex])->setActive(false);
 			mapIndex = 0;
 			index = 0;
@@ -373,7 +380,7 @@ void AnimationDrawer::setMapIndex(int ind) {
 	for(int i =0 ; i < drawers.size(); ++i)
 		getDrawer(i)->setActive(false);
 
-	mapIndex = ind;
+	mapIndex = activeMaps[ind];
 }
 
 //---------------------------------------------------------
@@ -387,7 +394,7 @@ LRESULT AnimationControl::OnTimeTick( WPARAM wParam, LPARAM lParam ) {
 		st->Hide();
 
 	if ( lParam == TRUE)
-		graphSlider->setIndex(wParam);
+		graphSlider->setIndex(adrw->activeMaps[wParam]);
 	else
 		adrw->setMapIndex(wParam);
 	return 1;
@@ -563,7 +570,7 @@ void AnimationControl::setSlider(FormEntry *entry) {
 		MapList mpl((*source)->fnObj);
 		RangeInt setRange = RangeInt(0, mpl->iSize());
 		graphSlider = new TimeGraphSlider(root, setRange);
-		graphSlider->SetWidth(165);
+		graphSlider->SetWidth(180);
 		graphSlider->Align(entry, AL_UNDER, 23);
 	}
 
@@ -759,6 +766,7 @@ TimeSelection::TimeSelection(CWnd *par, AnimationDrawer *ldr, vector<int>& _acti
 {
 	FillData();	
 	fl = new FieldLister(root,data, cols);
+	fl->setReadOnly(true);
 	fl->SetWidth(100 + (cols.size() - 2) * 32 );
 	fl->SetHeight(120 + min(160, data.size() * 16));
   create();
