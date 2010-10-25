@@ -273,7 +273,7 @@ Texture * TextureHeap::GenerateNextTexture(bool fInThread)
 		tex->CreateTexture(drawerContext, fInThread, &fAbortTexGen);
 		clock_t end = clock();
 		double duration = 1000.0 * (double)(end - start) / CLOCKS_PER_SEC;
-		TRACE("Texture generated in %2.2f milliseconds;\n", duration);
+		//TRACE("Texture generated in %2.2f milliseconds;\n", duration);
 		if (tex->fValid())
 			textures[texturesArraySize++] = tex;
 		else {
