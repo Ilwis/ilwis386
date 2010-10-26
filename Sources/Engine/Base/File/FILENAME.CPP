@@ -225,6 +225,7 @@ void FileName::initCopyFrom(const FileName& fn)
 	sDir = fn.sDir;
 	sFile = fn.sFile;
 	sExt = fn.sExt;
+	sCol = fn.sCol;
 }
 
 // Constructors: name

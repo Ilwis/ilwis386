@@ -197,6 +197,8 @@ class BaseMap: public IlwisObject
         static IlwisObjectPtrList    listMap;
 };
 
+#define ISBASEMAP(type) (type==IlwisObject::iotRASMAP || type==IlwisObject::iotPOINTMAP || type==IlwisObject::iotPOLYGONMAP || type==IlwisObject::iotSEGMENTMAP)
+
 #endif
 
 

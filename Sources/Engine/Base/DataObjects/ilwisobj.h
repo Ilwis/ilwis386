@@ -406,6 +406,9 @@ private:
 };
 class DATEXPORT Ellipsoid;
 
+#define IOTYPE(name) IlwisObject::iotObjectType(name)
+typedef IlwisObject::iotIlwisObjectType IObjectType;
+
 #endif // ILWISOBJ_H
 
 
