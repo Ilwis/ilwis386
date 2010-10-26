@@ -1,39 +1,39 @@
 /***************************************************************
- ILWIS integrates image, vector and thematic data in one unique 
- and powerful package on the desktop. ILWIS delivers a wide 
- range of feautures including import/export, digitizing, editing, 
- analysis and display of data as well as production of 
- quality mapsinformation about the sensor mounting platform
- 
- Exclusive rights of use by 52°North Initiative for Geospatial 
- Open Source Software GmbH 2007, Germany
+ILWIS integrates image, vector and thematic data in one unique 
+and powerful package on the desktop. ILWIS delivers a wide 
+range of feautures including import/export, digitizing, editing, 
+analysis and display of data as well as production of 
+quality mapsinformation about the sensor mounting platform
 
- Copyright (C) 2007 by 52°North Initiative for Geospatial
- Open Source Software GmbH
+Exclusive rights of use by 52°North Initiative for Geospatial 
+Open Source Software GmbH 2007, Germany
 
- Author: Jan Hendrikse, Willem Nieuwenhuis,Wim Koolhoven 
- Bas Restsios, Martin Schouwenburg, Lichun Wang, Jelle Wind 
+Copyright (C) 2007 by 52°North Initiative for Geospatial
+Open Source Software GmbH
 
- Contact: Martin Schouwenburg; schouwenburg@itc.nl; 
- tel +31-534874371
+Author: Jan Hendrikse, Willem Nieuwenhuis,Wim Koolhoven 
+Bas Restsios, Martin Schouwenburg, Lichun Wang, Jelle Wind 
 
- This program is free software; you can redistribute it and/or
- modify it under the terms of the GNU General Public License
- version 2 as published by the Free Software Foundation.
+Contact: Martin Schouwenburg; schouwenburg@itc.nl; 
+tel +31-534874371
 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU General Public License for more details.
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+version 2 as published by the Free Software Foundation.
 
- You should have received a copy of the GNU General Public License
- along with this program (see gnu-gpl v2.txt); if not, write to
- the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- Boston, MA 02111-1307, USA or visit the web page of the Free
- Software Foundation, http://www.fsf.org.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
 
- Created on: 2007-02-8
- ***************************************************************/
+You should have received a copy of the GNU General Public License
+along with this program (see gnu-gpl v2.txt); if not, write to
+the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+Boston, MA 02111-1307, USA or visit the web page of the Free
+Software Foundation, http://www.fsf.org.
+
+Created on: 2007-02-8
+***************************************************************/
 // PixelInfoDoc.cpp : implementation file
 //
 
@@ -77,13 +77,14 @@ PixelInfoDoc::PixelInfoDoc()
 , fMouseCont(false)
 , fDigitizer(true)
 , fDigitizerCont(false)
+, isEditable(true) // temporary for testing
 {
-//  riArray.Resize(1,1);
-  riArray.Resize(1); // is now zero based
+	//  riArray.Resize(1,1);
+	riArray.Resize(1); // is now zero based
 
 	IlwisSettings settings("pixelinfo");
 
-	fMouseCont = settings.fValue("MouseContineous", true);
+	fMouseCont = settings.fValue("MouseContineous", false);
 	fDigitizerCont = settings.fValue("DigitizerContineous", false);	
 	fMouse = settings.fValue("UseMouse", true);		
 	fDigitizer = settings.fValue("UseDigitizer", false);				
@@ -91,47 +92,47 @@ PixelInfoDoc::PixelInfoDoc()
 
 BOOL PixelInfoDoc::OnNewDocument()
 {	
-  // IlwisDocument does not accept OnNewDocument()
+	// IlwisDocument does not accept OnNewDocument()
 	if (!CDocument::OnNewDocument())
 		return FALSE;
-  SetTitle(SPITitlePixelInfo.sVal());
-  riCoord.AllowEdit(true);
+	SetTitle(SPITitlePixelInfo.sVal());
+	riCoord.AllowEdit(true);
 	Update();
 	return TRUE;
 }
 
 BOOL PixelInfoDoc::OnOpenDocument(LPCTSTR lpszPathName)
 {
-  // IlwisDocument does not accept OnNewDocument()
+	// IlwisDocument does not accept OnNewDocument()
 	if (!OnNewDocument())
 		return FALSE;
-  ParmList pm(lpszPathName);
-  for (int i=0; i < pm.iFixed(); i++) {
-    try {
-      FileName fn(pm.sGet(i));
-      if (fn.sExt == ".csy") {
-        CoordSystem cs(fn);
-  		  AddCoordSystem(cs);
-      }
-      if (fn.sExt == ".grf") {
-        GeoRef grf(fn);
-  		  AddGeoRef(grf);
-      }
-      else if (fn.sExt == ".mpl") {
-        MapList mpl(fn);
-        AddMapList(mpl);
-      }
-      else if (fn.sExt == ".mpr" ||fn.sExt == ".mpa" ||fn.sExt == ".mpp" ||fn.sExt == ".mps") {
-        BaseMap map(fn);
-        AddMap(map);
-      }
-    }
-    catch (const ErrorObject& err) {
-      err.Show();
-    }
-  }
+	ParmList pm(lpszPathName);
+	for (int i=0; i < pm.iFixed(); i++) {
+		try {
+			FileName fn(pm.sGet(i));
+			if (fn.sExt == ".csy") {
+				CoordSystem cs(fn);
+				AddCoordSystem(cs);
+			}
+			if (fn.sExt == ".grf") {
+				GeoRef grf(fn);
+				AddGeoRef(grf);
+			}
+			else if (fn.sExt == ".mpl") {
+				MapList mpl(fn);
+				AddMapList(mpl);
+			}
+			else if (fn.sExt == ".mpr" ||fn.sExt == ".mpa" ||fn.sExt == ".mpp" ||fn.sExt == ".mps") {
+				BaseMap map(fn);
+				AddMap(map);
+			}
+		}
+		catch (const ErrorObject& err) {
+			err.Show();
+		}
+	}
 
-	
+
 	Update();
 	return TRUE;
 }
@@ -176,72 +177,68 @@ void PixelInfoDoc::Serialize(CArchive& ar)
 
 zIcon PixelInfoDoc::icon() const
 {
-  return zIcon("PixInfoIcon");
+	return zIcon("PixInfoIcon");
 }
 
 int PixelInfoDoc::iSize() const
 {
-  return riArray.iSize();
+	return riArray.iSize();
 }
 
 String PixelInfoDoc::sName(int iRow) const
 {
-  if (iRow > 0 && iRow <= iSize()) {
-    String sRes = riArray[(int)iRow-1]->sName(); // is zero based
-    return sRes;
-  }
-  else
-    return "";
+	if (iRow > 0 && iRow <= iSize()) {
+		String sRes = riArray[(int)iRow-1]->sName(); // is zero based
+		return sRes;
+	}
+	else
+		return "";
 }
 
 FileName PixelInfoDoc::fn(int iRow) const
 {
-  if (iRow > 0 && iRow <= iSize()) 
-    return riArray[iRow-1]->fnObj(); // is zero based
-  else
-    return FileName();
+	if (iRow > 0 && iRow <= iSize()) 
+		return riArray[iRow-1]->fnObj(); // is zero based
+	else
+		return FileName();
 }
 
 String PixelInfoDoc::sValue(int iRow) const
 {
-  if (iRow > 0 && iRow <= iSize()) {
-    String sRes = riArray[iRow-1]->sValue(); // is zero based
-    return sRes;
-  }
-  else
-    return "";
+	if (iRow > 0 && iRow <= iSize()) {
+		String sRes = riArray[iRow-1]->sValue(); // is zero based
+		return sRes;
+	}
+	else
+		return "";
 }
 
 void PixelInfoDoc::Update()
 {
-  riArray.Reset();
-  riCoord.AddSelfToArray(riArray);
+	riArray.Reset();
+	riCoord.AddSelfToArray(riArray);
 	UpdateAllViews(0);
 }
 
 LRESULT PixelInfoDoc::OnUpdate(WPARAM wParam, LPARAM lParam)
 {
 	CoordMessage cm = (CoordMessage) wParam;
-  CoordWithCoordSystem* c = (CoordWithCoordSystem*)(void*) lParam;
-  bool fUpdate = false;
-	switch (cm) {
-		case cmMOUSEMOVE:
-	    fUpdate = fMouse && fMouseCont;
-			break;
-		case cmMOUSECLICK:
-	    fUpdate = fMouse;
-			break;
-		case cmDIGIMOVE:
-	    fUpdate = fDigitizer && fDigitizerCont;
-			break;
-		case cmDIGICLICK1:
-		case cmDIGICLICK2:
-		case cmDIGICLICK3:
-		case cmDIGICLICK4:
-	    fUpdate = fDigitizer;
-			break;
+
+	CoordWithCoordSystem* c = (CoordWithCoordSystem*)(void*) lParam;
+	bool fUpdate = false;
+	if ( cm & cmMOUSECLICK ) {
+		fUpdate = fMouse;
 	}
-  if (fUpdate) {
+	if ( cm & cmMOUSEMOVE && !(cm & cmZOOMIN)) {
+		fUpdate = fMouse && fMouseCont;
+	}
+	if ( cm & cmDIGIMOVE) {
+		fUpdate = fDigitizer && fDigitizerCont;
+	}
+	if ( cm >= 1024)
+		fUpdate = fDigitizer;
+
+	if (fUpdate) {
 		riCoord.SetValue(*c);
 		UpdateAllViews(0, (LPARAM)BaseTablePaneView::uhNOBUTTONS);
 	}
@@ -250,54 +247,54 @@ LRESULT PixelInfoDoc::OnUpdate(WPARAM wParam, LPARAM lParam)
 
 void PixelInfoDoc::OnAddMaps()
 {
-  String s;
-  DataObjectForm frm(wndGetActiveView(), SPITitleAddMap, &s, ".mpr.mpa.mps.mpp.mpl", htpPixAddMap);
-  if (frm.fOkClicked()) {
-    FileName fn = s;
-    if (fn.sExt == ".mpl") {
-      MapList mpl(fn);
+	String s;
+	DataObjectForm frm(wndGetActiveView(), SPITitleAddMap, &s, ".mpr.mpa.mps.mpp.mpl", htpPixAddMap);
+	if (frm.fOkClicked()) {
+		FileName fn = s;
+		if (fn.sExt == ".mpl") {
+			MapList mpl(fn);
 			AddMapList(mpl);
-    }
-    else {
-      BaseMap mp(s);
+		}
+		else {
+			BaseMap mp(s);
 			AddMap(mp);
-    }  
-  }
+		}  
+	}
 }
 
 void PixelInfoDoc::OnAddCsys()
 {
-  String s;
-  DataObjectForm frm(wndGetActiveView(), SPITitleAddCsys, &s, ".csy", htpCrdCnf);
-  if (frm.fOkClicked()) {
-    CoordSystem cs(s);
+	String s;
+	DataObjectForm frm(wndGetActiveView(), SPITitleAddCsys, &s, ".csy", htpCrdCnf);
+	if (frm.fOkClicked()) {
+		CoordSystem cs(s);
 		AddCoordSystem(cs);
-  }
+	}
 }
 
 void PixelInfoDoc::OnAddGrf()
 {
-  String s;
-  DataObjectForm frm(wndGetActiveView(), SPITitleAddGrf, &s, ".grf", htpPixGrfCnf);
-  if (frm.fOkClicked()) {
-    GeoRef grf(s);
+	String s;
+	DataObjectForm frm(wndGetActiveView(), SPITitleAddGrf, &s, ".grf", htpPixGrfCnf);
+	if (frm.fOkClicked()) {
+		GeoRef grf(s);
 		AddGeoRef(grf);
-  }
+	}
 }
 
 void PixelInfoDoc::AddMap(const BaseMap& mp)
 {
-  riCoord.AddMap(mp);
+	riCoord.AddMap(mp);
 	Update();
 }
 
 void PixelInfoDoc::AddMapList(const MapList& mpl)
 {
-  if (mpl.fValid()) {
-    for (int i = mpl->iLower(); i <= mpl->iUpper(); ++i)
-      riCoord.AddMap(mpl[i]);
+	if (mpl.fValid()) {
+		for (int i = mpl->iLower(); i <= mpl->iUpper(); ++i)
+			riCoord.AddMap(mpl[i]);
 		Update();
-  }
+	}
 }
 
 void PixelInfoDoc::AddCoordSystem(const CoordSystem& cs)
@@ -315,30 +312,30 @@ void PixelInfoDoc::AddGeoRef(const GeoRef& grf)
 class PixelInfoConfigureForm: public FormWithDest
 {
 public:
-  PixelInfoConfigureForm(CWnd* w, PixelInfoDoc* pid)
-  : FormWithDest(w, SPITitleCnfPixInfo)
-  {
-    StaticText* st = new StaticText(root, SPIRemRecvCoordFrom);
-    st->SetIndependentPos();
-    CheckBox* cbMouse = new CheckBox (root, SPIUiMouse, &pid->fMouse);
-    new CheckBox (cbMouse, SPIUiContinuous, &pid->fMouseCont);
-    CheckBox* cbDig = new CheckBox (root, SPIUiDigitizer, &pid->fDigitizer);
-    cbDig->Align(cbMouse, AL_UNDER);
-    new CheckBox (cbDig, SPIUiContinuous, &pid->fDigitizerCont);
-    st = new StaticText(root, SPIRemShowValuesOf);
-    st->Align(cbDig, AL_UNDER);
-    st->SetIndependentPos();
-    RecItemSelector* ris = new RecItemSelector(root, &pid->riCoord);
-    ris->SetIndependentPos();
-    SetMenHelpTopic(htpPixCnf);
-    create();
-  }
+	PixelInfoConfigureForm(CWnd* w, PixelInfoDoc* pid)
+		: FormWithDest(w, SPITitleCnfPixInfo)
+	{
+		StaticText* st = new StaticText(root, SPIRemRecvCoordFrom);
+		st->SetIndependentPos();
+		CheckBox* cbMouse = new CheckBox (root, SPIUiMouse, &pid->fMouse);
+		new CheckBox (cbMouse, SPIUiContinuous, &pid->fMouseCont);
+		CheckBox* cbDig = new CheckBox (root, SPIUiDigitizer, &pid->fDigitizer);
+		cbDig->Align(cbMouse, AL_UNDER);
+		new CheckBox (cbDig, SPIUiContinuous, &pid->fDigitizerCont);
+		st = new StaticText(root, SPIRemShowValuesOf);
+		st->Align(cbDig, AL_UNDER);
+		st->SetIndependentPos();
+		RecItemSelector* ris = new RecItemSelector(root, &pid->riCoord);
+		ris->SetIndependentPos();
+		SetMenHelpTopic(htpPixCnf);
+		create();
+	}
 };
 
 void PixelInfoDoc::OnPixConfigure()
 {
-  PixelInfoConfigureForm frm(wndGetActiveView(), this);
-  if (frm.fOkClicked()) 
+	PixelInfoConfigureForm frm(wndGetActiveView(), this);
+	if (frm.fOkClicked()) 
 		Update();
 }
 
@@ -350,6 +347,17 @@ void PixelInfoDoc::OnCloseDocument()
 	settings.SetValue("DigitizerContineous", fDigitizerCont);	
 	settings.SetValue("UseDigitizer", fDigitizer);		
 	settings.SetValue("UseMouse", fMouse);		
-	
+
 	IlwisDocument::OnCloseDocument();
+}
+
+bool PixelInfoDoc::fRowEditable(int rowIndex) const {
+	return true;
+}
+
+RecItem * PixelInfoDoc::getItem(int rowIndex) {
+	if (rowIndex > 0 && rowIndex <= iSize()) {
+		return riArray[rowIndex - 1];
+	}
+	return 0;
 }

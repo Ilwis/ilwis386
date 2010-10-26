@@ -67,11 +67,16 @@ class URL;
 enum CoordMessage {
 					cmMOUSEMOVE = 1, 
 					cmMOUSECLICK = 2,
-					cmDIGIMOVE = 99,
-					cmDIGICLICK1 = 100,
-					cmDIGICLICK2,
-					cmDIGICLICK3,
-					cmDIGICLICK4 };
+					cmDIGIMOVE = 4,
+					cmEDIT = 8,
+					cmZOOMIN = 16,
+					cmZOOMOUT = 32,
+					cmSELECTAREA = 64,
+					cmPAN = 128,
+					cmDIGICLICK1 = 1024,
+					cmDIGICLICK2 = 2048,
+					cmDIGICLICK3 = 4096,
+					cmDIGICLICK4 = 8192};
 
 class CoordWithCoordSystem;
 
@@ -121,7 +126,7 @@ public:
 	CDocument _export  *OpenDocumentAsRoseDiagram(LPCTSTR lpszFileName);
 	CDocument          *OpenDocumentFile(LPCTSTR lpszFileName, const String& sLayers);
 	CDocument          *OpenDocumentAsSMCE(LPCTSTR lpszFileName);
-	void _export       SendUpdateCoordMessages(CoordMessage, CoordWithCoordSystem*);
+	void _export       SendUpdateCoordMessages(int, CoordWithCoordSystem*);
 	CatalogDocument    *dirDoc();
 	void               SetCatalogDocument(CatalogDocument *doc);
 	CImageList         ilSmall, ilLarge;
@@ -152,6 +157,7 @@ public:
 	ILWIS::NewDrawer _export *getDrawer(const String& type, ILWIS::PreparationParameters *pp=0, ILWIS::DrawerParameters *parms=0) ;
 	void  addDrawer(const String& type, const String& subtype, DrawerCreate);
 	ILWIS::SVGLoader *getSVGContainer() const { return svgContainer; }
+	void getDocumentList(list<CDocument *>& opendocs);
 	
 	//{{AFX_MSG(IlwisWinApp)
 	afx_msg void OnAbout();

@@ -680,7 +680,7 @@ LRESULT CoordSystemEditor::OnUpdate(WPARAM wParam, LPARAM lParam)
 {
 	CoordMessage cm = (CoordMessage) wParam;
 	if (0 != atpf) {
-		if (cmMOUSECLICK == cm || cmDIGICLICK1 == cm) 
+		if (cmMOUSECLICK & cm || cmDIGICLICK1 & cm) 
 		{
 			CoordWithCoordSystem* c = (CoordWithCoordSystem*)(void*) lParam;
 			Coord crd = csctp->csOther->cConv((CoordSystem)*c, *c);
@@ -691,7 +691,7 @@ LRESULT CoordSystemEditor::OnUpdate(WPARAM wParam, LPARAM lParam)
 		}
 	}
 	else {
-		if (cmDIGICLICK1 == cm) 
+		if (cmDIGICLICK1 & cm) 
 		{
 			CoordWithCoordSystem* c = (CoordWithCoordSystem*)(void*) lParam;
 			Coord crd = *c;

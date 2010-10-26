@@ -43,11 +43,14 @@ Created on: 2007-02-8
 #include "Headers\constant.h"
 #include "Client\Base\IlwisDocument.h"
 #include "Client\TableWindow\BaseTablePaneView.h"
+#include "Client\TableWindow\BaseTblField.h"
 #include "Client\Mapwindow\PixelInfoDoc.h"
 #include "Client\Mapwindow\PixelInfoView.h"
+#include "Engine\Domain\dmsort.h"
 #include "Headers\Hs\PIXINFO.hs"
 #include <afxole.h>
 #include "Headers\messages.h"
+#include "Headers\Hs\Table.hs"
 
 
 #ifdef _DEBUG
@@ -71,6 +74,7 @@ PixelInfoView::PixelInfoView()
 {
 	iButtonWidth = 12;
 	odt = new COleDropTarget;
+	selectedRowIndex = iUNDEF;
 }
 
 PixelInfoView::~PixelInfoView()
@@ -333,3 +337,122 @@ void PixelInfoView::OnLButtonDblClk(UINT nFlags, CPoint point)
 	BaseTablePaneView::OnLButtonDblClk(nFlags, point);
 }
 
+void PixelInfoView::OnFieldPressed(int iCol, long iRow, bool fLeft) {
+	PixelInfoDoc *doc = GetDocument();
+	selectedRowIndex = iUNDEF;
+	if ( !doc->getEditable()) {
+		return;
+	}
+
+	deleteField();
+	if (iCol < 0 || iCol >= iCols()
+		|| iRow <= 0 || iRow > iRows()) 
+	{
+		MessageBeep(MB_ICONASTERISK);
+		return;
+	}
+	//Ilwis::Record rec = tvw()->rec(iRec);
+	//TableWindow* tw = twParent();
+	//if (tw) {
+	//	if (0 != tw->recBar && 0 != tw->recBar->GetSafeHwnd()) {
+	//		tw->recBar->view->SetRecord(rec, tvw());
+	//		tw->recBar->Invalidate();
+	//	}
+	//}
+
+	if (fLeft) {
+		//FrameWindow* fw = fwParent();
+		if (0 == doc)
+			return;
+		if (doc->fRowEditable(iRow)) {
+			tField = new PixInfoField(this,iCol,iRow);
+			selectedRowIndex = iRow;
+			//String s(STBRemEditField);
+			//if (fw) 
+			//	fw->status->SetWindowText(s.scVal());
+		}  
+		else {
+			tField = new PixInfoReadOnlyField(this,iCol,iRow); 
+			//String s(STBRemFieldIsReadOnly);
+			//if (fw) 
+			//	fw->status->SetWindowText(s.scVal());
+		}  
+	}
+}
+
+int PixelInfoView::getSelectedRow() const{
+	return selectedRowIndex;
+}
+
+//--------------------------------------------------------------------
+PixInfoField::PixInfoField(PixelInfoView* pane, int col, long row)
+: BaseTblField(pane,col,row, pane->GetDocument()->getItem(row)->fnObj())
+{
+	PixelInfoDoc *doc = pane->GetDocument();
+	String str = doc->sValue(row);
+	init(str);
+	FileName fn = pane->GetDocument()->getItem(row)->fnObj();
+	IObjectType type = IOTYPE(FileName(fn.sFile + fn.sExt));
+	if ( ISBASEMAP(type)) {
+		BaseMap bmp(fn);
+		dm = bmp->dvrs().dm();
+	}
+	if ( type == IlwisObject::iotTABLE && fn.sCol != "") {
+		FileName fnObj(fn);
+		fnObj.sCol = "";
+		Table tbl(fnObj);
+		Column col = tbl->col(fn.sCol);
+		dm = col->dvrs().dm();
+	}
+}
+
+PixInfoField::~PixInfoField()
+{
+	if (fHasChanged()) 
+	{
+		String s = sText();
+		if ("" == s)
+			s = "?";
+		PixelInfoView* pane = (PixelInfoView*) tbpn;
+		PixelInfoDoc *doc = pane->GetDocument();
+		DomainValueRangeStruct dvs(dm);
+		if (("?" != s) && !dvs.fValid(s)) {
+			DomainSort* ds = dvs.dm()->pdsrt();
+			if (0 != ds) {
+				String sMsg(STBMsgNotInDomain_SS.sVal(), s, ds->sName());
+				int iRet = pane->MessageBox(sMsg.sVal(), STBMsgInvalidValue.sVal(),
+					MB_YESNO|MB_ICONEXCLAMATION);
+				if (IDNO == iRet)
+				{
+					init(doc->sValue(iRow));
+					return;
+				}
+				if (IDYES == iRet)
+					ds->iAdd(s);
+			}
+			else {
+				String sMsg(STBMsgInvalidValue_S.sVal(), s);
+				pane->MessageBox(sMsg.sVal(), STBMsgInvalidValue.sVal(),
+					MB_OK|MB_ICONEXCLAMATION);
+				return;
+			}
+		}
+		doc->getItem(pane->getSelectedRow())->PutVal(s);
+		doc->UpdateAllViews(0,2);
+	}
+}
+
+//--------------------------------------------------------------------------------
+
+PixInfoReadOnlyField::PixInfoReadOnlyField(PixelInfoView* pane, int col, long row)
+: BaseTblField(pane,col,row,true)
+{
+	PixelInfoDoc *doc = pane->GetDocument();
+	String str = doc->sValue(row);
+	init(str);
+}
+
+PixInfoReadOnlyField::~PixInfoReadOnlyField()
+{
+	// never changes ;-)
+}

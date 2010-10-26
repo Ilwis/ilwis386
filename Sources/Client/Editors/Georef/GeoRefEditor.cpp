@@ -823,16 +823,12 @@ LRESULT GeoRefEditor::OnUpdate(WPARAM wParam, LPARAM lParam)
 	if (0 == atpf)
 		return 0;
 	CoordMessage cm = (CoordMessage) wParam;
-	switch (cm) {
-case cmMOUSECLICK:
-case cmDIGICLICK1:
+	if ( cm & cmMOUSECLICK || cm & cmDIGICLICK1)
 	{
 		CoordWithCoordSystem* c = (CoordWithCoordSystem*)(void*) lParam;
-		//Coord crd = (*c)->cConv(grc->cs(), *c);	
 		Coord crd = grc->cs()->cConv((CoordSystem)*c, *c);
 		atpf->SetCoord(crd);
 		atpf->SetFocus();
-	}
 	}
 	return 0;
 }

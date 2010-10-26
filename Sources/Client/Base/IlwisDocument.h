@@ -85,6 +85,7 @@ protected:
 public:
 	bool				fReadOnly() const;
 	virtual	IlwisObject	obj() const;
+	virtual bool usesObject(const IlwisObject& ob) const;
 	void				SetObjectDescription(const String& s);
 	string				sObjectDescription();
 	virtual zIcon		icon() const;

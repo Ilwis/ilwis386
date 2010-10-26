@@ -82,6 +82,8 @@ public:
 	virtual BOOL GetFileTypeString(CString& rString);
 	void OnExtPerc();	
 	BOOL fSaveModified(bool fAllowCancel);
+	bool usesObject(const IlwisObject& ob) const;
+	NewDrawer *getDrawerFor(const IlwisObject& obj) const;
 
 	MapCompositionSrvItem* GetEmbeddedItem()
 	{ return (MapCompositionSrvItem*)CatalogDocument::GetEmbeddedItem(); }

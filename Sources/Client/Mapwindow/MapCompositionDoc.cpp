@@ -239,6 +239,33 @@ zIcon MapCompositionDoc::icon() const
 	}
 }
 
+bool MapCompositionDoc::usesObject(const IlwisObject& ob) const {
+	vector<NewDrawer *> drawers;
+	rootDrawer->getDrawers(drawers);
+	for(int i = 0; i < drawers.size(); ++i) {
+		AbstractMapDrawer *drw = dynamic_cast<AbstractMapDrawer *>(drawers.at(i));
+		if ( drw) {
+			if ( drw->getBaseMap()->fnObj == ob->fnObj)
+				return true;
+		}
+		
+	}
+	return false;
+}
+
+NewDrawer *MapCompositionDoc::getDrawerFor(const IlwisObject& ob) const{
+	vector<NewDrawer *> drawers;
+	rootDrawer->getDrawers(drawers);
+	for(int i = 0; i < drawers.size(); ++i) {
+		AbstractMapDrawer *drw = dynamic_cast<AbstractMapDrawer *>(drawers.at(i));
+		if ( drw) {
+			if ( drw->getBaseMap()->fnObj == ob->fnObj)
+				return drw;
+		}
+		
+	}
+	return 0;
+}
 
 BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPathName) 
 {

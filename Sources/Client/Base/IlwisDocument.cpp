@@ -463,6 +463,12 @@ bool IlwisDocument::fEditable() const
 	return !io->fReadOnly() && !io->fDependent() && !io->fUseAs();
 }
 
+bool IlwisDocument::usesObject(const IlwisObject& ob) const {
+	if (ob.fValid() && ilwisobj && ilwisobj->fValid())
+		return ob == obj();
+	return false;
+}
+
 bool IlwisDocument::fIsEmpty() const
 {
 	return false;

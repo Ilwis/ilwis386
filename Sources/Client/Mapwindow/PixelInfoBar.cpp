@@ -49,6 +49,7 @@
 #include "Client\TableWindow\TableDoc.h"
 #include "Client\TableWindow\BaseTablePaneView.h"
 #include "Client\TableWindow\TablePaneView.h"
+#include "Client\TableWindow\BaseTblField.h"
 #include "Client\Mapwindow\PixelInfoDoc.h"
 #include "Client\Mapwindow\PixelInfoView.h"
 #include "Client\Mapwindow\MapPaneView.h"

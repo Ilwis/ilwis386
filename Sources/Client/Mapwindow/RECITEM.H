@@ -65,6 +65,7 @@ public:
   virtual int Changed();  // even if overridden, call this one
   virtual const String& sValue(int iWidth = 0);  // text to display
   virtual void SetValue(const char*);
+  virtual void PutVal(const String& s) {};
   virtual long iValue();
   virtual const CoordWithCoordSystem& crdValue();
   virtual FileName fnObj() const;
@@ -80,6 +81,7 @@ public:
   bool fAllowEdit() { return fEditable; }
   void AllowEdit(bool fEdit) { fEditable = fEdit; }
 protected:
+  void updateView(const IlwisObject& obj);
   CoordWithCoordSystem cwcs;
   RecItem(RecItem* parent);
   SListP<RecItem> children;
@@ -107,6 +109,7 @@ public:
   virtual long iValue();   // pixel value
   virtual const String& sValue(int iWidth = 0); // meaning
   virtual FileName fnObj() const;
+  virtual void PutVal(const String& s);
 protected:
   const BaseMap& map() const { return _map; }
 private:
@@ -143,6 +146,8 @@ public:
   virtual const String& sValue(int iWidth = 0);
   virtual void SetValue(const char*);
   virtual const CoordWithCoordSystem& crdValue();
+  virtual FileName fnObj() const;
+  virtual void PutVal(const String& s);
 protected:
   const Column& col() const { return _col; }
   long iRec;

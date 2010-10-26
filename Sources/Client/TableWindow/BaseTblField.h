@@ -67,16 +67,17 @@ protected:
   BaseTblField(BaseTablePaneView*, int col, long row);
   BaseTblField(BaseTablePaneView*, int col, long row, bool fReadOnly);
   BaseTblField(BaseTablePaneView*, int col, long row, const Domain&);
+  BaseTblField(BaseTablePaneView*, int col, long row, const FileName&);
   void init(const String&);  // should be called in derived constructor
   String sText();
   BOOL fHasChanged();
   BaseTablePaneView* tbpn;
+  Domain dm;
 private:
   void moveTo(int col, long row);
 	void FrameHandlesAccelerators(bool fYes);
 
   zPoint pCurr;
-  Domain dm;
   CWnd* ctrl;
 };
 

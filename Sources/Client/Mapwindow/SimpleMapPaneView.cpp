@@ -58,6 +58,7 @@ Created on: 2007-02-8
 #include "Headers\constant.h"
 #include "Headers\Hs\Mapwind.hs"
 #include "Engine\Domain\Dmvalue.h"
+#include "Client\TableWindow\BaseTblField.h"
 #include "Client\Mapwindow\PixelInfoBar.h"
 #include "Client\Mapwindow\PixelInfoView.h"
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
@@ -431,7 +432,10 @@ void SimpleMapPaneView::OnMouseMove(UINT nFlags, CPoint point)
 
 	if (fValid && !fOutside) {
 		CoordWithCoordSystem cwcs(c, mcd->rootDrawer->getCoordinateSystem());
-		IlwWinApp()->SendUpdateCoordMessages(cmMOUSEMOVE, &cwcs);
+		int state = cmMOUSEMOVE;
+		if ( iActiveTool == ID_ZOOMIN)
+			state |= cmZOOMIN;
+		IlwWinApp()->SendUpdateCoordMessages(state, &cwcs);
 	}
 	CView::OnMouseMove(nFlags, point);
 }

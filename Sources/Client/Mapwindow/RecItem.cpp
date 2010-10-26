@@ -43,9 +43,16 @@
 */
 #include "Client\Headers\formelementspch.h"
 #include "Client\Mapwindow\RECITEM.H"
+#include "Engine\Map\Feature.h"
+#include "Client\Mapwindow\Drawers\Drawer_n.h"
+#include "Client\ilwis.h"
+#include "Client\Base\IlwisDocument.h"
+#include "Client\Mapwindow\MapCompositionDoc.h"
 #include <stdlib.h>
 #include "Headers\Hs\PIXINFO.hs"
 #include "Engine\Domain\Dmvalue.h"
+
+using namespace ILWIS;
 
 RecItem::RecItem(RecItem* parent)
   : children(true), cwcs(crdUNDEF)
@@ -141,6 +148,25 @@ int RecItem::Changed()
   return 0;
 }
 
+void RecItem::updateView(const IlwisObject& obj) {
+	list<CDocument *> docs;
+	IlwWinApp()->getDocumentList(docs);
+	for(list<CDocument *>::iterator cur = docs.begin(); cur != docs.end(); ++cur) {
+		IlwisDocument *idoc = dynamic_cast<IlwisDocument *>(*cur);
+		if ( idoc) {
+			if(idoc->usesObject(obj)) {
+				MapCompositionDoc *mdoc = dynamic_cast<MapCompositionDoc *>(idoc);
+				if ( mdoc) {
+					NewDrawer *drw = mdoc->getDrawerFor(obj);
+					ILWIS::PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER);
+					drw->prepare(&pp);
+				}
+				idoc->UpdateAllViews(0,2);
+			}
+		}
+	}
+}
+
 String RecItem::sName() const
 {
   return "";
@@ -229,6 +255,35 @@ long RecItemMap::iValue()   // pixel value
     iVal = map()->iRaw(cwcs);
   }
   return iVal;
+}
+
+void RecItemMap::PutVal(const String& s) {
+	//if ( !fAllowEdit())
+	//	return;
+	IObjectType type = IOTYPE(fnObj());
+	if ( type == IlwisObject::iotRASMAP) {
+		Map bmp(fnObj());
+		Coord c = crdValue();
+		bmp->PutVal(c,s);
+		iVal = bmp->dvrs().iRaw(s);
+		sVal = s;
+		updateView(bmp);
+	} else if ( type == IlwisObject::iotSEGMENTMAP || 
+		type == IlwisObject::iotPOINTMAP || 
+		type == IlwisObject::iotPOLYGONMAP) {
+			BaseMap bmp(fnObj());
+			vector<Geometry *> features = bmp->getFeatures(crdValue());
+			for(int i=0; i < features.size(); ++i) {
+				Feature *f = CFEATURE(features[i]);
+				f->PutVal(bmp->dvrs(), s);
+			}
+			iVal = bmp->dvrs().iRaw(s);
+			if ( iVal != iUNDEF){
+				sVal = s;
+				bmp->fChanged = true;
+				updateView(bmp);
+			}
+	}
 }
 
 const String& RecItemMap::sValue(int iWidth)   // meaning
@@ -364,6 +419,22 @@ String RecItemColumn::sName() const
   String s = col()->sName();
   s &= ".clm";
   return s;
+}
+
+FileName RecItemColumn::fnObj() const {
+	FileName fn(col()->fnTbl);
+	fn.sCol = col()->sName();
+	return fn;
+}
+
+void RecItemColumn::PutVal(const String& s) {
+	//if ( !fAllowEdit())
+	//	return;
+	_col->PutVal(iRec, s);
+	iVal = _col->dvrs().iRaw(s);
+	sVal = s;
+	Table tbl(_col->fnTbl);
+	updateView(tbl);
 }
 
 long RecItemColumn::iValue()

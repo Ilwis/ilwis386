@@ -34,32 +34,14 @@ Software Foundation, http://www.fsf.org.
 
 Created on: 2007-02-8
 ***************************************************************/
-#if !defined(AFX_PIXELINFOVIEW_H__6848AD61_24D1_11D3_B77D_00A0C9D5342F__INCLUDED_)
-#define AFX_PIXELINFOVIEW_H__6848AD61_24D1_11D3_B77D_00A0C9D5342F__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// PixelInfoView.h : header file
-//
-
-#undef IMPEXP
-#ifdef ILWISCLIENT
-#define IMPEXP __declspec(dllexport)
-#else
-#define IMPEXP __declspec(dllimport)
-#endif
 
 
 class COleDropTarget;
 
-/////////////////////////////////////////////////////////////////////////////
-// PixelInfoView view
-
 class IMPEXP PixelInfoView : public BaseTablePaneView
 {
 protected:
-	// protected constructor used by dynamic creation
 	DECLARE_DYNCREATE(PixelInfoView)
 public:
 	PixelInfoView();
@@ -72,6 +54,7 @@ public:
 	virtual String sColButton(int iCol) const;
 	virtual String sRowButton(long iRow) const;
 	virtual void OnInitialUpdate();
+	int getSelectedRow() const;
 protected:
 	virtual String sField(int iCol, long iRow) const;
 	virtual String sDescrULButton() const; // upper left button
@@ -81,6 +64,8 @@ protected:
 	virtual void OnDragLeave();
 	virtual DROPEFFECT OnDragOver(COleDataObject* pDataObject, DWORD dwKeyState, CPoint point);
 	virtual BOOL OnDrop(COleDataObject* pDataObject, DROPEFFECT dropEffect, CPoint point);
+	void OnFieldPressed(int iCol, long iRow, bool fLeft);
+	int selectedRowIndex;
 
 protected:
 	virtual ~PixelInfoView();
@@ -95,9 +80,17 @@ private:
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+class PixInfoField: public BaseTblField
+{
+public:
+	PixInfoField(PixelInfoView*, int col, long row);
+	~PixInfoField();
+};
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+class PixInfoReadOnlyField: public BaseTblField
+{
+public:
+	PixInfoReadOnlyField(PixelInfoView*, int col, long row);
+	~PixInfoReadOnlyField();
+};
 
-#endif // !defined(AFX_PIXELINFOVIEW_H__6848AD61_24D1_11D3_B77D_00A0C9D5342F__INCLUDED_)

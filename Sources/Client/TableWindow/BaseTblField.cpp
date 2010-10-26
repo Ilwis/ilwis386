@@ -261,6 +261,35 @@ void EditFieldComboBox::OnCloseUp()
 	}
 }
 
+BaseTblField::BaseTblField(BaseTablePaneView* pane, int col, long row, const FileName& fn)
+{
+	Domain dom;
+	IlwisObject::iotIlwisObjectType type = IlwisObject::iotObjectType(fn);
+	if ( type == IlwisObject::iotRASMAP || type == IlwisObject::iotSEGMENTMAP || 
+		type == IlwisObject::iotPOINTMAP || type == IlwisObject::iotPOLYGONMAP) {
+			BaseMap bmp(fn);
+			dom = bmp->dvrs().dm();
+	} else if ( type == IlwisObject::iotTABLE){
+		Table tbl(fn.sPath() + fn.sFile + fn.sExt);
+		dom = tbl->col(fn.sCol)->dm();
+	}
+	if ( dom.fValid()) {
+		DomainClass* dc = dom->pdc();
+		DomainBool* db = dom->pdbool();
+		if (dc)
+			ctrl = new EditFieldComboBox(pane, this, dc);
+		else if (db)
+			ctrl = new EditFieldBool(pane, this, db);
+		else
+			ctrl = new EditFieldLine(pane, this);
+	} else {
+		ctrl = new EditFieldLine(pane, this, true);
+	}
+	tbpn = pane;
+	iCol = col;
+	iRow = row;
+	FrameHandlesAccelerators(false);
+}
 
 BaseTblField::BaseTblField(BaseTablePaneView* pane, int col, long row, const Domain& dom)
   : dm(dom)

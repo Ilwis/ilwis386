@@ -88,6 +88,7 @@ Created on: 2007-02-8
 #include "Client\FormElements\fldgrf.h"
 #include "Client\FormElements\fldantxt.h"
 #include "Client\FormElements\fldmsmpl.h"
+#include "Client\TableWindow\BaseTblField.h"
 #include "Client\Mapwindow\PixelInfoDoc.h"
 #include "Client\Mapwindow\PixelInfoBar.h"
 #include "Client\Mapwindow\PixelInfoView.h"

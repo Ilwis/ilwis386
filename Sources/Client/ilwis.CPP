@@ -152,6 +152,7 @@ $Header: /ILWIS 3.0/Main/ilwis.CPP 329   10-06-05 15:09 Retsios $
 #include "Client\TableWindow\RoseDiagramDoc.h"
 #include "Client\TableWindow\GraphPaneView.h"
 #include "Client\Base\WinThread.h"
+#include "Client\TableWindow\BaseTblField.h"
 #include "Client\Mapwindow\PixelInfoWindow.h"
 #include "Client\Mapwindow\PixelInfoDoc.h"
 #include "Client\Mapwindow\PixelInfoView.h"
@@ -1904,10 +1905,10 @@ void IlwisWinApp::OnRestoreAll()
 
 class SendUpdateCoordMessage
 {
-	CoordMessage cm;
+	int cm;
 	CoordWithCoordSystem* cwcs;
 public:
-	SendUpdateCoordMessage(CoordMessage crdm, CoordWithCoordSystem* cwcsys)
+	SendUpdateCoordMessage(int crdm, CoordWithCoordSystem* cwcsys)
 		: cm(crdm), cwcs(cwcsys) {}
 	void operator()(HWND hWnd)
 	{ 
@@ -1916,10 +1917,10 @@ public:
 	}
 };
 
-void IlwisWinApp::SendUpdateCoordMessages(CoordMessage cm, CoordWithCoordSystem* cwcs)
+void IlwisWinApp::SendUpdateCoordMessages(int cm, CoordWithCoordSystem* cwcs)
 {
 	for_each(lhWindows.begin(), lhWindows.end(), SendUpdateCoordMessage(cm,cwcs));
-	if (cm == cmMOUSECLICK || cm >= cmDIGICLICK1)
+	if (cm & cmMOUSECLICK || cm >= cmDIGICLICK1)
 		thrDdeServer->PostThreadMessage(ILW_UPDATE,(WPARAM)cm,(LPARAM)(void*)cwcs);
 }
 
@@ -2453,7 +2454,24 @@ void IlwisWinApp::addDrawer(const String& type, const String& subtype, DrawerCre
 	drawers[type + "|" + subtype] = func;
 }
 
+void IlwisWinApp::getDocumentList(list<CDocument *>& opendocs)
+{
+   ASSERT(opendocs.size() == 0);
 
+   POSITION pos = GetFirstDocTemplatePosition();
+
+   while (pos)
+   {
+      CDocTemplate* pTemplate = (CDocTemplate*)GetNextDocTemplate(pos);
+      POSITION pos2 = pTemplate->GetFirstDocPosition();
+      while (pos2)
+      {
+         CDocument * pDocument;
+         if ((pDocument=pTemplate->GetNextDoc(pos2)) != NULL)
+            opendocs.push_back(pDocument);
+      }
+   }
+}
 
 
 
