@@ -1692,7 +1692,7 @@ void EffectGroup::Slice()
 				{
 					//if (!map->fUpToDate())
 					//	map->MakeUpToDate();
-					rrMinMaxMap = map->rrMinMax(true); // calc if needed
+					rrMinMaxMap = map->rrMinMax(BaseMapPtr::mmmCALCULATE); // calc if needed
 				}
 			}
 			catch (ErrorObject&)
@@ -3601,7 +3601,7 @@ String MapEffect::sInputMinMax(int iCol, bool fMax)
 					{
 						//if (!map->fUpToDate())
 						//	map->MakeUpToDate();
-						RangeReal rrDummy = map->rrMinMax(true); // calc if needed
+						RangeReal rrDummy = map->rrMinMax(BaseMapPtr::mmmCALCULATE); // calc if needed
 					}
 				}
 				catch(ErrorObject&)
@@ -3693,7 +3693,7 @@ RangeReal MapEffect::rrMinMax(int iCol)
 							{
 								//if (!map->fUpToDate())
 								//	map->MakeUpToDate();
-								rrReturn = map->rrMinMax(true); // calc if needed
+								rrReturn = map->rrMinMax(BaseMapPtr::mmmCALCULATE); // calc if needed
 							}
 						}
 						catch(ErrorObject&)
