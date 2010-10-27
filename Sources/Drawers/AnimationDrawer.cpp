@@ -77,7 +77,7 @@ RangeReal AnimationDrawer::getMinMax(const MapList& mlist) const{
 		if (mlist->map(0)->dm()->pdv()) {
 			for (int i = 0; i < mlist->iSize(); ++i) {
 				Map mp = mlist->map(i);
-				RangeReal rrMinMaxMap = mp->rrMinMax();
+				RangeReal rrMinMaxMap = mp->rrMinMax(BaseMapPtr::mmmSAMPLED);
 				if (rrMinMaxMap.rLo() >= rrMinMaxMap.rHi())
 					rrMinMaxMap = mp->vr()->rrMinMax();
 				if (i > 0)
@@ -452,9 +452,11 @@ int AnimationControl::setTimingMode(Event *ev) {
 	cbTime->StoreData();
 	AnimationDrawer *adrw = (AnimationDrawer *)drw;
 	frtime->Hide();
-	fgTime->Hide();
+	if ( fgTime)
+		fgTime->Hide();
 	if ( adrw->useTime) {
-		fgTime->Show();
+		if ( fgTime)
+			fgTime->Show();
 		IlwisObject *source = adrw->datasource;
 		MapList mpl((*source)->fnObj);
 		if ( mpl->fTblAtt()) {
