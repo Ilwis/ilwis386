@@ -146,7 +146,7 @@ Domain FilterStandardDev::dmDefault(const Map& ) const
 
 ValueRange FilterStandardDev::vrDefault(const Map& mp, const Domain&) const
 {
-  RangeReal rr = mp->rrMinMax(false);
+  RangeReal rr = mp->rrMinMax();
   if (!rr.fValid())
     rr = mp->dvrs().rrMinMax();
   // calc extremes

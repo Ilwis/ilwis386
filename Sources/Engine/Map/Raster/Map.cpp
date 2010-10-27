@@ -1188,6 +1188,7 @@ String MapPtr::sValue(RowCol rc, short iWidth, short iDec) const
 
 void MapPtr::CalcMinMax()
 {
+
   { 
     ILWISSingleLock sl(&csAccess, TRUE, SOURCE_LOCATION);
     if (fnObj.sFile.length() == 0) {
@@ -1900,4 +1901,31 @@ vector<String> MapPtr::vsValue(const Coord& crd, short iWidth, short iDec, doubl
 	values.push_back(sValue(crd, iWidth, iDec, rPrx));
 
 	return values;
+}
+
+RangeReal MapPtr::rrMinMaxSampled() {
+	RangeReal rr;
+	RealBuf buf(rcSize().Row);
+	GetLineVal(0,buf);
+	rr += buf[0];
+	rr += buf[rcSize().Col - 1];
+	rr += buf[rcSize().Col / 2];
+	GetLineVal(rcSize().Row / 2,buf);
+	rr += buf[0];
+	rr += buf[rcSize().Col - 1];
+	rr += buf[rcSize().Col / 2];
+	GetLineVal(rcSize().Row - 1, buf);
+	rr += buf[0];
+	rr += buf[rcSize().Col - 1];
+	rr += buf[rcSize().Col / 2];
+	for(int i = 1; i < 7; ++i) {
+		int line = i * rcSize().Col / 7;
+		GetLineVal(i,buf);
+		for(int j = 1; j < 7; ++j) {
+			int col = j * rcSize().Row / 7;
+			rr += buf[col];
+		}
+	}
+	return rr;
+
 }

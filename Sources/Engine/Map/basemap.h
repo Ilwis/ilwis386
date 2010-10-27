@@ -67,6 +67,7 @@ friend class ObjectDependency;
 #define CFEATURE(x)	dynamic_cast<Feature *>(x)
 
 public:
+	enum MinMaxMethod{mmmNOCALCULATE,mmmCALCULATE, mmmSAMPLED};
     virtual _export           ~BaseMapPtr();
 	
     virtual void _export Updated();
@@ -113,8 +114,8 @@ public:
 								{ return dvs.fRawIsValue(); }
     bool                 		fValues() const       
 								{ return dvs.fValues(); }
-    RangeInt _export     		riMinMax(bool fForce=false);
-    RangeReal _export    		rrMinMax(bool fForce=false);
+	RangeInt _export     		riMinMax(MinMaxMethod m=mmmNOCALCULATE);
+    RangeReal _export    		rrMinMax(MinMaxMethod m=mmmNOCALCULATE);
     RangeInt  _export    		riPerc1(bool fForce=false);
     RangeReal _export    		rrPerc1(bool fForce=false);
     void _export         		SetMinMax(const RangeInt& ri);
@@ -147,7 +148,8 @@ protected:
     _export BaseMapPtr(const FileName& fn, const CoordSystem& cs, const CoordBounds& cb, 
 						const DomainValueRangeStruct& dvs);
 	
-    virtual void         CalcMinMax();
+	virtual void         CalcMinMax();
+	virtual RangeReal _export   rrMinMaxSampled() { return rrMinMax();}
 	
     RangeReal            _rrMinMax;  // for DomainValueReal
     RangeReal            _rrPerc1;

@@ -73,7 +73,7 @@ void SmplHist::Allocate(DomainClass* domc, const MapList& ml)
   
   for (b = ml->iLower(); b <= ml->iUpper(); b++) 
   {
-    riRanges[b-(ml->iLower())] = ml[b]->riMinMax(true);
+    riRanges[b-(ml->iLower())] = ml[b]->riMinMax(BaseMapPtr::mmmCALCULATE);
   }
   iSHptr = new long**[MAXCLASS+1]; 
   for (int i=0; i<=MAXCLASS ; i++) 

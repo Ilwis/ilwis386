@@ -173,7 +173,7 @@ void IDRExporter::IDRDetOutSize()
 	}
 	else if (dm->pdv() != NULL ) 
 	{
-		rRr = mp->rrMinMax(true);
+		rRr = mp->rrMinMax(BaseMapPtr::mmmCALCULATE);
 		if ( (mp->vr()->rStep() == 1.0) && (rRr.rLo() >= -32766.0) &&(rRr.rHi()<= 32767.0) )
 			iConv = ieInt;
 		else

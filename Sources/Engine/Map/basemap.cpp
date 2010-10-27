@@ -738,27 +738,41 @@ void BaseMapPtr::SetNoAttributeTable()
   SetAttributeTable(tbl);
 }
 
-RangeInt BaseMapPtr::riMinMax(bool fForce)
+RangeInt BaseMapPtr::riMinMax(MinMaxMethod m)
 {
   if (!dvs.fValues())
     return RangeInt();
   if (dm().fValid() && (dm()->pdbit() || dm()->pdbool()))
     return RangeInt(0,1);
-  if (fForce)
-    if (!_riMinMax.fValid())  // not yet set
-      CalcMinMax();
+  if (m != mmmNOCALCULATE) {
+	  if (!_riMinMax.fValid())  {
+         if ( m == mmmCALCULATE)
+			CalcMinMax();
+		 if (  m == mmmSAMPLED){
+			RangeReal rr = rrMinMaxSampled();
+			return RangeInt(rr.rLo(), rr.rHi());
+		  }
+	  }
+
+  }
   return _riMinMax;
 }
 
-RangeReal BaseMapPtr::rrMinMax(bool fForce)
+RangeReal BaseMapPtr::rrMinMax(MinMaxMethod m)
 {
   if (!dvs.fValues())
     return RangeReal();
   if (dm().fValid() && (dm()->pdbit() || dm()->pdbool()))
     return RangeReal(0,1);
-  if (fForce)
-    if (!_rrMinMax.fValid())  // not yet set
-      CalcMinMax();
+  if (m != mmmNOCALCULATE) {
+	  if (!_rrMinMax.fValid())  {
+         if ( m == mmmCALCULATE)
+			CalcMinMax();
+	  }
+	  if (!_rrMinMax.fValid() || _rrMinMax.rLo() == -1e38) // latter value is silly value from gdal import;
+		if (  m == mmmSAMPLED)
+		  return rrMinMaxSampled();
+  }
   return _rrMinMax;
 }
 
@@ -767,7 +781,7 @@ RangeInt BaseMapPtr::riPerc1(bool fForce)
   if (!dvs.fValues())
     return RangeInt();
   if (st() > stINT)
-    return riMinMax(fForce);
+	  return riMinMax(fForce ? mmmCALCULATE : mmmNOCALCULATE);
   if (fForce)
     if (!_riPerc1.fValid())  // not yet set
       CalcMinMax();
@@ -779,7 +793,7 @@ RangeReal BaseMapPtr::rrPerc1(bool fForce)
   if (!dvs.fValues())
     return RangeReal();
   if (st() > stINT)
-    return rrMinMax(fForce);
+    return rrMinMax(fForce ? mmmCALCULATE : mmmNOCALCULATE);
   if (fForce)
     if (!_rrPerc1.fValid())  // not yet set
       CalcMinMax();

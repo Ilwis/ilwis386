@@ -131,7 +131,7 @@ void CoordSystemDirectLinear::init()
   mm.MaxRow() -= 1;
   mm.MaxCol() -= 1;
   cbDTM = CalcCoordBounds(mm);  // find xy edges of DTM mp
-  rrMMDTM = mapDTM->rrMinMax(true);  // find minmax height of DTM
+  rrMMDTM = mapDTM->rrMinMax(BaseMapPtr::mmmCALCULATE);  // find minmax height of DTM
   //rHeightAccuracy = 10;    
 	if (mapDTM.fValid() && mapDTM->vr().fValid()) // protect against vr() == 0
 		rHeightAccuracy = mapDTM->vr()->rStep();    

@@ -108,7 +108,7 @@ short GISExporter::DetOutSize()
 			DomainValueReal *pDomValReal = dm->pdvr();
 			if (pDomValReal != NULL)
 			{
-				rRr = mp->rrMinMax(true);
+				rRr = mp->rrMinMax(BaseMapPtr::mmmCALCULATE);
 				if ( !(mp->vr()->fRealValues()))    // integer kind of input
 				{
 					if ((rRr.rLo() < 0) || (rRr.rHi() > 65535L))

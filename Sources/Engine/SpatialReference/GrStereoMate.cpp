@@ -98,7 +98,7 @@ void GeoRefStereoMate::Init()
 		rSourceMapPixSize = grSourceMap->rPixSize() * rEarthRadius * M_PI/180;
 	}
 	cbDTM = grDTM->cb();//CoordBounds(Coord(mm.MinRow(), mm.MinCol()), Coord(mm.MaxRow(), mm.MaxCol()));
-	rrMMDTM = mapDTM->rrMinMax(true);  // find minmax height of DTM
+	rrMMDTM = mapDTM->rrMinMax(BaseMapPtr::mmmCALCULATE);  // find minmax height of DTM
 	
 	rEstimTerrainHeight = (4 * rrMMDTM.rHi() + rrMMDTM.rLo()) / 5;  // First terrainHeightGuess
 	iMaxHeightCount = 15;

@@ -643,7 +643,7 @@ int SolveOrthoPhoto::iFindOuterOrientation(int iGroundCtrlPnts, double rScanPrin
                CVector& vecProjC, double& rAvgScale, double& rKa, double& rPh, double& rOm,
                int iMaxOrientCount, int& iIterations)
 {
-  double rMaxTerrainHeight = mDTM->rrMinMax(true).rHi();
+  double rMaxTerrainHeight = mDTM->rrMinMax(BaseMapPtr::mmmCALCULATE).rHi();
   double rKappa, rPhi, rOmega;        // approximate rotation angles, camera tilt
   RealMatrix rmRotation(3);
   double rU0, rV0, rW0;               // approx.coord of proj center in terrainsystem (meters)

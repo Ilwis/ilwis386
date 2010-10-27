@@ -146,6 +146,20 @@ public:
 		_rHi = max(_rHi, ri.rHi());
 		return *this;
 	}
+
+	RangeReal& operator+=( double v) {
+		if ( v == rUNDEF || v == iUNDEF)
+			return *this;
+
+		if ( !fValid()) {
+			_rLo = _rHi = v;
+		}
+		else if ( v > _rHi)
+			_rHi = v;
+		else if ( v < _rLo)
+			_rLo = v;
+		return *this;
+	}
 	bool fContains(const RangeReal& rr)
 	{ return fContains(rr.rLo()) && fContains(rr.rHi()); } 	
 	double& rLo() { return _rLo; }       // return lower boundary

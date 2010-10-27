@@ -619,7 +619,7 @@ RangeReal RasterTransformer::rrDetermineValueRange(Map& ValMap)
 {
 	RangeReal rrMinMax = ValMap->rrPerc1(true);
 	if (!rrMinMax.fValid())
-		rrMinMax = ValMap->rrMinMax(true);
+		rrMinMax = ValMap->rrMinMax(BaseMapPtr::mmmCALCULATE);
 	if (!rrMinMax.fValid())
 		rrMinMax = ValMap->dm()->pdv()->rrMinMax();
 	return rrMinMax;

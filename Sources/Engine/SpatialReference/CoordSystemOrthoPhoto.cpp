@@ -538,7 +538,7 @@ int CoordSystemOrthoPhoto::OuterOrientation()
     return -5;
   int iRes = 0;
 
-  RangeReal rrMM = mapDTM->rrMinMax(true);
+  RangeReal rrMM = mapDTM->rrMinMax(BaseMapPtr::mmmCALCULATE);
   rEstimTerrainHeight = (4 * rrMM.rHi() + rrMM.rLo()) / 5;  // First terrainHeightGuess
   rPrevTerrainHeight = 0;  // to be used for segment (stream) digitizing in monoplot
   int iNr;

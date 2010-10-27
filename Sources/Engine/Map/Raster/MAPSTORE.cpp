@@ -819,7 +819,7 @@ void MapStore::Export(const FileName& fn) const
 				}
 			}
 			else { // integer numbers
-				RangeInt ri = ptr.riMinMax(true);
+				RangeInt ri = ptr.riMinMax(BaseMapPtr::mmmCALCULATE);
 				long iRange = ri.iHi() - ri.iLo()+1;
 				if ((iRange > 256) || (ri.iHi() >= 256) || (ri.iLo() < 0)) { // use 1.41 int map
 					mpi.iScale = 0; //shortConv(iRange / (long)0xFFFF); ?????????

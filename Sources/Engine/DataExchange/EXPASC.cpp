@@ -134,7 +134,7 @@ void ASCExporter::ASCDetMapDomType()
    }
    DomainValue *pDomVal = dm->pdv();
    if ( pDomVal != NULL ) {
-     rRr = mp->rrMinMax(true);
+	   rRr = mp->rrMinMax(BaseMapPtr::mmmCALCULATE);
      rStep = mp->vr()->rStep();
      if ( (rStep == 1.0) && (rRr.rLo() >= 0.0) &&(rRr.rHi()<= 254.0) )
                                                 {iConv = ieInt254;   return;}

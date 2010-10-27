@@ -148,7 +148,7 @@ NASExporter::iconvtype NASExporter::ictDetermineDomainType(const Map& mp)
 	}
 	else if (pdv)
 	{
-		RangeReal rrMap = mp->rrMinMax(true);  // force the minmax calculation
+		RangeReal rrMap = mp->rrMinMax(BaseMapPtr::mmmCALCULATE);  // force the minmax calculation
 		double rStep = mp->vr()->rStep();
 
 		if (abs(rStep - 1.0) < 1e-6)

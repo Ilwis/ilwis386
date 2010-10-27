@@ -71,7 +71,7 @@ StereoPairFromDTM* StereoPairFromDTM::create(const FileName& fn, StereoPairPtr& 
     ExpressionError(sExpr, sSyntax());
   Map mpSrcImage(as[0], fn.sPath());
 	Map mpDTM(as[1], fn.sPath());
-	RangeReal rrMMDTM = mpDTM->rrMinMax(true);  // find minmax height of DTM
+	RangeReal rrMMDTM = mpDTM->rrMinMax(BaseMapPtr::mmmCALCULATE);  // find minmax height of DTM
 	double rAngl = 30.0; //default if iParms < 3
 	double rRefH = (rrMMDTM.rHi() + rrMMDTM.rLo()) / 2; //if iParms < 4
 	LookModus lm = lmBOTH;															//if iParms < 5

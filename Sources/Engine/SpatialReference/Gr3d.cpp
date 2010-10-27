@@ -355,7 +355,7 @@ void GeoRef3D::CalcTrig()
 ///                   / max(cbDTM.width(), cbDTM.height());
   rScaleFactor = rPrincDistance / rTanHalfAngle;
   rHeightScaleCorrection = rViewH * (1.0 - rScaleH);
-  RangeReal rrMM = mapDTM->rrMinMax(true);
+  RangeReal rrMM = mapDTM->rrMinMax(BaseMapPtr::mmmCALCULATE);
   rMinimumTerrainHeight = rrMM.rLo() * rScaleH + rHeightScaleCorrection;//ScaleCorrected
   rMaximumTerrainHeight = rrMM.rHi() * rScaleH + rHeightScaleCorrection;//     "
   rMaxDepth = rLocH - rMinimumTerrainHeight;

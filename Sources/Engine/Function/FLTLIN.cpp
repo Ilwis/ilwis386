@@ -204,7 +204,7 @@ Domain FilterLinear::dmDefault(const Map& mp) const
 
 ValueRange FilterLinear::vrDefault(const Map& mp, const Domain& dm) const
 {
-  RangeReal rr = mp->rrMinMax(false);
+  RangeReal rr = mp->rrMinMax();
   if (!rr.fValid()) {
     ValueRange vr = FilterPtr::vrDefault(mp, dm);
     if (vr.fValid())

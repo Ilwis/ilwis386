@@ -34,76 +34,7 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/* $Log: /ILWIS 3.0/RasterStorage/Map.h $
- * 
- * 18    10/29/01 12:58p Martin
- * fHasPyramidFile is nu const geworden
- * 
- * 17    8/23/01 17:19 Willem
- * Removed the SetReadOnly() function. This is now handled by
- * IlwisObjectPtr::SetReadOnly() for all ilwis objects
- * 
- * 16    6/19/01 11:06a Martin
- * maps can now tell how many pyramid layers they have (to ensure that not
- * an impossible layer is used)
- * 
- * 15    6/14/01 11:49a Martin
- * added support for deleting pyramid files
- * 
- * 14    6/13/01 4:08p Martin
- * map can check if it has a pyramid file
- * 
- * 13    6/05/01 4:28p Martin
- * added interface for creating pyramid files and accessing the layers in
- * a file
- * 
- * 12    23-01-01 11:03a Martin
- * useas is passed as a parm with the constructor
- * 
- * 11    10-01-01 4:25p Martin
- * link through of the the StoreAs function in MapStore
- * 
- * 10    21-12-00 10:05a Martin
- * added the pGetVirtualObject() function to access the virtual object
- * embedded in the object. 
- * 
- * 9     23/11/00 10:43 Willem
- * Added st() virtual function: the StoreType is now retrieved from
- * MapStore
- * 
- * 8     11-09-00 11:34a Martin
- * added function for GetObjectStructure
- * 
- * 7     17-03-00 9:54a Martin
- * extra constructors for foreignformat support
- * 
- * 6     17-01-00 11:30 Wind
- * added proximity to iValue(const Coord& ..) etc.
- * 
- * 5     2-12-99 16:41 Hendrikse
- * made void _export OpenMapVirtual()  public
- * needed for use by MapComputedElsewhere
- * 
- * 4     9/29/99 11:05a Wind
- * added support for maps thata are a band in a maplist without mpr and
- * objectinfo in maplist
- * 
- * 3     3/08/99 2:27p Martin
- * //->/*
- * 
- * 2     3/08/99 2:09p Martin
- * exports added
-// Revision 1.3  1998/09/16 17:22:46  Wim
-// 22beta2
-//
-// Revision 1.2  1997/08/11 16:44:21  Wim
-// Added SetValueRange
-//
-/* Map
-   Copyright Ilwis System Development ITC
-   march 1995, by Wim Koolhoven
-	Last change:  WK   24 Apr 98    5:05 pm
-*/
+
 
 #ifndef ILWMAP_H
 #define ILWMAP_H
@@ -240,6 +171,7 @@ public:
 	_export bool fHasPyramidFile() const;
 	_export void DeletePyramidFile();
 	_export int  iNoOfPyramidLayers();
+	virtual RangeReal _export	rrMinMaxSampled();
 private:  
 	GeoRef _gr;
 	RowCol _rcSize;

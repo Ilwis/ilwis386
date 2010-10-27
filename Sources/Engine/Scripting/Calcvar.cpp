@@ -494,12 +494,12 @@ CalcVarMap::CalcVarMap(const Map& map)
 void CalcVarMap::SetMinMax()
 {
   if (dvs.fRealValues()) {
-    RangeReal rr = map()->rrMinMax(false);
+    RangeReal rr = map()->rrMinMax();
     if (rr.rLo() <= rr.rHi())
       dvs.SetValueRange(ValueRange(rr.rLo(), rr.rHi(), dvs.rStep()));
   }
   else {
-    RangeInt ri = map()->riMinMax(false);
+    RangeInt ri = map()->riMinMax();
     if (ri.iLo() <= ri.iHi()) 
       dvs.SetValueRange(ValueRange(ri.iLo(), ri.iHi()));
   }  
