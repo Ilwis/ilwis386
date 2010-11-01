@@ -313,7 +313,7 @@ void GDALFormat::DetermineOutputType(const FileName& fnMap, int& iBands, GDALDat
 		if ( mapFormatInfo[id].fSupports(FormatInfo::epREAL) )
 			gdalDataType = GDT_Float32;
 	}			
-	else if (  RangeInt(0, 255).fContains( mp->riMinMax(fRecalc)))
+	else if (  RangeInt(0, 255).fContains( mp->riMinMax(fRecalc ? BaseMapPtr::mmmCALCULATE : BaseMapPtr::mmmNOCALCULATE)))
 	{
 		if ( mapFormatInfo[id].fSupports(FormatInfo::ep8UBIT) )
 			gdalDataType = GDT_Byte;
@@ -322,12 +322,12 @@ void GDALFormat::DetermineOutputType(const FileName& fnMap, int& iBands, GDALDat
 		else if ( mapFormatInfo[id].fSupports(FormatInfo::ep16SBIT) )
 			gdalDataType = GDT_Int16;			
 	}		
-	else if (  RangeInt(0, 65535).fContains( mp->riMinMax(fRecalc)))
+	else if (  RangeInt(0, 65535).fContains( mp->riMinMax(fRecalc ? BaseMapPtr::mmmCALCULATE : BaseMapPtr::mmmNOCALCULATE)))
 	{
 		if ( mapFormatInfo[id].fSupports(FormatInfo::ep16UBIT) )
 			gdalDataType = GDT_UInt16;
 	}		
-	else if (  RangeInt(-32767, 32768).fContains( mp->riMinMax(fRecalc)))
+	else if (  RangeInt(-32767, 32768).fContains( mp->riMinMax(fRecalc ? BaseMapPtr::mmmCALCULATE : BaseMapPtr::mmmNOCALCULATE)))
 	{
 		if ( mapFormatInfo[id].fSupports(FormatInfo::ep16SBIT) )
 			gdalDataType = GDT_Int16;		
