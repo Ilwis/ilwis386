@@ -89,6 +89,7 @@ protected:
 	void OnLButtonUp(UINT nFlags, CPoint point);
 	void OnMeasureDist();
 	void OnUpdateMeasureDist(CCmdUI* pCmdUI);
+	afx_msg void OnWindowPosChanging( WINDOWPOS* lpwndpos );
 	BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
 	bool volatile fDirty;
 	bool volatile fRedrawing;
@@ -107,6 +108,8 @@ private:
 	CWinThread * drawThread;
 	bool fDrawRequest;
 	bool fStopDrawThread;
+	bool fResizing;
+	CCriticalSection csResizing;
 	CCriticalSection csThread;
 	static UINT DrawInThread(LPVOID);
 	static void MoveMouse(short xInc, short yInc) ;

@@ -88,6 +88,7 @@ BEGIN_MESSAGE_MAP(SimpleMapPaneView, ZoomableView)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
 	ON_WM_SETCURSOR()
+	ON_WM_WINDOWPOSCHANGING()
 	ON_COMMAND(ID_MEASUREDIST, OnMeasureDist)
 	ON_UPDATE_COMMAND_UI(ID_MEASUREDIST, OnUpdateMeasureDist)
 END_MESSAGE_MAP()
@@ -100,7 +101,7 @@ void SimpleMapPaneView::MoveMouse(short xInc, short yInc)
 const int RepresentationClass::iSIZE_FACTOR=3; // MapWindow to Layout ratio; never make this 0; currently only int ratio supported
 
 SimpleMapPaneView::SimpleMapPaneView()
-: info(0), edit(0), dcView(0), cwcsButtonDown(Coord()), fwPar(0), bmView(0), hBmOld(0), pDC(0), drawThread(0), fStopDrawThread(false), fDrawRequest(false)
+: info(0), edit(0), dcView(0), cwcsButtonDown(Coord()), fwPar(0), bmView(0), hBmOld(0), pDC(0), drawThread(0), fStopDrawThread(false), fDrawRequest(false), fResizing(false)
 {
 	fDirty = false;
 	fRedrawing = false;
@@ -250,11 +251,14 @@ void SimpleMapPaneView::RequestRedraw()
 UINT SimpleMapPaneView::DrawInThread(LPVOID lp)
 {
 	SimpleMapPaneView* mpv = (SimpleMapPaneView*)lp;
+	MapCompositionDoc* mcd = mpv->GetDocument();
 	mpv->csThread.Lock();
 	try {
 		while (!mpv->fStopDrawThread) {
+			mcd->rootDrawer->getDrawerContext()->TakeContext();
 			while (mpv->fDrawRequest)
 				mpv->Draw();
+			mcd->rootDrawer->getDrawerContext()->ReleaseContext();
 			if (!mpv->fStopDrawThread)
 				mpv->drawThread->SuspendThread(); // wait here, and dont consume CPU time either
 		}
@@ -273,10 +277,21 @@ void SimpleMapPaneView::Draw()
 {
 	fDrawRequest = false;
 	MapCompositionDoc* mcd = GetDocument();
-	mcd->rootDrawer->getDrawerContext()->TakeContext();
 	mcd->rootDrawer->draw();
-	mcd->rootDrawer->getDrawerContext()->swapBuffers();
-	mcd->rootDrawer->getDrawerContext()->ReleaseContext();
+	csResizing.Lock();
+	if (fResizing) {
+		fResizing = false;
+		fDrawRequest = true;
+	} else
+		mcd->rootDrawer->getDrawerContext()->swapBuffers();
+	csResizing.Unlock();
+}
+
+void SimpleMapPaneView::OnWindowPosChanging(WINDOWPOS* lpwndpos)
+{
+	csResizing.Lock();
+	fResizing = true;
+	csResizing.Unlock();
 }
 
 void SimpleMapPaneView::OnMeasureDist()
