@@ -129,9 +129,7 @@ Color Color::clrDraw(DrawColors drc) const
 
 inline Color::operator long() const
 { 
- long color = 0; 
- color= red()  | (green() << 8) | blue() << 16; 
- return color;
+	return iValue & 0x00ffffff; // needed for COLORREF
 }
 
 inline long Color::iVal() const
