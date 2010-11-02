@@ -73,8 +73,6 @@ void Palette::SetData(const Map & mp, const SetDrawer * rsd, const unsigned int 
 		palette_greens = new float [iPaletteSize];
 		palette_blues = new float [iPaletteSize];
 		palette_alphas = new float [iPaletteSize];
-		for (int i = 0; i < iPaletteSize - 1; ++i)
-			palette_alphas[i] = 1.0;
 		palette_alphas[iPaletteSize - 1] = 0.0; // by definition, last index reserved for UNDEF
 	}
 }
@@ -126,9 +124,11 @@ void Palette::Refresh()
 		}
 
 		for (int i = 0; i < nrMapValues; ++i) {
-			palette_reds[i] = ((Color)(bufColor[i])).redP();
-			palette_greens[i] = ((Color)(bufColor[i])).greenP();
-			palette_blues[i] = ((Color)(bufColor[i])).blueP();
+			Color col(bufColor[i]);
+			palette_reds[i] = col.redP();
+			palette_greens[i] = col.greenP();
+			palette_blues[i] = col.blueP();
+			palette_alphas[i] = col.alphaP();
 		}
 
 		delete [] bufColor;
