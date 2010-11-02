@@ -143,42 +143,47 @@ HTREEITEM RasterSetDrawer::configure(LayerTreeView  *tv, HTREEITEM parent){
 	return SetDrawer::configure(tv,parent);
 }
 
-bool RasterSetDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
+bool RasterSetDrawer::draw(bool norecursion , const CoordBounds& cbArea) const {
+
+	drawPreDrawers(norecursion, cbArea);
+
 	if (!data->init)
 		init();
-	if (!textureHeap->fValid())
-		return false;
+	if (textureHeap->fValid())
+	{
+		//glClearColor(1.0,1.0,1.0,0.0);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+		glColor4f(1, 1, 1, transparency);
 
-	//glClearColor(1.0,1.0,1.0,0.0);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-	glColor4f(1, 1, 1, transparency);
+		textureHeap->ClearQueuedTextures();
 
-	textureHeap->ClearQueuedTextures();
+		// Extend the image so that its width and height become ^2
 
-	// Extend the image so that its width and height become ^2
+		double log2width = log((double)data->imageWidth)/log(2.0);
+		log2width = max(6, ceil(log2width)); // 2^6 = 64 = the minimum texture size that OpenGL/TexImage2D supports
+		const unsigned long width = pow(2, log2width);
+		double log2height = log((double)data->imageHeight)/log(2.0);
+		log2height = max(6, ceil(log2height)); // 2^6 = 64 = the minimum texture size that OpenGL/TexImage2D supports
+		const unsigned long height = pow(2, log2height);
+		// DisplayImagePortion(-1, 1, 1, -1, 0, 0, width, height);
+		CoordBounds cb = data->cb;
+		double minX = cb.MinX();
+		double maxX = cb.MaxX();
+		double minY = cb.MinY();
+		double maxY = cb.MaxY();
+		// Image has grown right-down
+		maxX = minX + (maxX - minX) * (double)width / (double)data->imageWidth;
+		minY = maxY + (minY - maxY) * (double)height / (double)data->imageHeight;
 
-	double log2width = log((double)data->imageWidth)/log(2.0);
-	log2width = max(6, ceil(log2width)); // 2^6 = 64 = the minimum texture size that OpenGL/TexImage2D supports
-	const unsigned long width = pow(2, log2width);
-	double log2height = log((double)data->imageHeight)/log(2.0);
-	log2height = max(6, ceil(log2height)); // 2^6 = 64 = the minimum texture size that OpenGL/TexImage2D supports
-	const unsigned long height = pow(2, log2height);
-	// DisplayImagePortion(-1, 1, 1, -1, 0, 0, width, height);
-	CoordBounds cb = data->cb;
-	double minX = cb.MinX();
-	double maxX = cb.MaxX();
-	double minY = cb.MinY();
-	double maxY = cb.MaxY();
-	// Image has grown right-down
-	maxX = minX + (maxX - minX) * (double)width / (double)data->imageWidth;
-	minY = maxY + (minY - maxY) * (double)height / (double)data->imageHeight;
+		glEnable(GL_TEXTURE_2D);
+		if (fUsePalette)
+			palette->MakeCurrent(); // for now this is the only call .. officially it should also be called before generating textures in a separate thread, however currently the only way two palettes would interfere is with the AnimationDrawer, and there textures are generated in the current thread
+		DisplayImagePortion(minX, maxY, maxX, minY, 0, 0, width, height);
+		glDisable(GL_TEXTURE_2D);
+	}
 
-	glEnable(GL_TEXTURE_2D);
-	if (fUsePalette)
-		palette->MakeCurrent(); // for now this is the only call .. officially it should also be called before generating textures in a separate thread, however currently the only way two palettes would interfere is with the AnimationDrawer, and there textures are generated in the current thread
-	DisplayImagePortion(minX, maxY, maxX, minY, 0, 0, width, height);
-	glDisable(GL_TEXTURE_2D);
+	drawPostDrawers(norecursion, cbArea);
 
 	return true;
 }
