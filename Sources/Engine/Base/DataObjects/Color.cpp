@@ -127,16 +127,6 @@ Color Color::clrDraw(DrawColors drc) const
   return c;
 }
 
-inline Color::operator long() const
-{ 
-	return iValue & 0x00ffffff; // needed for COLORREF
-}
-
-inline long Color::iVal() const
-{
-	return iValue;
-}
-
 Color Color::clrPrimary(int iNr)
 {
 	switch (iNr%32)

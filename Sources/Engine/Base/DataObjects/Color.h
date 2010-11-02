@@ -85,8 +85,12 @@ public:
 	{ return (m_red==c.red()) && (m_green==c.green()) && (m_blue==c.blue() && m_transparency==c.transparency()); }
 	bool operator!=(const Color& c)
 		{ return !(*this == c); }
-	operator long() const ; // for COLORREF conversion; so it will ignore the transparency
-	long iVal() const ;
+	//operator long() const ; // for COLORREF conversion; so it will ignore the transparency
+	//long iVal() const ;
+	inline operator long() const
+	{ return iValue & 0x00ffffff; } // needed for COLORREF
+	inline long iVal() const
+	{ return iValue; }
 	byte hue() const; 
 	byte sat() const; 
 	byte intens() const; 
