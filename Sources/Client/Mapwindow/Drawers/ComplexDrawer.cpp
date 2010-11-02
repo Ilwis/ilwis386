@@ -99,7 +99,7 @@ void ComplexDrawer::addPreDrawer(int order, NewDrawer *drw) {
 	drawersById[drw->getId()] = drw;
 }
 
-bool ComplexDrawer::draw(bool norecursion, const CoordBounds& cb) const{
+bool ComplexDrawer::drawPreDrawers(bool norecursion, const CoordBounds& cb) const{
 	if (!isActive())
 		return false;
 
@@ -113,6 +113,17 @@ bool ComplexDrawer::draw(bool norecursion, const CoordBounds& cb) const{
 				drw->draw(norecursion, cb);
 		}
 	}
+	return true;
+}
+
+
+bool ComplexDrawer::draw(bool norecursion, const CoordBounds& cb) const{
+	if (!isActive())
+		return false;
+
+	drawPreDrawers(norecursion, cb);
+
+	long& count = (const_cast<ComplexDrawer *>(this))->currentIndex;
 	count = 0;
 	if ( !norecursion) {
 		for(int i=0; i < drawers.size(); ++i) {
@@ -121,6 +132,17 @@ bool ComplexDrawer::draw(bool norecursion, const CoordBounds& cb) const{
 				drawers[i]->draw(norecursion, cb);
 		}
 	}
+
+	drawPostDrawers(norecursion, cb);
+
+	return true;
+}
+
+bool ComplexDrawer::drawPostDrawers(bool norecursion, const CoordBounds& cb) const{
+	if (!isActive())
+		return false;
+
+	long& count = (const_cast<ComplexDrawer *>(this))->currentIndex;
 	count = 0;
 	if ( postDrawers.size() > 0) {
 		++count;

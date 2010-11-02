@@ -103,6 +103,8 @@ class _export ComplexDrawer : public NewDrawer {
 		void displayOptionTransparency(CWnd *parent) ;
 		void setInfoMode(void *v,LayerTreeView *tv);
 		NewDrawer *loadDrawer(const FileName& fnView, const String& drawerSection);
+		bool drawPreDrawers(bool norecursion, const CoordBounds& cb) const;
+		bool drawPostDrawers(bool norecursion, const CoordBounds& cb) const;
 	private:
 		void init();
 	} ;
