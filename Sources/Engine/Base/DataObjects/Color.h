@@ -42,30 +42,27 @@
 #define ILW_COLORH
 #include "Engine\Base\DataObjects\Buf.h"
 
-#define TRANSP  0
-class structRGB { public: byte r, g, b, transparency; };
+#define OPAQUE_VALUE 0
+//class structRGB { public: byte r, g, b, transparency; };
 
 enum DrawColors { drcLIGHT, drcNORMAL, drcDARK, drcGREY };
 
-#define colorUNDEF Color(1,2,3,4)
+#define colorUNDEF Color(0,0,0,255)
 
 class _export Color
 {
 public:
 	static Color clrPrimary(int iNr);
 
-	Color() { m_red = m_green = m_blue = m_transparency = 0; }
-	Color(byte rd, byte gr, byte bl, byte alpha=TRANSP)
-	    { m_red = rd; m_green = gr; m_blue = bl; m_transparency = alpha; }
+	Color() { m_red = m_green = m_blue = 0; m_transparency = OPAQUE_VALUE; }
+	Color(byte rd, byte gr, byte bl, byte transparency = OPAQUE_VALUE)
+	    { m_red = rd; m_green = gr; m_blue = bl; m_transparency = transparency; }
 	Color(const Color& c)
-	{ red() = c.red(); blue() = c.blue(); green() = c.green(); transparency() = c.transparency();}
+	{ iValue = c.iValue; }
 	Color& operator=(const Color& c)
-	{ setVal(c.iVal()); return *this; }
+	{ iValue = c.iValue; return *this; }
 	Color(long _iVal)
-	{ 
-		setVal(_iVal);
-	}
-	void setVal(long _iVal);
+	{ iValue = _iVal; }
 	void SetHSI(byte hue, byte sat, byte intens);
 	byte& red()   { return m_red; }
 	byte& green() { return m_green; }
@@ -74,11 +71,13 @@ public:
 	byte red()   const { return m_red; }
 	byte green() const { return m_green; }
 	byte blue()  const { return m_blue; }
+	byte alpha() const { return 255 - m_transparency; }
 	byte transparency() const { return m_transparency; }
 	double redP()   const { return (double)m_red / 255.0; }
 	double greenP() const { return (double)m_green / 255.0; }
 	double blueP()  const { return (double)m_blue / 255.0; }
 	double transparencyP()  const { return (double)m_transparency / 255.0; }
+	double alphaP()  const { return 1.0 - (double)m_transparency / 255.0; }
 	byte yellow()   const { return 255-m_blue; }
 	byte magenta() const { return 255-m_green; }
 	byte cyan()  const { return 255-m_red; }
@@ -94,8 +93,9 @@ public:
 	byte grey() const; 
 	Color clrDraw(DrawColors drc) const;
 private:
-	struct{
-	byte m_red, m_green, m_blue,m_transparency;
+	union {
+		struct{byte m_red, m_green, m_blue, m_transparency;};
+		long iValue;
 	};
 };
 

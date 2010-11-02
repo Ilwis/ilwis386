@@ -127,24 +127,16 @@ Color Color::clrDraw(DrawColors drc) const
   return c;
 }
 
-inline Color::operator long() const 
+inline Color::operator long() const
 { 
  long color = 0; 
  color= red()  | (green() << 8) | blue() << 16; 
  return color;
 }
 
-inline long Color::iVal() const 
+inline long Color::iVal() const
 {
-	long c = m_red + 256 * m_green + 256 * 256 * m_blue + 256 * 256 * 256 * m_transparency;
-	return c;
-}
-
-inline void Color::setVal(long _iVal) {
-	red() =  _iVal & 0xff;
-	green() = _iVal >> 8;
-	blue() =  _iVal  >> 16; 
-	transparency() = _iVal >> 24;
+	return iValue;
 }
 
 Color Color::clrPrimary(int iNr)
