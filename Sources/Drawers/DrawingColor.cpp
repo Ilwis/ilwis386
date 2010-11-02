@@ -257,7 +257,7 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 		}
 	  } break;
 	case NewDrawer::drmCOLOR:
-		memcpy(bufOut, buf, iLen * sizeof(long)); // no change !! ---- or change alpha = 0 to alpha = 255?
+		memcpy(bufOut, buf, iLen * sizeof(long)); // no change !!
 		break;
 	case NewDrawer::drmBOOL: 
 		for (long i = 0; i < iLen; ++i) {
