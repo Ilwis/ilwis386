@@ -208,7 +208,7 @@ int FieldColorSimple::SelChanged(Event* )
     CreateColor(0);
   if ( fldc->slider != 0) {
 	  Color c = (Color)ose->GetItemData(id);
-	  fldc->slider->SetVal(c.transparency());
+	  fldc->slider->SetVal(c.alpha());
   }
   return 0;
 }
@@ -263,7 +263,7 @@ void FieldColorSimple::SetVal(Color clr)
   ose->SetItemData(idCustom,clr);
   ose->SetCurSel(idCustom);
   if (  fldc->slider) {
-	  fldc->slider->SetVal(clr.transparency()/ 2.55);
+	  fldc->slider->SetVal(clr.alpha()/ 2.55);
   }
 
 }
@@ -325,7 +325,7 @@ void FieldColor::StoreData() {
 	fcs->StoreData();
 	if ( slider) {
 		slider->StoreData();
-		clr->transparency() = 255.0 *(1.0-transp/100.0);
+		clr->transparency() = 255.0 * transp / 100.0;
 	}
 }
 
