@@ -1905,7 +1905,7 @@ vector<String> MapPtr::vsValue(const Coord& crd, short iWidth, short iDec, doubl
 
 RangeReal MapPtr::rrMinMaxSampled() {
 	RangeReal rr;
-	RealBuf buf(rcSize().Row);
+	RealBuf buf(rcSize().Col);
 	GetLineVal(0,buf);
 	rr += buf[0];
 	rr += buf[rcSize().Col - 1];
