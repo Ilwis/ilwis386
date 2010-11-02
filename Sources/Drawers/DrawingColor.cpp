@@ -143,7 +143,7 @@ void DrawingColor::clrVal(const double * buf, long * bufOut, long iLen) const
 			{
 				RangeReal rr = drw->getStretchRangeReal();
 				for (long i = 0; i < iLen; ++i)
-					bufOut[i] = rpr->clr(buf[i], rr);
+					bufOut[i] = rpr->clr(buf[i], rr).iVal();
 			} break;
 		case SetDrawer::smLOGARITHMIC:
 			{
@@ -151,18 +151,18 @@ void DrawingColor::clrVal(const double * buf, long * bufOut, long iLen) const
 				double rMax = 1 + rr.rHi() - rr.rLo();
 				rr = RangeReal(0, log(rMax));
 				for (long i = 0; i < iLen; ++i)
-					bufOut[i] = rpr->clr(log(buf[i] - rr.rLo()), rr);
+					bufOut[i] = rpr->clr(log(buf[i] - rr.rLo()), rr).iVal();
 			} break;
 		}
 	}
 	else if (NewDrawer::drmIMAGE == drw->getDrawMethod()) {
 		RangeReal rr = RangeReal(0, 255);
 		for (long i = 0; i < iLen; ++i)
-			bufOut[i] = rpr->clr(buf[i], rr);
+			bufOut[i] = rpr->clr(buf[i], rr).iVal();
 	}
 	else {
 		for (long i = 0; i < iLen; ++i)
-			bufOut[i] = rpr->clr(buf[i]);
+			bufOut[i] = rpr->clr(buf[i]).iVal();
 	}
 }
 
@@ -180,7 +180,7 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 						RangeReal rr = drw->getStretchRangeReal();
 						DomainValueRangeStruct dvrs = bmap->dvrs();
 						for (long i = 0; i < iLen; ++i)
-							bufOut[i] = rpr->clr(dvrs.rValue(buf[i]), rr);
+							bufOut[i] = rpr->clr(dvrs.rValue(buf[i]), rr).iVal();
 					} break;
 					case SetDrawer::smLOGARITHMIC:
 						{
@@ -189,7 +189,7 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 							rr = RangeReal(0, log(rMax));
 							DomainValueRangeStruct dvrs = bmap->dvrs();
 							for (long i = 0; i < iLen; ++i)
-								bufOut[i] = rpr->clr(log(dvrs.rValue(buf[i]) - rr.rLo()), rr);
+								bufOut[i] = rpr->clr(log(dvrs.rValue(buf[i]) - rr.rLo()), rr).iVal();
 						} break;
 					}
 				}
@@ -197,17 +197,17 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 					RangeReal rr = RangeReal(0, 255);
 					DomainValueRangeStruct dvrs = bmap->dvrs();
 					for (long i = 0; i < iLen; ++i)
-						bufOut[i] = rpr->clr(dvrs.rValue(buf[i]), rr);
+						bufOut[i] = rpr->clr(dvrs.rValue(buf[i]), rr).iVal();
 				}
 				else {
 					DomainValueRangeStruct dvrs = bmap->dvrs();
 					for (long i = 0; i < iLen; ++i)
-						bufOut[i] = rpr->clr(dvrs.rValue(buf[i]));
+						bufOut[i] = rpr->clr(dvrs.rValue(buf[i])).iVal();
 				}
 			}
 			else {
 				for (long i = 0; i < iLen; ++i)
-					bufOut[i] = rpr->clrRaw(buf[i]);
+					bufOut[i] = rpr->clrRaw(buf[i]).iVal();
 			}
 		} break;
 	case NewDrawer::drmSINGLE: {
@@ -220,12 +220,12 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 				col = fdr->getSingleColor();
 		}
 		for (long i = 0; i < iLen; ++i)
-			bufOut[i] = col; // you asked for it (!)
+			bufOut[i] = col.iVal(); // you asked for it (!)
 	} break;
 	case NewDrawer::drmMULTIPLE: 
 		if (3 == iMultColors) {
 			for (long i = 0; i < iLen; ++i)
-				bufOut[i] = clrRandom(buf[i]);
+				bufOut[i] = clrRandom(buf[i]).iVal();
 		}
 		else {
 			int iStep = 7;
@@ -235,7 +235,7 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 			case 2: iStep = 31; break;
 			}
 			for (long i = 0; i < iLen; ++i)
-				bufOut[i] = clrPrimary(1 + buf[i] % iStep);
+				bufOut[i] = clrPrimary(1 + buf[i] % iStep).iVal();
 		}  
 		break;
 	case NewDrawer::drmIMAGE: {
@@ -253,16 +253,16 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 			else if (iRaw > iMax)
 				iRaw = iMax;
 			int iVal = (int)(floor(255 * float(iRaw - iMin) / iDiff));
-			bufOut[i] = Color(iVal,iVal,iVal);
+			bufOut[i] = Color(iVal,iVal,iVal).iVal();
 		}
 	  } break;
 	case NewDrawer::drmCOLOR:
-		memcpy(bufOut, buf, iLen * sizeof(long)); // no change !!
+		memcpy(bufOut, buf, iLen * sizeof(long)); // no change !! ---- or change alpha = 0 to alpha = 255?
 		break;
 	case NewDrawer::drmBOOL: 
 		for (long i = 0; i < iLen; ++i) {
 			long iRaw = buf[i];
-			bufOut[i] = (iRaw == 1)?clr1:((iRaw == 2)?clr2:Color(0,0,0));
+			bufOut[i] = (iRaw == 1)?clr1.iVal():((iRaw == 2)?clr2.iVal():Color(0,0,0).iVal());
 		}
 	break;
 	}
