@@ -114,7 +114,7 @@ void AnimationDrawer::addSelectionDrawers(const Representation& rpr) {
 			palette = rasterset->SetPaletteOwner(); // create only the palette of the first rasterset, and share it with the other rastersets
 		else
 			rasterset->SetPalette(palette);
-		PreparationParameters pp(NewDrawer::ptGEOMETRY);
+		PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER);
 		addSetDrawer(mp,&pp,rasterset,"", true);
 		drw->addPostDrawer(RSELECTDRAWER,rasterset);
 		rasterset->setActive(i == 0 ? true : false);
