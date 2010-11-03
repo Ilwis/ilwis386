@@ -60,6 +60,11 @@ class Editor;
 class MapCompositionDoc;
 class InfoLine;
 
+namespace ILWIS {
+	class AbstractMapDrawer;
+	class BaseMapEditor;
+}
+
 class IMPEXP SimpleMapPaneView : public ZoomableView 
 {
 	friend class AreaSelector;
@@ -74,9 +79,10 @@ public:
 	void Coord2RowCol(Coord crd, double& rRow, double &rCol);
 	Coord crdPnt(zPoint pnt);
 	zPoint pntPos(Coord crd);
+	ILWIS::BaseMapEditor* editGet() ;
+	void createEditor(ILWIS::AbstractMapDrawer *drw);
 
 	InfoLine* info;
-	const Editor* editGet() const;
 
 protected:  
 	virtual void OnDraw(CDC* pDC); 
@@ -96,10 +102,9 @@ protected:
 	bool volatile fDrawStop;
 	bool fStarting;
 	bool fDrawAlsoWhenLoading; 
-	Editor* edit;
 	CoordWithCoordSystem cwcsButtonDown;
 	CDC* dcView; // dcView is our own CDC and should be cleaned up at next cycle
-	void InitOpenGL(HDC hDC);
+	ILWIS::BaseMapEditor *edit;
 private:  
 	void RedrawInThread();
 	static UINT RedrawPaneInThread(LPVOID);
