@@ -108,6 +108,21 @@ String SimpleDrawer::getInfo(const Coord& crd) const {
 	return "";
 }
 
+void SimpleDrawer::setSpecialDrawingOptions(SpecialDrawingOptions option, bool add){
+	if ( add)
+		specialOptions |= option;
+	else
+		specialOptions &= !option;
+}
+
+int SimpleDrawer::getSpecialDrawingOption(SpecialDrawingOptions opt) const {
+	if ( opt == sdoNone)
+		return specialOptions;
+	else
+		return specialOptions & opt;
+}
+
+
 
 
 

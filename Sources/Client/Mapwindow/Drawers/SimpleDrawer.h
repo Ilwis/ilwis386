@@ -37,14 +37,15 @@ namespace ILWIS {
 		virtual void timedEvent(UINT timerid) {};
 		virtual String description() const { return "?";}
 		virtual String iconName(const String& subtype="?") const { return "?";}
-		void setSpecialDrawingOptions(SpecialDrawingOptions option, bool add) { parentDrawer->setSpecialDrawingOptions(option,add);}
-		int getSpecialDrawingOption(SpecialDrawingOptions opt=sdoNone) const { return parentDrawer->getSpecialDrawingOption(opt);}
+		void setSpecialDrawingOptions(SpecialDrawingOptions option, bool add); 
+		int getSpecialDrawingOption(SpecialDrawingOptions opt=sdoNone) const; 
 		String store(const FileName& fnView, const String& parenSection) const { return parenSection;}
 		void load(const FileName& fnView, const String& parenSection) {};
 		bool isSimple() const { return true;}
 		bool isDirty() const { return true;} 
 		void setDirty(bool yesno) {}
 		String getInfo(const Coord& crd) const;
+		void shareVertices(vector<Coord *>& coords) {};
 
 		CCriticalSection cs;
 	protected:
@@ -57,6 +58,7 @@ namespace ILWIS {
 		bool info;
 		bool editable;
 		double extrTransparency;
+		int specialOptions;
 
 		SimpleDrawer(DrawerParameters *context, const String& ty);
 		SimpleDrawer();
