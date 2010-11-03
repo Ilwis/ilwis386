@@ -83,7 +83,7 @@ public:
 	void OnExtPerc();	
 	BOOL fSaveModified(bool fAllowCancel);
 	bool usesObject(const IlwisObject& ob) const;
-	NewDrawer *getDrawerFor(const IlwisObject& obj) const;
+	NewDrawer *getDrawerFor(const IlwisObject& obj, const Coord& crd=Coord()) const;
 
 	MapCompositionSrvItem* GetEmbeddedItem()
 	{ return (MapCompositionSrvItem*)CatalogDocument::GetEmbeddedItem(); }

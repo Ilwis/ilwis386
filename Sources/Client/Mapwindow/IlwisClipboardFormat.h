@@ -37,12 +37,12 @@
 #ifndef ILWISCLIPFORMATS_H
 #define ILWISCLIPFORMATS_H
 
-struct IlwisPoint {
+struct _export IlwisPoint {
   Coord c;
   long iRaw;
 };
 
-class IlwisDomain
+class _export IlwisDomain
 {
 public:
 	IlwisDomain() {}
