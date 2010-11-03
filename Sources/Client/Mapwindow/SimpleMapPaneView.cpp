@@ -41,10 +41,11 @@ Created on: 2007-02-8
 #include "Client\Headers\formelementspch.h"
 #include "Engine\Map\Segment\Seg.h"
 #include "engine\map\polygon\POL.H"
+#include "Client\ilwis.h"
+#include "Client\Editors\Map\FeatureSetEditor.h"
 #include "Client\Mapwindow\SimpleMapPaneView.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Base\Framewin.h"
-#include "Client\ilwis.h"
 #include "Client\Mapwindow\Positioner.h"
 #include "Client\Mapwindow\InfoLine.h"
 #include "Client\Editors\Editor.h"
@@ -221,15 +222,9 @@ BOOL SimpleMapPaneView::OnEraseBkgnd(CDC* cdc)
 	return TRUE;
 }
 
-void SimpleMapPaneView::InitOpenGL(HDC hDC) {
-
-}
-
 void SimpleMapPaneView::OnDraw(CDC* cdc)
 {
 	fStarting  = false;
-	// CDC *dc = cdc == 0 ? GetDC() : cdc;
-	// CDC *dc = GetDC(); // apparently the cdc can come with an invalid m_hDC handle (the reason is not properly understood yet, but the maps are not drawn)
 	if (!pDC) {
 		pDC = GetDC();
 		MapCompositionDoc* mcd = GetDocument();
@@ -491,8 +486,8 @@ void SimpleMapPaneView::OnLButtonUp(UINT nFlags, CPoint point)
 
 BOOL SimpleMapPaneView::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo) 
 {
-	//if (edit && edit->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
-	//	return TRUE;
+	if (edit && edit->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
+		return TRUE;
 	return ZoomableView::OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
 }
 
@@ -515,8 +510,9 @@ UINT SimpleMapPaneView::RedrawPaneInThread(LPVOID lp)
 {
 	SimpleMapPaneView* mpv = (SimpleMapPaneView*)lp;
 	try {
-		while (mpv->fDirty) 
-			mpv->RedrawInThread();
+		while (mpv->fDirty) {
+		//	mpv->RedrawInThread();
+		}
 		// invalidate only after finished redrawing
 		if (mpv->m_hWnd != 0)
 			mpv->Invalidate();
@@ -529,218 +525,6 @@ UINT SimpleMapPaneView::RedrawPaneInThread(LPVOID lp)
 		err.Show();
 	}
 	return FALSE;
-}
-
-void SimpleMapPaneView::RedrawInThread()
-{
-	//if ( true) {
-	//	MapCompositionDoc* mcd = GetDocument();
-	//	//	(*(mcd->drawers.begin()))->prepare();
-	//	//	(*(mcd->drawers.begin()))->draw();
-	//	return;
-	//}
-
-	//fRedrawing = true;
-	//CWaitCursor curWait;
-	//fDirty = false;
-	//fDrawStop = false;
-	//MapCompositionDoc* mcd = GetDocument();
-	//MapStatusBar* msb = 0;
-	//if (fwPar) 
-	//	msb = dynamic_cast<MapStatusBar*>(fwPar->status);
-	//CRect rect;
-	//GetClientRect(rect);
-	//MinMax mm = mmRect(rect);
-	//double rSc = rScale();
-	//BitmapPositioner psnBm(rSc,mm,mcd->georef);
-
-	//CClientDC cdc(this);
-	//CDC* dcBm = new CDC; // will be cleaned up at next cycle or at destructor
-	//CBitmap * bm = new CBitmap; // will be cleaned up at next cycle or at destructor
-	//bm->CreateCompatibleBitmap(&cdc,rect.Width(),rect.Height()); // will be released at next cycle or at destructor
-	//dcBm->CreateCompatibleDC(&cdc); // will be released at next cycle or at destructor
-	//CBitmap * bmToRestore = dcBm->SelectObject(bm); // NOTE: bmToRestore belongs to dcBm
-
-	//Color colBackground = mcd->colBackground;
-	////  if (0 != alphablendfunc)
-	////    colBackground.alpha() = 255;
-
-	//CPen penRect(PS_SOLID,1,colBackground);
-	//CBrush brRect(colBackground);
-	//CPen* penOld = dcBm->SelectObject(&penRect);
-	//CBrush* brOld = dcBm->SelectObject(&brRect);
-	//CRect rctBounds = rctPos(mcd->mmBounds());
-	//dcBm->Rectangle(rect);
-	//dcBm->SelectObject(penOld);
-	//dcBm->SelectObject(brOld);
-
-	//int iState = mcd->iState();
-	//for (list<Drawer*>::iterator iter = mcd->dl.begin(); iter != mcd->dl.end(); ++iter) 
-	//{
-	//	if (fDrawStop)
-	//		break;
-	//	if (iState != mcd->iState()) 
-	//		break;
-	//	Drawer* dr = *iter;
-	//	if (msb)
-	//		msb->SetActiveDrawer(dr);
-	//	if (iState != mcd->iState()) 
-	//		break;
-	//	if (dr->fScaleLimits) {
-	//		double rScale = rounding(rScaleShow());
-	//		if (rScale < dr->riScaleLimits.iLo())
-	//			continue;
-	//		if (rScale >= dr->riScaleLimits.iHi())
-	//			continue;
-	//	}
-	//	if (0 != edit && dr == edit->dr())
-	//		continue;
-	//	if (dr->fTransparency && 0 != alphablendfunc)
-	//	{
-	//		CBitmap bmLayer;
-	//		bmLayer.CreateCompatibleBitmap(&cdc,rect.Width(),rect.Height());
-	//		CDC dcLayer;
-	//		dcLayer.CreateCompatibleDC(&cdc);
-	//		dcLayer.SelectObject(&bmLayer);
-
-	//		CPen penRect(PS_SOLID,1,Color(0));
-	//		CBrush brRect(Color(0));
-	//		CPen* penOld = dcLayer.SelectObject(&penRect);
-	//		CBrush* brOld = dcLayer.SelectObject(&brRect);
-	//		dcLayer.Rectangle(rect);
-	//		dcLayer.SelectObject(penOld);
-	//		dcLayer.SelectObject(brOld);
-
-	//		dr->draw(&dcLayer, rect, &psnBm, &fDrawStop);
-	//		if (fDrawStop)
-	//			break;
-	//		BLENDFUNCTION blendfunc;
-	//		blendfunc.BlendOp = AC_SRC_OVER;
-	//		blendfunc.BlendFlags = 0;
-	//		blendfunc.SourceConstantAlpha = (byte)(255 * (100 - dr->iTransparence)/100.0);
-	//		blendfunc.AlphaFormat = 1;
-
-	//		alphablendfunc(*dcBm, 0,0, rect.Width(), rect.Height(), 
-	//			dcLayer,0,0,rect.Width(),rect.Height(),blendfunc);
-	//	}
-	//	else
-	//	{
-	//		if ((dynamic_cast<MapDrawer*>(dr) != 0) || (dynamic_cast<AnnotationTextDrawer*>(dr) != 0) || (dynamic_cast<Grid3DDrawer*>(dr) != 0)) {
-	//			WMSMapDrawer *wmsdr = dynamic_cast<WMSMapDrawer*>(dr);
-	//			bool overview = wmsdr == 0 || dynamic_cast<OverviewMapPaneView *>(this) == 0;
-	//			if ( overview)
-	//				dr->draw(dcBm, rect, &psnBm, &fDrawStop);
-	//		}
-	//		else
-	//		{
-	//			// special handling for non raster-layers - reduce thickness
-
-	//			int iOldMapMode = dcBm->SetMapMode(MM_ANISOTROPIC);
-	//			SetGraphicsMode(dcBm->GetSafeHdc(), GM_ADVANCED); // otherwise fonts can't be scaled and rotated at the same time!
-	//			CSize szOldWindowExt = dcBm->ScaleWindowExt(RepresentationClass::iSIZE_FACTOR, 1, RepresentationClass::iSIZE_FACTOR, 1);
-
-	//			// only influence thicknesses - not positions, so alter the positioner
-	//			if (rSc < 0) // scale correction for historical reasons - negative scale number had special meaning
-	//				rSc = -1 / rSc;
-	//			BitmapPositioner psnBmScaled(rSc * RepresentationClass::iSIZE_FACTOR, mm, mcd->georef);
-
-	//			// now draw
-	//			dr->draw(dcBm, rect, &psnBmScaled, &fDrawStop);
-	//			// then restore window properties
-	//			dcBm->SetWindowExt(szOldWindowExt);
-	//			dcBm->SetMapMode(iOldMapMode);
-	//		}
-	//	}
-	//}
-	//// Now we need to do {dcBm->SelectObject(bmToRestore); bm->DeleteObject(); delete bm;}
-	//// This would release and free bm, but it is too early.
-	//// I don't remember exactly why, but either the map disappears from the display, or
-	//// at a slideshow there is a black bitmap shown between slides
-
-	//// The solution is to do it at the next redraw cycle or at the destructor
-	//// For this we need to maintain pointers to the old CDC, bitmap and popped bitmap
-	//// (resp. dcView, bmView and bmOld) while the new CDC, bitmab and popped bitmap
-	//// (resp. dcBm, bm and bmToRestore) are being created
-
-	//// Hence the code below and in the destructor
-
-	//if (msb && !fDrawStop)
-	//	msb->SetActiveDrawer(0);
-	//if (iState != mcd->iState()) 
-	//{
-	//	// First attempt to clean up GDI and memory: according to the "official" way
-	//	CBitmap * bmOut = dcBm->SelectObject(bmToRestore); // To return the bm of the previous redraw
-	//	// we keep bmOut for fail-safety.. it is a TempGDIObject equal to our bm
-	//	if (bmOut) // If the bm appeared, clean it up !! don't clean up objs still selected!!
-	//	{
-	//		bm->DeleteObject();
-	//		delete bm;
-	//		bm = 0;
-	//	}
-	//	dcBm->DeleteDC();
-	//	delete dcBm;
-	//	// one more attempt to clean up GDI and memory
-	//	if (bm)
-	//	{
-	//		bm->DeleteObject(); // encapsulating dc is gone, so this should be ok now
-	//		delete bm;
-	//	}
-	//	fDirty = true;
-	//	return;
-	//}
-	//csDcView.Lock();
-	//if (dcView)
-	//{
-	//	// First attempt to clean up GDI and memory: according to the "official" way
-	//	CBitmap * bmOut = dcView->SelectObject(CBitmap::FromHandle(hBmOld)); // To return the bm of the previous redraw
-	//	// we keep bmOut for fail-safety.. it is a TempGDIObject equal to our bmView
-	//	if (bmOut) // If the bm appeared, clean it up !! don't clean up objs still selected!!
-	//	{
-	//		bmView->DeleteObject();
-	//		delete bmView;
-	//		bmView = 0;
-	//	}
-	//	dcView->DeleteDC();
-	//	delete dcView;
-	//}
-	//// one more attempt to clean up GDI and memory
-	//if (bmView)
-	//{
-	//	bmView->DeleteObject(); // encapsulating dc is gone, so this should be ok now
-	//	delete bmView;
-	//}
-	//dcView = dcBm;			 // bmToRestore belongs to dcBm, just like bmOld belongs to dcView
-	//bmView = bm;				 // bmView and dcView must be cleaned up at next round or destructor
-	//hBmOld = (HBITMAP)bmToRestore->GetSafeHandle(); // hBmOld helps freeing our bitmap from CDC with SelectObject
-	//csDcView.Unlock();
-	//fRedrawing = false;
-}
-
-// returns 1:.... value
-double SimpleMapPaneView::rScaleShow()
-{
-	//throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
-	//MapCompositionDoc* mcd = GetDocument();
-	//if (0 == mcd || !mcd->georef.fValid())
-	//	return rUNDEF;
-	//double rPixSize = mcd->georef->rPixSize();
-	//if (rUNDEF == rPixSize)
-	//	return rUNDEF;
-	//CoordSystemLatLon* csll = mcd->georef->cs()->pcsLatLon();
-	//if (0 != csll)
-	//	rPixSize *= M_PI / 180 * csll->ell.a;
-	//if (rScale() > 0)
-	//	rPixSize /= rScale();
-	//else if (rScale() < 0)
-	//	rPixSize *= -rScale();
-
-	//CClientDC dc(this);
-	//int iPixPerInchY = dc.GetDeviceCaps(LOGPIXELSY);
-	//double rPixPermm = iPixPerInchY / 25.4;         // (pixel per mm)
-
-	//rPixSize *= rPixPermm;
-	//rPixSize *= 1000; // 1000 mm per m
-	return 1;
 }
 
 void SimpleMapPaneView::SetDirty()
@@ -772,10 +556,51 @@ void SimpleMapPaneView::SetDirtySilent()
 	fDrawAlsoWhenLoading = true;
 }
 
-const Editor* SimpleMapPaneView::editGet() const
+double SimpleMapPaneView::rScaleShow()
+{
+	MapCompositionDoc* mcd = GetDocument();
+	//if (0 == mcd || !mcd->georef.fValid())
+	//	return rUNDEF;
+	//double rPixSize = mcd->georef->rPixSize();
+	//if (rUNDEF == rPixSize)
+	//	return rUNDEF;
+	//CoordSystemLatLon* csll = mcd->georef->cs()->pcsLatLon();
+ // if (0 != csll)
+ //   rPixSize *= M_PI / 180 * csll->ell.a;
+	//if (rScale() > 0)
+	//	rPixSize /= rScale();
+	//else if (rScale() < 0)
+	//	rPixSize *= -rScale();
+
+	//CClientDC dc(this);
+	//int iPixPerInchY = dc.GetDeviceCaps(LOGPIXELSY);
+ // double rPixPermm = iPixPerInchY / 25.4;         // (pixel per mm)
+
+	//rPixSize *= rPixPermm;
+	//rPixSize *= 1000; // 1000 mm per m
+	//return rPixSize;
+	return rUNDEF;
+}
+
+BaseMapEditor* SimpleMapPaneView::editGet() 
 {
 	return edit;
 }
+
+void SimpleMapPaneView::createEditor(AbstractMapDrawer *drw) {
+	BaseMap bmp;
+	bmp.SetPointer(drw->getBaseMap());
+	IObjectType type = IOTYPE(bmp->fnObj);
+	if ( edit){
+		delete edit;
+		edit = 0;
+	}
+	if ( type == IlwisObject::iotPOINTMAP) {
+		edit = ILWISAPP->getMEditor("PointSetEditor","ilwis38",GetDocument(), bmp);
+	}
+}
+
+
 
 #ifdef _DEBUG
 void SimpleMapPaneView::AssertValid() const
