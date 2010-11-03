@@ -302,8 +302,10 @@ FieldColor::FieldColor(FormEntry* p, const String& sQuestion,
 				 (NotifyProc)&FieldColor::CreateColor, 
 				 true, false);
   if ( useTransparency) {
+	  transp = color->transparencyP() * 100;
 	  slider = new FieldIntSliderEx(this,TR("Transparency"),&transp,ValueRangeInt(0,100), true);
 	  slider->Align(st ? (FormEntry *)st : (FormEntry *)fcs, AL_UNDER);
+	  
   }
   pbCreate->Align(fcs, AL_AFTER);
   pbCreate->SetIndependentPos();
