@@ -67,6 +67,10 @@ class _export ComplexDrawer : public NewDrawer {
 		//Tranquilizer getTranquilizer() { return trq; }
 		long getCurrentIndex() const;
 		void setCurrentIndex(long i);
+		virtual void getDrawerFor(const Feature* feature,vector<NewDrawer *>& features);
+		void shareVertices(vector<Coord *>& coords);
+		bool inEditMode() const;
+		void setEditMode(bool yesno);
 	protected:
 		vector<NewDrawer *> drawers;
 		DrawerMap postDrawers;
@@ -86,6 +90,7 @@ class _export ComplexDrawer : public NewDrawer {
 		String name;
 		bool active;
 		bool editable;
+		bool editmode;
 		ZValueMaker *zmaker;
 		bool threeD;
 		HTREEITEM itemTransparent;

@@ -7,6 +7,7 @@ class FieldColumn;
 namespace ILWIS{
 
 class DrawingColor;
+class Palette;
 
 class _export AbstractMapDrawer : public ComplexDrawer {
 	friend class AbstractMapDrawerForm;
@@ -31,6 +32,7 @@ class _export AbstractMapDrawer : public ComplexDrawer {
 		virtual String description() const;
 		virtual String iconName(const String& subtype="?") const;
 		Ilwis::Record AbstractMapDrawer::rec(const Coord& crd);
+		virtual void inactivateOtherPalettes(Palette * palette);
 
 	protected:
 		Table attTable;
@@ -45,7 +47,6 @@ class _export AbstractMapDrawer : public ComplexDrawer {
 		void setInfoMode(void *v,LayerTreeView *tv);
 		String store(const FileName& fnView, const String& parenSection) const;
 		void load(const FileName& fnView, const String& parenSection);
-
 	};
 
 

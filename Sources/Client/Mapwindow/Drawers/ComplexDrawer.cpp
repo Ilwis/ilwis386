@@ -45,6 +45,7 @@ void ComplexDrawer::init() {
 	specialOptions = sdoNone;
 	dirty = true;
 	currentIndex = 0;
+	editmode = false;
 }
 
 String ComplexDrawer::getType() const {
@@ -542,6 +543,28 @@ void ComplexDrawer::setCurrentIndex(long i){
 		currentIndex = i;	
 }
 
+void ComplexDrawer::getDrawerFor(const Feature* feature,vector<NewDrawer *>& featureDrawers) {
+	vector<NewDrawer *> draws;
+	getDrawers(draws);
+	for(int i = 0; i < draws.size(); ++i) {
+		NewDrawer *drw = draws.at(i);
+		if ( !drw->isSimple()){
+			ComplexDrawer *cdrw = (ComplexDrawer *)drw;
+			cdrw->getDrawerFor(feature, featureDrawers);
+		}
+	}
+}
+
+void ComplexDrawer::shareVertices(vector<Coord *>& coords) {
+}
+
+bool ComplexDrawer::inEditMode() const{
+	return editmode;
+}
+
+void ComplexDrawer::setEditMode(bool yesno){
+	editmode = yesno;
+}
 //--------------------------------- UI ------------------------------------------------------------------------
 HTREEITEM ComplexDrawer::InsertItem(LayerTreeView *tv, HTREEITEM parent,const String& name,const String& icon, HTREEITEM after) {
 	int iImg = IlwWinApp()->iImage(icon);

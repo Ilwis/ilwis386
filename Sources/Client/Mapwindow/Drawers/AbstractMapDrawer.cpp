@@ -207,6 +207,11 @@ void AbstractMapDrawer::load(const FileName& fnView, const String& parentSection
 
 }
 
+void AbstractMapDrawer::inactivateOtherPalettes(ILWIS::Palette * palette)
+{
+
+}
+
 //------------------------------------UI--------------------------------
 
 HTREEITEM AbstractMapDrawer:: configure(LayerTreeView  *tv, HTREEITEM parent) {
