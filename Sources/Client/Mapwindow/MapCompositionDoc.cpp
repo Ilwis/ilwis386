@@ -253,14 +253,27 @@ bool MapCompositionDoc::usesObject(const IlwisObject& ob) const {
 	return false;
 }
 
-NewDrawer *MapCompositionDoc::getDrawerFor(const IlwisObject& ob) const{
+NewDrawer *MapCompositionDoc::getDrawerFor(const IlwisObject& ob, const Coord& crd) const{
 	vector<NewDrawer *> drawers;
 	rootDrawer->getDrawers(drawers);
 	for(int i = 0; i < drawers.size(); ++i) {
 		AbstractMapDrawer *drw = dynamic_cast<AbstractMapDrawer *>(drawers.at(i));
 		if ( drw) {
-			if ( drw->getBaseMap()->fnObj == ob->fnObj)
-				return drw;
+			if ( drw->getBaseMap()->fnObj == ob->fnObj) {
+				if ( crd.fUndef())
+					return drw;
+				else{
+					if ( drw->inEditMode()) {
+						BaseMapPtr *ptr = drw->getBaseMap();
+						vector<Geometry *> geoms = ptr->getFeatures(crd);
+						Feature *feature = CFEATURE(geoms[0]);
+						vector<NewDrawer *> drawers;
+						drw->getDrawerFor(feature, drawers);
+						if ( drawers.size() > 0)
+							return drawers[0];
+					}
+				}
+			}
 		}
 		
 	}
@@ -737,7 +750,7 @@ void MapCompositionDoc::OnUpdateDataLayer(CCmdUI* pCmdUI)
 	bool fEnable = true;
 	if (0 != mpv) 
 	{
-		const Editor* edit = mpv->editGet();
+		BaseMapEditor* edit = mpv->editGet();
 		if (0 != edit)
 		{
 			int i, id;

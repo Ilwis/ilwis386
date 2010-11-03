@@ -46,6 +46,7 @@
 #include "Client\MainWindow\Catalog\CatalogDocument.h"
 #include <afxole.h>
 #include "Engine\Map\Mapview.h"
+#include "Client\Mapwindow\MapPaneView.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Headers\Hs\Drwforms.hs"
@@ -159,8 +160,12 @@ void DrawerLayerTreeItem::OnContextMenu(CWnd* w, CPoint p)
     int iCmd = men.TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON|TPM_NONOTIFY|TPM_RETURNCMD, p.x, p.y, w);
 	switch (iCmd) 
 	{
-		case ID_EDITLAYER: 
-			//dr->Edit();
+		case ID_EDITLAYER:
+			{
+			if ( !dr->isSimple())
+				((ComplexDrawer *)dr)->setEditMode(true);
+				ltv->GetDocument()->mpvGetView()->createEditor(dynamic_cast<AbstractMapDrawer *>(dr));
+			}
 			break;
 		case ID_PROPLAYER:
 			IlwWinApp()->Execute(String("prop %S", mptr->fnObj.sFullNameQuoted()));
