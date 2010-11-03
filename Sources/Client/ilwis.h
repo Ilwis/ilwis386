@@ -64,6 +64,7 @@ class CommandHandlerUI;
 class Action;
 class URL;
 
+
 enum CoordMessage {
 					cmMOUSEMOVE = 1, 
 					cmMOUSECLICK = 2,
@@ -79,11 +80,16 @@ enum CoordMessage {
 					cmDIGICLICK4 = 8192};
 
 class CoordWithCoordSystem;
+class MapCompositionDoc;
 
 namespace ILWIS {
 	class SVGElement;
 	class SVGLoader;
+	class FeatureSetEditor;
+	class BaseMapEditor;
 }
+
+typedef ILWIS::FeatureSetEditor* (*FeatureSetEditorCreate)(MapCompositionDoc *, const BaseMap& );
 
 class IlwisWinApp: public CWinApp
 {
@@ -154,8 +160,10 @@ public:
 	IlwisAppContext*    Context() { return ilwapp; }
 	CommandHandlerUI			*getCommands() { return commandUI; }
 	ILWIS::NewDrawer _export *getDrawer(const String& type, const String& subType, ILWIS::DrawerParameters *parms) ;
+	ILWIS::BaseMapEditor _export *getMEditor(const String& type, const String& subtype, MapCompositionDoc *doc, BaseMap& bmp) ;
 	ILWIS::NewDrawer _export *getDrawer(const String& type, ILWIS::PreparationParameters *pp=0, ILWIS::DrawerParameters *parms=0) ;
 	void  addDrawer(const String& type, const String& subtype, DrawerCreate);
+	void  addMEditor(const String& type, const String& subtype, FeatureSetEditorCreate);
 	ILWIS::SVGLoader *getSVGContainer() const { return svgContainer; }
 	void getDocumentList(list<CDocument *>& opendocs);
 	
@@ -229,6 +237,7 @@ private:
 	map<sfFontType, CFont*> StandardFonts;
 	list<HWND> lhWindows;
 	map<String, DrawerCreate> drawers;
+	map<String,FeatureSetEditorCreate> meditors;
 	IlwisDocTemplate *dtPixelInfo;
 	CMultiDocTemplate *dtDirectory;
 	IlwisDocTemplate *dtMapWindow;

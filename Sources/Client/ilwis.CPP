@@ -195,6 +195,7 @@ $Header: /ILWIS 3.0/Main/ilwis.CPP 329   10-06-05 15:09 Retsios $
 #include "Client\Editors\SMCE\SMCEWindow.h"
 #include "Client\Editors\SMCE\CriteriaTreeView.h"
 #include "Client\Editors\SMCE\CriteriaTreeDoc.h"
+#include "Client\Editors\Map\FeatureSetEditor.h"
 #include "Client\Base\DdeServerThread.h"
 #include "Client\Base\IlwisDocManager.h"
 #include "Client\MainWindow\AboutDlg.h"
@@ -2423,6 +2424,17 @@ vector<Action *> IlwisWinApp::CreateActions() {
 	return commandUI->CreateActions();
 }
 
+ILWIS::BaseMapEditor* IlwisWinApp::getMEditor(const String& type, const String& subtype, MapCompositionDoc *doc, BaseMap& bmp)  {
+	if ( type == "")
+		return 0;
+
+	String fullType = type + "|" + subtype;
+	map<String, FeatureSetEditorCreate>::const_iterator item = meditors.find(fullType);
+	if ( item != meditors.end())
+		return ((*item).second)(doc,bmp);
+	return NULL;
+}
+
 ILWIS::NewDrawer *IlwisWinApp::getDrawer(const String& type, const String& subtype, ILWIS::DrawerParameters *c)  {
 	if ( type == "")
 		return 0;
@@ -2452,6 +2464,10 @@ ILWIS::NewDrawer *IlwisWinApp::getDrawer(const String& type, ILWIS::PreparationP
 
 void IlwisWinApp::addDrawer(const String& type, const String& subtype, DrawerCreate func) {
 	drawers[type + "|" + subtype] = func;
+}
+
+void IlwisWinApp::addMEditor(const String& type, const String& subtype, FeatureSetEditorCreate func) {
+	meditors[type + "|" + subtype] = func;
 }
 
 void IlwisWinApp::getDocumentList(list<CDocument *>& opendocs)
