@@ -4700,6 +4700,14 @@
 						RelativePath="..\..\Sources\Client\Editors\Map\EditField.h"
 						>
 					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Editors\Map\FeatureSetEditor.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Editors\Map\FeatureSetEditor.h"
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="Dgitizer"
