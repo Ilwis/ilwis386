@@ -27,6 +27,7 @@ namespace ILWIS{
 		bool draw(bool norecursion , const CoordBounds& cbArea) const;
 		void timedEvent(UINT _timerid);
 		String description() const;
+		virtual void inactivateOtherPalettes(Palette * palette);
 		
 	protected:
 		enum SourceType{sotUNKNOWN, sotFEATURE, sotMAPLIST, sotOBJECTCOLLECTION};
@@ -57,6 +58,7 @@ namespace ILWIS{
 		bool useTime;
 		String colTime;
 		clock_t last;
+		vector<Palette*> paletteList;
 
 		ILWIS::Duration timestep;
 		CCriticalSection csAccess;

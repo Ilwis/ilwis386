@@ -15,6 +15,7 @@
 #include "Drawers\FeatureSetDrawer.h"
 #include "Drawers\PointSetDrawer.h"
 #include "Drawers\PointDrawer.h"
+#include "Drawers\PointFeatureDrawer.h"
 //#include "Client\Mapwindow\Drawers\PointMapDrawerForm.h"
 #include "Headers\Hs\Drwforms.hs"
 
@@ -86,9 +87,18 @@ void PointSetDrawer::setDrawMethod(DrawMethod method) {
 		}
 	}
 	else
-		drm = method;
+		drm = method; 
 }
 
+void PointSetDrawer::getDrawerFor(const Feature* feature,vector<NewDrawer *>& featureDrawers) {
+	for(int i=0; i< getDrawerCount(); ++i) {
+		PointFeatureDrawer *pfdrw = dynamic_cast<PointFeatureDrawer *>(getDrawer(i));
+		if ( pfdrw) {
+			if ( feature->getGuid() == pfdrw->getFeature()->getGuid())
+				featureDrawers.push_back(pfdrw);
+		}
+	}
+}
 //-----------------------------------------------------------------
 PointSymbolizationForm::PointSymbolizationForm(CWnd *wPar, PointSetDrawer *dr):
 	DisplayOptionsForm(dr,wPar,TR("Symbolization")), selection(0)

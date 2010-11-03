@@ -10,6 +10,7 @@ class PointFeatureDrawer : public PointDrawer {
 		virtual bool draw(bool norecursion = false, const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *);
 		void addDataSource(void *f,int options=0);
+		Feature *getFeature() const;
 	protected:
 		PointFeatureDrawer(DrawerParameters *parms, const String& name);
 		Feature *feature;

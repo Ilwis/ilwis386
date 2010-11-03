@@ -16,6 +16,8 @@ class PointDrawer : public SimpleDrawer {
 		Color getDrawColor() const;
 		void setSymbol(const String& sym);
 		String getSymbol() const;
+		void shareVertices(vector<Coord *>& coords);
+
 	protected:
 		PointDrawer(DrawerParameters *parms, const String& name);
 		HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent) ;

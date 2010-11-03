@@ -125,6 +125,7 @@ void PolygonFeatureDrawer::prepareList(gpc_vertex_list& exteriorBoundary, vector
 	for(int i = 0; i < tristrip.num_strips; ++i) {
 		gpc_vertex_list list = tristrip.strip[i];
 		int n = list.num_vertices;
+		SetDrawer::test_count += ((int)(n / 3)) + 1;
 		triangleStrips[i].resize(n);
 		for(int j = 0; j < n; ++j) {
 			gpc_vertex b = list.vertex[j];

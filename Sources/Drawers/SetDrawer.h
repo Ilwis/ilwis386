@@ -36,6 +36,8 @@ class _export SetDrawer : public ComplexDrawer {
 		void SetthreeD(void *v, LayerTreeView *tv);
 		String iconName(const String& subtype="?") const ;
 		String getInfo(const Coord& crd) const;
+		static unsigned long test_count;
+		bool draw(bool norecursion, const CoordBounds& cbArea) const;
 	
 			
 	protected:

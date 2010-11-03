@@ -16,6 +16,7 @@ class PointSetDrawer : public FeatureSetDrawer {
 		HTREEITEM  configure(LayerTreeView  *tv, HTREEITEM parent);
 		void prepare(PreparationParameters *parms);
 		void setDefaultSymbol(const String& name);
+		void getDrawerFor(const Feature* feature,vector<NewDrawer *>& featureDrawers);
 
 	protected:
 		String store(const FileName& fnView, const String& parenSection) const;

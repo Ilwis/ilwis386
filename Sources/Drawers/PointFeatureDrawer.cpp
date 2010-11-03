@@ -66,3 +66,7 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 		extrTransparency = fdr->getExtrusionTransparency();
 	}
 }
+
+Feature *PointFeatureDrawer::getFeature() const {
+	return feature;
+}

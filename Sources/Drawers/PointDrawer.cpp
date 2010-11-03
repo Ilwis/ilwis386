@@ -58,7 +58,21 @@ bool PointDrawer::draw(bool norecursion, const CoordBounds& cbArea) const {
 
 	double symbolScale = cbZoom.width() / 200;
 	CoordBounds cb(Coord(fx - symbolScale, fy - symbolScale,fz), Coord(fx + symbolScale, fy + symbolScale,fz));
+	if ( specialOptions & NewDrawer::sdoSELECTED) {
+		CoordBounds cbSelect = cb;
+			cbSelect *= 1.2;
+		glColor4d(1, 0, 0, 1);
+		glBegin(GL_QUADS);						
+		glVertex3f( cbSelect.MinX(), cbSelect.MinY(),fz);	
+		glVertex3f( cbSelect.MinX(),cbSelect.MaxY(),fz);	
+		glVertex3f( cbSelect.MaxX(), cbSelect.MaxY(),fz);
+		glVertex3f( cbSelect.MaxX(), cbSelect.MinY(),fz);
+		glEnd();
+
+	}
 	drw->drawSVG(cb, this,fz);
+
+	
 
 
 	if ( is3D) {
@@ -80,6 +94,10 @@ bool PointDrawer::draw(bool norecursion, const CoordBounds& cbArea) const {
 	}
 
 	return true;
+}
+
+void PointDrawer::shareVertices(vector<Coord *>& coords) {
+	coords.push_back(&cNorm);
 }
 
 HTREEITEM PointDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {

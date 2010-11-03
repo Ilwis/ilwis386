@@ -30,6 +30,8 @@
 
 using namespace ILWIS;
 
+unsigned long SetDrawer::test_count = 0;
+
 SetDrawer::SetDrawer(DrawerParameters *parms, const String& name) : 
 	ComplexDrawer(parms,name),
 	stretched(false),
@@ -63,6 +65,15 @@ void SetDrawer::prepare(PreparationParameters *parm){
 	if (!drawColor)
 		drawColor = new DrawingColor(this);
 	setDrawMethod();
+}
+
+bool SetDrawer::draw(bool norecursion, const CoordBounds& cbArea) const{
+	glClearColor(1.0,1.0,1.0,0.0);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+
+	ComplexDrawer::draw(norecursion, cbArea);
+	return true;
 }
 
 void SetDrawer::SetthreeD(void *v, LayerTreeView *tv) {

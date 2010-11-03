@@ -82,6 +82,10 @@ void RasterSetDrawer::setDrawMethod(DrawMethod method) {
 
 void RasterSetDrawer::setRepresentation(const Representation& rp)
 {
+	if ( getName().find("band") != -1)
+	{
+		TRACE(" I am here\n");
+	}
 	SetDrawer::setRepresentation(rp);
 	if (fPaletteOwner) {
 		if (fUsePalette && palette->fValid())
@@ -177,8 +181,10 @@ bool RasterSetDrawer::draw(bool norecursion , const CoordBounds& cbArea) const {
 		minY = maxY + (minY - maxY) * (double)height / (double)data->imageHeight;
 
 		glEnable(GL_TEXTURE_2D);
-		if (fUsePalette)
+		if (fUsePalette) {
+			((AbstractMapDrawer*)getParentDrawer())->inactivateOtherPalettes(palette);
 			palette->MakeCurrent(); // for now this is the only call .. officially it should also be called before generating textures in a separate thread, however currently the only way two palettes would interfere is with the AnimationDrawer, and there textures are generated in the current thread
+		}
 		DisplayImagePortion(minX, maxY, maxX, minY, 0, 0, width, height);
 		glDisable(GL_TEXTURE_2D);
 	}

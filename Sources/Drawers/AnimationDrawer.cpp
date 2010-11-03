@@ -111,11 +111,14 @@ void AnimationDrawer::addSelectionDrawers(const Representation& rpr) {
 		rasterset->setRepresentation(rpr);
 		rasterset->setMinMax(rrMinMax);
 		if (i == 0)
+		{
 			palette = rasterset->SetPaletteOwner(); // create only the palette of the first rasterset, and share it with the other rastersets
+			paletteList.push_back(palette);
+		}
 		else
 			rasterset->SetPalette(palette);
 		PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER);
-		addSetDrawer(mp,&pp,rasterset,"", true);
+		addSetDrawer(mp,&pp,rasterset,String("overlay %d",i), true);
 		drw->addPostDrawer(RSELECTDRAWER,rasterset);
 		rasterset->setActive(i == 0 ? true : false);
 
@@ -171,10 +174,13 @@ void AnimationDrawer::prepare(PreparationParameters *pp){
 				rasterset->setThreaded(false);
 				rasterset->setMinMax(rrMinMax);
 				if (i == 0)
+				{
 					palette = rasterset->SetPaletteOwner(); // create only the palette of the first rasterset, and share it with the other rastersets
+					paletteList.push_back(palette);
+				}
 				else
 					rasterset->SetPalette(palette);
-				addSetDrawer(mp,pp,rasterset);
+				addSetDrawer(mp,pp,rasterset,String("band %d",i));
 				rasterset->setActive(i == 0 ? true : false);
 			}
 		}
@@ -193,6 +199,7 @@ void AnimationDrawer::setTransparency(double v) {
 }
 
 void AnimationDrawer::addSetDrawer(const BaseMap& basemap,PreparationParameters *pp,SetDrawer *rsd, const String& name, bool post) {
+	//MessageBox(0,"Add set drawer","", MB_OK);
 	PreparationParameters fp((int)pp->type | NewDrawer::ptANIMATION, 0);
 	fp.rootDrawer = getRootDrawer();
 	fp.parentDrawer = this;
@@ -227,7 +234,16 @@ void AnimationDrawer::addDataSource(void *data, int options){
 			}
 		}
 	}
+}
 
+void AnimationDrawer::inactivateOtherPalettes(ILWIS::Palette * palette)
+{
+	for (int i=0; i < paletteList.size(); ++i)
+	{
+		Palette * pal = paletteList.at(i);
+		if (pal != palette)
+			pal->SetNotCurrent();
+	}
 }
 
 HTREEITEM AnimationDrawer::configure(LayerTreeView  *tv, HTREEITEM displayOptionsLastItem){

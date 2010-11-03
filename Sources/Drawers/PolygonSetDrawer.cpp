@@ -53,7 +53,9 @@ HTREEITEM PolygonSetDrawer:: configure(LayerTreeView  *tv, HTREEITEM parent) {
 }
 
 void PolygonSetDrawer::prepare(PreparationParameters *parms) {
+	SetDrawer::test_count = 0;
 	FeatureSetDrawer::prepare(parms);
+	TRACE(String("%d", SetDrawer::test_count).scVal());
 }
 
 void PolygonSetDrawer::setDrawMethod(DrawMethod method) {

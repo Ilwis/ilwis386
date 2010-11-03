@@ -312,6 +312,8 @@ void ValueSlicerSlider::setBoundColor(int index, Color c) {
 void ValueSlicerSlider::init() {
 	if ( isValid()) {
 		bool rprCreated = false;
+		//delete drawingcolor;
+
 		if ( !rprgrad) {
 			for(int i=0; i < bounds.size(); ++i) {
 				bounds[i] = valrange->rrMinMax().rLo() + i * (valrange->rrMinMax().rWidth() / (bounds.size() - 1));
@@ -332,15 +334,32 @@ void ValueSlicerSlider::init() {
 			rprgrad->SetColorMethod(i,RepresentationGradual::crLOWER);
 		}
 		rpr.SetPointer(rprgrad);
+
 		ILWIS::AbstractMapDrawer *parentDrw = (ILWIS::AbstractMapDrawer *)drawer->getParentDrawer();
 		for(int i =0; i < parentDrw->getDrawerCount(); ++i) {
 			ILWIS::SetDrawer *setdrw = (ILWIS::SetDrawer *)parentDrw->getDrawer(i);
-			setdrw->setRepresentation(rpr);
+			if ( rprBase.fValid()){
+				setdrw->setRepresentation(rprBase);
+				setdrw = (ILWIS::SetDrawer *)setdrw->getDrawer(RSELECTDRAWER,ComplexDrawer::dtPOST);
+			}
+			else
+				setdrw = (ILWIS::SetDrawer *)parentDrw->getDrawer(i);
+			if ( setdrw)
+				setdrw->setRepresentation(rpr);
 		}
-		drawingcolor = new ILWIS::DrawingColor(drawer);
+
+		if (valueslicer)
+			valueslicer->updateRepresentations();
+
+		if ( rprBase.fValid()) {
+			SetDrawer *dr = (SetDrawer *)drawer->getDrawer(RSELECTDRAWER,ComplexDrawer::dtPOST);
+			if ( dr)
+				drawingcolor = new ILWIS::DrawingColor(dr);
+		}
+		else {
+			drawingcolor = new ILWIS::DrawingColor(drawer);
+		}
 	}
-	if (valueslicer)
-		valueslicer->Invalidate();
 }
 
 Color ValueSlicerSlider::nextColor(int i) {
@@ -353,7 +372,7 @@ Color ValueSlicerSlider::nextColor(int i) {
 	int rstep = deltar / (bounds.size() - 2);
 	int gstep = deltag / (bounds.size() - 2);
 	int bstep = deltab / (bounds.size() - 2);
-	int tstep = deltat / ( bounds.size() - 2);
+	int tstep = deltat / (bounds.size() - 2);
 	return Color(lowColor.red() + rstep * i, lowColor.green() + gstep * i, lowColor.blue() + bstep * i, lowColor.transparency() + tstep * i);
 }
 
@@ -379,5 +398,3 @@ FormWithDest(parent, TR("Step Color"))
 	new FieldColor(root,TR("Step Color"), clr,true);
 	create();
 }
-
-
