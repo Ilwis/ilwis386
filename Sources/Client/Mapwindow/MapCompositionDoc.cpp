@@ -1424,35 +1424,22 @@ NewDrawer* MapCompositionDoc::drAppend(const Map& rasmap, bool asAnimation)
 
 NewDrawer* MapCompositionDoc::drAppend(const MapList& maplist, bool asAnimation)
 {
-	class AppendMapListForm: public FormWithDest
-	{
-	public:
-		AppendMapListForm(CWnd* wPar, const MapList& ml, int* iOption)
-			: FormWithDest(wPar, SMWTitleShowMapList)
-		{
-			String sMapList = ml->sName();
-			String s(SMWMsgShowMapListAs_S.scVal(), sMapList);
-			RadioGroup* rg = new RadioGroup(root, s, iOption);
-			RadioButton* rbCc = new RadioButton(rg, SMWUiColorComposite);
-			new RadioButton(rg, SMWUiSlideShow);
-			if (0 == ml[ml->iLower()]->dm()->pdv())
-				rbCc->Disable();
-			create();
-		}
-	};
-	if (!fGeoRefOk(maplist[maplist->iLower()]))
-		return 0;
-	int iOption = 0;
-	AppendMapListForm frm(wndGetActiveView(), maplist, &iOption);
-	if (!frm.fOkClicked())
-		return false;
+	int iOption = 1;
 	switch (iOption) {
 	case 0:
 		//dr = new MapListColorCompDrawer(this, maplist);
 		break;
 	case 1: 
 		{
-			ILWIS::NewDrawer *drawer = createBaseMapDrawer(maplist->map(maplist->iLower()), "AnimationDrawer", "Ilwis38");
+			ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
+			ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer("AnimationDrawer", "Ilwis38", &parms);
+			drawer->addDataSource((void *)&maplist);
+			Map mp = maplist[maplist->iLower()];
+			rootDrawer->setCoordinateSystem(mp->cs());
+			rootDrawer->addCoordBounds(mp->cs(), mp->cb(), false);
+			ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
+			drawer->prepare(&pp);
+			rootDrawer->addDrawer(drawer);
 			ChangeState();
 			UpdateAllViews(0,3);
 			mpvGetView()->Invalidate();
