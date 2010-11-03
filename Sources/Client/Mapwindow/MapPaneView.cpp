@@ -39,6 +39,7 @@ Created on: 2007-02-8
 
 #include "Client\Headers\formelementspch.h"
 #include "Client\ilwis.h"
+#include "Client\Editors\Map\FeatureSetEditor.h"
 #include "Engine\Map\Segment\Seg.h"
 #include "engine\map\polygon\POL.H"
 #include "Client\Base\datawind.h"
@@ -680,7 +681,8 @@ void MapPaneView::OnCoordSysEdit()
 		if (edit)
 			delete edit;
 		edit = 0;
-		edit = new CoordSystemEditor(this,cs);
+		//edit = new CoordSystemEditor(this,cs);
+		throw ErrorObject(String("TO be done %s %s", __FILE__, __LINE__));
 		if (edit)	{
 			Invalidate();
 		}
@@ -1161,10 +1163,10 @@ void MapPaneView::OnCreateSampleSet()
 
 LRESULT MapPaneView::OnViewSettings(WPARAM wP, LPARAM lP)
 {
-	if (wP == SAVESETTINGS) {
+	/*if (wP == SAVESETTINGS) {
 		if (0 != edit)
 			edit->PreSaveState();
-	}
+	}*/
 	return TRUE;
 }
 
