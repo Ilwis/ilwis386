@@ -82,20 +82,22 @@ void LineSetDrawer::load(const FileName& fnView, const String& parentSection){
 //--------------------------------- UI ----------------------------
 void LineSetDrawer::prepare(PreparationParameters *parm){
 	FeatureSetDrawer::prepare(parm);
-	for(int i=0; i < drawers.size(); ++i) {
-		LineDrawer *ld = (LineDrawer *)drawers.at(i);
-		ld->setThickness(linethickness);
-		switch(linestyle) {
-			case ldtDot:
-				ld->setLineStyle(0xAAAA); break;
-			case ldtDash:
-				ld->setLineStyle(0xF0F0); break;
-			case ldtDashDot:
-				ld->setLineStyle(0x6B5A); break;
-			case ldtDashDotDot:
-				ld->setLineStyle(0x56B5); break;
-			default:
-				ld->setLineStyle(0xFFFF);
+	if ( parm->type == NewDrawer::ptRENDER) {
+		for(int i=0; i < drawers.size(); ++i) {
+			LineDrawer *ld = (LineDrawer *)drawers.at(i);
+			ld->setThickness(linethickness);
+			switch(linestyle) {
+				case ldtDot:
+					ld->setLineStyle(0xAAAA); break;
+				case ldtDash:
+					ld->setLineStyle(0xF0F0); break;
+				case ldtDashDot:
+					ld->setLineStyle(0x6B5A); break;
+				case ldtDashDotDot:
+					ld->setLineStyle(0x56B5); break;
+				default:
+					ld->setLineStyle(0xFFFF);
+			}
 		}
 	}
 }

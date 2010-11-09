@@ -49,12 +49,15 @@ void FeatureSetDrawer::prepare(PreparationParameters *parms){
 
 	SetDrawer::prepare(parms);
 	FeatureLayerDrawer *mapDrawer = (FeatureLayerDrawer *)parentDrawer;
+	if ( getName() == "Unknown")
+		setName(mapDrawer->getBaseMap()->sName());
 	vector<Feature *> features;
 	if ( parms->type & RootDrawer::ptGEOMETRY | parms->type & NewDrawer::ptRESTORE){
 		mapDrawer->getFeatures(features);
 		clear();
 		drawers.resize( features.size());
 		int count = 0;
+		Tranquilizer trq("preparing data");
 		for(int i=0; i < features.size(); ++i) {
 			Feature *feature = features.at(i);
 			NewDrawer *pdrw;
@@ -66,6 +69,9 @@ void FeatureSetDrawer::prepare(PreparationParameters *parms){
 				pdrw->prepare(&fp);
 				drawers.at(i) = pdrw;
 				++count;
+				if ( i % 100 == 0) {
+					trq.fUpdate(i,features.size()); 
+				}
 			}
 		}
 		if ( count < features.size())

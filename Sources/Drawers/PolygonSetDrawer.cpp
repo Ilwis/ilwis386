@@ -25,7 +25,7 @@ ILWIS::NewDrawer *createPolygonSetDrawer(DrawerParameters *parms) {
 PolygonSetDrawer::PolygonSetDrawer(DrawerParameters *parms) : 
 	FeatureSetDrawer(parms,"PolygonSetDrawer")
 {
-	PreparationParameters pp(NewDrawer::ptALL, 0);
+	PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER , 0);
 	pp.csy = ((AbstractMapDrawer *)getParentDrawer())->getBaseMap()->cs();
 	FeatureSetDrawer *fsd = (FeatureSetDrawer *)IlwWinApp()->getDrawer("LineSetDrawer", &pp, parms); // boundaries 
 	fsd->setUICode(NewDrawer::ucNOINFO | NewDrawer::ucNOMASK);
@@ -35,8 +35,10 @@ PolygonSetDrawer::PolygonSetDrawer(DrawerParameters *parms) :
 	BaseMap bmp;
 	bmp.SetPointer(((AbstractMapDrawer *)getParentDrawer())->getBaseMap());
 	fsd->getZMaker()->setSpatialSourceMap(bmp);
+	fsd->getZMaker()->setDataSourceMap(bmp);
 	fsd->prepare(&pp);
 	((ComplexDrawer *)getParentDrawer())->addPostDrawer(100,fsd);
+	setName("Areas");
 }
 
 PolygonSetDrawer::~PolygonSetDrawer() {

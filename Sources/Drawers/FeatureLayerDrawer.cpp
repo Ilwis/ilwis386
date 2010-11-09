@@ -85,7 +85,8 @@ void FeatureLayerDrawer::prepare(PreparationParameters *pp){
 void FeatureLayerDrawer::addSetDrawer(const BaseMap& basemap,PreparationParameters *pp,SetDrawer *fsd, const String& name) {
 	PreparationParameters fp((int)pp->type, 0);
 	fp.csy = basemap->cs();
-	fsd->setName(name);
+	if ( getName() == "Unknown")
+		fsd->setName(name);
 	fsd->setRepresentation(basemap->dm()->rpr()); //  default choice
 	fsd->getZMaker()->setSpatialSourceMap(basemap);
 	fsd->getZMaker()->setDataSourceMap(basemap);

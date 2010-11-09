@@ -82,10 +82,6 @@ void RasterSetDrawer::setDrawMethod(DrawMethod method) {
 
 void RasterSetDrawer::setRepresentation(const Representation& rp)
 {
-	if ( getName().find("band") != -1)
-	{
-		TRACE(" I am here\n");
-	}
 	SetDrawer::setRepresentation(rp);
 	if (fPaletteOwner) {
 		if (fUsePalette && palette->fValid())

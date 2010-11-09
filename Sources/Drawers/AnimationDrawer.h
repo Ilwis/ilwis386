@@ -32,6 +32,7 @@ namespace ILWIS{
 	protected:
 		enum SourceType{sotUNKNOWN, sotFEATURE, sotMAPLIST, sotOBJECTCOLLECTION};
 		virtual String iconName(const String& subtype="?") const;
+		void removeSelectionDrawers() ;
 		void animationTiming(CWnd *w);
 		void animationControl(CWnd *w);
 		void animationSourceUsage(CWnd *parent);

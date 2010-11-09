@@ -98,10 +98,20 @@ RangeReal AnimationDrawer::getMinMax(const MapList& mlist) const{
 	return rrMinMax;
 }
 
+void AnimationDrawer::removeSelectionDrawers() {
+	for(int i = 0; i < getDrawerCount(); ++i) {
+		SetDrawer *sdrw = (SetDrawer *) getDrawer(i);
+		NewDrawer *drwPost = sdrw->getDrawer(RSELECTDRAWER,ComplexDrawer::dtPOST);
+		if ( drwPost)
+			sdrw->removeDrawer(drwPost->getId());
+	}
+}
+
 void AnimationDrawer::addSelectionDrawers(const Representation& rpr) {
 	MapList mlist((*datasource)->fnObj);
 	RangeReal rrMinMax = getMinMax(mlist);
 	Palette * palette;
+	removeSelectionDrawers();
 	for(int i = 0; i < getDrawerCount(); ++i) {
 		RasterSetDrawer *drw = (RasterSetDrawer*)getDrawer(i);
 		ILWIS::DrawerParameters parms(getRootDrawer(), this);
@@ -130,7 +140,8 @@ void AnimationDrawer::prepare(PreparationParameters *pp){
 	if ( sourceType == sotFEATURE ) {
 		if ( pp->type & NewDrawer::ptGEOMETRY) {
 			BaseMap basemap((*datasource)->fnObj);
-			setName(basemap->sName());
+			if ( getName() == "")
+				setName(basemap->sName());
 			ILWIS::DrawerParameters parms(getRootDrawer(), getRootDrawer());
 			if ( drawers.size() > 0) {
 				clear();
@@ -159,7 +170,8 @@ void AnimationDrawer::prepare(PreparationParameters *pp){
 	if ( sourceType == sotMAPLIST) {
 		if ( pp->type & NewDrawer::ptGEOMETRY) {
 			MapList mlist((*datasource)->fnObj);
-			setName(mlist->sName());
+			if ( getName() == "Unknown")
+				setName(mlist->sName());
 			ILWIS::DrawerParameters parms(getRootDrawer(), getRootDrawer());
 			if ( drawers.size() > 0) {
 				clear();
