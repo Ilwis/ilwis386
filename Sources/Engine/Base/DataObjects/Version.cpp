@@ -60,6 +60,8 @@ String ILWIS::Version::ModuleVersionNumberToString(ILWIS::Module::ModuleInterfac
 			return "Module Interface 3.6";
 		case ILWIS::Module::mi37:
 			return "Module Interface 3.7";
+		case ILWIS::Module::mi38:
+			return "Module Interface 3.8";
 		default:
 			return "?";
 	};

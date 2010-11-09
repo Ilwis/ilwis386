@@ -61,6 +61,7 @@ void Engine::Init(const String& prog, const String& sCmdLn) {
 	version->addODFVersion("3.1");
 	version->addModuleInterfaceVersion(ILWIS::Module::mi36);
 	version->addModuleInterfaceVersion(ILWIS::Module::mi37);
+	version->addModuleInterfaceVersion(ILWIS::Module::mi38);
 	String ilwDir = context->sIlwDir();
 	modules.addModules();
     formats.AddFormats();

@@ -711,10 +711,19 @@ Geometry * PointMapStore::getFeature(long i) const {
 
 vector<Geometry *> PointMapStore::getFeatures(Coord crd, double rPrx) {
 	vector<Geometry *> points;
-	for(int i = 0; i< geometries->size(); ++i) {
+	long iRes = iUNDEF;
+	double r2Res = rPrx == rUNDEF ? ptr.rProximity() : rPrx;
+	r2Res *= r2Res;
+	double r2;
+	for (long i = 0; i < geometries->size(); ++i) {
 		Geometry *g = geometries->at(i);
-		if ( crd.equals(*(g->getCoordinate())))
+		Coord c =  *(g->getCoordinate());
+		if (c.fUndef())
+			continue;
+		r2 = rDist2(c, crd);
+		if (r2 <= r2Res + EPS10)
 			points.push_back(g);
 	}
 	return points;
+
 }

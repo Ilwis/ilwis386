@@ -1922,7 +1922,7 @@ RangeReal MapPtr::rrMinMaxSampled() {
 		int line = i * rcSize().Col / 7;
 		GetLineVal(i,buf);
 		for(int j = 1; j < 7; ++j) {
-			int col = j * rcSize().Row / 7;
+			int col = min(buf.iSize()-1, j * rcSize().Row / 7);
 			rr += buf[col];
 		}
 	}

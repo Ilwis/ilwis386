@@ -638,6 +638,9 @@ ILWIS::Segment *SegmentMapPtr::seg(const Coord& crd, double rPrx) const
   ILWIS::Segment *sg = NULL;
   long dummy;
   Coord crdFound = crdPoint(crd,&sg,dummy);
+  if ( sg == 0)
+	  return 0;
+
   if (!sg->fValid())
     return sg;
   double rD = rPrx == rUNDEF ? rSnapDist : rPrx;

@@ -302,6 +302,7 @@ SegmentMapStore::SegmentMapStore(const FileName& fn, SegmentMapPtr& p, bool fCre
 			ColumnCoordBuf *colCrdBuf = colCoords->pcbuf();
 			Column colDeleted   = tblSegment->col("Deleted");
 			Column colSegmentValue = tblSegment->col("SegmentValue");
+			Tranquilizer trq("Loading data");
 			for(int i = 0; i < tblSegment->iRecs(); ++i) {
 				ILWIS::Segment *seg;
 				bool fVals = ptr.dvrs().fRealValues();
@@ -321,6 +322,9 @@ SegmentMapStore::SegmentMapStore(const FileName& fn, SegmentMapPtr& p, bool fCre
 				seg->PutCoords(seq);
 				seg->PutVal(value);
 				geometries->push_back(seg);
+				if ( i % 100 == 0) {
+					trq.fUpdate(i,tblSegment->iRecs()); 
+				}
 			}
 			*fDoNotShowError = fOldVal;
 		}
