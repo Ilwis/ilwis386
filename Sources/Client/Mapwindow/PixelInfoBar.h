@@ -50,6 +50,7 @@ public:
 	BOOL Create(CWnd* pParent);
 	PixelInfoView* pixview;
 	void OnSize(UINT nType, int cx, int cy);
+	void setDragging(bool yesno) { fDragging = yesno; }
   DECLARE_MESSAGE_MAP()
 
 private:

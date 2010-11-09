@@ -83,6 +83,10 @@ PixelInfoBar::~PixelInfoBar()
 
 LRESULT PixelInfoBar::OnUpdate(WPARAM wParam, LPARAM lParam)
 {
+	CoordMessage cm = (CoordMessage) wParam;
+	if ( cm & cmZOOMIN)
+		return 0;
+
 	PixelInfoDoc* pid = (PixelInfoDoc*)pixview->GetDocument();
 	return pid->OnUpdate(wParam, lParam);
 }

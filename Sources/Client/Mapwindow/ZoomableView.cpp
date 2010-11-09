@@ -175,7 +175,8 @@ BOOL ZoomableView::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT*
 	CPoint point((DWORD)lParam);
 	switch (message) {
 		case WM_MOUSEMOVE:
-			if (as) as->OnMouseMove(wParam, point);
+			if (as) 
+				as->OnMouseMove(wParam, point);
 			else if (wParam & MK_CONTROL) moveEyePoint(point, message);
 //			return CView::OnWndMsg(message, wParam, lParam, pResult);
 			//return TRUE;

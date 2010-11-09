@@ -173,6 +173,9 @@ void SimpleMapPaneView::OnInitialUpdate()
 	if (0 == fwPar) {
 		CFrameWnd* fw = GetTopLevelFrame();
 		fwPar = dynamic_cast<FrameWindow*>(fw);
+		NewDrawer *drw = GetDocument()->rootDrawer->getDrawer(0);
+		MapStatusBar *sbar = dynamic_cast<MapStatusBar*>(fwPar->status);
+		sbar->SetActiveDrawer(drw);
 	}
 	ZoomableView::OnInitialUpdate();
 	_rScale = rUNDEF; // derived class has to set rScale in some way on a valid value
@@ -250,12 +253,21 @@ UINT SimpleMapPaneView::DrawInThread(LPVOID lp)
 	mpv->csThread.Lock();
 	try {
 		while (!mpv->fStopDrawThread) {
+			clock_t start = clock();
+
 			mcd->rootDrawer->getDrawerContext()->TakeContext();
 			while (mpv->fDrawRequest)
 				mpv->Draw();
 			mcd->rootDrawer->getDrawerContext()->ReleaseContext();
+
+			clock_t end = clock();
+			double total =  1000.0 * (double)(end - start) / CLOCKS_PER_SEC;
+			TRACE(String("drawn DrawInThread in %2.2f milliseconds;\n", total).scVal());
+			TRACE("------\n");
+
 			if (!mpv->fStopDrawThread)
 				mpv->drawThread->SuspendThread(); // wait here, and dont consume CPU time either
+		
 		}
 	}
 	catch(ErrorObject& err)
@@ -462,15 +474,20 @@ void SimpleMapPaneView::OnLButtonDown(UINT nFlags, CPoint point)
 		return;
 	}
 	if (c.fUndef()) return;
-	SetCapture();
-	String s = mcd->rootDrawer->getInfo(c);
-	if (s != "") {
-		info->text(point,s);
-		info->ShowWindow(SW_SHOW);
+	if ( as == 0) {
+		SetCapture();
+		String s = mcd->rootDrawer->getInfo(c);
+		if (s != "") {
+			info->text(point,s);
+			info->ShowWindow(SW_SHOW);
+		}
 	}
 
 	//mcd->mpvGetView()->Invalidate();
-	IlwWinApp()->SendUpdateCoordMessages(cmMOUSECLICK, &cwcsButtonDown);
+	int state = cmMOUSECLICK;
+	if ( iActiveTool == ID_ZOOMIN)
+			state |= cmZOOMIN;
+	IlwWinApp()->SendUpdateCoordMessages(state, &cwcsButtonDown);
 }
 
 void SimpleMapPaneView::OnLButtonUp(UINT nFlags, CPoint point) 

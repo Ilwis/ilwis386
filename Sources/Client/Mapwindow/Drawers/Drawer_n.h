@@ -58,8 +58,7 @@ namespace ILWIS {
 		virtual bool isDirty() const =0;
 		virtual void setDirty(bool yesno) = 0;
 		virtual void shareVertices(vector<Coord *>& coords) = 0;
-
-
+		virtual bool inEditMode() const = 0;
 	};
 
 	struct DrawerParameters {

@@ -46,6 +46,7 @@ namespace ILWIS {
 		void setDirty(bool yesno) {}
 		String getInfo(const Coord& crd) const;
 		void shareVertices(vector<Coord *>& coords) {};
+		bool inEditMode() const { return parentDrawer->inEditMode();}
 
 		CCriticalSection cs;
 	protected:

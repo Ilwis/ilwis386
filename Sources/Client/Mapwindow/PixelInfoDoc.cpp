@@ -41,6 +41,7 @@ Created on: 2007-02-8
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\ilwis.h"
 #include "Client\Base\datawind.h"
+#include "Client\Mapwindow\Drawers\Drawer_n.h"
 #include "Client\Mapwindow\PixelInfoWindow.h"
 #include "Headers\constant.h"
 #include "Client\Base\IlwisDocument.h"
@@ -77,7 +78,6 @@ PixelInfoDoc::PixelInfoDoc()
 , fMouseCont(false)
 , fDigitizer(true)
 , fDigitizerCont(false)
-, isEditable(true) // temporary for testing
 {
 	//  riArray.Resize(1,1);
 	riArray.Resize(1); // is now zero based
@@ -101,7 +101,7 @@ BOOL PixelInfoDoc::OnNewDocument()
 	return TRUE;
 }
 
-BOOL PixelInfoDoc::OnOpenDocument(LPCTSTR lpszPathName)
+BOOL PixelInfoDoc::OnOpenDocument(LPCTSTR lpszPathName, ILWIS::NewDrawer *drw)
 {
 	// IlwisDocument does not accept OnNewDocument()
 	if (!OnNewDocument())
@@ -124,7 +124,7 @@ BOOL PixelInfoDoc::OnOpenDocument(LPCTSTR lpszPathName)
 			}
 			else if (fn.sExt == ".mpr" ||fn.sExt == ".mpa" ||fn.sExt == ".mpp" ||fn.sExt == ".mps") {
 				BaseMap map(fn);
-				AddMap(map);
+				AddMap(map, drw);
 			}
 		}
 		catch (const ErrorObject& err) {
@@ -257,7 +257,7 @@ void PixelInfoDoc::OnAddMaps()
 		}
 		else {
 			BaseMap mp(s);
-			AddMap(mp);
+			AddMap(mp,0);
 		}  
 	}
 }
@@ -282,9 +282,9 @@ void PixelInfoDoc::OnAddGrf()
 	}
 }
 
-void PixelInfoDoc::AddMap(const BaseMap& mp)
+void PixelInfoDoc::AddMap(const BaseMap& mp, ILWIS::NewDrawer *drw)
 {
-	riCoord.AddMap(mp);
+	riCoord.AddMap(mp,drw);
 	Update();
 }
 
@@ -292,7 +292,7 @@ void PixelInfoDoc::AddMapList(const MapList& mpl)
 {
 	if (mpl.fValid()) {
 		for (int i = mpl->iLower(); i <= mpl->iUpper(); ++i)
-			riCoord.AddMap(mpl[i]);
+			riCoord.AddMap(mpl[i],0);
 		Update();
 	}
 }
@@ -352,7 +352,10 @@ void PixelInfoDoc::OnCloseDocument()
 }
 
 bool PixelInfoDoc::fRowEditable(int rowIndex) const {
-	return true;
+	if (rowIndex > 0 && rowIndex <= iSize()) {
+		return riArray[rowIndex - 1]->fAllowEdit();
+	}
+	return false;
 }
 
 RecItem * PixelInfoDoc::getItem(int rowIndex) {

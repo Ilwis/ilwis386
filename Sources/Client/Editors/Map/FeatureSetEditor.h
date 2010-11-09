@@ -36,6 +36,7 @@ namespace ILWIS{
 		virtual zIcon icon() const = 0;
 		virtual String sTitle() const = 0 ;
 		virtual LRESULT OnUpdate(WPARAM, LPARAM) = 0;
+		virtual bool hasSelection() const = 0;
 	};
 
 	class _export FeatureSetEditor : public BaseMapEditor{
@@ -55,6 +56,7 @@ namespace ILWIS{
 		virtual bool fCopyOk();
 		virtual bool fPasteOk();
 		void clear();
+		bool hasSelection() const { return selectedFeatures.size() > 0; }
 
 	protected:
 		long iCoordIndex(const vector<Coord *>& coords, const Coord& c) const;

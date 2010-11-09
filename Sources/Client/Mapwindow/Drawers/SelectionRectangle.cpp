@@ -19,6 +19,8 @@ SelectionRectangle::~SelectionRectangle() {
 }
 
 bool SelectionRectangle::draw(bool norecursion , const CoordBounds& cb) const{
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
 	bool is3D = getRootDrawer()->is3D();
 	double fakeZ = getRootDrawer()->getFakeZ();
 	double z = is3D ? fakeZ : 0;
@@ -39,6 +41,7 @@ bool SelectionRectangle::draw(bool norecursion , const CoordBounds& cb) const{
 	glVertex3d(c2.x, c1.y,z);
 	glVertex3d(c1.x, c1.y,z);
 	glEnd();
+	glDisable(GL_BLEND);
 
 	return true;
 }

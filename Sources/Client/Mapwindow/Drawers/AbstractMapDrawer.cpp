@@ -68,7 +68,8 @@ void AbstractMapDrawer::addDataSource(void *bmap,int options)
 {
 	bm = BaseMap((*((BaseMap *)(bmap)))->fnObj);
 	if ( bm.fValid()) {
-		setName(bm->sName());
+		if ( getName() == "Unknown")
+			setName(bm->sName());
 		if ( bm->fTblAtt()) {
 			attTable = bm->tblAtt();
 			attColumn = attTable->col(0);

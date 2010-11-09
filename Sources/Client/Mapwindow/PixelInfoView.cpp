@@ -280,7 +280,7 @@ BOOL PixelInfoView::OnDrop(COleDataObject* pDataObject, DROPEFFECT dropEffect, C
 			}
 			else {
 				BaseMap mp(fn);
-				pid->AddMap(mp);
+				pid->AddMap(mp,0);
 				fOk = true;
 			}  
 		}
@@ -340,9 +340,6 @@ void PixelInfoView::OnLButtonDblClk(UINT nFlags, CPoint point)
 void PixelInfoView::OnFieldPressed(int iCol, long iRow, bool fLeft) {
 	PixelInfoDoc *doc = GetDocument();
 	selectedRowIndex = iUNDEF;
-	if ( !doc->getEditable()) {
-		return;
-	}
 
 	deleteField();
 	if (iCol < 0 || iCol >= iCols()
@@ -351,31 +348,15 @@ void PixelInfoView::OnFieldPressed(int iCol, long iRow, bool fLeft) {
 		MessageBeep(MB_ICONASTERISK);
 		return;
 	}
-	//Ilwis::Record rec = tvw()->rec(iRec);
-	//TableWindow* tw = twParent();
-	//if (tw) {
-	//	if (0 != tw->recBar && 0 != tw->recBar->GetSafeHwnd()) {
-	//		tw->recBar->view->SetRecord(rec, tvw());
-	//		tw->recBar->Invalidate();
-	//	}
-	//}
-
 	if (fLeft) {
-		//FrameWindow* fw = fwParent();
 		if (0 == doc)
 			return;
-		if (doc->fRowEditable(iRow)) {
+		if (doc->fRowEditable(iRow) ) {
 			tField = new PixInfoField(this,iCol,iRow);
 			selectedRowIndex = iRow;
-			//String s(STBRemEditField);
-			//if (fw) 
-			//	fw->status->SetWindowText(s.scVal());
 		}  
 		else {
 			tField = new PixInfoReadOnlyField(this,iCol,iRow); 
-			//String s(STBRemFieldIsReadOnly);
-			//if (fw) 
-			//	fw->status->SetWindowText(s.scVal());
 		}  
 	}
 }
@@ -391,7 +372,9 @@ PixInfoField::PixInfoField(PixelInfoView* pane, int col, long row)
 	PixelInfoDoc *doc = pane->GetDocument();
 	String str = doc->sValue(row);
 	init(str);
-	FileName fn = pane->GetDocument()->getItem(row)->fnObj();
+	RecItem *item = pane->GetDocument()->getItem(row);
+	
+	FileName fn = item->fnObj();
 	IObjectType type = IOTYPE(FileName(fn.sFile + fn.sExt));
 	if ( ISBASEMAP(type)) {
 		BaseMap bmp(fn);

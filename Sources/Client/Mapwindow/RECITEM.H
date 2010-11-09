@@ -54,6 +54,10 @@ class RecItemCoord;
 class RecItemCoordSystem;
 class RecItemGeoRef;
 
+namespace ILWIS {
+	class NewDrawer;
+}
+
 typedef Array<RecItem*> RecItemArray;
 
 class _export RecItem
@@ -71,20 +75,23 @@ public:
   virtual FileName fnObj() const;
   int AddSelfToArray(RecItemArray&);
   int AddSelfAlwaysToArray(RecItemArray&);
-  RecItemMap* AddMap(BaseMap);
+  RecItemMap* AddMap(BaseMap, ILWIS::NewDrawer *drw);
   RecItemCoordSystem* AddCoordSystem(const CoordSystem&);
   RecItemTable* AddTable(Table, bool fAllowEdit = false);
+  RecItemTable* AddTable(Table tbl, ILWIS::NewDrawer *drw);
   RecItemGeoRef* AddGeoRef(const GeoRef&);
 //  RecItemTable* AddTable(TableView, bool fAllowEdit = false);
   bool fShowRec() { return fShow; }
   void ShowRec(bool fSR) { fShow = fSR; }
-  bool fAllowEdit() { return fEditable; }
-  void AllowEdit(bool fEdit) { fEditable = fEdit; }
+  bool fAllowEdit() ;
+  void AllowEdit(bool fEdit) ;
+  void setAssociatedDrawer(ILWIS::NewDrawer *drw);
 protected:
   void updateView(const IlwisObject& obj);
   CoordWithCoordSystem cwcs;
   RecItem(RecItem* parent);
   SListP<RecItem> children;
+  ILWIS::NewDrawer *associatedDrawer;
   RecItem* riParent;
   unsigned fShow	 :1;
   unsigned fShowChildren :1;
@@ -103,7 +110,7 @@ static SList<RecItem> DummyRecItemSList;
 class _export RecItemMap: public RecItem
 {
 public:
-  RecItemMap(RecItem* parent, BaseMap);
+  RecItemMap(RecItem* parent, BaseMap, ILWIS::NewDrawer *drw);
   virtual int Configure(CWnd*);
   virtual String sName() const;
   virtual long iValue();   // pixel value
@@ -128,6 +135,7 @@ public:
   virtual const String& sValue(int iWidth = 0); // key value
   virtual void SetValue(const char*);
   RecItemColumn* AddColumn(Column, bool fAllowEdit = false);
+  RecItemColumn* AddColumn(Column col, ILWIS::NewDrawer *drw);
   virtual FileName fnObj() const;
 protected:
   const Table& tbl() const { return _tbl; }
@@ -140,6 +148,7 @@ class _export RecItemColumn: public RecItem
 {
 public:
   RecItemColumn(RecItem* parent, Column);
+  RecItemColumn(RecItem* parent, Column col, ILWIS::NewDrawer *drw);
   virtual int Configure(CWnd*);
   virtual String sName() const;
   virtual long iValue();

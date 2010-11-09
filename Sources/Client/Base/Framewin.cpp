@@ -459,13 +459,13 @@ void FrameWindow::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
 		return;
 	switch (nState) {
 		case WA_INACTIVE:
-			TRACE("Inactivate window\n");
+			//TRACE("Inactivate window\n");
 			OnShowFloatingControlBars(false);
 			break;
 		case WA_CLICKACTIVE:
 			TRACE("Click");
 		case WA_ACTIVE:
-			TRACE("Activate window\n");
+			//TRACE("Activate window\n");
 			OnShowFloatingControlBars(true);
 			break;
 	}	

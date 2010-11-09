@@ -38,6 +38,7 @@ void SimpleDrawer::init() {
 	info = false;
 	parentDrawer = 0;
 	extrTransparency = 0.2;
+	specialOptions = NewDrawer::sdoNone;
 }
 
 String SimpleDrawer::getType() const {

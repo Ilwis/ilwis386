@@ -93,6 +93,7 @@ Created on: 2007-02-8
 #include "Client\Mapwindow\MapCompositionSrvItem.h"
 #include "Engine\DataExchange\WMSCollection.h"
 #include "Client\Mapwindow\ScaleBarSrvItem.h"
+#include "Client\Mapwindow\MapStatusBar.h"
 #include "Engine\SampleSet\SAMPLSET.H"
 #include "Client\Editors\Editor.h"
 
@@ -900,7 +901,14 @@ ILWIS::NewDrawer *MapCompositionDoc::createBaseMapDrawer(const BaseMap& bmp, con
 	ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
 	drawer->prepare(&pp);
 	rootDrawer->addDrawer(drawer);
-	addToPixelInfo(bmp);
+	addToPixelInfo(bmp, drawer);
+	FrameWindow * frame = mpvGetView()->getFrameWindow();
+	if ( frame) {
+		MapStatusBar *sbar = dynamic_cast<MapStatusBar*>(frame->status);
+		if ( sbar) {
+			sbar->SetActiveDrawer(drawer);
+		}
+	}
 
 	return drawer;
 }
@@ -1040,11 +1048,11 @@ BOOL MapCompositionDoc::OnOpenPointMap(const PointMap& pm, OpenType ot)
 	return TRUE;
 }
 
-void MapCompositionDoc::addToPixelInfo(const BaseMap& bm) {
+void MapCompositionDoc::addToPixelInfo(const BaseMap& bm, NewDrawer *drw) {
 	if (!pixInfoDoc) 
 		pixInfoDoc = new PixelInfoDoc();
 
-	pixInfoDoc->OnOpenDocument(bm->fnObj.sFullPath().scVal());
+	pixInfoDoc->OnOpenDocument(bm->fnObj.sFullPath().scVal(), drw);
 	pixInfoDoc->UpdateAllViews(0,2);
 }
 

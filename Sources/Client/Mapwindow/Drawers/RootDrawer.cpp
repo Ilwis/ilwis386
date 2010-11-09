@@ -294,13 +294,26 @@ Coord RootDrawer::screenToWorld(const RowCol& rc) {
 }
 
 RowCol RootDrawer::worldToScreen(const Coord& crd){
-	int vp[4];
 	drawercontext->TakeContext();
-	glGetIntegerv(GL_VIEWPORT, vp);
+	//glGetIntegerv(GL_VIEWPORT, vp);
+	//int x = vp[0] + crd.x * vp[2];
+	//int y = vp[1] + crd.y * vp[3];
+	//return RowCol(y,x);
+
+	GLint viewport[4];
+	double modelview[16];
+	double projection[16];
+	double posX, posY, posZ;
+
+	glGetDoublev( GL_MODELVIEW_MATRIX, modelview );
+	glGetDoublev( GL_PROJECTION_MATRIX, projection );
+	glGetIntegerv( GL_VIEWPORT, viewport );
+
+	int pppp = gluProject(crd.x, crd.y, 1,modelview, projection, viewport,&posX,&posY, &posZ);
+
 	drawercontext->ReleaseContext();
-	int x = vp[0] + crd.x * vp[2];
-	int y = vp[1] + crd.y * vp[3];
-	return RowCol(y,x);
+	return RowCol(posY, posX);
+
 }
 
 void RootDrawer::setZoom(const CRect& rect) {

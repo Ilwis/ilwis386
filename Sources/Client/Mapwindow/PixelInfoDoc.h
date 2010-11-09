@@ -56,9 +56,7 @@ public:
 	zIcon icon() const;
 	FileName fn(int) const;
 	virtual void Serialize(CArchive& ar);   // overridden for document i/o
-	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
-	bool getEditable() const { return isEditable; }
-	void setEditabl(bool yesno) { isEditable = yesno; }
+	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName, ILWIS::NewDrawer *drw);
 	bool fRowEditable(int rowIndex) const;
 	RecItem * getItem(int rowIndex);
 protected:
@@ -77,7 +75,7 @@ public:
 	afx_msg void OnAddMaps();
 	afx_msg void OnAddCsys();
 	afx_msg void OnAddGrf();
-	void AddMap(const BaseMap&);
+	void AddMap(const BaseMap&, ILWIS::NewDrawer *drw);
 	void AddMapList(const MapList&);
 	void AddCoordSystem(const CoordSystem&);
 	void AddGeoRef(const GeoRef&);
@@ -86,7 +84,6 @@ public:
 	DECLARE_MESSAGE_MAP()
 	RecItemCoord riCoord;
 	RecItemArray riArray;
-	bool isEditable;
 };
 
 

@@ -74,32 +74,41 @@ bool FeatureSetEditor::OnLButtonDown(UINT nFlags, CPoint point){
 	if ( mode == mUNKNOWN)
 		return false;
 
-	Coord crd = mdoc->rootDrawer->screenToWorld(RowCol(point.y, point.x));
-	vector<Geometry *> geometries;
-	bool fCtrl = nFlags & MK_CONTROL ? true : false;
-	if ( !fCtrl) {
-		clear();
-	}
+	if ( mode == mSELECT || mode == mMOVE) {
+		Coord crd = mdoc->rootDrawer->screenToWorld(RowCol(point.y, point.x));
+		vector<Geometry *> geometries;
+		if ( mode == mSELECT) {
+			bool fCtrl = nFlags & MK_CONTROL ? true : false;
+			if ( !fCtrl) {
+				clear();
+			}
+		}
 
-	geometries = bmapptr->getFeatures(crd);
-	if ( geometries.size() > 0) {
-		Feature *f = CFEATURE(geometries[0]);
-		currentGuid = f->getGuid();
-		vector<NewDrawer *> drawers;
-		mdoc->rootDrawer->getDrawerFor(f, drawers);
-		addToSelectedFeatures(f, crd, drawers);
-	
-	} else
-		return false;
+		geometries = bmapptr->getFeatures(crd);
+		if ( geometries.size() > 0) {
+			Feature *f = CFEATURE(geometries[0]);
+			currentGuid = f->getGuid();
+			vector<NewDrawer *> drawers;
+			mdoc->rootDrawer->getDrawerFor(f, drawers);
+			addToSelectedFeatures(f, crd, drawers);
+		
+		} else {
+			clear();
+			mdoc->mpvGetView()->Invalidate();
+			return false;
+		}
+	}
+	if ( mode == mMOVE) {
+		mode = mMOVING;
+	}
 	return true;
 }
 
 bool FeatureSetEditor::OnLButtonUp(UINT nFlags, CPoint point){
 	if ( mode == mUNKNOWN)
 		return false;
-	bool fCtrl = nFlags & MK_CONTROL ? true : false;
-	if ( !fCtrl) {
-		clear();
+	if ( mode == mMOVING) {
+		mode = mMOVE;
 	}
 	return true;
 }
@@ -109,7 +118,7 @@ bool FeatureSetEditor::OnLButtonDblClk(UINT nFlags, CPoint point){
 	return true;
 }
 bool FeatureSetEditor::OnMouseMove(UINT nFlags, CPoint point){
-	if ( mode != mMOVE)
+	if ( mode != mMOVING)
 		return false;
 
 	Coord crd = mdoc->rootDrawer->screenToWorld(RowCol(point.y, point.x));
@@ -117,7 +126,9 @@ bool FeatureSetEditor::OnMouseMove(UINT nFlags, CPoint point){
 		Coord cDelta(*(selectedFeatures[currentGuid]->coords[0]));
 		cDelta -= crd;
 		for(SFMIter cur = selectedFeatures.begin(); cur != selectedFeatures.end(); ++cur) {
-			*(selectedFeatures[currentGuid]->coords[0]) += cDelta;
+			vector<Coord *> &coords = (*cur).second->coords;
+			for(int i=0; i < coords.size(); ++i)
+				*(coords[i]) -= cDelta;
 		}
 		mdoc->mpvGetView()->Invalidate();
 	}

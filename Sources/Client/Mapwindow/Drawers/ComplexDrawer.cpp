@@ -123,15 +123,22 @@ bool ComplexDrawer::draw(bool norecursion, const CoordBounds& cb) const{
 		return false;
 
 	drawPreDrawers(norecursion, cb);
+	
 
 	long& count = (const_cast<ComplexDrawer *>(this))->currentIndex;
 	count = 0;
+	double total = 0;
 	if ( !norecursion) {
+		//clock_t start = clock();
 		for(int i=0; i < drawers.size(); ++i) {
 			++count;
-			if ( drawers[i] && drawers[i]->isActive())
+			if ( drawers[i] && drawers[i]->isActive()) {
 				drawers[i]->draw(norecursion, cb);
+			}
 		}
+	/*	clock_t end = clock();
+		total =  1000 *(double)(end - start) / CLOCKS_PER_SEC;
+		TRACE(String("drawn %S in %2.2f milliseconds;\n", getName(), total).scVal());*/
 	}
 
 	drawPostDrawers(norecursion, cb);

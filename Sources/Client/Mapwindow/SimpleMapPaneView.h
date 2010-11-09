@@ -81,6 +81,7 @@ public:
 	zPoint pntPos(Coord crd);
 	ILWIS::BaseMapEditor* editGet() ;
 	void createEditor(ILWIS::AbstractMapDrawer *drw);
+	FrameWindow * getFrameWindow() { return  fwPar; }
 
 	InfoLine* info;
 
