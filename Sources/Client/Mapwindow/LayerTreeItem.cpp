@@ -147,13 +147,18 @@ void DrawerLayerTreeItem::OnContextMenu(CWnd* w, CPoint p)
 	AbstractMapDrawer *mapdrw = dynamic_cast<AbstractMapDrawer *>(dr);
 	if (!mapdrw)
 		return;
+	int types = ComplexDrawer::dtMAIN | ComplexDrawer::dtPOST | ComplexDrawer::dtPRE;
 	BaseMapPtr *mptr = mapdrw->getBaseMap();
 	CMenu men;
 	men.CreatePopupMenu();
 	pmadd(ID_LAYEROPTIONS);
 	men.SetDefaultItem(ID_LAYEROPTIONS);
-	if (dr->isEditable())
-		pmadd(ID_EDITLAYER);
+	if (dr->isEditable()) {
+		if (mapdrw->getDrawerCount(types) == 1 && 
+			mapdrw->getDrawer(0)->isEditable()) {
+				pmadd(ID_EDITLAYER);
+		}
+	}
 	if (mapdrw)
 		pmadd(ID_PROPLAYER);
 	pmadd(ID_REMOVELAYER);
@@ -162,9 +167,22 @@ void DrawerLayerTreeItem::OnContextMenu(CWnd* w, CPoint p)
 	{
 		case ID_EDITLAYER:
 			{
-			if ( !dr->isSimple())
-				((ComplexDrawer *)dr)->setEditMode(true);
-				ltv->GetDocument()->mpvGetView()->createEditor(dynamic_cast<AbstractMapDrawer *>(dr));
+				if( mapdrw->getDrawerCount(types) == 1) {
+				/*	CTreeCtrl& tc = ltv->GetTreeCtrl();
+					HTREEITEM hti = tc.GetSelectedItem();
+					if (0 == hti)
+						return;
+					DrawerLayerTreeItem* dlti = 0;
+					LayerTreeItem* lti = (LayerTreeItem*)tc.GetItemData(hti);
+					dlti = dynamic_cast<DrawerLayerTreeItem*>(lti);
+					ComplexDrawer *drw = (ComplexDrawer *)dlti->drw();*/
+					ComplexDrawer *drw = (ComplexDrawer *)mapdrw->getDrawer(0);
+					mapdrw->setEditMode(true);
+					if ( !drw->isSimple()) {
+						drw->setEditMode(true);
+						ltv->GetDocument()->mpvGetView()->createEditor(drw);
+					}
+				}
 			}
 			break;
 		case ID_PROPLAYER:

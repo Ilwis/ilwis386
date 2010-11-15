@@ -76,6 +76,7 @@ namespace ILWIS {
 		PreparationParameters(const PreparationParameters* parms) :
 			type(parms->type),dc(parms->dc),rootDrawer(0),parentDrawer(0) {}
 		PreparationParameters(int t=1,CDC *_dc = 0) : type(t),dc(_dc),rootDrawer(0),parentDrawer(0) {} 
+		PreparationParameters(int t, const CoordSystem& cs) : type(t), csy(cs),dc(0),rootDrawer(0),parentDrawer(0)  {}
 		int type;
 		CDC *dc;
 		CoordSystem csy;

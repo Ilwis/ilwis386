@@ -18,15 +18,18 @@ struct SelectedFeature {
 typedef map<String, SelectedFeature *> SFMap;
 typedef SFMap::iterator SFMIter;
 typedef SFMap::const_iterator SFMCIter;
+class PixelInfoDoc;
 
 namespace ILWIS{
 	class NewDrawer;
+	class ComplexDrawer;
 
 	class _export BaseMapEditor : public CCmdTarget{
 	public:
 		enum Mode{mINSERT, mMOVE, mMOVING, mSELECT, mDELETE, mCHANGE, mUNKNOWN};
 		// empty class for the moment will be moved to seperate file as soon as there is a rastermap editor
 		virtual bool OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)=0;
+		virtual ~BaseMapEditor() {};
 		virtual bool OnLButtonDown(UINT nFlags, CPoint point)=0;
 		virtual bool OnLButtonUp(UINT nFlags, CPoint point)=0;
 		virtual bool OnLButtonDblClk(UINT nFlags, CPoint point)=0;
@@ -37,6 +40,8 @@ namespace ILWIS{
 		virtual String sTitle() const = 0 ;
 		virtual LRESULT OnUpdate(WPARAM, LPARAM) = 0;
 		virtual bool hasSelection() const = 0;
+		virtual void init(ILWIS::ComplexDrawer *drw,PixelInfoDoc *pdoc) = 0;
+		virtual void updateFeature(SelectedFeature *f) = 0;
 	};
 
 	class _export FeatureSetEditor : public BaseMapEditor{
@@ -55,10 +60,15 @@ namespace ILWIS{
 		LRESULT OnUpdate(WPARAM, LPARAM);
 		virtual bool fCopyOk();
 		virtual bool fPasteOk();
+		void init(ILWIS::ComplexDrawer *drw,PixelInfoDoc *pdoc);
 		void clear();
-		bool hasSelection() const { return selectedFeatures.size() > 0; }
+		bool hasSelection() const;
+
 
 	protected:
+		virtual bool select(UINT nFlags, CPoint point);
+		virtual bool insert(UINT nFlags, CPoint point) = 0;
+
 		long iCoordIndex(const vector<Coord *>& coords, const Coord& c) const;
 		void addToSelectedFeatures(Feature *f, const Coord& crd, const vector<ILWIS::NewDrawer *>& drawers);
 		MapCompositionDoc *mdoc;
@@ -69,6 +79,8 @@ namespace ILWIS{
 		zCursor curActive;
 		HMENU hmenFile, hmenEdit;
 		Mode mode;
+		ILWIS::ComplexDrawer *setdrawer;
+		PixelInfoDoc *pixdoc;
 	};
 }
 

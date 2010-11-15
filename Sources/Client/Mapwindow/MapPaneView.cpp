@@ -89,10 +89,6 @@ Created on: 2007-02-8
 #include "Client\FormElements\fldgrf.h"
 #include "Client\FormElements\fldantxt.h"
 #include "Client\FormElements\fldmsmpl.h"
-#include "Client\TableWindow\BaseTblField.h"
-#include "Client\Mapwindow\PixelInfoDoc.h"
-#include "Client\Mapwindow\PixelInfoBar.h"
-#include "Client\Mapwindow\PixelInfoView.h"
 #include "Client\Mapwindow\MapCompositionSrvItem.h"
 #include "Client\FormElements\fldmap.h"
 #include "Engine\SampleSet\SAMPLSET.H"
@@ -177,7 +173,6 @@ MapPaneView::~MapPaneView()
 {
 	delete odt;
 	delete recBar;
-	delete pib;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -201,22 +196,6 @@ void MapPaneView::OnInitialUpdate()
 		PostMessage(WM_COMMAND, ID_DEFAULTSCALE, 0);
 	else
 		PostMessage(WM_COMMAND, ID_ENTIREMAP, 0);
-}
-
-void MapPaneView::createPixInfoBar() {
-	if ( !pib && GetDocument()->pixInfoDoc) {
-		pib = new PixelInfoBar();
-		pib->Create(mwParent());
-		pib->SetWindowText(TR("Pixel Info").scVal());
-		pib->EnableDocking(CBRS_ALIGN_LEFT|CBRS_ALIGN_RIGHT);
-		GetDocument()->pixInfoDoc->AddView(pib->pixview);
-		mwParent()->RecalcLayout();
-		CRect rct;
-		mwParent()->ltb.GetWindowRect(&rct);
-		rct.OffsetRect(0,1);
-		mwParent()->DockControlBar(pib, AFX_IDW_DOCKBAR_LEFT,&rct);
-
-	}
 }
 
 MapWindow* MapPaneView::mwParent()

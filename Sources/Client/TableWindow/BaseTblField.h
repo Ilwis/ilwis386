@@ -52,6 +52,8 @@
 #define IMPEXP __declspec(dllimport)
 #endif
 
+class BaseTablePaneView;
+
 class IMPEXP BaseTblField  
 {
 public:

@@ -16,14 +16,14 @@ class _export ComplexDrawer : public NewDrawer {
 		friend class TransparencyForm;
 
 	public:
-		enum DrawerType{dtPOST, dtPRE, dtMAIN};
+		enum DrawerType{dtPOST=1, dtPRE=2, dtMAIN=4};
 		String getType() const;
 		RootDrawer *getRootDrawer();
 		RootDrawer *getRootDrawer() const;
 		bool draw(bool norecursion = false, const CoordBounds& cb=CoordBounds()) const;
 		void prepare(PreparationParameters *);
 		void prepareChildDrawers(PreparationParameters *);
-		int getDrawerCount() const;
+		int getDrawerCount(int types=dtMAIN) const;
 		NewDrawer * getDrawer(int index, DrawerType type=dtMAIN);
 		NewDrawer *getDrawer(const String& did);
 		virtual String addDrawer(NewDrawer *drw);

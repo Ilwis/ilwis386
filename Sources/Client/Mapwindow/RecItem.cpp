@@ -190,12 +190,13 @@ void RecItem::updateView(const IlwisObject& obj) {
 		IlwisDocument *idoc = dynamic_cast<IlwisDocument *>(*cur);
 		if ( idoc) {
 			if(idoc->usesObject(obj)) {
-				MapCompositionDoc *mdoc = dynamic_cast<MapCompositionDoc *>(idoc);
+				// for the moment not, this is a far to expensive operation for the updayte of a cell of the pixview
+				/*MapCompositionDoc *mdoc = dynamic_cast<MapCompositionDoc *>(idoc);
 				if ( mdoc) {
 					NewDrawer *drw = mdoc->getDrawerFor(obj);
 					ILWIS::PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER);
 					drw->prepare(&pp);
-				}
+				}*/
 				idoc->UpdateAllViews(0,2);
 			}
 		}

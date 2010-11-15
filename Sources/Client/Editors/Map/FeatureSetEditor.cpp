@@ -2,10 +2,15 @@
 #include "Engine\Map\basemap.h"
 #include "Engine\Map\Point\ilwPoint.h"
 #include "Engine\Map\Point\PNT.H"
+#include "Client\Ilwis.h"
+#include "Client\TableWindow\BaseTablePaneView.h"
+#include "Client\TableWindow\BaseTblField.h"
+#include "Client\Mapwindow\PixelInfoDoc.h"
+#include "Client\Mapwindow\PixelInfoBar.h"
+#include "Client\Mapwindow\PixelInfoView.h"
 #include "Client\Mapwindow\MapPaneView.h"
 #include "Client\Mapwindow\Drawers\ComplexDrawer.h"
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
-#include "Client\Ilwis.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "FeatureSetEditor.h"
@@ -17,11 +22,16 @@ FeatureSetEditor::FeatureSetEditor(MapCompositionDoc *doc, const BaseMap& bm) :
 	bmapptr(bm.ptr()),
 	currentCoordIndex(iUNDEF),
 	currentGuid(sUNDEF),
-	mode(BaseMapEditor::mUNKNOWN)
-{
+	mode(BaseMapEditor::mUNKNOWN),
+	setdrawer(0)
+{ 
 }
 
 FeatureSetEditor::~FeatureSetEditor(){
+	if ( bmapptr && bmapptr->fChanged) {
+		bmapptr->Store();
+	}
+	clear();
 }
 
 bool FeatureSetEditor::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags){
@@ -31,8 +41,8 @@ bool FeatureSetEditor::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags){
 void FeatureSetEditor::clear() {
 	for(SFMIter cur = selectedFeatures.begin(); cur != selectedFeatures.end(); ++cur) {
 		for(vector<NewDrawer *>::iterator cur2 = (*cur).second->drawers.begin(); cur2 != (*cur).second->drawers.end(); ++cur2) {
-			NewDrawer *drw = (*cur2);
-			drw->setSpecialDrawingOptions(NewDrawer::sdoSELECTED, false);
+			NewDrawer *drws = (*cur2);
+			drws->setSpecialDrawingOptions(NewDrawer::sdoSELECTED, false);
 		}
 		delete (*cur).second;
 	}
@@ -70,33 +80,41 @@ void FeatureSetEditor::addToSelectedFeatures(Feature *f, const Coord& crd, const
 
 }
 
+bool FeatureSetEditor::select(UINT nFlags, CPoint point) {
+	Coord crd = mdoc->rootDrawer->screenToWorld(RowCol(point.y, point.x));
+	vector<Geometry *> geometries;
+	if ( mode == mSELECT) {
+		bool fCtrl = nFlags & MK_CONTROL ? true : false;
+		if ( !fCtrl) {
+			clear();
+		}
+	}
+
+	geometries = bmapptr->getFeatures(crd);
+	if ( geometries.size() > 0) {
+		Feature *f = CFEATURE(geometries[0]);
+		currentGuid = f->getGuid();
+		vector<NewDrawer *> drawers;
+		mdoc->rootDrawer->getDrawerFor(f, drawers);
+		addToSelectedFeatures(f, crd, drawers);
+
+	} else {
+		clear();
+		mdoc->mpvGetView()->Invalidate();
+		return false;
+	}
+	return true;
+}
+
 bool FeatureSetEditor::OnLButtonDown(UINT nFlags, CPoint point){
 	if ( mode == mUNKNOWN)
 		return false;
 
-	if ( mode == mSELECT || mode == mMOVE) {
-		Coord crd = mdoc->rootDrawer->screenToWorld(RowCol(point.y, point.x));
-		vector<Geometry *> geometries;
-		if ( mode == mSELECT) {
-			bool fCtrl = nFlags & MK_CONTROL ? true : false;
-			if ( !fCtrl) {
-				clear();
-			}
-		}
-
-		geometries = bmapptr->getFeatures(crd);
-		if ( geometries.size() > 0) {
-			Feature *f = CFEATURE(geometries[0]);
-			currentGuid = f->getGuid();
-			vector<NewDrawer *> drawers;
-			mdoc->rootDrawer->getDrawerFor(f, drawers);
-			addToSelectedFeatures(f, crd, drawers);
-		
-		} else {
-			clear();
-			mdoc->mpvGetView()->Invalidate();
-			return false;
-		}
+	if ( mode == mSELECT) {
+		select(nFlags, point);
+	}
+	else if (mode == mINSERT) {
+		insert(nFlags, point);
 	}
 	if ( mode == mMOVE) {
 		mode = mMOVING;
@@ -108,10 +126,20 @@ bool FeatureSetEditor::OnLButtonUp(UINT nFlags, CPoint point){
 	if ( mode == mUNKNOWN)
 		return false;
 	if ( mode == mMOVING) {
+		CoordSystem csyMap = bmapptr->cs();
+		CoordSystem csyPane = setdrawer->getRootDrawer()->getCoordinateSystem();
+		if ( csyMap == csyPane)  {
+			for(SFMIter cur = selectedFeatures.begin(); cur != selectedFeatures.end(); ++cur) {
+				SelectedFeature *f = (*cur).second;
+				updateFeature(f);
+				bmapptr->fChanged = true;
+			}
+		}
 		mode = mMOVE;
 	}
 	return true;
 }
+
 bool FeatureSetEditor::OnLButtonDblClk(UINT nFlags, CPoint point){
 	if ( mode == mUNKNOWN)
 		return false;
@@ -182,4 +210,13 @@ bool FeatureSetEditor::fCopyOk(){
 bool FeatureSetEditor::fPasteOk()
 {
   return false;
+}
+
+void FeatureSetEditor::init(ILWIS::ComplexDrawer *d,PixelInfoDoc *pdoc) {
+	setdrawer = d;
+	pixdoc = pdoc;
+}
+
+bool FeatureSetEditor::hasSelection() const { 
+	return selectedFeatures.size() > 0; 
 }

@@ -127,10 +127,8 @@ protected:
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	void OnShowRecordView();
 	void OnUpdateShowRecordView(CCmdUI* pCmdUI);
-protected:
-	PixelInfoBar *pib;
+
 private:
-	void createPixInfoBar() ;
 	enum DoubleClickAction { dcaRECORD, dcaRPR, dcaACTION };
 	DoubleClickAction dca;
 	MapWindow* mwPar;

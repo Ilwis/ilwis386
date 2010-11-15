@@ -16,31 +16,39 @@
 #define colorUSERDEF Color(3,2,1)
 
 namespace ILWIS {
-	class _export SVGElement : public ComplexDrawer{
-	public:
-		enum ShapeType{sRECTANGLE, sCIRCLE,sELLIPSE,sLINE,sPOLYLINE,sPOLYGON,sPATH};
+	struct SVGAttributes {
+		enum ShapeType{sRECTANGLE, sCIRCLE,sELLIPSE,sLINE,sPOLYLINE,sPOLYGON,sPATH, sCOMPOUND, sUNKNOWN};
+		SVGAttributes(ShapeType t=sUNKNOWN) : type(t) {
+			ox = oy = strokewidth = rwidth = rheight = rx = ry = cx = cy = 0;
+			borderThickness = opacity = 1;
+			fillColor = colorUSERDEF;
+			strokeColor =Color(0,0,0);
+		}
+		int borderThickness;
+		Color fillColor, strokeColor;
+		double opacity,ox, oy, rx, ry,cx,cy, rwidth, rheight, strokewidth;
+		vector<Coord> points;
+		vector<Coord> triangles;
+		ShapeType type;
+	};
 
-		SVGElement();
+	class _export SVGElement : public vector<SVGAttributes> {
+	public:
+		SVGElement(const String& _id);
+		SVGElement(SVGAttributes::ShapeType t, const String& _id);
 		bool draw(bool norecursion, const CoordBounds& cbArea) const { return true;}
-		virtual void drawSVG(const CoordBounds& cbElement,const NewDrawer *dr, double z=0) const;
-		virtual void parse(XERCES_CPP_NAMESPACE::DOMNode* node);
-		void prepare(PreparationParameters *p) {};
+		void parse(XERCES_CPP_NAMESPACE::DOMNode* node);
+		void parseNode(XERCES_CPP_NAMESPACE::DOMNode* node,SVGAttributes& attributes);
 
 	protected:
-		SVGElement(DrawerParameters *parms, const String& name);
 		void initSvgData();
 		Color getColor(const String& name) const;
 		String getAttributeValue(XERCES_CPP_NAMESPACE::DOMNamedNodeMap *map, const String& key) const;
-		String parseStyle(const String& style);
+		String parseStyle(const String& style,SVGAttributes& attributes);
 
-		int ewidth, eheight;
-		Color fillColor;
-		Color strokeColor;
-		int rx, ry, rwidth, rheight;
-		int borderThickness;
-		double opacity;
 
 	private:
 		static map<String, Color> svgcolors;
+		String id;
 	};
 }

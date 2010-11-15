@@ -59,10 +59,12 @@ Created on: 2007-02-8
 class Editor;
 class MapCompositionDoc;
 class InfoLine;
+class PixelInfoBar;
 
 namespace ILWIS {
 	class AbstractMapDrawer;
 	class BaseMapEditor;
+	class ComplexDrawer;
 }
 
 class IMPEXP SimpleMapPaneView : public ZoomableView 
@@ -80,12 +82,13 @@ public:
 	Coord crdPnt(zPoint pnt);
 	zPoint pntPos(Coord crd);
 	ILWIS::BaseMapEditor* editGet() ;
-	void createEditor(ILWIS::AbstractMapDrawer *drw);
+	void createEditor(ILWIS::ComplexDrawer *drw);
 	FrameWindow * getFrameWindow() { return  fwPar; }
+	void createPixInfoBar();
 
 	InfoLine* info;
 
-protected:  
+protected:
 	virtual void OnDraw(CDC* pDC); 
 	BOOL OnEraseBkgnd(CDC* pDC);
 	void SetDirty();	
@@ -103,6 +106,7 @@ protected:
 	bool volatile fDrawStop;
 	bool fStarting;
 	bool fDrawAlsoWhenLoading; 
+	PixelInfoBar *pib;
 	CoordWithCoordSystem cwcsButtonDown;
 	CDC* dcView; // dcView is our own CDC and should be cleaned up at next cycle
 	ILWIS::BaseMapEditor *edit;

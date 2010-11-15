@@ -220,9 +220,18 @@ void ComplexDrawer::removeDrawer(const String& did, bool dodelete) {
 	}
 }
 
-int ComplexDrawer::getDrawerCount() const{
-	return drawers.size();
+int ComplexDrawer::getDrawerCount(int types) const{
+	int count = 0;
+	if ( types & dtPRE)
+		count += preDrawers.size();
+	if ( types & dtPOST)
+		count +=postDrawers.size();
+	if ( types & dtMAIN)
+		count += drawers.size();
+
+	return count;
 }
+
 NewDrawer * ComplexDrawer::getDrawer(int index, DrawerType type){
 	if ( type == dtMAIN) {
 		if ( index < drawers.size()) {

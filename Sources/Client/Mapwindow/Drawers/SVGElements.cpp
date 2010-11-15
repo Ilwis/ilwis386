@@ -5,9 +5,11 @@
 #include "Engine\base\system\engine.h"
 #include <map>
 #include "Drawer_n.h"
+#include "Engine\Base\Algorithm\Triangulation\cdt.h"
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h"
 #include "Client\Mapwindow\Drawers\ComplexDrawer.h"
 #include "Client\Mapwindow\Drawers\SVGElements.h"
+#include "Engine\Base\Algorithm\Triangulation\cdt.h"
 
 
 using namespace ILWIS;
@@ -15,41 +17,22 @@ using namespace XERCES_CPP_NAMESPACE;
 
 map<String, Color> SVGElement::svgcolors;
 
-SVGElement::SVGElement() : 
-eheight(0), 
-ewidth(0),
-rx(0), 
-ry(0), 
-rwidth(0), 
-rheight(0), 
-fillColor(colorUNDEF), 
-strokeColor(colorUNDEF),
-borderThickness(1),
-opacity(1)
+SVGElement::SVGElement(const String& _id) 
 {
 	if ( svgcolors.size() == 0) {
 		initSvgData();
 	}
+	id = _id;
 }
 
-SVGElement::SVGElement(ILWIS::DrawerParameters *parms, const String& name) :
-ComplexDrawer(parms, name),
-eheight(0), 
-ewidth(0),
-rx(0), 
-ry(0), 
-rwidth(0), 
-rheight(0), 
-fillColor(colorUNDEF), 
-strokeColor(colorUNDEF),
-borderThickness(1),
-opacity(1)
-{
+SVGElement::SVGElement(SVGAttributes::ShapeType t, const String& _id) : id(_id){
 	if ( svgcolors.size() == 0) {
 		initSvgData();
 	}
+	if ( t != SVGAttributes::sUNKNOWN) {
+		push_back(SVGAttributes(t));
+	}
 }
-
 
 Color SVGElement::getColor(const String& name) const{
 	map<String, Color>::const_iterator cur;
@@ -66,14 +49,32 @@ Color SVGElement::getColor(const String& name) const{
 	return Color(0,0,0);
 }
 
-void SVGElement::drawSVG(const CoordBounds& cbElement,const NewDrawer *dr, double z) const {
-	for(int i=0; i < drawers.size(); ++i) {
-		SVGElement *element = (SVGElement *)drawers.at(i);
-		element->drawSVG(cbElement, dr, z);
+void SVGElement::parse(DOMNode* node) {
+	XERCES_CPP_NAMESPACE::DOMNodeList* children = node->getChildNodes();
+	for(int i = 0; i < children->getLength(); ++i) {
+		DOMNode* node = children->item(i);
+		DOMNamedNodeMap *map = node->getAttributes();
+		if (! map)
+			continue;
+		String nodeName = CString(node->getNodeName());
+		SVGAttributes::ShapeType type = SVGAttributes::sUNKNOWN;
+		if ( nodeName == "rect")
+			type = SVGAttributes::sRECTANGLE;
+		if ( nodeName == "circle")
+			type = SVGAttributes::sCIRCLE;
+		if ( nodeName == "line")
+			type = SVGAttributes::sLINE;
+		if ( nodeName == "polyline")
+			type = SVGAttributes::sPOLYLINE;
+		if ( nodeName == "polygon")
+			type = SVGAttributes::sPOLYGON;
+		SVGAttributes attributes(type);
+		parseNode(node, attributes);
+		push_back(attributes);
 	}
 }
 
-void SVGElement::parse(DOMNode* node) {
+void SVGElement::parseNode(DOMNode* node,SVGAttributes& attributes) {
 	XERCES_CPP_NAMESPACE::DOMNamedNodeMap *map = node->getAttributes();
 	if ( map) {
 		String idv = getAttributeValue(map,"id");
@@ -81,51 +82,124 @@ void SVGElement::parse(DOMNode* node) {
 			id = idv;
 		String sfill = getAttributeValue(map, "fill");
 		if ( sfill != "")
-			fillColor = getColor(sfill);
+			attributes.fillColor = getColor(sfill);
+		else
+			attributes.fillColor = colorUNDEF;
 
+		String sstrw = getAttributeValue(map, "stroke-width");
+		if ( sstrw != "")
+			attributes.strokewidth = sstrw.rVal();
 		String sstroke = getAttributeValue(map, "stroke");
 		if ( sstroke != "")
-			strokeColor = getColor(sstroke);
+			attributes.strokeColor = getColor(sstroke);
+		else
+			attributes.strokeColor = colorUNDEF;
+
 		String style = getAttributeValue(map, "style"); 
 		if ( style != "")
-			parseStyle(style);
+			parseStyle(style, attributes);
 		String sx = getAttributeValue(map, "x");
-		if ( sx != "")
-			rx = sx.iVal();
 		String sy = getAttributeValue(map, "y");
-		if ( sy != "")
-			ry = sy.iVal(); 
+		if ( sx != "" && sy != "") {
+			attributes.ox = sx.rVal();
+			attributes.oy = sy.rVal();
+		}
+		
+		String sradius = getAttributeValue(map, "r");
+		if ( sradius != "")
+			attributes.rx = attributes.ry = sradius.rVal();
+		String sradiusx = getAttributeValue(map, "rx");
+		if ( sradiusx != "")
+			attributes.rx= sradiusx.rVal();
+		String sradiusy = getAttributeValue(map, "ry");
+		if ( sradiusy != "")
+			attributes.ry= sradiusy.rVal();
+		String scx = getAttributeValue(map, "cx");
+		if ( scx != "")
+			attributes.cx = scx.rVal();
+		String scy = getAttributeValue(map, "cy");
+		if ( scy != ""){
+			attributes.cy = scy.rVal();
+		}
+		String sx1 = getAttributeValue(map,"x1");
+		String sx2 = getAttributeValue(map,"x2");
+		String sy1 = getAttributeValue(map,"y1");
+		String sy2 = getAttributeValue(map,"y2");
+		if ( sx1 != "" && sx2 != "" && sy1 != "" && sy2 != "") {
+			attributes.points.push_back(Coord(sx1.rVal(), sy1.rVal()));
+			attributes.points.push_back(Coord(sx2.rVal(), sy2.rVal()));
+		}
+		String spnts = getAttributeValue(map, "points");
+		if ( spnts != "") {
+			Array<String> parts;
+			Split(spnts, parts, " ");
+			for(int i=0; i < parts.size(); ++i) {
+				String pnt = parts[i];
+				Coord c ( pnt.sHead(",").rVal(), pnt.sTail(",").rVal());
+				attributes.points.push_back(c);
+			}
+			if ( attributes.type == SVGAttributes::sPOLYGON) {
+				p2t::CDT cdt(attributes.points);
+				cdt.Triangulate();
+				vector<Coord> strip;
+				cdt.getTriangleStrips(strip);
+			}
+		}
+
+
+		
 		String swidth = getAttributeValue(map, "width");
 		if ( swidth != "" && swidth != "user-defined")
-			rwidth = swidth.iVal();
+			attributes.rwidth = swidth.iVal();
 		String sheight = getAttributeValue(map, "height");
 		if ( sheight != "" && sheight != "user-defined")
-			rheight = sheight.iVal();
+			attributes.rheight = sheight.iVal();
 
-		if ( rwidth != 0)
-			ewidth = rwidth;
-		if ( rheight != 0)
-			eheight = rheight;
+		if ( attributes.rwidth == 0 && attributes.rx != 0)
+			attributes.rwidth = attributes.rx;
+		if ( attributes.rheight == 0 && attributes.ry != 0)
+			attributes.rheight = attributes.ry;
+
+		if ( attributes.rwidth == 0 && attributes.points.size() > 0) {
+			double xmin,ymin,ymax,xmax;
+			xmin = ymin = 1e300;
+			xmax = ymax = -1e300;
+			for(int i=0; i < attributes.points.size(); ++i) {
+				xmin = min(xmin,attributes.points[i].x);
+				ymin = min(ymin,attributes.points[i].y);
+				xmax = max(xmax,attributes.points[i].x);
+				ymax = max(ymax,attributes.points[i].y);
+				
+			}
+			attributes.rwidth = abs(xmin - xmax);
+			attributes.rheight = abs(ymin - ymax);
+		}
+
+		if ( attributes.type == SVGAttributes::sPOLYGON) { // need tot triangulate
+			p2t::CDT cdt(attributes.points);
+			cdt.Triangulate();
+			cdt.getTriangleStrips(attributes.triangles);
+		}
 	}
 }
 
-String SVGElement::parseStyle(const String& style) {
+String SVGElement::parseStyle(const String& style,SVGAttributes& attributes) {
 	Array<String> parts;
 	Split(style, parts,";");
 	for(int i = 0; i < parts.size(); ++i) {
 		String attr = parts[i].sHead(":");
 		String val = parts[i].sTail(":");
 		if ( attr == "fill") {
-			fillColor = getColor(val);
+			attributes.fillColor = getColor(val);
 		}
 		else if ( attr == "stroke-width") {
-			borderThickness = val.iVal();
+			attributes.borderThickness = val.iVal();
 		}
 		else if ( attr == "stroke") {
-			strokeColor = getColor(val);
+			attributes.strokeColor = getColor(val);
 		}
 		else if (attr == "fill-opacity") {
-			opacity = val.rVal();
+			attributes.opacity = val.rVal();
 		}
 	}
 
@@ -143,12 +217,11 @@ String SVGElement::getAttributeValue(XERCES_CPP_NAMESPACE::DOMNamedNodeMap *map,
 	return "";
 }
 
-
 void SVGElement::initSvgData() {
 	if ( svgcolors.size() != 0) 
 		return;
 	svgcolors["user-defined"] = colorUSERDEF;
-	svgcolors["undefined"] = colorUNDEF;
+	svgcolors["none"] = colorUNDEF;
 	svgcolors["aliceblue"] = Color(240,248,255);
 	svgcolors["antiquewhite"] = Color(250,235,215);
 	svgcolors["aqua"] = Color(0,255,255);

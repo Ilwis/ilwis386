@@ -74,6 +74,7 @@ enum CoordMessage {
 					cmZOOMOUT = 32,
 					cmSELECTAREA = 64,
 					cmPAN = 128,
+					cmINSERT = 256,
 					cmDIGICLICK1 = 1024,
 					cmDIGICLICK2 = 2048,
 					cmDIGICLICK3 = 4096,

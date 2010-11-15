@@ -42,6 +42,8 @@ typedef Array<RecItem*> RecItemArray;
 /////////////////////////////////////////////////////////////////////////////
 // PixelInfoDoc document
 
+class Feature;
+
 class IMPEXP PixelInfoDoc : public IlwisDocument
 {
 	friend class PixelInfoConfigureForm;
@@ -59,6 +61,8 @@ public:
 	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName, ILWIS::NewDrawer *drw);
 	bool fRowEditable(int rowIndex) const;
 	RecItem * getItem(int rowIndex);
+	void setEditFeature(Feature *f);
+	Feature *getEditFeature();
 protected:
 	virtual BOOL OnNewDocument();
 	virtual void OnCloseDocument();
@@ -84,6 +88,7 @@ public:
 	DECLARE_MESSAGE_MAP()
 	RecItemCoord riCoord;
 	RecItemArray riArray;
+	Feature *editFeature;
 };
 
 

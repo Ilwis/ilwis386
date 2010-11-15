@@ -47,6 +47,7 @@ Created on: 2007-02-8
 #include "Client\Mapwindow\PixelInfoDoc.h"
 #include "Client\Mapwindow\PixelInfoView.h"
 #include "Engine\Domain\dmsort.h"
+#include "Engine\Map\Feature.h"
 #include "Headers\Hs\PIXINFO.hs"
 #include <afxole.h>
 #include "Headers\messages.h"
@@ -410,8 +411,10 @@ PixInfoField::~PixInfoField()
 					init(doc->sValue(iRow));
 					return;
 				}
-				if (IDYES == iRet)
-					ds->iAdd(s);
+				if (IDYES == iRet){ 
+					long raw = ds->iAdd(s);
+					doc->getEditFeature()->PutVal(raw);
+				}
 			}
 			else {
 				String sMsg(STBMsgInvalidValue_S.sVal(), s);

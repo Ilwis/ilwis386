@@ -50,6 +50,7 @@ Created on: 2007-02-8
 #include "Client\FormElements\flddat.h"
 #include "Client\Mapwindow\RECITSEL.H"
 #include "Client\TableWindow\BaseTablePaneView.h"
+#include "Engine\map\Feature.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -77,7 +78,8 @@ PixelInfoDoc::PixelInfoDoc()
 , fMouse(true)
 , fMouseCont(false)
 , fDigitizer(true)
-, fDigitizerCont(false)
+, fDigitizerCont(false),
+editFeature(0)
 {
 	//  riArray.Resize(1,1);
 	riArray.Resize(1); // is now zero based
@@ -235,8 +237,8 @@ LRESULT PixelInfoDoc::OnUpdate(WPARAM wParam, LPARAM lParam)
 	if ( cm & cmDIGIMOVE) {
 		fUpdate = fDigitizer && fDigitizerCont;
 	}
-	if ( cm >= 1024)
-		fUpdate = fDigitizer;
+	if ( cm & cmINSERT)
+		fUpdate = true;
 
 	if (fUpdate) {
 		riCoord.SetValue(*c);
@@ -363,4 +365,12 @@ RecItem * PixelInfoDoc::getItem(int rowIndex) {
 		return riArray[rowIndex - 1];
 	}
 	return 0;
+}
+
+void PixelInfoDoc::setEditFeature(Feature *f) {
+	editFeature = f;
+}
+
+Feature *PixelInfoDoc::getEditFeature() {
+	return editFeature;
 }

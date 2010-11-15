@@ -42,6 +42,13 @@ Created on: 2007-02-8
 #include "Engine\Map\Segment\Seg.h"
 #include "engine\map\polygon\POL.H"
 #include "Client\ilwis.h"
+#include "Client\Base\datawind.h"
+#include "Client\Mapwindow\MapWindow.h"
+#include "Client\TableWindow\BaseTablePaneView.h"
+#include "Client\TableWindow\BaseTblField.h"
+#include "Client\Mapwindow\PixelInfoDoc.h"
+#include "Client\Mapwindow\PixelInfoBar.h"
+#include "Client\Mapwindow\PixelInfoView.h"
 #include "Client\Editors\Map\FeatureSetEditor.h"
 #include "Client\Mapwindow\SimpleMapPaneView.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
@@ -60,8 +67,6 @@ Created on: 2007-02-8
 #include "Headers\Hs\Mapwind.hs"
 #include "Engine\Domain\Dmvalue.h"
 #include "Client\TableWindow\BaseTblField.h"
-#include "Client\Mapwindow\PixelInfoBar.h"
-#include "Client\Mapwindow\PixelInfoView.h"
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
 #include "Client\Mapwindow\Drawers\TextDrawer.h"
 #include "Client\Mapwindow\Drawers\MouseClickInfoDrawer.h"
@@ -136,6 +141,7 @@ SimpleMapPaneView::~SimpleMapPaneView()
 	}
 	delete info;
 	delete edit;
+	delete pib;
 	if (dcView)
 	{
 		// First attempt to clean up GDI and memory .. according to the "official" way
@@ -604,20 +610,39 @@ BaseMapEditor* SimpleMapPaneView::editGet()
 	return edit;
 }
 
-void SimpleMapPaneView::createEditor(AbstractMapDrawer *drw) {
+void SimpleMapPaneView::createEditor(ComplexDrawer *drw) {
 	BaseMap bmp;
-	bmp.SetPointer(drw->getBaseMap());
+	bmp.SetPointer(((AbstractMapDrawer *)drw->getParentDrawer())->getBaseMap());
 	IObjectType type = IOTYPE(bmp->fnObj);
 	if ( edit){
+		pib->pixview->GetDocument()->setEditFeature(0);
 		delete edit;
 		edit = 0;
 	}
 	if ( type == IlwisObject::iotPOINTMAP) {
 		edit = ILWISAPP->getMEditor("PointSetEditor","ilwis38",GetDocument(), bmp);
+		edit->init(drw, pib->pixview->GetDocument());
+
 	}
 }
 
+void SimpleMapPaneView::createPixInfoBar() {
+	if ( !pib && GetDocument()->pixInfoDoc) {
+		CFrameWnd* fw = GetTopLevelFrame();
+		MapWindow *parent = dynamic_cast<MapWindow*>(fw);
+		pib = new PixelInfoBar();
+		pib->Create(parent);
+		pib->SetWindowText(TR("Pixel Info").scVal());
+		pib->EnableDocking(CBRS_ALIGN_LEFT|CBRS_ALIGN_RIGHT);
+		GetDocument()->pixInfoDoc->AddView(pib->pixview);
+		parent->RecalcLayout();
+		CRect rct;
+		parent->ltb.GetWindowRect(&rct);
+		rct.OffsetRect(0,1);
+		parent->DockControlBar(pib, AFX_IDW_DOCKBAR_LEFT,&rct);
 
+	}
+}
 
 #ifdef _DEBUG
 void SimpleMapPaneView::AssertValid() const

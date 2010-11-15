@@ -13,6 +13,13 @@ using namespace XERCES_CPP_NAMESPACE;
 
 //-----------------------------
 SVGLoader::SVGLoader() {
+	SVGElement *element = new SVGElement(SVGAttributes::sRECTANGLE,"rectangle");
+	(*this)["rectangle"] = element;
+	element = new SVGElement(SVGAttributes::sELLIPSE,"ellipse");
+	(*this)["ellipse"] = element;
+	element = new SVGElement(SVGAttributes::sCIRCLE,"circle");
+	(*this)["circle"] = element;
+
 }
 SVGLoader::~SVGLoader() {
 }
@@ -48,23 +55,10 @@ void SVGLoader::parseFile(const FileName& fn) {
 	XERCES_CPP_NAMESPACE::DOMDocument* xmlDoc = parser->getDocument();
 	XERCES_CPP_NAMESPACE::DOMElement* elementRoot = xmlDoc->getDocumentElement();
 	String rootName = CString(elementRoot->getNodeName());
-	XERCES_CPP_NAMESPACE::DOMNodeList* children = elementRoot->getChildNodes();
-	for(int i = 0; i < children->getLength(); ++i) {
-		DOMNode* node = children->item(i);
-		DOMNamedNodeMap *map = node->getAttributes();
-		if (! map)
-			continue;
-		ILWIS::DrawerParameters dp(0, 0);
-		String nodeName = CString(node->getNodeName());
-		String id = fn.sFile;
-		SVGElement *element = (SVGElement *)IlwWinApp()->getDrawer(id, 0, &dp);
-		if ( element) {
-			element->parse(node);
-			if ( element->getId() != "")
-				(*this)[element->getId()+"|ilwis38"] = element;
-			break;
-		}
-	}
+	String id = fn.sFile;
+	SVGElement *element = new SVGElement(id);
+	element->parse(elementRoot);
+	(*this)[id] = element;
 }
 
 String SVGLoader::getAttributeValue(DOMNamedNodeMap *map, const String& key) const{
