@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Client\Mapwindow\Drawers\SVGElements.h"
+
 ILWIS::NewDrawer *createPointDrawer(ILWIS::DrawerParameters *parms);
 
 namespace ILWIS{
@@ -17,15 +19,22 @@ class PointDrawer : public SimpleDrawer {
 		void setSymbol(const String& sym);
 		String getSymbol() const;
 		void shareVertices(vector<Coord *>& coords);
-
+		static String defaultSymbol;
 	protected:
 		PointDrawer(DrawerParameters *parms, const String& name);
 		HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent) ;
+		void calcSize();
+
+		void drawRectangle(const SVGAttributes& attributes, double z) const;
+		void drawEllipse(const SVGAttributes& attributes, double z) const;
+		void drawLine(const SVGAttributes& attributes, double z) const;
+		void drawPolygon(const SVGAttributes& attributes, double z) const;
+		void drawPath(const SVGAttributes& attributes, double z) const;
 
 		Coord cNorm;
 		Color drawColor;
-		SVGElement *drw;
-		String drwId;
+		const SVGElement *element;
 		String symbol;
+		double width, height;
 	};
 }

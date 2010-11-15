@@ -15,8 +15,8 @@ class PointSetDrawer : public FeatureSetDrawer {
 		virtual ~PointSetDrawer();
 		HTREEITEM  configure(LayerTreeView  *tv, HTREEITEM parent);
 		void prepare(PreparationParameters *parms);
-		void setDefaultSymbol(const String& name);
 		void getDrawerFor(const Feature* feature,vector<NewDrawer *>& featureDrawers);
+		void setSymbols(const String& symbol);
 
 	protected:
 		String store(const FileName& fnView, const String& parenSection) const;
@@ -24,7 +24,6 @@ class PointSetDrawer : public FeatureSetDrawer {
 		virtual NewDrawer *createElementDrawer(PreparationParameters *pp, ILWIS::DrawerParameters* parms) const;
 		void setDrawMethod(DrawMethod method=drmINIT);
 		void setSymbolization(CWnd *parent);
-		String defaultSymbol;
 	};
 
 	class PointSymbolizationForm : public DisplayOptionsForm {

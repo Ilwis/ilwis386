@@ -48,7 +48,7 @@ DrawerInfoVector *createDrawer() {
 	infos->push_back(new DrawerInfo("RasterSetDrawer","ilwis38", createRasterSetDrawer));
 	infos->push_back(new DrawerInfo("AnimationDrawer","ilwis38", createAnimationDrawer));
 
-	addSVGDrawers(infos);
+	//addSVGDrawers(infos);
 	return infos;
 }
 

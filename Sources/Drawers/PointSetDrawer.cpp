@@ -28,7 +28,6 @@ ILWIS::NewDrawer *createPointSetDrawer(DrawerParameters *parms) {
 PointSetDrawer::PointSetDrawer(DrawerParameters *parms) : 
 	FeatureSetDrawer(parms,"PointSetDrawer")
 {
-	setDefaultSymbol("open-rectangle");
 }
 
 PointSetDrawer::~PointSetDrawer() {
@@ -44,13 +43,11 @@ void PointSetDrawer::prepare(PreparationParameters *parms){
 	if ( parms->type & NewDrawer::ptRENDER) {
 		for(int i = 0; i < getDrawerCount(); ++i) {
 			PointDrawer *pdrw = (PointDrawer *)getDrawer(i);
-			pdrw->setSymbol(defaultSymbol);
+			if ( pdrw != 0){
+				pdrw->prepare(parms);
+			}
 		}
 	}
-}
-
-void PointSetDrawer::setDefaultSymbol(const String& name) {
-	defaultSymbol = name;
 }
 
 HTREEITEM PointSetDrawer:: configure(LayerTreeView  *tv, HTREEITEM parent) {
@@ -99,6 +96,16 @@ void PointSetDrawer::getDrawerFor(const Feature* feature,vector<NewDrawer *>& fe
 		}
 	}
 }
+
+void PointSetDrawer::setSymbols(const String& symbol) {
+	for(int i=0; i< getDrawerCount(); ++i) {
+		PointDrawer *pdrw = dynamic_cast<PointDrawer *>(getDrawer(i));
+		if ( pdrw) {
+			pdrw->setSymbol(symbol);
+		}
+	}
+}
+
 //-----------------------------------------------------------------
 PointSymbolizationForm::PointSymbolizationForm(CWnd *wPar, PointSetDrawer *dr):
 	DisplayOptionsForm(dr,wPar,TR("Symbolization")), selection(0)
@@ -118,7 +125,7 @@ void PointSymbolizationForm::apply(){
 
 	String symbol = names[selection];
 	PointSetDrawer *psdrw = (PointSetDrawer *)drw;
-	psdrw->setDefaultSymbol(symbol);
+	psdrw->setSymbols(symbol);
 	PreparationParameters pp(NewDrawer::ptRENDER, 0);
 	psdrw->prepare(&pp);
 	updateMapView();
