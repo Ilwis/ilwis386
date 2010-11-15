@@ -248,7 +248,7 @@ void MapStretch::InitCalc()
     trq.SetTitle(sFreezeTitle);
   }
   else if (rPerc != rUNDEF)
-    rrFrom = mp->rrMinMax(true);
+    rrFrom = mp->rrMinMax(BaseMapPtr::mmmCALCULATE);
   if (fLinear) {
     if (rrFrom.rWidth() <= 0)
       rFact = 0;

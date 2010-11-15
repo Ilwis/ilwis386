@@ -248,7 +248,7 @@ MapAggregate::MapAggregate(const FileName& fn, MapPtr& p,
   if (!fnObj.fValid())
     objtime = objdep.tmNewest();
   if (fCIStrEqual(sAggName , "aggsum")) {
-    RangeReal rr = mp->rrMinMax(false);
+    RangeReal rr = mp->rrMinMax(BaseMapPtr::mmmNOCALCULATE);
     if (!rr.fValid())
       rr = mp->dvrs().rrMinMax();
     double rStep = mp->dvrs().rStep();
@@ -257,7 +257,7 @@ MapAggregate::MapAggregate(const FileName& fn, MapPtr& p,
   }
   else if (fCIStrEqual(sAggName , "aggavg")) {
     if (0 == mp->dm()->pdi()) {
-      RangeReal rr = mp->rrMinMax(false);
+      RangeReal rr = mp->rrMinMax(BaseMapPtr::mmmNOCALCULATE);
       if (!rr.fValid())
         rr = mp->dvrs().rrMinMax();
       double rStep = mp->dvrs().rStep()/100.0;

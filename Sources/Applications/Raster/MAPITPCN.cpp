@@ -103,7 +103,7 @@ const char* MapInterpolContour::sSyntax() {
 
 ValueRange MapInterpolContour::vrDefault(const SegmentMap& segmap)
 {
-  RangeReal rr = segmap->rrMinMax(true);
+  RangeReal rr = segmap->rrMinMax(BaseMapPtr::mmmCALCULATE);
   if (!rr.fValid())
     rr = segmap->dvrs().rrMinMax();
 	//double rRangeWidth = abs(rr.rHi() - rr.rLo());

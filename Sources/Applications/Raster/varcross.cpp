@@ -68,7 +68,7 @@ static void GeoRefNoneError(const FileName& fn, IlwisError err)
 
 ValueRange MapCrossVariogramSurfaceRas::vrDefault(const Map& map)
 {
-  RangeReal rr = map->rrMinMax(false);  // default range of output variogrsurface
+  RangeReal rr = map->rrMinMax(BaseMapPtr::mmmNOCALCULATE);  // default range of output variogrsurface
   if (!rr.fValid())
     rr = map->dvrs().rrMinMax();
   double rLowestOut = 0.0;

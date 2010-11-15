@@ -99,7 +99,7 @@ double MapVariogramSurfacePnt::rDefaultLagSpacing(const PointMap& pmap)
 
 ValueRange MapVariogramSurfacePnt::vrDefault(const PointMap& pmap)
 {
-  RangeReal rr = pmap->rrMinMax(false);
+  RangeReal rr = pmap->rrMinMax(BaseMapPtr::mmmNOCALCULATE);
   if (!rr.fValid())
     rr = pmap->dvrs().rrMinMax();
   double rLowestOut = 0.0;

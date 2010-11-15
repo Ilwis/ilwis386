@@ -108,7 +108,7 @@ bool MapCoKriging::fDomainChangeable() const
 
 ValueRange MapCoKriging::vrDefault(const PointMap& pmap)
 {
-  RangeReal rr = pmap->rrMinMax(false);
+  RangeReal rr = pmap->rrMinMax(BaseMapPtr::mmmNOCALCULATE);
   if (!rr.fValid())
     rr = pmap->dvrs().rrMinMax();
 	double rRangeWidth = abs(rr.rHi() - rr.rLo());

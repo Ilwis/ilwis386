@@ -262,7 +262,7 @@ void MapSegmentDensity::CalcPatchBounds(long iX, long iY)
 }
 
 bool MapSegmentDensity::fInPatch(const ILWIS::Segment* seg) {
-  CoordBounds cb = seg->crdBounds();
+  CoordBounds cb = seg->cbBounds();
   Coord cLow = cb.cMin, cHigh = cb.cMax;
 
   if (min(cLow.x, cHigh.x) > max(cTopLeft.x, cBotRight.x))

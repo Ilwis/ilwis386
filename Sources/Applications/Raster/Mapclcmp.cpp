@@ -224,7 +224,7 @@ void MapColorComp::InitCalc(const Map& mp, double rPerc, RangeReal& rr, Array<lo
       if (rPerc == 1)
         rr = mp->rrPerc1(true);
       else
-        rr = mp->rrMinMax(true);
+        rr = mp->rrMinMax(BaseMapPtr::mmmCALCULATE);
     }
     if (histinf[iInf].fValid() && (rPerc != rUNDEF))
       rr = histinf[iInf].rrMinMax(rPerc);

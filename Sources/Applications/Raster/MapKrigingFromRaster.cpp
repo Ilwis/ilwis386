@@ -116,7 +116,7 @@ bool MapKrigingFromRaster::fGeoRefChangeable() const
 
 ValueRange MapKrigingFromRaster::vrDefault(const Map& mp)
 {
-  RangeReal rr = mp->rrMinMax(false);
+  RangeReal rr = mp->rrMinMax(BaseMapPtr::mmmNOCALCULATE);
   if (!rr.fValid())
     rr = mp->dvrs().rrMinMax();
 	double rRangeWidth = abs(rr.rHi() - rr.rLo());
