@@ -2,9 +2,15 @@
 #include "Engine\Map\basemap.h"
 #include "Engine\Map\Point\ilwPoint.h"
 #include "Engine\Map\Point\PNT.H"
+#include "Client\ilwis.h"
 #include "Client\Base\datawind.h"
 #include "Client\Mapwindow\MapWindow.h"
 #include "Client\Mapwindow\MapPaneView.h"
+#include "Client\TableWindow\BaseTablePaneView.h"
+#include "Client\TableWindow\BaseTblField.h"
+#include "Client\Mapwindow\PixelInfoDoc.h"
+#include "Client\Mapwindow\PixelInfoBar.h"
+#include "Client\Mapwindow\PixelInfoView.h"
 #include "Client\Mapwindow\IlwisClipboardFormat.h"
 #include "Client\Mapwindow\Drawers\ComplexDrawer.h"
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h"
@@ -12,7 +18,6 @@
 #include "Client\Ilwis.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
-#include "Client\ilwis.h"
 #include "Client\Editors\Map\FeatureSetEditor.h"
 #include "MapEditors\PointSetEditor.h"
 #include "Headers\constant.h"
@@ -290,4 +295,38 @@ void PointSetEditor::OnCopy()
 bool PointSetEditor::fPasteOk()
 {
   return IsClipboardFormatAvailable(iFmtPnt) ? true : false;
+}
+
+bool PointSetEditor::insert(UINT nFlags, CPoint point) {
+	clear();
+	Coord crd = mdoc->rootDrawer->screenToWorld(RowCol(point.y, point.x));
+	ILWIS::Point * p = CPOINT(bmapptr->newFeature());
+	p->setCoord(crd);
+	p->PutVal(0L);
+	pixdoc->setEditFeature(CFEATURE(p));
+
+	CoordWithCoordSystem cwcs(crd, bmapptr->cs());
+	if ( setdrawer) {
+		ILWIS::DrawerParameters parms(setdrawer->getRootDrawer(), setdrawer);
+		ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer("PointFeatureDrawer", "ilwis38", &parms);
+		drawer->addDataSource(CFEATURE(p));
+		PreparationParameters fp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER, 0);
+		drawer->prepare(&fp);
+		drawer->setSpecialDrawingOptions(NewDrawer::sdoSELECTED,true);
+		setdrawer->addDrawer(drawer);
+	}
+	select(nFlags, point);
+	IlwWinApp()->SendUpdateCoordMessages(cmINSERT, &cwcs);
+	mdoc->mpvGetView()->Invalidate();
+
+	return true;
+}
+
+void PointSetEditor::updateFeature(SelectedFeature *f) {
+	for(int i = 0; i < f->selectedCoords.size(); ++i) {
+		int index = f->selectedCoords[i];
+		ILWIS::Point *p = CPOINT(f->feature);
+		Coord c = *(f->coords[index]);
+		p->setCoord(c);
+	}
 }

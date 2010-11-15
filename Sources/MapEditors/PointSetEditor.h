@@ -12,12 +12,14 @@ namespace ILWIS {
 		~PointSetEditor();
 		bool fPasteOk();
 	public:
+		bool insert(UINT nFlags, CPoint point);
 		void OnCopy();
 		void OnInsertMode();
 		void OnUpdateMode(CCmdUI* pCmdUI);
 		void OnMoveMode();
 		void OnSelectMode();
 		bool OnContextMenu(CWnd* pWnd, CPoint point);
+		void updateFeature(SelectedFeature *f);
 
 		void Mode(BaseMapEditor::Mode m) ;
 		String sTitle() const;
