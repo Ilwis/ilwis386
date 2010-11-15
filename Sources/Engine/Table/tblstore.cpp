@@ -542,9 +542,11 @@ long TableStore::iRecNewWithoutRecsUpdate(long iRecords)
     ptr.Updated();
     for (short c = 0; c < iCols(); ++c) {
       Column col = ac.ind(c);
-      col->AppendRec(iRecords);
-      if (col->fDependent())
-        col->DeleteCalc();
+	  if ( col.fValid()) {
+		  col->AppendRec(iRecords);
+		  if (col->fDependent())
+			col->DeleteCalc();
+	  }
     }
   }
   return rec;

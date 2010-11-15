@@ -98,7 +98,7 @@ void ILWIS::LPoint::PutVal(double rV) {
 }
 
  void ILWIS::LPoint::PutVal(const DomainValueRangeStruct& dvs, const String &sVal){
-	 value = sVal.iVal();
+	 value = dvs.iRaw(sVal);
   }
 
  Geometry *ILWIS::LPoint::clone() const {
