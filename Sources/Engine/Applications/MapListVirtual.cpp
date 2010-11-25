@@ -70,6 +70,17 @@ MapListVirtual::MapListVirtual(const FileName& fn, MapListPtr& p, bool fCreate)
   }
 }
 
+MapListVirtual::MapListVirtual(const FileName& fn, MapListPtr& _ptr, const GeoRef& gr, const RowCol& rc, long iNrBands, const String& sBandPrefix)
+: IlwisObjectVirtual(fn, _ptr, _ptr.objdep, true),
+  ptr(_ptr)
+{
+	ptr._gr = gr;
+	ptr._rcSize = rc;
+	ptr._sBandPreFix = sBandPrefix;
+	ptr.iOffset = 0;
+
+}
+
 MapListVirtual _export * MapListVirtual::create(const FileName& fn, MapListPtr& p)
 {
    String sType;

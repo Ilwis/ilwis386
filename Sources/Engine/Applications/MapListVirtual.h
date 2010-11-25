@@ -58,8 +58,10 @@ class _export MapListVirtual : public IlwisObjectVirtual
   friend class MapListPtr;
 protected:
   MapListVirtual(const FileName&, MapListPtr&, bool fCreate=false);
+  MapListVirtual(const FileName& fn, MapListPtr& _ptr, const GeoRef& gr, const RowCol& rc, long iNrBands, const String& sBandPrefix);
   static MapListVirtual  *create(const FileName&, MapListPtr&);
   static MapListVirtual  *create(const FileName&, MapListPtr&, const String& sExpression);
+
   virtual ~MapListVirtual();
   virtual void Store();
 public:
