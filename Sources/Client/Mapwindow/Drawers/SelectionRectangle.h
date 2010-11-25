@@ -1,6 +1,6 @@
 #pragma once
 
-typedef void (CCmdTarget::*NotifyRectProc)(CRect);
+//typedef void (CCmdTarget::*NotifyRectProc)(CRect);
 
 #include "Client\MapWindow\Drawers\SimpleDrawer.h"
 
@@ -17,9 +17,11 @@ namespace ILWIS {
 		virtual void prepare(PreparationType t=ptALL,CDC *dc = 0);
 		void calcWorldCoordinates(const CRect & rctZoom);
 		CoordBounds getWorldCoordinates() const;
+		void setColor(const Color& clr);
 	protected:
 		virtual HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent) { return 0;}
 		Coord c1,c2;
+		Color clr;
 	};
 
 	struct SelectionParameters : public DrawerParameters {

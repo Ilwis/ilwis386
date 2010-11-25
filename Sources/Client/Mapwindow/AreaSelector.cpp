@@ -63,22 +63,18 @@ static char THIS_FILE[] = __FILE__;
 
 using namespace ILWIS;
 
-AreaSelector::AreaSelector(ZoomableView* mappaneview, 
-													 CCmdTarget* cmdTarget, 
-													 NotifyRectProc notProc)
+AreaSelector::AreaSelector(ZoomableView* mappaneview, CCmdTarget* cmdTarget, NotifyRectProc notProc, const Color& _clr)
 : MapPaneViewTool(mappaneview)
 , cmt(cmdTarget)
 , np(notProc)
 , fDown(false)
 , fKeepDimensions(false)
+, clr(_clr)
 {
 	SetCursor(zCursor("AreaSelCursor"));
 }
 
-AreaSelector::AreaSelector(ZoomableView* mappaneview, 
-													 CCmdTarget* cmdTarget, 
-													 NotifyRectProc notProc,
-													 zDimension dimension)
+AreaSelector::AreaSelector(ZoomableView* mappaneview, CCmdTarget* cmdTarget, NotifyRectProc notProc, zDimension dimension, const Color& _clr)
 : MapPaneViewTool(mappaneview)
 , cmt(cmdTarget)
 , np(notProc)
@@ -86,6 +82,7 @@ AreaSelector::AreaSelector(ZoomableView* mappaneview,
 , dim(dimension)
 , fKeepDimensions(true)
 , selectionDrawer(0)
+,clr(_clr)
 {
 	SetCursor(zCursor("AreaSelCursor"));
 }
@@ -121,6 +118,7 @@ void AreaSelector::OnLButtonDown(UINT nFlags, CPoint point)
 		ILWIS::DrawerParameters sp(mcd->rootDrawer, mcd->rootDrawer);
 		selectionDrawer = (ILWIS::SelectionRectangle *)IlwWinApp()->getDrawer("SelectionRectangle", "Ilwis38", &sp);
 		mcd->rootDrawer->addDrawer(selectionDrawer);
+		selectionDrawer->setColor(clr);
 	}
 	mpv->SetCapture();
 	DrawRect();

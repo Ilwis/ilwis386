@@ -24,6 +24,7 @@ namespace ILWIS {
 		enum UICode{ucNONE=0, ucNOREPRESENTATION=2, ucNOINFO=4, ucNOMASK=8, ucNOMULTICOLOR=16,ucNOTRANSPARENCY=32,ucALL=4294967295};
 		enum SpecialDrawingOptions{sdoNone=0, sdoExtrusion=1, sdoXMarker=2, sdoYMarker=4, sdoFilled=8, sdoSELECTED=16};
 
+		~NewDrawer() {}
 		virtual bool draw(bool norecursion = false, const CoordBounds& cb=CoordBounds()) const = 0;
 		virtual void prepare(PreparationParameters *) =0;
 		virtual String getType() const =0;

@@ -40,6 +40,7 @@ AbstractMapDrawer::AbstractMapDrawer(DrawerParameters *parms, const String& name
 }
 
 AbstractMapDrawer::~AbstractMapDrawer() {
+	bm.SetPointer(0);
 }
 
 void AbstractMapDrawer::prepare(PreparationParameters *pp){
