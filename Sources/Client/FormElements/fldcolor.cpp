@@ -206,10 +206,6 @@ int FieldColorSimple::SelChanged(Event* )
   ose->GetLBText(id, s);
   if (id == idCustom)
     CreateColor(0);
-  if ( fldc->slider != 0) {
-	  Color c = (Color)ose->GetItemData(id);
-	  fldc->slider->SetVal(c.alpha());
-  }
   return 0;
 }
 
@@ -254,7 +250,7 @@ void FieldColorSimple::SetVal(Color clr)
 {
   for (int id = 0; id < iCols; ++id) 
   {
-    Color c = (Color)ose->GetItemData(id);
+    Color c = (Color)ose->GetItemData(id); 
     if (c == clr) {
       ose->SetCurSel(id);
       return;
@@ -262,10 +258,6 @@ void FieldColorSimple::SetVal(Color clr)
   }
   ose->SetItemData(idCustom,clr);
   ose->SetCurSel(idCustom);
-  if (  fldc->slider) {
-	  fldc->slider->SetVal(clr.alpha()/ 2.55);
-  }
-
 }
 
 int FieldColorSimple::CreateColor(void * Evt) 

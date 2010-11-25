@@ -59,8 +59,8 @@
 class AreaSelector : public MapPaneViewTool
 {
 public:
-	_export AreaSelector(ZoomableView*, CCmdTarget*, NotifyRectProc);           
-	_export AreaSelector(ZoomableView*, CCmdTarget*, NotifyRectProc, zDimension);           
+	_export AreaSelector(ZoomableView*, CCmdTarget*, NotifyRectProc, const Color& clr=Color(0,120,255));           
+	_export AreaSelector(ZoomableView*, CCmdTarget*, NotifyRectProc, zDimension, const Color& clr=Color(0,120,255));           
 
 	void OnMouseMove(UINT nFlags, CPoint point);
 	void OnLButtonDown(UINT nFlags, CPoint point);
@@ -75,6 +75,7 @@ protected:
 	zDimension dim;
 	bool fDown, fKeepDimensions;
 	ILWIS::SelectionRectangle * selectionDrawer;
+	Color clr;
 };
 
 /////////////////////////////////////////////////////////////////////////////

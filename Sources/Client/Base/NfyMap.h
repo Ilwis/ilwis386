@@ -47,6 +47,7 @@ using namespace std;
 
 typedef CCmdTarget CallBackHandler;
 typedef int (CallBackHandler::*NotifyProc)(Event *);
+typedef void (CCmdTarget::*NotifyRectProc)(CRect);
 
 // handler and function
 class CallBackPair

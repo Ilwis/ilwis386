@@ -262,6 +262,11 @@ EXTRUSION               ICON                    "extrusion.ico"
 SLICING                 ICON                    "slicing.ico"
 SELECTAREA              ICON                    "SelectArea.ico"
 TimeSelection           ICON                    "TimeSelection.ico"
+SELECTAOI               ICON                    "selectaoi.ico"
+Average                 ICON                    "average.ico"
+Min                     ICON                    "min.ico"
+Max                     ICON                    "max.ico"
+Median                  ICON                    "median.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //

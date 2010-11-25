@@ -5281,7 +5281,27 @@
 			</Filter>
 		</Filter>
 		<File
+			RelativePath="..\..\Sources\Client\Resources\average.ico"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\max.ico"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\median.ico"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\min.ico"
+			>
+		</File>
+		<File
 			RelativePath="..\..\Sources\Client\Resources\select.ico"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\selectaoi.ico"
 			>
 		</File>
 		<File
