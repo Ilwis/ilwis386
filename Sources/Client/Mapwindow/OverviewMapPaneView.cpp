@@ -206,7 +206,7 @@ void OverviewMapPaneView::OnSelectArea()
 {
 	OnNoTool();
   MapPaneView* mpv = GetDocument()->mpvGetView();
-  as = new AreaSelector(this, this, (NotifyRectProc)&OverviewMapPaneView::AreaSelected);
+  as = new AreaSelector(this, this, (NotifyRectProc)&OverviewMapPaneView::AreaSelected); 
 	as->SetCursor(zCursor("ZoomToolCursor"));
 	iActiveTool = ID_ZOOMIN;
 }
