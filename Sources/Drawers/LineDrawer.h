@@ -20,6 +20,8 @@ class LineDrawer : public SimpleDrawer {
 	protected:
 		LineDrawer(DrawerParameters *parms, const String& name);
 		void clear();
+		void shareVertices(vector<Coord *>& coords);
+		void drawSelectedFeature(CoordinateSequence *points, const CoordBounds& cbZoom, bool is3D) const;
 
 		vector<CoordinateSequence *> lines;
 		Color drawColor;

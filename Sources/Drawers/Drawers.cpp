@@ -26,8 +26,9 @@
 #include "Drawers\RasterSetDrawer.h"
 #include "Drawers\AnimationDrawer.h"
 #include "Drawers\GridDrawer.h"
+#include "drawers\Boxdrawer.h"
 #include "Client\Mapwindow\Drawers\SVGElements.h"
-#include "Drawers\SVGDrawers.h"
+//#include "Drawers\SVGDrawers.h"
 
 using namespace ILWIS;
 
@@ -47,6 +48,8 @@ DrawerInfoVector *createDrawer() {
 	infos->push_back(new DrawerInfo("RasterLayerDrawer","ilwis38", createRasterLayerDrawer));
 	infos->push_back(new DrawerInfo("RasterSetDrawer","ilwis38", createRasterSetDrawer));
 	infos->push_back(new DrawerInfo("AnimationDrawer","ilwis38", createAnimationDrawer));
+	infos->push_back(new DrawerInfo("BoxDrawer","ilwis38", createBoxDrawer));
+
 
 	//addSVGDrawers(infos);
 	return infos;

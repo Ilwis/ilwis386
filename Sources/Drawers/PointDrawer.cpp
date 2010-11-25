@@ -6,7 +6,7 @@
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
 #include "Drawers\DrawingColor.h" 
 #include "Client\Mapwindow\Drawers\SVGElements.h"
-#include "Drawers\SVGDrawers.h"
+//#include "Drawers\SVGDrawers.h"
 #include "drawers\pointdrawer.h"
 #include "Client\Mapwindow\Drawers\ComplexDrawer.h"
 #include "Client\Mapwindow\Drawers\SVGLoader.h"

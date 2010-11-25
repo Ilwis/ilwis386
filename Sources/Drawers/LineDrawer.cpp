@@ -1,5 +1,6 @@
 #include "Client\Headers\formelementspch.h"
 #include "Client\FormElements\syscolor.h"
+#include "Client\MapWindow\Drawers\DrawerContext.h"
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
 #include "Client\Ilwis.h"
@@ -45,9 +46,11 @@ bool LineDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 	if ( !getRootDrawer()->getCoordBoundsZoom().fContains(cb))
 		return false;
 
-	glClearColor(1.0,1.0,1.0,0.0);
+	/*glClearColor(1.0,1.0,1.0,0.0);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_BLEND);
+	glEnable(GL_BLEND);*/
+	CoordBounds cbZoom = getRootDrawer()->getCoordBoundsZoom();
+
 	bool extrusion = getSpecialDrawingOption(NewDrawer::sdoExtrusion);
 	bool filledExtr = getSpecialDrawingOption(NewDrawer::sdoFilled);
 	ComplexDrawer *cdrw = (ComplexDrawer *)getParentDrawer();
@@ -72,6 +75,13 @@ bool LineDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 	}
 	for(int j = 0; j < lines.size(); ++j) {
 		CoordinateSequence *points = lines.at(j);
+		if ( specialOptions & NewDrawer::sdoSELECTED) {
+			glColor4d(1, 0, 0, 1);
+			glLineWidth(thickness * 1.2 + 3);
+			drawSelectedFeature(points, cbZoom, is3D);
+			glLineWidth(thickness);
+			glColor4f(drawColor.redP(),drawColor.greenP(), drawColor.blueP(), getTransparency());
+		}
 		glBegin(GL_LINE_STRIP);
 		for(int i=0; i<points->size(); ++i) {
 			Coordinate c = points->getAt(i);
@@ -109,6 +119,27 @@ bool LineDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 	return true;
 }
 
+void LineDrawer::drawSelectedFeature(CoordinateSequence *points, const CoordBounds& cbZoom, bool is3D) const{
+	glBegin(GL_LINE_STRIP);
+	for(int i=0; i<points->size(); ++i) {
+		Coordinate c = points->getAt(i);
+		double z = is3D ? c.z : 0;
+		glVertex3d( c.x, c.y, z);
+	}
+	glEnd();
+	for(int i=0; i<points->size(); ++i) {
+		Coordinate c = points->getAt(i);
+		double symbolScale = cbZoom.width() / 200;
+		double fz = is3D ? c.z : 0;;
+		glBegin(GL_LINE_STRIP);						
+			glVertex3f( c.x - symbolScale, c.y - symbolScale,fz);	
+			glVertex3f( c.x - symbolScale, c.y + symbolScale,fz);	
+			glVertex3f( c.x + symbolScale, c.y + symbolScale,fz);
+			glVertex3f( c.x + symbolScale, c.y - symbolScale,fz);
+		glEnd();
+	}
+}
+
 void LineDrawer::prepare(PreparationParameters *p){
 	SimpleDrawer::prepare(p);
 }
@@ -123,6 +154,26 @@ void LineDrawer::setThickness(float t) {
 
 void LineDrawer::setLineStyle(int style) {
 	linestyle = style;
+}
+
+void LineDrawer::shareVertices(vector<Coord *>& coords) {
+	//coords.push_back(&cNorm);
+
+	int count = 0;
+	for(int j = 0; j < lines.size(); ++j) {
+		CoordinateSequence *points = lines.at(j);
+		count += points->size();
+	}
+	coords.resize(count);
+	int index = 0;
+	for(int j = 0; j < lines.size(); ++j) {
+		CoordinateSequence *points = lines.at(j);
+		for(int i = 0; i < points->size(); ++i) {
+			const Coord& c = points->getAt(i);
+			coords[index++] = & const_cast<Coord&>(c);
+		}
+			
+	}
 }
 
 

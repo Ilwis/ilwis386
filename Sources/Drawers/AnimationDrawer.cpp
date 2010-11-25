@@ -1,6 +1,7 @@
 #include "Client\Headers\formelementspch.h"
 #include "Client\FormElements\FieldList.h"
 #include "Client\FormElements\selector.h"
+#include "Client\FormElements\fldcolor.h"
 #include "Client\Editors\Utils\MULTICOL.H"
 #include "Client\FormElements\FieldIntSlider.h"
 #include "Client\FormElements\FieldRealSlider.h"
@@ -11,6 +12,7 @@
 #include "Client\FormElements\objlist.h"
 #include "Engine\Domain\DomainTime.h" 
 #include "Engine\Map\basemap.h"
+#include "Client\Mapwindow\Drawers\SelectionRectangle.h"
 #include "Engine\Map\Point\ilwPoint.h"
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
 #include "Client\MapWindow\Drawers\ComplexDrawer.h"
@@ -29,6 +31,7 @@
 #include "Drawers\FeatureSetDrawer.h"
 #include "Drawers\RasterSetDrawer.h"
 #include "Drawers\AnimationDrawer.h"
+#include "drawers\Boxdrawer.h"
 #include "Client\Mapwindow\Drawers\ZValueMaker.h"
 
 using namespace ILWIS;
@@ -36,6 +39,7 @@ using namespace ILWIS;
 int AnimationDrawer::timerIdCounter=5000;
 int mycount = 0;
 #define REAL_TIME_INTERVAL 100
+#define BOX_DRAWER_ID 497
 
 ILWIS::NewDrawer *createAnimationDrawer(DrawerParameters *parms) {
 	return new AnimationDrawer(parms);
@@ -285,12 +289,20 @@ HTREEITEM AnimationDrawer::configure(LayerTreeView  *tv, HTREEITEM displayOption
 		0,(DisplayOptionItemFunc)&AnimationDrawer::timeSelection);
 	InsertItem(TR("Time Selection"),"TimeSelection",itemFrameSelect);
 
+	DisplayOptionTreeItem * itemAOI = new DisplayOptionTreeItem(tv, portrayalItem,this,
+		0,(DisplayOptionItemFunc)&AnimationDrawer::areaOfInterest);
+	InsertItem(TR("Area of Interest"),"SelectAoi",itemAOI);
+
 
 	return displayOptionsLastItem;
 
 }
 void AnimationDrawer::animationSlicing(CWnd *parent) {
 	new AnimationSlicing(parent,this);
+}
+
+void AnimationDrawer::areaOfInterest(CWnd *parent) {
+	new AnimationAreaOfInterest(parent,this);
 }
 
 void AnimationDrawer::timeSelection(CWnd *parent) {
@@ -710,6 +722,75 @@ int AnimationSlicing::createSteps(Event*) {
 		drw->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->Invalidate();
 	}
 	return 1;
+}
+
+//----------------------------------------------------------
+AnimationAreaOfInterest::AnimationAreaOfInterest(CWnd *par, AnimationDrawer *adr) 
+	: DisplayOptionsForm(adr, par, TR("Area of Interest")), boxdrw(0)
+{
+	clr = Color(60,60,60, 120);
+	fb = new FlatIconButton(root, "SelectAoi", TR("Select Area"),(NotifyProc)&AnimationAreaOfInterest::createROIDrawer,FileName());
+	fb->SetIndependentPos();
+	fc = new FieldColor(root, TR("Out area color"), &clr, true);
+	fb->SetWidth(80);
+	create();
+}
+
+AnimationAreaOfInterest::~AnimationAreaOfInterest() {
+	if ( boxId != "") {
+		drw->getRootDrawer()->removeDrawer(boxId);
+		drw->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->Invalidate();
+		boxdrw = 0;
+	}
+	::SetCursor(zCursor(Arrow));
+}
+
+void AnimationAreaOfInterest::areaOfInterest(CRect rect) {
+	if ( boxId != "") {
+		drw->getRootDrawer()->removeDrawer(boxId);
+		boxId = "";
+		boxdrw = 0;
+	}
+	if ( rect.Width() != 0 && rect.Height() != 0) { // case of clicking on the map in zoom mode
+		Coord c1 = drw->getRootDrawer()->screenToWorld(RowCol(rect.top, rect.left));
+		Coord c2 = drw->getRootDrawer()->screenToWorld(RowCol(rect.bottom, rect.right));
+		CoordBounds cbInner(c1,c2);
+		CoordBounds cbOuter = drw->getRootDrawer()->getCoordBoundsZoom();
+		ILWIS::DrawerParameters sp(drw->getRootDrawer(), drw->getRootDrawer());
+		boxdrw = (ILWIS::BoxDrawer *)IlwWinApp()->getDrawer("BoxDrawer", "Ilwis38", &sp);
+		boxdrw->setBox(cbOuter, cbInner);
+		boxId = String("%d", BOX_DRAWER_ID);
+		drw->getRootDrawer()->addPostDrawer(BOX_DRAWER_ID,boxdrw); 
+		::SetCursor(zCursor(Arrow));
+	} 
+}
+
+void AnimationAreaOfInterest::apply() {
+	fc->StoreData();
+	if ( boxdrw) {
+		boxdrw->setDrawColor(clr);
+		updateMapView();
+	}
+	
+
+}
+
+int AnimationAreaOfInterest::createROIDrawer(Event*) {
+
+	if ( boxId == "") {
+		fb->SetText(TR("Unselect Area"));
+		drw->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->selectArea(this,
+			(NotifyRectProc)&AnimationAreaOfInterest::areaOfInterest,"DRAGOK",Color(255,0,0,0.2)); 
+	} else {
+		drw->getRootDrawer()->removeDrawer(boxId);
+		fb->SetText(TR("Select Area"));
+		boxId= "";
+		boxdrw = 0;
+		::SetCursor(zCursor(Arrow));
+		drw->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->Invalidate();
+	}
+	return 1;
+
 }
 
 //----------------------------------------------------------

@@ -14,6 +14,7 @@ class LineFeatureDrawer : public LineDrawer {
 		void prepare(PreparationParameters *);
 		void setDataSource(void *f);
 		void addDataSource(void *f,int options=0);
+		Feature *getFeature() const;
 	protected:
 		LineFeatureDrawer(DrawerParameters *parms, const String& name);
 		Feature *feature;

@@ -29,6 +29,7 @@ class LineSetDrawer : public FeatureSetDrawer {
 		void displayOptionSetLineStyle(CWnd *parent);
 		String store(const FileName& fnView, const String& parenSection) const;
 		void load(const FileName& fnView, const String& parenSection);
+		void getDrawerFor(const Feature* feature,vector<NewDrawer *>& featureDrawers);
 
 		LineDspType linestyle;
 		double linethickness;

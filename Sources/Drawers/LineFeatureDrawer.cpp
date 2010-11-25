@@ -96,3 +96,6 @@ void LineFeatureDrawer::prepare(PreparationParameters *p){
 	}
 }
 
+Feature *LineFeatureDrawer::getFeature() const {
+	return feature;
+}

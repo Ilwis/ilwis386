@@ -11,6 +11,7 @@ class FieldLister;
 
 ILWIS::NewDrawer *createAnimationDrawer(ILWIS::DrawerParameters *parms);
 namespace ILWIS{
+	class BoxDrawer;
 
 	class _export AnimationDrawer : public AbstractMapDrawer {
 		friend class AnimationTiming;
@@ -40,6 +41,7 @@ namespace ILWIS{
 		void animationSlicing(CWnd *parent);
 		void animationSelection(CWnd *parent);
 		void timeSelection(CWnd *parent);
+		void areaOfInterest(CWnd *parent);
 		void setTransparency(double v);
 		bool timerPerIndex() ;
 		bool timerPerTime() ;
@@ -112,6 +114,22 @@ namespace ILWIS{
 		int createSteps(Event*);
 		String steps;
 		ValueSlicerSlider *vs;
+
+	};
+
+	class AnimationAreaOfInterest : public DisplayOptionsForm {
+	public:
+		AnimationAreaOfInterest(CWnd *par, AnimationDrawer *gdr);
+		~AnimationAreaOfInterest();
+	private:
+		void apply();
+		FlatIconButton *fb;
+		FieldColor *fc;
+		BoxDrawer *boxdrw;
+		int createROIDrawer(Event*);
+		void areaOfInterest(CRect rect);
+		String boxId;
+		Color clr;
 
 	};
 

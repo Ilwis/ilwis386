@@ -16,7 +16,7 @@
 #include "Drawers\LineSetDrawer.h"
 #include "drawers\linedrawer.h"
 #include "Drawers\FeatureLayerDrawer.h"
-//#include "Client\Mapwindow\Drawers\PointMapDrawerForm.h"
+#include "drawers\linefeaturedrawer.h"
 #include "Headers\Hs\Drwforms.hs"
 
 using namespace ILWIS;
@@ -77,6 +77,16 @@ void LineSetDrawer::load(const FileName& fnView, const String& parentSection){
 	ls = (LineDspType)linestyle;
 	ObjectInfo::ReadElement(currentSection.scVal(),"LineThickness",fnView, linethickness);
 
+}
+
+void LineSetDrawer::getDrawerFor(const Feature* feature,vector<NewDrawer *>& featureDrawers) {
+	for(int i=0; i< getDrawerCount(); ++i) {
+		LineFeatureDrawer *pfdrw = dynamic_cast<LineFeatureDrawer *>(getDrawer(i));
+		if ( pfdrw) {
+			if ( feature->getGuid() == pfdrw->getFeature()->getGuid())
+				featureDrawers.push_back(pfdrw);
+		}
+	}
 }
 
 //--------------------------------- UI ----------------------------
