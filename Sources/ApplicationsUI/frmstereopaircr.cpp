@@ -188,7 +188,7 @@ int FormStereoPairFromDTM::DTMMapCallBack(Event*)
 		Map mapDTM(fnDTMMap);
     if (fnDTMMap.sFile == "")
       return 0;
-    rrMMDTM = mapDTM->rrMinMax(true);  // find minmax height of DTM
+    rrMMDTM = mapDTM->rrMinMax(BaseMapPtr::mmmCALCULATE);  // find minmax height of DTM
 		iRefHeight = (int)((rrMMDTM.rLo()+ rrMMDTM.rHi()) / 2);
 		fiRefHeight->SetVal(iRefHeight);
   }

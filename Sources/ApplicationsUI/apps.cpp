@@ -52,6 +52,8 @@ Last change:  WK   17 Sep 98    2:14 pm
 #include "ApplicationsUI\frmappia.h"
 #include "ApplicationsUI\frmstereopaircr.h"
 #include "ApplicationsUI\FormMaplistGraph.h"
+#include "ApplicationsUI\FormMapAggregateMapList.h"
+#include "ApplicationsUI\FormMapListChangeDetection.h"
 #include "Client\Base\IlwisDocument.h"
 #include "Engine\Table\tblinfo.h"
 #include "Client\TableWindow\TableDoc.h"
@@ -67,6 +69,8 @@ extern "C" _export InfoUIVector* getApplicationInfoUI() {
 	String ilwDir = IlwWinApp()->Context()->sIlwDir();
 	String hyrdoDemBase = ilwDir + "Scripts\\Hydro-DEM\\";
 
+(*infosui).push_back(CommandHandlerUI::createApplicationInfo("changedetect","",Cmdchangedetection,TR("&Raster Operations..&Change detection"),TR("Change Detection"),".mpl",".mpl",0,TR("Detect changes in a maplist with baseline data")));
+(*infosui).push_back(CommandHandlerUI::createApplicationInfo("aggregatemaplist","",Cmdaggregatemaplist,TR("&Raster Operations..&Aggregate Maplist"),TR("Aggregate Maplist"),"ExeMap16IcoL",".mpl",0,TR("Aggregate a maplist into a single map")));
 (*infosui).push_back(CommandHandlerUI::createApplicationInfo("apply3d","",Cmdapply3d, SMENUApply3D,SMENUSApply3D,"ExeMap16IcoL","",4102,SMENUDApply3D));
 (*infosui).push_back(CommandHandlerUI::createApplicationInfo("mapcalc","",Cmdmapcalc,SMENUMapCalc,SMENUSMapCalc,"ExeMap16IcoL","",4022,SMENUDMapCalc));
 (*infosui).push_back(CommandHandlerUI::createApplicationInfo("maplistcalc","",Cmdmaplistcalc,SMENUMapListCalc,SMENUSMapListCalc,".mpl","",4022,SMENUDMapListCalc));
