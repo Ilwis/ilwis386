@@ -225,6 +225,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\Sources\Applications\Raster\MapAggregateMapList.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Applications\Raster\MapAggregateMapList.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Sources\Applications\Raster\MAPARN.cpp"
 					>
 				</File>
@@ -721,6 +729,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\Sources\Applications\MapList\MapListChangeDetection.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Sources\Applications\MapList\MapListMatrixMultiply.cpp"
 					>
 				</File>
@@ -733,6 +745,10 @@
 					</File>
 					<File
 						RelativePath="..\..\Sources\Applications\MapList\MapListCalculate.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Applications\MapList\MapListChangeDetection.h"
 						>
 					</File>
 					<File

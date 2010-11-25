@@ -57,8 +57,10 @@
 #include "Applications\MapList\MapListApplic.h"
 #include "Applications\MapList\MapListCalculate.h"
 #include "Applications\MapList\MapListMatrixMultiply.h"
+#include "Applications\Raster\MapAggregateMapList.h"
 #include "Applications\Raster\Mapglue.h"
 #include "Applications\Table\COLCALC.H"
+#include "Applications\MapList\MapListChangeDetection.h"
 #include "Applications\Table\AUTCSEMV.H"
 
 //extern "C" _export vector<ApplicationInfo *>* getApplicationInfo());
@@ -71,6 +73,8 @@ InfoVector* getApplicationInfo() {
 
 	InfoVector *infos = new InfoVector();
 
+	infos->push_back(ApplicationMap::newApplicationInfo(createMapListChangeDetection,"MapListChangeDetection"));
+	infos->push_back(ApplicationMap::newApplicationInfo(createMapAggregateMapList,"MapAggregateMapList"));
 	infos->push_back(ApplicationMap::newApplicationInfo(createMapAttribute,"MapAttribute",metadataMapAtrribute));
 	infos->push_back(ApplicationMap::newApplicationInfo(createMapListMatrixMultiply,"MapListMatrixMultiply"));
 	infos->push_back(ApplicationMap::newApplicationInfo(createMapVariogramSurfaceRas,"MapVariogramSurfaceRas"));
