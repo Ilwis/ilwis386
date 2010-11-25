@@ -815,6 +815,19 @@ void ZoomableView::OnSelectArea()
 	iActiveTool = ID_ZOOMIN;
 }
 
+void ZoomableView::selectArea(CCmdTarget *target, NotifyRectProc proc, const String& cursor, const Color& clr)
+{
+	OnNoTool();
+
+	if (fAdjustSize)
+		as = new AreaSelector(this, target, proc, clr);
+	else 
+		as = new AreaSelector(this, target, proc, dim, clr);
+
+	as->SetCursor(zCursor(cursor.scVal()));
+	//iActiveTool = ID_ZOOMIN;
+}
+
 void ZoomableView::OnPanArea()
 {
 	if (iActiveTool == ID_PANAREA) {
