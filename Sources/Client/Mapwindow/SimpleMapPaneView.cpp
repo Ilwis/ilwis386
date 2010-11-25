@@ -624,6 +624,11 @@ void SimpleMapPaneView::createEditor(ComplexDrawer *drw) {
 		edit->init(drw, pib->pixview->GetDocument());
 
 	}
+	if ( type == IlwisObject::iotSEGMENTMAP) {
+		edit = ILWISAPP->getMEditor("LineSetEditor","ilwis38",GetDocument(), bmp);
+		edit->init(drw, pib->pixview->GetDocument());
+
+	}
 }
 
 void SimpleMapPaneView::createPixInfoBar() {
