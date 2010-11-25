@@ -26,7 +26,7 @@ namespace ILWIS{
 
 	class _export BaseMapEditor : public CCmdTarget{
 	public:
-		enum Mode{mINSERT, mMOVE, mMOVING, mSELECT, mDELETE, mCHANGE, mUNKNOWN};
+		enum Mode{mINSERT, mMOVE, mMOVING, mSELECT, mDELETE, mCHANGE, mSPLIT, mUNKNOWN};
 		// empty class for the moment will be moved to seperate file as soon as there is a rastermap editor
 		virtual bool OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)=0;
 		virtual ~BaseMapEditor() {};
@@ -81,6 +81,8 @@ namespace ILWIS{
 		Mode mode;
 		ILWIS::ComplexDrawer *setdrawer;
 		PixelInfoDoc *pixdoc;
+		HelpTopic htpTopic;
+		String sHelpKeywords;
 	};
 }
 

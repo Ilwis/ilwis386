@@ -15,6 +15,10 @@
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "FeatureSetEditor.h"
 
+#define sMen(ID) ILWSF("men",ID).scVal()
+#define addmen(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
+#define addSub(ID) menSub.AppendMenu(MF_STRING, ID, sMen(ID));
+
 using namespace ILWIS;
 
 FeatureSetEditor::FeatureSetEditor(MapCompositionDoc *doc, const BaseMap& bm) : 
