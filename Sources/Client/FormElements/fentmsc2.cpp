@@ -835,10 +835,16 @@ void FlatIconButton::show(int sw)
     pb->ShowWindow(sw);
 }
 
-String FlatIconButton::sGetText()
+String FlatIconButton::sGetText() 
 {
     if ( !fShow() ) return "";
     return m_sCaption;
+}
+
+void FlatIconButton::SetText(const String& sTxt)
+{
+	if ( pb )
+		m_sCaption = sTxt.scVal();
 }
 
 void FlatIconButton::SetFocus()

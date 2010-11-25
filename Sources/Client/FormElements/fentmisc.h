@@ -702,6 +702,7 @@ public:
 	void create();             // overriden
 	String sGetText();         // overriden
 	void SetFocus();           // overriden
+	void _export SetText(const String& sTxt); 
 
 protected:
 	void setup(const String sCaption, const FileName& fnObject, NotifyProc np);
