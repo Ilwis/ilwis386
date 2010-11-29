@@ -49,7 +49,7 @@ Created on: 2007-02-8
 #include "Client\Mapwindow\PixelInfoDoc.h"
 #include "Client\Mapwindow\PixelInfoBar.h"
 #include "Client\Mapwindow\PixelInfoView.h"
-#include "Client\Editors\Map\FeatureSetEditor.h"
+#include "Client\Editors\Map\BaseMapEditor.h"
 #include "Client\Mapwindow\SimpleMapPaneView.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Base\Framewin.h"

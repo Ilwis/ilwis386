@@ -49,7 +49,7 @@ Last change:  WK   24 Jul 97    1:03 pm
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
 #include "Client\Mapwindow\MapPaneView.h"
 #include "Client\ilwis.h"
-#include "Client\Editors\Map\FeatureSetEditor.h"
+#include "Client\Editors\Map\BaseMapEditor.h"
 #include "Client\Base\IlwisDocument.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include <stdlib.h>

@@ -48,7 +48,7 @@
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\Drawers\SelectionRectangle.h"
-#include "Client\Editors\Map\FeatureSetEditor.h"
+#include "Client\Editors\Map\BaseMapEditor.h"
 #include "Client\Mapwindow\Drawers\CanvasBackgroundDrawer.h"
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h"
 #include "Client\Mapwindow\Drawers\TextDrawer.h"
@@ -137,7 +137,7 @@ void BaseCommandHandlerUI::addModules() {
 		}
 		GetMEditors editorFuncs = (GetMEditors)(module->getMethod(ILWIS::Module::ifMapEditors));
 		if ( editorFuncs) {
-			FSEditors *infos = editorFuncs();
+			BMEditors *infos = editorFuncs();
 			for ( int i=0 ; i < infos->size(); ++i) {
 				IlwWinApp()->addMEditor(infos->at(i)->name, infos->at(i)->subtype,infos->at(i)->createFunc);
 			}

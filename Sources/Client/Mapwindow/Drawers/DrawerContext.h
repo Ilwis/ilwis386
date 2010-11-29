@@ -18,7 +18,7 @@ namespace ILWIS {
 
 		void TakeContext();
 		void ReleaseContext();
-		void InvalidateWindow();
+		void doDraw();
 		void swapBuffers() const;
 
 	private:

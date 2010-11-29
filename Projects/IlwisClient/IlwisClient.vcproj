@@ -4693,19 +4693,15 @@
 					Name="Map"
 					>
 					<File
+						RelativePath="..\..\Sources\Client\Editors\Map\BaseMapEditor.h"
+						>
+					</File>
+					<File
 						RelativePath="..\..\Sources\Client\Editors\Map\EditField.cpp"
 						>
 					</File>
 					<File
 						RelativePath="..\..\Sources\Client\Editors\Map\EditField.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\Map\FeatureSetEditor.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\Map\FeatureSetEditor.h"
 						>
 					</File>
 				</Filter>

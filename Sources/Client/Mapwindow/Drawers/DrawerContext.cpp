@@ -52,7 +52,7 @@ bool DrawerContext::initOpenGL(CDC *dc) {
 	return true;
 }
 
-void DrawerContext::InvalidateWindow()
+void DrawerContext::doDraw()
 {
 	if (m_wnd != 0 && IsWindow(m_wnd->m_hWnd))
 		m_wnd->Invalidate(FALSE);

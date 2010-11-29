@@ -195,7 +195,7 @@ $Header: /ILWIS 3.0/Main/ilwis.CPP 329   10-06-05 15:09 Retsios $
 #include "Client\Editors\SMCE\SMCEWindow.h"
 #include "Client\Editors\SMCE\CriteriaTreeView.h"
 #include "Client\Editors\SMCE\CriteriaTreeDoc.h"
-#include "Client\Editors\Map\FeatureSetEditor.h"
+#include "Client\Editors\Map\BaseMapEditor.h"
 #include "Client\Base\DdeServerThread.h"
 #include "Client\Base\IlwisDocManager.h"
 #include "Client\MainWindow\AboutDlg.h"
@@ -2434,7 +2434,7 @@ ILWIS::BaseMapEditor* IlwisWinApp::getMEditor(const String& type, const String& 
 		return 0;
 
 	String fullType = type + "|" + subtype;
-	map<String, FeatureSetEditorCreate>::const_iterator item = meditors.find(fullType);
+	map<String, BaseMapEditorCreate>::const_iterator item = meditors.find(fullType);
 	if ( item != meditors.end())
 		return ((*item).second)(doc,bmp);
 	return NULL;
@@ -2471,7 +2471,7 @@ void IlwisWinApp::addDrawer(const String& type, const String& subtype, DrawerCre
 	drawers[type + "|" + subtype] = func;
 }
 
-void IlwisWinApp::addMEditor(const String& type, const String& subtype, FeatureSetEditorCreate func) {
+void IlwisWinApp::addMEditor(const String& type, const String& subtype, BaseMapEditorCreate func) {
 	meditors[type + "|" + subtype] = func;
 }
 

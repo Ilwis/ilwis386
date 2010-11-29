@@ -86,11 +86,11 @@ class MapCompositionDoc;
 namespace ILWIS {
 	class SVGElement;
 	class SVGLoader;
-	class FeatureSetEditor;
+	class BaseMapEditor;
 	class BaseMapEditor;
 }
 
-typedef ILWIS::FeatureSetEditor* (*FeatureSetEditorCreate)(MapCompositionDoc *, const BaseMap& );
+typedef ILWIS::BaseMapEditor* (*BaseMapEditorCreate)(MapCompositionDoc *, const BaseMap& );
 
 class IlwisWinApp: public CWinApp
 {
@@ -164,7 +164,7 @@ public:
 	ILWIS::BaseMapEditor _export *getMEditor(const String& type, const String& subtype, MapCompositionDoc *doc, BaseMap& bmp) ;
 	ILWIS::NewDrawer _export *getDrawer(const String& type, ILWIS::PreparationParameters *pp=0, ILWIS::DrawerParameters *parms=0) ;
 	void  addDrawer(const String& type, const String& subtype, DrawerCreate);
-	void  addMEditor(const String& type, const String& subtype, FeatureSetEditorCreate);
+	void  addMEditor(const String& type, const String& subtype, BaseMapEditorCreate);
 	ILWIS::SVGLoader *getSVGContainer() const { return svgContainer; }
 	void getDocumentList(list<CDocument *>& opendocs);
 	
@@ -238,7 +238,7 @@ private:
 	map<sfFontType, CFont*> StandardFonts;
 	list<HWND> lhWindows;
 	map<String, DrawerCreate> drawers;
-	map<String,FeatureSetEditorCreate> meditors;
+	map<String,BaseMapEditorCreate> meditors;
 	IlwisDocTemplate *dtPixelInfo;
 	CMultiDocTemplate *dtDirectory;
 	IlwisDocTemplate *dtMapWindow;

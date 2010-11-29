@@ -39,7 +39,7 @@ Created on: 2007-02-8
 
 #include "Client\Headers\formelementspch.h"
 #include "Client\ilwis.h"
-#include "Client\Editors\Map\FeatureSetEditor.h"
+#include "Client\Editors\Map\BaseMapEditor.h"
 #include "Engine\Map\Segment\Seg.h"
 #include "engine\map\polygon\POL.H"
 #include "Client\Base\datawind.h"
