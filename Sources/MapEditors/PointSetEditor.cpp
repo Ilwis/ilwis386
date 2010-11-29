@@ -18,7 +18,7 @@
 #include "Client\Ilwis.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
-#include "Client\Editors\Map\FeatureSetEditor.h"
+#include "FeatureSetEditor.h"
 #include "MapEditors\PointSetEditor.h"
 #include "Headers\constant.h"
 
@@ -58,7 +58,7 @@ END_MESSAGE_MAP()
 #define addmen(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 #define addSub(ID) menSub.AppendMenu(MF_STRING, ID, sMen(ID));
 
-ILWIS::FeatureSetEditor *createPointSetEditor(MapCompositionDoc *doc, const BaseMap& bm) {
+ILWIS::BaseMapEditor *createPointSetEditor(MapCompositionDoc *doc, const BaseMap& bm) {
 	return new PointSetEditor(doc, (PointMap&)bm);
 }
 

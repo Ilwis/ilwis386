@@ -208,6 +208,14 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			>
 			<File
+				RelativePath="..\..\Sources\MapEditors\FeatureSetEditor.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\MapEditors\LineSetEditor.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\MapEditors\mapeditors.cpp"
 				>
 			</File>
@@ -220,6 +228,14 @@
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			>
+			<File
+				RelativePath="..\..\Sources\MapEditors\FeatureSetEditor.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\MapEditors\LineSetEditor.h"
+				>
+			</File>
 			<File
 				RelativePath="..\..\Sources\MapEditors\PointSetEditor.h"
 				>

@@ -3,7 +3,7 @@
 class MapCompositionDoc;
 class BaseMap;
 
-ILWIS::FeatureSetEditor *createPointSetEditor(MapCompositionDoc *doc, const BaseMap& bm);
+ILWIS::BaseMapEditor *createPointSetEditor(MapCompositionDoc *doc, const BaseMap& bm);
 
 namespace ILWIS {
 	class _export PointSetEditor : public FeatureSetEditor {
