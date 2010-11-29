@@ -184,7 +184,7 @@ void ValueSlicer::updateRepresentations() {
 		setdrw->setRepresentation(rpr);
 	}
 	Invalidate();
-	fldslicer->drawer->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->Invalidate();
+	fldslicer->drawer->getRootDrawer()->getDrawerContext()->doDraw();
 }
 void ValueSlicer::OnLButtonDown(UINT nFlags, CPoint point) {
 	CRect rct = makeDrawRect();

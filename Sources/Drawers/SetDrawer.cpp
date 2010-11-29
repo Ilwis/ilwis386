@@ -20,6 +20,7 @@
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
 #include "Client\FormElements\fldcolor.h"
+#include "Client\Mapwindow\Drawers\DrawerContext.h"
 #include "Drawers\DrawingColor.h" 
 #include "Drawers\SetDrawer.h"
 #include "Client\FormElements\fldcol.h"
@@ -85,8 +86,7 @@ bool SetDrawer::draw(bool norecursion, const CoordBounds& cbArea) const{
 void SetDrawer::SetthreeD(void *v, LayerTreeView *tv) {
 	bool value = *(bool *)v;
 	getZMaker()->setThreeDPossible(value);
-	MapCompositionDoc *doc = tv->GetDocument();
-	doc->mpvGetView()->Invalidate();
+	getRootDrawer()->getDrawerContext()->doDraw();
 }
 
 String SetDrawer::iconName(const String& subtype) const 
@@ -124,8 +124,7 @@ void SetDrawer::setcheckRpr(void *value, LayerTreeView *tree) {
 	modifyLineStyleItem(tree, (getDrawMethod() == NewDrawer::drmRPR && rpr.fValid() && rpr->prc()));
 	PreparationParameters pp(NewDrawer::ptRENDER, 0);
 	prepareChildDrawers(&pp);
-	MapCompositionDoc* doc = tree->GetDocument();
-	doc->mpvGetView()->Invalidate();
+	getRootDrawer()->getDrawerContext()->doDraw();
 }
 
 Representation SetDrawer::getRepresentation() const { // avoiding copy constructotrs

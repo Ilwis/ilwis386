@@ -301,7 +301,7 @@ UINT TextureHeap::GenerateTexturesInThread(LPVOID pParam)
 		while (tex != 0)
 			tex = pObject->GenerateNextTexture(true);
 		if (!pObject->fAbortTexGen && !pObject->fStopThread)
-			pObject->drawerContext->InvalidateWindow();
+			pObject->drawerContext->doDraw();
 		if (!pObject->fStopThread)
 			pObject->textureThread->SuspendThread(); // wait here, and dont consume CPU time either
 	}

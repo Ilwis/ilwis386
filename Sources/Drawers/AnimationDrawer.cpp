@@ -329,7 +329,6 @@ void AnimationDrawer::animationSourceUsage(CWnd *parent) {
 
 void AnimationDrawer::timedEvent(UINT _timerid) {
     ILWISSingleLock sl(&csAccess, TRUE,SOURCE_LOCATION);
-	MapCompositionDoc *doc = getRootDrawer()->getDrawerContext()->getDocument();
 	bool redraw = false;
 	if ( timerid == _timerid) {
 		if ( useTime) {
@@ -340,7 +339,7 @@ void AnimationDrawer::timedEvent(UINT _timerid) {
 		if ( redraw) {
 			if ( animcontrol)
 				animcontrol->PostMessage(ID_TIME_TICK,mapIndex, TRUE);
-			doc->mpvGetView()->Invalidate();
+			getRootDrawer()->getDrawerContext()->doDraw();
 		}
 	}
 }
@@ -719,7 +718,7 @@ int AnimationSlicing::createSteps(Event*) {
 		if ( mapIndex != -1) {
 			vs->setNumberOfBounds(mapIndex +2);
 		}
-		drw->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->Invalidate();
+		drw->getRootDrawer()->getDrawerContext()->doDraw();
 	}
 	return 1;
 }
@@ -739,7 +738,7 @@ AnimationAreaOfInterest::AnimationAreaOfInterest(CWnd *par, AnimationDrawer *adr
 AnimationAreaOfInterest::~AnimationAreaOfInterest() {
 	if ( boxId != "") {
 		drw->getRootDrawer()->removeDrawer(boxId);
-		drw->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->Invalidate();
+		drw->getRootDrawer()->getDrawerContext()->doDraw();
 		boxdrw = 0;
 	}
 	::SetCursor(zCursor(Arrow));
@@ -787,7 +786,7 @@ int AnimationAreaOfInterest::createROIDrawer(Event*) {
 		boxId= "";
 		boxdrw = 0;
 		::SetCursor(zCursor(Arrow));
-		drw->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->Invalidate();
+		drw->getRootDrawer()->getDrawerContext()->doDraw();
 	}
 	return 1;
 
@@ -829,7 +828,7 @@ int AnimationSelection::createSteps(Event*) {
 				}
 			}
 		}
-		drw->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->Invalidate();
+		drw->getRootDrawer()->getDrawerContext()->doDraw();
 	}
 	return 1;
 }

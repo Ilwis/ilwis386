@@ -337,10 +337,9 @@ void GridDrawer::displayOptionGrid3D(CWnd *parent) {
 
 void GridDrawer::grid3D(void *v, LayerTreeView *tv) {
 	threeD = *(bool *)v;
-	MapCompositionDoc* doc = tv->GetDocument();
 	PreparationParameters pp(NewDrawer::ptGEOMETRY);
 	prepare(&pp);
-	doc->mpvGetView()->Invalidate();
+	getRootDrawer()->getDrawerContext()->doDraw();
 }
 
 void GridDrawer::gridOptions(CWnd *parent) {
@@ -352,8 +351,7 @@ void GridDrawer::gridActive(void *v, LayerTreeView *tv) {
 	setActive(value);
 	PreparationParameters pp(NewDrawer::ptGEOMETRY);
 	prepare(&pp);
-	MapCompositionDoc* doc = tv->GetDocument();
-	doc->mpvGetView()->Invalidate();
+	getRootDrawer()->getDrawerContext()->doDraw();
 }
 //---------------------------------------------
 ILWIS::NewDrawer *createGridLine(DrawerParameters *parms) {

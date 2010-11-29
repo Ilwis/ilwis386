@@ -179,7 +179,7 @@ void FeatureSetDrawer::extrusionOptions(CWnd *p) {
 void FeatureSetDrawer::setExtrusion(void *value, LayerTreeView *tree) {
 	bool v = *(bool *)value;
 	setSpecialDrawingOptions(sdoExtrusion, v);
-	tree->GetDocument()->mpvGetView()->Invalidate();
+	getRootDrawer()->getDrawerContext()->doDraw();
 
 }
 
