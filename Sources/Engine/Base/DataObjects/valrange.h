@@ -111,6 +111,7 @@ public:
                                 { return !fEqual(vr); }
     virtual bool      fEqual(const ValueRangePtr& vr) const;
     virtual void      AdjustRangeToStep();
+	virtual double _export getOffset() const ;
 
 protected:
     ValueRangePtr();
@@ -150,6 +151,7 @@ public:
     void              init(long iRaw0 = iUNDEF);
     virtual String    sRange(bool fInternal=false) const;
     long              iDefaultRaw0() const;
+	virtual double _export getOffset() const { return iRaw0(); } 
 
 private:
     long _i0;
@@ -184,6 +186,7 @@ public:
   virtual void      AdjustRangeToStep();
   virtual bool      fRealValues() const;
 	static bool _export  fEqual(double r1, double r2);
+	virtual double _export getOffset() const { return rRaw0(); } 
 
 private:
   double            _rStep;

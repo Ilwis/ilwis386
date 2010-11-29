@@ -373,6 +373,10 @@ bool ValueRange::fEqual(const ValueRange& vr) const
   throw ErrorObject("Comparison with uninitialized Object", 1000);*/
 }
 
+double ValueRangePtr::getOffset() const{
+	return rUNDEF;
+}
+
 ValueRangeInt* ValueRangePtr::vri() const
 {
   return dynamic_cast<ValueRangeInt*>(const_cast<ValueRangePtr*>(this));

@@ -45,31 +45,34 @@
 #include "Engine\Table\Col.h"
 #include "Engine\Domain\dminfo.h"
 
-class ColumnInfo
+class _export ColumnInfo
 {
 public:
-    _export ColumnInfo();
-    _export ColumnInfo(const String& sTblColName);
-    _export ColumnInfo(const FileName& fnTbl, const String& sColName);
-    _export ColumnInfo(const FileName& fnTbl, long iCol);
-    _export ColumnInfo(const ColumnInfo& colinf);
+	 enum ColumnType { ctRAW, ctREAL, ctSTRING, ctBINARY, ctCRD,ctCRD3D };
+     ColumnInfo();
+     ColumnInfo(const String& sTblColName);
+     ColumnInfo(const FileName& fnTbl, const String& sColName);
+     ColumnInfo(const FileName& fnTbl, long iCol);
+     ColumnInfo(const ColumnInfo& colinf);
 
-    void _export            operator = (const ColumnInfo& colinf);
-    void                    Read(const FileName& fnTbl, const String& sColName);
-    bool _export            fValid() const;
-    Domain _export          dm() const; // opens domain
-    DomainValueRangeStruct  _export dvrs() const; // opens domain
+    void             operator = (const ColumnInfo& colinf);
+    void             Read(const FileName& fnTbl, const String& sColName);
+	void			 Read(const FileName& fnTbl, long col);
+    bool             fValid() const;
+    Domain           dm() const; // opens domain
+    DomainValueRangeStruct   dvrs() const; // opens domain
     FileName                fnTbl() const;
-    String _export          sName() const;
-    DomainInfo _export      dminf() const;
+    String           sName() const;
+    DomainInfo       dminf() const;
     FileName                fnDom() const;
-    DomainType _export      dmt() const;
-    ValueRange _export      vr() const;
-    StoreType _export       st() const;
-    long                    iOffset() const;
+    DomainType       dmt() const;
+    ValueRange       vr() const;
+    StoreType        st() const;
+	long 					iOffset() const { TRACE(String("%s %d",__FILE__, __LINE__).scVal()); return 1;}
+    long                    getOffset() const;
     long                    iRecs() const;
     RangeInt                riMinMax() const;
-    RangeReal _export       rrMinMax() const;
+    RangeReal        rrMinMax() const;
     ObjectTime              objtime() const;
     String                  sDescription() const;
     bool                    fReadOnly() const;
@@ -79,6 +82,13 @@ public:
     String                  sExpression() const;
     void                    DependencyNames(Array<String>& asNames);  // returns names of dependencies
     // in printable form (columns are preceded by the word Column)
+	void					setIndex(long i);
+	long					getIndex() const;
+	void				    setOffset(long off) ;
+	ColumnType				getColumnType() const;
+	double					getStep() const;
+	double					getValueOffset() const;
+
 private:
     void                    Init(const ColumnInfo& colinf);
     String                  _sName;
@@ -96,6 +106,11 @@ private:
     bool                    _fOwnedByTable;
     String                  _sExpression;
     bool                    _fReadOnly; //, _fDataReadOnly, _fPropReadOnly;
+	long					_index;
+	ColumnType				_ct;
+	DomainValueRangeStruct	_dvrs;
+	double					_rStep;
+	double					_rValueOffset;
 };
 
 #endif // ILWCOLINFO_H
