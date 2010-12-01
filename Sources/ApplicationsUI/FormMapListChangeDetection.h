@@ -12,4 +12,6 @@ private:
   String name;
   String mplName;
   String mplOut;
+  double threshold;
+  bool undefHandling;
 };

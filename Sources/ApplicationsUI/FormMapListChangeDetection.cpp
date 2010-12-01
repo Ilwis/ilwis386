@@ -3,6 +3,7 @@
 #include "client\formelements\fldlist.h"
 #include "ApplicationsUI\FormMapListChangeDetection.h"
 #include "Headers\messages.h"
+#include "Engine\Base\System\Engine.h"
 #include "Client\ilwis.h"
 #include "Headers\constant.h"
 
@@ -13,7 +14,7 @@ LRESULT Cmdchangedetection(CWnd *wnd, const String& s)
 }
 
 FormMapListChangeDetection::FormMapListChangeDetection(CWnd* mw, const char* sPar)
-:FormGeneralApplication(mw, TR("Aggregate Maplist")), choice(0)
+:FormGeneralApplication(mw, TR("Aggregate Maplist")), choice(0),threshold(0), undefHandling(false)
 {
 	if (sPar) {
 		TextInput inp(sPar);
@@ -46,6 +47,9 @@ FormMapListChangeDetection::FormMapListChangeDetection(CWnd* mw, const char* sPa
 
 	rb = new RadioButton(rg,TR("Previous Index"));
 
+	new FieldReal(root,TR("Threshold"),&threshold);
+	CheckBox *cb = new CheckBox(root,TR("Treat Undefined deltas as zero deltas"), &undefHandling);
+	cb->SetIndependentPos();
 	new FieldMapCreate(root, TR("&Output MapList"), &mplOut);
 	//SetAppHelpTopic(htpFillSinks);
 	create();
@@ -55,7 +59,22 @@ FormMapListChangeDetection::FormMapListChangeDetection(CWnd* mw, const char* sPa
 int FormMapListChangeDetection::exec() 
 {
 	FormGeneralApplication::exec();
+	FileName fnOut(mplOut,".mpl");
+	FileName fnIn1(mplName);
+	FileName fnIn2(name);
+
+	String expr;
+	if ( choice == 0 ) {
+		expr = String("%S=MapListChangeDetection(%S, %S, %f, %s)", fnOut.sRelative(), fnIn1.sRelative(),fnIn2.sRelative(),threshold, undefHandling ? "true": "false");
+	}
+	if ( choice == 1) {
+		expr = String("%S=MapListChangeDetection(%S, %S, %f, %s)", fnOut.sRelative(), fnIn1.sRelative(),fnIn2.sRelative(),threshold, undefHandling ? "true": "false");
+	} 
+	if ( choice == 2) {
+		expr = String("%S=MapListChangeDetection(%S, %f, %s)", fnOut.sRelative(), fnIn1.sRelative(),threshold, undefHandling ? "true": "false");
+	}
+	getEngine()->Execute(expr);
+	getEngine()->Execute(String("open %S", fnOut.sRelative()));
 	
-	execMapOut(sExpr);  
 	return 0;
 }
