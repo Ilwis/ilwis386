@@ -14,6 +14,7 @@
 #include "Drawers\ValueSlicer.h"
 #include "Drawers\SetDrawer.h"
 #include "Drawers\FeatureLayerDrawer.h"
+#include "Drawers\RasterSetDrawer.h"
 #include "Drawers\AnimationDrawer.h"
 
 

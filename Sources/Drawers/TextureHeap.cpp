@@ -102,6 +102,7 @@ void Palette::Refresh()
 {
 	if (fValid()) {
 		unsigned int nrMapValues = iPaletteSize - 1;
+		//rrMinMaxMap = rsd->getStretchRangeReal();
 		double width = rrMinMaxMap.rWidth();
 		double minMapVal = rrMinMaxMap.rLo();
 

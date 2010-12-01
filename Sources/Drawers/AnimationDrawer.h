@@ -7,8 +7,6 @@ class FieldOneSelectTextOnly;
 class ValueSlicerSlider;
 class FieldLister;
 
-#define RSELECTDRAWER 323
-
 ILWIS::NewDrawer *createAnimationDrawer(ILWIS::DrawerParameters *parms);
 namespace ILWIS{
 	class BoxDrawer;

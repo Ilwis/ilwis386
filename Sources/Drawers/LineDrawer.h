@@ -19,11 +19,14 @@ class LineDrawer : public SimpleDrawer {
 
 	protected:
 		LineDrawer(DrawerParameters *parms, const String& name);
+		bool findSelectedPoint(const Coord& c) const;
+		void setSpecialDrawingOptions(SpecialDrawingOptions option, bool add, vector<Coord>* coords);
 		void clear();
 		void shareVertices(vector<Coord *>& coords);
 		void drawSelectedFeature(CoordinateSequence *points, const CoordBounds& cbZoom, bool is3D) const;
 
 		vector<CoordinateSequence *> lines;
+		vector<Coord> selectedCoords;
 		Color drawColor;
 		CoordBounds cb;
 		float thickness;

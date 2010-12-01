@@ -77,9 +77,7 @@ bool LineDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 		CoordinateSequence *points = lines.at(j);
 		if ( specialOptions & NewDrawer::sdoSELECTED) {
 			glColor4d(1, 0, 0, 1);
-			glLineWidth(thickness * 1.2 + 3);
 			drawSelectedFeature(points, cbZoom, is3D);
-			glLineWidth(thickness);
 			glColor4f(drawColor.redP(),drawColor.greenP(), drawColor.blueP(), getTransparency());
 		}
 		glBegin(GL_LINE_STRIP);
@@ -120,6 +118,7 @@ bool LineDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 }
 
 void LineDrawer::drawSelectedFeature(CoordinateSequence *points, const CoordBounds& cbZoom, bool is3D) const{
+	glLineWidth(thickness * 1.2 + 3);
 	glBegin(GL_LINE_STRIP);
 	for(int i=0; i<points->size(); ++i) {
 		Coordinate c = points->getAt(i);
@@ -127,19 +126,40 @@ void LineDrawer::drawSelectedFeature(CoordinateSequence *points, const CoordBoun
 		glVertex3d( c.x, c.y, z);
 	}
 	glEnd();
+	glLineWidth(thickness);
 	for(int i=0; i<points->size(); ++i) {
 		Coordinate c = points->getAt(i);
+		bool isPointSelected = findSelectedPoint(c);
 		double symbolScale = cbZoom.width() / 200;
 		double fz = is3D ? c.z : 0;;
+		if ( isPointSelected) {
+			glBegin(GL_QUADS);						
+			glVertex3f( c.x - symbolScale, c.y - symbolScale,fz);	
+			glVertex3f( c.x - symbolScale, c.y + symbolScale,fz);	
+			glVertex3f( c.x + symbolScale, c.y + symbolScale,fz);
+			glVertex3f( c.x + symbolScale, c.y - symbolScale,fz);
+			//glVertex3f( c.x - symbolScale, c.y - symbolScale,fz);
+			glEnd();
+		}
+		else {
+		}
 		glBegin(GL_LINE_STRIP);						
 			glVertex3f( c.x - symbolScale, c.y - symbolScale,fz);	
 			glVertex3f( c.x - symbolScale, c.y + symbolScale,fz);	
 			glVertex3f( c.x + symbolScale, c.y + symbolScale,fz);
 			glVertex3f( c.x + symbolScale, c.y - symbolScale,fz);
+			glVertex3f( c.x - symbolScale, c.y - symbolScale,fz);
 		glEnd();
 	}
 }
 
+bool LineDrawer::findSelectedPoint(const Coord& c) const{
+	for(int i=0; i < selectedCoords.size(); ++i) {
+		if ( selectedCoords.at(i) == c)
+			return true;
+	}
+	return false;
+}
 void LineDrawer::prepare(PreparationParameters *p){
 	SimpleDrawer::prepare(p);
 }
@@ -169,11 +189,33 @@ void LineDrawer::shareVertices(vector<Coord *>& coords) {
 	for(int j = 0; j < lines.size(); ++j) {
 		CoordinateSequence *points = lines.at(j);
 		for(int i = 0; i < points->size(); ++i) {
-			const Coord& c = points->getAt(i);
-			coords[index++] = & const_cast<Coord&>(c);
+			const Coord *c = (const Coord *)&(points->getAt(i));
+			coords[index++] = const_cast<Coord *>(c);
 		}
 			
 	}
+}
+
+void LineDrawer::setSpecialDrawingOptions(SpecialDrawingOptions option, bool add, vector<Coord>* coords){
+	SimpleDrawer::setSpecialDrawingOptions(option, add);
+	selectedCoords.clear();
+	if ( coords) {
+		for(int n=0; n < coords->size(); ++n) {
+			for(int j = 0; j < lines.size(); ++j) {
+				CoordinateSequence *points = lines.at(j);
+				for(int i = 0; i < points->size(); ++i) {
+					const Coord *c = (const Coord *)&(points->getAt(i));
+					if ( c->equals(coords->at(n)))
+						selectedCoords.push_back(coords->at(n));
+				}
+				
+			}
+		}
+	}
+	else {
+		selectedCoords.clear();
+	}
+
 }
 
 

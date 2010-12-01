@@ -56,15 +56,15 @@ void SetDrawer::prepare(PreparationParameters *parm){
 	//delete drawColor; // the drawColor is still in use elsewhere (a local pointer is kept for efficiency). Unless there's a good reason to fully renew it here, I try commenting this out for now.
 	//drawColor = 0;
 	ComplexDrawer::prepare(parm);
-	csy = parm->csy;
-	if ( getUICode() == NewDrawer::ucALL) {
+	if ( parm->type & NewDrawer::ptGEOMETRY ||  parm->type & NewDrawer::ptRESTORE) {
+		csy = parm->csy;
 		AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)parentDrawer;
 		Representation rpr = mapDrawer->getRepresentation();
 		if ( rpr.fValid() && !rpr->prv())
 			setStretchRangeReal(mapDrawer->getStretchRangeReal());
+		if (!drawColor)
+			drawColor = new DrawingColor(this);
 	}
-	if (!drawColor)
-		drawColor = new DrawingColor(this);
 	setDrawMethod();
 }
 
@@ -189,6 +189,9 @@ void SetDrawer::setStretchRangeReal(const RangeReal& rr){
 	rrStretch = rr;
 	riStretch.iLo() = (long)(rounding(rrStretch.rLo()));
 	riStretch.iHi() = (long)(rounding(rrStretch.rHi()));
+	//if ( drawColor) {
+	//	drawColor->
+	//}
 }
 
 RangeInt SetDrawer::getStretchRangeInt() const{
@@ -269,6 +272,8 @@ HTREEITEM SetDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 
 		if ( usesRpr)
 			InsertItem(tv, rprItem,String("Value : %S",rpr->sName()),".rpr");
+		if ( rpr->prg() || rpr->prv())
+			insertStretchItem(tv, portrayalItem);
 
 	}
 	return hti;
@@ -337,13 +342,14 @@ void  RepresentationForm::apply() {
 //------------------------------------
 SetStretchForm::SetStretchForm(CWnd *wPar, SetDrawer *dr) : 
 	DisplayOptionsForm(dr,wPar,"Set stretch"),
-	rr(dr->getStretchRangeReal()),
 	low(dr->getStretchRangeReal().rLo()),
 	high(dr->getStretchRangeReal().rHi())
 
 {
-	sliderLow = new FieldRealSliderEx(root,"Lower", &low,ValueRange(rr),true);
-	sliderHigh = new FieldRealSliderEx(root,"Upper", &high,ValueRange(rr),true);
+	BaseMapPtr *ptr = ((AbstractMapDrawer *)dr->getParentDrawer())->getBaseMap();
+	rr = ptr->rrMinMax();
+	sliderLow = new FieldRealSliderEx(root,"Lower", &low,ValueRange(rr,0.01),true);
+	sliderHigh = new FieldRealSliderEx(root,"Upper", &high,ValueRange(rr,0.01),true);
 	sliderHigh->Align(sliderLow, AL_UNDER);
 	sliderLow->SetCallBack((NotifyProc)&SetStretchForm::check);
 	sliderHigh->SetCallBack((NotifyProc)&SetStretchForm::check);
@@ -362,6 +368,11 @@ int  SetStretchForm::check(Event *) {
 		high = low;
 		sliderHigh->SetVal(high);
 	}
+	((SetDrawer *)drw)->setStretchRangeReal(RangeReal(low,high));
+
+	PreparationParameters pp(NewDrawer::ptRENDER, 0);
+	drw->prepare(&pp);
+	updateMapView();
 	return 1;
 }
 
