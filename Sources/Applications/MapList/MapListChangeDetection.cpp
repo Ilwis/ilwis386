@@ -50,9 +50,9 @@ Created on: 2007-02-8
 namespace {
 	const char* sSyntax() 
 	{
-		return "MapListChangeDetection(inpmaplist, baselinemap,threshold)\n \
-			   MapListChangeDetection(inpmaplist1, inpmaplist2,threshold)\n \
-			   MapListChangeDetection(inpmaplist, threshold)";
+		return "MapListChangeDetection(inpmaplist, baselinemap,threshold,undefhandling)\n \
+			   MapListChangeDetection(inpmaplist1, inpmaplist2,threshold, undefhandling)\n \
+			   MapListChangeDetection(inpmaplist, threshold, undefhandling)";
 	}
 }
 
@@ -70,22 +70,25 @@ MapListChangeDetection::MapListChangeDetection(const FileName& fn, MapListPtr& p
 	ReadElement("MapListChangeDetection", "MapList2", mpl2);
 	ReadElement("MapListChangeDetection", "BaseLine", mapBaseLine);
 	ReadElement("MapListChangeDetection", "Threshold", threshold);
+	ReadElement("MapListChangeDetection", "Undefhandling", undefHandling);
 	Init();
 }
 
-MapListChangeDetection::MapListChangeDetection(const FileName& fn, MapListPtr& _ptr,const MapList& mplIn, const Map& mpBase, double threshld) :
+MapListChangeDetection::MapListChangeDetection(const FileName& fn, MapListPtr& _ptr,const MapList& mplIn, const Map& mpBase, double threshld, bool undef) :
 MapListVirtual(fn, _ptr, mpBase->gr(),mpBase->rcSize(), mplIn->iSize(),""), 
 mpl1(mplIn),
 mapBaseLine(mpBase),
-threshold(threshld)
+threshold(threshld),
+undefHandling(undef)
 {
 }
 
-MapListChangeDetection::MapListChangeDetection(const FileName& fn, MapListPtr& _ptr,const MapList& mplIn1, const MapList& mplIn2, double threshld) :
+MapListChangeDetection::MapListChangeDetection(const FileName& fn, MapListPtr& _ptr,const MapList& mplIn1, const MapList& mplIn2, double threshld, bool undef) :
 MapListVirtual(fn, _ptr, mplIn1[0]->gr(), mplIn1[0]->rcSize(), mplIn1->iSize(),""), 
 mpl1(mplIn1),
 mpl2(mplIn2),
-threshold(threshld)
+threshold(threshld),
+undefHandling(undef)
 {
 }
 
@@ -97,12 +100,14 @@ MapListVirtual *MapListChangeDetection::create(const FileName& fn, MapListPtr& p
 	if (iParms < 2)
 		ExpressionError(sExpr, sSyntax());
 	MapList mplIn = MapList(FileName(as[0],".mpl"));
-	if ( iParms ==2 ) {
+	if ( iParms ==3 ) {
 		double threshld = as[1].rVal();
-		return new MapListChangeDetection(fn ,ptr, mplIn, MapList(),threshld);
+		bool undefs = as[2].fVal();
+		return new MapListChangeDetection(fn ,ptr, mplIn, MapList(),threshld,undefs);
 	}
 	FileName fnInput2(as[1]);
-	double threshld = as[3].rVal();
+	bool undefs = as[3].fVal();
+	double threshld = as[2].rVal();
 	bool twoList = false;
 
 	if ( fnInput2.sExt == ".mpl")
@@ -121,11 +126,17 @@ MapListVirtual *MapListChangeDetection::create(const FileName& fn, MapListPtr& p
 	}
 	if ( twoList) {
 		MapList mpL2(fnInput2);
-		return new MapListChangeDetection(fn ,ptr, mplIn, mpL2, threshld);
+		if ( mpL2->iSize() != mplIn->iSize())
+			throw ErrorObject(TR("Map lists must have the same number of maps"));
+		if ( mpL2[mpL2->iLower()]->gr() != mplIn[mplIn->iLower()]->gr())
+			throw ErrorObject(TR("Map lists must use the same georef"));
+		return new MapListChangeDetection(fn ,ptr, mplIn, mpL2, threshld, undefs);
 	}
 	else {
 		Map mapBase = Map(fnInput2);
-		return new MapListChangeDetection(fn ,ptr, mplIn, mapBase, threshld);
+		if ( mapBase->gr() != mplIn[mplIn->iLower()]->gr())
+			throw ErrorObject(TR("Map lists must use the same georef as baseline map"));
+		return new MapListChangeDetection(fn ,ptr, mplIn, mapBase, threshld, undefs);
 	}
 }
 
@@ -141,6 +152,7 @@ void MapListChangeDetection::Store()
 	WriteElement("MapListChangeDetection", "MapList2", mpl2);
 	WriteElement("MapListChangeDetection", "BaseLine", mapBaseLine);
 	WriteElement("MapListChangeDetection", "Threshold", threshold);
+	WriteElement("MapListChangeDetection", "Undefhandling", undefHandling);
 }
 
 void MapListChangeDetection::Init()
@@ -151,10 +163,11 @@ void MapListChangeDetection::Init()
 String MapListChangeDetection::sExpression() const
 {
 	if ( mapBaseLine.fValid()) {
-		return String("MapListChangeDetection(%S, %S,%f)", mpl1->sName(), mapBaseLine->sName(),  threshold);
-	} else {
-		return String("MapListChangeDetection(%S, %S,%f)", mpl1->sName(), mpl2->sName(), threshold);
-	}
+		return String("MapListChangeDetection(%S, %S,%f,%s)", mpl1->sName(), mapBaseLine->sName(),  threshold, undefHandling ? "true": "false");
+	} else if ( mpl2.fValid()) {
+		return String("MapListChangeDetection(%S, %S,%f,%s)", mpl1->sName(), mpl2->sName(), threshold, undefHandling ? "true": "false");
+	} else
+		return String("MapListChangeDetection(%S,%f,%s)", mpl1->sName(), threshold, undefHandling ? "true": "false");
 }
 
 
@@ -184,7 +197,7 @@ bool MapListChangeDetection::oneMapList() {
 	DomainValueRangeStruct dvrs(Domain("value"), range);
 	
 	for(int i=0; i< mpl1->iSize() - 1; ++i) {
-		FileName fn(String("%S_%d.mpr",mapBaseLine->fnObj.sFile, i));
+		FileName fn(String("delta_%S_%d.mpr",ptr.fnObj.sFile, i));
 
 		Map mp(fn, mpl1->gr(), mpl1->rcSize(),dvrs);
 		ptr.AddMap(mp);
@@ -206,8 +219,12 @@ bool MapListChangeDetection::oneMapList() {
 				double delta;
 				double v1 = buf1[col];
 				double v2 = buf2[col];
-				if ( v1 == rUNDEF || v1 == iUNDEF || v1 == shUNDEF || v2 == rUNDEF || v2 == iUNDEF || v2 == shUNDEF)
-					delta = rUNDEF;
+				if ( v1 == rUNDEF || v1 == iUNDEF || v1 == shUNDEF || v2 == rUNDEF || v2 == iUNDEF || v2 == shUNDEF) {
+					if ( undefHandling)
+						delta = 0;
+					else
+						delta = rUNDEF;
+				}
 				else {
 					delta = v1 - v2;
 					if ( abs(delta) < threshold) {
@@ -236,7 +253,7 @@ bool MapListChangeDetection::withBaseMap() {
 	DomainValueRangeStruct dvrs(Domain("value"), range);
 	
 	for(int i=0; i< mpl1->iSize(); ++i) {
-		FileName fn(String("%S_%d.mpr",mapBaseLine->fnObj.sFile, i));
+		FileName fn(String("delta_%S_%d.mpr",ptr.fnObj.sFile, i));
 
 		Map mp(fn, mpl1->gr(), mpl1->rcSize(),dvrs);
 		ptr.AddMap(mp);
@@ -257,8 +274,12 @@ bool MapListChangeDetection::withBaseMap() {
 				double delta;
 				double v1 = buf[col];
 				double v2 = bufBase[col];
-				if ( v1 == rUNDEF || v1 == iUNDEF || v1 == shUNDEF || v2 == rUNDEF || v2 == iUNDEF || v2 == shUNDEF)
-					delta = rUNDEF;
+				if ( v1 == rUNDEF || v1 == iUNDEF || v1 == shUNDEF || v2 == rUNDEF || v2 == iUNDEF || v2 == shUNDEF) {
+					if ( undefHandling)
+						delta = 0;
+					else
+						delta = rUNDEF;
+				}
 				else {
 					delta = v1 - v2;
 					if ( abs(delta) < threshold) {
@@ -290,7 +311,7 @@ bool MapListChangeDetection::twoMapLists() {
 	ValueRangeReal range(rrList1.rLo() - rrList2.rHi(), rrList1.rHi() + rrList2.rHi(),rStep);
 	DomainValueRangeStruct dvrs(Domain("value"), range);
 	for(int i=0; i< mpl1->iSize(); ++i) {
-		FileName fn(String("%S_%d.mpr",mapBaseLine->fnObj.sFile, i));
+		FileName fn(String("delta_%S_%d.mpr",ptr.fnObj.sFile, i));
 
 		Map mp(fn, mpl1->gr(), mpl1->rcSize(),dvrs);
 		ptr.AddMap(mp);
@@ -312,8 +333,12 @@ bool MapListChangeDetection::twoMapLists() {
 				double delta;
 				double v1 = buf1[col];
 				double v2 = buf2[col];
-				if ( v1 == rUNDEF || v1 == iUNDEF || v1 == shUNDEF || v2 == rUNDEF || v2 == iUNDEF || v2 == shUNDEF)
-					delta = rUNDEF;
+				if ( v1 == rUNDEF || v1 == iUNDEF || v1 == shUNDEF || v2 == rUNDEF || v2 == iUNDEF || v2 == shUNDEF) {
+					if ( undefHandling)
+						delta = 0;
+					else
+						delta = rUNDEF;
+				}
 				else {
 					delta = v1 - v2;
 					if ( abs(delta) < threshold) {

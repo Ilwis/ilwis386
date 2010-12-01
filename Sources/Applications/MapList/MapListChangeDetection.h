@@ -6,8 +6,8 @@ class MapListChangeDetection : public MapListVirtual
 {
 public:
 	MapListChangeDetection(const FileName& fn, MapListPtr& ptr);
-	MapListChangeDetection(const FileName& fn, MapListPtr& _ptr,const MapList& mplIn, const Map& mpBase, double threshld);
-	MapListChangeDetection(const FileName& fn, MapListPtr& _ptr,const MapList& mplIn1, const MapList& mplIn2, double threshld);
+	MapListChangeDetection(const FileName& fn, MapListPtr& _ptr,const MapList& mplIn, const Map& mpBase, double threshld, bool undef);
+	MapListChangeDetection(const FileName& fn, MapListPtr& _ptr,const MapList& mplIn1, const MapList& mplIn2, double threshld, bool undef);
 	static MapListVirtual *create(const FileName& fn, MapListPtr& ptr, const String& sExpr);
 	virtual ~MapListChangeDetection();
 	virtual void Store();
@@ -22,4 +22,5 @@ private:
 	MapList mpl2;
 	Map mapBaseLine;
 	double threshold;
+	bool undefHandling;
 };
