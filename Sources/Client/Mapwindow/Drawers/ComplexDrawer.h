@@ -58,7 +58,7 @@ class _export ComplexDrawer : public NewDrawer {
 		virtual void timedEvent(UINT timerid);
 		virtual String description() const { return "?";}
 		virtual String iconName(const String& subtype="?") const { return "?";}
-		void setSpecialDrawingOptions(SpecialDrawingOptions option, bool add) ;
+		void setSpecialDrawingOptions(SpecialDrawingOptions option, bool add, vector<Coord>* coords=NULL) ;
 		int getSpecialDrawingOption(SpecialDrawingOptions opt=sdoNone) const;
 		bool isSimple() const { return false;}
 		bool isDirty() const;

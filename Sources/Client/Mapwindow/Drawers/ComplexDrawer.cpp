@@ -274,7 +274,7 @@ void ComplexDrawer::setDrawMethod(DrawMethod method) {
 	drm = method;
 }
 
-void ComplexDrawer::setSpecialDrawingOptions(SpecialDrawingOptions option, bool add){
+void ComplexDrawer::setSpecialDrawingOptions(SpecialDrawingOptions option, bool add, vector<Coord>* coords){
 	if ( add)
 		specialOptions |= option;
 	else

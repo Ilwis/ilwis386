@@ -20,7 +20,7 @@ class NewDrawer;
 
 	class _export BaseMapEditor : public CCmdTarget{
 	public:
-		enum Mode{mINSERT, mMOVE, mMOVING, mSELECT, mDELETE, mCHANGE, mSPLIT, mUNKNOWN};
+		enum Mode{mUNKNOWN=0, mINSERT=1, mMOVE=2, mMOVING=4, mSELECT=8, mDELETE=16, mCHANGE=32, mSPLIT=64};
 		// empty class for the moment will be moved to seperate file as soon as there is a rastermap editor
 		virtual bool OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)=0;
 		virtual ~BaseMapEditor() {};

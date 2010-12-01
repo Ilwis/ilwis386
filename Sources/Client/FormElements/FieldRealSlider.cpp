@@ -80,11 +80,16 @@ void FieldRealSlider::create()
 
 	slc = new OwnSliderCtrl(this);
 	slc->Create(m_dwStyle,	CRect(pntFld, dimFld), _frm->wnd(), Id());
-	slc->SetRange(rLo, rHi);
-	slc->SetPos(_rVal);
+	slc->SetRange(0, 1000);
+	slc->SetPos(scaleValue());
 	slc->setContinuous(continuous);
 
   CreateChildren();
+}
+
+double FieldRealSlider::scaleValue() const {
+	double v =  1000.0 * ((_rVal - vrr->rrMinMax().rLo()) / vrr->rrMinMax().rWidth());
+	return v;
 }
 
 void FieldRealSlider::show(int sw)
@@ -99,14 +104,17 @@ void FieldRealSlider::SetVal(double rVal)
   if (0 == slc)
     return;
   if ((0 != slc) && (rVal != iUNDEF) && (vrr->rrMinMax().fContains(rVal)))
-    slc->SetPos(rVal);
+    slc->SetPos(scaleValue());
   if (_npChanged)
     (_cb->*_npChanged)(0);
 }
 
 double FieldRealSlider::rVal()
 {
-	_rVal = slc->GetPos();
+  _rVal = slc->GetPos();
+  _rVal /= 1000.0;
+  _rVal *= vrr->rrMinMax().rWidth();
+  _rVal += vrr->rrMinMax().rLo();
   return _rVal;
 }
 
@@ -116,7 +124,7 @@ void FieldRealSlider::StoreData()
 	{
     if (slc)
 		{
-			_rVal = slc->GetPos();
+			_rVal = rVal();
 			*_prVal = _rVal;
 		}
   }
@@ -144,9 +152,9 @@ FormEntry* FieldRealSlider::CheckData()
   if (!fShow()) return 0;
   if (slc) 
   {
-		_rVal = slc->GetPos();
-			if (!vrr->rrMinMax().fContains(_rVal))
-				return this;
+		_rVal = rVal();
+		if (!vrr->rrMinMax().fContains(_rVal))
+			return this;
   }  
   return FormEntry::CheckData();
 }
@@ -243,7 +251,7 @@ int FieldRealSliderEx::EditCallBackFunc(Event *ev) {
 	if ( initial || setRace == 0)
 		return 1;
 	setRace = 1;
-	int val = edit->rVal();
+	double val = edit->rVal();
 	slider->SetVal(val);
 	setRace = -1;
 	return 1;

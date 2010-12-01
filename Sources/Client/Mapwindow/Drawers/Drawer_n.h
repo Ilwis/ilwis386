@@ -24,7 +24,7 @@ namespace ILWIS {
 		enum UICode{ucNONE=0, ucNOREPRESENTATION=2, ucNOINFO=4, ucNOMASK=8, ucNOMULTICOLOR=16,ucNOTRANSPARENCY=32,ucALL=4294967295};
 		enum SpecialDrawingOptions{sdoNone=0, sdoExtrusion=1, sdoXMarker=2, sdoYMarker=4, sdoFilled=8, sdoSELECTED=16};
 
-		~NewDrawer() {}
+		virtual ~NewDrawer() {}
 		virtual bool draw(bool norecursion = false, const CoordBounds& cb=CoordBounds()) const = 0;
 		virtual void prepare(PreparationParameters *) =0;
 		virtual String getType() const =0;
@@ -51,7 +51,7 @@ namespace ILWIS {
 		virtual void timedEvent(UINT eventid) = 0;
 		virtual String description() const = 0;
 		virtual String iconName(const String& subtype="?") const = 0;
-		virtual void setSpecialDrawingOptions(SpecialDrawingOptions option, bool add)=0 ;
+		virtual void setSpecialDrawingOptions(SpecialDrawingOptions option, bool add, vector<Coord>* coords=NULL)=0 ;
 		virtual int getSpecialDrawingOption(SpecialDrawingOptions opt=sdoNone) const =0;
 		virtual String store(const FileName& fnView, const String& parenSection) const = 0;
 		virtual void load(const FileName& fnView, const String& parenSection) = 0;

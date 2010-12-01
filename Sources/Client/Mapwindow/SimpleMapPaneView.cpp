@@ -259,17 +259,17 @@ UINT SimpleMapPaneView::DrawInThread(LPVOID lp)
 	mpv->csThread.Lock();
 	try {
 		while (!mpv->fStopDrawThread) {
-			clock_t start = clock();
+			//clock_t start = clock();
 
 			mcd->rootDrawer->getDrawerContext()->TakeContext();
 			while (mpv->fDrawRequest)
 				mpv->Draw();
 			mcd->rootDrawer->getDrawerContext()->ReleaseContext();
 
-			clock_t end = clock();
-			double total =  1000.0 * (double)(end - start) / CLOCKS_PER_SEC;
-			TRACE(String("drawn DrawInThread in %2.2f milliseconds;\n", total).scVal());
-			TRACE("------\n");
+			//clock_t end = clock();
+			//double total =  1000.0 * (double)(end - start) / CLOCKS_PER_SEC;
+			//TRACE(String("drawn DrawInThread in %2.2f milliseconds;\n", total).scVal());
+			//TRACE("------\n");
 
 			if (!mpv->fStopDrawThread)
 				mpv->drawThread->SuspendThread(); // wait here, and dont consume CPU time either

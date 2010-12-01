@@ -62,6 +62,7 @@ public:
 	void setContinuous(bool v) { continuous = v; }
 
 private:
+	double scaleValue() const;
 	double *_prVal;                // place holder for pointer to result
 	double _rVal;									// local copy with most recent value; StoreData writes this to _piVal
 	OwnSliderCtrl *slc;
