@@ -56,7 +56,9 @@ AnimationDrawer::AnimationDrawer(DrawerParameters *parms) :
 	index(0),
 	animcontrol(0), 
 	useTime(false),
-	mapIndex(0)
+	mapIndex(0),
+	animselection(0),
+	animslicing(0)
 {
 	setTransparency(1);
 	last = 0;
@@ -271,8 +273,8 @@ HTREEITEM AnimationDrawer::configure(LayerTreeView  *tv, HTREEITEM displayOption
 
 	item2 = new DisplayOptionTreeItem(tv,displayOptionsLastItem,this,
 					0,
-					(DisplayOptionItemFunc)&AnimationDrawer::animationSourceUsage);
-	InsertItem(TR("Source usage"),".mpv",item2);
+					(DisplayOptionItemFunc)&AnimationDrawer::animationDefaultView);
+	InsertItem(TR("Restore default view"),".isl",item2);
 
 	//item2 = new DisplayOptionTreeItem(tv,displayOptionsLastItem,this,0);
 	HTREEITEM portrayalItem = InsertItem(tv, displayOptionsLastItem, TR("Selections"),"Select");
@@ -298,7 +300,7 @@ HTREEITEM AnimationDrawer::configure(LayerTreeView  *tv, HTREEITEM displayOption
 
 }
 void AnimationDrawer::animationSlicing(CWnd *parent) {
-	new AnimationSlicing(parent,this);
+	animslicing = new AnimationSlicing(parent,this);
 }
 
 void AnimationDrawer::areaOfInterest(CWnd *parent) {
@@ -310,7 +312,7 @@ void AnimationDrawer::timeSelection(CWnd *parent) {
 }
 
 void AnimationDrawer::animationSelection(CWnd *parent) {
-	new AnimationSelection(parent,this);
+	animselection = new AnimationSelection(parent,this);
 }
 
 bool AnimationDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
@@ -323,8 +325,34 @@ void AnimationDrawer::animationControl(CWnd *parent) {
 	animcontrol = new AnimationControl(parent, this);
 }
 
-void AnimationDrawer::animationSourceUsage(CWnd *parent) {
-	new AnimationSourceUsage(parent, this);
+void AnimationDrawer::animationDefaultView(CWnd *parent) {
+	MapList mlist;
+	mlist.SetPointer(datasource->pointer());
+	for(int i =0 ; i < drawers.size(); ++i) {
+		SetDrawer *sdr = (SetDrawer *)drawers.at(i);
+		NewDrawer *drPost;
+		if ( (drPost = sdr->getDrawer(RSELECTDRAWER,dtPOST)) != 0)
+			sdr->removeDrawer(drPost->getId(), true);
+		if ( (drPost = sdr->getDrawer(BOX_DRAWER_ID,dtPOST)) != 0)
+			sdr->removeDrawer(drPost->getId(), true);
+
+		if ( mlist[i]->dm()->pdi()) {
+			sdr->setDrawMethod(NewDrawer::drmIMAGE);
+		} else {
+			sdr->setRepresentation(mlist[i]->dm()->rpr());
+			sdr->setStretchRangeReal(mlist[i]->rrPerc1());
+		}
+		PreparationParameters pp(NewDrawer::ptRENDER);
+		sdr->prepare(&pp);
+		paletteList.clear();
+	}
+	if ( animselection)
+		animselection->OnOK();
+	if ( animslicing)
+		animslicing->OnOK();
+	getRootDrawer()->getDrawerContext()->doDraw();
+
+
 }
 
 void AnimationDrawer::timedEvent(UINT _timerid) {
@@ -723,6 +751,12 @@ int AnimationSlicing::createSteps(Event*) {
 	return 1;
 }
 
+void AnimationSlicing::shutdown(int iReturn) {
+	AnimationDrawer *andr = (AnimationDrawer *)drw;
+	andr->animslicing = 0;
+	return DisplayOptionsForm2::shutdown();
+}
+
 //----------------------------------------------------------
 AnimationAreaOfInterest::AnimationAreaOfInterest(CWnd *par, AnimationDrawer *adr) 
 	: DisplayOptionsForm(adr, par, TR("Area of Interest")), boxdrw(0)
@@ -831,6 +865,12 @@ int AnimationSelection::createSteps(Event*) {
 		drw->getRootDrawer()->getDrawerContext()->doDraw();
 	}
 	return 1;
+}
+
+void AnimationSelection::shutdown(int iReturn) {
+	AnimationDrawer *andr = (AnimationDrawer *)drw;
+	andr->animselection = 0;
+	return DisplayOptionsForm2::shutdown();
 }
 //----------------------------------------------------------
 AnimationSourceUsage::AnimationSourceUsage(CWnd *par, AnimationDrawer *ldr) 

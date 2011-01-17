@@ -27,6 +27,7 @@
 #include "client\formelements\fldrpr.h"
 #include "client\formelements\fentvalr.h"
 #include "Client\Mapwindow\Drawers\ZValueMaker.h"
+#include "Engine\Domain\dmclass.h"
 #include "Headers\Hs\Drwforms.hs"
 
 using namespace ILWIS;
@@ -60,6 +61,7 @@ void SetDrawer::prepare(PreparationParameters *parm){
 		csy = parm->csy;
 		AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)parentDrawer;
 		Representation rpr = mapDrawer->getRepresentation();
+		//if ( rpr.fValid() && !rpr->prv())
 		if ( rpr.fValid() && !rpr->prv())
 			setStretchRangeReal(mapDrawer->getStretchRangeReal());
 		if (!drawColor)
@@ -134,8 +136,9 @@ Representation SetDrawer::getRepresentation() const { // avoiding copy construct
 void SetDrawer::setRepresentation( const Representation& rp){
 	rpr = rp;
 	stretched = false;
+	setDrawMethod(NewDrawer::drmRPR);
 	AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)parentDrawer;
-	if ( rpr.fValid() && !rpr->prv())
+	if ( rpr.fValid() && mapDrawer->getBaseMap()->dm()->pdv())
 		setStretchRangeReal(mapDrawer->getStretchRangeReal());
 }
 
@@ -206,14 +209,6 @@ void SetDrawer::setStretchRangeInt(const RangeInt& ri){
 	rrStretch.rHi() = doubleConv(riStretch.iHi());
 }
 
-RangeReal SetDrawer::getLegendRange() const{
-	return rrLegendRange;
-}
-
-void SetDrawer::setLegendRange(const RangeReal& rr){
-	rrLegendRange = rr;
-}
-
 SetDrawer::StretchMethod SetDrawer::getStretchMethod() const{
 	return stretchMethod;
 }
@@ -263,20 +258,89 @@ HTREEITEM SetDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 
 	NewDrawer::DrawMethod method = getDrawMethod();
 	portrayalItem = InsertItem(tv,parent, "Portrayal", "Colors");
-	
+
 	colorCheck = new SetChecks(tv,this,(SetCheckFunc)&SetDrawer::setcheckRpr);
 	if ( rpr.fValid() ) {
 		bool usesRpr = method == NewDrawer::drmRPR;
 		DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,portrayalItem,this,(DisplayOptionItemFunc)&SetDrawer::displayOptionSubRpr,0,colorCheck);
 		rprItem = InsertItem("Representation", ".rpr", item, (int)usesRpr);
-
+		insertLegendItems(tv, rprItem);
 		if ( usesRpr)
 			InsertItem(tv, rprItem,String("Value : %S",rpr->sName()),".rpr");
-		if ( rpr->prg() || rpr->prv())
+		if ( rpr->prg() || rpr->prv()){
 			insertStretchItem(tv, portrayalItem);
+		
+		}
 
 	}
 	return hti;
+}
+
+void SetDrawer::insertLegendItems(LayerTreeView  *tv, HTREEITEM parent) {
+	String sName = SDCRemLegend;
+	int iImgLeg = IlwWinApp()->iImage("legend");
+	HTREEITEM htiLeg = tv->GetTreeCtrl().InsertItem(sName.scVal(), iImgLeg, iImgLeg, parent);
+	if (0 == htiLeg)
+		return;
+
+	if ( rpr->prg() || rpr->prv())
+		insertLegendItemsValue(tv, htiLeg);
+	else if ( rpr->prc()) {
+		insertLegendItemsClass(tv, htiLeg);
+	}
+	tv->GetTreeCtrl().Expand(htiLeg, TVE_EXPAND);
+
+}
+void SetDrawer::insertLegendItemsValue(LayerTreeView  *tv, HTREEITEM htiLeg){
+	tv->GetTreeCtrl().SetItemData(htiLeg, (DWORD_PTR)new ObjectLayerTreeItem(tv, rpr.pointer()));
+	AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)getParentDrawer();
+	DomainValueRangeStruct dvs = mapDrawer->getBaseMap()->dvrs();					
+	RangeReal rr = getStretchRangeReal();
+	int iItems = 5;
+	double rStep = dvs.rStep();
+	if (rStep > 1e-6) {
+		int iSteps = 1 + round(rr.rWidth() / rStep);
+		if (iSteps < 2)
+			iSteps = 2;
+		if (iSteps <= 11)
+			iItems = iSteps;
+	}
+	for (int i = 0; i < iItems; ++i) {
+		double rMaxItem = iItems - 1;
+		double rVal = rr.rLo() + i / rMaxItem * rr.rWidth();
+		String sName = dvs.sValue(rVal, 0);
+		HTREEITEM hti = tv->GetTreeCtrl().InsertItem(sName.scVal(), htiLeg);
+		tv->GetTreeCtrl().SetItemData(hti, (DWORD_PTR)new LegendValueLayerTreeItem(tv, this, dvs, rVal));		
+	}
+}
+
+void SetDrawer::insertLegendItemsClass(LayerTreeView  *tv, HTREEITEM htiLeg){
+	tv->GetTreeCtrl().SetItemData(htiLeg, (DWORD_PTR)new LegendLayerTreeItem(tv, this));		
+	DomainClass* dc = rpr->dm()->pdc();
+	int iItems = dc->iNettoSize();
+	for (int i = 1; i <= iItems; ++i) {
+		int iRaw = dc->iKey(i);
+		String sName = dc->sValueByRaw(iRaw, 0);
+		HTREEITEM hti = tv->GetTreeCtrl().InsertItem(sName.scVal(), htiLeg);
+		tv->GetTreeCtrl().SetItemData(hti, (DWORD_PTR)new LegendClassLayerTreeItem(tv, this, rpr->dm(), iRaw));		
+	}
+}
+
+
+void SetDrawer::drawLegendItem(CDC *dc, const CRect& rct, double rVal) const{
+	AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)getParentDrawer();
+	DomainValueRangeStruct dvs = mapDrawer->getBaseMap()->dvrs();
+	Color clr;
+	if ( dvs.dm()->pdv())
+		clr = getDrawingColor()->clrVal(rVal);
+	else
+		clr = getDrawingColor()->clrRaw((long)rVal, getDrawMethod());
+	
+
+	CBrush brushColor(clr);
+	CBrush *br = dc->SelectObject(&brushColor);
+	dc->Rectangle(rct);
+	dc->SelectObject(br);
 }
 
 void SetDrawer::insertStretchItem(LayerTreeView  *tv, HTREEITEM parent) {
@@ -347,9 +411,10 @@ SetStretchForm::SetStretchForm(CWnd *wPar, SetDrawer *dr) :
 
 {
 	BaseMapPtr *ptr = ((AbstractMapDrawer *)dr->getParentDrawer())->getBaseMap();
-	rr = ptr->rrMinMax();
-	sliderLow = new FieldRealSliderEx(root,"Lower", &low,ValueRange(rr,0.01),true);
-	sliderHigh = new FieldRealSliderEx(root,"Upper", &high,ValueRange(rr,0.01),true);
+	rr = ptr->dvrs().rrMinMax();
+	double rStep = ptr->dvrs().rStep();
+	sliderLow = new FieldRealSliderEx(root,"Lower", &low,ValueRange(rr,rStep),true);
+	sliderHigh = new FieldRealSliderEx(root,"Upper", &high,ValueRange(rr,rStep),true);
 	sliderHigh->Align(sliderLow, AL_UNDER);
 	sliderLow->SetCallBack((NotifyProc)&SetStretchForm::check);
 	sliderHigh->SetCallBack((NotifyProc)&SetStretchForm::check);

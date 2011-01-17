@@ -35,6 +35,7 @@ class _export FeatureSetDrawer : public SetDrawer {
 		void displayZScaling(CWnd *parent);
 		void extrusionOptions(CWnd *p) ;
 		void setExtrusion(void *value, LayerTreeView *tree);
+		void setSingleColorMap(void *value, LayerTreeView *tree);
 		String store(const FileName& fnView, const String& parenSection) const;
 		void load(const FileName& fnView, const String& parenSection);
 

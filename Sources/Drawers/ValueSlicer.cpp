@@ -42,7 +42,7 @@ ValueSlicer::ValueSlicer(ValueSlicerSlider *f, DWORD dwStyle, const RECT& rect, 
 
 void ValueSlicer::drawRprBase(LPDRAWITEMSTRUCT lpDIS, const CRect rct) {
 	RepresentationGradual *rpg = rprBase->prg();
-	double yscale = rct.Height();
+	double yscale = (double)rct.Height() / ((rpg->iLimits() - 1.0) * rpg->iGetStretchSteps());
 	double y = 0;
 	for(int i = 1; i < rpg->iLimits(); ++i) {
 		
@@ -51,15 +51,15 @@ void ValueSlicer::drawRprBase(LPDRAWITEMSTRUCT lpDIS, const CRect rct) {
 		double rStep = (v2 - v1) / rpg->iGetStretchSteps();
 		for(int j=0; j < rpg->iGetStretchSteps(); ++j) {
 			double cv = v1 + j * rStep;
-			Color c = rpg->clr(cv + rStep / 2.0);
+			Color c = rpg->clr(cv + rStep);
 			CBrush brush(c);
 			CPen pen(PS_SOLID,1,c);
 			HGDIOBJ open = SelectObject(lpDIS->hDC, pen);
 			HGDIOBJ prevBrush = SelectObject(lpDIS->hDC, brush);
-			int yup = rct.bottom - y - rStep * yscale;
+			int yup = rct.bottom - y - yscale;
 			int ydown = rct.bottom - y;
 			::Rectangle(lpDIS->hDC, rct.left, ydown, rct.right, yup);
-			y += rStep * yscale;
+			y += yscale;
 			SelectObject(lpDIS->hDC, prevBrush);
 			SelectObject(lpDIS->hDC, open);
 		}
@@ -210,6 +210,10 @@ void ValueSlicer::OnLButtonDown(UINT nFlags, CPoint point) {
 
 void ValueSlicer::OnLButtonDblClk(UINT nFlags, CPoint point) {
 	Color clr = fldslicer->rprgrad->GetColor(fldslicer->selectedIndex );
+	bool showForm = !rprBase.fValid() || fldslicer->selectedIndex % 2 == 1;
+	if (!showForm)
+		return;
+
 	SlicingStepColor frm(this,&clr);
 	if ( frm.fOkClicked()) {
 		fldslicer->rprgrad->SetLimitColor(fldslicer->selectedIndex  , clr);

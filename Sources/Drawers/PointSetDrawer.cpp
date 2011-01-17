@@ -54,7 +54,7 @@ HTREEITEM PointSetDrawer:: configure(LayerTreeView  *tv, HTREEITEM parent) {
 	HTREEITEM hti = FeatureSetDrawer::configure(tv,parent);
 	if ( portrayalItem) {
 		DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,portrayalItem,this,(DisplayOptionItemFunc)&PointSetDrawer::setSymbolization);
-		InsertItem(TR("Symbolization"),"set",item);
+		InsertItem(TR("Symbolization"),"Set",item);
 	}
 	return hti;
 }

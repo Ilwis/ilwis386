@@ -26,8 +26,6 @@ class _export SetDrawer : public ComplexDrawer {
 		RangeInt getStretchRangeInt() const;
 		void setStretchRangeInt(const RangeInt& rr);
 		bool isStretched() const;
-		RangeReal getLegendRange() const;
-		void setLegendRange(const RangeReal& rr);
 		StretchMethod getStretchMethod() const;
 		void setStretchMethod(StretchMethod sm);
 		ILWIS::DrawingColor *getDrawingColor() const;
@@ -47,7 +45,11 @@ class _export SetDrawer : public ComplexDrawer {
 		void displayOptionSubRpr(CWnd *parent);
 		void displayOptionStretch(CWnd *parent);
 		void insertStretchItem(LayerTreeView  *tv, HTREEITEM parent);
+		void insertLegendItems(LayerTreeView  *tv, HTREEITEM parent);
+		void insertLegendItemsValue(LayerTreeView  *tv, HTREEITEM parent);
+		void insertLegendItemsClass(LayerTreeView  *tv, HTREEITEM parent);
 		virtual void modifyLineStyleItem(LayerTreeView  *tv, bool remove=false) {}
+		void drawLegendItem(CDC *dc, const CRect& rct, double rVal) const;
 
 		//BaseMap basemap;
 		Representation rpr;

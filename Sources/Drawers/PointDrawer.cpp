@@ -71,7 +71,8 @@ bool PointDrawer::draw(bool norecursion, const CoordBounds& cbArea) const {
 	bool filledExtr = getSpecialDrawingOption(NewDrawer::sdoFilled);
 
 	ComplexDrawer *cdrw = (ComplexDrawer *)getParentDrawer();
-	bool is3D = getRootDrawer()->is3D() && cdrw->getZMaker()->getThreeDPossible();
+	ZValueMaker *zvmkr = cdrw->getZMaker();
+	bool is3D = getRootDrawer()->is3D() && zvmkr->getThreeDPossible();
 	double fakez = getRootDrawer()->getFakeZ();
 
 	double fx = cNorm.x;
@@ -94,20 +95,19 @@ bool PointDrawer::draw(bool norecursion, const CoordBounds& cbArea) const {
 				drawEllipse((*cur), fz);
 				break;
 			case SVGAttributes::sRECTANGLE:
-				drawRectangle((*cur), fz);
+				drawRectangle((*cur), 0);
 				break;
 			case SVGAttributes::sPOLYGON:
-				drawRectangle((*cur), fz);
+				drawRectangle((*cur), 0);
 				break;
 			case SVGAttributes::sLINE:
 			case SVGAttributes::sPOLYLINE:
-				drawLine((*cur), fz);
+				drawLine((*cur), 0);
 				break;
 			case SVGAttributes::sPATH:
 				break;			
 		};
 	}
-	glPopMatrix();
 
 	if ( specialOptions & NewDrawer::sdoSELECTED) {
 		CoordBounds cbSelect = cb;
@@ -121,27 +121,19 @@ bool PointDrawer::draw(bool norecursion, const CoordBounds& cbArea) const {
 		glEnd();
 
 	}
+	glPopMatrix();
 
-	
+	if ( is3D) {
+		if ( extrusion) {
+			glBegin(GL_LINE_STRIP) ;
+			glVertex3d(cNorm.x,cNorm.y,0);
+			glVertex3d(cNorm.x, cNorm.y,fz*zvmkr->getZScale());
+			glEnd();
+		}
+
+	}
 
 
-	//if ( is3D) {
-	//	if ( extrusion) {
-	//		if (!filledExtr) {
-	//			glBegin(GL_LINE_STRIP) ;
-	//			glVertex3d(cNorm.x,cNorm.y,0);
-	//			glVertex3d(cNorm.x, cNorm.y,fz);
-	//			glEnd();
-	//		} else {
-	//			glColor4f(drawColor.redP(),drawColor.greenP(), drawColor.blueP(), extrTransparency);
-	//			drawExtrusion(Coord(fx - symbolScale, fy - symbolScale,fz),Coord(fx - symbolScale, fy + symbolScale, fz),fakez,true); 
-	//			drawExtrusion(Coord(fx - symbolScale, fy + symbolScale,fz),Coord(fx + symbolScale, fy + symbolScale, fz),fakez, true);
-	//			drawExtrusion(Coord(fx + symbolScale, fy + symbolScale,fz),Coord(fx + symbolScale, fy - symbolScale, fz),fakez, true); 
-	//			drawExtrusion(Coord(fx + symbolScale, fy - symbolScale,fz),Coord(fx - symbolScale, fy - symbolScale, fz),fakez, true); 
-	//		}
-	//	}
-
-	//}
 
 	return true;
 }

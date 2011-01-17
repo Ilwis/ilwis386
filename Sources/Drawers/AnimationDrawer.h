@@ -10,11 +10,13 @@ class FieldLister;
 ILWIS::NewDrawer *createAnimationDrawer(ILWIS::DrawerParameters *parms);
 namespace ILWIS{
 	class BoxDrawer;
+	class AnimationSlicing;
 
 	class _export AnimationDrawer : public AbstractMapDrawer {
 		friend class AnimationTiming;
 		friend class AnimationSourceUsage;
 		friend class AnimationControl;
+		friend class AnimationSlicing;
 		friend class AnimationSelection;
 		friend class TimeSelection;
 	public:
@@ -34,7 +36,7 @@ namespace ILWIS{
 		void removeSelectionDrawers() ;
 		void animationTiming(CWnd *w);
 		void animationControl(CWnd *w);
-		void animationSourceUsage(CWnd *parent);
+		void animationDefaultView(CWnd *parent);
 		void setMapIndex(int index);
 		void animationSlicing(CWnd *parent);
 		void animationSelection(CWnd *parent);
@@ -64,6 +66,8 @@ namespace ILWIS{
 		ILWIS::Duration timestep;
 		CCriticalSection csAccess;
 		AnimationControl *animcontrol;
+		AnimationSelection *animselection;
+		AnimationSlicing *animslicing;
 
 		void addSetDrawer(const BaseMap& basemap, ILWIS::PreparationParameters *pp, ILWIS::SetDrawer *rsd, const String& name="", bool post=false);
 	};
@@ -110,6 +114,7 @@ namespace ILWIS{
 	private:
 		FieldOneSelectTextOnly *fldSteps;
 		int createSteps(Event*);
+		void shutdown(int iReturn);
 		String steps;
 		ValueSlicerSlider *vs;
 
@@ -135,6 +140,7 @@ namespace ILWIS{
 	public:
 		AnimationSelection(CWnd *par, AnimationDrawer *gdr);
 	private:
+		void shutdown(int iReturn);
 		FieldOneSelectTextOnly *fldSteps;
 		int createSteps(Event*);
 		String steps;

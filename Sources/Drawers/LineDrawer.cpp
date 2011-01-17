@@ -46,9 +46,6 @@ bool LineDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 	if ( !getRootDrawer()->getCoordBoundsZoom().fContains(cb))
 		return false;
 
-	/*glClearColor(1.0,1.0,1.0,0.0);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_BLEND);*/
 	CoordBounds cbZoom = getRootDrawer()->getCoordBoundsZoom();
 
 	bool extrusion = getSpecialDrawingOption(NewDrawer::sdoExtrusion);

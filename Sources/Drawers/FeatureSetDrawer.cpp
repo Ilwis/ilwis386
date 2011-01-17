@@ -34,7 +34,8 @@ FeatureSetDrawer::FeatureSetDrawer(DrawerParameters *parms, const String& name) 
 	SetDrawer(parms,name),
 	singleColor(Color(0,176,20)),
 	useMask(false),
-	colorItem(0)
+	colorItem(0),
+	extrTransparency(0.2)
 {
 	setDrawMethod(drmNOTSET); // default
 	setInfo(false);
@@ -56,6 +57,8 @@ void FeatureSetDrawer::prepare(PreparationParameters *parms){
 		mapDrawer->getFeatures(features);
 		clear();
 		drawers.resize( features.size());
+		for(int i=0; i<drawers.size(); ++i)
+			drawers.at(i) = 0;
 		int count = 0;
 		Tranquilizer trq("preparing data");
 		for(int i=0; i < features.size(); ++i) {
@@ -67,7 +70,7 @@ void FeatureSetDrawer::prepare(PreparationParameters *parms){
 				pdrw->addDataSource(feature);
 				PreparationParameters fp((int)parms->type, 0);
 				pdrw->prepare(&fp);
-				drawers.at(i) = pdrw;
+				setDrawer(i, pdrw);
 				++count;
 				if ( i % 100 == 0) {
 					trq.fUpdate(i,features.size()); 
@@ -131,7 +134,7 @@ HTREEITEM FeatureSetDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 		bool useSingleColor = getDrawMethod() == NewDrawer::drmSINGLE;
 		bool useRpr = getDrawMethod() == NewDrawer::drmRPR;
 		colorItem = new DisplayOptionColorItem("Single color", tv,portrayalItem,this,
-						(DisplayOptionItemFunc)&FeatureSetDrawer::displayOptionSingleColor,0,colorCheck);
+						(DisplayOptionItemFunc)&FeatureSetDrawer::displayOptionSingleColor,0,colorCheck,(SetCheckFunc)&FeatureSetDrawer::setSingleColorMap);
 		colorItem->setColor(singleColor);
 		HTREEITEM singleColorItem = InsertItem("Single Color","SingleColor",colorItem, useSingleColor & !useRpr);
 		item = new DisplayOptionTreeItem(tv,portrayalItem,this, 0,0,colorCheck);									
@@ -143,6 +146,15 @@ HTREEITEM FeatureSetDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 	
 
 	return hti;
+}
+
+void FeatureSetDrawer::setSingleColorMap(void *value, LayerTreeView *tree) {
+	bool v = *(bool *)value;
+	if ( v) {
+		PreparationParameters parm(NewDrawer::ptRENDER, 0);
+		prepareChildDrawers(&parm);
+		getRootDrawer()->getDrawerContext()->doDraw();
+	}
 }
 
 HTREEITEM FeatureSetDrawer::make3D(bool yesno, LayerTreeView  *tv){
@@ -178,7 +190,9 @@ void FeatureSetDrawer::extrusionOptions(CWnd *p) {
 
 void FeatureSetDrawer::setExtrusion(void *value, LayerTreeView *tree) {
 	bool v = *(bool *)value;
-	setSpecialDrawingOptions(sdoExtrusion, v);
+	setSpecialDrawingOptions(sdoExtrusion | sdoTOCHILDEREN, v);
+	//PreparationParameters parm(NewDrawer::ptRENDER, 0);
+	//prepareChildDrawers(&parm);
 	getRootDrawer()->getDrawerContext()->doDraw();
 
 }
@@ -344,9 +358,10 @@ void ExtrusionOptions::apply() {
 	rg->StoreData();
 	slider->StoreData();
 	if ( line == 1)
-		((FeatureSetDrawer *)drw)->specialOptions |= NewDrawer::sdoFilled;
+		((FeatureSetDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFilled | NewDrawer::sdoTOCHILDEREN, true );
+		//specialOptions |= NewDrawer::sdoFilled;
 	else
-		((FeatureSetDrawer *)drw)->specialOptions &= ~NewDrawer::sdoFilled;
+		((FeatureSetDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFilled | NewDrawer::sdoTOCHILDEREN, false);
 	((FeatureSetDrawer *)drw)->extrTransparency = 1.0 - (double)transparency/100.0;
 	updateMapView();
 
