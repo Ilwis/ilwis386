@@ -167,6 +167,8 @@
 #include "Engine\Map\Point\PNTSTORE.H"
 #include "Engine\Table\tblstore.h"
 #include "Engine\Table\COLSTORE.H"
+#include "Engine\Table\NewTableStore.h"
+#include "Engine\Table\TableStoreIlwis3.h"
 #include "Engine\Base\DataObjects\valrange.h"
 #include "Engine\Table\Rec.h"
 #include "Engine\Base\DataObjects\Tranq.h"
@@ -175,6 +177,8 @@
 #include "Engine\Base\DataObjects\ObjectStructure.h"
 #include "Engine\Table\tblinfo.h"
 #include "Headers\Hs\point.hs"
+
+using namespace ILWIS;
 
 #define EPS10 1.e-10
 
@@ -185,9 +189,8 @@ fnObj(p.fnObj), ptr(p)
 	if ( fDoNotLoad ) // loading and constructing will be done elsewhere (foreignformat)
 		return;
 
-	Table tbl = Table(fn);
-	tbl->Load();
-	tbl->DoNotStore(true);
+	TableStoreIlwis3 tbl;
+	tbl.load(fn,"");
 
 	ILWIS::Version::BinaryVersion fvFormatVersion;
 	ptr.ReadElement("PointMapStore", "Format", (int &)fvFormatVersion);
@@ -199,35 +202,34 @@ fnObj(p.fnObj), ptr(p)
 
 	// determine the format of the pointmap by means of the Coordinate column
 	// This Column did not exist in version 2.2 and lower
-	bool fFormat20 = !TableInfo::fExistCol(p.fnObj, tbl->sSectionPrefix, "Coordinate");
-	Column colValue = tbl->col("Name");
+	bool fFormat20 = false; //!TableInfo::fExistCol(p.fnObj, tbl->sSectionPrefix, "Coordinate");
+	long iNr = tbl.getRowCount();
 
 	if (fFormat20)
 	{
-		tbl->LoadData();
-		Column colX = tbl->col("X");
-		Column colY = tbl->col("Y");
-		if (!colX.fValid() || !colY.fValid())
-			throw ErrorObject("PointMap does not have valid X and/or Y column");
-		long iNr = tbl->iRecs();
-		
+		int xCol = tbl.index("X");
+		int yCol = tbl.index("Y");
+		int vCol = tbl.index("Name");
 		for (long i = 1; i <= iNr; ++i) 
 		{
-			double x = colX->rValue(i);
-			double y = colY->rValue(i);
-			SetPoint(Coord(x,y), i, colValue);
-			
+			double x,y,v;
+			tbl.get(i-1, xCol, x);
+			tbl.get(i-1, yCol, y);
+			tbl.get(i-1, vCol, v);
+			SetPoint(Coord(x,y), v, tbl.fUsesReals(vCol));
 		}
 	}
 	else {
-		Column colCrd = tbl->col("Coordinate");
-			if (!colCrd.fValid())
-				throw ErrorObject("PointMap does not have valid Coordinate column");
-		long iNr = tbl->iRecs();;
-		
-		for (long i = 1; i <= iNr; ++i) 
+
+		Coord crd;
+		int crdCol = tbl.index("Coordinate");
+		int vCol = tbl.index("Name");
+		for (long i = 0; i < iNr; ++i) 
 		{
-			SetPoint(colCrd->cValue(i), i, colValue);
+			double v;
+			tbl.get(i,crdCol,crd);
+			tbl.get(i, vCol, v);
+			SetPoint(crd, v, tbl.fUsesReals(vCol));
 		}
 	}
 
@@ -253,13 +255,11 @@ Feature *PointMapStore::pntNew(geos::geom::Geometry *pnt) {
 	return p;
 }
 
-void PointMapStore::SetPoint(const Coord& crd, int i, const Column& colValue) {
-	if ( colValue->dvrs().fRealValues()) {
-	 	double v = colValue->rValue(i);
+void PointMapStore::SetPoint(const Coord& crd, double v, bool usesReal) {
+	if ( usesReal) {
 		ILWIS::RPoint *p = new ILWIS::RPoint(crd, v);
 		geometries->push_back(p);
 	} else {
-		long v = ptr.dvrs().fValues() ? colValue->iValue(i) : colValue->iRaw(i);
 		ILWIS::LPoint *p = new ILWIS::LPoint(crd, v);
 		geometries->push_back(p);
 	} 
@@ -447,7 +447,7 @@ String PointMapStore::sValue(long iRec, short iWidth, short iDec) const
 Coord PointMapStore::cValue(long iRec) const
 {
 	if ( iRec  < geometries->size() && geometries->at(iRec) != NULL)	{
-		Point *pnt = (Point *)geometries->at(iRec);
+		ILWIS::Point *pnt = (ILWIS::Point *)geometries->at(iRec);
 		const CoordinateSequence *p = pnt->getCoordinates();
 		Coord c(p->getX(0),p->getY(0));
 		delete p;

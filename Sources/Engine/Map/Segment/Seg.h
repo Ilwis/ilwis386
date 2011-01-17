@@ -145,6 +145,7 @@ namespace ILWIS {
 {
 public:
 	Segment(geos::geom::LineString *seg=NULL);
+	virtual ~Segment();
 	//CoordBounds		crdBounds() const; // new 3.0
 	long			iBegin() const;   // begin node  - id in node table
 	long			iEnd() const;	   // end node	  - id in node table

@@ -138,7 +138,7 @@ enum DomainType { dmtCLASS, dmtID, dmtVALUE, dmtIMAGE, dmtPICTURE,
                   dmtBIT, dmtNONE, dmtSTRING, dmtGROUP, dmtCOLOR, dmtCOORD, 
                   dmtBOOL, dmtBINARY, dmtCOORDBUF, dmtUNIQUEID, dmtTIME, dmtUNKNOWN};
 enum StoreType { stBIT, stDUET, stNIBBLE, stBYTE, stINT, stLONG,
-                 stREAL, stCRD, stSTRING, stBINARY, stFLOAT, stCOORDBUF, stFOREIGNFORMAT, stCRD3D, stCOORDBUF3D};
+                 stREAL, stCRD, stSTRING, stBINARY, stFLOAT, stCOORDBUF, stFOREIGNFORMAT, stCRD3D, stCOORDBUF3D, stUNKNOWN};
                   
 class Domain: public IlwisObject
 {

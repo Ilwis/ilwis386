@@ -88,6 +88,8 @@ public:
 	ColumnType				getColumnType() const;
 	double					getStep() const;
 	double					getValueOffset() const;
+	bool					isSharedValue() const;
+	void				    sharedValue(bool yesno);
 
 private:
     void                    Init(const ColumnInfo& colinf);
@@ -111,6 +113,7 @@ private:
 	DomainValueRangeStruct	_dvrs;
 	double					_rStep;
 	double					_rValueOffset;
+	bool					_valueIsShared;
 };
 
 #endif // ILWCOLINFO_H

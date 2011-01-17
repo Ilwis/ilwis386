@@ -201,14 +201,18 @@ void DomainInfo::Load(const FileName& fn, const char* sSect, const char* sEntry)
   p = strtok(0, ";");
   if (p == 0)
     return;
-  _st = Domain::st(p);
+  String dmName(p);
+  _st = Domain::st(dmName.toLower());
+  if ( _st == stUNKNOWN) {
+	  _st = Domain::st(_fnDom.sFile.toLower());
+  }
   p = strtok(0, ";");
   if (p == 0)
 	{
     return;
 	}		
 	if (stCRD == _st) {
-		_fnDom = FileName(); // "Coord.dom" does noet exist!
+		//_fnDom = FileName(); // "Coord.dom" does noet exist!
 		_dmt = dmtCOORD;
 	}
 	else
@@ -220,7 +224,28 @@ void DomainInfo::Load(const FileName& fn, const char* sSect, const char* sEntry)
   p = strtok(0, ";");
   if (p == 0)
     return;
-  _vr = ValueRange(String(p));
+  if ( _dmt == dmtVALUE) {
+	  String range;
+	ObjectInfo::ReadElement(sSect, "Range", fn, range);
+	double min=0, max=0, step=1, offset=0;
+	Array<String> parts;
+	Split(range,parts,":");
+	if ( parts.size() < 4) {
+		min = parts[0].rVal();
+		max = parts[1].rVal();
+	}
+	if ( parts.size() == 3) {
+		offset = parts[2].sTail("=").rVal();
+	}
+	if ( parts.size() == 4) {
+		step = parts[2].rVal();
+		offset = parts[3].sTail("=").rVal();
+	}
+	_vr = ValueRange(min,max,step);
+  }
+  else {
+	_vr = ValueRange(String(p));
+  }
 }
 
 Domain DomainInfo::dmUnknown() const

@@ -32,68 +32,6 @@
  Boston, MA 02111-1307, USA or visit the web page of the Free
  Software Foundation, http://www.fsf.org.
 
- Created on: 2007-02-8
- ***************************************************************/
-/* $Log: /ILWIS 3.0/Tools/ERR.CPP $
- * 
- * 14    8/01/01 4:27p Martin
- * repalced Error typedef with int to prevent nameclashes
- * 
- * 13    22-02-01 12:52 Koolhoven
- * protected ErrorObject::Show() against trying to give the focus to a
- * just removed window
- * 
- * 12    10/11/00 11:05 Willem
- * ErrorObject NotFoundError now throws an ErrorDummy error object instead
- * of trying to throw the function DummyError()
- * 
- * 11    6-11-00 8:32a Martin
- * NotFoundError uses the thread local var to determine if it is showm or
- * deferred to a higher level
- * 
- * 10    2-10-00 18:28 Koolhoven
- * Added MB_TOPMOST flag in Show()
- * 
- * 9     7-09-00 11:24a Martin
- * removed 'Dos' phrase from dos errors
- * 
- * 8     24-07-00 13:01 Koolhoven
- * Show() now gives focus back to the window who had it
- * 
- * 7     4-01-00 10:30 Wind
- * changed functioning of errors with error code 0 (they now don't show if
- * also there is no 'what' and 'where' set.
- * 
- * 6     9-12-99 15:41 Koolhoven
- * te correct version of ilwisgen.hs is in the hs dir not in htp
- * 
- * 5     29-10-99 8:49a Martin
- * removed unwanted check out of errorobject (err == 0)
- * 
- * 4     9/10/99 10:38a Wind
- * changed some const params to const & parms
- * 
- * 3     13-08-99 11:15a Martin
- * Changes for adding the registry functions
- * 
- * 2     27-04-99 16:46 Koolhoven
- * Prevented Fatal Error when logfile would be readonly
-// Revision 1.5  1997/09/16 12:05:11  janh
-// ErrorMapWithoutGeoRefcorners added
-//
-// Revision 1.4  1997/09/09 16:55:43  Wim
-// Do not allocate memory when a memory allocation error occurs
-//
-// Revision 1.3  1997-08-21 10:28:42+02  Wim
-// Added ErrorInvalidType()
-//
-// Revision 1.2  1997-07-28 18:07:46+02  Wim
-// FileAlreadyExistsError() added
-//
-/* ErrorObject.c
-   Copyright Ilwis System Development ITC
-   may 1995, by Jelle Wind
-	Last change:  WK   28 Aug 98    4:55 pm
 */
 #define ERR_C
 #include "Headers\toolspch.h"

@@ -11,6 +11,7 @@ namespace ILWIS {
 		virtual void get(int row, int column, double& v ) const=0;
 		virtual void get(int row, int column, Coord& c) const=0;
 		virtual void get(int row, int column, String& s) const=0;
+		virtual void get(int row, int column, CoordinateSequence **seq) const=0;
 		virtual long index(const String& colName) const;
 		long getRowCount() const;
 		long getColCount() const;

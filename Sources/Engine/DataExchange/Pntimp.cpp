@@ -340,7 +340,7 @@ PointMapImport::PointMapImport(const FileName& fn, const Table& table,
 	
 	for (long i = 0; i < iNr; ++i) 
 	{
-		pms->SetPoint(colCrd->cValue(i), i, colValue);
+		pms->SetPoint(colCrd->cValue(i), colValue->rValue(i), colValue->dvrs().fUseReals());
 	}
   
 //  pms->tbl = table;

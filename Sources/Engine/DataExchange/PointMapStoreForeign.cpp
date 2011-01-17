@@ -66,7 +66,7 @@ PointMapStoreForeign::PointMapStoreForeign(const FileName& fn, PointMapPtr& p, L
 	
 	for (long i = 0; i < iNr; ++i) 
 	{
-		SetPoint(colCrd->cValue(i), i, colValue);
+		SetPoint(colCrd->cValue(i),  colValue->rValue(i), colValue->dvrs().fUseReals());
 	}
 }
 

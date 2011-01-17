@@ -32,189 +32,6 @@
  Boston, MA 02111-1307, USA or visit the web page of the Free
  Software Foundation, http://www.fsf.org.
 
- Created on: 2007-02-8
- ***************************************************************/
-/*
-// $Log: /ILWIS 3.0/SegmentMap/SEGSTORE.cpp $
- * 
- * 41    8/24/01 13:03 Willem
- * Removed the SetReadOnly() function. This is now handled by
- * IlwisObjectPtr::SetReadOnly() for all ilwis objects
- * 
- * 40    5-04-01 15:44 Koolhoven
- * changed Pack() (a little more efficient)
- * count of number of deleted segments improved
- * 
- * 39    21-03-01 4:04p Martin
- * tblSegment was used in constructor but it need not to be present, so
- * the table if now first checked for its validity
- * 
- * 38    19-03-01 8:28a Martin
- * seterase function was left empty, release diskspace did not work
- * properly because of that
- * 
- * 37    16-03-01 20:43 Koolhoven
- * added tblSegment->DoNotStore(false) because it was forgotten
- * 
- * 36    16/03/01 14:09 Willem
- * Added validity check for "SegmentValue" column before using it
- * 
- * 35    3/16/01 13:33 Retsios
- * Make columns table-owned for showastbl
- * Only look for the SegmentValue column in segment maps
- * 
- * 34    13-03-01 2:24p Martin
- * loading of csy for the internal columns of a seg/pol map will not
- * generate an error
- * 
- * 33    3/05/01 15:13 Retsios
- * Check on validity of colSegmentValue before using it (problems when =
- * colUNDEF)
- * 
- * 32    1/03/01 14:32 Willem
- * The DomainValueRangeStruct and ValueRange for the segment map now also
- * set the ValueRange of the proper TableSegment Column as well to have
- * the domain of the segmentmap and that of the TableSegment Column
- * synchronized.
- * 
- * 31    23-02-01 11:04a Martin
- * columns of the segstore table are now tableowned
- * 
- * 30    23-02-01 10:57a Martin
- * removed a suspicious line in the constructor of segmentmapstore. It set
- * the fErase on true for 2.0 file but this had the effect that any use of
- * 2.0 files could lead to a possible deletion of the file (e.g
- * setreadonly of a 2.0 file)
- * 
- * 29    13-02-01 8:28a Martin
- * when changing the coordsystem of a map the coordsystem of the internal
- * tables (columns) is also changed
- * 
- * 28    20-12-00 19:08 Koolhoven
- * pack() now has a tranquilizer
- * 
- * 27    1-12-00 15:45 Koolhoven
- * in Export() use ptr.cbGetCoordBounds() instead of (the now removed)
- * ptr.crdBounds()
- * 
- * 26    24-11-00 12:29 Koolhoven
- * Added Pack() option for segments
- * 
- * 25    11/01/00 2:01p Martin
- * removed superflous GetObjectStructure. They are all handled in the
- * relevant ilwisobject
- * 
- * 24    30-10-00 11:00a Martin
- * solved a problem witjh loading of tables. tblSegment was not yet set
- * when trying to set its status on loaded. Only occured during
- * foreignformat.
- * 
- * 23    3-10-00 13:05 Hendrikse
- * Segstore(data) should not try to load itself when there is no
- * meaningfull datafile. (iSeg == 0)
- * 
- * 22    9/19/00 9:08a Martin
- * added protection against superflous stores
- * 
- * 21    9/18/00 9:40a Martin
- * if newwly created the loadstate of the internal table(s) is set to true
- * 
- * 20    12-09-00 1:04p Martin
- * prevented automatic conversion (on disk) to 3.0 as long as no changes
- * are made. Delete old datafiles if converted to 3.0
- * 
- * 19    11-09-00 11:30a Martin
- * added function for objectStructure 
- * 
- * 18    16-06-00 20:49 Koolhoven
- * use Column members of SegmentMapStore instead of enum ColumnTypes with
- * indirections
- * 
- * 17    12-05-00 10:55 Koolhoven
- * iNode(), crdNode() and crdCoord() are now protected against
- * segmentbuffers which have illegal contents (undefs)
- * 
- * 16    16/03/00 16:17 Willem
- * - Export segments to ILWIS 1.4 format now exports the segments using
- * interface functions. Because of format changes copying data files did
- * not yield proper results anymore.
- * 
- * 15    3/03/00 14:24 Willem
- * The data file is now stored in the same directory as the ODF
- * 
- * 14    28-02-00 8:49a Martin
- * Segmentmap can now read foreign formats
- * 
- * 13    15/02/00 15:56 Willem
- * The fPolygonMap now checks the extension to see whether it belongs to a
- * PolygonMap
- * 
- * 12    15/02/00 12:48 Willem
- * - new segmentmaps were deleted immediately after creation; now first
- * existance is checked
- * - the deleted column is now filled with a valid value
- * 
- * 11    8-02-00 18:01 Wind
- * set fUpdateCatalog flag to false after creation of internal table
- * 
- * 10    8-02-00 11:58 Wind
- * bug in newFeature(long iSegNr)
- * 
- * 9     8-02-00 11:11 Wind
- * bug in newFeature(long iSegNr)
- * 
- * 8     7-02-00 17:04 Wind
- * solved problems with readonly maps and their conversion to format 3.0
- * 
- * 7     17-01-00 8:17a Martin
- * changed rowcols to coords
- * 
- * 6     10-12-99 11:48a Martin
- * removed internal rowcols and replaced them by true coords
- * 
- * 5     29-10-99 9:20 Wind
- * thread save stuff
- * 
- * 4     9/24/99 10:37a Wind
- * replaced calls to static funcs ObjectInfo::ReadElement and WriteElement
- * by calls to member functions
- * 
- * 3     9/08/99 12:55p Wind
- * changed constructor calls FileName(fn, sExt, true) to FileName(fn,
- * sExt)
- * or changed FileName(fn, sExt, false) to FileName(fn.sFullNameQuoted(),
- * seExt, false)
- * to ensure that proper constructor is called
- * 
- * 2     9/08/99 12:02p Wind
- * comments
-*/
-// Revision 1.9  1998/09/16 17:25:20  Wim
-// 22beta2
-//
-// Revision 1.8  1998/03/20 14:45:21  Willem
-// Added a check for too many segments when a SegNew is executed. The constant
-// is defined in base.h
-//
-// Revision 1.7  1997/09/25 16:28:39  Wim
-// In constructor do never set offset for alSegBuf, just resize 1+iSeg()
-//
-// Revision 1.6  1997-09-24 19:08:43+02  Wim
-// newFeature(nr) was not updating alSegBuf properly
-//
-// Revision 1.5  1997-09-19 17:52:19+02  Wim
-// Added buffering with alSegBuf
-//
-// Revision 1.4  1997-08-25 09:54:30+02  Wim
-// In Store() filSegCode is now also flushed
-//
-// Revision 1.3  1997-08-08 00:07:00+02  Willem
-// Export to 1.4 now truncates the segment code to 15 characters.
-//
-/* SegmentMapStore
-   Copyright Ilwis System Development ITC
-   march 1995, by Wim Koolhoven
-	Last change:  WN   20 Mar 98   10:31 am
 */
 
 #include "Engine\Map\Segment\SEGSTORE.H"
@@ -231,9 +48,13 @@
 #include "Engine\Applications\objvirt.h"
 #include "Engine\Applications\ModuleMap.h"
 #include "Engine\Base\System\Engine.h"
+#include "Engine\Table\NewTableStore.h"
+#include "Engine\Table\TableStoreIlwis3.h"
 #include "Headers\geos\operation\distance\DistanceOp.h"
 #include "Engine\Table\Rec.h"
 #include "Engine\Map\Point\ilwPoint.h"
+
+using namespace ILWIS;
 
 static void TooManySegments()
 {
@@ -292,38 +113,35 @@ SegmentMapStore::SegmentMapStore(const FileName& fn, SegmentMapPtr& p, bool fCre
 			bool *fDoNotShowError = (bool *)(getEngine()->pGetThreadLocalVar(IlwisAppContext::tlvDONOTSHOWFINDERROR));
 			bool fOldVal = *fDoNotShowError;
 			*fDoNotShowError = true;
-			Table tblSegment;
-			tblSegment.SetPointer(new TablePtr(fn, sSection));
-			tblSegment->Load();
-			tblSegment->DoNotStore(true);
-			Column colMinCoords = tblSegment->col("MinCoords");
-			Column colMaxCoords = tblSegment->col("MaxCoords");
-			Column colCoords = tblSegment->col("Coords");
-			ColumnCoordBuf *colCrdBuf = colCoords->pcbuf();
-			Column colDeleted   = tblSegment->col("Deleted");
-			Column colSegmentValue = tblSegment->col("SegmentValue");
+			TableStoreIlwis3 tbl;
+			tbl.load(fn,sSection);
+
+
+			int colMinCrd = tbl.index("MinCoords");
+			int colMaxCrd = tbl.index("MaxCoords");
+			int colCoords = tbl.index("Coords");
+			tbl.sharedValue(colCoords,true);
+			int colDeleted = tbl.index("Deleted");
+			int colValue = tbl.index("SegmentValue");
 			Tranquilizer trq("Loading data");
-			for(int i = 0; i < tblSegment->iRecs(); ++i) {
+
+			for(int i = 0; i < tbl.getRowCount(); ++i) {
 				ILWIS::Segment *seg;
 				bool fVals = ptr.dvrs().fRealValues();
 				double value;
 				if (fVals){
 					seg  =  new ILWIS::RSegment();
-					value = colSegmentValue->rValue(i+1);
 				} else {
 					seg = new ILWIS::LSegment();
-					if (ptr.dvrs().fRawAvailable())
-						value = colSegmentValue->iRaw(i+1);
-					else
-						value = colSegmentValue->iValue(i+1);
 				}
+				tbl.get(i,colValue,value);
 				CoordinateSequence *seq = NULL;
-				seq = colCrdBuf->iGetValue(i+1);
+				tbl.get(i, colCoords,&seq);
 				seg->PutCoords(seq);
 				seg->PutVal(value);
 				geometries->push_back(seg);
 				if ( i % 100 == 0) {
-					trq.fUpdate(i,tblSegment->iRecs()); 
+					trq.fUpdate(i,tbl.getRowCount()); 
 				}
 			}
 			*fDoNotShowError = fOldVal;

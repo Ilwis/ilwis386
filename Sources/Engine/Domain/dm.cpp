@@ -1245,10 +1245,14 @@ StoreType Domain::st(const String& sStoreType)
     return stCRD3D;
   if (sStoreType == "coordbuf3D")
     return stCOORDBUF3D;
+  if (sStoreType == "coordbuf")
+    return stCOORDBUF;
   if (sStoreType == "string")
     return stSTRING;
   if (sStoreType == "binary")
     return stBINARY;
+  if ( sStoreType == "?") 
+    return stUNKNOWN;
   return stBYTE; // what else ???
 }
 

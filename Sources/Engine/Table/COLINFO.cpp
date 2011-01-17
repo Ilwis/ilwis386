@@ -44,7 +44,7 @@ Last change:  JEL  14 May 97   10:59 am
 #include "Engine\Base\DataObjects\valrange.h"
 #include "Engine\Base\objdepen.h"
 
-ColumnInfo::ColumnInfo()
+ColumnInfo::ColumnInfo(): _valueIsShared(false)
 {
 }
 
@@ -54,11 +54,13 @@ ColumnInfo::ColumnInfo(const FileName& fnTbl, long iCol)
 	if (0 == ObjectInfo::ReadElement("TableStore", String("Col%li", iCol).scVal(), fnTbl, sColName))
 		return;
 	Read(fnTbl, sColName);
+	_valueIsShared = false;
 }
 
 ColumnInfo::ColumnInfo(const FileName& fnTbl, const String& sColName)
 {
 	_iOffset = 0;
+	_valueIsShared = false;
 	Read(fnTbl, sColName);
 }
 
@@ -90,6 +92,7 @@ void ColumnInfo::Init(const ColumnInfo& colinf)
 	_fReadOnly = colinf.fReadOnly();
 	_index = colinf.getIndex();
 	_ct = colinf.getColumnType();
+	_valueIsShared = false;
 	//  _fDataReadOnly = colinf.fDataReadOnly();
 	//  _fPropReadOnly = colinf.fPropReadOnly();
 }
@@ -173,12 +176,13 @@ void ColumnInfo::Read(const FileName& fnTbl, const String& sColName)
 
 	DomainValue *pdv = dm()->pdv();
 
-	_dvrs = DomainValueRangeStruct(Domain(fnDom()), vr());
+	_dvrs = DomainValueRangeStruct(Domain(fnDom()), _dminf.vr());
 	if ( pdv) {
 		_rStep = _dvrs.rStep();
 		_rValueOffset = _dvrs.vr()->getOffset();
 	} else {
-		_rStep = _rValueOffset = rUNDEF;
+		_rStep = 1;
+		_rValueOffset = 0;
 	}
 
 	if ( dvrs().fRawAvailable())
@@ -324,6 +328,13 @@ double ColumnInfo::getValueOffset() const {
 	return _rValueOffset;
 }
 
+void ColumnInfo::sharedValue(bool yesno) {
+	_valueIsShared = yesno;
+}
+
+bool ColumnInfo::isSharedValue() const {
+	return _valueIsShared;
+}
 
 
 

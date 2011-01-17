@@ -14,7 +14,7 @@ TableStoreIlwis3::~TableStoreIlwis3(){
 		for(long c = 0; c < getColCount(); ++c) {
 			const ColumnInfo& info = columnInfo.at(c);
 			char *p = records + r * recordSize + info.getOffset();
-			if ( info.getColumnType() == ColumnInfo::ctBINARY){
+			if ( info.getColumnType() == ColumnInfo::ctBINARY && info.isSharedValue() == false){
 				delete [] p; 
 			}
 			else if	( info.getColumnType() == ColumnInfo::ctSTRING) {
@@ -55,18 +55,17 @@ void TableStoreIlwis3::setColumnInfo(const FileName& fnODF, bool& simpleDataType
 void TableStoreIlwis3::readData(char *memblock) {
 	long posFile = 128;
 	long posMem = 0;
-
 	for(long r = 0; r < getRowCount(); ++r) {
 		for(long c = 0; c < getColCount(); ++c) {
 			const ColumnInfo& info = columnInfo.at(c);
 			char *p = records + r * recordSize + info.getOffset();
 			switch(info.getColumnType()) {
-				case ColumnInfo::ctRAW:
-					*p = *(long *)(memblock + posFile);
+				case ColumnInfo::ctRAW: 
+					*(long *)p = *(long *)(memblock + posFile);
 					posFile += 4;
 					break;
 				case ColumnInfo::ctREAL:
-					*p = *(double *)(memblock + posFile);
+					*(double *)p = *(double *)(memblock + posFile);
 					posFile += 8;
 					break;
 				case ColumnInfo::ctCRD:
@@ -78,12 +77,12 @@ void TableStoreIlwis3::readData(char *memblock) {
 					posFile += 24;
 					break;
 				case ColumnInfo::ctSTRING:
-					*p = *(long *)readString(memblock + posFile);
+					*(long *)p = *(long *)readString(memblock + posFile);
 					posFile+= ((String *)p)->size() + 1;
 					break;
 				case ColumnInfo::ctBINARY:
 					long cnt = 0;
-					*p = *(long *)readCoordList(memblock + posFile, cnt);
+					*(long *)p = (long)readCoordList(memblock + posFile, cnt);
 					posFile += cnt;
 					break;
 			}
@@ -143,10 +142,18 @@ String *TableStoreIlwis3::readString(char *mem) {
 }
 
 char *TableStoreIlwis3::readCoordList(char *mem, long& count) {
-	long sz = *(long *)mem;
-	char *block = new char [sz];
-	memcpy(block,mem+4,sz);
-	return block;
+	count = *(long *)mem;
+	long noCoords = count / 16;
+	CoordinateSequence *seq = new CoordinateArraySequence(noCoords);
+	for(int i=0; i < noCoords; ++i) {
+		double x = *(double *)(mem + 4 + i * sizeof(double) * 2);
+		double y = *(double *)(mem + 4 + sizeof(double) * (i * 2 + 1));
+		seq->setAt(Coordinate(x,y), i);
+	}
+	//*(long *)block = count;
+	//memcpy(block+4,mem+4,count);
+	count +=4;
+	return (char *)seq;
 }
 
 
@@ -175,10 +182,11 @@ void TableStoreIlwis3::get(int row, int column, double& v ) const {
 
 void TableStoreIlwis3::get(int row, int column, Coord& c) const {
 	const ColumnInfo& field = columnInfo.at(column);
+	StoreType st = field.st();
 	char *p = moveTo(row, column, field);
 	c.x = *(double *)p;
-	c.y = *(double *)p + sizeof(double);
-	c.z = *(double *)p + sizeof(double)*2;
+	c.y = *(double *)(p + sizeof(double));
+	c.z =  st == stCRD3D ? *(double *)(p + sizeof(double)*2) : rUNDEF;
 }
 
 void TableStoreIlwis3::get(int row, int column, String& s) const {
@@ -187,9 +195,44 @@ void TableStoreIlwis3::get(int row, int column, String& s) const {
 	s = **(String **)p;
 }
 
+void TableStoreIlwis3::get(int row, int column, CoordinateSequence **seq) const {
+	const ColumnInfo& field = columnInfo.at(column);
+	char *p = moveTo(row, column, field);
+	CoordinateSequence *s = (CoordinateSequence *)(*(long *)p);
+	(*seq) = s;
+
+/*	long size = *(long *)block;
+	double x = *(double *)(block + sizeof(long));
+	double y = *(double *)(block + sizeof(long) + sizeof(double));
+	long noCoords = size / 16;
+	(*seq) = new CoordinateArraySequence(noCoords);
+	for(int i=0; i < noCoords; ++i) {
+		Coord c(
+		(*seq)->getAt(*(double *)(block));
+	}*/
+	
+
+}
+
 inline char *TableStoreIlwis3::moveTo(int row, int column, const  ColumnInfo& fld) const{
 	return (char *)(records + row * recordSize + fld.getOffset());
 }
+
+bool TableStoreIlwis3::fUsesReals(int column) const{
+	return columnInfo.at(column).dvrs().fUseReals();
+}
+
+void TableStoreIlwis3::sharedValue(int column, bool yesno) {
+	columnInfo.at(column).sharedValue(yesno);
+}
+
+bool TableStoreIlwis3::isShared(int column) const {
+	return columnInfo.at(column).isSharedValue();
+}
+
+
+
+
 
 
 

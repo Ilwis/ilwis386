@@ -194,6 +194,9 @@ ILWIS::Segment::Segment(geos::geom::LineString *line) :
   fAcceptDeleted = false;
 }
 
+Segment::~Segment() {
+}
+
 //CoordBounds ILWIS::Segment::crdBounds() const 
 //{
 //	ILWISSingleLock sl(const_cast<CCriticalSection *>(&csAccess), TRUE, SOURCE_LOCATION);

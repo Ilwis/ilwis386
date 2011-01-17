@@ -15,6 +15,10 @@ namespace ILWIS {
 		virtual void get(int row, int column, double& v ) const;
 		virtual void get(int row, int column, Coord& c) const;
 		virtual void get(int row, int column, String& s) const;
+		virtual void get(int row, int column, CoordinateSequence **seq) const;
+		virtual bool fUsesReals(int column) const;
+		virtual void sharedValue(int column, bool yesno);
+		virtual bool isShared(int col) const;
 	private:
 		char *moveTo(int row, int column, const  ColumnInfo& fld) const;
 		String *readString(char *mem);

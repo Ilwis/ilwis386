@@ -96,7 +96,7 @@ protected:
   //Table tbl;
   //Column colVal, colCoord;
   void SetCoordSystem(const CoordSystem& cs);
-  void SetPoint(const Coord& crd, int i, const Column& colValue);
+  void SetPoint(const Coord& crd, double v, bool usesReal);
   bool fErase;
 };
 
