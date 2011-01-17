@@ -66,6 +66,7 @@
 BEGIN_MESSAGE_MAP( PixelInfoBar, CSizingControlBar )
 	ON_WM_SIZE()
 	ON_MESSAGE(ILW_UPDATE, OnUpdate)
+	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 
@@ -78,7 +79,14 @@ PixelInfoBar::PixelInfoBar()
 
 PixelInfoBar::~PixelInfoBar()
 {
-//	delete pixview;  -- gives crash ???
+
+
+		//delete pixview;  -- gives crash ???
+}
+
+void PixelInfoBar::OnDestroy() {
+		AfxGetApp()->PostThreadMessage(ILW_REMOVEDATAWINDOW, (WPARAM)this->m_hWnd, 0);
+		CSizingControlBar::OnDestroy();
 }
 
 LRESULT PixelInfoBar::OnUpdate(WPARAM wParam, LPARAM lParam)

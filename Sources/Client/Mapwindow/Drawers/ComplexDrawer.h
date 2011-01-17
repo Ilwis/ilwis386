@@ -27,6 +27,7 @@ class _export ComplexDrawer : public NewDrawer {
 		NewDrawer * getDrawer(int index, DrawerType type=dtMAIN);
 		NewDrawer *getDrawer(const String& did);
 		virtual String addDrawer(NewDrawer *drw);
+		virtual void setDrawer(int index, NewDrawer *drw);
 		virtual void removeDrawer(const String& did, bool dodelete=true);
 		virtual void addPostDrawer(int order, NewDrawer *drw);
 		virtual void addPreDrawer(int order, NewDrawer *drw);
@@ -58,8 +59,8 @@ class _export ComplexDrawer : public NewDrawer {
 		virtual void timedEvent(UINT timerid);
 		virtual String description() const { return "?";}
 		virtual String iconName(const String& subtype="?") const { return "?";}
-		void setSpecialDrawingOptions(SpecialDrawingOptions option, bool add, vector<Coord>* coords=NULL) ;
-		int getSpecialDrawingOption(SpecialDrawingOptions opt=sdoNone) const;
+		void setSpecialDrawingOptions(int option, bool add, vector<Coord>* coords=NULL) ;
+		int getSpecialDrawingOption(int opt=sdoNone) const;
 		bool isSimple() const { return false;}
 		bool isDirty() const;
 		void setDirty(bool yesno);
@@ -71,6 +72,7 @@ class _export ComplexDrawer : public NewDrawer {
 		void shareVertices(vector<Coord *>& coords);
 		bool inEditMode() const;
 		void setEditMode(bool yesno);
+		void drawLegendItem(CDC *dc, const CRect& rct, double rVal) const {}
 	protected:
 		vector<NewDrawer *> drawers;
 		DrawerMap postDrawers;

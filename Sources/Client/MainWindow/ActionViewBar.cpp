@@ -43,7 +43,7 @@
 #include "Engine\Base\DataObjects\URL.h"
 #include "Client\MainWindow\ActionViewBar.h"
 #include "Client\MainWindow\ActionTreeCtrl.h"
-#include "Client\MainWindow\ActionListCtrl.h"
+#include "Client\MainWindow\ActionFinder.h"
 #include "Engine\Base\File\Directory.h"
 #include "Client\MainWindow\NavigatorTreeCtrl.h"
 #include "Client\ilwis.h"
@@ -64,8 +64,8 @@ END_MESSAGE_MAP()
 ActionTabs::~ActionTabs()
 {
 	delete atc;
-	delete alc;
 	delete nav;
+	delete afnd;
 }
 
 int ActionTabs::Create(ActionViewBar *av)
@@ -84,17 +84,17 @@ int ActionTabs::Create(ActionViewBar *av)
 
 	atc = new ActionTreeCtrl;
 	atc->Create(this, av);
-	alc = new ActionListCtrl;
-	alc->Create(this);
 	nav = new NavigatorTreeCtrl(this);
+	afnd = new ActionFinder();
+	afnd->Create(this);
 
 //	SetImageList(&(IlwWinApp()->ilSmall));
 	InsertItem(0, SMSTitleOperationsTree.scVal());
-	InsertItem(1, SMSTitleOperationsList.scVal());
-	InsertItem(2, SMSTitleNavigator.scVal());
+	InsertItem(1, SMSTitleNavigator.scVal());
+	InsertItem(2, TR("Finder").scVal());
 	atc->ShowWindow(SW_SHOW);
-	alc->ShowWindow(SW_HIDE);
 	nav->ShowWindow(SW_HIDE);
+	afnd->ShowWindow(SW_HIDE);
 
 	return 1;
 }
@@ -114,17 +114,22 @@ void ActionTabs::OnSize( UINT nType, int cx, int cy )
   {
 		atc->MoveWindow(&rct);
 	}
-	if (alc->GetSafeHwnd() != NULL)
-	{
-		alc->MoveWindow(&rct);
-		LVCOLUMN col;
-		col.mask = LVCF_WIDTH;
-		col.cx = rct.Width() - 20;
-		alc->SetColumn(0, &col);
-	}
+	//if (alc->GetSafeHwnd() != NULL)
+	//{
+	//	alc->MoveWindow(&rct);
+	//	LVCOLUMN col;
+	//	col.mask = LVCF_WIDTH;
+	//	col.cx = rct.Width() - 20;
+	//	alc->SetColumn(0, &col);
+	//}
 	if (nav->GetSafeHwnd() != NULL)
 	{
 		nav->MoveWindow(&rct);
+	}
+	if (afnd->GetSafeHwnd() != NULL)
+	{
+		afnd->MoveWindow(&rct);
+		afnd->size();
 	}
 }
 
@@ -134,18 +139,18 @@ void ActionTabs::OnTabPressed( NMHDR * pNotifyStruct, LRESULT* result )
 	if ( iIndex == 2 && iCurrIndex != iIndex )
 			nav->Refresh();
 	
-	alc->ShowWindow(SW_HIDE);
 	atc->ShowWindow(SW_HIDE);
 	nav->ShowWindow(SW_HIDE);
+	afnd->ShowWindow(SW_HIDE);
 
 	switch( iIndex)
 	{
 		case 0:
 			atc->ShowWindow(SW_SHOW); break;
 		case 1:
-			alc->ShowWindow(SW_SHOW); break;
-		case 2:
 			nav->ShowWindow(SW_SHOW); break;
+		case 2:
+			afnd->ShowWindow(SW_SHOW); break;
 	}
 	iCurrIndex = iIndex;
 }

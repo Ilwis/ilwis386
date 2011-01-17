@@ -109,14 +109,14 @@ String SimpleDrawer::getInfo(const Coord& crd) const {
 	return "";
 }
 
-void SimpleDrawer::setSpecialDrawingOptions(SpecialDrawingOptions option, bool add, vector<Coord>* coords){
+void SimpleDrawer::setSpecialDrawingOptions(int option, bool add, vector<Coord>* coords){
 	if ( add)
 		specialOptions |= option;
 	else
 		specialOptions &= !option;
 }
 
-int SimpleDrawer::getSpecialDrawingOption(SpecialDrawingOptions opt) const {
+int SimpleDrawer::getSpecialDrawingOption(int opt) const {
 	if ( opt == sdoNone)
 		return specialOptions;
 	else

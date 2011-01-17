@@ -7,7 +7,7 @@
 
 using namespace ILWIS;
 
-#define DEFAULT_SCALE 3.0
+#define DEFAULT_SCALE 1.0
 
 ZValueMaker::ZValueMaker()  : scalingType(zvsNONE), self(true),threeDPossible(false),offset(0), zscale(DEFAULT_SCALE){
 }

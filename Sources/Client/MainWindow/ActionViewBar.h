@@ -50,10 +50,10 @@
 #endif // _MSC_VER > 1000
 
 class ActionTreeCtrl;
-class ActionListCtrl;
 class NavigatorTreeCtrl;
 class ActionTabs;
 class IlwisSettings;
+class ActionFinder;
 
 class ActionViewBar: public CSizingControlBar      
 {
@@ -89,8 +89,8 @@ class ActionTabs : public CTabCtrl
 		//void OnSize( UINT nType, int cx, int cy );
 		void OnTabPressed( NMHDR * pNotifyStruct, LRESULT* result );
 		ActionTreeCtrl *atc;
-		ActionListCtrl *alc;
 		NavigatorTreeCtrl *nav;
+		ActionFinder *afnd;
 		int iCurrIndex;
 
   DECLARE_MESSAGE_MAP();

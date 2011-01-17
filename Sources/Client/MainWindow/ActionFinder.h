@@ -34,29 +34,54 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-// PixelInfoBar.h: interface for the PixelInfoBar class.
-//
-//////////////////////////////////////////////////////////////////////
-#pragma once
-#include "Client\Editors\Utils\sizecbar.h"
+class ActionTabs;
+class ActionFinderListDropTarget;
+class ActionFinderList;
+class ActionFinderEdit;
 
-class PixelInfoView;
-
-class PixelInfoBar: public CSizingControlBar    
-{
+class ActionFinder : public CWnd {
 public:
-	PixelInfoBar();
-	virtual ~PixelInfoBar();
-	BOOL Create(CWnd* pParent);
-	PixelInfoView* pixview;
-	void OnSize(UINT nType, int cx, int cy);
-	void setDragging(bool yesno) { fDragging = yesno; }
-  DECLARE_MESSAGE_MAP()
-
+	int Create(ActionTabs *tabs);
+	ActionFinder();
+	void size();
 private:
-	void OnDestroy();
-	LRESULT OnUpdate(WPARAM wParam, LPARAM lParam);
-	COleDropTarget* odt;
-	bool fDragging;
+	ActionFinderList *list;
+	ActionFinderEdit *edit;
+
 };
 
+class ActionFinderEdit : public CEdit {
+public:
+	ActionFinderList *list;
+	ActionFinderEdit(ActionFinderList* lst);
+	void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
+
+	DECLARE_MESSAGE_MAP()
+};
+
+
+class ActionFinderList : public CListCtrl
+{
+public:
+	ActionFinderList();
+	virtual ~ActionFinderList();
+	int Create(CWnd *tabs);
+	virtual DROPEFFECT OnDragEnter(COleDataObject* pDataObject, DWORD dwKeyState, CPoint point);
+	virtual void OnDragLeave();
+	virtual DROPEFFECT OnDragOver(COleDataObject* pDataObject, DWORD dwKeyState, CPoint point);
+	virtual BOOL OnDrop(COleDataObject* pDataObject, DROPEFFECT dropEffect, CPoint point);
+	virtual	BOOL PreTranslateMessage(MSG* pMsg);
+	void find(const String& filter="");
+protected:
+	afx_msg void OnClick(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnDblclk(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnReturn(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnGetInfoTip(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg void OnRButtonDown(UINT nFlags, CPoint point); 
+
+	ActionFinderListDropTarget* odt;
+
+	DECLARE_MESSAGE_MAP()
+};

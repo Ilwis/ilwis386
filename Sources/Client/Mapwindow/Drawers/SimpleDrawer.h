@@ -37,8 +37,8 @@ namespace ILWIS {
 		virtual void timedEvent(UINT timerid) {};
 		virtual String description() const { return "?";}
 		virtual String iconName(const String& subtype="?") const { return "?";}
-		void setSpecialDrawingOptions(SpecialDrawingOptions option, bool add, vector<Coord>* coords=NULL); 
-		int getSpecialDrawingOption(SpecialDrawingOptions opt=sdoNone) const; 
+		void setSpecialDrawingOptions(int option, bool add, vector<Coord>* coords=NULL); 
+		int getSpecialDrawingOption(int opt=sdoNone) const; 
 		String store(const FileName& fnView, const String& parenSection) const { return parenSection;}
 		void load(const FileName& fnView, const String& parenSection) {};
 		bool isSimple() const { return true;}
@@ -47,6 +47,7 @@ namespace ILWIS {
 		String getInfo(const Coord& crd) const;
 		void shareVertices(vector<Coord *>& coords) {};
 		bool inEditMode() const { return parentDrawer->inEditMode();}
+		void drawLegendItem(CDC *dc, const CRect& rct, double rVal) const {}
 
 		CCriticalSection cs;
 	protected:

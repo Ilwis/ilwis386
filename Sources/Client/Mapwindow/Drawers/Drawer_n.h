@@ -22,7 +22,7 @@ namespace ILWIS {
 		enum PreparationType{ptNONE=0,ptRENDER=1,ptGEOMETRY=2,ptINITOPENGL=4,ptUI=8,pt3D=16,ptANIMATION=32,ptRESTORE=64,ptALL=4294967295};
 		enum DataSourceMergeOptions{dsmEXTENDCB=1};
 		enum UICode{ucNONE=0, ucNOREPRESENTATION=2, ucNOINFO=4, ucNOMASK=8, ucNOMULTICOLOR=16,ucNOTRANSPARENCY=32,ucALL=4294967295};
-		enum SpecialDrawingOptions{sdoNone=0, sdoExtrusion=1, sdoXMarker=2, sdoYMarker=4, sdoFilled=8, sdoSELECTED=16};
+		enum SpecialDrawingOptions{sdoNone=0, sdoExtrusion=1, sdoXMarker=2, sdoYMarker=4, sdoFilled=8, sdoSELECTED=16, sdoTOCHILDEREN=32};
 
 		virtual ~NewDrawer() {}
 		virtual bool draw(bool norecursion = false, const CoordBounds& cb=CoordBounds()) const = 0;
@@ -51,8 +51,8 @@ namespace ILWIS {
 		virtual void timedEvent(UINT eventid) = 0;
 		virtual String description() const = 0;
 		virtual String iconName(const String& subtype="?") const = 0;
-		virtual void setSpecialDrawingOptions(SpecialDrawingOptions option, bool add, vector<Coord>* coords=NULL)=0 ;
-		virtual int getSpecialDrawingOption(SpecialDrawingOptions opt=sdoNone) const =0;
+		virtual void setSpecialDrawingOptions(int option, bool add, vector<Coord>* coords=NULL)=0 ;
+		virtual int getSpecialDrawingOption(int opt=sdoNone) const =0;
 		virtual String store(const FileName& fnView, const String& parenSection) const = 0;
 		virtual void load(const FileName& fnView, const String& parenSection) = 0;
 		virtual bool isSimple() const =0;
@@ -60,6 +60,7 @@ namespace ILWIS {
 		virtual void setDirty(bool yesno) = 0;
 		virtual void shareVertices(vector<Coord *>& coords) = 0;
 		virtual bool inEditMode() const = 0;
+		virtual void drawLegendItem(CDC *dc, const CRect& rct, double rVal) const = 0;
 	};
 
 	struct DrawerParameters {

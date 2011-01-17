@@ -73,7 +73,7 @@ protected:
 	enum { eNAME, eDESCR, eNAMEDESCR } eText;
 };
 
-class ObjectLayerTreeItem: public LayerTreeItem
+class _export ObjectLayerTreeItem: public LayerTreeItem
 {
 public:
 	ObjectLayerTreeItem(LayerTreeView*, IlwisObjectPtr*);
@@ -85,7 +85,7 @@ private:
 	IlwisObjectPtr* ptr;
 };
 
-class LegendLayerTreeItem: public LayerTreeItem
+class _export LegendLayerTreeItem: public LayerTreeItem
 {
 public:
 	LegendLayerTreeItem(LayerTreeView*, ILWIS::NewDrawer*);
@@ -127,7 +127,7 @@ private:
 	ChooseColumnComboBox* cccb;
 };
 
-class LegendClassLayerTreeItem: public LayerTreeItem
+class _export LegendClassLayerTreeItem: public LayerTreeItem
 {
 public:
 	LegendClassLayerTreeItem(LayerTreeView*, ILWIS::NewDrawer*, Domain _dm, int iRaw);
@@ -142,16 +142,16 @@ private:
 
 };
 
-class LegendValueLayerTreeItem: public LayerTreeItem
+class _export LegendValueLayerTreeItem: public LayerTreeItem
 {
 public:
-	LegendValueLayerTreeItem(LayerTreeView*, AbstractMapDrawer*, DomainValueRangeStruct _dvrs, double rValue);
+	LegendValueLayerTreeItem(LayerTreeView*, NewDrawer*, DomainValueRangeStruct _dvrs, double rValue);
 	virtual ~LegendValueLayerTreeItem();
 	virtual void OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult); 
 private:
 	DomainValueRangeStruct dvrs;
 	double rVal;
-	AbstractMapDrawer *dr;
+	NewDrawer *dr;
 };
 
 class DisplayOptionTree: public LayerTreeItem
@@ -167,7 +167,7 @@ private:
 class _export DisplayOptionTreeItem: public LayerTreeItem
 {
 public:
-	DisplayOptionTreeItem(LayerTreeView*, HTREEITEM parent, ILWIS::NewDrawer *dr, DisplayOptionItemFunc f,HTREEITEM item=0, SetChecks *checks=0);
+	DisplayOptionTreeItem(LayerTreeView*, HTREEITEM parent, ILWIS::NewDrawer *dr, DisplayOptionItemFunc f,HTREEITEM item=0, SetChecks *checks=0, SetCheckFunc cf=0);
 	DisplayOptionTreeItem(LayerTreeView*, HTREEITEM parent, ILWIS::NewDrawer *dr, SetCheckFunc f,DisplayOptionItemFunc fun=0, ILWIS::NewDrawer *_altHandler=0);
 	virtual ~DisplayOptionTreeItem();
 	virtual void OnLButtonDblClk(UINT nFlags, CPoint point);
@@ -188,7 +188,7 @@ private:
 class _export DisplayOptionColorItem: public DisplayOptionTreeItem
 {
 public:
-	DisplayOptionColorItem(const String& sText, LayerTreeView*, HTREEITEM parent, ILWIS::NewDrawer *dr, DisplayOptionItemFunc f,HTREEITEM item=0, SetChecks *checks=0);
+	DisplayOptionColorItem(const String& sText, LayerTreeView*, HTREEITEM parent, ILWIS::NewDrawer *dr, DisplayOptionItemFunc f,HTREEITEM item=0, SetChecks *checks=0, SetCheckFunc cf=0);
 	//DisplayOptionColorItem(LayerTreeView*, ILWIS::NewDrawer *dr, SetCheckFunc f,DisplayOptionItemFunc fun=0, HTREEITEM item=0, ILWIS::NewDrawer *_altHandler=0);
 	void OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult);
 	void setColor(Color c) ;

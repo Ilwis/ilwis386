@@ -179,7 +179,8 @@ void RootDrawer::setViewPort(const RowCol& rc) {
 				modifyCBZoomView(cbView.width(), cbZoom.width(),(double)rc.Col / pixArea.Col); 
 			}
 			if ( rc.Row != pixArea.Row) { // make sure the zoomsize is changed if the cols change
-				modifyCBZoomView(cbView.width(), cbZoom.width(),(double)pixArea.Col / rc.Col); 
+				//modifyCBZoomView(cbView.width(), cbZoom.width(),(double)pixArea.Col / rc.Col); 
+				modifyCBZoomView(cbView.width(), cbZoom.width(), (double)pixArea.Row / (double)rc.Row ); 
 			}
 	
 		} else { // x < y

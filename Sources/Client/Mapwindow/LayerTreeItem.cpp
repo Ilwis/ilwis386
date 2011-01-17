@@ -1,39 +1,39 @@
 /***************************************************************
- ILWIS integrates image, vector and thematic data in one unique 
- and powerful package on the desktop. ILWIS delivers a wide 
- range of feautures including import/export, digitizing, editing, 
- analysis and display of data as well as production of 
- quality mapsinformation about the sensor mounting platform
- 
- Exclusive rights of use by 52°North Initiative for Geospatial 
- Open Source Software GmbH 2007, Germany
+ILWIS integrates image, vector and thematic data in one unique 
+and powerful package on the desktop. ILWIS delivers a wide 
+range of feautures including import/export, digitizing, editing, 
+analysis and display of data as well as production of 
+quality mapsinformation about the sensor mounting platform
 
- Copyright (C) 2007 by 52°North Initiative for Geospatial
- Open Source Software GmbH
+Exclusive rights of use by 52°North Initiative for Geospatial 
+Open Source Software GmbH 2007, Germany
 
- Author: Jan Hendrikse, Willem Nieuwenhuis,Wim Koolhoven 
- Bas Restsios, Martin Schouwenburg, Lichun Wang, Jelle Wind 
+Copyright (C) 2007 by 52°North Initiative for Geospatial
+Open Source Software GmbH
 
- Contact: Martin Schouwenburg; schouwenburg@itc.nl; 
- tel +31-534874371
+Author: Jan Hendrikse, Willem Nieuwenhuis,Wim Koolhoven 
+Bas Restsios, Martin Schouwenburg, Lichun Wang, Jelle Wind 
 
- This program is free software; you can redistribute it and/or
- modify it under the terms of the GNU General Public License
- version 2 as published by the Free Software Foundation.
+Contact: Martin Schouwenburg; schouwenburg@itc.nl; 
+tel +31-534874371
 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU General Public License for more details.
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+version 2 as published by the Free Software Foundation.
 
- You should have received a copy of the GNU General Public License
- along with this program (see gnu-gpl v2.txt); if not, write to
- the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- Boston, MA 02111-1307, USA or visit the web page of the Free
- Software Foundation, http://www.fsf.org.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
 
- Created on: 2007-02-8
- ***************************************************************/
+You should have received a copy of the GNU General Public License
+along with this program (see gnu-gpl v2.txt); if not, write to
+the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+Boston, MA 02111-1307, USA or visit the web page of the Free
+Software Foundation, http://www.fsf.org.
+
+Created on: 2007-02-8
+***************************************************************/
 // LayerTreeItem.cpp: implementation of the LayerTreeItem class.
 //
 //////////////////////////////////////////////////////////////////////
@@ -162,60 +162,60 @@ void DrawerLayerTreeItem::OnContextMenu(CWnd* w, CPoint p)
 	if (mapdrw)
 		pmadd(ID_PROPLAYER);
 	pmadd(ID_REMOVELAYER);
-    int iCmd = men.TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON|TPM_NONOTIFY|TPM_RETURNCMD, p.x, p.y, w);
+	int iCmd = men.TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON|TPM_NONOTIFY|TPM_RETURNCMD, p.x, p.y, w);
 	switch (iCmd) 
 	{
-		case ID_EDITLAYER:
-			{
-				if( mapdrw->getDrawerCount(types) == 1) {
+	case ID_EDITLAYER:
+		{
+			if( mapdrw->getDrawerCount(types) == 1) {
 				/*	CTreeCtrl& tc = ltv->GetTreeCtrl();
-					HTREEITEM hti = tc.GetSelectedItem();
-					if (0 == hti)
-						return;
-					DrawerLayerTreeItem* dlti = 0;
-					LayerTreeItem* lti = (LayerTreeItem*)tc.GetItemData(hti);
-					dlti = dynamic_cast<DrawerLayerTreeItem*>(lti);
-					ComplexDrawer *drw = (ComplexDrawer *)dlti->drw();*/
-					ComplexDrawer *drw = (ComplexDrawer *)mapdrw->getDrawer(0);
-					mapdrw->setEditMode(true);
-					if ( !drw->isSimple()) {
-						drw->setEditMode(true);
-						ltv->GetDocument()->mpvGetView()->createEditor(drw);
-					}
+				HTREEITEM hti = tc.GetSelectedItem();
+				if (0 == hti)
+				return;
+				DrawerLayerTreeItem* dlti = 0;
+				LayerTreeItem* lti = (LayerTreeItem*)tc.GetItemData(hti);
+				dlti = dynamic_cast<DrawerLayerTreeItem*>(lti);
+				ComplexDrawer *drw = (ComplexDrawer *)dlti->drw();*/
+				ComplexDrawer *drw = (ComplexDrawer *)mapdrw->getDrawer(0);
+				mapdrw->setEditMode(true);
+				if ( !drw->isSimple()) {
+					drw->setEditMode(true);
+					ltv->GetDocument()->mpvGetView()->createEditor(drw);
 				}
 			}
-			break;
-		case ID_PROPLAYER:
-			IlwWinApp()->Execute(String("prop %S", mptr->fnObj.sFullNameQuoted()));
-			break;
-		case ID_REMOVELAYER:
-			ltv->OnRemoveLayer();
-			break;
+		}
+		break;
+	case ID_PROPLAYER:
+		IlwWinApp()->Execute(String("prop %S", mptr->fnObj.sFullNameQuoted()));
+		break;
+	case ID_REMOVELAYER:
+		ltv->OnRemoveLayer();
+		break;
 	}
 }
 
 void DrawerLayerTreeItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 {
-  LPNMTVCUSTOMDRAW lptvcd = (LPNMTVCUSTOMDRAW) pNMHDR;
-  switch (lptvcd->nmcd.dwDrawStage) 
+	LPNMTVCUSTOMDRAW lptvcd = (LPNMTVCUSTOMDRAW) pNMHDR;
+	switch (lptvcd->nmcd.dwDrawStage) 
 	{
-		case CDDS_ITEMPREPAINT:
-			*pResult = CDRF_NOTIFYPOSTPAINT;
-			return;
-		case CDDS_ITEMPOSTPAINT:
-			*pResult = CDRF_DODEFAULT;
-			if (dr->hasInfo())
-			{
-				int	iImgOvlInfo =	IlwWinApp()->iImage("OverlayInfo");
-				CDC cdc;
-				cdc.Attach(lptvcd->nmcd.hdc);
-				CRect rect = lptvcd->nmcd.rc;
-				CPoint pt = rect.TopLeft();
-				pt.x += 3;
-				IlwWinApp()->ilSmall.Draw(&cdc, iImgOvlInfo, pt, ILD_TRANSPARENT); 				
-				cdc.Detach();
-			} 
-			return;
+	case CDDS_ITEMPREPAINT:
+		*pResult = CDRF_NOTIFYPOSTPAINT;
+		return;
+	case CDDS_ITEMPOSTPAINT:
+		*pResult = CDRF_DODEFAULT;
+		if (dr->hasInfo())
+		{
+			int	iImgOvlInfo =	IlwWinApp()->iImage("OverlayInfo");
+			CDC cdc;
+			cdc.Attach(lptvcd->nmcd.hdc);
+			CRect rect = lptvcd->nmcd.rc;
+			CPoint pt = rect.TopLeft();
+			pt.x += 3;
+			IlwWinApp()->ilSmall.Draw(&cdc, iImgOvlInfo, pt, ILD_TRANSPARENT); 				
+			cdc.Detach();
+		} 
+		return;
 	}
 }
 
@@ -268,7 +268,7 @@ LegendLayerTreeItem::~LegendLayerTreeItem()
 
 void LegendLayerTreeItem::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
-//	dr->EditRepresentation();
+	//	dr->EditRepresentation();
 }
 
 void LegendLayerTreeItem::OnContextMenu(CWnd* w, CPoint p)
@@ -308,7 +308,7 @@ void PropertiesLayerTreeItem::OnLButtonDblClk(UINT nFlags, CPoint point)
 class ChooseColumnComboBox: public CComboBox
 {
 public:
-  ChooseColumnComboBox(CWnd* wnd, ColumnLayerTreeItem* clti, CRect rect);
+	ChooseColumnComboBox(CWnd* wnd, ColumnLayerTreeItem* clti, CRect rect);
 	void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	void OnKillFocus(CWnd* pWnd);
 	void OnSelChange(NMHDR* pNotifyStruct, LRESULT* result);
@@ -327,26 +327,26 @@ ChooseColumnComboBox::ChooseColumnComboBox(CWnd* wnd, ColumnLayerTreeItem* lti, 
 {
 	clti = lti;
 	Create(WS_CHILD|
-	       CBS_HASSTRINGS|WS_VSCROLL|
-         CBS_DROPDOWNLIST|WS_BORDER|CBS_AUTOHSCROLL|CBS_NOINTEGRALHEIGHT,
-	       rect, wnd, 0);
+		CBS_HASSTRINGS|WS_VSCROLL|
+		CBS_DROPDOWNLIST|WS_BORDER|CBS_AUTOHSCROLL|CBS_NOINTEGRALHEIGHT,
+		rect, wnd, 0);
 
-  Table tbl = clti->mdr()->getBaseMap()->tblAtt();
-  for (int i = 0; i < tbl->iCols(); ++i) {
-    Column col = tbl->col(i);
-    Domain dm = col->dm();
+	Table tbl = clti->mdr()->getBaseMap()->tblAtt();
+	for (int i = 0; i < tbl->iCols(); ++i) {
+		Column col = tbl->col(i);
+		Domain dm = col->dm();
 		if (dm->pdc() || dm->pdid() || dm->pdv() ||
-			  dm->pdp() || dm->pdcol())
+			dm->pdp() || dm->pdcol())
 		{
-	    String sCol = col->sName();
+			String sCol = col->sName();
 			AddString(sCol.scVal());
 		}
-  }
-  if (clti->mdr()->getAtttributeColumn().fValid()) {
+	}
+	if (clti->mdr()->getAtttributeColumn().fValid()) {
 		String sCol = clti->mdr()->getAtttributeColumn()->sName();
 		SelectString(-1, sCol.scVal());
-  }
-  ShowWindow(SW_SHOW);
+	}
+	ShowWindow(SW_SHOW);
 }
 
 void ChooseColumnComboBox::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -447,71 +447,69 @@ void LegendClassLayerTreeItem::OnLButtonDblClk(UINT nFlags, CPoint point)
 
 void LegendClassLayerTreeItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 {
-  LPNMTVCUSTOMDRAW lptvcd = (LPNMTVCUSTOMDRAW) pNMHDR;
-  switch (lptvcd->nmcd.dwDrawStage) 
+	LPNMTVCUSTOMDRAW lptvcd = (LPNMTVCUSTOMDRAW) pNMHDR;
+	switch (lptvcd->nmcd.dwDrawStage) 
 	{
-		case CDDS_ITEMPREPAINT:
-			// post paint otherwise line is not drawn at left side
-			*pResult = CDRF_NOTIFYPOSTPAINT;
-			return;
-		case CDDS_ITEMPOSTPAINT:
-			{
-				CDC cdc;
-				cdc.Attach(lptvcd->nmcd.hdc);
-				CRect rect = lptvcd->nmcd.rc;
-				HTREEITEM hti = ltv->GetTreeCtrl().HitTest(rect.TopLeft());
-				ltv->GetTreeCtrl().GetItemRect(hti, &rect, TRUE);
-				rect.left -= 20;
-				rect.bottom += 1;
-				rect.right += 1000;
-				Color clrText = SysColor(COLOR_WINDOWTEXT);
-				Color clrBack = SysColor(COLOR_WINDOW);
-				Color clrTextSel = SysColor(COLOR_HIGHLIGHTTEXT);
-				Color clrSel  = SysColor(COLOR_HIGHLIGHT);
-				CPen penNull(PS_NULL,0,Color(0,0,0));
-				CPen penBlack(PS_SOLID,1,clrText);
-				CBrush brWhite(clrBack);
-				CPen* penOld = cdc.SelectObject(&penBlack);
-				CBrush* brOld = cdc.SelectObject(&brWhite);
-				cdc.Rectangle(rect);
-				cdc.SelectObject(penOld);
-				penOld = cdc.SelectObject(&penBlack);
-				rect.top += 1;
-				rect.bottom -= 1;
-				int iHeight = rect.Height();
-				int iWidth = 1.5 * iHeight;
-				rect.right = rect.left + iWidth;
+	case CDDS_ITEMPREPAINT:
+		// post paint otherwise line is not drawn at left side
+		*pResult = CDRF_NOTIFYPOSTPAINT;
+		return;
+	case CDDS_ITEMPOSTPAINT:
+		{
+			CDC cdc;
+			cdc.Attach(lptvcd->nmcd.hdc);
+			CRect rect = lptvcd->nmcd.rc;
+			HTREEITEM hti = ltv->GetTreeCtrl().HitTest(rect.TopLeft());
+			ltv->GetTreeCtrl().GetItemRect(hti, &rect, TRUE);
+			rect.left -= 20;
+			rect.bottom += 1;
+			rect.right += 20;
+			Color clrText = SysColor(COLOR_WINDOWTEXT);
+			Color clrBack = SysColor(COLOR_WINDOW);
+			Color clrTextSel = SysColor(COLOR_HIGHLIGHTTEXT);
+			Color clrSel  = SysColor(COLOR_HIGHLIGHT);
+			CPen penNull(PS_NULL,0,Color(0,0,0));
+			CPen penBlack(PS_SOLID,1,clrText);
+			CBrush brWhite(clrBack);
+			CPen* penOld = cdc.SelectObject(&penBlack);
+			CBrush* brOld = cdc.SelectObject(&brWhite);
+			penOld = cdc.SelectObject(&penBlack);
+			rect.top += 1;
+			rect.bottom -= 1;
+			int iHeight = rect.Height();
+			int iWidth = 1.5 * iHeight;
+			rect.right = rect.left + iWidth;
 
-        CRgn rgn;
-        rgn.CreateRectRgnIndirect(&rect);
-        cdc.SelectClipRgn(&rgn);
-				//dr->DrawLegendRect(&cdc, rect, iRaw);
-        cdc.SelectClipRgn(0);
-        
-	      String sText = dm->sValueByRaw(iRaw,0);
-				CPoint pt;
-				pt.x = rect.right + 2;
-				pt.y = rect.top;
-				if (ltv->GetTreeCtrl().GetItemState(hti, TVIS_SELECTED)) {
-					cdc.SetTextColor(clrTextSel);
-					cdc.SetBkColor(clrSel);
-				}
-				else {
-					cdc.SetTextColor(clrText);
-					cdc.SetBkColor(clrBack);
-				}
-				cdc.SetBkMode(OPAQUE);
-				cdc.TextOut(pt.x, pt.y, sText.scVal(), sText.length());
-				cdc.SelectObject(penOld);
-				cdc.SelectObject(brOld);
-				cdc.Detach();
+			CRgn rgn;
+			rgn.CreateRectRgnIndirect(&rect);
+			cdc.SelectClipRgn(&rgn);
+			dr->drawLegendItem(&cdc, rect, iRaw);
+			cdc.SelectClipRgn(0);
+
+			String sText = dm->sValueByRaw(iRaw,0);
+			CPoint pt;
+			pt.x = rect.right + 2;
+			pt.y = rect.top;
+			if (ltv->GetTreeCtrl().GetItemState(hti, TVIS_SELECTED)) {
+				cdc.SetTextColor(clrTextSel);
+				cdc.SetBkColor(clrSel);
 			}
-			return;
+			else {
+				cdc.SetTextColor(clrText);
+				cdc.SetBkColor(clrBack);
+			}
+			cdc.SetBkMode(OPAQUE);
+			cdc.TextOut(pt.x, pt.y, sText.scVal(), sText.length());
+			cdc.SelectObject(penOld);
+			cdc.SelectObject(brOld);
+			cdc.Detach();
+		}
+		return;
 	}
 }
 
 
-LegendValueLayerTreeItem::LegendValueLayerTreeItem(LayerTreeView* ltv, AbstractMapDrawer* _dr, DomainValueRangeStruct _dvrs, double rValue)
+LegendValueLayerTreeItem::LegendValueLayerTreeItem(LayerTreeView* ltv, NewDrawer* _dr, DomainValueRangeStruct _dvrs, double rValue)
 : LayerTreeItem(ltv), dr(_dr), rVal(rValue), dvrs(_dvrs)
 {
 }
@@ -522,64 +520,64 @@ LegendValueLayerTreeItem::~LegendValueLayerTreeItem()
 
 void LegendValueLayerTreeItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 {
-  LPNMTVCUSTOMDRAW lptvcd = (LPNMTVCUSTOMDRAW) pNMHDR;
-  switch (lptvcd->nmcd.dwDrawStage) 
+	LPNMTVCUSTOMDRAW lptvcd = (LPNMTVCUSTOMDRAW) pNMHDR;
+	switch (lptvcd->nmcd.dwDrawStage) 
 	{
-		case CDDS_ITEMPREPAINT:
-			// post paint otherwise line is not drawn at left side
-			*pResult = CDRF_NOTIFYPOSTPAINT;
-			return;
-		case CDDS_ITEMPOSTPAINT:
-			{
-				CDC cdc;
-				cdc.Attach(lptvcd->nmcd.hdc);
-				CRect rect = lptvcd->nmcd.rc;
-				HTREEITEM hti = ltv->GetTreeCtrl().HitTest(rect.TopLeft());
-				ltv->GetTreeCtrl().GetItemRect(hti, &rect, TRUE);
-				rect.left -= 20;
-				rect.bottom += 1;
-				rect.right += 1000;
-				Color clrText = SysColor(COLOR_WINDOWTEXT);
-				Color clrBack = SysColor(COLOR_WINDOW);
-				Color clrTextSel = SysColor(COLOR_HIGHLIGHTTEXT);
-				Color clrSel  = SysColor(COLOR_HIGHLIGHT);
-				CPen penNull(PS_NULL,0,Color(0,0,0));
-				CPen penBlack(PS_SOLID,1,clrText);
-				CBrush brWhite(clrBack);
-				CPen* penOld = cdc.SelectObject(&penNull);
-				CBrush* brOld = cdc.SelectObject(&brWhite);
-				cdc.Rectangle(rect);
-				cdc.SelectObject(penOld);
-				penOld = cdc.SelectObject(&penBlack);
-				rect.top += 1;
-				rect.bottom -= 1;
-				int iHeight = rect.Height();
-				int iWidth = 1.5 * iHeight;
-				rect.right = rect.left + iWidth;
-				//dr->DrawValueLegendRect(&cdc, rect, rVal);
-	      String sText = dvrs.sValue(rVal,0);
-        DomainValue* dv = dvrs.dm()->pdv();
-        if (dv->fUnit())
-          sText = String("%S %S", sText, dv->sUnit());
-        
-				CPoint pt;
-				pt.x = rect.right + 2;
-				pt.y = rect.top;
-				if (ltv->GetTreeCtrl().GetItemState(hti, TVIS_SELECTED)) {
-					cdc.SetTextColor(clrTextSel);
-					cdc.SetBkColor(clrSel);
-				}
-				else {
-					cdc.SetTextColor(clrText);
-					cdc.SetBkColor(clrBack);
-				}
-				cdc.SetBkMode(OPAQUE);
-				cdc.TextOut(pt.x, pt.y, sText.scVal(), sText.length());
-				cdc.SelectObject(penOld);
-				cdc.SelectObject(brOld);
-				cdc.Detach();
+	case CDDS_ITEMPREPAINT:
+		// post paint otherwise line is not drawn at left side
+		*pResult = CDRF_NOTIFYPOSTPAINT;
+		return;
+	case CDDS_ITEMPOSTPAINT:
+		{
+			CDC cdc;
+			cdc.Attach(lptvcd->nmcd.hdc);
+			CRect rect = lptvcd->nmcd.rc;
+			HTREEITEM hti = ltv->GetTreeCtrl().HitTest(rect.TopLeft());
+			ltv->GetTreeCtrl().GetItemRect(hti, &rect, TRUE);
+			rect.left -= 20;
+			rect.bottom += 1;
+			rect.right += 1000;
+			Color clrText = SysColor(COLOR_WINDOWTEXT);
+			Color clrBack = SysColor(COLOR_WINDOW);
+			Color clrTextSel = SysColor(COLOR_HIGHLIGHTTEXT);
+			Color clrSel  = SysColor(COLOR_HIGHLIGHT);
+			CPen penNull(PS_NULL,0,Color(0,0,0));
+			CPen penBlack(PS_SOLID,1,clrText);
+			CBrush brWhite(clrBack);
+			CPen* penOld = cdc.SelectObject(&penNull);
+			CBrush* brOld = cdc.SelectObject(&brWhite);
+			cdc.Rectangle(rect);
+			cdc.SelectObject(penOld);
+			penOld = cdc.SelectObject(&penBlack);
+			rect.top += 1;
+			rect.bottom -= 1;
+			int iHeight = rect.Height();
+			int iWidth = 1.5 * iHeight;
+			rect.right = rect.left + iWidth;
+			dr->drawLegendItem(&cdc, rect, rVal);
+			String sText = dvrs.sValue(rVal,0);
+			DomainValue* dv = dvrs.dm()->pdv();
+			if (dv->fUnit())
+				sText = String("%S %S", sText, dv->sUnit());
+
+			CPoint pt;
+			pt.x = rect.right + 2;
+			pt.y = rect.top;
+			if (ltv->GetTreeCtrl().GetItemState(hti, TVIS_SELECTED)) {
+				cdc.SetTextColor(clrTextSel);
+				cdc.SetBkColor(clrSel);
 			}
-			return;
+			else {
+				cdc.SetTextColor(clrText);
+				cdc.SetBkColor(clrBack);
+			}
+			cdc.SetBkMode(OPAQUE);
+			cdc.TextOut(pt.x, pt.y, sText.scVal(), sText.length());
+			cdc.SelectObject(penOld);
+			cdc.SelectObject(brOld);
+			cdc.Detach();
+		}
+		return;
 	}
 }
 //-----------------------------------
@@ -595,13 +593,13 @@ parent(_parent)
 {
 }
 
-DisplayOptionTreeItem::DisplayOptionTreeItem(LayerTreeView* ltv, HTREEITEM _parent, NewDrawer *dr, DisplayOptionItemFunc f,HTREEITEM item, SetChecks *ch)
+DisplayOptionTreeItem::DisplayOptionTreeItem(LayerTreeView* ltv, HTREEITEM _parent, NewDrawer *dr, DisplayOptionItemFunc f,HTREEITEM item, SetChecks *ch, SetCheckFunc cf)
 : LayerTreeItem(ltv),
 func(f),
 drw(dr),
 hti(item),
 checks(ch),
-setCheckFunc(0),
+setCheckFunc(cf),
 altHandler(0),
 parent(_parent)
 {
@@ -621,7 +619,7 @@ DisplayOptionTreeItem::~DisplayOptionTreeItem()
 void DisplayOptionTreeItem::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
 	if ( func) {
- 		(drw->*func)(ltv);
+		(drw->*func)(ltv);
 		SwitchCheckBox(true);
 	}
 }
@@ -639,7 +637,7 @@ void DisplayOptionTreeItem::SwitchCheckBox(bool fOn) {
 //----------------------------------
 DisplayOptionTree::DisplayOptionTree(LayerTreeView* ltv, HTREEITEM hti)
 : LayerTreeItem(ltv),
-  htiStart(hti)
+htiStart(hti)
 
 {
 }
@@ -661,8 +659,8 @@ void DisplayOptionTree::OnLButtonDblClk(UINT nFlags, CPoint point)
 }
 
 //--------------------------------------------
-DisplayOptionColorItem::DisplayOptionColorItem(const String& sTxt, LayerTreeView* t, HTREEITEM parent, ILWIS::NewDrawer *dr, DisplayOptionItemFunc f,HTREEITEM item, SetChecks *checks) :
-DisplayOptionTreeItem(t, parent, dr,f,item,checks) ,
+DisplayOptionColorItem::DisplayOptionColorItem(const String& sTxt, LayerTreeView* t, HTREEITEM parent, ILWIS::NewDrawer *dr, DisplayOptionItemFunc f,HTREEITEM item, SetChecks *checks, SetCheckFunc cf) :
+DisplayOptionTreeItem(t, parent, dr,f,item,checks, cf) ,
 sText(sTxt)
 {
 }
@@ -708,7 +706,7 @@ void DisplayOptionColorItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult){
 			rctColor.DeflateRect(iWidth * 0.8, iHeight * 0.7);
 
 			cdc.Rectangle(rctColor);
-			
+
 			CPoint pt;
 			pt.x = rect.left + 1.5 * iHeight + 2;
 			pt.y = rect.top;

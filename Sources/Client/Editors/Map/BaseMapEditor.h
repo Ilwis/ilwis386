@@ -1,5 +1,7 @@
 #pragma once
 
+// registers which feature is selected, which drawer is drawing it, the coords of the feature and the selected coords(indexes in coords vector).
+// note that the coords list is the "real" coords list. so any changes to them is reflected in the drawing.
 struct SelectedFeature {
 	SelectedFeature(Feature *f=0) : feature(f) {}
 	Feature *feature;

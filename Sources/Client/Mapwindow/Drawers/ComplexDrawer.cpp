@@ -28,7 +28,7 @@ void ComplexDrawer::init() {
 	GUID gd;
 	CoCreateGuid(&gd);
 	WCHAR buf[39];
-	::StringFromGUID2(gd,buf,39);
+	::StringFromGUID2(gd,buf,39); 
 	CString str(buf);
 	id = str;
 	name = "Unknown";
@@ -180,6 +180,17 @@ String ComplexDrawer::addDrawer(NewDrawer *drw) {
 	return drw->getName();
 }
 
+void ComplexDrawer::setDrawer(int index, NewDrawer *drw){
+	if ( index >= drawers.size())
+		return;
+	if ( drawers.at(index) != 0)
+		removeDrawer(drawers.at(index)->getId());
+
+	drawers[index] = drw;
+	drawersById[drw->getId()] = drw;
+}
+
+
 NewDrawer *ComplexDrawer::getDrawer(const String& did) {
 	map<String, NewDrawer *>::iterator cur= drawersById.find(did);
 	if ( cur != drawersById.end())
@@ -201,7 +212,7 @@ void ComplexDrawer::removeDrawer(const String& did, bool dodelete) {
 	for(map<String,NewDrawer *>::iterator cur = preDrawers.begin(); cur != preDrawers.end(); ++cur) {
 		NewDrawer *drw = (*cur).second;
 		if ( drw->getId() == did ) {
-			preDrawers.erase(did);
+			preDrawers.erase(cur);
 			drawersById.erase(did);
 			if ( dodelete)
 				delete drw;
@@ -211,8 +222,9 @@ void ComplexDrawer::removeDrawer(const String& did, bool dodelete) {
 	for(map<String,NewDrawer *>::iterator cur = postDrawers.begin(); cur != postDrawers.end(); ++cur) {
 		NewDrawer *drw = (*cur).second;
 		if ( drw->getId() == did ) {
-			postDrawers.erase(did);
-			drawersById.erase(did);
+
+			postDrawers.erase(cur);
+			int count = drawersById.erase(did);
 			if ( dodelete)
 				delete drw;
 			break;
@@ -274,14 +286,19 @@ void ComplexDrawer::setDrawMethod(DrawMethod method) {
 	drm = method;
 }
 
-void ComplexDrawer::setSpecialDrawingOptions(SpecialDrawingOptions option, bool add, vector<Coord>* coords){
+void ComplexDrawer::setSpecialDrawingOptions(int option, bool add, vector<Coord>* coords){
 	if ( add)
 		specialOptions |= option;
 	else
 		specialOptions &= !option;
+	if ( option & sdoTOCHILDEREN) {
+		for(int i=0; i < drawers.size(); ++i) {
+			drawers.at(i)->setSpecialDrawingOptions(option, add, coords);
+		}
+	}
 }
 
-int ComplexDrawer::getSpecialDrawingOption(SpecialDrawingOptions opt) const {
+int ComplexDrawer::getSpecialDrawingOption(int opt) const {
 	if ( opt == sdoNone)
 		return specialOptions;
 	else

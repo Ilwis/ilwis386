@@ -30,7 +30,7 @@ TextSetDrawer::~TextSetDrawer() {
 	delete font;
 }
 
-void  TextSetDrawer::prepare(PreparationParameters *pp){
+void  TextSetDrawer::prepare(PreparationParameters *pp){ 
 	ComplexDrawer::prepare(pp);
 }
 

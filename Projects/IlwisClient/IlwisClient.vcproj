@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="IlwisClient"
 	ProjectGUID="{12042408-86EA-4501-8797-F358A5447A86}"
 	RootNamespace="IlwisClient"
@@ -667,6 +667,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Client\Resources\average.ico"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Client\Resources\axis.ICO"
 				>
 			</File>
@@ -1279,11 +1283,23 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Client\Resources\max.ico"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Client\Resources\MEASDIST.CUR"
 				>
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\measure.bmp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\median.ico"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\min.ico"
 				>
 			</File>
 			<File
@@ -1539,6 +1555,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Client\Resources\select.ico"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\selectaoi.ico"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Client\Resources\SelectArea.ico"
 				>
 			</File>
@@ -1788,6 +1812,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\ThreeD.ico"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\TimeSelection.ico"
 				>
 			</File>
 			<File
@@ -2151,6 +2179,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\Sources\Client\MainWindow\ActionFinder.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Sources\Client\MainWindow\ActionListCtrl.cpp"
 					>
 				</File>
@@ -2383,6 +2415,10 @@
 					</File>
 					<File
 						RelativePath="..\..\Sources\Client\MainWindow\ACTION.H"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\MainWindow\ActionFinder.h"
 						>
 					</File>
 					<File
@@ -5276,34 +5312,6 @@
 				</File>
 			</Filter>
 		</Filter>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\average.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\max.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\median.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\min.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\select.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\selectaoi.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\TimeSelection.ico"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

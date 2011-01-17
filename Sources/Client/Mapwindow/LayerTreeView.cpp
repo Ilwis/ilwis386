@@ -318,12 +318,13 @@ void LayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 				//}
 		dr->configure(this, item);
 
-		//bool fLegend = adr->isLegendUsefull();
-		//if (fLegend) {
+		//bool fLegend = true;
+		//if (mapDrawer && fLegend) {
+		//	Domain dm = mapDrawer->getBaseMap()->dm();
 		//	if (dm->pdc()) {
-		//		sName = SDCRemLegend;
+		//		String sName = SDCRemLegend;
 		//		int iImgLeg = IlwWinApp()->iImage("legend");
-		//		HTREEITEM htiLeg = tc.InsertItem(sName.scVal(), iImgLeg, iImgLeg, hti);
+		//		HTREEITEM htiLeg = tc.InsertItem(sName.scVal(), iImgLeg, iImgLeg, item);
 		//		if (0 == htiLeg)
 		//			return;
 		//		tc.SetItemData(htiLeg, (DWORD_PTR)new LegendLayerTreeItem(this, dr));		
@@ -337,6 +338,7 @@ void LayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 		//		}
 		//		tc.Expand(htiLeg, TVE_EXPAND);
 		//	}
+		//}
 		//	else if (dm->pdbool()) {
 		//		sName = SDCRemLegend;
 		//		int iImgLeg = IlwWinApp()->iImage("legend");

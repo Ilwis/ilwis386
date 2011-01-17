@@ -679,7 +679,7 @@ void MapPaneView::OnCoordSysEdit()
 
 void MapPaneView::OnUpdateGeoRefEdit(CCmdUI* pCmdUI)
 {
-	throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
+	//throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
 	//GeoRef georef = GetDocument()->georef;
 	//bool fEdit = georef.fValid() && !georef->fReadOnly() && !georef->fDependent();
 	//fEdit = fEdit && georef->fnObj.sFullName().length() > 0; // internal georefs are not editable
