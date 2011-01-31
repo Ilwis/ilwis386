@@ -262,6 +262,7 @@ private:
 	CWinThread       *thrDdeServer;
 	COMServerHandler *chCOMServerHandler;
 	bool fOldTranquilizers;
+	ULONG_PTR m_gdiplusToken;
 	
 	DECLARE_MESSAGE_MAP()
 };

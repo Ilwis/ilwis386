@@ -212,7 +212,7 @@ $Header: /ILWIS 3.0/Main/ilwis.CPP 329   10-06-05 15:09 Retsios $
 #include "MainWindow\Catalog\WMSCatalog.h"
 #include "Engine\DataExchange\WMSCollection.h"
 #include "MainWindow\Catalog\WMSCollectionDoc.h"
-
+#include <gdiplus.h>
 #include "Headers\Hs\Mainwind.hs"
 
 IlwisWinApp TheIlwisApp;
@@ -265,7 +265,7 @@ bool IlwisWinApp::fShowHelpNumbers = false;
 
 
 
-IlwisWinApp::IlwisWinApp()
+IlwisWinApp::IlwisWinApp() 
 : CWinApp(ILWIS_VERSION_NAME)
 , smILWIS(1,1,ILWIS_VERSION_NAME)
 , smMainWindow(1,1,String("%sMW",ILWIS_VERSION_NAME).scVal())
@@ -408,6 +408,8 @@ BOOL IlwisWinApp::InitInstance()
 		RegisterClasses();
 		RegisterDocTemplates();
 		InitImageLists();
+		Gdiplus::GdiplusStartupInput gdiplusStartupInput;
+		Gdiplus::GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, NULL);
 
 		//ParmList *pl;
 		Context()->InitThreadLocalVars();
@@ -666,7 +668,7 @@ int IlwisWinApp::ExitInstance()
 
 	// remove the default fonts
 	for_each(StandardFonts.begin(), StandardFonts.end(), delfnt);
-
+	Gdiplus::GdiplusShutdown(m_gdiplusToken);
 	::OleUninitialize();
 
 	return 0;
@@ -877,8 +879,8 @@ void IlwisWinApp::RegisterDocTemplates()
 	AddDocTemplate(dtMapList);
 
 	dtAnimation = new IlwisDocTemplate(
-		".mpl", 
-		"MapList", 
+		".mpl,ioc", 
+		"MapList,ObjectCollection", 
 		"ILWIS Animation",
 		RUNTIME_CLASS(MapCompositionDoc),
 		RUNTIME_CLASS(MapWindow),
@@ -1190,8 +1192,8 @@ void IlwisWinApp::InitImageLists()
 {
 	ilSmall.Create(16,16,TRUE,4,4);
 	ilLarge.Create(32,32,TRUE,4,4);
-	ilSmall.SetImageCount(97);
-	ilLarge.SetImageCount(97);
+	ilSmall.SetImageCount(98);
+	ilLarge.SetImageCount(98);
 
 	int i = 0;
 	InitImage("ilwis", "LogoIcon", i++);
@@ -1303,6 +1305,7 @@ void IlwisWinApp::InitImageLists()
 	InitImage("Median","median",i++);
 	InitImage("Min","min",i++);
 	InitImage("Max","max",i++);
+	InitImage("Save","save",i++);
 
 
 
@@ -1688,8 +1691,26 @@ CDocument* IlwisWinApp::OpenDocumentFile(LPCTSTR lpszFileName, IlwisDocument::Op
 		else
 			AfxBeginThread(CommandHandler::CalcObjectAndShow, (LPVOID)(new String(fn.sFullName(true))));
 	}
-	else if (iotType == IlwisObject::iotOBJECTCOLLECTION ||
-		(iotType == IlwisObject::iotANY && fExisting)) // catch all will go the foreignformat
+	else if (iotType == IlwisObject::iotOBJECTCOLLECTION) {
+		ObjectCollection oc(fn);
+		bool fCalculated = oc->fCalculated();
+		// prevent dead lock
+		oc.SetPointer(0);
+		if (fCalculated) {
+			if ( ot == IlwisDocument::otANIMATION) {
+				//((IlwisDocManager *)m_pDocManager)->OpenDocumentAsAnimation(fn.sFullName().scVal());
+				WinThread *thr = new WinThread(m_pDocManager, pLongFileName, ot);
+				if ( thr)
+					thr->CreateThread(0,0);
+
+			}
+			else
+				m_pDocManager->OpenDocumentFile(fn.sFullName().scVal());
+		}
+		else
+			AfxBeginThread(CommandHandler::CalcObjectAndShow, (LPVOID)(new String(fn.sFullName(true))));
+	}
+	else if	(iotType == IlwisObject::iotANY && fExisting) // catch all will go the foreignformat
 	{
 		m_pDocManager->OpenDocumentFile(fn.sFullName().scVal());
 	}

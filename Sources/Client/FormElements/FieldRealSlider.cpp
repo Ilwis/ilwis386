@@ -169,7 +169,7 @@ FieldRealSliderEx::FieldRealSliderEx(FormEntry * parent, const String& question,
 	continuous(0),
 	rangeText(txt)
 {
-	FieldGroup *fg = new FieldGroup(parent);
+	fg = new FieldGroup(parent);
 	edit = new FieldReal(fg,question,val,valrange);
 	slider = new FieldRealSlider(fg,val,valrange,TBS_HORZ);
 	slider->Align(edit,AL_AFTER);
@@ -195,6 +195,7 @@ void FieldRealSliderEx::create(){
 }
 
 void FieldRealSliderEx::show(int sw){
+	fg->show(sw);
 	if (edit)
 		edit->show(sw);
 	if ( slider)
@@ -253,6 +254,8 @@ int FieldRealSliderEx::EditCallBackFunc(Event *ev) {
 	setRace = 1;
 	double val = edit->rVal();
 	slider->SetVal(val);
+	if ( _npChanged)
+		(_cb->*_npChanged)(ev);
 	setRace = -1;
 	return 1;
 }

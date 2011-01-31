@@ -300,6 +300,7 @@ public:
 	void SetWidth(short iWidth);
 	void _export Enable();
 	void _export Disable();
+	void show(int s);
 
 	String sGetText();
 private:

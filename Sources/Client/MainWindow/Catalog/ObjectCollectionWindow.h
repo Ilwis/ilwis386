@@ -57,33 +57,22 @@ class IMPEXP ObjectCollectionWindow : public CatalogFrameWindow
 protected:
 	ObjectCollectionWindow();           // protected constructor used by dynamic creation
 
-// Attributes
 public:
 
-// Operations
+
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(ObjectCollectionWindow)
-	//}}AFX_VIRTUAL
-
-// Implementation
 protected:
 	virtual ~ObjectCollectionWindow();
 
-	// Generated message map functions
-	//{{AFX_MSG(ObjectCollectionWindow)
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	void OnUpdateFrameTitle(BOOL bAddToTitle);
 	void OnUpdateFrameMenu(BOOL bActivate, CWnd* pActivateWnd, HMENU hMenuAlt);
-	//}}AFX_MSG
+
+	ButtonBar bbCollection;
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
 
 #endif

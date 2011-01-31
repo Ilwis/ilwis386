@@ -52,6 +52,7 @@ Created on: 2007-02-8
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\PixelInfoDoc.h"
+#include "Engine\Base\DataObjects\ObjectCollection.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\FormElements\syscolor.h"
 #include "Engine\Map\Segment\Seg.h"
@@ -388,6 +389,12 @@ BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPathName, OpenType ot)
 			if (!ml.fValid())
 				return FALSE;
 			return OnOpenMapList(ml, ot);
+		}
+		else if (".ioc" == fn.sExt && ot == IlwisDocument::otANIMATION) {
+			ObjectCollection oc(fn);
+			if (!oc.fValid())
+				return FALSE;
+			return OnOpenObjectCollection(oc, ot);
 		}
 		else if (".mps" == fn.sExt) {
 			SegmentMap mp(fn);
@@ -945,6 +952,31 @@ String MapCompositionDoc::getForeignType(const Map& mp) {
 		return "";
 	return s.sHead("(");
 
+}
+
+BOOL MapCompositionDoc::OnOpenObjectCollection(const ObjectCollection& list, OpenType ot)
+{
+	BaseMap bmp(list->fnObject(0));
+	if (!bmp.fValid())
+		return FALSE;
+	SetTitle(bmp);
+
+	if (ot & otANIMATION) {
+		ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
+		ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer("AnimationDrawer", "Ilwis38", &parms);
+		drawer->addDataSource((void *)&list);
+		rootDrawer->setCoordinateSystem(bmp->cs());
+		rootDrawer->addCoordBounds(bmp->cs(), bmp->cb(), false);
+		ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
+		drawer->prepare(&pp);
+		rootDrawer->addDrawer(drawer);
+	}
+	else {
+	//	eType = eColorComp;
+	}
+
+	
+	return TRUE;
 }
 
 BOOL MapCompositionDoc::OnOpenMapList(const MapList& maplist, OpenType ot)

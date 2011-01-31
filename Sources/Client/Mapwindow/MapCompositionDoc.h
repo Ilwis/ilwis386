@@ -56,6 +56,7 @@ class Palette;
 class MapPaneView;
 class StereoPair;
 class PixelInfoDoc;
+class ObjectCollection;
 
 /////////////////////////////////////////////////////////////////////////////
 // MapCompositionDoc document
@@ -132,6 +133,7 @@ private:
 	BOOL OnOpenStereoPair(const StereoPair&, OpenType ot);
 	virtual void DeleteContents();
 	ILWIS::NewDrawer *createBaseMapDrawer(const BaseMap& bmp, const String& type, const String& subtype);
+	BOOL OnOpenObjectCollection(const ObjectCollection& list, OpenType ot);
 
 private:
 	afx_msg void OnExtCoord();

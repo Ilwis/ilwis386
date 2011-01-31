@@ -103,7 +103,9 @@ int ObjectCollectionWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	if (CatalogFrameWindow::OnCreate(lpCreateStruct) == -1)
 		return -1;
-
+	EnableDocking(CBRS_ALIGN_ANY);
+	bbCollection.Create(this, "collection.but", "", 100);
+	DockControlBar(&bbCollection, AFX_IDW_DOCKBAR_TOP);
 	return 0;
 }
 
@@ -111,3 +113,5 @@ void ObjectCollectionWindow::OnUpdateFrameTitle(BOOL bAddToTitle)
 {
 	CMDIChildWnd::OnUpdateFrameTitle(bAddToTitle); // pass to update of CatalogFrame
 }
+
+

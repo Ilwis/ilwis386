@@ -91,6 +91,7 @@ private:
 	void setContinuousMode(int m);
 	FieldRealSlider *slider;
 	FieldReal *edit;
+	FieldGroup *fg;
 	bool rangeText;
 	int continuous;
 	bool initial;

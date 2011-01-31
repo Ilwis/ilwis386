@@ -645,6 +645,14 @@ void FieldReal::Disable()
 	fld->Disable();
 }
 
+void FieldReal::show(int status)            // set show or hide
+{
+	fld->show(status);
+	if ( st)
+		st->show(status);
+}
+
+
 //---------------------------------------------------------------------------------------------------[ FieldRangeInt ]-----
 FieldRangeInt::FieldRangeInt(FormEntry* p, const String& sQuestion,
                              Parm *prm, const ValueRange& vri)

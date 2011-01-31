@@ -63,6 +63,7 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(ObjectCollectionDoc, CatalogDocument)
 
 BEGIN_MESSAGE_MAP(ObjectCollectionDoc, CatalogDocument)
+	ON_COMMAND(ID_FILE_OPENMPL_FILM, OnOpenFilm)
 END_MESSAGE_MAP()
 
 
@@ -201,4 +202,11 @@ String ObjectCollectionDoc::sGetPathName() const
 bool ObjectCollectionDoc::fAlreadyInCollection(const FileName& fn) const
 {
 	return oc->fObjectAlreadyInCollection(fn);
+}
+
+void ObjectCollectionDoc::OnOpenFilm()
+{
+	//String sCmd("slideshow %S", mpl->fnObj.sFullNameQuoted());
+	String sCmd("open %S -animation", oc->fnObj.sFullNameQuoted());
+	IlwWinApp()->Execute(sCmd);
 }

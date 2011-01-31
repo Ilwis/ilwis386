@@ -72,6 +72,7 @@ public:
 	virtual void RemoveObject(const FileName& fn);
 	bool fAlreadyInCollection(const FileName& fn) const;
 	virtual String sAllowedTypes();
+	void OnOpenFilm();
 
 protected:
 	ObjectCollectionDoc();           // protected constructor used by dynamic creation

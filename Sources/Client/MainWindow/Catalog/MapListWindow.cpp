@@ -86,6 +86,7 @@ int MapListWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	ObjectCollectionWindow::OnCreate(lpCreateStruct);
 	EnableDocking(CBRS_ALIGN_ANY);
+	bbCollection.ShowWindow(SW_HIDE);
 	bbMapList.Create(this, "maplist.but", "", 100);
 	DockControlBar(&bbMapList, AFX_IDW_DOCKBAR_TOP);
 	return 0;
