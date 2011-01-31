@@ -25,6 +25,8 @@ public:
    DECLARE_MESSAGE_MAP();
 private:
 	void drawRprBase(LPDRAWITEMSTRUCT lpDIS, const CRect rct);
+	void drawRpr(LPDRAWITEMSTRUCT lpDIS, const CRect rct);
+	void moveValue(int index, double v);
 	ValueSlicerSlider *fldslicer;
 	vector<int> ylimits;
 	CPoint activePoint;
@@ -44,12 +46,15 @@ public:
 	bool isValid() const;
 	void setHighColor(Color c);
 	void setLowColor(Color c);
-	void setBoundColor(int index, Color c);
+	void setBoundColor(int index, Color c, int tranp=0);
 	void setRprBase(const Representation& rprB);
 	Representation getRpr() const;
+	void setFileNameRpr(const FileName& fn);
 	
 private:
 	void init();
+	void insertLimit(double rValue1, const Color& clr1, const Color& clr2);
+	int insertBound(double rValue);
 	Color nextColor(int i);
 	ValueSlicer *valueslicer;
 	ValueRange valrange;
@@ -58,17 +63,19 @@ private:
 	RepresentationGradual *rprgrad;
 	Representation rpr;
 	vector<double> bounds;
+	vector<int> transparency;
 	int selectedIndex;
 	Color lowColor;
 	Color highColor;
 	Representation rprBase;
+	int nrBounds;
 };
 
 
 //----------------------------
 class SlicingStepColor : public FormWithDest {
 public:
-	SlicingStepColor(CWnd *par, Color *col);
+	SlicingStepColor(CWnd* parent, Color* clrLow, double *v1, Color*clrHigh, double *v2) ;
 
 	//int exec();
 };

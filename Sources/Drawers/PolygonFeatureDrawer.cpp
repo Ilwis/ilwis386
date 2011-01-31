@@ -16,6 +16,7 @@
 #include "Drawers\DrawingColor.h" 
 #include "Drawers\gpc.h"
 #include "Drawers\gpc.c"
+#include "drawers\linedrawer.h"
 #include "drawers\polygondrawer.h"
 #include "Drawers\PolygonFeatureDrawer.h"
 #include "Client\Mapwindow\Drawers\ZValueMaker.h"
@@ -29,10 +30,14 @@ ILWIS::NewDrawer *createPolygonFeatureDrawer(DrawerParameters *parms) {
 
 PolygonFeatureDrawer::PolygonFeatureDrawer(DrawerParameters *parms) : PolygonDrawer(parms,"PolygonFeatureDrawer") {
 	setDrawMethod(NewDrawer::drmRPR);
+	PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER , 0);
+	boundary = (LineDrawer *)IlwWinApp()->getDrawer("LineFeatureDrawer", &pp, parms);
 }
 
 PolygonFeatureDrawer::PolygonFeatureDrawer(DrawerParameters *parms, const String& name) : PolygonDrawer(parms,name) {
 	setDrawMethod(NewDrawer::drmRPR);
+	PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER , 0);
+	boundary = (LineDrawer *)IlwWinApp()->getDrawer("LineFeatureDrawer", &pp, parms);
 }
 
 PolygonFeatureDrawer::~PolygonFeatureDrawer() {
@@ -44,6 +49,8 @@ bool PolygonFeatureDrawer::draw(bool norecursion, const CoordBounds& cbArea) con
 
 void PolygonFeatureDrawer::addDataSource(void *f, int options) {
 	feature = (Feature *)f;
+	if ( boundary)
+		boundary->addDataSource(feature);
 }
 
 void PolygonFeatureDrawer::prepare(PreparationParameters *p){
@@ -51,7 +58,10 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 	FeatureSetDrawer *fdr = dynamic_cast<FeatureSetDrawer *>(parentDrawer);
 	if (  p->type & ptGEOMETRY | p->type & ptRESTORE) {
 		CoordSystem csy = fdr->getCoordSystem();
+		if ( boundary)
+			boundary->prepare(p);
 		ILWIS::Polygon *polygon = (ILWIS::Polygon *)feature;
+		//double ar = polygon->rArea();
 		if ( !polygon)
 			return;
 		cb = polygon->cbBounds();
@@ -86,6 +96,8 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 	}
 	if (  p->type & ptALL || p->type & RootDrawer::ptRENDER) {
 		drawColor = fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod());
+		if ( boundary)
+			boundary->setDrawColor(Color(0,0,0));
 	}
 }
 

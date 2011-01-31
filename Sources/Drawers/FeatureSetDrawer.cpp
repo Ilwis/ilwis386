@@ -25,6 +25,7 @@
 #include "Drawers\FeatureSetDrawer.h"
 #include "Client\Mapwindow\Drawers\ZValueMaker.h"
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
+#include "Drawers\AnimationDrawer.h"
 //#include "Client\Mapwindow\Drawers\PointMapDrawerForm.h"
 #include "Headers\Hs\Drwforms.hs"
 
@@ -42,6 +43,21 @@ FeatureSetDrawer::FeatureSetDrawer(DrawerParameters *parms, const String& name) 
 }
 
 FeatureSetDrawer::~FeatureSetDrawer() {
+
+}
+
+void FeatureSetDrawer::addDataSource(void *bmap,int options) {
+	fbasemap.SetPointer((BaseMapPtr *)bmap);
+}
+
+void FeatureSetDrawer::getFeatures(vector<Feature *>& features) const {
+	features.clear();
+	int numberOfFeatures = fbasemap->iFeatures();
+	features.resize(numberOfFeatures);
+	for(int i=0; i < numberOfFeatures; ++i) {
+		Feature *feature = CFEATURE(fbasemap->getFeature(i));
+		features.at(i) = feature;
+	}
 }
 
 void FeatureSetDrawer::prepare(PreparationParameters *parms){
@@ -54,7 +70,12 @@ void FeatureSetDrawer::prepare(PreparationParameters *parms){
 		setName(mapDrawer->getBaseMap()->sName());
 	vector<Feature *> features;
 	if ( parms->type & RootDrawer::ptGEOMETRY | parms->type & NewDrawer::ptRESTORE){
-		mapDrawer->getFeatures(features);
+		bool isAnimation = mapDrawer->getType() == "AnimationDrawer";
+		if ( isAnimation ) {
+			getFeatures(features);
+		} else {
+			mapDrawer->getFeatures(features);
+		}
 		clear();
 		drawers.resize( features.size());
 		for(int i=0; i<drawers.size(); ++i)

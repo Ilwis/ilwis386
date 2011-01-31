@@ -7,10 +7,37 @@ class FieldOneSelectTextOnly;
 class ValueSlicerSlider;
 class FieldLister;
 
+#define ID_AnimationBar 6007
+
 ILWIS::NewDrawer *createAnimationDrawer(ILWIS::DrawerParameters *parms);
 namespace ILWIS{
 	class BoxDrawer;
 	class AnimationSlicing;
+
+	class AnimationBar : public CToolBar
+	{
+	// Construction
+	public:
+		AnimationBar();
+		virtual ~AnimationBar();
+		virtual void OnUpdateCmdUI(CFrameWnd*, BOOL);
+		void Create(CWnd* pParent); 
+
+		// Generated message map functions
+	protected:
+		afx_msg void OnSetFocus();
+		afx_msg void OnKillFocus();
+		void updateTime(const String& );
+		//{{AFX_MSG(ScaleBar)
+			// NOTE - the ClassWizard will add and remove member functions here.
+		//}}AFX_MSG
+		CEdit ed;
+		CFont fnt;
+		bool fActive;
+
+		DECLARE_MESSAGE_MAP()
+	};
+
 
 	class _export AnimationDrawer : public AbstractMapDrawer {
 		friend class AnimationTiming;
@@ -47,6 +74,7 @@ namespace ILWIS{
 		bool timerPerTime() ;
 		void addSelectionDrawers(const Representation& rpr);
 		RangeReal getMinMax(const MapList& mlist) const;
+		SetDrawer *createIndexDrawer(const BaseMap& basemap,ILWIS::DrawerParameters& dp, PreparationParameters* pp);
 		double interval;
 		UINT timerid;
 		IlwisObject *datasource;
@@ -68,6 +96,7 @@ namespace ILWIS{
 		AnimationControl *animcontrol;
 		AnimationSelection *animselection;
 		AnimationSlicing *animslicing;
+		AnimationBar animBar;
 
 		void addSetDrawer(const BaseMap& basemap, ILWIS::PreparationParameters *pp, ILWIS::SetDrawer *rsd, const String& name="", bool post=false);
 	};
@@ -90,20 +119,25 @@ namespace ILWIS{
 		FieldGroup *fgTime;
 		FieldColumn *fcol;
 		FieldColumn *fcolTime;
-		FieldTime *ftime;
+		FieldInt *fiYr, *fiMonth, *fiDay, *fiHour, *fiMinute;
+		//FieldTime *ftime;
 		StaticText *st;
 		CheckBox *cbTime;
+		FieldRealSliderEx *sliderFps;
 		String colName;
-		FieldReal *frtime;
+		//FieldReal *frtime;
 		FlatIconButton *fbBegin; 
 		int begin(Event  *ev);
 		int end(Event  *ev);
 		int pause(Event  *ev);
 		int run(Event  *ev);
 		int stop(Event  *ev);
+		int speed(Event *ev);
 		int changeTimeColumn(Event *);
 		int setTimingMode(Event *ev);
 		bool initial;
+		double fps;
+		int year, month, day, hour, minute;
 
 		DECLARE_MESSAGE_MAP();
 	};
@@ -117,6 +151,8 @@ namespace ILWIS{
 		void shutdown(int iReturn);
 		String steps;
 		ValueSlicerSlider *vs;
+		int saveRpr(Event *ev);
+		FileName fnRpr;
 
 	};
 
@@ -145,7 +181,7 @@ namespace ILWIS{
 		int createSteps(Event*);
 		String steps;
 		ValueSlicerSlider *vs;
-
+	
 	};
 
 	class AnimationSourceUsage: public DisplayOptionsForm2
@@ -172,6 +208,7 @@ namespace ILWIS{
 		vector<int>& activeMaps;
 	};
 
+	
 
 
 }

@@ -429,11 +429,23 @@ InterActiveSlicing::InterActiveSlicing(CWnd *par, RasterSetDrawer *adr)
 	fldSteps = new FieldOneSelectTextOnly(fg, &steps);
 	fldSteps->SetCallBack((NotifyProc)&InterActiveSlicing::createSteps);
 	fldSteps->Align(vs, AL_UNDER);
-	fldSteps->SetWidth(vs->psn->iWidth/2);
+	fldSteps->SetWidth(vs->psn->iWidth/3);
+	FlatIconButton *fb = new FlatIconButton(fg,"Save","",(NotifyProc)&InterActiveSlicing::saveRpr,fnRpr);
+	fb->Align(fldSteps, AL_AFTER);
 
 
 	create();
 }
+
+int InterActiveSlicing::saveRpr(Event *ev) {
+	CFileDialog filedlg (FALSE, "*.rpr", "*.rpr",OFN_HIDEREADONLY|OFN_NOREADONLYRETURN | OFN_LONGNAMES, "Ilwis Representation (*.rpr)|*.rpr||", NULL);
+	if ( filedlg.DoModal() == IDOK) {
+		String name(filedlg.GetPathName());
+		vs->setFileNameRpr(FileName(name));
+	}
+	return 1;
+}
+
 int InterActiveSlicing::createSteps(Event*) {
 	if (fldSteps->ose->GetCount() == 0) {
 		for(int i = 2 ; i <= 10; ++i)
@@ -481,7 +493,9 @@ int HighLightDrawer::createSteps(Event*) {
 			vs->setNumberOfBounds(mapIndex +2);
 			for(int i = 0; i < mapIndex + 2; ++i) {
 				if ( i % 2 == 1) {
-					vs->setBoundColor(i,Color(200,0,0));
+					vs->setBoundColor(i,Color(200,0,0,0),0);
+				} else {
+					vs->setBoundColor(i,Color(0,0,0,255),255);
 				}
 			}
 		}

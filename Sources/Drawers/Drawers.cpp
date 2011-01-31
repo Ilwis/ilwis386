@@ -39,6 +39,7 @@ DrawerInfoVector *createDrawer() {
 	infos->push_back(new DrawerInfo("PointSetDrawer","ilwis38",createPointSetDrawer));
 	infos->push_back(new DrawerInfo("LineFeatureDrawer","ilwis38",createLineFeatureDrawer));
 	infos->push_back(new DrawerInfo("LineSetDrawer","ilwis38",createLineSetDrawer));
+	infos->push_back(new DrawerInfo("LineDrawer","ilwis38",createLineDrawer));
 	infos->push_back(new DrawerInfo("PolygonFeatureDrawer","ilwis38",createPolygonFeatureDrawer));
 	infos->push_back(new DrawerInfo("PolygonSetDrawer","ilwis38",createPolygonSetDrawer));
 	infos->push_back(new DrawerInfo("GridDrawer","ilwis38",createGridDrawer));

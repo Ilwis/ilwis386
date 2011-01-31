@@ -4,6 +4,7 @@
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
 #include "Client\Ilwis.h"
 #include "geos\algorithm\CGAlgorithms.h"
+#include "drawers\linedrawer.h"
 #include "drawers\polygondrawer.h"
 #include "Client\Mapwindow\Drawers\ComplexDrawer.h"
 #include "Client\Mapwindow\Drawers\ZValueMaker.h"
@@ -15,16 +16,19 @@ ILWIS::NewDrawer *createPolygonDrawer(DrawerParameters *parms) {
 	return new PolygonDrawer(parms);
 }
 
-PolygonDrawer::PolygonDrawer(DrawerParameters *parms) : SimpleDrawer(parms,"PolygonDrawer") {
+PolygonDrawer::PolygonDrawer(DrawerParameters *parms) : SimpleDrawer(parms,"PolygonDrawer"), boundary(0), showArea(0) {
 	setDrawMethod(NewDrawer::drmRPR);
 	drawColor = SysColor(COLOR_BTNFACE);
+	areaTransparency = 1;
 }
 
-PolygonDrawer::PolygonDrawer(DrawerParameters *parms, const String& name) : SimpleDrawer(parms,name) {
+PolygonDrawer::PolygonDrawer(DrawerParameters *parms, const String& name) : SimpleDrawer(parms,name), boundary(0), showArea(true) {
 	setDrawMethod(NewDrawer::drmRPR);
+	areaTransparency = 1;
 }
 
 PolygonDrawer::~PolygonDrawer() {
+	delete boundary;
 }
 
 bool PolygonDrawer::draw(bool norecursion, const CoordBounds& cbArea) const{
@@ -32,7 +36,6 @@ bool PolygonDrawer::draw(bool norecursion, const CoordBounds& cbArea) const{
 		return false;
 	if ( !getRootDrawer()->getCoordBoundsZoom().fContains(cb))
 		return false;
-
 	glShadeModel(GL_FLAT);
 
 	ComplexDrawer *cdrw = (ComplexDrawer *)getParentDrawer();
@@ -46,8 +49,8 @@ bool PolygonDrawer::draw(bool norecursion, const CoordBounds& cbArea) const{
 		glTranslated(0,0,zoffset);
 	}
 
-	glColor4f(drawColor.redP(),drawColor.greenP(), drawColor.blueP(), getTransparency());
-	for(int i=0; i < triangleStrips.size(); ++i){
+	glColor4f(drawColor.redP(),drawColor.greenP(), drawColor.blueP(), getTransparency() * areaTransparency);
+	for(int i=0; i < triangleStrips.size() && showArea; ++i){
 		glBegin(GL_TRIANGLE_STRIP);
 		for(int j=0; j < triangleStrips.at(i).size(); ++j) {
 			Coord c = triangleStrips.at(i).at(j);
@@ -59,6 +62,8 @@ bool PolygonDrawer::draw(bool norecursion, const CoordBounds& cbArea) const{
 	if ( is3D) {
 		glPopMatrix();
 	}
+	if ( boundary && showBoundary)
+		boundary->draw(norecursion, cbArea);
 	return true;
 }
 
@@ -73,6 +78,23 @@ HTREEITEM PolygonDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 void PolygonDrawer::setDrawColor(const Color& col) {
 	drawColor = col;
 }
+
+LineDrawer *PolygonDrawer::getBoundaryDrawer(){
+	return boundary;
+}
+
+void PolygonDrawer::areasActive(bool yesno) {
+	showArea = yesno;
+}
+
+void PolygonDrawer::boundariesActive(bool active) {
+	showBoundary = active;
+}
+
+void PolygonDrawer::setTransparencyArea(double v) {
+	areaTransparency = v;
+}
+
 
 
 

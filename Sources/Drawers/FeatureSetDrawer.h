@@ -25,7 +25,8 @@ class _export FeatureSetDrawer : public SetDrawer {
 		HTREEITEM  configure(LayerTreeView  *tv, HTREEITEM parent);
 		virtual NewDrawer *createElementDrawer(PreparationParameters *pp, ILWIS::DrawerParameters* parms) const { return 0;}
 		double getExtrusionTransparency() const;
-
+		void getFeatures(vector<Feature *>& features) const;
+		virtual void addDataSource(void *,int options=0);
 
 	protected:
 		HTREEITEM make3D(bool yeno, LayerTreeView  *tvm);
@@ -44,6 +45,7 @@ class _export FeatureSetDrawer : public SetDrawer {
 		Color singleColor;
 		DisplayOptionColorItem *colorItem;
 		double extrTransparency;
+		BaseMap fbasemap;
 	
 	};
 	class SetMaskForm : public DisplayOptionsForm {

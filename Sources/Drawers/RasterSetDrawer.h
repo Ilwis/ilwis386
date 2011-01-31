@@ -73,6 +73,8 @@ namespace ILWIS{
 		int createSteps(Event*);
 		String steps;
 		ValueSlicerSlider *vs;
+		int saveRpr(Event *ev);
+		FileName fnRpr;
 
 	};
 
