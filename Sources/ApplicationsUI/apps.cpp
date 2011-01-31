@@ -61,6 +61,7 @@ Last change:  WK   17 Sep 98    2:14 pm
 #include "Engine\Base\System\LOGGER.H"
 #include "Client\Base\BaseCommandHandlerUI.h"
 #include "Client\MainWindow\CommandHandlerUI.h"
+#include "ApplicationsUI\TableCreateTimeColumn.h"
 #include "Client\ilwis.h"
 #include "Headers\Hs\Applications.hs"
 
@@ -148,6 +149,7 @@ extern "C" _export InfoUIVector* getApplicationInfoUI() {
 (*infosui).push_back(CommandHandlerUI::createApplicationInfo("clmmoledensky","",Cmdclmmoledensky,"","",".grh",".mpl",0000,"", false));
 (*infosui).push_back(CommandHandlerUI::createApplicationInfo("clmhelmert7parms","",Cmdclmhelmert7parms,"","",".grh",".mpl",0000,"", false));
 (*infosui).push_back(CommandHandlerUI::createApplicationInfo("clmfindazimuthdistance","",Cmdclmfindazimuthdistance,"","Find Azimuth Distance",".grh",".mpl",0000,"Find Azimuth Distance", false));
+(*infosui).push_back(CommandHandlerUI::createApplicationInfo("timecolumn","",Cmdtimecolumn,TR("&Table Operations..&Create time column"),TR("Create time column"),"ExeTbl16IcoL",".tbl",0,TR("Create time column from maplist name information")));
  
 return infosui;
 }

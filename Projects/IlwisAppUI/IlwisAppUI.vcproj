@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="IlwisAppUI"
 	ProjectGUID="{1D43E8C9-3563-4CC7-A3D1-B69C8BB736E8}"
 	RootNamespace="IlwisAppUI"
@@ -270,6 +270,14 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\ApplicationsUI\frmUniqueId.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\ApplicationsUI\TableCreateTimeColumn.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\ApplicationsUI\TableCreateTimeColumn.h"
 				>
 			</File>
 			<File

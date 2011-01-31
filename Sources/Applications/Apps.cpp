@@ -61,6 +61,7 @@
 #include "Applications\Raster\Mapglue.h"
 #include "Applications\Table\COLCALC.H"
 #include "Applications\MapList\MapListChangeDetection.h"
+#include "Applications\Table\TableCreateTimeColumn.h"
 #include "Applications\Table\AUTCSEMV.H"
 
 //extern "C" _export vector<ApplicationInfo *>* getApplicationInfo());
@@ -137,6 +138,7 @@ InfoVector* getApplicationInfo() {
 	infos->push_back(ApplicationMap::newApplicationInfo(createTableNeighbourPol,"TableNeighbourPol"));
 	infos->push_back(ApplicationMap::newApplicationInfo(createTableTranspose,"TableTranspose"));
 	infos->push_back(ApplicationMap::newApplicationInfo(createTableAutoCorrSemiVar,"TableAutoCorrSemiVar"));
+	infos->push_back(ApplicationMap::newApplicationInfo(createTableCreateTimeColumn,"TableCreateTimeColumn"));
 
 	return infos;
 
