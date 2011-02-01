@@ -249,9 +249,9 @@ void RasterSetDrawer::DisplayImagePortion(double x1, double y1, double x2, doubl
 	// project the patch to 2D
 	if (sameCsy) {
 		gluProject(x1, y1, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[0], &m_winy[0], &m_winz[0]);
-		gluProject(x1, y2, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[1], &m_winy[1], &m_winz[1]);
+		gluProject(x2, y1, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[1], &m_winy[1], &m_winz[1]);
 		gluProject(x2, y2, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[2], &m_winy[2], &m_winz[2]);
-		gluProject(x2, y1, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[3], &m_winy[3], &m_winz[3]);
+		gluProject(x1, y2, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[3], &m_winy[3], &m_winz[3]);
 	} else {
 		gluProject(c1.x, c1.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[0], &m_winy[0], &m_winz[0]);
 		gluProject(c2.x, c2.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[1], &m_winy[1], &m_winz[1]);
@@ -317,15 +317,14 @@ void RasterSetDrawer::DisplayTexture(double x1, double y1, double x2, double y2,
 
 	if (tex != 0)
 	{
-
-		// avoid plotting the "added" portion of the map
-		x2 = min(x2, data->cb.MaxX());
-		y2 = max(y2, data->cb.MinY());
-
 		// make the quad
 		glBegin (GL_QUADS);
 
 		if (sameCsy) {
+			// avoid plotting the "added" portion of the map
+			x2 = min(x2, data->cb.MaxX());
+			y2 = max(y2, data->cb.MinY());
+
 			tex->TexCoord2d(x1, y1);
 			glVertex3d(x1, y1, 0.0);
 
@@ -338,6 +337,28 @@ void RasterSetDrawer::DisplayTexture(double x1, double y1, double x2, double y2,
 			tex->TexCoord2d(x1, y2);
 			glVertex3d(x1, y2, 0.0);
 		} else {
+			// avoid plotting the "added" portion of the map
+			bool fRecalculateCX2 = false;
+			if (x2 > data->cb.MaxX())
+			{
+				x2 = data->cb.MaxX();
+				fRecalculateCX2 = true;
+			}
+			bool fRecalculateCY2 = false;
+			if (y2 < data->cb.MinY())
+			{
+				y2 = data->cb.MinY();
+				fRecalculateCY2 = true;
+			}
+
+			//c1 = csy->cConv(getRootDrawer()->getCoordinateSystem(), Coord(x1, y1, 0.0));
+			if (fRecalculateCX2)
+				c2 = csy->cConv(getRootDrawer()->getCoordinateSystem(), Coord(x2, y1, 0.0));
+			if (fRecalculateCX2 || fRecalculateCY2)
+				c3 = csy->cConv(getRootDrawer()->getCoordinateSystem(), Coord(x2, y2, 0.0));
+			if (fRecalculateCY2)
+				c4 = csy->cConv(getRootDrawer()->getCoordinateSystem(), Coord(x1, y2, 0.0));
+
 			tex->TexCoord2d(x1, y1);
 			glVertex3d(c1.x, c1.y, 0.0);
 
