@@ -16,11 +16,11 @@ class LineDrawer : public SimpleDrawer {
 		void setDrawColor(const Color& col);
 		void setThickness(float t);
 		void setLineStyle(int style);
+		void setSpecialDrawingOptions(int option, bool add, vector<Coord>* coords);
 
 	protected:
 		LineDrawer(DrawerParameters *parms, const String& name);
 		bool findSelectedPoint(const Coord& c) const;
-		void setSpecialDrawingOptions(SpecialDrawingOptions option, bool add, vector<Coord>* coords);
 		void clear();
 		void shareVertices(vector<Coord *>& coords);
 		void drawSelectedFeature(CoordinateSequence *points, const CoordBounds& cbZoom, bool is3D) const;
@@ -29,7 +29,7 @@ class LineDrawer : public SimpleDrawer {
 		vector<Coord> selectedCoords;
 		Color drawColor;
 		CoordBounds cb;
-		float thickness;
+		double thickness;
 		int linestyle;
 	};
 

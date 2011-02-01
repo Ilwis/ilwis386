@@ -52,7 +52,7 @@ bool LineDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 	bool filledExtr = getSpecialDrawingOption(NewDrawer::sdoFilled);
 	ComplexDrawer *cdrw = (ComplexDrawer *)getParentDrawer();
 	bool is3D = getRootDrawer()->is3D() && cdrw->getZMaker()->getThreeDPossible();
-	double zscale, zoffset, fakez;
+	double zscale, zoffset, fakez=0;
 
 
 	glColor4f(drawColor.redP(),drawColor.greenP(), drawColor.blueP(), getTransparency());
@@ -61,11 +61,10 @@ bool LineDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 		glEnable (GL_LINE_STIPPLE);
 		glLineStipple(1,linestyle);
 	}
-
+	fakez = getRootDrawer()->getFakeZ()/2.0;
 	if ( is3D) {
 		zscale = cdrw->getZMaker()->getZScale();
 		zoffset = cdrw->getZMaker()->getOffset();
-		fakez = getRootDrawer()->getFakeZ();
 		glPushMatrix();
 		glScaled(1,1,zscale);
 		glTranslated(0,0,zoffset);
@@ -80,7 +79,7 @@ bool LineDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 		glBegin(GL_LINE_STRIP);
 		for(int i=0; i<points->size(); ++i) {
 			Coordinate c = points->getAt(i);
-			double z = is3D ? c.z : 0;
+			double z = is3D ? c.z : fakez;
 			glVertex3d( c.x, c.y, z);
 		}
 		glEnd();
@@ -135,7 +134,6 @@ void LineDrawer::drawSelectedFeature(CoordinateSequence *points, const CoordBoun
 			glVertex3f( c.x - symbolScale, c.y + symbolScale,fz);	
 			glVertex3f( c.x + symbolScale, c.y + symbolScale,fz);
 			glVertex3f( c.x + symbolScale, c.y - symbolScale,fz);
-			//glVertex3f( c.x - symbolScale, c.y - symbolScale,fz);
 			glEnd();
 		}
 		else {
@@ -193,7 +191,7 @@ void LineDrawer::shareVertices(vector<Coord *>& coords) {
 	}
 }
 
-void LineDrawer::setSpecialDrawingOptions(SpecialDrawingOptions option, bool add, vector<Coord>* coords){
+void LineDrawer::setSpecialDrawingOptions(int option, bool add, vector<Coord>* coords){
 	SimpleDrawer::setSpecialDrawingOptions(option, add);
 	selectedCoords.clear();
 	if ( coords) {

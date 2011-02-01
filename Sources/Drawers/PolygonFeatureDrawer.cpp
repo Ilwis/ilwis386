@@ -58,8 +58,9 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 	FeatureSetDrawer *fdr = dynamic_cast<FeatureSetDrawer *>(parentDrawer);
 	if (  p->type & ptGEOMETRY | p->type & ptRESTORE) {
 		CoordSystem csy = fdr->getCoordSystem();
-		if ( boundary)
+		if ( boundary) {
 			boundary->prepare(p);
+		}
 		ILWIS::Polygon *polygon = (ILWIS::Polygon *)feature;
 		//double ar = polygon->rArea();
 		if ( !polygon)
@@ -93,11 +94,17 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 				c.z = zv;
 			}
 		}
+		if ( boundary) {
+			boundary->prepare(p);
+		}
 	}
 	if (  p->type & ptALL || p->type & RootDrawer::ptRENDER) {
+		extrTransparency = fdr->getExtrusionTransparency();
 		drawColor = fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod());
-		if ( boundary)
+		if ( boundary) {
 			boundary->setDrawColor(Color(0,0,0));
+			boundary->prepare(p);
+		}
 	}
 }
 

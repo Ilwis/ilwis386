@@ -29,13 +29,13 @@ ILWIS::NewDrawer *createLineFeatureDrawer(DrawerParameters *parms) {
 }
 
 LineFeatureDrawer::LineFeatureDrawer(DrawerParameters *parms) : 
-	LineDrawer(parms,"LineFeatureDrawer")
+	LineDrawer(parms,"LineFeatureDrawer"), feature(0)
 {
 	drawColor = Color(0,167,18);
 }
 
 LineFeatureDrawer::LineFeatureDrawer(DrawerParameters *parms, const String& name) : 
-	LineDrawer(parms,name)
+	LineDrawer(parms,name),feature(0)
 {
 }
 

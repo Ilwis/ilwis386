@@ -452,6 +452,7 @@ bool AnimationDrawer::timerPerIndex() {
 				getDrawer(activeMaps[0])->setActive(true);
 			}
 		}
+		animBar.updateTime(String("index : %d",mapIndex));
 	}
 	return true;
 }
@@ -471,11 +472,12 @@ bool AnimationDrawer::timerPerTime() {
 		ILWIS::Duration duration = (col->rrMinMax().rHi() - col->rrMinMax().rLo());
 		double steps = 1000.0 / REAL_TIME_INTERVAL;
 		double currentTime = col->rrMinMax().rLo() +  timestep * (double)index / steps;
-		//TRACE(String("%f %f\n",currentTime,col->rValue(activeMaps[mapIndex])).scVal());
+		ILWIS::Time ct(currentTime);
+
 		if ( mapIndex < activeMaps.size() - 1 && col->rValue(activeMaps[mapIndex]) < currentTime){
 			getDrawer(activeMaps[mapIndex])->setActive(false);
 			getDrawer(activeMaps[++mapIndex])->setActive(true);
-			//TRACE(String("%d %d\n",mapIndex,activeMaps[mapIndex]).scVal());
+			animBar.updateTime(String("index %d : %S", mapIndex, timeString(mpl, mapIndex)));
 			redraw = true;
 		} else {
 			if (loop && mapIndex >= activeMaps.size() -1 && currentTime >= col->rValue(col->iRecs() - 1)) {
@@ -491,6 +493,14 @@ bool AnimationDrawer::timerPerTime() {
 
 	return redraw;
 
+}
+
+String AnimationDrawer::timeString(const MapList& mpl, int index) {
+	double steps = 1000.0 / REAL_TIME_INTERVAL;
+	double currentTime = mpl->tblAtt()->col(colTime)->rrMinMax().rLo() +  timestep * (double)index / steps;
+	ILWIS::Time ct(currentTime);
+	String timestring = ct.toString(true,mpl->tblAtt()->col(colTime)->dm()->pdtime()->getMode());
+	return timestring;
 }
 
 String AnimationDrawer::iconName(const String& subtype) const {
@@ -515,10 +525,12 @@ LRESULT AnimationControl::OnTimeTick( WPARAM wParam, LPARAM lParam ) {
 	if ( adrw->getDrawerCount() - 1 == (int)wParam )
 		st->Hide();
 
-	if ( lParam == TRUE)
+	if ( lParam == TRUE) {
 		graphSlider->setIndex(adrw->activeMaps[wParam]);
-	else
+	}
+	else {
 		adrw->setMapIndex(wParam);
+	}
 	return 1;
 }
 
@@ -1113,7 +1125,7 @@ AnimationBar::~AnimationBar()
 
 void AnimationBar::Create(CWnd* pParent)
 {
-	int iWidth = 80;
+	int iWidth = 180;
 
 	DWORD dwCtrlStyle = TBSTYLE_FLAT | TBSTYLE_TRANSPARENT | TBSTYLE_TOOLTIPS;
 	DWORD dwStyle = WS_CHILD | WS_VISIBLE |
@@ -1132,7 +1144,7 @@ void AnimationBar::Create(CWnd* pParent)
 	rect.top = 3;
 	rect.bottom -= 2;
 	rect.right = rect.left + iWidth;
-	ed.Create(WS_VISIBLE|WS_CHILD|WS_BORDER,rect,this,ID_AnimationBar);
+	ed.Create(WS_VISIBLE|WS_CHILD|WS_BORDER|WS_DISABLED,rect,this,ID_AnimationBar);
 	ed.SetFont(&fnt);
 	SendMessage(DM_SETDEFID,IDOK);
 
@@ -1146,24 +1158,6 @@ void AnimationBar::OnUpdateCmdUI(CFrameWnd* pParent, BOOL)
 {
 	if (fActive)
 		return;
-//	CView* vw = pParent->GetActiveView();
-//	MapPaneView* mpv = dynamic_cast<MapPaneView*>(vw);
-//	if (0 == mpv) {
-//		ed.EnableWindow(FALSE);
-//		return;
-//	}
-//	double rScale = mpv->rScaleShow();
-//	if (rUNDEF == rScale)	{
-////		ed.ShowWindow(SW_HIDE);
-//		ed.SetWindowText(SMWRemNoScale.scVal());
-//		ed.EnableWindow(FALSE);
-//	}
-//	else {
-//		String sTxt("1:%.f", rScale);
-//		ed.SetWindowText(sTxt.scVal());
-////		ed.ShowWindow(SW_SHOW);
-//		ed.EnableWindow(TRUE);
-//	}
 }
 
 void AnimationBar::OnSetFocus()
@@ -1183,33 +1177,9 @@ void AnimationBar::OnKillFocus()
 }
 
 
-void AnimationBar::updateTime(const String& ) // called by AnimationBarEdit
+void AnimationBar::updateTime(const String& s) // called by AnimationBarEdit
 {
-	//CString str;
-	//ed.GetWindowText(str);
-	//if (str.GetLength() > 2 && str[0] == '1' && str[1] == ':')
-	//	str = str.Mid(2);
-	//bool fOk = true;
-	//double rScale;
-	//if (-1 != str.Find(':'))
-	//	fOk = false;
-	//if (fOk) {
-	//	rScale = atof(str);
-	//	if (rScale < 1)
-	//		fOk = false;
-	//	if (rScale > 1e10)
-	//		fOk = false;
-	//}
-	//if (fOk) {
-	//	CWnd* wnd = GetOwner();
-	//	CFrameWnd* fw = dynamic_cast<CFrameWnd*>(wnd);
-	//	CView* vw = fw->GetActiveView();
-	//	MapPaneView* mpv = dynamic_cast<MapPaneView*>(vw);
-	//	if (0 == mpv)
-	//		return;
-	//	mpv->UseScale(rScale);
-	//}
-	//else
-	//	MessageBeep(-1);
+
+	ed.SetWindowText(s.scVal());
 }
 

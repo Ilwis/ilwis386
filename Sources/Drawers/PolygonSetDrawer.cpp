@@ -2,6 +2,7 @@
 #include "Client\FormElements\FieldIntSlider.h"
 #include "Client\FormElements\FieldRealSlider.h"
 #include "Engine\Map\basemap.h"
+#include "Client\Editors\Utils\line.h"
 #include "Engine\Map\Point\ilwPoint.h"
 #include "Client\Mapwindow\Drawers\ComplexDrawer.h"
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
@@ -28,24 +29,16 @@ ILWIS::NewDrawer *createPolygonSetDrawer(DrawerParameters *parms) {
 }
 
 PolygonSetDrawer::PolygonSetDrawer(DrawerParameters *parms) : 
-	FeatureSetDrawer(parms,"PolygonSetDrawer"), showAreas(true), showBoundaries(true), areaTransparency(1.0)
+	FeatureSetDrawer(parms,"PolygonSetDrawer"), 
+	showAreas(true), 
+	showBoundaries(true), 
+	areaTransparency(1.0),
+	linecolor(Color(0,0,0)),
+	linestyle(ldtNone),
+	linethickness(1.0)
 {
-	//PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER , 0);
-	//pp.csy = ((AbstractMapDrawer *)getParentDrawer())->getBaseMap()->cs();
-	//FeatureSetDrawer *fsd = (FeatureSetDrawer *)IlwWinApp()->getDrawer("LineSetDrawer", &pp, parms); // boundaries 
-	//fsd->setUICode(NewDrawer::ucNOINFO | NewDrawer::ucNOMASK);
-	//fsd->setName("Boundaries");
-	//fsd->setSingleColor(Color(0,0,0));
-	//fsd->setDrawMethod(NewDrawer::drmSINGLE);
-	//BaseMap bmp;
-	//bmp.SetPointer(((AbstractMapDrawer *)getParentDrawer())->getBaseMap());
-	//fsd->getZMaker()->setSpatialSourceMap(bmp);
-	//fsd->getZMaker()->setDataSourceMap(bmp);
-	////fsd->prepare(&pp);
-	//((ComplexDrawer *)getParentDrawer())->addPostDrawer(100,fsd);
-	//setName("Areas");
-}
 
+}
 PolygonSetDrawer::~PolygonSetDrawer() {
 }
 
@@ -67,18 +60,23 @@ HTREEITEM PolygonSetDrawer:: configure(LayerTreeView  *tv, HTREEITEM parent) {
 	HTREEITEM hti = FeatureSetDrawer::configure(tv,parent);
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,parent,this,
 				(SetCheckFunc)&PolygonSetDrawer::setActiveBoundaries);
-				
 	HTREEITEM itemBoundaries = InsertItem("Boundaries",".mps",item,(int)showBoundaries);
-	item = new DisplayOptionTreeItem(tv,parent,this,
-				(SetCheckFunc)&PolygonSetDrawer::setActiveAreas);
 
-				
+	item = new DisplayOptionTreeItem(tv,itemBoundaries,this,(DisplayOptionItemFunc)&PolygonSetDrawer::displayOptionSetLineStyle);
+	InsertItem("Line style","LineStyle", item, -1);
+
+	item = new DisplayOptionTreeItem(tv,parent,this,
+				(SetCheckFunc)&PolygonSetDrawer::setActiveAreas);				
 	HTREEITEM itemAreas = InsertItem("Areas",".mpa",item,(int)showAreas);
 
 	item = new DisplayOptionTreeItem(tv,itemAreas,this,(DisplayOptionItemFunc)&PolygonSetDrawer::displayOptionTransparencyP);
 	String transp("Transparency (%d)", 100 * getTransparency());
 	itemTransparentP = InsertItem(transp,"Transparent", item, -1);
 	return hti;
+}
+
+void PolygonSetDrawer::displayOptionSetLineStyle(CWnd *parent) {
+	new BoundaryLineStyleForm(parent, this);
 }
 
 void PolygonSetDrawer::displayOptionTransparencyP(CWnd *p) {
@@ -110,7 +108,20 @@ void PolygonSetDrawer::prepare(PreparationParameters *parms) {
 			pdr->boundariesActive(showBoundaries);
 			pdr->areasActive(showAreas);
 			pdr->setTransparencyArea(areaTransparency);
-
+			switch(linestyle) {
+			case ldtDot:
+				pdr->setlineStyle(0xAAAA); break;
+			case ldtDash:
+				pdr->setlineStyle(0xF0F0); break;
+			case ldtDashDot:
+				pdr->setlineStyle(0x6B5A); break;
+			case ldtDashDotDot:
+				pdr->setlineStyle(0x56B5); break;
+			default:
+				pdr->setlineStyle(0xFFFF);
+			}
+			pdr->setLineColor(linecolor);
+			pdr->setlineThickness(linethickness);
 		}
 	}
 }
@@ -166,4 +177,25 @@ void  TransparencyFormP::apply() {
 	pdrw->prepare(&parm);
 	updateMapView();
 
+}
+
+//-----------------------------
+BoundaryLineStyleForm::BoundaryLineStyleForm(CWnd *par, PolygonSetDrawer *pdr) 
+	: DisplayOptionsForm(pdr, par, TR("Line Style"))
+{
+
+  fi = new FieldReal(root, TR("Line thickness"), &pdr->linethickness, ValueRange(1.0,100.0));
+  flt = new FieldLineType(root, SDCUiLineType, &pdr->linestyle);
+  fc = new FieldColor(root, TR("Line color"),&pdr->linecolor);
+
+  create();
+}
+
+void  BoundaryLineStyleForm::apply() {
+	fi->StoreData();
+	flt->StoreData();
+	fc->StoreData();
+	PreparationParameters pp(NewDrawer::ptRENDER);
+	drw->prepare(&pp);
+	updateMapView();
 }

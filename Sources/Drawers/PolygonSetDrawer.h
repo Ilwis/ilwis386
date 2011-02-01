@@ -9,8 +9,10 @@ namespace ILWIS{
 
 class PolygonSetDrawer : public FeatureSetDrawer {
 	friend class TransparencyFormP;
+	friend class BoundaryLineStyleForm;
 	public:
 		ILWIS::NewDrawer *createPolygonSetDrawer(DrawerParameters *parms);
+		NewDrawer *createElementDrawer(PreparationParameters *pp, ILWIS::DrawerParameters* parms) const;
 
 		PolygonSetDrawer(DrawerParameters *parms);
 		virtual ~PolygonSetDrawer();
@@ -21,15 +23,18 @@ class PolygonSetDrawer : public FeatureSetDrawer {
 		void setTransparencyArea(double v);
 
 	protected:
-		virtual NewDrawer *createElementDrawer(PreparationParameters *pp, ILWIS::DrawerParameters* parms) const;
 		void displayOptionTransparencyP(CWnd *);
 		void setDrawMethod(DrawMethod method=drmINIT);
 		void setActiveAreas(void *w, LayerTreeView *view);
 		void setActiveBoundaries(void *w, LayerTreeView *view);
+		void displayOptionSetLineStyle(CWnd *parent);
 		bool showAreas;
 		bool showBoundaries;
 		double areaTransparency;
 		HTREEITEM itemTransparentP;
+		Color           linecolor;
+		LineDspType		linestyle;
+		double			linethickness;
 	};
 
 	class TransparencyFormP : public DisplayOptionsForm {
@@ -41,5 +46,16 @@ class PolygonSetDrawer : public FeatureSetDrawer {
 
 		int transparency;
 		FieldIntSliderEx *slider;
+	};
+
+	class BoundaryLineStyleForm: public DisplayOptionsForm
+	{
+	public:
+		BoundaryLineStyleForm(CWnd *par, PolygonSetDrawer *gdr);
+		void apply();
+	private:
+		FieldReal *fi;
+		FieldLineType *flt;
+		FieldColor *fc;
 	};
 }

@@ -17,8 +17,12 @@ class PolygonDrawer : public SimpleDrawer {
 		void areasActive(bool yesno);
 		void boundariesActive(bool active);
 		void setTransparencyArea(double v);
+		void setlineStyle(int st);
+		void setlineThickness(double th);
+		void setLineColor(const Color& clr);
 
 	protected:
+		virtual void setSpecialDrawingOptions(int option, bool add, vector<Coord>* coords=NULL) ;
 		PolygonDrawer(DrawerParameters *parms, const String& name);
 		HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent) ;
 		LineDrawer *boundary;

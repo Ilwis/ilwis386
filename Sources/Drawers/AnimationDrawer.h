@@ -22,12 +22,11 @@ namespace ILWIS{
 		virtual ~AnimationBar();
 		virtual void OnUpdateCmdUI(CFrameWnd*, BOOL);
 		void Create(CWnd* pParent); 
-
-		// Generated message map functions
+		void updateTime(const String& );
 	protected:
 		afx_msg void OnSetFocus();
 		afx_msg void OnKillFocus();
-		void updateTime(const String& );
+
 		//{{AFX_MSG(ScaleBar)
 			// NOTE - the ClassWizard will add and remove member functions here.
 		//}}AFX_MSG
@@ -75,6 +74,7 @@ namespace ILWIS{
 		void addSelectionDrawers(const Representation& rpr);
 		RangeReal getMinMax(const MapList& mlist) const;
 		SetDrawer *createIndexDrawer(const BaseMap& basemap,ILWIS::DrawerParameters& dp, PreparationParameters* pp);
+		String timeString(const MapList& mpl,int index);
 		double interval;
 		UINT timerid;
 		IlwisObject *datasource;

@@ -62,9 +62,16 @@ bool PolygonDrawer::draw(bool norecursion, const CoordBounds& cbArea) const{
 	if ( is3D) {
 		glPopMatrix();
 	}
-	if ( boundary && showBoundary)
+	if ( boundary && showBoundary) {
 		boundary->draw(norecursion, cbArea);
+	}
 	return true;
+}
+
+void PolygonDrawer::setSpecialDrawingOptions(int option, bool add, vector<Coord>* coords){
+	SimpleDrawer::setSpecialDrawingOptions(option,add,coords);
+	if ( boundary)
+		boundary->setSpecialDrawingOptions(option, add, coords);
 }
 
 void PolygonDrawer::prepare(PreparationParameters *p){
@@ -93,6 +100,17 @@ void PolygonDrawer::boundariesActive(bool active) {
 
 void PolygonDrawer::setTransparencyArea(double v) {
 	areaTransparency = v;
+}
+
+void PolygonDrawer::setlineStyle(int st){
+	boundary->setLineStyle(st);
+}
+void PolygonDrawer::setlineThickness(double th){
+	boundary->setThickness(th);
+}
+
+void PolygonDrawer::setLineColor(const Color& clr) {
+	boundary->setDrawColor(clr);
 }
 
 
