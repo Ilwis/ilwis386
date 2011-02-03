@@ -47,8 +47,8 @@ void RasterLayerDrawer::prepare(PreparationParameters *pp){
 				rsd = (RasterSetDrawer *)IlwWinApp()->getDrawer("RasterSetDrawer", pp, &dp);
 				RangeReal rrMinMax (0, 255);
 				if ( basemap->dm()->pdv()) {
-					rrMinMax = basemap->rrMinMax(BaseMapPtr::mmmSAMPLED);
-					if (rrMinMax.rLo() >= rrMinMax.rHi())
+					rrMinMax = basemap->rrMinMax(); // not mmmSAMPLED here, to get a more accurate result, otherwise there's a high chance of artifacts since the sampling is only done on this one band
+					if (rrMinMax.rLo() > rrMinMax.rHi())
 						rrMinMax = basemap->vr()->rrMinMax();
 				} else if (  basemap->fTblAtt() && attColumn.fValid() && attColumn->dm()->pdv())
 					rrMinMax = attColumn->vr()->rrMinMax();
