@@ -150,6 +150,8 @@ PhiLam ProjectionGeoStationarySatellite::plConv(const XY& _xy) const
 		double tangentLength2 = sqr(rDisttoCenter) - sqr(a);
 			// length of tangent-line from satellite to earth
 		double t2 = (cos2y + a2overb2 * sin2y) * tangentLength2;//1737121856;//
+		if (t1 < t2)
+			return PhiLam();
 		double SD = sqrt(t1 - t2);
 		double SN = (rDisttoCenter*cosx*cosy - SD)/(cos2y + a2overb2 * sin2y);
 		double s1 =  rDisttoCenter - SN * cosx*cosy;
