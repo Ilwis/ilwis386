@@ -227,10 +227,10 @@ void RasterSetDrawer::DisplayImagePortion(double x1, double y1, double x2, doubl
 		glVertex3d(x2, y2, 0.0);
 		glVertex3d(x1, y2, 0.0);
 	} else {
-		c1 = csy->cConv(getRootDrawer()->getCoordinateSystem(), Coord(x1, y1, 0.0));
-		c2 = csy->cConv(getRootDrawer()->getCoordinateSystem(), Coord(x2, y1, 0.0));
-		c3 = csy->cConv(getRootDrawer()->getCoordinateSystem(), Coord(x2, y2, 0.0));
-		c4 = csy->cConv(getRootDrawer()->getCoordinateSystem(), Coord(x1, y2, 0.0));
+		c1 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x1, y1, 0.0));
+		c2 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x2, y1, 0.0));
+		c3 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x2, y2, 0.0));
+		c4 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x1, y2, 0.0));
 		glVertex3d(c1.x, c1.y, 0.0);
 		glVertex3d(c2.x, c2.y, 0.0);
 		glVertex3d(c3.x, c3.y, 0.0);
@@ -351,13 +351,13 @@ void RasterSetDrawer::DisplayTexture(double x1, double y1, double x2, double y2,
 				fRecalculateCY2 = true;
 			}
 
-			//c1 = csy->cConv(getRootDrawer()->getCoordinateSystem(), Coord(x1, y1, 0.0));
+			//c1 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x1, y1, 0.0));
 			if (fRecalculateCX2)
-				c2 = csy->cConv(getRootDrawer()->getCoordinateSystem(), Coord(x2, y1, 0.0));
+				c2 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x2, y1, 0.0));
 			if (fRecalculateCX2 || fRecalculateCY2)
-				c3 = csy->cConv(getRootDrawer()->getCoordinateSystem(), Coord(x2, y2, 0.0));
+				c3 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x2, y2, 0.0));
 			if (fRecalculateCY2)
-				c4 = csy->cConv(getRootDrawer()->getCoordinateSystem(), Coord(x1, y2, 0.0));
+				c4 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x1, y2, 0.0));
 
 			tex->TexCoord2d(x1, y1);
 			glVertex3d(c1.x, c1.y, 0.0);
