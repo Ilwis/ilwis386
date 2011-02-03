@@ -32,7 +32,7 @@ PolygonDrawer::~PolygonDrawer() {
 }
 
 bool PolygonDrawer::draw(bool norecursion, const CoordBounds& cbArea) const{
-	if (triangleStrips.size() == 0)
+	if (triangleStrips.size() == 0 || !fActive)
 		return false;
 	if ( !getRootDrawer()->getCoordBoundsZoom().fContains(cb))
 		return false;

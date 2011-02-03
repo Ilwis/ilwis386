@@ -5,11 +5,12 @@ class FieldColor;
 class FieldIntSliderEx;
 class FieldRealSliderEx;
 class FieldRepresentation;
+class DisplayOptionsLegend;
 
 namespace ILWIS{
 
 class _export SetDrawer : public ComplexDrawer {
-	friend class RepresentationForm;
+
 	public:
 		enum StretchMethod { smLINEAR, smLOGARITHMIC };
 		ILWIS::NewDrawer *createSetDrawer(DrawerParameters *parms);
@@ -36,19 +37,17 @@ class _export SetDrawer : public ComplexDrawer {
 		String getInfo(const Coord& crd) const;
 		static unsigned long test_count;
 		bool draw(bool norecursion, const CoordBounds& cbArea) const;
-	
+		virtual void modifyLineStyleItem(LayerTreeView  *tv, bool remove=false) {}	
+		HTREEITEM getRprItem() { return rprItem; }
+		void insertStretchItem(LayerTreeView  *tv, HTREEITEM parent);
+		void displayOptionSubRpr(CWnd *parent);
+		void setcheckRpr(void *value, LayerTreeView *);
+		void updateLegendItem();
 			
 	protected:
 		String store(const FileName& fnView, const String& parenSection) const;
 		void load(const FileName& fnView, const String& parenSection);
-		void setcheckRpr(void *value, LayerTreeView *);
-		void displayOptionSubRpr(CWnd *parent);
 		void displayOptionStretch(CWnd *parent);
-		void insertStretchItem(LayerTreeView  *tv, HTREEITEM parent);
-		void insertLegendItems(LayerTreeView  *tv, HTREEITEM parent);
-		void insertLegendItemsValue(LayerTreeView  *tv, HTREEITEM parent);
-		void insertLegendItemsClass(LayerTreeView  *tv, HTREEITEM parent);
-		virtual void modifyLineStyleItem(LayerTreeView  *tv, bool remove=false) {}
 		void drawLegendItem(CDC *dc, const CRect& rct, double rVal) const;
 
 		//BaseMap basemap;
@@ -61,6 +60,7 @@ class _export SetDrawer : public ComplexDrawer {
 		RangeReal rrLegendRange;
 		bool stretched;
 		StretchMethod stretchMethod;
+		DisplayOptionsLegend *doLegend;
 
 		HTREEITEM rprItem;
 		HTREEITEM portrayalItem;

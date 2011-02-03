@@ -61,7 +61,8 @@ bool LineDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 		glEnable (GL_LINE_STIPPLE);
 		glLineStipple(1,linestyle);
 	}
-	fakez = getRootDrawer()->getFakeZ()/2.0;
+	if ( getRootDrawer()->is3D())
+		fakez = getRootDrawer()->getFakeZ()/2.0;
 	if ( is3D) {
 		zscale = cdrw->getZMaker()->getZScale();
 		zoffset = cdrw->getZMaker()->getOffset();

@@ -17,6 +17,8 @@
 #include "Drawers\FeatureSetDrawer.h"
 #include "drawers\linedrawer.h"
 #include "drawers\polygondrawer.h"
+#include "Drawers\gpc.h"
+#include "Drawers\PolygonFeatureDrawer.h"
 #include "Drawers\PolygonSetDrawer.h"
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
 #include "Client\Mapwindow\Drawers\ZValueMaker.h"
@@ -104,7 +106,7 @@ void PolygonSetDrawer::prepare(PreparationParameters *parms) {
 	FeatureSetDrawer::prepare(parms);
 	if ( parms->type & RootDrawer::ptRENDER){
 		for(int i=0; i < drawers.size(); ++i) {
-			PolygonDrawer *pdr = (PolygonDrawer *)drawers.at(i);
+			PolygonFeatureDrawer *pdr = (PolygonFeatureDrawer *)drawers.at(i);
 			pdr->boundariesActive(showBoundaries);
 			pdr->areasActive(showAreas);
 			pdr->setTransparencyArea(areaTransparency);
@@ -122,6 +124,12 @@ void PolygonSetDrawer::prepare(PreparationParameters *parms) {
 			}
 			pdr->setLineColor(linecolor);
 			pdr->setlineThickness(linethickness);
+			for(int j =0 ; j < parms->filteredRaws.size(); ++j) {
+				int raw = parms->filteredRaws[j];
+				if ( pdr->getFeature()->rValue() == abs(raw)) {
+					pdr->setActive(raw > 0);
+				}
+			}
 		}
 	}
 }

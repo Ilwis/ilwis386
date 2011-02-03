@@ -13,6 +13,7 @@ ILWIS::NewDrawer *createAnimationDrawer(ILWIS::DrawerParameters *parms);
 namespace ILWIS{
 	class BoxDrawer;
 	class AnimationSlicing;
+	class FeatureLayerDrawer;
 
 	class AnimationBar : public CToolBar
 	{
@@ -27,9 +28,6 @@ namespace ILWIS{
 		afx_msg void OnSetFocus();
 		afx_msg void OnKillFocus();
 
-		//{{AFX_MSG(ScaleBar)
-			// NOTE - the ClassWizard will add and remove member functions here.
-		//}}AFX_MSG
 		CEdit ed;
 		CFont fnt;
 		bool fActive;
@@ -55,6 +53,9 @@ namespace ILWIS{
 		void timedEvent(UINT _timerid);
 		String description() const;
 		virtual void inactivateOtherPalettes(Palette * palette);
+		void setcheckRpr(void *value, LayerTreeView *tree);
+		void updateLegendItem();
+		void displayOptionSubRpr(CWnd *parent);
 		
 	protected:
 		enum SourceType{sotUNKNOWN, sotFEATURE, sotMAPLIST, sotOBJECTCOLLECTION};
@@ -75,6 +76,7 @@ namespace ILWIS{
 		RangeReal getMinMax(const MapList& mlist) const;
 		SetDrawer *createIndexDrawer(const BaseMap& basemap,ILWIS::DrawerParameters& dp, PreparationParameters* pp);
 		String timeString(const MapList& mpl,int index);
+		void drawLegendItem(CDC *dc, const CRect& rct, double rVal) const;
 		double interval;
 		UINT timerid;
 		IlwisObject *datasource;
@@ -90,6 +92,8 @@ namespace ILWIS{
 		String colTime;
 		clock_t last;
 		vector<Palette*> paletteList;
+		Representation rpr;
+		DisplayOptionsLegend *doLegend;
 
 		ILWIS::Duration timestep;
 		CCriticalSection csAccess;
@@ -97,6 +101,7 @@ namespace ILWIS{
 		AnimationSelection *animselection;
 		AnimationSlicing *animslicing;
 		AnimationBar animBar;
+		HTREEITEM rprItem;
 
 		void addSetDrawer(const BaseMap& basemap, ILWIS::PreparationParameters *pp, ILWIS::SetDrawer *rsd, const String& name="", bool post=false);
 	};
@@ -138,6 +143,7 @@ namespace ILWIS{
 		bool initial;
 		double fps;
 		int year, month, day, hour, minute;
+
 
 		DECLARE_MESSAGE_MAP();
 	};
@@ -207,8 +213,6 @@ namespace ILWIS{
 		vector<String> cols;
 		vector<int>& activeMaps;
 	};
-
-	
 
 
 }

@@ -53,6 +53,10 @@ void PolygonFeatureDrawer::addDataSource(void *f, int options) {
 		boundary->addDataSource(feature);
 }
 
+Feature *PolygonFeatureDrawer::getFeature() const {
+	return feature;
+}
+
 void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 	PolygonDrawer::prepare(p);
 	FeatureSetDrawer *fdr = dynamic_cast<FeatureSetDrawer *>(parentDrawer);

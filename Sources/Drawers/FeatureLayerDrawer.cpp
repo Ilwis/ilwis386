@@ -18,6 +18,7 @@
 #include "Client\Mapwindow\LayerTreeItem.h" 
 #include "Client\FormElements\fldcolor.h"
 #include "Drawers\SetDrawer.h"
+#include "Client\Editors\Utils\line.h"
 #include "Drawers\FeatureSetDrawer.h"
 #include "Drawers\PolygonSetDrawer.h"
 #include "Drawers\LineSetDrawer.h"

@@ -81,7 +81,7 @@ void FeatureSetDrawer::prepare(PreparationParameters *parms){
 		for(int i=0; i<drawers.size(); ++i)
 			drawers.at(i) = 0;
 		int count = 0;
-		Tranquilizer trq("preparing data");
+		Tranquilizer trq(TR("preparing data"));
 		for(int i=0; i < features.size(); ++i) {
 			Feature *feature = features.at(i);
 			NewDrawer *pdrw;

@@ -31,8 +31,10 @@
 #include "Drawers\ValueSlicer.h"
 #include "Drawers\FeatureSetDrawer.h"
 #include "Drawers\RasterSetDrawer.h"
+#include "Drawers\DisplayOptionsLegend.h"
 #include "Drawers\AnimationDrawer.h"
 #include "drawers\Boxdrawer.h"
+#include "Drawers\DrawingColor.h" 
 #include "Client\Base\Framewin.h"
 #include "Client\Mapwindow\MapWindow.h"
 #include "Client\Mapwindow\Drawers\ZValueMaker.h"
@@ -61,8 +63,8 @@ AnimationDrawer::AnimationDrawer(DrawerParameters *parms) :
 	useTime(false),
 	mapIndex(0),
 	animselection(0),
-	animslicing(0)
-	//animselectionFeature(0)
+	animslicing(0),
+	doLegend(0)
 {
 	setTransparency(1);
 	last = 0;
@@ -118,30 +120,32 @@ void AnimationDrawer::removeSelectionDrawers() {
 }
 
 void AnimationDrawer::addSelectionDrawers(const Representation& rpr) {
-	MapList mlist((*datasource)->fnObj);
-	RangeReal rrMinMax = getMinMax(mlist);
-	Palette * palette;
-	removeSelectionDrawers();
-	for(int i = 0; i < getDrawerCount(); ++i) {
-		RasterSetDrawer *drw = (RasterSetDrawer*)getDrawer(i);
-		ILWIS::DrawerParameters parms(getRootDrawer(), this);
-		Map mp = mlist->map(i);
-		RasterSetDrawer *rasterset = (RasterSetDrawer *)IlwWinApp()->getDrawer("RasterSetDrawer", "Ilwis38", &parms); 
-		rasterset->setThreaded(false);
-		rasterset->setRepresentation(rpr);
-		rasterset->setMinMax(rrMinMax);
-		if (i == 0)
-		{
-			palette = rasterset->SetPaletteOwner(); // create only the palette of the first rasterset, and share it with the other rastersets
-			paletteList.push_back(palette);
-		}
-		else
-			rasterset->SetPalette(palette);
-		PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER);
-		addSetDrawer(mp,&pp,rasterset,String("overlay %d",i), true);
-		drw->addPostDrawer(RSELECTDRAWER,rasterset);
-		rasterset->setActive(i == 0 ? true : false);
+	if ( sourceType == sotMAPLIST) {
+		MapList mlist((*datasource)->fnObj);
+		RangeReal rrMinMax = getMinMax(mlist);
+		Palette * palette;
+		removeSelectionDrawers();
+		for(int i = 0; i < getDrawerCount(); ++i) {
+			RasterSetDrawer *drw = (RasterSetDrawer*)getDrawer(i);
+			ILWIS::DrawerParameters parms(getRootDrawer(), this);
+			Map mp = mlist->map(i);
+			RasterSetDrawer *rasterset = (RasterSetDrawer *)IlwWinApp()->getDrawer("RasterSetDrawer", "Ilwis38", &parms); 
+			rasterset->setThreaded(false);
+			rasterset->setRepresentation(rpr);
+			rasterset->setMinMax(rrMinMax);
+			if (i == 0)
+			{
+				palette = rasterset->SetPaletteOwner(); // create only the palette of the first rasterset, and share it with the other rastersets
+				paletteList.push_back(palette);
+			}
+			else
+				rasterset->SetPalette(palette);
+			PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER);
+			addSetDrawer(mp,&pp,rasterset,String("overlay %d",i), true);
+			drw->addPostDrawer(RSELECTDRAWER,rasterset);
+			rasterset->setActive(i == 0 ? true : false);
 
+		}
 	}
 }
 
@@ -169,21 +173,27 @@ void AnimationDrawer::prepare(PreparationParameters *pp){
 	AbstractMapDrawer::prepare(pp);
 	ILWIS::DrawerParameters dp(getRootDrawer(), this);
 	if ( sourceType == sotFEATURE ) {
+		ObjectCollection oc((*datasource)->fnObj);
 		if ( pp->type & NewDrawer::ptGEOMETRY) {
-			ObjectCollection oc((*datasource)->fnObj);
 			if ( getName() == "")
 				setName(oc->sName());
 			ILWIS::DrawerParameters parms(getRootDrawer(), getRootDrawer());
 			if ( drawers.size() > 0) {
 				clear();
 			}
-
+			Tranquilizer trq(TR("Adding maps"));
 			for(int i = 0; i < oc->iNrObjects(); ++i) {
-				BaseMap bmp(oc->fnObject(i));
-				if ( bmp.fValid()) {
-					SetDrawer *drw = createIndexDrawer(bmp, dp, pp);
-					//addSetDrawer(bmp,pp,drw,String("band %d",i));
-					drw->setActive(i == 0 ? true : false);
+				IlwisObject::iotIlwisObjectType type = IOTYPE(oc->fnObject(i));
+				if (type == IlwisObject::iotPOINTMAP || type == IlwisObject::iotPOLYGONMAP || type ==IlwisObject::iotSEGMENTMAP) {
+					BaseMap bmp(oc->fnObject(i));
+					if ( bmp.fValid()) {
+						if ( !rpr.fValid())
+							rpr = bmp->dm()->rpr();
+						
+						SetDrawer *drw = createIndexDrawer(bmp, dp, pp);
+						drw->setActive(i == 0 ? true : false);
+						trq.fUpdate(i,oc->iNrObjects()); 
+					}
 				}
 			}
 	/*		featurelayer = (FeatureLayerDrawer *)IlwWinApp()->getDrawer("FeatureLayerDrawer", "Ilwis38", &parms);
@@ -205,6 +215,12 @@ void AnimationDrawer::prepare(PreparationParameters *pp){
 			}*/
 
 		} 
+		if ( pp->type && NewDrawer::ptRENDER) {
+			for(int i = 0; i < oc->iNrObjects(); ++i) {
+				SetDrawer *sdr = (SetDrawer *)getDrawer(i);
+				sdr->prepare(pp);
+			}
+		}
 	}
 	if ( sourceType == sotMAPLIST) {
 		if ( pp->type & NewDrawer::ptGEOMETRY) {
@@ -221,6 +237,8 @@ void AnimationDrawer::prepare(PreparationParameters *pp){
 			for(int i = 0; i < mlist->iSize(); ++i) {
 				ILWIS::DrawerParameters parms(getRootDrawer(), this);
 				Map mp = mlist->map(i);
+				if ( !rpr.fValid())
+					rpr = mp->dm()->rpr();
 				RasterSetDrawer *rasterset = (RasterSetDrawer *)IlwWinApp()->getDrawer("RasterSetDrawer", "Ilwis38", &parms); 
 				rasterset->setThreaded(false);
 				rasterset->setMinMax(rrMinMax);
@@ -312,13 +330,15 @@ HTREEITEM AnimationDrawer::configure(LayerTreeView  *tv, HTREEITEM displayOption
 					(DisplayOptionItemFunc)&AnimationDrawer::animationControl);
 	InsertItem(TR("Run"),"History",item2);
 
-	item2 = new DisplayOptionTreeItem(tv,displayOptionsLastItem,this,
+	HTREEITEM portrayalItem = InsertItem(tv,displayOptionsLastItem, "Portrayal", "Colors");
+	item2 = new DisplayOptionTreeItem(tv,portrayalItem,this,
 					0,
 					(DisplayOptionItemFunc)&AnimationDrawer::animationDefaultView);
 	InsertItem(TR("Restore default view"),".isl",item2);
 
-	//item2 = new DisplayOptionTreeItem(tv,displayOptionsLastItem,this,0);
-	HTREEITEM portrayalItem = InsertItem(tv, displayOptionsLastItem, TR("Selections"),"Select");
+	doLegend = new DisplayOptionsLegend(tv,portrayalItem);
+	doLegend->createForAnimation(this);
+
 
 	if (IOTYPE((*datasource)->fnObj) == IlwisObject::iotMAPLIST) {
 
@@ -326,9 +346,6 @@ HTREEITEM AnimationDrawer::configure(LayerTreeView  *tv, HTREEITEM displayOption
 			0,(DisplayOptionItemFunc)&AnimationDrawer::animationSlicing);
 		InsertItem(TR("Interactive Slicing"),"Slicing",itemSlicing);
 	}
-	DisplayOptionTreeItem * itemSelect = new DisplayOptionTreeItem(tv, portrayalItem,this,
-		0,(DisplayOptionItemFunc)&AnimationDrawer::animationSelection);
-	InsertItem(TR("Attribute thresholds"),"SelectArea",itemSelect);
 
 
 	DisplayOptionTreeItem * itemFrameSelect = new DisplayOptionTreeItem(tv, portrayalItem,this,
@@ -340,15 +357,39 @@ HTREEITEM AnimationDrawer::configure(LayerTreeView  *tv, HTREEITEM displayOption
 	InsertItem(TR("Area of Interest"),"SelectAoi",itemAOI);
 	MapWindow *parent = (MapWindow *)getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->GetParent();
 
-	animBar.Create(parent);
-	CRect rect;
-	parent->barScale.GetWindowRect(&rect);
-	rect.OffsetRect(1,0);
-	parent->DockControlBar(&animBar,AFX_IDW_DOCKBAR_TOP, rect);
+	if ( animBar.GetSafeHwnd() == 0) {
+		animBar.Create(parent);
+		CRect rect;
+		parent->barScale.GetWindowRect(&rect);
+		rect.OffsetRect(1,0);
+		parent->DockControlBar(&animBar,AFX_IDW_DOCKBAR_TOP, rect);
+	}
 
 	return displayOptionsLastItem;
 
 }
+
+void AnimationDrawer::drawLegendItem(CDC *dc, const CRect& rct, double rVal) const{
+	DomainValueRangeStruct dvs = getBaseMap()->dvrs();
+	Color clr;
+	SetDrawer *dr = (SetDrawer *)(const_cast<AnimationDrawer *>(this)->getDrawer(0));
+	if ( dvs.dm()->pdv())
+		clr = dr->getDrawingColor()->clrVal(rVal);
+	else
+		clr = dr->getDrawingColor()->clrRaw((long)rVal, dr->getDrawMethod());
+	
+
+	CBrush brushColor(clr);
+	CBrush *br = dc->SelectObject(&brushColor);
+	dc->Rectangle(rct);
+	dc->SelectObject(br);
+}
+
+void AnimationDrawer::setcheckRpr(void *value, LayerTreeView *tree) {
+	if ( doLegend)
+		doLegend->setcheckRpr(value, tree);
+}
+
 void AnimationDrawer::animationSlicing(CWnd *parent) {
 	animslicing = new AnimationSlicing(parent,this);
 }
@@ -513,6 +554,15 @@ void AnimationDrawer::setMapIndex(int ind) {
 		getDrawer(i)->setActive(false);
 
 	mapIndex = activeMaps[ind];
+}
+
+void AnimationDrawer::updateLegendItem() {
+	if ( doLegend)
+		doLegend->updateLegendItem();
+}
+
+void AnimationDrawer::displayOptionSubRpr(CWnd *parent) {
+	new RepresentationFormL(parent, (SetDrawer *)getDrawer(0),this);
 }
 
 //---------------------------------------------------------
@@ -1183,3 +1233,4 @@ void AnimationBar::updateTime(const String& s) // called by AnimationBarEdit
 	ed.SetWindowText(s.scVal());
 }
 
+//-------------------------------------------------------

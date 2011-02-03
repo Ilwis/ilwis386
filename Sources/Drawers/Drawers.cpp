@@ -4,6 +4,7 @@
 #include "client\formelements\fentvalr.h"
 #include "Engine\Base\System\Module.h"
 #include "Engine\Map\basemap.h"
+#include "Client\Editors\Utils\line.h"
 #include "Engine\Map\Point\ilwPoint.h"
 #include "Client\Mapwindow\Drawers\ComplexDrawer.h"
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h" 

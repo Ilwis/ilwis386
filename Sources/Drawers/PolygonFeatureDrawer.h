@@ -2,6 +2,7 @@
 
 ILWIS::NewDrawer *createPolygonFeatureDrawer(ILWIS::DrawerParameters *parms);
 
+
 namespace ILWIS{
 
 class PolygonFeatureDrawer : public PolygonDrawer {
@@ -11,6 +12,7 @@ class PolygonFeatureDrawer : public PolygonDrawer {
 		virtual bool draw(bool norecursion = false, const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *);
 		void addDataSource(void *f,int options=0);
+		Feature *getFeature() const;
 	protected:
 		PolygonFeatureDrawer(DrawerParameters *parms, const String& name);
 		void prepareList(gpc_vertex_list& exteriorBoundary, vector<gpc_vertex_list>& holes);
