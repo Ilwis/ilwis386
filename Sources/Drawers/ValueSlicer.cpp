@@ -74,12 +74,12 @@ void ValueSlicer::drawRpr(LPDRAWITEMSTRUCT lpDIS, const CRect rct) {
 		double v1 = fldslicer->bounds[i-1];
 		double v2 =fldslicer->bounds[i];
 		double rStep = (v2 - v1) / rpg->iGetStretchSteps();
-		double f = (v2 - v1) / fldslicer->bounds[fldslicer->bounds.size() - 1];
+		double f = (v2 - v1) / fldslicer->valrange->rrMinMax().rWidth(); // fldslicer->bounds[fldslicer->bounds.size() - 1];
 		double yStep = rct.Height() * f/  rpg->iGetStretchSteps();
 		int transp = fldslicer->transparency[i-1];
 		for(int j=0; j < rpg->iGetStretchSteps(); ++j) {
 			double cv = v1 + j * rStep;
-			Color c = rpg->clr(cv + rStep);
+			Color c = rpg->clr(cv + rStep, fldslicer->valrange->rrMinMax());
 			Gdiplus::SolidBrush brush(Gdiplus::Color(255 - transp, c.red(), c.green(), c.blue()));
 			int yup = rct.bottom - y - yStep;
 			int ydown = rct.bottom - y;

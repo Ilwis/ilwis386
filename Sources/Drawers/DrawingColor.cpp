@@ -37,10 +37,7 @@ Color DrawingColor::clrVal(double rVal) const
 		switch (drw->getStretchMethod())
 		{
 		case SetDrawer::smLINEAR:
-			//if ( type != IlwisObject::iotRASMAP)
-				cRet = (Color)rpr->clr(rVal);
-			//else
-			//	cRet = (Color)rpr->clr(rVal);
+				cRet = (Color)rpr->clr(rVal, drw->getStretchRangeReal());
 			break;
 		case  SetDrawer::smLOGARITHMIC:
 			{
@@ -143,7 +140,7 @@ void DrawingColor::clrVal(const double * buf, long * bufOut, long iLen) const
 			{
 				RangeReal rr = drw->getStretchRangeReal();
 				for (long i = 0; i < iLen; ++i)
-					bufOut[i] = rpr->clr(buf[i]).iVal();
+					bufOut[i] = rpr->clr(buf[i], rr).iVal();
 			} break;
 		case SetDrawer::smLOGARITHMIC:
 			{
