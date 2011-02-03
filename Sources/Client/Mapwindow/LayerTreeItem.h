@@ -134,6 +134,7 @@ public:
 	virtual ~LegendClassLayerTreeItem();
 	virtual void OnLButtonDblClk(UINT nFlags, CPoint point);
 	virtual void OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult); 
+	virtual void SwitchCheckBox(bool fOn);
 private:
 	Domain dm;
 	int iRaw;
@@ -147,7 +148,7 @@ class _export LegendValueLayerTreeItem: public LayerTreeItem
 public:
 	LegendValueLayerTreeItem(LayerTreeView*, NewDrawer*, DomainValueRangeStruct _dvrs, double rValue);
 	virtual ~LegendValueLayerTreeItem();
-	virtual void OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult); 
+	virtual void OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult);
 private:
 	DomainValueRangeStruct dvrs;
 	double rVal;

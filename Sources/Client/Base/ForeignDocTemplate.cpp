@@ -36,6 +36,7 @@
  ***************************************************************/
 #include "Headers\toolspch.h"
 #include "Client\ilwis.h"
+#include "Engine\Table\tbl.h"
 #include "Client\Base\BaseDocTemplate.h"
 #include "Client\Base\IlwisDocTemplate.h"
 #include "Client\Base\IlwisDocument.h"

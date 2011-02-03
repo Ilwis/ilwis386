@@ -132,7 +132,7 @@ void LayerTreeView::DeleteAllItems()
 	}
 }
 
-void LayerTreeView::DeleteAllItems(HTREEITEM hti)
+void LayerTreeView::DeleteAllItems(HTREEITEM hti, bool childerenOnly)
 {
 	CTreeCtrl& tc = GetTreeCtrl();
 	if (tc.ItemHasChildren(hti)) {
@@ -145,9 +145,11 @@ void LayerTreeView::DeleteAllItems(HTREEITEM hti)
 			htiChild = htiNext;
 		}
 	}
-	LayerTreeItem* lti = (LayerTreeItem*)tc.GetItemData(hti);
-	if (lti)
-		delete lti;
+	if ( !childerenOnly) {
+		LayerTreeItem* lti = (LayerTreeItem*)tc.GetItemData(hti);
+		if (lti)
+			delete lti;
+	}
 	collectStructure();
 }
 

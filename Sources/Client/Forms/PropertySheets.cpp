@@ -2636,6 +2636,132 @@ void MapViewPropPage::BuildPage()
 	mpv->ReadElement("MapView", "CoordSystem", cs);
 	new FieldObjShow(m_fgPageRoot, cs);
 }
+//-------------------------------
+ObjectCollectionPropPage::ObjectCollectionPropPage(const IlwisObject& obj)
+	: BasicPropertyFormPage(obj, TR("Object Collection"))
+{
+	SetMenHelpTopic(htpPropInfoObjectCollection);
+	oc.SetPointer(obj.pointer());
+}
+
+void ObjectCollectionPropPage::BuildPage()
+{
+	BasicPropertyFormPage::BuildPage();
+	
+	
+
+	int iMaps = oc->iNrObjects();
+	if (iMaps > 0 || ! oc->fDependent())
+	{
+		String sNrMaps(SMSRemRasterMaps_i.scVal(), iMaps);
+		new InfoText(m_fgPageRoot, sNrMaps);
+	}    
+	
+	//	new FieldObjShow(m_fgPageRoot, mpl->gr()->cs());
+		
+	
+	SetAttribTableField();
+	
+	String s('X', 55);
+	m_stRemark = new InfoText(m_fgPageRoot, s);
+	m_stRemark->SetVal(String());   // clear remark string
+	
+	DisplayDefinition();
+	
+}
+
+void ObjectCollectionPropPage::SetAttribTableField()
+{
+	fAttrTable = oc->fTblAtt();
+	if (fAttrTable)
+	{
+		sAttrTable = oc->sName(false);
+		sAttrTable &= ".tbt";
+		Table tbl = oc->tblAtt();
+		if (tbl.fValid())
+			sAttrTable = tbl->sName(true);
+		else
+			fAttrTable = false;
+	}  
+	else
+		sAttrTable = String();
+
+	if (m_fReadOnly)
+	{
+		if (fAttrTable)
+		{
+			String s = SMSUiAttrTable;
+			s &= " ";
+			s &= sAttrTable;
+			new InfoText(m_fgPageRoot, s);
+		}
+	} 
+	else
+	{
+		CheckBox* cb = new CheckBox(m_fgPageRoot, SMSUiAttrTable, &fAttrTable);
+		ftAttTable = new FieldTableC(cb, "", &sAttrTable, Domain("none"));
+		ftAttTable->SetCallBack((NotifyProc)&ObjectCollectionPropPage::CallBackAttTableChange); 
+
+		String s('X', 50);
+		stAttTable = new InfoText(cb, s);
+		stAttTable->SetVal(String());
+		stAttTable->Align(cb, AL_UNDER);
+	}  
+}
+
+int ObjectCollectionPropPage::CallBackAttTableChange(Event*)
+{
+	if ( !fAttrTable ) return 1;
+	DataChanged(0);
+	
+	ftAttTable->StoreData();
+	if (sAttrTable.length() == 0)
+	{
+		stAttTable->SetVal("");
+		return 0;
+	}
+
+	FileName fn(sAttrTable, ".tbt");
+	String sRemark;
+	Table tbl;
+	try
+	{
+		tbl = Table(fn);
+		if ( tbl->iRecs() < oc->iNrObjects())
+			throw ErrorObject(TR("Attribute table doesnt match number of maps"));
+	}
+	catch (ErrorObject& err)
+	{
+		err.Show(SMSErrAttrTableChange);
+	}
+
+	if (tbl.fValid()) 
+		sRemark = tbl->sDescription;
+	else  
+		sRemark = "";
+
+	stAttTable->SetVal(sRemark);
+	return 0;
+}
+
+int ObjectCollectionPropPage::exec()
+{
+	BasicPropertyFormPage::exec();
+
+	if (!oc.fValid())
+		return 0;
+
+	// Change Georeference
+	if ( fAttrTable) {
+		FileName fn(sAttrTable, ".tbt");
+		if ( !oc->tblAtt().fValid() || oc->tblAtt()->fnObj != fn) {
+			oc->SetAttributeTable(Table(fn));
+		}
+
+	}
+
+	return 0;
+}
 
 //-------------------------------
 // DependsOnPropPage member functions
@@ -3092,6 +3218,7 @@ UINT ShowPropForm(LPVOID lpObjectStruct)
 			pgObject = new HistogramPropPage(obj);
 			break;
 		case IlwisObject::iotOBJECTCOLLECTION:
+			pgObject = new ObjectCollectionPropPage(obj);
 			htp = htpPropInfoObjectCollection;
 			break;
 		case IlwisObject::iotMAPLIST:

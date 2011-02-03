@@ -268,7 +268,7 @@ public:
 
 	void setNotifyFocusChanged(CallBackHandler * wnd, NotifyProc np)
     {
-		le->setNotify(wnd, np, WM_KILLFOCUS); 
+		le->setNotify(wnd, np, WM_KILLFOCUS);  
 		le->setNotify(wnd, np, WM_SETFOCUS); 
     }
 	void removeNotifyFocusChange(CallBackHandler * wnd)

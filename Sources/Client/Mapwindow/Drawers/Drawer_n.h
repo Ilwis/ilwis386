@@ -83,6 +83,7 @@ namespace ILWIS {
 		CDC *dc;
 		CoordSystem csy;
 		map<String,String> typeMapping;
+		vector<int> filteredRaws;
 		NewDrawer *rootDrawer;
 		NewDrawer *parentDrawer;
 	};

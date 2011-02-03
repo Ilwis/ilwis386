@@ -59,7 +59,7 @@ class _export ComplexDrawer : public NewDrawer {
 		virtual void timedEvent(UINT timerid);
 		virtual String description() const { return "?";}
 		virtual String iconName(const String& subtype="?") const { return "?";}
-		void setSpecialDrawingOptions(int option, bool add, vector<Coord>* coords=NULL) ;
+		virtual void setSpecialDrawingOptions(int option, bool add, vector<Coord>* coords=NULL) ;
 		int getSpecialDrawingOption(int opt=sdoNone) const;
 		bool isSimple() const { return false;}
 		bool isDirty() const;
@@ -73,6 +73,10 @@ class _export ComplexDrawer : public NewDrawer {
 		bool inEditMode() const;
 		void setEditMode(bool yesno);
 		void drawLegendItem(CDC *dc, const CRect& rct, double rVal) const {}
+		HTREEITEM InsertItem(const String& name,const String& icon, DisplayOptionTreeItem *item=0, int checkstatus = -1, HTREEITEM after=TVI_LAST);
+		HTREEITEM InsertItem(LayerTreeView  *tv,HTREEITEM parent, const String& name,const String& icon, HTREEITEM after=TVI_LAST);
+		HTREEITEM findTreeItemByName(LayerTreeView  *tv, HTREEITEM parent, const String& name) const;
+
 	protected:
 		vector<NewDrawer *> drawers;
 		DrawerMap postDrawers;
@@ -98,15 +102,13 @@ class _export ComplexDrawer : public NewDrawer {
 		HTREEITEM itemTransparent;
 		int specialOptions;
 		bool dirty;
+
 		
 		ComplexDrawer(DrawerParameters *context, const String& ty);
 		ComplexDrawer();
 		virtual ~ComplexDrawer();
 		String store(const FileName& fnView, const String& parenSection) const;
 		void load(const FileName& fnView, const String& parenSection);
-		HTREEITEM InsertItem(const String& name,const String& icon, DisplayOptionTreeItem *item=0, int checkstatus = -1, HTREEITEM after=TVI_LAST);
-		HTREEITEM InsertItem(LayerTreeView  *tv,HTREEITEM parent, const String& name,const String& icon, HTREEITEM after=TVI_LAST);
-		HTREEITEM findTreeItemByName(LayerTreeView  *tv, HTREEITEM parent, const String& name) const;
 		void displayOptionTransparency(CWnd *parent) ;
 		void setInfoMode(void *v,LayerTreeView *tv);
 		NewDrawer *loadDrawer(const FileName& fnView, const String& drawerSection);

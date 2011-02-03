@@ -100,7 +100,7 @@ public:
 	HTREEITEM getAncestor(HTREEITEM current, int depth);
 	bool getItem(HTREEITEM hItem, UINT mask, TreeItem& item) const;
 	void collectStructure(HTREEITEM parent=0, const String& name="");
-	void DeleteAllItems(HTREEITEM hti);
+	void DeleteAllItems(HTREEITEM hti, bool childerenOnly=false);
 	//}}AFX_MSG
 protected:
 	void SwitchCheckBox(HTREEITEM hti);

@@ -101,7 +101,7 @@ bool BaseZapp::fProcess(Event& ev)
 
 void BaseZapp::setNotify(CallBackHandler *handler, NotifyProc npCh,  const Message& mp)
 {
-  NotifyPair &np = Notifies[mp];
+  NotifyPair &np = Notifies[mp]; 
   np.second.insert(CallBackPair(handler, npCh));
   np.first=mp;
 }

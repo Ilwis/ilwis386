@@ -20,8 +20,8 @@ namespace ILWIS {
 		String getId() const;
 		String getName() const;
 		virtual void setName(const String&);
-		bool isActive() const {return parentDrawer->isActive(); }
-	    void setActive(bool yesno) {};
+		bool isActive() const {return fActive; }
+		void setActive(bool yesno) { fActive=yesno;}
 		DrawMethod getDrawMethod() const { return parentDrawer->getDrawMethod(); }
 		void setDrawMethod(DrawMethod method=drmINIT) {};
 		virtual bool isEditable() const;
@@ -59,6 +59,7 @@ namespace ILWIS {
 		String name;
 		bool info;
 		bool editable;
+		bool fActive;
 		double extrTransparency;
 		int specialOptions;
 

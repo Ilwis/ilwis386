@@ -341,6 +341,29 @@ private:
 	int exec();
 };
 
+class ObjectCollectionPropPage: public BasicPropertyFormPage
+{
+public:
+	ObjectCollectionPropPage(const IlwisObject& obj);
+
+	virtual void BuildPage();
+
+private:
+	StaticText   *m_stRemark;
+	FieldTableC       *ftAttTable;
+	StaticText        *stAttTable;
+	
+	ObjectCollection	   oc;
+	bool  fAttrTable;
+	String sAttrTable;
+
+	int CallBackAttTableChange(Event*);
+	void SetAttribTableField();
+
+	
+	int exec();
+}; 
+
 class MapViewPropPage: public BasicPropertyFormPage
 {
 public:

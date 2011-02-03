@@ -445,6 +445,16 @@ void LegendClassLayerTreeItem::OnLButtonDblClk(UINT nFlags, CPoint point)
 	//ltv->SetFocus();
 }
 
+void LegendClassLayerTreeItem::SwitchCheckBox(bool fOn)
+{
+	PreparationParameters pp(NewDrawer::ptRENDER);
+	pp.filteredRaws.push_back(fOn ? iRaw : -iRaw);
+	dr->prepare(&pp);
+	MapCompositionDoc* doc = ltv->GetDocument();
+	doc->mpvGetView()->Invalidate();
+
+}
+
 void LegendClassLayerTreeItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	LPNMTVCUSTOMDRAW lptvcd = (LPNMTVCUSTOMDRAW) pNMHDR;
@@ -490,7 +500,7 @@ void LegendClassLayerTreeItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 			CPoint pt;
 			pt.x = rect.right + 2;
 			pt.y = rect.top;
-			if (ltv->GetTreeCtrl().GetItemState(hti, TVIS_SELECTED)) {
+			if (ltv->GetTreeCtrl().GetItemState(hti, TVIS_SELECTED) && false) {
 				cdc.SetTextColor(clrTextSel);
 				cdc.SetBkColor(clrSel);
 			}
