@@ -220,6 +220,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Drawers\DisplayOptionsLegend.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Drawers\Drawers.cpp"
 				>
 			</File>
@@ -326,6 +330,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Drawers\CanvasBackgroundDrawer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\DisplayOptionsLegend.h"
 				>
 			</File>
 			<File

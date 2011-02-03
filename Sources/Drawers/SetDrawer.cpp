@@ -23,6 +23,7 @@
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
 #include "Drawers\DrawingColor.h" 
 #include "Drawers\SetDrawer.h"
+#include "Drawers\DisplayOptionsLegend.h"
 #include "Client\FormElements\fldcol.h"
 #include "client\formelements\fldrpr.h"
 #include "client\formelements\fentvalr.h"
@@ -42,7 +43,8 @@ SetDrawer::SetDrawer(DrawerParameters *parms, const String& name) :
 	colorCheck(0),
 	rprItem(0),
 	threeDItem(0),
-	portrayalItem(0)
+	portrayalItem(0),
+	doLegend(0)
 {
 	setInfo(true);
 	setTransparency(1);
@@ -104,29 +106,8 @@ bool SetDrawer::useInternalDomain() const {
 }
 
 void SetDrawer::setcheckRpr(void *value, LayerTreeView *tree) {
-	if ( value == 0)
-		return;
-	HTREEITEM hItem = *((HTREEITEM *)value);
-	String name = tree->getItemName(hItem);
-	if ( name == sUNDEF)
-		return;
-	int index = name.find_last_of("|");
-
-	if ( index == string::npos)
-		return;
-
-	String method = name.substr(index + 1);
-	if ( method == "Representation")
-		setDrawMethod(NewDrawer::drmRPR);
-	else if ( method == "Single Color")
-		setDrawMethod(NewDrawer::drmSINGLE);
-	else if ( method == "Multiple Colors"){
-		setDrawMethod(NewDrawer::drmMULTIPLE);
-	}
-	modifyLineStyleItem(tree, (getDrawMethod() == NewDrawer::drmRPR && rpr.fValid() && rpr->prc()));
-	PreparationParameters pp(NewDrawer::ptRENDER, 0);
-	prepareChildDrawers(&pp);
-	getRootDrawer()->getDrawerContext()->doDraw();
+	if ( doLegend)
+		doLegend->setcheckRpr(value, tree);
 }
 
 Representation SetDrawer::getRepresentation() const { // avoiding copy constructotrs
@@ -220,10 +201,6 @@ ILWIS::DrawingColor * SetDrawer::getDrawingColor() const {
 	return drawColor;
 }
 
-void SetDrawer::displayOptionSubRpr(CWnd *parent) {
-	new RepresentationForm(parent, this);
-}
-
 void SetDrawer::displayOptionStretch(CWnd *parent) {
 	new SetStretchForm(parent, this);
 }
@@ -258,72 +235,33 @@ HTREEITEM SetDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 
 	NewDrawer::DrawMethod method = getDrawMethod();
 	portrayalItem = InsertItem(tv,parent, "Portrayal", "Colors");
+	doLegend = new DisplayOptionsLegend(tv,portrayalItem);
+	doLegend->createForSet(this);
 
 	colorCheck = new SetChecks(tv,this,(SetCheckFunc)&SetDrawer::setcheckRpr);
-	if ( rpr.fValid() ) {
-		bool usesRpr = method == NewDrawer::drmRPR;
-		DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,portrayalItem,this,(DisplayOptionItemFunc)&SetDrawer::displayOptionSubRpr,0,colorCheck);
-		rprItem = InsertItem("Representation", ".rpr", item, (int)usesRpr);
-		insertLegendItems(tv, rprItem);
-		if ( usesRpr)
-			InsertItem(tv, rprItem,String("Value : %S",rpr->sName()),".rpr");
-		if ( rpr->prg() || rpr->prv()){
-			insertStretchItem(tv, portrayalItem);
-		
-		}
+	//if ( rpr.fValid() ) {
+	//	bool usesRpr = method == NewDrawer::drmRPR;
+	//	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,portrayalItem,this,(DisplayOptionItemFunc)&SetDrawer::displayOptionSubRpr,0,colorCheck);
+	//	rprItem = InsertItem("Representation", ".rpr", item, (int)usesRpr);
+	//	insertLegendItems(tv, rprItem);
+	//	if ( usesRpr)
+	//		InsertItem(tv, rprItem,String("Value : %S",rpr->sName()),".rpr");
+	//	if ( rpr->prg() || rpr->prv()){
+	//		insertStretchItem(tv, portrayalItem);
+	//	
+	//	}
 
-	}
+	//}
 	return hti;
 }
 
-void SetDrawer::insertLegendItems(LayerTreeView  *tv, HTREEITEM parent) {
-	String sName = SDCRemLegend;
-	int iImgLeg = IlwWinApp()->iImage("legend");
-	HTREEITEM htiLeg = tv->GetTreeCtrl().InsertItem(sName.scVal(), iImgLeg, iImgLeg, parent);
-	if (0 == htiLeg)
-		return;
-
-	if ( rpr->prg() || rpr->prv())
-		insertLegendItemsValue(tv, htiLeg);
-	else if ( rpr->prc()) {
-		insertLegendItemsClass(tv, htiLeg);
-	}
-	tv->GetTreeCtrl().Expand(htiLeg, TVE_EXPAND);
-
-}
-void SetDrawer::insertLegendItemsValue(LayerTreeView  *tv, HTREEITEM htiLeg){
-	tv->GetTreeCtrl().SetItemData(htiLeg, (DWORD_PTR)new ObjectLayerTreeItem(tv, rpr.pointer()));
-	AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)getParentDrawer();
-	DomainValueRangeStruct dvs = mapDrawer->getBaseMap()->dvrs();					
-	RangeReal rr = getStretchRangeReal();
-	int iItems = 5;
-	double rStep = dvs.rStep();
-	if (rStep > 1e-6) {
-		int iSteps = 1 + round(rr.rWidth() / rStep);
-		if (iSteps < 2)
-			iSteps = 2;
-		if (iSteps <= 11)
-			iItems = iSteps;
-	}
-	for (int i = 0; i < iItems; ++i) {
-		double rMaxItem = iItems - 1;
-		double rVal = rr.rLo() + i / rMaxItem * rr.rWidth();
-		String sName = dvs.sValue(rVal, 0);
-		HTREEITEM hti = tv->GetTreeCtrl().InsertItem(sName.scVal(), htiLeg);
-		tv->GetTreeCtrl().SetItemData(hti, (DWORD_PTR)new LegendValueLayerTreeItem(tv, this, dvs, rVal));		
-	}
+void SetDrawer::updateLegendItem() {
+	if ( doLegend)
+		doLegend->updateLegendItem();
 }
 
-void SetDrawer::insertLegendItemsClass(LayerTreeView  *tv, HTREEITEM htiLeg){
-	tv->GetTreeCtrl().SetItemData(htiLeg, (DWORD_PTR)new LegendLayerTreeItem(tv, this));		
-	DomainClass* dc = rpr->dm()->pdc();
-	int iItems = dc->iNettoSize();
-	for (int i = 1; i <= iItems; ++i) {
-		int iRaw = dc->iKey(i);
-		String sName = dc->sValueByRaw(iRaw, 0);
-		HTREEITEM hti = tv->GetTreeCtrl().InsertItem(sName.scVal(), htiLeg);
-		tv->GetTreeCtrl().SetItemData(hti, (DWORD_PTR)new LegendClassLayerTreeItem(tv, this, rpr->dm(), iRaw));		
-	}
+void SetDrawer::displayOptionSubRpr(CWnd *parent) {
+	new RepresentationFormL(parent, this,0);
 }
 
 
@@ -372,35 +310,35 @@ RepresentationForm::RepresentationForm(CWnd *wPar, SetDrawer *dr) :
 }
 
 void  RepresentationForm::apply() {
-	fldRpr->StoreData();
-	SetDrawer *setDrawer = (SetDrawer *)drw;
-	setDrawer->setRepresentation(rpr);
-	PreparationParameters pp(NewDrawer::ptRENDER, 0);
-	drw->prepareChildDrawers(&pp);
-	updateMapView();
+	//fldRpr->StoreData();
+	//SetDrawer *setDrawer = (SetDrawer *)drw;
+	//setDrawer->setRepresentation(rpr);
+	//PreparationParameters pp(NewDrawer::ptRENDER, 0);
+	//drw->prepareChildDrawers(&pp);
+	//updateMapView();
 
-	HTREEITEM child = view->GetTreeCtrl().GetNextItem(setDrawer->rprItem, TVGN_CHILD);
-	if ( child) {
-		FileName fn(rpr);
-		String name("Value : %S",fn.sFile);
-		TreeItem titem;
-		view->getItem(child,TVIF_TEXT | TVIF_HANDLE | TVIF_IMAGE | TVIF_PARAM | TVIS_SELECTED,titem);
-	
-		strcpy(titem.item.pszText,name.scVal());
-		view->GetTreeCtrl().SetItem(&titem.item);
-	}
-	Representation setRpr = Representation(FileName(rpr));
-	HTREEITEM parent = view->getAncestor(setDrawer->rprItem, 2);
-	if ( parent) {
-		HTREEITEM stretchItem = setDrawer->findTreeItemByName(view,parent,"Stretch");
-		if ( !stretchItem && setRpr->prg()) {
-			setDrawer->insertStretchItem(view,parent);
-		}
-		if ( stretchItem && setRpr->prv()) {
-			view->GetTreeCtrl().DeleteItem(stretchItem);
-		}
-		view->collectStructure();
-	}
+	//HTREEITEM child = view->GetTreeCtrl().GetNextItem(setDrawer->rprItem, TVGN_CHILD);
+	//if ( child) {
+	//	FileName fn(rpr);
+	//	String name("Value : %S",fn.sFile);
+	//	TreeItem titem;
+	//	view->getItem(child,TVIF_TEXT | TVIF_HANDLE | TVIF_IMAGE | TVIF_PARAM | TVIS_SELECTED,titem);
+	//
+	//	strcpy(titem.item.pszText,name.scVal());
+	//	view->GetTreeCtrl().SetItem(&titem.item);
+	//}
+	//Representation setRpr = Representation(FileName(rpr));
+	//HTREEITEM parent = view->getAncestor(setDrawer->rprItem, 2);
+	//if ( parent) {
+	//	HTREEITEM stretchItem = setDrawer->findTreeItemByName(view,parent,"Stretch");
+	//	if ( !stretchItem && setRpr->prg()) {
+	//		setDrawer->insertStretchItem(view,parent);
+	//	}
+	//	if ( stretchItem && setRpr->prv()) {
+	//		view->GetTreeCtrl().DeleteItem(stretchItem);
+	//	}
+	//	view->collectStructure();
+	//}
 
 }
 //------------------------------------
