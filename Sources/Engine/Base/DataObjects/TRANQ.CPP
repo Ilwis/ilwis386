@@ -142,9 +142,7 @@ Tranquilizer::~Tranquilizer()
 {
   Stop();
   // wait till ReportWindow is finished
-	TRACE("entering lock for tranquilizer =>");
   ILWISSingleLock cslTranq(&csTranq, TRUE,SOURCE_LOCATION);
-	TRACE("leaving lock for tranquilizer \n");
 }
 
 void Tranquilizer::Start()

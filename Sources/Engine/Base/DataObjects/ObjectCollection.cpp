@@ -36,6 +36,7 @@
  ***************************************************************/
 #pragma warning( disable : 4786 )
 
+#include "Engine\Table\tbl.h"
 #include "Engine\Base\DataObjects\ObjectCollection.h"
 #include "Engine\Applications\ObjectCollectionVirtual.h"
 #include "Engine\DataExchange\DatabaseCollection.h"
@@ -103,12 +104,16 @@ ObjectCollection::ObjectCollection(const FileName& fn, const String& sType, Parm
 
 ObjectCollectionPtr *ObjectCollection::Create(const FileName& fn, const String& sType, ParmList& pm)
 {
-	mapCreates::iterator where = ObjectCollection::mapCreateFuncs.find(sType);	
-	if ( where != mapCreateFuncs.end() )
-	{
-		CollectionCreate func = (*where).second;
-		return (func)(fn, pm);
-	}		
+	if ( sType == "ObjectCollectionVirtual") {
+		return new ObjectCollectionPtr(fn);
+	} else {
+		mapCreates::iterator where = ObjectCollection::mapCreateFuncs.find(sType);	
+		if ( where != mapCreateFuncs.end() )
+		{
+			CollectionCreate func = (*where).second;
+			return (func)(fn, pm);
+		}
+	}
 	return 0;		
 }
 
@@ -151,6 +156,7 @@ ObjectCollectionPtr* ObjectCollectionPtr::create(const FileName& fn, const Strin
   return p;
 }
 
+
 void ObjectCollection::Init()
 {
 	mapCreateFuncs[sTypeObjectCollection] = ObjectCollectionPtr::Create;
@@ -190,10 +196,11 @@ ObjectCollectionPtr::~ObjectCollectionPtr()
 }
 
 ObjectCollectionPtr::ObjectCollectionPtr(const FileName& fn)
-: IlwisObjectPtr(fn)
+: IlwisObjectPtr(fn), ocv(0)
 {
 	long iNr;
 	ReadElement("ObjectCollection", "NrObjects", iNr);
+	ReadElement("ObjectCollection", "AttributeTable", attTable);
 	FileName fnObject;
 	for(int i = 0; i < iNr; ++i)
 	{
@@ -203,7 +210,7 @@ ObjectCollectionPtr::ObjectCollectionPtr(const FileName& fn)
 }
 
 ObjectCollectionPtr::ObjectCollectionPtr(const FileName& fn, bool fCreate)
-: IlwisObjectPtr(fn, fCreate)
+: IlwisObjectPtr(fn, fCreate), ocv(0)
 {
 }
 
@@ -219,6 +226,57 @@ ObjectCollectionPtr *ObjectCollectionPtr::Create(const FileName& fn, ParmList& )
 		return new ObjectCollectionPtr(fn);
 	else
 		return new ObjectCollectionPtr(fn, true);
+}
+
+bool ObjectCollectionPtr::fCalculated() const
+// returns true if a calculated result exists
+{
+  if (!fDependent())
+    return IlwisObjectPtr::fCalculated();
+  ILWISSingleLock sl(const_cast<CCriticalSection*>(&csCalc), TRUE);
+  return 0 != ocv;
+} 
+
+void ObjectCollectionPtr::BreakDependency() {
+   if (!fCalculated())
+    Calc(true);
+  if (!fCalculated())
+    return; 
+  ILWISSingleLock sl(&csAccess, TRUE, SOURCE_LOCATION);
+  delete ocv;
+  ocv = 0;
+  fChanged = true;
+//  _fDataReadOnly = false;
+  Store();
+}
+
+void ObjectCollectionPtr::OpenCollectionVirtual()
+{
+  if (0 != ocv) // already there
+    return;
+  if (!fDependent())
+    return;
+  try {
+    ocv = ObjectCollectionVirtual::create(fnObj, *this);
+    objdep = ObjectDependency(fnObj);
+  }
+  catch (const ErrorObject& err) {
+    err.Show();
+    ocv = 0;
+    objdep = ObjectDependency();
+  }
+}
+
+void ObjectCollectionPtr::Calc(bool fMakeUpToDate)
+// calculates the result     
+{
+  ILWISSingleLock sl(&csCalc, TRUE, SOURCE_LOCATION);
+  OpenCollectionVirtual();
+  if (fMakeUpToDate)
+    if (!objdep.fUpdateAll())
+      return;
+  if (0 != ocv) 
+    ocv->Freeze();
 }
 
 bool ObjectCollectionPtr::fCanAdd(const FileName& fn)
@@ -239,6 +297,7 @@ void ObjectCollectionPtr::Store()
 	if ( sType() != sTypeObjectCollection) // else it gets circular in on open document
 		WriteElement("ObjectCollection", "Type", sType());	
 	WriteElement("ObjectCollection", "NrObjects", (long)arObjects.size());
+	WriteElement("ObjectCollection", "AttributeTable", attTable);
 
 	for(unsigned int i=0; i < arObjects.size(); ++i)
 	{
@@ -249,6 +308,27 @@ void ObjectCollectionPtr::Store()
 		else
 			WriteElement("ObjectCollection", String("Object%i", i).scVal(), arObjects[i].sFullPathQuoted());
 	}
+	if ( fDependent())
+		WriteElement("ObjectCollection", "Type", "ObjectCollectionVirtual");
+	if (ocv) 
+		ocv->Store();
+}
+
+bool ObjectCollectionPtr::fDependent() const
+{
+  ILWISSingleLock sl(const_cast<CCriticalSection*>(&csAccess), TRUE, SOURCE_LOCATION);
+  if (0 != ocv)
+    return true;
+  String s;
+  ReadElement("ObjectCollection", "Type", s);
+  return fCIStrEqual(s , "ObjectCollectionVirtual");
+}
+
+void ObjectCollectionPtr::SetAttributeTable(const Table& tbl){
+	if (tbl->iRecs() != arObjects.size())
+		throw ErrorObject(TR("Table's number of records doesn't match number of objects in the collection"));
+	attTable = tbl;
+	fChanged = true;
 }
 
 void ObjectCollectionPtr::GetObjectDependencies(Array<FileName>& afnObjDep)
@@ -414,4 +494,11 @@ bool ObjectCollectionPtr::fObjectAlreadyInCollection(const FileName& fn) const
 			return true;
 	}	
 	return false;
+}
+
+bool ObjectCollectionPtr::fTblAtt() const {
+	return attTable.fValid();
+}
+Table ObjectCollectionPtr::tblAtt() const {
+	return attTable;
 }

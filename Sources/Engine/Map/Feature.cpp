@@ -41,15 +41,18 @@ bool Feature::EnvelopeIntersectsWith(Geometry *g2, bool useMargine) {
 CoordBounds Feature::cbBounds() const // bounding rectangle
 {
 	ILWISSingleLock sl(const_cast<CCriticalSection *>(&csAccess), TRUE);
-	const Geometry *geometry = dynamic_cast<const geos::geom::Geometry *>(this);
-	Geometry *geom = geometry->getEnvelope();
-	CoordinateSequence *seq = geom->getCoordinates();
-	CoordBounds cb;
-	for(int i = 0; i < seq->size(); ++i) {
-		Coord crd(seq->getAt(i));
-		cb += crd;
+	if ( cb.fUndef()) {
+		const Geometry *geometry = dynamic_cast<const geos::geom::Geometry *>(this);
+		Geometry *geom = geometry->getEnvelope();
+		CoordinateSequence *seq = geom->getCoordinates();
+		CoordBounds cbNew;
+		for(int i = 0; i < seq->size(); ++i) {
+			Coord crd(seq->getAt(i));
+			cbNew += crd;
+		}
+		const_cast<Feature *>(this)->cb = cbNew;
+		delete seq;
 	}
-	delete seq;
 	return cb;	
 }
 

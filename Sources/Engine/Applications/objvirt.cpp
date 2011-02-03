@@ -33,50 +33,13 @@
  Software Foundation, http://www.fsf.org.
 
  Created on: 2007-02-8
- ***************************************************************/
-/* $Log: /ILWIS 3.0/BasicDataStructures/objvirt.cpp $
- * 
- * 8     25-02-02 15:20 Willem
- * Added some protection against invalid object collections. Occured when
- * the object collection referred to in ODF of a map did not exist anymore
- * 
- * 7     29-08-01 18:54 Koolhoven
- * in Store() adding to obectcollection is now only done if it is really
- * an object collection (.ioc) and not something similar like a maplist
- * orso
- * 
- * 6     8/10/01 11:54a Martin
- * virtual objects will now add themselves to an ioc if all their input
- * objects are part of an ioc
- * 
- * 5     21-12-00 10:17a Martin
- * added the pGetVirtualObject() function to access the virtual object
- * embedded in the object. 
- * 
- * 4     29-10-99 16:32 Koolhoven
- * last comment caused problems
- * 
- * 3     29/10/99 9:40 Willem
- * Comments changed: // -> in $Log section
- * 
- * 2     29-10-99 9:20 Wind
- * thread save stuff
- */
-// Revision 1.3  1998/09/16 17:22:46  Wim
-// 22beta2
-//
-// Revision 1.2  1997/08/21 12:23:47  Wim
-// In Store() it is now made sure that the [Ilwis] section is written first
-//
-/* IlwisObjectVirtual
-   Copyright Ilwis System Development ITC
-   april 1997, by Jelle Wind
-	Last change:  WK   21 Aug 97    2:23 pm
+ ***************************************************************
 */
 
 #pragma warning( disable : 4786 )
 
 #include "Engine\Applications\objvirt.h"
+#include "Engine\Table\tbl.h"
 #include "Engine\Base\DataObjects\ObjectCollection.h"
 
 

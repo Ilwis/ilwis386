@@ -267,6 +267,7 @@ void ILWIS::Segment::PutCoords(CoordinateSequence* sq) {
 void ILWIS::Segment::PutCoords(long iNr, const CoordBuf& crdBuf) 
 {
     ILWISSingleLock sl(const_cast<CCriticalSection *>(&csAccess), TRUE, SOURCE_LOCATION);
+	cb = CoordBounds();
 	points.release();
 	vector<Coordinate> *crds = new vector<Coordinate>();
 	crds->resize(iNr);

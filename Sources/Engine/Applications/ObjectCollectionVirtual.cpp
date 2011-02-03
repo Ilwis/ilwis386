@@ -38,6 +38,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
+#include "Engine\Table\tbl.h"
 #include "Engine\Base\DataObjects\ObjectCollection.h"
 #include "Engine\Applications\ObjectCollectionVirtual.h"
 #include "Engine\Applications\objvirt.h"

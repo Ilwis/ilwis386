@@ -244,6 +244,7 @@ void PolygonMapStore::StoreRing(File& binaryFile, const LineString *ls) {
 	const vector<Coordinate> *v = seq->toVector();
 	long sz = v->size();
 	const void *p = &sz;
+	byte *vc = (byte *)&(*v)[0];
 	binaryFile.Write(4L, p);
 	binaryFile.Write(v->size() * 3 * 8, &(*v)[0]);
 	delete seq;

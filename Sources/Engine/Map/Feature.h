@@ -29,6 +29,7 @@ public:
 
 protected:
 	CCriticalSection csAccess;
+	CoordBounds cb;
 
 private:
 	bool deleted;

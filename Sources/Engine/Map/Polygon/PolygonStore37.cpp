@@ -20,8 +20,6 @@ void PolygonMapStoreFormat37::Load()
 		pol->addBoundary(ReadRing(binaryFile));
 		double value;
 		binaryFile.Read(8,&value);
-		if ( value == rUNDEF)
-			continue;
 		pol->PutVal(value);
 		long numberOfHoles;
 		binaryFile.Read(4,&numberOfHoles);
@@ -37,6 +35,7 @@ LinearRing *PolygonMapStoreFormat37::ReadRing(File&  binaryFile) {
 		throw ErrorObject(String("Can't read from %S",ptr.fnObj.sRelative()));
 	Coordinate *p = new Coordinate[numberOfCoords];
 	binaryFile.Read(numberOfCoords*3*8,(void *)p);
+	byte *tst = (byte *)p;
 	vector<Coordinate> *z = new vector<Coordinate>();
 	z->assign(p, p+numberOfCoords);
 	CoordinateSequence *seq = new CoordinateArraySequence(z);

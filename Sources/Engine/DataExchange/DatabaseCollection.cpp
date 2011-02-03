@@ -36,6 +36,7 @@
  ***************************************************************/
 #pragma warning( disable : 4786 )
 
+#include "Engine\Table\tbl.h"
 #include "Engine\DataExchange\DatabaseCollection.h"
 #include "Engine\Table\tbl.h"
 #include "Engine\DataExchange\ForeignFormat.h"

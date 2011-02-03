@@ -44,7 +44,7 @@
 #define ILWDOMIDENT_H
 #include "Engine\Domain\dmsort.h"
 
-class DATEXPORT DomainIdentifier: public DomainSort
+class _export DomainIdentifier: public DomainSort
 {
   friend class Domain;
   friend class DomainPtr;

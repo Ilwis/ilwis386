@@ -127,6 +127,7 @@ LinearRing *ILWIS::Polygon::makeRing(const LineString *line) const {
 }
 
 void ILWIS::Polygon::addBoundary(LinearRing *ring) {
+	cb = CoordBounds();
 	if ( shell != NULL)
 		delete shell;
 	shell = ring;

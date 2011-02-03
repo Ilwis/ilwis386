@@ -684,7 +684,7 @@ String ILWIS::Time::toString(bool local, ILWIS::Time::Mode mode) const{
 		if ( mode == mDATE)
 				return String("%04d-%02d-%02d", year, timeinfo.tm_mon + 1, timeinfo.tm_mday);
 		else if ( mode == mDATETIME)
-			return String("%04d-%02d-%02dT%02d:%02d:%02d", year, timeinfo.tm_mon, timeinfo.tm_mday, timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec);
+			return String("%04d-%02d-%02dT%02d:%02d:%02d", year, timeinfo.tm_mon + 1, timeinfo.tm_mday, timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec);
 		else if ( mode == mTIME)
 			return String("T%02d:%02d:%02.02f", timeinfo.tm_hour, timeinfo.tm_min, seconds);
 	} else {

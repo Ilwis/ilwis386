@@ -1027,6 +1027,8 @@ bool CommandHandler::fCmdCalc(const String& sCmd)
 				else
 					return CommandHandler::ImportObject(fn, sExpres);
 			}
+			else if (fCIStrEqual(sExpres.sLeft(14) , "PolygonMapList")) 
+				sType = "ioc";
 			else if (fCIStrEqual(sExpres.sLeft(7) , "MapList")) 
 				sType = "mpl";
 			else if (fCIStrEqual(sExpres.sLeft(3) , "Map"))
@@ -2515,7 +2517,7 @@ void CommandHandler::BreakDepObjects(const String& sCommand, Tranquilizer* trq)
 	Array<FileName> afn;
 	Array<String> asExt;
 	asExt &= ".mpr"; asExt &= ".mpp"; asExt &= ".mpa"; asExt &= ".mps"; asExt &= ".tbt";
-	asExt &= ".mat"; asExt &= ".mpl"; asExt &= ".stp";
+	asExt &= ".mat"; asExt &= ".mpl"; asExt &= ".stp"; asExt&=".ioc";
 	File::GetFileNames(sFileMask, afn, &asExt);
 	if (fForce)
 	{

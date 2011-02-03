@@ -41,6 +41,7 @@
 
 class ObjectCollection;
 class ObjectCollectionPtr;
+class Table;
 
 typedef ObjectCollectionPtr* (*CollectionCreate)(const FileName& fn, ParmList&);
 typedef map<String, CollectionCreate> mapCreates;
@@ -72,14 +73,23 @@ public:
 	bool _export            fObjectAlreadyInCollection(const FileName& fn) const;
 	static ObjectCollectionPtr* Create(const FileName& fn, ParmList& ParmList);
 	static ObjectCollectionPtr*	create(const FileName& fn, const String& sExpression);
+	bool					fDependent() const;
+	void					BreakDependency();
+	bool					fCalculated() const;
+	void				    Calc(bool fMakeUpToDate);
+	void _export			SetAttributeTable(const Table& tbl);
+    bool _export         		fTblAtt() const;
+    Table _export        		tblAtt() const;
 
 protected:
 	_export ObjectCollectionPtr(const FileName&);
 	_export ObjectCollectionPtr(const FileName&, bool /* fCreate */);
+	void OpenCollectionVirtual();
 
 	vector<FileName>		arObjects;
 	ObjectDependency        objdep;
 	ObjectCollectionVirtual *ocv;
+	Table   				attTable;
 };
 
 class ObjectCollection: public IlwisObject
