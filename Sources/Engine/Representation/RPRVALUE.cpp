@@ -118,6 +118,10 @@ void RepresentationValue::CheckDomainRange()
   }
 }
 
+Color RepresentationValue::clr(double rValue, RangeReal rr) const // in rprValue, RangeReal must not be used
+{
+	return RepresentationGradual::clr(rValue);  
+}
 
 
 

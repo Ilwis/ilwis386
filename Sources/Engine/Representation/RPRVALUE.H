@@ -55,6 +55,7 @@ public:
   virtual ~RepresentationValue();
   virtual String sType() const;
   virtual void Store();
+  virtual Color clr(double rValue, RangeReal) const; // in rprValue, RangeReal must not be used
   void CheckDomainRange();
 };
 

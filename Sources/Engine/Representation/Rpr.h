@@ -107,7 +107,7 @@ public:
   virtual Color         clrSymbolFill(long iRaw) const;
   virtual Color         clrLineFill(long iRaw) const;
   Color _export         clr(double rValue) const;            // 0..1
-  Color _export         clr(double rValue, RangeReal) const; // stretch
+  virtual Color _export clr(double rValue, RangeReal) const; // stretch
   Color                 clrBoundary() const 
                           { return clrBoundaryColor; } 
   virtual byte          iColor(double rValue) const;  // 0..1 
