@@ -17,8 +17,8 @@ using namespace ILWIS;
 
 DrawingColor::DrawingColor(SetDrawer *dr) : 
 drw(dr),
-clr1(0,176,20),
-clr2(168,168,168),
+clr1(168,168,168), // False
+clr2(0,176,20), // True
 iMultColors(0),
 gamma(0),
 mcd(0)
