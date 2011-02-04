@@ -333,7 +333,7 @@ BOOL PreStereoMateView::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 #define addBreak men.AppendMenu(MF_SEPARATOR);
 void PreStereoMateView::OnContextMenu(CWnd* pWnd, CPoint point) 
 {
-	if (as)
+	if (tools.size() > 0)
 		return;
 	// if (edit && edit->OnContextMenu(pWnd, point))
 	// 	return;

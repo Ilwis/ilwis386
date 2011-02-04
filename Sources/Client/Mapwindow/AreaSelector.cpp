@@ -98,9 +98,6 @@ AreaSelector::~AreaSelector()
 
 void AreaSelector::OnMouseMove(UINT nFlags, CPoint point) 
 {
-	if ( selectionDrawer) {
-		TRACE("M\n");
-	}
 	if (fDown) {
 		pEnd = point;
 		DrawRect();

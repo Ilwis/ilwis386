@@ -86,7 +86,7 @@ public:
 
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
-	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
+	afx_msg virtual void OnContextMenu(CWnd* pWnd, CPoint point);
 	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg void OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult);
@@ -97,6 +97,7 @@ public:
 	afx_msg void OnRemoveLayer();
 
 	String getItemName(HTREEITEM item) const;
+	HTREEITEM getItemHandle(const String& name) const;
 	HTREEITEM getAncestor(HTREEITEM current, int depth);
 	bool getItem(HTREEITEM hItem, UINT mask, TreeItem& item) const;
 	void collectStructure(HTREEITEM parent=0, const String& name="");

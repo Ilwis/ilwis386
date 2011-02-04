@@ -89,8 +89,7 @@ BEGIN_MESSAGE_MAP(ZoomableView, CView)
 END_MESSAGE_MAP()
 
 ZoomableView::ZoomableView()
-	: as(0)
-	, iXpos(0), iYpos(0)
+	: iXpos(0), iYpos(0)
 	, iXfalseOffset(0), iYfalseOffset(0)
 	, iXpage(0), iYpage(0)
 	, iXsize(0), iYsize(0)
@@ -175,31 +174,29 @@ BOOL ZoomableView::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT*
 	CPoint point((DWORD)lParam);
 	switch (message) {
 		case WM_MOUSEMOVE:
-			if (as) 
-				as->OnMouseMove(wParam, point);
+			if (tools.size() > 0) 
+				tools.OnMouseMove(wParam, point);
 			else if (wParam & MK_CONTROL) moveEyePoint(point, message);
-//			return CView::OnWndMsg(message, wParam, lParam, pResult);
-			//return TRUE;
 			break;
 		case WM_LBUTTONDBLCLK:
-			if (as) as->OnLButtonDblClk(wParam, point);
+			if (tools.size() > 0) tools.OnLButtonDblClk(wParam, point);
 			return FALSE;
 		case WM_LBUTTONDOWN:
-			if (as) as->OnLButtonDown(wParam, point);
+			if (tools.size() > 0) tools.OnLButtonDown(wParam, point);
 			else if (wParam & MK_CONTROL) moveEyePoint(point,message);
 			break;
 		case WM_LBUTTONUP:
-			if (as) as->OnLButtonUp(wParam, point);
+			if (tools.size() > 0) tools.OnLButtonUp(wParam, point);
 			else if (wParam & MK_CONTROL) moveEyePoint(point,message);
 			break;
 		case WM_RBUTTONDBLCLK:
-			if (as) as->OnRButtonDblClk(wParam, point);
+			if (tools.size() > 0) tools.OnRButtonDblClk(wParam, point);
 			return FALSE;
 		case WM_RBUTTONDOWN:
-			if (as) as->OnRButtonDown(wParam, point);
+			if (tools.size() > 0) tools.OnRButtonDown(wParam, point);
 			return FALSE;
 		case WM_RBUTTONUP:
-			if (as) as->OnRButtonUp(wParam, point);
+			if (tools.size() > 0) tools.OnRButtonUp(wParam, point);
 			return FALSE;
 	}
 	return CView::OnWndMsg(message, wParam, lParam, pResult);
@@ -379,8 +376,8 @@ void ZoomableView::AreaSelected(CRect rect)
 
 void ZoomableView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
-	if (as && VK_ESCAPE == nChar) {
-		as->OnEscape();
+	if (tools.size() > 0 && VK_ESCAPE == nChar) {
+		tools.OnEscape();
 		return;
 	}
   bool fCtrl = GetKeyState(VK_CONTROL) & 0x8000 ? true : false;
@@ -705,7 +702,7 @@ void ZoomableView::OnUpdateZoomOut(CCmdUI* pCmdUI)
 	bool zoomedIn = (mcd->rootDrawer->getMapCoordBounds().width() > mcd->rootDrawer->getCoordBoundsZoom().width()) || 
 				     (mcd->rootDrawer->getMapCoordBounds().height() > mcd->rootDrawer->getCoordBoundsZoom().height());
 	pCmdUI->Enable(fMapOpen && zoomedIn);
-	if (0 == as)
+	if (tools.size() == 0)
 		iActiveTool = 0;
 	pCmdUI->SetRadio(ID_ZOOMOUT == iActiveTool);
 }
@@ -751,21 +748,32 @@ void ZoomableView::OnUpdateZoomIn(CCmdUI* pCmdUI)
 	bool fTooSmall;
  	fTooSmall = false; // scale(dim.width()) < 5 || scale(dim.height()) < 5;
 	pCmdUI->Enable(fMapOpen && !fTooSmall);
-	if (0 == as)
-		iActiveTool = 0;
 	pCmdUI->SetRadio(ID_ZOOMIN == iActiveTool);
 }
 
 void ZoomableView::OnNoTool()
 {
-	iActiveTool = 0;
-	if (as) 
-		as->Stop();
+	noTool();
 }
+
+void ZoomableView::noTool(int iTool) {
+	if ( iTool == 0) {
+		iActiveTool = 0;
+		tools.reset();
+	} else {
+		map<int, MapPaneViewTool *>::iterator cur = tools.find(iTool);
+		if ( cur != tools.end()) {
+			(*cur).second->Stop();
+			delete (*cur).second;
+			tools.erase(cur);
+		}
+	}
+}
+
 
 void ZoomableView::OnUpdateNoTool(CCmdUI* pCmdUI)
 {
-	if (0 == as)
+	if (tools.size() == 0)
 		iActiveTool = 0;
 	pCmdUI->SetRadio(0 == iActiveTool);
 }
@@ -773,10 +781,10 @@ void ZoomableView::OnUpdateNoTool(CCmdUI* pCmdUI)
 void ZoomableView::OnZoomIn()
 {
 	if (iActiveTool == ID_ZOOMIN) {
-		OnNoTool();
+		noTool(ID_ZOOMIN);
 		return;
 	}
-	OnNoTool();
+	noTool(ID_ZOOMIN);
 	if (HIWORD(AfxGetThreadState()->m_lastSentMsg.wParam) == 1)
 	{
 		zPoint p(dim.width()/2,dim.height()/2);
@@ -784,15 +792,16 @@ void ZoomableView::OnZoomIn()
 	}
 	else
 		OnSelectArea();
+	iActiveTool = ID_ZOOMIN;
 }
 
 void ZoomableView::OnZoomOut()
 {
 	if (iActiveTool == ID_ZOOMOUT) {
-		OnNoTool();
+		noTool();
 		return;
 	}
-	OnNoTool();
+	noTool();
 	MapCompositionDoc *mcd = (MapCompositionDoc *)GetDocument();
 	CoordBounds cb = mcd->rootDrawer->getCoordBoundsZoom();
 	cb *= 1.41;
@@ -805,39 +814,41 @@ void ZoomableView::OnZoomOut()
 
 void ZoomableView::OnSelectArea()
 {
-	OnNoTool();
+	noTool();
 
+	AreaSelector *as;
 	if (fAdjustSize)
 		as = new AreaSelector(this, this, (NotifyRectProc)&ZoomableView::AreaSelected);
 	else 
 		as = new AreaSelector(this, this, (NotifyRectProc)&ZoomableView::AreaSelected, dim);
+	tools[ID_ZOOMIN] = as;
 	as->SetCursor(zCursor("ZoomToolCursor"));
 	iActiveTool = ID_ZOOMIN;
 }
 
 void ZoomableView::selectArea(CCmdTarget *target, NotifyRectProc proc, const String& cursor, const Color& clr)
 {
-	OnNoTool();
-
+	noTool();
+	AreaSelector *as;
 	if (fAdjustSize)
 		as = new AreaSelector(this, target, proc, clr);
 	else 
 		as = new AreaSelector(this, target, proc, dim, clr);
-
+	tools[ID_ZOOMIN] = as;
 	as->SetCursor(zCursor(cursor.scVal()));
-	//iActiveTool = ID_ZOOMIN;
+	iActiveTool = ID_ZOOMIN;
 }
 
 void ZoomableView::OnPanArea()
 {
 	if (iActiveTool == ID_PANAREA) {
-		OnNoTool();
+		noTool();
 		return;
 	}
-	OnNoTool();
+	noTool();
 	CRect rect;
 	GetClientRect(&rect);
-	as = new PanTool(this, this, (NotifyMoveProc)&ZoomableView::PanMove, rect);
+	tools[ID_PANAREA ] = new PanTool(this, this, (NotifyMoveProc)&ZoomableView::PanMove, rect);
 	iActiveTool = ID_PANAREA;
 }
 
@@ -856,8 +867,8 @@ void ZoomableView::OnUpdatePanArea(CCmdUI* pCmdUI)
 		fMapOpen = true;
 	bool fPanPossible = iXpage < iXsize || iYpage < iYsize;
 	pCmdUI->Enable(fMapOpen && fPanPossible);
-	if (0 == as)
-		iActiveTool = 0;
+	//if (tools.size())
+	//	iActiveTool = 0;
 	pCmdUI->SetRadio(ID_PANAREA == iActiveTool);
 }
 
@@ -914,7 +925,7 @@ void ZoomableView::ShowArea(const MinMax& mmWish)
 	SetDirty();
 	bool fTooSmall = scale(dim.width()) < 5 || scale(dim.height()) < 5;
 	if (fTooSmall && ID_ZOOMIN == iActiveTool)
-		OnNoTool();
+		noTool();
 }
 
 void ZoomableView::ShowArea(double rScale, long iX, long iY)
@@ -944,7 +955,7 @@ void ZoomableView::ZoomOutAreaSelected(CRect rect)
 	bool fTooSmall;
   fTooSmall= scale(iXsize,true) < 5 || scale(iYsize,true) < 5;
 	if (fTooSmall && ID_ZOOMOUT == iActiveTool)
-		OnNoTool();
+		noTool();
 }
 
 void ZoomableView::OnReDraw()
@@ -959,7 +970,7 @@ void ZoomableView::OnReDraw()
 BOOL ZoomableView::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message) 
 {
 	if (HTCLIENT == nHitTest) {
-		if (as && as->OnSetCursor())
+		if (tools.size() > 0 && iActiveTool > 0 && tools[iActiveTool]->OnSetCursor())
 			return TRUE;
 	}
 	return CView::OnSetCursor(pWnd, nHitTest, message);
@@ -996,3 +1007,63 @@ MinMax ZoomableView::mmVisibleMapArea() const
  return MinMax(RowCol(iYpos - iYfalseOffset, iXpos - iXfalseOffset ), RowCol(iYpos + iYpage - iYfalseOffset, iXpos + iXpage - iXfalseOffset));
 }
 
+//------------------------------------------------
+MapTools::~MapTools() {
+	reset();
+}
+
+void MapTools::reset() {
+	for(map<int, MapPaneViewTool *>::iterator cur = begin(); cur != end(); ++cur) {
+		(*cur).second->Stop();
+		delete (*cur).second;
+	}
+	clear();
+}
+
+void MapTools::OnMouseMove(UINT nFlags, CPoint point, int state){
+	for(map<int, MapPaneViewTool *>::iterator cur = begin(); cur != end(); ++cur) {
+		(*cur).second->OnMouseMove(nFlags, point);
+	}
+}
+
+void MapTools::OnLButtonDblClk(UINT nFlags, CPoint point, int state){
+	for(map<int, MapPaneViewTool *>::iterator cur = begin(); cur != end(); ++cur) {
+		(*cur).second->OnLButtonDblClk(nFlags, point);
+	}
+}
+
+void MapTools::OnLButtonDown(UINT nFlags, CPoint point, int state){
+	for(map<int, MapPaneViewTool *>::iterator cur = begin(); cur != end(); ++cur) {
+		(*cur).second->OnLButtonDown(nFlags, point);
+	}
+}
+
+void MapTools::OnLButtonUp(UINT nFlags, CPoint point, int state){
+	for(map<int, MapPaneViewTool *>::iterator cur = begin(); cur != end(); ++cur) {
+		(*cur).second->OnLButtonUp(nFlags, point);
+	}
+
+}
+void MapTools::OnRButtonDblClk(UINT nFlags, CPoint point, int state){
+	for(map<int, MapPaneViewTool *>::iterator cur = begin(); cur != end(); ++cur) {
+		(*cur).second->OnRButtonDblClk(nFlags, point);
+	}
+}
+
+void MapTools::OnRButtonDown(UINT nFlags, CPoint point, int state){
+	for(map<int, MapPaneViewTool *>::iterator cur = begin(); cur != end(); ++cur) {
+		(*cur).second->OnRButtonDown(nFlags, point);
+	}
+}
+
+void MapTools::OnRButtonUp(UINT nFlags, CPoint point, int state){
+	for(map<int, MapPaneViewTool *>::iterator cur = begin(); cur != end(); ++cur) {
+		(*cur).second->OnRButtonUp(nFlags, point);
+	}
+}
+
+void MapTools::OnEscape() {
+	for(map<int, MapPaneViewTool *>::iterator cur = begin(); cur != end(); ++cur) {
+		(*cur).second->OnEscape();
+	}
+}

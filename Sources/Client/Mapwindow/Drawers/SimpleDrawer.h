@@ -17,6 +17,7 @@ namespace ILWIS {
 		void prepare(PreparationParameters *);
 		virtual void addDataSource(void *,int options=0) {};
 		virtual void removeDataSource(void *){}
+		virtual void* getDataSource() const {return 0;}
 		String getId() const;
 		String getName() const;
 		virtual void setName(const String&);

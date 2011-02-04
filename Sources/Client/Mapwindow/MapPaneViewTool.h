@@ -45,11 +45,17 @@
 
 
 class ZoomableView;
+class LayerTreeView;
+
+namespace ILWIS {
+class ComplexDrawer;
+class NewDrawer;
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // MapPaneViewTool command target
 
-class MapPaneViewTool : public CCmdTarget
+class _export MapPaneViewTool : public CCmdTarget
 {
 public:
 	MapPaneViewTool(ZoomableView*);           
@@ -65,8 +71,10 @@ public:
 	bool OnSetCursor(); // called by MapPaneView::OnSetCursor
 	void SetCursor(const zCursor& cur);
 	void Stop();
-protected:
+	virtual void insertTool(LayerTreeView  *tv, ILWIS::ComplexDrawer *drw) {};
+	virtual bool isToolUseableFor(ILWIS::NewDrawer *drw) { return false;}
 	virtual ~MapPaneViewTool();
+protected:
 
 	ZoomableView* mpv;
 private:

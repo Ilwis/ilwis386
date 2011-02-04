@@ -63,6 +63,7 @@ class ForeignMultiDocTemplate;
 class CommandHandlerUI;
 class Action;
 class URL;
+class MapPaneViewTool;
 
 
 enum CoordMessage {
@@ -88,6 +89,7 @@ namespace ILWIS {
 	class SVGLoader;
 	class BaseMapEditor;
 	class BaseMapEditor;
+	class ComplexDrawer;
 }
 
 typedef ILWIS::BaseMapEditor* (*BaseMapEditorCreate)(MapCompositionDoc *, const BaseMap& );
@@ -166,6 +168,7 @@ public:
 	void  addDrawer(const String& type, const String& subtype, DrawerCreate);
 	void  addMEditor(const String& type, const String& subtype, BaseMapEditorCreate);
 	ILWIS::SVGLoader *getSVGContainer() const { return svgContainer; }
+	void getDrawerTools(ILWIS::ComplexDrawer *drwin, vector<MapPaneViewTool *> tools);
 	void getDocumentList(list<CDocument *>& opendocs);
 	
 	//{{AFX_MSG(IlwisWinApp)

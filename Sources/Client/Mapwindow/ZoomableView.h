@@ -62,6 +62,20 @@ class WMSMapDrawer;
 
 //#include "Client\Mapwindow\Drawers\SelectionRectangle.h"
 
+class MapTools : public map<int, MapPaneViewTool *> {
+public:
+	virtual ~MapTools();
+	void OnMouseMove(UINT nFlags, CPoint point, int state=0);
+	void OnLButtonDblClk(UINT nFlags, CPoint point, int state=0);
+	void OnLButtonDown(UINT nFlags, CPoint point, int state=0);
+	void OnLButtonUp(UINT nFlags, CPoint point, int state=0);
+	void OnRButtonDblClk(UINT nFlags, CPoint point, int state=0);
+	void OnRButtonDown(UINT nFlags, CPoint point, int state=0);
+	void OnRButtonUp(UINT nFlags, CPoint point, int state=0);
+	void OnEscape();
+	void reset();
+};
+
 class IMPEXP ZoomableView : public CView
 {
 public:
@@ -85,7 +99,8 @@ public:
 	void Pnt2RowCol(zPoint p, double& rRow, double &rCol);
 	MinMax mmVisibleMapArea() const;
 
-	MapPaneViewTool* as;   // eg. AreaSelector
+	//MapPaneViewTool* as;   // eg. AreaSelector
+	MapTools tools;
 	//{{AFX_VIRTUAL(ZoomableView)
 	virtual void OnInitialUpdate();     // first time after construct
 	virtual void OnDraw(CDC* pDC);      // overridden to draw this view
@@ -98,6 +113,7 @@ public:
 	afx_msg void OnZoomIn();
 	afx_msg void OnZoomOut();
 	afx_msg void OnNoTool();
+	void noTool(int iTool= 0);
 	void AreaSelected(CRect);
 	void ShowArea(const MinMax& mmWish);
 	void ShowArea(double rScale, long iXpos, long iYpos);

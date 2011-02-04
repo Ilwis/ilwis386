@@ -7,6 +7,7 @@
 #include "Engine\Map\Raster\Map.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
+#include "Client\Mapwindow\ZoomableView.h"
 #include "Client\Mapwindow\Drawers\ComplexDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h"
@@ -175,6 +176,8 @@ void ComplexDrawer::prepare(PreparationParameters *parms){
 }
 
 String ComplexDrawer::addDrawer(NewDrawer *drw) {
+	if (! drw)
+		return "";
 	drawers.push_back(drw);
 	drawersById[drw->getId()] = drw;
 	return drw->getName();
@@ -640,6 +643,15 @@ HTREEITEM ComplexDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 		DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,parent,this,(DisplayOptionItemFunc)&ComplexDrawer::displayOptionTransparency);
 		String transp("Transparency (%d)", 100 * getTransparency());
 		itemTransparent = InsertItem(transp,"Transparent", item, -1);
+	}
+	for(int i=0; i < getDrawerCount(); ++i) {
+		NewDrawer *drw = drawers.at(i);
+		if ( drw && !drw->isSimple()) {
+			ComplexDrawer *cdrw = (ComplexDrawer *)drw;
+			if ( cdrw->getUICode() != 0) {
+				//cdrw->insertTool(tv);
+			}
+		}
 	}
 	return parent;
 }

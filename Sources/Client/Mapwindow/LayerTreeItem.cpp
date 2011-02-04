@@ -168,14 +168,6 @@ void DrawerLayerTreeItem::OnContextMenu(CWnd* w, CPoint p)
 	case ID_EDITLAYER:
 		{
 			if( mapdrw->getDrawerCount(types) == 1) {
-				/*	CTreeCtrl& tc = ltv->GetTreeCtrl();
-				HTREEITEM hti = tc.GetSelectedItem();
-				if (0 == hti)
-				return;
-				DrawerLayerTreeItem* dlti = 0;
-				LayerTreeItem* lti = (LayerTreeItem*)tc.GetItemData(hti);
-				dlti = dynamic_cast<DrawerLayerTreeItem*>(lti);
-				ComplexDrawer *drw = (ComplexDrawer *)dlti->drw();*/
 				ComplexDrawer *drw = (ComplexDrawer *)mapdrw->getDrawer(0);
 				mapdrw->setEditMode(true);
 				if ( !drw->isSimple()) {
@@ -642,6 +634,10 @@ void DisplayOptionTreeItem::SwitchCheckBox(bool fOn) {
 		(drw->*setCheckFunc)(&fOn, ltv);
 	if ( altHandler != 0)
 		(altHandler->*setCheckFunc)(&fOn, ltv);
+}
+
+void DisplayOptionTreeItem::OnContextMenu(CWnd* pWnd, CPoint pos)
+{
 }
 
 //----------------------------------

@@ -65,6 +65,11 @@ BaseMapPtr* AbstractMapDrawer::getBaseMap() const { // we return the pointer to 
 		return bm.ptr();
 	return 0;
 }
+
+void* AbstractMapDrawer::getDataSource() const {
+	return (void *)&bm;
+}
+
 void AbstractMapDrawer::addDataSource(void *bmap,int options) 
 {
 	bm = BaseMap((*((BaseMap *)(bmap)))->fnObj);

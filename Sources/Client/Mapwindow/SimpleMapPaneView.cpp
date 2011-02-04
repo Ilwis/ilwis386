@@ -310,7 +310,7 @@ void SimpleMapPaneView::OnWindowPosChanging(WINDOWPOS* lpwndpos)
 void SimpleMapPaneView::OnMeasureDist()
 {
 	OnNoTool();
-	as = new DistanceMeasurer(this);
+	tools[ID_MEASUREDIST] = new DistanceMeasurer(this);
 	iActiveTool = ID_MEASUREDIST;
 }
 
@@ -329,8 +329,8 @@ void SimpleMapPaneView::OnUpdateMeasureDist(CCmdUI* pCmdUI)
 
 void SimpleMapPaneView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
-	if (as && VK_ESCAPE == nChar) {
-		as->OnEscape();
+	if (tools.size() > 0 && VK_ESCAPE == nChar) {
+		tools.OnEscape();
 		return;
 	}
 	if (edit && edit->OnKeyDown(nChar, nRepCnt, nFlags))
@@ -416,7 +416,7 @@ void SimpleMapPaneView::OnMouseMove(UINT nFlags, CPoint point)
 		}  
 	}
 
-	if (0 == as && (MK_LBUTTON & nFlags)) {
+	if (0 == tools.size() ==0 && (MK_LBUTTON & nFlags)) {
 		zRect rect;
 		GetClientRect(&rect);
 		if (!rect.PtInRect(point)) {
@@ -480,7 +480,7 @@ void SimpleMapPaneView::OnLButtonDown(UINT nFlags, CPoint point)
 		return;
 	}
 	if (c.fUndef()) return;
-	if ( as == 0) {
+	if ( tools.size() == 0) {
 		SetCapture();
 		String s = mcd->rootDrawer->getInfo(c);
 		if (s != "") {
@@ -517,7 +517,7 @@ BOOL SimpleMapPaneView::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDL
 BOOL SimpleMapPaneView::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message) 
 {
 	if (HTCLIENT == nHitTest) {
-		if (as && as->OnSetCursor())
+		if (tools.size() > 0 && iActiveTool > 0 && tools[iActiveTool]->OnSetCursor())
 			return TRUE;
 		else if (edit && edit->OnSetCursor())
 			return TRUE;

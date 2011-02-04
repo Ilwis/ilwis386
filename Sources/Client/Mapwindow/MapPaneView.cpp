@@ -331,7 +331,7 @@ void MapPaneView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 #define add(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 void MapPaneView::OnContextMenu(CWnd* pWnd, CPoint point) 
 {
-	if (as)
+	if (tools.size() == 0)
 		return;
 	if (edit && edit->OnContextMenu(pWnd, point))
 		return;

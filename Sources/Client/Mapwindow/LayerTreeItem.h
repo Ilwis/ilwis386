@@ -175,6 +175,7 @@ public:
 	void SwitchCheckBox(bool fOn);
 	HTREEITEM getParent() { return parent;}
 	void setTreeItem(HTREEITEM it) ;
+	virtual void OnContextMenu(CWnd* pWnd, CPoint pos);
 	
 private: 
 	DisplayOptionItemFunc func;

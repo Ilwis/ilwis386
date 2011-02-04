@@ -850,6 +850,14 @@ String LayerTreeView::getItemName(HTREEITEM item) const {
 	return sUNDEF;
 }
 
+HTREEITEM LayerTreeView::getItemHandle(const String& name) const {
+	map<String, NodeInfo>::const_iterator cur = nodes.find(name);
+	if ( cur != nodes.end())
+		return (*cur).second.hItem;
+	return 0;;
+}
+
+
 HTREEITEM LayerTreeView::getAncestor(HTREEITEM current, int depth) {
 	String name = getItemName(current);
 	while(depth != 0) {

@@ -57,6 +57,7 @@ $Header: /ILWIS 3.0/Main/ilwis.CPP 329   10-06-05 15:09 Retsios $
 #include "Client\Editors\Digitizer\DIGITIZR.H"
 #include "Client\MainWindow\mainwind.h"
 #include "Headers\messages.h"
+#include "Client\Mapwindow\Drawers\DrawerContext.h"
 #include "Headers\constant.h"
 #include "Client\FormElements\formbase.h"
 #include "Client\FormElements\fldcolor.h"
@@ -212,6 +213,7 @@ $Header: /ILWIS 3.0/Main/ilwis.CPP 329   10-06-05 15:09 Retsios $
 #include "MainWindow\Catalog\WMSCatalog.h"
 #include "Engine\DataExchange\WMSCollection.h"
 #include "MainWindow\Catalog\WMSCollectionDoc.h"
+#include "Client\Mapwindow\MapPaneViewTool.h"
 #include <gdiplus.h>
 #include "Headers\Hs\Mainwind.hs"
 
@@ -2515,5 +2517,19 @@ void IlwisWinApp::getDocumentList(list<CDocument *>& opendocs)
    }
 }
 
-
+void IlwisWinApp::getDrawerTools(ComplexDrawer *drwin, vector<MapPaneViewTool *> tools) {
+	for(map<String, DrawerCreate>::const_iterator item = drawers.begin(); item != drawers.end(); ++item) {
+		NewDrawer *drw =  ((*item).second)(0);
+		if ( drw->isSimple() == false) {
+			ComplexDrawer *cdrw = (ComplexDrawer *)drw;
+			MapPaneViewTool *tool = cdrw->createTool(drwin->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView());
+			if ( tool) {
+				if ( tool->isToolUseableFor(drwin)) {
+					tools.push_back(tool);
+				}
+			}
+		}
+		delete drw;
+	}
+}
 

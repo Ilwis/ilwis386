@@ -17,6 +17,7 @@ class _export AbstractMapDrawer : public ComplexDrawer {
 		virtual ~AbstractMapDrawer();
 		virtual void prepare(PreparationParameters *pp);
 		void addDataSource(void *bm, int options=0);
+		void *getDataSource() const;
 		BaseMapPtr *getBaseMap() const;
 		Representation getRepresentation() const;
 		void setRepresentation(const Representation& rp);

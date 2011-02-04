@@ -868,10 +868,10 @@ void MapLayoutItem::OnContextMenu(CWnd* wnd, CPoint pt)
 void MapLayoutItem::OnSelectArea(ZoomableView* zvw)
 {
 	zv = zvw;
-	if (0 == zv || zv->as)
+	if (0 == zv || zv->tools.size() > 0)
 		return;
 	CSize sz = rectPos().Size();
-	zv->as = new AreaSelector(zv, this, (NotifyRectProc)&MapLayoutItem::AreaSelected, sz);
+	zv->tools[ID_ZOOMIN] = new AreaSelector(zv, this, (NotifyRectProc)&MapLayoutItem::AreaSelected, sz);
 }
 
 void MapLayoutItem::AreaSelected(CRect rect)
@@ -937,7 +937,7 @@ void MapLayoutItem::OnPanRect(ZoomableView* zvw)
 		return;
 	zv->OnNoTool();
 	CRect rect = zv->rctPos(mmPosition());
-	zv->as = new PanTool(zv, this, (NotifyMoveProc)&MapLayoutItem::PanMove, rect);
+	zv->tools[ID_PANAREA] = new PanTool(zv, this, (NotifyMoveProc)&MapLayoutItem::PanMove, rect);
 }
 
 void MapLayoutItem::PanMove(CPoint pt)

@@ -7,6 +7,8 @@ typedef DrawerMap::iterator DrawerIter;
 typedef DrawerMap::const_iterator DrawerIter_C;
 
 class FieldIntSliderEx;
+class MapPaneViewTool;
+class ZoomableView;
 
 namespace ILWIS {
 
@@ -33,6 +35,7 @@ class _export ComplexDrawer : public NewDrawer {
 		virtual void addPreDrawer(int order, NewDrawer *drw);
 		void getDrawers(vector<NewDrawer *>&) ;
 		virtual void addDataSource(void *,int options=0){}
+		virtual void* getDataSource() const {return 0;}
 		virtual void removeDataSource(void *) {}
 		virtual void clear();
 		String getId() const;
@@ -76,7 +79,8 @@ class _export ComplexDrawer : public NewDrawer {
 		HTREEITEM InsertItem(const String& name,const String& icon, DisplayOptionTreeItem *item=0, int checkstatus = -1, HTREEITEM after=TVI_LAST);
 		HTREEITEM InsertItem(LayerTreeView  *tv,HTREEITEM parent, const String& name,const String& icon, HTREEITEM after=TVI_LAST);
 		HTREEITEM findTreeItemByName(LayerTreeView  *tv, HTREEITEM parent, const String& name) const;
-
+		virtual MapPaneViewTool *createTool(ZoomableView*) { return 0;}
+	
 	protected:
 		vector<NewDrawer *> drawers;
 		DrawerMap postDrawers;

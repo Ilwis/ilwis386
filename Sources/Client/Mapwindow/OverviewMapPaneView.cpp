@@ -206,8 +206,8 @@ void OverviewMapPaneView::OnSelectArea()
 {
 	OnNoTool();
   MapPaneView* mpv = GetDocument()->mpvGetView();
-  as = new AreaSelector(this, this, (NotifyRectProc)&OverviewMapPaneView::AreaSelected); 
-	as->SetCursor(zCursor("ZoomToolCursor"));
+  tools[ID_ZOOMIN] = new AreaSelector(this, this, (NotifyRectProc)&OverviewMapPaneView::AreaSelected); 
+  tools[ID_ZOOMIN]->SetCursor(zCursor("ZoomToolCursor"));
 	iActiveTool = ID_ZOOMIN;
 }
 
@@ -241,15 +241,16 @@ void OverviewMapPaneView::OnLButtonDown(UINT nFlags, CPoint point)
   
   if (!rect.PtInRect(point) || iDiff < 10)
   {
-  	as = new AreaSelector(this, this, (NotifyRectProc)&OverviewMapPaneView::AreaSelected);
-  	as->SetCursor(zCursor("ZoomToolCursor"));
+  	tools[ID_ZOOMIN] = new AreaSelector(this, this, (NotifyRectProc)&OverviewMapPaneView::AreaSelected);
+  	tools[ID_ZOOMIN]->SetCursor(zCursor("ZoomToolCursor"));
   	iActiveTool = ID_ZOOMIN;
   }
   else 
   {
-    as = new DragRectTool(this, this, (NotifyRectProc)&OverviewMapPaneView::AreaSelected, rect);
+    tools[ID_SELECTAREA] = new DragRectTool(this, this, (NotifyRectProc)&OverviewMapPaneView::AreaSelected, rect);
+	iActiveTool = ID_SELECTAREA;
   }
-  as->OnLButtonDown(nFlags, point);
+  tools[iActiveTool]->OnLButtonDown(nFlags, point);
 }
 
 bool OverviewMapPaneView::hasWMSDrawer() {

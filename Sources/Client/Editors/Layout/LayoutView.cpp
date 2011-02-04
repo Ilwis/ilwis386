@@ -421,7 +421,7 @@ void LayoutView::OnLButtonDown(UINT nFlags, CPoint point)
 
 void LayoutView::OnMouseMove(UINT nFlags, CPoint point) 
 {
-	if (0 == as && liActive) {
+	if (tools.size() == 0 && liActive) {
 		int iHit = tracker.HitTest(point);
 		if (iHit != CRectTracker::hitNothing) {
 			tracker.SetCursor(this, HTCLIENT);
@@ -905,7 +905,7 @@ void LayoutView::DrawPageBorder(CDC* cdc)
 
 BOOL LayoutView::PreTranslateMessage(MSG* pMsg) 
 {
-  if (0 == as && pMsg->message == WM_KEYDOWN )
+  if (tools.size() == 0 && pMsg->message == WM_KEYDOWN )
 	{
 		switch (pMsg->wParam)
 		{

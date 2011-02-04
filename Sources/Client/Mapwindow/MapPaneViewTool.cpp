@@ -105,8 +105,8 @@ void MapPaneViewTool::OnEscape()
 
 void MapPaneViewTool::Stop()
 {
-	mpv->as = 0;
-	delete this;
+	//mpv->as = 0;
+	//delete this;
 }
 
 bool MapPaneViewTool::OnSetCursor() // called by MapPaneView::OnSetCursor
