@@ -90,7 +90,7 @@ RangeReal AnimationDrawer::getMinMax(const MapList& mlist) const{
 			for (int i = 0; i < mlist->iSize(); ++i) {
 				Map mp = mlist->map(i);
 				RangeReal rrMinMaxMap = mp->rrMinMax(BaseMapPtr::mmmSAMPLED);
-				if (rrMinMaxMap.rLo() >= rrMinMaxMap.rHi())
+				if (rrMinMaxMap.rLo() > rrMinMaxMap.rHi())
 					rrMinMaxMap = mp->vr()->rrMinMax();
 				if (i > 0)
 					rrMinMax += rrMinMaxMap;
@@ -130,6 +130,7 @@ void AnimationDrawer::addSelectionDrawers(const Representation& rpr) {
 			ILWIS::DrawerParameters parms(getRootDrawer(), this);
 			Map mp = mlist->map(i);
 			RasterSetDrawer *rasterset = (RasterSetDrawer *)IlwWinApp()->getDrawer("RasterSetDrawer", "Ilwis38", &parms); 
+			rasterset->setUICode(0);
 			rasterset->setThreaded(false);
 			rasterset->setRepresentation(rpr);
 			rasterset->setMinMax(rrMinMax);
@@ -191,6 +192,7 @@ void AnimationDrawer::prepare(PreparationParameters *pp){
 							rpr = bmp->dm()->rpr();
 						
 						SetDrawer *drw = createIndexDrawer(bmp, dp, pp);
+						drw->setUICode(0);
 						drw->setActive(i == 0 ? true : false);
 						trq.fUpdate(i,oc->iNrObjects()); 
 					}
@@ -283,6 +285,10 @@ void AnimationDrawer::addSetDrawer(const BaseMap& basem,PreparationParameters *p
 		addDrawer(rsd);
 }
 
+void* AnimationDrawer::getDataSource() const {
+	return (void *)datasource;
+}
+
 void AnimationDrawer::addDataSource(void *data, int options){
 	IlwisObject *obj = dynamic_cast<IlwisObject *>((IlwisObject *)data);
 	if ( obj) {
@@ -340,7 +346,7 @@ HTREEITEM AnimationDrawer::configure(LayerTreeView  *tv, HTREEITEM displayOption
 	doLegend->createForAnimation(this);
 
 
-	if (IOTYPE((*datasource)->fnObj) == IlwisObject::iotMAPLIST) {
+	if (IOTYPE((*datasource)->fnObj) == IlwisObject::iotMAPLIST && ( rpr->prv() || rpr->prg())) {
 
 		DisplayOptionTreeItem * itemSlicing = new DisplayOptionTreeItem(tv, portrayalItem,this,
 			0,(DisplayOptionItemFunc)&AnimationDrawer::animationSlicing);

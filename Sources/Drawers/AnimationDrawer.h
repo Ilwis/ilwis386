@@ -48,6 +48,7 @@ namespace ILWIS{
 		virtual ~AnimationDrawer();
 		virtual void prepare(PreparationParameters *pp);
 		void addDataSource(void *bmap, int options=0);
+		void *getDataSource() const;
 		HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent);
 		bool draw(bool norecursion , const CoordBounds& cbArea) const;
 		void timedEvent(UINT _timerid);

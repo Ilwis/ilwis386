@@ -421,15 +421,19 @@ void RasterSetDrawer::addSelectionDrawers(const Representation& rpr) {
 
 //-----------------------------------UI-------------------------
 HTREEITEM RasterSetDrawer::configure(LayerTreeView  *tv, HTREEITEM parent){
+	if ( getUICode() == 0)
+		return parent;
 	SetDrawer::configure(tv,parent);
 
-	DisplayOptionTreeItem * itemSlicing = new DisplayOptionTreeItem(tv, portrayalItem,this,
-		0,(DisplayOptionItemFunc)&RasterSetDrawer::rasterSlicing);
-	InsertItem(TR("Interactive Slicing"),"Slicing",itemSlicing);
+	if ( rastermap->dm()->pdv()) {
+		DisplayOptionTreeItem * itemSlicing = new DisplayOptionTreeItem(tv, portrayalItem,this,
+			0,(DisplayOptionItemFunc)&RasterSetDrawer::rasterSlicing);
+		InsertItem(TR("Interactive Slicing"),"Slicing",itemSlicing);
 
-	DisplayOptionTreeItem * itemSelect = new DisplayOptionTreeItem(tv, portrayalItem,this,
-		0,(DisplayOptionItemFunc)&RasterSetDrawer::highLightSelection);
-	InsertItem(TR("Attribute thresholds"),"SelectArea",itemSelect);
+		//DisplayOptionTreeItem * itemSelect = new DisplayOptionTreeItem(tv, portrayalItem,this,
+		//	0,(DisplayOptionItemFunc)&RasterSetDrawer::highLightSelection);
+		//InsertItem(TR("Attribute thresholds"),"SelectArea",itemSelect);
+	}
 
 	return parent;
 }
