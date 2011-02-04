@@ -127,6 +127,8 @@ void LineSetDrawer::modifyLineStyleItem(LayerTreeView  *tv, bool remove) {
 	}
 }
 HTREEITEM LineSetDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
+	if ( getUICode() == 0)
+		return parent;
 	HTREEITEM hti = FeatureSetDrawer::configure(tv,parent);
     FeatureLayerDrawer *fdr = dynamic_cast<FeatureLayerDrawer *>(getParentDrawer());
 	BaseMapPtr *mp = fdr->getBaseMap();

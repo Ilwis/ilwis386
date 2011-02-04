@@ -59,6 +59,8 @@ void PolygonSetDrawer::addDataSource(void *bmap,int options) {
 }
 
 HTREEITEM PolygonSetDrawer:: configure(LayerTreeView  *tv, HTREEITEM parent) {
+	if ( getUICode() == 0)
+		return parent;
 	HTREEITEM hti = FeatureSetDrawer::configure(tv,parent);
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,parent,this,
 				(SetCheckFunc)&PolygonSetDrawer::setActiveBoundaries);
