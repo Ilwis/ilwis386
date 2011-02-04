@@ -90,6 +90,8 @@ void RasterLayerDrawer::addDataSource(void *bmap, int options){
 }
 
 HTREEITEM RasterLayerDrawer::configure(LayerTreeView  *tv, HTREEITEM parent){
+	if ( getUICode() == 0)
+		return parent;
 	return AbstractMapDrawer::configure(tv,parent);
 }
 
