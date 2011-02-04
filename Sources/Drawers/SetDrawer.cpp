@@ -246,10 +246,10 @@ HTREEITEM SetDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 	//	insertLegendItems(tv, rprItem);
 	//	if ( usesRpr)
 	//		InsertItem(tv, rprItem,String("Value : %S",rpr->sName()),".rpr");
-	//	if ( rpr->prg() || rpr->prv()){
-	//		insertStretchItem(tv, portrayalItem);
-	//	
-	//	}
+	if ( rpr.fValid() && (rpr->prg() || rpr->prv())){
+		insertStretchItem(tv, portrayalItem);
+	
+	}
 
 	//}
 	return hti;
@@ -301,15 +301,15 @@ void SetDrawer::insertStretchItem(LayerTreeView  *tv, HTREEITEM parent) {
 	}
 }
 
-RepresentationForm::RepresentationForm(CWnd *wPar, SetDrawer *dr) : 
-	DisplayOptionsForm(dr,wPar,"Set Representation"),
-	rpr(dr->getRepresentation()->sName())
-{
-	fldRpr = new FieldRepresentation(root, "Representation", &rpr);
-	create();
-}
-
-void  RepresentationForm::apply() {
+//RepresentationForm::RepresentationForm(CWnd *wPar, SetDrawer *dr) : 
+//	DisplayOptionsForm(dr,wPar,"Set Representation"),
+//	rpr(dr->getRepresentation()->sName())
+//{
+//	fldRpr = new FieldRepresentation(root, "Representation", &rpr);
+//	create();
+//}
+//
+//void  RepresentationForm::apply() {
 	//fldRpr->StoreData();
 	//SetDrawer *setDrawer = (SetDrawer *)drw;
 	//setDrawer->setRepresentation(rpr);
@@ -340,7 +340,7 @@ void  RepresentationForm::apply() {
 	//	view->collectStructure();
 	//}
 
-}
+//}
 //------------------------------------
 SetStretchForm::SetStretchForm(CWnd *wPar, SetDrawer *dr) : 
 	DisplayOptionsForm(dr,wPar,"Set stretch"),
@@ -360,6 +360,27 @@ SetStretchForm::SetStretchForm(CWnd *wPar, SetDrawer *dr) :
 }
 
 int  SetStretchForm::check(Event *) {
+	apply();
+	//sliderLow->StoreData();
+	//sliderHigh->StoreData();
+
+	//if ( low > high){
+	//	low = high;
+	//	sliderLow->SetVal(low);
+	//}
+	//if ( high < low){
+	//	high = low;
+	//	sliderHigh->SetVal(high);
+	//}
+	//((SetDrawer *)drw)->setStretchRangeReal(RangeReal(low,high));
+
+	//PreparationParameters pp(NewDrawer::ptRENDER, 0);
+	//drw->prepare(&pp);
+	//updateMapView();
+	return 1;
+}
+
+void  SetStretchForm::apply() {
 	sliderLow->StoreData();
 	sliderHigh->StoreData();
 
@@ -371,17 +392,6 @@ int  SetStretchForm::check(Event *) {
 		high = low;
 		sliderHigh->SetVal(high);
 	}
-	((SetDrawer *)drw)->setStretchRangeReal(RangeReal(low,high));
-
-	PreparationParameters pp(NewDrawer::ptRENDER, 0);
-	drw->prepare(&pp);
-	updateMapView();
-	return 1;
-}
-
-void  SetStretchForm::apply() {
-	sliderLow->StoreData();
-	sliderHigh->StoreData();
 
 	((SetDrawer *)drw)->setStretchRangeReal(RangeReal(low,high));
 

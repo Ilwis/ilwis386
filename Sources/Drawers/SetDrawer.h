@@ -67,15 +67,15 @@ class _export SetDrawer : public ComplexDrawer {
 		HTREEITEM threeDItem;
 	};
 
-	class RepresentationForm : public DisplayOptionsForm {
-		public:
-		RepresentationForm(CWnd *wPar, SetDrawer *dr);
-		void apply(); 
-	private:
-		String rpr;
-		FieldRepresentation *fldRpr;
+	//class RepresentationForm : public DisplayOptionsForm {
+	//	public:
+	//	RepresentationForm(CWnd *wPar, SetDrawer *dr);
+	//	void apply(); 
+	//private:
+	//	String rpr;
+	//	FieldRepresentation *fldRpr;
 
-	};
+	//};
 
 	class SetStretchForm : public DisplayOptionsForm {
 		public:
