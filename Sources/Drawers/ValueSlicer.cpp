@@ -202,6 +202,8 @@ void ValueSlicer::updateRepresentations() {
 		Representation rpr;
 		rpr.SetPointer(fldslicer->rprgrad);
 		setdrw->setRepresentation(rpr);
+		PreparationParameters pp(NewDrawer::ptRENDER, 0);
+		setdrw->prepareChildDrawers(&pp);
 	}
 	Invalidate();
 	fldslicer->drawer->getRootDrawer()->getDrawerContext()->doDraw();
