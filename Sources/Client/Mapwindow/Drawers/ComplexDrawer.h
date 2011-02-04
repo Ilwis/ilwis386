@@ -24,7 +24,7 @@ class _export ComplexDrawer : public NewDrawer {
 		RootDrawer *getRootDrawer() const;
 		bool draw(bool norecursion = false, const CoordBounds& cb=CoordBounds()) const;
 		void prepare(PreparationParameters *);
-		void prepareChildDrawers(PreparationParameters *);
+		virtual void prepareChildDrawers(PreparationParameters *);
 		int getDrawerCount(int types=dtMAIN) const;
 		NewDrawer * getDrawer(int index, DrawerType type=dtMAIN);
 		NewDrawer *getDrawer(const String& did);
