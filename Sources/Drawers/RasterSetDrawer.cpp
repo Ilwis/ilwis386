@@ -56,8 +56,9 @@ void RasterSetDrawer::setMinMax(const RangeReal & rrMinMax)
 
 void RasterSetDrawer::prepare(PreparationParameters *pp){
 	SetDrawer::prepare(pp);
+
 	if ( pp->type & NewDrawer::ptRENDER) {
-		fUsePalette = rastermap->dm()->pdv() != 0;
+		fUsePalette = drm != drmCOLOR;
 		if (fPaletteOwner) {
 			if (fUsePalette && palette->fValid())
 				palette->Refresh();
@@ -81,6 +82,8 @@ void RasterSetDrawer::setDrawMethod(DrawMethod method) {
 				drm = drmCOLOR;
 			else if (0 != _dm->pdid())
 				drm = drmMULTIPLE;
+			else if ((0 != _dm->pdbit()) || (0 != _dm->pdbool()))
+				drm = drmBOOL;
 			else if (0 != _dm->pdp())
 				drm = drmRPR;
 		}
