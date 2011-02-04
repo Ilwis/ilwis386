@@ -54,6 +54,10 @@ void RasterSetDrawer::setMinMax(const RangeReal & rrMinMax)
 	this->rrMinMax = rrMinMax;
 }
 
+void RasterSetDrawer::prepareChildDrawers(PreparationParameters *pp){
+	prepare(pp);
+}
+
 void RasterSetDrawer::prepare(PreparationParameters *pp){
 	SetDrawer::prepare(pp);
 
@@ -89,16 +93,6 @@ void RasterSetDrawer::setDrawMethod(DrawMethod method) {
 		}
 	} else
 		drm = method;
-}
-
-void RasterSetDrawer::setRepresentation(const Representation& rp)
-{
-	SetDrawer::setRepresentation(rp);
-	if (fPaletteOwner) {
-		if (fUsePalette && palette->fValid())
-			palette->Refresh();
-	}
-	textureHeap->PaletteChanged();
 }
 
 Palette * RasterSetDrawer::SetPaletteOwner()
