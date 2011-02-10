@@ -5,6 +5,7 @@
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
 #include "Client\Ilwis.h"
 #include "drawers\linedrawer.h"
+#include "Client\Editors\Utils\line.h"
 #include "Client\Mapwindow\Drawers\ComplexDrawer.h"
 #include "Client\Mapwindow\Drawers\ZValueMaker.h"
 
@@ -38,8 +39,37 @@ void LineDrawer::clear() {
 		delete lines.at(i);
 	}
 	lines.clear();
+	cb = CoordBounds();
 }
 
+void LineDrawer::addCoords(const vector<Coord>& v,int options) {
+	if ( options == 1){
+		clear();
+	}
+	CoordinateSequence *seq = new CoordinateArraySequence();
+	for(int i = 0; i < v.size(); ++i) {
+		Coord c = v.at(i);
+		seq->add(v.at(i));
+		cb+= c;
+	}
+	lines.push_back(seq);
+}
+
+int LineDrawer::openGLLineStyle(int linestyle, double sz){
+	switch(linestyle) {
+		case ldtDot:
+			return 0xAAAA;
+		case ldtDash:
+			return 0xF0F0;
+		case ldtDashDot:
+			return 0x6B5A;
+		case ldtDashDotDot:
+			return 0x56B5;
+		default:
+			return 0xFFFF;
+	}
+	return 0xFFFF;
+}
 bool LineDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 	if (lines.size() == 0)
 		return false;

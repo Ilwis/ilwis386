@@ -7,7 +7,7 @@ ILWIS::NewDrawer *createLineDrawer(ILWIS::DrawerParameters *parms);
 namespace ILWIS{
 
 
-class LineDrawer : public SimpleDrawer {
+class _export LineDrawer : public SimpleDrawer {
 	public:
 		LineDrawer(ILWIS::DrawerParameters *parms);
 		~LineDrawer();
@@ -17,6 +17,8 @@ class LineDrawer : public SimpleDrawer {
 		void setThickness(float t);
 		void setLineStyle(int style);
 		void setSpecialDrawingOptions(int option, bool add, vector<Coord>* coords);
+		virtual void addCoords(const vector<Coord>& v,int options=0);
+		static int openGLLineStyle(int linestyle, double sz=1.0);
 
 	protected:
 		LineDrawer(DrawerParameters *parms, const String& name);
