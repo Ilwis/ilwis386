@@ -49,7 +49,7 @@ bool PolygonDrawer::draw(bool norecursion, const CoordBounds& cbArea) const{
 		glTranslated(0,0,zoffset);
 	}
 
-	glColor4f(drawColor.redP(),drawColor.greenP(), drawColor.blueP(), getTransparency() * areaTransparency);
+	glColor4f(drawColor.redP(),drawColor.greenP(), drawColor.blueP(), (1.0 - drawColor.transparencyP()) * getTransparency() * areaTransparency);
 	for(int i=0; i < triangleStrips.size() && showArea; ++i){
 		glBegin(GL_TRIANGLE_STRIP);
 		for(int j=0; j < triangleStrips.at(i).size(); ++j) {
