@@ -17,9 +17,10 @@ SimpleDrawer::SimpleDrawer() {
 	init();
 }
 
-SimpleDrawer::SimpleDrawer(DrawerParameters *parms, const String& ty) : type(ty), rootDrawer(parms->rootDrawer){
+SimpleDrawer::SimpleDrawer(DrawerParameters *parms, const String& ty) : type(ty), rootDrawer(parms ? parms->rootDrawer : 0){
 	init();
-	parentDrawer = parms->parent;
+	if ( parms)
+		parentDrawer = parms->parent;
 }
 
 
