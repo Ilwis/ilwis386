@@ -181,7 +181,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ILWISEngine.lib htmlhelp.lib geos.lib opengl32.lib glu32.lib ftgl.lib freetype.lib xerces-c_2.lib"
+				AdditionalDependencies="ILWISEngine.lib htmlhelp.lib geos.lib opengl32.lib glu32.lib gdiplus.lib ftgl.lib freetype.lib xerces-c_2.lib"
 				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\Ilwis.exe"
 				Version="3.7"
 				LinkIncremental="1"
