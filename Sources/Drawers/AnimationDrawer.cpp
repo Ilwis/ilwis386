@@ -499,8 +499,8 @@ bool AnimationDrawer::timerPerIndex() {
 				getDrawer(activeMaps[0])->setActive(true);
 			}
 		}
-		animBar.updateTime(String("index : %d",mapIndex));
 	}
+	animBar.updateTime(String("index : %d",mapIndex));
 	return true;
 }
 
@@ -559,6 +559,7 @@ void AnimationDrawer::setMapIndex(int ind) {
 	for(int i =0 ; i < drawers.size(); ++i)
 		getDrawer(i)->setActive(false);
 
+	getDrawer(ind)->setActive(true);
 	mapIndex = activeMaps[ind];
 }
 
