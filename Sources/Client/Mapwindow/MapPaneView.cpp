@@ -924,7 +924,7 @@ BOOL MapPaneView::AddFiles(vector<FileName>& afn)
 
 struct FilesInThreadStruct
 {
-	MapPaneView * mpv;
+	HWND handle;
 	vector<FileName> afn;
 };
 
@@ -949,27 +949,31 @@ BOOL MapPaneView::OnDrop(COleDataObject* pDataObject, DROPEFFECT dropEffect, CPo
 	GlobalFree(hnd);
 	// if send by SendMessage() prevent deadlock
 	BOOL fCalledFromOtherThread = ReplyMessage(0);
-	if (fCalledFromOtherThread)
-		return AddFiles(afn);
-	else
-	{
-		FilesInThreadStruct * pfits = new FilesInThreadStruct; // deleted in thread
-		pfits->afn = afn;
-		pfits->mpv = this;
-		AfxBeginThread(AddFilesInThread, pfits);
-		return TRUE;
-	}
+	return AddFiles(afn);
+	// code below is wrong , mpv may not be transferred to other thread. Handles may not be correct there
+	//if (fCalledFromOtherThread)
+	//	return AddFiles(afn);
+	//else
+	//{
+	//	FilesInThreadStruct * pfits = new FilesInThreadStruct; // deleted in thread
+	//	pfits->afn = afn;
+	//	pfits->handle = this->m_hWnd;
+	//	/AddFilesInThread((void *)pfits);
+	//	AfxBeginThread(AddFilesInThread, pfits);
+	//	return TRUE;
+	//}
 }
 
 UINT MapPaneView::AddFilesInThread(LPVOID pParam)
 {
 	FilesInThreadStruct * pfits = (FilesInThreadStruct*)pParam;
+	//MapPaneView *mpv = (MapPaneView *)CWnd::FromHandle(pfits->handle);
 	if (pfits == NULL)
 		return 1;
 
 	IlwWinApp()->Context()->InitThreadLocalVars(); // this is a new thread .. and localvars are touched in AddFiles
 
-	pfits->mpv->AddFiles(pfits->afn);
+	//mpv->AddFiles(pfits->afn);
 	delete pfits;
 
 	IlwWinApp()->Context()->RemoveThreadLocalVars();

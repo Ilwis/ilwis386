@@ -30,7 +30,9 @@ class _export ComplexDrawer : public NewDrawer {
 		NewDrawer *getDrawer(const String& did);
 		virtual String addDrawer(NewDrawer *drw);
 		virtual void setDrawer(int index, NewDrawer *drw);
+		virtual int getDrawerIndex(NewDrawer *drw);
 		virtual void removeDrawer(const String& did, bool dodelete=true);
+		virtual void insertDrawer(int index, NewDrawer *drw);
 		virtual void addPostDrawer(int order, NewDrawer *drw);
 		virtual void addPreDrawer(int order, NewDrawer *drw);
 		void getDrawers(vector<NewDrawer *>&) ;

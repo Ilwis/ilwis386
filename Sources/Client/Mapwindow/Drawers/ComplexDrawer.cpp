@@ -203,6 +203,11 @@ NewDrawer *ComplexDrawer::getDrawer(const String& did) {
 
 }
 
+void ComplexDrawer::insertDrawer(int index, NewDrawer *drw) {
+	if ( index < drawers.size())
+		drawers.insert(drawers.begin() + index, drw);
+}
+
 void ComplexDrawer::removeDrawer(const String& did, bool dodelete) {
 	for(int i=0; i < drawers.size(); ++i) {
 		if ( drawers.at(i)->getId() == did ) {
@@ -578,6 +583,16 @@ long ComplexDrawer::getCurrentIndex() const{
 void ComplexDrawer::setCurrentIndex(long i){
 	if ( i >= 0 && i < drawers.size())
 		currentIndex = i;	
+}
+
+int ComplexDrawer::getDrawerIndex(NewDrawer *drw) {
+	for(int index = 0; index < getDrawerCount(); ++index) {
+		NewDrawer *dr = getDrawer(index);
+		if ( drw && drw->getId() == dr->getId()) {
+			return index;
+		}
+	}
+	return iUNDEF;
 }
 
 void ComplexDrawer::getDrawerFor(const Feature* feature,vector<NewDrawer *>& featureDrawers) {

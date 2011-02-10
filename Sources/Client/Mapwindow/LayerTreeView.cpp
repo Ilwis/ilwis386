@@ -782,32 +782,32 @@ void LayerTreeView::OnLButtonUp(UINT nFlags, CPoint point)
 				return;
 		}
 
-	/*	LayerTreeItem* lti = (LayerTreeItem*)tree.GetItemData(hDraggedItem);
+		LayerTreeItem* lti = (LayerTreeItem*)tree.GetItemData(hDraggedItem);
 		DrawerLayerTreeItem* dltiDrag = dynamic_cast<DrawerLayerTreeItem*>(lti);
 		NewDrawer* drDrag = dltiDrag->drw();
-
 		MapCompositionDoc* mcd = GetDocument();	 
 		mcd->ChangeState();
-		mcd->rootDrawer->removeDrawer(drDrag->getId());
-
+		mcd->rootDrawer->removeDrawer(drDrag->getId(),false);
+		
 		switch (eType) 
 		{
 		case eBEGIN:
-			mcd->dl.push_back(drDrag);
+			//mcd->dl.push_back(drDrag);
 			break;
 		case eEND:
-			mcd->dl.push_front(drDrag);
+			//mcd->dl.push_front(drDrag);
 			break;
 		case eITEM:
 			{
 				NewDrawer* drTarget = dlti->drw();
-				list<Drawer*>::iterator iter = find(mcd->dl.begin(), mcd->dl.end(), drTarget);
-				mcd->dl.insert(iter, drDrag);
+				int index = mcd->rootDrawer->getDrawerIndex(drTarget);
+				mcd->rootDrawer->insertDrawer(index,drDrag);
+		
 			} break;
 		}
 		mcd->ChangeState();
 		mcd->UpdateAllViews(0,2);
-		hDraggedItem = NULL;	*/
+		hDraggedItem = NULL;	
 	}	
 	CTreeView::OnLButtonUp(nFlags, point);
 }
