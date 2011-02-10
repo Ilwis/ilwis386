@@ -763,9 +763,13 @@ void ZoomableView::noTool(int iTool) {
 	} else {
 		map<int, MapPaneViewTool *>::iterator cur = tools.find(iTool);
 		if ( cur != tools.end()) {
+			iActiveTool = 0;
+			::SetCursor(LoadCursor(0,IDC_ARROW));
 			(*cur).second->Stop();
-			delete (*cur).second;
-			tools.erase(cur);
+			if ( (*cur).second->stayResident() == false) {
+				delete (*cur).second;
+				tools.erase(cur);
+			}
 		}
 	}
 }
@@ -810,6 +814,27 @@ void ZoomableView::OnZoomOut()
 	OnDraw(0);
 	
 	iActiveTool = ID_ZOOMOUT;
+}
+
+bool ZoomableView::addTool(MapPaneViewTool *tool, int id) {
+	map<int, MapPaneViewTool *>::iterator cur = tools.find(id);
+	if ( cur == tools.end()){
+		tools[id] = tool;
+		return true;
+	}
+	return false;
+}
+
+void ZoomableView::changeStateTool(int id, bool isActive) {
+	map<int, MapPaneViewTool *>::iterator cur = tools.find(id);
+	if ( cur != tools.end()) {
+		if ( isActive) {
+			iActiveTool= id;
+			tools[id]->SetCursor(zCursor(tools[id]->cursorName().scVal()));
+		} else {
+			noTool(id);
+		}
+	}
 }
 
 void ZoomableView::OnSelectArea()

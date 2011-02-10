@@ -114,6 +114,7 @@ public:
 	afx_msg void OnZoomOut();
 	afx_msg void OnNoTool();
 	void noTool(int iTool= 0);
+	bool addTool(MapPaneViewTool *tool, int id);
 	void AreaSelected(CRect);
 	void ShowArea(const MinMax& mmWish);
 	void ShowArea(double rScale, long iXpos, long iYpos);
@@ -121,6 +122,7 @@ public:
 	void ShowScrollBars(bool fYesNo);	
 	virtual void SetDirty();
 	void ZoomOutAreaSelected(CRect);
+	void changeStateTool(int id, bool isActive);
 
 	int vertPageMove(int);
 	int vertTop();
