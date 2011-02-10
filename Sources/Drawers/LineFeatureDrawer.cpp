@@ -57,8 +57,8 @@ void LineFeatureDrawer::prepare(PreparationParameters *p){
 	FeatureSetDrawer *fdr = dynamic_cast<FeatureSetDrawer *>(parentDrawer);
 	if ( p->type & ptGEOMETRY | p->type & ptRESTORE) {
 		CoordSystem csy = fdr->getCoordSystem();
-		cb = feature->cbBounds();
 		clear();
+		cb = feature->cbBounds();
 		feature->getBoundaries(lines);
 		bool sameCsy = getRootDrawer()->getCoordinateSystem()->fEqual(*(csy.ptr()));
 		if ( !sameCsy ) {
