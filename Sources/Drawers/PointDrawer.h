@@ -8,7 +8,7 @@ namespace ILWIS{
 
 class SVGElement;
 
-class PointDrawer : public SimpleDrawer {
+class _export PointDrawer : public SimpleDrawer {
 	public:
 		PointDrawer(ILWIS::DrawerParameters *parms);
 		~PointDrawer();
@@ -20,6 +20,8 @@ class PointDrawer : public SimpleDrawer {
 		String getSymbol() const;
 		void shareVertices(vector<Coord *>& coords);
 		static String defaultSymbol;
+		void setCoord(const Coord& crd);
+		void setScale(double); 
 	protected:
 		PointDrawer(DrawerParameters *parms, const String& name);
 		HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent) ;
@@ -36,5 +38,6 @@ class PointDrawer : public SimpleDrawer {
 		const SVGElement *element;
 		String symbol;
 		double width, height;
+		double scale;
 	};
 }

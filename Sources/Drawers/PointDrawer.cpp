@@ -22,11 +22,11 @@ ILWIS::NewDrawer *createPointDrawer(DrawerParameters *parms) {
 	return new PointDrawer(parms);
 }
 
-PointDrawer::PointDrawer(DrawerParameters *parms) : SimpleDrawer(parms,"PointDrawer"), element(0), symbol(defaultSymbol) {
+PointDrawer::PointDrawer(DrawerParameters *parms) : SimpleDrawer(parms,"PointDrawer"), element(0), symbol(defaultSymbol), scale(1.0) {
 	drawColor = SysColor(COLOR_WINDOWTEXT);
 }
 
-PointDrawer::PointDrawer(DrawerParameters *parms, const String& name) : SimpleDrawer(parms,name), element(0), symbol(defaultSymbol){
+PointDrawer::PointDrawer(DrawerParameters *parms, const String& name) : SimpleDrawer(parms,name), element(0), symbol(defaultSymbol), scale(1.0){
 }
 
 PointDrawer::~PointDrawer() {
@@ -44,6 +44,10 @@ void PointDrawer::prepare(PreparationParameters *p){
 	}
 }
 
+void PointDrawer::setCoord(const Coord& crd) {
+	cNorm = crd;
+}
+
 void PointDrawer::calcSize() {
 	width = 0;
 	for(vector<SVGAttributes>::const_iterator cur = element->begin(); cur != element->end(); ++cur) {
@@ -55,9 +59,13 @@ void PointDrawer::calcSize() {
 	}
 	CoordBounds cbZoom = getRootDrawer()->getCoordBoundsZoom();
 	if (width == 0)
-		width = cbZoom.width() / 100;;
+		width = cbZoom.width() / 100.0;
 	if (height == 0)
-		height = cbZoom.width() / 100;
+		height = cbZoom.width() / 100.0;
+}
+
+void PointDrawer::setScale(double s) {
+	scale = s;
 }
 
 bool PointDrawer::draw(bool norecursion, const CoordBounds& cbArea) const {
@@ -87,7 +95,7 @@ bool PointDrawer::draw(bool norecursion, const CoordBounds& cbArea) const {
 
 	glPushMatrix();
 	glTranslated(cb.cMin.x, cb.cMin.y, fz);
-	glScaled(xscale, yscale, 1);
+	glScaled(xscale * scale, yscale * scale , 1);
 	for(vector<SVGAttributes>::const_iterator cur = element->begin(); cur != element->end(); ++cur) {
 		switch((*cur).type) {
 			case SVGAttributes::sCIRCLE:
@@ -188,10 +196,10 @@ void PointDrawer::drawRectangle(const SVGAttributes& attributes, double z) const
 }
 
 void PointDrawer::drawEllipse(const SVGAttributes& attributes, double z) const{
-	double rx = attributes.rx != 0 ? attributes.rx : width / 2;
-	double ry = attributes.ry !=0 ? attributes.ry : height / 2;
-	double lcx = attributes.cx != 0 ? attributes.cx : width / 2;
-	double lcy = attributes.cy != 0 ? attributes.cy : height / 2;
+	double rx = attributes.rx > 0 ? attributes.rx : width / 2;
+	double ry = attributes.ry >0 ? attributes.ry : height / 2;
+	double lcx = attributes.cx > 0 ? attributes.cx : width / 2;
+	double lcy = attributes.cy > 0 ? attributes.cy : height / 2;
 	double r = min(rx,ry);
 
 	Color fcolor = attributes.fillColor == colorUSERDEF ? getDrawColor() : attributes.fillColor;
