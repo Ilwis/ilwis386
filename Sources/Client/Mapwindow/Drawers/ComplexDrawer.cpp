@@ -20,9 +20,10 @@ ComplexDrawer::ComplexDrawer() {
 	init();
 }
 
-ComplexDrawer::ComplexDrawer(DrawerParameters *parms, const String& ty) : type(ty), rootDrawer(parms->rootDrawer){
+ComplexDrawer::ComplexDrawer(DrawerParameters *parms, const String& ty) : type(ty), rootDrawer(parms ? parms->rootDrawer : 0){
 	init();
-	parentDrawer = parms->parent;
+	if ( parms)
+		parentDrawer = parms->parent;
 }
 
 void ComplexDrawer::init() {
