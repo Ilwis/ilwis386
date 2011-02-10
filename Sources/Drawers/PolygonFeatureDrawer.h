@@ -13,6 +13,7 @@ class PolygonFeatureDrawer : public PolygonDrawer {
 		void prepare(PreparationParameters *);
 		void addDataSource(void *f,int options=0);
 		Feature *getFeature() const;
+		void* getDataSource() const;
 	protected:
 		PolygonFeatureDrawer(DrawerParameters *parms, const String& name);
 		void prepareList(gpc_vertex_list& exteriorBoundary, vector<gpc_vertex_list>& holes);

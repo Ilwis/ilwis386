@@ -57,6 +57,11 @@ Feature *PolygonFeatureDrawer::getFeature() const {
 	return feature;
 }
 
+void* PolygonFeatureDrawer::getDataSource() const{
+	return (void *) feature;
+}
+
+
 void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 	PolygonDrawer::prepare(p);
 	FeatureSetDrawer *fdr = dynamic_cast<FeatureSetDrawer *>(parentDrawer);
