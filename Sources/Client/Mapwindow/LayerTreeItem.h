@@ -158,11 +158,13 @@ private:
 class DisplayOptionTree: public LayerTreeItem
 {
 public:
-	DisplayOptionTree(LayerTreeView*, HTREEITEM hti);
+	DisplayOptionTree(LayerTreeView*, HTREEITEM hti, NewDrawer *drw);
 	virtual ~DisplayOptionTree();
 	virtual void OnLButtonDblClk(UINT nFlags, CPoint point);
+	virtual void OnContextMenu(CWnd* pWnd, CPoint pos);
 private:
 	HTREEITEM htiStart;
+	NewDrawer *drw;
 };
 
 class _export DisplayOptionTreeItem: public LayerTreeItem

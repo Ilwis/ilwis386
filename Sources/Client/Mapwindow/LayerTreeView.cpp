@@ -202,7 +202,7 @@ HTREEITEM LayerTreeView::addMapItem(ILWIS::AbstractMapDrawer *mapDrawer, HTREEIT
 	iImg = IlwWinApp()->iImage(".mpv");
 	HTREEITEM htiDisplayOptions = tc.InsertItem(sName.scVal(), iImg, iImg, htiMap);
 	//mapDrawer->configure(this, htiDisplayOptions);
-	tc.SetItemData(htiDisplayOptions, (DWORD_PTR)new DisplayOptionTree(this,htiDisplayOptions));
+	tc.SetItemData(htiDisplayOptions, (DWORD_PTR)new DisplayOptionTree(this,htiDisplayOptions,mapDrawer));
 
 	sName = "Properties";
 	int iImgProp = IlwWinApp()->iImage("prop");

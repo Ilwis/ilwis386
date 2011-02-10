@@ -56,6 +56,7 @@ Created on: 2007-02-8
 #include "Client\Mapwindow\Drawers\drawer_n.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\LayerTreeItem.h"
+#include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Headers\constant.h"
 #include "Client\FormElements\syscolor.h"
 #include "Engine\Domain\Dmvalue.h"
@@ -641,9 +642,10 @@ void DisplayOptionTreeItem::OnContextMenu(CWnd* pWnd, CPoint pos)
 }
 
 //----------------------------------
-DisplayOptionTree::DisplayOptionTree(LayerTreeView* ltv, HTREEITEM hti)
+DisplayOptionTree::DisplayOptionTree(LayerTreeView* ltv, HTREEITEM hti, NewDrawer *draw)
 : LayerTreeItem(ltv),
-htiStart(hti)
+htiStart(hti),
+drw(draw)
 
 {
 }
@@ -656,11 +658,41 @@ void DisplayOptionTree::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
 	HTREEITEM hItem = htiStart;
 	HTREEITEM hStop= ltv->GetTreeCtrl().GetNextItem(hItem, TVGN_NEXTVISIBLE);
+	HTREEITEM hti = ltv->GetTreeCtrl().HitTest(point);
 
 	while (hItem != NULL && hItem != hStop)
 	{
 		ltv->GetTreeCtrl().Expand(hItem,TVE_EXPAND);
 		hItem= ltv->GetTreeCtrl().GetNextItem(hItem, TVGN_NEXTVISIBLE);
+	}
+}
+
+void DisplayOptionTree::OnContextMenu(CWnd* pWnd, CPoint pos){
+	AbstractMapDrawer *mapdrw = dynamic_cast<AbstractMapDrawer *>(drw);
+	if (!mapdrw)
+		return;
+	CPoint pnt = pos;
+	ltv->GetTreeCtrl().ScreenToClient(&pnt);
+	HTREEITEM hti = ltv->GetTreeCtrl().HitTest(pnt);
+	int types = ComplexDrawer::dtMAIN | ComplexDrawer::dtPOST | ComplexDrawer::dtPRE;
+	BaseMapPtr *mptr = mapdrw->getBaseMap();
+	CMenu men;
+	men.CreatePopupMenu();
+	vector<MapPaneViewTool *> tools;
+	IlwWinApp()->getDrawerTools(mapdrw,tools); 
+	for(int i = 0; i < tools.size(); ++i) {
+		String sMenu = tools[i]->getMenuString();
+		if ( sMenu != "")
+			men.AppendMenu(MF_STRING, tools[i]->getId(),sMenu.scVal());
+	}
+	int iCmd = men.TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON|TPM_NONOTIFY|TPM_RETURNCMD, pos.x, pos.y, pWnd);
+	for(int i = 0; i < tools.size(); ++i) {
+		if ( iCmd == tools[i]->getId()){
+			if ( hti){
+				ILWIS::DrawerParameters parms(drw->getRootDrawer(),drw);
+				tools[i]->insertTool(ltv,&parms);
+			}
+		}
 	}
 }
 
