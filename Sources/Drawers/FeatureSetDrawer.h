@@ -27,6 +27,7 @@ class _export FeatureSetDrawer : public SetDrawer {
 		double getExtrusionTransparency() const;
 		void getFeatures(vector<Feature *>& features) const;
 		virtual void addDataSource(void *,int options=0);
+		void *getDataSource() const;
 
 	protected:
 		HTREEITEM make3D(bool yeno, LayerTreeView  *tvm);

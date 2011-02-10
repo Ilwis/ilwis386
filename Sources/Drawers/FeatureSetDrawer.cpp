@@ -50,6 +50,10 @@ void FeatureSetDrawer::addDataSource(void *bmap,int options) {
 	fbasemap.SetPointer((BaseMapPtr *)bmap);
 }
 
+void *FeatureSetDrawer::getDataSource() const {
+	return (void *)&fbasemap;
+}
+
 void FeatureSetDrawer::getFeatures(vector<Feature *>& features) const {
 	features.clear();
 	int numberOfFeatures = fbasemap->iFeatures();
