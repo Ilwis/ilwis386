@@ -61,7 +61,7 @@ Color DrawingColor::clrVal(double rVal) const
 Color DrawingColor::clrRaw(long iRaw, NewDrawer::DrawMethod drm) const
 {
 	if (iUNDEF == iRaw)
-		return Color(0,0,0);
+		return Color(0,0,0,255);
 	Color cRet;
 	switch (drm) {
 	case NewDrawer::drmRPR:
