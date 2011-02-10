@@ -34,23 +34,17 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-#if !defined(AFX_MAPPANEVIEWTOOL_H__BB72FBCA_4BCE_11D3_B7BC_00A0C9D5342F__INCLUDED_)
-#define AFX_MAPPANEVIEWTOOL_H__BB72FBCA_4BCE_11D3_B7BC_00A0C9D5342F__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// MapPaneViewTool.h : header file
 //
-
-
 class ZoomableView;
 class LayerTreeView;
 
 namespace ILWIS {
 class ComplexDrawer;
 class NewDrawer;
+struct DrawerParameters;
 }
+
 
 /////////////////////////////////////////////////////////////////////////////
 // MapPaneViewTool command target
@@ -71,19 +65,18 @@ public:
 	bool OnSetCursor(); // called by MapPaneView::OnSetCursor
 	void SetCursor(const zCursor& cur);
 	void Stop();
-	virtual void insertTool(LayerTreeView  *tv, ILWIS::ComplexDrawer *drw) {};
+	virtual void insertTool(LayerTreeView  *tv, ILWIS::DrawerParameters *) {};
 	virtual bool isToolUseableFor(ILWIS::NewDrawer *drw) { return false;}
 	virtual ~MapPaneViewTool();
-protected:
+	virtual int getId();
+	virtual String getMenuString() const { return "";}
+	virtual String cursorName() const { return "";}
+	bool stayResident() const { return stay; }
 
+protected:
 	ZoomableView* mpv;
 private:
 	zCursor curActive;
+	static int id;
+	bool stay;
 };
-
-/////////////////////////////////////////////////////////////////////////////
-
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
-
-#endif // !defined(AFX_MAPPANEVIEWTOOL_H__BB72FBCA_4BCE_11D3_B7BC_00A0C9D5342F__INCLUDED_)

@@ -36,7 +36,6 @@
  ***************************************************************/
 // MapPaneViewTool.cpp : implementation file
 //
-
 #include "Client\Headers\formelementspch.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\ilwis.h"
@@ -49,18 +48,19 @@
 #include "Client\Mapwindow\MapPaneView.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
+
+int MapPaneViewTool::id=20000;
+
 
 /////////////////////////////////////////////////////////////////////////////
 // MapPaneViewTool
 
 MapPaneViewTool::MapPaneViewTool(ZoomableView* mappaneview)
-: mpv(mappaneview)
+: mpv(mappaneview), stay(false)
 {
+	id++;
+	if ( id > 30000)
+		id = 20000;
 }
 
 MapPaneViewTool::~MapPaneViewTool()
@@ -121,6 +121,10 @@ void MapPaneViewTool::SetCursor(const zCursor& cur)
 {
 	curActive = cur;
 	OnSetCursor();
+}
+
+int MapPaneViewTool::getId() { 
+	return id;
 }
 
 
