@@ -2517,7 +2517,7 @@ void IlwisWinApp::getDocumentList(list<CDocument *>& opendocs)
    }
 }
 
-void IlwisWinApp::getDrawerTools(ComplexDrawer *drwin, vector<MapPaneViewTool *> tools) {
+void IlwisWinApp::getDrawerTools(ComplexDrawer *drwin, vector<MapPaneViewTool *>& tools) {
 	for(map<String, DrawerCreate>::const_iterator item = drawers.begin(); item != drawers.end(); ++item) {
 		NewDrawer *drw =  ((*item).second)(0);
 		if ( drw->isSimple() == false) {

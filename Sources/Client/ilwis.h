@@ -168,7 +168,7 @@ public:
 	void  addDrawer(const String& type, const String& subtype, DrawerCreate);
 	void  addMEditor(const String& type, const String& subtype, BaseMapEditorCreate);
 	ILWIS::SVGLoader *getSVGContainer() const { return svgContainer; }
-	void getDrawerTools(ILWIS::ComplexDrawer *drwin, vector<MapPaneViewTool *> tools);
+	void getDrawerTools(ILWIS::ComplexDrawer *drwin, vector<MapPaneViewTool *>& tools);
 	void getDocumentList(list<CDocument *>& opendocs);
 	
 	//{{AFX_MSG(IlwisWinApp)
