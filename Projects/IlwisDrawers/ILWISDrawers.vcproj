@@ -162,7 +162,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ILWISEngine.lib htmlhelp.lib IlwisClient.lib geos.lib opengl32.lib glu32.lib"
+				AdditionalDependencies="ILWISEngine.lib htmlhelp.lib IlwisClient.lib geos.lib opengl32.lib gdiplus.lib glu32.lib"
 				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\Extensions\ILWISDrawers.dll"
 				Version="3.7"
 				LinkIncremental="1"
@@ -272,10 +272,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Drawers\PointFeatureDrawer.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\Sources\Drawers\PointSetDrawer.cpp"
 				>
 			</File>
@@ -374,6 +370,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Drawers\PointDrawer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\PointFeatureDrawer.h"
 				>
 			</File>
 			<File
