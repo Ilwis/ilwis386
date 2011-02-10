@@ -239,13 +239,6 @@ HTREEITEM SetDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 	doLegend->createForSet(this);
 
 	colorCheck = new SetChecks(tv,this,(SetCheckFunc)&SetDrawer::setcheckRpr);
-	//if ( rpr.fValid() ) {
-	//	bool usesRpr = method == NewDrawer::drmRPR;
-	//	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,portrayalItem,this,(DisplayOptionItemFunc)&SetDrawer::displayOptionSubRpr,0,colorCheck);
-	//	rprItem = InsertItem("Representation", ".rpr", item, (int)usesRpr);
-	//	insertLegendItems(tv, rprItem);
-	//	if ( usesRpr)
-	//		InsertItem(tv, rprItem,String("Value : %S",rpr->sName()),".rpr");
 	if ( rpr.fValid() && (rpr->prg() || rpr->prv())){
 		insertStretchItem(tv, portrayalItem);
 	
