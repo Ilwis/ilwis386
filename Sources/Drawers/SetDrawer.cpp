@@ -44,7 +44,8 @@ SetDrawer::SetDrawer(DrawerParameters *parms, const String& name) :
 	rprItem(0),
 	threeDItem(0),
 	portrayalItem(0),
-	doLegend(0)
+	doLegend(0),
+	useAttColumn(false)
 {
 	setInfo(true);
 	setTransparency(1);
@@ -115,25 +116,42 @@ Representation SetDrawer::getRepresentation() const { // avoiding copy construct
 }
 
 void SetDrawer::setRepresentation( const Representation& rp){
+	if ( !rp.fValid())
+		return;
+
+	AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)parentDrawer;
+	bool isValue = false;
+	if ( useAttributeColumn()) {
+		isValue = getAtttributeColumn()->dm()->pdv() != 0;
+	} else {
+		isValue = mapDrawer->getBaseMap()->dm()->pdv() !=0;
+	}
+
 	rpr = rp;
 	stretched = false;
 	setDrawMethod(NewDrawer::drmRPR);
-	AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)parentDrawer;
-	if ( rpr.fValid() && mapDrawer->getBaseMap()->dm()->pdv())
-		setStretchRangeReal(mapDrawer->getStretchRangeReal());
+	if ( isValue) {
+		if ( useAttributeColumn()) {
+			attColumn->CalcMinMax();
+			setStretchRangeReal(attColumn->rrMinMax());
+		}
+		else{
+			setStretchRangeReal(mapDrawer->getStretchRangeReal());
+		}
+	}
 }
 
 CoordSystem SetDrawer::getCoordSystem() const {
 	return csy;
 }
 
-bool SetDrawer::isLegendUsefull() const {
-	AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)getParentDrawer();
-	BaseMapPtr *bm = mapDrawer->getBaseMap();
-	if (bm != 0 && bm->dm()->pdv() && stretched) 
-		return true;
-	return drm != drmSINGLE;
-}
+//bool SetDrawer::isLegendUsefull() const {
+//	AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)getParentDrawer();
+//	BaseMapPtr *bm = mapDrawer->getBaseMap();
+//	if (bm != 0 && bm->dm()->pdv() && stretched) 
+//		return true;
+//	return drm != drmSINGLE;
+//}
 
 bool SetDrawer::isStretched() const {
 	return stretched;
@@ -205,6 +223,22 @@ void SetDrawer::displayOptionStretch(CWnd *parent) {
 	new SetStretchForm(parent, this);
 }
 
+Column SetDrawer::getAtttributeColumn() const{
+	return attColumn;
+}
+
+void SetDrawer::setAttributeColumn(const Column& c){
+	attColumn = c;
+}
+
+void SetDrawer::setUseAttributeColumn(bool yesno) {
+	useAttColumn = yesno;
+}
+
+bool SetDrawer::useAttributeColumn() const{
+	return attColumn.fValid() && useAttColumn ;
+}
+
 String SetDrawer::store(const FileName& fnView, const String& parentSection) const{
 	ComplexDrawer::store(fnView, parentSection);
 	ObjectInfo::WriteElement(parentSection.scVal(),"CoordinateSystem",fnView, csy);
@@ -213,6 +247,9 @@ String SetDrawer::store(const FileName& fnView, const String& parentSection) con
 	ObjectInfo::WriteElement(parentSection.scVal(),"StretchInt",fnView, riStretch);
 	ObjectInfo::WriteElement(parentSection.scVal(),"IsStretched",fnView, stretched);
 	ObjectInfo::WriteElement(parentSection.scVal(),"StretchMethod",fnView, stretchMethod);
+	if ( attColumn.fValid())
+		ObjectInfo::WriteElement(parentSection.scVal(),"AttributeColumn",fnView, attColumn->sName());
+	ObjectInfo::WriteElement(parentSection.scVal(),"UseAttributes",fnView, useAttColumn);
 
 	return parentSection;
 }
@@ -227,12 +264,25 @@ void SetDrawer::load(const FileName& fnView, const String& parentSection){
 	long method;
 	ObjectInfo::ReadElement(parentSection.scVal(),"StretchMethod",fnView, method);
 	stretchMethod = (StretchMethod)method;
+	String colname;
+	ObjectInfo::ReadElement(parentSection.scVal(),"AttributeColumn",fnView, colname);
+	attColumn = ((AbstractMapDrawer *)getParentDrawer())->getBaseMap()->tblAtt()->col(colname);
+	ObjectInfo::ReadElement(parentSection.scVal(),"UseAttributes",fnView, useAttColumn);
 }
 //---------------UI---------------
 
 HTREEITEM SetDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 	HTREEITEM hti = ComplexDrawer::configure(tv,parent);
+	AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)getParentDrawer();
+	if ( mapDrawer->getBaseMap()->dm()->pdsrt()) {
+		DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,parent,this,
+				(SetCheckFunc)&SetDrawer::setColumnCheckumn,
+				(DisplayOptionItemFunc)&SetDrawer::displayOptionAttColumn);
 
+		HTREEITEM itemColumn = InsertItem("Attribute table",".tbt",item,(int)useAttColumn);
+		if ( useAttributeColumn() && attColumn.fValid())
+			InsertItem(tv,itemColumn,String("Column : %S",attColumn->sName()),"column");
+	}
 	NewDrawer::DrawMethod method = getDrawMethod();
 	portrayalItem = InsertItem(tv,parent, "Portrayal", "Colors");
 	doLegend = new DisplayOptionsLegend(tv,portrayalItem);
@@ -248,6 +298,30 @@ HTREEITEM SetDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 	return hti;
 }
 
+void SetDrawer::setColumnCheckumn(void *w, LayerTreeView *view) {
+	bool yesno = *(bool *)w;
+	setUseAttributeColumn(yesno);
+	AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)getParentDrawer();
+	if ( yesno && attColumn.fValid())
+		setRepresentation(attColumn->dm()->rpr());
+	else
+		setRepresentation(mapDrawer->getBaseMap()->dm()->rpr());
+	if ( !yesno)
+		getDrawingColor()->setDataColumn(Column());
+
+	PreparationParameters pp(NewDrawer::ptRENDER, 0);
+	prepareChildDrawers(&pp);
+	getRootDrawer()->getDrawerContext()->doDraw();
+}
+
+void SetDrawer::displayOptionAttColumn(CWnd *w) {
+	if ( useAttColumn)
+		new ChooseAttributeColumnForm(w, this);
+}
+
+
+
+//--------------------------------------
 void SetDrawer::updateLegendItem() {
 	if ( doLegend)
 		doLegend->updateLegendItem();
@@ -276,7 +350,7 @@ void SetDrawer::drawLegendItem(CDC *dc, const CRect& rct, double rVal) const{
 
 void SetDrawer::insertStretchItem(LayerTreeView  *tv, HTREEITEM parent) {
 	AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)parentDrawer;
-	Column attColumn = mapDrawer->getAtttributeColumn();
+	Column attColumn = getAtttributeColumn();
 	if ( rpr->prg()) {
 		if ( rpr->dm()->pdv() || (attColumn.fValid() && attColumn->dm()->pdv())) {
 			DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,parent,this,(DisplayOptionItemFunc)&SetDrawer::displayOptionStretch);
@@ -294,46 +368,7 @@ void SetDrawer::insertStretchItem(LayerTreeView  *tv, HTREEITEM parent) {
 	}
 }
 
-//RepresentationForm::RepresentationForm(CWnd *wPar, SetDrawer *dr) : 
-//	DisplayOptionsForm(dr,wPar,"Set Representation"),
-//	rpr(dr->getRepresentation()->sName())
-//{
-//	fldRpr = new FieldRepresentation(root, "Representation", &rpr);
-//	create();
-//}
-//
-//void  RepresentationForm::apply() {
-	//fldRpr->StoreData();
-	//SetDrawer *setDrawer = (SetDrawer *)drw;
-	//setDrawer->setRepresentation(rpr);
-	//PreparationParameters pp(NewDrawer::ptRENDER, 0);
-	//drw->prepareChildDrawers(&pp);
-	//updateMapView();
 
-	//HTREEITEM child = view->GetTreeCtrl().GetNextItem(setDrawer->rprItem, TVGN_CHILD);
-	//if ( child) {
-	//	FileName fn(rpr);
-	//	String name("Value : %S",fn.sFile);
-	//	TreeItem titem;
-	//	view->getItem(child,TVIF_TEXT | TVIF_HANDLE | TVIF_IMAGE | TVIF_PARAM | TVIS_SELECTED,titem);
-	//
-	//	strcpy(titem.item.pszText,name.scVal());
-	//	view->GetTreeCtrl().SetItem(&titem.item);
-	//}
-	//Representation setRpr = Representation(FileName(rpr));
-	//HTREEITEM parent = view->getAncestor(setDrawer->rprItem, 2);
-	//if ( parent) {
-	//	HTREEITEM stretchItem = setDrawer->findTreeItemByName(view,parent,"Stretch");
-	//	if ( !stretchItem && setRpr->prg()) {
-	//		setDrawer->insertStretchItem(view,parent);
-	//	}
-	//	if ( stretchItem && setRpr->prv()) {
-	//		view->GetTreeCtrl().DeleteItem(stretchItem);
-	//	}
-	//	view->collectStructure();
-	//}
-
-//}
 //------------------------------------
 SetStretchForm::SetStretchForm(CWnd *wPar, SetDrawer *dr) : 
 	DisplayOptionsForm(dr,wPar,"Set stretch"),
@@ -354,22 +389,6 @@ SetStretchForm::SetStretchForm(CWnd *wPar, SetDrawer *dr) :
 
 int  SetStretchForm::check(Event *) {
 	apply();
-	//sliderLow->StoreData();
-	//sliderHigh->StoreData();
-
-	//if ( low > high){
-	//	low = high;
-	//	sliderLow->SetVal(low);
-	//}
-	//if ( high < low){
-	//	high = low;
-	//	sliderHigh->SetVal(high);
-	//}
-	//((SetDrawer *)drw)->setStretchRangeReal(RangeReal(low,high));
-
-	//PreparationParameters pp(NewDrawer::ptRENDER, 0);
-	//drw->prepare(&pp);
-	//updateMapView();
 	return 1;
 }
 
@@ -391,6 +410,32 @@ void  SetStretchForm::apply() {
 	PreparationParameters pp(NewDrawer::ptRENDER, 0);
 	drw->prepareChildDrawers(&pp);
 	updateMapView();
+}
+
+//-------------------------------------
+ChooseAttributeColumnForm::ChooseAttributeColumnForm(CWnd *wPar, SetDrawer *dr) : 
+	DisplayOptionsForm(dr,wPar,"Choose attribute column")
+{
+	attTable = ((AbstractMapDrawer *)dr->getParentDrawer())->getBaseMap()->tblAtt();
+	attColumn = dr->getAtttributeColumn().fValid() ? dr->getAtttributeColumn()->sName() : "";
+	fc = new FieldColumn(root, "Column", attTable, &attColumn);
+	create();
+}
+
+
+void  ChooseAttributeColumnForm::apply() {
+	fc->StoreData();
+	if ( attColumn != "") {
+		Column col = attTable->col(attColumn);
+		((SetDrawer *)drw)->setUseAttributeColumn(true);
+		((SetDrawer *)drw)->setAttributeColumn(col);
+		((SetDrawer *)drw)->setRepresentation(col->dm()->rpr());
+		((SetDrawer *)drw)->getDrawingColor()->setDataColumn(col);
+	}
+	PreparationParameters pp(NewDrawer::ptRENDER, 0);
+	drw->prepareChildDrawers(&pp);
+	updateMapView();
+
 }
 
 

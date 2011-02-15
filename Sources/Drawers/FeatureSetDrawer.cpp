@@ -314,8 +314,8 @@ DisplayZDataSourceForm::DisplayZDataSourceForm(CWnd *wPar, SetDrawer *dr) :
 DisplayOptionsForm(dr,wPar,TR("3D Options")), sourceIndex(0) 
 {
 	FeatureLayerDrawer *fdrw = (FeatureLayerDrawer *)dr->getParentDrawer();
-	attTable = fdrw->getAtttributeTable();
 	bmp.SetPointer(fdrw->getBaseMap());
+	attTable = bmp->tblAtt();
 	rg = new RadioGroup(root,TR("Data Source"),&sourceIndex);
 	new RadioButton(rg,"Self");
 	RadioButton *rbMap = new RadioButton(rg,TR("Raster Map"));

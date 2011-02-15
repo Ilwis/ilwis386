@@ -422,6 +422,8 @@ void ValueSlicerSlider::init() {
 
 void ValueSlicerSlider::insertLimit(double rValue1, const Color& clr1, const Color& clr2) {
 	int index = rprgrad->insert(rValue1, clr1, RepresentationGradual::crUPPER);
+	if ( index == iUNDEF)
+		return;
 	rprgrad->SetLimitColor(index - 1, clr2);
 	Color clr3 = rprgrad->GetColor(index + 1);
 	index = insertBound(rValue1);

@@ -7,6 +7,17 @@ namespace ILWIS {
 	class AbstractMapDrawer;
 	class SetDrawer;
 
+	class IlwisData{
+	public:
+		void setBaseMap(const BaseMap& bm);
+		void setColumn(const Column& col);
+		DomainValueRangeStruct dvrs() const;
+		Domain dm() const;
+		double rValByRaw(int raw) const;
+	private:
+		BaseMap bmap;
+		Column col;
+	};
 class _export DrawingColor {
 public:
 	DrawingColor(SetDrawer *dr);
@@ -16,6 +27,7 @@ public:
 	void clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer::DrawMethod drm) const;
 	Color clrRandom(int iRaw) const;
 	Color clrPrimary(int iNr) const;
+	void setDataColumn(const Column& c);
 
 private:
 	void InitClrRandom();
@@ -27,7 +39,7 @@ private:
 	Color clr2;
 	int iMultColors;
 	double gamma;
-	BaseMap bmap;
+	IlwisData dataValues;
 	IlwisObject::iotIlwisObjectType type;
 };
 }

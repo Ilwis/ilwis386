@@ -53,8 +53,12 @@ void RasterLayerDrawer::prepare(PreparationParameters *pp){
 					rrMinMax = basemap->rrMinMax(BaseMapPtr::mmmCALCULATE); // not mmmSAMPLED here, to get a more accurate result, otherwise there's a high chance of artifacts since the sampling is only done on this one band
 					if (rrMinMax.rLo() > rrMinMax.rHi())
 						rrMinMax = basemap->vr()->rrMinMax();
-				} else if (  basemap->fTblAtt() && attColumn.fValid() && attColumn->dm()->pdv())
-					rrMinMax = attColumn->vr()->rrMinMax();
+				} else {
+					if (  rsd->useAttributeColumn() && rsd->getAtttributeColumn()->dm()->pdv()) {
+
+						rrMinMax = rsd->getAtttributeColumn()->vr()->rrMinMax();
+					}
+				}
 				rsd->setMinMax(rrMinMax);
 				rsd->SetPaletteOwner(); // this set has the only available palette
 				addSetDrawer(basemap,pp,rsd);

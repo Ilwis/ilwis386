@@ -15,6 +15,37 @@
 
 using namespace ILWIS;
 
+// setting the basemap invalidates the column
+void IlwisData::setBaseMap(const BaseMap& bm){
+	bmap = bm;
+	col = Column();
+}
+
+// setting the column doesnt invalidate the basemap as we will retain it as the default
+void IlwisData::setColumn(const Column& c){
+	col = c;
+}
+
+DomainValueRangeStruct IlwisData::dvrs() const{
+	if ( col.fValid()) {
+		return col->dvrs();
+	}
+	return bmap->dvrs();
+}
+Domain IlwisData::dm() const{
+	if ( col.fValid()) {
+		return col->dm();
+	}
+	return bmap->dm();
+}
+
+double IlwisData::rValByRaw(int raw) const{
+	if ( col.fValid()) {
+		return col->rValue(raw);
+	}
+	return bmap->dvrs().rValue(raw);
+}
+
 DrawingColor::DrawingColor(SetDrawer *dr) : 
 drw(dr),
 clr1(168,168,168), // False
@@ -24,9 +55,16 @@ gamma(0),
 mcd(0)
 {
 	AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)drw->getParentDrawer();
+	BaseMap bmap;
 	bmap.SetPointer(mapDrawer->getBaseMap());
+	dataValues.setBaseMap(bmap);
 	type = IlwisObject::iotObjectType(bmap->fnObj);
 }
+
+void DrawingColor::setDataColumn(const Column& c) {
+	dataValues.setColumn(c);
+}
+
 Color DrawingColor::clrVal(double rVal) const
 {
 	Color cRet;
@@ -65,8 +103,8 @@ Color DrawingColor::clrRaw(long iRaw, NewDrawer::DrawMethod drm) const
 	Color cRet;
 	switch (drm) {
 	case NewDrawer::drmRPR:
-		if (bmap->dm()->pdv()) {
-			double rVal = bmap->dvrs().rValue(iRaw);
+		if (dataValues.dm()->pdv()) {
+			double rVal = dataValues.rValByRaw(iRaw);
 			return clrVal(rVal);
 		}
 		else {
@@ -169,13 +207,13 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 	case NewDrawer::drmRPR:
 		{
 			Representation rpr = drw->getRepresentation();
-			if (bmap->dm()->pdv()) {
+			if (dataValues.dm()->pdv()) {
 				if (drw->isStretched()) {
 					switch (drw->getStretchMethod())
 					{
 					case SetDrawer::smLINEAR: {
 						RangeReal rr = drw->getStretchRangeReal();
-						DomainValueRangeStruct dvrs = bmap->dvrs();
+						DomainValueRangeStruct dvrs = dataValues.dvrs();
 						for (long i = 0; i < iLen; ++i)
 							bufOut[i] = rpr->clr(dvrs.rValue(buf[i]), rr).iVal();
 					} break;
@@ -184,7 +222,7 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 							RangeReal rr = drw->getStretchRangeReal();
 							double rMax = 1 + rr.rHi() - rr.rLo();
 							rr = RangeReal(0, log(rMax));
-							DomainValueRangeStruct dvrs = bmap->dvrs();
+							DomainValueRangeStruct dvrs = dataValues.dvrs();
 							for (long i = 0; i < iLen; ++i)
 								bufOut[i] = rpr->clr(log(dvrs.rValue(buf[i]) - rr.rLo()), rr).iVal();
 						} break;
@@ -192,12 +230,12 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 				}
 				else if (NewDrawer::drmIMAGE == drw->getDrawMethod()) {
 					RangeReal rr = RangeReal(0, 255);
-					DomainValueRangeStruct dvrs = bmap->dvrs();
+					DomainValueRangeStruct dvrs = dataValues.dvrs();
 					for (long i = 0; i < iLen; ++i)
 						bufOut[i] = rpr->clr(dvrs.rValue(buf[i]), rr).iVal();
 				}
 				else {
-					DomainValueRangeStruct dvrs = bmap->dvrs();
+					DomainValueRangeStruct dvrs = dataValues.dvrs();
 					for (long i = 0; i < iLen; ++i)
 						bufOut[i] = rpr->clr(dvrs.rValue(buf[i])).iVal();
 				}

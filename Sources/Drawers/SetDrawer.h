@@ -6,6 +6,7 @@ class FieldIntSliderEx;
 class FieldRealSliderEx;
 class FieldRepresentation;
 class DisplayOptionsLegend;
+class FieldColumn;
 
 namespace ILWIS{
 
@@ -21,7 +22,7 @@ class _export SetDrawer : public ComplexDrawer {
 		HTREEITEM  configure(LayerTreeView  *tv, HTREEITEM parent);
 		Representation getRepresentation() const;
 		virtual void setRepresentation(const Representation& rp);
-		bool isLegendUsefull() const;
+		//bool isLegendUsefull() const;
 		RangeReal getStretchRangeReal() const;
 		void setStretchRangeReal(const RangeReal& rr);
 		RangeInt getStretchRangeInt() const;
@@ -43,16 +44,24 @@ class _export SetDrawer : public ComplexDrawer {
 		void displayOptionSubRpr(CWnd *parent);
 		void setcheckRpr(void *value, LayerTreeView *);
 		void updateLegendItem();
+		Column getAtttributeColumn() const;
+		void setAttributeColumn(const Column& col );
+		bool useAttributeColumn() const;
+		void setUseAttributeColumn(bool yesno);
 			
 	protected:
 		String store(const FileName& fnView, const String& parenSection) const;
 		void load(const FileName& fnView, const String& parenSection);
 		void displayOptionStretch(CWnd *parent);
 		void drawLegendItem(CDC *dc, const CRect& rct, double rVal) const;
+		void setColumnCheckumn(void *w, LayerTreeView *view);
+		void displayOptionAttColumn(CWnd *w);
 
 		//BaseMap basemap;
 		Representation rpr;
 		CoordSystem csy;
+		Column attColumn;
+		bool useAttColumn;
 		DrawingColor *drawColor;
 		SetChecks *colorCheck;
 		RangeReal rrStretch;
@@ -67,15 +76,6 @@ class _export SetDrawer : public ComplexDrawer {
 		HTREEITEM threeDItem;
 	};
 
-	//class RepresentationForm : public DisplayOptionsForm {
-	//	public:
-	//	RepresentationForm(CWnd *wPar, SetDrawer *dr);
-	//	void apply(); 
-	//private:
-	//	String rpr;
-	//	FieldRepresentation *fldRpr;
-
-	//};
 
 	class SetStretchForm : public DisplayOptionsForm {
 		public:
@@ -89,6 +89,16 @@ class _export SetDrawer : public ComplexDrawer {
 
 		int check(Event *);
 
+	};
+
+	class ChooseAttributeColumnForm : public DisplayOptionsForm {
+		public:
+		ChooseAttributeColumnForm(CWnd *wPar, SetDrawer *dr);
+		void apply(); 
+	private:
+		Table attTable;
+		String attColumn;
+		FieldColumn *fc;
 	};
 
 }

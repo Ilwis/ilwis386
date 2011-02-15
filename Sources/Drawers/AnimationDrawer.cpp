@@ -97,13 +97,16 @@ RangeReal AnimationDrawer::getMinMax(const MapList& mlist) const{
 				else
 					rrMinMax = rrMinMaxMap;
 			}
-		} else if (mlist->map(0)->fTblAtt() && attColumn.fValid() && attColumn->dm()->pdv()) {
-			for (int i = 0; i < mlist->iSize(); ++i) {
-				Map mp = mlist->map(i);
-				if (i > 0)
-					rrMinMax += attColumn->vr()->rrMinMax();
-				else
-					rrMinMax = attColumn->vr()->rrMinMax();
+		} else {
+				SetDrawer *sdr = (SetDrawer *)const_cast<AnimationDrawer *>(this)->getDrawer(0);
+				if (sdr->useAttributeColumn() && sdr->getAtttributeColumn()->dm()->pdv()) {
+				for (int i = 0; i < mlist->iSize(); ++i) {
+					Map mp = mlist->map(i);
+					if (i > 0)
+						rrMinMax += sdr->getAtttributeColumn()->vr()->rrMinMax();
+					else
+						rrMinMax = sdr->getAtttributeColumn()->vr()->rrMinMax();
+				}
 			}
 		}
 	}
