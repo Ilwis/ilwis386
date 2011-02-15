@@ -99,18 +99,19 @@ void PointSetDrawer::getDrawerFor(const Feature* feature,vector<NewDrawer *>& fe
 	}
 }
 
-void PointSetDrawer::setSymbols(const String& symbol) {
+void PointSetDrawer::setSymbolProperties(const String& symbol, double scale) {
 	for(int i=0; i< getDrawerCount(); ++i) {
 		PointDrawer *pdrw = dynamic_cast<PointDrawer *>(getDrawer(i));
 		if ( pdrw) {
 			pdrw->setSymbol(symbol);
+			pdrw->setScale(scale);
 		}
 	}
 }
 
 //-----------------------------------------------------------------
 PointSymbolizationForm::PointSymbolizationForm(CWnd *wPar, PointSetDrawer *dr):
-	DisplayOptionsForm(dr,wPar,TR("Symbolization")), selection(0)
+DisplayOptionsForm(dr,wPar,TR("Symbolization")), selection(0), thick(1), scale(1)
 {
 	ILWIS::SVGLoader *loader = IlwWinApp()->getSVGContainer();
 	for(map<String, SVGElement *>::iterator cur = loader->begin(); cur != loader->end(); ++cur) {
@@ -119,15 +120,19 @@ PointSymbolizationForm::PointSymbolizationForm(CWnd *wPar, PointSetDrawer *dr):
 		names.push_back(name);
 	}
 	fselect = new FieldOneSelectString(root,TR("Symbols"),&selection, names);
+	fiThick = new FieldInt(root,TR("Line thickness"),&thick);
+	frScale = new FieldReal(root,TR("Symbol scale"),&scale,ValueRange(RangeReal(0.1,100.0),0.1));
 	create();
 }
 
 void PointSymbolizationForm::apply(){
 	fselect->StoreData();
+	fselect->StoreData();
+	frScale->StoreData();
 
 	String symbol = names[selection];
 	PointSetDrawer *psdrw = (PointSetDrawer *)drw;
-	psdrw->setSymbols(symbol);
+	psdrw->setSymbolProperties(symbol,scale);
 	PreparationParameters pp(NewDrawer::ptRENDER, 0);
 	psdrw->prepare(&pp);
 	updateMapView();
