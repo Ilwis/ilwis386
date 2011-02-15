@@ -141,8 +141,13 @@ void SVGElement::parseNode(DOMNode* node,SVGAttributes& attributes) {
 			if ( attributes.type == SVGAttributes::sPOLYGON) {
 				p2t::CDT cdt(attributes.points);
 				cdt.Triangulate();
-				vector<Coord> strip;
-				cdt.getTriangleStrips(strip);
+				vector<p2t::Triangle*> cdtTriangles = cdt.GetTriangles();
+				attributes.triangles.resize(cdtTriangles.size()*3);
+				for(int i=0; i < cdtTriangles.size(); ++i) {
+					attributes.triangles[i*3] = Coord(cdtTriangles[i]->GetPoint(0)->x,cdtTriangles[i]->GetPoint(0)->y);
+					attributes.triangles[i*3 + 1] = Coord(cdtTriangles[i]->GetPoint(1)->x,cdtTriangles[i]->GetPoint(1)->y);
+					attributes.triangles[i*3 + 2] = Coord(cdtTriangles[i]->GetPoint(2)->x,cdtTriangles[i]->GetPoint(2)->y);
+				}
 			}
 		}
 
