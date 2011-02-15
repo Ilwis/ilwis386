@@ -72,8 +72,10 @@ bool PointDrawer::draw(bool norecursion, const CoordBounds& cbArea) const {
 	if ( cNorm.fUndef())
 		return false;
 	CoordBounds cbZoom = getRootDrawer()->getCoordBoundsZoom();
-	if ( !cbZoom.fContains(cNorm))
-		return false;
+	if ( cbArea.fValid()) {
+		if ( !cbZoom.fContains(cNorm))
+			return false;
+	}
 
 	bool extrusion = getSpecialDrawingOption(NewDrawer::sdoExtrusion);
 	bool filledExtr = getSpecialDrawingOption(NewDrawer::sdoFilled);
@@ -106,7 +108,7 @@ bool PointDrawer::draw(bool norecursion, const CoordBounds& cbArea) const {
 				drawRectangle((*cur), 0);
 				break;
 			case SVGAttributes::sPOLYGON:
-				drawRectangle((*cur), 0);
+				drawPolygon((*cur), 0);
 				break;
 			case SVGAttributes::sLINE:
 			case SVGAttributes::sPOLYLINE:
@@ -254,12 +256,17 @@ void PointDrawer::drawPolygon(const SVGAttributes& attributes, double z) const{
 	Color fcolor = attributes.fillColor == colorUSERDEF ? getDrawColor() : attributes.fillColor;
 	double transp = attributes.opacity * getTransparency();
 	glColor4f(fcolor.redP(),fcolor.greenP(), fcolor.blueP(), transp);
-	glBegin(GL_TRIANGLE_STRIP);
-	for(int i=0; i < attributes.triangles.size(); ++i){
-		const Coord& c = attributes.triangles.at(i);
-		glVertex3d(c.x,c.y,z);
+	for(int i=0; i < attributes.triangles.size() / 3; ++i) {
+		Coord c1 = attributes.triangles[3*i];
+		Coord c2 = attributes.triangles[3*i + 1];
+		Coord c3 = attributes.triangles[3*i + 2];
+		glBegin(GL_TRIANGLES);
+			glVertex3d(c1.x,c1.y,0);
+			glVertex3d(c2.x,c2.y,0);
+			glVertex3d(c3.x,c3.y,0);
+		glEnd();
 	}
-	glBegin(GL_TRIANGLE_STRIP);
+
 }
 
 void PointDrawer::drawPath(const SVGAttributes& attributes, double z) const{

@@ -16,7 +16,7 @@ class PointSetDrawer : public FeatureSetDrawer {
 		HTREEITEM  configure(LayerTreeView  *tv, HTREEITEM parent);
 		void prepare(PreparationParameters *parms);
 		void getDrawerFor(const Feature* feature,vector<NewDrawer *>& featureDrawers);
-		void setSymbols(const String& symbol);
+		void setSymbolProperties(const String& symbol, double scale);
 
 	protected:
 		String store(const FileName& fnView, const String& parenSection) const;
@@ -33,7 +33,11 @@ class PointSetDrawer : public FeatureSetDrawer {
 	private:
 		vector<string> names;
 		long selection;
+		int thick;
+		double scale;
 		FieldOneSelectString *fselect;
+		FieldInt *fiThick;
+		FieldReal *frScale;
 
 
 	};
