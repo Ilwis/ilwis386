@@ -34,8 +34,11 @@ PolygonDrawer::~PolygonDrawer() {
 bool PolygonDrawer::draw(bool norecursion, const CoordBounds& cbArea) const{
 	if (triangleStrips.size() == 0 || !fActive)
 		return false;
-	if ( !getRootDrawer()->getCoordBoundsZoom().fContains(cb))
-		return false;
+	// cb.fValid == false is accpet as it is made whith maps that have a coordbound around the earths edge (and thus in space))
+	if ( cbArea.fValid()) {
+		if ( !getRootDrawer()->getCoordBoundsZoom().fContains(cb))
+			return false;
+	}
 	glShadeModel(GL_FLAT);
 
 	ComplexDrawer *cdrw = (ComplexDrawer *)getParentDrawer();
