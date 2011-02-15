@@ -335,10 +335,10 @@ ChooseColumnComboBox::ChooseColumnComboBox(CWnd* wnd, ColumnLayerTreeItem* lti, 
 			AddString(sCol.scVal());
 		}
 	}
-	if (clti->mdr()->getAtttributeColumn().fValid()) {
-		String sCol = clti->mdr()->getAtttributeColumn()->sName();
-		SelectString(-1, sCol.scVal());
-	}
+	//if (clti->mdr()->getAtttributeColumn().fValid()) {
+	//	String sCol = clti->mdr()->getAtttributeColumn()->sName();
+	//	SelectString(-1, sCol.scVal());
+	//}
 	ShowWindow(SW_SHOW);
 }
 
@@ -357,8 +357,8 @@ void ChooseColumnComboBox::OnSelChange(NMHDR* pNotifyStruct, LRESULT* result)
 	CString str;
 	GetWindowText(str);
 	Table tbl = clti->mdr()->getBaseMap()->tblAtt();
-	clti->mdr()->setAttributeColumn(String(str));
-	clti->ltv->GetDocument()->UpdateAllViews(clti->ltv, 0);
+	//clti->mdr()->setAttributeColumn(String(str));
+	//clti->ltv->GetDocument()->UpdateAllViews(clti->ltv, 0);
 }
 
 
@@ -384,7 +384,7 @@ void ColumnLayerTreeItem::OnContextMenu(CWnd* w, CPoint p)
 
 void ColumnLayerTreeItem::SwitchCheckBox(bool fOn)
 {
-	mdr()->setUseAttributeTable(fOn);
+//	mdr()->setUseAttributeTable(fOn);
 	if (fOn)
 		ShowColumnField();
 	MapCompositionDoc* doc = ltv->GetDocument();

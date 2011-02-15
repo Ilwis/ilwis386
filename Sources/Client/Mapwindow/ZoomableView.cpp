@@ -450,10 +450,10 @@ void ZoomableView::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 		vertBottom();
 		break;
 	case SB_LINEUP:
-		vertLineMove(-1);
+		vertLineMove(1);
 		break;
 	case SB_LINEDOWN:
-		vertLineMove(1);
+		vertLineMove(-1);
 		break;
 	case SB_PAGEUP:
 		vertPageMove(1);
@@ -559,9 +559,18 @@ int ZoomableView::vertPixMove(long iDiff, bool fPreScroll)
 	if ( mcd) {
 		CoordBounds cbZoom = mcd->rootDrawer->getCoordBoundsZoom();
 		CoordBounds cbMap = mcd->rootDrawer->getMapCoordBounds();
+		double zheight = cbZoom.height();
 		double deltay = cbMap.height() * iDiff / SCROLL_SIZE;
 		cbZoom.cMin.y += deltay;
 		cbZoom.cMax.y += deltay;
+		if ( cbZoom.cMax.y > cbMap.cMax.y) {
+			cbZoom.cMax.y = cbMap.cMax.y;
+			cbZoom.cMin.y = cbZoom.cMax.y - zheight;
+		}
+		if ( cbZoom.cMin.y < cbMap.cMin.y) {
+			cbZoom.cMin.y = cbMap.cMin.y;
+			cbZoom.cMax.y = cbZoom.cMin.y + zheight;
+		}
 		mcd->rootDrawer->setCoordBoundsZoom(cbZoom);
 		setScrollBars();
 		OnDraw(0);
@@ -577,8 +586,17 @@ int ZoomableView::horzPixMove(long iDiff, bool fPreScroll)
 		CoordBounds cbZoom = mcd->rootDrawer->getCoordBoundsZoom();
 		CoordBounds cbMap = mcd->rootDrawer->getMapCoordBounds();
 		double deltax = cbMap.width() * iDiff / SCROLL_SIZE;
+		double zwidth = cbZoom.width();
 		cbZoom.cMin.x += deltax;
 		cbZoom.cMax.x += deltax;
+		if ( cbZoom.cMax.x > cbMap.cMax.x) {
+			cbZoom.cMax.x = cbMap.cMax.x;
+			cbZoom.cMin.x = cbZoom.cMax.x - zwidth;
+		}
+		if ( cbZoom.cMin.x < cbMap.cMin.x) {
+			cbZoom.cMin.x = cbMap.cMin.x;
+			cbZoom.cMax.x = cbZoom.cMin.x + zwidth;
+		}
 		mcd->rootDrawer->setCoordBoundsZoom(cbZoom);
 		setScrollBars();
 		OnDraw(0);

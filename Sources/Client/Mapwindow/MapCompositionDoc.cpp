@@ -692,11 +692,11 @@ void MapCompositionDoc::menLayers(CMenu& men, int iBaseId)
 			  ? MF_CHECKED : MF_UNCHECKED;
 		  men.CheckMenuItem(id, MF_BYCOMMAND | iFlag);
 		  break;
-	  case ID_ATTLAYER:  
-		  iFlag = !mapdrawer->isActive() || !mapdrawer->getAtttributeTable().fValid()
-			  ? MF_GRAYED : MF_ENABLED;
-		  men.EnableMenuItem(id, MF_BYCOMMAND | iFlag);
-		  break;
+	  //case ID_ATTLAYER:  
+		 // iFlag = !mapdrawer->isActive() || !mapdrawer->getAtttributeTable().fValid()
+			//  ? MF_GRAYED : MF_ENABLED;
+		 // men.EnableMenuItem(id, MF_BYCOMMAND | iFlag);
+		 // break;
 	  case ID_RPRLAYER:  
 		  iFlag = !mapdrawer->isActive() || ! mapdrawer->getBaseMap()->dm()->rpr().fValid()
 			  ? MF_GRAYED : MF_ENABLED;

@@ -21,12 +21,6 @@ class _export AbstractMapDrawer : public ComplexDrawer {
 		BaseMapPtr *getBaseMap() const;
 		Representation getRepresentation() const;
 		void setRepresentation(const Representation& rp);
-		Table getAtttributeTable() const;
-		void setAttributeTable(const Table& tbl);
-		Column getAtttributeColumn() const;
-		void setAttributeColumn(const String& name);
-		bool useAttributeTable() const;
-		void setUseAttributeTable(bool yesno);
 		RangeReal getStretchRangeReal() const;
 		bool useInternalDomain() const;
 		HTREEITEM  configure(LayerTreeView  *tv, HTREEITEM parent);
@@ -36,9 +30,6 @@ class _export AbstractMapDrawer : public ComplexDrawer {
 		virtual void inactivateOtherPalettes(Palette * palette);
 
 	protected:
-		Table attTable;
-		Column attColumn;
-		bool useAttTable;
 		bool internalDomain;
 		BaseMap bm;
 
@@ -51,15 +42,6 @@ class _export AbstractMapDrawer : public ComplexDrawer {
 	};
 
 
-	class ChooseAttributeColumnForm : public DisplayOptionsForm {
-		public:
-		ChooseAttributeColumnForm(CWnd *wPar, AbstractMapDrawer *dr);
-		void apply(); 
-	private:
-		Table attTable;
-		String attColumn;
-		FieldColumn *fc;
-	};
 	#define CMAPDRW(root,i) (dynamic_cast<AbstractMapDrawer *>(root->getDrawer(i)))
 
 }
