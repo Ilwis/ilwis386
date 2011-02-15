@@ -162,13 +162,20 @@ void RootDrawer::load(const FileName& fnView, const String parenSection){
 }
 
 void RootDrawer::modifyCBZoomView(double dv, double dz, double f) {
-	double deltaxv = dv * f;
-	double deltaxz = dz * f;
+	double deltaview = dv * f;
+	double deltazoom = dz * f;
 	Coord cMiddle = cbZoom.middle();
-	cbView.cMin.x = cMiddle.x - deltaxv / 2.0;
-	cbView.cMax.x = cMiddle.x + deltaxv / 2.0;
-	cbZoom.cMin.x = cMiddle.x - deltaxz / 2.0;
-	cbZoom.cMax.x = cMiddle.x + deltaxz / 2.0;
+	if ( aspectRatio <= 1.0) {
+		cbView.cMin.x = cMiddle.x - deltaview / 2.0;
+		cbView.cMax.x = cMiddle.x + deltaview / 2.0;
+		cbZoom.cMin.x = cMiddle.x - deltazoom / 2.0;
+		cbZoom.cMax.x = cMiddle.x + deltazoom / 2.0;
+	} else {
+		cbView.cMin.y = cMiddle.y - deltaview / 2.0;
+		cbView.cMax.y = cMiddle.y + deltaview / 2.0;
+		cbZoom.cMin.y = cMiddle.y - deltazoom / 2.0;
+		cbZoom.cMax.y = cMiddle.y + deltazoom / 2.0;
+	}
 }
 
 void RootDrawer::setViewPort(const RowCol& rc) {
@@ -185,11 +192,11 @@ void RootDrawer::setViewPort(const RowCol& rc) {
 	
 		} else { // x < y
 			if ( rc.Row != pixArea.Row){
-				modifyCBZoomView(cbView.height(), cbZoom.height(),pixArea.Col / (double)rc.Col ); 
+				modifyCBZoomView(cbView.height(), cbZoom.height(),(double)rc.Row / pixArea.Row ); 
 
 			}
 			if ( rc.Col != pixArea.Col) {
-				modifyCBZoomView(cbView.height(), cbZoom.height(),(double)rc.Col / pixArea.Col); 
+				modifyCBZoomView(cbView.height(), cbZoom.height(),(double)pixArea.Col / rc.Col ); 
 			}
 		}
 	}
