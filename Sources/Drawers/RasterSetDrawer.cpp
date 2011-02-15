@@ -184,10 +184,10 @@ bool RasterSetDrawer::draw(bool norecursion , const CoordBounds& cbArea) const {
 		}
 		DisplayImagePortion(minX, maxY, maxX, minY, 0, 0, width, height);
 		glDisable(GL_TEXTURE_2D);
+		glDisable(GL_BLEND);
 	}
 
 	drawPostDrawers(norecursion, cbArea);
-
 	return true;
 }
 
