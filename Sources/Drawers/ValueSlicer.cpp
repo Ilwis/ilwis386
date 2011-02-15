@@ -183,7 +183,6 @@ void ValueSlicer::moveValue(int index, double v) {
 		fldslicer->rprgrad->SetLimitValue(index*2 - shift, v - delta);
 	fldslicer->rprgrad->SetLimitValue(index*2 - shift + 1 , v);
 	fldslicer->rprgrad->SetLimitValue(index*2 - shift + 2, v + delta);
-	updateRepresentations();
 }
 
 void ValueSlicer::updateRepresentations() {
