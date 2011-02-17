@@ -110,7 +110,7 @@ Representation::Representation(const Representation& rpr)
 Representation::Representation(const String& sExpression)
 : IlwisObject(listRpr, RepresentationPtr::create(sExpression))
 {
-  if (ptr()->sDescription == "")
+  if (ptr() && ptr()->sDescription == "")
     ptr()->sDescription = ptr()->sTypeName();
 }
 
