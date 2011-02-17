@@ -78,8 +78,11 @@ void Texture::CreateTexture(DrawerContext * drawerContext, bool fInThread, volat
 	glPixelStorei( GL_UNPACK_SKIP_ROWS, 0);
 	if (fUsePalette)
 		glTexImage2D( GL_TEXTURE_2D, 0, 4, sizeX / zoomFactor, sizeY / zoomFactor, 0, GL_COLOR_INDEX, GL_UNSIGNED_SHORT, texture_data);
-	else
+	else {
 		glTexImage2D( GL_TEXTURE_2D, 0, 4, sizeX / zoomFactor, sizeY / zoomFactor, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture_data);
+		free(texture_data);
+		texture_data = 0;
+	}
 	fPaletteChanged = false;
 	if (fInThread)
 		drawerContext->ReleaseContext();
