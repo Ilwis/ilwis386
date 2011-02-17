@@ -52,7 +52,7 @@ bool PolygonDrawer::draw(bool norecursion, const CoordBounds& cbArea) const{
 	}
 
 	glColor4f(drawColor.redP(),drawColor.greenP(), drawColor.blueP(), (1.0 - drawColor.transparencyP()) * getTransparency() * areaTransparency);
-	if ( asQuad) {
+	if ( asQuad && showArea) {
 		glBegin(GL_QUADS);
 		glVertex3d(cb.cMin.x, cb.cMin.y, 0);
 		glVertex3d(cb.cMin.x, cb.cMax.y, 0);
