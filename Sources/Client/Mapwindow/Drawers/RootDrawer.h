@@ -4,8 +4,10 @@
 
 class MapCompositionDoc;
 
+
 namespace ILWIS {
 	class DrawerContext;
+	class SelectionRectangle;
 
 	class _export RootDrawer : public ComplexDrawer {
 	public:
@@ -34,6 +36,8 @@ namespace ILWIS {
 		RowCol worldToScreen(const Coord& crd);
 		double getAspectRatio() const;
 		DrawerContext *getDrawerContext() { return drawercontext; }
+		DrawerContext *getDrawerContext() const { return drawercontext; }
+		void setSelectionDrawer(SelectionRectangle *selDraw);
 
 		//void clear();
 		void set3D(bool yeno);
@@ -51,6 +55,8 @@ namespace ILWIS {
 		void addDataSource(void *);
 		void SetthreeD(void *v, LayerTreeView *tv);
 		void debug();
+		void swapBufferToScreen(const CRect& rct) const;
+		void saveScreenBuffer(const CRect& rct);
 
 		CoordBounds cbView;
 		CoordBounds cbZoom;
@@ -62,6 +68,8 @@ namespace ILWIS {
 		Coordinate viewPoint;
 		double fakeZ;
 		double aspectRatio;
+		SelectionRectangle *selectionDrawer;
+		float * swapBitmap;
 		ILWIS::DrawerContext *drawercontext;
 	};
 }

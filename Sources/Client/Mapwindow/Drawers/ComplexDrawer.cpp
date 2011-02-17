@@ -428,8 +428,8 @@ void ComplexDrawer::prepareChildDrawers(PreparationParameters *parms) {
 	for(int i = 0; i < drawers.size(); ++i) {
 		NewDrawer *pdrw = drawers.at(i);
 		if ( pdrw) {
-			PreparationParameters pp((int)parms->type, parms->dc);
-			pdrw->prepare(&pp);
+			//PreparationParameters pp((int)parms->type, parms->dc);
+			pdrw->prepare(parms);
 		}
 	}
 }

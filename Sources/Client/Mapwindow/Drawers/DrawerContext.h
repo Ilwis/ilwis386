@@ -20,6 +20,7 @@ namespace ILWIS {
 		void ReleaseContext();
 		void doDraw();
 		void swapBuffers() const;
+		HDC getHDC() const { return m_hdc; }
 
 	private:
 		MapCompositionDoc *doc;

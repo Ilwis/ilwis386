@@ -10,6 +10,7 @@
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
+#include "Client\Mapwindow\Drawers\SelectionRectangle.h"
 #include "RootDrawer.h"
 
 using namespace ILWIS;
@@ -25,10 +26,15 @@ RootDrawer::RootDrawer(MapCompositionDoc *doc) {
 	setName("RootDrawer");
 	threeD = false;
 	aspectRatio = 0;
+	selectionDrawer = 0;
+	swapBitmap = 0;
+
 }
 
 RootDrawer::~RootDrawer() {
 	delete drawercontext;
+	if ( swapBitmap)
+		delete [] swapBitmap;
 }
 
 void  RootDrawer::prepare(PreparationParameters *pp){
@@ -86,26 +92,46 @@ void RootDrawer::addCoordBounds(const CoordSystem& _cs, const CoordBounds& cb, b
 	Therefore all calls to RootDrawer::draw must be preceded by a call to DrawerContext::TakeContext and followed by a call to ReleaseContext
 */
 bool RootDrawer::draw(bool norecursion, const CoordBounds& cb) const{
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		// Clear The Screen And The Depth Buffer
-	if (threeD)
-		glEnable(GL_DEPTH_TEST);
-	else
-		glDisable(GL_DEPTH_TEST);
-
-	glViewport(0,0,pixArea.Col, pixArea.Row);
-	setProjection(cbZoom);
-	
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	if (is3D()) {
-		Coord cView = getViewPoint();
-		Coord cEye = getEyePoint();
-		gluLookAt(cEye.x, cEye.y, cEye.z,
-			      cView.x, cView.y, cView.z, 
-				  0, 0, 1.0 );
+	if ( selectionDrawer != 0) {
+		CRect rct;
+		getDrawerContext()->getDocument()->mpvGetView()->GetClientRect(&rct);
+		const_cast<RootDrawer *>(this)->saveScreenBuffer(rct);
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glViewport(0,0,pixArea.Col, pixArea.Row);
+		setProjection(cbZoom);
+		glClearColor(1.0,1.0,1.0,0.0);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_BLEND);
+		
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		swapBufferToScreen(rct);
+		selectionDrawer->draw(norecursion, cb);
+		glDisable(GL_BLEND);
 	}
+	else {
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		// Clear The Screen And The Depth Buffer
+		if (threeD)
+			glEnable(GL_DEPTH_TEST);
+		else
+			glDisable(GL_DEPTH_TEST);
 
-	return ComplexDrawer::draw(norecursion, cb);
+		glViewport(0,0,pixArea.Col, pixArea.Row);
+		setProjection(cbZoom);
+		
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		if (is3D()) {
+			Coord cView = getViewPoint();
+			Coord cEye = getEyePoint();
+			gluLookAt(cEye.x, cEye.y, cEye.z,
+					  cView.x, cView.y, cView.z, 
+					  0, 0, 1.0 );
+		}
+
+		return ComplexDrawer::draw(norecursion, cb);
+	}
+	return false;
 
 }
 
@@ -427,6 +453,36 @@ void RootDrawer::SetthreeD(void *v, LayerTreeView *tv) {
 	doc->mpvGetView()->Invalidate();
 }
 
+void RootDrawer::setSelectionDrawer(SelectionRectangle *selDraw) {
+	if ( selDraw == 0) {
+		delete [] swapBitmap;
+		swapBitmap = 0;
+	}
+	// selection drawer is owned by the areaselector, dont delete it here
+	selectionDrawer = selDraw;
+}
+
+
+void RootDrawer::swapBufferToScreen(const CRect& rct) const{
+	if (swapBitmap!=NULL) {
+		glDrawPixels(rct.Width(), rct.Height(),GL_RGBA,GL_FLOAT, swapBitmap);
+		GLenum ret =  glGetError();
+	}
+}
+
+void RootDrawer::saveScreenBuffer(const CRect& rct)
+{
+	if ( swapBitmap == 0) {
+		int width,height;
+		width = rct.Width();
+		height = rct.Height();
+		if (swapBitmap==NULL) {
+			swapBitmap = new float[width * height  * 4];
+			glReadBuffer(GL_FRONT);
+			glReadPixels(rct.left,rct.top,width,height,GL_RGBA,GL_FLOAT,swapBitmap);
+		}
+	}
+}
 
 
 
