@@ -52,12 +52,14 @@ class _export CDT
 public:
 
 /// Constructor
+CDT(const geos::geom::LineString *ring);
 CDT(std::vector<Point*> polyline);
 CDT(const vector<Coord>& points);
 /// Destructor
 ~CDT();
 /// Add a hole
 void AddHole(std::vector<Point*> polyline);
+void AddHole(const geos::geom::LineString *ring);
 /// Add a single point
 void AddPoint(Point* point);
 /// Triangulate points

@@ -34,6 +34,15 @@
 
 namespace p2t {
 
+CDT::CDT(const geos::geom::LineString *ring) {
+	polyline.resize(ring->getNumPoints()-1);
+	for(int i =0; i < ring->getNumPoints() - 1; ++i) {
+		const Coordinate& c = ring->getCoordinateN(i);
+		polyline[i] = new Point(c.x, c.y);
+	}
+	sweep_context_ = new SweepContext(polyline);
+	sweep_ = new Sweep;
+}
 CDT::CDT(const vector<Coord>& points) {
 	polyline.resize(points.size());
 	for(int i =0; i < points.size(); ++i) {
@@ -47,6 +56,17 @@ CDT::CDT(std::vector<Point*> _polyline)
 {
   sweep_context_ = new SweepContext(_polyline);
   sweep_ = new Sweep;
+}
+
+void CDT::AddHole(const geos::geom::LineString *ring) {
+	std::vector<Point*> _polyline;
+	int n = ring->getNumPoints() - 1;
+	_polyline.resize(n);
+	for(int i =0; i < n ; ++i) {
+		const Coordinate& c = ring->getCoordinateN(n - i);
+		_polyline[i] = new Point(c.x, c.y);
+	}
+	sweep_context_->AddHole(_polyline);
 }
 
 void CDT::AddHole(std::vector<Point*> polyline)
