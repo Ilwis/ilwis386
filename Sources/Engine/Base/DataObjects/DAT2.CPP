@@ -191,6 +191,7 @@ bool Coord::operator == (const Coord& crd) const
 
 CoordBounds::CoordBounds(const CoordBuf& cBuf)
 {
+	area=rUNDEF;
 	for(int i=0; i<cBuf.iSize(); ++i)
 		operator+=(cBuf[0]);
 }
@@ -199,7 +200,13 @@ Coord CoordBounds::middle() const {
 	return Coord((cMax.x + cMin.x) / 2.0, (cMax.y + cMin.y) / 2.0,(cMax.z + cMin.z) / 2.0);
 }
 
+bool CoordBounds::fValid() const {
+	return abs(cMin.x) < 10e9 &&  abs(cMin.y) < 10e9 && abs(cMax.x) < 10e9 && abs(cMax.y) < 10e9 &&
+		cMin.x <= cMax.x && cMin.y <= cMax.y;
+}
+
 CoordBounds& CoordBounds::operator *=(double fact) {
+	area=rUNDEF;
 	double dw = width() * fact / 2.0;
 	double dh = height() * fact / 2.0;
 	Coord cm = middle();
@@ -282,6 +289,7 @@ CoordBounds& CoordBounds::operator += (Coord c)        // change this so that po
 {
 	if (!c.fUndef()) 
 	{
+		area=rUNDEF;
 		if ( MinX() == rUNDEF ) MinX() = c.x;
 		if ( MinY() == rUNDEF ) MinY() = c.y;
 		if ( MaxX() == rUNDEF ) MaxX() = c.x;
@@ -304,6 +312,7 @@ CoordBounds& CoordBounds::operator += (const CoordBounds& cb) // change this so 
 {
   if (!cb.fUndef()) 
 	{
+		area=rUNDEF;
 		if ( MinX() == rUNDEF ) MinX() = cb.MinX();
 		if ( MinY() == rUNDEF ) MinY() = cb.MinY();
 		if ( MaxX() == rUNDEF ) MaxX() = cb.MaxX();

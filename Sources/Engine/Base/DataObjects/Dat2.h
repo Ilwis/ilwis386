@@ -175,8 +175,8 @@ struct CoordBounds
 // The CoordBounds is the boundary of a certain object represented in
 // real world (Coord) coordinates. Used in BaseMap
 {
-  CoordBounds(): cMin(1e30,1e30,1e30), cMax(-1e30,-1e30,-1e30) {}
-  CoordBounds(Coord c1, Coord c2) : cMin(c1), cMax(c2) { Check(); }
+  CoordBounds(): cMin(1e30,1e30,1e30), cMax(-1e30,-1e30,-1e30) {area=rUNDEF;}
+  CoordBounds(Coord c1, Coord c2) : cMin(c1), cMax(c2) { Check(); area=rUNDEF; }
 	_export CoordBounds(const CoordBuf& cBuf);
   bool fUndef() const
     { return cMin.x > cMax.x || cMin.y > cMax.y || cMin.fUndef() || cMax.fUndef(); }
@@ -190,12 +190,12 @@ struct CoordBounds
   double MaxY() const { return cMax.y; }
   double MinZ() const { return cMin.z; }
   double MaxZ() const { return cMax.z; }
-  double& MinX() { return cMin.x; }
-  double& MaxX() { return cMax.x; }
-  double& MinY() { return cMin.y; }
-  double& MaxY() { return cMax.y; }
-  double& MinZ() { return cMin.z; }
-  double& MaxZ() { return cMax.z; }
+  double& MinX() { return cMin.x; area=rUNDEF;}
+  double& MaxX() { return cMax.x; area=rUNDEF;}
+  double& MinY() { return cMin.y; area=rUNDEF;}
+  double& MaxY() { return cMax.y; area=rUNDEF; }
+  double& MinZ() { return cMin.z; area=rUNDEF;}
+  double& MaxZ() { return cMax.z; area=rUNDEF;}
   double width() const
     { if (fUndef()) return rUNDEF;
       return MaxX() - MinX(); }
@@ -211,9 +211,19 @@ struct CoordBounds
   bool operator == (const CoordBounds& cb) const {
     return cMin == cb.cMin && cMax == cb.cMax;
   }
+  bool _export fValid() const;
   Coord _export middle() const;
+  double getArea() {
+	  if ( fUndef())
+		  return rUNDEF;
+	  if ( area == rUNDEF){
+		  area = width() * height();
+	  }
+	  return area;
+  }
 
   Coord cMin, cMax;
+  double area;
 };
 
 struct IMPEXP LatLon
