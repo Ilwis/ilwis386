@@ -74,7 +74,7 @@ bool PolygonDrawer::draw(bool norecursion, const CoordBounds& cbArea) const{
 	if ( is3D) {
 		glPopMatrix();
 	}
-	if ( boundary && showBoundary && !asQuad) {
+	if ( boundary && showBoundary && (!asQuad || !showArea)) {
 		boundary->draw(norecursion, cbArea);
 	}
 	return true;
