@@ -28,6 +28,7 @@ RootDrawer::RootDrawer(MapCompositionDoc *doc) {
 	aspectRatio = 0;
 	selectionDrawer = 0;
 	swapBitmap = 0;
+	useBitmapRedraw = false;
 
 }
 
@@ -72,13 +73,6 @@ String RootDrawer::addDrawer(NewDrawer *drw) {
 		CoordBounds cb = mapdrw->getBaseMap()->cb();
 		vector<NewDrawer *> allDrawers;
 		getDrawers(allDrawers);
-	/*	for(int i = 0; i < allDrawers.size(); ++i) {
-			AbstractMapDrawer *drw = dynamic_cast<AbstractMapDrawer *>(allDrawers.at(i));
-			if ( drw) {
-				cb += drw->getBaseMap()->cb();
-			}
-		}
-		setCoordBoundsMap(cb);*/
 	}
 	return ComplexDrawer::addDrawer(drw);
 }
@@ -92,22 +86,8 @@ void RootDrawer::addCoordBounds(const CoordSystem& _cs, const CoordBounds& cb, b
 	Therefore all calls to RootDrawer::draw must be preceded by a call to DrawerContext::TakeContext and followed by a call to ReleaseContext
 */
 bool RootDrawer::draw(bool norecursion, const CoordBounds& cb) const{
-	if ( selectionDrawer != 0) {
-		CRect rct;
-		getDrawerContext()->getDocument()->mpvGetView()->GetClientRect(&rct);
-		const_cast<RootDrawer *>(this)->saveScreenBuffer(rct);
-		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glViewport(0,0,pixArea.Col, pixArea.Row);
-		setProjection(cbZoom);
-		glClearColor(1.0,1.0,1.0,0.0);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glEnable(GL_BLEND);
-		
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-		swapBufferToScreen(rct);
-		selectionDrawer->draw(norecursion, cb);
-		glDisable(GL_BLEND);
+	if ( useBitmapRedraw ) {
+		bitmapBufferRedraw();
 	}
 	else {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		// Clear The Screen And The Depth Buffer
@@ -133,6 +113,24 @@ bool RootDrawer::draw(bool norecursion, const CoordBounds& cb) const{
 	}
 	return false;
 
+}
+
+void RootDrawer::bitmapBufferRedraw() const{
+	CRect rct;
+	getDrawerContext()->getDocument()->mpvGetView()->GetClientRect(&rct);
+	const_cast<RootDrawer *>(this)->saveScreenBuffer(rct);
+	glViewport(0,0,pixArea.Col, pixArea.Row);
+	setProjection(cbZoom);
+	glClearColor(1.0,1.0,1.0,0.0);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+	
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	swapBufferToScreen(rct);
+	if ( selectionDrawer)
+		selectionDrawer->draw();
+	glDisable(GL_BLEND);
 }
 
 void RootDrawer::addDataSource(void *) {
@@ -265,10 +263,7 @@ void RootDrawer::setCoordBoundsView(const CoordSystem& _cs, const CoordBounds& _
 		cbZoom = cbView;
 		setViewPoint(cbView.middle());
 		setEyePoint();
-	} /* else {
-		//cbView += cb;
-		aspectRatio = cbView.width()/ cbView.height();
-	}*/
+	} 
 	fakeZ = cbView.width() * 0.001;
 	
 }
@@ -329,11 +324,7 @@ Coord RootDrawer::screenToWorld(const RowCol& rc) {
 
 RowCol RootDrawer::worldToScreen(const Coord& crd){
 	drawercontext->TakeContext();
-	//glGetIntegerv(GL_VIEWPORT, vp);
-	//int x = vp[0] + crd.x * vp[2];
-	//int y = vp[1] + crd.y * vp[3];
-	//return RowCol(y,x);
-
+	
 	GLint viewport[4];
 	double modelview[16];
 	double projection[16];
@@ -465,6 +456,7 @@ void RootDrawer::setSelectionDrawer(SelectionRectangle *selDraw) {
 
 void RootDrawer::swapBufferToScreen(const CRect& rct) const{
 	if (swapBitmap!=NULL) {
+		glPixelTransferf(GL_MAP_COLOR, false);
 		glDrawPixels(rct.Width(), rct.Height(),GL_RGBA,GL_FLOAT, swapBitmap);
 		GLenum ret =  glGetError();
 	}
@@ -479,8 +471,17 @@ void RootDrawer::saveScreenBuffer(const CRect& rct)
 		if (swapBitmap==NULL) {
 			swapBitmap = new float[width * height  * 4];
 			glReadBuffer(GL_FRONT);
+			glPixelTransferf(GL_MAP_COLOR, false);
 			glReadPixels(rct.left,rct.top,width,height,GL_RGBA,GL_FLOAT,swapBitmap);
 		}
+	}
+}
+
+void RootDrawer::setBitmapRedraw(bool yesno) {
+	useBitmapRedraw = yesno;
+	if ( yesno==false && swapBitmap) {
+		delete [] swapBitmap;
+		swapBitmap = 0;
 	}
 }
 

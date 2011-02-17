@@ -47,6 +47,8 @@ namespace ILWIS {
 		Coord getViewPoint() const;
 		Coord getEyePoint() const;
 		double getFakeZ() const;
+		void setBitmapRedraw(bool yesno);
+
 	private:
 		void setProjection(const CoordBounds& cb) const;
 		void setEyePoint();
@@ -57,6 +59,7 @@ namespace ILWIS {
 		void debug();
 		void swapBufferToScreen(const CRect& rct) const;
 		void saveScreenBuffer(const CRect& rct);
+		void bitmapBufferRedraw() const;
 
 		CoordBounds cbView;
 		CoordBounds cbZoom;
@@ -71,5 +74,6 @@ namespace ILWIS {
 		SelectionRectangle *selectionDrawer;
 		float * swapBitmap;
 		ILWIS::DrawerContext *drawercontext;
+		bool useBitmapRedraw;
 	};
 }

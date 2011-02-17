@@ -118,6 +118,7 @@ void AreaSelector::OnLButtonDown(UINT nFlags, CPoint point)
 		ILWIS::DrawerParameters sp(mcd->rootDrawer, mcd->rootDrawer);
 		selectionDrawer = (ILWIS::SelectionRectangle *)IlwWinApp()->getDrawer("SelectionRectangle", "Ilwis38", &sp);
 		mcd->rootDrawer->setSelectionDrawer(selectionDrawer);
+		mcd->rootDrawer->setBitmapRedraw(true);
 		selectionDrawer->setColor(clr);
 	}
 	mpv->SetCapture();
@@ -135,6 +136,7 @@ void AreaSelector::OnLButtonUp(UINT nFlags, CPoint point)
 		mcd->rootDrawer->setSelectionDrawer(0);
 		delete selectionDrawer;
 		selectionDrawer = NULL;
+		mcd->rootDrawer->setBitmapRedraw(false);
 	}
 
 	(cmt->*np)(rect());

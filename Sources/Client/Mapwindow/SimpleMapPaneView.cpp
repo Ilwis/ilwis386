@@ -416,7 +416,7 @@ void SimpleMapPaneView::OnMouseMove(UINT nFlags, CPoint point)
 		}  
 	}
 
-	if (0 == tools.size() ==0 && (MK_LBUTTON & nFlags)) {
+	if (0 == tools.size()&& (MK_LBUTTON & nFlags)) {
 		zRect rect;
 		GetClientRect(&rect);
 		if (!rect.PtInRect(point)) {
