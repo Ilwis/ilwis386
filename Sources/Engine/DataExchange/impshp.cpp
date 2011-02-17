@@ -162,12 +162,12 @@ bool ImpShapeFile::fImport(Tranquilizer& trq)
     Domain dmSimpleId = Domain(fnDomain, iMaxRecords, dmtID);
     DBIVImport dbTable(fnDBF, fnTable, trq);
     dbTable.SetTableDomain(dmSimpleId); // the imported table will have a ID domain
-    //if (!dbTable.fImport()) // importing the dbf file. The result will be used as attribute table
-    //   ThrowImportingTableError(fnDBF) ;
-    //trq.SetTitle(SCVTitleImportShape);
-    //trq.SetText(SCVTextProcessing);
-    //dbTable.GetTable()->fErase = true;        // keep table only if import shape succeeds
-    //dbTable.GetTable()->dm()->fErase = true;  // same for the table domain    
+    if (!dbTable.fImport()) // importing the dbf file. The result will be used as attribute table
+       ThrowImportingTableError(fnDBF) ;
+    trq.SetTitle(SCVTitleImportShape);
+    trq.SetText(SCVTextProcessing);
+    dbTable.GetTable()->fErase = true;        // keep table only if import shape succeeds
+    dbTable.GetTable()->dm()->fErase = true;  // same for the table domain    
 
     bool fFailed = true;
     switch(isfType)
