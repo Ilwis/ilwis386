@@ -484,6 +484,10 @@ void PolygonMapStore::GetDataFiles(Array<FileName>& afnDat, Array<String>* asSec
     FileName fnDat;
     ptr.ReadElement("PolygonMapStore", "DataPol", fnDat);
     ObjectInfo::Add(afnDat, fnDat, fnObj.sPath());
+	FileName fnTriangle(ptr.fnObj,".tria#");
+	if ( fnTriangle.fExist()) {
+		ObjectInfo::Add(afnDat, fnTriangle, fnObj.sPath());
+	}
 }
 
 void PolygonMapStore::KeepOpen(bool f)
