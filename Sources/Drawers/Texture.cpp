@@ -73,16 +73,21 @@ void Texture::CreateTexture(DrawerContext * drawerContext, bool fInThread, volat
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
+	// The following are shared OpenGL variables .. if ever they need to change from the default of 0, restore them to the original value
+	//glPixelStorei( GL_UNPACK_SKIP_PIXELS, 0);
+	//glPixelStorei( GL_UNPACK_SKIP_ROWS, 0);
+	boolean oldVal;
+	glGetBooleanv(GL_MAP_COLOR, &oldVal);
 	glPixelTransferf(GL_MAP_COLOR, fUsePalette);
-	glPixelStorei( GL_UNPACK_SKIP_PIXELS, 0);
-	glPixelStorei( GL_UNPACK_SKIP_ROWS, 0);
-	if (fUsePalette)
+	if (fUsePalette) {
 		glTexImage2D( GL_TEXTURE_2D, 0, 4, sizeX / zoomFactor, sizeY / zoomFactor, 0, GL_COLOR_INDEX, GL_UNSIGNED_SHORT, texture_data);
+	}
 	else {
 		glTexImage2D( GL_TEXTURE_2D, 0, 4, sizeX / zoomFactor, sizeY / zoomFactor, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture_data);
 		free(texture_data);
 		texture_data = 0;
 	}
+	glPixelTransferf(GL_MAP_COLOR, oldVal);
 	fPaletteChanged = false;
 	if (fInThread)
 		drawerContext->ReleaseContext();
@@ -97,7 +102,11 @@ void Texture::BindMe()
 {
 	glBindTexture(GL_TEXTURE_2D, texture);
 	if (fUsePalette && fPaletteChanged) {
+		boolean oldVal;
+		glGetBooleanv(GL_MAP_COLOR, &oldVal);
+		glPixelTransferf(GL_MAP_COLOR, true);
 		glTexImage2D( GL_TEXTURE_2D, 0, 4, sizeX / zoomFactor, sizeY / zoomFactor, 0, GL_COLOR_INDEX, GL_UNSIGNED_SHORT, texture_data);
+		glPixelTransferf(GL_MAP_COLOR, oldVal);
 		fPaletteChanged = false;
 	}
 }
