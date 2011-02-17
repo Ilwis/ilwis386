@@ -34,11 +34,10 @@ PolygonDrawer::~PolygonDrawer() {
 bool PolygonDrawer::draw(bool norecursion, const CoordBounds& cbArea) const{
 	if (triangleStrips.size() == 0 || !fActive)
 		return false;
-	// cb.fValid == false is accpet as it is made whith maps that have a coordbound around the earths edge (and thus in space))
-	if ( cbArea.fValid()) {
-		if ( !getRootDrawer()->getCoordBoundsZoom().fContains(cb))
+	CoordBounds cbZoom = getRootDrawer()->getCoordBoundsZoom();
+	if ( !cbZoom.fContains(cb))
 			return false;
-	}
+    bool asQuad =  cbZoom.getArea() * 0.00001 > const_cast<PolygonDrawer *>(this)->cb.getArea() ? true : false;
 	glShadeModel(GL_FLAT);
 
 	ComplexDrawer *cdrw = (ComplexDrawer *)getParentDrawer();
@@ -53,19 +52,29 @@ bool PolygonDrawer::draw(bool norecursion, const CoordBounds& cbArea) const{
 	}
 
 	glColor4f(drawColor.redP(),drawColor.greenP(), drawColor.blueP(), (1.0 - drawColor.transparencyP()) * getTransparency() * areaTransparency);
-	for(int i=0; i < triangleStrips.size() && showArea; ++i){
-		glBegin(GL_TRIANGLE_STRIP);
-		for(int j=0; j < triangleStrips.at(i).size(); ++j) {
-			Coord c = triangleStrips.at(i).at(j);
-			double z = is3D ? c.z : 0;
-			glVertex3d(c.x,c.y,z);
-		}
+	if ( asQuad) {
+		glBegin(GL_QUADS);
+		glVertex3d(cb.cMin.x, cb.cMin.y, 0);
+		glVertex3d(cb.cMin.x, cb.cMax.y, 0);
+		glVertex3d(cb.cMax.x, cb.cMax.y, 0);
+		glVertex3d(cb.cMax.x, cb.cMin.y, 0);
 		glEnd();
+	} else {
+	for(int i=0; i < triangleStrips.size() && showArea; ++i){
+			glBegin(GL_TRIANGLE_STRIP);
+			//glBegin(GL_LINE_STRIP);
+			for(int j=0; j < triangleStrips.at(i).size(); ++j) {
+				Coord c = triangleStrips.at(i).at(j);
+				double z = is3D ? c.z : 0;
+				glVertex3d(c.x,c.y,z);
+			}
+			glEnd();
+		}
 	}
 	if ( is3D) {
 		glPopMatrix();
 	}
-	if ( boundary && showBoundary) {
+	if ( boundary && showBoundary && !asQuad) {
 		boundary->draw(norecursion, cbArea);
 	}
 	return true;

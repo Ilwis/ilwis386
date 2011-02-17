@@ -71,11 +71,9 @@ void PointDrawer::setScale(double s) {
 bool PointDrawer::draw(bool norecursion, const CoordBounds& cbArea) const {
 	if ( cNorm.fUndef())
 		return false;
-	CoordBounds cbZoom = getRootDrawer()->getCoordBoundsZoom();
-	if ( cbArea.fValid()) {
-		if ( !cbZoom.fContains(cNorm))
+	const CoordBounds& cbZoom = getRootDrawer()->getCoordBoundsZoom();
+	if ( !cbZoom.fContains(cNorm))
 			return false;
-	}
 
 	bool extrusion = getSpecialDrawingOption(NewDrawer::sdoExtrusion);
 	bool filledExtr = getSpecialDrawingOption(NewDrawer::sdoFilled);

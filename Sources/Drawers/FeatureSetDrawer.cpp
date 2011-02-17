@@ -68,6 +68,7 @@ void FeatureSetDrawer::prepare(PreparationParameters *parms){
 	if ( !isActive())
 		return;
 
+	clock_t start = clock();
 	SetDrawer::prepare(parms);
 	FeatureLayerDrawer *mapDrawer = (FeatureLayerDrawer *)parentDrawer;
 	if ( getName() == "Unknown")
@@ -93,8 +94,9 @@ void FeatureSetDrawer::prepare(PreparationParameters *parms){
 				ILWIS::DrawerParameters dp(getRootDrawer(), this);
 				pdrw = createElementDrawer(parms, &dp);
 				pdrw->addDataSource(feature);
-				PreparationParameters fp((int)parms->type, 0);
-				pdrw->prepare(&fp);
+				/*PreparationParameters fp((int)parms->type, 0);
+				pp->file = parms->file;*/
+				pdrw->prepare(parms);
 				setDrawer(i, pdrw);
 				++count;
 				if ( i % 100 == 0) {
@@ -109,6 +111,9 @@ void FeatureSetDrawer::prepare(PreparationParameters *parms){
 			prepareChildDrawers(parms);
 		}
 	}
+	clock_t end = clock();
+	double duration = 1000.0 * (double)(end - start) / CLOCKS_PER_SEC;
+	TRACE("Prepared in %2.2f seconds;\n", duration/1000);
 }
 
 String FeatureSetDrawer::getMask() const{

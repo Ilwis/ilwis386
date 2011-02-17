@@ -4,6 +4,7 @@
 #include "Client\Mapwindow\Drawers\ComplexDrawer.h"
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
 #include "Client\Ilwis.h"
+#include "Client\Editors\Utils\line.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
@@ -12,6 +13,7 @@
 #include "Drawers\featurelayerdrawer.h"
 #include "Drawers\SetDrawer.h"
 #include "Drawers\FeatureSetDrawer.h"
+#include "Drawers\PolygonSetDrawer.h"
 #include "geos\algorithm\CGAlgorithms.h"
 #include "Drawers\DrawingColor.h" 
 #include "Drawers\gpc.h"
@@ -28,13 +30,13 @@ ILWIS::NewDrawer *createPolygonFeatureDrawer(DrawerParameters *parms) {
 	return new PolygonFeatureDrawer(parms);
 }
 
-PolygonFeatureDrawer::PolygonFeatureDrawer(DrawerParameters *parms) : PolygonDrawer(parms,"PolygonFeatureDrawer") {
+PolygonFeatureDrawer::PolygonFeatureDrawer(DrawerParameters *parms) : PolygonDrawer(parms,"PolygonFeatureDrawer"),trianglePol(0) {
 	setDrawMethod(NewDrawer::drmRPR);
 	PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER , 0);
 	boundary = (LineDrawer *)IlwWinApp()->getDrawer("LineFeatureDrawer", &pp, parms);
 }
 
-PolygonFeatureDrawer::PolygonFeatureDrawer(DrawerParameters *parms, const String& name) : PolygonDrawer(parms,name) {
+PolygonFeatureDrawer::PolygonFeatureDrawer(DrawerParameters *parms, const String& name) : PolygonDrawer(parms,name),trianglePol(0) {
 	setDrawMethod(NewDrawer::drmRPR);
 	PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER , 0);
 	boundary = (LineDrawer *)IlwWinApp()->getDrawer("LineFeatureDrawer", &pp, parms);
@@ -64,35 +66,43 @@ void* PolygonFeatureDrawer::getDataSource() const{
 
 void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 	PolygonDrawer::prepare(p);
-	FeatureSetDrawer *fdr = dynamic_cast<FeatureSetDrawer *>(parentDrawer);
+	PolygonSetDrawer *fdr = dynamic_cast<PolygonSetDrawer *>(parentDrawer);
 	if (  p->type & ptGEOMETRY | p->type & ptRESTORE) {
 		CoordSystem csy = fdr->getCoordSystem();
 		if ( boundary) {
 			boundary->prepare(p);
 		}
 		ILWIS::Polygon *polygon = (ILWIS::Polygon *)feature;
-		//double ar = polygon->rArea();
 		if ( !polygon)
 			return;
 		cb = polygon->cbBounds();
-		gpc_vertex_list exteriorBoundary;
-		vector<gpc_vertex_list> holes;
-		bool coordNeedsConversion = getRootDrawer()->getCoordinateSystem()->fnObj == csy->fnObj;
+		cb.getArea(); // initializes the area
+		long *data;
+		long *count;
+		fdr->getTriangleData(&data, &count);
+		if ( data) {
+			readTriangleData(data, count);
+		} else {
+			gpc_vertex_list exteriorBoundary;
+			vector<gpc_vertex_list> holes;
+			bool coordNeedsConversion = getRootDrawer()->getCoordinateSystem()->fnObj == csy->fnObj;
 
-		const LineString *ring = polygon->getExteriorRing();
-		exteriorBoundary.num_vertices = ring->getNumPoints() - 1;
-		exteriorBoundary.vertex = makeVertexList(ring, coordNeedsConversion,csy);
-		holes.resize(polygon->getNumInteriorRing());
-		for(int i = 0; i < polygon->getNumInteriorRing(); ++i) {
-			const LineString * ring = polygon->getInteriorRingN(i);
-			holes[i].num_vertices = ring->getNumPoints() - 1;
-			holes[i].vertex = makeVertexList(ring,coordNeedsConversion,csy);
+			const LineString *ring = polygon->getExteriorRing();
+			exteriorBoundary.num_vertices = ring->getNumPoints() - 1;
+			exteriorBoundary.vertex = makeVertexList(ring, coordNeedsConversion,csy);
+			holes.resize(polygon->getNumInteriorRing());
+			for(int i = 0; i < polygon->getNumInteriorRing(); ++i) {
+				const LineString * ring = polygon->getInteriorRingN(i);
+				holes[i].num_vertices = ring->getNumPoints() - 1;
+				holes[i].vertex = makeVertexList(ring,coordNeedsConversion,csy);
+			}
+			prepareList(exteriorBoundary, holes);
+			for(int i = 0; i < holes.size(); ++i) {
+				delete [] holes[i].vertex	;
+			}
+			delete [] exteriorBoundary.vertex;
 		}
-		prepareList(exteriorBoundary, holes);
-		for(int i = 0; i < holes.size(); ++i) {
-			delete [] holes[i].vertex	;
-		}
-		delete [] exteriorBoundary.vertex;
+
 	}
 	if ( p->type & NewDrawer::pt3D) {
 		ZValueMaker *zmaker = ((ComplexDrawer *)parentDrawer)->getZMaker();
@@ -111,8 +121,23 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 		extrTransparency = fdr->getExtrusionTransparency();
 		drawColor = fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod());
 		if ( boundary) {
-			boundary->setDrawColor(Color(0,0,0));
+			Color clr;
+			LineDspType dspType;
+			double thick;
+			fdr->getBoundaryParements(clr,dspType,thick);
+			boundariesActive(fdr->getShowBoundaries());
+			areasActive(fdr->getShowAreas());
+			setTransparencyArea(fdr->getTransparencyArea());
+			boundary->setLineStyle(LineDrawer::openGLLineStyle(dspType));
+			boundary->setThickness(thick);
+			for(int j =0 ; j < p->filteredRaws.size(); ++j) {
+				int raw = p->filteredRaws[j];
+				if ( getFeature()->rValue() == abs(raw)) {
+					setActive(raw > 0);
+				}
+			}
 			boundary->prepare(p);
+			boundary->setDrawColor(clr);
 		}
 	}
 }
@@ -149,16 +174,59 @@ void PolygonFeatureDrawer::prepareList(gpc_vertex_list& exteriorBoundary, vector
 	tristrip.num_strips = 0;
 	tristrip.strip = 0;
 	gpc_polygon_to_tristrip(&polygon, &tristrip);
+
+	long count = 2;
+	//count += tristrip.num_strips;
+	for(int i = 0; i < tristrip.num_strips; ++i) {
+		gpc_vertex_list list = tristrip.strip[i];
+		int n = list.num_vertices;
+		count += n * 2 * 3 + 1;
+	}
+	trianglePol = new long[ count ]; // number of pointer plus one long indicating howmany pointers + one for totalsize of block
+	trianglePol[0] = count;
+	trianglePol[1] = tristrip.num_strips;
+	count = 2;
 	triangleStrips.resize(tristrip.num_strips);
 	for(int i = 0; i < tristrip.num_strips; ++i) {
 		gpc_vertex_list list = tristrip.strip[i];
 		int n = list.num_vertices;
-		SetDrawer::test_count += ((int)(n / 3)) + 1;
+		trianglePol[count++] = n;
 		triangleStrips[i].resize(n);
 		for(int j = 0; j < n; ++j) {
 			gpc_vertex b = list.vertex[j];
 			triangleStrips.at(i)[j] = (Coord(b.x, b.y));
+			((double *)(trianglePol + count))[j*3] = b.x;
+			((double*)(trianglePol + count))[j*3 + 1] = b.y;
+			((double*)(trianglePol + count))[j*3 + 2] = 0;
 		}
+		count += n * 2 *3;
 	}
+}
+
+long PolygonFeatureDrawer::writeTriangleData(ofstream& file) {
+	file.write((char *)trianglePol, trianglePol[0]*4);
+	return trianglePol[0];
+}
+
+void PolygonFeatureDrawer::readTriangleData(long *buffer, long* count) {
+	long number;
+	number = buffer[*count];
+	trianglePol = new long[number];
+	trianglePol[0] = number;
+	memcpy(trianglePol,buffer + *count,number * 4);
+	long current = 2;
+	triangleStrips.resize(trianglePol[1]);
+	for(int i = 0; i < trianglePol[1]; ++i) {
+		int n = trianglePol[current++];
+		triangleStrips[i].resize(n);
+		for(int j = 0; j < n; ++j) {
+			double x = ((double *)(trianglePol + current))[j*3];
+			double y = ((double *)(trianglePol + current))[j*3 + 1];
+			double z = ((double *)(trianglePol + current))[j*3 + 2];
+			triangleStrips.at(i)[j] = Coord(x,y,z);
+		}
+		current += n * 2 *3;
+	}
+	*count += number;
 }
 

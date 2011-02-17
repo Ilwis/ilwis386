@@ -21,6 +21,10 @@ class PolygonSetDrawer : public FeatureSetDrawer {
 		void addDataSource(void *bmap,int options);
 		double getTransparencyArea() const;
 		void setTransparencyArea(double v);
+		bool getShowAreas() const { return showAreas; }
+		bool getShowBoundaries() const { return showBoundaries; }
+		void getTriangleData(long **data,long** loc);
+		void getBoundaryParements(Color& clr, LineDspType& dspType, double& thick);
 
 	protected:
 		void displayOptionTransparencyP(CWnd *);
@@ -35,6 +39,10 @@ class PolygonSetDrawer : public FeatureSetDrawer {
 		Color           linecolor;
 		LineDspType		linestyle;
 		double			linethickness;
+		bool usesTriangleFile;
+		long *triData;
+		long currentLoc;
+		
 	};
 
 	class TransparencyFormP : public DisplayOptionsForm {

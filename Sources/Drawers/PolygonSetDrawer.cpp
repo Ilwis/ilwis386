@@ -37,7 +37,10 @@ PolygonSetDrawer::PolygonSetDrawer(DrawerParameters *parms) :
 	areaTransparency(1.0),
 	linecolor(Color(0,0,0)),
 	linestyle(ldtNone),
-	linethickness(1.0)
+	linethickness(1.0),
+	usesTriangleFile(true),
+	triData(0),
+	currentLoc(0)
 {
 
 }
@@ -103,14 +106,52 @@ void PolygonSetDrawer::setActiveBoundaries(void *v, LayerTreeView *view) {
 	getRootDrawer()->getDrawerContext()->doDraw();
 }
 
+void PolygonSetDrawer::getTriangleData(long **data, long** count) {
+	*data = triData;
+	*count = &currentLoc;
+}
+
 void PolygonSetDrawer::prepare(PreparationParameters *parms) {
-	SetDrawer::test_count = 0;
+	BaseMapPtr *bmap = ((AbstractMapDrawer *)(getParentDrawer()))->getBaseMap();
+	FileName fnTriangle(bmap->fnObj,".tria#");
+	if ( (parms->type & RootDrawer::ptGEOMETRY) && fnTriangle.fExist()) {
+		ifstream file(fnTriangle.sFullPath().scVal(), ios::in|ios::binary);
+		bool ff = file.is_open();
+		long size=1234;
+		file.read((char *)(&size), 4);
+		triData = new long[size];
+		triData[0] = size;
+		file.read((char *)(triData + 1),(size - 1)*4);
+		currentLoc = 1; // first long is the total size of the file; irrelevant for the rest of the polygons
+	}
+
 	FeatureSetDrawer::prepare(parms);
+
+	if ( parms->type & RootDrawer::ptGEOMETRY) {
+		if ( usesTriangleFile && triData == 0) {
+			if ( !fnTriangle.fExist()) {
+				ofstream file(fnTriangle.sFullPath().scVal(), ios::out|ios::binary|ios::ate);
+				long cnt = 1;
+				file.write((char *)&cnt,4);
+				for(int i=0; i < getDrawerCount(); ++i) {
+					cnt += ((PolygonFeatureDrawer *)getDrawer(i))->writeTriangleData(file);
+				}
+				file.seekp(0);
+				file.write((char *)&cnt,4);
+				file.close();
+			}
+		}
+	}
+	if ( triData != 0) {
+		delete [] triData;
+		triData = 0;
+		currentLoc = 0;
+	}
 	if ( parms->type & RootDrawer::ptRENDER){
-		for(int i=0; i < drawers.size(); ++i) {
+	/*	for(int i=0; i < drawers.size(); ++i) {
 			PolygonFeatureDrawer *pdr = (PolygonFeatureDrawer *)drawers.at(i);
 			pdr->boundariesActive(showBoundaries);
-			pdr->areasActive(showAreas);
+			pdr->areasActive();
 			pdr->setTransparencyArea(areaTransparency);
 			switch(linestyle) {
 			case ldtDot:
@@ -132,7 +173,7 @@ void PolygonSetDrawer::prepare(PreparationParameters *parms) {
 					pdr->setActive(raw > 0);
 				}
 			}
-		}
+		}*/
 	}
 }
 
@@ -153,6 +194,12 @@ double PolygonSetDrawer::getTransparencyArea() const{
 
 void PolygonSetDrawer::setTransparencyArea(double v){
 	areaTransparency = v;
+}
+
+void PolygonSetDrawer::getBoundaryParements(Color& clr, LineDspType& dspType, double& thick) {
+	clr = linecolor;
+	dspType = linestyle;
+	thick = linethickness;
 }
 
 //------------------------------------------------
