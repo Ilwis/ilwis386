@@ -215,29 +215,15 @@ void ZoomableView::moveEyePoint(const CPoint& pnt, UINT message) {
 		double deltay = beginMovePoint.y - pnt.y;
 		if ( deltax == 0 && deltay == 0)
 			return;
-		double roll = deltax / 50.0;
-		double yaw = deltay / 50.0;
-
 		MapCompositionDoc *doc = (MapCompositionDoc *)GetDocument();
-		Coord eyePoint = doc->rootDrawer->getEyePoint();
-		Coord viewPoint = doc->rootDrawer->getViewPoint();
-		double deltaXEyeView = eyePoint.x - viewPoint.x;
-		double deltaYEyeView = eyePoint.y - viewPoint.y;
-		double deltaZEyeView = eyePoint.z - viewPoint.z;
-		double distance = sqrt(deltaXEyeView * deltaXEyeView + deltaYEyeView * deltaYEyeView + deltaZEyeView * deltaZEyeView);
-		double theta = M_PI_2 - atan2( deltaZEyeView ,sqrt( deltaXEyeView*deltaXEyeView + deltaYEyeView * deltaYEyeView));
-		double phi = atan2(deltaYEyeView,deltaXEyeView);
-		theta += yaw;
-		phi += roll;
-		double x = distance * cos(phi) * sin(theta);
-		double y = distance * sin(theta) * sin(phi);
-		double z = distance * cos(theta);
-		double xe =  x + viewPoint.x;
-		double ye = y + viewPoint.y;
-		double ze = z + viewPoint.z;
-	
-		Coord newEye(xe,ye,ze);
-		doc->rootDrawer->setEyePoint(newEye);
+		double roll = deltax/2;
+		double yaw = deltay/2;
+		double rx,ry,rz;
+		doc->rootDrawer->getRotationAngles(rx,ry,rz);
+		rx += roll;
+		ry += yaw;
+		doc->rootDrawer->setRotationAngles(rx,ry,rz);
+
 		beginMovePoint = pnt;
 		doc->mpvGetView()->Invalidate();
 	}
@@ -729,15 +715,9 @@ void ZoomableView::ZoomInPnt(zPoint p)
 {
 
 	MapCompositionDoc *mcd = (MapCompositionDoc *)GetDocument();
-	Coord eyePoint = mcd->rootDrawer->getEyePoint();
-	Coord viewPoint = mcd->rootDrawer->getViewPoint();
-	double deltaXEyeView = eyePoint.x - viewPoint.x;
-	double deltaYEyeView = eyePoint.y - viewPoint.y;
-	double deltaZEyeView = eyePoint.z - viewPoint.z;
-	Coord newEyePoint(eyePoint.x - deltaXEyeView/10.0,
-		eyePoint.y - deltaYEyeView/10.0,
-		eyePoint.z - deltaZEyeView/10.0);
-	mcd->rootDrawer->setEyePoint(newEyePoint);
+	double zoom3D = mcd->rootDrawer->getZoom3D();
+	zoom3D /= 1.1;
+	mcd->rootDrawer->setZoom3D(zoom3D);
 	mcd->mpvGetView()->Invalidate();
 
 }
@@ -745,15 +725,9 @@ void ZoomableView::ZoomInPnt(zPoint p)
 void ZoomableView::ZoomOutPnt(zPoint p)
 {
 	MapCompositionDoc *mcd = (MapCompositionDoc *)GetDocument();
-	Coord eyePoint = mcd->rootDrawer->getEyePoint();
-	Coord viewPoint = mcd->rootDrawer->getViewPoint();
-	double deltaXEyeView = eyePoint.x - viewPoint.x;
-	double deltaYEyeView = eyePoint.y - viewPoint.y;
-	double deltaZEyeView = eyePoint.z - viewPoint.z;
-	Coord newEyePoint(eyePoint.x + deltaXEyeView/10.0,
-		eyePoint.y + deltaYEyeView/10.0,
-		eyePoint.z + deltaZEyeView/10.0);
-	mcd->rootDrawer->setEyePoint(newEyePoint);
+	double zoom3D = mcd->rootDrawer->getZoom3D();
+	zoom3D *= 1.1;
+	mcd->rootDrawer->setZoom3D(zoom3D);
 	mcd->mpvGetView()->Invalidate();
 }
 

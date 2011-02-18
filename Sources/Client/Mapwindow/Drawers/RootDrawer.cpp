@@ -29,6 +29,8 @@ RootDrawer::RootDrawer(MapCompositionDoc *doc) {
 	selectionDrawer = 0;
 	swapBitmap = 0;
 	useBitmapRedraw = false;
+	rotX = rotY = rotZ = 0;
+	zoom3D = 1.0;
 
 }
 
@@ -100,18 +102,26 @@ bool RootDrawer::draw(bool norecursion, const CoordBounds& cb) const{
 		setProjection(cbZoom);
 		
 		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
+		if ( rotX ==0 && rotY ==0) {
+			glLoadIdentity();
+			if (is3D()) {
+				gluLookAt(eyePoint.x, eyePoint.y, eyePoint.z, viewPoint.x, viewPoint.y, viewPoint.z, 0, 1.0, 0 );
+			}
+		}
 		if (is3D()) {
-			Coord cView = getViewPoint();
-			Coord cEye = getEyePoint();
-			gluLookAt(cEye.x, cEye.y, cEye.z,
-					  cView.x, cView.y, cView.z, 
-					  0, 0, 1.0 );
+				glPushMatrix();	
+				glTranslatef(viewPoint.x,viewPoint.y, 0);
+				glRotatef(rotX,0,0,1);				// Rotate on x
+				glRotatef(rotY,1,0,0);				// Rotate on y
+				glTranslatef(-viewPoint.x,-viewPoint.y, 0);
+	
 		}
 
-		return ComplexDrawer::draw(norecursion, cb);
+		ComplexDrawer::draw(norecursion, cb);
+		if ( is3D())
+			glPopMatrix();
 	}
-	return false;
+	return true;
 
 }
 
@@ -265,6 +275,16 @@ void RootDrawer::setCoordBoundsView(const CoordSystem& _cs, const CoordBounds& _
 		setEyePoint();
 	} 
 	fakeZ = cbView.width() * 0.001;
+	glMatrixMode(GL_MODELVIEW);
+	if ( is3D()) {
+		glLoadIdentity();
+		if (is3D()) {
+			rotX= rotY = 0;
+			zoom3D = 1.0;
+			setCoordBoundsZoom(cbView);
+			gluLookAt(eyePoint.x, eyePoint.y, eyePoint.z, viewPoint.x, viewPoint.y, viewPoint.z, 0, 1.0, 0 );
+		}
+	}
 	
 }
 
@@ -275,9 +295,9 @@ void RootDrawer::setCoordBoundsZoom(const CoordBounds& cb) {
 }
 
 void RootDrawer::setEyePoint() {
-	eyePoint.x = viewPoint.x - cbZoom.width() ;
+	eyePoint.x = viewPoint.x;;// - cbZoom.width() ;
 	eyePoint.y = viewPoint.y - cbZoom.height();
-	eyePoint.z = cbZoom.width() * 2;
+	eyePoint.z = cbZoom.width() ;
 }
 
 void RootDrawer::setCoordBoundsMap(const CoordBounds& cb) {
@@ -377,7 +397,7 @@ void RootDrawer::setProjection(const CoordBounds& cb) const {
 	if ( threeD) {
 		double zBase = max(abs(eyePoint.x - viewPoint.x), abs(eyePoint.y - viewPoint.y));
 		double w = max(cbZoom.width(), cbZoom.height());
-		gluPerspective(40, aspectRatio,zBase/2.0, w * 4);
+		gluPerspective(40*zoom3D, aspectRatio,zBase/2.0, w * 4);
 	} else {
 		glOrtho(cb.cMin.x,cb.cMax.x,cb.cMin.y,cb.cMax.y,-1,1);
 	}
@@ -483,6 +503,25 @@ void RootDrawer::setBitmapRedraw(bool yesno) {
 		delete [] swapBitmap;
 		swapBitmap = 0;
 	}
+}
+
+void RootDrawer::setRotationAngles(double rx, double ry, double rz){
+	rotX = rx;
+	rotY = ry;
+	rotZ = rz;
+}
+void RootDrawer::getRotationAngles(double& rx, double& ry, double& rz){
+	rx = rotX;
+	ry = rotY;
+	rz = rotZ;
+}
+
+double RootDrawer::getZoom3D() const{
+	return zoom3D;
+}
+
+void RootDrawer::setZoom3D(double v){
+	zoom3D = v;
 }
 
 

@@ -48,6 +48,10 @@ namespace ILWIS {
 		Coord getEyePoint() const;
 		double getFakeZ() const;
 		void setBitmapRedraw(bool yesno);
+		void setRotationAngles(double rx, double ry, double rz);
+		void getRotationAngles(double& rx, double& ry, double& rz);
+		double getZoom3D() const;
+		void setZoom3D(double v);
 
 	private:
 		void setProjection(const CoordBounds& cb) const;
@@ -60,6 +64,7 @@ namespace ILWIS {
 		void swapBufferToScreen(const CRect& rct) const;
 		void saveScreenBuffer(const CRect& rct);
 		void bitmapBufferRedraw() const;
+		void init3D();
 
 		CoordBounds cbView;
 		CoordBounds cbZoom;
@@ -71,6 +76,8 @@ namespace ILWIS {
 		Coordinate viewPoint;
 		double fakeZ;
 		double aspectRatio;
+		double rotX, rotY, rotZ;
+		double zoom3D;
 		SelectionRectangle *selectionDrawer;
 		float * swapBitmap;
 		ILWIS::DrawerContext *drawercontext;
