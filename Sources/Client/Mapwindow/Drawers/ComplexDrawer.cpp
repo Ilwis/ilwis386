@@ -464,7 +464,7 @@ bool ComplexDrawer::is3D() const {
 	return threeD;
 }
 
-ZValueMaker *ComplexDrawer::getZMaker() {
+ZValueMaker *ComplexDrawer::getZMaker() const {
 	return zmaker;
 }
 
