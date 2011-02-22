@@ -10,7 +10,6 @@ namespace ILWIS{
 
 class _export FeatureSetDrawer : public SetDrawer {
 	friend class SetSingleColorForm;
-	friend class ExtrusionOptions;
 
 	public:
 		ILWIS::NewDrawer *createFeatureSetDrawer(DrawerParameters *parms);
@@ -24,19 +23,13 @@ class _export FeatureSetDrawer : public SetDrawer {
 		Color getSingleColor() const;
 		HTREEITEM  configure(LayerTreeView  *tv, HTREEITEM parent);
 		virtual NewDrawer *createElementDrawer(PreparationParameters *pp, ILWIS::DrawerParameters* parms) const { return 0;}
-		double getExtrusionTransparency() const;
 		void getFeatures(vector<Feature *>& features) const;
 		virtual void addDataSource(void *,int options=0);
 		void *getDataSource() const;
 
 	protected:
-		HTREEITEM make3D(bool yeno, LayerTreeView  *tvm);
 		void displayOptionMask(CWnd *parent);
 		void displayOptionSingleColor(CWnd *parent);
-		void displayZOption3D(CWnd *parent);
-		void displayZScaling(CWnd *parent);
-		void extrusionOptions(CWnd *p) ;
-		void setExtrusion(void *value, LayerTreeView *tree);
 		void setSingleColorMap(void *value, LayerTreeView *tree);
 		String store(const FileName& fnView, const String& parenSection) const;
 		void load(const FileName& fnView, const String& parenSection);
@@ -45,7 +38,6 @@ class _export FeatureSetDrawer : public SetDrawer {
 		bool useMask;
 		Color singleColor;
 		DisplayOptionColorItem *colorItem;
-		double extrTransparency;
 		BaseMap fbasemap;
 	
 	};
@@ -66,47 +58,6 @@ class _export FeatureSetDrawer : public SetDrawer {
 	private:
 		FieldColor *fc;
 		Color c;
-
-	};
-
-		class ZDataScaling : public DisplayOptionsForm {
-		public:
-		ZDataScaling(CWnd *wPar, SetDrawer *dr);
-		void apply(); 
-	private:
-		int settransforms(Event *);
-		FieldRealSliderEx *sliderScale;
-		FieldRealSliderEx *sliderOffset;
-
-		double zoffset;
-		double zscale;
-	};
-
-	class DisplayZDataSourceForm : public DisplayOptionsForm {
-		public:
-		DisplayZDataSourceForm(CWnd *wPar, SetDrawer *dr);
-		void apply(); 
-	private:
-		RadioGroup *rg;
-		FieldMap *fmap;
-
-		String colName;
-		Table  attTable;
-		String mapName;
-		int sourceIndex;
-		BaseMap bmp;
-	};
-
-	class ExtrusionOptions : public DisplayOptionsForm {
-	public:
-		ExtrusionOptions(CWnd *p, FeatureSetDrawer *fsd);
-		void apply();
-	private:
-		int setTransparency(Event *ev);
-		int line;
-		int transparency;
-		RadioGroup *rg;
-		FieldIntSliderEx *slider;
 
 	};
 }
