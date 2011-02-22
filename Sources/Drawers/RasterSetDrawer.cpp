@@ -316,22 +316,35 @@ void RasterSetDrawer::DisplayTexture(double x1, double y1, double x2, double y2,
 		// make the quad
 		glBegin (GL_QUADS);
 
+		ZValueMaker *zmaker = 0;
+		double zv = 0.0;
+		if (is3D())
+			zmaker = getZMaker();
+
 		if (sameCsy) {
 			// avoid plotting the "added" portion of the map
 			x2 = min(x2, data->cb.MaxX());
 			y2 = max(y2, data->cb.MinY());
 
+			if (zmaker != 0)
+				zv = zmaker->getValue(Coord(x1, y1), 0);
 			tex->TexCoord2d(x1, y1);
-			glVertex3d(x1, y1, 0.0);
+			glVertex3d(x1, y1, zv);
 
+			if (zmaker != 0)
+				zv = zmaker->getValue(Coord(x2, y1), 0);
 			tex->TexCoord2d(x2, y1);
-			glVertex3d(x2, y1, 0.0);
+			glVertex3d(x2, y1, zv);
 
+			if (zmaker != 0)
+				zv = zmaker->getValue(Coord(x2, y2), 0);
 			tex->TexCoord2d(x2, y2);
-			glVertex3d(x2, y2, 0.0);
+			glVertex3d(x2, y2, zv);
 
+			if (zmaker != 0)
+				zv = zmaker->getValue(Coord(x1, y2), 0);
 			tex->TexCoord2d(x1, y2);
-			glVertex3d(x1, y2, 0.0);
+			glVertex3d(x1, y2, zv);
 		} else {
 			// avoid plotting the "added" portion of the map
 			bool fRecalculateCX2 = false;
@@ -355,17 +368,25 @@ void RasterSetDrawer::DisplayTexture(double x1, double y1, double x2, double y2,
 			if (fRecalculateCY2)
 				c4 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x1, y2, 0.0));
 
+			if (zmaker != 0)
+				zv = zmaker->getValue(Coord(c1.x, c1.y), 0);
 			tex->TexCoord2d(x1, y1);
-			glVertex3d(c1.x, c1.y, 0.0);
+			glVertex3d(c1.x, c1.y, zv);
 
+			if (zmaker != 0)
+				zv = zmaker->getValue(Coord(c2.x, c2.y), 0);
 			tex->TexCoord2d(x2, y1);
-			glVertex3d(c2.x, c2.y, 0.0);
+			glVertex3d(c2.x, c2.y, zv);
 
+			if (zmaker != 0)
+				zv = zmaker->getValue(Coord(c3.x, c3.y), 0);
 			tex->TexCoord2d(x2, y2);
-			glVertex3d(c3.x, c3.y, 0.0);
+			glVertex3d(c3.x, c3.y, zv);
 
+			if (zmaker != 0)
+				zv = zmaker->getValue(Coord(c4.x, c4.y), 0);
 			tex->TexCoord2d(x1, y2);
-			glVertex3d(c4.x, c4.y, 0.0);
+			glVertex3d(c4.x, c4.y, zv);
 		}
 	
 		glEnd();
