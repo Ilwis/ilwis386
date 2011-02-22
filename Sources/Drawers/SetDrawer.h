@@ -11,6 +11,7 @@ class FieldColumn;
 namespace ILWIS{
 
 class _export SetDrawer : public ComplexDrawer {
+	friend class ExtrusionOptions;
 
 	public:
 		enum StretchMethod { smLINEAR, smLOGARITHMIC };
@@ -48,8 +49,14 @@ class _export SetDrawer : public ComplexDrawer {
 		void setAttributeColumn(const Column& col );
 		bool useAttributeColumn() const;
 		void setUseAttributeColumn(bool yesno);
+		double getExtrusionTransparency() const;
 			
 	protected:
+		HTREEITEM make3D(bool yeno, LayerTreeView  *tvm);
+		void displayZOption3D(CWnd *parent);
+		void displayZScaling(CWnd *parent);
+		void extrusionOptions(CWnd *p) ;
+		void setExtrusion(void *value, LayerTreeView *tree);
 		String store(const FileName& fnView, const String& parenSection) const;
 		void load(const FileName& fnView, const String& parenSection);
 		void displayOptionStretch(CWnd *parent);
@@ -70,12 +77,53 @@ class _export SetDrawer : public ComplexDrawer {
 		bool stretched;
 		StretchMethod stretchMethod;
 		DisplayOptionsLegend *doLegend;
+		double extrTransparency;
 
 		HTREEITEM rprItem;
 		HTREEITEM portrayalItem;
 		HTREEITEM threeDItem;
 	};
 
+	class ZDataScaling : public DisplayOptionsForm {
+		public:
+		ZDataScaling(CWnd *wPar, SetDrawer *dr);
+		void apply(); 
+	private:
+		int settransforms(Event *);
+		FieldRealSliderEx *sliderScale;
+		FieldRealSliderEx *sliderOffset;
+
+		double zoffset;
+		double zscale;
+	};
+
+	class DisplayZDataSourceForm : public DisplayOptionsForm {
+		public:
+		DisplayZDataSourceForm(CWnd *wPar, SetDrawer *dr);
+		void apply(); 
+	private:
+		RadioGroup *rg;
+		FieldMap *fmap;
+
+		String colName;
+		Table  attTable;
+		String mapName;
+		int sourceIndex;
+		BaseMap bmp;
+	};
+
+	class ExtrusionOptions : public DisplayOptionsForm {
+	public:
+		ExtrusionOptions(CWnd *p, SetDrawer *fsd);
+		void apply();
+	private:
+		int setTransparency(Event *ev);
+		int line;
+		int transparency;
+		RadioGroup *rg;
+		FieldIntSliderEx *slider;
+
+	};
 
 	class SetStretchForm : public DisplayOptionsForm {
 		public:
