@@ -13,7 +13,8 @@ class DisplayOptionTreeItem;
 namespace ILWIS {
 	class RootDrawer;
 	struct PreparationParameters;
-
+	struct GeneralDrawerProperties { // placeholder , others derive from this
+	};
 
 	class _export NewDrawer {
 	public:
@@ -45,7 +46,6 @@ namespace ILWIS {
 		virtual void setInfo(bool yesno) = 0;
 		virtual String getInfo(const Coord& crd) const = 0;
 		virtual NewDrawer *getParentDrawer() const = 0;
-		virtual HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent)=0;
 		virtual double getTransparency() const = 0;
 		virtual void setTransparency(double value) = 0;
 		virtual String getId() const = 0;
@@ -62,6 +62,7 @@ namespace ILWIS {
 		virtual void shareVertices(vector<Coord *>& coords) = 0;
 		virtual bool inEditMode() const = 0;
 		virtual void drawLegendItem(CDC *dc, const CRect& rct, double rVal) const = 0;
+		virtual GeneralDrawerProperties *getProperties() = 0;
 	};
 
 	struct DrawerParameters {
@@ -71,8 +72,6 @@ namespace ILWIS {
 	};
 
 	typedef void(ILWIS::NewDrawer::*DisplayOptionItemFunc)(CWnd *parent);
-	typedef void (ILWIS::NewDrawer::*SetCheckFunc)(void *value, LayerTreeView *v);
-
 	
 
 	struct PreparationParameters {
@@ -92,7 +91,6 @@ namespace ILWIS {
 }
 
 typedef ILWIS::NewDrawer* (*DrawerCreate)(ILWIS::DrawerParameters *parms);
-typedef HTREEITEM (ILWIS::NewDrawer::*Configure)(LayerTreeView  *tv, HTREEITEM parent);
 
 struct DrawerInfo {
 	DrawerInfo(const String& n, const String& _subtype, DrawerCreate func) : name(n), subtype(_subtype), createFunc(func) {}
@@ -101,12 +99,12 @@ struct DrawerInfo {
 	DrawerCreate createFunc;
 };
 
-struct ConfigureMethod {
-	ConfigureMethod(ILWIS::NewDrawer *_drw, Configure _conf) : drawer(_drw),configure(_conf) {}
-	ILWIS::NewDrawer *drawer;
-	Configure configure;
-
-};
+//struct ConfigureMethod {
+//	ConfigureMethod(ILWIS::NewDrawer *_drw, Configure _conf) : drawer(_drw),configure(_conf) {}
+//	ILWIS::NewDrawer *drawer;
+//	Configure configure;
+//
+//};
 
 typedef vector<DrawerInfo *> DrawerInfoVector;
 typedef DrawerInfoVector *( *GetDrawers)();

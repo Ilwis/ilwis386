@@ -49,7 +49,7 @@
 #include "Client\Mapwindow\MapPaneViewTool.h"
 
 
-int MapPaneViewTool::id=20000;
+int MapPaneViewTool::idSeed=20000;
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -58,9 +58,9 @@ int MapPaneViewTool::id=20000;
 MapPaneViewTool::MapPaneViewTool(ZoomableView* mappaneview)
 : mpv(mappaneview), stay(false)
 {
-	id++;
-	if ( id > 30000)
-		id = 20000;
+	id = idSeed++;
+	if ( idSeed > 300000)
+		idSeed = 200000;
 }
 
 MapPaneViewTool::~MapPaneViewTool()

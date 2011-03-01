@@ -9,6 +9,8 @@
 #include "Engine\Map\Raster\Map.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\LayerTreeView.h"
+#include "Client\Mapwindow\MapPaneViewTool.h"
+#include "Client\Mapwindow\Drawers\DrawerTool.h"
 #include "Client\Mapwindow\LayerTreeItem.h"
 #include "Engine\Representation\Rprclass.h"
 
@@ -43,18 +45,18 @@ void TextSetDrawer::setFont(OpenGLText *f) {
 	font = f;
 }
 
-HTREEITEM TextSetDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
-	HTREEITEM hti = ComplexDrawer::configure(tv,parent);
-	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,parent,this,(DisplayOptionItemFunc)&TextSetDrawer::displayOptionsText);
-	HTREEITEM itemText = InsertItem(String("Text(%S)",sFaceName), "Text",item,-1);
-	InsertItem(tv,itemText,String("Font : %S",sFaceName),"Text");
-	InsertItem(tv,itemText,String("Size : %d",iFHeight),"Calculationsingle");
-	String weightString =  iFWeight >= 500 ? "Bold" : "Normal";
-	InsertItem(tv,itemText,String("Weight : %S",weightString),"Calculationsingle");
-
-
-	return hti;
-}
+//HTREEITEM TextSetDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
+//	HTREEITEM hti = ComplexDrawer::configure(tv,parent);
+//	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,parent,this,(DisplayOptionItemFunc)&TextSetDrawer::displayOptionsText);
+//	HTREEITEM itemText = InsertItem(String("Text(%S)",sFaceName), "Text",item,-1);
+//	InsertItem(tv,itemText,String("Font : %S",sFaceName),"Text");
+//	InsertItem(tv,itemText,String("Size : %d",iFHeight),"Calculationsingle");
+//	String weightString =  iFWeight >= 500 ? "Bold" : "Normal";
+//	InsertItem(tv,itemText,String("Weight : %S",weightString),"Calculationsingle");
+//
+//
+//	return hti;
+//}
 
 void TextSetDrawer::displayOptionsText(CWnd *parent) {
 	CWindowDC wdc(parent);

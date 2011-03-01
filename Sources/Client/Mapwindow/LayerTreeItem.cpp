@@ -55,8 +55,9 @@ Created on: 2007-02-8
 #include "Client\FormElements\fldcolor.h"
 #include "Client\Mapwindow\Drawers\drawer_n.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
-#include "Client\Mapwindow\LayerTreeItem.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
+#include "Client\Mapwindow\Drawers\DrawerTool.h"
+#include "Client\Mapwindow\LayerTreeItem.h"
 #include "Headers\constant.h"
 #include "Client\FormElements\syscolor.h"
 #include "Engine\Domain\Dmvalue.h"
@@ -335,10 +336,10 @@ ChooseColumnComboBox::ChooseColumnComboBox(CWnd* wnd, ColumnLayerTreeItem* lti, 
 			AddString(sCol.scVal());
 		}
 	}
-	//if (clti->mdr()->getAtttributeColumn().fValid()) {
-	//	String sCol = clti->mdr()->getAtttributeColumn()->sName();
-	//	SelectString(-1, sCol.scVal());
-	//}
+	if (clti->mdr()->getAtttributeColumn().fValid()) {
+		String sCol = clti->mdr()->getAtttributeColumn()->sName();
+		SelectString(-1, sCol.scVal());
+	}
 	ShowWindow(SW_SHOW);
 }
 
@@ -357,8 +358,8 @@ void ChooseColumnComboBox::OnSelChange(NMHDR* pNotifyStruct, LRESULT* result)
 	CString str;
 	GetWindowText(str);
 	Table tbl = clti->mdr()->getBaseMap()->tblAtt();
-	//clti->mdr()->setAttributeColumn(String(str));
-	//clti->ltv->GetDocument()->UpdateAllViews(clti->ltv, 0);
+	clti->mdr()->setAttributeColumn(String(str));
+	clti->ltv->GetDocument()->UpdateAllViews(clti->ltv, 0);
 }
 
 
@@ -384,7 +385,7 @@ void ColumnLayerTreeItem::OnContextMenu(CWnd* w, CPoint p)
 
 void ColumnLayerTreeItem::SwitchCheckBox(bool fOn)
 {
-//	mdr()->setUseAttributeTable(fOn);
+	mdr()->setUseAttributeTable(fOn);
 	if (fOn)
 		ShowColumnField();
 	MapCompositionDoc* doc = ltv->GetDocument();
@@ -584,28 +585,29 @@ void LegendValueLayerTreeItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 	}
 }
 //-----------------------------------
-DisplayOptionTreeItem::DisplayOptionTreeItem(LayerTreeView* ltv, HTREEITEM _parent, NewDrawer *dr, SetCheckFunc f,DisplayOptionItemFunc fun, NewDrawer *_altHandler)
+DisplayOptionTreeItem::DisplayOptionTreeItem(LayerTreeView* ltv, HTREEITEM _parent, NewDrawer *dr)
 : LayerTreeItem(ltv),
-func(fun),
 drw(dr),
 hti(0),
 checks(0),
-setCheckFunc(f),
-altHandler(_altHandler),
-parent(_parent)
+altHandler(0),
+parent(_parent),
+dbctool(0),
+chctool(0),
+dbcAction(0),
+dtSetCheckFunc(0)
 {
 }
 
-DisplayOptionTreeItem::DisplayOptionTreeItem(LayerTreeView* ltv, HTREEITEM _parent, NewDrawer *dr, DisplayOptionItemFunc f,HTREEITEM item, SetChecks *ch, SetCheckFunc cf)
-: LayerTreeItem(ltv),
-func(f),
-drw(dr),
-hti(item),
-checks(ch),
-setCheckFunc(cf),
-altHandler(0),
-parent(_parent)
-{
+void DisplayOptionTreeItem::setDoubleCickAction(ILWIS::DrawerTool *_tool, DTDoubleClickActionFunc f) {
+	dbctool = _tool;
+	dbcAction = f;
+}
+
+void DisplayOptionTreeItem::setCheckAction(ILWIS::DrawerTool *_tool, SetChecks *_checks, DTSetCheckFunc _cf) {
+	chctool = _tool;
+	checks = _checks;
+	dtSetCheckFunc = _cf;
 }
 
 void DisplayOptionTreeItem::setTreeItem(HTREEITEM it) 
@@ -621,20 +623,20 @@ DisplayOptionTreeItem::~DisplayOptionTreeItem()
 
 void DisplayOptionTreeItem::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
-	if ( func) {
-		(drw->*func)(ltv);
-		SwitchCheckBox(true);
-	}
+	if ( dbctool && dbcAction) {
+		(dbctool->*dbcAction)();
+	} 
+	SwitchCheckBox(true);
 }
 
 void DisplayOptionTreeItem::SwitchCheckBox(bool fOn) {
 	if (checks) {
 		checks->checkItem(hti,fOn);
 	}
-	if ( setCheckFunc && altHandler == 0)
-		(drw->*setCheckFunc)(&fOn, ltv);
-	if ( altHandler != 0)
-		(altHandler->*setCheckFunc)(&fOn, ltv);
+	if ( dtSetCheckFunc && altHandler == 0)
+		(chctool->*dtSetCheckFunc)(&fOn);
+	//if ( altHandler != 0)
+	//	(altHandler->*setCheckFunc)(&fOn, ltv);
 }
 
 void DisplayOptionTreeItem::OnContextMenu(CWnd* pWnd, CPoint pos)
@@ -642,11 +644,11 @@ void DisplayOptionTreeItem::OnContextMenu(CWnd* pWnd, CPoint pos)
 }
 
 //----------------------------------
-DisplayOptionTree::DisplayOptionTree(LayerTreeView* ltv, HTREEITEM hti, NewDrawer *draw)
+DisplayOptionTree::DisplayOptionTree(LayerTreeView* ltv, HTREEITEM hti, NewDrawer *draw, DrawerTool *t)
 : LayerTreeItem(ltv),
 htiStart(hti),
-drw(draw)
-
+drw(draw),
+tool(t)
 {
 }
 
@@ -656,49 +658,55 @@ DisplayOptionTree::~DisplayOptionTree()
 
 void DisplayOptionTree::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
-	HTREEITEM hItem = htiStart;
-	HTREEITEM hStop= ltv->GetTreeCtrl().GetNextItem(hItem, TVGN_NEXTVISIBLE);
+	//HTREEITEM hItem = htiStart;
+	//HTREEITEM hStop= ltv->GetTreeCtrl().GetNextItem(hItem, TVGN_NEXTVISIBLE);
 	HTREEITEM hti = ltv->GetTreeCtrl().HitTest(point);
-
-	while (hItem != NULL && hItem != hStop)
+	ltv->GetTreeCtrl().Expand(hti,TVE_TOGGLE);
+	/*while (hItem != NULL && hItem != hStop)
 	{
 		ltv->GetTreeCtrl().Expand(hItem,TVE_EXPAND);
 		hItem= ltv->GetTreeCtrl().GetNextItem(hItem, TVGN_NEXTVISIBLE);
-	}
+	}*/
 }
 
 void DisplayOptionTree::OnContextMenu(CWnd* pWnd, CPoint pos){
-	AbstractMapDrawer *mapdrw = dynamic_cast<AbstractMapDrawer *>(drw);
-	if (!mapdrw)
-		return;
 	CPoint pnt = pos;
 	ltv->GetTreeCtrl().ScreenToClient(&pnt);
 	HTREEITEM hti = ltv->GetTreeCtrl().HitTest(pnt);
 	int types = ComplexDrawer::dtMAIN | ComplexDrawer::dtPOST | ComplexDrawer::dtPRE;
-	BaseMapPtr *mptr = mapdrw->getBaseMap();
+	DisplayOptionTree *doTree = (DisplayOptionTree * )ltv->GetTreeCtrl().GetItemData(hti);
+	DrawerTool *setTool = doTree->getTool();
 	CMenu men;
 	men.CreatePopupMenu();
-	vector<MapPaneViewTool *> tools;
-	IlwWinApp()->getDrawerTools(mapdrw,tools); 
-	for(int i = 0; i < tools.size(); ++i) {
-		String sMenu = tools[i]->getMenuString();
+	for(int i = 0; i < setTool->getToolCount(); ++i) {
+		DrawerTool *tool = setTool->getTool(i);
+		String sMenu = tool->getMenuString();
 		if ( sMenu != "")
-			men.AppendMenu(MF_STRING, tools[i]->getId(),sMenu.scVal());
+			men.AppendMenu(MF_STRING, tool->getId(),sMenu.scVal());
+			if (tool->isActive())
+				men.CheckMenuItem(tool->getId(), MF_CHECKED);
 	}
 	int iCmd = men.TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON|TPM_NONOTIFY|TPM_RETURNCMD, pos.x, pos.y, pWnd);
-	for(int i = 0; i < tools.size(); ++i) {
-		if ( iCmd == tools[i]->getId()){
+	for(int i = 0; i < setTool->getToolCount(); ++i) {
+		DrawerTool *tool = setTool->getTool(i);
+		if ( iCmd == tool->getId()){
 			if ( hti){
-				ILWIS::DrawerParameters parms(drw->getRootDrawer(),drw);
-				tools[i]->insertTool(ltv,&parms);
+				UINT state = men.GetMenuState(iCmd,MF_BYCOMMAND);
+				// it still has the state it had so invert the logic
+				if ( state == MF_UNCHECKED) {
+					tool->setActiveMode(true);
+				} else if ( state == MF_CHECKED){
+					tool->setActiveMode(false);
+					//ltv->DeleteAllItems(hti);
+				}
 			}
 		}
 	}
 }
 
 //--------------------------------------------
-DisplayOptionColorItem::DisplayOptionColorItem(const String& sTxt, LayerTreeView* t, HTREEITEM parent, ILWIS::NewDrawer *dr, DisplayOptionItemFunc f,HTREEITEM item, SetChecks *checks, SetCheckFunc cf) :
-DisplayOptionTreeItem(t, parent, dr,f,item,checks, cf) ,
+DisplayOptionColorItem::DisplayOptionColorItem(const String& sTxt, LayerTreeView* t, HTREEITEM parent, ILWIS::NewDrawer *dr) :
+DisplayOptionTreeItem(t, parent, dr) ,
 sText(sTxt)
 {
 }
@@ -774,11 +782,12 @@ void DisplayOptionColorItem::setColor(Color c) {
 SetChecks::~SetChecks() {
 }
 
-SetChecks::SetChecks(LayerTreeView *v, NewDrawer *dr,SetCheckFunc _f){
+SetChecks::SetChecks(LayerTreeView *v, DrawerTool *dt,DTSetCheckFunc _f){
 	tv = v;
-	drw = dr;
+	tool = dt;
 	fun = _f;
 }
+
 void SetChecks::addItem(HTREEITEM hti){
 	checkedItems.push_back(hti);
 }
@@ -789,6 +798,6 @@ void SetChecks::checkItem(HTREEITEM hti,bool fOn) {
 		HTREEITEM ht = checkedItems.at(i);
 		tree.SetCheck(ht, FALSE);
 	}
-	(drw->*fun)(&hti, tv);
+	(tool->*fun)(&hti);
 	tree.SetCheck(hti,fOn);
 }

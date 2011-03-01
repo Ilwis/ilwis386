@@ -51,14 +51,13 @@ class _export ComplexDrawer : public NewDrawer {
 		virtual void setEditable(bool yesno);
 		bool hasInfo() const;
 		void setInfo(bool yesno);
-		HTREEITEM  configure(LayerTreeView  *tv, HTREEITEM parent);
-		void setActiveMode(void *v,LayerTreeView *tv);
+		//void setActiveMode(void *v,LayerTreeView *tv);
 		NewDrawer *getParentDrawer() const;
 		double getTransparency() const;
 		void setTransparency(double value);
 		virtual int getUICode() const;
 		virtual void setUICode(int c);
-		virtual HTREEITEM make3D(bool yeno, LayerTreeView  *tvm);
+		//virtual HTREEITEM make3D(bool yeno, LayerTreeView  *tvm);
 		bool is3D() const;
 		ZValueMaker *getZMaker() const;
 		virtual void timedEvent(UINT timerid);
@@ -78,10 +77,8 @@ class _export ComplexDrawer : public NewDrawer {
 		bool inEditMode() const;
 		void setEditMode(bool yesno);
 		void drawLegendItem(CDC *dc, const CRect& rct, double rVal) const {}
-		HTREEITEM InsertItem(const String& name,const String& icon, DisplayOptionTreeItem *item=0, int checkstatus = -1, HTREEITEM after=TVI_LAST);
-		HTREEITEM InsertItem(LayerTreeView  *tv,HTREEITEM parent, const String& name,const String& icon, HTREEITEM after=TVI_LAST);
-		HTREEITEM findTreeItemByName(LayerTreeView  *tv, HTREEITEM parent, const String& name) const;
 		virtual MapPaneViewTool *createTool(ZoomableView*) { return 0;}
+		virtual GeneralDrawerProperties *getProperties() { return 0;}
 	
 	protected:
 		vector<NewDrawer *> drawers;
@@ -105,7 +102,6 @@ class _export ComplexDrawer : public NewDrawer {
 		bool editmode;
 		ZValueMaker *zmaker;
 		bool threeD;
-		HTREEITEM itemTransparent;
 		int specialOptions;
 		bool dirty;
 
@@ -124,36 +120,4 @@ class _export ComplexDrawer : public NewDrawer {
 		void init();
 	} ;
 
-	class _export DisplayOptionsForm : public FormBaseDialog {
-	public:
-		DisplayOptionsForm(ComplexDrawer *dr,CWnd *par, const String& title);
-		afx_msg virtual void OnCancel();
-		int exec();
-		virtual void apply();
-	protected:
-		void updateMapView();
-		ComplexDrawer *drw;
-		LayerTreeView *view;
-	};
-
-	class _export DisplayOptionsForm2 : public FormBaseDialog {
-	public:
-		DisplayOptionsForm2(ComplexDrawer *dr,CWnd *par, const String& title);
-		int exec();
-	protected:
-		void updateMapView();
-		ComplexDrawer *drw;
-		LayerTreeView *view;
-	};
-
-	class TransparencyForm : public DisplayOptionsForm {
-		public:
-		TransparencyForm(CWnd *wPar, ComplexDrawer *dr);
-		void apply(); 
-	private:
-		int setTransparency(Event *ev);
-
-		int transparency;
-		FieldIntSliderEx *slider;
-	};
 }

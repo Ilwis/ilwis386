@@ -21,22 +21,27 @@ class _export AbstractMapDrawer : public ComplexDrawer {
 		BaseMapPtr *getBaseMap() const;
 		Representation getRepresentation() const;
 		void setRepresentation(const Representation& rp);
+		Table getAtttributeTable() const;
+		void setAttributeTable(const Table& tbl);
+		Column getAtttributeColumn() const;
+		void setAttributeColumn(const String& name);
+		bool useAttributeTable() const;
+		void setUseAttributeTable(bool yesno);
 		RangeReal getStretchRangeReal() const;
 		bool useInternalDomain() const;
-		HTREEITEM  configure(LayerTreeView  *tv, HTREEITEM parent);
 		virtual String description() const;
 		virtual String iconName(const String& subtype="?") const;
 		Ilwis::Record AbstractMapDrawer::rec(const Coord& crd);
 		virtual void inactivateOtherPalettes(Palette * palette);
 
 	protected:
+		Table attTable;
+		Column attColumn;
+		bool useAttTable;
 		bool internalDomain;
 		BaseMap bm;
 
 		AbstractMapDrawer(DrawerParameters *parms, const String& name);
-		void displayOptionAttColumn(CWnd *parent);
-		void setColumnCheckumn(void *w, LayerTreeView *view);
-		void setInfoMode(void *v,LayerTreeView *tv);
 		String store(const FileName& fnView, const String& parenSection) const;
 		void load(const FileName& fnView, const String& parenSection);
 	};

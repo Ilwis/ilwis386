@@ -17,7 +17,7 @@ namespace ILWIS {
 		String addDrawer(NewDrawer *drw);
 		void addCoordBounds(const CoordSystem& _cs, const CoordBounds& cb, bool overrule=true);
 		bool draw(bool norecursion = false, const CoordBounds& cb=CoordBounds()) const;
-		HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent);
+		//HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent);
 		void timedEvent(UINT timerID);
 		String store(const FileName& fnView, const String parenSection) const;
 		void load(const FileName& fnView, const String parenSection);

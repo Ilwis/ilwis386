@@ -16,7 +16,7 @@ public:
 	virtual void prepare(PreparationParameters *pp);
 	OpenGLText *getFont() const;
 	void setFont(OpenGLText *f);
-	HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent);
+	//HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent);
 private:
 	void displayOptionsText(CWnd *parent);
 	Color clrText;

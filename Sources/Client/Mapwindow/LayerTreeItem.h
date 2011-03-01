@@ -42,6 +42,10 @@
 
 using namespace ILWIS;
 
+namespace ILWIS {
+	class DrawerTool;
+}
+
 class _export LayerTreeItem  
 {
 public:
@@ -155,35 +159,41 @@ private:
 	NewDrawer *dr;
 };
 
-class DisplayOptionTree: public LayerTreeItem
+class _export DisplayOptionTree: public LayerTreeItem
 {
 public:
-	DisplayOptionTree(LayerTreeView*, HTREEITEM hti, NewDrawer *drw);
+	DisplayOptionTree(LayerTreeView*, HTREEITEM hti, NewDrawer *drw, DrawerTool *tool);
 	virtual ~DisplayOptionTree();
 	virtual void OnLButtonDblClk(UINT nFlags, CPoint point);
 	virtual void OnContextMenu(CWnd* pWnd, CPoint pos);
+	DrawerTool *getTool() { return tool;}
 private:
 	HTREEITEM htiStart;
 	NewDrawer *drw;
+    DrawerTool *tool;
 };
 
 class _export DisplayOptionTreeItem: public LayerTreeItem
 {
 public:
-	DisplayOptionTreeItem(LayerTreeView*, HTREEITEM parent, ILWIS::NewDrawer *dr, DisplayOptionItemFunc f,HTREEITEM item=0, SetChecks *checks=0, SetCheckFunc cf=0);
-	DisplayOptionTreeItem(LayerTreeView*, HTREEITEM parent, ILWIS::NewDrawer *dr, SetCheckFunc f,DisplayOptionItemFunc fun=0, ILWIS::NewDrawer *_altHandler=0);
+	DisplayOptionTreeItem(LayerTreeView*, HTREEITEM parent, ILWIS::NewDrawer *dr);
 	virtual ~DisplayOptionTreeItem();
 	virtual void OnLButtonDblClk(UINT nFlags, CPoint point);
 	void SwitchCheckBox(bool fOn);
 	HTREEITEM getParent() { return parent;}
 	void setTreeItem(HTREEITEM it) ;
 	virtual void OnContextMenu(CWnd* pWnd, CPoint pos);
+	void setDoubleCickAction(ILWIS::DrawerTool *tool, DTDoubleClickActionFunc f);
+	void setCheckAction(ILWIS::DrawerTool *tool, SetChecks *checks, DTSetCheckFunc cf);
 	
 private: 
-	DisplayOptionItemFunc func;
-	SetCheckFunc setCheckFunc;
+	DTDoubleClickActionFunc dbcAction;
+	DTSetCheckFunc dtSetCheckFunc;
+
 	ILWIS::NewDrawer *drw;
 	ILWIS::NewDrawer *altHandler;
+	ILWIS::DrawerTool *dbctool;
+	ILWIS::DrawerTool *chctool;
 	SetChecks *checks;
 	HTREEITEM hti;
 	HTREEITEM parent;
@@ -192,8 +202,7 @@ private:
 class _export DisplayOptionColorItem: public DisplayOptionTreeItem
 {
 public:
-	DisplayOptionColorItem(const String& sText, LayerTreeView*, HTREEITEM parent, ILWIS::NewDrawer *dr, DisplayOptionItemFunc f,HTREEITEM item=0, SetChecks *checks=0, SetCheckFunc cf=0);
-	//DisplayOptionColorItem(LayerTreeView*, ILWIS::NewDrawer *dr, SetCheckFunc f,DisplayOptionItemFunc fun=0, HTREEITEM item=0, ILWIS::NewDrawer *_altHandler=0);
+	DisplayOptionColorItem(const String& sText, LayerTreeView*, HTREEITEM parent, ILWIS::NewDrawer *dr);
 	void OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult);
 	void setColor(Color c) ;
 private:
@@ -206,15 +215,15 @@ private:
 
 class _export SetChecks {
 public:
-	SetChecks(LayerTreeView*, NewDrawer *dr,SetCheckFunc _f);
+	SetChecks(LayerTreeView*, ILWIS::DrawerTool *dr, DTSetCheckFunc _f);
 	~SetChecks();
 	void addItem(HTREEITEM hti);
 	void checkItem(HTREEITEM hti,bool fOn);
 private:
 	vector<HTREEITEM> checkedItems;
 	LayerTreeView *tv;
-	NewDrawer *drw;
-	SetCheckFunc fun;
+	DrawerTool *tool;
+	DTSetCheckFunc fun;
 
 };
 

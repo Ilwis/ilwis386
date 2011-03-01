@@ -77,6 +77,7 @@ protected:
 	ZoomableView* mpv;
 private:
 	zCursor curActive;
-	static int id;
+	static int idSeed;
+	int id;
 	bool stay;
 };

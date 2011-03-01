@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="IlwisClient"
 	ProjectGUID="{12042408-86EA-4501-8797-F358A5447A86}"
 	RootNamespace="IlwisClient"
@@ -2638,6 +2638,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\DrawerTool.cpp"
+						>
+					</File>
+					<File
 						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\MouseClickInfoDrawer.cpp"
 						>
 					</File>
@@ -2695,6 +2699,10 @@
 						</File>
 						<File
 							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\DrawerContext.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\DrawerTool.h"
 							>
 						</File>
 						<File

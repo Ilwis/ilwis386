@@ -52,6 +52,7 @@ struct NodeInfo{
 namespace ILWIS {
 	class AbstractMapDrawer;
 	class TextSetDrawer;
+	class DrawerTool;
 }
 
 struct TreeItem{
@@ -118,6 +119,7 @@ private:
 	bool fDragging;
 	HTREEITEM hDraggedItem;	
 	CImageList *pDragImageList;
+	ILWIS::DrawerTool *drwTool;
 	DECLARE_MESSAGE_MAP()
 public:
 #ifdef _DEBUG

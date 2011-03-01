@@ -8,6 +8,8 @@
 #include "Drawer_n.h"
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
 #include "Client\Mapwindow\LayerTreeView.h"
+#include "Client\Mapwindow\MapPaneViewTool.h"
+#include "Client\Mapwindow\Drawers\DrawerTool.h"
 #include "Client\Mapwindow\LayerTreeItem.h"
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
 

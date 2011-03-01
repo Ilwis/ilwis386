@@ -7,8 +7,6 @@
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h"
-#include "Client\Mapwindow\LayerTreeView.h"
-#include "Client\Mapwindow\LayerTreeItem.h"
 #include "Client\Ilwis.h"
 
 
@@ -75,13 +73,14 @@ void MouseClickInfoDrawer::load(const FileName& fnView, const String& parenSecti
 }
 
 HTREEITEM MouseClickInfoDrawer::configure(LayerTreeView  *tv, HTREEITEM parent){
-	CTreeCtrl& tc = tv->GetTreeCtrl();
-	int iImg = IlwWinApp()->iImage("info");
-	String sName = "Info";
-	HTREEITEM hti = tc.InsertItem(sName.scVal(),iImg,iImg,TVI_ROOT,TVI_FIRST);
-	tc.SetItemData(hti, (DWORD_PTR)new DrawerLayerTreeItem(tv, this));		
-	tc.SetCheck(hti, isActive());
-	return hti;
+	//CTreeCtrl& tc = tv->GetTreeCtrl();
+	//int iImg = IlwWinApp()->iImage("info");
+	//String sName = "Info";
+	//HTREEITEM hti = tc.InsertItem(sName.scVal(),iImg,iImg,TVI_ROOT,TVI_FIRST);
+	//tc.SetItemData(hti, (DWORD_PTR)new DrawerLayerTreeItem(tv, this));		
+	//tc.SetCheck(hti, isActive());
+	//return hti;
+	return 0;
 }
 
 

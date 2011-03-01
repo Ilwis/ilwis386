@@ -49,6 +49,7 @@ namespace ILWIS {
 		void shareVertices(vector<Coord *>& coords) {};
 		bool inEditMode() const { return parentDrawer->inEditMode();}
 		void drawLegendItem(CDC *dc, const CRect& rct, double rVal) const {}
+		virtual GeneralDrawerProperties *getProperties() { return 0;}
 
 		CCriticalSection cs;
 	protected:

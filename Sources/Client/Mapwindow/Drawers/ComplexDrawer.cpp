@@ -1,17 +1,9 @@
 #include "Client\Headers\formelementspch.h"
-#include "Client\FormElements\FieldIntSlider.h"
-#include "Client\FormElements\FieldRealSlider.h"
-#include "Client\Base\events.h"
 #include "Client\ilwis.h"
 #include "Engine\Spatialreference\gr.h"
 #include "Engine\Map\Raster\Map.h"
-#include "Engine\Base\System\RegistrySettings.h"
-#include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\ZoomableView.h"
 #include "Client\Mapwindow\Drawers\ComplexDrawer.h"
-#include "Client\Mapwindow\LayerTreeView.h"
-#include "Client\Mapwindow\LayerTreeItem.h"
-#include "Client\Mapwindow\MapPaneView.h"
 #include "Client\Mapwindow\Drawers\ZValueMaker.h"
 
 using namespace ILWIS;
@@ -43,7 +35,6 @@ void ComplexDrawer::init() {
 	parentDrawer = 0;
 	uiCode = NewDrawer::ucALL;
 	zmaker = new ILWIS::ZValueMaker();
-	itemTransparent = 0;
 	specialOptions = sdoNone;
 	dirty = true;
 	currentIndex = 0;
@@ -434,37 +425,37 @@ void ComplexDrawer::prepareChildDrawers(PreparationParameters *parms) {
 	}
 }
 
-HTREEITEM ComplexDrawer::make3D(bool yesno,LayerTreeView  *tv) {
-	threeD = yesno;
-	HTREEITEM hti = 0;
-	for(map<String,NewDrawer *>::iterator cur = preDrawers.begin(); cur != preDrawers.end(); ++cur) {
-		ComplexDrawer *pdrw = dynamic_cast<ComplexDrawer *>((*cur).second);
-		if ( pdrw) {
-			pdrw->getZMaker()->setThreeDPossible(yesno);
-			pdrw->make3D(yesno, tv);
-		}
-	}
-	for(int i = 0; i < drawers.size(); ++i) {
-		ComplexDrawer *pdrw = dynamic_cast<ComplexDrawer *>(drawers.at(i));
-		if ( pdrw) {
-			pdrw->getZMaker()->setThreeDPossible(yesno);
-			pdrw->make3D(yesno, tv);
-		}
-	}
-	for(map<String,NewDrawer *>::iterator cur =postDrawers.begin(); cur != postDrawers.end(); ++cur) {
-		ComplexDrawer *pdrw = dynamic_cast<ComplexDrawer *>((*cur).second);
-		if ( pdrw) {
-			pdrw->getZMaker()->setThreeDPossible(yesno);
-			pdrw->make3D(yesno, tv);
-		}
-	}
-	return hti;
-}
+//HTREEITEM ComplexDrawer::make3D(bool yesno,LayerTreeView  *tv) {
+//	threeD = yesno;
+//	HTREEITEM hti = 0;
+//	for(map<String,NewDrawer *>::iterator cur = preDrawers.begin(); cur != preDrawers.end(); ++cur) {
+//		ComplexDrawer *pdrw = dynamic_cast<ComplexDrawer *>((*cur).second);
+//		if ( pdrw) {
+//			pdrw->getZMaker()->setThreeDPossible(yesno);
+//			pdrw->make3D(yesno, tv);
+//		}
+//	}
+//	for(int i = 0; i < drawers.size(); ++i) {
+//		ComplexDrawer *pdrw = dynamic_cast<ComplexDrawer *>(drawers.at(i));
+//		if ( pdrw) {
+//			pdrw->getZMaker()->setThreeDPossible(yesno);
+//			pdrw->make3D(yesno, tv);
+//		}
+//	}
+//	for(map<String,NewDrawer *>::iterator cur =postDrawers.begin(); cur != postDrawers.end(); ++cur) {
+//		ComplexDrawer *pdrw = dynamic_cast<ComplexDrawer *>((*cur).second);
+//		if ( pdrw) {
+//			pdrw->getZMaker()->setThreeDPossible(yesno);
+//			pdrw->make3D(yesno, tv);
+//		}
+//	}
+//	return hti;
+//}
 bool ComplexDrawer::is3D() const {
 	return threeD;
 }
 
-ZValueMaker *ComplexDrawer::getZMaker() const {
+ZValueMaker *ComplexDrawer::getZMaker() const{
 	return zmaker;
 }
 
@@ -618,144 +609,16 @@ void ComplexDrawer::setEditMode(bool yesno){
 	editmode = yesno;
 }
 //--------------------------------- UI ------------------------------------------------------------------------
-HTREEITEM ComplexDrawer::InsertItem(LayerTreeView *tv, HTREEITEM parent,const String& name,const String& icon, HTREEITEM after) {
-	int iImg = IlwWinApp()->iImage(icon);
-	HTREEITEM htiDisplayOptions = tv->GetTreeCtrl().InsertItem(name.scVal(), iImg, iImg, parent,after);
-	return htiDisplayOptions; 
-}
-
-HTREEITEM ComplexDrawer::InsertItem(const String& name,const String& icon, DisplayOptionTreeItem *item, int checkstatus, HTREEITEM after){
-	int iImg = IlwWinApp()->iImage(icon);
-	HTREEITEM htiDisplayOptions = item->getTreeView()->GetTreeCtrl().InsertItem(name.scVal(), iImg, iImg, item->getParent(), after);
-	item->setTreeItem(htiDisplayOptions);
-	if ( checkstatus >=0) {
-		item->getTreeView()->GetTreeCtrl().SetCheck(htiDisplayOptions, checkstatus );
-	}
-	item->getTreeView()->GetTreeCtrl().SetItemData(htiDisplayOptions, (DWORD_PTR)item);
-
-	return htiDisplayOptions;
-}
-
-HTREEITEM ComplexDrawer::findTreeItemByName(LayerTreeView  *tv, HTREEITEM parent, const String& name) const {
-	HTREEITEM currentItem = tv->GetTreeCtrl().GetNextItem(parent, TVGN_CHILD);
-	while(currentItem != 0) {
-		TVITEM item;
-		TCHAR szText[1024];
-		item.hItem = currentItem;
-		item.mask = TVIF_TEXT | TVIF_HANDLE;
-		item.pszText = szText;
-		item.cchTextMax = 1024;
-
-		BOOL bWorked = tv->GetTreeCtrl().GetItem(&item);
-		if ( name == item.pszText )
-			return item.hItem;
-		currentItem =tv->GetTreeCtrl().GetNextItem(currentItem, TVGN_NEXT);
-	}
-	return 0;
-}
-
-HTREEITEM ComplexDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
-	if ( transparency != rUNDEF) {
-		DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,parent,this,(DisplayOptionItemFunc)&ComplexDrawer::displayOptionTransparency);
-		String transp("Transparency (%d)", 100 * getTransparency());
-		itemTransparent = InsertItem(transp,"Transparent", item, -1);
-	}
-	for(int i=0; i < getDrawerCount(); ++i) {
-		NewDrawer *drw = drawers.at(i);
-		if ( drw && !drw->isSimple()) {
-			ComplexDrawer *cdrw = (ComplexDrawer *)drw;
-			if ( cdrw->getUICode() != 0) {
-				//cdrw->insertTool(tv);
-			}
-		}
-	}
-	return parent;
-}
-
-void ComplexDrawer::setActiveMode(void *v,LayerTreeView *tv) {
-	bool value = *(bool *)v;
-	setActive(value);
-	MapCompositionDoc* doc = tv->GetDocument();
-	doc->mpvGetView()->Invalidate();
-
-}
-
-void ComplexDrawer::displayOptionTransparency(CWnd *parent) {
-	new TransparencyForm(parent, this);
-}
+//void ComplexDrawer::setActiveMode(void *v,LayerTreeView *tv) {
+//	bool value = *(bool *)v;
+//	setActive(value);
+//	MapCompositionDoc* doc = tv->GetDocument();
+//	doc->mpvGetView()->Invalidate();
+//
+//}
 
 
-//----------------------------------------------------------------------------
 
-DisplayOptionsForm::DisplayOptionsForm(ComplexDrawer *dr,CWnd *par, const String& title) : 
-FormBaseDialog(par,title,fbsApplyButton | fbsBUTTONSUNDER | fbsOKHASCLOSETEXT | fbsSHOWALWAYS),
-view((LayerTreeView *)par),
-drw(dr)
-{
-}
-
-void DisplayOptionsForm::OnCancel() {
-	apply();
-}
-
-int DisplayOptionsForm::exec() {
-	return 1;
-}
-
-void DisplayOptionsForm::apply() {
-}
-
-void DisplayOptionsForm::updateMapView() {
-	MapCompositionDoc* doc = view->GetDocument();
-	doc->mpvGetView()->Invalidate();
-}
-
-//--------------------------------
-DisplayOptionsForm2::DisplayOptionsForm2(ComplexDrawer *dr,CWnd *par, const String& title) : 
-FormBaseDialog(par,title,fbsBUTTONSUNDER | fbsSHOWALWAYS | fbsNOCANCELBUTTON),
-view((LayerTreeView *)par),
-drw(dr)
-{
-}
-
-int DisplayOptionsForm2::exec() {
-	return 1;
-}
-
-void DisplayOptionsForm2::updateMapView() {
-	MapCompositionDoc* doc = view->GetDocument();
-	doc->mpvGetView()->Invalidate();
-}
-//--------------------------------
-TransparencyForm::TransparencyForm(CWnd *wPar, ComplexDrawer *dr) : 
-DisplayOptionsForm(dr,wPar,"Transparency"),
-transparency(100 *(1.0-dr->getTransparency()))
-{
-	slider = new FieldIntSliderEx(root,"Transparency(0-100)", &transparency,ValueRange(0,100),true);
-	slider->SetCallBack((NotifyProc)&TransparencyForm::setTransparency);
-	slider->setContinuous(true);
-	create();
-}
-
-int TransparencyForm::setTransparency(Event *ev) {
-	apply();
-	return 1;
-}
-
-void  TransparencyForm::apply() {
-	slider->StoreData();
-	drw->setTransparency(1.0 - (double)transparency/100.0);
-	/*PreparationParameters pp(NewDrawer::ptRENDER, 0);
-	drw->prepareChildDrawers(&pp);*/
-	String transp("Transparency (%d)",transparency);
-	TreeItem titem;
-	view->getItem(drw->itemTransparent,TVIF_TEXT | TVIF_HANDLE | TVIF_IMAGE | TVIF_PARAM | TVIS_SELECTED,titem);
-
-	strcpy(titem.item.pszText,transp.scVal());
-	view->GetTreeCtrl().SetItem(&titem.item);
-	updateMapView();
-
-}
 
 
 

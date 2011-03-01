@@ -3,10 +3,7 @@
 #include "Engine\Map\basemap.h"
 #include "Client\Mapwindow\MapPaneView.h"
 #include "ComplexDrawer.h"
-#include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
-#include "Client\Mapwindow\LayerTreeView.h"
-#include "Client\Mapwindow\LayerTreeItem.h"
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
@@ -31,6 +28,7 @@ RootDrawer::RootDrawer(MapCompositionDoc *doc) {
 	useBitmapRedraw = false;
 	rotX = rotY = rotZ = 0;
 	zoom3D = 1.0;
+	rootDrawer = this;
 
 }
 
@@ -296,7 +294,7 @@ void RootDrawer::setCoordBoundsZoom(const CoordBounds& cb) {
 
 void RootDrawer::setEyePoint() {
 	eyePoint.x = viewPoint.x;;// - cbZoom.width() ;
-	eyePoint.y = viewPoint.y - cbZoom.height();
+	eyePoint.y = viewPoint.y - cbZoom.height() * 1.5;
 	eyePoint.z = cbZoom.width() ;
 }
 
@@ -447,22 +445,22 @@ void RootDrawer::debug() {
 }
 
 //----------------------------------UI-------------------------------------
-HTREEITEM RootDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
-	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,parent,this,
-		(SetCheckFunc)&RootDrawer::SetthreeD);	
-	return InsertItem("3D","3D",item,is3D(),TVI_FIRST);
-}
+//HTREEITEM RootDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
+//	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,parent,this)
+//{
+//	return InsertItem("3D","3D",item,is3D(),TVI_FIRST);
+//}
 
-void RootDrawer::SetthreeD(void *v, LayerTreeView *tv) {
-	bool value = *(bool *)(v);
-
-	set3D(value);
-	MapCompositionDoc* doc = tv->GetDocument();
-  
-
-	make3D(value,tv);
-	doc->mpvGetView()->Invalidate();
-}
+//void RootDrawer::SetthreeD(void *v, LayerTreeView *tv) {
+//	bool value = *(bool *)(v);
+//
+//	set3D(value);
+//	MapCompositionDoc* doc = tv->GetDocument();
+//  
+//
+//	//make3D(value,tv);
+//	doc->mpvGetView()->Invalidate();
+//}
 
 void RootDrawer::setSelectionDrawer(SelectionRectangle *selDraw) {
 	if ( selDraw == 0) {

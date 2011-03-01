@@ -49,9 +49,10 @@
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\Drawers\SelectionRectangle.h"
 #include "Client\Editors\Map\BaseMapEditor.h"
-#include "Client\Mapwindow\Drawers\CanvasBackgroundDrawer.h"
 #include "Client\Mapwindow\Drawers\SimpleDrawer.h"
 #include "Client\Mapwindow\Drawers\TextDrawer.h"
+#include "Client\Mapwindow\Drawers\DrawerTool.h"
+#include "Client\Mapwindow\Drawers\CanvasBackgroundDrawer.h"
 #include "Client\Mapwindow\Drawers\MouseClickInfoDrawer.h" 
 #include "Engine\Base\System\Engine.h"
 //#include "Engine\Applications\ModuleMap.h"
@@ -131,7 +132,9 @@ void BaseCommandHandlerUI::addModules() {
 			DrawerInfoVector *infos = drawFuncs();
 			for ( int i=0 ; i < infos->size(); ++i) {
 				IlwWinApp()->addDrawer(infos->at(i)->name, infos->at(i)->subtype,infos->at(i)->createFunc);
+				delete infos->at(i);
 			}
+			delete infos;
 			IlwWinApp()->addDrawer("SelectionRectangle","ilwis38", createSelectionRectangle);
 			IlwWinApp()->addDrawer("MouseClickInfoDrawer","ilwis38",createMouseClickInfoDrawer);
 		}
@@ -140,7 +143,18 @@ void BaseCommandHandlerUI::addModules() {
 			BMEditors *infos = editorFuncs();
 			for ( int i=0 ; i < infos->size(); ++i) {
 				IlwWinApp()->addMEditor(infos->at(i)->name, infos->at(i)->subtype,infos->at(i)->createFunc);
+				delete infos->at(i);
 			}
+			delete infos;
+		}
+		GetDrawerTools toolFunc = (GetDrawerTools)(module->getMethod(ILWIS::Module::ifDrawerTools));
+		if ( toolFunc) {
+			DrawerToolInfoVector *infos = toolFunc();
+			for ( int i=0 ; i < infos->size(); ++i) {
+				DrawerTool::addCreateTool(infos->at(i)->name, infos->at(i)->createFunc);
+				delete infos->at(i);
+			}
+			delete infos;
 		}
 		++index;
 
