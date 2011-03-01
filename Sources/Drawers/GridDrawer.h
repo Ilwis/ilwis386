@@ -10,21 +10,26 @@ enum LineDspType;
 namespace ILWIS{
 
 	class GridDrawer : public ComplexDrawer {
-		friend class GridForm;
-		friend class GridLine;
-		friend class GridLineStyleForm;
-		friend class Grid3DOptions;
-
 	public:
-		enum Mode{mGRID=1, mPLANE=2, mMARKERS=4,mAXIS=8,mVERTICALS=16};
+		enum Mode{mGRID=1, mPLANE=2, mMARKERS=4,mAXIS=8,mVERTICALS=16, mCUBE=32};
 		ILWIS::NewDrawer *createGridDrawer(DrawerParameters *parms);
 
 		GridDrawer(DrawerParameters *parms);
 		virtual ~GridDrawer();
-		HTREEITEM  configure(LayerTreeView  *tv, HTREEITEM parent);
 		bool draw(bool norecursion = false, const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *pp);
 		bool is3D() const { return threeD; }
+		int getMode() const;
+		void setMode(int m);
+		double getZSpacing() const;
+		void setZSpacing(double z);
+		Color getPlaneColor() const;
+		void setPlaneColor(Color clr);
+		void set3D(bool yesno);
+		double getGridSpacing() const;
+		void setGridSpacing(double v);
+		GeneralDrawerProperties *getProperties();
+
 
 	protected:
 		void AddGridLine(Coord c1, Coord c2);
@@ -41,16 +46,16 @@ namespace ILWIS{
 		void resizeQuadsVector(int planes);
 		void prepareVAxis(double rDist,const Coord& cMax, const Coord& cMin);
 		void preparePlanes(double rDist, const Coord& cMax, const Coord& cMin );
+		void prepareCube(double rDist, const Coord& cMax, const Coord& cMin );
 
 		double          rDist;
-		Color           color;
-		LineDspType		linestyle;
-		double			linethickness;
+		LineProperties	lproperties;
 		bool			threeD;
 		double			zdist;
 		double			maxz;
 		int				mode;
 		Color			planeColor;
+		int				noOfPlanes;
 		vector< Coord * >   planeQuads;
 	};
 
@@ -58,49 +63,22 @@ namespace ILWIS{
 	public:
 		GridLine(DrawerParameters *parms);
 		virtual ~GridLine();
-		//HTREEITEM  configure(LayerTreeView  *tv, HTREEITEM parent) { return 0};
 		bool draw(bool norecursion = false, const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *pp);
 		void addDataSource(void *c, int options = 0);
 	private:
 	};
 
-	class GridForm: public DisplayOptionsForm
-	{
-	public:
-		GridForm(CWnd *par, GridDrawer *gdr);
-		void apply();
-	private:
-		FieldReal *fr;
-		FieldColor *fc;
-		GridDrawer *gd;
-	};
+	//class GridLineStyleForm: public DisplayOptionsForm
+	//{
+	//public:
+	//	GridLineStyleForm(CWnd *par, GridDrawer *gdr);
+	//	void apply();
+	//private:
+	//	FieldReal *fi;
+	//	FieldLineType *flt;
+	//	FieldColor *fc;
+	//};
 
-	class GridLineStyleForm: public DisplayOptionsForm
-	{
-	public:
-		GridLineStyleForm(CWnd *par, GridDrawer *gdr);
-		void apply();
-	private:
-		FieldReal *fi;
-		FieldLineType *flt;
-		FieldColor *fc;
-	};
-
-	class Grid3DOptions : public DisplayOptionsForm {
-	public:
-		Grid3DOptions(CWnd *par, GridDrawer *gdr);
-	private:
-		void apply();
-		FieldReal *frDistance;
-		CheckBox *cbgrid;
-		CheckBox *cbplane; 
-		CheckBox *cbmarker;
-		CheckBox *cbaxis, *cbverticals;
-		FieldGroup *fg;
-		bool hasplane, hasgrid, hasmarker, hasverticals, hasaxis;
-
-
-
-	};
+	
 }

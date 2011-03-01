@@ -26,20 +26,4 @@ class PointSetDrawer : public FeatureSetDrawer {
 		void setSymbolization(CWnd *parent);
 	};
 
-	class PointSymbolizationForm : public DisplayOptionsForm {
-		public:
-		PointSymbolizationForm(CWnd *wPar, PointSetDrawer *dr);
-		void apply(); 
-	private:
-		vector<string> names;
-		long selection;
-		int thick;
-		double scale;
-		FieldOneSelectString *fselect;
-		FieldInt *fiThick;
-		FieldReal *frScale;
-
-
-	};
-
 }

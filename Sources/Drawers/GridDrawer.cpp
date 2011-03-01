@@ -12,6 +12,8 @@
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
+#include "Client\Mapwindow\MapPaneViewTool.h"
+#include "Client\Mapwindow\Drawers\DrawerTool.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
 #include "Client\Editors\Utils\line.h"
@@ -36,10 +38,11 @@ ComplexDrawer(parms,"GridDrawer")
 	setActive(false);
 	setTransparency(0.2);
 	threeD = false;
-	linethickness = 1;
-	color = Color(0,0,0);
+	lproperties.thickness = 1;
+	lproperties.drawColor = Color(0,0,0);
 	planeColor = Color(210,210,255);
-	linestyle = ldtSingle;
+	lproperties.linestyle = 0xFFFF;
+	noOfPlanes = 4;
 	zdist = rUNDEF;
 	maxz = rUNDEF;
 	mode = GridDrawer::mGRID | mVERTICALS | mAXIS;
@@ -107,8 +110,10 @@ void GridDrawer::prepare(PreparationParameters *pp) {
 		cMax = cbMap.cMax;
 		if ( maxz == rUNDEF)
 			maxz = min(cbMap.width(), cbMap.height()) / 2.0;
-		if (zdist == rUNDEF)
-			zdist = maxz / 4.0;
+		if (zdist == rUNDEF) {
+			zdist = rRound(maxz / noOfPlanes);
+			maxz = zdist * noOfPlanes;
+		}
 		if ( rDist == rUNDEF)
 			rDist = rRound((cMax.x - cMin.x) / 7);
 
@@ -123,25 +128,17 @@ void GridDrawer::prepare(PreparationParameters *pp) {
 				prepareVAxis(rDist,cMax, cMin);
 			if ( mode & GridDrawer::mVERTICALS)
 				prepareVerticals(rDist, cMax, cMin);
+			if ( mode & GridDrawer::mCUBE)
+				prepareCube(rDist, cMax, cMin);
 		}
 	}
 	if ( pp->type & NewDrawer::ptRENDER) {
 		for(int i=0; i < drawers.size(); ++i) {
 			LineDrawer *ld = (LineDrawer *)drawers.at(i);
-			ld->setThickness(linethickness);
-			ld->setDrawColor(color);
-			switch(linestyle) {
-			case ldtDot:
-				ld->setLineStyle(0xAAAA); break;
-			case ldtDash:
-				ld->setLineStyle(0xF0F0); break;
-			case ldtDashDot:
-				ld->setLineStyle(0x6B5A); break;
-			case ldtDashDotDot:
-				ld->setLineStyle(0x56B5); break;
-			default:
-				ld->setLineStyle(0xFFFF);
-			}
+			((LineProperties *)ld->getProperties())->drawColor = lproperties.drawColor;
+			((LineProperties *)ld->getProperties())->linestyle = lproperties.linestyle;
+			((LineProperties *)ld->getProperties())->thickness = lproperties.thickness;
+			ld->setTransparency(getTransparency());
 		}
 	}
 }
@@ -217,7 +214,65 @@ void GridDrawer::preparePlanes(double rDist, const Coord& cMax, const Coord& cMi
 		z += zdist;
 	}
 	maxz = z - zdist;
+		
 }
+
+void GridDrawer::prepareCube(double rDist, const Coord& cMax, const Coord& cMin ) {
+	Coord c1, c2;
+	double z = 	getRootDrawer()->getFakeZ();
+
+	c1 = cMin;
+	c1.z = c2.z = z;
+	c2.x = cMin.x;
+	c2.y = cMax.y;
+	AddGridLine(c1, c2);
+	c1 = c2;
+	c2.x = cMax.x;
+	c2.y = cMax.y;
+	AddGridLine(c1, c2);
+	c1 = c2;
+	c2.x = cMax.x;
+	c2.y = cMin.y;
+	AddGridLine(c1, c2);
+	c1 = c2;
+	c2.x = cMin.x;
+	c2.y = cMin.y;
+	AddGridLine(c1, c2);
+	c1 = cMin;
+	c1.z = c2.z = maxz;
+	c2.x = cMin.x;
+	c2.y = cMax.y;
+	AddGridLine(c1, c2);
+	c1 = c2;
+	c2.x = cMax.x;
+	c2.y = cMax.y;
+	AddGridLine(c1, c2);
+	c1 = c2;
+	c2.x = cMax.x;
+	c2.y = cMin.y;
+	AddGridLine(c1, c2);
+	c1 = c2;
+	c2.x = cMin.x;
+	c2.y = cMin.y;
+	AddGridLine(c1, c2);
+	c1 = c2 = cMin;
+	c1.z = z;
+	c2.z = maxz;
+	AddGridLine(c1, c2);
+	c1 = c2 = Coord(cMin.x, cMax.y);
+	c1.z = z;
+	c2.z = maxz;
+	AddGridLine(c1, c2);
+	c1 = c2 = Coord(cMax.x, cMax.y);
+	c1.z = z;
+	c2.z = maxz;
+	AddGridLine(c1, c2);
+	c1 = c2 = Coord(cMax.x, cMin.y);
+	c1.z = z;
+	c2.z = maxz;
+	AddGridLine(c1, c2);
+}
+
 void GridDrawer::prepareGrid(double rDist, const Coord& cMax, const Coord& cMin ) {
 	Coord c1, c2;
 	double z = 	getRootDrawer()->getFakeZ();
@@ -270,7 +325,7 @@ void GridDrawer::AddGridLine(Coord c1, Coord c2)
 	GridLine *line = (GridLine *)IlwWinApp()->getDrawer("GridLine", &pp, &dp);
 	line->addDataSource(&c1);
 	line->addDataSource(&c2);
-	line->setDrawColor(color);
+	((LineProperties *)line->getProperties())->drawColor = lproperties.drawColor;
 	addDrawer(line);
 }
 
@@ -310,56 +365,52 @@ String GridDrawer::store(const FileName& fnView, const String& parentSection) co
 
 void GridDrawer::load(const FileName& fnView, const String& parenSection){
 }
-//------------------------------------------- UI -------------------------------
 
-HTREEITEM GridDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
-	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,TVI_ROOT,this,
-					(SetCheckFunc)&GridDrawer::gridActive,
-					(DisplayOptionItemFunc)&GridDrawer::gridOptions);
-	HTREEITEM htiGrid = InsertItem("Grid",".grid",item, isActive(),TVI_FIRST);
-	ComplexDrawer::configure(tv, htiGrid);
 
-	item = new DisplayOptionTreeItem(tv,htiGrid,this,(DisplayOptionItemFunc)&GridDrawer::displayOptionSetLineStyle);
-	InsertItem("Line style","LineStyle", item, -1);
-	item = new DisplayOptionTreeItem(tv, htiGrid, this, (SetCheckFunc)&GridDrawer::grid3D,(DisplayOptionItemFunc)&GridDrawer::displayOptionGrid3D);
-	InsertItem("3D Grid","3D",item,threeD);
-
-	return parent;
+double GridDrawer::getGridSpacing() const{
+	return rDist;
+}
+void GridDrawer::setGridSpacing(double d){
+	rDist = d;
 }
 
-void GridDrawer::displayOptionSetLineStyle(CWnd *parent) {
-	new GridLineStyleForm(parent, this);
+GeneralDrawerProperties *GridDrawer::getProperties() {
+	return &lproperties;
 }
 
-void GridDrawer::displayOptionGrid3D(CWnd *parent) {
-	new Grid3DOptions(parent, this);
+int GridDrawer::getMode() const{
+	return mode;
 }
 
-void GridDrawer::grid3D(void *v, LayerTreeView *tv) {
-	threeD = *(bool *)v;
-	PreparationParameters pp(NewDrawer::ptGEOMETRY);
-	prepare(&pp);
-	getRootDrawer()->getDrawerContext()->doDraw();
+void GridDrawer::setMode(int m) {
+	mode = m;
 }
 
-void GridDrawer::gridOptions(CWnd *parent) {
-	new GridForm(parent, this);
+double GridDrawer::getZSpacing() const{
+	return zdist;
+}
+void GridDrawer::setZSpacing(double z){
+	zdist = z;
+	maxz = zdist * noOfPlanes;
 }
 
-void GridDrawer::gridActive(void *v, LayerTreeView *tv) {
-	bool value = *(bool *)v;
-	setActive(value);
-	PreparationParameters pp(NewDrawer::ptGEOMETRY);
-	prepare(&pp);
-	getRootDrawer()->getDrawerContext()->doDraw();
+Color GridDrawer::getPlaneColor() const {
+	return planeColor;
 }
+void GridDrawer::setPlaneColor(Color clr){
+	planeColor = clr;
+}
+
+void GridDrawer::set3D(bool yesno){
+	threeD = yesno;
+}
+
 //---------------------------------------------
 ILWIS::NewDrawer *createGridLine(DrawerParameters *parms) {
 	return new GridLine(parms);
 }
 
 GridLine::GridLine(DrawerParameters *parms) : LineDrawer(parms,"GridLine"){
-	drawColor = SysColor(COLOR_WINDOWTEXT);
 }
 
 GridLine::~GridLine(){
@@ -384,95 +435,5 @@ void GridLine::addDataSource(void *crd, int options) {
 	lines.at(0)->add(c);
 }
 
-//-------------------------------
-GridForm::GridForm(CWnd *par, GridDrawer *gdr) 
-	: DisplayOptionsForm(gdr, par, SDCTitleGrid)
-	
-{
-  fr = new FieldReal(root, SDCUiGridDistance, &gdr->rDist, ValueRange(0.0,1e10,0.001));
-  fc = new FieldColor(root, SDCUiColor, &gdr->color);
 
-  create();
-}
 
-void  GridForm::apply() {
-	fc->StoreData();
-	fr->StoreData();
-	PreparationParameters pp(NewDrawer::ptRENDER);
-	drw->prepare(&pp);
-	updateMapView();
-}
-
-//------------------------------------------------------
-
-GridLineStyleForm::GridLineStyleForm(CWnd *par, GridDrawer *ldr) 
-	: DisplayOptionsForm(ldr, par, TR("Line Style"))
-{
-
-  fi = new FieldReal(root, TR("Line thickness"), &ldr->linethickness, ValueRange(1.0,100.0));
-  flt = new FieldLineType(root, SDCUiLineType, &ldr->linestyle);
-  fc = new FieldColor(root, TR("Line color"),&ldr->color);
-
-  create();
-}
-
-void  GridLineStyleForm::apply() {
-	fi->StoreData();
-	flt->StoreData();
-	fc->StoreData();
-	PreparationParameters pp(NewDrawer::ptRENDER);
-	drw->prepare(&pp);
-	updateMapView();
-}
-
-//-----------------------------------------------------------
-Grid3DOptions::Grid3DOptions(CWnd *par, GridDrawer *gdr) :
-DisplayOptionsForm(gdr, par, TR("3D Grid options"))
-{
-	hasgrid = gdr->mode & GridDrawer::mGRID;
-	hasplane = gdr->mode & GridDrawer::mPLANE;
-	hasmarker = gdr->mode & GridDrawer::mMARKERS;
-	hasaxis = gdr->mode & GridDrawer::mAXIS;
-	hasverticals = gdr->mode & GridDrawer::mVERTICALS;
-	frDistance = new FieldReal(root, TR("Vertical Distance"), &gdr->zdist, ValueRange(0.0,10000));
-	new StaticText(root,TR("Appearance"));
-	fg = new FieldGroup(root);
-	cbgrid = new CheckBox(fg,TR("Grid"), &hasgrid);
-	cbaxis = new CheckBox(fg,TR("Frame"), &hasaxis);
-	cbaxis->Align(cbgrid, AL_AFTER);
-	cbverticals = new CheckBox(fg,TR("Verticals"), &hasverticals);
-	cbverticals->Align(cbaxis, AL_AFTER);
-	cbplane = new CheckBox(fg,TR("Plane"), &hasplane);
-	cbplane->Align(cbverticals, AL_AFTER);
-	cbmarker = new CheckBox(fg,TR("Markers"),&hasmarker);
-	cbmarker->Align(cbplane, AL_AFTER);
-	fg->SetIndependentPos();
-	FieldColor *fc = new FieldColor(cbplane,TR("Color"), &(gdr->planeColor));
-	fc->Align(fg, AL_UNDER);
-	fc->SetIndependentPos();
-	create();
-}
-
-void  Grid3DOptions::apply() {
-	frDistance->StoreData();
-	cbgrid->StoreData();
-	cbplane->StoreData();
-	cbmarker->StoreData();
-	cbverticals->StoreData();
-	cbaxis->StoreData();
-	int mode = 0;
-	if ( hasgrid)
-		mode |= GridDrawer::mGRID;
-	if (hasplane)
-		mode |= GridDrawer::mPLANE;
-	if ( hasmarker)
-		mode |= GridDrawer::mMARKERS;
-	if ( hasaxis)
-		mode |= GridDrawer::mAXIS;
-	if ( hasverticals)
-		mode |= GridDrawer::mVERTICALS;
-	((GridDrawer *)drw)->mode = mode;
-	PreparationParameters pp(NewDrawer::ptGEOMETRY);
-	drw->prepare(&pp);
-	updateMapView();
-}

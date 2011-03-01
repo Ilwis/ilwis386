@@ -17,53 +17,30 @@ class PolygonSetDrawer : public FeatureSetDrawer {
 		PolygonSetDrawer(DrawerParameters *parms);
 		virtual ~PolygonSetDrawer();
 		virtual void prepare(PreparationParameters *pp);
-		HTREEITEM  configure(LayerTreeView  *tv, HTREEITEM parent);
 		void addDataSource(void *bmap,int options);
 		double getTransparencyArea() const;
 		void setTransparencyArea(double v);
 		bool getShowAreas() const { return showAreas; }
 		bool getShowBoundaries() const { return showBoundaries; }
+		void setLineStyle(int st);
+		void setLineThickness(double thick);
+		void setLineColor(const Color& clr);
+		void setShowBoundaries(bool yesno);
+		void setShowAreas(bool yesno);
 		void getTriangleData(long **data,long** loc);
-		void getBoundaryParements(Color& clr, LineDspType& dspType, double& thick);
+		GeneralDrawerProperties *getProperties() ;
+		
 
 	protected:
-		void displayOptionTransparencyP(CWnd *);
 		void setDrawMethod(DrawMethod method=drmINIT);
-		void setActiveAreas(void *w, LayerTreeView *view);
-		void setActiveBoundaries(void *w, LayerTreeView *view);
-		void displayOptionSetLineStyle(CWnd *parent);
+	
 		bool showAreas;
 		bool showBoundaries;
 		double areaTransparency;
-		HTREEITEM itemTransparentP;
-		Color           linecolor;
-		LineDspType		linestyle;
-		double			linethickness;
+		LineProperties lp;
 		bool usesTriangleFile;
 		long *triData;
 		long currentLoc;
 		
-	};
-
-	class TransparencyFormP : public DisplayOptionsForm {
-		public:
-		TransparencyFormP(CWnd *wPar, PolygonSetDrawer *dr);
-		void apply(); 
-	private:
-		int setTransparency(Event *ev);
-
-		int transparency;
-		FieldIntSliderEx *slider;
-	};
-
-	class BoundaryLineStyleForm: public DisplayOptionsForm
-	{
-	public:
-		BoundaryLineStyleForm(CWnd *par, PolygonSetDrawer *gdr);
-		void apply();
-	private:
-		FieldReal *fi;
-		FieldLineType *flt;
-		FieldColor *fc;
 	};
 }

@@ -220,10 +220,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Drawers\DisplayOptionsLegend.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\Sources\Drawers\Drawers.cpp"
 				>
 			</File>
@@ -252,15 +248,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Drawers\LineEditDrawer.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\Sources\Drawers\LineFeatureDrawer.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\Sources\Drawers\LineSetDrawer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\LineSetTool.cpp"
 				>
 			</File>
 			<File
@@ -311,6 +307,186 @@
 				RelativePath="..\..\Sources\Drawers\ValueSlicer.cpp"
 				>
 			</File>
+			<Filter
+				Name="tools"
+				>
+				<File
+					RelativePath="..\..\Sources\Drawers\AnimationControlTool.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\AnimationControlTool.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\AnimationTimeSelection.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\AnimationTimeSelection.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\AnimationTool.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\AnimationTool.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\AttributeTool.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\AttributeTool.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\BackgroundTool.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\BackgroundTool.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\ColorTool.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\ColorTool.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\ExtrusionTool.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\ExtrusionTool.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\Grid3DTool.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\Grid3dTool.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\GridTool.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\GridTool.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\HighlightTool.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\HighlightTool.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\InteractiveRepresentationTool.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\InteractiveRepresentationTool.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\LegendTool.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\LegendTool.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\LineStyleTool.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\LineStyleTool.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\NonRepresentationTool.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\NonRepresentationTool.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\PointSymbolizationTool.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\PointSymbolizationTool.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\PolygonSetTool.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\PolygonSetTool.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\RepresentationTool.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\RepresentationTool.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\SetDrawerTool.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\SetDrawerTool.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\StretchTool.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\StretchTool.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\ThreeDGlobalTool.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\ThreeDGlobalTool.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\ThreeDTool.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\ThreeDTool.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\TransparencyTool.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Drawers\TransparencyTool.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -321,15 +497,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\AttributeTool.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Drawers\BoxDrawer.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\Sources\Drawers\CanvasBackgroundDrawer.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\Drawers\DisplayOptionsLegend.h"
 				>
 			</File>
 			<File
@@ -357,15 +533,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Drawers\LineEditDrawer.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\Sources\Drawers\LineFeatureDrawer.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\Sources\Drawers\LineSetDrawer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\LineSetTool.h"
 				>
 			</File>
 			<File

@@ -1,11 +1,12 @@
 #include "Client\Headers\formelementspch.h"
-#include "Client\FormElements\fldcolor.h"
 #include "Engine\Map\basemap.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
 #include "Client\MapWindow\Drawers\ComplexDrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
+#include "Client\Mapwindow\MapPaneViewTool.h"
+#include "Client\Mapwindow\Drawers\DrawerTool.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h"
 #include "CanvasBackgroundDrawer.h"
@@ -90,43 +91,19 @@ void CanvasBackgroundDrawer::load(const FileName& fnView, const String& parentSe
 	ObjectInfo::ReadElement(getType().scVal(),"OutSideColor3D",fnView, outside3D);
 }
 
-//------------------------------------ UI -----------------------------------------
-HTREEITEM CanvasBackgroundDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
-	HTREEITEM hti = InsertItem(tv,TVI_ROOT,"Background Area","MapPane", TVI_LAST);
-	ComplexDrawer::configure(tv,hti);
-	bool is3D = getRootDrawer()->is3D();
-
-	DisplayOptionColorItem *item = new DisplayOptionColorItem("Outside", tv,hti,this, 
-					(DisplayOptionItemFunc)&CanvasBackgroundDrawer::displayOptionOutsideColor);
-	item->setColor(is3D ? outside3D : outside2D);
-	InsertItem("Outside map","SingleColor",item, -1);
-
-	item = new DisplayOptionColorItem("Inside", tv,hti,this,
-					(DisplayOptionItemFunc)&CanvasBackgroundDrawer::displayOptionInsideColor);
-	InsertItem("Inside map","SingleColor",item, -1);
-	item->setColor(is3D ? inside3D : inside2D);
-
-	return hti;
+Color& CanvasBackgroundDrawer::getColor(ColorLocation cl){
+	switch (cl) {
+		case clINSIDE2D:
+			return inside2D;
+		case clOUTSIDE2D:
+			return outside2D;
+		case clINSIDE3D:
+			return inside3D;
+		case clOUTSIDE3D:
+			return outside3D;
+	}
+	return inside2D;
 }
 
-void CanvasBackgroundDrawer::displayOptionOutsideColor(CWnd *parent) {
-	new SetColorForm("Outside map", parent, this, getRootDrawer()->is3D() ? &outside3D : &outside2D);
-}
 
-void CanvasBackgroundDrawer::displayOptionInsideColor(CWnd *parent) {
-	new SetColorForm("Inside map", parent, this, getRootDrawer()->is3D() ? &inside3D : &inside2D);
-}
-
-//------------------------------------------------
-SetColorForm::SetColorForm(const String& title, CWnd *wPar, CanvasBackgroundDrawer *dr, Color* color) : 
-	DisplayOptionsForm(dr, wPar,title)
-{
-	fc = new FieldColor(root, "Draw color", color);
-	create();
-}
-
-void  SetColorForm::apply() {
-	fc->StoreData();
-	updateMapView();
-}
 

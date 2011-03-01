@@ -10,18 +10,15 @@ enum LineDspType;
 namespace ILWIS{
 
 class LineSetDrawer : public FeatureSetDrawer {
-	friend class LineStyleForm;
 
 	public:
 		ILWIS::NewDrawer *createLineSetDrawer(DrawerParameters *parms);
 
 		LineSetDrawer(DrawerParameters *parms);
 		virtual ~LineSetDrawer();
-		HTREEITEM  configure(LayerTreeView  *tv, HTREEITEM parent);
-		LineDspType getLineStyle() const;
-		int getLineThickness() const;
 		void prepare(PreparationParameters *parm);
-		void modifyLineStyleItem(LayerTreeView  *tv, bool remove=false);
+		GeneralDrawerProperties *getProperties();
+
 
 	protected:
 		virtual NewDrawer *createElementDrawer(PreparationParameters *pp,ILWIS::DrawerParameters* parms) const;
@@ -31,18 +28,8 @@ class LineSetDrawer : public FeatureSetDrawer {
 		void load(const FileName& fnView, const String& parenSection);
 		void getDrawerFor(const Feature* feature,vector<NewDrawer *>& featureDrawers);
 
-		LineDspType linestyle;
-		double linethickness;
+		LineProperties lproperties;
 		HTREEITEM styleItem;
 	};
 
-	class LineStyleForm: public DisplayOptionsForm
-	{
-	public:
-		LineStyleForm(CWnd *par, LineSetDrawer *gdr);
-		void apply();
-	private:
-		FieldReal *fi;
-		FieldLineType *flt;
-	};
 }

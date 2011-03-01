@@ -44,6 +44,7 @@ bool PolygonDrawer::draw(bool norecursion, const CoordBounds& cbArea) const{
 	bool is3D = getRootDrawer()->is3D() && cdrw->getZMaker()->getThreeDPossible();
 	double zscale = cdrw->getZMaker()->getZScale();
 	double zoffset = cdrw->getZMaker()->getOffset();
+	double fakez = getRootDrawer()->is3D() ? getRootDrawer()->getFakeZ() : 0;
 
 	if ( is3D) {
 		glPushMatrix();
@@ -65,7 +66,7 @@ bool PolygonDrawer::draw(bool norecursion, const CoordBounds& cbArea) const{
 			//glBegin(GL_LINE_STRIP);
 			for(int j=0; j < triangleStrips.at(i).size(); ++j) {
 				Coord c = triangleStrips.at(i).at(j);
-				double z = is3D ? c.z : 0;
+				double z = is3D ? c.z : fakez;
 				glVertex3d(c.x,c.y,z);
 			}
 			glEnd();
@@ -115,14 +116,17 @@ void PolygonDrawer::setTransparencyArea(double v) {
 }
 
 void PolygonDrawer::setlineStyle(int st){
-	boundary->setLineStyle(st);
+	LineProperties *lp = (LineProperties *)boundary->getProperties();
+	lp->linestyle = st;
 }
 void PolygonDrawer::setlineThickness(double th){
-	boundary->setThickness(th);
+	LineProperties *lp = (LineProperties *)boundary->getProperties();
+	lp->thickness = th;
 }
 
 void PolygonDrawer::setLineColor(const Color& clr) {
-	boundary->setDrawColor(clr);
+	LineProperties *lp = (LineProperties *)boundary->getProperties();
+	lp->drawColor = clr;
 }
 
 

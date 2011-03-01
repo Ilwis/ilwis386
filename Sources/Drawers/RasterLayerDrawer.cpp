@@ -9,6 +9,8 @@
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
+#include "Client\Mapwindow\MapPaneViewTool.h"
+#include "Client\Mapwindow\Drawers\DrawerTool.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
 #include "Drawers\SetDrawer.h"
@@ -91,12 +93,6 @@ void RasterLayerDrawer::addSetDrawer(const BaseMap& basemap,PreparationParameter
 
 void RasterLayerDrawer::addDataSource(void *bmap, int options){
 	AbstractMapDrawer::addDataSource(bmap, options);
-}
-
-HTREEITEM RasterLayerDrawer::configure(LayerTreeView  *tv, HTREEITEM parent){
-	if ( getUICode() == 0)
-		return parent;
-	return AbstractMapDrawer::configure(tv,parent);
 }
 
 bool RasterLayerDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{

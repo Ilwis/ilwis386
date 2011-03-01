@@ -12,6 +12,8 @@
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
+#include "Client\Mapwindow\MapPaneViewTool.h"
+#include "Client\Mapwindow\Drawers\DrawerTool.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h"
 #include "Drawers\DrawingColor.h" 
@@ -31,7 +33,7 @@ ILWIS::NewDrawer *createLineFeatureDrawer(DrawerParameters *parms) {
 LineFeatureDrawer::LineFeatureDrawer(DrawerParameters *parms) : 
 	LineDrawer(parms,"LineFeatureDrawer"), feature(0)
 {
-	drawColor = Color(0,167,18);
+	lproperties.drawColor = Color(0,167,18);
 }
 
 LineFeatureDrawer::LineFeatureDrawer(DrawerParameters *parms, const String& name) : 
@@ -89,7 +91,7 @@ void LineFeatureDrawer::prepare(PreparationParameters *p){
 		}
 	}
 	if (  p->type & RootDrawer::ptRENDER || p->type & ptRESTORE) {
-		drawColor = (fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod()));
+		lproperties.drawColor = (fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod()));
 		double tr = fdr->getTransparency();
 		setTransparency(tr);
 		extrTransparency = fdr->getExtrusionTransparency();

@@ -7,6 +7,7 @@ class FieldColor;
 namespace ILWIS {
 class CanvasBackgroundDrawer : public ComplexDrawer {
 public:
+	enum ColorLocation{clINSIDE2D, clOUTSIDE2D,clINSIDE3D, clOUTSIDE3D};
 	CanvasBackgroundDrawer(DrawerParameters *parms);
 	virtual ~CanvasBackgroundDrawer();
 	virtual void prepare(PreparationParameters *pp);
@@ -14,6 +15,7 @@ public:
 	void addCoordBounds(const CoordBounds& cb, bool overrule=true);
 	bool draw(bool norecursion = false, const CoordBounds& cb=CoordBounds()) const;
 	HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent);
+	Color& getColor(ColorLocation cl);
 private:
 	void displayOptionOutsideColor(CWnd *parent);
 	void displayOptionInsideColor(CWnd *parent);
@@ -27,13 +29,5 @@ private:
 	Color outside3D;
 };
 
-class SetColorForm : public DisplayOptionsForm {
-public:
-	SetColorForm(const String& title, CWnd *wPar, CanvasBackgroundDrawer *dr, Color* color);
-	void apply();
-private:
-	FieldColor *fc;
-	Color* c;
 
-};
 }

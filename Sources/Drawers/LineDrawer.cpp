@@ -16,18 +16,13 @@ ILWIS::NewDrawer *createLineDrawer(DrawerParameters *parms) {
 }
 
 LineDrawer::LineDrawer(DrawerParameters *parms) : 
-SimpleDrawer(parms,"LineDrawer"),
-thickness(1.0),
-linestyle(0xFFFF)
+SimpleDrawer(parms,"LineDrawer")
 {
 }
 
 LineDrawer::LineDrawer(DrawerParameters *parms, const String& name) : 
-SimpleDrawer(parms,name),
-linestyle(0xFFFF),
-thickness(1.0)
+SimpleDrawer(parms,name)
 {
-	drawColor = SysColor(COLOR_WINDOWTEXT);
 }
 
 LineDrawer::~LineDrawer() {
@@ -70,6 +65,23 @@ int LineDrawer::openGLLineStyle(int linestyle, double sz){
 	}
 	return 0xFFFF;
 }
+
+int LineDrawer::ilwisLineStyle(int linestyle, double sz){
+	switch(linestyle) {
+		case 0xAAAA:
+			return ldtDot;
+		case 0xF0F0:
+			return ldtDash;
+		case 0x6B5A:
+			return ldtDashDot;
+		case 0x56B5:
+			return ldtDashDotDot;
+		default:
+			return ldtSingle;
+	}
+	return 0xFFFF;
+}
+
 bool LineDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 	if (lines.size() == 0)
 		return false;
@@ -85,14 +97,14 @@ bool LineDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 	double zscale, zoffset, fakez=0;
 
 
-	glColor4f(drawColor.redP(),drawColor.greenP(), drawColor.blueP(), getTransparency());
-	glLineWidth(thickness);
-	if (linestyle != 0xFFFF) {
+	glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(), getTransparency());
+	glLineWidth(lproperties.thickness);
+	if (lproperties.linestyle != 0xFFFF) {
 		glEnable (GL_LINE_STIPPLE);
-		glLineStipple(1,linestyle);
+		glLineStipple(1,lproperties.linestyle);
 	}
 	if ( getRootDrawer()->is3D())
-		fakez = getRootDrawer()->getFakeZ()/2.0;
+		fakez = getRootDrawer()->getFakeZ() *1.2;
 	if ( is3D) {
 		zscale = cdrw->getZMaker()->getZScale();
 		zoffset = cdrw->getZMaker()->getOffset();
@@ -105,7 +117,7 @@ bool LineDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 		if ( specialOptions & NewDrawer::sdoSELECTED) {
 			glColor4d(1, 0, 0, 1);
 			drawSelectedFeature(points, cbZoom, is3D);
-			glColor4f(drawColor.redP(),drawColor.greenP(), drawColor.blueP(), getTransparency());
+			glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(), getTransparency());
 		}
 		glBegin(GL_LINE_STRIP);
 		for(int i=0; i<points->size(); ++i) {
@@ -116,15 +128,15 @@ bool LineDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 		glEnd();
 		if ( is3D) {
 			if ( extrusion) {
-				glColor4f(drawColor.redP(),drawColor.greenP(), drawColor.blueP(), extrTransparency);
+				glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(), getTransparency());
 				Coord cOld;
 				Coord cStart = points->getAt(0);
 				for(int i=0; i<points->size(); ++i) {
 					Coordinate c = points->getAt(i);
 					if ( !cOld.fUndef()) {
-						glColor4f(drawColor.redP(),drawColor.greenP(), drawColor.blueP(), extrTransparency);
+						glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(), getTransparency());
 						drawExtrusion(cOld, c, fakez, filledExtr);
-						glColor4f(drawColor.redP(),drawColor.greenP(), drawColor.blueP(), getTransparency());
+						glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(), getTransparency());
 						glBegin(GL_LINE_STRIP);
 						glVertex3d(c.x,c.y,c.z);
 						glVertex3d(c.x,c.y,fakez);
@@ -145,7 +157,7 @@ bool LineDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 }
 
 void LineDrawer::drawSelectedFeature(CoordinateSequence *points, const CoordBounds& cbZoom, bool is3D) const{
-	glLineWidth(thickness * 1.2 + 3);
+	glLineWidth(lproperties.thickness * 1.2 + 3);
 	glBegin(GL_LINE_STRIP);
 	for(int i=0; i<points->size(); ++i) {
 		Coordinate c = points->getAt(i);
@@ -153,7 +165,7 @@ void LineDrawer::drawSelectedFeature(CoordinateSequence *points, const CoordBoun
 		glVertex3d( c.x, c.y, z);
 	}
 	glEnd();
-	glLineWidth(thickness);
+	glLineWidth(lproperties.thickness);
 	for(int i=0; i<points->size(); ++i) {
 		Coordinate c = points->getAt(i);
 		bool isPointSelected = findSelectedPoint(c);
@@ -188,18 +200,6 @@ bool LineDrawer::findSelectedPoint(const Coord& c) const{
 }
 void LineDrawer::prepare(PreparationParameters *p){
 	SimpleDrawer::prepare(p);
-}
-
-void LineDrawer::setDrawColor(const Color& col) {
-	drawColor = col;
-}
-
-void LineDrawer::setThickness(float t) {
-	thickness = t;
-}
-
-void LineDrawer::setLineStyle(int style) {
-	linestyle = style;
 }
 
 void LineDrawer::shareVertices(vector<Coord *>& coords) {
@@ -242,6 +242,10 @@ void LineDrawer::setSpecialDrawingOptions(int option, bool add, vector<Coord>* c
 		selectedCoords.clear();
 	}
 
+}
+
+GeneralDrawerProperties *LineDrawer::getProperties() {
+	return &lproperties;
 }
 
 

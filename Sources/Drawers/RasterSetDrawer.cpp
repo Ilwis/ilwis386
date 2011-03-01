@@ -1,7 +1,6 @@
 #include "Client\Headers\formelementspch.h"
 #include "Client\FormElements\FieldList.h"
 #include "Client\FormElements\selector.h"
-#include "Client\FormElements\fldcolor.h"
 #include "Client\Editors\Utils\MULTICOL.H"
 #include "Client\FormElements\FieldIntSlider.h"
 #include "Client\FormElements\FieldRealSlider.h"
@@ -17,6 +16,8 @@
 #include "Drawers\DrawingColor.h" 
 #include "Drawers\SetDrawer.h"
 #include "Drawers\ValueSlicer.h"
+#include "Client\Mapwindow\MapPaneViewTool.h"
+#include "Client\Mapwindow\Drawers\DrawerTool.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
 #include "Drawers\RasterSetDrawer.h"
@@ -406,144 +407,35 @@ void RasterSetDrawer::setThreaded(bool yesno) {
 	isThreaded = yesno;
 }
 
-void RasterSetDrawer::addSelectionDrawers(const Representation& rpr) {
-	BaseMapPtr *bmptr = ((AbstractMapDrawer *)getParentDrawer())->getBaseMap();
-	BaseMap bmap;
-	bmap.SetPointer(bmptr);
-	RasterSetDrawer *rasterset;
-	RangeReal rrmm = bmap->rrMinMax();
-	NewDrawer *drwPost = getDrawer(RSELECTDRAWER,ComplexDrawer::dtPOST);
-	if ( drwPost)
-		removeDrawer(drwPost->getId());
-	ILWIS::DrawerParameters parms(getRootDrawer(), getParentDrawer());
-	rasterset = (RasterSetDrawer *)IlwWinApp()->getDrawer("RasterSetDrawer", "Ilwis38", &parms); 
-	rasterset->setThreaded(false);
-	rasterset->setRepresentation(rpr);
-	rasterset->setMinMax(rrmm);
-	rasterset->SetPalette(palette);
-	PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER);
-	pp.csy = bmap->cs();
-	rasterset->setName(name);
-	rasterset->setRepresentation(bmptr->dm()->rpr()); //  default choice
-	rasterset->getZMaker()->setSpatialSourceMap(bmap);
-	rasterset->getZMaker()->setDataSourceMap(bmap);
-	rasterset->addDataSource(bmptr);
-	rasterset->prepare(&pp);
-	Palette * palette = rasterset->SetPaletteOwner();
-	addPostDrawer(RSELECTDRAWER,rasterset);
-
-}
-
-//-----------------------------------UI-------------------------
-HTREEITEM RasterSetDrawer::configure(LayerTreeView  *tv, HTREEITEM parent){
-	if ( getUICode() == 0)
-		return parent;
-	SetDrawer::configure(tv,parent);
-
-	if ( rastermap->dm()->pdv()) {
-		DisplayOptionTreeItem * itemSlicing = new DisplayOptionTreeItem(tv, portrayalItem,this,
-			0,(DisplayOptionItemFunc)&RasterSetDrawer::rasterSlicing);
-		InsertItem(TR("Interactive Slicing"),"Slicing",itemSlicing);
-
-		//DisplayOptionTreeItem * itemSelect = new DisplayOptionTreeItem(tv, portrayalItem,this,
-		//	0,(DisplayOptionItemFunc)&RasterSetDrawer::highLightSelection);
-		//InsertItem(TR("Attribute thresholds"),"SelectArea",itemSelect);
-	}
-
-	return parent;
-}
+//void RasterSetDrawer::addSelectionDrawers(const Representation& rpr) {
+//	BaseMapPtr *bmptr = ((AbstractMapDrawer *)getParentDrawer())->getBaseMap();
+//	BaseMap bmap;
+//	bmap.SetPointer(bmptr);
+//	RasterSetDrawer *rasterset;
+//	RangeReal rrmm = bmap->rrMinMax();
+//	NewDrawer *drwPost = getDrawer(RSELECTDRAWER,ComplexDrawer::dtPOST);
+//	if ( drwPost)
+//		removeDrawer(drwPost->getId());
+//	ILWIS::DrawerParameters parms(getRootDrawer(), getParentDrawer());
+//	rasterset = (RasterSetDrawer *)IlwWinApp()->getDrawer("RasterSetDrawer", "Ilwis38", &parms); 
+//	rasterset->setThreaded(false);
+//	rasterset->setRepresentation(rpr);
+//	rasterset->setMinMax(rrmm);
+//	rasterset->SetPalette(palette);
+//	PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER);
+//	pp.csy = bmap->cs();
+//	rasterset->setName(name);
+//	rasterset->setRepresentation(bmptr->dm()->rpr()); //  default choice
+//	rasterset->getZMaker()->setSpatialSourceMap(bmap);
+//	rasterset->getZMaker()->setDataSourceMap(bmap);
+//	rasterset->addDataSource(bmptr);
+//	rasterset->prepare(&pp);
+//	Palette * palette = rasterset->SetPaletteOwner();
+//	addPostDrawer(RSELECTDRAWER,rasterset);
+//
+//}
 
 
-void RasterSetDrawer::rasterSlicing(CWnd *parent) {
-	new InterActiveSlicing(parent,this);
-}
 
-void RasterSetDrawer::highLightSelection(CWnd *parent) {
-	new HighLightDrawer(parent,this);
-}
-
-//----------------------------------------------------------
-InterActiveSlicing::InterActiveSlicing(CWnd *par, RasterSetDrawer *adr) 
-	: DisplayOptionsForm2(adr, par, TR("Slicing"))
-{
-	vs = new ValueSlicerSlider(root, adr);
-	FieldGroup *fg = new FieldGroup(root);
-	fldSteps = new FieldOneSelectTextOnly(fg, &steps);
-	fldSteps->SetCallBack((NotifyProc)&InterActiveSlicing::createSteps);
-	fldSteps->Align(vs, AL_UNDER);
-	fldSteps->SetWidth(vs->psn->iWidth/3);
-	FlatIconButton *fb = new FlatIconButton(fg,"Save","",(NotifyProc)&InterActiveSlicing::saveRpr,fnRpr);
-	fb->Align(fldSteps, AL_AFTER);
-
-
-	create();
-}
-
-int InterActiveSlicing::saveRpr(Event *ev) {
-	CFileDialog filedlg (FALSE, "*.rpr", "*.rpr",OFN_HIDEREADONLY|OFN_NOREADONLYRETURN | OFN_LONGNAMES, "Ilwis Representation (*.rpr)|*.rpr||", NULL);
-	if ( filedlg.DoModal() == IDOK) {
-		String name(filedlg.GetPathName());
-		vs->setFileNameRpr(FileName(name));
-	}
-	return 1;
-}
-
-int InterActiveSlicing::createSteps(Event*) {
-	if (fldSteps->ose->GetCount() == 0) {
-		for(int i = 2 ; i <= 10; ++i)
-			fldSteps->AddString(String("%d",i));
-		fldSteps->ose->SelectString(0,"2");
-	} else {
-		int mapIndex = fldSteps->ose->GetCurSel();
-		if ( mapIndex != -1) {
-			vs->setNumberOfBounds(mapIndex +2);
-		}
-		drw->getRootDrawer()->getDrawerContext()->doDraw();
-	}
-	return 1;
-}
-
-//---------------------------------------------------------------
-HighLightDrawer::HighLightDrawer(CWnd *par, RasterSetDrawer *adr) 
-	: DisplayOptionsForm2(adr, par, TR("Selection"))
-{
-	vs = new ValueSlicerSlider(root, adr);
-	vs->setRprBase( ((AbstractMapDrawer *)(adr->getParentDrawer()))->getBaseMap()->dm()->rpr());
-	vs->setLowColor(colorUNDEF);
-	vs->setHighColor(colorUNDEF);
-	vs->setNumberOfBounds(3);
-	FieldGroup *fg = new FieldGroup(root);
-	fldSteps = new FieldOneSelectTextOnly(fg, &steps);
-	fldSteps->SetCallBack((NotifyProc)&HighLightDrawer::createSteps);
-	fldSteps->Align(vs, AL_UNDER);
-	fldSteps->SetWidth(vs->psn->iWidth/2);
-	adr->addSelectionDrawers(vs->getRpr());
-
-	create();
-
-	//vs->setBoundColor(1,Color(120,230,0));
-}
-
-int HighLightDrawer::createSteps(Event*) {
-	if (fldSteps->ose->GetCount() == 0) {
-		for(int i = 2 ; i <= 10; ++i)
-			fldSteps->AddString(String("%d",i));
-		fldSteps->ose->SelectString(0,"3");
-	} else {
-		int mapIndex = fldSteps->ose->GetCurSel();
-		if ( mapIndex != -1) {
-			vs->setNumberOfBounds(mapIndex +2);
-			for(int i = 0; i < mapIndex + 2; ++i) {
-				if ( i % 2 == 1) {
-					vs->setBoundColor(i,Color(200,0,0,0),0);
-				} else {
-					vs->setBoundColor(i,Color(0,0,0,255),255);
-				}
-			}
-		}
-		drw->getRootDrawer()->getDrawerContext()->doDraw();
-	}
-	return 1;
-}
 
 

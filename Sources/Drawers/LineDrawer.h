@@ -6,19 +6,27 @@ ILWIS::NewDrawer *createLineDrawer(ILWIS::DrawerParameters *parms);
 
 namespace ILWIS{
 
+	struct LineProperties : public GeneralDrawerProperties {
+		LineProperties(double t=1.0, int st=0xFFFF, Color clr=Color(0,0,0)) : thickness(t),linestyle(st),drawColor(clr), ignoreColor(false) {}
+		LineProperties(LineProperties *lp) { thickness=lp->thickness; linestyle=lp->linestyle;drawColor=lp->drawColor;ignoreColor=lp->ignoreColor;}
 
-class _export LineDrawer : public SimpleDrawer {
+		double thickness;
+		int linestyle;
+		Color drawColor;
+		bool ignoreColor;
+	};
+
+	class _export LineDrawer : public SimpleDrawer {
 	public:
 		LineDrawer(ILWIS::DrawerParameters *parms);
 		~LineDrawer();
 		virtual bool draw(bool norecursion = false, const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *);
-		void setDrawColor(const Color& col);
-		void setThickness(float t);
-		void setLineStyle(int style);
 		void setSpecialDrawingOptions(int option, bool add, vector<Coord>* coords);
 		virtual void addCoords(const vector<Coord>& v,int options=0);
 		static int openGLLineStyle(int linestyle, double sz=1.0);
+		static int ilwisLineStyle(int linestyle, double sz=1.0);
+		GeneralDrawerProperties *getProperties();
 
 	protected:
 		LineDrawer(DrawerParameters *parms, const String& name);
@@ -29,10 +37,9 @@ class _export LineDrawer : public SimpleDrawer {
 
 		vector<CoordinateSequence *> lines;
 		vector<Coord> selectedCoords;
-		Color drawColor;
 		CoordBounds cb;
-		double thickness;
-		int linestyle;
+		LineProperties lproperties;
+
 	};
 
 

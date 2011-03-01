@@ -12,6 +12,7 @@
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
 #include "Drawers\featurelayerdrawer.h"
 #include "Drawers\SetDrawer.h"
+#include "Drawers\LineDrawer.h"
 #include "Drawers\FeatureSetDrawer.h"
 #include "Drawers\PolygonSetDrawer.h"
 #include "geos\algorithm\CGAlgorithms.h"
@@ -121,15 +122,12 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 		extrTransparency = fdr->getExtrusionTransparency();
 		drawColor = fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod());
 		if ( boundary) {
-			Color clr;
-			LineDspType dspType;
-			double thick;
-			fdr->getBoundaryParements(clr,dspType,thick);
+			LineProperties *lp = (LineProperties *)fdr->getProperties();
 			boundariesActive(fdr->getShowBoundaries());
 			areasActive(fdr->getShowAreas());
 			setTransparencyArea(fdr->getTransparencyArea());
-			boundary->setLineStyle(LineDrawer::openGLLineStyle(dspType));
-			boundary->setThickness(thick);
+			((LineProperties *)boundary->getProperties())->linestyle = lp->linestyle;
+			((LineProperties *)boundary->getProperties())->thickness = lp->thickness;
 			for(int j =0 ; j < p->filteredRaws.size(); ++j) {
 				int raw = p->filteredRaws[j];
 				if ( getFeature()->rValue() == abs(raw)) {
@@ -137,7 +135,7 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 				}
 			}
 			boundary->prepare(p);
-			boundary->setDrawColor(clr);
+			((LineProperties *)boundary->getProperties())->drawColor = lp->drawColor;
 		}
 	}
 }

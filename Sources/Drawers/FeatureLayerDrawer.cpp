@@ -10,6 +10,8 @@
 #include "client\formelements\fentvalr.h"
 #include "Engine\Spatialreference\gr.h"
 #include "Engine\Map\Raster\Map.h"
+#include "Client\Mapwindow\MapPaneViewTool.h"
+#include "Client\Mapwindow\Drawers\DrawerTool.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
@@ -17,14 +19,14 @@
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
 #include "Client\FormElements\fldcolor.h"
+#include "drawers\pointdrawer.h"
+#include "drawers\linedrawer.h"
 #include "Drawers\SetDrawer.h"
 #include "Client\Editors\Utils\line.h"
 #include "Drawers\FeatureSetDrawer.h"
 #include "Drawers\PolygonSetDrawer.h"
 #include "Drawers\LineSetDrawer.h"
 #include "Drawers\PointSetDrawer.h"
-#include "drawers\pointdrawer.h"
-#include "drawers\linedrawer.h"
 #include "Drawers\FeatureLayerDrawer.h"
 #include "Client\Mapwindow\Drawers\ZValueMaker.h"
 //#include "Client\Mapwindow\Drawers\PointMapDrawerForm.h"
@@ -91,6 +93,8 @@ void FeatureLayerDrawer::addSetDrawer(const BaseMap& basemap,PreparationParamete
 	fsd->setRepresentation(basemap->dm()->rpr()); //  default choice
 	fsd->getZMaker()->setSpatialSourceMap(basemap);
 	fsd->getZMaker()->setDataSourceMap(basemap);
+	BaseMap bmp(basemap);
+	fsd->addDataSource(bmp.ptr());
 	fsd->prepare(&fp);
 	addDrawer(fsd);
 }
@@ -117,10 +121,7 @@ void FeatureLayerDrawer::load(const FileName& fnView, const String& parentSectio
 	AbstractMapDrawer::load(fnView, parentSection);
 }
 
-//-------------------------------------- UI ----------------------------------------------
-HTREEITEM FeatureLayerDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
-	return AbstractMapDrawer::configure(tv,parent);
-}
+
 
 
 

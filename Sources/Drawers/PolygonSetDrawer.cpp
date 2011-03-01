@@ -11,6 +11,8 @@
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\Drawers\RootDrawer.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
+#include "Client\Mapwindow\MapPaneViewTool.h"
+#include "Client\Mapwindow\Drawers\DrawerTool.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
 #include "Drawers\SetDrawer.h"
@@ -35,9 +37,6 @@ PolygonSetDrawer::PolygonSetDrawer(DrawerParameters *parms) :
 	showAreas(true), 
 	showBoundaries(true), 
 	areaTransparency(1.0),
-	linecolor(Color(0,0,0)),
-	linestyle(ldtNone),
-	linethickness(1.0),
 	usesTriangleFile(true),
 	triData(0),
 	currentLoc(0)
@@ -61,62 +60,17 @@ void PolygonSetDrawer::addDataSource(void *bmap,int options) {
 
 }
 
-HTREEITEM PolygonSetDrawer:: configure(LayerTreeView  *tv, HTREEITEM parent) {
-	if ( getUICode() == 0)
-		return parent;
-	HTREEITEM hti = FeatureSetDrawer::configure(tv,parent);
-	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,parent,this,
-				(SetCheckFunc)&PolygonSetDrawer::setActiveBoundaries);
-	HTREEITEM itemBoundaries = InsertItem("Boundaries",".mps",item,(int)showBoundaries);
-
-	item = new DisplayOptionTreeItem(tv,itemBoundaries,this,(DisplayOptionItemFunc)&PolygonSetDrawer::displayOptionSetLineStyle);
-	InsertItem("Line style","LineStyle", item, -1);
-
-	item = new DisplayOptionTreeItem(tv,parent,this,
-				(SetCheckFunc)&PolygonSetDrawer::setActiveAreas);				
-	HTREEITEM itemAreas = InsertItem("Areas",".mpa",item,(int)showAreas);
-
-	item = new DisplayOptionTreeItem(tv,itemAreas,this,(DisplayOptionItemFunc)&PolygonSetDrawer::displayOptionTransparencyP);
-	String transp("Transparency (%d)", 100 * getTransparency());
-	itemTransparentP = InsertItem(transp,"Transparent", item, -1);
-	return hti;
-}
-
-void PolygonSetDrawer::displayOptionSetLineStyle(CWnd *parent) {
-	new BoundaryLineStyleForm(parent, this);
-}
-
-void PolygonSetDrawer::displayOptionTransparencyP(CWnd *p) {
-	new TransparencyFormP(p, this);
-}
-
-void PolygonSetDrawer::setActiveAreas(void *v, LayerTreeView *view) {
-	bool value = *(bool *)v;
-	showAreas = value;
-	PreparationParameters parm(NewDrawer::ptRENDER, 0);
-	prepare(&parm);
-	getRootDrawer()->getDrawerContext()->doDraw();
-}
-
-void PolygonSetDrawer::setActiveBoundaries(void *v, LayerTreeView *view) {
-	bool value = *(bool *)v;
-	showBoundaries = value;
-	PreparationParameters parm(NewDrawer::ptRENDER, 0);
-	prepare(&parm);
-	getRootDrawer()->getDrawerContext()->doDraw();
-}
-
 void PolygonSetDrawer::getTriangleData(long **data, long** count) {
 	*data = triData;
 	*count = &currentLoc;
 }
 
 void PolygonSetDrawer::prepare(PreparationParameters *parms) {
-	BaseMapPtr *bmap = ((AbstractMapDrawer *)(getParentDrawer()))->getBaseMap();
-	FileName fnTriangle(bmap->fnObj,".tria#");
+	BaseMap *bmap = (BaseMap *)getDataSource();
+	FileName fnTriangle((*bmap)->fnObj,".tria#");
 	if ( (parms->type & RootDrawer::ptGEOMETRY) && fnTriangle.fExist()) {
 		ifstream file(fnTriangle.sFullPath().scVal(), ios::in|ios::binary);
-		bool ff = file.is_open();
+		file.is_open();
 		long size=1234;
 		file.read((char *)(&size), 4);
 		triData = new long[size];
@@ -147,34 +101,7 @@ void PolygonSetDrawer::prepare(PreparationParameters *parms) {
 		triData = 0;
 		currentLoc = 0;
 	}
-	if ( parms->type & RootDrawer::ptRENDER){
-	/*	for(int i=0; i < drawers.size(); ++i) {
-			PolygonFeatureDrawer *pdr = (PolygonFeatureDrawer *)drawers.at(i);
-			pdr->boundariesActive(showBoundaries);
-			pdr->areasActive();
-			pdr->setTransparencyArea(areaTransparency);
-			switch(linestyle) {
-			case ldtDot:
-				pdr->setlineStyle(0xAAAA); break;
-			case ldtDash:
-				pdr->setlineStyle(0xF0F0); break;
-			case ldtDashDot:
-				pdr->setlineStyle(0x6B5A); break;
-			case ldtDashDotDot:
-				pdr->setlineStyle(0x56B5); break;
-			default:
-				pdr->setlineStyle(0xFFFF);
-			}
-			pdr->setLineColor(linecolor);
-			pdr->setlineThickness(linethickness);
-			for(int j =0 ; j < parms->filteredRaws.size(); ++j) {
-				int raw = parms->filteredRaws[j];
-				if ( pdr->getFeature()->rValue() == abs(raw)) {
-					pdr->setActive(raw > 0);
-				}
-			}
-		}*/
-	}
+
 }
 
 void PolygonSetDrawer::setDrawMethod(DrawMethod method) {
@@ -196,63 +123,30 @@ void PolygonSetDrawer::setTransparencyArea(double v){
 	areaTransparency = v;
 }
 
-void PolygonSetDrawer::getBoundaryParements(Color& clr, LineDspType& dspType, double& thick) {
-	clr = linecolor;
-	dspType = linestyle;
-	thick = linethickness;
+void PolygonSetDrawer::setShowAreas(bool yesno) {
+	showAreas = yesno;
 }
 
-//------------------------------------------------
-TransparencyFormP::TransparencyFormP(CWnd *wPar, PolygonSetDrawer *dr) : 
-DisplayOptionsForm(dr,wPar,"Transparency"),
-transparency(100 *(1.0-dr->getTransparencyArea()))
-{
-	slider = new FieldIntSliderEx(root,"Transparency(0-100)", &transparency,ValueRange(0,100),true);
-	slider->SetCallBack((NotifyProc)&TransparencyFormP::setTransparency);
-	slider->setContinuous(true);
-	create();
+void PolygonSetDrawer::setShowBoundaries(bool yesno){
+	showBoundaries = yesno;
 }
 
-int TransparencyFormP::setTransparency(Event *ev) {
-	apply();
-	return 1;
+void PolygonSetDrawer::setLineStyle(int st) {
+	lp.linestyle = st;
 }
 
-void  TransparencyFormP::apply() {
-	slider->StoreData();
-	PolygonSetDrawer *pdrw = (PolygonSetDrawer *)drw;
-	pdrw->setTransparencyArea(1.0 - (double)transparency/100.0);
-	/*PreparationParameters pp(NewDrawer::ptRENDER, 0);
-	drw->prepareChildDrawers(&pp);*/
-	String transp("Transparency (%d)",transparency);
-	TreeItem titem;
-	view->getItem(pdrw->itemTransparentP,TVIF_TEXT | TVIF_HANDLE | TVIF_IMAGE | TVIF_PARAM | TVIS_SELECTED,titem);
-
-	strcpy(titem.item.pszText,transp.scVal());
-	view->GetTreeCtrl().SetItem(&titem.item);
-	PreparationParameters parm(NewDrawer::ptRENDER, 0);
-	pdrw->prepare(&parm);
-	updateMapView();
-
+void PolygonSetDrawer::setLineThickness(double thick) {
+	lp.thickness = thick;
 }
 
-//-----------------------------
-BoundaryLineStyleForm::BoundaryLineStyleForm(CWnd *par, PolygonSetDrawer *pdr) 
-	: DisplayOptionsForm(pdr, par, TR("Line Style"))
-{
-
-  fi = new FieldReal(root, TR("Line thickness"), &pdr->linethickness, ValueRange(1.0,100.0));
-  flt = new FieldLineType(root, SDCUiLineType, &pdr->linestyle);
-  fc = new FieldColor(root, TR("Line color"),&pdr->linecolor);
-
-  create();
+void PolygonSetDrawer::setLineColor(const Color& clr) {
+	lp.drawColor = clr;
 }
 
-void  BoundaryLineStyleForm::apply() {
-	fi->StoreData();
-	flt->StoreData();
-	fc->StoreData();
-	PreparationParameters pp(NewDrawer::ptRENDER);
-	drw->prepare(&pp);
-	updateMapView();
+GeneralDrawerProperties *PolygonSetDrawer::getProperties() {
+	return &lp;
 }
+
+
+
+
