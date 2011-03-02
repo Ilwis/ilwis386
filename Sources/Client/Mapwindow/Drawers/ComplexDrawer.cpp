@@ -4,6 +4,7 @@
 #include "Engine\Map\Raster\Map.h"
 #include "Client\Mapwindow\ZoomableView.h"
 #include "Client\Mapwindow\Drawers\ComplexDrawer.h"
+#include "Client\Mapwindow\Drawers\RootDrawer.h"
 #include "Client\Mapwindow\Drawers\ZValueMaker.h"
 
 using namespace ILWIS;
@@ -93,7 +94,7 @@ void ComplexDrawer::addPreDrawer(int order, NewDrawer *drw) {
 	drawersById[drw->getId()] = drw;
 }
 
-bool ComplexDrawer::drawPreDrawers(bool norecursion, const CoordBounds& cb) const{
+bool ComplexDrawer::drawPreDrawers(const CoordBounds& cb) const{
 	if (!isActive())
 		return false;
 
@@ -104,42 +105,42 @@ bool ComplexDrawer::drawPreDrawers(bool norecursion, const CoordBounds& cb) cons
 			++count;
 			NewDrawer *drw = (*cur).second;
 			if ( drw)
-				drw->draw(norecursion, cb);
+				drw->draw( cb);
 		}
 	}
 	return true;
 }
 
 
-bool ComplexDrawer::draw(bool norecursion, const CoordBounds& cb) const{
+bool ComplexDrawer::draw( const CoordBounds& cb) const{
 	if (!isActive())
 		return false;
-
-	drawPreDrawers(norecursion, cb);
+	getRootDrawer()->setZIndex(1 + getRootDrawer()->getZIndex());
+	drawPreDrawers(cb);
 	
 
 	long& count = (const_cast<ComplexDrawer *>(this))->currentIndex;
 	count = 0;
 	double total = 0;
-	if ( !norecursion) {
-		//clock_t start = clock();
-		for(int i=0; i < drawers.size(); ++i) {
-			++count;
-			if ( drawers[i] && drawers[i]->isActive()) {
-				drawers[i]->draw(norecursion, cb);
-			}
+	//clock_t start = clock();
+	for(int i=0; i < drawers.size(); ++i) {
+		++count;
+		NewDrawer *drw = drawers[i];
+		if (  drw && drw->isActive()) {
+			drw->draw( cb);
 		}
-	/*	clock_t end = clock();
-		total =  1000 *(double)(end - start) / CLOCKS_PER_SEC;
-		TRACE(String("drawn %S in %2.2f milliseconds;\n", getName(), total).scVal());*/
 	}
 
-	drawPostDrawers(norecursion, cb);
+	drawPostDrawers(cb);
+
+/*	clock_t end = clock();
+		total =  1000 *(double)(end - start) / CLOCKS_PER_SEC;
+		TRACE(String("drawn %S in %2.2f milliseconds;\n", getName(), total).scVal());*/
 
 	return true;
 }
 
-bool ComplexDrawer::drawPostDrawers(bool norecursion, const CoordBounds& cb) const{
+bool ComplexDrawer::drawPostDrawers(const CoordBounds& cb) const{
 	if (!isActive())
 		return false;
 
@@ -150,7 +151,7 @@ bool ComplexDrawer::drawPostDrawers(bool norecursion, const CoordBounds& cb) con
 		for(map<String,NewDrawer *>::const_iterator cur = postDrawers.begin(); cur != postDrawers.end(); ++cur) {
 			NewDrawer *drw = (*cur).second;
 			if ( drw)
-				drw->draw(norecursion, cb);
+				drw->draw( cb);
 		}
 	}
 	return true;
@@ -289,9 +290,10 @@ void ComplexDrawer::setDrawMethod(DrawMethod method) {
 void ComplexDrawer::setSpecialDrawingOptions(int option, bool add, vector<Coord>* coords){
 	if ( add)
 		specialOptions |= option;
-	else
-		specialOptions &= !option;
-	if ( option & sdoTOCHILDEREN) {
+	else {
+		specialOptions &= ~option;
+	}
+	if ( (option & sdoTOCHILDEREN) || (specialOptions & sdoTOCHILDEREN)) {
 		for(int i=0; i < drawers.size(); ++i) {
 			drawers.at(i)->setSpecialDrawingOptions(option, add, coords);
 		}
@@ -425,32 +427,7 @@ void ComplexDrawer::prepareChildDrawers(PreparationParameters *parms) {
 	}
 }
 
-//HTREEITEM ComplexDrawer::make3D(bool yesno,LayerTreeView  *tv) {
-//	threeD = yesno;
-//	HTREEITEM hti = 0;
-//	for(map<String,NewDrawer *>::iterator cur = preDrawers.begin(); cur != preDrawers.end(); ++cur) {
-//		ComplexDrawer *pdrw = dynamic_cast<ComplexDrawer *>((*cur).second);
-//		if ( pdrw) {
-//			pdrw->getZMaker()->setThreeDPossible(yesno);
-//			pdrw->make3D(yesno, tv);
-//		}
-//	}
-//	for(int i = 0; i < drawers.size(); ++i) {
-//		ComplexDrawer *pdrw = dynamic_cast<ComplexDrawer *>(drawers.at(i));
-//		if ( pdrw) {
-//			pdrw->getZMaker()->setThreeDPossible(yesno);
-//			pdrw->make3D(yesno, tv);
-//		}
-//	}
-//	for(map<String,NewDrawer *>::iterator cur =postDrawers.begin(); cur != postDrawers.end(); ++cur) {
-//		ComplexDrawer *pdrw = dynamic_cast<ComplexDrawer *>((*cur).second);
-//		if ( pdrw) {
-//			pdrw->getZMaker()->setThreeDPossible(yesno);
-//			pdrw->make3D(yesno, tv);
-//		}
-//	}
-//	return hti;
-//}
+
 bool ComplexDrawer::is3D() const {
 	return threeD;
 }

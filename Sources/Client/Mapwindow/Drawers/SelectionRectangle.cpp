@@ -19,7 +19,7 @@ clr(Color(0,100,255))
 SelectionRectangle::~SelectionRectangle() {
 }
 
-bool SelectionRectangle::draw(bool norecursion , const CoordBounds& cb) const{
+bool SelectionRectangle::draw( const CoordBounds& cb) const{
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 	bool is3D = getRootDrawer()->is3D();

@@ -8,6 +8,7 @@
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
 #include "Client\Mapwindow\Drawers\SelectionRectangle.h"
+#include "Client\Mapwindow\Drawers\ZValueMaker.h"
 #include "RootDrawer.h"
 
 using namespace ILWIS;
@@ -85,11 +86,12 @@ void RootDrawer::addCoordBounds(const CoordSystem& _cs, const CoordBounds& cb, b
 	Note: calls to RootDrawer::draw are meaningless without an OpenGL context in the current thread.
 	Therefore all calls to RootDrawer::draw must be preceded by a call to DrawerContext::TakeContext and followed by a call to ReleaseContext
 */
-bool RootDrawer::draw(bool norecursion, const CoordBounds& cb) const{
+bool RootDrawer::draw( const CoordBounds& cb) const{
 	if ( useBitmapRedraw ) {
 		bitmapBufferRedraw();
 	}
 	else {
+		const_cast<RootDrawer *>(this)->setZIndex(0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		// Clear The Screen And The Depth Buffer
 		if (threeD)
 			glEnable(GL_DEPTH_TEST);
@@ -115,12 +117,20 @@ bool RootDrawer::draw(bool norecursion, const CoordBounds& cb) const{
 	
 		}
 
-		ComplexDrawer::draw(norecursion, cb);
+		ComplexDrawer::draw( cb);
 		if ( is3D())
 			glPopMatrix();
 	}
 	return true;
 
+}
+
+int RootDrawer::getZIndex() const {
+	return getZMaker()->getZOrder();
+}
+
+void RootDrawer::setZIndex(int n) {
+	getZMaker()->setZOrder(n, fakeZ);
 }
 
 void RootDrawer::bitmapBufferRedraw() const{
@@ -272,7 +282,7 @@ void RootDrawer::setCoordBoundsView(const CoordSystem& _cs, const CoordBounds& _
 		setViewPoint(cbView.middle());
 		setEyePoint();
 	} 
-	fakeZ = cbView.width() * 0.001;
+	fakeZ = cbView.width() * 0.0005;
 	glMatrixMode(GL_MODELVIEW);
 	if ( is3D()) {
 		glLoadIdentity();

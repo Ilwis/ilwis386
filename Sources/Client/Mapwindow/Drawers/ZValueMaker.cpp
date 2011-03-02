@@ -9,21 +9,27 @@ using namespace ILWIS;
 
 #define DEFAULT_SCALE 1.0
 
-ZValueMaker::ZValueMaker()  : scalingType(zvsNONE), self(true),threeDPossible(false),offset(0), zscale(DEFAULT_SCALE){
+ZValueMaker::ZValueMaker()  : scalingType(zvsNONE), self(true),threeDPossible(false),offset(0), zscale(DEFAULT_SCALE), zOrder(0), fakeZ(0){
 }
 void ZValueMaker::setDataSourceMap(const BaseMap& mp){
 	threeDPossible =  mp->dm()->dmt() != dmtVALUE ? false : true;
 	datasourcemap = mp;
 	table = Table();
-	range = mp->dvrs().rrMinMax();
+	RangeReal tempRange = mp->dvrs().rrMinMax();
+	if ( tempRange.fValid())
+		range = tempRange;
 	type = IlwisObject::iotObjectType(datasourcemap->fnObj);
 	self =  spatialsourcemap == datasourcemap;
 	offset = 0;
 	zscale = DEFAULT_SCALE;
 }
 
-void ZValueMaker::setSpatialSourceMap(const BaseMap& mp) {
+void ZValueMaker::setSpatialSource(const BaseMap& mp, const CoordBounds& cb) {
 	spatialsourcemap = mp;
+	cbLimits = cb;
+	if ( !range.fValid() && cb.fValid()) {
+		range = RangeReal(0,min(cb.width(), cb.height()));
+	}
 }
 
 void ZValueMaker::setTable(const Table& tbl, const String& colName) {
@@ -153,3 +159,15 @@ void ZValueMaker::setZScale(double v){
 	zscale = v;
 }
 
+void ZValueMaker::setZOrder(int index, double base) {
+	zOrder = index;
+	fakeZ = (zOrder+1.0) * base;
+}
+
+int ZValueMaker::getZOrder() const{
+	return zOrder;
+}
+
+double ZValueMaker::getZ0(bool is3D) const{
+	return is3D ? fakeZ : 0;
+}

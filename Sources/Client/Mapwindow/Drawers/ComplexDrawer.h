@@ -22,7 +22,7 @@ class _export ComplexDrawer : public NewDrawer {
 		String getType() const;
 		RootDrawer *getRootDrawer();
 		RootDrawer *getRootDrawer() const;
-		bool draw(bool norecursion = false, const CoordBounds& cb=CoordBounds()) const;
+		bool draw( const CoordBounds& cb=CoordBounds()) const;
 		void prepare(PreparationParameters *);
 		virtual void prepareChildDrawers(PreparationParameters *);
 		int getDrawerCount(int types=dtMAIN) const;
@@ -104,6 +104,7 @@ class _export ComplexDrawer : public NewDrawer {
 		bool threeD;
 		int specialOptions;
 		bool dirty;
+		int totalDrawerCount;
 
 		
 		ComplexDrawer(DrawerParameters *context, const String& ty);
@@ -114,8 +115,8 @@ class _export ComplexDrawer : public NewDrawer {
 		void displayOptionTransparency(CWnd *parent) ;
 		void setInfoMode(void *v,LayerTreeView *tv);
 		NewDrawer *loadDrawer(const FileName& fnView, const String& drawerSection);
-		bool drawPreDrawers(bool norecursion, const CoordBounds& cb) const;
-		bool drawPostDrawers(bool norecursion, const CoordBounds& cb) const;
+		bool drawPreDrawers(const CoordBounds& cb) const;
+		bool drawPostDrawers(const CoordBounds& cb) const;
 	private:
 		void init();
 	} ;

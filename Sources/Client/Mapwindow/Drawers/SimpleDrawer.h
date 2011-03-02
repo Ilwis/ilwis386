@@ -13,7 +13,7 @@ namespace ILWIS {
 	class _export SimpleDrawer : public NewDrawer {
 	public:
 		String getType() const;
-		bool draw(bool norecursion = false, const CoordBounds& cb=CoordBounds()) const = 0;
+		bool draw( const CoordBounds& cb=CoordBounds()) const = 0;
 		void prepare(PreparationParameters *);
 		virtual void addDataSource(void *,int options=0) {};
 		virtual void removeDataSource(void *){}
@@ -50,6 +50,8 @@ namespace ILWIS {
 		bool inEditMode() const { return parentDrawer->inEditMode();}
 		void drawLegendItem(CDC *dc, const CRect& rct, double rVal) const {}
 		virtual GeneralDrawerProperties *getProperties() { return 0;}
+		void setSupportingDrawer(bool yesno) { isSupportingDrawer=yesno;};
+		void setExtrustionTransparency(double v);
 
 		CCriticalSection cs;
 	protected:
@@ -64,11 +66,12 @@ namespace ILWIS {
 		bool fActive;
 		double extrTransparency;
 		int specialOptions;
+		bool isSupportingDrawer;
 
 		SimpleDrawer(DrawerParameters *context, const String& ty);
 		SimpleDrawer();
 		virtual ~SimpleDrawer();
-		void drawExtrusion(const Coord& c1, const Coord& c2, double z, bool filled = false) const;
+		void drawExtrusion(const Coord& c1, const Coord& c2, double z, int option) const;
 	private:
 		void init();
 	} ;

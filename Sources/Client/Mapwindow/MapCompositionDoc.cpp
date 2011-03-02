@@ -97,6 +97,7 @@ Created on: 2007-02-8
 #include "Client\Mapwindow\MapStatusBar.h"
 #include "Engine\SampleSet\SAMPLSET.H"
 #include "Client\Editors\Editor.h"
+#include "Client\Mapwindow\Drawers\ZValueMaker.h"
 
 
 #ifdef _DEBUG
@@ -963,11 +964,13 @@ BOOL MapCompositionDoc::OnOpenObjectCollection(const ObjectCollection& list, Ope
 
 	if (ot & otANIMATION) {
 		ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
-		ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer("AnimationDrawer", "Ilwis38", &parms);
+		ComplexDrawer *drawer = (ComplexDrawer *)IlwWinApp()->getDrawer("AnimationDrawer", "Ilwis38", &parms);
 		drawer->addDataSource((void *)&list);
 		rootDrawer->setCoordinateSystem(bmp->cs());
 		rootDrawer->addCoordBounds(bmp->cs(), bmp->cb(), false);
-		ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
+		drawer->getZMaker()->setSpatialSource(bmp, rootDrawer->getMapCoordBounds());
+		drawer->getZMaker()->setDataSourceMap(bmp);
+		ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,bmp->cs());
 		drawer->prepare(&pp);
 		rootDrawer->addDrawer(drawer);
 	}

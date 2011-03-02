@@ -122,7 +122,7 @@ void  TextDrawer::prepare(PreparationParameters *pp){
 	SimpleDrawer::prepare(pp);
 }
 
-void TextDrawer::draw(bool norecursion){
+void TextDrawer::draw( const CoordBounds& cbArea){
 	TextSetDrawer *set = (TextSetDrawer *)parentDrawer;
 	if ( set->getFont()) {
 		set->getFont()->renderText(getRootDrawer(),c, text);

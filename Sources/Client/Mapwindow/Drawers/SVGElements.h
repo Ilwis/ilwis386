@@ -36,7 +36,7 @@ namespace ILWIS {
 	public:
 		SVGElement(const String& _id);
 		SVGElement(SVGAttributes::ShapeType t, const String& _id);
-		bool draw(bool norecursion, const CoordBounds& cbArea) const { return true;}
+		bool draw( const CoordBounds& cbArea) const { return true;}
 		void parse(XERCES_CPP_NAMESPACE::DOMNode* node);
 		void parseNode(XERCES_CPP_NAMESPACE::DOMNode* node,SVGAttributes& attributes);
 

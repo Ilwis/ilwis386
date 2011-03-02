@@ -35,7 +35,7 @@ public:
 	TextDrawer(DrawerParameters *parms);
 	~TextDrawer();
 	virtual void prepare(PreparationParameters *pp);
-	void draw(bool norecursion = false);
+	void draw( const CoordBounds& cbArea=CoordBounds() );
 	void addDataSource(void *);
 private:
 	String text;

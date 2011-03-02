@@ -16,7 +16,7 @@ namespace ILWIS {
 		virtual void prepare(PreparationParameters *pp);
 		String addDrawer(NewDrawer *drw);
 		void addCoordBounds(const CoordSystem& _cs, const CoordBounds& cb, bool overrule=true);
-		bool draw(bool norecursion = false, const CoordBounds& cb=CoordBounds()) const;
+		bool draw( const CoordBounds& cb=CoordBounds()) const;
 		//HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent);
 		void timedEvent(UINT timerID);
 		String store(const FileName& fnView, const String parenSection) const;
@@ -38,6 +38,8 @@ namespace ILWIS {
 		DrawerContext *getDrawerContext() { return drawercontext; }
 		DrawerContext *getDrawerContext() const { return drawercontext; }
 		void setSelectionDrawer(SelectionRectangle *selDraw);
+		int getZIndex() const;
+		void setZIndex(int);
 
 		//void clear();
 		void set3D(bool yeno);

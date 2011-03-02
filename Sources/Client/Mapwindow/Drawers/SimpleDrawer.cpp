@@ -12,6 +12,7 @@
 #include "Client\Mapwindow\Drawers\DrawerTool.h"
 #include "Client\Mapwindow\LayerTreeItem.h"
 #include "Client\Mapwindow\Drawers\DrawerContext.h"
+#include "Client\Mapwindow\Drawers\ZValueMaker.h"
 
 using namespace ILWIS;
 
@@ -43,6 +44,7 @@ void SimpleDrawer::init() {
 	extrTransparency = 0.2;
 	specialOptions = NewDrawer::sdoNone;
 	fActive = true;
+	isSupportingDrawer = false;
 }
 
 String SimpleDrawer::getType() const {
@@ -87,25 +89,31 @@ NewDrawer *SimpleDrawer::getParentDrawer() const {
 	return parentDrawer;
 }
 
-void SimpleDrawer::drawExtrusion(const Coord& c1, const Coord& c2, double z, bool filled) const {
+void SimpleDrawer::drawExtrusion(const Coord& c1, const Coord& c2, double z, int option) const {
 	Coord c3 = c1;
 	Coord c4 = c2;
 	c3.z = z;
 	c4.z = z;
-	if ( filled) {
+	if ( option & NewDrawer::sdoFilled) {
 		glBegin(GL_QUADS); // temporary, should be changed when svg symbols are there						
 			glVertex3f( c1.x, c1.y, c1.z);	
 			glVertex3f( c2.x, c2.y, c2.z);	
 			glVertex3f( c4.x, c4.y, c4.z);
 			glVertex3f( c3.x, c3.y, c3.z);
 		glEnd();
-	} else {
+	} else if ( option & NewDrawer::sdoOpen){
 		glBegin(GL_LINE_STRIP); // temporary, should be changed when svg symbols are there						
 			glVertex3f( c1.x, c1.y, c1.z);	
 			glVertex3f( c2.x, c2.y, c2.z);	
 			glVertex3f( c4.x, c4.y, c4.z);
 			glVertex3f( c3.x, c3.y, c3.z);
 		glEnd();
+	} else if ( option & NewDrawer::sdoFootPrint) {
+		//double z0 = ((ComplexDrawer *)getParentDrawer())->getZMaker()->getZ0(getRootDrawer()->is3D());
+			glBegin(GL_LINE_STRIP);
+				glVertex3f( c1.x, c1.y, z);	
+				glVertex3f( c2.x, c2.y, z);
+			glEnd();
 	}
 }
 
@@ -117,7 +125,7 @@ void SimpleDrawer::setSpecialDrawingOptions(int option, bool add, vector<Coord>*
 	if ( add)
 		specialOptions |= option;
 	else
-		specialOptions &= !option;
+		specialOptions &= ~option;
 }
 
 int SimpleDrawer::getSpecialDrawingOption(int opt) const {
@@ -125,6 +133,10 @@ int SimpleDrawer::getSpecialDrawingOption(int opt) const {
 		return specialOptions;
 	else
 		return specialOptions & opt;
+}
+
+void SimpleDrawer::setExtrustionTransparency(double v) {
+	extrTransparency = v;
 }
 
 

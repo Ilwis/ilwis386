@@ -5,7 +5,7 @@ class _export ZValueMaker {
 public:
 	enum ZValueTypeScaling{zvsNONE, zvsLINEAR, zvsLOGARITHMIC};
 	ZValueMaker();
-	void setSpatialSourceMap(const BaseMap& mp);
+	void setSpatialSource(const BaseMap& mp, const CoordBounds& cb);
 	void setDataSourceMap(const BaseMap& mp);
 	void setTable(const Table& tbl, const String& colName);
 	void setTable(const Table& tbl, const vector<String>& names);
@@ -20,6 +20,9 @@ public:
 	void setZScale(double v);
 	void store(const FileName& fn, const String& section);
 	void load(const FileName& fn, const String& section);
+	void setZOrder(int index, double base);
+	int getZOrder() const;
+	double getZ0(bool is3D) const;
 
 private:
 	BaseMap spatialsourcemap;
@@ -33,6 +36,9 @@ private:
 	bool self;
 	bool threeDPossible;
 	double zscale;
+	CoordBounds cbLimits;
+	int zOrder; // because OpenGL limitations, each set drawer must be drawn for height=0 at a different level.
+	double fakeZ; // the faze z value for objects at heigh 0 for the user of this z-maker
 
 };
 }

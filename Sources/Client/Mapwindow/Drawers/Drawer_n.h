@@ -23,10 +23,10 @@ namespace ILWIS {
 		enum PreparationType{ptNONE=0,ptRENDER=1,ptGEOMETRY=2,ptINITOPENGL=4,ptUI=8,pt3D=16,ptANIMATION=32,ptRESTORE=64,ptALL=4294967295};
 		enum DataSourceMergeOptions{dsmEXTENDCB=1};
 		enum UICode{ucNONE=0, ucNOREPRESENTATION=2, ucNOINFO=4, ucNOMASK=8, ucNOMULTICOLOR=16,ucNOTRANSPARENCY=32, ucALL=4294967295};
-		enum SpecialDrawingOptions{sdoNone=0, sdoExtrusion=1, sdoXMarker=2, sdoYMarker=4, sdoFilled=8, sdoSELECTED=16, sdoTOCHILDEREN=32};
+		enum SpecialDrawingOptions{sdoNone=0, sdoExtrusion=1, sdoXMarker=2, sdoYMarker=4, sdoFilled=8, sdoSELECTED=16, sdoTOCHILDEREN=32, sdoFootPrint=64, sdoOpen=128};
 
 		virtual ~NewDrawer() {}
-		virtual bool draw(bool norecursion = false, const CoordBounds& cb=CoordBounds()) const = 0;
+		virtual bool draw( const CoordBounds& cb=CoordBounds()) const = 0;
 		virtual void prepare(PreparationParameters *) =0;
 		virtual String getType() const =0;
 		virtual void addDataSource(void *, int options=0) = 0;
@@ -76,9 +76,9 @@ namespace ILWIS {
 
 	struct PreparationParameters {
 		PreparationParameters(const PreparationParameters* parms) :
-			type(parms->type),dc(parms->dc),rootDrawer(0),parentDrawer(0) {}
-		PreparationParameters(int t=1,CDC *_dc = 0) : type(t),dc(_dc),rootDrawer(0),parentDrawer(0) {} 
-		PreparationParameters(int t, const CoordSystem& cs) : type(t), csy(cs),dc(0),rootDrawer(0),parentDrawer(0)  {}
+			type(parms->type),dc(parms->dc),rootDrawer(0),parentDrawer(0),zOrder(parms->zOrder) {}
+		PreparationParameters(int t=1,CDC *_dc = 0) : type(t),dc(_dc),rootDrawer(0),parentDrawer(0), zOrder(-1) {} 
+		PreparationParameters(int t, const CoordSystem& cs) : type(t), csy(cs),dc(0),rootDrawer(0),parentDrawer(0),zOrder(-1)  {}
 		int type;
 		CDC *dc;
 		CoordSystem csy;
@@ -86,6 +86,7 @@ namespace ILWIS {
 		vector<int> filteredRaws;
 		NewDrawer *rootDrawer;
 		NewDrawer *parentDrawer;
+		int zOrder;
 	};
 
 }
