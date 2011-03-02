@@ -16,7 +16,7 @@ namespace ILWIS{
 
 		GridDrawer(DrawerParameters *parms);
 		virtual ~GridDrawer();
-		bool draw(bool norecursion = false, const CoordBounds& cbArea=CoordBounds()) const;
+		bool draw( const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *pp);
 		bool is3D() const { return threeD; }
 		int getMode() const;
@@ -29,6 +29,8 @@ namespace ILWIS{
 		double getGridSpacing() const;
 		void setGridSpacing(double v);
 		GeneralDrawerProperties *getProperties();
+		void setNumberOfplanes(int n);
+		int getNumberOfPlanes() const;
 
 
 	protected:
@@ -42,7 +44,7 @@ namespace ILWIS{
 		void prepareVerticals( double rDist,const Coord& cMax, const Coord& cMin);
 		String store(const FileName& fnView, const String& parenSection) const;
 		void load(const FileName& fnView, const String& parenSection);
-		bool drawPlane(bool norecursion, const CoordBounds& cbArea) const;
+		bool drawPlane(const CoordBounds& cbArea) const;
 		void resizeQuadsVector(int planes);
 		void prepareVAxis(double rDist,const Coord& cMax, const Coord& cMin);
 		void preparePlanes(double rDist, const Coord& cMax, const Coord& cMin );
@@ -63,7 +65,7 @@ namespace ILWIS{
 	public:
 		GridLine(DrawerParameters *parms);
 		virtual ~GridLine();
-		bool draw(bool norecursion = false, const CoordBounds& cbArea=CoordBounds()) const;
+		bool draw( const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *pp);
 		void addDataSource(void *c, int options = 0);
 	private:

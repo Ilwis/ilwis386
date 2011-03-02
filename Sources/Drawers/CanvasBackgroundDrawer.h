@@ -13,7 +13,7 @@ public:
 	virtual void prepare(PreparationParameters *pp);
 	void setCoordSystem(const CoordSystem& cs, bool overrule=false);
 	void addCoordBounds(const CoordBounds& cb, bool overrule=true);
-	bool draw(bool norecursion = false, const CoordBounds& cb=CoordBounds()) const;
+	bool draw( const CoordBounds& cb=CoordBounds()) const;
 	HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent);
 	Color& getColor(ColorLocation cl);
 private:

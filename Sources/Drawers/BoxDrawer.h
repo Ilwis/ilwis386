@@ -11,7 +11,7 @@ class BoxDrawer : public SimpleDrawer {
 	public:
 		BoxDrawer(ILWIS::DrawerParameters *parms);
 		~BoxDrawer();
-		virtual bool draw(bool norecursion = false, const CoordBounds& cbArea=CoordBounds()) const;
+		virtual bool draw( const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *);
 		void setDrawColor(const Color& col);
 		void setBox(const CoordBounds& cbOuter, const CoordBounds& cbInner = CoordBounds());

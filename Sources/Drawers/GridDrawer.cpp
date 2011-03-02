@@ -45,7 +45,7 @@ ComplexDrawer(parms,"GridDrawer")
 	noOfPlanes = 4;
 	zdist = rUNDEF;
 	maxz = rUNDEF;
-	mode = GridDrawer::mGRID | mVERTICALS | mAXIS;
+	mode = mGRID | mVERTICALS | mAXIS;
 }
 
 GridDrawer::~GridDrawer() {
@@ -55,17 +55,27 @@ GridDrawer::~GridDrawer() {
 }
 
 
-bool GridDrawer::draw(bool norecursion, const CoordBounds& cbArea) const{
+bool GridDrawer::draw( const CoordBounds& cbArea) const{
 	if ( !isActive())
 		return false;
-	ComplexDrawer::draw(norecursion, cbArea);
-	if ( mode & mPLANE) {
-		drawPlane(norecursion, cbArea);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+	if ( getRootDrawer()->is3D()) {
+		glPushMatrix();
+		double z0 = getRootDrawer()->getZMaker()->getZ0(true);
+		glTranslated(0,0,z0);
 	}
+	ComplexDrawer::draw( cbArea);
+	if ( mode & mPLANE) {
+		drawPlane(cbArea);
+	}
+	if ( getRootDrawer()->is3D())
+		glPopMatrix();
+	glDisable(GL_BLEND);
 	return true;
 }
 
-bool GridDrawer::drawPlane(bool norecursion, const CoordBounds& cbArea) const{
+bool GridDrawer::drawPlane(const CoordBounds& cbArea) const{
 	glClearColor(1.0,1.0,1.0,0.0);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
@@ -104,7 +114,8 @@ void GridDrawer::prepare(PreparationParameters *pp) {
 		Coord c, cMin, cMax;
 		Color clr;
 		clear();
-		getZMaker()->setThreeDPossible(true);
+	/*	getZMaker()->setThreeDPossible(true);
+		getZMaker()->setZOrder(100, getZMaker()->getZ0(true));*/
 		CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
 		cMin = cbMap.cMin;
 		cMax = cbMap.cMax;
@@ -131,6 +142,7 @@ void GridDrawer::prepare(PreparationParameters *pp) {
 			if ( mode & GridDrawer::mCUBE)
 				prepareCube(rDist, cMax, cMin);
 		}
+		getZMaker()->setThreeDPossible(true);
 	}
 	if ( pp->type & NewDrawer::ptRENDER) {
 		for(int i=0; i < drawers.size(); ++i) {
@@ -146,21 +158,21 @@ void GridDrawer::prepare(PreparationParameters *pp) {
 void GridDrawer::prepareVAxis(double rDist,const Coord& cMax, const Coord& cMin) {
 	Coord c1, c2, oldc2,startc2;
 	c1 = cMin;
-	c1.z  = getRootDrawer()->getFakeZ();
+	c1.z  = getZMaker()->getZ0(true);;
 	c2 = c1;
 	c2.z = maxz;
 	startc2 = oldc2 = c2;
 	AddGridLine(c1,c2);
 	c1.x = cMin.x;
 	c1.y = cMax.y;
-	c1.z  = getRootDrawer()->getFakeZ();
+	c1.z  = getZMaker()->getZ0(true);;
 	c2 = c1;
 	c2.z = maxz;
 	AddGridLine(oldc2,c2);
 	oldc2 = c2;
 	AddGridLine(c1,c2);
 	c1 = cMax;
-	c1.z  = getRootDrawer()->getFakeZ();
+	c1.z  = getZMaker()->getZ0(true);;
 	c2 = c1;
 	c2.z = maxz;
 	AddGridLine(oldc2,c2);
@@ -168,7 +180,7 @@ void GridDrawer::prepareVAxis(double rDist,const Coord& cMax, const Coord& cMin)
 	AddGridLine(c1,c2);
 	c1.x = cMax.x;
 	c1.y = cMin.y;
-	c1.z  = getRootDrawer()->getFakeZ();
+	c1.z  = getZMaker()->getZ0(true);;
 	c2 = c1;
 	c2.z = maxz;
 	AddGridLine(oldc2,c2);
@@ -189,7 +201,7 @@ void GridDrawer::prepareVerticals(double rDist,const Coord& cMax, const Coord& c
 		{
 			c1.x = x;
 			c1.y = y;
-			c1.z =  getRootDrawer()->getFakeZ();
+			c1.z =  getZMaker()->getZ0(true);;
 			c2.x = x;
 			c2.y = y;
 			c2.z = maxz;
@@ -199,7 +211,7 @@ void GridDrawer::prepareVerticals(double rDist,const Coord& cMax, const Coord& c
 }
 void GridDrawer::preparePlanes(double rDist, const Coord& cMax, const Coord& cMin ) {
 	Coord c1, c2;
-	double z = 	getRootDrawer()->getFakeZ();
+	double z = 	getZMaker()->getZ0(true);;
 	int zplanes = threeD ? 0.5 + maxz / zdist : 0;
 	resizeQuadsVector(zplanes);
 	for(int i=0; i <= zplanes; ++i) {
@@ -219,7 +231,7 @@ void GridDrawer::preparePlanes(double rDist, const Coord& cMax, const Coord& cMi
 
 void GridDrawer::prepareCube(double rDist, const Coord& cMax, const Coord& cMin ) {
 	Coord c1, c2;
-	double z = 	getRootDrawer()->getFakeZ();
+	double z = 	getZMaker()->getZ0(true);;
 
 	c1 = cMin;
 	c1.z = c2.z = z;
@@ -275,7 +287,7 @@ void GridDrawer::prepareCube(double rDist, const Coord& cMax, const Coord& cMin 
 
 void GridDrawer::prepareGrid(double rDist, const Coord& cMax, const Coord& cMin ) {
 	Coord c1, c2;
-	double z = 	getRootDrawer()->getFakeZ();
+	double z = 	getZMaker()->getZ0(true);
 	int zplanes = threeD ? 0.5 + maxz / zdist : 0;
 	resizeQuadsVector(zplanes);
 	for(int i=0; i <= zplanes; ++i) {
@@ -405,6 +417,14 @@ void GridDrawer::set3D(bool yesno){
 	threeD = yesno;
 }
 
+void GridDrawer::setNumberOfplanes(int n) {
+	noOfPlanes = n;
+	zdist = rUNDEF;
+}
+
+int GridDrawer::getNumberOfPlanes() const {
+	return noOfPlanes;
+}
 //---------------------------------------------
 ILWIS::NewDrawer *createGridLine(DrawerParameters *parms) {
 	return new GridLine(parms);
@@ -416,8 +436,8 @@ GridLine::GridLine(DrawerParameters *parms) : LineDrawer(parms,"GridLine"){
 GridLine::~GridLine(){
 }
 
-bool GridLine::draw(bool norecursion, const CoordBounds& cbArea) const{
-	return LineDrawer::draw(norecursion, cbArea);
+bool GridLine::draw( const CoordBounds& cbArea) const{
+	return LineDrawer::draw( cbArea);
 }
 
 void GridLine::prepare(PreparationParameters *pp){
@@ -434,6 +454,8 @@ void GridLine::addDataSource(void *crd, int options) {
 		lines.push_back(new CoordinateArraySequence());
 	lines.at(0)->add(c);
 }
+
+
 
 
 

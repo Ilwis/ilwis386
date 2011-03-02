@@ -45,7 +45,7 @@ void BoxDrawer::setBox(const CoordBounds& cbOuter, const CoordBounds& cbInner) {
 
 }
 
-bool BoxDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
+bool BoxDrawer::draw( const CoordBounds& cbArea) const{
 	if (boxes.size() == 0)
 		return false;
 	bool is3D = getRootDrawer()->is3D() ;

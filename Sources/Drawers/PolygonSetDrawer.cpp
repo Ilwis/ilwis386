@@ -51,6 +51,11 @@ NewDrawer *PolygonSetDrawer::createElementDrawer(PreparationParameters *pp, ILWI
 
 }
 
+bool PolygonSetDrawer::draw( const CoordBounds& cbArea) const {
+	FeatureSetDrawer::draw(cbArea);
+	getRootDrawer()->setZIndex(1 + getRootDrawer()->getZIndex()); // extra offset because of the boundary layer;
+	return true;
+}
 void PolygonSetDrawer::addDataSource(void *bmap,int options) {
 	FeatureSetDrawer::addDataSource(bmap, options);
 	ComplexDrawer *cdr = (ComplexDrawer *)getParentDrawer();

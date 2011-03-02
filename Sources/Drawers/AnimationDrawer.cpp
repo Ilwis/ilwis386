@@ -261,7 +261,7 @@ void AnimationDrawer::addSetDrawer(const BaseMap& basem,PreparationParameters *p
 	fp.csy = basem->cs();
 	rsd->setName(name);
 	rsd->setRepresentation(basem->dm()->rpr()); //  default choice
-	rsd->getZMaker()->setSpatialSourceMap(basem);
+	rsd->getZMaker()->setSpatialSource(basem, getRootDrawer()->getMapCoordBounds());
 	rsd->getZMaker()->setDataSourceMap(basem);
 	rsd->addDataSource(basem.ptr());
 	rsd->prepare(&fp);
@@ -330,9 +330,9 @@ void AnimationDrawer::drawLegendItem(CDC *dc, const CRect& rct, double rVal) con
 }
 
 
-bool AnimationDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
+bool AnimationDrawer::draw(int drawerIndex , const CoordBounds& cbArea) const{
     ILWISSingleLock sl(const_cast<CCriticalSection *>(&csAccess), TRUE,SOURCE_LOCATION);
-	AbstractMapDrawer::draw(norecursion, cbArea);
+	AbstractMapDrawer::draw( cbArea);
 	return true;
 }
 

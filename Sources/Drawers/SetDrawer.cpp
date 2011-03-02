@@ -2,6 +2,7 @@
 #include "Engine\Map\basemap.h"
 #include "Engine\Map\Point\ilwPoint.h"
 #include "Client\MapWindow\Drawers\ComplexDrawer.h"
+#include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
 #include "Client\Ilwis.h"
 #include "Engine\Representation\Rpr.h"
 #include "Engine\Spatialreference\gr.h"
@@ -56,16 +57,17 @@ void SetDrawer::prepare(PreparationParameters *parm){
 	setDrawMethod();
 }
 
-bool SetDrawer::draw(bool norecursion, const CoordBounds& cbArea) const{
+bool SetDrawer::draw( const CoordBounds& cbArea) const{
 	glClearColor(1.0,1.0,1.0,0.0);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	/*CoordBounds cb = getRootDrawer()->getCoordBoundsZoom();
 	RowCol rc1= getRootDrawer()->worldToScreen(cb.cMin);
 	RowCol rc2= getRootDrawer()->worldToScreen(cb.cMax);*/
 	glEnable(GL_BLEND);
+	getZMaker()->setZOrder(getRootDrawer()->getZIndex(),getRootDrawer()->getFakeZ());
 	//glEnable(GL_SCISSOR_TEST);
 	//glScissor(rc1.Col, rc2.Row, abs(rc1.Col - rc2.Col), abs(rc2.Col - rc2.Col));
-	ComplexDrawer::draw(norecursion, cbArea);
+	ComplexDrawer::draw( cbArea);
 	glDisable(GL_BLEND);
 	//glDisable(GL_SCISSOR_TEST);
 	return true;
@@ -96,6 +98,14 @@ Representation SetDrawer::getRepresentation() const { // avoiding copy construct
 
 double SetDrawer::getExtrusionTransparency() const {
 	return extrTransparency;
+}
+
+void SetDrawer::setExtrustionTransparency(double v) {
+	extrTransparency = v;
+	for(int i = 0; i < drawers.size(); ++i) {
+		if ( drawers[i]->isSimple())
+			((SimpleDrawer *)drawers[i])->setExtrustionTransparency(v);
+	}
 }
 
 void SetDrawer::setRepresentation( const Representation& rp){
@@ -135,14 +145,6 @@ void SetDrawer::setRepresentation( const Representation& rp){
 CoordSystem SetDrawer::getCoordSystem() const {
 	return csy;
 }
-
-//bool SetDrawer::isLegendUsefull() const {
-//	AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)getParentDrawer();
-//	BaseMapPtr *bm = mapDrawer->getBaseMap();
-//	if (bm != 0 && bm->dm()->pdv() && stretched) 
-//		return true;
-//	return drm != drmSINGLE;
-//}
 
 bool SetDrawer::isStretched() const {
 	return stretched;

@@ -24,6 +24,7 @@ namespace ILWIS {
 		void apply();
 		int uncheckRest(Event *ev);
 		FieldReal *frDistance;
+		FieldInt *frPlanes;
 		CheckBox *cbgrid;
 		CheckBox *cbplane; 
 		CheckBox *cbcube;
@@ -33,6 +34,7 @@ namespace ILWIS {
 		double zDist;
 		Color planeColor;
 		bool threeD;
+		int numPlanes;
 
 	};
 

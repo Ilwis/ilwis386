@@ -84,7 +84,7 @@ void RasterLayerDrawer::addSetDrawer(const BaseMap& basemap,PreparationParameter
 	fp.csy = basemap->cs();
 	rsd->setName(name);
 	rsd->setRepresentation(basemap->dm()->rpr()); //  default choice
-	rsd->getZMaker()->setSpatialSourceMap(basemap);
+	rsd->getZMaker()->setSpatialSource(basemap, getRootDrawer()->getMapCoordBounds());
 	rsd->getZMaker()->setDataSourceMap(basemap);
 	rsd->addDataSource(basemap.ptr());
 	rsd->prepare(&fp);
@@ -95,7 +95,7 @@ void RasterLayerDrawer::addDataSource(void *bmap, int options){
 	AbstractMapDrawer::addDataSource(bmap, options);
 }
 
-bool RasterLayerDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
-	AbstractMapDrawer::draw(norecursion, cbArea);
+bool RasterLayerDrawer::draw(int drawerIndex , const CoordBounds& cbArea) const{
+	AbstractMapDrawer::draw( cbArea);
 	return true;
 }

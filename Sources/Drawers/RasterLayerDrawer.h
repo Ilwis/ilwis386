@@ -10,7 +10,7 @@ namespace ILWIS{
 		virtual ~RasterLayerDrawer();
 		virtual void prepare(PreparationParameters *pp);
 		void addDataSource(void *bmap, int options=0);
-		bool draw(bool norecursion , const CoordBounds& cbArea) const;
+		bool draw(int drawerIndex , const CoordBounds& cbArea) const;
 		
 	protected:
 		void addSetDrawer(const BaseMap& basemap, ILWIS::PreparationParameters *pp, ILWIS::SetDrawer *rsd, const String& name="");

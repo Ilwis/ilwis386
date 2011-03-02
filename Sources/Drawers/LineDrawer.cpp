@@ -82,7 +82,7 @@ int LineDrawer::ilwisLineStyle(int linestyle, double sz){
 	return 0xFFFF;
 }
 
-bool LineDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
+bool LineDrawer::draw( const CoordBounds& cbArea) const{
 	if (lines.size() == 0)
 		return false;
 	if ( !getRootDrawer()->getCoordBoundsZoom().fContains(cb))
@@ -90,21 +90,22 @@ bool LineDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 
 	CoordBounds cbZoom = getRootDrawer()->getCoordBoundsZoom();
 
-	bool extrusion = getSpecialDrawingOption(NewDrawer::sdoExtrusion);
-	bool filledExtr = getSpecialDrawingOption(NewDrawer::sdoFilled);
 	ComplexDrawer *cdrw = (ComplexDrawer *)getParentDrawer();
-	bool is3D = getRootDrawer()->is3D() && cdrw->getZMaker()->getThreeDPossible();
+	bool is3D = getRootDrawer()->is3D(); 
+	bool is3DPossible = cdrw->getZMaker()->getThreeDPossible();
 	double zscale, zoffset, fakez=0;
+	double transp = getTransparency();
 
-
-	glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(), getTransparency());
+	glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(),transp );
 	glLineWidth(lproperties.thickness);
 	if (lproperties.linestyle != 0xFFFF) {
 		glEnable (GL_LINE_STIPPLE);
 		glLineStipple(1,lproperties.linestyle);
 	}
-	if ( getRootDrawer()->is3D())
-		fakez = getRootDrawer()->getFakeZ() *1.2;
+	double z0 = cdrw->getZMaker()->getZ0(getRootDrawer()->is3D());
+	if ( isSupportingDrawer && is3D) // supporting drawers need to be slightly above the level of the "main" drawer. OpenGL won't draw them correct if they are in the same plane
+		z0 +=  z0;
+
 	if ( is3D) {
 		zscale = cdrw->getZMaker()->getZScale();
 		zoffset = cdrw->getZMaker()->getOffset();
@@ -117,34 +118,29 @@ bool LineDrawer::draw(bool norecursion , const CoordBounds& cbArea) const{
 		if ( specialOptions & NewDrawer::sdoSELECTED) {
 			glColor4d(1, 0, 0, 1);
 			drawSelectedFeature(points, cbZoom, is3D);
-			glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(), getTransparency());
+			glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(), transp);
 		}
 		glBegin(GL_LINE_STRIP);
 		for(int i=0; i<points->size(); ++i) {
 			Coordinate c = points->getAt(i);
-			double z = is3D ? c.z : fakez;
+			double z = is3D && is3DPossible ? c.z : z0;
 			glVertex3d( c.x, c.y, z);
 		}
 		glEnd();
 		if ( is3D) {
-			if ( extrusion) {
-				glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(), getTransparency());
+			if ( (specialOptions & NewDrawer::sdoExtrusion) != 0) {
+				glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(), transp);
 				Coord cOld;
 				Coord cStart = points->getAt(0);
 				for(int i=0; i<points->size(); ++i) {
 					Coordinate c = points->getAt(i);
 					if ( !cOld.fUndef()) {
-						glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(), getTransparency());
-						drawExtrusion(cOld, c, fakez, filledExtr);
-						glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(), getTransparency());
-						glBegin(GL_LINE_STRIP);
-						glVertex3d(c.x,c.y,c.z);
-						glVertex3d(c.x,c.y,fakez);
-						glEnd();
-					}
-					cOld = c;
+						glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(), extrTransparency);
+						drawExtrusion(cOld, c, z0 - zoffset, specialOptions);
+						glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(), extrTransparency);
+								}
+						cOld = c;
 				}
-				//drawExtrusion(cOld, cStart, cOld.z, filledExtr); 
 			}
 		}
 	}

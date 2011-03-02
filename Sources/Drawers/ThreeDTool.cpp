@@ -73,13 +73,17 @@ void ThreeDTool::displayZOption3D() {
 
 void ThreeDTool::setExtrusion(void *value) {
 	bool v = *(bool *)value;
-	drawer->setSpecialDrawingOptions(NewDrawer::sdoExtrusion | NewDrawer::sdoTOCHILDEREN, v);
+	int opt = drawer->getSpecialDrawingOption() & NewDrawer::sdoExtrusion;
+	if ( opt == 0 && v)
+		drawer->setSpecialDrawingOptions(NewDrawer::sdoExtrusion | NewDrawer::sdoTOCHILDEREN | NewDrawer::sdoFilled,true);
+	else
+		drawer->setSpecialDrawingOptions(NewDrawer::sdoExtrusion | NewDrawer::sdoTOCHILDEREN, v);
 	drawer->getRootDrawer()->getDrawerContext()->doDraw();
 
 }
 
 void ThreeDTool::extrusionOptions() {
-	new ExtrusionOptions(tree, (SetDrawer *)drawer);
+	new ExtrusionOptions(tree, (ComplexDrawer *)drawer);
 }
 
 void ThreeDTool::displayZScaling() {
@@ -104,8 +108,8 @@ DisplayOptionsForm(dr,wPar,TR("3D Options")), sourceIndex(0)
 		AbstractMapDrawer *fdrw = (AbstractMapDrawer *)sdrw->getParentDrawer();
 		bmp.SetPointer(fdrw->getBaseMap());
 	}
-	
-	attTable = bmp->tblAtt();
+	if ( bmp->fTblAtt())
+		attTable = bmp->tblAtt();
 	rg = new RadioGroup(root,TR("Data Source"),&sourceIndex);
 	new RadioButton(rg,"Self");
 	RadioButton *rbMap = new RadioButton(rg,TR("Raster Map"));
@@ -113,7 +117,7 @@ DisplayOptionsForm(dr,wPar,TR("3D Options")), sourceIndex(0)
 
 	if ( attTable.fValid()) {
 		RadioButton *rbTable = new RadioButton(rg,TR("Attribute column"));
-		FieldColumn *fcol = new FieldColumn(rbTable,"",attTable,&colName,dmVALUE&dmIMAGE);
+		FieldColumn *fcol = new FieldColumn(rbTable,"",attTable,&colName,dmVALUE | dmIMAGE);
 	}
 
 	rg->SetIndependentPos();
@@ -201,14 +205,25 @@ void ZDataScaling::apply() {
 	updateMapView();
 }
 //----------------------------------------------------------------
-ExtrusionOptions::ExtrusionOptions(CWnd *p, SetDrawer *fsd) :
-DisplayOptionsForm(fsd, p, TR("Extrusion options") )
+ExtrusionOptions::ExtrusionOptions(CWnd *p, ComplexDrawer *drw) :
+DisplayOptionsForm(drw, p, TR("Extrusion options") )
 {
-	transparency = 100 *(1.0-fsd->extrTransparency);
-	line = fsd->specialOptions & ( NewDrawer::sdoFilled| NewDrawer::sdoExtrusion) ? 0 : 1;
+	SetDrawer *fdr = (SetDrawer *)drw;
+	AnimationDrawer *animdrw = dynamic_cast<AnimationDrawer *>(drw);
+	if ( animdrw)
+		fdr = ((SetDrawer *)animdrw->getDrawer(0));
+
+	transparency = 100 *(1.0-fdr->getExtrusionTransparency());
+	if ( (fdr->getSpecialDrawingOption() &  NewDrawer::sdoOpen) != 0)
+		line = 0;
+	if ( (fdr->getSpecialDrawingOption() &  NewDrawer::sdoFilled) != 0)
+		line = 1;
+	if ( (fdr->getSpecialDrawingOption() &  NewDrawer::sdoFootPrint) != 0)
+		line = 2;
 	rg = new RadioGroup(root, TR("Appearence"),&line);
 	new RadioButton(rg, TR("Line"));
 	new RadioButton(rg,TR("Filled"));
+	new RadioButton(rg,TR("Footprint"));
 	slider = new FieldIntSliderEx(root,"Transparency(0-100)", &transparency,ValueRange(0,100),true);
 	slider->SetCallBack((NotifyProc)&ExtrusionOptions::setTransparency);
 	slider->setContinuous(true);
@@ -219,7 +234,8 @@ DisplayOptionsForm(fsd, p, TR("Extrusion options") )
 
 int ExtrusionOptions::setTransparency(Event *ev) {
 	slider->StoreData();
-	((SetDrawer *)drw)->extrTransparency = 1.0 - (double)transparency/100.0;
+	//((SetDrawer *)drw)->extrTransparency = 1.0 - (double)transparency/100.0;
+	((SetDrawer *)drw)->setExtrustionTransparency(1.0 - (double)transparency/100.0);
 	PreparationParameters pp(NewDrawer::ptRENDER);
 	drw->prepare(&pp);
 	updateMapView();
@@ -228,12 +244,39 @@ int ExtrusionOptions::setTransparency(Event *ev) {
 void ExtrusionOptions::apply() {
 	rg->StoreData();
 	slider->StoreData();
-	if ( line == 1)
-		((SetDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFilled | NewDrawer::sdoTOCHILDEREN, true );
-		//specialOptions |= NewDrawer::sdoFilled;
-	else
-		((SetDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFilled | NewDrawer::sdoTOCHILDEREN, false);
-	((SetDrawer *)drw)->extrTransparency = 1.0 - (double)transparency/100.0;
+	SetDrawer *fdr = (SetDrawer *)drw;
+	AnimationDrawer *animDrw = dynamic_cast<AnimationDrawer *>(drw);
+	if ( animDrw) {
+		PreparationParameters pp(NewDrawer::ptRENDER, 0);
+		for(int i = 0; i < animDrw->getDrawerCount(); ++i) {
+			SetDrawer *fdr = (SetDrawer *)animDrw->getDrawer(i);
+			setFSDOptions(fdr);
+		}
+	}
+	else {
+		setFSDOptions(fdr);
+	}
+
 	updateMapView();
+
+}
+
+void ExtrusionOptions::setFSDOptions(SetDrawer *fsd) {
+	if ( line == 0) {
+		((SetDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoOpen, true );
+	    ((SetDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFootPrint, false );
+		((SetDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFilled, false);
+	}
+	if (line == 1) {
+		((SetDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFilled, true);
+	    ((SetDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoOpen, false );
+		((SetDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFootPrint, false);
+	}
+	if (line == 2){
+	    ((SetDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoOpen, false );
+		((SetDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFilled, false);
+		((SetDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFootPrint, true);
+	}
+	((SetDrawer *)drw)->setExtrustionTransparency(1.0 - (double)transparency/100.0);
 
 }

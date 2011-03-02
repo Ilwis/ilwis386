@@ -61,12 +61,12 @@ void Grid3DTool::grid3D(void *v) {
 }
 
 String Grid3DTool::getMenuString() const {
-	return TR("Interactive Stretching");
+	return TR("Grid 3D");
 }
 
 //-----------------------------------------------------------
 Grid3DOptions::Grid3DOptions(CWnd *par, GridDrawer *gdr) :
-DisplayOptionsForm(gdr, par, TR("3D Grid options")), zDist(gdr->getZSpacing()),planeColor(gdr->getPlaneColor())
+DisplayOptionsForm(gdr, par, TR("3D Grid options")), zDist(gdr->getZSpacing()),planeColor(gdr->getPlaneColor()), numPlanes(gdr->getNumberOfPlanes())
 {
 	hasgrid = (gdr->getMode() & GridDrawer::mGRID) != 0;
 	hasplane = (gdr->getMode() & GridDrawer::mPLANE) != 0;
@@ -74,6 +74,7 @@ DisplayOptionsForm(gdr, par, TR("3D Grid options")), zDist(gdr->getZSpacing()),p
 	hasaxis = (gdr->getMode() & GridDrawer::mAXIS) != 0;
 	hasverticals = (gdr->getMode() & GridDrawer::mVERTICALS) != 0;
 	frDistance = new FieldReal(root, TR("Vertical Distance"), &zDist, ValueRange(0.0,10000));
+	frPlanes = new FieldInt(root, TR("Number of planes"), &numPlanes, ValueRange(1,10));
 	new StaticText(root,TR("Appearance"));
 	fg = new FieldGroup(root);
 	cbgrid = new CheckBox(fg,TR("Grid"), &hasgrid);
@@ -108,6 +109,7 @@ void  Grid3DOptions::apply() {
 	cbplane->StoreData();
 	cbcube->StoreData();
 	cbverticals->StoreData();
+	frPlanes->StoreData();
 	GridDrawer *gdr = ((GridDrawer *)drw);
 	int mode = 0;
 	if ( hasgrid)
@@ -121,6 +123,7 @@ void  Grid3DOptions::apply() {
 	gdr->setMode(mode);
 	gdr->setZSpacing(zDist);
 	gdr->setPlaneColor(planeColor);
+	gdr->setNumberOfplanes(numPlanes);
 	PreparationParameters pp(NewDrawer::ptGEOMETRY);
 	drw->prepare(&pp);
 	updateMapView();

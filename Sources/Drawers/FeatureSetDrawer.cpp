@@ -83,12 +83,14 @@ void FeatureSetDrawer::prepare(PreparationParameters *parms){
 		for(int i=0; i < features.size(); ++i) {
 			Feature *feature = features.at(i);
 			NewDrawer *pdrw;
-			if ( feature && feature->fValid()){
+			if ( feature && feature->fValid() ){
 				ILWIS::DrawerParameters dp(getRootDrawer(), this);
 				pdrw = createElementDrawer(parms, &dp);
 				pdrw->addDataSource(feature);
-				PreparationParameters fp((int)parms->type, 0);
+				PreparationParameters fp((int)parms->type, mapDrawer->getBaseMap()->cs());
 				pdrw->prepare(&fp);
+				if ( feature->rValue() == rUNDEF)
+					pdrw->setActive(false);
 				setDrawer(i, pdrw);
 				++count;
 				if ( i % 100 == 0) {
@@ -96,8 +98,7 @@ void FeatureSetDrawer::prepare(PreparationParameters *parms){
 				}
 			}
 		}
-		if ( count < features.size())
-			drawers.resize(count);
+
 	} else {
 		if ( parms->type & NewDrawer::ptRENDER || parms->type & NewDrawer::pt3D) {
 			prepareChildDrawers(parms);

@@ -13,8 +13,6 @@ namespace ILWIS{
 class DrawingColor;
 
 class _export SetDrawer : public ComplexDrawer {
-	friend class ExtrusionOptions;
-
 	public:
 		enum StretchMethod { smLINEAR, smLOGARITHMIC };
 		ILWIS::NewDrawer *createSetDrawer(DrawerParameters *parms);
@@ -38,13 +36,14 @@ class _export SetDrawer : public ComplexDrawer {
 		String iconName(const String& subtype="?") const ;
 		String getInfo(const Coord& crd) const;
 		static unsigned long test_count;
-		bool draw(bool norecursion, const CoordBounds& cbArea) const;
+		bool draw( const CoordBounds& cbArea) const;
 		//void updateLegendItem();
 		Column getAtttributeColumn() const;
 		void setAttributeColumn(const Column& col );
 		bool useAttributeColumn() const;
 		void setUseAttributeColumn(bool yesno);
 		double getExtrusionTransparency() const;
+		void setExtrustionTransparency(double v);
 		virtual void modifyLineStyleItem(LayerTreeView  *tv, bool remove=false) {}
 		void *getDataSource() { return getParentDrawer()->getDataSource(); }
 			

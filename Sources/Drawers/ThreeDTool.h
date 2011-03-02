@@ -53,9 +53,10 @@ private:
 
 class ExtrusionOptions : public DisplayOptionsForm {
 public:
-	ExtrusionOptions(CWnd *p, SetDrawer *fsd);
+	ExtrusionOptions(CWnd *p, ComplexDrawer *fsd);
 	void apply();
 private:
+	void setFSDOptions(SetDrawer *fsd);
 	int setTransparency(Event *ev);
 	int line;
 	int transparency;

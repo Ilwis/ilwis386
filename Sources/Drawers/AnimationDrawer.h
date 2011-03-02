@@ -25,7 +25,7 @@ namespace ILWIS{
 		virtual void prepare(PreparationParameters *pp);
 		void addDataSource(void *bmap, int options=0);
 		void *getDataSource() const;
-		bool draw(bool norecursion , const CoordBounds& cbArea) const;
+		bool draw(int drawerIndex , const CoordBounds& cbArea) const;
 		void timedEvent(UINT _timerid);
 		String description() const;
 		virtual void inactivateOtherPalettes(Palette * palette);

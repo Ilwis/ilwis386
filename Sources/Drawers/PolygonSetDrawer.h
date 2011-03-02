@@ -13,6 +13,7 @@ class PolygonSetDrawer : public FeatureSetDrawer {
 	public:
 		ILWIS::NewDrawer *createPolygonSetDrawer(DrawerParameters *parms);
 		NewDrawer *createElementDrawer(PreparationParameters *pp, ILWIS::DrawerParameters* parms) const;
+		bool draw( const CoordBounds& cbArea) const;
 
 		PolygonSetDrawer(DrawerParameters *parms);
 		virtual ~PolygonSetDrawer();

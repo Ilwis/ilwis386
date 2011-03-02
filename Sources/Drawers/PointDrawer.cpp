@@ -68,7 +68,7 @@ void PointDrawer::setScale(double s) {
 	scale = s;
 }
 
-bool PointDrawer::draw(bool norecursion, const CoordBounds& cbArea) const {
+bool PointDrawer::draw( const CoordBounds& cbArea) const {
 	if ( cNorm.fUndef())
 		return false;
 	const CoordBounds& cbZoom = getRootDrawer()->getCoordBoundsZoom();
@@ -81,11 +81,11 @@ bool PointDrawer::draw(bool norecursion, const CoordBounds& cbArea) const {
 	ComplexDrawer *cdrw = (ComplexDrawer *)getParentDrawer();
 	ZValueMaker *zvmkr = cdrw->getZMaker();
 	bool is3D = getRootDrawer()->is3D() && zvmkr->getThreeDPossible();
-	double fakez = getRootDrawer()->getFakeZ();
+	double z0 = cdrw->getZMaker()->getZ0(is3D);
 
 	double fx = cNorm.x;
 	double fy = cNorm.y;
-	double fz = is3D ? cNorm.z : 0;;
+	double fz = is3D ? cNorm.z : z0;
 
 	double symbolScale = cbZoom.width() / 200;
 	CoordBounds cb(Coord(fx - symbolScale, fy - symbolScale,fz), Coord(fx + symbolScale, fy + symbolScale,fz));
@@ -103,14 +103,14 @@ bool PointDrawer::draw(bool norecursion, const CoordBounds& cbArea) const {
 				drawEllipse((*cur), fz);
 				break;
 			case SVGAttributes::sRECTANGLE:
-				drawRectangle((*cur), 0);
+				drawRectangle((*cur), fz);
 				break;
 			case SVGAttributes::sPOLYGON:
-				drawPolygon((*cur), 0);
+				drawPolygon((*cur), fz);
 				break;
 			case SVGAttributes::sLINE:
 			case SVGAttributes::sPOLYLINE:
-				drawLine((*cur), 0);
+				drawLine((*cur), fz);
 				break;
 			case SVGAttributes::sPATH:
 				break;			

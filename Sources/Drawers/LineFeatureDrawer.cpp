@@ -44,8 +44,8 @@ LineFeatureDrawer::LineFeatureDrawer(DrawerParameters *parms, const String& name
 LineFeatureDrawer::~LineFeatureDrawer() {
 }
 
-bool LineFeatureDrawer::draw(bool norecursion, const CoordBounds& cbArea) const {
-	return LineDrawer::draw(norecursion, cbArea);
+bool LineFeatureDrawer::draw( const CoordBounds& cbArea) const {
+	return LineDrawer::draw( cbArea);
 }
 
 void LineFeatureDrawer::addDataSource(void *f, int options) {

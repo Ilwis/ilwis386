@@ -359,14 +359,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\Sources\Drawers\ExtrusionTool.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Sources\Drawers\ExtrusionTool.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\Sources\Drawers\Grid3DTool.cpp"
 					>
 				</File>

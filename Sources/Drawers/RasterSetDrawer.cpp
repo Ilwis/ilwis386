@@ -145,9 +145,9 @@ void RasterSetDrawer::addDataSource(void *bmap, int options){
 	rastermap.SetPointer((BaseMapPtr *)bmap);
 }
 
-bool RasterSetDrawer::draw(bool norecursion , const CoordBounds& cbArea) const {
+bool RasterSetDrawer::draw( const CoordBounds& cbArea) const {
 
-	drawPreDrawers(norecursion, cbArea);
+	drawPreDrawers(cbArea);
 
 	if (!data->init)
 		init();
@@ -188,7 +188,7 @@ bool RasterSetDrawer::draw(bool norecursion , const CoordBounds& cbArea) const {
 		glDisable(GL_BLEND);
 	}
 
-	drawPostDrawers(norecursion, cbArea);
+	drawPostDrawers(cbArea);
 	return true;
 }
 
@@ -318,34 +318,27 @@ void RasterSetDrawer::DisplayTexture(double x1, double y1, double x2, double y2,
 		glBegin (GL_QUADS);
 
 		ZValueMaker *zmaker = 0;
-		double zv = 0.0;
-		if (is3D())
+		//double zv = 0.0;
+		//if (is3D())
 			zmaker = getZMaker();
+		double z0 = zmaker->getZ0(getRootDrawer()->is3D());
 
 		if (sameCsy) {
 			// avoid plotting the "added" portion of the map
 			x2 = min(x2, data->cb.MaxX());
 			y2 = max(y2, data->cb.MinY());
 
-			if (zmaker != 0)
-				zv = zmaker->getValue(Coord(x1, y1), 0);
 			tex->TexCoord2d(x1, y1);
-			glVertex3d(x1, y1, zv);
+			glVertex3d(x1, y1, z0);
 
-			if (zmaker != 0)
-				zv = zmaker->getValue(Coord(x2, y1), 0);
 			tex->TexCoord2d(x2, y1);
-			glVertex3d(x2, y1, zv);
+			glVertex3d(x2, y1, z0);
 
-			if (zmaker != 0)
-				zv = zmaker->getValue(Coord(x2, y2), 0);
 			tex->TexCoord2d(x2, y2);
-			glVertex3d(x2, y2, zv);
+			glVertex3d(x2, y2, z0);
 
-			if (zmaker != 0)
-				zv = zmaker->getValue(Coord(x1, y2), 0);
 			tex->TexCoord2d(x1, y2);
-			glVertex3d(x1, y2, zv);
+			glVertex3d(x1, y2, z0);
 		} else {
 			// avoid plotting the "added" portion of the map
 			bool fRecalculateCX2 = false;
@@ -369,25 +362,17 @@ void RasterSetDrawer::DisplayTexture(double x1, double y1, double x2, double y2,
 			if (fRecalculateCY2)
 				c4 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x1, y2, 0.0));
 
-			if (zmaker != 0)
-				zv = zmaker->getValue(Coord(c1.x, c1.y), 0);
 			tex->TexCoord2d(x1, y1);
-			glVertex3d(c1.x, c1.y, zv);
+			glVertex3d(c1.x, c1.y, z0);
 
-			if (zmaker != 0)
-				zv = zmaker->getValue(Coord(c2.x, c2.y), 0);
 			tex->TexCoord2d(x2, y1);
-			glVertex3d(c2.x, c2.y, zv);
+			glVertex3d(c2.x, c2.y, z0);
 
-			if (zmaker != 0)
-				zv = zmaker->getValue(Coord(c3.x, c3.y), 0);
 			tex->TexCoord2d(x2, y2);
-			glVertex3d(c3.x, c3.y, zv);
+			glVertex3d(c3.x, c3.y, z0);
 
-			if (zmaker != 0)
-				zv = zmaker->getValue(Coord(c4.x, c4.y), 0);
 			tex->TexCoord2d(x1, y2);
-			glVertex3d(c4.x, c4.y, zv);
+			glVertex3d(c4.x, c4.y, z0);
 		}
 	
 		glEnd();
@@ -407,33 +392,7 @@ void RasterSetDrawer::setThreaded(bool yesno) {
 	isThreaded = yesno;
 }
 
-//void RasterSetDrawer::addSelectionDrawers(const Representation& rpr) {
-//	BaseMapPtr *bmptr = ((AbstractMapDrawer *)getParentDrawer())->getBaseMap();
-//	BaseMap bmap;
-//	bmap.SetPointer(bmptr);
-//	RasterSetDrawer *rasterset;
-//	RangeReal rrmm = bmap->rrMinMax();
-//	NewDrawer *drwPost = getDrawer(RSELECTDRAWER,ComplexDrawer::dtPOST);
-//	if ( drwPost)
-//		removeDrawer(drwPost->getId());
-//	ILWIS::DrawerParameters parms(getRootDrawer(), getParentDrawer());
-//	rasterset = (RasterSetDrawer *)IlwWinApp()->getDrawer("RasterSetDrawer", "Ilwis38", &parms); 
-//	rasterset->setThreaded(false);
-//	rasterset->setRepresentation(rpr);
-//	rasterset->setMinMax(rrmm);
-//	rasterset->SetPalette(palette);
-//	PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER);
-//	pp.csy = bmap->cs();
-//	rasterset->setName(name);
-//	rasterset->setRepresentation(bmptr->dm()->rpr()); //  default choice
-//	rasterset->getZMaker()->setSpatialSourceMap(bmap);
-//	rasterset->getZMaker()->setDataSourceMap(bmap);
-//	rasterset->addDataSource(bmptr);
-//	rasterset->prepare(&pp);
-//	Palette * palette = rasterset->SetPaletteOwner();
-//	addPostDrawer(RSELECTDRAWER,rasterset);
-//
-//}
+
 
 
 

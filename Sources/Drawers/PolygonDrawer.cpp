@@ -31,7 +31,7 @@ PolygonDrawer::~PolygonDrawer() {
 	delete boundary;
 }
 
-bool PolygonDrawer::draw(bool norecursion, const CoordBounds& cbArea) const{
+bool PolygonDrawer::draw( const CoordBounds& cbArea) const{
 	if (triangleStrips.size() == 0 || !fActive)
 		return false;
 	CoordBounds cbZoom = getRootDrawer()->getCoordBoundsZoom();
@@ -40,11 +40,11 @@ bool PolygonDrawer::draw(bool norecursion, const CoordBounds& cbArea) const{
     bool asQuad =  cbZoom.getArea() * 0.00001 > const_cast<PolygonDrawer *>(this)->cb.getArea() ? true : false;
 	glShadeModel(GL_FLAT);
 
+	bool is3D = getRootDrawer()->is3D();
 	ComplexDrawer *cdrw = (ComplexDrawer *)getParentDrawer();
-	bool is3D = getRootDrawer()->is3D() && cdrw->getZMaker()->getThreeDPossible();
 	double zscale = cdrw->getZMaker()->getZScale();
 	double zoffset = cdrw->getZMaker()->getOffset();
-	double fakez = getRootDrawer()->is3D() ? getRootDrawer()->getFakeZ() : 0;
+	double z0 = cdrw->getZMaker()->getZ0(is3D);
 
 	if ( is3D) {
 		glPushMatrix();
@@ -55,10 +55,10 @@ bool PolygonDrawer::draw(bool norecursion, const CoordBounds& cbArea) const{
 	glColor4f(drawColor.redP(),drawColor.greenP(), drawColor.blueP(), (1.0 - drawColor.transparencyP()) * getTransparency() * areaTransparency);
 	if ( asQuad && showArea) {
 		glBegin(GL_QUADS);
-		glVertex3d(cb.cMin.x, cb.cMin.y, 0);
-		glVertex3d(cb.cMin.x, cb.cMax.y, 0);
-		glVertex3d(cb.cMax.x, cb.cMax.y, 0);
-		glVertex3d(cb.cMax.x, cb.cMin.y, 0);
+		glVertex3d(cb.cMin.x, cb.cMin.y, z0);
+		glVertex3d(cb.cMin.x, cb.cMax.y, z0);
+		glVertex3d(cb.cMax.x, cb.cMax.y, z0);
+		glVertex3d(cb.cMax.x, cb.cMin.y, z0);
 		glEnd();
 	} else {
 	for(int i=0; i < triangleStrips.size() && showArea; ++i){
@@ -66,7 +66,7 @@ bool PolygonDrawer::draw(bool norecursion, const CoordBounds& cbArea) const{
 			//glBegin(GL_LINE_STRIP);
 			for(int j=0; j < triangleStrips.at(i).size(); ++j) {
 				Coord c = triangleStrips.at(i).at(j);
-				double z = is3D ? c.z : fakez;
+				double z = cdrw->getZMaker()->getThreeDPossible() & is3D ? c.z : z0;
 				glVertex3d(c.x,c.y,z);
 			}
 			glEnd();
@@ -76,7 +76,7 @@ bool PolygonDrawer::draw(bool norecursion, const CoordBounds& cbArea) const{
 		glPopMatrix();
 	}
 	if ( boundary && showBoundary && (!asQuad || !showArea)) {
-		boundary->draw(norecursion, cbArea);
+		boundary->draw( cbArea);
 	}
 	return true;
 }

@@ -37,9 +37,9 @@ void PointFeatureDrawer::addDataSource(void *f, int options) {
 	 feature = (Feature *)f;
 }
 
-bool PointFeatureDrawer::draw(bool norecursion, const CoordBounds& cbArea) const{
+bool PointFeatureDrawer::draw( const CoordBounds& cbArea) const{
 
-	return PointDrawer::draw(norecursion, cbArea);
+	return PointDrawer::draw( cbArea);
 }
 
 void PointFeatureDrawer::prepare(PreparationParameters *p){

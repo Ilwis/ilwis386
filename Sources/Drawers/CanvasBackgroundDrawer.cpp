@@ -33,7 +33,7 @@ void  CanvasBackgroundDrawer::prepare(PreparationParameters *pp){
 
 }
 
-bool CanvasBackgroundDrawer::draw(bool norecursion, const CoordBounds& cb) const{
+bool CanvasBackgroundDrawer::draw( const CoordBounds& cb) const{
 	CoordBounds cbView = getRootDrawer()->getCoordBoundsView();
 	CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
 	bool is3D = getRootDrawer()->is3D();

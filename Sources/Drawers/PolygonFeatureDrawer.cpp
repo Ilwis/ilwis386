@@ -46,8 +46,8 @@ PolygonFeatureDrawer::PolygonFeatureDrawer(DrawerParameters *parms, const String
 PolygonFeatureDrawer::~PolygonFeatureDrawer() {
 }
 
-bool PolygonFeatureDrawer::draw(bool norecursion, const CoordBounds& cbArea) const {
-	return PolygonDrawer::draw(norecursion, cbArea);
+bool PolygonFeatureDrawer::draw( const CoordBounds& cbArea) const {
+	return PolygonDrawer::draw( cbArea);
 }
 
 void PolygonFeatureDrawer::addDataSource(void *f, int options) {
@@ -116,6 +116,8 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 		}
 		if ( boundary) {
 			boundary->prepare(p);
+			boundary->setSupportingDrawer(true);
+
 		}
 	}
 	if (  p->type & ptALL || p->type & RootDrawer::ptRENDER) {
@@ -135,6 +137,7 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 				}
 			}
 			boundary->prepare(p);
+			boundary->setSupportingDrawer(true);
 			((LineProperties *)boundary->getProperties())->drawColor = lp->drawColor;
 		}
 	}

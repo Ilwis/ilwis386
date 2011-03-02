@@ -12,7 +12,7 @@ class _export PointDrawer : public SimpleDrawer {
 	public:
 		PointDrawer(ILWIS::DrawerParameters *parms);
 		~PointDrawer();
-		virtual bool draw(bool norecursion = false, const CoordBounds& cbArea=CoordBounds()) const;
+		virtual bool draw( const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *);
 		void setDrawColor(const Color& col);
 		Color getDrawColor() const;

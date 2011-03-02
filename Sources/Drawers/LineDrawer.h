@@ -20,7 +20,7 @@ namespace ILWIS{
 	public:
 		LineDrawer(ILWIS::DrawerParameters *parms);
 		~LineDrawer();
-		virtual bool draw(bool norecursion = false, const CoordBounds& cbArea=CoordBounds()) const;
+		virtual bool draw( const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *);
 		void setSpecialDrawingOptions(int option, bool add, vector<Coord>* coords);
 		virtual void addCoords(const vector<Coord>& v,int options=0);
