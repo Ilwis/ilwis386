@@ -197,7 +197,7 @@ void LayerTreeView::collectStructure(HTREEITEM parent, const String& name) {
 	}
 }
 
-HTREEITEM LayerTreeView::addMapItem(ILWIS::AbstractMapDrawer *mapDrawer, HTREEITEM after) {
+HTREEITEM LayerTreeView::addMapItem(ILWIS::AbstractMapDrawer *mapDrawer, HTREEITEM after, int lastTool) {
 	CTreeCtrl& tc = GetTreeCtrl();
 	BaseMapPtr *bmp = mapDrawer->getBaseMap();
 	int iImg = IlwWinApp()->iImage(mapDrawer->iconName());
@@ -213,7 +213,7 @@ HTREEITEM LayerTreeView::addMapItem(ILWIS::AbstractMapDrawer *mapDrawer, HTREEIT
 	if ( mapDrawer->getType() == "AnimationDrawer") {
 		DrawerTool *dt = DrawerTool::createTool("AnimationTool",GetDocument()->mpvGetView(),this,mapDrawer);
 		if ( dt) {
-			drwTool->addTool(dt);
+			drwTool->addTool(dt, lastTool);
 			dt->configure(htiMap);
 		}
 	} else {
@@ -222,7 +222,7 @@ HTREEITEM LayerTreeView::addMapItem(ILWIS::AbstractMapDrawer *mapDrawer, HTREEIT
 			if ( drw) {
 				DrawerTool *dt = DrawerTool::createTool("SetTool",GetDocument()->mpvGetView(),this,drw);
 				if ( dt) {
-					drwTool->addTool(dt);
+					drwTool->addTool(dt, lastTool);
 					dt->configure(htiMap);
 				}
 			}
@@ -321,13 +321,15 @@ void LayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 	mcd->rootDrawer->getDrawers(allDrawers);
 
 	HTREEITEM item = 0;
-	for(int index = 0; index < allDrawers.size(); ++index) 
+	int lastTool = drwTool->getToolCount();
+	//for(int index = 0; index < allDrawers.size(); ++index) 
+	for(int index = allDrawers.size() - 1; index !=0; --index) 
 	{
 		ComplexDrawer* dr = (ComplexDrawer *)allDrawers.at(index);
 		//ILWISSingleLock csl(&dr->cs, TRUE, SOURCE_LOCATION);
 		AbstractMapDrawer *mapDrawer = dynamic_cast<AbstractMapDrawer *>(dr);
 		if (mapDrawer != 0 && mapDrawer->getBaseMap() != 0){
-			item = addMapItem(mapDrawer, lastNode);
+			item = addMapItem(mapDrawer, lastNode, lastTool);
 		}
 	}
 	DrawerTool *dt = DrawerTool::createTool("BackgroundTool",mcd->mpvGetView(),this,mcd->rootDrawer);

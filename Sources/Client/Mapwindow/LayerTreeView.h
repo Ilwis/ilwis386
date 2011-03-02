@@ -111,7 +111,7 @@ protected:
 //	void AddPropItems(HTREEITEM hti, int iImg, const IlwisObject& obj);
 	CImageList ilStates;
 private:
-	HTREEITEM addMapItem(ILWIS::AbstractMapDrawer *mapDrawer, HTREEITEM after);
+	HTREEITEM addMapItem(ILWIS::AbstractMapDrawer *mapDrawer, HTREEITEM after, int lastTool);
 	void NextNode(HTREEITEM hItem, const String& name);
 	void resetState();
 	map<String, NodeInfo> nodes;

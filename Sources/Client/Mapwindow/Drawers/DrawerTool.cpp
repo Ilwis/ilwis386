@@ -87,12 +87,6 @@ void DrawerTool::addDrawer(ComplexDrawer *cdrw) {
 		DrawerTool *dtool = ((*cur).second)(mpv,tree,cdrw);
 		if ( dtool->isToolUseableFor(cdrw) ) {
 			addTool(dtool);
-		/*	for(int i=0; i < cdrw->getDrawerCount(); ++i) {
-				NewDrawer *drw = cdrw->getDrawer(i);
-				if ( drw && !drw->isSimple()) {
-						dtool->addDrawer((ComplexDrawer *)drw);
-				}
-			}*/
 		} else
 			delete dtool;
 	}
@@ -103,7 +97,10 @@ bool DrawerTool::addTool(DrawerTool *tool, int proposedIndex) {
 		if ( tools[i]->getId() == tool->getId())
 			return false;
 	}
-	tools.push_back(tool);
+	if ( proposedIndex == iUNDEF)
+		tools.push_back(tool);
+	else
+		tools.insert(tools.begin() + proposedIndex, tool);
 	for( map<String, CreateDrawerTool>::iterator cur = factory.begin(); cur != factory.end(); ++cur) {
 		DrawerTool *dtool = ((*cur).second)(mpv,tree,(ComplexDrawer *)tool->getDrawer());
 		if ( dtool->isToolUseableFor(tool) ) {
@@ -234,8 +231,8 @@ void DisplayOptionsForm::updateMapView() {
 }
 
 //--------------------------------
-DisplayOptionsForm2::DisplayOptionsForm2(ComplexDrawer *dr,CWnd *par, const String& title) : 
-FormBaseDialog(par,title,fbsBUTTONSUNDER | fbsSHOWALWAYS | fbsNOCANCELBUTTON),
+DisplayOptionsForm2::DisplayOptionsForm2(ComplexDrawer *dr,CWnd *par, const String& title, int style) : 
+FormBaseDialog(par,title,style),
 view((LayerTreeView *)par),
 drw(dr)
 {

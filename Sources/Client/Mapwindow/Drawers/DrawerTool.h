@@ -79,7 +79,7 @@ protected:
 
 class _export DisplayOptionsForm2 : public FormBaseDialog {
 public:
-	DisplayOptionsForm2(ComplexDrawer *dr,CWnd *par, const String& title);
+	DisplayOptionsForm2(ComplexDrawer *dr,CWnd *par, const String& title,int style=fbsBUTTONSUNDER | fbsSHOWALWAYS | fbsNOCANCELBUTTON);
 	int exec();
 protected:
 	void updateMapView();
