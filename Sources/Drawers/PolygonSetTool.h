@@ -12,7 +12,6 @@ public:
 	virtual ~PolygonSetTool();
 	String getMenuString() const;
 protected:
-	void displayOptionSetBoundaryStyle();
 	void displayOptionTransparencyP();
 	void setActiveAreas(void *w);
 	void setActiveBoundaries(void *w);
@@ -24,7 +23,7 @@ protected:
 
 class TransparencyFormP : public DisplayOptionsForm {
 	public:
-	TransparencyFormP(CWnd *wPar, PolygonSetDrawer *dr,HTREEITEM hti);
+	TransparencyFormP(CWnd *wPar, ComplexDrawer *dr,HTREEITEM hti);
 	void apply(); 
 private:
 	int setTransparency(Event *ev);

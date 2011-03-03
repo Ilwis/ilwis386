@@ -407,7 +407,6 @@ bool AnimationDrawer::timerPerIndex() {
 			}
 		}
 	}
-	//animBar.updateTime(String("index : %d",mapIndex));
 	return true;
 }
 

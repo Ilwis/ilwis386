@@ -5,6 +5,28 @@ ILWIS::DrawerTool *createAnimationControlTool(ZoomableView* zv, LayerTreeView *v
 namespace ILWIS {
 
 	class AnimationDrawer;
+	class AnimationControl;
+
+	class AnimationBar : public CToolBar
+	{
+	// Construction
+	public:
+		AnimationBar();
+		virtual ~AnimationBar();
+		virtual void OnUpdateCmdUI(CFrameWnd*, BOOL);
+		void Create(CWnd* pParent); 
+		void updateTime(const String& );
+	protected:
+		afx_msg void OnSetFocus();
+		afx_msg void OnKillFocus();
+
+		CEdit ed;
+		CFont fnt;
+		bool fActive;
+
+		DECLARE_MESSAGE_MAP()
+	};
+
 
 	class AnimationControlTool : public DrawerTool {
 	public:
@@ -15,7 +37,7 @@ namespace ILWIS {
 		String getMenuString() const;
 	protected:
 		void animationControl();
-
+		AnimationControl *animControl;
 	};
 
 	class AnimationControl: public DisplayOptionsForm2
@@ -58,6 +80,7 @@ namespace ILWIS {
 		int year, month, day, hour, minute;
 		bool useTimeAttribute;
 		String timeColName;
+		AnimationBar animBar;
 
 
 		DECLARE_MESSAGE_MAP();

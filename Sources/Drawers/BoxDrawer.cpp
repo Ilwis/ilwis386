@@ -49,8 +49,8 @@ bool BoxDrawer::draw( const CoordBounds& cbArea) const{
 	if (boxes.size() == 0)
 		return false;
 	bool is3D = getRootDrawer()->is3D() ;
-	double fakeZ = getRootDrawer()->getFakeZ();
-	double z = is3D ? fakeZ : 0;
+	double z0 = ((ComplexDrawer *)parentDrawer)->getZMaker()->getZ0(getRootDrawer()->is3D());
+	double z = is3D ? z0 : 0;
 	glClearColor(1.0,1.0,1.0,0.0);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
@@ -75,6 +75,7 @@ bool BoxDrawer::draw( const CoordBounds& cbArea) const{
 
 void BoxDrawer::prepare(PreparationParameters *p){
 	SimpleDrawer::prepare(p);
+	((ComplexDrawer *)parentDrawer)->getZMaker()->setZOrder(getRootDrawer()->getZIndex(),getRootDrawer()->getFakeZ());
 }
 
 void BoxDrawer::setDrawColor(const Color& col) {

@@ -41,7 +41,11 @@ bool PolygonSetTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	if ( !sdrwt && !adrwt)
 		return false;
 
-	PolygonSetDrawer *pdrw = dynamic_cast<PolygonSetDrawer *>(drawer);
+	NewDrawer *ndrw = drawer;;
+	if ( adrwt) {
+		ndrw = ((AnimationDrawer *)(adrwt->getDrawer()))->getDrawer(0);
+	}
+	PolygonSetDrawer *pdrw = dynamic_cast<PolygonSetDrawer *>(ndrw);
 	if ( !pdrw)
 		return false;
 	parentTool = tool;
@@ -52,6 +56,9 @@ HTREEITEM PolygonSetTool::configure( HTREEITEM parentItem) {
 	if ( isConfigured)
 		return parentItem;
 	PolygonSetDrawer *pdrw = dynamic_cast<PolygonSetDrawer *>(drawer);
+	if ( !pdrw) {
+		pdrw = dynamic_cast<PolygonSetDrawer *>(((AnimationDrawer *)drawer)->getDrawer(0));
+	}
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
 	item->setCheckAction(this, 0, (DTSetCheckFunc)&PolygonSetTool::setActiveBoundaries);
 	HTREEITEM itemBoundaries = insertItem("Boundaries",".mps",item,(int)pdrw->getShowBoundaries());
@@ -81,48 +88,58 @@ HTREEITEM PolygonSetTool::configure( HTREEITEM parentItem) {
 void PolygonSetTool::setActiveAreas(void *v) {
 	bool value = *(bool *)v;
 	PolygonSetDrawer *pdrw = dynamic_cast<PolygonSetDrawer *>(drawer);
+	PreparationParameters pp(NewDrawer::ptRENDER, 0);
 	if ( pdrw) {
 		pdrw->setShowAreas(value);
+		drawer->prepare(&pp);
 	} else {
 		AnimationDrawer *animDrw = dynamic_cast<AnimationDrawer *>(drawer);
-		PreparationParameters pp(NewDrawer::ptRENDER, 0);
 		for(int i = 0; i < animDrw->getDrawerCount(); ++i) {
 			PolygonSetDrawer *sdr = (PolygonSetDrawer *)animDrw->getDrawer(i);
 			sdr->setShowAreas(value);
 			sdr->prepareChildDrawers(&pp);
 		}
 	}
-	PreparationParameters parm(NewDrawer::ptRENDER, 0);
-	pdrw->prepare(&parm);
-	pdrw->getRootDrawer()->getDrawerContext()->doDraw();
+	drawer->getRootDrawer()->getDrawerContext()->doDraw();
 }
 
 void PolygonSetTool::setActiveBoundaries(void *v) {
 	bool value = *(bool *)v;
 	PolygonSetDrawer *pdrw = dynamic_cast<PolygonSetDrawer *>(drawer);
-	pdrw->setShowBoundaries(value);
-	PreparationParameters parm(NewDrawer::ptRENDER, 0);
-	pdrw->prepare(&parm);
-	pdrw->getRootDrawer()->getDrawerContext()->doDraw();
-}
+	PreparationParameters pp(NewDrawer::ptRENDER, 0);
+	if ( pdrw) {
+		PolygonSetDrawer *pdrw = dynamic_cast<PolygonSetDrawer *>(drawer);
+		pdrw->setShowBoundaries(value);
+		drawer->prepare(&pp);
+	} else {
+		AnimationDrawer *animDrw = dynamic_cast<AnimationDrawer *>(drawer);
+		for(int i = 0; i < animDrw->getDrawerCount(); ++i) {
+			PolygonSetDrawer *sdr = (PolygonSetDrawer *)animDrw->getDrawer(i);
+			sdr->setShowBoundaries(value);
+			sdr->prepareChildDrawers(&pp);
+		}
 
-void PolygonSetTool::displayOptionSetBoundaryStyle() {
-//	new BoundaryLineStyleForm(tree, (PolygonSetDrawer *)drawer);
+	}
+	drawer->getRootDrawer()->getDrawerContext()->doDraw();
 }
 
 void PolygonSetTool::displayOptionTransparencyP() {
-	new TransparencyFormP(tree, (PolygonSetDrawer *)drawer, htiTransparency);
+	new TransparencyFormP(tree, (ComplexDrawer *)drawer, htiTransparency);
 }
 
 String PolygonSetTool::getMenuString() const {
 	return TR("Polygon drawer");
 }
 //------------------------------------------------
-TransparencyFormP::TransparencyFormP(CWnd *wPar, PolygonSetDrawer *dr, HTREEITEM htiTr) : 
+TransparencyFormP::TransparencyFormP(CWnd *wPar, ComplexDrawer *dr, HTREEITEM htiTr) : 
 DisplayOptionsForm(dr,wPar,"Transparency"),
-transparency(100 *(1.0-dr->getTransparencyArea())),
 htiTransparent(htiTr)
 {
+	PolygonSetDrawer *pdrw = dynamic_cast<PolygonSetDrawer *>(dr);
+	if ( !pdrw) {
+		PolygonSetDrawer *pdrw = dynamic_cast<PolygonSetDrawer *>(((AnimationDrawer *)dr)->getDrawer(0));
+	}
+	transparency = 100 *(1.0-pdrw->getTransparencyArea());
 	slider = new FieldIntSliderEx(root,"Transparency(0-100)", &transparency,ValueRange(0,100),true);
 	slider->SetCallBack((NotifyProc)&TransparencyFormP::setTransparency);
 	slider->setContinuous(true);

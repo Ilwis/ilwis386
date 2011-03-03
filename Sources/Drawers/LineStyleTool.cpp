@@ -7,6 +7,7 @@
 #include "Client\Ilwis.h"
 #include "Engine\Representation\Rpr.h"
 #include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
+#include "Drawers\AnimationDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\Mapwindow\Drawers\DrawerTool.h"
@@ -28,7 +29,7 @@ DrawerTool *createLineStyleTool(ZoomableView* zv, LayerTreeView *view, NewDrawer
 }
 
 LineStyleTool::LineStyleTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
-	DrawerTool("LineStyleTool", zv, view, drw)
+DrawerTool("LineStyleTool", zv, view, drw)
 {
 }
 
@@ -67,27 +68,48 @@ String LineStyleTool::getMenuString() const {
 
 //-----------------------------------------------
 LineStyleForm::LineStyleForm(CWnd *par, ComplexDrawer *ldr) 
-	: DisplayOptionsForm(ldr, par, "Line Style"),
-	lprops((LineProperties *)ldr->getProperties())
+: DisplayOptionsForm(ldr, par, "Line Style")
+
 {
 
-  style = (LineDspType)LineDrawer::ilwisLineStyle(lprops->linestyle);
-  fi = new FieldReal(root, "Line thickness", &lprops->thickness, ValueRange(1.0,100.0));
-  flt = new FieldLineType(root, TR("Line Style"), &style);
-  if ( !lprops->ignoreColor)
-	fc = new FieldColor(root,TR("Line Color"), &lprops->drawColor);
+	AnimationDrawer *animDrw = dynamic_cast<AnimationDrawer *>(ldr);
+	if ( animDrw) {
+		lprops = (LineProperties *)(animDrw->getDrawer(0)->getProperties());
+	} else
+	{
+		lprops = (LineProperties *)ldr->getProperties();
+	}
+	style = (LineDspType)LineDrawer::ilwisLineStyle(lprops->linestyle);
+	fi = new FieldReal(root, "Line thickness", &lprops->thickness, ValueRange(1.0,100.0));
+	flt = new FieldLineType(root, TR("Line Style"), &style);
+	if ( !lprops->ignoreColor)
+		fc = new FieldColor(root,TR("Line Color"), &lprops->drawColor);
 
-  create();
+	create();
 }
 
 void  LineStyleForm::apply() {
 	fi->StoreData();
 	flt->StoreData();
-	if ( !lprops->ignoreColor)
+	if ( fc)
 		fc->StoreData();
-	lprops->linestyle = LineDrawer::openGLLineStyle(style);
 	PreparationParameters pp(NewDrawer::ptRENDER);
-	drw->prepare(&pp);
+	AnimationDrawer *animDrw = dynamic_cast<AnimationDrawer *>(drw);
+	if ( animDrw) {
+		for(int i = 0; i < animDrw->getDrawerCount(); ++i) {
+			NewDrawer *ndr = animDrw->getDrawer(i);
+			LineProperties *oldprops = (LineProperties *)ndr->getProperties();
+			oldprops->drawColor = lprops->drawColor;
+			oldprops->linestyle = lprops->linestyle;
+			oldprops->thickness = lprops->thickness;
+		}
+		animDrw->prepareChildDrawers(&pp);
+	} else {
+		if ( !lprops->ignoreColor)
+			fc->StoreData();
+		lprops->linestyle = LineDrawer::openGLLineStyle(style);
+		drw->prepare(&pp);
+	}
 	updateMapView();
 }
 
