@@ -60,16 +60,10 @@ void SetDrawer::prepare(PreparationParameters *parm){
 bool SetDrawer::draw( const CoordBounds& cbArea) const{
 	glClearColor(1.0,1.0,1.0,0.0);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	/*CoordBounds cb = getRootDrawer()->getCoordBoundsZoom();
-	RowCol rc1= getRootDrawer()->worldToScreen(cb.cMin);
-	RowCol rc2= getRootDrawer()->worldToScreen(cb.cMax);*/
 	glEnable(GL_BLEND);
 	getZMaker()->setZOrder(getRootDrawer()->getZIndex(),getRootDrawer()->getFakeZ());
-	//glEnable(GL_SCISSOR_TEST);
-	//glScissor(rc1.Col, rc2.Row, abs(rc1.Col - rc2.Col), abs(rc2.Col - rc2.Col));
 	ComplexDrawer::draw( cbArea);
 	glDisable(GL_BLEND);
-	//glDisable(GL_SCISSOR_TEST);
 	return true;
 }
 
