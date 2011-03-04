@@ -42,11 +42,11 @@ by Wim Koolhoven
 Last change:  WK   24 Jul 97    1:03 pm
 */
 #include "Client\Headers\formelementspch.h"
-#include "Client\Mapwindow\Drawers\Drawer_n.h"
+#include "Engine\Drawers\drawer_n.h"
 #include "Client\Mapwindow\RECITEM.H"
 #include "Engine\Map\Feature.h"
-#include "Client\Mapwindow\Drawers\DrawerContext.h"
-#include "Client\Mapwindow\Drawers\RootDrawer.h"
+#include "Engine\Drawers\DrawerContext.h"
+#include "Engine\Drawers\RootDrawer.h"
 #include "Client\Mapwindow\MapPaneView.h"
 #include "Client\ilwis.h"
 #include "Client\Editors\Map\BaseMapEditor.h"
@@ -87,7 +87,7 @@ void RecItem::setAssociatedDrawer(NewDrawer *drw) {
 
 bool RecItem::fAllowEdit() {
 	if ( associatedDrawer) {
-		ILWIS::BaseMapEditor* edit = associatedDrawer->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->editGet();
+		ILWIS::BaseMapEditor* edit = 0 ;;//associatedDrawer->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->editGet();
 
 		return associatedDrawer->inEditMode() && edit->hasSelection();
 	}

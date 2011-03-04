@@ -2626,59 +2626,11 @@
 					Name="Drawers"
 					>
 					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\AbstractMapDrawer.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\ComplexDrawer.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\DrawerContext.cpp"
-						>
-					</File>
-					<File
 						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\DrawerTool.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\MouseClickInfoDrawer.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\MouseClickInfoDrawer.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Base\OpenGLText.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\RootDrawer.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SelectionRectangle.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SimpleDrawer.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SVGElements.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SVGLoader.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\TextDrawer.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\ZValueMaker.cpp"
+						RelativePath="..\..\Sources\Client\Mapwindow\Drawers\ScreenSwapper.cpp"
 						>
 					</File>
 					<Filter
@@ -2686,55 +2638,11 @@
 						Filter=".h"
 						>
 						<File
-							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\AbstractMapDrawer.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\ComplexDrawer.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\Drawer_n.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\DrawerContext.h"
-							>
-						</File>
-						<File
 							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\DrawerTool.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\Sources\Client\Base\OpenGLText.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\RootDrawer.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SelectionRectangle.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SimpleDrawer.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SVGElements.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\SVGLoader.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\TextDrawer.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\ZValueMaker.h"
+							RelativePath="..\..\Sources\Client\Mapwindow\Drawers\ScreenSwapper.h"
 							>
 						</File>
 					</Filter>

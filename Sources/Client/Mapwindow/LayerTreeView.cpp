@@ -48,9 +48,9 @@ Created on: 2007-02-8
 #include <afxole.h>
 #include "Engine\Map\Mapview.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
-#include "Client\Mapwindow\Drawers\ComplexDrawer.h"
-#include "Client\Mapwindow\Drawers\SimpleDrawer.h"
-#include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\ComplexDrawer.h"
+#include "Engine\Drawers\SimpleDrawer.h"
+#include "Engine\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\Mapwindow\Drawers\DrawerTool.h"
 #include "Client\Mapwindow\LayerTreeView.h"

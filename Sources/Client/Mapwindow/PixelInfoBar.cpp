@@ -59,7 +59,7 @@
 #include "Client\Editors\Editor.h"
 #include "Client\Editors\Utils\SYMBOL.H"
 #include "Client\Editors\Utils\sizecbar.h"
-#include "Client\Mapwindow\Drawers\ComplexDrawer.h"
+#include "Engine\Drawers\ComplexDrawer.h"
 #include "Client\Mapwindow\PixelInfoBar.h"
 #include "Headers\Hs\Mapwind.hs"
 

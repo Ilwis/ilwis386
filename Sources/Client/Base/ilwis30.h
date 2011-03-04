@@ -43,7 +43,6 @@
 
 
 #include "Client\Headers\formelementspch.h"
-#include "Client\Mapwindow\Drawers\SVGLoader.h"
 #include "Client\Base\IlwisDocument.h"
 #include "Client\MainWindow\Catalog\CatalogDocument.h"
 #include "Client\MainWindow\DirectoryDocument.h"

@@ -39,8 +39,8 @@ Created on: 2007-02-8
 //////////////////////////////////////////////////////////////////////
 
 #include "Client\Headers\formelementspch.h"
-#include "Client\Mapwindow\Drawers\RootDrawer.h"
-#include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\RootDrawer.h"
+#include "Engine\Drawers\AbstractMapDrawer.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapPaneView.h"
 #include "Engine\Map\Segment\Seg.h"

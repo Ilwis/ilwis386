@@ -44,6 +44,7 @@ Created on: 2007-02-8
 #include "Client\ilwis.h"
 #include "Client\Base\datawind.h"
 #include "Client\Mapwindow\MapWindow.h"
+#include "Client\Mapwindow\Drawers\ScreenSwapper.h"
 #include "Client\TableWindow\BaseTablePaneView.h"
 #include "Client\TableWindow\BaseTblField.h"
 #include "Client\Mapwindow\PixelInfoDoc.h"
@@ -61,20 +62,21 @@ Created on: 2007-02-8
 #include "Engine\SpatialReference\csdirect.h"
 #include "Client\TableWindow\BaseTablePaneView.h"
 #include "Client\FormElements\syscolor.h"
-#include "Client\Mapwindow\Drawers\RootDrawer.h"
-#include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\RootDrawer.h"
+#include "Engine\Drawers\AbstractMapDrawer.h"
 #include "Headers\constant.h"
 #include "Headers\Hs\Mapwind.hs"
 #include "Engine\Domain\Dmvalue.h"
 #include "Client\TableWindow\BaseTblField.h"
-#include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
-#include "Client\Mapwindow\Drawers\TextDrawer.h"
-#include "Client\Mapwindow\Drawers\MouseClickInfoDrawer.h"
+#include "Engine\Drawers\SimpleDrawer.h" 
+#include "Engine\Drawers\TextDrawer.h"
+#include "Engine\Drawers\MouseClickInfoDrawer.h"
 #include "Engine\SpatialReference\Cslatlon.h"
 #include "Engine\Representation\Rprclass.h"
 #include "Client\Mapwindow\MapPaneView.h"
-#include "Client\Mapwindow\Drawers\DrawerContext.h"
+#include "Engine\Drawers\DrawerContext.h"
 #include "Client\Mapwindow\OverviewMapPaneView.h"
+
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -116,6 +118,7 @@ SimpleMapPaneView::SimpleMapPaneView()
 	fDrawAlsoWhenLoading = false;
 
 	hmodMsimg32 = LoadLibrary("msimg32.dll");
+	swapper = new ScreenSwapper();
 	if (hmodMsimg32 <= 0)
 	{
 		hmodMsimg32 = 0;
@@ -134,7 +137,7 @@ SimpleMapPaneView::~SimpleMapPaneView()
 		csThread.Lock(); // wait here til thread exits
 		csThread.Unlock();
 	}
-
+	delete swapper;
 	while (fRedrawing) {
 		fDrawStop = true;
 		Sleep(10);
@@ -262,8 +265,10 @@ UINT SimpleMapPaneView::DrawInThread(LPVOID lp)
 			//clock_t start = clock();
 
 			mcd->rootDrawer->getDrawerContext()->TakeContext();
-			while (mpv->fDrawRequest)
+			while (mpv->fDrawRequest) {
+				mpv->getSwapper()->bitmapBufferRedraw(mcd);
 				mpv->Draw();
+			}
 			mcd->rootDrawer->getDrawerContext()->ReleaseContext();
 
 			//clock_t end = clock();
@@ -298,6 +303,10 @@ void SimpleMapPaneView::Draw()
 	} else
 		mcd->rootDrawer->getDrawerContext()->swapBuffers();
 	csResizing.Unlock();
+}
+
+void SimpleMapPaneView::setBitmapRedraw(bool yesno) {
+	swapper->setBitmapRedraw(yesno);
 }
 
 void SimpleMapPaneView::OnWindowPosChanging(WINDOWPOS* lpwndpos)
@@ -620,13 +629,13 @@ void SimpleMapPaneView::createEditor(ComplexDrawer *drw) {
 		edit = 0;
 	}
 	if ( type == IlwisObject::iotPOINTMAP) {
-		edit = ILWISAPP->getMEditor("PointSetEditor","ilwis38",GetDocument(), bmp);
-		edit->init(drw, pib->pixview->GetDocument());
+		//edit = ILWISAPP->getMEditor("PointSetEditor","ilwis38",GetDocument(), bmp);
+		//edit->init(drw, pib->pixview->GetDocument());
 
 	}
 	if ( type == IlwisObject::iotSEGMENTMAP) {
-		edit = ILWISAPP->getMEditor("LineSetEditor","ilwis38",GetDocument(), bmp);
-		edit->init(drw, pib->pixview->GetDocument());
+		//edit = ILWISAPP->getMEditor("LineSetEditor","ilwis38",GetDocument(), bmp);
+		//edit->init(drw, pib->pixview->GetDocument());
 
 	}
 }

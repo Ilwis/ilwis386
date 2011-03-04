@@ -65,6 +65,7 @@ namespace ILWIS {
 	class AbstractMapDrawer;
 	class BaseMapEditor;
 	class ComplexDrawer;
+	class ScreenSwapper;
 }
 
 class IMPEXP SimpleMapPaneView : public ZoomableView 
@@ -85,6 +86,8 @@ public:
 	void createEditor(ILWIS::ComplexDrawer *drw);
 	FrameWindow * getFrameWindow() { return  fwPar; }
 	void createPixInfoBar();
+	void setBitmapRedraw(bool yesno);
+	ILWIS::ScreenSwapper* getSwapper() { return swapper; }
 
 	InfoLine* info;
 
@@ -137,6 +140,7 @@ private:
 	typedef BOOL (WINAPI *AlphaBlendFunc)(HDC,int,int,int,int,HDC,int,int,int,int,BLENDFUNCTION);
 	AlphaBlendFunc alphablendfunc;
 	CDC * pDC;
+	ILWIS::ScreenSwapper *swapper;
 
 	DECLARE_DYNCREATE(SimpleMapPaneView)
 	DECLARE_MESSAGE_MAP()

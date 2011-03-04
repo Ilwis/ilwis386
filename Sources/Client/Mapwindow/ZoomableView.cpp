@@ -58,8 +58,8 @@
 #include "Engine\Base\System\Engine.h"
 #include "Engine\Base\System\LOGGER.H"
 #include "Client\Mapwindow\MapPaneView.h"
-#include "Client\Mapwindow\Drawers\DrawerContext.h"
-#include "Client\Mapwindow\Drawers\SelectionRectangle.h"
+#include "Engine\Drawers\DrawerContext.h"
+#include "Engine\Drawers\SelectionRectangle.h"
 #include "Engine\SpatialReference\prj.h"
 
 

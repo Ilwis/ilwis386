@@ -50,7 +50,7 @@
 
 //typedef void (CCmdTarget::*NotifyRectProc)(CRect);
 
-#include "Client\Mapwindow\Drawers\SelectionRectangle.h"
+#include "Engine\Drawers\SelectionRectangle.h"
 
 
 /////////////////////////////////////////////////////////////////////////////

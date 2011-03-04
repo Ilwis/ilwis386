@@ -48,7 +48,7 @@
 #ifndef COMCMDLINE_THREAD_H
 #include "Engine\COMInterface\COMCmdLineThread.h"
 #endif
-#include "Client\Mapwindow\Drawers\Drawer_n.h"
+//#include "Engine\Drawers\drawer_n.h"
 #pragma warning( disable : 4786 )
 
 class ActionList;
@@ -83,6 +83,7 @@ enum CoordMessage {
 
 class CoordWithCoordSystem;
 class MapCompositionDoc;
+class BaseMap;
 
 namespace ILWIS {
 	class SVGElement;
@@ -162,13 +163,8 @@ public:
 	bool fUseOldStyleTranquilizers() { return fOldTranquilizers; }
 	IlwisAppContext*    Context() { return ilwapp; }
 	CommandHandlerUI			*getCommands() { return commandUI; }
-	ILWIS::NewDrawer _export *getDrawer(const String& type, const String& subType, ILWIS::DrawerParameters *parms) ;
-	ILWIS::BaseMapEditor _export *getMEditor(const String& type, const String& subtype, MapCompositionDoc *doc, BaseMap& bmp) ;
-	ILWIS::NewDrawer _export *getDrawer(const String& type, ILWIS::PreparationParameters *pp=0, ILWIS::DrawerParameters *parms=0) ;
-	void  addDrawer(const String& type, const String& subtype, DrawerCreate);
-	void  addMEditor(const String& type, const String& subtype, BaseMapEditorCreate);
-	ILWIS::SVGLoader *getSVGContainer() const { return svgContainer; }
-	void getDrawerTools(ILWIS::ComplexDrawer *drwin, vector<MapPaneViewTool *>& tools);
+	//ILWIS::SVGLoader *getSVGContainer() const { return svgContainer; }
+	//void getDrawerTools(ILWIS::ComplexDrawer *drwin, vector<MapPaneViewTool *>& tools);
 	void getDocumentList(list<CDocument *>& opendocs);
 	
 	//{{AFX_MSG(IlwisWinApp)
@@ -240,7 +236,6 @@ private:
 	ILWISSingleLock lockMWCreated;
 	map<sfFontType, CFont*> StandardFonts;
 	list<HWND> lhWindows;
-	map<String, DrawerCreate> drawers;
 	map<String,BaseMapEditorCreate> meditors;
 	IlwisDocTemplate *dtPixelInfo;
 	CMultiDocTemplate *dtDirectory;
@@ -260,7 +255,6 @@ private:
 	COleTemplateServer otsMapComposition;
 	HWND hWndLogo;
 	static bool fShowHelpNumbers;
-	ILWIS::SVGLoader		*svgContainer;
 	
 	CWinThread       *thrDdeServer;
 	COMServerHandler *chCOMServerHandler;

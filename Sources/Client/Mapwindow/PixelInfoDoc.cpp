@@ -41,7 +41,7 @@ Created on: 2007-02-8
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\ilwis.h"
 #include "Client\Base\datawind.h"
-#include "Client\Mapwindow\Drawers\Drawer_n.h"
+#include "Engine\Drawers\drawer_n.h"
 #include "Client\Mapwindow\PixelInfoWindow.h"
 #include "Headers\constant.h"
 #include "Client\Base\IlwisDocument.h"

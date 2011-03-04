@@ -44,8 +44,8 @@ Created on: 2007-02-8
 #include "Engine\Map\Mapview.h"
 #endif
 
-#include "Client/MapWindow/Drawers/Drawer_n.h"
-#include "Client/MapWindow/Drawers/RootDrawer.h"
+#include "Engine/Drawers/Drawer_n.h"
+#include "Engine/Drawers/RootDrawer.h"
 
 using namespace ILWIS;
 

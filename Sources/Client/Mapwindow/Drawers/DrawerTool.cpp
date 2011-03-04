@@ -1,18 +1,18 @@
 #include "Client\Headers\formelementspch.h"
 #include "Client\FormElements\FieldIntSlider.h"
 #include "Client\FormElements\FieldRealSlider.h"
-#include "Client\Mapwindow\Drawers\RootDrawer.h"
-#include "Client\MapWindow\Drawers\ComplexDrawer.h"
+#include "Engine\Drawers\RootDrawer.h"
+#include "Engine\Drawers\ComplexDrawer.h"
 #include "Client\Ilwis.h"
 #include "Engine\Representation\Rpr.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\MapPaneView.h"
-#include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\Mapwindow\Drawers\DrawerTool.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
-#include "Client\Mapwindow\Drawers\DrawerContext.h"
+#include "Engine\Drawers\DrawerContext.h"
 #include "Client\Mapwindow\Drawers\DrawerTool.h"
 
 
@@ -204,7 +204,13 @@ void DrawerTool::setActiveMode(bool yesno) {
 	}
 }
 
-//-------------------------------------------------------
+MapCompositionDoc *DrawerTool::getDocument() const {
+	return (MapCompositionDoc *)mpv->GetDocument();
+}
+
+MapPaneView *DrawerTool::mpvGetView() const {
+	return getDocument()->mpvGetView();
+}
 //----------------------------------------------------------------------------
 
 DisplayOptionsForm::DisplayOptionsForm(ComplexDrawer *dr,CWnd *par, const String& title) : 

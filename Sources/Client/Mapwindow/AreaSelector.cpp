@@ -47,7 +47,7 @@
 #include "Client\MainWindow\Catalog\CatalogDocument.h"
 #include "Engine\Map\Mapview.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
-#include "Client\Mapwindow\Drawers\SelectionRectangle.h"
+#include "Engine\Drawers\SelectionRectangle.h"
 #include "Client\Mapwindow\MapPaneView.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\Mapwindow\AreaSelector.h"
@@ -116,9 +116,10 @@ void AreaSelector::OnLButtonDown(UINT nFlags, CPoint point)
 	if ( selectionDrawer == NULL)  {
 		MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(mpv->GetDocument());
 		ILWIS::DrawerParameters sp(mcd->rootDrawer, mcd->rootDrawer);
-		selectionDrawer = (ILWIS::SelectionRectangle *)IlwWinApp()->getDrawer("SelectionRectangle", "Ilwis38", &sp);
+		selectionDrawer = (ILWIS::SelectionRectangle *)NewDrawer::getDrawer("SelectionRectangle", "Ilwis38", &sp);
 		mcd->rootDrawer->setSelectionDrawer(selectionDrawer);
-		mcd->rootDrawer->setBitmapRedraw(true);
+		//mcd->rootDrawer->setBitmapRedraw(true);
+		mcd->mpvGetView()->setBitmapRedraw(true);
 		selectionDrawer->setColor(clr);
 	}
 	mpv->SetCapture();
@@ -136,7 +137,7 @@ void AreaSelector::OnLButtonUp(UINT nFlags, CPoint point)
 		mcd->rootDrawer->setSelectionDrawer(0);
 		delete selectionDrawer;
 		selectionDrawer = NULL;
-		mcd->rootDrawer->setBitmapRedraw(false);
+		mcd->mpvGetView()->setBitmapRedraw(false);
 	}
 
 	(cmt->*np)(rect());

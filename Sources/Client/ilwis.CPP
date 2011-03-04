@@ -57,7 +57,7 @@ $Header: /ILWIS 3.0/Main/ilwis.CPP 329   10-06-05 15:09 Retsios $
 #include "Client\Editors\Digitizer\DIGITIZR.H"
 #include "Client\MainWindow\mainwind.h"
 #include "Headers\messages.h"
-#include "Client\Mapwindow\Drawers\DrawerContext.h"
+//#include "Engine\Drawers\DrawerContext.h"
 #include "Headers\constant.h"
 #include "Client\FormElements\formbase.h"
 #include "Client\FormElements\fldcolor.h"
@@ -128,7 +128,7 @@ $Header: /ILWIS 3.0/Main/ilwis.CPP 329   10-06-05 15:09 Retsios $
 #include "Client\Editors\Georef\grsubcoordedit.h"
 #include "Client\Editors\Georef\grsubcornersedit.h"
 #include "Client\Editors\Georef\GrMirRotEdit.h"
-#include "Client\Mapwindow\Drawers\SelectionRectangle.h"
+//#include "Engine\Drawers\SelectionRectangle.h"
 #include "Client\Mapwindow\MapWindow.h"
 #include "Client\Mapwindow\MapPaneView.h"
 #include "Engine\Map\Mapview.h"
@@ -499,8 +499,6 @@ BOOL IlwisWinApp::InitInstance()
 		CloseLogoWindow();
 		lockMWCreated.Unlock();
 		commandUI->initModules();
-		svgContainer = new ILWIS::SVGLoader();
-		svgContainer->load();
 
 		if ( m_sCommand != "") {
 			Script::Exec(m_sCommand);
@@ -2452,52 +2450,6 @@ vector<Action *> IlwisWinApp::CreateActions() {
 	return commandUI->CreateActions();
 }
 
-ILWIS::BaseMapEditor* IlwisWinApp::getMEditor(const String& type, const String& subtype, MapCompositionDoc *doc, BaseMap& bmp)  {
-	if ( type == "")
-		return 0;
-
-	String fullType = type + "|" + subtype;
-	map<String, BaseMapEditorCreate>::const_iterator item = meditors.find(fullType);
-	if ( item != meditors.end())
-		return ((*item).second)(doc,bmp);
-	return NULL;
-}
-
-ILWIS::NewDrawer *IlwisWinApp::getDrawer(const String& type, const String& subtype, ILWIS::DrawerParameters *c)  {
-	if ( type == "")
-		return 0;
-
-	String fullType = type + "|" + subtype;
-	if ( c != 0) {
-		map<String, DrawerCreate>::const_iterator item = drawers.find(fullType);
-		if ( item != drawers.end())
-			return ((*item).second)(c);
-	}
-	map<String, ILWIS::SVGElement *>::iterator svgItem = svgContainer->find(fullType);
-	if ( svgItem != svgContainer->end())
-		return (ILWIS::NewDrawer *)(*svgItem).second;
-	return NULL;
-}
-
-ILWIS::NewDrawer *IlwisWinApp::getDrawer(const String& type, ILWIS::PreparationParameters *parms, ILWIS::DrawerParameters *c)  {
-	if ( type == "")
-		return 0;
-
-	if ( parms == 0 || parms->typeMapping.size() == 0)
-		return getDrawer(type,"Ilwis38",c);
-	map<String,String>::iterator item = parms->typeMapping.find(type);
-	String subType =  item == parms->typeMapping.end() ? "Ilwis38" : (*item).second;
-	return getDrawer(type,subType,c);
-}
-
-void IlwisWinApp::addDrawer(const String& type, const String& subtype, DrawerCreate func) {
-	drawers[type + "|" + subtype] = func;
-}
-
-void IlwisWinApp::addMEditor(const String& type, const String& subtype, BaseMapEditorCreate func) {
-	meditors[type + "|" + subtype] = func;
-}
-
 void IlwisWinApp::getDocumentList(list<CDocument *>& opendocs)
 {
    ASSERT(opendocs.size() == 0);
@@ -2517,19 +2469,19 @@ void IlwisWinApp::getDocumentList(list<CDocument *>& opendocs)
    }
 }
 
-void IlwisWinApp::getDrawerTools(ComplexDrawer *drwin, vector<MapPaneViewTool *>& tools) {
-	for(map<String, DrawerCreate>::const_iterator item = drawers.begin(); item != drawers.end(); ++item) {
-		NewDrawer *drw =  ((*item).second)(0);
-		if ( drw->isSimple() == false) {
-			ComplexDrawer *cdrw = (ComplexDrawer *)drw;
-			MapPaneViewTool *tool = cdrw->createTool(drwin->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView());
-			if ( tool) {
-				if ( tool->isToolUseableFor(drwin)) {
-					tools.push_back(tool);
-				}
-			}
-		}
-		delete drw;
-	}
-}
+//void IlwisWinApp::getDrawerTools(ComplexDrawer *drwin, vector<MapPaneViewTool *>& tools) {
+//	for(map<String, DrawerCreate>::const_iterator item = drawers.begin(); item != drawers.end(); ++item) {
+//		NewDrawer *drw =  ((*item).second)(0);
+//		if ( drw->isSimple() == false) {
+//			ComplexDrawer *cdrw = (ComplexDrawer *)drw;
+//			MapPaneViewTool *tool = cdrw->createTool(drwin->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView());
+//			if ( tool) {
+//				if ( tool->isToolUseableFor(drwin)) {
+//					tools.push_back(tool);
+//				}
+//			}
+//		}
+//		delete drw;
+//	}
+//}
 

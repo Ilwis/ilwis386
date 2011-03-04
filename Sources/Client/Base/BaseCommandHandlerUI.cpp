@@ -36,7 +36,7 @@
  ***************************************************************/
 
 #include "Client\Headers\formelementspch.h"
-#include "Client\Mapwindow\Drawers\Drawer_n.h"
+//#include "Engine\Drawers\drawer_n.h"
 #include "Client\ilwis.h"
 #include "Engine\Base\System\LOGGER.H"
 #include "Engine\Base\DataObjects\Version.h"
@@ -45,15 +45,15 @@
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
-#include "Client\Mapwindow\Drawers\RootDrawer.h"
-#include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
-#include "Client\Mapwindow\Drawers\SelectionRectangle.h"
-#include "Client\Editors\Map\BaseMapEditor.h"
-#include "Client\Mapwindow\Drawers\SimpleDrawer.h"
-#include "Client\Mapwindow\Drawers\TextDrawer.h"
+//#include "Engine\Drawers\RootDrawer.h"
+//#include "Engine\Drawers\AbstractMapDrawer.h"
+//#include "Engine\Drawers\SelectionRectangle.h"
+//#include "Client\Editors\Map\BaseMapEditor.h"
+//#include "Engine\Drawers\SimpleDrawer.h"
+//#include "Client\Mapwindow\Drawers\TextDrawer.h"
 #include "Client\Mapwindow\Drawers\DrawerTool.h"
-#include "Client\Mapwindow\Drawers\CanvasBackgroundDrawer.h"
-#include "Client\Mapwindow\Drawers\MouseClickInfoDrawer.h" 
+//#include "Client\Mapwindow\Drawers\CanvasBackgroundDrawer.h"
+//#include "Client\Mapwindow\Drawers\MouseClickInfoDrawer.h" 
 #include "Engine\Base\System\Engine.h"
 //#include "Engine\Applications\ModuleMap.h"
 
@@ -127,7 +127,7 @@ void BaseCommandHandlerUI::addModules() {
 		if ( initFunc) {
 			moduleInits.push_back(initFunc);
 		}
-		GetDrawers drawFuncs = (GetDrawers)(module->getMethod(ILWIS::Module::ifDrawers));
+	/*	GetDrawers drawFuncs = (GetDrawers)(module->getMethod(ILWIS::Module::ifDrawers));
 		if ( drawFuncs) {
 			DrawerInfoVector *infos = drawFuncs();
 			for ( int i=0 ; i < infos->size(); ++i) {
@@ -137,8 +137,8 @@ void BaseCommandHandlerUI::addModules() {
 			delete infos;
 			IlwWinApp()->addDrawer("SelectionRectangle","ilwis38", createSelectionRectangle);
 			IlwWinApp()->addDrawer("MouseClickInfoDrawer","ilwis38",createMouseClickInfoDrawer);
-		}
-		GetMEditors editorFuncs = (GetMEditors)(module->getMethod(ILWIS::Module::ifMapEditors));
+		}*/
+	/*	GetMEditors editorFuncs = (GetMEditors)(module->getMethod(ILWIS::Module::ifMapEditors));
 		if ( editorFuncs) {
 			BMEditors *infos = editorFuncs();
 			for ( int i=0 ; i < infos->size(); ++i) {
@@ -146,7 +146,7 @@ void BaseCommandHandlerUI::addModules() {
 				delete infos->at(i);
 			}
 			delete infos;
-		}
+		}*/
 		GetDrawerTools toolFunc = (GetDrawerTools)(module->getMethod(ILWIS::Module::ifDrawerTools));
 		if ( toolFunc) {
 			DrawerToolInfoVector *infos = toolFunc();

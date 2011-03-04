@@ -98,7 +98,7 @@
 // (c) Computer Department ITC
 	Last change:  WK   22 Apr 98    6:27 pm
 */
-#include "Headers\toolspch.h"
+#include "Client\Headers\formelementspch.h"
 #include "Client\ilwis.h"
 #include "Engine\Map\basemap.h"
 #include "Engine\SpatialReference\Coordsys.h"

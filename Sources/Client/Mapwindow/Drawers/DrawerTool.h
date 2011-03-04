@@ -1,8 +1,12 @@
 #pragma once
 
+class MapPaneView;
+
 namespace ILWIS {
 
 class DrawerTool;
+class ComplexDrawer;
+
 typedef DrawerTool* (*CreateDrawerTool)(ZoomableView* zv, LayerTreeView  *tv, NewDrawer* drw);
 
 
@@ -36,6 +40,8 @@ public:
 	bool isActive() const;
 	void setActiveMode(bool yesno);
 	HTREEITEM getTreeItem() const { return htiNode; }
+	MapCompositionDoc *getDocument() const;
+	MapPaneView *mpvGetView() const;
 
 protected:
 	HTREEITEM insertItem(const String& name,const String& icon, DisplayOptionTreeItem *item=0, int checkstatus = -1, HTREEITEM after=TVI_LAST);

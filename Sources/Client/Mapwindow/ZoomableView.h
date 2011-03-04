@@ -60,7 +60,7 @@ class WMSMapDrawer;
 /////////////////////////////////////////////////////////////////////////////
 // ZoomableView view
 
-//#include "Client\Mapwindow\Drawers\SelectionRectangle.h"
+//#include "Engine\Drawers\SelectionRectangle.h"
 
 class MapTools : public map<int, MapPaneViewTool *> {
 public:

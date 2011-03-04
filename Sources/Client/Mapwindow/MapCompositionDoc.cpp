@@ -49,8 +49,8 @@ Created on: 2007-02-8
 #include "Client\Mapwindow\MapWindow.h"
 #include "Engine\Map\Mapview.h"
 #include "Engine\Base\DataObjects\URL.h"
-#include "Client\Mapwindow\Drawers\RootDrawer.h"
-#include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\RootDrawer.h"
+#include "Engine\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\PixelInfoDoc.h"
 #include "Engine\Base\DataObjects\ObjectCollection.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
@@ -68,7 +68,7 @@ Created on: 2007-02-8
 #include "Client\Editors\Utils\Pattern.h"
 #include "Client\Editors\Utils\MULTICOL.H"
 #include "Client\Mapwindow\ZoomableView.h"
-#include "Client\Mapwindow\Drawers\DrawerContext.h"
+#include "Engine\Drawers\DrawerContext.h"
 #include "Client\Mapwindow\PixelInfoDoc.h"
 #include "Engine\Stereoscopy\StereoPair.h"
 #include "Headers\constant.h"
@@ -97,7 +97,7 @@ Created on: 2007-02-8
 #include "Client\Mapwindow\MapStatusBar.h"
 #include "Engine\SampleSet\SAMPLSET.H"
 #include "Client\Editors\Editor.h"
-#include "Client\Mapwindow\Drawers\ZValueMaker.h"
+#include "Engine\Drawers\ZValueMaker.h"
 
 
 #ifdef _DEBUG
@@ -902,7 +902,7 @@ void MapCompositionDoc::OnUpdatePropLayer(CCmdUI* pCmdUI)
 ILWIS::NewDrawer *MapCompositionDoc::createBaseMapDrawer(const BaseMap& bmp, const String& type, const String& subtype) {
 
 	ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
-	ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer(type, subtype, &parms);
+	ILWIS::NewDrawer *drawer = NewDrawer::getDrawer(type, subtype, &parms);
 	drawer->addDataSource((void *)&bmp);
 	rootDrawer->setCoordinateSystem(bmp->cs());
 	rootDrawer->addCoordBounds(bmp->cs(), bmp->cb(), false);
@@ -964,7 +964,7 @@ BOOL MapCompositionDoc::OnOpenObjectCollection(const ObjectCollection& list, Ope
 
 	if (ot & otANIMATION) {
 		ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
-		ComplexDrawer *drawer = (ComplexDrawer *)IlwWinApp()->getDrawer("AnimationDrawer", "Ilwis38", &parms);
+		ComplexDrawer *drawer = (ComplexDrawer *)NewDrawer::getDrawer("AnimationDrawer", "Ilwis38", &parms);
 		drawer->addDataSource((void *)&list);
 		rootDrawer->setCoordinateSystem(bmp->cs());
 		rootDrawer->addCoordBounds(bmp->cs(), bmp->cb(), false);
@@ -991,7 +991,7 @@ BOOL MapCompositionDoc::OnOpenMapList(const MapList& maplist, OpenType ot)
 
 	if (ot & otANIMATION) {
 	ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
-		ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer("AnimationDrawer", "Ilwis38", &parms);
+		ILWIS::NewDrawer *drawer = NewDrawer::getDrawer("AnimationDrawer", "Ilwis38", &parms);
 		drawer->addDataSource((void *)&maplist);
 		rootDrawer->setCoordinateSystem(mp->cs());
 		rootDrawer->addCoordBounds(mp->cs(), mp->cb(), false);
@@ -1475,7 +1475,7 @@ NewDrawer* MapCompositionDoc::drAppend(const MapList& maplist, bool asAnimation)
 	case 1: 
 		{
 			ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
-			ILWIS::NewDrawer *drawer = IlwWinApp()->getDrawer("AnimationDrawer", "Ilwis38", &parms);
+			ILWIS::NewDrawer *drawer = NewDrawer::getDrawer("AnimationDrawer", "Ilwis38", &parms);
 			drawer->addDataSource((void *)&maplist);
 			Map mp = maplist[maplist->iLower()];
 			rootDrawer->setCoordinateSystem(mp->cs());
@@ -1510,7 +1510,7 @@ NewDrawer* MapCompositionDoc::drAppend(const BaseMap& mp, bool asAnimation)
 		ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
 		ILWIS::NewDrawer *drawer;
 		if ( asAnimation) {
-			drawer = IlwWinApp()->getDrawer("AnimationDrawer", "Ilwis38", &parms);
+			drawer = NewDrawer::getDrawer("AnimationDrawer", "Ilwis38", &parms);
 		}
 		else {
 			if ( IlwisObject::iotObjectType(mp->fnObj) !=  IlwisObject::iotRASMAP)
