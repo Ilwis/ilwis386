@@ -7,7 +7,7 @@ class FieldColor;
 
 namespace ILWIS{
 
-class PolygonSetDrawer : public FeatureSetDrawer {
+class _export PolygonSetDrawer : public FeatureSetDrawer {
 	friend class TransparencyFormP;
 	friend class BoundaryLineStyleForm;
 	public:

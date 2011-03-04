@@ -1,16 +1,12 @@
-#include "Client\Headers\formelementspch.h"
+#include "Headers\toolspch.h"
 #include "Engine\Map\basemap.h"
 #include "Engine\Base\System\RegistrySettings.h"
-#include "Client\Mapwindow\MapCompositionDoc.h"
-#include "Client\Mapwindow\Drawers\DrawerContext.h"
-#include "Client\MapWindow\Drawers\ComplexDrawer.h"
-#include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
-#include "Client\Mapwindow\MapPaneViewTool.h"
-#include "Client\Mapwindow\Drawers\DrawerTool.h"
-#include "Client\Mapwindow\LayerTreeView.h"
-#include "Client\Mapwindow\LayerTreeItem.h"
+#include "Engine\Drawers\DrawerContext.h"
+#include "Engine\Drawers\ComplexDrawer.h"
+#include "Engine\Drawers\RootDrawer.h"
+#include "Engine\Drawers\AbstractMapDrawer.h"
 #include "CanvasBackgroundDrawer.h"
-#include "Client\Ilwis.h"
+
 
 using namespace ILWIS;
 

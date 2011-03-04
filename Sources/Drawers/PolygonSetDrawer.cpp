@@ -1,20 +1,11 @@
-#include "Client\Headers\formelementspch.h"
-#include "Client\FormElements\FieldIntSlider.h"
-#include "Client\FormElements\FieldRealSlider.h"
+#include "Headers\toolspch.h"
 #include "Engine\Map\basemap.h"
-#include "Client\Editors\Utils\line.h"
 #include "Engine\Map\Point\ilwPoint.h"
-#include "Client\Mapwindow\Drawers\ComplexDrawer.h"
-#include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
-#include "Client\Ilwis.h"
+#include "Engine\Drawers\ComplexDrawer.h"
+#include "Engine\Drawers\SimpleDrawer.h" 
 #include "Engine\Base\System\RegistrySettings.h"
-#include "Client\Mapwindow\MapCompositionDoc.h"
-#include "Client\Mapwindow\Drawers\RootDrawer.h"
-#include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
-#include "Client\Mapwindow\MapPaneViewTool.h"
-#include "Client\Mapwindow\Drawers\DrawerTool.h"
-#include "Client\Mapwindow\LayerTreeView.h"
-#include "Client\Mapwindow\LayerTreeItem.h" 
+#include "Engine\Drawers\RootDrawer.h"
+#include "Engine\Drawers\AbstractMapDrawer.h"
 #include "Drawers\SetDrawer.h"
 #include "Drawers\FeatureSetDrawer.h"
 #include "drawers\linedrawer.h"
@@ -22,8 +13,8 @@
 #include "Drawers\gpc.h"
 #include "Drawers\PolygonFeatureDrawer.h"
 #include "Drawers\PolygonSetDrawer.h"
-#include "Client\Mapwindow\Drawers\DrawerContext.h"
-#include "Client\Mapwindow\Drawers\ZValueMaker.h"
+#include "Engine\Drawers\DrawerContext.h"
+#include "Engine\Drawers\ZValueMaker.h"
 #include "Headers\Hs\Drwforms.hs"
 
 using namespace ILWIS;
@@ -47,7 +38,7 @@ PolygonSetDrawer::~PolygonSetDrawer() {
 }
 
 NewDrawer *PolygonSetDrawer::createElementDrawer(PreparationParameters *pp, ILWIS::DrawerParameters* parms) const{
-	return IlwWinApp()->getDrawer("PolygonFeatureDrawer",pp, parms);
+	return NewDrawer::getDrawer("PolygonFeatureDrawer",pp, parms);
 
 }
 

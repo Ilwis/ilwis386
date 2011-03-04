@@ -11,7 +11,7 @@
 
 #include <GL/gl.h>
 
-#include "Client\MapWindow\Drawers\ComplexDrawer.h" // for DrawMethod
+#include "Engine\Drawers\ComplexDrawer.h" // for DrawMethod
 
 namespace ILWIS {
 

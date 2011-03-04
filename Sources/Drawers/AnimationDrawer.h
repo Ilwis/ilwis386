@@ -45,6 +45,7 @@ namespace ILWIS{
 		void setTimerId(int tid) { timerid = tid; }
 		void setUseTime(bool yesno) { useTime = yesno; }
 		int getMapIndex() const { return mapIndex;}
+		static int getTimerIdCounter();
 
 		static int timerIdCounter;
 

@@ -9,7 +9,7 @@ namespace ILWIS{
 
 class SetDrawer;
 
-class FeatureLayerDrawer : public AbstractMapDrawer {
+class _export FeatureLayerDrawer : public AbstractMapDrawer {
 	public:
 
 		FeatureLayerDrawer(DrawerParameters *parms);

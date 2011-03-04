@@ -1,15 +1,12 @@
-#include "Client\Headers\formelementspch.h"
+#include "Headers\toolspch.h"
 #include "Engine\Map\basemap.h"
 #include "Engine\Map\Polygon\POL.h"
-#include "Client\Mapwindow\Drawers\ComplexDrawer.h"
-#include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
-#include "Client\Ilwis.h"
-#include "Client\Editors\Utils\line.h"
+#include "Engine\Drawers\ComplexDrawer.h"
+#include "Engine\Drawers\SimpleDrawer.h" 
 #include "Engine\Base\System\RegistrySettings.h"
-#include "Client\Mapwindow\MapCompositionDoc.h"
-#include "Client\Mapwindow\Drawers\RootDrawer.h"
-#include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
-#include "Client\Mapwindow\Drawers\DrawerContext.h"
+#include "Engine\Drawers\RootDrawer.h"
+#include "Engine\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\DrawerContext.h"
 #include "Drawers\featurelayerdrawer.h"
 #include "Drawers\SetDrawer.h"
 #include "Drawers\LineDrawer.h"
@@ -22,7 +19,7 @@
 #include "drawers\linedrawer.h"
 #include "drawers\polygondrawer.h"
 #include "Drawers\PolygonFeatureDrawer.h"
-#include "Client\Mapwindow\Drawers\ZValueMaker.h"
+#include "Engine\Drawers\ZValueMaker.h"
 
 
 using namespace ILWIS;
@@ -34,13 +31,13 @@ ILWIS::NewDrawer *createPolygonFeatureDrawer(DrawerParameters *parms) {
 PolygonFeatureDrawer::PolygonFeatureDrawer(DrawerParameters *parms) : PolygonDrawer(parms,"PolygonFeatureDrawer"),trianglePol(0) {
 	setDrawMethod(NewDrawer::drmRPR);
 	PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER , 0);
-	boundary = (LineDrawer *)IlwWinApp()->getDrawer("LineFeatureDrawer", &pp, parms);
+	boundary = (LineDrawer *)NewDrawer::getDrawer("LineFeatureDrawer", &pp, parms);
 }
 
 PolygonFeatureDrawer::PolygonFeatureDrawer(DrawerParameters *parms, const String& name) : PolygonDrawer(parms,name),trianglePol(0) {
 	setDrawMethod(NewDrawer::drmRPR);
 	PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER , 0);
-	boundary = (LineDrawer *)IlwWinApp()->getDrawer("LineFeatureDrawer", &pp, parms);
+	boundary = (LineDrawer *)NewDrawer::getDrawer("LineFeatureDrawer", &pp, parms);
 }
 
 PolygonFeatureDrawer::~PolygonFeatureDrawer() {

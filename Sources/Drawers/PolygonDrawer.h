@@ -4,7 +4,7 @@ ILWIS::NewDrawer *createPolygonDrawer(ILWIS::DrawerParameters *parms);
 
 namespace ILWIS{
 
-class PolygonDrawer : public SimpleDrawer {
+class _export PolygonDrawer : public SimpleDrawer {
 	//class LineDrawer;
 
 	public:

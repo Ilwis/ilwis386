@@ -24,8 +24,6 @@ namespace ILWIS{
 		void prepare(PreparationParameters *);
 		void setSpecialDrawingOptions(int option, bool add, vector<Coord>* coords);
 		virtual void addCoords(const vector<Coord>& v,int options=0);
-		static int openGLLineStyle(int linestyle, double sz=1.0);
-		static int ilwisLineStyle(int linestyle, double sz=1.0);
 		GeneralDrawerProperties *getProperties();
 
 	protected:

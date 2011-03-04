@@ -4,7 +4,7 @@ ILWIS::NewDrawer *createPointFeatureDrawer(ILWIS::DrawerParameters *parms);
 
 namespace ILWIS {
 
-class PointFeatureDrawer : public PointDrawer {
+class _export PointFeatureDrawer : public PointDrawer {
 		public:
 		PointFeatureDrawer(ILWIS::DrawerParameters *parms);
 		virtual bool draw( const CoordBounds& cbArea=CoordBounds()) const;

@@ -1,12 +1,11 @@
-#include "Client\Headers\formelementspch.h"
-#include "Client\FormElements\syscolor.h"
-#include "Client\MapWindow\Drawers\DrawerContext.h"
-#include "Client\Mapwindow\Drawers\RootDrawer.h"
-#include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
-#include "Client\Ilwis.h"
-#include "drawers\Boxdrawer.h"
-#include "Client\Mapwindow\Drawers\ComplexDrawer.h"
-#include "Client\Mapwindow\Drawers\ZValueMaker.h"
+#include "Headers\toolspch.h"
+#include "Engine\Map\basemap.h"
+#include "Engine\Drawers\DrawerContext.h"
+#include "Engine\Drawers\RootDrawer.h"
+#include "Engine\Drawers\SimpleDrawer.h" 
+#include "Boxdrawer.h"
+#include "Engine\Drawers\ComplexDrawer.h"
+#include "Engine\Drawers\ZValueMaker.h"
 
 using namespace ILWIS;
 

@@ -9,7 +9,7 @@ enum LineDspType;
 
 namespace ILWIS{
 
-	class GridDrawer : public ComplexDrawer {
+	class _export GridDrawer : public ComplexDrawer {
 	public:
 		enum Mode{mGRID=1, mPLANE=2, mMARKERS=4,mAXIS=8,mVERTICALS=16, mCUBE=32};
 		ILWIS::NewDrawer *createGridDrawer(DrawerParameters *parms);

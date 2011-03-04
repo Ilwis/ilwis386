@@ -7,7 +7,7 @@ ILWIS::NewDrawer *createBoxDrawer(ILWIS::DrawerParameters *parms);
 
 namespace ILWIS{
 
-class BoxDrawer : public SimpleDrawer {
+class _export BoxDrawer : public SimpleDrawer {
 	public:
 		BoxDrawer(ILWIS::DrawerParameters *parms);
 		~BoxDrawer();

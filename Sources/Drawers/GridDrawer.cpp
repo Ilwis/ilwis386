@@ -1,26 +1,15 @@
-#include "Client\Headers\formelementspch.h"
-#include "Client\FormElements\syscolor.h"
-#include "Client\FormElements\FieldIntSlider.h"
+#include "Headers\toolspch.h"
 #include "Engine\Base\Round.h"
 #include "Engine\Map\basemap.h"
-#include "Client\Mapwindow\MapPaneView.h"
 #include "Engine\Map\Point\ilwPoint.h"
-#include "Client\Mapwindow\Drawers\DrawerContext.h"
-#include "Client\Mapwindow\Drawers\ComplexDrawer.h"
-#include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
-#include "Client\Ilwis.h"
+#include "Engine\Drawers\DrawerContext.h"
+#include "Engine\Drawers\ComplexDrawer.h"
+#include "Engine\Drawers\SimpleDrawer.h" 
 #include "Engine\Base\System\RegistrySettings.h"
-#include "Client\Mapwindow\MapCompositionDoc.h"
-#include "Client\Mapwindow\Drawers\RootDrawer.h"
-#include "Client\Mapwindow\MapPaneViewTool.h"
-#include "Client\Mapwindow\Drawers\DrawerTool.h"
-#include "Client\Mapwindow\LayerTreeView.h"
-#include "Client\Mapwindow\LayerTreeItem.h" 
-#include "Client\Editors\Utils\line.h"
+#include "Engine\Drawers\RootDrawer.h"
 #include "Drawers\LineDrawer.h"
 #include "Drawers\GridDrawer.h"
-#include "Client\FormElements\fldcolor.h"
-#include "Client\Mapwindow\Drawers\ZValueMaker.h"
+#include "Engine\Drawers\ZValueMaker.h"
 #include "Headers\Hs\Drwforms.hs"
 
 using namespace ILWIS;
@@ -334,7 +323,7 @@ void GridDrawer::AddGridLine(Coord c1, Coord c2)
 {
 	ILWIS::DrawerParameters dp(getRootDrawer(), this);
 	PreparationParameters pp(NewDrawer::ptGEOMETRY);
-	GridLine *line = (GridLine *)IlwWinApp()->getDrawer("GridLine", &pp, &dp);
+	GridLine *line = (GridLine *)NewDrawer::getDrawer("GridLine", &pp, &dp);
 	line->addDataSource(&c1);
 	line->addDataSource(&c2);
 	((LineProperties *)line->getProperties())->drawColor = lproperties.drawColor;

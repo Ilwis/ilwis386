@@ -7,7 +7,7 @@ class FieldColor;
 
 namespace ILWIS{
 
-class PointSetDrawer : public FeatureSetDrawer {
+class _export PointSetDrawer : public FeatureSetDrawer {
 	public:
 		ILWIS::NewDrawer *createPointSetDrawer(DrawerParameters *parms);
 

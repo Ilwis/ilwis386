@@ -5,7 +5,7 @@ ILWIS::NewDrawer *createCanvasBackgroundDrawer(ILWIS::DrawerParameters *parms);
 class FieldColor;
 
 namespace ILWIS {
-class CanvasBackgroundDrawer : public ComplexDrawer {
+class _export CanvasBackgroundDrawer : public ComplexDrawer {
 public:
 	enum ColorLocation{clINSIDE2D, clOUTSIDE2D,clINSIDE3D, clOUTSIDE3D};
 	CanvasBackgroundDrawer(DrawerParameters *parms);

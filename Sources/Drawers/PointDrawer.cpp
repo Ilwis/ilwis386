@@ -1,17 +1,15 @@
-#include "Client\Headers\formelementspch.h"
-#include "Client\FormElements\syscolor.h"
+#include "Headers\toolspch.h"
 #include "Engine\Map\basemap.h"
-#include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
-#include "Client\Ilwis.h"
-#include "Client\Mapwindow\Drawers\RootDrawer.h"
+#include "Engine\Drawers\SimpleDrawer.h" 
+#include "Engine\Drawers\RootDrawer.h"
 #include "Drawers\DrawingColor.h" 
-#include "Client\Mapwindow\Drawers\SVGElements.h"
+#include "Engine\Drawers\SVGElements.h"
 //#include "Drawers\SVGDrawers.h"
 #include "drawers\pointdrawer.h"
-#include "Client\Mapwindow\Drawers\ComplexDrawer.h"
-#include "Client\Mapwindow\Drawers\SVGLoader.h"
-#include "Client\Mapwindow\Drawers\SVGElements.h"
-#include "Client\Mapwindow\Drawers\ZValueMaker.h"
+#include "Engine\Drawers\ComplexDrawer.h"
+#include "Engine\Drawers\SVGLoader.h"
+#include "Engine\Drawers\SVGElements.h"
+#include "Engine\Drawers\ZValueMaker.h"
 
 using namespace ILWIS;
 
@@ -23,7 +21,7 @@ ILWIS::NewDrawer *createPointDrawer(DrawerParameters *parms) {
 }
 
 PointDrawer::PointDrawer(DrawerParameters *parms) : SimpleDrawer(parms,"PointDrawer"), element(0), symbol(defaultSymbol), scale(1.0) {
-	drawColor = SysColor(COLOR_WINDOWTEXT);
+	drawColor = Color(0,0,0);
 }
 
 PointDrawer::PointDrawer(DrawerParameters *parms, const String& name) : SimpleDrawer(parms,name), element(0), symbol(defaultSymbol), scale(1.0){
@@ -35,7 +33,7 @@ PointDrawer::~PointDrawer() {
 void PointDrawer::prepare(PreparationParameters *p){
 	SimpleDrawer::prepare(p);
 	if ( p->type & NewDrawer::ptRENDER && symbol != "") {
-		const SVGLoader *loader = IlwWinApp()->getSVGContainer();
+		const SVGLoader *loader = NewDrawer::getSvgLoader();
 		SVGLoader::const_iterator cur = loader->find(symbol);
 		if ( cur == loader->end())
 			throw ErrorObject(TR("Unknow symbol"));

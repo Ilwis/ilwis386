@@ -1,35 +1,23 @@
-#include "Client\Headers\formelementspch.h"
-#include "Client\FormElements\FieldIntSlider.h"
+#include "Headers\toolspch.h"
 #include "Engine\Map\basemap.h"
 #include "Engine\Map\Point\ilwPoint.h"
-#include "Client\MapWindow\Drawers\ComplexDrawer.h"
-#include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
-#include "Client\Ilwis.h"
-#include "Client\FormElements\fldcol.h"
-#include "client\formelements\fldrpr.h"
-#include "client\formelements\fentvalr.h"
+#include "Engine\Drawers\ComplexDrawer.h"
+#include "Engine\Drawers\SimpleDrawer.h" 
 #include "Engine\Spatialreference\gr.h"
 #include "Engine\Map\Raster\Map.h"
-#include "Client\Mapwindow\MapPaneViewTool.h"
-#include "Client\Mapwindow\Drawers\DrawerTool.h"
 #include "Engine\Base\System\RegistrySettings.h"
-#include "Client\Mapwindow\MapCompositionDoc.h"
-#include "Client\Mapwindow\Drawers\RootDrawer.h"
-#include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
-#include "Client\Mapwindow\LayerTreeView.h"
-#include "Client\Mapwindow\LayerTreeItem.h" 
-#include "Client\FormElements\fldcolor.h"
+#include "Engine\Drawers\RootDrawer.h"
+#include "Engine\Drawers\AbstractMapDrawer.h"
 #include "drawers\pointdrawer.h"
 #include "drawers\linedrawer.h"
 #include "Drawers\SetDrawer.h"
-#include "Client\Editors\Utils\line.h"
 #include "Drawers\FeatureSetDrawer.h"
 #include "Drawers\PolygonSetDrawer.h"
 #include "Drawers\LineSetDrawer.h"
 #include "Drawers\PointSetDrawer.h"
 #include "Drawers\FeatureLayerDrawer.h"
-#include "Client\Mapwindow\Drawers\ZValueMaker.h"
-//#include "Client\Mapwindow\Drawers\PointMapDrawerForm.h"
+#include "Engine\Drawers\ZValueMaker.h"
+//#include "Engine\Drawers\PointMapDrawerForm.h"
 #include "Headers\Hs\Drwforms.hs"
 
 using namespace ILWIS;
@@ -60,15 +48,15 @@ void FeatureLayerDrawer::prepare(PreparationParameters *pp){
 		IlwisObject::iotIlwisObjectType otype = IlwisObject::iotObjectType(basemap->fnObj);
 		switch ( otype) {
 			case IlwisObject::iotPOINTMAP:
-				fsd = (FeatureSetDrawer *)IlwWinApp()->getDrawer("PointSetDrawer", pp, &dp); 
+				fsd = (FeatureSetDrawer *)NewDrawer::getDrawer("PointSetDrawer", pp, &dp); 
 				addSetDrawer(basemap,pp,fsd);
 				break;
 			case IlwisObject::iotSEGMENTMAP:
-				fsd = (FeatureSetDrawer *)IlwWinApp()->getDrawer("LineSetDrawer", pp, &dp); 
+				fsd = (FeatureSetDrawer *)NewDrawer::getDrawer("LineSetDrawer", pp, &dp); 
 				addSetDrawer(basemap,pp,fsd);
 				break;
 			case IlwisObject::iotPOLYGONMAP:
-				fsd = (FeatureSetDrawer *)IlwWinApp()->getDrawer("PolygonSetDrawer", pp, &dp); 
+				fsd = (FeatureSetDrawer *)NewDrawer::getDrawer("PolygonSetDrawer", pp, &dp); 
 				addSetDrawer(basemap,pp,fsd, "Areas");
 				break;
 		}

@@ -1,13 +1,12 @@
-#include "Client\Headers\formelementspch.h"
-#include "Client\FormElements\syscolor.h"
-#include "Client\Mapwindow\Drawers\Rootdrawer.h"
-#include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
-#include "Client\Ilwis.h"
+#include "Headers\toolspch.h"
+#include "Engine\Map\basemap.h"
+#include "Engine\Drawers\Rootdrawer.h"
+#include "Engine\Drawers\SimpleDrawer.h" 
 #include "geos\algorithm\CGAlgorithms.h"
 #include "drawers\linedrawer.h"
 #include "drawers\polygondrawer.h"
-#include "Client\Mapwindow\Drawers\ComplexDrawer.h"
-#include "Client\Mapwindow\Drawers\ZValueMaker.h"
+#include "Engine\Drawers\ComplexDrawer.h"
+#include "Engine\Drawers\ZValueMaker.h"
 
 
 using namespace ILWIS;
@@ -18,7 +17,7 @@ ILWIS::NewDrawer *createPolygonDrawer(DrawerParameters *parms) {
 
 PolygonDrawer::PolygonDrawer(DrawerParameters *parms) : SimpleDrawer(parms,"PolygonDrawer"), boundary(0), showArea(0) {
 	setDrawMethod(NewDrawer::drmRPR);
-	drawColor = SysColor(COLOR_BTNFACE);
+	drawColor = Color(100,200,255);
 	areaTransparency = 1;
 }
 

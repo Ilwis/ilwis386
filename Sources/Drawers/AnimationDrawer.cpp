@@ -1,16 +1,16 @@
-#include "Client\Headers\formelementspch.h"
+#include "Headers\toolspch.h"
+#include "Engine\Table\tbl.h"
+#include "Engine\Map\Raster\MapList\maplist.h"
 #include "Engine\Base\DataObjects\ObjectCollection.h"
 #include "Engine\Domain\DomainTime.h" 
 #include "Engine\Map\basemap.h"
-#include "Client\Mapwindow\Drawers\SelectionRectangle.h"
+#include "Engine\Drawers\SelectionRectangle.h"
 #include "Engine\Map\Point\ilwPoint.h"
-#include "Client\Mapwindow\Drawers\DrawerContext.h"
-#include "Client\MapWindow\Drawers\ComplexDrawer.h"
-#include "Client\Ilwis.h"
+#include "Engine\Drawers\DrawerContext.h"
+#include "Engine\Drawers\ComplexDrawer.h"
 #include "Engine\Spatialreference\gr.h"
-#include "Client\Mapwindow\MapPaneView.h"
-#include "Client\Mapwindow\Drawers\RootDrawer.h"
-#include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\RootDrawer.h"
+#include "Engine\Drawers\AbstractMapDrawer.h"
 #include "Drawers\FeatureLayerDrawer.h"
 #include "Drawers\SetDrawer.h"
 #include "Drawers\FeatureSetDrawer.h"
@@ -18,7 +18,7 @@
 #include "Drawers\AnimationDrawer.h"
 #include "drawers\Boxdrawer.h"
 #include "Drawers\DrawingColor.h" 
-#include "Client\Mapwindow\Drawers\ZValueMaker.h"
+#include "Engine\Drawers\ZValueMaker.h"
 
 using namespace ILWIS;
 
@@ -111,7 +111,7 @@ void AnimationDrawer::addSelectionDrawers(const Representation& rpr) {
 			RasterSetDrawer *drw = (RasterSetDrawer*)getDrawer(i);
 			ILWIS::DrawerParameters parms(getRootDrawer(), this);
 			Map mp = mlist->map(i);
-			RasterSetDrawer *rasterset = (RasterSetDrawer *)IlwWinApp()->getDrawer("RasterSetDrawer", "Ilwis38", &parms); 
+			RasterSetDrawer *rasterset = (RasterSetDrawer *)NewDrawer::getDrawer("RasterSetDrawer", "Ilwis38", &parms); 
 			rasterset->setUICode(0);
 			rasterset->setThreaded(false);
 			rasterset->setRepresentation(rpr);
@@ -137,15 +137,15 @@ SetDrawer *AnimationDrawer::createIndexDrawer(const BaseMap& basem,ILWIS::Drawer
 	IlwisObject::iotIlwisObjectType otype = IlwisObject::iotObjectType(basem->fnObj);
 	switch ( otype) {
 		case IlwisObject::iotPOINTMAP:
-			fsd = (FeatureSetDrawer *)IlwWinApp()->getDrawer("PointSetDrawer", pp, &dp); 
+			fsd = (FeatureSetDrawer *)NewDrawer::getDrawer("PointSetDrawer", pp, &dp); 
 			addSetDrawer(basem,pp,fsd);
 			break;
 		case IlwisObject::iotSEGMENTMAP:
-			fsd = (FeatureSetDrawer *)IlwWinApp()->getDrawer("LineSetDrawer", pp, &dp); 
+			fsd = (FeatureSetDrawer *)NewDrawer::getDrawer("LineSetDrawer", pp, &dp); 
 			addSetDrawer(basem,pp,fsd);
 			break;
 		case IlwisObject::iotPOLYGONMAP:
-			fsd = (FeatureSetDrawer *)IlwWinApp()->getDrawer("PolygonSetDrawer", pp, &dp); 
+			fsd = (FeatureSetDrawer *)NewDrawer::getDrawer("PolygonSetDrawer", pp, &dp); 
 			addSetDrawer(basem,pp,fsd, "Areas");
 			break;
 	}
@@ -223,7 +223,7 @@ void AnimationDrawer::prepare(PreparationParameters *pp){
 				Map mp = mlist->map(i);
 				if ( !rpr.fValid())
 					rpr = mp->dm()->rpr();
-				RasterSetDrawer *rasterset = (RasterSetDrawer *)IlwWinApp()->getDrawer("RasterSetDrawer", "Ilwis38", &parms); 
+				RasterSetDrawer *rasterset = (RasterSetDrawer *)NewDrawer::getDrawer("RasterSetDrawer", "Ilwis38", &parms); 
 				rasterset->setThreaded(false);
 				if ( rrMinMax.fValid())
 					rasterset->setMinMax(rrMinMax);
@@ -472,6 +472,10 @@ void AnimationDrawer::setMapIndex(int ind) {
 void AnimationDrawer::updateLegendItem() {
 	//if ( doLegend)
 	//	doLegend->updateLegendItem();
+}
+
+int AnimationDrawer::getTimerIdCounter() {
+	return timerIdCounter;
 }
 
 //----------------------------------------------------------

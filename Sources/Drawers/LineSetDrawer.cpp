@@ -1,21 +1,14 @@
-#include "Client\Headers\formelementspch.h"
+#include "Headers\toolspch.h"
 #include "Engine\Map\basemap.h"
 #include "Engine\Map\Point\ilwPoint.h"
-#include "Client\Mapwindow\Drawers\ComplexDrawer.h"
-#include "Client\Mapwindow\Drawers\SimpleDrawer.h"
+#include "Engine\Drawers\ComplexDrawer.h"
+#include "Engine\Drawers\SimpleDrawer.h"
 #include "drawers\linedrawer.h"
-#include "Client\Ilwis.h"
 #include "Engine\Base\System\RegistrySettings.h"
-#include "Client\Mapwindow\MapCompositionDoc.h"
-#include "Client\Mapwindow\Drawers\RootDrawer.h"
-#include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
-#include "Client\Mapwindow\MapPaneViewTool.h"
-#include "Client\Mapwindow\Drawers\DrawerTool.h"
-#include "Client\Mapwindow\LayerTreeView.h"
-#include "Client\Mapwindow\LayerTreeItem.h" 
+#include "Engine\Drawers\RootDrawer.h"
+#include "Engine\Drawers\AbstractMapDrawer.h"
 #include "Drawers\SetDrawer.h"
 #include "Drawers\FeatureSetDrawer.h"
-#include "Client\Editors\Utils\line.h"
 #include "Drawers\LineSetDrawer.h"
 #include "Drawers\FeatureLayerDrawer.h"
 #include "drawers\linefeaturedrawer.h"
@@ -38,7 +31,7 @@ LineSetDrawer::~LineSetDrawer() {
 }
 
 NewDrawer *LineSetDrawer::createElementDrawer(PreparationParameters *pp, ILWIS::DrawerParameters* parms) const{
-	return IlwWinApp()->getDrawer("LineFeatureDrawer",pp, parms);
+	return NewDrawer::getDrawer("LineFeatureDrawer",pp, parms);
 
 }
 

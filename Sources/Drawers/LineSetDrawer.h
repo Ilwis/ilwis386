@@ -9,7 +9,7 @@ enum LineDspType;
 
 namespace ILWIS{
 
-class LineSetDrawer : public FeatureSetDrawer {
+class _export LineSetDrawer : public FeatureSetDrawer {
 
 	public:
 		ILWIS::NewDrawer *createLineSetDrawer(DrawerParameters *parms);

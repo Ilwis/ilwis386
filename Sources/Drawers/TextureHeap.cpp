@@ -2,10 +2,11 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "Client\Headers\formelementspch.h"
+#include "Headers\toolspch.h"
+#include "Engine\Map\Raster\Map.h"
 #include "TextureHeap.h"
 #include "Texture.h"
-#include "Client\MapWindow\Drawers\DrawerContext.h"
+#include "Engine\Drawers\DrawerContext.h"
 #include "DrawingColor.h"
 #include "SetDrawer.h"
 

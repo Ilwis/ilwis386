@@ -5,7 +5,7 @@ ILWIS::NewDrawer *createPolygonFeatureDrawer(ILWIS::DrawerParameters *parms);
 
 namespace ILWIS{
 
-class PolygonFeatureDrawer : public PolygonDrawer {
+class _export PolygonFeatureDrawer : public PolygonDrawer {
 	public:
 		PolygonFeatureDrawer(ILWIS::DrawerParameters *parms);
 		~PolygonFeatureDrawer();

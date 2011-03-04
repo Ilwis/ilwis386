@@ -1,13 +1,11 @@
-#include "Client\Headers\formelementspch.h"
-#include "Client\FormElements\syscolor.h"
-#include "Client\MapWindow\Drawers\DrawerContext.h"
-#include "Client\Mapwindow\Drawers\RootDrawer.h"
-#include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
-#include "Client\Ilwis.h"
+#include "Headers\toolspch.h"
+#include "Engine\Map\basemap.h"
+#include "Engine\Drawers\DrawerContext.h"
+#include "Engine\Drawers\RootDrawer.h"
+#include "Engine\Drawers\SimpleDrawer.h" 
 #include "drawers\linedrawer.h"
-#include "Client\Editors\Utils\line.h"
-#include "Client\Mapwindow\Drawers\ComplexDrawer.h"
-#include "Client\Mapwindow\Drawers\ZValueMaker.h"
+#include "Engine\Drawers\ComplexDrawer.h"
+#include "Engine\Drawers\ZValueMaker.h"
 
 using namespace ILWIS;
 
@@ -48,38 +46,6 @@ void LineDrawer::addCoords(const vector<Coord>& v,int options) {
 		cb+= c;
 	}
 	lines.push_back(seq);
-}
-
-int LineDrawer::openGLLineStyle(int linestyle, double sz){
-	switch(linestyle) {
-		case ldtDot:
-			return 0xAAAA;
-		case ldtDash:
-			return 0xF0F0;
-		case ldtDashDot:
-			return 0x6B5A;
-		case ldtDashDotDot:
-			return 0x56B5;
-		default:
-			return 0xFFFF;
-	}
-	return 0xFFFF;
-}
-
-int LineDrawer::ilwisLineStyle(int linestyle, double sz){
-	switch(linestyle) {
-		case 0xAAAA:
-			return ldtDot;
-		case 0xF0F0:
-			return ldtDash;
-		case 0x6B5A:
-			return ldtDashDot;
-		case 0x56B5:
-			return ldtDashDotDot;
-		default:
-			return ldtSingle;
-	}
-	return 0xFFFF;
 }
 
 bool LineDrawer::draw( const CoordBounds& cbArea) const{

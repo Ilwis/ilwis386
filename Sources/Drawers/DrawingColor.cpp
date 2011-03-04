@@ -1,17 +1,15 @@
-#include "Client\Headers\formelementspch.h"
-#include "Client\FormElements\FieldIntSlider.h"
+#include "Headers\toolspch.h"
 #include "Engine\Base\DataObjects\Color.h"
 #include "Engine\Spatialreference\gr.h"
 #include "Engine\Map\Raster\Map.h"
 #include "Engine\Domain\dmsort.h"
 #include "Engine\Base\Algorithm\Random.h"
 #include "Engine\Base\System\RegistrySettings.h"
-#include "Client\Mapwindow\MapCompositionDoc.h"
-#include "Client\Mapwindow\Drawers\RootDrawer.h"
-#include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
-#include "Drawers\SetDrawer.h"
-#include "Drawers\FeatureSetDrawer.h"
-#include "Drawers\DrawingColor.h" 
+#include "Engine\Drawers\RootDrawer.h"
+#include "Engine\Drawers\AbstractMapDrawer.h"
+#include "SetDrawer.h"
+#include "FeatureSetDrawer.h"
+#include "DrawingColor.h" 
 
 using namespace ILWIS;
 

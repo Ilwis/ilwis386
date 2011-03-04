@@ -1,14 +1,11 @@
-#include "Client\Headers\formelementspch.h"
-#include "Client\FormElements\fldcol.h"
-#include "client\formelements\fldrpr.h"
-#include "client\formelements\fentvalr.h"
+#include "Headers\toolspch.h"
 #include "Engine\Base\System\Module.h"
 #include "Engine\Map\basemap.h"
-#include "Client\Editors\Utils\line.h"
+#include "Engine\Map\Raster\Map.h"
 #include "Engine\Map\Point\ilwPoint.h"
-#include "Client\Mapwindow\Drawers\ComplexDrawer.h"
-#include "Client\Mapwindow\Drawers\SimpleDrawer.h" 
-#include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\ComplexDrawer.h"
+#include "Engine\Drawers\SimpleDrawer.h" 
+#include "Engine\Drawers\AbstractMapDrawer.h"
 #include "drawers\linedrawer.h"
 #include "Drawers\SetDrawer.h"
 #include "Drawers\FeatureSetDrawer.h"
@@ -30,31 +27,7 @@
 #include "Drawers\GridDrawer.h"
 #include "drawers\pointdrawer.h"
 #include "drawers\Boxdrawer.h"
-#include "Client\Mapwindow\MapPaneViewTool.h"
-#include "Client\Mapwindow\Drawers\DrawerTool.h"
-#include "Drawers\SetDrawerTool.h"
-#include "Drawers\RepresentationTool.h"
-#include "Drawers\LegendTool.h"
-#include "Drawers\ColorTool.h"
-#include "Drawers\InteractiveRepresentationTool.h"
-#include "Drawers\StretchTool.h"
-#include "Drawers\PolygonSetTool.h"
-#include "Client\Mapwindow\Drawers\SVGElements.h"
-#include "Drawers\LineStyleTool.h"
-#include "Drawers\NonRepresentationTool.h"
-#include "Drawers\AnimationTool.h"
-#include "Drawers\AnimationControlTool.h"
-#include "Drawers\AnimationTimeSelection.h"
-#include "Drawers\ThreeDTool.h"
-#include "Drawers\GridTool.h"
-#include "Drawers\ThreeDGlobalTool.h"
-#include "Drawers\AttributeTool.h"
-#include "Drawers\HighLightTool.h"
-#include "Drawers\BackgroundTool.h"
-#include "Drawers\PointSymbolizationTool.h"
-#include "Drawers\Grid3DTool.h"
-#include "Drawers\TransparencyTool.h"
-#include "Drawers\LineSetTool.h"
+
 
 using namespace ILWIS;
 
@@ -83,39 +56,9 @@ DrawerInfoVector *createDrawer() {
 	return infos;
 }
 
-DrawerToolInfoVector *createDrawerTool() {
-	DrawerToolInfoVector *infos = new DrawerToolInfoVector();
-
-	infos->push_back(new DrawerToolInfo("RepresentationTool",createRepresentationTool));
-	infos->push_back(new DrawerToolInfo("LegendTool",createLegendTool));
-	infos->push_back(new DrawerToolInfo("SetTool",createSetDrawerTool));
-	infos->push_back(new DrawerToolInfo("ColorTool",createColorTool));
-	infos->push_back(new DrawerToolInfo("InteractiveRepresentationTool",createInteractiveRepresentationTool));
-	infos->push_back(new DrawerToolInfo("StretchTool",createStretchTool));
-	infos->push_back(new DrawerToolInfo("PolygonSetTool",createPolygonSetTool));
-	infos->push_back(new DrawerToolInfo("LineStyleTool",createLineStyleTool));
-	infos->push_back(new DrawerToolInfo("NonRepresentationTool",createNonRepresentationToolTool));
-	infos->push_back(new DrawerToolInfo("AnimationTool",createAnimationTool));
-	infos->push_back(new DrawerToolInfo("AnimationControlTool",createAnimationControlTool));
-	infos->push_back(new DrawerToolInfo("AnimationTimeSelectionTool",createAnimationTimeSelectionTool));
-	infos->push_back(new DrawerToolInfo("3DTool",createThreeDTool));
-	infos->push_back(new DrawerToolInfo("GridTool",createGridTool));
-	infos->push_back(new DrawerToolInfo("3DGlobal",createThreeDGlobalTool));
-	infos->push_back(new DrawerToolInfo("AttributeTool",createAttributeTool));
-	infos->push_back(new DrawerToolInfo("HighlightTool",createHighLightTool));
-	infos->push_back(new DrawerToolInfo("BackgroundTool",createBackgroundTool));
-	infos->push_back(new DrawerToolInfo("PointSymbolizationTool",createPointSymbolizationTool));
-	infos->push_back(new DrawerToolInfo("Grid3DTool",createGrid3DTool));
-	infos->push_back(new DrawerToolInfo("TransparencyTool",createTransparencyTool));
-	infos->push_back(new DrawerToolInfo("LineSetTool",createLineSetTool));
-
-	return infos;
-}
-
 extern "C" _export ILWIS::Module *getModuleInfo() {
 	ILWIS::Module *module = new ILWIS::Module("Drawers", "IlwisDrawers.dll",ILWIS::Module::mi38,"1.0");
 	module->addMethod(ILWIS::Module::ifDrawers, (void *)createDrawer);  
-	module->addMethod(ILWIS::Module::ifDrawerTools, (void *)createDrawerTool); 
 
 	return module;
 }

@@ -6,7 +6,7 @@ ILWIS::NewDrawer *createLineFeatureDrawer(ILWIS::DrawerParameters *parms);
 
 namespace ILWIS{
 
-class LineFeatureDrawer : public LineDrawer {
+class _export LineFeatureDrawer : public LineDrawer {
 	public:
 		LineFeatureDrawer(ILWIS::DrawerParameters *parms);
 		~LineFeatureDrawer();

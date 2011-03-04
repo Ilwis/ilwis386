@@ -9,7 +9,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "Client\MapWindow\Drawers\Drawer_n.h" // for DrawMethod
+#include "Engine\Drawers\Drawer_n.h" // for DrawMethod
 
 #include <GL/gl.h>
 

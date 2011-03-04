@@ -1,21 +1,15 @@
-#include "Client\Headers\formelementspch.h"
+#include "Headers\toolspch.h"
 #include "Engine\Map\basemap.h"
 #include "Engine\Map\Point\ilwPoint.h"
-#include "Client\MapWindow\Drawers\ComplexDrawer.h"
-#include "Client\Ilwis.h"
+#include "Engine\Drawers\ComplexDrawer.h"
 #include "Engine\Spatialreference\gr.h"
 #include "Engine\Map\Raster\Map.h"
 #include "Engine\Base\System\RegistrySettings.h"
-#include "Client\Mapwindow\MapCompositionDoc.h"
-#include "Client\Mapwindow\Drawers\RootDrawer.h"
-#include "Client\Mapwindow\Drawers\AbstractMapDrawer.h"
-#include "Client\Mapwindow\MapPaneViewTool.h"
-#include "Client\Mapwindow\Drawers\DrawerTool.h"
-#include "Client\Mapwindow\LayerTreeView.h"
-#include "Client\Mapwindow\LayerTreeItem.h" 
+#include "Engine\Drawers\RootDrawer.h"
+#include "Engine\Drawers\AbstractMapDrawer.h"
 #include "Drawers\SetDrawer.h"
 #include "Drawers\RasterLayerDrawer.h"
-#include "Client\Mapwindow\Drawers\ZValueMaker.h"
+#include "Engine\Drawers\ZValueMaker.h"
 #include "Drawers\RasterSetDrawer.h"
 
 using namespace ILWIS;
@@ -46,7 +40,7 @@ void RasterLayerDrawer::prepare(PreparationParameters *pp){
 		IlwisObject::iotIlwisObjectType otype = IlwisObject::iotObjectType(basemap->fnObj);
 		switch ( otype) {
 			case IlwisObject::iotRASMAP:
-				rsd = (RasterSetDrawer *)IlwWinApp()->getDrawer("RasterSetDrawer", pp, &dp);
+				rsd = (RasterSetDrawer *)NewDrawer::getDrawer("RasterSetDrawer", pp, &dp);
 				RangeReal rrMinMax (0, 255);
 				Domain dm = basemap->dm();
 				if (dm.fValid() && (dm->pdbit() || dm->pdbool()))

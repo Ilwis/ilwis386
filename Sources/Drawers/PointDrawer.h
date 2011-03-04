@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Client\Mapwindow\Drawers\SVGElements.h"
+#include "Engine\Drawers\SVGElements.h"
 
 ILWIS::NewDrawer *createPointDrawer(ILWIS::DrawerParameters *parms);
 
