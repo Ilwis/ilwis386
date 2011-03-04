@@ -93,7 +93,7 @@
 #define ILWGR3D_H
 #include "Engine\SpatialReference\Gr.h"
 #include "Engine\Map\Raster\Map.h"
-//#include "Client\Mapwindow\Drawers\Drawer.h"
+//#include "Engine\Drawers\Drawer.h"
 
 class DATEXPORT GeoRef3D: public GeoRefPtr
 {

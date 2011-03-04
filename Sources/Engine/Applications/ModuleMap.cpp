@@ -12,6 +12,16 @@
 #include "Engine\Table\TBLHSTSG.H"
 #include "Engine\Table\TBLHSTPT.H"
 #include "Engine\Table\TBLHIST.H"
+#include "Engine\Drawers\SVGElements.h"
+#include "Engine\Drawers\SVGLoader.h"
+#include "Engine\Drawers\Drawer_n.h"
+#include "Engine\Drawers\RootDrawer.h"
+#include "Engine\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\SelectionRectangle.h"
+//#include "Client\Editors\Map\BaseMapEditor.h"
+#include "Engine\Drawers\SimpleDrawer.h"
+#include "Engine\Drawers\TextDrawer.h"
+#include "Engine\Drawers\MouseClickInfoDrawer.h" 
 
 using namespace ILWIS;
 
@@ -53,9 +63,16 @@ void ModuleMap::addFolder(const String& dir) {
 				addFolder(String(fnNew.sFullPath()));
 		}
 	}
+	//modules that are dependent on not(yet) loaded modules may not load the first time. 
+	// they get a second try as it can be assumed that the module they need is loaded then
+	// of course if that module is dependent again it will not work but that situation is not
+	// legal in the plugin system of ILWIS. Maybe a formal dependency definition should be given with each module(future).
+	for(int i =0; i < retryList.size(); ++i) {
+		addModule(retryList.at(i), true);
+	}
 }
 
-void ModuleMap::addModule(const FileName& fnModule) {
+void ModuleMap::addModule(const FileName& fnModule, bool retry) {
 	try{
 		HMODULE hm = LoadLibrary(fnModule.sFullPath().scVal());
 		if ( hm != NULL ) {
@@ -77,7 +94,24 @@ void ModuleMap::addModule(const FileName& fnModule) {
 				if ( initFunc) {
 					moduleInits.push_back(initFunc);
 				}
+				GetDrawers drawFuncs = (GetDrawers)(mod->getMethod(ILWIS::Module::ifDrawers));
+				if ( drawFuncs) {
+					DrawerInfoVector *infos = drawFuncs();
+					for ( int i=0 ; i < infos->size(); ++i) {
+						NewDrawer::addDrawer(infos->at(i)->name, infos->at(i)->subtype,infos->at(i)->createFunc);
+						delete infos->at(i);
+					}
+					delete infos;
+					NewDrawer::addDrawer("SelectionRectangle","ilwis38", createSelectionRectangle);
+					NewDrawer::addDrawer("MouseClickInfoDrawer","ilwis38",createMouseClickInfoDrawer);
+				}
 
+			}
+		} else {
+			if ( retry == false) {
+				vector<FileName>::iterator cur = std::find(retryList.begin(), retryList.end(),fnModule);
+				if (cur == retryList.end())
+					retryList.push_back(fnModule);
 			}
 		}
 	}catch(ErrorObject& err){

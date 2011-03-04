@@ -54,7 +54,7 @@ private:
 class _export ModuleMap : public map<String, ILWIS::Module*> {
 public:
 	~ModuleMap();
-	void addModule(const FileName& fnModule);
+	void addModule(const FileName& fnModule, bool retry = false);
 	void addModules();
 	void initModules();
 	ApplicationInfo * getAppInfo(const String& name){ return applications[name];}
@@ -63,6 +63,7 @@ private:
 	void addModule(ILWIS::Module *m);
 	vector<ModuleInit> moduleInits;
 	ApplicationMap applications;
+	vector<FileName> retryList;
 
 };
 

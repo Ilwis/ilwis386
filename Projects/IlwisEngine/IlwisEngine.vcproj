@@ -78,7 +78,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="RpcRT4.Lib libcurl.lib xerces-c_2D.lib geosd.lib"
+				AdditionalDependencies="RpcRT4.Lib libcurl.lib xerces-c_2D.lib geosd.lib ftgl.lib opengl32.lib glu32.lib freetype.lib"
 				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\$(ProjectName).dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)libraries\import&quot;;&quot;$(SolutionDir)libraries\$(ConfigurationName)&quot;;&quot;$(SolutionDir)\libraries\debug&quot;;&quot;C:\Program Files\Microsoft Visual Studio 8\VC\PlatformSDK\Lib&quot;"
@@ -3794,6 +3794,126 @@
 						>
 					</File>
 				</Filter>
+			</Filter>
+			<Filter
+				Name="Drawers"
+				>
+				<File
+					RelativePath="..\..\Sources\Engine\Drawers\AbstractMapDrawer.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\Drawers\AbstractMapDrawer.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\Drawers\ComplexDrawer.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\Drawers\ComplexDrawer.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\Drawers\Drawer.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\Drawers\Drawer_n.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\Drawers\DrawerContext.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\Drawers\DrawerContext.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\Drawers\MouseClickInfoDrawer.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\Drawers\MouseClickInfoDrawer.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\Drawers\OpenGLFont.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\Drawers\OpenGLFont.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\Drawers\OpenGLText.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\Drawers\RootDrawer.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\Drawers\RootDrawer.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\Drawers\SelectionRectangle.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\Drawers\SelectionRectangle.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\Drawers\SimpleDrawer.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\Drawers\SimpleDrawer.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\Drawers\SVGContainer.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\Drawers\SVGContainer.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\Drawers\SVGElements.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\Drawers\SVGElements.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\Drawers\SVGLoader.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\Drawers\SVGLoader.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\Drawers\TextDrawer.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\Drawers\TextDrawer.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\Drawers\ZValueMaker.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\Drawers\ZValueMaker.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 	</Files>
