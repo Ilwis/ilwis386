@@ -245,6 +245,21 @@ Coord CoordSystemProjection::cConv(const LatLon& ll) const
     return crdUNDEF;
 }
 
+String CoordSystemProjection::getIdentification(bool wkt) {
+	if ( datum){
+		return datum->getIdentification(wkt);
+	} else {
+		String id;
+		if ( prj.fValid()) {
+			id =  prj->getIdentification(wkt);
+		}
+		if (id == sUNDEF)
+			id = ell.getIdentification();
+		return id;
+	}
+	return CoordSystemPtr::getIdentification(wkt);
+}
+
 bool CoordSystemProjection::fEqual(const IlwisObjectPtr& obj) const
 {
 	if (this == (const CoordSystemProjection*)(&obj))
