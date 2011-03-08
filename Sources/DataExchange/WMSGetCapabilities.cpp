@@ -145,13 +145,13 @@ void XERCES_CPP_NAMESPACE::WMSSaxHandler::startElement(const XMLCh* const name, 
 		throw ErrorObject("Fatal error in request");
 }
 
-void xercesc_2_8::WMSSaxHandler::handleBoundingBox(map<String, vector<double> >& srs, AttributeList&  attributes) {
+void XERCES_CPP_NAMESPACE::WMSSaxHandler::handleBoundingBox(map<String, vector<double> >& srs, AttributeList&  attributes) {
 	String srsName = String(StrX(attributes.getValue("SRS")).scVal());
 	vector<double> v = handleBBBounds(attributes);
 	srs[srsName] = v;
 }
 
-vector<double> xercesc_2_8::WMSSaxHandler::handleBBBounds(AttributeList&  attributes) {
+vector<double> XERCES_CPP_NAMESPACE::WMSSaxHandler::handleBBBounds(AttributeList&  attributes) {
 	vector<double> bb;
 	bb.push_back(StrX(attributes.getValue("minx")).rVal());
 	bb.push_back(StrX(attributes.getValue("miny")).rVal());
@@ -161,7 +161,7 @@ vector<double> xercesc_2_8::WMSSaxHandler::handleBBBounds(AttributeList&  attrib
 	return bb;
 }
 
-void xercesc_2_8::WMSSaxHandler::handleLayerEnd(String &tag)
+void XERCES_CPP_NAMESPACE::WMSSaxHandler::handleLayerEnd(String &tag)
 {
 	if ( tag == "Layer" ) {
 		currentTag = "";
