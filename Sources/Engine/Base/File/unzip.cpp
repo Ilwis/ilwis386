@@ -1799,6 +1799,9 @@ bool unzip(const FileName & fn)
 
         fill_win32_filefunc(&ffunc);
 		uf = unzOpen2(fn.sFullPath().scVal(),&ffunc);
+		if ( uf == 0)
+			return false;
+
 		int err = do_extract(uf, fn.sPath(), password);
 		int err2 = unzCloseCurrentFile(uf);
 		if ( err2 < 0 ) {

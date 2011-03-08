@@ -344,7 +344,7 @@ extern uLong ZEXPORT unzGetOffset (unzFile file);
 
 /* Set the current file offset */
 extern int ZEXPORT unzSetOffset (unzFile file, uLong pos);
-extern bool unzip(const FileName & fn);
+extern bool _export unzip(const FileName & fn);
 
 
 

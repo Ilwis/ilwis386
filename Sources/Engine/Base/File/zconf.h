@@ -242,6 +242,7 @@
 #    endif
 #  endif
 #endif
+#define ZEXPORT __stdcall
 
 #ifndef ZEXTERN
 #  define ZEXTERN extern
