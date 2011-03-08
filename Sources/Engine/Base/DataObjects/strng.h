@@ -121,7 +121,7 @@ public:
     String _export       sUnQuote() const;
     char _export *       strchrQuoted(char c) const;
     char _export *       strrchrQuoted(char c, int iLoc = iUNDEF) const;
-	wchar_t *			 toWChar(wchar_t r[]) const;
+	wchar_t _export *			 toWChar(wchar_t r[]) const;
     static const char _export * pcCharsToBeQuoted();
     static const char _export * pcCharsNotAllowedOutsideQuotes();
 

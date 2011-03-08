@@ -59,7 +59,7 @@ public:
   _export ~Tranquilizer();
 
   void _export SetTitle(const String& sTitle);
-  void _export SetHelpTopic(const HelpTopic& htp);
+  void _export setHelpItem(const HelpTopic& htp);
   void _export SetText(const String& sText);
 
   bool _export fUpdate(long iVal, long iMax = 0); // return true if stop has been pressed
@@ -70,7 +70,7 @@ public:
   void _export SetAborted();
   _export unsigned short iGetProgressID();
 
-  void HelpEnable(bool) {} // dummy, should be handled by SetHelpTopic()
+  void HelpEnable(bool) {} // dummy, should be handled by setHelpItem()
 	void _export SetDelayShow(bool fD);
 
   void _export Start();
