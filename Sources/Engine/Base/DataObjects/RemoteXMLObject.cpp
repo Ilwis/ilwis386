@@ -55,7 +55,7 @@ size_t RemoteXMLObject::WriteMemoryCallback(void *ptr, size_t size, size_t nmemb
 {
 	size_t realsize = size * nmemb;
 	MemoryStruct *mem = (MemoryStruct *)data;
-
+    char *ss = (char *)ptr;
 	mem->memory = (unsigned char *)myrealloc(mem->memory, mem->size + realsize + 1);
 	if (mem->memory) {
 		memcpy(&(mem->memory[mem->size]), ptr, realsize);
