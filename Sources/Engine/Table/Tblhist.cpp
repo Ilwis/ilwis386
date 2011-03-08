@@ -699,7 +699,7 @@ void TableHistogram::Init()
 	
   String sTitle("%S - %S", STBLTitleTableHistogram, sName(true));
   trq.SetTitle(sTitle);
-  trq.SetHelpTopic(htpTableHistogramT);
+  trq.setHelpItem(htpTableHistogramT);
   if (0 == pts)
     return;
   if (0 != dm()->pdnone()) {

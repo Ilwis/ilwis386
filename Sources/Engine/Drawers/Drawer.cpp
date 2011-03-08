@@ -44,8 +44,10 @@ void NewDrawer::addDrawer(const String& type, const String& subtype, DrawerCreat
 
 SVGLoader* NewDrawer::getSvgLoader()
 { 
-	if ( svgContainer == 0)
+	if ( svgContainer == 0) {
 		svgContainer = new ILWIS::SVGLoader();
+		svgContainer->load();
+	}
 	return svgContainer; 
 }
 

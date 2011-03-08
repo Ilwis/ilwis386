@@ -435,23 +435,6 @@ void RootDrawer::debug() {
 	glGetIntegerv(GL_VIEWPORT, m_viewport);
 }
 
-//----------------------------------UI-------------------------------------
-//HTREEITEM RootDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
-//	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,parent,this)
-//{
-//	return InsertItem("3D","3D",item,is3D(),TVI_FIRST);
-//}
-
-//void RootDrawer::SetthreeD(void *v, LayerTreeView *tv) {
-//	bool value = *(bool *)(v);
-//
-//	set3D(value);
-//	MapCompositionDoc* doc = tv->GetDocument();
-//  
-//
-//	//make3D(value,tv);
-//	doc->mpvGetView()->Invalidate();
-//}
 
 void RootDrawer::setSelectionDrawer(SelectionRectangle *selDraw) {
 	// selection drawer is owned by the areaselector, dont delete it here

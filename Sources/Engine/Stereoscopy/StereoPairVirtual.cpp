@@ -123,7 +123,7 @@ void StereoPairVirtual::Freeze()
 	trq.Start();
 	String sTitle("%S - %S", sFreezeTitle, sName(true));
 	trq.SetTitle(sTitle);
-	trq.SetHelpTopic(htpFreeze);
+	trq.setHelpItem(htpFreeze);
   UnFreeze();
   if (fFreezing())
 	{

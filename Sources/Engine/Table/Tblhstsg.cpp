@@ -428,7 +428,7 @@ void TableHistogramSeg::FillColumns()
 void TableHistogramSeg::Init()
 {
   trq.SetTitle("TableHistogramSeg");
-  trq.SetHelpTopic(htpTableHistogramSegT);
+  trq.setHelpItem(htpTableHistogramSegT);
   if (pts==0)
     return;
   if (0 != dm()->pdnone()) {

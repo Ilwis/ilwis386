@@ -387,7 +387,7 @@ void TableHistogramPnt::FillColumns()
 void TableHistogramPnt::Init()
 {
   trq.SetTitle("TableHistogramPnt");
-  trq.SetHelpTopic(htpTableHistogramPntT);
+  trq.setHelpItem(htpTableHistogramPntT);
   if (pts==0)
     return;
 //  Time tim = pts->objtime;
