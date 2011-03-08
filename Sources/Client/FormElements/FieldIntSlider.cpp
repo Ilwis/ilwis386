@@ -182,22 +182,24 @@ FormEntry* FieldIntSlider::CheckData()
 
 //---------------------------------------------------
 FieldIntSliderEx::FieldIntSliderEx(FormEntry * parent, const String& question, int *val, const ValueRange& valrange, bool rangeText) : 
-	FormEntry(parent,0,true),
+	FormEntry(parent,0,false),
 	edit(0),
 	slider(0),
 	initial(true),
 	setRace(-1)
 {
-	FieldGroup *fg = new FieldGroup(parent);
+	FieldGroup *fg = new FieldGroup(this);
+	new FieldBlank(fg,0.1);
 	edit = new FieldInt(fg,question,val,valrange);
 	slider = new FieldIntSlider(fg,val,valrange,TBS_HORZ);
-	fg->SetIndependentPos();
 	slider->Align(edit,AL_AFTER);
 	if ( rangeText) {
 		StaticText *st = new StaticText(fg,String("(%S)",valrange->sRange()));
 		st->Align(slider, AL_AFTER);
 	}
-	new FieldBlank(fg);
+	psn->iMinWidth = 75;
+	fg->SetIndependentPos();
+	// new FieldBlank(fg);
 
 }
 
@@ -206,8 +208,10 @@ FieldIntSliderEx::~FieldIntSliderEx(){
 
 void FieldIntSliderEx::create(){
 	FormEntry::CreateChildren();
-	slider->SetCallBack((NotifyProc)&FieldIntSliderEx::SliderCallBackFunc,this);
-	edit->SetCallBack((NotifyProc)&FieldIntSliderEx::EditCallBackFunc,this);
+	if ( slider)
+		slider->SetCallBack((NotifyProc)&FieldIntSliderEx::SliderCallBackFunc,this);
+	if (edit)
+		edit->SetCallBack((NotifyProc)&FieldIntSliderEx::EditCallBackFunc,this);
 	initial = false;
 }
 
@@ -225,24 +229,30 @@ int FieldIntSliderEx::iVal(){
 	return slider->iVal();
 }
 void FieldIntSliderEx::StoreData(){
-	edit->StoreData();
+	if (edit)
+		edit->StoreData();
 }
 void FieldIntSliderEx::Enable(){
-	edit->Enable();
-	slider->Enable();
+	if (edit)
+		edit->Enable();
+	if ( slider)
+		slider->Enable();
 }
 void FieldIntSliderEx::Disable(){
 	edit->Disable();
-	slider->Disable();
+	if ( slider)
+		slider->Disable();
 }
 void FieldIntSliderEx::SetFocus(){
-	edit->SetFocus();
+	if (edit)
+		edit->SetFocus();
 }
 FormEntry* FieldIntSliderEx::CheckData(){
 	FormEntry *frm = edit->CheckData();
 	if ( frm)
 		return frm;
-	frm = slider->CheckData();
+	if ( slider)
+		frm = slider->CheckData();
 	return frm;
 }
 
@@ -250,8 +260,11 @@ int FieldIntSliderEx::SliderCallBackFunc(Event *ev) {
 	if ( initial || setRace == 1)
 		return 1;
 	setRace = 0;
-	int val = slider->iVal();
-	edit->SetVal(val);
+	if ( slider){
+		int val = slider->iVal();
+		if (edit)
+			edit->SetVal(val);
+	}
 	setRace = -1;
 	if ( _npChanged)
 		(_cb->*_npChanged)(ev);
@@ -262,8 +275,11 @@ int FieldIntSliderEx::EditCallBackFunc(Event *ev) {
 	if ( initial || setRace == 0)
 		return 1;
 	setRace = 1;
-	int val = edit->iVal();
-	slider->SetVal(val);
+	if (edit) {
+		int val = edit->iVal();
+		if ( slider)
+			slider->SetVal(val);
+	}
 	setRace = -1;
 	return 1;
 }

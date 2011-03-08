@@ -186,7 +186,7 @@ public:
 	void setDoubleCickAction(ILWIS::DrawerTool *tool, DTDoubleClickActionFunc f);
 	void setCheckAction(ILWIS::DrawerTool *tool, SetChecks *checks, DTSetCheckFunc cf);
 	
-private: 
+protected:
 	DTDoubleClickActionFunc dbcAction;
 	DTSetCheckFunc dtSetCheckFunc;
 
@@ -211,6 +211,20 @@ private:
 
 };
 
+class _export DisplayOptionRadioButtonItem: public DisplayOptionTreeItem
+{
+public:
+	DisplayOptionRadioButtonItem(const String& sText, LayerTreeView*, HTREEITEM parent, ILWIS::NewDrawer *dr);
+	void OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult);
+	void setState(bool yesno) ;
+	bool getState() const;
+private:
+	void OnLButtonDown(UINT nFlags, CPoint point);
+	bool isSelected;
+	String sText;
+
+};
+
 
 
 class _export SetChecks {
@@ -218,7 +232,7 @@ public:
 	SetChecks(LayerTreeView*, ILWIS::DrawerTool *dr, DTSetCheckFunc _f);
 	~SetChecks();
 	void addItem(HTREEITEM hti);
-	void checkItem(HTREEITEM hti,bool fOn);
+	void checkItem(HTREEITEM hti);
 private:
 	vector<HTREEITEM> checkedItems;
 	LayerTreeView *tv;

@@ -351,7 +351,7 @@ afx_msg void StringMultiEdit::OnSetFocus(CWnd* wnd)
 {
 	ZappEdit::OnSetFocus(wnd);
 	SetSel(-1,0);
-//  ilwapp->SetHelpTopic(_fe->htp());
+//  ilwapp->setHelpItem(_fe->htp());
 //    static String s= text();
 //    text(s);
 }
@@ -359,7 +359,7 @@ afx_msg void StringMultiEdit::OnSetFocus(CWnd* wnd)
 /*
 afx_msg void StringMultiEdit::OnKillFocus(CWnd*)
 {
-    ilwapp->SetHelpTopic(_fe->frm()->htp());
+    ilwapp->setHelpItem(_fe->frm()->htp());
     SetSel(-1,0);
 }
 */
@@ -539,7 +539,7 @@ void FieldStringSimple::SetFocus()
 {
 	if (se)
 		se->SetFocus();
-  _frm->ilwapp->SetHelpTopic(htp());
+  _frm->ilwapp->setHelpItem(htp());
 }
 
 //-------------------------------------------------------------------------------------------------[ FieldStringMultiSimple ]----------
@@ -644,7 +644,7 @@ void FieldStringMultiSimple::SetFocus()
 {
 	if (se)
 		se->SetFocus();
-  _frm->ilwapp->SetHelpTopic(htp());
+  _frm->ilwapp->setHelpItem(htp());
 }
 
 void FieldStringMultiSimple::Enable()
@@ -690,14 +690,14 @@ FormattedEdit::FormattedEdit(FormEntry* fe, CWnd *parent, const CRect& rct, unsi
 afx_msg void FormattedEdit::OnSetFocus(CWnd* oldWindow)
 {
   CEdit::OnSetFocus(oldWindow);           
-  ilwapp->SetHelpTopic(_fe->htp());       
+  ilwapp->setHelpItem(_fe->htp());       
                             
 }
 
 afx_msg void FormattedEdit::OnKillFocus(CWnd* oldWindow)
 {
   CEdit::OnKillFocus(oldWindow);
-  ilwapp->SetHelpTopic(_fe->frm()->htp()); 
+  ilwapp->setHelpItem(_fe->frm()->htp()); 
   SetSel(-1, 0); 
 }                
 //----------------------------------------------------------------------------------------[ LongEdit ]--------
@@ -1082,7 +1082,7 @@ void FieldIntSimple::SetFocus()
 {
   if (le)
     le->SetFocus();
-  _frm->ilwapp->SetHelpTopic(htp());
+  _frm->ilwapp->setHelpItem(htp());
 }
 
 //-----------------------------------------------------------------------------------[ FieldRealSimple ]----------------
@@ -1305,15 +1305,15 @@ void FieldRealSimple::SetFocus()
 {
   if (de)
     de->SetFocus();
-  _frm->ilwapp->SetHelpTopic(htp());
+  _frm->ilwapp->setHelpItem(htp());
 }
 //--------------------------------------------------------------------------------------[ FieldValueSimple ]--------------
 /*
 #define genfocus()                          \
  if (ev->gainFocus())                       \
-    ilwapp->SetHelpTopic(_fe->htp());       \
+    ilwapp->setHelpItem(_fe->htp());       \
   else {                                    \
-    ilwapp->SetHelpTopic(_fe->frm()->htp());  \
+    ilwapp->setHelpItem(_fe->frm()->htp());  \
      selection(-1, 0);                      \
   }                                         \
   return 0;
@@ -1391,7 +1391,7 @@ void FieldValueSimple::StoreData()
 void FieldValueSimple::SetFocus()
 {
   fe->SetFocus();
-  _frm->ilwapp->SetHelpTopic(htp());
+  _frm->ilwapp->setHelpItem(htp());
 } 
 
 

@@ -111,7 +111,7 @@ void FieldDataTypeSimple::Init()
 			_sName = String("%S%S", fn.sFile, fn.sExt);
 	}
 
-	SetHelpTopic(htpUiDataType);
+	setHelpItem(htpUiDataType);
 	fAllowEmpty = false;
 	zDimension dim = Dim("gh");
 	psn->iHeight = dim.cy + 9;
@@ -217,7 +217,7 @@ void FieldDataTypeSimple::SetFocus()
   if (ne)
     ne->SetFocus();
 #endif
-  _frm->ilwapp->SetHelpTopic(htp());
+  _frm->ilwapp->setHelpItem(htp());
 }
 
 void FieldDataTypeSimple::Enable() 
@@ -265,7 +265,7 @@ FieldDataType::FieldDataType(FormEntry* p, const String& sQuestion,
 	st->psn->iHeight = fld->psn->iHeight;
 	psn->iHeight = fld->psn->iHeight;
   }
-  SetHelpTopic(htpUiDataType);
+  setHelpItem(htpUiDataType);
 }
 
 FieldDataType::FieldDataType(FormEntry* p, const String& sQuestion,
@@ -300,7 +300,7 @@ FieldDataType::FieldDataType(FormEntry* p, const String& sQuestion,
 	st->psn->iHeight = fld->psn->iHeight;
 	psn->iHeight = fld->psn->iHeight;
   }
-  SetHelpTopic(htpUiDataType);
+  setHelpItem(htpUiDataType);
 }
 
 FieldDataType::FieldDataType(FormEntry* p, const String& sQuestion,
@@ -426,7 +426,7 @@ FieldDataTypeCreate::FieldDataTypeCreate(FormEntry* p, const String& sQuestion, 
   fld->psn->iMinWidth = FLDNAMEOUTPUTWIDTH;
   if (st)
     fld->Align(st, AL_AFTER);
-  SetHelpTopic(htpUiDataType);
+  setHelpItem(htpUiDataType);
 }
 
 FieldDataTypeCreate::FieldDataTypeCreate(FormEntry* p, const String& sQuestion,
@@ -444,7 +444,7 @@ FieldDataTypeCreate::FieldDataTypeCreate(FormEntry* p, const String& sQuestion,
   fld->psn->iMinWidth = FLDNAMEOUTPUTWIDTH;
   if (st)
     fld->Align(st, AL_AFTER);
-  SetHelpTopic(htpUiDataType);
+  setHelpItem(htpUiDataType);
 }
 
 FieldDataTypeCreate::~FieldDataTypeCreate()
@@ -527,7 +527,7 @@ FieldMapFromMapList::FieldMapFromMapList(FormEntry* p, const String& sQuestion,
 	fld->SetWidth(FLDNAMEWIDTH);
   if (st)
     fld->Align(st, AL_AFTER);
-  SetHelpTopic(htpUiColumn);
+  setHelpItem(htpUiColumn);
 };
 
 void FieldMapFromMapList::create()
@@ -574,7 +574,7 @@ void FieldMapFromMapList::FillWithMaps(const MapList& ml)
 void FieldMapFromMapList::SetFocus()
 {
   fld->SetFocus();
-  _frm->ilwapp->SetHelpTopic(htp());
+  _frm->ilwapp->setHelpItem(htp());
 }
 
 

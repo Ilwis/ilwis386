@@ -58,8 +58,8 @@ public:
   void create();
   void StoreData();         
   void SetFocus() { fld->SetFocus(); }   
-  void SetHelpTopic(const HelpTopic& htp)
-    { fld->SetHelpTopic(htp); }
+  void setHelpItem(const HelpTopic& htp)
+    { fld->setHelpItem(htp); }
   void SetCallBack(NotifyProc np)
     { fld->SetCallBack(np); }
   void SetCallBack(NotifyProc np, CallBackHandler* cb)

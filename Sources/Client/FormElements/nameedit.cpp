@@ -174,7 +174,7 @@ void BaseNameEdit::OnCloseUp()
 void BaseNameEdit::OnSetFocus(CWnd *pOldWin)
 {
   CComboBox::OnSetFocus(pOldWin);
-//  ilwapp->SetHelpTopic(_fe->htp());
+//  ilwapp->setHelpItem(_fe->htp());
 }
 
 //----[ NameEditDropTarget ]---------------------------------------------------------------------------------------------------

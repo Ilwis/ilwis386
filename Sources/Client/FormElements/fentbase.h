@@ -78,7 +78,7 @@ public:
   virtual void            StoreData();            // store result in destination
   virtual void            Enable();
   virtual void            Disable();
-  virtual void            SetHelpTopic(const HelpTopic& htp);
+  virtual void            setHelpItem(const HelpTopic& htp);
   virtual void            SetCallBack(NotifyProc np);
   virtual void            SetCallBack(NotifyProc np, CallBackHandler* cb);
   virtual void            SetWidth(short iWid);

@@ -100,6 +100,7 @@ LayerTreeView::LayerTreeView()
 LayerTreeView::~LayerTreeView()
 {
 	delete odt;
+	drwTool->clear();
 	delete drwTool;
 }
 
@@ -417,6 +418,9 @@ void LayerTreeView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		CTreeCtrl& tc = GetTreeCtrl();
 		HTREEITEM hti = tc.GetSelectedItem();
 		SwitchCheckBox(hti);
+	}
+	if ( nChar == VK_DELETE) {
+		OnRemoveLayer();
 	}
 	else
 		CTreeView::OnKeyDown(nChar, nRepCnt, nFlags);
@@ -776,6 +780,10 @@ bool LayerTreeView::getItem(HTREEITEM hItem, UINT mask, TreeItem& treeitem) cons
 	treeitem.item.mask = mask;
 	BOOL ok =  GetTreeCtrl().GetItem(&(treeitem.item));
 	return ok == TRUE;
+}
+
+ILWIS::DrawerTool *LayerTreeView::getRootTool() {
+	return drwTool;
 }
 
 #ifdef _DEBUG

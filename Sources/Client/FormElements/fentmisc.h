@@ -132,8 +132,8 @@ public:
 	void StoreData()           // overriden
 	{ fld->StoreData(); }
 	void SetFocus();
-	void SetHelpTopic(const HelpTopic& htp) // overriden
-	{ fld->SetHelpTopic(htp); }
+	void setHelpItem(const HelpTopic& htp) // overriden
+	{ fld->setHelpItem(htp); }
 	void SetCallBack(NotifyProc np)
 	{ FormEntry::SetCallBack(np); fld->SetCallBack(np); }
 	void SetCallBack(NotifyProc np, CallBackHandler* cb)
@@ -171,8 +171,8 @@ public:
 	void StoreData()           // overriden
 	{ fld->StoreData(); }
 	void _export SetFocus();
-	void SetHelpTopic(const HelpTopic& htp) // overriden
-	{ fld->SetHelpTopic(htp); }
+	void setHelpItem(const HelpTopic& htp) // overriden
+	{ fld->setHelpItem(htp); }
 	void SetCallBack(NotifyProc np)
 	{ FormEntry::SetCallBack(np); fld->SetCallBack(np); }
 	void SetCallBack(NotifyProc np, CallBackHandler* cb)
@@ -243,8 +243,8 @@ public:
 	{ fld->StoreData(); }
 
 	void SetFocus();
-	void SetHelpTopic(const HelpTopic& htp) // overriden
-	{ fld->SetHelpTopic(htp); }
+	void setHelpItem(const HelpTopic& htp) // overriden
+	{ fld->setHelpItem(htp); }
 	void SetCallBack(NotifyProc np)
 	{ FormEntry::SetCallBack(np); fld->SetCallBack(np); }
 	void SetCallBack(NotifyProc np, CallBackHandler* cb)
@@ -291,8 +291,8 @@ public:
 	void _export StoreData()           // overriden
 	{ fld->StoreData(); }
 	void SetFocus();
-	void SetHelpTopic(const HelpTopic& htp) // overriden
-	{ fld->SetHelpTopic(htp); }
+	void setHelpItem(const HelpTopic& htp) // overriden
+	{ fld->setHelpItem(htp); }
 	void SetCallBack(NotifyProc np)
 	{ FormEntry::SetCallBack(np); fld->SetCallBack(np); }
 	void SetCallBack(NotifyProc np, CallBackHandler* cb)
@@ -332,8 +332,8 @@ public:
 	void create();             // overriden
 	void StoreData();          // overriden
 	void SetFocus();           // overriden
-	void SetHelpTopic(const HelpTopic& htp) // overriden
-	{ fiLo->SetHelpTopic(htp); fiHi->SetHelpTopic(htp); }
+	void setHelpItem(const HelpTopic& htp) // overriden
+	{ fiLo->setHelpItem(htp); fiHi->setHelpItem(htp); }
 	void SetCallBack(NotifyProc np) // overriden
 	{ FormEntry::SetCallBack(np); fiLo->SetCallBack(np); fiHi->SetCallBack(np); }
 	void SetCallBack(NotifyProc np, CallBackHandler* cb)
@@ -378,8 +378,8 @@ public:
 	void StoreData();          // overriden
 	void SetFocus();           // overriden
 	String sGetText();
-	void SetHelpTopic(const HelpTopic& htp) // overriden
-	{ frLo->SetHelpTopic(htp); frHi->SetHelpTopic(htp); }
+	void setHelpItem(const HelpTopic& htp) // overriden
+	{ frLo->setHelpItem(htp); frHi->setHelpItem(htp); }
 	void SetCallBack(NotifyProc np) // overriden
 	{ FormEntry::SetCallBack(np); frLo->SetCallBack(np); frHi->SetCallBack(np); }
 	void SetCallBack(NotifyProc np, CallBackHandler* cb)
@@ -419,8 +419,8 @@ public:
 		fiRow->SetReadOnly(fVal);
 		fiCol->SetReadOnly(fVal);
 	}	
-	void SetHelpTopic(const HelpTopic& htp) // overriden
-	{ fiRow->SetHelpTopic(htp); fiCol->SetHelpTopic(htp); }
+	void setHelpItem(const HelpTopic& htp) // overriden
+	{ fiRow->setHelpItem(htp); fiCol->setHelpItem(htp); }
 	void SetCallBack(NotifyProc np) // overriden
 	{ FormEntry::SetCallBack(np); fiRow->SetCallBack(np); fiCol->SetCallBack(np); }
 	void SetCallBack(NotifyProc np, CallBackHandler* cb)
@@ -464,8 +464,8 @@ public:
 		frX->SetReadOnly(fVal);
 		frY->SetReadOnly(fVal);
 	}	
-	void SetHelpTopic(const HelpTopic& htp) // overriden
-	{ frX->SetHelpTopic(htp); frY->SetHelpTopic(htp); }
+	void setHelpItem(const HelpTopic& htp) // overriden
+	{ frX->setHelpItem(htp); frY->setHelpItem(htp); }
 	void SetCallBack(NotifyProc np) // overriden
 	{ FormEntry::SetCallBack(np); frX->SetCallBack(np); frY->SetCallBack(np); }
 	void SetCallBack(NotifyProc np, CallBackHandler* cb)
@@ -756,8 +756,8 @@ public:
 	void StoreData()           // overriden
 	{ fld->StoreData(); }
 	void SetFocus();
-	void SetHelpTopic(const HelpTopic& htp) // overriden
-	{ fld->SetHelpTopic(htp); }
+	void setHelpItem(const HelpTopic& htp) // overriden
+	{ fld->setHelpItem(htp); }
 	void SetCallBack(NotifyProc np)
 	{ FormEntry::SetCallBack(np); fld->SetCallBack(np); }
 	void SetCallBack(NotifyProc np, CallBackHandler* cb)
@@ -805,7 +805,7 @@ public:
 	}
 	void Enable();
 	void Disable();
-	void SetHelpTopic(const HelpTopic& htp) // overriden
+	void setHelpItem(const HelpTopic& htp) // overriden
 	{  }
 	void SetCallBack(NotifyProc np) // overriden
 	{ FormEntry::SetCallBack(np); frDay->SetCallBack(np); frMonth->SetCallBack(np); frYear->SetCallBack(np); }

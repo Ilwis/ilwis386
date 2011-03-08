@@ -390,7 +390,7 @@ FieldInt::FieldInt(FormEntry* p, const String& sQuestion,
   fld = new FieldIntSimple(this, prm, dm, fSpinControl);
   if (st)
     fld->Align(st, AL_AFTER);
-  SetHelpTopic(htpUiInt);
+  setHelpItem(htpUiInt);
 }
 
 FieldInt::FieldInt(FormEntry* p, const String& sQuestion,
@@ -404,7 +404,7 @@ FieldInt::FieldInt(FormEntry* p, const String& sQuestion,
   fld = new FieldIntSimple(this, pbVal, vri, fSpinControl);
   if (st)
     fld->Align(st, AL_AFTER);
-  SetHelpTopic(htpUiInt);
+  setHelpItem(htpUiInt);
 }
 
 FieldInt::FieldInt(FormEntry* p, const String& sQuestion,
@@ -418,7 +418,7 @@ FieldInt::FieldInt(FormEntry* p, const String& sQuestion,
   fld = new FieldIntSimple(this, piVal, vri, fSpinControl);
   if (st)
     fld->Align(st, AL_AFTER);
-  SetHelpTopic(htpUiInt);
+  setHelpItem(htpUiInt);
 }
 
 FieldInt::FieldInt(FormEntry* p, const String& sQuestion,
@@ -432,7 +432,7 @@ FieldInt::FieldInt(FormEntry* p, const String& sQuestion,
   fld = new FieldIntSimple(this, piVal, vri, fSpinControl, fAcceptUndef);
   if (st)
     fld->Align(st, AL_AFTER);
-  SetHelpTopic(htpUiInt);
+  setHelpItem(htpUiInt);
 }
 
 
@@ -447,7 +447,7 @@ FieldInt::FieldInt(FormEntry* p, const String& sQuestion,
   fld = new FieldIntSimple(this, piVal, vri, fSpinControl);
   if (st)
     fld->Align(st, AL_AFTER);
-  SetHelpTopic(htpUiInt);
+  setHelpItem(htpUiInt);
 }
 
 FieldInt::FieldInt(FormEntry* p, const String& sQuestion,
@@ -461,7 +461,7 @@ FieldInt::FieldInt(FormEntry* p, const String& sQuestion,
   fld = new FieldIntSimple(this, pbVal, dm, fSpinControl);
   if (st)
     fld->Align(st, AL_AFTER);
-  SetHelpTopic(htpUiInt);
+  setHelpItem(htpUiInt);
 }
 
 FieldInt::FieldInt(FormEntry* p, const String& sQuestion,
@@ -475,7 +475,7 @@ FieldInt::FieldInt(FormEntry* p, const String& sQuestion,
   fld = new FieldIntSimple(this, piVal, dm, fSpinControl);
   if (st)
     fld->Align(st, AL_AFTER);
-  SetHelpTopic(htpUiInt);
+  setHelpItem(htpUiInt);
 }
 
 FieldInt::FieldInt(FormEntry* p, const String& sQuestion,
@@ -489,7 +489,7 @@ FieldInt::FieldInt(FormEntry* p, const String& sQuestion,
   fld = new FieldIntSimple(this, piVal, dm, fSpinControl);
   if (st)
     fld->Align(st, AL_AFTER);
-  SetHelpTopic(htpUiInt);
+  setHelpItem(htpUiInt);
 }
 
 
@@ -545,7 +545,7 @@ FieldReal::FieldReal(FormEntry* p, const String& sQuestion, Parm *prm,
   fld = new FieldRealSimple(this, prm, dm);
   if (st)
     fld->Align(st, AL_AFTER);
-  SetHelpTopic(htpUiReal);
+  setHelpItem(htpUiReal);
 }
 
 FieldReal::FieldReal(FormEntry* p, const String& sQuestion,
@@ -559,7 +559,7 @@ FieldReal::FieldReal(FormEntry* p, const String& sQuestion,
   fld = new FieldRealSimple(this, prVal, vrr);
   if (st)
     fld->Align(st, AL_AFTER);
-  SetHelpTopic(htpUiReal);
+  setHelpItem(htpUiReal);
 }
 
 FieldReal::FieldReal(FormEntry* p, const String& sQuestion,
@@ -573,7 +573,7 @@ FieldReal::FieldReal(FormEntry* p, const String& sQuestion,
   fld = new FieldRealSimple(this, prVal, vrr);
   if (st)
     fld->Align(st, AL_AFTER);
-  SetHelpTopic(htpUiReal);
+  setHelpItem(htpUiReal);
 }
 
 FieldReal::FieldReal(FormEntry* p, const String& sQuestion,
@@ -588,7 +588,7 @@ FieldReal::FieldReal(FormEntry* p, const String& sQuestion,
   fld = new FieldRealSimple(this, prVal, dm);
   if (st)
     fld->Align(st, AL_AFTER);
-  SetHelpTopic(htpUiReal);
+  setHelpItem(htpUiReal);
 }
 
 FieldReal::FieldReal(FormEntry* p, const String& sQuestion,
@@ -602,7 +602,7 @@ FieldReal::FieldReal(FormEntry* p, const String& sQuestion,
   fld = new FieldRealSimple(this, prVal, dm);
   if (st)
     fld->Align(st, AL_AFTER);
-  SetHelpTopic(htpUiReal);
+  setHelpItem(htpUiReal);
 }
 
 FieldReal::~FieldReal()
@@ -690,7 +690,7 @@ void FieldRangeInt::Init(const String& sQuestion, RangeInt rng, const ValueRange
   fiHi->Align(fiLo, AL_AFTER, 10);
   if (_npChanged)
     SetCallBack(_npChanged,_cb);
-  SetHelpTopic(htpUiRangeInt);
+  setHelpItem(htpUiRangeInt);
 }
 
 FieldRangeInt::~FieldRangeInt()
@@ -745,7 +745,7 @@ void FieldRangeInt::StoreData()
 void FieldRangeInt::SetFocus()
 {
   fiLo->SetFocus();
-  _frm->ilwapp->SetHelpTopic(htp());
+  _frm->ilwapp->setHelpItem(htp());
 }
 
 void FieldRangeInt::SetWidth(short iWidth) 
@@ -803,7 +803,7 @@ void FieldRangeReal::Init(const String& sQuestion, RangeReal rng,
   frHi->Align(frLo, AL_AFTER, 10);
   if (_npChanged)
     SetCallBack(_npChanged,_cb);
-  SetHelpTopic(htpUiRangeReal);
+  setHelpItem(htpUiRangeReal);
 }
 
 
@@ -863,7 +863,7 @@ void FieldRangeReal::StoreData()
 void FieldRangeReal::SetFocus()
 {
   frLo->SetFocus();
-  _frm->ilwapp->SetHelpTopic(htp());
+  _frm->ilwapp->setHelpItem(htp());
 }
 
 void FieldRangeReal::SetWidth(short iWidth)
@@ -948,7 +948,7 @@ void FieldRowCol::Init(const String& sQuestion)
   fiCol->Align(fiRow, AL_AFTER, 10);
   if (_npChanged)
     SetCallBack(_npChanged,_cb);
-  SetHelpTopic(htpUiRowCol);
+  setHelpItem(htpUiRowCol);
 }
 
 
@@ -993,7 +993,7 @@ void FieldRowCol::StoreData()
 void FieldRowCol::SetFocus()
 {
   fiRow->SetFocus();
-  _frm->ilwapp->SetHelpTopic(htp());
+  _frm->ilwapp->setHelpItem(htp());
 }
 
 void FieldRowCol::SetWidth(short iWidth)
@@ -1047,7 +1047,7 @@ void FieldCoord::Init(const String& sQuestion)
   frY->Align(frX, AL_AFTER, 10);
   if (_npChanged)
     SetCallBack(_npChanged,_cb);
-  SetHelpTopic(htpUiCoord);
+  setHelpItem(htpUiCoord);
 }
 
 
@@ -1100,7 +1100,7 @@ void FieldCoord::StoreData()
 void FieldCoord::SetFocus()
 {
   frX->SetFocus();
-  _frm->ilwapp->SetHelpTopic(htp());
+  _frm->ilwapp->setHelpItem(htp());
 }
 
 void FieldCoord::SetWidth(short iWidth)
@@ -1163,7 +1163,7 @@ void FieldDate::Init(const String& sQuestion)
 
   if (_npChanged)
     SetCallBack(_npChanged,_cb);
-  //SetHelpTopic(htpUiCoord);
+  //setHelpItem(htpUiCoord);
 }
 
 int FieldDate::showCalendar(Event *ev) {
@@ -1261,7 +1261,7 @@ void FieldDate::StoreData()
 void FieldDate::SetFocus()
 {
   frDay->SetFocus();
-  //_frm->ilwapp->SetHelpTopic(htp());
+  //_frm->ilwapp->setHelpItem(htp());
 }
 
 void FieldDate::SetWidth(short iWidth)

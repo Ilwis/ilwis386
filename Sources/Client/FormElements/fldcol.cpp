@@ -59,7 +59,7 @@ FieldColumn::FieldColumn(FormEntry* p, const String& sQuestion,
   fld = new FieldOneSelect(this, 0);
   if (st)
     fld->Align(st, AL_AFTER);
-  SetHelpTopic(htpUiColumn);
+  setHelpItem(htpUiColumn);
 }
 */
 FieldColumn::FieldColumn(FormEntry* p, const String& sQuestion,
@@ -77,7 +77,7 @@ FieldColumn::FieldColumn(FormEntry* p, const String& sQuestion,
 	fld->psn->iMinWidth *= 1.5;
   if (st)
     fld->Align(st, AL_AFTER);
-  SetHelpTopic(htpUiColumn);
+  setHelpItem(htpUiColumn);
 };
 
 
@@ -96,7 +96,7 @@ FieldColumn::FieldColumn(FormEntry* p, const String& sQuestion,
 	fld->psn->iMinWidth *= 1.5;
   if (st)
     fld->Align(st, AL_AFTER);
-  SetHelpTopic(htpUiColumn);
+  setHelpItem(htpUiColumn);
 };
 
 
@@ -299,7 +299,7 @@ void FieldColumn::FillWithColumns(const FileName& fnTbl, const Domain& dmCol)
 void FieldColumn::SetFocus()
 {
   fld->SetFocus();
-  _frm->ilwapp->SetHelpTopic(htp());
+  _frm->ilwapp->setHelpItem(htp());
 }
 
 void FieldColumn::SetSelected(int iIndex)

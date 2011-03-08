@@ -48,6 +48,7 @@ Created on: 2007-02-8
 #include "Client\MainWindow\Catalog\CatalogDocument.h"
 #include <afxole.h>
 #include "Engine\Map\Mapview.h"
+#include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\MapPaneView.h"
 #include "Client\Mapwindow\Positioner.h"
@@ -55,6 +56,7 @@ Created on: 2007-02-8
 #include "Engine\Drawers\AbstractMapDrawer.h"
 #include "Headers\constant.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
+#include "Client\Mapwindow\Drawers\DrawerTool.h"
 #include "Engine\Drawers\DrawerContext.h"
 #include "Client\Mapwindow\AreaSelector.h"
 #include "winuser.h"
@@ -1221,5 +1223,5 @@ void MapPaneView::OnUpdateShowRecordView(CCmdUI* pCmdUI)
 void MapPaneView::OnTimer(UINT timerID) {
 	MapCompositionDoc *doc = GetDocument();
 	doc->rootDrawer->timedEvent(timerID);
-
+	doc->ltvGetView()->getRootTool()->timedEvent(timerID);
 }

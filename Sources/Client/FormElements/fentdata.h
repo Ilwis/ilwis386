@@ -102,8 +102,8 @@ public:
   _export ~FieldDataType();
   void SetObjLister(ObjectLister* objl) 
     { fld->SetObjLister(objl); }
-  virtual void SetHelpTopic(const HelpTopic& htp)
-    { fld->SetHelpTopic(htp); FormEntry::SetHelpTopic(htp); }
+  virtual void setHelpItem(const HelpTopic& htp)
+    { fld->setHelpItem(htp); FormEntry::setHelpItem(htp); }
   void SetAllowEmpty(bool f = true) { fld->SetAllowEmpty(f); }
   void SetVal(const String& sVal)
     { fld->SetVal(sVal); }
@@ -166,8 +166,8 @@ public:
   _export FieldDataTypeCreate(FormEntry*, const String& sQuestion,
                       String *psName, const String& sExt, bool fExt);
   _export ~FieldDataTypeCreate();
-  virtual void SetHelpTopic(const HelpTopic& htp)
-    { fld->SetHelpTopic(htp); FormEntry::SetHelpTopic(htp); }
+  virtual void setHelpItem(const HelpTopic& htp)
+    { fld->setHelpItem(htp); FormEntry::setHelpItem(htp); }
   void _export SetVal(const String& sVal);
   void SetFocus()
     { fld->SetFocus(); }  // overriden
@@ -224,10 +224,10 @@ public:
            Parm *prm)
     : FieldDataType(parent, sQuestion, prm, ".MPR",
                     true)
-    { SetHelpTopic(htpUiMap); }
+    { setHelpItem(htpUiMap); }
   FieldMap(FormEntry* parent, const String& sQuestion, String *sName, ObjectLister *obl=NULL)
     : FieldDataType(parent, sQuestion, sName, ".MPR", true, obl)
-    { SetHelpTopic(htpUiMap); }
+    { setHelpItem(htpUiMap); }
 };
 
 class _export FieldMapCreate: public FieldDataTypeCreate
@@ -236,12 +236,12 @@ public:
   FieldMapCreate(FormEntry* parent, const String& sQuestion,
                        Parm *prm)
     : FieldDataTypeCreate(parent, sQuestion, prm, ".MPR", false)
-    { SetHelpTopic(htpUiMap); }
+    { setHelpItem(htpUiMap); }
 
   FieldMapCreate(FormEntry* parent, const String& sQuestion,
                        String *sName)
     : FieldDataTypeCreate(parent, sQuestion, sName, ".MPR", false)
-    { SetHelpTopic(htpUiMap); }
+    { setHelpItem(htpUiMap); }
 };
 
 
@@ -254,13 +254,13 @@ public:
            Parm *prm)
     : FieldDataType(parent, sQuestion, prm, sBaseMapExtensions,
                     true) // return name with extension
-    { SetHelpTopic(htpUiBaseMap); }
+    { setHelpItem(htpUiBaseMap); }
 
   FieldBaseMap(FormEntry* parent, const String& sQuestion,
            String *sName)
     : FieldDataType(parent, sQuestion, sName, sBaseMapExtensions,
                     true) // return name with extension
-    { SetHelpTopic(htpUiBaseMap); }
+    { setHelpItem(htpUiBaseMap); }
 };
 
 
@@ -287,12 +287,12 @@ public:
            Parm *prm)
     : FieldDataType(parent, sQuestion, prm, ".MPS",
                     true)
-    { SetHelpTopic(htpUiSegMap); }
+    { setHelpItem(htpUiSegMap); }
 
   FieldSegmentMap(FormEntry* parent, const String& sQuestion, String *sName, ObjectLister *obl=NULL)
     : FieldDataType(parent, sQuestion, sName, ".MPS",
                     true, obl)
-    { SetHelpTopic(htpUiSegMap); }
+    { setHelpItem(htpUiSegMap); }
 
 };
 
@@ -303,13 +303,13 @@ public:
                        Parm *prm)
     : FieldDataTypeCreate(parent, sQuestion, prm, ".MPS",
                     false)
-    { SetHelpTopic(htpUiSegMap); }
+    { setHelpItem(htpUiSegMap); }
 
   FieldSegmentMapCreate(FormEntry* parent, const String& sQuestion,
                        String *sName)
     : FieldDataTypeCreate(parent, sQuestion, sName, ".MPS",
                     false)
-    { SetHelpTopic(htpUiSegMap); }
+    { setHelpItem(htpUiSegMap); }
 };
 
 
@@ -320,10 +320,10 @@ public:
            Parm *prm)
     : FieldDataType(parent, sQuestion, prm, ".MPA",
                     true)
-    { SetHelpTopic(htpUiPolMap); }
+    { setHelpItem(htpUiPolMap); }
   FieldPolygonMap(FormEntry* parent, const String& sQuestion, String *sName, ObjectLister *obl=NULL)
     : FieldDataType(parent, sQuestion, sName, ".MPA", true, obl)
-    { SetHelpTopic(htpUiPolMap); }
+    { setHelpItem(htpUiPolMap); }
 };
 
 class _export FieldPolygonMapCreate: public FieldDataTypeCreate
@@ -333,12 +333,12 @@ public:
                        Parm *prm)
     : FieldDataTypeCreate(parent, sQuestion, prm, ".MPA",
                     false)
-    { SetHelpTopic(htpUiPolMap); }
+    { setHelpItem(htpUiPolMap); }
   FieldPolygonMapCreate(FormEntry* parent, const String& sQuestion,
                        String *sName)
     : FieldDataTypeCreate(parent, sQuestion, sName, ".MPA",
                     false)
-    { SetHelpTopic(htpUiPolMap); }
+    { setHelpItem(htpUiPolMap); }
 };
 
 class _export FieldPointMap: public FieldDataType
@@ -347,10 +347,10 @@ public:
   FieldPointMap(FormEntry* parent, const String& sQuestion,
            Parm *prm)
     : FieldDataType(parent, sQuestion, prm, ".MPP", true)
-    { SetHelpTopic(htpUiPntMap); }
+    { setHelpItem(htpUiPntMap); }
   FieldPointMap(FormEntry* parent, const String& sQuestion, String *sName, ObjectLister *obl=NULL)
     : FieldDataType(parent, sQuestion, sName, ".MPP", true, obl)
-    { SetHelpTopic(htpUiPntMap); }
+    { setHelpItem(htpUiPntMap); }
 };
 
 class _export FieldPointMapCreate: public FieldDataTypeCreate
@@ -360,12 +360,12 @@ public:
                        Parm *prm)
     : FieldDataTypeCreate(parent, sQuestion, prm, ".MPP",
                     false)
-    { SetHelpTopic(htpUiPntMap); }
+    { setHelpItem(htpUiPntMap); }
   FieldPointMapCreate(FormEntry* parent, const String& sQuestion,
                        String *sName)
     : FieldDataTypeCreate(parent, sQuestion, sName, ".MPP",
                     false)
-    { SetHelpTopic(htpUiPntMap); }
+    { setHelpItem(htpUiPntMap); }
 };
 
 class _export FieldMatrix: public FieldDataType
@@ -415,12 +415,12 @@ public:
             Parm *prm)
     : FieldDataType(parent, sQuestion, prm, ".MPV",
                     true)
-    { SetHelpTopic(htpUiView); }
+    { setHelpItem(htpUiView); }
   FieldView(FormEntry* parent, const String& sQuestion,
             String *sName)
     : FieldDataType(parent, sQuestion, sName, ".MPV",
                     true)
-    { SetHelpTopic(htpUiView); }
+    { setHelpItem(htpUiView); }
 };
 
 class _export FieldViewCreate: public FieldDataTypeCreate
@@ -430,13 +430,13 @@ public:
                        Parm *prm)
     : FieldDataTypeCreate(parent, sQuestion, prm, ".MPV",
                     true)
-    { SetHelpTopic(htpUiTbl); }
+    { setHelpItem(htpUiTbl); }
 
   FieldViewCreate(FormEntry* parent, const String& sQuestion,
                        String *sName)
     : FieldDataTypeCreate(parent, sQuestion, sName, ".MPV",
                     true)
-    { SetHelpTopic(htpUiTbl); }
+    { setHelpItem(htpUiTbl); }
 };
 
 class _export FieldMapFromMapList: public FormEntry

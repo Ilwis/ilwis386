@@ -56,7 +56,7 @@ END_MESSAGE_MAP()
 
 FormBasePropertyPage::FormBasePropertyPage(const string& sTitle)
 {
-	SetHelpTopic(htpContentsIlwis);
+	setHelpItem(htpContentsIlwis);
 	dummyWindow=new CWnd(); 
 	dummyWindow->Create(NULL, "dummy", WS_CHILD, CRect(0,0,100,100), GetDesktopWindow(), 101);
 	_windsp = new zDisplay(dummyWindow);

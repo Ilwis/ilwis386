@@ -41,7 +41,6 @@ Created on: 2007-02-8
 #include "Engine\Base\StlExtensions.h"
 #include "Client\Help\ChmFinder.h"
 #include "Headers\constant.h"
-#include "Headers\xercesc\util\Platforms\Win32\resource.h"
 #include "Headers\Hs\Mainwind.hs"
 #include "Engine\Base\Algorithm\Random.h"
 #include "Headers\htmlhelp.h"
@@ -257,7 +256,7 @@ afx_msg void FormBaseDialog::OnDrawItem( int nIDCtl, LPDRAWITEMSTRUCT dis )
 
 afx_msg void FormBaseDialog::OnSetFocus( CWnd* pOldWnd )
 {
-	ilwapp->SetHelpTopic(htp());
+	ilwapp->setHelpItem(htp());
 }
 
 void FormBaseDialog::shutdown(int iReturn)
@@ -275,7 +274,7 @@ void FormBaseDialog::CreateDefaultPositions()
 	PRECONDITION(fINotEqual, root, (FormEntry *)NULL);
 
 	SetCursor(LoadCursor(NULL, IDC_WAIT));
-	ilwapp->SetHelpTopic(htp());
+	ilwapp->setHelpItem(htp());
 	try 
 	{
 		short i, j;

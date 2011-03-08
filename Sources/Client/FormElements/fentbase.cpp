@@ -141,7 +141,7 @@ FormEntry::FormEntry(FormEntry* p, Parm *prm, bool fAutoAlign) :
   {
     if (!(_par->fGroup() && (_par->children.iSize() == 0)))  // align entry
     {
-      if (!_frm->feLastInserted->fGroup() || (_frm->feLastInserted != _par)) 
+      if (_frm->feLastInserted &&(!_frm->feLastInserted->fGroup() || (_frm->feLastInserted != _par))) 
       {
         if (_par->fRadioButton() || _par->fCheckBox())
           Align(_par, AL_AFTER, 0);
@@ -215,7 +215,7 @@ bool FormEntry::fCheckBox() const
 bool FormEntry::fGroup() const 
 { return _par == 0; }
 
-void FormEntry::SetHelpTopic(const HelpTopic& htp)
+void FormEntry::setHelpItem(const HelpTopic& htp)
 { _htp = htp; }
 
 void FormEntry::SetCallBack(NotifyProc np) 

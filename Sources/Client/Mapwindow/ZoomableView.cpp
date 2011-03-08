@@ -101,8 +101,8 @@ ZoomableView::ZoomableView()
 	fScrollBarsVisible = true;
 	iActiveTool = 0;
 	xOld = yOld = iUNDEF;
-	zoomf = 0.0;
 	beginMovePoint = CPoint(iUNDEF, iUNDEF);
+	mode = cNone;
 }
 
 ZoomableView::~ZoomableView()
@@ -176,7 +176,7 @@ BOOL ZoomableView::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT*
 		case WM_MOUSEMOVE:
 			if (tools.size() > 0) 
 				tools.OnMouseMove(wParam, point);
-			else if (wParam & MK_CONTROL) moveEyePoint(point, message);
+			else if (wParam & MK_CONTROL) movePoint(point, message);
 			break;
 		case WM_LBUTTONDBLCLK:
 			if (tools.size() > 0) tools.OnLButtonDblClk(wParam, point);
@@ -193,8 +193,10 @@ BOOL ZoomableView::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT*
 			if (tools.size() > 0) tools.OnRButtonDblClk(wParam, point);
 			return FALSE;
 		case WM_RBUTTONDOWN:
-			if (tools.size() > 0) tools.OnRButtonDown(wParam, point);
-			return FALSE;
+			if (tools.size() > 0) 
+				tools.OnRButtonDown(wParam, point);
+			else if (wParam & MK_CONTROL) moveViewPoint(point, message);
+			break;
 		case WM_RBUTTONUP:
 			if (tools.size() > 0) tools.OnRButtonUp(wParam, point);
 			return FALSE;
@@ -202,20 +204,58 @@ BOOL ZoomableView::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT*
 	return CView::OnWndMsg(message, wParam, lParam, pResult);
 }
 
+void ZoomableView::movePoint(const CPoint& pnt, UINT message) {
+	if ( mode == cPan)
+		moveViewPoint(pnt, message);
+	if ( mode == cZoom)
+		moveEyePoint(pnt, message);
+
+}
+void ZoomableView::moveViewPoint(const CPoint& pnt, UINT message) {
+	MapCompositionDoc *doc = (MapCompositionDoc *)GetDocument();
+	if ( message == WM_RBUTTONDOWN) {
+		beginMovePoint = pnt;
+		mode = cPan;
+	}
+	else if ( message == WM_RBUTTONUP){
+		beginMovePoint = CPoint(iUNDEF,iUNDEF);
+		mode = cNone;
+	} else if (message == WM_MOUSEMOVE && beginMovePoint.x != iUNDEF) {
+		CRect rct;
+		GetClientRect(rct);
+		Coord viewPoint = doc->rootDrawer->getViewPoint();
+		double deltax = beginMovePoint.x - pnt.x;
+		double deltay = beginMovePoint.y - pnt.y;
+		if ( deltax == 0 && deltay == 0)
+			return;
+		deltax = deltax / rct.Width();
+		deltay = deltay / rct.Height();
+		CoordBounds cb = doc->rootDrawer->getCoordBoundsZoom();
+		double shiftx = cb.width() * deltax;
+		double shifty = cb.height() * deltay;
+		viewPoint.x += shiftx;
+		viewPoint.y += shifty;
+		doc->rootDrawer->setViewPoint(viewPoint);
+		
+		beginMovePoint = pnt;
+		Invalidate();
+	}
+}
+
 void ZoomableView::moveEyePoint(const CPoint& pnt, UINT message) {
+	MapCompositionDoc *doc = (MapCompositionDoc *)GetDocument();
 	if ( message == WM_LBUTTONDOWN) {
 		beginMovePoint = pnt;
+		mode = cZoom;
 	}
 	else if ( message == WM_LBUTTONUP){
 		beginMovePoint = CPoint(iUNDEF,iUNDEF);
-		MapCompositionDoc *doc = (MapCompositionDoc *)GetDocument();
-		Coord eyePoint = doc->rootDrawer->getEyePoint();
+		mode =  cNone;
 	} else if (message == WM_MOUSEMOVE && beginMovePoint.x != iUNDEF) {
 		double deltax = beginMovePoint.x - pnt.x;
 		double deltay = beginMovePoint.y - pnt.y;
 		if ( deltax == 0 && deltay == 0)
 			return;
-		MapCompositionDoc *doc = (MapCompositionDoc *)GetDocument();
 		double roll = deltax/2;
 		double yaw = deltay/2;
 		double rx,ry,rz;
@@ -225,7 +265,7 @@ void ZoomableView::moveEyePoint(const CPoint& pnt, UINT message) {
 		doc->rootDrawer->setRotationAngles(rx,ry,rz);
 
 		beginMovePoint = pnt;
-		doc->mpvGetView()->Invalidate();
+		Invalidate();
 	}
 }
 

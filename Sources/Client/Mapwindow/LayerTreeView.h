@@ -103,6 +103,7 @@ public:
 	bool getItem(HTREEITEM hItem, UINT mask, TreeItem& item) const;
 	void collectStructure(HTREEITEM parent=0, const String& name="");
 	void DeleteAllItems(HTREEITEM hti, bool childerenOnly=false);
+	ILWIS::DrawerTool *getRootTool();
 	//}}AFX_MSG
 protected:
 	void SwitchCheckBox(HTREEITEM hti);

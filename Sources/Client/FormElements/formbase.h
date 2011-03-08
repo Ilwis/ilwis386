@@ -98,12 +98,12 @@ public:
   int                  iDefFldHeight() 
                           { return _iDefFldHeight; } // default height of formentry
   void                 Add(Parm *prm);                // add prm to parm list pl
-  void                 SetHelpTopic(const HelpTopic& htp) 
+  void                 setHelpItem(const HelpTopic& htp) 
                           { _htp = htp; }
   void                 SetAppHelpTopic(unsigned long iTop)
-                          { SetHelpTopic(HelpTopic(iTop,"ilwis.chm")); }
+                          { setHelpItem(HelpTopic(iTop,"ilwis.chm")); }
   void                 SetMenHelpTopic(unsigned long iTop)
-                          { SetHelpTopic(HelpTopic(iTop,"ilwis.chm")); }
+                          { setHelpItem(HelpTopic(iTop,"ilwis.chm")); }
   HelpTopic&           htp() 
                           { return _htp; }
   bool                 fHideOnOk() const;

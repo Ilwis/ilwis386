@@ -774,7 +774,7 @@ public:
 			new FieldVal(root, sCol, cl->dvrs(), &sVal);
 		}
 		new FieldBlank(root);
-		SetHelpTopic(htpTblEditMultiRecords);
+		setHelpItem(htpTblEditMultiRecords);
 		create();
 	}
 private:
@@ -825,7 +825,7 @@ public:
 				}
 			}
 		}
-		SetHelpTopic(htpTblEditMultiFields);
+		setHelpItem(htpTblEditMultiFields);
 		create();
 	}
 private:

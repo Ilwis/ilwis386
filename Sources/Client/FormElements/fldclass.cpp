@@ -56,7 +56,7 @@ FieldClassSimple::FieldClassSimple(FormEntry* p, long* iClass, DomainSort* dsrt)
       SetWidth(iWidth);
   }
   rpr = ds->rpr();  
-//  SetHelpTopic(htpUiClass);
+//  setHelpItem(htpUiClass);
 }
 
 FieldClassSimple::~FieldClassSimple()

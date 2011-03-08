@@ -79,6 +79,13 @@ HTREEITEM DrawerTool::configure( HTREEITEM parentItem){
 	return parentItem;
 }
 
+//pseudo destructor; regular destructor is called too often(by design), this method can be called when a real cleanup mys be done
+void DrawerTool::clear() {
+	for(int i=0; i < tools.size(); ++i)
+		tools[i]->clear();
+	isConfigured = false;
+}
+
 void DrawerTool::addDrawer(ComplexDrawer *cdrw) {
 	if (!cdrw) 
 		return; 
@@ -211,12 +218,19 @@ MapCompositionDoc *DrawerTool::getDocument() const {
 MapPaneView *DrawerTool::mpvGetView() const {
 	return getDocument()->mpvGetView();
 }
+
+void DrawerTool::timedEvent(UINT timerid) {
+	for(vector<DrawerTool *>::iterator cur=tools.begin(); cur != tools.end(); ++cur) {
+		(*cur)->timedEvent(timerid);
+	}
+}
 //----------------------------------------------------------------------------
 
 DisplayOptionsForm::DisplayOptionsForm(ComplexDrawer *dr,CWnd *par, const String& title) : 
 FormBaseDialog(par,title,fbsApplyButton | fbsBUTTONSUNDER | fbsOKHASCLOSETEXT | fbsSHOWALWAYS),
 view((LayerTreeView *)par),
-drw(dr)
+drw(dr),
+initial(true)
 {
 }
 
@@ -236,11 +250,17 @@ void DisplayOptionsForm::updateMapView() {
 	doc->mpvGetView()->Invalidate();
 }
 
+void DisplayOptionsForm::create() {
+	FormBaseDialog::create();
+	initial = false;
+}
+
 //--------------------------------
 DisplayOptionsForm2::DisplayOptionsForm2(ComplexDrawer *dr,CWnd *par, const String& title, int style) : 
 FormBaseDialog(par,title,style),
 view((LayerTreeView *)par),
-drw(dr)
+drw(dr),
+initial(true)
 {
 }
 
@@ -251,6 +271,11 @@ int DisplayOptionsForm2::exec() {
 void DisplayOptionsForm2::updateMapView() {
 	MapCompositionDoc* doc = view->GetDocument();
 	doc->mpvGetView()->Invalidate();
+}
+
+void DisplayOptionsForm2::create() {
+	FormBaseDialog::create();
+	initial = false;
 }
 
 

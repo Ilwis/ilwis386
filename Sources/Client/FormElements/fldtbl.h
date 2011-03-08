@@ -52,13 +52,13 @@ public:
            Parm *prm)
     : FieldDataType(parent, sQuestion, prm, ".TBT",
                     true)
-    { SetHelpTopic(htpUiTbl); }
+    { setHelpItem(htpUiTbl); }
 
   _export FieldTable(FormEntry* parent, const String& sQuestion,
            String *sName, String sExtraExt=".TBT")
     : FieldDataType(parent, sQuestion, sName, sExtraExt,
                     true)
-    { SetHelpTopic(htpUiTbl); }
+    { setHelpItem(htpUiTbl); }
   void _export SetDomain(const Domain& dm);
 };
 
@@ -69,13 +69,13 @@ public:
                        Parm *prm)
     : FieldDataTypeCreate(parent, sQuestion, prm, ".TBT",
                     false)
-    { SetHelpTopic(htpUiTbl); }
+    { setHelpItem(htpUiTbl); }
 
   _export FieldTableCreate(FormEntry* parent, const String& sQuestion,
                        String *sName)
     : FieldDataTypeCreate(parent, sQuestion, sName, ".TBT",
                     false)
-    { SetHelpTopic(htpUiTbl); }
+    { setHelpItem(htpUiTbl); }
 };
 
 

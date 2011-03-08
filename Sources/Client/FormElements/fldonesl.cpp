@@ -320,13 +320,13 @@ int OneSelectEdit::storeData()
 void OneSelectEdit::OnSetFocus(CWnd *old)
 {
   OwnerDrawCB::OnSetFocus(old);
-  ilwapp->SetHelpTopic(_fe->htp());
+  ilwapp->setHelpItem(_fe->htp());
 }
 
 void OneSelectEdit::OnKillFocus(CWnd *old)
 {
   OwnerDrawCB::OnKillFocus(old);
-  ilwapp->SetHelpTopic(_fe->frm()->htp());
+  ilwapp->setHelpItem(_fe->frm()->htp());
 }
 
 // FieldOneSelectStringSimple -------------------------------------------------------------------------

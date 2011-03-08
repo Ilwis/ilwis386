@@ -94,7 +94,7 @@ FieldColumnLister::FieldColumnLister(FormEntry* feParent, vector<ClmInfo> &colIn
 	psn->iMinWidth = psn->iWidth = 450;
 	psn->iMinHeight = psn->iHeight = 150;
 
-//  SetHelpTopic(htpUiDataType);
+//  setHelpItem(htpUiDataType);
 }
 
 FieldColumnLister::~FieldColumnLister()

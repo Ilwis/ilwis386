@@ -891,7 +891,7 @@ void GeoRefEditor::OnTransformation()
 			new RadioButton(rg, SGRUiFullSecondOrder);
 			new RadioButton(rg, SGRUiThirdOrder);
 			new RadioButton(rg, SGRUiProjective);
-			//    SetHelpTopic(htpGeoRefEditor);
+			//    setHelpItem(htpGeoRefEditor);
 			SetMenHelpTopic(htpGrfEditTransf);
 			create();
 		}

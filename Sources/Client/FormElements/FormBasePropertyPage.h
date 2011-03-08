@@ -63,6 +63,7 @@ public:
 	virtual CWnd* wnd();
 	virtual void create();
 	virtual void OnOK();     
+	virtual int DataChanged(Event*);
 protected:
 	int exec();
 	void shutdown(int iReturn=IDCANCEL); 
@@ -74,7 +75,6 @@ protected:
 	afx_msg void OnDrawItem( int nIDCtl, LPDRAWITEMSTRUCT lpDrawItemStruct );
 	afx_msg void OnMeasureItem( int nIDCtl, LPMEASUREITEMSTRUCT mi );
 	afx_msg void OnHelp();                             
-	int DataChanged(Event*);
 private:
 	bool _fApplyClicked;
 	BOOL OnInitDialog();

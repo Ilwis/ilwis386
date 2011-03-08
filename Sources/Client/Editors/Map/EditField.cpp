@@ -270,7 +270,7 @@ public:
     new FieldString(root, SEDUiCode, sCode, Domain(), true);
     new FieldColor(root, SEDUiColor, clr);
     
-//    SetHelpTopic(htpDomainWindow);
+//    setHelpItem(htpDomainWindow);
     create();
   }
 };

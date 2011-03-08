@@ -53,13 +53,13 @@ class FieldRepresentation: public FieldDataType
 public:
   FieldRepresentation(FormEntry* parent, const String& sQuestion, Parm *prm) :
     FieldDataType(parent, sQuestion, prm, ".RPR",true)
-  { SetHelpTopic(htpUiRepresentation); }
+  { setHelpItem(htpUiRepresentation); }
   FieldRepresentation(FormEntry* parent, const String& sQuestion, String *sName) :
     FieldDataType(parent, sQuestion, sName, ".RPR", true)
-  { SetHelpTopic(htpUiRepresentation); }
+  { setHelpItem(htpUiRepresentation); }
   FieldRepresentation(FormEntry* parent, const String& sQuestion, String *sName, const Domain& dm) :
     FieldDataType(parent, sQuestion, sName, new RepresentationLister(dm), true)          
-  { SetHelpTopic(htpUiRepresentation); }
+  { setHelpItem(htpUiRepresentation); }
 };
 
 class FieldRepresentationC: public FieldDataTypeC

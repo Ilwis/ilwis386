@@ -42,6 +42,8 @@ public:
 	HTREEITEM getTreeItem() const { return htiNode; }
 	MapCompositionDoc *getDocument() const;
 	MapPaneView *mpvGetView() const;
+	virtual void clear();
+	virtual void timedEvent(UINT timerid);
 
 protected:
 	HTREEITEM insertItem(const String& name,const String& icon, DisplayOptionTreeItem *item=0, int checkstatus = -1, HTREEITEM after=TVI_LAST);
@@ -78,9 +80,11 @@ public:
 	int exec();
 	virtual void apply();
 protected:
+	void create();
 	void updateMapView();
 	ComplexDrawer *drw;
 	LayerTreeView *view;
+	bool initial;
 };
 
 class _export DisplayOptionsForm2 : public FormBaseDialog {
@@ -88,9 +92,11 @@ public:
 	DisplayOptionsForm2(ComplexDrawer *dr,CWnd *par, const String& title,int style=fbsBUTTONSUNDER | fbsSHOWALWAYS | fbsNOCANCELBUTTON);
 	int exec();
 protected:
+	void create();
 	void updateMapView();
 	ComplexDrawer *drw;
 	LayerTreeView *view;
+	bool initial;
 };
 
 

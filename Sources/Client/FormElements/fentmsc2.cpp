@@ -60,7 +60,7 @@ RadioButton::RadioButton(RadioGroup* p, const String& sQuestion,
   if (iChild > 1)
     Align(_par->childlist()[iChild-2], (p->fAlignHor) ? AL_AFTER : AL_UNDER);
 
-  SetHelpTopic(htpUiRadioButton);
+  setHelpItem(htpUiRadioButton);
 }
 
 RadioButton::RadioButton(RadioGroup* p, const String& sQuestion)
@@ -75,7 +75,7 @@ RadioButton::RadioButton(RadioGroup* p, const String& sQuestion)
   if (iChild > 1)
     Align(_par->childlist()[iChild-2], (p->fAlignHor) ? AL_AFTER : AL_UNDER);
 
-  SetHelpTopic(htpUiRadioButton);
+  setHelpItem(htpUiRadioButton);
 }
 
 
@@ -144,7 +144,7 @@ void RadioButton::show(int sw)
 void RadioButton::SetFocus()
 {
   rb->SetFocus();
-  _frm->ilwapp->SetHelpTopic(htp());
+  _frm->ilwapp->setHelpItem(htp());
 }
 
 void RadioButton::StoreData()
@@ -369,7 +369,7 @@ CheckBox::CheckBox(FormEntry* p, const String& sQuestion, Parm *prm)
   sQuest = sQuestion;
   zDimension dim = Dim(sQuest);
   psn->iMinWidth = dim.width() + 30; // dim.height();
-  SetHelpTopic(htpUiCheckBox);
+  setHelpItem(htpUiCheckBox);
 }
 
 CheckBox::CheckBox(FormEntry* p, const String& sQuestion, bool *pfVal)
@@ -380,7 +380,7 @@ CheckBox::CheckBox(FormEntry* p, const String& sQuestion, bool *pfVal)
   sQuest = sQuestion;
   zDimension dim = Dim(sQuest);
   psn->iMinWidth = dim.width() + 30; //dim.height();
-  SetHelpTopic(htpUiCheckBox);
+  setHelpItem(htpUiCheckBox);
 }
 
 CheckBox::CheckBox(FormEntry* p, const String& sQuestion, long *piVal)
@@ -391,7 +391,7 @@ CheckBox::CheckBox(FormEntry* p, const String& sQuestion, long *piVal)
   sQuest = sQuestion;
   zDimension dim = Dim(sQuest);
   psn->iMinWidth = dim.width() + 30; //dim.height();
-  SetHelpTopic(htpUiCheckBox);
+  setHelpItem(htpUiCheckBox);
 }
 
 void CheckBox::SetStyle(bool fDisabled)
@@ -507,7 +507,7 @@ void CheckBox::SetFocus()
 {
   if (cbx)
     cbx->SetFocus();
-  _frm->ilwapp->SetHelpTopic(htp());
+  _frm->ilwapp->setHelpItem(htp());
 }
 
 CheckBox::~CheckBox()
@@ -628,7 +628,7 @@ void Check3Box::SetFocus()
 {
   if (cbx)
     cbx->SetFocus();
-  _frm->ilwapp->SetHelpTopic(htp());
+  _frm->ilwapp->setHelpItem(htp());
 }
 
 Check3Box::~Check3Box()
@@ -653,7 +653,7 @@ PushButtonSimple::PushButtonSimple(FormEntry* p, const String& sQuestion,
   zDimension dim = Dim(sQuest);
   psn->iMinWidth = dim.width() + 25;
   psn->iHeight = psn->iMinHeight = dim.height() + 9;
-  SetHelpTopic(htpUiPushButton);
+  setHelpItem(htpUiPushButton);
   pb = 0;
 }
 
@@ -666,7 +666,7 @@ PushButtonSimple::PushButtonSimple(FormEntry* parent, const String& sQuestion, N
   zDimension dim = Dim(sQuest);
   psn->iMinWidth = dim.width() + 25;
   psn->iHeight = psn->iMinHeight = dim.height() + 9;
-  SetHelpTopic(htpUiPushButton);
+  setHelpItem(htpUiPushButton);
   pb = 0;
 }
 
@@ -734,7 +734,7 @@ void PushButtonSimple::SetFocus()
 {
   if (pb)
     pb->SetFocus();
-  _frm->ilwapp->SetHelpTopic(htp());
+  _frm->ilwapp->setHelpItem(htp());
 }
 
 void PushButtonSimple::SetText(const String& sTxt)
@@ -801,7 +801,7 @@ void FlatIconButton::setup(const String sCaption, const FileName& fnObject, Noti
 	psn->iMinWidth = dim.width() + cxIcon + 19;  // cxIcon is button width, 19 is spacing
 	psn->iHeight = psn->iMinHeight = max(dim.height(), cyIcon) + 6;  // 6 is vertical spacing
 
-	SetHelpTopic(htpUiPushButton);
+	setHelpItem(htpUiPushButton);
 	pb = 0;
 }
 
@@ -851,7 +851,7 @@ void FlatIconButton::SetFocus()
 {
   if (pb)
     pb->SetFocus();
-  _frm->ilwapp->SetHelpTopic(htp());
+  _frm->ilwapp->setHelpItem(htp());
 }
 
 int FlatIconButton::OnContext(MouseClickEvent* evt)
@@ -879,7 +879,7 @@ OwnButtonSimple::OwnButtonSimple(FormEntry* p, const String& sQuestion, NotifyPr
 
   psn->iMinWidth = dim.width();
   psn->iMinHeight = dim.height();
-  SetHelpTopic(htpUiPushButton);
+  setHelpItem(htpUiPushButton);
   pb = 0;
 }
 
@@ -895,7 +895,7 @@ OwnButtonSimple::OwnButtonSimple(FormEntry* p, const String& sQuestion, NotifyPr
 
   psn->iMinWidth = dim.width();
   psn->iMinHeight = dim.height();
-  SetHelpTopic(htpUiPushButton);
+  setHelpItem(htpUiPushButton);
   pb = 0;
 }
 
@@ -936,7 +936,7 @@ void OwnButtonSimple::SetFocus()
 {
   if (pb)
     pb->SetFocus();
-  _frm->ilwapp->SetHelpTopic(htp());
+  _frm->ilwapp->setHelpItem(htp());
 }
 
 void OwnButtonSimple::DrawItem(DRAWITEMSTRUCT* dis)

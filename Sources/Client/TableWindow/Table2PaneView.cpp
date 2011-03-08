@@ -333,7 +333,7 @@ public:
   {
     new FieldVal(root, STBUINewValue.scVal(), dvrs, &sVal);
   	new FieldBlank(root);
-//		SetHelpTopic(htpTblEditMultiRecords);
+//		setHelpItem(htpTblEditMultiRecords);
     create();
   }
 };

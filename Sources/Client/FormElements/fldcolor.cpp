@@ -50,7 +50,7 @@ FieldColorSimple::FieldColorSimple(FormEntry* p, Color* color)
   : FieldOneSelect(p,(long*)color), fldc((FieldColor *)p)
 {
   psn->iMinWidth = 1.5 * FLDNAMEWIDTH;
-  SetHelpTopic(htpUiColor);
+  setHelpItem(htpUiColor);
 }
 
 FieldColorSimple::~FieldColorSimple()

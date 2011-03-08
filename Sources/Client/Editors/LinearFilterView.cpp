@@ -379,7 +379,7 @@ public:
   {
     new FieldInt(root, SFLUiValue.scVal(), iVal);
   	new FieldBlank(root);
-//		SetHelpTopic(htpTblEditMultiRecords);
+//		setHelpItem(htpTblEditMultiRecords);
     create();
   }
 };

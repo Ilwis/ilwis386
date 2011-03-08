@@ -41,7 +41,6 @@
 #define FORMBASEVIEW_C
 #include "Client\Headers\formelementspch.h"
 #include "Headers\constant.h"
-#include "Headers\xercesc\util\Platforms\Win32\resource.h"
 #include "Engine\Base\Algorithm\Random.h"
 #include "Headers\Hs\Mainwind.hs"
 #include "Headers\htmlhelp.h"
@@ -166,7 +165,7 @@ afx_msg void FormBaseView::OnDrawItem( int nIDCtl, LPDRAWITEMSTRUCT dis )
 
 afx_msg void FormBaseView::OnSetFocus( CWnd* pOldWnd )
 {
-    ilwapp->SetHelpTopic(htp());
+    ilwapp->setHelpItem(htp());
 }
 
 afx_msg BOOL FormBaseView::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
@@ -245,7 +244,7 @@ void FormBaseView::create()
     PRECONDITION(fINotEqual, root, (FormEntry *)NULL);
 
     SetCursor(LoadCursor(NULL, IDC_WAIT));
-    ilwapp->SetHelpTopic(htp());
+    ilwapp->setHelpItem(htp());
     try 
     {
     short i, j;

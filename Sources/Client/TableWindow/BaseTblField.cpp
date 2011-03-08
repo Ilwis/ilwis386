@@ -343,7 +343,7 @@ public:
     new FieldString(root, SEDUiName, sName, Domain(), false);
     new FieldString(root, SEDUiCode, sCode, Domain(), true);
 
-//    SetHelpTopic(htpDomainWindow);
+//    setHelpItem(htpDomainWindow);
     create();
   }
 };

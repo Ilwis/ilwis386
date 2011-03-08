@@ -631,7 +631,7 @@ void DisplayOptionTreeItem::OnLButtonDblClk(UINT nFlags, CPoint point)
 
 void DisplayOptionTreeItem::SwitchCheckBox(bool fOn) {
 	if (checks) {
-		checks->checkItem(hti,fOn);
+		checks->checkItem(hti);
 	}
 	if ( dtSetCheckFunc && altHandler == 0)
 		(chctool->*dtSetCheckFunc)(&fOn);
@@ -779,6 +779,107 @@ void DisplayOptionColorItem::setColor(Color c) {
 	ltv->UpdateWindow();
 }
 
+//-------------------------------------------------------------------------------------
+DisplayOptionRadioButtonItem::DisplayOptionRadioButtonItem(const String& sTxt, LayerTreeView* t, HTREEITEM parent, ILWIS::NewDrawer *dr) :
+DisplayOptionTreeItem(t, parent, dr) ,
+sText(sTxt),
+isSelected(false)
+
+{
+}
+
+void DisplayOptionRadioButtonItem::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	if (checks) {
+		checks->checkItem(hti);
+
+	}
+	if ( dtSetCheckFunc && altHandler == 0)
+		(chctool->*dtSetCheckFunc)(&isSelected);
+}
+
+
+void DisplayOptionRadioButtonItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult){
+	LPNMTVCUSTOMDRAW lptvcd = (LPNMTVCUSTOMDRAW) pNMHDR;
+	switch (lptvcd->nmcd.dwDrawStage) 
+	{
+	case CDDS_ITEMPREPAINT:
+		// post paint otherwise line is not drawn at left side
+		*pResult = CDRF_NOTIFYPOSTPAINT;
+		return;
+	case CDDS_ITEMPOSTPAINT:
+		{
+			CDC cdc;
+			cdc.Attach(lptvcd->nmcd.hdc);
+			CRect rect = lptvcd->nmcd.rc;
+			HTREEITEM hti = ltv->GetTreeCtrl().HitTest(rect.TopLeft());
+			ltv->GetTreeCtrl().GetItemRect(hti, &rect, TRUE);
+			rect.left -= 20;
+			rect.bottom += 1;
+			rect.right += 1000;
+			Color clrText = SysColor(COLOR_WINDOWTEXT);
+			Color clrBack = SysColor(COLOR_WINDOW);
+			Color clrTextSel = SysColor(COLOR_HIGHLIGHTTEXT);
+			Color clrSel  = SysColor(COLOR_HIGHLIGHT);
+			CPen penNull(PS_NULL,0,Color(0,0,0));
+			CPen penBlack(PS_SOLID,1,clrText);
+			CBrush brWhite(clrBack);
+			CBrush brBlack(clrText);
+			CPen* penOld = cdc.SelectObject(&penNull);
+			CBrush* brOld = cdc.SelectObject(&brWhite);
+			cdc.Rectangle(rect);
+			cdc.SelectObject(penOld);
+			cdc.SelectObject(&penNull);
+			CBrush brushColor(clrText);
+			cdc.SelectObject(&brWhite);
+			cdc.SelectObject(&penBlack);
+			rect.top += 1;
+			rect.bottom -= 1;
+			int iHeight = rect.Height() * 0.8;
+			int iWidth = iHeight;
+			rect.right = rect.left + iWidth ;
+			rect.bottom = rect.top + iHeight;
+			CRect rctColor(rect);
+			rctColor.MoveToY(rect.top + 2);
+			cdc.Ellipse(rctColor);
+
+			if ( isSelected) {
+				rctColor.DeflateRect(iWidth * 0.9, iHeight * 0.9);
+				cdc.SelectObject(&brBlack);
+				cdc.SelectObject(&penBlack);
+				cdc.Ellipse(rctColor);
+			} 
+
+			CPoint pt;
+			pt.x = rect.left + 1.5 * iHeight + 2;
+			pt.y = rect.top;
+			if (ltv->GetTreeCtrl().GetItemState(hti, TVIS_SELECTED)) {
+				cdc.SetTextColor(clrTextSel);
+				cdc.SetBkColor(clrSel);
+			}
+			else {
+				cdc.SetTextColor(clrText);
+				cdc.SetBkColor(clrBack);
+			}
+			cdc.SetBkMode(OPAQUE);
+			cdc.TextOut(pt.x, pt.y, sText.scVal(), sText.length());
+			cdc.SelectObject(penOld);
+			cdc.SelectObject(brOld);
+			cdc.Detach();
+		}
+		return;
+	}
+}
+
+void DisplayOptionRadioButtonItem::setState(bool yesno) {
+	isSelected = yesno;
+}
+
+bool DisplayOptionRadioButtonItem::getState() const {
+	return isSelected;
+}
+//----------------------------------------
+
 SetChecks::~SetChecks() {
 }
 
@@ -792,12 +893,26 @@ void SetChecks::addItem(HTREEITEM hti){
 	checkedItems.push_back(hti);
 }
 
-void SetChecks::checkItem(HTREEITEM hti,bool fOn) {
+void SetChecks::checkItem(HTREEITEM hti) {
 	CTreeCtrl& tree = tv->GetTreeCtrl();
+	DisplayOptionRadioButtonItem *item = dynamic_cast<DisplayOptionRadioButtonItem * >((LayerTreeItem *)(tree.GetItemData(hti)));
+	if ( item) {
+		bool currentState = item->getState();
+		if ( currentState) // it was selected and will be selected, nothing to do;
+			return;
+		currentState  = !currentState;
+		item->setState(currentState);
+	}
 	for(int i = 0; i< checkedItems.size(); ++i) {
 		HTREEITEM ht = checkedItems.at(i);
-		tree.SetCheck(ht, FALSE);
+		DisplayOptionRadioButtonItem *item = dynamic_cast<DisplayOptionRadioButtonItem * >((LayerTreeItem *)(tree.GetItemData(ht)));
+		if ( ht == hti)
+			continue;
+		if ( item) {
+			item->setState(false);
+		}
 	}
 	(tool->*fun)(&hti);
-	tree.SetCheck(hti,fOn);
+	tv->Invalidate();
+	tv->UpdateWindow();
 }

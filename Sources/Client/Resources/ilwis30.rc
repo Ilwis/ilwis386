@@ -267,7 +267,8 @@ AVERAGE                 ICON                    "average.ico"
 MIN                     ICON                    "min.ico"
 MAX                     ICON                    "max.ico"
 MEDIAN                  ICON                    "median.ico"
-Save                    ICON                    "save.ico"
+SAVE                    ICON                    "save.ico"
+EditMap                 ICON                    "EditMap.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //

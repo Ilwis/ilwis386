@@ -188,11 +188,11 @@ void FieldDMS::SetFocus()
   fiDeg->SetFocus();
 }
            
-void FieldDMS::SetHelpTopic(const HelpTopic& htp)
+void FieldDMS::setHelpItem(const HelpTopic& htp)
 {
-  fiDeg->SetHelpTopic(htp);
-  fiMin->SetHelpTopic(htp);
-  frSec->SetHelpTopic(htp);
+  fiDeg->setHelpItem(htp);
+  fiMin->setHelpItem(htp);
+  frSec->setHelpItem(htp);
 }
 
 void FieldDMS::SetCallBack(NotifyProc np)
@@ -254,10 +254,10 @@ void FieldDMSS::StoreData()
   *rValue = rVal();
 }
 
-void FieldDMSS::SetHelpTopic(const HelpTopic& htp)
+void FieldDMSS::setHelpItem(const HelpTopic& htp)
 {
-  FieldDMS::SetHelpTopic(htp);
-  fss->SetHelpTopic(htp);
+  FieldDMS::setHelpItem(htp);
+  fss->setHelpItem(htp);
 }
 
 void FieldDMSS::SetCallBack(NotifyProc np)
@@ -454,7 +454,7 @@ void FieldLatLon::StoreData()
 void FieldLatLon::SetFocus()
 {
   fLat->SetFocus();
-  _frm->ilwapp->SetHelpTopic(htp());
+  _frm->ilwapp->setHelpItem(htp());
 }
 
 FieldCoordAskLatLon::FieldCoordAskLatLon(FormEntry* parent, 

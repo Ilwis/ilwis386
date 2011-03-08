@@ -82,7 +82,7 @@ FieldListView::FieldListView(FormEntry* feParent, const vector<FLVColumnInfo> &c
 	psn->iMinWidth = psn->iWidth = iTotalWidth;
 	psn->iMinHeight = psn->iHeight = 150;
 
-//  SetHelpTopic(htpUiDataType);
+//  setHelpItem(htpUiDataType);
 }
 
 FieldListView::~FieldListView()

@@ -57,7 +57,7 @@ public:
   void StoreData();          
   FormEntry* CheckData();    
   void SetFocus();           
-  void SetHelpTopic(const HelpTopic& htp);
+  void setHelpItem(const HelpTopic& htp);
   void SetCallBack(NotifyProc np);
   void SetCallBack(NotifyProc np, CallBackHandler* cb);
   String sGetText();
@@ -81,7 +81,7 @@ public:
   ~FieldDMSS();
   double rVal();
   void StoreData();          
-  void SetHelpTopic(const HelpTopic& htp);
+  void setHelpItem(const HelpTopic& htp);
   void SetCallBack(NotifyProc np);
   void SetCallBack(NotifyProc np, CallBackHandler* cb);
   String sGetText();
@@ -121,8 +121,8 @@ public:
   FormEntry* CheckData();
   void StoreData();          // overriden
   void SetFocus();           // overriden
-  void SetHelpTopic(const HelpTopic& htp) // overriden
-    { fLat->SetHelpTopic(htp); fLon->SetHelpTopic(htp); }
+  void setHelpItem(const HelpTopic& htp) // overriden
+    { fLat->setHelpItem(htp); fLon->setHelpItem(htp); }
   void SetCallBack(NotifyProc np) // overriden
     { fLat->SetCallBack(np); fLon->SetCallBack(np); }
   void SetCallBack(NotifyProc np, CallBackHandler* cb)

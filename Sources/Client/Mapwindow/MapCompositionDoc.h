@@ -89,6 +89,7 @@ public:
 	MapCompositionSrvItem* GetEmbeddedItem()
 	{ return (MapCompositionSrvItem*)CatalogDocument::GetEmbeddedItem(); }
 	MapPaneView* mpvGetView() const;
+	LayerTreeView* ltvGetView() const;
 
 	BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo); 
 	void initBounds(MinMax mm);
@@ -99,6 +100,7 @@ public:
 	NewDrawer* drAppend(const Map&, bool asAnimation=false);
 	NewDrawer* drAppend(const MapList&, bool asAnimation=false);
 	NewDrawer* drAppend(const BaseMap&, bool asAnimation=false);
+	NewDrawer* drAppend(const ObjectCollection& oc, bool asAnimation=false);
 	void RemoveDrawer(ILWIS::NewDrawer* dr);
 	void SetCoordSystem(const CoordSystem&);
 	double rPrefScale() const { return rDfltScale; }

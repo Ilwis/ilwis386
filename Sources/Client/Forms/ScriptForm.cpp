@@ -139,7 +139,7 @@ ScriptForm::ScriptForm(const Script& script)
 				break;
 		}
 	}
-	SetHelpTopic(1); // set help button on
+	setHelpItem(1); // set help button on
 	create();
   ShowWindow(SW_SHOW);
 }

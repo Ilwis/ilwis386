@@ -53,6 +53,7 @@ Created on: 2007-02-8
 #include "Engine\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\PixelInfoDoc.h"
 #include "Engine\Base\DataObjects\ObjectCollection.h"
+#include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\FormElements\syscolor.h"
 #include "Engine\Map\Segment\Seg.h"
@@ -507,7 +508,7 @@ void MapCompositionDoc::OnSaveViewAs()
 			new FieldViewCreate(root, SMWUiViewName, sName);
 			FieldString *fs = new FieldString(root, SMWUiViewTitle, sTitle);
 			fs->SetWidth(120);
-			//      SetHelpTopic(htpSaveViewForms);
+			//      setHelpItem(htpSaveViewForms);
 			SetMenHelpTopic(htpSaveView);
 			create();
 		}
@@ -1211,13 +1212,13 @@ class AddLayerForm: public FormWithDest
 {
 public:
 	AddLayerForm(CWnd* parent, String* sName, bool *asAnimation = 0)
-		: FormWithDest(parent, SMWTitleAddLayer), asAnim(asAnimation)
+		: FormWithDest(parent, SMWTitleAddLayer), asAnim(asAnimation), cb(0)
 	{
 		new FieldBlank(root);
 		fdtl = new FieldDataTypeLarge(root, sName, ".mpr.mpl.mps.mpa.mpp.atx");
 		//    new FieldSegmentMap(root, SDUiSegMap, sName);
 		if ( asAnimation != 0) {
-			CheckBox *cb = new CheckBox(root,SMWUiAnimationLayer,asAnimation);
+			cb = new CheckBox(root,SMWUiAnimationLayer,asAnimation);
 			cb->SetCallBack((NotifyProc)&AddLayerForm::changeFilter);
 		}
 		SetMenHelpTopic(htpAddLayer);
@@ -1225,10 +1226,14 @@ public:
 	}
 private:
 	bool * asAnim;
+	CheckBox *cb;
 	FieldDataTypeLarge * fdtl;
 	int changeFilter(Event *ev) {
+		if ( cb)
+			cb->StoreData();
+
 		if ( *asAnim) {
-			fdtl->SetExt(".mpl.mpr.mps.mpa.ioc.mpp");
+			fdtl->SetExt(".mpl.ioc");
 		} else {
 			fdtl->SetExt(".mpr.mpl.mps.mpa.mpp.atx");
 		}
@@ -1314,6 +1319,8 @@ bool MapCompositionDoc::fAppendable(const FileName& fn)
 	else if (fn.sExt == ".grf" || fn.sExt == ".csy") {
 		fOk = true; 
 		// melding op status regel?
+	} else if ( IOTYPE(fn) == IlwisObject::iotOBJECTCOLLECTION) {
+		fOk = true;
 	}
 	return fOk;
 }
@@ -1341,6 +1348,10 @@ NewDrawer* MapCompositionDoc::drAppend(const FileName& fn, bool asAnimation)
 	else if (".mpl" == fn.sExt) {
 		MapList ml(fn);
 		dr = drAppend(ml,asAnimation);
+	}
+	else if (".ioc" == fn.sExt) {
+		ObjectCollection oc(fn);
+		dr = drAppend(oc,asAnimation);
 	}
 	else if (".csy" == fn.sExt) {
 		CoordSystem csy(fn);
@@ -1463,6 +1474,65 @@ NewDrawer* MapCompositionDoc::drAppend(const Map& rasmap, bool asAnimation)
 
 	ChangeState();
 	return dr;
+}
+
+NewDrawer* MapCompositionDoc::drAppend(const ObjectCollection& oc, bool asAnimation)
+{
+	ILWIS::NewDrawer *drawer = 0;
+	if ( asAnimation) {
+		ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
+		drawer = NewDrawer::getDrawer("AnimationDrawer", "Ilwis38", &parms);
+		drawer->addDataSource((void *)&oc);
+		for(int i=0; i < oc->iNrObjects(); ++i) {
+			FileName fn = oc->fnObject(i);
+			if ( IOTYPEBASEMAP(fn)) {
+				BaseMap bmp(fn);
+				rootDrawer->setCoordinateSystem(bmp->cs());
+				rootDrawer->addCoordBounds(bmp->cs(), bmp->cb(), false);
+			}
+
+		}
+		ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
+		drawer->prepare(&pp);
+		rootDrawer->addDrawer(drawer);
+		ChangeState();
+		UpdateAllViews(0,3);
+		mpvGetView()->Invalidate();
+	} else {
+		for(int i=0; i < oc->iNrObjects(); ++i) {
+			FileName fn = oc->fnObject(i);
+			if ( IOTYPEBASEMAP(fn)) {
+				drAppend(fn);
+			}
+
+	/*		if ( obj.fValid() == false)
+				continue;
+			if ( IOTYPE(obj->fnObj) == IlwisObject::iotMAPLIST) {
+				MapList mpl(obj->fnObj);
+				drAppend(mpl, true);
+			}
+			if ( IOTYPE(obj->fnObj) == IlwisObject::iotRASMAP) {
+				Map mp(obj->fnObj);
+				drAppend(mp, true);
+			}
+			if ( IOTYPE(obj->fnObj) == IlwisObject::iotPOINTMAP) {
+				PointMap pmp(obj->fnObj);
+				drAppend(pmp, true);
+			}
+			if ( IOTYPE(obj->fnObj) == IlwisObject::iotPOLYGONMAP) {
+				PolygonMap pmp(obj->fnObj);
+				drAppend(pmp, true);
+			}
+			if ( IOTYPE(obj->fnObj) == IlwisObject::iotSEGMENTMAP) {
+				SegmentMap smp(obj->fnObj);
+				drAppend(smp, true);
+			}*/
+		}
+	}
+	ChangeState();
+	UpdateAllViews(0,2);
+
+	return drawer;
 }
 
 NewDrawer* MapCompositionDoc::drAppend(const MapList& maplist, bool asAnimation)
@@ -1845,6 +1915,18 @@ MapPaneView* MapCompositionDoc::mpvGetView() const
 		MapPaneView* mpv = dynamic_cast<MapPaneView*>(vw);
 		if (mpv)
 			return mpv;
+	}
+	return 0;
+}
+
+LayerTreeView* MapCompositionDoc::ltvGetView() const
+{
+	POSITION pos = GetFirstViewPosition();
+	while (0 != pos) {
+		CView* vw = GetNextView(pos);
+		LayerTreeView* ltv = dynamic_cast<LayerTreeView*>(vw);
+		if (ltv)
+			return ltv;
 	}
 	return 0;
 }

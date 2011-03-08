@@ -92,7 +92,7 @@ void FieldMapInMapList::StoreData()
 void FieldMapInMapList::SetFocus()
 {
   fld->SetFocus();
-  _frm->ilwapp->SetHelpTopic(htp());
+  _frm->ilwapp->setHelpItem(htp());
 }
 
 
