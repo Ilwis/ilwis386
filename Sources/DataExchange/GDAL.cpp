@@ -611,6 +611,7 @@ void GDALFormat::CreateRasterLayer(int iMaxChannels, bool fBitMap)
 	{
 		try
 		{
+			currentLayer = 0; // reset this else it will continue with the first layer
 			GetRasterLayer(iChannel, mp, arMaps, grf, dm, fBitMap);
 		}
 		catch(StopConversion&)
