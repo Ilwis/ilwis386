@@ -42,6 +42,7 @@
 
 #include "Headers\Err\ILWISDAT.ERR"
 #include "Engine\SpatialReference\Coordsys.h"
+#include "Engine\Base\System\engine.h"
 #include "Engine\SpatialReference\PRJCALC.H"
 #include "Engine\SpatialReference\AEQD.H"
 #include "Engine\SpatialReference\aitoff.h"
@@ -281,7 +282,15 @@ ProjectionPtr* ProjectionPtr::create(const String& sName, const Ellipsoid& ell)
     ptr = new ProjectionWinkel3();
   else  
     InvalidTypeError(FileName(), "Projection", sName.c_str());
-  ptr->_sName = sName;  
+  ptr->_sName = sName; 
+  String sPath = getEngine()->getContext()->sIlwDir();
+  sPath &= "\\Resources\\Def\\Projs.def";
+  char buf[1024];
+  GetPrivateProfileString("Projections",sName.scVal(),"",buf,1024, sPath.scVal());
+  String sid(buf);
+  sid = sid.sTail(":");
+  if ( sid != "")
+	  ptr->identification = sid;
   return ptr;
 }
 
@@ -828,3 +837,6 @@ bool ProjectionPtr::fEqual(const IlwisObjectPtr& ptr) const
 	return true;
 }
 
+String ProjectionPtr::getIdentification(bool wkt) {
+	return identification;
+}
