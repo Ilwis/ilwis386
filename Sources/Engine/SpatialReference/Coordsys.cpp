@@ -274,7 +274,7 @@ CoordSystemPtr* CoordSystemPtr::create(const FileName& fn, const String& sExpres
 }
 
 CoordSystemPtr::CoordSystemPtr()
-: IlwisObjectPtr(FileName("unknown", ".csy", true))
+: IlwisObjectPtr(FileName("unknown", ".csy", true)),identification(sUNDEF)
 {
   _iWidth = 28;
   _iDec = 2;
@@ -282,7 +282,7 @@ CoordSystemPtr::CoordSystemPtr()
 }
 
 CoordSystemPtr::CoordSystemPtr(const FileName& fn)
-: IlwisObjectPtr(fn)
+: IlwisObjectPtr(fn),identification(sUNDEF)
 {
   _iWidth = iReadElement("CoordSystem", "Width");
   _iDec = iReadElement("CoordSystem", "Decimals");
@@ -438,6 +438,10 @@ CoordBounds CoordSystemPtr::cbConv(const CoordSystem& csOld, const CoordBounds& 
     for (cXY.y = cbOld.MinY(),iY = 0; iY <= 10; cXY.y += rDY, ++iY )
       cbNew += cConv( csOld, cXY);
   return cbNew;  
+}
+
+String CoordSystemPtr::getIdentification(bool wkt) {
+	return identification;
 }
 
 void CoordSystemPtr::Rename(const FileName& fnNew)

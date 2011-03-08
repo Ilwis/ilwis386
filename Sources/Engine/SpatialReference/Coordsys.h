@@ -144,10 +144,12 @@ public:
   CoordSystemTiePoints _export *pcsTiePoints() const;
   CoordSystemOrthoPhoto _export *pcsOrthoPhoto() const;
   CoordSystemDirectLinear _export *pcsDirectLinear() const;
+  virtual String _export getIdentification(bool wkt=false);
 protected:
   short _iWidth;
   short _iDec;
   double rUnitSize; // in meters
+  String identification;
 };
 
 class CoordSystem: public IlwisObject
@@ -158,7 +160,7 @@ public:
     _export CoordSystem(const FileName& fn, const String& sExpr);
     _export CoordSystem(const String& sExpr, const String& sPath);
     _export CoordSystem(const CoordSystem& cs);
-		_export CoordSystem(const char* sExpr);
+	_export CoordSystem(const char* sExpr);
     _export CoordSystem(const String& sExpr);
 
     void                    operator = (const CoordSystem& cs) 
@@ -185,6 +187,7 @@ public:
   Coord& c() { return crd; }
   const Coord& c() const { return crd; }
   CoordSystemPtr* operator -> () const { return csys.ptr(); }
+  bool fValid() { return csys.fValid(); }
 private:  
   Coord crd;
   CoordSystem csys;
