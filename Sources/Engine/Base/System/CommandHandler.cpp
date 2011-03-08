@@ -112,10 +112,37 @@ void BaseCommandHandler::SetOwner(CFrameWnd* wnd)
 	wndOwner = wnd;
 }
 
-void BaseCommandHandler::AddCommand(string sCmd, CommandFunction cf)
-{
-	commands[sCmd] = cf;
+void BaseCommandHandler::executeAdditional(const String& sCmd) {
+	String cc = sCmd;
+	String head = cc.sHead(" "); 
+	String sCom = head.toLower();
+	size_t iSize = min(sCom.size() + 1, sCmd.size());
+	String sParm = sCmd.substr(iSize); // iSize cannot be larger than sCmd.size()
+	sParm = sParm.sTrimSpaces();
+	map<String, AdditionalCommand>::iterator cur = additionalCommands.find(sCom);
+	if (cur != additionalCommands.end()) // known command ?
+	{
+		AdditionalCommand cf = (*cur).second;
+		String sParms = sParm.sTrimSpaces();
+		(cf)(sParms);
+	}
+	else
+		throw ErrorObject(String(SMSErrNoCommandHandler_S.scVal(), sCmd)); // ??later here loadModule/ GetProcAddress ??
 }
+
+void BaseCommandHandler::AddCommand(const String& sCmd, AdditionalCommand cf)
+{
+	if ( additionalCommands.find(sCmd) == additionalCommands.end()) {
+		additionalCommands[sCmd] = cf;
+		commands[sCmd] = &BaseCommandHandler::executeAdditional;
+	} else
+		throw ErrorObject(String("Command %S already defined, ignored", sCmd));
+}
+
+//void BaseCommandHandler::AddCommand(string sCmd, CommandFunction cf)
+//{
+//	commands[sCmd] = cf;
+//}
 
 LRESULT BaseCommandHandler::fExecute(const String& sCmd)
 {
@@ -127,14 +154,18 @@ LRESULT BaseCommandHandler::fExecute(const String& sCmd)
 	sParm = sParm.sTrimSpaces();
 	bool routToClient = sCom == "copy" && getEngine()->hasClient();
 	CommandIter ci = commands.find(sCom);
-	if (!routToClient && ci != commands.end()) // known command ?
+	if (!routToClient && ci != commands.end()) // known command ? 
 	{
 		const CommandPair &cp = *ci;
 		if (cp.second) // anything usefull ??
 		{
 			CommandFunction cf = cp.second;
-			String sCmd = sParm.sTrimSpaces();
-			(this->*cf)(sCmd);
+			String sParms = sParm.sTrimSpaces();
+			if ( cf == &BaseCommandHandler::executeAdditional) {
+				(this->*cf)(sCom + " " + sParms);
+			} else {
+				(this->*cf)(sCmd);
+			}
 			return true;
 		}
 		else
@@ -984,12 +1015,13 @@ bool CommandHandler::fCmdCalc(const String& sCmd)
 		{
 			String appName = sExpres.sHead("(");
 			appName.toLower();
-			ApplicationInfo *info = getEngine()->modules.getAppInfo(appName);
-			if ( info && info->metadata){
+			vector<ApplicationInfo *> infos;
+			getEngine()->modules.getAppInfo(appName, infos);
+			if ( infos.size() > 0 && infos[0]->metadata){
 				ApplicationQueryData query;
 				query.queryType = "OUTPUTTYPE";
 				query.expression = sExpres;
-				ApplicationMetadata md = (info->metadata)(&query);
+				ApplicationMetadata md = (infos[0]->metadata)(&query);
 				if ( md.returnType != IlwisObject::iotANY) {
 					switch( md.returnType){
 						case IlwisObject::iotPOINTMAP :
@@ -2847,13 +2879,14 @@ void CommandHandler::CmdAppMetaData(const String& sN)
 {
 	String appName = sN.sHead(" ");
 	String output = sN.sTail(" ");
-	ApplicationInfo *info = getEngine()->modules.getAppInfo(appName);
-	if ( info == NULL) 
+	vector<ApplicationInfo *> infos;
+	getEngine()->modules.getAppInfo(appName, infos);
+	if ( infos.size() == 0) 
 		return;
-   if ( info->metadata != NULL) {
+   if ( infos[0]->metadata != NULL) {
 		ApplicationQueryData query;
 		query.queryType = "WPSMETADATA";
-		ApplicationMetadata amd = (info->metadata)(&query);
+		ApplicationMetadata amd = (infos[0]->metadata)(&query);
 		if ( amd.wpsxml == "")
 			return;
 		String xml = amd.wpsxml;

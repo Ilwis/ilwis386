@@ -46,6 +46,7 @@ class CommandHandler;
 class Tranquilizer;
 
 typedef void (BaseCommandHandler::*CommandFunction)(const String&);
+typedef void (*AdditionalCommand)(const String& expression);
 typedef map<string, CommandFunction> CommandMap;
 typedef CommandMap::iterator CommandIter;
 typedef pair<string, CommandFunction> CommandPair;
@@ -67,15 +68,17 @@ protected:
 	void ReroutPost(const String& s);
 	static LRESULT ReroutSend(CWnd *owner, String s);
 	CommandMap commands;
+	map<String, AdditionalCommand> additionalCommands;
 	CFrameWnd *wndOwner;
 public:
   virtual LRESULT fExecute(const String& sCmd);
-  	void AddCommand(string, CommandFunction);
+  		void AddCommand(const String& cmd, AdditionalCommand);
 	virtual ~BaseCommandHandler();
   void SetOwner(CFrameWnd*);
 private:
   void CmdExit(const String& s);
   void CmdHelp(const String& s);
+  void executeAdditional(const String& sCmd);
 };
 
 class CommandHandler: public BaseCommandHandler
