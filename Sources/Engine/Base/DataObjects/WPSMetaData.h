@@ -8,7 +8,7 @@ public:
 	void AddTitle(const String& desc); 
 	void AddAbstract(const String& desc); 
 	void AddDefault(const String& _def);
-	xercesc_2_8::DOMElement *createNode(xercesc_2_8::DOMDocument *doc);
+	XERCES_CPP_NAMESPACE::DOMElement *createNode(XERCES_CPP_NAMESPACE::DOMDocument *doc);
 	bool isInput() const;
 private:
 	String id;
@@ -32,6 +32,7 @@ private:
 	String id;
 	String title;
 	String abstrct;
+	String skeletonExpression;
 	vector<WPSParameter> inputParameters;
 	vector<WPSParameter> outputParameters;
 	vector<String> keywords;
