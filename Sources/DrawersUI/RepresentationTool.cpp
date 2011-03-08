@@ -48,11 +48,12 @@ HTREEITEM RepresentationTool::configure( HTREEITEM parentItem){
 	rpr = setdrw->getRepresentation();
 	DisplayOptionItemFunc func = (DisplayOptionItemFunc)&RepresentationTool::displayOptionSubRpr; 
 	bool usesRpr = drawer->getDrawMethod() == NewDrawer::drmRPR;
-	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
+	DisplayOptionRadioButtonItem *item = new DisplayOptionRadioButtonItem(TR("Representation"), tree,parentItem,drawer);
+	item->setState(true);
 	item->setDoubleCickAction(this,(DTDoubleClickActionFunc)&RepresentationTool::displayOptionSubRpr);
 	ColorTool *ctool = (ColorTool *)parentTool;
 	item->setCheckAction(ctool,ctool->getColorCheck(), (DTSetCheckFunc)&ColorTool::setcheckRpr);
-	HTREEITEM rprItem = insertItem("Representation", ".rpr", item, (int)usesRpr);
+	HTREEITEM rprItem = insertItem("Representation", ".rpr", item, -1);
 	DrawerTool::configure(rprItem);
 	
 	return rprItem;

@@ -4,6 +4,7 @@ ILWIS::DrawerTool *createAnimationTool(ZoomableView* zv, LayerTreeView *view, IL
 
 namespace ILWIS {
 	class AnimationDrawer;
+	class AnimationPropertySheet;
 
 	class AnimationTool : public DrawerTool {
 	public:
@@ -11,10 +12,12 @@ namespace ILWIS {
 		bool isToolUseableFor(ILWIS::NewDrawer *drw);
 		HTREEITEM configure( HTREEITEM parentItem);
 		virtual ~AnimationTool();
+		static AnimationPropertySheet *getManagement() ;
 		String getMenuString() const;
+		static AnimationPropertySheet *animManagement;
+		void clear();
 	protected:
 		void animationDefaultView();
-
 	};
 
 }

@@ -64,6 +64,7 @@ void AnimationControlTool::animationControl() {
 String AnimationControlTool::getMenuString() const {
 	return TR("Animation Control");
 }
+
 //---------------------------------------------------
 BEGIN_MESSAGE_MAP(AnimationControl, DisplayOptionsForm2)
 	//ON_MESSAGE(ID_TIME_TICK, OnTimeTick)
@@ -186,9 +187,11 @@ int AnimationControl::setTimingMode(Event *ev) {
 		MapList mpl((*source)->fnObj);
 		if ( mpl->fTblAtt()) {
 			Column col = mpl->tblAtt()->col(adrw->getTimeColumn());
-			TimeInterval interval(col->rrMinMax().rLo(),col->rrMinMax().rHi());
-			graphSlider->setTimeInterval(interval);
-			graphSlider->setTimes(col);
+			if ( col.fValid()) {
+				TimeInterval interval(col->rrMinMax().rLo(),col->rrMinMax().rHi());
+				graphSlider->setTimeInterval(interval);
+				graphSlider->setTimes(col);
+			}
 		}
 	} else {
 		sliderFps->Show();

@@ -23,18 +23,22 @@ namespace ILWIS {
 	private:
 		void apply();
 		int uncheckRest(Event *ev);
+		int setTransparency(Event *ev) ;
 		FieldReal *frDistance;
 		FieldInt *frPlanes;
 		CheckBox *cbgrid;
 		CheckBox *cbplane; 
 		CheckBox *cbcube;
 		CheckBox *cbverticals;
+		CheckBox *cbRetainGound;
+		FieldIntSliderEx *slider;
 		FieldGroup *fg;
-		bool hasplane, hasgrid, iscube, hasverticals, hasaxis;
+		bool hasplane, hasgrid, iscube, hasverticals, hasaxis,retainGoundLevel;
 		double zDist;
 		Color planeColor;
 		bool threeD;
 		int numPlanes;
+		int transparencyPlane;
 
 	};
 

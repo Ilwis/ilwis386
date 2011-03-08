@@ -137,7 +137,8 @@ htiTransparent(htiTr)
 {
 	PolygonSetDrawer *pdrw = dynamic_cast<PolygonSetDrawer *>(dr);
 	if ( !pdrw) {
-		PolygonSetDrawer *pdrw = dynamic_cast<PolygonSetDrawer *>(((AnimationDrawer *)dr)->getDrawer(0));
+		NewDrawer *drP = ((AnimationDrawer *)dr)->getDrawer(0);
+		pdrw = dynamic_cast<PolygonSetDrawer *>(drP);
 	}
 	transparency = 100 *(1.0-pdrw->getTransparencyArea());
 	slider = new FieldIntSliderEx(root,"Transparency(0-100)", &transparency,ValueRange(0,100),true);
@@ -152,17 +153,18 @@ int TransparencyFormP::setTransparency(Event *ev) {
 }
 
 void  TransparencyFormP::apply() {
+	if ( initial) return;
 	slider->StoreData();
-	//PreparationParameters parm(NewDrawer::ptRENDER, 0);
-	//pdrw->prepare(&parm);
 
 	AnimationDrawer *animDrw = dynamic_cast<AnimationDrawer *>(drw);
 	if ( animDrw) {
 		PreparationParameters pp(NewDrawer::ptRENDER, 0);
 		for(int i = 0; i < animDrw->getDrawerCount(); ++i) {
-			PolygonSetDrawer *pdrw = (PolygonSetDrawer *)drw;
-			pdrw->setTransparencyArea(1.0 - (double)transparency/100.0);
-			pdrw->prepareChildDrawers(&pp);
+			PolygonSetDrawer *pdrw = (PolygonSetDrawer *)animDrw->getDrawer(i);
+			if ( pdrw) {
+				pdrw->setTransparencyArea(1.0 - (double)transparency/100.0);
+				pdrw->prepareChildDrawers(&pp);
+			}
 		}
 	}
 	else {

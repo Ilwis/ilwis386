@@ -59,8 +59,16 @@ void StretchTool::displayOptionStretch() {
 	SetDrawer *sdrw = dynamic_cast<SetDrawer *>(drawer);
 	AnimationDrawer *adrw = dynamic_cast<AnimationDrawer *>(drawer);
 	RangeReal rr = adrw ? adrw->getStretchRangeReal() : sdrw->getStretchRangeReal();
+	double rStep;
+	if ( sdrw) {
+		BaseMapPtr *bmp = ((AbstractMapDrawer *)(sdrw->getParentDrawer()))->getBaseMap();
+		rStep = bmp->dvrs().rStep();
+	} else {
+		BaseMapPtr *bmp = adrw->getBaseMap();
+		rStep = bmp->dvrs().rStep();
+	}
 
-	new SetStretchValueForm(tree, drawer, rr);
+	new SetStretchValueForm(tree, drawer, rr, rStep);
 }
 
 bool StretchTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
@@ -81,13 +89,12 @@ String StretchTool::getMenuString() const {
 }
 
 //------------------------------------
-SetStretchValueForm::SetStretchValueForm(CWnd *wPar, NewDrawer *dr, const RangeReal& _rr) : 
+SetStretchValueForm::SetStretchValueForm(CWnd *wPar, NewDrawer *dr, const RangeReal& _rr, double rStep) : 
 	DisplayOptionsForm((ComplexDrawer *)dr,wPar,"Set stretch"),
 	rr(_rr),
 	low(rr.rLo()),
 	high(rr.rHi())
 {
-	double rStep = _rr.rWidth() / 100.0;
 	sliderLow = new FieldRealSliderEx(root,"Lower", &low,ValueRange(rr,rStep),true);
 	sliderHigh = new FieldRealSliderEx(root,"Upper", &high,ValueRange(rr,rStep),true);
 	sliderHigh->Align(sliderLow, AL_UNDER);

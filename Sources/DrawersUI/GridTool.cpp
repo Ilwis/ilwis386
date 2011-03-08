@@ -2,6 +2,7 @@
 #include "Engine\Drawers\RootDrawer.h"
 #include "Engine\Drawers\ComplexDrawer.h"
 #include "Engine\Drawers\SimpleDrawer.h" 
+#include "Client\FormElements\FieldIntSlider.h"
 #include "Client\Ilwis.h"
 #include "Engine\Representation\Rpr.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
@@ -76,6 +77,7 @@ GridForm::GridForm(CWnd *par, GridDrawer *gdr)
 	
 {
 	fr = new FieldReal(root, TR("Grid spacing"), &rDist, ValueRange(0.0,1e10,0.001));
+
 
   create();
 }

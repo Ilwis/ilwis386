@@ -29,6 +29,7 @@ namespace ILWIS {
 		FieldReal *fr;
 		GridDrawer *gd;
 		double rDist;
+		int dummy;
 	};
 
 }

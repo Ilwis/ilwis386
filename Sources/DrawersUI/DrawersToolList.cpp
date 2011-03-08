@@ -53,6 +53,11 @@
 #include "Grid3DTool.h"
 #include "TransparencyTool.h"
 #include "LineSetTool.h"
+#include "FeatureSetEditor.h"
+#include "PointSetEditor.h"
+#include "AnimationManagementTool.h"
+#include "Client\FormElements\FormBasePropertyPage.h"
+#include "AnimationManagement.h"
 
 using namespace ILWIS;
 
@@ -82,13 +87,34 @@ DrawerToolInfoVector *createDrawerTool() {
 	infos->push_back(new DrawerToolInfo("Grid3DTool",createGrid3DTool));
 	infos->push_back(new DrawerToolInfo("TransparencyTool",createTransparencyTool));
 	infos->push_back(new DrawerToolInfo("LineSetTool",createLineSetTool));
+	infos->push_back(new DrawerToolInfo("PointSetEditor",createPointSetEditor));
+	infos->push_back(new DrawerToolInfo("AnimationManagement",createAnimationManagementTool));
+
+	
 
 	return infos;
 }
 
+extern "C" _export void moduleInit(ILWIS::Module *module) {
+	if ( AnimationTool::animManagement == 0 ) {
+			AnimationTool::animManagement = new AnimationPropertySheet();
+			AnimationRun *page = new AnimationRun(*AnimationTool::animManagement);
+			AnimationTool::animManagement->AddPage(page);
+			AnimationSynchronization *page2 = new AnimationSynchronization(*AnimationTool::animManagement);
+			AnimationTool::animManagement->AddPage(page2);
+			AnimationProgress *page3 = new AnimationProgress(*AnimationTool::animManagement);
+			AnimationTool::animManagement->AddPage(page3);
+			AnimationTool::animManagement->Create(0,WS_SYSMENU | WS_POPUP | WS_CAPTION | DS_MODALFRAME );
+			//AnimationTool::animManagement->ShowWindow(SW_HIDE);
+
+	}
+
+}
+
 extern "C" _export ILWIS::Module *getModuleInfo() {
 	ILWIS::Module *module = new ILWIS::Module("DrawersUI", "IlwisDrawersUI.dll",ILWIS::Module::mi38,"1.0");
-	module->addMethod(ILWIS::Module::ifDrawerTools, (void *)createDrawerTool); 
+	module->addMethod(ILWIS::Module::ifDrawerTools, (void *)createDrawerTool);
+	module->addMethod(ILWIS::Module::ifInitUI, (void *)moduleInit);
 
 	return module;
 }

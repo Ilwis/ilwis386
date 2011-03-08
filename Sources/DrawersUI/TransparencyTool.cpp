@@ -80,6 +80,7 @@ int TransparencyForm::setTransparency(Event *ev) {
 }
 
 void  TransparencyForm::apply() {
+	if ( initial) return;
 	slider->StoreData();
 	//PreparationParameters parm(NewDrawer::ptRENDER, 0);
 	//pdrw->prepare(&parm);

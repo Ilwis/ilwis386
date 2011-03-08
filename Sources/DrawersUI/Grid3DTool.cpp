@@ -1,5 +1,6 @@
 #include "Client\Headers\formelementspch.h"
 #include "Client\FormElements\fldcolor.h"
+#include "Client\FormElements\FieldIntSlider.h"
 #include "Engine\Drawers\RootDrawer.h"
 #include "Engine\Drawers\ComplexDrawer.h"
 #include "Engine\Drawers\SimpleDrawer.h" 
@@ -72,23 +73,28 @@ DisplayOptionsForm(gdr, par, TR("3D Grid options")), zDist(gdr->getZSpacing()),p
 	hasplane = (gdr->getMode() & GridDrawer::mPLANE) != 0;
 	iscube = (gdr->getMode() & GridDrawer::mMARKERS) != 0;
 	hasaxis = (gdr->getMode() & GridDrawer::mAXIS) != 0;
+	retainGoundLevel = (gdr->getMode() & GridDrawer::mGROUNDLEVEL) != 0;
 	hasverticals = (gdr->getMode() & GridDrawer::mVERTICALS) != 0;
-	frDistance = new FieldReal(root, TR("Vertical Distance"), &zDist, ValueRange(0.0,10000));
+	transparencyPlane = 100 *(1.0-gdr->getTransparencyPlane()) ;
+	frDistance = new FieldReal(root, TR("Vertical Distance"), &zDist, ValueRange(0.0,1000000));
 	frPlanes = new FieldInt(root, TR("Number of planes"), &numPlanes, ValueRange(1,10));
 	new StaticText(root,TR("Appearance"));
 	fg = new FieldGroup(root);
 	cbgrid = new CheckBox(fg,TR("Grid"), &hasgrid);
 	cbverticals = new CheckBox(fg,TR("Verticals"), &hasverticals);
-	cbverticals->Align(cbgrid, AL_AFTER);
 	cbplane = new CheckBox(fg,TR("Plane"), &hasplane);
-	cbplane->Align(cbverticals, AL_AFTER);
 	cbcube = new CheckBox(fg,TR("Cube"),&iscube);
 	cbcube->SetCallBack((NotifyProc)&Grid3DOptions::uncheckRest);
-	cbcube->Align(cbplane, AL_AFTER);
+	cbRetainGound = new CheckBox(fg,TR("Ground level grid"), &retainGoundLevel); 
+	cbRetainGound->Align(cbgrid, AL_AFTER);
 	fg->SetIndependentPos();
-	FieldColor *fc = new FieldColor(cbplane,TR("Color"), &planeColor);
-	fc->Align(fg, AL_UNDER);
-	fc->SetIndependentPos();
+	FieldGroup *fg2 = new FieldGroup(cbplane, true);
+	fg2->Align(cbplane, AL_AFTER);
+	FieldColor *fc = new FieldColor(fg2, TR("Color"), &planeColor);
+	slider = new FieldIntSliderEx(fg2, "Transparency(0-100)", &transparencyPlane,ValueRange(0,100),true);
+	slider->SetCallBack((NotifyProc)&Grid3DOptions::setTransparency);
+	slider->setContinuous(true);
+	slider->Align(fc, AL_UNDER);
 	create();
 }
 
@@ -99,16 +105,33 @@ int Grid3DOptions::uncheckRest(Event *ev) {
 		cbverticals->SetVal(false);
 		cbplane->SetVal(false);
 		((GridDrawer *)drw)->clear();
+		//updateMapView();
 	}
 	return 1;
 }
 
+int Grid3DOptions::setTransparency(Event *ev) {
+	if (initial) return 1;
+
+	slider->StoreData();
+	GridDrawer *gdrw = (GridDrawer *)drw;
+	gdrw->setTransparencyPlane(1.0 - (double)transparencyPlane/100.0);
+	PreparationParameters pp(NewDrawer::ptRENDER, 0);
+	gdrw->prepare(&pp);
+	updateMapView();
+
+	return 1;
+}
+
 void  Grid3DOptions::apply() {
+	if (initial) return;
+
 	frDistance->StoreData();
 	cbgrid->StoreData();
 	cbplane->StoreData();
 	cbcube->StoreData();
 	cbverticals->StoreData();
+	cbRetainGound->StoreData();
 	frPlanes->StoreData();
 	GridDrawer *gdr = ((GridDrawer *)drw);
 	int mode = 0;
@@ -120,6 +143,8 @@ void  Grid3DOptions::apply() {
 		mode |= GridDrawer::mCUBE;
 	if ( hasverticals)
 		mode |= GridDrawer::mVERTICALS;
+	if ( retainGoundLevel)
+		mode |= GridDrawer::mGROUNDLEVEL;
 	gdr->setMode(mode);
 	gdr->setZSpacing(zDist);
 	gdr->setPlaneColor(planeColor);

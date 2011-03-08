@@ -100,7 +100,7 @@ int LineStyleTool::ilwisLineStyle(int linestyle, double sz){
 
 //-----------------------------------------------
 LineStyleForm::LineStyleForm(CWnd *par, ComplexDrawer *ldr) 
-: DisplayOptionsForm(ldr, par, "Line Style")
+: DisplayOptionsForm(ldr, par, "Line Style"), fc(0)
 
 {
 

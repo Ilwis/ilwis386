@@ -54,14 +54,16 @@ HTREEITEM NonRepresentationToolTool::configure( HTREEITEM parentItem) {
 	ColorTool *ctool = (ColorTool *)parentTool;
 	bool useSingleColor = sdrw->getDrawMethod() == NewDrawer::drmSINGLE;
 	bool useRpr = sdrw->getDrawMethod() == NewDrawer::drmRPR;
-	DisplayOptionColorItem *colorItem = new DisplayOptionColorItem("Single color", tree,htiNode,drawer);
+	DisplayOptionRadioButtonItem *colorItem = new DisplayOptionRadioButtonItem("Single color", tree,htiNode,drawer);
 	colorItem->setDoubleCickAction(this,(DTDoubleClickActionFunc)&NonRepresentationToolTool::displayOptionSingleColor);
 	colorItem->setCheckAction(ctool,ctool->getColorCheck(), (DTSetCheckFunc)&ColorTool::setcheckRpr);
-	colorItem->setColor(sdrw->getSingleColor());
-	HTREEITEM singleColorItem = insertItem("Single Color","SingleColor",colorItem, useSingleColor & !useRpr);
-	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,htiNode,drawer);	
+	colorItem->setState(useSingleColor);
+	HTREEITEM singleColorItem = insertItem("Single Color","SingleColor",colorItem, -1);
+	DisplayOptionRadioButtonItem *item = new DisplayOptionRadioButtonItem("Multiple Colors", tree,htiNode,drawer);	
 	item->setCheckAction(ctool,ctool->getColorCheck(), (DTSetCheckFunc)&ColorTool::setcheckRpr);
-	HTREEITEM multiColorItem = insertItem("Multiple Colors","MultipleColors",item, !useSingleColor & !useRpr);
+	item->setState(!useRpr && !useSingleColor);
+	HTREEITEM multiColorItem = insertItem("Multiple Colors","MultipleColors",item, -1);
+
 
 	DrawerTool::configure(htiNode);
 

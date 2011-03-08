@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="DrawersUI"
 	ProjectGUID="{8DF70E96-104A-4E41-8A67-633B975E6A6D}"
 	RootNamespace="DrawersUI"
@@ -212,6 +212,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\DrawersUI\AnimationManagement.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\AnimationManagementTool.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\DrawersUI\AnimationTimeSelection.cpp"
 				>
 			</File>
@@ -237,6 +245,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\DrawersUI\ExtrusionTool.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\FeatureSetEditor.cpp"
 				>
 			</File>
 			<File
@@ -269,6 +281,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\DrawersUI\NonRepresentationTool.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\PointSetEditor.cpp"
 				>
 			</File>
 			<File
@@ -317,6 +333,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\DrawersUI\AnimationManagement.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\AnimationManagementTool.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\DrawersUI\AnimationTimeSelection.h"
 				>
 			</File>
@@ -333,11 +357,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\DrawersUI\BaseMapEditor.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\DrawersUI\ColorTool.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\Sources\DrawersUI\ExtrusionTool.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\FeatureSetEditor.h"
 				>
 			</File>
 			<File
@@ -370,6 +402,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\DrawersUI\NonRepresentationTool.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\PointSetEditor.h"
 				>
 			</File>
 			<File
