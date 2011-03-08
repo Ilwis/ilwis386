@@ -206,7 +206,7 @@ void Tranquilizer::SetText(const String& sText)
 	}
 }
 
-void Tranquilizer::SetHelpTopic(const HelpTopic& _htp)
+void Tranquilizer::setHelpItem(const HelpTopic& _htp)
 {
   cs.Lock();
   htp = _htp;
