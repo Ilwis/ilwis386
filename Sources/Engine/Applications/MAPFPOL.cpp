@@ -48,10 +48,11 @@ MapFromPolygonMap* MapFromPolygonMap::create(const FileName& fn, MapPtr& p)
 {
 	String sType;
 	ObjectInfo::ReadElement("MapFromPolygonMap", "Type", fn, sType);
-	ApplicationInfo * info = Engine::modules.getAppInfo(sType);
-	if ( info != NULL ) {
+	vector<ApplicationInfo *> infos;
+    Engine::modules.getAppInfo(sType, infos);
+	if ( infos.size() > 0 ) {
 		vector<void *> extraParms = vector<void *>();
-		return (MapFromPolygonMap *)(info->createFunction)(fn, p, "", extraParms);
+		return (MapFromPolygonMap *)(infos[0]->createFunction)(fn, p, "", extraParms);
 	}
 	InvalidTypeError(fn, "MapFromPolygonMap", sType);
 

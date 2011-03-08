@@ -7,7 +7,7 @@ typedef InfoVector::iterator InfoVIter;
 typedef pair<string, ApplicationInfo *> InfoPair;
 typedef InfoVector *(*AppInfo)();
 //typedef ILWIS::Module *(*ModuleInfo)();
-typedef void(*ModuleInit)();
+typedef void(*ModuleInit)(ILWIS::Module *module);
 typedef void(*Test1)(ApplicationInfo* name);
 typedef IlwisObjectPtr *(* CreateFunc)(const FileName& fn, IlwisObjectPtr& p, const String& sExpr, vector<void *> parms);
 typedef String (* CommandName)();
@@ -57,11 +57,11 @@ public:
 	void addModule(const FileName& fnModule, bool retry = false);
 	void addModules();
 	void initModules();
-	ApplicationInfo * getAppInfo(const String& name){ return applications[name];}
+	void getAppInfo(const String& name, vector<ApplicationInfo *>& infos);
 private:
 	void addFolder(const String& dir);
 	void addModule(ILWIS::Module *m);
-	vector<ModuleInit> moduleInits;
+	map<String, ModuleInit> moduleInits;
 	ApplicationMap applications;
 	vector<FileName> retryList;
 

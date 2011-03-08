@@ -219,10 +219,11 @@ MapVirtual* MapVirtual::create(const FileName& fn, MapPtr& p)
 }
 
 IlwisObjectPtr * MapVirtual::getMapVirtual(const FileName& fn, MapPtr& p, const String& sType) {
-	ApplicationInfo * info = Engine::modules.getAppInfo(sType);
-	if ( info != NULL ) {
+	vector<ApplicationInfo *> infos;
+	Engine::modules.getAppInfo(sType, infos);
+	if ( infos.size() > 0 ) {
 		vector<void *> extraParms = vector<void *>();
-		return (info->createFunction)(fn, p, "", extraParms);
+		return (infos[0]->createFunction)(fn, p, "", extraParms);
 	}
 	return NULL;
 }
@@ -264,18 +265,20 @@ static bool fSplitOnDots(const String& sExpr, Array<String>& as)
 MapVirtual* MapVirtual::create(const FileName& fn, MapPtr& p, const String& sExpression)
 {
 	String sFunc = IlwisObjectPtr::sParseFunc(sExpression);
-	ApplicationInfo * info = Engine::modules.getAppInfo(sFunc);
+	vector<ApplicationInfo *> infos;
+	Engine::modules.getAppInfo(sFunc, infos);
 	vector<void *> extraParms = vector<void *>();
-	if ( info != NULL ) {
-		return (MapVirtual *)(info->createFunction)(fn, p, sExpression, extraParms);
+	if ( infos.size() > 0 ) {
+		return (MapVirtual *)(infos[0]->createFunction)(fn, p, sExpression, extraParms);
 	}
 	MapVirtual *mpv = NULL;
 	if ( (mpv = dottedExpressionMaps(fn,p, sExpression, extraParms))) {
 		return mpv;
 	}
-	info = Engine::modules.getAppInfo("MapCalculate");
-	if ( info != NULL ) {
-		return (MapVirtual *)(info->createFunction)(fn, p, sExpression, extraParms);
+	infos.clear();
+	Engine::modules.getAppInfo("MapCalculate", infos);
+	if ( infos.size() > 0 ) {
+		return (MapVirtual *)(infos[0]->createFunction)(fn, p, sExpression, extraParms);
 	}
  
  
@@ -307,11 +310,12 @@ MapVirtual *MapVirtual::dottedExpressionMaps(const FileName& fn, MapPtr& p, cons
 				try {
 					Map mp(fnMap);
 					if (mp->dm()->pdp() || mp->dm()->pdcol()) {
-						ApplicationInfo * info = Engine::modules.getAppInfo("MapColorSep");
-						if ( info) {
+						vector<ApplicationInfo *> infos;
+						Engine::modules.getAppInfo("MapColorSep", infos);
+						if ( infos.size() > 0) {
 							extraParms.push_back((void *)&asParts[iNext]);
 							extraParms.push_back((void *)&Map(fnMap));
-							return (MapVirtual *)(info->createFunction)(fn, p, "", extraParms);
+							return (MapVirtual *)(infos[0]->createFunction)(fn, p, "", extraParms);
 							}
 						//return new MapColorSep(FileName(), p, mp, asParts[iNext]);
 					}
@@ -325,12 +329,13 @@ MapVirtual *MapVirtual::dottedExpressionMaps(const FileName& fn, MapPtr& p, cons
 				sCol &= '.';
 				sCol &= asParts[i];
 				}
-			ApplicationInfo * info = Engine::modules.getAppInfo("MapAttribute");
-			if ( info) {
+			vector<ApplicationInfo *> infos;
+			Engine::modules.getAppInfo("MapAttribute", infos);
+			if ( infos.size() > 0) {
 				Map mp1(fnMap);
 				extraParms.push_back((void *)&sCol);
 				extraParms.push_back((void *)&mp1);
-				return (MapVirtual *)(info->createFunction)(fn, p, "", extraParms);
+				return (MapVirtual *)(infos[0]->createFunction)(fn, p, "", extraParms);
 				//return new MapAttribute(fn, p, Map(fnMap), sCol);
 			}
 		}
@@ -425,7 +430,7 @@ void MapVirtual::Freeze()
 	trq.Start();
 	String sTitle("%S - %S", sFreezeTitle, sName(true));
 	trq.SetTitle(sTitle);
-	trq.SetHelpTopic(htpFreeze);
+	trq.setHelpItem(htpFreeze);
 	bool fFrozen;
 	bool fErrorShown = false;
 	try

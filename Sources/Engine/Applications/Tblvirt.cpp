@@ -137,10 +137,11 @@ TableVirtual* TableVirtual::create(const FileName& fn, TablePtr& p)
 	if (0 == ObjectInfo::ReadElement("IlwisObjectVirtual", "Expression", fn, sExpr))
 		return NULL;
 	String sFunc = sExpr.sHead("(");
-	ApplicationInfo * info = Engine::modules.getAppInfo(sFunc);
-	if ( info != NULL ) {
+	vector<ApplicationInfo *> infos;
+	Engine::modules.getAppInfo(sFunc, infos);
+	if ( infos.size() > 0 ) {
 		vector<void *> extraParms = vector<void *>();
-		return (TableVirtual *)(info->createFunction)(fn, p, "", extraParms);
+		return (TableVirtual *)(infos[0]->createFunction)(fn, p, "", extraParms);
 	}
     return NULL;
 }
@@ -148,10 +149,11 @@ TableVirtual* TableVirtual::create(const FileName& fn, TablePtr& p)
 TableVirtual* TableVirtual::create(const FileName& fn, TablePtr& p, const String& sExpression)
 {
  	String sFunc = IlwisObjectPtr::sParseFunc(sExpression);
-	ApplicationInfo * info = Engine::modules.getAppInfo(sFunc);
+	vector<ApplicationInfo *> infos;
+	Engine::modules.getAppInfo(sFunc, infos);
 	vector<void *> extraParms = vector<void *>();
-	if ( info != NULL ) {
-		return (TableVirtual *)(info->createFunction)(fn, p, sExpression, extraParms);
+	if ( infos.size() > 0 ) {
+		return (TableVirtual *)(infos[0]->createFunction)(fn, p, sExpression, extraParms);
 	}
 	  if (0 != sExpression.strchrQuoted('('))
 		throw ErrorAppName(fn.sFullName(), sExpression);
@@ -203,7 +205,7 @@ void TableVirtual::Freeze()
   trq.Start();
   String sTitle("%S - %S", sFreezeTitle, sName(true));
   trq.SetTitle(sTitle);
-  trq.SetHelpTopic(htpFreeze);
+  trq.setHelpItem(htpFreeze);
   ptr.iRef++; // to prevent deletion in fFreezing when colNew(..) is called
   bool fFrozen;
   try {

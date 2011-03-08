@@ -54,15 +54,15 @@
 
 ColumnVirtual* ColumnVirtual::create(const Table& tbl, const String& sColName, ColumnPtr& p)
 {
-  String sExpr;
+   String sExpr;
   ObjectInfo::ReadElement(String("%SCol:%S", tbl->sSectionPrefix, sColName).scVal(), "Expression", tbl->fnObj, sExpr);
   String sFunc = IlwisObjectPtr::sParseFunc(sExpr);
-
-  ApplicationInfo * info = Engine::modules.getAppInfo(sFunc);
+  vector<ApplicationInfo *> infos;
+  Engine::modules.getAppInfo(sFunc, infos);
   vector<void *> extraParms = vector<void *>();
   extraParms.push_back((void *)&sColName);
-  if ( info != NULL ) {
-	return (ColumnVirtual *)(info->createFunction)(tbl->fnObj, p, "", extraParms);
+  if ( infos.size() > 0  ) {
+	return (ColumnVirtual *)(infos[0]->createFunction)(tbl->fnObj, p, "", extraParms);
   }
   throw ErrorInvalidType(tbl->fnObj, "ColumnVirtual", sFunc);
 
@@ -90,17 +90,19 @@ ColumnVirtual* ColumnVirtual::create(const Table& tbl, const String& sColName, C
                                      const String& sExpression, const DomainValueRangeStruct& dvs)
 {
   String sFunc = IlwisObjectPtr::sParseFunc(sExpression);
-  ApplicationInfo * info = Engine::modules.getAppInfo(sFunc);
+  vector<ApplicationInfo *> infos;
+  Engine::modules.getAppInfo(sFunc, infos);
   vector<void *> extraParms = vector<void *>();
   extraParms.push_back((void *)&sColName);
   extraParms.push_back((void *)&dvs);
   extraParms.push_back((void *)&sFunc);
-  if ( info != NULL ) {
-	return (ColumnVirtual *)(info->createFunction)(tbl->fnObj, p, sExpression, extraParms);
+  if ( infos.size() > 0 ) {
+	return (ColumnVirtual *)(infos[0]->createFunction)(tbl->fnObj, p, sExpression, extraParms);
   }
-  info = Engine::modules.getAppInfo("ColumnCalculate");
-  if ( info)
-	return (ColumnVirtual *)(info->createFunction)(tbl->fnObj, p, sExpression, extraParms);
+  infos.clear();
+  Engine::modules.getAppInfo(sFunc, infos);
+  if ( infos.size() > 0)
+	return (ColumnVirtual *)(infos[0]->createFunction)(tbl->fnObj, p, sExpression, extraParms);
 
   throw ErrorInvalidType(tbl->fnObj, "ColumnVirtual", sFunc);
   //String sFunc = IlwisObjectPtr::sParseFunc(sExpression);

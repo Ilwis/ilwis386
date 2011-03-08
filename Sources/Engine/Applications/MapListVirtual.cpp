@@ -86,10 +86,11 @@ MapListVirtual _export * MapListVirtual::create(const FileName& fn, MapListPtr& 
    String sType;
   if (0 == ObjectInfo::ReadElement("MapListVirtual", "Type", fn, sType))
     return 0;
-  ApplicationInfo * info = Engine::modules.getAppInfo(sType);
+  vector<ApplicationInfo *> infos;
+  Engine::modules.getAppInfo(sType, infos);
   vector<void *> extraParms = vector<void *>();
-  if ( info != NULL ) {
-	return (MapListVirtual *)(info->createFunction)(fn, p, "", extraParms);
+  if ( infos.size()>0 ) {
+	return (MapListVirtual *)(infos[0]->createFunction)(fn, p, "", extraParms);
   }
   throw ErrorInvalidType(fn, "MapListVirtual", sType);
 
@@ -99,10 +100,11 @@ MapListVirtual _export * MapListVirtual::create(const FileName& fn, MapListPtr& 
 MapListVirtual _export *MapListVirtual::create(const FileName& fn, MapListPtr& p, const String& sExpression)
 {
 	String sFunc = IlwisObjectPtr::sParseFunc(sExpression);
-	ApplicationInfo * info = Engine::modules.getAppInfo(sFunc);
+	vector<ApplicationInfo *> infos;
+    Engine::modules.getAppInfo(sFunc, infos);
 	vector<void *> extraParms = vector<void *>();
-	if ( info != NULL ) {
-		return (MapListVirtual *)(info->createFunction)(fn, p, sExpression, extraParms);
+	if ( infos.size() > 0) {
+		return (MapListVirtual *)(infos[0]->createFunction)(fn, p, sExpression, extraParms);
 	}
 
   throw ErrorAppName(fn.sFullName(), sExpression);
@@ -130,7 +132,7 @@ void MapListVirtual::Freeze()
 	trq.Start();
 	String sTitle("%S - %S", sFreezeTitle, sName(true));
 	trq.SetTitle(sTitle);
-	trq.SetHelpTopic(htpFreeze);
+	trq.setHelpItem(htpFreeze);
   SetSize(0);
   fFreezing();
   int iMaps = ptr.iSize();

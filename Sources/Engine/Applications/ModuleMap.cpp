@@ -92,7 +92,7 @@ void ModuleMap::addModule(const FileName& fnModule, bool retry) {
 				}
 				ModuleInit initFunc = (ModuleInit)(mod->getMethod(ILWIS::Module::ifInit));
 				if ( initFunc) {
-					moduleInits.push_back(initFunc);
+					moduleInits[mod->getName()] = initFunc;
 				}
 				GetDrawers drawFuncs = (GetDrawers)(mod->getMethod(ILWIS::Module::ifDrawers));
 				if ( drawFuncs) {
@@ -120,9 +120,52 @@ void ModuleMap::addModule(const FileName& fnModule, bool retry) {
 }
 
 void ModuleMap::initModules() {
-	for(vector<ModuleInit>::iterator cur; cur != moduleInits.end(); ++cur) {
-		ModuleInit moduleInit = (*cur);
-		moduleInit();
+	for(map<String, ModuleInit>::iterator cur =moduleInits.begin() ; cur != moduleInits.end(); ++cur) {
+		ModuleInit moduleInit = (*cur).second;
+		String name = (*cur).first;
+		if ( find(name) != end()) {
+			moduleInit((*this)[name]);	
+		}
+		
+	}
+}
+
+void ModuleMap::getAppInfo(const String& name, vector<ApplicationInfo *>& infos)	{ 
+	ApplicationMap::iterator cur;
+	int index=0;
+	if ((cur = applications.find(name)) != applications.end())
+		infos.push_back((*cur).second);
+	else if ( (index = name.find("*")) != string::npos) {
+		if ( index == 0) {
+			for(cur = applications.begin(); cur!= applications.end(); ++cur) {
+				if ( name.size() == 1){
+					infos.push_back((*cur).second);
+					continue;
+				}
+				String key = (*cur).first;
+				String namepart = name.substr(1);
+				String keypart = key.substr(key.size() -  name.size() -1);
+				if ( namepart == keypart)
+					infos.push_back((*cur).second);
+			}
+		} else if ( index == name.size() - 1) {
+			for(cur = applications.begin(); cur!= applications.end(); ++cur) {
+				String key = (*cur).first;
+				String namepart = name.substr(0,name.size() - 1);
+				String keypart = key.substr(0,name.size() - 1);
+				if ( namepart == keypart)
+					infos.push_back((*cur).second);
+			}
+		} else 
+			for(cur = applications.begin(); cur!= applications.end(); ++cur) {
+				String key = (*cur).first;
+				String namepart1 = name.sHead("*");
+				String namepart2 = name.sTail("*");
+				String keypart1 = key.substr(0,namepart1.size());
+				String keypart2 = key.substr(key.size() -  namepart2.size());
+				if ( namepart1 == keypart1 && namepart2 == keypart2)
+					infos.push_back((*cur).second);
+		}
 	}
 }
 

@@ -57,10 +57,11 @@ ObjectCollectionVirtual _export * ObjectCollectionVirtual::create(const FileName
    String sType;
   if (0 == ObjectInfo::ReadElement("ObjectCollectionVirtual", "Type", fn, sType))
     return 0;
-  ApplicationInfo * info = Engine::modules.getAppInfo(sType);
+  	vector<ApplicationInfo *> infos;
+    Engine::modules.getAppInfo(sType, infos);
   vector<void *> extraParms = vector<void *>();
-  if ( info != NULL ) {
-	return (ObjectCollectionVirtual *)(info->createFunction)(fn, p, "", extraParms);
+  if (infos.size() > 0 ) {
+	return (ObjectCollectionVirtual *)(infos[0]->createFunction)(fn, p, "", extraParms);
   }
   throw ErrorInvalidType(fn, "ObjectCollectionVirtual", sType);
 
@@ -70,10 +71,11 @@ ObjectCollectionVirtual _export * ObjectCollectionVirtual::create(const FileName
 ObjectCollectionVirtual _export *ObjectCollectionVirtual::create(const FileName& fn, ObjectCollectionPtr& p, const String& sExpression)
 {
 	String sFunc = IlwisObjectPtr::sParseFunc(sExpression);
-	ApplicationInfo * info = Engine::modules.getAppInfo(sFunc);
+	vector<ApplicationInfo *> infos;
+	Engine::modules.getAppInfo(sFunc, infos);
 	vector<void *> extraParms = vector<void *>();
-	if ( info != NULL ) {
-		return (ObjectCollectionVirtual *)(info->createFunction)(fn, p, sExpression, extraParms);
+	if ( infos.size() > 0 ) {
+		return (ObjectCollectionVirtual *)(infos[0]->createFunction)(fn, p, sExpression, extraParms);
 	}
 
   throw ErrorAppName(fn.sFullName(), sExpression);
@@ -99,7 +101,7 @@ void ObjectCollectionVirtual::Freeze()
 	trq.Start();
 	String sTitle("%S - %S", sFreezeTitle, sName(true));
 	trq.SetTitle(sTitle);
-	trq.SetHelpTopic(htpFreeze);
+	trq.setHelpItem(htpFreeze);
   fFreezing();
   int number = ptr.iNrObjects();
   for (int i = 0; i < number; ++i)

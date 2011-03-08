@@ -54,10 +54,11 @@ MapFromPointMap* MapFromPointMap::create(const FileName& fn, MapPtr& p)
   String sType;     
   ObjectInfo::ReadElement("MapFromPointMap", "Type", fn, sType);
 
-  	ApplicationInfo * info = Engine::modules.getAppInfo(sType);
-	if ( info != NULL ) {
+  	vector<ApplicationInfo *> infos;
+    Engine::modules.getAppInfo(sType, infos);
+	if ( infos.size() > 0 ) {
 		vector<void *> extraParms = vector<void *>();
-		return (MapFromPointMap *)(info->createFunction)(fn, p, "", extraParms);
+		return (MapFromPointMap *)(infos[0]->createFunction)(fn, p, "", extraParms);
 	}
  
   InvalidTypeError(fn, "MapFromPointMap", sType);

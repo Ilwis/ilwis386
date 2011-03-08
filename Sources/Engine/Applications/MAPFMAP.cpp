@@ -46,17 +46,17 @@
 
 MapFromMap* MapFromMap::create(const FileName& fn, MapPtr& p)
 {
-  String sType;
+   String sType;
   ObjectInfo::ReadElement("MapFromMap", "Type", fn, sType);
 
-  	ApplicationInfo * info = Engine::modules.getAppInfo(sType);
-	if ( info != NULL ) {
+  	vector<ApplicationInfo *> infos;
+    Engine::modules.getAppInfo(sType, infos);
+	if ( infos.size() > 0 ) {
 		vector<void *> extraParms = vector<void *>();
-		return (MapFromMap *)(info->createFunction)(fn, p, "", extraParms);
+		return (MapFromMap *)(infos[0]->createFunction)(fn, p, "", extraParms);
 	}
 
  	InvalidTypeError(fn, "MapFromMap", sType);
-  return 0;
 }
 
 MapFromMap::MapFromMap(const FileName& fn, MapPtr& p)

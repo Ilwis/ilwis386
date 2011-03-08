@@ -51,10 +51,11 @@ MapFromSegmentMap* MapFromSegmentMap::create(const FileName& fn, MapPtr& p)
 	if (0 == ObjectInfo::ReadElement("MapFromSegmentMap", "Type", fn, sType))
 		return 0;
 
-	ApplicationInfo * info = Engine::modules.getAppInfo(sType);
-	if ( info != NULL ) {
+	vector<ApplicationInfo *> infos;
+    Engine::modules.getAppInfo(sType, infos);
+	if ( infos.size() > 0 ) {
 		vector<void *> extraParms = vector<void *>();
-		return (MapFromSegmentMap *)(info->createFunction)(fn, p, "", extraParms);
+		return (MapFromSegmentMap *)(infos[0]->createFunction)(fn, p, "", extraParms);
 	}
 	InvalidTypeError(fn, "MapFromSegmentMap", sType);
 	return 0;

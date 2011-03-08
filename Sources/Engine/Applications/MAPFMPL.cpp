@@ -48,15 +48,14 @@ MapFromMapList* MapFromMapList::create(const FileName& fn, MapPtr& p)
 	String sType;
 	ObjectInfo::ReadElement("MapFromMapList", "Type", fn, sType);
 
-	ApplicationInfo * info = Engine::modules.getAppInfo(sType);
-	if ( info != NULL ) {
+	vector<ApplicationInfo *> infos;
+    Engine::modules.getAppInfo(sType, infos);
+	if ( infos.size() > 0 ) {
 		vector<void *> extraParms = vector<void *>();
-		return (MapFromMapList *)(info->createFunction)(fn, p, "", extraParms);
+		return (MapFromMapList *)(infos[0]->createFunction)(fn, p, "", extraParms);
 	}
 
 	InvalidTypeError(fn, "MapFromMapList", sType);
-
-	return NULL;
 }
 
 MapFromMapList::MapFromMapList(const FileName& fn, MapPtr& p)

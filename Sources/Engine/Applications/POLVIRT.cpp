@@ -34,50 +34,7 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/* $Log: /ILWIS 3.0/PolygonMap/POLVIRT.cpp $
- * 
- * 8     2/05/03 11:30a Lichun
- * merge ID grid branch 
- * 
- * 9     9/05/02 9:05a Lichun
- * Addede PolygonMapGrid
- * 
- * 7     11-12-00 17:26 Koolhoven
- * added PolygonMapFromSegmentNonTopological
- * 
- * 6     29-11-00 13:39 Koolhoven
- * made PolygonMapVirtual::smp() virtual and call this function in
- * PolygonMapPtr::smp()
- * 
- * 5     22-11-99 12:23 Wind
- * same as prvious,but different implementation
- * 
- * 4     22-11-99 12:12 Wind
- * added object name to title of report window
- * 
- * 3     9/08/99 10:23a Wind
- * adpated to use of quoted file names
- * 
- * 2     3/10/99 4:08p Martin
- * Case insensitive support added
-// Revision 1.5  1998/09/16 17:25:54  Wim
-// 22beta2
-//
-// Revision 1.4  1997/09/02 15:24:19  Wim
-// Extra safety check
-//
-// Revision 1.3  1997-08-25 19:50:13+02  Wim
-// Added (empty) DeleteInternals() to BaseMapVirtual
-// to call in the UnFreeze() routine.
-//
-// Revision 1.2  1997-07-30 12:42:09+02  Wim
-// Removed PolygonMapSubMap because it does not work
-//
-/* PolygonMapVirtual
-   Copyright Ilwis System Development ITC
-   march 1995, by Wim Koolhoven
-	Last change:  WK   29 Aug 97   12:54 pm
-*/
+
 
 #include "Engine\Applications\POLVIRT.H"
 #include "Engine\Applications\objvirt.h"
@@ -87,13 +44,14 @@
 
 PolygonMapVirtual* PolygonMapVirtual::create(const FileName& fn, PolygonMapPtr& p)
 {
-  String sType;
+   String sType;
   if (0 == ObjectInfo::ReadElement("PolygonMapVirtual", "Type", fn, sType))
     return 0;
-  ApplicationInfo * info = Engine::modules.getAppInfo(sType);
+  vector<ApplicationInfo *> infos;
+  Engine::modules.getAppInfo(sType, infos);
   vector<void *> extraParms = vector<void *>();
-  if ( info != NULL ) {
-	return (PolygonMapVirtual *)(info->createFunction)(fn, p, "", extraParms);
+  if ( infos.size() > 0 ) {
+	return (PolygonMapVirtual *)(infos[0]->createFunction)(fn, p, "", extraParms);
   }
   throw ErrorInvalidType(fn, "PolygonMapVirtual", sType);
 
@@ -103,11 +61,13 @@ PolygonMapVirtual* PolygonMapVirtual::create(const FileName& fn, PolygonMapPtr& 
 PolygonMapVirtual* PolygonMapVirtual::create(const FileName& fn, PolygonMapPtr& p, const String& sExpression)
 {
 	String sFunc = IlwisObjectPtr::sParseFunc(sExpression);
-	ApplicationInfo * info = Engine::modules.getAppInfo(sFunc);
+	vector<ApplicationInfo *> infos;
+    Engine::modules.getAppInfo(sFunc, infos);
 	vector<void *> extraParms = vector<void *>();
-	if ( info != NULL ) {
-		return (PolygonMapVirtual *)(info->createFunction)(fn, p, sExpression, extraParms);
+	if ( infos.size() > 0 ) {
+		return (PolygonMapVirtual *)(infos[0]->createFunction)(fn, p, sExpression, extraParms);
 	}
+
 
 	FileName fnMap(sExpression);
 
@@ -124,13 +84,14 @@ PolygonMapVirtual* PolygonMapVirtual::create(const FileName& fn, PolygonMapPtr& 
 			if (!File::fExist(fnMap))
 				throw ErrorNotFound(fnMap);
 		}
-		ApplicationInfo * info = Engine::modules.getAppInfo("PolygonMapAttribute");
+		vector<ApplicationInfo *> infos;
+		Engine::modules.getAppInfo("PolygonMapAttribute", infos);
 		vector<void *> extraParms = vector<void *>();
 		PolygonMap pmap(fnMap);
 		extraParms.push_back( &pmap);
 		extraParms.push_back( &sCol);
-		if ( info != NULL ) {
-			return (PolygonMapVirtual *)(info->createFunction)(fn, p, "", extraParms);
+		if ( infos.size() > 0) {
+			return (PolygonMapVirtual *)(infos[0]->createFunction)(fn, p, "", extraParms);
 		}
 	}
 	throw ErrorAppName(fn, sFunc);
@@ -195,7 +156,7 @@ void PolygonMapVirtual::Freeze()
   trq.Start();
   String sTitle("%S - %S", sFreezeTitle, sName(true));
   trq.SetTitle(sTitle); 
-  trq.SetHelpTopic(htpFreeze);
+  trq.setHelpItem(htpFreeze);
   bool fFrozen;
   try {
     fFrozen = fFreezing();

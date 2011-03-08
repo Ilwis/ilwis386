@@ -82,10 +82,11 @@ SegmentMapVirtual* SegmentMapVirtual::create(const FileName& fn, SegmentMapPtr& 
   String sType;
   if (0 == ObjectInfo::ReadElement("SegmentMapVirtual", "Type", fn, sType))
     return 0;
-  ApplicationInfo * info = Engine::modules.getAppInfo(sType);
+  vector<ApplicationInfo *> infos;
+  Engine::modules.getAppInfo(sType, infos);
   vector<void *> extraParms = vector<void *>();
-  if ( info != NULL ) {
-	return (SegmentMapVirtual *)(info->createFunction)(fn, p, "", extraParms);
+  if ( infos.size() > 0 ) {
+	return (SegmentMapVirtual *)(infos[0]->createFunction)(fn, p, "", extraParms);
   }
   throw ErrorInvalidType(fn, "SegmentMapVirtual", sType);
 
@@ -96,10 +97,11 @@ SegmentMapVirtual* SegmentMapVirtual::create(const FileName& fn, SegmentMapPtr& 
 {
 
 	String sFunc = IlwisObjectPtr::sParseFunc(sExpression);
-	ApplicationInfo * info = Engine::modules.getAppInfo(sFunc);
+	vector<ApplicationInfo *> infos;
+	Engine::modules.getAppInfo(sFunc, infos);
 	vector<void *> extraParms = vector<void *>();
-	if ( info != NULL ) {
-		return (SegmentMapVirtual *)(info->createFunction)(fn, p, sExpression, extraParms);
+	if ( infos.size() > 0 ) {
+		return (SegmentMapVirtual *)(infos[0]->createFunction)(fn, p, sExpression, extraParms);
 	}
 
 	FileName fnMap(sExpression);
@@ -117,13 +119,14 @@ SegmentMapVirtual* SegmentMapVirtual::create(const FileName& fn, SegmentMapPtr& 
 			if (!File::fExist(fnMap))
 				throw ErrorNotFound(fnMap);
 		}
-		ApplicationInfo * info = Engine::modules.getAppInfo("SegmentMapAttribute");
+		vector<ApplicationInfo *> infos;
+		Engine::modules.getAppInfo("SegmentMapAttribute", infos);
 		vector<void *> extraParms = vector<void *>();
 		SegmentMap pmap(fnMap);
 		extraParms.push_back( &pmap);
 		extraParms.push_back( &sCol);
-		if ( info != NULL ) {
-			return (SegmentMapVirtual *)(info->createFunction)(fn, p, "", extraParms);
+		if ( infos.size() > 0) {
+			return (SegmentMapVirtual *)(infos[0]->createFunction)(fn, p, "", extraParms);
 		}
 	}
 	throw ErrorAppName(fn, sFunc);
@@ -191,7 +194,7 @@ void SegmentMapVirtual::Freeze()
   trq.Start();
   String sTitle("%S - %S", sFreezeTitle, sName(true));
   trq.SetTitle(sTitle);
-  trq.SetHelpTopic(htpFreeze);
+  trq.setHelpItem(htpFreeze);
   bool fFrozen;
   try {
     fFrozen = fFreezing();

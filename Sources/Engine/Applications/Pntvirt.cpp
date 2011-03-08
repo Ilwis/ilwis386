@@ -88,13 +88,14 @@ void PointMapVirtual::LoadPlugins() {
 
 PointMapVirtual* PointMapVirtual::create(const FileName& fn, PointMapPtr& ptr)
 {
-  String sType;
+   String sType;
   if (0 == ObjectInfo::ReadElement("PointMapVirtual", "Type", fn, sType))
     return 0;
-  ApplicationInfo * info = Engine::modules.getAppInfo(sType);
+  vector<ApplicationInfo *> infos;
+  Engine::modules.getAppInfo(sType, infos);
   vector<void *> extraParms = vector<void *>();
-  if ( info != NULL ) {
-	return (PointMapVirtual *)(info->createFunction)(fn, ptr, "", extraParms);
+  if ( infos.size() > 0 ) {
+	return (PointMapVirtual *)(infos[0]->createFunction)(fn, ptr, "", extraParms);
   }
   throw ErrorInvalidType(fn, "PointMapVirtual", sType);
 
@@ -104,10 +105,11 @@ PointMapVirtual* PointMapVirtual::create(const FileName& fn, PointMapPtr& ptr)
 PointMapVirtual* PointMapVirtual::create(const FileName& fn, PointMapPtr& ptr, const String& sExpression)
 {
 	String sFunc = IlwisObjectPtr::sParseFunc(sExpression);
-	ApplicationInfo * info = Engine::modules.getAppInfo(sFunc);
+	vector<ApplicationInfo *> infos;
+    Engine::modules.getAppInfo(sFunc, infos);
 	vector<void *> extraParms = vector<void *>();
-	if ( info != NULL ) {
-		return (PointMapVirtual *)(info->createFunction)(fn, ptr, sExpression, extraParms);
+	if ( infos.size() > 0) {
+		return (PointMapVirtual *)(infos[0]->createFunction)(fn, ptr, sExpression, extraParms);
 	}
 
 	FileName fnMap(sExpression);
@@ -125,13 +127,14 @@ PointMapVirtual* PointMapVirtual::create(const FileName& fn, PointMapPtr& ptr, c
 			if (!File::fExist(fnMap))
 				throw ErrorNotFound(fnMap);
 		}
-		ApplicationInfo * info = Engine::modules.getAppInfo("PointMapAttribute");
+		vector<ApplicationInfo *> infos;
+		Engine::modules.getAppInfo("PointMapAttribute", infos);
 		vector<void *> extraParms = vector<void *>();
 		PointMap pmap(fnMap);
 		extraParms.push_back( &pmap);
 		extraParms.push_back( &sCol);
-		if ( info != NULL ) {
-			return (PointMapVirtual *)(info->createFunction)(fn, ptr, "", extraParms);
+		if ( infos.size() > 0) {
+			return (PointMapVirtual *)(infos[0]->createFunction)(fn, ptr, "", extraParms);
 		}
 		//return new PointMapAttribute(fn, ptr, PointMap(fnMap), sCol);
 	}
@@ -204,7 +207,7 @@ void PointMapVirtual::Freeze()
   trq.Start();
   String sTitle("%S - %S", sFreezeTitle, sName(true));
   trq.SetTitle(sTitle);
-  trq.SetHelpTopic(htpFreeze);
+  trq.setHelpItem(htpFreeze);
   bool fFrozen;
   try {
     fFrozen = fFreezing();
