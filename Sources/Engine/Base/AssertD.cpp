@@ -35,7 +35,7 @@
  Created on: 2007-02-8
  ***************************************************************/
 #include "Engine\Base\AssertD.h"
-#include "Headers\xercesc\util\Platforms\Win32\resource.h"
+//#include "Headers\xercesc\util\Platforms\Win32\resource.h"
 
 BEGIN_MESSAGE_MAP(AssertDialog, CDialog)
   ON_BN_CLICKED(IDIGNORE, OnIgnore)
