@@ -64,12 +64,10 @@ unsigned char VerKey[8] = { 0xD8, 0xE7, 0x1B, 0xF6, 0x57, 0xE2, 0xD0, 0x53 };
 IlwisAppContext::IlwisAppContext(const String& sProg, const String& sCmdLine)
 : winRoot(0)
 {
-  HINSTANCE _hInst = AfxGetInstanceHandle();
-  CWinApp* wapp = AfxGetApp();
   if (sProg.length() == 0)
   {
       char sTemp[MAX_PATH];
-      ::GetModuleFileName(_hInst, sTemp, MAX_PATH);
+      ::GetModuleFileName(NULL, sTemp, MAX_PATH);
       _sProg = String(sTemp);
   }
   else
@@ -88,9 +86,6 @@ IlwisAppContext::IlwisAppContext(const String& sProg, const String& sCmdLine)
   sTmp = "";
   _svl->Add(new Parm("Temp", sTmp));
   char sLang[5];//, sLng[5];
- /* GetPrivateProfileString("Ilwis", "Language", "eng", sLang, 5, "ilwis.ini");
-  sTmp = sLang;
-  _svl->Add(new Parm("Language", sTmp));*/
   _svl->Add(new Parm("SysProgName", String("ilwis")));
   _svl->Add(new Parm("verbose", true));
   _svl->Add(new Parm("timer", false));
@@ -148,10 +143,12 @@ void IlwisAppContext::InitThreadLocalVars()
 	*fDoNotLoad = false;
 	bool *fNoUpdate = new bool(false);
 	bool *fDispNoErr = new bool(false);
+	bool *fServerMode = new bool(false);
 	SetThreadLocalVar(tlvDONOTSHOWFINDERROR, fVar);
 	SetThreadLocalVar(tlvDONOTLOADGDB, fDoNotLoad);
 	SetThreadLocalVar(tlvNOUPDATECATALOG, fNoUpdate);
 	SetThreadLocalVar(tlvDONOTSHOWANYERROR, fDispNoErr);
+	SetThreadLocalVar(tlvSERVERMODE, fServerMode);
 
 	char sDir[MAX_PATH];
 	GetCurrentDirectory(MAX_PATH, sDir);
@@ -179,6 +176,7 @@ void IlwisAppContext::SetThreadLocalVar(ThreadLocalVars tvType, void *Var)
 				case tlvDONOTLOADGDB:
 				case tlvNOUPDATECATALOG:					
 				case tlvDONOTSHOWANYERROR:
+				case tlvSERVERMODE:
 					delete (bool *)((*cur).pValue);
 					break;
 			}			
@@ -223,6 +221,7 @@ void IlwisAppContext::RemoveThreadLocalVars()
 				case tlvDONOTLOADGDB:
 				case tlvNOUPDATECATALOG:
 				case tlvDONOTSHOWANYERROR:
+				case tlvSERVERMODE:
 					delete (bool *)((*cur).pValue);
 					break;
 					

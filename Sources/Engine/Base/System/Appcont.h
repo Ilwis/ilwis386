@@ -62,7 +62,7 @@ class ModuleMap;
 class IlwisAppContext 
 {
 public:
-	enum ThreadLocalVars{tlvDONOTSHOWFINDERROR, tlvCURDIR, tlvDONOTLOADGDB, tlvNOUPDATECATALOG, tlvDONOTSHOWANYERROR, tlvNONE};
+	enum ThreadLocalVars{tlvDONOTSHOWFINDERROR, tlvCURDIR, tlvDONOTLOADGDB, tlvNOUPDATECATALOG, tlvDONOTSHOWANYERROR, tlvSERVERMODE, tlvNONE};
 	_export IlwisAppContext(const String& sProg, const String& sCmdLine);
 	_export ~IlwisAppContext();
 	void UseYield(bool f) { _fUseYield = f; }
@@ -89,7 +89,7 @@ public:
 	SysVarList *svl() { return _svl; }
 	StringManager *sm() { return _sm; }
 	HelpTopic& htp() { return _htp; }
-	void SetHelpTopic(const HelpTopic& htp) { _htp = htp; }
+	void setHelpItem(const HelpTopic& htp) { _htp = htp; }
 	String _export sIlwDir();
 	String _export sStdDir();
 	String _export sCurDir();
