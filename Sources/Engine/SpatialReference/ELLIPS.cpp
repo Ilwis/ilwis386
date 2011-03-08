@@ -63,15 +63,17 @@
 #define EPS15	1.e-15
 #define EPS12	1.e-12
 
-Ellipsoid::Ellipsoid()
-: sName("Sphere")
+Ellipsoid::Ellipsoid(): 
+identification(sUNDEF),
+sName("Sphere")
 {
   init(6371007.1809185,0);  // sphere with equal area as WGS 84
 //  init(6378137.0, 298.257223563);
 }
 
-Ellipsoid::Ellipsoid (double a, double f1)
-: sName("User Defined")
+Ellipsoid::Ellipsoid (double a, double f1): 
+identification(sUNDEF),
+sName("User Defined")
 {
   if (f1 == 0)
     sName = "Sphere";
@@ -79,7 +81,7 @@ Ellipsoid::Ellipsoid (double a, double f1)
 }
 
 Ellipsoid::Ellipsoid(const String& sEll)
-: sName(sEll)
+: sName(sEll), identification(sUNDEF)
 {
   if (fCIStrEqual("Sphere" , sEll)) {
     init(6371007.1809185,0);  // sphere with equal area as WGS 84
@@ -91,9 +93,19 @@ Ellipsoid::Ellipsoid(const String& sEll)
   char sBuf[100];
   if (0 == GetPrivateProfileString("Ellipsoids", sName.scVal(), "", sBuf, 100, sPath.scVal())) 
     throw ErrorNotFound(sEll);
-  double rMajor, f1;  
-  if (2 != sscanf(sBuf, "%lf,%lf", &rMajor, &f1))
-    InvalidEllipsoidDef();
+  double rMajor, f1;
+  String definition(sBuf);
+  Array<String> parts;
+  Split(definition, parts,",");
+  if ( parts.size() < 2)
+      InvalidEllipsoidDef();
+
+  rMajor = parts[0].rVal();
+  f1 = parts[1].rVal();
+  if ( rMajor == rUNDEF || f1 == rUNDEF)
+       InvalidEllipsoidDef();
+  if ( parts.size() == 3)
+	  identification = parts[2];
   init(rMajor,f1);  
 }
 
@@ -322,4 +334,8 @@ CoordCTS Ellipsoid::ctsConv(const CoordCTS& ctsIn, const CoordCTS& ctsPivot,
   // output coordinates to reference_system_2  (meters geocentric)
 
 	return ctsOut;
+}
+
+String Ellipsoid::getIdentification(bool wkt) {
+	return identification;
 }
