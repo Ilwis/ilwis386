@@ -4,7 +4,7 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
-#include "Headers\xercesc\util\Platforms\Win32\resource.h"		// main symbols
+//#include "Headers\xercesc\util\Platforms\Win32\resource.h"		// main symbols
 #include "Engine\Base\System\module.h"
 #include "Engine\Base\DataObjects\Version.h"
 
