@@ -118,6 +118,15 @@ CoordSystemViaLatLon::~CoordSystemViaLatLon()
     delete datum;
 }
 
+String CoordSystemViaLatLon::getIdentification(bool wkt) {
+	if ( datum){
+		return datum->getIdentification(wkt);
+	} else {
+		return ell.getIdentification(wkt);
+	}
+	return CoordSystemPtr::getIdentification(wkt);
+}
+
 void CoordSystemViaLatLon::Store()
 {
   CoordSystemPtr::Store();

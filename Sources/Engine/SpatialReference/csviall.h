@@ -57,6 +57,7 @@ public:
 //  virtual bool fConvertFrom(const CoordSystem&) const;
   virtual Coord cConv(const CoordSystem&, const Coord&) const;
   virtual Coord cConv(const LatLon&) const;
+  String getIdentification(bool wkt=false);
   Datum* datum;
   Ellipsoid ell;
 private:
