@@ -56,7 +56,9 @@ void AnimationManagementTool::animationManagement() {
 }
 
 void AnimationManagementTool::timedEvent(UINT timerid) {
-
+	AnimationPropertySheet *propSheet = AnimationTool::getManagement();
+	if ( propSheet) 
+		propSheet->PostMessage(ILWM_UPDATE_ANIM, AnimationPropertySheet::pTimedEvent);
 }
 //---------------------------------------------------
 

@@ -56,9 +56,9 @@ LRESULT AnimationPropertySheet::command(WPARAM wp, LPARAM lp) {
 		FormBasePropertyPage *page = (FormBasePropertyPage *)GetPage(1);
 		page->DataChanged((Event*)1);
 	}
-	if ( (int)wp & pAttributes) {
-		FormBasePropertyPage *page = (FormBasePropertyPage *)GetPage(1);
-		page->DataChanged((Event*)1);
+	if ( (int)wp & pTimedEvent) {
+		FormBasePropertyPage *page = (FormBasePropertyPage *)GetPage(2);
+		page->DataChanged((Event*)2);
 	}
 	return 0;
 }
@@ -345,6 +345,10 @@ int AnimationSynchronization::synchronize(Event*) {
 	return 1;
 }
 //---------------------------------------------------
+BEGIN_MESSAGE_MAP(AnimationProgress, FormBasePropertyPage)
+	ON_MESSAGE(ID_TIME_TICK, OnTimeTick)
+END_MESSAGE_MAP()
+
 AnimationProgress::AnimationProgress(AnimationPropertySheet& sheet) : FormBasePropertyPage(TR("Progress Control").scVal()), propsheet(sheet)
 {
 	fgMaster = new FieldGroup(root, true);
@@ -353,6 +357,16 @@ AnimationProgress::AnimationProgress(AnimationPropertySheet& sheet) : FormBasePr
 	graphSlider->SetWidth(180);
 	//graphSlider->Align(entry, AL_UNDER, 23);{
 	create();
+}
+
+LRESULT AnimationProgress::OnTimeTick( WPARAM wParam, LPARAM lParam ) {
+	AnimationProperties *props = propsheet.getActiveAnimation();
+	if ( !props)
+		return 0;
+
+	graphSlider->setIndex(props->drawer->getActiveMaps()[wParam]);
+	props->drawer->setMapIndex(wParam);
+	return 1;
 }
 
 int AnimationProgress::DataChanged(Event*ev) {
@@ -374,8 +388,16 @@ int AnimationProgress::DataChanged(Event*ev) {
 			ObjectCollection oc((*source)->fnObj);
 			number = oc->iNrObjects();
 		}
-		RangeInt setRange = RangeInt(0, 100);
+		RangeInt setRange = RangeInt(0, number);
 		graphSlider->setRecordRange(setRange);
+	}
+	if (GetSafeHwnd() && code == 2) {
+		AnimationProperties *props = propsheet.getActiveAnimation();
+		if ( props == 0)
+			return 1;
+		AnimationDrawer *adrw = props->drawer;
+		graphSlider->setIndex(adrw->getActiveMaps()[adrw->getMapIndex()]);
+		//animBar.updateTime(String("index : %d",adrw->getMapIndex()));
 	}
 	return 1;
 }

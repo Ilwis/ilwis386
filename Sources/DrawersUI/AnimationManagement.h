@@ -14,7 +14,7 @@ namespace ILWIS {
 	class AnimationPropertySheet : public CPropertySheet
 	{
 	public:
-		enum Pages{pRun=1, pSynchornization=2, pAttributes=4, pAll=32767};
+		enum Pages{pRun=1, pSynchornization=2, pAttributes=4, pTimedEvent=16, pAll=32767};
 		AnimationPropertySheet();
 
 		BOOL OnInitDialog();
@@ -78,9 +78,12 @@ namespace ILWIS {
 			AnimationProgress(AnimationPropertySheet& sheet);
 		private:
 			int DataChanged(Event*ev);
+			LRESULT OnTimeTick( WPARAM wParam, LPARAM lParam );
 			AnimationPropertySheet	&propsheet;
 			TimeGraphSlider *graphSlider;
 			FieldGroup *fgMaster;
+
+		DECLARE_MESSAGE_MAP();
 	};
 }
 
