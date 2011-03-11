@@ -56,6 +56,7 @@
 #define IMPEXP __declspec(dllimport)
 #endif
 
+	
 class IMPEXP MapWindow: public DataWindow
 {
 public:

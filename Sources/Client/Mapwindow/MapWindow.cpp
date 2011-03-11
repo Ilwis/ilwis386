@@ -572,3 +572,4 @@ void MapWindow::GetMessageString(UINT nID, CString& sMessage) const
 	FrameWindow::GetMessageString(nID, sMessage);
 }
 
+//--------------------------------------------------------

@@ -75,9 +75,9 @@ protected:
 	afx_msg void OnDrawItem( int nIDCtl, LPDRAWITEMSTRUCT lpDrawItemStruct );
 	afx_msg void OnMeasureItem( int nIDCtl, LPMEASUREITEMSTRUCT mi );
 	afx_msg void OnHelp();                             
+	BOOL OnInitDialog();
 private:
 	bool _fApplyClicked;
-	BOOL OnInitDialog();
 	struct dlgt 
 	{   
 		DLGTEMPLATE dlg;

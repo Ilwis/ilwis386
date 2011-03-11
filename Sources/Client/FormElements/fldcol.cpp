@@ -113,6 +113,9 @@ void FieldColumn::create()
 
 FormEntry* FieldColumn::CheckData()
 {
+  if (fld->ose == 0)
+	  return 0;
+
   if (fShow()) {
     int id = fld->ose->GetCurSel();
   String sCol = _sName.sUnQuote() + ".clm"; // strip quotes from column name

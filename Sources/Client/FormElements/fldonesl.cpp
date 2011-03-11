@@ -187,6 +187,9 @@ String FieldOneSelect::sGetText()
 
 void FieldOneSelect::StoreData()
 {
+	if (ose == 0)
+		return;
+
   ose->storeData();
   FormEntry::StoreData();
 }

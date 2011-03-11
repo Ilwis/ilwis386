@@ -268,7 +268,9 @@ MIN                     ICON                    "min.ico"
 MAX                     ICON                    "max.ico"
 MEDIAN                  ICON                    "median.ico"
 SAVE                    ICON                    "save.ico"
-EditMap                 ICON                    "EditMap.ico"
+EDITMAP                 ICON                    "EditMap.ico"
+OneFramePlus            ICON                    "oneframeplus.ico"
+OneFrameMinus           ICON                    "oneframeminus.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //

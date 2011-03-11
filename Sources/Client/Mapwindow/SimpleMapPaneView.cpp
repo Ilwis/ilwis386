@@ -457,17 +457,19 @@ void SimpleMapPaneView::OnMouseMove(UINT nFlags, CPoint point)
 		}
 		else {
 			bool fHide = true;
-			if (fValid && !fOutside){
+			if (fValid && !fOutside && mode == cNone){
 				String s = mcd->rootDrawer->getInfo(c);
 				if (s != "") {
 					info->text(point,s);
 					info->ShowWindow(SW_SHOW);
 				}
 			}
+			else
+				info->ShowWindow(SW_HIDE);
 		}
 	}
 
-	if (fValid && !fOutside) {
+	if (fValid && !fOutside && mode == cNone) {
 		CoordWithCoordSystem cwcs(c, mcd->rootDrawer->getCoordinateSystem());
 		int state = cmMOUSEMOVE;
 		if ( iActiveTool == ID_ZOOMIN)

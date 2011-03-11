@@ -331,7 +331,7 @@ void LayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 		AbstractMapDrawer *mapDrawer = dynamic_cast<AbstractMapDrawer *>(dr);
 		if (mapDrawer != 0 && mapDrawer->getBaseMap() != 0){
 			item = addMapItem(mapDrawer, lastNode, lastTool);
-		}
+		} 
 	}
 	DrawerTool *dt = DrawerTool::createTool("BackgroundTool",mcd->mpvGetView(),this,mcd->rootDrawer);
 	drwTool->addTool(dt);
