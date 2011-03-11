@@ -9,7 +9,7 @@ ILWIS::NewDrawer *createRasterSetDrawer(ILWIS::DrawerParameters *parms);
 class FieldOneSelectTextOnly;
 class ValueSlicerSlider;
 
-namespace ILWIS{
+namespace ILWIS {
 
 	class RasterSetData {
 	public:
@@ -23,9 +23,12 @@ namespace ILWIS{
 
 		GLint maxTextureSize;
 		CoordBounds cb;
-		long imageWidth, imageHeight;
+		unsigned long imageWidth, imageHeight; // actual image size
+		unsigned long width, height; // power of 2
 		bool init;
 	};
+
+	class DEMTriangulator;
 
 	class _export RasterSetDrawer : public SetDrawer {
 	public:
@@ -49,6 +52,7 @@ namespace ILWIS{
 
 		void DisplayImagePortion(double x1, double y1, double x2, double y2, unsigned int imageOffsetX, unsigned int imageOffsetY, unsigned int imageSizeX, unsigned int imageSizeY) const;
 		void DisplayTexture(double x1, double y1, double x2, double y2, Coord & c1, Coord & c2, Coord & c3, Coord & c4, unsigned int imageOffsetX, unsigned int imageOffsetY, unsigned int imageSizeX, unsigned int imageSizeY, unsigned int zoomFactor) const;
+		void DisplayTexture3D(double x1, double y1, double x2, double y2, Coord & c1, Coord & c2, Coord & c3, Coord & c4, unsigned int imageOffsetX, unsigned int imageOffsetY, unsigned int imageSizeX, unsigned int imageSizeY, unsigned int zoomFactor) const;
 		double getMinZoom(unsigned int imageSizeX, unsigned int imageSizeY, GLdouble * m_winx, GLdouble * m_winy) const;
 		void init() const;
 		
@@ -60,6 +64,7 @@ namespace ILWIS{
 		bool fPaletteOwner; // for maplist animation: all have same palette, just use the one of the first band
 		Palette * palette;
 		TextureHeap * textureHeap;
+		DEMTriangulator * demTriangulator;
 	};
 
 	

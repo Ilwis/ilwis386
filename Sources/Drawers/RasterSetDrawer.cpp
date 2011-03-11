@@ -12,6 +12,7 @@
 #include "Engine\Drawers\AbstractMapDrawer.h"
 #include "Engine\Drawers\DrawerContext.h"
 #include "Texture.h"
+#include "DEMTriangulator.h"
 
 
 using namespace ILWIS;
@@ -22,7 +23,7 @@ ILWIS::NewDrawer *createRasterSetDrawer(DrawerParameters *parms) {
 
 RasterSetDrawer::RasterSetDrawer(DrawerParameters *parms) : 
 SetDrawer(parms,"RasterSetDrawer")
-, data(new RasterSetData()), isThreaded(true), sameCsy(true), fUsePalette(false), fPaletteOwner(false), palette(0), textureHeap(new TextureHeap())
+, data(new RasterSetData()), isThreaded(true), sameCsy(true), fUsePalette(false), fPaletteOwner(false), palette(0), textureHeap(new TextureHeap()), demTriangulator(0)
 {
 	setTransparency(1); // default, opaque
 	//	setDrawMethod(drmNOTSET); // default
@@ -34,6 +35,8 @@ RasterSetDrawer::~RasterSetDrawer(){
 	if (fPaletteOwner)
 		delete palette;
 	delete data;
+	if (demTriangulator)
+		delete demTriangulator;
 }
 
 void RasterSetDrawer::setMinMax(const RangeReal & rrMinMax)
@@ -58,6 +61,21 @@ void RasterSetDrawer::prepare(PreparationParameters *pp){
 	}
 	if ( pp->type & ptGEOMETRY | pp->type & ptRESTORE) {
 		sameCsy = getRootDrawer()->getCoordinateSystem()->fnObj == csy->fnObj;
+	}
+	if ((pp->type & pt3D) || ((pp->type & ptGEOMETRY | pp->type & ptRESTORE) && demTriangulator != 0)) {
+		ZValueMaker * zMaker = getZMaker();
+		bool is3DPossible = zMaker->getThreeDPossible();
+		if (demTriangulator != 0) {
+			delete demTriangulator;
+			demTriangulator = 0;
+		}
+		if (is3DPossible) {
+			demTriangulator = new DEMTriangulator(zMaker, rastermap.ptr(), getRootDrawer()->getCoordinateSystem(), false);
+			if (!demTriangulator->fValid()) {
+				delete demTriangulator;
+				demTriangulator = 0;
+			}
+		}
 	}
 }
 
@@ -114,11 +132,19 @@ void RasterSetDrawer::init() const
 		if (iYScreen < data->maxTextureSize)
 			data->maxTextureSize = iYScreen;
 
-		textureHeap->SetData(rastermap, getDrawingColor(), getDrawMethod(), drawcontext->getMaxPaletteSize(), rrMinMax, drawcontext);
-		if (fPaletteOwner)
-			palette->SetData(rastermap, this, drawcontext->getMaxPaletteSize(), rrMinMax);
 		data->imageWidth = rastermap->rcSize().Col;
 		data->imageHeight = rastermap->rcSize().Row;
+
+		double log2width = log((double)data->imageWidth)/log(2.0);
+		log2width = max(6, ceil(log2width)); // 2^6 = 64 = the minimum texture size that OpenGL/TexImage2D supports
+		data->width = pow(2, log2width);
+		double log2height = log((double)data->imageHeight)/log(2.0);
+		log2height = max(6, ceil(log2height)); // 2^6 = 64 = the minimum texture size that OpenGL/TexImage2D supports
+		data->height = pow(2, log2height);
+
+		textureHeap->SetData(rastermap, getDrawingColor(), getDrawMethod(), drawcontext->getMaxPaletteSize(), data->width, data->height, rrMinMax, drawcontext);
+		if (fPaletteOwner)
+			palette->SetData(rastermap, this, drawcontext->getMaxPaletteSize(), rrMinMax);
 
 		if (fPaletteOwner)
 			if (fUsePalette)
@@ -148,12 +174,6 @@ bool RasterSetDrawer::draw( const CoordBounds& cbArea) const {
 
 		// Extend the image so that its width and height become ^2
 
-		double log2width = log((double)data->imageWidth)/log(2.0);
-		log2width = max(6, ceil(log2width)); // 2^6 = 64 = the minimum texture size that OpenGL/TexImage2D supports
-		const unsigned long width = pow(2, log2width);
-		double log2height = log((double)data->imageHeight)/log(2.0);
-		log2height = max(6, ceil(log2height)); // 2^6 = 64 = the minimum texture size that OpenGL/TexImage2D supports
-		const unsigned long height = pow(2, log2height);
 		// DisplayImagePortion(-1, 1, 1, -1, 0, 0, width, height);
 		CoordBounds cb = data->cb;
 		double minX = cb.MinX();
@@ -161,16 +181,31 @@ bool RasterSetDrawer::draw( const CoordBounds& cbArea) const {
 		double minY = cb.MinY();
 		double maxY = cb.MaxY();
 		// Image has grown right-down
-		maxX = minX + (maxX - minX) * (double)width / (double)data->imageWidth;
-		minY = maxY + (minY - maxY) * (double)height / (double)data->imageHeight;
+		maxX = minX + (maxX - minX) * (double)data->width / (double)data->imageWidth;
+		minY = maxY + (minY - maxY) * (double)data->height / (double)data->imageHeight;
 
+		bool is3D = getRootDrawer()->is3D(); 
+		if (is3D) {
+			ZValueMaker *zmaker = getZMaker();
+			double zscale = zmaker->getZScale();
+			double zoffset = zmaker->getOffset();
+			glPushMatrix();
+			glScaled(1,1,zscale);
+			glTranslated(0,0,zoffset);
+		}
 		glEnable(GL_TEXTURE_2D);
+		glMatrixMode(GL_TEXTURE);
+		glPushMatrix();
 		if (fUsePalette) {
 			((AbstractMapDrawer*)getParentDrawer())->inactivateOtherPalettes(palette);
 			palette->MakeCurrent(); // for now this is the only call .. officially it should also be called before generating textures in a separate thread, however currently the only way two palettes would interfere is with the AnimationDrawer, and there textures are generated in the current thread
 		}
-		DisplayImagePortion(minX, maxY, maxX, minY, 0, 0, width, height);
+		DisplayImagePortion(minX, maxY, maxX, minY, 0, 0, data->width, data->height);
+		glPopMatrix();
+		glMatrixMode(GL_MODELVIEW);
 		glDisable(GL_TEXTURE_2D);
+		if (is3D)
+			glPopMatrix();
 		glDisable(GL_BLEND);
 	}
 
@@ -291,7 +326,12 @@ void RasterSetDrawer::DisplayImagePortion(double x1, double y1, double x2, doubl
 		DisplayImagePortion(x1, y1 + dy, x2, y2, imageOffsetX, imageOffsetY + sizeY2, imageSizeX, sizeY2);
 	}
 	else
-		DisplayTexture(x1, y1, x2, y2, c1, c2, c3, c4, imageOffsetX, imageOffsetY, imageSizeX, imageSizeY, zoomFactor);
+	{
+		if (getRootDrawer()->is3D() && demTriangulator)
+			DisplayTexture3D(x1, y1, x2, y2, c1, c2, c3, c4, imageOffsetX, imageOffsetY, imageSizeX, imageSizeY, zoomFactor);
+		else
+			DisplayTexture(x1, y1, x2, y2, c1, c2, c3, c4, imageOffsetX, imageOffsetY, imageSizeX, imageSizeY, zoomFactor);
+	}
 }
 
 void RasterSetDrawer::DisplayTexture(double x1, double y1, double x2, double y2, Coord & c1, Coord & c2, Coord & c3, Coord & c4, unsigned int imageOffsetX, unsigned int imageOffsetY, unsigned int imageSizeX, unsigned int imageSizeY, unsigned int zoomFactor) const
@@ -303,27 +343,29 @@ void RasterSetDrawer::DisplayTexture(double x1, double y1, double x2, double y2,
 		// make the quad
 		glBegin (GL_QUADS);
 
-		ZValueMaker *zmaker = 0;
-		//double zv = 0.0;
-		//if (is3D())
-			zmaker = getZMaker();
-		double z0 = zmaker->getZ0(getRootDrawer()->is3D());
+		// texture bounds
+		double s1 = imageOffsetX / (double)data->width;
+		double t1 = imageOffsetY / (double)data->height;
+		double s2 = min(imageOffsetX + imageSizeX, data->imageWidth) / (double)data->width;
+		double t2 = min(imageOffsetY + imageSizeY, data->imageHeight) / (double)data->height;
+
+		double z0 = getZMaker()->getZ0(getRootDrawer()->is3D());
 
 		if (sameCsy) {
 			// avoid plotting the "added" portion of the map
 			x2 = min(x2, data->cb.MaxX());
 			y2 = max(y2, data->cb.MinY());
 
-			tex->TexCoord2d(x1, y1);
+			glTexCoord2d(s1, t1);
 			glVertex3d(x1, y1, z0);
 
-			tex->TexCoord2d(x2, y1);
+			glTexCoord2d(s2, t1);
 			glVertex3d(x2, y1, z0);
 
-			tex->TexCoord2d(x2, y2);
+			glTexCoord2d(s2, t2);
 			glVertex3d(x2, y2, z0);
 
-			tex->TexCoord2d(x1, y2);
+			glTexCoord2d(s1, t2);
 			glVertex3d(x1, y2, z0);
 		} else {
 			// avoid plotting the "added" portion of the map
@@ -348,20 +390,85 @@ void RasterSetDrawer::DisplayTexture(double x1, double y1, double x2, double y2,
 			if (fRecalculateCY2)
 				c4 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x1, y2, 0.0));
 
-			tex->TexCoord2d(x1, y1);
+			glTexCoord2d(s1, t1);
 			glVertex3d(c1.x, c1.y, z0);
 
-			tex->TexCoord2d(x2, y1);
+			glTexCoord2d(s2, t1);
 			glVertex3d(c2.x, c2.y, z0);
 
-			tex->TexCoord2d(x2, y2);
+			glTexCoord2d(s2, t2);
 			glVertex3d(c3.x, c3.y, z0);
 
-			tex->TexCoord2d(x1, y2);
+			glTexCoord2d(s1, t2);
 			glVertex3d(c4.x, c4.y, z0);
 		}
 	
 		glEnd();
+	}
+}
+
+void RasterSetDrawer::DisplayTexture3D(double x1, double y1, double x2, double y2, Coord & c1, Coord & c2, Coord & c3, Coord & c4, unsigned int imageOffsetX, unsigned int imageOffsetY, unsigned int imageSizeX, unsigned int imageSizeY, unsigned int zoomFactor) const
+{
+	Texture* tex = textureHeap->GetTexture(imageOffsetX, imageOffsetY, imageSizeX, imageSizeY, x1, y1, x2, y2, zoomFactor, fUsePalette, isThreaded);
+
+	if (tex != 0)
+	{
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+		if (sameCsy) {
+			// avoid plotting the "added" portion of the map
+			x2 = min(x2, data->cb.MaxX());
+			y2 = max(y2, data->cb.MinY());
+
+			double clip_plane0[]={-1.0,0.0,0.0,x2}; // x < x2
+			double clip_plane1[]={1.0,0.0,0.0,-x1}; // x > x1
+			double clip_plane2[]={0.0,-1.0,0.0,y1}; // y > y1
+			double clip_plane3[]={0.0,1.0,0.0,-y2}; // y < y2
+			glClipPlane(GL_CLIP_PLANE0,clip_plane0);
+			glClipPlane(GL_CLIP_PLANE1,clip_plane1);
+			glClipPlane(GL_CLIP_PLANE2,clip_plane2);
+			glClipPlane(GL_CLIP_PLANE3,clip_plane3);
+
+		} else {
+			// avoid plotting the "added" portion of the map
+			bool fRecalculateCX2 = false;
+			if (x2 > data->cb.MaxX())
+			{
+				x2 = data->cb.MaxX();
+				fRecalculateCX2 = true;
+			}
+			bool fRecalculateCY2 = false;
+			if (y2 < data->cb.MinY())
+			{
+				y2 = data->cb.MinY();
+				fRecalculateCY2 = true;
+			}
+
+			//c1 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x1, y1, 0.0));
+			if (fRecalculateCX2)
+				c2 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x2, y1, 0.0));
+			if (fRecalculateCX2 || fRecalculateCY2)
+				c3 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x2, y2, 0.0));
+			if (fRecalculateCY2)
+				c4 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x1, y2, 0.0));
+			double clip_plane0[]={-1.0,0.0,0.0,c3.x}; // x < x2
+			double clip_plane1[]={1.0,0.0,0.0,-c1.x}; // x > x1
+			double clip_plane2[]={0.0,-1.0,0.0,c1.y}; // y > y1
+			double clip_plane3[]={0.0,1.0,0.0,-c3.y}; // y < y2
+			glClipPlane(GL_CLIP_PLANE0,clip_plane0);
+			glClipPlane(GL_CLIP_PLANE1,clip_plane1);
+			glClipPlane(GL_CLIP_PLANE2,clip_plane2);
+			glClipPlane(GL_CLIP_PLANE3,clip_plane3);
+		}
+		glEnable(GL_CLIP_PLANE0);
+		glEnable(GL_CLIP_PLANE1);
+		glEnable(GL_CLIP_PLANE2);
+		glEnable(GL_CLIP_PLANE3);
+		demTriangulator->PlotTriangles();
+		glDisable(GL_CLIP_PLANE0);
+		glDisable(GL_CLIP_PLANE1);
+		glDisable(GL_CLIP_PLANE2);
+		glDisable(GL_CLIP_PLANE3);
 	}
 }
 
