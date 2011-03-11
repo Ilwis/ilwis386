@@ -20,7 +20,7 @@ using namespace ILWIS;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-Texture::Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDrawer::DrawMethod drm, const long offsetX, const long offsetY, const long sizeX, const long sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, unsigned int iPaletteSize, const RangeReal & rrMinMaxMap, bool fUsePalette)
+Texture::Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDrawer::DrawMethod drm, const long offsetX, const long offsetY, const unsigned long sizeX, const unsigned long sizeY, const unsigned long imgWidth2, const unsigned long imgHeight2, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, unsigned int iPaletteSize, const RangeReal & rrMinMaxMap, bool fUsePalette)
 : mp(mp)
 , texture_data(0)
 , drawColor(drawColor)
@@ -29,6 +29,8 @@ Texture::Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDr
 , offsetY(offsetY)
 , sizeX(sizeX)
 , sizeY(sizeY)
+, imgWidth2(imgWidth2)
+, imgHeight2(imgHeight2)
 , xMin(xMin)
 , xMax(xMax)
 , yMin(yMin)
@@ -102,6 +104,11 @@ bool Texture::fValid()
 void Texture::BindMe()
 {
 	glBindTexture(GL_TEXTURE_2D, texture);
+	double s = offsetX / (double)imgWidth2;
+	double t = offsetY / (double)imgHeight2;
+	glLoadIdentity();
+	glScaled(imgWidth2 / (double)sizeX, imgHeight2 / (double)sizeY, 1);
+	glTranslated(-s, -t, 0);
 	if (fUsePalette && fPaletteChanged) {
 		boolean oldVal;
 		glGetBooleanv(GL_MAP_COLOR, &oldVal);
@@ -115,11 +122,6 @@ void Texture::BindMe()
 void Texture::PaletteChanged()
 {
 	fPaletteChanged = true;
-}
-
-void Texture::TexCoord2d(GLdouble x, GLdouble y)
-{
-	glTexCoord2d((x - xMin) / (xMax - xMin), (y - yMin) / (yMax - yMin));
 }
 
 bool Texture::equals(GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor)

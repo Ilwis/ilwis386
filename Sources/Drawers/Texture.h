@@ -21,12 +21,11 @@ namespace ILWIS {
 	class Texture
 	{
 	public:
-		Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDrawer::DrawMethod drm, const long offsetX, const long offsetY, const long sizeX, const long sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, unsigned int iPaletteSize, const RangeReal & rrMinMaxMap, bool fUsePalette);
+		Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDrawer::DrawMethod drm, const long offsetX, const long offsetY, const unsigned long sizeX, const unsigned long sizeY, const unsigned long imgWidth2, const unsigned long imgHeight2, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, unsigned int iPaletteSize, const RangeReal & rrMinMaxMap, bool fUsePalette);
 		virtual ~Texture();
 
 		void CreateTexture(DrawerContext * drawerContext, bool fInThread, volatile bool * fDrawStop);
 		void BindMe(); // To be called before glBegin
-		void TexCoord2d(GLdouble x, GLdouble y); // To be called repeatedly between glBegin and glEnd // These are in world coordinates !!
 		bool equals(GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor);
 		bool contains(GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax);
 		unsigned int getZoomFactor();
@@ -48,8 +47,9 @@ namespace ILWIS {
 		GLuint texture;
 		char * texture_data;
 		const GLdouble xMin, yMin, xMax, yMax; // These are in world coordinates !! These are to be mapped to texture coordinates 0 to 1
-		const long sizeX, sizeY;
+		const unsigned long sizeX, sizeY;
 		const long offsetX, offsetY;
+		const unsigned long imgWidth2, imgHeight2;
 		const unsigned int zoomFactor;
 		const DrawingColor * drawColor;
 		const ComplexDrawer::DrawMethod drm;
