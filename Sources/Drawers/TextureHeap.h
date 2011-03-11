@@ -48,7 +48,7 @@ namespace ILWIS {
 		TextureHeap();
 		virtual ~TextureHeap();
 
-		void SetData(const Map & _mp, const DrawingColor * drawColor, const NewDrawer::DrawMethod drm, const unsigned int iPaletteSize, const RangeReal & rrMinMaxMap, DrawerContext * drawerContext);
+		void SetData(const Map & _mp, const DrawingColor * drawColor, const NewDrawer::DrawMethod drm, const unsigned int iPaletteSize, const unsigned long imgWidth2, const unsigned long imgHeight2, const RangeReal & rrMinMaxMap, DrawerContext * drawerContext);
 		bool fValid();
 		Texture * GetTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, const bool fUsePalette, bool fInThread);
 		void ClearQueuedTextures();
@@ -66,6 +66,7 @@ namespace ILWIS {
 		const DrawingColor * drawColor;
 		NewDrawer::DrawMethod drm;
 		unsigned int iPaletteSize;
+		unsigned long imgWidth2, imgHeight2;
 		RangeReal rrMinMaxMap;
 		int texturesArraySize;
 		int readpos;

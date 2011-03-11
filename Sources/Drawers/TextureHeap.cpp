@@ -171,12 +171,14 @@ TextureHeap::~TextureHeap()
 			delete textures[i];
 }
 
-void TextureHeap::SetData(const Map & _mp, const DrawingColor * drawColor, const NewDrawer::DrawMethod drm, const unsigned int iPaletteSize, const RangeReal & rrMinMaxMap, DrawerContext * drawerContext)
+void TextureHeap::SetData(const Map & _mp, const DrawingColor * drawColor, const NewDrawer::DrawMethod drm, const unsigned int iPaletteSize, const unsigned long imgWidth2, const unsigned long imgHeight2, const RangeReal & rrMinMaxMap, DrawerContext * drawerContext)
 {
 	this->mp.SetPointer(_mp.pointer());
 	this->drawColor = drawColor;
 	this->drm = drm;
 	this->iPaletteSize = iPaletteSize;
+	this->imgWidth2 = imgWidth2;
+	this->imgHeight2 = imgHeight2;
 	this->rrMinMaxMap.rLo() = rrMinMaxMap.rLo();
 	this->rrMinMaxMap.rHi() = rrMinMaxMap.rHi();
 	this->drawerContext = drawerContext;
@@ -242,7 +244,7 @@ Texture * TextureHeap::GetTexture(const unsigned int offsetX, const unsigned int
 Texture * TextureHeap::GenerateTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, const bool fUsePalette, bool fInThread)
 {
 	if (((writepos + 1) % BUF_SIZE) != readpos) {
-		textureRequest[writepos] = new Texture(mp, drawColor, drm, offsetX, offsetY, sizeX, sizeY, xMin, yMin, xMax, yMax, zoomFactor, iPaletteSize, rrMinMaxMap, fUsePalette);
+		textureRequest[writepos] = new Texture(mp, drawColor, drm, offsetX, offsetY, sizeX, sizeY, imgWidth2, imgHeight2, xMin, yMin, xMax, yMax, zoomFactor, iPaletteSize, rrMinMaxMap, fUsePalette);
 		writepos = (writepos + 1) % BUF_SIZE;
 	}
 	if (fInThread) {
