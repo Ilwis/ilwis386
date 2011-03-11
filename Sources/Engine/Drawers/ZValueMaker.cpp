@@ -112,10 +112,15 @@ double ZValueMaker::getValue(const Coord& crd, Feature *f ){
 	if (table.fValid()) {
 		value =  columns[0]->rValue(f->iValue());
 	}
+	return scaleValue(value);
+}
+
+double ZValueMaker::scaleValue(double value) {
 	if ( value == rUNDEF)
 		return 0;
 	double scale = (value - range.rLo()) / range.rWidth();
-	double zMaxSizeEstimate = (spatialsourcemap->cb().width() + spatialsourcemap->cb().height())/ 2.0;
+	// double zMaxSizeEstimate = (spatialsourcemap->cb().width() + spatialsourcemap->cb().height())/ 2.0;
+	double zMaxSizeEstimate = (cbLimits.width() + cbLimits.height())/ 2.0;
 	double endvalue = scale * zMaxSizeEstimate * 0.25;
 	if ( endvalue <= 0) {
 		endvalue = zMaxSizeEstimate * 0.01;
@@ -123,11 +128,28 @@ double ZValueMaker::getValue(const Coord& crd, Feature *f ){
 	return endvalue;
 }
 
+BaseMapPtr * ZValueMaker::getSourceRasterMap() const { // we return the pointer to avoid copy constructors
+	if (type == IlwisObject::iotRASMAP) {
+		if (self) {
+			if (spatialsourcemap.fValid())
+				return spatialsourcemap.ptr();
+			else
+				return 0;
+		}
+		else if (datasourcemap.fValid())
+			return datasourcemap.ptr();
+		else
+			return 0;
+	} else
+		return 0;
+}
 void ZValueMaker::setOffset(double v){
 	if ( range.rLo() == rUNDEF) {
-		offset = 0;
+		v = 0;
 	}
-	offset = v;
+	double scale = (v - range.rLo()) / range.rWidth();
+	double zMaxSizeEstimate = (cbLimits.width() + cbLimits.height())/ 2.0;
+	offset = scale * zMaxSizeEstimate * 0.25;
 }
 
 double ZValueMaker::getOffset() const {

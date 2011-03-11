@@ -11,6 +11,7 @@ public:
 	void setTable(const Table& tbl, const vector<String>& names);
 	void setScaleType(ZValueTypeScaling t);
 	double getValue(const Coord& crd, Feature *f = 0);
+	double scaleValue(double value);
 	void setOffset(double u=rUNDEF);
 	double getOffset() const;
 	RangeReal getRange() const;
@@ -23,6 +24,7 @@ public:
 	void setZOrder(int index, double base);
 	int getZOrder() const;
 	double getZ0(bool is3D) const;
+	BaseMapPtr * getSourceRasterMap() const;
 
 private:
 	BaseMap spatialsourcemap;
