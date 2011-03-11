@@ -220,6 +220,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Drawers\DEMTriangulator.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Drawers\Drawers.cpp"
 				>
 			</File>
@@ -314,6 +318,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Drawers\CanvasBackgroundDrawer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\DEMTriangulator.h"
 				>
 			</File>
 			<File
