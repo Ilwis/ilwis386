@@ -78,8 +78,14 @@ DEMTriangulator::DEMTriangulator(ZValueMaker * zMaker, BaseMapPtr * drapeMapPtr,
 		double minY = mp->cb().MinY();
 		double maxY = mp->cb().MaxY();
 
-		width = pow(2, max(6, ceil(log((double)iSizeX)/log(2.0))));
-		height = pow(2, max(6, ceil(log((double)iSizeY)/log(2.0))));
+		if (fSelfDrape) {
+			width = pow(2, max(6, ceil(log((double)iSizeX)/log(2.0))));
+			height = pow(2, max(6, ceil(log((double)iSizeY)/log(2.0))));
+		} else {
+			RowCol rc = drapemp->rcSize();
+			width = (pow(2, max(6, ceil(log((double)rc.Col)/log(2.0)))));
+			height = (pow(2, max(6, ceil(log((double)rc.Row)/log(2.0)))));
+		}
 		rStepX = (double) ((maxX - minX) / iSizeX);
 		rStepY = (double) ((maxY - minY) / iSizeY);
 		rMinX = minX + (rStepX / 2.0); // Provided: corner of corners; convert to centre of corners
@@ -743,7 +749,7 @@ void DEMTriangulator::AddVertex(int x, int y, double rHeight)
 {	
 	// TRIANGLE_ARRAY, thus every 3 vertices form 1 triangle
 
-	// 4 cases:
+	// Cases:
 	// 1: mp to be draped over mp values, in projection mp->csy
 	// 2: mp to be draped over mp values, in projection root->csy
 	// 3: drapemp to be draped over mp values, in projection mp->csy (== drapemp->csy)
@@ -760,18 +766,8 @@ void DEMTriangulator::AddVertex(int x, int y, double rHeight)
 		double row;
 		double col;
 		drapemp->gr()->Coord2RowCol(c1, row, col);
-		RowCol rc = drapemp->rcSize();
-		//CoordBounds cb = drapemp->cb();
-		//double minX = cb.MinX();
-		//double minY = cb.MinY();
-		//double maxX = cb.MaxX();
-		//double maxY = cb.MaxY();
-		//s = (c1.x - minX) / cb.width();
-		//t = (c1.y - minY) / cb.height();
-		long width1 = (pow(2, max(6, ceil(log((double)rc.Col)/log(2.0)))));
-		long height1 = (pow(2, max(6, ceil(log((double)rc.Row)/log(2.0)))));
-		s = col / (double)width1;
-		t = row / (double)height1;
+		s = col / (double)width;
+		t = row / (double)height;
 	}
 	if (!fSameCsy)
 		c = csyDest->cConv(csyMap, c);
