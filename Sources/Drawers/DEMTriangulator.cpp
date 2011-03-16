@@ -14,8 +14,8 @@ using namespace ILWIS;
 
 DEMTriangulator::DEMTriangulator(double* rHeights, int iWidth, int iHeight,
 			double rMinX, double rMinY, double rMaxX, double rMaxY, bool fSmooth)
-: iMinGlobalRes(12) // min global res., the higher the more vertices
-, D2K ((double) iMinGlobalRes / (2.0 * (iMinGlobalRes - 1.0))) // factor for neighboring D2-values, between 0.5 and 1
+: iNrVerticalSteps(12) // min global res., the higher the more vertices
+, D2K ((double) iNrVerticalSteps / (2.0 * (iNrVerticalSteps - 1.0))) // factor for neighboring D2-values, between 0.5 and 1
 , iSizeX(iWidth)
 , iSizeY(iHeight)
 , rHeights(rHeights)
@@ -26,7 +26,7 @@ DEMTriangulator::DEMTriangulator(double* rHeights, int iWidth, int iHeight,
 , rStepY((double) ((rMaxY - rMinY) / iSizeY))
 , rMinX(rMinX + (rStepX / 2.0)) // Provided: corner of corners; convert to centre of corners
 , rMinY(rMinY + (rStepY / 2.0))
-, rDesiredResolution(0.1 / 2500.0) // (22.0) //(0.001) // ((double) iWidth * (double) rStepX * 4) // The desired resolution (calculate based on the DEM properties). Formula may need improvement.
+, rHeightAccuracy(2500.0 / (double)iNrVerticalSteps) // (22.0) //(0.001) // ((double) iWidth * (double) rStepX * 4) // The desired resolution (calculate based on the DEM properties). Formula may need improvement.
 , iNrVertices(0)
 , iVertexArrayIncrement(1024 * 1024)
 , valid(false)
@@ -46,8 +46,8 @@ DEMTriangulator::DEMTriangulator(double* rHeights, int iWidth, int iHeight,
 }
 
 DEMTriangulator::DEMTriangulator(ZValueMaker * zMaker, BaseMapPtr * drapeMapPtr, CoordSystem & csyDest, bool fSmooth)
-: iMinGlobalRes(12) // min global res., the higher the more vertices
-, D2K ((double) iMinGlobalRes / (2.0 * (iMinGlobalRes - 1.0))) // factor for neighboring D2-values, between 0.5 and 1
+: iNrVerticalSteps(12) // min global res., the higher the more vertices
+, D2K ((double) iNrVerticalSteps / (2.0 * (iNrVerticalSteps - 1.0))) // factor for neighboring D2-values, between 0.5 and 1
 , fSmooth(fSmooth)
 , iNrVertices(0)
 , zMaker(zMaker)
@@ -90,7 +90,7 @@ DEMTriangulator::DEMTriangulator(ZValueMaker * zMaker, BaseMapPtr * drapeMapPtr,
 		rStepY = (double) ((maxY - minY) / iSizeY);
 		rMinX = minX + (rStepX / 2.0); // Provided: corner of corners; convert to centre of corners
 		rMinY = minY + (rStepY / 2.0);
-		rDesiredResolution = 0.1 / 2500.0; // (22.0) //(0.001) // ((double) iWidth * (double) rStepX * 4) // The desired resolution (calculate based on the DEM properties). Formula may need improvement.
+		rHeightAccuracy = mp->rrMinMax().rWidth() / (double)iNrVerticalSteps;
 
 		if (iSizeX < iSizeY)
 			iSize2 = (int) pow(2.0, (int) (log((double)iSizeX) / log(2.0)));
@@ -172,9 +172,10 @@ void DEMTriangulator::ReadMap()
 
 void DEMTriangulator::DoTriangulate()
 {
+	// Non-recursive Quad-Tree triangulation
 	bool success = false;
 	while (!success) {
-		TRACE("Trying with rDesiredResolution = %f\n", rDesiredResolution);
+		TRACE("Trying with rHeightAccuracy = %f\n", rHeightAccuracy);
 		iNrVertices = 0;
 		iVerticesArraySize = iVertexArrayIncrement;
 		vertices = (Vertex*)malloc(iVerticesArraySize * sizeof(Vertex));
@@ -188,7 +189,7 @@ void DEMTriangulator::DoTriangulate()
 		success = fRenderMesh();
 		if (!success) {
 			free(vertices);
-			rDesiredResolution /= 10.0;
+			rHeightAccuracy *= 10.0;
 			TRACE("realloc failed, requested %d megabytes of memory ... retrying\n", iVerticesArraySize * sizeof(Vertex) / (1024 * 1024));
 			// if (smooth) then re-read heights
 			if (fSmooth)
@@ -218,6 +219,8 @@ void DEMTriangulator::CalcD2ErrorMatrix()
 				double d2hErr = abs(rHeights[centerX + iSizeX * (centerY)] - (rHeights[centerX + s2 + iSizeX * (centerY - s2)] + rHeights[centerX - s2 + iSizeX * (centerY + s2)]) / 2.0);
 
 				// --- determine max of the 6 errors -----------------------------------
+				// The maximum of the absolute values of these elevation differences is called d2
+				// d2 =(1/d)*max(i=1..6)|dhi|.
 				double rMaxhErr = max(max(nhErr, ehErr), max(max(shErr, whErr), max(d1hErr, d2hErr)));
 
 				rFactors[centerX + iSizeX * (centerY)] = rMaxhErr / ((double) iSize);
@@ -292,20 +295,16 @@ void DEMTriangulator::TriangulateMesh()
 		int s2 = iSize / 2;
 		for (int x = s2; x < iSizeX - s2; x += iSize) { // start left (west), and move right (east)
 			for (int y = s2; y < iSizeY - s2; y += iSize) { // start up (north) and move down (south)
-				//double subDiv = 16.0 / ((iSize * rStepX) * iMinGlobalRes * max(rDesiredResolution * rFactors[x + iSizeX * (y)] / rStepX, 1.0));
-				//double subDiv = 16.0 / (max(iSize * iMinGlobalRes * rDesiredResolution * rFactors[x + iSizeX * (y)], iSize * iMinGlobalRes * rStepX));
-				double subDiv = 1.0 / (iSize * iMinGlobalRes * rDesiredResolution * rFactors[x + iSizeX * y]);
-				//double subDiv = eyeDist / ((width * VertexSpacing) * MinGlobalRes * Math.max(DesiredRes * ErrorMatrix[nodeIndex] / VertexSpacing, 1.0));
-
-				if ((subDiv >= 1.0) && !((x + iSize + iSize >= iSizeX)||(y + iSize + iSize >= iSizeY))) {
+				double rError = iSize * rFactors[x + iSizeX * y];
+				if ((rError <= rHeightAccuracy) && !((x + iSize + iSize >= iSizeX)||(y + iSize + iSize >= iSizeY))) {
 					// the error of replacing this quad by a higher level quad is small
 					// however, don't skip this quad if the higher level quad is at the edge of the image and would not fit to be displayed in its entirety.
-//						deleteNode(x, y, iSize);
+					//deleteNode(x, y, iSize);
 					rFactors[x + iSizeX * (y)] = rUNDEF;
 				} else {			
 					// --- leaf or parent? ---------------------------------------------
 					// Calculate the blend value, that determines the contribution of the height at the current location when blending with neighbours			
-					double blend = min(2 * (1.0 - subDiv), 1.0);
+					double blend = min(2 * (1.0 - rHeightAccuracy / rError), 1.0);
 					rFactors[x + iSizeX * (y)] = blend;
 				}
 			}
@@ -313,18 +312,18 @@ void DEMTriangulator::TriangulateMesh()
 	}
 }
 
-//	private void deleteNode(int x, int y, int iSize) {
-//		rFactors[x + iSizeX * (y)] = rUNDEF;
-//		for (int iSize1 = iSize; iSize1 > 4; iSize1 /= 2) {
-//			int s2 = iSize1 / 2;
-//			int s4 = iSize1 / 4;
-//			for (int x1 = x - s4; x1 < x + s4; x1 += s2) {
-//				for (int y1 = y - s4; y1 < y + s4; y1 += s2) {
-//					rFactors[x1 + iSizeX * (y1)] = rUNDEF;				
-//				}			
-//			}
+//void DEMTriangulator::deleteNode(int x, int y, int iSize) {
+//	rFactors[x + iSizeX * (y)] = rUNDEF;
+//	for (int iSize1 = iSize; iSize1 > 4; iSize1 /= 2) {
+//		int s2 = iSize1 / 2;
+//		int s4 = iSize1 / 4;
+//		for (int x1 = x - s4; x1 < x + s4; x1 += s2) {
+//			for (int y1 = y - s4; y1 < y + s4; y1 += s2) {
+//				rFactors[x1 + iSizeX * (y1)] = rUNDEF;				
+//			}			
 //		}
 //	}
+//}
 
 // === Render Terrain-Mesh =================================================
 

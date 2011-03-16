@@ -50,7 +50,7 @@ namespace ILWIS {
 		void AddVertex(int x, int y, double rHeight);
 
 		static const int NW = 0, W = 1, SW = 2, S = 3, SE = 4, E = 5, NE = 6, N = 7, C = 8;
-		const int iMinGlobalRes;
+		const int iNrVerticalSteps;
 		const double D2K;
 
 		Map mp;
@@ -72,7 +72,7 @@ namespace ILWIS {
 		double rStepY;
 		double rMinX;
 		double rMinY;
-		double rDesiredResolution;
+		double rHeightAccuracy;
 		const bool fSmooth;
 		bool valid;
 		bool fSameCsy;
