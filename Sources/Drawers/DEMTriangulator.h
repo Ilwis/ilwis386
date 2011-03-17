@@ -51,7 +51,6 @@ namespace ILWIS {
 
 		static const int NW = 0, W = 1, SW = 2, S = 3, SE = 4, E = 5, NE = 6, N = 7, C = 8;
 		const int iNrVerticalSteps;
-		const double D2K;
 
 		Map mp;
 		Map drapemp;

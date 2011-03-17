@@ -14,8 +14,7 @@ using namespace ILWIS;
 
 DEMTriangulator::DEMTriangulator(double* rHeights, int iWidth, int iHeight,
 			double rMinX, double rMinY, double rMaxX, double rMaxY, bool fSmooth)
-: iNrVerticalSteps(12) // min global res., the higher the more vertices
-, D2K ((double) iNrVerticalSteps / (2.0 * (iNrVerticalSteps - 1.0))) // factor for neighboring D2-values, between 0.5 and 1
+: iNrVerticalSteps(10) // the higher the more vertices
 , iSizeX(iWidth)
 , iSizeY(iHeight)
 , rHeights(rHeights)
@@ -46,8 +45,7 @@ DEMTriangulator::DEMTriangulator(double* rHeights, int iWidth, int iHeight,
 }
 
 DEMTriangulator::DEMTriangulator(ZValueMaker * zMaker, BaseMapPtr * drapeMapPtr, CoordSystem & csyDest, bool fSmooth)
-: iNrVerticalSteps(12) // min global res., the higher the more vertices
-, D2K ((double) iNrVerticalSteps / (2.0 * (iNrVerticalSteps - 1.0))) // factor for neighboring D2-values, between 0.5 and 1
+: iNrVerticalSteps(10) // the higher the more vertices
 , fSmooth(fSmooth)
 , iNrVertices(0)
 , zMaker(zMaker)
@@ -272,16 +270,19 @@ void DEMTriangulator::PropagateD2Errors()
 					y3 = centerY + iSize + s2;
 					break;
 				}
-				double d2K_error = D2K * rFactors[centerX + iSizeX * (centerY)];
+
+				// propagate half of the error to the next level, to ensure that the relevant next level quads are split into at least half of the triangles, so that there is no crack in the result
+				// (restricted quadtree property)
+				double rPropagateErr = rFactors[centerX + iSizeX * (centerY)] / 2.0;
 
 				// --- propagate to 3 parents ------------------------------
 				// --- to real father --------------------------------------
-				rFactors[x1 + iSizeX * (y1)] = max(rFactors[x1 + iSizeX * (y1)], d2K_error);
+				rFactors[x1 + iSizeX * (y1)] = max(rFactors[x1 + iSizeX * (y1)], rPropagateErr);
 				// --- other 2 "parents" -----------------------------------
 				if (x2 >= 0 && x2 < iSizeX && y2 >= 0 && y2 < iSizeY)
-					rFactors[x2 + iSizeX * (y2)] = max(rFactors[x2 + iSizeX * (y2)], d2K_error);
+					rFactors[x2 + iSizeX * (y2)] = max(rFactors[x2 + iSizeX * (y2)], rPropagateErr);
 				if (x3 >= 0 && x3 < iSizeX && y3 >= 0 && y3 < iSizeY)
-					rFactors[x3 + iSizeX * (y3)] = max(rFactors[x3 + iSizeX * (y3)], d2K_error);
+					rFactors[x3 + iSizeX * (y3)] = max(rFactors[x3 + iSizeX * (y3)], rPropagateErr);
 			}
 		}
 	}
