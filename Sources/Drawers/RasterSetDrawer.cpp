@@ -282,6 +282,8 @@ void RasterSetDrawer::DisplayImagePortion(double x1, double y1, double x2, doubl
 	double log2zoom = log(zoom)/log(2.0);
 	log2zoom = floor(log2zoom);
 	const unsigned int zoomFactor = min(64, max(1, pow(2, log2zoom)));
+	if (0 == zoomFactor)
+		return;
 
 	// split the visible portion of the image into a number of patches, depending on the accuracy needed
 
