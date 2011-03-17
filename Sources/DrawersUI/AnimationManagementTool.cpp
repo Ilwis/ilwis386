@@ -39,7 +39,7 @@ HTREEITEM AnimationManagementTool::configure( HTREEITEM parentItem) {
 		return parentItem;
 	DisplayOptionTreeItem *item2 = new DisplayOptionTreeItem(tree,parentItem,drawer);
 	item2->setDoubleCickAction(this, (DTDoubleClickActionFunc) &AnimationManagementTool::animationManagement);
-	htiNode = insertItem(TR("Run2"),"History",item2);
+	htiNode = insertItem(TR("Run"),"History",item2);
 
 	DrawerTool::configure(htiNode);
 

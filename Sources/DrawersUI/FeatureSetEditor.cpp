@@ -13,7 +13,7 @@
 #include "Engine\Drawers\ComplexDrawer.h"
 #include "Engine\Drawers\SimpleDrawer.h"
 #include "Engine\Drawers\AbstractMapDrawer.h"
-//#include "Drawers\SetDrawer.h";
+#include "Client\Mapwindow\LayerTreeView.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Headers\constant.h"
@@ -106,6 +106,13 @@ void FeatureSetEditor::setcheckEditMode(void *value) {
 	if ( value == 0)
 		return;
 	HTREEITEM hItem = *((HTREEITEM *)value);
+	String name = tree->getItemName(hItem);
+	if ( name == sUNDEF)
+		return;
+	int index = name.find_last_of("|");
+
+	if ( index == string::npos)
+		return;
 	//DisplayOptionRadioButtonItem *item = dynamic_cast<DisplayOptionRadioButtonItem * >((LayerTreeItem *)(tree.GetItemData(hItem)));
 /*	if ( item->sG) {
 		OnSelectMode();

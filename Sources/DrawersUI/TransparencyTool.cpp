@@ -18,6 +18,7 @@
 #include "drawers\linedrawer.h"
 #include "drawers\GridDrawer.h"
 #include "GridTool.h"
+#include "drawers\CanvasBackgroundDrawer.h"
 
 DrawerTool *createTransparencyTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) {
 	return new TransparencyTool(zv, view, drw);
@@ -36,6 +37,7 @@ bool TransparencyTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	SetDrawerTool *sdrwt = dynamic_cast<SetDrawerTool *>(tool);
 	AnimationTool *adrwt = dynamic_cast<AnimationTool *>(tool);
 	GridTool *gdrt = dynamic_cast<GridTool *>(tool);
+//	CanvasBackgroundDrawer *cbdr = dynamic_cast<CanvasBackgroundDrawer *>(tool);
 	if ( !sdrwt && !adrwt && !gdrt)
 		return false;
 

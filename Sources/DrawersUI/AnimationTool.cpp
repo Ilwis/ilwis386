@@ -18,6 +18,8 @@
 #include "Client\FormElements\FormBasePropertyPage.h"
 #include "AnimationManagement.h"
 #include "DrawersUI\AnimationTool.h"
+#include "Client\Base\Framewin.h"
+#include "Client\Mapwindow\MapWindow.h"
 
 using namespace ILWIS;
 
@@ -46,10 +48,22 @@ bool AnimationTool::isToolUseableFor(ILWIS::NewDrawer *drw) {
 }
 
 HTREEITEM AnimationTool::configure( HTREEITEM parentItem) {
-	AnimationProperties props;
-	props.drawer = (AnimationDrawer *)drawer;
-	props.mdoc = tree->GetDocument();
-	animManagement->addAnimation(props);
+	AnimationProperties *candidate = animManagement->findAnimationProps((AnimationDrawer *)drawer);
+	if ( candidate == 0) {
+		AnimationProperties props;
+		props.drawer = (AnimationDrawer *)drawer;
+		props.mdoc = tree->GetDocument();
+		if ( props.animBar == 0) {
+			props.animBar = new AnimationBar();
+			MapWindow *parent = (MapWindow *)props.mdoc->mpvGetView()->GetParent();
+			props.animBar->Create(parent);
+			CRect rect;
+			parent->barScale.GetWindowRect(&rect);
+			rect.OffsetRect(1,0);
+			parent->DockControlBar(props.animBar,AFX_IDW_DOCKBAR_TOP, rect);
+		}
+		animManagement->addAnimation(props);
+	}
 
 	DisplayOptionTree *item = new DisplayOptionTree(tree,parentItem,drawer, this);
 	htiNode = insertItem(parentItem, TR("Display Tools"), ".mpv",(LayerTreeItem *)item);

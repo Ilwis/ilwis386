@@ -3,24 +3,51 @@
 #define ILWM_UPDATE_ANIM (WM_APP+232)
 
 class MapCompositionDoc;
+#define ID_AnimationBar 67305
 
 namespace ILWIS {
 
+	struct AnimationProperties;
+
+	class AnimationBar : public CToolBar
+	{
+	public:
+		AnimationBar();
+		virtual ~AnimationBar();
+		virtual void OnUpdateCmdUI(CFrameWnd*, BOOL);
+		void Create(CWnd* pParent); 
+		void updateTime(const AnimationProperties* props );
+		String setTimeString(const AnimationProperties* props);
+	protected:
+		afx_msg void OnSetFocus();
+		afx_msg void OnKillFocus();
+
+		CEdit ed;
+		CFont fnt;
+		bool fActive;
+
+		DECLARE_MESSAGE_MAP()
+	};
+
 	struct AnimationProperties {
+		AnimationProperties() : drawer(0), mdoc(0), animBar(0) {}
+		AnimationProperties(const AnimationProperties& p) : drawer(p.drawer), mdoc(p.mdoc), animBar(p.animBar) {}
 		AnimationDrawer *drawer;
 		MapCompositionDoc *mdoc;
+		AnimationBar *animBar;
 	};
 
 	class AnimationPropertySheet : public CPropertySheet
 	{
 	public:
-		enum Pages{pRun=1, pSynchornization=2, pAttributes=4, pTimedEvent=16, pAll=32767};
+		enum Pages{pRun=1, pSynchornization=2, pAttributes=4, pTimedEvent=16, pProgress=32, pAll=32767};
 		AnimationPropertySheet();
 
 		BOOL OnInitDialog();
 		void addAnimation(const AnimationProperties& props);
 		void setActiveAnimation(AnimationDrawer * drw);
 		void removeAnimation(AnimationDrawer * drw);
+		AnimationProperties* findAnimationProps(AnimationDrawer * drw);
 		AnimationProperties* getActiveAnimation();
 		AnimationProperties* getAnimation(int i);
 		int getAnimationCount() const;
@@ -49,6 +76,8 @@ namespace ILWIS {
 
 		AnimationPropertySheet	&propsheet;
 		virtual int DataChanged(Event*);
+		int framePlus(Event *ev);
+		int frameMinus(Event *ev);
 		int speed(Event *ev);
 		int begin(Event  *ev);
 		int end(Event  *ev);
@@ -61,29 +90,68 @@ namespace ILWIS {
 	public:
 		AnimationSynchronization(AnimationPropertySheet& sheet);
 	private:
-		FieldOneSelect *foMaster, *foSlave1;
-		FieldGroup *fgMaster;
+		BOOL OnInitDialog();
+		FieldOneSelect *foSlave1;
+		FieldGroup *fgMaster,*fgSlaveIndex, *fgSlaveTime;
+		StaticText *stMaster;
 		int offset1;
 		long choiceMaster, choiceSlave1;
 		double step1;
 		AnimationPropertySheet	&propsheet;
 		bool initial;
+		int year, month, day, hour, minute;
 
 		int DataChanged(Event*);
 		int synchronize(Event*);
+		void setTimerPerIndex(FormEntry *anchor);
+		void setTimerPerTime(FormEntry *anchor);
 	};
 
 	class AnimationProgress : public FormBasePropertyPage {
 		public:
 			AnimationProgress(AnimationPropertySheet& sheet);
 		private:
+
 			int DataChanged(Event*ev);
+			int changeColumn(Event *ev);
 			LRESULT OnTimeTick( WPARAM wParam, LPARAM lParam );
 			AnimationPropertySheet	&propsheet;
 			TimeGraphSlider *graphSlider;
 			FieldGroup *fgMaster;
+			FieldColumn *fcol;
+			StaticText *stMaster;
 
+			String colName;
+			Table tbl;
+			
 		DECLARE_MESSAGE_MAP();
+	};
+
+	class RealTimePage : public FormBasePropertyPage {
+	public:
+		RealTimePage(AnimationPropertySheet& sheet);
+	private:
+		AnimationPropertySheet	&propsheet;
+		FieldGroup *fgTime;
+		FieldGroup *fgMaster;
+		StaticText *stMaster;
+		CheckBox *cbTime;
+		FieldColumn *fcolTime;
+		FieldInt *fiYr, *fiMonth, *fiDay, *fiHour, *fiMinute;
+		String colName;
+		Table tbl;
+		bool useTimeAttribute;
+		int year, month, day, hour, minute;
+		String timeColName;
+
+		int DataChanged(Event*ev);
+		int setTimingMode(Event *ev);
+		int changeDuration(Event *ev);
+		int changeTimeColumn(Event *e);
+		void setTimeElements(FormEntry *entry);
+		double calcNiceStep(Duration time);
+		void changeTimer(bool isRealTime, AnimationProperties *props);
+
 	};
 }
 

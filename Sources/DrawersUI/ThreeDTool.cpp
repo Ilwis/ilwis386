@@ -3,6 +3,7 @@
 #include "Client\FormElements\FieldRealSlider.h"
 #include "Client\FormElements\fldcol.h"
 #include "Client\FormElements\objlist.h"
+#include "client\formelements\fldlist.h"
 #include "Engine\Drawers\RootDrawer.h"
 #include "Engine\Drawers\ComplexDrawer.h"
 #include "Drawers\DrawingColor.h" 
@@ -21,6 +22,7 @@
 #include "DrawersUI\ThreeDTool.h"
 #include "DrawersUI\SetDrawerTool.h"
 #include "DrawersUI\AnimationTool.h"
+#include "Drawers\RasterSetDrawer.h"
 
 using namespace ILWIS;
 
@@ -99,26 +101,31 @@ String ThreeDTool::getMenuString() const {
 DisplayZDataSourceForm::DisplayZDataSourceForm(CWnd *wPar, ComplexDrawer *dr) : 
 DisplayOptionsForm(dr,wPar,TR("3D Options")), sourceIndex(0) 
 {
+	root->SetCallBack((NotifyProc)&DisplayZDataSourceForm::initForm);
 	SetDrawer *sdrw = dynamic_cast<SetDrawer *>(drw);
 	AnimationDrawer *adrw = dynamic_cast<AnimationDrawer *>(drw);
 	if ( adrw) {
 		sdrw = (SetDrawer *)adrw->getDrawer(0);
-		bmp.SetPointer(((BaseMap *)sdrw->getDataSource())->ptr());
+		AbstractMapDrawer *absdrw = (AbstractMapDrawer *)sdrw->getParentDrawer();
+		bmp.SetPointer(absdrw->getBaseMap());
 	} else {
 		AbstractMapDrawer *fdrw = (AbstractMapDrawer *)sdrw->getParentDrawer();
 		bmp.SetPointer(fdrw->getBaseMap());
 	}
 	if ( bmp->fTblAtt())
 		attTable = bmp->tblAtt();
+	mapName = bmp->fnObj.sRelative();
 	rg = new RadioGroup(root,TR("Data Source"),&sourceIndex);
 	new RadioButton(rg,"Self");
 	RadioButton *rbMap = new RadioButton(rg,TR("Raster Map"));
 	fmap = new FieldMap(rbMap,"",&mapName, new MapListerDomainType(dmVALUE|dmIMAGE));
-
-	if ( attTable.fValid()) {
-		RadioButton *rbTable = new RadioButton(rg,TR("Attribute column"));
+	rbMaplist = new RadioButton(rg,TR("Maplist"));
+	fmaplist = new FieldMapList(rbMaplist, "", &mapName,new MapListerDomainType(dmVALUE|dmIMAGE)); 
+	//if ( attTable.fValid()) {
+		rbTable = new RadioButton(rg,TR("Attribute column"));
 		FieldColumn *fcol = new FieldColumn(rbTable,"",attTable,&colName,dmVALUE | dmIMAGE);
-	}
+	//}
+
 
 	rg->SetIndependentPos();
 
@@ -127,34 +134,59 @@ DisplayOptionsForm(dr,wPar,TR("3D Options")), sourceIndex(0)
 	
 }
 
+int DisplayZDataSourceForm::initForm(Event *ev) {
+	if ( GetSafeHwnd()) {
+		if ( !attTable.fValid())
+			rbTable->Disable();
+		SetDrawer *sdrw = dynamic_cast<SetDrawer *>(drw);
+		AnimationDrawer *adrw = dynamic_cast<AnimationDrawer *>(drw);
+		if ( !adrw) {
+			rbMaplist->Disable();
+		}
+	}
+	return 1;
+}
 
 void DisplayZDataSourceForm::apply() {
 	rg->StoreData();
+
 	SetDrawer *sdrw = dynamic_cast<SetDrawer *>(drw);
 	AnimationDrawer *adrw = dynamic_cast<AnimationDrawer *>(drw);
 	if ( adrw) {
 		for(int i = 0 ; i < adrw->getDrawerCount(); ++i) {
-			SetDrawer *sdrw = (SetDrawer *)adrw->getDrawer(i);
-			updateDrawer(sdrw);
+			RasterSetDrawer *sdrw = (RasterSetDrawer *)adrw->getDrawer(i);
+			MapList mpl;
+			if ( sourceIndex == 0) {
+				mpl = *((MapList *)(sdrw->getDataSource())); 
+			} else if ( sourceIndex == 1){
+				updateDrawer(sdrw, BaseMap(FileName(mapName)));
+				continue;
+			} else if ( sourceIndex == 2){
+				mpl = MapList(FileName(mapName));
+			}
+			Map mp = mpl[i];
+			updateDrawer(sdrw, mp);
+			RangeReal tempRange = mp->dvrs().rrMinMax();
+			if ( tempRange.fValid()) {
+				RangeReal rr = adrw->getZMaker()->getRange();
+				rr += tempRange.rLo();
+				rr += tempRange.rHi();
+				adrw->getZMaker()->setRange(rr);
+			}
 		}
 	} else {
-		updateDrawer(sdrw);
+		updateDrawer( sdrw, bmp);
 	}
 
 	updateMapView();
 }
 
-void DisplayZDataSourceForm::updateDrawer(SetDrawer *sdrw) {
-	if ( sourceIndex == 0) {
-		sdrw->getZMaker()->setDataSourceMap(bmp);
+void DisplayZDataSourceForm::updateDrawer(SetDrawer *sdrw, const BaseMap& basemap) {
+	if ( mapName != "" && sourceIndex < 3) {
+		sdrw->getZMaker()->setDataSourceMap(basemap);
 		PreparationParameters pp(NewDrawer::pt3D);
 		sdrw->prepare(&pp);
-	}
-	else if ( mapName != "" && sourceIndex == 1) {
-		sdrw->getZMaker()->setDataSourceMap(BaseMap(FileName(mapName)));
-		PreparationParameters pp(NewDrawer::pt3D);
-		sdrw->prepare(&pp);
-	} else if ( colName != "" && sourceIndex == 2) {
+	} else if ( colName != "" && sourceIndex == 3) {
 		sdrw->getZMaker()->setTable(attTable,colName);
 		PreparationParameters pp(NewDrawer::pt3D);
 		sdrw->prepare(&pp);
@@ -173,8 +205,8 @@ sliderOffset(0) {
 
 	if (dr->getZMaker()->getRange().fValid()) { 
 		RangeReal rr = dr->getZMaker()->getRange();
-		ValueRangeReal vr(- ( rr.rHi() + rr.rLo()), rr.rWidth());
-		zoffset -= rr.rLo();
+		ValueRangeReal vr(- ( rr.rHi() + abs(rr.rLo())), rr.rWidth());
+		zoffset -= abs(rr.rLo());
 		sliderOffset = new FieldRealSliderEx(root,"Z Offset", &zoffset,vr,true);
 		sliderOffset->SetCallBack((NotifyProc)&ZDataScaling::settransforms);
 		sliderOffset->setContinuous(true);

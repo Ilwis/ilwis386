@@ -5,6 +5,8 @@
 #include "Drawers\CanvasBackgroundDrawer.h"
 #include "Client\Ilwis.h"
 #include "Engine\Representation\Rpr.h"
+#include "Client\Mapwindow\MapCompositionDoc.h"
+#include "Client\Mapwindow\MapPaneView.h"
 #include "Engine\Drawers\AbstractMapDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
@@ -30,8 +32,7 @@ BackgroundTool::~BackgroundTool() {
 
 bool BackgroundTool::isToolUseableFor(ILWIS::NewDrawer *drw) { 
 
-	//return dynamic_cast<RootDrawer *>(drw) != 0;
-	return false; // tool will be added by "hand", not automatically
+	return false; 
 }
 
 HTREEITEM BackgroundTool::configure( HTREEITEM parentItem) {
@@ -48,6 +49,11 @@ HTREEITEM BackgroundTool::configure( HTREEITEM parentItem) {
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&BackgroundTool::displayOptionInsideColor);
 	insertItem("Inside map","SingleColor",item);
 	item->setColor(is3D ? cbdr->getColor(CanvasBackgroundDrawer::clINSIDE3D) :  cbdr->getColor(CanvasBackgroundDrawer::clINSIDE2D));
+
+	DrawerTool *dt = DrawerTool::createTool("TransparencyTool", getDocument()->mpvGetView(),tree,drawer);
+	if ( dt) {
+		addTool(dt);
+	}
 
 	DrawerTool::configure(htiNode);
 	isConfigured = true;

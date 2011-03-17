@@ -7,25 +7,25 @@ namespace ILWIS {
 	class AnimationDrawer;
 	class AnimationControl;
 
-	class AnimationBar : public CToolBar
-	{
-	// Construction
-	public:
-		AnimationBar();
-		virtual ~AnimationBar();
-		virtual void OnUpdateCmdUI(CFrameWnd*, BOOL);
-		void Create(CWnd* pParent); 
-		void updateTime(const String& );
-	protected:
-		afx_msg void OnSetFocus();
-		afx_msg void OnKillFocus();
+	//class AnimationBar : public CToolBar
+	//{
+	//// Construction
+	//public:
+	//	AnimationBar();
+	//	virtual ~AnimationBar();
+	//	virtual void OnUpdateCmdUI(CFrameWnd*, BOOL);
+	//	void Create(CWnd* pParent); 
+	//	void updateTime(const String& );
+	//protected:
+	//	afx_msg void OnSetFocus();
+	//	afx_msg void OnKillFocus();
 
-		CEdit ed;
-		CFont fnt;
-		bool fActive;
+	//	CEdit ed;
+	//	CFont fnt;
+	//	bool fActive;
 
-		DECLARE_MESSAGE_MAP()
-	};
+	//	DECLARE_MESSAGE_MAP()
+	//};
 
 
 	class AnimationControlTool : public DrawerTool {
@@ -80,7 +80,7 @@ namespace ILWIS {
 		int year, month, day, hour, minute;
 		bool useTimeAttribute;
 		String timeColName;
-		AnimationBar animBar;
+		//AnimationBar animBar;
 
 
 		DECLARE_MESSAGE_MAP();

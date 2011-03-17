@@ -2,6 +2,8 @@
 
 ILWIS::DrawerTool *createThreeDTool(ZoomableView* zv, LayerTreeView *view, ILWIS::NewDrawer *drw);
 
+class FieldMapList;
+
 namespace ILWIS {
 
 class AnimationDrawer;
@@ -27,9 +29,13 @@ class DisplayZDataSourceForm : public DisplayOptionsForm {
 	DisplayZDataSourceForm(CWnd *wPar, ComplexDrawer *dr);
 	void apply(); 
 private:
-	void updateDrawer(SetDrawer *sdrw);
+	int initForm(Event *ev);
+	void updateDrawer(SetDrawer *sdrw, const BaseMap& basemap);
 	RadioGroup *rg;
 	FieldMap *fmap;
+	FieldMapList *fmaplist;
+	RadioButton *rbTable;
+	RadioButton *rbMaplist;
 
 	String colName;
 	Table  attTable;
