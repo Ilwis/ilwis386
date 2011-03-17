@@ -26,6 +26,7 @@ ComplexDrawer(parms,"GridDrawer")
 	rDist = rUNDEF;
 	setActive(false);
 	setTransparency(0.2);
+	transparencyPlane = 0.5;
 	threeD = false;
 	lproperties.thickness = 1;
 	lproperties.drawColor = Color(0,0,0);
@@ -64,6 +65,14 @@ bool GridDrawer::draw( const CoordBounds& cbArea) const{
 	return true;
 }
 
+void GridDrawer::setTransparencyPlane( double v) {
+	transparencyPlane = v;
+}
+
+double GridDrawer::getTransparencyPlane() const{
+	return transparencyPlane;
+}
+
 bool GridDrawer::drawPlane(const CoordBounds& cbArea) const{
 	glClearColor(1.0,1.0,1.0,0.0);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -72,8 +81,7 @@ bool GridDrawer::drawPlane(const CoordBounds& cbArea) const{
 	ComplexDrawer *cdrw = (ComplexDrawer *)getParentDrawer();
 	ZValueMaker *zmaker = cdrw->getZMaker();
 
-	glColor4f(planeColor.redP(),planeColor.greenP(), planeColor.blueP(), getTransparency());
-
+	glColor4f(planeColor.redP(),planeColor.greenP(), planeColor.blueP(), transparencyPlane);
 	double zscale = zmaker->getZScale();
 	double zoffset = zmaker->getOffset();
 	glPushMatrix();
@@ -119,7 +127,7 @@ void GridDrawer::prepare(PreparationParameters *pp) {
 
 		Coord c1, c2;
 	
-		if ( mode & GridDrawer::mGRID)
+		if ( (mode & GridDrawer::mGRID) || (mode & GridDrawer::mGROUNDLEVEL))
 			prepareGrid(rDist,cMax, cMin);
 		if ( threeD) {
 			if ( mode & GridDrawer::mPLANE)
@@ -279,7 +287,8 @@ void GridDrawer::prepareGrid(double rDist, const Coord& cMax, const Coord& cMin 
 	double z = 	getZMaker()->getZ0(true);
 	int zplanes = threeD ? 0.5 + maxz / zdist : 0;
 	resizeQuadsVector(zplanes);
-	for(int i=0; i <= zplanes; ++i) {
+	int nPlanes = mode & mGRID ? zplanes : 0;
+	for(int i=0; i <= nPlanes; ++i) {
 		c1.z = c2.z = z;
 		c1.y = cMin.y;
 		c2.y = cMax.y;
@@ -408,7 +417,7 @@ void GridDrawer::set3D(bool yesno){
 
 void GridDrawer::setNumberOfplanes(int n) {
 	noOfPlanes = n;
-	zdist = rUNDEF;
+	maxz = zdist * noOfPlanes;
 }
 
 int GridDrawer::getNumberOfPlanes() const {

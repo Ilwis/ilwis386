@@ -41,7 +41,8 @@ AnimationDrawer::AnimationDrawer(DrawerParameters *parms) :
 	loop(true),
 	index(0),
 	useTime(false),
-	mapIndex(0)
+	mapIndex(0),
+	offset(0)
 {
 	setTransparency(1);
 	last = 0;
@@ -50,6 +51,8 @@ AnimationDrawer::AnimationDrawer(DrawerParameters *parms) :
 AnimationDrawer::~AnimationDrawer(){
 	delete datasource;
 	delete featurelayer;
+	datasource = 0;
+	featurelayer = 0;
 }
 
 String AnimationDrawer::description() const {
@@ -235,6 +238,7 @@ void AnimationDrawer::prepare(PreparationParameters *pp){
 				else
 					rasterset->SetPalette(palette);
 				addSetDrawer(mp,pp,rasterset,String("band %d",i));
+				getZMaker()->setBounds(getRootDrawer()->getMapCoordBounds());
 				rasterset->setActive(i == 0 ? true : false);
 			}
 		}
@@ -263,6 +267,13 @@ void AnimationDrawer::addSetDrawer(const BaseMap& basem,PreparationParameters *p
 	rsd->setRepresentation(basem->dm()->rpr()); //  default choice
 	rsd->getZMaker()->setSpatialSource(basem, getRootDrawer()->getMapCoordBounds());
 	rsd->getZMaker()->setDataSourceMap(basem);
+	RangeReal tempRange = basem->dvrs().rrMinMax();
+	if ( tempRange.fValid()) {
+		RangeReal rr = getZMaker()->getRange();
+		rr += tempRange.rLo();
+		rr += tempRange.rHi();
+		getZMaker()->setRange(rr);
+	}
 	rsd->addDataSource(basem.ptr());
 	rsd->prepare(&fp);
 	if (!post)
@@ -372,8 +383,6 @@ void AnimationDrawer::timedEvent(UINT _timerid) {
 			redraw = timerPerIndex();
 		}
 		if ( redraw) {
-			//if ( animcontrol)
-			//	animcontrol->PostMessage(ID_TIME_TICK,mapIndex, TRUE);
 			getRootDrawer()->getDrawerContext()->doDraw();
 		}
 	}
@@ -396,20 +405,41 @@ bool AnimationDrawer::timerPerIndex() {
 	if ( sourceType == sotMAPLIST) {
 		MapList mlist;
 		mlist.SetPointer(datasource->pointer());
-		if ( mlist->iSize() > 0 && mapIndex < activeMaps.size() - 1) {
-			getDrawer(activeMaps[mapIndex])->setActive(false);
-			getDrawer(activeMaps[++mapIndex])->setActive(true);
-		} else {
-			if (loop) {
-				getDrawer(activeMaps[mapIndex])->setActive(false);
-				mapIndex = 0;
-				getDrawer(activeMaps[0])->setActive(true);
-			}
+		int nmaps = activeMaps.size();
+		getDrawer(activeMaps[(mapIndex) % nmaps])->setActive(false);
+		getDrawer(activeMaps[(mapIndex + 1) % nmaps])->setActive(true);
+		mapIndex = (mapIndex+1)  % nmaps;
+	
+	}
+	for(int i=0; i < slaves.size(); ++i) {
+		SlaveProperties& props = slaves.at(i);
+		if ( props.threshold > 1.0){
+			props.slave->timedEvent(SLAVE_TIMER_ID);
+			props.threshold -= 1.0;
 		}
+		props.threshold += props.slaveStep;
+
 	}
 	return true;
 }
 
+bool AnimationDrawer::activeOnTime(const Column& col, double currentTime) {
+	if ( mapIndex < activeMaps.size() - 1 && col->rValue(activeMaps[mapIndex]) < currentTime){
+		getDrawer(activeMaps[mapIndex])->setActive(false);
+		++mapIndex;
+		getDrawer(activeMaps[mapIndex])->setActive(true);
+		return true;
+	} else {
+		if (loop && mapIndex >= activeMaps.size() -1 && currentTime >= col->rValue(col->iRecs() - 1)) {
+			getDrawer(activeMaps[mapIndex])->setActive(false);
+			mapIndex = 0;
+			index = 0;
+			getDrawer(activeMaps[0])->setActive(true);
+			return true;
+		}
+	}
+	return false;
+}
 bool AnimationDrawer::timerPerTime() {
 	if ( (double)timestep == rUNDEF || (double)timestep == 0.0)
 		return false;
@@ -424,37 +454,58 @@ bool AnimationDrawer::timerPerTime() {
 		Column col = mpl->tblAtt()->col(colTime);
 		ILWIS::Duration duration = (col->rrMinMax().rHi() - col->rrMinMax().rLo());
 		double steps = 1000.0 / REAL_TIME_INTERVAL;
-		double currentTime = col->rrMinMax().rLo() +  timestep * (double)index / steps;
-		ILWIS::Time ct(currentTime);
+		double offset =  timestep * (double)index / steps;
+		double lowtime = col->rrMinMax().rLo();
+		double currentTime = lowtime + offset;
+		redraw = activeOnTime(col, currentTime);
+		for(int i=0; i < slaves.size(); ++i) {
+			SlaveProperties& props = slaves.at(i);
+			props.slave->timedEvent(SLAVE_TIMER_ID);
 
-		if ( mapIndex < activeMaps.size() - 1 && col->rValue(activeMaps[mapIndex]) < currentTime){
-			getDrawer(activeMaps[mapIndex])->setActive(false);
-			getDrawer(activeMaps[++mapIndex])->setActive(true);
-			//animBar.updateTime(String("index %d : %S", mapIndex, timeString(mpl, mapIndex)));
-			redraw = true;
-		} else {
-			if (loop && mapIndex >= activeMaps.size() -1 && currentTime >= col->rValue(col->iRecs() - 1)) {
-				getDrawer(activeMaps[mapIndex])->setActive(false);
-				mapIndex = 0;
-				index = 0;
-				getDrawer(activeMaps[0])->setActive(true);
-				redraw = true;
-			}
 		}
 	}
+	
 	++index;
 
 	return redraw;
 
 }
 
-String AnimationDrawer::timeString(const MapList& mpl, int index) {
-	double steps = 1000.0 / REAL_TIME_INTERVAL;
-	double currentTime = mpl->tblAtt()->col(colTime)->rrMinMax().rLo() +  timestep * (double)index / steps;
-	ILWIS::Time ct(currentTime);
-	String timestring = ct.toString(true,mpl->tblAtt()->col(colTime)->dm()->pdtime()->getMode());
-	return timestring;
+void AnimationDrawer::setTimeStep(ILWIS::Duration dur) 
+{
+	//MapList mpl;
+	//mpl.SetPointer(datasource->pointer());
+	//Column col = mpl->tblAtt()->col(colTime);
+	//if ( useTime && col.fValid() && (double)timestep > 0) {
+	//	index = 0;
+	//	if ( (double)timestep < 300.0  )
+	//		mapIndex = 13;
+	//	double steps = 1000.0 / REAL_TIME_INTERVAL;
+	//	double baseTime = col->rrMinMax().rLo();
+	//	double offset = 0;
+	//	double currentTime = col->rValue(activeMaps[mapIndex]);
+	//	while ( currentTime > (baseTime + offset)){
+	//		offset =  timestep * (double)index / steps;
+	//		++index;
+	//	}
+
+	//}
+	index = 0;
+	setMapIndex(0);
+	timestep = dur; 
 }
+
+ILWIS::Duration AnimationDrawer::getTimeStep() const {
+	return timestep;
+}
+//
+//String AnimationDrawer::timeString(const MapList& mpl, int index) {
+//	double steps = 1000.0 / REAL_TIME_INTERVAL;
+//	double currentTime = mpl->tblAtt()->col(colTime)->rrMinMax().rLo() +  timestep * (double)index / steps;
+//	ILWIS::Time ct(currentTime);
+//	String timestring = ct.toString(true,mpl->tblAtt()->col(colTime)->dm()->pdtime()->getMode());
+//	return timestring;
+//}
 
 String AnimationDrawer::iconName(const String& subtype) const {
 	return "Animation";
@@ -465,8 +516,9 @@ void AnimationDrawer::setMapIndex(int ind) {
 	for(int i =0 ; i < drawers.size(); ++i)
 		getDrawer(i)->setActive(false);
 
-	getDrawer(ind)->setActive(true);
-	mapIndex = activeMaps[ind];
+	int nmaps = activeMaps.size();
+	mapIndex = (ind)  % nmaps;
+	getDrawer(activeMaps[mapIndex])->setActive(true);
 }
 
 void AnimationDrawer::updateLegendItem() {
@@ -474,142 +526,53 @@ void AnimationDrawer::updateLegendItem() {
 	//	doLegend->updateLegendItem();
 }
 
-int AnimationDrawer::getTimerIdCounter() {
+int AnimationDrawer::getTimerIdCounter(bool increase) {
+	if ( increase)
+		++timerIdCounter;
+
 	return timerIdCounter;
 }
 
-//----------------------------------------------------------
-//AnimationSlicing::AnimationSlicing(CWnd *par, AnimationDrawer *adr) 
-//	: DisplayOptionsForm2(adr, par, TR("Slicing"))
-//{
-//	vs = new ValueSlicerSlider(root, ((SetDrawer *)adr->getDrawer(0)));
-//	FieldGroup *fg = new FieldGroup(root);
-//	fldSteps = new FieldOneSelectTextOnly(fg, &steps);
-//	fldSteps->SetCallBack((NotifyProc)&AnimationSlicing::createSteps);
-//	fldSteps->Align(vs, AL_UNDER);
-//	fldSteps->SetWidth(vs->psn->iWidth/3);
-//	FlatIconButton *fb=new FlatIconButton(fg,"Save","",(NotifyProc)&AnimationSlicing::saveRpr,fnRpr);
-//	fb->Align(fldSteps, AL_AFTER);
-//
-//
-//	create();
-//}
-//
-//int AnimationSlicing::saveRpr(Event *ev) {
-//	CFileDialog filedlg (FALSE, "*.rpr", "*.rpr",OFN_HIDEREADONLY|OFN_NOREADONLYRETURN | OFN_LONGNAMES, "Ilwis Representation (*.rpr)|*.rpr||", NULL);
-//	if ( filedlg.DoModal() == IDOK) {
-//		String name(filedlg.GetPathName());
-//		vs->setFileNameRpr(FileName(name));
-//	}
-//	return 1;
-//}
-//
-//int AnimationSlicing::createSteps(Event*) {
-//	if (fldSteps->ose->GetCount() == 0) {
-//		for(int i = 2 ; i <= 10; ++i)
-//			fldSteps->AddString(String("%d",i));
-//		fldSteps->ose->SelectString(0,"2");
-//	} else {
-//		int mapIndex = fldSteps->ose->GetCurSel();
-//		if ( mapIndex != -1) {
-//			vs->setNumberOfBounds(mapIndex +2);
-//		}
-//		drw->getRootDrawer()->getDrawerContext()->doDraw();
-//	}
-//	return 1;
-//}
-//
-//void AnimationSlicing::shutdown(int iReturn) {
-//	AnimationDrawer *andr = (AnimationDrawer *)drw;
-//	andr->animslicing = 0;
-//	return DisplayOptionsForm2::shutdown();
-//}
+void AnimationDrawer::addSlave(const SlaveProperties& pr) {
+	for(int i =0; i < slaves.size(); ++i) {
+		if ( slaves.at(i).slave->getId() == pr.slave->getId())
+			return;
+	}
+	slaves.push_back(pr);
+	pr.slave->setTimerId(SLAVE_TIMER_ID);
+}
 
-//----------------------------------------------------------
-//AnimationSelection::AnimationSelection(CWnd *par, AnimationDrawer *adr) 
-//	: DisplayOptionsForm2(adr, par, TR("Selection"))
-//{
-//	vs = new ValueSlicerSlider(root, ((SetDrawer *)adr->getDrawer(0)));
-//	vs->setRprBase( ((AbstractMapDrawer *)adr)->getBaseMap()->dm()->rpr());
-//	vs->setLowColor(colorUNDEF);
-//	vs->setHighColor(colorUNDEF);
-//	vs->setNumberOfBounds(3);
-//	FieldGroup *fg = new FieldGroup(root);
-//	fldSteps = new FieldOneSelectTextOnly(fg, &steps);
-//	fldSteps->SetCallBack((NotifyProc)&AnimationSelection::createSteps);
-//	fldSteps->Align(vs, AL_UNDER);
-//	fldSteps->SetWidth(vs->psn->iWidth/3);
-//	adr->addSelectionDrawers(vs->getRpr());
-//
-//	create();
-//
-//	//vs->setBoundColor(1,Color(120,230,0));
-//}
-//int AnimationSelection::createSteps(Event*) {
-//	if (fldSteps->ose->GetCount() == 0) {
-//		for(int i = 2 ; i <= 10; ++i)
-//			fldSteps->AddString(String("%d",i));
-//		fldSteps->ose->SelectString(0,"3");
-//	} else {
-//		int mapIndex = fldSteps->ose->GetCurSel();
-//		if ( mapIndex != -1) {
-//			vs->setNumberOfBounds(mapIndex +2);
-//			for(int i = 0; i < mapIndex + 2; ++i) {
-//				if ( i % 2 == 1) {
-//					vs->setBoundColor(i,Color(200,0,0));
-//				}
-//			}
-//		}
-//		drw->getRootDrawer()->getDrawerContext()->doDraw();
-//	}
-//	return 1;
-//}
-//
-//void AnimationSelection::shutdown(int iReturn) {
-//	AnimationDrawer *andr = (AnimationDrawer *)drw;
-//	andr->animselection = 0;
-//	return DisplayOptionsForm2::shutdown();
-//}
-////----------------------------------------------------------
-//AnimationSourceUsage::AnimationSourceUsage(CWnd *par, AnimationDrawer *ldr) 
-//	: DisplayOptionsForm2(ldr, par, "Time"), mcs(0), rg(0)
-//{
-//	if ( ldr->sourceType == AnimationDrawer::sotFEATURE) {
-//		BaseMap basemap((*(ldr->datasource))->fnObj);
-//		if ( basemap->fTblAtt()) {
-//			new StaticText(root, TR("Columns to be used"));
-//			mcs = new MultiColumnSelector(root,basemap->tblAtt().ptr(), dmVALUE);
-//			RadioGroup *rg = new RadioGroup(root,TR("Type of use"),&columnUsage);
-//			new RadioButton(rg, TR("As Z value"));
-//			new RadioButton(rg, TR("As feature size"));
-//			new RadioButton(rg, TR("As Coordinates"));
-//				
-//		}
-//	}
-//  create();
-//}
-//
-//int  AnimationSourceUsage::exec() {
-//	if ( rg) rg->StoreData();
-//	if ( mcs) {
-//		//mcs->StoreData();
-//		IntBuf selectedIndexes;
-//		mcs->iGetSelected(selectedIndexes);
-//		AnimationDrawer *andr = (AnimationDrawer *)drw;
-//		for(int  i =0; i < selectedIndexes.iSize(); ++i) {
-//			andr->names.push_back(mcs->sName(i));
-//		}
-//
-//	}
-//	PreparationParameters pp(NewDrawer::ptGEOMETRY);
-//	drw->prepare(&pp);
-//	updateMapView();
-//
-//	return 1;
-//}
-//
-////----------------------------------------------------------
+void AnimationDrawer::removeSlave(AnimationDrawer *drw) {
+	for(int i =0; i < slaves.size(); ++i) {
+		if ( slaves.at(i).slave->getId() == drw->getId()) {
+			drw->setTimerId(iUNDEF);
+			slaves.erase(slaves.begin() + i);
+		}
+	}
+}
 
-//-------------------------------------------------
+int AnimationDrawer::getOffset() const {
+	return offset;
+}
 
-//-------------------------------------------------------
+void AnimationDrawer::setOffset(int off) {
+	offset = off;
+	mapIndex = (mapIndex + offset) % activeMaps.size();
+}
+
+void AnimationDrawer::setTimeColumn(const Column& col) {
+	if ( col->dm()->dmt() == dmtTIME ) {
+		colTime = col->sName();
+		useTime = true;
+	} else {
+		useTime = false;
+	}
+}
+
+void AnimationDrawer::setUseTime(bool yesno) {
+	if ( colTime != "") {
+		useTime = yesno;
+	} else {
+		useTime = false;
+	}
+}

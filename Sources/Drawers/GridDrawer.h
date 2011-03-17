@@ -11,7 +11,7 @@ namespace ILWIS{
 
 	class _export GridDrawer : public ComplexDrawer {
 	public:
-		enum Mode{mGRID=1, mPLANE=2, mMARKERS=4,mAXIS=8,mVERTICALS=16, mCUBE=32};
+		enum Mode{mGRID=1, mPLANE=2, mMARKERS=4,mAXIS=8,mVERTICALS=16, mCUBE=32, mGROUNDLEVEL=64};
 		ILWIS::NewDrawer *createGridDrawer(DrawerParameters *parms);
 
 		GridDrawer(DrawerParameters *parms);
@@ -31,6 +31,8 @@ namespace ILWIS{
 		GeneralDrawerProperties *getProperties();
 		void setNumberOfplanes(int n);
 		int getNumberOfPlanes() const;
+		void setTransparencyPlane( double v);
+		double getTransparencyPlane() const;
 
 
 	protected:
@@ -59,6 +61,7 @@ namespace ILWIS{
 		Color			planeColor;
 		int				noOfPlanes;
 		vector< Coord * >   planeQuads;
+		double transparencyPlane;
 	};
 
 	class GridLine: public LineDrawer {

@@ -74,6 +74,12 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 		if ( !polygon)
 			return;
 		cb = polygon->cbBounds();
+		bool coordNeedsConversion = getRootDrawer()->getCoordinateSystem()->fnObj != csy->fnObj;
+		if ( coordNeedsConversion) {
+			Coord c1 = getRootDrawer()->getCoordinateSystem()->cConv(csy,cb.cMin);
+			Coord c2 = getRootDrawer()->getCoordinateSystem()->cConv(csy,cb.cMax);
+			cb = CoordBounds(c1,c2);
+		}
 		cb.getArea(); // initializes the area
 		long *data;
 		long *count;
@@ -83,7 +89,6 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 		} else {
 			gpc_vertex_list exteriorBoundary;
 			vector<gpc_vertex_list> holes;
-			bool coordNeedsConversion = getRootDrawer()->getCoordinateSystem()->fnObj == csy->fnObj;
 
 			const LineString *ring = polygon->getExteriorRing();
 			exteriorBoundary.num_vertices = ring->getNumPoints() - 1;
@@ -178,6 +183,7 @@ void PolygonFeatureDrawer::prepareList(gpc_vertex_list& exteriorBoundary, vector
 	for(int i = 0; i < tristrip.num_strips; ++i) {
 		gpc_vertex_list list = tristrip.strip[i];
 		int n = list.num_vertices;
+		SetDrawer::test_count += n;
 		count += n * 2 * 3 + 1;
 	}
 	trianglePol = new long[ count ]; // number of pointer plus one long indicating howmany pointers + one for totalsize of block

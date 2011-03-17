@@ -203,6 +203,7 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 {
 	switch (drm) {
 	case NewDrawer::drmRPR:
+	case NewDrawer::drmIMAGE:
 		{
 			Representation rpr = drw->getRepresentation();
 			if (dataValues.dm()->pdv()) {
@@ -271,9 +272,9 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 				bufOut[i] = clrPrimary(1 + buf[i] % iStep).iVal();
 		}  
 		break;
-	case NewDrawer::drmIMAGE: {
+	/*case NewDrawer::drmIMAGE: {
 		RangeInt riStretch = drw->getStretchRangeInt();
-		int iMin = 0, iMax = 255;
+,		int iMin = 0, iMax = 255;
 		if (drw->isStretched()) {
 			iMin = riStretch.iLo();
 			iMax = riStretch.iHi();
@@ -288,7 +289,7 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 			int iVal = (int)(floor(255 * float(iRaw - iMin) / iDiff));
 			bufOut[i] = Color(iVal,iVal,iVal).iVal();
 		}
-	  } break;
+	  } break;*/
 	case NewDrawer::drmCOLOR:
 		memcpy(bufOut, buf, iLen * sizeof(long)); // no change !!
 		break;

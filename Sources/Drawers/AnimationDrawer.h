@@ -8,7 +8,7 @@ class ValueSlicerSlider;
 class FieldLister;
 class FieldRealSliderEx;
 
-#define ID_AnimationBar 6007
+#define SLAVE_TIMER_ID 46757736
 
 ILWIS::NewDrawer *createAnimationDrawer(ILWIS::DrawerParameters *parms);
 namespace ILWIS{
@@ -16,7 +16,15 @@ namespace ILWIS{
 	class AnimationSlicing;
 	class FeatureLayerDrawer;
 	class SetDrawer;
+	class AnimationDrawer;
 
+	struct _export SlaveProperties {
+		SlaveProperties(AnimationDrawer *s, int offset, double step) : slave(s), slaveOffset(offset), slaveStep(step),threshold(0) {}
+		AnimationDrawer *slave;
+		int slaveOffset;
+		double slaveStep;
+		double threshold;
+	};
 
 	class _export AnimationDrawer : public AbstractMapDrawer {
 	public:
@@ -39,13 +47,19 @@ namespace ILWIS{
 		bool getUseTime() const { return useTime; }
 		void setInterval(double intv) { interval = intv; }
 		String getTimeColumn() const { return colTime; }
-		void setTimeStep(ILWIS::Duration dur) { timestep = dur; }
+		void setTimeColumn(const Column& col);
+		void setTimeStep(ILWIS::Duration dur);
+		ILWIS::Duration getTimeStep() const;
 		int getTimerId() const { return timerid; }
 		void setIndex(int ind) { index = ind;}
 		void setTimerId(int tid) { timerid = tid; }
-		void setUseTime(bool yesno) { useTime = yesno; }
+		void setUseTime(bool yesno) ;
 		int getMapIndex() const { return mapIndex;}
-		static int getTimerIdCounter();
+		static int getTimerIdCounter(bool increase=false);
+		void addSlave(const SlaveProperties& pr);
+		void removeSlave(AnimationDrawer *drw);
+		int getOffset() const;
+		void setOffset(int off);
 
 		static int timerIdCounter;
 
@@ -55,10 +69,11 @@ namespace ILWIS{
 		void removeSelectionDrawers() ;
 		bool timerPerIndex() ;
 		bool timerPerTime() ;
+		bool activeOnTime(const Column& col, double currentTime);
 		void addSelectionDrawers(const Representation& rpr);
 		RangeReal getMinMax(const MapList& mlist) const;
 		SetDrawer *createIndexDrawer(const BaseMap& basemap,ILWIS::DrawerParameters& dp, PreparationParameters* pp);
-		String timeString(const MapList& mpl,int index);
+		//String timeString(const MapList& mpl,int index);
 		void drawLegendItem(CDC *dc, const CRect& rct, double rVal) const;
 		double interval;
 		UINT timerid;
@@ -66,6 +81,7 @@ namespace ILWIS{
 		SourceType sourceType;
 		vector<String> names;
 		vector<int> activeMaps;
+		vector<SlaveProperties> slaves;
 		FeatureLayerDrawer *featurelayer;
 		int index;
 		int mapIndex;
@@ -75,6 +91,7 @@ namespace ILWIS{
 		clock_t last;
 		vector<Palette*> paletteList;
 		Representation rpr;
+		int offset;
 		//DisplayOptionsLegend *doLegend;
 
 		ILWIS::Duration timestep;

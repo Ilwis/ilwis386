@@ -50,8 +50,8 @@ bool PolygonDrawer::draw( const CoordBounds& cbArea) const{
 		glScaled(1,1,zscale);
 		glTranslated(0,0,zoffset);
 	}
-
-	glColor4f(drawColor.redP(),drawColor.greenP(), drawColor.blueP(), (1.0 - drawColor.transparencyP()) * getTransparency() * areaTransparency);
+	double tr = (1.0 - drawColor.transparencyP()) * getTransparency() * areaTransparency;
+	glColor4f(drawColor.redP(),drawColor.greenP(), drawColor.blueP(), tr);
 	if ( asQuad && showArea) {
 		glBegin(GL_QUADS);
 		glVertex3d(cb.cMin.x, cb.cMin.y, z0);

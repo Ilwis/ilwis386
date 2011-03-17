@@ -6,6 +6,7 @@
 #include "Engine\Drawers\RootDrawer.h"
 #include "Engine\Drawers\AbstractMapDrawer.h"
 #include "CanvasBackgroundDrawer.h"
+#include "Engine\Drawers\ZValueMaker.h"
 
 
 using namespace ILWIS;
@@ -30,6 +31,10 @@ void  CanvasBackgroundDrawer::prepare(PreparationParameters *pp){
 }
 
 bool CanvasBackgroundDrawer::draw( const CoordBounds& cb) const{
+
+	glClearColor(1.0,1.0,1.0,0.0);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
 	CoordBounds cbView = getRootDrawer()->getCoordBoundsView();
 	CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
 	bool is3D = getRootDrawer()->is3D();
@@ -67,6 +72,8 @@ bool CanvasBackgroundDrawer::draw( const CoordBounds& cb) const{
 		glVertex3f(cbMap.MaxX(), cbMap.MinY(),z);
 	glEnd();
 
+
+	glDisable(GL_BLEND);
 	return true;
 }
 

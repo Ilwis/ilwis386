@@ -75,7 +75,9 @@ void PolygonSetDrawer::prepare(PreparationParameters *parms) {
 		currentLoc = 1; // first long is the total size of the file; irrelevant for the rest of the polygons
 	}
 
+	SetDrawer::test_count = 0;
 	FeatureSetDrawer::prepare(parms);
+//	TRACE("Total number of vertices %d\n", SetDrawer::test_count);
 
 	if ( parms->type & RootDrawer::ptGEOMETRY) {
 		if ( usesTriangleFile && triData == 0) {
