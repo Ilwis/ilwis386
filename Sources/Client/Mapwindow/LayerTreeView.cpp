@@ -100,7 +100,8 @@ LayerTreeView::LayerTreeView()
 LayerTreeView::~LayerTreeView()
 {
 	delete odt;
-	drwTool->clear();
+	if ( drwTool)
+		drwTool->clear();
 	delete drwTool;
 }
 

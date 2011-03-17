@@ -191,6 +191,9 @@ void MapStatusBar::ResizeProgressCtrl()
 
 void MapStatusBar::UpdateProgressCtrl()
 {
+	if ( !dr)
+		return;
+
 	ComplexDrawer* drw = dynamic_cast<ComplexDrawer*>(dr); // dr is volatile
 	if (0 == drw)
 		return;
@@ -200,19 +203,21 @@ void MapStatusBar::UpdateProgressCtrl()
 
 void MapStatusBar::SetActiveDrawer(NewDrawer* drw)
 { 
-	bool fWasActive = 0 != dr;
-	dr = drw; 
-	if (0 == drw) {
-		prctl.ShowWindow(SW_HIDE);
-		if (fWasActive)
-			KillTimer(1);
-	}
-	else {
-		UpdateProgressCtrl();
-		prctl.ShowWindow(SW_SHOW);
-		if (!fWasActive)
-			SetTimer(1,250,0);
-	}
+	// hardly usefull anymore. disabled because the drawer might be removed without updating this control. Can be solved but isnt worth the trouble
+	return;
+	//bool fWasActive = 0 != dr;
+	//dr = drw; 
+	//if (0 == drw) {
+	//	prctl.ShowWindow(SW_HIDE);
+	//	if (fWasActive)
+	//		KillTimer(1);
+	//}
+	//else {
+	//	UpdateProgressCtrl();
+	//	prctl.ShowWindow(SW_SHOW);
+	//	if (!fWasActive)
+	//		SetTimer(1,250,0);
+	//}
 }
 
 void MapStatusBar::OnTimer(UINT nIDEvent) 
