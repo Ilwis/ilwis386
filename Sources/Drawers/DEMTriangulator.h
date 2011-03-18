@@ -29,8 +29,6 @@ namespace ILWIS {
 	class DEMTriangulator
 	{
 	public:
-		DEMTriangulator(double* rHeights, int iWidth, int iHeight,
-			double rMinX, double rMinY, double rMaxX, double rMaxY, bool fSmooth);
 		DEMTriangulator(ZValueMaker * zMaker, BaseMapPtr * drapeMapPtr, CoordSystem & csyDest, bool fSmooth);
 		~DEMTriangulator(void);
 		void PlotTriangles(double xMin, double yMin, double xMax, double yMax, Texture * tex);
@@ -72,7 +70,7 @@ namespace ILWIS {
 		double rStepX;
 		double rStepY;
 		double rMinX;
-		double rMinY;
+		double rMaxY;
 		double rHeightAccuracy;
 		const bool fSmooth;
 		bool valid;

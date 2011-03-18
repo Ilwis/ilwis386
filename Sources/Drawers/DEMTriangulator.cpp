@@ -12,37 +12,6 @@ static char THIS_FILE[]=__FILE__;
 
 using namespace ILWIS;
 
-DEMTriangulator::DEMTriangulator(double* rHeights, int iWidth, int iHeight,
-			double rMinX, double rMinY, double rMaxX, double rMaxY, bool fSmooth)
-: iNrVerticalSteps(10) // the higher the more vertices
-, iSizeX(iWidth)
-, iSizeY(iHeight)
-, rHeights(rHeights)
-, width(pow(2, max(6, ceil(log((double)iSizeX)/log(2.0)))))
-, height(pow(2, max(6, ceil(log((double)iSizeY)/log(2.0)))))
-, fSmooth(fSmooth)
-, rStepX((double) ((rMaxX - rMinX) / iSizeX))
-, rStepY((double) ((rMaxY - rMinY) / iSizeY))
-, rMinX(rMinX + (rStepX / 2.0)) // Provided: corner of corners; convert to centre of corners
-, rMinY(rMinY + (rStepY / 2.0))
-, rHeightAccuracy(2500.0 / (double)iNrVerticalSteps) // (22.0) //(0.001) // ((double) iWidth * (double) rStepX * 4) // The desired resolution (calculate based on the DEM properties). Formula may need improvement.
-, iNrVertices(0)
-, iVertexArrayIncrement(1024 * 1024)
-, valid(false)
-, fSameCsy(true)
-{
-	if (iWidth < iHeight)
-		iSize2 = (int) pow(2.0, (int) (log((double)iWidth) / log(2.0)));
-	else
-		iSize2 = (int) pow(2.0, (int) (log((double)iHeight) / log(2.0)));	
-	// iSize2 is the largest ^2 that is smaller or equal to both width and height. Any bigger value is a waste. 
-	rFactors = (double*)malloc(iSizeX * iSizeY * sizeof(double));
-	for (int i = 0; i < iSizeX * iSizeY; ++i)
-		if (rHeights[i] == rUNDEF)
-			rHeights[i] = 0;
-	valid = fDoTriangulate();
-}
-
 DEMTriangulator::DEMTriangulator(ZValueMaker * zMaker, BaseMapPtr * drapeMapPtr, CoordSystem & csyDest, bool fSmooth)
 : iNrVerticalSteps(10) // the higher the more vertices
 , fSmooth(fSmooth)
@@ -85,7 +54,7 @@ DEMTriangulator::DEMTriangulator(ZValueMaker * zMaker, BaseMapPtr * drapeMapPtr,
 		rStepX = (double) ((maxX - minX) / iSizeX);
 		rStepY = (double) ((maxY - minY) / iSizeY);
 		rMinX = minX + (rStepX / 2.0); // Provided: corner of corners; convert to centre of corners
-		rMinY = minY + (rStepY / 2.0);
+		rMaxY = maxY - (rStepY / 2.0);
 		rHeightAccuracy = mp->rrMinMax().rWidth() / (double)iNrVerticalSteps;
 
 		if (iSizeX < iSizeY)
@@ -166,8 +135,6 @@ bool DEMTriangulator::fDoTriangulate()
 
 bool DEMTriangulator::fReadMap(Tranquilizer & trq)
 {
-	int iWidth = mp->rcSize().Col;
-	int iHeight = mp->rcSize().Row;
 	bool fValue = 0 != mp->dm()->pdvi() || 0 != mp->dm()->pdvr();
 	bool fAttTable = false;
 	ValueRange vr = mp->vr();
@@ -181,35 +148,35 @@ bool DEMTriangulator::fReadMap(Tranquilizer & trq)
 	mp->KeepOpen(true);
 	if (fRealMap) 
 	{
-		RealBuf bufIn(iWidth);
+		RealBuf bufIn(iSizeX);
 		double * ptrBufIn = bufIn.buf();
-		memset(ptrBufIn, 0, iWidth * sizeof(double)); // to prevent NAN values in bufIn.
-		for (long iYPos = 0; iYPos < iHeight; ++iYPos)
+		memset(ptrBufIn, 0, iSizeX * sizeof(double)); // to prevent NAN values in bufIn.
+		for (long iYPos = 0; iYPos < iSizeY; ++iYPos)
 		{
 			if (trq.fUpdate(iYPos, iTrqMax)) {
 				mp->KeepOpen(false);
 				return false;
 			}
-			mp->GetLineVal(iYPos, bufIn, 0, iWidth);
-			memcpy(&rHeights[(iHeight - iYPos - 1) * iWidth], ptrBufIn, iWidth * sizeof(double));
+			mp->GetLineVal(iYPos, bufIn, 0, iSizeX);
+			memcpy(&rHeights[iYPos * iSizeX], ptrBufIn, iSizeX * sizeof(double));
 		}
 	}
 	else 
 	{ // !fRealMap
-		LongBuf bufIn(iWidth);
+		LongBuf bufIn(iSizeX);
 		long * ptrBufIn = bufIn.buf();
-		for (long iYPos = 0; iYPos < iHeight; ++iYPos) 
+		for (long iYPos = 0; iYPos < iSizeY; ++iYPos) 
 		{
 			if (trq.fUpdate(iYPos, iTrqMax)) {
 				mp->KeepOpen(false);
 				return false;
 			}
 			if (fValue && !fAttTable)
-				mp->GetLineVal(iYPos, bufIn, 0, iWidth);
+				mp->GetLineVal(iYPos, bufIn, 0, iSizeX);
 			else
-				mp->GetLineRaw(iYPos, bufIn, 0, iWidth);
-			for (long iXPos = 0; iXPos < iWidth; ++iXPos)
-				rHeights[(iHeight - iYPos - 1) * iWidth + iXPos] = doubleConv(ptrBufIn[iXPos]);
+				mp->GetLineRaw(iYPos, bufIn, 0, iSizeX);
+			for (long iXPos = 0; iXPos < iSizeX; ++iXPos)
+				rHeights[iYPos * iSizeX + iXPos] = doubleConv(ptrBufIn[iXPos]);
 		}
 	}                                                                         
 	mp->KeepOpen(false);
@@ -226,20 +193,20 @@ bool DEMTriangulator::fCalcD2ErrorMatrix(Tranquilizer & trq)
 			for (int centerY = s2; centerY < iSizeY - s2; centerY += iSize) { // start up (north) and move down (south)
 				// --- north, east, south, west height errors --------------------------
 				double nhErr = abs(rHeights[centerX + iSizeX * (centerY - s2)] - (rHeights[centerX - s2 + iSizeX * (centerY - s2)] + rHeights[centerX + s2 + iSizeX * (centerY - s2)]) / 2.0);
-				double ehErr = abs(rHeights[centerX + s2 + iSizeX * (centerY)] - (rHeights[centerX + s2 + iSizeX * (centerY - s2)] + rHeights[centerX + s2 + iSizeX * (centerY + s2)]) / 2.0);
+				double ehErr = abs(rHeights[centerX + s2 + iSizeX * centerY] - (rHeights[centerX + s2 + iSizeX * (centerY - s2)] + rHeights[centerX + s2 + iSizeX * (centerY + s2)]) / 2.0);
 				double shErr = abs(rHeights[centerX + iSizeX * (centerY + s2)] - (rHeights[centerX + s2 + iSizeX * (centerY + s2)] + rHeights[centerX - s2 + iSizeX * (centerY + s2)]) / 2.0);
-				double whErr = abs(rHeights[centerX - s2 + iSizeX * (centerY)] - (rHeights[centerX - s2 + iSizeX * (centerY + s2)] + rHeights[centerX - s2 + iSizeX * (centerY - s2)]) / 2.0);
+				double whErr = abs(rHeights[centerX - s2 + iSizeX * centerY] - (rHeights[centerX - s2 + iSizeX * (centerY + s2)] + rHeights[centerX - s2 + iSizeX * (centerY - s2)]) / 2.0);
 
 				// --- 1. and 2. diagonal height error ---------------------------------
-				double d1hErr = abs(rHeights[centerX + iSizeX * (centerY)] - (rHeights[centerX - s2 + iSizeX * (centerY - s2)] + rHeights[centerX + s2 + iSizeX * (centerY + s2)]) / 2.0);
-				double d2hErr = abs(rHeights[centerX + iSizeX * (centerY)] - (rHeights[centerX + s2 + iSizeX * (centerY - s2)] + rHeights[centerX - s2 + iSizeX * (centerY + s2)]) / 2.0);
+				double d1hErr = abs(rHeights[centerX + iSizeX * centerY] - (rHeights[centerX - s2 + iSizeX * (centerY - s2)] + rHeights[centerX + s2 + iSizeX * (centerY + s2)]) / 2.0);
+				double d2hErr = abs(rHeights[centerX + iSizeX * centerY] - (rHeights[centerX + s2 + iSizeX * (centerY - s2)] + rHeights[centerX - s2 + iSizeX * (centerY + s2)]) / 2.0);
 
 				// --- determine max of the 6 errors -----------------------------------
 				// The maximum of the absolute values of these elevation differences is called d2
 				// d2 =(1/d)*max(i=1..6)|dhi|.
 				double rMaxhErr = max(max(nhErr, ehErr), max(max(shErr, whErr), max(d1hErr, d2hErr)));
 
-				rFactors[centerX + iSizeX * (centerY)] = rMaxhErr / ((double) iSize);
+				rFactors[centerX + iSizeX * centerY] = rMaxhErr / ((double) iSize);
 			}
 			if (trq.fUpdate(++iTrqVal, iTrqMax))
 				return false;
@@ -294,16 +261,16 @@ bool DEMTriangulator::fPropagateD2Errors(Tranquilizer & trq)
 
 				// propagate half of the error to the next level, to ensure that the relevant next level quads are split into at least half of the triangles, so that there is no crack in the result
 				// (restricted quadtree property)
-				double rPropagateErr = rFactors[centerX + iSizeX * (centerY)] / 2.0;
+				double rPropagateErr = rFactors[centerX + iSizeX * centerY] / 2.0;
 
 				// --- propagate to 3 parents ------------------------------
 				// --- to real father --------------------------------------
-				rFactors[x1 + iSizeX * (y1)] = max(rFactors[x1 + iSizeX * (y1)], rPropagateErr);
+				rFactors[x1 + iSizeX * y1] = max(rFactors[x1 + iSizeX * y1], rPropagateErr);
 				// --- other 2 "parents" -----------------------------------
 				if (x2 >= 0 && x2 < iSizeX && y2 >= 0 && y2 < iSizeY)
-					rFactors[x2 + iSizeX * (y2)] = max(rFactors[x2 + iSizeX * (y2)], rPropagateErr);
+					rFactors[x2 + iSizeX * y2] = max(rFactors[x2 + iSizeX * y2], rPropagateErr);
 				if (x3 >= 0 && x3 < iSizeX && y3 >= 0 && y3 < iSizeY)
-					rFactors[x3 + iSizeX * (y3)] = max(rFactors[x3 + iSizeX * (y3)], rPropagateErr);
+					rFactors[x3 + iSizeX * y3] = max(rFactors[x3 + iSizeX * y3], rPropagateErr);
 			}
 			if (trq.fUpdate(++iTrqVal, iTrqMax))
 				return false;
@@ -325,12 +292,12 @@ bool DEMTriangulator::fTriangulateMesh(Tranquilizer & trq)
 					// the error of replacing this quad by a higher level quad is small
 					// however, don't skip this quad if the higher level quad is at the edge of the image and would not fit to be displayed in its entirety.
 					//deleteNode(x, y, iSize);
-					rFactors[x + iSizeX * (y)] = rUNDEF;
+					rFactors[x + iSizeX * y] = rUNDEF;
 				} else {			
 					// --- leaf or parent? ---------------------------------------------
 					// Calculate the blend value, that determines the contribution of the height at the current location when blending with neighbours			
 					double blend = min(2 * (1.0 - rHeightAccuracy / rError), 1.0);
-					rFactors[x + iSizeX * (y)] = blend;
+					rFactors[x + iSizeX * y] = blend;
 				}
 			}
 			if (trq.fUpdate(++iTrqVal, iTrqMax))
@@ -341,7 +308,7 @@ bool DEMTriangulator::fTriangulateMesh(Tranquilizer & trq)
 }
 
 //void DEMTriangulator::deleteNode(int x, int y, int iSize) {
-//	rFactors[x + iSizeX * (y)] = rUNDEF;
+//	rFactors[x + iSizeX * y] = rUNDEF;
 //	for (int iSize1 = iSize; iSize1 > 4; iSize1 /= 2) {
 //		int s2 = iSize1 / 2;
 //		int s4 = iSize1 / 4;
@@ -361,7 +328,7 @@ bool DEMTriangulator::fRenderMesh(Tranquilizer & trq)
 		int s2 = iSize / 2;
 		for (int x = s2; x < iSizeX - s2; x += iSize) { // start left (west), and move right (east)
 			for (int y = s2; y < iSizeY - s2; y += iSize) { // start up (north) and move down (south)
-				if (rFactors[x + iSizeX * (y)] != rUNDEF) {
+				if (rFactors[x + iSizeX * y] != rUNDEF) {
 					// --- get all 9 heights -----------------------------------------------
 
 					double rhNW = rHeights[x - s2 + iSizeX * (y - s2)];
@@ -395,21 +362,21 @@ bool DEMTriangulator::fRenderMesh(Tranquilizer & trq)
 						hC = rGetHeight(x, y, iSize, dirToFather, C, rhNW, rhNE, rhSW, rhSE);
 						hN = (y > s2) ? rHeights[x + iSizeX * (y - s2)] : rGetHeight(x, y, iSize, dirToFather, N, rhNW, rhNE, rhSW, rhSE);
 						hS = rGetHeight(x, y, iSize, dirToFather, S, rhNW, rhNE, rhSW, rhSE);
-						hW = (x > s2) ? rHeights[x - s2 + iSizeX * (y)] : rGetHeight(x, y, iSize, dirToFather, W, rhNW, rhNE, rhSW, rhSE);
+						hW = (x > s2) ? rHeights[x - s2 + iSizeX * y] : rGetHeight(x, y, iSize, dirToFather, W, rhNW, rhNE, rhSW, rhSE);
 						hE = rGetHeight(x, y, iSize, dirToFather, E, rhNW, rhNE, rhSW, rhSE);
-						rHeights[x + iSizeX * (y)] = hC;
+						rHeights[x + iSizeX * y] = hC;
 						if (y == s2)
 							rHeights[x + iSizeX * (y - s2)] = hN;
 						rHeights[x + iSizeX * (y + s2)] = hS;
 						if (x == s2)
-							rHeights[x - s2 + iSizeX * (y)] = hW;
-						rHeights[x + s2 + iSizeX * (y)] = hE;
+							rHeights[x - s2 + iSizeX * y] = hW;
+						rHeights[x + s2 + iSizeX * y] = hE;
 					} else {
-						hC = rHeights[x + iSizeX * (y)];
+						hC = rHeights[x + iSizeX * y];
 						hN = rHeights[x + iSizeX * (y - s2)];
 						hS = rHeights[x + iSizeX * (y + s2)];
-						hW = rHeights[x - s2 + iSizeX * (y)];
-						hE = rHeights[x + s2 + iSizeX * (y)];
+						hW = rHeights[x - s2 + iSizeX * y];
+						hE = rHeights[x + s2 + iSizeX * y];
 					}
 							
 					if (!fCreateFanAround1(x, y, iSize, hC, hN, hS, hW, hE, rhNW, rhNE, rhSW, rhSE))
@@ -428,7 +395,7 @@ double DEMTriangulator::rGetHeight(int x, int y, int iSize, int dirToFather, int
 	double heightValue;
 	switch(neswc) {
 	case C:
-		heightValue = rHeights[x + iSizeX * (y)];
+		heightValue = rHeights[x + iSizeX * y];
 		break;
 	case N:
 		heightValue = rHeights[x + iSizeX * (y - iSize / 2)];
@@ -437,10 +404,10 @@ double DEMTriangulator::rGetHeight(int x, int y, int iSize, int dirToFather, int
 		heightValue = rHeights[x + iSizeX * (y + iSize / 2)];
 		break;
 	case W:
-		heightValue = rHeights[x - iSize / 2 + iSizeX * (y)];
+		heightValue = rHeights[x - iSize / 2 + iSizeX * y];
 		break;
 	case E:
-		heightValue = rHeights[x + iSize / 2 + iSizeX * (y)];
+		heightValue = rHeights[x + iSize / 2 + iSizeX * y];
 		break;
 	default:
 		heightValue = 0;				
@@ -451,7 +418,7 @@ double DEMTriangulator::rGetHeight(int x, int y, int iSize, int dirToFather, int
 	if (fSmooth) {
 		// blend the height with the height of two neighbours
 		
-		double blend = rFactors[x + iSizeX * (y)];
+		double blend = rFactors[x + iSizeX * y];
 		
 		switch (neswc) {
 
@@ -484,13 +451,13 @@ double DEMTriangulator::rGetHeight(int x, int y, int iSize, int dirToFather, int
 
 		case W:
 			if (x - iSize >= 0)
-				blend = min(blend, rFactors[x - iSize + iSizeX * (y)]);
+				blend = min(blend, rFactors[x - iSize + iSizeX * y]);
 			heightValue = (1.0 - blend) * (rhNW + rhSW) / 2.0 + blend * heightValue;
 			break;
 
 		case E:
 			if (x + iSize < iSizeX)
-				blend = min(blend, rFactors[x + iSize + iSizeX * (y)]);
+				blend = min(blend, rFactors[x + iSize + iSizeX * y]);
 			heightValue = (1.0 - blend) * (rhNE + rhSE) / 2.0 + blend * heightValue;
 			break;
 		}
@@ -529,11 +496,11 @@ bool DEMTriangulator::fCreateFanAround1(int x, int y, int iSize,
 
 	if ((y - iSize >= 0) && (rFactors[x + iSizeX * (y - iSize)] == rUNDEF))
 		corners[N] = false;
-	if ((x + iSize < iSizeX) && (rFactors[x + iSize + iSizeX * (y)] == rUNDEF))
+	if ((x + iSize < iSizeX) && (rFactors[x + iSize + iSizeX * y] == rUNDEF))
 		corners[E] = false;
 	if ((y + iSize < iSizeY) && (rFactors[x + iSizeX * (y + iSize)] == rUNDEF))
 		corners[S] = false;
-	if ((x - iSize >= 0) && (rFactors[x - iSize + iSizeX * (y)] == rUNDEF))
+	if ((x - iSize >= 0) && (rFactors[x - iSize + iSizeX * y] == rUNDEF))
 		corners[W] = false;
 
 	if (iNrVertices + 24 >= iVerticesArraySize) {
@@ -681,11 +648,11 @@ void DEMTriangulator::CreateFanAround2(int x, int y, int iSize,
 
 	if ((y - iSize >= 0) && (rFactors[x + iSizeX * (y - iSize)] == rUNDEF))
 		corners[N] = false;
-	if ((x + iSize < iSizeX) && (rFactors[x + iSize + iSizeX * (y)] == rUNDEF))
+	if ((x + iSize < iSizeX) && (rFactors[x + iSize + iSizeX * y] == rUNDEF))
 		corners[E] = false;
 	if ((y + iSize < iSizeY) && (rFactors[x + iSizeX * (y + iSize)] == rUNDEF))
 		corners[S] = false;
-	if ((x - iSize >= 0) && (rFactors[x - iSize + iSizeX * (y)] == rUNDEF))
+	if ((x - iSize >= 0) && (rFactors[x - iSize + iSizeX * y] == rUNDEF))
 		corners[W] = false;
 
 	// TRIANGLE_FAN_ARRAY
@@ -785,11 +752,11 @@ void DEMTriangulator::AddVertex(int x, int y, double rHeight)
 	// 4: drapemp to be draped over mp values, in projection drapemp->csy (!= drapemp->csy)
 	// 5: drapemp to be draped over mp values, in projection root->csy (!= drapemp->csy)
 	// 6: drapemp to be draped over mp values, in projection root->csy (!= drapemp->csy)
-	Coord c (rMinX + x * rStepX, rMinY + y * rStepY, 0.0);
+	Coord c (rMinX + x * rStepX, rMaxY - y * rStepY, 0.0);
 	double s, t;
 	if (fSelfDrape) {
 		s = x / (double)width;
-		t = (iSizeY - y - 1) / (double)height;
+		t = y / (double)height;
 	} else {
 		Coord c1 = csyDrape->cConv(csyMap, c);
 		double row;
