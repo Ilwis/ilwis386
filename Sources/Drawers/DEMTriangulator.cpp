@@ -40,8 +40,7 @@ DEMTriangulator::DEMTriangulator(double* rHeights, int iWidth, int iHeight,
 	for (int i = 0; i < iSizeX * iSizeY; ++i)
 		if (rHeights[i] == rUNDEF)
 			rHeights[i] = 0;
-	DoTriangulate();
-	valid = true;
+	valid = fDoTriangulate();
 }
 
 DEMTriangulator::DEMTriangulator(ZValueMaker * zMaker, BaseMapPtr * drapeMapPtr, CoordSystem & csyDest, bool fSmooth)
@@ -70,7 +69,6 @@ DEMTriangulator::DEMTriangulator(ZValueMaker * zMaker, BaseMapPtr * drapeMapPtr,
 		iSizeY = mp->rcSize().Row;
 
 		rHeights = (double*)malloc(iSizeX * iSizeY * sizeof(double));
-		ReadMap();
 		double minX = mp->cb().MinX();
 		double maxX = mp->cb().MaxX();
 		double minY = mp->cb().MinY();
@@ -94,17 +92,18 @@ DEMTriangulator::DEMTriangulator(ZValueMaker * zMaker, BaseMapPtr * drapeMapPtr,
 			iSize2 = (int) pow(2.0, (int) (log((double)iSizeX) / log(2.0)));
 		else
 			iSize2 = (int) pow(2.0, (int) (log((double)iSizeY) / log(2.0)));	
-		// iSize2 is the largest ^2 that is smaller or equal to both width and height. Any bigger value is a waste. 
+		// iSize2 is the largest ^2 that is smaller or equal to both width and height. Any bigger value is a waste.
+
+		iTrqMax = iSizeY + 4 * iSizeX; // ReadMap + 4 triangulation loops
 		rFactors = (double*)malloc(iSizeX * iSizeY * sizeof(double));
 		double rMin = mp->rrMinMax().rLo();
 		for (int i = 0; i < iSizeX * iSizeY; ++i)
 			if (rHeights[i] == rUNDEF)
 				rHeights[i] = rMin;
-		DoTriangulate();
+		valid = fDoTriangulate();
 
 		if (rHeights)
 			free(rHeights);
-		valid = true;
 	}
 }
 
@@ -115,7 +114,57 @@ DEMTriangulator::~DEMTriangulator(void)
 	free(vertices);
 }
 
-void DEMTriangulator::ReadMap()
+bool DEMTriangulator::fDoTriangulate()
+{
+	// Non-recursive Quad-Tree triangulation
+	bool fSuccess = false;
+	Tranquilizer trq(TR("Triangulating DEM"));
+	trq.fUpdate(0, iTrqMax);
+	iTrqVal = 0;
+	if (!fReadMap(trq))
+		return false;
+	iTrqVal = iSizeY;
+	while (!fSuccess) {
+		TRACE("Trying with rHeightAccuracy = %f\n", rHeightAccuracy);
+		iNrVertices = 0;
+		iVerticesArraySize = iVertexArrayIncrement;
+		vertices = (Vertex*)malloc(iVerticesArraySize * sizeof(Vertex));
+		memset(rFactors, 0, iSizeX * iSizeY * sizeof(double));
+		// --- set initial D2-Values -----------
+		if (!fCalcD2ErrorMatrix(trq))
+			break;
+		// --- ensure max level difference of 1 (restricted quadtree property) -
+		if (!fPropagateD2Errors(trq))
+			break;
+		if (!fTriangulateMesh(trq))
+			break;
+		// --- create Terrain Mesh ---------------------------------------------
+		fSuccess = fRenderMesh(trq);
+		if (trq.fAborted()) // fSuccess will be false; fRenderMesh returns false for two reasons (out of memory, or user stopped)
+			break;
+		if (!fSuccess) {
+			free(vertices);
+			rHeightAccuracy *= 10.0;
+			TRACE("realloc failed, requested %d megabytes of memory ... retrying\n", iVerticesArraySize * sizeof(Vertex) / (1024 * 1024));
+			// if (smooth) then re-read heights
+			if (fSmooth) {
+				trq.fUpdate(0, iTrqMax);
+				iTrqVal = 0;
+				if (!fReadMap(trq))
+					break;
+			}
+			iTrqVal = iSizeY;
+		}
+	}
+	trq.fUpdate(iTrqMax, iTrqMax);
+	if (fSuccess) {
+		vertices = (Vertex*)realloc(vertices, iNrVertices * sizeof(Vertex));
+		TRACE("Success!! memory = %d megabytes, NrVertices = %d\n", iNrVertices * sizeof(Vertex) / (1024 * 1024), iNrVertices);
+	}
+	return fSuccess;
+}
+
+bool DEMTriangulator::fReadMap(Tranquilizer & trq)
 {
 	int iWidth = mp->rcSize().Col;
 	int iHeight = mp->rcSize().Row;
@@ -129,8 +178,6 @@ void DEMTriangulator::ReadMap()
 		fRealMap = (vr->rStep() < 1) || (vr->stUsed() == stREAL);
 	else
 		fRealMap = false;
-//		if (*fDrawStop)
-//			return false;
 	mp->KeepOpen(true);
 	if (fRealMap) 
 	{
@@ -139,10 +186,10 @@ void DEMTriangulator::ReadMap()
 		memset(ptrBufIn, 0, iWidth * sizeof(double)); // to prevent NAN values in bufIn.
 		for (long iYPos = 0; iYPos < iHeight; ++iYPos)
 		{
-//				if (*fDrawStop) {
-//					mp->KeepOpen(false);
-//					return false;
-//				}
+			if (trq.fUpdate(iYPos, iTrqMax)) {
+				mp->KeepOpen(false);
+				return false;
+			}
 			mp->GetLineVal(iYPos, bufIn, 0, iWidth);
 			memcpy(&rHeights[(iHeight - iYPos - 1) * iWidth], ptrBufIn, iWidth * sizeof(double));
 		}
@@ -153,10 +200,10 @@ void DEMTriangulator::ReadMap()
 		long * ptrBufIn = bufIn.buf();
 		for (long iYPos = 0; iYPos < iHeight; ++iYPos) 
 		{
-//				if (*fDrawStop) {
-//					mp->KeepOpen(false);
-//					return false;
-//				}
+			if (trq.fUpdate(iYPos, iTrqMax)) {
+				mp->KeepOpen(false);
+				return false;
+			}
 			if (fValue && !fAttTable)
 				mp->GetLineVal(iYPos, bufIn, 0, iWidth);
 			else
@@ -166,41 +213,12 @@ void DEMTriangulator::ReadMap()
 		}
 	}                                                                         
 	mp->KeepOpen(false);
-}
-
-void DEMTriangulator::DoTriangulate()
-{
-	// Non-recursive Quad-Tree triangulation
-	bool success = false;
-	while (!success) {
-		TRACE("Trying with rHeightAccuracy = %f\n", rHeightAccuracy);
-		iNrVertices = 0;
-		iVerticesArraySize = iVertexArrayIncrement;
-		vertices = (Vertex*)malloc(iVerticesArraySize * sizeof(Vertex));
-		memset(rFactors, 0, iSizeX * iSizeY * sizeof(double));
-		// --- set initial D2-Values -----------
-		CalcD2ErrorMatrix();
-		// --- ensure max level difference of 1 (restricted quadtree property) -
-		PropagateD2Errors();
-		TriangulateMesh();
-		// --- create Terrain Mesh ---------------------------------------------
-		success = fRenderMesh();
-		if (!success) {
-			free(vertices);
-			rHeightAccuracy *= 10.0;
-			TRACE("realloc failed, requested %d megabytes of memory ... retrying\n", iVerticesArraySize * sizeof(Vertex) / (1024 * 1024));
-			// if (smooth) then re-read heights
-			if (fSmooth)
-				ReadMap();
-		}
-	}
-	vertices = (Vertex*)realloc(vertices, iNrVertices * sizeof(Vertex));
-	TRACE("Success!! memory = %d megabytes, NrVertices = %d\n", iNrVertices * sizeof(Vertex) / (1024 * 1024), iNrVertices);
+	return true;
 }
 
 // === ErrorMatrix calculations ============================================
 
-void DEMTriangulator::CalcD2ErrorMatrix()
+bool DEMTriangulator::fCalcD2ErrorMatrix(Tranquilizer & trq)
 {
 	for (int iSize = 2; iSize <= iSize2; iSize *= 2) {
 		int s2 = iSize / 2;
@@ -223,15 +241,18 @@ void DEMTriangulator::CalcD2ErrorMatrix()
 
 				rFactors[centerX + iSizeX * (centerY)] = rMaxhErr / ((double) iSize);
 			}
+			if (trq.fUpdate(++iTrqVal, iTrqMax))
+				return false;
 		}
 	}
+	return true;
 }
 
-void DEMTriangulator::PropagateD2Errors()
+bool DEMTriangulator::fPropagateD2Errors(Tranquilizer & trq)
 {
 	int x1 = 0, y1 = 0, x2 = 0, y2 = 0, x3 = 0, y3 = 0;
 	// --- iterate through all levels --------------------------------------
-	for (int iSize = 2; iSize <= iSize2 / 2; iSize *= 2) { // start with 2x2 and grow
+	for (int iSize = 2; iSize <= iSize2; iSize *= 2) { // start with 2x2 and grow
 		int s2 = iSize / 2;
 		for (int centerX = s2; centerX < iSizeX - s2; centerX += iSize) { // start left (west), and move right (east)
 			for (int centerY = s2; centerY < iSizeY - s2; centerY += iSize) { // start up (north) and move down (south)
@@ -284,13 +305,16 @@ void DEMTriangulator::PropagateD2Errors()
 				if (x3 >= 0 && x3 < iSizeX && y3 >= 0 && y3 < iSizeY)
 					rFactors[x3 + iSizeX * (y3)] = max(rFactors[x3 + iSizeX * (y3)], rPropagateErr);
 			}
+			if (trq.fUpdate(++iTrqVal, iTrqMax))
+				return false;
 		}
 	}
+	return true;
 }
 
 // === Triangulation =======================================================
 
-void DEMTriangulator::TriangulateMesh()
+bool DEMTriangulator::fTriangulateMesh(Tranquilizer & trq)
 {
 	for (int iSize = 2; iSize <= iSize2; iSize *= 2) {
 		int s2 = iSize / 2;
@@ -309,8 +333,11 @@ void DEMTriangulator::TriangulateMesh()
 					rFactors[x + iSizeX * (y)] = blend;
 				}
 			}
+			if (trq.fUpdate(++iTrqVal, iTrqMax))
+				return false;
 		}
 	}
+	return true;
 }
 
 //void DEMTriangulator::deleteNode(int x, int y, int iSize) {
@@ -328,9 +355,9 @@ void DEMTriangulator::TriangulateMesh()
 
 // === Render Terrain-Mesh =================================================
 
-bool DEMTriangulator::fRenderMesh()
+bool DEMTriangulator::fRenderMesh(Tranquilizer & trq)
 {		
-	for (int iSize = 2 * (int)(iSize2 / 2); iSize > 1; iSize /= 2) {
+	for (int iSize = iSize2; iSize > 1; iSize /= 2) {
 		int s2 = iSize / 2;
 		for (int x = s2; x < iSizeX - s2; x += iSize) { // start left (west), and move right (east)
 			for (int y = s2; y < iSizeY - s2; y += iSize) { // start up (north) and move down (south)
@@ -386,9 +413,11 @@ bool DEMTriangulator::fRenderMesh()
 					}
 							
 					if (!fCreateFanAround1(x, y, iSize, hC, hN, hS, hW, hE, rhNW, rhNE, rhSW, rhSE))
-						return false;
+						return false; // false, 1st reason: out of memory
 				}
 			}
+			if (trq.fUpdate(++iTrqVal, iTrqMax))
+				return false; // false, 2nd reason: user aborted
 		}
 	}
 	return true;

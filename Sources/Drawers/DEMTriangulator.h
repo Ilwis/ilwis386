@@ -38,12 +38,12 @@ namespace ILWIS {
 		bool fValid();
 
 	private:
-		void ReadMap();
-		void DoTriangulate();
-		void CalcD2ErrorMatrix();
-		void PropagateD2Errors();
-		void TriangulateMesh();
-		bool fRenderMesh();
+		bool fDoTriangulate();
+		bool fReadMap(Tranquilizer & trq);
+		bool fCalcD2ErrorMatrix(Tranquilizer & trq);
+		bool fPropagateD2Errors(Tranquilizer & trq);
+		bool fTriangulateMesh(Tranquilizer & trq);
+		bool fRenderMesh(Tranquilizer & trq);
 		double rGetHeight(int x, int y, int size, int dirToFather, int neswc, double rhNW, double rhNE, double rhSW, double rhSE);
 		bool fCreateFanAround1(int x, int y, int size, double hC, double hN, double hS, double hW, double hE, double hNW, double hNE, double hSW, double hSE);
 		void CreateFanAround2(int x, int y, int size, double hC, double hN, double hS, double hW, double hE, double hNW, double hNE, double hSW, double hSE);
@@ -61,6 +61,8 @@ namespace ILWIS {
 		unsigned long iVerticesArraySize;
 		unsigned long iNrVertices;
 		const unsigned long iVertexArrayIncrement;
+		unsigned long iTrqVal;
+		unsigned long iTrqMax;
 
 		int iSize2; // num. of values in x- and y-direction
 		int iSizeX;
