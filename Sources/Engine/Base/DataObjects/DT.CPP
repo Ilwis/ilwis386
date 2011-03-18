@@ -699,6 +699,11 @@ String ILWIS::Time::toString(bool local, ILWIS::Time::Mode mode) const{
 	}
 	return "?";
 }
+
+Time ILWIS::Time::now() {
+	CTime t = CTime::GetCurrentTime();
+	return Time(t);
+}
 //-------------------------------------------
 Duration::Duration(const String& duration) {
 	String definition = duration;
@@ -809,9 +814,38 @@ String ILWIS::Duration::toString(bool local, ILWIS::Time::Mode mode) const{
 
 }
 
+double ILWIS::Duration::get(TimePart part) const{
+	if ( julianday == rUNDEF)
+		return rUNDEF;
+
+	if ( abs(julianday) > NOTIME)
+		return rUNDEF;
+
+	int year, month, day, hour, minutes;
+	double seconds;
+	julianToGregorian(year,month,day,hour,minutes,seconds);
+	if ( month == 12) { // month 12 is a duration of 1 year, month 12 makes sense in Time's context, but not in duration;
+		++year;
+		month = 0;
+	}
+	if ( part == tpYEAR)
+		return year + 4712;
+	else if (part == tpMONTH)
+		return month - 1; // in time months are 1 based, but for duration this doesnt make sense
+	else if (part == tpDAYOFMONTH )
+		return day - 1; // in time days are 1 based, but for duration this doesnt make sense
+	else{
+		return ILWIS::Time::get(part);
+	}
+	return tUNDEF;
+}
+
+
 bool ILWIS::Duration::isValid() const{
 	return Time::isValid() && julianday != 0;
 }
+
+
 //-------------------------------------------
 TimeInterval::TimeInterval() {
 	current = tUNDEF;
@@ -891,6 +925,8 @@ TimeInterval& ILWIS::TimeInterval::operator=(const TimeInterval& tiv){
 
 	return *this;
 }
+
+
 
 
 

@@ -12,7 +12,7 @@ using namespace ILWIS;
 ZValueMaker::ZValueMaker()  : scalingType(zvsNONE), self(true),threeDPossible(false),offset(0), zscale(DEFAULT_SCALE), zOrder(0), fakeZ(0){
 }
 void ZValueMaker::setDataSourceMap(const BaseMap& mp){
-	threeDPossible =  mp->dm()->dmt() != dmtVALUE ? false : true;
+	threeDPossible =  mp->dm()->dmt() == dmtVALUE || mp->dm()->dmt() == dmtIMAGE;
 	datasourcemap = mp;
 	table = Table();
 	RangeReal tempRange = mp->dvrs().rrMinMax();
@@ -97,6 +97,10 @@ RangeReal ZValueMaker::getRange() const {
 	return range;
 }
 
+void ZValueMaker::setRange(const RangeReal& rr) {
+	range = rr;
+}
+
 double ZValueMaker::getValue(const Coord& crd, Feature *f ){
 
 	if (!threeDPossible)
@@ -160,7 +164,7 @@ double ZValueMaker::getOffset() const {
 
 void ZValueMaker::setThreeDPossible(bool v) {
 	if ( datasourcemap.fValid()) {
-		threeDPossible = v && (datasourcemap->dm()->dmt() != dmtVALUE ? false : true);
+		threeDPossible = v && (datasourcemap->dm()->dmt() == dmtVALUE || datasourcemap->dm()->dmt() == dmtIMAGE);
 	}
 	else if ( columns.size() > 0) {
 		threeDPossible = v && (columns[0]->dm()->dmt() != dmtVALUE ? false : true); 
@@ -192,4 +196,8 @@ int ZValueMaker::getZOrder() const{
 
 double ZValueMaker::getZ0(bool is3D) const{
 	return is3D ? fakeZ : 0;
+}
+
+void ZValueMaker::setBounds(const CoordBounds& bnd) {
+	cbLimits = bnd;
 }

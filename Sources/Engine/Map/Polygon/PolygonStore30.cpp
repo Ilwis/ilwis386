@@ -37,6 +37,8 @@ void PolygonMapStoreFormat30::Load()
 		} else{
 			polygon = new ILWIS::LPolygon();
 		}
+		if ( rings.size() == 0)
+			continue;
 		polygon->addBoundary(rings.at(0));
 		CoordinateSequence *seq = rings.at(0)->getCoordinates();
 		CoordBounds cb = ptr.cb();
@@ -82,7 +84,7 @@ void PolygonMapStoreFormat30::getRings(long startIndex, const Table& tblTopology
 			seq = line;
 		}
 	
-		if ( seq->front() == seq->back()) {
+		if ( seq->front() == seq->back() && seq->size() > 3) {
 			LinearRing *ring = new LinearRing(seq, new GeometryFactory());
 			rings.push_back(ring);			
 			seq = new CoordinateArraySequence();

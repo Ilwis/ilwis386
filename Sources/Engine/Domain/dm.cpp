@@ -491,6 +491,8 @@ DomainType DomainPtr::dmt() const
 		return dmtBIT;
 	if (0 != pdbool())
 		return dmtBOOL;
+	if ( 0 != pdtime())
+		return dmtTIME;
 	if (0 != pdv())
 		return dmtVALUE;
 	if (0 != pdgrp())
@@ -513,8 +515,6 @@ DomainType DomainPtr::dmt() const
 		return dmtCOORDBUF;
 	if (0 != pdcol())
 		return dmtCOLOR;
-	if ( 0 != pdtime())
-		return dmtTIME;
 	return dmtNONE;
 }
 

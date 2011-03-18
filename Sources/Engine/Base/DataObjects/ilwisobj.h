@@ -408,6 +408,7 @@ class DATEXPORT Ellipsoid;
 
 #define IOTYPE(name) IlwisObject::iotObjectType(name)
 #define IOTYPEBASEMAP(name) ( IOTYPE(name) == IlwisObject::iotRASMAP || IOTYPE(name) == IlwisObject::iotPOLYGONMAP || IOTYPE(name) == IlwisObject::iotPOINTMAP || IOTYPE(name) == IlwisObject::iotSEGMENTMAP)
+#define IOTYPEFEATUREMAP(name) ( IOTYPE(name) == IlwisObject::iotPOLYGONMAP || IOTYPE(name) == IlwisObject::iotPOINTMAP || IOTYPE(name) == IlwisObject::iotSEGMENTMAP)
 typedef IlwisObject::iotIlwisObjectType IObjectType;
 
 #endif // ILWISOBJ_H

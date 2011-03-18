@@ -15,6 +15,7 @@ public:
 	void setOffset(double u=rUNDEF);
 	double getOffset() const;
 	RangeReal getRange() const;
+	void setRange(const RangeReal& rr);
 	void setThreeDPossible(bool v);
 	bool getThreeDPossible() const;
 	double getZScale() const;
@@ -24,6 +25,7 @@ public:
 	void setZOrder(int index, double base);
 	int getZOrder() const;
 	double getZ0(bool is3D) const;
+	void setBounds(const CoordBounds& bnd);
 	BaseMapPtr * getSourceRasterMap() const;
 
 private:

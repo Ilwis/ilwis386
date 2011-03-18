@@ -100,7 +100,6 @@ bool RootDrawer::draw( const CoordBounds& cb) const{
 	else {
 		const_cast<RootDrawer *>(this)->setZIndex(0);
 		setupDraw();
-
 		if ( rotX ==0 && rotY ==0) {
 			glLoadIdentity();
 			if (is3D()) {
@@ -245,18 +244,28 @@ void RootDrawer::setCoordBoundsView(const CoordSystem& _cs, const CoordBounds& _
 		double delta = 0;
 		if ( aspectRatio <= 1.0) {
 			double pixwidth = (double)pixArea.Row * aspectRatio;
+			double deltay = 0;
+			if ( pixwidth > pixArea.Col) {
+				deltay = cb.height() * ( pixwidth / pixArea.Col - 1.0);
+				pixwidth = pixArea.Col;
+			}
 			double fracofWidth = 1.0 - (pixArea.Col - pixwidth) / pixArea.Col;
 			double crdWidth = w / fracofWidth;
 			double delta = (crdWidth - w) / 2.0;
-			cbView =  CoordBounds(Coord(cb.MinX() - delta,cb.MinY(),0), 
-			                  Coord(cb.MaxX() + delta,cb.MaxY(),0));
+			cbView =  CoordBounds(Coord(cb.MinX() - delta,cb.MinY() - deltay /2.0,0), 
+			                  Coord(cb.MaxX() + delta,cb.MaxY() + deltay/ 2.0,0));
 		} else {
 			double pixheight = (double)pixArea.Col / aspectRatio;
+			double deltax = 0;
+			if ( pixheight > pixArea.Row) {
+				deltax = cb.width() * ( pixheight / pixArea.Row - 1.0);
+				pixheight = pixArea.Row;
+			}
 			double fracofHeight = 1.0 - abs(pixArea.Row - pixheight) / (double)pixArea.Row;
 			double crdHeight = h / fracofHeight;
 			double delta = (crdHeight - h) / 2.0;
-			cbView =  CoordBounds(Coord(cb.MinX(),cb.MinY()  - delta,0), 
-			                      Coord(cb.MaxX(),cb.MaxY()  + delta,0));
+			cbView =  CoordBounds(Coord(cb.MinX() - deltax /2.0,cb.MinY()  - delta,0), 
+			                      Coord(cb.MaxX() + deltax /2.0,cb.MaxY()  + delta,0));
 
 		}
 		cbZoom = cbView;

@@ -133,8 +133,9 @@ void ModuleMap::initModules() {
 void ModuleMap::getAppInfo(const String& name, vector<ApplicationInfo *>& infos)	{ 
 	ApplicationMap::iterator cur;
 	int index=0;
-	if ((cur = applications.find(name)) != applications.end())
-		infos.push_back((*cur).second);
+	ApplicationInfo *inf = applications[name];
+	if ( inf != 0)
+		infos.push_back(inf);
 	else if ( (index = name.find("*")) != string::npos) {
 		if ( index == 0) {
 			for(cur = applications.begin(); cur!= applications.end(); ++cur) {

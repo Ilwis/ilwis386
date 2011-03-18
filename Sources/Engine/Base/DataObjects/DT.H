@@ -85,7 +85,7 @@ namespace ILWIS {
 		Time& operator=(double t);
 		time_t toTime_t() const;
 		bool isLeapYear(int year = iUNDEF) const;
-		double get(TimePart part) const;
+		virtual double get(TimePart part) const;
 		Time operator-(const Time& time) const;
 		Time operator+(const Time& time) const;
 		bool operator <(const Time& time) const;
@@ -101,6 +101,7 @@ namespace ILWIS {
 		void setSecond(double sec);
 		virtual String toString(bool local= true, ILWIS::Time::Mode mode=ILWIS::Time::mDATETIME) const;
 		virtual bool isValid() const;
+		static Time now();
 		
 	protected:
 		double gregorianToJulian(int year, int month, int day, int hour, int minutes, double seconds) const;
@@ -123,6 +124,7 @@ namespace ILWIS {
 		Duration(double r);
 		String toString(bool local, ILWIS::Time::Mode mode) const;
 		bool isValid() const;
+		double get(TimePart part) const;
 	};
 
 	class _export TimeInterval : public RangeReal {
