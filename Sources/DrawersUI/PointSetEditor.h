@@ -16,16 +16,17 @@ namespace ILWIS {
 		HTREEITEM configure( HTREEITEM parentItem);
 		bool isToolUseableFor(ILWIS::DrawerTool *tool);
 		String getMenuString() const;
+		void removeSelectedFeatures();
 		void OnCopy();
-		void OnInsertMode();
+		//void OnInsertMode();
 		void OnUpdateMode(CCmdUI* pCmdUI);
-		void OnMoveMode();
-		void OnSelectMode();
+		//void OnMoveMode();
+		//void OnSelectMode();
 		void OnContextMenu(CWnd* pWnd, CPoint point);
 		void updateFeature(SelectedFeature *f);
 		//bool OnLButtonUp(UINT nFlags, CPoint point);
 
-		void Mode(BaseMapEditor::Mode m) ;
+		void setMode(BaseMapEditor::Mode m) ;
 		String sTitle() const;
 		zIcon icon() const;
 		int iFmtPnt, iFmtDom;

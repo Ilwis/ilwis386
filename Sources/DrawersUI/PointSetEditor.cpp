@@ -19,8 +19,10 @@
 #include "Client\Ilwis.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
+#include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
-#include "Client\Mapwindow\Drawers\DrawerTool.h"
+#include "Client\MapWindow\Drawers\DrawerTool.h"
+#include "Client\Mapwindow\LayerTreeItem.h" 
 #include "DrawersUI\SetDrawerTool.h"
 #include "FeatureSetEditor.h"
 #include "PointSetEditor.h"
@@ -92,17 +94,25 @@ bool PointSetEditor::isToolUseableFor(ILWIS::DrawerTool *tool) {
 
 	if ( bmp->fReadOnly())
 		return false;
+	if ( drawer->inEditMode())
+		active = true;
 	parentTool = tool;
 	return true;
 }
 
 String PointSetEditor::getMenuString() const {
-	return TR("Pointmap Editor");
+	if ( drawer->inEditMode()) {
+		return TR("Close Pointmap Editor");
+	}
+	else{
+		return TR("Open Pointmap Editor");
+	}
 }
 
 HTREEITEM PointSetEditor::configure( HTREEITEM parentItem) {
-	HTREEITEM htiEditor = insertItem(parentItem,"Pointmap Editor","EditMap");
-	FeatureSetEditor::configure(htiEditor);
+	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
+	htiNode = insertItem("Pointmap Editor","EditMap", item);
+	FeatureSetEditor::configure(htiNode);
 
 	CMenu men;
 	CMenu menSub;
@@ -146,7 +156,7 @@ HTREEITEM PointSetEditor::configure( HTREEITEM parentItem) {
 		dw->RecalcLayout();
 		mdoc->mpvGetView()->mwParent()->UpdateMenu(hmenFile, hmenEdit);
 	}
-	return htiEditor;
+	return htiNode;
 }
 
 void PointSetEditor::OnContextMenu(CWnd* pWnd, CPoint point)
@@ -181,20 +191,20 @@ String PointSetEditor::sTitle() const
 	return s;
 }
 
-void PointSetEditor::OnInsertMode()
-{
-	Mode(mode == BaseMapEditor::mINSERT ? BaseMapEditor::mUNKNOWN : BaseMapEditor::mINSERT);
-}
-
-void PointSetEditor::OnMoveMode()
-{
-	Mode(mode == BaseMapEditor::mMOVE ? BaseMapEditor::mUNKNOWN : BaseMapEditor::mMOVE);
-}
-
-void PointSetEditor::OnSelectMode()
-{
-	Mode(mode == BaseMapEditor::mSELECT ? BaseMapEditor::mUNKNOWN : BaseMapEditor::mSELECT);
-}
+//void PointSetEditor::OnInsertMode()
+//{
+//	Mode(mode == BaseMapEditor::mINSERT ? BaseMapEditor::mUNKNOWN : BaseMapEditor::mINSERT);
+//}
+//
+//void PointSetEditor::OnMoveMode()
+//{
+//	Mode(mode == BaseMapEditor::mMOVE ? BaseMapEditor::mUNKNOWN : BaseMapEditor::mMOVE);
+//}
+//
+//void PointSetEditor::OnSelectMode()
+//{
+//	Mode(mode == BaseMapEditor::mSELECT ? BaseMapEditor::mUNKNOWN : BaseMapEditor::mSELECT);
+//}
 
 void PointSetEditor::OnUpdateMode(CCmdUI* pCmdUI)
 {
@@ -218,11 +228,10 @@ void PointSetEditor::OnUpdateMode(CCmdUI* pCmdUI)
 	pCmdUI->SetRadio(fCheck);
 }
 
-void PointSetEditor::Mode(BaseMapEditor::Mode m) 
+void PointSetEditor::setMode(BaseMapEditor::Mode m) 
 {
-	if (mode != mSELECT)
-		clear();
-	mdoc->mpvGetView()->OnNoTool();
+	//if (mode != mSELECT)
+	//	clear();
 	switch (m) {
 	case mSELECT:
 		curActive = curEdit;
@@ -331,7 +340,7 @@ bool PointSetEditor::insertFeature(UINT nFlags, CPoint point) {
 	ILWIS::Point * p = CPOINT(bmapptr->newFeature());
 	p->setCoord(crd);
 	p->PutVal(0L);
-	pixdoc->setEditFeature(CFEATURE(p));
+	mdoc->pixInfoDoc->setEditFeature(CFEATURE(p));
 
 	CoordWithCoordSystem cwcs(crd, bmapptr->cs());
 	if ( setdrawer) {
@@ -357,5 +366,17 @@ void PointSetEditor::updateFeature(SelectedFeature *f) {
 		Coord c = *(f->coords[index]);
 		p->setCoord(c);
 	}
+}
+
+void PointSetEditor::removeSelectedFeatures() {
+	for(SFMIter cur = selectedFeatures.begin(); cur != selectedFeatures.end(); ++cur) {
+		SelectedFeature *sfeature = (*cur).second;
+		bmapptr->removeFeature(sfeature->feature->getGuid(), sfeature->selectedCoords);
+		((ComplexDrawer *)drawer)->removeDrawer(sfeature->drawers[0]->getId());
+
+	}
+	selectedFeatures.clear();
+	currentCoordIndex = iUNDEF;
+	currentGuid = sUNDEF;
 }
 

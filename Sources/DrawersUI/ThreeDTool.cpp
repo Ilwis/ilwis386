@@ -204,14 +204,26 @@ sliderOffset(0) {
 	sliderScale->setContinuous(true);
 
 	if (dr->getZMaker()->getRange().fValid()) { 
-		RangeReal rr = dr->getZMaker()->getRange();
-		ValueRangeReal vr(- ( rr.rHi() + abs(rr.rLo())), rr.rWidth());
-		zoffset -= abs(rr.rLo());
+		range = dr->getZMaker()->getRange();
+		ValueRangeReal vr(- ( range.rHi() + abs(range.rLo())), range.rWidth());
+		zoffset -= abs(range.rLo());
+		frr = new FieldRangeReal(root, TR("Detected Value range"), &range);
+		frr->SetCallBack((NotifyProc)&ZDataScaling::updateOffset);
 		sliderOffset = new FieldRealSliderEx(root,"Z Offset", &zoffset,vr,true);
 		sliderOffset->SetCallBack((NotifyProc)&ZDataScaling::settransforms);
 		sliderOffset->setContinuous(true);
 	}
 	create();
+}
+
+int ZDataScaling::updateOffset(Event *ev) {
+	frr->StoreData();
+	ValueRangeReal vr(- ( range.rHi() + abs(range.rLo())), range.rWidth());
+	zoffset -= abs(range.rLo());
+	sliderOffset->setValueRange(vr); 
+	drw->getZMaker()->setRange(range);
+	apply();
+	return 1;
 }
 
 int ZDataScaling::settransforms(Event *) {

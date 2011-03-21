@@ -357,10 +357,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\DrawersUI\BaseMapEditor.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\Sources\DrawersUI\ColorTool.h"
 				>
 			</File>

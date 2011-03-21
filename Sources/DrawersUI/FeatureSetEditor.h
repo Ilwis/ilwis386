@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Client\Base\Res.h"
-#include "BaseMapEditor.h"
+#include "Client\Editors\map\BaseMapEditor.h"
 
 class MapCompositionDoc;
 class BaseMap;
@@ -15,7 +15,7 @@ namespace ILWIS{
 	public:
 		FeatureSetEditor(const String& tp,  ZoomableView* zv, LayerTreeView *view, NewDrawer *drw);
 		virtual ~FeatureSetEditor();
-		void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+		bool OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 		void OnLButtonDown(UINT nFlags, CPoint point);
 		void OnLButtonUp(UINT nFlags, CPoint point);
 		void OnLButtonDblClk(UINT nFlags, CPoint point);
@@ -27,7 +27,6 @@ namespace ILWIS{
 		LRESULT OnUpdate(WPARAM, LPARAM);
 		virtual bool fCopyOk();
 		virtual bool fPasteOk();
-		void init(ILWIS::ComplexDrawer *drw,PixelInfoDoc *pdoc);
 		void clear();
 		bool hasSelection() const;
 		HTREEITEM configure( HTREEITEM parentItem);
@@ -35,6 +34,9 @@ namespace ILWIS{
 		virtual void OnInsertMode() ;
 		virtual void OnMoveMode() ;
 		virtual void OnSelectMode() ;
+		void prepare();
+		virtual void removeSelectedFeatures() {};
+		void setActive(bool yesno);
 
 
 	protected:
@@ -54,7 +56,7 @@ namespace ILWIS{
 		HMENU hmenFile, hmenEdit;
 		int mode;
 		ILWIS::ComplexDrawer *setdrawer;
-		PixelInfoDoc *pixdoc;
+		//PixelInfoDoc *pixdoc;
 		HelpTopic htpTopic;
 		String sHelpKeywords;
 		SetChecks *editModeItems;

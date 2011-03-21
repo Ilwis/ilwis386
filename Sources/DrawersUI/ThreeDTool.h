@@ -21,7 +21,6 @@ protected:
 	void setExtrusion(void *value);
 	void extrusionOptions() ;
 
-
 };
 
 class DisplayZDataSourceForm : public DisplayOptionsForm {
@@ -49,12 +48,15 @@ public:
 	ZDataScaling(CWnd *wPar, ComplexDrawer *dr);
 	void apply(); 
 private:
+	int updateOffset(Event *ev);
 	int settransforms(Event *);
 	FieldRealSliderEx *sliderScale;
 	FieldRealSliderEx *sliderOffset;
+	FieldRangeReal *frr;
 
 	double zoffset;
 	double zscale;
+	RangeReal range;
 };
 
 class ExtrusionOptions : public DisplayOptionsForm {

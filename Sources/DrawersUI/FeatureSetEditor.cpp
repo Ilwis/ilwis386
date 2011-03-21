@@ -75,11 +75,16 @@ FeatureSetEditor::FeatureSetEditor(const String& tp,  ZoomableView* zv, LayerTre
 	}
 	active = false;
 	editModeItems = new SetChecks(tree,this,(DTSetCheckFunc)&FeatureSetEditor::setcheckEditMode);
+	stay = true;
 }
 
 FeatureSetEditor::~FeatureSetEditor(){
-	if ( bmapptr && bmapptr->fChanged) {
-		bmapptr->Store();
+	if ( bmapptr) {
+		if (  bmapptr->fChanged )
+			bmapptr->Store();
+		MapCompositionDoc *mdoc = tree->GetDocument();
+		mdoc->pixInfoDoc->setAssociatedDrawerTool(0,bmapptr->fnObj.sRelative()); 
+		mdoc->mpvGetView()->noTool(getId());
 	}
 	clear();
 }
@@ -87,17 +92,18 @@ FeatureSetEditor::~FeatureSetEditor(){
 HTREEITEM FeatureSetEditor::configure( HTREEITEM parentItem) {
 	DisplayOptionRadioButtonItem *item = new DisplayOptionRadioButtonItem(TR("Select"), tree,parentItem,drawer);
 	item->setState(true);
-	item->setCheckAction(this,editModeItems,(DTSetCheckFunc)&FeatureSetEditor::setcheckEditMode); 
+	item->setCheckAction(this,editModeItems,0); 
 	insertItem("Select","Bitmap", item);
 	item = new DisplayOptionRadioButtonItem(TR("Insert"), tree,parentItem,drawer);
 	item->setState(false);
-	item->setCheckAction(this,editModeItems,(DTSetCheckFunc)&FeatureSetEditor::setcheckEditMode);
+	item->setCheckAction(this,editModeItems,0);
 	insertItem("Insert","Bitmap", item);
 	item = new DisplayOptionRadioButtonItem(TR("Move"), tree,parentItem,drawer);
 	item->setState(false);
-	item->setCheckAction(this,editModeItems,(DTSetCheckFunc)&FeatureSetEditor::setcheckEditMode); 
+	item->setCheckAction(this,editModeItems,0); 
 	insertItem("Move","Bitmap", item);
 	DrawerTool::configure(htiNode);
+
 
 	return parentItem;
 }
@@ -106,31 +112,55 @@ void FeatureSetEditor::setcheckEditMode(void *value) {
 	if ( value == 0)
 		return;
 	HTREEITEM hItem = *((HTREEITEM *)value);
-	String name = tree->getItemName(hItem);
-	if ( name == sUNDEF)
-		return;
-	int index = name.find_last_of("|");
 
-	if ( index == string::npos)
-		return;
-	//DisplayOptionRadioButtonItem *item = dynamic_cast<DisplayOptionRadioButtonItem * >((LayerTreeItem *)(tree.GetItemData(hItem)));
-/*	if ( item->sG) {
+	DisplayOptionRadioButtonItem *item = dynamic_cast<DisplayOptionRadioButtonItem * >((LayerTreeItem *)(tree->GetTreeCtrl().GetItemData(hItem)));
+	int choice = item->getChecks()->getState();
+	if ( choice == 0) {
 		OnSelectMode();
 	} else if ( choice == 1) {
 		OnInsertMode();
-	} else if ( mode == 2) {
-		OnMoveMode();*/
-	//}
+	} else if ( choice == 2) {
+		OnMoveMode();
+	}
+	mdoc->mpvGetView()->iActiveTool = getId();
+	setActive(true);
 }
 
+void FeatureSetEditor::prepare() {
+	bool editMode = drawer->inEditMode();
+	String reason = bmapptr->fnObj.sRelative();
+	if ( editMode) { // toggle
+		mdoc->pixInfoDoc->setAssociatedDrawerTool(0,reason); 
+		mdoc->mpvGetView()->noTool(getId());
+	}
+	else {
+		mdoc->pixInfoDoc->setAssociatedDrawerTool(this, reason );
+		mdoc->mpvGetView()->addTool(this, getId());
+	}
+	getDrawer()->setEditable(!getDrawer()->isEditable());
+	((ComplexDrawer *)getDrawer())->setEditMode(!editMode);
+	OnSelectMode();
 
-void FeatureSetEditor::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags){
+
+}
+
+bool FeatureSetEditor::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags){
 
 	if (  nChar == VK_RETURN) {
 		mode -= mMOVING;
 		clear();
+		return true;
 	}
-	return ;
+	if ( nChar == VK_DELETE && hasSelection()) {
+		if ( MessageBox(tree->m_hWnd, TR("Remove selected point(s)?").scVal(),TR("Delete").scVal(), MB_YESNO) == IDYES  ) {
+			removeSelectedFeatures();
+		/*	PreparationParameters p(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER,bmapptr->cs());
+			drawer->prepare(&p);*/
+			mpvGetView()->Invalidate();
+		}
+		return true;
+	}
+	return false;
 }
 
 void FeatureSetEditor::clear() {
@@ -377,10 +407,6 @@ bool FeatureSetEditor::fPasteOk()
   return false;
 }
 
-void FeatureSetEditor::init(ILWIS::ComplexDrawer *d,PixelInfoDoc *pdoc) {
-	setdrawer = d;
-	pixdoc = pdoc;
-}
 
 bool FeatureSetEditor::hasSelection() const { 
 	return selectedFeatures.size() > 0; 
@@ -388,17 +414,22 @@ bool FeatureSetEditor::hasSelection() const {
 
 void FeatureSetEditor::OnInsertMode()
 {
-	Mode(mode == BaseMapEditor::mINSERT ? BaseMapEditor::mUNKNOWN : BaseMapEditor::mINSERT);
+	setMode(mode == BaseMapEditor::mINSERT ? BaseMapEditor::mUNKNOWN : BaseMapEditor::mINSERT);
 }
 
 void FeatureSetEditor::OnMoveMode()
 {
-	Mode(mode == BaseMapEditor::mMOVE ? BaseMapEditor::mUNKNOWN : BaseMapEditor::mMOVE);
+	setMode(mode == BaseMapEditor::mMOVE ? BaseMapEditor::mUNKNOWN : BaseMapEditor::mMOVE);
 }
 
 void FeatureSetEditor::OnSelectMode()
 {
-	Mode(mode == BaseMapEditor::mSELECT ? BaseMapEditor::mUNKNOWN : BaseMapEditor::mSELECT);
+	setMode(mode == BaseMapEditor::mSELECT ? BaseMapEditor::mUNKNOWN : BaseMapEditor::mSELECT);
+}
+
+void FeatureSetEditor::setActive(bool yesno) {
+	BaseMapEditor::setActive(yesno);
+	editModeItems->setActive(yesno);
 }
 
 
