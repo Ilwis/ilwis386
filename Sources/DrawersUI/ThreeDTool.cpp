@@ -153,6 +153,7 @@ void DisplayZDataSourceForm::apply() {
 	SetDrawer *sdrw = dynamic_cast<SetDrawer *>(drw);
 	AnimationDrawer *adrw = dynamic_cast<AnimationDrawer *>(drw);
 	if ( adrw) {
+		adrw->getZMaker()->setRange(adrw->getRange());
 		for(int i = 0 ; i < adrw->getDrawerCount(); ++i) {
 			RasterSetDrawer *sdrw = (RasterSetDrawer *)adrw->getDrawer(i);
 			MapList mpl;
@@ -166,13 +167,13 @@ void DisplayZDataSourceForm::apply() {
 			}
 			Map mp = mpl[i];
 			updateDrawer(sdrw, mp);
-			RangeReal tempRange = mp->dvrs().rrMinMax();
+			/*RangeReal tempRange = mp->dvrs().rrMinMax();
 			if ( tempRange.fValid()) {
 				RangeReal rr = adrw->getZMaker()->getRange();
 				rr += tempRange.rLo();
 				rr += tempRange.rHi();
 				adrw->getZMaker()->setRange(rr);
-			}
+			}*/
 		}
 	} else {
 		updateDrawer( sdrw, bmp);
@@ -240,8 +241,10 @@ void ZDataScaling::apply() {
 	drw->getZMaker()->setOffset(zoffset + rr.rLo());
 	AnimationDrawer *adrw = dynamic_cast<AnimationDrawer *>(drw);
 	if ( adrw) {
+		rr = adrw->getRange();
 		for(int i = 0 ; i < adrw->getDrawerCount(); ++i) {
 			SetDrawer *sdrw = (SetDrawer *)adrw->getDrawer(i);
+			sdrw->getZMaker()->setRange(rr);
 			sdrw->getZMaker()->setZScale(zscale/100.0);
 			sdrw->getZMaker()->setOffset(zoffset + rr.rLo());
 		}
