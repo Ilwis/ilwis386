@@ -86,6 +86,12 @@ void LineFeatureDrawer::prepare(PreparationParameters *p){
 	}
 	if (  p->type & RootDrawer::ptRENDER || p->type & ptRESTORE) {
 		lproperties.drawColor = (fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod()));
+		for(int j =0 ; j < p->filteredRaws.size(); ++j) {
+			int raw = p->filteredRaws[j];
+			if ( getFeature()->rValue() == abs(raw)) {
+				setActive(raw > 0);
+			}
+		}
 		double tr = fdr->getTransparency();
 		setTransparency(tr);
 		extrTransparency = fdr->getExtrusionTransparency();

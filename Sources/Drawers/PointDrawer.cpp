@@ -115,6 +115,7 @@ bool PointDrawer::draw( const CoordBounds& cbArea) const {
 		};
 	}
 
+	glPopMatrix();
 	if ( specialOptions & NewDrawer::sdoSELECTED) {
 		CoordBounds cbSelect = cb;
 			cbSelect *= 1.2;
@@ -127,7 +128,6 @@ bool PointDrawer::draw( const CoordBounds& cbArea) const {
 		glEnd();
 
 	}
-	glPopMatrix();
 
 	if ( is3D) {
 		if ( extrusion) {

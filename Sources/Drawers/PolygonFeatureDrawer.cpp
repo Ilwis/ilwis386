@@ -85,19 +85,19 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 		long *count;
 		fdr->getTriangleData(&data, &count);
 		if ( data) {
-			readTriangleData(data, count);
+			readTriangleData(data, count, coordNeedsConversion, csy);
 		} else {
 			gpc_vertex_list exteriorBoundary;
 			vector<gpc_vertex_list> holes;
 
 			const LineString *ring = polygon->getExteriorRing();
 			exteriorBoundary.num_vertices = ring->getNumPoints() - 1;
-			exteriorBoundary.vertex = makeVertexList(ring, coordNeedsConversion,csy);
+			exteriorBoundary.vertex = makeVertexList(ring);
 			holes.resize(polygon->getNumInteriorRing());
 			for(int i = 0; i < polygon->getNumInteriorRing(); ++i) {
 				const LineString * ring = polygon->getInteriorRingN(i);
 				holes[i].num_vertices = ring->getNumPoints() - 1;
-				holes[i].vertex = makeVertexList(ring,coordNeedsConversion,csy);
+				holes[i].vertex = makeVertexList(ring);
 			}
 			prepareList(exteriorBoundary, holes);
 			for(int i = 0; i < holes.size(); ++i) {
@@ -145,13 +145,11 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 	}
 }
 
-gpc_vertex *PolygonFeatureDrawer::makeVertexList(const LineString* ring, bool coordNeedsConversion, const CoordSystem& csy) const{
+gpc_vertex *PolygonFeatureDrawer::makeVertexList(const LineString* ring) const{
 	int npoints = ring->getNumPoints() - 1;
 	gpc_vertex *vertices = new gpc_vertex[npoints];
 	for(int j = 0; j < npoints; ++j) {
 		Coordinate c = ring->getCoordinateN(j);
-		if ( coordNeedsConversion)
-			c = getRootDrawer()->getCoordinateSystem()->cConv(csy,c);
 		gpc_vertex vertex;
 		vertex.x = c.x;
 		vertex.y = c.y;
@@ -212,7 +210,7 @@ long PolygonFeatureDrawer::writeTriangleData(ofstream& file) {
 	return trianglePol[0];
 }
 
-void PolygonFeatureDrawer::readTriangleData(long *buffer, long* count) {
+void PolygonFeatureDrawer::readTriangleData(long *buffer, long* count, bool coordConversion, const CoordSystem& csy) {
 	long number;
 	number = buffer[*count];
 	trianglePol = new long[number];
@@ -227,7 +225,11 @@ void PolygonFeatureDrawer::readTriangleData(long *buffer, long* count) {
 			double x = ((double *)(trianglePol + current))[j*3];
 			double y = ((double *)(trianglePol + current))[j*3 + 1];
 			double z = ((double *)(trianglePol + current))[j*3 + 2];
-			triangleStrips.at(i)[j] = Coord(x,y,z);
+			Coord c(x,y,z);
+			if ( coordConversion)
+				c = getRootDrawer()->getCoordinateSystem()->cConv(csy,c);
+			
+			triangleStrips.at(i)[j] = c;
 		}
 		current += n * 2 *3;
 	}

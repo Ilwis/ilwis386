@@ -53,7 +53,7 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 		}
 		cb += cNorm;
 	}
-	if ( fdr->is3D() && p->type & NewDrawer::pt3D) {
+	if ( fdr->getRootDrawer()->is3D() && p->type & NewDrawer::pt3D) {
 		ZValueMaker *zmaker = ((ComplexDrawer *)parentDrawer)->getZMaker();
 		double zv = zmaker->getValue(cNorm,feature);
 		cNorm.z = zv;
@@ -61,6 +61,12 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 	if (  p->type & ptRENDER || p->type & ptRESTORE) {
 		drawColor = fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod());
 		extrTransparency = fdr->getExtrusionTransparency();
+		for(int j =0 ; j < p->filteredRaws.size(); ++j) {
+			int raw = p->filteredRaws[j];
+			if ( getFeature()->rValue() == abs(raw)) {
+				setActive(raw > 0);
+			}
+		}
 	}
 }
 
