@@ -45,10 +45,14 @@ Created on: 2007-02-8
 #include "Client\Mapwindow\PixelInfoWindow.h"
 #include "Headers\constant.h"
 #include "Client\Base\IlwisDocument.h"
+#include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\PixelInfoDoc.h"
 #include "Headers\Hs\PIXINFO.hs"
 #include "Client\FormElements\flddat.h"
 #include "Client\Mapwindow\RECITSEL.H"
+#include "Client\Mapwindow\LayerTreeView.h"
+#include "Client\Mapwindow\MapPaneViewTool.h"
+#include "Client\MapWindow\Drawers\DrawerTool.h"
 #include "Client\TableWindow\BaseTablePaneView.h"
 #include "Engine\map\Feature.h"
 
@@ -89,7 +93,8 @@ editFeature(0)
 	fMouseCont = settings.fValue("MouseContineous", false);
 	fDigitizerCont = settings.fValue("DigitizerContineous", false);	
 	fMouse = settings.fValue("UseMouse", true);		
-	fDigitizer = settings.fValue("UseDigitizer", false);				
+	fDigitizer = settings.fValue("UseDigitizer", false);
+	mdoc = 0;
 }
 
 BOOL PixelInfoDoc::OnNewDocument()
@@ -103,12 +108,13 @@ BOOL PixelInfoDoc::OnNewDocument()
 	return TRUE;
 }
 
-BOOL PixelInfoDoc::OnOpenDocument(LPCTSTR lpszPathName)
+BOOL PixelInfoDoc::OnOpenDocument(LPCTSTR lpszPathName, MapCompositionDoc *doc)
 {
 	// IlwisDocument does not accept OnNewDocument()
 	if (!OnNewDocument())
 		return FALSE;
 	ParmList pm(lpszPathName);
+	mdoc = doc;
 	for (int i=0; i < pm.iFixed(); i++) {
 		try {
 			FileName fn(pm.sGet(i));
@@ -141,6 +147,8 @@ BOOL PixelInfoDoc::OnOpenDocument(LPCTSTR lpszPathName)
 
 PixelInfoDoc::~PixelInfoDoc()
 {
+	if ( mdoc)
+		mdoc->pixInfoDoc = 0; //  remove the reference to this one
 }
 
 
@@ -249,6 +257,9 @@ LRESULT PixelInfoDoc::OnUpdate(WPARAM wParam, LPARAM lParam)
 
 void PixelInfoDoc::setAssociatedDrawerTool(ILWIS::DrawerTool *drw, const String& targetName) {
 	riCoord.setAssociatedDrawerTool(drw, targetName);
+	if ( drw)
+		mdoc = drw->getDocument();
+
 }
 
 void PixelInfoDoc::OnAddMaps()

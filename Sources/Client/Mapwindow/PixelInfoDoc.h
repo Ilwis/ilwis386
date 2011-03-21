@@ -43,6 +43,7 @@ typedef Array<RecItem*> RecItemArray;
 // PixelInfoDoc document
 
 class Feature;
+class MapCompositionDoc;
 
 namespace ILWIS {
 	class DrawerTool;
@@ -62,7 +63,7 @@ public:
 	zIcon icon() const;
 	FileName fn(int) const;
 	virtual void Serialize(CArchive& ar);   // overridden for document i/o
-	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
+	virtual BOOL OnOpenDocument(LPCTSTR lpszPathNamee, MapCompositionDoc *doc);
 	bool fRowEditable(int rowIndex) const;
 	RecItem * getItem(int rowIndex);
 	void setEditFeature(Feature *f);
@@ -94,6 +95,7 @@ public:
 	RecItemCoord riCoord;
 	RecItemArray riArray;
 	Feature *editFeature;
+	MapCompositionDoc *mdoc;
 };
 
 

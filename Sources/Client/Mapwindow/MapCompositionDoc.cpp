@@ -1088,7 +1088,7 @@ void MapCompositionDoc::addToPixelInfo(const BaseMap& bm) {
 	if (!pixInfoDoc) 
 		pixInfoDoc = new PixelInfoDoc();
 
-	pixInfoDoc->OnOpenDocument(bm->fnObj.sFullPath().scVal());
+	pixInfoDoc->OnOpenDocument(bm->fnObj.sFullPath().scVal(), this);
 	pixInfoDoc->UpdateAllViews(0,2);
 }
 
