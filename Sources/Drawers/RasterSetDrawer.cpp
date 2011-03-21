@@ -189,9 +189,10 @@ bool RasterSetDrawer::draw( const CoordBounds& cbArea) const {
 			ZValueMaker *zmaker = getZMaker();
 			double zscale = zmaker->getZScale();
 			double zoffset = zmaker->getOffset();
+			double z0 = getRootDrawer()->getZMaker()->getZ0(is3D);
 			glPushMatrix();
 			glScaled(1,1,zscale);
-			glTranslated(0,0,zoffset);
+			glTranslated(0,0,zoffset + z0);
 		}
 		glEnable(GL_TEXTURE_2D);
 		glMatrixMode(GL_TEXTURE);
@@ -351,24 +352,22 @@ void RasterSetDrawer::DisplayTexture(double x1, double y1, double x2, double y2,
 		double s2 = min(imageOffsetX + imageSizeX, data->imageWidth) / (double)data->width;
 		double t2 = min(imageOffsetY + imageSizeY, data->imageHeight) / (double)data->height;
 
-		double z0 = getZMaker()->getZ0(getRootDrawer()->is3D());
-
 		if (sameCsy) {
 			// avoid plotting the "added" portion of the map
 			x2 = min(x2, data->cb.MaxX());
 			y2 = max(y2, data->cb.MinY());
 
 			glTexCoord2d(s1, t1);
-			glVertex3d(x1, y1, z0);
+			glVertex3d(x1, y1, 0.0);
 
 			glTexCoord2d(s2, t1);
-			glVertex3d(x2, y1, z0);
+			glVertex3d(x2, y1, 0.0);
 
 			glTexCoord2d(s2, t2);
-			glVertex3d(x2, y2, z0);
+			glVertex3d(x2, y2, 0.0);
 
 			glTexCoord2d(s1, t2);
-			glVertex3d(x1, y2, z0);
+			glVertex3d(x1, y2, 0.0);
 		} else {
 			// avoid plotting the "added" portion of the map
 			bool fRecalculateCX2 = false;
@@ -393,16 +392,16 @@ void RasterSetDrawer::DisplayTexture(double x1, double y1, double x2, double y2,
 				c4 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x1, y2, 0.0));
 
 			glTexCoord2d(s1, t1);
-			glVertex3d(c1.x, c1.y, z0);
+			glVertex3d(c1.x, c1.y, 0.0);
 
 			glTexCoord2d(s2, t1);
-			glVertex3d(c2.x, c2.y, z0);
+			glVertex3d(c2.x, c2.y, 0.0);
 
 			glTexCoord2d(s2, t2);
-			glVertex3d(c3.x, c3.y, z0);
+			glVertex3d(c3.x, c3.y, 0.0);
 
 			glTexCoord2d(s1, t2);
-			glVertex3d(c4.x, c4.y, z0);
+			glVertex3d(c4.x, c4.y, 0.0);
 		}
 	
 		glEnd();
@@ -415,7 +414,7 @@ void RasterSetDrawer::DisplayTexture3D(double x1, double y1, double x2, double y
 
 	if (tex != 0)
 	{
-		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 		if (sameCsy) {
 			// avoid plotting the "added" portion of the map
@@ -471,6 +470,7 @@ void RasterSetDrawer::DisplayTexture3D(double x1, double y1, double x2, double y
 		glDisable(GL_CLIP_PLANE1);
 		glDisable(GL_CLIP_PLANE2);
 		glDisable(GL_CLIP_PLANE3);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 }
 
