@@ -34,133 +34,6 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/*
-// $Log: /ILWIS 3.0/PointMap/Pntstore.cpp $
- * 
- * 30    15-10-03 13:54 Retsios
- * Added function to fill the pointmap from a buffer (performance reason)
- * 
- * 29    2-05-03 9:34 Willem
- * - Changed: Simplified the table version check to its essentials
- * 
- * 28    29-04-03 17:35 Retsios
- * Some data contains [ilwis] version 2.2 and "Coordinate" column instead
- * of X/Y (product of ILWIS 3.0 to ILWIS 3.1x).
- * 
- * 27    21-01-03 16:55 Willem
- * - Added: Compatibility check: there seem to be maps with mixed
- * versioning: table info in version 3 format, including .pt# data file
- * but with an [ilwis] version=2.2 section and thus X and Y column instead
- * of Coordinate
- * 
- * 26    10-01-03 11:02 Hendrikse
- * added  SetCoordSystem(const CoordSystem&); cto be used by property
- * sheet when user changes csy of pointmap. It calls
- * pointmapstore::SetCoordSystem(const CoordSystem&); to ensure that the
- * coordinate column also gets the new csy as domain
- * 
- * 25    2-10-02 9:32 Willem
- * - Removed: unnecessary code to change storetype. In Column this is
- * already handled
- * - Replaced: loop to change spaces into underscores with a single
- * function call
- * 
- * 24    2/21/02 12:45p Martin
- * iRec function used a case sensitive compare
- * 
- * 23    8/24/01 13:03 Willem
- * Removed the SetReadOnly() function. This is now handled by
- * IlwisObjectPtr::SetReadOnly() for all ilwis objects
- * 
- * 22    20-03-01 12:35p Martin
- * X,Y column of old 2.0 files are only removed when a store is done. As a
- * remove will delete a section from the odf it can not be done earlier
- * 
- * 21    16-03-01 17:56 Koolhoven
- * with fFormat20 and no vlaid X or Y column throw an error instead of
- * silently returning
- * 
- * 20    3/16/01 13:30 Retsios
- * Make columns table-owned for showastbl
- * 
- * 19    5/03/01 10:34 Willem
- * Removed superfluous member _iPoints from PointMapPtr: iPnt() now gets
- * the number of points from the PointMapStore or PointMapVirtual
- * 
- * 18    27-11-00 11:24 Koolhoven
- * readability measures: removed "== true" and replaced "== false" by "!"
- * 
- * 17    11/01/00 2:01p Martin
- * removed superflous GetObjectStructure. They are all handled in the
- * relevant ilwisobject
- * 
- * 16    9/26/00 11:37a Martin
- * for 2.2 format the table will be loaded directly into memory (would
- * have happenend anyhow) instead of load-on-demand. 
- * 
- * 15    12-09-00 9:49a Martin
- * pn# is removed after a conversion
- * 
- * 14    12-09-00 9:13a Martin
- * added guards to prevent a store to ODF when not wanted
- * 
- * 13    11-09-00 11:33a Martin
- * added function for objectstructure and DoNotUpdate
- * 
- * 12    8-09-00 4:40p Martin
- * added function GetObjectStructure and DoNotUpdate
- * 
- * 11    15-02-00 8:55a Martin
- * Added changes for use of foreign formats
- * 
- * 10    8-02-00 18:01 Wind
- * set fUpdateCatalog flag to false after creation of internal table
- * 
- * 9     7-02-00 11:59a Martin
- * removing old pn# file
- * 
- * 8     21-01-00 3:55p Martin
- * Oops order of tbl creation wrong
- * 
- * 7     17-01-00 3:58p Martin
- * changed xy coords in true column coordinate
- * 
- * 6     17-01-00 11:29 Wind
- * added proximity to iValue(const Coord& ..) etc.
- * 
- * 5     29-10-99 9:19 Wind
- * thread save stuff
- * 
- * 4     22-10-99 12:54 Wind
- * thread save access (not yet finished)
- * 
- * 3     9/24/99 10:37a Wind
- * replaced calls to static funcs ObjectInfo::ReadElement and WriteElement
- * by calls to member functions
- * 
- * 2     9/08/99 11:59a Wind
- * comments
-*/
-// Revision 1.6  1998/09/16 17:26:27  Wim
-// 22beta2
-//
-// Revision 1.5  1997/09/10 15:09:28  Wim
-// Delete() now updates the number of points
-//
-// Revision 1.4  1997-08-21 13:08:38+02  martin
-// Illegal columns are now checked in the constructor.
-//
-// Revision 1.3  1997/08/13 07:34:57  Wim
-// Default range for coordinates set.
-//
-// Revision 1.2  1997-08-08 00:07:32+02  Willem
-// Export to Ilwis 1.4 now truncates the point codes to 20 characters.
-//
-/* PointMapStore
-   Copyright Ilwis System Development ITC
-   march 1995, by Wim Koolhoven
-	Last change:  WK   10 Jun 98    6:30 pm
-*/
 #include "Headers\toolspch.h"
 #include "Engine\Base\DataObjects\valrange.h"
 #include "Engine\Map\Point\ilwPoint.h"
@@ -726,4 +599,14 @@ vector<Geometry *> PointMapStore::getFeatures(Coord crd, double rPrx) {
 	}
 	return points;
 
+}
+
+void PointMapStore::removeFeature(const String& id, const vector<int>& selectedCoords) {
+	for(vector<Geometry *>::iterator cur = geometries->begin(); cur != geometries->end(); ++cur) {
+		ILWIS::Point *pnt = CPOINT(*cur);
+		if ( pnt->getGuid() == id) {
+			delete pnt;
+			geometries->erase(cur);
+		}
+	}
 }

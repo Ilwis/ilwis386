@@ -200,7 +200,7 @@ void ComplexDrawer::insertDrawer(int index, NewDrawer *drw) {
 
 void ComplexDrawer::removeDrawer(const String& did, bool dodelete) {
 	for(int i=0; i < drawers.size(); ++i) {
-		if ( drawers.at(i)->getId() == did ) {
+		if ( drawers.at(i) && drawers.at(i)->getId() == did ) {
 			if ( dodelete)
 				delete drawers.at(i);
 			drawers.erase(drawers.begin() + i);
@@ -293,7 +293,8 @@ void ComplexDrawer::setSpecialDrawingOptions(int option, bool add, vector<Coord>
 	}
 	if ( (option & sdoTOCHILDEREN) || (specialOptions & sdoTOCHILDEREN)) {
 		for(int i=0; i < drawers.size(); ++i) {
-			drawers.at(i)->setSpecialDrawingOptions(option, add, coords);
+			if ( drawers.at(i))
+				drawers.at(i)->setSpecialDrawingOptions(option, add, coords);
 		}
 	}
 }
@@ -425,10 +426,6 @@ void ComplexDrawer::prepareChildDrawers(PreparationParameters *parms) {
 	}
 }
 
-
-bool ComplexDrawer::is3D() const {
-	return threeD;
-}
 
 ZValueMaker *ComplexDrawer::getZMaker() const{
 	return zmaker;

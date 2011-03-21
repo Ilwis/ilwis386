@@ -840,3 +840,7 @@ vector<Geometry *> PolygonMapPtr::getFeatures(Coord crd, double rPrx) {
 }
 
 
+void PolygonMapPtr::removeFeature(const String& id, const vector<int>& selectedCoords) {
+	if ( 0 != pms)
+		pms->removeFeature(id, selectedCoords);
+}

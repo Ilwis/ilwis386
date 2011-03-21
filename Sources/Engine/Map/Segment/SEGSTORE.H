@@ -34,67 +34,6 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/* $Log: /ILWIS 3.0/SegmentMap/SEGSTORE.H $
- * 
- * 15    8/24/01 13:03 Willem
- * Removed the SetReadOnly() function. This is now handled by
- * IlwisObjectPtr::SetReadOnly() for all ilwis objects
- * 
- * 14    1/03/01 14:32 Willem
- * The DomainValueRangeStruct and ValueRange for the segment map now also
- * set the ValueRange of the proper TableSegment Column as well to have
- * the domain of the segmentmap and that of the TableSegment Column
- * synchronized.
- * 
- * 13    13-02-01 8:28a Martin
- * when changing the coordsystem of a map the coordsystem of the internal
- * tables (columns) is also changed
- * 
- * 12    24/01/01 16:33 Willem
- * Added code to let Ilwis2.x data file be correctly set to R/O and R/W
- * 
- * 11    24-11-00 12:29 Koolhoven
- * Added Pack() option for segments
- * 
- * 10    11/01/00 2:01p Martin
- * removed superflous GetObjectStructure. They are all handled in the
- * relevant ilwisobject
- * 
- * 9     11-09-00 11:30a Martin
- * added function for objectStructure 
- * 
- * 8     16-06-00 20:49 Koolhoven
- * use Column members of SegmentMapStore instead of enum ColumnTypes with
- * indirections
- * 
- * 7     16-06-00 2:57p Martin
- * made detsructor virtual
- * 
- * 6     28-02-00 8:49a Martin
- * Segmentmap can now read foreign formats
- * 
- * 5     7-02-00 17:04 Wind
- * solved problems with readonly maps and their conversion to format 3.0
- * 
- * 4     17-01-00 8:17a Martin
- * changed rowcols to coords
- * 
- * 3     10-12-99 11:53a Martin
- * //->/*
- * 
- * 2     10-12-99 11:48a Martin
- * removed internal rowcols and replaced them by true coords
-// Revision 1.3  1998/09/16 17:25:20  Wim
-// 22beta2
-//
-// Revision 1.2  1997/09/19 15:51:54  Wim
-// Added buffer alSegBuf
-//
-/* SegmentMapStore
-   Copyright Ilwis System Development ITC
-   march 1995, by Wim Koolhoven
-	Last change:  WK   19 Sep 97   11:14 am
-*/
 
 #ifndef ILWSEGSTORE_H
 #define ILWSEGSTORE_H
@@ -127,6 +66,7 @@ public:
 	//ILWIS::Segment*     newFeature(long iSegNr);
 	Feature*		    newFeature(geos::geom::Geometry *line = NULL);
 	Geometry			*getTransformedFeature(long iRec, const CoordSystem& csy) const	;
+	void				removeFeature(const String& id, const vector<int>& selectedCoords=vector<int>());
 
 	long                 iNode(Coord) const; // 3.0
 	Coord                crdNode(Coord) const;

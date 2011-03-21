@@ -34,99 +34,7 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/* $Log: /ILWIS 3.0/SegmentMap/Seg.h $
- * 
- * 27    8/24/01 13:03 Willem
- * Removed the SetReadOnly() function. This is now handled by
- * IlwisObjectPtr::SetReadOnly() for all ilwis objects
- * 
- * 26    1/03/01 14:32 Willem
- * The DomainValueRangeStruct and ValueRange for the segment map now also
- * set the ValueRange of the proper TableSegment Column as well to have
- * the domain of the segmentmap and that of the TableSegment Column
- * synchronized.
- * 
- * 25    16-02-01 13:16 Koolhoven
- * added function sValueAndNumber() to be used in the SegmentEditor for
- * reporting purposes
- * 
- * 24    13-02-01 8:28a Martin
- * when changing the coordsystem of a map the coordsystem of the internal
- * tables (columns) is also changed
- * 
- * 23    1-12-00 15:44 Koolhoven
- * removed function SegmentMapPtr::crdBounds() because it is a duplicate
- * of BaseMapPtr::cbGetCoordBounds()
- * 
- * 22    24-11-00 12:29 Koolhoven
- * Added Pack() option for segments
- * 
- * 21    16-10-00 19:01 Hendrikse
- *   Densify  for polygonmap transformation
- * 
- * 20    11-09-00 11:30a Martin
- * added function for objectStructure 
- * 
- * 19    25-04-00 17:57 Koolhoven
- * Added UndoAllChanges()
- * 
- * 18    25-04-00 16:25 Koolhoven
- * Removed Pack() function
- * 
- * 17    14-03-00 13:06 Hendrikse
- * removed array in Densify (because ther is no 1000 crds limit anymore)
- * 
- * 16    28-02-00 8:49a Martin
- * Segmentmap can now read foreign formats
- * 
- * 15    26-01-00 10:43a Martin
- * added export
- * 
- * 14    20-01-00 10:50a Martin
- * uses columnPtr to access data, changed column layout
- * 
- * 13    17-01-00 11:30 Wind
- * added proximity to iValue(const Coord& ..) etc.
- * 
- * 12    17-01-00 8:17a Martin
- * changed rowcols to coords
- * 
- * 11    13-12-99 11:00a Martin
- * 
- * 10    10-12-99 11:48a Martin
- * removed internal rowcols and replaced them by true coords
- * 
- * 9     9-09-99 2:40p Martin
- * ported 2.22 stuff
- * 
- * 8     16-07-99 15:11 Koolhoven
- * exports
- * 
- * 7     15-07-99 20:05 Koolhoven
- * exports
- * 
- * 6     15-07-99 18:50 Koolhoven
- * exports
- * 
- * 5     17-06-99 1:09p Martin
- * added s for import/export dll
- * 
- * 4     29-03-99 13:12 Koolhoven
- * Header Comments
- * 
- * 3     29-03-99 13:04 Koolhoven
- * Added  to ILWIS::Segment::cs()
-// Revision 1.4  1998/09/16 17:22:46  Wim
-// 22beta2
-//
-// Revision 1.3  1997/09/19 15:51:08  Wim
-// Added SegBufType and ArrayLarge<SegBufType>
-//
-/* SegmentMap
-   Copyright Ilwis System Development ITC
-   march 1995, by Wim Koolhoven
-	Last change:  WK   20 Mar 98    5:26 pm
-*/
+
 
 #ifndef ILWSEGMAP_H
 #define ILWSEGMAP_H
@@ -263,6 +171,7 @@ public:
 	Geometry		*getFeature(long i) const;
 	Geometry		*getTransformedFeature(long iRec, const CoordSystem& csy) const	;
 	virtual vector<Geometry *> getFeatures(Coord crd, double rPrx=rUNDEF);
+	void removeFeature(const String& id, const vector<int>& selectedCoords=vector<int>());
 	bool            fSatisfyCondition(const ILWIS::Segment& seg) const;
 	
 	void     SetAlfa(const CoordBounds& cb);

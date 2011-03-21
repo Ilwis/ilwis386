@@ -789,3 +789,33 @@ void SegmentMapStore::Pack()
   ptr._iSegDeleted = 0;
   ptr.Updated();
 }
+
+
+void SegmentMapStore::removeFeature(const String& id, const vector<int>& selectedCoords) {
+	for(vector<Geometry *>::iterator cur = geometries->begin(); cur != geometries->end(); ++cur) {
+		ILWIS::Segment *seg = CSEGMENT(*cur);
+		if ( seg->getGuid() == id  ) {
+			if ( selectedCoords.size() == 0 || selectedCoords.size() == geometries->size()) {
+				delete seg;
+				geometries->erase(cur);
+			} else {
+				CoordBuf crdBuf;
+				CoordinateSequence *seq = seg->getCoordinates();
+				vector<bool> status(seq->size(), true);
+				for(int i = 0 ; i < selectedCoords.size(); ++i) {
+					status[selectedCoords.at(i)] = false;
+
+				}
+				int reducedSize = seq->size() - selectedCoords.size();
+				crdBuf.Size(reducedSize);
+				int count = 0;
+				for( int j = 0; j < seq->size(); ++j) {
+					if ( !status[j] )
+						continue;
+					crdBuf[count++] = seq->getAt(j);
+				}
+				seg->PutCoords(count, crdBuf);
+			}
+		} 
+	}
+}

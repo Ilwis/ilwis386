@@ -34,165 +34,6 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/* $Log: /ILWIS 3.0/PointMap/PNT.cpp $
- * 
- * 37    19-05-05 17:57 Retsios
- * [bug=6424] Properly open the maps in case the supplied attribute column
- * contains spaces. Added a safeguard to p to reduce the chance of reading
- * characters outside the string bounds.
- * 
- * 36    15-10-03 13:53 Retsios
- * Added function to fill the pointmap from a buffer (performance reason)
- * 
- * 35    10-01-03 11:03 Hendrikse
- * added  SetCoordSystem(const CoordSystem&); to be used by property sheet
- * when user changes csy of pointmap. It calls
- * pointmapstore::SetCoordSystem(const CoordSystem&); to ensure that the
- * coordinate column also gets the new csy as domain
- * 
- * 34    12/06/01 14:49 Willem
- * ForeignFormat pointer is now deleted after use
- * 
- * 33    12/05/01 10:27 Willem
- * The histogram of all maptypes is now also copied or deleted with the
- * map it belongs to
- * 
- * 32    8/24/01 13:03 Willem
- * Removed the SetReadOnly() function. This is now handled by
- * IlwisObjectPtr::SetReadOnly() for all ilwis objects
- * 
- * 31    22-03-01 11:23a Martin
- * extra guard against not created foreign formats
- * 
- * 30    5/03/01 10:34 Willem
- * Removed superfluous member _iPoints from PointMapPtr: iPnt() now gets
- * the number of points from the PointMapStore or PointMapVirtual
- * 
- * 29    26/02/01 12:58 Willem
- * iPnt() function now queries either the mapstore of the MapVirtual for
- * the number of points.
- * 
- * 28    20-02-01 2:43p Martin
- * unneeded foreign file was added in the getobjectstructure. Ilwisobject
- * already does this
- * 
- * 27    2/08/01 12:05 Retsios
- * Solved a few more potential "dot in pathname detected as extension's
- * dot" bugs
- * 
- * 26    2/01/01 17:33 Retsios
- * Now PointMap::PointMap(const String& sExpression, const String& sPath)
- * correctly handles dots that are part of the path and not the filename
- * (bug 3884)
- * 
- * 25    21-12-00 10:22a Martin
- * added access function for the virtualobject
- * 
- * 24    21-11-00 15:39 Hendrikse
- * in Open...MapVirtual() load ObjectDependcency after the creation of the
- * ...MapVirtual. This prevents a.o.a problems with internal tables and
- * columns (...MapAttribute)
- * 
- * 23    27-10-00 10:20a Martin
- * added foreignformat files to the getobjectstructure
- * 
- * 22    11-09-00 11:33a Martin
- * added function for objectstructure and DoNotUpdate
- * 
- * 21    8-09-00 4:40p Martin
- * added function GetObjectStructure and DoNotUpdate
- * 
- * 20    10-08-00 15:14 Koolhoven
- * PointMap(const FileName& fn) when fn.sCol has a value now returns an
- * attribute map
- * 
- * 19    20-06-00 8:26a Martin
- * sets outbounds of map
- * 
- * 18    27-04-00 12:46 Koolhoven
- * Added function UndoAllChanges()
- * and internal help funciton Load()
- * 
- * 17    9-03-00 8:38a Martin
- * changed the usage of tblptr to table in LayerInfo
- * 
- * 16    3-03-00 4:33p Martin
- * temporary removed delete for ForeignFormat *ff, caused crash (???)
- * 
- * 15    28-02-00 10:23a Martin
- * Wrong test to see if a pointmap is foreign or not with existsting mpp
- * files, now corrected.
- * 
- * 14    28-02-00 8:49a Martin
- * changes to do with multiple shapes in one layer. The LayerInfo object
- * is now passed as parm
- * 
- * 13    21-02-00 4:38p Martin
- * Pntmap works now with PointMapStoreForeignFormat for non ilwis formats
- * 
- * 12    15-02-00 8:55a Martin
- * Added changes for use of foreign formats
- * 
- * 11    17-01-00 11:29 Wind
- * added proximity to iValue(const Coord& ..) etc.
- * 
- * 10    12-01-00 17:12 Wind
- * removed proximity (moved to basemap)
- * 
- * 9     8-12-99 16:16 Wind
- * delete table if definition failed
- * 
- * 8     25-10-99 13:14 Wind
- * making thread save (2); not yet finished
- * 
- * 7     22-10-99 12:54 Wind
- * thread save access (not yet finished)
- * 
- * 6     9/24/99 10:37a Wind
- * replaced calls to static funcs ObjectInfo::ReadElement and WriteElement
- * by calls to member functions
- * 
- * 5     9/08/99 1:00p Wind
- * changed constructor calls FileName(fn, sExt, true) to FileName(fn,
- * sExt)
- * or changed FileName(fn, sExt, false) to FileName(fn.sFullNameQuoted(),
- * seExt, false)
- * to ensure that proper constructor is called
- * 
- * 4     9/08/99 10:21a Wind
- * adpated to use of quoted file names
- * 
- * 3     3/23/99 9:05a Martin
- * //->/*
- * 
- * 2     3/23/99 9:05a Martin
- * Case Problem solved
-// Revision 1.12  1998/09/16 17:22:46  Wim
-// 22beta2
-//
-// Revision 1.11  1997/09/29 13:07:55  Wim
-// Update nr of points according to number of records in table of pointmapstroe
-// in constructor of PointMapPtr
-//
-// Revision 1.10  1997-09-12 17:16:20+02  Wim
-// Default proximity is now 1e20 instead of 0.
-//
-// Revision 1.9  1997-09-11 20:40:41+02  Wim
-// Allow to break dependencies even when source objects are gone
-//
-// Revision 1.8  1997-09-09 14:02:07+02  Wim
-// In Store() make sure the map remains dependent even when
-// the virtual map has not been loaded into memory
-//
-// Revision 1.7  1997-09-04 12:45:58+02  Wim
-// Delete Histogram in DeleteCalc() function
-//
-/* PointMap
-   Copyright Ilwis System Development ITC
-   march 1995, by Wim Koolhoven
-	Last change:  WK   29 Sep 97    3:06 pm
-*/
-
 #include "Engine\SpatialReference\Coordsys.h"
 #include "Engine\Table\Col.h"
 #include "Engine\Base\DataObjects\valrange.h"
@@ -1009,4 +850,10 @@ vector<Geometry *> PointMapPtr::getFeatures(Coord crd, double rPrx) {
 	if ( 0 != pms)
 		return pms->getFeatures(crd, rPrx);
 	return vector<Geometry *>();
+}
+
+
+void PointMapPtr::removeFeature(const String& id, const vector<int>& selectedCoords) {
+	if ( 0 != pms)
+		pms->removeFeature(id, selectedCoords);
 }

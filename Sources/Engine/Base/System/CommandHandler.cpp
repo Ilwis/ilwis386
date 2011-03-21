@@ -164,7 +164,7 @@ LRESULT BaseCommandHandler::fExecute(const String& sCmd)
 			if ( cf == &BaseCommandHandler::executeAdditional) {
 				(this->*cf)(sCom + " " + sParms);
 			} else {
-				(this->*cf)(sCmd);
+				(this->*cf)(sParms);
 			}
 			return true;
 		}

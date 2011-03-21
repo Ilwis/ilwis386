@@ -33,82 +33,7 @@
  Software Foundation, http://www.fsf.org.
 
  Created on: 2007-02-8
- ***************************************************************/
-/* $Log: /ILWIS 3.0/PolygonMap/POL.H $
- * 
- * 21    8/23/01 17:07 Willem
- * Removed the SetReadOnly() function. This is now handled by
- * IlwisObjectPtr::SetReadOnly() for all ilwis objects
- * 
- * 20    1/03/01 14:31 Willem
- * PolygonMap and PolygonMapStore now set DomainValueRangeStruct or
- * ValueRange of the proper TablePolygon Column as well to have the domain
- * of the polygonmap and that of the TablePolygon Column synchronized..
- * 
- * 19    21-12-00 10:06a Martin
- * added the pGetVirtualObject() function to access the virtual object
- * embedded in the object. 
- * 
- * 18    12-09-00 8:41a Martin
- * added 
- * 
- * 17    11-09-00 10:54a Martin
- * added functionfor GetObjectStructure and DoNotUpdate
- * 
- * 16    1-09-00 10:33 Koolhoven
- * Made SetCoordSystem() virtual so that PolygonMap can also set the
- * coordsystem of its internal segmentmap
- * 
- * 15    25-07-00 10:28a Martin
- * added acces function and member to indicate that a polygonmap is (non)
- * topological
- * 
- * 14    27-04-00 14:59 Koolhoven
- * Added UndoAllChanges()
- * 
- * 13    1-03-00 12:43p Martin
- * handling of polygon maps as foreign format (phase 1)
- * 
- * 12    20-01-00 10:49a Martin
- * 
- * 11    17-01-00 11:30 Wind
- * added proximity to iValue(const Coord& ..) etc.
- * 
- * 10    17-01-00 8:17a Martin
- * changed rowcols to coords
- * 
- * 9     10-12-99 3:14p Martin
- * removed internal coordinates and used true coords
- * 
- * 8     10-12-99 11:49a Martin
- * removed internal coordinates and replaced them by true coords
- * 
- * 7     21-07-99 14:45 Koolhoven
- * exports
- * 
- * 6     21-07-99 12:27 Koolhoven
- * exports
- * 
- * 5     17-06-99 1:09p Martin
- * added s for import/export dll
- * 
- * 4     7-06-99 15:56 Koolhoven
- * Header comment
- * 
- * 
- * 3     7-06-99 11:06 Koolhoven
- * Added exports
-// Revision 1.3  1998/09/16 17:22:46  Wim
-// 22beta2
-//
-// Revision 1.2  1997/08/04 14:42:03  Wim
-// Added ILWIS::Polygon::fInMask(mask)
-//
-/* PolygonMap
-   Copyright Ilwis System Development ITC
-   march 1995, by Wim Koolhoven
-	Last change:  WK    4 Aug 97    4:39 pm
-*/
+ */
 
 #pragma once
 
@@ -215,6 +140,7 @@ public:
 	Geometry   *getFeature(const String&) const;
 	Geometry   *getFeature(long) const;
 	Geometry	*getTransformedFeature(long iRec, const CoordSystem& csy) const;
+	void removeFeature(const String& id, const vector<int>& selectedCoords=vector<int>());
 	
 	virtual void  CalcMinMax();
 	virtual void  Rename(const FileName& fnNew);

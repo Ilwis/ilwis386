@@ -58,7 +58,6 @@ class _export ComplexDrawer : public NewDrawer {
 		virtual int getUICode() const;
 		virtual void setUICode(int c);
 		//virtual HTREEITEM make3D(bool yeno, LayerTreeView  *tvm);
-		bool is3D() const;
 		ZValueMaker *getZMaker() const;
 		virtual void timedEvent(UINT timerid);
 		virtual String description() const { return "?";}

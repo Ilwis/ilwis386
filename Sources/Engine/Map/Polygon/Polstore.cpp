@@ -34,135 +34,7 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/*
-// $Log: /ILWIS 3.0/PolygonMap/Polstore.cpp $
- * 
- * 29    23-05-05 17:28 Willem
- * tblPolygon.fErase is now correctly uses the function parameter
- * 
- * 28    1-06-04 15:03 Koolhoven
- * Both polFirst() and polLast() now when colDeleted is not valid they
- * still perform the expected behaviour
- * 
- * 27    22-04-04 10:20 Willem
- * [Bug=6471]
- * The polFirst and polLast functions now add protection when asking for
- * the deleted column. The "deleted" column is not always there.This
- * occurs in case of cyclic dependency between an .mpr and .mpa for
- * instance
- * 
- * 26    11/12/01 2:19p Martin
- * The section that is removed from the ODF when saving an old 2.0 map to
- * 3.0 was wrongly identified. It remained thus
- * 
- * 25    8/23/01 17:07 Willem
- * Removed the SetReadOnly() function. This is now handled by
- * IlwisObjectPtr::SetReadOnly() for all ilwis objects
- * 
- * 24    19-03-01 8:33a Martin
- * SetErase function was not implmented properly. The tblPolygon was not
- * deleted
- * 
- * 23    3/16/01 13:30 Retsios
- * Make columns table-owned for showastbl
- * 
- * 22    13-03-01 2:24p Martin
- * loading of csy for the internal columns of a seg/pol map will not
- * generate an error
- * 
- * 21    1/03/01 14:31 Willem
- * PolygonMap and PolygonMapStore now set DomainValueRangeStruct or
- * ValueRange of the proper TablePolygon Column as well to have the domain
- * of the polygonmap and that of the TablePolygon Column synchronized..
- * 
- * 20    13-02-01 8:28a Martin
- * when changing the coordsystem of a map the coordsystem of the internal
- * tables (columns) is also changed
- * 
- * 19    20-12-00 8:39a Martin
- * destructor protected against the non-existence of a VoronoiPoint map
- * (unloaded object)
- * 
- * 18    27-11-00 9:56a Martin
- * odd typo. The fErase flag was set to true when the file was read-only.
- * Probably a msitake when selecting the correct function from the
- * dropdownlist
- * 
- * 17    17/11/00 16:59 Willem
- * Polstore now set the readonly flag of all files belonging to the
- * polygonmap
- * 
- * 16    24-10-00 12:27p Martin
- * added and changed the getobjectstructure function
- * 
- * 15    9/18/00 9:40a Martin
- * if newwly created the loadstate of the internal table(s) is set to true
- * 
- * 14    12-09-00 2:30p Martin
- * automatic conversion to 3.0 only if data has changed. Old data files
- * are removed
- * 
- * 13    11-09-00 10:53a Martin
- * added function for getobjectstructure and DoNOtUpdate
- * 
- * 12    9-03-00 8:40a Martin
- * tblptr to tbl use, better use of the tbltop in LayerInfo
- * 
- * 11    3-03-00 4:32p Martin
- * changes for Foreign format polygon
- * 
- * 10    1-03-00 12:43p Martin
- * handling of polygon maps as foreign format (phase 1)
- * 
- * 9     25-02-00 10:46 Koolhoven
- * Solved ambiguity in TablePtr constructor
- * 
- * 8     8-02-00 18:01 Wind
- * set fUpdateCatalog flag to false after creation of internal table
- * 
- * 7     7-02-00 17:04 Wind
- * solved problems with read only maps and there conversion to format 3.0
- * 
- * 6     17-01-00 8:17a Martin
- * changed rowcols to coords
- * 
- * 5     13-12-99 12:38 Wind
- * changed aiPol and aiTop in fCompatc() to zero based
- * 
- * 4     29-10-99 9:19 Wind
- * thread save stuff
- * 
- * 3     9/24/99 10:37a Wind
- * replaced calls to static funcs ObjectInfo::ReadElement and WriteElement
- * by calls to member functions
- * 
- * 2     9/08/99 11:57a Wind
- * comments
-*/
-// Revision 1.7  1998/09/16 17:25:54  Wim
-// 22beta2
-//
-// Revision 1.6  1997/09/26 16:39:40  Wim
-// Safety Flush() added in destructor
-//
-// Revision 1.5  1997-09-26 15:47:33+02  Wim
-// In destructor make sure sm->fErase has same value as ptr.fErase
-// It could happen that (after UndoAll()) that sm->fErase was eroneously true.
-//
-// Revision 1.4  1997-08-20 22:01:58+02  Wim
-// Corrected names for inclusions when exporting to 1.4
-//
-// Revision 1.3  1997-08-08 00:06:17+02  Willem
-// Export to 1.4 now truncatesthe pol code to 15 characters
-//
-// Revision 1.2  1997/08/06 20:38:10  Willem
-// Export to Ilwis 1.4 replaces spaces in domain items with underscores.
-//
-/* PolygonMapStore
-   Copyright Ilwis System Development ITC
-   april 1995, by Wim Koolhoven
-	Last change:  WK    7 Sep 98   10:34 am
-*/
+
 #define POLSTORE_C
 #include "Engine\Map\Polygon\POLSTORE.H"
 #include "Engine\Map\Polygon\POL14.H"
@@ -559,11 +431,34 @@ void PolygonMapStore::addPolygon(ILWIS::Polygon *pol) {
 	ptr._iPol = geometries->size();
 }
 
-//bool PolygonMapStore::fVersionCheck(IlwisObjectPtr::BinaryVersion vers) const {
-//	return ( vers == IlwisObjectPtr::fvFORMAT30 ||
-//		vers == IlwisObjectPtr::fvFORMATFOREIGN ||
-//		vers == IlwisObjectPtr::fvFORMAT37);
-//}
+void PolygonMapStore::removeFeature(const String& id, const vector<int>& selectedCoords) {
+	for(vector<Geometry *>::iterator cur = geometries->begin(); cur != geometries->end(); ++cur) {
+		ILWIS::Polygon *pol = CPOLYGON(*cur);
+		if ( pol->getGuid() == id  ) {
+			if ( selectedCoords.size() == 0 || selectedCoords.size() == geometries->size()) {
+				delete pol;
+				geometries->erase(cur);
+			} else {
+				CoordBuf crdBuf;
+				CoordinateSequence *seq = pol->getCoordinates();
+				vector<bool> status(seq->size(), true);
+				for(int i = 0 ; i < selectedCoords.size(); ++i) {
+					status[selectedCoords.at(i)] = false;
+
+				}
+				int reducedSize = seq->size() - selectedCoords.size();
+				crdBuf.Size(reducedSize);
+				int count = 0;
+				for(int j = 0; j < seq->size(); ++j) {
+					if ( !status[j] )
+						continue;
+					crdBuf[count++] = seq->getAt(j);
+				}
+				//pol->PutCoords(count, crdBuf);
+			}
+		} 
+	}
+}
 
 
 

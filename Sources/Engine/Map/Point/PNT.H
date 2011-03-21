@@ -34,79 +34,7 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/* $Log: /ILWIS 3.0/PointMap/PNT.H $
- * 
- * 18    15-10-03 13:53 Retsios
- * Added function to fill the pointmap from a buffer (performance reason)
- * 
- * 17    10-01-03 11:02 Hendrikse
- * added  SetCoordSystem(const CoordSystem&); cto be used by property
- * sheet when user changes csy of pointmap. It calls
- * pointmapstore::SetCoordSystem(const CoordSystem&); to ensure that the
- * coordinate column also gets the new csy as domain
- * 
- * 16    9/26/02 12:25p Lichun
- * exported iAdd function.
- * 
- * 15    8/24/01 13:03 Willem
- * Removed the SetReadOnly() function. This is now handled by
- * IlwisObjectPtr::SetReadOnly() for all ilwis objects
- * 
- * 14    5/03/01 10:34 Willem
- * Removed superfluous member _iPoints from PointMapPtr: iPnt() now gets
- * the number of points from the PointMapStore or PointMapVirtual
- * 
- * 13    21-12-00 10:23a Martin
- * added access function for the virtualobject
- * 
- * 12    8-09-00 4:40p Martin
- * added function GetObjectStructure and DoNotUpdate
- * 
- * 11    27-04-00 12:46 Koolhoven
- * Added function UndoAllChanges()
- * and internal help funciton Load()
- * 
- * 10    28-02-00 8:49a Martin
- * changes to do with multiple shapes in one layer. The LayerInfo object
- * is now passed as parm
- * 
- * 9     21-02-00 4:38p Martin
- * Pntmap works now with PointMapStoreForeignFormat for non ilwis formats
- * 
- * 8     15-02-00 8:55a Martin
- * Added changes for use of foreign formats
- * 
- * 7     17-01-00 11:29 Wind
- * added proximity to iValue(const Coord& ..) etc.
- * 
- * 6     12-01-00 17:12 Wind
- * removed proximity (moved to basemap)
- * 
- * 5     15-07-99 18:39 Koolhoven
- * externals
- * 
- * 4     17-06-99 1:09p Martin
- * added s for import/export dll
- * 
- * 3     7-06-99 13:14 Koolhoven
- * Header comment
- * 
- * 2     7-06-99 11:09 Koolhoven
- * Added exports
-// Revision 1.4  1998/09/16 17:22:46  Wim
-// 22beta2
-//
-// Revision 1.3  1997/08/26 11:04:41  martin
-// SetDomaiRangeStruct added as function
-//
-// Revision 1.2  1997/08/04 15:01:37  Wim
-// Added fPntInMask()
-//
-/* PointMap
-   Copyright Ilwis System Development ITC
-   march 1995, by Wim Koolhoven
-	Last change:  MS   26 Aug 97   11:54 am
-*/
+
 
 #ifndef ILWPOINTMAP_H
 #define ILWPOINTMAP_H
@@ -198,6 +126,7 @@ public:
 	virtual void    SetCoordSystem(const CoordSystem&); // dangerous function!
 	Feature *newFeature(geos::geom::Geometry *g=NULL);
 	virtual vector<Geometry *> getFeatures(Coord crd, double rPrx=rUNDEF);
+	void removeFeature(const String& id, const vector<int>& selectedCoords=vector<int>());
 private:  
 	void OpenPointMapVirtual(); // load PointMapVirtual and set member pmv
 	PointMapStore* pms;

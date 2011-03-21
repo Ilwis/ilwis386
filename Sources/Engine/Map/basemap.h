@@ -141,6 +141,7 @@ public:
 	virtual vector<Geometry *> getFeatures(Coord crd, double rPrx=rUNDEF) { return vector<Geometry *>(); }
 	Geometry *getTransformedFeature(long iRec, const CoordSystem& csy) const	{ return NULL;}
 	virtual Feature *newFeature(geos::geom::Geometry *pnt=NULL) { return NULL; }
+	virtual void removeFeature(const String& id, const vector<int>& selectedCoords=vector<int>()) {}
 	
 protected:
     _export BaseMapPtr();
