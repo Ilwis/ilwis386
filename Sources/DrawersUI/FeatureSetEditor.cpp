@@ -76,6 +76,7 @@ FeatureSetEditor::FeatureSetEditor(const String& tp,  ZoomableView* zv, LayerTre
 	active = false;
 	editModeItems = new SetChecks(tree,this,(DTSetCheckFunc)&FeatureSetEditor::setcheckEditMode);
 	stay = true;
+	needsMouseFocus = true;
 }
 
 FeatureSetEditor::~FeatureSetEditor(){
@@ -83,7 +84,9 @@ FeatureSetEditor::~FeatureSetEditor(){
 		if (  bmapptr->fChanged )
 			bmapptr->Store();
 		MapCompositionDoc *mdoc = tree->GetDocument();
-		mdoc->pixInfoDoc->setAssociatedDrawerTool(0,bmapptr->fnObj.sRelative()); 
+		if ( mdoc->pixInfoDoc) {
+			mdoc->pixInfoDoc->setAssociatedDrawerTool(0,bmapptr->fnObj.sRelative()); 
+		}
 		mdoc->mpvGetView()->noTool(getId());
 	}
 	clear();

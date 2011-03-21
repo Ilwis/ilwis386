@@ -77,7 +77,6 @@ curPntMoving("EditPntMovingCursor")
 {
 	iFmtPnt = RegisterClipboardFormat("IlwisPoints");
 	iFmtDom = RegisterClipboardFormat("IlwisDomain");
-
 }
 
 PointSetEditor::~PointSetEditor(){
