@@ -42,10 +42,13 @@ Created on: 2007-02-8
 #include "Client\Base\datawind.h"
 #include "Headers\constant.h"
 #include "Client\Base\IlwisDocument.h"
+#include "Client\Mapwindow\MapPaneView.h"
 #include "Client\TableWindow\BaseTablePaneView.h"
 #include "Client\TableWindow\BaseTblField.h"
 #include "Client\Mapwindow\PixelInfoDoc.h"
 #include "Client\Mapwindow\PixelInfoView.h"
+#include "Client\Mapwindow\MapPaneViewTool.h"
+#include "Client\MapWindow\Drawers\DrawerTool.h"
 #include "Engine\Domain\dmsort.h"
 #include "Engine\Map\Feature.h"
 #include "Headers\Hs\PIXINFO.hs"
@@ -281,7 +284,7 @@ BOOL PixelInfoView::OnDrop(COleDataObject* pDataObject, DROPEFFECT dropEffect, C
 			}
 			else {
 				BaseMap mp(fn);
-				pid->AddMap(mp,0);
+				pid->AddMap(mp);
 				fOk = true;
 			}  
 		}
@@ -423,8 +426,13 @@ PixInfoField::~PixInfoField()
 				return;
 			}
 		}
+		RecItem *rcItem = doc->getItem(iRow);
+		if ( rcItem && rcItem->getAssociatedTool() != 0) {
+			rcItem->getAssociatedTool()->mpvGetView()->Invalidate();
+		}
 		doc->getItem(pane->getSelectedRow())->PutVal(s);
-		doc->UpdateAllViews(0,2);
+
+		//doc->UpdateAllViews(0,2);
 	}
 }
 

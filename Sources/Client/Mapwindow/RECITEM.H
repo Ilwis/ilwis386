@@ -56,6 +56,7 @@ class RecItemGeoRef;
 
 namespace ILWIS {
 	class NewDrawer;
+	class DrawerTool;
 }
 
 typedef Array<RecItem*> RecItemArray;
@@ -75,23 +76,24 @@ public:
   virtual FileName fnObj() const;
   int AddSelfToArray(RecItemArray&);
   int AddSelfAlwaysToArray(RecItemArray&);
-  RecItemMap* AddMap(BaseMap, ILWIS::NewDrawer *drw);
+  RecItemMap* AddMap(BaseMap);
   RecItemCoordSystem* AddCoordSystem(const CoordSystem&);
-  RecItemTable* AddTable(Table, bool fAllowEdit = false);
-  RecItemTable* AddTable(Table tbl, ILWIS::NewDrawer *drw);
+  RecItemTable* AddTable(Table, bool fAllowEdit);
+  RecItemTable* AddTable(Table tbl);
   RecItemGeoRef* AddGeoRef(const GeoRef&);
 //  RecItemTable* AddTable(TableView, bool fAllowEdit = false);
   bool fShowRec() { return fShow; }
   void ShowRec(bool fSR) { fShow = fSR; }
   bool fAllowEdit() ;
   void AllowEdit(bool fEdit) ;
-  void setAssociatedDrawer(ILWIS::NewDrawer *drw);
+  virtual void setAssociatedDrawerTool(ILWIS::DrawerTool *drw, const String& targetName);
+  ILWIS::DrawerTool *getAssociatedTool() const { return associatedDrawerTool; }
 protected:
   void updateView(const IlwisObject& obj);
   CoordWithCoordSystem cwcs;
   RecItem(RecItem* parent);
   SListP<RecItem> children;
-  ILWIS::NewDrawer *associatedDrawer;
+  ILWIS::DrawerTool *associatedDrawerTool;
   RecItem* riParent;
   unsigned fShow	 :1;
   unsigned fShowChildren :1;
@@ -110,13 +112,14 @@ static SList<RecItem> DummyRecItemSList;
 class _export RecItemMap: public RecItem
 {
 public:
-  RecItemMap(RecItem* parent, BaseMap, ILWIS::NewDrawer *drw);
+  RecItemMap(RecItem* parent, BaseMap);
   virtual int Configure(CWnd*);
   virtual String sName() const;
   virtual long iValue();   // pixel value
   virtual const String& sValue(int iWidth = 0); // meaning
   virtual FileName fnObj() const;
   virtual void PutVal(const String& s);
+  virtual void setAssociatedDrawerTool(ILWIS::DrawerTool *drw, const String& targetName);
 protected:
   const BaseMap& map() const { return _map; }
 private:
@@ -134,8 +137,8 @@ public:
   virtual long iValue();   // record number
   virtual const String& sValue(int iWidth = 0); // key value
   virtual void SetValue(const char*);
-  RecItemColumn* AddColumn(Column, bool fAllowEdit = false);
-  RecItemColumn* AddColumn(Column col, ILWIS::NewDrawer *drw);
+  RecItemColumn* AddColumn(Column, bool fAllowEdit);
+  RecItemColumn* AddColumn(Column col);
   virtual FileName fnObj() const;
 protected:
   const Table& tbl() const { return _tbl; }
@@ -148,7 +151,6 @@ class _export RecItemColumn: public RecItem
 {
 public:
   RecItemColumn(RecItem* parent, Column);
-  RecItemColumn(RecItem* parent, Column col, ILWIS::NewDrawer *drw);
   virtual int Configure(CWnd*);
   virtual String sName() const;
   virtual long iValue();
@@ -157,6 +159,7 @@ public:
   virtual const CoordWithCoordSystem& crdValue();
   virtual FileName fnObj() const;
   virtual void PutVal(const String& s);
+  void setAssociatedDrawerTool(ILWIS::DrawerTool *drw, const String& targetName);
 protected:
   const Column& col() const { return _col; }
   long iRec;

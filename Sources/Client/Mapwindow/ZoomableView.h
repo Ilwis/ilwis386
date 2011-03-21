@@ -72,6 +72,9 @@ public:
 	void OnRButtonDblClk(UINT nFlags, CPoint point, int state=0);
 	void OnRButtonDown(UINT nFlags, CPoint point, int state=0);
 	void OnRButtonUp(UINT nFlags, CPoint point, int state=0);
+	bool OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+
+
 	void OnEscape();
 	void reset();
 };

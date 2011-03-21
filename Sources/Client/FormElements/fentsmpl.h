@@ -320,6 +320,7 @@ public:
   void StoreData();          // overriden
 	virtual void Enable();
 	virtual void Disable();
+	void _export setValueRange(const ValueRange& vr) { vrr = vr;}
   String sGetText();
   void _export setNotifyFocusChanged(CallBackHandler * wnd, NotifyProc np);
   void _export removeNotifyFocusChange(CallBackHandler * wnd);

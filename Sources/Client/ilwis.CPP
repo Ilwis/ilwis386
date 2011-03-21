@@ -62,6 +62,8 @@ $Header: /ILWIS 3.0/Main/ilwis.CPP 329   10-06-05 15:09 Retsios $
 #include "Client\FormElements\formbase.h"
 #include "Client\FormElements\fldcolor.h"
 #include "Engine\DataExchange\ForeignFormat.h"
+#include "Client\Mapwindow\MapPaneViewTool.h"
+#include "Client\Mapwindow\Drawers\DrawerTool.h"
 #include "Client\Base\BaseDocTemplate.h"
 #include "Client\Base\IlwisDocTemplate.h"
 #include "Client\Base\IlwisMDIDocTemplate.h"

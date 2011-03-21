@@ -82,7 +82,7 @@ public:
 	void Coord2RowCol(Coord crd, double& rRow, double &rCol);
 	Coord crdPnt(zPoint pnt);
 	zPoint pntPos(Coord crd);
-	ILWIS::BaseMapEditor* editGet() ;
+	Editor* editGet() ;
 	void createEditor(ILWIS::ComplexDrawer *drw);
 	FrameWindow * getFrameWindow() { return  fwPar; }
 	void createPixInfoBar();
@@ -112,7 +112,7 @@ protected:
 	PixelInfoBar *pib;
 	CoordWithCoordSystem cwcsButtonDown;
 	CDC* dcView; // dcView is our own CDC and should be cleaned up at next cycle
-	ILWIS::BaseMapEditor *edit;
+	Editor *edit;
 private:  
 	void RedrawInThread();
 	static UINT RedrawPaneInThread(LPVOID);

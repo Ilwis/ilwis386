@@ -103,7 +103,7 @@ BOOL PixelInfoDoc::OnNewDocument()
 	return TRUE;
 }
 
-BOOL PixelInfoDoc::OnOpenDocument(LPCTSTR lpszPathName, ILWIS::NewDrawer *drw)
+BOOL PixelInfoDoc::OnOpenDocument(LPCTSTR lpszPathName)
 {
 	// IlwisDocument does not accept OnNewDocument()
 	if (!OnNewDocument())
@@ -126,7 +126,7 @@ BOOL PixelInfoDoc::OnOpenDocument(LPCTSTR lpszPathName, ILWIS::NewDrawer *drw)
 			}
 			else if (fn.sExt == ".mpr" ||fn.sExt == ".mpa" ||fn.sExt == ".mpp" ||fn.sExt == ".mps") {
 				BaseMap map(fn);
-				AddMap(map, drw);
+				AddMap(map);
 			}
 		}
 		catch (const ErrorObject& err) {
@@ -247,6 +247,10 @@ LRESULT PixelInfoDoc::OnUpdate(WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
+void PixelInfoDoc::setAssociatedDrawerTool(ILWIS::DrawerTool *drw, const String& targetName) {
+	riCoord.setAssociatedDrawerTool(drw, targetName);
+}
+
 void PixelInfoDoc::OnAddMaps()
 {
 	String s;
@@ -259,7 +263,7 @@ void PixelInfoDoc::OnAddMaps()
 		}
 		else {
 			BaseMap mp(s);
-			AddMap(mp,0);
+			AddMap(mp);
 		}  
 	}
 }
@@ -284,9 +288,9 @@ void PixelInfoDoc::OnAddGrf()
 	}
 }
 
-void PixelInfoDoc::AddMap(const BaseMap& mp, ILWIS::NewDrawer *drw)
+void PixelInfoDoc::AddMap(const BaseMap& mp)
 {
-	riCoord.AddMap(mp,drw);
+	riCoord.AddMap(mp);
 	Update();
 }
 
@@ -294,7 +298,7 @@ void PixelInfoDoc::AddMapList(const MapList& mpl)
 {
 	if (mpl.fValid()) {
 		for (int i = mpl->iLower(); i <= mpl->iUpper(); ++i)
-			riCoord.AddMap(mpl[i],0);
+			riCoord.AddMap(mpl[i]);
 		Update();
 	}
 }

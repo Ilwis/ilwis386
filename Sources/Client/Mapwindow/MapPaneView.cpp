@@ -39,7 +39,6 @@ Created on: 2007-02-8
 
 #include "Client\Headers\formelementspch.h"
 #include "Client\ilwis.h"
-#include "Client\Editors\Map\BaseMapEditor.h"
 #include "Engine\Map\Segment\Seg.h"
 #include "engine\map\polygon\POL.H"
 #include "Client\Base\datawind.h"
@@ -57,6 +56,7 @@ Created on: 2007-02-8
 #include "Headers\constant.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\Mapwindow\Drawers\DrawerTool.h"
+#include "Client\Editors\Map\BaseMapEditor.h"
 #include "Engine\Drawers\DrawerContext.h"
 #include "Client\Mapwindow\AreaSelector.h"
 #include "winuser.h"
@@ -631,27 +631,33 @@ void MapPaneView::OnPolygonEdit()
 
 void MapPaneView::OnGeoRefEdit()
 {
-	throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
-	//GeoRefCTP* gc = georef->pgCTP();
-	//if (gc ) {
-	//	if (edit)
-	//		delete edit;
-	//	edit = 0;
-	//	if (gc)
-	//		edit = new GeoRefEditor(this,georef);
-	//	if (edit)	{
-	//		Invalidate();
-	//	}
-	//	UpdateFrame();
-	//	MapWindow* mw = mwParent();
-	//	if (0 != mw) 
-	//		mw->SetAcceleratorTable();
-	//	return;  
-	//}
-	//String sFileName = georef->fnObj.sFullNameQuoted();
-	//if ("" == sFileName)
-	//	return;
-	//IlwWinApp()->OpenDocumentFile(sFileName.sVal());
+	AbstractMapDrawer *absndrw = dynamic_cast<AbstractMapDrawer *>(GetDocument()->rootDrawer->getDrawer(0));
+	BaseMapPtr *bmp = absndrw->getBaseMap();
+	if ( !IOTYPE((*bmp).fnObj) == IlwisObject::iotRASMAP)
+		return;
+	MapPtr *mptr = (MapPtr *)bmp;
+	GeoRef georef = (*mptr).gr();
+	GeoRefCTP* gc = georef->pgCTP();
+	if (gc ) {
+		if (edit)
+			delete edit;
+		edit = 0;
+		throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
+	/*	if (gc)
+			edit = new GeoRefEditor(this,georef);
+		if (edit)	{
+			Invalidate();
+		}*/
+		UpdateFrame();
+		MapWindow* mw = mwParent();
+		if (0 != mw) 
+			mw->SetAcceleratorTable();
+		return;  
+	}
+	String sFileName = georef->fnObj.sFullNameQuoted();
+	if ("" == sFileName)
+		return;
+	IlwWinApp()->OpenDocumentFile(sFileName.sVal());
 }
 
 void MapPaneView::OnCoordSysEdit()

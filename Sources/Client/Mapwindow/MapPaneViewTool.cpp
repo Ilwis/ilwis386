@@ -56,7 +56,7 @@ int MapPaneViewTool::idSeed=20000;
 // MapPaneViewTool
 
 MapPaneViewTool::MapPaneViewTool(ZoomableView* mappaneview)
-: mpv(mappaneview), stay(false)
+: mpv(mappaneview), stay(false), active(true),needsMouseFocus(false)
 {
 	id = idSeed++;
 	if ( idSeed > 300000)
@@ -98,6 +98,10 @@ void MapPaneViewTool::OnRButtonUp(UINT nFlags, CPoint point)
 {
 }
 
+bool MapPaneViewTool::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags){
+	return false;
+}
+
 void MapPaneViewTool::OnEscape()
 {
 	Stop();
@@ -125,6 +129,22 @@ void MapPaneViewTool::SetCursor(const zCursor& cur)
 
 int MapPaneViewTool::getId() { 
 	return id;
+}
+
+bool MapPaneViewTool::isActive() const {
+	return active;
+}
+
+void MapPaneViewTool::setActive(bool yesno) {
+	if ( yesno) {
+		for(map<int, MapPaneViewTool *>::iterator cur = mpv->tools.begin(); cur !=  mpv->tools.end(); ++cur) {
+			MapPaneViewTool *tool = (*cur).second;
+			// this will shut down all the (other)tools that need exclusive access to the mouse
+			if ( tool->mouseFoucesNeeded() && tool->getId() != getId())
+				tool->setActive(false);
+		}
+	}
+	active = yesno;
 }
 
 

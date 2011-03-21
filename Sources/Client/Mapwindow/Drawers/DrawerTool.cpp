@@ -24,6 +24,7 @@ DrawerTools::~DrawerTools() {
 	for(int i=0; i < size(); ++i) {
 		delete at(i);
 	}
+	resize(0);
 }
 //---------------------------------------
 DrawerTool *DrawerTool::createTool(const String& name, ZoomableView *zv, LayerTreeView *view, NewDrawer *drw) {
@@ -59,12 +60,15 @@ void DrawerTool::addCreateTool(const String& name, CreateDrawerTool func) {
 // - - - - - - - - - - - - - - - - - - - - -
 DrawerTool::DrawerTool(const String& tpe, ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
 MapPaneViewTool(zv),
-drawer(drw), tree(view), visible(true),parentTool(0),isConfigured(false), type(tpe), active(true),htiNode(0)
+drawer(drw), tree(view), visible(true),parentTool(0),isConfigured(false), type(tpe),htiNode(0)
 {
 
 }
 
 DrawerTool::~DrawerTool() {
+	MapCompositionDoc *mdoc = tree->GetDocument();
+	MapPaneView *mpv = mdoc->mpvGetView();
+	mpv->noTool(getId());
 }
 
 HTREEITEM DrawerTool::configure( HTREEITEM parentItem){
@@ -84,6 +88,12 @@ void DrawerTool::clear() {
 	for(int i=0; i < tools.size(); ++i)
 		tools[i]->clear();
 	isConfigured = false;
+}
+
+DrawerTool *DrawerTool::getTool(int index) const{
+	if ( index < tools.size())
+		return tools[index];
+	return 0;
 }
 
 void DrawerTool::addDrawer(ComplexDrawer *cdrw) {
@@ -182,16 +192,6 @@ DrawerTool *DrawerTool::getParentTool() const {
 
 int DrawerTool::getToolCount() const {
 	return tools.size();
-}
-
-DrawerTool *DrawerTool::getTool(int index) const{
-	if ( index < tools.size())
-		return tools[index];
-	return 0;
-}
-
-bool DrawerTool::isActive() const {
-	return active;
 }
 
 void DrawerTool::setActiveMode(bool yesno) {

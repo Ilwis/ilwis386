@@ -300,6 +300,7 @@ public:
 	void SetWidth(short iWidth);
 	void _export Enable();
 	void _export Disable();
+	void _export setValueRange(const ValueRange& vr) ;
 	void show(int s);
 
 	String sGetText();

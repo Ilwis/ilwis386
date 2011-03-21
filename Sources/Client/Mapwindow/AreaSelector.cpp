@@ -72,6 +72,7 @@ AreaSelector::AreaSelector(ZoomableView* mappaneview, CCmdTarget* cmdTarget, Not
 , clr(_clr)
 {
 	SetCursor(zCursor("AreaSelCursor"));
+	needsMouseFocus = true;
 }
 
 AreaSelector::AreaSelector(ZoomableView* mappaneview, CCmdTarget* cmdTarget, NotifyRectProc notProc, zDimension dimension, const Color& _clr)
@@ -85,6 +86,7 @@ AreaSelector::AreaSelector(ZoomableView* mappaneview, CCmdTarget* cmdTarget, Not
 ,clr(_clr)
 {
 	SetCursor(zCursor("AreaSelCursor"));
+	needsMouseFocus = true;
 }
 
 AreaSelector::~AreaSelector()

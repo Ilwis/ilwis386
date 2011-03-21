@@ -49,14 +49,18 @@ Last change:  WK   24 Jul 97    1:03 pm
 #include "Engine\Drawers\RootDrawer.h"
 #include "Client\Mapwindow\MapPaneView.h"
 #include "Client\ilwis.h"
-#include "Client\Editors\Map\BaseMapEditor.h"
 #include "Client\Base\IlwisDocument.h"
+#include "Client\Mapwindow\MapPaneViewTool.h"
+#include "Client\Mapwindow\Drawers\DrawerTool.h"
+#include "Client\Editors\Map\BaseMapEditor.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include <stdlib.h>
 #include "Headers\Hs\PIXINFO.hs"
 #include "Engine\Domain\Dmvalue.h"
 
 using namespace ILWIS;
+
+#define ADDED_PARENT_CHILD "@Added_as_parent_child_relationship@"
 
 RecItem::RecItem(RecItem* parent)
 : children(true), cwcs(crdUNDEF)
@@ -69,7 +73,7 @@ RecItem::RecItem(RecItem* parent)
 	fStrValid = false;
 	fEditable = false;
 	cwcs = crdUNDEF;
-	associatedDrawer = 0;
+	associatedDrawerTool = 0;
 }
 
 RecItem::~RecItem()
@@ -77,19 +81,20 @@ RecItem::~RecItem()
 	// members of children will be deleted automatically
 }
 
-void RecItem::setAssociatedDrawer(NewDrawer *drw) {
-	associatedDrawer = drw;
+void RecItem::setAssociatedDrawerTool(DrawerTool *drw, const String& targetName) {
 	for (SLIterP<RecItem> iter(&children); iter.fValid(); ++iter) {
-		iter()->setAssociatedDrawer(drw);
+		iter()->setAssociatedDrawerTool(drw, targetName);
 	}
 
 }
 
 bool RecItem::fAllowEdit() {
-	if ( associatedDrawer) {
-		ILWIS::BaseMapEditor* edit = 0 ;;//associatedDrawer->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView()->editGet();
-
-		return associatedDrawer->inEditMode() && edit->hasSelection();
+	if ( associatedDrawerTool) {
+		ILWIS::BaseMapEditor* edit = dynamic_cast<BaseMapEditor *>(associatedDrawerTool);
+		if ( edit)
+			return associatedDrawerTool->getDrawer()->inEditMode() && edit->hasSelection();
+		else
+			return false;
 	}
 	return fEditable; 
 }
@@ -117,10 +122,10 @@ int RecItem::AddSelfAlwaysToArray(RecItemArray& ria)
 	return 0;
 }
 
-RecItemMap* RecItem::AddMap(BaseMap map, ILWIS::NewDrawer *drw)
+RecItemMap* RecItem::AddMap(BaseMap map)
 {
 	map->MakeUsable();
-	RecItemMap* ri = new RecItemMap(this,map, drw);
+	RecItemMap* ri = new RecItemMap(this,map);
 	children.append(ri);
 	return ri;
 }
@@ -139,11 +144,11 @@ RecItemGeoRef* RecItem::AddGeoRef(const GeoRef& grf)
 	return ri;
 }
 
-RecItemTable* RecItem::AddTable(Table tbl, ILWIS::NewDrawer *drw) {
+RecItemTable* RecItem::AddTable(Table tbl) {
 	tbl->MakeUsable();
 	RecItemTable* ri = new RecItemTable(this,tbl);
 	for (int i = 0; i < tbl->iCols(); ++i)
-		ri->AddColumn(tbl->col(i), drw);
+		ri->AddColumn(tbl->col(i));
 	children.append(ri);
 	return ri;
 }
@@ -249,16 +254,27 @@ int RecItem::Configure(CWnd* win)
 	*/  
 }
 
-RecItemMap::RecItemMap(RecItem* parent, BaseMap map, ILWIS::NewDrawer *drw)
+//-------------------------------------------------------------------------------
+RecItemMap::RecItemMap(RecItem* parent, BaseMap map)
 : RecItem(parent), _map(map)
 {
-	associatedDrawer = drw;
 	Table tbl = _map->tblAtt();
 	if (tbl.fValid()) {
-		RecItemTable* rit = AddTable(tbl,drw);
+		RecItemTable* rit = AddTable(tbl);
 		rit->ShowRec(false);
 	} 
 	cwcs = _map->cs();
+}
+
+void RecItemMap::setAssociatedDrawerTool(DrawerTool *drw, const String& targetName) {
+	String reason = targetName;
+	if ( _map->fnObj.sRelative() == reason || reason == ADDED_PARENT_CHILD) {
+		associatedDrawerTool = drw;
+		reason = ADDED_PARENT_CHILD;
+	}
+	for (SLIterP<RecItem> iter(&children); iter.fValid(); ++iter) {
+		iter()->setAssociatedDrawerTool(drw, reason);
+	}
 }
 
 String RecItemMap::sName() const
@@ -368,6 +384,7 @@ int RecItemMap::Configure(CWnd* win)
 	return RecItem::Configure(win);
 }
 
+//--------------------------------------------------------------------------------------
 RecItemTable::RecItemTable(RecItem* parent, Table tbl)
 : RecItem(parent)
 {
@@ -440,25 +457,20 @@ RecItemColumn* RecItemTable::AddColumn(Column col, bool fAllowEdit)
 	return ri;
 }
 
-RecItemColumn* RecItemTable::AddColumn(Column col, ILWIS::NewDrawer *drw)
+RecItemColumn* RecItemTable::AddColumn(Column col)
 {
-	RecItemColumn* ri = new RecItemColumn(this,col, drw);
+	RecItemColumn* ri = new RecItemColumn(this,col);
 	children.append(ri);
 	return ri;
 }
 
+//----------------------------------------------------------------------
 RecItemColumn::RecItemColumn(RecItem* parent, Column col)
 : RecItem(parent)
 {
 	_col = col;
 }
 
-RecItemColumn::RecItemColumn(RecItem* parent, Column col, ILWIS::NewDrawer *drw)
-: RecItem(parent)
-{
-	associatedDrawer = drw;
-	_col = col;
-}
 
 int RecItemColumn::Configure(CWnd* win)
 {
@@ -470,6 +482,17 @@ String RecItemColumn::sName() const
 	String s = col()->sName();
 	s &= ".clm";
 	return s;
+}
+
+void RecItemColumn::setAssociatedDrawerTool(ILWIS::DrawerTool *drw, const String& targetName) {
+	String reason = targetName;
+	if ( reason == ADDED_PARENT_CHILD) {
+		associatedDrawerTool = drw;
+		reason = ADDED_PARENT_CHILD;
+	}
+	for (SLIterP<RecItem> iter(&children); iter.fValid(); ++iter) {
+		iter()->setAssociatedDrawerTool(drw, reason);
+	}
 }
 
 FileName RecItemColumn::fnObj() const {

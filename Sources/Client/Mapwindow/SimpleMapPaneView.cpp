@@ -46,6 +46,8 @@ Created on: 2007-02-8
 #include "Client\Mapwindow\MapWindow.h"
 #include "Client\Mapwindow\Drawers\ScreenSwapper.h"
 #include "Client\TableWindow\BaseTablePaneView.h"
+#include "Client\Mapwindow\MapPaneViewTool.h"
+#include "Client\Mapwindow\Drawers\DrawerTool.h"
 #include "Client\TableWindow\BaseTblField.h"
 #include "Client\Mapwindow\PixelInfoDoc.h"
 #include "Client\Mapwindow\PixelInfoBar.h"
@@ -318,7 +320,7 @@ void SimpleMapPaneView::OnWindowPosChanging(WINDOWPOS* lpwndpos)
 
 void SimpleMapPaneView::OnMeasureDist()
 {
-	OnNoTool();
+	noTool(ID_MEASUREDIST);
 	tools[ID_MEASUREDIST] = new DistanceMeasurer(this);
 	iActiveTool = ID_MEASUREDIST;
 }
@@ -343,6 +345,8 @@ void SimpleMapPaneView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		return;
 	}
 	if (edit && edit->OnKeyDown(nChar, nRepCnt, nFlags))
+		return;
+	if (tools.OnKeyDown(nChar, nRepCnt, nFlags))
 		return;
 	bool fCtrl = GetKeyState(VK_CONTROL) & 0x8000 ? true : false;
 	switch (nChar) {
@@ -616,7 +620,7 @@ double SimpleMapPaneView::rScaleShow()
 	return rUNDEF;
 }
 
-BaseMapEditor* SimpleMapPaneView::editGet() 
+Editor* SimpleMapPaneView::editGet() 
 {
 	return edit;
 }

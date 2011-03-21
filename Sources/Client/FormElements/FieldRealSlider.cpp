@@ -75,8 +75,8 @@ void FieldRealSlider::create()
   zPoint pntFld = zPoint(psn->iPosX, psn->iPosY);
   zDimension dimFld = zDimension(psn->iMinWidth, psn->iMinHeight);
 
-	double rLo = vrr->rrMinMax().rLo();
-	double rHi = vrr->rrMinMax().rHi();
+	//double rLo = vrr->rrMinMax().rLo();
+	//double rHi = vrr->rrMinMax().rHi();
 
 	slc = new OwnSliderCtrl(this);
 	slc->Create(m_dwStyle,	CRect(pntFld, dimFld), _frm->wnd(), Id());
@@ -174,14 +174,22 @@ FieldRealSliderEx::FieldRealSliderEx(FormEntry * parent, const String& question,
 	slider = new FieldRealSlider(fg,val,valrange,TBS_HORZ);
 	slider->Align(edit,AL_AFTER);
 	if ( rangeText) {
-		StaticText *st = new StaticText(fg,String("(%S)",valrange->sRange()));
-		st->Align(slider, AL_AFTER);
+		stRange = new StaticText(fg,String("(%S)",valrange->sRange()));
+		stRange->Align(slider, AL_AFTER);
 	}
 		
 	FieldBlank *fb = new FieldBlank(fg,0.0);
 	fb->Align(edit, AL_UNDER);
 	
 
+}
+
+void FieldRealSliderEx::setValueRange(const ValueRange& valrang) {
+	edit->setValueRange(valrang);
+	slider->setValueRange(valrang);
+	if ( rangeText) {
+		stRange->SetVal(String("(%S)",valrang->sRange()));
+	}
 }
 
 FieldRealSliderEx::~FieldRealSliderEx(){

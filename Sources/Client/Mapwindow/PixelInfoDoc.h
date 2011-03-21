@@ -44,6 +44,10 @@ typedef Array<RecItem*> RecItemArray;
 
 class Feature;
 
+namespace ILWIS {
+	class DrawerTool;
+}
+
 class IMPEXP PixelInfoDoc : public IlwisDocument
 {
 	friend class PixelInfoConfigureForm;
@@ -58,11 +62,12 @@ public:
 	zIcon icon() const;
 	FileName fn(int) const;
 	virtual void Serialize(CArchive& ar);   // overridden for document i/o
-	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName, ILWIS::NewDrawer *drw);
+	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
 	bool fRowEditable(int rowIndex) const;
 	RecItem * getItem(int rowIndex);
 	void setEditFeature(Feature *f);
 	Feature *getEditFeature();
+	void setAssociatedDrawerTool(ILWIS::DrawerTool *drw, const String& targetName);
 protected:
 	virtual BOOL OnNewDocument();
 	virtual void OnCloseDocument();
@@ -79,7 +84,7 @@ public:
 	afx_msg void OnAddMaps();
 	afx_msg void OnAddCsys();
 	afx_msg void OnAddGrf();
-	void AddMap(const BaseMap&, ILWIS::NewDrawer *drw);
+	void AddMap(const BaseMap&);
 	void AddMapList(const MapList&);
 	void AddCoordSystem(const CoordSystem&);
 	void AddGeoRef(const GeoRef&);

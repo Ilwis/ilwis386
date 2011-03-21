@@ -760,7 +760,7 @@ void MapCompositionDoc::OnUpdateDataLayer(CCmdUI* pCmdUI)
 	bool fEnable = true;
 	if (0 != mpv) 
 	{
-		BaseMapEditor* edit = mpv->editGet();
+		Editor* edit = mpv->editGet();
 		if (0 != edit)
 		{
 			int i, id;
@@ -910,7 +910,7 @@ ILWIS::NewDrawer *MapCompositionDoc::createBaseMapDrawer(const BaseMap& bmp, con
 	ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
 	drawer->prepare(&pp);
 	rootDrawer->addDrawer(drawer);
-	addToPixelInfo(bmp, drawer);
+	addToPixelInfo(bmp);
 	FrameWindow * frame = mpvGetView()->getFrameWindow();
 	if ( frame) {
 		MapStatusBar *sbar = dynamic_cast<MapStatusBar*>(frame->status);
@@ -1084,11 +1084,11 @@ BOOL MapCompositionDoc::OnOpenPointMap(const PointMap& pm, OpenType ot)
 	return TRUE;
 }
 
-void MapCompositionDoc::addToPixelInfo(const BaseMap& bm, NewDrawer *drw) {
+void MapCompositionDoc::addToPixelInfo(const BaseMap& bm) {
 	if (!pixInfoDoc) 
 		pixInfoDoc = new PixelInfoDoc();
 
-	pixInfoDoc->OnOpenDocument(bm->fnObj.sFullPath().scVal(), drw);
+	pixInfoDoc->OnOpenDocument(bm->fnObj.sFullPath().scVal());
 	pixInfoDoc->UpdateAllViews(0,2);
 }
 

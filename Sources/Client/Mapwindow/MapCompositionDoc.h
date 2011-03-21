@@ -116,7 +116,7 @@ public:
 	FileName getViewName() const;
 	NewDrawer *getSelectedDrawer() const { return selectedDrawer; }
 	void setSelectedDrawer(NewDrawer *drw) { selectedDrawer = drw; }
-	void addToPixelInfo(const BaseMap& bm, NewDrawer *drw);
+	void addToPixelInfo(const BaseMap& bm);
 	PixelInfoDoc *pixInfoDoc;
 
 protected:

@@ -610,6 +610,9 @@ FieldReal::~FieldReal()
  // children are removed by ~FormEntry
 }
 
+void FieldReal::setValueRange(const ValueRange& vr) {
+	fld->setValueRange(vr);
+}
 String FieldReal::sGetText()
 {
         if ( !fShow() ) return "";

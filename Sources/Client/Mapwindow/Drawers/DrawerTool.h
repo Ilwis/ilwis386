@@ -1,6 +1,8 @@
 #pragma once
 
 class MapPaneView;
+class DisplayOptionTreeItem;
+class LayerTreeItem;
 
 namespace ILWIS {
 
@@ -26,6 +28,7 @@ public:
 	void setVisible(bool yesno);
 	static DrawerTool *createTool(const String& name, ZoomableView *zv, LayerTreeView *view, NewDrawer *drw);
 	DrawerTool *getTool(const String& type) const;
+	DrawerTool *getTool(int index) const;
 	static void addCreateTool(const String& name, CreateDrawerTool func);
 	virtual void addDrawer(ComplexDrawer *cdrw);
 	virtual bool isToolUseableFor(ILWIS::NewDrawer *drw) { return false;}
@@ -35,15 +38,14 @@ public:
 	void setParentTool(DrawerTool *p) { parentTool = p; }
 	String getType() const { return type; }
 	virtual void update() {}
+	virtual void prepare() {}
 	int getToolCount() const;
-	DrawerTool *getTool(int index) const;
-	bool isActive() const;
-	void setActiveMode(bool yesno);
 	HTREEITEM getTreeItem() const { return htiNode; }
 	MapCompositionDoc *getDocument() const;
 	MapPaneView *mpvGetView() const;
 	virtual void clear();
 	virtual void timedEvent(UINT timerid);
+	void setActiveMode(bool yesno);
 
 protected:
 	HTREEITEM insertItem(const String& name,const String& icon, DisplayOptionTreeItem *item=0, int checkstatus = -1, HTREEITEM after=TVI_LAST);
@@ -57,7 +59,6 @@ protected:
 	DrawerTool *parentTool;
 	bool isConfigured;
 	String type;
-	bool active;
 	HTREEITEM htiNode;
 
 private:

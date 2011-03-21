@@ -61,6 +61,7 @@ public:
 	virtual void OnRButtonDblClk(UINT nFlags, CPoint point);
 	virtual void OnRButtonDown(UINT nFlags, CPoint point);
 	virtual void OnRButtonUp(UINT nFlags, CPoint point);
+	virtual bool OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	virtual void OnEscape();
 	bool OnSetCursor(); // called by MapPaneView::OnSetCursor
 	void SetCursor(const zCursor& cur);
@@ -72,12 +73,17 @@ public:
 	virtual String getMenuString() const { return "";}
 	virtual String cursorName() const { return "";}
 	bool stayResident() const { return stay; }
+	bool isActive() const;
+	virtual void setActive(bool yesno);
+	bool mouseFoucesNeeded() { return needsMouseFocus; }
 
 protected:
 	ZoomableView* mpv;
+	bool stay;
+	bool active;
+	bool needsMouseFocus;
 private:
 	zCursor curActive;
 	static int idSeed;
 	int id;
-	bool stay;
 };

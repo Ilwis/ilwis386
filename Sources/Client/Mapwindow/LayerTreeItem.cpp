@@ -697,8 +697,8 @@ void DisplayOptionTree::OnContextMenu(CWnd* pWnd, CPoint pos){
 					tool->setActiveMode(true);
 				} else if ( state == MF_CHECKED){
 					tool->setActiveMode(false);
-					//ltv->DeleteAllItems(hti);
 				}
+				tool->prepare();
 			}
 		}
 	}
@@ -887,10 +887,26 @@ SetChecks::SetChecks(LayerTreeView *v, DrawerTool *dt,DTSetCheckFunc _f){
 	tv = v;
 	tool = dt;
 	fun = _f;
+	state = 0;
 }
 
 void SetChecks::addItem(HTREEITEM hti){
 	checkedItems.push_back(hti);
+}
+
+void SetChecks::setActive(bool yesno) {
+	if ( yesno) {
+	}
+	else {
+		CTreeCtrl& tree = tv->GetTreeCtrl();
+		for(int i = 0; i< checkedItems.size(); ++i) {
+			HTREEITEM ht = checkedItems.at(i);
+			DisplayOptionRadioButtonItem *item = dynamic_cast<DisplayOptionRadioButtonItem * >((LayerTreeItem *)(tree.GetItemData(ht)));
+			item->setState(false);
+		}
+		tv->Invalidate();
+		tv->UpdateWindow();
+	}
 }
 
 void SetChecks::checkItem(HTREEITEM hti) {
@@ -906,8 +922,10 @@ void SetChecks::checkItem(HTREEITEM hti) {
 	for(int i = 0; i< checkedItems.size(); ++i) {
 		HTREEITEM ht = checkedItems.at(i);
 		DisplayOptionRadioButtonItem *item = dynamic_cast<DisplayOptionRadioButtonItem * >((LayerTreeItem *)(tree.GetItemData(ht)));
-		if ( ht == hti)
+		if ( ht == hti) {
+			state = i;
 			continue;
+		}
 		if ( item) {
 			item->setState(false);
 		}

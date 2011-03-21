@@ -185,6 +185,7 @@ public:
 	virtual void OnContextMenu(CWnd* pWnd, CPoint pos);
 	void setDoubleCickAction(ILWIS::DrawerTool *tool, DTDoubleClickActionFunc f);
 	void setCheckAction(ILWIS::DrawerTool *tool, SetChecks *checks, DTSetCheckFunc cf);
+	SetChecks *getChecks() { return checks; }
 	
 protected:
 	DTDoubleClickActionFunc dbcAction;
@@ -229,15 +230,18 @@ private:
 
 class _export SetChecks {
 public:
-	SetChecks(LayerTreeView*, ILWIS::DrawerTool *dr, DTSetCheckFunc _f);
+	SetChecks(LayerTreeView*, ILWIS::DrawerTool *dr, DTSetCheckFunc _f=0);
 	~SetChecks();
 	void addItem(HTREEITEM hti);
 	void checkItem(HTREEITEM hti);
+	int getState() const { return state; }
+	void setActive(bool yesno);
 private:
 	vector<HTREEITEM> checkedItems;
 	LayerTreeView *tv;
 	DrawerTool *tool;
 	DTSetCheckFunc fun;
+	int state;
 
 };
 

@@ -800,8 +800,8 @@ void ZoomableView::noTool(int iTool) {
 			(*cur).second->Stop();
 			if ( (*cur).second->stayResident() == false) {
 				delete (*cur).second;
-				tools.erase(cur);
 			}
+			tools.erase(cur);
 		}
 	}
 }
@@ -834,10 +834,9 @@ void ZoomableView::OnZoomIn()
 void ZoomableView::OnZoomOut()
 {
 	if (iActiveTool == ID_ZOOMOUT) {
-		noTool();
+		noTool(ID_ZOOMOUT);
 		return;
 	}
-	noTool();
 	MapCompositionDoc *mcd = (MapCompositionDoc *)GetDocument();
 	CoordBounds cb = mcd->rootDrawer->getCoordBoundsZoom();
 	cb *= 1.41;
@@ -845,7 +844,6 @@ void ZoomableView::OnZoomOut()
 	setScrollBars();
 	OnDraw(0);
 	
-	iActiveTool = ID_ZOOMOUT;
 }
 
 bool ZoomableView::addTool(MapPaneViewTool *tool, int id) {
@@ -871,7 +869,7 @@ void ZoomableView::changeStateTool(int id, bool isActive) {
 
 void ZoomableView::OnSelectArea()
 {
-	noTool();
+	noTool(ID_ZOOMIN);
 
 	AreaSelector *as;
 	if (fAdjustSize)
@@ -880,12 +878,13 @@ void ZoomableView::OnSelectArea()
 		as = new AreaSelector(this, this, (NotifyRectProc)&ZoomableView::AreaSelected, dim);
 	tools[ID_ZOOMIN] = as;
 	as->SetCursor(zCursor("ZoomToolCursor"));
+	as->setActive(true);
 	iActiveTool = ID_ZOOMIN;
 }
 
 void ZoomableView::selectArea(CCmdTarget *target, NotifyRectProc proc, const String& cursor, const Color& clr)
 {
-	noTool();
+	noTool(ID_ZOOMIN);
 	AreaSelector *as;
 	if (fAdjustSize)
 		as = new AreaSelector(this, target, proc, clr);
@@ -893,16 +892,17 @@ void ZoomableView::selectArea(CCmdTarget *target, NotifyRectProc proc, const Str
 		as = new AreaSelector(this, target, proc, dim, clr);
 	tools[ID_ZOOMIN] = as;
 	as->SetCursor(zCursor(cursor.scVal()));
+	as->setActive(true);
 	iActiveTool = ID_ZOOMIN;
 }
 
 void ZoomableView::OnPanArea()
 {
 	if (iActiveTool == ID_PANAREA) {
-		noTool();
+		noTool(ID_PANAREA);
 		return;
 	}
-	noTool();
+	noTool(ID_PANAREA);
 	CRect rect;
 	GetClientRect(&rect);
 	tools[ID_PANAREA ] = new PanTool(this, this, (NotifyMoveProc)&ZoomableView::PanMove, rect);
@@ -1072,55 +1072,73 @@ MapTools::~MapTools() {
 void MapTools::reset() {
 	for(map<int, MapPaneViewTool *>::iterator cur = begin(); cur != end(); ++cur) {
 		(*cur).second->Stop();
-		delete (*cur).second;
+		if ( !(*cur).second->stayResident())
+			delete (*cur).second;
 	}
 	clear();
 }
 
+bool MapTools::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags){
+	bool result = false;
+	for(map<int, MapPaneViewTool *>::iterator cur = begin(); cur != end(); ++cur) {
+		if ( (*cur).second->isActive())
+			result |= (*cur).second->OnKeyDown(nChar, nRepCnt, nFlags);
+	}
+	return result;
+}
+
 void MapTools::OnMouseMove(UINT nFlags, CPoint point, int state){
 	for(map<int, MapPaneViewTool *>::iterator cur = begin(); cur != end(); ++cur) {
-		(*cur).second->OnMouseMove(nFlags, point);
+		if ( (*cur).second->isActive())
+			(*cur).second->OnMouseMove(nFlags, point);
 	}
 }
 
 void MapTools::OnLButtonDblClk(UINT nFlags, CPoint point, int state){
 	for(map<int, MapPaneViewTool *>::iterator cur = begin(); cur != end(); ++cur) {
-		(*cur).second->OnLButtonDblClk(nFlags, point);
+		if ( (*cur).second->isActive())
+			(*cur).second->OnLButtonDblClk(nFlags, point);
 	}
 }
 
 void MapTools::OnLButtonDown(UINT nFlags, CPoint point, int state){
 	for(map<int, MapPaneViewTool *>::iterator cur = begin(); cur != end(); ++cur) {
-		(*cur).second->OnLButtonDown(nFlags, point);
+		if ( (*cur).second->isActive())
+			(*cur).second->OnLButtonDown(nFlags, point);
 	}
 }
 
 void MapTools::OnLButtonUp(UINT nFlags, CPoint point, int state){
 	for(map<int, MapPaneViewTool *>::iterator cur = begin(); cur != end(); ++cur) {
-		(*cur).second->OnLButtonUp(nFlags, point);
+		if ( (*cur).second->isActive())
+			(*cur).second->OnLButtonUp(nFlags, point);
 	}
 
 }
 void MapTools::OnRButtonDblClk(UINT nFlags, CPoint point, int state){
 	for(map<int, MapPaneViewTool *>::iterator cur = begin(); cur != end(); ++cur) {
-		(*cur).second->OnRButtonDblClk(nFlags, point);
+		if ( (*cur).second->isActive())
+			(*cur).second->OnRButtonDblClk(nFlags, point);
 	}
 }
 
 void MapTools::OnRButtonDown(UINT nFlags, CPoint point, int state){
 	for(map<int, MapPaneViewTool *>::iterator cur = begin(); cur != end(); ++cur) {
-		(*cur).second->OnRButtonDown(nFlags, point);
+		if ( (*cur).second->isActive())
+			(*cur).second->OnRButtonDown(nFlags, point);
 	}
 }
 
 void MapTools::OnRButtonUp(UINT nFlags, CPoint point, int state){
 	for(map<int, MapPaneViewTool *>::iterator cur = begin(); cur != end(); ++cur) {
-		(*cur).second->OnRButtonUp(nFlags, point);
+		if ( (*cur).second->isActive())
+			(*cur).second->OnRButtonUp(nFlags, point);
 	}
 }
 
 void MapTools::OnEscape() {
 	for(map<int, MapPaneViewTool *>::iterator cur = begin(); cur != end(); ++cur) {
-		(*cur).second->OnEscape();
+		if ( (*cur).second->isActive())
+			(*cur).second->OnEscape();
 	}
 }

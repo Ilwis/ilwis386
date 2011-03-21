@@ -59,6 +59,7 @@ public:
 	void Disable();
 	void SetFocus();
 	FormEntry* CheckData();
+	void setValueRange(const ValueRange& vr) { vrr = vr; }
 	void setContinuous(bool v) { continuous = v; }
 
 private:
@@ -78,6 +79,7 @@ public:
 	void create();             // overriden
 	void show(int sw);         // overriden
 	void SetVal(double rVal);
+	void setValueRange(const ValueRange& valrang);
 	double rVal();               // return current value
 	void StoreData();
 	void Enable();
@@ -90,6 +92,7 @@ private:
 	int EditCallBackFunc(Event *ev);
 	void setContinuousMode(int m);
 	FieldRealSlider *slider;
+	StaticText *stRange;
 	FieldReal *edit;
 	FieldGroup *fg;
 	bool rangeText;
