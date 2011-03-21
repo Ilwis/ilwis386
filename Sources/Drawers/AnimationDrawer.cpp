@@ -219,7 +219,7 @@ void AnimationDrawer::prepare(PreparationParameters *pp){
 				clear();
 			}
 			// Calculate the min/max over the whole maplist. This is used for palette and texture generation.
-			RangeReal rrMinMax = getMinMax(mlist);
+			rrMinMax = getMinMax(mlist);
 			Palette * palette;
 			for(int i = 0; i < mlist->iSize(); ++i) {
 				ILWIS::DrawerParameters parms(getRootDrawer(), this);

@@ -60,6 +60,7 @@ namespace ILWIS{
 		void removeSlave(AnimationDrawer *drw);
 		int getOffset() const;
 		void setOffset(int off);
+		RangeReal getRange() const { return rrMinMax; }
 
 		static int timerIdCounter;
 
@@ -92,6 +93,7 @@ namespace ILWIS{
 		vector<Palette*> paletteList;
 		Representation rpr;
 		int offset;
+		RangeReal rrMinMax;
 		//DisplayOptionsLegend *doLegend;
 
 		ILWIS::Duration timestep;
