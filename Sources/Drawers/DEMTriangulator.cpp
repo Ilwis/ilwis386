@@ -71,6 +71,8 @@ DEMTriangulator::DEMTriangulator(ZValueMaker * zMaker, BaseMapPtr * drapeMapPtr,
 				rHeights[i] = rMin;
 		valid = fDoTriangulate();
 
+		if (rFactors)
+			free(rFactors);
 		if (rHeights)
 			free(rHeights);
 	}
@@ -78,8 +80,6 @@ DEMTriangulator::DEMTriangulator(ZValueMaker * zMaker, BaseMapPtr * drapeMapPtr,
 
 DEMTriangulator::~DEMTriangulator(void)
 {
-	if (rFactors)
-		free(rFactors);
 	free(vertices);
 }
 
