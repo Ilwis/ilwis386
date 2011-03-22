@@ -100,19 +100,14 @@ bool RootDrawer::draw( const CoordBounds& cb) const{
 	else {
 		const_cast<RootDrawer *>(this)->setZIndex(0);
 		setupDraw();
-		if ( rotX ==0 && rotY ==0) {
-			glLoadIdentity();
-			if (is3D()) {
-				gluLookAt(eyePoint.x, eyePoint.y, eyePoint.z, viewPoint.x, viewPoint.y, viewPoint.z, 0, 1.0, 0 );
-			}
-		}
+		glLoadIdentity();
 		if (is3D()) {
-				glPushMatrix();	
-				glTranslatef(viewPoint.x,viewPoint.y, 0);
-				glRotatef(rotX,0,0,1);				// Rotate on x
-				glRotatef(rotY,1,0,0);				// Rotate on y
-				glTranslatef(-viewPoint.x,-viewPoint.y, 0);
-	
+			gluLookAt(eyePoint.x, eyePoint.y, eyePoint.z, viewPoint.x, viewPoint.y, viewPoint.z, 0, 1.0, 0 );
+			glPushMatrix();	
+			glTranslatef(viewPoint.x,viewPoint.y, 0);
+			glRotatef(rotY,-1,0,0);				// Rotate on y
+			glRotatef(rotX,0,0,-1);				// Rotate on x
+			glTranslatef(-viewPoint.x,-viewPoint.y, 0);
 		}
 
 		ComplexDrawer::draw( cb);
