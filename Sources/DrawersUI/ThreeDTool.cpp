@@ -176,7 +176,7 @@ void DisplayZDataSourceForm::apply() {
 			}*/
 		}
 	} else {
-		updateDrawer( sdrw, bmp);
+		updateDrawer( sdrw, BaseMap(mapName));
 	}
 
 	updateMapView();
@@ -241,7 +241,7 @@ void ZDataScaling::apply() {
 	drw->getZMaker()->setOffset(zoffset + rr.rLo());
 	AnimationDrawer *adrw = dynamic_cast<AnimationDrawer *>(drw);
 	if ( adrw) {
-		rr = adrw->getRange();
+		rr = adrw->getZMaker()->getRange();
 		for(int i = 0 ; i < adrw->getDrawerCount(); ++i) {
 			SetDrawer *sdrw = (SetDrawer *)adrw->getDrawer(i);
 			sdrw->getZMaker()->setRange(rr);

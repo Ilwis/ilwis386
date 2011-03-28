@@ -34,8 +34,9 @@ namespace ILWIS{
 		virtual void OnInsertMode() ;
 		virtual void OnMoveMode() ;
 		virtual void OnSelectMode() ;
+		virtual void OnSplitMode();
 		void prepare();
-		virtual void removeSelectedFeatures() {};
+		virtual void removeSelectedFeatures();
 		void setActive(bool yesno);
 
 
@@ -44,6 +45,8 @@ namespace ILWIS{
 		virtual bool insertFeature(UINT nFlags, CPoint point) = 0;
 		virtual bool insertVertex(UINT nFlags, CPoint point) { return false;}
 		virtual bool selectMove(UINT nFlags, CPoint point);
+		void OnUpdateMode(CCmdUI* pCmdUI);
+		virtual void setMode(BaseMapEditor::Mode m) ;
 
 		long iCoordIndex(const vector<Coord *>& coords, const Coord& c) const;
 		void addToSelectedFeatures(Feature *f, const Coord& crd, const vector<ILWIS::NewDrawer *>& drawers, int coordIndex=iUNDEF);
@@ -60,6 +63,7 @@ namespace ILWIS{
 		HelpTopic htpTopic;
 		String sHelpKeywords;
 		SetChecks *editModeItems;
+		zCursor curInsert, curEdit, curMove, curMoving;
 
 		DECLARE_MESSAGE_MAP()
 	};

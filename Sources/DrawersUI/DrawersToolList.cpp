@@ -58,6 +58,7 @@
 #include "AnimationManagementTool.h"
 #include "Client\FormElements\FormBasePropertyPage.h"
 #include "AnimationManagement.h"
+#include "LineSetEditor.h"
 
 using namespace ILWIS;
 
@@ -88,6 +89,7 @@ DrawerToolInfoVector *createDrawerTool() {
 	infos->push_back(new DrawerToolInfo("TransparencyTool",createTransparencyTool));
 	infos->push_back(new DrawerToolInfo("LineSetTool",createLineSetTool));
 	infos->push_back(new DrawerToolInfo("PointSetEditor",createPointSetEditor));
+	infos->push_back(new DrawerToolInfo("LineSetEditor",createLineSetEditor));
 	infos->push_back(new DrawerToolInfo("AnimationManagement",createAnimationManagementTool));
 
 	

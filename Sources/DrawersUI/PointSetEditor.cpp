@@ -46,6 +46,7 @@ BEGIN_MESSAGE_MAP(PointSetEditor, BaseMapEditor)
 	ON_UPDATE_COMMAND_UI(ID_MOVEMODE, OnUpdateMode)
 	ON_COMMAND(ID_INSERTMODE, OnInsertMode)
 	ON_UPDATE_COMMAND_UI(ID_INSERTMODE, OnUpdateMode)
+	//ON_WM_INITMENUPOPUP()
 //	ON_COMMAND(ID_FINDUNDEFS, OnFindUndefs)
 //	ON_UPDATE_COMMAND_UI(ID_FINDUNDEFS, OnUpdateMode)
 //	ON_COMMAND(ID_CONFIGURE, OnConfigure)
@@ -69,11 +70,7 @@ DrawerTool *createPointSetEditor(ZoomableView* zv, LayerTreeView *view, NewDrawe
 }
 
 PointSetEditor::PointSetEditor(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
-FeatureSetEditor("PointSetEditor", zv, view, drw),
-curEdit("EditCursor"), 
-curPntEdit("EditPntCursor"),
-curPntMove("EditPntMoveCursor"), 
-curPntMoving("EditPntMovingCursor") 
+FeatureSetEditor("PointSetEditor", zv, view, drw),crdFrm(0)
 {
 	iFmtPnt = RegisterClipboardFormat("IlwisPoints");
 	iFmtDom = RegisterClipboardFormat("IlwisDomain");
@@ -117,35 +114,35 @@ HTREEITEM PointSetEditor::configure( HTREEITEM parentItem) {
 	CMenu menSub;
 	men.CreateMenu();
 
-	addmen(ID_UNDOALL);
-	addmen(ID_FILE_SAVE);
-	addmen(ID_SEGSETBOUNDS);
-	men.AppendMenu(MF_SEPARATOR);
-	addmen(ID_CONFIGURE);
-	menSub.CreateMenu();
-	addSub(ID_FILE_DIGREF);
-	addSub(ID_DIGACTIVE);
-	men.AppendMenu(MF_POPUP, (UINT)menSub.GetSafeHmenu(), sMen(ID_DIG)); 
-	menSub.Detach();
-	addmen(ID_EXITEDITOR);
-	hmenFile = men.GetSafeHmenu();
-	men.Detach();
+	//addmen(ID_UNDOALL);
+	//addmen(ID_FILE_SAVE);
+	//addmen(ID_SEGSETBOUNDS);
+	//men.AppendMenu(MF_SEPARATOR);
+	//addmen(ID_CONFIGURE);
+	//menSub.CreateMenu();
+	//addSub(ID_FILE_DIGREF);
+	//addSub(ID_DIGACTIVE);
+	//men.AppendMenu(MF_POPUP, (UINT)menSub.GetSafeHmenu(), sMen(ID_DIG)); 
+	//menSub.Detach();
+	//addmen(ID_EXITEDITOR);
+	//hmenFile = men.GetSafeHmenu();
+	//men.Detach();
 
-	men.CreateMenu();
-	addmen(ID_CUT  );
-	addmen(ID_COPY );
-	addmen(ID_PASTE);
-	addmen(ID_CLEAR);
-	men.AppendMenu(MF_SEPARATOR);
-	addmen(ID_SELALL);
-	addmen(ID_EDIT);
-	addmen(ID_ADDPOINT);
-	men.AppendMenu(MF_SEPARATOR);
+	//men.CreateMenu();
+	//addmen(ID_CUT  );
+	//addmen(ID_COPY );
+	//addmen(ID_PASTE);
+	//addmen(ID_CLEAR);
+	//men.AppendMenu(MF_SEPARATOR);
+	//addmen(ID_SELALL);
+	//addmen(ID_EDIT);
+	//addmen(ID_ADDPOINT);
+	//men.AppendMenu(MF_SEPARATOR);
 	addmen(ID_SELECTMODE);
 	addmen(ID_MOVEMODE);
 	addmen(ID_INSERTMODE);
-	men.AppendMenu(MF_SEPARATOR);
-	addmen(ID_FINDUNDEFS);
+	//men.AppendMenu(MF_SEPARATOR);
+	//addmen(ID_FINDUNDEFS);
 	hmenEdit = men.GetSafeHmenu();
 	men.Detach();
 
@@ -154,6 +151,7 @@ HTREEITEM PointSetEditor::configure( HTREEITEM parentItem) {
 		dw->bbDataWindow.LoadButtons("pntedit.but");
 		dw->RecalcLayout();
 		mdoc->mpvGetView()->mwParent()->UpdateMenu(hmenFile, hmenEdit);
+		//mdoc->mpvGetView()->UpdateWindow();
 	}
 	return htiNode;
 }
@@ -205,9 +203,13 @@ String PointSetEditor::sTitle() const
 //	Mode(mode == BaseMapEditor::mSELECT ? BaseMapEditor::mUNKNOWN : BaseMapEditor::mSELECT);
 //}
 
+
+
 void PointSetEditor::OnUpdateMode(CCmdUI* pCmdUI)
 {
 	BOOL fCheck;
+
+	pCmdUI->SetRadio(FALSE);
 	switch (pCmdUI->m_nID) {
 		case ID_SELECTMODE:
 			fCheck = (BaseMapEditor::mSELECT & mode) != 0;
@@ -218,38 +220,10 @@ void PointSetEditor::OnUpdateMode(CCmdUI* pCmdUI)
 		case ID_INSERTMODE:
 			fCheck = (BaseMapEditor::mINSERT & mode) != 0;
 			break;
-		//case ID_FINDUNDEFS:
-		//	pCmdUI->SetCheck(fFindUndefs);
-			return;
+		return;
 	}
-	//if (0 != mpv->as)
-	//	fCheck = false;
 	pCmdUI->SetRadio(fCheck);
 }
-
-void PointSetEditor::setMode(BaseMapEditor::Mode m) 
-{
-	//if (mode != mSELECT)
-	//	clear();
-	switch (m) {
-	case mSELECT:
-		curActive = curEdit;
-		break;
-	case mMOVE:
-		curActive = curPntMove;
-		break;
-	case mMOVING:
-		curActive = curPntMoving;
-		break;
-	case mINSERT:
-		curActive = curPntEdit;
-		break;
-	}
-	mode = m;
-	OnSetCursor();
-}
-
-
 
 void PointSetEditor::OnCopy()
 {
@@ -367,15 +341,53 @@ void PointSetEditor::updateFeature(SelectedFeature *f) {
 	}
 }
 
-void PointSetEditor::removeSelectedFeatures() {
-	for(SFMIter cur = selectedFeatures.begin(); cur != selectedFeatures.end(); ++cur) {
-		SelectedFeature *sfeature = (*cur).second;
-		bmapptr->removeFeature(sfeature->feature->getGuid(), sfeature->selectedCoords);
-		((ComplexDrawer *)drawer)->removeDrawer(sfeature->drawers[0]->getId());
+//void PointSetEditor::removeSelectedFeatures() {
+//	for(SFMIter cur = selectedFeatures.begin(); cur != selectedFeatures.end(); ++cur) {
+//		SelectedFeature *sfeature = (*cur).second;
+//		bmapptr->removeFeature(sfeature->feature->getGuid(), sfeature->selectedCoords);
+//		((ComplexDrawer *)drawer)->removeDrawer(sfeature->drawers[0]->getId());
+//
+//	}
+//	selectedFeatures.clear();
+//	currentCoordIndex = iUNDEF;
+//	currentGuid = sUNDEF;
+//}
 
+void PointSetEditor::OnLButtonDblClk(UINT nFlags, CPoint point){
+	Coord crd = mdoc->rootDrawer->screenToWorld(RowCol(point.y, point.x));
+	vector<Geometry *> geometries = bmapptr->getFeatures(crd);
+	for(int i = 0; i < geometries.size(); ++i) {
+		Feature *f = CFEATURE(geometries[i]);
+		if ( f) {
+			for(SFMIter cur = selectedFeatures.begin(); cur != selectedFeatures.end(); ++cur) {
+				Feature *fselected = (*cur).second->feature;
+				if ( fselected->getGuid() == f->getGuid()) {
+					if (!crdFrm) {
+						ComplexDrawer *cdrw = (ComplexDrawer *)getDrawer();
+						crdFrm = new CoordForm(tree, cdrw,fselected);
+					}
+					else
+						crdFrm->ShowWindow(SW_SHOW);
+				}
+			}
+		}
 	}
-	selectedFeatures.clear();
-	currentCoordIndex = iUNDEF;
-	currentGuid = sUNDEF;
+}
+//-------------------------------------
+CoordForm::CoordForm(CWnd *wPar, ComplexDrawer *dr, Feature *feature) : DisplayOptionsForm(dr,wPar,TR("Coordinate(s)")){
+	pnt = CPOINT(feature);
+	crd = *pnt->getCoordinate();
+	fc = new FieldCoord(root,TR("Coordinate"),&crd);
+	create();
 }
 
+void CoordForm::apply() {
+	fc->StoreData();
+	pnt->setCoord(crd);
+	PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER, ((SetDrawer *)drw)->getCoordSystem());
+	drw->prepare(&pp);
+
+	this->ShowWindow(SW_HIDE);
+
+	updateMapView();
+}

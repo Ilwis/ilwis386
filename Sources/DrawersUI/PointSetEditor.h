@@ -6,6 +6,7 @@ class BaseMap;
 DrawerTool *createPointSetEditor(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw);
 
 namespace ILWIS {
+	class CoordForm;
 	class _export PointSetEditor : public FeatureSetEditor {
 	public:
 		PointSetEditor(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw);
@@ -16,7 +17,7 @@ namespace ILWIS {
 		HTREEITEM configure( HTREEITEM parentItem);
 		bool isToolUseableFor(ILWIS::DrawerTool *tool);
 		String getMenuString() const;
-		void removeSelectedFeatures();
+		//void removeSelectedFeatures();
 		void OnCopy();
 		//void OnInsertMode();
 		void OnUpdateMode(CCmdUI* pCmdUI);
@@ -24,16 +25,27 @@ namespace ILWIS {
 		//void OnSelectMode();
 		void OnContextMenu(CWnd* pWnd, CPoint point);
 		void updateFeature(SelectedFeature *f);
-		//bool OnLButtonUp(UINT nFlags, CPoint point);
+		void OnLButtonDblClk(UINT nFlags, CPoint point);
 
-		void setMode(BaseMapEditor::Mode m) ;
+
 		String sTitle() const;
 		zIcon icon() const;
 		int iFmtPnt, iFmtDom;
 		zCursor curEdit, curPntEdit, curPntMove, curPntMoving;
 
 		vector<Coord *> coords;
+		CoordForm *crdFrm;
 
 		DECLARE_MESSAGE_MAP()
+	};
+
+	class CoordForm : public DisplayOptionsForm {
+	public:
+		CoordForm(CWnd *wPar, ComplexDrawer *dr, Feature *f);
+		void apply(); 
+	private:
+		Coord crd;
+		ILWIS::Point *pnt;
+		FieldCoord *fc;
 	};
 }

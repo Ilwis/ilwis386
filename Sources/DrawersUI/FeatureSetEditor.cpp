@@ -39,7 +39,7 @@ BEGIN_MESSAGE_MAP(FeatureSetEditor, BaseMapEditor)
 	//ON_COMMAND(ID_CUT, OnCut)
 	// ON_UPDATE_COMMAND_UI(ID_CUT, OnUpdateCopy)
 	//ON_COMMAND(ID_SELECTMODE, OnSelectMode)
-//	ON_UPDATE_COMMAND_UI(ID_SELECTMODE, OnUpdateMode)
+	//ON_UPDATE_COMMAND_UI(ID_SELECTMODE, OnUpdateMode)
 	//ON_COMMAND(ID_MOVEMODE, OnMoveMode)
 	//ON_UPDATE_COMMAND_UI(ID_MOVEMODE, OnUpdateMode)
 	//ON_COMMAND(ID_INSERTMODE, OnInsertMode)
@@ -66,7 +66,12 @@ FeatureSetEditor::FeatureSetEditor(const String& tp,  ZoomableView* zv, LayerTre
 	currentGuid(sUNDEF),
 	mode(BaseMapEditor::mUNKNOWN),
 	setdrawer((ComplexDrawer *)drw),
-	bmapptr(0)
+	bmapptr(0),
+	curInsert("EditEditCursor"),
+	curEdit("EditPntCursor"),
+	curMove("EditPntMoveCursor"), 
+	curMoving("EditPntMovingCursor"),
+	mdoc(0)
 { 
 	AbstractMapDrawer *amdrw = dynamic_cast<AbstractMapDrawer *>(drw->getParentDrawer());
 	if ( amdrw) {
@@ -96,15 +101,15 @@ HTREEITEM FeatureSetEditor::configure( HTREEITEM parentItem) {
 	DisplayOptionRadioButtonItem *item = new DisplayOptionRadioButtonItem(TR("Select"), tree,parentItem,drawer);
 	item->setState(true);
 	item->setCheckAction(this,editModeItems,0); 
-	insertItem("Select","Bitmap", item);
+	insertItem(TR("Select"),"Bitmap", item);
 	item = new DisplayOptionRadioButtonItem(TR("Insert"), tree,parentItem,drawer);
 	item->setState(false);
 	item->setCheckAction(this,editModeItems,0);
-	insertItem("Insert","Bitmap", item);
+	insertItem(TR("Insert"),"Bitmap", item);
 	item = new DisplayOptionRadioButtonItem(TR("Move"), tree,parentItem,drawer);
 	item->setState(false);
 	item->setCheckAction(this,editModeItems,0); 
-	insertItem("Move","Bitmap", item);
+	insertItem(TR("Move"),"Bitmap", item);
 	DrawerTool::configure(htiNode);
 
 
@@ -124,6 +129,8 @@ void FeatureSetEditor::setcheckEditMode(void *value) {
 		OnInsertMode();
 	} else if ( choice == 2) {
 		OnMoveMode();
+	} else if ( choice == 3) {
+		OnSplitMode();
 	}
 	mdoc->mpvGetView()->iActiveTool = getId();
 	setActive(true);
@@ -150,15 +157,14 @@ void FeatureSetEditor::prepare() {
 bool FeatureSetEditor::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags){
 
 	if (  nChar == VK_RETURN) {
-		mode -= mMOVING;
+		mode = mode & ~mMOVING;
 		clear();
 		return true;
 	}
 	if ( nChar == VK_DELETE && hasSelection()) {
 		if ( MessageBox(tree->m_hWnd, TR("Remove selected point(s)?").scVal(),TR("Delete").scVal(), MB_YESNO) == IDYES  ) {
 			removeSelectedFeatures();
-		/*	PreparationParameters p(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER,bmapptr->cs());
-			drawer->prepare(&p);*/
+	
 			mpvGetView()->Invalidate();
 		}
 		return true;
@@ -176,6 +182,7 @@ void FeatureSetEditor::clear() {
 	}
 	selectedFeatures.clear();
 	currentCoordIndex = iUNDEF;
+	TRACE("cur ind undef\n");
 	currentGuid = sUNDEF;
 }
 
@@ -204,7 +211,7 @@ void FeatureSetEditor::addToSelectedFeatures(Feature *f, const Coord& crd, const
 
 	if ( currentCoordIndex == iUNDEF)
 		return;
-
+	TRACE(String("cur ind1 %d\n", currentCoordIndex).scVal());
 	vector<int>::iterator loc = find(sf->selectedCoords.begin(), 
 									 sf->selectedCoords.end(), 
 									 currentCoordIndex);
@@ -212,12 +219,14 @@ void FeatureSetEditor::addToSelectedFeatures(Feature *f, const Coord& crd, const
 	if (  loc == sf->selectedCoords.end()){
 		sf->selectedCoords.push_back(currentCoordIndex);
 		for(int i=0; i < sf->drawers.size(); ++i) {
-			vector<Coord> coords;
+			vector<int> coords;
 			for(int c=0; c < sf->selectedCoords.size(); ++c) {
-				Coord crd = *(sf->coords.at(sf->selectedCoords.at(c)));
-				coords.push_back(crd);
+				int ind = sf->selectedCoords.at(c);
+				if ( ind < sf->coords.size()) {
+					coords.push_back(ind);
+				}
 			}
-			sf->drawers[i]->setSpecialDrawingOptions(NewDrawer::sdoSELECTED,true, &coords);
+			sf->drawers[i]->setSpecialDrawingOptions(NewDrawer::sdoSELECTED,true, coords);
 		}
 	} else {
 		sf->selectedCoords.erase(loc);
@@ -231,9 +240,11 @@ bool FeatureSetEditor::selectMove(UINT nFlags, CPoint point) {
 
 	Coord crd = mdoc->rootDrawer->screenToWorld(RowCol(point.y, point.x));
 	vector<Geometry *> geometries = bmapptr->getFeatures(crd);
-	if ( geometries.size() > 0) {
-		Feature *f = CFEATURE(geometries[0]);
-		currentGuid = f->getGuid();
+	if ( geometries.size() > 0 || currentGuid != "") {
+		if ( geometries.size() > 0) {
+			Feature *f = CFEATURE(geometries[0]);
+			currentGuid = f->getGuid();
+		}
 		SFMIter cur = selectedFeatures.find(currentGuid);
 		if ( cur == selectedFeatures.end()) { // other feature selected, clear all selections and select new feature
 			clear();
@@ -241,6 +252,7 @@ bool FeatureSetEditor::selectMove(UINT nFlags, CPoint point) {
 		}
 		SelectedFeature *sf = (*cur).second;
 		currentCoordIndex = iCoordIndex(sf->coords,crd);
+		TRACE(String("cur ind2 %d\n", currentCoordIndex).scVal());
 		vector<int>::iterator cur2 = find(sf->selectedCoords.begin(), sf->selectedCoords.end(), currentCoordIndex);
 		if ( currentCoordIndex == iUNDEF || cur2 == sf->selectedCoords.end()) { // selected other point, not in the selection, clear selection and select a new one
 			sf->selectedCoords.clear();
@@ -288,10 +300,40 @@ bool FeatureSetEditor::select(UINT nFlags, CPoint point) {
 
 }
 
+void FeatureSetEditor::setMode(BaseMapEditor::Mode m) 
+{
+	int selectedIndex = editModeItems->getState();
+	switch (m) {
+	case mSELECT:
+		curActive = curEdit;
+		if ( selectedIndex != 0) {
+			editModeItems->checkItem(0);
+		}
+		break;
+	case mMOVE:
+		curActive = curMove;
+		if ( selectedIndex != 2) {
+			editModeItems->checkItem(2);
+		}
+		break;
+	case mMOVING:
+		curActive = curMoving;
+		break;
+	case mINSERT:
+		curActive = curInsert;
+		if ( selectedIndex != 1) {
+			editModeItems->checkItem(1);
+		}
+		break;
+	}
+	mode = m;
+	OnSetCursor();
+}
+
 void FeatureSetEditor::OnLButtonDown(UINT nFlags, CPoint point){
 
 	// nothing to do
-	if ( mode & mUNKNOWN)
+	if ( mode == mUNKNOWN)
 		return ;
 
 	// select vertex or feature at current location
@@ -304,7 +346,7 @@ void FeatureSetEditor::OnLButtonDown(UINT nFlags, CPoint point){
 		else {
 			// insert a new vertex in the feature; if not possible, the editing has ended for this feature.
 			if ( !insertVertex(nFlags, point)) {
-				mode -= mMOVING;
+				mode = mode & ~mMOVING;
 				clear();
 			}
 		}
@@ -329,7 +371,7 @@ void FeatureSetEditor::OnLButtonUp(UINT nFlags, CPoint point){
 				updateFeature(f);
 			}
 			bmapptr->fChanged = true;
-			mode -= mMOVING;
+			mode = mode & ~mMOVING;
 		}
 	} else
 		return ;
@@ -348,12 +390,15 @@ void FeatureSetEditor::OnMouseMove(UINT nFlags, CPoint point){
 
 	Coord crd = mdoc->rootDrawer->screenToWorld(RowCol(point.y, point.x));
 	if ( currentCoordIndex != iUNDEF && currentGuid != sUNDEF) {
-		Coord cDelta(*(selectedFeatures[currentGuid]->coords[currentCoordIndex]));
-		cDelta -= crd;
-		for(SFMIter cur = selectedFeatures.begin(); cur != selectedFeatures.end(); ++cur) {
-			vector<Coord *> &coords = (*cur).second->coords;
-			for(int i = 0; i < (*cur).second->selectedCoords.size(); ++i){
-				*(coords[(*cur).second->selectedCoords[i]]) -= cDelta;
+		SelectedFeature *sf = selectedFeatures[currentGuid];
+		if ( sf && currentCoordIndex < sf->coords.size()) {
+			Coord cDelta(*(sf->coords[currentCoordIndex]));
+			cDelta -= crd;
+			for(SFMIter cur = selectedFeatures.begin(); cur != selectedFeatures.end(); ++cur) {
+				vector<Coord *> &coords = (*cur).second->coords;
+				for(int i = 0; i < (*cur).second->selectedCoords.size(); ++i){
+					*(coords[(*cur).second->selectedCoords[i]]) -= cDelta;
+				}
 			}
 		}
 		mdoc->mpvGetView()->Invalidate();
@@ -430,10 +475,60 @@ void FeatureSetEditor::OnSelectMode()
 	setMode(mode == BaseMapEditor::mSELECT ? BaseMapEditor::mUNKNOWN : BaseMapEditor::mSELECT);
 }
 
+void FeatureSetEditor::OnSplitMode()
+{
+	setMode(mode == BaseMapEditor::mSPLIT ? BaseMapEditor::mUNKNOWN : BaseMapEditor::mSPLIT);
+}
+
 void FeatureSetEditor::setActive(bool yesno) {
 	BaseMapEditor::setActive(yesno);
 	editModeItems->setActive(yesno);
 }
+
+void FeatureSetEditor::OnUpdateMode(CCmdUI* pCmdUI)
+{
+	BOOL fCheck;
+	switch (pCmdUI->m_nID) {
+		case ID_SELECTMODE:
+			fCheck = (BaseMapEditor::mSELECT & mode) != 0;
+			break;
+		case ID_MOVEMODE:
+			fCheck = (BaseMapEditor::mMOVE & mode) != 0;
+			break;
+		case ID_INSERTMODE:
+			fCheck = (BaseMapEditor::mINSERT & mode) != 0;
+			break;
+		//case ID_FINDUNDEFS:
+		//	pCmdUI->SetCheck(fFindUndefs);
+			return;
+	}
+	//if (0 != mpv->as)
+	//	fCheck = false;
+	pCmdUI->SetRadio(fCheck);
+}
+
+void FeatureSetEditor::removeSelectedFeatures() {
+	for(SFMIter cur = selectedFeatures.begin(); cur != selectedFeatures.end(); ++cur) {
+		SelectedFeature *sfeature = (*cur).second;
+		bmapptr->removeFeature(sfeature->feature->getGuid(), sfeature->selectedCoords);
+		bool removed = false;
+		if ( sfeature->feature->getGuid() == currentGuid) {
+			if ( sfeature->selectedCoords.size() == 0 || sfeature->selectedCoords.size() == sfeature->coords.size()) {
+				((ComplexDrawer *)drawer)->removeDrawer(sfeature->drawers[0]->getId());
+				currentGuid = sUNDEF;
+				removed = true;
+			}
+		}
+		if ( !removed) {
+			PreparationParameters p(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER,bmapptr->cs());
+			sfeature->drawers[0]->prepare(&p);
+		}
+
+	}
+	selectedFeatures.clear();
+	currentCoordIndex = iUNDEF;
+}
+
 
 
 

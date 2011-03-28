@@ -1,4 +1,5 @@
 #include "Client\Headers\formelementspch.h"
+#include "Engine\Base\Round.h"
 #include "Client\FormElements\fldcol.h"
 #include "client\formelements\fldrpr.h"
 #include "client\formelements\fentvalr.h"
@@ -69,12 +70,21 @@ void LegendTool::insertLegendItemsValue(const Representation& rpr, const DomainV
 		if (iSteps <= 11)
 			iItems = iSteps;
 	}
-	for (int i = 0; i < iItems; ++i) {
-		double rMaxItem = iItems - 1;
-		double rVal = rr.rLo() + i / rMaxItem * rr.rWidth();
-		String sName = dvs.sValue(rVal, 0);
+	RangeReal rmd = roundRange(rr.rLo(), rr.rHi());
+	double rVal = rRound(rmd.rWidth()/ iItems);
+	double rStart = rRound(rmd.rLo());
+	double rHi = rmd.rHi() + rVal;
+	if (dvs.rValue(rHi) == rUNDEF)
+		rHi = rmd.rHi();
+	bool fImage = dvs.dm()->pdi();
+
+	for (double v = rStart; v <= rHi; v += rVal) {
+		String sName = dvs.sValue(v);
 		HTREEITEM hti = tree->GetTreeCtrl().InsertItem(sName.scVal(), htiNode);
-		tree->GetTreeCtrl().SetItemData(hti, (DWORD_PTR)new LegendValueLayerTreeItem(tree, drawer, dvs, rVal));		
+		if ( fImage && v + rVal > 255) {
+			v = 255;
+		}
+		tree->GetTreeCtrl().SetItemData(hti, (DWORD_PTR)new LegendValueLayerTreeItem(tree, drawer, dvs, v));		
 	}
 }
 
