@@ -195,14 +195,17 @@ void RecItem::updateView(const IlwisObject& obj) {
 		IlwisDocument *idoc = dynamic_cast<IlwisDocument *>(*cur);
 		if ( idoc) {
 			if(idoc->usesObject(obj)) {
-				// for the moment not, this is a far to expensive operation for the updayte of a cell of the pixview
-				/*MapCompositionDoc *mdoc = dynamic_cast<MapCompositionDoc *>(idoc);
+				MapCompositionDoc *mdoc = dynamic_cast<MapCompositionDoc *>(idoc);
 				if ( mdoc) {
-					NewDrawer *drw = mdoc->getDrawerFor(obj);
-					ILWIS::PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER);
-					drw->prepare(&pp);
-				}*/
-				idoc->UpdateAllViews(0,2);
+					ILWIS::PreparationParameters pp(NewDrawer::ptRENDER);
+					if ( associatedDrawerTool) {
+						NewDrawer *drw = associatedDrawerTool->getDrawer();
+						drw->prepare(&pp);
+						mdoc->mpvGetView()->Invalidate();
+					}
+
+				}
+				//idoc->UpdateAllViews(0,2);
 			}
 		}
 	}
@@ -505,9 +508,11 @@ void RecItemColumn::PutVal(const String& s) {
 	//if ( !fAllowEdit())
 	//	return;
 	_col->PutVal(iRec, s);
+	_col->fChanged = true;
 	iVal = _col->dvrs().iRaw(s);
 	sVal = s;
 	Table tbl(_col->fnTbl);
+	tbl->fChanged = true;
 	updateView(tbl);
 }
 
@@ -679,6 +684,10 @@ void RecItemCoord::SetValue(const CoordWithCoordSystem& c)
 {
 	cwcs = c;
 	RecItem::Changed();
+}
+
+void RecItemCoord::setAssociatedDrawerTool(DrawerTool *drw, const String& targetName) {
+	RecItem::setAssociatedDrawerTool(drw, targetName);
 }
 
 RecItemCoordSystem::RecItemCoordSystem(RecItem* parent, const CoordSystem& cs)

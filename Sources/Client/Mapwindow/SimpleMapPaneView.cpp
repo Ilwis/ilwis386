@@ -526,6 +526,8 @@ BOOL SimpleMapPaneView::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDL
 {
 	if (edit && edit->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
 		return TRUE;
+	if ( tools.OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
+		return TRUE;
 	return ZoomableView::OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
 }
 

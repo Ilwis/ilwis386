@@ -1136,6 +1136,16 @@ void MapTools::OnRButtonUp(UINT nFlags, CPoint point, int state){
 	}
 }
 
+BOOL MapTools::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo) {
+	BOOL routed = FALSE;
+	for(map<int, MapPaneViewTool *>::iterator cur = begin(); cur != end(); ++cur) {
+		if ( (*cur).second->isActive()) {
+			routed |= (*cur).second->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
+		}
+	}
+	return routed;
+}
+
 void MapTools::OnEscape() {
 	for(map<int, MapPaneViewTool *>::iterator cur = begin(); cur != end(); ++cur) {
 		if ( (*cur).second->isActive())

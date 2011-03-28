@@ -180,7 +180,7 @@ BOOL WinThread::InitInstance()
 
 		CDocument* doc = 0;
 		if (m_pDocTemplate)
-			doc = m_pDocTemplate->OpenDocumentFile(sFile, ot);
+			doc = m_pDocTemplate->OpenDocumentFile(sFile, true);
 		else if (m_pDocManager && parms.iSize() > 0 )			
 			doc = OpenDocumentFile(m_pDocManager, sFile, parms);
 		else if (m_pDocManager)	

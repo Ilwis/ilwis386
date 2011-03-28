@@ -193,6 +193,8 @@ public:
   virtual const CoordWithCoordSystem& crdValue();
   virtual void SetValue(const char*);
   void SetValue(const CoordWithCoordSystem&);
+  void setAssociatedDrawerTool(ILWIS::DrawerTool *drw, const String& targetName);
+
 //bool fContinual() { return fContinuous; }
 //void Continual(bool fCont) { fContinuous = fCont; }
 protected:

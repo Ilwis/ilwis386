@@ -234,6 +234,8 @@ public:
 	~SetChecks();
 	void addItem(HTREEITEM hti);
 	void checkItem(HTREEITEM hti);
+	void checkItem(int index);
+
 	int getState() const { return state; }
 	void setActive(bool yesno);
 private:

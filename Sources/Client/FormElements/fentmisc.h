@@ -449,11 +449,13 @@ class FieldCoord: public FormEntry
 {
 public:
 	FieldCoord(FormEntry* parent, const String& sQuestion, Parm *prm);
-	_export FieldCoord(FormEntry* parent, const String& sQuestion, Coord *crd);
+	_export FieldCoord(FormEntry* parent, const String& sQuestion, Coord *crd, bool _is3D=false, const ValueRange& _range3dV=ValueRange());
 	_export ~FieldCoord();
 	void SetVal(const Coord& crd)
 	{ frX->SetVal(crd.x);
-	frY->SetVal(crd.y); }
+	frY->SetVal(crd.y);
+	if(is3D && frZ) frZ->SetVal(crd.z);
+	}
 	Coord _export crdVal();        // current value
 	//  void Show(int sw);         // overriden
 	FormEntry* CheckData();    // overriden
@@ -464,38 +466,47 @@ public:
 	{
 		frX->SetReadOnly(fVal);
 		frY->SetReadOnly(fVal);
+		if(is3D && frZ) frZ->SetReadOnly(fVal);
 	}	
 	void setHelpItem(const HelpTopic& htp) // overriden
 	{ frX->setHelpItem(htp); frY->setHelpItem(htp); }
 	void SetCallBack(NotifyProc np) // overriden
-	{ FormEntry::SetCallBack(np); frX->SetCallBack(np); frY->SetCallBack(np); }
+	{ FormEntry::SetCallBack(np); frX->SetCallBack(np); frY->SetCallBack(np);  if(is3D && frZ) frZ->SetCallBack(np);}
 	void SetCallBack(NotifyProc np, CallBackHandler* cb)
-	{ FormEntry::SetCallBack(np,cb); frX->SetCallBack(np,cb); frY->SetCallBack(np,cb); }
+	{ FormEntry::SetCallBack(np,cb); frX->SetCallBack(np,cb); frY->SetCallBack(np,cb);  if(is3D && frZ) frZ->SetCallBack(np, cb);}
 	void SetWidth(short iWidth);
 	String sGetText();
 	void setNotifyFocusChange(CallBackHandler* evh, NotifyProc np)
 	{ frX->setNotifyFocusChanged(evh, np);
-	frY->setNotifyFocusChanged(evh, np); }
+	frY->setNotifyFocusChanged(evh, np);
+	if(is3D && frZ) frZ->setNotifyFocusChanged(evh, np);}
 	void removeNotifyFocusChange(CallBackHandler* evh, NotifyProc np)
 	{ frX->removeNotifyFocusChange(evh);
-	frY->removeNotifyFocusChange(evh); }
+	frY->removeNotifyFocusChange(evh); 
+	if(is3D && frZ) frZ->removeNotifyFocusChange(evh);}
 	bool _export fIncludesHandle(HANDLE hnd);
 	void SetStyle(unsigned int iStyle)
 	{
 		frX->SetStyle(iStyle);
 		frY->SetStyle(iStyle);
+		if (is3D && frZ)
+			frZ->SetStyle(iStyle);
 	}
-	void _export SetStepSize(double rStep)
+	void _export SetStepSize(double rStep, double rStepZ=rUNDEF)
 	{
 		frX->SetStepSize(rStep);
 		frY->SetStepSize(rStep);
+		if (is3D && frZ)
+			frZ->SetStepSize(rStepZ);
 	}
 private:
 	void Init(const String& sQuestion);
 	StaticTextSimple *st;
-	FieldRealSimple *frX, *frY;    // coord consists of two form entries
+	FieldRealSimple *frX, *frY, *frZ;    // coord consists of two form entries
 	Coord *_crd;
 	Coord crd;
+	bool is3D;
+	ValueRange vr3D;
 };
 
 class RadioGroup;

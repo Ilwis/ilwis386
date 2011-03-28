@@ -49,6 +49,7 @@
 #include "Client\TableWindow\BaseTablePaneView.h"
 #include "Client\Mapwindow\MapStatusBar.h"
 #include "Client\Mapwindow\OverviewMapPaneView.h"
+#include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Headers\Hs\Mapwind.hs"
 
 #ifdef _DEBUG
@@ -70,6 +71,7 @@ BEGIN_MESSAGE_MAP(MapWindow, DataWindow)
 	ON_WM_GETMINMAXINFO()
 	ON_WM_INITMENU()
 	ON_MESSAGE(ILW_UPDATE, OnUpdate)
+	ON_WM_INITMENUPOPUP()
 	ON_COMMAND(ID_LAYERMANAGE, OnLayerManagement)
 	ON_COMMAND(ID_OVERVIEW, OnOverviewWindow)
 	ON_COMMAND(ID_SCALECONTROL, OnScaleControl)

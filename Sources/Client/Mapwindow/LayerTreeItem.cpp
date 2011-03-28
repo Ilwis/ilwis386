@@ -934,3 +934,10 @@ void SetChecks::checkItem(HTREEITEM hti) {
 	tv->Invalidate();
 	tv->UpdateWindow();
 }
+
+void SetChecks::checkItem(int index) {
+	if ( checkedItems.size() > index) {
+		HTREEITEM hti = checkedItems[index];
+		checkItem(hti);
+	}
+}
