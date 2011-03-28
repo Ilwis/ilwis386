@@ -399,7 +399,7 @@ bool MapCluster::fFreezing()
     
     trq.SetText(SMAPTextCalcCompHist);
     trq.SetTitle(sFreezeTitle);
-    trq.SetHelpTopic(htpFreeze);
+    trq.setHelpItem(htpFreeze);
 
     // Calculate the feature space histogram
     // and assign the featurespace index to each

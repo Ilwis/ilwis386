@@ -216,7 +216,7 @@ bool MapInterpolContour::fFreezing()
 {
 	mp->Calc();
   trq.SetTitle(sFreezeTitle);
-  trq.SetHelpTopic(htpFreeze);
+  trq.setHelpItem(htpFreeze);
   FileName filen=FileName::fnUnique(FileName("ic.tmp"));
   filTemp = new File(filen, facCRT);
 	if ( filTemp == NULL || filTemp->m_hFile == CFile::hFileNull)

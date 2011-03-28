@@ -212,7 +212,7 @@ bool MapHeckbert::fFreezing()
   unsigned int iIndex;
   trq.SetText(SMAPTextCalcCompHist);
   trq.SetTitle(sFreezeTitle);
-  trq.SetHelpTopic(htpFreeze);
+  trq.setHelpItem(htpFreeze);
   for (l=0; l<iLines; l++) {
     if (l % 10 == 0) {
       if (trq.fUpdate(l, iLines)) 

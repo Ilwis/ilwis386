@@ -195,7 +195,7 @@ void MapClassify::Init()
     }
   }
   trq.SetTitle(sFreezeTitle);
-  trq.SetHelpTopic(htpFreeze);
+  trq.setHelpItem(htpFreeze);
 }
 
 void MapClassify::Store()

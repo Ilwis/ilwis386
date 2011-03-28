@@ -287,7 +287,7 @@ bool MapMaplistStatistics::fFreezing()
 
     trq.SetText("Calculating maplist statistics"); //SMAPTextCalcCompHist);
     trq.SetTitle(sFreezeTitle);
-    trq.SetHelpTopic(htpFreeze);
+    trq.setHelpItem(htpFreeze);
 
     // Make sure we have the correct domain and function
     Map firstBand = mpl->map(mpl->iLower());
