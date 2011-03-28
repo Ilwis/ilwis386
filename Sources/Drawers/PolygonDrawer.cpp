@@ -48,16 +48,16 @@ bool PolygonDrawer::draw( const CoordBounds& cbArea) const{
 	if ( is3D) {
 		glPushMatrix();
 		glScaled(1,1,zscale);
-		glTranslated(0,0,zoffset);
+		glTranslated(0,0,zoffset + z0);
 	}
 	double tr = (1.0 - drawColor.transparencyP()) * getTransparency() * areaTransparency;
 	glColor4f(drawColor.redP(),drawColor.greenP(), drawColor.blueP(), tr);
 	if ( asQuad && showArea) {
 		glBegin(GL_QUADS);
-		glVertex3d(cb.cMin.x, cb.cMin.y, z0);
-		glVertex3d(cb.cMin.x, cb.cMax.y, z0);
-		glVertex3d(cb.cMax.x, cb.cMax.y, z0);
-		glVertex3d(cb.cMax.x, cb.cMin.y, z0);
+		glVertex3d(cb.cMin.x, cb.cMin.y, 0);
+		glVertex3d(cb.cMin.x, cb.cMax.y, 0);
+		glVertex3d(cb.cMax.x, cb.cMax.y, 0);
+		glVertex3d(cb.cMax.x, cb.cMin.y, 0);
 		glEnd();
 	} else {
 	for(int i=0; i < triangleStrips.size() && showArea; ++i){
@@ -80,7 +80,7 @@ bool PolygonDrawer::draw( const CoordBounds& cbArea) const{
 	return true;
 }
 
-void PolygonDrawer::setSpecialDrawingOptions(int option, bool add, vector<Coord>* coords){
+void PolygonDrawer::setSpecialDrawingOptions(int option, bool add, const vector<int>& coords){
 	SimpleDrawer::setSpecialDrawingOptions(option,add,coords);
 	if ( boundary)
 		boundary->setSpecialDrawingOptions(option, add, coords);
