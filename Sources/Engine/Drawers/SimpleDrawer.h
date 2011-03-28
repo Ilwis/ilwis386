@@ -38,7 +38,7 @@ namespace ILWIS {
 		virtual void timedEvent(UINT timerid) {};
 		virtual String description() const { return "?";}
 		virtual String iconName(const String& subtype="?") const { return "?";}
-		void setSpecialDrawingOptions(int option, bool add, vector<Coord>* coords=NULL); 
+		void setSpecialDrawingOptions(int option, bool add, const vector<int>& coords=vector<int>()); 
 		int getSpecialDrawingOption(int opt=sdoNone) const; 
 		String store(const FileName& fnView, const String& parenSection) const { return parenSection;}
 		void load(const FileName& fnView, const String& parenSection) {};

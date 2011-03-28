@@ -9,7 +9,7 @@ using namespace ILWIS;
 
 #define DEFAULT_SCALE 1.0
 
-ZValueMaker::ZValueMaker()  : scalingType(zvsNONE), self(true),threeDPossible(false),offset(0), zscale(DEFAULT_SCALE), zOrder(0), fakeZ(0){
+ZValueMaker::ZValueMaker()  : scalingType(zvsNONE), self(true),threeDPossible(false),offset(0), zscale(DEFAULT_SCALE), zOrder(0), fakeZ(0), isSameCsy(true){
 }
 void ZValueMaker::setDataSourceMap(const BaseMap& mp){
 	threeDPossible =  mp->dm()->dmt() == dmtVALUE || mp->dm()->dmt() == dmtIMAGE;
@@ -18,9 +18,14 @@ void ZValueMaker::setDataSourceMap(const BaseMap& mp){
 	RangeReal tempRange = mp->dvrs().rrMinMax();
 	if ( tempRange.fValid())
 		range = tempRange;
+	if ( !range.fValid() && cbLimits.fValid()) {
+		range = RangeReal(0,min(cbLimits.width(), cbLimits.height()));
+	}
+
 	type = IlwisObject::iotObjectType(datasourcemap->fnObj);
 	self =  spatialsourcemap == datasourcemap;
 	offset = 0;
+	isSameCsy = spatialsourcemap->cs() == datasourcemap->cs();
 	zscale = DEFAULT_SCALE;
 }
 
@@ -111,8 +116,13 @@ double ZValueMaker::getValue(const Coord& crd, Feature *f ){
 	if (self && type == IlwisObject::iotRASMAP){
 		value = spatialsourcemap->rValue(crd);
 	}
-	if ( type == IlwisObject::iotRASMAP)
-		value = datasourcemap->rValue(crd);
+	if ( type == IlwisObject::iotRASMAP) {
+		Coord c = crd;
+		if (!isSameCsy) {
+			c = datasourcemap->cs()->cConv( spatialsourcemap->cs(), c);
+		}
+		value = datasourcemap->rValue(c);
+	}
 	if (table.fValid()) {
 		value =  columns[0]->rValue(f->iValue());
 	}

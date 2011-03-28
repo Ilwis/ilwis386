@@ -158,7 +158,7 @@ void PointMapStore::Store()
 	colVal->SetOwnedByTable(true);
 	colVal->SetDescription("Point name/value");
 	
-	tbl->iRecNew(geometries->size() + 1);
+	tbl->iRecNew(geometries->size()+1);
 
 	for(int i = 0 ; i < geometries->size(); ++i) {
 		ILWIS::Point *point = CPOINT(geometries->at(i));

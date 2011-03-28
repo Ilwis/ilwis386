@@ -19,7 +19,7 @@ namespace ILWIS {
 	class NewDrawer;
 };
 
-typedef ILWIS::NewDrawer* (*DrawerCreate)(ILWIS::DrawerParameters *parms);
+typedef ILWIS::NewDrawer* (*DrawerCreate)(ILWIS::DrawerParameters *parms); 
 
 namespace ILWIS {
 	class RootDrawer;
@@ -65,7 +65,7 @@ namespace ILWIS {
 		virtual void timedEvent(UINT eventid) = 0;
 		virtual String description() const = 0;
 		virtual String iconName(const String& subtype="?") const = 0;
-		virtual void setSpecialDrawingOptions(int option, bool add, vector<Coord>* coords=NULL)=0 ;
+		virtual void setSpecialDrawingOptions(int option, bool add, const vector<int>& coords=vector<int>())=0 ;
 		virtual int getSpecialDrawingOption(int opt=sdoNone) const =0;
 		virtual String store(const FileName& fnView, const String& parenSection) const = 0;
 		virtual void load(const FileName& fnView, const String& parenSection) = 0;

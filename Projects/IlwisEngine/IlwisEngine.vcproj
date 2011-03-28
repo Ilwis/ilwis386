@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="IlwisEngine"
 	ProjectGUID="{903CDF6B-45ED-4C7D-83BF-9ECC12B051D3}"
 	RootNamespace="IlwisEngine"
@@ -645,6 +645,14 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\Sources\Engine\Base\System\MibAccess.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Engine\Base\System\MibAccess.h"
+						>
+					</File>
+					<File
 						RelativePath="..\..\Sources\Engine\Base\System\module.cpp"
 						>
 					</File>
@@ -654,6 +662,14 @@
 					</File>
 					<File
 						RelativePath="..\..\Sources\Engine\Base\System\RegistrySettings.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Engine\Base\System\SysInfo.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Engine\Base\System\SysInfo.h"
 						>
 					</File>
 					<File

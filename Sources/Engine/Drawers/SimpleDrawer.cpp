@@ -114,7 +114,7 @@ String SimpleDrawer::getInfo(const Coord& crd) const {
 	return "";
 }
 
-void SimpleDrawer::setSpecialDrawingOptions(int option, bool add, vector<Coord>* coords){
+void SimpleDrawer::setSpecialDrawingOptions(int option, bool add, const vector<int>& coords){
 	if ( add)
 		specialOptions |= option;
 	else

@@ -31,6 +31,7 @@ public:
 private:
 	BaseMap spatialsourcemap;
 	BaseMap datasourcemap;
+	bool isSameCsy;
 	Table table;
 	vector<Column> columns;
 	ZValueTypeScaling scalingType;

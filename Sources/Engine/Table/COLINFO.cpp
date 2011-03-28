@@ -174,9 +174,16 @@ void ColumnInfo::Read(const FileName& fnTbl, const String& sColName)
 	if (_fDependent)
 		ObjectInfo::ReadElement(sSection.scVal(), "Expression", _fnTbl, _sExpression);
 
-	DomainValue *pdv = dm()->pdv();
+	DomainValue *pdv = 0;
+	if (_dminf.dmt() == dmtCOORD) {
+		String _sCsy;
+		ObjectInfo::ReadElement(sSection.scVal(), "Domain", _fnTbl, _sCsy);	
+		_dvrs = DomainValueRangeStruct(Domain(FileName(_sCsy)));
+	} else {
+		pdv = dm()->pdv();
+		_dvrs = DomainValueRangeStruct(Domain(fnDom()), _dminf.vr());
+	}
 
-	_dvrs = DomainValueRangeStruct(Domain(fnDom()), _dminf.vr());
 	if ( pdv) {
 		_rStep = _dvrs.rStep();
 		_rValueOffset = _dvrs.vr()->getOffset();

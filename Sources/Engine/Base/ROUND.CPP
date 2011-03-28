@@ -41,6 +41,9 @@
 
 #define ROUND_C
 #include "Headers\toolspch.h"
+#include <iostream>
+#include <iomanip>
+#include <sstream>
 #include "Engine\Base\Round.h"
 
 double rRound(double r)
@@ -57,7 +60,7 @@ double rRound(double r)
       return rRound(r/10)*10;
   else if (r < 17)
     return 10;
-  else if (r < 25)
+  else if (r <= 25)
     return 20;
   else
     return 50;
@@ -93,6 +96,36 @@ double rRoundDMS(double rDflt)
 		return rRound60(rDflt / rMIN) * rMIN;
 	else 
 		return rRound60(rDflt);
+}
+
+double niceOne(double v) {
+	double rest = v - (int)v;
+	if ( rest > 0) {
+		if ( rest > 0.5)
+			v++;
+		else
+			v = (int)v + 0.5;
+	}
+	return v;
+}
+
+RangeReal roundRange(double rmin, double rmax) {
+//	double  minpow = rmin == 0 ? 0 : (int)log10(rmin);
+//	double maxpow = rmax == 0 ? 0 : (int)log10(rmax);
+	if ( rmin == 0 && rmax == 255)
+		return RangeReal(0,255);
+
+	double dist = rmax - rmin;
+	double distPow = floor((log10(dist)));
+	double rm1 = rmin / pow(10,distPow);
+	double rm2 = rmax / pow(10,distPow);
+	rm1 = niceOne(rm1);
+	rm2 = niceOne(rm2);
+
+	double irm1 = rm1 * pow(10,distPow);
+	double irm2 = rm2 * pow(10,distPow);
+
+	return RangeReal(irm1, irm2);
 }
 
 
