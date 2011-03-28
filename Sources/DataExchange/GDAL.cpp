@@ -1033,6 +1033,10 @@ void GDALFormat::GetLineVal(long iLine, RealBuf& buf, long iFrom, long iNum) con
 			for( i = 0; i< iNum; ++i)
 				buf[i] = buffer[i];
 			break;
+		case GDT_Float32:
+			for( i = 0; i< iNum; ++i)				
+ 				buf[i] = ((float *)buffer)[i];
+			break;
 		case GDT_Float64:
 			for( i = 0; i< iNum; ++i)				
  				buf[i] = ((double *)buffer)[i];
