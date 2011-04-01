@@ -128,21 +128,20 @@ void LineDrawer::drawSelectedFeature(CoordinateSequence *points, const CoordBoun
 	}
 	glEnd();
 	glLineWidth(lproperties.thickness);
-	for(int i=0; i<points->size(); ++i) {
-		Coordinate c = points->getAt(i);
-		bool isPointSelected = findSelectedPoint(c);
-		double symbolScale = cbZoom.width() / 200;
+	double symbolScale = cbZoom.width() / 200;
+	for(int i=0; i < selectedCoords.size(); ++i) {
+		Coordinate c = points->getAt(selectedCoords.at(i));
 		double fz = is3D ? c.z : 0;;
-		if ( isPointSelected) {
-			glBegin(GL_QUADS);						
+		glBegin(GL_QUADS);						
 			glVertex3f( c.x - symbolScale, c.y - symbolScale,fz);	
 			glVertex3f( c.x - symbolScale, c.y + symbolScale,fz);	
 			glVertex3f( c.x + symbolScale, c.y + symbolScale,fz);
 			glVertex3f( c.x + symbolScale, c.y - symbolScale,fz);
-			glEnd();
-		}
-		else {
-		}
+		glEnd();
+	}
+	for(int i=0; i<points->size(); ++i) {
+		Coordinate c = points->getAt(i);
+		double fz = is3D ? c.z : 0;;
 		glBegin(GL_LINE_STRIP);						
 			glVertex3f( c.x - symbolScale, c.y - symbolScale,fz);	
 			glVertex3f( c.x - symbolScale, c.y + symbolScale,fz);	
@@ -153,13 +152,6 @@ void LineDrawer::drawSelectedFeature(CoordinateSequence *points, const CoordBoun
 	}
 }
 
-bool LineDrawer::findSelectedPoint(const Coord& c) const{
-	for(int i=0; i < selectedCoords.size(); ++i) {
-		if ( selectedCoords.at(i) == c)
-			return true;
-	}
-	return false;
-}
 void LineDrawer::prepare(PreparationParameters *p){
 	SimpleDrawer::prepare(p);
 }
@@ -184,26 +176,12 @@ void LineDrawer::shareVertices(vector<Coord *>& coords) {
 	}
 }
 
-void LineDrawer::setSpecialDrawingOptions(int option, bool add, vector<Coord>* coords){
+void LineDrawer::setSpecialDrawingOptions(int option, bool add, const vector<int>& coords){
 	SimpleDrawer::setSpecialDrawingOptions(option, add);
 	selectedCoords.clear();
-	if ( coords) {
-		for(int n=0; n < coords->size(); ++n) {
-			for(int j = 0; j < lines.size(); ++j) {
-				CoordinateSequence *points = lines.at(j);
-				for(int i = 0; i < points->size(); ++i) {
-					const Coord *c = (const Coord *)&(points->getAt(i));
-					if ( c->equals(coords->at(n)))
-						selectedCoords.push_back(coords->at(n));
-				}
-				
-			}
-		}
+	for(int n=0; n < coords.size(); ++n) {
+		selectedCoords.push_back(coords.at(n));
 	}
-	else {
-		selectedCoords.clear();
-	}
-
 }
 
 GeneralDrawerProperties *LineDrawer::getProperties() {

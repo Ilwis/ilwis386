@@ -22,7 +22,7 @@ class _export PolygonDrawer : public SimpleDrawer {
 		void setLineColor(const Color& clr);
 
 	protected:
-		virtual void setSpecialDrawingOptions(int option, bool add, vector<Coord>* coords=NULL) ;
+		virtual void setSpecialDrawingOptions(int option, bool add, const vector<int>& coords=vector<int>()) ;
 		PolygonDrawer(DrawerParameters *parms, const String& name);
 		HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent) ;
 		LineDrawer *boundary;
