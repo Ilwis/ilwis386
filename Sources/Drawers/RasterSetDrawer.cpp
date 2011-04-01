@@ -414,7 +414,7 @@ void RasterSetDrawer::DisplayTexture3D(double x1, double y1, double x2, double y
 
 	if (tex != 0)
 	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 		if (sameCsy) {
 			// avoid plotting the "added" portion of the map
@@ -470,7 +470,7 @@ void RasterSetDrawer::DisplayTexture3D(double x1, double y1, double x2, double y
 		glDisable(GL_CLIP_PLANE1);
 		glDisable(GL_CLIP_PLANE2);
 		glDisable(GL_CLIP_PLANE3);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 }
 
