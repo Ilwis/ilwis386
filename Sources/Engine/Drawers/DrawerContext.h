@@ -6,6 +6,7 @@ class MapCompositionDoc;
 
 namespace ILWIS { 
 	class RootDrawer;
+	class Palette;
 	class _export DrawerContext {
 	public:
 		~DrawerContext();
@@ -19,6 +20,8 @@ namespace ILWIS {
 		void ReleaseContext();
 		void doDraw();
 		void swapBuffers() const;
+		void setActivePalette(const Palette * palette);
+		bool isActivePalette(const Palette * palette) const;
 		HDC getHDC() const { return m_hdc; }
 
 	private:
@@ -28,6 +31,7 @@ namespace ILWIS {
 		HDC m_hdc;
 		HGLRC m_hrc;
 		CWnd * m_wnd;
+		const Palette * palette;
 		bool fGLInitialized;
 	};
 }

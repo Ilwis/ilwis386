@@ -195,10 +195,3 @@ void AbstractMapDrawer::load(const FileName& fnView, const String& parentSection
 	bm = BaseMap(fn);
 
 }
-
-void AbstractMapDrawer::inactivateOtherPalettes(ILWIS::Palette * palette)
-{
-
-}
-
-

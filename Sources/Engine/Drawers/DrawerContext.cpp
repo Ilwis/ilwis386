@@ -10,6 +10,7 @@ maxTextureSize(128)
 , m_hdc(0)
 , m_hrc(0)
 , m_wnd(0)
+, palette(0)
 {
 }
 
@@ -93,5 +94,10 @@ void DrawerContext::swapBuffers() const{
 	SwapBuffers(m_hdc);
 }
 
+void DrawerContext::setActivePalette(const Palette * palette) {
+	this->palette = palette;
+}
 
-
+bool DrawerContext::isActivePalette(const Palette * palette) const {
+	return this->palette == palette;
+}
