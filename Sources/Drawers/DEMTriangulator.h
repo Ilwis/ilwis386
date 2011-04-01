@@ -52,6 +52,7 @@ namespace ILWIS {
 
 		Map mp;
 		Map drapemp;
+		RangeReal rrMinMax;
 		ZValueMaker * zMaker;
 		double* rHeights; // the DEM rastermap's values
 		double* rFactors; // represents quad tree (and contains heights)
@@ -62,7 +63,8 @@ namespace ILWIS {
 		unsigned long iTrqVal;
 		unsigned long iTrqMax;
 
-		int iSize2; // num. of values in x- and y-direction
+		int iSize2l;
+		int iSize2u;
 		int iSizeX;
 		int iSizeY;
 		unsigned long width;
