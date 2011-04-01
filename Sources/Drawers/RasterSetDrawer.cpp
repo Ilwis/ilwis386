@@ -54,10 +54,12 @@ void RasterSetDrawer::prepare(PreparationParameters *pp){
 	if ( pp->type & NewDrawer::ptRENDER) {
 		fUsePalette = drm != drmCOLOR;
 		if (fPaletteOwner) {
-			if (fUsePalette && palette->fValid())
+			if (fUsePalette && palette->fValid()) {
 				palette->Refresh();
+				getRootDrawer()->getDrawerContext()->setActivePalette(0);
+			}
 		}
-		textureHeap->PaletteChanged();
+		textureHeap->RepresentationChanged();
 	}
 	if ( pp->type & ptGEOMETRY | pp->type & ptRESTORE) {
 		sameCsy = getRootDrawer()->getCoordinateSystem()->fnObj == csy->fnObj;
@@ -147,8 +149,10 @@ void RasterSetDrawer::init() const
 			palette->SetData(rastermap, this, drawcontext->getMaxPaletteSize(), rrMinMax);
 
 		if (fPaletteOwner)
-			if (fUsePalette)
+			if (fUsePalette) {
 				palette->Refresh();
+				getRootDrawer()->getDrawerContext()->setActivePalette(0);
+			}
 	}
 	data->init = true;
 }
@@ -197,10 +201,6 @@ bool RasterSetDrawer::draw( const CoordBounds& cbArea) const {
 		glEnable(GL_TEXTURE_2D);
 		glMatrixMode(GL_TEXTURE);
 		glPushMatrix();
-		if (fUsePalette) {
-			((AbstractMapDrawer*)getParentDrawer())->inactivateOtherPalettes(palette);
-			palette->MakeCurrent(); // for now this is the only call .. officially it should also be called before generating textures in a separate thread, however currently the only way two palettes would interfere is with the AnimationDrawer, and there textures are generated in the current thread
-		}
 		DisplayImagePortion(minX, maxY, maxX, minY, 0, 0, data->width, data->height);
 		glPopMatrix();
 		glMatrixMode(GL_MODELVIEW);
@@ -339,7 +339,7 @@ void RasterSetDrawer::DisplayImagePortion(double x1, double y1, double x2, doubl
 
 void RasterSetDrawer::DisplayTexture(double x1, double y1, double x2, double y2, Coord & c1, Coord & c2, Coord & c3, Coord & c4, unsigned int imageOffsetX, unsigned int imageOffsetY, unsigned int imageSizeX, unsigned int imageSizeY, unsigned int zoomFactor) const
 {
-	Texture* tex = textureHeap->GetTexture(imageOffsetX, imageOffsetY, imageSizeX, imageSizeY, x1, y1, x2, y2, zoomFactor, fUsePalette, isThreaded);
+	Texture* tex = textureHeap->GetTexture(imageOffsetX, imageOffsetY, imageSizeX, imageSizeY, x1, y1, x2, y2, zoomFactor, palette, isThreaded);
 
 	if (tex != 0)
 	{
@@ -410,7 +410,7 @@ void RasterSetDrawer::DisplayTexture(double x1, double y1, double x2, double y2,
 
 void RasterSetDrawer::DisplayTexture3D(double x1, double y1, double x2, double y2, Coord & c1, Coord & c2, Coord & c3, Coord & c4, unsigned int imageOffsetX, unsigned int imageOffsetY, unsigned int imageSizeX, unsigned int imageSizeY, unsigned int zoomFactor) const
 {
-	Texture* tex = textureHeap->GetTexture(imageOffsetX, imageOffsetY, imageSizeX, imageSizeY, x1, y1, x2, y2, zoomFactor, fUsePalette, isThreaded);
+	Texture* tex = textureHeap->GetTexture(imageOffsetX, imageOffsetY, imageSizeX, imageSizeY, x1, y1, x2, y2, zoomFactor, palette, isThreaded);
 
 	if (tex != 0)
 	{

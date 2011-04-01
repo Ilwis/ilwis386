@@ -36,7 +36,6 @@ namespace ILWIS{
 		bool draw(int drawerIndex , const CoordBounds& cbArea) const;
 		void timedEvent(UINT _timerid);
 		String description() const;
-		virtual void inactivateOtherPalettes(Palette * palette);
 		//void setcheckRpr(void *value, LayerTreeView *tree);
 		void updateLegendItem();
 		vector<int>& getActiveMaps() { return activeMaps;}
@@ -90,7 +89,6 @@ namespace ILWIS{
 		bool useTime;
 		String colTime;
 		clock_t last;
-		vector<Palette*> paletteList;
 		Representation rpr;
 		int offset;
 		RangeReal rrMinMax;

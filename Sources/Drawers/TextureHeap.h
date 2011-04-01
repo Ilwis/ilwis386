@@ -27,15 +27,13 @@ namespace ILWIS {
 		virtual ~Palette();
 		void SetData(const Map & mp, const SetDrawer * rsd, const unsigned int iPaletteSize, const RangeReal & rrMinMaxMap);
 		bool fValid();
-		void MakeCurrent();
-		void SetNotCurrent();
+		void MakeCurrent() const;
 		void Refresh();
 	private:
 		float * palette_reds;
 		float * palette_greens;
 		float * palette_blues;
 		float * palette_alphas;
-		bool fCurrent;
 		bool fRealMap;
 		unsigned int iPaletteSize;
 		RangeReal rrMinMaxMap;
@@ -50,12 +48,12 @@ namespace ILWIS {
 
 		void SetData(const Map & _mp, const DrawingColor * drawColor, const NewDrawer::DrawMethod drm, const unsigned int iPaletteSize, const unsigned long imgWidth2, const unsigned long imgHeight2, const RangeReal & rrMinMaxMap, DrawerContext * drawerContext);
 		bool fValid();
-		Texture * GetTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, const bool fUsePalette, bool fInThread);
+		Texture * GetTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, const Palette * palette, bool fInThread);
 		void ClearQueuedTextures();
-		void PaletteChanged();
+		void RepresentationChanged();
 
 	private:
-		Texture * GenerateTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, const bool fUsePalette, bool fInThread);
+		Texture * GenerateTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, const Palette * palette, bool fInThread);
 		static UINT GenerateTexturesInThread(LPVOID pParam);
 		Texture * GenerateNextTexture(bool fInThread);
 		//vector<Texture*> textures;

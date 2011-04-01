@@ -120,10 +120,7 @@ void AnimationDrawer::addSelectionDrawers(const Representation& rpr) {
 			rasterset->setRepresentation(rpr);
 			rasterset->setMinMax(rrMinMax);
 			if (i == 0)
-			{
 				palette = rasterset->SetPaletteOwner(); // create only the palette of the first rasterset, and share it with the other rastersets
-				paletteList.push_back(palette);
-			}
 			else
 				rasterset->SetPalette(palette);
 			PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER);
@@ -231,10 +228,7 @@ void AnimationDrawer::prepare(PreparationParameters *pp){
 				if ( rrMinMax.fValid())
 					rasterset->setMinMax(rrMinMax);
 				if (i == 0)
-				{
 					palette = rasterset->SetPaletteOwner(); // create only the palette of the first rasterset, and share it with the other rastersets
-					paletteList.push_back(palette);
-				}
 				else
 					rasterset->SetPalette(palette);
 				addSetDrawer(mp,pp,rasterset,String("band %d",i));
@@ -314,16 +308,6 @@ void AnimationDrawer::addDataSource(void *data, int options){
 	}
 }
 
-void AnimationDrawer::inactivateOtherPalettes(ILWIS::Palette * palette)
-{
-	for (int i=0; i < paletteList.size(); ++i)
-	{
-		Palette * pal = paletteList.at(i);
-		if (pal != palette)
-			pal->SetNotCurrent();
-	}
-}
-
 void AnimationDrawer::drawLegendItem(CDC *dc, const CRect& rct, double rVal) const{
 	DomainValueRangeStruct dvs = getBaseMap()->dvrs();
 	Color clr;
@@ -366,7 +350,6 @@ void AnimationDrawer::animationDefaultView() {
 		}
 		PreparationParameters pp(NewDrawer::ptRENDER);
 		sdr->prepare(&pp);
-		paletteList.clear();
 	}
 	getRootDrawer()->getDrawerContext()->doDraw();
 

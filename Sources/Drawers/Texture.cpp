@@ -5,6 +5,7 @@
 #include "Headers\toolspch.h"
 #include "Engine\Map\Raster\Map.h"
 #include "Texture.h"
+#include "TextureHeap.h" // for Palette
 #include "Engine\Drawers\DrawerContext.h"
 #include "Drawers\DrawingColor.h"
 
@@ -20,7 +21,7 @@ using namespace ILWIS;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-Texture::Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDrawer::DrawMethod drm, const long offsetX, const long offsetY, const unsigned long sizeX, const unsigned long sizeY, const unsigned long imgWidth2, const unsigned long imgHeight2, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, unsigned int iPaletteSize, const RangeReal & rrMinMaxMap, bool fUsePalette)
+Texture::Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDrawer::DrawMethod drm, const long offsetX, const long offsetY, const unsigned long sizeX, const unsigned long sizeY, const unsigned long imgWidth2, const unsigned long imgHeight2, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, unsigned int iPaletteSize, const RangeReal & rrMinMaxMap, const Palette * palette)
 : mp(mp)
 , texture_data(0)
 , drawColor(drawColor)
@@ -38,7 +39,7 @@ Texture::Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDr
 , zoomFactor(zoomFactor)
 , iPaletteSize(iPaletteSize)
 , rrMinMaxMap(rrMinMaxMap)
-, fUsePalette(fUsePalette)
+, palette(palette)
 , valid(false)
 {
 }
@@ -55,7 +56,7 @@ void Texture::CreateTexture(DrawerContext * drawerContext, bool fInThread, volat
 {
 	fValue = 0 != mp->dm()->pdvi() || 0 != mp->dm()->pdvr();
 	fAttTable = false;
-	if (fUsePalette) {
+	if (palette) {
 		texture_data = (char*)malloc((sizeX / zoomFactor) * (sizeY / zoomFactor) * 2);
 		this->valid = DrawTexturePaletted(offsetX, offsetY, sizeX, sizeY, zoomFactor, texture_data, fDrawStop);
 	} else {
@@ -81,8 +82,12 @@ void Texture::CreateTexture(DrawerContext * drawerContext, bool fInThread, volat
 	//glPixelStorei( GL_UNPACK_SKIP_ROWS, 0);
 	boolean oldVal;
 	glGetBooleanv(GL_MAP_COLOR, &oldVal);
-	glPixelTransferf(GL_MAP_COLOR, fUsePalette);
-	if (fUsePalette) {
+	glPixelTransferf(GL_MAP_COLOR, palette != 0);
+	if (palette != 0) {
+		if (!drawerContext->isActivePalette(palette)) {
+			palette->MakeCurrent();
+			drawerContext->setActivePalette(palette);
+		}
 		glTexImage2D( GL_TEXTURE_2D, 0, 4, sizeX / zoomFactor, sizeY / zoomFactor, 0, GL_COLOR_INDEX, GL_UNSIGNED_SHORT, texture_data);
 	}
 	else {
@@ -91,7 +96,7 @@ void Texture::CreateTexture(DrawerContext * drawerContext, bool fInThread, volat
 		texture_data = 0;
 	}
 	glPixelTransferf(GL_MAP_COLOR, oldVal);
-	fPaletteChanged = false;
+	fRepresentationChanged = false;
 	if (fInThread)
 		drawerContext->ReleaseContext();
 }
@@ -101,7 +106,7 @@ bool Texture::fValid()
 	return valid;
 }
 
-void Texture::BindMe()
+void Texture::BindMe(DrawerContext * drawerContext)
 {
 	glBindTexture(GL_TEXTURE_2D, texture);
 	double s = offsetX / (double)imgWidth2;
@@ -109,24 +114,28 @@ void Texture::BindMe()
 	glLoadIdentity();
 	glScaled(imgWidth2 / (double)sizeX, imgHeight2 / (double)sizeY, 1);
 	glTranslated(-s, -t, 0);
-	if (fUsePalette && fPaletteChanged) {
+	if (palette != 0 && fRepresentationChanged) {
 		boolean oldVal;
 		glGetBooleanv(GL_MAP_COLOR, &oldVal);
 		glPixelTransferf(GL_MAP_COLOR, true);
+		if (!drawerContext->isActivePalette(palette)) {
+			palette->MakeCurrent();
+			drawerContext->setActivePalette(palette);
+		}
 		glTexImage2D( GL_TEXTURE_2D, 0, 4, sizeX / zoomFactor, sizeY / zoomFactor, 0, GL_COLOR_INDEX, GL_UNSIGNED_SHORT, texture_data);
 		glPixelTransferf(GL_MAP_COLOR, oldVal);
-		fPaletteChanged = false;
+		fRepresentationChanged = false;
 	}
 }
 
-void Texture::PaletteChanged()
+void Texture::RepresentationChanged()
 {
-	fPaletteChanged = true;
+	fRepresentationChanged = true;
 }
 
 bool Texture::equals(GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor)
 {
-	return this->xMin == xMin && this->yMin == yMin && this->xMax == xMax && this->yMax == yMax && this->zoomFactor == zoomFactor && this->fUsePalette == fUsePalette;
+	return this->xMin == xMin && this->yMin == yMin && this->xMax == xMax && this->yMax == yMax && this->zoomFactor == zoomFactor && this->palette == palette;
 }
 
 bool Texture::contains(GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax)

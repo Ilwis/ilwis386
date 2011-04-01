@@ -26,7 +26,6 @@ using namespace ILWIS;
 Palette::Palette()
 : rsd(0)
 , iPaletteSize(0)
-, fCurrent(false)
 , palette_reds(0)
 , palette_greens(0)
 , palette_blues(0)
@@ -83,22 +82,15 @@ bool Palette::fValid()
 	return iPaletteSize > 2; // a vaild palette has at least colors for mapMin, mapMax and UNDEF.
 }
 
-void Palette::MakeCurrent()
+void Palette::MakeCurrent() const
 {
-	if (!fCurrent) {
-		glPixelMapfv(GL_PIXEL_MAP_I_TO_R, iPaletteSize, palette_reds);
-		glPixelMapfv(GL_PIXEL_MAP_I_TO_G, iPaletteSize, palette_greens);
-		glPixelMapfv(GL_PIXEL_MAP_I_TO_B, iPaletteSize, palette_blues);
-		glPixelMapfv(GL_PIXEL_MAP_I_TO_A, iPaletteSize, palette_alphas);
-		fCurrent = true;
-	}
+	glPixelMapfv(GL_PIXEL_MAP_I_TO_R, iPaletteSize, palette_reds);
+	glPixelMapfv(GL_PIXEL_MAP_I_TO_G, iPaletteSize, palette_greens);
+	glPixelMapfv(GL_PIXEL_MAP_I_TO_B, iPaletteSize, palette_blues);
+	glPixelMapfv(GL_PIXEL_MAP_I_TO_A, iPaletteSize, palette_alphas);
 }
 
-void Palette::SetNotCurrent()
-{
-	fCurrent = false;
-}
-
+// Call Refresh() when: 1. Map data has changed, 2. Representation has changed
 void Palette::Refresh()
 {
 	if (fValid()) {
@@ -133,8 +125,6 @@ void Palette::Refresh()
 		}
 
 		delete [] bufColor;
-
-		fCurrent = false;
 	}
 }
 
@@ -202,19 +192,19 @@ void TextureHeap::ClearQueuedTextures()
 	csChangeTexCreatorList.Unlock();
 }
 
-void TextureHeap::PaletteChanged()
+void TextureHeap::RepresentationChanged()
 {
 	for (int i = 0; i < texturesArraySize; ++i)
-		textures[i]->PaletteChanged();	
+		textures[i]->RepresentationChanged();	
 }
 
-Texture * TextureHeap::GetTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, const bool fUsePalette, bool fInThread)
+Texture * TextureHeap::GetTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, const Palette * palette, bool fInThread)
 {
 	Texture * tex = 0;
 	if (fInThread) { // call Invalidate when done, to redraw the mapwindow
 		for (int i = 0; i < texturesArraySize; ++i) {
 			if (textures[i]->equals(xMin, yMin, xMax, yMax, zoomFactor)) {
-				textures[i]->BindMe();
+				textures[i]->BindMe(drawerContext);
 				return textures[i];
 			} else if (textures[i]->contains(xMin, yMin, xMax, yMax)) {
 				if (tex != 0) {
@@ -225,26 +215,26 @@ Texture * TextureHeap::GetTexture(const unsigned int offsetX, const unsigned int
 			}
 		}
 
-		GenerateTexture(offsetX, offsetY, sizeX, sizeY, xMin, yMin, xMax, yMax, zoomFactor, fUsePalette, fInThread);
+		GenerateTexture(offsetX, offsetY, sizeX, sizeY, xMin, yMin, xMax, yMax, zoomFactor, palette, fInThread);
 	} else { // caller is waiting for the Texture*
 		for (int i = 0; i < texturesArraySize; ++i) {
 			if (textures[i]->equals(xMin, yMin, xMax, yMax, zoomFactor))
 				tex = textures[i];
 		}
 		if (0 == tex)
-			tex = GenerateTexture(offsetX, offsetY, sizeX, sizeY, xMin, yMin, xMax, yMax, zoomFactor, fUsePalette, fInThread);
+			tex = GenerateTexture(offsetX, offsetY, sizeX, sizeY, xMin, yMin, xMax, yMax, zoomFactor, palette, fInThread);
 	}
 
 	if (tex != 0)
-		tex->BindMe();
+		tex->BindMe(drawerContext);
 
 	return tex;
 }
 
-Texture * TextureHeap::GenerateTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, const bool fUsePalette, bool fInThread)
+Texture * TextureHeap::GenerateTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, const Palette * palette, bool fInThread)
 {
 	if (((writepos + 1) % BUF_SIZE) != readpos) {
-		textureRequest[writepos] = new Texture(mp, drawColor, drm, offsetX, offsetY, sizeX, sizeY, imgWidth2, imgHeight2, xMin, yMin, xMax, yMax, zoomFactor, iPaletteSize, rrMinMaxMap, fUsePalette);
+		textureRequest[writepos] = new Texture(mp, drawColor, drm, offsetX, offsetY, sizeX, sizeY, imgWidth2, imgHeight2, xMin, yMin, xMax, yMax, zoomFactor, iPaletteSize, rrMinMaxMap, palette);
 		writepos = (writepos + 1) % BUF_SIZE;
 	}
 	if (fInThread) {

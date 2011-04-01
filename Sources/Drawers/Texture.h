@@ -17,19 +17,20 @@ namespace ILWIS {
 
 	class DrawingColor;
 	class DrawerContext;
+	class Palette;
 
 	class Texture
 	{
 	public:
-		Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDrawer::DrawMethod drm, const long offsetX, const long offsetY, const unsigned long sizeX, const unsigned long sizeY, const unsigned long imgWidth2, const unsigned long imgHeight2, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, unsigned int iPaletteSize, const RangeReal & rrMinMaxMap, bool fUsePalette);
+		Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDrawer::DrawMethod drm, const long offsetX, const long offsetY, const unsigned long sizeX, const unsigned long sizeY, const unsigned long imgWidth2, const unsigned long imgHeight2, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, unsigned int iPaletteSize, const RangeReal & rrMinMaxMap, const Palette * palette);
 		virtual ~Texture();
 
 		void CreateTexture(DrawerContext * drawerContext, bool fInThread, volatile bool * fDrawStop);
-		void BindMe(); // To be called before glBegin
+		void BindMe(DrawerContext * drawerContext); // To be called before glBegin
 		bool equals(GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor);
 		bool contains(GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax);
 		unsigned int getZoomFactor();
-		void PaletteChanged();
+		void RepresentationChanged();
 		bool fValid();
 
 	private:
@@ -57,8 +58,8 @@ namespace ILWIS {
 		const RangeReal rrMinMaxMap;
 		bool fValue;
 		bool fAttTable;
-		const bool fUsePalette;
-		bool fPaletteChanged;
+		const Palette * palette;
+		bool fRepresentationChanged;
 		bool valid;
 	};
 }
