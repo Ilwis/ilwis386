@@ -165,7 +165,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="ILWISEngine.lib geos.lib"
 				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\Extensions\IlwisSEBS.dll"
-				Version="3.7"
+				Version="3.8"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)libraries\import&quot;;&quot;$(SolutionDir)libraries\$(ConfigurationName)&quot;"
 				GenerateDebugInformation="true"

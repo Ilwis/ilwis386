@@ -176,7 +176,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="RpcRT4.Lib libcurl.lib xerces-c_3.lib ftgl.lib opengl32.lib geos.lib glu32.lib freetype.lib xqilla22.lib"
 				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\$(ProjectName).dll"
-				Version="3.7"
+				Version="3.8"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(SolutionDir)libraries\import;$(SolutionDir)libraries\$(ConfigurationName);D:\Projects\ILWISrevised\ILWIS32005\libraries\debug;&quot;C:\Program Files\Microsoft Visual Studio 8\VC\PlatformSDK\Lib&quot;"
 				GenerateManifest="true"
