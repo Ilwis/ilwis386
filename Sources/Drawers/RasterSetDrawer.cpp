@@ -346,13 +346,13 @@ void RasterSetDrawer::DisplayTexture(double x1, double y1, double x2, double y2,
 		// make the quad
 		glBegin (GL_QUADS);
 
-		// texture bounds
-		double s1 = imageOffsetX / (double)data->width;
-		double t1 = imageOffsetY / (double)data->height;
-		double s2 = min(imageOffsetX + imageSizeX, data->imageWidth) / (double)data->width;
-		double t2 = min(imageOffsetY + imageSizeY, data->imageHeight) / (double)data->height;
-
 		if (sameCsy) {
+			// texture bounds
+			double s1 = imageOffsetX / (double)data->width;
+			double t1 = imageOffsetY / (double)data->height;
+			double s2 = min(imageOffsetX + imageSizeX, data->imageWidth) / (double)data->width;
+			double t2 = min(imageOffsetY + imageSizeY, data->imageHeight) / (double)data->height;
+
 			// avoid plotting the "added" portion of the map
 			x2 = min(x2, data->cb.MaxX());
 			y2 = max(y2, data->cb.MinY());
@@ -382,12 +382,12 @@ void RasterSetDrawer::DisplayTexture(double x1, double y1, double x2, double y2,
 			for (int x = 0; x < iSize; ++x) {
 				double s2 = s1 + colStep / (double)data->width;
 				double t1 = imageOffsetY / (double)data->height;
-				for (int y = 0; y < iSize ; ++y) {
+				c1 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x1 + xStep * x, y1, 0.0));
+				c2 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x1 + xStep * (x + 1), y1, 0.0));
+				for (int y = 1; y <= iSize ; ++y) {
 					double t2 = t1 + rowStep / (double)data->height;
-					c1 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x1 + xStep * x, y1 + yStep * y, 0.0));
-					c2 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x1 + xStep * (x + 1), y1 + yStep * y, 0.0));
-					c3 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x1 + xStep * (x + 1), y1 + yStep * (y + 1), 0.0));
-					c4 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x1 + xStep * x, y1 + yStep * (y + 1), 0.0));
+					c3 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x1 + xStep * (x + 1), y1 + yStep * y, 0.0));
+					c4 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x1 + xStep * x, y1 + yStep * y, 0.0));
 
 					glTexCoord2d(s1, t1);
 					glVertex3d(c1.x, c1.y, 0.0);
@@ -402,6 +402,8 @@ void RasterSetDrawer::DisplayTexture(double x1, double y1, double x2, double y2,
 					glVertex3d(c4.x, c4.y, 0.0);
 
 					t1 = t2;
+					c1 = c4;
+					c2 = c3;
 				}
 				s1 = s2;
 			}
