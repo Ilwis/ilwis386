@@ -452,10 +452,14 @@ void RasterSetDrawer::DisplayTexture3D(double x1, double y1, double x2, double y
 				c3 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x2, y2, 0.0));
 			if (fRecalculateCY2)
 				c4 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x1, y2, 0.0));
-			double clip_plane0[]={-1.0,0.0,0.0,c3.x}; // x < x2
-			double clip_plane1[]={1.0,0.0,0.0,-c1.x}; // x > x1
-			double clip_plane2[]={0.0,-1.0,0.0,c1.y}; // y > y1
-			double clip_plane3[]={0.0,1.0,0.0,-c3.y}; // y < y2
+			//double clip_plane0[]={c3.y - c2.y, c2.x - c3.x, 0.0, c2.x * (c2.y - c3.y) - c2.y * (c2.x - c3.x)}; // x < x2
+			//double clip_plane1[]={c1.y - c4.y, c4.x - c1.x, 0.0, c4.x * (c4.y - c1.y) - c4.y * (c4.x - c1.x)}; // x > x1
+			//double clip_plane2[]={c2.y - c1.y, c1.x - c2.x, 0.0, c1.x * (c1.y - c2.y) - c1.y * (c1.x - c2.x)}; // y > y1
+			//double clip_plane3[]={c4.y - c3.y, c3.x - c4.x, 0.0, c3.x * (c3.y - c4.y) - c3.y * (c3.x - c4.x)}; // y < y2
+			double clip_plane0[]={c3.y - c2.y, c2.x - c3.x, 0.0, c3.x * (c2.y - c3.y) - c3.y * (c2.x - c3.x)}; // x < x2
+			double clip_plane1[]={c1.y - c4.y, c4.x - c1.x, 0.0, c1.x * (c4.y - c1.y) - c1.y * (c4.x - c1.x)}; // x > x1
+			double clip_plane2[]={c4.y - c3.y, c3.x - c4.x, 0.0, c4.x * (c3.y - c4.y) - c4.y * (c3.x - c4.x)}; // y > y1
+			double clip_plane3[]={c2.y - c1.y, c1.x - c2.x, 0.0, c2.x * (c1.y - c2.y) - c2.y * (c1.x - c2.x)}; // y < y2
 			glClipPlane(GL_CLIP_PLANE0,clip_plane0);
 			glClipPlane(GL_CLIP_PLANE1,clip_plane1);
 			glClipPlane(GL_CLIP_PLANE2,clip_plane2);
