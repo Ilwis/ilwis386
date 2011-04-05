@@ -369,39 +369,42 @@ void RasterSetDrawer::DisplayTexture(double x1, double y1, double x2, double y2,
 			glTexCoord2d(s1, t2);
 			glVertex3d(x1, y2, 0.0);
 		} else {
-			// avoid plotting the "added" portion of the map
-			bool fRecalculateCX2 = false;
-			if (x2 > data->cb.MaxX())
-			{
-				x2 = data->cb.MaxX();
-				fRecalculateCX2 = true;
+			const unsigned int iSize = 10; // this makes 100 quads, thus 200 triangles per texture
+			// avoid plotting the "added" portion of the map that was there to make the texture size a power of 2
+			double colStep = min(imageSizeX, data->imageWidth - imageOffsetX) / (double)iSize;
+			double rowStep = min(imageSizeY, data->imageHeight - imageOffsetY) / (double)iSize;
+			x2 = min(x2, data->cb.MaxX());
+			y2 = max(y2, data->cb.MinY());
+			double xStep = (x2 - x1) / (double)iSize;
+			double yStep = (y2 - y1) / (double)iSize;
+
+			double s1 = imageOffsetX / (double)data->width;
+			for (int x = 0; x < iSize; ++x) {
+				double s2 = s1 + colStep / (double)data->width;
+				double t1 = imageOffsetY / (double)data->height;
+				for (int y = 0; y < iSize ; ++y) {
+					double t2 = t1 + rowStep / (double)data->height;
+					c1 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x1 + xStep * x, y1 + yStep * y, 0.0));
+					c2 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x1 + xStep * (x + 1), y1 + yStep * y, 0.0));
+					c3 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x1 + xStep * (x + 1), y1 + yStep * (y + 1), 0.0));
+					c4 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x1 + xStep * x, y1 + yStep * (y + 1), 0.0));
+
+					glTexCoord2d(s1, t1);
+					glVertex3d(c1.x, c1.y, 0.0);
+
+					glTexCoord2d(s2, t1);
+					glVertex3d(c2.x, c2.y, 0.0);
+
+					glTexCoord2d(s2, t2);
+					glVertex3d(c3.x, c3.y, 0.0);
+
+					glTexCoord2d(s1, t2);
+					glVertex3d(c4.x, c4.y, 0.0);
+
+					t1 = t2;
+				}
+				s1 = s2;
 			}
-			bool fRecalculateCY2 = false;
-			if (y2 < data->cb.MinY())
-			{
-				y2 = data->cb.MinY();
-				fRecalculateCY2 = true;
-			}
-
-			//c1 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x1, y1, 0.0));
-			if (fRecalculateCX2)
-				c2 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x2, y1, 0.0));
-			if (fRecalculateCX2 || fRecalculateCY2)
-				c3 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x2, y2, 0.0));
-			if (fRecalculateCY2)
-				c4 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x1, y2, 0.0));
-
-			glTexCoord2d(s1, t1);
-			glVertex3d(c1.x, c1.y, 0.0);
-
-			glTexCoord2d(s2, t1);
-			glVertex3d(c2.x, c2.y, 0.0);
-
-			glTexCoord2d(s2, t2);
-			glVertex3d(c3.x, c3.y, 0.0);
-
-			glTexCoord2d(s1, t2);
-			glVertex3d(c4.x, c4.y, 0.0);
 		}
 	
 		glEnd();
