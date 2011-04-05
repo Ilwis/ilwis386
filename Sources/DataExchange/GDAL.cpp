@@ -716,9 +716,14 @@ CoordSystem GDALFormat::GetCoordSystem()
 	if ( funcs.isProjected(handle)) {
 		CoordSystemProjection *csp =  new CoordSystemProjection(fnCsy, 1);
 		String dn = Datum::WKTToILWISName(datumName);
-		if ( dn == "")
-			throw ErrorObject("Datum can't be transformed to an ILWIS known datum");
-		csp->datum = new MolodenskyDatum(dn,"");
+		if ( dn == "") {
+			Projection proj = ProjectionPtr::WKTToILWISName(wkt);
+			if ( proj.fValid() == false)
+				throw ErrorObject("Datum can't be transformed to an ILWIS known datum");
+			csp->prj = proj;
+		} else {
+			csp->datum = new MolodenskyDatum(dn,"");
+		}
 		csv = csp;
 	} else {
 		csv = new CoordSystemLatLon(fnCsy, 1);
