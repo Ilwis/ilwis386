@@ -200,13 +200,27 @@ bool PolygonMapFromRas::fSetPolygonLabels(const Map& mpAreas)
 		String sV = mpAreas->dm()->sValueByRaw(raw);
 		String sV2 = colAtt->sValue(iKey);
 		double r = pol->rArea();
-		if (dvrs().fRealValues())
-			pol->PutVal(colAtt->rValue(iKey));
-		else if (dvrs().fValues())
-			pol->PutVal(colAtt->iValue(iKey));
+		if (dvrs().fRealValues()) {
+			double rV = colAtt->rValue(iKey);
+			if ( rV != rUNDEF)
+				pol->PutVal(rV);
+		}
+		else if (dvrs().fValues()) {
+			long iV = colAtt->iValue(iKey);
+			if ( iV != iUNDEF)
+				pol->PutVal(iV);
+		}
 		else{
 			long v = colAtt->iRaw(iKey);
 			pol->PutVal( v == iUNDEF + 1 ? iUNDEF : v); // area numbering makes undefs, undefs + 1 (logic of that applic)
+		}
+	}
+	for (long i = 0; i < iNrPol; i++) {
+		ILWIS::Polygon *pol = pms->pol(i);
+		if (!pol || pol->fValid() == false)
+			continue;
+		if ( pol->rValue() == rUNDEF) {
+			pol->Delete(true);
 		}
 	}
 	return true;

@@ -65,7 +65,7 @@
 */                                                                      
 
 #include <geos/opBuffer.h>
-#include <geos\operation\buffer\BufferParameters.h>
+//#include <geos\operation\buffer\BufferParameters.h>
 #include "Engine\Map\Point\PNT.H"
 #include "Engine\Map\Point\PNTSTORE.H"
 #include "Engine\Map\Polygon\POL.H"
@@ -132,13 +132,13 @@ PolygonMapBuffer::PolygonMapBuffer(const FileName& fn, PolygonMapPtr& p, const B
   objdep.Add(bmp.ptr());
   if (!fnObj.fValid()) // 'inline' object
     objtime = objdep.tmNewest();
-  endStyle = geos::operation::buffer::BufferParameters::CAP_ROUND;
+  endStyle = geos::operation::buffer::BufferOp::CAP_ROUND;
   if ( String(style).toLower() == "round")
-	  endStyle =geos::operation::buffer::BufferParameters::CAP_ROUND;
-  else if (String(style).toLower() == "butt")
-	  endStyle =geos::operation::buffer::BufferParameters::CAP_FLAT;
+	  endStyle =geos::operation::buffer::BufferOp::CAP_ROUND;
+ /* else if (String(style).toLower() == "butt")
+	  endStyle =geos::operation::buffer::BufferParameters::CAP_FLAT;*/
    else if (String(style).toLower() == "square")
-	  endStyle =geos::operation::buffer::BufferParameters::CAP_SQUARE;
+	  endStyle =geos::operation::buffer::BufferOp::CAP_SQUARE;
 }
 
 
