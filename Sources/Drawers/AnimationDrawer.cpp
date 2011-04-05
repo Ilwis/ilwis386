@@ -261,7 +261,7 @@ void AnimationDrawer::addSetDrawer(const BaseMap& basem,PreparationParameters *p
 	rsd->setRepresentation(basem->dm()->rpr()); //  default choice
 	rsd->getZMaker()->setSpatialSource(basem, getRootDrawer()->getMapCoordBounds());
 	rsd->getZMaker()->setDataSourceMap(basem);
-	RangeReal tempRange = basem->dvrs().rrMinMax();
+	RangeReal tempRange = rsd->getZMaker()->getRange(); //basem->dvrs().rrMinMax();
 	if ( tempRange.fValid()) {
 		RangeReal rr = getZMaker()->getRange();
 		rr += tempRange.rLo();
