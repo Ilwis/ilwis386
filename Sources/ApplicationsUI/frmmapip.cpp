@@ -291,6 +291,7 @@ FormColorComp::FormColorComp(CWnd* mw, const char* sPar)
   fgRGB->Align(fgTop, AL_UNDER);
   FieldDataType* fmRed = new FieldDataType(fgRGB, SAFUiRedBand, &sMapRed,
                              new MapListerDomainType(dmIMAGE), true);
+  fmRed->SetWidth(140);
   rrRed = RangeReal(0,255);
   rPercRed = 1;
   fRangeRed = new FieldRangeReal(fgRGB, "", &rrRed);
@@ -300,6 +301,7 @@ FormColorComp::FormColorComp(CWnd* mw, const char* sPar)
   
   FieldDataType* fmGreen = new FieldDataType(fgRGB, SAFUiGreenBand, &sMapGreen,
                              new MapListerDomainType(dmIMAGE), true);
+  fmGreen->SetWidth(140);
   fmGreen->Align(fmRed, AL_UNDER);
   rrGreen = RangeReal(0,255);
   rPercGreen = 1;
@@ -310,6 +312,7 @@ FormColorComp::FormColorComp(CWnd* mw, const char* sPar)
   
   FieldDataType* fmBlue = new FieldDataType(fgRGB, SAFUiBlueBand, &sMapBlue,
                              new MapListerDomainType(dmIMAGE), true);
+  fmBlue->SetWidth(140);
   fmBlue->Align(fmGreen, AL_UNDER);
   rrBlue = RangeReal(0,255);
   rPercBlue = 1;
