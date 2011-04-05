@@ -34,63 +34,7 @@ Software Foundation, http://www.fsf.org.
 
 Created on: 2007-02-8
 ***************************************************************/
-/* $Log: /ILWIS 3.0/CoordinateSystem/DATUM.cpp $
-* 
-* 12    3-10-03 22:01 Hendrikse
-* gave corretc signs to BursaWolf and Badekas params in llhFromWGS84 and
-* llhToWGS84 conversion functions
-* 
-* 11    30-09-03 10:14 Hendrikse
-* Debug: corrected 2X a typing mistake: m_RotZ replaced by m_RotY 
-* 
-* 10    26-09-03 17:27 Hendrikse
-* implemented the use of  method  String sType() and its protected
-* associated member 	String m_sType in class Datum  'write to' and 'read
-* from' the ODF (the *.csy file.) the types Bursa-Wolf and
-* Molodensky-Badkas in the [Datum] section. (see store functions)
-* Implemented llhFromWGS84() and llhToWGS84 for both new Datum types.
-* 
-* 9     15-09-03 11:31 Hendrikse
-* added llhFromWGS84(const LatLonHeight& llh) and llhToWGS84(const
-* LatLonHeight& llh) for derived Datums
-* Implemented the constructors and other functions of the newly derived
-* Datum classes
-* 
-* 8     25-08-03 18:52 Hendrikse
-* MolodenskyDatum::Datum is now used in st of Datum
-* 
-* 7     28-03-01 18:25 Koolhoven
-* protected constructor against empty string for ellipsoid
-* instead of strange macro
-* 
-* 6     15/06/00 11:40 Willem
-* Added check for length of sArea in Datum constructor, before calling
-* GetPrivetProfileString
-* 
-* 5     3-06-00 16:16 Hendrikse
-* Implemented datum shifts with  doubles dx, dy, dz;
-* to cope with high precision shift info
-* Made a String sShifts; to display the shifts in the Change Datum form
-* 
-* 4     23-06-99 12:22p Martin
-* changed assert
-* 
-* 3     24-03-99 9:49 Koolhoven
-* Header comment
-* 
-* 2     15-03-99 16:03 Willem
-* Updated for redefinition of Assertion function
-// Revision 1.3  1998/09/16 17:22:46  Wim
-// 22beta2
-//
-// Revision 1.2  1997/08/13 11:09:47  Wim
-// Do not allow invalid areas anymore
-//
-/* Datum
-Copyright Ilwis System Development ITC
-march 1996, by Wim Koolhoven
-Last change:  WK   13 Aug 97    1:07 pm
-*/
+
 #include "Engine\SpatialReference\Coordsys.h"
 #include "Engine\SpatialReference\DATUM.H"
 #include "Engine\Base\AssertD.h"
@@ -240,7 +184,7 @@ MolodenskyDatum::MolodenskyDatum(const String& sN, const String& sA)
 		} else if (parts.iSize() > 3 ) {
 			dx = parts[1].rVal();
 			dy = parts[2].rVal();
-			dx = parts[3].rVal();
+			dz = parts[3].rVal();
 			sDescription = parts[4];
 		}
 		String id=sDescription.sTail(":");

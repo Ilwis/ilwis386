@@ -50,7 +50,7 @@
 #include "Engine\Base\System\Engine.h"
 #include "Engine\Table\NewTableStore.h"
 #include "Engine\Table\TableStoreIlwis3.h"
-#include "Headers\geos\operation\distance\DistanceOp.h"
+#include "geos\operation\distance\DistanceOp.h"
 #include "Engine\Table\Rec.h"
 #include "Engine\Map\Point\ilwPoint.h"
 

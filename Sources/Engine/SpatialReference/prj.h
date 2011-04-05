@@ -108,6 +108,7 @@ public:
 	virtual void _export Param(ProjectionParamValue, const Coord&);
 
 	virtual Datum _export *datumDefault() const;
+	static Projection _export WKTToILWISName(const String& wkt);
 	const Ellipsoid& ell;
 	double x0, y0, lam0;  // used by CoordSystemPtr
 	virtual long _export iMaxZoneNr() const;

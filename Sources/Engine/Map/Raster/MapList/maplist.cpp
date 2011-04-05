@@ -1089,8 +1089,10 @@ void MapListPtr::GetObjectStructure(ObjectStructure& os)
 	else if (os.caGetCommandAction() != ObjectStructure::caCOPY &&
 			 os.caGetCommandAction() != ObjectStructure::caDELETE)
 	{
-		for (int i = iLower(); i <= iUpper(); i++)
-			ma[i]->GetObjectStructure(os);
+		if ( os.fRetrieveContentsContainer()) {
+			for (int i = iLower(); i <= iUpper(); i++)
+				ma[i]->GetObjectStructure(os);
+		}
 	}
 }
 

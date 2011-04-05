@@ -349,7 +349,7 @@ public:
 };
 
 //! IlwisObject is a smart pointer to an IlwisObjectPtr
-class IMPEXP IlwisObject
+class IMPEXP IlwisObject     
 {
 friend class Array<IlwisObject*>;
 

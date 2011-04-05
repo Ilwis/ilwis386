@@ -43,7 +43,7 @@ Last change:  WK    8 Apr 98   10:40 am
 #ifndef ILWELLIPSOID_H
 #define ILWELLIPSOID_H
 #include "Engine\Base\DataObjects\ilwisobj.h"
-#include "Headers\geos.h"
+#include "Geos\Geos.h"
 
 class DATEXPORT Ellipsoid;
 

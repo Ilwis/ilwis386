@@ -51,7 +51,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/GS"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)Sources\Headers&quot;;&quot;$(SolutionDir)Sources&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)Sources\Headers&quot;;&quot;$(SolutionDir)Sources\Geos\headers&quot;;&quot;$(SolutionDir)Sources&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;ILWISENGINE;_WIN32_DCOM;_CRTDBG_MAP_ALLOC;_WIN32_WINNT=0x0400;_WIN32_IE=0x0400;_CRT_SECURE_NO_WARNINGS;_SECURE_SCL=0;_HAS_ITERATOR_DEBUGGING=0"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -78,7 +78,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="RpcRT4.Lib libcurl.lib xerces-c_3D.lib geosd.lib ftgl.lib opengl32.lib glu32.lib freetype.lib xqilla22d.lib"
+				AdditionalDependencies="RpcRT4.Lib libcurl.lib xerces-c_3D.lib ftgl.lib opengl32.lib geos.lib glu32.lib freetype.lib xqilla22d.lib"
 				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\$(ProjectName).dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)libraries\import&quot;;&quot;$(SolutionDir)libraries\$(ConfigurationName)&quot;;&quot;$(SolutionDir)\libraries\debug&quot;;&quot;C:\Program Files\Microsoft Visual Studio 8\VC\PlatformSDK\Lib&quot;"
@@ -148,7 +148,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)Sources\Headers&quot;;&quot;$(SolutionDir)Sources&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)Sources\Geos\headers&quot;;&quot;$(SolutionDir)Sources\Headers&quot;;&quot;$(SolutionDir)Sources&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;ILWISENGINE;_WIN32_DCOM;_WIN32_WINNT=0x0400;_CRT_SECURE_NO_WARNINGS;_HAS_ITERATOR_DEBUGGING=0;_SECURE_SCL=0;_WIN32_IE=0x0400"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="0"
@@ -174,7 +174,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="RpcRT4.Lib libcurl.lib xerces-c_2.lib gdal.lib geos.lib"
+				AdditionalDependencies="RpcRT4.Lib libcurl.lib xerces-c_3.lib ftgl.lib opengl32.lib geos.lib glu32.lib freetype.lib xqilla22.lib"
 				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\$(ProjectName).dll"
 				Version="3.7"
 				LinkIncremental="1"

@@ -94,6 +94,7 @@ class _export ObjectStructure
 		bool fFilesContainRelevantPathInfo(const Directory& dirDestination) const;
 		bool fFindLinkedTables(const vector<FileName>& fnFiles);
 		void RemoveLinkedTables();
+		void RetrieveEntireCollection(bool fYesNo);
 		
 	private:
 		enum PathInfo{ piABSOLUTE, piRELATIVE, piNONE};
@@ -121,7 +122,6 @@ class _export ObjectStructure
 		void SetPathsToDestination();		// used for copy in same dir
 		bool AddEntry(ODFEntry& oeFile);
 		void GatherFiles(ObjectStructure& osStruct);
-		void RetrieveEntireCollection(bool fYesNo);
 		void RemoveSuperflousCollectionReferences(const Directory& dirDestination);
 		void SetDestinationFile(const FileName& fnOld, const FileName& fnNew);
 		ObjectStructure::ODFEntry* oeGetODFEntry(int i);

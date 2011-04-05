@@ -47,7 +47,7 @@
 #define ILWDAT2_H
 #include "Headers\base.h"
 //#include "Engine\Base\DataObjects\Buf.h"
-#include "Headers\geos.h"
+#include "Geos\Geos.h"
 
 #undef IMPEXP
 //#ifdef DAT2_C

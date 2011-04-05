@@ -150,7 +150,7 @@ protected:
 						const DomainValueRangeStruct& dvs);
 	
 	virtual void         CalcMinMax();
-	virtual RangeReal _export   rrMinMaxSampled() { return rrMinMax();}
+	virtual RangeReal _export   rrMinMaxSampled() { return rrMinMax(mmmCALCULATE);} // overrule this when sampling makes sense
 	
     RangeReal            _rrMinMax;  // for DomainValueReal
     RangeReal            _rrPerc1;

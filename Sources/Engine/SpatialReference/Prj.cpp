@@ -840,3 +840,32 @@ bool ProjectionPtr::fEqual(const IlwisObjectPtr& ptr) const
 String ProjectionPtr::getIdentification(bool wkt) {
 	return identification;
 }
+
+Projection ProjectionPtr::WKTToILWISName(const String& wkt) {
+	String swkt = wkt;
+	swkt.toLower();
+	int index = swkt.find("projection");
+	if ( index != string::npos) {
+		int index2 = swkt.find("]",index);
+		int start = index + 12;
+		String projname = swkt.substr(start, index2 - start - 1);
+		index = swkt.find("spheroid");
+		if ( index != 1) {
+			index2 = swkt.find("]",index);
+			int start = index + 10;
+			String elldata = swkt.substr(start, index2 - start);
+			Array<String> parts;
+			Split(elldata, parts,",");
+			String ellname = parts[0];
+			double axis = parts[1].rVal();
+			double f = parts[2].rVal();
+			Ellipsoid ell(axis, f);
+			if ( f != 0)
+				ell.sName = ellname;
+			return Projection(projname,ell);
+
+		}
+	}
+
+	return Projection();
+}

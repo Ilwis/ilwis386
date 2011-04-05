@@ -80,6 +80,10 @@ public:
 	void _export			SetAttributeTable(const Table& tbl);
     bool _export         		fTblAtt() const;
     Table _export        		tblAtt() const;
+	set<IObjectType>					getFilterTypes() const;
+	void					addFilterType(IObjectType type);
+	void					removeFilterType(IObjectType type);
+	
 
 protected:
 	_export ObjectCollectionPtr(const FileName&);
@@ -90,6 +94,7 @@ protected:
 	ObjectDependency        objdep;
 	ObjectCollectionVirtual *ocv;
 	Table   				attTable;
+	set<IObjectType>		filterTypes;
 };
 
 class ObjectCollection: public IlwisObject

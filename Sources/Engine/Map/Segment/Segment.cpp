@@ -248,6 +248,63 @@ double ILWIS::Segment::rLength() const
 	return getLength();
 }
 
+
+long ILWIS::Segment::nearSection(const Coord& crd, double delta, double use3D) {
+	CoordinateSequence *seq = getCoordinates();
+	if ( seq->size() == 0)
+		return iUNDEF;
+
+	Coord c1 = seq->getAt(0);
+	for(int i=1; i<seq->size(); ++i) {
+		Coord c2 = seq->getAt(i);
+		double c3x, c3y;
+	/*	if ( c1.x - c2.x != 0) {
+			double a1 = (c1.y - c2.y) / (c1.x - c2.x);
+			if ( a1 != 0) {
+				double a2 = -1.0/ a1;
+				double b1 = c1.y  - a1 * c1.x;
+				double b2 = c2.y - a2 * c2.x;
+				c3x = (b1 - b2) / (a2 - a1);
+				c3y = a1 * c3x + b1;
+			} else {
+				c3x = crd.x;
+				c3y = c1.y;
+			}
+		} else {
+			c3x = c1.x;
+			c3y = crd.y;
+		}*/
+		double a = crd.x - c1.x;
+		double b = crd.y - c1.y;
+		double c = c2.x - c1.x;
+		double d = c2.y - c1.y;
+		double dot = a * b + c *d;
+		double lensq = c *c + d * d;
+		double p = dot / lensq;
+		if (  p < 0) {
+			c3x = c1.x;
+			c3y = c1.y;
+		} else if ( p > 1) {
+			c3x = c2.x;
+			c3y = c2.y;
+		} else {
+			c3x = c1.x + p * c;
+			c3y = c1.y + p * d;
+		}
+
+		Coord c3(c3x, c3y);
+		double rd = rDist(c3, crd);
+		if ( rd <= delta)
+			return i;
+		c1 = c2;
+
+	}
+	
+
+
+	return iUNDEF;
+}
+
 void ILWIS::Segment::Split(long iAfter, Coord crdAt, CoordBuf& crdBufBefore, CoordBuf& crdBufAfter)
 {
 	CoordBounds cbBefore, cbAfter;

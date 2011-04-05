@@ -169,10 +169,11 @@ void TableStoreIlwis3::get(int row, int column, double& v ) const {
 	switch(field.getColumnType()) {
 		case ColumnInfo::ctRAW:{
 				long raw = *(long *) p;
-				if ( raw == 0)
-					v = rUNDEF;
-				double rVal = raw + field.getValueOffset();
-				v = rVal * field.getStep();
+				//if ( raw == 0)
+				//	v = rUNDEF;
+				//double rVal = raw + field.getValueOffset();
+				//v = rVal * field.getStep();
+				v = raw;
 		    }
 		    break;
 		case ColumnInfo::ctREAL:
@@ -198,6 +199,11 @@ void TableStoreIlwis3::get(int row, int column, String& s) const {
 void TableStoreIlwis3::get(int row, int column, CoordinateSequence **seq) const {
 	const ColumnInfo& field = columnInfo.at(column);
 	char *p = moveTo(row, column, field);
+	double *a1 = (double *)(records);
+	double *a2 = (double *)(records+8);
+	double *a3 = (double *)(records+16);
+	double *a4 = (double *)(records+24);
+	double *a5 = (double *)(records+32);
 	CoordinateSequence *s = (CoordinateSequence *)(*(long *)p);
 	(*seq) = s;
 

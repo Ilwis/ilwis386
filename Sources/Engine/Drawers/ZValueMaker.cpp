@@ -15,8 +15,7 @@ void ZValueMaker::setDataSourceMap(const BaseMap& mp){
 	threeDPossible =  mp->dm()->dmt() == dmtVALUE || mp->dm()->dmt() == dmtIMAGE;
 	datasourcemap = mp;
 	table = Table();
-	RangeReal tempRange = mp->dvrs().rrMinMax();
-	if ( tempRange.fValid())
+	RangeReal tempRange = mp->rrMinMax();
 		range = tempRange;
 	if ( !range.fValid() && cbLimits.fValid()) {
 		range = RangeReal(0,min(cbLimits.width(), cbLimits.height()));
@@ -111,8 +110,12 @@ double ZValueMaker::getValue(const Coord& crd, Feature *f ){
 	if (!threeDPossible)
 		return spatialsourcemap->cb().width() * 0.01;
 	double value = 0;
-	if (self && f && type != IlwisObject::iotRASMAP)
-		value =  f->rValue();
+	if (self && f && type != IlwisObject::iotRASMAP) {
+		//if (!datasourcemap->dvrs().fRawAvailable())
+			value =  f->rValue();
+		//else
+		//	value = datasourcemap->dvrs().rValue(f->rValue());
+	}
 	if (self && type == IlwisObject::iotRASMAP){
 		value = spatialsourcemap->rValue(crd);
 	}

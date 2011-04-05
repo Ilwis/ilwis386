@@ -46,6 +46,6 @@ public:
 protected:
 	virtual void Load();
 	bool isForwardLinked(Coord c1, Coord c2) { return true; }
-	void getRings(long startIndex, const Table& tblTopology, const Table& tblPolygon, vector<LinearRing*>& rings );
+	bool getRings(long startIndex, const Table& tblTopology, const Table& tblPolygon, vector<LinearRing*>& rings );
 	bool isForwardStartDirection(const Column& colFwl,const Column& colBwl, ColumnCoordBuf *colCrdBuf, long index);
 };

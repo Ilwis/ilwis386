@@ -35,7 +35,7 @@
  Created on: 2007-02-8
  ***************************************************************/
 #include "Headers\toolspch.h"
-#include "Headers\geos.h"
+#include "Geos\Geos.h"
 #include "Engine\Table\ColumnCoordBuf.h"
 #include "Engine\Domain\dmcoordbuf.h"
 

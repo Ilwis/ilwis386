@@ -38,7 +38,7 @@
 #ifndef ILWSEGSTORE_H
 #define ILWSEGSTORE_H
 #include "Engine\Map\Segment\Seg.h"
-#include "Headers\geos.h"
+#include "Geos\Geos.h"
 
 class APPEXPORT Tranquilizer;
 class SegmentMapPtr;

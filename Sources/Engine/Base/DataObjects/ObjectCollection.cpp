@@ -195,12 +195,19 @@ ObjectCollectionPtr::~ObjectCollectionPtr()
 	}
 }
 
-ObjectCollectionPtr::ObjectCollectionPtr(const FileName& fn)
+ObjectCollectionPtr::ObjectCollectionPtr(const FileName& fn) 
 : IlwisObjectPtr(fn), ocv(0)
 {
 	long iNr;
 	ReadElement("ObjectCollection", "NrObjects", iNr);
 	ReadElement("ObjectCollection", "AttributeTable", attTable);
+	long ft;
+	ReadElement("ObjectCollection", "FilterTypes", ft);
+	for(int i=0; i < ft; ++i) {
+		long ft;
+		ReadElement("ObjectCollection", String("FilterType%d",i).scVal(), ft);
+		filterTypes.insert((IObjectType)ft);
+	}
 	FileName fnObject;
 	for(int i = 0; i < iNr; ++i)
 	{
@@ -298,6 +305,14 @@ void ObjectCollectionPtr::Store()
 		WriteElement("ObjectCollection", "Type", sType());	
 	WriteElement("ObjectCollection", "NrObjects", (long)arObjects.size());
 	WriteElement("ObjectCollection", "AttributeTable", attTable);
+	long sz = filterTypes.size();
+	WriteElement("ObjectCollection", "FilterTypes", sz);
+	int count = 0;
+	for(set<IObjectType>::iterator cur=filterTypes.begin(); cur != filterTypes.end(); ++cur) {
+		long ft = (*cur);
+		WriteElement("ObjectCollection", String("FilterType%d",count++).scVal(), ft);
+	}
+
 
 	for(unsigned int i=0; i < arObjects.size(); ++i)
 	{
@@ -347,6 +362,10 @@ void ObjectCollectionPtr::Add(const IlwisObject& obj)
 
 void ObjectCollectionPtr::Add(const FileName& fnObject)
 {
+	set<IObjectType>::iterator whre = filterTypes.find(IOTYPE(fnObject));
+	if ( whre == filterTypes.end() && filterTypes.size() != 0)
+		return;
+
 	FileNameIter cur = find(arObjects.begin(), arObjects.end(), fnObject);
 	ObjectInfo::WriteAdditionOfFileToCollection(fnObject, fnObj);
 	if (cur != arObjects.end())	{
@@ -501,4 +520,16 @@ bool ObjectCollectionPtr::fTblAtt() const {
 }
 Table ObjectCollectionPtr::tblAtt() const {
 	return attTable;
+}
+
+set<IObjectType> ObjectCollectionPtr::getFilterTypes() const{
+	return filterTypes;
+}
+
+void ObjectCollectionPtr::addFilterType(IObjectType type){
+	filterTypes.insert(type);
+}
+
+void ObjectCollectionPtr::removeFilterType(IObjectType type){
+	filterTypes.erase(type);
 }

@@ -47,7 +47,7 @@
 #include "Engine\Applications\objvirt.h"
 #include "Engine\Applications\ModuleMap.h"
 #include "Engine\Base\System\Engine.h"
-#include "Headers\geos\algorithm\locate\SimplePointInAreaLocator.h"
+#include "geos\algorithm\locate\SimplePointInAreaLocator.h"
 #include "Headers\Hs\polygon.hs"
 
 PolygonMapStore::PolygonMapStore(PolygonMapPtr& p, const FileName& fn) :
@@ -57,7 +57,6 @@ PolygonMapStore::PolygonMapStore(PolygonMapPtr& p, const FileName& fn) :
 	iStatusFlags(0)
 {
 	ptr.ReadElement("PolygonMapStore", "Polygons", ptr._iPol);
-	ptr.ReadElement("PolygonMapStore", "DeletedPolygons", ptr._iPolDeleted);
 }
 
 PolygonMapStore::PolygonMapStore(const FileName& fn, PolygonMapPtr& p, bool fCreate)
@@ -126,9 +125,10 @@ void PolygonMapStore::Store()
 {
 	FileName fnData(ptr.fnObj,".mpz#");
 	File  binaryFile(fnData,facCRT);
+	long correct = 0;
 	for(int i = 0; i < geometries->size(); ++i) {
 		ILWIS::Polygon *pol = (ILWIS::Polygon *)geometries->at(i);
-		if ( pol->fValid()) {
+		if ( pol->fValid() && !pol->fDeleted()) {
 			const LineString *ring = pol->getExteriorRing();
 			StoreRing(binaryFile, ring);
 			double value = pol->rValue();
@@ -139,23 +139,16 @@ void PolygonMapStore::Store()
 				ring = pol->getInteriorRingN(j);
 				StoreRing(binaryFile,ring);
 			}
-		}
+		} else
+			++correct;
 	}
 
 	FileName	fnPolygon;
 	ptr.WriteElement("PolygonMapStore","Format",ptr.getVersionBinary());
 	ptr.WriteElement("PolygonMapStore", "DataPol", fnData);
-	/*if ( ptr.ReadElement("PolygonMapStore", "DataPol", fnPolygon))
-	{
-		if ( fnPolygon.fExist() )
-			DeleteFile(fnPolygon.sFullPath().scVal());
-		ptr.WriteElement("PolygonMapStore", "DataPol", (char*)0);			
-	}*/		
 	ptr.WriteElement("PolygonMap", "Type", "PolygonMapStore");
 
-	ptr.WriteElement("PolygonMapStore", "Polygons", iPol());
-	if (iPolDeleted() != iUNDEF)
-		ptr.WriteElement("PolygonMapStore", "DeletedPolygons", iPolDeleted());
+	ptr.WriteElement("PolygonMapStore", "Polygons", iPol() - correct);
 }
 
 void PolygonMapStore::UnStore(const FileName& fn)

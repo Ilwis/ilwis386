@@ -98,7 +98,7 @@
 #include "Engine\Domain\Dmvalue.h"
 #include "Engine\Base\Algorithm\Clipline.h"
 #include "Engine\Map\Point\ilwPoint.h"
-#include "Headers\geos\algorithm\InteriorPointArea.h"
+#include "geos\algorithm\InteriorPointArea.h"
 #include "Headers\Hs\polygon.hs"
 
 // for the time being the interface works with the 1.4 datastructures

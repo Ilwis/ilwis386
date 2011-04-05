@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine\Map\Feature.h"
-#include "Headers\geos.h"
+#include "Geos\Geos.h"
 
 class Mask;
 

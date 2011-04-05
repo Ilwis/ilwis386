@@ -71,7 +71,7 @@
 #ifndef ILWBUF_H
 #define ILWBUF_H
 
-#include "Headers\geos.h"
+#include "Geos\Geos.h"
 #include "Engine\Base\DataObjects\Dat2.h"
 
 struct Coord;

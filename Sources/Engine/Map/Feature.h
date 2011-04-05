@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Headers\geos.h"
+#include "Geos\Geos.h"
 
 class Mask;
 class DomainValueRangeStruct;
@@ -25,6 +25,7 @@ public:
 	String getGuid() const;
 	bool EnvelopeIntersectsWith(Geometry *g2, bool useMargine=false);
 	CoordBounds Feature::cbBounds() const;
+	virtual long nearSection(const Coord& crd, double delta=rUNDEF, double use3D=false) { return iUNDEF;}
 	virtual void Feature::getBoundaries(vector<CoordinateSequence*>& boundaries) const = 0;
 
 protected:

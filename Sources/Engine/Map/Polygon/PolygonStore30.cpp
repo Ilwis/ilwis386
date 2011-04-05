@@ -30,29 +30,30 @@ void PolygonMapStoreFormat30::Load()
 		if ( colArea->rValue(i) <  0)
 			continue;
 		vector<LinearRing*> rings;
-		getRings(colTopStart->iValue(i), tblTopology, tblPolygon, rings);
-		ILWIS::Polygon *polygon;
-		if ( ptr.dvrs().fValues()) {
-			polygon = new ILWIS::RPolygon();	
-		} else{
-			polygon = new ILWIS::LPolygon();
+		if (getRings(colTopStart->iValue(i), tblTopology, tblPolygon, rings)) {
+			ILWIS::Polygon *polygon;
+			if ( ptr.dvrs().fValues()) {
+				polygon = new ILWIS::RPolygon();	
+			} else{
+				polygon = new ILWIS::LPolygon();
+			}
+			if ( rings.size() == 0)
+				continue;
+			polygon->addBoundary(rings.at(0));
+			CoordinateSequence *seq = rings.at(0)->getCoordinates();
+			CoordBounds cb = ptr.cb();
+			polygon->PutVal(colValue->iRaw(i));
+				for(int j = 1; j < rings.size(); ++j) {
+				polygon->addHole(rings[j]);
+			}
+			geometries->push_back(polygon);
 		}
-		if ( rings.size() == 0)
-			continue;
-		polygon->addBoundary(rings.at(0));
-		CoordinateSequence *seq = rings.at(0)->getCoordinates();
-		CoordBounds cb = ptr.cb();
-		polygon->PutVal(colValue->iRaw(i));
-			for(int j = 1; j < rings.size(); ++j) {
-			polygon->addHole(rings[j]);
-		}
-		geometries->push_back(polygon);
 
 	}
 	CalcBounds();
 }
 
-void PolygonMapStoreFormat30::getRings(long startIndex, const Table& tblTopology, const Table& tblPolygon, vector<LinearRing*>& rings ){
+bool PolygonMapStoreFormat30::getRings(long startIndex, const Table& tblTopology, const Table& tblPolygon, vector<LinearRing*>& rings ){
 	Column colFwl = tblTopology->col("ForwardLink");
 	Column colBwl = tblTopology->col("BackwardLink");
 	Column colCoords = tblTopology->col("Coords");
@@ -89,10 +90,15 @@ void PolygonMapStoreFormat30::getRings(long startIndex, const Table& tblTopology
 			rings.push_back(ring);			
 			seq = new CoordinateArraySequence();
 		}
+		int oldIndex = index;
 		index = forward ?  colFwl->iRaw(abs(index)): colBwl->iRaw(abs(index));
+		if ( oldIndex == index && index != startIndex) // this would indicate infintite loop. corrupt data
+			return false;
 		forward = index > 0;
 	} while(abs(index) != abs(startIndex));
 	delete seq;
+
+	return true;
 }
 
 bool PolygonMapStoreFormat30::isForwardStartDirection(const Column& colFwl,const Column& colBwl, ColumnCoordBuf *colCrdBuf,long index) {

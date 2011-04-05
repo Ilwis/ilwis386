@@ -44,7 +44,7 @@
 #define ILWPOLMAPSTORE_H
 #include "Engine\Map\Polygon\POL.H"
 #include "Engine\Map\Segment\SEGSTORE.H"
-#include "Headers\geos.h"
+#include "Geos\Geos.h"
 
 class APPEXPORT Tranquilizer;
 

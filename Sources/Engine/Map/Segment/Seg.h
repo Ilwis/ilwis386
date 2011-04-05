@@ -41,7 +41,7 @@
 #include "Engine\Map\basemap.h"
 #include "Engine\Map\Feature.h"
 #include "Engine\Base\mask.h"
-#include "Headers\geos.h"
+#include "Geos\Geos.h"
 
 struct segtype;
 class SegmentMapStore;
@@ -71,6 +71,7 @@ public:
 
 	virtual			FeatureType getType() const;
 	virtual	void    getBoundaries(std::vector<geos::geom::CoordinateSequence*>& boundaries) const;
+	long			nearSection(const Coord& crd, double delta, double use3D=false);
 
 
 	double			rLength() const;
