@@ -1053,26 +1053,37 @@ void LineSetEditor::OnLButtonDown(UINT nFlags, CPoint point){
 	if ( mode & mSPLIT) {
 		Coord crd = mdoc->rootDrawer->screenToWorld(RowCol(point.y, point.x));
 		CoordBounds cbZoom = mdoc->rootDrawer->getCoordBoundsZoom();
-		double delta = max(cbZoom.height(), cbZoom.width()) / 200.0;
+		double delta = max(cbZoom.height(), cbZoom.width()) / 50.0;
 		vector<Geometry *> geoms = bmapptr->getFeatures(crd, delta);
 		for(int i = 0; i < geoms.size(); ++i) {
 			Segment *seg = CSEGMENT(geoms.at(i));
 			long after = seg->nearSection(crd, delta);
+			if ( after == iUNDEF)
+				continue;
 			vector<CoordinateSequence*> boundaries;
 			seg->getBoundaries(boundaries);
 			CoordinateSequence *seq = boundaries[0];
 			vector<Coordinate> copyv;
-			for(int k=0; k < seq->size(); ++k) {
+			int k = 0;
+			while(k < seq->size()){
 				if ( k != after) {
-					copyv.push_back(seq->getAt(k));
+					copyv.push_back(seq->getAt(k++));
 				}
 				else {
 					copyv.push_back(crd);
+					after = iUNDEF;
 				}
 			}
-			
-			CoordinateArraySequence *arseq = new CoordinateArraySequence(&copyv);
-			seg->PutCoords(arseq);
+			vector<NewDrawer *> drawers;
+			drawer->getRootDrawer()->getDrawerFor(seg, drawers);
+			if ( drawers.size() > 0) {		
+				CoordinateArraySequence *arseq = new CoordinateArraySequence(&copyv);
+				seg->PutCoords(arseq);
+			// find the lowest drawer that belongs to this feature
+				PreparationParameters p(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER,bmapptr->cs());
+				drawers[0]->prepare(&p);
+				mdoc->mpvGetView()->Invalidate();
+			}
 		}
 	}
 

@@ -45,7 +45,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)Sources&quot;;&quot;$(SolutionDir)Sources\Headers&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)Sources\Geos\headers&quot;;&quot;$(SolutionDir)Sources&quot;;&quot;$(SolutionDir)Sources\Headers&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;IlwisApplicationsUI;_WIN32_WINNT=0x0400;_WIN32_IE=0x0400;_CRT_SECURE_NO_WARNINGS;_HAS_ITERATOR_DEBUGGING=0;_SECURE_SCL=0"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -71,7 +71,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ILWISEngine.lib htmlhelp.lib IlwisClient.lib geosd.lib opengl32.lib ILWISDrawers.lib glu32.lib gdiplus.lib"
+				AdditionalDependencies="ILWISEngine.lib htmlhelp.lib IlwisClient.lib opengl32.lib ILWISDrawers.lib glu32.lib gdiplus.lib geos.lib"
 				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\Extensions\DrawersUI.dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)libraries\import&quot;;&quot;$(SolutionDir)libraries\$(ConfigurationName)&quot;"
@@ -136,7 +136,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)Sources&quot;;&quot;$(SolutionDir)Sources\Headers&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)Sources\Geos\headers&quot;;&quot;$(SolutionDir)Sources&quot;;&quot;$(SolutionDir)Sources\Headers&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;IlwisApplicationsUI;_WIN32_WINNT=0x0400;_CRT_SECURE_NO_WARNINGS;_HAS_ITERATOR_DEBUGGING=0;_SECURE_SCL=0;_WIN32_IE=0x0400"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="0"
@@ -162,7 +162,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ILWISEngine.lib htmlhelp.lib IlwisClient.lib IlwisApplications.lib  geos.lib"
+				AdditionalDependencies="ILWISEngine.lib htmlhelp.lib IlwisClient.lib IlwisApplications.lib geos.lib gdiplus.lib"
 				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\Extensions\DrawersUI.dll"
 				Version="3.7"
 				LinkIncremental="1"

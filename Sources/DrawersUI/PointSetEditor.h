@@ -43,6 +43,7 @@ namespace ILWIS {
 	public:
 		CoordForm(CWnd *wPar, ComplexDrawer *dr, Feature *f);
 		void apply(); 
+		void setFeature(Feature *f);
 	private:
 		Coord crd;
 		ILWIS::Point *pnt;

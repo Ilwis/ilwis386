@@ -351,17 +351,6 @@ void FeatureSetEditor::OnLButtonDown(UINT nFlags, CPoint point){
 			}
 		}
 	}
-	if ( mode & mMOVE) {
-		selectMove(nFlags, point);
-		mode |= mMOVING;
-	}
-	return ;
-
-}
-
-void FeatureSetEditor::OnLButtonUp(UINT nFlags, CPoint point){
-	if ( mode & mUNKNOWN)
-		return ;
 	if ( mode & mMOVING) {
 		CoordSystem csyMap = bmapptr->cs();
 		CoordSystem csyPane = setdrawer->getRootDrawer()->getCoordinateSystem();
@@ -373,6 +362,29 @@ void FeatureSetEditor::OnLButtonUp(UINT nFlags, CPoint point){
 			bmapptr->fChanged = true;
 			mode = mode & ~mMOVING;
 		}
+	}
+	else if ( mode & mMOVE) {
+		selectMove(nFlags, point);
+		mode |= mMOVING;
+	}
+	return ;
+
+}
+
+void FeatureSetEditor::OnLButtonUp(UINT nFlags, CPoint point){
+	if ( mode & mUNKNOWN)
+		return ;
+	if ( mode & mMOVING) {
+		//CoordSystem csyMap = bmapptr->cs();
+		//CoordSystem csyPane = setdrawer->getRootDrawer()->getCoordinateSystem();
+		//if ( csyMap == csyPane)  {
+		//	for(SFMIter cur = selectedFeatures.begin(); cur != selectedFeatures.end(); ++cur) {
+		//		SelectedFeature *f = (*cur).second;
+		//		updateFeature(f);
+		//	}
+		//	bmapptr->fChanged = true;
+		//	//mode = mode & ~mMOVING;
+		//}
 	} else
 		return ;
 

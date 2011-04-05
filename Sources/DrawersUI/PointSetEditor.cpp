@@ -366,15 +366,18 @@ void PointSetEditor::OnLButtonDblClk(UINT nFlags, CPoint point){
 						ComplexDrawer *cdrw = (ComplexDrawer *)getDrawer();
 						crdFrm = new CoordForm(tree, cdrw,fselected);
 					}
-					else
+					else {
+						crdFrm->setFeature(fselected);
 						crdFrm->ShowWindow(SW_SHOW);
+					}
 				}
 			}
 		}
 	}
 }
 //-------------------------------------
-CoordForm::CoordForm(CWnd *wPar, ComplexDrawer *dr, Feature *feature) : DisplayOptionsForm(dr,wPar,TR("Coordinate(s)")){
+CoordForm::CoordForm(CWnd *wPar, ComplexDrawer *dr, Feature *feature) : 
+DisplayOptionsForm(dr,wPar,TR("Coordinate(s)"),fbsApplyButton | fbsBUTTONSUNDER | fbsOKHASCLOSETEXT | fbsSHOWALWAYS|fbsHIDEONCLOSE){
 	pnt = CPOINT(feature);
 	crd = *pnt->getCoordinate();
 	fc = new FieldCoord(root,TR("Coordinate"),&crd);
@@ -390,4 +393,12 @@ void CoordForm::apply() {
 	this->ShowWindow(SW_HIDE);
 
 	updateMapView();
+}
+
+void CoordForm::setFeature(Feature *f){
+	pnt = CPOINT(f);
+	crd = *pnt->getCoordinate();
+	fc->SetVal(crd);
+
+
 }
