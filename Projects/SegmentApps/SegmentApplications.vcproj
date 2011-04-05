@@ -46,7 +46,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)Sources\Headers&quot;;&quot;$(SolutionDir)Sources&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)Sources\Geos\headers&quot;;&quot;$(SolutionDir)Sources\Headers&quot;;&quot;$(SolutionDir)Sources&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;SegmentApplications;_WIN32_WINNT=0x0400;_WIN32_IE=0x0400;_CRT_SECURE_NO_WARNINGS;_HAS_ITERATOR_DEBUGGING=0;_SECURE_SCL=0"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -72,7 +72,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ILWISEngine.lib htmlhelp.lib geosd.lib"
+				AdditionalDependencies="ILWISEngine.lib htmlhelp.lib geos.lib"
 				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\Extensions\IlwisSegmentApps.dll"
 				Version="3.5"
 				LinkIncremental="2"
@@ -142,7 +142,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)Sources\Headers&quot;;&quot;$(SolutionDir)Sources&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)Sources\Geos\headers&quot;;&quot;$(SolutionDir)Sources\Headers&quot;;&quot;$(SolutionDir)Sources&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;SegmentApplications;_WIN32_WINNT=0x0400;_CRT_SECURE_NO_WARNINGS;_HAS_ITERATOR_DEBUGGING=0;_SECURE_SCL=0;_WIN32_IE=0x0400"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="0"
@@ -168,7 +168,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ILWISEngine.lib htmlhelp.lib geos.lib"
+				AdditionalDependencies="ILWISEngine.lib geos.lib"
 				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\Extensions\Ilwis$(ProjectName).dll"
 				Version="3.7"
 				LinkIncremental="1"

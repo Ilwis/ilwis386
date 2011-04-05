@@ -399,9 +399,9 @@ bool SegmentMapGlue::fFreezing()
 					{
 						if (!asmp[i]->dvrs().fValues())
 							continue;
-						RangeReal rr = asmp[i]->rrMinMax(false);
+						RangeReal rr = asmp[i]->rrMinMax(BaseMapPtr::mmmNOCALCULATE);
 						if ( !rr.fValid())
-							rr = asmp[i]->rrMinMax(true);
+							rr = asmp[i]->rrMinMax(BaseMapPtr::mmmCALCULATE);
 						if (rr.rLo() < rMin)
 							rMin = rr.rLo();
 						if (rr.rHi() > rMax)

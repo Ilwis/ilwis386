@@ -34,50 +34,7 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/* $Log: /ILWIS 3.0/SegmentMap/CNFRMRSV.H $
- * 
- * 5     10-11-05 11:37 Retsios
- * The application now requires the step-value between iso-lines (instead
- * of the number of iso-lines). This seems more intuitive to a user.
- * 
- * 4     9-11-05 17:57 Retsios
- * Solve memory leaks
- * 
- * 3     9-11-05 12:39 Retsios
- * Re-order the segments in the segmentmap so that the ones with higher
- * iso-values are always on top of segments with lower iso-values
- * 
- * 2     8-11-05 18:21 Retsios
- * Initial seriously working version
- * 
- * 1     7-11-05 18:21 Retsios
- * 
- * 5     27-11-00 15:17 Koolhoven
- * in case of composite name now also produce attribute table 
- * 
- * 4     8-03-00 17:53 Wind
- * removed 1000 coordinates limit
- * 
- * 3     10-12-99 11:51a Martin
- * //->/*
- * 
- * 2     10-12-99 11:49a Martin
- * removed internal rowcols and replaced them by true coords
-// Revision 1.4  1998/09/16 17:25:20  Wim
-// 22beta2
-//
-// Revision 1.3  1997/09/02 14:31:01  martin
-// Function added to construct names for segments
-//
-// Revision 1.2  1997/07/29 16:22:31  Wim
-// fSingleName to distinguish between "single" or "composite" naming
-// of the segments.
-//
-/* SegmentMapFromRasPol
-   Copyright Ilwis System Development ITC
-   oct 1996, by Jelle Wind
-	Last change:  MS    2 Sep 97    3:17 pm
-*/
+
 
 #ifndef ILWCONFRMRASVAL_H
 #define ILWCONFRMRASVAL_H
@@ -87,42 +44,6 @@
 IlwisObjectPtr * createSegmentMapFromRasValueBnd(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
 IlwisObjectPtr * createSegmentMapFromRasAreaBnd(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms );
 
-//enum DirBound { dbNONE, dbUP, dbDOWN, dbLEFT, dbRIGHT };
-//
-//class ChainRec {
-//public:
-//  ChainRec() { iLength = 1; dbCode = dbNONE; }
-//  ChainRec(DirBound db, long iLen){ iLength = iLen; dbCode = db; }  
-//  DirBound dbCode;  
-//  long iLength;
-//};  
-//
-//inline ChainRec undef(const ChainRec&) 
-//{ return ChainRec(); }
-//
-//
-//class SegBound {
-//public:  
-////  long iSegNr;
-////  long iNrCh, iBegCh, iEndCh;
-//  bool fBeginSeg, fEndSeg;
-//  Coord crdFrom, crdTo;
-//  DList<ChainRec> dlChain;
-//  double rLeftVal, rRightVal;
-//  void Insert(DirBound db, long iLength) {
-//    dlChain.insert(ChainRec(db, iLength));
-//  }  
-//  void Append(DirBound db, long iLength) {
-//    dlChain.append(ChainRec(db, iLength));
-//  }  
-//  ChainRec& crFirst() {
-//    return dlChain.first();
-//  }  
-//  ChainRec& crLast() {
-//    return dlChain.last();
-//  }  
-//};
-
 class SegBound;
 
 class DATEXPORT SegmentMapFromRasValueBnd: public SegmentMapVirtual
@@ -131,6 +52,7 @@ class DATEXPORT SegmentMapFromRasValueBnd: public SegmentMapVirtual
 public:
   SegmentMapFromRasValueBnd(const FileName&, SegmentMapPtr& p);
   SegmentMapFromRasValueBnd(const FileName& fn, SegmentMapPtr& p, const Map& mp, double rStartVal, double rEndVal, double rStepVal, bool f8Con, bool fSmooth);
+  SegmentMapFromRasValueBnd(const FileName& fn, SegmentMapPtr& p, const Map& mp, const set<double>& seq, bool f8Con, bool fSmth);
   ~SegmentMapFromRasValueBnd();
   static const char* sSyntax();
   virtual String sExpression() const;
@@ -150,6 +72,7 @@ private:
   void StoreSegm(const SegBound& sb, int& iCurrentIsoNr);
   void StoreSegm(CoordBuf& cBuf, long& iCrd, double& rVal);
 	int iComparePixels(const double& rFirst, const double& rSecond, const double& rCurrentIsoVal);
+	static void parseSequence(const String& sequence, set<double>& intervals);
 //  long iNewSegNr();
   Map map;
   RealBufExt rBufInp;     // rasvec 1.4 var: line
@@ -167,6 +90,8 @@ private:
 	double m_rIsoStepVal;
 	list<CoordBuf> *tmpSegmentMap; // remember coordinates here so that they can be stored in the order we want
 	list <SegBound*> cleanupList; // to gather the SegBounds that are new-ed and should be deleted
+	set<double> intervals;
+
 };
 
 #endif
