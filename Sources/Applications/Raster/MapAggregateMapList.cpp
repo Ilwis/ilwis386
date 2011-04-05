@@ -39,6 +39,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "headers\toolspch.h"
+#include "Engine\Base\System\SysInfo.h"
 #include "Applications\Raster\MapAggregateMapList.h"
 #include "Headers\Hs\maplist.hs"
 
@@ -128,10 +129,16 @@ bool MapAggregateMapList::fFreezing()
 	}
 	long offset = 0;
 	long blockSize = size.Row * size.Col * byteSize ;
-	mapBlock = new unsigned char[blockSize * ml->iSize()];
-	memset(mapBlock, 0, blockSize * ml->iSize());
+	CSysInfo sysInfo;
+	sysInfo.Init();
+	DWORD64 memSz = sysInfo.GetAvailPhys();
+	DWORD64 szneeded = blockSize * ml->iSize();
+	if ( szneeded > memSz) {
+		throw ErrorObject(TR("Not enough physical memory"));
+	}
+	mapBlock = new unsigned char[szneeded];
 
-	
+	memset(mapBlock, 0, blockSize * ml->iSize());
 
 	for(int i =ml->iLower(); i < ml->iSize(); ++i) {
 		Map mp = ml[ i];

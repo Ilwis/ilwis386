@@ -201,7 +201,7 @@ bool TableAutoCorrSemiVar::fFreezing()
   if (!fCalculate(mpRotate))
     return false;
   trq.SetTitle(sFreezeTitle);
-  trq.SetHelpTopic(htpFreeze);
+  trq.setHelpItem(htpFreeze);
   CalcAutoCorr(_colVertCorr);
   CalcSemiVar(_colVertVar);
 

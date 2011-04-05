@@ -131,6 +131,8 @@ bool TableCreateTimeColumn::fFreezing()
 	vector<ILWIS::Time> isoStrings;
 	ILWIS::TimeInterval interval;
 	bool useDate = true;
+	int oldYear = iUNDEF;
+	int offset = 0;
 	for(int i = 0; i < mplInput->iSize(); ++i) {
 		Map mp = mplInput[mplInput->iLower() + i];
 		String name = mp->sName();
@@ -146,8 +148,14 @@ bool TableCreateTimeColumn::fFreezing()
 				if ( parts.size() == 3)
 					base = parts[2].iVal();
 				year = name.sSub(start, end - start + 1 ).iVal();
-				if ( base != iUNDEF)
-					year += base;
+				if ( base != iUNDEF) {
+					if ( oldYear > year && year < 100) {
+						offset = 100;
+					}
+					oldYear = year;
+					year += base + offset;
+
+				}
 			}
 			if ( part == "month") {
 				Array<String> parts;
