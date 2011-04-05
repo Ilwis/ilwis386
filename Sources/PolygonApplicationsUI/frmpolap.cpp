@@ -704,7 +704,7 @@ FormPolygonMapFromRaster::FormPolygonMapFromRaster(CWnd* mw, const char* sPar)
     }
   }
   new FieldDataType(root, SAFUiRasMap, &sMap,
-                 new MapListerDomainType(".mpr", dmCLASS|dmIDENT|dmBOOL, true), true);
+                 new MapListerDomainType(".mpr", dmCLASS|dmIDENT|dmBOOL|dmUNIQUEID, true), true);
   RadioGroup* rg = new RadioGroup(root, SAFUiConnect, &iConnect);
   rg->SetIndependentPos();
   RadioButton* rb4 = new RadioButton(rg, SAFUi4Connected);
