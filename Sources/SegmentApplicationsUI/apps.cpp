@@ -66,6 +66,7 @@ Last change:  WK   17 Sep 98    2:14 pm
 #include "Client\Base\BaseCommandHandlerUI.h"
 #include "Client\MainWindow\CommandHandlerUI.h"
 #include "SegmentApplicationsUI\frmSegmentTIN.h"
+#include "SegmentApplicationsUI\SegmentMapFromRasValueBndFrm.h"
 #include "Headers\Hs\Applications.hs"
 
 InfoUIVector* getApplicationInfoUI() {
@@ -92,6 +93,7 @@ InfoUIVector* getApplicationInfoUI() {
 (*infosui).push_back(CommandHandlerUI::createApplicationInfo("symdiffseg","",Cmdsegmentmapsymetricdifference,SMENUssymetricdifference,SMENUSssymetricdifference,"ExeSeg16IcoL",".mpa.mps",0,SMENUDssymetricdifference));
 (*infosui).push_back(CommandHandlerUI::createApplicationInfo("relateseg","",Cmdsegmentmaprelate,SMENUsegrelate,SMENUSsegrelate,"ExeSeg16IcoL",".mps",0,SMENUDsegrelate));
 (*infosui).push_back(CommandHandlerUI::createApplicationInfo("tin","",Cmdsegmentmaptin,SMENUsegTIN,SMENUSsegTIN,"ExeSeg16IcoL",".mps",0,SMENUDsegTIN));
+(*infosui).push_back(CommandHandlerUI::createApplicationInfo("isolines","",Cmdsegmentisoline,TR("&Segment Operations..&Iso Lines"),TR("Iso lines"),"ExeSeg16IcoL",".mps",0,TR("Creates Iso lines from a value raster map")));
 
 return infosui;
 }

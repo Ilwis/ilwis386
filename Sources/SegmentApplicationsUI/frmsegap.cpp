@@ -1490,7 +1490,7 @@ FormSegmentMapFromRaster::FormSegmentMapFromRaster(CWnd* mw, const char* sPar)
     }
   }
   new FieldDataType(root, SAFUiRasMap, &sMap,
-                 new MapListerDomainType(dmCLASS|dmIDENT|dmBOOL), true);
+                 new MapListerDomainType(dmCLASS|dmIDENT|dmBOOL|dmUNIQUEID), true);
   
   RadioGroup* rgConnect = new RadioGroup(root, SAFUiConnect, &iConnect);
   rgConnect->SetIndependentPos();
