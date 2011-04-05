@@ -438,7 +438,7 @@ bool PointMapGlue::fFreezing()
 				for (int i = 0; i < iPntMap; ++i) {
 					if (!apmp[i]->dvrs().fValues())
 						continue;
-					RangeReal rr = apmp[i]->rrMinMax(true);
+					RangeReal rr = apmp[i]->rrMinMax(BaseMapPtr::mmmCALCULATE);
 					if (rr.rLo() < rMin)
 						rMin = rr.rLo();
 					if (rr.rHi() > rMax)

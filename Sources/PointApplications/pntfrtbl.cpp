@@ -313,7 +313,7 @@ void PointMapFromTable::Init()
 {
   _iPoints = tbl->iRecs();
   CoordBounds cb;
-  for (long i = 1; i <= _iPoints; ++i)
+  for (long i = 0; i < _iPoints; ++i)
     cb += cValue(i);
   double rExtraWidth = 1 + cb.width() / 20;
   cb.MinX() -= rExtraWidth;
@@ -334,7 +334,7 @@ void PointMapFromTable::InitFreeze()
 long PointMapFromTable::iRaw(long iRec) const
 {
   if (colAttrib.fValid())
-    return colAttrib->iRaw(iRec);
+    return colAttrib->iRaw(iRec + 1) + 1;
   else
     return iRec;
 }
@@ -342,7 +342,7 @@ long PointMapFromTable::iRaw(long iRec) const
 long PointMapFromTable::iValue(long iRec) const
 {
   if (colAttrib.fValid())
-    return colAttrib->iValue(iRec);
+    return colAttrib->iValue(iRec + 1);
   else
     return dvrs().iValue(iRec);
 }
@@ -350,7 +350,7 @@ long PointMapFromTable::iValue(long iRec) const
 double PointMapFromTable::rValue(long iRec) const
 {
   if (colAttrib.fValid())
-    return colAttrib->rValue(iRec);
+    return colAttrib->rValue(iRec + 1);
   else
     return dvrs().rValue(iRec);
 }
@@ -358,7 +358,7 @@ double PointMapFromTable::rValue(long iRec) const
 String PointMapFromTable::sValue(long iRec, short iWidth, short iDec) const
 {
   if (colAttrib.fValid())
-    return colAttrib->sValue(iRec, iWidth, iDec);
+    return colAttrib->sValue(iRec + 1, iWidth, iDec);
   else
     return dvrs().sValue(iRec, iWidth, iDec);
 }
@@ -368,11 +368,11 @@ Coord PointMapFromTable::cValue(long iRec) const
   Coord crd;
 	if (!colCoord.fValid())
 	{
-	  crd.x = colX->rValue(iRec);
-		crd.y = colY->rValue(iRec);
+	  crd.x = colX->rValue(iRec + 1);
+		crd.y = colY->rValue(iRec + 1);
 	}	
 	else
-		crd = colCoord->cValue(iRec);
+		crd = colCoord->cValue(iRec+1);
 		
   return crd;
 }
