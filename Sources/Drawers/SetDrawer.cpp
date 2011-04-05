@@ -264,8 +264,12 @@ void SetDrawer::drawLegendItem(CDC *dc, const CRect& rct, double rVal) const{
 		dvs = getAtttributeColumn()->dvrs();
 	}
 	Color clr;
-	if ( dvs.dm()->pdv())
-		clr = getDrawingColor()->clrVal(rVal);
+	if ( dvs.dm()->pdv()) {
+		if ( dvs.fUseReals())
+			clr = getDrawingColor()->clrVal(rVal);
+		else
+			clr = getDrawingColor()->clrRaw(dvs.iRaw(rVal), getDrawMethod());
+	}
 	else
 		clr = getDrawingColor()->clrRaw((long)rVal, getDrawMethod());
 	
