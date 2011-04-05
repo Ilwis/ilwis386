@@ -82,7 +82,7 @@ class FieldValueRange: public FieldGroup
 public:
 	_export FieldValueRange(FormEntry* parent, const String& sQuestion,
 		ValueRange* rng, FieldDataType* fdc, 
-		const ValueRange& = ValueRange(-1e300,1e300,1e-6));
+		const ValueRange& = ValueRange(-1e300,1e300,1e-6), bool after=false);
 	void _export SetVal(const ValueRange& rng);
 	void SetCallBack(NotifyProc np)
 	{ FieldGroup::SetCallBack(np);

@@ -226,8 +226,8 @@ void DrawerTool::timedEvent(UINT timerid) {
 }
 //----------------------------------------------------------------------------
 
-DisplayOptionsForm::DisplayOptionsForm(ComplexDrawer *dr,CWnd *par, const String& title) : 
-FormBaseDialog(par,title,fbsApplyButton | fbsBUTTONSUNDER | fbsOKHASCLOSETEXT | fbsSHOWALWAYS),
+DisplayOptionsForm::DisplayOptionsForm(ComplexDrawer *dr,CWnd *par, const String& title, int style) : 
+FormBaseDialog(par,title,style),
 view((LayerTreeView *)par),
 drw(dr),
 initial(true)

@@ -246,6 +246,8 @@ bool FilesForRemovalCollector::CollectObjectFiles(Array<FileName>& afn)
 				HandleDeletionOfContainers(obj, afnContents, m_choices.choiceContainerHandling);
 				if (chCANCEL == m_choices.choiceContainerHandling)
 					return false;
+				if ( chNO == m_choices.choiceContainerHandling)
+					m_osStruct->RetrieveEntireCollection(false);
 
 				obj->GetObjectStructure(*m_osStruct);
 			}

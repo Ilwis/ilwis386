@@ -76,7 +76,7 @@ struct DrawerToolInfo {
 
 class _export DisplayOptionsForm : public FormBaseDialog {
 public:
-	DisplayOptionsForm(ComplexDrawer *dr,CWnd *par, const String& title);
+	DisplayOptionsForm(ComplexDrawer *dr,CWnd *par, const String& title, int style=fbsApplyButton | fbsBUTTONSUNDER | fbsOKHASCLOSETEXT | fbsSHOWALWAYS);
 	afx_msg virtual void OnCancel();
 	int exec();
 	virtual void apply();

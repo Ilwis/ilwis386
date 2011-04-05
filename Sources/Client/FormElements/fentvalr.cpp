@@ -119,7 +119,7 @@ Last change:  WK    9 Oct 98    5:19 pm
 #include "Engine\Domain\Dmvalue.h"
 
 FieldValueRange::FieldValueRange(FormEntry* parent, const String& sQuestion,
-								 ValueRange *rng, FieldDataType* _fdc, const ValueRange& vrRange)
+								 ValueRange *rng, FieldDataType* _fdc, const ValueRange& vrRange, bool after)
 								 : FieldGroup(parent), vr(rng), fdc(_fdc),
 								 frr(0), dv(0)
 {
@@ -133,7 +133,12 @@ FieldValueRange::FieldValueRange(FormEntry* parent, const String& sQuestion,
 	frStep = new FieldReal(this, SUIUiStepSize, &rStep, ValueRange(0,1e9,0));
 	if (rStep < 0.001)
 		frStep->SetStepSize(rStep); // prevent rounding to 0 in display!
-	frStep->Align(frr, AL_UNDER);  
+	if ( after) {
+		frStep->Align(frr, AL_AFTER);
+	}
+	else {
+		frStep->Align(frr, AL_UNDER);  
+	}
 	frStep->SetCallBack((NotifyProc)&FieldValueRange::StepChangeCallBack,this);
 }       
 
