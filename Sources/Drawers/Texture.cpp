@@ -122,7 +122,7 @@ void Texture::BindMe(DrawerContext * drawerContext)
 			palette->MakeCurrent();
 			drawerContext->setActivePalette(palette);
 		}
-		glTexImage2D( GL_TEXTURE_2D, 0, 4, sizeX / zoomFactor, sizeY / zoomFactor, 0, GL_COLOR_INDEX, GL_UNSIGNED_SHORT, texture_data);
+		glTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, sizeX / zoomFactor, sizeY / zoomFactor, GL_COLOR_INDEX, GL_UNSIGNED_SHORT, texture_data);
 		glPixelTransferf(GL_MAP_COLOR, oldVal);
 		fRepresentationChanged = false;
 	}
