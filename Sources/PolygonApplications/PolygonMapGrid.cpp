@@ -41,7 +41,7 @@
 #include "PolygonApplications\PolygonMapGrid.h"
 #include "Engine\Table\tbl.h"
 #include "Engine\Domain\dmsort.h"
-#include "Engine\Base\System\commandhandler.h"
+//#include "Engine\Base\System\commandhandler.h"
 #include "Headers\Htp\Ilwisapp.htp"
 #include "Headers\Hs\polygon.hs"
 #include <math.h>
