@@ -64,89 +64,89 @@
 #include "Applications\Table\TableCreateTimeColumn.h"
 #include "Applications\Table\AUTCSEMV.H"
 
-//extern "C" _export vector<ApplicationInfo *>* getApplicationInfo());
+//extern "C" _export vector<CommandInfo *>* getCommandInfo());
 
-extern "C" _export void testApplicationInfo(ApplicationInfo* name) {
+extern "C" _export void testCommandInfo(CommandInfo* name) {
 	name[0].createFunction = createMapAttribute;
 	name[1].name = "MapAttribute";
 }
-InfoVector* getApplicationInfo() {
+InfoVector* getCommandInfo() {
 
 	InfoVector *infos = new InfoVector();
 
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapListChangeDetection,"MapListChangeDetection"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapAggregateMapList,"MapAggregateMapList"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapAttribute,"MapAttribute",metadataMapAtrribute));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapListMatrixMultiply,"MapListMatrixMultiply"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapVariogramSurfaceRas,"MapVariogramSurfaceRas"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapListCalculate,"MapListCalculate"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapListApplic,"MapListApplic"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapGlue,"MapGlue"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapFilter,"MapFilter"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapClassify,"MapClassify"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapColorSep,"MapColorSeparation"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapColorSep,"MapColorSep"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapRasterizeSegment,"MapRasterizeSegment"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapRasterizePolygon,"MapRasterizePolygon"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapAreaNumbering,"MapAreaNumbering"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapDensify,"MapDensify"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapAggregate,"MapAggregate___"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapMirrorRotate,"MapMirrorRotate"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapHeckbert,"MapHeckbert"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapCluster,"MapCluster"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapMaplistStatistics,"MapMaplistStatistics"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapColorComp,"MapColorComp___"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapDistance,"MapDistance"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapSubMap,"MapSubMap___"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapThiessen,"MapThiessen"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapCross,"MapCross"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapSlicing,"MapSlicing", metadataSlicing));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapStretch,"MapStretch___"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapRasterizePoint,"MapRasterizePoint___"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapNearestPoint,"MapNearestPoint"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapMovingAverage,"MapMovingAverage"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapMovingSurface,"MapMovingSurface"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapTrendSurface,"MapTrendSurface"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapResample,"MapResample"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapApply3D,"MapApply3D"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapInterpolContour,"MapInterpolContour"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapSegmentDensity,"MapSegmentDensity"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapKriging,"MapKriging___"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapCoKriging,"MapCoKriging"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapVariogramSurfacePnt,"MapVariogramSurfacePnt"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapComputedElsewhere,"MapComputedElsewhere"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapKrigingFromRaster,"MapKrigingFromRaster"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapVisibility,"MapVisibility"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapIterator,"MapIterator"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapIterator,"MapIterProp"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapCalculate,"MapCalculate"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createColumnCalculate,"ColumnCalculate"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createColumnAggregate,"ColumnAggregate___"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createColumnAggregate,"agg___"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createColumnSemiVariogram,"ColumnSemiVariogram"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createColumnCumulative,"ColumnCumulative"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createColumnLeastSquaresFit,"ColumnLeastSquaresFit"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createTableCrossVarioGram,"TableCrossVarioGram"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createTableBursaWolf,"TableBursaWolf"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createTableChangeDomain,"TableChangeDomain"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createTableCross,"TableCross"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createTableGlue,"TableGlue"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createTableGlue,"TableGlue"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createTableSpatCorr,"TableSpatCorr"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createTableSegDir,"TableSegDir"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createTablePattAnal,"TablePattAnal"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createTableNeighbourPol,"TableNeighbourPol"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createTableTranspose,"TableTranspose"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createTableAutoCorrSemiVar,"TableAutoCorrSemiVar"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createTableCreateTimeColumn,"TableCreateTimeColumn"));
+	infos->push_back(CommandMap::newCommandInfo(createMapListChangeDetection,"MapListChangeDetection"));
+	infos->push_back(CommandMap::newCommandInfo(createMapAggregateMapList,"MapAggregateMapList"));
+	infos->push_back(CommandMap::newCommandInfo(createMapAttribute,"MapAttribute",metadataMapAtrribute));
+	infos->push_back(CommandMap::newCommandInfo(createMapListMatrixMultiply,"MapListMatrixMultiply"));
+	infos->push_back(CommandMap::newCommandInfo(createMapVariogramSurfaceRas,"MapVariogramSurfaceRas"));
+	infos->push_back(CommandMap::newCommandInfo(createMapListCalculate,"MapListCalculate"));
+	infos->push_back(CommandMap::newCommandInfo(createMapListApplic,"MapListApplic"));
+	infos->push_back(CommandMap::newCommandInfo(createMapGlue,"MapGlue"));
+	infos->push_back(CommandMap::newCommandInfo(createMapFilter,"MapFilter"));
+	infos->push_back(CommandMap::newCommandInfo(createMapClassify,"MapClassify"));
+	infos->push_back(CommandMap::newCommandInfo(createMapColorSep,"MapColorSeparation"));
+	infos->push_back(CommandMap::newCommandInfo(createMapColorSep,"MapColorSep"));
+	infos->push_back(CommandMap::newCommandInfo(createMapRasterizeSegment,"MapRasterizeSegment"));
+	infos->push_back(CommandMap::newCommandInfo(createMapRasterizePolygon,"MapRasterizePolygon"));
+	infos->push_back(CommandMap::newCommandInfo(createMapAreaNumbering,"MapAreaNumbering"));
+	infos->push_back(CommandMap::newCommandInfo(createMapDensify,"MapDensify"));
+	infos->push_back(CommandMap::newCommandInfo(createMapAggregate,"MapAggregate___"));
+	infos->push_back(CommandMap::newCommandInfo(createMapMirrorRotate,"MapMirrorRotate"));
+	infos->push_back(CommandMap::newCommandInfo(createMapHeckbert,"MapHeckbert"));
+	infos->push_back(CommandMap::newCommandInfo(createMapCluster,"MapCluster"));
+	infos->push_back(CommandMap::newCommandInfo(createMapMaplistStatistics,"MapMaplistStatistics"));
+	infos->push_back(CommandMap::newCommandInfo(createMapColorComp,"MapColorComp___"));
+	infos->push_back(CommandMap::newCommandInfo(createMapDistance,"MapDistance"));
+	infos->push_back(CommandMap::newCommandInfo(createMapSubMap,"MapSubMap___"));
+	infos->push_back(CommandMap::newCommandInfo(createMapThiessen,"MapThiessen"));
+	infos->push_back(CommandMap::newCommandInfo(createMapCross,"MapCross"));
+	infos->push_back(CommandMap::newCommandInfo(createMapSlicing,"MapSlicing", metadataSlicing));
+	infos->push_back(CommandMap::newCommandInfo(createMapStretch,"MapStretch___"));
+	infos->push_back(CommandMap::newCommandInfo(createMapRasterizePoint,"MapRasterizePoint___"));
+	infos->push_back(CommandMap::newCommandInfo(createMapNearestPoint,"MapNearestPoint"));
+	infos->push_back(CommandMap::newCommandInfo(createMapMovingAverage,"MapMovingAverage"));
+	infos->push_back(CommandMap::newCommandInfo(createMapMovingSurface,"MapMovingSurface"));
+	infos->push_back(CommandMap::newCommandInfo(createMapTrendSurface,"MapTrendSurface"));
+	infos->push_back(CommandMap::newCommandInfo(createMapResample,"MapResample"));
+	infos->push_back(CommandMap::newCommandInfo(createMapApply3D,"MapApply3D"));
+	infos->push_back(CommandMap::newCommandInfo(createMapInterpolContour,"MapInterpolContour"));
+	infos->push_back(CommandMap::newCommandInfo(createMapSegmentDensity,"MapSegmentDensity"));
+	infos->push_back(CommandMap::newCommandInfo(createMapKriging,"MapKriging___"));
+	infos->push_back(CommandMap::newCommandInfo(createMapCoKriging,"MapCoKriging"));
+	infos->push_back(CommandMap::newCommandInfo(createMapVariogramSurfacePnt,"MapVariogramSurfacePnt"));
+	infos->push_back(CommandMap::newCommandInfo(createMapComputedElsewhere,"MapComputedElsewhere"));
+	infos->push_back(CommandMap::newCommandInfo(createMapKrigingFromRaster,"MapKrigingFromRaster"));
+	infos->push_back(CommandMap::newCommandInfo(createMapVisibility,"MapVisibility"));
+	infos->push_back(CommandMap::newCommandInfo(createMapIterator,"MapIterator"));
+	infos->push_back(CommandMap::newCommandInfo(createMapIterator,"MapIterProp"));
+	infos->push_back(CommandMap::newCommandInfo(createMapCalculate,"MapCalculate"));
+	infos->push_back(CommandMap::newCommandInfo(createColumnCalculate,"ColumnCalculate"));
+	infos->push_back(CommandMap::newCommandInfo(createColumnAggregate,"ColumnAggregate___"));
+	infos->push_back(CommandMap::newCommandInfo(createColumnAggregate,"agg___"));
+	infos->push_back(CommandMap::newCommandInfo(createColumnSemiVariogram,"ColumnSemiVariogram"));
+	infos->push_back(CommandMap::newCommandInfo(createColumnCumulative,"ColumnCumulative"));
+	infos->push_back(CommandMap::newCommandInfo(createColumnLeastSquaresFit,"ColumnLeastSquaresFit"));
+	infos->push_back(CommandMap::newCommandInfo(createTableCrossVarioGram,"TableCrossVarioGram"));
+	infos->push_back(CommandMap::newCommandInfo(createTableBursaWolf,"TableBursaWolf"));
+	infos->push_back(CommandMap::newCommandInfo(createTableChangeDomain,"TableChangeDomain"));
+	infos->push_back(CommandMap::newCommandInfo(createTableCross,"TableCross"));
+	infos->push_back(CommandMap::newCommandInfo(createTableGlue,"TableGlue"));
+	infos->push_back(CommandMap::newCommandInfo(createTableGlue,"TableGlue"));
+	infos->push_back(CommandMap::newCommandInfo(createTableSpatCorr,"TableSpatCorr"));
+	infos->push_back(CommandMap::newCommandInfo(createTableSegDir,"TableSegDir"));
+	infos->push_back(CommandMap::newCommandInfo(createTablePattAnal,"TablePattAnal"));
+	infos->push_back(CommandMap::newCommandInfo(createTableNeighbourPol,"TableNeighbourPol"));
+	infos->push_back(CommandMap::newCommandInfo(createTableTranspose,"TableTranspose"));
+	infos->push_back(CommandMap::newCommandInfo(createTableAutoCorrSemiVar,"TableAutoCorrSemiVar"));
+	infos->push_back(CommandMap::newCommandInfo(createTableCreateTimeColumn,"TableCreateTimeColumn"));
 
 	return infos;
 
 }
 
-extern "C" _export ILWIS::Module *getModuleInfo() {
-	ILWIS::Module *module = new ILWIS::Module("Rastermap and Table Applications", "IlwisApp.dll",ILWIS::Module::mi37,"1.0");
-	module->addMethod(ILWIS::Module::ifGetAppInfo, (void *)getApplicationInfo);  
+extern "C" _export ILWIS::Module *getModuleInfo(const FileName& fnModule) {
+	ILWIS::Module *module = new ILWIS::Module("Rastermap and Table Applications", fnModule,ILWIS::Module::mi38,"1.0");
+	module->addMethod(ILWIS::Module::ifgetCommandInfo, (void *)getCommandInfo);  
 
 	return module;
 }
