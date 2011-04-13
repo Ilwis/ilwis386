@@ -56,31 +56,31 @@ Last change:  WK   17 Sep 98    2:14 pm
 #include "PolygonApplicationsUI\frmpolrelate.h"
 #include "Headers\Hs\Applications.hs"
 
-InfoUIVector* getApplicationInfoUI() {
+InfoUIVector* getCommandInfoUI(ILWIS::Module *module) {
 	InfoUIVector *infosui = new InfoUIVector();
 	String ilwDir = IlwWinApp()->Context()->sIlwDir();
 
-(*infosui).push_back(CommandHandlerUI::createApplicationInfo("raspol","",Cmdraspol,SMENUraspol,SMENUSraspol,"ExePol16IcoL",".mpr",4652,SMENUDraspol));
-(*infosui).push_back(CommandHandlerUI::createApplicationInfo("segpol","",Cmdsegpol,SMENUsegpol,SMENUSsegpol,"ExePol16IcoL",".mps",4612,SMENUDsegpol));
-(*infosui).push_back(CommandHandlerUI::createApplicationInfo("attribpol","",Cmdattribpol,SMENUattribpol,SMENUSattribpol,"ExePol16IcoL",".mpa",4602,SMENUDattribpol));
-(*infosui).push_back(CommandHandlerUI::createApplicationInfo("maskpol","",Cmdmaskpol,SMENUmaskpol,SMENUSmaskpol,"ExePol16IcoL",".mpa",4642,SMENUDmaskpol));
-(*infosui).push_back(CommandHandlerUI::createApplicationInfo("labelpol","",Cmdlabelpol,SMENUlabelpol,SMENUSlabelpol,"ExePol16IcoL",".mpa",4622,SMENUDlabelpol));
-(*infosui).push_back(CommandHandlerUI::createApplicationInfo("transfpol","",Cmdtransfpol,SMENUtransfpol,SMENUStransfpol,"ExePol16IcoL",".mpa.csy",4632,SMENUDtransfpol));
-(*infosui).push_back(CommandHandlerUI::createApplicationInfo("idgrid","",Cmdidgrid,SMENUidgrid,SMENUSidgrid,"ExePol16IcoL",".csy",4672,SMENUDidgrid));
-(*infosui).push_back(CommandHandlerUI::createApplicationInfo("bufpol","",Cmdpolygonmapbuffer,SMENUbufpol,SMENUSbufpol,"ExePol16IcoL",".mpa.mps.mpp",0,SMENUDbufpol));
-(*infosui).push_back(CommandHandlerUI::createApplicationInfo("convexhull","",Cmdpolygonmapconvexhull,SMENUconvexhull,SMENUSconvexhull,"ExePol16IcoL",".mpa.mps.mpp",0,SMENUDconvexhull));
-(*infosui).push_back(CommandHandlerUI::createApplicationInfo("intersectpol","",Cmdpolygonmapintersect,SMENUintersection,SMENUSintersection,"ExePol16IcoL",".mpa",0,SMENUDintersection));
-(*infosui).push_back(CommandHandlerUI::createApplicationInfo("unionpol","",Cmdpolygonmapunion,SMENUunion,SMENUSunion,"ExePol16IcoL",".mpa",0,SMENUDunion));
-(*infosui).push_back(CommandHandlerUI::createApplicationInfo("diffpol","",Cmdpolygonmapdifference,SMENUdifference,SMENUSdifference,"ExePol16IcoL",".mpa",0,SMENUDdifference));
-(*infosui).push_back(CommandHandlerUI::createApplicationInfo("symdiffpol","",Cmdpolygonmapsymetricdifference,SMENUsymetricdifference,SMENUSsymetricdifference,"ExePol16IcoL",".mpa",0,SMENUDsymetricdifference));
-(*infosui).push_back(CommandHandlerUI::createApplicationInfo("relatepol","",Cmdpolygonmaprelate,SMENUpolrelate,SMENUSpolrelate,"ExePol16IcoL",".mpa",0,SMENUDpolrelate));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("raspol","",Cmdraspol,SMENUraspol,SMENUSraspol,"ExePol16IcoL",".mpr",4652,SMENUDraspol));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("segpol","",Cmdsegpol,SMENUsegpol,SMENUSsegpol,"ExePol16IcoL",".mps",4612,SMENUDsegpol));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("attribpol","",Cmdattribpol,SMENUattribpol,SMENUSattribpol,"ExePol16IcoL",".mpa",4602,SMENUDattribpol));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("maskpol","",Cmdmaskpol,SMENUmaskpol,SMENUSmaskpol,"ExePol16IcoL",".mpa",4642,SMENUDmaskpol));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("labelpol","",Cmdlabelpol,SMENUlabelpol,SMENUSlabelpol,"ExePol16IcoL",".mpa",4622,SMENUDlabelpol));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("transfpol","",Cmdtransfpol,SMENUtransfpol,SMENUStransfpol,"ExePol16IcoL",".mpa.csy",4632,SMENUDtransfpol));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("idgrid","",Cmdidgrid,SMENUidgrid,SMENUSidgrid,"ExePol16IcoL",".csy",4672,SMENUDidgrid));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("bufpol","",Cmdpolygonmapbuffer,SMENUbufpol,SMENUSbufpol,"ExePol16IcoL",".mpa.mps.mpp",0,SMENUDbufpol));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("convexhull","",Cmdpolygonmapconvexhull,SMENUconvexhull,SMENUSconvexhull,"ExePol16IcoL",".mpa.mps.mpp",0,SMENUDconvexhull));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("intersectpol","",Cmdpolygonmapintersect,SMENUintersection,SMENUSintersection,"ExePol16IcoL",".mpa",0,SMENUDintersection));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("unionpol","",Cmdpolygonmapunion,SMENUunion,SMENUSunion,"ExePol16IcoL",".mpa",0,SMENUDunion));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("diffpol","",Cmdpolygonmapdifference,SMENUdifference,SMENUSdifference,"ExePol16IcoL",".mpa",0,SMENUDdifference));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("symdiffpol","",Cmdpolygonmapsymetricdifference,SMENUsymetricdifference,SMENUSsymetricdifference,"ExePol16IcoL",".mpa",0,SMENUDsymetricdifference));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("relatepol","",Cmdpolygonmaprelate,SMENUpolrelate,SMENUSpolrelate,"ExePol16IcoL",".mpa",0,SMENUDpolrelate));
 
 	return infosui;
 }
 
-extern "C" _export ILWIS::Module *getModuleInfo() {
-	ILWIS::Module *module = new ILWIS::Module("Polygonmap applications UI", "PolygonApplicationsUI.dll",ILWIS::Module::mi37,"1.0");
-	module->addMethod(ILWIS::Module::ifGetAppInfoUI, (void *)getApplicationInfoUI);  
+extern "C" _export ILWIS::Module *getModuleInfo(const FileName& fnModule) {
+	ILWIS::Module *module = new ILWIS::Module("Polygonmap applications UI", fnModule,ILWIS::Module::mi37,"1.0");
+	module->addMethod(ILWIS::Module::ifgetCommandInfoUI, (void *)getCommandInfoUI);  
 
 	return module;
 }
