@@ -17,33 +17,33 @@
 #include "HydroFlowApplications\TblHortonPlots.h"
 
 
-//extern "C" _export vector<ApplicationInfo *>* getApplicationInfo());
+//extern "C" _export vector<CommandInfo *>* getCommandInfo());
 
-InfoVector* getApplicationInfo() {
+InfoVector* getCommandInfo() {
 
 	InfoVector *infos = new InfoVector();
 
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapFlowDirection,"MapFlowDirection"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapFlowAccumulation,"MapFlowAccumulation"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapDEMOptimization,"MapDEMOptimization"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapTopologicalOptimization,"MapTopologicalOptimization"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapVariableThresholdComputation,"MapVariableThresholdComputation"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapFillSinks,"MapFillSinks"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapDrainageNetworkExtraction,"MapDrainageNetworkExtraction"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapDrainageNetworkOrdering,"MapDrainageNetworkOrdering"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapOverlandFlowLength,"MapOverlandFlowLength"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapFlowLength2Outlet,"MapFlowLength2Outlet"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapCatchmentExtraction,"MapCatchmentExtraction"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createMapCatchmentMerge,"MapCatchmentMerge"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createTableHortonPlots,"TableHortonPlots"));
+	infos->push_back(CommandMap::newCommandInfo(createMapFlowDirection,"MapFlowDirection"));
+	infos->push_back(CommandMap::newCommandInfo(createMapFlowAccumulation,"MapFlowAccumulation"));
+	infos->push_back(CommandMap::newCommandInfo(createMapDEMOptimization,"MapDEMOptimization"));
+	infos->push_back(CommandMap::newCommandInfo(createMapTopologicalOptimization,"MapTopologicalOptimization"));
+	infos->push_back(CommandMap::newCommandInfo(createMapVariableThresholdComputation,"MapVariableThresholdComputation"));
+	infos->push_back(CommandMap::newCommandInfo(createMapFillSinks,"MapFillSinks"));
+	infos->push_back(CommandMap::newCommandInfo(createMapDrainageNetworkExtraction,"MapDrainageNetworkExtraction"));
+	infos->push_back(CommandMap::newCommandInfo(createMapDrainageNetworkOrdering,"MapDrainageNetworkOrdering"));
+	infos->push_back(CommandMap::newCommandInfo(createMapOverlandFlowLength,"MapOverlandFlowLength"));
+	infos->push_back(CommandMap::newCommandInfo(createMapFlowLength2Outlet,"MapFlowLength2Outlet"));
+	infos->push_back(CommandMap::newCommandInfo(createMapCatchmentExtraction,"MapCatchmentExtraction"));
+	infos->push_back(CommandMap::newCommandInfo(createMapCatchmentMerge,"MapCatchmentMerge"));
+	infos->push_back(CommandMap::newCommandInfo(createTableHortonPlots,"TableHortonPlots"));
 
 	return infos;
 
 }
 
-extern "C" _export ILWIS::Module *getModuleInfo() {
-	ILWIS::Module *module = new ILWIS::Module("Hydrological flow Applications", "IlwisHydroFlowApps.dll",ILWIS::Module::mi37,"1.0");
-	module->addMethod(ILWIS::Module::ifGetAppInfo, (void *)getApplicationInfo);  
+extern "C" _export ILWIS::Module *getModuleInfo(const FileName& fnModule) {
+	ILWIS::Module *module = new ILWIS::Module("Hydrological flow Applications", fnModule,ILWIS::Module::mi37,"1.0");
+	module->addMethod(ILWIS::Module::ifgetCommandInfo, (void *)getCommandInfo);  
 
 	return module;
 }
