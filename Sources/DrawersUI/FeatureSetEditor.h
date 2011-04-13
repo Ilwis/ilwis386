@@ -35,6 +35,7 @@ namespace ILWIS{
 		virtual void OnMoveMode() ;
 		virtual void OnSelectMode() ;
 		virtual void OnSplitMode();
+		virtual void OnMergeMode();
 		void prepare();
 		virtual void removeSelectedFeatures();
 		void setActive(bool yesno);

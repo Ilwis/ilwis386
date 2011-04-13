@@ -42,17 +42,20 @@ namespace ILWIS {
 		void OnLButtonUp(UINT nFlags, CPoint point);
 		void OnLButtonDown(UINT nFlags, CPoint point);
 		int AskSplit(ILWIS::Segment *seg, long iAfter, Coord crdAt);
+		long findInsertSegment(const Coord& crd, Segment** seg);
+		Coord insertPoint(const Coord& crd, Segment* seg, long after);
 		String sTitle() const;
 		zIcon icon() const;
 		int iFmtPnt, iFmtDom;
 		void findSnapPoint();
 
 		vector<Coord *> coords;
-		int iSnapPixels;
+		double rSnapDistance;
 		bool fAutoSnap,fShowNodes;
      	zCursor curSegSplit, curSegSplitting;
 		String sMask;
 		ILWIS::Segment * segment;
+		long insertionPoint;
 
 		DECLARE_MESSAGE_MAP()
 	};

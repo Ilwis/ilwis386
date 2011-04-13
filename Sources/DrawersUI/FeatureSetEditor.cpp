@@ -131,6 +131,8 @@ void FeatureSetEditor::setcheckEditMode(void *value) {
 		OnMoveMode();
 	} else if ( choice == 3) {
 		OnSplitMode();
+	} else if ( choice == 4) {
+		OnMergeMode();
 	}
 	mdoc->mpvGetView()->iActiveTool = getId();
 	setActive(true);
@@ -158,7 +160,10 @@ bool FeatureSetEditor::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags){
 
 	if (  nChar == VK_RETURN) {
 		mode = mode & ~mMOVING;
-		clear();
+		for(SFMIter cur = selectedFeatures.begin(); cur != selectedFeatures.end(); ++cur) {
+			SelectedFeature *f = (*cur).second;
+			updateFeature(f);
+		}
 		return true;
 	}
 	if ( nChar == VK_DELETE && hasSelection()) {
@@ -182,7 +187,6 @@ void FeatureSetEditor::clear() {
 	}
 	selectedFeatures.clear();
 	currentCoordIndex = iUNDEF;
-	TRACE("cur ind undef\n");
 	currentGuid = sUNDEF;
 }
 
@@ -211,7 +215,6 @@ void FeatureSetEditor::addToSelectedFeatures(Feature *f, const Coord& crd, const
 
 	if ( currentCoordIndex == iUNDEF)
 		return;
-	TRACE(String("cur ind1 %d\n", currentCoordIndex).scVal());
 	vector<int>::iterator loc = find(sf->selectedCoords.begin(), 
 									 sf->selectedCoords.end(), 
 									 currentCoordIndex);
@@ -252,7 +255,6 @@ bool FeatureSetEditor::selectMove(UINT nFlags, CPoint point) {
 		}
 		SelectedFeature *sf = (*cur).second;
 		currentCoordIndex = iCoordIndex(sf->coords,crd);
-		TRACE(String("cur ind2 %d\n", currentCoordIndex).scVal());
 		vector<int>::iterator cur2 = find(sf->selectedCoords.begin(), sf->selectedCoords.end(), currentCoordIndex);
 		if ( currentCoordIndex == iUNDEF || cur2 == sf->selectedCoords.end()) { // selected other point, not in the selection, clear selection and select a new one
 			sf->selectedCoords.clear();
@@ -276,6 +278,7 @@ bool FeatureSetEditor::select(UINT nFlags, CPoint point) {
 			clear();
 		}
 	}
+
 
 	// check which geometries/ features belong to the location
 	vector<Geometry *> geometries = bmapptr->getFeatures(crd);
@@ -337,7 +340,7 @@ void FeatureSetEditor::OnLButtonDown(UINT nFlags, CPoint point){
 		return ;
 
 	// select vertex or feature at current location
-	if ( mode & mSELECT) {
+	if ( mode & mSELECT || mode & mMERGE) {
 		select(nFlags, point);
 	} // insert a new feature if we are not in the moving mode or add a vertex to an feature being inserted
 	else if (mode & mINSERT) {
@@ -351,7 +354,7 @@ void FeatureSetEditor::OnLButtonDown(UINT nFlags, CPoint point){
 			}
 		}
 	}
-	if ( mode & mMOVING) {
+	if ( (mode & mMOVING) && ((mode & mINSERT) == 0)) {
 		CoordSystem csyMap = bmapptr->cs();
 		CoordSystem csyPane = setdrawer->getRootDrawer()->getCoordinateSystem();
 		if ( csyMap == csyPane)  {
@@ -375,16 +378,15 @@ void FeatureSetEditor::OnLButtonUp(UINT nFlags, CPoint point){
 	if ( mode & mUNKNOWN)
 		return ;
 	if ( mode & mMOVING) {
-		//CoordSystem csyMap = bmapptr->cs();
-		//CoordSystem csyPane = setdrawer->getRootDrawer()->getCoordinateSystem();
-		//if ( csyMap == csyPane)  {
-		//	for(SFMIter cur = selectedFeatures.begin(); cur != selectedFeatures.end(); ++cur) {
-		//		SelectedFeature *f = (*cur).second;
-		//		updateFeature(f);
-		//	}
-		//	bmapptr->fChanged = true;
-		//	//mode = mode & ~mMOVING;
-		//}
+		CoordSystem csyMap = bmapptr->cs();
+		CoordSystem csyPane = setdrawer->getRootDrawer()->getCoordinateSystem();
+		if ( csyMap == csyPane)  {
+			for(SFMIter cur = selectedFeatures.begin(); cur != selectedFeatures.end(); ++cur) {
+				SelectedFeature *f = (*cur).second;
+				updateFeature(f);
+			}
+			bmapptr->fChanged = true;
+		}
 	} else
 		return ;
 
@@ -490,6 +492,11 @@ void FeatureSetEditor::OnSelectMode()
 void FeatureSetEditor::OnSplitMode()
 {
 	setMode(mode == BaseMapEditor::mSPLIT ? BaseMapEditor::mUNKNOWN : BaseMapEditor::mSPLIT);
+}
+
+void FeatureSetEditor::OnMergeMode()
+{
+	setMode(mode == BaseMapEditor::mMERGE ? BaseMapEditor::mUNKNOWN : BaseMapEditor::mMERGE);
 }
 
 void FeatureSetEditor::setActive(bool yesno) {

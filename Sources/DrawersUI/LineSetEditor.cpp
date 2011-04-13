@@ -24,6 +24,7 @@
 #include "Client\Ilwis.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
+#include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
 #include "FeatureSetEditor.h"
 #include "DrawersUI\SetDrawerTool.h"
@@ -86,10 +87,13 @@ DrawerTool *createLineSetEditor(ZoomableView* zv, LayerTreeView *view, NewDrawer
 LineSetEditor::LineSetEditor(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
 FeatureSetEditor("LineSetEditor",zv, view, drw),
 curSegSplit("EditSplitCursor"),
-curSegSplitting("EditSplittingCursor")
+curSegSplitting("EditSplittingCursor"),
+rSnapDistance(0.01),
+insertionPoint(iUNDEF)
 {
 	iFmtPnt = RegisterClipboardFormat("IlwisPoints");
 	iFmtDom = RegisterClipboardFormat("IlwisDomain");
+	//mergeModeItems = new SetChecks(tree,this,(DTSetCheckFunc)&LineSetEditor::setcheckMergeMode);
 
 
 
@@ -206,6 +210,23 @@ HTREEITEM LineSetEditor::configure( HTREEITEM parentItem) {
 	ritem->setCheckAction(this,editModeItems,0);
 	insertItem(TR("Split"),"Bitmap", ritem);
 
+	/*ritem = new DisplayOptionRadioButtonItem(TR("Merge"), tree,htiNode,drawer);
+	ritem->setState(false);
+	ritem->setCheckAction(this,editModeItems,0);
+	HTREEITEM htMerge = insertItem(TR("Merge"),"Bitmap", ritem);*/
+
+	//DisplayOptionButtonItem *bitem = new DisplayOptionButtonItem(TR("Snap to"), tree,htMerge,drawer);
+	//bitem->setState(false);
+	//bitem->setCheckAction(this,mergeModeItems,0);
+	//insertItem(TR("Snap to"),"Bitmap", bitem);
+
+	//bitem = new DisplayOptionButtonItem(TR("Connect"), tree,htMerge,drawer);
+	//bitem->setState(false);
+	//bitem->setCheckAction(this,mergeModeItems,0);
+	//insertItem(TR("Connect"),"Bitmap", bitem);
+
+
+
 	CMenu men;
 	CMenu menSub;
 	men.CreateMenu();
@@ -233,10 +254,6 @@ void LineSetEditor::getSettings() {
 
 	IlwisSettings settings("Map Window\\Segment Editor");
 	String fn = IlwWinApp()->Context()->fnUserINI().sFullName();
-	iSnapPixels = GetPrivateProfileInt("Segment Editor", "Snap Pixels", 5, fn.sVal());
-	iSnapPixels = settings.iValue("Snap Pixels", iSnapPixels);
-	if (iSnapPixels < 1)
-		iSnapPixels = 1;
 	char sBuf[80];
 	String sVal;
 
@@ -389,19 +406,27 @@ bool LineSetEditor::insertVertex(UINT nFlags, CPoint point) {
 	segment->getBoundaries(bound);
 	CoordBuf buf(bound[0]);
 	delete bound[0];
-	buf[buf.iSize() - 1] = crd;
+	if ( insertionPoint == iUNDEF)
+		insertionPoint = buf.size() - 1;
+	buf[insertionPoint++] = crd;
 	buf.add(crd);
+	/*for(int i=0; i < buf.size(); ++i) {
+		TRACE(String("%d %f %f\n",i, buf[i].x, buf[i].y).scVal());
+	}*/
 	segment->PutCoords(buf.iSize(), buf);
-	PreparationParameters fp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER, 0);
-	drawer->prepare(&fp);
+	PreparationParameters fp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER, bmapptr->cs());
+	if ( drawers.size() > 0) {
+		drawers[0]->prepare(&fp);
+	}
+	//select(nFlags, point);
 
 	SFMIter cur = selectedFeatures.find(currentGuid);
 	if ( cur != selectedFeatures.end()) {
 		delete (*cur).second;
 		selectedFeatures.erase(currentGuid);
-		vector<NewDrawer *> drawers;
-		drawers.push_back(drawer);
-		addToSelectedFeatures(segment,crd,drawers, buf.iSize() - 1);
+		vector<NewDrawer *> drws;
+		drws.push_back(drawers[0]);
+		addToSelectedFeatures(segment,crd,drws, buf.iSize() - 1);
 
 	}
 
@@ -410,16 +435,82 @@ bool LineSetEditor::insertVertex(UINT nFlags, CPoint point) {
 	return true;
 }
 
+long LineSetEditor::findInsertSegment(const Coord& crd, Segment** seg) {
+	CoordBounds cbZoom = mdoc->rootDrawer->getCoordBoundsZoom();
+	double delta = max(cbZoom.height(), cbZoom.width()) / 50.0;
+	vector<Geometry *> geoms = bmapptr->getFeatures(crd, delta);
+	for(int i = 0; i < geoms.size(); ++i) {
+		*seg = CSEGMENT(geoms.at(i));
+		double d;
+		long after = (*seg)->nearSection(crd, delta,d);
+		if ( after == iUNDEF)
+			continue;
+
+
+		return after;
+	}
+	*seg = 0;
+	return iUNDEF;
+}
+
+Coord LineSetEditor::insertPoint(const Coord& crd, Segment* seg, long after) {
+	vector<CoordinateSequence*> boundaries;
+	seg->getBoundaries(boundaries);
+	CoordBounds cb = drawer->getRootDrawer()->getCoordBoundsZoom();
+	double snap = rSnapDistance * min(cb.width(), cb.height());
+	CoordinateSequence *seq = boundaries[0];
+	for(int i =0; i < seq->size(); ++i) {
+		Coord c = seq->getAt(i);
+		if ( rDist(c,crd) < snap) {
+			return c;
+		}
+	}
+	vector<Coordinate> *copyv = new vector<Coordinate>();
+	int k = 0;
+	while(k < seq->size()){
+		if ( k != after) {
+			copyv->push_back(seq->getAt(k++));
+		}
+		else {
+			copyv->push_back(crd);
+			after = iUNDEF;
+		}
+	}
+	vector<NewDrawer *> drawers;
+	drawer->getRootDrawer()->getDrawerFor(seg, drawers);
+	seg->PutCoords(new CoordinateArraySequence(copyv));
+	PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER,bmapptr->cs());
+	drawers[0]->prepare(&pp);
+	mdoc->mpvGetView()->Invalidate();
+	return Coord();
+}
+
 
 // inserts 2 points for a segment. The second one will/can be moved byt the mouse though they begin at the same location
 bool LineSetEditor::insertFeature(UINT nFlags, CPoint point) {
 	clear();
 	Coord crd = mdoc->rootDrawer->screenToWorld(RowCol(point.y, point.x));
-	segment = CSEGMENT(bmapptr->newFeature());
-	CoordBuf buf(2);
-	buf[0] = crd;
-	buf[1] = crd;
-	segment->PutCoords(buf.iSize(), buf);
+	insertionPoint = findInsertSegment(crd, &segment);
+	if ( segment == 0) {
+		segment = CSEGMENT(bmapptr->newFeature());
+	} else {
+		crd = insertPoint(crd, segment, insertionPoint);
+	}
+	if ( crd.fUndef())
+		return true;
+
+	if ( !( insertionPoint == segment->iBegin() || insertionPoint == segment->iEnd())) {
+		CoordBuf buf(2);
+		buf[0] = crd;
+		buf[1] = crd;
+		segment->PutCoords(buf.iSize(), buf);
+		segment->PutVal(0L);
+	} else {
+		CoordinateSequence *seq = segment->getCoordinates();
+		seq->add(crd);
+		segment->PutCoords(seq);
+		insertionPoint++;
+	}
 	mdoc->pixInfoDoc->setEditFeature(CFEATURE(segment));
 
 	CoordWithCoordSystem cwcs(crd, bmapptr->cs());
@@ -430,12 +521,13 @@ bool LineSetEditor::insertFeature(UINT nFlags, CPoint point) {
 		PreparationParameters fp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER,bmapptr->cs());
 		sdrw->prepare(&fp);
 		sdrw->setSpecialDrawingOptions(NewDrawer::sdoSELECTED,true);
-		setdrawer->addDrawer(sdrw);
+		if ( segment->iValue() == 0)
+			setdrawer->addDrawer(sdrw);
 
 		vector<NewDrawer *> drawers;
 		drawers.push_back(sdrw);
 		currentGuid = segment->getGuid();
-		addToSelectedFeatures(segment,crd,drawers,1);
+		addToSelectedFeatures(segment,crd,drawers,segment->iValue() != 0 ? insertionPoint : 1);
 	}
 
 
@@ -446,12 +538,15 @@ bool LineSetEditor::insertFeature(UINT nFlags, CPoint point) {
 }
 
 void LineSetEditor::updateFeature(SelectedFeature *f) {
-	//for(int i = 0; i < f->selectedCoords.size(); ++i) {
-	//	int index = f->selectedCoords[i];
-	//	ILWIS::Point *p = CPOINT(f->feature);
-	//	Coord c = *(f->coords[index]);
-	//	p->setCoord(c);
-	//}
+	ILWIS::Segment *seg = CSEGMENT(f->feature);
+	CoordinateSequence *seq = seg->getCoordinates();
+	for(int i = 0; i < f->selectedCoords.size(); ++i) {
+		int index = f->selectedCoords[i];
+		Coordinate c = *(f->coords[index]);
+		seq->setAt(c,index); 
+
+	}
+	seg->PutCoords(seq);
 }
 
 void LineSetEditor::OnUpdateMode(CCmdUI* pCmdUI)
@@ -488,6 +583,12 @@ void LineSetEditor::setMode(BaseMapEditor::Mode m)
 		curActive = curSegSplit;
 		if ( selectedIndex != 3) {
 			editModeItems->checkItem(3);
+		}
+		break;
+	case BaseMapEditor::mMERGE:
+		curActive = curEdit;
+		if ( selectedIndex != 4) {
+			editModeItems->checkItem(4);
 		}
 		break;
 	default:
@@ -1057,33 +1158,59 @@ void LineSetEditor::OnLButtonDown(UINT nFlags, CPoint point){
 		vector<Geometry *> geoms = bmapptr->getFeatures(crd, delta);
 		for(int i = 0; i < geoms.size(); ++i) {
 			Segment *seg = CSEGMENT(geoms.at(i));
-			long after = seg->nearSection(crd, delta);
+			double d;
+			long after = seg->nearSection(crd, delta,d);
 			if ( after == iUNDEF)
 				continue;
+			bool isRing = seg->isRing();
 			vector<CoordinateSequence*> boundaries;
 			seg->getBoundaries(boundaries);
 			CoordinateSequence *seq = boundaries[0];
-			vector<Coordinate> copyv;
+			vector<Coordinate> *copyv1 = new vector<Coordinate>();
+			vector<Coordinate> *copyv2 = new vector<Coordinate>();
+			vector<Coordinate> *copyv = copyv1;
+			NewDrawer *prepareDrawer = 0;
 			int k = 0;
 			while(k < seq->size()){
 				if ( k != after) {
-					copyv.push_back(seq->getAt(k++));
+					copyv->push_back(seq->getAt(k++));
 				}
 				else {
-					copyv.push_back(crd);
+					copyv->push_back(crd);
+					copyv = copyv2;
+					copyv->push_back(crd);
 					after = iUNDEF;
 				}
+			}
+			//addToSelectedFeatures(seg, crd,,);
+			PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER,bmapptr->cs());
+			if ( isRing) {
+				for(int j = 0; j < copyv1->size(); j++) {
+					copyv2->push_back(copyv1->at(j));
+				}
+				copyv = copyv2;
+				delete copyv1;
+			} else {
+				ILWIS::Segment *segNew = CSEGMENT(bmapptr->newFeature());
+				CoordinateArraySequence *arseq2 = new CoordinateArraySequence(copyv2);
+				segNew->PutCoords(arseq2);
+				segNew->PutVal(seg->rValue());
+				prepareDrawer = drawer;
+				copyv = copyv1;
 			}
 			vector<NewDrawer *> drawers;
 			drawer->getRootDrawer()->getDrawerFor(seg, drawers);
 			if ( drawers.size() > 0) {		
-				CoordinateArraySequence *arseq = new CoordinateArraySequence(&copyv);
+				CoordinateArraySequence *arseq = new CoordinateArraySequence(copyv);
 				seg->PutCoords(arseq);
-			// find the lowest drawer that belongs to this feature
-				PreparationParameters p(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER,bmapptr->cs());
-				drawers[0]->prepare(&p);
-				mdoc->mpvGetView()->Invalidate();
+				if (prepareDrawer == 0)
+					prepareDrawer  = drawers[0];
+
 			}
+			prepareDrawer->prepare(&pp);
+			select(nFlags, point);
+			mdoc->mpvGetView()->Invalidate();
+			break;
 		}
 	}
 
@@ -1104,4 +1231,20 @@ void LineSetEditor::OnLButtonUp(UINT nFlags, CPoint point){
 			
 	return ;
 }
+//
+//void LineSetEditor::setcheckMergeMode(void *value) {
+//	if ( value == 0)
+//		return;
+//	HTREEITEM hItem = *((HTREEITEM *)value);
+//
+//	DisplayOptionButtonItem *item = dynamic_cast<DisplayOptionButtonItem * >((LayerTreeItem *)(tree->GetTreeCtrl().GetItemData(hItem)));
+//	int choice = item->getChecks()->getState();
+//	if ( choice == 0) {
+//		//OnSelectMode();
+//	} else if ( choice == 1) {
+//		//OnInsertMode();
+//	} 
+//	//mdoc->mpvGetView()->iActiveTool = getId();
+//	//setActive(true);
+//}
 
