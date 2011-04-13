@@ -65,7 +65,8 @@ enum FormBaseStyle
 	fbsSHOWALWAYS = 0x01, fbsMODAL = 0x02, fbsHIDEONOK = 0x04, fbsNOOKBUTTON = 0x08, 
 	fbsNOCANCELBUTTON = 0x10, fbsBUTTONSUNDER = 0x20, fbsNOPARENTRESIZE = 0x40, fbsNOBEVEL=0x80,
 	fbsAPPLIC = 0x100, fbsHIDEONCLOSE = 0x200, fbsTOPMOST = 0x400, fbsCALC = 0x800,
-	fbsOKHASCLOSETEXT = 0x1000, fbsNoCheckData=0x2000, fbsApplyButton=0x4000
+	fbsOKHASCLOSETEXT = 0x1000, fbsNoCheckData=0x2000, fbsApplyButton=0x4000,fbsCancelHasCLOSETEXT=0x8000
+
 };
 
 
@@ -177,7 +178,7 @@ class IMPEXP FormBaseDialog: public CDialog, public FormBase
 {
 public:
   FormBaseDialog(CWnd* parent, const String& sTitle, bool fShowAlways = true, bool fModal = false, bool fHideOnOk = false);
-  FormBaseDialog(CWnd* parent, const String& sTitle, int fbs);
+  FormBaseDialog(CWnd* parent, const String& sTitle, int fbs, DWORD extraWindowsStyles=0);
   FormBaseDialog(CWnd* parent, const String& sTitle, ParmList *plDefault, bool fShowAlways = true, bool fModal = false, bool fHideOnOk = true);
   ~FormBaseDialog();
 
@@ -218,8 +219,8 @@ class IMPEXP FormWithDest : public FormBaseDialog
 public:
   FormWithDest(CWnd* parent, const String& sTitle) 
     : FormBaseDialog(parent, sTitle, true, true, false) {}
-  FormWithDest(CWnd* parent, const String& sTitle, int fbs)
-    : FormBaseDialog(parent, sTitle, fbs) {}
+  FormWithDest(CWnd* parent, const String& sTitle, int fbs, int extraWindowsStyles=0)
+    : FormBaseDialog(parent, sTitle, fbs, extraWindowsStyles) {}
   FormWithDest(CWnd* parent, const String& sTitle, bool fCancelBut)
     : FormBaseDialog(parent, sTitle, (fbsSHOWALWAYS | fbsMODAL | (fCancelBut ? 0 : fbsNOCANCELBUTTON) ) & ~fbsHIDEONOK) {}
     

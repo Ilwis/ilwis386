@@ -46,6 +46,8 @@ $Header: /ILWIS 3.0/Main/ilwis.CPP 329   10-06-05 15:09 Retsios $
 #include "Client\Base\BaseCommandHandlerUI.h"
 #include "Client\MainWindow\CommandHandlerUI.h"
 #include "Client\MainWindow\ACTION.H"
+#include "Engine\Applications\ModuleMap.h"
+#include "Engine\Base\System\commandhandler.h"
 #include "Engine\Base\DataObjects\URL.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Editors\Utils\BaseBar.h"
@@ -209,7 +211,6 @@ $Header: /ILWIS 3.0/Main/ilwis.CPP 329   10-06-05 15:09 Retsios $
 #include "Engine\COMInterface\COMCmdLineThread.h"
 #include "Engine\Base\File\Directory.h"
 #include "Engine\Applications\objvirt.h"
-#include "Engine\Applications\ModuleMap.h"
 #include "Client\FormElements\fldcolor.h"
 #include "Engine\Base\System\Engine.h"
 #include "MainWindow\Catalog\WMSCatalog.h"
@@ -1194,8 +1195,8 @@ void IlwisWinApp::InitImageLists()
 {
 	ilSmall.Create(16,16,TRUE,4,4);
 	ilLarge.Create(32,32,TRUE,4,4);
-	ilSmall.SetImageCount(101);
-	ilLarge.SetImageCount(101);
+	ilSmall.SetImageCount(104);
+	ilLarge.SetImageCount(104);
 
 	int i = 0;
 	InitImage("ilwis", "LogoIcon", i++);
@@ -1311,6 +1312,9 @@ void IlwisWinApp::InitImageLists()
 	InitImage("EditMap","EditMap",i++);
 	InitImage("OneFramePlus","OneFramePlus",i++);
 	InitImage("OneFrameMinus","OneFrameMinus",i++);
+	InitImage("GNC", "GNC", i++);	
+	InitImage("ESA", "ESA", i++);	
+	InitImage("amesd", "amesd", i++);	
 
 
 

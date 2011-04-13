@@ -94,7 +94,7 @@ FormGeneralPreferences::FormGeneralPreferences() :
 		mapPos[i].rcMax.Row = settings2.iValue(String("YSize%d", i), iUNDEF);
 	}
 
-  tree = new TreeSelector(root);
+  tree = new TreeSelector(root,1);
 	tree->SetCallBack((NotifyProc)&FormGeneralPreferences::Fill);
 	pages.push_back(FormGeneralPreferences::Page(SPFMainWindow, new FieldPage(root)));
 	pages.push_back(FormGeneralPreferences::Page(SPFMainWindowSP, new FieldPage(root)));
@@ -769,7 +769,7 @@ int FormGeneralPreferences::Fill(Event*)
 		{
 			if ( (*cur).sName != "")
 			{
-				tree->Add((*cur).sName);
+				tree->Add((*cur).sName,0);
 			}
 		}
 		ftoMpl->AddString("Open");

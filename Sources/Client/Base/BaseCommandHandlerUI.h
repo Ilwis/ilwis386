@@ -45,18 +45,21 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-struct ApplicationInfoUI;
+struct CommandInfoUI;
 class Tranquilizer;
+namespace ILWIS {
+class Module;
+}
 
 typedef void(*ModuleInitUI)();
-typedef vector<ApplicationInfoUI *> InfoUIVector;
-typedef InfoUIVector* (*AppInfoUI)();
+typedef vector<CommandInfoUI *> InfoUIVector;
+typedef InfoUIVector* (*AppInfoUI)(ILWIS::Module *module);
 typedef int (*TesterFunc)();
-typedef map<String, ApplicationInfoUI *> CommandMapUI;
+typedef map<String, CommandInfoUI *> CommandMapUI;
 typedef CommandMapUI::iterator CommandIterUI;
 typedef InfoUIVector::iterator InfoUIVIter;
 typedef LRESULT (*UIHandlerFunction)(CWnd *wnd, const String&);
-typedef pair<String, ApplicationInfoUI *> ApplicationPairUI;
+typedef pair<String, CommandInfoUI *> ApplicationPairUI;
 typedef map<String, String> Aliases;
 typedef Aliases::iterator AliasesIter;
 
@@ -73,7 +76,7 @@ public:
 	void addModules();
 	CommandMapUI getCommands() { return commands; }
 	void setCommands(CommandMapUI& cmap) { commands = cmap; fCleanUp = false;}
-	_export static ApplicationInfoUI* createApplicationInfo(String app, String names, UIHandlerFunction appHandler, 
+	_export static CommandInfoUI* createCommandInfo(String app, String names, UIHandlerFunction appHandler, 
 		String menuStructure,String listName, String icon, String extension, int htopic, String description, bool fVis=true);
 	void SetOwner(CFrameWnd * owner);
 	void initModules();
@@ -81,7 +84,7 @@ public:
 protected:
 	void add(InfoUIVector *apps);
 	virtual void addExtraCommands() {};
-	void addCommand(ApplicationInfoUI *ai);
+	void addCommand(CommandInfoUI *ai);
 	CFrameWnd *wndOwner;
 	CommandMapUI commands;
 	bool fCleanUp;
@@ -93,7 +96,7 @@ private:
 	Aliases aliases;
 };
 
-struct ApplicationInfoUI 
+struct CommandInfoUI 
 {
 public:
 	String command;

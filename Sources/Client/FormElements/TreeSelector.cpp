@@ -68,10 +68,12 @@ void Tree::OnItemExpanding(NMHDR* pNMHDR, LRESULT* pResult)
 }
 
 //-----------------------------------------------------------------------------------
-TreeSelector::TreeSelector(FormEntry* par, bool _expandAll)
+TreeSelector::TreeSelector(FormEntry* par, int depth, bool _expandAll)
   : FormEntry(par,0,true),
 	tree(NULL),
-	expandAll(_expandAll)
+	expandAll(_expandAll),
+	maxExpansionDepth(depth),
+	keepSelection(true)
 {
   psn->iMinWidth = psn->iWidth = FLDNAMEWIDTH + 100;
   psn->iMinHeight = psn->iHeight = 250;
@@ -84,8 +86,12 @@ void TreeSelector::create()
 {
   zPoint pntFld = zPoint(psn->iPosX,psn->iPosY);
   zDimension dimFld = zDimension(psn->iWidth,psn->iMinHeight);
-  tree = new Tree(this, WS_VISIBLE | WS_BORDER | WS_CHILD | WS_TABSTOP | TVS_DISABLEDRAGDROP | TVS_LINESATROOT | TVS_HASBUTTONS | TVS_HASLINES,
-              CRect(pntFld, dimFld) , frm()->wnd() , Id());
+  
+  DWORD style = WS_VISIBLE | WS_BORDER | WS_CHILD | WS_TABSTOP | TVS_DISABLEDRAGDROP | TVS_LINESATROOT | TVS_HASBUTTONS | TVS_HASLINES;
+  if ( keepSelection)
+		style |= TVS_SHOWSELALWAYS;
+	tree = new Tree(this, style,
+			  CRect(pntFld, dimFld) , frm()->wnd() , Id());
   tree->SetFont(frm()->fnt);
    if ( alternativeHandler) {
 	    if ( npExpansion)  tree->setNotify(alternativeHandler, npExpansion, Message(TVN_ITEMEXPANDING));
@@ -113,12 +119,25 @@ void TreeSelector::show(int sw)
     tree->ShowWindow(sw);
 }
 
+void TreeSelector::expand(HTREEITEM hti, int depth) {
+	if ( hti == NULL || depth == maxExpansionDepth)
+		return;
+	HTREEITEM htNew = tree->GetNextItem(hti, TVGN_CHILD);
+
+	while(htNew) {
+		tree->Expand(htNew,TVE_EXPAND);
+		htNew = tree->GetNextSiblingItem(htNew);
+		expand(htNew,depth + 1);
+	}
+
+}
+
 void TreeSelector::SetNotifyExpansion(NotifyProc np, FormEntry* _alternativeHandler) {
 	npExpansion = np;
 	alternativeHandler = _alternativeHandler;
 }
 
-void TreeSelector::Add(const String& sValue, HTREEITEM hti, DWORD data, bool fLeaf)
+void TreeSelector::Add(const String& sValue, HTREEITEM hti, DWORD data, bool fLeaf, int depth)
 {
 	if ( !tree || sValue == "") return;
 	HTREEITEM it = tree->GetNextItem(hti, TVGN_CHILD);
@@ -138,7 +157,7 @@ void TreeSelector::Add(const String& sValue, HTREEITEM hti, DWORD data, bool fLe
 				tvi.cChildren = 1;
 				tree->SetItem(&tvi);
 			}
-			Add(sValue.sTail("|"), it, data, fLeaf);
+			Add(sValue.sTail("|"), it, data, fLeaf, depth + 1);
 			return;
 		}				
 		it = tree->GetNextItem(it, TVGN_NEXT);
@@ -152,23 +171,19 @@ void TreeSelector::Add(const String& sValue, HTREEITEM hti, DWORD data, bool fLe
 
 	tvi.hItem = it = tree->InsertItem(sValue.sHead("|").scVal(), -1,-1, hti);
 	tree->SetItemData(it, (DWORD) data);
-	tree->SetItem(&tvi);
-	/*HTREEITEM parentItem = tree->GetParentItem(it);
-	TVITEM tvParent;
-	memset(&tvParent, 0, sizeof(TVITEM));
-	tvParent.hItem = it;
-	tree->GetItem(&tvParent);*/
-	Add(sValue.sTail("|"), it);
+	Add(sValue.sTail("|"), it, data, fLeaf, depth + 1);
+	/*if ( maxExpansionDepth != 0) {
 	 if ( expandAll) {
 		HTREEITEM hItem;
 
 		hItem= tree->GetFirstVisibleItem();
 		while (hItem != NULL)
-		{
-			tree->Expand(hItem,TVE_EXPAND);
+			if ( depth <= maxExpansionDepth) {
+				tree->Expand(hItem,TVE_EXPAND);
+			}
 			hItem= tree->GetNextItem(hItem, TVGN_NEXTVISIBLE);
-		}
-	}
+	}*/
+
 }
 
 String TreeSelector::sBranchValue(HTREEITEM _it)
@@ -202,3 +217,24 @@ DWORD  TreeSelector::GetData(HTREEITEM hti) {
 	return tree->GetItemData(hti);
 }
 
+void TreeSelector::SelectNode(const String& path,HTREEITEM hti){
+	if ( !tree || path == "") return;
+	HTREEITEM it = tree->GetNextItem(hti, TVGN_CHILD);
+	String sCurTxt = path.sHead("|");
+	while(it != NULL)
+	{
+		String s = String(tree->GetItemText(it));
+		if ( sCurTxt == s )
+		{
+			tree->SelectItem(it);
+			return;
+		}
+		SelectNode(path.sTail("|"), it);
+		it = tree->GetNextItem(it, TVGN_NEXT);
+	}
+
+}
+void TreeSelector::ExpandTo(int depth){
+	maxExpansionDepth = depth;
+
+}

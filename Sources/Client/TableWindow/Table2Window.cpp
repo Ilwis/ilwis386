@@ -44,6 +44,8 @@
 #include "Client\Editors\Utils\BaseBar.h"
 #include "Client\Base\ButtonBar.h"
 #include "Client\MainWindow\CommandCombo.h"
+#include "engine\base\system\module.h"
+#include "Engine\Applications\ModuleMap.h"
 #include "Engine\Base\System\commandhandler.h"
 #include "Engine\Table\tbl2dim.h"
 #include "Client\TableWindow\Table2Doc.h"

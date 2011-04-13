@@ -58,11 +58,11 @@ class TreeSelector: public FormEntry
 {
 public:
   _export ~TreeSelector();
-  _export TreeSelector(FormEntry* par, bool _expandAll=false);
+  _export TreeSelector(FormEntry* par, int depth, bool _expandAll=false);
   void _export show(int);
   virtual void StoreData() {};
   void setDirty() { tree->Invalidate(); }
-	void _export Add(const String& sValue, HTREEITEM hti = TVI_ROOT, DWORD data=0, bool fLeaf=false);
+	void _export Add(const String& sValue, HTREEITEM hti=TVI_ROOT, DWORD data=0, bool fLeaf=false, int depth=0);
 	DWORD _export GetData(HTREEITEM hti);
 	String _export sBranchValue(HTREEITEM _it=0);
 	String _export sLeafValue();
@@ -70,6 +70,9 @@ public:
 	void _export SetNotifyExpansion(NotifyProc np, FormEntry *altHandler=NULL);
 	void setDynamicNodes(bool fDyn) { fDynamic = true; }
 	DWORD _export GetBranchValueData();
+	void _export expand(HTREEITEM hti, int depth);
+	void _export SelectNode(const String& path,HTREEITEM hti=0);
+	void _export ExpandTo(int depth=0);
 
 protected:
   void _export create();
@@ -81,6 +84,8 @@ protected:
   NotifyProc npExpansion;
   FormEntry *alternativeHandler;
   bool fDynamic;
+  int maxExpansionDepth;
+  bool keepSelection;
 };
 
 #endif

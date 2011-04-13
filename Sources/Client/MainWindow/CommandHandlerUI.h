@@ -73,7 +73,7 @@ public:
 	static void _export CopyFiles(const String& sCmd, Tranquilizer* trq);
 	static UINT CmdCopyFileInThread(LPVOID p);
 	static UINT CmdCopyInThread(LPVOID p);
-	//static _export ApplicationInfoUI *createApplicationInfo(String app, String names, UIHandlerFunction appHandler, String menuStructure, String listName, String icon, String extension, int htopic, String description, bool fVisible=true);
+	//static _export CommandInfoUI *createCommandInfo(String app, String names, UIHandlerFunction appHandler, String menuStructure, String listName, String icon, String extension, int htopic, String description, bool fVisible=true);
 	vector<Action *> CreateActions();
 	void addExtraCommands();
 	void saveOperationsDefinitions(const FileName& fn);

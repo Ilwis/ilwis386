@@ -76,7 +76,7 @@ LRESULT BaseCommandHandlerUI::doCommand(CWnd *parent, String sCom, String sParm)
 	if (ci != commands.end()) // known command ?
 	{
 		const ApplicationPairUI &cp = *ci;
-		ApplicationInfoUI *appInfo = cp.second;
+		CommandInfoUI *appInfo = cp.second;
 		String sCmd = sParm.sTrimSpaces();
 		UIHandlerFunction func = appInfo->handler;
 		return (func)(parent == NULL ? wndOwner : parent, sParm);
@@ -116,9 +116,9 @@ void BaseCommandHandlerUI::addModules() {
 	int index=0;
 	while( ( module=getEngine()->getModule(index)) != NULL ) {
 		ILWIS::Module::ModuleInterface type = module->getInterfaceVersion();
-		AppInfoUI f = (AppInfoUI)(module->getMethod(ILWIS::Module::ifGetAppInfoUI));
+		AppInfoUI f = (AppInfoUI)(module->getMethod(ILWIS::Module::ifgetCommandInfoUI));
 		if ( f ) {
-			InfoUIVector *infos = (*f)();
+			InfoUIVector *infos = (*f)(module);
 			if ( infos->size() > 0)
 				add(infos);
 			delete infos;
@@ -163,7 +163,7 @@ void BaseCommandHandlerUI::addModules() {
 
 }
 
-void BaseCommandHandlerUI::addCommand(ApplicationInfoUI *ai)
+void BaseCommandHandlerUI::addCommand(CommandInfoUI *ai)
 {
 	commands[ai->command] = ai;
 	if(ai->names.size() > 0	) {
@@ -175,13 +175,13 @@ void BaseCommandHandlerUI::addCommand(ApplicationInfoUI *ai)
 }
 void BaseCommandHandlerUI::add(InfoUIVector *apps) {
 	for(InfoUIVIter cur = apps->begin(); cur != apps->end(); ++cur) {
-		ApplicationInfoUI *ai = (*cur);
+		CommandInfoUI *ai = (*cur);
 		addCommand(ai);
 	}
 }
 
-ApplicationInfoUI *BaseCommandHandlerUI::createApplicationInfo(String app, String names, UIHandlerFunction appHandler, String menuStructure,String listName, String icon, String extension, int htopic, String description, bool fVis) {
-	ApplicationInfoUI *inf = new ApplicationInfoUI;
+CommandInfoUI *BaseCommandHandlerUI::createCommandInfo(String app, String names, UIHandlerFunction appHandler, String menuStructure,String listName, String icon, String extension, int htopic, String description, bool fVis) {
+	CommandInfoUI *inf = new CommandInfoUI;
 	Split(names, inf->names, ",");
 	inf->command = app;
 	inf->handler = appHandler;

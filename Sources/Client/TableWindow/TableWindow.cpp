@@ -43,6 +43,8 @@
 #include "Client\Base\datawind.h"
 #include "Client\Editors\Utils\BaseBar.h"
 #include "Client\MainWindow\CommandCombo.h"
+#include "engine\base\system\module.h"
+#include "Engine\Applications\ModuleMap.h"
 #include "Client\Base\BaseCommandHandlerUI.h"
 #include "Client\MainWindow\CommandHandlerUI.h"
 #include "Engine\Base\System\commandhandler.h"

@@ -70,16 +70,19 @@ FormBaseDialog::FormBaseDialog(CWnd* parent, const String& sTitle, bool fShowAlw
 		Init();
 }
 
-FormBaseDialog::FormBaseDialog(CWnd* parent, const String& sTitle, int styl)
+FormBaseDialog::FormBaseDialog(CWnd* parent, const String& sTitle, int styl, DWORD extraWindowsStyles)
 : FormBase(parent, sTitle, styl)
 {
 	iImg = 0;
 	DWORD style = defaultStyle |  ( fModal() ? DS_MODALFRAME : 0);
+	if ( extraWindowsStyles != 0)
+		style |= extraWindowsStyles;
 	if (CreateDialogTemplate(par, sTitle, style) == 0)
 		throw ErrorObject("XXCould not create dialog");
 	if (fModal() )
 		Init();
 }
+
 
 FormBaseDialog::FormBaseDialog(CWnd* parent, const String& sTitle, ParmList *plDefault, bool fShowAlways, bool fMod, bool fHideOnOk)
 : FormBase(parent, sTitle, plDefault, fShowAlways, fMod, fHideOnOk)
@@ -305,12 +308,18 @@ void FormBaseDialog::CreateDefaultPositions()
 
 		if (fnt != 0)
 			fntOld = dc.SelectObject(fnt);
-		zDimension d1 = (zDimension)dc.GetTextExtent(SUICancel.sVal(), SUICancel.length());
+		zDimension d1;
+		if ( fbs && fbsCancelHasCLOSETEXT)
+			d1 = (zDimension)dc.GetTextExtent(SUIClose.sVal(), SUIClose.length());
+		else
+			d1 = (zDimension)dc.GetTextExtent(SUICancel.sVal(), SUICancel.length());
+
 		zDimension d2;
 		if ( fbs & fbsOKHASCLOSETEXT)
 			d2 = (zDimension)dc.GetTextExtent(SUIClose.sVal(), SUIClose.length());
 		else
 			d2 = (zDimension)dc.GetTextExtent(SUIOK.sVal(), SUIOK.length());
+
 		zDimension d3 = (zDimension)dc.GetTextExtent(SUIHelp.sVal(), SUIHelp.length());
 		if (fnt != 0)
 			dc.SelectObject(fntOld);

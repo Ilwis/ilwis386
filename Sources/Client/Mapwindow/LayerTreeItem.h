@@ -226,6 +226,20 @@ private:
 
 };
 
+class _export DisplayOptionButtonItem: public DisplayOptionTreeItem
+{
+public:
+	DisplayOptionButtonItem(const String& sText, LayerTreeView*, HTREEITEM parent, ILWIS::NewDrawer *dr);
+	void OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult);
+	void setState(bool yesno) ;
+	bool getState() const;
+private:
+	void OnLButtonDown(UINT nFlags, CPoint point);
+	bool isSelected;
+	String sText;
+
+};
+
 
 
 class _export SetChecks {

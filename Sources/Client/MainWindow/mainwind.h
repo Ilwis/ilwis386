@@ -42,7 +42,6 @@
 #endif
 
 #ifndef COMMAND_HANDLER_H
-#include "Engine\Base\System\commandhandler.h"
 #endif
 
 #if !defined(AFX_ACTIONVIEWBAR_H__964C78F3_7650_11D3_B7EE_00A0C9D5342F__INCLUDED_)

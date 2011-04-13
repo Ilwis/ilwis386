@@ -1863,75 +1863,75 @@ LRESULT CmdDirChanged(CWnd *parent,const String& sPar)
 }
 
 void CommandHandlerUI::addExtraCommands() {
-	addCommand(CommandHandlerUI::createApplicationInfo("simplecalc","",fCmdSimpleCalc,"","","","",0,"run simple calc"));
-	addCommand(CommandHandlerUI::createApplicationInfo("dirchanged","",CmdDirChanged,"","","","",0,""));
-	addCommand(CommandHandlerUI::createApplicationInfo("run","",Cmdrun,"","","","",0,"Run a script"));
-	addCommand(CommandHandlerUI::createApplicationInfo("commandline","",CmdSetCommandLine,"","","","",0,"Sets the commandline"));
-	addCommand(CommandHandlerUI::createApplicationInfo("visible","",Cmdvisible,"","","","",0,"Make Ilwis visible", false));	
-	addCommand(CommandHandlerUI::createApplicationInfo("invisible","",Cmdinvisible,"","","","",0,"Make Ilwis invisible", false));	
-	addCommand(CommandHandlerUI::createApplicationInfo("rmdir","",Cmddel,"","Rmdir","","",0,"Remove directory", false));	
-	addCommand(CommandHandlerUI::createApplicationInfo("del","delete",Cmddel,"","Del","","",0,"Delete file(s)", false));
-	addCommand(CommandHandlerUI::createApplicationInfo("copy","",Cmdcopy,"","Copy","","",0,"Celete file(s)", false));
-	addCommand(CommandHandlerUI::createApplicationInfo("run","",Cmdrun,"","Run","",".isl",0,"Run", false));
-	addCommand(CommandHandlerUI::createApplicationInfo("dir","",Cmddir,"","Dir","",".isl",0,"Change directory", false));
-	addCommand(CommandHandlerUI::createApplicationInfo("mkdir","makedir",Cmdmkdir,"","MakeDir","","",0,"Create directory", false));
-	addCommand(CommandHandlerUI::createApplicationInfo("seg","",Cmdseg,"","Open Segmentmap","",".mps",0,"Show a segmentmap", false));
-	addCommand(CommandHandlerUI::createApplicationInfo("pol","",Cmdpol,"","Open Polygonmap","",".mpa",0,"Show a polygonmap", false));
-	addCommand(CommandHandlerUI::createApplicationInfo("tbl","table",Cmdtbl,"","Open Table","",".tbt",0,"Opens a Table", false));
-	addCommand(CommandHandlerUI::createApplicationInfo("map","",Cmdmap,"","Open Map","",".mpr",0,"Opens a raster map", false));
-	addCommand(CommandHandlerUI::createApplicationInfo("pnt","",Cmdpnt,"","Open Pointmap","",".mpp",0,"Opens a Pointmap", false));
-	addCommand(CommandHandlerUI::createApplicationInfo("prop","properties",Cmdpropobject,"","Object Properties","","",0,"Shows the properties of an object",false));
-    addCommand(CommandHandlerUI::createApplicationInfo("pixelinfo","",Cmdpixelinfo,"..","Pixel Info","info","",7004,"Open or activate the pixel information window"));
-	addCommand(CommandHandlerUI::createApplicationInfo("showdefform","", Cmdshowdefform,"..","","","",-1,"", false));
-	addCommand(CommandHandlerUI::createApplicationInfo("deleteobjects","",Cmddeleteobjects,"","",".",".",0000,"", false));
+	addCommand(CommandHandlerUI::createCommandInfo("simplecalc","",fCmdSimpleCalc,"","","","",0,"run simple calc"));
+	addCommand(CommandHandlerUI::createCommandInfo("dirchanged","",CmdDirChanged,"","","","",0,""));
+	addCommand(CommandHandlerUI::createCommandInfo("run","",Cmdrun,"","","","",0,"Run a script"));
+	addCommand(CommandHandlerUI::createCommandInfo("commandline","",CmdSetCommandLine,"","","","",0,"Sets the commandline"));
+	addCommand(CommandHandlerUI::createCommandInfo("visible","",Cmdvisible,"","","","",0,"Make Ilwis visible", false));	
+	addCommand(CommandHandlerUI::createCommandInfo("invisible","",Cmdinvisible,"","","","",0,"Make Ilwis invisible", false));	
+	addCommand(CommandHandlerUI::createCommandInfo("rmdir","",Cmddel,"","Rmdir","","",0,"Remove directory", false));	
+	addCommand(CommandHandlerUI::createCommandInfo("del","delete",Cmddel,"","Del","","",0,"Delete file(s)", false));
+	addCommand(CommandHandlerUI::createCommandInfo("copy","",Cmdcopy,"","Copy","","",0,"Celete file(s)", false));
+	addCommand(CommandHandlerUI::createCommandInfo("run","",Cmdrun,"","Run","",".isl",0,"Run", false));
+	addCommand(CommandHandlerUI::createCommandInfo("dir","",Cmddir,"","Dir","",".isl",0,"Change directory", false));
+	addCommand(CommandHandlerUI::createCommandInfo("mkdir","makedir",Cmdmkdir,"","MakeDir","","",0,"Create directory", false));
+	addCommand(CommandHandlerUI::createCommandInfo("seg","",Cmdseg,"","Open Segmentmap","",".mps",0,"Show a segmentmap", false));
+	addCommand(CommandHandlerUI::createCommandInfo("pol","",Cmdpol,"","Open Polygonmap","",".mpa",0,"Show a polygonmap", false));
+	addCommand(CommandHandlerUI::createCommandInfo("tbl","table",Cmdtbl,"","Open Table","",".tbt",0,"Opens a Table", false));
+	addCommand(CommandHandlerUI::createCommandInfo("map","",Cmdmap,"","Open Map","",".mpr",0,"Opens a raster map", false));
+	addCommand(CommandHandlerUI::createCommandInfo("pnt","",Cmdpnt,"","Open Pointmap","",".mpp",0,"Opens a Pointmap", false));
+	addCommand(CommandHandlerUI::createCommandInfo("prop","properties",Cmdpropobject,"","Object Properties","","",0,"Shows the properties of an object",false));
+    addCommand(CommandHandlerUI::createCommandInfo("pixelinfo","",Cmdpixelinfo,"..","Pixel Info","info","",7004,"Open or activate the pixel information window"));
+	addCommand(CommandHandlerUI::createCommandInfo("showdefform","", Cmdshowdefform,"..","","","",-1,"", false));
+	addCommand(CommandHandlerUI::createCommandInfo("deleteobjects","",Cmddeleteobjects,"","",".",".",0000,"", false));
 
-	addCommand(CommandHandlerUI::createApplicationInfo("open","show",Cmdopen,SMENUopen,SMENUSopen,"DspMap16Ico","",7010,SMENUDopen));
-	addCommand(CommandHandlerUI::createApplicationInfo("slideshow","",Cmdmplslideshow,SMENUslideshow,SMENUSslideshow,"DspMap16Ico",".mpl",7013,SMENUDslideshow));
-	addCommand(CommandHandlerUI::createApplicationInfo("showastbl","showastable",Cmdshowastable,SMENUshowastable,SMENUSshowastable,".tbt",".tbt",0,SMENUDshowastable));
-	addCommand(CommandHandlerUI::createApplicationInfo("display3d","",Cmddisplay3d,SMENUdisplay3d,SMENUSdisplay3d,"DspMap16Ico","",7002,SMENUDdisplay3d));
-	addCommand(CommandHandlerUI::createApplicationInfo("edit","",Cmdedit,SMENUedit,SMENUSedit,"DspMap16Ico","",7001,SMENUDedit));
-    addCommand(CommandHandlerUI::createApplicationInfo("pixelinfo","",Cmdpixelinfo,SMENUpixelinfo,SMENUSpixelinfo,"info","",7004,SMENUDpixelinfo));
-	addCommand(CommandHandlerUI::createApplicationInfo("makestereopair","",Cmdmakestereopair,SMENUmakestereopair,SMENUSmakestereopair,".stp","",7015,SMENUDmakestereopair));
-	addCommand(CommandHandlerUI::createApplicationInfo("sample","",Cmdsample,SMENUsample,SMENUSsample,"DspMap16Ico","",7003,SMENUDsample));
-	addCommand(CommandHandlerUI::createApplicationInfo("anaglyph","",Cmdanaglyph,SMENUanaglyph,SMENUSanaglyph,".stp",".stp",7017,SMENUDanaglyph));
-	addCommand(CommandHandlerUI::createApplicationInfo("stereoscope","",Cmdstereoscope,SMENUstereoscope,SMENUSstereoscope,".stp",".stp",7016,SMENUDstereoscope));
-	addCommand(CommandHandlerUI::createApplicationInfo("finddatumparms","",Cmdfinddatumparms,SMENUfinddatumparms,SMENUSfinddatumparms,".csy",".mpp",4778,SMENUDfinddatumparms));
-	addCommand(CommandHandlerUI::createApplicationInfo("smce","",Cmdsmce,SMENUsmce,SMENUSsmce,".smc","",8110,SMENUDsmce));
-	addCommand(CommandHandlerUI::createApplicationInfo("createmap","",Cmdcreatemap,SMENUcreatemap,SMENUScreatemap,".mpr",".dom.grf",1000,SMENUDcreatemap));
-	addCommand(CommandHandlerUI::createApplicationInfo("createpol","",Cmdcreatepol,SMENUcreatepol,SMENUScreatepol,".mpa",".dom.csy",1001,SMENUDcreatepol));
-	addCommand(CommandHandlerUI::createApplicationInfo("createseg","",Cmdcreateseg,SMENUcreateseg,SMENUScreateseg,".mps",".dom.csy",1002,SMENUDcreateseg));
-	addCommand(CommandHandlerUI::createApplicationInfo("createpnt","",Cmdcreatepnt,SMENUcreatepnt,SMENUScreatepnt,".mpp",".dom.csy",1003,SMENUDcreatepnt));
-	addCommand(CommandHandlerUI::createApplicationInfo("layout","",Cmdlayout,SMENUlayout,SMENUSlayout,".ilo",".mpv",1000,SMENUDlayout));
-	addCommand(CommandHandlerUI::createApplicationInfo("createtbl","",Cmdcreatetbl,SMENUcreatetbl,SMENUScreatetbl,".tbt",".dom",1005,SMENUDcreatetbl));
-	addCommand(CommandHandlerUI::createApplicationInfo("createtb2","",Cmdcreatetb2,SMENUcreatetb2,SMENUScreatetb2,".ta2",".dom",1027,SMENUDcreatetb2));
-	addCommand(CommandHandlerUI::createApplicationInfo("graph","",Cmdgraph,SMENUgraph,SMENUSgraph,".grh",".tbt",1000,SMENUDgraph));
-	addCommand(CommandHandlerUI::createApplicationInfo("rosediagram","",Cmdrosediagram,SMENUrosediagram,SMENUSrosediagram,".grh",".tbt",1000,SMENUDrosediagram));
-	addCommand(CommandHandlerUI::createApplicationInfo("createdom","",Cmdcreatedom,SMENUcreatedom,SMENUScreatedom,".dom","",1010,SMENUDcreatedom));
-	addCommand(CommandHandlerUI::createApplicationInfo("createrpr","",Cmdcreaterpr,SMENUcreaterpr,SMENUScreaterpr,".rpr",".dom",1011,SMENUDcreaterpr));
-	addCommand(CommandHandlerUI::createApplicationInfo("creategrf","",Cmdcreategrf,SMENUcreategrf,SMENUScreategrf,".grf",".csy",1012,SMENUDcreategrf));
-	addCommand(CommandHandlerUI::createApplicationInfo("createcsy","",Cmdcreatecsy,SMENUcreatecsy,SMENUScreatecsy,".csy","",1013,SMENUDcreatecsy));
-	addCommand(CommandHandlerUI::createApplicationInfo("creatempl","",Cmdcreatempl,SMENUcreatempl,SMENUScreatempl,".mpl","",1004,SMENUDcreatempl));
-	addCommand(CommandHandlerUI::createApplicationInfo("createsms","",Cmdcreatesms,SMENUcreatesms,SMENUScreatesms,".sms",".mpl",1022,SMENUDcreatesms));
-	addCommand(CommandHandlerUI::createApplicationInfo("createfil","",Cmdcreatefil,SMENUcreatefil,SMENUScreatefil,".fil","",1024,SMENUDcreatefil));
-	addCommand(CommandHandlerUI::createApplicationInfo("createfun","",Cmdcreatefun,SMENUcreatefun,SMENUScreatefun,".fun","",1025,SMENUDcreatefun));
-	addCommand(CommandHandlerUI::createApplicationInfo("createisl","",Cmdcreateisl,SMENUcreateisl,SMENUScreateisl,".isl","",1026,SMENUDcreateisl));
-	addCommand(CommandHandlerUI::createApplicationInfo("createioc","",Cmdcreateioc,SMENUcreateioc,SMENUScreateioc,".ioc","",1026,SMENUDcreateioc));
-	addCommand(CommandHandlerUI::createApplicationInfo("import","",Cmdimport,SMENUimport,SMENUSimport,"ExeIcoL","",7006,SMENUDimport));
-	addCommand(CommandHandlerUI::createApplicationInfo("import -tablewizard","",Cmdimport,SMENUimportTable,SMENUSimportTable,".tbt","",7006,SMENUDimportTable));
-	addCommand(CommandHandlerUI::createApplicationInfo("import -gdal","",Cmdimport,SMENUimportGdal,SMENUSimportGdal,".mpr","",7006,SMENUDimportGdal));
-	addCommand(CommandHandlerUI::createApplicationInfo("import -generalraster","",Cmdimport,SMENUimportGR,SMENUSimportGR,".mpr","",7006,SMENUDimportGR));
-	addCommand(CommandHandlerUI::createApplicationInfo("export","",Cmdexport,SMENUexport,SMENUSexport,"ExeIcoL",".mpr.mpa.mps.mpp.tbt.mpl.his.hss.hsa.hsp",7008,SMENUDexport));
-	addCommand(CommandHandlerUI::createApplicationInfo("colorcomp","mpl",Cmdmplcolorcomp,SMENUcolorcomp,SMENUScolorcomp,"DspMap16Ico","",7014,SMENUDcolorcomp));
-	addCommand(CommandHandlerUI::createApplicationInfo("colorcomp","mpl",Cmdmplcolorcomp,SMENUcolorcomp,SMENUScolorcomp,"DspMap16Ico","",7014,SMENUDcolorcomp));
-	addCommand(CommandHandlerUI::createApplicationInfo("createView","",createView,"","","","",0,""));
+	addCommand(CommandHandlerUI::createCommandInfo("open","show",Cmdopen,SMENUopen,SMENUSopen,"DspMap16Ico","",7010,SMENUDopen));
+	addCommand(CommandHandlerUI::createCommandInfo("slideshow","",Cmdmplslideshow,SMENUslideshow,SMENUSslideshow,"DspMap16Ico",".mpl",7013,SMENUDslideshow));
+	addCommand(CommandHandlerUI::createCommandInfo("showastbl","showastable",Cmdshowastable,SMENUshowastable,SMENUSshowastable,".tbt",".tbt",0,SMENUDshowastable));
+	addCommand(CommandHandlerUI::createCommandInfo("display3d","",Cmddisplay3d,SMENUdisplay3d,SMENUSdisplay3d,"DspMap16Ico","",7002,SMENUDdisplay3d));
+	addCommand(CommandHandlerUI::createCommandInfo("edit","",Cmdedit,SMENUedit,SMENUSedit,"DspMap16Ico","",7001,SMENUDedit));
+    addCommand(CommandHandlerUI::createCommandInfo("pixelinfo","",Cmdpixelinfo,SMENUpixelinfo,SMENUSpixelinfo,"info","",7004,SMENUDpixelinfo));
+	addCommand(CommandHandlerUI::createCommandInfo("makestereopair","",Cmdmakestereopair,SMENUmakestereopair,SMENUSmakestereopair,".stp","",7015,SMENUDmakestereopair));
+	addCommand(CommandHandlerUI::createCommandInfo("sample","",Cmdsample,SMENUsample,SMENUSsample,"DspMap16Ico","",7003,SMENUDsample));
+	addCommand(CommandHandlerUI::createCommandInfo("anaglyph","",Cmdanaglyph,SMENUanaglyph,SMENUSanaglyph,".stp",".stp",7017,SMENUDanaglyph));
+	addCommand(CommandHandlerUI::createCommandInfo("stereoscope","",Cmdstereoscope,SMENUstereoscope,SMENUSstereoscope,".stp",".stp",7016,SMENUDstereoscope));
+	addCommand(CommandHandlerUI::createCommandInfo("finddatumparms","",Cmdfinddatumparms,SMENUfinddatumparms,SMENUSfinddatumparms,".csy",".mpp",4778,SMENUDfinddatumparms));
+	addCommand(CommandHandlerUI::createCommandInfo("smce","",Cmdsmce,SMENUsmce,SMENUSsmce,".smc","",8110,SMENUDsmce));
+	addCommand(CommandHandlerUI::createCommandInfo("createmap","",Cmdcreatemap,SMENUcreatemap,SMENUScreatemap,".mpr",".dom.grf",1000,SMENUDcreatemap));
+	addCommand(CommandHandlerUI::createCommandInfo("createpol","",Cmdcreatepol,SMENUcreatepol,SMENUScreatepol,".mpa",".dom.csy",1001,SMENUDcreatepol));
+	addCommand(CommandHandlerUI::createCommandInfo("createseg","",Cmdcreateseg,SMENUcreateseg,SMENUScreateseg,".mps",".dom.csy",1002,SMENUDcreateseg));
+	addCommand(CommandHandlerUI::createCommandInfo("createpnt","",Cmdcreatepnt,SMENUcreatepnt,SMENUScreatepnt,".mpp",".dom.csy",1003,SMENUDcreatepnt));
+	addCommand(CommandHandlerUI::createCommandInfo("layout","",Cmdlayout,SMENUlayout,SMENUSlayout,".ilo",".mpv",1000,SMENUDlayout));
+	addCommand(CommandHandlerUI::createCommandInfo("createtbl","",Cmdcreatetbl,SMENUcreatetbl,SMENUScreatetbl,".tbt",".dom",1005,SMENUDcreatetbl));
+	addCommand(CommandHandlerUI::createCommandInfo("createtb2","",Cmdcreatetb2,SMENUcreatetb2,SMENUScreatetb2,".ta2",".dom",1027,SMENUDcreatetb2));
+	addCommand(CommandHandlerUI::createCommandInfo("graph","",Cmdgraph,SMENUgraph,SMENUSgraph,".grh",".tbt",1000,SMENUDgraph));
+	addCommand(CommandHandlerUI::createCommandInfo("rosediagram","",Cmdrosediagram,SMENUrosediagram,SMENUSrosediagram,".grh",".tbt",1000,SMENUDrosediagram));
+	addCommand(CommandHandlerUI::createCommandInfo("createdom","",Cmdcreatedom,SMENUcreatedom,SMENUScreatedom,".dom","",1010,SMENUDcreatedom));
+	addCommand(CommandHandlerUI::createCommandInfo("createrpr","",Cmdcreaterpr,SMENUcreaterpr,SMENUScreaterpr,".rpr",".dom",1011,SMENUDcreaterpr));
+	addCommand(CommandHandlerUI::createCommandInfo("creategrf","",Cmdcreategrf,SMENUcreategrf,SMENUScreategrf,".grf",".csy",1012,SMENUDcreategrf));
+	addCommand(CommandHandlerUI::createCommandInfo("createcsy","",Cmdcreatecsy,SMENUcreatecsy,SMENUScreatecsy,".csy","",1013,SMENUDcreatecsy));
+	addCommand(CommandHandlerUI::createCommandInfo("creatempl","",Cmdcreatempl,SMENUcreatempl,SMENUScreatempl,".mpl","",1004,SMENUDcreatempl));
+	addCommand(CommandHandlerUI::createCommandInfo("createsms","",Cmdcreatesms,SMENUcreatesms,SMENUScreatesms,".sms",".mpl",1022,SMENUDcreatesms));
+	addCommand(CommandHandlerUI::createCommandInfo("createfil","",Cmdcreatefil,SMENUcreatefil,SMENUScreatefil,".fil","",1024,SMENUDcreatefil));
+	addCommand(CommandHandlerUI::createCommandInfo("createfun","",Cmdcreatefun,SMENUcreatefun,SMENUScreatefun,".fun","",1025,SMENUDcreatefun));
+	addCommand(CommandHandlerUI::createCommandInfo("createisl","",Cmdcreateisl,SMENUcreateisl,SMENUScreateisl,".isl","",1026,SMENUDcreateisl));
+	addCommand(CommandHandlerUI::createCommandInfo("createioc","",Cmdcreateioc,SMENUcreateioc,SMENUScreateioc,".ioc","",1026,SMENUDcreateioc));
+	addCommand(CommandHandlerUI::createCommandInfo("import","",Cmdimport,SMENUimport,SMENUSimport,"ExeIcoL","",7006,SMENUDimport));
+	addCommand(CommandHandlerUI::createCommandInfo("import -tablewizard","",Cmdimport,SMENUimportTable,SMENUSimportTable,".tbt","",7006,SMENUDimportTable));
+	addCommand(CommandHandlerUI::createCommandInfo("import -gdal","",Cmdimport,SMENUimportGdal,SMENUSimportGdal,".mpr","",7006,SMENUDimportGdal));
+	addCommand(CommandHandlerUI::createCommandInfo("import -generalraster","",Cmdimport,SMENUimportGR,SMENUSimportGR,".mpr","",7006,SMENUDimportGR));
+	addCommand(CommandHandlerUI::createCommandInfo("export","",Cmdexport,SMENUexport,SMENUSexport,"ExeIcoL",".mpr.mpa.mps.mpp.tbt.mpl.his.hss.hsa.hsp",7008,SMENUDexport));
+	addCommand(CommandHandlerUI::createCommandInfo("colorcomp","mpl",Cmdmplcolorcomp,SMENUcolorcomp,SMENUScolorcomp,"DspMap16Ico","",7014,SMENUDcolorcomp));
+	addCommand(CommandHandlerUI::createCommandInfo("colorcomp","mpl",Cmdmplcolorcomp,SMENUcolorcomp,SMENUScolorcomp,"DspMap16Ico","",7014,SMENUDcolorcomp));
+	addCommand(CommandHandlerUI::createCommandInfo("createView","",createView,"","","","",0,""));
 }
 
 vector<Action *> CommandHandlerUI::CreateActions() {
 	vector<Action *> actions;
 	vector<CString> sortedActions;
-	map<CString, ApplicationInfoUI *> alternateOrdering;
+	map<CString, CommandInfoUI *> alternateOrdering;
 	for(CommandIterUI iter = commands.begin(); iter != commands.end(); ++iter) {
-		ApplicationInfoUI *ai = (*iter).second;
+		CommandInfoUI *ai = (*iter).second;
 		CString temp(ai->menuString.scVal());
 		temp.Remove('&');
 		CString temp2;
@@ -1956,7 +1956,7 @@ vector<Action *> CommandHandlerUI::CreateActions() {
 
 	for(vector<CString>::iterator iter2 = sortedActions.begin(); iter2 != sortedActions.end(); ++iter2) {
 		CString v(*iter2);
-		ApplicationInfoUI *ai = alternateOrdering[v];
+		CommandInfoUI *ai = alternateOrdering[v];
 		if ( ai->visible) {
 			Action *act = new Action(ai);
 			actions.push_back(act);
@@ -1970,7 +1970,7 @@ void CommandHandlerUI::saveOperationsDefinitions(const FileName& fn) {
 	vector<CString> sortedActions;
 	int rootCounter = 0;
 	for(CommandIterUI iter = commands.begin(); iter != commands.end(); ++iter) {
-		ApplicationInfoUI *ai = (*iter).second;
+		CommandInfoUI *ai = (*iter).second;
 		CString temp(ai->menuString.scVal());
 		temp.Remove('&');
 		CString temp2;

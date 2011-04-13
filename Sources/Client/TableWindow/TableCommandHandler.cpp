@@ -43,6 +43,8 @@
 #include "Client\ilwis.h"
 #include "Headers\hourglss.h"
 #include "Client\ilwis.h"
+#include "engine\base\system\module.h"
+#include "Engine\Applications\ModuleMap.h"
 #include "Engine\Base\System\commandhandler.h"
 #include "Engine\Base\System\LOGGER.H"
 #include "Client\Base\BaseCommandHandlerUI.h"
@@ -87,7 +89,7 @@ static char THIS_FILE[]=__FILE__;
 TableCommandHandler::TableCommandHandler()
 {
 	tbldoc = 0;
-	//addCommand(CommandHandlerUI::createApplicationInfo("statistics","",createView,"","","","",0,""));
+	//addCommand(CommandHandlerUI::createCommandInfo("statistics","",createView,"","","","",0,""));
 	//AddCommand("statistics", (CommandFunction)& TableCommandHandler::CmdTblStats);
 	//AddCommand("clmaggregate", (CommandFunction)& TableCommandHandler::CmdAggregate);
 	//AddCommand("join", (CommandFunction)& TableCommandHandler::CmdJoin);

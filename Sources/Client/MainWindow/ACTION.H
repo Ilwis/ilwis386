@@ -42,7 +42,7 @@
 #ifndef ILWACTION_H
 #define ILWACTION_H
 
-struct ApplicationInfoUI;
+struct CommandInfoUI;
 
 #ifndef ILWRES_H
 #include "Client\Base\Res.h"
@@ -51,7 +51,7 @@ struct ApplicationInfoUI;
 class Action
 {
 public:
-  Action(ApplicationInfoUI* info);
+  Action(CommandInfoUI* info);
   Action(const String&, const String& sObject="", const String& sPathExternCommand="");
 	String sIcon() const { return sIco; }
   bool fExtension(const String&) const;

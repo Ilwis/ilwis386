@@ -27,7 +27,7 @@ class NewDrawer;
 	class _export BaseMapEditor : public DrawerTool{
 	public:
 		BaseMapEditor(const String& tp,  ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : DrawerTool(tp,zv,view, drw) {}
-		enum Mode{mUNKNOWN=0, mINSERT=1, mMOVE=2, mMOVING=4, mSELECT=8, mDELETE=16, mCHANGE=32, mSPLIT=64};
+		enum Mode{mUNKNOWN=0, mINSERT=1, mMOVE=2, mMOVING=4, mSELECT=8, mDELETE=16, mCHANGE=32, mSPLIT=64, mMERGE=128};
 		// empty class for the moment will be moved to seperate file as soon as there is a rastermap editor
 		virtual ~BaseMapEditor() {};
 		virtual zIcon icon() const = 0;

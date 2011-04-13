@@ -46,6 +46,8 @@
 #include "Client\MainWindow\Catalog\CatalogFrameWindow.h"
 #include "Client\Editors\Utils\OwnerHeaderCtrl.h"
 #include "Engine\Base\System\RegistrySettings.h"
+#include "Engine\Applications\ModuleMap.h"
+#include "Engine\Base\System\commandhandler.h"
 #include "Client\MainWindow\CommandCombo.h"
 #include "Client\MainWindow\mainwind.h"
 #include "Client\MainWindow\Catalog\Catalog.h"

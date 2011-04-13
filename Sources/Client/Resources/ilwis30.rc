@@ -28,6 +28,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
+amesd                   ICON                    "amesd.ico"
 EXEMAPICONL             ICON                    "EXE16MAPL.ICO"
 EXEPOLICONL             ICON                    "EXE16POLL.ICO"
 EXESEGICONL             ICON                    "EXE16SEGL.ICO"
@@ -271,6 +272,8 @@ SAVE                    ICON                    "save.ico"
 EDITMAP                 ICON                    "EditMap.ico"
 OneFramePlus            ICON                    "oneframeplus.ico"
 OneFrameMinus           ICON                    "oneframeminus.ico"
+ESA                     ICON                    "esa.ico"
+GNC                     ICON                    "GNC.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //

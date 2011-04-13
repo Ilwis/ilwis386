@@ -56,6 +56,8 @@
 #include "Client\TableWindow\ColumnPropForm.h"
 #include "Engine\Table\tblview.h"
 #include "Headers\Htp\Ilwis.htp"
+#include "engine\base\system\module.h"
+#include "Engine\Applications\ModuleMap.h"
 #include "Engine\Base\System\commandhandler.h"
 //#include "Client\TableWindow\TableCommandHandler.h"
 #include "Client\TableWindow\TableDoc.h"

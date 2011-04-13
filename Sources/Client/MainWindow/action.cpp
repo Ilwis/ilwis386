@@ -52,7 +52,7 @@
 #include "Engine\Scripting\Script.h"
 #include "Engine\Base\Tokbase.h"
 
-Action::Action(ApplicationInfoUI* info) {
+Action::Action(CommandInfoUI* info) {
 	String s = info->menuString;
 	Array<String> parts;
 	sOption = s.sHead(".");
@@ -343,17 +343,18 @@ void ActionList::add(File& fil, const String& sPathExternCommand)
 }
 
 void ActionList::determineRootIcons() {
-	String prevTop = "";
+	//String prevTop = "";
 	map<String, int> iconCounts;
+	Action *oldAct = 0;
 	for (SLIterCP<Action> iter(this); iter.fValid(); ++iter) {
 		Action* act = iter();
 		String sTop = act->sMenOpt();
 		if ( sTop == "")
 			continue;
-		if ( prevTop == "" || sTop == prevTop ) {
+		if ( oldAct == 0 || ( oldAct->sMenOpt() == act->sMenOpt())) {
 			iconCounts[act->sIcon()] += 1;
-			if ( prevTop == "")
-				prevTop = sTop;
+		if (oldAct == 0)
+			oldAct = act;
 			continue;
 		}
 		String predominantName = "";
@@ -366,9 +367,12 @@ void ActionList::determineRootIcons() {
 				predominantName = name;
 			}
 		}
-		topIcons[prevTop] = predominantName;
 		iconCounts = map<String, int>();
-		prevTop = sTop;
+		if ( predominantName != "") {
+			topIcons[oldAct->sMenOpt()] = predominantName;
+			iconCounts[act->sIcon()] += 1;
+		}
+		oldAct = act;
 	}
 	topIcons["Script"]=".isl";
 }

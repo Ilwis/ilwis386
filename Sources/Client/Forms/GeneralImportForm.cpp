@@ -255,7 +255,7 @@ int GeneralImportForm::Fill(Event*)
 		{
 			if ( (*cur).sName != "")
 			{
-				tree->Add((*cur).sName);
+				tree->Add((*cur).sName,0);
 			}
 		}
 		fInitial=false;

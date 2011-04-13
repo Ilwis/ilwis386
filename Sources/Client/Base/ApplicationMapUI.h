@@ -35,18 +35,18 @@
  Created on: 2007-02-8
 */
 
-struct ApplicationInfo;
+struct CommandInfo;
 
 
-typedef vector<ApplicationInfo *> InfoVector;
+typedef vector<CommandInfo *> InfoVector;
 typedef InfoVector::iterator InfoVIter;
-typedef pair<string, ApplicationInfo *> InfoPair;
-typedef vector<ApplicationInfo *>* (*AppInfo)();
+typedef pair<string, CommandInfo *> InfoPair;
+typedef vector<CommandInfo *>* (*AppInfo)();
 typedef IlwisObjectPtr *(* CreateFunc)(const FileName& fn, IlwisObjectPtr& p, const String& sExpr, vector<void *> parms);
 typedef String (* CommandName)();
 typedef void (* HandlerFunction)(const String& sCmd);
 
-struct _export ApplicationInfoUI 
+struct _export CommandInfoUI 
 {
 public:
 	String name;
@@ -55,13 +55,13 @@ public:
 	HandlerFunction commandFunction;
 };
 
-class ApplicationMapUI : public map<String, ApplicationInfo *> {
+class CommandMapUI : public map<String, CommandInfo *> {
 public:
 	void _export addModules(const FileName& fnModule);
-	static _export ApplicationInfo *newApplicationInfo(CreateFunc appFunc, String appName, HandlerFunction handlerFunc, String handlerName);
+	static _export CommandInfo *newCommandInfo(CreateFunc appFunc, String appName, HandlerFunction handlerFunc, String handlerName);
 
 private:
-	void add(vector<ApplicationInfo *> *apps);
+	void add(vector<CommandInfo *> *apps);
 };
 
 typedef ModuleMap::iterator InfoIter;
