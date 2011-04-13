@@ -35,11 +35,11 @@ void WPSDescribeProcess::writeResponse(IlwisServer *server) const{
 	//XERCES_CPP_NAMESPACE::DOMElement *node1,*node2,*node3, *node4, *node5;
 	String txt;
 	for(int i =0; i < processIDs.size(); ++i) {
-		vector<ApplicationInfo *> infos;
-		Engine::modules.getAppInfo(processIDs[i], infos);
+		vector<CommandInfo *> infos;
+		Engine::modules.getCommandInfo(processIDs[i], infos);
 		if ( infos.size() == 0)
 			continue;
-		ApplicationInfo *info = infos[0];
+		CommandInfo *info = infos[0];
 		if ( info->metadata != NULL) {
 			ApplicationQueryData query;
 			query.queryType = "WPSMETADATA";

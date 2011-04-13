@@ -1,9 +1,9 @@
 #include "headers/toolspch.h"
 #include "Engine\Base\System\module.h"
-#include "Engine\Base\System\commandhandler.h"
-#include "Engine/base/system/engine.h"
 #include "Engine\Base\DataObjects\ilwisobj.h"
 #include "Engine\Applications\ModuleMap.h"
+#include "Engine\Base\System\commandhandler.h"
+#include "Engine/base/system/engine.h"
 #include "httpserver\RequestHandler.h"
 #include "httpserver\SharedDataHandler.h"
 #include "HttpServer\command.h"
@@ -32,7 +32,7 @@ void executehttpcommand(const String& cmd) {
 	if ( server == 0) {
 		AfxBeginThread(IlwisServer::executeInThread, _cmd);	
 	}
-	while(server==0);
+	while(server==0 || !server->fValid());
 	server->start(_cmd);
 }
 
@@ -41,7 +41,7 @@ extern "C" _export void moduleInit(ILWIS::Module *module) {
 
 }
 
-extern "C" _export ILWIS::Module *getModuleInfo() {
+extern "C" _export ILWIS::Module *getModuleInfo(const FileName& fnModule) {
 	ILWIS::Module *module = new ILWIS::Module("HttpServer", "IlwisHttpServer.dll",ILWIS::Module::mi38,"1.0");
 	module->addMethod(ILWIS::Module::ifInit, (void *)moduleInit);
 
@@ -49,7 +49,7 @@ extern "C" _export ILWIS::Module *getModuleInfo() {
 }
 
 //-------------------------------------
-IlwisServer::IlwisServer() : ctx(0){
+IlwisServer::IlwisServer() : ctx(0),isValid(false){
 
 }
 
@@ -65,7 +65,8 @@ UINT IlwisServer::executeInThread(LPVOID lp) {
 	String ilwDir = getEngine()->getContext()->sIlwDir();
 	if ( server == 0) {
 		server = new IlwisServer();
-		server->ReadConfigFile(String("%Sconfig.ini",ilwDir));
+		String name("%Sconfig.ini",ilwDir);
+		server->ReadConfigFile(name);
 	}
 	return 1;
 }
@@ -96,6 +97,7 @@ void IlwisServer::ReadConfigFile(FileName fnConfig) {
 
 		}
 	}
+	isValid = true;
 }
 
 

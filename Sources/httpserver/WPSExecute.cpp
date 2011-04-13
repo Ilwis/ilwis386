@@ -74,18 +74,33 @@ void WPSExecute::downloadReferencedData() {
 	}
 }
 
-void WPSExecute::executeOperation() {
-
-	String expression = getValue("identifier");
-	String operation = expression;
-	operation.toLower();
-
-	map<String, ILWIS::WPSParameter> orderedInput;
-	for(int i=0; i < inputs.size(); ++i) {
-		orderedInput[inputs[i].id] = inputs[i];
-
+bool WPSExecute::isApplication(const String& sExpres) {
+	if (fCIStrEqual(sExpres.sLeft(14) , "PolygonMapList")) 
+			return true;
+	else if (fCIStrEqual(sExpres.sLeft(7) , "MapList")) 
+		return true;
+	else if (fCIStrEqual(sExpres.sLeft(3) , "Map"))
+		return true;
+	else if (fCIStrEqual(sExpres.sLeft(5) , "Table")) 
+	{
+		return true;
 	}
-	expression += "(";
+	else if (fCIStrEqual(sExpres.sLeft(10) , "SegmentMap"))
+		return true;
+	else if (fCIStrEqual(sExpres.sLeft(10) , "PolygonMap"))
+		return true;
+	else if (fCIStrEqual(sExpres.sLeft(8) , "PointMap"))
+		return true;
+	else if (fCIStrEqual(sExpres.sLeft(6) , "Matrix"))
+		return true;
+	else if (fCIStrEqual(sExpres.sLeft(10) , "StereoPair"))
+		return true;
+	return false;
+
+}
+
+String WPSExecute::makeApplicationExpression(const String& expr, const map<String, ILWIS::WPSParameter>& orderedInput) {
+	String expression = expr + "(";
 	int i = 0;
 	for(map<String, ILWIS::WPSParameter>::const_iterator cur=orderedInput.begin(); cur != orderedInput.end();++cur,++i) {
 		WPSParameter par = (*cur).second;
@@ -113,11 +128,69 @@ void WPSExecute::executeOperation() {
 		}
 	}
 	expression += ")";
+	return expression;
+}
+
+String WPSExecute::makeNonApplicationExpression(const String& expr, const map<String, ILWIS::WPSParameter>& orderedInput) {
+	String expression = expr + " ";
+	int i = 0;
+	for(map<String, ILWIS::WPSParameter>::const_iterator cur=orderedInput.begin(); cur != orderedInput.end();++cur,++i) {
+		WPSParameter par = (*cur).second;
+		if (i > 0)
+			expression += " ";
+		if ( par.isReference) {
+			String url = par.value.sTail("=");
+			int index = url.find_last_of("/");
+			String name="";
+			if ( index != string::npos) {
+				name =  url.substr(index+1);
+			}
+			name = executionDir + "\\" + name;
+			index = name.find_last_of("_");
+			if ( index != string::npos) {
+				String ext = name.substr(index+1);
+				name = name.substr(0,index);
+				name = String("%S.%S",name, ext.sHead("."));
+			} else
+				name = FileName(name).sFile;
+
+			expression += name;
+		} else {
+			expression += par.value;
+		}
+	}
+	return expression;
+}
+
+void WPSExecute::executeOperation() {
+
+	String expression = getValue("identifier");
+	String operation = expression;
+	operation.toLower();
+
+	map<String, ILWIS::WPSParameter> orderedInput;
+	for(int i=0; i < inputs.size(); ++i) {
+		orderedInput[inputs[i].id] = inputs[i];
+
+	}
+	bool isApp = isApplication(expression);
+	if ( isApp) {
+		expression = makeApplicationExpression(expression, orderedInput);
+	} else {
+		expression = makeNonApplicationExpression(expression, orderedInput);
+	}
+
+
 	String curDir = getEngine()->getContext()->sCurDir();
 	outputName = getValue("responsedocument") + resultType(operation);
+	getEngine()->SetCurDir(executionDir);
 
-	if ( outputName != sUNDEF) {
-		expression = "*" + outputName + ":=" + expression;
+	if ( outputName != sUNDEF ) {
+		if ( isApp)
+			expression = "*" + outputName + ":=" + expression;
+		else {
+			expression = expression + " " + outputName;
+		}
 	}
 	getEngine()->Execute(expression);
 
@@ -128,8 +201,8 @@ void WPSExecute::executeOperation() {
 }
 
 String WPSExecute::resultType(const String& operation) {
-	vector<ApplicationInfo *> infos;
-	getEngine()->modules.getAppInfo(operation, infos);
+	vector<CommandInfo *> infos;
+	getEngine()->modules.getCommandInfo(operation, infos);
 	String ext;
 	if ( infos.size() > 0 && infos[0]->metadata){
 		ApplicationQueryData query;
@@ -169,14 +242,14 @@ void WPSExecute::writeResponse(IlwisServer *server) const{
 	createHeader(doc, "WPSExecute_response.xsd");
 	XERCES_CPP_NAMESPACE::DOMElement *root = doc->getDocumentElement();
 
-	vector<ApplicationInfo *> infos;
+	vector<CommandInfo *> infos;
 	String operation = getValue("identifier");
 	operation.toLower();
-	Engine::modules.getAppInfo( operation, infos);
+	Engine::modules.getCommandInfo( operation, infos);
 	if ( infos.size() == 0)
 		return; // exception must be handled here
 	
-	ApplicationInfo *info = infos[0];
+	CommandInfo *info = infos[0];
 	if ( info->metadata != NULL) {
 		ApplicationQueryData query;
 		ApplicationMetadata amd = (info->metadata)(&query);

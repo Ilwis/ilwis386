@@ -16,6 +16,9 @@ namespace ILWIS{
 		bool needsResponse() const;
 		void doCommand();
 	private:
+		bool isApplication(const String& sExpress) ;
+		String makeApplicationExpression(const String& expr, const map<String, ILWIS::WPSParameter>& orderedInput);
+		String makeNonApplicationExpression(const String& expr ,const map<String, ILWIS::WPSParameter>& orderedInput);
 		String execute(vector<WPSParameter>& outputs) const;
 		vector<WPSParameter> inputs;
 		String executionDir;

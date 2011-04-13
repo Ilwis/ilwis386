@@ -99,10 +99,10 @@ void WPSGetCapabilities::writeResponse(IlwisServer *server) const{
 
 	node2 = doc->createElement(L"wps:ProcessOfferings");
 	node1->appendChild(node2);
-	vector<ApplicationInfo *> infos;
-	Engine::modules.getAppInfo("*", infos);
-	for(vector<ApplicationInfo *>::iterator cur=infos.begin(); cur != infos.end(); ++cur) {
-		ApplicationInfo *info = (*cur);
+	vector<CommandInfo *> infos;
+	Engine::modules.getCommandInfo("*", infos);
+	for(vector<CommandInfo *>::iterator cur=infos.begin(); cur != infos.end(); ++cur) {
+		CommandInfo *info = (*cur);
 		if ( info->metadata != NULL) {
 			ApplicationQueryData query;
 			query.queryType = "WPSMETADATA";

@@ -26,6 +26,7 @@ public:
 	void checkTimeOutLocations();
 	void addTimeOutLocation(const String& folder, time_t t);
 	void updateTimeOutLocation(const String& folder);
+	bool fValid() { return isValid;}
 
 private:
     struct mg_context *ctx;
@@ -37,5 +38,6 @@ private:
 	CCriticalSection csAccess;
 	CWinThread *watcherThread;
 	static UINT timeOutChecker(LPVOID data);
+	bool isValid;
 };
 
