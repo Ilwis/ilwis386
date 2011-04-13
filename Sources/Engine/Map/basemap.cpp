@@ -34,156 +34,7 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/* $Log: /ILWIS 3.0/BasicDataStructures/basemap.cpp $
- * 
- * 36    11/26/01 12:33 Willem
- * Getting the object structure for dependent data of an object is now
- * handled by IlwisObject instead of the individual objects
- * 
- * 35    13-08-01 16:57 Koolhoven
- * readability: replaced "== false" by a "!"
- * 
- * 34    29-03-01 11:39a Martin
- * fDataReadOnly function returns correct value
- * 
- * 33    7-03-01 16:46 Koolhoven
- * tblAtt() also stores the Table internally when the table comes from the
- * Domain, this prevents removed tables in record editing
- * 
- * 32    7-03-01 4:13p Martin
- * fDataReadOnly implemented. It checks for foreignformat files if their
- * format supports editing
- * 
- * 31    26/02/01 17:14 Willem
- * The CoordSystem is now not read from the ODF for raster maps; GeoRef
- * will provide the correct CoordSystem
- * 
- * 30    23-01-01 2:20p Martin
- * copier will now break the dependency of the target object, not of the
- * source object
- * 
- * 29    30/11/00 12:14 Willem
- * SetDomainValueRangeStruct() function now checks if the dmOld is a
- * DomainNone before clearing the attribute table
- * 
- * 28    23-11-00 10:12a Martin
- * for internal domains the data files are now required files in
- * getobjectstructure
- * 
- * 27    23-11-00 9:31a Martin
- * made a typo in the getobjectstructure for the section of dependencies
- * 
- * 26    17-11-00 15:26 Koolhoven
- * sTblAtt() now calls  ObjectInfo::fnAttributeTable() instead of reading
- * itself in the odf
- * 
- * 25    6-11-00 15:32 Koolhoven
- * tblAtt now returns simply a Table, not by reference anymore
- * 
- * 24    11/01/00 12:11p Martin
- * added errormap to the objectsructure members
- * 
- * 23    30-10-00 9:38a Martin
- * added handling for internal domains in the GetObjectStructure. Should
- * not be here but ilwis has no other option
- * 
- * 22    27-10-00 4:19p Martin
- * list of objdependencies added in objectstructure list
- * 
- * 21    25-10-00 4:33p Martin
- * changed the getobjectstructure function
- * 
- * 20    11-09-00 10:05a Martin
- * changed the structure of ObjectStructure object to include odf entry
- * information
- * 
- * 19    8-09-00 3:21p Martin
- * added function to set the fChanged member of all the 'members of an
- * object.
- * added function to retrieve the 'structure' of an object (filenames)
- * 
- * 18    10/08/00 9:50 Willem
- * The constructor of BaseMap now calls the BaseMap::pGet() function to
- * retrieve the proper BaseMapPtr. This is needed for polygonmaps that
- * contain segmentmaps with the same name
- * 
- * 17    4/26/00 5:27p Hendrikse
- * improved GetDataFiles using now the Basemap(fn)  constructor
- * 
- * 16    4/26/00 3:31p Hendrikse
- * adapted GetDataFiles(_) to ensure that while copying a KrigingMap the
- * associated ErrorMap is copied as well. 
- * This will then work for all maps producing an errormap
- * 
- * 15    21-02-00 4:35p Martin
- * Added a function to quickly add a whole set of values (AddValues)
- * 
- * 14    15-02-00 8:55a Martin
- * Added changes for use of foreign formats
- * 
- * 13    8-02-00 12:34 Wind
- * bug when reading in proximity
- * 
- * 12    17-01-00 11:30 Wind
- * added proximity to iValue(const Coord& ..) etc.
- * 
- * 11    12-01-00 17:13 Wind
- * added proximity and erormap functions
- * 
- * 10    10-01-00 2:05p Martin
- * added function toaccess to cbOuter member
- * 
- * 9     5-01-00 18:00 Wind
- * prevented SegmentMap of PolygonMap to destruy some entries in the ODF
- * 
- * 8     29-10-99 12:59 Wind
- * case sensitive stuff
- * 
- * 7     22-10-99 12:56 Wind
- * thread save access (not yet finished)
- * 
- * 6     10/01/99 1:37p Wind
- * support for map syntax maplist:bandnr
- * 
- * 5     9/29/99 11:01a Wind
- * added support for FileName::sSectionPostFix
- * 
- * 4     22-09-99 15:51 Koolhoven
- * SetNoAttributeTable() debugged
- * 
- * 3     9/08/99 10:10a Wind
- * adapted to use of quoted file names for attribute tables
- * 
- * 2     3/11/99 12:15p Martin
- * Added support for Case insesitive 
-// Revision 1.8  1998/09/16 17:22:46  Wim
-// 22beta2
-//
-// Revision 1.7  1998/03/06 16:40:59  janh
-// Initialization of _fAttTable was not done.
-//
-// Revision 1.6  1997/09/04 10:41:38  Wim
-// Call DeleteCalc() in SetValueRangeStruct() and SetValueRange()
-//
-// Revision 1.5  1997-08-20 18:41:40+02  Wim
-// Added Updated():
-// reset minmax and perc1 interval
-//
-// Revision 1.4  1997-08-19 16:50:41+02  Wim
-// Added BaseMap::pGetRasMap(), pGetSegMap(), pGetPolMap(), pGetPntMap()
-// because all basemapptr's are in the same list.
-// This caused problems with polygonmapstore which has a segmentmap
-// inside, with the same filename.
-// Due to the static casts you got some "funny" results.
-//
-// Revision 1.3  1997-08-19 14:53:51+02  Wim
-// Some protections agains using invalid dm()
-//
-/* BaseMapPtr
-   Copyright Ilwis System Development ITC
-   march 1995, by Wim Koolhoven
-	Last change:  J    21 Oct 99   10:03 am
-*/
+
 #include "Headers\toolspch.h"
 #include "Engine\Map\Feature.h"
 #include "Engine\Map\basemap.h"
@@ -304,7 +155,7 @@ MapPtr*  BaseMap::pGetRasMap(const FileName& fn)
 BaseMapPtr::BaseMapPtr()
 : IlwisObjectPtr(), 
   rProx(rUNDEF), 
-	dvs(DomainValueRangeStruct(Domain("none")))
+	dvs(DomainValueRangeStruct(Domain("none"))),histogramSize(0)
 {
   _fAttTable = false;
   fKeepOpen = false;
@@ -371,7 +222,7 @@ BaseMapPtr* BaseMapPtr::create(const FileName& fn)
 }
 
 BaseMapPtr::BaseMapPtr(const FileName& fn, bool fCreate)
-: IlwisObjectPtr(fn, fCreate), _fAttTable(false), rProx(rUNDEF)
+: IlwisObjectPtr(fn, fCreate), _fAttTable(false), rProx(rUNDEF),histogramSize(0)
 {
   if (fCreate) 
     return;
@@ -387,6 +238,7 @@ BaseMapPtr::BaseMapPtr(const FileName& fn, bool fCreate)
 	String sType;
 	ReadElement("BaseMap", "Domain", sType);
 	ReadElement("BaseMap", "Domain", dom);
+	ReadElement("BaseMap", "HistogramSize", histogramSize);
   dvs.SetDomain(dom,true); 
   if (dvs.fValues()) {
     ValueRange vr;
@@ -458,6 +310,7 @@ void BaseMapPtr::Store()
     return;
   WriteElement("BaseMap", "Domain", dm());
   WriteElement("BaseMap", "Range", vr());
+  WriteElement("BaseMap", "HistogramSize", histogramSize);
   if (!_fAttTable || sAttTable.length() == 0)
     WriteElement("BaseMap", "AttributeTable", (const char*)0);
   else
@@ -822,6 +675,15 @@ void BaseMapPtr::SetPerc1(const RangeReal& rr)
 { 
   _rrPerc1 = rr; 
   WriteElement("BaseMap", "Perc1", _rrPerc1);
+}
+
+void BaseMapPtr::setHistrogramSize(long n) {
+	histogramSize = n;
+    WriteElement("BaseMap", "HistogramSize", histogramSize);
+}
+
+long BaseMapPtr::getHistogramSize() const{
+	return histogramSize;
 }
 
 void BaseMapPtr::CalcMinMax()

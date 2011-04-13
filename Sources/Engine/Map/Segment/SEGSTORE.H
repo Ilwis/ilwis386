@@ -43,6 +43,14 @@
 class APPEXPORT Tranquilizer;
 class SegmentMapPtr;
 
+namespace geos {
+	namespace index {
+		namespace quadtree{
+		class Quadtree;
+		}
+	}
+}
+
 class _export SegmentMapStore	: public MultiLineString
 {
 	friend class SegmentMapPtr;
@@ -68,10 +76,10 @@ public:
 	Geometry			*getTransformedFeature(long iRec, const CoordSystem& csy) const	;
 	void				removeFeature(const String& id, const vector<int>& selectedCoords=vector<int>());
 
-	long                 iNode(Coord) const; // 3.0
-	Coord                crdNode(Coord) const;
+	//long                 iNode(Coord) const; // 3.0
+	//Coord                crdNode(Coord) const;
 	Coord                crdCoord(Coord, ILWIS::Segment**, long&) const; //3.0
-	Coord                crdPoint(Coord, ILWIS::Segment**, long& iAft, bool fAcceptDeleted) const;  // 3.0
+	Coord                crdPoint(Coord, ILWIS::Segment**, long& iAft, double rPrx) const;  // 3.0
 
 	bool                 fSegExist(const ILWIS::Segment& segNew, Tranquilizer* trq=0) const;
 	bool                 fSegExist(const CoordinateSequence *crdBufNew, 
@@ -104,6 +112,7 @@ protected:
 	SegmentMapPtr& ptr;  // the SegmentMapPtr of which this is a member
 	void SetCoordSystem(const CoordSystem& cs);	
 	ObjectTime timStore; // time of last change in data
+	geos::index::quadtree::Quadtree *spatialIndex;
 	
 private:
 	void Truncate(); // remove all contents, make empty

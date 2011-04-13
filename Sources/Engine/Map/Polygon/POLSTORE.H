@@ -105,12 +105,14 @@ protected:
 	PolygonMapPtr& ptr;  // the SegmentMapPtr of which this is a member
 	const FileName& fnObj; // fnObj from ptr (for convenience)
 	ObjectTime timStore; // time of last change in data
+    geos::index::quadtree::Quadtree *spatialIndex;
 	
 private:
 	void StoreRing(File& binaryFile, const LineString *ls);
 	void getRings(long startIndex, const Table& tblTopology, const Table& tblPolygon, vector<LinearRing*>& rings );
 	void AddBoundary(Topology& top, const String& sVal, Tranquilizer* trq=0);
 	LinearRing *ReadRing(File&  binaryFile);
+
 		
 	//void FindPolygon(Topology topStart,
 	//const ArrayLarge<Coord>& crdF,

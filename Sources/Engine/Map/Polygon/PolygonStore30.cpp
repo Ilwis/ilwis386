@@ -33,9 +33,9 @@ void PolygonMapStoreFormat30::Load()
 		if (getRings(colTopStart->iValue(i), tblTopology, tblPolygon, rings)) {
 			ILWIS::Polygon *polygon;
 			if ( ptr.dvrs().fValues()) {
-				polygon = new ILWIS::RPolygon();	
+				polygon = new ILWIS::RPolygon(spatialIndex);	
 			} else{
-				polygon = new ILWIS::LPolygon();
+				polygon = new ILWIS::LPolygon(spatialIndex);
 			}
 			if ( rings.size() == 0)
 				continue;

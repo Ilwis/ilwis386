@@ -141,13 +141,13 @@ void PolygonMapStoreFormat20::Load()
 		void *val = &(valuebuffer[iPolygon * iValueSize]);
 		if ( ptr.st() == stREAL )
 		{
-			polygon = new ILWIS::RPolygon();
+			polygon = new ILWIS::RPolygon(spatialIndex);
 			rVal = *((double *) val );
 			polygon->PutVal(rVal);
 		}
 		else
 		{
-			polygon = new ILWIS::LPolygon();
+			polygon = new ILWIS::LPolygon(spatialIndex);
 			iVal = *((long *) val);
 			polygon->PutVal(iVal);
 		}

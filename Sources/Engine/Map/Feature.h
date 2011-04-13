@@ -2,13 +2,21 @@
 
 #include "Geos\Geos.h"
 
+namespace geos {
+	namespace index {
+		namespace quadtree{
+		class Quadtree;
+		}
+	}
+}
+
 class Mask;
 class DomainValueRangeStruct;
 
 class _export Feature {
 public:
 	enum FeatureType{ftPOINT, ftSEGMENT, ftPOLYGON};
-	Feature();
+	Feature(geos::index::quadtree::Quadtree *tree);
 
 
 	virtual String sValue(const DomainValueRangeStruct& dvs, short iWidth=-1, short iDec=-1) const = 0;
@@ -25,12 +33,13 @@ public:
 	String getGuid() const;
 	bool EnvelopeIntersectsWith(Geometry *g2, bool useMargine=false);
 	CoordBounds Feature::cbBounds() const;
-	virtual long nearSection(const Coord& crd, double delta=rUNDEF, double use3D=false) { return iUNDEF;}
+	virtual long nearSection(const Coord& crd, double delta, double& dis) { return iUNDEF;}
 	virtual void Feature::getBoundaries(vector<CoordinateSequence*>& boundaries) const = 0;
 
 protected:
 	CCriticalSection csAccess;
 	CoordBounds cb;
+	geos::index::quadtree::Quadtree *spatialIndex;
 
 private:
 	bool deleted;

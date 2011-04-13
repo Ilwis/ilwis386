@@ -142,6 +142,8 @@ public:
 	Geometry *getTransformedFeature(long iRec, const CoordSystem& csy) const	{ return NULL;}
 	virtual Feature *newFeature(geos::geom::Geometry *pnt=NULL) { return NULL; }
 	virtual void removeFeature(const String& id, const vector<int>& selectedCoords=vector<int>()) {}
+	void _export setHistrogramSize(long n);
+	long _export getHistogramSize() const;
 	
 protected:
     _export BaseMapPtr();
@@ -161,6 +163,7 @@ protected:
     CoordSystem          _csys;
     CoordBounds          cbOuter;
     DomainValueRangeStruct      dvs;
+	long histogramSize;
 	
 private:
     static BaseMapPtr* create(const FileName&);

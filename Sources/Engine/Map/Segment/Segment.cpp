@@ -42,19 +42,21 @@
 #include "Engine\Table\Col.h"
 #include "Engine\Domain\Dmvalue.h"
 #include "Engine\Base\DataObjects\valrange.h"
-//#include "Engine\Base\Algorithm\Tunnel.h"
+#include "Geos\headers\geos\algorithm\CGAlgorithms.h"
 #include "Engine\Base\Algorithm\Clipline.h"
 #include "Engine\Table\ColumnCoordBuf.h"
 #include "Engine\Base\mask.h"
 #include "Engine\Base\AssertD.h"
 #include "Engine\Domain\DomainUniqueID.h"
+#include <geos/index/quadtree/Quadtree.h>
+#include <geos/geom/Envelope.h>
 
 #define EPS10 1.e-10
 
 using namespace ILWIS;
 
-ILWIS::Segment::Segment(geos::geom::LineString *line) :
-	geos::geom::LineString(NULL, new GeometryFactory(new PrecisionModel()))
+ILWIS::Segment::Segment(geos::index::quadtree::Quadtree *tree, geos::geom::LineString *line) :
+	geos::geom::LineString(NULL, new GeometryFactory(new PrecisionModel())), Feature(tree)
 {
   if ( line != NULL)
 	  PutCoords(line->getCoordinates());
@@ -88,6 +90,16 @@ Coord ILWIS::Segment::crdEnd()
 {
   return Coord(*(getEndPoint()->getCoordinate()));
 }
+
+long ILWIS::Segment::iBegin() const  // begin node  - id in node table 
+{
+	return 0;
+}
+long ILWIS::Segment::iEnd() const	   // end node	  - id in node table 
+{
+	return points->size() - 1;
+}
+
 
 double ILWIS::Segment::rAzim(bool fEnd) const  // azimuth at begin or end
 {
@@ -126,15 +138,19 @@ double ILWIS::Segment::rAzim(bool fEnd) const  // azimuth at begin or end
 }
 
 void ILWIS::Segment::PutCoords(CoordinateSequence* sq) {
+	spatialIndex->remove(getEnvelopeInternal(),this);
 	ILWISSingleLock sl(const_cast<CCriticalSection *>(&csAccess), TRUE, SOURCE_LOCATION);
 	points.release();
 	//CoordinateArraySequence *sss = new CoordinateArraySequence();
 	points = CoordinateSequence::AutoPtr(sq);
+	envelope = computeEnvelopeInternal();
+	spatialIndex->insert(getEnvelopeInternal(), this);
 }
 
 void ILWIS::Segment::PutCoords(long iNr, const CoordBuf& crdBuf) 
 {
     ILWISSingleLock sl(const_cast<CCriticalSection *>(&csAccess), TRUE, SOURCE_LOCATION);
+	spatialIndex->remove(getEnvelopeInternal(),this);
 	cb = CoordBounds();
 	points.release();
 	vector<Coordinate> *crds = new vector<Coordinate>();
@@ -143,6 +159,8 @@ void ILWIS::Segment::PutCoords(long iNr, const CoordBuf& crdBuf)
 		(*crds)[i] = Coordinate(crdBuf[i].x,crdBuf[i].y, crdBuf[i].z);
 	}
 	points =  CoordinateSequence::AutoPtr(new CoordinateArraySequence(crds));
+	envelope = computeEnvelopeInternal();
+ 	spatialIndex->insert(getEnvelopeInternal(), this);
 }
 
 void ILWIS::Segment::Clip(const CoordBounds& cbClip,
@@ -249,7 +267,7 @@ double ILWIS::Segment::rLength() const
 }
 
 
-long ILWIS::Segment::nearSection(const Coord& crd, double delta, double use3D) {
+long ILWIS::Segment::nearSection(const Coord& crd, double delta, double& dist) {
 	CoordinateSequence *seq = getCoordinates();
 	if ( seq->size() == 0)
 		return iUNDEF;
@@ -257,45 +275,11 @@ long ILWIS::Segment::nearSection(const Coord& crd, double delta, double use3D) {
 	Coord c1 = seq->getAt(0);
 	for(int i=1; i<seq->size(); ++i) {
 		Coord c2 = seq->getAt(i);
-		double c3x, c3y;
-	/*	if ( c1.x - c2.x != 0) {
-			double a1 = (c1.y - c2.y) / (c1.x - c2.x);
-			if ( a1 != 0) {
-				double a2 = -1.0/ a1;
-				double b1 = c1.y  - a1 * c1.x;
-				double b2 = c2.y - a2 * c2.x;
-				c3x = (b1 - b2) / (a2 - a1);
-				c3y = a1 * c3x + b1;
-			} else {
-				c3x = crd.x;
-				c3y = c1.y;
-			}
-		} else {
-			c3x = c1.x;
-			c3y = crd.y;
-		}*/
-		double a = crd.x - c1.x;
-		double b = crd.y - c1.y;
-		double c = c2.x - c1.x;
-		double d = c2.y - c1.y;
-		double dot = a * b + c *d;
-		double lensq = c *c + d * d;
-		double p = dot / lensq;
-		if (  p < 0) {
-			c3x = c1.x;
-			c3y = c1.y;
-		} else if ( p > 1) {
-			c3x = c2.x;
-			c3y = c2.y;
-		} else {
-			c3x = c1.x + p * c;
-			c3y = c1.y + p * d;
-		}
-
-		Coord c3(c3x, c3y);
-		double rd = rDist(c3, crd);
-		if ( rd <= delta)
+		double rd = geos::algorithm::CGAlgorithms::distancePointLinePerpendicular(crd, c1,c2);
+		if ( rd <= delta) {
+			dist = rd;
 			return i;
+		}
 		c1 = c2;
 
 	}
@@ -585,7 +569,7 @@ void ILWIS::Segment::getBoundaries(vector<geos::geom::CoordinateSequence*>& boun
 }
 
 //-----[LSEGMENT]-----------------------------------------------------------------------
-ILWIS::LSegment::LSegment(geos::geom::LineString *line) : ILWIS::Segment(line){
+ILWIS::LSegment::LSegment(geos::index::quadtree::Quadtree *tree, geos::geom::LineString *line) : ILWIS::Segment(tree, line){
 
 }
 
@@ -597,7 +581,7 @@ void ILWIS::LSegment::PutVal(long iRaw)
 }
 
 Geometry *ILWIS::LSegment::clone() const {
-	LSegment *seg = new LSegment();
+	LSegment *seg = new LSegment(spatialIndex);
 	seg->PutCoords(getCoordinates());
 	seg->PutVal(value);
 	return seg;
@@ -660,11 +644,11 @@ void ILWIS::LSegment::segSplit(long iAfter, Coord crdAt, ILWIS::Segment **seg)
 }
 
 //---[RSEGMENT]---------------------------------------------------------
-ILWIS::RSegment::RSegment(geos::geom::LineString *line) : ILWIS::Segment(line){
+ILWIS::RSegment::RSegment(geos::index::quadtree::Quadtree *tree, geos::geom::LineString *line) : ILWIS::Segment(tree, line){
 }
 
 Geometry *ILWIS::RSegment::clone() const {
-	RSegment *seg = new RSegment();
+	RSegment *seg = new RSegment(spatialIndex);
 	seg->PutCoords(getCoordinates());
 	seg->PutVal(value);
 	return seg;
