@@ -112,20 +112,15 @@ double niceOne(double v) {
 RangeReal roundRange(double rmin, double rmax) {
 //	double  minpow = rmin == 0 ? 0 : (int)log10(rmin);
 //	double maxpow = rmax == 0 ? 0 : (int)log10(rmax);
-	if ( rmin == 0 && rmax == 255)
-		return RangeReal(0,255);
+	double d = rmax - rmin;
+	long pw = log10(d);
+	double f = pow(10,(double)pw);
+	int vd = rmin / f;
+	double v1 = vd * f;
+	vd = (rmax + f)/f;
+	double v2 = vd * f;
 
-	double dist = rmax - rmin;
-	double distPow = floor((log10(dist)));
-	double rm1 = rmin / pow(10,distPow);
-	double rm2 = rmax / pow(10,distPow);
-	rm1 = niceOne(rm1);
-	rm2 = niceOne(rm2);
-
-	double irm1 = rm1 * pow(10,distPow);
-	double irm2 = rm2 * pow(10,distPow);
-
-	return RangeReal(irm1, irm2);
+	return RangeReal(v1, v2);
 }
 
 

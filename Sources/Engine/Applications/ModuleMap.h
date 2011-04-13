@@ -1,15 +1,16 @@
 #pragma once
 
-struct ApplicationInfo;
+struct CommandInfo;
 
-typedef vector<ApplicationInfo *> InfoVector;
+typedef vector<CommandInfo *> InfoVector;
 typedef InfoVector::iterator InfoVIter;
-typedef pair<string, ApplicationInfo *> InfoPair;
+typedef pair<string, CommandInfo *> InfoPair;
 typedef InfoVector *(*AppInfo)();
 //typedef ILWIS::Module *(*ModuleInfo)();
 typedef void(*ModuleInit)(ILWIS::Module *module);
-typedef void(*Test1)(ApplicationInfo* name);
+typedef void(*Test1)(CommandInfo* name);
 typedef IlwisObjectPtr *(* CreateFunc)(const FileName& fn, IlwisObjectPtr& p, const String& sExpr, vector<void *> parms);
+typedef void (*CommandFunc)(const String& expression);
 typedef String (* CommandName)();
 typedef String (* WPSMetadataFunc)();
 
@@ -19,6 +20,7 @@ struct _export ApplicationMetadata {
 	ApplicationMetadata() { returnType = IlwisObject::iotANY; } 
 	String wpsxml;
 	IlwisObject::iotIlwisObjectType returnType;
+	String skeletonExpression;
 };
 
 struct _export ApplicationQueryData {
@@ -29,23 +31,26 @@ struct _export ApplicationQueryData {
 
 typedef ApplicationMetadata (* MetaDataFunc)(ApplicationQueryData* query);
 
-struct _export ApplicationInfo 
+struct _export CommandInfo 
 {
 public:
 	String name;
 	CreateFunc createFunction;
+	CommandFunc commandFunction;
 	MetaDataFunc metadata;
-	ApplicationInfo() { createFunction = NULL;metadata = NULL;} 
+	CommandInfo() { createFunction = NULL;metadata = NULL;commandFunction=NULL;} 
+	CommandInfo(const String& sName, CommandFunc cf,MetaDataFunc mf=0) : name(sName), commandFunction(cf), metadata(mf) {}
 };
 
-class _export ApplicationMap : public map<String, ApplicationInfo *> {
+class _export CommandMap : public map<String, CommandInfo *> {
 public:
-	static ApplicationInfo *newApplicationInfo(CreateFunc appFunc, String appName);
-	static ApplicationInfo *newApplicationInfo(CreateFunc appFunc, String appName, MetaDataFunc mdFunc);
-	ApplicationInfo * operator[](String name);
-	void addApplications(vector<ApplicationInfo *> apps);
+	static CommandInfo *newCommandInfo(CreateFunc appFunc, String appName);
+	static CommandInfo *newCommandInfo(CreateFunc appFunc, String appName, MetaDataFunc mdFunc);
+	CommandInfo * operator[](String name);
+	void addApplications(vector<CommandInfo *> apps);
 	void addExtraFunctions();
-	~ApplicationMap();
+	void addCommand(const String& sName, CommandFunc cf,MetaDataFunc mf =0); 
+	~CommandMap();
 
 private:
 
@@ -57,15 +62,16 @@ public:
 	void addModule(const FileName& fnModule, bool retry = false);
 	void addModules();
 	void initModules();
-	void getAppInfo(const String& name, vector<ApplicationInfo *>& infos);
+	void getCommandInfo(const String& name, vector<CommandInfo *>& infos);
+	void addCommand(const String& sName, CommandFunc cf,MetaDataFunc mf =0); 
 private:
 	void addFolder(const String& dir);
 	void addModule(ILWIS::Module *m);
 	map<String, ModuleInit> moduleInits;
-	ApplicationMap applications;
+	CommandMap applications;
 	vector<FileName> retryList;
 
 };
 
 typedef ModuleMap::iterator ModuleIter;
-typedef ApplicationMap::iterator AppIter;
+typedef CommandMap::iterator AppIter;

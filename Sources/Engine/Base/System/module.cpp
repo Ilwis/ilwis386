@@ -35,3 +35,8 @@ String ILWIS::Module::getName() const {
 String ILWIS::Module::getNameAndVersion() const {
 	return name + " " + version;
 }
+
+FileName ILWIS::Module::getLocation() const {
+	return fnModule;
+}
+

@@ -52,7 +52,7 @@ namespace ILWIS {
 	class _export Segment : public geos::geom::LineString, public Feature
 {
 public:
-	Segment(geos::geom::LineString *seg=NULL);
+	Segment(geos::index::quadtree::Quadtree *tree, geos::geom::LineString *seg=NULL);
 	virtual ~Segment();
 	//CoordBounds		crdBounds() const; // new 3.0
 	long			iBegin() const;   // begin node  - id in node table
@@ -71,7 +71,7 @@ public:
 
 	virtual			FeatureType getType() const;
 	virtual	void    getBoundaries(std::vector<geos::geom::CoordinateSequence*>& boundaries) const;
-	long			nearSection(const Coord& crd, double delta, double use3D=false);
+	long			nearSection(const Coord& crd, double delta, double& dist);
 
 
 	double			rLength() const;
@@ -99,7 +99,7 @@ protected:
 
 	class LSegment : public ILWIS::Segment {
 public:
-	LSegment(geos::geom::LineString *seg=NULL);
+	LSegment(geos::index::quadtree::Quadtree *tree, geos::geom::LineString *seg=NULL);
 	virtual long	iValue()const;
 	virtual double	rValue() const;
 	virtual String	sValue(const DomainValueRangeStruct& dvs, short iWidth=0, short iDec=0) const;
@@ -114,7 +114,7 @@ private:
 
 class RSegment : public ILWIS::Segment {
 public:
-	RSegment(geos::geom::LineString *seg=NULL);
+	RSegment(geos::index::quadtree::Quadtree *tree, geos::geom::LineString *seg=NULL);
 	virtual long	iValue()const;
 	virtual double	rValue() const;
 	virtual String	sValue(const DomainValueRangeStruct& dvs, short iWidth=0, short iDec=0) const;
@@ -177,10 +177,10 @@ public:
 	
 	void     SetAlfa(const CoordBounds& cb);
 	
-	long            iNode(Coord) const; //3.0
-	Coord    crdNode(Coord) const; // 3.0
+	//long            iNode(Coord) const; //3.0
+	//Coord    crdNode(Coord) const; // 3.0
 	Coord    crdCoord(Coord, ILWIS::Segment** seg, long& iNr) const; //3.0
-	Coord    crdPoint(Coord, ILWIS::Segment** seg, long& iAft, bool fAcceptDeleted = 0) const; //3.0
+	Coord    crdPoint(Coord, ILWIS::Segment** seg, long& iAft, double rPrx) const; //3.0
 	bool            fSegExist(const ILWIS::Segment& segNew, Tranquilizer* trq=0);
 	bool            fSegExist(long iCrdNew, const CoordBuf& crdBufNew, const CoordBounds& mmBoundsNew, Tranquilizer* trq=0); //3.0
 	

@@ -49,6 +49,8 @@
 #include "Engine\Base\System\Engine.h"
 #include "Engine\Base\DataObjects\ObjectStructure.h"
 #include "Engine\Table\tblinfo.h"
+#include <geos/index/quadtree/Quadtree.h>
+#include <geos/geom/Envelope.h>
 #include "Headers\Hs\point.hs"
 
 using namespace ILWIS;
@@ -59,6 +61,7 @@ PointMapStore::PointMapStore(const FileName& fn, PointMapPtr& p, bool fDoNotLoad
 : MultiPoint(NULL, new GeometryFactory()),
 fnObj(p.fnObj), ptr(p)
 {
+	spatialIndex = new geos::index::quadtree::Quadtree();
 	if ( fDoNotLoad ) // loading and constructing will be done elsewhere (foreignformat)
 		return;
 
@@ -111,6 +114,7 @@ fnObj(p.fnObj), ptr(p)
 PointMapStore::PointMapStore(const FileName& fn, PointMapPtr& p, long iPnts)
 : MultiPoint(NULL, new GeometryFactory()), fnObj(p.fnObj), ptr(p)
 {
+	spatialIndex = new geos::index::quadtree::Quadtree();
 	geometries = new vector<Geometry *>();
 	for(int i=0; i<iPnts; ++i) 
 		pntNew();
@@ -120,9 +124,9 @@ PointMapStore::PointMapStore(const FileName& fn, PointMapPtr& p, long iPnts)
 Feature *PointMapStore::pntNew(geos::geom::Geometry *pnt) {
 	ILWIS::Point *p;
 	if ( ptr.dvrs().fRealValues()) {
-		p = new ILWIS::RPoint((geos::geom::Point*)(pnt));
+		p = new ILWIS::RPoint(spatialIndex, (geos::geom::Point*)(pnt));
 	} else {
-		p = new ILWIS::LPoint((geos::geom::Point*)(pnt));
+		p = new ILWIS::LPoint(spatialIndex, (geos::geom::Point*)(pnt));
 	}
 	geometries->push_back(p);
 	return p;
@@ -130,16 +134,17 @@ Feature *PointMapStore::pntNew(geos::geom::Geometry *pnt) {
 
 void PointMapStore::SetPoint(const Coord& crd, double v, bool usesReal) {
 	if ( usesReal) {
-		ILWIS::RPoint *p = new ILWIS::RPoint(crd, v);
+		ILWIS::RPoint *p = new ILWIS::RPoint(spatialIndex,crd, v);
 		geometries->push_back(p);
 	} else {
-		ILWIS::LPoint *p = new ILWIS::LPoint(crd, v);
+		ILWIS::LPoint *p = new ILWIS::LPoint(spatialIndex,crd, v);
 		geometries->push_back(p);
 	} 
 }
 
 PointMapStore::~PointMapStore()
 {
+	delete spatialIndex;
 }
 
 void PointMapStore::Store()
@@ -436,7 +441,7 @@ long PointMapStore::iAdd(long iRecs)
 
 long PointMapStore::iAddRaw(const Coord& c, long iRaw)
 {
-	ILWIS::LPoint *p = new ILWIS::LPoint(c, iRaw);
+	ILWIS::LPoint *p = new ILWIS::LPoint(spatialIndex, c, iRaw);
 	geometries->push_back(p);
 	Updated();
 	return geometries->size();
@@ -448,10 +453,10 @@ long PointMapStore::iAddVal(const Coord& c, const String& s)
 	//	return iUNDEF;
 	ILWIS::Point *p;
 	if ( ptr.dvrs().fUseReals()) {
-		p = new ILWIS::RPoint(c, s.rVal());
+		p = new ILWIS::RPoint(spatialIndex,c, s.rVal());
 	} else {
 		long iRaw = ptr.dvrs().iRaw(s);
-		p = new ILWIS::LPoint(c, iRaw);
+		p = new ILWIS::LPoint(spatialIndex,c, iRaw);
 	}
 	geometries->push_back(p);
 	Updated();
@@ -464,10 +469,10 @@ long PointMapStore::iAddVal(const Coord& c, double rValue)
 		return iUNDEF;
 	ILWIS::Point *p;
 	if ( ptr.dvrs().fUseReals()) {
-		p = new ILWIS::RPoint(c, rValue);
+		p = new ILWIS::RPoint(spatialIndex,c, rValue);
 	} else {
 		long iRaw = ptr.dvrs().iRaw(rValue);
-		p = new ILWIS::LPoint(c, iRaw);
+		p = new ILWIS::LPoint(spatialIndex,c, iRaw);
 	}
 	geometries->push_back(p);
 	return geometries->size();

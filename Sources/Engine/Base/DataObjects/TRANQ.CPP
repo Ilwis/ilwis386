@@ -142,12 +142,16 @@ Tranquilizer::~Tranquilizer()
 {
   Stop();
   // wait till ReportWindow is finished
+//	TRACE("entering lock for tranquilizer =>");
   ILWISSingleLock cslTranq(&csTranq, TRUE,SOURCE_LOCATION);
+//	TRACE("leaving lock for tranquilizer \n");
 }
 
 void Tranquilizer::Start()
 {
 //	cs.Lock();
+	if( fServerMode())
+		return;
 	if (!fStarted ) // to protect against multiple, incorrect use of a tranquilizer
 	{
 		iProgressID = ++iTranqIDCounter;	
@@ -171,6 +175,8 @@ void Tranquilizer::SetNoStopButton(bool fYesNo)
 void Tranquilizer::Stop()
 {
 //  cs.Lock();
+	if( fServerMode())
+		return;
 	if (fStarted && reportWindow != 0 && reportWindow->GetSafeHwnd() != NULL)
 	{
 		int iMessage = MAKELONG(ILWREP_STOP, iProgressID);
@@ -183,6 +189,8 @@ void Tranquilizer::Stop()
 
 void Tranquilizer::SetTitle(const String& sTitl)
 {
+	if( fServerMode())
+		return;
 	cs.Lock();
 	sTitle = sTitl;
 	cs.Unlock();
@@ -195,6 +203,8 @@ void Tranquilizer::SetTitle(const String& sTitl)
 
 void Tranquilizer::SetText(const String& sText)
 {
+  if( fServerMode())
+		return;
   cs.Lock();
   sTranqText = sText;
   iVal = iUNDEF;	
@@ -208,13 +218,24 @@ void Tranquilizer::SetText(const String& sText)
 
 void Tranquilizer::setHelpItem(const HelpTopic& _htp)
 {
+  if( fServerMode())
+	return;
   cs.Lock();
   htp = _htp;
   cs.Unlock();
 }
 
+void Tranquilizer::setHelpItem(const String& file)
+{
+  cs.Lock();
+  help = file;
+  cs.Unlock();
+}
+
 bool Tranquilizer::fUpdate(long _iVal, long _iMax) // return true if stop has been pressed
 {
+  if( fServerMode())
+	return false;
   if (0 == reportWindow && !fStarted)
     Start();
   cs.Lock();
@@ -235,6 +256,8 @@ bool Tranquilizer::fUpdate(long _iVal, long _iMax) // return true if stop has be
 
 bool Tranquilizer::fText(const String& sText) // return true if stop has been pressed
 {
+  if( fServerMode())
+		return false;
   if (0 == reportWindow && !fStarted)
     Start();
   cs.Lock();
@@ -296,6 +319,14 @@ bool Tranquilizer::fGetOnlyGauge()
 unsigned short Tranquilizer::iGetProgressID()
 {
 	return iProgressID;
+}
+
+bool Tranquilizer::fServerMode() const{
+	bool *fServerMode = (bool*)getEngine()->getContext()->pGetThreadLocalVar(IlwisAppContext::tlvSERVERMODE);
+	if( fServerMode != 0 && *fServerMode)
+		return true;
+	return false;
+
 }
 
 

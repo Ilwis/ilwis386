@@ -46,6 +46,14 @@
 #include "Engine\Map\Point\PNT.H"
 #include "Engine\Table\Col.h"
 
+namespace geos {
+	namespace index {
+		namespace quadtree{
+		class Quadtree;
+		}
+	}
+}
+
 class _export PointMapStore : public MultiPoint
 {
   friend class PointMapPtr;
@@ -99,6 +107,7 @@ protected:
   void SetCoordSystem(const CoordSystem& cs);
   void SetPoint(const Coord& crd, double v, bool usesReal);
   bool fErase;
+  geos::index::quadtree::Quadtree *spatialIndex;
 };
 
 #endif

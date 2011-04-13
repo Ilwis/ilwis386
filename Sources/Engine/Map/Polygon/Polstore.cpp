@@ -48,6 +48,8 @@
 #include "Engine\Applications\ModuleMap.h"
 #include "Engine\Base\System\Engine.h"
 #include "geos\algorithm\locate\SimplePointInAreaLocator.h"
+#include <geos/index/quadtree/Quadtree.h>
+#include <geos/geom/Envelope.h>
 #include "Headers\Hs\polygon.hs"
 
 PolygonMapStore::PolygonMapStore(PolygonMapPtr& p, const FileName& fn) :
@@ -57,20 +59,13 @@ PolygonMapStore::PolygonMapStore(PolygonMapPtr& p, const FileName& fn) :
 	iStatusFlags(0)
 {
 	ptr.ReadElement("PolygonMapStore", "Polygons", ptr._iPol);
+    spatialIndex = new geos::index::quadtree::Quadtree();
 }
 
 PolygonMapStore::PolygonMapStore(const FileName& fn, PolygonMapPtr& p, bool fCreate)
 : MultiPolygon(  new vector<Geometry *>(), new GeometryFactory()), fnObj(p.fnObj), ptr(p), iStatusFlags(0)
 {
-	//ILWIS::Version::BinaryVersion fvBinaryVersion;
-
-	//ptr.ReadElement("PolygonMapStore", "Format", (int &)fvBinaryVersion);
-	//if ( fvBinaryVersion == shUNDEF && fCreate) fvBinaryVersion = ILWIS::Version::bvPOLYGONFORMAT37;
-	//if ( fvBinaryVersion == shUNDEF && !fCreate) fvBinaryVersion = ILWIS::Version::bvFORMAT30;
-	//getEngine()->getVersion()->fSupportsBinaryVersion(fvBinaryVersion);
-	//ptr.setVersionBinary(fvBinaryVersion);
-	//if ( fCreate && fvBinaryVersion == ILWIS::Version::bvPOLYGONFORMAT37 )
-	//{
+	spatialIndex = new geos::index::quadtree::Quadtree();
 	ptr._iPol = 0;
 	ptr._iPolDeleted = 0;
 	//}
@@ -171,6 +166,7 @@ void PolygonMapStore::UnStore(const FileName& fn)
 
 PolygonMapStore::~PolygonMapStore()
 {
+	delete spatialIndex;
 }
 
 void PolygonMapStore::Updated()
@@ -364,9 +360,9 @@ Feature* PolygonMapStore::newFeature(geos::geom::Geometry *p)        // create a
 	ILWISSingleLock sl(&ptr.csAccess, TRUE, SOURCE_LOCATION);
 	ILWIS::Polygon *pol = NULL;
 	if ( ptr.dvrs().fUseReals()) {
-		pol  = new ILWIS::RPolygon(dynamic_cast<geos::geom::Polygon *>(p));
+		pol  = new ILWIS::RPolygon(spatialIndex,dynamic_cast<geos::geom::Polygon *>(p));
 	} else {
-		pol =  new ILWIS::LPolygon(dynamic_cast<geos::geom::Polygon *>(p));
+		pol =  new ILWIS::LPolygon(spatialIndex,dynamic_cast<geos::geom::Polygon *>(p));
 	}
 	geometries->push_back(pol);
 	ptr._iPol = geometries->size();
@@ -382,9 +378,9 @@ Geometry *PolygonMapStore::getTransformedFeature(long iRec, const CoordSystem& c
 	  return NULL;
    ILWIS::Polygon *pol;
    if ( ptr.dvrs().fUseReals()) {
-		pol  = new ILWIS::RPolygon();
+		pol  = new ILWIS::RPolygon(spatialIndex);
 	} else {
-		pol =  new ILWIS::LPolygon();
+		pol =  new ILWIS::LPolygon(spatialIndex);
 	}
    ILWIS::Polygon *p = (ILWIS::Polygon *) geometries->at(iRec);
 

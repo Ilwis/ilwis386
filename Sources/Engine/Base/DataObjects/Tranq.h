@@ -60,6 +60,7 @@ public:
 
   void _export SetTitle(const String& sTitle);
   void _export setHelpItem(const HelpTopic& htp);
+  void _export setHelpItem(const String& htp);
   void _export SetText(const String& sText);
 
   bool _export fUpdate(long iVal, long iMax = 0); // return true if stop has been pressed
@@ -70,7 +71,7 @@ public:
   void _export SetAborted();
   _export unsigned short iGetProgressID();
 
-  void HelpEnable(bool) {} // dummy, should be handled by setHelpItem()
+  void HelpEnable(bool) {} // dummy, should be handled by SetHelpItem()
 	void _export SetDelayShow(bool fD);
 
   void _export Start();
@@ -91,10 +92,13 @@ private:
 	bool fNoStopButton;
 	bool fOnlyGauge;
 	long iVal, iMax;
+	String help;
 	CCriticalSection cs, csTranq;
 	CWnd *reportWindow;
 	unsigned short iProgressID;
 	static unsigned short iTranqIDCounter;
+
+	bool fServerMode() const;
 };
 
 #endif

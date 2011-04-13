@@ -51,6 +51,8 @@
 #include "Engine\Table\NewTableStore.h"
 #include "Engine\Table\TableStoreIlwis3.h"
 #include "geos\operation\distance\DistanceOp.h"
+#include <geos/index/quadtree/Quadtree.h>
+#include <geos/geom/Envelope.h>
 #include "Engine\Table\Rec.h"
 #include "Engine\Map\Point\ilwPoint.h"
 
@@ -63,11 +65,11 @@ static void TooManySegments()
 }  
 
 SegmentMapStore::SegmentMapStore(const FileName& fn, SegmentMapPtr& p, bool fCreate, bool fForeign)
-: MultiLineString(new vector<Geometry *>(), new GeometryFactory()), ptr(p),fErase(false)
+: MultiLineString(new vector<Geometry *>(), new GeometryFactory()), ptr(p),fErase(false), spatialIndex(0)
 {
   ILWISSingleLock sl(&ptr.csAccess, TRUE, SOURCE_LOCATION);
 	String sDummy;
-
+  spatialIndex = new geos::index::quadtree::Quadtree();
   ILWIS::Version::BinaryVersion fvFormatVersion;
   ptr.ReadElement("SegmentMapStore", "Format", (int &)fvFormatVersion);
   if (fCreate ) 
@@ -125,14 +127,15 @@ SegmentMapStore::SegmentMapStore(const FileName& fn, SegmentMapPtr& p, bool fCre
 			int colValue = tbl.index("SegmentValue");
 			Tranquilizer trq("Loading data");
 
+
 			for(int i = 0; i < tbl.getRowCount(); ++i) {
 				ILWIS::Segment *seg;
 				bool fVals = ptr.dvrs().fRealValues();
 				double value;
 				if (fVals){
-					seg  =  new ILWIS::RSegment();
+					seg  =  new ILWIS::RSegment(spatialIndex);
 				} else {
-					seg = new ILWIS::LSegment();
+					seg = new ILWIS::LSegment(spatialIndex);
 				}
 				tbl.get(i,colValue,value);
 				CoordinateSequence *seq = NULL;
@@ -143,6 +146,8 @@ SegmentMapStore::SegmentMapStore(const FileName& fn, SegmentMapPtr& p, bool fCre
 				if ( i % 100 == 0) {
 					trq.fUpdate(i,tbl.getRowCount()); 
 				}
+				const Envelope *env =  seg->getEnvelopeInternal();
+				spatialIndex->insert(env, seg);
 			}
 			*fDoNotShowError = fOldVal;
 		}
@@ -432,9 +437,9 @@ Geometry *SegmentMapStore::getTransformedFeature(long iRec, const CoordSystem& c
    delete seq;
    ILWIS::Segment *seg;
    if ( ptr.dvrs().fUseReals()) {
-		seg  = new ILWIS::RSegment();
+		seg  = new ILWIS::RSegment(spatialIndex);
 	} else {
-		seg =  new ILWIS::LSegment();
+		seg =  new ILWIS::LSegment(spatialIndex);
 	}
    seg->PutCoords(aseq);
    seg->PutVal(s->rValue());
@@ -485,9 +490,9 @@ Feature* SegmentMapStore::newFeature(geos::geom::Geometry *line)        // creat
 	bool fVals = ptr.dvrs().fValues();
 	ILWIS::Segment *seg = NULL;
 	if ( ptr.dvrs().fUseReals()) {
-		seg  = new ILWIS::RSegment((LineString *)line);
+		seg  = new ILWIS::RSegment(spatialIndex,(LineString *)line);
 	} else {
-		seg =  new ILWIS::LSegment((LineString *)line);
+		seg =  new ILWIS::LSegment(spatialIndex,(LineString *)line);
 	}
 	geometries->push_back(seg);
 	ptr._iSeg = geometries->size();
@@ -496,69 +501,69 @@ Feature* SegmentMapStore::newFeature(geos::geom::Geometry *line)        // creat
 	return seg;
 }
 
-long SegmentMapStore::iNode(Coord crd) const
-{
-	Coord crdRes, crdTmp;
-	double rTmp;
-	double rDist = HUGE_VAL;
-	int  segIndex = 0;
-	for (;segIndex < geometries->size(); ++segIndex) {
-		ILWIS::Segment *seg = (ILWIS::Segment *)geometries->at(segIndex);
-		crdTmp = seg->crdBegin();
-		if (crdTmp.fUndef()) // did never happen in version 2, and should never happen
-			continue;
-		rTmp = rDist2(crdTmp, crd);
-		if (rTmp < rDist) {
-			rDist = rTmp;
-			crdRes = crdTmp;
-		}
-		crdTmp = seg->crdEnd();
-		if (crdTmp.fUndef()) // did never happen in version 2, and should never happen
-			continue;
-		rTmp = rDist2(crdTmp, crd);
-		if (rTmp < rDist) {
-			rDist = rTmp;
-			crdRes = crdTmp;
-		}
-		if (rDist == 0) break;
-	}
-	if ( segIndex < geometries->size()   )
-		return segIndex;
-	return iUNDEF;
-}
+//long SegmentMapStore::iNode(Coord crd) const
+//{
+//	Coord crdRes, crdTmp;
+//	double rTmp;
+//	double rDist = HUGE_VAL;
+//	int  segIndex = 0;
+//	for (;segIndex < geometries->size(); ++segIndex) {
+//		ILWIS::Segment *seg = (ILWIS::Segment *)geometries->at(segIndex);
+//		crdTmp = seg->crdBegin();
+//		if (crdTmp.fUndef()) // did never happen in version 2, and should never happen
+//			continue;
+//		rTmp = rDist2(crdTmp, crd);
+//		if (rTmp < rDist) {
+//			rDist = rTmp;
+//			crdRes = crdTmp;
+//		}
+//		crdTmp = seg->crdEnd();
+//		if (crdTmp.fUndef()) // did never happen in version 2, and should never happen
+//			continue;
+//		rTmp = rDist2(crdTmp, crd);
+//		if (rTmp < rDist) {
+//			rDist = rTmp;
+//			crdRes = crdTmp;
+//		}
+//		if (rDist == 0) break;
+//	}
+//	if ( segIndex < geometries->size()   )
+//		return segIndex;
+//	return iUNDEF;
+//}
 
-Coord SegmentMapStore::crdNode(Coord crd) const
-{
-	Coord crdRes, crdTmp;
-	double rTmp;
-	double rDist = HUGE_VAL;
-	int  segIndex = 0;
-	for (;segIndex < geometries->size(); ++segIndex) {
-		ILWIS::Segment *seg = (ILWIS::Segment *)geometries->at(segIndex);
-		if ( !seg->fValid())
-			continue;
-		crdTmp = seg->crdBegin();
-		if (crdTmp.fUndef()) // did never happen in version 2, and should never happen
-			continue;
-		rTmp = rDist2(crdTmp, crd);
-		if (rTmp < rDist) {
-			rDist = rTmp;
-			crdRes = crdTmp;
-		}
-		crdTmp = seg->crdEnd();
-		if (crdTmp.fUndef()) // did never happen in version 2, and should never happen
-			continue;
-		rTmp = rDist2(crdTmp, crd);
-		if (rTmp < rDist) {
-			rDist = rTmp;
-			crdRes = crdTmp;
-		}
-		if (rDist == 0) break;
-	}
-	if ( segIndex <= geometries->size())
-		return crdRes;
-	return Coord();
-}
+//Coord SegmentMapStore::crdNode(Coord crd) const
+//{
+//	Coord crdRes, crdTmp;
+//	double rTmp;
+//	double rDist = HUGE_VAL;
+//	int  segIndex = 0;
+//	for (;segIndex < geometries->size(); ++segIndex) {
+//		ILWIS::Segment *seg = (ILWIS::Segment *)geometries->at(segIndex);
+//		if ( !seg->fValid())
+//			continue;
+//		crdTmp = seg->crdBegin();
+//		if (crdTmp.fUndef()) // did never happen in version 2, and should never happen
+//			continue;
+//		rTmp = rDist2(crdTmp, crd);
+//		if (rTmp < rDist) {
+//			rDist = rTmp;
+//			crdRes = crdTmp;
+//		}
+//		crdTmp = seg->crdEnd();
+//		if (crdTmp.fUndef()) // did never happen in version 2, and should never happen
+//			continue;
+//		rTmp = rDist2(crdTmp, crd);
+//		if (rTmp < rDist) {
+//			rDist = rTmp;
+//			crdRes = crdTmp;
+//		}
+//		if (rDist == 0) break;
+//	}
+//	if ( segIndex <= geometries->size())
+//		return crdRes;
+//	return Coord();
+//}
 
 bool fOk(const SegmentMapStore* sm, bool& fFirst, ILWIS::Segment* s)
   {
@@ -574,11 +579,14 @@ bool fOk(const SegmentMapStore* sm, bool& fFirst, ILWIS::Segment* s)
 
 Coord SegmentMapStore::crdCoord(Coord crd, ILWIS::Segment** seg, long& iNr) const // existing coordinate
 {
-	ILWIS::LPoint pnt(crd, 1);
+	ILWIS::LPoint pnt(0,crd, 1);
 	double minDist = -1.0;
 	ILWIS::Segment *closestSeg = NULL;
-	for(int i = 0; i < geometries->size(); ++i) {
-		ILWIS::Segment *s = (ILWIS::Segment *)geometries->at(i);
+	vector<void *> segs;
+	geos::geom::Envelope env(crd.x - ptr.rProximity(), crd.y - ptr.rProximity(), crd.x + ptr.rProximity(), crd.y + ptr.rProximity());
+	spatialIndex->query(&env,segs);
+	for(int i = 0; i < segs.size(); ++i) {
+		ILWIS::Segment *s = (ILWIS::Segment *)segs.at(i);
 		if ( !s || s->fValid()==false)
 			continue;
 		geos::operation::distance::DistanceOp dop(s,&pnt);
@@ -595,7 +603,7 @@ Coord SegmentMapStore::crdCoord(Coord crd, ILWIS::Segment** seg, long& iNr) cons
 	if ( closestSeg != NULL) {
 		CoordinateSequence *seq = closestSeg->getCoordinates();
 		for(int j = 0; j < seq->size(); ++j) {
-			ILWIS::LPoint pntLine(seq->getAt(j),1);
+			ILWIS::LPoint pntLine(0,seq->getAt(j),1);
 			geos::operation::distance::DistanceOp dop(&pntLine,&pnt);
 			double dist = dop.distance();
 			if ( dist < minDistInternal || minDistInternal == -1.0) {
@@ -614,55 +622,57 @@ Coord SegmentMapStore::crdCoord(Coord crd, ILWIS::Segment** seg, long& iNr) cons
 	return Coord();
 }
 
-Coord SegmentMapStore::crdPoint(Coord crd, ILWIS::Segment** seg, long& iAft,
-                           bool fAcceptDeleted) const // somewhere on a segment
+Coord SegmentMapStore::crdPoint(Coord crd, ILWIS::Segment** seg, long& iNr,
+                           double rPrx) const // somewhere on a segment
 {
-	Coord crdRes = crdCoord(crd,seg,iAft);
-	double rMinDist2 = rDist2(crd,crdRes)+1;
-	double rMinDist = sqrt(rMinDist2);
-	for (int i = 0; i < geometries->size(); ++i) {
-		ILWIS::Segment *s = (ILWIS::Segment *)geometries->at(i);
-		if ( s == NULL || s->fValid()== false)
+	ILWIS::LPoint pnt(0,crd, 1);
+	double minDist = -1.0;
+	ILWIS::Segment *closestSeg = NULL;
+	vector<void *> segs;
+	if ( rPrx == rUNDEF)
+		rPrx = ptr.rProximity();
+	geos::geom::Envelope env(crd.x - rPrx, crd.y - rPrx, crd.x + rPrx, crd.y + rPrx);
+	spatialIndex->query(&env,segs);
+	for(int i = 0; i < segs.size(); ++i) {
+		ILWIS::Segment *s = (ILWIS::Segment *)segs.at(i);
+		if ( !s || s->fValid()==false)
 			continue;
-		if (s->cbBounds().fNear(crd,rMinDist)) {
-			CoordinateSequence *buf = s->getCoordinates();
-			for (int i = 0; i < buf->size()-1; ++i) {
-				CoordBounds cb(buf->getAt(i),buf->getAt(i+1));
-				if (!cb.fNear(crd,rMinDist)) continue;
-
-				double dxAB, dyAB, dxAC, dyAC, d2, u, v;
-				Coord crdA = buf->getAt(i);
-				Coord crdB = buf->getAt(i+1);
-				dxAB = crdB.x - crdA.x;
-				dyAB = crdB.y - crdA.y;
-				dxAC = crd.x  - crdA.x;
-				dyAC = crd.y  - crdA.y;
-				d2 = dxAB * dxAB + dyAB * dyAB;
-				if (d2 < 0.1) continue; // should never happen
-				v = (dxAC * dyAB - dyAC * dxAB) / d2;
-				if (abs(dxAB) > abs(dyAB))
-					u = (dxAC + v * dyAB) / dxAB;
-				else
-					u = (dyAC - v * dxAB) / dyAB;
-				if (u >= 0 && u <= 1) {
-					Coord crdTmp;
-					crdTmp.x = crdA.x + u * dxAB;
-					crdTmp.y = crdA.y + u * dyAB;
-					double rD2 = rDist2(crdTmp,crd);
-					if (rD2 < rMinDist2) {
-						crdRes = crdTmp;
-						if ( seg != NULL)
-							*seg = s;
-						iAft = i;
-						rMinDist2 = rD2;
-						rMinDist = sqrt(rMinDist2);
-					}
-				}
-			} // for i
-			delete buf;
-		} // if seg near
-	} // for seg
-	return crdRes;;
+		geos::operation::distance::DistanceOp dop(s,&pnt);
+		double dist = dop.distance();
+		if ( dist <= minDist || minDist == -1.0) {
+			minDist = dist;
+			closestSeg = s;
+		}
+		if ( dist == 0.0)
+			break;
+	}
+	double minDistInternal = rPrx;
+	Coord cSearch;
+	if ( closestSeg != NULL) {
+		double dist;
+		iNr = closestSeg->nearSection(crd, minDistInternal,dist);
+		if ( iNr != iUNDEF) {
+			*seg = closestSeg;
+			return closestSeg->getCoordinateN(iNr);
+		}
+		//CoordinateSequence *seq = closestSeg->getCoordinates();
+		//for(int j = 0; j < seq->size(); ++j) {
+		//	ILWIS::LPoint pntLine(0,seq->getAt(j),1);
+		//	geos::operation::distance::DistanceOp dop(&pntLine,&pnt);
+		//	double dist = dop.distance();
+		//	if ( dist < minDistInternal ) {
+		//		minDistInternal = dist;
+		//		iNr = j;
+		//		cSearch = seq->getAt(j);
+		//	}
+		//}
+		//if ( seg != NULL)
+		//	*seg = closestSeg;
+		//delete seq;
+		//return cSearch;
+	}
+	*seg = 0;
+	return Coord();
 
 
 }
@@ -796,6 +806,7 @@ void SegmentMapStore::removeFeature(const String& id, const vector<int>& selecte
 		ILWIS::Segment *seg = CSEGMENT(*cur);
 		if ( seg->getGuid() == id  ) {
 			if ( selectedCoords.size() == 0 || selectedCoords.size() == geometries->size()) {
+				spatialIndex->remove(seg->getEnvelopeInternal(),seg);
 				delete seg;
 				geometries->erase(cur);
 			} else {

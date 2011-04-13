@@ -2,12 +2,14 @@
 #include "Engine\Base\DataObjects\valrange.h"
 #include "Engine\Base\mask.h"
 #include "Engine\Map\Point\ilwPoint.h"
+#include <geos/index/quadtree/Quadtree.h>
+#include <geos/geom/Envelope.h>
 
 #define _HAS_ITERATOR_DEBUGGING 0
 
 using namespace ILWIS;
 
-ILWIS::Point::Point(const geos::geom::Point *pnt) : geos::geom::Point( ILWIS::Point::create(Coord()), new GeometryFactory(new PrecisionModel())){
+ILWIS::Point::Point(geos::index::quadtree::Quadtree *tree, const geos::geom::Point *pnt) : geos::geom::Point( ILWIS::Point::create(Coord()), new GeometryFactory(new PrecisionModel())), Feature(tree){
 	if ( pnt) {
 		Coordinate *crd = const_cast<Coordinate *>(getCoordinate());
 		crd->x = pnt->getCoordinate()->x;
@@ -19,11 +21,14 @@ ILWIS::Point::Point(const geos::geom::Point *pnt) : geos::geom::Point( ILWIS::Po
 ILWIS::Point::~Point() {
 }
 
-ILWIS::Point::Point(const Coord& c)  : geos::geom::Point( ILWIS::Point::create(c), new GeometryFactory(new PrecisionModel()))
+ILWIS::Point::Point(geos::index::quadtree::Quadtree *tree,const Coord& c)  : geos::geom::Point( ILWIS::Point::create(c), new GeometryFactory(new PrecisionModel())), Feature(tree)
 {
 }
 
-ILWIS::Point::Point(CoordinateSequence *seq) : geos::geom::Point(seq,new GeometryFactory(new PrecisionModel())) {
+ILWIS::Point::Point(geos::index::quadtree::Quadtree *tree, CoordinateSequence *seq) : 
+geos::geom::Point(seq,new GeometryFactory(new PrecisionModel())),
+Feature(tree)
+{
 }
 
 CoordinateSequence* ILWIS::Point::create(const Coord& c) {
@@ -55,14 +60,14 @@ void ILWIS::Point::getBoundaries(vector<CoordinateSequence*>& boundaries) const{
 }
 
 //--------------------------------------------------------------
-ILWIS::LPoint::LPoint(geos::geom::Point *pnt) : ILWIS::Point(pnt), value(iUNDEF) {
+ILWIS::LPoint::LPoint(geos::index::quadtree::Quadtree *tree, geos::geom::Point *pnt) : ILWIS::Point(tree, pnt), value(iUNDEF) {
 	
 }
 
-ILWIS::LPoint::LPoint(CoordinateSequence *seq, long v) : ILWIS::Point(seq) {
+ILWIS::LPoint::LPoint(geos::index::quadtree::Quadtree *tree, CoordinateSequence *seq, long v) : ILWIS::Point(tree, seq) {
 }
 
-ILWIS::LPoint::LPoint(const Coord& c, long v) : ILWIS::Point(c), value(v) {
+ILWIS::LPoint::LPoint(geos::index::quadtree::Quadtree *tree, const Coord& c, long v) : ILWIS::Point(tree, c), value(v) {
 }
 
 ILWIS::LPoint::~LPoint() {
@@ -102,7 +107,7 @@ void ILWIS::LPoint::PutVal(double rV) {
   }
 
  Geometry *ILWIS::LPoint::clone() const {
-	 ILWIS::LPoint *p = new ILWIS::LPoint(*getCoordinate(), iValue());
+	 ILWIS::LPoint *p = new ILWIS::LPoint(spatialIndex, *getCoordinate(), iValue());
 	 return p;
  }
 
@@ -112,10 +117,10 @@ bool ILWIS::LPoint::fInMask(const DomainValueRangeStruct& dvs, const Mask& mask)
 }
 
 //-------------------------------------------------------------------
- ILWIS::RPoint::RPoint(geos::geom::Point *pnt) : ILWIS::Point(pnt), value(rUNDEF) {
+ ILWIS::RPoint::RPoint(geos::index::quadtree::Quadtree *tree,geos::geom::Point *pnt) : ILWIS::Point(tree, pnt), value(rUNDEF) {
 
  }
- ILWIS::RPoint::RPoint(const Coord& c, double v) : ILWIS::Point(c), value(v) {
+ ILWIS::RPoint::RPoint(geos::index::quadtree::Quadtree *tree,const Coord& c, double v) : ILWIS::Point(tree, c), value(v) {
 }
 
 ILWIS::RPoint::~RPoint() {
@@ -155,7 +160,7 @@ long ILWIS::RPoint::iValue() const {
 }
 
 Geometry *ILWIS::RPoint::clone() const {
-	ILWIS::RPoint *p = new ILWIS::RPoint(*getCoordinate(), rValue());
+	ILWIS::RPoint *p = new ILWIS::RPoint(spatialIndex, *getCoordinate(), rValue());
 	return p;
 }
 

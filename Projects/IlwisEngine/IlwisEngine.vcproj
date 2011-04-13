@@ -78,7 +78,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="RpcRT4.Lib libcurl.lib xerces-c_3D.lib ftgl.lib opengl32.lib geos.lib glu32.lib freetype.lib xqilla22d.lib"
+				AdditionalDependencies="RpcRT4.Lib libcurl.lib xerces-c_3D.lib ftgl.lib opengl32.lib geos.lib glu32.lib freetype.lib xqilla22d.lib zlib.lib"
 				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\$(ProjectName).dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)libraries\import&quot;;&quot;$(SolutionDir)libraries\$(ConfigurationName)&quot;;&quot;$(SolutionDir)\libraries\debug&quot;;&quot;C:\Program Files\Microsoft Visual Studio 8\VC\PlatformSDK\Lib&quot;"

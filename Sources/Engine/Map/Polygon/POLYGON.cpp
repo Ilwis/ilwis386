@@ -34,63 +34,6 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/*
-// $Log: /ILWIS 3.0/PolygonMap/POLYGON.cpp $
- * 
- * 13    8-09-04 18:16 Hendrikse
- * inserted a safer  if (iPtAmount > 99)  in the function
- * :crdFindPointInPol() const    to debug b6550  , to prevent overflow of
- * double rPt[100] and rDist[100]
- * 
- * 12    7-06-04 16:35 Retsios
- * Improved readability of function PolygonTable()
- * 
- * 11    16/03/01 16:21 Willem
- * Replaced the long with a double in FindInterSect() function.
- * 
- * 10    13-03-01 11:40 Koolhoven
- * TopStart() checked the wrong column to determine if it was deleted
- * 
- * 9     25-07-00 10:28a Martin
- * added acces function and member to indicate that a polygonmap is (non)
- * topological
- * 
- * 8     19-06-00 11:30 Koolhoven
- * replaced reference to SegmentMapStore::ct... with PolygonMapStore::ct..
- * 
- * 7     20-01-00 10:49a Martin
- * uses columPtr to acces data
- * 
- * 6     17-01-00 11:22a Martin
- * TableVector removed, now PolygonMapStore
- * 
- * 5     17-01-00 8:17a Martin
- * changed rowcols to coords
- * 
- * 4     10-12-99 11:50a Martin
- * removed internal coordinates and replaced them by true coords
- * 
- * 3     9/08/99 1:11p Wind
- * comments
- * 
- * 2     9/08/99 11:57a Wind
- * comments
-*/
-// Revision 1.4  1998/09/16 17:25:54  Wim
-// 22beta2
-//
-// Revision 1.3  1997/08/04 15:04:19  Wim
-// Use string for mask with all value maps
-//
-// Revision 1.2  1997-08-04 16:41:44+02  Wim
-// Added ILWIS::Polygon::fInMask(mask)
-//
-/* ILWIS::Polygon
-   Copyright Ilwis System Development ITC
-   march 1995, by Wim Koolhoven
-	Last change:  WK    4 Aug 97    5:04 pm
-*/
-
 #include "Engine\Base\AssertD.h"
 #include "Engine\Map\Polygon\POLSTORE.H"
 #include "Engine\Map\Polygon\POL14.H"
@@ -99,6 +42,8 @@
 #include "Engine\Base\Algorithm\Clipline.h"
 #include "Engine\Map\Point\ilwPoint.h"
 #include "geos\algorithm\InteriorPointArea.h"
+#include <geos/index/quadtree/Quadtree.h>
+#include <geos/geom/Envelope.h>
 #include "Headers\Hs\polygon.hs"
 
 // for the time being the interface works with the 1.4 datastructures
@@ -106,12 +51,12 @@
 
 //------------------------------------------------------------
 
-ILWIS::Polygon::Polygon() : geos::geom::Polygon(NULL,new vector<Geometry *>(),new GeometryFactory(new PrecisionModel()))
+ILWIS::Polygon::Polygon(geos::index::quadtree::Quadtree *tree) : geos::geom::Polygon(NULL,new vector<Geometry *>(),new GeometryFactory(new PrecisionModel())), Feature(tree)
 {
 }
 
-ILWIS::Polygon::Polygon(geos::geom::Polygon *pol) :  
-geos::geom::Polygon(NULL,new vector<Geometry *>(),new GeometryFactory(new PrecisionModel())) 
+ILWIS::Polygon::Polygon(geos::index::quadtree::Quadtree *tree,geos::geom::Polygon *pol) :  
+geos::geom::Polygon(NULL,new vector<Geometry *>(),new GeometryFactory(new PrecisionModel())), Feature(tree)
 {
 	if ( pol != NULL) {
 		addBoundary(makeRing(pol->getExteriorRing()));
@@ -182,7 +127,7 @@ bool ILWIS::Polygon::fInMask(const DomainValueRangeStruct& dvrs, const Mask& mas
 
 bool ILWIS::Polygon::fContains(Coord crd) const
 {
-	ILWIS::LPoint pnt(crd,iUNDEF);
+	ILWIS::LPoint pnt(0, crd,iUNDEF);
 	return contains(&pnt);
 }
 
@@ -245,11 +190,11 @@ void ILWIS::Polygon::getBoundaries(vector<CoordinateSequence*>& boundaries) cons
 
 
 //--------[ILWIS::LPolygon]--------------------------------------------------------
-ILWIS::LPolygon::LPolygon(geos::geom::Polygon *pol) : ILWIS::Polygon(pol), value(0) {
+ILWIS::LPolygon::LPolygon(geos::index::quadtree::Quadtree *tree, geos::geom::Polygon *pol) : ILWIS::Polygon(tree, pol), value(0) {
 }
 
 Geometry * ILWIS::LPolygon::clone() const{
-	ILWIS::LPolygon *p = new ILWIS::LPolygon();
+	ILWIS::LPolygon *p = new ILWIS::LPolygon(spatialIndex);
 	p = (ILWIS::LPolygon *)copy(p);
 	p->PutVal(value);
 	return p;
@@ -307,7 +252,7 @@ String ILWIS::LPolygon::sValue(const DomainValueRangeStruct& dvrs, short iWidth,
 }
 
 //---[ILWIS::RPolygon]-------------------------------------------------
-ILWIS::RPolygon::RPolygon(geos::geom::Polygon *pol) : ILWIS::Polygon(pol), value(0) {
+ILWIS::RPolygon::RPolygon(geos::index::quadtree::Quadtree *tree, geos::geom::Polygon *pol) : ILWIS::Polygon(tree, pol), value(0) {
 }
 void ILWIS::RPolygon::PutVal(long iRaw)
 {
@@ -361,7 +306,7 @@ String ILWIS::RPolygon::sValue(const DomainValueRangeStruct& dvrs, short iWidth,
 }
 
 Geometry * ILWIS::RPolygon::clone() const{
-	ILWIS::RPolygon *p = new ILWIS::RPolygon();
+	ILWIS::RPolygon *p = new ILWIS::RPolygon(spatialIndex);
 	p = (ILWIS::RPolygon *)copy(p);
 	p->PutVal(value);
 	return p;

@@ -1,8 +1,10 @@
 #include "Headers\toolspch.h"
 #include "Engine\Base\DataObjects\valrange.h"
 #include "Engine\Map\Feature.h"
+#include <geos/index/quadtree/Quadtree.h>
+#include <geos/geom/Envelope.h>
 
-Feature::Feature() {
+Feature::Feature(geos::index::quadtree::Quadtree *tree) {
 	deleted = false;
 	GUID gd;
 	CoCreateGuid(&gd);
@@ -10,6 +12,7 @@ Feature::Feature() {
 	::StringFromGUID2(gd,buf,39);
 	CString str(buf);
 	guid = str;
+	spatialIndex = tree;
 }
 
 void Feature::Delete(bool yesno) {
@@ -43,15 +46,9 @@ CoordBounds Feature::cbBounds() const // bounding rectangle
 	ILWISSingleLock sl(const_cast<CCriticalSection *>(&csAccess), TRUE);
 	if ( cb.fUndef()) {
 		const Geometry *geometry = dynamic_cast<const geos::geom::Geometry *>(this);
-		Geometry *geom = geometry->getEnvelope();
-		CoordinateSequence *seq = geom->getCoordinates();
-		CoordBounds cbNew;
-		for(int i = 0; i < seq->size(); ++i) {
-			Coord crd(seq->getAt(i));
-			cbNew += crd;
-		}
-		const_cast<Feature *>(this)->cb = cbNew;
-		delete seq;
+		const Envelope *geom = geometry->getEnvelopeInternal();
+		const_cast<Feature *>(this)->cb = CoordBounds(Coord(geom->getMinX(), geom->getMinY()), Coord(geom->getMaxX(), geom->getMaxY()));
+
 	}
 	return cb;	
 }

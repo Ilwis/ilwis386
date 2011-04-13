@@ -4,7 +4,7 @@ namespace ILWIS {
 
 class _export Module {
 public:
-	enum InterfaceFunctions{ifGetAppInfo,ifInit,ifGetAppInfoUI,ifInitUI, ifDrawers,getFFInfo, 
+	enum InterfaceFunctions{ifgetCommandInfo,ifInit,ifgetCommandInfoUI,ifInitUI, ifDrawers,getFFInfo, 
 		                    getImpDrivers, getOptionsUI, getFFInit, getOptionsUIInit,ifMapEditors,ifDrawerTools};
 	enum ModuleInterface{mi36,mi37,mi38};
 	Module(const String& _name, const FileName& _fnModule, ModuleInterface ivers, const String& vers);
@@ -14,6 +14,7 @@ public:
 	String getName() const;
 	String getVersion() const;
 	String getNameAndVersion() const;
+	FileName getLocation() const;
 
 private:
 	String name;
@@ -27,4 +28,4 @@ private:
 typedef ILWIS::Module::ModuleInterface (*ModuleInterfaceVersion)();
 };
 
-typedef ILWIS::Module *(*ModuleInfo)();
+typedef ILWIS::Module *(*ModuleInfo)(const FileName& fnModule);

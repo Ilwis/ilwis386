@@ -42,6 +42,10 @@
 #include "Headers\constant.h"
 #include "Engine\Base\DataObjects\strng.h"
 #include "Engine\Base\Tokbase.h"
+#include "Engine\Base\DataObjects\ilwisobj.h"
+#include "Engine\Base\System\Engine.h"
+#include "Engine\Base\System\module.h"
+#include "Engine\Applications\ModuleMap.h"
 #include "Engine\Base\System\commandhandler.h"
 #include "Engine\Scripting\Script.h"
 #include "Engine\Scripting\Calc.h"
@@ -68,6 +72,19 @@
 #include "Engine\Base\File\BaseCopier.h"
 #include "Engine\Base\File\ObjectCopier.h"
 #include "Engine\Base\DataObjects\ObjectStructure.h"
+#include <xercesc/parsers/SAXParser.hpp>
+#include <xercesc/framework/MemBufInputSource.hpp>
+#include <xercesc/util/OutOfMemoryException.hpp>
+#include <xercesc/sax/HandlerBase.hpp>
+#include <stack>
+#include "Engine\Base\DataObjects\URL.h"
+#include "Engine\Base\DataObjects\URLEncode.h"
+#include "Engine\Base\DataObjects\RemoteXMLObject.h"
+#include "Engine\Base\File\zlib.h"
+#include "Engine\Base\File\zip.h"
+
+
+CFrameWnd *BaseCommandHandler::wndOwner=0;
 
 struct WinAndParm 
 { // struct for passing parms to import, export, copy and delete threads
@@ -95,10 +112,10 @@ static void UpdateCatalog(FileName *fpn=NULL)
 }
 
 BaseCommandHandler::BaseCommandHandler() 
-: wndOwner(0)
 {
-	commands["exit"] = &BaseCommandHandler::CmdExit;
-	commands["help"] = &BaseCommandHandler::CmdHelp;
+	//commands["exit"] = &BaseCommandHandler::CmdExit;
+	getEngine()->modules.addCommand("exit", (CommandFunc)&BaseCommandHandler::CmdExit); 
+	getEngine()->modules.addCommand("help",(CommandFunc)&BaseCommandHandler::CmdHelp); 
 } 
 
 BaseCommandHandler::~BaseCommandHandler()
@@ -112,37 +129,10 @@ void BaseCommandHandler::SetOwner(CFrameWnd* wnd)
 	wndOwner = wnd;
 }
 
-void BaseCommandHandler::executeAdditional(const String& sCmd) {
-	String cc = sCmd;
-	String head = cc.sHead(" "); 
-	String sCom = head.toLower();
-	size_t iSize = min(sCom.size() + 1, sCmd.size());
-	String sParm = sCmd.substr(iSize); // iSize cannot be larger than sCmd.size()
-	sParm = sParm.sTrimSpaces();
-	map<String, AdditionalCommand>::iterator cur = additionalCommands.find(sCom);
-	if (cur != additionalCommands.end()) // known command ?
-	{
-		AdditionalCommand cf = (*cur).second;
-		String sParms = sParm.sTrimSpaces();
-		(cf)(sParms);
-	}
-	else
-		throw ErrorObject(String(SMSErrNoCommandHandler_S.scVal(), sCmd)); // ??later here loadModule/ GetProcAddress ??
-}
-
-void BaseCommandHandler::AddCommand(const String& sCmd, AdditionalCommand cf)
+void BaseCommandHandler::AddCommand(const String& sCmd, CommandFunc cf, MetaDataFunc mdFunc)
 {
-	if ( additionalCommands.find(sCmd) == additionalCommands.end()) {
-		additionalCommands[sCmd] = cf;
-		commands[sCmd] = &BaseCommandHandler::executeAdditional;
-	} else
-		throw ErrorObject(String("Command %S already defined, ignored", sCmd));
+	getEngine()->modules.addCommand(sCmd, cf, mdFunc);
 }
-
-//void BaseCommandHandler::AddCommand(string sCmd, CommandFunction cf)
-//{
-//	commands[sCmd] = cf;
-//}
 
 LRESULT BaseCommandHandler::fExecute(const String& sCmd)
 {
@@ -153,23 +143,14 @@ LRESULT BaseCommandHandler::fExecute(const String& sCmd)
 	String sParm = sCmd.substr(iSize); // iSize cannot be larger than sCmd.size()
 	sParm = sParm.sTrimSpaces();
 	bool routToClient = sCom == "copy" && getEngine()->hasClient();
-	CommandIter ci = commands.find(sCom);
-	if (!routToClient && ci != commands.end()) // known command ? 
+	vector<CommandInfo *> infos;
+	getEngine()->modules.getCommandInfo(sCom, infos);
+	if (!routToClient && infos.size() > 0) // known command ? 
 	{
-		const CommandPair &cp = *ci;
-		if (cp.second) // anything usefull ??
-		{
-			CommandFunction cf = cp.second;
-			String sParms = sParm.sTrimSpaces();
-			if ( cf == &BaseCommandHandler::executeAdditional) {
-				(this->*cf)(sCom + " " + sParms);
-			} else {
-				(this->*cf)(sParms);
-			}
-			return true;
-		}
-		else
-			throw ErrorObject(String(SMSErrNoCommandHandler_S.scVal(), sCmd)); // ??later here loadModule/ GetProcAddress ??
+		CommandFunc cf = infos[0]->commandFunction;
+		String sParms = sParm.sTrimSpaces();
+		(cf)(sParms);
+		return true;
 	} else {
 		ReroutPost(sCmd);
 		return true;
@@ -179,8 +160,7 @@ LRESULT BaseCommandHandler::fExecute(const String& sCmd)
 
 void BaseCommandHandler::CmdExit(const String& s)
 {
-	if (wndOwner)
-		getEngine()->SendMessage(WM_CLOSE, 0, 0);
+	getEngine()->SendMessage(WM_CLOSE, 0, 0);
 }
 
 void BaseCommandHandler::CmdHelp(const String& s)
@@ -451,73 +431,74 @@ CommandHandler::~CommandHandler()
 void CommandHandler::Init()
 {
 	//datamanagment
-	commands["cd"							  ] = (CommandFunction) &CommandHandler::CmdChangeDir;
-	commands["opendir"				  ] = (CommandFunction) &CommandHandler::CmdOpenDir;
-	commands["md"							  ] = (CommandFunction) &CommandHandler::CmdMakeDir;
-	commands["mkdir"					  ] = commands["md"];
-	commands["rd"							  ] = (CommandFunction) &CommandHandler::CmdRemoveDir;
-	commands["rmdir"					  ] = commands["rd"];
-	commands["create"					  ] = (CommandFunction) &CommandHandler::CmdCreate;
-	commands["del"						  ] = (CommandFunction) &CommandHandler::CmdDel;
-	commands["copy"						  ] = (CommandFunction) &CommandHandler::Cmdcopy;
+	//AddCommand(const String& sCmd, CommandFunc cf, MetaDataFunc mdFunc)
+AddCommand("cd",(CommandFunc)&CommandHandler::CmdChangeDir);
+AddCommand("opendir",(CommandFunc)&CommandHandler::CmdOpenDir);
+AddCommand("md",(CommandFunc)&CommandHandler::CmdMakeDir);
+AddCommand("mkdir",(CommandFunc)&CommandHandler::CmdMakeDir);
+AddCommand("rd",(CommandFunc)&CommandHandler::CmdRemoveDir);
+AddCommand("rmdir",(CommandFunc)&CommandHandler::CmdRemoveDir);
+AddCommand("create",(CommandFunc)&CommandHandler::CmdCreate);
+AddCommand("del",(CommandFunc)&CommandHandler::CmdDel);
+AddCommand("copy",(CommandFunc)&CommandHandler::Cmdcopy);
 
-	commands["createpyramidlayers"]= (CommandFunction) &CommandHandler::CmdCreatePyramidFiles;
-	commands["deletepyramidlayers"]= (CommandFunction) &CommandHandler::CmdDeletePyramidFiles;	
+AddCommand("createpyramidlayers",(CommandFunc)&CommandHandler::CmdCreatePyramidFiles);
+AddCommand("deletepyramidlayers",(CommandFunc)&CommandHandler::CmdDeletePyramidFiles);
 
-	commands["calc"							] = (CommandFunction) &CommandHandler::CalcObject;
-	commands["calculate"				] = commands["calc"];
-	commands["makeuptodate" 		] = (CommandFunction) &CommandHandler::UpdateObject;
-	commands["update" 		      ] = commands["makeuptodate"];
-	commands["breakdep" 			  ] = (CommandFunction) &CommandHandler::BreakDepObject;
-	commands["reldiskspace"		  ] = (CommandFunction) &CommandHandler::RelDiskSpaceObject;
-	commands["reldisksp"		    ] = commands["reldiskspace"];
-	commands["script"						] = (CommandFunction) &CommandHandler::CmdScript;
-	commands["run"							] = (CommandFunction) &CommandHandler::CmdRunScript;
-	commands["setdescr"         ] = (CommandFunction) &CommandHandler::CmdSetDescr;
-							
-//	commands["mapcalc"					] = (CommandFunction) &CommandHandler::CmdMapCalc;
-	//commands["maplistspectra"			] = (CommandFunction) &CommandHandler::CmdSpectra;	
+AddCommand("calc",(CommandFunc)&CommandHandler::CalcObject);
+AddCommand("calculate",(CommandFunc)&CommandHandler::CalcObject);
+AddCommand("makeuptodate",(CommandFunc)&CommandHandler::UpdateObject);
+AddCommand("update",(CommandFunc)&CommandHandler::UpdateObject);
+AddCommand("breakdep",(CommandFunc)&CommandHandler::BreakDepObject);
+AddCommand("reldiskspace",(CommandFunc)&CommandHandler::RelDiskSpaceObject);
+AddCommand("reldisksp",(CommandFunc)&CommandHandler::RelDiskSpaceObject);
+AddCommand("script",(CommandFunc)&CommandHandler::CmdScript);
+AddCommand("run",(CommandFunc)&CommandHandler::CmdRunScript);
+AddCommand("setdescr",(CommandFunc)&CommandHandler::CmdSetDescr);
 
-	commands["import14"					] = (CommandFunction) &CommandHandler::CmdImport14;
-	commands["convert14"        ] = (CommandFunction) &CommandHandler::CmdConvert14;
-	commands["setreadonly"      ] = (CommandFunction) &CommandHandler::CmdSetReadOnly;
-	commands["setreadwrite"     ] = (CommandFunction) &CommandHandler::CmdSetReadWrite;
-	commands["closeall"         ] = (CommandFunction) &CommandHandler::CmdCloseAll;
-	//commands["rename"           ] = (CommandFunction) &CommandHandler::CmdRenameObject;
-	commands["delfile"          ] = (CommandFunction) &CommandHandler::CmdDelFile;
-	commands["delcol"           ] = (CommandFunction) &CommandHandler::CmdDelColumn;
-	commands["calccol"          ] = (CommandFunction) &CommandHandler::CmdCalcColumn;
-	commands["updatecol"        ] = (CommandFunction) &CommandHandler::CmdUpdateColumn;
-	commands["breakdepcol"      ] = (CommandFunction) &CommandHandler::CmdBreakDepColumn;
-	commands["domidtoclass"     ] = (CommandFunction) &CommandHandler::CmdDomIDToClass;
-	commands["domclasstoid"     ] = (CommandFunction) &CommandHandler::CmdDomClassToID;
-	commands["dompictoclass"    ] = (CommandFunction) &CommandHandler::CmdDomPicToClass;
+//AddCommand("mapcalc",(CommandFunc)&CommandHandler::CmdMapCalc);
+//AddCommand("maplistspectra",(CommandFunc)&CommandHandler::CmdSpectra);
 
-	commands["setgrf"] = (CommandFunction) &CommandHandler::CmdSetGrf;
-	commands["setcsy"] = (CommandFunction) &CommandHandler::CmdSetCsy;
-	commands["setatttable"] = (CommandFunction) &CommandHandler::CmdSetAttTable;
-	commands["setdom"] = (CommandFunction) &CommandHandler::CmdSetDom;
-	commands["setvr"] = (CommandFunction) &CommandHandler::CmdSetValRange;
-	commands["changedom"] = (CommandFunction) &CommandHandler::CmdChangeDom;
-	commands["mergedom"] = (CommandFunction) &CommandHandler::CmdMergeDom;
-	commands["additemtodomain"] = (CommandFunction) &CommandHandler::CmdAddItemToDomain;
-	commands["additemtodomaingroup"] = (CommandFunction) &CommandHandler::CmdAddItemToDomainGroup;
-	commands["showexpressionerror"] = (CommandFunction) &CommandHandler::CmdShowExpressionError;
+AddCommand("import14",(CommandFunc)&CommandHandler::CmdImport14);
+AddCommand("convert14",(CommandFunc)&CommandHandler::CmdConvert14);
+AddCommand("setreadonly",(CommandFunc)&CommandHandler::CmdSetReadOnly);
+AddCommand("setreadwrite",(CommandFunc)&CommandHandler::CmdSetReadWrite);
+AddCommand("closeall",(CommandFunc)&CommandHandler::CmdCloseAll);
+//AddCommand("rename",(CommandFunc)&CommandHandler::CmdRenameObject);
+AddCommand("delfile",(CommandFunc)&CommandHandler::CmdDelFile);
+AddCommand("delcol",(CommandFunc)&CommandHandler::CmdDelColumn);
+AddCommand("calccol",(CommandFunc)&CommandHandler::CmdCalcColumn);
+AddCommand("updatecol",(CommandFunc)&CommandHandler::CmdUpdateColumn);
+AddCommand("breakdepcol",(CommandFunc)&CommandHandler::CmdBreakDepColumn);
+AddCommand("domidtoclass",(CommandFunc)&CommandHandler::CmdDomIDToClass);
+AddCommand("domclasstoid",(CommandFunc)&CommandHandler::CmdDomClassToID);
+AddCommand("dompictoclass",(CommandFunc)&CommandHandler::CmdDomPicToClass);
 
-	commands["cr2dim"] = (CommandFunction) &CommandHandler::CmdCreate2DimTable;
-	commands["crtbl"] = (CommandFunction) &CommandHandler::CmdCreateTable;
-	commands["crmap"] = (CommandFunction) &CommandHandler::CmdCreateMap;
-	commands["crpntmap"] = (CommandFunction) &CommandHandler::CmdCreatePointMap;
-	commands["crsegmap"] = (CommandFunction) &CommandHandler::CmdCreateSegMap;
-	commands["crmaplist"] = (CommandFunction) &CommandHandler::CmdCrMapList;	
-	commands["crdom"] = (CommandFunction) &CommandHandler::CmdCreateDom;
-	commands["crgrf"] = (CommandFunction) &CommandHandler::CmdCreateGrf;
-	commands["crrpr"] = (CommandFunction) &CommandHandler::CmdCreateRpr;
-	commands["appmetadata"]= (CommandFunction) &CommandHandler::CmdAppMetaData;
+AddCommand("setgrf",(CommandFunc)&CommandHandler::CmdSetGrf);
+AddCommand("setcsy",(CommandFunc)&CommandHandler::CmdSetCsy);
+AddCommand("setatttable",(CommandFunc)&CommandHandler::CmdSetAttTable);
+AddCommand("setdom",(CommandFunc)&CommandHandler::CmdSetDom);
+AddCommand("setvr",(CommandFunc)&CommandHandler::CmdSetValRange);
+AddCommand("changedom",(CommandFunc)&CommandHandler::CmdChangeDom);
+AddCommand("mergedom",(CommandFunc)&CommandHandler::CmdMergeDom);
+AddCommand("additemtodomain",(CommandFunc)&CommandHandler::CmdAddItemToDomain);
+AddCommand("additemtodomaingroup",(CommandFunc)&CommandHandler::CmdAddItemToDomainGroup);
+AddCommand("showexpressionerror",(CommandFunc)&CommandHandler::CmdShowExpressionError);
 
+AddCommand("cr2dim",(CommandFunc)&CommandHandler::CmdCreate2DimTable);
+AddCommand("crtbl",(CommandFunc)&CommandHandler::CmdCreateTable);
+AddCommand("crmap",(CommandFunc)&CommandHandler::CmdCreateMap);
+AddCommand("crpntmap",(CommandFunc)&CommandHandler::CmdCreatePointMap);
+AddCommand("crsegmap",(CommandFunc)&CommandHandler::CmdCreateSegMap);
+AddCommand("crmaplist",(CommandFunc)&CommandHandler::CmdCrMapList);
+AddCommand("crdom",(CommandFunc)&CommandHandler::CmdCreateDom);
+AddCommand("crgrf",(CommandFunc)&CommandHandler::CmdCreateGrf);
+AddCommand("crrpr",(CommandFunc)&CommandHandler::CmdCreateRpr);
+AddCommand("appmetadata",(CommandFunc)&CommandHandler::CmdAppMetaData);
+AddCommand("send",(CommandFunc) &CommandHandler::CmdSend);
+AddCommand("zip",(CommandFunc) &CommandHandler::CmdZip); 
 
-
-	commands["testingdbconnection"] = (CommandFunction) &CommandHandler::CmdTestingDBConnection;
+//commands["testingdbconnection"]=(CommandFunction)&CommandHandler::CmdTestingDBConnection;
 }
 
 class ErrorInvalidCalcCommand
@@ -1003,6 +984,9 @@ bool CommandHandler::fCmdCalc(const String& sCmd)
 		sType = "mat";
 	else if (fn.sExt == ".ioc")
 		sType = "ioc";
+	else if ( fn.sExt != "")
+		throw ErrorInvalidCalcCommand();
+
 
 	size_t iBracket = sExpres.find('(');
 	if (iBracket!=-1) 
@@ -1015,8 +999,8 @@ bool CommandHandler::fCmdCalc(const String& sCmd)
 		{
 			String appName = sExpres.sHead("(");
 			appName.toLower();
-			vector<ApplicationInfo *> infos;
-			getEngine()->modules.getAppInfo(appName, infos);
+			vector<CommandInfo *> infos;
+			getEngine()->modules.getCommandInfo(appName, infos);
 			if ( infos.size() > 0 && infos[0]->metadata){
 				ApplicationQueryData query;
 				query.queryType = "OUTPUTTYPE";
@@ -1688,15 +1672,21 @@ void CommandHandler::CmdTestingDBConnection(const String& sCmd)
 }
 
 void BaseCommandHandler::ReroutPost(const String& s) {
-	if ( wndOwner != 0) {
-		size_t len = s.size();
-		char * str = new char[len + 1];
-		strcpy(str, s.scVal());
-		getEngine()->PostMessage(ILWM_CMDHANDLERUI, 0, (LPARAM)str);
-	}
+	bool *fServerMode = (bool*)getEngine()->getContext()->pGetThreadLocalVar(IlwisAppContext::tlvSERVERMODE);
+	if( fServerMode != 0 && *fServerMode)
+		return ;
+
+	size_t len = s.size();
+	char * str = new char[len + 1];
+	strcpy(str, s.scVal());
+	getEngine()->PostMessage(ILWM_CMDHANDLERUI, 0, (LPARAM)str);
 }
 
 LRESULT BaseCommandHandler::ReroutSend(CWnd *owner, String s) {
+	bool *fServerMode = (bool*)getEngine()->getContext()->pGetThreadLocalVar(IlwisAppContext::tlvSERVERMODE);
+	if( fServerMode != 0 && *fServerMode)
+		return 0;
+
 	if ( owner != 0) {
 		size_t len = s.size();
 		char * str = new char[len + 1];
@@ -2879,8 +2869,8 @@ void CommandHandler::CmdAppMetaData(const String& sN)
 {
 	String appName = sN.sHead(" ");
 	String output = sN.sTail(" ");
-	vector<ApplicationInfo *> infos;
-	getEngine()->modules.getAppInfo(appName, infos);
+	vector<CommandInfo *> infos;
+	getEngine()->modules.getCommandInfo(appName, infos);
 	if ( infos.size() == 0) 
 		return;
    if ( infos[0]->metadata != NULL) {
@@ -2903,6 +2893,129 @@ void CommandHandler::CmdAppMetaData(const String& sN)
 	}
 
 }
+
+void CommandHandler::CmdSend(const String& sN) {
+	CURLEncode encode;
+	RemoteXMLObject xmlObj(sN);
+	MemoryStruct *mem = xmlObj.get();
+	String txt;
+	for(int i = 0; i < mem->size; ++i)
+		txt += mem->memory[i];
+	ReroutPost(String("simplecalc Text %S",txt));
+}
+
+#define WRITEBUFFERSIZE (16384)
+
+void CommandHandler::CmdZip(const String& expr) {
+	ParmList pm(expr);
+	String filename;
+	if ( pm.iSize() == 0)
+		return;
+
+	FileName fnZip;
+	if ( pm.iSize() == 1) {
+		FileName fn(pm.sGet(0));
+		fnZip = FileName(String("%S_%S.zip",fn.sFile, fn.sExt.sTail(".")));
+	} else {
+		fnZip = FileName(pm.sGet(pm.iSize() - 1));
+	}
+
+	void* buf=NULL;
+	int size_buf=0;
+	size_buf = WRITEBUFFERSIZE;
+	buf = (void*)malloc(size_buf);
+	if (!buf)
+	{
+	   throw ErrorObject("Could allocate memory for reading zip file");
+	}
+
+	String path = fnZip.sRelative();
+	zipFile zf = zf = zipOpen(fnZip.sFullName().scVal(),0);
+
+	for(int i=0; (i < pm.iSize() - 1) || (pm.iSize() == 1 && i != 1); ++i) {
+		FileName fnobj(pm.sGet(i));
+		IlwisObject object = IlwisObject::obj(fnobj);
+		ObjectStructure ostruct;
+		object->GetObjectStructure(ostruct);
+		list<String> files;
+		ostruct.GetUsedFiles(files, false);
+	
+		FILE * fin;
+		int size_read;
+
+		zip_fileinfo zi;
+		int opt_compress_level=Z_BEST_COMPRESSION;
+		//Best compression to save bandwidth at a maximum.
+
+
+		for(list<String>::iterator cur=files.begin(); cur != files.end(); ++cur) {
+			String curfile = (*cur);
+			FileName fnt(curfile);
+			curfile = fnt.sFile + fnt.sExt;
+			zi.tmz_date.tm_sec = zi.tmz_date.tm_min = zi.tmz_date.tm_hour = 
+				zi.tmz_date.tm_mday = zi.tmz_date.tm_min = zi.tmz_date.tm_year = 0;
+			zi.dosDate = 0;
+			zi.internal_fa = 0;
+			zi.external_fa = 0;
+			int err = zipOpenNewFileInZip(zf, curfile.scVal(), &zi,NULL,0,NULL,0,NULL /* comment*/,(opt_compress_level != 0) ? Z_DEFLATED : 0,opt_compress_level);
+
+			if (err != ZIP_OK)
+			{
+				throw ErrorObject(String("error in opening %S in zipfile\n",curfile));
+	    
+			}
+			else
+			{
+				fin = fopen(fnt.sFullName().scVal(),_T("rb"));
+				if (fin==NULL)
+				{
+					throw ErrorObject(String("error in opening %S for reading\n",curfile));
+				}
+			}
+			do
+			{
+				err = ZIP_OK;
+				size_read = fread(buf,1,size_buf,fin);
+				//if (size_read < size_buf)
+				//    if (feof(fin)==0)
+				//    {
+				//        //Seems like we could not read from the temp name.
+				//        AfxFormatString1(strMessage, AFX_IDP_FAILED_IO_ERROR_READ, szTempName);
+				//        AfxMessageBox(strMessage);
+				//        strMessage.Empty();
+				//        err = ZIP_ERRNO;
+				//    }
+
+				if (err==ZIP_OK && size_read>0)
+				{
+					err = zipWriteInFileInZip (zf,buf,size_read);
+				   // if (err<0)
+					//{
+					//    //We could not write the file in the ZIP-File for whatever reason.
+					//    AfxFormatString1(strMessage, AFX_IDP_FAILED_IO_ERROR_WRITE,strZipFile);
+					//    AfxMessageBox(strMessage);
+					//    strMessage.Empty();
+					//}
+
+				}
+			}
+			while (err==ZIP_OK && size_read>0);
+
+
+
+			fclose(fin);
+	   }
+   }
+   int errclose = zipClose(zf,NULL);
+   free (buf);
+}
+
+
+
+
+
+
+
 
 
 
