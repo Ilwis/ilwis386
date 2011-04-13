@@ -82,8 +82,8 @@ SegmentMapVirtual* SegmentMapVirtual::create(const FileName& fn, SegmentMapPtr& 
   String sType;
   if (0 == ObjectInfo::ReadElement("SegmentMapVirtual", "Type", fn, sType))
     return 0;
-  vector<ApplicationInfo *> infos;
-  Engine::modules.getAppInfo(sType, infos);
+  vector<CommandInfo *> infos;
+  Engine::modules.getCommandInfo(sType, infos);
   vector<void *> extraParms = vector<void *>();
   if ( infos.size() > 0 ) {
 	return (SegmentMapVirtual *)(infos[0]->createFunction)(fn, p, "", extraParms);
@@ -97,8 +97,8 @@ SegmentMapVirtual* SegmentMapVirtual::create(const FileName& fn, SegmentMapPtr& 
 {
 
 	String sFunc = IlwisObjectPtr::sParseFunc(sExpression);
-	vector<ApplicationInfo *> infos;
-	Engine::modules.getAppInfo(sFunc, infos);
+	vector<CommandInfo *> infos;
+	Engine::modules.getCommandInfo(sFunc, infos);
 	vector<void *> extraParms = vector<void *>();
 	if ( infos.size() > 0 ) {
 		return (SegmentMapVirtual *)(infos[0]->createFunction)(fn, p, sExpression, extraParms);
@@ -119,8 +119,8 @@ SegmentMapVirtual* SegmentMapVirtual::create(const FileName& fn, SegmentMapPtr& 
 			if (!File::fExist(fnMap))
 				throw ErrorNotFound(fnMap);
 		}
-		vector<ApplicationInfo *> infos;
-		Engine::modules.getAppInfo("SegmentMapAttribute", infos);
+		vector<CommandInfo *> infos;
+		Engine::modules.getCommandInfo("SegmentMapAttribute", infos);
 		vector<void *> extraParms = vector<void *>();
 		SegmentMap pmap(fnMap);
 		extraParms.push_back( &pmap);

@@ -86,8 +86,8 @@ MapListVirtual _export * MapListVirtual::create(const FileName& fn, MapListPtr& 
    String sType;
   if (0 == ObjectInfo::ReadElement("MapListVirtual", "Type", fn, sType))
     return 0;
-  vector<ApplicationInfo *> infos;
-  Engine::modules.getAppInfo(sType, infos);
+  vector<CommandInfo *> infos;
+  Engine::modules.getCommandInfo(sType, infos);
   vector<void *> extraParms = vector<void *>();
   if ( infos.size()>0 ) {
 	return (MapListVirtual *)(infos[0]->createFunction)(fn, p, "", extraParms);
@@ -100,8 +100,8 @@ MapListVirtual _export * MapListVirtual::create(const FileName& fn, MapListPtr& 
 MapListVirtual _export *MapListVirtual::create(const FileName& fn, MapListPtr& p, const String& sExpression)
 {
 	String sFunc = IlwisObjectPtr::sParseFunc(sExpression);
-	vector<ApplicationInfo *> infos;
-    Engine::modules.getAppInfo(sFunc, infos);
+	vector<CommandInfo *> infos;
+    Engine::modules.getCommandInfo(sFunc, infos);
 	vector<void *> extraParms = vector<void *>();
 	if ( infos.size() > 0) {
 		return (MapListVirtual *)(infos[0]->createFunction)(fn, p, sExpression, extraParms);

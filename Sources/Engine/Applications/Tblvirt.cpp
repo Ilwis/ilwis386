@@ -137,8 +137,8 @@ TableVirtual* TableVirtual::create(const FileName& fn, TablePtr& p)
 	if (0 == ObjectInfo::ReadElement("IlwisObjectVirtual", "Expression", fn, sExpr))
 		return NULL;
 	String sFunc = sExpr.sHead("(");
-	vector<ApplicationInfo *> infos;
-	Engine::modules.getAppInfo(sFunc, infos);
+	vector<CommandInfo *> infos;
+	Engine::modules.getCommandInfo(sFunc, infos);
 	if ( infos.size() > 0 ) {
 		vector<void *> extraParms = vector<void *>();
 		return (TableVirtual *)(infos[0]->createFunction)(fn, p, "", extraParms);
@@ -149,8 +149,8 @@ TableVirtual* TableVirtual::create(const FileName& fn, TablePtr& p)
 TableVirtual* TableVirtual::create(const FileName& fn, TablePtr& p, const String& sExpression)
 {
  	String sFunc = IlwisObjectPtr::sParseFunc(sExpression);
-	vector<ApplicationInfo *> infos;
-	Engine::modules.getAppInfo(sFunc, infos);
+	vector<CommandInfo *> infos;
+	Engine::modules.getCommandInfo(sFunc, infos);
 	vector<void *> extraParms = vector<void *>();
 	if ( infos.size() > 0 ) {
 		return (TableVirtual *)(infos[0]->createFunction)(fn, p, sExpression, extraParms);

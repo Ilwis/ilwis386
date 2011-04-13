@@ -48,8 +48,8 @@ MapFromMapList* MapFromMapList::create(const FileName& fn, MapPtr& p)
 	String sType;
 	ObjectInfo::ReadElement("MapFromMapList", "Type", fn, sType);
 
-	vector<ApplicationInfo *> infos;
-    Engine::modules.getAppInfo(sType, infos);
+	vector<CommandInfo *> infos;
+    Engine::modules.getCommandInfo(sType, infos);
 	if ( infos.size() > 0 ) {
 		vector<void *> extraParms = vector<void *>();
 		return (MapFromMapList *)(infos[0]->createFunction)(fn, p, "", extraParms);

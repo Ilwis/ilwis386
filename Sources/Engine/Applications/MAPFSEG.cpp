@@ -51,8 +51,8 @@ MapFromSegmentMap* MapFromSegmentMap::create(const FileName& fn, MapPtr& p)
 	if (0 == ObjectInfo::ReadElement("MapFromSegmentMap", "Type", fn, sType))
 		return 0;
 
-	vector<ApplicationInfo *> infos;
-    Engine::modules.getAppInfo(sType, infos);
+	vector<CommandInfo *> infos;
+    Engine::modules.getCommandInfo(sType, infos);
 	if ( infos.size() > 0 ) {
 		vector<void *> extraParms = vector<void *>();
 		return (MapFromSegmentMap *)(infos[0]->createFunction)(fn, p, "", extraParms);

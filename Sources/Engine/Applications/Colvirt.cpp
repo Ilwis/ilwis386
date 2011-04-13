@@ -57,8 +57,8 @@ ColumnVirtual* ColumnVirtual::create(const Table& tbl, const String& sColName, C
    String sExpr;
   ObjectInfo::ReadElement(String("%SCol:%S", tbl->sSectionPrefix, sColName).scVal(), "Expression", tbl->fnObj, sExpr);
   String sFunc = IlwisObjectPtr::sParseFunc(sExpr);
-  vector<ApplicationInfo *> infos;
-  Engine::modules.getAppInfo(sFunc, infos);
+  vector<CommandInfo *> infos;
+  Engine::modules.getCommandInfo(sFunc, infos);
   vector<void *> extraParms = vector<void *>();
   extraParms.push_back((void *)&sColName);
   if ( infos.size() > 0  ) {
@@ -90,8 +90,8 @@ ColumnVirtual* ColumnVirtual::create(const Table& tbl, const String& sColName, C
                                      const String& sExpression, const DomainValueRangeStruct& dvs)
 {
   String sFunc = IlwisObjectPtr::sParseFunc(sExpression);
-  vector<ApplicationInfo *> infos;
-  Engine::modules.getAppInfo(sFunc, infos);
+  vector<CommandInfo *> infos;
+  Engine::modules.getCommandInfo(sFunc, infos);
   vector<void *> extraParms = vector<void *>();
   extraParms.push_back((void *)&sColName);
   extraParms.push_back((void *)&dvs);
@@ -100,7 +100,7 @@ ColumnVirtual* ColumnVirtual::create(const Table& tbl, const String& sColName, C
 	return (ColumnVirtual *)(infos[0]->createFunction)(tbl->fnObj, p, sExpression, extraParms);
   }
   infos.clear();
-  Engine::modules.getAppInfo(sFunc, infos);
+  Engine::modules.getCommandInfo(sFunc, infos);
   if ( infos.size() > 0)
 	return (ColumnVirtual *)(infos[0]->createFunction)(tbl->fnObj, p, sExpression, extraParms);
 

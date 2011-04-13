@@ -54,8 +54,8 @@ MapFromPointMap* MapFromPointMap::create(const FileName& fn, MapPtr& p)
   String sType;     
   ObjectInfo::ReadElement("MapFromPointMap", "Type", fn, sType);
 
-  	vector<ApplicationInfo *> infos;
-    Engine::modules.getAppInfo(sType, infos);
+  	vector<CommandInfo *> infos;
+    Engine::modules.getCommandInfo(sType, infos);
 	if ( infos.size() > 0 ) {
 		vector<void *> extraParms = vector<void *>();
 		return (MapFromPointMap *)(infos[0]->createFunction)(fn, p, "", extraParms);

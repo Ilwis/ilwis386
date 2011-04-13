@@ -91,8 +91,8 @@ PointMapVirtual* PointMapVirtual::create(const FileName& fn, PointMapPtr& ptr)
    String sType;
   if (0 == ObjectInfo::ReadElement("PointMapVirtual", "Type", fn, sType))
     return 0;
-  vector<ApplicationInfo *> infos;
-  Engine::modules.getAppInfo(sType, infos);
+  vector<CommandInfo *> infos;
+  Engine::modules.getCommandInfo(sType, infos);
   vector<void *> extraParms = vector<void *>();
   if ( infos.size() > 0 ) {
 	return (PointMapVirtual *)(infos[0]->createFunction)(fn, ptr, "", extraParms);
@@ -105,8 +105,8 @@ PointMapVirtual* PointMapVirtual::create(const FileName& fn, PointMapPtr& ptr)
 PointMapVirtual* PointMapVirtual::create(const FileName& fn, PointMapPtr& ptr, const String& sExpression)
 {
 	String sFunc = IlwisObjectPtr::sParseFunc(sExpression);
-	vector<ApplicationInfo *> infos;
-    Engine::modules.getAppInfo(sFunc, infos);
+	vector<CommandInfo *> infos;
+    Engine::modules.getCommandInfo(sFunc, infos);
 	vector<void *> extraParms = vector<void *>();
 	if ( infos.size() > 0) {
 		return (PointMapVirtual *)(infos[0]->createFunction)(fn, ptr, sExpression, extraParms);
@@ -127,8 +127,8 @@ PointMapVirtual* PointMapVirtual::create(const FileName& fn, PointMapPtr& ptr, c
 			if (!File::fExist(fnMap))
 				throw ErrorNotFound(fnMap);
 		}
-		vector<ApplicationInfo *> infos;
-		Engine::modules.getAppInfo("PointMapAttribute", infos);
+		vector<CommandInfo *> infos;
+		Engine::modules.getCommandInfo("PointMapAttribute", infos);
 		vector<void *> extraParms = vector<void *>();
 		PointMap pmap(fnMap);
 		extraParms.push_back( &pmap);

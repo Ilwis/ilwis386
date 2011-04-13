@@ -76,14 +76,14 @@ void ModuleMap::addModule(const FileName& fnModule, bool retry) {
 	try{
 		HMODULE hm = LoadLibrary(fnModule.sFullPath().scVal());
 		if ( hm != NULL ) {
-			//AppInfo f = (AppInfo)GetProcAddress(hm, "getApplicationInfo");
+			//AppInfo f = (AppInfo)GetProcAddress(hm, "getCommandInfo");
 			ModuleInfo m = (ModuleInfo)GetProcAddress(hm, "getModuleInfo");
 			if ( m != NULL) {
-				ILWIS::Module *mod = (*m)();
+				ILWIS::Module *mod = (*m)(fnModule);
 				ILWIS::Module::ModuleInterface type = mod->getInterfaceVersion();
 				getEngine()->getVersion()->fSupportsModuleInterfaceVersion(type, mod->getName());
 				addModule(mod);
-				AppInfo appFunc = (AppInfo)(mod->getMethod(ILWIS::Module::ifGetAppInfo));
+				AppInfo appFunc = (AppInfo)(mod->getMethod(ILWIS::Module::ifgetCommandInfo));
 				if ( appFunc) {
 					InfoVector *infos = (*appFunc)();
 					if ( infos->size() > 0)
@@ -130,10 +130,10 @@ void ModuleMap::initModules() {
 	}
 }
 
-void ModuleMap::getAppInfo(const String& name, vector<ApplicationInfo *>& infos)	{ 
-	ApplicationMap::iterator cur;
+void ModuleMap::getCommandInfo(const String& name, vector<CommandInfo *>& infos)	{ 
+	CommandMap::iterator cur;
 	int index=0;
-	ApplicationInfo *inf = applications[name];
+	CommandInfo *inf = applications[name];
 	if ( inf != 0)
 		infos.push_back(inf);
 	else if ( (index = name.find("*")) != string::npos) {
@@ -184,28 +184,32 @@ void ModuleMap::addModule(ILWIS::Module *m) {
 		(*this)[m->getName()] = m;
 	}
 }
+
+void ModuleMap::addCommand(const String& sName, CommandFunc cf,MetaDataFunc mf) {
+	applications.addCommand(sName, cf, mf);
+}
 //-------------------------------------------------------------------------------------------
-ApplicationMap::~ApplicationMap() {
+CommandMap::~CommandMap() {
 	for(AppIter cur = this->begin(); cur != this->end(); ++cur) {
-		ApplicationInfo *ai = (*cur).second;
+		CommandInfo *ai = (*cur).second;
 		delete ai;
 	}
 }
 
-void ApplicationMap::addExtraFunctions() {
+void CommandMap::addExtraFunctions() {
 	InfoVector *infos = new InfoVector();
-	(*infos).push_back(ApplicationMap::newApplicationInfo(createTableHistogram,"TableHistogram"));
-	(*infos).push_back(ApplicationMap::newApplicationInfo(createTableHistogramPol,"TableHistogramPol"));
-	(*infos).push_back(ApplicationMap::newApplicationInfo(createTableHistogramSeg,"TableHistogramSeg"));
-	(*infos).push_back(ApplicationMap::newApplicationInfo(createTableHistogramPnt,"TableHistogramPnt"));
+	(*infos).push_back(CommandMap::newCommandInfo(createTableHistogram,"TableHistogram"));
+	(*infos).push_back(CommandMap::newCommandInfo(createTableHistogramPol,"TableHistogramPol"));
+	(*infos).push_back(CommandMap::newCommandInfo(createTableHistogramSeg,"TableHistogramSeg"));
+	(*infos).push_back(CommandMap::newCommandInfo(createTableHistogramPnt,"TableHistogramPnt"));
 
 	addApplications(*infos);
 
 	delete infos;
 }
 
-ApplicationInfo * ApplicationMap::newApplicationInfo(CreateFunc appFunc, String appName) {
-	ApplicationInfo *inf = new ApplicationInfo;
+CommandInfo * CommandMap::newCommandInfo(CreateFunc appFunc, String appName) {
+	CommandInfo *inf = new CommandInfo;
 	inf->createFunction = appFunc;
 	inf->name = appName.toLower();
 	inf->metadata = NULL;
@@ -213,8 +217,8 @@ ApplicationInfo * ApplicationMap::newApplicationInfo(CreateFunc appFunc, String 
 	return inf;
 }
 
-ApplicationInfo * ApplicationMap::newApplicationInfo(CreateFunc appFunc, String appName, MetaDataFunc mdFunc) {
-	ApplicationInfo *inf = new ApplicationInfo;
+CommandInfo * CommandMap::newCommandInfo(CreateFunc appFunc, String appName, MetaDataFunc mdFunc) {
+	CommandInfo *inf = new CommandInfo;
 	inf->createFunction = appFunc;
 	inf->name = appName.toLower();
 	inf->metadata = mdFunc;
@@ -222,15 +226,15 @@ ApplicationInfo * ApplicationMap::newApplicationInfo(CreateFunc appFunc, String 
 	return inf;
 }
 
-void ApplicationMap::addApplications(InfoVector apps) {
+void CommandMap::addApplications(InfoVector apps) {
 	for(InfoVIter cur = apps.begin(); cur != apps.end(); ++cur) {
-		ApplicationInfo *ai = (*cur);
+		CommandInfo *ai = (*cur);
 		InfoPair p(ai->name, ai);
 		(*this).insert(p);
 	}
 }
 
-ApplicationInfo * ApplicationMap::operator[](String n) {
+CommandInfo * CommandMap::operator[](String n) {
 	String name = n.toLower();
 	AppIter iter = (*this).find(name);
 	if ( iter != this->end() )
@@ -253,4 +257,11 @@ ApplicationInfo * ApplicationMap::operator[](String n) {
 		}
 	}
 	return NULL;
+}
+
+void CommandMap::addCommand(const String& sName, CommandFunc cf,MetaDataFunc mf) {
+	AppIter cur = find(sName);
+	if ( cur == end()) {
+		insert(pair<String, CommandInfo *>(sName, new CommandInfo(sName, cf, mf)));
+	}
 }

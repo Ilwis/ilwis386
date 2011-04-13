@@ -219,8 +219,8 @@ MapVirtual* MapVirtual::create(const FileName& fn, MapPtr& p)
 }
 
 IlwisObjectPtr * MapVirtual::getMapVirtual(const FileName& fn, MapPtr& p, const String& sType) {
-	vector<ApplicationInfo *> infos;
-	Engine::modules.getAppInfo(sType, infos);
+	vector<CommandInfo *> infos;
+	Engine::modules.getCommandInfo(sType, infos);
 	if ( infos.size() > 0 ) {
 		vector<void *> extraParms = vector<void *>();
 		return (infos[0]->createFunction)(fn, p, "", extraParms);
@@ -265,8 +265,8 @@ static bool fSplitOnDots(const String& sExpr, Array<String>& as)
 MapVirtual* MapVirtual::create(const FileName& fn, MapPtr& p, const String& sExpression)
 {
 	String sFunc = IlwisObjectPtr::sParseFunc(sExpression);
-	vector<ApplicationInfo *> infos;
-	Engine::modules.getAppInfo(sFunc, infos);
+	vector<CommandInfo *> infos;
+	Engine::modules.getCommandInfo(sFunc, infos);
 	vector<void *> extraParms = vector<void *>();
 	if ( infos.size() > 0 ) {
 		return (MapVirtual *)(infos[0]->createFunction)(fn, p, sExpression, extraParms);
@@ -276,7 +276,7 @@ MapVirtual* MapVirtual::create(const FileName& fn, MapPtr& p, const String& sExp
 		return mpv;
 	}
 	infos.clear();
-	Engine::modules.getAppInfo("MapCalculate", infos);
+	Engine::modules.getCommandInfo("MapCalculate", infos);
 	if ( infos.size() > 0 ) {
 		return (MapVirtual *)(infos[0]->createFunction)(fn, p, sExpression, extraParms);
 	}
@@ -310,8 +310,8 @@ MapVirtual *MapVirtual::dottedExpressionMaps(const FileName& fn, MapPtr& p, cons
 				try {
 					Map mp(fnMap);
 					if (mp->dm()->pdp() || mp->dm()->pdcol()) {
-						vector<ApplicationInfo *> infos;
-						Engine::modules.getAppInfo("MapColorSep", infos);
+						vector<CommandInfo *> infos;
+						Engine::modules.getCommandInfo("MapColorSep", infos);
 						if ( infos.size() > 0) {
 							extraParms.push_back((void *)&asParts[iNext]);
 							extraParms.push_back((void *)&Map(fnMap));
@@ -329,8 +329,8 @@ MapVirtual *MapVirtual::dottedExpressionMaps(const FileName& fn, MapPtr& p, cons
 				sCol &= '.';
 				sCol &= asParts[i];
 				}
-			vector<ApplicationInfo *> infos;
-			Engine::modules.getAppInfo("MapAttribute", infos);
+			vector<CommandInfo *> infos;
+			Engine::modules.getCommandInfo("MapAttribute", infos);
 			if ( infos.size() > 0) {
 				Map mp1(fnMap);
 				extraParms.push_back((void *)&sCol);

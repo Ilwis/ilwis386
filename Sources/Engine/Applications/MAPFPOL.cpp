@@ -48,8 +48,8 @@ MapFromPolygonMap* MapFromPolygonMap::create(const FileName& fn, MapPtr& p)
 {
 	String sType;
 	ObjectInfo::ReadElement("MapFromPolygonMap", "Type", fn, sType);
-	vector<ApplicationInfo *> infos;
-    Engine::modules.getAppInfo(sType, infos);
+	vector<CommandInfo *> infos;
+    Engine::modules.getCommandInfo(sType, infos);
 	if ( infos.size() > 0 ) {
 		vector<void *> extraParms = vector<void *>();
 		return (MapFromPolygonMap *)(infos[0]->createFunction)(fn, p, "", extraParms);

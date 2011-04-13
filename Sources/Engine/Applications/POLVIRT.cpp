@@ -47,8 +47,8 @@ PolygonMapVirtual* PolygonMapVirtual::create(const FileName& fn, PolygonMapPtr& 
    String sType;
   if (0 == ObjectInfo::ReadElement("PolygonMapVirtual", "Type", fn, sType))
     return 0;
-  vector<ApplicationInfo *> infos;
-  Engine::modules.getAppInfo(sType, infos);
+  vector<CommandInfo *> infos;
+  Engine::modules.getCommandInfo(sType, infos);
   vector<void *> extraParms = vector<void *>();
   if ( infos.size() > 0 ) {
 	return (PolygonMapVirtual *)(infos[0]->createFunction)(fn, p, "", extraParms);
@@ -61,8 +61,8 @@ PolygonMapVirtual* PolygonMapVirtual::create(const FileName& fn, PolygonMapPtr& 
 PolygonMapVirtual* PolygonMapVirtual::create(const FileName& fn, PolygonMapPtr& p, const String& sExpression)
 {
 	String sFunc = IlwisObjectPtr::sParseFunc(sExpression);
-	vector<ApplicationInfo *> infos;
-    Engine::modules.getAppInfo(sFunc, infos);
+	vector<CommandInfo *> infos;
+    Engine::modules.getCommandInfo(sFunc, infos);
 	vector<void *> extraParms = vector<void *>();
 	if ( infos.size() > 0 ) {
 		return (PolygonMapVirtual *)(infos[0]->createFunction)(fn, p, sExpression, extraParms);
@@ -84,8 +84,8 @@ PolygonMapVirtual* PolygonMapVirtual::create(const FileName& fn, PolygonMapPtr& 
 			if (!File::fExist(fnMap))
 				throw ErrorNotFound(fnMap);
 		}
-		vector<ApplicationInfo *> infos;
-		Engine::modules.getAppInfo("PolygonMapAttribute", infos);
+		vector<CommandInfo *> infos;
+		Engine::modules.getCommandInfo("PolygonMapAttribute", infos);
 		vector<void *> extraParms = vector<void *>();
 		PolygonMap pmap(fnMap);
 		extraParms.push_back( &pmap);

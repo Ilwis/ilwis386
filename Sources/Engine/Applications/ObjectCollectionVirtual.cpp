@@ -57,8 +57,8 @@ ObjectCollectionVirtual _export * ObjectCollectionVirtual::create(const FileName
    String sType;
   if (0 == ObjectInfo::ReadElement("ObjectCollectionVirtual", "Type", fn, sType))
     return 0;
-  	vector<ApplicationInfo *> infos;
-    Engine::modules.getAppInfo(sType, infos);
+  	vector<CommandInfo *> infos;
+    Engine::modules.getCommandInfo(sType, infos);
   vector<void *> extraParms = vector<void *>();
   if (infos.size() > 0 ) {
 	return (ObjectCollectionVirtual *)(infos[0]->createFunction)(fn, p, "", extraParms);
@@ -71,8 +71,8 @@ ObjectCollectionVirtual _export * ObjectCollectionVirtual::create(const FileName
 ObjectCollectionVirtual _export *ObjectCollectionVirtual::create(const FileName& fn, ObjectCollectionPtr& p, const String& sExpression)
 {
 	String sFunc = IlwisObjectPtr::sParseFunc(sExpression);
-	vector<ApplicationInfo *> infos;
-	Engine::modules.getAppInfo(sFunc, infos);
+	vector<CommandInfo *> infos;
+	Engine::modules.getCommandInfo(sFunc, infos);
 	vector<void *> extraParms = vector<void *>();
 	if ( infos.size() > 0 ) {
 		return (ObjectCollectionVirtual *)(infos[0]->createFunction)(fn, p, sExpression, extraParms);
