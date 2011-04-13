@@ -20,37 +20,37 @@
 #include "PointApplications\pntRelate.H"
 
 
-//extern "C" _export vector<ApplicationInfo *>* getApplicationInfo());
+//extern "C" _export vector<CommandInfo *>* getCommandInfo());
 
-InfoVector* getApplicationInfo() {
+InfoVector* getCommandInfo() {
 
 	InfoVector *infos = new InfoVector();
 
-	infos->push_back(ApplicationMap::newApplicationInfo(createPointMapFromRas,"PointMapFromRas"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createPointMapAttribute,"PointMapAttribute")); 
-	infos->push_back(ApplicationMap::newApplicationInfo(createPointMapSeg,"PointMapSegDist")); 
-	infos->push_back(ApplicationMap::newApplicationInfo(createPointMapSeg,"PointMapSegNodes")); 
-	infos->push_back(ApplicationMap::newApplicationInfo(createPointMapSeg,"PointMapSegCoords")); 
-	infos->push_back(ApplicationMap::newApplicationInfo(createPointMapPolLabels,"PointMapPolLabels")); 
-	infos->push_back(ApplicationMap::newApplicationInfo(createPointMapTransform,"PointMapTransform"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createPointMapSubMap,"PointMapSubMap"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createPointMapGlue,"PointMapGlue"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createPointMapMask,"PointMapMask"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createPointMapNumbering,"PointMapNumbering"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createPointMapFromTable,"PointMapFromTable"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createPointMapIntersect,"PointMapIntersect"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createPointMapUnion,"PointMapUnion"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createPointMapDifference,"PointMapDifference"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createPointMapSymetricDifference,"PointMapSymetricDifference"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createPointMapPointInSegment,"PointMapPointInSegment"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createPointMapRelate,"PointMapRelate"));
+	infos->push_back(CommandMap::newCommandInfo(createPointMapFromRas,"PointMapFromRas"));
+	infos->push_back(CommandMap::newCommandInfo(createPointMapAttribute,"PointMapAttribute")); 
+	infos->push_back(CommandMap::newCommandInfo(createPointMapSeg,"PointMapSegDist")); 
+	infos->push_back(CommandMap::newCommandInfo(createPointMapSeg,"PointMapSegNodes")); 
+	infos->push_back(CommandMap::newCommandInfo(createPointMapSeg,"PointMapSegCoords")); 
+	infos->push_back(CommandMap::newCommandInfo(createPointMapPolLabels,"PointMapPolLabels")); 
+	infos->push_back(CommandMap::newCommandInfo(createPointMapTransform,"PointMapTransform"));
+	infos->push_back(CommandMap::newCommandInfo(createPointMapSubMap,"PointMapSubMap"));
+	infos->push_back(CommandMap::newCommandInfo(createPointMapGlue,"PointMapGlue"));
+	infos->push_back(CommandMap::newCommandInfo(createPointMapMask,"PointMapMask"));
+	infos->push_back(CommandMap::newCommandInfo(createPointMapNumbering,"PointMapNumbering"));
+	infos->push_back(CommandMap::newCommandInfo(createPointMapFromTable,"PointMapFromTable"));
+	infos->push_back(CommandMap::newCommandInfo(createPointMapIntersect,"PointMapIntersect"));
+	infos->push_back(CommandMap::newCommandInfo(createPointMapUnion,"PointMapUnion"));
+	infos->push_back(CommandMap::newCommandInfo(createPointMapDifference,"PointMapDifference"));
+	infos->push_back(CommandMap::newCommandInfo(createPointMapSymetricDifference,"PointMapSymetricDifference"));
+	infos->push_back(CommandMap::newCommandInfo(createPointMapPointInSegment,"PointMapPointInSegment"));
+	infos->push_back(CommandMap::newCommandInfo(createPointMapRelate,"PointMapRelate"));
 
 	return infos;
 }
 
-extern "C" _export ILWIS::Module *getModuleInfo() {
-	ILWIS::Module *module = new ILWIS::Module("Pointmap Applications", "IlwisPointApps.dll",ILWIS::Module::mi37,"1.0");
-	module->addMethod(ILWIS::Module::ifGetAppInfo, (void *)getApplicationInfo);  
+extern "C" _export ILWIS::Module *getModuleInfo(const FileName& fnModule) {
+	ILWIS::Module *module = new ILWIS::Module("Pointmap Applications", fnModule,ILWIS::Module::mi37,"1.0");
+	module->addMethod(ILWIS::Module::ifgetCommandInfo, (void *)getCommandInfo);  
 
 	return module;
 }

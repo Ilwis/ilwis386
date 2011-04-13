@@ -336,7 +336,7 @@ long PointMapFromTable::iRaw(long iRec) const
   if (colAttrib.fValid())
     return colAttrib->iRaw(iRec + 1) + 1;
   else
-    return iRec;
+    return iRec + 1;
 }
 
 long PointMapFromTable::iValue(long iRec) const
@@ -344,7 +344,7 @@ long PointMapFromTable::iValue(long iRec) const
   if (colAttrib.fValid())
     return colAttrib->iValue(iRec + 1);
   else
-    return dvrs().iValue(iRec);
+    return dvrs().iValue(iRec + 1);
 }
 
 double PointMapFromTable::rValue(long iRec) const
@@ -352,7 +352,7 @@ double PointMapFromTable::rValue(long iRec) const
   if (colAttrib.fValid())
     return colAttrib->rValue(iRec + 1);
   else
-    return dvrs().rValue(iRec);
+    return dvrs().rValue(iRec + 1);
 }
 
 String PointMapFromTable::sValue(long iRec, short iWidth, short iDec) const
@@ -360,7 +360,7 @@ String PointMapFromTable::sValue(long iRec, short iWidth, short iDec) const
   if (colAttrib.fValid())
     return colAttrib->sValue(iRec + 1, iWidth, iDec);
   else
-    return dvrs().sValue(iRec, iWidth, iDec);
+    return dvrs().sValue(iRec + 1, iWidth, iDec);
 }
 
 Coord PointMapFromTable::cValue(long iRec) const
