@@ -27,35 +27,35 @@
 #include "SegmentApplications\segRelate.H"
 #include "SegmentApplications\segTin.h"
 
-InfoVector* getApplicationInfo() {
+InfoVector* getCommandInfo() {
 
 	InfoVector *infos = new InfoVector();
-	infos->push_back(ApplicationMap::newApplicationInfo(createSegmentMapAttribute,"SegmentMapAttribute"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createSegmentMapFromRasAreaBnd,"SegmentMapFromRasAreaBnd"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createSegmentMapTunneling,"SegmentMapTunneling"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createSegmentMapLabels,"SegmentMapLabels"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createSegmentMapMask,"SegmentMapMask"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createSegmentMapPolBoundaries,"SegmentMapPolBoundaries"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createSegmentMapFromRasValueBnd,"SegmentMapFromRasValueBnd"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createSegmentMapTransform,"SegmentMapTransform"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createSegmentMapSubMap,"SegmentMapSubMap"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createSegmentMapDensifyCoords,"SegmentMapDensifyCoords"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createSegmentMapGlue,"SegmentMapGlue"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createSegmentMapNumbering,"SegmentMapNumbering"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createSegmentMapIntersect,"SegmentMapIntersect"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createSegmentMapUnion,"SegmentMapUnion"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createSegmentMapDifference,"SegmentMapDifference"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createSegmentMapSymetricDifference,"SegmentMapSymetricDifference"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createSegmentMapVoronoi,"SegmentMapVoronoi"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createSegmentMapRelate,"SegmentMapRelate"));
-	infos->push_back(ApplicationMap::newApplicationInfo(createSegmentMapTIN,"SegmentMapTIN"));
+	infos->push_back(CommandMap::newCommandInfo(createSegmentMapAttribute,"SegmentMapAttribute"));
+	infos->push_back(CommandMap::newCommandInfo(createSegmentMapFromRasAreaBnd,"SegmentMapFromRasAreaBnd"));
+	infos->push_back(CommandMap::newCommandInfo(createSegmentMapTunneling,"SegmentMapTunneling"));
+	infos->push_back(CommandMap::newCommandInfo(createSegmentMapLabels,"SegmentMapLabels"));
+	infos->push_back(CommandMap::newCommandInfo(createSegmentMapMask,"SegmentMapMask"));
+	infos->push_back(CommandMap::newCommandInfo(createSegmentMapPolBoundaries,"SegmentMapPolBoundaries"));
+	infos->push_back(CommandMap::newCommandInfo(createSegmentMapFromRasValueBnd,"SegmentMapFromRasValueBnd"));
+	infos->push_back(CommandMap::newCommandInfo(createSegmentMapTransform,"SegmentMapTransform"));
+	infos->push_back(CommandMap::newCommandInfo(createSegmentMapSubMap,"SegmentMapSubMap"));
+	infos->push_back(CommandMap::newCommandInfo(createSegmentMapDensifyCoords,"SegmentMapDensifyCoords"));
+	infos->push_back(CommandMap::newCommandInfo(createSegmentMapGlue,"SegmentMapGlue"));
+	infos->push_back(CommandMap::newCommandInfo(createSegmentMapNumbering,"SegmentMapNumbering"));
+	infos->push_back(CommandMap::newCommandInfo(createSegmentMapIntersect,"SegmentMapIntersect"));
+	infos->push_back(CommandMap::newCommandInfo(createSegmentMapUnion,"SegmentMapUnion"));
+	infos->push_back(CommandMap::newCommandInfo(createSegmentMapDifference,"SegmentMapDifference"));
+	infos->push_back(CommandMap::newCommandInfo(createSegmentMapSymetricDifference,"SegmentMapSymetricDifference"));
+	infos->push_back(CommandMap::newCommandInfo(createSegmentMapVoronoi,"SegmentMapVoronoi"));
+	infos->push_back(CommandMap::newCommandInfo(createSegmentMapRelate,"SegmentMapRelate"));
+	infos->push_back(CommandMap::newCommandInfo(createSegmentMapTIN,"SegmentMapTIN"));
 
 	return infos;
 }
 
-extern "C" _export ILWIS::Module *getModuleInfo() {
-	ILWIS::Module *module = new ILWIS::Module("Segmentmap applications", "IlwisSegmentApps.dll",ILWIS::Module::mi37,"1.0");
-	module->addMethod(ILWIS::Module::ifGetAppInfo, (void *)getApplicationInfo);  
+extern "C" _export ILWIS::Module *getModuleInfo(const FileName& fnModule) {
+	ILWIS::Module *module = new ILWIS::Module("Segmentmap applications", fnModule,ILWIS::Module::mi37,"1.0");
+	module->addMethod(ILWIS::Module::ifgetCommandInfo, (void *)getCommandInfo);  
 
 	return module;
 }
