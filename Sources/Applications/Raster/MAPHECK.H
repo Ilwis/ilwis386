@@ -34,12 +34,7 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/* MapHeckbert
-   Copyright Ilwis System Development ITC
-/* MapHeckbert
-   september 1995, by Jelle Wind
-   Last change:  JEL  20 Jun 97    1:25 pm
-*/
+
 
 #ifndef ILWMAPHECKBERT_H
 #define ILWMAPHECKBERT_H
@@ -67,6 +62,7 @@ inline HistRGBRec undef(const HistRGBRec&)
 { HistRGBRec x; return x; }
 
 IlwisObjectPtr * createMapHeckbert(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
+ApplicationMetadata metadataMapHeckbert(ApplicationQueryData *query);
 
 class DATEXPORT MapHeckbert: public MapFromMapList
 {

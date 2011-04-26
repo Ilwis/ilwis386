@@ -45,6 +45,7 @@
 #include "Engine\Applications\MAPFMAP.H"
 
 IlwisObjectPtr * createMapDistance(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
+ApplicationMetadata metadataMapDistance(ApplicationQueryData *query);
 
 class DATEXPORT MapDistance: public MapFromMap
 {

@@ -34,11 +34,7 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/* MapClassify
-   Copyright Ilwis System Development ITC
-   june 1995, by Jelle Wind
-   Last change:  JEL  18 Jun 97   11:17 am
-*/
+
 
 #ifndef ILWMAPCLASSIFY_H
 #define ILWMAPCLASSIFY_H
@@ -47,6 +43,7 @@
 #include "Engine\Function\CLASSIFR.H"
 
 IlwisObjectPtr * createMapClassify(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
+ApplicationMetadata metadataMapClassify(ApplicationQueryData *query);
 
 class DATEXPORT SampleSet;
 

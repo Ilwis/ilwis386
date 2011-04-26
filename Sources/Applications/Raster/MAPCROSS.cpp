@@ -43,6 +43,7 @@
 #include "Applications\Raster\MAPCROSS.H"
 #include "Engine\Table\Col.h"
 #include "Engine\Table\COLSTORE.H"
+#include "Engine\Base\DataObjects\WPSMetaData.h"
 #include "Engine\Table\tblstore.h"
 #include "Engine\Applications\TBLVIRT.H"
 #include "Engine\Base\DataObjects\valrange.h"
@@ -55,6 +56,60 @@ IlwisObjectPtr * createMapCross(const FileName& fn, IlwisObjectPtr& ptr, const S
 		return (IlwisObjectPtr *)MapCross::create(fn, (MapPtr &)ptr, sExpr);
 	else
 		return (IlwisObjectPtr *)new MapCross(fn, (MapPtr &)ptr);
+}
+
+String wpsmetadataMapCross() {
+	WPSMetaData metadata("MapCross");
+	metadata.AddTitle("MapCross");
+	metadata.AddAbstract("An overlay of two raster maps which have the same georeference. Pixels on the same positions in both maps are compared; the occurring combinations of class names, identifiers or values of pixels in the first input map and those of pixels in the second input map are stored");
+	metadata.AddKeyword("spatial");
+	metadata.AddKeyword("raster");
+	metadata.AddKeyword("merge");
+	WPSParameter *parm1 = new WPSParameter("1","First Input Map",WPSParameter::pmtRASMAP);
+	WPSParameter *parm2 = new WPSParameter("2","Second Input Map",WPSParameter::pmtRASMAP);
+
+	WPSParameterGroup *exclList = new WPSParameterGroup();
+
+	WPSParameterGroup *grp1 = new WPSParameterGroup("Output raster",2,"Output raster");
+	grp1->setOptional(true);
+
+	WPSParameter *parm3 = new WPSParameter("0","Output Map",WPSParameter::pmtRASMAP);
+	parm3->AddAbstract("Creates an optional cross map as output");
+	WPSParameter *parm4 = new WPSParameter("1","Ignore Undefs",WPSParameter::pmtENUM);
+	parm4->AddAbstract("Ignore undefs in the all maps, the first or the second. Possible values. All, Map1, Map2");
+
+	grp1->addParameter(parm3);
+	grp1->addParameter(parm4);
+
+	WPSParameter *parm5 = new WPSParameter("0","Ignore Undefs",WPSParameter::pmtENUM);
+	parm5->AddAbstract("Ignore undefs in the all maps, the first or the second. Possible values. All, Map1, Map2");
+	parm5->setOptional(true);
+
+	exclList->addParameter(grp1);
+	exclList->addParameter(parm5);
+
+	metadata.AddParameter(parm1);
+	metadata.AddParameter(parm2);
+	metadata.AddParameter(exclList);
+
+	WPSParameter *parmout = new WPSParameter("Result","Output Table", WPSParameter::pmtTABLE, false);
+	parmout->AddAbstract("reference Output table and supporting data objects");
+	metadata.AddParameter(parmout);
+
+	return metadata.toString();
+}
+
+ApplicationMetadata metadataMapCross(ApplicationQueryData *query) {
+	ApplicationMetadata md;
+	if ( query->queryType == "WPSMETADATA" || query->queryType == "") {
+		md.wpsxml = wpsmetadataMapCross();
+	}
+	if ( query->queryType == "OUTPUTTYPE" || query->queryType == "")
+		md.returnType = IlwisObject::iotRASMAP;
+	if ( query->queryType == "EXPERSSION" || query->queryType == "")
+		md.skeletonExpression =  MapCross::sSyntax();
+
+	return md;
 }
 
 const char* MapCross::sSyntax() {

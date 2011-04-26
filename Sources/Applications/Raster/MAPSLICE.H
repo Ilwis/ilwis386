@@ -45,7 +45,7 @@
 #include "Engine\Applications\MAPFMAP.H"
 
 IlwisObjectPtr * createMapSlicing(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
-ApplicationMetadata metadataSlicing(ApplicationQueryData *query);
+ApplicationMetadata metadataMapSlicing(ApplicationQueryData *query);
 
 class DATEXPORT DomainGroup;
 

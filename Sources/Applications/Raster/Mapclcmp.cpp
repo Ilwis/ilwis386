@@ -34,46 +34,11 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/* $Log: /ILWIS 3.0/RasterApplication/Mapclcmp.cpp $
- * 
- * 8     2/15/01 1:30p Lichun
- * made correction in fLinear in InitCalc().
- * 
- * 7     15-02-01 12:40 Lichun
- * made correction in if (fLinear) in InitCalc()
- * 
- * 6     6-11-00 18:25 Hendrikse
- * corrected wrong addition of + 1 in if (fLinear) in InitCalc()
- * 
- * 5     30-11-99 12:22 Wind
- * solved problem with TableHistogramInfo (caused by use of threads)
- * 
- * 4     9/29/99 9:56a Wind
- * added case insensitive string comparison
- * 
- * 3     9/08/99 8:54a Wind
- * changed sName() to sNameQuoted() in sExpression() tot suport quoted
- * file names
- * 
- * 2     3/11/99 12:16p Martin
- * Added support for Case insesitive 
-// Revision 1.4  1998/10/20 15:56:11  Wim
-// In iComputeLineRaw() when f24Bit && !fHSI, fStretch should always be true.
-//
-// Revision 1.3  1998-09-16 18:24:39+01  Wim
-// 22beta2
-//
-// Revision 1.2  1997/08/19 11:14:31  Wim
-// sExpression now correctly reports ranges
-//
-/* MapColorComp
-   Copyright Ilwis System Development ITC
-   july 1995, by Wim Koolhoven
-	Last change:  WK   20 Oct 98    4:54 pm
-*/
+
 #include "Applications\Raster\MAPCLCMP.H"
 #include "Engine\Representation\Rprclass.h"
 #include "Engine\Table\TBLHIST.H"
+#include "Engine\Base\DataObjects\WPSMetaData.h"
 #include "Headers\Htp\Ilwisapp.htp"
 #include "Headers\Err\Ilwisapp.err"
 
@@ -84,6 +49,82 @@ IlwisObjectPtr * createMapColorComp(const FileName& fn, IlwisObjectPtr& ptr, con
 		return (IlwisObjectPtr *)new MapColorComp(fn, (MapPtr &)ptr);
 }
 
+String wpsmetadataMapColorComp() {
+	WPSMetaData metadata("MapColorComp");
+	metadata.AddTitle("MapColorComp");
+	metadata.AddAbstract("A color composite is a combination of three raster bands. One band is displayed in shades of red, one in shades of green and one in shades of blue. Putting three bands together in one color composite map can give a better visual impression of the reality on the ground");
+	metadata.AddKeyword("spatial");
+	metadata.AddKeyword("raster");
+	metadata.AddKeyword("Color composite");
+
+	WPSParameter *parm1 = new WPSParameter("1","MapList", WPSParameter::pmtMAPLIST);
+	parm1->AddAbstract("An existing map list which contains 3 raster maps with the Image domain");
+
+	WPSParameter * parm2 = new WPSParameter("2","Method", WPSParameter::pmtENUM);
+	parm2->AddAbstract("Method used for combining the values of the three bands. Allowed are <empty>, Linear, 24, 24Linear, 24HistEq, 24HSI");
+
+	WPSParameterGroup *exclList = new WPSParameterGroup();
+
+	WPSParameterGroup *grp1 = new WPSParameterGroup("Range Bands",2,"Bands");
+	grp1->setOptional(true);
+
+	WPSParameterGroup *grp2 = new WPSParameterGroup("Percentage Bands",2,"Bands");
+	grp2->setOptional(true);
+	
+	WPSParameter * parm3 = new WPSParameter("0","range band one",WPSParameter::pmtRANGE);
+	parm3->AddAbstract(" the intervals of input values to be used as min:max ");
+
+	WPSParameter * parm4 = new WPSParameter("1","range band two",WPSParameter::pmtRANGE);
+	parm4->AddAbstract(" the intervals of input values to be used as min:max");
+
+	WPSParameter * parm5 = new WPSParameter("2","range band three",WPSParameter::pmtRANGE);
+	parm5->AddAbstract(" the intervals of input values to be used as min:max");
+
+	grp1->addParameter(parm3);
+	grp1->addParameter(parm4);
+	grp1->addParameter(parm5);
+
+	WPSParameter * parm6 = new WPSParameter("0","range band one",WPSParameter::pmtRANGE);
+	parm3->AddAbstract("The interval to be used as stretch percentage");
+
+	WPSParameter * parm7 = new WPSParameter("1","range band two",WPSParameter::pmtRANGE);
+	parm4->AddAbstract("The interval to be used as stretch percentage");
+
+	WPSParameter * parm8 = new WPSParameter("2","range band three",WPSParameter::pmtRANGE);
+	parm5->AddAbstract("The interval to be used as stretch percentage");
+
+	grp2->addParameter(parm6);
+	grp2->addParameter(parm7);
+	grp2->addParameter(parm8);
+
+	exclList->addParameter(grp1);
+	exclList->addParameter(grp2);
+
+	metadata.AddParameter(parm1);
+	metadata.AddParameter(parm2);
+	metadata.AddParameter(exclList);
+
+
+	WPSParameter *parmout = new WPSParameter("Result","Map", WPSParameter::pmtRASMAP, false);
+	parmout->AddAbstract("reference Outputmap and supporting data objects");
+	metadata.AddParameter(parmout);
+	
+
+	return metadata.toString();
+}
+
+ApplicationMetadata metadataMapColorComp(ApplicationQueryData *query) {
+	ApplicationMetadata md;
+	if ( query->queryType == "WPSMETADATA" || query->queryType == "") {
+		md.wpsxml = wpsmetadataMapColorComp();
+	}
+	if ( query->queryType == "OUTPUTTYPE" || query->queryType == "")
+		md.returnType = IlwisObject::iotRASMAP;
+	if ( query->queryType == "EXPERSSION" || query->queryType == "")
+		md.skeletonExpression =  MapColorComp::sSyntax();
+
+	return md;
+}
 const char* MapColorComp::sSyntax() 
 { return "MapColorCompLinear(maplist,range1,range2,range3)\nMapColorCompHistEq(maplist,range1,range2,range3)\n"
 "MapColorComp24Linear(maplist,range1,range2,range3)\nMapColorComp24HistEq(maplist,range1,range2,range3)"
@@ -92,20 +133,28 @@ const char* MapColorComp::sSyntax()
 MapColorComp* MapColorComp::create(const FileName& fn, MapPtr& p, const String& sExpr)
 {
   String sFunc = IlwisObjectPtr::sParseFunc(sExpr);
-  bool fLinear;
-  bool fHSI = false;
-  if (fCIStrEqual(sFunc, "MapColorCompLinear")   || fCIStrEqual(sFunc, "MapColorComp") ||
-      fCIStrEqual(sFunc, "MapColorComp24Linear") || fCIStrEqual(sFunc, "MapColorComp24"))
-    fLinear = true;
-  else if (fCIStrEqual(sFunc,"MapColorCompHistEq") || fCIStrEqual(sFunc, "MapColorComp24HistEq"))
-    fLinear = false;
-  else if (fCIStrEqual(sFunc, "MapColorComp24HSI"))
-    fHSI = true;
-  else
-    AppNameError(fn, sFunc);
-  bool f24Bit = strstr(sFunc.sVal(), "24") != 0;
   Array<String> as;
-  int  iParms = IlwisObjectPtr::iParseParm(sExpr, as);
+  int  iParms = IlwisObjectPtr::fParseParm(sExpr, as);
+  bool f24Bit = false;
+  bool fLinear = false;
+  bool fHSI = false;
+  if ( fCIStrEqual(sFunc, "MapColorComp") && iParms == 5) {
+	  f24Bit = strstr(as[1].scVal(), "24") != 0;
+	  fLinear = strstr(as[1].scVal(), "Linear") != 0;
+	  fHSI = strstr(as[1].scVal(), "HSI") != 0;
+
+  } else {
+	  if (fCIStrEqual(sFunc, "MapColorCompLinear")   || fCIStrEqual(sFunc, "MapColorComp") ||
+		  fCIStrEqual(sFunc, "MapColorComp24Linear") || fCIStrEqual(sFunc, "MapColorComp24"))
+		fLinear = true;
+	  else if (fCIStrEqual(sFunc,"MapColorCompHistEq") || fCIStrEqual(sFunc, "MapColorComp24HistEq"))
+		fLinear = false;
+	  else if (fCIStrEqual(sFunc, "MapColorComp24HSI"))
+		fHSI = true;
+	  else
+		AppNameError(fn, sFunc);
+	  bool f24Bit = strstr(sFunc.sVal(), "24") != 0;
+  }
   if ((iParms != 1) && (iParms != 4))
     ExpressionError(sExpr, sSyntax());
   MapList mpl(as[0], fn.sPath());

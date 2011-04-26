@@ -34,44 +34,9 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/*
-// $Log: /ILWIS 3.0/RasterApplication/Mapclass.cpp $
- * 
- * 5     8/15/01 17:39 Hendrikse
- * checks now in create( )  on equality of domains of SampleSet anf table
- * in case of priorProbab classifier
- * 
- * 4     6-03-01 13:12 Hendrikse
- * In Init() I removed try..catch around clf->SetSampleSet to enable the
- * throw of an error object in case of too small samplesets
- * 
- * 3     9/08/99 11:45a Wind
- * comments
- * 
- * 2     9/08/99 8:53a Wind
- * changed sName() to sNameQuoted() in sExpression() tot suport quoted
- * file names
- */
-// Revision 1.5  1998/10/08 10:52:50  Wim
-// Check on all zero corrected in ComputeLineRaw()
-//
-// Revision 1.4  1998-10-07 17:09:34+01  Wim
-// Now for all classifiers;
-// byte maps when all input are 0 the result will be made 0 (undef)
-// int and real maps when one input has ? the result will be amde 0  (undef).
-//
-// Revision 1.3  1998-09-16 18:24:31+01  Wim
-// 22beta2
-//
-// Revision 1.2  1997/08/05 11:09:08  Wim
-// sSyntax() corrected
-//
-/* MapClassify
-   Copyright Ilwis System Development ITC
-   april 1995, by Jelle Wind
-	Last change:  WK    8 Oct 98   11:52 am
-*/
+
 #include "Applications\Raster\MAPCLASS.H"
+#include "Engine\Base\DataObjects\WPSMetaData.h"
 #include "Headers\Htp\Ilwisapp.htp"
 #include "Headers\Err\Ilwisapp.err"
 #include "Headers\Hs\map.hs"
@@ -83,6 +48,76 @@ IlwisObjectPtr * createMapClassify(const FileName& fn, IlwisObjectPtr& ptr, cons
 		return (IlwisObjectPtr *)MapClassify::create(fn, (MapPtr &)ptr, sExpr);
 	else
 		return (IlwisObjectPtr *)new MapClassify(fn, (MapPtr &)ptr);
+}
+
+String wpsmetadataMapClassify() {
+	WPSMetaData metadata("MapClassify");
+	metadata.AddTitle("MapClassify");
+	metadata.AddAbstract("The Classify operation performs a multi-spectral image classification according to training pixels in a sample set.");
+	metadata.AddKeyword("spatial");
+	metadata.AddKeyword("Classification");
+	metadata.AddKeyword("Raster");
+
+	WPSParameter *parm1 = new WPSParameter("1","Sample set name", WPSParameter::pmtSAMPLESET);
+	parm1->AddAbstract("Input sample set which contains the training pixels");
+
+	WPSParameter *parm2 = new WPSParameter("2","Classification method", WPSParameter::pmtENUM);
+	parm2->AddAbstract("Name of the classification method, This maybe Box, MinDist,MinMahaDist,MaxLikelyHood,PriorProbablity. Subsequent parameters are depdent on the method");
+
+	WPSParameterGroup *exclList = new WPSParameterGroup();
+
+	WPSParameter *parm3 = new WPSParameter("0","Threshold", WPSParameter::pmtREAL);
+	parm3->AddAbstract("Measure to decide whether the calculated spectral distance towards a class is small enough to actually classify the pixel as that class");
+	parm3->setOptional(true);
+
+	WPSParameter *parm4 = new WPSParameter("0","Factor", WPSParameter::pmtREAL);
+	parm4->AddAbstract("Obligatory parameter for the Box classifier which allows you to widen (factor > 1) the boxes that are 'drawn' around class means");
+	parm4->setOptional(true);
+
+	WPSParameterGroup *grp = new WPSParameterGroup("PriorPropabilities",2,"PriorPropabilities");
+
+	WPSParameter *parm7 = new WPSParameter("0","Threshold", WPSParameter::pmtREAL);
+	parm7->AddAbstract("Measure to decide whether the calculated spectral distance towards a class is small enough to actually classify the pixel as that class");
+	parm7->setOptional(true);
+
+	WPSParameter *parm5 = new WPSParameter("1","Table Name", WPSParameter::pmtTABLE);
+	parm5->AddAbstract("Prior Probabilities classifier: the parameter which specifies the table that contains the column with the prior probability values");
+	parm5->setOptional(true);
+
+	WPSParameter *parm6 = new WPSParameter("2","Column Name", WPSParameter::pmtCOLUMN);
+	parm6->AddAbstract("for the Prior Probabilities classifier: the parameter which specifies the column name that contains prior probability values");
+	parm6->setOptional(true);
+
+	grp->addParameter(parm7);
+	grp->addParameter(parm5);
+	grp->addParameter(parm6);
+
+	exclList->addParameter(parm3);
+	exclList->addParameter(parm4);
+	exclList->addParameter(grp);
+
+	metadata.AddParameter(parm1);
+	metadata.AddParameter(parm2);
+	metadata.AddParameter(exclList);
+	WPSParameter *parmout = new WPSParameter("Result","Output Map",WPSParameter::pmtRASMAP,false);
+	parmout->AddTitle("reference Outputmap and supporting data objects");
+	metadata.AddParameter(parmout);
+	
+
+	return metadata.toString();
+}
+
+ApplicationMetadata metadataMapClassify(ApplicationQueryData *query) {
+	ApplicationMetadata md;
+	if ( query->queryType == "WPSMETADATA" || query->queryType == "") {
+		md.wpsxml = wpsmetadataMapClassify();
+	}
+	if ( query->queryType == "OUTPUTTYPE" || query->queryType == "")
+		md.returnType = IlwisObject::iotRASMAP;
+	if ( query->queryType == "EXPERSSION" || query->queryType == "")
+		md.skeletonExpression =  MapClassify::sSyntax();
+
+	return md;
 }
 
 const char* MapClassify::sSyntax() {

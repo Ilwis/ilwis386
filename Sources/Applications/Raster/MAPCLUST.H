@@ -72,6 +72,7 @@ inline HistBandsRec undef(const HistBandsRec&)
 { HistBandsRec x; return x; }
 
 IlwisObjectPtr * createMapCluster(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
+ApplicationMetadata metadataMapCluster(ApplicationQueryData *query);
 
 class DATEXPORT MapCluster: public MapFromMapList
 {

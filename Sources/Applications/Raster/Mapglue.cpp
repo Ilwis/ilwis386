@@ -34,164 +34,14 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/* $Log: /ILWIS 3.0/RasterApplication/Mapglue.cpp $
- * 
- * 26    20-05-05 12:55 Retsios
- * [bug=6466] The georeference of an input map should be compared to the
- * georeference of the output to decide whether it should be resampled or
- * not (otherwise the first map that uses grf0 is not resampled to the
- * output georeference, which makes the glue result incorrect).
- * 
- * 25    11-09-02 16:48 Willem
- * - MaxSize was calculated wrong
- * - Gluing thematic maps caused loss of classes when the number of
- * classes grew above 255
- * 
- * 24    4-12-01 18:28 Koolhoven
- * Jan:
- * corrected the check on fResamplingNeeded for the case a user supplies
- * another georef, especially equal to one of the georefs of the maps to
- * be glued.
- * Now the errormessage in the mapresample constructor
- * SMAPMsgMapGeoRefEqual_SS is now prevented in such cases
- * 
- * 24    30-11-01 14:51 Hendrikse
- * corrected the check on fResamplingNeeded for the case a user supplies
- * another georef, especially equal to one of the georefs of the maps to
- * be glued.
- * Now the errormessage in the mapresample constructor
- * SMAPMsgMapGeoRefEqual_SS is now prevented in such cases
- * 
- * 23    15-08-01 18:31 Koolhoven
- * added option to specify a GeoRef for MapGlue
- * 
- * 22    15-03-01 18:53 Hendrikse
- * Merging of sort domains is done first and then glue with thes produces
- * alwys dom Id except if all are dom UniqId or all are dom Class 
- * 
- * 21    20-02-01 20:11 Hendrikse
- * use now sNameQuoted in sExpression()
- * removed superfluous MergeDomainSorts at start of fFreezing(), because
- * fGlueRasterMap() calls later all the various Merge combinations
- * 
- * 20    13-02-01 18:53 Hendrikse
- * fNewGeoRef is now set on True on the basis of different georefs OR
- * equal georefs but different coordsystems (e.g. FalseEasting- or
- * Datumshift etc)
- * 
- * 19    30-01-01 14:05 Hendrikse
- * added bool fClassAndUniqId to produce dom identifier as output domain
- * 
- * 18    26-01-01 18:17 Hendrikse
- * added check on fAllMapsHaveAttrTable before gluing attr tables at the
- * end of fFreezinf()
- * 
- * 17    10-01-01 18:17 Hendrikse
- * improved layout of sourcecode in GlueAttribTable
- * 
- * 16    8-01-01 18:56 Hendrikse
- * improved spelling of enum DomainCombinations  items
- * 
- * 15    19-12-00 18:37 Hendrikse
- * implemented improved function names.
- * debugged the use od aiRecode in case of Uniqued's
- * Inserted domaincheck and setting fAllUniqueId in 'read'-constructor
- * iEndLastID is now passed by reference
- * 
- * 14    27-11-00 11:24 Koolhoven
- * readability measures: removed "== true" and replaced "== false" by "!"
- * 
- * 13    13-11-00 10:55 Hendrikse
- * correcte check bool fNewGeoRef = false; in fFreezing (maps 2,3,4 ...
- * where not resampled if map0 and map1 had same georef.
- * Improved naming of maps map_i, map_j   i.st.o. map1, map2 
- * 
- * 12    11-10-00 2:39p Martin
- * forgot to set one flag, would work with all uniqueid's but otherwis
- * would crash i guess
- * 
- * 11    26-09-00 12:12p Martin
- * changes to make domainuniqueid work. some performance enhancements by
- * calling DetermineOutputDomain not in the //constructor// fFreezing.
- * 
- * 10    24-07-00 2:18p Martin
- * determine domains before the calculation starts
- * 
- * 9     8-02-00 15:23 Wind
- * TableGlue (in PointMapGlue) was not aware of long file names
- * 
- * 8     14-01-00 17:19 Koolhoven
- * Post reread Catalog as thread message
- * 
- * 7     10-12-99 13:10 Wind
- * made aiRecode zero based
- * 
- * 6     30-11-99 12:21 Wind
- * added local copy of Representation to prevent 'inline deletion' of
- * representation object
- * 
- * 5     9-09-99 2:40p Martin
- * ported 2.22 stuff
- * 
- * 4     9/08/99 12:58p Wind
- * changed constructor calls FileName(fn, sExt, true) to FileName(fn,
- * sExt)
- * or changed FileName(fn, sExt, false) to FileName(fn.sFullNameQuoted(),
- * seExt, false)
- * to ensure that proper constructor is called
- * 
- * 3     9/08/99 8:57a Wind
- * changed sName() to sNameQuoted() in sExpression() to support long file
- * names
- * 
- * 2     3/11/99 12:16p Martin
- * Added support for Case insesitive 
-// Revision 1.14  1998/10/07 16:23:12  Wim
-// #include constant.h to knwo of ILW_READCATALOG
-//
-// Revision 1.13  1998-10-07 17:14:57+01  Wim
-// At the end of fFreezing call PostMessage with ILW_READCATALOG force to ensure the
-// removal of temporary stuff in the catalog.
-//
-// Revision 1.12  1998-09-16 18:24:31+01  Wim
-// 22beta2
-//
-// Revision 1.11  1997/09/01 14:25:58  martin
-// Combinations of Color x Picture are not allowed and now catched at an early stage
-//
-// Revision 1.10  1997/08/27 15:14:23  martin
-// The replace flag was not written in the ODF file
-//
-// Revision 1.9  1997/08/26 10:14:49  martin
-// Again added a check for the sizes of the georefs
-//
-// Revision 1.8  1997/08/22 15:51:33  Wim
-// Added special case for glueing two images
-//
-// Revision 1.7  1997-08-19 11:17:56+02  martin
-// Cahnged one check to many for the "undefs" of picture domain
-//
-// Revision 1.4  1997/08/06 17:36:26  Wim
-// Corrected parsing of parameters
-//
-// Revision 1.3  1997-08-06 17:48:52+02  Wim
-// Only make new georeference when needed
-// Put fErase flag on for temporary maps and georeference.
-//
-// Revision 1.2  1997-07-30 16:42:20+02  Wim
-// Added sDomName option to create a domain instead on an internal domain
-//
-/* MapGlue
-   Copyright Ilwis System Development ITC
-   march 1997, by Jelle Wind, Jan Hendrikse
-	Last change:  WK    7 Oct 98    5:22 pm
-*/
+
 #include "Applications\Raster\Mapglue.h"
 #include "Engine\SpatialReference\Grsub.h"
 #include "Engine\Base\DataObjects\valrange.h"
 #include "Engine\Domain\dmsort.h"
 #include "Engine\Domain\Dmvalue.h"
 #include "Engine\Domain\DomainUniqueID.h"
+#include "Engine\Base\DataObjects\WPSMetaData.h"
 #include "Engine\Domain\dmpict.h"
 #include "Headers\Htp\Ilwisapp.htp"
 #include "Headers\Err\Ilwisapp.err"
@@ -205,6 +55,58 @@ IlwisObjectPtr * createMapGlue(const FileName& fn, IlwisObjectPtr& ptr, const St
 	else
 		return (IlwisObjectPtr *)new MapGlue(fn, (MapPtr &)ptr);
 }
+
+String wpsmetadataMapGlue() {
+	WPSMetaData metadata("MapGlue");
+	metadata.AddTitle("MapGlue");
+	metadata.AddAbstract("merges two or more georeferenced input raster maps into one output raster map");
+	metadata.AddKeyword("spatial");
+	metadata.AddKeyword("raster");
+	metadata.AddKeyword("mosaicing");
+
+	WPSParameter *parm1 = new WPSParameter("0","Georeference",WPSParameter::pmtGEOREF);
+	parm1->AddAbstract("optional parameter to specify the name of an existing georeference that you wish to use as the georeference for the output raster map");
+	parm1->setOptional(true);
+
+	WPSParameter *parm2 = new WPSParameter("1","Input Map 1",WPSParameter::pmtRASMAP);
+	parm2->setRange(RangeInt(2,100));
+
+	WPSParameterGroup *grp1 = new WPSParameterGroup("Addtional",2,"Additional");
+	grp1->setOptional(true);
+	WPSParameter *parm3 = new WPSParameter("0","Create new merged domain",WPSParameter::pmtDOMAIN);
+	parm3->setOptional(true);
+	parm3->AddAbstract("optional parameter in case of merging Class or ID maps that do not have the same domain");
+	WPSParameter *parm4 = new WPSParameter("1","Overlap handling",WPSParameter::pmtBOOL);
+	parm4->setOptional(true);
+	parm4->AddAbstract("When this parameter is not used, then the values, class names, IDs or colors of the first input map will be used for overlapping pixels");
+	grp1->addParameter(parm3);
+	grp1->addParameter(parm4);
+
+
+	metadata.AddParameter(parm1);
+	metadata.AddParameter(parm2);
+	metadata.AddParameter(grp1);
+	WPSParameter *parmout = new WPSParameter("Result","Output Map", WPSParameter::pmtRASMAP, false);
+	parmout->AddAbstract("Reference Outputmap and supporting data objects");
+	metadata.AddParameter(parmout);
+	
+
+	return metadata.toString();
+}
+
+ApplicationMetadata metadataMapGlue(ApplicationQueryData *query) {
+	ApplicationMetadata md;
+	if ( query->queryType == "WPSMETADATA" || query->queryType == "") {
+		md.wpsxml = wpsmetadataMapGlue();
+	}
+	if ( query->queryType == "OUTPUTTYPE" || query->queryType == "")
+		md.returnType = IlwisObject::iotRASMAP;
+	if ( query->queryType == "EXPERSSION" || query->queryType == "")
+		md.skeletonExpression =  MapGlue::sSyntax();
+
+	return md;
+}
+
 
 const char* MapGlue::sSyntax() {
   return "MapGlue(map1,map2, ...)\n"

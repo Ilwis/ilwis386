@@ -58,6 +58,7 @@ inline tcand undef(tcand)
 }
 
 IlwisObjectPtr * createMapInterpolContour(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
+ApplicationMetadata metadataMapInterpolContour(ApplicationQueryData *query);
 
 class DATEXPORT MapInterpolContour: public MapFromMap
 {

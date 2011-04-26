@@ -34,46 +34,13 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/* $Log: /ILWIS 3.0/RasterApplication/Mapglue.h $
- * 
- * 7     15-08-01 18:31 Koolhoven
- * added option to specify a GeoRef for MapGlue
- * 
- * 6     8-01-01 18:55 Hendrikse
- * improved spelling of enum DomainCombinations
- * 
- * 5     19-12-00 18:32 Hendrikse
- * iEndLastID is now called by reference
- * improved names of functions
- * 
- * 4     26-09-00 12:12p Martin
- * changes to make domainuniqueid work. some performance enhancements by
- * calling DetermineOutputDomain not in the //constructor// fFreezing.
- * 
- * 3     25/07/00 10:19 Willem
- * Comments
- * 
- * 2     25-07-00 10:07a Martin
- * DetermineOutputDomain has an extra parm to prevent a full domainmerge when it
- * is not needed
- */
-// Revision 1.3  1998/09/16 17:24:31  Wim
-// 22beta2
-//
-// Revision 1.2  1997/07/30 14:42:49  Wim
-// Added sNewDom option to create a domain instead of an internal domain
-//
-/* MapGlue
-   Copyright Ilwis System Development ITC
-   march 1997, by Jelle Wind
-   Last change:  WK    6 Aug 98    2:20 pm
-*/
 
 #ifndef ILWMAPGLUE_H
 #define ILWMAPGLUE_H
 #include "Engine\Applications\MAPFMAP.H"
 
 IlwisObjectPtr * createMapGlue(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void*> parms=vector<void *>());
+ApplicationMetadata metadataMapGlue(ApplicationQueryData *query);
 
 class DATEXPORT MapGlue: public MapFromMap
 {

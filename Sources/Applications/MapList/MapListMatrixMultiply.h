@@ -49,15 +49,14 @@
 #include "Engine\Applications\MapListVirtual.h"
 #endif
 
-#ifndef ILWMAPLIST_H
-#include "Engine\Map\Raster\MapList\maplist.h"
-#endif
+#include "Engine\Base\DataObjects\WPSMetaData.h"
 
 #ifndef ILWMATRIXOBJ_H
 #include "Engine\Matrix\Matrxobj.h"
 #endif
 
 IlwisObjectPtr * createMapListMatrixMultiply(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms );
+ApplicationMetadata metadataMapListMatrixMultiply(ApplicationQueryData *query);
 
 class MapListMatrixMultiply : public MapListVirtual
 {

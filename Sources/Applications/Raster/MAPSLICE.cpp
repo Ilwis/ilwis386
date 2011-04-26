@@ -56,37 +56,41 @@ IlwisObjectPtr * createMapSlicing(const FileName& fn, IlwisObjectPtr& ptr, const
 		return (IlwisObjectPtr *)new MapSlicing(fn, (MapPtr &)ptr);
 }
 
-String wpsmetadataSlicing() {
+String wpsmetadataMapSlicing() {
 	WPSMetaData metadata("MapSlicing");
 	metadata.AddTitle("Slicing");
 	metadata.AddAbstract("Slice classification on raster map");
 	metadata.AddKeyword("spatial");
 	metadata.AddKeyword("raster");
 	metadata.AddKeyword("Classification");
-	WPSParameter parm1("inputmap","string");
-	parm1.AddTitle("Filename Inputmap");
-	WPSParameter parm2("domain","string");
-	parm2.AddTitle("Filename group domain");
+
+	WPSParameter *parm1 = new WPSParameter("1","Input Map", WPSParameter::pmtRASMAP);
+	parm1->AddAbstract("Filename Inputmap");
+
+	WPSParameter *parm2 = new WPSParameter("2","Input domain", WPSParameter::pmtDOMAIN);
+	parm2->AddAbstract("is the name of your domain Group which contains the boundaries of the values and the group names for the output map.");
+
 	metadata.AddParameter(parm1);
 	metadata.AddParameter(parm2);
-	WPSParameter parmout("outputmap","string",false);
-	parmout.AddTitle("Filename Outputmap");
+	WPSParameter *parmout = new WPSParameter("outputmap","Output Map",WPSParameter::pmtRASMAP, false);
+	parmout->AddAbstract("Filename Outputmap");
 	metadata.AddParameter(parmout);
 
 	return metadata.toString();
 }
 
-ApplicationMetadata metadataSlicing(ApplicationQueryData *query) {
+ApplicationMetadata metadataMapSlicing(ApplicationQueryData *query) {
 	ApplicationMetadata md;
-	if ( query->queryType == "WPSMETADATA") {
-		md.wpsxml = wpsmetadataSlicing();
+	if ( query->queryType == "WPSMETADATA" || query->queryType == "") {
+		md.wpsxml = wpsmetadataMapSlicing();
 	}
-	if ( query->queryType == "OUTPUTTYPE")
+	if ( query->queryType == "OUTPUTTYPE" || query->queryType == "")
 		md.returnType = IlwisObject::iotRASMAP;
+	if ( query->queryType == "EXPERSSION" || query->queryType == "")
+		md.skeletonExpression =  MapSlicing::sSyntax();
 
 	return md;
 }
-
 
 const char * MapSlicing::sSyntax()
  { return "MapSlicing(map,groupdomain)"; }

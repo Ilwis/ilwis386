@@ -48,6 +48,7 @@
 class DATEXPORT AggregateFunction;
 
 IlwisObjectPtr * createMapAggregate(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
+ApplicationMetadata metadataMapAggregate(ApplicationQueryData *query);
 
 class DATEXPORT MapAggregate: public MapFromMap
 {

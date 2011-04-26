@@ -69,26 +69,29 @@ String wpsmetadataMapAttribute() {
 	metadata.AddKeyword("spatial");
 	metadata.AddKeyword("raster");
 	metadata.AddKeyword("Attribute");
-	WPSParameter parm1("inputmap","string");
-	parm1.AddTitle("Filename Inputmap");
-	WPSParameter parm2("column","string");
-	parm2.AddTitle("Attribute Column to be used");
+	WPSParameter *parm1 = new WPSParameter("1","Input Map",WPSParameter::pmtRASMAP);
+	parm1->AddAbstract("Input raster map with associated attribute table");
+	WPSParameter *parm2 = new WPSParameter("2","Column", WPSParameter::pmtCOLUMN);
+	parm2->AddAbstract("Name of the Attribute Column to be used");
 	metadata.AddParameter(parm1);
 	metadata.AddParameter(parm2);
-	WPSParameter parmout("outputmap","string",false);
-	parmout.AddTitle("Filename Outputmap");
+	WPSParameter *parmout = new WPSParameter("Result","Output Map", WPSParameter::pmtRASMAP, false);
+	parmout->AddAbstract("reference Outputmap and supporting data objects");
 	metadata.AddParameter(parmout);
+	
 
 	return metadata.toString();
 }
 
 ApplicationMetadata metadataMapAtrribute(ApplicationQueryData *query) {
 	ApplicationMetadata md;
-	if ( query->queryType == "WPSMETADATA") {
+	if ( query->queryType == "WPSMETADATA" || query->queryType == "") {
 		md.wpsxml = wpsmetadataMapAttribute();
 	}
-	if ( query->queryType == "OUTPUTTYPE")
+	if ( query->queryType == "OUTPUTTYPE" || query->queryType == "")
 		md.returnType = IlwisObject::iotRASMAP;
+	if ( query->queryType == "EXPERSSION" || query->queryType == "")
+		md.skeletonExpression =  MapAttribute::sSyntax();
 
 	return md;
 }

@@ -42,6 +42,7 @@
 
 #include "Applications\Raster\MAPCOLSP.H"
 #include "Engine\Base\DataObjects\Color.h"
+#include "Engine\Base\DataObjects\WPSMetaData.h"
 #include "Engine\Base\DataObjects\valrange.h"
 #include "Headers\Htp\Ilwisapp.htp"
 #include "Headers\Err\Ilwisapp.err"
@@ -52,6 +53,40 @@ IlwisObjectPtr * createMapColorSep(const FileName& fn, IlwisObjectPtr& ptr, cons
 		return (IlwisObjectPtr *)MapColorSep::create(fn, (MapPtr &)ptr, sExpr);
 	else
 		return (IlwisObjectPtr *)new MapColorSep(fn, (MapPtr &)ptr);
+}
+
+String wpsmetadataMapColorSep() {
+	WPSMetaData metadata("MapColorSep");
+	metadata.AddTitle("MapColorSep");
+	metadata.AddAbstract("allows you to extract different 'bands' for instance from a scanned or digital color photo as if using color filters when taking the picture");
+	metadata.AddKeyword("spatial");
+	metadata.AddKeyword("raster");
+	metadata.AddKeyword("color");
+	WPSParameter *parm1 = new WPSParameter("1","Input Map",WPSParameter::pmtRASMAP);
+	parm1->AddAbstract("Input raster map.The input maps must have a Picture domain or the Color domain");
+	WPSParameter *parm2 = new WPSParameter("2","Extracted Color", WPSParameter::pmtSTRING);
+	parm2->AddAbstract("The color you want to extract");
+	metadata.AddParameter(parm1);
+	metadata.AddParameter(parm2);
+	WPSParameter *parmout = new WPSParameter("Result","Output Map", WPSParameter::pmtRASMAP, false);
+	parmout->AddAbstract("reference Outputmap and supporting data objects");
+	metadata.AddParameter(parmout);
+	
+
+	return metadata.toString();
+}
+
+ApplicationMetadata metadataMapColorSep(ApplicationQueryData *query) {
+	ApplicationMetadata md;
+	if ( query->queryType == "WPSMETADATA" || query->queryType == "") {
+		md.wpsxml = wpsmetadataMapColorSep();
+	}
+	if ( query->queryType == "OUTPUTTYPE" || query->queryType == "")
+		md.returnType = IlwisObject::iotRASMAP;
+	if ( query->queryType == "EXPERSSION" || query->queryType == "")
+		md.skeletonExpression =  MapColorSep::sSyntax();
+
+	return md;
 }
 
 #define MAXAREAS 1L

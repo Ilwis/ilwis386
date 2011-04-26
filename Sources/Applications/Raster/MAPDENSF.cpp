@@ -46,6 +46,7 @@
 #include "Engine\Base\DataObjects\valrange.h"
 #include "Engine\Domain\Dmvalue.h"
 #include "Engine\SpatialReference\Grfactor.h"
+#include "Engine\Base\DataObjects\WPSMetaData.h"
 #include "Engine\Base\objdepen.h"
 #include "Headers\Htp\Ilwisapp.htp"
 #include "Headers\Err\Ilwisapp.err"
@@ -56,6 +57,43 @@ IlwisObjectPtr * createMapDensify(const FileName& fn, IlwisObjectPtr& ptr, const
 		return (IlwisObjectPtr *)MapDensify::create(fn, (MapPtr &)ptr, sExpr);
 	else
 		return (IlwisObjectPtr *)new MapDensify(fn, (MapPtr &)ptr);
+}
+
+String wpsmetadataMapDensify() {
+	WPSMetaData metadata("MapDensify");
+	metadata.AddTitle("MapDensify");
+	metadata.AddAbstract("allows you to reduce the pixel size of a raster map, i.e. the number of rows and columns is increased in the output map");
+	metadata.AddKeyword("spatial");
+	metadata.AddKeyword("raster");
+	metadata.AddKeyword("georeference");
+	WPSParameter *parm1 = new WPSParameter("1","Input Map",WPSParameter::pmtRASMAP);
+	parm1->AddAbstract("Input raster map with associated attribute table");
+	WPSParameter *parm2 = new WPSParameter("2","Enlargement Factor", WPSParameter::pmtREAL);
+	parm2->AddAbstract("enlargement factor (real value > 1)");
+	WPSParameter *parm3= new WPSParameter("2","Interpolation method", WPSParameter::pmtENUM);
+	parm3->AddAbstract("Method of how pixel values are calculated");
+	metadata.AddParameter(parm1);
+	metadata.AddParameter(parm2);
+	metadata.AddParameter(parm3);
+	WPSParameter *parmout = new WPSParameter("Result","Output Map", WPSParameter::pmtRASMAP, false);
+	parmout->AddAbstract("reference Outputmap and supporting data objects");
+	metadata.AddParameter(parmout);
+	
+
+	return metadata.toString();
+}
+
+ApplicationMetadata metadataMapDensify(ApplicationQueryData *query) {
+	ApplicationMetadata md;
+	if ( query->queryType == "WPSMETADATA" || query->queryType == "") {
+		md.wpsxml = wpsmetadataMapDensify();
+	}
+	if ( query->queryType == "OUTPUTTYPE" || query->queryType == "")
+		md.returnType = IlwisObject::iotRASMAP;
+	if ( query->queryType == "EXPERSSION" || query->queryType == "")
+		md.skeletonExpression =  MapDensify::sSyntax();
+
+	return md;
 }
 
 #define rHalf 0.4999999999

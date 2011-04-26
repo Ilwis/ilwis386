@@ -34,56 +34,12 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/* $Log: /ILWIS 3.0/RasterApplication/MAPITPCN.cpp $
- * 
- * 8     10-11-00 20:45 Hendrikse
- * removed redundant filTemp->Close(); and DeleteFile statements
- * It's now done by the File class
- * 
- * 7     9-11-00 22:09 Hendrikse
- * implemented vrDefault 
- * interchanged order of calls DeleteFile and delete pointer to file
- * 
- * 6     8-11-00 17:16 Hendrikse
- * corrected syntax text
- * added mp->Calc(); at start of fFreezing to make rasterazide segments
- * added check on existence and deletion of filtemp
- * 
- * 5     1-03-00 11:45 Wind
- * if it depends on a segment map the dependency of the rasterized segment
- * map is removed
- * 
- * 4     6-12-99 10:55 Wind
- * use a name for intermediate rasterized segment mapthat doesn't conflict
- * with output name
- * 
- * 3     9/08/99 8:57a Wind
- * changed sName() to sNameQuoted() in sExpression() to support long file
- * names
- * 
- * 2     28-04-99 13:07 Koolhoven
- * work with short* to stay compatible with IntBuf
-// Revision 1.5  1998/09/16 17:24:31  Wim
-// 22beta2
-//
-// Revision 1.4  1997/09/16 09:09:33  martin
-// Changed the way the temporary file ic.tmp is made.
-//
-// Revision 1.3  1997/08/21 19:17:02  Wim
-// Make current file in create() function to prevent that SegRas is using the same name
-//
-// Revision 1.2  1997-08-15 15:24:06+02  Wim
-// removed obscure code in create() functions which caused problems.
-//
-/* MapInterpolContour
-   Copyright Ilwis System Development ITC
-   august 1995, by Jelle Wind
-	Last change:  MS   15 Sep 97    9:52 am
-*/
+
 #define MAPITPCN_C
 
 #include "Applications\Raster\MAPITPCN.H"
 #include "Applications\Raster\SEGRAS.H"
+#include "Engine\Base\DataObjects\WPSMetaData.h"
 #include "Headers\Htp\Ilwisapp.htp"
 #include "Headers\Err\Ilwisapp.err"
 #include "Headers\Hs\map.hs"
@@ -94,6 +50,45 @@ IlwisObjectPtr * createMapInterpolContour(const FileName& fn, IlwisObjectPtr& pt
 	else
 		return (IlwisObjectPtr *)new MapInterpolContour(fn, (MapPtr &)ptr);
 }
+
+String wpsmetadataMapInterpolContour() {
+	WPSMetaData metadata("MapInterpolContour");
+	metadata.AddTitle("MapInterpolContour");
+	metadata.AddAbstract("an operation which first rasterizes contour lines of a segment map with a value domain, and then calculates values for pixels that are not covered by segments by means of a linear interpolation");
+	metadata.AddKeyword("spatial");
+	metadata.AddKeyword("raster");
+	metadata.AddKeyword("linestring");
+	metadata.AddKeyword("interpolation");
+
+	WPSParameter *parm1 = new WPSParameter("1","Input Segment map",WPSParameter::pmtSEGMENTMAP);
+	parm1->AddAbstract("input segment map (value domain).");
+	WPSParameter *parm2 = new WPSParameter("2","Georeference", WPSParameter::pmtINTEGER);
+	parm2->AddAbstract("georeference that should be used for the output raster map");
+	parm2->setOptional(true);
+
+	metadata.AddParameter(parm1);
+	metadata.AddParameter(parm2);
+	WPSParameter *parmout = new WPSParameter("Result","Output Map", WPSParameter::pmtRASMAP, false);
+	parmout->AddAbstract("Reference Outputmap and supporting data objects");
+	metadata.AddParameter(parmout);
+	
+
+	return metadata.toString();
+}
+
+ApplicationMetadata metadataMapInterpolContour(ApplicationQueryData *query) {
+	ApplicationMetadata md;
+	if ( query->queryType == "WPSMETADATA" || query->queryType == "") {
+		md.wpsxml = wpsmetadataMapInterpolContour();
+	}
+	if ( query->queryType == "OUTPUTTYPE" || query->queryType == "")
+		md.returnType = IlwisObject::iotRASMAP;
+	if ( query->queryType == "EXPERSSION" || query->queryType == "")
+		md.skeletonExpression =  MapInterpolContour::sSyntax();
+
+	return md;
+}
+
 
 #define HIVAL 16000
 

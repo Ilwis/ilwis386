@@ -34,41 +34,12 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/*// $Log: /ILWIS 3.0/RasterApplication/MAPHECK.cpp $
- * 
- * 5     5/01/00 14:43 Willem
- * Increased the size of the pClassTab and HistRGB arrays to the really
- * necessary value 
- * 
- * 4     30-11-99 12:21 Wind
- * added local copy of Representation to prevent 'inline deletion' of
- * representation object
- * 
- * 3     9/08/99 11:51a Wind
- * comment problem
- * 
- * 2     9/08/99 8:57a Wind
- * changed sName() to sNameQuoted() in sExpression() to support long file
- * names
-*/
-// Revision 1.4  1998/09/16 17:24:39  Wim
-// 22beta2
-//
-// Revision 1.3  1997/08/15 18:43:18  Wim
-// Only 2 parameters allowed for MapHeckbert()
-//
-// Revision 1.2  1997-08-05 17:47:15+02  Wim
-// sSyntax() corrected
-//
-/* MapHeckbert
-   Copyright Ilwis System Development ITC
-   july 1995, by Wim Koolhoven
-	Last change:  WK   15 Aug 97    8:43 pm
-*/
+
 #define MAPHECK_C
 #include "Applications\Raster\MAPHECK.H"
 #include "Engine\Representation\Rprclass.h"
 #include "Engine\Base\Algorithm\Qsort.h"
+#include "Engine\Base\DataObjects\WPSMetaData.h"
 #include "Headers\Htp\Ilwisapp.htp"
 #include "Headers\Err\Ilwisapp.err"
 #include "Headers\Hs\map.hs"
@@ -78,6 +49,43 @@ IlwisObjectPtr * createMapHeckbert(const FileName& fn, IlwisObjectPtr& ptr, cons
 		return (IlwisObjectPtr *)MapHeckbert::create(fn, (MapPtr &)ptr, sExpr);
 	else
 		return (IlwisObjectPtr *)new MapHeckbert(fn, (MapPtr &)ptr);
+}
+
+String wpsmetadataMapHeckbert() {
+	WPSMetaData metadata("MapHeckbert");
+	metadata.AddTitle("MapHeckbert");
+	metadata.AddAbstract("A color composite is a combination of three raster bands. One band is displayed in shades of red, one in shades of green and one in shades of blue. Putting three bands together in one color composite map can give a better visual impression of the reality on the ground");
+	metadata.AddKeyword("spatial");
+	metadata.AddKeyword("raster");
+	metadata.AddKeyword("color composite");
+
+	WPSParameter *parm1 = new WPSParameter("1","Input Map list",WPSParameter::pmtMAPLIST);
+	parm1->AddAbstract("Input map list");
+	WPSParameter *parm2 = new WPSParameter("2","Number of colors", WPSParameter::pmtINTEGER);
+	parm2->AddAbstract("For Dynamic color composites: the number of colors present in the output map (2-255)");
+	
+
+	metadata.AddParameter(parm1);
+	metadata.AddParameter(parm2);
+	WPSParameter *parmout = new WPSParameter("Result","Output Map", WPSParameter::pmtRASMAP, false);
+	parmout->AddAbstract("Reference Outputmap and supporting data objects");
+	metadata.AddParameter(parmout);
+	
+
+	return metadata.toString();
+}
+
+ApplicationMetadata metadataMapHeckbert(ApplicationQueryData *query) {
+	ApplicationMetadata md;
+	if ( query->queryType == "WPSMETADATA" || query->queryType == "") {
+		md.wpsxml = wpsmetadataMapHeckbert();
+	}
+	if ( query->queryType == "OUTPUTTYPE" || query->queryType == "")
+		md.returnType = IlwisObject::iotRASMAP;
+	if ( query->queryType == "EXPERSSION" || query->queryType == "")
+		md.skeletonExpression =  MapHeckbert::sSyntax();
+
+	return md;
 }
 
 const char* MapHeckbert::sSyntax() { return "MapHeckbert(maplist,colors)"; }

@@ -45,6 +45,7 @@
 #include "Engine\Applications\MAPFMAP.H"
 
 IlwisObjectPtr * createMapColorSep(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
+ApplicationMetadata metadataMapColorSep(ApplicationQueryData *query);
 
 class DATEXPORT MapColorSep: public MapFromMap
 {

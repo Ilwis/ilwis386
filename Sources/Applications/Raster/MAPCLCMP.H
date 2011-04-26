@@ -46,6 +46,7 @@
 #include "Engine\Table\TBLHIST.H"
 
 IlwisObjectPtr * createMapColorComp(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
+ApplicationMetadata metadataMapColorComp(ApplicationQueryData *query);
 
 
 class DATEXPORT MapColorComp: public MapFromMapList

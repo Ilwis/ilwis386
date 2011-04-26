@@ -47,6 +47,7 @@
 #include "Engine\Function\FILTER.H"
 
 IlwisObjectPtr * createMapFilter(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
+ApplicationMetadata metadataMapFilter(ApplicationQueryData *query);
 
 class DATEXPORT MapFilter: public MapFromMap
 {

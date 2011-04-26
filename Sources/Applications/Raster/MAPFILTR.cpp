@@ -34,50 +34,12 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/*
-// $Log: /ILWIS 3.0/RasterApplication/MAPFILTR.cpp $
- * 
- * 8     29-02-00 17:32 Wind
- * binary filter bug
- * 
- * 7     28-02-00 16:33 Wind
- * bug in 'usera' and binary filters
- * 
- * 6     22-12-99 10:28 Wind
- * changed fUseRaw use
- * 
- * 5     9/24/99 10:39a Wind
- * replaced calls to static funcs ObjectInfo::ReadElement and WriteElement
- * by calls to member functions
- * 
- * 4     9-09-99 9:46a Martin
- * Added 2.22 stuff
- * 
- * 3     9/08/99 11:51a Wind
- * comment problem
- * 
- * 2     9/08/99 8:54a Wind
- * changed sName() to sNameQuoted() in sExpression() tot suport quoted
- * file names
-*/
-// Revision 1.5  1998/09/16 17:24:31  Wim
-// 22beta2
-//
-// Revision 1.4  1997/09/25 17:20:18  Wim
-// Changed fUseRaw to true in init() for fBinaryFilter and fAdd1ToRaw to true if not bit
-//
-// Revision 1.3  1997-09-23 10:39:10+02  Wim
-// Check on invalid default domain in constructor of MapFilter
-//
-/* MapFilter
-   Copyright Ilwis System Development ITC
-   july 1995, by Jelle Wind
-	Last change:  WK   25 Sep 97    7:17 pm
-*/
+
 #include "Applications\Raster\MAPFILTR.H"
 #include "Engine\Domain\Dmvalue.h"
 #include "Engine\Base\DataObjects\valrange.h"
 #include "Engine\Function\FLTBIN.H"
+#include "Engine\Base\DataObjects\WPSMetaData.h"
 #include "Headers\Htp\Ilwisapp.htp"
 #include "Headers\Err\Ilwisapp.err"
 #include "Headers\Hs\map.hs"
@@ -87,6 +49,144 @@ IlwisObjectPtr * createMapFilter(const FileName& fn, IlwisObjectPtr& ptr, const 
 		return (IlwisObjectPtr *)MapFilter::create(fn, (MapPtr &)ptr, sExpr);
 	else
 		return (IlwisObjectPtr *)new MapFilter(fn, (MapPtr &)ptr);
+}
+
+String wpsmetadataMapFilter() {
+	WPSMetaData metadata("MapFilter");
+	metadata.AddTitle("MapFilter");
+	metadata.AddAbstract("each pixel value in a raster map is replaced with a new value.The new value is obtained by applying a certain function to each input pixel and its direct neighbours");
+	metadata.AddKeyword("spatial");
+	metadata.AddKeyword("raster");
+	metadata.AddKeyword("filter");
+	WPSParameter *parm1 = new WPSParameter("1","Input Map",WPSParameter::pmtRASMAP);
+	parm1->AddAbstract("Input raster map with associated attribute table");
+
+	WPSParameterGroup *excList = new WPSParameterGroup();
+
+	WPSParameter *parm2 = new WPSParameter("0","FilterName", WPSParameter::pmtENUM);
+	parm2->AddAbstract("Unique name identifying the filter");
+	excList->addParameter(parm2);
+
+	WPSParameterGroup *grp1 = new WPSParameterGroup("Filter Linear",0,"Name");
+	grp1->AddAbstract("Unique name identifying the filter expression");
+	WPSParameter *parm3 = new WPSParameter("0","Row", WPSParameter::pmtINTEGER);
+	parm3->AddAbstract("Number of rows around the central pixel");
+	WPSParameter *parm4 = new WPSParameter("0","Col", WPSParameter::pmtINTEGER);
+	parm4->AddAbstract("Number of columns around the central pixel");
+	WPSParameter *parm5 = new WPSParameter("0","Expression", WPSParameter::pmtSTRING);
+	parm5->AddAbstract("Expression identifying the operation applied on the pixels");
+	grp1->addParameter(parm3);
+	grp1->addParameter(parm4);
+	grp1->addParameter(parm5);
+
+	WPSParameterGroup *grp2 = new WPSParameterGroup("Average",0,"Name");
+	grp2->AddAbstract("Unique name identifying the filter expression");
+	parm3 = new WPSParameter("0","Row", WPSParameter::pmtINTEGER);
+	parm3->AddAbstract("Number of rows around the central pixel");
+	parm4 = new WPSParameter("0","Col", WPSParameter::pmtINTEGER);
+	parm4->AddAbstract("Number of columns around the central pixel");
+	grp2->addParameter(parm3);
+	grp2->addParameter(parm4);
+
+	WPSParameterGroup *grp3 = new WPSParameterGroup("RankOrder",0,"Name");
+	grp3->AddAbstract("Unique name identifying the filter expression");
+	parm3 = new WPSParameter("0","Row", WPSParameter::pmtINTEGER);
+	parm3->AddAbstract("Number of rows around the central pixel");
+	parm4 = new WPSParameter("0","Col", WPSParameter::pmtINTEGER);
+	parm4->AddAbstract("Number of columns around the central pixel");
+	parm5 = new WPSParameter("0","Threshold", WPSParameter::pmtREAL);
+	parm5->AddAbstract("center pixel will only be replaced with the new value if the difference between the original and new value is smaller than or equal to the threshold");
+	parm5->setOptional(true);
+	grp3->addParameter(parm3);
+	grp3->addParameter(parm4);
+	grp3->addParameter(parm5);
+
+	WPSParameterGroup *grp4 = new WPSParameterGroup("Median",0,"Name");
+	grp4->AddAbstract("Unique name identifying the filter expression");
+	parm3 = new WPSParameter("0","Row", WPSParameter::pmtINTEGER);
+	parm3->AddAbstract("Number of rows around the central pixel");
+	parm4 = new WPSParameter("0","Col", WPSParameter::pmtINTEGER);
+	parm4->AddAbstract("Number of columns around the central pixel");
+	parm5 = new WPSParameter("0","Threshold", WPSParameter::pmtREAL);
+	parm5->AddAbstract("center pixel will only be replaced with the new value if the difference between the original and new value is smaller than or equal to the threshold");
+	parm5->setOptional(true);
+	grp4->addParameter(parm3);
+	grp4->addParameter(parm4);
+	grp4->addParameter(parm5);
+
+	WPSParameterGroup *grp5 = new WPSParameterGroup("Majority",0,"Name");
+	grp5->AddAbstract("Unique name identifying the filter expression");
+	parm3 = new WPSParameter("0","Row", WPSParameter::pmtINTEGER);
+	parm3->AddAbstract("Number of rows around the central pixel");
+	parm4 = new WPSParameter("0","Col", WPSParameter::pmtINTEGER);
+	parm4->AddAbstract("Number of columns around the central pixel");
+	grp5->addParameter(parm3);
+	grp5->addParameter(parm4);
+
+	WPSParameterGroup *grp6 = new WPSParameterGroup("MajorityZero",0,"Name");
+	grp6->AddAbstract("Unique name identifying the filter expression");
+	parm3 = new WPSParameter("0","Row", WPSParameter::pmtINTEGER);
+	parm3->AddAbstract("Number of rows around the central pixel");
+	parm4 = new WPSParameter("0","Col", WPSParameter::pmtINTEGER);
+	parm4->AddAbstract("Number of columns around the central pixel");
+	grp6->addParameter(parm3);
+	grp6->addParameter(parm4);
+
+	WPSParameterGroup *grp7 = new WPSParameterGroup("UndefMajority",0,"Name");
+	grp7->AddAbstract("Unique name identifying the filter expression");
+	parm3 = new WPSParameter("0","Row", WPSParameter::pmtINTEGER);
+	parm3->AddAbstract("Number of rows around the central pixel");
+	parm4 = new WPSParameter("0","Col", WPSParameter::pmtINTEGER);
+	parm4->AddAbstract("Number of columns around the central pixel");
+	grp7->addParameter(parm3);
+	grp7->addParameter(parm4);
+
+	WPSParameterGroup *grp8 = new WPSParameterGroup("Patter",0,"Name");
+	parm5 = new WPSParameter("0","Threshold", WPSParameter::pmtREAL);
+	parm5->AddAbstract("center pixel will only be replaced with the new value if the difference between the original and new value is smaller than or equal to the threshold");
+	parm5->setOptional(true);
+	grp8->addParameter(parm5);
+
+	WPSParameterGroup *grp9 = new WPSParameterGroup("FilterStandardDev",0,"Name");
+	grp9->AddAbstract("Unique name identifying the filter expression");
+	parm3 = new WPSParameter("0","Row", WPSParameter::pmtINTEGER);
+	parm3->AddAbstract("Number of rows around the central pixel");
+	parm4 = new WPSParameter("0","Col", WPSParameter::pmtINTEGER);
+	parm4->AddAbstract("Number of columns around the central pixel");
+	grp9->addParameter(parm3);
+	grp9->addParameter(parm4);
+
+	excList->addParameter(grp1);
+	excList->addParameter(grp2);
+	excList->addParameter(grp3);
+	excList->addParameter(grp4);
+	excList->addParameter(grp5);
+	excList->addParameter(grp6);
+	excList->addParameter(grp7);
+	excList->addParameter(grp8);
+	excList->addParameter(grp9);
+
+	metadata.AddParameter(parm1);
+	metadata.AddParameter(excList);
+	WPSParameter *parmout = new WPSParameter("Result","Output Map", WPSParameter::pmtRASMAP, false);
+	parmout->AddAbstract("reference Outputmap and supporting data objects");
+	metadata.AddParameter(parmout);
+	
+
+	return metadata.toString();
+}
+
+ApplicationMetadata metadataMapFilter(ApplicationQueryData *query) {
+	ApplicationMetadata md;
+	if ( query->queryType == "WPSMETADATA" || query->queryType == "") {
+		md.wpsxml = wpsmetadataMapFilter();
+	}
+	if ( query->queryType == "OUTPUTTYPE" || query->queryType == "")
+		md.returnType = IlwisObject::iotRASMAP;
+	if ( query->queryType == "EXPERSSION" || query->queryType == "")
+		md.skeletonExpression =  MapFilter::sSyntax();
+
+	return md;
 }
 
 const char * MapFilter::sSyntax()

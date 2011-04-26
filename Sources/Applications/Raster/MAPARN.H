@@ -34,34 +34,13 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/* $Log: /ILWIS 3.0/RasterApplication/MAPARN.H $
- * 
- * 4     20-06-00 9:48 Leeuwen
- * //->/*
- * 
- * 3     20-06-00 9:48 Leeuwen
- * //->*/
- /* 
- * 2     16-06-00 14:12 Koolhoven
- * create a DomainUniqueID, specifying a domain name has no influence
- * anymore
-// Revision 1.3  1998/09/16 17:24:31  Wim
-// 22beta2
-//
-// Revision 1.2  1997/08/26 08:19:42  Wim
-// Added sNewDom member
-//
-/* MapAreaNumbering
-   Copyright Ilwis System Development ITC
-   july 1995, by Jelle Wind
-   Last change:  WK   26 Aug 97   10:18 am
-*/
 
 #ifndef ILWMAPARN_H
 #define ILWMAPARN_H
 #include "Engine\Applications\MAPFMAP.H"
 
 IlwisObjectPtr * createMapAreaNumbering(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
+ApplicationMetadata metadataMapAreaNumbering(ApplicationQueryData *query);
 
 class DATEXPORT MapAreaNumbering: public MapFromMap
 {

@@ -45,6 +45,7 @@
 #include "Engine\Applications\MAPFMAP.H"
 
 IlwisObjectPtr * createMapIterator(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
+ApplicationMetadata metadataMapIter(ApplicationQueryData *query);
 
 class CALCEXPORT Instructions;
 

@@ -68,29 +68,34 @@ String wpsmetadataMapListMatrixMultiply() {
 	metadata.AddKeyword("raster");
 	metadata.AddKeyword("Principal Components");
 	metadata.AddKeyword("Factor Analysis");
-	WPSParameter parm1("inputmap","string");
-	parm1.AddTitle("Filename Inputmap");
-	WPSParameter parm2("matrix object","string");
-	parm2.AddTitle("Matrix object to be used");
-	WPSParameter parm3("NrOutput maps","integer");
-	parm3.AddTitle("Number of output maps in resulting maplist");
+
+	WPSParameter * parm1 = new WPSParameter("1","Input Map", WPSParameter::pmtMAPLIST);
+
+	WPSParameter *parm2 = new WPSParameter("2","Input Matrix", WPSParameter::pmtMATRIX);
+	parm2->AddTitle("Matrix object to be used. e.g from factoranalysis or principle components");
+
+	WPSParameter *parm3 = new WPSParameter("3","Number of output maps", WPSParameter::pmtINTEGER);
+	parm3->AddTitle("Number of output maps in resulting maplist");
+
 	metadata.AddParameter(parm1);
 	metadata.AddParameter(parm2);
 	metadata.AddParameter(parm3);
-	WPSParameter parmout("outputmaplist","string",false);
-	parmout.AddTitle("Filename Output maplist");
+
+	WPSParameter *parmout = new WPSParameter("outputmaplist","Output MapList", WPSParameter::pmtMAPLIST,false);
 	metadata.AddParameter(parmout);
 
 	return metadata.toString();
 }
 
-ApplicationMetadata metadataMatrixMultiply(ApplicationQueryData *query) {
+ApplicationMetadata metadataMapListMatrixMultiply(ApplicationQueryData *query) {
 	ApplicationMetadata md;
-	if ( query->queryType == "WPSMETADATA") {
+	if ( query->queryType == "WPSMETADATA" || query->queryType == "") {
 		md.wpsxml = wpsmetadataMapListMatrixMultiply();
 	}
-	if ( query->queryType == "OUTPUTTYPE")
-		md.returnType = IlwisObject::iotMAPLIST;
+	if ( query->queryType == "OUTPUTTYPE" || query->queryType == "")
+		md.returnType = IlwisObject::iotRASMAP;
+	if ( query->queryType == "EXPERSSION" || query->queryType == "")
+		md.skeletonExpression =  ""; // MapListMatrixMultiply::sSyntax();
 
 	return md;
 }

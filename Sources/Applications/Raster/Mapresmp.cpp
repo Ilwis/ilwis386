@@ -120,7 +120,7 @@ IlwisObjectPtr * createMapResample(const FileName& fn, IlwisObjectPtr& ptr, cons
 		return (IlwisObjectPtr *)new MapResample(fn, (MapPtr &)ptr);
 }
 
-String metadataResample() {
+String wpsmetadataMapResample() {
 	WPSMetaData metadata("MapResample");
 	metadata.AddTitle("Resampling raster map");
 	metadata.AddAbstract("Resample a raster map to another georeference");
@@ -128,22 +128,37 @@ String metadataResample() {
 	metadata.AddKeyword("raster");
 	metadata.AddKeyword("Spatial reference system");
 	metadata.AddKeyword("Georeference");
-	WPSParameter parm1("inputmap","string");
-	parm1.AddTitle("Filename Inputmap");
-	WPSParameter parm2("georeference","string");
-	parm2.AddTitle("Filename georeference");
-	WPSParameter parm3("method","string");
-	parm3.AddTitle("resampling method");
-	parm3.AddAbstract("resampling method using nearest neighbour, bi-linear or bi-cubic");
-	parm3.AddDefault("bi-cubic");
+	WPSParameter *parm1 = new WPSParameter("1","Input Map", WPSParameter::pmtRASMAP);
+	parm1->AddAbstract("Filename Inputmap");
+
+	WPSParameter *parm2= new WPSParameter("2","Georeference", WPSParameter::pmtGEOREF);
+	parm2->AddTitle("The Georeference to resample to");
+
+	WPSParameter *parm3 = new WPSParameter("3","Resample Method", WPSParameter::pmtENUM);
+	parm3->AddAbstract("resampling method using nearest neighbour, bi-linear or bi-cubic");
+	parm3->AddDefault("bi-cubic");
+
 	metadata.AddParameter(parm1);
 	metadata.AddParameter(parm2);
 	metadata.AddParameter(parm3);
-	WPSParameter parmout("outputmap","string",false);
-	parmout.AddTitle("Filename Outputmap");
+
+	WPSParameter *parmout = new WPSParameter("outputmap","Output Map", WPSParameter::pmtRASMAP, false);
 	metadata.AddParameter(parmout);
 
 	return metadata.toString();
+}
+
+ApplicationMetadata metadataMapResample(ApplicationQueryData *query) {
+	ApplicationMetadata md;
+	if ( query->queryType == "WPSMETADATA" || query->queryType == "") {
+		md.wpsxml = wpsmetadataMapResample();
+	}
+	if ( query->queryType == "OUTPUTTYPE" || query->queryType == "")
+		md.returnType = IlwisObject::iotRASMAP;
+	if ( query->queryType == "EXPERSSION" || query->queryType == "")
+		md.skeletonExpression =  MapResample::sSyntax();
+
+	return md;
 }
 
 

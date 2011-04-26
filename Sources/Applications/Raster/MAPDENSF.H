@@ -46,6 +46,7 @@
 #include "Engine\Applications\MAPFMAP.H"
 
 IlwisObjectPtr * createMapDensify(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
+ApplicationMetadata metadataMapDensify(ApplicationQueryData *query);
 
 class DATEXPORT MapDensify: public MapFromMap
 {

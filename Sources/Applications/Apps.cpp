@@ -77,39 +77,39 @@ InfoVector* getCommandInfo() {
 	infos->push_back(CommandMap::newCommandInfo(createMapListChangeDetection,"MapListChangeDetection"));
 	infos->push_back(CommandMap::newCommandInfo(createMapAggregateMapList,"MapAggregateMapList"));
 	infos->push_back(CommandMap::newCommandInfo(createMapAttribute,"MapAttribute",metadataMapAtrribute));
-	infos->push_back(CommandMap::newCommandInfo(createMapListMatrixMultiply,"MapListMatrixMultiply"));
+	infos->push_back(CommandMap::newCommandInfo(createMapListMatrixMultiply,"MapListMatrixMultiply",metadataMapListMatrixMultiply));
 	infos->push_back(CommandMap::newCommandInfo(createMapVariogramSurfaceRas,"MapVariogramSurfaceRas"));
 	infos->push_back(CommandMap::newCommandInfo(createMapListCalculate,"MapListCalculate"));
 	infos->push_back(CommandMap::newCommandInfo(createMapListApplic,"MapListApplic"));
-	infos->push_back(CommandMap::newCommandInfo(createMapGlue,"MapGlue"));
-	infos->push_back(CommandMap::newCommandInfo(createMapFilter,"MapFilter"));
-	infos->push_back(CommandMap::newCommandInfo(createMapClassify,"MapClassify"));
-	infos->push_back(CommandMap::newCommandInfo(createMapColorSep,"MapColorSeparation"));
-	infos->push_back(CommandMap::newCommandInfo(createMapColorSep,"MapColorSep"));
+	infos->push_back(CommandMap::newCommandInfo(createMapGlue,"MapGlue",metadataMapGlue));
+	infos->push_back(CommandMap::newCommandInfo(createMapFilter,"MapFilter",metadataMapFilter));
+	infos->push_back(CommandMap::newCommandInfo(createMapClassify,"MapClassify",metadataMapClassify));
+	infos->push_back(CommandMap::newCommandInfo(createMapColorSep,"MapColorSeparation",metadataMapColorSep));
+	infos->push_back(CommandMap::newCommandInfo(createMapColorSep,"MapColorSep",metadataMapColorSep));
 	infos->push_back(CommandMap::newCommandInfo(createMapRasterizeSegment,"MapRasterizeSegment"));
 	infos->push_back(CommandMap::newCommandInfo(createMapRasterizePolygon,"MapRasterizePolygon"));
-	infos->push_back(CommandMap::newCommandInfo(createMapAreaNumbering,"MapAreaNumbering"));
-	infos->push_back(CommandMap::newCommandInfo(createMapDensify,"MapDensify"));
-	infos->push_back(CommandMap::newCommandInfo(createMapAggregate,"MapAggregate___"));
+	infos->push_back(CommandMap::newCommandInfo(createMapAreaNumbering,"MapAreaNumbering",metadataMapAreaNumbering));
+	infos->push_back(CommandMap::newCommandInfo(createMapDensify,"MapDensify",metadataMapDensify));
+	infos->push_back(CommandMap::newCommandInfo(createMapAggregate,"MapAggregate___",metadataMapAggregate));
 	infos->push_back(CommandMap::newCommandInfo(createMapMirrorRotate,"MapMirrorRotate"));
-	infos->push_back(CommandMap::newCommandInfo(createMapHeckbert,"MapHeckbert"));
-	infos->push_back(CommandMap::newCommandInfo(createMapCluster,"MapCluster"));
+	infos->push_back(CommandMap::newCommandInfo(createMapHeckbert,"MapHeckbert",metadataMapHeckbert));
+	infos->push_back(CommandMap::newCommandInfo(createMapCluster,"MapCluster",metadataMapCluster));
 	infos->push_back(CommandMap::newCommandInfo(createMapMaplistStatistics,"MapMaplistStatistics"));
-	infos->push_back(CommandMap::newCommandInfo(createMapColorComp,"MapColorComp___"));
-	infos->push_back(CommandMap::newCommandInfo(createMapDistance,"MapDistance"));
+	infos->push_back(CommandMap::newCommandInfo(createMapColorComp,"MapColorComp___",metadataMapColorComp));
+	infos->push_back(CommandMap::newCommandInfo(createMapDistance,"MapDistance",metadataMapDistance));
 	infos->push_back(CommandMap::newCommandInfo(createMapSubMap,"MapSubMap___"));
 	infos->push_back(CommandMap::newCommandInfo(createMapThiessen,"MapThiessen"));
-	infos->push_back(CommandMap::newCommandInfo(createMapCross,"MapCross"));
-	infos->push_back(CommandMap::newCommandInfo(createMapSlicing,"MapSlicing", metadataSlicing));
+	infos->push_back(CommandMap::newCommandInfo(createMapCross,"MapCross",metadataMapCross));
+	infos->push_back(CommandMap::newCommandInfo(createMapSlicing,"MapSlicing", metadataMapSlicing));
 	infos->push_back(CommandMap::newCommandInfo(createMapStretch,"MapStretch___"));
 	infos->push_back(CommandMap::newCommandInfo(createMapRasterizePoint,"MapRasterizePoint___"));
 	infos->push_back(CommandMap::newCommandInfo(createMapNearestPoint,"MapNearestPoint"));
 	infos->push_back(CommandMap::newCommandInfo(createMapMovingAverage,"MapMovingAverage"));
 	infos->push_back(CommandMap::newCommandInfo(createMapMovingSurface,"MapMovingSurface"));
 	infos->push_back(CommandMap::newCommandInfo(createMapTrendSurface,"MapTrendSurface"));
-	infos->push_back(CommandMap::newCommandInfo(createMapResample,"MapResample"));
+	infos->push_back(CommandMap::newCommandInfo(createMapResample,"MapResample",metadataMapResample));
 	infos->push_back(CommandMap::newCommandInfo(createMapApply3D,"MapApply3D"));
-	infos->push_back(CommandMap::newCommandInfo(createMapInterpolContour,"MapInterpolContour"));
+	infos->push_back(CommandMap::newCommandInfo(createMapInterpolContour,"MapInterpolContour",metadataMapInterpolContour));
 	infos->push_back(CommandMap::newCommandInfo(createMapSegmentDensity,"MapSegmentDensity"));
 	infos->push_back(CommandMap::newCommandInfo(createMapKriging,"MapKriging___"));
 	infos->push_back(CommandMap::newCommandInfo(createMapCoKriging,"MapCoKriging"));
@@ -117,7 +117,7 @@ InfoVector* getCommandInfo() {
 	infos->push_back(CommandMap::newCommandInfo(createMapComputedElsewhere,"MapComputedElsewhere"));
 	infos->push_back(CommandMap::newCommandInfo(createMapKrigingFromRaster,"MapKrigingFromRaster"));
 	infos->push_back(CommandMap::newCommandInfo(createMapVisibility,"MapVisibility"));
-	infos->push_back(CommandMap::newCommandInfo(createMapIterator,"MapIterator"));
+	infos->push_back(CommandMap::newCommandInfo(createMapIterator,"MapIterator",metadataMapIter));
 	infos->push_back(CommandMap::newCommandInfo(createMapIterator,"MapIterProp"));
 	infos->push_back(CommandMap::newCommandInfo(createMapCalculate,"MapCalculate"));
 	infos->push_back(CommandMap::newCommandInfo(createColumnCalculate,"ColumnCalculate"));
@@ -145,7 +145,7 @@ InfoVector* getCommandInfo() {
 }
 
 extern "C" _export ILWIS::Module *getModuleInfo(const FileName& fnModule) {
-	ILWIS::Module *module = new ILWIS::Module("Rastermap and Table Applications", fnModule,ILWIS::Module::mi38,"1.0");
+	ILWIS::Module *module = new ILWIS::Module("Rastermap and Table Applications", fnModule,ILWIS::Module::mi38,"1.1");
 	module->addMethod(ILWIS::Module::ifgetCommandInfo, (void *)getCommandInfo);  
 
 	return module;

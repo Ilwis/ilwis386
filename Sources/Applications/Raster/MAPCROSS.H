@@ -45,6 +45,7 @@
 #include "Engine\Applications\MAPFMAP.H"
 
 IlwisObjectPtr * createMapCross(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
+ApplicationMetadata metadataMapCross(ApplicationQueryData *query);
 
 class DATEXPORT MapCross: public MapFromMap
 {

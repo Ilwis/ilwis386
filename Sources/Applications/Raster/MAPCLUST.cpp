@@ -34,73 +34,11 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/*
-// $Log: /ILWIS 3.0/RasterApplication/MAPCLUST.cpp $
- * 
- * 12    9-01-06 13:04 Willem
- * Allow value maps for clustering
- * Increase the maximum number of classes ro 255
- * Debugged: erroneous shift in case of 3 band clustering
- * 
- * 11    5-12-02 18:18 Hendrikse
- * made proper use of fnObj.sRelativeQuoted() to debug for output table
- * names with spaces etc
- * 
- * 10    4/09/01 11:31 Willem
- * Restored to calling the original constructor for the MapList creation.
- * 
- * 9     5/04/01 16:03 Willem
- * Added extra check on validity of MapList
- * 
- * 8     23-11-00 17:54 Koolhoven
- * added \n to sSyntax()
- * 
- * 7     28-10-00 11:37 Hendrikse
- * added for the output columns:
- * col->SetReadOnly();
- * col->SetOwnedByTable(true);
- * added	tblCross.SetPointer(0); to remove intermediate results
- * 
- * 6     8/15/00 5:15p Wind
- * added statistics table
- * 
- * 5     22-02-00 16:56 Wind
- * bug with array boundaries that caused wrong results
- * 
- * 4     9/08/99 12:58p Wind
- * changed constructor calls FileName(fn, sExt, true) to FileName(fn,
- * sExt)
- * or changed FileName(fn, sExt, false) to FileName(fn.sFullNameQuoted(),
- * seExt, false)
- * to ensure that proper constructor is called
- * 
- * 3     9/08/99 11:51a Wind
- * comment problem
- * 
- * 2     9/08/99 8:54a Wind
- * changed sName() to sNameQuoted() in sExpression() tot suport quoted
- * file names
-*/
-// Revision 1.5  1998/09/16 17:24:39  Wim
-// 22beta2
-//
-// Revision 1.4  1998/02/05 16:41:37  Wim
-// Create internal domain only after all the checks which can cause error throwing,
-// to prevent the creation of an invalid .mpr file
-//
-// Revision 1.3  1997-09-05 15:52:59+01  Wim
-// CreateMapStore() after calling SetDomainValueRangeStruct() in fFreezing()
-//
-// Revision 1.2  1997-07-29 16:29:22+02  Wim
-// Internal domain uses now prefix "Cluster"
-//
-/* MapCluster
-   Copyright Ilwis System Development ITC
-   july 1995, by Wim Koolhoven
-*/
+
 #define MAPCLUST_C
 #include "Applications\Raster\MAPCLUST.H"
 #include "Engine\Base\Algorithm\Qsort.h"
+#include "Engine\Base\DataObjects\WPSMetaData.h"
 #include "Headers\Htp\Ilwisapp.htp"
 #include "Headers\Err\Ilwisapp.err"
 #include "Headers\Hs\map.hs"
@@ -111,6 +49,47 @@ IlwisObjectPtr * createMapCluster(const FileName& fn, IlwisObjectPtr& ptr, const
 	else
 		return (IlwisObjectPtr *)new MapCluster(fn, (MapPtr &)ptr);
 }
+
+String wpsmetadataMapCluster() {
+	WPSMetaData metadata("MapCluster");
+	metadata.AddTitle("MapCluster");
+	metadata.AddAbstract("An unsupervised classification in which image data is grouped into spectral clusters based on the statistical properties of all pixel values");
+	metadata.AddKeyword("spatial");
+	metadata.AddKeyword("raster");
+	metadata.AddKeyword("classification");
+
+	WPSParameter *parm1 = new WPSParameter("1","Input Map list",WPSParameter::pmtMAPLIST);
+	parm1->AddAbstract("Input map list with");
+	WPSParameter *parm2 = new WPSParameter("2","Number of clusters", WPSParameter::pmtINTEGER);
+	parm2->AddAbstract("the number of clusters/spectral classes you want to obtain in the output map; number of clusters between 2 and 60");
+	WPSParameter *parm3 = new WPSParameter("3","Number of clusters", WPSParameter::pmtTABLE);
+	parm3->AddAbstract("Attribute table for the output map containing statistical information on the clusters ");
+	parm3->setOptional(true);
+
+	metadata.AddParameter(parm1);
+	metadata.AddParameter(parm2);
+	metadata.AddParameter(parm3);
+	WPSParameter *parmout = new WPSParameter("Result","Output Map", WPSParameter::pmtRASMAP, false);
+	parmout->AddAbstract("Reference Outputmap and supporting data objects");
+	metadata.AddParameter(parmout);
+	
+
+	return metadata.toString();
+}
+
+ApplicationMetadata metadataMapCluster(ApplicationQueryData *query) {
+	ApplicationMetadata md;
+	if ( query->queryType == "WPSMETADATA" || query->queryType == "") {
+		md.wpsxml = wpsmetadataMapCluster();
+	}
+	if ( query->queryType == "OUTPUTTYPE" || query->queryType == "")
+		md.returnType = IlwisObject::iotRASMAP;
+	if ( query->queryType == "EXPERSSION" || query->queryType == "")
+		md.skeletonExpression =  MapCluster::sSyntax();
+
+	return md;
+}
+
 
 #define MAXCLASSES 255
 

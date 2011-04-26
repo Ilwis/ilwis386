@@ -34,76 +34,7 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/*
-// $Log: /ILWIS 3.0/RasterApplication/MAPARN.cpp $
- * 
- * 14    21-12-00 14:58 Koolhoven
- * ensure in constructor and fFreezing that the column being created has a
- * valid name
- * 
- * 13    15-12-00 17:17 Hendrikse
- * corrected counters for aiNrPix and arArea array
- * and if statement that uses them
- * 
- * 12    13-11-00 17:20 Hendrikse
- * removed redundant filTemp->Close(); and DeleteFile statements
- *  It's now done by the File class
- * 
- * 11    8-11-00 10:16 Hendrikse
- * Under certain conditions (fKnownPixelSize) a column npix is produced in
- * the attrib table.
- * At the end of fFreezing the temp file is removed by means of:
- *   String sName = filTemp.sName();
- *   filTemp.Close();
- *   DeleteFile(sName.scVal());
- * 
- * 10    2-11-00 18:08 Hendrikse
- * added column colAr to attrib table to show areas in meters squared for
- * each numbered area (wish in bug 2091)
- * 
- * 9     16-06-00 14:12 Koolhoven
- * create a DomainUniqueID, specifying a domain name has no influence
- * anymore
- * 
- * 8     28-02-00 11:53 Wind
- * column of attribute table was not always stored
- * 
- * 7     10-01-00 17:46 Wind
- * proper creation of domain and attribute table at map creation time
- * 
- * 6     11-11-99 12:00 Wind
- * error in creation of areanumber map
- * 
- * 5     11-11-99 11:38 Wind
- * solved bug 1177
- * 
- * 4     9/08/99 12:58p Wind
- * changed constructor calls FileName(fn, sExt, true) to FileName(fn,
- * sExt)
- * or changed FileName(fn, sExt, false) to FileName(fn.sFullNameQuoted(),
- * seExt, false)
- * to ensure that proper constructor is called
- * 
- * 3     9/08/99 11:51a Wind
- * comment problem
- * 
- * 2     9/08/99 8:51a Wind
- * changed sName( to sNameQuoted( in sExpression()
- */
-// Revision 1.5  1998/09/16 17:24:31  Wim
-// 22beta2
-//
-// Revision 1.4  1997/08/26 08:45:48  Wim
-// Corrected new domain creation in fFreezing()
-//
-// Revision 1.3  1997/08/26 08:25:28  Wim
-// Added optional new domain
-//
-/* MapAreaNumbering
-   Copyright Ilwis System Development ITC
-   july 1995, by Wim Koolhoven
-	Last change:  WK   26 Aug 97   10:39 am
-*/
+
 
 #include "Applications\Raster\MAPARN.H"
 #include "Engine\Table\Col.h"
@@ -111,6 +42,7 @@
 #include "Engine\Table\tblstore.h"
 #include "Engine\Base\DataObjects\valrange.h"
 #include "Engine\Domain\dmsort.h"
+#include "Engine\Base\DataObjects\WPSMetaData.h"
 #include "Headers\Htp\Ilwisapp.htp"
 #include "Headers\Err\Ilwisapp.err"
 #include "Headers\Hs\map.hs"
@@ -124,6 +56,39 @@ IlwisObjectPtr * createMapAreaNumbering(const FileName& fn, IlwisObjectPtr& ptr,
 		return (IlwisObjectPtr *)new MapAreaNumbering(fn, (MapPtr &)ptr);
 }
 
+String wpsmetadataMapAreaNumbering() {
+	WPSMetaData metadata("MapAreaNumbering");
+	metadata.AddTitle("MapAreaNumbering");
+	metadata.AddAbstract("A raster operation which assigns unique identifiers to pixels with the same class names or values that are horizontally, vertically or diagonally connected");
+	metadata.AddKeyword("spatial");
+	metadata.AddKeyword("raster");
+	metadata.AddKeyword("Classification");
+	WPSParameter *parm1 = new WPSParameter("1","Input Map", WPSParameter::pmtRASMAP);
+	parm1->AddAbstract("Input raster map");
+	WPSParameter *parm2 = new WPSParameter("2","Connected", WPSParameter::pmtINTEGER);
+	parm2->AddAbstract("Indicates whether to construct 8-connected or 4-connected areas");
+	metadata.AddParameter(parm1);
+	metadata.AddParameter(parm2);
+	WPSParameter *parmout = new WPSParameter("Result","Output Map",WPSParameter::pmtRASMAP, false);
+	parmout->AddAbstract("Reference Outputmap and supporting data objects");
+	metadata.AddParameter(parmout);
+	
+
+	return metadata.toString();
+}
+
+ApplicationMetadata metadataMapAreaNumbering(ApplicationQueryData *query) {
+	ApplicationMetadata md;
+	if ( query->queryType == "WPSMETADATA" || query->queryType == "") {
+		md.wpsxml = wpsmetadataMapAreaNumbering();
+	}
+	if ( query->queryType == "OUTPUTTYPE" || query->queryType == "")
+		md.returnType = IlwisObject::iotRASMAP;
+	if ( query->queryType == "EXPERSSION" || query->queryType == "")
+		md.skeletonExpression =  MapAreaNumbering::sSyntax();
+
+	return md;
+}
 const char* MapAreaNumbering::sSyntax() {
   return "MapAreaNumbering(map,4|8)";
 }

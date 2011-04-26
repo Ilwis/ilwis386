@@ -34,47 +34,12 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/*
-// $Log: /ILWIS 3.0/RasterApplication/MAPDIST.cpp $
- * 
- * 4     19/02/01 12:21 Willem
- * The weight map line buffer now uses doubles instead of longs
- * 
- * 3     9/08/99 11:51a Wind
- * comment problem
- * 
- * 2     9/08/99 8:54a Wind
- * changed sName() to sNameQuoted() in sExpression() tot suport quoted
- * file names
-*/
-// Revision 1.7  1998/09/16 17:24:31  Wim
-// 22beta2
-//
-// Revision 1.6  1997/09/04 18:09:42  Wim
-// Corrected sSyntax()
-//
-// Revision 1.5  1997-07-30 20:20:27+02  Wim
-// Always go back at least once. Add one to iChanges when fFirstPass is true.
-//
-// Revision 1.4  1997-07-28 18:21:46+02  Wim
-// Changed sequence, first check on equalness of fn and fnThiessen,
-// only after that if fnThiessen exists.
-//
-// Revision 1.3  1997-07-28 18:12:45+02  Wim
-// SameNameDistThiessenError() added.
-//
-// Revision 1.2  1997-07-28 18:08:21+02  Wim
-// When supplied name for map thiessen already exists FileAlreadyExistsError() called.
-//
-/* MapDistance
-   Copyright Ilwis System Development ITC
-   august 1995, by Wim Koolhoven
-	Last change:  WK    4 Sep 97    8:08 pm
-*/
+
 
 #include "Applications\Raster\MAPDIST.H"
 #include "Applications\Raster\MAPTHIES.H"
 #include "Engine\Base\DataObjects\valrange.h"
+#include "Engine\Base\DataObjects\WPSMetaData.h"
 #include "Headers\Htp\Ilwisapp.htp"
 #include "Headers\Err\Ilwisapp.err"
 #include "Headers\Hs\map.hs"
@@ -84,6 +49,53 @@ IlwisObjectPtr * createMapDistance(const FileName& fn, IlwisObjectPtr& ptr, cons
 		return (IlwisObjectPtr *)MapDistance::create(fn, (MapPtr &)ptr, sExpr);
 	else
 		return (IlwisObjectPtr *)new MapDistance(fn, (MapPtr &)ptr);
+}
+
+String wpsmetadataMapDistance() {
+	WPSMetaData metadata("MapDistance");
+	metadata.AddTitle("MapDistance");
+	metadata.AddAbstract("each pixel is assigned the distance in meters towards user-specified source pixels, for example distance to schools, distance to roads etc.");
+	metadata.AddKeyword("spatial");
+	metadata.AddKeyword("raster");
+	metadata.AddKeyword("distance");
+	WPSParameter *parm1 = new WPSParameter("1","Input Map",WPSParameter::pmtRASMAP);
+	parm1->AddAbstract("is the name of the source map");
+
+	WPSParameterGroup *grp = new WPSParameterGroup("Weight",0,"Weight");
+
+	WPSParameter *parm2 = new WPSParameter("0","Weight map", WPSParameter::pmtRASMAP);
+	parm2->AddAbstract("is the name of the weight map; the weight map should be a map with a value domain.");
+
+	WPSParameter *parm3= new WPSParameter("2","Thiessen Map", WPSParameter::pmtENUM);
+	parm3->AddAbstract("Optional calculation of a Thiessen map. When calculating a Thiessen map, also a distance map is calculated");
+	parm3->setOptional(true);
+
+	grp->addParameter(parm2);
+	grp->addParameter(parm3);
+	grp->setOptional(true);
+
+	metadata.AddParameter(parm1);
+	metadata.AddParameter(grp);
+
+	WPSParameter *parmout = new WPSParameter("Result","Output Map", WPSParameter::pmtRASMAP, false);
+	parmout->AddAbstract("reference Outputmap and supporting data objects");
+	metadata.AddParameter(parmout);
+	
+
+	return metadata.toString();
+}
+
+ApplicationMetadata metadataMapDistance(ApplicationQueryData *query) {
+	ApplicationMetadata md;
+	if ( query->queryType == "WPSMETADATA" || query->queryType == "") {
+		md.wpsxml = wpsmetadataMapDistance();
+	}
+	if ( query->queryType == "OUTPUTTYPE" || query->queryType == "")
+		md.returnType = IlwisObject::iotRASMAP;
+	if ( query->queryType == "EXPERSSION" || query->queryType == "")
+		md.skeletonExpression =  MapDistance::sSyntax();
+
+	return md;
 }
 
 #define HIVAL (LONG_MAX >> 1)

@@ -46,7 +46,7 @@
 #define MAX_SIZE_PATCH_BUFFER 10
 
 IlwisObjectPtr * createMapResample(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
-String metadataResample();
+ApplicationMetadata metadataMapResample(ApplicationQueryData *query);
                         
 enum ResampleMethod { rmNEARNEIGHB, rmBILINEAR, rmBICUBIC };                         
 
