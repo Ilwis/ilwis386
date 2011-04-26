@@ -1,4 +1,6 @@
 #include "Headers\toolspch.h"
+#include "Engine\Base\DataObjects\ilwisobj.h"
+#include "engine\base\system\module.h"
 #include "Engine\Base\DataObjects\WPSMetaData.h"
 #include <xercesc/dom/domdocument.hpp>
 
@@ -6,7 +8,7 @@
 XERCES_CPP_NAMESPACE_USE
 
 XERCES_CPP_NAMESPACE::DOMElement *createTextNode(XERCES_CPP_NAMESPACE::DOMDocument *doc,const String& nodeName, const String& value) {
-	wchar_t result[250];
+	wchar_t result[TEXT_SIZE];
 	XERCES_CPP_NAMESPACE::DOMElement *ele = doc->createElement(nodeName.toWChar(result));
 	DOMText* text = doc->createTextNode(value.toWChar(result));
 	ele->appendChild(text);
@@ -14,7 +16,36 @@ XERCES_CPP_NAMESPACE::DOMElement *createTextNode(XERCES_CPP_NAMESPACE::DOMDocume
 
 }
 
-WPSParameter::WPSParameter(const String& name, const String& _type, bool _input) : id(name), input(_input),type(_type){
+void WPSParameter::setOptional(bool yesno) {
+	optional = yesno;
+}
+bool WPSParameter::isOptional() const {
+	return optional;
+}
+
+void WPSParameter::setRange(const RangeInt& r){
+	range = r;
+}
+
+RangeInt WPSParameter::getRange() const{
+	return range;
+}
+
+WPSParameter::WPSParameter(const String& name, const String& _title, ParameterType pt, bool _input) : 
+id(name), input(_input),title(_title), pmt(pt), optional(false), range(RangeInt(1,1)){
+}
+
+String WPSParameter::paremeterTypeToWWW3String() const {
+	if ( pmt <= pmtZIP) {
+		return "anyURL";
+	}
+	else if ( pmt == pmtINTEGER) {
+		return "int";
+	} else if ( pmt == pmtREAL) {
+		return "double";
+	} else
+		return "string";
+
 }
 
 void WPSParameter::AddTitle(const String& desc) {
@@ -42,7 +73,7 @@ void WPSMetaData::AddKeyword(const String& kw) {
 }
 
 XERCES_CPP_NAMESPACE::DOMElement *WPSParameter::createNode(XERCES_CPP_NAMESPACE::DOMDocument *doc) {
-	wchar_t result[250];
+	wchar_t result[TEXT_SIZE];
 	XERCES_CPP_NAMESPACE::DOMElement *parm = doc->createElement(input ? L"wps:Input" : L"wps:Output");
 	parm->setAttribute(L"minOccurs",L"1");
 	parm->setAttribute(L"maxOccurs",L"1");
@@ -51,10 +82,10 @@ XERCES_CPP_NAMESPACE::DOMElement *WPSParameter::createNode(XERCES_CPP_NAMESPACE:
 	if ( abstrct != "")
 		parm->appendChild(createTextNode(doc, "ows:Abstract", abstrct));
 
-	if ( type != "zip") {
+	if ( pmt != pmtZIP) {
 		XERCES_CPP_NAMESPACE::DOMElement *literalParm = doc->createElement(L"LiteralData");
-		XERCES_CPP_NAMESPACE::DOMElement *dt = createTextNode(doc,"ows:reference",type); 
-		String datatype("http://www.w3.org/TR/xmlschema-2/%S", type);
+		XERCES_CPP_NAMESPACE::DOMElement *dt = createTextNode(doc,"ows:reference",title); 
+		String datatype("http://www.w3.org/TR/xmlschema-2/%S", paremeterTypeToWWW3String());
 		dt->setAttribute(L"ows:reference", datatype.toWChar(result));
 		if ( def != "") {
 			literalParm->appendChild(createTextNode(doc,"DefaultValue",def));
@@ -76,13 +107,60 @@ XERCES_CPP_NAMESPACE::DOMElement *WPSParameter::createNode(XERCES_CPP_NAMESPACE:
 
 	return parm;
 }
+//------------------------------------------------------------------------------------
+WPSParameterGroup::WPSParameterGroup() : WPSParameter("?","",pmtGROUP), exclusiveList(true), startOrdinal(iUNDEF) {
+}
 
+WPSParameterGroup::WPSParameterGroup(const String& id, int _startOrdinal, const String& _title) : 
+WPSParameter(id, _title, pmtGROUP) ,
+startOrdinal(_startOrdinal),
+exclusiveList(false)
+{
+}
+
+WPSParameterGroup::~WPSParameterGroup() {
+	for(int i = 0; i < parameters.size(); ++i)
+		delete parameters[i];
+}
+
+void WPSParameterGroup::addParameter(WPSParameter* p){
+	parameters.push_back(p);
+}
+
+int WPSParameterGroup::getNumberOfParameters() const{
+	return parameters.size();
+}
+
+WPSParameter *WPSParameterGroup::getParameters(int index){
+	if ( index < parameters.size())
+		return parameters[index];
+	return 0;
+}
+
+XERCES_CPP_NAMESPACE::DOMElement *WPSParameterGroup::createNode(XERCES_CPP_NAMESPACE::DOMDocument *doc) {
+	XERCES_CPP_NAMESPACE::DOMElement *parm = 0;
+	for(int i = 0; i < parameters.size(); ++i) {
+		parm = parameters[i]->createNode(doc);
+	}
+	return parm;
+}
 //------------------------------------------------------------------------------------
 WPSMetaData::WPSMetaData(const String& appName) : id(appName){
 }
 
-void WPSMetaData::AddParameter(const WPSParameter& parm) {
-	if ( parm.isInput() ) {
+WPSMetaData::~WPSMetaData() {
+	for(int i=0; i < inputParameters.size(); ++i) {
+		delete inputParameters[i];
+	}
+
+	for(int i=0; i < outputParameters.size(); ++i) {
+		delete outputParameters[i];
+	}
+}
+
+
+void WPSMetaData::AddParameter(WPSParameter* parm) {
+	if ( parm->isInput() ) {
 		inputParameters.push_back(parm);
 	} else {
 		outputParameters.push_back(parm);
@@ -90,12 +168,13 @@ void WPSMetaData::AddParameter(const WPSParameter& parm) {
 
 }
 
+
 void WPSMetaData::AddTitle(const String& desc) {
 	title = desc;
 }
 
 String WPSMetaData::toString() {
-	wchar_t result[250];
+	wchar_t result[1000];
 	XMLPlatformUtils::Initialize();
 	DOMImplementation* dom = DOMImplementationRegistry::getDOMImplementation(XMLString::transcode("core"));
 	XERCES_CPP_NAMESPACE::DOMDocument *doc = dom->createDocument(0, L"ProcessDescriptions", 0);
@@ -126,13 +205,13 @@ String WPSMetaData::toString() {
 	}
 	XERCES_CPP_NAMESPACE::DOMElement *inputs = doc->createElement(L"wps:DataInputs");
 	for(int i =0; i < inputParameters.size(); ++i) {
-		XERCES_CPP_NAMESPACE::DOMElement *parameter = inputParameters[i].createNode(doc);
+		XERCES_CPP_NAMESPACE::DOMElement *parameter = inputParameters[i]->createNode(doc);
 		inputs->appendChild(parameter);
 	}
 	proces->appendChild(inputs);
 	XERCES_CPP_NAMESPACE::DOMElement *outputs = doc->createElement(L"wps:ProcessOutputs");
 	for(int i =0; i < outputParameters.size(); ++i) {
-		XERCES_CPP_NAMESPACE::DOMElement *parameter = outputParameters[i].createNode(doc);
+		XERCES_CPP_NAMESPACE::DOMElement *parameter = outputParameters[i]->createNode(doc);
 		outputs->appendChild(parameter);
 	}
 	proces->appendChild(outputs);
