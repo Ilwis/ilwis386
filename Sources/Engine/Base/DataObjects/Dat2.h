@@ -184,6 +184,7 @@ struct CoordBounds
   CoordBounds _export &operator += (Coord);   // change this so that point is inside
   CoordBounds _export &operator += (const CoordBounds&);  // change this so that cb is inside
   CoordBounds _export &operator *= (double);
+  CoordBounds _export &operator += (double);
   double MinX() const { return cMin.x; }
   double MaxX() const { return cMax.x; }
   double MinY() const { return cMin.y; }

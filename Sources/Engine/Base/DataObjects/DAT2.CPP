@@ -34,72 +34,7 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/* $Log: /ILWIS 3.0/Tools/DAT2.CPP $
- * 
- * 17    7-10-02 11:35 Hendrikse
- * moved rSphericalDistance as static function to the distance.cpp file in
- * Coordsuystems project
- * 
- * 16    3-09-02 14:32 Hendrikse
- * implemented rSphericalDistance for spheric interpolation functions etc
- * 
- * 15    5-07-02 18:59 Koolhoven
- * prevent warings with Visual Studio .Net
- * 
- * 14    20-02-02 14:18 Retsios
- * Spaces before LatLon coordinates caused crash - general robuustness
- * improvement for LatLon::rDegree
- * 
- * 13    12/04/01 15:51 Willem
- * Take modulo to quicken calculation in case of large input Longitude
- * 
- * 12    11/02/01 12:19p Martin
- * forgot to add the 'W' sign modifier when tranlating latlon strings
- * 
- * 11    11/02/01 9:37a Martin
- * changes the rDgree function of LatLon. the scans missed some cases
- * 
- * 10    8/30/01 16:20 Willem
- * Removed the LatLon display limitation outside
- * 
- * 9     11/28/00 1:04p Martin
- * in rDegree sscanf found that -0 == 0 so -0 01 0 == 0 01 0. Check if the
- * first char is a minus instead trusting sscanf
- * 
- * 8     11/28/00 12:31p Martin
- * rDegree and sDegree return UNDEF if an undef is passed
- * 
- * 7     20-06-00 8:25a Martin
- * += operator of Coordbounds now checks if it was undefined
- * 
- * 6     16-06-00 9:20a Martin
- * added constructor for coordbounds (with coordbuf)
- * 
- * 5     8-05-00 18:30 Hendrikse
- * Have set iWidth = 14 at several places to make lon and lat precision
- * equal.
- * Now fShowMin parameter is used in sDegree in case of neg angles for the
- * dms function
- * rDegree is debugged for neg angles from sDegree
- * 
- * 4     4/04/00 1:58p Wind
- * added static functions to latLon for conversions between degrees and
- * strings
- * 
- * 3     21-12-99 4:10p Martin
- * //-> /*
- * 
- * 2     21-12-99 1:02p Martin
- * added _Export and a operator '-' for two coords
-// Revision 1.2  1997/07/28 13:21:29  Wim
-// 180 W till 180 E, nwo both possible.
-//
-/* dat2.c
-// General Interface for ILWIS 2.0
-// april 1993, by Wim Koolhoven
-// (c) Computer Department ITC
-	Last change:  WK   28 Aug 98    4:53 pm
-*/
+
 #define DAT2_C
 #include "Headers\toolspch.h"
 
@@ -219,6 +154,22 @@ CoordBounds& CoordBounds::operator *=(double fact) {
 
 	return *this;
 }
+
+CoordBounds& CoordBounds::operator +=(double dist) {
+	area=rUNDEF;
+	double dw = width() + dist;
+	double dh = height() + dist;
+	Coord cm = middle();
+	double maxx = cm.x + dw;
+	double maxy = cm.y + dh;
+	double minx = cm.x - dw;
+	double miny = cm.y - dh;
+	cMax = Coord(maxx,maxy);
+	cMin = Coord(minx,miny);
+
+	return *this;
+}
+
 void CoordBounds::Check()  // makesure that rcMin < rcMax bith with Row and Col
 {
   double rTmp;
