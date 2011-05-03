@@ -21,7 +21,7 @@ protected:
 
 class SetSingleColorForm : public DisplayOptionsForm {
 public:
-	SetSingleColorForm(CWnd *wPar, FeatureSetDrawer *dr);
+	SetSingleColorForm(CWnd *wPar, FeatureLayerDrawer *dr);
 	void apply();
 private:
 	FieldColor *fc;

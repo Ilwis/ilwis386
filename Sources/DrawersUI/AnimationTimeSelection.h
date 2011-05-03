@@ -1,6 +1,7 @@
 #pragma once
 
 ILWIS::DrawerTool *createAnimationTimeSelectionTool(ZoomableView* zv, LayerTreeView *view, ILWIS::NewDrawer *drw);
+class FieldLister;
 
 namespace ILWIS {
 

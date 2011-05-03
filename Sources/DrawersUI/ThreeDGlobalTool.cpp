@@ -4,7 +4,7 @@
 #include "Client\Ilwis.h"
 #include "Client\Mapwindow\MapPaneView.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\MapWindow\Drawers\DrawerTool.h"

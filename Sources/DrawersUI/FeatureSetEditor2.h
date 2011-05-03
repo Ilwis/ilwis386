@@ -11,14 +11,16 @@ class BaseMapPtr;
 namespace ILWIS{
 
 
-	class _export FeatureSetEditor : public BaseMapEditor{
+	class _export FeatureSetEditor2 : public BaseMapEditor{
 	public:
-		FeatureSetEditor(const String& tp,  ZoomableView* zv, LayerTreeView *view, NewDrawer *drw);
-		virtual ~FeatureSetEditor();
+		enum States{msNONE=0, msINSERT=1, msMOVE=4, msSELECT=8, msSPLIT=16, msMOVEINSERTVERTICES=32, msMOVEVERTICES=64,
+					msLMOUSEUP=128, msLMOUSEDOWN=256, msMOUSEMOVE=512, 
+					msENTER=1024, msESCAPE=2048, msCTRL=4096, msDELETE=8192, msOVERVERTEX=16384, msOVERLINE=32768, msEMPTY=65536};
+		FeatureSetEditor2(const String& tp,  ZoomableView* zv, LayerTreeView *view, NewDrawer *drw);
+		virtual ~FeatureSetEditor2();
 		bool OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 		void OnLButtonDown(UINT nFlags, CPoint point);
 		void OnLButtonUp(UINT nFlags, CPoint point);
-		void OnLButtonDblClk(UINT nFlags, CPoint point);
 		void OnMouseMove(UINT nFlags, CPoint point);
 		void OnSetCursor(BaseMapEditor::Mode m=mUNKNOWN);
 		void OnContextMenu(CWnd* pWnd, CPoint point);
@@ -39,32 +41,28 @@ namespace ILWIS{
 		void prepare();
 		virtual void removeSelectedFeatures();
 		void setActive(bool yesno);
+		bool hasState(int state);
 
 
 	protected:
-		virtual bool select(UINT nFlags, CPoint point);
-		virtual bool insertFeature(UINT nFlags, CPoint point) = 0;
-		virtual bool insertVertex(UINT nFlags, CPoint point) { return false;}
-		virtual bool selectMove(UINT nFlags, CPoint point);
 		void OnUpdateMode(CCmdUI* pCmdUI);
-		virtual void setMode(BaseMapEditor::Mode m) ;
+		virtual void setMode(FeatureSetEditor2::States state) ;
 
 		long iCoordIndex(const vector<Coord *>& coords, const Coord& c) const;
-		SelectedFeature *addToSelectedFeatures(Feature *f, const Coord& crd, const vector<ILWIS::NewDrawer *>& drawers, int coordIndex=iUNDEF);
 		MapCompositionDoc *mdoc;
 		BaseMapPtr *bmapptr;
 		SFMap selectedFeatures;
 		int currentCoordIndex;
-		String currentGuid;
 		zCursor curActive;
 		HMENU hmenFile, hmenEdit;
 		int mode;
-		ILWIS::ComplexDrawer *LayerDrawer;
+		ILWIS::ComplexDrawer *layerDrawer;
 		//PixelInfoDoc *pixdoc;
 		HelpTopic htpTopic;
 		String sHelpKeywords;
 		SetChecks *editModeItems;
 		zCursor curInsert, curEdit, curMove, curMoving;
+		long editorState;
 
 		DECLARE_MESSAGE_MAP()
 	};

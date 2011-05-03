@@ -3,6 +3,10 @@
 #define ILWM_UPDATE_ANIM (WM_APP+232)
 
 class MapCompositionDoc;
+class FieldOneSelect;
+class FieldRealSliderEx;
+class TimeGraphSlider;
+
 #define ID_AnimationBar 67305
 
 namespace ILWIS {

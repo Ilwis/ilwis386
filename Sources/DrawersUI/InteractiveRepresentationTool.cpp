@@ -5,17 +5,18 @@
 #include "Engine\Drawers\ComplexDrawer.h"
 #include "Client\Ilwis.h"
 #include "Engine\Representation\Rpr.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\MapWindow\Drawers\DrawerTool.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
+#include "Drawers\LayerDrawer.h"
 #include "Drawers\SetDrawer.h"
-#include "Drawers\AnimationDrawer.h"
 #include "ValueSlicer.h"
-#include "Drawers\RasterSetDrawer.h"
+#include "Drawers\RasterDataDrawer.h"
 #include "Engine\Drawers\DrawerContext.h"
 #include "InteractiveRepresentationTool.h"
+#include "DrawersUI\LayerDrawerTool.h"
 #include "DrawersUI\SetDrawerTool.h"
 #include "DrawersUI\AnimationTool.h"
 
@@ -33,12 +34,12 @@ InteractiveRepresentationTool::~InteractiveRepresentationTool() {
 }
 
 bool InteractiveRepresentationTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
-	SetDrawerTool *sdrwt = dynamic_cast<SetDrawerTool *>(tool);
+	LayerDrawerTool *sdrwt = dynamic_cast<LayerDrawerTool *>(tool);
 	AnimationTool *adrwt = dynamic_cast<AnimationTool *>(tool);
 	if ( !sdrwt && !adrwt)
 		return false;
-	SetDrawer *sdrw = dynamic_cast<SetDrawer *>(tool->getDrawer());
-	AnimationDrawer *adrw = dynamic_cast<AnimationDrawer *>(tool->getDrawer());
+	LayerDrawer *sdrw = dynamic_cast<LayerDrawer *>(tool->getDrawer());
+	SetDrawer *adrw = dynamic_cast<SetDrawer *>(tool->getDrawer());
 	RangeReal rr = adrw ? adrw->getStretchRangeReal() : sdrw->getStretchRangeReal();
 	if ( rr.fValid())
 		parentTool = tool;
@@ -69,10 +70,10 @@ String InteractiveRepresentationTool::getMenuString() const {
 InterActiveSlicing::InterActiveSlicing(CWnd *par, NewDrawer *adr) 
 	: DisplayOptionsForm2((ComplexDrawer *)adr, par, TR("Slicing"))
 {
-	SetDrawer *sdr = (SetDrawer *)adr;
-	AnimationDrawer *animdrw = dynamic_cast<AnimationDrawer *>(adr);
+	LayerDrawer *sdr = (LayerDrawer *)adr;
+	SetDrawer *animdrw = dynamic_cast<SetDrawer *>(adr);
 	if ( animdrw)
-		sdr = ((SetDrawer *)animdrw->getDrawer(0));
+		sdr = ((LayerDrawer *)animdrw->getDrawer(0));
 	vs = new ValueSlicerSlider(root, sdr);
 	FieldGroup *fg = new FieldGroup(root);
 	fldSteps = new FieldOneSelectTextOnly(fg, &steps);

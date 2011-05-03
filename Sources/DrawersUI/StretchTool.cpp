@@ -8,16 +8,17 @@
 #include "Engine\Representation\Rpr.h"
 #include "Engine\Domain\Dmvalue.h"
 #include "Client\Mapwindow\MapPaneView.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\MapWindow\Drawers\DrawerTool.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
 #include "Engine\Drawers\DrawerContext.h"
+#include "Drawers\LayerDrawer.h"
 #include "Drawers\SetDrawer.h"
-#include "Drawers\AnimationDrawer.h"
-#include "DrawersUI\SetDrawerTool.h"
+#include "DrawersUI\LayerDrawerTool.h"
 #include "DrawersUI\StretchTool.h"
+#include "DrawersUI\LayerDrawerTool.h"
 #include "DrawersUI\SetDrawerTool.h"
 #include "DrawersUI\AnimationTool.h"
 #include "Headers\Hs\Drwforms.hs"
@@ -37,12 +38,12 @@ HTREEITEM StretchTool::configure( HTREEITEM parentItem){
 	if ( isConfigured)
 		return htiNode;
 
-	SetDrawer *sdrw = dynamic_cast<SetDrawer *>(drawer);
-	AnimationDrawer *adrw = dynamic_cast<AnimationDrawer *>(drawer);
+	LayerDrawer *sdrw = dynamic_cast<LayerDrawer *>(drawer);
+	SetDrawer *adrw = dynamic_cast<SetDrawer *>(drawer);
 	RangeReal rr = adrw ? adrw->getStretchRangeReal() : sdrw->getStretchRangeReal();
 
-	AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)drawer->getParentDrawer();
-	SetDrawer *setdrw = (SetDrawer *)drawer;
+	SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)drawer->getParentDrawer();
+	LayerDrawer *setdrw = (LayerDrawer *)drawer;
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&StretchTool::displayOptionStretch);
 	htiNode = insertItem("Stretch","Valuerange", item,-1); 
@@ -56,12 +57,12 @@ HTREEITEM StretchTool::configure( HTREEITEM parentItem){
 }
 
 void StretchTool::displayOptionStretch() {
-	SetDrawer *sdrw = dynamic_cast<SetDrawer *>(drawer);
-	AnimationDrawer *adrw = dynamic_cast<AnimationDrawer *>(drawer);
+	LayerDrawer *sdrw = dynamic_cast<LayerDrawer *>(drawer);
+	SetDrawer *adrw = dynamic_cast<SetDrawer *>(drawer);
 	RangeReal rr = adrw ? adrw->getStretchRangeReal() : sdrw->getStretchRangeReal();
 	double rStep;
 	if ( sdrw) {
-		BaseMapPtr *bmp = ((AbstractMapDrawer *)(sdrw->getParentDrawer()))->getBaseMap();
+		BaseMapPtr *bmp = ((SpatialDataDrawer *)(sdrw->getParentDrawer()))->getBaseMap();
 		rStep = bmp->dvrs().rStep();
 	} else {
 		BaseMapPtr *bmp = adrw->getBaseMap();
@@ -72,12 +73,12 @@ void StretchTool::displayOptionStretch() {
 }
 
 bool StretchTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
-	SetDrawerTool *sdrwt = dynamic_cast<SetDrawerTool *>(tool);
-	AnimationTool *adrwt = dynamic_cast<AnimationTool *>(tool);
-	if ( !sdrwt && !adrwt)
+	LayerDrawerTool *layerDrawerTool = dynamic_cast<LayerDrawerTool *>(tool);
+	SetDrawerTool *setDrawerTool = dynamic_cast<SetDrawerTool *>(tool);
+	if ( !layerDrawerTool && !setDrawerTool)
 		return false;
-	SetDrawer *sdrw = dynamic_cast<SetDrawer *>(tool->getDrawer());
-	AnimationDrawer *adrw = dynamic_cast<AnimationDrawer *>(tool->getDrawer());
+	LayerDrawer *sdrw = dynamic_cast<LayerDrawer *>(tool->getDrawer());
+	SetDrawer *adrw = dynamic_cast<SetDrawer *>(tool->getDrawer());
 	RangeReal rr = adrw ? adrw->getStretchRangeReal() : sdrw->getStretchRangeReal();
 	if ( rr.fValid())
 		parentTool = tool;
@@ -121,17 +122,17 @@ void  SetStretchValueForm::apply() {
 		sliderHigh->SetVal(high);
 	}
 	
-	AnimationDrawer *animDrw = dynamic_cast<AnimationDrawer *>(drw);
-	if ( animDrw) {
+	SetDrawer *setdrw = dynamic_cast<SetDrawer *>(drw);
+	if ( setdrw) {
 		PreparationParameters pp(NewDrawer::ptRENDER, 0);
-		for(int i = 0; i < animDrw->getDrawerCount(); ++i) {
-			SetDrawer *sdr = (SetDrawer *)animDrw->getDrawer(i);
-			sdr->setStretchRangeReal(RangeReal(low,high));
-			sdr->prepareChildDrawers(&pp);
+		for(int i = 0; i < setdrw->getDrawerCount(); ++i) {
+			LayerDrawer *ldr = (LayerDrawer *)setdrw->getDrawer(i);
+			ldr->setStretchRangeReal(RangeReal(low,high));
+			ldr->prepareChildDrawers(&pp);
 		}
 	}
 	else {
-		SetDrawer *setdr = (SetDrawer *)drw;
+		LayerDrawer *setdr = (LayerDrawer *)drw;
 		setdr->setStretchRangeReal(RangeReal(low,high));
 		PreparationParameters pp(NewDrawer::ptRENDER, 0);
 		setdr->prepareChildDrawers(&pp);

@@ -7,17 +7,18 @@
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\MapPaneView.h"
 #include "Drawers\DrawingColor.h" 
-#include "Drawers\SetDrawer.h"
+#include "Drawers\LayerDrawer.h"
 #include "Client\Ilwis.h"
 #include "Engine\Representation\Rpr.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\MapWindow\Drawers\DrawerTool.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
+#include "DrawersUI\SetDrawerTool.h"
 #include "Engine\Drawers\DrawerContext.h"
 #include "DrawersUI\AttributeTool.h"
-#include "DrawersUI\SetDrawerTool.h"
+#include "DrawersUI\LayerDrawerTool.h"
 
 
 DrawerTool *createAttributeTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) {
@@ -33,11 +34,14 @@ AttributeTool::~AttributeTool() {
 }
 
 bool AttributeTool::isToolUseableFor(ILWIS::DrawerTool *tool) { 
-	SetDrawerTool *sdrwt = dynamic_cast<SetDrawerTool *>(tool);
-	if (!sdrwt)
+	LayerDrawerTool *layerDrawerTool = dynamic_cast<LayerDrawerTool *>(tool);
+	SetDrawerTool *setDrawerTool = dynamic_cast<SetDrawerTool *>(tool);
+	if (!layerDrawerTool)
 		return false;
-	SetDrawer *sdrw = dynamic_cast<SetDrawer *>(sdrwt->getDrawer());
-	Table attTable = ((AbstractMapDrawer *)sdrw->getParentDrawer())->getAtttributeTable();
+	LayerDrawer *ldrw = dynamic_cast<LayerDrawer *>(layerDrawerTool->getDrawer());
+	if ( !ldrw)
+		return false;
+	Table attTable = ((SpatialDataDrawer *)ldrw->getParentDrawer())->getAtttributeTable();
 	parentTool = tool;
 	return attTable.fValid();
 }
@@ -46,7 +50,7 @@ HTREEITEM AttributeTool::configure( HTREEITEM parentItem) {
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
 	item->setDoubleCickAction(this,(DTDoubleClickActionFunc)&AttributeTool::displayOptionAttColumn);
 	item->setCheckAction(this,0, (DTSetCheckFunc)&AttributeTool::setcheckAttributeTable);
-	SetDrawer *sdr = (SetDrawer *)drawer;
+	LayerDrawer *sdr = (LayerDrawer *)drawer;
 	Column attColumn = sdr->getAtttributeColumn();
 	htiNode = insertItem("Attribute table",".tbt",item,sdr->useAttributeColumn());
 	if ( sdr->useAttributeColumn() && attColumn.fValid())
@@ -56,7 +60,7 @@ HTREEITEM AttributeTool::configure( HTREEITEM parentItem) {
 
 void AttributeTool::setcheckAttributeTable(void *w) {
 	bool yesno = *(bool *)w;
-	SetDrawer *sdr = (SetDrawer *)drawer;
+	LayerDrawer *sdr = (LayerDrawer *)drawer;
 	sdr->setUseAttributeColumn(yesno);
 	if ( !yesno){
 		sdr->getDrawingColor()->setDataColumn(Column());
@@ -71,9 +75,9 @@ void AttributeTool::setcheckAttributeTable(void *w) {
 }
 
 void AttributeTool::update() {
-	SetDrawer *sdr = (SetDrawer *)drawer;
+	LayerDrawer *sdr = (LayerDrawer *)drawer;
 	Column attColumn = sdr->getAtttributeColumn();
-	AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)sdr->getParentDrawer();
+	SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)sdr->getParentDrawer();
 	Domain dm = attColumn.fValid() ? attColumn->dm() : mapDrawer->getBaseMap()->dm();
 	sdr->setRepresentation(dm->rpr());
 	DrawerTool *stretchTool = getParentTool()->getTool("StretchTool");
@@ -95,9 +99,9 @@ void AttributeTool::update() {
 
 
 void AttributeTool::displayOptionAttColumn() {
-	SetDrawer *sdr = (SetDrawer *)drawer;
+	LayerDrawer *sdr = (LayerDrawer *)drawer;
 	if ( sdr->useAttributeColumn())
-		new ChooseAttributeColumnForm(tree, (SetDrawer *)drawer, this);
+		new ChooseAttributeColumnForm(tree, (LayerDrawer *)drawer, this);
 }
 
 String AttributeTool::getMenuString() const {
@@ -105,11 +109,11 @@ String AttributeTool::getMenuString() const {
 }
 
 //-------------------------------------
-ChooseAttributeColumnForm::ChooseAttributeColumnForm(CWnd *wPar, SetDrawer *dr, DrawerTool *t) : 
+ChooseAttributeColumnForm::ChooseAttributeColumnForm(CWnd *wPar, LayerDrawer *dr, DrawerTool *t) : 
 	DisplayOptionsForm(dr,wPar,"Choose attribute column"),
 	tool(t)
 {
-	attTable = ((AbstractMapDrawer *)dr->getParentDrawer())->getBaseMap()->tblAtt();
+	attTable = ((SpatialDataDrawer *)dr->getParentDrawer())->getBaseMap()->tblAtt();
 	attColumn = dr->getAtttributeColumn().fValid() ? dr->getAtttributeColumn()->sName() : "";
 	fc = new FieldColumn(root, "Column", attTable, &attColumn,dmVALUE | dmIMAGE | dmBOOL | dmCLASS | dmIDENT | dmUNIQUEID);
 	create();
@@ -120,10 +124,10 @@ void  ChooseAttributeColumnForm::apply() {
 	fc->StoreData();
 	if ( attColumn != "") {
 		Column col = attTable->col(attColumn);
-		((SetDrawer *)drw)->setUseAttributeColumn(true);
-		((SetDrawer *)drw)->setAttributeColumn(col);
-		((SetDrawer *)drw)->setRepresentation(col->dm()->rpr());
-		((SetDrawer *)drw)->getDrawingColor()->setDataColumn(col);
+		((LayerDrawer *)drw)->setUseAttributeColumn(true);
+		((LayerDrawer *)drw)->setAttributeColumn(col);
+		((LayerDrawer *)drw)->setRepresentation(col->dm()->rpr());
+		((LayerDrawer *)drw)->getDrawingColor()->setDataColumn(col);
 		
 		tool->update();
 	

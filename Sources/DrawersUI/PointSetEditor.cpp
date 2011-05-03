@@ -14,8 +14,8 @@
 #include "Client\Mapwindow\IlwisClipboardFormat.h"
 #include "Engine\Drawers\ComplexDrawer.h"
 #include "Engine\Drawers\SimpleDrawer.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
-#include "Drawers\SetDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
+#include "Drawers\LayerDrawer.h"
 #include "Client\Ilwis.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
@@ -23,7 +23,7 @@
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\MapWindow\Drawers\DrawerTool.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
-#include "DrawersUI\SetDrawerTool.h"
+#include "DrawersUI\LayerDrawerTool.h"
 #include "FeatureSetEditor.h"
 #include "PointSetEditor.h"
 #include "Headers\constant.h"
@@ -80,11 +80,13 @@ PointSetEditor::~PointSetEditor(){
 }
 
 bool PointSetEditor::isToolUseableFor(ILWIS::DrawerTool *tool) { 
-	SetDrawerTool *sdrwt = dynamic_cast<SetDrawerTool *>(tool);
+	LayerDrawerTool *sdrwt = dynamic_cast<LayerDrawerTool *>(tool);
 	if (!sdrwt)
 		return false;
-	SetDrawer *sdrw = dynamic_cast<SetDrawer *>(sdrwt->getDrawer());
-	BaseMapPtr *bmp = ((AbstractMapDrawer *)sdrw->getParentDrawer())->getBaseMap();
+	ILWIS::LayerDrawer *sdrw = dynamic_cast<ILWIS::LayerDrawer *>(sdrwt->getDrawer());
+	if ( !sdrw)
+		return false;
+	BaseMapPtr *bmp = ((SpatialDataDrawer *)sdrw->getParentDrawer())->getBaseMap();
 	if ( !bmp || IOTYPE(bmp->fnObj) != IlwisObject::iotPOINTMAP)
 		return false;
 
@@ -316,14 +318,14 @@ bool PointSetEditor::insertFeature(UINT nFlags, CPoint point) {
 	mdoc->pixInfoDoc->setEditFeature(CFEATURE(p));
 
 	CoordWithCoordSystem cwcs(crd, bmapptr->cs());
-	if ( setdrawer) {
-		ILWIS::DrawerParameters parms(setdrawer->getRootDrawer(), setdrawer);
+	if ( LayerDrawer) {
+		ILWIS::DrawerParameters parms(LayerDrawer->getRootDrawer(), LayerDrawer);
 		ILWIS::NewDrawer *drawer = NewDrawer::getDrawer("PointFeatureDrawer", "ilwis38", &parms);
 		drawer->addDataSource(CFEATURE(p));
 		PreparationParameters fp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER, 0);
 		drawer->prepare(&fp);
 		drawer->setSpecialDrawingOptions(NewDrawer::sdoSELECTED,true);
-		setdrawer->addDrawer(drawer);
+		LayerDrawer->addDrawer(drawer);
 	}
 	select(nFlags, point);
 	IlwWinApp()->SendUpdateCoordMessages(cmINSERT, &cwcs);
@@ -387,7 +389,7 @@ DisplayOptionsForm(dr,wPar,TR("Coordinate(s)"),fbsApplyButton | fbsBUTTONSUNDER 
 void CoordForm::apply() {
 	fc->StoreData();
 	pnt->setCoord(crd);
-	PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER, ((SetDrawer *)drw)->getCoordSystem());
+	PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER, ((LayerDrawer *)drw)->getCoordSystem());
 	drw->prepare(&pp);
 
 	this->ShowWindow(SW_HIDE);

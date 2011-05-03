@@ -2,6 +2,9 @@
 
 ILWIS::DrawerTool *createAnimationControlTool(ZoomableView* zv, LayerTreeView *view, ILWIS::NewDrawer *drw);
 
+class TimeGraphSlider;
+class FieldRealSliderEx;
+
 namespace ILWIS {
 
 	class AnimationDrawer;

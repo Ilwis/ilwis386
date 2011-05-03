@@ -21,7 +21,7 @@ protected:
 
 	class ChooseAttributeColumnForm : public DisplayOptionsForm {
 		public:
-		ChooseAttributeColumnForm(CWnd *wPar, SetDrawer *dr, DrawerTool *t);
+		ChooseAttributeColumnForm(CWnd *wPar, LayerDrawer *dr, DrawerTool *t);
 		void apply(); 
 	private:
 		Table attTable;

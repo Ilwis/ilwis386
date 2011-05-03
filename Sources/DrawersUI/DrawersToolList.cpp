@@ -7,14 +7,14 @@
 #include "Engine\Map\Point\ilwPoint.h"
 #include "Engine\Drawers\ComplexDrawer.h"
 #include "Engine\Drawers\SimpleDrawer.h" 
-#include "Engine\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
 #include "drawers\linedrawer.h"
-#include "Drawers\SetDrawer.h"
-#include "Drawers\FeatureSetDrawer.h"
-#include "Drawers\PolygonSetDrawer.h"
+#include "Drawers\LayerDrawer.h"
+#include "Drawers\FeatureLayerDrawer.h"
+#include "Drawers\PolygonLayerDrawer.h"
 #include "drawers\linedrawer.h"
-#include "Drawers\LineSetDrawer.h"
-#include "Drawers\PointSetDrawer.h"
+#include "Drawers\LineLayerDrawer.h"
+#include "Drawers\PointLayerDrawer.h"
 #include "drawers\linefeaturedrawer.h"
 #include "drawers\PointDrawer.h"
 #include "drawers\PointFeatureDrawer.h"
@@ -23,15 +23,16 @@
 #include "drawers\polygonfeaturedrawer.h"
 #include "Drawers\FeatureLayerDrawer.h"
 #include "Drawers\CanvasBackgroundDrawer.h"
-#include "Drawers\RasterLayerDrawer.h"
-#include "Drawers\RasterSetDrawer.h"
+#include "Drawers\RasterDataDrawer.h"
+#include "Drawers\RasterDataDrawer.h"
+#include "Drawers\SetDrawer.h"
 #include "Drawers\AnimationDrawer.h"
 #include "Drawers\GridDrawer.h"
 #include "drawers\pointdrawer.h"
 #include "drawers\Boxdrawer.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\Mapwindow\Drawers\DrawerTool.h"
-#include "SetDrawerTool.h"
+#include "LayerDrawerTool.h"
 #include "RepresentationTool.h"
 #include "LegendTool.h"
 #include "ColorTool.h"
@@ -40,7 +41,9 @@
 #include "PolygonSetTool.h"
 #include "LineStyleTool.h"
 #include "NonRepresentationTool.h"
+#include "DrawersUI\SetDrawerTool.h"
 #include "AnimationTool.h"
+#include "DrawersUI\CollectionTool.h"
 #include "AnimationControlTool.h"
 #include "AnimationTimeSelection.h"
 #include "ThreeDTool.h"
@@ -54,11 +57,14 @@
 #include "TransparencyTool.h"
 #include "LineSetTool.h"
 #include "FeatureSetEditor.h"
+#include "FeatureSetEditor2.h"
 #include "PointSetEditor.h"
 #include "AnimationManagementTool.h"
 #include "Client\FormElements\FormBasePropertyPage.h"
 #include "AnimationManagement.h"
-#include "LineSetEditor.h"
+//#include "LineSetEditor.h"
+#include "LineSetEditor2.h"
+
 
 using namespace ILWIS;
 
@@ -68,7 +74,7 @@ DrawerToolInfoVector *createDrawerTool() {
 
 	infos->push_back(new DrawerToolInfo("RepresentationTool",createRepresentationTool));
 	infos->push_back(new DrawerToolInfo("LegendTool",createLegendTool));
-	infos->push_back(new DrawerToolInfo("SetTool",createSetDrawerTool));
+	infos->push_back(new DrawerToolInfo("LayerDrawerTool",createLayerDrawerTool));
 	infos->push_back(new DrawerToolInfo("ColorTool",createColorTool));
 	infos->push_back(new DrawerToolInfo("InteractiveRepresentationTool",createInteractiveRepresentationTool));
 	infos->push_back(new DrawerToolInfo("StretchTool",createStretchTool));
@@ -89,8 +95,9 @@ DrawerToolInfoVector *createDrawerTool() {
 	infos->push_back(new DrawerToolInfo("TransparencyTool",createTransparencyTool));
 	infos->push_back(new DrawerToolInfo("LineSetTool",createLineSetTool));
 	infos->push_back(new DrawerToolInfo("PointSetEditor",createPointSetEditor));
-	infos->push_back(new DrawerToolInfo("LineSetEditor",createLineSetEditor));
+	infos->push_back(new DrawerToolInfo("LineSetEditor2",createLineSetEditor2));
 	infos->push_back(new DrawerToolInfo("AnimationManagement",createAnimationManagementTool));
+	infos->push_back(new DrawerToolInfo("CollectionTool",createCollectionTool));
 
 	
 

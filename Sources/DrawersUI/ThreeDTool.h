@@ -3,6 +3,7 @@
 ILWIS::DrawerTool *createThreeDTool(ZoomableView* zv, LayerTreeView *view, ILWIS::NewDrawer *drw);
 
 class FieldMapList;
+class FieldRealSliderEx;
 
 namespace ILWIS {
 
@@ -29,7 +30,7 @@ class DisplayZDataSourceForm : public DisplayOptionsForm {
 	void apply(); 
 private:
 	int initForm(Event *ev);
-	void updateDrawer(SetDrawer *sdrw, const BaseMap& basemap);
+	void updateDrawer(LayerDrawer *sdrw, const BaseMap& basemap);
 	RadioGroup *rg;
 	FieldMap *fmap;
 	FieldMapList *fmaplist;
@@ -64,7 +65,7 @@ public:
 	ExtrusionOptions(CWnd *p, ComplexDrawer *fsd);
 	void apply();
 private:
-	void setFSDOptions(SetDrawer *fsd);
+	void setFSDOptions(LayerDrawer *fsd);
 	int setTransparency(Event *ev);
 	int line;
 	int transparency;

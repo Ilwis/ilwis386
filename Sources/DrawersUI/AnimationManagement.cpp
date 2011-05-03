@@ -20,9 +20,10 @@
 #include "Engine\Drawers\ComplexDrawer.h"
 #include "Engine\Spatialreference\gr.h"
 #include "Engine\Drawers\RootDrawer.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Client\Base\Framewin.h"
 #include "Client\Mapwindow\MapWindow.h"
+#include "Drawers\SetDrawer.h"
 #include "Drawers\AnimationDrawer.h"
 #include "AnimationManagement.h"
 

@@ -12,7 +12,7 @@
 #include "Engine\Drawers\DrawerContext.h"
 #include "Engine\Drawers\ComplexDrawer.h"
 #include "Engine\Drawers\SimpleDrawer.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
@@ -65,7 +65,7 @@ FeatureSetEditor::FeatureSetEditor(const String& tp,  ZoomableView* zv, LayerTre
 	currentCoordIndex(iUNDEF),
 	currentGuid(sUNDEF),
 	mode(BaseMapEditor::mUNKNOWN),
-	setdrawer((ComplexDrawer *)drw),
+	LayerDrawer((ComplexDrawer *)drw),
 	bmapptr(0),
 	curInsert("EditEditCursor"),
 	curEdit("EditPntCursor"),
@@ -73,7 +73,7 @@ FeatureSetEditor::FeatureSetEditor(const String& tp,  ZoomableView* zv, LayerTre
 	curMoving("EditPntMovingCursor"),
 	mdoc(0)
 { 
-	AbstractMapDrawer *amdrw = dynamic_cast<AbstractMapDrawer *>(drw->getParentDrawer());
+	SpatialDataDrawer *amdrw = dynamic_cast<SpatialDataDrawer *>(drw->getParentDrawer());
 	if ( amdrw) {
 		bmapptr = amdrw->getBaseMap();
 		mdoc = (MapCompositionDoc *)zv->GetDocument();
@@ -191,9 +191,9 @@ void FeatureSetEditor::clear() {
 }
 
 // adds a vertex and the feature it belongs to to a set of selected features(maybe empty).
-void FeatureSetEditor::addToSelectedFeatures(Feature *f, const Coord& crd, const vector<NewDrawer *>& drawers, int coordIndex) {
+SelectedFeature * FeatureSetEditor::addToSelectedFeatures(Feature *f, const Coord& crd, const vector<NewDrawer *>& drawers, int coordIndex) {
 	if ( drawers.size() == 0)
-		return;
+		return 0;
 
 	SelectedFeature *sf;
 	// see if the feature already is in the 
@@ -214,7 +214,9 @@ void FeatureSetEditor::addToSelectedFeatures(Feature *f, const Coord& crd, const
 		currentCoordIndex = coordIndex;
 
 	if ( currentCoordIndex == iUNDEF)
-		return;
+		return 0;
+	currentGuid = sf->feature->getGuid();
+
 	vector<int>::iterator loc = find(sf->selectedCoords.begin(), 
 									 sf->selectedCoords.end(), 
 									 currentCoordIndex);
@@ -235,6 +237,7 @@ void FeatureSetEditor::addToSelectedFeatures(Feature *f, const Coord& crd, const
 		sf->selectedCoords.erase(loc);
 	}
 
+	return sf; 
 }
 
 bool FeatureSetEditor::selectMove(UINT nFlags, CPoint point) {
@@ -268,7 +271,7 @@ bool FeatureSetEditor::selectMove(UINT nFlags, CPoint point) {
 // is choosen the current selection is removed.
 bool FeatureSetEditor::select(UINT nFlags, CPoint point) {
 	// calc world coordinates from the point
-	Coord crd = setdrawer->getRootDrawer()->screenToWorld(RowCol(point.y, point.x));
+	Coord crd = LayerDrawer->getRootDrawer()->screenToWorld(RowCol(point.y, point.x));
 	// if no control key is pressed previous selection has to be removed
 	// note that the mMOVE mode is a hidden selection as needing to select anything 
 	// before being able to move things would be a bit cumbersome.
@@ -287,16 +290,16 @@ bool FeatureSetEditor::select(UINT nFlags, CPoint point) {
 		currentGuid = f->getGuid();
 		vector<NewDrawer *> drawers;
 		// find the lowest drawer that belongs to this feature
-		setdrawer->getRootDrawer()->getDrawerFor(f, drawers);
+		LayerDrawer->getRootDrawer()->getDrawerFor(f, drawers);
 		// add the feature to the list of selected features
 		addToSelectedFeatures(f, crd, drawers);
 
-		setdrawer->getRootDrawer()->getDrawerContext()->doDraw();
+		LayerDrawer->getRootDrawer()->getDrawerContext()->doDraw();
 
 	} else {
 		// empty selection remove all previous selections
 		clear();
-		setdrawer->getRootDrawer()->getDrawerContext()->doDraw();
+		LayerDrawer->getRootDrawer()->getDrawerContext()->doDraw();
 		return false;
 	}
 	return true;
@@ -356,7 +359,7 @@ void FeatureSetEditor::OnLButtonDown(UINT nFlags, CPoint point){
 	}
 	if ( (mode & mMOVING) && ((mode & mINSERT) == 0)) {
 		CoordSystem csyMap = bmapptr->cs();
-		CoordSystem csyPane = setdrawer->getRootDrawer()->getCoordinateSystem();
+		CoordSystem csyPane = LayerDrawer->getRootDrawer()->getCoordinateSystem();
 		if ( csyMap == csyPane)  {
 			for(SFMIter cur = selectedFeatures.begin(); cur != selectedFeatures.end(); ++cur) {
 				SelectedFeature *f = (*cur).second;
@@ -379,7 +382,7 @@ void FeatureSetEditor::OnLButtonUp(UINT nFlags, CPoint point){
 		return ;
 	if ( mode & mMOVING) {
 		CoordSystem csyMap = bmapptr->cs();
-		CoordSystem csyPane = setdrawer->getRootDrawer()->getCoordinateSystem();
+		CoordSystem csyPane = LayerDrawer->getRootDrawer()->getCoordinateSystem();
 		if ( csyMap == csyPane)  {
 			for(SFMIter cur = selectedFeatures.begin(); cur != selectedFeatures.end(); ++cur) {
 				SelectedFeature *f = (*cur).second;
@@ -448,14 +451,17 @@ long FeatureSetEditor::iCoordIndex(const vector<Coord *>& coords, const Coord& c
 			continue;
 		r2 = rDist2(c, crd);
 		if (r2 <= r2Res) {
-			if (r2 == 0)
+			if (r2 == 0) {
 				return i;
+			}
 			r2Res = r2;
 			iRes = i;
 		}
 	}
-	if ( iRes != iUNDEF)
+	if ( iRes != iUNDEF) {
+		TRACE(String("crdIndex %d\n",iRes).scVal());
 		return iRes;
+	}
 	return iUNDEF;
 }
 

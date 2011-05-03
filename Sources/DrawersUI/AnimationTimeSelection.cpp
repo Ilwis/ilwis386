@@ -6,12 +6,14 @@
 #include "Engine\Representation\Rpr.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\MapWindow\Drawers\DrawerTool.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
+#include "Drawers\SetDrawer.h"
 #include "Drawers\AnimationDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
 #include "Engine\Drawers\DrawerContext.h"
 #include "DrawersUI\AnimationTimeSelection.h"
+#include "DrawersUI\SetDrawerTool.h"
 #include "DrawersUI\AnimationTool.h"
 
 using namespace ILWIS;

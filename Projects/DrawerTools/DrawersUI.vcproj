@@ -236,6 +236,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\DrawersUI\CollectionTool.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\DrawersUI\ColorTool.cpp"
 				>
 			</File>
@@ -249,6 +253,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\DrawersUI\FeatureSetEditor.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\FeatureSetEditor2.cpp"
 				>
 			</File>
 			<File
@@ -268,11 +276,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\DrawersUI\LayerDrawerTool.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\DrawersUI\LegendTool.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\DrawersUI\LineSetEditor.cpp"
+				RelativePath="..\..\Sources\DrawersUI\LineSetEditor2.cpp"
 				>
 			</File>
 			<File
@@ -361,6 +373,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\DrawersUI\CollectionTool.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\DrawersUI\ColorTool.h"
 				>
 			</File>
@@ -370,6 +386,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\DrawersUI\FeatureSetEditor.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\FeatureSetEditor2.h"
 				>
 			</File>
 			<File
@@ -389,11 +409,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\DrawersUI\LayerDrawerTool.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\DrawersUI\LegendTool.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\DrawersUI\LineSetEditor.h"
+				RelativePath="..\..\Sources\DrawersUI\LineSetEditor2.h"
 				>
 			</File>
 			<File

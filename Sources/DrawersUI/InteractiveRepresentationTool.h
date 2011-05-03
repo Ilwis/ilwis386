@@ -2,7 +2,11 @@
 
 ILWIS::DrawerTool *createInteractiveRepresentationTool(ZoomableView* zv, LayerTreeView *view, ILWIS::NewDrawer *drw);
 
+class FieldOneSelectTextOnly;
+class ValueSlicerSlider;
+
 namespace ILWIS {
+
 
 class InteractiveRepresentationTool : public DrawerTool {
 public:

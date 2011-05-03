@@ -7,12 +7,12 @@
 #include "Engine\Drawers\RootDrawer.h"
 #include "Engine\Drawers\ComplexDrawer.h"
 #include "Drawers\DrawingColor.h" 
-#include "Drawers\SetDrawer.h"
+#include "Drawers\LayerDrawer.h"
 #include "Engine\Domain\Dmvalue.h"
 #include "Client\Ilwis.h"
 #include "Engine\Representation\Rpr.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
-#include "Drawers\AnimationDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
+#include "Drawers\SetDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\MapWindow\Drawers\DrawerTool.h"
@@ -20,9 +20,10 @@
 #include "Engine\Drawers\DrawerContext.h"
 #include "Engine\Drawers\ZValueMaker.h"
 #include "DrawersUI\ThreeDTool.h"
+#include "DrawersUI\LayerDrawerTool.h"
 #include "DrawersUI\SetDrawerTool.h"
 #include "DrawersUI\AnimationTool.h"
-#include "Drawers\RasterSetDrawer.h"
+#include "Drawers\RasterLayerDrawer.h"
 
 using namespace ILWIS;
 
@@ -40,7 +41,7 @@ ThreeDTool::~ThreeDTool() {
 
 bool ThreeDTool::isToolUseableFor(ILWIS::DrawerTool *tool) { 
 
-	SetDrawerTool *sdrwt = dynamic_cast<SetDrawerTool *>(tool);
+	LayerDrawerTool *sdrwt = dynamic_cast<LayerDrawerTool *>(tool);
 	AnimationTool *adrwt = dynamic_cast<AnimationTool *>(tool);
 	if ( !sdrwt && !adrwt)
 		return false;
@@ -102,14 +103,14 @@ DisplayZDataSourceForm::DisplayZDataSourceForm(CWnd *wPar, ComplexDrawer *dr) :
 DisplayOptionsForm(dr,wPar,TR("3D Options")), sourceIndex(0) 
 {
 	root->SetCallBack((NotifyProc)&DisplayZDataSourceForm::initForm);
-	SetDrawer *sdrw = dynamic_cast<SetDrawer *>(drw);
-	AnimationDrawer *adrw = dynamic_cast<AnimationDrawer *>(drw);
+	LayerDrawer *sdrw = dynamic_cast<LayerDrawer *>(drw);
+	SetDrawer *adrw = dynamic_cast<SetDrawer *>(drw);
 	if ( adrw) {
-		sdrw = (SetDrawer *)adrw->getDrawer(0);
-		AbstractMapDrawer *absdrw = (AbstractMapDrawer *)sdrw->getParentDrawer();
+		sdrw = (LayerDrawer *)adrw->getDrawer(0);
+		SpatialDataDrawer *absdrw = (SpatialDataDrawer *)sdrw->getParentDrawer();
 		bmp.SetPointer(absdrw->getBaseMap());
 	} else {
-		AbstractMapDrawer *fdrw = (AbstractMapDrawer *)sdrw->getParentDrawer();
+		SpatialDataDrawer *fdrw = (SpatialDataDrawer *)sdrw->getParentDrawer();
 		bmp.SetPointer(fdrw->getBaseMap());
 	}
 	if ( bmp->fTblAtt())
@@ -138,8 +139,8 @@ int DisplayZDataSourceForm::initForm(Event *ev) {
 	if ( GetSafeHwnd()) {
 		if ( !attTable.fValid())
 			rbTable->Disable();
-		SetDrawer *sdrw = dynamic_cast<SetDrawer *>(drw);
-		AnimationDrawer *adrw = dynamic_cast<AnimationDrawer *>(drw);
+		LayerDrawer *sdrw = dynamic_cast<LayerDrawer *>(drw);
+		SetDrawer *adrw = dynamic_cast<SetDrawer *>(drw);
 		if ( !adrw) {
 			rbMaplist->Disable();
 		}
@@ -150,12 +151,12 @@ int DisplayZDataSourceForm::initForm(Event *ev) {
 void DisplayZDataSourceForm::apply() {
 	rg->StoreData();
 
-	SetDrawer *sdrw = dynamic_cast<SetDrawer *>(drw);
-	AnimationDrawer *adrw = dynamic_cast<AnimationDrawer *>(drw);
+	ILWIS::LayerDrawer *sdrw = dynamic_cast<ILWIS::LayerDrawer *>(drw);
+	SetDrawer *adrw = dynamic_cast<SetDrawer *>(drw);
 	if ( adrw) {
 		adrw->getZMaker()->setRange(adrw->getRange());
 		for(int i = 0 ; i < adrw->getDrawerCount(); ++i) {
-			RasterSetDrawer *sdrw = (RasterSetDrawer *)adrw->getDrawer(i);
+			RasterLayerDrawer *sdrw = (RasterLayerDrawer *)adrw->getDrawer(i);
 			MapList mpl;
 			if ( sourceIndex == 0) {
 				mpl = *((MapList *)(sdrw->getDataSource())); 
@@ -182,7 +183,7 @@ void DisplayZDataSourceForm::apply() {
 	updateMapView();
 }
 
-void DisplayZDataSourceForm::updateDrawer(SetDrawer *sdrw, const BaseMap& basemap) {
+void DisplayZDataSourceForm::updateDrawer(LayerDrawer *sdrw, const BaseMap& basemap) {
 	if ( mapName != "" && sourceIndex < 3) {
 		sdrw->getZMaker()->setDataSourceMap(basemap);
 		PreparationParameters pp(NewDrawer::pt3D);
@@ -239,11 +240,11 @@ void ZDataScaling::apply() {
 	drw->getZMaker()->setZScale(zscale/100.0);
 	RangeReal rr = drw->getZMaker()->getRange();
 	drw->getZMaker()->setOffset(zoffset + rr.rLo());
-	AnimationDrawer *adrw = dynamic_cast<AnimationDrawer *>(drw);
+	SetDrawer *adrw = dynamic_cast<SetDrawer *>(drw);
 	if ( adrw) {
 		rr = adrw->getZMaker()->getRange();
 		for(int i = 0 ; i < adrw->getDrawerCount(); ++i) {
-			SetDrawer *sdrw = (SetDrawer *)adrw->getDrawer(i);
+			LayerDrawer *sdrw = (LayerDrawer *)adrw->getDrawer(i);
 			sdrw->getZMaker()->setRange(rr);
 			sdrw->getZMaker()->setZScale(zscale/100.0);
 			sdrw->getZMaker()->setOffset(zoffset + rr.rLo());
@@ -255,10 +256,10 @@ void ZDataScaling::apply() {
 ExtrusionOptions::ExtrusionOptions(CWnd *p, ComplexDrawer *drw) :
 DisplayOptionsForm(drw, p, TR("Extrusion options") )
 {
-	SetDrawer *fdr = (SetDrawer *)drw;
-	AnimationDrawer *animdrw = dynamic_cast<AnimationDrawer *>(drw);
+	LayerDrawer *fdr = (LayerDrawer *)drw;
+	SetDrawer *animdrw = dynamic_cast<SetDrawer *>(drw);
 	if ( animdrw)
-		fdr = ((SetDrawer *)animdrw->getDrawer(0));
+		fdr = ((LayerDrawer *)animdrw->getDrawer(0));
 
 	transparency = 100 *(1.0-fdr->getExtrusionTransparency());
 	if ( (fdr->getSpecialDrawingOption() &  NewDrawer::sdoOpen) != 0)
@@ -281,8 +282,8 @@ DisplayOptionsForm(drw, p, TR("Extrusion options") )
 
 int ExtrusionOptions::setTransparency(Event *ev) {
 	slider->StoreData();
-	//((SetDrawer *)drw)->extrTransparency = 1.0 - (double)transparency/100.0;
-	((SetDrawer *)drw)->setExtrustionTransparency(1.0 - (double)transparency/100.0);
+	//((LayerDrawer *)drw)->extrTransparency = 1.0 - (double)transparency/100.0;
+	((LayerDrawer *)drw)->setExtrustionTransparency(1.0 - (double)transparency/100.0);
 	PreparationParameters pp(NewDrawer::ptRENDER);
 	drw->prepare(&pp);
 	updateMapView();
@@ -291,12 +292,12 @@ int ExtrusionOptions::setTransparency(Event *ev) {
 void ExtrusionOptions::apply() {
 	rg->StoreData();
 	slider->StoreData();
-	SetDrawer *fdr = (SetDrawer *)drw;
-	AnimationDrawer *animDrw = dynamic_cast<AnimationDrawer *>(drw);
+	LayerDrawer *fdr = (LayerDrawer *)drw;
+	SetDrawer *animDrw = dynamic_cast<SetDrawer *>(drw);
 	if ( animDrw) {
 		PreparationParameters pp(NewDrawer::ptRENDER, 0);
 		for(int i = 0; i < animDrw->getDrawerCount(); ++i) {
-			SetDrawer *fdr = (SetDrawer *)animDrw->getDrawer(i);
+			LayerDrawer *fdr = (LayerDrawer *)animDrw->getDrawer(i);
 			setFSDOptions(fdr);
 		}
 	}
@@ -308,22 +309,22 @@ void ExtrusionOptions::apply() {
 
 }
 
-void ExtrusionOptions::setFSDOptions(SetDrawer *fsd) {
+void ExtrusionOptions::setFSDOptions(LayerDrawer *fsd) {
 	if ( line == 0) {
-		((SetDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoOpen, true );
-	    ((SetDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFootPrint, false );
-		((SetDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFilled, false);
+		((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoOpen, true );
+	    ((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFootPrint, false );
+		((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFilled, false);
 	}
 	if (line == 1) {
-		((SetDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFilled, true);
-	    ((SetDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoOpen, false );
-		((SetDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFootPrint, false);
+		((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFilled, true);
+	    ((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoOpen, false );
+		((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFootPrint, false);
 	}
 	if (line == 2){
-	    ((SetDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoOpen, false );
-		((SetDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFilled, false);
-		((SetDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFootPrint, true);
+	    ((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoOpen, false );
+		((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFilled, false);
+		((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFootPrint, true);
 	}
-	((SetDrawer *)drw)->setExtrustionTransparency(1.0 - (double)transparency/100.0);
+	((LayerDrawer *)drw)->setExtrustionTransparency(1.0 - (double)transparency/100.0);
 
 }

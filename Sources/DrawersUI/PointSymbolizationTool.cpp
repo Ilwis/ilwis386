@@ -3,20 +3,20 @@
 #include "Engine\Drawers\ComplexDrawer.h"
 #include "Client\Ilwis.h"
 #include "Engine\Representation\Rpr.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\MapWindow\Drawers\DrawerTool.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
 #include "Engine\Drawers\DrawerContext.h"
-#include "Drawers\SetDrawer.h"
-#include "Drawers\FeatureSetDrawer.h"
-#include "Drawers\PointSetDrawer.h"
+#include "Drawers\LayerDrawer.h"
+#include "Drawers\FeatureLayerDrawer.h"
+#include "Drawers\PointLayerDrawer.h"
 #include "Engine\Drawers\SVGLoader.h"
 #include "DrawersUI\PointSymbolizationTool.h"
+#include "DrawersUI\LayerDrawerTool.h"
 #include "DrawersUI\SetDrawerTool.h"
-#include "DrawersUI\AnimationTool.h"
-#include "Drawers\AnimationDrawer.h"
+#include "Drawers\SetDrawer.h"
 
 
 DrawerTool *createPointSymbolizationTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) {
@@ -24,7 +24,7 @@ DrawerTool *createPointSymbolizationTool(ZoomableView* zv, LayerTreeView *view, 
 }
 
 PointSymbolizationTool::PointSymbolizationTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
-	DrawerTool("NonRepresentationToolTool", zv, view, drw)
+	DrawerTool("PointSymbolizationTool", zv, view, drw)
 {
 }
 
@@ -33,14 +33,14 @@ PointSymbolizationTool::~PointSymbolizationTool() {
 
 bool PointSymbolizationTool::isToolUseableFor(ILWIS::DrawerTool *tool) { 
 
-	SetDrawerTool *sdrwt = dynamic_cast<SetDrawerTool *>(tool);
-	AnimationTool *adrwt = dynamic_cast<AnimationTool *>(tool);
-	if ( !sdrwt && !adrwt)
+	LayerDrawerTool *ldrwt = dynamic_cast<LayerDrawerTool *>(tool);
+	SetDrawerTool *setDrawerTool = dynamic_cast<SetDrawerTool *>(tool);
+	if ( !ldrwt && !setDrawerTool)
 		return false;
-	PointSetDrawer *pdrw = dynamic_cast<PointSetDrawer *>(drawer);
-	if ( adrwt) {
-		NewDrawer *drw = adrwt->getDrawer();
-		pdrw = dynamic_cast<PointSetDrawer *>(((AnimationDrawer *)(drw))->getDrawer(0));
+	PointLayerDrawer *pdrw = dynamic_cast<PointLayerDrawer *>(drawer);
+	if ( setDrawerTool) {
+		NewDrawer *drw = setDrawerTool->getDrawer();
+		pdrw = dynamic_cast<PointLayerDrawer *>(((SetDrawer *)(drw))->getDrawer(0));
 	}
 	if ( !pdrw)
 		return false;
@@ -58,7 +58,7 @@ HTREEITEM PointSymbolizationTool::configure( HTREEITEM parentItem) {
 }
 
 void PointSymbolizationTool::setSymbolization() {
-	new PointSymbolizationForm(tree, (PointSetDrawer *)drawer);
+	new PointSymbolizationForm(tree, (PointLayerDrawer *)drawer);
 }
 
 String PointSymbolizationTool::getMenuString() const {
@@ -66,7 +66,7 @@ String PointSymbolizationTool::getMenuString() const {
 }
 
 //---------------------------------------------------
-PointSymbolizationForm::PointSymbolizationForm(CWnd *wPar, PointSetDrawer *dr):
+PointSymbolizationForm::PointSymbolizationForm(CWnd *wPar, PointLayerDrawer *dr):
 DisplayOptionsForm(dr,wPar,TR("Symbolization")), selection(0), thick(1), scale(1)
 {
 	ILWIS::SVGLoader *loader = NewDrawer::getSvgLoader();
@@ -86,11 +86,23 @@ void PointSymbolizationForm::apply(){
 	fselect->StoreData();
 	frScale->StoreData();
 
+	SetDrawer *setDrw = dynamic_cast<SetDrawer *>(drw);
 	String symbol = names[selection];
-	PointSetDrawer *psdrw = (PointSetDrawer *)drw;
-	psdrw->setSymbolProperties(symbol,scale);
-	PreparationParameters pp(NewDrawer::ptRENDER, 0);
-	psdrw->prepare(&pp);
+	if ( setDrw) {
+		for(int i = 0; i < setDrw->getDrawerCount(); ++i) {
+			PointLayerDrawer *psdrw = (PointLayerDrawer *) (setDrw->getDrawer(i));
+			psdrw->setSymbolProperties(symbol,scale);
+		}
+		PreparationParameters pp(NewDrawer::ptRENDER, 0);
+		setDrw->prepareChildDrawers(&pp);
+	} else {
+		PointLayerDrawer *psdrw = (PointLayerDrawer *)drw;
+		psdrw->setSymbolProperties(symbol,scale);
+		PreparationParameters pp(NewDrawer::ptRENDER, 0);
+		psdrw->prepare(&pp);
+	}
+
+
 	updateMapView();
 }
 

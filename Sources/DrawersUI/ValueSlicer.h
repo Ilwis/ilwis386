@@ -36,11 +36,11 @@ private:
 class _export ValueSlicerSlider : public FormEntry {
 	friend class ValueSlicer;
 public:
-	ValueSlicerSlider(FormEntry* par, ILWIS::SetDrawer *sdrw);
+	ValueSlicerSlider(FormEntry* par, ILWIS::LayerDrawer *sdrw);
 	~ValueSlicerSlider();
 	void setValueRange(const ValueRange& tbl);
 	void setBound(int index, double up);
-	void setDrawer(ILWIS::SetDrawer *drwc);
+	void LayerDrawer(ILWIS::LayerDrawer *drwc);
 	void setNumberOfBounds(int n);
 	void create();
 	bool isValid() const;
@@ -58,7 +58,7 @@ private:
 	Color nextColor(int i);
 	ValueSlicer *valueslicer;
 	ValueRange valrange;
-	ILWIS::SetDrawer *drawer;
+	ILWIS::LayerDrawer *drawer;
 	ILWIS::DrawingColor *drawingcolor;
 	RepresentationGradual *rprgrad;
 	Representation rpr;

@@ -3,15 +3,16 @@
 #include "Engine\Drawers\ComplexDrawer.h"
 #include "Client\Ilwis.h"
 #include "Engine\Representation\Rpr.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\MapWindow\Drawers\DrawerTool.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
 #include "Engine\Drawers\DrawerContext.h"
 #include "DrawersUI\ColorTool.h"
+#include "Drawers\LayerDrawer.h"
 #include "Drawers\SetDrawer.h"
-#include "Drawers\AnimationDrawer.h"
+#include "DrawersUI\LayerDrawerTool.h"
 #include "DrawersUI\SetDrawerTool.h"
 #include "DrawersUI\AnimationTool.h"
 
@@ -30,7 +31,7 @@ ColorTool::~ColorTool() {
 }
 
 bool ColorTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
-	SetDrawerTool *sdrwt = dynamic_cast<SetDrawerTool *>(tool);
+	LayerDrawerTool *sdrwt = dynamic_cast<LayerDrawerTool *>(tool);
 	AnimationTool *adrwt = dynamic_cast<AnimationTool *>(tool);
 	if ( !sdrwt && !adrwt)
 		return false;
@@ -61,10 +62,10 @@ void ColorTool::setcheckRpr(void *value) {
 
 	String method = name.substr(index + 1);
 
-	SetDrawer *sdrw = dynamic_cast<SetDrawer *>(drawer);
-	AnimationDrawer *adrw = dynamic_cast<AnimationDrawer *>(drawer);
+	LayerDrawer *sdrw = dynamic_cast<LayerDrawer *>(drawer);
+	SetDrawer *adrw = dynamic_cast<SetDrawer *>(drawer);
 	if ( adrw) {
-		sdrw = (SetDrawer *)adrw->getDrawer(0);
+		sdrw = (LayerDrawer *)adrw->getDrawer(0);
 	}
 	Representation rpr = sdrw->getRepresentation();
 	if ( method == "Representation")
@@ -77,7 +78,7 @@ void ColorTool::setcheckRpr(void *value) {
 	if ( adrw) {
 		PreparationParameters pp(NewDrawer::ptRENDER, 0);
 		for(int i = 0; i < adrw->getDrawerCount(); ++i) {
-			SetDrawer *sdr = (SetDrawer *)adrw->getDrawer(i);
+			LayerDrawer *sdr = (LayerDrawer *)adrw->getDrawer(i);
 			sdr->modifyLineStyleItem(tree, (sdrw->getDrawMethod() == NewDrawer::drmRPR && rpr.fValid() && rpr->prc()));
 			sdr->prepareChildDrawers(&pp);
 		}

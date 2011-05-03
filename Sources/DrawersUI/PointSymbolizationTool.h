@@ -21,7 +21,7 @@ protected:
 
 class PointSymbolizationForm : public DisplayOptionsForm {
 	public:
-	PointSymbolizationForm(CWnd *wPar, PointSetDrawer *dr);
+	PointSymbolizationForm(CWnd *wPar, PointLayerDrawer *dr);
 	void apply(); 
 private:
 	vector<string> names;

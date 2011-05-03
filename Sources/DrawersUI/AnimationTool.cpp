@@ -1,15 +1,16 @@
 #include "Client\Headers\formelementspch.h"
 #include "Engine\Drawers\RootDrawer.h"
 #include "Engine\Drawers\ComplexDrawer.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\MapWindow\Drawers\DrawerTool.h"
+#include "Drawers\SetDrawer.h"
 #include "Drawers\AnimationDrawer.h"
 #include "Client\Ilwis.h"
 #include "Engine\Representation\Rpr.h"
 #include "Client\Mapwindow\MapPaneView.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\MapWindow\Drawers\DrawerTool.h"
@@ -17,6 +18,7 @@
 #include "Engine\Drawers\DrawerContext.h"
 #include "Client\FormElements\FormBasePropertyPage.h"
 #include "AnimationManagement.h"
+#include "DrawersUI\SetDrawerTool.h"
 #include "DrawersUI\AnimationTool.h"
 #include "Client\Base\Framewin.h"
 #include "Client\Mapwindow\MapWindow.h"
@@ -30,7 +32,7 @@ DrawerTool *createAnimationTool(ZoomableView* zv, LayerTreeView *view, NewDrawer
 }
 
 AnimationTool::AnimationTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
-	DrawerTool("AnimationTool",zv, view, drw)
+	SetDrawerTool("AnimationTool",zv, view, drw)
 {
 }
 

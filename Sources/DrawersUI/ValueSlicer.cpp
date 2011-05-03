@@ -1,7 +1,7 @@
 #include "Client\Headers\formelementspch.h"
 #include <gdiplus.h>
 #include "Engine\Drawers\RootDrawer.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Client\FormElements\fldcolor.cpp"
 #include "Engine\Map\basemap.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
@@ -13,10 +13,10 @@
 #include "Engine\Representation\Rprgrad.h"
 #include "Engine\Base\DataObjects\valrange.h"
 #include "ValueSlicer.h"
-#include "Drawers\SetDrawer.h"
+#include "Drawers\LayerDrawer.h"
 #include "Drawers\FeatureLayerDrawer.h"
-#include "Drawers\RasterSetDrawer.h"
-#include "Drawers\AnimationDrawer.h"
+#include "Drawers\RasterLayerDrawer.h"
+#include "Drawers\SetDrawer.h"
 
 
 BEGIN_MESSAGE_MAP(ValueSlicer, CStatic)
@@ -186,15 +186,15 @@ void ValueSlicer::moveValue(int index, double v) {
 }
 
 void ValueSlicer::updateRepresentations() {
-	ILWIS::AbstractMapDrawer *parentDrw = (ILWIS::AbstractMapDrawer *)fldslicer->drawer->getParentDrawer();
+	ILWIS::SpatialDataDrawer *parentDrw = (ILWIS::SpatialDataDrawer *)fldslicer->drawer->getParentDrawer();
 	for(int i =0; i < parentDrw->getDrawerCount(); ++i) {
-		ILWIS::SetDrawer *setdrw;
+		ILWIS::LayerDrawer *setdrw;
 		if ( rprBase.fValid()){
-			setdrw = (ILWIS::SetDrawer *)parentDrw->getDrawer(i);
-			setdrw = (ILWIS::SetDrawer *)setdrw->getDrawer(RSELECTDRAWER,ComplexDrawer::dtPOST);
+			setdrw = (ILWIS::LayerDrawer *)parentDrw->getDrawer(i);
+			setdrw = (ILWIS::LayerDrawer *)setdrw->getDrawer(RSELECTDRAWER,ComplexDrawer::dtPOST);
 		}
 		else
-			setdrw = (ILWIS::SetDrawer *)parentDrw->getDrawer(i);
+			setdrw = (ILWIS::LayerDrawer *)parentDrw->getDrawer(i);
 		if (!setdrw)
 			return;
 
@@ -272,7 +272,7 @@ void ValueSlicer::setRprBase(const Representation& rprB) {
 	rprBase = rprB;
 }
 //----------------------------------------------------
-ValueSlicerSlider::ValueSlicerSlider(FormEntry* par, ILWIS::SetDrawer *sdrw) :
+ValueSlicerSlider::ValueSlicerSlider(FormEntry* par, ILWIS::LayerDrawer *sdrw) :
 	FormEntry(par,0,true),
     valueslicer(0),
 	drawingcolor(0),
@@ -283,7 +283,7 @@ ValueSlicerSlider::ValueSlicerSlider(FormEntry* par, ILWIS::SetDrawer *sdrw) :
   psn->iMinHeight = psn->iHeight = 250;
   SetIndependentPos();
   setNumberOfBounds(2);
-  setDrawer(sdrw);
+  LayerDrawer(sdrw);
   RangeReal rr = sdrw->getStretchRangeReal();
   setValueRange(ValueRange(rr,0));
   highColor = Color(70,255,30);
@@ -330,7 +330,7 @@ void ValueSlicerSlider::setBound(int index , double v){
 	
 }
 
-void ValueSlicerSlider::setDrawer(ILWIS::SetDrawer *dr) {
+void ValueSlicerSlider::LayerDrawer(ILWIS::LayerDrawer *dr) {
 	drawer = dr;
 }
 
@@ -393,15 +393,15 @@ void ValueSlicerSlider::init() {
 			rpr->Store();
 		}
 	
-		ILWIS::AbstractMapDrawer *parentDrw = (ILWIS::AbstractMapDrawer *)drawer->getParentDrawer();
+		ILWIS::SpatialDataDrawer *parentDrw = (ILWIS::SpatialDataDrawer *)drawer->getParentDrawer();
 		for(int i =0; i < parentDrw->getDrawerCount(); ++i) {
-			ILWIS::SetDrawer *setdrw = (ILWIS::SetDrawer *)parentDrw->getDrawer(i);
+			ILWIS::LayerDrawer *setdrw = (ILWIS::LayerDrawer *)parentDrw->getDrawer(i);
 			if ( rprBase.fValid()){
 				setdrw->setRepresentation(rprBase);
-				setdrw = (ILWIS::SetDrawer *)setdrw->getDrawer(RSELECTDRAWER,ComplexDrawer::dtPOST);
+				setdrw = (ILWIS::LayerDrawer *)setdrw->getDrawer(RSELECTDRAWER,ComplexDrawer::dtPOST);
 			}
 			else
-				setdrw = (ILWIS::SetDrawer *)parentDrw->getDrawer(i);
+				setdrw = (ILWIS::LayerDrawer *)parentDrw->getDrawer(i);
 			if ( setdrw)
 				setdrw->setRepresentation(rpr);
 		}
@@ -410,7 +410,7 @@ void ValueSlicerSlider::init() {
 			valueslicer->updateRepresentations();
 
 		if ( rprBase.fValid()) {
-			SetDrawer *dr = (SetDrawer *)drawer->getDrawer(RSELECTDRAWER,ComplexDrawer::dtPOST);
+			ILWIS::LayerDrawer *dr = (ILWIS::LayerDrawer *)drawer->getDrawer(RSELECTDRAWER,ComplexDrawer::dtPOST);
 			if ( dr)
 				drawingcolor = new ILWIS::DrawingColor(dr);
 		}

@@ -2,6 +2,8 @@
 
 ILWIS::DrawerTool *createStretchTool(ZoomableView* zv, LayerTreeView *view, ILWIS::NewDrawer *drw);
 
+class FieldRealSliderEx;
+
 namespace ILWIS {
 class StretchTool : public DrawerTool {
 public:

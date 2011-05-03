@@ -4,13 +4,13 @@
 #include "Engine\Drawers\ComplexDrawer.h"
 #include "Client\Ilwis.h"
 #include "Engine\Representation\Rpr.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\MapWindow\Drawers\DrawerTool.h"
 #include "DrawersUI\ColorTool.h"
-#include "Drawers\SetDrawer.h"
-#include "Drawers\FeatureSetDrawer.h"
+#include "Drawers\LayerDrawer.h"
+#include "Drawers\FeatureLayerDrawer.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
 #include "Engine\Drawers\DrawerContext.h"
 #include "DrawersUI\NonRepresentationTool.h"
@@ -34,7 +34,7 @@ bool NonRepresentationToolTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	if ( dynamic_cast<ColorTool *>(tool) == 0)
 		return false;
 
-	FeatureSetDrawer *sdrw = dynamic_cast<FeatureSetDrawer *>(tool->getDrawer());
+	FeatureLayerDrawer *sdrw = dynamic_cast<FeatureLayerDrawer *>(tool->getDrawer());
 	if (!sdrw)
 		return false;
 	Representation rpr = sdrw->getRepresentation();
@@ -50,7 +50,7 @@ bool NonRepresentationToolTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 HTREEITEM NonRepresentationToolTool::configure( HTREEITEM parentItem) {
 	int iImgLeg = IlwWinApp()->iImage("Picture");
 	htiNode = tree->GetTreeCtrl().InsertItem(TR("Fixed Colors").scVal(), iImgLeg, iImgLeg, parentItem);
-	FeatureSetDrawer *sdrw = dynamic_cast<FeatureSetDrawer *>(drawer);
+	FeatureLayerDrawer *sdrw = dynamic_cast<FeatureLayerDrawer *>(drawer);
 	ColorTool *ctool = (ColorTool *)parentTool;
 	bool useSingleColor = sdrw->getDrawMethod() == NewDrawer::drmSINGLE;
 	bool useRpr = sdrw->getDrawMethod() == NewDrawer::drmRPR;
@@ -71,14 +71,14 @@ HTREEITEM NonRepresentationToolTool::configure( HTREEITEM parentItem) {
 }
 
 void NonRepresentationToolTool::displayOptionSingleColor() {
-	new SetSingleColorForm(tree, (FeatureSetDrawer *)drawer);
+	new SetSingleColorForm(tree, (FeatureLayerDrawer *)drawer);
 }
 
 String NonRepresentationToolTool::getMenuString() const {
 	return TR("Fixed Color Scheme");
 }
 //------------------------------------------------
-SetSingleColorForm::SetSingleColorForm(CWnd *wPar, FeatureSetDrawer *dr) : 
+SetSingleColorForm::SetSingleColorForm(CWnd *wPar, FeatureLayerDrawer *dr) : 
 	DisplayOptionsForm(dr, wPar,String("Single draw color for %S",dr->getName())),
 	c(dr->getSingleColor())
 {
@@ -88,8 +88,8 @@ SetSingleColorForm::SetSingleColorForm(CWnd *wPar, FeatureSetDrawer *dr) :
 
 void  SetSingleColorForm::apply() {
 	fc->StoreData();
-	((FeatureSetDrawer *)drw)->setSingleColor(c);
-	//((FeatureSetDrawer *)drw)->colorItem->setColor(c);
+	((FeatureLayerDrawer *)drw)->setSingleColor(c);
+	//((FeatureLayerDrawer *)drw)->colorItem->setColor(c);
 	PreparationParameters parm(NewDrawer::ptRENDER, 0);
 	drw->prepareChildDrawers(&parm);
 	updateMapView();

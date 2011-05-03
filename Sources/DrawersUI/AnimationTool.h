@@ -6,7 +6,7 @@ namespace ILWIS {
 	class AnimationDrawer;
 	class AnimationPropertySheet;
 
-	class AnimationTool : public DrawerTool {
+	class AnimationTool : public SetDrawerTool {
 	public:
 		AnimationTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw);
 		bool isToolUseableFor(ILWIS::NewDrawer *drw);

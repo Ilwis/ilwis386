@@ -8,18 +8,18 @@
 #include "Engine\Representation\Rpr.h"
 #include "Engine\Domain\Dmvalue.h"
 #include "Client\Mapwindow\MapPaneView.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Engine\Drawers\DrawerContext.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\MapWindow\Drawers\DrawerTool.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
 #include "Client\Mapwindow\LayerTreeView.h"
+#include "Drawers\LayerDrawer.h"
 #include "Drawers\SetDrawer.h"
-#include "Drawers\AnimationDrawer.h"
 #include "DrawersUI\RepresentationTool.h"
 #include "DrawersUI\ColorTool.h"
 #include "DrawersUI\LegendTool.h"
-#include "DrawersUI\SetDrawerTool.h"
+#include "DrawersUI\LayerDrawerTool.h"
 #include "DrawersUI\StretchTool.h"
 #include "Engine\Domain\dmclass.h"
 #include "Headers\Hs\Drwforms.hs"
@@ -32,7 +32,7 @@ DrawerTool *createRepresentationTool(ZoomableView* zv, LayerTreeView *view, NewD
 RepresentationTool::RepresentationTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
 	DrawerTool("RepresentationTool", zv,view,drw)
 {
-	//SetDrawer *setdrw = (SetDrawer *)drawer;
+	//LayerDrawer *setdrw = (LayerDrawer *)drawer;
 	//Representation rpr = setdrw->getRepresentation();
 	//DrawerTool *legendTool = new LegendTool(zv,tree, drw);
 	//legendTool->setVisible(true);
@@ -44,7 +44,7 @@ RepresentationTool::~RepresentationTool() {
 
 
 HTREEITEM RepresentationTool::configure( HTREEITEM parentItem){
-	SetDrawer *setdrw = (SetDrawer *)drawer;
+	LayerDrawer *setdrw = (LayerDrawer *)drawer;
 	rpr = setdrw->getRepresentation();
 	DisplayOptionItemFunc func = (DisplayOptionItemFunc)&RepresentationTool::displayOptionSubRpr; 
 	bool usesRpr = drawer->getDrawMethod() == NewDrawer::drmRPR;
@@ -65,10 +65,10 @@ bool RepresentationTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	if ( dynamic_cast<ColorTool *>(tool) == 0)
 		return false;
 
-	SetDrawer *sdrw = dynamic_cast<SetDrawer *>(tool->getDrawer());
-	AnimationDrawer *adrw = dynamic_cast<AnimationDrawer *>(tool->getDrawer());
+	LayerDrawer *sdrw = dynamic_cast<LayerDrawer *>(tool->getDrawer());
+	SetDrawer *adrw = dynamic_cast<SetDrawer *>(tool->getDrawer());
 	if ( adrw) {
-		sdrw = (SetDrawer *)adrw->getDrawer(0);
+		sdrw = (LayerDrawer *)adrw->getDrawer(0);
 	}
 
 	Representation rpr = sdrw->getRepresentation();
@@ -82,23 +82,23 @@ bool RepresentationTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 }
 
 void RepresentationTool::displayOptionSubRpr() {
-	AnimationDrawer *animDrw = dynamic_cast<AnimationDrawer *>(drawer);
+	SetDrawer *animDrw = dynamic_cast<SetDrawer *>(drawer);
 	DrawerTool *legendTool = getTool("LegendTool");
-	new RepresentationToolForm(tree, (SetDrawer *)drawer,animDrw, legendTool);
+	new RepresentationToolForm(tree, (LayerDrawer *)drawer,animDrw, legendTool);
 }
 
 //---------------------------------------------------
-RepresentationToolForm::RepresentationToolForm(CWnd *wPar, SetDrawer *dr,AnimationDrawer *adr, DrawerTool* t) : 
+RepresentationToolForm::RepresentationToolForm(CWnd *wPar, ILWIS::LayerDrawer *dr,SetDrawer *adr, DrawerTool* t) : 
 	DisplayOptionsForm(dr,wPar,"Set Representation"),
-	setDrawer(dr),
+	layerDrawer(dr),
 	animDrw(adr),
 	tool(t)
 {
 	if ( animDrw) {
-		rpr = ((SetDrawer *)animDrw->getDrawer(0))->getRepresentation()->sName();
+		rpr = ((ILWIS::LayerDrawer *)animDrw->getDrawer(0))->getRepresentation()->sName();
 	}
 	else {
-		rpr = setDrawer->getRepresentation()->sName();
+		rpr = layerDrawer->getRepresentation()->sName();
 	}
 	fldRpr = new FieldRepresentation(root, "Representation", &rpr);
 	create();
@@ -109,15 +109,15 @@ void  RepresentationToolForm::apply() {
 	if ( animDrw) {
 		PreparationParameters pp(NewDrawer::ptRENDER, 0);
 		for(int i = 0; i < animDrw->getDrawerCount(); ++i) {
-			SetDrawer *sdr = (SetDrawer *)animDrw->getDrawer(i);
+			LayerDrawer *sdr = (LayerDrawer *)animDrw->getDrawer(i);
 			sdr->setRepresentation(rpr);
 			sdr->prepareChildDrawers(&pp);
 		}
 	}
 	else {
 		PreparationParameters pp(NewDrawer::ptRENDER, 0);
-		setDrawer->setRepresentation(rpr);
-		setDrawer->prepareChildDrawers(&pp);
+		layerDrawer->setRepresentation(rpr);
+		layerDrawer->prepareChildDrawers(&pp);
 	}
 	tool->update();
 	

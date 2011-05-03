@@ -3,8 +3,9 @@
 #include "Engine\Drawers\ComplexDrawer.h"
 #include "Client\Ilwis.h"
 #include "Engine\Representation\Rpr.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
+#include "Drawers\SetDrawer.h"
 #include "Drawers\AnimationDrawer.h"
 #include "Client\Mapwindow\MapPaneView.h"
 #include "Client\Mapwindow\LayerTreeView.h"
@@ -15,12 +16,12 @@
 #include "DrawersUI\LineSetTool.h"
 #include "Engine\Drawers\SimpleDrawer.h" 
 #include "drawers\linedrawer.h"
-#include "Drawers\SetDrawer.h"
-#include "Drawers\FeatureSetDrawer.h"
+#include "Drawers\LayerDrawer.h"
+#include "Drawers\FeatureLayerDrawer.h"
 #include "Client\Editors\Utils\line.h"
-#include "Drawers\LineSetDrawer.h"
+#include "Drawers\LineLayerDrawer.h"
+#include "DrawersUI\LayerDrawerTool.h"
 #include "DrawersUI\SetDrawerTool.h"
-#include "DrawersUI\AnimationTool.h"
 //#include "Drawers\RepresentationTool.h"
 //#include "Drawers\StretchTool.h"
 
@@ -38,12 +39,18 @@ LineSetTool::~LineSetTool() {
 
 bool LineSetTool::isToolUseableFor(ILWIS::DrawerTool *tool) { 
 
-	SetDrawerTool *sdrwt = dynamic_cast<SetDrawerTool *>(tool);
-	AnimationTool *adrwt = dynamic_cast<AnimationTool *>(tool);
-	if ( !sdrwt && !adrwt)
+	LayerDrawerTool *ldrwt = dynamic_cast<LayerDrawerTool *>(tool);
+	SetDrawerTool *setdrawertool = dynamic_cast<SetDrawerTool *>(tool);
+	if ( !ldrwt && !setdrawertool)
 		return false;
 
-	LineSetDrawer *ldrw = dynamic_cast<LineSetDrawer *>(drawer);
+	NewDrawer *ndrw = drawer;;
+	if ( setdrawertool) {
+		SetDrawer *drw = (SetDrawer *)(setdrawertool->getDrawer());
+		ndrw = drw->getDrawer(0);
+	}
+
+	LineLayerDrawer *ldrw = dynamic_cast<LineLayerDrawer *>(ndrw);
 	if ( !ldrw)
 		return false;
 	parentTool = tool;

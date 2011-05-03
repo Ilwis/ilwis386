@@ -10,15 +10,15 @@
 #include "Engine\Representation\Rpr.h"
 #include "Engine\Domain\Dmvalue.h"
 #include "Client\Mapwindow\MapPaneView.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\MapWindow\Drawers\DrawerTool.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
 #include "Engine\Drawers\DrawerContext.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
+#include "Drawers\LayerDrawer.h"
 #include "Drawers\SetDrawer.h"
-#include "Drawers\AnimationDrawer.h"
 #include "DrawersUI\RepresentationTool.h"
 #include "DrawersUI\LegendTool.h"
 #include "Engine\Domain\dmclass.h"
@@ -56,8 +56,8 @@ void LegendTool::insertLegendItemsValue(const Representation& rpr, const DomainV
 	int iItems = 5;
 	double rStep = dvs.rStep();
 	RangeReal rr;
-	SetDrawer *sdrw = dynamic_cast<SetDrawer *>(drawer);
-	AnimationDrawer *adrw = dynamic_cast<AnimationDrawer *>(drawer);
+	LayerDrawer *sdrw = dynamic_cast<LayerDrawer *>(drawer);
+	SetDrawer *adrw = dynamic_cast<SetDrawer *>(drawer);
 	if ( adrw) {
 		rr = adrw->getStretchRangeReal();
 	} else
@@ -92,7 +92,7 @@ void LegendTool::insertLegendItemsClass(const Representation& rpr){
 	if ( htiNode) {
 		tree->DeleteAllItems(htiNode, true);
 	}
-	SetDrawer *setdr = (SetDrawer *)drawer;
+	LayerDrawer *setdr = (LayerDrawer *)drawer;
 	tree->GetTreeCtrl().SetItemData(htiNode, (DWORD_PTR)new LegendLayerTreeItem(tree, setdr));		
 	DomainClass* dc = rpr->dm()->pdc();
 	if (!dc) // huh, seen it happen though, rprclass without a domain class
@@ -108,16 +108,16 @@ void LegendTool::insertLegendItemsClass(const Representation& rpr){
 }
 
 void LegendTool::update() {
-	AbstractMapDrawer *mapDrawer = dynamic_cast<AbstractMapDrawer *>(drawer); // case animation drawer
+	SpatialDataDrawer *mapDrawer = dynamic_cast<SpatialDataDrawer *>(drawer); // case animation drawer
 	if ( !mapDrawer)
-		mapDrawer = dynamic_cast<AbstractMapDrawer *>(drawer->getParentDrawer());
+		mapDrawer = dynamic_cast<SpatialDataDrawer *>(drawer->getParentDrawer());
 
 	DomainValueRangeStruct dvs = mapDrawer->getBaseMap()->dvrs();
 
-	SetDrawer *sdrw = dynamic_cast<SetDrawer *>(drawer);
-	AnimationDrawer *adrw = dynamic_cast<AnimationDrawer *>(drawer);
+	LayerDrawer *sdrw = dynamic_cast<LayerDrawer *>(drawer);
+	SetDrawer *adrw = dynamic_cast<SetDrawer *>(drawer);
 	if ( adrw) {
-		sdrw = (SetDrawer *)adrw->getDrawer(0);
+		sdrw = (LayerDrawer *)adrw->getDrawer(0);
 	}
 
 	if ( sdrw->useAttributeColumn() && sdrw->getAtttributeColumn().fValid()) {

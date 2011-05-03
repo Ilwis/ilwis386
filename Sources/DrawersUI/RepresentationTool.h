@@ -17,13 +17,13 @@ private:
 
 class RepresentationToolForm : public DisplayOptionsForm {
 public:
-	RepresentationToolForm(CWnd *wPar, ILWIS::SetDrawer *dr, AnimationDrawer *adr, DrawerTool *t);
+	RepresentationToolForm(CWnd *wPar, ILWIS::LayerDrawer *dr, SetDrawer *adr, DrawerTool *t);
 	void apply(); 
 private:
 	String rpr;
 	FieldRepresentation *fldRpr;
-	SetDrawer *setDrawer;
-	AnimationDrawer *animDrw;
+	LayerDrawer *layerDrawer;
+	SetDrawer *animDrw;
 	DrawerTool *tool;
 };
 }

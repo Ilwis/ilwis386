@@ -5,15 +5,16 @@
 #include "Engine\Drawers\SimpleDrawer.h" 
 #include "Client\Ilwis.h"
 #include "Engine\Representation\Rpr.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
-#include "Drawers\AnimationDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
+#include "Drawers\SetDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\MapWindow\Drawers\DrawerTool.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
 #include "Engine\Drawers\DrawerContext.h"
 #include "TransparencyTool.h"
-#include "SetDrawerTool.h"
+#include "LayerDrawerTool.h"
+#include "DrawersUI\SetDrawerTool.h"
 #include "AnimationTool.h"
 #include "drawers\linedrawer.h"
 #include "drawers\GridDrawer.h"
@@ -34,7 +35,7 @@ TransparencyTool::~TransparencyTool() {
 
 bool TransparencyTool::isToolUseableFor(ILWIS::DrawerTool *tool) { 
 
-	SetDrawerTool *sdrwt = dynamic_cast<SetDrawerTool *>(tool);
+	LayerDrawerTool *sdrwt = dynamic_cast<LayerDrawerTool *>(tool);
 	AnimationTool *adrwt = dynamic_cast<AnimationTool *>(tool);
 	GridTool *gdrt = dynamic_cast<GridTool *>(tool);
 //	CanvasBackgroundDrawer *cbdr = dynamic_cast<CanvasBackgroundDrawer *>(tool);
@@ -87,7 +88,7 @@ void  TransparencyForm::apply() {
 	//PreparationParameters parm(NewDrawer::ptRENDER, 0);
 	//pdrw->prepare(&parm);
 
-	AnimationDrawer *animDrw = dynamic_cast<AnimationDrawer *>(drw);
+	SetDrawer *animDrw = dynamic_cast<SetDrawer *>(drw);
 	if ( animDrw) {
 		PreparationParameters pp(NewDrawer::ptRENDER, 0);
 		for(int i = 0; i < animDrw->getDrawerCount(); ++i) {

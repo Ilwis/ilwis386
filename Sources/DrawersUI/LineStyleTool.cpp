@@ -2,12 +2,12 @@
 #include "Engine\Drawers\RootDrawer.h"
 #include "Engine\Drawers\ComplexDrawer.h"
 #include "Engine\Drawers\SimpleDrawer.h"
-#include "Drawers\SetDrawer.h"
-#include "Drawers\FeatureSetDrawer.h"
+#include "Drawers\LayerDrawer.h"
+#include "Drawers\FeatureLayerDrawer.h"
 #include "Client\Ilwis.h"
 #include "Engine\Representation\Rpr.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
-#include "Drawers\AnimationDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
+#include "Drawers\SetDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\MapWindow\Drawers\DrawerTool.h"
@@ -15,9 +15,9 @@
 #include "Engine\Drawers\DrawerContext.h"
 #include "Client\Editors\Utils\line.h"
 #include "Drawers\LineDrawer.h"
-#include "Drawers\LineSetDrawer.h"
+#include "Drawers\LineLayerDrawer.h"
 #include "DrawersUI\LineStyleTool.h"
-#include "Drawers\PolygonSetDrawer.h"
+#include "Drawers\PolygonLayerDrawer.h"
 #include "DrawersUI\PolygonSetTool.h"
 
 //#include "drawers\linedrawer.h"
@@ -104,9 +104,18 @@ LineStyleForm::LineStyleForm(CWnd *par, ComplexDrawer *ldr)
 
 {
 
-	AnimationDrawer *animDrw = dynamic_cast<AnimationDrawer *>(ldr);
-	if ( animDrw) {
-		lprops = (LineProperties *)(animDrw->getDrawer(0)->getProperties());
+	SetDrawer *setDrw = dynamic_cast<SetDrawer *>(ldr);
+	if ( setDrw) {
+		SetDrawer *drw = (SetDrawer *)(ldr);
+		for(int i=0; i < drw->getDrawerCount(); ++i) {
+			int filter = (int)(ComplexDrawer::dtPOLYGONLAYER | ComplexDrawer::dtSEGMENTLAYER);
+			NewDrawer *drwFeature = drw->getDrawer(i, filter);
+			if ( drwFeature) {
+				lprops = (LineProperties *)(drwFeature->getProperties());
+				break;
+			}
+		}
+
 	} else
 	{
 		lprops = (LineProperties *)ldr->getProperties();
@@ -126,16 +135,18 @@ void  LineStyleForm::apply() {
 	if ( fc)
 		fc->StoreData();
 	PreparationParameters pp(NewDrawer::ptRENDER);
-	AnimationDrawer *animDrw = dynamic_cast<AnimationDrawer *>(drw);
-	if ( animDrw) {
-		for(int i = 0; i < animDrw->getDrawerCount(); ++i) {
-			NewDrawer *ndr = animDrw->getDrawer(i);
+	SetDrawer *setDrw = dynamic_cast<SetDrawer *>(drw);
+	if ( setDrw) {
+		for(int i = 0; i < setDrw->getDrawerCount(); ++i) {
+			NewDrawer *ndr = setDrw->getDrawer(i, ComplexDrawer::dtPOLYGONLAYER | ComplexDrawer::dtSEGMENTLAYER);
+			if ( !ndr)
+				continue;
 			LineProperties *oldprops = (LineProperties *)ndr->getProperties();
 			oldprops->drawColor = lprops->drawColor;
 			oldprops->linestyle = lprops->linestyle;
 			oldprops->thickness = lprops->thickness;
+			ndr->prepare(&pp);
 		}
-		animDrw->prepareChildDrawers(&pp);
 	} else {
 		if ( !lprops->ignoreColor)
 			fc->StoreData();
