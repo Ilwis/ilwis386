@@ -6,7 +6,7 @@ ILWIS::NewDrawer *createMouseClickInfoDrawer(ILWIS::DrawerParameters *parms);
 
 namespace ILWIS {
 
-class MouseClickInfoDrawer : public TextSetDrawer {
+class MouseClickInfoDrawer : public TextLayerDrawer {
 public:
 	MouseClickInfoDrawer(DrawerParameters *parms);
 	~MouseClickInfoDrawer();

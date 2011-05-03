@@ -83,6 +83,8 @@ public:
 	set<IObjectType>					getFilterTypes() const;
 	void					addFilterType(IObjectType type);
 	void					removeFilterType(IObjectType type);
+	bool	_export			isBaseMapOnly() const;
+	CoordBounds	_export 	cb() const;
 	
 
 protected:

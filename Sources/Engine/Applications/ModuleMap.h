@@ -39,7 +39,7 @@ public:
 	CommandFunc commandFunction;
 	MetaDataFunc metadata;
 	CommandInfo() { createFunction = NULL;metadata = NULL;commandFunction=NULL;} 
-	CommandInfo(const String& sName, CommandFunc cf,MetaDataFunc mf=0) : name(sName), commandFunction(cf), metadata(mf) {}
+	CommandInfo(const String& sName, CommandFunc cf,MetaDataFunc mf=0) : name(sName), commandFunction(cf), metadata(mf),createFunction(0) {}
 };
 
 class _export CommandMap : public map<String, CommandInfo *> {
@@ -65,7 +65,7 @@ public:
 	void getCommandInfo(const String& name, vector<CommandInfo *>& infos);
 	void addCommand(const String& sName, CommandFunc cf,MetaDataFunc mf =0); 
 private:
-	void addFolder(const String& dir);
+	void addFolder(const String& dir, int depth);
 	void addModule(ILWIS::Module *m);
 	map<String, ModuleInit> moduleInits;
 	CommandMap applications;

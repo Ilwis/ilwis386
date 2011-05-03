@@ -54,7 +54,11 @@ Logger::Logger()
 {
 	if (getEngine()->getContext() == NULL)
 		return;
-	String sDirName = getEngine()->getContext()->sIlwDir() + "Log";
+	String sDirName = getEngine()->getContext()->sIlwDir();
+	//if ( sDirName [ sDirName.size() - 1] != '\\') {// ? riddle. It happens when ILWIS is called to the -C parameter, no clue why {
+	//	sDirName += '\\';
+	//}
+	sDirName = sDirName + "Log";
 	Directory dir(sDirName);
 	if ( !Directory::fIsExistingDir(dir)) {
 		_mkdir(dir.sFullPath().scVal());

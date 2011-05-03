@@ -2,7 +2,7 @@
 #include "Engine\Map\basemap.h"
 #include "ComplexDrawer.h"
 #include "Engine\Drawers\RootDrawer.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Engine\Drawers\DrawerContext.h"
 #include "Engine\Drawers\SelectionRectangle.h"
 #include "Engine\Drawers\ZValueMaker.h"
@@ -62,11 +62,11 @@ void  RootDrawer::prepare(PreparationParameters *pp){
 }
 
 String RootDrawer::addDrawer(NewDrawer *drw) {
-	AbstractMapDrawer *mapdrw = dynamic_cast<AbstractMapDrawer *>(drw);
+	SpatialDataDrawer *mapdrw = dynamic_cast<SpatialDataDrawer *>(drw);
 	if ( mapdrw && mapdrw->getBaseMap() != 0) {
-		CoordBounds cb = mapdrw->getBaseMap()->cb();
-		vector<NewDrawer *> allDrawers;
-		getDrawers(allDrawers);
+		CoordBounds cb = mapdrw->cb();
+		//vector<NewDrawer *> allDrawers;
+		//getDrawers(allDrawers);
 	}
 	return ComplexDrawer::addDrawer(drw);
 }

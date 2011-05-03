@@ -15,8 +15,11 @@ SimpleDrawer::SimpleDrawer() {
 
 SimpleDrawer::SimpleDrawer(DrawerParameters *parms, const String& ty) : type(ty), rootDrawer(parms ? parms->rootDrawer : 0){
 	init();
-	if ( parms)
+	if ( parms) {
 		parentDrawer = parms->parent;
+		rootDrawer = parms->rootDrawer;
+	}
+
 }
 
 
@@ -49,9 +52,9 @@ String SimpleDrawer::getId() const{
 }
 
 void SimpleDrawer::prepare(PreparationParameters *parms){
-	if ( parms->parentDrawer != 0)
-		parentDrawer = parms->parentDrawer;
-	rootDrawer = parentDrawer->getRootDrawer();
+	//if ( parms->parentDrawer != 0)
+	//	parentDrawer = parms->parentDrawer;
+	//rootDrawer = parentDrawer->getRootDrawer();
 }
 
 

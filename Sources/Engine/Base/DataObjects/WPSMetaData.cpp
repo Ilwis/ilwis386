@@ -238,3 +238,13 @@ String WPSMetaData::toString() {
 
 	return endResult;
 }
+//-----------------------------------------
+void ProcessMetaData::addDefinitionFile(const FileName& fn) {
+}
+
+WPSMetaData * ProcessMetaData::operator[](const String& name){
+	map<String,WPSMetaData *>::iterator cur=find(name);
+	if ( cur != end())
+		return (*cur).second;
+	return 0;
+}

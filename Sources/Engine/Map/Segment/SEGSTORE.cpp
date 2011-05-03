@@ -802,6 +802,8 @@ void SegmentMapStore::Pack()
 
 
 void SegmentMapStore::removeFeature(const String& id, const vector<int>& selectedCoords) {
+	if ( geometries->size() == 0)
+		return;
 	for(vector<Geometry *>::iterator cur = geometries->begin(); cur != geometries->end(); ++cur) {
 		ILWIS::Segment *seg = CSEGMENT(*cur);
 		if ( seg->getGuid() == id  ) {

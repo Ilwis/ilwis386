@@ -148,8 +148,12 @@ LRESULT BaseCommandHandler::fExecute(const String& sCmd)
 	if (!routToClient && infos.size() > 0) // known command ? 
 	{
 		CommandFunc cf = infos[0]->commandFunction;
-		String sParms = sParm.sTrimSpaces();
-		(cf)(sParms);
+		if ( cf) {
+			String sParms = sParm.sTrimSpaces();
+			(cf)(sParms);
+			return true;
+		}
+		ReroutPost(sCmd);
 		return true;
 	} else {
 		ReroutPost(sCmd);
@@ -719,6 +723,13 @@ void CommandHandler::CmdMakeDir(const String& str)
 {
 	ParmList p(str);
 	String sDir = p.sGet(0);
+	bool openDir = true;
+	if ( p.iSize() > 1) {
+		if ( p.fExist("createonly")) {
+			openDir = false;
+		}
+	}
+
 	SetCurrentDirectory(getEngine()->sGetCurDir().scVal());
 	if ("" == sDir) 
 	{
@@ -733,8 +744,10 @@ void CommandHandler::CmdMakeDir(const String& str)
 	if (!CreateDirectory(sNewDir.c_str(), NULL))
 		throw WindowsError(GetLastError());
 
-	ReroutPost("dirchanged");
-	CmdOpenDir(sDir);
+	if (openDir) {
+		ReroutPost("dirchanged");
+		CmdOpenDir(sDir);
+	}
 }
 
 void CommandHandler::CmdRemoveDir(const String& str)
@@ -2934,11 +2947,15 @@ void CommandHandler::CmdZip(const String& expr) {
 
 	for(int i=0; (i < pm.iSize() - 1) || (pm.iSize() == 1 && i != 1); ++i) {
 		FileName fnobj(pm.sGet(i));
-		IlwisObject object = IlwisObject::obj(fnobj);
-		ObjectStructure ostruct;
-		object->GetObjectStructure(ostruct);
 		list<String> files;
-		ostruct.GetUsedFiles(files, false);
+		IlwisObject object = IlwisObject::obj(fnobj);
+		if ( object.fValid()) {
+			ObjectStructure ostruct;
+			object->GetObjectStructure(ostruct);
+			ostruct.GetUsedFiles(files, false);
+		} else {
+			files.push_back(fnobj.sFullPath());
+		}
 	
 		FILE * fin;
 		int size_read;

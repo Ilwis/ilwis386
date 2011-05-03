@@ -48,6 +48,7 @@
 	Last change:  WK   25 Aug 97    5:17 pm
 */
 #include "Engine\Applications\bmapvirt.h"
+#include "Engine\Base\DataObjects\WPSMetaData.h"
 
 BaseMapVirtual::BaseMapVirtual(const FileName& fn, BaseMapPtr& _ptr)
 : IlwisObjectVirtual(fn, _ptr, _ptr.objdep, false), bptr(_ptr)

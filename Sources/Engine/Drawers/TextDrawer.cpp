@@ -12,7 +12,7 @@
 using namespace ILWIS;
 
 
-TextSetDrawer::TextSetDrawer(DrawerParameters *parms, const String& type) : 
+TextLayerDrawer::TextLayerDrawer(DrawerParameters *parms, const String& type) : 
 	ComplexDrawer(parms,type), 
 	font(0),
 	iFHeight(100 * RepresentationClass::iSIZE_FACTOR),
@@ -23,26 +23,26 @@ TextSetDrawer::TextSetDrawer(DrawerParameters *parms, const String& type) :
 {
 }
 
-TextSetDrawer::~TextSetDrawer() {
+TextLayerDrawer::~TextLayerDrawer() {
 	delete font;
 }
 
-void  TextSetDrawer::prepare(PreparationParameters *pp){ 
+void  TextLayerDrawer::prepare(PreparationParameters *pp){ 
 	ComplexDrawer::prepare(pp);
 }
 
-OpenGLText *TextSetDrawer::getFont() const {
+OpenGLText *TextLayerDrawer::getFont() const {
 	return font;
 }
-void TextSetDrawer::setFont(OpenGLText *f) {
+void TextLayerDrawer::setFont(OpenGLText *f) {
 	if ( font)
 		delete font;
 	font = f;
 }
 
-//HTREEITEM TextSetDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
+//HTREEITEM TextLayerDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
 //	HTREEITEM hti = ComplexDrawer::configure(tv,parent);
-//	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,parent,this,(DisplayOptionItemFunc)&TextSetDrawer::displayOptionsText);
+//	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,parent,this,(DisplayOptionItemFunc)&TextLayerDrawer::displayOptionsText);
 //	HTREEITEM itemText = InsertItem(String("Text(%S)",sFaceName), "Text",item,-1);
 //	InsertItem(tv,itemText,String("Font : %S",sFaceName),"Text");
 //	InsertItem(tv,itemText,String("Size : %d",iFHeight),"Calculationsingle");
@@ -53,7 +53,7 @@ void TextSetDrawer::setFont(OpenGLText *f) {
 //	return hti;
 //}
 
-void TextSetDrawer::displayOptionsText(CWnd *parent) {
+void TextLayerDrawer::displayOptionsText(CWnd *parent) {
 	CWindowDC wdc(parent);
 	LOGFONT lf;
 	lf.lfHeight = MulDiv(iFHeight, GetDeviceCaps(wdc.GetSafeHdc(), LOGPIXELSY), 720);
@@ -118,7 +118,7 @@ void  TextDrawer::prepare(PreparationParameters *pp){
 }
 
 void TextDrawer::draw( const CoordBounds& cbArea){
-	TextSetDrawer *set = (TextSetDrawer *)parentDrawer;
+	TextLayerDrawer *set = (TextLayerDrawer *)parentDrawer;
 	if ( set->getFont()) {
 		set->getFont()->renderText(getRootDrawer(),c, text);
 	}

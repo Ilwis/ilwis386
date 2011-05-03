@@ -9,10 +9,10 @@ class OpenGLText;
 
 namespace ILWIS {
 
-class _export TextSetDrawer : public ComplexDrawer {
+class _export TextLayerDrawer : public ComplexDrawer {
 public:
-	TextSetDrawer(DrawerParameters *parms, const String& type);
-	~TextSetDrawer();
+	TextLayerDrawer(DrawerParameters *parms, const String& type);
+	~TextLayerDrawer();
 	virtual void prepare(PreparationParameters *pp);
 	OpenGLText *getFont() const;
 	void setFont(OpenGLText *f);

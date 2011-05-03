@@ -41,17 +41,12 @@
 #if !defined(AFX_MAPLISTVIRTUAL_H__6C4EDC42_939D_4D80_B9BE_4968C8358D22__INCLUDED_)
 #define AFX_MAPLISTVIRTUAL_H__6C4EDC42_939D_4D80_B9BE_4968C8358D22__INCLUDED_
 
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
 
-#ifndef ILWOBJECTVIRT_H
 #include "Engine\Applications\objvirt.h"
-#endif
 
-#ifndef ILWMAPLIST_H
 #include "Engine\Map\Raster\MapList\maplist.h"
-#endif
+
 
 class _export MapListVirtual : public IlwisObjectVirtual 
 {

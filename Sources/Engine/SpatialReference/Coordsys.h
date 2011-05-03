@@ -34,56 +34,6 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/* $Log: /ILWIS 3.0/CoordinateSystem/Coordsys.h $
- * 
- * 13    25-02-02 12:14 Hendrikse
- * inserted '_export' 
- *  CoordSystemBoundsOnly _export *pcsBoundsOnly() const;
- * needed to check on csy-type to solve wish about required coordbounds
- * when making a coordsystem projection
- * 
- * 12    8-09-00 3:43p Martin
- * added function for setting the update status and getting the
- * objectstructure
- * 
- * 11    13-10-99 11:45 Hendrikse
- * added  CoordSystemDirectLinear  twice
- * 
- * 10    29-09-99 16:11 Hendrikse
- * inserted _export before cValue(const String&)
- * 
- * 9     28-09-99 18:12 Hendrikse
- * added many _export qualifiers and a call to pcsCTP
- * 
- * 8     20-09-99 17:42 Koolhoven
- * export
- * 
- * 7     7-09-99 3:34p Martin
- * added 2.22 changes
- * 
- * 6     30-07-99 14:48 Koolhoven
- * exports
- * 
- * 5     23-06-99 12:21p Martin
- * added exports
- * 
- * 4     21-06-99 2:01p Martin
- * added export
- * 
- * 3     17-06-99 2:27p Martin
- * // -> /*
- * 
- * 2     17-06-99 1:08p Martin
- * added _exports for import/export dll
-// Revision 1.2  1998/09/16 17:22:46  Wim
-// 22beta2
-//
-/* CoordSystem, CoordSystemPtr
-   Copyright Ilwis System Development ITC
-   october 1995, by Wim Koolhoven
-	Last change:  WK    8 Apr 98    1:07 pm
-*/
-
 #ifndef ILWCOORDSYS_H
 #define ILWCOORDSYS_H
 #include "Engine\Base\DataObjects\ilwisobj.h"

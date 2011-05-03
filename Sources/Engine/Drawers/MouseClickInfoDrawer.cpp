@@ -7,7 +7,7 @@
 #include "Engine\Drawers\TextDrawer.h"
 #include "Engine\Drawers\MouseClickInfoDrawer.h" 
 #include "Engine\Drawers\RootDrawer.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Engine\Drawers\SimpleDrawer.h"
 
 
@@ -17,7 +17,7 @@ ILWIS::NewDrawer *createMouseClickInfoDrawer(DrawerParameters *parms) {
 }
 
 MouseClickInfoDrawer::MouseClickInfoDrawer(DrawerParameters *parms) : 
-	TextSetDrawer(parms,"MouseClickInfoDrawer"),
+	TextLayerDrawer(parms,"MouseClickInfoDrawer"),
 	hasText(false)
 {
 	name = id = "MouseClickInfoDrawer";
@@ -28,13 +28,13 @@ MouseClickInfoDrawer::~MouseClickInfoDrawer() {
 }
 
 void  MouseClickInfoDrawer::prepare(PreparationParameters *pp){
-	TextSetDrawer::prepare(pp);
+	TextLayerDrawer::prepare(pp);
 	sInfo = "";
 	if ( !activePoint.fUndef()) {
 		for(int i =0; i < drawers.size(); ++i) {
 			NewDrawer *drw = drawers[i];
 			if ( drw->hasInfo() && drw->isActive()) {
-				AbstractMapDrawer *amdrw = dynamic_cast<AbstractMapDrawer *>(drw);
+				SpatialDataDrawer *amdrw = dynamic_cast<SpatialDataDrawer *>(drw);
 				if ( amdrw) {
 					BaseMapPtr *bm = amdrw->getBaseMap();
 					vector<String> values = bm->vsValue(activePoint);
@@ -63,7 +63,7 @@ void MouseClickInfoDrawer::setActivePoint(const Coord& c) {
 }
 
 String MouseClickInfoDrawer::store(const FileName& fnView, const String& parentSection) const{
-	TextSetDrawer::store(fnView, getType());
+	TextLayerDrawer::store(fnView, getType());
 
 	return getType();
 }

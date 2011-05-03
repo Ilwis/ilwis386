@@ -494,6 +494,8 @@
 #define ID_DIRUP       918
 #define ID_CAT_PYRAMIDS 919
 #define ID_CAT_TABLEVIEW 920
+#define ID_CAT_ASLAYER 921
+#define ID_CAT_ASANIMATION 922
 
 #define ID_ACT_START   950
 #define ID_ACT_RUN     950
@@ -855,6 +857,8 @@
 #define ID_UNDELSEG	 2326
 #define ID_UNDELBND	 2327
 #define ID_FINDUNDEFS 2328
+#define ID_UNDO 2329
+#define ID_REDO 2330
 // Points
 #define ID_ADDPOINT	 2340
 // Segments

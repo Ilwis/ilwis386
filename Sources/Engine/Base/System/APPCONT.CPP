@@ -70,8 +70,9 @@ IlwisAppContext::IlwisAppContext(const String& sProg, const String& sCmdLine)
       ::GetModuleFileName(NULL, sTemp, MAX_PATH);
       _sProg = String(sTemp);
   }
-  else
+  else {
     _sProg = sProg;
+  }
 //  _obm = new IlwObjectManager();
   _svl = new SysVarList();
   IlwisSettings settings("DefaultSettings");

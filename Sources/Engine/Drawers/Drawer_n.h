@@ -97,17 +97,18 @@ namespace ILWIS {
 
 	struct PreparationParameters {
 		PreparationParameters(const PreparationParameters* parms) :
-			type(parms->type),dc(parms->dc),rootDrawer(0),parentDrawer(0),zOrder(parms->zOrder) {}
-		PreparationParameters(int t=1,CDC *_dc = 0) : type(t),dc(_dc),rootDrawer(0),parentDrawer(0), zOrder(-1) {} 
-		PreparationParameters(int t, const CoordSystem& cs) : type(t), csy(cs),dc(0),rootDrawer(0),parentDrawer(0),zOrder(-1)  {}
+			type(parms->type),dc(parms->dc)/*,rootDrawer(0),zOrder(parms->zOrder)*/,index(parms->index) {}
+		PreparationParameters(int t=1,CDC *_dc = 0) : type(t),dc(_dc)/*,rootDrawer(0),parentDrawer(0)*/, zOrder(-1),index(0) {} 
+		PreparationParameters(int t, const CoordSystem& cs) : type(t), csy(cs),dc(0)/*,rootDrawer(0),parentDrawer(0)*/,zOrder(-1),index(0)  {}
 		int type;
 		CDC *dc;
 		CoordSystem csy;
 		map<String,String> typeMapping;
 		vector<int> filteredRaws;
-		NewDrawer *rootDrawer;
-		NewDrawer *parentDrawer;
+		//NewDrawer *rootDrawer;
+		//NewDrawer *parentDrawer;
 		int zOrder;
+		int index;
 	};
 
 }

@@ -13,8 +13,10 @@ ComplexDrawer::ComplexDrawer() {
 
 ComplexDrawer::ComplexDrawer(DrawerParameters *parms, const String& ty) : type(ty), rootDrawer(parms ? parms->rootDrawer : 0){
 	init();
-	if ( parms)
+	if ( parms) {
 		parentDrawer = parms->parent;
+		rootDrawer = parms->rootDrawer;
+	}
 }
 
 void ComplexDrawer::init() {
@@ -160,10 +162,10 @@ String ComplexDrawer::getId() const{
 }
 
 void ComplexDrawer::prepare(PreparationParameters *parms){
-	if ( parms->parentDrawer != 0)
-		parentDrawer = parms->parentDrawer;
-	if ( parms->rootDrawer !=0)
-		rootDrawer = (RootDrawer *)parms->rootDrawer;
+	//if ( parms->parentDrawer != 0)
+	//	parentDrawer = parms->parentDrawer;
+	//if ( parms->rootDrawer !=0)
+	//	rootDrawer = (RootDrawer *)parms->rootDrawer;
 }
 
 String ComplexDrawer::addDrawer(NewDrawer *drw) {
@@ -243,7 +245,7 @@ int ComplexDrawer::getDrawerCount(int types) const{
 	return count;
 }
 
-NewDrawer * ComplexDrawer::getDrawer(int index, DrawerType type){
+NewDrawer * ComplexDrawer::getDrawer(int index, int type){
 	if ( type == dtMAIN) {
 		if ( index < drawers.size()) {
 			return drawers.at(index);
@@ -258,6 +260,22 @@ NewDrawer * ComplexDrawer::getDrawer(int index, DrawerType type){
 		map<String, NewDrawer *>::iterator here = postDrawers.find(name);
 		if (  here != postDrawers.end())
 			return (*here).second;
+	} else if (type & dtPOLYGONLAYER) {
+		NewDrawer *drw = drawers.at(index);
+		if ( drw->getType() == "PolygonLayerDrawer")
+			return drw;
+	} else if (type & dtSEGMENTLAYER) {
+		NewDrawer *drw = drawers.at(index);
+		if ( drw->getType() == "LineLayerDrawer")
+			return drw;
+	} else if (type & dtPOINTLAYER) {
+		NewDrawer *drw = drawers.at(index);
+		if ( drw->getType() == "PointLayerDrawer")
+			return drw;
+	} else if (type & dtRASTERLAYER) {
+		NewDrawer *drw = drawers.at(index);
+		if ( drw->getType() == "RasterLayerDrawer")
+			return drw;
 	}
 	return NULL;
 }

@@ -275,17 +275,20 @@ long ILWIS::Segment::nearSection(const Coord& crd, double delta, double& dist) {
 	Coord c1 = seq->getAt(0);
 	for(int i=1; i<seq->size(); ++i) {
 		Coord c2 = seq->getAt(i);
-		double rd = geos::algorithm::CGAlgorithms::distancePointLinePerpendicular(crd, c1,c2);
-		if ( rd <= delta) {
-			dist = rd;
-			return i;
+		CoordBounds cbBox(c1,c2);
+		cbBox += delta; 
+		if ( cbBox.fContains(crd)) {
+			double rd = geos::algorithm::CGAlgorithms::distancePointLinePerpendicular(crd, c1,c2);
+			if ( rd <= delta) {
+				dist = rd;
+				delete seq;
+				return i;
+			}
 		}
 		c1 = c2;
 
 	}
-	
-
-
+	delete seq;	
 	return iUNDEF;
 }
 

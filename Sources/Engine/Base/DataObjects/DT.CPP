@@ -175,7 +175,7 @@ ILWIS::Time::Time(const String& isostring) {
 
 ILWIS::Time::Time(const CTime& time){
 	valid = true;
-	int year = time.GetYear() + 1970;
+	int year = time.GetYear();
 	int month = time.GetMonth();
 	int day = time.GetDay();
 	int hour = time.GetHour();

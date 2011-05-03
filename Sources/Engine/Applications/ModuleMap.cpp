@@ -6,6 +6,8 @@
 #include "Engine\Base\File\zlib.h"
 #include "Engine\Base\File\unzip.h"
 #include "engine\base\system\module.h"
+#include "Engine\Map\Raster\MapList\maplist.h"
+#include "Engine\Base\DataObjects\ObjectCollection.h"
 #include "Engine\Applications\ModuleMap.h"
 #include "Engine\Table\TBLHSTPL.H"
 #include "Engine\Table\TBLHSTPL.H"
@@ -16,7 +18,7 @@
 #include "Engine\Drawers\SVGLoader.h"
 #include "Engine\Drawers\Drawer_n.h"
 #include "Engine\Drawers\RootDrawer.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Engine\Drawers\SelectionRectangle.h"
 //#include "Client\Editors\Map\BaseMapEditor.h"
 #include "Engine\Drawers\SimpleDrawer.h"
@@ -40,13 +42,16 @@ void ModuleMap::addModules() {
 		}
 	}   
 
+	int depth = 0;
 	path = getEngine()->getContext()->sIlwDir() + "\\Extensions";
-	addFolder(path);
+	addFolder(path, depth + 1);
 	applications.addExtraFunctions();
 
 }
 
-void ModuleMap::addFolder(const String& dir) {
+void ModuleMap::addFolder(const String& dir, int depth) {
+	if ( depth > 2)
+		return;
 	CFileFind finder;
 	String pattern = dir + "\\*.*";
 	BOOL fFound = finder.FindFile(pattern.scVal());
@@ -60,7 +65,7 @@ void ModuleMap::addFolder(const String& dir) {
 		} else {
 			FileName fnNew (finder.GetFilePath());
 			if ( fnNew.sFile != "." && fnNew.sFile != ".." && fnNew.sFile != "")
-				addFolder(String(fnNew.sFullPath()));
+				addFolder(String(fnNew.sFullPath()), depth + 1);
 		}
 	}
 	//modules that are dependent on not(yet) loaded modules may not load the first time. 
@@ -74,6 +79,10 @@ void ModuleMap::addFolder(const String& dir) {
 
 void ModuleMap::addModule(const FileName& fnModule, bool retry) {
 	try{
+		String sName = fnModule.sFile + fnModule.sExt;
+		sName = sName.toLower();
+		if ( sName == "cygpng12.dll" || sName == "cygz.dll") // these two are problematic and will be skipped, not ILWIS anyway
+			return;
 		HMODULE hm = LoadLibrary(fnModule.sFullPath().scVal());
 		if ( hm != NULL ) {
 			//AppInfo f = (AppInfo)GetProcAddress(hm, "getCommandInfo");

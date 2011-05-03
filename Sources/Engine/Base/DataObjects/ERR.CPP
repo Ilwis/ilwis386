@@ -185,8 +185,11 @@ void ErrorObject::Show(const String& sTitl) const
 		String sErr = sShowError();
 		if (sErr.length() == 0)
 			return;
-		MessageBeep(MB_ICONHAND);
-		MessageBox(0,sErr.sVal(), sTtl.sVal(), MB_ICONHAND|MB_OK|MB_TASKMODAL|MB_TOPMOST);
+		bool *fServerMode = (bool*)getEngine()->getContext()->pGetThreadLocalVar(IlwisAppContext::tlvSERVERMODE);
+		if ( *fServerMode == false) {
+			MessageBeep(MB_ICONHAND);
+			MessageBox(0,sErr.sVal(), sTtl.sVal(), MB_ICONHAND|MB_OK|MB_TASKMODAL|MB_TOPMOST);
+		}
 		if ( longMessage != "") {
 			String txt("simplecalc Text %S",longMessage);
 			getEngine()->Execute(txt);

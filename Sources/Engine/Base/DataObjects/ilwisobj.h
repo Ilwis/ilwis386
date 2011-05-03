@@ -371,6 +371,7 @@ public:
 
 	IlwisObject(const IlwisObject& obj) : list(obj.list), ptr(0)
 			{ SetPointer(obj.pointer()); }
+	IlwisObject();
 	~IlwisObject();
 
 	bool                fEqual(const IlwisObject& obj) const;
@@ -397,7 +398,6 @@ protected:
 	IlwisObject(IlwisObjectPtrList& lst);
 	IlwisObject(IlwisObjectPtrList&, const FileName&);
 	IlwisObject(IlwisObjectPtrList&, IlwisObjectPtr*);
-	IlwisObject();
 
 private:
 

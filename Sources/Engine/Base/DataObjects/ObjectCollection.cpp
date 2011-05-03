@@ -49,6 +49,7 @@
 #include "Engine\Applications\ModuleMap.h"
 #include "Engine\Base\System\Engine.h"
 #include "Engine\DataExchange\ForeignFormat.h"
+#include "engine\map\basemap.h"
 #include "Engine\Base\DataObjects\URL.h"
 #include "Engine\DataExchange\WMSCollection.h"
 #include "Engine\Base\System\mutex.h"
@@ -532,4 +533,35 @@ void ObjectCollectionPtr::addFilterType(IObjectType type){
 
 void ObjectCollectionPtr::removeFilterType(IObjectType type){
 	filterTypes.erase(type);
+}
+
+bool ObjectCollectionPtr::isBaseMapOnly() const {
+	for(vector<FileName>::const_iterator cur=arObjects.begin(); cur != arObjects.end(); ++cur)	 {
+		if ( !IOTYPEBASEMAP(*cur)) {
+			return false;
+		}
+	}
+	return true;
+}
+
+CoordBounds ObjectCollectionPtr::cb() const {
+	CoordSystem cs;
+	CoordBounds cb;
+	for(vector<FileName>::const_iterator cur=arObjects.begin(); cur != arObjects.end(); ++cur)	 {
+		if ( IOTYPEBASEMAP(*cur)) {
+			BaseMap bm((*cur));
+			if ( !cs.fValid() || cs->fUnknown()) {
+				cs = bm->cs();
+				cb += bm->cb();
+			} else {
+				if ( cs == bm->cs()) {
+					cb += bm->cb();
+				} else {
+					CoordBounds cb2 = cs->cbConv(bm->cs(), cb);
+					cb += cb2;
+				}
+			}
+		}
+	}
+	return cb;
 }
