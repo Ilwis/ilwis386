@@ -46,7 +46,7 @@
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 //#include "Engine\Drawers\RootDrawer.h"
-//#include "Engine\Drawers\AbstractMapDrawer.h"
+//#include "Engine\Drawers\SpatialDataDrawer.h"
 //#include "Engine\Drawers\SelectionRectangle.h"
 //#include "Client\Editors\Map\BaseMapEditor.h"
 //#include "Engine\Drawers\SimpleDrawer.h"

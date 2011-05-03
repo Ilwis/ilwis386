@@ -40,7 +40,7 @@ Created on: 2007-02-8
 
 #include "Client\Headers\formelementspch.h"
 #include "Engine\Drawers\RootDrawer.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Mapwindow\MapPaneView.h"
 #include "Engine\Map\Segment\Seg.h"
@@ -117,7 +117,7 @@ CoordSystemEditor::CoordSystemEditor(MapPaneView* mpvw, CoordSystem csy)
 	MapCompositionDoc* mcd = mpv->GetDocument();
 	for(int i = 0; i < mcd->rootDrawer->getDrawerCount(); ++i)
 	{
-		AbstractMapDrawer* dr = CMAPDRW(mcd->rootDrawer, i);
+		SpatialDataDrawer* dr = CMAPDRW(mcd->rootDrawer, i);
 		FileName fn = dr->getName();
 		if (fn.sExt != "") {
 			csctp->fnBackgroundMap = fn;

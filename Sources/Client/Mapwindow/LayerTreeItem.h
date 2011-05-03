@@ -117,15 +117,15 @@ class ColumnLayerTreeItem: public LayerTreeItem
 {
 	friend class ChooseColumnComboBox;
 public:
-	ColumnLayerTreeItem(LayerTreeView*, ILWIS::AbstractMapDrawer*, HTREEITEM hti);
+	ColumnLayerTreeItem(LayerTreeView*, ILWIS::SpatialDataDrawer*, HTREEITEM hti);
 	virtual ~ColumnLayerTreeItem();
 	virtual void SwitchCheckBox(bool fOn);
 	virtual void OnLButtonDown(UINT nFlags, CPoint point);
 	virtual void OnContextMenu(CWnd* pWnd, CPoint pos);
-	AbstractMapDrawer * mdr() { return dr;}
+	SpatialDataDrawer * mdr() { return dr;}
 private:
 	void ShowColumnField();
-	ILWIS::AbstractMapDrawer *dr;
+	ILWIS::SpatialDataDrawer *dr;
 	void FinishColumnField();
 	HTREEITEM hti;
 	ChooseColumnComboBox* cccb;

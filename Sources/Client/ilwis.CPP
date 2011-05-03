@@ -899,6 +899,15 @@ void IlwisWinApp::RegisterDocTemplates()
 		RUNTIME_CLASS(CollectionCatalog));
 	AddDocTemplate(dtObjectCollection);
 
+	idt = new IlwisDocTemplate(
+		".ioc", 
+		"ObjectCollection", 
+		"ILWIS CollectionLayer",
+		RUNTIME_CLASS(MapCompositionDoc),
+		RUNTIME_CLASS(MapWindow),
+		RUNTIME_CLASS(MapPaneView));
+	AddDocTemplate(idt);
+
 	dtObjectCollection = new ForeignMultiDocTemplate(
 		"DataBaseCollection", 
 		"ILWIS DataBase Collections",
@@ -1195,8 +1204,8 @@ void IlwisWinApp::InitImageLists()
 {
 	ilSmall.Create(16,16,TRUE,4,4);
 	ilLarge.Create(32,32,TRUE,4,4);
-	ilSmall.SetImageCount(104);
-	ilLarge.SetImageCount(104);
+	ilSmall.SetImageCount(105);
+	ilLarge.SetImageCount(105);
 
 	int i = 0;
 	InitImage("ilwis", "LogoIcon", i++);
@@ -1315,6 +1324,7 @@ void IlwisWinApp::InitImageLists()
 	InitImage("GNC", "GNC", i++);	
 	InitImage("ESA", "ESA", i++);	
 	InitImage("amesd", "amesd", i++);	
+	InitImage("Setcol", "SETCOLL", i++);	
 
 
 
@@ -1703,11 +1713,13 @@ CDocument* IlwisWinApp::OpenDocumentFile(LPCTSTR lpszFileName, IlwisDocument::Op
 	}
 	else if (iotType == IlwisObject::iotOBJECTCOLLECTION) {
 		ObjectCollection oc(fn);
+		if ( oc.fValid() == false)
+			throw ErrorObject(TR("Invalid object collection"));
 		bool fCalculated = oc->fCalculated();
 		// prevent dead lock
 		oc.SetPointer(0);
 		if (fCalculated) {
-			if ( ot == IlwisDocument::otANIMATION) {
+			if ( ot == IlwisDocument::otANIMATION  || ot == IlwisDocument::otCOLLECTION) {
 				//((IlwisDocManager *)m_pDocManager)->OpenDocumentAsAnimation(fn.sFullName().scVal());
 				WinThread *thr = new WinThread(m_pDocManager, pLongFileName, ot);
 				if ( thr)

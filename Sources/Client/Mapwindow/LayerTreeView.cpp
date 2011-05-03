@@ -50,7 +50,7 @@ Created on: 2007-02-8
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Engine\Drawers\ComplexDrawer.h"
 #include "Engine\Drawers\SimpleDrawer.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\Mapwindow\Drawers\DrawerTool.h"
 #include "Client\Mapwindow\LayerTreeView.h"
@@ -199,7 +199,7 @@ void LayerTreeView::collectStructure(HTREEITEM parent, const String& name) {
 	}
 }
 
-HTREEITEM LayerTreeView::addMapItem(ILWIS::AbstractMapDrawer *mapDrawer, HTREEITEM after, int lastTool) {
+HTREEITEM LayerTreeView::addMapItem(ILWIS::SpatialDataDrawer *mapDrawer, HTREEITEM after, int lastTool) {
 	CTreeCtrl& tc = GetTreeCtrl();
 	BaseMapPtr *bmp = mapDrawer->getBaseMap();
 	int iImg = IlwWinApp()->iImage(mapDrawer->iconName());
@@ -218,11 +218,17 @@ HTREEITEM LayerTreeView::addMapItem(ILWIS::AbstractMapDrawer *mapDrawer, HTREEIT
 			drwTool->addTool(dt, lastTool);
 			dt->configure(htiMap);
 		}
+	} else 	if ( mapDrawer->getType() == "CollectionDrawer") {
+		DrawerTool *dt = DrawerTool::createTool("CollectionTool",GetDocument()->mpvGetView(),this,mapDrawer);
+		if ( dt) {
+			drwTool->addTool(dt, lastTool);
+			dt->configure(htiMap);
+		}
 	} else {
 		for( int  i=0; i < mapDrawer->getDrawerCount(); ++i) {
 			NewDrawer *drw = mapDrawer->getDrawer(i);
 			if ( drw) {
-				DrawerTool *dt = DrawerTool::createTool("SetTool",GetDocument()->mpvGetView(),this,drw);
+				DrawerTool *dt = DrawerTool::createTool("LayerDrawerTool",GetDocument()->mpvGetView(),this,drw);
 				if ( dt) {
 					drwTool->addTool(dt, lastTool);
 					dt->configure(htiMap);
@@ -329,7 +335,7 @@ void LayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 	{
 		ComplexDrawer* dr = (ComplexDrawer *)allDrawers.at(index);
 		//ILWISSingleLock csl(&dr->cs, TRUE, SOURCE_LOCATION);
-		AbstractMapDrawer *mapDrawer = dynamic_cast<AbstractMapDrawer *>(dr);
+		SpatialDataDrawer *mapDrawer = dynamic_cast<SpatialDataDrawer *>(dr);
 		if (mapDrawer != 0 && mapDrawer->getBaseMap() != 0){
 			item = addMapItem(mapDrawer, lastNode, lastTool);
 		} 

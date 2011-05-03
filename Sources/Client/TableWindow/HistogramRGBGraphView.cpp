@@ -40,7 +40,7 @@
 
 #include "Client\Headers\formelementspch.h"
 #include "Engine\Drawers\RootDrawer.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Client\ilwis.h"
 #include "Client\Base\IlwisDocument.h"
 #include "Client\TableWindow\TableDoc.h"
@@ -62,7 +62,7 @@ using namespace ILWIS;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-HistogramRGBGraphView::HistogramRGBGraphView(AbstractMapDrawer *drw)
+HistogramRGBGraphView::HistogramRGBGraphView(SpatialDataDrawer *drw)
 {
   Map mpRed, mpGreen, mpBlue;
   grdrw = cgd = new CartesianGraphDrawer(this);

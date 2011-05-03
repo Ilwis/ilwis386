@@ -52,7 +52,7 @@ Created on: 2007-02-8
 #include "Client\Mapwindow\MapPaneView.h"
 #include "Client\Mapwindow\Positioner.h"
 #include "Engine\Drawers\RootDrawer.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Headers\constant.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\Mapwindow\Drawers\DrawerTool.h"
@@ -395,7 +395,7 @@ void MapPaneView::OnLButtonDblClk(UINT nFlags, CPoint point)
 	//	Coord crd = c;
 	//	if (dr->isSelectable() && dr->isActive()) 
 	//	{
-	//	AbstractMapDrawer* bmd = dynamic_cast<AbstractMapDrawer*>(dr);
+	//	SpatialDataDrawer* bmd = dynamic_cast<SpatialDataDrawer*>(dr);
 	//	if ( !bmd)
 	//		continue;
 	//	BaseMapPtr *bmpPtr = bmd->getBaseMap();
@@ -631,7 +631,7 @@ void MapPaneView::OnPolygonEdit()
 
 void MapPaneView::OnGeoRefEdit()
 {
-	AbstractMapDrawer *absndrw = dynamic_cast<AbstractMapDrawer *>(GetDocument()->rootDrawer->getDrawer(0));
+	SpatialDataDrawer *absndrw = dynamic_cast<SpatialDataDrawer *>(GetDocument()->rootDrawer->getDrawer(0));
 	BaseMapPtr *bmp = absndrw->getBaseMap();
 	if ( !IOTYPE((*bmp).fnObj) == IlwisObject::iotRASMAP)
 		return;
@@ -1114,7 +1114,7 @@ void MapPaneView::OnCreateCoordSys()
 			for (int i = 0; i < mcd->rootDrawer->getDrawerCount(); ++i) 
 			{
 			NewDrawer* drw = mcd->rootDrawer->getDrawer(i);
-			AbstractMapDrawer* bmd = dynamic_cast<AbstractMapDrawer*>(drw);
+			SpatialDataDrawer* bmd = dynamic_cast<SpatialDataDrawer*>(drw);
 			if (bmd) {
 				BaseMapPtr* bmp = bmd->getBaseMap();
 				String s(SMWMsgRplCsy_SSS.scVal(), bmp->sName(true), bmp->cs()->sName(), csy->sName());
@@ -1170,7 +1170,7 @@ void MapPaneView::OnCreateSubMap()
 	for (int i = 0; i < mcd->rootDrawer->getDrawerCount(); ++i) 
 	{
 		NewDrawer* drw = mcd->rootDrawer->getDrawer(i);
-		AbstractMapDrawer *mpdr = dynamic_cast<AbstractMapDrawer *>(drw);
+		SpatialDataDrawer *mpdr = dynamic_cast<SpatialDataDrawer *>(drw);
 		BaseMapPtr *mptr = mpdr->getBaseMap();
 		IlwisObject::iotIlwisObjectType type = IlwisObject::iotObjectType(mptr->fnObj);
 		MinMax mm = mmVisibleMapArea();

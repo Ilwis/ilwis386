@@ -54,7 +54,7 @@ Created on: 2007-02-8
 #include "Client\FormElements\fldrpr.h"
 #include "Client\FormElements\fldcolor.h"
 #include "Engine\Drawers\drawer_n.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\Mapwindow\Drawers\DrawerTool.h"
 #include "Client\Mapwindow\LayerTreeItem.h"
@@ -146,7 +146,7 @@ void DrawerLayerTreeItem::SwitchCheckBox(bool fOn)
 
 void DrawerLayerTreeItem::OnContextMenu(CWnd* w, CPoint p)
 {
-	AbstractMapDrawer *mapdrw = dynamic_cast<AbstractMapDrawer *>(dr);
+	SpatialDataDrawer *mapdrw = dynamic_cast<SpatialDataDrawer *>(dr);
 	if (!mapdrw)
 		return;
 	int types = ComplexDrawer::dtMAIN | ComplexDrawer::dtPOST | ComplexDrawer::dtPRE;
@@ -267,7 +267,7 @@ void LegendLayerTreeItem::OnLButtonDblClk(UINT nFlags, CPoint point)
 
 void LegendLayerTreeItem::OnContextMenu(CWnd* w, CPoint p)
 {
-	AbstractMapDrawer *mdrw = dynamic_cast<AbstractMapDrawer *>(dr);
+	SpatialDataDrawer *mdrw = dynamic_cast<SpatialDataDrawer *>(dr);
 	if (!mdrw)
 		return;
 	Representation rpr = mdrw->getRepresentation();
@@ -364,7 +364,7 @@ void ChooseColumnComboBox::OnSelChange(NMHDR* pNotifyStruct, LRESULT* result)
 
 
 
-ColumnLayerTreeItem::ColumnLayerTreeItem(LayerTreeView* ltv, AbstractMapDrawer* drw, HTREEITEM htiClm) 
+ColumnLayerTreeItem::ColumnLayerTreeItem(LayerTreeView* ltv, SpatialDataDrawer* drw, HTREEITEM htiClm) 
 : LayerTreeItem(ltv), cccb(0), hti(htiClm)
 {
 	dr = drw;
@@ -634,7 +634,7 @@ void DisplayOptionTreeItem::SwitchCheckBox(bool fOn) {
 		checks->checkItem(hti);
 	}
 	if ( dtSetCheckFunc && altHandler == 0)
-		(chctool->*dtSetCheckFunc)(&fOn);
+		(chctool->*dtSetCheckFunc)(&fOn, hti);
 	//if ( altHandler != 0)
 	//	(altHandler->*setCheckFunc)(&fOn, ltv);
 }
@@ -795,7 +795,7 @@ void DisplayOptionRadioButtonItem::OnLButtonDown(UINT nFlags, CPoint point)
 
 	}
 	if ( dtSetCheckFunc && altHandler == 0)
-		(chctool->*dtSetCheckFunc)(&isSelected);
+		(chctool->*dtSetCheckFunc)(&isSelected,hti);
 }
 
 
@@ -896,7 +896,7 @@ void DisplayOptionButtonItem::OnLButtonDown(UINT nFlags, CPoint point)
 
 	}
 	if ( dtSetCheckFunc && altHandler == 0)
-		(chctool->*dtSetCheckFunc)(&isSelected);
+		(chctool->*dtSetCheckFunc)(&isSelected,hti);
 }
 
 
@@ -1032,7 +1032,7 @@ void SetChecks::checkItem(HTREEITEM hti) {
 			item->setState(false);
 		}
 	}
-	(tool->*fun)(&hti);
+	(tool->*fun)(&hti,hti);
 	tv->Invalidate();
 	tv->UpdateWindow();
 }

@@ -65,7 +65,7 @@ Created on: 2007-02-8
 #include "Client\TableWindow\BaseTablePaneView.h"
 #include "Client\FormElements\syscolor.h"
 #include "Engine\Drawers\RootDrawer.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Headers\constant.h"
 #include "Headers\Hs\Mapwind.hs"
 #include "Engine\Domain\Dmvalue.h"
@@ -629,7 +629,7 @@ Editor* SimpleMapPaneView::editGet()
 
 void SimpleMapPaneView::createEditor(ComplexDrawer *drw) {
 	BaseMap bmp;
-	bmp.SetPointer(((AbstractMapDrawer *)drw->getParentDrawer())->getBaseMap());
+	bmp.SetPointer(((SpatialDataDrawer *)drw->getParentDrawer())->getBaseMap());
 	IObjectType type = IOTYPE(bmp->fnObj);
 	if ( edit){
 		pib->pixview->GetDocument()->setEditFeature(0);

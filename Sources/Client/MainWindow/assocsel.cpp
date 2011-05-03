@@ -235,6 +235,10 @@ AssociationSelector::AssociationSelector(CWnd* w, zPoint p,
 	AppendMenu(MF_SEPARATOR);
 
 	bool fOpenAs = false;
+	if ( IOTYPE(fn) == IlwisObject::iotOBJECTCOLLECTION)
+		pmadd(ID_CAT_ASLAYER);
+	if ( IOTYPE(fn) == IlwisObject::iotOBJECTCOLLECTION || IOTYPE(fn) == IlwisObject::iotMAPLIST)
+		pmadd(ID_CAT_ASANIMATION);
 	if ((".dom" != sExt) && ObjectInfo::fDomain(fn, false)) 
 	{
 		fOpenAs = true;
@@ -325,6 +329,12 @@ void AssociationSelector::ProcessCmd(int iCmd, const FileName& fn)
 				sCmd = String("opendir %S", fn.sFile);
 			else
 				sCmd = String("show %S", fn.sFullPathQuoted());
+			break;
+		case ID_CAT_ASLAYER:
+			sCmd = String("open %S -layer", fn.sFullPathQuoted());
+			break;
+		case ID_CAT_ASANIMATION:
+			sCmd = String("open %S -animation", fn.sFullPathQuoted());
 			break;
 		case ID_CAT_SHOWASDOM:
 			sCmd = String("showasdom %S", fn.sFullPathQuoted());

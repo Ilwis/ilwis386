@@ -104,7 +104,7 @@ protected:
 typedef vector<DrawerToolInfo *> DrawerToolInfoVector;
 typedef DrawerToolInfoVector *( *GetDrawerTools)();
 typedef void(ILWIS::DrawerTool::*DTDoubleClickActionFunc)();
-typedef void (ILWIS::DrawerTool::*DTSetCheckFunc)(void *value);
+typedef void (ILWIS::DrawerTool::*DTSetCheckFunc)(void *value, HTREEITEM hti);
 
 
 }

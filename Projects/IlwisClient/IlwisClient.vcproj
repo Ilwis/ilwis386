@@ -5245,15 +5245,11 @@
 			</Filter>
 		</Filter>
 		<File
-			RelativePath="..\..\Sources\Client\Resources\amesd.ico"
-			>
-		</File>
-		<File
 			RelativePath=".\amesd.ico"
 			>
 		</File>
 		<File
-			RelativePath="..\..\Sources\Client\Resources\esa.ico"
+			RelativePath="..\..\Sources\Client\Resources\amesd.ico"
 			>
 		</File>
 		<File
@@ -5261,11 +5257,19 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\Sources\Client\Resources\GNC.ico"
+			RelativePath="..\..\Sources\Client\Resources\esa.ico"
 			>
 		</File>
 		<File
 			RelativePath=".\GNC.ico"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\GNC.ico"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\setcol.ico"
 			>
 		</File>
 	</Files>

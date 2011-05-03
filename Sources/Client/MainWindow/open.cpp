@@ -147,6 +147,8 @@ LRESULT OpenIlwisMaps(CWnd *parent, const String& sCmd) {
 		IlwWinApp()->OpenDocumentFile(fnFile.sFullNameQuoted().scVal(), IlwisDocument::otANIMATION);
 	else if (fnFile.sExt == ".ioc" && pm.fExist("animation"))
 		IlwWinApp()->OpenDocumentFile(fnFile.sFullNameQuoted().scVal(), IlwisDocument::otANIMATION);
+	else if (fnFile.sExt == ".ioc" && pm.fExist("layer"))
+		IlwWinApp()->OpenDocumentFile(fnFile.sFullNameQuoted().scVal(), IlwisDocument::otCOLLECTION);
 	else
 		IlwWinApp()->OpenDocumentFile(fnFile.sFullNameQuoted().scVal());
 

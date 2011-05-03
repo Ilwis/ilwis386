@@ -50,7 +50,7 @@ Created on: 2007-02-8
 #include "Engine\Map\Mapview.h"
 #include "Engine\Base\DataObjects\URL.h"
 #include "Engine\Drawers\RootDrawer.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Client\Mapwindow\PixelInfoDoc.h"
 #include "Engine\Base\DataObjects\ObjectCollection.h"
 #include "Client\Mapwindow\LayerTreeView.h"
@@ -247,7 +247,7 @@ bool MapCompositionDoc::usesObject(const IlwisObject& ob) const {
 	vector<NewDrawer *> drawers;
 	rootDrawer->getDrawers(drawers);
 	for(int i = 0; i < drawers.size(); ++i) {
-		AbstractMapDrawer *drw = dynamic_cast<AbstractMapDrawer *>(drawers.at(i));
+		SpatialDataDrawer *drw = dynamic_cast<SpatialDataDrawer *>(drawers.at(i));
 		if ( drw) {
 			if ( drw->getBaseMap()->fnObj == ob->fnObj)
 				return true;
@@ -261,7 +261,7 @@ NewDrawer *MapCompositionDoc::getDrawerFor(const IlwisObject& ob, const Coord& c
 	vector<NewDrawer *> drawers;
 	rootDrawer->getDrawers(drawers);
 	for(int i = 0; i < drawers.size(); ++i) {
-		AbstractMapDrawer *drw = dynamic_cast<AbstractMapDrawer *>(drawers.at(i));
+		SpatialDataDrawer *drw = dynamic_cast<SpatialDataDrawer *>(drawers.at(i));
 		if ( drw) {
 			if ( drw->getBaseMap()->fnObj == ob->fnObj) {
 				if ( crd.fUndef())
@@ -392,7 +392,7 @@ BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPathName, OpenType ot)
 				return FALSE;
 			return OnOpenMapList(ml, ot);
 		}
-		else if (".ioc" == fn.sExt && ot == IlwisDocument::otANIMATION) {
+		else if (".ioc" == fn.sExt) {
 			ObjectCollection oc(fn);
 			if (!oc.fValid())
 				return FALSE;
@@ -668,7 +668,7 @@ void MapCompositionDoc::menLayers(CMenu& men, int iBaseId)
 	for(int i =0,id = iBaseId; i < rootDrawer->getDrawerCount(); ++i,++id)
 	{  
 		char s[512];
-		AbstractMapDrawer *mapdrawer = dynamic_cast<AbstractMapDrawer *>(rootDrawer->getDrawer(i));
+		SpatialDataDrawer *mapdrawer = dynamic_cast<SpatialDataDrawer *>(rootDrawer->getDrawer(i));
 		if (!mapdrawer)
 			continue;
 		String str = mapdrawer->getBaseMap()->fnObj.sFullName();
@@ -784,7 +784,7 @@ void MapCompositionDoc::OnEditLayer(UINT nID)
 	for(int i =0,id = ID_EDITLAYER; i < rootDrawer->getDrawerCount(); ++i,++id)
 	{  
 		if (id == nID) {
-			AbstractMapDrawer *mapdrawer = dynamic_cast<AbstractMapDrawer *>(rootDrawer->getDrawer(i));
+			SpatialDataDrawer *mapdrawer = dynamic_cast<SpatialDataDrawer *>(rootDrawer->getDrawer(i));
 			if (mapdrawer->isEditable()) {
 				MapPaneView* mpv = mpvGetView();
 				if (0 != mpv)
@@ -938,7 +938,7 @@ BOOL MapCompositionDoc::OnOpenRasterMap(const Map& mp, OpenType ot)
 
 	SetTitle(mp);
 
-	createBaseMapDrawer(mp, "RasterLayerDrawer", "Ilwis38");	
+	createBaseMapDrawer(mp, "RasterDataDrawer", "Ilwis38");	
 
 	if (ot & otEDIT) {
 		::AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_EDITLAYER, 0);
@@ -962,22 +962,26 @@ BOOL MapCompositionDoc::OnOpenObjectCollection(const ObjectCollection& list, Ope
 	if (!bmp.fValid())
 		return FALSE;
 	SetTitle(bmp);
-
-	if (ot & otANIMATION) {
+	ComplexDrawer *drawer=0;
+	if (ot == otANIMATION) {
 		ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
-		ComplexDrawer *drawer = (ComplexDrawer *)NewDrawer::getDrawer("AnimationDrawer", "Ilwis38", &parms);
-		drawer->addDataSource((void *)&list);
-		rootDrawer->setCoordinateSystem(bmp->cs());
-		rootDrawer->addCoordBounds(bmp->cs(), bmp->cb(), false);
-		drawer->getZMaker()->setSpatialSource(bmp, rootDrawer->getMapCoordBounds());
-		drawer->getZMaker()->setDataSourceMap(bmp);
-		ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,bmp->cs());
-		drawer->prepare(&pp);
-		rootDrawer->addDrawer(drawer);
+		drawer = (ComplexDrawer *)NewDrawer::getDrawer("AnimationDrawer", "Ilwis38", &parms);
+
 	}
-	else {
-	//	eType = eColorComp;
+	else if (ot == otCOLLECTION)  {
+		ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
+		drawer = (ComplexDrawer *)NewDrawer::getDrawer("CollectionDrawer", "Ilwis38", &parms);
 	}
+	if ( drawer == 0)
+		throw ErrorObject(TR("No compatible drawer found"));
+	drawer->addDataSource((void *)&list);
+	rootDrawer->setCoordinateSystem(bmp->cs());
+	rootDrawer->addCoordBounds(bmp->cs(), list->cb(), false);
+	drawer->getZMaker()->setSpatialSource(bmp, rootDrawer->getMapCoordBounds());
+	drawer->getZMaker()->setDataSourceMap(bmp);
+	ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,bmp->cs());
+	drawer->prepare(&pp);
+	rootDrawer->addDrawer(drawer);
 
 	
 	return TRUE;
@@ -1470,7 +1474,7 @@ NewDrawer* MapCompositionDoc::drAppend(const Map& rasmap, bool asAnimation)
 	}
 	if (!rasmap->fCalculated() && !rasmap->fDefOnlyPossible())
 		return 0;
-	NewDrawer *dr = createBaseMapDrawer(rasmap,"RasterLayerDrawer","Ilwis38");
+	NewDrawer *dr = createBaseMapDrawer(rasmap,"RasterDataDrawer","Ilwis38");
 
 	ChangeState();
 	return dr;
@@ -1586,7 +1590,7 @@ NewDrawer* MapCompositionDoc::drAppend(const BaseMap& mp, bool asAnimation)
 			if ( IlwisObject::iotObjectType(mp->fnObj) !=  IlwisObject::iotRASMAP)
 				drawer = createBaseMapDrawer(mp, "FeatureLayerDrawer", "Ilwis38");
 			else
-				drawer = createBaseMapDrawer(mp, "RasterLayerDrawer", "Ilwis38");
+				drawer = createBaseMapDrawer(mp, "RasterDataDrawer", "Ilwis38");
 		}
 		ChangeState();
 		UpdateAllViews(0,3);
@@ -1818,7 +1822,7 @@ void MapCompositionDoc::OnShowHistogram()
 	for (int i = 0; i < rootDrawer->getDrawerCount(); ++i) 
 	{
 		NewDrawer* dr = rootDrawer->getDrawer(i);
-		AbstractMapDrawer* md = dynamic_cast<AbstractMapDrawer*>(dr);
+		SpatialDataDrawer* md = dynamic_cast<SpatialDataDrawer*>(dr);
 		if (md->getType() == "ColorCompositeDrawer") 
 		{
 			throw ErrorObject("THis must be moved");  // HistogramRGBGraphView may not remain here
@@ -1835,7 +1839,7 @@ void MapCompositionDoc::OnShowHistogram()
 			fw->ShowControlBar(gbHist,TRUE,FALSE);
 			return;
 		}
-		if (md->getType() == "RasterLayerDrawer" ) // && md->dm()->pdv()) 
+		if (md->getType() == "RasterDataDrawer" ) // && md->dm()->pdv()) 
 		{
 			HistogramGraphDoc* hgd = new HistogramGraphDoc;
 			Map mp;
@@ -1870,7 +1874,7 @@ void MapCompositionDoc::OnUpdateShowHistogram(CCmdUI* pCmdUI)
 		for (int i = 0; i < rootDrawer->getDrawerCount(); ++i) 
 		{
 			NewDrawer* dr = rootDrawer->getDrawer(i);
-			AbstractMapDrawer* md = dynamic_cast<AbstractMapDrawer*>(dr);
+			SpatialDataDrawer* md = dynamic_cast<SpatialDataDrawer*>(dr);
 			if (md && (md->getBaseMap()->dm()->pdv() || md->getBaseMap()->dm()->pdsrt())) 
 			{
 				fPossible = true;
@@ -2034,7 +2038,7 @@ void MapCompositionDoc::OnOpenPixelInfo()
 	for (int i = 0; i < rootDrawer->getDrawerCount(); ++i) 
 	{
 		NewDrawer* dr = rootDrawer->getDrawer(i);
-		AbstractMapDrawer* md = dynamic_cast<AbstractMapDrawer*>(dr);
+		SpatialDataDrawer* md = dynamic_cast<SpatialDataDrawer*>(dr);
 		sList &= " ";
 		sList &= md->getBaseMap()->fnObj.sFullNameQuoted();
 	}

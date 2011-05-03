@@ -899,7 +899,7 @@ public:
 			throw ErrorObject("TO DO");
 			//for (list<Drawer*>::iterator it = mcdex->dl.begin(); it != mcdex->dl.end(); ++it)
 			//{
-			//	AbstractMapDrawer* smd = dynamic_cast<AbstractMapDrawer*>(*it);
+			//	SpatialDataDrawer* smd = dynamic_cast<SpatialDataDrawer*>(*it);
 			//	if (smd)
 			//	{
 			//		ValueRange vr = m_vstrvrCustomValueRanges[smd->basemap()->fnObj.sFileExt()];

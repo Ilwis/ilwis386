@@ -274,6 +274,7 @@ OneFramePlus            ICON                    "oneframeplus.ico"
 OneFrameMinus           ICON                    "oneframeminus.ico"
 ESA                     ICON                    "esa.ico"
 GNC                     ICON                    "GNC.ico"
+SETCOLL                 ICON                    "setcol.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //

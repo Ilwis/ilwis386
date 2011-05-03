@@ -62,7 +62,7 @@ class InfoLine;
 class PixelInfoBar;
 
 namespace ILWIS {
-	class AbstractMapDrawer;
+	class SpatialDataDrawer;
 	class BaseMapEditor;
 	class ComplexDrawer;
 	class ScreenSwapper;

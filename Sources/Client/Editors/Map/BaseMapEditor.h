@@ -35,7 +35,7 @@ class NewDrawer;
 		virtual LRESULT OnUpdate(WPARAM, LPARAM) = 0;
 		virtual bool hasSelection() const = 0;
 		virtual void updateFeature(SelectedFeature *f) = 0;
-		virtual void setMode(BaseMapEditor::Mode m) = 0;
+		virtual void setMode(BaseMapEditor::Mode m) {};
 	};
 }
 
