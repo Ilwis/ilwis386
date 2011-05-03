@@ -4,7 +4,7 @@
 #include "Engine\Drawers\DrawerContext.h"
 #include "Engine\Drawers\ComplexDrawer.h"
 #include "Engine\Drawers\RootDrawer.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
 #include "CanvasBackgroundDrawer.h"
 #include "Engine\Drawers\ZValueMaker.h"
 

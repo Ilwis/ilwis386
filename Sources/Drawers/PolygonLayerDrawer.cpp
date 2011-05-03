@@ -1,0 +1,150 @@
+#include "Headers\toolspch.h"
+#include "Engine\Map\basemap.h"
+#include "Engine\Map\Point\ilwPoint.h"
+#include "Engine\Drawers\ComplexDrawer.h"
+#include "Engine\Drawers\SimpleDrawer.h" 
+#include "Engine\Base\System\RegistrySettings.h"
+#include "Engine\Drawers\RootDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
+#include "Drawers\LayerDrawer.h"
+#include "Drawers\FeatureLayerDrawer.h"
+#include "drawers\linedrawer.h"
+#include "drawers\polygondrawer.h"
+#include "Drawers\gpc.h"
+#include "Drawers\PolygonFeatureDrawer.h"
+#include "Drawers\PolygonLayerDrawer.h"
+#include "Engine\Drawers\DrawerContext.h"
+#include "Engine\Drawers\ZValueMaker.h"
+#include "Headers\Hs\Drwforms.hs"
+
+using namespace ILWIS;
+
+ILWIS::NewDrawer *createPolygonLayerDrawer(DrawerParameters *parms) {
+	return new PolygonLayerDrawer(parms);
+}
+
+PolygonLayerDrawer::PolygonLayerDrawer(DrawerParameters *parms) : 
+	FeatureLayerDrawer(parms,"PolygonLayerDrawer"), 
+	showAreas(true), 
+	showBoundaries(true), 
+	areaTransparency(1.0),
+	usesTriangleFile(true),
+	triData(0),
+	currentLoc(0)
+{
+
+}
+PolygonLayerDrawer::~PolygonLayerDrawer() {
+}
+
+NewDrawer *PolygonLayerDrawer::createElementDrawer(PreparationParameters *pp, ILWIS::DrawerParameters* parms) const{
+	return NewDrawer::getDrawer("PolygonFeatureDrawer",pp, parms);
+
+}
+
+bool PolygonLayerDrawer::draw( const CoordBounds& cbArea) const {
+	FeatureLayerDrawer::draw(cbArea);
+	getRootDrawer()->setZIndex(1 + getRootDrawer()->getZIndex()); // extra offset because of the boundary layer;
+	return true;
+}
+void PolygonLayerDrawer::addDataSource(void *bmap,int options) {
+	FeatureLayerDrawer::addDataSource(bmap, options);
+	ComplexDrawer *cdr = (ComplexDrawer *)getParentDrawer();
+	FeatureLayerDrawer *fdr = (FeatureLayerDrawer *)cdr->getDrawer(100, ComplexDrawer::dtPOST);
+	if ( fdr)
+		fdr->addDataSource(bmap);
+
+}
+
+void PolygonLayerDrawer::getTriangleData(long **data, long** count) {
+	*data = triData;
+	*count = &currentLoc;
+}
+
+void PolygonLayerDrawer::prepare(PreparationParameters *parms) {
+	BaseMap *bmap = (BaseMap *)getDataSource();
+	FileName fnTriangle((*bmap)->fnObj,".tria#");
+	if ( (parms->type & RootDrawer::ptGEOMETRY) && fnTriangle.fExist()) {
+		ifstream file(fnTriangle.sFullPath().scVal(), ios::in|ios::binary);
+		file.is_open();
+		long size=1234;
+		file.read((char *)(&size), 4);
+		triData = new long[size];
+		triData[0] = size;
+		file.read((char *)(triData + 1),(size - 1)*4);
+		currentLoc = 1; // first long is the total size of the file; irrelevant for the rest of the polygons
+	}
+
+	LayerDrawer::test_count = 0;
+	FeatureLayerDrawer::prepare(parms);
+//	TRACE("Total number of vertices %d\n", LayerDrawer::test_count);
+
+	if ( parms->type & RootDrawer::ptGEOMETRY) {
+		if ( usesTriangleFile && triData == 0) {
+			if ( !fnTriangle.fExist()) {
+				ofstream file(fnTriangle.sFullPath().scVal(), ios::out|ios::binary|ios::ate);
+				long cnt = 1;
+				file.write((char *)&cnt,4);
+				for(int i=0; i < getDrawerCount(); ++i) {
+					cnt += ((PolygonFeatureDrawer *)getDrawer(i))->writeTriangleData(file);
+				}
+				file.seekp(0);
+				file.write((char *)&cnt,4);
+				file.close();
+			}
+		}
+	}
+	if ( triData != 0) {
+		delete [] triData;
+		triData = 0;
+		currentLoc = 0;
+	}
+
+}
+
+void PolygonLayerDrawer::setDrawMethod(DrawMethod method) {
+	if ( method == drmINIT) {
+		if ( useInternalDomain() || !rpr.fValid())
+			setDrawMethod(drmMULTIPLE);
+		else 
+			setDrawMethod(drmRPR);
+
+	} else
+		drm = method;
+}
+
+double PolygonLayerDrawer::getTransparencyArea() const{
+	return areaTransparency;
+}
+
+void PolygonLayerDrawer::setTransparencyArea(double v){
+	areaTransparency = v;
+}
+
+void PolygonLayerDrawer::setShowAreas(bool yesno) {
+	showAreas = yesno;
+}
+
+void PolygonLayerDrawer::setShowBoundaries(bool yesno){
+	showBoundaries = yesno;
+}
+
+void PolygonLayerDrawer::setLineStyle(int st) {
+	lp.linestyle = st;
+}
+
+void PolygonLayerDrawer::setLineThickness(double thick) {
+	lp.thickness = thick;
+}
+
+void PolygonLayerDrawer::setLineColor(const Color& clr) {
+	lp.drawColor = clr;
+}
+
+GeneralDrawerProperties *PolygonLayerDrawer::getProperties() {
+	return &lp;
+}
+
+
+
+

@@ -9,11 +9,11 @@
 #include "Engine\Map\Raster\Map.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Engine\Drawers\RootDrawer.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Drawers\DrawingColor.h" 
-#include "Drawers\featurelayerdrawer.h"
-#include "Drawers\SetDrawer.h"
-#include "Drawers\FeatureSetDrawer.h"
+#include "Drawers\featureDatadrawer.h"
+#include "Drawers\LayerDrawer.h"
+#include "Drawers\FeatureLayerDrawer.h"
 #include "drawers\linedrawer.h"
 #include "drawers\linefeaturedrawer.h"
 #include "Engine\Drawers\ZValueMaker.h"
@@ -50,7 +50,7 @@ void LineFeatureDrawer::addDataSource(void *f, int options) {
 
 void LineFeatureDrawer::prepare(PreparationParameters *p){
 	LineDrawer::prepare(p);
-	FeatureSetDrawer *fdr = dynamic_cast<FeatureSetDrawer *>(parentDrawer);
+	FeatureLayerDrawer *fdr = dynamic_cast<FeatureLayerDrawer *>(parentDrawer);
 	if ( p->type & ptGEOMETRY | p->type & ptRESTORE) {
 		CoordSystem csy = fdr->getCoordSystem();
 		clear();

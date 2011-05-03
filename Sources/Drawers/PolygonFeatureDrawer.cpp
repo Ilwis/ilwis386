@@ -5,13 +5,13 @@
 #include "Engine\Drawers\SimpleDrawer.h" 
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Engine\Drawers\RootDrawer.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Engine\Drawers\DrawerContext.h"
-#include "Drawers\featurelayerdrawer.h"
-#include "Drawers\SetDrawer.h"
+#include "Drawers\featuredatadrawer.h"
+#include "Drawers\LayerDrawer.h"
 #include "Drawers\LineDrawer.h"
-#include "Drawers\FeatureSetDrawer.h"
-#include "Drawers\PolygonSetDrawer.h"
+#include "Drawers\FeatureLayerDrawer.h"
+#include "Drawers\PolygonLayerDrawer.h"
 #include "geos\algorithm\CGAlgorithms.h"
 #include "Drawers\DrawingColor.h" 
 #include "Drawers\gpc.h"
@@ -64,7 +64,7 @@ void* PolygonFeatureDrawer::getDataSource() const{
 
 void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 	PolygonDrawer::prepare(p);
-	PolygonSetDrawer *fdr = dynamic_cast<PolygonSetDrawer *>(parentDrawer);
+	PolygonLayerDrawer *fdr = dynamic_cast<PolygonLayerDrawer *>(parentDrawer);
 	if (  p->type & ptGEOMETRY | p->type & ptRESTORE) {
 		CoordSystem csy = fdr->getCoordSystem();
 		if ( boundary) {
@@ -181,7 +181,7 @@ void PolygonFeatureDrawer::prepareList(gpc_vertex_list& exteriorBoundary, vector
 	for(int i = 0; i < tristrip.num_strips; ++i) {
 		gpc_vertex_list list = tristrip.strip[i];
 		int n = list.num_vertices;
-		SetDrawer::test_count += n;
+		LayerDrawer::test_count += n;
 		count += n * 2 * 3 + 1;
 	}
 	trianglePol = new long[ count ]; // number of pointer plus one long indicating howmany pointers + one for totalsize of block

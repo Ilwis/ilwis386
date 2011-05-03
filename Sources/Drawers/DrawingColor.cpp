@@ -6,9 +6,9 @@
 #include "Engine\Base\Algorithm\Random.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Engine\Drawers\RootDrawer.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
-#include "SetDrawer.h"
-#include "FeatureSetDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
+#include "LayerDrawer.h"
+#include "FeatureLayerDrawer.h"
 #include "DrawingColor.h" 
 
 using namespace ILWIS;
@@ -44,17 +44,18 @@ double IlwisData::rValByRaw(int raw) const{
 	return bmap->dvrs().rValue(raw);
 }
 
-DrawingColor::DrawingColor(SetDrawer *dr) : 
+DrawingColor::DrawingColor(LayerDrawer *dr, int ind) : 
 drw(dr),
 clr1(168,168,168), // False
 clr2(0,176,20), // True
 iMultColors(0),
 gamma(0),
-mcd(0)
+mcd(0),
+index(ind)
 {
-	AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)drw->getParentDrawer();
+	SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)drw->getParentDrawer();
 	BaseMap bmap;
-	bmap.SetPointer(mapDrawer->getBaseMap());
+	bmap.SetPointer(mapDrawer->getBaseMap(index));
 	dataValues.setBaseMap(bmap);
 	type = IlwisObject::iotObjectType(bmap->fnObj);
 }
@@ -72,10 +73,10 @@ Color DrawingColor::clrVal(double rVal) const
 	if (drw->isStretched()) {
 		switch (drw->getStretchMethod())
 		{
-		case SetDrawer::smLINEAR:
+		case LayerDrawer::smLINEAR:
 				cRet = (Color)rpr->clr(rVal, drw->getStretchRangeReal());
 			break;
-		case  SetDrawer::smLOGARITHMIC:
+		case  LayerDrawer::smLOGARITHMIC:
 			{
 				RangeReal rr = drw->getStretchRangeReal();
 				double rMax = 1 + rr.rHi() - rr.rLo();
@@ -114,7 +115,7 @@ Color DrawingColor::clrRaw(long iRaw, NewDrawer::DrawMethod drm) const
 		if ((long)clr2 == -1)
 			cRet = GetSysColor(COLOR_WINDOWTEXT);
 		else {
-			FeatureSetDrawer *fdr = dynamic_cast<FeatureSetDrawer *>(drw);
+			FeatureLayerDrawer *fdr = dynamic_cast<FeatureLayerDrawer *>(drw);
 			if ( fdr)
 				cRet = fdr->getSingleColor();
 		}
@@ -172,13 +173,13 @@ void DrawingColor::clrVal(const double * buf, long * bufOut, long iLen) const
 	if (drw->isStretched()) {
 		switch (drw->getStretchMethod())
 		{
-		case SetDrawer::smLINEAR:
+		case LayerDrawer::smLINEAR:
 			{
 				RangeReal rr = drw->getStretchRangeReal();
 				for (long i = 0; i < iLen; ++i)
 					bufOut[i] = rpr->clr(buf[i], rr).iVal();
 			} break;
-		case SetDrawer::smLOGARITHMIC:
+		case LayerDrawer::smLOGARITHMIC:
 			{
 				RangeReal rr = drw->getStretchRangeReal();
 				double rMax = 1 + rr.rHi() - rr.rLo();
@@ -210,13 +211,13 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 				if (drw->isStretched()) {
 					switch (drw->getStretchMethod())
 					{
-					case SetDrawer::smLINEAR: {
+					case LayerDrawer::smLINEAR: {
 						RangeReal rr = drw->getStretchRangeReal();
 						DomainValueRangeStruct dvrs = dataValues.dvrs();
 						for (long i = 0; i < iLen; ++i)
 							bufOut[i] = rpr->clr(dvrs.rValue(buf[i]), rr).iVal();
 					} break;
-					case SetDrawer::smLOGARITHMIC:
+					case LayerDrawer::smLOGARITHMIC:
 						{
 							RangeReal rr = drw->getStretchRangeReal();
 							double rMax = 1 + rr.rHi() - rr.rLo();
@@ -249,7 +250,7 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 		if ((long)clr2 == -1)
 			col = GetSysColor(COLOR_WINDOWTEXT);
 		else {
-			FeatureSetDrawer *fdr = dynamic_cast<FeatureSetDrawer *>(drw);
+			FeatureLayerDrawer *fdr = dynamic_cast<FeatureLayerDrawer *>(drw);
 			if ( fdr)
 				col = fdr->getSingleColor();
 		}

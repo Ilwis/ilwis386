@@ -4,8 +4,8 @@ class MapCompositionDoc;
 
 namespace ILWIS {
 
-	class AbstractMapDrawer;
-	class SetDrawer;
+	class SpatialDataDrawer;
+	class LayerDrawer;
 
 	class IlwisData{
 	public:
@@ -20,7 +20,7 @@ namespace ILWIS {
 	};
 class _export DrawingColor {
 public:
-	DrawingColor(SetDrawer *dr);
+	DrawingColor(LayerDrawer *dr, int _index=0);
 	Color clrVal(double rVal) const;
 	Color clrRaw(long iRaw, NewDrawer::DrawMethod drm) const;
 	void clrVal(const double * buf, long * bufOut, long iLen) const;
@@ -32,7 +32,7 @@ public:
 private:
 	void InitClrRandom();
 
-	SetDrawer *drw;
+	LayerDrawer *drw;
 	MapCompositionDoc *mcd;
     vector<Color> m_clrRandom;
 	Color clr1;
@@ -40,6 +40,7 @@ private:
 	int iMultColors;
 	double gamma;
 	IlwisData dataValues;
+	int index;
 	IlwisObject::iotIlwisObjectType type;
 };
 }

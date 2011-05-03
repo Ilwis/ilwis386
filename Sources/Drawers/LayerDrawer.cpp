@@ -9,19 +9,19 @@
 #include "Engine\Map\Raster\Map.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Engine\Drawers\RootDrawer.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Engine\Drawers\DrawerContext.h"
 #include "Drawers\DrawingColor.h" 
-#include "Drawers\SetDrawer.h"
+#include "Drawers\LayerDrawer.h"
 #include "Engine\Drawers\ZValueMaker.h"
 #include "Engine\Domain\dmclass.h"
 #include "Headers\Hs\Drwforms.hs"
 
 using namespace ILWIS;
 
-unsigned long SetDrawer::test_count = 0;
+unsigned long LayerDrawer::test_count = 0;
 
-SetDrawer::SetDrawer(DrawerParameters *parms, const String& name) : 
+LayerDrawer::LayerDrawer(DrawerParameters *parms, const String& name) : 
 	ComplexDrawer(parms,name),
 	stretched(false),
 	stretchMethod(smLINEAR),
@@ -33,28 +33,28 @@ SetDrawer::SetDrawer(DrawerParameters *parms, const String& name) :
 	setTransparency(1);
 }
 
-SetDrawer::~SetDrawer() {
+LayerDrawer::~LayerDrawer() {
 	delete drawColor;
 }
 
-void SetDrawer::prepare(PreparationParameters *parm){
+void LayerDrawer::prepare(PreparationParameters *parm){
 	//delete drawColor; // the drawColor is still in use elsewhere (a local pointer is kept for efficiency). Unless there's a good reason to fully renew it here, I try commenting this out for now.
 	//drawColor = 0;
 	ComplexDrawer::prepare(parm);
 	if ( parm->type & NewDrawer::ptGEOMETRY ||  parm->type & NewDrawer::ptRESTORE) {
 		csy = parm->csy;
-		AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)parentDrawer;
+		SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)parentDrawer;
 		Representation rpr = mapDrawer->getRepresentation();
 		//if ( rpr.fValid() && !rpr->prv())
 		if ( rpr.fValid() && !rpr->prv())
 			setStretchRangeReal(mapDrawer->getStretchRangeReal());
 		if (!drawColor)
-			drawColor = new DrawingColor(this);
+			drawColor = new DrawingColor(this, parm->index);
 	}
 	setDrawMethod();
 }
 
-bool SetDrawer::draw( const CoordBounds& cbArea) const{
+bool LayerDrawer::draw( const CoordBounds& cbArea) const{
 	glClearColor(1.0,1.0,1.0,0.0);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
@@ -64,34 +64,34 @@ bool SetDrawer::draw( const CoordBounds& cbArea) const{
 	return true;
 }
 
-//void SetDrawer::SetthreeD(void *v, LayerTreeView *tv) {
+//void LayerDrawer::SetthreeD(void *v, LayerTreeView *tv) {
 //	bool value = *(bool *)v;
 //	getZMaker()->setThreeDPossible(value);
 //	getRootDrawer()->getDrawerContext()->doDraw();
 //}
 
-String SetDrawer::iconName(const String& subtype) const 
+String LayerDrawer::iconName(const String& subtype) const 
 { 
 	return "Set";
 }
 
-bool SetDrawer::useInternalDomain() const {
-	AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)getParentDrawer();
+bool LayerDrawer::useInternalDomain() const {
+	SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)getParentDrawer();
 	if ( !mapDrawer)
 		throw ErrorObject("Parent drawer not set");
 	return mapDrawer->useInternalDomain();
 }
 
 
-Representation SetDrawer::getRepresentation() const { // avoiding copy constructotrs
+Representation LayerDrawer::getRepresentation() const { // avoiding copy constructotrs
 	return rpr;
 }
 
-double SetDrawer::getExtrusionTransparency() const {
+double LayerDrawer::getExtrusionTransparency() const {
 	return extrTransparency;
 }
 
-void SetDrawer::setExtrustionTransparency(double v) {
+void LayerDrawer::setExtrustionTransparency(double v) {
 	extrTransparency = v;
 	for(int i = 0; i < drawers.size(); ++i) {
 		if ( drawers[i]->isSimple())
@@ -99,8 +99,8 @@ void SetDrawer::setExtrustionTransparency(double v) {
 	}
 }
 
-void SetDrawer::setRepresentation( const Representation& rp){
-	AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)parentDrawer;
+void LayerDrawer::setRepresentation( const Representation& rp){
+	SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)parentDrawer;
 	if ( !rp.fValid()) { 
 		// domain id has no rpr
 		BaseMap bmp;
@@ -116,7 +116,8 @@ void SetDrawer::setRepresentation( const Representation& rp){
 	if ( useAttributeColumn() && getAtttributeColumn().fValid() ) {
 		isValue = getAtttributeColumn()->dm()->pdv() != 0;
 	} else {
-		isValue = mapDrawer->getBaseMap()->dm()->pdv() !=0;
+		//isValue = mapDrawer->getBaseMap()->dm()->pdv() !=0;
+		isValue = rp->dm()->pdv() !=0;
 	}
 
 	rpr = rp;
@@ -133,23 +134,23 @@ void SetDrawer::setRepresentation( const Representation& rp){
 	}
 }
 
-CoordSystem SetDrawer::getCoordSystem() const {
+CoordSystem LayerDrawer::getCoordSystem() const {
 	return csy;
 }
 
-bool SetDrawer::isStretched() const {
+bool LayerDrawer::isStretched() const {
 	return stretched;
 }
 
-RangeReal SetDrawer::getStretchRangeReal() const{
+RangeReal LayerDrawer::getStretchRangeReal() const{
 	return rrStretch;
 }
 
-String SetDrawer::getInfo(const Coord& c) const {
+String LayerDrawer::getInfo(const Coord& c) const {
 	if ( !hasInfo() || !isActive())
 		return "";
 	Coord crd = c;
-	AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)parentDrawer;
+	SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)parentDrawer;
 	BaseMapPtr *bmptr = mapDrawer->getBaseMap();
 	if (bmptr->cs() != rootDrawer->getCoordinateSystem())
 	{
@@ -169,7 +170,7 @@ String SetDrawer::getInfo(const Coord& c) const {
 	return info;
 }
 
-void SetDrawer::setStretchRangeReal(const RangeReal& rr){
+void LayerDrawer::setStretchRangeReal(const RangeReal& rr){
 	if ( rr.fValid())
 		stretched = true;
 	rrStretch = rr;
@@ -177,11 +178,11 @@ void SetDrawer::setStretchRangeReal(const RangeReal& rr){
 	riStretch.iHi() = (long)(rounding(rrStretch.rHi()));
 }
 
-RangeInt SetDrawer::getStretchRangeInt() const{
+RangeInt LayerDrawer::getStretchRangeInt() const{
 	return riStretch;
 }
 
-void SetDrawer::setStretchRangeInt(const RangeInt& ri){
+void LayerDrawer::setStretchRangeInt(const RangeInt& ri){
 	if ( ri != riStretch && ri.fValid())
 		stretched = true;
 	riStretch = ri;
@@ -189,43 +190,43 @@ void SetDrawer::setStretchRangeInt(const RangeInt& ri){
 	rrStretch.rHi() = doubleConv(riStretch.iHi());
 }
 
-SetDrawer::StretchMethod SetDrawer::getStretchMethod() const{
+LayerDrawer::StretchMethod LayerDrawer::getStretchMethod() const{
 	return stretchMethod;
 }
-void SetDrawer::setStretchMethod(StretchMethod sm){
+void LayerDrawer::setStretchMethod(StretchMethod sm){
 	stretchMethod = sm;
 }
 
-ILWIS::DrawingColor * SetDrawer::getDrawingColor() const {
+ILWIS::DrawingColor * LayerDrawer::getDrawingColor() const {
 	return drawColor;
 }
 
-Column SetDrawer::getAtttributeColumn() const{
+Column LayerDrawer::getAtttributeColumn() const{
 	return attColumn;
 }
 
-void SetDrawer::setAttributeColumn(const Column& c){
+void LayerDrawer::setAttributeColumn(const Column& c){
 	attColumn = c;
 }
 
-void SetDrawer::setUseAttributeColumn(bool yesno) {
+void LayerDrawer::setUseAttributeColumn(bool yesno) {
 	if ( attColumn.fValid() ) { // dont mess around with stretch if there was never a valid column, leave it as is
 		if ( yesno) {
 			if (attColumn->dm()->pdv())
 				setStretchRangeReal(attColumn->rrMinMax());
 		} else {
-			AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)parentDrawer;
+			SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)parentDrawer;
 			setStretchRangeReal(mapDrawer->getStretchRangeReal());
 		}
 	}
 	useAttColumn = yesno;
 }
 
-bool SetDrawer::useAttributeColumn() const{
+bool LayerDrawer::useAttributeColumn() const{
 	return useAttColumn ;
 }
 
-String SetDrawer::store(const FileName& fnView, const String& parentSection) const{
+String LayerDrawer::store(const FileName& fnView, const String& parentSection) const{
 	ComplexDrawer::store(fnView, parentSection);
 	ObjectInfo::WriteElement(parentSection.scVal(),"CoordinateSystem",fnView, csy);
 	ObjectInfo::WriteElement(parentSection.scVal(),"Representation",fnView, rpr);
@@ -240,7 +241,7 @@ String SetDrawer::store(const FileName& fnView, const String& parentSection) con
 	return parentSection;
 }
 
-void SetDrawer::load(const FileName& fnView, const String& parentSection){
+void LayerDrawer::load(const FileName& fnView, const String& parentSection){
 	ComplexDrawer::load(fnView, parentSection);
 	ObjectInfo::ReadElement(parentSection.scVal(),"CoordinateSystem",fnView, csy);
 	ObjectInfo::ReadElement(parentSection.scVal(),"Representation",fnView, rpr);
@@ -252,12 +253,12 @@ void SetDrawer::load(const FileName& fnView, const String& parentSection){
 	stretchMethod = (StretchMethod)method;
 	String colname;
 	ObjectInfo::ReadElement(parentSection.scVal(),"AttributeColumn",fnView, colname);
-	attColumn = ((AbstractMapDrawer *)getParentDrawer())->getBaseMap()->tblAtt()->col(colname);
+	attColumn = ((SpatialDataDrawer *)getParentDrawer())->getBaseMap()->tblAtt()->col(colname);
 	ObjectInfo::ReadElement(parentSection.scVal(),"UseAttributes",fnView, useAttColumn);
 }
 
-void SetDrawer::drawLegendItem(CDC *dc, const CRect& rct, double rVal) const{
-	AbstractMapDrawer *mapDrawer = (AbstractMapDrawer *)getParentDrawer();
+void LayerDrawer::drawLegendItem(CDC *dc, const CRect& rct, double rVal) const{
+	SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)getParentDrawer();
 	DomainValueRangeStruct dvs = mapDrawer->getBaseMap()->dvrs();
 
 	if ( useAttributeColumn() && getAtttributeColumn().fValid()) {

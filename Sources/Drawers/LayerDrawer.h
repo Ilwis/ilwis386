@@ -1,24 +1,17 @@
 #pragma once
 
 
-class FieldColor;
-class FieldIntSliderEx;
-class FieldRealSliderEx;
-class FieldRepresentation;
-class DisplayOptionsLegend;
-class FieldColumn;
-
 namespace ILWIS{
 
 class DrawingColor;
 
-class _export SetDrawer : public ComplexDrawer {
+class _export LayerDrawer : public ComplexDrawer {
 	public:
 		enum StretchMethod { smLINEAR, smLOGARITHMIC };
-		ILWIS::NewDrawer *createSetDrawer(DrawerParameters *parms);
+		ILWIS::NewDrawer *createLayerDrawer(DrawerParameters *parms);
 
-		SetDrawer(DrawerParameters *parms, const String& name);
-		virtual ~SetDrawer();
+		LayerDrawer(DrawerParameters *parms, const String& name);
+		virtual ~LayerDrawer();
 		virtual void prepare(PreparationParameters *pp);
 		Representation getRepresentation() const;
 		virtual void setRepresentation(const Representation& rp);
@@ -66,69 +59,6 @@ class _export SetDrawer : public ComplexDrawer {
 		double extrTransparency;
 	};
 
-	/*class ZDataScaling : public DisplayOptionsForm {
-		public:
-		ZDataScaling(CWnd *wPar, SetDrawer *dr);
-		void apply(); 
-	private:
-		int settransforms(Event *);
-		FieldRealSliderEx *sliderScale;
-		FieldRealSliderEx *sliderOffset;
 
-		double zoffset;
-		double zscale;
-	};*/
-
-	/*class DisplayZDataSourceForm : public DisplayOptionsForm {
-		public:
-		DisplayZDataSourceForm(CWnd *wPar, SetDrawer *dr);
-		void apply(); 
-	private:
-		RadioGroup *rg;
-		FieldMap *fmap;
-
-		String colName;
-		Table  attTable;
-		String mapName;
-		int sourceIndex;
-		BaseMap bmp;
-	};*/
-
-	/*class ExtrusionOptions : public DisplayOptionsForm {
-	public:
-		ExtrusionOptions(CWnd *p, SetDrawer *fsd);
-		void apply();
-	private:
-		int setTransparency(Event *ev);
-		int line;
-		int transparency;
-		RadioGroup *rg;
-		FieldIntSliderEx *slider;
-
-	};*/
-
-	/*class SetStretchForm : public DisplayOptionsForm {
-		public:
-		SetStretchForm(CWnd *wPar, SetDrawer *dr);
-		void apply(); 
-	private:
-		RangeReal rr;
-		FieldRealSliderEx *sliderLow;
-		FieldRealSliderEx *sliderHigh;
-		double low, high;
-
-		int check(Event *);
-
-	};*/
-
-	//class ChooseAttributeColumnForm : public DisplayOptionsForm {
-	//	public:
-	//	ChooseAttributeColumnForm(CWnd *wPar, SetDrawer *dr);
-	//	void apply(); 
-	//private:
-	//	Table attTable;
-	//	String attColumn;
-	//	FieldColumn *fc;
-	//};
 
 }

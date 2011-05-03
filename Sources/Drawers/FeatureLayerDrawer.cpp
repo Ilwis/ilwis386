@@ -6,111 +6,128 @@
 #include "Engine\Spatialreference\gr.h"
 #include "Engine\Map\Raster\Map.h"
 #include "Engine\Base\System\RegistrySettings.h"
+#include "Engine\Map\basemap.h"
 #include "Engine\Drawers\RootDrawer.h"
-#include "Engine\Drawers\AbstractMapDrawer.h"
-#include "drawers\pointdrawer.h"
-#include "drawers\linedrawer.h"
-#include "Drawers\SetDrawer.h"
-#include "Drawers\FeatureSetDrawer.h"
-#include "Drawers\PolygonSetDrawer.h"
-#include "Drawers\LineSetDrawer.h"
-#include "Drawers\PointSetDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
+#include "Drawers\FeatureDataDrawer.h"
+#include "Drawers\LayerDrawer.h"
 #include "Drawers\FeatureLayerDrawer.h"
 #include "Engine\Drawers\ZValueMaker.h"
-//#include "Engine\Drawers\PointMapDrawerForm.h"
+#include "Engine\Drawers\DrawerContext.h"
 #include "Headers\Hs\Drwforms.hs"
 
 using namespace ILWIS;
 
-ILWIS::NewDrawer *createFeatureLayerDrawer(DrawerParameters *parms) {
-	return new FeatureLayerDrawer(parms);
-}
-
-FeatureLayerDrawer::FeatureLayerDrawer(DrawerParameters *parms) : 
-	AbstractMapDrawer(parms,"FeatureLayerDrawer")
+FeatureLayerDrawer::FeatureLayerDrawer(DrawerParameters *parms, const String& name) : 
+	LayerDrawer(parms,name),
+	singleColor(Color(0,176,20)),
+	useMask(false)
 {
-	setTransparency(rUNDEF);
+	setDrawMethod(drmNOTSET); // default
+	setInfo(false);
 }
 
 FeatureLayerDrawer::~FeatureLayerDrawer() {
-}
-
-void FeatureLayerDrawer::prepare(PreparationParameters *pp){
-	AbstractMapDrawer::prepare(pp);
-	BaseMapPtr *bmptr = getBaseMap();
-	BaseMap basemap;
-	basemap.SetPointer(bmptr);
-	if ( pp->type & RootDrawer::ptGEOMETRY) {
-		if ( !(pp->type & NewDrawer::ptANIMATION))
-			clear();
-		FeatureSetDrawer *fsd;
-		ILWIS::DrawerParameters dp(getRootDrawer(), this);
-		IlwisObject::iotIlwisObjectType otype = IlwisObject::iotObjectType(basemap->fnObj);
-		switch ( otype) {
-			case IlwisObject::iotPOINTMAP:
-				fsd = (FeatureSetDrawer *)NewDrawer::getDrawer("PointSetDrawer", pp, &dp); 
-				addSetDrawer(basemap,pp,fsd);
-				break;
-			case IlwisObject::iotSEGMENTMAP:
-				fsd = (FeatureSetDrawer *)NewDrawer::getDrawer("LineSetDrawer", pp, &dp); 
-				addSetDrawer(basemap,pp,fsd);
-				break;
-			case IlwisObject::iotPOLYGONMAP:
-				fsd = (FeatureSetDrawer *)NewDrawer::getDrawer("PolygonSetDrawer", pp, &dp); 
-				addSetDrawer(basemap,pp,fsd, "Areas");
-				break;
-		}
-	} else {
-		if ( pp->type & NewDrawer::ptRENDER | pp->type & NewDrawer::ptRESTORE) {
-			for(int i = 0; i < drawers.size(); ++i) {
-				FeatureSetDrawer *fsd = (FeatureSetDrawer *)drawers.at(i);
-				PreparationParameters fp((int)pp->type, 0);
-				fp.csy = basemap->cs();
-				fsd->prepare(&fp);
-			}
-		}
-	}
 
 }
 
-void FeatureLayerDrawer::addSetDrawer(const BaseMap& basemap,PreparationParameters *pp,SetDrawer *fsd, const String& name) {
-	PreparationParameters fp((int)pp->type, 0);
-	fp.csy = basemap->cs();
-	if ( getName() == "Unknown")
-		fsd->setName(name);
-	fsd->setRepresentation(basemap->dm()->rpr()); //  default choice
-	fsd->getZMaker()->setSpatialSource(basemap, getRootDrawer()->getMapCoordBounds());
-	fsd->getZMaker()->setDataSourceMap(basemap);
-	BaseMap bmp(basemap);
-	fsd->addDataSource(bmp.ptr());
-	fsd->prepare(&fp);
-	addDrawer(fsd);
+void FeatureLayerDrawer::addDataSource(void *bmap,int options) {
+	fbasemap.SetPointer((BaseMapPtr *)bmap);
 }
 
-void FeatureLayerDrawer::getFeatures(vector<Feature *>& features) const{
-	BaseMapPtr *basemap = getBaseMap();
+void *FeatureLayerDrawer::getDataSource() const {
+	return (void *)&fbasemap;
+}
+
+void FeatureLayerDrawer::getFeatures(vector<Feature *>& features) const {
 	features.clear();
-	int numberOfFeatures = basemap->iFeatures();
+	int numberOfFeatures = fbasemap->iFeatures();
 	features.resize(numberOfFeatures);
-	for(int i=0; i < basemap->iFeatures(); ++i) {
-		Feature *feature = CFEATURE(basemap->getFeature(i));
+	for(int i=0; i < numberOfFeatures; ++i) {
+		Feature *feature = CFEATURE(fbasemap->getFeature(i));
 		features.at(i) = feature;
 	}
 }
 
-String FeatureLayerDrawer::store(const FileName& fnView, const String& parentSection) const{
-	String currentSection = "FeatureLayerDrawer::" + parentSection;
-	AbstractMapDrawer::store(fnView, currentSection);
+void FeatureLayerDrawer::prepare(PreparationParameters *parms){
+	/*if ( !isActive())
+		return;*/
 
-	return currentSection;
+	clock_t start = clock();
+	LayerDrawer::prepare(parms);
+	FeatureDataDrawer *mapDrawer = (FeatureDataDrawer *)parentDrawer;
+	if ( getName() == "Unknown")
+		setName(mapDrawer->getBaseMap()->sName());
+	vector<Feature *> features;
+	if ( parms->type & RootDrawer::ptGEOMETRY | parms->type & NewDrawer::ptRESTORE){
+		bool isAnimation = mapDrawer->getType() == "AnimationDrawer";
+		if ( isAnimation ) {
+			getFeatures(features);
+		} else {
+			mapDrawer->getFeatures(features, parms->index);
+		}
+		clear();
+		drawers.resize( features.size());
+		for(int i=0; i<drawers.size(); ++i)
+			drawers.at(i) = 0;
+		int count = 0;
+		Tranquilizer trq(TR("preparing data"));
+		for(int i=0; i < features.size(); ++i) {
+			Feature *feature = features.at(i);
+			NewDrawer *pdrw;
+			if ( feature && feature->fValid() ){
+				ILWIS::DrawerParameters dp(getRootDrawer(), this);
+				pdrw = createElementDrawer(parms, &dp);
+				pdrw->addDataSource(feature);
+				PreparationParameters fp((int)parms->type, mapDrawer->getBaseMap()->cs());
+				pdrw->prepare(&fp);
+				if ( feature->rValue() == rUNDEF)
+					pdrw->setActive(false);
+				setDrawer(i, pdrw);
+				++count;
+				if ( i % 100 == 0) {
+					trq.fUpdate(i,features.size()); 
+				}
+			}
+		}
+
+	} else {
+		if ( parms->type & NewDrawer::ptRENDER || parms->type & NewDrawer::pt3D) {
+
+			prepareChildDrawers(parms);
+		}
+	}
+	clock_t end = clock();
+	double duration = 1000.0 * (double)(end - start) / CLOCKS_PER_SEC;
+	TRACE("Prepared in %2.2f seconds;\n", duration/1000);
+}
+
+String FeatureLayerDrawer::getMask() const{
+	return mask;
+}
+
+void FeatureLayerDrawer::setMask(const String& sm){
+	mask = sm;
+}
+
+void FeatureLayerDrawer:: setSingleColor(const Color& c){
+	singleColor = c;
+	setDrawMethod(drmSINGLE);
+}
+
+Color FeatureLayerDrawer::getSingleColor() const {
+	return singleColor;
+}
+
+String FeatureLayerDrawer::store(const FileName& fnView, const String& parentSection) const{
+	LayerDrawer::store(fnView, parentSection);
+	ObjectInfo::WriteElement(parentSection.scVal(),"SingleColor",fnView, singleColor);
+	return parentSection;
 }
 
 void FeatureLayerDrawer::load(const FileName& fnView, const String& parentSection){
-	AbstractMapDrawer::load(fnView, parentSection);
+	LayerDrawer::load(fnView, parentSection);
+	ObjectInfo::ReadElement(parentSection.scVal(),"SingleColor",fnView, singleColor);
+
 }
-
-
-
-
-
 

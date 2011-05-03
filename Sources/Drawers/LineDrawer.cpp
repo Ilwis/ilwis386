@@ -81,7 +81,7 @@ bool LineDrawer::draw( const CoordBounds& cbArea) const{
 	}
 	for(int j = 0; j < lines.size(); ++j) {
 		CoordinateSequence *points = lines.at(j);
-		if ( specialOptions & NewDrawer::sdoSELECTED) {
+		if ( specialOptions & NewDrawer::sdoSELECTED || selectedCoords.size() > 0) {
 			glColor4d(1, 0, 0, 1);
 			drawSelectedFeature(points, cbZoom, is3D);
 			glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(), transp);

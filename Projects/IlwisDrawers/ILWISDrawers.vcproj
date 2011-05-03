@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="ILWISDrawers"
 	ProjectGUID="{FD4E2ECC-451A-40CD-9391-6806EBEC9BF4}"
 	RootNamespace="ILWISDrawers"
@@ -220,6 +220,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Drawers\CollectionDrawer.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Drawers\DEMTriangulator.cpp"
 				>
 			</File>
@@ -232,11 +236,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Drawers\FeatureLayerDrawer.cpp"
+				RelativePath="..\..\Sources\Drawers\FeatureDataDrawer.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Drawers\FeatureSetDrawer.cpp"
+				RelativePath="..\..\Sources\Drawers\FeatureLayerDrawer.cpp"
 				>
 			</File>
 			<File
@@ -248,6 +252,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Drawers\LayerDrawer.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Drawers\LineDrawer.cpp"
 				>
 			</File>
@@ -256,7 +264,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Drawers\LineSetDrawer.cpp"
+				RelativePath="..\..\Sources\Drawers\LineLayerDrawer.cpp"
 				>
 			</File>
 			<File
@@ -268,7 +276,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Drawers\PointSetDrawer.cpp"
+				RelativePath="..\..\Sources\Drawers\PointLayerDrawer.cpp"
 				>
 			</File>
 			<File
@@ -280,15 +288,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Drawers\PolygonSetDrawer.cpp"
+				RelativePath="..\..\Sources\Drawers\PolygonLayerDrawer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\RasterDataDrawer.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\Sources\Drawers\RasterLayerDrawer.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\Drawers\RasterSetDrawer.cpp"
 				>
 			</File>
 			<File
@@ -321,6 +329,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Drawers\CollectionDrawer.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Drawers\DEMTriangulator.h"
 				>
 			</File>
@@ -329,11 +341,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Drawers\FeatureLayerDrawer.h"
+				RelativePath="..\..\Sources\Drawers\FeatureDataDrawer.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Drawers\FeatureSetDrawer.h"
+				RelativePath="..\..\Sources\Drawers\FeatureLayerDrawer.h"
 				>
 			</File>
 			<File
@@ -345,6 +357,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Drawers\LayerDrawer.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Drawers\LineDrawer.h"
 				>
 			</File>
@@ -353,7 +369,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Drawers\LineSetDrawer.h"
+				RelativePath="..\..\Sources\Drawers\LineLayerDrawer.h"
 				>
 			</File>
 			<File
@@ -365,7 +381,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Drawers\PointSetDrawer.h"
+				RelativePath="..\..\Sources\Drawers\PointLayerDrawer.h"
 				>
 			</File>
 			<File
@@ -377,15 +393,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Drawers\PolygonSetDrawer.h"
+				RelativePath="..\..\Sources\Drawers\PolygonLayerDrawer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\RasterDataDrawer.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\Sources\Drawers\RasterLayerDrawer.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\Drawers\RasterSetDrawer.h"
 				>
 			</File>
 			<File
