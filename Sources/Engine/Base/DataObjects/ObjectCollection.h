@@ -83,7 +83,7 @@ public:
 	set<IObjectType>					getFilterTypes() const;
 	void					addFilterType(IObjectType type);
 	void					removeFilterType(IObjectType type);
-	bool	_export			isBaseMapOnly() const;
+	bool	_export			getStatusFor(int query) const;
 	CoordBounds	_export 	cb() const;
 	
 
@@ -97,11 +97,13 @@ protected:
 	ObjectCollectionVirtual *ocv;
 	Table   				attTable;
 	set<IObjectType>		filterTypes;
+	int status;
 };
 
 class ObjectCollection: public IlwisObject
 {
 public:
+	enum ContentStatus{csANY=0,csALLBASEMAP=1, csSAMEDOMAIN=2,csSAMECSY=4, csSAMEGEOREF=8,csALLRASTER=16,csALLPOINT=32, csALLSEGMENT=64,csALLPOLYGON=128};
 	_export ObjectCollection();
 	_export ObjectCollection(const FileName& fn);
 	_export ObjectCollection(const FileName& fn,  const String& sType, ParmList& pm);

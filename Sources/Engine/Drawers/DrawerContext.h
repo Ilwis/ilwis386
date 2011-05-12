@@ -11,7 +11,7 @@ namespace ILWIS {
 	public:
 		~DrawerContext();
 		DrawerContext();
-		bool initOpenGL(CDC *dc);
+		bool initOpenGL(CDC *dc, bool init=false);
 		void clear();
 		GLint getMaxTextureSize() const { return maxTextureSize; };
 		GLint getMaxPaletteSize() const { return maxPaletteSize; };

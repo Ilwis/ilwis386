@@ -160,13 +160,17 @@ BaseMapPtr * ZValueMaker::getSourceRasterMap() const { // we return the pointer 
 	} else
 		return 0;
 }
-void ZValueMaker::setOffset(double v){
-	if ( range.rLo() == rUNDEF) {
-		v = 0;
+void ZValueMaker::setOffset(double v, bool useTrueCoords){
+	if (useTrueCoords) {
+		offset = v;
+	} else {
+		if ( range.rLo() == rUNDEF) {
+			v = 0;
+		}
+		double scale = (v - range.rLo()) / range.rWidth();
+		double zMaxSizeEstimate = (cbLimits.width() + cbLimits.height())/ 2.0;
+		offset = scale * zMaxSizeEstimate * 0.25;
 	}
-	double scale = (v - range.rLo()) / range.rWidth();
-	double zMaxSizeEstimate = (cbLimits.width() + cbLimits.height())/ 2.0;
-	offset = scale * zMaxSizeEstimate * 0.25;
 }
 
 double ZValueMaker::getOffset() const {

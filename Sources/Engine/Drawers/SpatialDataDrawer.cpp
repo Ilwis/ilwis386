@@ -84,7 +84,7 @@ void SpatialDataDrawer::addDataSource(void *bmap,int options)
 		bm = BaseMap(fn);
 	else if (IOTYPE(fn) == IlwisObject::iotOBJECTCOLLECTION) {
 		oc = ObjectCollection(fn);
-		if ( !oc->isBaseMapOnly())
+		if ( !oc->getStatusFor(ObjectCollection::csALLBASEMAP))
 			throw ErrorObject(TR("Only collections with feature or raster maps only are allowed as layer"));
 	}
 	else if ( IOTYPE(fn) == IlwisObject::iotMAPLIST)

@@ -12,7 +12,7 @@ public:
 	void setScaleType(ZValueTypeScaling t);
 	double getValue(const Coord& crd, Feature *f = 0);
 	double scaleValue(double value);
-	void setOffset(double u=rUNDEF);
+	void setOffset(double u=rUNDEF, bool useTrueCoords=false);
 	double getOffset() const;
 	RangeReal getRange() const;
 	void setRange(const RangeReal& rr);

@@ -41,6 +41,7 @@
 #include "Engine\Applications\ObjectCollectionVirtual.h"
 #include "Engine\DataExchange\DatabaseCollection.h"
 #include "Engine\DataExchange\ForeignCollection.h"
+#include "Engine\Map\Raster\Map.h"
 #include "Engine\Base\objdepen.h"
 #include "Engine\Base\DataObjects\ObjectStructure.h"
 #include "Engine\Base\DataObjects\valrange.h"
@@ -535,13 +536,50 @@ void ObjectCollectionPtr::removeFilterType(IObjectType type){
 	filterTypes.erase(type);
 }
 
-bool ObjectCollectionPtr::isBaseMapOnly() const {
+bool ObjectCollectionPtr::getStatusFor(int query) const {
+	bool allBasemap, allSegMap, allPntMap, allRasMap, allPolMap, sameDomain, sameGeoref, sameCsy;
+	allBasemap = allSegMap = allPntMap = allRasMap = allPolMap = sameDomain = sameGeoref = sameCsy = true;
+	Domain dm;
+	GeoRef grf;
+	CoordSystem csy;
 	for(vector<FileName>::const_iterator cur=arObjects.begin(); cur != arObjects.end(); ++cur)	 {
-		if ( !IOTYPEBASEMAP(*cur)) {
+		if ((allBasemap & allSegMap & allPntMap && allRasMap & allPolMap & sameDomain & sameGeoref) == false)
 			return false;
+		allBasemap &= IOTYPEBASEMAP(*cur);
+		allSegMap &= IlwisObject::iotSEGMENTMAP || ((query & ObjectCollection::csALLSEGMENT) == 0);
+		allPolMap &= IlwisObject::iotPOLYGONMAP || ((query & ObjectCollection::csALLPOLYGON) == 0);
+		allPntMap &= IlwisObject::iotPOINTMAP || ((query & ObjectCollection::csALLPOINT) == 0);
+		allPntMap &= IlwisObject::iotRASMAP || ((query & ObjectCollection::csALLRASTER) == 0);
+		if ( query & (ObjectCollection::csSAMECSY | ObjectCollection::csSAMEDOMAIN | ObjectCollection::csSAMEGEOREF) && IOTYPEBASEMAP(*cur)) {
+			BaseMap bmp(*cur);
+			if (( ObjectCollection::csSAMEDOMAIN & query) != 0){
+				if ( !dm.fValid()) {
+					dm = bmp->dm();
+				} else {
+					sameDomain = dm == bmp->dm();
+				}
+			}
+			if (( ObjectCollection::csSAMEGEOREF & query) != 0){
+				Map mp((*cur));
+				if ( !grf.fValid()) {
+					grf = mp->gr();
+				} else {
+					sameGeoref = grf == mp->gr();
+				}
+			}
+			if (( ObjectCollection::csSAMECSY & query) != 0){
+				if ( !csy.fValid()) {
+					csy = bmp->cs();
+				} else {
+					sameCsy = csy == bmp->cs();;
+				}
+			}
+
+
 		}
 	}
-	return true;
+	bool finalStatus = allBasemap & allSegMap & allPntMap && allRasMap & allPolMap & sameDomain & sameGeoref;
+	return finalStatus;
 }
 
 CoordBounds ObjectCollectionPtr::cb() const {
@@ -557,7 +595,7 @@ CoordBounds ObjectCollectionPtr::cb() const {
 				if ( cs == bm->cs()) {
 					cb += bm->cb();
 				} else {
-					CoordBounds cb2 = cs->cbConv(bm->cs(), cb);
+					CoordBounds cb2 = cs->cbConv(bm->cs(), bm->cb());
 					cb += cb2;
 				}
 			}

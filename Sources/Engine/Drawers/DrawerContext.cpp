@@ -14,9 +14,11 @@ maxTextureSize(128)
 {
 }
 
-bool DrawerContext::initOpenGL(CDC *dc) {  
-	if (fGLInitialized)
-		return false;// no init needed, already done
+bool DrawerContext::initOpenGL(CDC *dc, bool init) {  
+	if ( !init) {
+		if (fGLInitialized)
+			return false;// no init needed, already done
+	}
 
 	PIXELFORMATDESCRIPTOR pfd;
 	ZeroMemory( &pfd, sizeof( pfd ) );

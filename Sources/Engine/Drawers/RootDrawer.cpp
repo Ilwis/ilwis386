@@ -17,7 +17,7 @@ RootDrawer::RootDrawer(MapCompositionDoc *doc) {
 	addPreDrawer(1,NewDrawer::getDrawer("CanvasBackgroundDrawer", &pp, &dp));
 	addPostDrawer(900,NewDrawer::getDrawer("MouseClickInfoDrawer", &pp, &dp));
 	addPostDrawer(800,NewDrawer::getDrawer("GridDrawer", &pp, &dp));
-	setTransparency(rUNDEF);
+	setTransparency(1.0);
 	setName("RootDrawer");
 	threeD = false;
 	aspectRatio = 0;
@@ -36,13 +36,17 @@ void  RootDrawer::prepare(PreparationParameters *pp){
 	bool v1 = pp->type & RootDrawer::ptINITOPENGL;
 	bool v2 = pp->type & RootDrawer::ptALL;
 	if ( pp->dc && (  v1 || v2 )) {
-		if ( getDrawerContext()->initOpenGL(pp->dc)) {
+		if ( pp->initContext && getDrawerContext())
+			getDrawerContext()->ReleaseContext();
+		if ( getDrawerContext()->initOpenGL(pp->dc, pp->initContext)) {
 			pp->type |= NewDrawer::ptGEOMETRY;
 			CWnd * wnd = pp->dc->GetWindow();
-			CRect rct;
-			wnd->GetClientRect(&rct);
-			RowCol rc(rct.Height(), rct.Width());
-			setViewPort(rc);
+			if ( wnd) {
+				CRect rct;
+				wnd->GetClientRect(&rct);
+				RowCol rc(rct.Height(), rct.Width());
+				setViewPort(rc);
+			}
 		}
 	}
 	if ( !(pp->type & RootDrawer::ptINITOPENGL)) {
@@ -65,14 +69,15 @@ String RootDrawer::addDrawer(NewDrawer *drw) {
 	SpatialDataDrawer *mapdrw = dynamic_cast<SpatialDataDrawer *>(drw);
 	if ( mapdrw && mapdrw->getBaseMap() != 0) {
 		CoordBounds cb = mapdrw->cb();
-		//vector<NewDrawer *> allDrawers;
-		//getDrawers(allDrawers);
+		addCoordBounds(mapdrw->getBaseMap()->cs(), cb);
 	}
 	return ComplexDrawer::addDrawer(drw);
 }
 
 void RootDrawer::addCoordBounds(const CoordSystem& _cs, const CoordBounds& cb, bool overrule){
-		setCoordBoundsView(_cs, cb, overrule);
+	CoordBounds ncb = cs.fEqual(_cs) ? cb : cs->cbConv(_cs,cb);
+	ncb += cbView;
+	setCoordBoundsView(cs, ncb, overrule);
 }
 
 /*
@@ -103,7 +108,7 @@ bool RootDrawer::draw( const CoordBounds& cb) const{
 		glLoadIdentity();
 		if (is3D()) {
 			gluLookAt(eyePoint.x, eyePoint.y, eyePoint.z, viewPoint.x, viewPoint.y, viewPoint.z, 0, 1.0, 0 );
-			glPushMatrix();	
+			//glPushMatrix();	
 			glTranslatef(viewPoint.x,viewPoint.y, 0);
 			glRotatef(rotY,-1,0,0);				// Rotate on y
 			glRotatef(rotX,0,0,-1);				// Rotate on x
@@ -111,8 +116,8 @@ bool RootDrawer::draw( const CoordBounds& cb) const{
 		}
 
 		ComplexDrawer::draw( cb);
-		if ( is3D())
-			glPopMatrix();
+		//if ( is3D())
+		//	glPopMatrix();
 	}
 	return true;
 
