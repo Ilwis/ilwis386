@@ -40,9 +40,9 @@ ThreeDTool::~ThreeDTool() {
 
 bool ThreeDTool::isToolUseableFor(ILWIS::DrawerTool *tool) { 
 
-	LayerDrawerTool *sdrwt = dynamic_cast<LayerDrawerTool *>(tool);
+	LayerDrawerTool *layerDrawert = dynamic_cast<LayerDrawerTool *>(tool);
 	SetDrawerTool *adrwt = dynamic_cast<SetDrawerTool *>(tool);
-	if ( !sdrwt && !adrwt)
+	if ( !layerDrawert && !adrwt)
 		return false;
 	parentTool = tool;
 	return true;
@@ -102,14 +102,14 @@ DisplayZDataSourceForm::DisplayZDataSourceForm(CWnd *wPar, ComplexDrawer *dr) :
 DisplayOptionsForm(dr,wPar,TR("3D Options")), sourceIndex(0) 
 {
 	root->SetCallBack((NotifyProc)&DisplayZDataSourceForm::initForm);
-	LayerDrawer *sdrw = dynamic_cast<LayerDrawer *>(drw);
+	LayerDrawer *layerDrawer = dynamic_cast<LayerDrawer *>(drw);
 	SetDrawer *adrw = dynamic_cast<SetDrawer *>(drw);
 	if ( adrw) {
-		sdrw = (LayerDrawer *)adrw->getDrawer(0);
-		SpatialDataDrawer *absdrw = (SpatialDataDrawer *)sdrw->getParentDrawer();
+		layerDrawer = (LayerDrawer *)adrw->getDrawer(0);
+		SpatialDataDrawer *absdrw = (SpatialDataDrawer *)layerDrawer->getParentDrawer();
 		bmp.SetPointer(absdrw->getBaseMap());
 	} else {
-		SpatialDataDrawer *fdrw = (SpatialDataDrawer *)sdrw->getParentDrawer();
+		SpatialDataDrawer *fdrw = (SpatialDataDrawer *)layerDrawer->getParentDrawer();
 		bmp.SetPointer(fdrw->getBaseMap());
 	}
 	if ( bmp->fTblAtt())
@@ -138,7 +138,7 @@ int DisplayZDataSourceForm::initForm(Event *ev) {
 	if ( GetSafeHwnd()) {
 		if ( !attTable.fValid())
 			rbTable->Disable();
-		LayerDrawer *sdrw = dynamic_cast<LayerDrawer *>(drw);
+		LayerDrawer *layerDrawer = dynamic_cast<LayerDrawer *>(drw);
 		SetDrawer *adrw = dynamic_cast<SetDrawer *>(drw);
 		if ( !adrw) {
 			rbMaplist->Disable();
@@ -150,23 +150,23 @@ int DisplayZDataSourceForm::initForm(Event *ev) {
 void DisplayZDataSourceForm::apply() {
 	rg->StoreData();
 
-	ILWIS::LayerDrawer *sdrw = dynamic_cast<ILWIS::LayerDrawer *>(drw);
-	SetDrawer *adrw = dynamic_cast<SetDrawer *>(drw);
-	if ( adrw) {
-		adrw->getZMaker()->setRange(adrw->getRange());
-		for(int i = 0 ; i < adrw->getDrawerCount(); ++i) {
-			RasterLayerDrawer *sdrw = (RasterLayerDrawer *)adrw->getDrawer(i);
+	ILWIS::LayerDrawer *layerDrawer = dynamic_cast<ILWIS::LayerDrawer *>(drw);
+	SetDrawer *setDrawer = dynamic_cast<SetDrawer *>(drw);
+	if ( setDrawer) {
+		setDrawer->getZMaker()->setRange(setDrawer->getRange());
+		for(int i = 0 ; i < setDrawer->getDrawerCount(); ++i) {
+			RasterLayerDrawer *layerDrawer = (RasterLayerDrawer *)setDrawer->getDrawer(i);
 			MapList mpl;
 			if ( sourceIndex == 0) {
-				mpl = *((MapList *)(sdrw->getDataSource())); 
+				mpl = *((MapList *)(setDrawer->getDataSource())); 
 			} else if ( sourceIndex == 1){
-				updateDrawer(sdrw, BaseMap(FileName(mapName)));
+				updateDrawer(layerDrawer, BaseMap(FileName(mapName)));
 				continue;
 			} else if ( sourceIndex == 2){
 				mpl = MapList(FileName(mapName));
 			}
 			Map mp = mpl[i];
-			updateDrawer(sdrw, mp);
+			updateDrawer(layerDrawer, mp);
 			/*RangeReal tempRange = mp->dvrs().rrMinMax();
 			if ( tempRange.fValid()) {
 				RangeReal rr = adrw->getZMaker()->getRange();
@@ -176,21 +176,21 @@ void DisplayZDataSourceForm::apply() {
 			}*/
 		}
 	} else {
-		updateDrawer( sdrw, BaseMap(mapName));
+		updateDrawer( layerDrawer, BaseMap(mapName));
 	}
 
 	updateMapView();
 }
 
-void DisplayZDataSourceForm::updateDrawer(LayerDrawer *sdrw, const BaseMap& basemap) {
+void DisplayZDataSourceForm::updateDrawer(LayerDrawer *layerDrawer, const BaseMap& basemap) {
 	if ( mapName != "" && sourceIndex < 3) {
-		sdrw->getZMaker()->setDataSourceMap(basemap);
+		layerDrawer->getZMaker()->setDataSourceMap(basemap);
 		PreparationParameters pp(NewDrawer::pt3D);
-		sdrw->prepare(&pp);
+		layerDrawer->prepare(&pp);
 	} else if ( colName != "" && sourceIndex == 3) {
-		sdrw->getZMaker()->setTable(attTable,colName);
+		layerDrawer->getZMaker()->setTable(attTable,colName);
 		PreparationParameters pp(NewDrawer::pt3D);
-		sdrw->prepare(&pp);
+		layerDrawer->prepare(&pp);
 	}
 }
 
@@ -243,10 +243,10 @@ void ZDataScaling::apply() {
 	if ( adrw) {
 		rr = adrw->getZMaker()->getRange();
 		for(int i = 0 ; i < adrw->getDrawerCount(); ++i) {
-			LayerDrawer *sdrw = (LayerDrawer *)adrw->getDrawer(i);
-			sdrw->getZMaker()->setRange(rr);
-			sdrw->getZMaker()->setZScale(zscale/100.0);
-			sdrw->getZMaker()->setOffset(zoffset + rr.rLo());
+			LayerDrawer *layerDrawer = (LayerDrawer *)adrw->getDrawer(i);
+			layerDrawer->getZMaker()->setRange(rr);
+			layerDrawer->getZMaker()->setZScale(zscale/100.0);
+			layerDrawer->getZMaker()->setOffset(zoffset + rr.rLo());
 		}
 	}
 	updateMapView();
