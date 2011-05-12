@@ -67,14 +67,14 @@ DEMTriangulator::DEMTriangulator(ZValueMaker * zMaker, BaseMapPtr * drapeMapPtr,
 		// iSize2h is the smallest ^2 that is greater or equal to both width and height.
 
 		iTrqMax = iSizeY + 4 * iSizeX; // ReadMap + 4 triangulation loops
-		rHeights = (double*)malloc(iSizeX * iSizeY * sizeof(double));
+		rHeights = new double [iSizeX * iSizeY];
 		if (rHeights) {
-			rFactors = (double*)malloc(iSize2u * iSize2u * sizeof(double));
+			rFactors = new double [iSize2u * iSize2u];
 			if (rFactors) {
 				valid = fDoTriangulate();
-				free(rFactors);
+				delete [] rFactors;
 			}
-			free(rHeights);
+			delete [] rHeights;
 		}
 	}
 }

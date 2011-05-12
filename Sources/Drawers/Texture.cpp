@@ -49,7 +49,7 @@ Texture::~Texture()
 	if (valid)
 		glDeleteTextures(1, &texture);
 	if (texture_data)
-		free(texture_data);
+		delete [] texture_data;
 }
 
 void Texture::CreateTexture(DrawerContext * drawerContext, bool fInThread, volatile bool * fDrawStop)
@@ -57,10 +57,10 @@ void Texture::CreateTexture(DrawerContext * drawerContext, bool fInThread, volat
 	fValue = 0 != mp->dm()->pdvi() || 0 != mp->dm()->pdvr();
 	fAttTable = false;
 	if (palette) {
-		texture_data = (char*)malloc((sizeX / zoomFactor) * (sizeY / zoomFactor) * 2);
+		texture_data = new char [(sizeX / zoomFactor) * (sizeY / zoomFactor) * 2];
 		this->valid = DrawTexturePaletted(offsetX, offsetY, sizeX, sizeY, zoomFactor, texture_data, fDrawStop);
 	} else {
-		texture_data = (char*)malloc((sizeX / zoomFactor) * (sizeY / zoomFactor) * 4);
+		texture_data = new char [(sizeX / zoomFactor) * (sizeY / zoomFactor) * 4];
 		this->valid = DrawTexture(offsetX, offsetY, sizeX, sizeY, zoomFactor, texture_data, fDrawStop);
 	}
 
@@ -92,7 +92,7 @@ void Texture::CreateTexture(DrawerContext * drawerContext, bool fInThread, volat
 	}
 	else {
 		glTexImage2D( GL_TEXTURE_2D, 0, 4, sizeX / zoomFactor, sizeY / zoomFactor, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture_data);
-		free(texture_data);
+		delete [] texture_data;
 		texture_data = 0;
 	}
 	glPixelTransferf(GL_MAP_COLOR, oldVal);
