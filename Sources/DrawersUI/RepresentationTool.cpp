@@ -44,8 +44,17 @@ RepresentationTool::~RepresentationTool() {
 
 
 HTREEITEM RepresentationTool::configure( HTREEITEM parentItem){
-	LayerDrawer *setdrw = (LayerDrawer *)drawer;
-	rpr = setdrw->getRepresentation();
+	LayerDrawer *ldrw = dynamic_cast<LayerDrawer *>(drawer);
+	if ( ldrw == 0) {
+		SetDrawer *sdrw = dynamic_cast<SetDrawer *>(drawer);
+		if (sdrw)
+			ldrw = (LayerDrawer *)sdrw->getDrawer(0);
+		else
+			throw ErrorObject(TR("Inconsistent drawer configuration"));
+	}
+	rpr = ldrw->getRepresentation();
+	if ( !rpr.fValid())
+		return parentItem;
 	DisplayOptionItemFunc func = (DisplayOptionItemFunc)&RepresentationTool::displayOptionSubRpr; 
 	bool usesRpr = drawer->getDrawMethod() == NewDrawer::drmRPR;
 	DisplayOptionRadioButtonItem *item = new DisplayOptionRadioButtonItem(TR("Representation"), tree,parentItem,drawer);

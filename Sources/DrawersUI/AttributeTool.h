@@ -15,7 +15,7 @@ public:
 	String getMenuString() const ;
 	void update();
 protected:
-	void setcheckAttributeTable(void *w);
+	void setcheckAttributeTable(void *w, HTREEITEM );
 	void displayOptionAttColumn();
 };
 

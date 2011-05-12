@@ -13,7 +13,7 @@ namespace ILWIS {
 		String getMenuString() const;
 	protected:
 		void displayOptionGrid3D() ;
-		void grid3D(void *v);
+		void grid3D(void *v, HTREEITEM );
 	
 
 	};

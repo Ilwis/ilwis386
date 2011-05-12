@@ -14,7 +14,7 @@
 #include "Drawers\SetDrawer.h"
 #include "DrawersUI\LayerDrawerTool.h"
 #include "DrawersUI\SetDrawerTool.h"
-#include "DrawersUI\AnimationTool.h"
+
 
 //#include "Drawers\RepresentationTool.h"
 //#include "Drawers\StretchTool.h"
@@ -32,7 +32,7 @@ ColorTool::~ColorTool() {
 
 bool ColorTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	LayerDrawerTool *sdrwt = dynamic_cast<LayerDrawerTool *>(tool);
-	AnimationTool *adrwt = dynamic_cast<AnimationTool *>(tool);
+	SetDrawerTool *adrwt = dynamic_cast<SetDrawerTool *>(tool);
 	if ( !sdrwt && !adrwt)
 		return false;
 
@@ -48,7 +48,7 @@ HTREEITEM ColorTool::configure( HTREEITEM parentItem) {
 	return htiNode;
 }
 
-void ColorTool::setcheckRpr(void *value) {
+void ColorTool::setcheckRpr(void *value, HTREEITEM item) {
 	if ( value == 0)
 		return;
 	HTREEITEM hItem = *((HTREEITEM *)value);

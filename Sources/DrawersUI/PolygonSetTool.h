@@ -13,8 +13,8 @@ public:
 	String getMenuString() const;
 protected:
 	void displayOptionTransparencyP();
-	void setActiveAreas(void *w);
-	void setActiveBoundaries(void *w);
+	void setActiveAreas(void *w, HTREEITEM hti);
+	void setActiveBoundaries(void *w, HTREEITEM hti);
 
 	HTREEITEM htiTransparency;
 

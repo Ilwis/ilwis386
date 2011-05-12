@@ -62,6 +62,7 @@
 #include "AnimationManagementTool.h"
 #include "Client\FormElements\FormBasePropertyPage.h"
 #include "AnimationManagement.h"
+#include "DrawersUI\ThreeDStack.h"
 //#include "LineSetEditor.h"
 #include "LineSetEditor2.h"
 
@@ -98,6 +99,7 @@ DrawerToolInfoVector *createDrawerTool() {
 	infos->push_back(new DrawerToolInfo("LineSetEditor2",createLineSetEditor2));
 	infos->push_back(new DrawerToolInfo("AnimationManagement",createAnimationManagementTool));
 	infos->push_back(new DrawerToolInfo("CollectionTool",createCollectionTool));
+	infos->push_back(new DrawerToolInfo("ThreeDStack",createThreeDStack));
 
 	
 

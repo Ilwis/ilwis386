@@ -22,7 +22,7 @@ protected:
 class LineStyleForm: public DisplayOptionsForm
 {
 public:
-	LineStyleForm(CWnd *par, ComplexDrawer *gdr);
+	LineStyleForm(CWnd *par, ComplexDrawer *gdr,ComplexDrawer::DrawerType);
 	void apply();
 private:
 	FieldReal *fi;
@@ -30,6 +30,7 @@ private:
 	FieldColor *fc;
 	LineProperties *lprops;
 	LineDspType style;
+	ComplexDrawer::DrawerType drawerType;
 };
 }
 

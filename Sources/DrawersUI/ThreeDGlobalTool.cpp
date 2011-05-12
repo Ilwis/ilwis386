@@ -28,21 +28,24 @@ ThreeDGlobalTool::~ThreeDGlobalTool() {
 
 bool ThreeDGlobalTool::isToolUseableFor(ILWIS::NewDrawer *drw) { 
 
-	return dynamic_cast<RootDrawer *>(drw) != 0;
+	bool ok = dynamic_cast<RootDrawer *>(drw) != 0;
+	if (ok)
+		return true;
+	return false;
 }
 
 HTREEITEM ThreeDGlobalTool::configure( HTREEITEM parentItem) {
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
 	item->setCheckAction(this, 0,(DTSetCheckFunc)&ThreeDGlobalTool::setthreeD);
-	HTREEITEM hti =  insertItem("3D","3D",item,((RootDrawer *)drawer)->is3D(),TVI_FIRST);
+	htiNode =  insertItem("3D","3D",item,((RootDrawer *)drawer)->is3D(),TVI_FIRST);
 
-	DrawerTool::configure(hti);
+	DrawerTool::configure(htiNode);
 
-	return hti;
+	return htiNode;
 }
 
 
-void ThreeDGlobalTool::setthreeD(void *v) {
+void ThreeDGlobalTool::setthreeD(void *v, HTREEITEM) {
 	bool value = *(bool *)(v);
 
 	((RootDrawer *)drawer)->set3D(value);

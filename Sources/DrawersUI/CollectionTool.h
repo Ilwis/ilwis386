@@ -13,10 +13,9 @@ namespace ILWIS {
 		String getMenuString() const;
 		void clear();
 	protected:
-		void createLayersNode(HTREEITEM htiNodeGroup, const String& name, const String& icon, const String& tool, int index);
+		void createNode(HTREEITEM hti, const String& name);
 		void setcheckLayer(void *w, HTREEITEM item);
-		HTREEITEM layerItems[4];
-		int visible[4];
+		IlwisObject::iotIlwisObjectType type;
 	};
 
 }

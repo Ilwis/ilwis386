@@ -10,7 +10,7 @@ public:
 	bool isToolUseableFor(ILWIS::DrawerTool *tool);
 	HTREEITEM configure( HTREEITEM parentItem);
 	virtual ~ColorTool();
-	void setcheckRpr(void *value);
+	void setcheckRpr(void *value, HTREEITEM item);
 	SetChecks *getColorCheck() { return colorCheck;}
 	String getMenuString() const;
 protected:

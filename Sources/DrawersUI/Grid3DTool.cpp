@@ -52,7 +52,7 @@ void Grid3DTool::displayOptionGrid3D() {
 	new Grid3DOptions(tree, (GridDrawer *)drawer);
 }
 
-void Grid3DTool::grid3D(void *v) {
+void Grid3DTool::grid3D(void *v, HTREEITEM ) {
 	bool threeD = *(bool *)v;
 	GridDrawer *gdr = (GridDrawer *)drawer;
 	gdr->set3D(threeD);

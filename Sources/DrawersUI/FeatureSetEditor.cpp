@@ -116,7 +116,7 @@ HTREEITEM FeatureSetEditor::configure( HTREEITEM parentItem) {
 	return parentItem;
 }
 
-void FeatureSetEditor::setcheckEditMode(void *value) {
+void FeatureSetEditor::setcheckEditMode(void *value, HTREEITEM  it) {
 	if ( value == 0)
 		return;
 	HTREEITEM hItem = *((HTREEITEM *)value);

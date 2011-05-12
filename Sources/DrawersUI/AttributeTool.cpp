@@ -58,7 +58,7 @@ HTREEITEM AttributeTool::configure( HTREEITEM parentItem) {
 	return htiNode;
 }
 
-void AttributeTool::setcheckAttributeTable(void *w) {
+void AttributeTool::setcheckAttributeTable(void *w, HTREEITEM ) {
 	bool yesno = *(bool *)w;
 	LayerDrawer *sdr = (LayerDrawer *)drawer;
 	sdr->setUseAttributeColumn(yesno);

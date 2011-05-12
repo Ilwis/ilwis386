@@ -13,7 +13,7 @@ namespace ILWIS {
 		HTREEITEM configure( HTREEITEM parentItem);
 		virtual ~ThreeDGlobalTool();
 	protected:
-		void setthreeD(void *v) ;
+		void setthreeD(void *v, HTREEITEM it) ;
 
 
 	};

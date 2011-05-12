@@ -96,7 +96,7 @@ HTREEITEM PolygonSetTool::configure( HTREEITEM parentItem) {
 	return parentItem;
 }
 
-void PolygonSetTool::setActiveAreas(void *v) {
+void PolygonSetTool::setActiveAreas(void *v, HTREEITEM hti) {
 	bool value = *(bool *)v;
 	PolygonLayerDrawer *pdrw = dynamic_cast<PolygonLayerDrawer *>(drawer);
 	PreparationParameters pp(NewDrawer::ptRENDER, 0);
@@ -116,7 +116,7 @@ void PolygonSetTool::setActiveAreas(void *v) {
 	drawer->getRootDrawer()->getDrawerContext()->doDraw();
 }
 
-void PolygonSetTool::setActiveBoundaries(void *v) {
+void PolygonSetTool::setActiveBoundaries(void *v, HTREEITEM hti) {
 	bool value = *(bool *)v;
 	PolygonLayerDrawer *pdrw = dynamic_cast<PolygonLayerDrawer *>(drawer);
 	PreparationParameters pp(NewDrawer::ptRENDER, 0);

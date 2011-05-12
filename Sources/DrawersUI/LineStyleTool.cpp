@@ -19,6 +19,7 @@
 #include "DrawersUI\LineStyleTool.h"
 #include "Drawers\PolygonLayerDrawer.h"
 #include "DrawersUI\PolygonSetTool.h"
+#include "DrawersUI\SetDrawerTool.h"
 
 //#include "drawers\linedrawer.h"
 
@@ -39,6 +40,14 @@ LineStyleTool::~LineStyleTool() {
 bool LineStyleTool::isToolUseableFor(ILWIS::DrawerTool *tool) { 
 	if ( dynamic_cast<LineStyleTool *>(tool) != 0) // prevent infinite adding the same tool to itself
 		return false;
+	SetDrawerTool *sdrwt = dynamic_cast<SetDrawerTool *>(tool);
+	if ( sdrwt) {
+		SetDrawer *sdrw = (SetDrawer *)sdrwt->getDrawer();
+		LineLayerDrawer *ldrw = dynamic_cast<LineLayerDrawer *>(sdrw->getDrawer(0));
+		if (!ldrw)
+			return false;
+	}
+	parentTool = tool;
 
 	return false;
 
@@ -59,7 +68,16 @@ HTREEITEM LineStyleTool::configure( HTREEITEM parentItem) {
 }
 
 void LineStyleTool::displayOptionSetLineStyle() {
-	new LineStyleForm(tree, (ComplexDrawer *)drawer);
+	ComplexDrawer::DrawerType dt = ComplexDrawer::dtMAIN;
+	if ( parentTool) {
+		if (parentTool->getType() == "LineSetTool") {
+			dt = ComplexDrawer::dtSEGMENTLAYER;
+		}
+		if (parentTool->getType() == "PolygonSetTool") {
+			dt = ComplexDrawer::dtPOLYGONLAYER;
+		}
+	}
+	new LineStyleForm(tree, (ComplexDrawer *)drawer, dt);
 }
 
 String LineStyleTool::getMenuString() const {
@@ -99,8 +117,8 @@ int LineStyleTool::ilwisLineStyle(int linestyle, double sz){
 }
 
 //-----------------------------------------------
-LineStyleForm::LineStyleForm(CWnd *par, ComplexDrawer *ldr) 
-: DisplayOptionsForm(ldr, par, "Line Style"), fc(0)
+LineStyleForm::LineStyleForm(CWnd *par, ComplexDrawer *ldr,ComplexDrawer::DrawerType dt) 
+: DisplayOptionsForm(ldr, par, "Line Style"), fc(0), drawerType(dt)
 
 {
 
@@ -108,8 +126,7 @@ LineStyleForm::LineStyleForm(CWnd *par, ComplexDrawer *ldr)
 	if ( setDrw) {
 		SetDrawer *drw = (SetDrawer *)(ldr);
 		for(int i=0; i < drw->getDrawerCount(); ++i) {
-			int filter = (int)(ComplexDrawer::dtPOLYGONLAYER | ComplexDrawer::dtSEGMENTLAYER);
-			NewDrawer *drwFeature = drw->getDrawer(i, filter);
+			NewDrawer *drwFeature = drw->getDrawer(i, (int)drawerType);
 			if ( drwFeature) {
 				lprops = (LineProperties *)(drwFeature->getProperties());
 				break;
@@ -138,20 +155,20 @@ void  LineStyleForm::apply() {
 	SetDrawer *setDrw = dynamic_cast<SetDrawer *>(drw);
 	if ( setDrw) {
 		for(int i = 0; i < setDrw->getDrawerCount(); ++i) {
-			NewDrawer *ndr = setDrw->getDrawer(i, ComplexDrawer::dtPOLYGONLAYER | ComplexDrawer::dtSEGMENTLAYER);
+			ComplexDrawer *ndr = (ComplexDrawer *)setDrw->getDrawer(i, (int)drawerType);
 			if ( !ndr)
 				continue;
 			LineProperties *oldprops = (LineProperties *)ndr->getProperties();
 			oldprops->drawColor = lprops->drawColor;
-			oldprops->linestyle = lprops->linestyle;
+			oldprops->linestyle = LineStyleTool::openGLLineStyle(style);
 			oldprops->thickness = lprops->thickness;
-			ndr->prepare(&pp);
+			ndr->prepareChildDrawers(&pp);
 		}
 	} else {
 		if ( !lprops->ignoreColor)
 			fc->StoreData();
 		lprops->linestyle = LineStyleTool::openGLLineStyle(style);
-		drw->prepare(&pp);
+		drw->prepareChildDrawers(&pp);
 	}
 	updateMapView();
 }

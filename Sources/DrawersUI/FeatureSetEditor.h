@@ -30,7 +30,7 @@ namespace ILWIS{
 		void clear();
 		bool hasSelection() const;
 		HTREEITEM configure( HTREEITEM parentItem);
-		void setcheckEditMode(void *value);
+		void setcheckEditMode(void *value, HTREEITEM );
 		virtual void OnInsertMode() ;
 		virtual void OnMoveMode() ;
 		virtual void OnSelectMode() ;

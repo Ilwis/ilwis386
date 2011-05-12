@@ -22,7 +22,6 @@
 #include "DrawersUI\ThreeDTool.h"
 #include "DrawersUI\LayerDrawerTool.h"
 #include "DrawersUI\SetDrawerTool.h"
-#include "DrawersUI\AnimationTool.h"
 #include "Drawers\RasterLayerDrawer.h"
 
 using namespace ILWIS;
@@ -31,7 +30,7 @@ DrawerTool *createThreeDTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *d
 	return new ThreeDTool(zv, view, drw);
 }
 
-ThreeDTool::ThreeDTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : DrawerTool("ThreeDTool", zv, view, drw)
+ThreeDTool::ThreeDTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : DrawerTool("3DTool", zv, view, drw)
 {
 	active = false;
 }
@@ -42,7 +41,7 @@ ThreeDTool::~ThreeDTool() {
 bool ThreeDTool::isToolUseableFor(ILWIS::DrawerTool *tool) { 
 
 	LayerDrawerTool *sdrwt = dynamic_cast<LayerDrawerTool *>(tool);
-	AnimationTool *adrwt = dynamic_cast<AnimationTool *>(tool);
+	SetDrawerTool *adrwt = dynamic_cast<SetDrawerTool *>(tool);
 	if ( !sdrwt && !adrwt)
 		return false;
 	parentTool = tool;
@@ -74,7 +73,7 @@ void ThreeDTool::displayZOption3D() {
 
 }
 
-void ThreeDTool::setExtrusion(void *value) {
+void ThreeDTool::setExtrusion(void *value, HTREEITEM) {
 	bool v = *(bool *)value;
 	int opt = drawer->getSpecialDrawingOption() & NewDrawer::sdoExtrusion;
 	if ( opt == 0 && v)

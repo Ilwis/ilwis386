@@ -55,7 +55,7 @@ HTREEITEM GridTool::configure( HTREEITEM parentItem) {
 	return htiNode;
 }
 
-void GridTool::gridActive(void *v) {
+void GridTool::gridActive(void *v, HTREEITEM ) {
 	bool value = *(bool *)v;
 	drawer->setActive(value);
 	PreparationParameters pp(NewDrawer::ptGEOMETRY);

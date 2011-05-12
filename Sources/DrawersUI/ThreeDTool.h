@@ -19,7 +19,7 @@ public:
 protected:
 	void displayZOption3D();
 	void displayZScaling();
-	void setExtrusion(void *value);
+	void setExtrusion(void *value, HTREEITEM);
 	void extrusionOptions() ;
 
 };

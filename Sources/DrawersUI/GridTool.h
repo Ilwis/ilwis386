@@ -14,7 +14,7 @@ namespace ILWIS {
 		virtual ~GridTool();
 		String getMenuString() const;
 	protected:
-		void gridActive(void *v);
+		void gridActive(void *v, HTREEITEM );
 		void gridOptions();
 
 
