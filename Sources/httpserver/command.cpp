@@ -124,10 +124,10 @@ bool IlwisServer::start(String* cmd) {
 }
 
 void IlwisServer::addOptions(int& index, char *coptions[40], const String& option, const String& value) {
-	coptions[index] = new char(option.size());
-	strcpy(coptions[index++], option.scVal());
-	coptions[index] = new char(value.size());
-	strcpy(coptions[index++], value.scVal());
+	coptions[index] = new char(option.size() + 1);
+	strcpy_s(coptions[index++],option.size() + 1,  option.scVal());
+	coptions[index] = new char(value.size() + 1);
+	strcpy_s(coptions[index++], value.size() + 1, value.scVal());
 }
 
 
@@ -148,20 +148,23 @@ void *IlwisServer::event_handler(enum mg_event ev, struct mg_connection *conn,  
 				delete rh;
 			}
 		}
-		if ( uri.find("/shared_data/") != string::npos) {
+		else if ( uri.find("/shared_data/") != string::npos) {
 			map<String, String> dummy;
 			SharedDataHandler *sdh = new SharedDataHandler(conn, request_info, dummy, "WPS:ServiceContext:SharedData");
 			sdh->setConfig(&IlwisServer::config);
 			sdh->writeResponse(server);
 			delete sdh;
 		}
-		if ( uri.find("/result_data/") != string::npos) {
+		else if ( uri.find("/result_data/") != string::npos) {
 			map<String, String> dummy;
 			SharedDataHandler *sdh = new SharedDataHandler(conn, request_info, dummy, "WPS:ExecutionData:Root");
 			sdh->setConfig(&IlwisServer::config);
 			sdh->writeResponse(server);
 			delete sdh;
+		} else {
+			mg_printf(conn,"Ilwis Server  %s\n", ILWIS::Time::now().toString().scVal());
 		}
+
 	}
 //	mg_printf(conn,"code %d\n", request_info->remote_port);
 	return processed;

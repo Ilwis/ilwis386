@@ -9,11 +9,17 @@
 #include "Engine\Base\System\module.h"
 #include "Engine\Applications\ModuleMap.h"
 #include "httpserver\XMLDocument.h"
+#include <xqilla/xqilla-dom3.hpp>
+#include <xqilla\simple-api\XQQuery.hpp>
+#include <xqilla\simple-api\XQilla.hpp>
+#include <xqilla/context/DynamicContext.hpp>
 #include <xercesc\dom\DOMLSSerializer.hpp>
 
 
 using namespace ILWIS;
 using namespace XERCES_CPP_NAMESPACE;
+#define TEXT_SIZE 100000
+
 
 WPSGetCapabilities::WPSGetCapabilities(struct mg_connection *c, const struct mg_request_info *ri, const map<String, String>& kvps)
 : WPSHandler(c,ri,kvps)
@@ -21,8 +27,48 @@ WPSGetCapabilities::WPSGetCapabilities(struct mg_connection *c, const struct mg_
 }
 
 void WPSGetCapabilities::writeResponse(IlwisServer *server) const{
-	wchar_t result[250];
-	XMLPlatformUtils::Initialize();
+	try{
+	wchar_t result[TEXT_SIZE];
+	//XMLPlatformUtils::Initialize();
+	XQilla *xqilla = new XQilla();
+	DynamicContext *context = xqilla->createContext(XQilla::XSLT2_FULLTEXT);
+	String urlXSLT("file:///%SResources/wps_ilwis_getcapabilities.xsl",getEngine()->getContext()->sIlwDir());
+	XQQuery *query = xqilla->parseFromURI(urlXSLT.toWChar(result),context);
+	String urlXML("file:///%SResources/operations_rastermap_and_table_applications.xml",getEngine()->getContext()->sIlwDir());
+	Sequence seq = context->resolveDocument(urlXML.toWChar(result));
+    if(!seq.isEmpty() && seq.first()->isNode()) {
+            context->setContextItem(seq.first());
+            context->setContextPosition(1);
+            context->setContextSize(1);
+    }
+
+	Result qresult = query->execute(context);
+	Item::Ptr item;
+	String txt;
+    while(item = qresult->next(context)) {
+			txt +=  UTF8(item->asString(context));
+    }
+	XMLDocument doc(txt);
+	txt = doc.toString();
+	char *buf = new char[txt.size() + 1];
+	memset(buf,0,txt.size() + 1);
+	memcpy(buf,txt.scVal(), txt.size());
+	mg_write(getConnection(), buf, txt.size()+1);
+	delete [] buf;
+	delete xqilla;
+	//delete context;
+	//delete query; // wil also delete the context
+
+	} catch (XQillaException& e) {
+		CString s(e.getMessage());
+		throw ErrorObject(String(s));
+	}
+
+	
+}
+
+void WPSGetCapabilities::writeResponse2(IlwisServer *server) const{
+	wchar_t result[TEXT_SIZE];
 	DOMImplementation* dom = DOMImplementationRegistry::getDOMImplementation(XMLString::transcode("core"));
 	XERCES_CPP_NAMESPACE::DOMDocument *doc = dom->createDocument(0, L"GetCapabilities", 0);
 

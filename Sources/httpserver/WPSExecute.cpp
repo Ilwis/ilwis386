@@ -1,11 +1,14 @@
 #include "headers/toolspch.h"
 #include "Engine\Base\DataObjects\ilwisobj.h"
 #include "Engine\Base\System\Engine.h"
+#include "Engine\Map\basemap.h"
+#include "Engine\Base\DataObjects\ObjectStructure.h"
 #include "HttpServer\command.h"
 #include "HttpServer\mongoose.h"
 #include "httpserver\RequestHandler.h"
 #include "httpserver\WPSHandler.h"
 #include "httpserver\WPSExecute.h"
+#include "Engine\Map\Raster\Map.h"
 #include "Engine\Base\System\module.h"
 #include "Engine\Applications\ModuleMap.h"
 #include "httpserver\XMLDocument.h"
@@ -159,7 +162,7 @@ String WPSExecute::makeNonApplicationExpression(const String& expr, const map<St
 			expression += par.value;
 		}
 	}
-	return expression;
+	return expression + ";";
 }
 
 void WPSExecute::executeOperation() {
@@ -193,11 +196,112 @@ void WPSExecute::executeOperation() {
 		}
 	}
 	getEngine()->Execute(expression);
+	CFileFind finder;
+	String path(getEngine()->sGetCurDir() + "*.*");
+	BOOL fFound = finder.FindFile(path.scVal());
+	FileName fnOut(outputName);
+	ofstream of(fnOut.sFullPath().scVal());
+	while(fFound) {
+		fFound = finder.FindNextFile();
+		if (!finder.IsDirectory())
+		{
+			FileName fnNew (finder.GetFilePath());
+			String line("%S\n",fnNew.sFile + fnNew.sExt);
+			of << line.scVal();
 
-	FileName fnOut(executionDir + "\\" + outputName);
+		}
+	}
+#undef close
+	of.close();
+
+
+	fnOut = FileName(executionDir + "\\" + outputName);
 	getEngine()->Execute(String("zip %S",fnOut.sFullNameQuoted()));
 	fnZip = FileName(String("%S_%S.zip",fnOut.sFile, fnOut.sExt.sTail(".")));
+	ifstream ifs(fnOut.sFullPath().scVal());
+	String line;
+	if (ifs.is_open())
+	{
+		map<String, FileName> files;
+		gatherFiles(ifs, files);
+		moveToLocal(files);
+		adaptPathsToLocal(files);
+	
+		ifs.close();
+	}
+}
 
+void WPSExecute::adaptPathsToLocal(const map<String, FileName>& files) {
+	String localPath = getEngine()->sGetCurDir();
+	for(map<String, FileName>::const_iterator cur = files.begin(); cur != files.end(); ++cur) {
+		FileName fnObj((*cur).second);
+		String path = fnObj.sPath();
+		if ( IOTYPEBASEMAP(fnObj) ) {
+			BaseMap bmp(fnObj);
+			if ( bmp->cs()->fnObj.sPath() != localPath) {
+				FileName fn( bmp->cs()->fnObj);
+				CoordSystem cs(FileName(fn.sFile + fn.sExt));
+				if ( ! cs->fSystemObject())
+					bmp->SetCoordSystem(cs);
+			}
+			if ( bmp->dvrs().dm()->fnObj.sPath() != localPath) {
+				FileName fn(bmp->dvrs().dm()->fnObj);
+				Domain dm(FileName(fn.sFile + fn.sExt));
+				if ( !dm->fSystemObject())
+					bmp->SetDomainValueRangeStruct(DomainValueRangeStruct(dm));
+			}
+			if (IOTYPE(fnObj) == IlwisObject::iotRASMAP) {
+				Map mp(fnObj);
+				if ( mp->gr()->fnObj.sPath() != localPath) {
+					FileName fn( mp->gr()->fnObj);
+					GeoRef grf(FileName(fn.sFile + fn.sExt));
+					if ( !grf->fSystemObject())
+						mp->SetGeoRef(grf);
+				}	
+			}
+			bmp->Store();
+		}
+	}
+}
+
+void WPSExecute::moveToLocal(const map<String, FileName>& files) {
+	for(map<String, FileName>::const_iterator cur = files.begin(); cur != files.end(); ++cur) {
+		String entry = (*cur).first;
+		FileName fnObj((*cur).second);
+
+		if ( IOTYPE(fnObj) != IlwisObject::iotANY) {
+			IlwisObject obj = IlwisObject::obj(fnObj);
+			if ( obj.fValid()) {
+				if ( obj->fSystemObject()) 
+					continue;
+			}
+		}
+		FileName fnHere(fnObj.sFile + fnObj.sExt);
+		if ( fnHere.fExist())
+			continue;
+		CopyFile(fnObj.sFullPath().scVal(), fnHere.sFullPath().scVal(),true);
+	}
+
+}
+void WPSExecute::gatherFiles(ifstream& ifs, map<String, FileName>& files) {
+	String line;
+	while ( ifs.good() )
+	{
+		getline (ifs,line);
+		FileName fn(line);
+		if ( IOTYPEBASEMAP(fn.sFullPath())) {
+			BaseMap bmp(fn);
+			ObjectStructure ostruct;
+			bmp->GetObjectStructure(ostruct);
+			list<String> usedFiles;
+			ostruct.GetUsedFiles(usedFiles, false);
+			for(list<String>::iterator cur = usedFiles.begin(); cur != usedFiles.end(); ++cur) {
+				FileName fnObj(*cur);
+				files[fnObj.sFile + fnObj.sExt] = fnObj;
+			}
+				
+		}
+	}
 }
 
 String WPSExecute::resultType(const String& operation) {
@@ -236,7 +340,6 @@ String WPSExecute::resultType(const String& operation) {
 }
 
 void WPSExecute::writeResponse(IlwisServer *server) const{
-	XMLPlatformUtils::Initialize();
 	DOMImplementation* dom = DOMImplementationRegistry::getDOMImplementation(XMLString::transcode("core"));
 	XERCES_CPP_NAMESPACE::DOMDocument *doc = dom->createDocument(0, L"ExecuteResponse", 0);
 	createHeader(doc, "WPSExecute_response.xsd");

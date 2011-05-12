@@ -26,6 +26,9 @@ void RequestHandler::parseQuery(const String& query, map<String, String>& kvps) 
 	}
 } 
 RequestHandler *RequestHandler::createHandler(struct mg_connection *c, const struct mg_request_info *request_info) {
+	if ( request_info->query_string == 0)
+		return 0;
+
 	String	query(request_info->query_string);
 	getEngine()->InitThreadLocalVars();
 	getEngine()->getContext()->SetThreadLocalVar(IlwisAppContext::tlvSERVERMODE, new bool(true));
@@ -95,8 +98,6 @@ String RequestHandler::getConfigValue(const String& key) const {
 }
 
 XercesDOMParser *RequestHandler::initXerces() const{
-	XMLPlatformUtils::Initialize();
-
 	XercesDOMParser *parser = new XERCES_CPP_NAMESPACE::XercesDOMParser;
 	parser->setValidationScheme(XERCES_CPP_NAMESPACE::XercesDOMParser::Val_Auto);
 	parser->setDoNamespaces(false);
@@ -108,7 +109,7 @@ XercesDOMParser *RequestHandler::initXerces() const{
 }
 
 XERCES_CPP_NAMESPACE::DOMElement *RequestHandler::createTextNode(XERCES_CPP_NAMESPACE::DOMDocument *doc,const String& nodeName, const String& value) const {
-   wchar_t result[250];
+   wchar_t result[1000];
    XERCES_CPP_NAMESPACE::DOMElement *ele = doc->createElement(nodeName.toWChar(result));
    DOMText* text = doc->createTextNode(value.toWChar(result));
    ele->appendChild(text);

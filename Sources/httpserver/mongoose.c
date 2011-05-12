@@ -3554,7 +3554,7 @@ void mg_stop(struct mg_context *ctx) {
 }
 
 struct mg_context *mg_start(mg_callback_t user_callback, const char **options) {
-  struct mg_context *ctx;
+  struct mg_context *ctx = 0;
   const char *name, *value, *default_value;
   int i;
 
@@ -3565,7 +3565,9 @@ struct mg_context *mg_start(mg_callback_t user_callback, const char **options) {
 
   // Allocate context and initialize reasonable general case defaults.
   // TODO(lsm): do proper error handling here.
+
   ctx = calloc(1, sizeof(*ctx));
+
   ctx->user_callback = user_callback;
 
   while (options && (name = *options++) != NULL) {

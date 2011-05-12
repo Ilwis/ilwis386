@@ -26,7 +26,6 @@ WPSDescribeProcess::WPSDescribeProcess(struct mg_connection *c, const struct mg_
 }
 
 void WPSDescribeProcess::writeResponse(IlwisServer *server) const{
-	XMLPlatformUtils::Initialize();
 	DOMImplementation* dom = DOMImplementationRegistry::getDOMImplementation(XMLString::transcode("core"));
 	XERCES_CPP_NAMESPACE::DOMDocument *doc = dom->createDocument(0, L"ProcessDescriptions", 0);
 	createHeader(doc, "wpsDescribeProcess_response.xsd");

@@ -24,6 +24,7 @@ namespace ILWIS {
 		~XMLDocument();
 		void executeXPathExpression(const String& xpathexpr, vector<String>& results) const;
 		void addNameSpace(const String& name, const String& uri);
+		String toString();
 	private:
 		XERCES_CPP_NAMESPACE::DOMImplementation *xqillaImplementation;
 		XERCES_CPP_NAMESPACE::DOMLSParser *parser;

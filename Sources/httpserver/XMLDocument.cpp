@@ -53,3 +53,33 @@ void ILWIS::XMLDocument::executeXPathExpression(const String& xpathexpr, vector<
 	}
 }
 
+String ILWIS::XMLDocument::toString() {
+	DOMImplementationLS *domOut = (DOMImplementationLS*)DOMImplementationRegistry::getDOMImplementation(L"LS");
+	DOMLSSerializer*  writer = domOut->createLSSerializer();
+
+	DOMConfiguration* dc = writer->getDomConfig(); 
+	//dc->setParameter(XMLUni::fgDOMErrorHandler,errorHandler); 
+	dc->setParameter(XMLUni::fgDOMWRTDiscardDefaultContent,true); 
+	dc->setParameter(XMLUni::fgDOMWRTFormatPrettyPrint, true);
+	CString txt(writer->writeToString(document));
+
+
+	//document->release();
+	XMLPlatformUtils::Terminate();
+	String endResult;
+	String temp(txt);
+	for(int i=0; i < temp.size(); ++i) {
+		if ( temp[i] == '\n') {
+			endResult += '\r';
+		}
+		endResult += temp[i];
+	}
+	int index = endResult.find("UTF-16");
+	if ( index != -1) { // hack, setting other encodings in xerces is a bit awkward
+		endResult.replace(index,6,"UTF-8");
+	}
+	return endResult;
+
+}
+
+

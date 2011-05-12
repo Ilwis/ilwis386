@@ -48,7 +48,7 @@
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)Sources\Geos\headers&quot;;&quot;$(SolutionDir)Sources\Headers&quot;;&quot;$(SolutionDir)Sources\Headers\Xquila&quot;;&quot;$(SolutionDir)Sources&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;HttpServer;_WIN32_WINNT=0x0400;_WIN32_IE=0x0400;_CRT_SECURE_NO_WARNINGS;_HAS_ITERATOR_DEBUGGING=0;_SECURE_SCL=0"
 				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
+				BasicRuntimeChecks="1"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
 				ObjectFile="$(SolutionDir)\temp\$(ConfigurationName)\$(ProjectName)\"
