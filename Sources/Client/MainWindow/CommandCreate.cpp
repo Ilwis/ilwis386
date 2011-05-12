@@ -318,7 +318,9 @@ LRESULT Cmdcreategrf(CWnd* parent, const String& sCsy)
 
 LRESULT Cmdcreateioc(CWnd* parent, const String& sN)
 {
-	String sName = sN;
+	String sTail = sN.sTail(" ");
+	String sHead = sN.sHead(" ");
+	String sName = sHead;
 	String sDescription;
 	if (sName == "ioc")
 	{
@@ -358,8 +360,18 @@ LRESULT Cmdcreateioc(CWnd* parent, const String& sN)
 	fn.sExt = ".ioc";
 	ObjectCollection oc(fn, "ObjectCollection", ParmList());
 	oc->SetDescription(sDescription);
-	oc->Store();
-	EditObject(fn);
+	if ( sTail == "") {
+		oc->Store();
+		EditObject(fn);
+	} else {
+		Array<String> files;
+		Split(sTail, files,",");
+		for(int i = 0; i< files.size(); ++i) {
+			String f = files[i].sTrimSpaces();
+			oc->Add(FileName(f));
+		}
+		oc->Store();
+	}
 
 	return -1;
 }

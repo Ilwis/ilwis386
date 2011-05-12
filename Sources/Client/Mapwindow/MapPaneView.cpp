@@ -851,18 +851,41 @@ void MapPaneView::OnUpdatePaste(CCmdUI* pCmdUI)
 
 void MapPaneView::OnCopy()
 {
+	CDC *dc = GetDC();
+	RECT sz = {0,0,10000,10000};
+	CMetaFileDC enhMFDC;
+	BOOL ret = enhMFDC.CreateEnhanced(dc,0,&sz,"dummy");
 	MapCompositionDoc* mcd = GetDocument();
-	MapCompositionSrvItem* mcsi = mcd->GetEmbeddedItem();
-	//	mcsi->CopyToClipboard(FALSE);
-	COleDataSource* pDataSource = new COleDataSource;
-	try {
-		mcsi->AddOtherClipboardData(pDataSource);
-	}
-	catch (...)
+	//PreparationParameters pp(NewDrawer::ptINITOPENGL, &enhMFDC,true);
+	//mcd->rootDrawer->prepare(&pp);
+	//mcd->rootDrawer->draw();
+	CPen pen(1,1,RGB(255,0,0));
+	enhMFDC.SelectObject(&pen);
+	enhMFDC.MoveTo(500,500);
+	enhMFDC.LineTo(1000,1000);
+
+
+	HENHMETAFILE hmf;
+	if( (hmf = enhMFDC.CloseEnhanced()) )
 	{
-		delete pDataSource;
+		if( OpenClipboard() )
+		{
+			EmptyClipboard();
+			SetClipboardData(CF_ENHMETAFILE, hmf);
+			CloseClipboard();
+		}
+		else
+		{
+			/*
+			* The metafile is deleted only 
+			* when it has not been set in
+			* the clipboard.
+			*/
+			::DeleteEnhMetaFile(hmf);
+		}
 	}
-	pDataSource->SetClipboard();
+	//pp = PreparationParameters(NewDrawer::ptINITOPENGL, dc,true);
+	//mcd->rootDrawer->prepare(&pp);
 }
 
 DROPEFFECT MapPaneView::OnDragEnter(COleDataObject* pDataObject, DWORD dwKeyState, CPoint point) 

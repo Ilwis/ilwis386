@@ -1312,13 +1312,11 @@ bool MapCompositionDoc::fAppendable(const FileName& fn)
 	}
 	else if (fn.sExt == ".mpr")
 	{
-		Map mp(fn);
-		fOk = fGeoRefOk(mp);
+		fOk = true;
 	}
 	else if (fn.sExt == ".mpl") 
 	{
-		MapList mpl(fn);
-		fOk = fGeoRefOk(mpl[mpl->iLower()]);
+		fOk = true;
 	}
 	else if (fn.sExt == ".grf" || fn.sExt == ".csy") {
 		fOk = true; 
@@ -1361,7 +1359,7 @@ NewDrawer* MapCompositionDoc::drAppend(const FileName& fn, bool asAnimation)
 		CoordSystem csy(fn);
 		SetCoordSystem(csy);
 	}
-
+	UpdateAllViews(0);
 	return dr;
 }
 

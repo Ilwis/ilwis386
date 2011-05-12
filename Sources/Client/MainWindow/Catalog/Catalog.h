@@ -142,6 +142,7 @@ protected:
 	afx_msg void OnShowMapTables();
 	afx_msg void OnShowAllData();
 	afx_msg void OnShowAllObjects();
+	afx_msg void OnCreateObjectCollection();
 	//}}AFX_MSG
 	afx_msg void OnSelBut(UINT id);
 	afx_msg void OnSelButUI(CCmdUI* pCmdUI);

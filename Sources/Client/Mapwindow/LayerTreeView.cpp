@@ -221,8 +221,10 @@ HTREEITEM LayerTreeView::addMapItem(ILWIS::SpatialDataDrawer *mapDrawer, HTREEIT
 	} else 	if ( mapDrawer->getType() == "CollectionDrawer") {
 		DrawerTool *dt = DrawerTool::createTool("CollectionTool",GetDocument()->mpvGetView(),this,mapDrawer);
 		if ( dt) {
-			drwTool->addTool(dt, lastTool);
-			dt->configure(htiMap);
+			if ( dt->isToolUseableFor(mapDrawer)) { 
+				drwTool->addTool(dt, lastTool);
+				dt->configure(htiMap);
+			}
 		}
 	} else {
 		for( int  i=0; i < mapDrawer->getDrawerCount(); ++i) {
@@ -232,6 +234,10 @@ HTREEITEM LayerTreeView::addMapItem(ILWIS::SpatialDataDrawer *mapDrawer, HTREEIT
 				if ( dt) {
 					drwTool->addTool(dt, lastTool);
 					dt->configure(htiMap);
+					DrawerTool *threeDStack = drwTool->getTool("ThreeDStack");
+					if ( threeDStack) {
+						threeDStack->update();
+					}
 				}
 			}
 		}
@@ -343,8 +349,8 @@ void LayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 	DrawerTool *dt = DrawerTool::createTool("BackgroundTool",mcd->mpvGetView(),this,mcd->rootDrawer);
 	drwTool->addTool(dt);
 	dt->configure(item);
-
 	resetState();
+	GetTreeCtrl().Expand(GetTreeCtrl().GetFirstVisibleItem(),TVE_COLLAPSE);
 	tc.SetRedraw(TRUE);
 	Invalidate();
 }

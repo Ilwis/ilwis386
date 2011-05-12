@@ -110,6 +110,9 @@ void DrawerTool::addDrawer(ComplexDrawer *cdrw) {
 }
 
 bool DrawerTool::addTool(DrawerTool *tool, int proposedIndex) {
+	if ( tool == 0)
+		return false;
+
 	for(int i=0; i < tools.size(); ++i) {
 		if ( tools[i]->getId() == tool->getId())
 			return false;
@@ -125,6 +128,7 @@ bool DrawerTool::addTool(DrawerTool *tool, int proposedIndex) {
 		} else
 			delete dtool;
 	}
+	tool->setParentTool(this);
 	return true;
 }
 

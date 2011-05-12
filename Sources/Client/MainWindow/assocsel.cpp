@@ -34,84 +34,7 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/* $Log: /ILWIS 3.0/Main/assocsel.cpp $
- * 
- * 18    11/16/01 11:49 Hendrikse
- * added EnableMenuItem for stereopairs to edit their making from RMButton
- * 
- * 17    20-09-01 18:40 Koolhoven
- * AddOperMenuItems() no longer crashes when 0==ap
- * 
- * 16    2-03-01 17:58 Koolhoven
- * simplified constructor of AssociationSelector
- * domain, segmap, polmap do no longer have OpenAsTable in the rmb menu
- * 
- * 15    2-02-01 1:07p Martin
- * delete is no longer grayed out with read-only files
- * 
- * 14    1/02/01 14:20 Willem
- * Each commandline is now set at most one time (it could be two or even
- * three times!)
- * 
- * 13    26/01/01 12:13 Willem
- * Added parameter to reject popup menu option "Show as Domain" for
- * internal DomainPicture
- * 
- * 12    7-09-00 10:26a Martin
- * rmb commands are added to commandline
- * 
- * 11    4-07-00 16:21 Koolhoven
- * removed CopyObject in RMB menu
- * 
- * 10    13-06-00 17:33 Koolhoven
- * added ID_EDIT_COPY to rmb menu
- * 
- * 9     15-05-00 17:39 Koolhoven
- * added AddOperMenuItems()
- * 
- * 8     15-05-00 15:33 Koolhoven
- * Removed "Edit" command for maplists
- * 
- * 7     14-01-00 10:57 Koolhoven
- * Added popuphelp on filenames (shows propertyform with help tab as
- * first)
- * 
- * 6     5-10-99 18:51 Koolhoven
- * Using of maplist:nr syntax to access a rastermap in a maplist
- * 
- * 5     4-10-99 9:47 Koolhoven
- * Indicate default action in context sensitive menu
- * 
- * 4     1-10-99 9:37 Koolhoven
- * RMB menu for directories and drives. Option "open" opens it in a new
- * window
- * 
- * 3     28-09-99 16:02 Koolhoven
- * Show description of context sensitive menu of catalog on statusline of
- * main window.
- * Also execute commands properly when in another thread.
- * 
- * 2     28-09-99 11:32 Koolhoven
- * Added right mouse button menu in Catalog
- * 
- * 1     27-09-99 17:11 Koolhoven
-// Revision 1.5  1998/09/16 17:35:18  Wim
-// 22beta2
-//
-// Revision 1.4  1997/08/21 07:41:12  Wim
-// Show as domain and show as rpr readded to context sensitive menu
-//
-// Revision 1.3  1997-07-28 17:14:52+02  Wim
-// Do not add break lines when fDomain() or fRepresentation() are true,
-// because show as options are already removed.
-//
-// Revision 1.2  1997-07-28 15:11:36+02  Wim
-// Removed Show as Domain and Show as Representation from right mouse menus
-//
-/* Interface for AssociationSelector
-// by Wim Koolhoven, okt. 1993
-// (c) Ilwis System Development ITC
-*/
+
 #include "Client\Headers\formelementspch.h"	
 #include "Client\Base\Res.h"
 #include "Client\MainWindow\ACTION.H"
@@ -232,13 +155,15 @@ AssociationSelector::AssociationSelector(CWnd* w, zPoint p,
 	pmadd(ID_CAT_SHOW);
 
 	AddOperMenuItems(*this, &aList, ap, sExt, iDfltOption);
-	AppendMenu(MF_SEPARATOR);
 
-	bool fOpenAs = false;
 	if ( IOTYPE(fn) == IlwisObject::iotOBJECTCOLLECTION)
 		pmadd(ID_CAT_ASLAYER);
 	if ( IOTYPE(fn) == IlwisObject::iotOBJECTCOLLECTION || IOTYPE(fn) == IlwisObject::iotMAPLIST)
 		pmadd(ID_CAT_ASANIMATION);
+
+	AppendMenu(MF_SEPARATOR);
+
+	bool fOpenAs = false;
 	if ((".dom" != sExt) && ObjectInfo::fDomain(fn, false)) 
 	{
 		fOpenAs = true;

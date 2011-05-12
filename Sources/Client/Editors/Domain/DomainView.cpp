@@ -1962,7 +1962,7 @@ void DomainSortView::PrintItem(CDC *pDC, CPrintInfo *pInfo, int iIndex)
 	sField = sMakeShortString(pDC, pdocDom->sName(iIndex + 1), rect.Width());
 	pDC->DrawText(sField.scVal(), rect, DT_LEFT | DT_SINGLELINE);
 
-	rect.left = rectPage.left +  + m_aiColOffsets[0];
+	rect.left = rectPage.left + m_aiColOffsets[0];
 	rect.right = rectPage.left + m_aiColOffsets[1] - m_cxChar;
 	sField = sMakeShortString(pDC, pdocDom->sCode(iIndex + 1), rect.Width());
 	pDC->DrawText(sField.scVal(), rect, DT_LEFT | DT_SINGLELINE);

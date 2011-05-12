@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="IlwisClient"
 	ProjectGUID="{12042408-86EA-4501-8797-F358A5447A86}"
 	RootNamespace="IlwisClient"
@@ -595,6 +595,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\amesd.ico"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\amesd.ico"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Client\Resources\animation.ico"
 				>
 			</File>
@@ -931,6 +939,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\esa.ico"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\esa.ico"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Client\Resources\EXE16.ICO"
 				>
 			</File>
@@ -1048,6 +1064,14 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\GEOREF.BMP"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\GNC.ico"
+				>
+			</File>
+			<File
+				RelativePath=".\GNC.ico"
 				>
 			</File>
 			<File
@@ -1587,6 +1611,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Client\Resources\setcol.ico"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Client\Resources\SETFID01.CUR"
 				>
 			</File>
@@ -1784,6 +1812,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\SPLITCOL.CUR"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\stack.ico"
 				>
 			</File>
 			<File
@@ -5244,34 +5276,6 @@
 				</File>
 			</Filter>
 		</Filter>
-		<File
-			RelativePath=".\amesd.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\amesd.ico"
-			>
-		</File>
-		<File
-			RelativePath=".\esa.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\esa.ico"
-			>
-		</File>
-		<File
-			RelativePath=".\GNC.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\GNC.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\setcol.ico"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

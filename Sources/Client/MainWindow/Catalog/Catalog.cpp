@@ -115,6 +115,7 @@ BEGIN_MESSAGE_MAP(Catalog, CListView)
 	ON_COMMAND(ID_EDIT_OBJ, OnEditObject)
 	ON_COMMAND(ID_CAT_PROP, OnProp)
 	ON_COMMAND(ID_CAT_COPY, OnCopyTo)
+	ON_COMMAND(ID_CREATE_OBJECTCOLLECTION,OnCreateObjectCollection)
 	ON_UPDATE_COMMAND_UI(ID_CAT_PROP, OnPropertiesUpdateUI)
 	ON_UPDATE_COMMAND_UI(ID_CAT_COPY, OnPropertiesUpdateUI)
 	ON_UPDATE_COMMAND_UI(ID_EDIT_OBJ, OnUpdateEditObject)
@@ -1420,6 +1421,7 @@ void Catalog::OnContextMenu(CWnd* pWnd, CPoint point)
 			pmadd(ID_OPENPIXELINFO);
 			men.AppendMenu(MF_SEPARATOR);
 		}
+		pmadd(ID_CREATE_OBJECTCOLLECTION);
 		pmadd(ID_EDIT_COPY);
 		pmadd(ID_EDIT_PASTE);
 		pmadd(ID_CAT_DEL );
@@ -2407,6 +2409,21 @@ void Catalog::OnUpdateEditObject(CCmdUI* pCmdUI)
 		
 	}
 	pCmdUI->Enable(FALSE);
+}
+
+void Catalog::OnCreateObjectCollection() {
+	FileName fn;
+	POSITION pos = pSTARTPOS;
+	String files;
+	while ( (fn = GetNextSelectedFile(pos)) != FileName())
+	{
+		if ( files != "")
+			files += ",";
+		files += fn.sFile + fn.sExt;
+	}
+
+	IlwWinApp()->Execute(String("create ioc %S", files));
+
 }
 
 void Catalog::OnCopyTo()
