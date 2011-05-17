@@ -44,6 +44,27 @@ String SetDrawer::description() const {
 	return sName;
 }
 
+RangeReal SetDrawer::getMinMax(const ObjectCollection& oc) const{
+	RangeReal rrMinMax (0, 255);
+	bool fFirst = true;
+	for(int i = 0; i < oc->iNrObjects(); ++i) {
+		if (IOTYPEBASEMAP( oc->fnObject(i))) {
+			BaseMap mp(oc->fnObject(i));
+			if (mp.fValid()) {
+				RangeReal rrMinMaxMap = mp->rrMinMax(BaseMapPtr::mmmSAMPLED);
+				if (rrMinMaxMap.rLo() > rrMinMaxMap.rHi())
+					rrMinMaxMap = mp->vr()->rrMinMax();
+				if (fFirst) {
+					rrMinMax = rrMinMaxMap;
+					fFirst = false;
+				}
+				else
+					rrMinMax += rrMinMaxMap;
+			}
+		}
+	}
+	return rrMinMax;
+}
 RangeReal SetDrawer::getMinMax(const MapList& mlist) const{
 	RangeReal rrMinMax (0, 255);
 	if (mlist->iSize() > 0) {
@@ -87,6 +108,9 @@ void SetDrawer::prepare(PreparationParameters *pp){
 				clear();
 			}
 			Tranquilizer trq(TR("Adding maps"));
+			// Calculate the min/max over the whole maplist. This is used for palette and texture generation.
+			rrMinMax = getMinMax(oc);
+			Palette * palette;
 			for(int i = 0; i < oc->iNrObjects(); ++i) {
 				//IlwisObject::iotIlwisObjectType type = IOTYPE();
 				if (IOTYPEBASEMAP( oc->fnObject(i))) {
@@ -95,6 +119,15 @@ void SetDrawer::prepare(PreparationParameters *pp){
 						if ( !rpr.fValid())
 							rpr = bmp->dm()->rpr();
 						ILWIS::LayerDrawer *drw = createIndexDrawer(i,bmp, dp, pp);
+						RasterLayerDrawer * rasterset = dynamic_cast<RasterLayerDrawer*>(drw);
+						if (rasterset) {
+							if ( rrMinMax.fValid())
+								rasterset->setMinMax(rrMinMax);
+							if (i == 0)
+								palette = rasterset->SetPaletteOwner(); // create only the palette of the first rasterset, and share it with the other rastersets
+							else
+								rasterset->SetPalette(palette);
+						} 
 						drw->setUICode(0);
 						trq.fUpdate(i,oc->iNrObjects()); 
 					}
