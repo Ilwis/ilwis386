@@ -22,6 +22,7 @@ namespace ILWIS{
 		enum SourceType{sotUNKNOWN, sotFEATURE, sotMAPLIST, sotOBJECTCOLLECTION};
 		virtual String iconName(const String& subtype="?") const;
 		RangeReal getMinMax(const MapList& mlist) const;
+		RangeReal getMinMax(const ObjectCollection& oc) const;
 		void drawLegendItem(CDC *dc, const CRect& rct, double rVal) const;
 		ILWIS::LayerDrawer *createIndexDrawer(int index, const BaseMap& basemap,ILWIS::DrawerParameters& dp, PreparationParameters* pp);
 		SourceType sourceType;
