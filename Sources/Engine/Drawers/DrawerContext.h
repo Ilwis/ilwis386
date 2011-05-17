@@ -9,9 +9,10 @@ namespace ILWIS {
 	class Palette;
 	class _export DrawerContext {
 	public:
+		enum Mode{mNONE=0,mFORCEINIT=1, mDRAWTOWINDOW=2, mDRAWTOBITMAP=4};
 		~DrawerContext();
 		DrawerContext();
-		bool initOpenGL(CDC *dc, bool init=false);
+		bool initOpenGL(CDC *dc, int m=mDRAWTOWINDOW);
 		void clear();
 		GLint getMaxTextureSize() const { return maxTextureSize; };
 		GLint getMaxPaletteSize() const { return maxPaletteSize; };

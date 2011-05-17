@@ -35,7 +35,7 @@ SpatialDataDrawer::SpatialDataDrawer(DrawerParameters *parms, const String& name
 }
 
 SpatialDataDrawer::~SpatialDataDrawer() {
-	bm.SetPointer(0);
+//	bm.SetPointer(0);
 }
 
 void SpatialDataDrawer::prepare(PreparationParameters *pp){

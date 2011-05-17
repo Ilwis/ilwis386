@@ -35,7 +35,6 @@
 #pragma warning( disable : 4244)
 
 #include "Headers\base.h"
-
 #include "Engine\Base\DataObjects\Dlist.h"
 #include "Engine\Base\DataObjects\Slist.h"
 #include "Engine\Base\DataObjects\Buf.h"

@@ -98,11 +98,8 @@ bool ComplexDrawer::drawPreDrawers(const CoordBounds& cb) const{
 	if (!isActive())
 		return false;
 
-	long& count = (const_cast<ComplexDrawer *>(this))->currentIndex;
-	count = 0;
 	if ( preDrawers.size() > 0) {
 		for(map<String,NewDrawer *>::const_iterator cur = preDrawers.begin(); cur != preDrawers.end(); ++cur) {
-			++count;
 			NewDrawer *drw = (*cur).second;
 			if ( drw)
 				drw->draw( cb);
@@ -119,12 +116,9 @@ bool ComplexDrawer::draw( const CoordBounds& cb) const{
 	drawPreDrawers(cb);
 	
 
-	long& count = (const_cast<ComplexDrawer *>(this))->currentIndex;
-	count = 0;
 	double total = 0;
 	//clock_t start = clock();
 	for(int i=0; i < drawers.size(); ++i) {
-		++count;
 		NewDrawer *drw = drawers[i];
 		if (  drw && drw->isActive()) {
 			drw->draw( cb);
@@ -144,10 +138,7 @@ bool ComplexDrawer::drawPostDrawers(const CoordBounds& cb) const{
 	if (!isActive())
 		return false;
 
-	long& count = (const_cast<ComplexDrawer *>(this))->currentIndex;
-	count = 0;
 	if ( postDrawers.size() > 0) {
-		++count;
 		for(map<String,NewDrawer *>::const_iterator cur = postDrawers.begin(); cur != postDrawers.end(); ++cur) {
 			NewDrawer *drw = (*cur).second;
 			if ( drw)

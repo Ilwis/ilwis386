@@ -27,7 +27,7 @@ namespace ILWIS {
 		CoordSystem getCoordinateSystem() const { return cs;}
 		RowCol getViewPort() const { return pixArea; }
 		void setCoordinateSystem(const CoordSystem& _cs, bool overrule=false) ;
-		void setCoordBoundsView(const CoordSystem& _cs, const CoordBounds& _cb, bool overrule=false); 
+		void setCoordBoundsView(const CoordBounds& _cb, bool overrule=false); 
 		void setCoordBoundsZoom(const CoordBounds& _cb);
 		void setCoordBoundsMap(const CoordBounds& cb);
 		void setZoom(const CRect& rct);

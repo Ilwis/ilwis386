@@ -14,8 +14,8 @@ maxTextureSize(128)
 {
 }
 
-bool DrawerContext::initOpenGL(CDC *dc, bool init) {  
-	if ( !init) {
+bool DrawerContext::initOpenGL(CDC *dc, int m) {  
+	if ( (m & Mode::mFORCEINIT) == 0) {
 		if (fGLInitialized)
 			return false;// no init needed, already done
 	}
@@ -24,8 +24,13 @@ bool DrawerContext::initOpenGL(CDC *dc, bool init) {
 	ZeroMemory( &pfd, sizeof( pfd ) );
 	pfd.nSize = sizeof( pfd );
 	pfd.nVersion = 1;
-	pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL |
-				  PFD_DOUBLEBUFFER;
+	if ( m & Mode::mDRAWTOWINDOW) {
+		pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL |
+					PFD_DOUBLEBUFFER;
+	} else {
+		pfd.dwFlags = PFD_DRAW_TO_BITMAP | PFD_SUPPORT_OPENGL |
+					  PFD_SUPPORT_GDI;
+	}
 	pfd.iPixelType = PFD_TYPE_RGBA;
 	pfd.cColorBits = 24;
 	pfd.cDepthBits = 16;

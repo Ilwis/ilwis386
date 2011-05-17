@@ -1,9 +1,9 @@
 #include "Headers\toolspch.h"
 #include "Engine\Map\basemap.h"
 #include "ComplexDrawer.h"
+#include "Engine\Drawers\DrawerContext.h"
 #include "Engine\Drawers\RootDrawer.h"
 #include "Engine\Drawers\SpatialDataDrawer.h"
-#include "Engine\Drawers\DrawerContext.h"
 #include "Engine\Drawers\SelectionRectangle.h"
 #include "Engine\Drawers\ZValueMaker.h"
 
@@ -17,6 +17,7 @@ RootDrawer::RootDrawer(MapCompositionDoc *doc) {
 	addPreDrawer(1,NewDrawer::getDrawer("CanvasBackgroundDrawer", &pp, &dp));
 	addPostDrawer(900,NewDrawer::getDrawer("MouseClickInfoDrawer", &pp, &dp));
 	addPostDrawer(800,NewDrawer::getDrawer("GridDrawer", &pp, &dp));
+	addPostDrawer(700,NewDrawer::getDrawer("GraticuleDrawer", &pp, &dp));
 	setTransparency(1.0);
 	setName("RootDrawer");
 	threeD = false;
@@ -36,9 +37,9 @@ void  RootDrawer::prepare(PreparationParameters *pp){
 	bool v1 = pp->type & RootDrawer::ptINITOPENGL;
 	bool v2 = pp->type & RootDrawer::ptALL;
 	if ( pp->dc && (  v1 || v2 )) {
-		if ( pp->initContext && getDrawerContext())
+		if ( ((pp->contextMode & DrawerContext::mFORCEINIT)!=0) && getDrawerContext())
 			getDrawerContext()->ReleaseContext();
-		if ( getDrawerContext()->initOpenGL(pp->dc, pp->initContext)) {
+		if ( getDrawerContext()->initOpenGL(pp->dc, pp->contextMode)) {
 			pp->type |= NewDrawer::ptGEOMETRY;
 			CWnd * wnd = pp->dc->GetWindow();
 			if ( wnd) {
@@ -68,16 +69,21 @@ void  RootDrawer::prepare(PreparationParameters *pp){
 String RootDrawer::addDrawer(NewDrawer *drw) {
 	SpatialDataDrawer *mapdrw = dynamic_cast<SpatialDataDrawer *>(drw);
 	if ( mapdrw && mapdrw->getBaseMap() != 0) {
-		CoordBounds cb = mapdrw->cb();
-		addCoordBounds(mapdrw->getBaseMap()->cs(), cb);
+		CoordBounds ncb = mapdrw->cb();
+		//addCoordBounds(mapdrw->getBaseMap()->cs(), cb);
+		//cb += ncb;
+		CoordBounds cb = cbView;
+		cb += ncb;
+		setCoordBoundsView(ncb);
+
 	}
 	return ComplexDrawer::addDrawer(drw);
 }
 
 void RootDrawer::addCoordBounds(const CoordSystem& _cs, const CoordBounds& cb, bool overrule){
 	CoordBounds ncb = cs.fEqual(_cs) ? cb : cs->cbConv(_cs,cb);
-	ncb += cbView;
-	setCoordBoundsView(cs, ncb, overrule);
+	ncb += cbMap;
+	setCoordBoundsView(ncb, overrule);
 }
 
 /*
@@ -172,7 +178,7 @@ void RootDrawer::load(const FileName& fnView, const String parenSection){
 	setCoordinateSystem(csy, false);
 	setViewPort(viewPort);
 	setCoordBoundsMap(cbMap);
-	setCoordBoundsView(csy, cbView, false);
+	setCoordBoundsView(cbView, false);
 	setCoordBoundsZoom(cbZoom);
 	setEyePoint(eyePoint);
 	setViewPoint(viewPoint);
@@ -234,8 +240,8 @@ void RootDrawer::setCoordinateSystem(const CoordSystem& _cs, bool overrule){
 	}
 }
 
-void RootDrawer::setCoordBoundsView(const CoordSystem& _cs, const CoordBounds& _cb, bool overrule){
-	CoordBounds cb = cs.fEqual(_cs) ? _cb : cs->cbConv(_cs,_cb);
+void RootDrawer::setCoordBoundsView(/*const CoordSystem& _cs,*/ const CoordBounds& cb, bool overrule){
+	//CoordBounds cb = cs.fEqual(_cs) ? _cb : cs->cbConv(_cs,_cb);
 	if ( overrule || cbView.fUndef()) {
 		cbMap = cb;
 		aspectRatio = cbMap.width()/ cbMap.height();

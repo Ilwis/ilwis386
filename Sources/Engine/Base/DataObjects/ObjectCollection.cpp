@@ -556,7 +556,11 @@ bool ObjectCollectionPtr::getStatusFor(int query) const {
 				if ( !dm.fValid()) {
 					dm = bmp->dm();
 				} else {
-					sameDomain = dm == bmp->dm();
+					if ( !dm->pdv())
+						sameDomain = dm == bmp->dm();
+					else { // we are less strict with domain value, need only to be same type in general
+						sameDomain = dm->pdv() !=0 && bmp->dm()->pdv() != 0;
+					}
 				}
 			}
 			if (( ObjectCollection::csSAMEGEOREF & query) != 0){
