@@ -24,7 +24,7 @@ DrawerTool *createGridTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw
 }
 
 GridTool::GridTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
-	DrawerTool("GridTool", zv, view, drw)
+	DrawerTool("GridTool", zv, view, drw), hasGraticule(false)
 {
 	drawer = ((RootDrawer *)drw)->getDrawer(800, ComplexDrawer::dtPOST);
 }
@@ -43,11 +43,13 @@ HTREEITEM GridTool::configure( HTREEITEM parentItem) {
 	item->setCheckAction(this,0,(DTSetCheckFunc)&GridTool::gridActive);
 	htiNode = insertItem("Grid",".grid",item, drawer->isActive(),TVI_ROOT);
 
+
 	DrawerTool *dt = DrawerTool::createTool("LineStyleTool", getDocument()->mpvGetView(),tree,drawer);
 	if ( dt) {
 		addTool(dt);
 		dt->configure(htiNode);
 	}
+
 	
 	DrawerTool::configure(htiNode);
 	tree->GetTreeCtrl().Expand(htiNode,TVE_COLLAPSE);

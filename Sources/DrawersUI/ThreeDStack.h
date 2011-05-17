@@ -36,7 +36,7 @@ namespace ILWIS {
 
 	};
 
-	class Cursor3DDrawer : public LineDrawer {
+	class Cursor3DDrawer : public PointDrawer {
 	public:
 		Cursor3DDrawer(ILWIS::DrawerParameters *parms);
 		~Cursor3DDrawer();

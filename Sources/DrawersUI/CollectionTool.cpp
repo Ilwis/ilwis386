@@ -48,7 +48,7 @@ bool CollectionTool::isToolUseableFor(ILWIS::NewDrawer *drw) {
 	ObjectCollection *oc = (ObjectCollection *)coldrw->getDataSource();
 	if ( !oc)
 		return false;
-	return (*oc)->getStatusFor(ObjectCollection::csALLBASEMAP | ObjectCollection::csSAMEDOMAIN);
+	return true;
 	
 }
 

@@ -1,36 +1,35 @@
 #pragma once
 
-ILWIS::DrawerTool *createGridTool(ZoomableView* zv, LayerTreeView *view, ILWIS::NewDrawer *drw);
+ILWIS::DrawerTool *createGraticuleTool(ZoomableView* zv, LayerTreeView *view, ILWIS::NewDrawer *drw);
 
 namespace ILWIS {
 
-	class AnimationDrawer;
+	class GraticuleDrawer;
 
-	class GridTool : public DrawerTool {
+	class GraticuleTool : public DrawerTool {
 	public:
-		GridTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw);
+		GraticuleTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw);
 		bool isToolUseableFor(ILWIS::NewDrawer *drw);
 		HTREEITEM configure( HTREEITEM parentItem);
-		virtual ~GridTool();
+		virtual ~GraticuleTool();
 		String getMenuString() const;
 		void toggleGraticule(bool yesno) { hasGraticule = yesno;}
 	protected:
-		void gridActive(void *v, HTREEITEM );
 		void graticuleActive(void *v, HTREEITEM);
-		void gridOptions();
+		void GraticuleOptions();
 		bool hasGraticule;
 
 
 	};
 
-	class GridForm: public DisplayOptionsForm
+	class GraticuleForm: public DisplayOptionsForm
 	{
 	public:
-		GridForm(CWnd *par, GridDrawer *gdr);
+		GraticuleForm(CWnd *par, GraticuleDrawer *gdr);
 		void apply();
 	private:
 		FieldReal *fr;
-		GridDrawer *gd;
+		GraticuleDrawer *gd;
 		double rDist;
 		int dummy;
 	};

@@ -15,7 +15,7 @@
 #include "Client\Mapwindow\LayerTreeItem.h" 
 #include "Engine\Drawers\DrawerContext.h"
 #include "Engine\Drawers\SimpleDrawer.h" 
-#include "drawers\linedrawer.h"
+#include "drawers\pointdrawer.h"
 #include "DrawersUI\ThreeDStack.h"
 #include "DrawersUI\ThreeDGlobalTool.h"
 #include "Engine\Drawers\ZValueMaker.h"
@@ -27,7 +27,7 @@ ILWIS::NewDrawer *createCursor3DDrawer(DrawerParameters *parms) {
 }
 
 Cursor3DDrawer::Cursor3DDrawer(DrawerParameters *parms) : 
-LineDrawer(parms,"Cursor3DDrawer")
+PointDrawer(parms,"Cursor3DDrawer")
 {
 }
 
@@ -36,11 +36,19 @@ Cursor3DDrawer::~Cursor3DDrawer() {
 
 
 bool Cursor3DDrawer::draw( const CoordBounds& cbArea) const{
-	return LineDrawer::draw(cbArea);	
+	glClearColor(1.0,1.0,1.0,0.0);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+	PointDrawer::draw(cbArea);
+	glDisable(GL_BLEND);
+
+	return true;
 }
 
 void Cursor3DDrawer::prepare(PreparationParameters *p){
-	LineDrawer::prepare(p);
+	setSymbol("slanted-cross");
+	setSpecialDrawingOptions(NewDrawer::sdoExtrusion, true);
+	PointDrawer::prepare(p);
 }
 //-----------------------------------------------------------------------------------
 DrawerTool *createThreeDStack(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) {
@@ -69,14 +77,18 @@ bool ThreeDStack::isToolUseableFor(ILWIS::DrawerTool *tool) {
 }
 
 void ThreeDStack::OnLButtonUp(UINT nFlags, CPoint point) {
+	if ( nFlags & MK_CONTROL)
+		return;
+
 	mouseCrd = drawer->getRootDrawer()->screenToWorld(RowCol(point.y, point.x));
-	if(cursor) {
-		vector<Coord> crds;
-		crds.push_back(Coord(mouseCrd.x, mouseCrd.y, mouseCrd.z));
-		crds.push_back(Coord(mouseCrd.x, mouseCrd.y, 0));
-		cursor->addCoords(crds,1);
-		if ( cursor && cursor->isActive())
+	if ( drawer->getRootDrawer()->getMapCoordBounds().fContains(mouseCrd)) {
+		if(cursor) {
+			mouseCrd.z = (drawer->getRootDrawer()->getDrawerCount() - 1) * distance * 1.05;
+			cursor->setCoord(mouseCrd);	
+			PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER);
+			cursor->prepare(&pp);
 			drawer->getRootDrawer()->getDrawerContext()->doDraw();
+		}
 	}
 }
 
@@ -88,7 +100,7 @@ HTREEITEM ThreeDStack::configure( HTREEITEM parentItem) {
 	DrawerTool::configure(htiNode);
 
 	CoordBounds cbLimits = drawer->getRootDrawer()->getCoordBoundsView();
-	distance = 0.25 * (cbLimits.width() + cbLimits.height())/ (2.0 * drawer->getRootDrawer()->getDrawerCount());
+	distance = 0.5 * (cbLimits.width() + cbLimits.height())/ (2.0 * drawer->getRootDrawer()->getDrawerCount());
 
 
 	return htiNode;
@@ -108,10 +120,7 @@ void ThreeDStack::setthreeDStackMarker(void *v, HTREEITEM) {
 			DrawerParameters dp(drawer->getRootDrawer(), drawer);
 			cursor = new Cursor3DDrawer(&dp);
 			drawer->getRootDrawer()->addPostDrawer(728,cursor); 
-			vector<Coord> crds;
-			crds.push_back(Coord(mouseCrd.x, mouseCrd.y, mouseCrd.z));
-			crds.push_back(Coord(mouseCrd.x, mouseCrd.y, 0));
-			cursor->addCoords(crds,1);
+			cursor->setCoord(mouseCrd);	
 		}
 		tree->GetDocument()->mpvGetView()->addTool(this, getId());
 	} else {
@@ -129,9 +138,9 @@ void ThreeDStack::update() {
 	stackStatus.clear();
 	ComplexDrawer *rootDrawer = (ComplexDrawer *)drawer->getRootDrawer();
 	DisplayOptionTreeItem *item;
-	/*item = new DisplayOptionTreeItem(tree,htiNode,drawer);
+	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	item->setCheckAction(this, 0,(DTSetCheckFunc)&ThreeDStack::setthreeDStackMarker);
-	insertItem(TR("3D Cursor"),"info",item,0);*/
+	insertItem(TR("3D Cursor"),"info",item,0);
 
 	for(int i = 0 ; i < rootDrawer->getDrawerCount(); ++i) {
 		NewDrawer *drw = rootDrawer->getDrawer(i);
@@ -147,10 +156,10 @@ void ThreeDStack::update() {
 				it = insertItem(drw->getName(),".mpa",item,1);
 			if ( IOTYPE(bmp->fnObj) == IlwisObject::iotPOINTMAP)
 				it = insertItem(drw->getName(),".mpp",item,1);
-			if ( IOTYPE(bmp->fnObj) == IlwisObject::iotMAPLIST)
-				it = insertItem(drw->getName(),".mpl",item,1);
-			if ( IOTYPE(bmp->fnObj) == IlwisObject::iotOBJECTCOLLECTION)
-				it = insertItem(drw->getName(),".ioc",item,1);
+		} else if ( drw->getType() == "AnimationDrawer") {
+			it = insertItem(drw->getName(),"Animation",item,1);
+		} else if ( drw->getType() == "CollectionDrawer") {
+				it = insertItem(drw->getName(),"Set",item,1);
 		} else {
 			continue;
 		}
