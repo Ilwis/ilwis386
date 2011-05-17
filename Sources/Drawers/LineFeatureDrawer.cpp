@@ -85,6 +85,9 @@ void LineFeatureDrawer::prepare(PreparationParameters *p){
 		}
 	}
 	if (  p->type & RootDrawer::ptRENDER || p->type & ptRESTORE) {
+		LineProperties *lparent = (LineProperties *)fdr->getProperties();
+		lproperties.linestyle = lparent->linestyle;
+		lproperties.thickness = lparent->thickness;
 		lproperties.drawColor = (fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod()));
 		for(int j =0 ; j < p->filteredRaws.size(); ++j) {
 			int raw = p->filteredRaws[j];

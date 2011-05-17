@@ -26,6 +26,7 @@
 #include "Drawers\SetDrawer.h"
 #include "Drawers\AnimationDrawer.h"
 #include "Drawers\GridDrawer.h"
+#include "Drawers\GraticuleDrawer.h"
 #include "drawers\pointdrawer.h"
 #include "drawers\Boxdrawer.h"
 #include "Drawers\CollectionDrawer.h"
@@ -53,6 +54,7 @@ DrawerInfoVector *createDrawer() {
 	infos->push_back(new DrawerInfo("AnimationDrawer","ilwis38", createAnimationDrawer));
 	infos->push_back(new DrawerInfo("BoxDrawer","ilwis38", createBoxDrawer));
 	infos->push_back(new DrawerInfo("CollectionDrawer","ilwis38", createCollectionDrawer));
+	infos->push_back(new DrawerInfo("GraticuleDrawer","ilwis38", createGraticuleDrawer));
 
 
 	//addSVGDrawers(infos);

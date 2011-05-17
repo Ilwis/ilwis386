@@ -8,6 +8,7 @@
 #include "Drawers\LayerDrawer.h"
 #include "Drawers\RasterLayerDrawer.h"
 #include "Engine\Drawers\ZValueMaker.h"
+#include "Engine\Representation\Rprclass.h"
 #include <GL/glu.h>
 #include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Engine\Drawers\DrawerContext.h"
@@ -53,6 +54,15 @@ void RasterLayerDrawer::prepare(PreparationParameters *pp){
 
 	if ( pp->type & NewDrawer::ptRENDER) {
 		fUsePalette = drm != drmCOLOR;
+		if ( rpr->prc()) {
+			RepresentationClass *rprC = rpr->prc();
+			for(int j =0 ; j < pp->filteredRaws.size(); ++j) {
+				int raw = pp->filteredRaws[j];
+				Color clr = rprC->clrRaw(abs(raw));
+				clr.m_transparency = raw > 0 ? 0 : 255;
+				rprC->PutColor(raw,clr);
+			}
+		}
 		if (fPaletteOwner) {
 			if (fUsePalette && palette->fValid()) {
 				palette->Refresh();

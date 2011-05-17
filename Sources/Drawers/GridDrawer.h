@@ -51,6 +51,7 @@ namespace ILWIS{
 		void prepareVAxis(double rDist,const Coord& cMax, const Coord& cMin);
 		void preparePlanes(double rDist, const Coord& cMax, const Coord& cMin );
 		void prepareCube(double rDist, const Coord& cMax, const Coord& cMin );
+		void prepareChildDrawers(PreparationParameters *parms);
 
 		double          rDist;
 		LineProperties	lproperties;

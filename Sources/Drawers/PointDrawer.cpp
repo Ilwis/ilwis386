@@ -78,7 +78,7 @@ bool PointDrawer::draw( const CoordBounds& cbArea) const {
 
 	ComplexDrawer *cdrw = (ComplexDrawer *)getParentDrawer();
 	ZValueMaker *zvmkr = cdrw->getZMaker();
-	bool is3D = getRootDrawer()->is3D() && zvmkr->getThreeDPossible();
+	bool is3D = getRootDrawer()->is3D();// && zvmkr->getThreeDPossible();
 	double z0 = cdrw->getZMaker()->getZ0(is3D);
 
 	double fx = cNorm.x;
@@ -93,7 +93,15 @@ bool PointDrawer::draw( const CoordBounds& cbArea) const {
 
 	glPushMatrix();
 	glTranslated(cb.cMin.x, cb.cMin.y, fz);
-	glScaled(xscale * scale, yscale * scale , 1);
+	glScaled(xscale * scale, yscale * scale , 0);
+
+	//if ( is3D) {
+	//	zscale = cdrw->getZMaker()->getZScale();
+	//	zoffset = cdrw->getZMaker()->getOffset();
+	//	glPushMatrix();
+	//	glScaled(1,1,zscale);
+	//	glTranslated(0,0,zoffset);
+	//}
 	for(vector<SVGAttributes>::const_iterator cur = element->begin(); cur != element->end(); ++cur) {
 		switch((*cur).type) {
 			case SVGAttributes::sCIRCLE:
@@ -114,8 +122,8 @@ bool PointDrawer::draw( const CoordBounds& cbArea) const {
 				break;			
 		};
 	}
-
 	glPopMatrix();
+
 	if ( specialOptions & NewDrawer::sdoSELECTED) {
 		CoordBounds cbSelect = cb;
 			cbSelect *= 1.2;
@@ -138,6 +146,7 @@ bool PointDrawer::draw( const CoordBounds& cbArea) const {
 		}
 
 	}
+
 
 
 

@@ -58,8 +58,12 @@ String AnimationDrawer::description() const {
 
 void AnimationDrawer::prepare(PreparationParameters *pp){
 	SetDrawer::prepare(pp);
-	if ( getDrawerCount() > 0)
-		getDrawer(0)->setActive(true);
+	if ( pp->type & NewDrawer::ptGEOMETRY) {
+		if ( getDrawerCount() > 0) {
+			for(int i=0; i < getDrawerCount(); ++i)
+				getDrawer(i)->setActive(i == 0 ? true : false);
+		}
+	}
 }
 
 
@@ -126,6 +130,7 @@ void AnimationDrawer::timedEvent(UINT _timerid) {
 		if ( redraw) {
 			getRootDrawer()->getDrawerContext()->doDraw();
 		}
+		currentIndex = activeMaps[mapIndex];
 	}
 }
 

@@ -339,33 +339,18 @@ void GridDrawer::AddGridLine(Coord c1, Coord c2)
 	addDrawer(line);
 }
 
-//void GridDrawer::DrawCurvedLine(Coord c1, Coord c2)
-//{
-//	Coord cStep, crd;
-//	int iSteps = 500;
-//	cStep.x = (c2.x - c1.x) / iSteps;
-//	cStep.y = (c2.y - c1.y) / iSteps;
-//	p = psn->pntPos(c1);
-//	if (p.x == shUNDEF || p.y == shUNDEF)
-//		fPointOk = false;
-//	else {
-//		fPointOk = true;
-//		cdc->MoveTo(p);
-//	}
-//	crd = c1;
-//	for (int i = 0; i < iSteps; ++i) {
-//		crd += cStep;
-//		p = psn->pntPos(crd);
-//		if (p.x == shUNDEF || p.y == shUNDEF)
-//			fPointOk = false;
-//		else if (fPointOk) 
-//			cdc->LineTo(p);
-//		else {
-//			fPointOk = true;
-//			cdc->MoveTo(p);
-//		}
-//	}
-//}
+void GridDrawer::prepareChildDrawers(PreparationParameters *parms) {
+	for(int i = 0; i < drawers.size(); ++i) {
+		GridLine *gline = (GridLine *)drawers.at(i);
+		if ( gline) {
+			LineProperties *oldprops = (LineProperties *)gline->getProperties();
+			oldprops->drawColor = lproperties.drawColor;
+			oldprops->linestyle = lproperties.linestyle;
+			oldprops->thickness = lproperties.thickness;
+			gline->prepare(parms);
+		}
+	}
+}
 
 String GridDrawer::store(const FileName& fnView, const String& parentSection) const{
 	ComplexDrawer::store(fnView, getType());
