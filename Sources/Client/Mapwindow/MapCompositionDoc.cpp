@@ -910,7 +910,7 @@ ILWIS::NewDrawer *MapCompositionDoc::createBaseMapDrawer(const BaseMap& bmp, con
 	ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
 	drawer->prepare(&pp);
 	rootDrawer->addDrawer(drawer);
-	addToPixelInfo(bmp);
+	addToPixelInfo(bmp, (ComplexDrawer *)drawer);
 	FrameWindow * frame = mpvGetView()->getFrameWindow();
 	if ( frame) {
 		MapStatusBar *sbar = dynamic_cast<MapStatusBar*>(frame->status);
@@ -979,6 +979,7 @@ BOOL MapCompositionDoc::OnOpenObjectCollection(const ObjectCollection& list, Ope
 	rootDrawer->addCoordBounds(bmp->cs(), list->cb(), false);
 	drawer->getZMaker()->setSpatialSource(bmp, rootDrawer->getMapCoordBounds());
 	drawer->getZMaker()->setDataSourceMap(bmp);
+	addToPixelInfo(list, drawer);
 	ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,bmp->cs());
 	drawer->prepare(&pp);
 	rootDrawer->addDrawer(drawer);
@@ -1001,6 +1002,7 @@ BOOL MapCompositionDoc::OnOpenMapList(const MapList& maplist, OpenType ot)
 		rootDrawer->setCoordinateSystem(mp->cs());
 		rootDrawer->addCoordBounds(mp->cs(), mp->cb(), false);
 		ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
+		addToPixelInfo(maplist, (ComplexDrawer *)drawer);
 		drawer->prepare(&pp);
 		rootDrawer->addDrawer(drawer);
 	}
@@ -1088,11 +1090,11 @@ BOOL MapCompositionDoc::OnOpenPointMap(const PointMap& pm, OpenType ot)
 	return TRUE;
 }
 
-void MapCompositionDoc::addToPixelInfo(const BaseMap& bm) {
+void MapCompositionDoc::addToPixelInfo(const IlwisObject& obj, ComplexDrawer *drw) {
 	if (!pixInfoDoc) 
 		pixInfoDoc = new PixelInfoDoc();
 
-	pixInfoDoc->OnOpenDocument(bm->fnObj.sFullPath().scVal(), this);
+	pixInfoDoc->OnOpenDocument(obj->fnObj.sFullPath().scVal(), this,drw);
 	pixInfoDoc->UpdateAllViews(0,2);
 }
 
@@ -1327,7 +1329,7 @@ bool MapCompositionDoc::fAppendable(const FileName& fn)
 	return fOk;
 }
 
-NewDrawer* MapCompositionDoc::drAppend(const FileName& fn, bool asAnimation)
+NewDrawer* MapCompositionDoc::drAppend(const FileName& fn, IlwisDocument::OpenType op)
 {
 	if (!fAppendable(fn))
 	{
@@ -1341,19 +1343,19 @@ NewDrawer* MapCompositionDoc::drAppend(const FileName& fn, bool asAnimation)
 	// add layer
 	if (".mps" == fn.sExt || ".mpa" == fn.sExt || ".mpp" == fn.sExt) {
 		BaseMap bm(fn);
-		dr = drAppend(bm,asAnimation);
+		dr = drAppend(bm);
 	}
 	else if (".mpr" == fn.sExt) {
 		Map mp(fn);
-		dr = drAppend(mp,asAnimation);
+		dr = drAppend(mp);
 	}
 	else if (".mpl" == fn.sExt) {
 		MapList ml(fn);
-		dr = drAppend(ml,asAnimation);
+		dr = drAppend(ml,op);
 	}
 	else if (".ioc" == fn.sExt) {
 		ObjectCollection oc(fn);
-		dr = drAppend(oc,asAnimation);
+		dr = drAppend(oc,op);
 	}
 	else if (".csy" == fn.sExt) {
 		CoordSystem csy(fn);
@@ -1371,7 +1373,14 @@ void MapCompositionDoc::OnAddLayer()
 	bool fOk = frm.fOkClicked();
 	if (fOk) {
 		FileName fn(sName);
-		drAppend(fn, asAnimation);
+		if ( IOTYPE(fn) == IlwisObject::iotOBJECTCOLLECTION)
+			drAppend(fn, asAnimation ? IlwisDocument::otANIMATION : IlwisDocument::otCOLLECTION);
+		else if ( IOTYPE(fn) == IlwisObject::iotMAPLIST) {
+			drAppend(fn, asAnimation ? IlwisDocument::otANIMATION : IlwisDocument::otUNKNOWN);
+		}
+		else{
+			drAppend(fn,IlwisDocument::otUNKNOWN);
+		}
 		ChangeState();
 		UpdateAllViews(0,2);
 	}
@@ -1454,7 +1463,7 @@ void MapCompositionDoc::RemoveDrawer(ILWIS::NewDrawer* drw)
 	ChangeState();
 }
 
-NewDrawer* MapCompositionDoc::drAppend(const Map& rasmap, bool asAnimation)
+NewDrawer* MapCompositionDoc::drAppend(const Map& rasmap)
 {
 	if (!fGeoRefOk(rasmap))
 	{
@@ -1478,10 +1487,10 @@ NewDrawer* MapCompositionDoc::drAppend(const Map& rasmap, bool asAnimation)
 	return dr;
 }
 
-NewDrawer* MapCompositionDoc::drAppend(const ObjectCollection& oc, bool asAnimation)
+NewDrawer* MapCompositionDoc::drAppend(const ObjectCollection& oc, IlwisDocument::OpenType op)
 {
 	ILWIS::NewDrawer *drawer = 0;
-	if ( asAnimation) {
+	if ( op == IlwisDocument::otANIMATION) {
 		ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
 		drawer = NewDrawer::getDrawer("AnimationDrawer", "Ilwis38", &parms);
 		drawer->addDataSource((void *)&oc);
@@ -1500,6 +1509,9 @@ NewDrawer* MapCompositionDoc::drAppend(const ObjectCollection& oc, bool asAnimat
 		ChangeState();
 		UpdateAllViews(0,3);
 		mpvGetView()->Invalidate();
+	} else if( op == IlwisDocument::otCOLLECTION) {
+		OnOpenObjectCollection(oc, op);
+
 	} else {
 		for(int i=0; i < oc->iNrObjects(); ++i) {
 			FileName fn = oc->fnObject(i);
@@ -1537,35 +1549,32 @@ NewDrawer* MapCompositionDoc::drAppend(const ObjectCollection& oc, bool asAnimat
 	return drawer;
 }
 
-NewDrawer* MapCompositionDoc::drAppend(const MapList& maplist, bool asAnimation)
+NewDrawer* MapCompositionDoc::drAppend(const MapList& maplist,IlwisDocument::OpenType op)
 {
-	int iOption = 1;
-	switch (iOption) {
-	case 0:
-		//dr = new MapListColorCompDrawer(this, maplist);
-		break;
-	case 1: 
-		{
-			ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
-			ILWIS::NewDrawer *drawer = NewDrawer::getDrawer("AnimationDrawer", "Ilwis38", &parms);
-			drawer->addDataSource((void *)&maplist);
-			Map mp = maplist[maplist->iLower()];
-			rootDrawer->setCoordinateSystem(mp->cs());
-			rootDrawer->addCoordBounds(mp->cs(), mp->cb(), false);
-			ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
-			drawer->prepare(&pp);
-			rootDrawer->addDrawer(drawer);
-			ChangeState();
-			UpdateAllViews(0,3);
-			mpvGetView()->Invalidate();
-			return drawer;
+	if ( op == IlwisDocument::otANIMATION) {
+		ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
+		ILWIS::NewDrawer *drawer = NewDrawer::getDrawer("AnimationDrawer", "Ilwis38", &parms);
+		drawer->addDataSource((void *)&maplist);
+		Map mp = maplist[maplist->iLower()];
+		rootDrawer->setCoordinateSystem(mp->cs());
+		rootDrawer->addCoordBounds(mp->cs(), mp->cb(), false);
+		ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
+		drawer->prepare(&pp);
+		rootDrawer->addDrawer(drawer);
+		ChangeState();
+		UpdateAllViews(0,3);
+		mpvGetView()->Invalidate();
+		return drawer;
+	} else {
+		for(int i = 0; i < maplist->iSize(); ++i) {
+			drAppend(maplist[i]->fnObj);
 		}
 	}
 	return 0;
 }
 
 
-NewDrawer* MapCompositionDoc::drAppend(const BaseMap& mp, bool asAnimation)
+NewDrawer* MapCompositionDoc::drAppend(const BaseMap& mp,IlwisDocument::OpenType op)
 {
 	if (fCoordSystemOk(mp)) {
 		if (!mp->fCalculated())
@@ -1581,7 +1590,7 @@ NewDrawer* MapCompositionDoc::drAppend(const BaseMap& mp, bool asAnimation)
 
 		ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
 		ILWIS::NewDrawer *drawer;
-		if ( asAnimation) {
+		if ( op == IlwisDocument::otANIMATION) {
 			drawer = NewDrawer::getDrawer("AnimationDrawer", "Ilwis38", &parms);
 		}
 		else {

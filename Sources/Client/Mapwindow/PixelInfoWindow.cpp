@@ -40,6 +40,7 @@
 #include "Client\Headers\formelementspch.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\ilwis.h"
+#include "Engine\Base\DataObjects\ObjectCollection.h"
 #include "Client\Base\datawind.h"
 #include "Headers\constant.h"
 #include "Client\Base\IlwisDocument.h"

@@ -83,7 +83,7 @@ public:
   void UseScale(double rScale);
 	void GetMinMaxInfo(MINMAXINFO FAR* lpMMI);
 	bool fBusyDrawing() { return fRedrawing; }
-	BOOL AddFiles(vector<FileName>& afn);
+	BOOL AddFiles(vector<FileName>& afn, bool asAnimation);
 	void ShowRecord(const Ilwis::Record& rec);
 	void ZoomInOn(Coord crd, double rDist);
 	afx_msg void OnEntireMap();

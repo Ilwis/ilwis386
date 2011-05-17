@@ -65,7 +65,7 @@ protected:
 public:
 	enum OpenType { otNORMAL=0, otEDIT=1, otNOASK=2, 
 	                otCOLORCOMP, otSLIDESHOW,
-	                otMPR, otMPA, otMPS, otMPP, otANIMATION,  otCOLLECTION };
+	                otMPR, otMPA, otMPS, otMPP, otANIMATION,  otCOLLECTION, otUNKNOWN };
 	virtual void Serialize(CArchive& ar);   // overridden for document i/o
 	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
 	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName, OpenType ot);

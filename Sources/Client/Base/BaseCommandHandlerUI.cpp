@@ -127,26 +127,6 @@ void BaseCommandHandlerUI::addModules() {
 		if ( initFunc) {
 			moduleInits.push_back(initFunc);
 		}
-	/*	GetDrawers drawFuncs = (GetDrawers)(module->getMethod(ILWIS::Module::ifDrawers));
-		if ( drawFuncs) {
-			DrawerInfoVector *infos = drawFuncs();
-			for ( int i=0 ; i < infos->size(); ++i) {
-				IlwWinApp()->addDrawer(infos->at(i)->name, infos->at(i)->subtype,infos->at(i)->createFunc);
-				delete infos->at(i);
-			}
-			delete infos;
-			IlwWinApp()->addDrawer("SelectionRectangle","ilwis38", createSelectionRectangle);
-			IlwWinApp()->addDrawer("MouseClickInfoDrawer","ilwis38",createMouseClickInfoDrawer);
-		}*/
-	/*	GetMEditors editorFuncs = (GetMEditors)(module->getMethod(ILWIS::Module::ifMapEditors));
-		if ( editorFuncs) {
-			BMEditors *infos = editorFuncs();
-			for ( int i=0 ; i < infos->size(); ++i) {
-				IlwWinApp()->addMEditor(infos->at(i)->name, infos->at(i)->subtype,infos->at(i)->createFunc);
-				delete infos->at(i);
-			}
-			delete infos;
-		}*/
 		GetDrawerTools toolFunc = (GetDrawerTools)(module->getMethod(ILWIS::Module::ifDrawerTools));
 		if ( toolFunc) {
 			DrawerToolInfoVector *infos = toolFunc();

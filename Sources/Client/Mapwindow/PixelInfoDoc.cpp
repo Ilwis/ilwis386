@@ -40,6 +40,7 @@ Created on: 2007-02-8
 #include "Client\Headers\formelementspch.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\ilwis.h"
+#include "Engine\Base\DataObjects\ObjectCollection.h"
 #include "Client\Base\datawind.h"
 #include "Engine\Drawers\drawer_n.h"
 #include "Client\Mapwindow\PixelInfoWindow.h"
@@ -108,7 +109,7 @@ BOOL PixelInfoDoc::OnNewDocument()
 	return TRUE;
 }
 
-BOOL PixelInfoDoc::OnOpenDocument(LPCTSTR lpszPathName, MapCompositionDoc *doc)
+BOOL PixelInfoDoc::OnOpenDocument(LPCTSTR lpszPathName, MapCompositionDoc *doc, ILWIS::ComplexDrawer *drw)
 {
 	// IlwisDocument does not accept OnNewDocument()
 	if (!OnNewDocument())
@@ -128,7 +129,7 @@ BOOL PixelInfoDoc::OnOpenDocument(LPCTSTR lpszPathName, MapCompositionDoc *doc)
 			}
 			else if (fn.sExt == ".mpl") {
 				MapList mpl(fn);
-				AddMapList(mpl);
+				AddMapList(mpl, drw->getType() == "AnimationDrawer" ? RecItem::atANIMATION : RecItem::atNORMAL,drw);
 			}
 			else if (fn.sExt == ".mpr" ||fn.sExt == ".mpa" ||fn.sExt == ".mpp" ||fn.sExt == ".mps") {
 				BaseMap map(fn);
@@ -270,7 +271,7 @@ void PixelInfoDoc::OnAddMaps()
 		FileName fn = s;
 		if (fn.sExt == ".mpl") {
 			MapList mpl(fn);
-			AddMapList(mpl);
+			AddMapList(mpl, RecItem::atNORMAL, 0);
 		}
 		else {
 			BaseMap mp(s);
@@ -301,15 +302,23 @@ void PixelInfoDoc::OnAddGrf()
 
 void PixelInfoDoc::AddMap(const BaseMap& mp)
 {
-	riCoord.AddMap(mp);
+	if (IOTYPE(mp->fnObj) == IlwisObject::iotRASMAP) {
+		Map rmap(mp->fnObj);
+		riCoord.AddRasterMap(rmap);
+	} else
+		riCoord.AddMap(mp);
 	Update();
 }
 
-void PixelInfoDoc::AddMapList(const MapList& mpl)
+void PixelInfoDoc::AddMapList(const MapList& mpl, RecItem::AddType tp, ILWIS::ComplexDrawer *drw)
 {
 	if (mpl.fValid()) {
-		for (int i = mpl->iLower(); i <= mpl->iUpper(); ++i)
-			riCoord.AddMap(mpl[i]);
+		if ( tp == RecItem::atNORMAL || drw == 0) {
+			for (int i = mpl->iLower(); i <= mpl->iUpper(); ++i)
+				riCoord.AddMap(mpl[i]);
+		} else if ( tp == RecItem::atANIMATION) {
+			riCoord.AddAnimation(mpl, drw);
+		}
 		Update();
 	}
 }

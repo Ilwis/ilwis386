@@ -63,7 +63,7 @@ public:
 	zIcon icon() const;
 	FileName fn(int) const;
 	virtual void Serialize(CArchive& ar);   // overridden for document i/o
-	virtual BOOL OnOpenDocument(LPCTSTR lpszPathNamee, MapCompositionDoc *doc);
+	virtual BOOL OnOpenDocument(LPCTSTR lpszPathNamee, MapCompositionDoc *doc, ILWIS::ComplexDrawer *drw=0);
 	bool fRowEditable(int rowIndex) const;
 	RecItem * getItem(int rowIndex);
 	void setEditFeature(Feature *f);
@@ -86,7 +86,7 @@ public:
 	afx_msg void OnAddCsys();
 	afx_msg void OnAddGrf();
 	void AddMap(const BaseMap&);
-	void AddMapList(const MapList&);
+	void AddMapList(const MapList& mpl, RecItem::AddType tp, ILWIS::ComplexDrawer *drw);
 	void AddCoordSystem(const CoordSystem&);
 	void AddGeoRef(const GeoRef&);
 	void Update();

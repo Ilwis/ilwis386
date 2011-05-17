@@ -53,10 +53,15 @@ class RecItemInt;
 class RecItemCoord;
 class RecItemCoordSystem;
 class RecItemGeoRef;
+class RecItemAnimation;
+class RecItemRasterMap;
+class ObjectCollection;
+
 
 namespace ILWIS {
 	class NewDrawer;
 	class DrawerTool;
+	//class ComplexDrawer;
 }
 
 typedef Array<RecItem*> RecItemArray;
@@ -64,8 +69,9 @@ typedef Array<RecItem*> RecItemArray;
 class _export RecItem
 {
 public:
+  enum AddType{atNORMAL, atANIMATION, atCOLLECTION};
   virtual ~RecItem();
-  virtual String sName() const;
+  virtual String sName() ;
   virtual int Configure(CWnd*);
   virtual int Changed();  // even if overridden, call this one
   virtual const String& sValue(int iWidth = 0);  // text to display
@@ -73,20 +79,22 @@ public:
   virtual void PutVal(const String& s) {};
   virtual long iValue();
   virtual const CoordWithCoordSystem& crdValue();
-  virtual FileName fnObj() const;
+  virtual FileName fnObj() ;
   int AddSelfToArray(RecItemArray&);
   int AddSelfAlwaysToArray(RecItemArray&);
   RecItemMap* AddMap(BaseMap);
+  RecItemRasterMap* AddRasterMap(Map);
   RecItemCoordSystem* AddCoordSystem(const CoordSystem&);
   RecItemTable* AddTable(Table, bool fAllowEdit);
   RecItemTable* AddTable(Table tbl);
   RecItemGeoRef* AddGeoRef(const GeoRef&);
+  RecItemAnimation *AddAnimation(const IlwisObject& obj, ILWIS::ComplexDrawer *drawr=0);
 //  RecItemTable* AddTable(TableView, bool fAllowEdit = false);
   bool fShowRec() { return fShow; }
   void ShowRec(bool fSR) { fShow = fSR; }
   bool fAllowEdit() ;
   void AllowEdit(bool fEdit) ;
-  virtual void setAssociatedDrawerTool(ILWIS::DrawerTool *drw, const String& targetName);
+  virtual void setAssociatedDrawerTool(ILWIS::DrawerTool *drawr, const String& targetName);
   ILWIS::DrawerTool *getAssociatedTool() const { return associatedDrawerTool; }
 protected:
   void updateView(const IlwisObject& obj);
@@ -114,17 +122,39 @@ class _export RecItemMap: public RecItem
 public:
   RecItemMap(RecItem* parent, BaseMap);
   virtual int Configure(CWnd*);
-  virtual String sName() const;
+  virtual String sName() ;
   virtual long iValue();   // pixel value
   virtual const String& sValue(int iWidth = 0); // meaning
-  virtual FileName fnObj() const;
+  virtual FileName fnObj() ;
   virtual void PutVal(const String& s);
-  virtual void setAssociatedDrawerTool(ILWIS::DrawerTool *drw, const String& targetName);
+  virtual void setAssociatedDrawerTool(ILWIS::DrawerTool *drawr, const String& targetName);
 protected:
-  const BaseMap& map() const { return _map; }
-private:
+  virtual const BaseMap& map()  { return _map; }
+protected:
   BaseMap _map;
   long iVal;
+};
+
+class _export RecItemRasterMap: public RecItemMap
+{
+public:
+  RecItemRasterMap(RecItem* parent, Map);
+};
+
+class _export RecItemAnimation: public RecItemMap
+{
+public:
+	RecItemAnimation(RecItem* parent, const MapList& mapl, ILWIS::ComplexDrawer *drawr);
+    RecItemAnimation(RecItem* parent, const ObjectCollection& col, ILWIS::ComplexDrawer *drawr);
+    virtual FileName fnObj() ;
+  //virtual void setAssociatedDrawerTool(ILWIS::DrawerTool *drawr, const String& targetName);
+protected:
+  virtual String sName() ;
+  const BaseMap& map() ;
+private:
+	ILWIS::ComplexDrawer *animationDrawer;
+  MapList mpl;
+  ObjectCollection collection;
 };
 
 class _export RecItemTable: public RecItem
@@ -133,13 +163,13 @@ public:
   RecItemTable(RecItem* parent, Table);
 //  RecItemTable(RecItem* parent, TableView*);
   virtual int Configure(CWnd*);
-  virtual String sName() const;
+  virtual String sName() ;
   virtual long iValue();   // record number
   virtual const String& sValue(int iWidth = 0); // key value
   virtual void SetValue(const char*);
   RecItemColumn* AddColumn(Column, bool fAllowEdit);
   RecItemColumn* AddColumn(Column col);
-  virtual FileName fnObj() const;
+  virtual FileName fnObj() ;
 protected:
   const Table& tbl() const { return _tbl; }
   long iRec;
@@ -152,14 +182,14 @@ class _export RecItemColumn: public RecItem
 public:
   RecItemColumn(RecItem* parent, Column);
   virtual int Configure(CWnd*);
-  virtual String sName() const;
+  virtual String sName() ;
   virtual long iValue();
   virtual const String& sValue(int iWidth = 0);
   virtual void SetValue(const char*);
   virtual const CoordWithCoordSystem& crdValue();
-  virtual FileName fnObj() const;
+  virtual FileName fnObj() ;
   virtual void PutVal(const String& s);
-  void setAssociatedDrawerTool(ILWIS::DrawerTool *drw, const String& targetName);
+  void setAssociatedDrawerTool(ILWIS::DrawerTool *drawr, const String& targetName);
 protected:
   const Column& col() const { return _col; }
   long iRec;
@@ -173,7 +203,7 @@ class _export RecItemInt: public RecItem    // used in TableRecord
 public:
   RecItemInt(long);
   virtual int Configure(CWnd*);
-  virtual String sName() const;
+  virtual String sName() ;
   virtual const String& sValue(int iWidth = 0);
   virtual long iValue();
   virtual void SetValue(const char*);
@@ -188,12 +218,12 @@ class _export RecItemCoord: public RecItem  // used in PixelInfo
 public:
   RecItemCoord(RecItem* parent, const CoordWithCoordSystem&);
   virtual int Configure(CWnd*);
-  virtual String sName() const;
+  virtual String sName() ;
   virtual const String& sValue(int iWidth = 0);
   virtual const CoordWithCoordSystem& crdValue();
   virtual void SetValue(const char*);
   void SetValue(const CoordWithCoordSystem&);
-  void setAssociatedDrawerTool(ILWIS::DrawerTool *drw, const String& targetName);
+  void setAssociatedDrawerTool(ILWIS::DrawerTool *drawr, const String& targetName);
 
 //bool fContinual() { return fContinuous; }
 //void Continual(bool fCont) { fContinuous = fCont; }
@@ -201,21 +231,22 @@ protected:
   String sNam;
 };
 
+
 class _export RecItemCoordSystem: public RecItemCoord
 {
 public:
   RecItemCoordSystem(RecItem* parent, const CoordSystem&);
   virtual const CoordWithCoordSystem& crdValue();
-  virtual FileName fnObj() const;
+  virtual FileName fnObj() ;
 };
 
 class RecItemGeoRef: public RecItem
 {
 public:
   RecItemGeoRef(RecItem* parent, const GeoRef&);
-  virtual String sName() const;
+  virtual String sName() ;
   virtual const String& sValue(int iWidth = 0);
-  virtual FileName fnObj() const;
+  virtual FileName fnObj() ;
   RowCol rcValue();
 private:
   GeoRef grf;

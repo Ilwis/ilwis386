@@ -42,6 +42,8 @@
 */
 
 #include "Client\Headers\formelementspch.h"
+#include "Client\ilwis.h"
+#include "Engine\Base\DataObjects\ObjectCollection.h"
 #include "Client\Mapwindow\RECITEM.H"
 #include "Client\Mapwindow\RECITSEL.H"
 

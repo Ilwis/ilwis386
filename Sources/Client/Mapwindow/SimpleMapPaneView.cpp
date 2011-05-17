@@ -39,9 +39,10 @@ Created on: 2007-02-8
 //////////////////////////////////////////////////////////////////////
 
 #include "Client\Headers\formelementspch.h"
+#include "Client\ilwis.h"
+#include "Engine\Base\DataObjects\ObjectCollection.h"
 #include "Engine\Map\Segment\Seg.h"
 #include "engine\map\polygon\POL.H"
-#include "Client\ilwis.h"
 #include "Client\Base\datawind.h"
 #include "Client\Mapwindow\MapWindow.h"
 #include "Client\Mapwindow\Drawers\ScreenSwapper.h"
@@ -210,7 +211,7 @@ Coord SimpleMapPaneView::crdPnt(zPoint pnt)
 
 zPoint SimpleMapPaneView::pntPos(Coord crd)
 {
-	throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
+	//throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
 	//try {
 	//	double rRow, rCol;
 	//	GetDocument()->georef->Coord2RowCol(crd, rRow, rCol);
@@ -218,7 +219,8 @@ zPoint SimpleMapPaneView::pntPos(Coord crd)
 	//}
 	//catch (...) {
 	//	return zPoint(shUNDEF, shUNDEF);
-	//}  
+	//} 
+	return zPoint();
 }
 
 BOOL SimpleMapPaneView::OnEraseBkgnd(CDC* cdc)
@@ -655,7 +657,7 @@ void SimpleMapPaneView::createPixInfoBar() {
 		pib = new PixelInfoBar();
 		pib->Create(parent);
 		pib->SetWindowText(TR("Pixel Info").scVal());
-		pib->EnableDocking(CBRS_ALIGN_LEFT|CBRS_ALIGN_RIGHT);
+		pib->EnableDocking(CBRS_ALIGN_LEFT|CBRS_ALIGN_RIGHT | CBRS_ALIGN_BOTTOM | CBRS_ALIGN_TOP);
 		GetDocument()->pixInfoDoc->AddView(pib->pixview);
 		parent->RecalcLayout();
 		CRect rct;

@@ -633,22 +633,22 @@ void GeoRefEditor::Calc()
 		int iRes = grc->Compute();
 		if (iRes) {
 			switch (iRes) {
-case -1:
-case -2:
-	edTxt.SetWindowText(SGRRemNotEnoughPoints.scVal());
-	break;
-case -3:
-	edTxt.SetWindowText(SGRRemSingularMatrix.scVal());
-	break;
-case -4:
-	edTxt.SetWindowText("Incorrect Heights");
-	break;
-case -5:
-	edTxt.SetWindowText("No valid DTM");
-	break;
-default:  
-	edTxt.SetWindowText(SGRRemError.scVal());
-	break;
+				case -1:
+				case -2:
+					edTxt.SetWindowText(SGRRemNotEnoughPoints.scVal());
+					break;
+				case -3:
+					edTxt.SetWindowText(SGRRemSingularMatrix.scVal());
+					break;
+				case -4:
+					edTxt.SetWindowText("Incorrect Heights");
+					break;
+				case -5:
+					edTxt.SetWindowText("No valid DTM");
+					break;
+				default:  
+					edTxt.SetWindowText(SGRRemError.scVal());
+					break;
 			}    
 			for (int i = 1; i <= grc->iNr(); ++i) {
 				colDRow->PutVal(i, rUNDEF);

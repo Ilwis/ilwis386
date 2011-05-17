@@ -252,7 +252,7 @@ void MapPaneView::OnEntireMap()
 
 	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(GetDocument());
 	if ( mcd) {
-		mcd->rootDrawer->setCoordBoundsView(mcd->rootDrawer->getCoordinateSystem(), mcd->rootDrawer->getMapCoordBounds(),true);
+		mcd->rootDrawer->setCoordBoundsView(mcd->rootDrawer->getMapCoordBounds(),true);
 		setScrollBars();
 		fStarting = false;
 		mcd->mpvGetView()->Invalidate();
@@ -642,12 +642,12 @@ void MapPaneView::OnGeoRefEdit()
 		if (edit)
 			delete edit;
 		edit = 0;
-		throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
-	/*	if (gc)
+		//throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
+		if (gc)
 			edit = new GeoRefEditor(this,georef);
 		if (edit)	{
 			Invalidate();
-		}*/
+		}
 		UpdateFrame();
 		MapWindow* mw = mwParent();
 		if (0 != mw) 
@@ -838,7 +838,7 @@ void MapPaneView::OnPaste()
 	Catalog::GetFromClipboard(arFiles);
 	if (arFiles.size() == 0) 
 		return;
-	AddFiles(arFiles);
+	AddFiles(arFiles, false);
 }
 
 void MapPaneView::OnUpdatePaste(CCmdUI* pCmdUI)
@@ -927,7 +927,7 @@ DROPEFFECT MapPaneView::OnDragOver(COleDataObject* pDataObject, DWORD dwKeyState
 	//return CView::OnDragOver(pDataObject, dwKeyState, point);
 }
 
-BOOL MapPaneView::AddFiles(vector<FileName>& afn)
+BOOL MapPaneView::AddFiles(vector<FileName>& afn, bool asAnimation)
 {
 	bool fOk = false;
 	MapCompositionDoc* mcd = GetDocument();
@@ -941,7 +941,7 @@ BOOL MapPaneView::AddFiles(vector<FileName>& afn)
 			if (fnSys.fExist())
 				fn = fnSys;
 		}
-		mcd->drAppend(fn);
+		mcd->drAppend(fn, asAnimation ? IlwisDocument::otANIMATION : IlwisDocument::otUNKNOWN);
 		// configure new drawer (option: no show?)
 		if (fOk) {
 			mcd->UpdateAllViews(0,2);
@@ -977,10 +977,12 @@ BOOL MapPaneView::OnDrop(COleDataObject* pDataObject, DROPEFFECT dropEffect, CPo
 		}
 		GlobalUnlock(hDrop);
 	}
+	int pressed = GetKeyState(VK_CONTROL);
+	bool asAnimation = pressed != 0;
 	GlobalFree(hnd);
 	// if send by SendMessage() prevent deadlock
 	BOOL fCalledFromOtherThread = ReplyMessage(0);
-	return AddFiles(afn);
+	return AddFiles(afn, asAnimation);
 	// code below is wrong , mpv may not be transferred to other thread. Handles may not be correct there
 	//if (fCalledFromOtherThread)
 	//	return AddFiles(afn);

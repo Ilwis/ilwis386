@@ -191,14 +191,14 @@ void MapStatusBar::ResizeProgressCtrl()
 
 void MapStatusBar::UpdateProgressCtrl()
 {
-	if ( !dr)
-		return;
+	//if ( !dr)
+	//	return;
 
-	ComplexDrawer* drw = dynamic_cast<ComplexDrawer*>(dr); // dr is volatile
-	if (0 == drw)
-		return;
-	prctl.SetRange32(0, drw->getDrawerCount());
-	prctl.SetPos(drw->getCurrentIndex());
+	//ComplexDrawer* drw = dynamic_cast<ComplexDrawer*>(dr); // dr is volatile
+	//if (0 == drw)
+	//	return;
+	//prctl.SetRange32(0, drw->getDrawerCount());
+	//prctl.SetPos(drw->getCurrentIndex());
 }
 
 void MapStatusBar::SetActiveDrawer(NewDrawer* drw)

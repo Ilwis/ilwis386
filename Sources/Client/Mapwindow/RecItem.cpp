@@ -42,13 +42,14 @@ by Wim Koolhoven
 Last change:  WK   24 Jul 97    1:03 pm
 */
 #include "Client\Headers\formelementspch.h"
+#include "Client\ilwis.h"
 #include "Engine\Drawers\drawer_n.h"
+#include "Engine\Base\DataObjects\ObjectCollection.h"
 #include "Client\Mapwindow\RECITEM.H"
 #include "Engine\Map\Feature.h"
 #include "Engine\Drawers\DrawerContext.h"
 #include "Engine\Drawers\RootDrawer.h"
 #include "Client\Mapwindow\MapPaneView.h"
-#include "Client\ilwis.h"
 #include "Client\Base\IlwisDocument.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\Mapwindow\Drawers\DrawerTool.h"
@@ -81,9 +82,9 @@ RecItem::~RecItem()
 	// members of children will be deleted automatically
 }
 
-void RecItem::setAssociatedDrawerTool(DrawerTool *drw, const String& targetName) {
+void RecItem::setAssociatedDrawerTool(DrawerTool *drawr, const String& targetName) {
 	for (SLIterP<RecItem> iter(&children); iter.fValid(); ++iter) {
-		iter()->setAssociatedDrawerTool(drw, targetName);
+		iter()->setAssociatedDrawerTool(drawr, targetName);
 	}
 
 }
@@ -128,6 +129,25 @@ RecItemMap* RecItem::AddMap(BaseMap map)
 	RecItemMap* ri = new RecItemMap(this,map);
 	children.append(ri);
 	return ri;
+}
+
+RecItemRasterMap* RecItem::AddRasterMap(Map mp)
+{
+	mp->MakeUsable();
+	RecItemRasterMap* ri = new RecItemRasterMap(this,mp);
+	children.append(ri);
+	return ri;
+}
+RecItemAnimation *RecItem::AddAnimation(const IlwisObject& obj,  ILWIS::ComplexDrawer *drawr) {
+	RecItemMap* ri = 0;
+	if ( IOTYPE(obj->fnObj) == IlwisObject::iotMAPLIST) {
+		ri =  new RecItemAnimation(this, MapList(obj->fnObj), drawr);
+	} else if (IOTYPE(obj->fnObj) == IlwisObject::iotOBJECTCOLLECTION) {
+		ri =  new RecItemAnimation(this, ObjectCollection(obj->fnObj), drawr);
+	}
+	if ( ri)
+		children.append(ri);
+	return 0;
 }
 
 RecItemCoordSystem* RecItem::AddCoordSystem(const CoordSystem& csy)
@@ -199,8 +219,8 @@ void RecItem::updateView(const IlwisObject& obj) {
 				if ( mdoc) {
 					ILWIS::PreparationParameters pp(NewDrawer::ptRENDER);
 					if ( associatedDrawerTool) {
-						NewDrawer *drw = associatedDrawerTool->getDrawer();
-						drw->prepare(&pp);
+						NewDrawer *drawr = associatedDrawerTool->getDrawer();
+						drawr->prepare(&pp);
 						mdoc->mpvGetView()->Invalidate();
 					}
 
@@ -211,12 +231,12 @@ void RecItem::updateView(const IlwisObject& obj) {
 	}
 }
 
-String RecItem::sName() const
+String RecItem::sName() 
 {
 	return "";
 }
 
-FileName RecItem::fnObj() const
+FileName RecItem::fnObj() 
 {
 	return FileName();
 }
@@ -269,18 +289,18 @@ RecItemMap::RecItemMap(RecItem* parent, BaseMap map)
 	cwcs = _map->cs();
 }
 
-void RecItemMap::setAssociatedDrawerTool(DrawerTool *drw, const String& targetName) {
+void RecItemMap::setAssociatedDrawerTool(DrawerTool *drawr, const String& targetName) {
 	String reason = targetName;
 	if ( _map->fnObj.sRelative() == reason || reason == ADDED_PARENT_CHILD) {
-		associatedDrawerTool = drw;
+		associatedDrawerTool = drawr;
 		reason = ADDED_PARENT_CHILD;
 	}
 	for (SLIterP<RecItem> iter(&children); iter.fValid(); ++iter) {
-		iter()->setAssociatedDrawerTool(drw, reason);
+		iter()->setAssociatedDrawerTool(drawr, reason);
 	}
 }
 
-String RecItemMap::sName() const
+String RecItemMap::sName() 
 {
 	FileName fn = map()->fnObj;
 	String s = fn.sFile;
@@ -288,7 +308,7 @@ String RecItemMap::sName() const
 	return s;
 }
 
-FileName RecItemMap::fnObj() const
+FileName RecItemMap::fnObj() 
 {
 	return map()->fnObj;
 }
@@ -386,6 +406,63 @@ int RecItemMap::Configure(CWnd* win)
 {
 	return RecItem::Configure(win);
 }
+//--------------------------------------
+RecItemRasterMap::RecItemRasterMap(RecItem* parent, Map mp)
+: RecItemMap(parent, mp)
+{
+	Table tbl = _map->tblAtt();
+	if (tbl.fValid()) {
+		RecItemTable* rit = AddTable(tbl);
+		rit->ShowRec(false);
+	} 
+	AddGeoRef(mp->gr());
+	cwcs = _map->cs();
+}
+
+//-------------------------------------------------------------------------------
+RecItemAnimation::RecItemAnimation(RecItem* parent, const MapList& mapl, ILWIS::ComplexDrawer *drawr)
+: RecItemMap(parent,mapl[0]),mpl(mapl),animationDrawer(drawr)
+{
+	Table tbl = _map->tblAtt();
+	if (tbl.fValid()) {
+		RecItemTable* rit = AddTable(tbl);
+		rit->ShowRec(false);
+	} 
+	cwcs = _map->cs();
+}
+
+RecItemAnimation::RecItemAnimation(RecItem* parent, const ObjectCollection& col,  ILWIS::ComplexDrawer *drawr)
+: RecItemMap(parent, BaseMap(col->fnObject(0))),animationDrawer(drawr), collection(col)
+{
+	Table tbl = _map->tblAtt();
+	if (tbl.fValid()) {
+		RecItemTable* rit = AddTable(tbl);
+		rit->ShowRec(false);
+	} 
+	cwcs = _map->cs();
+}
+
+const BaseMap& RecItemAnimation::map() {
+	if ( mpl.fValid())
+		_map = mpl[animationDrawer->getCurrentIndex()];
+	else if ( collection.fValid()) {
+		_map = BaseMap(collection->fnObject(animationDrawer->getCurrentIndex()));
+	}
+	return _map;
+}
+
+FileName RecItemAnimation::fnObj() 
+{
+	return map()->fnObj;
+}
+
+String RecItemAnimation::sName() 
+{
+	FileName fn = map()->fnObj;
+	String s = fn.sFile;
+	s &= ".Animation";
+	return s;
+}
 
 //--------------------------------------------------------------------------------------
 RecItemTable::RecItemTable(RecItem* parent, Table tbl)
@@ -406,7 +483,7 @@ int RecItemTable::Configure(CWnd* win)
 	return RecItem::Configure(win);
 }
 
-String RecItemTable::sName() const
+String RecItemTable::sName() 
 {
 	FileName fn = tbl()->fnObj;
 	String s = fn.sFile;
@@ -414,7 +491,7 @@ String RecItemTable::sName() const
 	return s;
 }
 
-FileName RecItemTable::fnObj() const
+FileName RecItemTable::fnObj() 
 {
 	return tbl()->fnObj;
 }
@@ -480,25 +557,25 @@ int RecItemColumn::Configure(CWnd* win)
 	return RecItem::Configure(win);
 }
 
-String RecItemColumn::sName() const
+String RecItemColumn::sName() 
 {
 	String s = col()->sName();
 	s &= ".clm";
 	return s;
 }
 
-void RecItemColumn::setAssociatedDrawerTool(ILWIS::DrawerTool *drw, const String& targetName) {
+void RecItemColumn::setAssociatedDrawerTool(ILWIS::DrawerTool *drawr, const String& targetName) {
 	String reason = targetName;
 	if ( reason == ADDED_PARENT_CHILD) {
-		associatedDrawerTool = drw;
+		associatedDrawerTool = drawr;
 		reason = ADDED_PARENT_CHILD;
 	}
 	for (SLIterP<RecItem> iter(&children); iter.fValid(); ++iter) {
-		iter()->setAssociatedDrawerTool(drw, reason);
+		iter()->setAssociatedDrawerTool(drawr, reason);
 	}
 }
 
-FileName RecItemColumn::fnObj() const {
+FileName RecItemColumn::fnObj()  {
 	FileName fn(col()->fnTbl);
 	fn.sCol = col()->sName();
 	return fn;
@@ -581,7 +658,7 @@ int RecItemInt::Configure(CWnd* win)
 	return RecItem::Configure(win);
 }
 
-String RecItemInt::sName() const
+String RecItemInt::sName() 
 {
 	return sNam;
 }
@@ -645,7 +722,7 @@ int RecItemCoord::Configure(CWnd* win)
 	*/
 }
 
-String RecItemCoord::sName() const
+String RecItemCoord::sName() 
 {
 	return sNam;
 }
@@ -686,8 +763,8 @@ void RecItemCoord::SetValue(const CoordWithCoordSystem& c)
 	RecItem::Changed();
 }
 
-void RecItemCoord::setAssociatedDrawerTool(DrawerTool *drw, const String& targetName) {
-	RecItem::setAssociatedDrawerTool(drw, targetName);
+void RecItemCoord::setAssociatedDrawerTool(DrawerTool *drawr, const String& targetName) {
+	RecItem::setAssociatedDrawerTool(drawr, targetName);
 }
 
 RecItemCoordSystem::RecItemCoordSystem(RecItem* parent, const CoordSystem& cs)
@@ -703,7 +780,7 @@ const CoordWithCoordSystem& RecItemCoordSystem::crdValue()
 	return cwcs;
 }
 
-FileName RecItemCoordSystem::fnObj() const
+FileName RecItemCoordSystem::fnObj() 
 {
 	return cwcs->fnObj;
 }
@@ -715,7 +792,7 @@ RecItemGeoRef::RecItemGeoRef(RecItem* parent, const GeoRef& georef)
 	cwcs = grf->cs();
 }
 
-String RecItemGeoRef::sName() const
+String RecItemGeoRef::sName() 
 {
 	FileName fn = grf->fnObj;
 	String s = fn.sFile;
@@ -723,7 +800,7 @@ String RecItemGeoRef::sName() const
 	return s;
 }
 
-FileName RecItemGeoRef::fnObj() const
+FileName RecItemGeoRef::fnObj() 
 {
 	return grf->fnObj;
 }

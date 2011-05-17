@@ -39,6 +39,7 @@ Created on: 2007-02-8
 #include "Client\Headers\formelementspch.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\ilwis.h"
+#include "Engine\Base\DataObjects\ObjectCollection.h"
 #include "Client\Base\datawind.h"
 #include "Headers\constant.h"
 #include "Client\Base\IlwisDocument.h"
@@ -279,7 +280,7 @@ BOOL PixelInfoView::OnDrop(COleDataObject* pDataObject, DROPEFFECT dropEffect, C
 			}
 			else if (fn.sExt == ".mpl") {
 				MapList mpl(fn);
-				pid->AddMapList(mpl);
+				pid->AddMapList(mpl, RecItem::atNORMAL,0);
 				fOk = true;
 			}
 			else {

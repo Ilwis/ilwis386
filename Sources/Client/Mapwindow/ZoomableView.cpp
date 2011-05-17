@@ -176,30 +176,30 @@ BOOL ZoomableView::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT*
 		case WM_MOUSEMOVE:
 			if (tools.size() > 0) 
 				tools.OnMouseMove(wParam, point);
-			else if (wParam & MK_CONTROL) movePoint(point, message);
+			if (wParam & MK_CONTROL) movePoint(point, message);
 			break;
 		case WM_LBUTTONDBLCLK:
 			if (tools.size() > 0) tools.OnLButtonDblClk(wParam, point);
-			return FALSE;
+			break;
 		case WM_LBUTTONDOWN:
 			if (tools.size() > 0) tools.OnLButtonDown(wParam, point);
-			else if (wParam & MK_CONTROL) moveEyePoint(point,message);
+			if (wParam & MK_CONTROL) moveEyePoint(point,message);
 			break;
 		case WM_LBUTTONUP:
 			if (tools.size() > 0) tools.OnLButtonUp(wParam, point);
-			else if (wParam & MK_CONTROL) moveEyePoint(point,message);
+			if (wParam & MK_CONTROL) moveEyePoint(point,message);
 			break;
 		case WM_RBUTTONDBLCLK:
 			if (tools.size() > 0) tools.OnRButtonDblClk(wParam, point);
-			return FALSE;
+			break;
 		case WM_RBUTTONDOWN:
 			if (tools.size() > 0) 
 				tools.OnRButtonDown(wParam, point);
-			else if (wParam & MK_CONTROL) moveViewPoint(point, message);
+			if (wParam & MK_CONTROL) moveViewPoint(point, message);
 			break;
 		case WM_RBUTTONUP:
 			if (tools.size() > 0) tools.OnRButtonUp(wParam, point);
-			return FALSE;
+			break;
 	}
 	return CView::OnWndMsg(message, wParam, lParam, pResult);
 }

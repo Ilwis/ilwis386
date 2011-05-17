@@ -96,11 +96,11 @@ public:
 	bool fCoordSystemOk(const BaseMap& bmap);
 	bool fGeoRefOk(const Map& map) { return true; } // might change
 	bool fAppendable(const FileName&);
-	NewDrawer* drAppend(const FileName&, bool asAnimation=false);
-	NewDrawer* drAppend(const Map&, bool asAnimation=false);
-	NewDrawer* drAppend(const MapList&, bool asAnimation=false);
-	NewDrawer* drAppend(const BaseMap&, bool asAnimation=false);
-	NewDrawer* drAppend(const ObjectCollection& oc, bool asAnimation=false);
+	NewDrawer* drAppend(const FileName&, IlwisDocument::OpenType op=IlwisDocument::otUNKNOWN);
+	NewDrawer* drAppend(const Map&);
+	NewDrawer* drAppend(const MapList&, IlwisDocument::OpenType op=IlwisDocument::otUNKNOWN);
+	NewDrawer* drAppend(const BaseMap&, IlwisDocument::OpenType op=IlwisDocument::otUNKNOWN);
+	NewDrawer* drAppend(const ObjectCollection& oc, IlwisDocument::OpenType op=IlwisDocument::otUNKNOWN);
 	void RemoveDrawer(ILWIS::NewDrawer* dr);
 	void SetCoordSystem(const CoordSystem&);
 	double rPrefScale() const { return rDfltScale; }
@@ -116,7 +116,7 @@ public:
 	FileName getViewName() const;
 	NewDrawer *getSelectedDrawer() const { return selectedDrawer; }
 	void setSelectedDrawer(NewDrawer *drw) { selectedDrawer = drw; }
-	void addToPixelInfo(const BaseMap& bm);
+	void addToPixelInfo(const IlwisObject& bm, ComplexDrawer *drw);
 	PixelInfoDoc *pixInfoDoc;
 
 protected:
