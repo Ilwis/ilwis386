@@ -42,7 +42,8 @@ void LayerDrawer::prepare(PreparationParameters *parm){
 	//drawColor = 0;
 	ComplexDrawer::prepare(parm);
 	if ( parm->type & NewDrawer::ptGEOMETRY ||  parm->type & NewDrawer::ptRESTORE) {
-		csy = parm->csy;
+		if ( parm->csy.fValid() && parm->csy->fUnknown() == false)
+			csy = parm->csy;
 		SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)parentDrawer;
 		Representation rpr = mapDrawer->getRepresentation();
 		//if ( rpr.fValid() && !rpr->prv())

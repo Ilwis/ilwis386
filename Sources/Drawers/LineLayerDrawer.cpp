@@ -79,7 +79,7 @@ GeneralDrawerProperties *LineLayerDrawer::getProperties() {
 
 void LineLayerDrawer::prepare(PreparationParameters *parm){
 	FeatureLayerDrawer::prepare(parm);
-	if ( parm->type == NewDrawer::ptRENDER) {
+	if ( (parm->type & NewDrawer::ptRENDER) != 0) {
 		for(int i=0; i < drawers.size(); ++i) {
 			LineDrawer *ld = (LineDrawer *)drawers.at(i);
 			LineProperties *props = (LineProperties *)ld->getProperties();
@@ -88,6 +88,8 @@ void LineLayerDrawer::prepare(PreparationParameters *parm){
 			if (!lproperties.ignoreColor)
 				props->drawColor = lproperties.drawColor;
 		}
+	} else if ( (parm->type & NewDrawer::pt3D) != 0) {
+		prepareChildDrawers(parm);
 	}
 }
 

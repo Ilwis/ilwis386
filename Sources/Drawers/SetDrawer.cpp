@@ -128,6 +128,7 @@ void SetDrawer::prepare(PreparationParameters *pp){
 							else
 								rasterset->SetPalette(palette);
 						} 
+						//addLayerDrawer(i,bmp,pp,drw,String("layer %d",i));
 						drw->setUICode(0);
 						trq.fUpdate(i,oc->iNrObjects()); 
 					}
@@ -140,6 +141,7 @@ void SetDrawer::prepare(PreparationParameters *pp){
 				if (!sdr)
 					continue;
 				pp->index = i;
+				pp->csy = sdr->getCoordSystem();
 				sdr->prepare(pp);
 			}
 		}
@@ -222,33 +224,23 @@ void SetDrawer::addLayerDrawer(int index, const BaseMap& basem,PreparationParame
 	rsd->setRepresentation(basem->dm()->rpr()); //  default choice
 	rsd->getZMaker()->setSpatialSource(basem, getRootDrawer()->getMapCoordBounds());
 	rsd->getZMaker()->setDataSourceMap(basem);
-	RangeReal tempRange = rsd->getZMaker()->getRange(); //basem->dvrs().rrMinMax();
-	if ( tempRange.fValid()) {
-		RangeReal rr = getZMaker()->getRange();
-		rr += tempRange.rLo();
-		rr += tempRange.rHi();
-		getZMaker()->setRange(rr);
-	}
 	rsd->addDataSource(basem.ptr());
 	rsd->prepare(&fp);
 	if (!post) {
 		addDrawer(rsd);
-	//	BaseMap bmp = getBaseMap(index);
-	//	if ( bmp.fValid()) {
-	//		CoordBounds cbMap = cb();
-	//		CoordBounds ncb = cs.fEqual(_cs) ? cbMap : cs->cbConv(_cs,cbMap);
-	//		ncb += cbView;
-	//	}
-	//}
+		if ( basem.fValid()) {
+			CoordBounds cbMap = basem->cb();
+			CoordSystem cs = basem->cs();
+			CoordBounds ncb = cbMap;
+			if (!cs.fEqual(getRootDrawer()->getCoordinateSystem())) 
+				ncb = getRootDrawer()->getCoordinateSystem()->cbConv(cs,cbMap);
+			cbBounds += ncb;
+		}
 	}
 }
 
 void SetDrawer::addDataSource(void *data, int options){
 	SpatialDataDrawer::addDataSource(data, options);
-	//IlwisObject *obj = dynamic_cast<IlwisObject *>((IlwisObject *)data);
-	//if ( obj) {
-	//	datasource = new IlwisObject(*obj);
-	//}
 	IlwisObject::iotIlwisObjectType type = IOTYPE(obj->fnObj);
 	if ( type == IlwisObject::iotOBJECTCOLLECTION) {
 		sourceType = sotFEATURE;

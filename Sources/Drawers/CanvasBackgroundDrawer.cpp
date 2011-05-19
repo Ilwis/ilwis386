@@ -32,6 +32,9 @@ void  CanvasBackgroundDrawer::prepare(PreparationParameters *pp){
 
 bool CanvasBackgroundDrawer::draw( const CoordBounds& cb) const{
 
+	if (!isActive())
+		return false;
+
 	glClearColor(1.0,1.0,1.0,0.0);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);

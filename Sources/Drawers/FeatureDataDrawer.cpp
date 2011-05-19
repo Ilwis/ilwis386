@@ -63,7 +63,14 @@ void FeatureDataDrawer::prepare(PreparationParameters *pp){
 	} else {
 		if ( pp->type & NewDrawer::ptRENDER | pp->type & NewDrawer::ptRESTORE) {
 			for(int i = 0; i < drawers.size(); ++i) {
-				FeatureDataDrawer *fsd = (FeatureDataDrawer *)drawers.at(i);
+				FeatureLayerDrawer *fsd = (FeatureLayerDrawer *)drawers.at(i);
+				PreparationParameters fp((int)pp->type, 0);
+				fp.csy = basemap->cs();
+				fsd->prepare(&fp);
+			}
+		} else if ( pp->type & NewDrawer::pt3D) {
+			for(int i = 0; i < drawers.size(); ++i) {
+				FeatureLayerDrawer *fsd = (FeatureLayerDrawer *)drawers.at(i);
 				PreparationParameters fp((int)pp->type, 0);
 				fp.csy = basemap->cs();
 				fsd->prepare(&fp);

@@ -60,7 +60,7 @@ void RasterLayerDrawer::prepare(PreparationParameters *pp){
 				int raw = pp->filteredRaws[j];
 				Color clr = rprC->clrRaw(abs(raw));
 				clr.m_transparency = raw > 0 ? 0 : 255;
-				rprC->PutColor(raw,clr);
+				rprC->PutColor(abs(raw),clr);
 			}
 		}
 		if (fPaletteOwner) {
