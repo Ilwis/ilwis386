@@ -4,23 +4,24 @@
 #include "Engine\Table\col.h"
 #include "Engine\Drawers\ZValueMaker.h"
 #include "Engine\Map\Feature.h"
+#include "Drawer_n.h"
+#include "Engine\Drawers\ComplexDrawer.h"
 
 using namespace ILWIS;
 
 #define DEFAULT_SCALE 1.0
 
-ZValueMaker::ZValueMaker()  : scalingType(zvsNONE), self(true),threeDPossible(false),offset(0), zscale(DEFAULT_SCALE), zOrder(0), fakeZ(0), isSameCsy(true){
+ZValueMaker::ZValueMaker(NewDrawer *drw)  : scalingType(zvsNONE), self(true),threeDPossible(false),offset(0), zscale(DEFAULT_SCALE), zOrder(0), fakeZ(0), isSameCsy(true), associatedDrawer(drw){
+	isSetDrawer = false;
+	NewDrawer *parentDrw = associatedDrawer->getParentDrawer();
+	if (parentDrw && !associatedDrawer->isSimple() && ((ComplexDrawer *)parentDrw)->isSet())
+		isSetDrawer = true;
 }
 void ZValueMaker::setDataSourceMap(const BaseMap& mp){
 	threeDPossible =  mp->dm()->dmt() == dmtVALUE || mp->dm()->dmt() == dmtIMAGE;
 	datasourcemap = mp;
+	addRange(mp);
 	table = Table();
-	RangeReal tempRange = mp->rrMinMax();
-		range = tempRange;
-	if ( !range.fValid() && cbLimits.fValid()) {
-		range = RangeReal(0,min(cbLimits.width(), cbLimits.height()));
-	}
-
 	type = IlwisObject::iotObjectType(datasourcemap->fnObj);
 	self =  spatialsourcemap == datasourcemap;
 	offset = 0;
@@ -28,12 +29,23 @@ void ZValueMaker::setDataSourceMap(const BaseMap& mp){
 	zscale = DEFAULT_SCALE;
 }
 
+void ZValueMaker::addRange(const BaseMap& mp) {
+	RangeReal tempRange = mp->rrMinMax(BaseMapPtr::mmmCALCULATE);
+	if ( !tempRange.fValid() && cbLimits.fValid()) {
+		range = RangeReal(0,min(cbLimits.width(), cbLimits.height()));
+	} else {
+		range += tempRange;
+	}
+	if ( isSetDrawer ) {
+		NewDrawer *parentDrw = associatedDrawer->getParentDrawer();
+		if ( parentDrw)
+			((ComplexDrawer *)parentDrw)->getZMaker()->addRange(mp);
+	}
+}
+
 void ZValueMaker::setSpatialSource(const BaseMap& mp, const CoordBounds& cb) {
 	spatialsourcemap = mp;
 	cbLimits = cb;
-	if ( !range.fValid() && cb.fValid()) {
-		range = RangeReal(0,min(cb.width(), cb.height()));
-	}
 }
 
 void ZValueMaker::setTable(const Table& tbl, const String& colName) {
@@ -98,6 +110,9 @@ void ZValueMaker::setScaleType(ZValueTypeScaling t){
 }
 
 RangeReal ZValueMaker::getRange() const {
+	if ( isSetDrawer) {
+		return ((ComplexDrawer *)associatedDrawer->getParentDrawer())->getZMaker()->getRange();
+	}
 	return range;
 }
 
@@ -135,13 +150,13 @@ double ZValueMaker::getValue(const Coord& crd, Feature *f ){
 double ZValueMaker::scaleValue(double value) {
 	if ( value == rUNDEF)
 		return 0;
-	double scale = (value - range.rLo()) / range.rWidth();
-	// double zMaxSizeEstimate = (spatialsourcemap->cb().width() + spatialsourcemap->cb().height())/ 2.0;
+	RangeReal scaleRange = getRange();
+	double scale = (value - scaleRange.rLo()) / scaleRange.rWidth();
 	double zMaxSizeEstimate = (cbLimits.width() + cbLimits.height())/ 2.0;
-	double endvalue = scale * zMaxSizeEstimate * 0.25;
-	if ( endvalue <= 0) {
-		endvalue = zMaxSizeEstimate * 0.01;
-	}
+	double endvalue = scale * zMaxSizeEstimate * 0.15;
+	//if ( endvalue <= 0) {
+	//	endvalue = zMaxSizeEstimate * 0.01;
+	//}
 	return endvalue;
 }
 
@@ -164,10 +179,10 @@ void ZValueMaker::setOffset(double v, bool useTrueCoords){
 	if (useTrueCoords) {
 		offset = v;
 	} else {
-		if ( range.rLo() == rUNDEF) {
+		if ( getRange().rLo() == rUNDEF) {
 			v = 0;
 		}
-		double scale = (v - range.rLo()) / range.rWidth();
+		double scale = (v - getRange().rLo()) / getRange().rWidth();
 		double zMaxSizeEstimate = (cbLimits.width() + cbLimits.height())/ 2.0;
 		offset = scale * zMaxSizeEstimate * 0.25;
 	}

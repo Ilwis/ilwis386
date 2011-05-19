@@ -78,6 +78,7 @@ class _export ComplexDrawer : public NewDrawer {
 		void drawLegendItem(CDC *dc, const CRect& rct, double rVal) const {}
 		virtual MapPaneViewTool *createTool(ZoomableView*) { return 0;}
 		virtual GeneralDrawerProperties *getProperties() { return 0;}
+		virtual bool isSet() const { return false; }
 	
 	protected:
 		vector<NewDrawer *> drawers;

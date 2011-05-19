@@ -33,7 +33,6 @@ class _export SpatialDataDrawer : public ComplexDrawer {
 		bool useInternalDomain() const;
 		virtual String description() const;
 		virtual String iconName(const String& subtype="?") const;
-		virtual bool isSet() const { return false; }
 		virtual CoordBounds cb();
 
 	protected:

@@ -14,10 +14,12 @@ RootDrawer::RootDrawer(MapCompositionDoc *doc) {
 	drawercontext = new ILWIS::DrawerContext();
 	ILWIS::DrawerParameters dp(this, this);
 	ILWIS::PreparationParameters pp(RootDrawer::ptALL,0);
-	addPreDrawer(1,NewDrawer::getDrawer("CanvasBackgroundDrawer", &pp, &dp));
+	backgroundDrawer = NewDrawer::getDrawer("CanvasBackgroundDrawer", &pp, &dp);
+
 	addPostDrawer(900,NewDrawer::getDrawer("MouseClickInfoDrawer", &pp, &dp));
 	addPostDrawer(800,NewDrawer::getDrawer("GridDrawer", &pp, &dp));
 	addPostDrawer(700,NewDrawer::getDrawer("GraticuleDrawer", &pp, &dp));
+
 	setTransparency(1.0);
 	setName("RootDrawer");
 	threeD = false;
@@ -31,6 +33,7 @@ RootDrawer::RootDrawer(MapCompositionDoc *doc) {
 
 RootDrawer::~RootDrawer() {
 	delete drawercontext;
+	delete backgroundDrawer;
 }
 
 void  RootDrawer::prepare(PreparationParameters *pp){
@@ -51,6 +54,8 @@ void  RootDrawer::prepare(PreparationParameters *pp){
 		}
 	}
 	if ( !(pp->type & RootDrawer::ptINITOPENGL)) {
+		backgroundDrawer->prepare(pp);
+
 		for(map<String,NewDrawer *>::iterator cur = preDrawers.begin(); cur != preDrawers.end(); ++cur) {
 			(*cur).second->prepare(pp);
 		}
@@ -74,7 +79,7 @@ String RootDrawer::addDrawer(NewDrawer *drw) {
 		//cb += ncb;
 		CoordBounds cb = cbView;
 		cb += ncb;
-		setCoordBoundsView(ncb);
+		setCoordBoundsView(cb,true);
 
 	}
 	return ComplexDrawer::addDrawer(drw);
@@ -82,8 +87,9 @@ String RootDrawer::addDrawer(NewDrawer *drw) {
 
 void RootDrawer::addCoordBounds(const CoordSystem& _cs, const CoordBounds& cb, bool overrule){
 	CoordBounds ncb = cs.fEqual(_cs) ? cb : cs->cbConv(_cs,cb);
-	ncb += cbMap;
-	setCoordBoundsView(ncb, overrule);
+	//ncb += cbMap;
+	cbMap += ncb;
+	setCoordBoundsView(cbMap, overrule);
 }
 
 /*
@@ -120,8 +126,13 @@ bool RootDrawer::draw( const CoordBounds& cb) const{
 			glRotatef(rotX,0,0,-1);				// Rotate on x
 			glTranslatef(-viewPoint.x,-viewPoint.y, 0);
 		}
-
+		// due to the way how transparency works in opengl the backgroundrawer has to be drawn at different moments depending on the view93d or not) 
+		if (! is3D())
+			backgroundDrawer->draw(cb);
 		ComplexDrawer::draw( cb);
+		if (is3D())
+			backgroundDrawer->draw(cb);
+
 		//if ( is3D())
 		//	glPopMatrix();
 	}
@@ -243,7 +254,7 @@ void RootDrawer::setCoordinateSystem(const CoordSystem& _cs, bool overrule){
 void RootDrawer::setCoordBoundsView(/*const CoordSystem& _cs,*/ const CoordBounds& cb, bool overrule){
 	//CoordBounds cb = cs.fEqual(_cs) ? _cb : cs->cbConv(_cs,_cb);
 	if ( overrule || cbView.fUndef()) {
-		cbMap = cb;
+		//cbMap = cb;
 		aspectRatio = cbMap.width()/ cbMap.height();
 		double w = cb.width();
 		double h = cb.height();

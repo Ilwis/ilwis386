@@ -1,10 +1,13 @@
 #pragma once
 
+
 namespace ILWIS {
+	class NewDrawer;
+
 class _export ZValueMaker {
 public:
 	enum ZValueTypeScaling{zvsNONE, zvsLINEAR, zvsLOGARITHMIC};
-	ZValueMaker();
+	ZValueMaker(NewDrawer *drw);
 	void setSpatialSource(const BaseMap& mp, const CoordBounds& cb);
 	void setDataSourceMap(const BaseMap& mp);
 	void setTable(const Table& tbl, const String& colName);
@@ -27,6 +30,7 @@ public:
 	double getZ0(bool is3D) const;
 	void setBounds(const CoordBounds& bnd);
 	BaseMapPtr * getSourceRasterMap() const;
+	void addRange(const BaseMap& mp);
 
 private:
 	BaseMap spatialsourcemap;
@@ -44,6 +48,8 @@ private:
 	CoordBounds cbLimits;
 	int zOrder; // because OpenGL limitations, each set drawer must be drawn for height=0 at a different level.
 	double fakeZ; // the faze z value for objects at heigh 0 for the user of this z-maker
+	NewDrawer *associatedDrawer;
+	bool isSetDrawer;
 
 };
 }

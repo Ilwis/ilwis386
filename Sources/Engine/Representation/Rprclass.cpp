@@ -250,7 +250,7 @@ Ilwis::Record RepresentationClass::rec(long iRaw) const
 
 void RepresentationClass::PutColor(long iRaw, Color clr)
 {
-  colColor->PutRaw(iRaw, clr);
+  colColor->PutRaw(iRaw, clr.iVal());
   Updated();
 }
 

@@ -7,16 +7,16 @@
 
 using namespace ILWIS;
 
-ComplexDrawer::ComplexDrawer() {
+ComplexDrawer::ComplexDrawer() : parentDrawer(0) {
 	init();
 }
 
-ComplexDrawer::ComplexDrawer(DrawerParameters *parms, const String& ty) : type(ty), rootDrawer(parms ? parms->rootDrawer : 0){
-	init();
+ComplexDrawer::ComplexDrawer(DrawerParameters *parms, const String& ty) : type(ty),parentDrawer(0){
 	if ( parms) {
 		parentDrawer = parms->parent;
 		rootDrawer = parms->rootDrawer;
 	}
+	init();
 }
 
 void ComplexDrawer::init() {
@@ -33,9 +33,8 @@ void ComplexDrawer::init() {
 	info = false;
 	threeD=false;
 	transparency = 1.0;
-	parentDrawer = 0;
 	uiCode = NewDrawer::ucALL;
-	zmaker = new ILWIS::ZValueMaker();
+	zmaker = new ILWIS::ZValueMaker(this);
 	specialOptions = sdoNone;
 	dirty = true;
 	currentIndex = 0;

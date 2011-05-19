@@ -41,6 +41,7 @@ namespace ILWIS {
 		int getZIndex() const;
 		void setZIndex(int);
 		void setupDraw() const;
+		NewDrawer *getBackgroundDrawer() const { return backgroundDrawer; }
 
 		//void clear();
 		void set3D(bool yeno);
@@ -80,5 +81,6 @@ namespace ILWIS {
 		double zoom3D;
 		SelectionRectangle *selectionDrawer;
 		ILWIS::DrawerContext *drawercontext;
+		NewDrawer *backgroundDrawer; 
 	};
 }
