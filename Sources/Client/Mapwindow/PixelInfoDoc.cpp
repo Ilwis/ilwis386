@@ -134,6 +134,9 @@ BOOL PixelInfoDoc::OnOpenDocument(LPCTSTR lpszPathName, MapCompositionDoc *doc, 
 			else if (fn.sExt == ".mpr" ||fn.sExt == ".mpa" ||fn.sExt == ".mpp" ||fn.sExt == ".mps") {
 				BaseMap map(fn);
 				AddMap(map);
+			} else if ( fn.sExt == ".ioc") {
+				ObjectCollection oc(fn);
+				AddCollection(oc);
 			}
 		}
 		catch (const ErrorObject& err) {
@@ -321,6 +324,11 @@ void PixelInfoDoc::AddMapList(const MapList& mpl, RecItem::AddType tp, ILWIS::Co
 		}
 		Update();
 	}
+}
+void PixelInfoDoc::AddCollection(const ObjectCollection& col)
+{
+	riCoord.AddCollection(col);
+	Update();
 }
 
 void PixelInfoDoc::AddCoordSystem(const CoordSystem& cs)

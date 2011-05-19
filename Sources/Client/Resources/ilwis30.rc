@@ -275,7 +275,8 @@ ONEFRAMEMINUS           ICON                    "oneframeminus.ico"
 ESA                     ICON                    "esa.ico"
 GNC                     ICON                    "GNC.ico"
 SETCOLL                 ICON                    "setcol.ico"
-Stack                   ICON                    "stack.ico"
+STACK                   ICON                    "stack.ico"
+SET16                   ICON                    "set16.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //

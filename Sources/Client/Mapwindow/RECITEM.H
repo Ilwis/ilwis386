@@ -55,6 +55,7 @@ class RecItemCoordSystem;
 class RecItemGeoRef;
 class RecItemAnimation;
 class RecItemRasterMap;
+class RecItemCollection;
 class ObjectCollection;
 
 
@@ -89,6 +90,7 @@ public:
   RecItemTable* AddTable(Table tbl);
   RecItemGeoRef* AddGeoRef(const GeoRef&);
   RecItemAnimation *AddAnimation(const IlwisObject& obj, ILWIS::ComplexDrawer *drawr=0);
+  RecItemCollection *AddCollection(const ObjectCollection& obj, ILWIS::ComplexDrawer *drawr=0);
 //  RecItemTable* AddTable(TableView, bool fAllowEdit = false);
   bool fShowRec() { return fShow; }
   void ShowRec(bool fSR) { fShow = fSR; }
@@ -155,6 +157,18 @@ private:
 	ILWIS::ComplexDrawer *animationDrawer;
   MapList mpl;
   ObjectCollection collection;
+};
+
+class _export RecItemCollection: public RecItem
+{
+public:
+    RecItemCollection(RecItem* parent, const ObjectCollection& col, ILWIS::ComplexDrawer *drawr);
+    virtual FileName fnObj() ;
+  //virtual void setAssociatedDrawerTool(ILWIS::DrawerTool *drawr, const String& targetName);
+protected:
+  virtual String sName() ;
+private:
+    ObjectCollection collection;
 };
 
 class _export RecItemTable: public RecItem

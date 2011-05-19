@@ -150,6 +150,12 @@ RecItemAnimation *RecItem::AddAnimation(const IlwisObject& obj,  ILWIS::ComplexD
 	return 0;
 }
 
+RecItemCollection *RecItem::AddCollection(const ObjectCollection& obj, ILWIS::ComplexDrawer *drawr) {
+	RecItemCollection *rcol = new RecItemCollection(this,obj, drawr);
+	children.append(rcol);
+	return rcol;
+}
+
 RecItemCoordSystem* RecItem::AddCoordSystem(const CoordSystem& csy)
 {
 	RecItemCoordSystem* ri = new RecItemCoordSystem(this,csy);
@@ -461,6 +467,34 @@ String RecItemAnimation::sName()
 	FileName fn = map()->fnObj;
 	String s = fn.sFile;
 	s &= ".Animation";
+	return s;
+}
+//-------------------------------------------------------------------------------------
+RecItemCollection::RecItemCollection(RecItem* parent, const ObjectCollection& col,  ILWIS::ComplexDrawer *drawr)
+: RecItem(parent),collection(col)
+{
+	for(int i=0; i < col->iNrObjects(); ++i) {
+		FileName fn = col->fnObject(i);
+		if ( IOTYPEBASEMAP(fn)) {
+			if (IOTYPEFEATUREMAP(fn))
+				AddMap(BaseMap(fn));
+			else
+				AddRasterMap(Map(fn));
+		}
+	}
+	Changed();
+}
+
+FileName RecItemCollection::fnObj() 
+{
+	return collection->fnObj;
+}
+
+String RecItemCollection::sName() 
+{
+	FileName fn = collection->fnObj;
+	String s = fn.sFile;
+	s &= ".Set16";
 	return s;
 }
 

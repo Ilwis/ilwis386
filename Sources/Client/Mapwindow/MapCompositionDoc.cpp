@@ -975,6 +975,7 @@ BOOL MapCompositionDoc::OnOpenObjectCollection(const ObjectCollection& list, Ope
 	if ( drawer == 0)
 		throw ErrorObject(TR("No compatible drawer found"));
 	drawer->addDataSource((void *)&list);
+	rootDrawer->addDrawer(drawer);
 	rootDrawer->setCoordinateSystem(bmp->cs());
 	rootDrawer->addCoordBounds(bmp->cs(), list->cb(), false);
 	drawer->getZMaker()->setSpatialSource(bmp, rootDrawer->getMapCoordBounds());
@@ -982,9 +983,7 @@ BOOL MapCompositionDoc::OnOpenObjectCollection(const ObjectCollection& list, Ope
 	addToPixelInfo(list, drawer);
 	ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,bmp->cs());
 	drawer->prepare(&pp);
-	rootDrawer->addDrawer(drawer);
 
-	
 	return TRUE;
 }
 

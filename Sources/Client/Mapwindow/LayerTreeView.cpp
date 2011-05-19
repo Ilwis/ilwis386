@@ -337,7 +337,7 @@ void LayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 	HTREEITEM item = 0;
 	int lastTool = drwTool->getToolCount();
 	//for(int index = 0; index < allDrawers.size(); ++index) 
-	for(int index = allDrawers.size() - 1; index !=0; --index) 
+	for(int index = allDrawers.size() - 1; index >=0; --index) 
 	{
 		ComplexDrawer* dr = (ComplexDrawer *)allDrawers.at(index);
 		//ILWISSingleLock csl(&dr->cs, TRUE, SOURCE_LOCATION);
