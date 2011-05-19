@@ -49,6 +49,8 @@ void ThreeDGlobalTool::setthreeD(void *v, HTREEITEM) {
 	bool value = *(bool *)(v);
 
 	((RootDrawer *)drawer)->set3D(value);
+	PreparationParameters pp(NewDrawer::pt3D);
+	((RootDrawer *)drawer)->prepare(&pp);
 
 	//make3D(value,tv);
 	getDocument()->mpvGetView()->Invalidate();
