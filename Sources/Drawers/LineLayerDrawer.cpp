@@ -49,8 +49,7 @@ void LineLayerDrawer::setDrawMethod(DrawMethod method) {
 String LineLayerDrawer::store(const FileName& fnView, const String& parentSection) const{
 	String currentSection = "LineLayerDrawer::" + parentSection;
 	FeatureLayerDrawer::store(fnView, currentSection);
-	ObjectInfo::WriteElement(currentSection.scVal(),"LineStyle",fnView, lproperties.linestyle);
-	ObjectInfo::WriteElement(currentSection.scVal(),"LineThickness",fnView, lproperties.thickness);
+	lproperties.store(fnView, currentSection);
 
 	return currentSection;
 }
@@ -58,8 +57,8 @@ String LineLayerDrawer::store(const FileName& fnView, const String& parentSectio
 void LineLayerDrawer::load(const FileName& fnView, const String& parentSection){
 	String currentSection = parentSection;
 	FeatureLayerDrawer::load(fnView, currentSection);
-	ObjectInfo::ReadElement(currentSection.scVal(),"LineStyle",fnView, lproperties.linestyle);
-	ObjectInfo::ReadElement(currentSection.scVal(),"LineThickness",fnView, lproperties.thickness);
+	lproperties.load(fnView, currentSection);
+
 
 }
 

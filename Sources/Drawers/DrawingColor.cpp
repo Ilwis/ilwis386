@@ -134,11 +134,11 @@ Color DrawingColor::clrRaw(long iRaw, NewDrawer::DrawMethod drm) const
 		}  
 		break;
 	case NewDrawer::drmIMAGE: {
-		RangeInt riStretch = drw->getStretchRangeInt();
+		RangeReal rrStretch = drw->getStretchRangeReal();
 		int iMin = 0, iMax = 255;
 		if (drw->isStretched()) {
-			iMin = riStretch.iLo();
-			iMax = riStretch.iHi();
+			iMin = rrStretch.rLo();
+			iMax = rrStretch.rHi();
 		}
 		int iDiff = iMax - iMin;
 		if (iRaw < iMin)

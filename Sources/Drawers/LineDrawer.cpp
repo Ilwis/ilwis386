@@ -188,7 +188,21 @@ GeneralDrawerProperties *LineDrawer::getProperties() {
 	return &lproperties;
 }
 
+//----------------------------------------
+String LineProperties::store(const FileName& fnView, const String& parentSection) const{
+	ObjectInfo::WriteElement(parentSection.scVal(),"Thickness",fnView, thickness);
+	ObjectInfo::WriteElement(parentSection.scVal(),"LineStyle",fnView, linestyle);
+	ObjectInfo::WriteElement(parentSection.scVal(),"DrawColor",fnView, drawColor);
+	ObjectInfo::WriteElement(parentSection.scVal(),"IgnoreColor",fnView, ignoreColor);
+	return parentSection;
+}
 
+void LineProperties::load(const FileName& fnView, const String& parentSection){
+	ObjectInfo::ReadElement(parentSection.scVal(),"Thickness",fnView, thickness);
+	ObjectInfo::ReadElement(parentSection.scVal(),"LineStyle",fnView, linestyle);
+	ObjectInfo::ReadElement(parentSection.scVal(),"DrawColor",fnView, drawColor);
+	ObjectInfo::ReadElement(parentSection.scVal(),"IgnoreColor",fnView, ignoreColor);
+}
 
 
 

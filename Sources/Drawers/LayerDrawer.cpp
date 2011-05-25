@@ -175,20 +175,6 @@ void LayerDrawer::setStretchRangeReal(const RangeReal& rr){
 	if ( rr.fValid())
 		stretched = true;
 	rrStretch = rr;
-	riStretch.iLo() = (long)(rounding(rrStretch.rLo()));
-	riStretch.iHi() = (long)(rounding(rrStretch.rHi()));
-}
-
-RangeInt LayerDrawer::getStretchRangeInt() const{
-	return riStretch;
-}
-
-void LayerDrawer::setStretchRangeInt(const RangeInt& ri){
-	if ( ri != riStretch && ri.fValid())
-		stretched = true;
-	riStretch = ri;
-	rrStretch.rLo() = doubleConv(riStretch.iLo());
-	rrStretch.rHi() = doubleConv(riStretch.iHi());
 }
 
 LayerDrawer::StretchMethod LayerDrawer::getStretchMethod() const{
@@ -232,12 +218,12 @@ String LayerDrawer::store(const FileName& fnView, const String& parentSection) c
 	ObjectInfo::WriteElement(parentSection.scVal(),"CoordinateSystem",fnView, csy);
 	ObjectInfo::WriteElement(parentSection.scVal(),"Representation",fnView, rpr);
 	ObjectInfo::WriteElement(parentSection.scVal(),"StretchReal",fnView, rrStretch);
-	ObjectInfo::WriteElement(parentSection.scVal(),"StretchInt",fnView, riStretch);
 	ObjectInfo::WriteElement(parentSection.scVal(),"IsStretched",fnView, stretched);
 	ObjectInfo::WriteElement(parentSection.scVal(),"StretchMethod",fnView, stretchMethod);
 	if ( attColumn.fValid())
 		ObjectInfo::WriteElement(parentSection.scVal(),"AttributeColumn",fnView, attColumn->sName());
 	ObjectInfo::WriteElement(parentSection.scVal(),"UseAttributes",fnView, useAttColumn);
+	ObjectInfo::WriteElement(parentSection.scVal(),"ExtrusionTransparency",fnView, extrTransparency);
 
 	return parentSection;
 }
@@ -247,15 +233,17 @@ void LayerDrawer::load(const FileName& fnView, const String& parentSection){
 	ObjectInfo::ReadElement(parentSection.scVal(),"CoordinateSystem",fnView, csy);
 	ObjectInfo::ReadElement(parentSection.scVal(),"Representation",fnView, rpr);
 	ObjectInfo::ReadElement(parentSection.scVal(),"StretchReal",fnView, rrStretch);
-	ObjectInfo::ReadElement(parentSection.scVal(),"StretchInt",fnView, riStretch);
 	ObjectInfo::ReadElement(parentSection.scVal(),"IsStretched",fnView, stretched);
 	long method;
 	ObjectInfo::ReadElement(parentSection.scVal(),"StretchMethod",fnView, method);
 	stretchMethod = (StretchMethod)method;
 	String colname;
 	ObjectInfo::ReadElement(parentSection.scVal(),"AttributeColumn",fnView, colname);
-	attColumn = ((SpatialDataDrawer *)getParentDrawer())->getBaseMap()->tblAtt()->col(colname);
+	if ( colname != "") {
+		attColumn = ((SpatialDataDrawer *)getParentDrawer())->getBaseMap()->tblAtt()->col(colname);
+	}
 	ObjectInfo::ReadElement(parentSection.scVal(),"UseAttributes",fnView, useAttColumn);
+	ObjectInfo::ReadElement(parentSection.scVal(),"ExtrusionTransparency",fnView, extrTransparency);
 }
 
 void LayerDrawer::drawLegendItem(CDC *dc, const CRect& rct, double rVal) const{

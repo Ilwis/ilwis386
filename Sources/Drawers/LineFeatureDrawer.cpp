@@ -72,7 +72,7 @@ void LineFeatureDrawer::prepare(PreparationParameters *p){
 			}
 		}
 	}
-	if ( p->type & NewDrawer::pt3D) {
+	if ( p->type & NewDrawer::pt3D || p->type & ptRESTORE) {
 		ZValueMaker *zmaker = ((ComplexDrawer *)parentDrawer)->getZMaker();
 		for(int j = 0; j < lines.size(); ++j) {
 			CoordinateSequence *seq = lines.at(j);
@@ -95,6 +95,7 @@ void LineFeatureDrawer::prepare(PreparationParameters *p){
 				setActive(raw > 0);
 			}
 		}
+		specialOptions = fdr->getSpecialDrawingOption();
 		double tr = fdr->getTransparency();
 		setTransparency(tr);
 		extrTransparency = fdr->getExtrusionTransparency();

@@ -52,6 +52,9 @@ namespace ILWIS{
 		static int timerIdCounter;
 
 	protected:
+		String store(const FileName& fnView, const String& parenSection) const;
+		void load(const FileName& fnView, const String& parenSection);
+
 		virtual String iconName(const String& subtype="?") const;
 		bool timerPerIndex() ;
 		bool timerPerTime() ;

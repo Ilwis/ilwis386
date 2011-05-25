@@ -14,6 +14,9 @@ namespace ILWIS{
 		int linestyle;
 		Color drawColor;
 		bool ignoreColor;
+
+		String store(const FileName& fnView, const String& parenSection) const;
+		void load(const FileName& fnView, const String& parenSection);
 	};
 
 	class _export LineDrawer : public SimpleDrawer {

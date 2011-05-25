@@ -17,11 +17,8 @@ namespace ILWIS{
 		virtual ~GraticuleDrawer();
 		bool draw( const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *pp);
-		bool is3D() const { return threeD; }
-		void set3D(bool yesno);
-		double getGridSpacing() const;
 		void setGridSpacing(double v);
-		double getGridSpacing() { return rDist;}
+		double getGridSpacing() const{ return rDist;}
 		GeneralDrawerProperties *getProperties();
 
 
@@ -31,7 +28,6 @@ namespace ILWIS{
 		void gridOptions(CWnd *parent);
 		void displayOptionGrid3D(CWnd *parent);
 		void gridActive(void *value, LayerTreeView *v);
-		void grid3D(void *v, LayerTreeView *tv);
 		void prepareGrid( const CoordSystem &csy, double rDist, const LatLon& cMax, const LatLon& cMin );
 		String store(const FileName& fnView, const String& parenSection) const;
 		void load(const FileName& fnView, const String& parenSection);

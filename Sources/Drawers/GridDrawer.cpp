@@ -27,7 +27,7 @@ ComplexDrawer(parms,"GridDrawer")
 	setActive(false);
 	setTransparency(0.2);
 	transparencyPlane = 0.5;
-	threeD = false;
+	threeDGrid = false;
 	lproperties.thickness = 1;
 	lproperties.drawColor = Color(0,0,0);
 	planeColor = Color(210,210,255);
@@ -129,7 +129,7 @@ void GridDrawer::prepare(PreparationParameters *pp) {
 	
 		if ( (mode & GridDrawer::mGRID) || (mode & GridDrawer::mGROUNDLEVEL))
 			prepareGrid(rDist,cMax, cMin);
-		if ( threeD) {
+		if ( threeDGrid) {
 			if ( mode & GridDrawer::mPLANE)
 				preparePlanes(rDist,cMax, cMin);
 			if (mode & GridDrawer::mAXIS)
@@ -209,7 +209,7 @@ void GridDrawer::prepareVerticals(double rDist,const Coord& cMax, const Coord& c
 void GridDrawer::preparePlanes(double rDist, const Coord& cMax, const Coord& cMin ) {
 	Coord c1, c2;
 	double z = 	getZMaker()->getZ0(true);;
-	int zplanes = threeD ? 0.5 + maxz / zdist : 0;
+	int zplanes = threeDGrid ? 0.5 + maxz / zdist : 0;
 	resizeQuadsVector(zplanes);
 	for(int i=0; i <= zplanes; ++i) {
 		c1.z = c2.z = z;
@@ -285,7 +285,7 @@ void GridDrawer::prepareCube(double rDist, const Coord& cMax, const Coord& cMin 
 void GridDrawer::prepareGrid(double rDist, const Coord& cMax, const Coord& cMin ) {
 	Coord c1, c2;
 	double z = 	getZMaker()->getZ0(true);
-	int zplanes = threeD ? 0.5 + maxz / zdist : 0;
+	int zplanes = threeDGrid ? 0.5 + maxz / zdist : 0;
 	resizeQuadsVector(zplanes);
 	int nPlanes = mode & mGRID ? zplanes : 0;
 	for(int i=0; i <= nPlanes; ++i) {
@@ -305,7 +305,7 @@ void GridDrawer::prepareGrid(double rDist, const Coord& cMax, const Coord& cMin 
 			c1.y = c2.y = y;
 			AddGridLine(c1, c2);
 		}
-		if ( threeD && (mode & GridDrawer::mGRID)) {
+		if ( threeDGrid && (mode & GridDrawer::mGRID)) {
 			AddGridLine(Coord(cMin.x,cMin.y,z), Coord(cMin.x, cMax.y,z));
 			AddGridLine(Coord(cMin.x,cMax.y,z), Coord(cMax.x, cMax.y,z));
 			AddGridLine(Coord(cMax.x,cMax.y,z), Coord(cMax.x, cMin.y,z));
@@ -354,11 +354,24 @@ void GridDrawer::prepareChildDrawers(PreparationParameters *parms) {
 
 String GridDrawer::store(const FileName& fnView, const String& parentSection) const{
 	ComplexDrawer::store(fnView, getType());
-
+	ObjectInfo::WriteElement(getType().scVal(),"Distance",fnView, rDist);
+	lproperties.store(fnView,getType());
+	ObjectInfo::WriteElement(getType().scVal(),"ThreeDGrid",fnView, threeDGrid);
+	ObjectInfo::WriteElement(getType().scVal(),"Mode",fnView, mode);
+	ObjectInfo::WriteElement(getType().scVal(),"PlaneColor",fnView, planeColor);
+	ObjectInfo::WriteElement(getType().scVal(),"NoOfPlanes",fnView, noOfPlanes);
+	ObjectInfo::WriteElement(getType().scVal(),"TransparencyPlane",fnView, transparencyPlane);
 	return getType();
 }
 
 void GridDrawer::load(const FileName& fnView, const String& parenSection){
+	ObjectInfo::ReadElement(getType().scVal(),"Distance",fnView, rDist);
+	lproperties.store(fnView,getType());
+	ObjectInfo::ReadElement(getType().scVal(),"ThreeDGrid",fnView, threeDGrid);
+	ObjectInfo::ReadElement(getType().scVal(),"Mode",fnView, mode);
+	ObjectInfo::ReadElement(getType().scVal(),"PlaneColor",fnView, planeColor);
+	ObjectInfo::ReadElement(getType().scVal(),"NoOfPlanes",fnView, noOfPlanes);
+	ObjectInfo::ReadElement(getType().scVal(),"TransparencyPlane",fnView, transparencyPlane);
 }
 
 
@@ -396,8 +409,8 @@ void GridDrawer::setPlaneColor(Color clr){
 	planeColor = clr;
 }
 
-void GridDrawer::set3D(bool yesno){
-	threeD = yesno;
+void GridDrawer::set3DGrid(bool yesno){
+	threeDGrid = yesno;
 }
 
 void GridDrawer::setNumberOfplanes(int n) {

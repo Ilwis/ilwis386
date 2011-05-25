@@ -29,7 +29,7 @@ RasterDataDrawer::~RasterDataDrawer(){
 
 void RasterDataDrawer::prepare(PreparationParameters *pp){
 	SpatialDataDrawer::prepare(pp);
-	if ( pp->type == ptALL || pp->type & RootDrawer::ptGEOMETRY) {
+	if ( pp->type & RootDrawer::ptGEOMETRY || pp->type & RootDrawer::ptRESTORE ) {
 		if ( !(pp->type & NewDrawer::ptANIMATION))
 			clear();
 		BaseMapPtr *bmptr = getBaseMap();
@@ -60,13 +60,12 @@ void RasterDataDrawer::prepare(PreparationParameters *pp){
 				addLayerDrawer(basemap,pp,rsd);
 				break;
 		}
-	} else {
-		if ( pp->type & RootDrawer::ptRENDER) {
-			for(int i = 0; i < drawers.size(); ++i) {
-				RasterDataDrawer *rsd = (RasterDataDrawer *)drawers.at(i);
-				PreparationParameters fp((int)pp->type, 0);
-				rsd->prepare(&fp);
-			}
+	} 
+	if ( pp->type & RootDrawer::ptRENDER || pp->type & RootDrawer::ptRESTORE) {
+		for(int i = 0; i < drawers.size(); ++i) {
+			RasterDataDrawer *rsd = (RasterDataDrawer *)drawers.at(i);
+			PreparationParameters fp((int)pp->type, 0);
+			rsd->prepare(&fp);
 		}
 	}
 }

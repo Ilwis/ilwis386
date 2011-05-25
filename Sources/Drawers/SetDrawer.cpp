@@ -100,7 +100,7 @@ void SetDrawer::prepare(PreparationParameters *pp){
 	SpatialDataDrawer::prepare(pp);
 	ILWIS::DrawerParameters dp(getRootDrawer(), this);
 	if ( sourceType == sotFEATURE ) {
-		if ( pp->type & NewDrawer::ptGEOMETRY) {
+		if ( pp->type & NewDrawer::ptGEOMETRY || pp->type & NewDrawer::ptRESTORE) {
 			if ( getName() == "")
 				setName(oc->sName());
 			ILWIS::DrawerParameters parms(getRootDrawer(), this);
@@ -147,11 +147,12 @@ void SetDrawer::prepare(PreparationParameters *pp){
 		}
 	}
 	if ( sourceType == sotMAPLIST) {
-		if ( pp->type & NewDrawer::ptGEOMETRY) {
+		bool isRestore = (pp->type & NewDrawer::ptRESTORE) != 0;
+		if ( pp->type & NewDrawer::ptGEOMETRY || isRestore) {
 			if ( getName() == "Unknown")
 				setName(mpl->sName());
 			ILWIS::DrawerParameters parms(getRootDrawer(), this);
-			if ( drawers.size() > 0) {
+			if ( drawers.size() > 0 && !isRestore) {
 				clear();
 			}
 			// Calculate the min/max over the whole maplist. This is used for palette and texture generation.
@@ -162,7 +163,11 @@ void SetDrawer::prepare(PreparationParameters *pp){
 				Map mp = mpl->map(i);
 				if ( !rpr.fValid())
 					rpr = mp->dm()->rpr();
-				RasterLayerDrawer *rasterset = (RasterLayerDrawer *)NewDrawer::getDrawer("RasterLayerDrawer", "Ilwis38", &parms); 
+				RasterLayerDrawer *rasterset;
+				if ( !isRestore) {
+					rasterset = (RasterLayerDrawer *)NewDrawer::getDrawer("RasterLayerDrawer", "Ilwis38", &parms);
+				} else
+					rasterset = (RasterLayerDrawer *)getDrawer(i);
 				rasterset->setThreaded(false);
 				if ( rrMinMax.fValid())
 					rasterset->setMinMax(rrMinMax);
@@ -176,7 +181,7 @@ void SetDrawer::prepare(PreparationParameters *pp){
 			}
 		}
 	}
-	if ( pp->type & NewDrawer::pt3D) {
+	if ( pp->type & NewDrawer::pt3D || pp->type & NewDrawer::ptRESTORE) {
 		for(int i=0; i < drawers.size(); ++i) {
 			pp->index = i;
 			drawers.at(i)->prepare(pp);
@@ -227,7 +232,8 @@ void SetDrawer::addLayerDrawer(int index, const BaseMap& basem,PreparationParame
 	rsd->addDataSource(basem.ptr());
 	rsd->prepare(&fp);
 	if (!post) {
-		addDrawer(rsd);
+		if ( ! (pp->type & NewDrawer::ptRESTORE))
+			addDrawer(rsd);
 		if ( basem.fValid()) {
 			CoordBounds cbMap = basem->cb();
 			CoordSystem cs = basem->cs();

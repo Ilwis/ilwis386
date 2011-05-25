@@ -6,6 +6,7 @@
 #include "Engine\Drawers\ComplexDrawer.h"
 #include "Engine\Drawers\SimpleDrawer.h" 
 #include "Engine\Drawers\SpatialDataDrawer.h"
+#include "Drawers\FeatureDataDrawer.h"
 #include "drawers\linedrawer.h"
 #include "Drawers\LayerDrawer.h"
 #include "Drawers\FeatureLayerDrawer.h"
@@ -47,7 +48,8 @@ DrawerInfoVector *createDrawer() {
 	infos->push_back(new DrawerInfo("PolygonLayerDrawer","ilwis38",createPolygonLayerDrawer));
 	infos->push_back(new DrawerInfo("GridDrawer","ilwis38",createGridDrawer));
 	infos->push_back(new DrawerInfo("GridLine","ilwis38",createGridLine));
-	infos->push_back(new DrawerInfo("FeatureLayerDrawer","ilwis38", createFeatureLayerDrawer));
+	//infos->push_back(new DrawerInfo("FeatureLayerDrawer","ilwis38", createFeatureLayerDrawer));
+	infos->push_back(new DrawerInfo("FeatureDataDrawer","ilwis38", createFeatureDataDrawer));
 	infos->push_back(new DrawerInfo("CanvasBackgroundDrawer","ilwis38", createCanvasBackgroundDrawer));
 	infos->push_back(new DrawerInfo("RasterLayerDrawer","ilwis38", createRasterLayerDrawer));
 	infos->push_back(new DrawerInfo("RasterDataDrawer","ilwis38", createRasterDataDrawer));

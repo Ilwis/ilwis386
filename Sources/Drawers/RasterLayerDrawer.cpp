@@ -52,7 +52,7 @@ void RasterLayerDrawer::prepareChildDrawers(PreparationParameters *pp){
 void RasterLayerDrawer::prepare(PreparationParameters *pp){
 	LayerDrawer::prepare(pp);
 
-	if ( pp->type & NewDrawer::ptRENDER) {
+	if ( pp->type & NewDrawer::ptRENDER || pp->type & RootDrawer::ptRESTORE) {
 		fUsePalette = drm != drmCOLOR;
 		if ( rpr->prc()) {
 			RepresentationClass *rprC = rpr->prc();
@@ -70,11 +70,9 @@ void RasterLayerDrawer::prepare(PreparationParameters *pp){
 			}
 		}
 		textureHeap->RepresentationChanged();
-	}
-	if ( pp->type & ptGEOMETRY | pp->type & ptRESTORE) {
 		sameCsy = getRootDrawer()->getCoordinateSystem()->fnObj == csy->fnObj;
 	}
-	if ((pp->type & pt3D) || ((pp->type & ptGEOMETRY | pp->type & ptRESTORE) && demTriangulator != 0)) {
+	if ((pp->type & pt3D) || ((pp->type & ptGEOMETRY || pp->type & ptRESTORE) && demTriangulator != 0)) {
 		ZValueMaker * zMaker = getZMaker();
 		bool is3DPossible = zMaker->getThreeDPossible();
 		if (demTriangulator != 0) {

@@ -1,7 +1,7 @@
 #pragma once
 
 
-ILWIS::NewDrawer *createFeatureLayerDrawer(ILWIS::DrawerParameters *parms);
+ILWIS::NewDrawer *createFeatureDataDrawer(ILWIS::DrawerParameters *parms);
 
 class FieldColor;
 

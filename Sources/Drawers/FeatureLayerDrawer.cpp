@@ -32,7 +32,7 @@ FeatureLayerDrawer::~FeatureLayerDrawer() {
 }
 
 void FeatureLayerDrawer::addDataSource(void *bmap,int options) {
-	fbasemap.SetPointer((BaseMapPtr *)bmap);
+	fbasemap = BaseMap(((BaseMapPtr *)bmap)->fnObj);
 }
 
 void *FeatureLayerDrawer::getDataSource() const {
@@ -59,7 +59,7 @@ void FeatureLayerDrawer::prepare(PreparationParameters *parms){
 	if ( getName() == "Unknown")
 		setName(mapDrawer->getBaseMap()->sName());
 	vector<Feature *> features;
-	if ( parms->type & RootDrawer::ptGEOMETRY | parms->type & NewDrawer::ptRESTORE){
+	if ( parms->type & RootDrawer::ptGEOMETRY || parms->type & NewDrawer::ptRESTORE){
 		bool isAnimation = mapDrawer->getType() == "AnimationDrawer";
 		if ( isAnimation ) {
 			getFeatures(features);
@@ -91,11 +91,8 @@ void FeatureLayerDrawer::prepare(PreparationParameters *parms){
 			}
 		}
 
-	} else {
-		if ( parms->type & NewDrawer::ptRENDER || parms->type & NewDrawer::pt3D) {
-
+	} if ( parms->type & NewDrawer::ptRENDER || parms->type & NewDrawer::pt3D || parms->type & NewDrawer::ptRESTORE) {
 			prepareChildDrawers(parms);
-		}
 	}
 	clock_t end = clock();
 	double duration = 1000.0 * (double)(end - start) / CLOCKS_PER_SEC;

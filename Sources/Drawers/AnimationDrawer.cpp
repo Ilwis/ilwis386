@@ -58,7 +58,7 @@ String AnimationDrawer::description() const {
 
 void AnimationDrawer::prepare(PreparationParameters *pp){
 	SetDrawer::prepare(pp);
-	if ( pp->type & NewDrawer::ptGEOMETRY) {
+	if ( pp->type & NewDrawer::ptGEOMETRY ) {
 		if ( getDrawerCount() > 0) {
 			for(int i=0; i < getDrawerCount(); ++i)
 				getDrawer(i)->setActive(i == 0 ? true : false);
@@ -305,3 +305,24 @@ void AnimationDrawer::setUseTime(bool yesno) {
 		useTime = false;
 	}
 }
+
+void AnimationDrawer::load(const FileName& fnView, const String& parentSection){
+	String currentSection = parentSection;
+	SetDrawer::load(fnView, currentSection);
+	ObjectInfo::ReadElement(currentSection.scVal(),"Interval",fnView, interval);
+	ObjectInfo::ReadElement(currentSection.scVal(),"UseTime",fnView, useTime);
+	ObjectInfo::ReadElement(currentSection.scVal(),"TimeColumn",fnView, colTime);
+	ObjectInfo::ReadElement(currentSection.scVal(),"Offset",fnView, offset);
+}
+
+String AnimationDrawer::store(const FileName& fnView, const String& parentSection) const{
+	String currentSection = "AnimationDrawer::" + parentSection;
+	SetDrawer::store(fnView, currentSection);
+	ObjectInfo::WriteElement(currentSection.scVal(),"Interval",fnView, interval);
+	ObjectInfo::WriteElement(currentSection.scVal(),"UseTime",fnView, useTime);
+	ObjectInfo::WriteElement(currentSection.scVal(),"TimeColumn",fnView, colTime);
+	ObjectInfo::WriteElement(currentSection.scVal(),"Offset",fnView, offset);
+
+	return currentSection;
+}
+

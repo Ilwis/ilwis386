@@ -18,8 +18,6 @@ class _export LayerDrawer : public ComplexDrawer {
 		//bool isLegendUsefull() const;
 		RangeReal getStretchRangeReal() const;
 		void setStretchRangeReal(const RangeReal& rr);
-		RangeInt getStretchRangeInt() const;
-		void setStretchRangeInt(const RangeInt& rr);
 		bool isStretched() const;
 		StretchMethod getStretchMethod() const;
 		void setStretchMethod(StretchMethod sm);
@@ -52,7 +50,6 @@ class _export LayerDrawer : public ComplexDrawer {
 		bool useAttColumn;
 		DrawingColor *drawColor;
 		RangeReal rrStretch;
-		RangeInt riStretch;
 		RangeReal rrLegendRange;
 		bool stretched;
 		StretchMethod stretchMethod;

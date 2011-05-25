@@ -65,7 +65,7 @@ void* PolygonFeatureDrawer::getDataSource() const{
 void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 	PolygonDrawer::prepare(p);
 	PolygonLayerDrawer *fdr = dynamic_cast<PolygonLayerDrawer *>(parentDrawer);
-	if (  p->type & ptGEOMETRY | p->type & ptRESTORE) {
+	if (  p->type & ptGEOMETRY || p->type & ptRESTORE) {
 		CoordSystem csy = fdr->getCoordSystem();
 		if ( boundary) {
 			boundary->prepare(p);
@@ -107,7 +107,7 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 		}
 
 	}
-	if ( p->type & NewDrawer::pt3D) {
+	if ( p->type & NewDrawer::pt3D || p->type & ptRESTORE) {
 		ZValueMaker *zmaker = ((ComplexDrawer *)parentDrawer)->getZMaker();
 		for(int i = 0; i < triangleStrips.size(); ++i) {
 			for(int j = 0; j < triangleStrips.at(i).size(); ++j) {
@@ -122,7 +122,7 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 
 		}
 	}
-	if (  p->type & ptALL || p->type & RootDrawer::ptRENDER) {
+	if (  p->type & ptRESTORE || p->type & RootDrawer::ptRENDER) {
 		extrTransparency = fdr->getExtrusionTransparency();
 		drawColor = fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod());
 		if ( boundary) {

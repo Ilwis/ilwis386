@@ -22,7 +22,7 @@
 
 using namespace ILWIS;
 
-ILWIS::NewDrawer *createFeatureLayerDrawer(DrawerParameters *parms) {
+ILWIS::NewDrawer *createFeatureDataDrawer(DrawerParameters *parms) {
 	return new FeatureDataDrawer(parms);
 }
 
@@ -60,24 +60,16 @@ void FeatureDataDrawer::prepare(PreparationParameters *pp){
 				addLayerDrawer(basemap,pp,fsd, "Areas");
 				break;
 		}
-	} else {
-		if ( pp->type & NewDrawer::ptRENDER | pp->type & NewDrawer::ptRESTORE) {
-			for(int i = 0; i < drawers.size(); ++i) {
-				FeatureLayerDrawer *fsd = (FeatureLayerDrawer *)drawers.at(i);
-				PreparationParameters fp((int)pp->type, 0);
-				fp.csy = basemap->cs();
-				fsd->prepare(&fp);
-			}
-		} else if ( pp->type & NewDrawer::pt3D) {
-			for(int i = 0; i < drawers.size(); ++i) {
-				FeatureLayerDrawer *fsd = (FeatureLayerDrawer *)drawers.at(i);
-				PreparationParameters fp((int)pp->type, 0);
-				fp.csy = basemap->cs();
-				fsd->prepare(&fp);
-			}
+	}
+	if ( pp->type & NewDrawer::ptRENDER || pp->type & NewDrawer::ptRESTORE || pp->type & NewDrawer::pt3D ) {
+		for(int i = 0; i < drawers.size(); ++i) {
+			FeatureLayerDrawer *fsd = (FeatureLayerDrawer *)drawers.at(i);
+			fsd->addDataSource(basemap.ptr());
+			PreparationParameters fp((int)pp->type, 0);
+			fp.csy = basemap->cs();
+			fsd->prepare(&fp);
 		}
 	}
-
 }
 
 void FeatureDataDrawer::addLayerDrawer(const BaseMap& basemap,PreparationParameters *pp,LayerDrawer *fsd, const String& name) {

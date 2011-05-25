@@ -31,6 +31,8 @@ class _export PolygonLayerDrawer : public FeatureLayerDrawer {
 		
 
 	protected:
+		String store(const FileName& fnView, const String& parenSection) const;
+		void load(const FileName& fnView, const String& parenSection);
 		void setDrawMethod(DrawMethod method=drmINIT);
 	
 		bool showAreas;

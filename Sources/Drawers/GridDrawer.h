@@ -18,14 +18,14 @@ namespace ILWIS{
 		virtual ~GridDrawer();
 		bool draw( const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *pp);
-		bool is3D() const { return threeD; }
+		bool is3DGrd() const { return threeDGrid; }
 		int getMode() const;
 		void setMode(int m);
 		double getZSpacing() const;
 		void setZSpacing(double z);
 		Color getPlaneColor() const;
 		void setPlaneColor(Color clr);
-		void set3D(bool yesno);
+		void set3DGrid(bool yesno);
 		double getGridSpacing() const;
 		void setGridSpacing(double v);
 		GeneralDrawerProperties *getProperties();
@@ -55,7 +55,7 @@ namespace ILWIS{
 
 		double          rDist;
 		LineProperties	lproperties;
-		bool			threeD;
+		bool			threeDGrid;
 		double			zdist;
 		double			maxz;
 		int				mode;

@@ -26,7 +26,6 @@ ComplexDrawer(parms,"GraticuleDrawer")
 	rDist = rUNDEF;
 	setActive(false);
 	setTransparency(0.2);
-	threeD = false;
 	lproperties.thickness = 1;
 	lproperties.drawColor = Color(0,0,0);
 	lproperties.linestyle = 0xFFFF;
@@ -184,27 +183,24 @@ void GraticuleDrawer::AddGraticuleLine(const CoordSystem &csy, const LatLon& llB
 
 String GraticuleDrawer::store(const FileName& fnView, const String& parentSection) const{
 	ComplexDrawer::store(fnView, getType());
-
+	ObjectInfo::WriteElement(getType().scVal(),"Distance",fnView, rDist);
+	lproperties.store(fnView,getType());
 	return getType();
 }
 
 void GraticuleDrawer::load(const FileName& fnView, const String& parenSection){
+	ComplexDrawer::load(fnView, getType());
+	ObjectInfo::ReadElement(getType().scVal(),"Distance",fnView, rDist);
+	lproperties.load(fnView,getType());
 }
 
 
-double GraticuleDrawer::getGridSpacing() const{
-	return rDist;
-}
 void GraticuleDrawer::setGridSpacing(double d){
 	rDist = d;
 }
 
 GeneralDrawerProperties *GraticuleDrawer::getProperties() {
 	return &lproperties;
-}
-
-void GraticuleDrawer::set3D(bool yesno){
-	threeD = yesno;
 }
 
 void GraticuleDrawer::prepareChildDrawers(PreparationParameters *parms) {

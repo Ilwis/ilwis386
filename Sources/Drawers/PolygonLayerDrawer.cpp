@@ -62,6 +62,8 @@ void PolygonLayerDrawer::getTriangleData(long **data, long** count) {
 }
 
 void PolygonLayerDrawer::prepare(PreparationParameters *parms) {
+	FeatureLayerDrawer::prepare(parms);
+
 	BaseMap *bmap = (BaseMap *)getDataSource();
 	FileName fnTriangle((*bmap)->fnObj,".tria#");
 	if ( (parms->type & RootDrawer::ptGEOMETRY) && fnTriangle.fExist()) {
@@ -74,12 +76,7 @@ void PolygonLayerDrawer::prepare(PreparationParameters *parms) {
 		file.read((char *)(triData + 1),(size - 1)*4);
 		currentLoc = 1; // first long is the total size of the file; irrelevant for the rest of the polygons
 	}
-
-	LayerDrawer::test_count = 0;
-	FeatureLayerDrawer::prepare(parms);
-//	TRACE("Total number of vertices %d\n", LayerDrawer::test_count);
-
-	if ( parms->type & RootDrawer::ptGEOMETRY) {
+	else if ( parms->type & RootDrawer::ptGEOMETRY) {
 		if ( usesTriangleFile && triData == 0) {
 			if ( !fnTriangle.fExist()) {
 				ofstream file(fnTriangle.sFullPath().scVal(), ios::out|ios::binary|ios::ate);
@@ -94,6 +91,7 @@ void PolygonLayerDrawer::prepare(PreparationParameters *parms) {
 			}
 		}
 	}
+
 	if ( triData != 0) {
 		delete [] triData;
 		triData = 0;
@@ -144,6 +142,30 @@ void PolygonLayerDrawer::setLineColor(const Color& clr) {
 GeneralDrawerProperties *PolygonLayerDrawer::getProperties() {
 	return &lp;
 }
+
+
+String PolygonLayerDrawer::store(const FileName& fnView, const String& parentSection) const{
+	String currentSection = "PolygonLayerDrawer::" + parentSection;
+	FeatureLayerDrawer::store(fnView, currentSection);
+	ObjectInfo::WriteElement(currentSection.scVal(),"ShowAreas",fnView, showAreas);
+	ObjectInfo::WriteElement(currentSection.scVal(),"ShowBoundaries",fnView, showBoundaries);
+	ObjectInfo::WriteElement(currentSection.scVal(),"AreaTransparency",fnView, areaTransparency);
+	lp.store(fnView, currentSection);
+
+	return currentSection;
+}
+
+void PolygonLayerDrawer::load(const FileName& fnView, const String& parentSection){
+	String currentSection = parentSection;
+	FeatureLayerDrawer::load(fnView, currentSection);
+	ObjectInfo::ReadElement(currentSection.scVal(),"ShowAreas",fnView, showAreas);
+	ObjectInfo::ReadElement(currentSection.scVal(),"ShowBoundaries",fnView, showBoundaries);
+	ObjectInfo::ReadElement(currentSection.scVal(),"AreaTransparency",fnView, areaTransparency);
+	lp.load(fnView, currentSection);
+}
+
+
+
 
 
 
