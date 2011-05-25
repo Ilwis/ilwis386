@@ -851,42 +851,232 @@ void MapPaneView::OnUpdatePaste(CCmdUI* pCmdUI)
 
 void MapPaneView::OnCopy()
 {
-	CDC *dc = GetDC();
-	RECT sz = {0,0,10000,10000};
-	CMetaFileDC enhMFDC;
-	BOOL ret = enhMFDC.CreateEnhanced(dc,0,&sz,"dummy");
-	MapCompositionDoc* mcd = GetDocument();
-	//PreparationParameters pp(NewDrawer::ptINITOPENGL, &enhMFDC,true);
-	//mcd->rootDrawer->prepare(&pp);
-	//mcd->rootDrawer->draw();
-	CPen pen(1,1,RGB(255,0,0));
-	enhMFDC.SelectObject(&pen);
-	enhMFDC.MoveTo(500,500);
-	enhMFDC.LineTo(1000,1000);
+	CRect	mRect;			// Position of this window's client area
 
+	BeginWaitCursor();
 
-	HENHMETAFILE hmf;
-	if( (hmf = enhMFDC.CloseEnhanced()) )
+	// Get the Views size (client area!)
+	GetClientRect(&mRect);
+
+	SetRedraw(FALSE);
+	int nReduceResCount = 0;
+	while (!EditCopy(mRect, nReduceResCount++))
 	{
-		if( OpenClipboard() )
+		// retry again with reduced resolution
+		if (nReduceResCount >= 10)
+			break;
+	}
+	//SetRedraw(TRUE);
+	//RedrawWindow(NULL, NULL, RDW_INVALIDATE | RDW_NOERASE);
+
+	EndWaitCursor();
+}
+
+BOOL MapPaneView::EditCopy(CRect mRect, int nReduceResCount)
+{
+	//CGlWinApp *pApp = (CGlWinApp *)AfxGetApp();
+
+	RECT	rect;
+	HDC		hMemDC, hTmpDC;
+	HGLRC	hMemRC;
+
+	BITMAPINFO	bitmapInfo;
+	HBITMAP		hDib;
+	LPVOID		pBitmapBits;
+	double		fac = 300/72.;		// 72 DPI (screen) --> <user selected> DPI (clipboard)
+	int			nXRes, nYRes;
+	BOOL		bSuccess = FALSE;
+
+	for (int k = nReduceResCount; k > 0; k--)
+		fac /= 2.;
+
+	rect = mRect;
+	ASSERT(rect.left == 0);
+	ASSERT(rect.top == 0);
+	rect.right = int(rect.right*fac);
+	rect.bottom = int(rect.bottom*fac);
+
+	if (mRect.Width() == 0 || mRect.Height() == 0)
+	{
+		// Get the Views size (client area!)
+		GetClientRect(&mRect);
+	}
+
+	nXRes = rect.right;
+	nYRes = rect.bottom;
+//	ScaleFont(fac);
+
+	//nXRes = (nXRes + (sizeof(DWORD)-1)) & ~(sizeof(DWORD)-1);	// aligning width to 4 bytes (sizeof(DWORD)) avoids 
+	nXRes = nXRes & ~(sizeof(DWORD)-1);							// aligning width to 4 bytes (sizeof(DWORD)) avoids 
+																// pixel garbage at the upper line
+
+	// First of all, initialize the bitmap header information...
+	memset(&bitmapInfo, 0, sizeof(BITMAPINFO));
+	bitmapInfo.bmiHeader.biSize		= sizeof(BITMAPINFOHEADER);
+	bitmapInfo.bmiHeader.biWidth		= nXRes;
+	bitmapInfo.bmiHeader.biHeight		= nYRes;
+	bitmapInfo.bmiHeader.biPlanes		= 1;
+	bitmapInfo.bmiHeader.biBitCount		= 24;
+	bitmapInfo.bmiHeader.biCompression	= BI_RGB;
+	bitmapInfo.bmiHeader.biSizeImage	= bitmapInfo.bmiHeader.biWidth * bitmapInfo.bmiHeader.biHeight * 3;
+	bitmapInfo.bmiHeader.biXPelsPerMeter = int(72.*fac/.0254);	// 72*fac DPI
+	bitmapInfo.bmiHeader.biYPelsPerMeter = int(72.*fac/.0254);	// 72*fac DPI
+
+	DrawerContext *context = GetDocument()->rootDrawer->getDrawerContext();
+
+	// create DIB
+	hTmpDC = ::GetDC(m_hWnd);
+	hDib = CreateDIBSection(hTmpDC, &bitmapInfo, DIB_RGB_COLORS, &pBitmapBits, NULL, (DWORD)0);
+	//::ReleaseDC(m_hWnd, hTmpDC);
+
+	// create memory device context
+	//HDC hdc = GetDocument()->rootDrawer->getDrawerContext()->getHDC();
+	CDC *pDC = new CWindowDC(this);
+	if ((hMemDC = CreateCompatibleDC(pDC == NULL ? NULL : pDC->GetSafeHdc())) == NULL)
+	{
+		DeleteObject(hDib);
+		return FALSE;
+	}
+	HGDIOBJ hOldDib = SelectObject(hMemDC, hDib);
+
+	// setup pixel format
+	if (!SetMemDcPixelFormat(hMemDC) && !SetMemDcPixelFormat(hMemDC, TRUE))
+	{
+		if (hOldDib != NULL)
+			SelectObject(hMemDC, hOldDib);
+		DeleteObject(hDib);
+		DeleteDC(hMemDC);
+		return FALSE;
+	}
+
+	// create memory rendering context
+	if ((hMemRC = wglCreateContext(hMemDC)) == NULL)
+	{
+		if (hOldDib != NULL)
+			SelectObject(hMemDC, hOldDib);
+		DeleteObject(hDib);
+		DeleteDC(hMemDC);
+		return FALSE;
+	}
+
+	// Store current rendering and device contexts
+	GetDocument()->rootDrawer->getDrawerContext()->TakeContext();
+
+	HDC hDCOld = wglGetCurrentDC();
+	HGLRC hRCOld = wglGetCurrentContext();
+	RowCol viewportOld = GetDocument()->rootDrawer->getViewPort();
+	GetDocument()->rootDrawer->setViewPort(RowCol(nYRes,nXRes));
+
+	// Make this hMemRC the current OpenGL rendering context.
+	context->ReleaseContext();
+	context->setContext(hMemDC,hMemRC, DrawerContext::mDRAWTOBITMAP | ~DrawerContext::mUSEDOUBLEBUFFER);
+	context->TakeContext();
+
+	//SetOpenGLProperties();
+
+	//glViewport(0, 0, nXRes, nYRes);
+	//glMatrixMode(GL_MODELVIEW);
+	//glLoadIdentity();
+	//glEnable(GL_DEPTH_TEST);
+
+	// must be created once for hMemDC
+	//CreateFontBitmaps();
+	glClearColor(1,1,1,0.0);
+	CDC *pDummyDC = GetDC();
+	pDummyDC->m_bPrinting = TRUE;	// this does the trick in OnDraw: it prevents changing rendering context and swapping buffers
+	GetDocument()->rootDrawer->draw();
+	ReleaseDC(pDummyDC);
+	glFinish();	// Finish all OpenGL commands
+
+	// the rendering context will be no longer needed
+	GetDocument()->rootDrawer->getDrawerContext()->ReleaseContext();
+	wglDeleteContext(hMemRC);
+
+	// Restore last rendering and device contexts
+	GetDocument()->rootDrawer->setViewPort(viewportOld);
+	if (hDCOld != NULL && hRCOld != NULL) {
+		GetDocument()->rootDrawer->getDrawerContext()->setContext(hDCOld, hRCOld);
+	}
+
+	// Restore the Views original font size
+	//UnScaleFont();
+	//CreateFontBitmaps();
+
+	if (OpenClipboard())
+	{
+		HGLOBAL hClipboardCopy = ::GlobalAlloc(GMEM_ZEROINIT | GMEM_MOVEABLE | GMEM_DDESHARE, sizeof(BITMAPINFOHEADER) + bitmapInfo.bmiHeader.biSizeImage);
+		if (hClipboardCopy != NULL)
 		{
+			LPVOID lpClipboardCopy, lpBitmapBitsOffset;
+			lpClipboardCopy = ::GlobalLock((HGLOBAL) hClipboardCopy);
+			lpBitmapBitsOffset = (LPVOID)((BYTE*)lpClipboardCopy + sizeof(BITMAPINFOHEADER));
+
+			memcpy(lpClipboardCopy, &bitmapInfo.bmiHeader, sizeof(BITMAPINFOHEADER));
+			memcpy(lpBitmapBitsOffset, pBitmapBits, bitmapInfo.bmiHeader.biSizeImage);
+			::GlobalUnlock(hClipboardCopy);
+
 			EmptyClipboard();
-			SetClipboardData(CF_ENHMETAFILE, hmf);
+
+			if (SetClipboardData(CF_DIB, hClipboardCopy) != NULL)
+			{
+				bSuccess = TRUE;
+				//if (nReduceResCount > 0)
+				//	pApp->SetStatusBarInfo(POLICY_RESOLUTION_REDUCED, (int)round(fac*72.));
+			}
+			else
+			{
+				GlobalFree(hClipboardCopy);
+			}
 			CloseClipboard();
 		}
-		else
-		{
-			/*
-			* The metafile is deleted only 
-			* when it has not been set in
-			* the clipboard.
-			*/
-			::DeleteEnhMetaFile(hmf);
-		}
 	}
-	//pp = PreparationParameters(NewDrawer::ptINITOPENGL, dc,true);
-	//mcd->rootDrawer->prepare(&pp);
+	if (hOldDib != NULL)
+		SelectObject(hMemDC, hOldDib);
+
+	// Delete our DIB and device context
+	DeleteObject(hDib);
+	DeleteDC(hMemDC);
+
+	return bSuccess;
 }
+
+BOOL MapPaneView::SetMemDcPixelFormat(HDC hMemDC, BOOL bUseAPI)
+{
+	PIXELFORMATDESCRIPTOR pfd = {
+		sizeof(PIXELFORMATDESCRIPTOR),	// Size of this structure
+		1,								// Version of this structure
+		PFD_DRAW_TO_BITMAP |			// Draw to bitmap (not to window)
+		PFD_SUPPORT_OPENGL |			// Support OpenGL calls in window
+		PFD_STEREO_DONTCARE,			// Don't need stereo mode
+		PFD_TYPE_RGBA,					// RGBA Color mode
+		24,								// Number of color bitplanes
+		0,0,0,0,0,0,					// Not used to select mode
+		0,								// Number of alpha bitplanes
+		0,								// Not used to select mode
+		64,								// Number of bitplanes in the accumulation buffer
+		0,0,0,0,						// Not used to select mode
+		32,								// Size of depth buffer
+		8,								// Size of stencil buffer
+		0,								// Size of auxiliary buffer
+		PFD_MAIN_PLANE,					// Draw in main plane
+		0,0,0,0 };						// Not used to select mode
+
+	int nGLPixelIndex = bUseAPI ? 
+		::ChoosePixelFormat(hMemDC, &pfd) : 
+		ChoosePixelFormat(hMemDC, &pfd);
+	if (nGLPixelIndex == 0) // Choose default
+		nGLPixelIndex = 1;
+
+	if (DescribePixelFormat(hMemDC, nGLPixelIndex, 
+		sizeof(PIXELFORMATDESCRIPTOR), &pfd) == 0)
+		return FALSE;
+
+	if (!SetPixelFormat(hMemDC, nGLPixelIndex, &pfd))
+		return FALSE;
+
+	return TRUE;
+}
+
 
 DROPEFFECT MapPaneView::OnDragEnter(COleDataObject* pDataObject, DWORD dwKeyState, CPoint point) 
 {

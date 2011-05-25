@@ -131,6 +131,8 @@ protected:
 private:
 	enum DoubleClickAction { dcaRECORD, dcaRPR, dcaACTION };
 	DoubleClickAction dca;
+	BOOL EditCopy(CRect mRect, int nReduceResCount);
+	BOOL SetMemDcPixelFormat(HDC hMemDC, BOOL bUseAPI = FALSE);
 	MapWindow* mwPar;
 	RecordBar* recBar;
 	COleDropTarget* odt;

@@ -212,7 +212,8 @@ void MapCompositionDoc::Serialize(CArchive& ar)
 		en.em->Serialize(ar);
 		try
 		{
-			mpv = MapView(en);
+			FileName fn(ar.m_strFileName);
+			mpv = MapView(fn);
 			OnOpenMapView(mpv);
 		}
 		catch (CException* err) 
@@ -489,8 +490,9 @@ void MapCompositionDoc::OnSaveView()
 	fUseSerialize = true;
 	if (!mpv.fValid())
 		OnSaveViewAs();
-	else 
-		OnFileSave();
+	else {
+		rootDrawer->store(mpv->fnObj,"Root");
+	}
 }
 
 void MapCompositionDoc::OnSaveViewAs()
@@ -530,6 +532,8 @@ void MapCompositionDoc::OnSaveViewAs()
 		mpv->sDescription = sTitle;
 		sViewName = mpv->fnObj.sFullName();
 		DoSave(sViewName.scVal());
+		mpv->Store();
+		rootDrawer->store(mpv->fnObj,"Root");
 		SetTitle(mpv);
 	}
 }
@@ -1028,9 +1032,7 @@ BOOL MapCompositionDoc::OnOpenSegmentMap(const SegmentMap& sm, OpenType ot)
 
 	SetTitle(sm);
 
-	//================================================ TEST!!!!!!!
-	createBaseMapDrawer(sm,"FeatureLayerDrawer", "Ilwis38");
-	//===============================================
+	createBaseMapDrawer(sm,"FeatureDataDrawer", "Ilwis38");
 	
 	if (ot & otEDIT) {
 		::AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_EDITLAYER, 0);
@@ -1054,7 +1056,7 @@ BOOL MapCompositionDoc::OnOpenPolygonMap(const PolygonMap& pm, OpenType ot)
 
 	SetTitle(pm);
 
-	createBaseMapDrawer(pm,"FeatureLayerDrawer", "Ilwis38");
+	createBaseMapDrawer(pm,"FeatureDataDrawer", "Ilwis38");
 	
 	if (ot & otEDIT) {
 		::AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_EDITLAYER, 0);
@@ -1080,7 +1082,7 @@ BOOL MapCompositionDoc::OnOpenPointMap(const PointMap& pm, OpenType ot)
 
 	//================================================ TEST!!!!!!!
 
-	createBaseMapDrawer(pm,"FeatureLayerDrawer", "Ilwis38");
+	createBaseMapDrawer(pm,"FeatureDataDrawer", "Ilwis38");
 	//===============================================
 
 	if (ot & otEDIT) {
@@ -1172,6 +1174,14 @@ BOOL MapCompositionDoc::OnOpenMapView(const MapView& mapview)
 		rootDrawer->load(fn,"");
 		ILWIS::PreparationParameters pp(NewDrawer::ptRESTORE,0);
 		rootDrawer->prepare(&pp);
+		for(int i=0; i < rootDrawer->getDrawerCount(); ++i) {
+			SpatialDataDrawer *spdrw = dynamic_cast<SpatialDataDrawer *>(rootDrawer->getDrawer(i));
+			if ( spdrw) {
+				BaseMapPtr *bmptr = spdrw->getBaseMap();
+				BaseMap bmp(bmptr->fnObj);
+				addToPixelInfo(bmp, spdrw);
+			}
+		}
 
 		return TRUE;
 	}
@@ -1240,7 +1250,7 @@ private:
 		if ( *asAnim) {
 			fdtl->SetExt(".mpl.ioc");
 		} else {
-			fdtl->SetExt(".mpr.mpl.mps.mpa.mpp.atx");
+			fdtl->SetExt(".ioc.mpr.mpl.mps.mpa.mpp.atx");
 		}
 		return 1;
 	}
@@ -1594,7 +1604,7 @@ NewDrawer* MapCompositionDoc::drAppend(const BaseMap& mp,IlwisDocument::OpenType
 		}
 		else {
 			if ( IlwisObject::iotObjectType(mp->fnObj) !=  IlwisObject::iotRASMAP)
-				drawer = createBaseMapDrawer(mp, "FeatureLayerDrawer", "Ilwis38");
+				drawer = createBaseMapDrawer(mp, "FeatureDataDrawer", "Ilwis38");
 			else
 				drawer = createBaseMapDrawer(mp, "RasterDataDrawer", "Ilwis38");
 		}
