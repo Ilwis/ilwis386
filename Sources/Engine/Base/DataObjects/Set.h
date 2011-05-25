@@ -142,8 +142,13 @@ public:
 	( _fHi ? rVal <= _rHi + 1e-6 : rVal < _rHi);
 	}
 	RangeReal& operator+=( const RangeReal& ri) {
-		_rLo = min(_rLo,ri.rLo());
-		_rHi = max(_rHi, ri.rHi());
+		if ( fValid()) {
+			_rLo = min(_rLo,ri.rLo());
+			_rHi = max(_rHi, ri.rHi());
+		} else {
+			_rLo = ri.rLo();
+			_rHi = ri.rHi();
+		}
 		return *this;
 	}
 

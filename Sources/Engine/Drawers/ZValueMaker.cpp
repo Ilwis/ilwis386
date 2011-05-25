@@ -2,6 +2,7 @@
 #include "Engine\Map\basemap.h"
 #include "Engine\Table\tbl.h"
 #include "Engine\Table\col.h"
+#include "Engine\Drawers\RootDrawer.h"
 #include "Engine\Drawers\ZValueMaker.h"
 #include "Engine\Map\Feature.h"
 #include "Drawer_n.h"
@@ -64,6 +65,8 @@ void ZValueMaker::setTable(const Table& tbl, const String& colName) {
 void ZValueMaker::store(const FileName& fnView, const String& section) {
 	if ( table.fValid())
 		ObjectInfo::WriteElement(section.scVal(),"Table",fnView, table);
+	if ( columns.size() > 0)
+		ObjectInfo::WriteElement(section.scVal(),"Column",fnView, columns.at(0));
 	if ( spatialsourcemap.fValid()) 
 		ObjectInfo::WriteElement(section.scVal(),"Spatialsourcemap",fnView, spatialsourcemap);
 	if ( datasourcemap.fValid())
@@ -72,22 +75,31 @@ void ZValueMaker::store(const FileName& fnView, const String& section) {
 		ObjectInfo::WriteElement(section.scVal(),"Range",fnView, range);
 	ObjectInfo::WriteElement(section.scVal(),"Self",fnView, self);
 	ObjectInfo::WriteElement(section.scVal(),"Zscale",fnView, zscale);
-	ObjectInfo::WriteElement(section.scVal(),"Range",fnView, offset);
+	ObjectInfo::WriteElement(section.scVal(),"Offset",fnView, offset);
 }
 
 void ZValueMaker::load(const FileName& fnView, const String& section) {
-	ObjectInfo::ReadElement(section.scVal(),"Table",fnView, table);
+	String sCol;
+	ObjectInfo::ReadElement(section.scVal(),"Column",fnView, sCol);
+	if ( sCol != "") {
+		ObjectInfo::ReadElement(section.scVal(),"Table",fnView, table);
+		if ( table.fValid()) {
+			setTable(table, sCol);
+		}
+	}
 	FileName fn;
 	ObjectInfo::ReadElement(section.scVal(),"Spatialsourcemap",fnView, fn);
-	if ( fn.fValid())
-		spatialsourcemap = BaseMap(fn);
+	if ( fn.fValid()){
+		setSpatialSource(BaseMap(fn),associatedDrawer->getRootDrawer()->getMapCoordBounds());
+	}
 	ObjectInfo::ReadElement(section.scVal(),"Datasourcemap",fnView, fn);
-	if ( fn.fValid())
-		datasourcemap = BaseMap(fn);
+	if ( fn.fValid()) {
+		setDataSourceMap(BaseMap(fn));
+	}
 	ObjectInfo::ReadElement(section.scVal(),"Range",fnView, range);
 	ObjectInfo::ReadElement(section.scVal(),"Self",fnView, self);
 	ObjectInfo::ReadElement(section.scVal(),"Zscale",fnView, zscale);
-	ObjectInfo::ReadElement(section.scVal(),"Range",fnView, offset);
+	ObjectInfo::ReadElement(section.scVal(),"Offset",fnView, offset);
 }
 
 void ZValueMaker::setTable(const Table& tbl, const vector<String>& names) {
@@ -153,10 +165,7 @@ double ZValueMaker::scaleValue(double value) {
 	RangeReal scaleRange = getRange();
 	double scale = (value - scaleRange.rLo()) / scaleRange.rWidth();
 	double zMaxSizeEstimate = (cbLimits.width() + cbLimits.height())/ 2.0;
-	double endvalue = scale * zMaxSizeEstimate * 0.15;
-	//if ( endvalue <= 0) {
-	//	endvalue = zMaxSizeEstimate * 0.01;
-	//}
+	double endvalue = scale * zMaxSizeEstimate * 0.20;
 	return endvalue;
 }
 

@@ -101,7 +101,6 @@ class _export ComplexDrawer : public NewDrawer {
 		bool editable;
 		bool editmode;
 		ZValueMaker *zmaker;
-		bool threeD;
 		int specialOptions;
 		bool dirty;
 		int totalDrawerCount;

@@ -11,26 +11,29 @@ maxTextureSize(128)
 , m_hrc(0)
 , m_wnd(0)
 , palette(0)
+, mode(mDRAWTOWINDOW | mUSEDOUBLEBUFFER)
 {
 }
 
 bool DrawerContext::initOpenGL(CDC *dc, int m) {  
-	if ( (m & Mode::mFORCEINIT) == 0) {
+	if ( (m & mFORCEINIT) == 0) {
 		if (fGLInitialized)
 			return false;// no init needed, already done
 	}
+	mode = m & ~mFORCEINIT; // strip this one off, need not to be saved
 
 	PIXELFORMATDESCRIPTOR pfd;
 	ZeroMemory( &pfd, sizeof( pfd ) );
 	pfd.nSize = sizeof( pfd );
 	pfd.nVersion = 1;
-	if ( m & Mode::mDRAWTOWINDOW) {
-		pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL |
-					PFD_DOUBLEBUFFER;
-	} else {
-		pfd.dwFlags = PFD_DRAW_TO_BITMAP | PFD_SUPPORT_OPENGL |
-					  PFD_SUPPORT_GDI;
-	}
+	pfd.dwFlags = PFD_SUPPORT_OPENGL;
+	if ( m & mDRAWTOWINDOW )
+		pfd.dwFlags |= PFD_DRAW_TO_WINDOW ;
+	if ( m & mUSEDOUBLEBUFFER)
+		pfd.dwFlags |= PFD_DOUBLEBUFFER;
+	if ( m & mDRAWTOBITMAP)
+		pfd.dwFlags |=  PFD_DRAW_TO_BITMAP ;
+
 	pfd.iPixelType = PFD_TYPE_RGBA;
 	pfd.cColorBits = 24;
 	pfd.cDepthBits = 16;
@@ -98,7 +101,8 @@ void DrawerContext::clear() {
 }
 
 void DrawerContext::swapBuffers() const{
-	SwapBuffers(m_hdc);
+	if ( mode & mUSEDOUBLEBUFFER)
+		SwapBuffers(m_hdc);
 }
 
 void DrawerContext::setActivePalette(const Palette * palette) {
@@ -107,4 +111,10 @@ void DrawerContext::setActivePalette(const Palette * palette) {
 
 bool DrawerContext::isActivePalette(const Palette * palette) const {
 	return this->palette == palette;
+}
+
+void DrawerContext::setContext(HDC hdc, HGLRC hrc, int m) {
+	m_hdc = hdc;
+	m_hrc = hrc;
+	mode = m | PFD_SUPPORT_OPENGL; // last one is mandatory as we use opengl, so I add it anyway, gdi is for convenience
 }

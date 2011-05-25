@@ -112,9 +112,9 @@ void SpatialDataDrawer::addDataSource(void *bmap,int options)
 		rootdrawer->setCoordBoundsMap(cbMap);
 		if ( bm.fValid() && bm->fnObj == bm->dm()->fnObj)
 			internalDomain = true;
-		MouseClickInfoDrawer *mid = (MouseClickInfoDrawer *)(rootdrawer)->getDrawer("MouseClickInfoDrawer");
-		if ( mid)
-			mid->addDataSource(this);
+		//MouseClickInfoDrawer *mid = (MouseClickInfoDrawer *)(rootdrawer)->getDrawer("MouseClickInfoDrawer");
+		//if ( mid)
+		//	mid->addDataSource(this);
 	}
 }
 
@@ -192,14 +192,26 @@ String SpatialDataDrawer::store(const FileName& fnView, const String& parentSect
 	if ( attColumn.fValid())
 		ObjectInfo::WriteElement(parentSection.scVal(),"AttributeColumn",fnView, attColumn->sName());
 	ObjectInfo::WriteElement(parentSection.scVal(),"UseAttributes",fnView, useAttTable);
-	ObjectInfo::WriteElement(parentSection.scVal(),"BaseMap",fnView, bm);
+	FileName fn;
+	if ( bm.fValid())
+		fn = bm->fnObj;
+	if ( oc.fValid())
+		fn = oc->fnObj;
+	if ( mpl.fValid())
+		fn = mpl->fnObj;
+
+	ObjectInfo::WriteElement(parentSection.scVal(),"Object",fnView, fn);
+
+	if ( attTable.fValid()) {
+		ObjectInfo::WriteElement(parentSection.scVal(),"AttributeTable",fnView, attTable);
+		ObjectInfo::WriteElement(parentSection.scVal(),"AttributeColumn",fnView, attColumn);
+	}
 
 	return parentSection;
 
 }
 
 void SpatialDataDrawer::load(const FileName& fnView, const String& parentSection){
-	ComplexDrawer::load(fnView, parentSection);
 	ObjectInfo::ReadElement(parentSection.scVal(),"AttributeTable",fnView, attTable);
 	if ( attTable.fValid()) {
 		String colname;
@@ -208,8 +220,20 @@ void SpatialDataDrawer::load(const FileName& fnView, const String& parentSection
 	}
 	ObjectInfo::ReadElement(parentSection.scVal(),"UseAttributes",fnView, useAttTable);
 	FileName fn;
-	ObjectInfo::ReadElement(parentSection.scVal(),"BaseMap",fnView, fn);
-	bm = BaseMap(fn);
+	ObjectInfo::ReadElement(parentSection.scVal(),"Object",fnView, fn);
+	IlwisObject object = IlwisObject::obj(fn);
+	addDataSource(&object);
+
+	ObjectInfo::ReadElement(parentSection.scVal(),"AttributeTable",fnView, fn);
+	if ( fn.fValid()) {
+		attTable = Table(fn);
+		if ( attTable.fValid()) {
+			String name;
+			ObjectInfo::ReadElement(parentSection.scVal(),"AttributeColumn",fnView, name);
+			attColumn = attTable->col(name);
+		}
+	}
+	ComplexDrawer::load(fnView, parentSection);
 
 }
 

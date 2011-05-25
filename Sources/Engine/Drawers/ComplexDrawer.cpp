@@ -31,7 +31,6 @@ void ComplexDrawer::init() {
 	editable = true;
 	active = true;
 	info = false;
-	threeD=false;
 	transparency = 1.0;
 	uiCode = NewDrawer::ucALL;
 	zmaker = new ILWIS::ZValueMaker(this);
@@ -448,8 +447,8 @@ String ComplexDrawer::store(const FileName& fnView, const String& parentSection)
 	ObjectInfo::WriteElement(parentSection.scVal(),"IsActive",fnView, active);
 	ObjectInfo::WriteElement(parentSection.scVal(),"editable",fnView, editable);
 	ObjectInfo::WriteElement(parentSection.scVal(),"HasInfo",fnView, info);
-	ObjectInfo::WriteElement(parentSection.scVal(),"IsThreeD",fnView, threeD);
 	ObjectInfo::WriteElement(parentSection.scVal(),"Name",fnView, name);
+	ObjectInfo::WriteElement(parentSection.scVal(),"SpecialOptions",fnView, specialOptions);
 
 	int count = 0;
 	for(DrawerIter_C cur = preDrawers.begin(); cur != preDrawers.end(); ++cur) {
@@ -505,8 +504,8 @@ void ComplexDrawer::load(const FileName& fnView, const String& parentSection){
 	ObjectInfo::ReadElement(parentSection.scVal(),"IsActive",fnView, active);
 	ObjectInfo::ReadElement(parentSection.scVal(),"editable",fnView, editable);
 	ObjectInfo::ReadElement(parentSection.scVal(),"HasInfo",fnView, info);
-	ObjectInfo::ReadElement(parentSection.scVal(),"IsThreeD",fnView, threeD);
 	ObjectInfo::ReadElement(parentSection.scVal(),"Name",fnView, name);
+	ObjectInfo::ReadElement(parentSection.scVal(),"SpecialOptions",fnView, specialOptions);
 
 	long count, order;
 	String drawerSection;
@@ -529,15 +528,19 @@ void ComplexDrawer::load(const FileName& fnView, const String& parentSection){
 		ObjectInfo::ReadElement(drawerSection.scVal(),"Order",fnView, order);
 		addPostDrawer(order,loadDrawer(fnView, drawerSection));
 	}
+
 	zmaker->load(fnView, parentSection);
+	setSpecialDrawingOptions(specialOptions | NewDrawer::sdoTOCHILDEREN, true);
 }
 
 NewDrawer *ComplexDrawer::loadDrawer(const FileName& fnView, const String& drawerSection) {
-	Array<String> parts;
-	Split(drawerSection,parts,"::");
+	String sType;
+	ObjectInfo::ReadElement(drawerSection.scVal(),"Type",fnView, sType);
 	ILWIS::DrawerParameters dp(rootDrawer, this);
-	ILWIS::NewDrawer *drawer = NewDrawer::getDrawer(parts[0], "Ilwis38", &dp);
-	drawer->load(fnView,drawerSection);
+	ILWIS::NewDrawer *drawer = NewDrawer::getDrawer(sType, "Ilwis38", &dp);
+	if (drawer) {
+		drawer->load(fnView,drawerSection);
+	}
 	return drawer;
 }
 

@@ -97,9 +97,9 @@ namespace ILWIS {
 
 	struct PreparationParameters {
 		PreparationParameters(const PreparationParameters* parms) :
-			type(parms->type),dc(parms->dc)/*,rootDrawer(0),zOrder(parms->zOrder)*/,index(parms->index),contextMode(2) {}
-		PreparationParameters(int t=1,CDC *_dc = 0,int m=2) : type(t),dc(_dc)/*,rootDrawer(0),parentDrawer(0)*/, zOrder(-1),index(0),contextMode(m) {} 
-		PreparationParameters(int t, const CoordSystem& cs) : type(t), csy(cs),dc(0)/*,rootDrawer(0),parentDrawer(0)*/,zOrder(-1),index(0),contextMode(2)  {}
+			type(parms->type),dc(parms->dc)/*,rootDrawer(0),zOrder(parms->zOrder)*/,index(parms->index),contextMode(10) {}
+		PreparationParameters(int t=1,CDC *_dc = 0,int m=10) : type(t),dc(_dc)/*,rootDrawer(0),parentDrawer(0)*/, zOrder(-1),index(0),contextMode(m) {} 
+		PreparationParameters(int t, const CoordSystem& cs) : type(t), csy(cs),dc(0)/*,rootDrawer(0),parentDrawer(0)*/,zOrder(-1),index(0),contextMode(10)  {}
 		int type;
 		CDC *dc;
 		int contextMode;
