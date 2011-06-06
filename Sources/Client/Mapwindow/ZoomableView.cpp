@@ -745,7 +745,7 @@ void ZoomableView::OnUpdateZoomOut(CCmdUI* pCmdUI)
 		fMapOpen = true;
 	bool zoomedIn = (mcd->rootDrawer->getMapCoordBounds().width() > mcd->rootDrawer->getCoordBoundsZoom().width()) || 
 				     (mcd->rootDrawer->getMapCoordBounds().height() > mcd->rootDrawer->getCoordBoundsZoom().height());
-	pCmdUI->Enable(fMapOpen && zoomedIn);
+	pCmdUI->Enable(fMapOpen && zoomedIn && !mcd->rootDrawer->is3D());
 	if (tools.size() == 0)
 		iActiveTool = 0;
 	pCmdUI->SetRadio(ID_ZOOMOUT == iActiveTool);
@@ -774,34 +774,36 @@ void ZoomableView::ZoomOutPnt(zPoint p)
 void ZoomableView::OnUpdateZoomIn(CCmdUI* pCmdUI)
 {
 	bool fMapOpen = false;
-	IlwisDocument *doc = (IlwisDocument *)GetDocument();
+	MapCompositionDoc *doc = (MapCompositionDoc *)GetDocument();
 	if ( !doc->fIsEmpty())			
 		fMapOpen = true;
 	bool fTooSmall;
  	fTooSmall = false; // scale(dim.width()) < 5 || scale(dim.height()) < 5;
-	pCmdUI->Enable(fMapOpen && !fTooSmall);
+	pCmdUI->Enable(fMapOpen && !fTooSmall && !doc->rootDrawer->is3D());
 	pCmdUI->SetRadio(ID_ZOOMIN == iActiveTool);
 }
 
 void ZoomableView::OnNoTool()
 {
-	noTool();
+	noTool(ID_ZOOMIN);
+	noTool(ID_ZOOMOUT);
 }
 
-void ZoomableView::noTool(int iTool) {
+void ZoomableView::noTool(int iTool, bool force) {
 	if ( iTool == 0) {
 		iActiveTool = 0;
-		tools.reset();
+		tools.reset(force);
 	} else {
 		map<int, MapPaneViewTool *>::iterator cur = tools.find(iTool);
 		if ( cur != tools.end()) {
 			iActiveTool = 0;
 			::SetCursor(LoadCursor(0,IDC_ARROW));
 			(*cur).second->Stop();
-			if ( (*cur).second->stayResident() == false) {
-				delete (*cur).second;
-			}
+			MapPaneViewTool *tool = (*cur).second;
 			tools.erase(cur);
+			if ( tool->stayResident() == false  || force) {
+				delete tool;
+			}
 		}
 	}
 }
@@ -1069,10 +1071,10 @@ MapTools::~MapTools() {
 	reset();
 }
 
-void MapTools::reset() {
+void MapTools::reset(bool force) {
 	for(map<int, MapPaneViewTool *>::iterator cur = begin(); cur != end(); ++cur) {
 		(*cur).second->Stop();
-		if ( !(*cur).second->stayResident())
+		if ( !(*cur).second->stayResident() || force)
 			delete (*cur).second;
 	}
 	clear();

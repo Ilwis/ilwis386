@@ -277,6 +277,12 @@ GNC                     ICON                    "GNC.ico"
 SETCOLL                 ICON                    "setcol.ico"
 STACK                   ICON                    "stack.ico"
 SET16                   ICON                    "set16.ico"
+AllLayers               ICON                    "alllayers.ico"
+Measurer                ICON                    "measurer.ico"
+Circle                  ICON                    "Circle.ico"
+CrossSection            ICON                    "crosssection.ico"
+Track                   ICON                    "track.ico"
+Scale                   ICON                    "scale.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //

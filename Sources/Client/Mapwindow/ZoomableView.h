@@ -77,7 +77,7 @@ public:
 
 
 	void OnEscape();
-	void reset();
+	void reset(bool force=false);
 };
 
 class IMPEXP ZoomableView : public CView
@@ -117,7 +117,7 @@ public:
 	afx_msg void OnZoomIn();
 	afx_msg void OnZoomOut();
 	afx_msg void OnNoTool();
-	void noTool(int iTool= 0);
+	void noTool(int iTool= 0, bool force = false);
 	bool addTool(MapPaneViewTool *tool, int id);
 	void AreaSelected(CRect);
 	void ShowArea(const MinMax& mmWish);

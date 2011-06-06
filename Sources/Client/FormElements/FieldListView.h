@@ -75,7 +75,9 @@ public:
 	int iNrCols();
 	 void show(int);
 	 char *item(int row, int col);
-	 void AddData(vector<String> v);
+	 void AddData(const vector<String>& v);
+	 void setData(int row, const vector<String>& v);
+	 void update();
 
 	//void ToggleAsKey(int iItem);
 	//void ToggleSelectedAsKey();

@@ -595,25 +595,27 @@ void MapCompositionDoc::OnExtPerc()
 	private:  
 		FieldReal* frTop;
 	};
-	//double rTop, rBottom, rLeft, rRight;
-	//rTop = (mmMapBounds.MinRow() - mmSize.MinRow()) * 100.0 / mmMapBounds.height();
-	//rTop = floor(100 * rTop) / 100;
-	//rBottom = (mmSize.MaxRow() - mmMapBounds.MaxRow()) * 100.0 / mmMapBounds.height();
-	//rBottom = floor(100 * rBottom) / 100;
-	//rLeft = (mmMapBounds.MinCol() - mmSize.MinCol()) * 100.0 / mmMapBounds.width();
-	//rLeft = floor(100 * rLeft) / 100;
-	//rRight = (mmSize.MaxCol() - mmMapBounds.MaxCol()) * 100.0 / mmMapBounds.width();
-	//rRight = floor(100 * rRight) / 100;
-	//ExtendForm frm(0,&rTop,&rBottom,&rLeft,&rRight);
-	//if (frm.fOkClicked()) 
-	//{
-	//	MinMax mm;
-	//	mm.MinRow() = mmMapBounds.MinRow() - rounding(rTop / 100.0 * mmMapBounds.height());
-	//	mm.MaxRow() = mmMapBounds.MaxRow() + rounding(rBottom / 100.0 * mmMapBounds.height());
-	//	mm.MinCol() = mmMapBounds.MinCol() - rounding(rLeft / 100.0 * mmMapBounds.width());
-	//	mm.MaxCol() = mmMapBounds.MaxCol() + rounding(rRight / 100.0 * mmMapBounds.width());
-	//	SetBounds(mm);
-	//}
+	double rTop, rBottom, rLeft, rRight;
+	rTop = rLeft = rBottom = rRight = 0;
+	ExtendForm frm(0,&rTop,&rBottom,&rLeft,&rRight);
+	if (frm.fOkClicked()) 
+	{
+		CoordBounds cb = rootDrawer->getMapCoordBounds();
+		double ty,by;
+		bool isNorthOriented = cb.MinY() > cb.MaxY();
+		double lx = cb.MinX() - cb.width() * rLeft / 100.0;
+		double rx = cb.MaxX() + cb.width() * rRight / 100.0;
+		if ( isNorthOriented) {
+			ty = cb.MinY() - cb.height() * rTop / 100.0;
+			by = cb.MaxY() + cb.height() * rBottom / 100.0;
+		} else {
+			ty = cb.MinY() - cb.height() * rBottom / 100.0;
+			by = cb.MaxY() + cb.height() * rTop / 100.0;
+		}
+		cb = CoordBounds(Coord(lx,ty), Coord(rx,by));
+		rootDrawer->addCoordBounds(rootDrawer->getCoordinateSystem(),cb);
+		rootDrawer->getDrawerContext()->doDraw();
+	}
 }
 
 void MapCompositionDoc::OnExtCoord()
@@ -636,17 +638,13 @@ void MapCompositionDoc::OnExtCoord()
 	private:  
 		FieldCoord* fcMin;
 	};
-	//MinMax mm = mmBounds();
-	//CoordBounds cb;
-	//cb += georef->cConv(mm.rcMin);
-	//cb += georef->cConv(mm.rcMax);
-	//cb += georef->cConv(RowCol(mm.MinRow(), mm.MaxCol()));
-	//cb += georef->cConv(RowCol(mm.MaxRow(), mm.MinCol()));
-	//BoundsForm frm(0,&cb.cMin,&cb.cMax);
-	//if (frm.fOkClicked()) 
-	//{
-	//	SetBounds(cb);
-	//}
+	CoordBounds cb = rootDrawer->getMapCoordBounds();
+	BoundsForm frm(0,&cb.cMin,&cb.cMax);
+	if (frm.fOkClicked()) 
+	{
+		rootDrawer->setCoordBoundsMap(cb);
+		rootDrawer->getDrawerContext()->doDraw();
+	}
 }
 
 void MapCompositionDoc::OnUpdateExtCoord(CCmdUI* pCmdUI)
@@ -911,7 +909,9 @@ ILWIS::NewDrawer *MapCompositionDoc::createBaseMapDrawer(const BaseMap& bmp, con
 	drawer->addDataSource((void *)&bmp);
 	rootDrawer->setCoordinateSystem(bmp->cs());
 	rootDrawer->addCoordBounds(bmp->cs(), bmp->cb(), false);
-	ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
+	ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY);
+	drawer->prepare(&pp);
+	pp.type = RootDrawer::ptRENDER;
 	drawer->prepare(&pp);
 	rootDrawer->addDrawer(drawer);
 	addToPixelInfo(bmp, (ComplexDrawer *)drawer);

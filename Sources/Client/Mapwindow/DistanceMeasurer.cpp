@@ -169,13 +169,25 @@ void DistanceMeasurer::Report()
 
 void DistanceMeasurer::drawLine()
 {
+	/*mpv->Invalidate();
 	CClientDC cdc(mpv);
 	int iROP = cdc.SetROP2(R2_XORPEN);
 	CGdiObject* pn = cdc.SelectStockObject(WHITE_PEN);
 	cdc.MoveTo(pStart);
 	cdc.LineTo(pEnd);
 	cdc.SelectObject(pn);
-	cdc.SetROP2(iROP);
+	cdc.SetROP2(iROP);*/
+	glClearColor(1.0,1.0,1.0,0.0);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+	glColor3d(1,1,1);
+	glBegin(GL_LINE_STRIP);
+	glVertex3d( cStart.x, cStart.y, 0); // mpv->GetDocument()->rootDrawer->getFakeZ());
+	glVertex3d( cEnd.x, cEnd.y, 0);
+	glEnd();
+	glDisable(GL_BLEND);
+
+
 }
 
 /*
@@ -219,7 +231,7 @@ void DistanceMeasurer::OnMouseMove(UINT nFlags, CPoint point)
 	if (fDown) {
 		if (pEnd == point)
 			return;
-    mpv->info->ShowWindow(SW_HIDE);
+        mpv->info->ShowWindow(SW_HIDE);
 		drawLine();
 		pEnd = point;
 		drawLine();
@@ -231,6 +243,7 @@ void DistanceMeasurer::OnLButtonDown(UINT nFlags, CPoint point)
 {
   pEnd = pStart = point;
   fDown = TRUE;
+  mpv->setBitmapRedraw(true);
   drawLine();
 }
 
@@ -244,16 +257,17 @@ void DistanceMeasurer::OnLButtonUp(UINT nFlags, CPoint point)
   if (pStart == pEnd) 
     return;
   Report();
+  mpv->setBitmapRedraw(true);
   drawLine();
   //Stop(); // no stop (request of Petra 14/6/00)
 }
 
 double DistanceMeasurer::rDistance()
 {
-	cStart = mpv->crdPnt(pStart);
+	cStart = mpv->GetDocument()->rootDrawer->screenToWorld(RowCol(pStart.y, pStart.x));
   if (cStart.fUndef())
     return rUNDEF;
-	cEnd = mpv->crdPnt(pEnd);
+  cEnd = mpv->GetDocument()->rootDrawer->screenToWorld(RowCol(pEnd.y, pEnd.x));
   if (cEnd.fUndef())
     return rUNDEF;
   return rDist(cStart, cEnd);
@@ -294,11 +308,11 @@ bool DistanceMeasurer::fEllipsoidalCoords()
 
 double DistanceMeasurer::rSphericalDistance(const double rRadius)
 {
-	cStart = mpv->crdPnt(pStart);
+	cStart = mpv->GetDocument()->rootDrawer->screenToWorld(RowCol(pStart.y, pStart.x));
   if (cStart.fUndef())
     return rUNDEF;
 
-	cEnd = mpv->crdPnt(pEnd);
+	 cEnd = mpv->GetDocument()->rootDrawer->screenToWorld(RowCol(pEnd.y, pEnd.x));
   if (cEnd.fUndef())
     return rUNDEF;
 
@@ -365,10 +379,10 @@ double DistanceMeasurer::rSphericalMeridConv(const double rRadius)
 double DistanceMeasurer::rEllipsoidDistance(const CoordSystem& cs) 
 {
 	double rD;
-	cStart = mpv->crdPnt(pStart);
+	cStart = mpv->GetDocument()->rootDrawer->screenToWorld(RowCol(pStart.y, pStart.x));
   if (cStart.fUndef())
     return rUNDEF;
-	cEnd = mpv->crdPnt(pEnd);
+	cEnd = mpv->GetDocument()->rootDrawer->screenToWorld(RowCol(pEnd.y, pEnd.x));
   if (cEnd.fUndef())
     return rUNDEF;
 	LatLon llStart, llEnd;

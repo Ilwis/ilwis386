@@ -95,7 +95,7 @@ private:
 	long getTypeMask(const String& type);
 	void addModule(const FileName& fnModule,vector<GetImportOptionForms>& options);
 	void addModules();
-	void addFolder(const String& dir,vector<GetImportOptionForms>& options);
+	//void addFolder(const String& dir,vector<GetImportOptionForms>& options);
 	void AddOldStyleIlwisImports();
 	void readImportDef();
 	ImportFormat getFormat(const String& sVal);

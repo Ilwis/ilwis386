@@ -866,8 +866,8 @@ void MapPaneView::OnCopy()
 		if (nReduceResCount >= 10)
 			break;
 	}
-	//SetRedraw(TRUE);
-	//RedrawWindow(NULL, NULL, RDW_INVALIDATE | RDW_NOERASE);
+	SetRedraw(TRUE);
+	RedrawWindow(NULL, NULL, RDW_INVALIDATE | RDW_NOERASE);
 
 	EndWaitCursor();
 }

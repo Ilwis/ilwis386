@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="IlwisClient"
 	ProjectGUID="{12042408-86EA-4501-8797-F358A5447A86}"
 	RootNamespace="IlwisClient"
@@ -595,11 +595,15 @@
 				>
 			</File>
 			<File
-				RelativePath=".\amesd.ico"
+				RelativePath="..\..\Sources\Client\Resources\alllayers.ico"
 				>
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\amesd.ico"
+				>
+			</File>
+			<File
+				RelativePath=".\amesd.ico"
 				>
 			</File>
 			<File
@@ -727,6 +731,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Client\Resources\Circle.ico"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Client\Resources\CLSDFOLD.ICO"
 				>
 			</File>
@@ -772,6 +780,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\Crosses.ico"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\crosssection.ico"
 				>
 			</File>
 			<File
@@ -1323,6 +1335,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Client\Resources\measurer.ico"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Client\Resources\median.ico"
 				>
 			</File>
@@ -1559,6 +1575,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Client\Resources\scale.ico"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Client\Resources\scalebar.bmp"
 				>
 			</File>
@@ -1608,6 +1628,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\set.ico"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\set16.ico"
 				>
 			</File>
 			<File
@@ -1876,6 +1900,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\touches.ico"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\track.ico"
 				>
 			</File>
 			<File
@@ -5276,10 +5304,6 @@
 				</File>
 			</Filter>
 		</Filter>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\set16.ico"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

@@ -122,7 +122,7 @@ bool DrawerTool::addTool(DrawerTool *tool, int proposedIndex) {
 	else
 		tools.insert(tools.begin() + proposedIndex, tool);
 	for( map<String, CreateDrawerTool>::iterator cur = factory.begin(); cur != factory.end(); ++cur) {
-		DrawerTool *dtool = ((*cur).second)(mpv,tree,(ComplexDrawer *)tool->getDrawer());
+		DrawerTool *dtool = ((*cur).second)(mpv,tree,tool->getDrawer());
 		if ( dtool->isToolUseableFor(tool) ) {
 			tool->addTool(dtool);			
 		} else

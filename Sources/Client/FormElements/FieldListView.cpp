@@ -64,8 +64,14 @@ void FLVColumnListCtrl::OnGetDispInfo(NMHDR* pNMHDR, LRESULT* pResult)
 	{
 		int iSubItem = pDispInfo->item.iSubItem;
 		int item = pDispInfo->item.iItem;
-
 		pDispInfo->item.pszText = parentFormEntry->item(item, iSubItem);
+		if ( iSubItem == 0 &&  pDispInfo->item.pszText != 0) {
+			FileName fn( pDispInfo->item.pszText);
+			if ( fn.sExt != "") {
+				pDispInfo->item.iImage = IlwWinApp()->iImage(fn.sExt);
+				pDispInfo->item.mask = LVIF_TEXT | LVIF_IMAGE;
+			}
+		}
 	}
 
 	*pResult = 0;
@@ -123,18 +129,27 @@ void FieldListView::show(int v) {
 		m_clctrl.ShowWindow(v)  ;
 }
 
-void FieldListView::AddData(vector<String> rowdata) {
+void FieldListView::setData(int row, const vector<String>& rowdata) {
+	if ( row >= data.size())
+		throw ErrorObject(TR("Illegal row number when changing data"));
+	data[row].clear();
+	for(vector<String>::const_iterator cur = rowdata.begin(); cur != rowdata.end(); ++cur) {
+		data[row].push_back(*cur);	
+	}
+}
+
+void FieldListView::AddData(const vector<String>& rowdata) {
 	SetRowCount(iRowCount() + 1);
 	data.push_back(vector<String>());
-	for(vector<String>::iterator cur = rowdata.begin(); cur != rowdata.end(); ++cur) {
-		data[data.size() - 1].push_back(*cur);	
-	}
+	setData(data.size() - 1, rowdata);
 }
 
 char *FieldListView::item(int row, int col) {
 	if ( iRowCount() < data.size())
 		SetRowCount(data.size());
-	return data[row][col].sVal();
+	if ( row < data.size())
+		return data[row][col].sVal();
+	return 0;
 }
 
 void FieldListView::BuildColumns()
@@ -182,4 +197,9 @@ void FieldListView::CallChangeCallback()
 {
 	if (_npChanged)
 		(_cb->*_npChanged)(0);
+}
+
+void FieldListView::update() {
+	m_clctrl.RedrawItems(0, m_clctrl.GetItemCount());
+	m_clctrl.UpdateWindow();
 }

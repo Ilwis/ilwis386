@@ -459,11 +459,11 @@ void GeneralImportForm::addModules() {
 			if ( fnNew.sExt.toLower() == ".dll")
 				addModule(fnNew, options);
 		}
-		else {
+	/*	else {
 			FileName fnNew (finder.GetFilePath());
 			if ( fnNew.sFile != "." && fnNew.sFile != ".." && fnNew.sFile != "")
 				addFolder(String(fnNew.sFullPath()),options);
-		}
+		}*/
 	}
 	for(int i = 0; i < options.size(); ++i) {
 		GetImportOptionForms opFunc = options[i];
@@ -471,24 +471,24 @@ void GeneralImportForm::addModules() {
 	}
 }
 
-void GeneralImportForm::addFolder(const String& dir,vector<GetImportOptionForms>& options) {
-	CFileFind finder;
-	String pattern = dir + "\\*.*";
-	BOOL fFound = finder.FindFile(pattern.scVal());
-	while(fFound) {
-		fFound = finder.FindNextFile();
-		if (!finder.IsDirectory())
-		{
-			FileName fnNew (finder.GetFilePath());
-			if ( fnNew.sExt == ".dll" || fnNew.sExt == ".DLL")
-				addModule(fnNew,options);
-		} else {
-			FileName fnNew (finder.GetFilePath());
-			if ( fnNew.sFile != "." && fnNew.sFile != ".." && fnNew.sFile != "")
-				addFolder(String(fnNew.sFullPath()),options);
-		}
-	}
-}
+//void GeneralImportForm::addFolder(const String& dir,vector<GetImportOptionForms>& options) {
+//	CFileFind finder;
+//	String pattern = dir + "\\*.*";
+//	BOOL fFound = finder.FindFile(pattern.scVal());
+//	while(fFound) {
+//		fFound = finder.FindNextFile();
+//		if (!finder.IsDirectory())
+//		{
+//			FileName fnNew (finder.GetFilePath());
+//			if ( fnNew.sExt == ".dll" || fnNew.sExt == ".DLL")
+//				addModule(fnNew,options);
+//		} else {
+//			FileName fnNew (finder.GetFilePath());
+//			if ( fnNew.sFile != "." && fnNew.sFile != ".." && fnNew.sFile != "")
+//				addFolder(String(fnNew.sFullPath()),options);
+//		}
+//	}
+//}
 
 void GeneralImportForm::AddOldStyleIlwisImports() {
 	readImportDef();

@@ -626,7 +626,7 @@ void DisplayOptionTreeItem::OnLButtonDblClk(UINT nFlags, CPoint point)
 	if ( dbctool && dbcAction) {
 		(dbctool->*dbcAction)();
 	} 
-	SwitchCheckBox(true);
+	//SwitchCheckBox(true);
 }
 
 void DisplayOptionTreeItem::SwitchCheckBox(bool fOn) {

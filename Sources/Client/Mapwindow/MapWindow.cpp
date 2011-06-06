@@ -190,8 +190,7 @@ int MapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
   add(ID_SCALE1);
   addBreak;
   add(ID_REDRAW);
-  add(ID_MEASUREDIST);
-	add(ID_SHOWHISTOGRAM);
+  add(ID_SHOWHISTOGRAM);
   addBreak;
     menSub.CreateMenu();
     addSub(ID_EXTPERC);
