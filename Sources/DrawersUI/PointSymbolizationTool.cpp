@@ -13,6 +13,8 @@
 #include "Drawers\FeatureLayerDrawer.h"
 #include "Drawers\PointLayerDrawer.h"
 #include "Engine\Drawers\SVGLoader.h"
+#include "Engine\Drawers\SimpleDrawer.h" 
+#include "drawers\pointdrawer.h"
 #include "DrawersUI\PointSymbolizationTool.h"
 #include "DrawersUI\LayerDrawerTool.h"
 #include "DrawersUI\SetDrawerTool.h"
@@ -67,7 +69,7 @@ String PointSymbolizationTool::getMenuString() const {
 
 //---------------------------------------------------
 PointSymbolizationForm::PointSymbolizationForm(CWnd *wPar, PointLayerDrawer *dr):
-DisplayOptionsForm(dr,wPar,TR("Symbolization")), selection(0), thick(1), scale(1)
+DisplayOptionsForm(dr,wPar,TR("Symbolization")), selection(0)
 {
 	ILWIS::SVGLoader *loader = NewDrawer::getSvgLoader();
 	for(map<String, SVGElement *>::iterator cur = loader->begin(); cur != loader->end(); ++cur) {
@@ -75,31 +77,37 @@ DisplayOptionsForm(dr,wPar,TR("Symbolization")), selection(0), thick(1), scale(1
 		name = name.sHead("|");
 		names.push_back(name);
 	}
+	props = (PointProperties *)dr->getProperties();
 	fselect = new FieldOneSelectString(root,TR("Symbols"),&selection, names);
-	fiThick = new FieldInt(root,TR("Line thickness"),&thick);
-	frScale = new FieldReal(root,TR("Symbol scale"),&scale,ValueRange(RangeReal(0.1,100.0),0.1));
+	fiThick = new FieldReal(root,TR("Line thickness"),&(props->thickness));
+	frScale = new FieldReal(root,TR("Symbol scale"),&(props->scale),ValueRange(RangeReal(0.1,100.0),0.1));
+	t3dOr = props->threeDOrientation ? 1 : 0;
+	f3d = new CheckBox(root,TR("3D orientation"),&t3dOr);
 	create();
 }
 
 void PointSymbolizationForm::apply(){
 	fselect->StoreData();
-	fselect->StoreData();
+	fiThick->StoreData();
 	frScale->StoreData();
+	f3d->StoreData();
 
 	SetDrawer *setDrw = dynamic_cast<SetDrawer *>(drw);
 	String symbol = names[selection];
 	if ( setDrw) {
 		for(int i = 0; i < setDrw->getDrawerCount(); ++i) {
 			PointLayerDrawer *psdrw = (PointLayerDrawer *) (setDrw->getDrawer(i));
-			psdrw->setSymbolProperties(symbol,scale);
+			PointProperties *oldprops = (PointProperties *)psdrw->getProperties();
+			props->threeDOrientation = t3dOr != 0;
+			oldprops->set(props);
+			PreparationParameters pp(NewDrawer::ptRENDER);
+			psdrw->prepareChildDrawers(&pp);
 		}
-		PreparationParameters pp(NewDrawer::ptRENDER, 0);
-		setDrw->prepareChildDrawers(&pp);
 	} else {
-		PointLayerDrawer *psdrw = (PointLayerDrawer *)drw;
-		psdrw->setSymbolProperties(symbol,scale);
+		props->symbol = symbol;
+		props->threeDOrientation = t3dOr != 0;
 		PreparationParameters pp(NewDrawer::ptRENDER, 0);
-		psdrw->prepare(&pp);
+		drw->prepare(&pp);
 	}
 
 

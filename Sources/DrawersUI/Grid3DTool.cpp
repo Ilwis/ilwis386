@@ -41,7 +41,7 @@ HTREEITEM Grid3DTool::configure( HTREEITEM parentItem) {
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree, parentItem, drawer);
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)(DisplayOptionItemFunc)&Grid3DTool::displayOptionGrid3D);
 	item->setCheckAction(this, 0,(DTSetCheckFunc)&Grid3DTool::grid3D);
-	htiNode = insertItem("3D Grid","3D",item,gdr->is3D());
+	htiNode = insertItem("3D Grid","3D",item,gdr->is3DGrd());
 
 	DrawerTool::configure(htiNode);
 
@@ -55,7 +55,7 @@ void Grid3DTool::displayOptionGrid3D() {
 void Grid3DTool::grid3D(void *v, HTREEITEM ) {
 	bool threeD = *(bool *)v;
 	GridDrawer *gdr = (GridDrawer *)drawer;
-	gdr->set3D(threeD);
+	gdr->set3DGrid(threeD);
 	PreparationParameters pp(NewDrawer::ptGEOMETRY);
 	drawer->prepare(&pp);
 	drawer->getRootDrawer()->getDrawerContext()->doDraw();

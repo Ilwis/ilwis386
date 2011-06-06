@@ -46,7 +46,7 @@ bool Cursor3DDrawer::draw( const CoordBounds& cbArea) const{
 }
 
 void Cursor3DDrawer::prepare(PreparationParameters *p){
-	setSymbol("slanted-cross");
+	properties.symbol = "slanted-cross";
 	setSpecialDrawingOptions(NewDrawer::sdoExtrusion, true);
 	PointDrawer::prepare(p);
 }
@@ -56,7 +56,7 @@ DrawerTool *createThreeDStack(ZoomableView* zv, LayerTreeView *view, NewDrawer *
 }
 
 ThreeDStack::ThreeDStack(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
-DrawerTool("ThreeDStack",zv, view, drw),cursor(0)
+DrawerTool("ThreeDStack",zv, view, drw),cursor(0),offset(0),distance(0)
 {
 	stay = true;
 }
@@ -108,7 +108,7 @@ HTREEITEM ThreeDStack::configure( HTREEITEM parentItem) {
 
 void ThreeDStack::changeDistances() {
 	ValueRange range(0, rRound(distance * 3), distance / 10);
-	new ThreeDStackForm(tree, (ComplexDrawer *)drawer, this, range,&distance);
+	new ThreeDStackForm(tree, (ComplexDrawer *)drawer, this, range,&distance,&offset);
 }
 
 void ThreeDStack::setthreeDStackMarker(void *v, HTREEITEM) {
@@ -185,7 +185,7 @@ void ThreeDStack::updateLayerDistances() {
 			continue;
 		for(int j = 0 ; j < drw->getDrawerCount(); ++j) {
 			ComplexDrawer *cdrw = (ComplexDrawer *)drw->getDrawer(j);
-			cdrw->getZMaker()->setOffset(zoffset,true);
+			cdrw->getZMaker()->setOffset(zoffset + offset,true);
 		}
 		zoffset += distance;
 	}
@@ -222,15 +222,21 @@ void ThreeDStack::setIndividualStatckItem(void *v, HTREEITEM it) {
 
 //---------------------------------------------------
 
-ThreeDStackForm::ThreeDStackForm(CWnd *wPar, ComplexDrawer *dr, ILWIS::ThreeDStack *_stack, const ValueRange& _range, double *_distance) : 
+ThreeDStackForm::ThreeDStackForm(CWnd *wPar, ComplexDrawer *dr, ILWIS::ThreeDStack *_stack, const ValueRange& _range, double *_distance, double *_offset) : 
 DisplayOptionsForm(dr,wPar,"ThreeDStack"),
 distance(_distance),
 range(_range),
-stck(_stack)
+stck(_stack),
+offset(_offset)
 {
-	slider = new FieldRealSliderEx(root,TR("Stack layer distance"), distance, range,true);
-	slider->SetCallBack((NotifyProc)&ThreeDStackForm::setThreeDStack);
-	slider->setContinuous(true);
+	sliderDistance = new FieldRealSliderEx(root,TR("Stack layer distance"), distance, range,false);
+	sliderDistance->SetCallBack((NotifyProc)&ThreeDStackForm::setThreeDStack);
+	sliderDistance->setContinuous(true);
+
+	ValueRange vrr(RangeReal(-range->rrMinMax().rHi(),range->rrMinMax().rHi()),range->rStep());
+	sliderOffset = new FieldRealSliderEx(root,TR("Stack layer offset"), offset, vrr, false);
+	sliderOffset->SetCallBack((NotifyProc)&ThreeDStackForm::setThreeDStack);
+	sliderOffset->setContinuous(true);
 	create();
 }
 
@@ -241,14 +247,15 @@ int ThreeDStackForm::setThreeDStack(Event *ev) {
 
 void  ThreeDStackForm::apply() {
 	if ( initial) return;
-	slider->StoreData();
+	sliderDistance->StoreData();
+	sliderOffset->StoreData();
 
 	SetDrawer *setdrw = dynamic_cast<SetDrawer *>(drw);
 	if ( setdrw) {
 		PreparationParameters pp(NewDrawer::ptRENDER, 0);
 		for(int i = 0; i < setdrw->getDrawerCount(); ++i) {
 			ComplexDrawer *cdrw = (ComplexDrawer *)drw;
-			cdrw->getZMaker()->setOffset(*distance,true);
+			cdrw->getZMaker()->setOffset(*distance + *offset,true);
 			//cdrw->prepareChildDrawers(&pp);
 		}
 	}

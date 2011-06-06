@@ -4,6 +4,8 @@ ILWIS::DrawerTool *createLineStyleTool(ZoomableView* zv, LayerTreeView *view, IL
 
 namespace ILWIS {
 
+class LineDrawer;
+
 class LineStyleTool : public DrawerTool {
 public:
 	LineStyleTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw);
@@ -23,12 +25,14 @@ class LineStyleForm: public DisplayOptionsForm
 {
 public:
 	LineStyleForm(CWnd *par, ComplexDrawer *gdr,ComplexDrawer::DrawerType);
+	LineStyleForm(CWnd *par, LineDrawer *ldr) ;
 	void apply();
 private:
 	FieldReal *fi;
 	FieldLineType *flt;
 	FieldColor *fc;
 	LineProperties *lprops;
+	LineDrawer *line;
 	LineDspType style;
 	ComplexDrawer::DrawerType drawerType;
 };

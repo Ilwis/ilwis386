@@ -9,7 +9,7 @@ namespace ILWIS {
 	class GridTool : public DrawerTool {
 	public:
 		GridTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw);
-		bool isToolUseableFor(ILWIS::NewDrawer *drw);
+		bool isToolUseableFor(ILWIS::DrawerTool *drw);
 		HTREEITEM configure( HTREEITEM parentItem);
 		virtual ~GridTool();
 		String getMenuString() const;

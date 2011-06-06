@@ -30,6 +30,7 @@ namespace ILWIS {
 		void setthreeDStack(void *v, HTREEITEM it) ;
 		vector<StackInfo> stackStatus;
 		double distance;
+		double offset;
 		Cursor3DDrawer *cursor;
 		Coord mouseCrd;
 
@@ -47,14 +48,16 @@ namespace ILWIS {
 
 	class ThreeDStackForm : public DisplayOptionsForm {
 	public:
-		ThreeDStackForm(CWnd *wPar, ComplexDrawer *dr, ThreeDStack *st, const ValueRange& _range, double *_distance);
+		ThreeDStackForm(CWnd *wPar, ComplexDrawer *dr, ThreeDStack *st, const ValueRange& _range, double *_distance, double *_offset);
 		void apply(); 
 	private:
 		int setThreeDStack(Event *ev);
 
 		int ThreeDStack;
-		FieldRealSliderEx *slider;
+		FieldRealSliderEx *sliderDistance;
+		FieldRealSliderEx *sliderOffset;
 		double *distance;
+		double *offset;
 		const ValueRange& range;
 		ILWIS::ThreeDStack *stck;
 	};

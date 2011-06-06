@@ -26,11 +26,13 @@ class PointSymbolizationForm : public DisplayOptionsForm {
 private:
 	vector<string> names;
 	long selection;
-	int thick;
-	double scale;
+	long t3dOr;
 	FieldOneSelectString *fselect;
-	FieldInt *fiThick;
+	FieldReal *fiThick;
+	CheckBox *f3d;
 	FieldReal *frScale;
+	PointProperties *props;
+
 
 
 };

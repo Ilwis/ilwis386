@@ -9,7 +9,7 @@ namespace ILWIS {
 	class ThreeDGlobalTool : public DrawerTool {
 	public:
 		ThreeDGlobalTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw);
-		bool isToolUseableFor(ILWIS::NewDrawer *drw);
+		bool isToolUseableFor(ILWIS::DrawerTool *drw);
 		HTREEITEM configure( HTREEITEM parentItem);
 		virtual ~ThreeDGlobalTool();
 	protected:

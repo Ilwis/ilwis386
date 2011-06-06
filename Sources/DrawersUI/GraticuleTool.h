@@ -9,7 +9,7 @@ namespace ILWIS {
 	class GraticuleTool : public DrawerTool {
 	public:
 		GraticuleTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw);
-		bool isToolUseableFor(ILWIS::NewDrawer *drw);
+		bool isToolUseableFor(ILWIS::DrawerTool *drw);
 		HTREEITEM configure( HTREEITEM parentItem);
 		virtual ~GraticuleTool();
 		String getMenuString() const;

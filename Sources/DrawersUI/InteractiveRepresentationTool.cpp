@@ -35,7 +35,7 @@ InteractiveRepresentationTool::~InteractiveRepresentationTool() {
 
 bool InteractiveRepresentationTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	LayerDrawerTool *sdrwt = dynamic_cast<LayerDrawerTool *>(tool);
-	AnimationTool *adrwt = dynamic_cast<AnimationTool *>(tool);
+	SetDrawerTool *adrwt = dynamic_cast<SetDrawerTool *>(tool);
 	if ( !sdrwt && !adrwt)
 		return false;
 	LayerDrawer *sdrw = dynamic_cast<LayerDrawer *>(tool->getDrawer());

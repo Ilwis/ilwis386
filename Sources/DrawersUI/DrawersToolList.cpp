@@ -18,7 +18,7 @@
 #include "drawers\linefeaturedrawer.h"
 #include "drawers\PointDrawer.h"
 #include "drawers\PointFeatureDrawer.h"
-#include "Drawers\gpc.h"
+#include "Engine\Base\Algorithm\triangulation\gpc.h"
 #include "drawers\polygondrawer.h"
 #include "drawers\polygonfeaturedrawer.h"
 #include "Drawers\FeatureLayerDrawer.h"
@@ -65,6 +65,11 @@
 #include "DrawersUI\ThreeDStack.h"
 #include "GraticuleTool.h"
 #include "LineSetEditor2.h"
+#include "DrawersUI\GlobalTool.h"
+#include "DistanceMeasurer.h"
+#include "DrawersUI\CrossSectionTool.h"
+#include "DrawersUI\TrackProfileTool.h"
+#include "DrawersUI\PointScalingTool.h"
 
 
 using namespace ILWIS;
@@ -101,8 +106,11 @@ DrawerToolInfoVector *createDrawerTool() {
 	infos->push_back(new DrawerToolInfo("CollectionTool",createCollectionTool));
 	infos->push_back(new DrawerToolInfo("ThreeDStack",createThreeDStack));
 	infos->push_back(new DrawerToolInfo("GraticuleTool",createGraticuleTool));
-
-	
+	infos->push_back(new DrawerToolInfo("GlobalTool",createGlobalTool));
+	infos->push_back(new DrawerToolInfo("DistanceMeasurer",createMeasurerTool));
+	infos->push_back(new DrawerToolInfo("CrossSectionTool",createCrossSectionTool));
+	infos->push_back(new DrawerToolInfo("TrackProfileTool",createTrackProfileTool));
+	infos->push_back(new DrawerToolInfo("PointScalingTool",createPointScalingTool));
 
 	return infos;
 }

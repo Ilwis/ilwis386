@@ -11,7 +11,7 @@
 #include "Client\Mapwindow\LayerTreeItem.h" 
 #include "Engine\Drawers\DrawerContext.h"
 #include "DrawersUI\ThreeDGlobalTool.h"
-//#include "Drawers\RepresentationTool.h"
+#include "DrawersUI\GlobalTool.h"
 //#include "Drawers\StretchTool.h"
 
 DrawerTool *createThreeDGlobalTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) {
@@ -26,9 +26,9 @@ ThreeDGlobalTool::ThreeDGlobalTool(ZoomableView* zv, LayerTreeView *view, NewDra
 ThreeDGlobalTool::~ThreeDGlobalTool() {
 }
 
-bool ThreeDGlobalTool::isToolUseableFor(ILWIS::NewDrawer *drw) { 
+bool ThreeDGlobalTool::isToolUseableFor(ILWIS::DrawerTool *drw) { 
 
-	bool ok = dynamic_cast<RootDrawer *>(drw) != 0;
+	bool ok = dynamic_cast<GlobalTool *>(drw) != 0;
 	if (ok)
 		return true;
 	return false;

@@ -16,6 +16,7 @@
 #include "drawers\linedrawer.h"
 #include "Drawers\GridDrawer.h"
 #include "DrawersUI\GridTool.h"
+#include "DrawersUI\GlobalTool.h"
 
 using namespace std;
 
@@ -26,15 +27,15 @@ DrawerTool *createGridTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw
 GridTool::GridTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
 	DrawerTool("GridTool", zv, view, drw), hasGraticule(false)
 {
-	drawer = ((RootDrawer *)drw)->getDrawer(800, ComplexDrawer::dtPOST);
+	drawer = ((ComplexDrawer *)(drw->getRootDrawer()))->getDrawer(800, ComplexDrawer::dtPOST);
 }
 
 GridTool::~GridTool() {
 }
 
-bool GridTool::isToolUseableFor(ILWIS::NewDrawer *drw) { 
+bool GridTool::isToolUseableFor(ILWIS::DrawerTool *drw) { 
 
-	return dynamic_cast<RootDrawer *>(drw) != 0;
+	return dynamic_cast<GlobalTool *>(drw) != 0;
 }
 
 HTREEITEM GridTool::configure( HTREEITEM parentItem) {

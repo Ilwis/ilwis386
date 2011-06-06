@@ -52,7 +52,7 @@ HTREEITEM AttributeTool::configure( HTREEITEM parentItem) {
 	item->setCheckAction(this,0, (DTSetCheckFunc)&AttributeTool::setcheckAttributeTable);
 	LayerDrawer *sdr = (LayerDrawer *)drawer;
 	Column attColumn = sdr->getAtttributeColumn();
-	htiNode = insertItem("Attribute table",".tbt",item,sdr->useAttributeColumn());
+	htiNode = insertItem(TR("Attribute table"),".tbt",item,sdr->useAttributeColumn());
 	if ( sdr->useAttributeColumn() && attColumn.fValid())
 		insertItem(htiNode,String("Column : %S",attColumn->sName()),"column");
 	return htiNode;

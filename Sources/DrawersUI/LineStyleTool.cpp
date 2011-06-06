@@ -77,7 +77,10 @@ void LineStyleTool::displayOptionSetLineStyle() {
 			dt = ComplexDrawer::dtPOLYGONLAYER;
 		}
 	}
-	new LineStyleForm(tree, (ComplexDrawer *)drawer, dt);
+	if ( drawer->isSimple()) {
+		new LineStyleForm(tree, (LineDrawer *)drawer);
+	} else
+		new LineStyleForm(tree, (ComplexDrawer *)drawer, dt);
 }
 
 String LineStyleTool::getMenuString() const {
@@ -117,8 +120,23 @@ int LineStyleTool::ilwisLineStyle(int linestyle, double sz){
 }
 
 //-----------------------------------------------
+LineStyleForm::LineStyleForm(CWnd *par, LineDrawer *ldr) 
+: DisplayOptionsForm((ComplexDrawer *)ldr->getParentDrawer(), par, "Line Style"), fc(0), drawerType(ComplexDrawer::dtDONTCARE), line(ldr)
+
+{
+
+	lprops = (LineProperties *)ldr->getProperties();
+	style = (LineDspType)LineStyleTool::ilwisLineStyle(lprops->linestyle);
+	fi = new FieldReal(root, "Line thickness", &lprops->thickness, ValueRange(1.0,100.0));
+	flt = new FieldLineType(root, TR("Line Style"), &style);
+	if ( !lprops->ignoreColor)
+		fc = new FieldColor(root,TR("Line Color"), &lprops->drawColor);
+
+	create();
+}
+
 LineStyleForm::LineStyleForm(CWnd *par, ComplexDrawer *ldr,ComplexDrawer::DrawerType dt) 
-: DisplayOptionsForm(ldr, par, "Line Style"), fc(0), drawerType(dt)
+: DisplayOptionsForm(ldr, par, "Line Style"), fc(0), drawerType(dt), line(0)
 
 {
 
@@ -152,23 +170,28 @@ void  LineStyleForm::apply() {
 	if ( fc)
 		fc->StoreData();
 	PreparationParameters pp(NewDrawer::ptRENDER);
-	SetDrawer *setDrw = dynamic_cast<SetDrawer *>(drw);
-	if ( setDrw) {
-		for(int i = 0; i < setDrw->getDrawerCount(); ++i) {
-			ComplexDrawer *ndr = (ComplexDrawer *)setDrw->getDrawer(i, (int)drawerType);
-			if ( !ndr)
-				continue;
-			LineProperties *oldprops = (LineProperties *)ndr->getProperties();
-			oldprops->drawColor = lprops->drawColor;
-			oldprops->linestyle = LineStyleTool::openGLLineStyle(style);
-			oldprops->thickness = lprops->thickness;
-			ndr->prepareChildDrawers(&pp);
+	if ( line != 0) {
+		SetDrawer *setDrw = dynamic_cast<SetDrawer *>(drw);
+		if ( setDrw) {
+			for(int i = 0; i < setDrw->getDrawerCount(); ++i) {
+				ComplexDrawer *ndr = (ComplexDrawer *)setDrw->getDrawer(i, (int)drawerType);
+				if ( !ndr)
+					continue;
+				LineProperties *oldprops = (LineProperties *)ndr->getProperties();
+				oldprops->drawColor = lprops->drawColor;
+				oldprops->linestyle = LineStyleTool::openGLLineStyle(style);
+				oldprops->thickness = lprops->thickness;
+				ndr->prepareChildDrawers(&pp);
+			}
+		} else {
+			if ( !lprops->ignoreColor)
+				fc->StoreData();
+			lprops->linestyle = LineStyleTool::openGLLineStyle(style);
+			drw->prepareChildDrawers(&pp);
 		}
 	} else {
-		if ( !lprops->ignoreColor)
-			fc->StoreData();
 		lprops->linestyle = LineStyleTool::openGLLineStyle(style);
-		drw->prepareChildDrawers(&pp);
+		line->prepare(&pp);
 	}
 	updateMapView();
 }

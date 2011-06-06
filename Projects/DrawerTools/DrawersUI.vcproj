@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="DrawersUI"
 	ProjectGUID="{8DF70E96-104A-4E41-8A67-633B975E6A6D}"
 	RootNamespace="DrawersUI"
@@ -244,6 +244,18 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\DrawersUI\CrossSectionGraph.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\CrossSectionTool.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\DistanceMeasurer.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\DrawersUI\DrawersToolList.cpp"
 				>
 			</File>
@@ -257,6 +269,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\DrawersUI\FeatureSetEditor2.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\GlobalTool.cpp"
 				>
 			</File>
 			<File
@@ -304,6 +320,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\DrawersUI\PointScalingTool.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\DrawersUI\PointSetEditor.cpp"
 				>
 			</File>
@@ -337,6 +357,14 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\DrawersUI\ThreeDTool.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\TrackProfileGraph.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\TrackProfileTool.cpp"
 				>
 			</File>
 			<File
@@ -389,6 +417,18 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\DrawersUI\CrossSectionGraph.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\CrossSectionTool.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\DistanceMeasurer.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\DrawersUI\ExtrusionTool.h"
 				>
 			</File>
@@ -398,6 +438,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\DrawersUI\FeatureSetEditor2.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\GlobalTool.h"
 				>
 			</File>
 			<File
@@ -445,6 +489,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\DrawersUI\PointScalingTool.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\DrawersUI\PointSetEditor.h"
 				>
 			</File>
@@ -478,6 +526,14 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\DrawersUI\ThreeDTool.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\TrackProfileGraph.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\TrackProfileTool.h"
 				>
 			</File>
 			<File
