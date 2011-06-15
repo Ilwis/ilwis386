@@ -18,10 +18,39 @@
 #include "DrawersUI\LayerDrawerTool.h"
 #include "Client\FormElements\FieldListView.h"
 #include "CrossSectionGraph.h"
+#include "Engine\Drawers\ComplexDrawer.h" 
+#include "Engine\Drawers\SimpleDrawer.h"
+#include "drawers\pointdrawer.h"
 #include "DrawersUI\CrossSectionTool.h"
 #include "headers\constant.h"
 
 using namespace ILWIS;
+ProbeMarkers::ProbeMarkers(DrawerParameters *parms) : 
+ComplexDrawer(parms,"ProbeMarkers")
+{
+}
+
+ProbeMarkers::~ProbeMarkers() {
+}
+
+
+void ProbeMarkers::prepare(PreparationParameters *p){
+	//properties.symbol = "crosshair";
+	//setSpecialDrawingOptions(NewDrawer::sdoExtrusion, true);
+	ComplexDrawer::prepare(p);
+}
+
+void ProbeMarkers::addMarker(const Coord& crd) {
+	DrawerParameters dp(this->getRootDrawer(), this);
+	PointDrawer *pdrw = new PointDrawer(&dp);
+	PointProperties *prop = (PointProperties *)pdrw->getProperties();
+	prop->symbol = "crosshair";
+	pdrw->setCoord(crd);
+	PreparationParameters pp(NewDrawer::ptRENDER);
+	pdrw->prepare(&pp);
+	addDrawer(pdrw);
+}
+
 
 DrawerTool *createCrossSectionTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) {
 	return new CrossSectionTool(zv, view, drw);
@@ -36,6 +65,7 @@ CrossSectionTool::CrossSectionTool(ZoomableView* zv, LayerTreeView *view, NewDra
 	stay = true;
 	graphForm = 0;
 	working = false;
+	markers = 0;
 }
 
 CrossSectionTool::~CrossSectionTool() {
@@ -58,6 +88,12 @@ bool CrossSectionTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 }
 
 HTREEITEM CrossSectionTool::configure( HTREEITEM parentItem) {
+	DrawerParameters dp(drawer->getRootDrawer(), drawer);
+	markers = new ProbeMarkers(&dp);
+	markers->setActive(false);
+	drawer->getRootDrawer()->addPostDrawer(732,markers);
+
+
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
 	item->setDoubleCickAction(this,(DTDoubleClickActionFunc)&CrossSectionTool::displayOptionAddList);
 	item->setCheckAction(this,0, (DTSetCheckFunc)&CrossSectionTool::setcheckTool);
@@ -73,10 +109,13 @@ void CrossSectionTool::setcheckTool(void *w, HTREEITEM item) {
 	if ( working) {
 		tree->GetDocument()->mpvGetView()->addTool(this, getId());
 		if (!graphForm) {
-			graphForm = new CrossSectionGraphFrom(tree, (LayerDrawer *)drawer);
+			graphForm = new CrossSectionGraphFrom(tree, (LayerDrawer *)drawer, sources);
 		} else {
 			graphForm->ShowWindow(SW_SHOW);
 		}
+		if ( sources.size() == 0)
+			new ChooseCrossSectionForm(tree, (LayerDrawer *)drawer, this);
+
 		for(int i = 0; i < sources.size(); ++i) {
 			graphForm->addSourceSet(sources[i]);
 		}
@@ -123,6 +162,19 @@ void CrossSectionTool::addSource(const FileName& fn) {
 	}
 }
 
+void CrossSectionTool::OnLButtonDown(UINT nFlags, CPoint pnt) {
+	short state = ::GetKeyState(VK_CONTROL);
+	Coord c1 = tree->GetDocument()->rootDrawer->screenToWorld(RowCol(pnt.y, pnt.x));
+	markers->setActive(true);
+	if ( (state & 0x8000)) {
+		markers->addMarker(c1);
+	} else {
+		markers->clear();
+		if ( graphForm)
+			graphForm->reset();
+		markers->addMarker(c1);
+	}
+}
 void CrossSectionTool::OnLButtonUp(UINT nFlags, CPoint point) {
 	if ( mpvGetView()->iActiveTool == ID_ZOOMIN) // during zooming, no message handling
 		return;
@@ -155,26 +207,40 @@ int ChooseCrossSectionForm::addSource(Event *ev) {
 	return 1;
 }
 
+int ChooseCrossSectionForm::exec() {
+	fm->StoreData();
+	if ( name != "") {
+		tool->addSource(FileName(name));
+	}
+
+	return 1;
+}
+
 //========================================================================
-CrossSectionGraphFrom::CrossSectionGraphFrom(CWnd *wPar, LayerDrawer *dr) :
+CrossSectionGraphFrom::CrossSectionGraphFrom(CWnd *wPar, LayerDrawer *dr, vector<IlwisObject>& sources) :
 DisplayOptionsForm2(dr,wPar,TR("Cross section Graph"),fbsBUTTONSUNDER | fbsSHOWALWAYS | fbsNOCANCELBUTTON|fbsHIDEONCLOSE)
 {
 	vector<FLVColumnInfo> v;
-	v.push_back(FLVColumnInfo("Source", 220));
+	v.push_back(FLVColumnInfo("Source", 200));
+	v.push_back(FLVColumnInfo("Probe", 40));
 	v.push_back(FLVColumnInfo("Index range", 40));
 	v.push_back(FLVColumnInfo("Value range", 80));
 	v.push_back(FLVColumnInfo("Selected index", 40));
 	v.push_back(FLVColumnInfo("Value", 60));
-	graph = new CrossSectionGraphEntry(root);
+	graph = new CrossSectionGraphEntry(root, sources,dr->getRootDrawer()->getCoordinateSystem());
 	graph->setListView(new FieldListView(root,v));
 	create();
 	ShowWindow(SW_HIDE);
 }
 
 void CrossSectionGraphFrom::addSourceSet(const IlwisObject& obj) {
-	graph->addSourceSet(obj);
+	graph->update();
 }
 
 void CrossSectionGraphFrom::setSelectCoord(const Coord& crd) {
 	graph->setCoord(crd);
+}
+
+void CrossSectionGraphFrom::reset() {
+	graph->reset();
 }

@@ -3,6 +3,9 @@
 #include "Engine\Base\DataObjects\ObjectCollection.h"
 #include "Client\FormElements\FieldListView.h"
 #include "Engine\Drawers\SimpleDrawer.h" 
+#include "Engine\Drawers\ComplexDrawer.h"
+#include "Engine\Drawers\RootDrawer.h"
+#include "Engine\Domain\dmcoord.h"
 #include "drawers\linedrawer.h"
 #include "drawers\pointdrawer.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
@@ -16,6 +19,7 @@ BEGIN_MESSAGE_MAP(TrackProfileGraph, CStatic)
 	ON_WM_LBUTTONUP()
 	ON_NOTIFY(TTN_NEEDTEXTW, 0, OnToolTipNotify)
 	ON_NOTIFY(TTN_NEEDTEXTA, 0, OnToolTipNotify)
+	ON_WM_CONTEXTMENU()
 END_MESSAGE_MAP()
 
 #define CSGRPAH_SIZE 450
@@ -236,6 +240,100 @@ void TrackProfileGraph::setTrack(const vector<Coord>& crds){
 			++cnt;
 		}
 		totDist += d;
+	}
+}
+
+#define ID_GR_COPY 5000
+#define ID_SAVE_AS_CSV 5001
+#define ID_SAVE_AS_TABLE 5002
+
+void TrackProfileGraph::OnContextMenu(CWnd* pWnd, CPoint point) 
+{
+	//if (tools.size() == 0)
+	//	return;
+	//if (edit && edit->OnContextMenu(pWnd, point))
+	//	return;
+	CMenu men;
+	men.CreatePopupMenu();
+	//men.AppendMenu(MF_STRING, ID_SAVE_AS_CSV, TR("Save as CSV").scVal());
+	men.AppendMenu(MF_STRING, ID_SAVE_AS_TABLE, TR("Open as Table").scVal());
+	int cmd = men.TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON|TPM_RETURNCMD, point.x, point.y, pWnd);
+	switch (cmd) {
+		case ID_GR_COPY:
+			break;
+		case ID_SAVE_AS_CSV:
+			saveAsCsv();
+			break;
+		case ID_SAVE_AS_TABLE:
+			saveAsTbl();
+			break;
+	}
+}
+
+void TrackProfileGraph::saveAsCsv() {
+	char strFilter[] = { "Comma separated Files (*.csv)|All Files (*.*)|*.*||" };
+	CFileDialog saveForm(FALSE,".csv",0,0,strFilter);
+	if ( saveForm.DoModal() == IDOK) {
+		FileName fn(saveForm.GetPathName());
+		ofstream out(fn.sFullPath().scVal());
+		if ( out.is_open()) {
+			out<<"map name" << "coordinate index" << "x coordinate" << "y coordinate" << "value" << "\n";
+			for(int m =0; m < fldGraph->tool->sources.size(); ++m) {
+				BaseMap bmp =  fldGraph->tool->sources[m]->getMap();
+				String name = bmp->sName();
+				for(int i=0; i < values[m].size(); ++i) {
+					GraphInfo info= values[m][i];
+					String v = bmp->sValue(info.crd);
+					out << name.scVal() << "," << info.index <<"," << info.crd.x << "," << info.crd.y << "," << v.scVal() << "\n";
+				}
+			}
+			out.close();
+		}
+		
+	}
+}
+
+class TableNameForm : public FormWithDest {
+public:
+	TableNameForm(CWnd *par,String *name) : FormWithDest(par,TR("Open as table"),fbsSHOWALWAYS | fbsMODAL) {
+		new FieldString(root,TR("Table name"),name);
+		//create();
+	}
+
+	int exec() {
+		FormWithDest::exec();
+		return 1;
+	}
+};
+
+void TrackProfileGraph::saveAsTbl() {
+	String fname("TrackProfile");
+	if ( TableNameForm(this, &fname).DoModal() == IDOK) {
+		FileName fnTable = FileName::fnUnique(FileName(fname,".tbt"));
+		Table tbl(fnTable,Domain("none"));
+		DomainValueRangeStruct dvInt(0 , 100);
+		Column colIndex = tbl->colNew("Coordinate Index",dvInt);
+		colIndex->SetOwnedByTable();
+		Domain dmcrd;
+		dmcrd.SetPointer(new DomainCoord(fldGraph->tool->getDrawer()->getRootDrawer()->getCoordinateSystem()->fnObj));
+		Column colCrd = tbl->colNew("Coordinate", dmcrd, ValueRange());
+		colCrd->SetOwnedByTable();
+		tbl->iRecNew(values[0].size());
+		for(int m =0; m < fldGraph->tool->sources.size(); ++m) {
+			BaseMap bmp =  fldGraph->tool->sources[m]->getMap();
+			String name = bmp->sName();
+			Column colValue = tbl->colNew(name.sQuote(), bmp->dvrs());
+			colValue->SetOwnedByTable();
+			for(int i=0; i < values[m].size(); ++i) {
+				GraphInfo info= values[m][i];
+				String v = bmp->sValue(info.crd);
+				colIndex->PutVal(i,info.index);
+				colCrd->PutVal(i, info.crd);
+				colValue->PutVal(i, v);
+			}
+		}
+		tbl->Store();
+		IlwWinApp()->Execute(String("Open %S",fnTable.sRelative())); 
 	}
 }
 

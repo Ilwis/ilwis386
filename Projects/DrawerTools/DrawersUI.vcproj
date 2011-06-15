@@ -228,6 +228,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\DrawersUI\AnnotationDrawerTool.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\AnnotationLegendDrawerTool.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\DrawersUI\AttributeTool.cpp"
 				>
 			</File>
@@ -398,6 +406,14 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\DrawersUI\AnimationTool.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\AnnotationDrawerTool.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\AnnotationLegendDrawerTool.h"
 				>
 			</File>
 			<File

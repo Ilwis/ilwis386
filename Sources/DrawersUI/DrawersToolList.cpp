@@ -70,6 +70,8 @@
 #include "DrawersUI\CrossSectionTool.h"
 #include "DrawersUI\TrackProfileTool.h"
 #include "DrawersUI\PointScalingTool.h"
+#include "DrawersUI\AnnotationDrawerTool.h"
+#include "DrawersUI\AnnotationLegendDrawerTool.h"
 
 
 using namespace ILWIS;
@@ -111,6 +113,7 @@ DrawerToolInfoVector *createDrawerTool() {
 	infos->push_back(new DrawerToolInfo("CrossSectionTool",createCrossSectionTool));
 	infos->push_back(new DrawerToolInfo("TrackProfileTool",createTrackProfileTool));
 	infos->push_back(new DrawerToolInfo("PointScalingTool",createPointScalingTool));
+	infos->push_back(new DrawerToolInfo("AnnotationDrawerTool",createAnnotationDrawerTool));
 
 	return infos;
 }

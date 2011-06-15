@@ -33,12 +33,15 @@ public:
 	void OnToolTipNotify(NMHDR *pNMHDR, LRESULT *pResult);
 	void PreSubclassWindow() ;
 	void setTrack( const vector<Coord>& crds);
+	void OnContextMenu(CWnd* pWnd, CPoint point) ;
 
    DECLARE_MESSAGE_MAP();
 private:
 	BaseMap getBaseMap(long i, long m);
 	int getNumberOfMaps(long i);
 	LRESULT tick(WPARAM wp, LPARAM lp);
+	void saveAsCsv();
+	void saveAsTbl();
 
 	TrackProfileGraphEntry *fldGraph;
 	vector<vector<GraphInfo> > values;

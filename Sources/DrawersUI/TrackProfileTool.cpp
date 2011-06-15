@@ -17,6 +17,7 @@
 #include "DrawersUI\SetDrawerTool.h"
 #include "DrawersUI\LayerDrawerTool.h"
 #include "Engine\Drawers\SimpleDrawer.h" 
+#include "Engine\Drawers\ComplexDrawer.h" 
 #include "drawers\linedrawer.h"
 #include "drawers\pointdrawer.h"
 #include "Client\FormElements\FieldListView.h"

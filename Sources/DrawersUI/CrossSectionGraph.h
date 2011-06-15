@@ -2,46 +2,49 @@
 
 class CrossSectionGraphEntry;
 
-#define ID_TIME_TICK WM_USER+345
+//#define ID_TIME_TICK WM_USER+345
 
 class CrossSectionGraph : public CStatic, public BaseZapp {
+	friend class CrossSectionGraphEntry;
 public:
    CrossSectionGraph(CrossSectionGraphEntry *f, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID);
    void DrawItem(LPDRAWITEMSTRUCT lpDIS);
    void OnLButtonUp(UINT nFlags, CPoint point);
    void setIndex(int index);
-   int OnToolHitTest(CPoint point, TOOLINFO *pTI) const;
-	void OnToolTipNotify(NMHDR *pNMHDR, LRESULT *pResult);
 	void PreSubclassWindow() ;
+	void OnContextMenu(CWnd* pWnd, CPoint point) ;
 
    DECLARE_MESSAGE_MAP();
 private:
 	BaseMap getBaseMap(long i, long m);
 	int getNumberOfMaps(long i);
-
+	void saveAsTbl();
 	CrossSectionGraphEntry *fldGraph;
-	vector<vector<double> > values;
+	vector<vector<vector<double> > >values;
 	CToolTipCtrl* toolTip;
 };
 
 class _export CrossSectionGraphEntry : public FormEntry {
 	friend class CrossSectionGraph;
 public:
-	CrossSectionGraphEntry(FormEntry* par);
-	void addSourceSet(const IlwisObject& obj);
+	CrossSectionGraphEntry(FormEntry* par, vector<IlwisObject>& sources, const CoordSystem& cys);
+//	void addSourceSet(const IlwisObject& obj);
 	void setRecordRange(const RangeInt& rng);
 	void create();
 	void setCoord( const Coord& crd);
 	void setListView(FieldListView *v);
 	RangeReal getRange(long i);
-	void setIndex(int sourceIndex, double value);
+	void fillList();
+	void update();
+	void reset();
 
 private:
 	bool isUnique(const FileName& fn);
-	vector<IlwisObject> sources;
-	Coord crdSelect;
+	vector<IlwisObject>& sources;
+	vector<Coord> crdSelect;
 	FieldListView *listview;
 	vector<RangeReal> ranges;
 	int currentIndex;
-	CrossSectionGraph *crossSectionGraph;	
+	CrossSectionGraph *crossSectionGraph;
+	CoordSystem csy;
 };

@@ -36,11 +36,15 @@ bool BackgroundTool::isToolUseableFor(ILWIS::NewDrawer *drw) {
 }
 
 HTREEITEM BackgroundTool::configure( HTREEITEM parentItem) {
-	htiNode = insertItem(TVI_ROOT,"Background Area","MapPane");
+
+	//htiNode = insertItem(TVI_ROOT,"","MapPane");
+	DisplayOptionColorItem *item = new DisplayOptionColorItem("BackgroundDrawer", tree,TVI_ROOT,drawer);
+	htiNode = insertItem(TR("Background Area"),"MaPane",item,1);
+	item->setCheckAction(this,0,(DTSetCheckFunc )&BackgroundTool::makeActive);
 	bool is3D = drawer->getRootDrawer()->is3D();
 	CanvasBackgroundDrawer *cbdr = (CanvasBackgroundDrawer *)drawer;
 
-	DisplayOptionColorItem *item = new DisplayOptionColorItem("Outside", tree,htiNode,drawer);
+	item = new DisplayOptionColorItem("Outside", tree,htiNode,drawer);
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&BackgroundTool::displayOptionOutsideColor);
 	item->setColor(is3D ? cbdr->getColor(CanvasBackgroundDrawer::clOUTSIDE3D) :  cbdr->getColor(CanvasBackgroundDrawer::clOUTSIDE2D));
 	insertItem("Outside map","SingleColor",item);
@@ -59,6 +63,12 @@ HTREEITEM BackgroundTool::configure( HTREEITEM parentItem) {
 	isConfigured = true;
 
 	return htiNode;
+}
+void BackgroundTool::makeActive(void *v, HTREEITEM) {
+	bool yesno = *(bool*)v;
+	drawer->setActive(yesno);
+	mpvGetView()->Invalidate();
+	
 }
 
 void BackgroundTool::displayOptionOutsideColor() {

@@ -12,6 +12,7 @@ namespace ILWIS {
 		virtual ~BackgroundTool();
 		String getMenuString() const;
 	protected:
+		void makeActive(void *v, HTREEITEM);
 		void displayOptionOutsideColor();
 		void displayOptionInsideColor();
 

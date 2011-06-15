@@ -1,0 +1,60 @@
+#include "Client\Headers\formelementspch.h"
+#include "Engine\Drawers\RootDrawer.h"
+#include "Engine\Drawers\ComplexDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
+#include "Client\Mapwindow\MapPaneViewTool.h"
+#include "Client\MapWindow\Drawers\DrawerTool.h"
+#include "Drawers\SetDrawer.h"
+#include "Client\Ilwis.h"
+#include "Client\Mapwindow\MapCompositionDoc.h"
+#include "Client\Mapwindow\LayerTreeView.h"
+#include "Client\Mapwindow\MapPaneViewTool.h"
+#include "Client\MapWindow\Drawers\DrawerTool.h"
+#include "Client\Mapwindow\LayerTreeItem.h" 
+#include "Engine\Drawers\DrawerContext.h"
+#include "DrawersUI\AnnotationDrawerTool.h"
+#include "DrawersUI\AnnotationLegendDrawerTool.h"
+#include "DrawersUI\GlobalTool.h"
+
+using namespace ILWIS;
+
+DrawerTool *createAnnotationDrawerTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) {
+	return new AnnotationDrawerTool(zv, view, drw);
+}
+
+AnnotationDrawerTool::AnnotationDrawerTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
+	DrawerTool(TR("AnnotationDrawerTool"),zv, view, drw)
+{
+}
+
+AnnotationDrawerTool::~AnnotationDrawerTool() {
+}
+
+void AnnotationDrawerTool::clear() {
+}
+
+bool AnnotationDrawerTool::isToolUseableFor(ILWIS::DrawerTool *tool) { 
+
+	bool ok = dynamic_cast<GlobalTool *>(tool) != 0;
+	if (ok)
+		return true;
+	return false;
+}
+
+HTREEITEM AnnotationDrawerTool::configure( HTREEITEM parentItem) {
+	DrawerTool::configure(htiNode);
+	htiNode = insertItem(parentItem, TR("Annotations"),"Annotation");
+	DrawerTool *dt = new AnnotationLegendDrawerTool(mpv,tree,drawer);
+	if ( dt) {
+		addTool(dt);
+		dt->configure(htiNode);
+	}
+
+
+	return htiNode;
+}
+
+String AnnotationDrawerTool::getMenuString() const {
+	return "";
+}
+
