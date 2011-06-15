@@ -90,6 +90,9 @@ bool ExportCsy2EsriPrj::fInitSucces(const FileName& fnObject, const FileName& fn
 {
 	if (!fInit(fnObject, fnForeign))
 		return false;
+	if ( csy->fUnknown()) {
+		throw ErrorImportExport(TR("Coordinate System unknown can not be exported to shape"));
+	}
 
 	CoordSystemLatLon* csll = csy->pcsLatLon();
   CoordSystemProjection *csprj = csy->pcsProjection();

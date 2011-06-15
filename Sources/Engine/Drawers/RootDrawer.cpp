@@ -69,7 +69,7 @@ void  RootDrawer::prepare(PreparationParameters *pp){
 			(*cur).second->prepare(pp);
 		}
 	}
-		
+
 }
 
 String RootDrawer::addDrawer(NewDrawer *drw) {
@@ -80,7 +80,8 @@ String RootDrawer::addDrawer(NewDrawer *drw) {
 		//cb += ncb;
 		CoordBounds cb = cbView;
 		cb += ncb;
-		setCoordBoundsView(cb,true);
+		if ( ! (cb == cbView))
+			setCoordBoundsView(cb,true);
 
 	}
 	return ComplexDrawer::addDrawer(drw);
@@ -94,8 +95,8 @@ void RootDrawer::addCoordBounds(const CoordSystem& _cs, const CoordBounds& cb, b
 }
 
 /*
-	Note: calls to RootDrawer::draw are meaningless without an OpenGL context in the current thread.
-	Therefore all calls to RootDrawer::draw must be preceded by a call to DrawerContext::TakeContext and followed by a call to ReleaseContext
+Note: calls to RootDrawer::draw are meaningless without an OpenGL context in the current thread.
+Therefore all calls to RootDrawer::draw must be preceded by a call to DrawerContext::TakeContext and followed by a call to ReleaseContext
 */
 
 void RootDrawer::setupDraw() const{
@@ -107,7 +108,7 @@ void RootDrawer::setupDraw() const{
 
 	glViewport(0,0,pixArea.Col, pixArea.Row);
 	setProjection(cbZoom);
-	
+
 	glMatrixMode(GL_MODELVIEW);
 }
 
@@ -239,7 +240,7 @@ void RootDrawer::setViewPort(const RowCol& rc) {
 				//modifyCBZoomView(cbView.width(), cbZoom.width(),(double)pixArea.Col / rc.Col); 
 				modifyCBZoomView(cbView.width(), cbZoom.width(), (double)pixArea.Row / (double)rc.Row ); 
 			}
-	
+
 		} else { // x < y
 			if ( rc.Row != pixArea.Row){
 				modifyCBZoomView(cbView.height(), cbZoom.height(),(double)rc.Row / pixArea.Row ); 
@@ -281,7 +282,7 @@ void RootDrawer::setCoordBoundsView(/*const CoordSystem& _cs,*/ const CoordBound
 			double crdWidth = w / fracofWidth;
 			double delta = (crdWidth - w) / 2.0;
 			cbView =  CoordBounds(Coord(cb.MinX() - delta,cb.MinY() - deltay /2.0,0), 
-			                  Coord(cb.MaxX() + delta,cb.MaxY() + deltay/ 2.0,0));
+				Coord(cb.MaxX() + delta,cb.MaxY() + deltay/ 2.0,0));
 		} else {
 			double pixheight = (double)pixArea.Col / aspectRatio;
 			double deltax = 0;
@@ -293,7 +294,7 @@ void RootDrawer::setCoordBoundsView(/*const CoordSystem& _cs,*/ const CoordBound
 			double crdHeight = h / fracofHeight;
 			double delta = (crdHeight - h) / 2.0;
 			cbView =  CoordBounds(Coord(cb.MinX() - deltax /2.0,cb.MinY()  - delta,0), 
-			                      Coord(cb.MaxX() + deltax /2.0,cb.MaxY()  + delta,0));
+				Coord(cb.MaxX() + deltax /2.0,cb.MaxY()  + delta,0));
 
 		}
 		cbZoom = cbView;
@@ -309,12 +310,12 @@ void RootDrawer::setCoordBoundsView(/*const CoordSystem& _cs,*/ const CoordBound
 				rotX= rotY = 0;
 				zoom3D = 1.0;
 			} else 
-					initRestore = false;
+				initRestore = false;
 			setCoordBoundsZoom(cbView);
 			gluLookAt(eyePoint.x, eyePoint.y, eyePoint.z, viewPoint.x, viewPoint.y, viewPoint.z, 0, 1.0, 0 );
 		}
 	}
-	
+
 }
 
 void RootDrawer::setCoordBoundsZoom(const CoordBounds& cb) {
@@ -373,7 +374,7 @@ Coord RootDrawer::screenToWorld(const RowCol& rc) {
 
 RowCol RootDrawer::worldToScreen(const Coord& crd){
 	drawercontext->TakeContext();
-	
+
 	GLint viewport[4];
 	double modelview[16];
 	double projection[16];
@@ -417,8 +418,8 @@ CoordBounds RootDrawer::getCoordBoundsZoom() const  {
 }
 
 /*
-	Note: calls to RootDrawer::setProjection are meaningless without an OpenGL context in the current thread.
-	Therefore all calls to RootDrawer::setProjection must be preceded by a call to DrawerContext::TakeContext and followed by a call to ReleaseContext
+Note: calls to RootDrawer::setProjection are meaningless without an OpenGL context in the current thread.
+Therefore all calls to RootDrawer::setProjection must be preceded by a call to DrawerContext::TakeContext and followed by a call to ReleaseContext
 */
 void RootDrawer::setProjection(const CoordBounds& cb) const {
 	glMatrixMode(GL_PROJECTION);
@@ -430,13 +431,14 @@ void RootDrawer::setProjection(const CoordBounds& cb) const {
 	} else {
 		glOrtho(cb.cMin.x,cb.cMax.x,cb.cMin.y,cb.cMax.y,-1,1);
 	}
-	
+
 }
 
 void RootDrawer::set3D(bool yesno) {
 	if ( yesno != threeD) {
 		threeD = yesno;
 		setEyePoint();
+	//	initLight();
 	}
 }
 bool RootDrawer::is3D() const {
@@ -501,156 +503,83 @@ void RootDrawer::setZoom3D(double v){
 	zoom3D = v;
 }
 
-bool RootDrawer::drawOnBitmap(CWnd *wnd, int nReduceResCount, BITMAPINFO& bitmapInfo, LPVOID pBitmapBits)
-{
-	//CGlWinApp *pApp = (CGlWinApp *)AfxGetApp();
+void RootDrawer::initLight() {
+	glEnable(GL_NORMALIZE);
 
-	RECT	rect;
-	HDC		hMemDC, hTmpDC;
-	HGLRC	hMemRC;
+	// Lights, material properties
+	GLfloat	specularProperties[] = {0.1f, 0.1f, 0.1f, 1.0f};
+	if ( is3D())
+		glEnable(GL_DEPTH_TEST);
+	else
+		glDisable(GL_DEPTH_TEST);
 
-	HBITMAP		hDib;
-	double		fac = 300/72.;		// 72 DPI (screen) --> <user selected> DPI (clipboard)
-	int			nXRes, nYRes;
-	BOOL		bSuccess = FALSE;
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specularProperties);
 
-	CRect	mRect;			// Position of this window's client area
-	wnd->GetClientRect(&mRect);
-	for (int k = nReduceResCount; k > 0; k--)
-		fac /= 2.;
+	glClearColor(1.0,1.0,1.0,0);
+	glClearDepth(1.0);
 
-	rect = mRect;
-	ASSERT(rect.left == 0);
-	ASSERT(rect.top == 0);
-	rect.right = int(rect.right*fac);
-	rect.bottom = int(rect.bottom*fac);
+	//GLfloat light0Position[] = {0.0f, 0.0f, 0.0f, 1.0f};
+	GLfloat light0Position[] = {eyePoint.x, eyePoint.y, eyePoint.z, 1.0f};
+	glLightfv(GL_LIGHT0, GL_POSITION, light0Position);
+	glEnable(GL_COLOR_MATERIAL);
 
-	if (mRect.Width() == 0 || mRect.Height() == 0)
-	{
-		// Get the Views size (client area!)
-		wnd->GetClientRect(&mRect);
-	}
+	glEnable(GL_LIGHT0);
+	SetAmbientColor();
+	SetDiffuseColor();
+	SetSpecularColor();
+	glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, 1.0);
 
-	nXRes = rect.right;
-	nYRes = rect.bottom;
-//	ScaleFont(fac);
+	glEnable(GL_POINT_SMOOTH);
+	glEnable(GL_LINE_SMOOTH);
+	glEnable(GL_POLYGON_SMOOTH);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+	glHint(GL_LINE_SMOOTH_HINT,GL_NICEST);
+	glLineWidth(1.0);
+	glPointSize(3.0);
 
-	//nXRes = (nXRes + (sizeof(DWORD)-1)) & ~(sizeof(DWORD)-1);	// aligning width to 4 bytes (sizeof(DWORD)) avoids 
-	nXRes = nXRes & ~(sizeof(DWORD)-1);							// aligning width to 4 bytes (sizeof(DWORD)) avoids 
-																// pixel garbage at the upper line
+	glShadeModel(GL_SMOOTH);
 
-	// create DIB
-	hTmpDC = ::GetDC(wnd->m_hWnd);
-	hDib = CreateDIBSection(hTmpDC, &bitmapInfo, DIB_RGB_COLORS, &pBitmapBits, NULL, (DWORD)0);
-	CDC *pDC = new CWindowDC(wnd);
-	if ((hMemDC = CreateCompatibleDC(pDC == NULL ? NULL : pDC->GetSafeHdc())) == NULL)
-	{
-		DeleteObject(hDib);
-		return FALSE;
-	}
-	HGDIOBJ hOldDib = SelectObject(hMemDC, hDib);
+	if (is3D())
+		glEnable(GL_LIGHTING);
+	else
+		glDisable(GL_LIGHTING);
 
-	// setup pixel format
-	if (!SetMemDcPixelFormat(hMemDC) && !SetMemDcPixelFormat(hMemDC, TRUE))
-	{
-		if (hOldDib != NULL)
-			SelectObject(hMemDC, hOldDib);
-		DeleteObject(hDib);
-		DeleteDC(hMemDC);
-		return FALSE;
-	}
-
-	// create memory rendering context
-	if ((hMemRC = wglCreateContext(hMemDC)) == NULL)
-	{
-		if (hOldDib != NULL)
-			SelectObject(hMemDC, hOldDib);
-		DeleteObject(hDib);
-		DeleteDC(hMemDC);
-		return FALSE;
-	}
-
-	// Store current rendering and device contexts
-	drawercontext->TakeContext();
-
-	HDC hDCOld = wglGetCurrentDC();
-	HGLRC hRCOld = wglGetCurrentContext();
-	RowCol viewportOld = getViewPort();
-	setViewPort(RowCol(nYRes,nXRes));
-
-	// Make this hMemRC the current OpenGL rendering context.
-	drawercontext->ReleaseContext();
-	drawercontext->setContext(hMemDC,hMemRC, DrawerContext::mDRAWTOBITMAP | ~DrawerContext::mUSEDOUBLEBUFFER);
-	drawercontext->TakeContext();
-
-	//SetOpenGLProperties();
-
-	//glViewport(0, 0, nXRes, nYRes);
-	//glMatrixMode(GL_MODELVIEW);
-	//glLoadIdentity();
-	//glEnable(GL_DEPTH_TEST);
-
-	// must be created once for hMemDC
-	//CreateFontBitmaps();
-	glClearColor(1,1,1,0.0);
-	CDC *pDummyDC = wnd->GetDC();
-	pDummyDC->m_bPrinting = TRUE;	// this does the trick in OnDraw: it prevents changing rendering context and swapping buffers
-	draw();
-	wnd->ReleaseDC(pDummyDC);
-	glFinish();	// Finish all OpenGL commands
-
-	// the rendering context will be no longer needed
-	drawercontext->ReleaseContext();
-	wglDeleteContext(hMemRC);
-
-	// Restore last rendering and device contexts
-	setViewPort(viewportOld);
-	if (hDCOld != NULL && hRCOld != NULL) {
-		drawercontext->setContext(hDCOld, hRCOld);
-	}
-
-	
-	DeleteObject(hDib);
-	DeleteDC(hMemDC);
-
-	return bSuccess;
+	// Default polygonmode
+	glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+	//switch (pApp->m_nPolygonMode)
+	//{
+	//	case 0:
+	//		glPolygonMode(GL_FRONT_AND_BACK,GL_POINT);
+	//		break;
+	//	case 1:
+	//		glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+	//		break;
+	//	case 2:
+	//		glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+	//		break;
+	//	default:
+	//		{}
+	//}
 }
 
-BOOL RootDrawer::SetMemDcPixelFormat(HDC hMemDC, BOOL bUseAPI)
+#define TESTCOL 1.0
+void RootDrawer::SetAmbientColor()
 {
-	PIXELFORMATDESCRIPTOR pfd = {
-		sizeof(PIXELFORMATDESCRIPTOR),	// Size of this structure
-		1,								// Version of this structure
-		PFD_DRAW_TO_BITMAP |			// Draw to bitmap (not to window)
-		PFD_SUPPORT_OPENGL |			// Support OpenGL calls in window
-		PFD_STEREO_DONTCARE,			// Don't need stereo mode
-		PFD_TYPE_RGBA,					// RGBA Color mode
-		24,								// Number of color bitplanes
-		0,0,0,0,0,0,					// Not used to select mode
-		0,								// Number of alpha bitplanes
-		0,								// Not used to select mode
-		64,								// Number of bitplanes in the accumulation buffer
-		0,0,0,0,						// Not used to select mode
-		32,								// Size of depth buffer
-		8,								// Size of stencil buffer
-		0,								// Size of auxiliary buffer
-		PFD_MAIN_PLANE,					// Draw in main plane
-		0,0,0,0 };						// Not used to select mode
+	GLfloat	ambientLight[]  = {TESTCOL, TESTCOL, TESTCOL, 1.0f};
+	glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
+}
 
-	int nGLPixelIndex = bUseAPI ? 
-		::ChoosePixelFormat(hMemDC, &pfd) : 
-		ChoosePixelFormat(hMemDC, &pfd);
-	if (nGLPixelIndex == 0) // Choose default
-		nGLPixelIndex = 1;
+void RootDrawer::SetDiffuseColor()
+{
+	GLfloat	diffuseLight[]  = {TESTCOL, TESTCOL, TESTCOL, 1.0f};
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
+}
 
-	if (DescribePixelFormat(hMemDC, nGLPixelIndex, 
-		sizeof(PIXELFORMATDESCRIPTOR), &pfd) == 0)
-		return FALSE;
-
-	if (!SetPixelFormat(hMemDC, nGLPixelIndex, &pfd))
-		return FALSE;
-
-	return TRUE;
+void RootDrawer::SetSpecularColor()
+{
+	GLfloat	specularLight[] = {1, 1, 1, 1.0f};
+	glLightfv(GL_LIGHT0, GL_SPECULAR, specularLight);
 }
 
 

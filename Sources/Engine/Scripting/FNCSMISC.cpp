@@ -492,8 +492,8 @@ void length_so(StackObject* soRes, const StackObject* so)
       bufRes[i] = iUNDEF;
     else
 		{
-				String sName = buf[i].find(':') == -1 ? buf[i] : buf[i].substr(buf[i].find(':') + 2);
-				bufRes[i] = sName.size();
+				//String sName = buf[i].find(':') == -1 ? buf[i] : buf[i].substr(buf[i].find(':') + 2);
+				bufRes[i] = buf[i].size();
 		}			
   soRes->PutVal(bufRes);
 }
@@ -517,8 +517,8 @@ void substr_so(StackObject* soRes, const StackObject* so0, const StackObject* so
 				bufRes[i]	= sUNDEF;
 			else
 			{
-				String sName = buf0[i].find(':') == -1 ? buf0[i]: buf0[i].substr(buf0[i].find(':') + 2);
-			  bufRes[i] = sName.sSub(buf1[i]-1, iLen);
+				//String sName = buf0[i].find(':') == -1 ? buf0[i]: buf0[i].substr(buf0[i].find(':') + 2);
+			  bufRes[i] = buf0[i].sSub(buf1[i]-1, iLen);
 			}			
 		}			
   soRes->PutVal(bufRes);
@@ -537,8 +537,8 @@ void leftstr_so(StackObject* soRes, const StackObject* so0, const StackObject* s
       bufRes[i] = sUNDEF;
     else
 		{
-			String sName = buf0[i].find(':') == -1 ? buf0[i] : buf0[i].substr(buf0[i].find(':') + 2);
-      bufRes[i] = sName.sLeft(buf1[i]);
+			//String sName = buf0[i].find(':') == -1 ? buf0[i] : buf0[i].substr(buf0[i].find(':') + 2);
+      bufRes[i] = buf0[i].sLeft(buf1[i]);
 		}			
   soRes->PutVal(bufRes);
 }

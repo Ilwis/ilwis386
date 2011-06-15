@@ -85,6 +85,7 @@ public:
 	void					removeFilterType(IObjectType type);
 	bool	_export			getStatusFor(int query) const;
 	CoordBounds	_export 	cb() const;
+	RangeReal _export		getRange() ;
 	
 
 protected:
@@ -98,6 +99,7 @@ protected:
 	Table   				attTable;
 	set<IObjectType>		filterTypes;
 	int status;
+	RangeReal				range;
 };
 
 class ObjectCollection: public IlwisObject

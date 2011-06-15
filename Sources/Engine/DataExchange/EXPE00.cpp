@@ -152,7 +152,7 @@ void E00::DoubleConvert(const double& rVal, int iPrecision, char *pcOut)
 	int iSign;
 
 	char *pcRes = pcOut;
-	char *p = ecvt(rVal, iPrecision + 1, &iDecPos, &iSign);
+	char *p = _ecvt(rVal, iPrecision + 1, &iDecPos, &iSign);
 	char *pcBuf = p;
 
 	*pcRes++ = (iSign == 0) ? ' ' : '-';

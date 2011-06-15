@@ -203,7 +203,7 @@ void NASExporter::DoubleConvert(const double& rVal, int iPrecision, char *pcOut)
 	int iSign;
 
 	char *pcRes = pcOut;
-	char *p = ecvt(rVal, iPrecision + 1, &iDecPos, &iSign);
+	char *p = _ecvt(rVal, iPrecision + 1, &iDecPos, &iSign);
 
 	if (abs(iDecPos) >= iPrecision)
 	{

@@ -564,7 +564,7 @@ DWORD CSysInfo::GetProcessMemoryUsage()
 	if (m_GetProcessMemoryInfo!=NULL)
 	{
 	    // Get a handle to the process.
-		HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS,FALSE,getpid());
+		HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS,FALSE, _getpid());
 		if (hProcess)
 		{
 			m_GetProcessMemoryInfo(hProcess,&m_ProcMemCounters,sizeof(m_ProcMemCounters));

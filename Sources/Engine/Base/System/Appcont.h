@@ -88,8 +88,8 @@ public:
 	MessageHandling *mh() { return _mh; }
 	SysVarList *svl() { return _svl; }
 	StringManager *sm() { return _sm; }
-	HelpTopic& htp() { return _htp; }
-	void setHelpItem(const HelpTopic& htp) { _htp = htp; }
+	String htp() { return help; }
+	void setHelpItem(const String& htp) { help = htp; }
 	String _export sIlwDir();
 	String _export sStdDir();
 	String _export sCurDir();
@@ -113,7 +113,7 @@ private:
 	bool fYldActive;
 	long _iProcess;  // place holder for process Id
 	String _sProg;   // place holder for program name
-	HelpTopic _htp;
+	String help;
 	CommandHandler *commHandler;
 	String languageExtension;
 public:  

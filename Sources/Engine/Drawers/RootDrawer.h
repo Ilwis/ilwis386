@@ -17,8 +17,6 @@ namespace ILWIS {
 		String addDrawer(NewDrawer *drw);
 		void addCoordBounds(const CoordSystem& _cs, const CoordBounds& cb, bool overrule=true);
 		bool draw( const CoordBounds& cb=CoordBounds()) const;
-		bool drawOnBitmap(CWnd *wnd, int nReduceResCount, BITMAPINFO& bitmapInfo, LPVOID pBitmapBits);
-		//HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent);
 		void timedEvent(UINT timerID);
 		String store(const FileName& fnView, const String parenSection) const;
 		void load(const FileName& fnView, const String parenSection);
@@ -66,8 +64,11 @@ namespace ILWIS {
 		void addDataSource(void *);
 		void SetthreeD(void *v, LayerTreeView *tv);
 		void debug();
-		void init3D();
-		BOOL SetMemDcPixelFormat(HDC hMemDC, BOOL bUseAPI=FALSE);
+		void initLight();
+			void SetAmbientColor();
+
+	void SetDiffuseColor();
+	void SetSpecularColor();
 
 		CoordBounds cbView;
 		CoordBounds cbZoom;

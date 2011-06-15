@@ -1524,7 +1524,7 @@ void AutoCadDXF::AddBulge(const Coord& cStart, const Coord& cEnd, double rBulge)
 }
 
 static int iCompCodes(const String* s1, const String* s2) {
-  return stricmp((*s1).scVal(), (*s2).scVal());
+  return _stricmp((*s1).scVal(), (*s2).scVal());
 }
 
 bool AutoCadDXF::SetupAllMaps(const FileName& fnObject, const FileName& fnFile) {

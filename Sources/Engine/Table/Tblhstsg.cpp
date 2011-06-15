@@ -428,7 +428,7 @@ void TableHistogramSeg::FillColumns()
 void TableHistogramSeg::Init()
 {
   trq.SetTitle("TableHistogramSeg");
-  trq.setHelpItem(htpTableHistogramSegT);
+  trq.setHelpItem("ilwisapp\\histogram_algorithm.htm");
   if (pts==0)
     return;
   if (0 != dm()->pdnone()) {

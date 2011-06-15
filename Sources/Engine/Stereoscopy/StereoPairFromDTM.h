@@ -70,6 +70,7 @@ protected:
 	virtual ~StereoPairFromDTM();
 	bool fFreezing();
 	void Init();
+	String help;
 private:
 	Map mpInputImage;
 	Map mpDTM;

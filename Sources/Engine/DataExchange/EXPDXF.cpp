@@ -356,7 +356,7 @@ void DXFExporter::WritePolylineHeader(const String& sName, bool fIsPolygon) {
 }
 
 static int iCompCodes(const String* s1, const String* s2) {
-  return stricmp((*s1).scVal(), (*s2).scVal());
+  return _stricmp((*s1).scVal(), (*s2).scVal());
 }
 
 void DXFExporter::ExportToDXF() {

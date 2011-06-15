@@ -16,8 +16,15 @@
 #define colorUSERDEF Color(3,2,1)
 
 namespace ILWIS {
+	struct Transform {
+		enum TransformType{tROTATE,tTRANSLATE,tMATRIX,tSCALE};
+		vector<double> parameters;
+		TransformType type;
+	};
+
 	struct SVGAttributes {
 		enum ShapeType{sRECTANGLE, sCIRCLE,sELLIPSE,sLINE,sPOLYLINE,sPOLYGON,sPATH, sCOMPOUND, sUNKNOWN};
+
 		SVGAttributes(ShapeType t=sUNKNOWN) : type(t) {
 			ox = oy = strokewidth = rwidth = rheight = rx = ry = cx = cy = 0;
 			borderThickness = opacity = 1;
@@ -28,8 +35,10 @@ namespace ILWIS {
 		Color fillColor, strokeColor;
 		double opacity,ox, oy, rx, ry,cx,cy, rwidth, rheight, strokewidth;
 		vector<Coord> points;
-		vector<Coord> triangles;
+		vector<vector<Coord> > triangleStrips;
 		ShapeType type;
+		vector<Transform> transformations;
+
 	};
 
 	class _export SVGElement : public vector<SVGAttributes> {
@@ -42,6 +51,7 @@ namespace ILWIS {
 
 	protected:
 		void initSvgData();
+		void parseTransform(SVGAttributes& attributes, const String& tranform);
 		Color getColor(const String& name) const;
 		String getAttributeValue(XERCES_CPP_NAMESPACE::DOMNamedNodeMap *map, const String& key) const;
 		String parseStyle(const String& style,SVGAttributes& attributes);

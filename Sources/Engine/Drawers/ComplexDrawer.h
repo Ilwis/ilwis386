@@ -18,7 +18,7 @@ class _export ComplexDrawer : public NewDrawer {
 		friend class TransparencyForm;
 
 	public:
-		enum DrawerType{dtPOST=1, dtPRE=2, dtMAIN=4, dtPOLYGONLAYER=8, dtSEGMENTLAYER=16,dtPOINTLAYER=32,dtRASTERLAYER=64};
+		enum DrawerType{dtDONTCARE=0, dtPOST=1, dtPRE=2, dtMAIN=4, dtPOLYGONLAYER=8, dtSEGMENTLAYER=16,dtPOINTLAYER=32,dtRASTERLAYER=64};
 		String getType() const;
 		RootDrawer *getRootDrawer();
 		RootDrawer *getRootDrawer() const;

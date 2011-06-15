@@ -34,56 +34,6 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/* $Log: /ILWIS 3.0/Representation/Rpr.cpp $
- * 
- * 11    11/02/00 3:39p Martin
- * removed old-style GetOIbjecttructure and replaced it by new one
- * 
- * 10    11/02/00 10:13a Martin
- * domain is now a required file in getobjectstructure
- * 
- * 9     24-10-00 9:36a Martin
- * added getobjectstructure function
- * 
- * 8     25/04/00 16:36 Willem
- * Added flag in constructor and create function to allow creation of
- * RepresentationValue for system domain "value.dom"
- * 
- * 7     29-10-99 12:51 Wind
- * case sensitive stuff
- * 
- * 6     22-10-99 12:54 Wind
- * thread save access (not yet finished)
- * 
- * 5     10/12/99 10:07a Wind
- * debugged for internal domains and representation
- * 
- * 4     9/08/99 12:57p Wind
- * changed constructor calls FileName(fn, sExt, true) to FileName(fn,
- * sExt)
- * or changed FileName(fn, sExt, false) to FileName(fn.sFullNameQuoted(),
- * seExt, false)
- * to ensure that proper constructor is called
- * 
- * 3     15-03-99 16:07 Koolhoven
- * 
- * 2     3/11/99 12:17p Martin
- * Added support for Case insesitive 
-// Revision 1.4  1998/09/16 17:22:46  Wim
-// 22beta2
-//
-// Revision 1.3  1997/08/21 08:29:06  Wim
-// If no Representation line in file, when NotThisObjectTypeError
-//
-// Revision 1.2  1997-08-14 20:50:32+02  Wim
-// Added sName() to report always the extension when different from
-// the normal one.
-//
-/* Representation, RepresentationPtr
-   by Wim Koolhoven
-  (c) Ilwis System Development ITC
-	Last change:  J    21 Oct 99   10:03 am
-*/
 
 #include "Engine\Domain\dm.h"
 #include "Engine\Domain\dminfo.h"
@@ -527,4 +477,43 @@ void RepresentationPtr::GetObjectStructure(ObjectStructure& os)
 	os.AddFile(fnObj, "TableStore", "Data");
 	if ( os.fGetAssociatedFiles() )
 		os.AddFile(fnObj, "Representation", "Domain", ".dom");
+}
+
+Color Representation::clrPrimary(int iNr) 
+{
+	switch (iNr%32) {
+	case  0: return Color(  0,  0,  0);
+	case  1: return Color(255,  0,  0);
+	case  2: return Color(255,255,  0);
+	case  3: return Color(  0,  0,255);
+	case  4: return Color(255,  0,255);
+	case  5: return Color(  0,255,255);
+	case  6: return Color(  0,255,  0);
+	case  7: return Color(128,128,128);
+	case  8: return Color(224,224,224);  // was white 255,255,255
+	case  9: return Color(128,  0,  0);
+	case 10: return Color(128,128,  0);
+	case 11: return Color(  0,  0,128);
+	case 12: return Color(128,  0,128);
+	case 13: return Color(  0,128,128);
+	case 14: return Color(  0,128,  0);
+	case 15: return Color(255,128,  0);
+	case 16: return Color(191,  0,  0);
+	case 17: return Color(191,191,  0);
+	case 18: return Color(  0,  0,191);
+	case 19: return Color(191,  0,191);
+	case 20: return Color(  0,191,191);
+	case 21: return Color(  0,191,  0);
+	case 22: return Color(191,191,191);
+	case 23: return Color(192,220,192);
+	case 24: return Color( 63,  0,  0);
+	case 25: return Color( 63, 63,  0);
+	case 26: return Color(  0,  0, 63);
+	case 27: return Color( 63,  0, 63);
+	case 28: return Color(  0, 63, 63);
+	case 29: return Color(  0, 63,  0);
+	case 30: return Color( 63, 63, 63);
+	case 31: return Color(127, 63,  0);
+	}  
+	return Color();
 }

@@ -258,7 +258,7 @@ ProjectionPtr* ProjectionPtr::create(const String& sName, const Ellipsoid& ell)
     ptr = new ProjectionCylindSinusInterrupt3();
   else if (_stricmp("StereoGraphic", sName.c_str()) == 0)
     ptr = new ProjectionStereoGraphic(ell);
-  else if (stricmp("StereoPolar", sName.c_str()) == 0)
+  else if (_stricmp("StereoPolar", sName.c_str()) == 0)
 	ptr = new ProjectionStereoPolar(ell);
   else if (_stricmp("Transverse Mercator", sName.c_str()) == 0)
     ptr = new ProjectionTransverseMercator(ell);

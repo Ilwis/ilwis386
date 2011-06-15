@@ -189,6 +189,7 @@ public:
    bool _export         		fTblAtt() const;
    Table _export        		tblAtt() const;
    void _export         		SetAttributeTable(const Table& tbl);
+   RangeReal _export			getRange();
 
 protected:
   _export MapListPtr(const FileName& fn);
@@ -228,6 +229,7 @@ private:
   String                      _sBandPreFix;
   long                        iOffset;
   Table						  attTable;
+  RangeReal					  range;
 
   MapListVirtual* pmlv;
 };  

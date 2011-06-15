@@ -59,7 +59,7 @@ public:
   String _export sTime() const;
   operator long() const { return iTime; }
   static ObjectTime timCurr() {
-    time_t t = ObjectTime(0);
+    time_t t = time(0);
     // adjust for comparison with DOS file ObjectTime which has resolution of 2 seconds
     if (t & 1) 
       --t;

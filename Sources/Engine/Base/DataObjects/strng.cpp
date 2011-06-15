@@ -506,7 +506,7 @@ ulfmt:
           precision = 6;    /* default precision   */
         dval = va_arg(pargs,double);
 fformat:
-        p = fcvt(dval,precision,&decpt,&sign);
+        p = _fcvt(dval,precision,&decpt,&sign);
         prefix = dosign(sign,flags);
         { char *sbuf;
           sbuf = &buf[0];
@@ -538,7 +538,7 @@ fformat:
         if (!(flags & FLprec))    /* if no precision   */
 	  precision = 6;    /* default precision   */
         dval = va_arg(pargs,double);
-        p = ecvt(dval,precision + 1,&decpt,&sign);
+        p = _ecvt(dval,precision + 1,&decpt,&sign);
 eformat:
         prefix = dosign(sign,flags);
         { char *sbuf;
@@ -565,7 +565,7 @@ eformat:
         if (!(flags & FLprec))    /* if no precision   */
 	  precision = 12; //6;	  /* default precision	 */
         dval = va_arg(pargs,double);
-        p = ecvt(dval,precision + 1,&decpt,&sign);
+        p = _ecvt(dval,precision + 1,&decpt,&sign);
         if (decpt < -3 || decpt - 1 > precision) {  /* use e format       */
           c -= 'g' - 'e';
           goto eformat;

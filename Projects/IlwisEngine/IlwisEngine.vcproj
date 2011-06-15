@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="IlwisEngine"
 	ProjectGUID="{903CDF6B-45ED-4C7D-83BF-9ECC12B051D3}"
 	RootNamespace="IlwisEngine"
@@ -1073,6 +1073,14 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\Sources\Engine\Base\Algorithm\Triangulation\gpc.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Engine\Base\Algorithm\Triangulation\gpc.h"
+						>
+					</File>
+					<File
 						RelativePath="..\..\Sources\Engine\Base\Algorithm\GROUPLIM.CPP"
 						>
 					</File>
@@ -1114,6 +1122,14 @@
 					</File>
 					<File
 						RelativePath="..\..\Sources\Engine\Base\Algorithm\SOLVEOBL.CPP"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Engine\Base\Algorithm\Triangulation\Triangulator.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Engine\Base\Algorithm\Triangulation\Triangulator.h"
 						>
 					</File>
 					<File
@@ -1190,90 +1206,6 @@
 						</File>
 						<File
 							RelativePath="..\..\Sources\Engine\Base\Algorithm\Tunnel.h"
-							>
-						</File>
-					</Filter>
-					<Filter
-						Name="triangulation"
-						>
-						<File
-							RelativePath="..\..\Sources\Engine\Base\Algorithm\Triangulation\Adjacency.cpp"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Engine\Base\Algorithm\Triangulation\Adjacency.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Engine\Base\Algorithm\Triangulation\advancing_front.cpp"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Engine\Base\Algorithm\Triangulation\advancing_front.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Engine\Base\Algorithm\Triangulation\cdt.cpp"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Engine\Base\Algorithm\Triangulation\cdt.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Engine\Base\Algorithm\Triangulation\CustomArray.cpp"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Engine\Base\Algorithm\Triangulation\CustomArray.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Engine\Base\Algorithm\Triangulation\RevisitedRadix.cpp"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Engine\Base\Algorithm\Triangulation\RevisitedRadix.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Engine\Base\Algorithm\Triangulation\shapes.cpp"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Engine\Base\Algorithm\Triangulation\shapes.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Engine\Base\Algorithm\Triangulation\Striper.cpp"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Engine\Base\Algorithm\Triangulation\Striper.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Engine\Base\Algorithm\Triangulation\sweep.cpp"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Engine\Base\Algorithm\Triangulation\sweep.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Engine\Base\Algorithm\Triangulation\sweep_context.cpp"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Engine\Base\Algorithm\Triangulation\sweep_context.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Engine\Base\Algorithm\Triangulation\TriangleStrip.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\Sources\Engine\Base\Algorithm\Triangulation\utils.h"
 							>
 						</File>
 					</Filter>

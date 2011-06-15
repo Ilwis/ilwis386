@@ -4,11 +4,12 @@
 #include "Engine\base\system\engine.h"
 #include <map>
 #include "Drawer_n.h"
-#include "Engine\Base\Algorithm\Triangulation\cdt.h"
 #include "Engine\Drawers\SimpleDrawer.h"
 #include "Engine\Drawers\ComplexDrawer.h"
 #include "Engine\Drawers\SVGElements.h"
-#include "Engine\Base\Algorithm\Triangulation\cdt.h"
+#include "Engine\Base\Algorithm\triangulation\gpc.h"
+#include "Engine\Base\Algorithm\Triangulation\Triangulator.h"
+//#include "Engine\Base\Algorithm\Triangulation\cdt.h"
 
 
 using namespace ILWIS;
@@ -73,6 +74,33 @@ void SVGElement::parse(DOMNode* node) {
 	}
 }
 
+void  SVGElement::parseTransform(SVGAttributes& attributes, const String& tranformString) {
+	Array<String> parts;
+	Split(tranformString, parts,")");
+	for(int i=0; i < parts.size(); ++i) {
+		String head = parts[i].sHead("(");
+		head.toLower();
+		Transform trans;
+		if ( head == "rotate") {
+			trans.type = Transform::tROTATE;
+		}
+		else if ( head == "translate") {
+			trans.type = Transform::tTRANSLATE;
+		} else if ( head == "scale") {
+			trans.type = Transform::tSCALE;
+		} else if ( head == "matrix" ) {
+			trans.type = Transform::tMATRIX;
+		}
+
+		Array<String> parts2;
+		Split(parts[i].sTail("("),parts2, " ");
+		for(int j = 0; j < parts2.size(); ++j) {
+			trans.parameters.push_back(parts2[j].rVal());
+		}
+		attributes.transformations.push_back(trans);
+	}
+}
+
 void SVGElement::parseNode(DOMNode* node,SVGAttributes& attributes) {
 	XERCES_CPP_NAMESPACE::DOMNamedNodeMap *map = node->getAttributes();
 	if ( map) {
@@ -84,6 +112,10 @@ void SVGElement::parseNode(DOMNode* node,SVGAttributes& attributes) {
 			attributes.fillColor = getColor(sfill);
 		else
 			attributes.fillColor = colorUNDEF;
+		String transform = getAttributeValue(map, "transform");
+		if ( transform != "") {
+			parseTransform(attributes, transform);
+		}
 
 		String sstrw = getAttributeValue(map, "stroke-width");
 		if ( sstrw != "")
@@ -137,17 +169,10 @@ void SVGElement::parseNode(DOMNode* node,SVGAttributes& attributes) {
 				Coord c ( pnt.sHead(",").rVal(), pnt.sTail(",").rVal());
 				attributes.points.push_back(c);
 			}
-			if ( attributes.type == SVGAttributes::sPOLYGON) {
-				p2t::CDT cdt(attributes.points);
-				cdt.Triangulate();
-				vector<p2t::Triangle*> cdtTriangles = cdt.GetTriangles();
-				attributes.triangles.resize(cdtTriangles.size()*3);
-				for(int i=0; i < cdtTriangles.size(); ++i) {
-					attributes.triangles[i*3] = Coord(cdtTriangles[i]->GetPoint(0)->x,cdtTriangles[i]->GetPoint(0)->y);
-					attributes.triangles[i*3 + 1] = Coord(cdtTriangles[i]->GetPoint(1)->x,cdtTriangles[i]->GetPoint(1)->y);
-					attributes.triangles[i*3 + 2] = Coord(cdtTriangles[i]->GetPoint(2)->x,cdtTriangles[i]->GetPoint(2)->y);
-				}
-			}
+	/*		if ( attributes.type == SVGAttributes::sPOLYGON) {
+				Triangulator tri;
+				tri.getTriangulation(attributes.points, attributes.triangleStrips);
+			}*/
 		}
 
 
@@ -180,9 +205,8 @@ void SVGElement::parseNode(DOMNode* node,SVGAttributes& attributes) {
 		}
 
 		if ( attributes.type == SVGAttributes::sPOLYGON) { // need tot triangulate
-			p2t::CDT cdt(attributes.points);
-			cdt.Triangulate();
-			cdt.getTriangleStrips(attributes.triangles);
+			Triangulator tri;
+			tri.getTriangulation(attributes.points, attributes.triangleStrips);
 		}
 	}
 }

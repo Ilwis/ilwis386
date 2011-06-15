@@ -97,7 +97,6 @@ private:
 	CWnd *reportWindow;
 	unsigned short iProgressID;
 	static unsigned short iTranqIDCounter;
-
 	bool fServerMode() const;
 };
 

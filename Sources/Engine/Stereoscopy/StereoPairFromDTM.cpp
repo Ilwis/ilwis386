@@ -227,7 +227,7 @@ void StereoPairFromDTM::Init()
 {
   fNeedFreeze = true;
   sFreezeTitle = "StereoPairFromDTM";
-  htpFreeze = htpStereoPairFromDTMT;
+  help = "ilwisapp\\stereopair_from_dtm_algorithm.htm";
 	csDTM = mpDTM->gr()->cs();
 	fTransformDTMCoords = csDTM != mpInputImage->cs();
 	rSourceMapPixSize = mpInputImage->gr()->rPixSize();

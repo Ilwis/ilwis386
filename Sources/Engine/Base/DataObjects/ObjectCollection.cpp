@@ -203,6 +203,7 @@ ObjectCollectionPtr::ObjectCollectionPtr(const FileName& fn)
 	long iNr;
 	ReadElement("ObjectCollection", "NrObjects", iNr);
 	ReadElement("ObjectCollection", "AttributeTable", attTable);
+	ReadElement("ObjectCollection","Range",range);
 	long ft;
 	ReadElement("ObjectCollection", "FilterTypes", ft);
 	for(int i=0; i < ft; ++i) {
@@ -307,6 +308,7 @@ void ObjectCollectionPtr::Store()
 		WriteElement("ObjectCollection", "Type", sType());	
 	WriteElement("ObjectCollection", "NrObjects", (long)arObjects.size());
 	WriteElement("ObjectCollection", "AttributeTable", attTable);
+	WriteElement("ObjectCollection", "Range", range);
 	long sz = filterTypes.size();
 	WriteElement("ObjectCollection", "FilterTypes", sz);
 	int count = 0;
@@ -374,6 +376,7 @@ void ObjectCollectionPtr::Add(const FileName& fnObject)
 		return;
 	}
 	arObjects.push_back(fnObject);
+	range = RangeReal();
 	Store();
 }
 
@@ -394,6 +397,7 @@ void ObjectCollectionPtr::Remove(const FileName& fnObject)
 		arObjects.erase(cur);	
 
 	ObjectInfo::WriteRemovalOfFileFromCollection(fnObject, fnObj);
+	range = RangeReal();
 	Updated();
 }
 
@@ -431,6 +435,7 @@ void ObjectCollectionPtr::DeleteEntireCollection()
 		getEngine()->Execute(sCmd);
 	}		
   fErase = true;
+  range = RangeReal();
 }
 
 FileName ObjectCollectionPtr::fnObject(int i)
@@ -584,6 +589,22 @@ bool ObjectCollectionPtr::getStatusFor(int query) const {
 	}
 	bool finalStatus = allBasemap & allSegMap & allPntMap && allRasMap & allPolMap & sameDomain & sameGeoref;
 	return finalStatus;
+}
+
+RangeReal ObjectCollectionPtr::getRange() {
+	if ( !range.fValid()) {
+		for(int i=0; i < arObjects.size(); ++i) {
+			const FileName& fnMap = arObjects.at(i);
+			if ( IOTYPEBASEMAP(fnMap)) {
+				BaseMap bmp(fnMap);
+				if ( bmp->dm()->pdv()) {
+					range += bmp->dvrs().rrMinMax();
+				}
+
+			} 
+		}
+	}
+	return range;
 }
 
 CoordBounds ObjectCollectionPtr::cb() const {

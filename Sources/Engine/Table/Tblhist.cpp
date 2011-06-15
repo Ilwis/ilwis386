@@ -699,7 +699,7 @@ void TableHistogram::Init()
 	
   String sTitle("%S - %S", STBLTitleTableHistogram, sName(true));
   trq.SetTitle(sTitle);
-  trq.setHelpItem(htpTableHistogramT);
+  trq.setHelpItem("ilwisapp\\histogram_algorithm.htm");
   if (0 == pts)
     return;
   if (0 != dm()->pdnone()) {

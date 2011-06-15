@@ -454,7 +454,7 @@ void TableHistogramPol::FillColumns()
 void TableHistogramPol::Init()
 {
   trq.SetTitle("TableHistogramPol");
-  trq.setHelpItem(htpTableHistogramPolT);
+  trq.setHelpItem("ilwisapp\\histogram_algorithm.htm");
   if (0 == pts)
     return;
   if (0 != dm()->pdnone()) {

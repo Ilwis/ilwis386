@@ -64,6 +64,13 @@ ColumnVirtual* ColumnVirtual::create(const Table& tbl, const String& sColName, C
   if ( infos.size() > 0  ) {
 	return (ColumnVirtual *)(infos[0]->createFunction)(tbl->fnObj, p, "", extraParms);
   }
+
+	infos.clear();
+	Engine::modules.getCommandInfo("ColumnCalculate", infos);
+	if ( infos.size() > 0 ) {
+		return (ColumnVirtual *)(infos[0]->createFunction)(tbl->fnObj, p, "", extraParms);
+	}
+
   throw ErrorInvalidType(tbl->fnObj, "ColumnVirtual", sFunc);
 
 
@@ -104,6 +111,11 @@ ColumnVirtual* ColumnVirtual::create(const Table& tbl, const String& sColName, C
   if ( infos.size() > 0)
 	return (ColumnVirtual *)(infos[0]->createFunction)(tbl->fnObj, p, sExpression, extraParms);
 
+	infos.clear();
+	Engine::modules.getCommandInfo("ColumnCalculate", infos);
+	if ( infos.size() > 0 ) {
+		return (ColumnVirtual *)(infos[0]->createFunction)(tbl->fnObj, p, sExpression, extraParms);
+	}
   throw ErrorInvalidType(tbl->fnObj, "ColumnVirtual", sFunc);
   //String sFunc = IlwisObjectPtr::sParseFunc(sExpression);
   //if (fCIStrEqual("ColumnCalculate",sFunc)) {

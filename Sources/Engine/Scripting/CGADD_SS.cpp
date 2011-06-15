@@ -108,7 +108,7 @@ static VarType VarTypes[] = { vtVALUE,  vtMAP, vtTABLE, vtCOLUMN,
 VarType vt(Array<char*>& sList, const String& sVal)
 {
   for (int i = 0; i < sList.iSize(); i++)
-    if (!stricmp(sList[i], sVal.scVal()))
+    if (!_stricmp(sList[i], sVal.scVal()))
       return VarTypes[i];
   return vtNONE;
 }

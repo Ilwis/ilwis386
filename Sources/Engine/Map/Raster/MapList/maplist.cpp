@@ -344,6 +344,7 @@ MapListPtr::MapListPtr(const FileName& fn)
 		fUseAs = false;
 	SetUseAs(fUseAs);
 	ReadElement("MapList", "AttributeTable", attTable);
+	ReadElement("MapList","Rnage", range);
 	int iMaps = iReadElement("MapList", "Maps");
     // Corrupted ODF can have no key for the number of maps, so check
     if (iMaps == iUNDEF)
@@ -537,6 +538,7 @@ void MapListPtr::Store()
 	WriteElement("MapList", "Maps", iSize());
 	WriteElement("MapList", "BandPreFix", _sBandPreFix);
 	WriteElement("MapList", "Offset", iLower());
+	WriteElement("MapList", "Range", range);
 	int i;
 	for (i  = iLower(); i <= iUpper(); i++)
 		WriteElement("MapList", String("Map%i", i).scVal(), map(i)->fnObj);
@@ -1016,6 +1018,7 @@ void MapListPtr::AddMap(const Map& mp)
 	if (i > iUpper())
 		ma &= mp;
 	ObjectInfo::WriteAdditionOfFileToCollection(mp->fnObj, fnObj);
+	range = RangeReal();
 		Updated();
 }
 
@@ -1036,6 +1039,7 @@ void MapListPtr::RemoveMap(const FileName& fn)
 		}
 	}
 	ObjectInfo::WriteRemovalOfFileFromCollection(fn, fnObj);
+	range = RangeReal();
 	Updated();
 }
 
@@ -1193,6 +1197,7 @@ void MapListPtr::Calc(bool fMakeUpToDate)
 		if (!objdep.fUpdateAll())
 			return;
 
+	range = RangeReal();
 	if (0 != pmlv)
 		pmlv->Freeze();
 }
@@ -1202,6 +1207,7 @@ void MapListPtr::DeleteCalc()
 {
 	ILWISSingleLock sl(&csCalc, TRUE, SOURCE_LOCATION);
 	OpenMapListVirtual();
+	range = RangeReal();
 	if (0 != pmlv) 
 		pmlv->UnFreeze();
 }
@@ -1272,4 +1278,15 @@ Table MapListPtr::tblAtt() const {
 void MapListPtr::SetAttributeTable(const Table& tbl){
 	attTable = tbl;
 	fChanged = true;
+}
+
+RangeReal MapListPtr::getRange() {
+	if ( !range.fValid()) {
+		for(int i=0; i < ma.size(); ++i) {
+			if ( ma[i]->dm()->pdv()) {
+				range += ma[i]->dvrs().rrMinMax();
+			}
+		}
+	}
+	return range;
 }

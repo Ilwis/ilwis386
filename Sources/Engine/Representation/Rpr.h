@@ -34,35 +34,6 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/* $Log: /ILWIS 3.0/Representation/Rpr.h $
- * 
- * 6     24-10-00 9:36a Martin
- * added getobjectstructure function
- * 
- * 5     25/04/00 16:36 Willem
- * Added flag in constructor and create function to allow creation of
- * RepresentationValue for system domain "value.dom"
- * 
- * 4     10/12/99 10:06a Wind
- * debugged for internal domains and representation
- * 
- * 3     5/27/99 4:38p Martin
- * //->/*
-  
- * 2     5/27/99 4:37p Martin
- * added some exports
-// Revision 1.3  1998/09/16 17:22:46  Wim
-// 22beta2
-//
-// Revision 1.2  1997/08/14 18:50:32  Wim
-// Added sName() to report always the extension when different from
-// the normal one.
-//
-/* Representation, RepresentationPtr
-   by Wim Koolhoven
-  (c) Ilwis System Development ITC
-	Last change:  WK   10 Mar 98    4:12 pm
-*/
 
 #ifndef ILWRPR_H
 #define ILWRPR_H
@@ -163,6 +134,7 @@ public:
     static Domain               dmGet(const FileName& fn);
     static bool                 fHasDomainValue(const FileName& fn); 
     static bool                 fHasSameDomain(const FileName& fn, const Domain& dmCompare); 
+	static Color				_export clrPrimary(int iNr) ;
 
 private:
     static IlwisObjectPtrList   listRpr;

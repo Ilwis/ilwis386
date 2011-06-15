@@ -1,6 +1,8 @@
 #include "Headers\toolspch.h"
 #include "Engine\Drawers\RootDrawer.h"
+#include "Engine\Map\basemap.h"
 #include "Engine\Drawers\SelectionRectangle.h"
+#include "Engine\Drawers\ZValueMaker.h"
 
 using namespace ILWIS;
 
@@ -12,6 +14,7 @@ SelectionRectangle::SelectionRectangle(DrawerParameters *parms) :
 SimpleDrawer(parms, "SelectionRectangle"),
 clr(Color(0,100,255))
 {
+	isSupportingDrawer = true;
 }
 
 SelectionRectangle::~SelectionRectangle() {
@@ -21,7 +24,8 @@ bool SelectionRectangle::draw( const CoordBounds& cb) const{
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 	bool is3D = getRootDrawer()->is3D();
-	double fakeZ = getRootDrawer()->getFakeZ();
+	double fakeZ = getRootDrawer()->getZMaker()->getZ0(is3D);
+	fakeZ += fakeZ;
 	double z = is3D ? fakeZ : 0;
 	glColor4d(clr.redP(),clr.greenP(),clr.blueP(),clr.alphaP());
 	glBegin(GL_LINE_STRIP);

@@ -159,7 +159,7 @@ PhiLam ProjectionGeneralPerspective::plConv(const XY& _xy) const
     xy.x = bm *  cg + bq *  sg;
     xy.y = bq *  cg - bm *  sg;
 //  }
-  rh = hypot(xy.x, xy.y);
+  rh = _hypot(xy.x, xy.y);
   if ((sinz = 1. - rh * rh *  pfact) < 0.) return pl;
   sinz = ( p - sqrt(sinz)) / ( pn1 / rh + rh /  pn1);
   cosz = sqrt(1. - sinz * sinz);

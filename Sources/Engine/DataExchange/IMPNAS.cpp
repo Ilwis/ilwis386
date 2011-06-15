@@ -65,7 +65,7 @@ void ImpExp::ImportNAS(File& FileIn, const FileName& fnObject)
 	
 	FileIn.ReadLnAscii(sLine);
 	String s1 = strtok(sLine.sVal(), " \t\v");
-	if (stricmp(s1.sVal(), "NAS") == 0)
+	if (_stricmp(s1.sVal(), "NAS") == 0)
 	{
 		FileIn.ReadLnAscii(sLine);
 		long iFr = atoi(strtok(sLine.sVal(), " \t\v"));
@@ -75,7 +75,7 @@ void ImpExp::ImportNAS(File& FileIn, const FileName& fnObject)
 		iNr = atoi(strtok(0, " \t\v"));
 		iCol = iNr - iFr + 1;
 	}
-	else if (stricmp(s1.sVal(), "NCOLS") == 0)
+	else if (_stricmp(s1.sVal(), "NCOLS") == 0)
 	{
 		fPc = false;
 		iCol = atoi(strtok(0, " \t\v"));
@@ -93,7 +93,7 @@ void ImpExp::ImportNAS(File& FileIn, const FileName& fnObject)
 		rSize = atofILW(strtok(0, " \t\v"));
 		FileIn.ReadLnAscii(sLine);
 		String s1 = sLine;
-		if (stricmp(strtok(s1.sVal(), " \t\v"), "NODATA_VALUE") == 0)
+		if (_stricmp(strtok(s1.sVal(), " \t\v"), "NODATA_VALUE") == 0)
 		{
 			nodata = atof(strtok(0, " \t\v"));
 			FileIn.ReadLnAscii(sLine);

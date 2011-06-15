@@ -387,7 +387,7 @@ void TableHistogramPnt::FillColumns()
 void TableHistogramPnt::Init()
 {
   trq.SetTitle("TableHistogramPnt");
-  trq.setHelpItem(htpTableHistogramPntT);
+  trq.setHelpItem("ilwisapp\\histogram_algorithm.htm");
   if (pts==0)
     return;
 //  Time tim = pts->objtime;

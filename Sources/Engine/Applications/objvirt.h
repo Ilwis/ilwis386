@@ -185,7 +185,7 @@ protected:
     ObjectDependency& objdep;
     ObjectTime&             objtime;
     bool              fNeedFreeze;
-    HelpTopic         htpFreeze;
+    String         htpFreeze;
     String            sFreezeTitle;
 };
 #endif

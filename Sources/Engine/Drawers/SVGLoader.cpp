@@ -24,7 +24,7 @@ SVGLoader::~SVGLoader() {
 }
 void SVGLoader::load() {
 	String ilwDir = getEngine()->getContext()->sIlwDir();
-	String pathToSvg = ilwDir + "\\Resources\\symbols\\*.svg";
+	String pathToSvg = ilwDir + "\\Resources\\symbols\\*.ivg";
 	try{
 
 		CFileFind finder;
