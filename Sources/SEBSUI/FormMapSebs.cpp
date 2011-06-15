@@ -217,7 +217,7 @@ FormMapETo::FormMapETo(CWnd* mw, const char* sPar)
 	CheckBox* chkRa = new CheckBox(root, SAFUiOutputTerrestrialIncomingDailySloarRadiationMap, &m_fRaMap);
 	FieldMapCreate* fmRa = new FieldMapCreate(chkRa, "", &m_sRa);
 		
-    //SetAppHelpTopic(htpFlowDirection);
+    //SetHelpItem("ilwisapp\\flow_direction.htm");
 	create();
 }
 int FormMapETo::exec() 
@@ -715,45 +715,49 @@ FormMapSebs::FormMapSebs(CWnd* mw, const char* sPar)
 						sOutMap = fn.sFullName(false);
 		}
 	}
-	ValueRange vr(-1e300, 1e300, 1e-2);		   
-	new FieldDataType(root, SAFUiLSTMap, &m_sMapLST, new MapListerDomainType(".mpr", dmVALUE, false),true);
-	new FieldDataType(root, SAFUiEmissivityMap , &m_sMapEmis, new MapListerDomainType(".mpr", dmVALUE, false),true);
-	new FieldDataType(root, SAFUiAlbedoMap, &m_sMapAlbedo, new MapListerDomainType(".mpr", dmVALUE, false),true);
-	FieldDataType *fldNDVI = new FieldDataType(root, SAFUiNdviMap, &m_sMapNDVI, new MapListerDomainType(".mpr", dmVALUE, false),true);
+	ValueRange vr(-1e300, 1e300, 1e-2);
+	FieldGroup *fg3 = new FieldGroup(root);
+	FieldGroup *fg1 = new FieldGroup(fg3);
+	new FieldDataType(fg1, SAFUiLSTMap, &m_sMapLST, new MapListerDomainType(".mpr", dmVALUE, false),true);
+	new FieldDataType(fg1, SAFUiEmissivityMap , &m_sMapEmis, new MapListerDomainType(".mpr", dmVALUE, false),true);
+	new FieldDataType(fg1, SAFUiAlbedoMap, &m_sMapAlbedo, new MapListerDomainType(".mpr", dmVALUE, false),true);
+	FieldDataType *fldNDVI = new FieldDataType(fg1, SAFUiNdviMap, &m_sMapNDVI, new MapListerDomainType(".mpr", dmVALUE, false),true);
+	
 
-	//m_fPv = false;
-	//CheckBox *chkPv = new CheckBox(root, SAFUiPvMap, &m_fPv);
-	//chkPv->Align(chkLai, AL_UNDER);
-	new FieldDataType(root, SAFUiPvMap, &m_sMapPv, new MapListerDomainType(".mpr", dmVALUE, false),true);
+	m_fPv = false;
+	CheckBox *chkPv = new CheckBox(fg1, "Vegetation Fraction (Fc)", &m_fPv);
+	//chkPv->Align(fldNDVI, AL_UNDER);
+	new FieldDataType(chkPv, "", &m_sMapPv, new MapListerDomainType(".mpr", dmVALUE, false),true);
 	
 	m_fLai = false;
-	CheckBox *chkLai = new CheckBox(root, SAFUiLaiMap, &m_fLai);
+	CheckBox *chkLai = new CheckBox(fg1, SAFUiLaiMap, &m_fLai);
+	chkLai->Align(chkPv,AL_UNDER);
 	new FieldDataType(chkLai, "", &m_sMapLai, new MapListerDomainType(".mpr", dmVALUE, false),true);
 	
 	m_fSza = false;
-	m_chkSza = new CheckBox(root, SAFUiSzaMap, &m_fSza);
+	m_chkSza = new CheckBox(fg1, SAFUiSzaMap, &m_fSza);
 	m_chkSza->Align(chkLai, AL_UNDER);
 	m_chkSza->SetCallBack((NotifyProc)&FormMapSebs::MapOnSelect);
 	new FieldDataType(m_chkSza, "", &m_sMapSza, new MapListerDomainType(".mpr", dmVALUE, false), true);
 	m_rSza = 60;
-	m_fldSza = new FieldReal(root, "", &m_rSza, vr); //Avg. SZA value
+	m_fldSza = new FieldReal(fg1, "", &m_rSza, vr); //Avg. SZA value
 	m_fldSza->Align(m_chkSza,AL_AFTER);
 
 	m_fDem = false;
-	m_chkDem = new CheckBox(root, SAFUiDemMap, &m_fDem);
+	m_chkDem = new CheckBox(fg1, SAFUiDemMap, &m_fDem);
 	m_chkDem->SetCallBack((NotifyProc)&FormMapSebs::DemMapOnSelect);
 	m_chkDem->Align(m_chkSza,AL_UNDER);
 	new FieldDataType(m_chkDem, "", &m_sMapDem, new MapListerDomainType(".mpr", dmVALUE, false), true);
 	m_rDem = rUNDEF;
-	m_fldDem = new FieldReal(root, "", &m_rDem, vr);//Avg. DEM value
+	m_fldDem = new FieldReal(fg1, "", &m_rDem, vr);//Avg. DEM value
 	m_fldDem->Align(m_chkDem,AL_AFTER);
 	m_fSdwnMap = false;
-	m_chkSdwnMap = new CheckBox(root, SAFUiDownwardSolarRadiationMap, &m_fSdwnMap);
+	m_chkSdwnMap = new CheckBox(fg1, SAFUiDownwardSolarRadiationMap, &m_fSdwnMap);
 	m_chkSdwnMap->Align(m_chkDem, AL_UNDER);
 	m_chkSdwnMap->SetCallBack((NotifyProc)&FormMapSebs::SdwnMapOnSelect);
-	new FieldDataType(m_chkSdwnMap, "", &m_sSdwnMap, new MapListerDomainType(".mpr", dmVALUE, false),true);
+	m_fldSdwn = new FieldDataType(m_chkSdwnMap, "", &m_sSdwnMap, new MapListerDomainType(".mpr", dmVALUE, false),true);
 	m_fS_dwn = true;
-	m_chkSdwn = new CheckBox(root, SAFUiDownwardSolarRadiation, &m_fS_dwn);
+	m_chkSdwn = new CheckBox(fg1, SAFUiDownwardSolarRadiation, &m_fS_dwn);
 	m_S_dwn = 1025.0;
 	m_chkSdwn->SetCallBack((NotifyProc)&FormMapSebs::CalcSdwnOnSelect);
 	m_chkSdwn->Align(m_chkSdwnMap, AL_UNDER);
@@ -761,127 +765,153 @@ FormMapSebs::FormMapSebs(CWnd* mw, const char* sPar)
 	flS_dwn->Align(m_chkSdwn, AL_AFTER);
 
 	m_Visi = 39.2;
-	m_flVisi = new FieldReal(root, SAFUiVisibility, &m_Visi, vr);
+	m_flVisi = new FieldReal(fg1, SAFUiVisibility, &m_Visi, vr);
 	m_flVisi->Align(m_chkSdwn, AL_UNDER);
 	
-
-	StaticText *st = new StaticText(root, SAFUiLandUseMap);
+	FieldGroup *fg2 = new FieldGroup(fg3);
+	StaticText *st = new StaticText(fg2, SAFUiLandUseMap, true);
 	
 	m_fHc = false;
-	CheckBox *chkHc = new CheckBox(root, SAFUiCanopyHeightMap, &m_fHc);
+	CheckBox *chkHc = new CheckBox(fg2, SAFUiCanopyHeightMap, &m_fHc);
 	chkHc->Align(st, AL_UNDER);
 	new FieldDataType(chkHc, "", &m_sHc, new MapListerDomainType(".mpr", dmVALUE, true), true);
 
 	m_fD0 = false;
-	CheckBox *chkD0 = new CheckBox(root, SAFUiDisplacementMap, &m_fD0);
+	CheckBox *chkD0 = new CheckBox(fg2, SAFUiDisplacementMap, &m_fD0);
 	chkD0->Align(chkHc, AL_UNDER);
 	new FieldDataType(chkD0, "", &m_sD0, new MapListerDomainType(".mpr", dmVALUE, true), true);
 
 	m_fLUM = false;
-	CheckBox *chkLUM = new CheckBox(root, SAFUiRoughnessMap, &m_fLUM);
+	CheckBox *chkLUM = new CheckBox(fg2, SAFUiRoughnessMap, &m_fLUM);
 	chkLUM->Align(chkD0, AL_UNDER);
 	new FieldDataType(chkLUM, "", &m_sLUM, new MapListerDomainType(".mpr", dmVALUE, true), true);
 	
 	m_fDaynumber = true;
-	m_chkDaynumber = new CheckBox(root, SAFUiJulianDayNumber, &m_fDaynumber);
+	m_chkDaynumber = new CheckBox(fg2, SAFUiJulianDayNumber, &m_fDaynumber);
 	m_chkDaynumber->Align(chkLUM, AL_UNDER);
 	m_chkDaynumber->SetCallBack((NotifyProc)&FormMapSebs::DaynumberOnSelect);
 	FieldInt* fldDaynumber = new FieldInt(m_chkDaynumber, "", &m_iDaynumber, ValueRange(1,365));
 	m_iMonth = iUNDEF;
-	m_fldMonth = new FieldInt(root, SAFUiMonth, &m_iMonth, ValueRange(1,12));
+	m_fldMonth = new FieldInt(fg2, SAFUiMonth, &m_iMonth, ValueRange(1,12));
 	m_fldMonth->SetIndependentPos();
 	m_fldMonth->Align(m_chkDaynumber,AL_UNDER);
 	//m_fldMonth->SetWidth(45);
 	
 	m_iDay = iUNDEF;
-    m_fldDay = new FieldInt(root, SAFUiDay, &m_iDay, ValueRange(1,31,1)); //Day
+    m_fldDay = new FieldInt(fg2, SAFUiDay, &m_iDay, ValueRange(1,31,1)); //Day
 	m_fldDay->SetIndependentPos();
 	m_fldDay->Align(m_fldMonth,AL_AFTER);
 	m_iYear = iUNDEF;
-	m_fldYear = new FieldInt(root, SAFUiYear, &m_iYear, ValueRange(1,LONG_MAX)); //Year
+	m_fldYear = new FieldInt(fg2, SAFUiYear, &m_iYear, ValueRange(1,LONG_MAX)); //Year
 	m_fldYear->SetIndependentPos();
 	m_fldYear->Align(m_fldDay,AL_AFTER);
 	
 	m_Z_ref = 2.0;
-	FieldReal* fldReferenceHeight = new FieldReal(root, SAFUiReferenceHeight, &m_Z_ref, vr);
+	FieldReal* fldReferenceHeight = new FieldReal(fg2, SAFUiReferenceHeight, &m_Z_ref, vr);
 	fldReferenceHeight->Align(m_fldMonth,AL_UNDER);
 	m_hi = 1000.0;
-	FieldReal* fldBPLHeight = new FieldReal(root, SAFUiPBLHeight, &m_hi, vr);
+	FieldReal* fldBPLHeight = new FieldReal(fg2, SAFUiPBLHeight, &m_hi, vr);
 	
 	m_fQ_ref = false;
-	m_chkQ_ref = new CheckBox(root, SAFUiHumidityMap, &m_fQ_ref);
+	m_chkQ_ref = new CheckBox(fg2, SAFUiHumidityMap, &m_fQ_ref);
 	m_chkQ_ref->SetCallBack((NotifyProc)&FormMapSebs::MapOnSelect);
 	new FieldDataType(m_chkQ_ref, "", &m_sQ_ref, new MapListerDomainType(".mpr", dmVALUE, false), true);
 	
 	m_Q_ref = 0.006;
 	ValueRange vr1(-1e300, 1e300, 1e-3);		   
-	m_fldQ_ref = new FieldReal(root, "", &m_Q_ref, vr1);
+	m_fldQ_ref = new FieldReal(fg2, "", &m_Q_ref, vr1);
 	m_fldQ_ref->Align(m_chkQ_ref,AL_AFTER);
 	
 	m_fU_ref = false;
-	m_chkU_ref = new CheckBox(root, SAFUiWindSpeedMap, &m_fU_ref);
+	m_chkU_ref = new CheckBox(fg2, SAFUiWindSpeedMap, &m_fU_ref);
 	m_chkU_ref->SetCallBack((NotifyProc)&FormMapSebs::MapOnSelect);
 	m_chkU_ref->Align(m_chkQ_ref,AL_UNDER);
 	new FieldDataType(m_chkU_ref, "", &m_sU_ref, new MapListerDomainType(".mpr", dmVALUE, false), true);
 	m_U_ref = 2.0;
-	m_fldU_ref = new FieldReal(root, "", &m_U_ref, vr);
+	m_fldU_ref = new FieldReal(fg2, "", &m_U_ref, vr);
 	m_fldU_ref->Align(m_chkU_ref,AL_AFTER);
 	
 	m_fT_ref = false;
-	m_chkT_ref = new CheckBox(root, SAFUiAirTemperatureMap, &m_fT_ref);
+	m_chkT_ref = new CheckBox(fg2, SAFUiAirTemperatureMap, &m_fT_ref);
 	m_chkT_ref->SetCallBack((NotifyProc)&FormMapSebs::MapOnSelect);
 	m_chkT_ref->Align(m_chkU_ref,AL_UNDER);
 	new FieldDataType(m_chkT_ref, "", &m_sT_ref, new MapListerDomainType(".mpr", dmVALUE, false), true);
 	m_T_ref = 25.0;
-	m_fldT_ref = new FieldReal(root, "", &m_T_ref, vr);
+	m_fldT_ref = new FieldReal(fg2, "", &m_T_ref, vr);
 	m_fldT_ref->Align(m_chkT_ref,AL_AFTER);
 	
 	m_fP_ref = false;
-	m_chkP_ref = new CheckBox(root, SAFUiPressureAtReferenceHeightMap, &m_fP_ref);
+	m_chkP_ref = new CheckBox(fg2, SAFUiPressureAtReferenceHeightMap, &m_fP_ref);
 	m_chkP_ref->SetCallBack((NotifyProc)&FormMapSebs::MapOnSelect);
 	m_chkP_ref->Align(m_chkT_ref,AL_UNDER);
 	new FieldDataType(m_chkP_ref, "", &m_sP_ref, new MapListerDomainType(".mpr", dmVALUE, false), true);
 	m_P_ref = 100000.0;
-	m_fldP_ref = new FieldReal(root, "", &m_P_ref, vr);
+	m_fldP_ref = new FieldReal(fg2, "", &m_P_ref, vr);
 	m_fldP_ref->Align(m_chkP_ref, AL_AFTER);
 
 	m_fP_sur = false;
-	m_chkP_sur = new CheckBox(root, SAFUiPressureAtSurfaceMap, &m_fP_sur);
+	m_chkP_sur = new CheckBox(fg2, SAFUiPressureAtSurfaceMap, &m_fP_sur);
 	m_chkP_sur->SetCallBack((NotifyProc)&FormMapSebs::MapOnSelect);
 	m_chkP_sur->Align(m_chkP_ref,AL_UNDER);
 	new FieldDataType(m_chkP_sur, "", &m_sP_sur, new MapListerDomainType(".mpr", dmVALUE, false), true);
 	m_P_sur = 100100.0;
-	m_fldP_sur = new FieldReal(root, "", &m_P_sur, vr);
+	m_fldP_sur = new FieldReal(fg2, "", &m_P_sur, vr);
 	m_fldP_sur->Align(m_chkP_sur,AL_AFTER);
 
-	FieldBlank *fb1 = new FieldBlank(root, 1); // Used to force proper alignment	
+	FieldBlank *fb1 = new FieldBlank(fg2, 1); // Used to force proper alignment	
     fb1->Align(m_chkP_sur, AL_UNDER);
     
 
 	m_fTa_avg_map = false;
-	m_chkTa_avg_map = new CheckBox(root, SAFUiMeanAirTemperatureMap, &m_fTa_avg_map);
+	m_chkTa_avg_map = new CheckBox(fg2, SAFUiMeanAirTemperatureMap, &m_fTa_avg_map);
 	m_chkTa_avg_map->SetCallBack((NotifyProc)&FormMapSebs::MapOnSelect);
 	m_chkTa_avg_map->Align(m_chkP_sur,AL_UNDER);
 	new FieldDataType(m_chkTa_avg_map, "", &m_sTa_avg, new MapListerDomainType(".mpr", dmVALUE, false), true);
 	m_Ta_avg = 25;
-	m_fldTa_avg = new FieldReal(root, "", &m_Ta_avg);
+	m_fldTa_avg = new FieldReal(fg2, "", &m_Ta_avg);
 	m_fldTa_avg->Align(m_chkTa_avg_map,AL_AFTER);
 
 	m_fN_s_map = false;
-	m_chkN_s_map = new CheckBox(root, SAFUiSunshineHours, &m_fN_s_map);
+	m_chkN_s_map = new CheckBox(fg2, SAFUiSunshineHours, &m_fN_s_map);
 	m_chkN_s_map->SetCallBack((NotifyProc)&FormMapSebs::MapOnSelect);
 	m_chkN_s_map->Align(m_chkTa_avg_map,AL_UNDER);
 	new FieldDataType(m_chkN_s_map, "", &m_sN_s, new MapListerDomainType(".mpr", dmVALUE, false), true);
 	m_N_s = 10;
-	m_fldN_s = new FieldReal(root, "", &m_N_s);
+	m_fldN_s = new FieldReal(fg2, "", &m_N_s);
 	m_fldN_s->Align(m_chkN_s_map,AL_AFTER);
 
+	//m_fKB=true: use kb as input , otherwise use sebs model for kb estimates 
+	m_fKB = true;
+	m_chkKB = new CheckBox(fg2, "Input kB^-1", &m_fKB);
+	m_chkKB->SetCallBack((NotifyProc)&FormMapSebs::kbCalOnSelect);
+	m_chkKB->Align(m_chkN_s_map,AL_UNDER);
+    
+	m_fKB_s_map = false;
+	m_chkKB_s_map = new CheckBox(fg2, "kB^-1 Map", &m_fKB_s_map);
+	m_chkKB_s_map->Align(m_chkKB,AL_UNDER);
+	m_chkKB_s_map->SetCallBack((NotifyProc)&FormMapSebs::kbMapOnSelect);
+	m_chkKB_s_map->Align(m_chkKB,AL_UNDER);
+	m_fldKB_s_map = new FieldDataType(m_chkKB_s_map, "", &m_sKB_s_map, new MapListerDomainType(".mpr", dmVALUE, false), true);
+	m_kb = 2.5;
+	m_fldKB_s = new FieldReal(fg2, "", &m_kb);
+	m_fldKB_s->Align(m_chkKB_s_map,AL_AFTER);
+	fg2->Align(fg1, AL_AFTER);
 	
-	FieldBlank *fb = new FieldBlank(root, 1); // Used to force proper alignment	
-    fb->Align(m_chkN_s_map, AL_UNDER);
+	//FieldBlank *fb = new FieldBlank(root, 1); // Used to force proper alignment	
+ //   fb->Align(fg3, AL_UNDER);
     	
-    initMapOut(false, false);
-    //SetAppHelpTopic(htpFlowDirection);
+    //initMapOut(false, false);
+	FieldGroup *fg4 = new FieldGroup(root);
+
+	FieldMapCreate *fmc = new FieldMapCreate(fg4, SAFUiOutRasMap, &sOutMap);
+	fmc->Align(fg3,AL_UNDER);
+    FieldString* fs = new FieldString(fg4, SAFUiDescription, &sDescr);
+    fs->Align(fmc, AL_AFTER);
+
+    fs->SetWidth(120);
+ // fs->SetIndependentPos();
+	fg4->SetIndependentPos();
+	
 	create();
 }
 
@@ -908,7 +938,7 @@ int FormMapSebs::exec()
 	FileName fnMapLai(m_sMapLai); 
 	m_sMapLai = fnMapLai.sRelativeQuoted(false,fn.sPath());	
   }
-  m_fPv = true;
+  //m_fPv = true;
   if (m_fPv){
 	FileName fnMapPv(m_sMapPv); 
 	m_sMapPv = fnMapPv.sRelativeQuoted(false,fn.sPath());	
@@ -997,8 +1027,15 @@ int FormMapSebs::exec()
 	FileName fnMapN_s(m_sN_s); 
 	m_sN_s = fnMapN_s.sRelativeQuoted(false,fn.sPath());	
   }
-  		
-  String sExpr("MapSEBS(%S,%S,%S,%S,%li,%S,%li,%S,%li,%S,%g,%li,%S,%g,%li,%li,%li,%li,%li,%g,%g,%li,%S,%g,%li,%S,%g,%li,%S,%g,%li,%S,%g,%li,%S,%g,%g,%li,%g,%li,%S,%li,%S,%li,%S,%li,%S,%li,%S,%g,%li,%S,%g)", 
+
+  if(m_fKB){
+	  if(m_fKB_s_map){
+	  	  FileName fnMapKB(m_sKB_s_map); 
+	      m_sKB_s_map = fnMapKB.sRelativeQuoted(false,fn.sPath());	
+      }
+  }
+  
+  String sExpr("MapSEBS(%S,%S,%S,%S,%li,%S,%li,%S,%li,%S,%g,%li,%S,%g,%li,%li,%li,%li,%li,%g,%g,%li,%S,%g,%li,%S,%g,%li,%S,%g,%li,%S,%g,%li,%S,%g,%g,%li,%g,%li,%S,%li,%S,%li,%S,%li,%S,%li,%S,%g,%li,%S,%g,%li,%g,%S,%li)", 
 										m_sMapLST, 
 										m_sMapEmis,
 										m_sMapAlbedo,
@@ -1047,10 +1084,45 @@ int FormMapSebs::exec()
 										m_fSdwnMap,
 										m_sSdwnMap,
 										m_fTa_avg_map,m_sTa_avg,m_Ta_avg,
-										m_fN_s_map,m_sN_s,m_N_s);
+										m_fN_s_map,m_sN_s,m_N_s,
+										m_fKB,m_kb, m_sKB_s_map, m_fKB_s_map);
   
   execMapOut(sExpr);  	
   return 0;
+}
+
+int FormMapSebs::kbMapOnSelect(Event *)
+{
+	m_chkKB_s_map->StoreData();
+	if (m_fKB_s_map){
+		m_fldKB_s->Hide();
+		
+	}
+	else{
+		m_fldKB_s->Show();
+	}
+	return 1;
+}
+int FormMapSebs::kbCalOnSelect(Event *)
+{
+	m_chkKB->StoreData();
+	if (m_fKB != true){
+		m_chkKB_s_map->Hide();
+		m_fldKB_s_map->Hide();
+		m_fldKB_s->Hide();
+	}
+	else{
+		m_chkKB_s_map->Show();
+		if (m_fKB_s_map){ 
+		 m_fldKB_s_map->Show();
+		 m_fldKB_s->Hide();
+        }
+		else{
+         m_fldKB_s_map->Hide();   
+		 m_fldKB_s->Show();
+        }
+	}
+	return 1;
 }
 
 int FormMapSebs::MapOnSelect(Event *)
@@ -1137,6 +1209,7 @@ int FormMapSebs::CalcSdwnOnSelect(Event *)
 	if (m_fS_dwn){
 		m_fSdwnMap = false;
 		m_chkSdwnMap->SetVal(false);
+		m_fldSdwn->Hide();
 	}
 	if (m_fSdwnMap || m_fS_dwn)
 		m_flVisi->Hide();
@@ -1211,7 +1284,7 @@ FormMapSI2Radiance::FormMapSI2Radiance(CWnd* mw, const char* sPar)
 		FieldReal* fldRadianceOffset = new FieldReal(root, SAFUiRadianceOffset, &m_rOffset,vr);
 		
 		initMapOut(false, false);
-		//SetAppHelpTopic(htpFillSinks);
+		//SetHelpItem("ilwisapp\\fill_sinks.htm");
 		create();
 }
 
@@ -1273,7 +1346,7 @@ FormMapRadiance2Reflectance::FormMapRadiance2Reflectance(CWnd* mw, const char* s
 		m_fldESUN= new FieldReal(root, "ESUN", &m_rEsun, ValueRange(0, 10000, 0.01)); 
 		m_fldESUN->Align(m_chkSensor, AL_UNDER);
 		initMapOut(false, false);
-		//SetAppHelpTopic(htpFillSinks);
+		//SetHelpItem("ilwisapp\\fill_sinks.htm");
 		create();
 }
 
@@ -1369,7 +1442,7 @@ FormMapBrightnessTemperature::FormMapBrightnessTemperature(CWnd* mw, const char*
 		m_fmcBT32 = new FieldMapCreate(root, SAFUiOutputMapBand32, &m_sBTMap32);
 		m_fmcBT14 = new FieldMapCreate(root, SAFUiOutputMapBand14, &m_sBTMap14);
 		m_fmcBT14->Align(m_fldBand14, AL_UNDER);
-		//SetAppHelpTopic(htpFillSinks);
+		//SetHelpItem("ilwisapp\\fill_sinks.htm");
 		create();
 }
 
@@ -1511,7 +1584,7 @@ FormMapEmissivity::FormMapEmissivity(CWnd* mw, const char* sPar)
 		chkPv->Align(chkEmisDif, AL_UNDER);
 		FieldMapCreate* fmPv = new FieldMapCreate(chkPv, "", &m_sMapPv);
     
-		//SetAppHelpTopic(htpFillSinks);
+		//SetHelpItem("ilwisapp\\fill_sinks.htm");
 		create();
 }
 
@@ -1634,7 +1707,7 @@ FormMapLandSurfaceTemperature::FormMapLandSurfaceTemperature(CWnd* mw, const cha
 		FieldBlank *fb1 = new FieldBlank(root, 0); // Used to force proper alignment
 		fb1->Align(chkInWaterVapor, AL_UNDER);
 		initMapOut(false, false);
-		//SetAppHelpTopic(htpFillSinks);
+		//SetHelpItem("ilwisapp\\fill_sinks.htm");
 		create();
 }
 
@@ -1789,7 +1862,7 @@ FormMapAlbedo::FormMapAlbedo(CWnd* mw, const char* sPar)
 		FieldBlank *fb1 = new FieldBlank(root, 0); // Used to force proper alignment
 		fb1->Align(m_stBand7, AL_UNDER);
 		initMapOut(false, false);
-		//SetAppHelpTopic(htpFillSinks);
+		//SetHelpItem("ilwisapp\\fill_sinks.htm");
 		create();
 }
 
@@ -2028,7 +2101,7 @@ FormMapSmac::FormMapSmac(CWnd* mw, const char* sPar)
     fb3->Align(m_chkMapViewAzimutAngle, AL_UNDER);
     	
     initMapOut(false, false);
-    //SetAppHelpTopic(htpFlowDirection);
+    //SetHelpItem("ilwisapp\\flow_direction.htm");
 	create();
 }
 
@@ -2142,6 +2215,12 @@ int FormMapSmac::MapOnSelect(Event *)
 	return 1;
 }
 
+LRESULT Cmdwatervapour(CWnd *wnd, const String& s)
+{
+	new FormMapWaterVapour(wnd, s.scVal());
+	return -1;
+}
+
 FormMapWaterVapour::FormMapWaterVapour(CWnd* mw, const char* sPar)
 :FormMapCreate(mw, "Compute Atmospheric Water Vapour")
 {
@@ -2185,7 +2264,7 @@ FormMapWaterVapour::FormMapWaterVapour(CWnd* mw, const char* sPar)
 		FieldBlank *fb1 = new FieldBlank(root, 0); // Used to force proper alignment
 		fb1->Align(m_fldBand19, AL_UNDER);
 		initMapOut(false, false);
-		//SetAppHelpTopic(htpFillSinks);
+		//SetHelpItem("ilwisapp\\fill_sinks.htm");
 		create();
 }
 
@@ -2288,7 +2367,7 @@ FormMapSoilMoisture::FormMapSoilMoisture(CWnd* mw, const char* sPar)
 		FieldBlank *fb1 = new FieldBlank(root, 0); // Used to force proper alignment
 		fb1->Align(fb, AL_UNDER);
 		initMapOut(false, false);
-		//SetAppHelpTopic(htpFillSinks);
+		//SetHelpItem("ilwisapp\\fill_sinks.htm");
 		create();
 }
 

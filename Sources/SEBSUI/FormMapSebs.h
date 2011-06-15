@@ -47,6 +47,7 @@ LRESULT Cmdemissivity(CWnd *wnd, const String& s);
 LRESULT Cmdlandsurfacetemperature(CWnd *wnd, const String& s);
 LRESULT Cmdalbedo(CWnd *wnd, const String& s);
 LRESULT Cmdsmac(CWnd *wnd, const String& s);
+LRESULT Cmdwatervapour(CWnd *wnd, const String& s);
 LRESULT Cmdmapradiance2reflectance(CWnd *wnd, const String& s);
 
 class FormMapSebs : public FormMapCreate  
@@ -101,7 +102,8 @@ private:
   CheckBox *m_chkSdwn;	
   bool m_fSdwnMap;
   String m_sSdwnMap;
-  CheckBox *m_chkSdwnMap;	
+  CheckBox *m_chkSdwnMap;
+  FieldDataType *m_fldSdwn;
   int CalcSdwnOnSelect(Event *);
   int SdwnMapOnSelect(Event *);
   double m_Visi;
@@ -144,6 +146,18 @@ private:
   FieldReal* m_fldN_s;
   String m_sN_s;
   double m_N_s;
+
+  bool m_fKB;
+  CheckBox *m_chkKB;
+  FieldReal* m_fldKB;
+  double m_kb;
+  bool m_fKB_s_map;
+  CheckBox *m_chkKB_s_map; 
+  FieldReal* m_fldKB_s;
+  FieldDataType *m_fldKB_s_map;  
+  String m_sKB_s_map;
+  int kbCalOnSelect(Event *);
+  int kbMapOnSelect(Event *);
 
   int DaynumberOnSelect(Event *);
 };
