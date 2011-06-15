@@ -139,7 +139,7 @@ bool PointMapMask::fDomainChangeable() const
 
 void PointMapMask::Init()
 {
-  htpFreeze = htpPointMapMaskT;
+  htpFreeze = "ilwisapp\\mask_points_algorithm.htm";
   sFreezeTitle = "PointMapMask";
 }
 

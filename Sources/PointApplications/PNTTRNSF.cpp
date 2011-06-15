@@ -151,7 +151,7 @@ String PointMapTransform::sExpression() const
 
 void PointMapTransform::Init()
 {
-  htpFreeze = htpPointMapTransformT;
+  htpFreeze = "ilwisapp\\transform_point_map_functionality_algorithm.htm";
   sFreezeTitle = "PointMapTransform";
 	if (m_fTransfHeights)
 		if (!f3DDatumTransformationPossible(pmp->cs(), csy))

@@ -327,7 +327,7 @@ void PointMapFromTable::Init()
 void PointMapFromTable::InitFreeze()
 {
   Init();
-  htpFreeze = htpPointMapFromTableT;
+  htpFreeze = "ilwisapp\\table_to_point_map_dialog_box.htm";
   sFreezeTitle = "PointMapFromTable";
 }
 

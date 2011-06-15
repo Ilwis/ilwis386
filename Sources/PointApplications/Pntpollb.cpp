@@ -126,7 +126,7 @@ String PointMapPolLabels::sExpression() const
 
 void PointMapPolLabels::Init()
 {
-  htpFreeze = htpPointMapPolLabelsT;
+  htpFreeze = "ilwisapp\\polygons_to_points_algorithm.htm";
   sFreezeTitle = "PointMapPolLabels";
 }
 

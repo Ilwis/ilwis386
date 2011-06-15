@@ -142,7 +142,7 @@ String PointMapSubMap::sExpression() const
 
 void PointMapSubMap::Init()
 {
-  htpFreeze = htpPointMapSubMapT;
+  htpFreeze = "ilwisapp\\submap_of_point_map_algorithm.htm";
   sFreezeTitle = "PointMapSubMap";
 }
 

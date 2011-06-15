@@ -366,7 +366,7 @@ bool PointMapGlue::fDomainChangeable() const
 
 void PointMapGlue::Init()
 {
-	htpFreeze = htpPointMapGlueT;
+	htpFreeze = "ilwisapp\\glue_point_maps_algorithm.htm";
 	sFreezeTitle = "PointMapGlue";
 	fNeedFreeze = true;
 }

@@ -182,15 +182,15 @@ String PointMapSegDist::sExpression() const
 void PointMapSegDist::Init()
 {
   if (rInterval > 0){
-    htpFreeze = htpPointMapSegDistT;
+     htpFreeze = "ilwisapp\\segment_density.htm";
     sFreezeTitle = "PointMapSegDist";
   }
   else if (rInterval == 0) {
-    htpFreeze = htpPointMapSegCoordsT;
+    htpFreeze = "ilwisapp\\segments_to_points.htm";
     sFreezeTitle = "PointMapSegCoords";
   }
   else {
-    htpFreeze = htpPointMapSegNodesT;
+    htpFreeze ="";
     sFreezeTitle = "PointMapSegNodes";
   }
 }

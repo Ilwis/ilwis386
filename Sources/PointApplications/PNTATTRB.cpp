@@ -177,7 +177,7 @@ bool PointMapAttribute::fDomainChangeable() const
 
 void PointMapAttribute::Init()
 {
-  htpFreeze = htpPointMapAttributeT;
+  htpFreeze = "ilwisapp\\attribute_map_of_point_map_algorithm.htm";
   sFreezeTitle = "PointMapAttribute";
   DomainSort* pdsrt = colAtt->dmKey()->pdsrt();
   assert(pdsrt);

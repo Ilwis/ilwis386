@@ -119,7 +119,7 @@ bool PointMapFromRas::fDomainChangeable() const
 
 void PointMapFromRas::Init()
 {
-  htpFreeze = htpPointMapFromRasT;
+  htpFreeze = "ilwisapp\\raster_to_points_algorithm.htm";
   sFreezeTitle = "PointMapFromRas";
 }
 

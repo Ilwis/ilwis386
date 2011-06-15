@@ -170,7 +170,7 @@ String PointMapNumbering::sExpression() const
 
 void PointMapNumbering::Init()
 {
-  htpFreeze = htpPointMapNumberingT;
+  htpFreeze = "ilwisapp\\unique_id_algorithm.htm";
   sFreezeTitle = "PointMapNumbering";
 }
 
