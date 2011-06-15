@@ -142,7 +142,7 @@ MapApply3D::MapApply3D(const FileName& fn, MapPtr& p, const Map& mp, const GeoRe
 void MapApply3D::Init()
 {
   sFreezeTitle = "MapApply3D";
-  htpFreeze = htpMapApply3DT;
+  htpFreeze = "ilwisapp\\apply_3d_algorithm.htm";
   if (0 == gr()->pg3d())
     NoGeoRef3DError(gr()->fnObj);
 }

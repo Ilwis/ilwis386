@@ -200,7 +200,7 @@ bool TableSegDir::fFreezing()
 void TableSegDir::Init()
 {
   sFreezeTitle = "TableSegDir";
-  htpFreeze = htpTableLineamentT;
+  htpFreeze = "ilwisapp\\segment_direction_histogram_algorithm.htm";
   if (pts==0)
     return;
   colDirection = pts->col("Direction");

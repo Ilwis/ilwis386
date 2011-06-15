@@ -121,7 +121,7 @@ TableCross::TableCross(const FileName& fn, TablePtr& p)
   fNeedFreeze = true;
   Init();
   sFreezeTitle = "TableCross";
-  htpFreeze = htpTableCrossT;
+  htpFreeze = "ilwisapp\\cross_algorithm.htm";
 }
 
 TableCross::TableCross(const FileName& fn, TablePtr& p, const Map& mp1, const Map& mp2,
@@ -136,7 +136,7 @@ TableCross::TableCross(const FileName& fn, TablePtr& p, const Map& mp1, const Ma
     objtime = objdep.tmNewest();
   fNeedFreeze = true;
   sFreezeTitle = "TableCross";
-  htpFreeze = htpTableCrossT;
+  htpFreeze = "ilwisapp\\cross_algorithm.htm";
   FileName fnDom = FileName::fnUnique(FileName(fnObj, ".dom"));
   ptr.SetDomain(Domain(fnDom, 0, dmtID, "CrossNr")); 
   if (sMapCross.length() > 0) {

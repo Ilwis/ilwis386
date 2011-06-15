@@ -64,21 +64,6 @@ IlwisObjectPtr * createMapAttribute(const FileName& fn, IlwisObjectPtr& ptr, con
 
 String wpsmetadataMapAttribute() {
 	WPSMetaData metadata("MapAttribute");
-	metadata.AddTitle("MapAttribute");
-	metadata.AddAbstract("Create an attribute map of a raster map with attribute table");
-	metadata.AddKeyword("spatial");
-	metadata.AddKeyword("raster");
-	metadata.AddKeyword("Attribute");
-	WPSParameter *parm1 = new WPSParameter("1","Input Map",WPSParameter::pmtRASMAP);
-	parm1->AddAbstract("Input raster map with associated attribute table");
-	WPSParameter *parm2 = new WPSParameter("2","Column", WPSParameter::pmtCOLUMN);
-	parm2->AddAbstract("Name of the Attribute Column to be used");
-	metadata.AddParameter(parm1);
-	metadata.AddParameter(parm2);
-	WPSParameter *parmout = new WPSParameter("Result","Output Map", WPSParameter::pmtRASMAP, false);
-	parmout->AddAbstract("reference Outputmap and supporting data objects");
-	metadata.AddParameter(parmout);
-	
 
 	return metadata.toString();
 }
@@ -202,7 +187,7 @@ MapAttribute::~MapAttribute()
 void MapAttribute::Init()
 {
   fNeedFreeze = false;
-  htpFreeze = htpMapAttributeT;
+  htpFreeze = "ilwisapp\\attribute_map_of_raster_map_algorithm.htm";
   sFreezeTitle = "MapAttribute";
   DomainSort* pdsrt = colAtt->dmKey()->pdsrt();
 	if ( !pdsrt )

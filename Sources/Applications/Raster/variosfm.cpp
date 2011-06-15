@@ -40,6 +40,10 @@
 	Last change:  WK   29 Jun 99    3:54 pm
 */
 #include "Headers\toolspch.h"
+#include "Engine\Base\DataObjects\ilwisobj.h"
+#include "engine\base\system\module.h"
+#include "Engine\Applications\ModuleMap.h"
+#include "Engine\Base\DataObjects\WPSMetaData.h"
 #include "Applications\Raster\variosfm.h"
 #include "Engine\SpatialReference\Grdiff.H"
 #include "Engine\Base\Algorithm\Realmat.h"
@@ -55,6 +59,24 @@ IlwisObjectPtr * createMapVariogramSurfaceRas(const FileName& fn, IlwisObjectPtr
 		return (IlwisObjectPtr *)MapVariogramSurfaceRas::create(fn, (MapPtr &)ptr, sExpr);
 	else
 		return (IlwisObjectPtr *)new MapVariogramSurfaceRas(fn, (MapPtr &)ptr);
+}
+
+String wpsmetadataMapVariogramSurfaceRas() {
+	WPSMetaData metadata("MapVariogramSurfaceRas");
+	return metadata.toString();
+}
+
+ApplicationMetadata metadataMapVariogramSurfaceRas(ApplicationQueryData *query) {
+	ApplicationMetadata md;
+	if ( query->queryType == "WPSMETADATA" || query->queryType == "") {
+		md.wpsxml = wpsmetadataMapVariogramSurfaceRas();
+	}
+	if ( query->queryType == "OUTPUTTYPE" || query->queryType == "")
+		md.returnType = IlwisObject::iotMAPLIST;
+	if ( query->queryType == "EXPERSSION" || query->queryType == "")
+		md.skeletonExpression =  MapVariogramSurfaceRas::sSyntax();
+
+	return md;
 }
 
 
@@ -165,7 +187,7 @@ void MapVariogramSurfaceRas::Init()
 {
   fNeedFreeze = true;
   sFreezeTitle = "MapVariogramSurfaceRas";
-  htpFreeze = htpMapVariogramSurfaceRasT;
+  htpFreeze = "ilwisapp\\variogram_surface_algorithm.htm";
 }
 
 void MapVariogramSurfaceRas::ShiftArrayBufIn(Array<RealBuf>& arBuf, long iNextRow, long iFr, long iNr)

@@ -69,6 +69,7 @@ public:
 };
 
 IlwisObjectPtr * createMapStretch(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
+ApplicationMetadata metadataMapStretch(ApplicationQueryData *query);
 
 class DATEXPORT MapStretch: public MapFromMap
 {

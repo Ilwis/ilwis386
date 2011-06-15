@@ -227,7 +227,7 @@ MapCalculate::MapCalculate(const FileName& fn, MapPtr& p, Instructions* inst, co
 
 void MapCalculate::Init()
 {
-  htpFreeze = htpMapCalculateT;
+  htpFreeze = "ilwisapp\\map_calculation_algorithm.htm";
   sFreezeTitle = "MapCalculate";
   SetUse();  
 }

@@ -40,6 +40,7 @@ Created on: 2007-02-8
 
 #include "headers\toolspch.h"
 #include "Engine\Applications\MapListVirtual.h"
+#include "Engine\Base\DataObjects\WPSMetaData.h"
 #include "Applications\MapList\MapListChangeDetection.h"
 #include "Headers\Hs\maplist.hs"
 
@@ -61,6 +62,24 @@ IlwisObjectPtr * createMapListChangeDetection(const FileName& fn, IlwisObjectPtr
 		return (IlwisObjectPtr *) MapListChangeDetection::create(fn, (MapListPtr &)ptr, sExpr);
 	else
 		return (IlwisObjectPtr *)new MapListChangeDetection(fn, (MapListPtr &)ptr);
+}
+
+String wpsmetadataMapListChangeDetection() {
+	WPSMetaData metadata("MapListChangeDetection");
+	return metadata.toString();
+}
+
+ApplicationMetadata metadataMapListChangeDetection(ApplicationQueryData *query) {
+	ApplicationMetadata md;
+	if ( query->queryType == "WPSMETADATA" || query->queryType == "") {
+		md.wpsxml = wpsmetadataMapListChangeDetection();
+	}
+	if ( query->queryType == "OUTPUTTYPE" || query->queryType == "")
+		md.returnType = IlwisObject::iotMAPLIST;
+	if ( query->queryType == "EXPERSSION" || query->queryType == "")
+		md.skeletonExpression =  sSyntax();
+
+	return md;
 }
 
 MapListChangeDetection::MapListChangeDetection(const FileName& fn, MapListPtr& ptr)

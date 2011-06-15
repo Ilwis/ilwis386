@@ -126,7 +126,7 @@ MapColorSep::MapColorSep(const FileName& fn, MapPtr& p)
     rpr = mp->dm()->rpr();
   fNeedFreeze = false;
   sFreezeTitle = "MapColorSep";
-  htpFreeze = htpMapColorSepT;
+  htpFreeze = "ilwisapp\\color_separation_algorithm.htm";
 }
 
 MapColorSep::MapColorSep(const FileName& fn, MapPtr& p,const Map& mp, const String& sColor)
@@ -150,7 +150,7 @@ assert(dm()->pdi());
   if (!fnObj.fValid())
     objtime = objdep.tmNewest();
   sFreezeTitle = "MapColorSep";
-  htpFreeze = htpMapColorSepT;
+  htpFreeze = "ilwisapp\\color_separation_algorithm.htm";
 }
 
 void MapColorSep::Store()

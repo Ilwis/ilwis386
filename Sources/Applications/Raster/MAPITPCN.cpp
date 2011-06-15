@@ -182,7 +182,7 @@ MapInterpolContour::MapInterpolContour(const FileName& fn, MapPtr& p,
 void MapInterpolContour::Init()
 {
   sFreezeTitle = "MapInterpolContour";
-  htpFreeze = htpMapInterpolContourT;
+  htpFreeze = "ilwisapp\\contour_interpolation_algorithm.htm";
 }
 
 void MapInterpolContour::Store()

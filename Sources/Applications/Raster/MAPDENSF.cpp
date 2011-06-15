@@ -218,7 +218,7 @@ MapDensify::~MapDensify()
 void MapDensify::Init()
 {
   sFreezeTitle = "MapDensify";
-  htpFreeze = htpMapDensifyT;
+  htpFreeze = "ilwisapp\\densify_algorithm.htm";
   long i;
   long iInpMapCols = mp->iCols();
   iLastInpLine = iUNDEF;

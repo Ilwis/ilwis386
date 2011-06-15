@@ -70,10 +70,11 @@
 	Last change:  JHE  18 Sep 97    5:19 pm
 */
 #define MAPSTRETCH_C
+#include "Engine\Base\DataObjects\valrange.h"
+#include "Engine\Base\DataObjects\WPSMetaData.h"
 #include "Applications\Raster\MAPSTRCH.H"
 #include "Applications\Raster\MAPCALC.H"
 #include "Engine\Table\TBLHIST.H"
-#include "Engine\Base\DataObjects\valrange.h"
 #include "Engine\Domain\Dmvalue.h"
 #include "Headers\Htp\Ilwisapp.htp"
 #include "Headers\Err\Ilwisapp.err"
@@ -86,6 +87,27 @@ IlwisObjectPtr * createMapStretch(const FileName& fn, IlwisObjectPtr& ptr, const
 }
 
 #define rHalf 0.4999999999
+
+String wpsmetadataMapStretch() {
+	WPSMetaData metadata("MapStretch");
+	//metadata.AddParameter(parmout);
+	
+
+	return metadata.toString();
+}
+
+ApplicationMetadata metadataMapStretch(ApplicationQueryData *query) {
+	ApplicationMetadata md;
+	if ( query->queryType == "WPSMETADATA" || query->queryType == "") {
+		md.wpsxml = wpsmetadataMapStretch();
+	}
+	if ( query->queryType == "OUTPUTTYPE" || query->queryType == "")
+		md.returnType = IlwisObject::iotRASMAP;
+	if ( query->queryType == "EXPERSSION" || query->queryType == "")
+		md.skeletonExpression =  MapStretch::sSyntax();
+
+	return md;
+}
 
 const char* MapStretch::sSyntax() {
   return "MapStretchLinear(map,rangefrom,domain,range)\nMapStretchHistEq(map,rangefrom,intervals)";
@@ -208,7 +230,7 @@ void MapStretch::Init()
 {
   fNeedFreeze = false;
   sFreezeTitle = "MapStretch";
-  htpFreeze = htpMapStretchT;
+  htpFreeze = "ilwisapp\\stretch_algorithm.htm";
   fInitCalc = false;
   rrTo = dvrs().rrMinMax();
 }

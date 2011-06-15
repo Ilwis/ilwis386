@@ -42,6 +42,7 @@
 #include "Engine\Domain\dm.h"
 #include "Engine\Domain\Dmvalue.h"
 #include "Engine\Base\DataObjects\valrange.h"
+#include "Engine\Base\DataObjects\WPSMetaData.h"
 #include "Applications\Raster\SEGRAS.H"
 #include "Headers\Htp\Ilwisapp.htp"
 #include "Headers\Err\Ilwisapp.err"
@@ -53,6 +54,24 @@ IlwisObjectPtr * createMapRasterizeSegment(const FileName& fn, IlwisObjectPtr& p
 		return (IlwisObjectPtr *)MapRasterizeSegment::create(fn, (MapPtr &)ptr, sExpr);
 	else
 		return (IlwisObjectPtr *)new MapRasterizeSegment(fn, (MapPtr &)ptr);
+}
+
+String wpsmetadataMapRasterizeSegment() {
+	WPSMetaData metadata("MapRasterizeSegment");
+	return metadata.toString();
+}
+
+ApplicationMetadata metadataMapRasterizeSegment(ApplicationQueryData *query) {
+	ApplicationMetadata md;
+	if ( query->queryType == "WPSMETADATA" || query->queryType == "") {
+		md.wpsxml = wpsmetadataMapRasterizeSegment();
+	}
+	if ( query->queryType == "OUTPUTTYPE" || query->queryType == "")
+		md.returnType = IlwisObject::iotRASMAP;
+	if ( query->queryType == "EXPERSSION" || query->queryType == "")
+		md.skeletonExpression =  MapRasterizeSegment::sSyntax();
+
+	return md;
 }
 const char* MapRasterizeSegment::sSyntax() {
   return "MapRasterizeSegment(segmap,georef)";
@@ -86,7 +105,7 @@ MapRasterizeSegment::MapRasterizeSegment(const FileName& fn, MapPtr& p)
 {
   fNeedFreeze = true;
   sFreezeTitle = "MapRasterizeSegment";
-  htpFreeze = htpMapRasterizeSegmentT;
+  htpFreeze = "ilwisapp\\segments_to_raster_algorithm.htm";
   objdep.Add(gr().ptr());
 }
 
@@ -100,7 +119,7 @@ MapRasterizeSegment::MapRasterizeSegment(const FileName& fn, MapPtr& p,
     IncompatibleCoordSystemsError(cs()->sName(true, fnObj.sPath()), sm->cs()->sName(true, fnObj.sPath()), sTypeName(), errMapRasterizeSegment+2);
   fNeedFreeze = true;
   sFreezeTitle = "MapRasterizeSegment";
-  htpFreeze = htpMapRasterizeSegmentT;
+  htpFreeze = "ilwisapp\\segments_to_raster_algorithm.htm";
   objdep.Add(gr.ptr());
   if (!fnObj.fValid())
     objtime = objdep.tmNewest();

@@ -120,7 +120,7 @@ MapAreaNumbering::MapAreaNumbering(const FileName& fn, MapPtr& p)
   fNeedFreeze = true;
   fUseForPolFromRas = false;
   sFreezeTitle = "MapAreaNumbering";
-  htpFreeze = htpMapAreaNumberingT;
+  htpFreeze = "ilwisapp\\areanumbering_algorithm.htm";
 }
 
 MapAreaNumbering::MapAreaNumbering(const FileName& fn, MapPtr& p,
@@ -141,7 +141,7 @@ MapAreaNumbering::MapAreaNumbering(const FileName& fn, MapPtr& p,
   if (!fnObj.fValid())
     objtime = objdep.tmNewest();
   sFreezeTitle = "MapAreaNumbering";
-  htpFreeze = htpMapAreaNumberingT;
+  htpFreeze = "ilwisapp\\areanumbering_algorithm.htm";
   ptr.Store(); // store domain and att table info
   Store();
 }

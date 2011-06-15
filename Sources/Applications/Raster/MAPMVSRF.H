@@ -55,6 +55,7 @@ enum WeightFuncType {wfEXACT = 0, wfNOTEXACT };
 #endif
 
 IlwisObjectPtr * createMapMovingSurface(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
+ApplicationMetadata metadataMapMovingSurface(ApplicationQueryData *query);
 
 class DATEXPORT MapMovingSurface: public MapFromPointMap
 {

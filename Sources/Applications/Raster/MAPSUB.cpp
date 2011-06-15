@@ -34,55 +34,9 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/*
-// $Log: /ILWIS 3.0/RasterApplication/MAPSUB.cpp $
- * 
- * 9     27/03/00 9:50 Willem
- * The description of the dependent georef is now set in the map
- * constructor instead of in the Store()
- * 
- * 8     24/03/00 17:36 Willem
- * Dependent GeoRef's: The description is now set to:
- * "Created from " + the create expression
- * 
- * 7     24/01/00 17:36 Willem
- * MapSubMap now initializes a default description for the GeoRefSubMap
- * 
- * 6     20-12-99 12:42 Wind
- * bug in MapSubmapCorners
- * 
- * 5     23-11-99 12:58 Wind
- * added mapsubmapcorners and mapsubmapcoords
- * 
- * 4     22-11-99 13:24 Wind
- * working on extension of submap
- * 
- * 3     9/08/99 11:51a Wind
- * comment problem
- * 
- * 2     9/08/99 8:57a Wind
- * changed sName() to sNameQuoted() in sExpression() to support long file
- * names
-*/
-// Revision 1.5  1998/09/16 17:24:31  Wim
-// 22beta2
-//
-// Revision 1.4  1997/09/29 12:55:07  Wim
-// Corrected the check on size in constructor
-//
-// Revision 1.3  1997-09-11 09:51:40+02  martin
-// No submaps possiblewhich do not contain at least a part of the map.
-//
-// Revision 1.2  1997/08/14 18:04:22  Wim
-// Improved sSyntax() line
-//
-/* MapSubMap
-   Copyright Ilwis System Development ITC
-   august 1995, by Jelle Wind
-	Last change:  WK   29 Sep 97    2:54 pm
-*/
-#include "Applications\Raster\MAPSUB.H"
 #include "Engine\Base\DataObjects\valrange.h"
+#include "Engine\Base\DataObjects\WPSMetaData.h"
+#include "Applications\Raster\MAPSUB.H"
 #include "Engine\SpatialReference\Grsub.h"
 #include "Headers\Htp\Ilwisapp.htp"
 #include "Headers\Err\Ilwisapp.err"
@@ -110,13 +64,35 @@ static const char* sSyntax2() {
   "MapSubMapCoords(map,cornerX, cornerY, oppositecornerX, oppositecornerY,grf)\n";
 }
 
+String wpsmetadataMapSubMap() {
+	WPSMetaData metadata("MapSubMap");
+	return metadata.toString();
+}
+
+ApplicationMetadata metadataMapSubMap(ApplicationQueryData *query) {
+	ApplicationMetadata md;
+	if ( query->queryType == "WPSMETADATA" || query->queryType == "") {
+		md.wpsxml = wpsmetadataMapSubMap();
+	}
+	if ( query->queryType == "OUTPUTTYPE" || query->queryType == "")
+		md.returnType = IlwisObject::iotRASMAP;
+	if ( query->queryType == "EXPERSSION" || query->queryType == "")
+		md.skeletonExpression =  String("%s %s", MapSubMap::sSyntax(),sSyntax2()).scVal();
+
+	return md;
+}
+
 MapSubMap* MapSubMap::create(const FileName& fn, MapPtr& p, const String& sExpr)
 {
   Array<String> as;
   String sFunc = IlwisObjectPtr::sParseFunc(sExpr);
   int iParms = IlwisObjectPtr::iParseParm(sExpr, as);
-  if ((iParms < 3) || (iParms > 6)) 
+  if ((iParms < 3) || (iParms > 7)) 
     ExpressionError(sExpr, sSyntax());
+
+  bool useCorners = as[1].toLower() == "corners" || fCIStrEqual(sFunc, "MapSubMapCorners");
+  bool useCoords = as[1].toLower() == "coords" || fCIStrEqual(sFunc, "MapSubMapCoords");
+
   Map mp(as[0], fn.sPath());
   if (fCIStrEqual(sFunc, "MapSubMap")) {
     RowCol rcOffset, rcSize;
@@ -137,28 +113,30 @@ MapSubMap* MapSubMap::create(const FileName& fn, MapPtr& p, const String& sExpr)
       ExpressionError(sExpr, sSyntax2());
     return new MapSubMap(fn, p, mp, rcSize, rcOffset,  crdUNDEF, crdUNDEF, sGrf, false);
   }
-  else if (fCIStrEqual(sFunc, "MapSubMapCorners")) {
+  else if (useCorners) {
+	 int offset = as[1] == "corners" ? 1 : 0;
     RowCol rcOffset, rcSize;
-    rcOffset.Row = as[1].iVal()-1L;
-    rcOffset.Col = as[2].iVal()-1L;
-    rcSize.Row = as[3].iVal() - as[1].iVal() + 1;
-    rcSize.Col = as[4].iVal() - as[2].iVal() + 1;
+    rcOffset.Row = as[1 + offset].iVal()-1L;
+    rcOffset.Col = as[2 + offset].iVal()-1L;
+    rcSize.Row = as[3 + offset].iVal() - as[1].iVal() + 1;
+    rcSize.Col = as[4 + offset].iVal() - as[2].iVal() + 1;
     String sGrf = fn.sFile;
-    if (iParms == 6)
-      sGrf = as[iParms-1];
+    if (iParms == 6 + offset)
+      sGrf = as[iParms-1  + offset];
     if (sGrf.length() == 0)
       ExpressionError(sExpr, sSyntax2());
     return new MapSubMap(fn, p, mp, rcSize, rcOffset, crdUNDEF, crdUNDEF, sGrf, true);
   }
-  else if (fCIStrEqual(sFunc, "MapSubMapCoords")) {
+  else if (useCoords) {
     Coord crd1, crd2;
-    crd1.x = as[1].rVal();
-    crd1.y = as[2].rVal();
-    crd2.x = as[3].rVal();
-    crd2.y = as[4].rVal();
+	int offset = as[1] == "coords" ? 1 : 0;
+    crd1.x = as[1  + offset].rVal();
+    crd1.y = as[2 + offset].rVal();
+    crd2.x = as[3 + offset].rVal();
+    crd2.y = as[4 + offset].rVal();
     String sGrf = fn.sFile;
-    if (iParms == 6)
-      sGrf = as[iParms-1];
+    if (iParms == 6 + offset)
+      sGrf = as[iParms-1 + offset];
     if (sGrf.length() == 0)
       ExpressionError(sExpr, sSyntax2());
     return new MapSubMap(fn, p, mp, rcUNDEF, rcUNDEF, crd1, crd2, sGrf, true);
@@ -259,7 +237,7 @@ void MapSubMap::Init()
 {
   fNeedFreeze = false;
   sFreezeTitle = "MapSubMap";
-  htpFreeze = htpMapSubMapT;
+  htpFreeze = "ilwisapp\\submap_of_raster_map_functionality_algorithm.htm";
 }
 
 long MapSubMap::iComputePixelRaw(RowCol rc) const

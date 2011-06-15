@@ -46,6 +46,7 @@
 #include "Engine\Applications\MAPFMAP.H"
 
 IlwisObjectPtr * createMapSubMap(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
+ApplicationMetadata metadataMapSubMap(ApplicationQueryData *query);
 
 class DATEXPORT MapSubMap: public MapFromMap
 {

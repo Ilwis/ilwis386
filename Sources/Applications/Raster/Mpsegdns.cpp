@@ -72,6 +72,7 @@
 #include "Engine\Domain\dm.h"
 #include "Engine\Domain\Dmvalue.h"
 #include "Engine\Base\DataObjects\valrange.h"
+#include "Engine\Base\DataObjects\WPSMetaData.h"
 #include "Applications\Raster\MPSEGDNS.H"
 #include "Headers\Hs\map.hs"
 
@@ -85,6 +86,23 @@ IlwisObjectPtr * createMapSegmentDensity(const FileName& fn, IlwisObjectPtr& ptr
 		return (IlwisObjectPtr *)new MapSegmentDensity(fn, (MapPtr &)ptr);
 }
 
+String wpsmetadataMapSegmentDensity() {
+	WPSMetaData metadata("MapSegmentDensity");
+	return metadata.toString();
+}
+
+ApplicationMetadata metadataMapSegmentDensity(ApplicationQueryData *query) {
+	ApplicationMetadata md;
+	if ( query->queryType == "WPSMETADATA" || query->queryType == "") {
+		md.wpsxml = wpsmetadataMapSegmentDensity();
+	}
+	if ( query->queryType == "OUTPUTTYPE" || query->queryType == "")
+		md.returnType = IlwisObject::iotRASMAP;
+	if ( query->queryType == "EXPERSSION" || query->queryType == "")
+		md.skeletonExpression = MapSegmentDensity::sSyntax();
+
+	return md;
+}
 
 const char* MapSegmentDensity::sSyntax() {
   return "MapSegmentDensity(segmap,georef)/nMapSegmentDensity(segmap,mask,georef)";
@@ -110,7 +128,7 @@ MapSegmentDensity::MapSegmentDensity(const FileName& fn, MapPtr& p)
 {
   fNeedFreeze = true;
   sFreezeTitle = "MapSegmentDensity";
-  htpFreeze = htpMapSegmentDensityT;
+  htpFreeze = "ilwisapp\\\segment_density_algorithm.htm";
   String sMask;
   ReadElement("SegmentMapDensity", "Mask", sMask);
   mask.SetMask(sMask);
@@ -128,7 +146,7 @@ MapSegmentDensity::MapSegmentDensity(const FileName& fn, MapPtr& p,
     IncompatibleCoordSystemsError(cs()->sName(true, fnObj.sPath()), sm->cs()->sName(true, fnObj.sPath()), sTypeName(), errMapSegmentDensity+1);
   fNeedFreeze = true;
   sFreezeTitle = "MapSegmentDensity";
-  htpFreeze = htpMapSegmentDensityT;
+  htpFreeze = "ilwisapp\\\segment_density_algorithm.htm";
   mask.SetMask(sMsk);
   objdep.Add(gr.ptr());
   if (!fnObj.fValid())

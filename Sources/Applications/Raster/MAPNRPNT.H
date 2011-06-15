@@ -46,6 +46,7 @@
 #include "Engine\Applications\MAPFPNT.H"
 
 IlwisObjectPtr * createMapNearestPoint(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
+ApplicationMetadata metadataMapNearestPoint(ApplicationQueryData *query);
 
 class DATEXPORT MapNearestPoint: public MapFromPointMap
 {

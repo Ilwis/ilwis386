@@ -340,7 +340,7 @@ void MapCoKriging::Init()
 {
   fNeedFreeze = true;
   sFreezeTitle = "MapCoKriging";
-  htpFreeze = htpMapCoKrigingT;
+  htpFreeze = "ilwisapp\\cokriging_algorithm.htm";
 }
 
 struct saTwoPointArr {    // used to sort in Kriging Ordinary

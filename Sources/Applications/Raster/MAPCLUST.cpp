@@ -126,7 +126,7 @@ MapCluster::MapCluster(const FileName& fn, MapPtr& p)
   ReadElement("MapCluster", "StatTable", sStatTable);
   fNeedFreeze = true;
   sFreezeTitle = "MapCluster";
-  htpFreeze = htpMapClusterT;
+  htpFreeze = "ilwisapp\\cluster_algorithm.htm";
   iBands = mpl->iSize();
 }
 
@@ -154,7 +154,7 @@ MapCluster::MapCluster(const FileName& fn, MapPtr& p, const MapList& mpl, int iC
   SetDomainValueRangeStruct(DomainValueRangeStruct(Domain(fnObj, iClass, dmtCLASS)));
   fNeedFreeze = true;
   sFreezeTitle = "MapCluster";
-  htpFreeze = htpMapClusterT;
+  htpFreeze = "ilwisapp\\cluster_algorithm.htm";
   if (!fnObj.fValid())
     objtime = objdep.tmNewest();
 }

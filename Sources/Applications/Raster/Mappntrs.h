@@ -46,6 +46,7 @@
 #include "Engine\Applications\MAPFPNT.H"
 
 IlwisObjectPtr * createMapRasterizePoint(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
+ApplicationMetadata metadataMapRasterizePoint(ApplicationQueryData *query);
 
 class DATEXPORT MapRasterizePoint: public MapFromPointMap
 {

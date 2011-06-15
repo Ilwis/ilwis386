@@ -40,6 +40,8 @@
 	Last change:  JH    3 Jul 99    4:40 pm
 */
 #include "Headers\toolspch.h"
+#include "Engine\Base\DataObjects\valrange.h"
+#include "Engine\Base\DataObjects\WPSMetaData.h"
 #include "Applications\Raster\Mapkrig.h"
 #include "Engine\Table\tblstore.h"
 #include "Engine\Table\COLSTORE.H"
@@ -49,32 +51,47 @@
 #include "Headers\Hs\map.hs"
 #define EPS10 1.0e-10
 
-//IlwisObjectPtr * createMapKrigingSimple(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms ) {
-//	if ( sExpr != "")
-//		return (IlwisObjectPtr *)MapKrigingSimple::create(fn, (MapPtr &)ptr, sExpr);
-//	else
-//		return (IlwisObjectPtr *)new MapKrigingSimple(fn, (MapPtr &)ptr);
-//}
-//
-//IlwisObjectPtr * createMapKrigingOrdinary(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms ) {
-//	if ( sExpr != "")
-//		return (IlwisObjectPtr *)MapKrigingOrdinary::create(fn, (MapPtr &)ptr, sExpr);
-//	else
-//		return (IlwisObjectPtr *)new MapKrigingOrdinary(fn, (MapPtr &)ptr);
-//}
-//
-//IlwisObjectPtr * createMapKrigingUniversal(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms ) {
-//	if ( sExpr != "")
-//		return (IlwisObjectPtr *)MapKrigingUniversal::create(fn, (MapPtr &)ptr, sExpr);
-//	else
-//		return (IlwisObjectPtr *)new MapKrigingUniversal(fn, (MapPtr &)ptr);
-//}
-
 IlwisObjectPtr * createMapKriging(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms ) {
 	if ( sExpr != "")
 		return (IlwisObjectPtr *)MapKriging::create(fn, (MapPtr &)ptr, sExpr);
 	else
 		return (IlwisObjectPtr *)new MapKriging(fn, (MapPtr &)ptr);
+}
+
+String wpsmetadataMapKrigingSimple() {
+	WPSMetaData metadata("MapKrigingSimple");
+	return metadata.toString();
+}
+
+ApplicationMetadata metadataMapKrigingSimple(ApplicationQueryData *query) {
+	ApplicationMetadata md;
+	if ( query->queryType == "WPSMETADATA" || query->queryType == "") {
+		md.wpsxml = wpsmetadataMapKrigingSimple();
+	}
+	if ( query->queryType == "OUTPUTTYPE" || query->queryType == "")
+		md.returnType = IlwisObject::iotRASMAP;
+	if ( query->queryType == "EXPERSSION" || query->queryType == "")
+		md.skeletonExpression =  MapKriging::sSyntax();
+
+	return md;
+}
+
+String wpsmetadataMapKrigingOrdinary() {
+	WPSMetaData metadata("MapKrigingOrdinary");
+	return metadata.toString();
+}
+
+ApplicationMetadata metadataMapKrigingOrdinary(ApplicationQueryData *query) {
+	ApplicationMetadata md;
+	if ( query->queryType == "WPSMETADATA" || query->queryType == "") {
+		md.wpsxml = wpsmetadataMapKrigingOrdinary();
+	}
+	if ( query->queryType == "OUTPUTTYPE" || query->queryType == "")
+		md.returnType = IlwisObject::iotRASMAP;
+	if ( query->queryType == "EXPERSSION" || query->queryType == "")
+		md.skeletonExpression =  MapKriging::sSyntax();
+
+	return md;
 }
 
 const char* MapKriging::sSyntax() {
@@ -659,14 +676,14 @@ void MapKriging::Init()
 {
   fNeedFreeze = true;
   sFreezeTitle = "MapKriging";
-  htpFreeze = htpMapKrigingT;
+  htpFreeze = "ilwisapp\\kriging_algorithm.htm";
 	if (krigMeth ==  kmANISOTROPIC)
-    htpFreeze = htpMapAnisotropicKrigingT;
+    htpFreeze = "ilwisapp\\anisotropic_kriging_algorithm.htm";
   if (krigMeth ==  kmUNIVERSAL)
     if (0 == iDegree)
-      htpFreeze = htpMapAnisotropicKrigingT;
+      htpFreeze = "ilwisapp\\anisotropic_kriging_algorithm.htm";
     else
-      htpFreeze = htpMapUniversalKrigingT;
+      htpFreeze = "ilwisapp\\universal_kriging_algorithm.htm";
 }
 
 double MapKriging::rDist2Ellip(const Coord& crd1, const Coord& crd2, 

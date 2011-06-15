@@ -46,6 +46,7 @@
 #include "Engine\Applications\MAPFMAP.H"
 
 IlwisObjectPtr * createMapVariogramSurfaceRas(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
+ApplicationMetadata metadataMapVariogramSurfaceRas(ApplicationQueryData *query);
 
 class DATEXPORT MapVariogramSurfaceRas: public MapFromMap
 {

@@ -108,7 +108,7 @@ MapHeckbert::MapHeckbert(const FileName& fn, MapPtr& p)
   ReadElement("MapHeckbert", "Colors", iNumColors);
   fNeedFreeze = true;
   sFreezeTitle = "MapHeckbert";
-  htpFreeze = htpMapHeckbertT;
+  htpFreeze = "ilwisapp\\color_composite_algorithm.htm";
 }
 
 MapHeckbert::MapHeckbert(const FileName& fn, MapPtr& p, const MapList& mpl, int iColors)
@@ -132,7 +132,7 @@ MapHeckbert::MapHeckbert(const FileName& fn, MapPtr& p, const MapList& mpl, int 
   SetDomainValueRangeStruct(DomainValueRangeStruct(Domain(fnObj, iColors+1, dmtPICTURE)));
   fNeedFreeze = true;
   sFreezeTitle = "MapHeckbert";
-  htpFreeze = htpMapHeckbertT;
+  htpFreeze = "ilwisapp\\color_composite_algorithm.htm";
   if (!fnObj.fValid())
     objtime = objdep.tmNewest();
 //Store();

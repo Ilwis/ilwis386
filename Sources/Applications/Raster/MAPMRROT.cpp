@@ -39,10 +39,10 @@
    july 1995, by Wim Koolhoven
 	Last change:  JEL  14 Jul 97    1:05 pm
 */
-
+#include "Engine\Base\DataObjects\valrange.h"
+#include "Engine\Base\DataObjects\WPSMetaData.h"
 #include "Applications\Raster\MAPMRROT.H"
 #include "Engine\Map\Raster\Map.h"
-#include "Engine\Base\DataObjects\valrange.h"
 #include "Headers\Htp\Ilwisapp.htp"
 #include "Headers\Err\Ilwisapp.err"
 #include "Headers\Hs\map.hs"
@@ -52,6 +52,24 @@ IlwisObjectPtr * createMapMirrorRotate(const FileName& fn, IlwisObjectPtr& ptr, 
 		return (IlwisObjectPtr *)MapMirrorRotate::create(fn, (MapPtr &)ptr, sExpr);
 	else
 		return (IlwisObjectPtr *)new MapMirrorRotate(fn, (MapPtr &)ptr);
+}
+
+String wpsmetadataMapMirrorRotate() {
+	WPSMetaData metadata("MapMirrorRotate");
+	return metadata.toString();
+}
+
+ApplicationMetadata metadataMapMirrorRotate(ApplicationQueryData *query) {
+	ApplicationMetadata md;
+	if ( query->queryType == "WPSMETADATA" || query->queryType == "") {
+		md.wpsxml = wpsmetadataMapMirrorRotate();
+	}
+	if ( query->queryType == "OUTPUTTYPE" || query->queryType == "")
+		md.returnType = IlwisObject::iotRASMAP;
+	if ( query->queryType == "EXPERSSION" || query->queryType == "")
+		md.skeletonExpression =  MapMirrorRotate::sSyntax();
+
+	return md;
 }
 
 const char * MapMirrorRotate::sSyntax()
@@ -166,7 +184,7 @@ void MapMirrorRotate::SetType(int iMethod)
 void MapMirrorRotate::Init(int iMethod)
 {
   sFreezeTitle = "MapMirrorRotate";
-  htpFreeze = htpMapMirrorRotateT;
+  htpFreeze = "ilwisapp\\mirror_rotate_algorithm.htm";
   SetType(iMethod);
   iInpLines = mp->iLines();
   iInpCols = mp->iCols();

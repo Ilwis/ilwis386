@@ -51,6 +51,7 @@ enum WeightFuncType {wfEXACT = 0, wfNOTEXACT };
 #endif
 
 IlwisObjectPtr * createMapMovingAverage(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
+ApplicationMetadata metadataMovingAverage(ApplicationQueryData *query);
 
 class DATEXPORT MapMovingAverage: public MapFromPointMap
 {

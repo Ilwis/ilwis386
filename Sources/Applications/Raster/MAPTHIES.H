@@ -45,6 +45,7 @@
 #include "Engine\Applications\MAPFMAP.H"
 
 IlwisObjectPtr * createMapThiessen(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
+ApplicationMetadata metadataMapThiessen(ApplicationQueryData *query);
 
 class DATEXPORT MapThiessen: public MapFromMap
 {

@@ -46,10 +46,9 @@
 #include "Engine\Applications\MAPFPNT.H"
 #include "Engine\Base\Algorithm\semivar.h"
 
-//IlwisObjectPtr * createMapKrigingSimple(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
-//IlwisObjectPtr * createMapKrigingOrdinary(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
-//IlwisObjectPtr * createMapKrigingUniversal(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
 IlwisObjectPtr * createMapKriging(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
+ApplicationMetadata metadataMapKrigingSimple(ApplicationQueryData *query) ;
+ApplicationMetadata metadataMapKrigingOrdinary(ApplicationQueryData *query);
 
 
 class DATEXPORT MapKriging: public MapFromPointMap
@@ -63,6 +62,7 @@ public:
 	static ValueRange  _export vrDefault(const PointMap& pmap);
 	static MapKriging* create(const FileName& fn, MapPtr& p, const String& sExpression);
 	MapKriging(const FileName& fn, MapPtr&);
+  static const char* sSyntax();
 protected:
   virtual void Store();
   MapKriging(const FileName& fn, MapPtr&, const PointMap& pm, const GeoRef& gr,
@@ -76,7 +76,6 @@ protected:
   ~MapKriging();
 	virtual String sExpression() const;
   virtual bool fFreezing();
-  static const char* sSyntax();
   virtual bool fValueRangeChangeable() const;
   virtual bool fDomainChangeable() const;
 private:

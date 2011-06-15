@@ -54,6 +54,7 @@
 #include "Engine\Base\mask.h"
 
 IlwisObjectPtr * createMapSegmentDensity(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
+ApplicationMetadata metadataMapSegmentDensity(ApplicationQueryData *query);
 
 class DATEXPORT MapSegmentDensity: public MapFromSegmentMap
 {

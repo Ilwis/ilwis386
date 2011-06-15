@@ -324,7 +324,7 @@ MapAggregate::~MapAggregate()
 void MapAggregate::Init()
 {
 	sFreezeTitle = "MapAggregate";
-	htpFreeze = htpMapAggregateT;
+	htpFreeze = "ilwisapp\\aggregate_algorithm.htm";
 	//  long iInpMapLines = mp->iLines();
 	long iInpMapCols = mp->iCols();
 	bufListValReal = new RealBuf[iGrpFac];

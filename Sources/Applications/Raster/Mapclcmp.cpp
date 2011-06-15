@@ -198,7 +198,7 @@ MapColorComp::MapColorComp(const FileName& fn, MapPtr& p)
     fHSI = false;
   fNeedFreeze = !f24Bit;
   sFreezeTitle = "MapColorComp";
-  htpFreeze = htpMapColorCompT;
+  htpFreeze = "ilwisapp\\color_composite_algorithm.htm";
 }
 
 MapColorComp::MapColorComp(const FileName& fn, MapPtr& p, const MapList& mpl, double _rPerc1, const RangeReal& _rr1,
@@ -207,7 +207,7 @@ MapColorComp::MapColorComp(const FileName& fn, MapPtr& p, const MapList& mpl, do
   rr1(_rr1), rPerc1(_rPerc1), rr2(_rr2), rPerc2(_rPerc2), rr3(_rr3), rPerc3(_rPerc3), fLinear(fLin), f24Bit(f24Bt)
 {
   sFreezeTitle = "MapColorComp";
-  htpFreeze = htpMapColorCompT;
+  htpFreeze = "ilwisapp\\color_composite_algorithm.htm";
   if (!fnObj.fValid())
     objtime = objdep.tmNewest();
   fHSI = _fHSI && ((rPerc1 == rUNDEF) && !rr1.fValid());

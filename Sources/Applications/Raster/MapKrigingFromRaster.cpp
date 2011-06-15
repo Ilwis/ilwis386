@@ -292,7 +292,7 @@ void MapKrigingFromRaster::Init()
 {
   fNeedFreeze = true;
   sFreezeTitle = "MapKrigingFromRaster";
-  //htpFreeze = htpMapKrigingFromRasterT;
+  //htpFreeze = "ilwisapp\\kriging_from_raster_algorithm.htm";
 }
 
 class RowColLess {

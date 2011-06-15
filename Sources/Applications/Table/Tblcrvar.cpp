@@ -454,7 +454,7 @@ bool TableCrossVarioGram::fFreezing()
 void TableCrossVarioGram::Init()
 {
   sFreezeTitle = "TableCrossVarioGram";
-  htpFreeze = htpTableCrossVariogramT;
+  htpFreeze = "ilwisapp\\cross_variogram_algorithm.htm";
   String sDescA = String("Predictand_Predictand");
   String sDescB = String("Covariable_Covariable");
   String sDescAB = String(": Predictand_Covariable");

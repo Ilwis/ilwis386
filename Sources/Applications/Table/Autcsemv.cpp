@@ -131,7 +131,7 @@ TableAutoCorrSemiVar::TableAutoCorrSemiVar(const FileName& fn, TablePtr& p)
   fNeedFreeze = true;
   Init();
   sFreezeTitle = "TableAutoCorrSemiVar";
-  htpFreeze = htpTableAutoCorrSemiVarT;
+  htpFreeze = "ilwisapp\\auto_correlation_semivariance_algorithm.htm";
 }
 
 TableAutoCorrSemiVar::TableAutoCorrSemiVar(const FileName& fn, TablePtr& p, Map& mp, long iMaxPixelShft)
@@ -154,7 +154,7 @@ TableAutoCorrSemiVar::TableAutoCorrSemiVar(const FileName& fn, TablePtr& p, Map&
     objtime = objdep.tmNewest();
   fNeedFreeze = true;
   sFreezeTitle = "TableAutoCorrSemiVar";
-  htpFreeze = htpTableAutoCorrSemiVarT;
+  htpFreeze = "ilwisapp\\auto_correlation_semivariance_algorithm.htm";
   ptr.SetDomain(Domain("none"));
 }
 

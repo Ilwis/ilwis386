@@ -105,6 +105,7 @@
 	Last change:  WK    5 Mar 98    1:56 pm
 */
 #include "Engine\Base\DataObjects\valrange.h"
+#include "Engine\Base\DataObjects\WPSMetaData.h"
 #include "Applications\Raster\POLRAS.H"
 #include "Engine\Base\System\Engine.h"
 #include "Engine\Map\Segment\SEGSTORE.H"
@@ -118,6 +119,24 @@ IlwisObjectPtr * createMapRasterizePolygon(const FileName& fn, IlwisObjectPtr& p
 		return (IlwisObjectPtr *)MapRasterizePolygon::create(fn, (MapPtr &)ptr, sExpr);
 	else
 		return (IlwisObjectPtr *)new MapRasterizePolygon(fn, (MapPtr &)ptr);
+}
+
+String wpsmetadataMapRasterizePolygon() {
+	WPSMetaData metadata("MapRasterizePolygon");
+	return metadata.toString();
+}
+
+ApplicationMetadata metadataMapRasterizePolygon(ApplicationQueryData *query) {
+	ApplicationMetadata md;
+	if ( query->queryType == "WPSMETADATA" || query->queryType == "") {
+		md.wpsxml = wpsmetadataMapRasterizePolygon();
+	}
+	if ( query->queryType == "OUTPUTTYPE" || query->queryType == "")
+		md.returnType = IlwisObject::iotRASMAP;
+	if ( query->queryType == "EXPERSSION" || query->queryType == "")
+		md.skeletonExpression =  MapRasterizePolygon::sSyntax();
+
+	return md;
 }
 
 const char* MapRasterizePolygon::sSyntax() {
@@ -150,7 +169,7 @@ MapRasterizePolygon::MapRasterizePolygon(const FileName& fn, MapPtr& p)
 {
   fNeedFreeze = true;
   sFreezeTitle = "MapRasterizePolygon";
-  htpFreeze = htpMapRasterizePolygonT;
+  htpFreeze = "ilwisapp\\polygons_to_raster_algorithm.htm";
   objdep.Add(gr().ptr());
 }
 
@@ -166,7 +185,7 @@ MapRasterizePolygon::MapRasterizePolygon(const FileName& fn, MapPtr& p,
     IncompatibleCoordSystemsError(cs()->sName(true, fnObj.sPath()), pm->cs()->sName(true, fnObj.sPath()), sTypeName(), errMapRasterizePolygon+2);
   fNeedFreeze = true;
   sFreezeTitle = "MapRasterizePolygon";
-  htpFreeze = htpMapRasterizePolygonT;
+  htpFreeze = "ilwisapp\\polygons_to_raster_algorithm.htm";
   objdep.Add(gr.ptr());
   if (!fnObj.fValid())
     objtime = objdep.tmNewest();

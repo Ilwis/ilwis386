@@ -34,37 +34,9 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/*
-// $Log: /ILWIS 3.0/RasterApplication/Maptrnds.cpp $
- * 
- * 4     23-02-01 16:41 Hendrikse
- * added cLocalCentroid to reduce the point coords to to local system for
- * better numerical accuracy of trend surf coefficients
- * 
- * 3     9/08/99 11:52a Wind
- * comment problem
- * 
- * 2     9/08/99 8:58a Wind
- * changed sName() to sNameQuoted() in sExpression() to support long file
- * names
-*/
-// Revision 1.5  1998/09/16 17:24:42  Wim
-// 22beta2
-//
-// Revision 1.4  1997/09/11 17:03:36  Wim
-// Init() function is now called in constructor
-//
-// Revision 1.3  1997-08-13 19:49:03+02  janh
-// In sFormula all \n replaced by \r\n
-//
-// Revision 1.2  1997/08/05 15:17:41  janh.ilwis.itc
-// sFormula extended with spaces and initial lines
-//
-/* MapTrendSurface
-   Copyright Ilwis System Development ITC
-   december 1995, by Dick Visser
-	Last change:  WK    6 Apr 98    9:19 am
-*/
+
+#include "Engine\Base\DataObjects\valrange.h"
+#include "Engine\Base\DataObjects\WPSMetaData.h"
 #include "Applications\Raster\MAPTRNDS.H"
 #include "Engine\Table\tblstore.h"
 #include "Engine\Table\COLSTORE.H"
@@ -82,6 +54,24 @@ IlwisObjectPtr * createMapTrendSurface(const FileName& fn, IlwisObjectPtr& ptr, 
 }
 
 static const char * sSurfaceType[] = { "Plane", "Linear2", "Parabolic2", "2", "3", "4", "5", "6", 0 };
+
+String wpsmetadataMapTrendSurface() {
+	WPSMetaData metadata("MapMovingSurface");
+	return metadata.toString();
+}
+
+ApplicationMetadata metadataMapTrendSurface(ApplicationQueryData *query) {
+	ApplicationMetadata md;
+	if ( query->queryType == "WPSMETADATA" || query->queryType == "") {
+		md.wpsxml = wpsmetadataMapTrendSurface();
+	}
+	if ( query->queryType == "OUTPUTTYPE" || query->queryType == "")
+		md.returnType = IlwisObject::iotRASMAP;
+	if ( query->queryType == "EXPERSSION" || query->queryType == "")
+		md.skeletonExpression = MapTrendSurface::sSyntax();
+
+	return md;
+}
 
 const char* MapTrendSurface::sSyntax() {
   return "MapTrendSurface(pntmap,georef,surfacetype)";
@@ -164,7 +154,7 @@ void MapTrendSurface::Init()
 {
   fNeedFreeze = true;
   sFreezeTitle = "MapTrendSurface";
-  htpFreeze = htpMapTrendSurfaceT;
+  htpFreeze = "ilwisapp\\trend_surface_algorithm.htm";
 }
 
 static String sFormula(const CVector& cv)

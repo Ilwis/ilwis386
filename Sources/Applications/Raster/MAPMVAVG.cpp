@@ -39,6 +39,8 @@
    december 1995, by Dick Visser
 	Last change:  WK   11 Sep 97    6:58 pm
 */
+#include "Engine\Base\DataObjects\valrange.h"
+#include "Engine\Base\DataObjects\WPSMetaData.h"
 #include "Applications\Raster\MAPMVAVG.H"
 #include "Engine\Table\tblstore.h"
 #include "Engine\Table\COLSTORE.H"
@@ -59,6 +61,24 @@ IlwisObjectPtr * createMapMovingAverage(const FileName& fn, IlwisObjectPtr& ptr,
 #define EPS20 1.0e-20
 
 static const char * sWeightFunc[] = { "InvDist", "Linear", 0 };
+
+String wpsmetadataMovingAverage() {
+	WPSMetaData metadata("MovingAverage");
+	return metadata.toString();
+}
+
+ApplicationMetadata metadataMovingAverage(ApplicationQueryData *query) {
+	ApplicationMetadata md;
+	if ( query->queryType == "WPSMETADATA" || query->queryType == "") {
+		md.wpsxml = wpsmetadataMovingAverage();
+	}
+	if ( query->queryType == "OUTPUTTYPE" || query->queryType == "")
+		md.returnType = IlwisObject::iotRASMAP;
+	if ( query->queryType == "EXPERSSION" || query->queryType == "")
+		md.skeletonExpression = MapMovingAverage::sSyntax();
+
+	return md;
+}
 
 const char* MapMovingAverage::sSyntax() {
   return "MapMovingAverage(pntmap,georef,weightfunc[,plane|sphere])";
@@ -105,26 +125,40 @@ MapMovingAverage* MapMovingAverage::create(const FileName& fn, MapPtr& p, const 
   Array<String> as;
 	short iParms = IlwisObjectPtr::iParseParm(sExpr, as);
   //if (!IlwisObjectPtr::fParseParm(sExpr, as))
-	if (iParms > 4 || iParms < 1)
+	if (iParms > 6 || iParms < 1)
     ExpressionError(sExpr, sSyntax());
   PointMap pmp(as[0], fn.sPath());
   GeoRef gr(as[1], fn.sPath());
   String sWeightFnc;
-  sWeightFnc = IlwisObjectPtr::sParseFunc(as[2]);
-  WeightFuncType wft = (WeightFuncType)iFind(sWeightFnc, sWeightFunc);
-  if (wft == shUNDEF)
-    WeightFuncError(sWeightFnc, fn);
-  Array<String> asd(2);
-  if (!IlwisObjectPtr::fParseParm(as[2], asd))
-    WeightFuncExprError(as[2], sWeightFnc);
-  double rWeightExp = asd[0].rVal();
-  if (rWeightExp == rUNDEF)
-    WeightFuncExprError(as[2], sWeightFnc);
-  double rLimD = asd[1].rVal();
+  double rLimD;
+  double rWeightExp ;
+  int offset = 0;
+  WeightFuncType wft;
+  if ( iParms <= 4) {
+	  sWeightFnc = IlwisObjectPtr::sParseFunc(as[2]);
+	  wft = (WeightFuncType)iFind(sWeightFnc, sWeightFunc);
+	  if (wft == shUNDEF)
+		WeightFuncError(sWeightFnc, fn);
+	  Array<String> asd(2);
+	  if (!IlwisObjectPtr::fParseParm(as[2], asd))
+		WeightFuncExprError(as[2], sWeightFnc);
+	  rWeightExp = asd[0].rVal();
+	  if (rWeightExp == rUNDEF)
+		WeightFuncExprError(as[2], sWeightFnc);
+	  rLimD = asd[1].rVal();
+  } else {
+	  wft = wfEXACT;
+	  sWeightFnc = as[2];
+	  if ( sWeightFnc.toLower() != "invdist")
+		  wft = wfNOTEXACT;
+	  rWeightExp = as[3].rVal();
+	  rLimD = as[4].rVal();
+	  offset = 2;
+  }
   if (rLimD == rUNDEF || rLimD < EPS10)
     WeightFuncExprError(as[2], sWeightFnc);
 	bool fSphericDist = false; //default
-	if ((iParms == 4) && fCIStrEqual("sphere", as[3]))
+	if ((iParms == 4 + offset) && fCIStrEqual("sphere", as[3 + offset]))
 		fSphericDist = true;
   return new MapMovingAverage(fn, p, pmp, gr, wft, rWeightExp, rLimD, fSphericDist);
 }
@@ -183,7 +217,7 @@ void MapMovingAverage::Init()
 {
   fNeedFreeze = true;
   sFreezeTitle = "MapMovingAverage";
-  htpFreeze = htpMapMovingAverageT;
+  htpFreeze = "ilwisapp\\moving_average_algorithm.htm";
 }
 
 double MapMovingAverage::rInvDist(double rDis)

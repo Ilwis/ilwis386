@@ -192,7 +192,7 @@ MapDistance::MapDistance(const FileName& fn, MapPtr& p, const Map& mapSrc, const
 void MapDistance::Init()
 {
   sFreezeTitle = "MapDistance";
-  htpFreeze = htpMapDistanceT;
+  htpFreeze = "ilwisapp\\distance_calculation_algorithm.htm";
 }
 
 void MapDistance::Store()

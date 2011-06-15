@@ -59,7 +59,7 @@ String wpsmetadataMapFilter() {
 	metadata.AddKeyword("raster");
 	metadata.AddKeyword("filter");
 	WPSParameter *parm1 = new WPSParameter("1","Input Map",WPSParameter::pmtRASMAP);
-	parm1->AddAbstract("Input raster map with associated attribute table");
+	parm1->AddAbstract("Map to be filtered");
 
 	WPSParameterGroup *excList = new WPSParameterGroup();
 
@@ -440,7 +440,7 @@ void MapFilter::Init()
 {
   fNeedFreeze = false;
   sFreezeTitle = "MapFilter";
-  htpFreeze = htpMapFilterT;
+  htpFreeze = "ilwisapp\\filter_algorithm.htm";
   iFltRows = flt->iRows();
   iFltCols = flt->iCols();
   iLastLine = iUNDEF;

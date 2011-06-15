@@ -215,7 +215,7 @@ void MapVariogramSurfacePnt::Init()
 {
   fNeedFreeze = true;
   sFreezeTitle = "MapVariogramSurfacePnt";
-  htpFreeze = htpMapVariogramSurfacePntT;
+  htpFreeze = "ilwisapp\\variogram_surface_algorithm.htm";
 }
 
 bool MapVariogramSurfacePnt::fFreezing()

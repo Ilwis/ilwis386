@@ -166,7 +166,7 @@ MapIterator::MapIterator(const FileName& fn, MapPtr& p, const Map& mapInit, cons
 void MapIterator::Init()
 {
 	sFreezeTitle = "MapIterator";
-	htpFreeze = htpMapIteratorT;
+	htpFreeze = "ilwisapp\\iteration_algorithm.htm";
 }
 
 void MapIterator::Store()

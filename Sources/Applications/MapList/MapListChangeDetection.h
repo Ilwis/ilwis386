@@ -1,6 +1,7 @@
 #pragma once
 
 IlwisObjectPtr * createMapListChangeDetection(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms );
+ApplicationMetadata metadataMapListChangeDetection(ApplicationQueryData *query);
 
 class MapListChangeDetection : public MapListVirtual 
 {

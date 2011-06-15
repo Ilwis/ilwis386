@@ -430,7 +430,7 @@ void TablePattAnal::Init()
 {
 	long iNrPoints = pmp->iFeatures();
   sFreezeTitle = "TablePattAnal";
-  htpFreeze = htpTablePattAnalT;
+  htpFreeze = "ilwisapp\\pattern_analysis_algorithm.htm";
   if (pts==0)
     return;
 //  Time tim = objtime;

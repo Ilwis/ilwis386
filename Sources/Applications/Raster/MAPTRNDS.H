@@ -51,6 +51,7 @@ enum SurfaceType {sfPLANE = 0, sfLIN2, sfPARAB2, sf2ND, sf3RD, sf4TH, sf5TH, sf6
 #endif
 
 IlwisObjectPtr * createMapTrendSurface(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
+ApplicationMetadata metadataMapTrendSurface(ApplicationQueryData *query);
 
 class DATEXPORT MapTrendSurface: public MapFromPointMap
 {

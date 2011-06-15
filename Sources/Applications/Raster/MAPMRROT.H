@@ -46,6 +46,7 @@
 #include "Engine\SpatialReference\GRMRROT.H"
 
 IlwisObjectPtr * createMapMirrorRotate(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
+ApplicationMetadata metadataMapMirrorRotate(ApplicationQueryData *query);
 
 //enum MirrorRotateType { mrNORM=0, mrHOR, mrVERT, mrTRANS, mrDIAG, mrR90, mrR180, mrR270 };
 

@@ -147,7 +147,7 @@ MapSlicing::~MapSlicing()
 void MapSlicing::Init()
 {
   fNeedFreeze = false;
-  htpFreeze = htpMapSlicingT;
+  htpFreeze = "ilwisapp\\slicing_algorithm.htm";
   sFreezeTitle = "MapSlicing";
   dgrp = dm()->pdgrp();
 }

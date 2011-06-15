@@ -46,6 +46,7 @@
 #include "Engine\Base\DataObjects\Patch.h"
 
 IlwisObjectPtr * createMapRasterizeSegment(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
+ApplicationMetadata metadataMapRasterizeSegment(ApplicationQueryData *query);
 
 class DATEXPORT MapRasterizeSegment: public MapFromSegmentMap
 {

@@ -142,7 +142,7 @@ MapCross::MapCross(const FileName& fn, MapPtr& p)
   ReadElement("MapCross", "CrossTable", sCrossTbl);
   fNeedFreeze = true;
   sFreezeTitle = "MapCross";
-  htpFreeze = htpMapCrossT;
+  htpFreeze = "ilwisapp\\cross_algorithm.htm";
   objdep.Add(map2.ptr());
 }
 
@@ -173,7 +173,7 @@ MapCross::MapCross(const FileName& fn, MapPtr& p, const Map& map1, const Map& _m
     ptr.Store(); // store domain info
   }
   sFreezeTitle = "MapCross";
-  htpFreeze = htpMapCrossT;
+  htpFreeze = "ilwisapp\\cross_algorithm.htm";
 /*  Prevent cyclic definition -> stack overflow !!
   if (!fnObj.fValid())
     objtime = objdep.tmNewest();

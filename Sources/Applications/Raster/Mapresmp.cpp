@@ -286,7 +286,7 @@ MapResample::MapResample(const FileName& fn, MapPtr& p, const Map& mp, const Geo
 void MapResample::Init()
 {
   sFreezeTitle = "MapResample";
-  htpFreeze = htpMapResampleT;
+  htpFreeze = "ilwisapp\\resample_algorithm.htm";
 }
 
 void MapResample::Store()

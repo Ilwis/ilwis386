@@ -692,7 +692,7 @@ void TableSpatCorr::Init()
 {
   String sDes1,sDes2;
   sFreezeTitle = "TableSpatCorr";
-  htpFreeze = htpTableSpatCorrT;
+  htpFreeze = "ilwisapp\\spatial_correlation_algorithm.htm";
 
   String sDescAvLag = STBLMsgAvgPointDistanceAll;
   String sDescAvLag1 = STBLMsgAvgPointDistance1;

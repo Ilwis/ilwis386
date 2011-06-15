@@ -34,49 +34,10 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/*
-// $Log: /ILWIS 3.0/RasterApplication/Mappntrs.cpp $
- * 
- * 9     8/01/01 4:27p Martin
- * repalced Error typedef with int to prevent nameclashes
- * 
- * 8     5-01-00 13:17 Hendrikse
- * corrected  case ptrsSUM:
- * removed assignements to err
- * 
- * 7     16-11-99 9:30a Martin
- * mistook line for comment (was nested in comments), missed it in 2.23.
- * Now properly ported
- * 
- * 6     9/29/99 9:56a Wind
- * added case insensitive string comparison
- * 
- * 5     9/10/99 11:54a Wind
- * changed call to AppNameError in create(..)
- * 
- * 3     9/08/99 11:51a Wind
- * comment problem
- * 
- * 2     9/08/99 8:57a Wind
- * changed sName() to sNameQuoted() in sExpression() to support long file
- * names
-*/
-// Revision 1.4  1998/09/16 17:24:42  Wim
-// 22beta2
-//
-// Revision 1.3  1997/08/28 15:39:53  Dick
-// changed so that for ptrsNORM domain value is used and at 2 places changed
-// dvrs().fUseReals() to dvrs().fValues.
-//
 
-/* MapRasterizePoint
-   Copyright Ilwis System Development ITC
-   july 1995, by Wim Koolhoven
-	Last change:  WK    5 Jun 98   11:17 am
-*/
-
-#include "Applications\Raster\Mappntrs.h"
 #include "Engine\Base\DataObjects\valrange.h"
+#include "Engine\Base\DataObjects\WPSMetaData.h"
+#include "Applications\Raster\Mappntrs.h"
 #include "Headers\Htp\Ilwisapp.htp"
 #include "Headers\Err\Ilwisapp.err"
 #include "Headers\Hs\map.hs"
@@ -86,6 +47,25 @@ IlwisObjectPtr * createMapRasterizePoint(const FileName& fn, IlwisObjectPtr& ptr
 		return (IlwisObjectPtr *)MapRasterizePoint::create(fn, (MapPtr &)ptr, sExpr);
 	else
 		return (IlwisObjectPtr *)new MapRasterizePoint(fn, (MapPtr &)ptr);
+}
+
+String wpsmetadataMapRasterizePoint() {
+	WPSMetaData metadata("MapRasterizePoint");
+
+	return metadata.toString();
+}
+
+ApplicationMetadata metadataMapRasterizePoint(ApplicationQueryData *query) {
+	ApplicationMetadata md;
+	if ( query->queryType == "WPSMETADATA" || query->queryType == "") {
+		md.wpsxml = wpsmetadataMapRasterizePoint();
+	}
+	if ( query->queryType == "OUTPUTTYPE" || query->queryType == "")
+		md.returnType = IlwisObject::iotRASMAP;
+	if ( query->queryType == "EXPERSSION" || query->queryType == "")
+		md.skeletonExpression =  MapRasterizePoint::sSyntax();
+
+	return md;
 }
 
 const char* MapRasterizePoint::sSyntax() {
@@ -103,29 +83,32 @@ const char* MapRasterizePoint::sSyntaxSum() {
 MapRasterizePoint* MapRasterizePoint::create(const FileName& fn, MapPtr& p, const String& sExpr)
 {
   String sFunc = IlwisObjectPtr::sParseFunc(sExpr);
+  Array<String> as;
+  int iParms = IlwisObjectPtr::iParseParm(sExpr, as);
   ptrsType  type;
+  int offset = as.size() == 4 ? 1 : 0;
   if (fCIStrEqual(sFunc,"MapRasterizePoint"))
     type = ptrsNORM;
-  else if (fCIStrEqual(sFunc,"MapRasterizePointCount"))
+  if (fCIStrEqual(sFunc,"MapRasterizePointCount") || as[1].toLower() == "sum" )
     type = ptrsCOUNT; 
-  else if (fCIStrEqual(sFunc,"MapRasterizePointSum"))
+  if (fCIStrEqual(sFunc,"MapRasterizePointSum"),  as[1].toLower() == "count")
     type = ptrsSUM; 
   else
     AppNameError(sExpr, fn.sFullPath());
-  Array<String> as(3);
-  if (!IlwisObjectPtr::fParseParm(sExpr, as))
-    if (type == ptrsNORM)
-      ExpressionError(sExpr, sSyntax());
-    else if (type == ptrsCOUNT)
-      ExpressionError(sExpr, sSyntaxCount());
-    else if (type == ptrsSUM)
-      ExpressionError(sExpr, sSyntaxSum());
+
+  //if (!IlwisObjectPtr::fParseParm(sExpr, as))
+  //  if (type == ptrsNORM)
+  //    ExpressionError(sExpr, sSyntax());
+  //  else if (type == ptrsCOUNT)
+  //    ExpressionError(sExpr, sSyntaxCount());
+  //  else if (type == ptrsSUM)
+  //    ExpressionError(sExpr, sSyntaxSum());
   PointMap mp(as[0], fn.sPath());
-  GeoRef gr(as[1], fn.sPath());
+  GeoRef gr(as[1 + offset], fn.sPath());
   int err = errMapRasterizePoint;
   if (gr->fGeoRefNone())
     throw ErrorGeoRefNone(gr->fnObj, err);
-  short iPointSize = as[2].shVal();
+  short iPointSize = as[ 2 + offset].shVal();
   return new MapRasterizePoint(fn, p, mp, gr, iPointSize, type);
 }
 
@@ -295,7 +278,7 @@ bool MapRasterizePoint::fFreezing()
 void MapRasterizePoint::Init()
 {
   sFreezeTitle = "MapRasterizePoint";
-  htpFreeze = htpMapRasterizePointT;
+  htpFreeze = "ilwisapp\\points_to_raster_algorithm.htm";
   iHalfSize = iPointSize / 2;  // was "(iPointSize+1) / 2" which causes a shift of (-1,-1)
 }
 

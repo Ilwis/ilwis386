@@ -34,30 +34,6 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/* $Log: /ILWIS 3.0/RasterApplication/POLRAS.H $
- * 
- * 4     12-11-99 9:23 Wind
- * bug 1132 (actived use of doubles)
- * 
- * 3     9-06-99 4:13p Martin
- * // -> /*
- * 
- * 2     6/09/99 11:34a Martin
- * Changed Array<int> to ArrayInt to solve compile problems (short, int)
-// Revision 1.5  1998/09/16 17:24:41  Wim
-// 22beta2
-//
-// Revision 1.4  1997/09/11 09:11:05  Wim
-// Removed mpPatchTmp from the class, added it instead as parameter to fInitFill()
-//
-// Revision 1.3  1997-08-14 11:53:44+02  Wim
-// Excluded PrepareLine for RealPatches, because excluded anyway
-//
-/* MapRasterizePolygon
-   Copyright Ilwis System Development ITC
-   june 1995, by Jelle Wind
-   Last change:  WK   11 Sep 97   11:06 am
-*/
 
 #ifndef ILWMAPPOLRAS_H
 #define ILWMAPPOLRAS_H
@@ -65,6 +41,7 @@
 #include "Engine\Base\DataObjects\ARRAY.H"
 
 IlwisObjectPtr * createMapRasterizePolygon(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
+ApplicationMetadata metadataMapRasterizePolygon(ApplicationQueryData *query);
 
 inline MinMax undef(MinMax) {
   return MinMax(RowCol(iUNDEF, iUNDEF), RowCol(iUNDEF, iUNDEF));

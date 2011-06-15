@@ -216,7 +216,7 @@ MapGlue::MapGlue(const FileName& fn, MapPtr& p)
 
   fNeedFreeze = true;
   sFreezeTitle = "MapGlue";
-  htpFreeze = htpMapGlueT;
+  htpFreeze = "ilwisapp\\glue_raster_maps_algorithm.htm";
 }
 
 MapGlue::MapGlue(const FileName& fn, MapPtr& p, const Array<Map>& _maps, bool fRepAlw, const String& sNewDomain)
@@ -244,7 +244,7 @@ MapGlue::MapGlue(const FileName& fn, MapPtr& p, const Array<Map>& _maps, bool fR
   SetDomainValueRangeStruct(ndvr);
 
   sFreezeTitle = "MapGlue";
-  htpFreeze = htpMapGlueT;
+  htpFreeze = "ilwisapp\\glue_raster_maps_algorithm.htm";
   for ( unsigned int i=1; i<maps.iSize(); ++i)
     objdep.Add(maps[i].ptr());
 }
@@ -278,7 +278,7 @@ MapGlue::MapGlue(const FileName& fn, MapPtr& p, const GeoRef& gr, const Array<Ma
   SetDomainValueRangeStruct(ndvr);
 
   sFreezeTitle = "MapGlue";
-  htpFreeze = htpMapGlueT;
+  htpFreeze = "ilwisapp\\glue_raster_maps_algorithm.htm";
   for (unsigned int i=1; i < maps.iSize(); ++i)
     objdep.Add(maps[i].ptr());
 }

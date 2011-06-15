@@ -175,7 +175,7 @@ bool TableNeighbourPol::fFreezing()
 void TableNeighbourPol::Init()
 {
   sFreezeTitle = "TableNeighbourPol";
-  htpFreeze = htpTableNeighbourPolT;
+  htpFreeze = "ilwisapp\\neighbour_polygons_algorithm.htm";
   if (pts==0)
     return;  
 

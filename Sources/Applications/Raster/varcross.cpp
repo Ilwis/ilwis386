@@ -161,7 +161,7 @@ void MapCrossVariogramSurfaceRas::Init()
 {
   fNeedFreeze = true;
   sFreezeTitle = "MapCrossVariogramSurfaceRas";
-  //htpFreeze = htpMapCrossVariogramSurfaceRasT;
+  //htpFreeze = "ilwisapp\\cross_dialogbox.htm"VariogramSurfaceRasT;
 }
 
 void MapCrossVariogramSurfaceRas::FillAndShiftArrayBufInA(Array<RealBuf>& arBuf, long iNextRow, long iFr, long iNr)

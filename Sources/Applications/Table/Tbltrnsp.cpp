@@ -185,7 +185,7 @@ void TableTranspose::Init()
 {
   fNeedFreeze = true;
   sFreezeTitle = "TableTranspose";
-  htpFreeze = htpTableTransposeT;
+  htpFreeze = "ilwisapp\\transpose_table_algorithm.htm";
 }
 
 TableTranspose::~TableTranspose()

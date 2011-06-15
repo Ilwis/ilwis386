@@ -184,7 +184,7 @@ void MapClassify::Init()
     return;
   fInit = true;
   sFreezeTitle = "MapClassify";
-  htpFreeze = htpMapClassifyT;
+  htpFreeze = "ilwisapp\\classify_algorithm.htm";
   mpl = sms->mpl();
   sms->fInitStat();
   clf->SetSampleSet(sms);

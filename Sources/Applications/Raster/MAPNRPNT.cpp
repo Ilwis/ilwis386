@@ -77,11 +77,12 @@
    december 1995, by Dick Visser
 	Last change:  WK   11 Sep 97    6:58 pm
 */
+#include "Engine\Base\DataObjects\valrange.h"
+#include "Engine\Base\DataObjects\WPSMetaData.h"
 #include "Applications\Raster\MAPNRPNT.H"
 #include "Engine\Map\Raster\MAPSTORE.H"
 #include "Engine\Table\tblstore.h"
 #include "Engine\Table\COLSTORE.H"
-#include "Engine\Base\DataObjects\valrange.h"
 #include "Engine\Base\Algorithm\Qsort.h"
 #include "Headers\Err\Ilwisapp.err"
 #include "Headers\Htp\Ilwisapp.htp"
@@ -92,6 +93,23 @@ IlwisObjectPtr * createMapNearestPoint(const FileName& fn, IlwisObjectPtr& ptr, 
 		return (IlwisObjectPtr *)MapNearestPoint::create(fn, (MapPtr &)ptr, sExpr);
 	else
 		return (IlwisObjectPtr *)new MapNearestPoint(fn, (MapPtr &)ptr);
+}
+
+String wpsmetadataMapNearestPoint() {
+	WPSMetaData metadata("MapNearestPoint");
+	return metadata.toString();
+}
+
+ApplicationMetadata metadataMapNearestPoint(ApplicationQueryData *query) {
+	ApplicationMetadata md;
+	if ( query->queryType == "WPSMETADATA" || query->queryType == "") {
+		md.wpsxml = wpsmetadataMapNearestPoint();
+	}
+	if ( query->queryType == "OUTPUTTYPE" || query->queryType == "")
+		md.returnType = IlwisObject::iotRASMAP;
+	if ( query->queryType == "EXPERSSION" || query->queryType == "")
+		md.skeletonExpression = MapNearestPoint::sSyntax();
+	return md;
 }
 
 const char* MapNearestPoint::sSyntax() {
@@ -150,7 +168,7 @@ void MapNearestPoint::Init()
 {
   fNeedFreeze = true;
   sFreezeTitle = "MapNearestPoint";
-  htpFreeze = htpMapNearestPointT;
+  htpFreeze = "ilwisapp\\nearest_point_functionality_algorithm.htm";
 }
 
 

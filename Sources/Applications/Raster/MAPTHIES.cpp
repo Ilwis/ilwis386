@@ -40,9 +40,10 @@
 	Last change:  JEL   7 May 97    9:30 am
 */
 
-#include "Applications\Raster\MAPTHIES.H"
-#include "Applications\Raster\MAPDIST.H"
 #include "Engine\Base\DataObjects\valrange.h"
+#include "Engine\Base\DataObjects\WPSMetaData.h"
+#include "Applications\Raster\MAPDist.H"
+#include "Applications\Raster\MAPThies.H"
 #include "Headers\Htp\Ilwisapp.htp"
 #include "Headers\Err\Ilwisapp.err"
 
@@ -54,6 +55,24 @@ IlwisObjectPtr * createMapThiessen(const FileName& fn, IlwisObjectPtr& ptr, cons
 }
 
 #define HIVAL (LONG_MAX >> 1)
+
+String wpsmetadataMapThiessen() {
+	WPSMetaData metadata("MapThiessen");
+	return metadata.toString();
+}
+
+ApplicationMetadata metadataMapThiessen(ApplicationQueryData *query) {
+	ApplicationMetadata md;
+	if ( query->queryType == "WPSMETADATA" || query->queryType == "") {
+		md.wpsxml = wpsmetadataMapThiessen();
+	}
+	if ( query->queryType == "OUTPUTTYPE" || query->queryType == "")
+		md.returnType = IlwisObject::iotRASMAP;
+	if ( query->queryType == "EXPERSSION" || query->queryType == "")
+		md.skeletonExpression =  MapThiessen::sSyntax();
+
+	return md;
+}
 
 const char * MapThiessen::sSyntax()
  { return "MapThiessen(sourcemap,distancemap)\nMapThiessen(sourcemap,weightmap,distancemap)"; }
@@ -103,7 +122,7 @@ MapThiessen::MapThiessen(const FileName& fn, MapPtr& p, const Map& mapSrc, const
 void MapThiessen::Init()
 {
   sFreezeTitle = "MapThiessen";
-  htpFreeze = htpMapThiessenT;
+  htpFreeze = "ilwisapp\\distance_calculation_algorithm.htm";
 }
 
 void MapThiessen::Store()
