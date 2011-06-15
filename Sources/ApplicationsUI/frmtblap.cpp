@@ -166,7 +166,7 @@ FormTableHistogram::FormTableHistogram(CWnd* mw, const char* sPar)
   new FieldBaseMap(root, SAFUiMap, &sMap);
   fShow = true;
 //  new CheckBox(root, SAFUiShow, &fShow);
-  SetAppHelpTopic(htpTableHistogram);
+  SetHelpItem("ilwisapp\\histogram_dialogbox.htm");
   create();
 }                    
 
@@ -235,7 +235,7 @@ FormTableAutoCorr::FormTableAutoCorr(CWnd* mw, const char* sPar)
   fldMap->SetCallBack((NotifyProc)&FormTableAutoCorr::CallBack);
   fiMaxShift = new FieldInt(root, SAFUiMaxPixShift, &iPixShift, ValueRange(1,8000), true);
   initTableOut(false);
-  SetAppHelpTopic(htpTableAutoCorrSemiVar);
+  SetHelpItem("ilwisapp\\auto_correlation_semivariance_dialog_box.htm");
   create();
 }                    
 
@@ -322,7 +322,7 @@ FormTableSpatCorr::FormTableSpatCorr(CWnd* mw, const char* sPar)
   FieldBlank* fb = new FieldBlank(root, 0);
   fb->Align(cbBW, AL_UNDER);
   initTableOut(false);
-  SetAppHelpTopic(htpTableSpatCorr);
+  SetHelpItem("ilwisapp\\spatial_correlation_dialogbox.htm");
   create();
 }                    
 
@@ -404,7 +404,7 @@ FormTablePattAnal::FormTablePattAnal(CWnd* mw, const char* sPar)
   }
   new FieldPointMap(root, SAFUiPntMap, &sMap);
   initTableOut(false);
-  SetAppHelpTopic(htpTablePattAnal);
+  SetHelpItem("ilwisapp\\pattern_analysis_dialog_box.htm");
   create();
 }                    
 
@@ -447,7 +447,7 @@ FormTableNeighbourPol::FormTableNeighbourPol(CWnd* mw, const char* sPar)
   }
   new FieldPolygonMap(root, SAFUiPolMap, &sMap);
   initTableOut(false);
-  SetAppHelpTopic(htpTableNeighbourPol);
+  SetHelpItem("ilwisapp\\neighbour_polygons_dialog_box.htm");
   create();
 }                    
 
@@ -484,7 +484,7 @@ FormTableLinAnal::FormTableLinAnal(CWnd* mw, const char* sPar)
   }
   new FieldSegmentMap(root, SAFUiSegMap, &sMap);
   initTableOut(false);
-  SetAppHelpTopic(htpTableLineament);
+  SetHelpItem("ilwisapp\\segment_direction_histogram_dialog_box.htm");
   create();
 }                    
 
@@ -552,7 +552,7 @@ FormMapCross::FormMapCross(CWnd* mw, const char* sPar)
   initTableOut(false);
   CheckBox* cbMap = new CheckBox(root, SAFUiOutMap, &fMap);
   new FieldMapCreate(cbMap, "", &sOutMap);
-  SetAppHelpTopic(htpMapCross);
+  SetHelpItem("ilwisapp\\cross_dialogbox.htm");
   create();
 }                    
 
@@ -618,7 +618,7 @@ FormTableTranspose::FormTableTranspose(CWnd* mw, const char* sPar)
   fdom->SetCallBack((NotifyProc)&FieldValueRange::DomainCallBack, fvr);
   fvr->Align(fdom, AL_UNDER);  
   initTableOut(false);
-  SetAppHelpTopic(htpTableTranspose);
+  SetHelpItem("ilwisapp\\transpose_table_dialog_box.htm");
   create();
 }                    
 
@@ -730,7 +730,7 @@ FormTableChangeDomain::FormTableChangeDomain(CWnd* mw, const char* sPar)
 	fb->Align(cb, AL_UNDER);
 	
 	initTableOut(false);
-	SetAppHelpTopic(htpTableChangeDomain);
+	SetHelpItem("ilwisapp\\change_domain_of_table_dialog_box.htm");
 	create();
 }                    
 
@@ -841,7 +841,7 @@ FormTableGlue::FormTableGlue(CWnd* mw, const char* sPar)
   stRemark = new StaticText(root, SAFRemIncompatableDomains);
   stRemark->Align(fb, AL_UNDER);
   stRemark->SetIndependentPos();
-  SetAppHelpTopic(htpTableGlue);
+  SetHelpItem("ilwisapp\\glue_tables_dialog_box.htm");
   create();
 }                    
 
@@ -1033,7 +1033,7 @@ FormTableCrossVariogram::FormTableCrossVariogram(CWnd* mw, const char* sPar)
 	CheckBox* cbSphDist = new CheckBox(root, SAFUiSphericalDist, &fSphericalDistance);
 	cbSphDist->SetIndependentPos();
   initTableOut(false);
-  SetAppHelpTopic(htpTableCrossVariogram);
+  SetHelpItem("ilwisapp\\cross_variogram_dialog_box.htm");
   create();
 }                    
 
@@ -1125,7 +1125,7 @@ FormTableBursaWolf::FormTableBursaWolf(CWnd* mw, const char* sPar)
   fcs = new FieldCoordSystem(root, SAFUiTargCoordSys, &m_sCsyOut);
   fcs->SetCallBack((NotifyProc)&FormTableBursaWolf::CallBackCsyName);
   initTableOut(false);
-  SetAppHelpTopic(htpTableCrossVariogram);
+  SetHelpItem("ilwisapp\\cross_variogram_dialog_box.htm");
   create();
 }                    
 

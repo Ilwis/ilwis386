@@ -113,7 +113,7 @@ FormTransformCoordinates::FormTransformCoordinates(CWnd* mw, const char* sPar)
   fsResult->Align(stOutpCrd, AL_AFTER);
   fsResult->SetIndependentPos();
 	fsResult->SetWidth(180);
-	SetAppHelpTopic(htpCoordinateTransform);
+	SetHelpItem("ilwisapp\\transform_coordinates.htm");
   create();
 }
 
@@ -363,7 +363,7 @@ FormTransformCoordinatesH::FormTransformCoordinatesH(CWnd* mw, const char* sPar)
   fsHeightOut = new FieldString(root, &sFill38, ES_AUTOHSCROLL|WS_TABSTOP|WS_GROUP|ES_READONLY);
   fsHeightOut->Align(stH, AL_AFTER);
   fsHeightOut->SetIndependentPos();
-  SetAppHelpTopic(htpDatumParmsMethod);
+  SetHelpItem("ilwisapp\\find_datum_trans_params_methodpage.htm");
   create();
 }
 
@@ -788,7 +788,7 @@ FormTransformCoordinatesH_to_ctsXYZ::FormTransformCoordinatesH_to_ctsXYZ(CWnd* m
 	frZCoordOut = new FieldReal(root, SAFUiZcts, &ctsOut.z, ValueRange(-1e12,1e12,0.001));
   frZCoordOut->Align(frYCoordOut, AL_UNDER);
     frZCoordOut->SetIndependentPos();
-  SetAppHelpTopic(htpDatumParmsMethod);
+  SetHelpItem("ilwisapp\\find_datum_trans_params_methodpage.htm");
   create();
 }
 
@@ -1044,7 +1044,7 @@ FormTransformCoordinatesH_from_ctsXYZ::FormTransformCoordinatesH_from_ctsXYZ(CWn
   stHeightOut = new StaticText(root, sFill38);
   stHeightOut->Align(stH, AL_AFTER);
   stHeightOut->SetIndependentPos();
-  SetAppHelpTopic(htpDatumParmsMethod);
+  SetHelpItem("ilwisapp\\find_datum_trans_params_methodpage.htm");
   create();
 }
 
@@ -1249,7 +1249,7 @@ frXCoordOut = new FieldReal(root, SAFUiX2Coord, &rX_Out, ValueRange(-1e12,1e12,0
   fsHeightOut = new FieldString(root, &sFill38, ES_AUTOHSCROLL|WS_TABSTOP|WS_GROUP|ES_READONLY);
   fsHeightOut->Align(stH, AL_AFTER);
   fsHeightOut->SetIndependentPos();
-  SetAppHelpTopic(htpDatumParmsMethod);
+  SetHelpItem("ilwisapp\\find_datum_trans_params_methodpage.htm");
   create();
 }
 

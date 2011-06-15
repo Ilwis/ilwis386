@@ -212,7 +212,7 @@ FormRasPoint::FormRasPoint(CWnd* mw, const char* sPar)
   iPointSize = 1;
   new FieldInt(root, SAFUiPointSize, &iPointSize);
   initMapOutValRange(true);
-  SetAppHelpTopic(htpMapRasterizePoint);
+  SetHelpItem("ilwisapp\\points_to_raster_dialogbox.htm");
   create();
 }                    
 
@@ -259,7 +259,7 @@ FormRasPointCount::FormRasPointCount(CWnd* mw, const char* sPar)
   iPointSize = 1;
   new FieldInt(root, SAFUiPointSize, &iPointSize);
   initMapOut(true,(long)dmVALUE);
-  SetAppHelpTopic(htpMapRasterizePointCount);
+  SetHelpItem("ilwisapp\\point_density_dialog_box.htm");
   create();
 }                    
 
@@ -306,7 +306,7 @@ FormMapNearestPoint::FormMapNearestPoint(CWnd* mw, const char* sPar)
 	CheckBox* cb = new CheckBox(root, SAFUiSphericalDist, &fSphericalDistance);
 	cb->SetIndependentPos();
   initMapOutValRange(true);
-  SetAppHelpTopic(htpMapNearestPoint);
+  SetAppHelpTopic("	ilwisapp\nearest_point_dialogbox.htm");
   create();
 }                    
 
@@ -430,7 +430,7 @@ FormMapMovingAverage::FormMapMovingAverage(CWnd* mw, const char* sPar)
 : FormMapGriddingWeighted(mw, SAFTitleInterpolMovAvg, sPar)
 {
   initMapOutValRange(true);
-  SetAppHelpTopic(htpMapMovingAverage);
+  SetHelpItem("ilwisapp\\moving_average_dialogbox.htm");
   create();
 }
 
@@ -499,7 +499,7 @@ FormMapMovingSurface::FormMapMovingSurface(CWnd* mw, const char* sPar)
   iSurface = 0;
   FieldSurface* fs = new FieldSurface(root, SAFUiSurface, &iSurface);
   initMapOutValRange(true);
-  SetAppHelpTopic(htpMapMovingSurface);
+  SetHelpItem("ilwisapp\\moving_surface_dialog_box.htm");
   create();
 }
 
@@ -549,7 +549,7 @@ FormMapTrendSurface::FormMapTrendSurface(CWnd* mw, const char* sPar)
   new RadioButton(rg, SAFUi6Degree);
 */  
   initMapOutValRange(true);
-  SetAppHelpTopic(htpMapTrendSurface);
+  SetHelpItem("ilwisapp\\trend_surface_dialog_box.htm");
   create();
 }                    
 
@@ -641,7 +641,7 @@ FormMapKriging::FormMapKriging(CWnd* mw, const char* sPar)
   initMapOutValRange(true);
   CheckBox* cbEr = new CheckBox(root, SAFUiErrorMap, &fErrorMap);
 
-  SetAppHelpTopic(htpMapKriging);
+  SetHelpItem("ilwisapp\\kriging_dialog_box.htm");
   create();
 }                    
 
@@ -763,7 +763,7 @@ FormMapUniversalKriging::FormMapUniversalKriging(CWnd* mw, const char* sPar)
   CheckBox* cbEr = new CheckBox(root, SAFUiErrorMap, &fErrorMap);
   //new FieldMapCreate(cbEr, "", &sErrorMap);
 
-  SetAppHelpTopic(htpMapUniversalKriging);
+  SetHelpItem("ilwisapp\\universal_kriging_dialog_box.htm");
   create();
 }                    
 
@@ -893,7 +893,7 @@ FormMapAnisotropicKriging::FormMapAnisotropicKriging(CWnd* mw, const char* sPar)
   CheckBox* cbEr = new CheckBox(root, SAFUiErrorMap, &fErrorMap);
   //new FieldMapCreate(cbEr, "", &sErrorMap);
 
-  SetAppHelpTopic(htpMapAnisotropicKriging);
+  SetHelpItem("ilwisapp\\anisotropic_kriging_dialog_box.htm");
   create();
 }                    
 
@@ -1007,7 +1007,7 @@ FormMapCoKriging::FormMapCoKriging(CWnd* mw, const char* sPar)
   CheckBox* cbEr = new CheckBox(root, SAFUiErrorMap, &fErrorMap);
   //new FieldMapCreate(cbEr, "", &sErrorMap);
 
-  SetAppHelpTopic(htpMapCoKriging);
+  SetHelpItem("ilwisapp\\cokriging_dialog_box.htm");
   create();
 }                    
 

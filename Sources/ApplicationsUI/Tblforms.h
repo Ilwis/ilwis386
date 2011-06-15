@@ -122,6 +122,8 @@ LRESULT Cmdclmmoledensky(CWnd *parent, const String& dummy);
 LRESULT Cmdclmhelmert7parms(CWnd *parent, const String& dummy);
 LRESULT Cmdclmfindazimuthdistance(CWnd *parent, const String& dummy);
 
+LRESULT CmdUpdateAllColumns(CWnd *parent, const String& s);
+
 
 class TableForm : public FormWithDest {
 public:

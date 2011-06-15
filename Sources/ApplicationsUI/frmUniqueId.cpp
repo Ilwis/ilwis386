@@ -120,7 +120,7 @@ FormUniqueID::FormUniqueID(CWnd* mw, const char* sPar)
 	stRemark = new StaticText(root, sFill);
 	stRemark->SetIndependentPos();
 	
-	SetAppHelpTopic(htpGenMapUniqueID);
+	SetHelpItem("ilwisapp\\unique_id_dialog_box.htm");
 	create();
 }
 

@@ -80,7 +80,7 @@ FormMatrixPrincCmp::FormMatrixPrincCmp(CWnd* mw, const char* sPar)
   fldOutBands = new FieldInt(root, SAFUINrOutputBands, &iOutBands, ValueRange(1,99), true);
   fldOutBands->SetCallBack((NotifyProc)&FormMatrixPrincCmp::OutBandsCallBack);
   initMatrixOut();
-  SetAppHelpTopic(htpMatrixPrincCmp);
+  SetHelpItem("ilwisapp\\principal_component_analysis_dialog_box.htm");
   create();
 }                    
 
@@ -157,7 +157,7 @@ FormMatrixFactorAnal::FormMatrixFactorAnal(CWnd* mw, const char* sPar)
   fldOutBands = new FieldInt(root, SAFUINrOutputBands, &iOutBands, ValueRange(1,99), true);
   fldOutBands->SetCallBack((NotifyProc)&FormMatrixFactorAnal::OutBandsCallBack);
   initMatrixOut();
-  SetAppHelpTopic(htpMatrixFactorAnal);
+  SetHelpItem("ilwisapp\\factor_analysis_dialog_box.htm");
   create();
 }                    
 
@@ -229,7 +229,7 @@ FormMatrixVarCov::FormMatrixVarCov(CWnd* mw, const char* sPar)
   }
   new FieldMapList(root, SAFUiMapList, &sMapList);
   fShow = true;
-  SetAppHelpTopic(htpMatrixVarCov);
+  SetHelpItem("ilwisapp\\variance_covariance_matrix_dialog_box.htm");
   create();
 }                    
 
@@ -273,7 +273,7 @@ FormMatrixCorr::FormMatrixCorr(CWnd* mw, const char* sPar)
   }
   new FieldMapList(root, SAFUiMapList, &sMapList);
   fShow = true;
-  SetAppHelpTopic(htpMatrixCorr);
+  SetHelpItem("ilwisapp\\correlation_matrix_dialog_box.htm");
   create();
 }                    
 

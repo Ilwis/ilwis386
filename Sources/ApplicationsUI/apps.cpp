@@ -150,7 +150,9 @@ extern "C" _export InfoUIVector* getCommandInfoUI(ILWIS::Module *module) {
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("clmhelmert7parms","",Cmdclmhelmert7parms,"","",".grh",".mpl",0000,"", false));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("clmfindazimuthdistance","",Cmdclmfindazimuthdistance,"","Find Azimuth Distance",".grh",".mpl",0000,"Find Azimuth Distance", false));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("timecolumn","",Cmdtimecolumn,TR("&Table Operations..&Create time column"),TR("Create time column"),"ExeTbl16IcoL",".tbl",0,TR("Create time column from maplist name information")));
- 
+
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("updateallcolumns","",CmdUpdateAllColumns,"","",".grh",".mpl",0000,"", false));
+
 return infosui;
 }
 

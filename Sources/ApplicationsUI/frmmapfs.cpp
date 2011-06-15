@@ -269,7 +269,7 @@ FormRasSegment::FormRasSegment(CWnd* mw, const char* sPar)
 //  initAsk(dmVALUE|dmCLASS|dmIDENT|dmBOOL);
 //  initMapOutValRange(true);
   initMapOut(true,false);
-  SetAppHelpTopic(htpMapRasterizeSegment);
+  SetHelpItem("ilwisapp\\segments_to_raster_dialogbox.htm");
   create();
 }                    
 
@@ -321,7 +321,7 @@ FormMapSegmentDensity::FormMapSegmentDensity(CWnd* mw, const char* sPar)
   FieldBlank* fb = new FieldBlank(root, 0);
   fb->Align(cb, AL_UNDER);
   initMapOut(true,(long)dmVALUE);
-  SetAppHelpTopic(htpMapSegmentDensity);
+  SetHelpItem("ilwisapp\\segment_density_dialog_box.htm");
   create();
 }                    
 
@@ -372,7 +372,7 @@ FormRasPolygon::FormRasPolygon(CWnd* mw, const char* sPar)
 	feMap->SetCallBack((NotifyProc)&FormRasterize::MapCallBack);
 	
 	initMapOut(true,false);
-	SetAppHelpTopic(htpMapRasterizePolygon);
+	SetHelpItem("ilwisapp\\polygons_to_raster_dialogbox.htm");
 	create();
 }                    
 
@@ -419,7 +419,7 @@ FormInterpolMap::FormInterpolMap(CWnd* mw, const char* sPar)
 //  initAsk(dmVALUE);
 //  initMapOutValRange(true);
   initMapOut(true,(long)dmVALUE);
-  SetAppHelpTopic(htpMapInterpolContour);
+  SetHelpItem("ilwisapp\\contour_interpolation_dialog_box.htm");
   create();
 }                    
 

@@ -154,7 +154,7 @@ FormMapCalc::FormMapCalc(CWnd* mw, const char* sPar)
                    (NotifyProc)&FormMapCalc::SetDefaults);
   pb->SetIndependentPos();
   pb->Align(fdc, AL_AFTER);
-  SetAppHelpTopic(htpMapCalculate);
+  SetHelpItem("ilwisapp\\map_calculation_dialog_box.htm");
   create();
 }                    
 
@@ -253,7 +253,7 @@ FormMapIter::FormMapIter(CWnd* mw, const char* sPar)
                    (NotifyProc)&FormMapIter::SetDefaults);
   pb->SetIndependentPos();
   pb->Align(fdc, AL_AFTER);
-  SetAppHelpTopic(htpMapIterator);
+  SetHelpItem("ilwisapp\\iteration_dialog_box.htm");
   create();
 }                    
    

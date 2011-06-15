@@ -126,7 +126,7 @@
  * disable both options
  * 
  * 20    3-08-00 17:23 Koolhoven
- * added htpMapKrigingFromRaster
+ * added "ilwisapp\kriging_from_raster_dialog_box.htm"
  * 
  * 19    16-06-00 13:05 Koolhoven
  * no longer ask for output domain in AreaNumbering 
@@ -317,7 +317,7 @@ FormDistanceMap::FormDistanceMap(CWnd* mw, const char* sPar)
   CheckBox* cbTm = new CheckBox(root, SAFUiThiessenMap, &fThiessenMap);
   new FieldMapCreate(cbTm, "", &sThiessenMap);
   
-  SetAppHelpTopic(htpMapDistance);
+  SetHelpItem("ilwisapp\\distance_calculation_dialogbox.htm");
   create();
 }                    
 
@@ -700,7 +700,7 @@ FormAreaNumbering::FormAreaNumbering(CWnd* mw, const char* sPar)
 
   initMapOut(false, false);
 //  initRemark();
-  SetAppHelpTopic(htpMapAreaNumbering);
+  SetHelpItem("ilwisapp\\areanumbering_dialogbox.htm");
   create();
 }                    
 
@@ -775,7 +775,7 @@ FormAttributeMap::FormAttributeMap(CWnd* mw, const char* sPar)
   stColRemark = new StaticText(root, String('x',50));
   stColRemark->SetIndependentPos();
   initMapOut(false,true);
-  SetAppHelpTopic(htpMapAttribute);
+  SetHelpItem("ilwisapp\\attribute_map_of_raster_map_dialogbox.htm");
   // bad trick to prevent that domain call back changes defaults of column callback
   stRemark->SetCallBack((NotifyProc)&FormAttributeMap::ColCallBack);
   create();
@@ -936,7 +936,7 @@ FormMapSlicing::FormMapSlicing(CWnd* mw, const char* sPar)
   fdtMapIn->SetCallBack((NotifyProc)&FormMapSlicing::MapCallBack);
 
   initMapOut(false, (long)dmGROUP);
-  SetAppHelpTopic(htpMapSlicing);
+  SetHelpItem("ilwisapp\\slicing_dialogbox.htm");
   create();
 }                    
 
@@ -1013,7 +1013,7 @@ FormMapAggregate::FormMapAggregate(CWnd* mw, const char* sPar)
   FieldBlank* fb = new FieldBlank(root,0);
   fb->Align(cb, AL_UNDER);
   initMapOut(false, true);
-  SetAppHelpTopic(htpMapAggregate);
+  SetHelpItem("ilwisapp\\aggregate_dialog_box.htm");
   create();
 }                    
 
@@ -1239,7 +1239,7 @@ FormMapGlue::FormMapGlue(CWnd* mw, const char* sPar)
   fb->Align(cb, AL_UNDER);
   initMapOut(false, false);
   initRemark();
-  SetAppHelpTopic(htpMapGlue);
+  SetHelpItem("ilwisapp\\glue_raster_maps_dialog_box.htm");
   create();
 }                    
 
@@ -1424,7 +1424,7 @@ FormMapVariogramSurface::FormMapVariogramSurface(CWnd* mw, const char* sPar)
   frLagSpacing = new FieldReal(root, SAFUiLagLengthM, &rLagSpacing, ValueRange(0.01,1e9,0.2));
   new FieldInt(root, SAFUiNrLags, &iLags, ValueRange(2,45), true);
   initMapOutValRange(false);
-  SetAppHelpTopic(htpMapVariogramSurface);
+  SetHelpItem("ilwisapp\\variogram_surface_dialog_box.htm");
   create();
 }
 
@@ -1543,7 +1543,7 @@ FormMapKrigingFromRaster::FormMapKrigingFromRaster(CWnd* mw, const char* sPar)
   initMapOutValRange(false);
   CheckBox* cbEr = new CheckBox(root, SAFUiErrorMap, &fErrorMap);
 	initRemark();
-  SetAppHelpTopic(htpMapKrigingFromRaster);
+  SetHelpItem("ilwisapp\\kriging_from_raster_dialog_box.htm");
   create();
 }
 

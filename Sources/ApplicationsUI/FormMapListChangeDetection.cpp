@@ -51,7 +51,7 @@ FormMapListChangeDetection::FormMapListChangeDetection(CWnd* mw, const char* sPa
 	CheckBox *cb = new CheckBox(root,TR("Treat Undefined deltas as zero deltas"), &undefHandling);
 	cb->SetIndependentPos();
 	new FieldMapCreate(root, TR("&Output MapList"), &mplOut);
-	//SetAppHelpTopic(htpFillSinks);
+	//SetHelpItem("ilwisapp\\fill_sinks_dialogbox.htm");
 	create();
 }
 

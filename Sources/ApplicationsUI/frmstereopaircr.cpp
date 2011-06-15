@@ -174,7 +174,7 @@ FormStereoPairFromDTM::FormStereoPairFromDTM(CWnd* mw, const char* sPar)
 	(new RadioButton(rgResampModus, "&Fast"))->SetIndependentPos();// default choice
   new RadioButton(rgResampModus, "&Accurate"); 
   initStereoPairOut();
-  SetAppHelpTopic(htpStereoPairFromDTM);
+  SetHelpItem("ilwisapp\\stereopair_from_dtm_dialogbox.htm");
   create();
 }                    
 

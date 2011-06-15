@@ -333,7 +333,7 @@ FormColorComp::FormColorComp(CWnd* mw, const char* sPar)
   FieldBlank* fb = new FieldBlank(root, 0);
   fb->Align(fgRGB, AL_UNDER);
   initMapOut(false, false);
-  SetAppHelpTopic(htpMapHeckbert);
+  SetHelpItem("ilwisapp\\color_composite_dialogbox.htm");
   create();
 }                    
 
@@ -567,7 +567,7 @@ FormClassifyMap::FormClassifyMap(CWnd* mw, const char* sPar)
   fldPriorProbCol = new FieldColumn(fgPrior, SAFUiColumn, Table(), &sCol, dmVALUE);
 	new FieldBlank(fgPrior, 0.25);
   initMapOut(false,false);
-  SetAppHelpTopic(htpMapClassify);
+  SetHelpItem("ilwisapp\\classify_dialogbox.htm");
   create();
 }                    
 
@@ -724,7 +724,7 @@ FormMapStretch::FormMapStretch(CWnd* mw, const char* sPar)
   FieldBlank* fb = new FieldBlank(root,0);
   fb->Align(rb, AL_UNDER);
   initMapOut(false, (long)(dmVALUE|dmIMAGE));
-  SetAppHelpTopic(htpMapStretch);
+  SetHelpItem("ilwisapp\\stretch_dialog_box.htm");
   create();
 }                    
 
@@ -911,7 +911,7 @@ FormMapCluster::FormMapCluster(CWnd* mw, const char* sPar)
   initMapOut(false, false);
 	CheckBox* cbTb = new CheckBox(root, SAFUiOutTable, &fStatTable);
   ftc = new FieldTableCreate(cbTb, "", &sOutTable);
-  SetAppHelpTopic(htpMapCluster);
+  SetHelpItem("ilwisapp\\cluster_dialog_box.htm");
   create();
 }                    
 
@@ -1029,7 +1029,7 @@ FormMapColorSep::FormMapColorSep(CWnd* mw, const char* sPar)
   rbGr->Align(rbH, AL_UNDER);
   
   initMapOut(false, false);
-  SetAppHelpTopic(htpMapColorSep);
+  SetHelpItem("ilwisapp\\color_separation_dialog_box.htm");
   create();
 }                    
 
@@ -1177,7 +1177,7 @@ FormMapMaplistStatistics::FormMapMaplistStatistics(CWnd* mw, const char* sPar)
     blank->Align(st2, AL_UNDER);
     initMapOut(false, false);
 
-//    SetAppHelpTopic(htpMapCluster);
+//    SetHelpItem("ilwisapp\\cluster_dialog_box.htm");
     create();
 }
 

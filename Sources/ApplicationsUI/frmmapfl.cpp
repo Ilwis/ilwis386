@@ -267,7 +267,7 @@ FormFilterMap::FormFilterMap(CWnd* mw, const char* sPar)
   initMapOut(false, true);
 //  fmc->Align(cbThreshold, AL_UNDER);
   fdc->SetCallBack((NotifyProc)&FormFilterMap::DomainCallBack);
-  SetAppHelpTopic(htpMapFilter);
+  SetHelpItem("ilwisapp\\\filter_dialog_box.htm");
   create();
 }                    
 

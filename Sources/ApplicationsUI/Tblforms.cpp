@@ -122,7 +122,7 @@ AggregateForm::AggregateForm(CWnd* parent)
 	String sFill('x', 60);
 	stRemark = new StaticText(root, sFill);
 	stRemark->SetIndependentPos();
-	SetMenHelpTopic(htpColAggregate);
+	SetMenHelpTopic("ilwismen\\aggregate_column.htm");
 	create();
 }
 
@@ -243,7 +243,7 @@ ConfusionMatrixForm::ConfusionMatrixForm(CWnd* parent)
 	new FieldColumn(root, STBUiFirstColumn, view, &sCol1, dmCLASS|dmIDENT|dmGROUP);
 	new FieldColumn(root, STBUiSecondColumn, view, &sCol2, dmCLASS|dmIDENT|dmGROUP);
 	new FieldColumn(root, STBUiFrequencyColumn, view, &sColFreq, dmVALUE);
-	SetMenHelpTopic(htpConfusionMatrix);
+	SetMenHelpTopic("ilwismen\\confusion_matrix.htm");
 	create();
 }
 
@@ -274,7 +274,7 @@ CumulativeForm::CumulativeForm(CWnd* parent)
 	FieldString* fs = new FieldString(root, STBUiOutCol, &sOutCol, Domain(), false);
 	fs->Align(cb, AL_UNDER);
 
-	SetMenHelpTopic(htpColCumulative);
+	SetMenHelpTopic("ilwismen\\cumulative_column.htm");
 	create();
 }
 
@@ -316,7 +316,7 @@ LeastSquaresForm::LeastSquaresForm(CWnd* parent)
 	frf->SetCallBack((NotifyProc)&LeastSquaresForm::FuncCallBack);
 	fiTerms = new FieldInt(root, STBUiNrTerms, &iTerms, RangeInt(2,100));
 	FieldString* fs = new FieldString(root, STBUiOutCol, &sOutCol, Domain(), false);
-	SetMenHelpTopic(htpColLeastSquares);
+	SetMenHelpTopic("ilwismen\\least_squares_fit.htm");
 	create();
 }
 
@@ -468,7 +468,7 @@ TblStatsForm::TblStatsForm(CWnd* parent)
 			fcExp->Align(fc1, AL_UNDER);
 			fr = new FieldReal(root, STBUiTrueValue, &rVal);
 			fr->Align(fc1, AL_UNDER);
-			SetMenHelpTopic(htpTblStatistics);
+			SetMenHelpTopic("ilwismen\\column_statistics.htm");
 			create();
 }
 
@@ -535,6 +535,20 @@ int TblStatsForm::exec()
 	return 0;
 }
 
+LRESULT CmdUpdateAllColumns(CWnd *parent, const String& s)
+{
+	CFrameWnd *frame = (CFrameWnd *)parent;
+	CDocument* doc = frame->GetActiveDocument();
+	TableDoc *tbldoc = dynamic_cast<TableDoc*>(doc);
+	TableView *tvw = const_cast<TableView *>(tbldoc->view());
+	for (int i = 0; i < tvw->iCols(); ++i)
+		tvw->cv(i)->MakeUpToDate();
+	tbldoc->UpdateAllViews(0);
+
+	return -1;
+}
+
+
 LRESULT Cmdclmsort(CWnd *parent, const String& s)
 {
 	CFrameWnd *frame = (CFrameWnd *)parent;
@@ -599,7 +613,7 @@ ColSortOnForm::ColSortOnForm(CWnd* parent, int* iSort, String* sCol, int* iSortO
       rgsort->Align(rb, AL_UNDER);
       new RadioButton(rgsort, STBUIAscending);
       new RadioButton(rgsort, STBUIDescending);
-      SetMenHelpTopic(htpTblSort);
+      SetMenHelpTopic("ilwismen\\sort_records.htm");
       create();
 }
 
@@ -627,7 +641,7 @@ ColSlicingForm::ColSlicingForm(CWnd *parent) :TableForm(parent, STBTitleSort)
 	new FieldString(root, STBUiOutCol, &sOutCol, Domain(), false);
 	new FieldBlank(root);
 
-	SetMenHelpTopic(htpColSlicing);
+	SetMenHelpTopic("ilwismen\\column_slicing.htm");
 	create();
 }
 
@@ -656,7 +670,7 @@ ColSemiVarForm::ColSemiVarForm(CWnd* parent)
 	new FieldColumn(root, STBUiDistCol, view, &sColDist, dmVALUE);
 	new FieldSemiVariogram(root, STBUiSemiVar, &smv);
 	new FieldString(root, STBUiOutCol, &sOutCol, Domain(), false);
-	SetMenHelpTopic(htpColSemiVar);
+	SetMenHelpTopic("ilwismen\\column_semivariogram.htm");
 	create();
 }
 
@@ -1049,30 +1063,30 @@ fKeyCol(false), fViaKey(false), fAggregate(false), fWeight(false)
 	// input column prop
 	ppInputColumn = new JoinInputColumnPP(this);
 	ppInputColumn->create();
-	ppInputColumn->SetMenHelpTopic(htpJoinWizardInput);
+	ppInputColumn->SetMenHelpTopic("ilwismen\\join_column.htm");
 	AddPage(ppInputColumn);
 
 	// input select type of join
 	ppJoinType = new JoinJoinTypePP(this);
 	ppJoinType->create();
-	ppJoinType->SetMenHelpTopic(htpJoinWizardType);
+	ppJoinType->SetMenHelpTopic("ilwismen\\join_column_join_method.htm");
 	AddPage(ppJoinType);
 
 	ppKeys = new JoinKeysPP(this);
 	ppKeys->create();
-	ppKeys->SetMenHelpTopic(htpJoinWizardKeys);
+	ppKeys->SetMenHelpTopic("ilwismen\\join_column_link_between_tables.htm");
 	AddPage(ppKeys);
 
 	ppAggr = new JoinAggrPP(this);
 	ppAggr->create();
 	AddPage(ppAggr);
-	ppAggr->SetMenHelpTopic(htpJoinWizardAggr);
+	ppAggr->SetMenHelpTopic("ilwismen\\join_column_aggregation_method.htm");
 	ppAggr->SetPPDisable();
 
 	// output column prop
 	ppOutputColumn = new JoinOutputColumnPP(this);
 	ppOutputColumn->create();
-	ppOutputColumn->SetMenHelpTopic(htpJoinWizardOutput);
+	ppOutputColumn->SetMenHelpTopic("ilwismen\\join_column_output_column.htm");
 	AddPage(ppOutputColumn);
 }
 

@@ -215,7 +215,7 @@ FormDensifyMap::FormDensifyMap(CWnd* mw, const char* sPar)
   rbCub = new RadioButton(rg, SAFUiBicubic);
   rbCub->Align(rbLin, AL_AFTER);
   initMapOutValRange(false);
-  SetAppHelpTopic(htpMapDensify);
+  SetHelpItem("ilwisapp\\densify_dialogbox.htm");
   create();
 }
 
@@ -395,7 +395,7 @@ FormResampleMap::FormResampleMap(CWnd* mw, const char* sPar)
   // re-assign the GRF call back
   fgr->SetCallBack((NotifyProc)&FormResampleMap::ChangeGeoRef);
 
-  SetAppHelpTopic(htpMapResample);
+  SetHelpItem("ilwisapp\\resample_dialog_box.htm");
   create();
 }                    
 
@@ -619,7 +619,7 @@ FormMapApply3D::FormMapApply3D(CWnd* mw, const char* sPar)
   }
   new FieldMap(root, SAFUiRasMap, &sMap);
   initMapOutGeoRef3D();
-  SetAppHelpTopic(htpMapApply3D);
+  SetHelpItem("ilwisapp\\apply_3d_dialog_box.htm");
   create();
 }
 
@@ -675,7 +675,7 @@ FormMapMirrorRotate::FormMapMirrorRotate(CWnd* mw, const char* sPar)
   new RadioButton(rg, SAFUiRotate270);
   rg->SetIndependentPos();
   initMapOut(false,false);
-  SetAppHelpTopic(htpMapMirrorRotate);
+  SetHelpItem("ilwisapp\\mirror_rotate_dialogbox.htm");
   create();
 }                    
 
@@ -807,7 +807,7 @@ FormMapSubMap::FormMapSubMap(CWnd* mw, const char* sPar)
   initMapOut(false, false);
   initRemark();
 
-  SetAppHelpTopic(htpMapSubMap);
+  SetHelpItem("ilwisapp\\submap_of_raster_map_dialogbox.htm");
   create();
 }                    
 

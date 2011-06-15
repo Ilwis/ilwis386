@@ -40,7 +40,7 @@ FormMapAggregateMapList::FormMapAggregateMapList(CWnd* mw, const char* sPar)
 	new FieldMapList(root, TR("Input"), &mplName);
 	new FieldOneSelectString(root,TR("Method"),&methodIndex, methods);
 	initMapOut(false, false);
-	//SetAppHelpTopic(htpFillSinks);
+	//SetHelpItem("ilwisapp\\fill_sinks_dialogbox.htm");
 	create();
 }
 
