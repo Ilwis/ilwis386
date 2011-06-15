@@ -252,7 +252,7 @@ bool SegmentMapFromRasAreaBnd::fDomainChangeable() const
 
 void SegmentMapFromRasAreaBnd::Init()
 {
-  htpFreeze = htpSegmentMapFromRasAreaBndT;
+  htpFreeze = "ilwisapp\raster_to_segments_algorithm.htm";
   sFreezeTitle = "SegmentMapFromRasAreaBnd";
 }
 

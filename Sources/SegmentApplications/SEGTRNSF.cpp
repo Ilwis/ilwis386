@@ -158,7 +158,7 @@ String SegmentMapTransform::sExpression() const
 
 void SegmentMapTransform::Init()
 {
-  htpFreeze = htpSegmentMapTransformT;
+  htpFreeze = "ilwisapp\transform_segment_map_functionality_algorithm.htm";
   sFreezeTitle = "SegmentMapTransform";
 }
 

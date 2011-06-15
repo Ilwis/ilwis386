@@ -210,7 +210,7 @@ bool SegmentMapPolBoundaries::fDomainChangeable() const
 
 void SegmentMapPolBoundaries::Init()
 {
-  htpFreeze = htpSegmentMapPolBoundariesT;
+  htpFreeze = "ilwisapp\\polygons_to_segments_functionality_algorithm.htm";
   sFreezeTitle = "SegmentMapPolBoundaries";
 }
 

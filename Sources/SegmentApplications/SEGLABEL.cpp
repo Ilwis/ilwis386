@@ -165,7 +165,7 @@ bool SegmentMapLabels::fDomainChangeable() const
 
 void SegmentMapLabels::Init()
 {
-  htpFreeze = htpSegmentMapLabelsT;
+  htpFreeze = "ilwisapp\assign_labels_to_segments_algorithm.htm";
   sFreezeTitle = "SegmentMapLabels";
 }
 

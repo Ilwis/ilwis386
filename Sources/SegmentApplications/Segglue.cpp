@@ -337,7 +337,7 @@ bool SegmentMapGlue::fDomainChangeable() const
 
 void SegmentMapGlue::Init()
 {
-  htpFreeze = htpSegmentMapGlueT;
+  htpFreeze = "ilwisapp\\glue_segment_maps_algorithm.htm";
   sFreezeTitle = "SegmentMapGlue";
 	fNeedFreeze = true;
 }

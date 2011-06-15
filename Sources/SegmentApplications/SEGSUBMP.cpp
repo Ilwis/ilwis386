@@ -134,7 +134,7 @@ bool SegmentMapSubMap::fValueRangeChangeable() const
 
 void SegmentMapSubMap::Init()
 {
-  htpFreeze = htpSegmentMapSubMapT;
+  htpFreeze = "ilwisapp\\submap_of_segment_map_algorithm.htm";
   sFreezeTitle = "SegmentMapSubMap";
 }
 

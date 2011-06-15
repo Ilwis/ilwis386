@@ -166,7 +166,7 @@ long SegmentMapAttribute::iFeatures() const
 */
 void SegmentMapAttribute::Init()
 {
-  htpFreeze = htpSegmentMapAttributeT;
+  htpFreeze = "ilwisapp\attribute_map_of_segment_map_algorithm.htm";
   sFreezeTitle = "SegmentMapAttribute";
   DomainSort* pdsrt = colAtt->dmKey()->pdsrt();
   assert(pdsrt);

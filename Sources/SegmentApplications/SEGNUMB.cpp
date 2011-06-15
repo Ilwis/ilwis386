@@ -180,7 +180,7 @@ String SegmentMapNumbering::sExpression() const
 
 void SegmentMapNumbering::Init()
 {
-  htpFreeze = htpSegmentMapNumberingT;
+  htpFreeze = "ilwisapp\unique_id_algorithm.htm";
   sFreezeTitle = "SegmentMapNumbering";
 }
 

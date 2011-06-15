@@ -133,7 +133,7 @@ bool SegmentMapDensifyCoords::fValueRangeChangeable() const
 
 void SegmentMapDensifyCoords::Init()
 {
-  htpFreeze = htpSegmentMapDensifyCoordsT;
+  htpFreeze = "ilwisapp\\densify_segment_coordinates_functionality_algorithm.htm";
   sFreezeTitle = "SegmentMapDensifyCoords";
 }
 

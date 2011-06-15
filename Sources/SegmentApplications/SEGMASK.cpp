@@ -152,7 +152,7 @@ bool SegmentMapMask::fDomainChangeable() const
 
 void SegmentMapMask::Init()
 {
-  htpFreeze = htpSegmentMapMaskT;
+  htpFreeze = "ilwisapp\\mask_segments_algorithm.htm";
   sFreezeTitle = "SegmentMapMask";
 }
 
