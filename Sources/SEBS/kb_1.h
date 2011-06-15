@@ -39,6 +39,7 @@
 //////////////////////////////////////////////////////////////////////
 /* SEBS model
    August 2007,by Lichun Wang
+   Updated 2011, by Lichun Wang
 */
 #ifndef ILWMAPSEBSKB1_H
 #define ILWMAPSEBSKB1_H
@@ -64,17 +65,19 @@ private:
 	double m_d;
 	double m_hc;//vegetation height
 	double m_z0h;
+	double m_kb;
 public:
 	//kb_1(double u_zref, double zref,double C_d, double Ct, double Ta, double pa);
 	kb_1(double zref,double C_d, double Ct);
 	void calculate(double Wfol, double LAI, double z0, double h, double d0,  
 					bool useLanduse,bool useHc, bool useD0, 
-					double u_ref, double p_ref, double t_ref);
+					double u_ref, double p_ref, double t_ref,
+					double LST_K, double qaref, bool kb_p, bool use_kb, double rKB);
 	double getZ0();	
 	double getD();	
 	double getZ0h();
 	double getHc();
+	double getKB();
 };
-
 
 #endif // ILWMAPSEBSKB1_H

@@ -39,6 +39,7 @@
 //////////////////////////////////////////////////////////////////////
 /* SEBS model
    August 2007, by Lichun Wang
+   updated 2011 by Lichun Wang
 */
 
 #include "Engine\Domain\Dmvalue.h"
@@ -50,6 +51,195 @@
 	m_zref(zref)
 	{
 	}
+	static double MOlength(double zm,double zh,double z0m,double z0h,double wspd,double ptsfc,double pt1){
+		// Compute lmo for both unstable and stable surface layer 
+		// based on Monin-Obukhov similarity theory. The univeral profile form 
+		// was proposed Hogstrom (1996) and the anlytical solution was developed by Yang (2001)
+		// REFERENCE: Similarity analytical solution:Yang, K., Tamai, N. and Koike, T., 2001: Analytical Solution 
+		// of Surface Layer Similarity Equations, J. Appl. Meteorol. 40, 
+		// 1647-1653. Profile form: Hogstrom (1996,Boundary-Layer Meteorol.)
+		double g=9.8; 
+		double prantl01=1.0;  // Turbulent Prandtl number for stable case
+		double prantl02=0.95; // Turbulent Prandtl number for unstable case
+		double gammam=19.0;
+		double gammah=11.6;
+		double betam=5.3;
+		double betah=8.0;
+
+		double bulkri=(g/pt1)*(pt1-ptsfc)*(zm-z0m)/(wspd*wspd);
+
+        double lmo = 1.0e-6;
+		if (bulkri < 0.0) {
+			//#######################################################################
+			//Unstable case: calculated by an anproximate analytical solution
+			//proposed by Yang (2001,JAM)%
+			//#######################################################################%
+			bulkri=max(bulkri,-10.0);          
+            double d=bulkri/prantl02;
+            //double numerator =d*(log(zm/z0m)^2/log(zh/z0h))*(1/(zm-z0m));  
+            double numerator =d*(pow(log(zm/z0m),2)/log(zh/z0h))*(1/(zm-z0m));    
+            double a = log(-d);
+            double b = log(log(zm/z0m));
+            double c = log(log(zh/z0h)); //log(log(zh./z0h));		 
+            double p = 0.03728-0.093143*a-0.24069*b+0.30616*c+0.017131*a*a+0.037666*a*b -0.084598*b*b-0.016498*a*c+0.1828*b*c-0.12587*c*c ;
+            p = max(0.0,p) ;    
+          
+            double coef=d*pow(gammam,2)/8/gammah*(zm-z0m)/(zh-z0h); //d*gammam^2/8/gammah*(zm-z0m)/(zh-z0h);
+                     
+            if (abs(1-coef*p)<1.0e-6)
+			  //keyboard %'stop in similarity'
+                      
+            lmo=numerator/(1-coef*p);
+		}
+		else{
+			//#######################################################################
+			//    Stable case: calculated by the exact analytical solution
+			//    proposed by Yang (2001,JAM)%
+			//#######################################################################
+            //bulkri=min(bulkri,min(0.2,prantl01*betah*(1-z0h/zh)/betam^2/(1-z0m/zm)-0.05));
+            bulkri=min(bulkri,min(0.2,prantl01*betah*(1-z0h/zh)/pow(betam,2)/(1-z0m/zm)-0.05));
+            double d = bulkri/prantl01;
+            double a=d*pow(betam,2)*(zm-z0m)-betah*(zh-z0h); //a=d*betam^2*(zm-z0m)-betah*(zh-z0h);
+            double b=2*d*betam*log(zm/z0m)-log(zh/z0h);
+            double c=d*pow(log(zm/z0m),2)/(zm-z0m); //c=d*log(zm/z0m)^2/(zm-z0m);
+            lmo=(-b-sqrt(b*b-4*a*c))/(2*a);	
+		}
+		
+
+		if (lmo > 0 && lmo < 1.0e-6) 
+			lmo=1.0e-6;
+		
+		if(lmo < 0 && lmo > -1.0e-6) 
+			lmo=-1.0e-6;
+		lmo=1/lmo;;
+		return lmo;
+    }
+
+	static void CuCpt(double lmo,double zm1,double zh1,double zm2,double zh2, double& c_u, double& c_pt){
+
+	  //PURPOSE:
+	  //Compute C_u and C_pt for both unstable and stable surface layer 
+	  //based on Monin-Obukhov similarity theory. The univeral profile form 
+	  //was proposed Hogstrom (1996) and the anlytical solution was 
+	  //developed by Yang (2000)
+	  //c_u: Frictional velocity /wind speed
+	  //c_pt: Nondimensional temperature scale
+	  double gammam=19.0;
+	  double gammah=11.6;
+	  double betam=5.3;
+	  double betah=8.0;
+	  double kv = 0.4;  // Von Karman constant
+	  double prantl01 = 1.0;
+	  double prantl02 = 0.95; 
+
+	  if (lmo<0.0){ 
+	  	  // Unstable case
+          double xx2   = sqrt(sqrt(1-gammam* zm2/lmo));   
+          double xx1   = sqrt(sqrt(1-gammam* zm1/lmo));
+          double psim  = 2 * log((1+xx2)/(1+xx1))+ log((1+xx2*xx2)/(1+xx1*xx1)) - 2*atan(xx2) + 2 * atan(xx1);
+          double yy2   = sqrt(1-gammah* zh2/lmo);  
+          double yy1   = sqrt(1-gammah* zh1/lmo);
+          double psih  = 2 * log((1+yy2)/(1+yy1)); 
+
+
+          double uprf  = max(log(zm2/zm1)- psim,0.50*log(zm2/zm1));
+          double ptprf = max(log(zh2/zh1) - psih,0.33*log(zm2/zm1)); 
+
+          c_u   = kv/ uprf;
+          c_pt  = kv/ (ptprf * prantl02 );    
+      }
+      else{
+	     //Stable case:
+          double psim  = -betam * (zm2-zm1)/lmo;
+          double psih  = -betah * (zh2-zh1)/lmo;
+          psim  = max( -betam, psim);  
+          
+          psih  = max( -betah, psih);  
+          double uprf  = log(zm2/zm1) - psim;
+          uprf  = min(log(zm2/zm1) - psim,2.0*log(zm2/zm1));
+          double ptprf = min(log(zh2/zh1) - psih,2.0*log(zm2/zm1));
+          c_u  = kv/ uprf;
+          c_pt = kv/ (ptprf * prantl01 );
+      }
+	  //return c_u;
+	}
+	static double flxpar(double zm,double zh,double z0m,double z0h,double wspd,double ptsfc,double pt1,double lmo, double& c_u,double& c_pt){
+		//
+	    // PURPOSE:Compute c_u, c_pt at land surface.
+		
+		// The quantity c_u, c_pt are used to obtain surface fluxes for both 
+		// the unstable and stable cases.
+
+
+		lmo=MOlength(zm,zh,z0m,z0h,wspd,ptsfc,pt1);
+		CuCpt(lmo,z0m,z0h,zm,zh, c_u, c_pt);
+		;return c_u;
+
+    }
+
+	static double z0mz0h(double zh,double nu,double ustr,double tstr){
+		//#######################################################################
+		//   PURPOSE:
+		//   Surface flux parameterization. Output ustr,tstr,ra,Hsfc
+		//	 Developed by River and Environmental Engineering Laboratory,University of Tokyo 
+		//#######################################################################
+		//   input
+		//      real zh        ! reference level of air temperature (m)
+		//      real z0m       ! aerodynamic roughness length
+		//      real ustr      ! frictional velocity
+		//     real tstr      ! =-H/(rhoair*cp*ustr)
+		//     real nu        ! kinematic viscousity 
+		//   output
+		//     real z0h	   ! thermal roughness length
+
+		double z0h = 70 * nu / ustr * exp(-7.2*sqrt(ustr)*sqrt(sqrt(abs(-tstr))));  
+        z0h = min(zh/10,max(z0h,1.0E-10));
+		return z0h;
+    }
+	static double kb_1_s(double z0m,double zm,double zh,double wspd,double tsfc,double tair,double qair,double psfc){
+		//#######################################################################
+		double kv = 0.4;   // Von Karman constant
+		double rd=287.0;   // Gas constant for dry air  (m**2/(s**2*K))
+		double cp=1004.0;  // Specific heat of dry air at constant pressure(m^2/(s^2*K)).
+		double rddcp=rd/cp;
+		double g=9.8;  // Acceleration due to gravity at the earth surface.% (m/(s**2)) 
+		double p0=1.0e5;  // Surface reference pressure, is 100000 Pascal. 
+		//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+		//
+		//    Beginning of executable code...
+		//
+		//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+		tair=tair+273.15;
+        double rhoair = psfc/(rd*tair*(1+0.61*qair));
+        //double ptair  = tair * (psfc/(psfc-rhoair*9.81*zh))^rddcp;
+		double ptair  = tair * pow(psfc/(psfc-rhoair*9.81*zh), rddcp);
+        double ptsfc  = tsfc; 
+      
+        double pt1  = ptair;
+      
+        double c_u  = kv /log(zm/z0m); //c_u 初始值
+        double c_pt = kv /log(zh/z0m); //c_pt 初始值
+        double tstr = c_pt*(pt1 - ptsfc); //tstr 初始值
+        double ustr = c_u * wspd;  
+        double lmo  = ptair*pow(ustr,2)/(kv*g*tstr);   //  M-O length
+      
+        double nu   = 1.328e-5*(p0/psfc)* pow(pt1/273.15, 1.754);  //viscosity of air                                                                                
+
+		double z0h;
+		for (int i = 0; i < 3; i++) {
+        //for i = 1:3   
+           //%use yang's model (2002,QJRMS)
+           //%CALL z0mz0h(zh,z0m,nu,ustr,tstr,z0h);
+           z0h = z0mz0h(zh,nu,ustr,tstr);
+           //%CALL flxpar(zm,zh,z0m,z0h,wspd,ptsfc,pt1,lmo,c_u, c_pt);
+		   lmo=MOlength(zm,zh,z0m,z0h,wspd,ptsfc,pt1);
+		   CuCpt(lmo,z0m,z0h,zm,zh, c_u, c_pt);
+		   //c_u=flxpar(zm,zh,z0m,z0h,wspd,ptsfc,pt1,lmo,c_pt);
+           ustr = c_u*wspd;  //%ustr每次计算值与fortran都不同
+           tstr = c_pt*(pt1-ptsfc);
+		}
+		return z0h;
+    }
 	
 	double kb_1::nu(double m_Ta, double m_pa) {
 
@@ -81,9 +271,10 @@
 		return nuval * 1.E-5; // The last factor should be there!
 	}
 
-	void kb_1::calculate(double	Wfol, double LAI, double z0, double h, double d0,
+	void kb_1::calculate(double	fc, double LAI, double z0m, double h, double d0,
 						bool useLanduse,bool useHc,bool useD0,
-						double u_ref, double p_ref, double t_ref) {
+						double u_ref, double p_ref, double t_ref, 
+						double LST_K, double qaref, bool kb_p, bool use_kb,double rKB) {
 
 		//  KB_1M, Massman, 1999, (24)
 		//  This a surrogate for the full LNF model for describing the combined
@@ -99,7 +290,7 @@
 		//  !lambda: light extinction coefficient, 0.<=lambda<=1.0, default=0.5
 		//  !OMEGA: foliage cluster factor, 0.<=OMEGA<=1.0, default=1.0 for no
 		//  cluster
-		//  Wfol: Fractional canopy cover (-)
+		//  fc: Fractional canopy cover (-)
 		//  Ta: ambient air temperature (0C)
 		//  pa: ambient air pressure (Pa)
 
@@ -113,22 +304,22 @@
 		double hs = 0.009; // 0.009 ~ 0.024, height of soil roughness obstacles
 		// Su et al., 1997, IJRS, p.2105-2124.
 
-		double Wsoil = 1. - Wfol; // Wfol is given as an input here.
-		//if (Wfol == 0.0)
+		double Wsoil = 1. - fc; // fc is given as an input here.
+		//if (fc == 0.0)
 		//h = hs; // Use smooth bare soil roughness
 
 		double ust2u_h = ustar2u_h(LAI);
 		double n_hvalue = n_h(ust2u_h, LAI);
 		double d2hval = d2h(ust2u_h, n_hvalue);
 		if (!useHc && useLanduse)
-			h = z0/0.136; //(0.136*0.333);
+			h = z0m/0.136; //(0.136*0.333);
 		m_hc = h;
 		if (!useLanduse){
-			z0 = z02h(ust2u_h, d2hval) * h; //0.136;  
-			if (Wfol <= 0)
-				z0=0.005;
+			z0m = z02h(ust2u_h, d2hval) * h; //0.136;  
+			if (fc <= 0)
+				z0m=0.005;
 		}
-		m_z0 = z0;
+		m_z0 = z0m;
 		
 		if (useD0)
 			m_d = d0;
@@ -166,24 +357,32 @@
 		if (nu0 != 0 )
 			Restars = ustars * hs / nu0;
 		double kB_1B82 = 2.46 * pow(Restars, (1. / 4.)) - log(7.4); // (Brutsaert,1982)
+		if (kb_p == 1){
+			double z0h = kb_1_s(z0m,m_zref,m_zref,u_ref,LST_K,t_ref,qaref, p_ref);   
+			kB_1B82 = log(0.0012/z0h);  
+		}
 
-		// kB_1M = Ak1*(k*C_d/Ct)*Wfol + Ak2
+		// kB_1M = Ak1*(k*C_d/Ct)*fc + Ak2
 		// *(k*ustar2u_h(h)*z02h(h)/Ctstar)*Wsoil $
 		//  - Ak3*k/ustar2u_h(h)
 		//
 		// We replace the above expression by Brutsaert, 1982.
 		//
-		// ckB_1M = kB_1CM*Wfol^2. + (k*ust2u_h * z0/h /
-		// Ctstar)*Wfol^2.*Wsoil^2. $
+		// ckB_1M = kB_1CM*fc^2. + (k*ust2u_h * z0/h /
+		// Ctstar)*fc^2.*Wsoil^2. $
 		//  +kB_1B82*Wsoil^2.
 		//
 		//  The weight of the second term is changed!
 		double ckB_1M = 0.0;
 		//if (Ctstar != 0)
-		ckB_1M = kB_1CM * pow(Wfol, 2.)
-				+ (k * ust2u_h * z0 / h / Ctstar) * Wfol * Wsoil * 2. + kB_1B82
+		if(!use_kb)
+			ckB_1M = kB_1CM * pow(fc, 2.)
+				+ (k * ust2u_h * z0m / h / Ctstar) * fc * Wsoil * 2. + kB_1B82
 				* pow(Wsoil, 2.);
-		m_z0h = z0 / exp(ckB_1M);
+		else 
+			ckB_1M = rKB;
+		m_z0h = z0m / exp(ckB_1M);
+		m_kb = ckB_1M;
 	}
 
 	double kb_1::u_h(double h, double u_zref) {
@@ -234,6 +433,8 @@
 		// h: canopy height
 		//
 		// d2hB = 0.667 ; This is from Brutsaert (1982)
+		if (n_hval == 0.0)
+			return 1;
 		return 1. - 1. / (2. * n_hval) * (1. - exp(-2 * n_hval)); 
 		// This is from Massman (1997)
 
@@ -273,5 +474,9 @@
 	double kb_1::getHc() {
 		return m_hc;
 	}
+	double kb_1::getKB() {
+		return m_kb;
+	}
+
 
 

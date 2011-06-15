@@ -39,6 +39,7 @@
 //////////////////////////////////////////////////////////////////////
 /* SEBS model
    August 2007, by Lichun Wang
+   updated 2011, by Lichun Wang
 */
 #include "SEBS\MapSEBS.h"
 #include "Headers\Htp\Ilwisapp.htp"
@@ -75,7 +76,7 @@ MapSEBS::MapSEBS(const FileName& fn, MapPtr& p)
 {
 	fNeedFreeze = true;
 	sFreezeTitle = SMAPTextSebs;
-	//htpFreeze = htpFlowAccumulationT;
+	//htpFreeze = "ilwisapp\flow_accumulation_algorithm.htm";
 
 	ReadElement("RelativeEvaporationFraction", "LandSurfaceTemperature", m_mpLST);
 	ReadElement("RelativeEvaporationFraction", "Emissivity", m_mpEmis);
@@ -198,6 +199,17 @@ MapSEBS::MapSEBS(const FileName& fn, MapPtr& p)
 	}
 	else
 		ReadElement("RelativeEvaporationFraction", "SunshineHours", m_rN);
+	ReadElement("RelativeEvaporationFraction", "USEKB", m_USE_KB);
+	ReadElement("RelativeEvaporationFraction", "USEKBMAP", m_fKBmap);
+	if (m_USE_KB){
+		if(m_fKBmap){
+			ReadElement("RelativeEvaporationFraction", "KB", m_mpKB);
+			CompitableGeorefs(fn, mp, m_mpKB);
+        }
+		else 
+		    ReadElement("RelativeEvaporationFraction", "KB", m_kb);
+	}
+  
 }
 
 MapSEBS::MapSEBS(const FileName& fn, 
@@ -224,7 +236,8 @@ MapSEBS::MapSEBS(const FileName& fn,
 				 bool use_LUM,String sLUM,bool use_Hc,String sHc,bool use_D0,String sD0,
 				 bool use_SdwnMap,String sDwn,
 				 bool useTa_avg_map,String sTa_avg,double Ta_avg,
-				 bool useN_map,String sN,double rN)
+				 bool useN_map,String sN,double rN,
+				 bool useKB, double rKB, String sKB, bool useKBMap)
 : MapFromMap(fn, p, mpLST),
 	m_mpLST(mpLST),
 	m_mpEmis(mpEmis),
@@ -250,7 +263,8 @@ MapSEBS::MapSEBS(const FileName& fn,
 	m_USE_LUM(use_LUM),m_sLUM(sLUM),m_USE_hc(use_Hc),m_sHc(sHc),m_USE_d0(use_D0),m_sD0(sD0),
 	m_use_SdwnMap(use_SdwnMap),m_sDwn(sDwn),
 	m_useTa_avg_map(useTa_avg_map),m_sTa_avg(sTa_avg),m_Ta_avg(Ta_avg),
-	m_useN_map(useN_map),m_sN(sN),m_rN(rN)
+	m_useN_map(useN_map),m_sN(sN),m_rN(rN),
+	m_USE_KB(useKB), m_kb(rKB), m_sKB_map(sKB),m_fKBmap(useKBMap)
 
 {
 	DomainValueRangeStruct dv(0,10,0.0001);
@@ -347,6 +361,14 @@ MapSEBS::MapSEBS(const FileName& fn,
 		objdep.Add(m_mpN);
 	}
 
+	if(useKB){ //kb map
+		if(useKBMap){
+		  m_mpKB = Map(sKB, fn.sPath());
+		  CompitableGeorefs(fn, mp, m_mpKB);
+		  objdep.Add(m_mpKB);
+        }
+	}
+	
 	if (!fnObj.fValid())
      objtime = objdep.tmNewest();
 	ptr.Store(); 
@@ -379,16 +401,17 @@ const char* MapSEBS::sSyntax() {
 			"true|false,MapSurfaceRoughness, \n"
 			"true|false,MapCanopyHeight, \n"
 			"true|false,MapDisplacementHeight, \n"
-			"true|false,sdwnMap), \n"
+			"true|false,sdwnMap, \n"
 			"true|false, MeanAirTemperatureMap, MeanAirTemperatureMapVal,\n"
-			"true|false, SunshineHoursPerDayMap, SunshineHoursPerDayVal)\n";
+			"true|false, SunshineHoursPerDayMap, SunshineHoursPerDayVal\n"
+			"true|false,KB, KBMap, true|false)\n";
 }
 
 MapSEBS* MapSEBS::create(const FileName& fn, MapPtr& p, const String& sExpr)
 {
   Array<String> as;
   int iParms = IlwisObjectPtr::iParseParm(sExpr, as);
-  if (iParms < 53 )
+  if (iParms < 55 )
       ExpressionError(sExpr, sSyntax());
 
     Map mpLST(as[0], fn.sPath());
@@ -451,7 +474,11 @@ MapSEBS* MapSEBS::create(const FileName& fn, MapPtr& p, const String& sExpr)
 	String sN = as[51].sVal();
 	double rN = as[52].rVal();
 
-	
+	bool use_kb = as[53].fVal();
+	double rKB = as[54].rVal();
+	String sKB = as[55].sVal();
+	bool useKBMap = as[56].fVal();
+		
 	return new MapSEBS(fn, p, 
 				   mpLST,
 				   mpEmis,
@@ -474,7 +501,8 @@ MapSEBS* MapSEBS::create(const FileName& fn, MapPtr& p, const String& sExpr)
 				   use_lum,sLum,use_hc,sHc,use_d0,sD0,
 				   use_sdwnMap,sdwnMap,
 				   useTa_avg_map,sTa_avg,Ta_avg,
-				   useN_map,sN,rN);
+				   useN_map,sN,rN,
+				   use_kb, rKB,sKB, useKBMap);
 }
 
 void MapSEBS::Store()
@@ -579,12 +607,20 @@ void MapSEBS::Store()
 	WriteElement("RelativeEvaporationFraction", "SunshineHoursMap", m_mpN);
   else
 	WriteElement("RelativeEvaporationFraction", "SunshineHours", m_rN);
+  WriteElement("RelativeEvaporationFraction", "USEKB", m_USE_KB);
+  WriteElement("RelativeEvaporationFraction", "USEKBMAP", m_fKBmap);
+  if(m_USE_KB){
+	if(m_fKBmap) 
+		WriteElement("RelativeEvaporationFraction", "KB", m_mpKB);
+    else 
+		WriteElement("RelativeEvaporationFraction", "KB", m_kb);
+  }
 }
 
 String MapSEBS::sExpression() const
 {
   
-	String sExp("MapSEBS(%S,%S,%S,%S,%li,%S,%li,%S,%li,%S,%g,%li,%S,%g,%li,%li,%li,%li,%li,%g,%g,%li,%S,%g,%li,%S,%g,%li,%S,%g,%li,%S,%g,%li,%S,%g,%g,%li,%g,%li,%S,%li,%S,%li,%S,%li,%S,%li,%S,%g,%li,%S,%g)", 
+	String sExp("MapSEBS(%S,%S,%S,%S,%li,%S,%li,%S,%li,%S,%g,%li,%S,%g,%li,%li,%li,%li,%li,%g,%g,%li,%S,%g,%li,%S,%g,%li,%S,%g,%li,%S,%g,%li,%S,%g,%g,%li,%g,%li,%S,%li,%S,%li,%S,%li,%S,%li,%S,%g,%li,%S,%g,%li,%g,%S,%li)", 
 										mp->sNameQuoted(false, fnObj.sPath()), 
 										m_mpEmis->sNameQuoted(true),
 										m_mpAlbedo->sNameQuoted(true),
@@ -606,7 +642,8 @@ String MapSEBS::sExpression() const
 										m_USE_LUM,m_sLUM,m_USE_hc,m_sHc,m_USE_d0,m_sD0,
 										m_use_SdwnMap,m_sDwn,
 										m_useTa_avg_map,m_sTa_avg,m_Ta_avg,
-										m_useN_map,m_sN,m_rN);
+										m_useN_map,m_sN,m_rN,
+										m_USE_KB,m_kb,m_sKB_map,m_fKBmap);
   return sExp;
 }
 
@@ -652,6 +689,7 @@ bool MapSEBS::fFreezing()
 	RealBuf inputSdwn;
 	RealBuf inputTa_avg;
 	RealBuf inputN_s;
+	RealBuf inputKB_map;
 
 	RealBuf outputBand1;  
 	RealBuf outputBand2;   
@@ -693,6 +731,7 @@ bool MapSEBS::fFreezing()
 	inputSdwn.Size(width);
 	inputTa_avg.Size(width);
 	inputN_s.Size(width);
+	inputKB_map.Size(width);
 
 	// allocate memory for single scan lines of the outputs
 	outputBand1.Size(width); //Actual evaporation
@@ -705,13 +744,13 @@ bool MapSEBS::fFreezing()
 	outputBand8.Size(width); //evaporation fraction
 	outputBand9.Size(width); //Daily evaporation
 	//Temperal testing files
-	/*outputBand10.Size(width); 
+	outputBand10.Size(width); 
 	outputBand11.Size(width); 
 	outputBand12.Size(width); 
 	outputBand13.Size(width); 
 	outputBand14.Size(width); 
 	outputBand15.Size(width); 
-	outputBand16.Size(width);*/ 
+	//outputBand16.Size(width); 
 
 	//Create output maps
 	Domain dmValue("value.dom");
@@ -758,12 +797,37 @@ bool MapSEBS::fFreezing()
 	Map mpLE = Map(fnLE, mp->gr(), mp->gr()->rcSize(), DomainValueRangeStruct(-1200,1200,0.001));
 
 	//Temperal testing files
-	/*FileName fnre_wet = FileName("sebs_re_wet",fnObj);
-	fnre_wet.sExt = ".mpr";
-	fnre_wet = FileName::fnUnique(fnre_wet);
-	Map mpre_wet = Map(fnre_wet, mp->gr(), mp->gr()->rcSize(), dv);
+	FileName fnT0ta = FileName("sebs_T0ta",fnObj);
+	fnT0ta.sExt = ".mpr";
+	fnT0ta = FileName::fnUnique(fnT0ta);
+	Map mpT0ta = Map(fnT0ta, mp->gr(), mp->gr()->rcSize(), dv);
 
-	FileName fnre_i = FileName("sebs_re_i",fnObj);
+	FileName fnC_i = FileName("sebs_C_i",fnObj);
+	fnC_i.sExt = ".mpr";
+	fnC_i = FileName::fnUnique(fnC_i);
+	Map mpC_i = Map(fnC_i, mp->gr(), mp->gr()->rcSize(), dv);
+
+	FileName fnZ0h = FileName("sebs_Z0h",fnObj);
+	fnZ0h.sExt = ".mpr";
+	fnZ0h = FileName::fnUnique(fnZ0h);
+	Map mpZ0h = Map(fnZ0h, mp->gr(), mp->gr()->rcSize(), dv);
+
+	FileName fnZ0m = FileName("sebs_Z0m",fnObj);
+	fnZ0m.sExt = ".mpr";
+	fnZ0m = FileName::fnUnique(fnZ0m);
+	Map mpZ0m = Map(fnZ0m, mp->gr(), mp->gr()->rcSize(), dv);
+
+	FileName fnLAI = FileName("sebs_LAI",fnObj);
+	fnLAI.sExt = ".mpr";
+	fnLAI = FileName::fnUnique(fnLAI);
+	Map mpLAI = Map(fnLAI, mp->gr(), mp->gr()->rcSize(), dv);
+
+	FileName fnKB = FileName("sebs_kb",fnObj);
+	fnKB.sExt = ".mpr";
+	fnKB = FileName::fnUnique(fnKB);
+	Map mpKB = Map(fnKB, mp->gr(), mp->gr()->rcSize(), dv);
+
+	/*FileName fnre_i = FileName("sebs_re_i",fnObj);
 	fnre_i.sExt = ".mpr";
 	fnre_i = FileName::fnUnique(fnre_i);
 	Map mpre_i = Map(fnre_i, mp->gr(), mp->gr()->rcSize(), dv);
@@ -796,6 +860,7 @@ bool MapSEBS::fFreezing()
 	// placeholders for the single values of the inner for-loop
 	double C_d = 0.2; //Foliage drag coefficient
 	double Ct = 0.01; //Heat transfer coefficient
+
 	kb_1 kb = kb_1(m_Z_ref, C_d, Ct);
 	EnergyBalance eb = EnergyBalance();
 		
@@ -854,7 +919,8 @@ bool MapSEBS::fFreezing()
 				m_mpTa_avg->GetLineVal(y, inputTa_avg);
 			if(m_useN_map)
 				m_mpN->GetLineVal(y, inputN_s);
-
+			if(m_USE_KB && m_fKBmap)
+				 m_mpKB->GetLineVal(y, inputKB_map);
 			for (int x = 0; x < width; x++) {
 				if(m_useQ_ref_map)
 					m_Q_ref = inputQ_ref[x]; //0.06; 
@@ -872,23 +938,13 @@ bool MapSEBS::fFreezing()
 				rc.Col = x;
 				Coord cd = mp->gr()->cConv(rc);
 
-				double Pv; //vegetation fractional coverage or Fractional vegetation cover = 0.5
+				double Fc; //vegetation fractional coverage or Fractional vegetation cover = 0.5
 				double LAI;
 				double NDVI = inputBandNDVI[x];
 				double emissivity = inputEmsi[x];
 				double albedoValue = inputAlbedo[x];
 				double LST = inputLST[x];
 
-				if(m_USE_Pv)
-					Pv = inputBandPv[x];
-				else{
-					if(NDVI < 0.2)
-						Pv = 0;
-					else if(NDVI >=0.2 && NDVI <= 0.5  )
-						Pv = pow((NDVI - NDVImin),2) / ((NDVImax - NDVImin)*(NDVImax - NDVImin)); //for kb calculation 
-					else
-						Pv =1;
-				}
 				if (NDVI <= 0)
 					NDVI = 0.0001;
 				else if (NDVI >= 1)
@@ -899,8 +955,13 @@ bool MapSEBS::fFreezing()
 					LAI = rUNDEF;
 				else	//use a simple formular for LAI= f(NDVI), Su (1996)
 					LAI = sqrt(NDVI*(1.0+NDVI)/(1.0-NDVI+ 1.e-6));
-					//LAI = log(1-Pv)/-0.5;
 				
+				if(m_USE_Pv)
+					Fc = inputBandPv[x];
+				else{
+					Fc=(1-exp(-0.5*LAI));
+				}
+								
 				double hMin = 0.0012;
 				double hMax = 2.5;
 
@@ -914,7 +975,7 @@ bool MapSEBS::fFreezing()
 					emis_air = rUNDEF;
 					LWd = rUNDEF;
 				}
-
+				
 				//sigma = 5.678 * 1.0e-8; //Stefen-Boltzman's constant
 
 				//eccentricity (sun earth distance)
@@ -977,14 +1038,27 @@ bool MapSEBS::fFreezing()
 					h = 0.0001;
 				if (d0<0.0001)
 					d0 = 0.0001;
-				kb.calculate(Pv, LAI, z0hM, h,d0,m_USE_LUM,m_USE_hc,m_USE_d0,m_U_ref,m_P_ref,m_T_ref);
+				bool kb_p;
+				if (NDVI < 0.2) //for bare soil
+					kb_p =1;
+				else
+					kb_p = 0;
+				double kb_val=2.5;
+				if(m_USE_KB){
+					if(m_fKBmap)
+				      kb_val=inputKB_map[x];
+					else
+                      kb_val = m_kb;
+				}
+				kb.calculate(Fc, LAI, z0hM, h,d0,m_USE_LUM,m_USE_hc,m_USE_d0,m_U_ref,m_P_ref,m_T_ref,
+							 LST, m_Q_ref, kb_p, m_USE_KB,kb_val);
 				h = kb.getHc();
 				if (!m_USE_LUM)
 					z0hM = kb.getZ0(); //Roughness height for heat transfer (m), 0.02
 				d0 = kb.getD();
 				double z0h = kb.getZ0h(); //Roughness height for momentum transfer (m), 0.2
-				eb.calculate(m_Z_ref, m_hi, d0, z0hM, z0h, Pv, m_U_ref, m_T_ref, m_P_ref, m_Q_ref, 
-						LST, m_P_sur, m_S_dwn, LWd, albedoValue, emissivity);
+				eb.calculate(m_Z_ref, m_hi, d0, z0hM, z0h, Fc, m_U_ref, m_T_ref, m_P_ref, m_Q_ref, 
+						LST, m_P_sur, m_S_dwn, LWd, albedoValue, emissivity,m_USE_LAI,LAI);
 					
 				//calculating daily evaporation
 				LatLon ll;
@@ -992,7 +1066,7 @@ bool MapSEBS::fFreezing()
 				if (mp->gr()->cs()->fCoord2LatLon()) {
 					ll = mp->gr()->cs()->llConv(cd);
 					lat = ll.Lat*m_PI/180;
-					//double y= cd.y;
+					//double y= cd.Y;
 				}
 				else{
 					lat = cd.y;
@@ -1002,8 +1076,8 @@ bool MapSEBS::fFreezing()
 				//calculating intermediate results, some formulas are from Campbell & Norman, 1998.
 				//Here, we use the average PBL and surface tempeature
 				double t_c = log((m_hi-d0)/z0h)/log((m_Z_ref-d0)/z0h);
-				//double t_s = m_T_ref + 273.15;
-				double t_s = 25 + 273.15;
+				double t_s = m_T_ref + 273.15;
+				//double t_s = 25 + 273.15;
 				double t_pbl_A = (LST)*(1.0-t_c)+t_s*t_c;
 				double T0 = (LST)/pow((1.0-dem/44331.0), 1.5029);
 				t_pbl_A = t_pbl_A/pow(1.0-dem/44331.0, 1.5029);
@@ -1095,6 +1169,12 @@ bool MapSEBS::fFreezing()
 				outputBand8[x] = eb.getEvap_fr(); // Evaporation fraction
 				outputBand9[x] = Edaily; //daily evaporation
 				//Temperal outputs
+				outputBand10[x] = LAI; 
+				outputBand11[x] = z0h;
+				outputBand12[x] = z0hM; 
+				outputBand13[x] = eb.getT_T0ta(); 
+				outputBand14[x] = eb.getT_C_i();
+				outputBand15[x] = kb.getKB();
 				/*outputBand10[x] = eb.getT_re_wet(); 
 				outputBand11[x] = eb.getT_re_i(); 
 				outputBand12[x] = eb.getT_T0ta(); 
@@ -1114,14 +1194,13 @@ bool MapSEBS::fFreezing()
 			mpH_i->PutLineVal(y, outputBand7);
 			mpdaily_evap->PutLineVal(y, outputBand9);
 			mpact_evap->PutLineVal(y,outputBand1);
-			/*mpre_wet->PutLineVal(y,outputBand10);
-			mpre_i->PutLineVal(y,outputBand11);
-			mpT0ta->PutLineVal(y,outputBand12);
-			mpZ0h->PutLineVal(y,outputBand13);
-			mprhoa->PutLineVal(y,outputBand14);
-			mprhoacp->PutLineVal(y,outputBand15);
-			mpC_i->PutLineVal(y,outputBand16);*/
-				
+			
+			mpLAI->PutLineVal(y,outputBand10);
+			mpZ0h->PutLineVal(y,outputBand11);
+			mpZ0m->PutLineVal(y,outputBand12);
+			mpT0ta->PutLineVal(y,outputBand13);
+			mpC_i->PutLineVal(y,outputBand14);
+			mpKB->PutLineVal(y,outputBand15);	
 
 			// Notify process listeners about processing progress and
 			// check whether or not processing shall be terminated

@@ -64,7 +64,7 @@ public:
 	void calculate(double Zref, double hi, double d0, double z0m,
 			double z0h, double fc, double Uref, double Tref, double Pref,
 			double qaref, double Tsk, double Ps, double SWd, double LWd,
-			double albedo, double emsi);
+			double albedo, double emsi, bool use_lai, double lai);
 	double getUstar();
 	double getH();
 	double getLE();
@@ -108,6 +108,5 @@ private:
 	double PSIh_y(double Y);
 	double PSIm_y (double Y);
 };
-
 
 #endif // ILWMAPSEBSMODELEnergyBalance_H

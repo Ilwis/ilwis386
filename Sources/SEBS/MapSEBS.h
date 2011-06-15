@@ -38,7 +38,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 /* MapSEBS model
-   August 2007,by Lichun Wang
+   August 2007,by Lichun Wang, updated 2011
 */
 #ifndef ILWMAPSEBSMODEL_H
 #define ILWMAPSEBSMODEL_H
@@ -108,8 +108,8 @@ public:
 				 bool use_SdwnMap,
 				 String sDwn,
 				 bool useTa_avg_map,String sTa_avg,double Ta_avg,
-				 bool useN_map,String sN,double rN);
-
+				 bool useN_map,String sN,double rN,
+				 bool use_KB, double kb, String sKB_map, bool fKBmap);
 	MapSEBS(const FileName& fn, MapPtr& p);
 protected:
 	virtual void Store();
@@ -188,6 +188,11 @@ private:
 	String m_sTa_avg;
 	double m_Ta_avg;
 	Map m_mpTa_avg;
+	bool m_USE_KB;
+	double m_kb;
+	String m_sKB_map;
+	Map m_mpKB;
+	bool m_fKBmap;
 	bool fLatLonCoords();
 };
 

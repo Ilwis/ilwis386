@@ -39,6 +39,7 @@
 #include "Engine\Domain\Dmvalue.h"
 #include "SEBS\EnergyBalance.h"
 
+
 EnergyBalance::EnergyBalance(){
 }
 
@@ -77,15 +78,16 @@ double EnergyBalance::PSIm_y (double Y)
 	     const double a = 0.33;
 	     const double b = 0.41; //    ; constants, p. 443
 
-	     double Yb;
 	     double PSI0 = -log(a) + pow(3,(1/2.))*b*pow(a,(1/3.))*M_PI/6.; //     ;p.443
 	     double b_3 = pow(b, (-3.));
-	     if (Y <= b_3)
-	    	 Yb = Y;
-	     else 
+		 double Yb;	
+		 if (Y <= b_3)
+			 Yb = Y;	
+		 else 
 	         Yb = b_3;
 	     double x = pow((Yb/a), (1/3.));
 		 PSIm_y = log(a+Yb) - 3*b*pow(Yb,(1/3.)) + b*pow(a,(1/3.))/2.*log(pow((1+x),2.)/(1-x+pow(x,2.))) + pow(3,(1/2.))*b*pow(a,(1/3.))*atan((2*x-1)/pow(3,(1/2.))) + PSI0;
+
 	   }
 	   return PSIm_y;
 	}
@@ -94,7 +96,7 @@ double EnergyBalance::PSIm_y (double Y)
 void EnergyBalance::calculate(double Zref, double hi, double d0, double z0m,
 			double z0h, double fc, double Uref, double Tref, double Pref,
 			double qaref, double Tsk, double Ps, double SWd, double LWd,
-			double albedo, double emsi) {
+			double albedo, double emsi,bool use_lai,double lai) {
 
 	//Zref - Reference height (m)
 	//hi - Height of the PBL (m), if not available, then use default 1000m around noon,
@@ -154,7 +156,10 @@ void EnergyBalance::calculate(double Zref, double hi, double d0, double z0m,
 	}
 	else{
 		Rn = (1.0 - albedo) * SWd + emsi * LWd - emsi * sigma2* pow(Tsk, 4.);
-		G0 = Rn * (0.05 + (1 - fc) * (0.315 - 0.05)); // ; This is good for COTTON!
+		if (use_lai)
+			G0 = Rn*0.34*exp(-0.46*lai);
+		else
+		    G0 = Rn * (0.05 + (1 - fc) * (0.315 - 0.05)); // ; This is good for COTTON!
 	}
 	
 	// We assume G0 = 0.3*Rn for bare soil (Kustas et al., 1989) and
@@ -216,7 +221,7 @@ void EnergyBalance::calculate(double Zref, double hi, double d0, double z0m,
 	if (Zref >= hst){
 		while(Reps > 0.01 && steps < 100){
 			RL = CL * pow(RUstar, 3) / RH;
-			RUstar = ku / (zdm - Bw(hi, d0, RL, z0m));
+			RUstar = ku / (zdm - Bw(hi,d0,RL, z0m));
 			RH = CH * RUstar / (zdh - Cw(hi,d0,RL,z0m,z0h));
 	        Reps   = abs(RH0 - RH); 
 	        RH0=RH;
@@ -276,10 +281,9 @@ void EnergyBalance::calculate(double Zref, double hi, double d0, double z0m,
 
 	double C_wet;
 	if (Zref < hst)
-		C_wet = PSIh_y(-Zref / L_wet);
+		C_wet = PSIh_y(-Zref/L_wet);
 	else
-		// (Zref >= hst)
-		C_wet = Cw(Zref, d0, L_wet, z0m, z0h);
+		C_wet = Cw(Zref, d0,L_wet, z0m, z0h);
 
 	// EB resistances at limiting cases
 	double re_wet = (log((Zref - d0) / z0h) - C_wet) / (k * ustar);
@@ -310,8 +314,7 @@ void EnergyBalance::calculate(double Zref, double hi, double d0, double z0m,
 	if (Zref < hst)
 		C_i = PSIh_y(-(Zref-d0)/L) - PSIh_y(-z0h/L);
 	else
-		// (Zref >= hst)
-		C_i = Cw(Zref, d0, L, z0m, z0h);
+		C_i = Cw(Zref, d0,L, z0m, z0h);
 	t_C_i = C_i;
 
 	// Actual resistance to heat transfer
@@ -356,7 +359,7 @@ void EnergyBalance::calculate(double Zref, double hi, double d0, double z0m,
 	Xevap = evap_re;
 }
 	
-double EnergyBalance::Bw(double hi, double d0, double L, double z0) {
+double EnergyBalance::Bw(double hi, double d0,double L, double z0) {
 		// Bulk Stability function for momentum, eq.(22), (26)
 		// hi: Height of ABL or PBL
 		// L: The Obukhov length
@@ -379,7 +382,7 @@ double EnergyBalance::Bw(double hi, double d0, double L, double z0) {
 
 		double B0 = (alfa / beta) * hi;
 		double B1 = -z0 / L;
-		double B11 = -alfa * (hi-d0)/L;
+		double B11 = -alfa * (hi-d0) / L;
 		double B21 = hi / (beta * z0);
 		double B22 = -beta * z0 / L;
 
@@ -414,7 +417,7 @@ double EnergyBalance::Bw(double hi, double d0, double L, double z0) {
 }
 
 
-double EnergyBalance::Cw(double hi, double d0, double L, double z0, double z0h) {
+double EnergyBalance::Cw(double hi, double d0,double L, double z0, double z0h) {
 		// Bulk Stability function for heat tranfer, eq.(23), (27)
 		// hi: Height of ABL or PBL
 		// L: The Obukhov length
@@ -432,7 +435,7 @@ double EnergyBalance::Cw(double hi, double d0, double L, double z0, double z0h) 
 
 		double C0 = (alfa / beta) * hi;
 		double C1 = -z0h / L;
-		double C11 = -alfa * (hi-d0)/L;
+		double C11 = -alfa * (hi-d0) / L;
 		double C21 = hi / (beta * z0);
 		double C22 = -beta * z0 / L;
 
