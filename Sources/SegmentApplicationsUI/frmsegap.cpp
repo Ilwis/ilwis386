@@ -253,7 +253,7 @@ FormAttributeSegmentMap::FormAttributeSegmentMap(CWnd* mw, const char* sPar)
   stColRemark = new StaticText(root, String('x',50));
   stColRemark->SetIndependentPos();
   initSegmentMapOut(false);
-  SetAppHelpTopic(htpSegmentMapAttribute);
+  SetHelpItem("ilwisapp\\attribute_map_of_segment_map_dialogbox.htm");
   create();
 }                    
 
@@ -361,7 +361,7 @@ FormSegmentMapTunneling::FormSegmentMapTunneling(CWnd* mw, const char* sPar)
   CheckBox* cb = new CheckBox(root, SAFUIRemoveNodes, &fRemoveNodes);
   cb->SetIndependentPos();
   initSegmentMapOut(false);
-  SetAppHelpTopic(htpSegmentMapTunneling);
+  SetHelpItem("ilwisapp\\tunnel_segments_dialogbox.htm");
   create();
 }                    
 
@@ -407,7 +407,7 @@ FormSegmentMapLabels::FormSegmentMapLabels(CWnd* mw, const char* sPar)
   new FieldSegmentMap(root, SAFUiSegMap, &sSegmentMap);
   new FieldPointMap(root, SAFUiLabelPnts, &sLabels, new MapListerDomainType(".mpp", 0/*dmVALUE|dmCLASS|dmIDENT|dmBOOL*/, true));
   initSegmentMapOut(false);
-  SetAppHelpTopic(htpSegmentMapLabels);
+  SetHelpItem("ilwisapp\\assign_labels_to_segments_dialog_box.htm");
   create();
 }                    
 
@@ -455,7 +455,7 @@ FormSegmentMapMask::FormSegmentMapMask(CWnd* mw, const char* sPar)
   new FieldSegmentMap(root, SAFUiSegMap, &sSegmentMap, new MapListerDomainType(".mps", 0, false));
   new FieldString(root, SAFUiMask, &sMask, Domain(), false);
   initSegmentMapOut(false);
-  SetAppHelpTopic(htpSegmentMapMask);
+  SetHelpItem("ilwisapp\\mask_segments_dialogbox.htm");
   create();
 }                    
 
@@ -500,7 +500,7 @@ FormSegmentMapCleaning::FormSegmentMapCleaning(CWnd* mw, const char* sPar)
   }
   new FieldSegmentMap(root, SAFUiSegMap, &sSegmentMap);
   initSegmentMapOut(false);
-  SetAppHelpTopic(htpSegmentMapCleaning);
+  SetAppHelpTopic("");
   create();
 }                    
 
@@ -571,7 +571,7 @@ FormSegmentMapTransform::FormSegmentMapTransform(CWnd* mw, const char* sPar)
   fs->SetWidth(120);
   fs->SetIndependentPos();
 	
-  SetAppHelpTopic(htpSegmentMapTransform);
+  SetHelpItem("ilwisapp\\transform_segment_map_dialog_box.htm");
   create();
 }                    
 
@@ -750,7 +750,7 @@ FormSegmentMapSubMap::FormSegmentMapSubMap(CWnd* mw, const char* sPar)
   fldMaxLon = new FieldLon(fg, SCSUiMaxLon, &llMax.Lon);
   fldMaxLon->SetCallBack((NotifyProc)&FormSegmentMapSubMap::CallBackMinMaxLatLon);
   initSegmentMapOut(false);
-  SetAppHelpTopic(htpSegmentMapSubMap);
+  SetHelpItem("ilwisapp\\submap_of_segment_map_dialogbox.htm");
   create();
 }                    
 
@@ -913,7 +913,7 @@ FormSegmentMapDensify::FormSegmentMapDensify(CWnd* mw, const char* sPar)
 	fldDegMinSec->Align(fldMap, AL_UNDER);
 
   initSegmentMapOut(false);
-  SetAppHelpTopic(htpSegmentMapDensifyCoords);
+  SetHelpItem("ilwisapp\\densify_segment_coordinates_dialogbox.htm");
   create();
 }                    
 
@@ -1080,11 +1080,11 @@ FormSegmentMapGlue::FormSegmentMapGlue(CWnd* mw, const char* sPar)
   fb->Align(cbDom, AL_UNDER);
 	fInsideDomCallBack = false;
   initSegmentMapOut(false);
-  SetAppHelpTopic(htpSegmentMapGlue);
+  SetHelpItem("ilwisapp\\glue_segment_maps_dialogbox.htm");
   String sFill('X', 40);
   stRemark = new StaticText(root, sFill);
   stRemark->SetIndependentPos();
-	SetAppHelpTopic(htpSegmentMapGlue);
+	SetHelpItem("ilwisapp\\glue_segment_maps_dialogbox.htm");
   create();
 }                    
 
@@ -1444,7 +1444,7 @@ FormSegmentMapPolBoundaries::FormSegmentMapPolBoundaries(CWnd* mw, const char* s
   FieldBlank* fb = new FieldBlank(root, 0);
   fb->Align(cb, AL_UNDER);
   initSegmentMapOut(false);
-  SetAppHelpTopic(htpSegmentMapPolBoundaries);
+  SetHelpItem("ilwisapp\\polygons_to_segments_dialog_box.htm");
   create();
 }                    
 
@@ -1504,7 +1504,7 @@ FormSegmentMapFromRaster::FormSegmentMapFromRaster(CWnd* mw, const char* sPar)
   new CheckBox(root, SAFUiSingleName, &fSingleName);
   
   initSegmentMapOut(false);
-  SetAppHelpTopic(htpSegmentMapFromRas);
+  SetHelpItem("ilwisapp\\raster_to_segments_dialog_box.htm");
   create();
 }                    
 
