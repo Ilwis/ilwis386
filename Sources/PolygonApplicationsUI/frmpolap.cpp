@@ -201,7 +201,7 @@ FormAttributePolygonMap::FormAttributePolygonMap(CWnd* mw, const char* sPar)
   stColRemark = new StaticText(root, String('x',50));
   stColRemark->SetIndependentPos();
   initPolygonMapOut(false);
-  SetAppHelpTopic(htpPolygonMapAttribute);
+  SetHelpItem("ilwisapp\\attribute_map_of_polygon_map_dialogbox.htm");
   create();
 }                    
 
@@ -319,7 +319,7 @@ FormPolygonMapLabels::FormPolygonMapLabels(CWnd* mw, const char* sPar)
   new FieldPolygonMap(root, SAFUiPolMap, &sPolygonMap);
   new FieldPointMap(root, SAFUiLabelPnts, &sPointMap, new MapListerDomainType(".mpp", 0/*dmVALUE|dmCLASS|dmIDENT|dmBOOL*/, true));
   initPolygonMapOut(false);
-  SetAppHelpTopic(htpPolygonMapLabels);
+  SetHelpItem("ilwisapp\\assign_labels_to_polygons_dialog_box.htm");
   create();
 }                    
 
@@ -402,7 +402,7 @@ FormPolygonMapFromSegment::FormPolygonMapFromSegment(CWnd* mw, const char* sPar)
 	new RadioButton(rgNonTop, SAFUiPolAutoIdent);
 	
 	initPolygonMapOut(false);
-	SetAppHelpTopic(htpPolygonMapFromSegment);
+	SetHelpItem("ilwisapp\\segments_to_polygons_dialog_box.htm");
 	create();
 }                    
 
@@ -520,7 +520,7 @@ FormPolygonMapTransform::FormPolygonMapTransform(CWnd* mw, const char* sPar)
   fs->SetWidth(120);
   fs->SetIndependentPos();
   
-  SetAppHelpTopic(htpPolygonMapTransform);
+  SetHelpItem("ilwisapp\\transform_polygon_map_dialog_box.htm");
   create();
 }                    
 
@@ -659,7 +659,7 @@ FormPolygonMapMask::FormPolygonMapMask(CWnd* mw, const char* sPar)
   new FieldPolygonMap(root, SAFUiPolMap, &sPolygonMap, new MapListerDomainType(".mpa", 0, false));
   new FieldString(root, SAFUiMask, &sMask, Domain(), false);
   initPolygonMapOut(false);
-  SetAppHelpTopic(htpPolygonMapMask);
+  SetHelpItem("ilwisapp\\mask_polygons_dialog_box.htm");
   create();
 }                    
 
@@ -713,7 +713,7 @@ FormPolygonMapFromRaster::FormPolygonMapFromRaster(CWnd* mw, const char* sPar)
   rb8->Align(rb4, AL_AFTER);
   new CheckBox(root, SAFUiSmoothLines, &fSmooth);
   initPolygonMapOut(false);
-  SetAppHelpTopic(htpPolygonMapFromRas);
+  SetHelpItem("ilwisapp\\raster_to_polygons_dialog_box.htm");
   create();
 }                    
 
@@ -889,7 +889,7 @@ FormPolygonMapGrid::FormPolygonMapGrid(CWnd* mw, const char* sPar)
 	chkLabels->Align(chkTable,AL_UNDER);
 	
 	initPolygonMapOut(false);
-  SetAppHelpTopic(htpPolygonMapGrid);
+  SetHelpItem("ilwisapp\\id_grid_map_dialog_box.htm");
   create();
 }
 
