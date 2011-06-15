@@ -473,7 +473,7 @@ void  ASTERFormat::ReadForeignFormat(ForeignCollectionPtr* col)
 	trq = new Tranquilizer();
 	trq->Start();
 	trq->SetTitle(String(SIEMImportingRaster_S.scVal(), fnGetForeignFile().sShortName()));
-	trq->setHelpItem(htpImportASTER);		
+	trq->setHelpItem("ilwismen\import_aster.htm");		
 
 	AfxGetApp()->GetMainWnd()->SendMessage(ILW_READCATALOG, WP_STOPREADING, 0);
 	LayerInfo li;			

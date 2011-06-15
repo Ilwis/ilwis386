@@ -57,7 +57,6 @@ vector<WMSLayerInfo *> WMSGetCapabilities::getLayerInfo() {
 }
 
 void WMSGetCapabilities::parse() {
-	XERCES_CPP_NAMESPACE::XMLPlatformUtils::Initialize();
 	RemoteXMLObject::parse();
 
 	XERCES_CPP_NAMESPACE::WMSSaxHandler handler(this);
