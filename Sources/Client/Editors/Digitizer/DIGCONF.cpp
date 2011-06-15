@@ -76,7 +76,7 @@ DigSetPortForm::DigSetPortForm(DigitizerWizard* dw, Digitizer* dig)
 	rb3->Align(rb1, AL_UNDER);               
 	RadioButton* rb4 = new RadioButton(rg, SDGUiCom4);
 	rb4->Align(rb3, AL_AFTER);
-	SetMenHelpTopic(htpDigSetPort);
+	SetMenHelpTopic("ilwismen\\digitizer_setup_digitizer_select_port.htm");
 	create();
 }
 
@@ -156,7 +156,7 @@ DigPortSettings::DigPortSettings(DigitizerWizard* dw, Digitizer *dig) :
 	foStop->Align(st1, AL_AFTER);
 
 	foBaud->SetCallBack((NotifyProc)&DigPortSettings::FillAll);
-	SetMenHelpTopic(htpDigSetPortSettings);
+	SetMenHelpTopic("ilwismen\\digitizer_setup_digitizer_port_settings.htm");
 	create();
 }
 
@@ -277,7 +277,7 @@ DigAutoForm::DigAutoForm(DigitizerWizard* dw, Digitizer* dig)
 	PushButton* pb = new PushButton(root, SDGUiManual,
 		(NotifyProc)&DigAutoForm::Manual);
 	pb->SetIndependentPos();
-	SetMenHelpTopic(htpDigAutoSetup);
+	SetMenHelpTopic("ilwismen\\digitizer_setup_digitizer_autodetect.htm");
 	create();
 }
 
@@ -432,7 +432,7 @@ DigConfigForm::DigConfigForm(DigitizerWizard* dw, Digitizer* dig)
   fiFlagPos->Align(fiYPos, AL_UNDER);
   FieldString* fiFlagCodes = new FieldString(root, SDGUiFlagCodes, &sCodes);
   fiFlagCodes->Align(fiFlagPos, AL_AFTER);
-  SetMenHelpTopic(htpDigSetup);
+  SetMenHelpTopic("ilwismen\\digitizer_setup_digitizer_manual.htm");
 	create();
 }
 
@@ -508,7 +508,7 @@ DigConfigSizeForm::DigConfigSizeForm(DigitizerWizard* dw, Digitizer* dig)
   frXI = new FieldReal(root, SDGUiXSizeInch, &rXSizeInch);
   frXI->Align(fb, AL_UNDER);
   frYI = new FieldReal(root, SDGUiYSizeInch, &rYSizeInch);
-  SetMenHelpTopic(htpDigSizeSetup);
+  SetMenHelpTopic("ilwismen\\digitizer_setup_digitizer_size.htm");
 	create();
 }
 

@@ -96,7 +96,7 @@ Import14MaskForm::Import14MaskForm(CWnd* wPar, String* sMask)
 {
   FormEntry* fe = new FieldString(root, SIEUiMask, sMask);
   fe->SetWidth(90);
-  SetMenHelpTopic(htpImport14);
+  SetMenHelpTopic("ilwismen\\import_map.htm");
   create();
 }
 
@@ -266,35 +266,35 @@ Import14MapForm::Import14MapForm(CWnd* wPar, const FileName& fn, const String& s
   if (iMapType == 0) {
     iDom = 0; // dmt = dmtBIT;
     fBit = true;
-    SetMenHelpTopic(htpImport14MapBit);
+    SetMenHelpTopic("ilwismen\\import_map.htm");
   }
   else if (iMapType == 1) {  // byte maps
     if (fInf) {              // has class info
       iDom = 0;              //   dmtCLASS
       fClass = fId = true;   //   possible selections
-      SetMenHelpTopic(htpImport14MapInf);
+      SetMenHelpTopic("ilwismen\\import_map.htm");
     }
     else if (fCol) {         // no class info, but has LUT
       iDom = 2;              //   dmtPICTURE
       fImage = fClass = fPicture = true;
-      SetMenHelpTopic(htpImport14MapCol);
+      SetMenHelpTopic("ilwismen\\import_map.htm");
     }
     else {                   // no class info, no LUT
       iDom = 2;              //   dmtIMAGE
       fClass = fId = fValue = fImage = true;
-      SetMenHelpTopic(htpImport14MapByte);
+      SetMenHelpTopic("ilwismen\\import_map.htm");
     }
   }
   else {  // integer maps; ignore LUT
     if (fInf) {              // class info found
       iDom = 1;              //   dmtID; 
       fClass = fId = true;
-      SetMenHelpTopic(htpImport14MapInf);
+      SetMenHelpTopic("ilwismen\\import_map.htm");
     }
     else {                   // no class info found
       iDom = 2;              // dmtVALUE;
       fClass = fId = fValue = true;
-      SetMenHelpTopic(htpImport14MapInt);
+      SetMenHelpTopic("ilwismen\\import_map.htm");
     }
   }
   
@@ -464,7 +464,7 @@ Import14SegmentMapForm::Import14SegmentMapForm(CWnd* wPar, const FileName& fn, c
   fs->SetIndependentPos();
   
   HideOnOk(true);
-  SetMenHelpTopic(htpImport14SegmentMap);
+  SetMenHelpTopic("ilwismen\\import_map.htm");
   create();
 }
 
@@ -543,7 +543,7 @@ Import14PolygonMapForm::Import14PolygonMapForm(CWnd* wPar, const FileName& fn, c
   fs->SetIndependentPos();
 
   HideOnOk(true);
-  SetMenHelpTopic(htpImport14PolygonMap);
+  SetMenHelpTopic("ilwismen\\import_map.htm");
   create();
 }
 
@@ -616,9 +616,9 @@ Import14PointMapForm::Import14PointMapForm(CWnd* wPar, const FileName& fn, const
 
   HideOnOk(true);
   if (fNameCol)
-    SetMenHelpTopic(htpImport14PointMap);
+    SetMenHelpTopic("ilwismen\\import_map.htm");
   else  
-    SetMenHelpTopic(htpImport14PointMapNoName);
+    SetMenHelpTopic("ilwismen\\import_map.htm");
   create();
 }
 
@@ -674,11 +674,11 @@ Import14TableForm::Import14TableForm(CWnd* wPar, const FileName& fn, const Strin
   if (fNameCol) {
     new RadioButton(rg, SIEUiClass);
     new RadioButton(rg, SIEUiIdentifier);
-    SetMenHelpTopic(htpImport14Table);
+    SetMenHelpTopic("ilwismen\\import_map.htm");
   }
   else { 
     new RadioButton(rg, SIEUiNone);
-    SetMenHelpTopic(htpImport14TableNoName);
+    SetMenHelpTopic("ilwismen\\import_map.htm");
   }
   if (fNameCol) {
 //    sDom = fn.sFile;

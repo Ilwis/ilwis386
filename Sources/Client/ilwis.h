@@ -166,6 +166,7 @@ public:
 	//ILWIS::SVGLoader *getSVGContainer() const { return svgContainer; }
 	//void getDrawerTools(ILWIS::ComplexDrawer *drwin, vector<MapPaneViewTool *>& tools);
 	void getDocumentList(list<CDocument *>& opendocs);
+	void _export showHelp(const String& helpfile);
 	
 	//{{AFX_MSG(IlwisWinApp)
 	afx_msg void OnAbout();

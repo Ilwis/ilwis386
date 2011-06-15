@@ -285,15 +285,7 @@ void ProgressListWindow::OnCancel()
 
 void ProgressListWindow::OnHelp()
 {
-	if ( rlvTrqList.GetSelectedCount() > 0)
-		rlvTrqList.ShowHelp();
-	else
-	{
-		String sHelpFile (ChmFinder::sFindChmFile("ilwis.chm"));
-
-		::HtmlHelp(::GetDesktopWindow(), sHelpFile.sVal(), HH_HELP_CONTEXT, htpProgressManager);
-		::HtmlHelp(0, sHelpFile.sVal(), HH_DISPLAY_TOC, 0);		
-	}		
+	IlwWinApp()->showHelp(help);	
 }
 
 void ProgressListWindow::OnSysCommand(UINT nID, LPARAM lParam)

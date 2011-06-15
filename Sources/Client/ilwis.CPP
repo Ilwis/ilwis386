@@ -1204,8 +1204,8 @@ void IlwisWinApp::InitImageLists()
 {
 	ilSmall.Create(16,16,TRUE,4,4);
 	ilLarge.Create(32,32,TRUE,4,4);
-	ilSmall.SetImageCount(112);
-	ilLarge.SetImageCount(112);
+	ilSmall.SetImageCount(113);
+	ilLarge.SetImageCount(113);
 
 	int i = 0;
 	InitImage("ilwis", "LogoIcon", i++);
@@ -1332,6 +1332,7 @@ void IlwisWinApp::InitImageLists()
 	InitImage("CrossSection", "CrossSection", i++);	
 	InitImage("Track", "Track", i++);	
 	InitImage("Scale", "Scale", i++);	
+	InitImage("Annotation", "Annotation", i++);	
 
 }
 
@@ -2495,19 +2496,27 @@ void IlwisWinApp::getDocumentList(list<CDocument *>& opendocs)
    }
 }
 
-//void IlwisWinApp::getDrawerTools(ComplexDrawer *drwin, vector<MapPaneViewTool *>& tools) {
-//	for(map<String, DrawerCreate>::const_iterator item = drawers.begin(); item != drawers.end(); ++item) {
-//		NewDrawer *drw =  ((*item).second)(0);
-//		if ( drw->isSimple() == false) {
-//			ComplexDrawer *cdrw = (ComplexDrawer *)drw;
-//			MapPaneViewTool *tool = cdrw->createTool(drwin->getRootDrawer()->getDrawerContext()->getDocument()->mpvGetView());
-//			if ( tool) {
-//				if ( tool->isToolUseableFor(drwin)) {
-//					tools.push_back(tool);
-//				}
-//			}
-//		}
-//		delete drw;
-//	}
-//}
+void IlwisWinApp::showHelp(const String& helpfile) {
+	String help = helpfile;
+	if ( help == "")
+		return;
+	String file;
+	string defaultFile = String("%S\\help\\eng\\%S",getEngine()->getContext()->sIlwDir(),help);
+	String language = getEngine()->getContext()->getLanguageExtension();
+	language = language.substr(1,language.size() - 1);
+	if ( help.toLower().find("extensions") == 0) {
+		file = String("%S\\%S",getEngine()->getContext()->sIlwDir(),help);
+	}
+	else {
+		file = String("%S\\help\\%S\\%S",getEngine()->getContext()->sIlwDir(),language,help);
+	}
+	FileName fn1 = FileName(file);
+	if ( !FileName(file).fExist())
+		file = defaultFile;
+	if ( FileName(file).fExist())
+
+		ShellExecute(GetMainWnd()->m_hWnd,"open",file.scVal(),0,0,SW_SHOW);
+	else
+		throw ErrorObject(String("Help file %S.%S doenst exist",fn1.sFile, fn1.sExt));
+}
 

@@ -287,7 +287,7 @@ MapDefForm::MapDefForm(CWnd* wPar, Map& _mp, bool fShowButtons, bool fBreakDep)
 		stRemark->SetIndependentPos();
 	}  
 	
-	SetMenHelpTopic(htpDefMap);
+	SetMenHelpTopic("ilwismen\\raster_map_definition.htm");
 
   if (fShowButtons) {
 		fbs	|= fbsAPPLIC;
@@ -504,7 +504,7 @@ SegmentMapDefForm::SegmentMapDefForm(CWnd* wPar, SegmentMap& _mp)
   fs->SetWidth(120);
   fs->SetIndependentPos();
     
-  SetMenHelpTopic(htpDefSegMap);
+ // SetMenHelpTopic(htpDefSegMap);
   create();
 }
     
@@ -528,7 +528,7 @@ PolygonMapDefForm::PolygonMapDefForm(CWnd* wPar, PolygonMap& _mp)
   fs->SetWidth(120);
   fs->SetIndependentPos();
     
-  SetMenHelpTopic(htpDefPolMap);
+  //SetMenHelpTopic(htpDefPolMap);
   create();
 }
     
@@ -552,7 +552,7 @@ PointMapDefForm::PointMapDefForm(CWnd* wPar, PointMap& _mp)
   fs->SetWidth(120);
   fs->SetIndependentPos();
     
-  SetMenHelpTopic(htpDefPntMap);
+  //SetMenHelpTopic(htpDefPntMap);
   create();
 }
     
@@ -576,7 +576,7 @@ TableDefForm::TableDefForm(CWnd* wPar, const Table& tb)
   fs->SetWidth(120);
   fs->SetIndependentPos();
     
-  SetMenHelpTopic(htpDefTable);
+  //SetMenHelpTopic(htpDefTable);
   create();
 }
 

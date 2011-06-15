@@ -156,7 +156,7 @@ bool GraphDrawer::fConfigureTitle()
       FieldString* fs = new FieldString(root, SGPUiTitle, &gd->sTitle);
       fs->SetWidth(90);
 			new FieldLogFont(root, &gd->lfTitle);
-      SetMenHelpTopic(htpGraphTitle);
+      SetMenHelpTopic("ilwismen\\graph_window_options_title.htm");
       create();      
     }
   };

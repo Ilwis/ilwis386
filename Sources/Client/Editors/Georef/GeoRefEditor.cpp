@@ -275,7 +275,7 @@ GeoRefEditor::GeoRefEditor(MapPaneView* mpvw, GeoRef georef)
 	dw->RecalcLayout();
 	Calc();
 
-	htpTopic = htpGeoRefEditor;
+	help = "ilwis\\georeference_tiepoints_editor.htm";
 	sHelpKeywords = "Georeference tiepoints editor";
 
 	if (grc->pgOrthoPhoto())
@@ -414,7 +414,7 @@ public:
 			CheckBox* cb = new CheckBox(root, SGRUiZ, &fZ);
 			frDTMheight = new FieldReal(cb, "", &rZ);
 		}
-		SetMenHelpTopic(htpGrfEditAddPoint);
+		SetMenHelpTopic("ilwismen\\georeference_tiepoints_editor_add_tiepoint.htm");
 		edit->atpf = this;
 		create();
 	}
@@ -842,7 +842,7 @@ void GeoRefEditor::OnDelPoint()
 			: FormWithDest(wPar, SGRTitleDelTiePoint)
 		{
 			fi = new FieldInt(root, SGRUiTiePointNumber, iNr, ri);
-			SetMenHelpTopic(htpGrfEditDelPoint);
+			SetMenHelpTopic("ilwismen\\georeference_tiepoints_editor_delete_tiepoint.htm");
 			create();
 		}
 	private:
@@ -891,8 +891,8 @@ void GeoRefEditor::OnTransformation()
 			new RadioButton(rg, SGRUiFullSecondOrder);
 			new RadioButton(rg, SGRUiThirdOrder);
 			new RadioButton(rg, SGRUiProjective);
-			//    setHelpItem(htpGeoRefEditor);
-			SetMenHelpTopic(htpGrfEditTransf);
+			//    setHelpItem("ilwis\georeference_tiepoints_editor.htm");
+			SetMenHelpTopic("ilwismen\\georeference_tiepoints_editor_transformation.htm");
 			create();
 		}
 	};
@@ -921,7 +921,7 @@ public:
 		if (0 != gre->efmf)
 			new FieldColor(root, SGRUiFidMarkColor, &gre->efmf->colFidMarks);
 		new FieldInt(root, SGRUiSmbSize, &gre->smb.iSize, ValueRange(1L,100L),true);
-		SetMenHelpTopic(htpGrfEditCnf);
+		SetMenHelpTopic("ilwismen\\georeference_tiepoints_editor_customize.htm");
 		create();
 	}
 };  

@@ -240,7 +240,7 @@ public:
 		PushButton* pbChangeMethod = new PushButton(root, SSmcUiChooseOtherMethod, (NotifyProc)&DirectEvaluationForm::PushButtonCallBack);
 		pbChangeMethod->Align(fgLeft, AL_UNDER);
 
-		SetMenHelpTopic(htpSMCEWeighDirect);
+		SetMenHelpTopic("ilwismen\\smce_window_weigh_direct.htm");
 
 		create();
 	}
@@ -752,7 +752,7 @@ public:
 		pbChangeMethod->SetIndependentPos();
 		pbChangeMethod->Align(fgLeft, AL_UNDER, 10);
 
-		SetMenHelpTopic(htpSMCEWeighPairwise);
+		SetMenHelpTopic("ilwismen\\smce_window_weigh_pairwise.htm");
 
 		create();
 	}
@@ -989,7 +989,7 @@ public:
 
 		PushButton* pbChangeMethod = new PushButton(root, SSmcUiChooseOtherMethod, (NotifyProc)&ShowPairwiseComparisonResultsForm::PushButtonCallBack);
 
-		SetMenHelpTopic(htpSMCEWeighPairwise);
+		SetMenHelpTopic("ilwismen\\smce_window_weigh_pairwise.htm");
 
 		create();
 	}
@@ -1858,7 +1858,7 @@ public:
 		pbChangeMethod->Align(sasLeft, AL_UNDER);
 		pbChangeMethod->SetIndependentPos();
 
-		SetMenHelpTopic(htpSMCEWeighRankOrder);
+		SetMenHelpTopic("ilwismen\\smce_window_weigh_rank_order.htm");
 
 		create();
 	}

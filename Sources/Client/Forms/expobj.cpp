@@ -104,7 +104,7 @@ void ExportObject(CWnd* wPar, Map& mp, const String& s)
       StaticText* st = new StaticText(root,sInf);
       st->SetIndependentPos();
       new FieldMapCreate(root, SIEUiMapName, sMap);
-//      SetMenHelpTopic(htpExportMap);      
+//      SetMenHelpTopic("ilwismen\\export.htm"Map);      
       create();
     }
   };  
@@ -133,7 +133,7 @@ void ExportObject(CWnd* wPar, SegmentMap& mp, const String& s)
       StaticText* st = new StaticText(root,sInf);
       st->SetIndependentPos();
       new FieldSegmentMapCreate(root, SIEUiMapName, sMap);
-//      SetMenHelpTopic(htpExportSegMap);      
+//      SetMenHelpTopic("ilwismen\\export.htm"SegMap);      
       create();
     }
   };  
@@ -162,7 +162,7 @@ void ExportObject(CWnd* wPar, PolygonMap& mp, const String& s)
       StaticText* st = new StaticText(root,sInf);
       st->SetIndependentPos();
       new FieldPolygonMapCreate(root, SIEUiMapName, sMap);
-//      SetMenHelpTopic(htpExportPolMap);      
+//      SetMenHelpTopic("ilwismen\\export.htm"PolMap);      
       create();
     }
   };  
@@ -191,7 +191,7 @@ void ExportObject(CWnd* wPar, PointMap& mp, const String& s)
       StaticText* st = new StaticText(root,sInf);
       st->SetIndependentPos();
       new FieldPointMapCreate(root, SIEUiMapName, sMap);
-//      SetMenHelpTopic(htpExportPntMap);      
+//      SetMenHelpTopic("ilwismen\\export.htm"PntMap);      
       create();
     }
   };  
@@ -220,7 +220,7 @@ void ExportObject(CWnd* wPar, Table& tbl, const String& s)
       StaticText* st = new StaticText(root,sInf);
       st->SetIndependentPos();
       new FieldTableCreate(root, SIEUiTblName, stbl);
-//      SetMenHelpTopic(htpExportTable);
+//      SetMenHelpTopic("ilwismen\\export.htm"Table);
       create();
     }
   };  

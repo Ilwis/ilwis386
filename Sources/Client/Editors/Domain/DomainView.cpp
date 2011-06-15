@@ -139,7 +139,7 @@ END_MESSAGE_MAP()
 class EditDomainItemForm: public FormWithDest
 {
 public:
-	EditDomainItemForm(CWnd* wPar, const String& sTitle, const ClassItem& gli, unsigned int htp)
+	EditDomainItemForm(CWnd* wPar, const String& sTitle, const ClassItem& gli, const String& help)
 		: FormWithDest(wPar, sTitle)
 	{
 		fInCallBack = false;
@@ -162,7 +162,7 @@ public:
 		stRemark = new StaticText(root, sRemark);
 		stRemark->SetIndependentPos();
 		stRemark->SetVal("");
-		SetMenHelpTopic(htp);
+		SetMenHelpTopic(help);
 		create();
 	}
 	FormEntry* feDefaultFocus()
@@ -235,7 +235,7 @@ private:
 class EditDomainGroupItemForm: public FormWithDest
 {
 public:
-	EditDomainGroupItemForm(CWnd* wPar, const String& sTitle, const GroupItem& gli, unsigned int htp)
+	EditDomainGroupItemForm(CWnd* wPar, const String& sTitle, const GroupItem& gli, const String& htp)
 		: FormWithDest(wPar, sTitle)
 	{
 		if (gli.sName().length() != 0)
@@ -314,7 +314,7 @@ class EditDomainMultiForm: public FormWithDest
 {
 public:
 	EditDomainMultiForm(CWnd* wPar, const String& sTitle, 
-		String* sDescr, int iSelCount, unsigned int htp)
+		String* sDescr, int iSelCount, const String& htp)
 		: FormWithDest(wPar, sTitle)
 	{
 		new StaticText(root, String(SDMMsgSelectedItems_I.scVal(), iSelCount));
@@ -345,7 +345,7 @@ public:
 		: FormWithDest(wPar, SDMTitleDomainMerge)
 	{
 		new FieldDataType(root, SDMUiDomain, sDomain, new DomainLister(dmCLASS|dmIDENT), true);
-		SetMenHelpTopic(htpDomMerge);
+		SetMenHelpTopic("ilwismen\\domain_class_id_editor_merge_domains.htm");
 		create();
 	}
 };
@@ -364,7 +364,7 @@ public:
 		fsPrefix->SetCallBack((NotifyProc)&ChangePrefixForm::CheckPrefix);
 		String sRem('x', 50);
 		stRemarks = new StaticText(root, sRem);
-		SetMenHelpTopic(htpDomPrefix);
+		SetMenHelpTopic("ilwismen\\domain_class_id_editor_change_prefix.htm");
 		create();
 	}
 	String sGetPrefix()
@@ -1045,7 +1045,7 @@ void DomainSortView::OnEdit()
 			bool fOkClick = true;
 			while (!fEditReady && fOkClick)
 			{
-				EditDomainItemForm frm(GetParent(), SDMTitleEditDomainItem, gli, htpDomEdit);
+				EditDomainItemForm frm(GetParent(), SDMTitleEditDomainItem, gli, "ilwismen\\domain_class_id_editor_edit_item.htm");
 				fOkClick = frm.fOkClicked();
 
 				if (fOkClick) 
@@ -1076,7 +1076,7 @@ void DomainSortView::OnEdit()
 		else {
 			String sDescr;
 
-			EditDomainMultiForm frm(GetParent(), SDMTitleMultEditDomainItem, &sDescr, iSelected, htpDomEdit);
+			EditDomainMultiForm frm(GetParent(), SDMTitleMultEditDomainItem, &sDescr, iSelected, "ilwismen\\domain_class_id_editor_edit_item.htm");
 			if (!frm.fOkClicked())
 				return;
 
@@ -1287,7 +1287,7 @@ void DomainSortView::OnAdd()
 	bool fOkClick = true;
 	while (!fEditReady && fOkClick)
 	{
-		EditDomainItemForm frm(GetParent(), SDMTitleAddDomainItem, gli, htpDomAdd);  // gli is dummy here
+		EditDomainItemForm frm(GetParent(), SDMTitleAddDomainItem, gli, "ilwismen\\domain_class_id_editor_add_item.htm");  // gli is dummy here
 		fOkClick = frm.fOkClicked();
 		if (fOkClick) 
 		{
@@ -2539,7 +2539,7 @@ void DomainGroupView::OnEdit()
 		bool fOkClick = true;
 		while (!fEditReady && fOkClick)
 		{
-			EditDomainGroupItemForm frm(GetParent(), SDMTitleEditDomainItem, gli, htpDomEditGroup);
+			EditDomainGroupItemForm frm(GetParent(), SDMTitleEditDomainItem, gli, "ilwismen\\domain_group_editor_edit_item.htm");
 			fOkClick = frm.fOkClicked();
 
 			if (fOkClick)
@@ -2589,7 +2589,7 @@ void DomainGroupView::OnAdd()
 	bool fOkClick = true;
 	while (!fEditReady && fOkClick)
 	{
-		EditDomainGroupItemForm frm(GetParent(), SDMTitleAddDomainItem, gli, htpDomAddGroup);  // gli is dummy here
+		EditDomainGroupItemForm frm(GetParent(), SDMTitleAddDomainItem, gli, "ilwismen\\domain_group_editor_add_item.htm");  // gli is dummy here
 		fOkClick = frm.fOkClicked();
 		if (fOkClick) 
 		{

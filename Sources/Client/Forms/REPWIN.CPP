@@ -268,11 +268,7 @@ void ReportWindow::OnCancel()
 
 void ReportWindow::OnHelp()
 {
-	String sHelpFile (ChmFinder::sFindChmFile("ilwis.chm"));
-	
-	int iHtp = tr->htp.iTopic;
-	::HtmlHelp(::GetDesktopWindow(), sHelpFile.sVal(), HH_HELP_CONTEXT, iHtp);
-	::HtmlHelp(0, sHelpFile.sVal(), HH_DISPLAY_TOC, 0);
+	IlwWinApp()->showHelp(help);
 }
 
 void ReportWindow::OnSysCommand(UINT nID, LPARAM lParam)

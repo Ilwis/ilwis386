@@ -503,7 +503,7 @@ void TableDoc::OnAddColumn()
 			fvr->Hide();
 			ftiv->Hide();
 
-			SetMenHelpTopic(htpTblNewCol);
+			SetMenHelpTopic("ilwismen\\add_column_to_table.htm");
 			create();
 		}
 		String sColName;

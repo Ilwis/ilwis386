@@ -73,7 +73,7 @@ FormCreateTable2Dim::FormCreateTable2Dim(CWnd* wPar, String* sTbl2Dim, const Str
   FieldValueRange* fvr = new FieldValueRange(root, STBUiRange, &vr, fdc);
   fdc->SetCallBack((NotifyProc)&FieldValueRange::DomainCallBack, fvr);
 
-  SetMenHelpTopic(htpCreateTable2Dim);
+  SetMenHelpTopic("ilwismen\\create_a_two_dimensional_table.htm");
   String sFill('*', 40);
   stRemark = new StaticText(root, sFill);
   stRemark->SetIndependentPos();

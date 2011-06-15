@@ -1871,7 +1871,7 @@ BOOL BaseTablePaneView::OnPreparePrinting(CPrintInfo* pInfo)
 					new RadioButton(rg, STBPrAll);
 					new RadioButton(rg, STBPrSelection);
 				}
-				SetMenHelpTopic(htpTblPrint);
+				SetMenHelpTopic("ilwismen\\print_table.htm");
 				create();
 			}
 		};

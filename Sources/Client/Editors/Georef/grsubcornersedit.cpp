@@ -126,7 +126,7 @@ void GeoRefSubMapCornersView::FillDerivedFields(FieldGroup* fgGenerRoot)
 		fiHeight->SetCallBack((NotifyProc)&GeoRefSubMapCornersView::CheckWithSize);
 	}
 
-	SetMenHelpTopic(htpGrfSubMap);
+	SetMenHelpTopic("");
 }
 
 int GeoRefSubMapCornersView::exec()

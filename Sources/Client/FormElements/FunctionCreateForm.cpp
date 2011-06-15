@@ -117,7 +117,7 @@ FormCreateFunction::FormCreateFunction(CWnd* wPar, String* str)
 	stRemark = new StaticText(root, sFill);
 	stRemark->SetIndependentPos();
 
-	SetMenHelpTopic(htpFunCreate);
+	SetMenHelpTopic("ilwismen\\create_a_function.htm");
 	create();
 }
 

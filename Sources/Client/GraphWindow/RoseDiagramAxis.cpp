@@ -417,7 +417,7 @@ bool RoseDiagramAxis::fConfig()
 	    new RadioButton(rg, "&30°");
 		  new RadioButton(rg, "&45°");
 		  new RadioButton(rg, "&90°");
-      SetMenHelpTopic(htpRoseDiagramXAxis);
+      SetMenHelpTopic("ilwismen\\graph_window_options_x_axis_rose.htm");
       create();      
     }
   };

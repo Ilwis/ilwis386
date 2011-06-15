@@ -301,7 +301,7 @@ ExportForm::ExportForm(CWnd* wPar, Exporting* export, String* sNam, String* sCmd
 	String s('x', 60);
 	stRemark = new StaticText(root, s);
 	stRemark->Align(fsOutName, AL_UNDER);
-	SetMenHelpTopic(htpExport);
+	SetMenHelpTopic("ilwismen\\export.htm");
 	create();
 }
 

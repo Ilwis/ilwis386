@@ -149,7 +149,7 @@ namespace
 			fcolX = new FieldColumn(cb, "", tbl, &sColX, dmVALUE | dmIMAGE | dmCLASS | dmIDENT);
 			fcolY = new FieldColumn(root, SGPUiYAxis, tbl, &sColY, dmVALUE | dmIMAGE | dmBOOL);
  			fcolY->Align(cb, AL_UNDER);
-      SetMenHelpTopic(htpCreateGraph);
+      SetMenHelpTopic("ilwismen\\create_a_graph.htm");
 			create();
 		}
 		bool fColX;
@@ -185,7 +185,7 @@ void CartesianGraphDoc::OnFileOpen()
     : FormWithDest(parent, SGPTitleOpenGraph)
     {
 			new FieldDataTypeLarge(root, sName, ".grh", new GraphLister(grhGRAPH));
-      SetMenHelpTopic(htpOpenGraph);
+      SetMenHelpTopic("ilwismen\\graph_window_open_graph.htm");
       create();
     }
   };
@@ -295,7 +295,7 @@ void CartesianGraphDoc::OnAddColumnGraph()
       ftbl->SetCallBack((NotifyProc)&AddGraphForm::TableCallBack);
 			fcolX = new FieldColumn(root, SGPUiXAxis, 0, sColX);
 			fcolY = new FieldColumn(root, SGPUiYAxis, 0, sColY, dmVALUE | dmIMAGE | dmBOOL);
-      SetMenHelpTopic(htpAddGraph);
+      SetMenHelpTopic("ilwismen\\graph_window_add_graph_from_columns.htm");
 			create();
 		}
   private:
@@ -324,7 +324,7 @@ void CartesianGraphDoc::OnAddColumnGraph()
 		: FormWithDest(wParent, SGPTitleAddGraph)
 		{
 			new FieldColumn(root, SGPUiYAxis, tbl, sColY, dmVALUE | dmIMAGE | dmBOOL);
-      SetMenHelpTopic(htpAddGraph);
+      SetMenHelpTopic("ilwismen\\graph_window_add_graph_from_columns.htm");
 			create();
 		}
   };    
@@ -378,7 +378,7 @@ void CartesianGraphDoc::OnAddFormulaGraph()
 			FieldString* fs = new FieldString(root, "y =", &sExpr, Domain(), false);
 			fs->SetWidth(120);
 			fs->SetIndependentPos();
-			SetMenHelpTopic(htpAddLineGraph);
+			SetMenHelpTopic("ilwismen\\graph_window_add_graph_from_formula.htm");
 			create();
 		}
 		String sExpr;
@@ -416,7 +416,7 @@ void CartesianGraphDoc::OnAddLsfGraph()
 			stRegr = new StaticText(root, sFill);
 			stRegr->SetIndependentPos();
 			fiTerms = new FieldInt(root, STBUiNrTerms, &iTerms, RangeInt(2,100));
-			SetMenHelpTopic(htpAddLsfGraph);
+			SetMenHelpTopic("ilwismen\\graph_window_add_graph_least_squares_fit.htm");
 			create();
 		}
 		String sColX, sColY, *sFunc, m_sDefault;
@@ -480,7 +480,7 @@ void CartesianGraphDoc::OnAddSvmGraph()
 		: FormWithDest(parent, sTitle)
 		{
 			new FieldSemiVariogram(root, SGPUiSemiVar, &smv);
-			SetMenHelpTopic(htpAddSemiVarGraph);
+			SetMenHelpTopic("ilwismen\\graph_window_add_semivariogram_model.htm");
 			create();
 		}
 		SemiVariogram smv;

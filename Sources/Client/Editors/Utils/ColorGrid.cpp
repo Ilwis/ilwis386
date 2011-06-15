@@ -161,7 +161,7 @@ void ColorGrid::OnNoOfCells()
     {
       new FieldBlank(root);
       new FieldInt(root, SRPUiNoOfCells, iX, ValueRange(2L,100L), true);
-      SetMenHelpTopic(htpRprColWidth);
+      SetMenHelpTopic("ilwismen\\representation_class_editor_column_width.htm");
       create();
     }  
   };

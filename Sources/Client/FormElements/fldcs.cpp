@@ -161,7 +161,7 @@ FormCreateCoordSystem::FormCreateCoordSystem(CWnd* wPar, String* sCS, long types
   stRemark->SetVal(String());
   stRemark->Align(rb, AL_UNDER);
   stRemark->SetIndependentPos();
-  SetMenHelpTopic(htpCSCreate);
+  SetMenHelpTopic("ilwismen\\create_a_coordinate_system.htm");
   create();
 }
 
@@ -313,7 +313,7 @@ FormCreateCoordSystemMW::FormCreateCoordSystemMW(CWnd* wPar, String* sCS)
 	stRemark = new StaticText(root, sFill);
 	stRemark->Align(rbOrthoPh, AL_UNDER);
 	stRemark->SetIndependentPos();
-	SetMenHelpTopic(htpCSCreateMapWindow);
+	SetMenHelpTopic("ilwismen\\create_a_coordinate_system_in_map_window.htm");
 	create();
 }
 

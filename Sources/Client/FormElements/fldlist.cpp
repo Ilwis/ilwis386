@@ -143,7 +143,7 @@ FormCreateMapList::FormCreateMapList(CWnd* wPar, String* sML)
   stRemark = new StaticText(root, sFill);
   stRemark->Align(fmm, AL_UNDER);
   stRemark->SetIndependentPos();
-  SetMenHelpTopic(htpMapListCreate);
+  SetMenHelpTopic("ilwismen\\create_a_map_list.htm");
   create();
 }
 

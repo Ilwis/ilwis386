@@ -272,7 +272,7 @@ void CoordSysProjectionView::create()
 			}
 		}
 	}
-	SetMenHelpTopic(htpCSEditProj);
+	SetMenHelpTopic("ilwismen\\edit_coordinate_system_projection.htm");
 }
 
 void CoordSysProjectionView::ShowProjInfo()
@@ -310,7 +310,7 @@ int CoordSysProjectionView::ButtonProjection(Event*)
     {
       new StaticText(root, SCSUiProj);
       new FieldProjection(root, sPrj);
-      SetMenHelpTopic(htpChangePrj);
+      SetMenHelpTopic("ilwismen\\select_projection.htm");
       create();
     }
   };

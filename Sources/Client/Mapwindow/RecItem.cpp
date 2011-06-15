@@ -745,7 +745,7 @@ int RecItemCoord::Configure(CWnd* win)
 	: FormWithDest(win, SDUpdCoord)
 	{
 	new CheckBox (root, SDUiContUpd, fContinuous);
-	SetMenHelpTopic(htpCrdCnf);
+	SetMenHelpTopic("ilwismen\\add_coordinate_system_to_pixel_info_window.htm");
 	create();
 	}
 	};

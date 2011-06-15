@@ -87,6 +87,7 @@ protected:
 	virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
 	virtual void OnPrint(CDC* pDC, CPrintInfo* pInfo);
 	virtual void OnEndPrinting(CDC* pDC, CPrintInfo *info);
+	String help;
 	//}}AFX_VIRTUAL
 
 	//{{AFX_MSG(LayoutView)

@@ -622,7 +622,7 @@ bool ColumnGraphLayer::fConfig()
     		new RadioButton(rgax, SGPUiRight);
     		rgax->SetIndependentPos();
     	}
-      SetMenHelpTopic(htpEditGraph);
+      SetMenHelpTopic("ilwismen\\graph_window_options_graph_from_columns.htm");
       create();
     }
   	int iColor, iYAxis;
@@ -741,7 +741,7 @@ bool FormulaGraphLayer::fConfig()
       sExpr = fgl->sExpr;
       fs = new FieldString(root, SGPUiFormulaY, &sExpr, Domain(), false);
       fs->SetWidth(120);
-      SetMenHelpTopic(htpEditGraphFormula);
+      SetMenHelpTopic("ilwismen\\graph_window_options_graph_from_formula.htm");
       create();      
     }
   	String sExpr;
@@ -850,7 +850,7 @@ bool LsfGraphLayer::fConfig()
       	StaticText* stFormula = new StaticText(root, lgl->lsf->sFormula());
       	stFormula->SetIndependentPos();
       }
-      SetMenHelpTopic(htpEditGraphLsf);
+      SetMenHelpTopic("ilwismen\\graph_window_options_graph_least_squares_fit.htm");
       create();      
     }
   	int iTerms;
@@ -1007,7 +1007,7 @@ bool SmvGraphLayer::fConfig()
       fs->SetWidth(120);
       new FieldLine(root, &sgl->line, true);
     	new FieldSemiVariogram(root, SGPUiSemiVar, &sgl->smv);
-      SetMenHelpTopic(htpEditGraphSemiVar);
+      SetMenHelpTopic("ilwismen\\graph_window_options_semivariogram_model.htm");
       create();      
     }
   };

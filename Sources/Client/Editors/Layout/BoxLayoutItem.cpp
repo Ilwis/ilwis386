@@ -118,7 +118,7 @@ public:
 		new FieldLine(root, &li->lnBox, true);
 		CheckBox* cb = new CheckBox(root, SLOUiFillColor, &li->fFill);
 		new FieldColor(cb, "", &li->clrFill);
-    SetMenHelpTopic(htpCnfAnnBox);
+    SetMenHelpTopic("ilwismen\\layout_editor_insert_edit_box.htm");
 		create();
 	}
 };

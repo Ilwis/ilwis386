@@ -141,7 +141,7 @@ FormCreateTable::FormCreateTable(CWnd* wPar, String* sTable, const String& sDom)
   fdc = new FieldDomainC(root, STBUiDom, &sDomain, dmCLASS|dmIDENT|dmNONE|dmBOOL, true);
   fdc->SetCallBack((NotifyProc)&FormCreateTable::CallBackDomain);
   fiRecs = new FieldInt(root, STBUiRecs, &iRecs);
-  SetMenHelpTopic(htpCreateTable);
+  SetMenHelpTopic("ilwismen\\create_a_table.htm");
   String sFill('*', 40);
   stRemark = new StaticText(root, sFill);
   stRemark->SetIndependentPos();

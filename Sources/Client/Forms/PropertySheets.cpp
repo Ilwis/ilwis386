@@ -813,7 +813,7 @@ int BaseMapPropPage::exec()
 MapPropPage::MapPropPage(const IlwisObject& obj)
 	: BaseMapPropPage(obj, SMSPropRasterMap)
 {
-	SetMenHelpTopic(htpPropInfoRasMap);
+	SetMenHelpTopic("ilwismen\\raster_map_properties.htm");
 	m_fInGRCallBack = false;
 	m_fvr = 0;
 	m_feAlignUnder = 0;
@@ -1317,7 +1317,7 @@ int MapPropPage::exec()
 SegmentMapPropPage::SegmentMapPropPage(const IlwisObject& obj)
 	: BaseMapPropPage(obj, SMSPropSegmentMap)
 {
-	SetMenHelpTopic(htpPropInfoSegMap);
+	SetMenHelpTopic("ilwismen\\segment_map_properties.htm");
 }
 
 void SegmentMapPropPage::SetMapDetails()
@@ -1338,7 +1338,7 @@ void SegmentMapPropPage::SetMapDetails()
 PointMapPropPage::PointMapPropPage(const IlwisObject& obj)
 	: BaseMapPropPage(obj, SMSPropPointMap)
 {
-	SetMenHelpTopic(htpPropInfoPntMap);
+	SetMenHelpTopic("ilwismen\\point_map_properties.htm");
 }
 
 void PointMapPropPage::SetMapDetails()
@@ -1357,7 +1357,7 @@ void PointMapPropPage::SetMapDetails()
 PolygonMapPropPage::PolygonMapPropPage(const IlwisObject& obj)
 	: BaseMapPropPage(obj, SMSPropPolygonMap)
 {
-	SetMenHelpTopic(htpPropInfoPolMap);
+	SetMenHelpTopic("ilwismen\\polygon_map_properties.htm");
 }
 
 void PolygonMapPropPage::SetMapDetails()
@@ -1403,7 +1403,7 @@ void AdditionalInfoPage::BuildPage()
 TablePropPage::TablePropPage(const IlwisObject& obj)
 	: BasicPropertyFormPage(obj, SMSPropTable)
 {
-	SetMenHelpTopic(htpPropInfoTable);
+	SetMenHelpTopic("ilwismen\\table_properties.htm");
 }
 
 void TablePropPage::BuildPage()
@@ -1460,7 +1460,7 @@ int TablePropPage::exec()
 Table2DimPropPage::Table2DimPropPage(const IlwisObject& obj)
 	: BasicPropertyFormPage(obj, SMSProp2DimTable)
 {
-	SetMenHelpTopic(htpPropInfoTable2Dim);
+	SetMenHelpTopic("ilwismen\\two_dimensional_table_properties.htm");
 }
 
 void Table2DimPropPage::BuildPage()
@@ -1501,7 +1501,7 @@ void Table2DimPropPage::BuildPage()
 HistogramPropPage::HistogramPropPage(const IlwisObject& obj)
 	: BasicPropertyFormPage(obj, SMSPropHistogram)
 {
-	SetMenHelpTopic(htpPropInfoHistogram);
+	SetMenHelpTopic("ilwismen\\histogram_properties.htm");
 }
 
 void HistogramPropPage::BuildPage()
@@ -1520,7 +1520,7 @@ void HistogramPropPage::BuildPage()
 GeoRefPropPage::GeoRefPropPage(const IlwisObject& obj)
 	: BasicPropertyFormPage(obj, SMSPropGeoReference)
 {
-	SetMenHelpTopic(htpPropInfoGeoRef);
+	SetMenHelpTopic("ilwismen\\georeference_properties.htm");
 	m_fm = 0;
 }
 
@@ -1736,7 +1736,7 @@ int GeoRefPropPage::exec()
 CoordSystemPropPage::CoordSystemPropPage(const IlwisObject& obj)
 	: BasicPropertyFormPage(obj, SMSPropCoordSystem)
 {
-	SetMenHelpTopic(htpPropInfoCoordSys);
+	SetMenHelpTopic("ilwismen\\coordinate_system_properties.htm");
 }
 
 void CoordSystemPropPage::BuildPage()
@@ -1863,7 +1863,7 @@ void CoordSystemPropPage::BuildPage()
 RepresentationPropPage::RepresentationPropPage(const IlwisObject& obj)
 	: BasicPropertyFormPage(obj, SMSPropRepresentation)
 {
-	SetMenHelpTopic(htpPropInfoRepresentation);
+	SetMenHelpTopic("ilwismen\\representation_properties.htm");
 }
 
 void RepresentationPropPage::BuildPage()
@@ -1879,7 +1879,7 @@ void RepresentationPropPage::BuildPage()
 DomainPropPage::DomainPropPage(const IlwisObject& obj)
 	: BasicPropertyFormPage(obj, SMSPropDomain), m_frc(0), m_ftAttTable(0)
 {
-	SetMenHelpTopic(htpPropInfoDomain);
+	SetMenHelpTopic("ilwismen\\domain_properties.htm");
 	m_fAttrTable = false;
 }
 
@@ -2174,7 +2174,7 @@ int DomainPropPage::exec()
 SampleSetPropPage::SampleSetPropPage(const IlwisObject& obj)
 	: BasicPropertyFormPage(obj, SMSPropSampleSet)
 {
-	SetMenHelpTopic(htpPropInfoSampleSet);
+	SetMenHelpTopic("ilwismen\\sample_set_properties.htm");
 }
 
 void SampleSetPropPage::BuildPage()
@@ -2289,7 +2289,7 @@ int SampleSetPropPage::exec()
 MapListPropPage::MapListPropPage(const IlwisObject& obj)
 	: BasicPropertyFormPage(obj, SMSPropMapList)
 {
-	SetMenHelpTopic(htpPropInfoMapList);
+	SetMenHelpTopic("ilwismen\\map_list_properties.htm");
 	m_fInGRCallBack = false;
 	m_stPyramids = 0;
 	pbPyramids = 0;
@@ -2620,7 +2620,7 @@ int MapListPropPage::exec()
 MapViewPropPage::MapViewPropPage(const IlwisObject& obj)
 	: BasicPropertyFormPage(obj, SMSPropMapView)
 {
-	SetMenHelpTopic(htpPropInfoMapView);
+	SetMenHelpTopic("ilwismen\\map_view_properties.htm");
 }
 
 void MapViewPropPage::BuildPage()
@@ -2640,7 +2640,7 @@ void MapViewPropPage::BuildPage()
 ObjectCollectionPropPage::ObjectCollectionPropPage(const IlwisObject& obj)
 	: BasicPropertyFormPage(obj, TR("Object Collection"))
 {
-	SetMenHelpTopic(htpPropInfoObjectCollection);
+	SetMenHelpTopic("ilwismen\\object_collection_properties.htm");
 	oc.SetPointer(obj.pointer());
 }
 
@@ -3089,48 +3089,38 @@ BOOL HelpPropPage::OnSetActive()
 	if (!FormBasePropertyPage::OnSetActive())
 		return FALSE;
 
-	if (0 == m_hhc)
+	if ("" == help)
 	{
-		m_iTopic = 0;
-		CRect rct;
-		GetClientRect(&rct);
-		m_hhc = new HelpCtrl;
-		m_hhc->Create(this, rct, 0, "main");
-	}
-	if (0 == m_iTopic)
-	{
-		if (!m_hhc->SetChmFile("ilwis.chm"))
-			return FALSE;
 
-		if (".mpr" == m_sExt)      m_iTopic = htpPopupMPR;
-		else if (".mpa" == m_sExt) m_iTopic = htpPopupMPA;
-		else if (".mps" == m_sExt) m_iTopic = htpPopupMPS;
-		else if (".mpp" == m_sExt) m_iTopic = htpPopupMPP;
-		else if (".mpl" == m_sExt) m_iTopic = htpPopupMPL;
-		else if (".tbt" == m_sExt) m_iTopic = htpPopupTBT;
-		else if (".ta2" == m_sExt) m_iTopic = htpPopupTA2;
-		else if (".dom" == m_sExt) m_iTopic = htpPopupDOM;
-		else if (".rpr" == m_sExt) m_iTopic = htpPopupRPR;
-		else if (".grf" == m_sExt) m_iTopic = htpPopupGRF;
-		else if (".csy" == m_sExt) m_iTopic = htpPopupCSY;
-		else if (".mpv" == m_sExt) m_iTopic = htpPopupMPV;
-		else if (".his" == m_sExt) m_iTopic = htpPopupHIS;
-		else if (".hsa" == m_sExt) m_iTopic = htpPopupHSA;
-		else if (".hss" == m_sExt) m_iTopic = htpPopupHSS;
-		else if (".hsp" == m_sExt) m_iTopic = htpPopupHSP;
-		else if (".sms" == m_sExt) m_iTopic = htpPopupSMS;
-		else if (".mat" == m_sExt) m_iTopic = htpPopupMAT;
-		else if (".grh" == m_sExt) m_iTopic = htpPopupGRH;
-		else if (".fil" == m_sExt) m_iTopic = htpPopupFIL;
-		else if (".fun" == m_sExt) m_iTopic = htpPopupFUN;
-		else if (".isl" == m_sExt) m_iTopic = htpPopupISL;
-		else if (".atx" == m_sExt) m_iTopic = htpPopupATX;
-		else if (".ioc" == m_sExt) m_iTopic = htpPopupIOC;
-		else if (".ilo" == m_sExt) m_iTopic = htpPopupILO;
-		else if (".grh" == m_sExt) m_iTopic = htpPopupGRH;
-		else if (".stp" == m_sExt) m_iTopic = htpPopupSTP;
-		else if (".smc" == m_sExt) m_iTopic = htpPopupSMC;
-		m_hhc->NavigateChm(m_iTopic);
+		if (".mpr" == m_sExt)      help = "ilwis\\popup\\objects_raster_map_popup.htm";
+		else if (".mpa" == m_sExt) help = "ilwis\\popup\\objects_polygon_map_popup.htm";
+		else if (".mps" == m_sExt) help = "ilwis\\popup\\objects_segment_map_popup.htm";
+		else if (".mpp" == m_sExt) help = "ilwis\\popup\\objects_point_map_popup.htm";
+		else if (".mpl" == m_sExt) help = "ilwis\\popup\\objects_map_list_popup.htm";
+		else if (".tbt" == m_sExt) help = "ilwis\\popup\\objects_table_popup.htm";
+		else if (".ta2" == m_sExt) help = "ilwis\\popup\\objects_table2dim_popup.htm";
+		else if (".dom" == m_sExt) help = "ilwis\\popup\\objects_domains_ilwobj_popup.htm";
+		else if (".rpr" == m_sExt) help = "ilwis\\popup\\objects_representation_popup.htm";
+		else if (".grf" == m_sExt) help = "ilwis\\popup\\objects_georeference_popup.htm";
+		else if (".csy" == m_sExt) help = "ilwis\\popup\\objects_coordinate_system_popup.htm";
+		else if (".mpv" == m_sExt) help = "ilwis\\popup\\objects_map_view_popup.htm";
+		else if (".his" == m_sExt) help = "ilwis\\popup\\objects_histogram_popup.htm";
+		else if (".hsa" == m_sExt) help = "ilwis\\popup\\objects_histogram_popup.htm";
+		else if (".hss" == m_sExt) help = "ilwis\\popup\\objects_histogram_popup.htm";
+		else if (".hsp" == m_sExt) help = "ilwis\\popup\\objects_histogram_popup.htm";
+		else if (".sms" == m_sExt) help = "ilwis\\popup\\objects_sample_set_popup.htm";
+		else if (".mat" == m_sExt) help = "ilwis\\popup\\objects_matrices_popup.htm";
+		else if (".grh" == m_sExt) help = "ilwis\\popup\\objects_graph_popup.htm";
+		else if (".fil" == m_sExt) help = "ilwis\\popup\\objects_filters_popup.htm";
+		else if (".fun" == m_sExt) help = "ilwis\\popup\\objects_userdef_functions_popup.htm";
+		else if (".isl" == m_sExt) help = "ilwis\\popup\\objects_script_popup.htm";
+		else if (".atx" == m_sExt) help = "ilwis\\popup\\annotation_text_popup.htm";
+		else if (".ioc" == m_sExt) help = "ilwis\\popup\\objects_objcol_popup.htm";
+		else if (".ilo" == m_sExt) help = "ilwis\\popup\\objects_layout_popup.htm";
+		else if (".grh" == m_sExt) help = "ilwis\\popup\\objects_graph_popup.htm";
+		else if (".stp" == m_sExt) help = "ilwis\\popup\\objects_stereopair_popup.htm";
+		else if (".smc" == m_sExt) help = "ilwis\\popup\\objects_criteria_trees_popup.htm";
+		//IlwWinApp()->showHelp(help);
 	}
 
 	return TRUE;
@@ -3184,7 +3174,7 @@ UINT ShowPropForm(LPVOID lpObjectStruct)
 	// Object type tab follows
 	IlwisObject::iotIlwisObjectType iotObj = IlwisObject::iotObjectType(obj->fnObj);
 
-	int htp;
+	String help;
 	switch (iotObj)
 	{
 		case IlwisObject::iotRASMAP:
@@ -3219,7 +3209,7 @@ UINT ShowPropForm(LPVOID lpObjectStruct)
 			break;
 		case IlwisObject::iotOBJECTCOLLECTION:
 			pgObject = new ObjectCollectionPropPage(obj);
-			htp = htpPropInfoObjectCollection;
+			help = "ilwismen\\object_collection_properties.htm";
 			break;
 		case IlwisObject::iotMAPLIST:
 			pgObject = new MapListPropPage(obj);
@@ -3228,7 +3218,7 @@ UINT ShowPropForm(LPVOID lpObjectStruct)
 			pgObject = new MapViewPropPage(obj);
 			break;
 		case IlwisObject::iotLAYOUT:
-			htp = htpPropInfoLayout;
+			help = "ilwismen\\layout_properties.htm";
 			break;
 		case IlwisObject::iotCOORDSYSTEM:
 			pgObject = new CoordSystemPropPage(obj);
@@ -3243,31 +3233,31 @@ UINT ShowPropForm(LPVOID lpObjectStruct)
 			pgObject = new RepresentationPropPage(obj);
 			break;
 		case IlwisObject::iotFILTER:
-			htp = htpPropInfoFilter;
+			help = "ilwismen\\filter_properties.htm";
 			break;
 		case IlwisObject::iotSCRIPT:
-			htp = htpPropInfoScript;
+			help = "ilwismen\\script_properties.htm";
 			break;
 		case IlwisObject::iotFUNCTION:
-			htp = htpPropInfoFunction;
+			help = "ilwismen\\function_properties.htm";
 			break;
 		case IlwisObject::iotMATRIX:
-			htp = htpPropInfoMatrix;
+			help = "ilwismen\\matrix_properties.htm";
 			break;
 		case IlwisObject::iotSAMPLESET:
 			pgObject = new SampleSetPropPage(obj);
 			break;
 		case IlwisObject::iotANNOTATIONTEXT:
-			htp = htpPropInfoAnnotationText;
+			help = "ilwismen\\annotation_text_properties.htm";
 			break;
     case IlwisObject::iotGRAPH:      
-			htp = htpPropInfoGraph;
+			help = "ilwismen\\graph_properties.htm";
 			break;
     case IlwisObject::iotSTEREOPAIR:      
 			pgObject = new StereoPairPropPage(obj);
 			break;
     case IlwisObject::iotCRITERIATREE:      
-			htp = htpPropInfoSMCE;
+			help = "ilwismen\\criteria_tree_properties.htm";
 			break;
 		case IlwisObject::iotANY:
 			break;
@@ -3277,12 +3267,12 @@ UINT ShowPropForm(LPVOID lpObjectStruct)
 	{
 		pgObject->create();
 		ps.AddPage(pgObject);
-		htp = pgObject->htp().iTopic;
+		help = pgObject->htp();
 	}
 
 	// General tab page follows
 	gpp = new GeneralPropPage(obj);
-	gpp->SetMenHelpTopic(htp);
+	gpp->SetMenHelpTopic(help);
 	gpp->create();
 	ps.AddPage(gpp);
 
@@ -3290,7 +3280,7 @@ UINT ShowPropForm(LPVOID lpObjectStruct)
 	if (obj->fDependent()) 
 	{
 		dop = new DependsOnPropPage(obj);
-		dop->SetMenHelpTopic(htp);
+		dop->SetMenHelpTopic(help);
 		dop->create();
 		ps.AddPage(dop);
 	}
@@ -3308,7 +3298,7 @@ UINT ShowPropForm(LPVOID lpObjectStruct)
 		".smc" == sExt)
 	{
 		cop = new ContainsPropPage(obj);
-		cop->SetMenHelpTopic(htp);
+		cop->SetMenHelpTopic(help);
 		cop->create();
 		ps.AddPage(cop);
 	}
@@ -3318,7 +3308,7 @@ UINT ShowPropForm(LPVOID lpObjectStruct)
 	if (iNr > 0)
 	{
 		cbp = new ContainedByPropPage(obj);
-		cbp->SetMenHelpTopic(htp);
+		cbp->SetMenHelpTopic(help);
 		cbp->create();
 		ps.AddPage(cbp);
 	}
@@ -3336,7 +3326,7 @@ UINT ShowPropForm(LPVOID lpObjectStruct)
 		".smc" != sExt)
 	{
 		ubp = new UsedByPropPage(obj);
-		ubp->SetMenHelpTopic(htp);
+		ubp->SetMenHelpTopic(help);
 		ubp->create();
 		ps.AddPage(ubp);
 	}
@@ -3345,14 +3335,14 @@ UINT ShowPropForm(LPVOID lpObjectStruct)
 	if (obj->fAdditionalInfo())
 	{
 		aip = new AdditionalInfoPage(obj);
-		aip->SetMenHelpTopic(htp);
+		aip->SetMenHelpTopic(help);
 		aip->create();
 		ps.AddPage(aip);
 	}
 
 	// Info tab page follows
 	hpp = new HelpPropPage(obj->fnObj);
-	hpp->SetMenHelpTopic(htp);
+	hpp->SetMenHelpTopic(help);
 	hpp->create();
 	ps.AddPage(hpp);
 
@@ -3408,7 +3398,7 @@ UINT ShowPropForm(LPVOID lpObjectStruct)
 StereoPairPropPage::StereoPairPropPage(const IlwisObject& obj)
 	: BasicPropertyFormPage(obj, SMSPropStereoPair)
 {
-	SetMenHelpTopic(htpPropInfoStereoPair);
+	SetMenHelpTopic("ilwismen\\stereopair_properties.htm");
 	m_stPyramids = 0;
 	pbPyramids = 0;
 }

@@ -85,7 +85,7 @@ FormCreateSampleSet::FormCreateSampleSet(CWnd* wPar, String* sm,
   String sFill('X', 50);
   stRemark = new StaticText(root, sFill);
   stRemark->SetIndependentPos();
-  SetMenHelpTopic(htpSampleMapCreate);
+  SetMenHelpTopic("ilwismen\\create_a_sample_set.htm");
   create();
 }
 

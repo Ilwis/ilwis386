@@ -90,7 +90,7 @@ FrameWindow::FrameWindow()
 	, status(0)
 	, fStoreToolBars(true)
 {
-  htpTopic = htpContentsIlwis;
+  help = "ilwis\\contents.htm";
 }
 
 FrameWindow::~FrameWindow()
@@ -594,17 +594,7 @@ BOOL FrameWindow::PreTranslateMessage(MSG* pMsg)
 
 void FrameWindow::OnHelp() 
 {
-	String sModName = htp().sModName;
-	String sHelpFile;
-	if (sModName != "")
-		sHelpFile = sModName;
-	else
-		sHelpFile = "ilwis.chm";
-
-	sHelpFile = ChmFinder::sFindChmFile(sHelpFile);
-	
-	::HtmlHelp(::GetDesktopWindow(), sHelpFile.sVal(), HH_HELP_CONTEXT, abs((int)htp().iTopic));
-	::HtmlHelp(0, sHelpFile.sVal(), HH_DISPLAY_TOC, 0);
+	IlwWinApp()->showHelp(help);
 }
 
 LRESULT FrameWindow::OnCommandHelp(WPARAM, LPARAM lParam)
@@ -615,27 +605,24 @@ LRESULT FrameWindow::OnCommandHelp(WPARAM, LPARAM lParam)
 
 void FrameWindow::OnRelatedTopics()
 {
-	HH_AKLINK link;
-	link.cbStruct =     sizeof(HH_AKLINK);
-	link.fReserved =    FALSE;
-	link.pszKeywords =  sHelpKeywords.scVal(); 
-	link.pszUrl =       NULL; 
-	link.pszMsgText =   NULL; 
-	link.pszMsgTitle =  NULL; 
-	link.pszWindow =    NULL;
-	link.fIndexOnFail = TRUE;
+	//HH_AKLINK link;
+	//link.cbStruct =     sizeof(HH_AKLINK);
+	//link.fReserved =    FALSE;
+	//link.pszKeywords =  sHelpKeywords.scVal(); 
+	//link.pszUrl =       NULL; 
+	//link.pszMsgText =   NULL; 
+	//link.pszMsgTitle =  NULL; 
+	//link.pszWindow =    NULL;
+	//link.fIndexOnFail = TRUE;
 
-	String sHelpFile (ChmFinder::sFindChmFile("ilwis.chm"));
+	//String sHelpFile (ChmFinder::sFindChmFile("ilwis.chm"));
 
-	::HtmlHelp(::GetDesktopWindow(), sHelpFile.sVal(), HH_KEYWORD_LOOKUP, (DWORD)&link);
+	//::HtmlHelp(::GetDesktopWindow(), sHelpFile.sVal(), HH_KEYWORD_LOOKUP, (DWORD)&link);
 }
 
 void FrameWindow::OnIlwisObjects()
 {
-	String sHelpFile (ChmFinder::sFindChmFile("ilwis.chm"));
-	String sHelpString ("%S::/ilwis/ilwis_objects.htm", sHelpFile);
-
-	::HtmlHelp(::GetDesktopWindow(), sHelpString.sVal(), HH_DISPLAY_TOPIC, 0);
+	IlwWinApp()->showHelp(help);
 }
 
 #define sMen(ID) ILWSF("men",ID).scVal()

@@ -151,7 +151,7 @@ StereoscopeWindow::StereoscopeWindow()
 	
 	zIcon icon("StereoPairIcon");
 	SetIcon(icon, TRUE);
-  htpTopic = htpStereoscopeWindow;
+  help = "ilwis\\stereopair_stereoscope_window.htm";
 	sHelpKeywords = "Stereo pairs (display)";
 
 	// The +1 is to make sure the splitter window can always be divided into two
@@ -368,7 +368,7 @@ public:
     : FormWithDest(wPar, SStcTitleOpenMapPair)    
   {
 		new FieldDataType(root, SStcUiStereoPair, sStereoPairName, ".stp", true);
-    SetMenHelpTopic(htpOpenStereoPairWithStereoscope);
+    SetMenHelpTopic("ilwismen\\open_stereopair.htm");
     create();    
   }    
 };

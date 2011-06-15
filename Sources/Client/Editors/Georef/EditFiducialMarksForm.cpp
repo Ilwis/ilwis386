@@ -176,7 +176,7 @@ EditFiducialMarksForm::EditFiducialMarksForm(MapPaneView* wnd, GeoRefOrthoPhoto*
 	stRem3 = new StaticText(fgInfo, sFill);
   fgInfo->SetCallBack((NotifyProc)&EditFiducialMarksForm::initFMF);
 
-  SetMenHelpTopic(htpGrfFiducialMarks);
+  SetMenHelpTopic("ilwismen\\georef_ortho_locate_fiducial_marks.htm");
 
   for (i = 0; i < iNrFiducialInputFields; ++i)
     ffm[i]->SetCallBack((NotifyProc)&EditFiducialMarksForm::calc,this);
@@ -259,7 +259,7 @@ EditFiducialMarksForm::EditFiducialMarksForm(MapPaneView* wnd, CoordSystemOrthoP
 	stRem3->SetIndependentPos();
   fgInfo->SetCallBack((NotifyProc)&EditFiducialMarksForm::initFMF);
 
-  SetMenHelpTopic(htpGrfFiducialMarks);
+  SetMenHelpTopic("ilwismen\\georef_ortho_locate_fiducial_marks.htm");
 
   for (i = 0; i < iNrFiducialInputFields; ++i)
     ffm[i]->SetCallBack((NotifyProc)&EditFiducialMarksForm::calc,this);

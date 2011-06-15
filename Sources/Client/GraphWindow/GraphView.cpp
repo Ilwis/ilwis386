@@ -346,7 +346,7 @@ BOOL GraphView::OnPreparePrinting(CPrintInfo* pInfo)
 				RadioButton* rb = new RadioButton(rg, SGPUiWidthInCm);
 				int iPrWidth = dcPrinter->GetDeviceCaps(HORZSIZE)/10 - 1.5; // margins
 				new FieldReal(rb, "", rWidthInCm, ValueRange(0, iPrWidth, 0.1));
-				SetMenHelpTopic(htpPrintGraph);
+				SetMenHelpTopic("ilwismen\\graph_window_print_graph.htm");
 				create();
 			}
 		};

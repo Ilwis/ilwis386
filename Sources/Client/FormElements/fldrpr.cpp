@@ -189,7 +189,7 @@ FormCreateRepresentation::FormCreateRepresentation(CWnd* wPar, String* str, cons
 	fcCreateGradual = new CheckBox(root, SRPUiUsePercentages, &fCreateGradual);
   stRemark = new StaticText(root, sFill);
   stRemark->SetIndependentPos();
-  SetMenHelpTopic(htpRprCreate);
+  SetMenHelpTopic("ilwismen\\create_a_representation.htm");
   create();
 }
 

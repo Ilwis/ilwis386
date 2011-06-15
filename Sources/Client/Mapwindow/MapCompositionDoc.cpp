@@ -510,8 +510,8 @@ void MapCompositionDoc::OnSaveViewAs()
 			new FieldViewCreate(root, SMWUiViewName, sName);
 			FieldString *fs = new FieldString(root, SMWUiViewTitle, sTitle);
 			fs->SetWidth(120);
-			//      setHelpItem(htpSaveViewForms);
-			SetMenHelpTopic(htpSaveView);
+			//      setHelpItem("ilwismen\save_view_as.htm"Forms);
+			SetMenHelpTopic("ilwismen\\save_view_as.htm");
 			create();
 		}
 	};
@@ -577,27 +577,80 @@ void MapCompositionDoc::OnExtPerc()
 	{
 	public:
 		ExtendForm(CWnd* wParent,
-			double* rTop, double* rBottom, double* rLeft, double* rRight)
-			: FormWithDest(wParent, SMWTitleExtWnd)
+			double* rTop, double* rBottom, double* rLeft, double* rRight, MapCompositionDoc *_mdoc)
+			: FormWithDest(wParent, SMWTitleExtWnd), mdoc(_mdoc)
 		{
+			values.push_back(TR("User defined"));
+			values.push_back(TR("Center"));
+			values.push_back(TR("Right top"));
+			values.push_back(TR("Left top"));
+			values.push_back(TR("Right bottom"));
+			values.push_back(TR("Left bottom"));
 			ValueRange vrr(-99, 1000, 1);
 			frTop = new FieldReal(root, SMWUiPrcTop, rTop, vrr);
-			new FieldReal(root, SMWUiPrcBot, rBottom, vrr);
-			new FieldReal(root, SMWUiPrcLft, rLeft  , vrr);
-			new FieldReal(root, SMWUiPrcRgt, rRight , vrr);
-			SetMenHelpTopic(htpDspExtend);
+			frBot = new FieldReal(root, SMWUiPrcBot, rBottom, vrr);
+			frLeft = new FieldReal(root, SMWUiPrcLft, rLeft  , vrr);
+			frRight = new FieldReal(root, SMWUiPrcRgt, rRight , vrr);
+			ftemplate = new FieldOneSelectString(root,TR("Templates"),&choice,values);
+			ftemplate->SetCallBack((NotifyProc)&ExtendForm::setTemplate,this);
+			SetMenHelpTopic("ilwismen\\extend_window_by_percentage.htm");
 			create();
+		}
+
+		int ExtendForm::setTemplate(Event *ev) {
+			ftemplate->StoreData();
+			if ( choice > 0) {
+				CoordBounds cb = mdoc->rootDrawer->getMapCoordBounds();
+				bool portrait = cb.width() / cb.height() > 1;
+				frRight->SetVal(0);
+				frTop->SetVal(0);
+				frLeft->SetVal(0);
+				frBot->SetVal(0);
+				int shiftMax = 40;
+				int shiftMin = 20;
+				if (choice == 1) {
+					frLeft->SetVal(portrait ? shiftMin : shiftMax);
+					frBot->SetVal(portrait ? shiftMax : shiftMin);
+					frRight->SetVal(portrait ? shiftMax : shiftMin);
+					frTop->SetVal(portrait ? shiftMin : shiftMax);
+				}
+				if (choice == 2) {
+					frLeft->SetVal(portrait ? shiftMin : shiftMax);
+					frBot->SetVal(portrait ? shiftMax : shiftMin);
+	
+				}
+				if (choice == 3) {
+					frBot->SetVal(portrait ? shiftMax : shiftMin);
+					frLeft->SetVal(portrait ? shiftMin : shiftMax);
+				}
+				if (choice == 4) {
+					frTop->SetVal(portrait ? shiftMax : shiftMin);
+					frLeft->SetVal(portrait ? shiftMin : shiftMax);
+				}
+				if (choice == 5) {
+					frTop->SetVal(portrait ? shiftMax : shiftMin);
+					frRight->SetVal(portrait ? shiftMin : shiftMax);
+				}
+			}
+			return 1;
 		}
 		FormEntry* feDefaultFocus()
 		{ 
+			if (ftemplate)
+				ftemplate->SetVal(0);
+
 			return frTop;
 		}
 	private:  
-		FieldReal* frTop;
+		FieldReal* frTop, *frBot, *frLeft, *frRight;
+		FieldOneSelectString *ftemplate;
+		long choice;
+		vector<string> values;
+		MapCompositionDoc *mdoc;
 	};
 	double rTop, rBottom, rLeft, rRight;
 	rTop = rLeft = rBottom = rRight = 0;
-	ExtendForm frm(0,&rTop,&rBottom,&rLeft,&rRight);
+	ExtendForm frm(0,&rTop,&rBottom,&rLeft,&rRight,this);
 	if (frm.fOkClicked()) 
 	{
 		CoordBounds cb = rootDrawer->getMapCoordBounds();
@@ -628,7 +681,7 @@ void MapCompositionDoc::OnExtCoord()
 		{
 			fcMin = new FieldCoord(root, SMWUiMinXY, cMin);
 			new FieldCoord(root, SMWUiMaxXY, cMax);
-			SetMenHelpTopic(htpDspBounds);
+			SetMenHelpTopic("");
 			create();
 		}
 		FormEntry* feDefaultFocus()
@@ -1236,7 +1289,7 @@ public:
 			cb = new CheckBox(root,SMWUiAnimationLayer,asAnimation);
 			cb->SetCallBack((NotifyProc)&AddLayerForm::changeFilter);
 		}
-		SetMenHelpTopic(htpAddLayer);
+		SetMenHelpTopic("ilwismen\\add_layer_to_map_window.htm");
 		create();
 	}
 private:
@@ -1265,7 +1318,7 @@ public:
 		new FieldBlank(root);
 		new FieldDataTypeLarge(root, sName, ".mpr");
 		//    new FieldSegmentMap(root, SDUiSegMap, sName);
-		SetMenHelpTopic(htpAddRasMap);
+		SetMenHelpTopic("");
 		create();
 	}
 };
@@ -1279,7 +1332,7 @@ public:
 		new FieldBlank(root);
 		new FieldDataTypeLarge(root, sName, ".mps");
 		//    new FieldSegmentMap(root, SDUiSegMap, sName);
-		SetMenHelpTopic(htpAddSegMap);
+		SetMenHelpTopic("");
 		create();
 	}
 };
@@ -1293,7 +1346,7 @@ public:
 		new FieldBlank(root);
 		new FieldDataTypeLarge(root, sName, ".mpa");
 		//    new FieldSegmentMap(root, SDUiSegMap, sName);
-		SetMenHelpTopic(htpAddPolMap);
+		SetMenHelpTopic("");
 		create();
 	}
 };
@@ -1307,7 +1360,7 @@ public:
 		new FieldBlank(root);
 		new FieldDataTypeLarge(root, sName, ".mpp");
 		//    new FieldSegmentMap(root, SDUiSegMap, sName);
-		SetMenHelpTopic(htpAddPntMap);
+		SetMenHelpTopic("");
 		create();
 	}
 };
@@ -1642,7 +1695,7 @@ public:
 		new FieldBlank(root);
 		new FieldDataTypeLarge(root, sName, ".ATX");
 		//    new PushButton(root, SMWUiCreate, (NotifyProc)&AddAnnTextForm::CreateAtx);
-		SetMenHelpTopic(htpAddAnnText);
+		SetMenHelpTopic("");
 		create();
 	}
 private:
@@ -1687,7 +1740,7 @@ BmForm(CWnd* parent, String* sName, bool* fIsotropic)
 {
 new FieldDataTypeLarge(root, sName, ".bmp.wmf.emf");
 new CheckBox(root, SMWUiIsotropic, fIsotropic);
-SetMenHelpTopic(htpAddBitmapPicture);
+SetMenHelpTopic("ilwismen\\layout_editor_insert_bitmap_picture.htm");
 create();
 }
 };
@@ -1802,7 +1855,7 @@ void MapCompositionDoc::OnChangeCoordSystem()
 			: FormWithDest(parent, SMWTitleChangeCoordSystem)
 		{
 			new FieldDataTypeLarge(root, sName, ".csy");
-			SetMenHelpTopic(htpDspChangeCS);
+			SetMenHelpTopic("ilwismen\\change_coordinate_system_of_a_map_window.htm");
 			create();
 		}
 	};
@@ -1960,7 +2013,7 @@ void MapCompositionDoc::OnOpen()
 			: FormWithDest(parent, SMSTitleShowMap)
 		{
 			new FieldDataObject(root, sName);
-			SetMenHelpTopic(htpOpenBaseMap);
+			SetMenHelpTopic("ilwismen\\open_show_map_or_other_object.htm");
 			create();
 		}
 	};

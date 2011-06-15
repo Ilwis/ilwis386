@@ -105,11 +105,11 @@ void DomainValueIntFormView::CreateForm()
 		fiWidth->Align(cb, AL_UNDER);
 	}
 	if (dm->fSystemObject())
-		SetMenHelpTopic(htpShowDomSystem);
+		SetMenHelpTopic("");
 	else if (dm->fReadOnly())
-		SetMenHelpTopic(htpShowDomReadOnly);
+		SetMenHelpTopic("");
 	else 
-		SetMenHelpTopic(htpEditDomValue);
+		SetMenHelpTopic("ilwismen\\edit_domain_value.htm");
 }
 
 int DomainValueIntFormView::exec()

@@ -435,7 +435,7 @@ int ColumnAndColorSelector::ChangeColor(Event*)
       PushButton* pb = new PushButton(root, SRPUiCustomColor,
         (NotifyProc)&ColorForm::CustomColor);
       pb->Align(cs, AL_UNDER);
-  //    SetMenHelpTopic(htpRprEditPix);
+  //    SetMenHelpTopic("ilwismen\\representation_class_editor_edit_item_raster.htm");
       create();
     }
   private:

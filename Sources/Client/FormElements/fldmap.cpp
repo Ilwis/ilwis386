@@ -208,7 +208,7 @@ FormCreateMap::FormCreateMap(CWnd* wPar, String* smap,
   fdc->SetCallBack((NotifyProc)&FormCreateMap::DomainCallBack);
   fvr->SetCallBack((NotifyProc)&FormCreateMap::ValueRangeCallBack);
 
-  SetMenHelpTopic(htpCreateMap);
+  SetMenHelpTopic("ilwismen\\create_a_raster_map.htm");
   create();
 }  
 
@@ -465,7 +465,7 @@ FormCreateSeg::FormCreateSeg(CWnd* wPar, String* sMap,
 : FormCreateVectorMap(wPar, SMSTitleCreateSegMap,
   ".mps", sMap, sCsy, sDomain)
 {
-  SetMenHelpTopic(htpCreateSegmentMap);
+  SetMenHelpTopic("ilwismen\\create_a_segment_map.htm");
   create();
 }
 
@@ -474,7 +474,7 @@ FormCreateSeg::FormCreateSeg(CWnd* wPar, String* sMap,
 : FormCreateVectorMap(wPar, SMSTitleCreateSegMap,
   ".mps", sMap, sCsy, cb, sDomain)
 {
-  SetMenHelpTopic(htpCreateSegmentMap);
+  SetMenHelpTopic("ilwismen\\create_a_segment_map.htm");
   create();
 }
 
@@ -508,7 +508,7 @@ FormCreatePol::FormCreatePol(CWnd* wPar, String* sMap,
 : FormCreateVectorMap(wPar, SMSTitleCreatePolMap,
   ".mpa", sMap, sCsy, sDomain)
 {
-  SetMenHelpTopic(htpCreatePolygonMap);
+  SetMenHelpTopic("");
   create();
 }
 
@@ -517,7 +517,7 @@ FormCreatePol::FormCreatePol(CWnd* wPar, String* sMap,
 : FormCreateVectorMap(wPar, SMSTitleCreatePolMap,
   ".mpa", sMap, sCsy, cb, sDomain)
 {
-  SetMenHelpTopic(htpCreatePolygonMap);
+  SetMenHelpTopic("");
   create();
 }
 
@@ -539,7 +539,7 @@ FormCreatePnt::FormCreatePnt(CWnd* wPar, String* sMap,
 : FormCreateVectorMap(wPar, SMSTitleCreatePntMap,
   ".mpp", sMap, sCsy, sDomain)
 {
-  SetMenHelpTopic(htpCreatePointMap);
+  SetMenHelpTopic("ilwismen\\create_a_point_map.htm");
   create();
 }
 
@@ -548,7 +548,7 @@ FormCreatePnt::FormCreatePnt(CWnd* wPar, String* sMap,
 : FormCreateVectorMap(wPar, SMSTitleCreatePntMap,
   ".mpp", sMap, sCsy, cb, sDomain)
 {
-  SetMenHelpTopic(htpCreatePointMap);
+  SetMenHelpTopic("ilwismen\\create_a_point_map.htm");
   create();
 }
 

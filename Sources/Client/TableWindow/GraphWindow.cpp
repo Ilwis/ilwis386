@@ -67,7 +67,7 @@ END_MESSAGE_MAP()
 
 GraphWindow::GraphWindow()
 {
-  htpTopic = htpGraphWindow;
+  help = "ilwis\\graph_window_functionality.htm";
 	sHelpKeywords = "Graph Window";
 }
 

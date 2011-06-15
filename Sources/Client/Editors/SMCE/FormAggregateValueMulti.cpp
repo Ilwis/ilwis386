@@ -213,9 +213,9 @@ void FormAggregateValueMulti::create()
 	pbCalc->Align(rgBoolean, AL_UNDER);
 
 	if ((m_fd & dmCLASS) == dmCLASS)
-		SetAppHelpTopic(htpSMCEAggregateValueSliced);
+		SetAppHelpTopic("ilwismen\\smce_window_aggregate_values_sliced.htm");
 	else
-		SetAppHelpTopic(htpSMCEAggregateValue);
+		SetAppHelpTopic("ilwismen\\smce_window_aggregate_values.htm");
 
 	FormBaseDialog::create();
 }

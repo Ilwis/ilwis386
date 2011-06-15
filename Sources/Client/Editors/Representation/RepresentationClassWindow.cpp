@@ -86,7 +86,7 @@ END_MESSAGE_MAP()
 
 RepresentationClassWindow::RepresentationClassWindow()
 {
-  htpTopic = htpReprClassWindow;
+  help = "ilwis\\representation_class_editor_functionality.htm";
 	sHelpKeywords = "Representation Class editor";
 }
 

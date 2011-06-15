@@ -114,7 +114,7 @@ void CoordSysView::create()
       fldCrdMax->SetCallBack((NotifyProc)&CoordSysView::CallBack);
     }
   }
-  SetMenHelpTopic(htpCSEdit);
+  SetMenHelpTopic("ilwismen\\edit_coordinate_system_boundary_only.htm");
 
 }
 

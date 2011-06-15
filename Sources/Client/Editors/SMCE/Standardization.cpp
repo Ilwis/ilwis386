@@ -445,7 +445,7 @@ public:
 		fgFunctionGraph->SetHeight(300);
 		fgFunctionGraph->SetIndependentPos();
 
-		SetMenHelpTopic(htpSMCEStandardizeValue);
+		SetMenHelpTopic("ilwismen\\smce_window_standardize_value.htm");
 
 		create();
 	}
@@ -1204,7 +1204,7 @@ public:
 		frDescription->SetIndependentPos();
 		frDescription->SetWidth(180);
 
-		SetMenHelpTopic(htpSMCEStandardizeValue);
+		SetMenHelpTopic("ilwismen\\smce_window_standardize_value.htm");
 		
 		create();
 	}
@@ -1546,7 +1546,7 @@ public:
 			pbApplyWizard->Align(pbCreateColumn, AL_AFTER);
 		}
 
-		SetMenHelpTopic(htpSMCEStandardizeClass);
+		SetMenHelpTopic("ilwismen\\smce_window_standardize_class.htm");
 
 		create();
 	}
@@ -1997,7 +1997,7 @@ public:
 		FieldReal* frTrue = new FieldReal(root, SSmcUiValueForTrue, rTrue, m_ValueRange);
 		FieldReal* frFalse = new FieldReal(root, SSmcUiValueForFalse, rFalse, m_ValueRange);
 
-		SetMenHelpTopic(htpSMCEStandardizeBool);
+		SetMenHelpTopic("ilwismen\\smce_window_standardize_boolean.htm");
 
 		create();
 	}
@@ -2113,7 +2113,7 @@ public:
 		RadioButton* rbBenefit = new RadioButton(rgCostBenefit, SSmcUiTruePasses);
 		RadioButton* rbCost = new RadioButton(rgCostBenefit, SSmcUiFalsePasses);
 		
-		SetMenHelpTopic(htpSMCEStandardizeBool);
+		SetMenHelpTopic("ilwismen\\smce_window_standardize_boolean.htm");
 		
 		create();
 	}

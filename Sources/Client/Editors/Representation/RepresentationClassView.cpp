@@ -262,7 +262,7 @@ CustomizeForm::CustomizeForm(CWnd* wPar, const Domain& dom, int *iState, int* w)
 	new FieldBlank(root);
 	fi = new FieldInt(root, SRPUiColumnWidth, w, ValueRange(20L,250L));
 	fi->SetCallBack((NotifyProc)& CustomizeForm::Check);
-	SetMenHelpTopic(htpRprColWidth);
+	SetMenHelpTopic("ilwismen\\representation_class_editor_column_width.htm");
 	create();
 } 
 
@@ -469,7 +469,7 @@ public:
 			fi->Align(cbVar, AL_UNDER);
 		}
 
-    SetMenHelpTopic(htpRprMultiple);
+    SetMenHelpTopic("ilwismen\\representation_class_editor_edit_multiple_items.htm");
 		seedrand(30);
     create();
   };

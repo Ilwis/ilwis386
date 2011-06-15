@@ -84,7 +84,7 @@ END_MESSAGE_MAP()
 
 Table2Window::Table2Window()
 {
-	htpTopic = htp2DimTableObject;
+	help = "ilwis\\ilwis_objects_two_dimensional_tables.htm";
 	sHelpKeywords = "Two-dimensional tables";
 }
 

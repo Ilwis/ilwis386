@@ -123,6 +123,7 @@ protected:
   virtual HelpTopic htp() { return htpTopic; }
 	String sHelpKeywords;
 	bool fStoreToolBars;
+	String help;
 
 private:
 	String m_sWindowName;

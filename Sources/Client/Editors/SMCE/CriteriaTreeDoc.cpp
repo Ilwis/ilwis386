@@ -134,7 +134,7 @@ public:
 		fsMessage->SetWidth(150);
 		fsMessage->SetHeight(100);
 		
-		SetMenHelpTopic(htpSMCENewCriteriaTree);
+		SetMenHelpTopic("ilwismen\\smce_window_new.htm");
 		
 		create();
 	}
@@ -222,7 +222,7 @@ void CriteriaTreeDoc::OnFileOpen()
     {
 			new FieldDataTypeLarge(root, sName, ".smc");
 
-			SetMenHelpTopic(htpSMCEOpenCriteriaTree);
+			SetMenHelpTopic("ilwismen\\smce_window_open_criteria_tree.htm");
 
       create();
     }
@@ -285,7 +285,7 @@ public:
 		new StaticText(root, SSmcUiExistingOverwritten);
 		new CheckBox(root, SSmcUiShowAfterCalc, fShow);
 
-		SetMenHelpTopic(htpSMCEGenerateAllMaps);
+		SetMenHelpTopic("ilwismen\\smce_window_all_composite_index_maps.htm");
 		create();
 	}
 };
@@ -345,7 +345,7 @@ public:
 		fsMessage->SetWidth(95);
 		fsMessage->SetIndependentPos();
 
-		SetMenHelpTopic(htpSMCEEditAlternatives);
+		SetMenHelpTopic("ilwismen\\smce_window_alternatives.htm");
 
 		create();
 	}

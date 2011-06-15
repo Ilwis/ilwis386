@@ -130,6 +130,10 @@ void FieldListView::show(int v) {
 }
 
 void FieldListView::setData(int row, const vector<String>& rowdata) {
+	if ( row == -1) {
+		data.clear();
+		return ;
+	}
 	if ( row >= data.size())
 		throw ErrorObject(TR("Illegal row number when changing data"));
 	data[row].clear();

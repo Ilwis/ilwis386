@@ -139,7 +139,7 @@ namespace
       ftbl->SetCallBack((NotifyProc)&NewGraphForm::TableCallBack);
 			fcolX = new FieldColumn(root, SGPUiAngle, tbl, &sColX, dmVALUE);
 			fcolY = new FieldColumn(root, SGPUiValue, tbl, &sColY, dmVALUE | dmIMAGE | dmBOOL);
-      SetMenHelpTopic(htpCreateRoseDiagram);
+      SetMenHelpTopic("ilwismen\\create_a_rose_diagram.htm");
 			create();
 		}
 		String sTbl, sColX, sColY;	
@@ -174,7 +174,7 @@ void RoseDiagramDoc::OnFileOpen()
     : FormWithDest(parent, SGPTitleOpenGraph)
     {
 			new FieldDataTypeLarge(root, sName, ".grh", new GraphLister(grhROSEDIAGRAM));
-			SetMenHelpTopic(htpOpenGraph);
+			SetMenHelpTopic("ilwismen\\graph_window_open_graph.htm");
       create();
     }
   };
@@ -259,7 +259,7 @@ void RoseDiagramDoc::OnAddGraph()
       ftbl->SetCallBack((NotifyProc)&AddGraphForm::TableCallBack);
 			fcolX = new FieldColumn(root, SGPUiAngle, 0, sColX, dmVALUE);
 			fcolY = new FieldColumn(root, SGPUiValue, 0, sColY, dmVALUE | dmIMAGE | dmBOOL);
-      SetMenHelpTopic(htpNewRoseDiagram);
+      SetMenHelpTopic("ilwismen\\graph_window_add_rose_diagram.htm");
 			create();
 		}
   private:

@@ -76,7 +76,7 @@ END_MESSAGE_MAP()
 
 LayoutWindow::LayoutWindow()
 {
-  htpTopic = htpLayoutWindow;
+  help = "ilwis\\layout_editor_functionality.htm";
 	sHelpKeywords = "Layout editor";
 }
 

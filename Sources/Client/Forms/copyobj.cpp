@@ -123,7 +123,7 @@ CopyObjectForm::CopyObjectForm(CWnd* wPar, list<FileName>& lfnFiles, String& _sT
 		cb->Align(fb, AL_UNDER);
 		cb->SetIndependentPos();
 	}  
-	SetMenHelpTopic(htpCopyObject);      
+	SetMenHelpTopic("ilwismen\\copy_object_to.htm");      
 	create();
 };
 

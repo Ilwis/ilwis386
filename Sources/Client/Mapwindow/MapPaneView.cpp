@@ -508,7 +508,7 @@ void MapPaneView::OnPixelEdit()
 				new FieldDataTypeLarge(root, sName, ".MPR.SMS");
 			fdtl->SetOnlyEditable();  
 			//    new FieldMap(root, SDUiMapName, sName);
-			SetMenHelpTopic(htpDspEditPixMap);
+			SetMenHelpTopic("ilwismen\\edit_raster_map.htm");
 			create();
 		}
 	};
@@ -553,7 +553,7 @@ void MapPaneView::OnPointEdit()
 				new FieldDataTypeLarge(root, sName, ".MPP");
 			fdtl->SetOnlyEditable();  
 			//    new FieldPointMap(root, SDUiPntMap, sName);
-			SetMenHelpTopic(htpDspEditPntMap);
+			SetMenHelpTopic("ilwismen\\edit_point_map.htm");
 			create();
 		}
 	};
@@ -591,7 +591,7 @@ void MapPaneView::OnSegmentEdit()
 				new FieldDataTypeLarge(root, sName, ".MPS");
 			fdtl->SetOnlyEditable();  
 			//    new FieldSegmentMap(root, SDUiSegMap, sName);
-			SetMenHelpTopic(htpDspEditSegMap);
+			SetMenHelpTopic("ilwismen\\edit_segment_map.htm");
 			create();
 		}
 	};
@@ -616,7 +616,7 @@ void MapPaneView::OnPolygonEdit()
 				new FieldDataTypeLarge(root, sName, ".MPA");
 			fdtl->SetOnlyEditable();  
 			//    new FieldPolygonMap(root, SDUiPolMap, sName);
-			SetMenHelpTopic(htpDspEditPolMap);
+			SetMenHelpTopic("ilwismen\\edit_polygon_map.htm");
 			create();
 		}
 	};
@@ -821,7 +821,7 @@ void MapPaneView::OnSetDoublClickAction()
 			new RadioButton(rg, SMWUiEditAttribute);
 			new RadioButton(rg, SMWUiEditRepres);
 			new RadioButton(rg, SMWUiExecuteAction);
-			SetMenHelpTopic(htpDspDblClkAction);
+			SetMenHelpTopic("ilwismen\\double_click_action.htm");
 			create();
 		}
 	};

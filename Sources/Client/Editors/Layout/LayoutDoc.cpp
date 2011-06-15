@@ -497,7 +497,7 @@ void LayoutDoc::OnAddMapView()
     : FormWithDest(parent, SLOTitleAddMapView)
     {
 			new FieldDataTypeLarge(root, sName, ".mpv");
-	    SetMenHelpTopic(htpInsertMapView);
+	    SetMenHelpTopic("ilwismen\\layout_editor_insert_map_view.htm");
       create();
     }
   };
@@ -569,7 +569,7 @@ void LayoutDoc::OnAddPicture()
     : FormWithDest(parent, SLOTitleAddPicture)
     {
       new FieldDataTypeLarge(root, sName, ".emf.wmf.bmp", true);
-	    SetMenHelpTopic(htpAddBitmapPicture);
+	    SetMenHelpTopic("ilwismen\\layout_editor_insert_bitmap_picture.htm");
       create();
     }
   };
@@ -634,7 +634,7 @@ void LayoutDoc::OnFileOpen()
     : FormWithDest(parent, SLOTitleOpenLayout)
     {
 			new FieldDataTypeLarge(root, sName, ".ilo");
-			SetMenHelpTopic(htpOpenLayout);
+			SetMenHelpTopic("ilwismen\\layout_editor_open_layout.htm");
       create();
     }
   };

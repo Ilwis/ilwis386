@@ -398,7 +398,7 @@ void TablePaneView::OnGotoColumn()
 		{
 			new FieldBlank(root);
 			new FieldColumn(root, STBUiCol, tvw, sCol);
-			SetMenHelpTopic(htpTblGotoCol);
+			SetMenHelpTopic("ilwismen\\goto_column.htm");
 			create();
 		}
 	};
@@ -774,7 +774,7 @@ public:
 			new FieldVal(root, sCol, cl->dvrs(), &sVal);
 		}
 		new FieldBlank(root);
-		setHelpItem(htpTblEditMultiRecords);
+		help = "ilwismen\\table_window_edit_single_column.htm";
 		create();
 	}
 private:
@@ -825,7 +825,7 @@ public:
 				}
 			}
 		}
-		setHelpItem(htpTblEditMultiFields);
+		help = "ilwismen\\table_window_edit_multiple_columns.htm";
 		create();
 	}
 private:

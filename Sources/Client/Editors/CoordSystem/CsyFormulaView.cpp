@@ -189,7 +189,7 @@ void CoordSysFormulaView::create()
   FieldReal* frA22 = new FieldReal(fgAffine, SCSUia22, &csf->a22);
   frA22->Align(frA21, AL_UNDER);
 
-  SetMenHelpTopic(htpCSEditFormula);
+  SetMenHelpTopic("ilwismen\\edit_coordinate_system_formula.htm");
 }
 
 int CoordSysFormulaView::SetDefaults(Event*)

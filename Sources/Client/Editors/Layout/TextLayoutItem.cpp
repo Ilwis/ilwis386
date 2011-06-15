@@ -249,7 +249,7 @@ public:
 			new FieldLogFont(root, &tli->lf, FieldLogFont::faROTATION);
 	    new CheckBox(root, SDCUiTransparent, &tli->fTransparent);
 
-      SetMenHelpTopic(htpCnfAnnText);
+      SetMenHelpTopic("ilwismen\\layout_editor_insert_edit_text.htm");
       create();
   }
   FormEntry* feDefaultFocus() {

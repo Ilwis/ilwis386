@@ -441,7 +441,7 @@ public:
 	    FieldLogFont* flf = new FieldLogFont(fg, &tli->lf);
       flf->Align(cb, AL_UNDER);
 
-      SetMenHelpTopic(htpCnfAnnNorth);
+      SetMenHelpTopic("ilwismen\\layout_editor_insert_edit_north_arrow.htm");
       create();
   }
 };

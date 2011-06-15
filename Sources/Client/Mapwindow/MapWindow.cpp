@@ -86,7 +86,7 @@ const int iMINSIZE = 50;
 MapWindow::MapWindow()
 : pFirstView(0)
 {
-  htpTopic = htpContentsMapWindow;
+  help = "ilwis\\map_window.htm";
 	sHelpKeywords = "Map Window";
 }
 

@@ -980,7 +980,7 @@ public:
   : FormWithDest(wPar, SRPTitleLineSymbol)
   {
     new FieldExtendedSymbol(root, smb, true, false);
-    SetMenHelpTopic(htpRprLineSymbol);
+    SetMenHelpTopic("ilwismen\\representation_class_editor_line_symbols_on_segments.htm");
     create();
   }
 };

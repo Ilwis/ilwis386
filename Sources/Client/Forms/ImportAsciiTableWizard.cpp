@@ -1212,33 +1212,33 @@ void AsciiTableWizard::SetPages() {
 	if ( ppTableDomain != NULL)
 		return;
 	ppTableDomain = new SelectTableDomainPage(this);
-	ppTableDomain->SetMenHelpTopic(htpImportTableWizardSelectTableDomain);
+	ppTableDomain->SetMenHelpTopic("ilwismen\\import_database_table_table_domain.htm");
 	ppTableDomain->create();
 	AddPage(ppTableDomain);
 	ppTableDomain->SetPPDisable();	
 
 	ppQuery = new EnterSqlQuery(this);
-	ppQuery->SetMenHelpTopic(htpImportTableWizardSQLQuery);
+	ppQuery->SetMenHelpTopic("ilwismen\\import_database_sql_query.htm");
 	ppQuery->create();
 	AddPage(ppQuery);	
 	ppQuery->SetPPDisable();	
 
 	ppSelectDBTable = new SelectDBTable(this);
-	ppSelectDBTable->SetMenHelpTopic(htpImportTableWizardSelectTableDomain);
+	ppSelectDBTable->SetMenHelpTopic("ilwismen\\import_database_table_table_domain.htm");
 	ppSelectDBTable->create();
 	AddPage(ppSelectDBTable);
 	ppSelectDBTable->SetPPDisable();			
 
 	// file contents viewer
 	ppFileView = new FileViewPage(this);
-	ppFileView->SetMenHelpTopic(htpImportTableWizardView);
+	ppFileView->SetMenHelpTopic("ilwismen\\import_table_view_file.htm");
 	ppFileView->create();
 	AddPage(ppFileView);
 	ppFileView->SetPPDisable();				
 
 	// choose all column properties
 	ppColDetails = new SpecifyColumnsDetailsPage(this);
-	ppColDetails->SetMenHelpTopic(htpImportTableWizardColumns);
+	ppColDetails->SetMenHelpTopic("ilwismen\\import_table_edit_column_details.htm");
 	ppColDetails->create();
 	AddPage(ppColDetails);
 	ppColDetails->SetPPDisable();					

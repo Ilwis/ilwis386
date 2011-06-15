@@ -135,7 +135,7 @@ void GeoRefFactorView::FillDerivedFields(FieldGroup* fgGenerRoot)
 		fiCol->Align(fiRow, AL_AFTER);
 	}
 
-	SetMenHelpTopic(htpGrfFactor);
+	SetMenHelpTopic("");
 }
 
 int GeoRefFactorView::exec()

@@ -107,7 +107,7 @@ public:
 	    new FieldLogFont(fg, &tli->lf);
       new CheckBox(fg, SDCUiTransparent, &tli->fTransparent);
 
-      SetMenHelpTopic(htpCnfAnnScaleText);
+      SetMenHelpTopic("ilwismen\\layout_editor_insert_edit_scale_text.htm");
       create();
   }
 };

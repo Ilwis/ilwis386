@@ -43,6 +43,7 @@
 #include "Client\Mapwindow\MapPaneView.h"
 #include "Engine\Map\Segment\Seg.h"
 #include "Engine\Map\Polygon\POL.H"
+#include "Client\ilwis.h"
 #include "Client\Mapwindow\Positioner.h"
 #include "Client\Editors\Editor.h"
 #include "Headers\constant.h"
@@ -84,7 +85,7 @@ Editor::Editor(MapPaneView* mappaneview)
 	hmenFile = 0;
 	hmenEdit = 0;
 	drw = 0;
-  htpTopic = htpContentsMapWindow;
+	help = "ilwis\\map_window.htm";
 	sHelpKeywords = "Map Window";
 }
 
@@ -218,7 +219,7 @@ int Editor::AskValue(const String& sRemark, unsigned int htp)
       if (dvrs.dm()->iWidth() > 12)
         fv->SetWidth(75);
       if (htp)  
-        SetMenHelpTopic(htp);
+        SetMenHelpTopic(help);
       create();
     }
   };
@@ -308,16 +309,7 @@ LRESULT Editor::OnUpdate(WPARAM wParam, LPARAM lParam)
 
 void Editor::OnHelp() 
 {
-	String sModName = htp().sModName;
-	String sHelpFile;
-	if (sModName != "")
-		sHelpFile = sModName;
-	else
-		sHelpFile = "ilwis.chm";
-	
-	sHelpFile = ChmFinder::sFindChmFile(sHelpFile);
-
-	HtmlHelp(GetDesktopWindow(), sHelpFile.sVal(), HH_HELP_CONTEXT, abs((int)htp().iTopic));
+	IlwWinApp()->showHelp(help);
 }
 
 void Editor::OnRelatedTopics()

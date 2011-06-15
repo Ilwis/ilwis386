@@ -41,6 +41,7 @@
 #define FORMBASEVIEW_C
 #include "Client\Headers\formelementspch.h"
 #include "Headers\constant.h"
+#include "Client\ilwis.h"
 #include "Engine\Base\Algorithm\Random.h"
 #include "Headers\Hs\Mainwind.hs"
 #include "Headers\htmlhelp.h"
@@ -193,16 +194,7 @@ afx_msg void FormBaseView::OnMeasureItem( int nIDCtl, LPMEASUREITEMSTRUCT mi )
 
 void FormBaseView::OnHelp()
 {
-  String sModName = htp().sModName;
-  String sHelpFile;
-  if (sModName != "")
-    sHelpFile = sModName;
-  else
-    sHelpFile = "ilwis.chm";
-	
-	sHelpFile = ChmFinder::sFindChmFile(sHelpFile);
-
-	::HtmlHelp(::GetDesktopWindow(), sHelpFile.sVal(), HH_HELP_CONTEXT, abs((int)htp().iTopic));
+	IlwWinApp()->showHelp(help);
 }
 
 int FormBaseView::Copy()
@@ -292,20 +284,13 @@ void FormBaseView::create()
     dimBut3.height() = 3 * dimButton.height() + 2 * ( DISTBUT + dimOutSide.height());
 
     String sHelp;
-    int iHelp = htp().iTopic;
-    if (GetPrivateProfileInt("help", "numbers", 0, "ilwis.ini")) 
-    {
-        sHelp = String("%d", iHelp);
-        if (iHelp < 0)
-            iHelp = 1;
-    }  
-    else 
-        sHelp = SUIHelp;
+    help = htp();
+    sHelp = SUIHelp;
     bool fButtonsRight = (0 == (fbs & fbsBUTTONSUNDER));
     int iButtons = 0;
     if (0 == (fbs & fbsNOOKBUTTON)) iButtons += 1;     // OK
     if (0 == (fbs & fbsNOCANCELBUTTON)) iButtons += 1; // Cancel
-    if (iHelp > 0) iButtons += 1;                      // Help
+    if (help != "") iButtons += 1;                      // Help
 
     zDimension dimForm;
 		if (0 == iButtons) {
@@ -381,7 +366,7 @@ void FormBaseView::create()
     }
     butCancel.SetFont(fnt);
  
-    if (iHelp > 0) 
+    if (help != "") 
     {
         if (fButtonsRight) 
         {

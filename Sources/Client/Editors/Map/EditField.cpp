@@ -270,7 +270,7 @@ public:
     new FieldString(root, SEDUiCode, sCode, Domain(), true);
     new FieldColor(root, SEDUiColor, clr);
     
-//    setHelpItem(htpDomainWindow);
+//    setHelpItem("ilwis\domain_class_id_editor_functionality.htm");
     create();
   }
 };

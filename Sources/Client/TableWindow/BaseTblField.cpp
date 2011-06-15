@@ -343,7 +343,7 @@ public:
     new FieldString(root, SEDUiName, sName, Domain(), false);
     new FieldString(root, SEDUiCode, sCode, Domain(), true);
 
-//    setHelpItem(htpDomainWindow);
+//    setHelpItem("ilwis\domain_class_id_editor_functionality.htm");
     create();
   }
 };

@@ -429,7 +429,7 @@ public:
 	BOOL OnSetActive();
 
 private:
-	int      m_iTopic;
+	String      help;
 	String   m_sExt;
 	CHHCtrl* m_hhc;
 };

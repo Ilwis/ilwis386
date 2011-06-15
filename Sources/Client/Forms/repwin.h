@@ -68,6 +68,7 @@ public:
 private:
   String sUpdate();
   void Update();
+  String help;
 	LONG OnIlwisReportMsg(UINT iRepCode, LONG lp);
 	void DelayedShow();
   void UpdateIconic();

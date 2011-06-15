@@ -111,7 +111,7 @@ public:
                               { return id; }   
 	void                    SetBevelStyle(BevelStyle bsStyle);
 
-  HelpTopic&              htp();
+  String              htp();
   FormEntry*              parent() 
                               { return _par; }        // parent
   const NotifyProc&       npChanged() const           // call back when form entry changed

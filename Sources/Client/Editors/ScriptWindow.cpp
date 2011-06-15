@@ -82,7 +82,7 @@ END_MESSAGE_MAP()
 
 ScriptWindow::ScriptWindow()
 {
-	htpTopic = htpScriptWindow;
+	help = "ilwis\\script_editor_functionality.htm";
 	sHelpKeywords = "Scripts";
 	SetWindowName("ScriptEditor");
 }

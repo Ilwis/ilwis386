@@ -129,28 +129,6 @@ void FormGeneralApplication::SetCommand(String sCmd)
 void FormGeneralApplication::OnHelp()
 {
 	FormBaseDialog::OnHelp();
-/*
-	if (0 == hhc) {
-		CWaitCursor curWait;
-		CRect rctWnd;
-		GetWindowRect(&rctWnd);
-		int iWidth = rctWnd.Width();
-		int iHeight = rctWnd.Height();
-		rctWnd.right += 400;
-
-		int iCaption = GetSystemMetrics(SM_CYCAPTION); 
-		int iBorder = 2 + GetSystemMetrics(SM_CYBORDER);
-		int iRight = iWidth + 400 - 2 * iBorder;
-		iHeight -= iCaption + 2 * iBorder;
-		CRect rect(iWidth,0,iRight,iHeight);
-		hhc = new HelpCtrl; //CHHCtrl;
-		hhc->Create(this, rect, 0, "main");
-		hhc->SetChmFile("ilwis.chm");
-
-		MoveWindow(&rctWnd);
-	}
-	hhc->NavigateChm(htp().iTopic);
-*/
 }
 
 void FormGeneralApplication::OnShow()

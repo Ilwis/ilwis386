@@ -234,7 +234,7 @@ ColumnManageForm::ColumnManageForm(TableDoc* tdoc, TableView* view)
   st->SetIndependentPos();
   st->SetCallBack((NotifyProc)&ColumnManageForm::Select);
 	
-  SetMenHelpTopic(htpColManage);
+  SetMenHelpTopic("ilwismen\\column_management.htm");
   create();
 }
 

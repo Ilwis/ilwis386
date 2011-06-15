@@ -34,110 +34,6 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/* $Log: /ILWIS 3.0/FormElements/flddat.cpp $
- * 
- * 26    17-05-05 12:50 Retsios
- * [bug=6565] Added a horizontal scrollbar to the listboxes of
- * FieldDataTypeLarge and gave it sufficient information to "know" how big
- * it should be in order to be able to read even the largest item.
- * 
- * 25    1-10-03 12:19 Retsios
- * Merging from $/ILWIS SMCE/FormElements/flddat.cpp
- * 
- * 26    21-08-03 15:00 Retsios
- * added new criteria tree (smc) object
- * 
- * 24    26-10-01 18:12 Retsios
- * Added ioc, ilo, grh, stp
- * 
- * 23    27-08-01 18:14 Koolhoven
- * in FillDir() use max 60 char instead 15 for directory substring to shwo
- * as text
- * 
- * 22    8/22/01 15:11 Willem
- * The SetExt() function did not caal the ToLower function for the last
- * extension in the string array
- * 
- * 21    16/03/01 9:05 Willem
- * The fill() function now tries to remember and restore the selected
- * object
- * 
- * 20    20/11/00 13:06 Willem
- * Added fIcons flag to FieldDataTypeLarge constructor
- * 
- * 19    26-10-00 15:48 Koolhoven
- * allow string which conatins name of object to conatin a directory on
- * input time
- * 
- * 18    14-07-00 4:29p Martin
- * sGetCurDir (from IlwisWinApp) instead of sCurDir
- * 
- * 17    17/05/00 13:16 Willem
- * CFileFind matches extensions that begin with a certain string (.MPA)
- * This includes extension such as .MPAt#. An extra check is now made
- * 
- * 16    9/05/00 11:29 Willem
- * FieldDataTypeLarge now does not list directories in the Object list box
- * anymore
- * 
- * 15    4/05/00 16:58 Willem
- * StoreData now clears the filename when no item is selected in the file
- * list
- * 
- * 14    4/05/00 11:36 Willem
- * - Selection is now disabled when the file count is zero; this prevents
- * a wrong output name to stay visible
- * - Remove previously selected name when another directory is selected
- * - Cleanup of code: removed old commented code
- * 
- * 13    3/05/00 16:38 Willem
- * Changed FillDir() to display long filenames for directories in
- * FieldDataTypeLarge
- * 
- * 12    14-01-00 18:11 Koolhoven
- * FieldDataTypeLarge is now wider
- * 
- * 11    29-11-99 10:53 Wind
- * make UNC compatible (use now GetCurrentDirectory and
- * SetCurrentDirectory)
- * 
- * 10    6-10-99 17:49 Koolhoven
- * Removed nameedit.h and objlist.h from formelementspch.h
- * 
- * 9     9/10/99 12:39p Wind
- * adapted for changes in FileName constructors
- * 
- * 8     1-09-99 4:18p Martin
- * corrected drawing behavior and selection
- * 
- * 7     31-08-99 9:48a Martin
- * removed superflous call draw item
- * 
- * 6     9-06-99 3:38p Martin
- * Changes for general callbacks
- * 
- * 5     3/31/99 12:18p Martin
- * Wrong DrawItem parameter transferred, now Event parm
- * 
- * 4     29-03-99 10:10 Koolhoven
- * Header Comment
- * 
- * 3     26-03-99 18:04 Koolhoven
- * DrawItem() changed
-// Revision 1.4  1998/09/16 17:37:53  Wim
-// 22beta2
-//
-// Revision 1.3  1998/02/09 14:15:57  Wim
-// Added member fOnlySystemDir to show only the files in the local directory.
-// DataObjectForm used with all extensions calls SetNoSystemDir()
-//
-/* FieldDataTypeLarge
-   by Wim Koolhoven, october 1995
-   (c) Ilwis System Development ITC
-	Last change:  WK    7 Aug 98    6:12 pm
-*/
-
-//#include "zapp.hpp"
 
 #include "Client\Headers\formelementspch.h"
 #include "Client\FormElements\flddat.h"
@@ -716,7 +612,7 @@ int FieldDataObject::TypeChanged(void *)
 }
 
 DataObjectForm::DataObjectForm(CWnd* parent, const String& sTitle, String* sName, 
-                 unsigned int htp)
+                const String& htp)
 : FormWithDest(parent, sTitle)
 {
   FieldDataObject* fdo = new FieldDataObject(root, sName);
@@ -726,10 +622,10 @@ DataObjectForm::DataObjectForm(CWnd* parent, const String& sTitle, String* sName
 }
   
 DataObjectForm::DataObjectForm(CWnd* parent, const String& sTitle, String* sName, 
-                 const String& sExt, unsigned int htp)
+                 const String& sExt, const String& htp)
 : FormWithDest(parent, sTitle)
 {
   new FieldDataTypeLarge(root, sName, sExt);
-  SetMenHelpTopic(htp);
+  SetMenHelpTopic(help);
   create();
 }          

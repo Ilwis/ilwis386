@@ -42,6 +42,7 @@
 #include "Client\FormElements\FormBasePropertyPage.h"
 #include "Headers\htmlhelp.h"
 #include "Client\Help\ChmFinder.h"
+#include "Client\ilwis.h"
 #include "Headers\Htp\Ilwis.htp"
 #include "prsht.h" 
 #include "Headers\Hs\Userint.hs"
@@ -56,7 +57,7 @@ END_MESSAGE_MAP()
 
 FormBasePropertyPage::FormBasePropertyPage(const string& sTitle)
 {
-	setHelpItem(htpContentsIlwis);
+	SetHelpItem("ilwis\\contents.htm");
 	dummyWindow=new CWnd(); 
 	dummyWindow->Create(NULL, "dummy", WS_CHILD, CRect(0,0,100,100), GetDesktopWindow(), 101);
 	_windsp = new zDisplay(dummyWindow);
@@ -255,16 +256,7 @@ int FormBasePropertyPage::DataChanged(Event*)
 
 void FormBasePropertyPage::OnHelp()
 {
-	String sModName = htp().sModName;
-	String sHelpFile;
-	if (sModName != "")
-		sHelpFile = sModName;
-	else
-		sHelpFile = "ilwis.chm";
-
-	sHelpFile = ChmFinder::sFindChmFile(sHelpFile);
-
-	::HtmlHelp(::GetDesktopWindow(), sHelpFile.sVal(), HH_HELP_CONTEXT, abs((int)htp().iTopic));
+	IlwWinApp()->showHelp(help);
 }
 
 BEGIN_MESSAGE_MAP(FormBaseWizardPage, FormBasePropertyPage)

@@ -118,7 +118,7 @@ FormCreateAnnotationText::FormCreateAnnotationText(CWnd* wPar, String* satx, dou
   stRemark = new StaticText(root, sFill);
   stRemark->SetIndependentPos();
 
-  SetMenHelpTopic(htpCreateAnnotationText);
+  SetMenHelpTopic("ilwismen\\create_an_annotation_text_object.htm");
   create();
 }
 

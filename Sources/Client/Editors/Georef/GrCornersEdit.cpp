@@ -157,7 +157,7 @@ void GeoRefCornersView::create()
 		stRemark = new StaticText(root, s);
 		stRemark->SetIndependentPos();
 	}
-	SetMenHelpTopic(htpGrfCorners);
+	SetMenHelpTopic("ilwismen\\edit_georeference_corners.htm");
 	m_fInSetVal = false;
 }
 

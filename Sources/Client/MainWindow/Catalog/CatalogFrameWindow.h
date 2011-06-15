@@ -93,6 +93,7 @@ protected:
   HelpTopic htpTopic;
   virtual HelpTopic htp() { return htpTopic; }
 	String sHelpKeywords;
+	String help;
 
 private:
 	String m_sWindowName;

@@ -957,7 +957,7 @@ public:
   {
 		fldView = new FieldView(root, SLOUiMapView, sName);
 		fldView->SetCallBack((NotifyProc)&MapLayoutItemMapViewForm::iCallBackLegaleChoice);
-		SetMenHelpTopic(htpReplaceMapView);
+		SetMenHelpTopic("ilwismen\\layout_editor_replace_map_view.htm");
 		create();
   }
 

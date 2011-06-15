@@ -307,7 +307,7 @@ void FormCreateDomain::init(dmType type)
 	stRemark->Align(fs, AL_UNDER);
 	stRemark->SetIndependentPos();
 
-	SetMenHelpTopic(htpDomCreate);
+	SetMenHelpTopic("ilwismen\\create_a_domain.htm");
 	create();
 }
 

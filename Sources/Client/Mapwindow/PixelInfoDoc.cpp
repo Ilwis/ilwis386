@@ -269,7 +269,7 @@ void PixelInfoDoc::setAssociatedDrawerTool(ILWIS::DrawerTool *drw, const String&
 void PixelInfoDoc::OnAddMaps()
 {
 	String s;
-	DataObjectForm frm(wndGetActiveView(), SPITitleAddMap, &s, ".mpr.mpa.mps.mpp.mpl", htpPixAddMap);
+	DataObjectForm frm(wndGetActiveView(), SPITitleAddMap, &s, ".mpr.mpa.mps.mpp.mpl", "ilwismen\add_map_to_pixel_information_window.htm");
 	if (frm.fOkClicked()) {
 		FileName fn = s;
 		if (fn.sExt == ".mpl") {
@@ -286,7 +286,7 @@ void PixelInfoDoc::OnAddMaps()
 void PixelInfoDoc::OnAddCsys()
 {
 	String s;
-	DataObjectForm frm(wndGetActiveView(), SPITitleAddCsys, &s, ".csy", htpCrdCnf);
+	DataObjectForm frm(wndGetActiveView(), SPITitleAddCsys, &s, ".csy", "ilwismen\add_coordinate_system_to_pixel_info_window.htm");
 	if (frm.fOkClicked()) {
 		CoordSystem cs(s);
 		AddCoordSystem(cs);
@@ -296,7 +296,7 @@ void PixelInfoDoc::OnAddCsys()
 void PixelInfoDoc::OnAddGrf()
 {
 	String s;
-	DataObjectForm frm(wndGetActiveView(), SPITitleAddGrf, &s, ".grf", htpPixGrfCnf);
+	DataObjectForm frm(wndGetActiveView(), SPITitleAddGrf, &s, ".grf", "");
 	if (frm.fOkClicked()) {
 		GeoRef grf(s);
 		AddGeoRef(grf);
@@ -361,7 +361,7 @@ public:
 		st->SetIndependentPos();
 		RecItemSelector* ris = new RecItemSelector(root, &pid->riCoord);
 		ris->SetIndependentPos();
-		SetMenHelpTopic(htpPixCnf);
+		SetMenHelpTopic("ilwismen\\customize_the_pixel_information_window.htm");
 		create();
 	}
 };

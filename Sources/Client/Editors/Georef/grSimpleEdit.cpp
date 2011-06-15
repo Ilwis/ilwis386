@@ -145,7 +145,7 @@ void GeoRefSimpleView::create()
 
 	SetCallBack((NotifyProc)&GeoRefSimpleView::CallBack);
 
-	SetMenHelpTopic(htpGrfSmpl);
+	SetMenHelpTopic("");
 }
 
 int GeoRefSimpleView::exec()

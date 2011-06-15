@@ -145,7 +145,7 @@ bool RoseDiagramLayer::fConfig()
       fg = new FieldGroup(rbNeedle, true);
       new FieldColor(fg, SGPUiColor, &rdl->color);
    
-      SetMenHelpTopic(htpEditRoseDiagram);
+      SetMenHelpTopic("ilwismen\\graph_window_options_rose_diagram.htm");
       create();
     }
   };

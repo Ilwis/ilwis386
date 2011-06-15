@@ -116,7 +116,7 @@ void GeoRefSubMapCoordView::FillDerivedFields(FieldGroup* fgGenerRoot)
 		fcSecond->Align(fcFirst, AL_UNDER);
 	}
 
-	SetMenHelpTopic(htpGrfSubMap);
+	SetMenHelpTopic("");
 }
 
 int GeoRefSubMapCoordView::exec()

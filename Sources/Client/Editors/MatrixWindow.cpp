@@ -68,7 +68,7 @@ END_MESSAGE_MAP()
 
 MatrixWindow::MatrixWindow()
 {
-	htpTopic = htpMatrixObject;
+	help = "ilwis\\ilwis_objects_matrices.htm";
 	sHelpKeywords = "Matrices";
 	SetWindowName("Matrix Window");	// ensure loading and saving settings
 }

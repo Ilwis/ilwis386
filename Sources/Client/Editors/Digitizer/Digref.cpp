@@ -305,7 +305,7 @@ MapReferenceForm::MapReferenceForm(CWnd* par, Digitizer* dg, bool fMetric)
   stScale = new StaticText(fginfo, SDGRemScale);
   stRot   = new StaticText(fginfo, SDGRemRotation);
   fginfo->SetCallBack((NotifyProc)&MapReferenceForm::initMRF);
-  SetMenHelpTopic(htpDigMapRef);
+  SetMenHelpTopic("ilwismen\\digitizer_map_referencing_dig_ctrl_points.htm");
 }
 
 MapReferenceForm::~MapReferenceForm()

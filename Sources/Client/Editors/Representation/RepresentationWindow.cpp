@@ -81,7 +81,7 @@ END_MESSAGE_MAP()
 
 RepresentationWindow::RepresentationWindow()
 {
-  htpTopic = htpReprValueWindow;
+  help = "ilwis\\representation_value_gradual_editor_functionality.htm";
 	sHelpKeywords = "Representation Value/Gradual editor";
 }
 

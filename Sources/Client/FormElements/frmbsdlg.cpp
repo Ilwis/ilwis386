@@ -344,21 +344,14 @@ void FormBaseDialog::CreateDefaultPositions()
 		dimBut3.height() = 3 * dimButton.height() + 2 * ( DISTBUT + dimOutSide.height());
 
 		String sHelp;
-		int iHelp = htp().iTopic;
-		if (GetPrivateProfileInt("help", "numbers", 0, "ilwis.ini")) 
-		{
-			sHelp = String("%d", iHelp);
-			if (iHelp < 0)
-				iHelp = 1;
-		}  
-		else 
-			sHelp = SUIHelp;
+		sHelp = TR("Help");
+	
 		bool fButtonsRight = (0 == (fbs & fbsBUTTONSUNDER));
 		int iButtons = 0;
 		if (0 == (fbs & fbsNOOKBUTTON)) iButtons += 1;     // OK
 		if (0 == (fbs & fbsNOCANCELBUTTON)) iButtons += 1; // Cancel
 		if (0 != (fbs & fbsAPPLIC)) iButtons = 3;          // Application: Show, Define, Cancel
-		if (iHelp > 0) iButtons += 1;                      // Help
+		if (help != "" ) iButtons += 1;                      // Help
 
 		zDimension dimForm;
 		if (fButtonsRight) 
@@ -470,7 +463,7 @@ void FormBaseDialog::CreateDefaultPositions()
 			}
 		}
 
-		if (iHelp > 0) 
+		if (help != "") 
 		{
 			if (fButtonsRight) 
 			{
@@ -545,23 +538,7 @@ void FormBaseDialog::CreateDefaultPositions()
 
 void FormBaseDialog::OnHelp()
 {
-	String sModName = htp().sModName;
-	String sHelpFile;
-	if (sModName != "")
-		sHelpFile = sModName;
-	else
-		sHelpFile = "ilwis.chm";
-
-	sHelpFile = ChmFinder::sFindChmFile(sHelpFile);
-
-	if (fbs & fbsTOPMOST)
-		::HtmlHelp(m_hWnd, sHelpFile.sVal(), HH_HELP_CONTEXT, abs((int)htp().iTopic));
-	else
-		::HtmlHelp(::GetDesktopWindow(), sHelpFile.sVal(), HH_HELP_CONTEXT, abs((int)htp().iTopic));
-
-	sHelpFile = ChmFinder::sFindChmFile("ilwis.chm");
-
-	::HtmlHelp(0, sHelpFile.sVal(), HH_DISPLAY_TOC, 0);
+	IlwWinApp()->showHelp(help);
 }
 
 LRESULT FormBaseDialog::OnCommandHelp(WPARAM, LPARAM lParam)

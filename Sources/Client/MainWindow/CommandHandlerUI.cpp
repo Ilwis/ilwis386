@@ -89,7 +89,7 @@ int OpenMapListColorComp(CWnd * wnd)
 		{
 			iImg = IlwWinApp()->iImage("DspMap16Ico");
 			new FieldDataTypeLarge(root, sName, ".mpl");
-			SetMenHelpTopic(htpOpenMapListColorComp);
+			SetMenHelpTopic("ilwismen\\open_show_map_list_as_color_composite.htm");
 			create();
 		}
 	};
@@ -142,7 +142,7 @@ LRESULT Cmddel(CWnd *wndOwner, const String& sCmd)
 {
 	String sFn;
 	if (sCmd == "") {
-		DataObjectForm frm(wndOwner, SMSTitleDelObject.c_str(), &sFn, htpSelDelete);
+		DataObjectForm frm(wndOwner, SMSTitleDelObject.c_str(), &sFn, "ilwismen\\delete_object_select_object.htm");
 		if (!frm.fOkClicked()) 
 			return -1;
 	}
@@ -158,7 +158,7 @@ void CommandHandlerUI::CmdExport14(const String& sCmd)
 	String sFn;
 	if (s1.length() == 0)
 	{
-		DataObjectForm frm(wndOwner, SMSTitleExport14, &sFn, htpSelExport);
+		DataObjectForm frm(wndOwner, SMSTitleExport14, &sFn, "");
 		if (!frm.fOkClicked()) 
 			return;
 	}
@@ -392,7 +392,7 @@ LRESULT Cmdtbl(CWnd *wndOwner, const String& s)
 		{
 			iImg = IlwWinApp()->iImage("DspMap16Ico");
 			new FieldDataTypeLarge(root, sName, ".tbt.ta2");
-			SetMenHelpTopic(htpOpenTable);
+			SetMenHelpTopic("ilwismen\\open_show_table.htm");
 			create();
 		}
 	};
@@ -452,7 +452,7 @@ LRESULT Cmdshowastable(CWnd *wndOwner, const String& s)
 		{
 			iImg = IlwWinApp()->iImage("DspMap16Ico");
 			new FieldDataTypeLarge(root, sName, ".dom.rpr.mpp.grf.tbt.ta2.his.hsa.hss.hsp.atx", new TableAsLister(""));
-			SetMenHelpTopic(htpOpenAsTable);
+			SetMenHelpTopic("ilwismen\\open_show_object_as_table.htm");
 			create();
 		}
 	};
@@ -1595,7 +1595,7 @@ LRESULT Cmdsample(CWnd *parent, const String& s)
 		{
 			iImg = IlwWinApp()->iImage("DspMap16Ico");
 			new FieldSampleSetC(root, SSSUiSampleSet, sSample);
-			SetMenHelpTopic(htpEditMapSample);
+			SetMenHelpTopic("ilwismen\\sampling.htm");
 			create();
 		}
 	};

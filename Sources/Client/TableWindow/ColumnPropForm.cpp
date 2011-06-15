@@ -254,7 +254,7 @@ ColumnPropForm::ColumnPropForm(CWnd* parent, ColumnView& cv,
 	}
 	AdditionalInfoButton();
 
-	SetMenHelpTopic(htpColProp);
+	SetMenHelpTopic("ilwismen\\column_properties.htm");
 	create();
 }
 
@@ -452,7 +452,7 @@ int ColumnPropForm::CreateDomain(Event*)
 			String sFill('*', 40);
 			stRemark = new StaticText(root, sFill);
 			stRemark->SetIndependentPos();
-			SetMenHelpTopic(htpColCreateDomain);
+			SetMenHelpTopic("ilwismen\\create_domain_class_or_id_from_string_column.htm");
 			create();
 		}
 	private:

@@ -755,7 +755,7 @@ public:
     RadioGroup* rg = new RadioGroup(root, SDGUiUseForCntrlPnts, iOption);
     new RadioButton(rg, SDGUiMetricCoords);
     new RadioButton(rg, SDGUiGeographicCoords);
-    SetMenHelpTopic(htpDigRefStart);
+    SetMenHelpTopic("ilwismen\\digitizer_map_referencing_coordsys.htm");
     create();
   }
 };

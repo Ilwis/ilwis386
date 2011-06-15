@@ -121,11 +121,11 @@ void DomainBoolView::CreateForm()
 		fsFalse->SetCallBack((NotifyProc)&DomainBoolView::CheckYesNoEqual);
 	}  
 	if (dm->fSystemObject())
-		SetMenHelpTopic(htpShowDomSystem);
+		SetMenHelpTopic("");
 	else if (dm->fReadOnly())
-		SetMenHelpTopic(htpShowDomReadOnly);
+		SetMenHelpTopic("");
 	else 
-		SetMenHelpTopic(htpShowDomBool);
+		SetMenHelpTopic("ilwismen\\edit_domain_bool.htm");
 }
 
 int DomainBoolView::exec()

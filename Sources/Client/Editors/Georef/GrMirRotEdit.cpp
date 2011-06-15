@@ -113,7 +113,7 @@ void GeoRefMirrorRotateView::FillDerivedFields(FieldGroup* fgGenerRoot)
 		fosMirRotType->Align(st, AL_AFTER);
 	}
 
-	SetMenHelpTopic(htpGrfMirrorRotate);
+	SetMenHelpTopic("");
 }
 
 int GeoRefMirrorRotateView::exec()

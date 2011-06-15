@@ -129,7 +129,7 @@ TableWindow::TableWindow()
 : recBar(0),
 	frmSimpleCalc(0)
 {
-  htpTopic = htpContentsTblWindow;
+  help = "ilwis\\table_window.htm";
 	sHelpKeywords = "Table Window";
 	commHandler.SetOwner(this);
   recBar = new RecordBar();
@@ -773,7 +773,7 @@ void TableWindow::OnGotoRecord()
     {
       new FieldBlank(root);
       fv = new FieldVal(root, STBUiRec, dm, sRec);
-      SetMenHelpTopic(htpTblGotoRec);
+      SetMenHelpTopic("ilwismen\\goto_record.htm");
       create();
     }
     FormEntry* feDefaultFocus()

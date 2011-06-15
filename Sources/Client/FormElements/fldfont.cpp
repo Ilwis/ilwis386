@@ -53,7 +53,7 @@ FieldFont::FieldFont(FormEntry* fe, const String& sQuestion, LOGFONT* fntspec,
 
 int FieldFont::SelectFont(void* Ev)
 {
-//  bw->SetDialogHelpTopic(htpChooseFont);
+//  bw->SetDialogHelpTopic("ilwismen\font.htm");
   CHOOSEFONT chf;
   chf.Flags = CF_INITTOLOGFONTSTRUCT;
   chf.iPointSize = fs.lfHeight;

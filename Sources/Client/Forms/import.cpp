@@ -399,7 +399,7 @@ ImportForm::ImportForm(CWnd* wPar, Importing* Import, String* sNam, String* sCmd
 	stRemark->Align(fgASTER, AL_UNDER);
 	stRemark->SetVal(String());
 
-	SetMenHelpTopic(htpImport);
+	SetMenHelpTopic("ilwismen\\import_map.htm");
 	create();
 }
 
@@ -472,20 +472,20 @@ int ImportForm::CallBack(Event*)
 		{
 			cbShow->Show();
 			fgGDAL->Show();
-			//SetMenHelpTopic(htpImportGeoGateway);
+			//SetMenHelpTopic("ilwismen\\import_geogateway.htm");
 		}
 
 		if (fCIStrEqual(sCmd, "ASTER") )
 		{
 			cbShow->Show();
 			fgASTER->Show();
-			SetMenHelpTopic(htpImportASTER);			
+			SetMenHelpTopic("ilwismen\\import_aster.htm");			
 		}
 		else if (fCIStrEqual(sCmd, "raster"))
-			SetMenHelpTopic(htpImportGenRas);
+			SetMenHelpTopic("ilwismen\\import_general_raster.htm");
 		else 
 		{
-			SetMenHelpTopic(htpImport);
+			SetMenHelpTopic("ilwismen\\import_map.htm");
 			if (fCIStrEqual(sCmd, "e00"))
 				fgE00->Show();
 			else if (fCIStrEqual(sCmd, "gartrip"))

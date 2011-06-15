@@ -138,7 +138,7 @@ SimpleQueryPropPage::SimpleQueryPropPage(CatalogPropertySheet& sh, vector<NameEx
 	FieldString *fs = new FieldString(root, SMSUiExtFileExtensions, &sExtensions);
 	fs->SetIndependentPos();
 
-  SetMenHelpTopic(htpCatFilter);
+  SetMenHelpTopic("ilwismen\\customize_catalog_selection.htm");
   create();	
 }
 
@@ -238,7 +238,7 @@ VisibleColumnsPropPage::VisibleColumnsPropPage(Catalog *c) :
 	PushButton *pb1 = new PushButton(root, SMSUiSaveTemplate, (NotifyProc)&VisibleColumnsPropPage::SetDefault);
 	PushButton *pb2 = new PushButton(root, SMSUiRestoreDefault, (NotifyProc)&VisibleColumnsPropPage::RestoreDefault);
 	pb2->Align(pb1, AL_AFTER);
-  SetMenHelpTopic(htpCatVisible);
+  SetMenHelpTopic("ilwismen\\customize_catalog_details_view.htm");
 	create();
 }
 
@@ -299,7 +299,7 @@ QueryPropPage::QueryPropPage(CatalogPropertySheet& sh, map<String, String>& mpQ)
 	pbSaveAs->SetIndependentPos();
 	pbSaveAs->Align(pbSave, AL_AFTER);
 	pbDelete->Align(pbSaveAs, AL_AFTER);
-  SetMenHelpTopic(htpCatQuery);
+  SetMenHelpTopic("ilwismen\\customize_catalog_query.htm");
 	create();	
 }
 

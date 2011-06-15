@@ -76,7 +76,7 @@ END_MESSAGE_MAP()
 
 LinearFilterWindow::LinearFilterWindow()
 {
-	htpTopic = htpFilterObject;
+	help = "ilwis\\ilwis_objects_filters.htm";
 	sHelpKeywords = "Linear filter editor";
 }
 

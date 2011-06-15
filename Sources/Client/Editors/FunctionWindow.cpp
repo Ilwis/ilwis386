@@ -82,7 +82,7 @@ END_MESSAGE_MAP()
 
 FunctionWindow::FunctionWindow()
 {
-	htpTopic = htpFunctionWindow;
+	help = "ilwis\\function_editor_functionality.htm";
 	sHelpKeywords = "Functions";
 	SetWindowName("FunctionEditor");
 }

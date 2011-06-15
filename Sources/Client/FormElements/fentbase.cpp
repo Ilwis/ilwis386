@@ -363,7 +363,7 @@ void FormEntry::Align(FormEntry* c, enumAlign a, int iOffSet)
   }
 }
 
-HelpTopic& FormEntry::htp()
+String FormEntry::htp()
 {
     return _frm->htp();
 }

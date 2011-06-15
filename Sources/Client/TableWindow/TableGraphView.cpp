@@ -138,7 +138,7 @@ bool ColumnGraphDrawer::fAddGraph(bool fConfigLayer)
 				FieldString* fs = new FieldString(root, "y =", &sExpr, Domain(), false);
 				fs->SetWidth(120);
 				fs->SetIndependentPos();
-				SetMenHelpTopic(htpAddLineGraph);
+				SetMenHelpTopic("ilwismen\\graph_window_add_graph_from_formula.htm");
 				create();
 			}
 			String sExpr;
@@ -174,7 +174,7 @@ bool ColumnGraphDrawer::fAddFormulaGraph(bool fConfigLayer)
 				stRegr = new StaticText(root, sFill);
 				stRegr->SetIndependentPos();
 				fiTerms = new FieldInt(root, STBUiNrTerms, &iTerms, RangeInt(2,100));
-				SetMenHelpTopic(htpAddLsfGraph);
+				SetMenHelpTopic("ilwismen\\graph_window_add_graph_least_squares_fit.htm");
 				create();
 			}
 			String sColX, sColY, *sFunc, m_sDefault;
@@ -228,7 +228,7 @@ bool ColumnGraphDrawer::fAddLsfGraph(bool fConfigLayer)
 			: FormWithDest(parent, sTitle)
 			{
 				new FieldSemiVariogram(root, SGPUiSemiVar, &smv);
-				SetMenHelpTopic(htpAddSemiVarGraph);
+				SetMenHelpTopic("ilwismen\\graph_window_add_semivariogram_model.htm");
 				create();
 			}
 			SemiVariogram smv;

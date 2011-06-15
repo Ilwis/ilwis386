@@ -223,7 +223,7 @@ int CoordSysViaLatLonView::ButtonDatum(Event*)
 				stRemark3 = new StaticText(fgPreDef, sFill);
 				stRemark3->psn->SetBound(0,0,-5,0);
         
-				SetMenHelpTopic(htpChangeDatum);
+				SetMenHelpTopic("ilwismen\\select_datum.htm");
 				create();
 			}
       int iType;
@@ -447,7 +447,7 @@ int CoordSysViaLatLonView::ButtonEllipsoid(Event*)
       new FieldReal(fg, "1/&f", &f1, ValueRange(200, 9999999999, 1e-9));         // WGS84: 298.257223563
       FieldEllipsoid* fe = new FieldEllipsoid(rbPreDef, sEll);
       fe->Align(rbUserDef, AL_UNDER);
-      SetMenHelpTopic(htpChangeEll);
+      SetMenHelpTopic("ilwismen\\select_ellipsoid.htm");
       create();
     }
     int iType;

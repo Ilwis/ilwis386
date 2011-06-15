@@ -67,7 +67,7 @@ END_MESSAGE_MAP()
 
 DataBaseCollectionWindow::DataBaseCollectionWindow()
 {
-	htpTopic = htpObjectCollection;
+	help = "ilwis\\ilwis_objects_object_collections.htm";
 	sHelpKeywords = "DataBase collections";
 	SetWindowName("DataBaseCollection Window");	// ensure loading and saving settings
 }

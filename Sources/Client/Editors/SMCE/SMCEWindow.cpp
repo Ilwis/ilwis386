@@ -57,7 +57,7 @@ END_MESSAGE_MAP()
 
 SMCEWindow::SMCEWindow()
 {
-	htpTopic = htpSMCEWindow;
+	help = "ilwis\\smce_window.htm";
 	sHelpKeywords = "SMCE Window";
 }
 

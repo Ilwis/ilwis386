@@ -139,7 +139,7 @@ FormGeneralPreferences::FormGeneralPreferences() :
 
 	AdvancedPage();
 
-  SetMenHelpTopic(htpPreferences);
+  SetMenHelpTopic("ilwismen\\main_window_preferences.htm");
 	create();
 }
 FormGeneralPreferences::~FormGeneralPreferences()

@@ -1198,7 +1198,7 @@ public:
 		new FieldReal(fg, SLOUiWidth_mm, &mbi->rNeatLineWidth, ValueRange(0.1,20,0.1));
 		new FieldBlank(root);
 
-		ppNeatLine->SetMenHelpTopic(htpCnfAnnMapBorderNeatLine);
+		ppNeatLine->SetMenHelpTopic("ilwismen\\layout_editor_insert_edit_map_border_neatline.htm");
 		ppNeatLine->create();
 		AddPage(ppNeatLine);
 
@@ -1252,7 +1252,7 @@ public:
     FieldLogFont *fl = new FieldLogFont(fg, &mbi->lfGridText);
 	
 
-		ppGrid->SetMenHelpTopic(htpCnfAnnMapBorderGrid);
+		ppGrid->SetMenHelpTopic("ilwismen\\layout_editor_insert_edit_map_border_grid.htm");
 		ppGrid->create();
 		AddPage(ppGrid);
 
@@ -1306,7 +1306,7 @@ public:
 		new FieldColor(fg, SLOUiColor, &mbi->clrGratText);
     new FieldLogFont(fg, &mbi->lfGratText);
 
-		ppGrat->SetMenHelpTopic(htpCnfAnnMapBorderGrat);
+		ppGrat->SetMenHelpTopic("ilwismen\\layout_editor_insert_edit_map_border_graticule.htm");
 		ppGrat->create();
 		AddPage(ppGrat);
 
@@ -1319,7 +1319,7 @@ public:
 		fg->Align(cb,AL_UNDER);
 		new FieldColor(fg, SLOUiColor, &mbi->clrCornerCoords);
     new FieldLogFont(fg, &mbi->lf);
-		ppCorners->SetMenHelpTopic(htpCnfAnnMapBorderCorners);
+		ppCorners->SetMenHelpTopic("ilwismen\\layout_editor_insert_edit_map_border_corners.htm");
 		ppCorners->create();
 		AddPage(ppCorners);
 
@@ -1334,7 +1334,7 @@ public:
 		new FieldReal(fg, SLOUiBorderOffset_mm, &mbi->rBorderLineDist, ValueRange(0.1, 50, 0.1));
 		new FieldLine(fg, &mbi->lnBorder, true);
 
-		ppBorder->SetMenHelpTopic(htpCnfAnnMapBorderOutline);
+		ppBorder->SetMenHelpTopic("ilwismen\\layout_editor_insert_edit_map_border_outline.htm");
 		ppBorder->create();
 		AddPage(ppBorder);
 	}

@@ -276,7 +276,7 @@ CoordSystemEditor::CoordSystemEditor(MapPaneView* mpvw, CoordSystem csy)
 	dw->RecalcLayout();
 	Calc();
 
-	htpTopic = htpCoordSystemEditor;
+	help = "ilwis\\coordinate_system_tiepoints_editor_functionality.htm";
 	sHelpKeywords = "Coordsys tiepoints editor";
 	if (csctp->pcsOrthoPhoto())
 		dw->PostMessage(WM_COMMAND, ID_EDITGRFFIDMARKS, 0);
@@ -380,7 +380,7 @@ void CoordSystemEditor::OnTransformation()
 			new RadioButton(rg, SGRUiFullSecondOrder);
 			new RadioButton(rg, SGRUiThirdOrder);
 			new RadioButton(rg, SGRUiProjective);
-			SetMenHelpTopic(htpCSEditTransf);
+			SetMenHelpTopic("ilwismen\\coordinate_system_tiepoints_editor_transformation.htm");
 			create();
 		}
 	};
@@ -421,7 +421,7 @@ public:
 			CheckBox* cb = new CheckBox(root, SGRUiZ, &fZ);
 			frDTMheight = new FieldReal(cb, "", &rZ);
 		}
-		SetMenHelpTopic(htpCSEditAddPoint);
+		SetMenHelpTopic("ilwismen\\coordinate_system_tiepoints_editor_add_tiepoint.htm");
 		edit->atpf = this;
 		create();
 	}
@@ -733,7 +733,7 @@ void CoordSystemEditor::OnDelPoint()
 			: FormWithDest(wPar, SCSTitleDelTiePoint)
 		{
 			fi = new FieldInt(root, SGRUiTiePointNumber, iNr, ri);
-			SetMenHelpTopic(htpCSEditDelPoint);
+			SetMenHelpTopic("ilwismen\\coordinate_system_tiepoints_editor_delete_tiepoint.htm");
 			create();
 		}
 	private:
@@ -780,7 +780,7 @@ public:
 		new FieldColor(root, SGRUiActBadColor, &cse->colActBad);
 		new FieldColor(root, SGRUiPassiveColor, &cse->colPassive);
 		new FieldInt(root, SGRUiSmbSize, &cse->smb.iSize, ValueRange(1L,100L), true);
-		SetMenHelpTopic(htpCSEditCnf);
+		SetMenHelpTopic("ilwismen\\coordinate_system_tiepoints_editor_customize.htm");
 		create();
 	}
 };  
@@ -822,7 +822,7 @@ public:
 		fldCrdMax = new FieldCoord(root, SCSUiMaxXY, &cs->cb.cMax);
 		PushButton* pb = new PushButton(root, SCSUiDefaults,
 			(NotifyProc)&EditBoundsForm::SetDefaults);
-		SetMenHelpTopic(htpCSEditBounds);
+		SetMenHelpTopic("ilwismen\\coordinate_system_tiepoints_editor_boundaries.htm");
 		create();
 	}
 private:

@@ -334,7 +334,7 @@ class LimitForm: public FormWithDest
 {
 public:
   LimitForm(CWnd* wPar, const String& sTitle, 
-    double* rVal, const Domain& dm, Color* col, bool fUsesGrad, unsigned int htp)
+    double* rVal, const Domain& dm, Color* col, bool fUsesGrad, const String& htp)
   : FormWithDest(wPar, sTitle)
   {
     if ("value" == dm->fnObj.sFile && fUsesGrad )
@@ -401,7 +401,7 @@ public:
 			fe1->Align(fe, AL_UNDER);
       fe = fe1;
 		}
-		SetMenHelpTopic(htpRprInsertMultipleLimits);		
+		SetMenHelpTopic("");		
  		create();
 	}
 
@@ -944,7 +944,7 @@ void RepresentationValueView::OnInsert()
 	Color col = GetDocument()->GetColor(iIndex);
   //Color col(128,128,128);
   LimitForm frm(this, SRPTitleInsertLimit, 
-    &rVal, rgDoc->dm(), &col, rgDoc->fUsesGradual(), htpRprInsertLimit);
+    &rVal, rgDoc->dm(), &col, rgDoc->fUsesGradual(), "ilwismen\\representation_value_gradual_editor_insert_limit.htm");
   if (frm.fOkClicked()) {
     if (! rgDoc->fRepresentationValue())
       rVal /= 100;
@@ -989,7 +989,7 @@ void RepresentationValueView::OnStretchSteps()
     : FormWithDest(wPar, SRPTitleStretchSteps)
     {
       fi = new FieldInt(root, SRPUiStretchSteps, iStretchSteps, ValueRange(2,30), true);
-      SetMenHelpTopic(htpRprEditSteps);
+      SetMenHelpTopic("ilwismen\\representation_value_gradual_editor_stretch_steps.htm");
       create();
     }
     FormEntry* feDefaultFocus()
@@ -1064,7 +1064,7 @@ void RepresentationValueView::OnEdit()
       rVal *= 100;
     Color col = rgDoc->GetColor(id);
 		
-    LimitForm frm(this, SRPTitleEditLimit, &rVal, rgDoc->dm(), &col, rgDoc->fUsesGradual(), htpRprEditLimit);
+    LimitForm frm(this, SRPTitleEditLimit, &rVal, rgDoc->dm(), &col, rgDoc->fUsesGradual(), "ilwismen\\representation_value_gradual_editor_edit_limit.htm");
     if (frm.fOkClicked()) 
 		{
       if ( ! rgDoc->fRepresentationValue())

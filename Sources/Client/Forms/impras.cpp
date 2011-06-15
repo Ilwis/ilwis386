@@ -118,7 +118,7 @@ ImportRasterForm::ImportRasterForm(CWnd* wPar, const FileName& fn, const String&
 	fsDesc->SetWidth(200);
 	fsDesc->SetIndependentPos();
 
-	SetMenHelpTopic(htpImportGenRas);
+	SetMenHelpTopic("ilwismen\\import_general_raster.htm");
 }
 
 BOOL ImportRasterForm::OnInitDialog()

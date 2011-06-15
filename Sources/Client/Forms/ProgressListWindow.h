@@ -1,42 +1,42 @@
 /***************************************************************
- ILWIS integrates image, vector and thematic data in one unique 
- and powerful package on the desktop. ILWIS delivers a wide 
- range of feautures including import/export, digitizing, editing, 
- analysis and display of data as well as production of 
- quality mapsinformation about the sensor mounting platform
- 
- Exclusive rights of use by 52°North Initiative for Geospatial 
- Open Source Software GmbH 2007, Germany
+ILWIS integrates image, vector and thematic data in one unique 
+and powerful package on the desktop. ILWIS delivers a wide 
+range of feautures including import/export, digitizing, editing, 
+analysis and display of data as well as production of 
+quality mapsinformation about the sensor mounting platform
 
- Copyright (C) 2007 by 52°North Initiative for Geospatial
- Open Source Software GmbH
+Exclusive rights of use by 52°North Initiative for Geospatial 
+Open Source Software GmbH 2007, Germany
 
- Author: Jan Hendrikse, Willem Nieuwenhuis,Wim Koolhoven 
- Bas Restsios, Martin Schouwenburg, Lichun Wang, Jelle Wind 
+Copyright (C) 2007 by 52°North Initiative for Geospatial
+Open Source Software GmbH
 
- Contact: Martin Schouwenburg; schouwenburg@itc.nl; 
- tel +31-534874371
+Author: Jan Hendrikse, Willem Nieuwenhuis,Wim Koolhoven 
+Bas Restsios, Martin Schouwenburg, Lichun Wang, Jelle Wind 
 
- This program is free software; you can redistribute it and/or
- modify it under the terms of the GNU General Public License
- version 2 as published by the Free Software Foundation.
+Contact: Martin Schouwenburg; schouwenburg@itc.nl; 
+tel +31-534874371
 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU General Public License for more details.
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+version 2 as published by the Free Software Foundation.
 
- You should have received a copy of the GNU General Public License
- along with this program (see gnu-gpl v2.txt); if not, write to
- the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- Boston, MA 02111-1307, USA or visit the web page of the Free
- Software Foundation, http://www.fsf.org.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
 
- Created on: 2007-02-8
- ***************************************************************/
+You should have received a copy of the GNU General Public License
+along with this program (see gnu-gpl v2.txt); if not, write to
+the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+Boston, MA 02111-1307, USA or visit the web page of the Free
+Software Foundation, http://www.fsf.org.
+
+Created on: 2007-02-8
+***************************************************************/
 /* ReportWindow
-   reponsible for the user interface part of a tranquilizer
-	Last change:  WK   14 Jan 99   10:22 am
+reponsible for the user interface part of a tranquilizer
+Last change:  WK   14 Jan 99   10:22 am
 */
 
 #ifndef PROGRESSLIST_H
@@ -55,42 +55,44 @@ class IMPEXP ProgressListWindow: public CFrameWnd
 
 public:
 	ProgressListWindow();
-  void Create();
-  ~ProgressListWindow();
-  void SetTitle(unsigned short);
-  void SetText(unsigned short);
-  BOOL OnInitDialog();
-  void OnCancel();
-  BOOL OnEraseBkgnd(CDC *);
-  void OnSize(UINT nType, int cx, int cy);
-  void OnHelp();
-  afx_msg void OnSysCommand(UINT, LPARAM);
+	void Create();
+	~ProgressListWindow();
+	void SetTitle(unsigned short);
+	void SetText(unsigned short);
+	BOOL OnInitDialog();
+	void OnCancel();
+	BOOL OnEraseBkgnd(CDC *);
+	void OnSize(UINT nType, int cx, int cy);
+	void OnHelp();
+	afx_msg void OnSysCommand(UINT, LPARAM);
 	void Stop(unsigned short iProgressID);
 	void Start(Tranquilizer *tr);
 	void UpdateItems();
-  BOOL DestroyWindow();	
+	BOOL DestroyWindow();	
+protected:
+	String help;
 
 private:
-  void sUpdate(String& sName, String& sNumber);
-  void Update(int iID);
-  LONG OnIlwisReportMsg(UINT iRepCode, LONG lp);
-  static UINT UpdateInThread(LPVOID data);
-  void OnTimer(UINT iIDEvent);
-  void OnClick(NMHDR* pNMHDR, LRESULT* pResult);
-  bool fDelayedShow();
-  void Init();  
-  CStatic stText;
-  CButton butAbort, butHelp;
+	void sUpdate(String& sName, String& sNumber);
+	void Update(int iID);
+	LONG OnIlwisReportMsg(UINT iRepCode, LONG lp);
+	static UINT UpdateInThread(LPVOID data);
+	void OnTimer(UINT iIDEvent);
+	void OnClick(NMHDR* pNMHDR, LRESULT* pResult);
+	bool fDelayedShow();
+	void Init();  
+	CStatic stText;
+	CButton butAbort, butHelp;
 
-  ReportListCtrl rlvTrqList;
-  HANDLE threadHandle;
-  time_t  iFirstTime;
-  bool fUpdateLoop;
-  bool fShown;
-  static int iNrReportWindows; // Number of report windows on the screen
-  int iMyNumber; // A number that represents the howmanieth report window I am
+	ReportListCtrl rlvTrqList;
+	HANDLE threadHandle;
+	time_t  iFirstTime;
+	bool fUpdateLoop;
+	bool fShown;
+	static int iNrReportWindows; // Number of report windows on the screen
+	int iMyNumber; // A number that represents the howmanieth report window I am
 
-  DECLARE_MESSAGE_MAP()
+	DECLARE_MESSAGE_MAP()
 };
 
 #endif // REPWIN_H

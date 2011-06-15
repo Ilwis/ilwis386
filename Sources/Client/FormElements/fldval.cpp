@@ -191,7 +191,7 @@ int FieldVal::NewDomainItem(Event*)
       new FieldString(root, SUIFldName, sName, Domain(), false);
       new FieldString(root, SUIFldCode, sCode, Domain(), true);
       new FieldColor(root, SUIFldColor, clr);
-  //    SetMenHelpTopic(htpDomEdit);
+  //    SetMenHelpTopic("ilwismen\\domain_class_id_editor_edit_item.htm");
       create();
     }
   };

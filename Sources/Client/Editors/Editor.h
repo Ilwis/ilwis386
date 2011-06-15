@@ -95,6 +95,7 @@ protected:
 	afx_msg void OnExit();
 	afx_msg void OnHelp();
 	afx_msg void OnRelatedTopics();
+	String help;
 	//}}AFX_MSG
 private:
 	CWnd* wEditField;

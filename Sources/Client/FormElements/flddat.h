@@ -120,9 +120,9 @@ class _export DataObjectForm: public FormWithDest
 {
 public:
   DataObjectForm(CWnd* parent, const String& sTitle, String* sName, 
-                 unsigned int htp);
+                 const String& htp);
   DataObjectForm(CWnd* parent, const String& sTitle, String* sName, 
-                 const String& sExt, unsigned int htp);
+                 const String& sExt, const String& htp);
 };
 
   

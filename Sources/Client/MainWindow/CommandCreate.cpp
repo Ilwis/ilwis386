@@ -330,7 +330,7 @@ LRESULT Cmdcreateioc(CWnd* parent, const String& sN)
 			NameForm(CWnd *wnd, String& sVal) 
 				: FormWithDest(wnd, SDATTitleCreateObjectCollection)
 			{
-				SetMenHelpTopic(htpCreateObjectCollection);
+				SetMenHelpTopic("ilwismen\\create_an_object_collection.htm");
 				iImg = IlwWinApp()->iImage(".ioc");
 			
 				new FieldDataTypeCreate(root, SDATTitleObjectCollection, &sVal, ".ioc", false);

@@ -129,7 +129,7 @@ StereoMapWindow::StereoMapWindow()
 
 	zIcon icon("StereoPairIcon");
 	SetIcon(icon, TRUE);
-  htpTopic = htpStereoPairEpipolarWindow;
+  help = "ilwis\\epipolar_stereopair_creation_window.htm";
 	sHelpKeywords = "Stereo pairs (create)";
 
 	iTimer = SetTimer(1, 1000, 0); // timer id = 1, trigger every 1 sec, kill while m_hWnd still valid
@@ -318,7 +318,7 @@ public:
 		fs->SetWidth(90);
 		stRemark = new StaticText(root, SStcErrStereopairExists); // trick to get enough space for the static
 		stRemark->SetVal(String());  // reset string value
-    SetMenHelpTopic(htpStereoPairEpiPolarCreate);
+    SetMenHelpTopic("ilwismen\\create_a_stereopair.htm");
 		create();    
   } 
 	int CallBackName(Event*)

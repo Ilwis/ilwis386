@@ -71,7 +71,7 @@ END_MESSAGE_MAP()
 DomainWindow::DomainWindow()
 {
 	// TODO: add member initialization code here
-	htpTopic = htpDomainWindow;
+	help = "ilwis\\domain_class_id_editor_functionality.htm";
 	sHelpKeywords = "Domain Class/ID editor";
 }
 

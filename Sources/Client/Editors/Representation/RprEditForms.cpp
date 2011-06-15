@@ -75,7 +75,7 @@ MapRprEditForm::MapRprEditForm(CWnd* wPar,
   PushButton* pb = new PushButton(root, SRPUiCustomColor, 
     (NotifyProc)&MapRprEditForm::CustomColor);
   pb->Align(cs, AL_UNDER);  
-  SetMenHelpTopic(htpRprEditPix);
+  SetMenHelpTopic("ilwismen\\representation_class_editor_edit_item_raster.htm");
   create();
 }
 
@@ -117,7 +117,7 @@ SegmentMapRprEditForm::SegmentMapRprEditForm(CWnd* wPar,
 	line.ResizeSymbol(1.0/RepresentationClass::iSIZE_FACTOR);
   new FieldLine(root, &line);
 
-  SetMenHelpTopic(htpRprEditSeg);
+  SetMenHelpTopic("ilwismen\\representation_class_editor_edit_item_segment.htm");
   create();
 }
 
@@ -224,7 +224,7 @@ PolygonMapRprEditForm::PolygonMapRprEditForm(CWnd* wPar,
 
   pbInverse = new PushButton(root, SRPUiInverseColors,
     (NotifyProc)&PolygonMapRprEditForm::InverseColors);
-  SetMenHelpTopic(htpRprEditPol);
+  SetMenHelpTopic("ilwismen\\representation_class_editor_edit_item_polygon.htm");
   create();
 }
 
@@ -345,7 +345,7 @@ PointMapRprEditForm::PointMapRprEditForm(CWnd* wPar,
   st->SetIndependentPos();
 	smb.Resize(1.0/RepresentationClass::iSIZE_FACTOR);
   fs = new FieldExtendedSymbol(root, smb);
-  SetMenHelpTopic(htpRprEditPnt);
+  SetMenHelpTopic("ilwismen\\representation_class_editor_edit_item_point.htm");
   create();
 }
 

@@ -333,7 +333,7 @@ public:
   {
     new FieldVal(root, STBUINewValue.scVal(), dvrs, &sVal);
   	new FieldBlank(root);
-//		setHelpItem(htpTblEditMultiRecords);
+//		setHelpItem("ilwismen\table_window_edit_single_column.htm");
     create();
   }
 };

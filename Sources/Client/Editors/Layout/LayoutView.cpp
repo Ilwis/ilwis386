@@ -326,7 +326,7 @@ void LayoutView::OnEntirePage()
 void LayoutView::OnPageSetup()
 {
 	LayoutDoc* ld = GetDocument();
-	htp = htpPageSetup;
+	help = "ilwismen\\layout_editor_page_setup.htm";
 
 	PAGESETUPDLG psd;
 	memset(&psd, 0, sizeof(psd));
@@ -742,7 +742,7 @@ BOOL LayoutView::OnPreparePrinting(CPrintInfo* pInfo)
 	pInfo->SetMinPage(1);	
 	pInfo->SetMaxPage(1);	
 
-	htp = htpPrintLayout;
+	help = "ilwismen\\layout_editor_print.htm";
 	PRINTDLG& pd = pInfo->m_pPD->m_pd;
 	pd.hwndOwner = m_hWnd;
 	pd.hDevMode = ld->m_hDevMode;
@@ -986,7 +986,7 @@ public:
 		st1->SetIndependentPos();
 		st2 = new StaticText(root, sDummy);
 		st2->SetIndependentPos();
-		SetMenHelpTopic(htpExportToBitmap);
+		SetMenHelpTopic("ilwismen\\layout_editor_export_to_bitmap.htm");
 		create();
 	}
 	FormEntry *CheckData()

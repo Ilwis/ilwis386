@@ -379,7 +379,7 @@ public:
   {
     new FieldInt(root, SFLUiValue.scVal(), iVal);
   	new FieldBlank(root);
-//		setHelpItem(htpTblEditMultiRecords);
+//		setHelpItem("ilwismen\table_window_edit_single_column.htm");
     create();
   }
 };

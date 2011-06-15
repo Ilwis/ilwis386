@@ -146,7 +146,7 @@ void CoordSysLatLonView::create()
     fb->Align(fgButtons, AL_UNDER);
   }
   ShowDatumEllInfo();
-  SetMenHelpTopic(htpCSEditLatLon);
+  SetMenHelpTopic("ilwismen\\edit_coordinate_system_latlon.htm");
 
 }
 

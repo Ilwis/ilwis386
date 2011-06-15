@@ -185,7 +185,7 @@ public:
 		fs->SetWidth(60);
 		fs->SetCallBack((NotifyProc)&FactorPropertyForm::CallBackFunc);
 
-		SetMenHelpTopic(htpSMCEEditFactor);
+		SetMenHelpTopic("ilwismen\\smce_window_insert_factor.htm");
 		
 		create();
 	}
@@ -221,7 +221,7 @@ public:
 		new RadioButton(rgMapScore, "Scores");
 		*/
 
-		SetMenHelpTopic(htpSMCEEditConstraint);
+		SetMenHelpTopic("ilwismen\\smce_window_insert_constraint.htm");
 
 		create();
 	}
@@ -252,7 +252,7 @@ public:
 		fs->SetWidth(60);
 		fs->SetCallBack((NotifyProc)&GroupPropertyForm::CallBackFunc);
 		
-		SetMenHelpTopic(htpSMCEEditGroup);
+		SetMenHelpTopic("ilwismen\\smce_window_insert_group.htm");
 		
 		create();
 	}
@@ -1296,7 +1296,7 @@ public:
 
 		CheckBox* cbShow = new CheckBox(root, SSmcUiShowAfterCalc, fShow);
 
-		SetMenHelpTopic(htpSMCEGenerateSelectedMap);
+		SetMenHelpTopic("ilwismen\\smce_window_generate_selected_map.htm");
 		create();
 	}
 };
@@ -1607,7 +1607,7 @@ public:
 		cb->SetCallBack((NotifyProc)&FormSlice::CBCallBackFunc);
 		cb->SetIndependentPos();
 
-		SetMenHelpTopic(htpSMCESlice);
+		SetMenHelpTopic("ilwismen\\smce_window_slice.htm");
 
 		create();
 	}
@@ -1903,7 +1903,7 @@ public:
 		FieldReal* fr = new FieldReal(cb, "Fine Contour Line Interval", rFineContourLineInterval, vrr);
 		fr->Align(cb, AL_UNDER);
 
-		// SetMenHelpTopic(htpSMCESlice);
+		// SetMenHelpTopic("ilwismen\\smce_window_slice.htm");
 
 		create();
 	}

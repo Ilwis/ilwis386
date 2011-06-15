@@ -66,7 +66,7 @@ END_MESSAGE_MAP()
 
 ObjectCollectionWindow::ObjectCollectionWindow()
 {
-	htpTopic = htpObjectCollection;
+	help = "ilwis\\ilwis_objects_object_collections.htm";
 	sHelpKeywords = "Object collections";
 	SetWindowName("ObjectCollection Window");	// ensure loading and saving settings
 }

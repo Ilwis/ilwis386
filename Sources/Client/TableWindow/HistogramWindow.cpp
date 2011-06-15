@@ -95,7 +95,7 @@ END_MESSAGE_MAP()
 
 HistogramWindow::HistogramWindow()
 {
-	htpTopic = htpHistogramObject;
+	help = "ilwis\\ilwis_objects_histograms.htm";
 	sHelpKeywords = "Histogram";
 }
 

@@ -269,9 +269,9 @@ FormCreateGeoRef::FormCreateGeoRef(CWnd* wPar, String* sGrf,
 	stRemark->Align(fgCorn, AL_UNDER);
 	stRemark->SetVal(String());
 	if (fOnlyCorners) 
-		SetMenHelpTopic(htpGrfCreateOnlyCorners);
+		SetMenHelpTopic("ilwismen\\create_a_georeference.htm");
 	else
-		SetMenHelpTopic(htpGrfCreate);
+		SetMenHelpTopic("ilwismen\\create_a_georeference.htm");
 	
 	m_fInShowHide = false;
 	m_fInSetVal = false;
@@ -864,9 +864,9 @@ FormCreateGeoRefRC::FormCreateGeoRefRC(CWnd* wPar, String* sGrf,
   stRemark->SetIndependentPos();
   
 	if (fOnlyTiepoints)
-    SetMenHelpTopic(htpGrfCreateOnlyTiepoints);
+    SetMenHelpTopic("ilwismen\\create_a_georeference.htm");
   else  
-    SetMenHelpTopic(htpGrfCreateRC);
+    SetMenHelpTopic("ilwismen\\create_a_georeference_through_properties.htm");
   create();
 }
 
@@ -1048,7 +1048,7 @@ public:
     fs->SetIndependentPos();
     new FieldRowCol(root, SGRUiRowsCols, rcSize);
     new FieldMap(root, SGRUiDTM, sDTM);
-    SetMenHelpTopic(htpGrfCreate3D);
+    SetMenHelpTopic("ilwismen\\create_a_georeference_3d.htm");
     create();
   }                   
 };

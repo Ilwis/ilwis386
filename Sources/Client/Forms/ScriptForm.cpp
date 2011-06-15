@@ -139,7 +139,7 @@ ScriptForm::ScriptForm(const Script& script)
 				break;
 		}
 	}
-	setHelpItem(1); // set help button on
+	//IlwWinApp()->setHelpItem(""); // set help button on
 	create();
   ShowWindow(SW_SHOW);
 }

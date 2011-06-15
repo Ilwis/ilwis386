@@ -246,7 +246,7 @@ void OpenAnaglyph(CWnd *parent)
 		{
 			iImg = IlwWinApp()->iImage("DspMap16Ico");
 			new FieldDataTypeLarge(root, sName, ".stp");
-			SetMenHelpTopic(htpOpenStereoPairAsAnaglyph);
+			SetMenHelpTopic("ilwismen\\open_stereopair_as_anaglyph.htm");
 			create();
 		}
 	};
@@ -271,7 +271,7 @@ void OpenBaseMap(CWnd *parent)
 			iImg = IlwWinApp()->iImage("DspMap16Ico");
 			
 			new FieldDataObject(root, sName);
-			SetMenHelpTopic(htpOpenBaseMap);
+			SetMenHelpTopic("ilwismen\\open_show_map_or_other_object.htm");
 			create();
 		}
 	};
@@ -318,7 +318,7 @@ int OpenMapListSlideShow(CWnd *parent)
 		{
 			iImg = IlwWinApp()->iImage("DspMap16Ico");
 			new FieldDataTypeLarge(root, sName, ".mpl");
-			SetMenHelpTopic(htpOpenMapListSlideShow);
+			SetMenHelpTopic("ilwismen\\open_show_map_list_as_slide_show.htm");
 			create();
 		}
 	};
@@ -358,7 +358,7 @@ void EditBaseMap(CWnd *parent)
 			iImg = IlwWinApp()->iImage("DspMap16Ico");
 			FieldDataObject* fdo = new FieldDataObject(root, sName);
 			fdo->SetOnlyEditable();
-			SetMenHelpTopic(htpEditBaseMap);
+			SetMenHelpTopic("ilwismen\\edit_object_select_object.htm");
 			create();
 		}
 	};
@@ -403,7 +403,7 @@ LRESULT Cmddisplay3d(CWnd *wndOwner, const String& sCmd)
 		{
 			iImg = IlwWinApp()->iImage("DspMap16Ico");
 			new FieldGeoRef3DC(root, S3DUiGrf, sGrf);
-			SetMenHelpTopic(htpEditDisplay3D);
+			SetMenHelpTopic("ilwismen\\display_3d.htm");
 			create();
 		}
 	};
@@ -434,7 +434,7 @@ LRESULT Cmdpropobject(CWnd *wndOwner, const String& str)
 	String sObj = pl.sGet(0);
 	if (sObj.length() == 0)
 	{
-		DataObjectForm frm(wndOwner, SMSTitleViewProp, &sObj, htpSelChangeProp);
+		DataObjectForm frm(wndOwner, SMSTitleViewProp, &sObj, "ilwismen\\view_edit_properties_of.htm");
 		if (!frm.fOkClicked()) 
 			return -1;
 	}

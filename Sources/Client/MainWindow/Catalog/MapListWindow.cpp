@@ -73,7 +73,7 @@ END_MESSAGE_MAP()
 
 MapListWindow::MapListWindow()
 {
-	htpTopic = htpMapListObject;
+	help = "ilwis\\ilwis_objects_map_lists.htm";
 	sHelpKeywords = "Map lists";
 	SetWindowName("MapList Window");	// ensure loading and saving settings
 }

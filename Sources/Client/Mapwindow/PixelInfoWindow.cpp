@@ -75,7 +75,7 @@ END_MESSAGE_MAP()
 PixelInfoWindow::PixelInfoWindow()
 : fAlwaysOnTop(false)
 {
-  htpTopic = htpContentsPixelInfo;
+  help = "ilwis\\pixel_information_window.htm";
 	sHelpKeywords = "Pixel information window";
 }
 

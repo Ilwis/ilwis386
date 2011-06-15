@@ -290,7 +290,7 @@ public:
 
 	    FieldLogFont* flf = new FieldLogFont(fg, &tli->lf);
 	
-      SetMenHelpTopic(htpCnfAnnScale);
+      SetMenHelpTopic("ilwismen\\layout_editor_insert_edit_scale_bar.htm");
       create();
   }
 };

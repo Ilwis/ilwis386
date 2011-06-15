@@ -789,16 +789,16 @@ bool GraphAxis::fConfig()
       switch (gaxis->gap)
       {
       case GraphAxis::gapX:
-        SetMenHelpTopic(htpGraphXAxis);
+        SetMenHelpTopic("ilwismen\\graph_window_options_x_axis.htm");
         break;
       case GraphAxis::gapYLeft:
-        SetMenHelpTopic(htpGraphYAxisLeft);
+        SetMenHelpTopic("ilwismen\\graph_window_options_y_axis_left.htm");
         break;
       case GraphAxis::gapYRight:
-        SetMenHelpTopic(htpGraphYAxisRight);
+        SetMenHelpTopic("ilwismen\\graph_window_options_y_axis_right.htm");
         break;
       case GraphAxis::gapYRose:
-        SetMenHelpTopic(htpRoseDiagramYAxis);
+        SetMenHelpTopic("ilwismen\\graph_window_options_y_axis_rose.htm");
         break;
       }
       create();      

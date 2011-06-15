@@ -93,7 +93,7 @@ FormCreateFilter::FormCreateFilter(CWnd* wPar, String* sFil)
   stRemark = new StaticText(root, sFill);
   stRemark->SetIndependentPos();
 
-  SetMenHelpTopic(htpFilterCreate);
+  SetMenHelpTopic("ilwismen\\create_a_filter.htm");
   create();
 }
 
