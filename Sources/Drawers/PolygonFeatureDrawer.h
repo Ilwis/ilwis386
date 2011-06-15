@@ -4,6 +4,7 @@ ILWIS::NewDrawer *createPolygonFeatureDrawer(ILWIS::DrawerParameters *parms);
 
 
 namespace ILWIS{
+	class MapPolygonTriangulator;
 
 class _export PolygonFeatureDrawer : public PolygonDrawer {
 	public:
@@ -22,7 +23,8 @@ class _export PolygonFeatureDrawer : public PolygonDrawer {
 		gpc_vertex *makeVertexList(const LineString* ring) const;
 
 		Feature *feature;
-		long *trianglePol;
+//		long *trianglePol;
+		MapPolygonTriangulator *tri;
 
 	};
 }

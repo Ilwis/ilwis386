@@ -13,18 +13,19 @@
 
 using namespace ILWIS;
 
-String PointDrawer::defaultSymbol="open-rectangle";
+String PointProperties::defaultSymbol="open-rectangle";
 
 
 ILWIS::NewDrawer *createPointDrawer(DrawerParameters *parms) {
 	return new PointDrawer(parms);
 }
 
-PointDrawer::PointDrawer(DrawerParameters *parms) : SimpleDrawer(parms,"PointDrawer"), element(0), symbol(defaultSymbol), scale(1.0) {
-	drawColor = Color(0,0,0);
+PointDrawer::PointDrawer(DrawerParameters *parms) : SimpleDrawer(parms,"PointDrawer"), element(0){
+	properties.symbol = PointProperties::defaultSymbol;
 }
 
-PointDrawer::PointDrawer(DrawerParameters *parms, const String& name) : SimpleDrawer(parms,name), element(0), symbol(defaultSymbol), scale(1.0){
+PointDrawer::PointDrawer(DrawerParameters *parms, const String& name) : SimpleDrawer(parms,name), element(0){
+	properties.symbol = PointProperties::defaultSymbol;
 }
 
 PointDrawer::~PointDrawer() {
@@ -32,9 +33,9 @@ PointDrawer::~PointDrawer() {
 
 void PointDrawer::prepare(PreparationParameters *p){
 	SimpleDrawer::prepare(p);
-	if ( p->type & NewDrawer::ptRENDER && symbol != "") {
+	if ( p->type & NewDrawer::ptRENDER && properties.symbol != "") {
 		const SVGLoader *loader = NewDrawer::getSvgLoader();
-		SVGLoader::const_iterator cur = loader->find(symbol);
+		SVGLoader::const_iterator cur = loader->find(properties.symbol);
 		if ( cur == loader->end())
 			throw ErrorObject(TR("Unknow symbol"));
 		element = (*cur).second;
@@ -62,11 +63,10 @@ void PointDrawer::calcSize() {
 		height = cbZoom.width() / 100.0;
 }
 
-void PointDrawer::setScale(double s) {
-	scale = s;
-}
-
 bool PointDrawer::draw( const CoordBounds& cbArea) const {
+	if ( !isActive())
+		return false;
+
 	if ( cNorm.fUndef())
 		return false;
 	const CoordBounds& cbZoom = getRootDrawer()->getCoordBoundsZoom();
@@ -83,7 +83,7 @@ bool PointDrawer::draw( const CoordBounds& cbArea) const {
 
 	double fx = cNorm.x;
 	double fy = cNorm.y;
-	double fz = is3D ? cNorm.z : z0;
+	double fz = 0; //is3D ? cNorm.z : z0;
 
 	double symbolScale = cbZoom.width() / 200;
 	CoordBounds cb(Coord(fx - symbolScale, fy - symbolScale,fz), Coord(fx + symbolScale, fy + symbolScale,fz));
@@ -92,8 +92,12 @@ bool PointDrawer::draw( const CoordBounds& cbArea) const {
 	double yscale = cb.height() / height;
 
 	glPushMatrix();
-	glTranslated(cb.cMin.x, cb.cMin.y, fz);
-	glScaled(xscale * scale, yscale * scale , 0);
+	glTranslated(fx,fy,fz);
+	glScaled(xscale * properties.scaling(), yscale *  properties.scaling(), 1);
+	if ( properties.threeDOrientation){
+		glTranslated(0,0,symbolScale);
+		glRotated(90,100,0,0);
+	}
 
 	//if ( is3D) {
 	//	zscale = cdrw->getZMaker()->getZScale();
@@ -153,63 +157,79 @@ bool PointDrawer::draw( const CoordBounds& cbArea) const {
 	return true;
 }
 
-HTREEITEM PointDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
-	return parent;
-}
-
-void PointDrawer::setDrawColor(const Color& col) {
-	drawColor = col;
-}
-
-Color PointDrawer::getDrawColor() const {
-	return drawColor;
-}
-
-void PointDrawer::setSymbol(const String& sym) {
-	symbol = sym;
-}
-
-String PointDrawer::getSymbol() const {
-	return symbol;
+void PointDrawer::transform(const SVGAttributes& attributes) const{
+	for(int i=0; i < attributes.transformations.size(); ++i) {
+		const Transform& tr = attributes.transformations.at(i);
+		if ( tr.type == Transform::tROTATE) {
+			if (tr.parameters.size() == 1) {
+				glRotated(tr.parameters[0], 0,0,100);
+			}
+			else
+				glRotated(tr.parameters[0],tr.parameters[1],tr.parameters[2],100);
+		} else if ( tr.type == Transform::tTRANSLATE) {
+			if (tr.parameters.size() == 1)
+				glTranslated(tr.parameters[0],0,0);
+			else
+				glTranslated(tr.parameters[0],tr.parameters[1],0);
+		} else if ( tr.type == Transform::tSCALE) {
+			if (tr.parameters.size() == 1)
+				glScaled(tr.parameters[0],0,0);
+			else
+				glScaled(tr.parameters[0],tr.parameters[1],0);
+		} else if ( tr.type == Transform::tMATRIX) {
+		}
+	}
 }
 
 void PointDrawer::drawRectangle(const SVGAttributes& attributes, double z) const {
+
+	double hw = attributes.rwidth != 0 ? attributes.rwidth : width;
+	double hh = attributes.rheight != 0 ? attributes.rheight : height;
+	hw /= 2.0;
+	hh /= 2.0;
+	if ( attributes.transformations.size() > 0) {
+		glPushMatrix();
+		transform(attributes);
+	}
+
 	double transp = getTransparency() * attributes.opacity;
 	double filltransp = transp ;
 	Color fcolor = attributes.fillColor;
 	if ( fcolor == colorUSERDEF)
-		fcolor = getDrawColor();
-	double w = attributes.rwidth != 0 ? attributes.rwidth : width;
-	double h = attributes.rheight != 0 ? attributes.rheight : height;
+		fcolor = properties.drawColor;
 
 	if ( fcolor != colorUNDEF) {
 		glColor4d(fcolor.redP(), fcolor.greenP(), fcolor.blueP(), transp);
 		glBegin(GL_QUADS);						
-		glVertex3f( attributes.ox, attributes.oy, z);	
-		glVertex3f( attributes.ox, attributes.oy + h,z);	
-		glVertex3f( attributes.ox + w, attributes.oy + h,z);
-		glVertex3f( attributes.ox + w, attributes.oy,z);
+		glVertex3f( attributes.ox - hw, attributes.oy - hw, z);	
+		glVertex3f( attributes.ox - hw, attributes.oy + hw,z);	
+		glVertex3f( attributes.ox + hw, attributes.oy + hw,z);
+		glVertex3f( attributes.ox + hw, attributes.oy - hw,z);
 		glEnd();
 	}
-	glLineWidth(attributes.borderThickness);
+	glLineWidth(properties.thickness!= 0 ? properties.thickness : attributes.borderThickness);
 	glColor4d(attributes.strokeColor.redP(), attributes.strokeColor.greenP(), attributes.strokeColor.blueP(), transp);
 	glBegin(GL_LINE_STRIP);						
-		glVertex3f( attributes.ox, attributes.oy, z);	
-		glVertex3f( attributes.ox, attributes.oy + h,z);	
-		glVertex3f( attributes.ox + w, attributes.oy + h,z);
-		glVertex3f( attributes.ox + w, attributes.oy,z);
-		glVertex3f( attributes.ox, attributes.oy, z);
+		glVertex3f( attributes.ox - hw, attributes.oy - hw, z);	
+		glVertex3f( attributes.ox - hw, attributes.oy + hw,z);	
+		glVertex3f( attributes.ox + hw, attributes.oy + hw,z);
+		glVertex3f( attributes.ox + hw, attributes.oy - hw,z);
+		glVertex3f( attributes.ox - hw, attributes.oy - hw, z);	
 	glEnd();
+
+	if ( attributes.transformations.size() > 0) {
+		glPopMatrix();
+	}
 }
 
 void PointDrawer::drawEllipse(const SVGAttributes& attributes, double z) const{
 	double rx = attributes.rx > 0 ? attributes.rx : width / 2;
 	double ry = attributes.ry >0 ? attributes.ry : height / 2;
-	double lcx = attributes.cx > 0 ? attributes.cx : width / 2;
-	double lcy = attributes.cy > 0 ? attributes.cy : height / 2;
+	double lcx = attributes.cx > 0 ? attributes.cx : 0;
+	double lcy = attributes.cy > 0 ? attributes.cy : 0;
 	double r = min(rx,ry);
 
-	Color fcolor = attributes.fillColor == colorUSERDEF ? getDrawColor() : attributes.fillColor;
+	Color fcolor = attributes.fillColor == colorUSERDEF ? properties.drawColor : attributes.fillColor;
 	double transp = attributes.opacity * getTransparency();
 
 	int sections = 20; //number of triangles to use to estimate a circle
@@ -229,9 +249,9 @@ void PointDrawer::drawEllipse(const SVGAttributes& attributes, double z) const{
 		glEnd();
 	}
 
-	Color scolor = attributes.strokeColor == colorUNDEF ? getDrawColor() :  attributes.strokeColor;
+	Color scolor = attributes.strokeColor == colorUNDEF ? properties.drawColor :  attributes.strokeColor;
 	glColor4d(scolor.redP(), scolor.greenP(), scolor.blueP(), transp);
-	glLineWidth(attributes.borderThickness);
+	glLineWidth(properties.thickness!= 0 ? properties.thickness : attributes.borderThickness);
 	glBegin(GL_LINE_LOOP);
 	for(int i = 0; i <= sections;i++) { // make $section number of circles
 		glVertex3d(lcx + rx * cos(i *  twoPi / sections), 
@@ -241,12 +261,12 @@ void PointDrawer::drawEllipse(const SVGAttributes& attributes, double z) const{
 }
 
 void PointDrawer::drawLine(const SVGAttributes& attributes, double z) const{
-	Color scolor = attributes.strokeColor == colorUNDEF ? getDrawColor() :  attributes.strokeColor;
+	Color scolor = attributes.strokeColor == colorUNDEF ? properties.drawColor :  attributes.strokeColor;
 	double transp = attributes.opacity * getTransparency();
 	glColor4d(scolor.redP(), scolor.greenP(), scolor.blueP(), transp);
 
 
-	glLineWidth(attributes.borderThickness);
+	glLineWidth(properties.thickness!= 0 ? properties.thickness : attributes.borderThickness);
 	glBegin(GL_LINE_STRIP);
 	for(int i=0; i < attributes.points.size(); ++i) {
 		glVertex3d(attributes.points[i].x, attributes.points[i].y, z);
@@ -258,17 +278,15 @@ void PointDrawer::drawLine(const SVGAttributes& attributes, double z) const{
 
 void PointDrawer::drawPolygon(const SVGAttributes& attributes, double z) const{
 
-	Color fcolor = attributes.fillColor == colorUSERDEF ? getDrawColor() : attributes.fillColor;
+	Color fcolor = attributes.fillColor == colorUSERDEF ? properties.drawColor : attributes.fillColor;
 	double transp = attributes.opacity * getTransparency();
 	glColor4f(fcolor.redP(),fcolor.greenP(), fcolor.blueP(), transp);
-	for(int i=0; i < attributes.triangles.size() / 3; ++i) {
-		Coord c1 = attributes.triangles[3*i];
-		Coord c2 = attributes.triangles[3*i + 1];
-		Coord c3 = attributes.triangles[3*i + 2];
-		glBegin(GL_TRIANGLES);
-			glVertex3d(c1.x,c1.y,0);
-			glVertex3d(c2.x,c2.y,0);
-			glVertex3d(c3.x,c3.y,0);
+	for(int i=0; i < attributes.triangleStrips.size(); ++i){
+		glBegin(GL_TRIANGLE_STRIP);
+		for(int j=0; j < attributes.triangleStrips.at(i).size(); ++j) {
+			Coord c = attributes.triangleStrips.at(i).at(j);
+			glVertex3d(c.x,c.y,z);
+		}
 		glEnd();
 	}
 
@@ -281,3 +299,40 @@ void PointDrawer::shareVertices(vector<Coord *>& coords) {
 	coords.push_back(&cNorm);
 }
 
+GeneralDrawerProperties *PointDrawer::getProperties() {
+	return &properties;
+}
+
+//----------------------------------------------
+String PointProperties::store(const FileName& fnView, const String& parentSection) const{
+	ObjectInfo::WriteElement(parentSection.scVal(),"Thickness",fnView, thickness);
+	ObjectInfo::WriteElement(parentSection.scVal(),"Symbol",fnView, symbol);
+	ObjectInfo::WriteElement(parentSection.scVal(),"DrawColor",fnView, drawColor);
+	ObjectInfo::WriteElement(parentSection.scVal(),"IgnoreColor",fnView, ignoreColor);
+	ObjectInfo::WriteElement(parentSection.scVal(),"Scale",fnView, scale);
+	ObjectInfo::WriteElement(parentSection.scVal(),"ScaleMode",fnView, scaleMode);
+	ObjectInfo::WriteElement(parentSection.scVal(),"UseDirection",fnView, (long)useDirection);
+	ObjectInfo::WriteElement(parentSection.scVal(),"StretchScale",fnView, stretchScale);
+	ObjectInfo::WriteElement(parentSection.scVal(),"StretchRange",fnView, stretchRange);
+	ObjectInfo::WriteElement(parentSection.scVal(),"StretchColumn",fnView, stretchColumn);
+	ObjectInfo::WriteElement(parentSection.scVal(),"DirectionColumn",fnView, directionColumn);
+
+
+	return parentSection;
+}
+
+void PointProperties::load(const FileName& fnView, const String& parentSection){
+	ObjectInfo::ReadElement(parentSection.scVal(),"Thickness",fnView, thickness);
+	ObjectInfo::ReadElement(parentSection.scVal(),"Symbol",fnView, symbol);
+	ObjectInfo::ReadElement(parentSection.scVal(),"DrawColor",fnView, drawColor);
+	ObjectInfo::ReadElement(parentSection.scVal(),"IgnoreColor",fnView, ignoreColor);
+	ObjectInfo::ReadElement(parentSection.scVal(),"Scale",fnView, scale);
+	long m;
+	ObjectInfo::ReadElement(parentSection.scVal(),"ScaleMode",fnView, m);
+	scaleMode = (Scaling)m;
+	ObjectInfo::ReadElement(parentSection.scVal(),"UseDirection",fnView, useDirection);
+	ObjectInfo::ReadElement(parentSection.scVal(),"StretchScale",fnView, stretchScale);
+	ObjectInfo::ReadElement(parentSection.scVal(),"StretchRange",fnView, stretchRange);
+	ObjectInfo::ReadElement(parentSection.scVal(),"StretchColumn",fnView, stretchColumn);
+	ObjectInfo::ReadElement(parentSection.scVal(),"DirectionColumn",fnView, directionColumn);
+}

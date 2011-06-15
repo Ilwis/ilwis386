@@ -57,6 +57,7 @@ void RasterLayerDrawer::prepare(PreparationParameters *pp){
 		if ( rpr->prc()) {
 			RepresentationClass *rprC = rpr->prc();
 			for(int j =0 ; j < pp->filteredRaws.size(); ++j) {
+				rprC->DoNotStore(true);
 				int raw = pp->filteredRaws[j];
 				Color clr = rprC->clrRaw(abs(raw));
 				clr.m_transparency = raw > 0 ? 0 : 255;
@@ -171,15 +172,15 @@ void RasterLayerDrawer::addDataSource(void *bmap, int options){
 
 bool RasterLayerDrawer::draw( const CoordBounds& cbArea) const {
 
-	drawPreDrawers(cbArea);
+	//LayerDrawer::draw(cbArea);
 
 	if (!data->init)
 		init();
 	if (textureHeap->fValid())
 	{
-		//glClearColor(1.0,1.0,1.0,0.0);
+		glClearColor(1.0,1.0,1.0,0.0);
 		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+		glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA); 
 		glColor4f(1, 1, 1, transparency);
 
 		textureHeap->ClearQueuedTextures();
@@ -218,7 +219,6 @@ bool RasterLayerDrawer::draw( const CoordBounds& cbArea) const {
 		glDisable(GL_BLEND);
 	}
 
-	drawPostDrawers(cbArea);
 	return true;
 }
 

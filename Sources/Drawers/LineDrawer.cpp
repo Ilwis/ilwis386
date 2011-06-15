@@ -49,6 +49,9 @@ void LineDrawer::addCoords(const vector<Coord>& v,int options) {
 }
 
 bool LineDrawer::draw( const CoordBounds& cbArea) const{
+	if ( !isActive())
+		return false;
+
 	if (lines.size() == 0)
 		return false;
 	if ( !getRootDrawer()->getCoordBoundsZoom().fContains(cb))
@@ -58,7 +61,7 @@ bool LineDrawer::draw( const CoordBounds& cbArea) const{
 
 	ComplexDrawer *cdrw = (ComplexDrawer *)getParentDrawer();
 	bool is3D = getRootDrawer()->is3D(); 
-	bool is3DPossible = cdrw->getZMaker()->getThreeDPossible();
+	bool is3DPossible = cdrw->getZMaker()->getThreeDPossible() && !isSupportingDrawer;
 	double zscale, zoffset, fakez=0;
 	double transp = getTransparency();
 
@@ -68,7 +71,8 @@ bool LineDrawer::draw( const CoordBounds& cbArea) const{
 		glEnable (GL_LINE_STIPPLE);
 		glLineStipple(1,lproperties.linestyle);
 	}
-	double z0 = cdrw->getZMaker()->getZ0(getRootDrawer()->is3D());
+	//double z0 = cdrw->getZMaker()->getZ0(getRootDrawer()->is3D());
+	double z0 = getRootDrawer()->getZMaker()->getZ0(is3D);
 	if ( isSupportingDrawer && is3D) // supporting drawers need to be slightly above the level of the "main" drawer. OpenGL won't draw them correct if they are in the same plane
 		z0 +=  z0;
 

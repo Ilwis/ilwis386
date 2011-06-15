@@ -7,8 +7,12 @@ class FieldColor;
 
 namespace ILWIS{
 
+struct PointProperties;
+
+
 class _export PointLayerDrawer : public FeatureLayerDrawer {
 	public:
+		enum Scaling{sNONE, sLOGARITHMIC, sLINEAR};
 		ILWIS::NewDrawer *createPointLayerDrawer(DrawerParameters *parms);
 
 		PointLayerDrawer(DrawerParameters *parms);
@@ -16,7 +20,12 @@ class _export PointLayerDrawer : public FeatureLayerDrawer {
 		HTREEITEM  configure(LayerTreeView  *tv, HTREEITEM parent);
 		void prepare(PreparationParameters *parms);
 		void getDrawerFor(const Feature* feature,vector<NewDrawer *>& featureDrawers);
-		void setSymbolProperties(const String& symbol, double scale);
+		GeneralDrawerProperties *getProperties();
+		//void setScaleMode(Scaling mode) { scaleMode = mode; }
+		//Scaling getScaleMode() const { return scaleMode; } 
+		//bool usingDirection() const { return useDirection; }
+		//void setUseDirection(bool yesno) { useDirection = yesno; }
+
 
 	protected:
 		String store(const FileName& fnView, const String& parenSection) const;
@@ -24,6 +33,8 @@ class _export PointLayerDrawer : public FeatureLayerDrawer {
 		virtual NewDrawer *createElementDrawer(PreparationParameters *pp, ILWIS::DrawerParameters* parms) const;
 		void setDrawMethod(DrawMethod method=drmINIT);
 		void setSymbolization(CWnd *parent);
+		PointProperties *properties;
+
 	};
 
 }

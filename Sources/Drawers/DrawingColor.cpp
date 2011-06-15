@@ -3,6 +3,7 @@
 #include "Engine\Spatialreference\gr.h"
 #include "Engine\Map\Raster\Map.h"
 #include "Engine\Domain\dmsort.h"
+#include "Engine\Representation\Rpr.h"
 #include "Engine\Base\Algorithm\Random.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Engine\Drawers\RootDrawer.h"
@@ -331,41 +332,42 @@ void DrawingColor::InitClrRandom()
 	}
 }
 
-Color DrawingColor::clrPrimary(int iNr) const
+Color DrawingColor::clrPrimary(int iNr) 
 {
-	switch (iNr%32) {
-	case  0: return Color(  0,  0,  0);
-	case  1: return Color(255,  0,  0);
-	case  2: return Color(255,255,  0);
-	case  3: return Color(  0,  0,255);
-	case  4: return Color(255,  0,255);
-	case  5: return Color(  0,255,255);
-	case  6: return Color(  0,255,  0);
-	case  7: return Color(128,128,128);
-	case  8: return Color(224,224,224);  // was white 255,255,255
-	case  9: return Color(128,  0,  0);
-	case 10: return Color(128,128,  0);
-	case 11: return Color(  0,  0,128);
-	case 12: return Color(128,  0,128);
-	case 13: return Color(  0,128,128);
-	case 14: return Color(  0,128,  0);
-	case 15: return Color(255,128,  0);
-	case 16: return Color(191,  0,  0);
-	case 17: return Color(191,191,  0);
-	case 18: return Color(  0,  0,191);
-	case 19: return Color(191,  0,191);
-	case 20: return Color(  0,191,191);
-	case 21: return Color(  0,191,  0);
-	case 22: return Color(191,191,191);
-	case 23: return Color(192,220,192);
-	case 24: return Color( 63,  0,  0);
-	case 25: return Color( 63, 63,  0);
-	case 26: return Color(  0,  0, 63);
-	case 27: return Color( 63,  0, 63);
-	case 28: return Color(  0, 63, 63);
-	case 29: return Color(  0, 63,  0);
-	case 30: return Color( 63, 63, 63);
-	case 31: return Color(127, 63,  0);
-	}  
-	return Color();
+	return Representation::clrPrimary(iNr);
+	//switch (iNr%32) {
+	//case  0: return Color(  0,  0,  0);
+	//case  1: return Color(255,  0,  0);
+	//case  2: return Color(255,255,  0);
+	//case  3: return Color(  0,  0,255);
+	//case  4: return Color(255,  0,255);
+	//case  5: return Color(  0,255,255);
+	//case  6: return Color(  0,255,  0);
+	//case  7: return Color(128,128,128);
+	//case  8: return Color(224,224,224);  // was white 255,255,255
+	//case  9: return Color(128,  0,  0);
+	//case 10: return Color(128,128,  0);
+	//case 11: return Color(  0,  0,128);
+	//case 12: return Color(128,  0,128);
+	//case 13: return Color(  0,128,128);
+	//case 14: return Color(  0,128,  0);
+	//case 15: return Color(255,128,  0);
+	//case 16: return Color(191,  0,  0);
+	//case 17: return Color(191,191,  0);
+	//case 18: return Color(  0,  0,191);
+	//case 19: return Color(191,  0,191);
+	//case 20: return Color(  0,191,191);
+	//case 21: return Color(  0,191,  0);
+	//case 22: return Color(191,191,191);
+	//case 23: return Color(192,220,192);
+	//case 24: return Color( 63,  0,  0);
+	//case 25: return Color( 63, 63,  0);
+	//case 26: return Color(  0,  0, 63);
+	//case 27: return Color( 63,  0, 63);
+	//case 28: return Color(  0, 63, 63);
+	//case 29: return Color(  0, 63,  0);
+	//case 30: return Color( 63, 63, 63);
+	//case 31: return Color(127, 63,  0);
+	//}  
+	//return Color();
 }

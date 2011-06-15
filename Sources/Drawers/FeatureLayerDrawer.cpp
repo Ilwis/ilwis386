@@ -92,7 +92,9 @@ void FeatureLayerDrawer::prepare(PreparationParameters *parms){
 		}
 
 	} if ( parms->type & NewDrawer::ptRENDER || parms->type & NewDrawer::pt3D || parms->type & NewDrawer::ptRESTORE) {
-			prepareChildDrawers(parms);
+			PreparationParameters pp(parms);
+			pp.type = pp.type & ~NewDrawer::ptGEOMETRY;
+			prepareChildDrawers(&pp);
 	}
 	clock_t end = clock();
 	double duration = 1000.0 * (double)(end - start) / CLOCKS_PER_SEC;

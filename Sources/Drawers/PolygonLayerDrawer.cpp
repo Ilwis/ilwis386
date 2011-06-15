@@ -10,7 +10,7 @@
 #include "Drawers\FeatureLayerDrawer.h"
 #include "drawers\linedrawer.h"
 #include "drawers\polygondrawer.h"
-#include "Drawers\gpc.h"
+#include "Engine\Base\Algorithm\triangulation\gpc.h"
 #include "Drawers\PolygonFeatureDrawer.h"
 #include "Drawers\PolygonLayerDrawer.h"
 #include "Engine\Drawers\DrawerContext.h"
@@ -30,11 +30,16 @@ PolygonLayerDrawer::PolygonLayerDrawer(DrawerParameters *parms) :
 	areaTransparency(1.0),
 	usesTriangleFile(true),
 	triData(0),
-	currentLoc(0)
+	currentLoc(0),
+	triaFileSize(0)
 {
 
 }
 PolygonLayerDrawer::~PolygonLayerDrawer() {
+	if ( triData != 0) {
+		delete [] triData;
+		triData = 0;
+	}
 }
 
 NewDrawer *PolygonLayerDrawer::createElementDrawer(PreparationParameters *pp, ILWIS::DrawerParameters* parms) const{
@@ -56,27 +61,32 @@ void PolygonLayerDrawer::addDataSource(void *bmap,int options) {
 
 }
 
-void PolygonLayerDrawer::getTriangleData(long **data, long** count) {
+bool PolygonLayerDrawer::getTriangleData(long **data, long** count) {
 	*data = triData;
 	*count = &currentLoc;
+	return currentLoc != triaFileSize;
 }
 
 void PolygonLayerDrawer::prepare(PreparationParameters *parms) {
-	FeatureLayerDrawer::prepare(parms);
-
 	BaseMap *bmap = (BaseMap *)getDataSource();
 	FileName fnTriangle((*bmap)->fnObj,".tria#");
 	if ( (parms->type & RootDrawer::ptGEOMETRY) && fnTriangle.fExist()) {
-		ifstream file(fnTriangle.sFullPath().scVal(), ios::in|ios::binary);
-		file.is_open();
-		long size=1234;
-		file.read((char *)(&size), 4);
-		triData = new long[size];
-		triData[0] = size;
-		file.read((char *)(triData + 1),(size - 1)*4);
-		currentLoc = 1; // first long is the total size of the file; irrelevant for the rest of the polygons
+		if ( triData == 0) { // is already read or not
+			ifstream file(fnTriangle.sFullPath().scVal(), ios::in|ios::binary);
+			file.is_open();
+			long size=1234;
+			file.read((char *)(&size), 4);
+			triData = new long[size];
+			triData[0] = size;
+			file.read((char *)(triData + 1),(size - 1)*4);
+			currentLoc = 1; // first long is the total size of the file; irrelevant for the rest of the polygons
+			triaFileSize = size;
+		}
 	}
-	else if ( parms->type & RootDrawer::ptGEOMETRY) {
+
+	FeatureLayerDrawer::prepare(parms);
+
+	if ( parms->type & RootDrawer::ptGEOMETRY) {
 		if ( usesTriangleFile && triData == 0) {
 			if ( !fnTriangle.fExist()) {
 				ofstream file(fnTriangle.sFullPath().scVal(), ios::out|ios::binary|ios::ate);
@@ -92,11 +102,11 @@ void PolygonLayerDrawer::prepare(PreparationParameters *parms) {
 		}
 	}
 
-	if ( triData != 0) {
-		delete [] triData;
-		triData = 0;
-		currentLoc = 0;
-	}
+	//if ( triData != 0) {
+	//	delete [] triData;
+	//	triData = 0;
+	//	currentLoc = 0;
+	//}
 
 }
 

@@ -26,7 +26,7 @@ class _export PolygonLayerDrawer : public FeatureLayerDrawer {
 		void setLineColor(const Color& clr);
 		void setShowBoundaries(bool yesno);
 		void setShowAreas(bool yesno);
-		void getTriangleData(long **data,long** loc);
+		bool getTriangleData(long **data,long** loc);
 		GeneralDrawerProperties *getProperties() ;
 		
 
@@ -42,6 +42,7 @@ class _export PolygonLayerDrawer : public FeatureLayerDrawer {
 		bool usesTriangleFile;
 		long *triData;
 		long currentLoc;
+		int triaFileSize;
 		
 	};
 }

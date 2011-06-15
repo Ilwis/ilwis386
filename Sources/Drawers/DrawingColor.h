@@ -26,7 +26,7 @@ public:
 	void clrVal(const double * buf, long * bufOut, long iLen) const;
 	void clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer::DrawMethod drm) const;
 	Color clrRandom(int iRaw) const;
-	Color clrPrimary(int iNr) const;
+	static Color clrPrimary(int iNr);
 	void setDataColumn(const Column& c);
 
 private:

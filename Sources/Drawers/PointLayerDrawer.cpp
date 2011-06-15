@@ -22,9 +22,11 @@ ILWIS::NewDrawer *createPointLayerDrawer(DrawerParameters *parms) {
 PointLayerDrawer::PointLayerDrawer(DrawerParameters *parms) : 
 	FeatureLayerDrawer(parms,"PointLayerDrawer")
 {
+	properties = new PointProperties();
 }
 
 PointLayerDrawer::~PointLayerDrawer() {
+	delete properties;
 }
 
 NewDrawer *PointLayerDrawer::createElementDrawer(PreparationParameters *pp, ILWIS::DrawerParameters* parms) const{
@@ -32,27 +34,39 @@ NewDrawer *PointLayerDrawer::createElementDrawer(PreparationParameters *pp, ILWI
 
 }
 
-void PointLayerDrawer::prepare(PreparationParameters *parms){
-	FeatureLayerDrawer::prepare(parms);
-	//if ( parms->type & NewDrawer::ptRENDER) {
-	//	for(int i = 0; i < getDrawerCount(); ++i) {
-	//		PointDrawer *pdrw = (PointDrawer *)getDrawer(i);
-	//		if ( pdrw != 0){
-	//			pdrw->prepare(parms);
-	//		}
-	//	}
-	//}
+void PointLayerDrawer::prepare(PreparationParameters *parm){
+	FeatureLayerDrawer::prepare(parm);
+	if ( (parm->type & NewDrawer::ptRENDER) != 0) {
+		for(int i=0; i < drawers.size(); ++i) {
+			PointDrawer *ld = (PointDrawer *)drawers.at(i);
+			if ( !ld) 
+				continue;
+			PointProperties *props = (PointProperties *)ld->getProperties();
+			props->set(properties);
+			if (!properties->ignoreColor)
+				props->drawColor = properties->drawColor;
+			ld->prepare(parm);
+		}
+	} else if ( (parm->type & NewDrawer::pt3D) != 0) {
+		prepareChildDrawers(parm);
+	}
 }
 
 String PointLayerDrawer::store(const FileName& fnView, const String& parentSection) const{
 	String currentSection = getType() + "::" + parentSection;
 	FeatureLayerDrawer::store(fnView, currentSection);
+	properties->store(fnView, currentSection);
+
+
 
 	return currentSection;
 }
 
-void PointLayerDrawer::load(const FileName& fnView, const String& parenSection){
-	FeatureLayerDrawer::load(fnView, parenSection);
+void PointLayerDrawer::load(const FileName& fnView, const String& parentSection){
+	String currentSection = getType() + "::" + parentSection;
+	FeatureLayerDrawer::load(fnView, currentSection);
+	properties->load(fnView, currentSection);
+
 }
 
 void PointLayerDrawer::setDrawMethod(DrawMethod method) {
@@ -78,14 +92,8 @@ void PointLayerDrawer::getDrawerFor(const Feature* feature,vector<NewDrawer *>& 
 	}
 }
 
-void PointLayerDrawer::setSymbolProperties(const String& symbol, double scale) {
-	for(int i=0; i< getDrawerCount(); ++i) {
-		PointDrawer *pdrw = dynamic_cast<PointDrawer *>(getDrawer(i));
-		if ( pdrw) {
-			pdrw->setSymbol(symbol);
-			pdrw->setScale(scale);
-		}
-	}
+GeneralDrawerProperties *PointLayerDrawer::getProperties() {
+	return properties;
 }
 
 //-----------------------------------------------------------------

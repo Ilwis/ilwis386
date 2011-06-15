@@ -59,6 +59,9 @@ bool LayerDrawer::draw( const CoordBounds& cbArea) const{
 	glClearColor(1.0,1.0,1.0,0.0);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
+	//if ( getRootDrawer()->is3D() ) {
+	//	getRootDrawer()->init3D();
+	//}
 	getZMaker()->setZOrder(getRootDrawer()->getZIndex(),getRootDrawer()->getFakeZ());
 	ComplexDrawer::draw( cbArea);
 	glDisable(GL_BLEND);
