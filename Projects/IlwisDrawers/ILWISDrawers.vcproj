@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="ILWISDrawers"
 	ProjectGUID="{FD4E2ECC-451A-40CD-9391-6806EBEC9BF4}"
 	RootNamespace="ILWISDrawers"
@@ -212,6 +212,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Drawers\AnnotationDrawers.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Drawers\BoxDrawer.cpp"
 				>
 			</File>
@@ -318,6 +322,10 @@
 			>
 			<File
 				RelativePath="..\..\Sources\Drawers\AnimationDrawer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\AnnotationDrawers.h"
 				>
 			</File>
 			<File

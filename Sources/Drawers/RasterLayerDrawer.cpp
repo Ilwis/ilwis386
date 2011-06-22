@@ -173,6 +173,7 @@ void RasterLayerDrawer::addDataSource(void *bmap, int options){
 bool RasterLayerDrawer::draw( const CoordBounds& cbArea) const {
 
 	//LayerDrawer::draw(cbArea);
+	drawPreDrawers(cbArea);
 
 	if (!data->init)
 		init();
@@ -218,6 +219,7 @@ bool RasterLayerDrawer::draw( const CoordBounds& cbArea) const {
 			glPopMatrix();
 		glDisable(GL_BLEND);
 	}
+	drawPostDrawers(cbArea);
 
 	return true;
 }

@@ -83,9 +83,9 @@ bool PointDrawer::draw( const CoordBounds& cbArea) const {
 
 	double fx = cNorm.x;
 	double fy = cNorm.y;
-	double fz = 0; //is3D ? cNorm.z : z0;
+	double fz = is3D ? cNorm.z : z0;
 
-	double symbolScale = cbZoom.width() / 200;
+	double symbolScale = cbZoom.width() / 250;
 	CoordBounds cb(Coord(fx - symbolScale, fy - symbolScale,fz), Coord(fx + symbolScale, fy + symbolScale,fz));
 
 	double xscale = cb.width() / width;
@@ -99,28 +99,21 @@ bool PointDrawer::draw( const CoordBounds& cbArea) const {
 		glRotated(90,100,0,0);
 	}
 
-	//if ( is3D) {
-	//	zscale = cdrw->getZMaker()->getZScale();
-	//	zoffset = cdrw->getZMaker()->getOffset();
-	//	glPushMatrix();
-	//	glScaled(1,1,zscale);
-	//	glTranslated(0,0,zoffset);
-	//}
 	for(vector<SVGAttributes>::const_iterator cur = element->begin(); cur != element->end(); ++cur) {
 		switch((*cur).type) {
 			case SVGAttributes::sCIRCLE:
 			case SVGAttributes::sELLIPSE:
-				drawEllipse((*cur), fz);
+				drawEllipse((*cur), 0);
 				break;
 			case SVGAttributes::sRECTANGLE:
-				drawRectangle((*cur), fz);
+				drawRectangle((*cur), 0);
 				break;
 			case SVGAttributes::sPOLYGON:
-				drawPolygon((*cur), fz);
+				drawPolygon((*cur), 0);
 				break;
 			case SVGAttributes::sLINE:
 			case SVGAttributes::sPOLYLINE:
-				drawLine((*cur), fz);
+				drawLine((*cur), 0);
 				break;
 			case SVGAttributes::sPATH:
 				break;			

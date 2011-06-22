@@ -46,24 +46,24 @@ String SetDrawer::description() const {
 
 RangeReal SetDrawer::getMinMax(const ObjectCollection& oc) const{
 	RangeReal rrMinMax (0, 255);
-	bool fFirst = true;
-	for(int i = 0; i < oc->iNrObjects(); ++i) {
-		if (IOTYPEBASEMAP( oc->fnObject(i))) {
-			BaseMap mp(oc->fnObject(i));
-			if (mp.fValid()) {
-				RangeReal rrMinMaxMap = mp->rrMinMax(BaseMapPtr::mmmSAMPLED);
-				if (rrMinMaxMap.rLo() > rrMinMaxMap.rHi())
-					rrMinMaxMap = mp->vr()->rrMinMax();
-				if (fFirst) {
-					rrMinMax = rrMinMaxMap;
-					fFirst = false;
-				}
-				else
-					rrMinMax += rrMinMaxMap;
-			}
-		}
-	}
-	return rrMinMax;
+	return oc->getRange();
+	//for(int i = 0; i < oc->iNrObjects(); ++i) {
+	//	if (IOTYPEBASEMAP( oc->fnObject(i))) {
+	//		BaseMap mp(oc->fnObject(i));
+	//		if (mp.fValid()) {
+	//			RangeReal rrMinMaxMap = mp->rrMinMax(BaseMapPtr::mmmSAMPLED);
+	//			if (rrMinMaxMap.rLo() > rrMinMaxMap.rHi())
+	//				rrMinMaxMap = mp->vr()->rrMinMax();
+	//			if (fFirst) {
+	//				rrMinMax = rrMinMaxMap;
+	//				fFirst = false;
+	//			}
+	//			else
+	//				rrMinMax += rrMinMaxMap;
+	//		}
+	//	}
+	//}
+	//return rrMinMax;
 }
 RangeReal SetDrawer::getMinMax(const MapList& mlist) const{
 	RangeReal rrMinMax (0, 255);
@@ -128,7 +128,6 @@ void SetDrawer::prepare(PreparationParameters *pp){
 							else
 								rasterset->SetPalette(palette);
 						} 
-						//addLayerDrawer(i,bmp,pp,drw,String("layer %d",i));
 						drw->setUICode(0);
 						trq.fUpdate(i,oc->iNrObjects()); 
 					}
@@ -140,9 +139,11 @@ void SetDrawer::prepare(PreparationParameters *pp){
 				ILWIS::LayerDrawer *sdr = (ILWIS::LayerDrawer *)getDrawer(i);
 				if (!sdr)
 					continue;
-				pp->index = i;
-				pp->csy = sdr->getCoordSystem();
-				sdr->prepare(pp);
+				PreparationParameters prp(*pp);
+				prp.index = i;
+				prp.csy = sdr->getCoordSystem();
+				prp.type = NewDrawer::ptRENDER;
+				sdr->prepare(&prp);
 			}
 		}
 	}
