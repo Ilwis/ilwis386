@@ -199,7 +199,8 @@ FieldIntSliderEx::FieldIntSliderEx(FormEntry * parent, const String& question, i
 	}
 	psn->iMinWidth = 75;
 	fg->SetIndependentPos();
-	// new FieldBlank(fg);
+	FieldBlank *fb = new FieldBlank(fg,0.0);
+	fb->Align(edit, AL_UNDER);
 
 }
 

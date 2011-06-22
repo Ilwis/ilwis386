@@ -63,7 +63,7 @@ private:
 class _export FieldListView : public FormEntry
 {
 public:
-	FieldListView(FormEntry* feParent, const vector<FLVColumnInfo>& m_colInfo);
+	FieldListView(FormEntry* feParent, const vector<FLVColumnInfo>& m_colInfo, long _extraStyles = 0);
 	virtual ~FieldListView();
 
 	virtual void create();
@@ -78,6 +78,8 @@ public:
 	 void AddData(const vector<String>& v);
 	 void setData(int row, const vector<String>& v);
 	 void update();
+	 void getSelectedRowNumbers(vector<int>& rowNumbers) const;
+	 void setSelectedRows(vector<int>& rowNumbers);
 
 	//void ToggleAsKey(int iItem);
 	//void ToggleSelectedAsKey();
@@ -93,9 +95,10 @@ private:
 
 	String m_sName;
 	String *m_psName;
-	const vector<FLVColumnInfo> &m_colInfo;
+	vector<FLVColumnInfo> m_colInfo;
 	vector<vector<String> > data;
 	FLVColumnListCtrl m_clctrl;
+	long extraStyles;
 };
 
 #endif

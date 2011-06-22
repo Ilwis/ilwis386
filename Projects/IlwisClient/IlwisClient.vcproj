@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="IlwisClient"
 	ProjectGUID="{12042408-86EA-4501-8797-F358A5447A86}"
 	RootNamespace="IlwisClient"
@@ -599,11 +599,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\amesd.ico"
+				RelativePath="..\..\Sources\Client\Resources\amesd.ico"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Client\Resources\amesd.ico"
+				RelativePath=".\amesd.ico"
 				>
 			</File>
 			<File
@@ -951,11 +951,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\esa.ico"
+				RelativePath="..\..\Sources\Client\Resources\esa.ico"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Client\Resources\esa.ico"
+				RelativePath=".\esa.ico"
 				>
 			</File>
 			<File
@@ -1079,11 +1079,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Client\Resources\GNC.ico"
+				RelativePath=".\GNC.ico"
 				>
 			</File>
 			<File
-				RelativePath=".\GNC.ico"
+				RelativePath="..\..\Sources\Client\Resources\GNC.ico"
 				>
 			</File>
 			<File
@@ -5306,6 +5306,10 @@
 		</Filter>
 		<File
 			RelativePath="..\..\Sources\Client\Resources\Annotation.ico"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\position.ico"
 			>
 		</File>
 	</Files>

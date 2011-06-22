@@ -78,9 +78,12 @@ void FLVColumnListCtrl::OnGetDispInfo(NMHDR* pNMHDR, LRESULT* pResult)
 }
 
 
-FieldListView::FieldListView(FormEntry* feParent, const vector<FLVColumnInfo> &colInfo)
-	: FormEntry(feParent, 0, true), m_colInfo(colInfo)
+FieldListView::FieldListView(FormEntry* feParent, const vector<FLVColumnInfo> &colInfo, long _extraStyles)
+: FormEntry(feParent, 0, true), extraStyles(_extraStyles)
 {
+	for(int i = 0; i < colInfo.size(); ++i) {
+		m_colInfo.push_back(colInfo[i]);
+	}
 	int iTotalWidth = 0;
 	for(vector<FLVColumnInfo>::const_iterator cur = m_colInfo.begin(); cur < m_colInfo.end(); ++cur) {
 		iTotalWidth += (*cur).width;
@@ -111,7 +114,7 @@ void FieldListView::create()
 	dwStyle &= ~(LVS_SORTASCENDING | LVS_SORTDESCENDING);
 	m_clctrl.Create(dwStyle, rect, frm()->wnd(), Id());
 	m_clctrl.SetImageList(&IlwWinApp()->ilSmall, LVSIL_SMALL);
-	m_clctrl.SetExtendedStyle(LVS_EX_FULLROWSELECT);
+	m_clctrl.SetExtendedStyle(LVS_EX_FULLROWSELECT | extraStyles);
 	m_clctrl.SetParent(this);
 	m_clctrl.SetFont(_frm->fnt);
 	m_clctrl.ShowWindow(SW_HIDE);
@@ -206,4 +209,25 @@ void FieldListView::CallChangeCallback()
 void FieldListView::update() {
 	m_clctrl.RedrawItems(0, m_clctrl.GetItemCount());
 	m_clctrl.UpdateWindow();
+}
+
+void FieldListView::setSelectedRows(vector<int>& rowNumbers) {
+	for(int i=0; i < rowNumbers.size(); ++i) {
+		m_clctrl.SetItemState(rowNumbers[i], LVIS_SELECTED, LVIS_SELECTED);
+	}
+}
+
+void FieldListView::getSelectedRowNumbers(vector<int>& rowNumbers) const{
+	POSITION pos = m_clctrl.GetFirstSelectedItemPosition();
+	if (pos == NULL)
+	   return;
+	else
+	{
+	   while (pos)
+	   {
+		  int nItem = m_clctrl.GetNextSelectedItem(pos);
+		  rowNumbers.push_back(nItem);	
+	   }
+}
+
 }

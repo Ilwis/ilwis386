@@ -89,7 +89,7 @@ public:
 	void AddMapList(const MapList& mpl, RecItem::AddType tp, ILWIS::ComplexDrawer *drw);
 	void AddCoordSystem(const CoordSystem&);
 	void AddGeoRef(const GeoRef&);
-	void AddCollection(const ObjectCollection& col);
+	void AddCollection(const ObjectCollection& col, RecItem::AddType tp, ILWIS::ComplexDrawer *drw);
 	void Update();
 	bool fMouse, fMouseCont, fDigitizer, fDigitizerCont;
 	DECLARE_MESSAGE_MAP()

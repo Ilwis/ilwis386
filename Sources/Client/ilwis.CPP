@@ -1204,8 +1204,8 @@ void IlwisWinApp::InitImageLists()
 {
 	ilSmall.Create(16,16,TRUE,4,4);
 	ilLarge.Create(32,32,TRUE,4,4);
-	ilSmall.SetImageCount(113);
-	ilLarge.SetImageCount(113);
+	ilSmall.SetImageCount(114);
+	ilLarge.SetImageCount(114);
 
 	int i = 0;
 	InitImage("ilwis", "LogoIcon", i++);
@@ -1333,6 +1333,7 @@ void IlwisWinApp::InitImageLists()
 	InitImage("Track", "Track", i++);	
 	InitImage("Scale", "Scale", i++);	
 	InitImage("Annotation", "Annotation", i++);	
+	InitImage("Position", "Position", i++);	
 
 }
 
@@ -2000,10 +2001,7 @@ void IlwisWinApp::ShowPopupMenu(CWnd* w, CPoint p, const FileName& fn, Associati
 
 void IlwisWinApp::OnHelpContents()
 {
-	String sHelpFile (ChmFinder::sFindChmFile("ilwis.chm"));
-
-	::HtmlHelp(GetDesktopWindow(), sHelpFile.sVal(), HH_HELP_CONTEXT, htpContentsIlwis);
-	::HtmlHelp(0, sHelpFile.sVal(), HH_DISPLAY_TOC, 0);
+	showHelp("__chmvf__.html");
 }
 
 void IlwisWinApp::OnHelpOperations()
@@ -2016,10 +2014,7 @@ void IlwisWinApp::OnHelpOperations()
 
 void IlwisWinApp::OnHelpMenuCmds()
 {
-	String sHelpFile (ChmFinder::sFindChmFile("ilwis.chm"));
-
-	::HtmlHelp(GetDesktopWindow(), sHelpFile.sVal(), HH_DISPLAY_TOPIC, (LPARAM)"ILWISMEN/menu_commands.htm");
-	::HtmlHelp(0, sHelpFile.sVal(), HH_DISPLAY_TOC, 0);
+	showHelp("ilwismen/menu_commands.htm");
 }
 
 void IlwisWinApp::OnHelpSearch()
@@ -2040,48 +2035,34 @@ void IlwisWinApp::OnHelpSearch()
 
 void IlwisWinApp::OnHelpIndex()
 {
-	String sHelpFile (ChmFinder::sFindChmFile("ilwis.chm"));
+	showHelp("ilwis/index.htm");
 
-	::HtmlHelp(GetDesktopWindow(), sHelpFile.sVal(), HH_HELP_CONTEXT, htpIndex);
-	::HtmlHelp(0, sHelpFile.sVal(), HH_DISPLAY_INDEX, 0);
 }
 
 void IlwisWinApp::OnHelpGlossary()
 {
-	String sHelpFile (ChmFinder::sFindChmFile("ilwis.chm"));
-	String sHelpString ("%S::/ilwis/basic_concepts.htm", sHelpFile);
-
-	::HtmlHelp(GetDesktopWindow(), sHelpString.sVal(), HH_DISPLAY_TOPIC, 0);
-	::HtmlHelp(0, sHelpFile.sVal(), HH_DISPLAY_INDEX, 0);
+	showHelp("ilwis/glossary.htm");
 }
 
 void IlwisWinApp::OnHelpHowTo()
 {
-	String sHelpFile (ChmFinder::sFindChmFile("ilwis.chm"));
-
-	::HtmlHelp(GetDesktopWindow(), sHelpFile.sVal(), HH_HELP_CONTEXT, htpHowTo);
-	::HtmlHelp(0, sHelpFile.sVal(), HH_DISPLAY_TOC, 0);
+	showHelp("ilwis/how_to.htm");
 }
 
 void IlwisWinApp::OnHelpMapTabCalc()
 {
-	String sHelpFile (ChmFinder::sFindChmFile("ilwis.chm"));
-
-	::HtmlHelp(GetDesktopWindow(), sHelpFile.sVal(), HH_HELP_CONTEXT, htpMapCalcTabCalc);
-	::HtmlHelp(0, sHelpFile.sVal(), HH_DISPLAY_TOC, 0);
+	showHelp("ilwis/calc.htm");
 }
 
 void IlwisWinApp::OnHelpIlwExpressions()
 {
-	String sHelpFile (ChmFinder::sFindChmFile("ilwis.chm"));
-
-	::HtmlHelp(GetDesktopWindow(), sHelpFile.sVal(), HH_HELP_CONTEXT, htpIlwisExpressions);
-	::HtmlHelp(0, sHelpFile.sVal(), HH_DISPLAY_TOC, 0);	
+	showHelp("ilwis/appendices_construction_of_expressions.htm");
 }
 
 void IlwisWinApp::OnHelpSebs()
 {
-	String sHelpFile (ChmFinder::sFindChmFile("SEBS4ILWIS_help.chm"));
+	String sDir = getEngine()->getContext()->sIlwDir();
+	String sHelpFile (ChmFinder::sFindChmFile(sDir + "Extensions\\SEBS\\SEBS4ILWIS_help.chm"));
 	::ShellExecute(GetDesktopWindow(),"open",sHelpFile.scVal(),0,0,SW_SHOW);
 }
 

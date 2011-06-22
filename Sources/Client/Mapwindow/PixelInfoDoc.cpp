@@ -136,7 +136,7 @@ BOOL PixelInfoDoc::OnOpenDocument(LPCTSTR lpszPathName, MapCompositionDoc *doc, 
 				AddMap(map);
 			} else if ( fn.sExt == ".ioc") {
 				ObjectCollection oc(fn);
-				AddCollection(oc);
+				AddCollection(oc, drw->getType() == "AnimationDrawer" ? RecItem::atANIMATION : RecItem::atNORMAL,drw);
 			}
 		}
 		catch (const ErrorObject& err) {
@@ -325,10 +325,17 @@ void PixelInfoDoc::AddMapList(const MapList& mpl, RecItem::AddType tp, ILWIS::Co
 		Update();
 	}
 }
-void PixelInfoDoc::AddCollection(const ObjectCollection& col)
+void PixelInfoDoc::AddCollection(const ObjectCollection& col, RecItem::AddType tp, ILWIS::ComplexDrawer *drw)
 {
-	riCoord.AddCollection(col);
+	if ( col.fValid()) {
+		if ( tp == RecItem::atNORMAL || drw == 0) {
+			riCoord.AddCollection(col);
+		} else if ( tp == RecItem::atANIMATION ) {
+			riCoord.AddAnimation(col, drw);
+
+		}
 	Update();
+	}
 }
 
 void PixelInfoDoc::AddCoordSystem(const CoordSystem& cs)
