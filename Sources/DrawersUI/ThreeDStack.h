@@ -46,7 +46,7 @@ namespace ILWIS {
 		private:
 	};
 
-	class ThreeDStackForm : public DisplayOptionsForm {
+	class ThreeDStackForm : public DisplayOptionsForm2 {
 	public:
 		ThreeDStackForm(CWnd *wPar, ComplexDrawer *dr, ThreeDStack *st, const ValueRange& _range, double *_distance, double *_offset);
 		void apply(); 

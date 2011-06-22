@@ -91,7 +91,7 @@ String StretchTool::getMenuString() const {
 
 //------------------------------------
 SetStretchValueForm::SetStretchValueForm(CWnd *wPar, NewDrawer *dr, const RangeReal& _rr, double rStep) : 
-	DisplayOptionsForm((ComplexDrawer *)dr,wPar,"Set stretch"),
+	DisplayOptionsForm2((ComplexDrawer *)dr,wPar,"Set stretch"),
 	rr(_rr),
 	low(rr.rLo()),
 	high(rr.rHi())
@@ -105,11 +105,6 @@ SetStretchValueForm::SetStretchValueForm(CWnd *wPar, NewDrawer *dr, const RangeR
 }
 
 int  SetStretchValueForm::check(Event *) {
-	apply();
-	return 1;
-}
-
-void  SetStretchValueForm::apply() {
 	sliderLow->StoreData();
 	sliderHigh->StoreData();
 
@@ -137,7 +132,12 @@ void  SetStretchValueForm::apply() {
 		PreparationParameters pp(NewDrawer::ptRENDER, 0);
 		setdr->prepareChildDrawers(&pp);
 	}
-
 	updateMapView();
+	return 1;
+}
+
+void  SetStretchValueForm::apply() {
+	check(0);
+
 }
 

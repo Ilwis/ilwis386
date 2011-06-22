@@ -100,8 +100,6 @@ void  TransparencyForm::apply() {
 	else {
 		ComplexDrawer *cdrw = (ComplexDrawer *)drw;
 		cdrw->setTransparency(1.0 - (double)transparency/100.0);
-	/*	PreparationParameters pp(NewDrawer::ptRENDER, 0);
-		cdrw->prepare(&pp);*/
 		String transp("Transparency (%d)",transparency);
 		TreeItem titem;
 		view->getItem(htiTransparent,TVIF_TEXT | TVIF_HANDLE | TVIF_IMAGE | TVIF_PARAM | TVIS_SELECTED,titem);

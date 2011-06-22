@@ -15,7 +15,7 @@ private:
 	void displayOptionStretch();
 };
 
-class SetStretchValueForm : public DisplayOptionsForm {
+class SetStretchValueForm : public DisplayOptionsForm2 {
 	public:
 	SetStretchValueForm(CWnd *wPar, NewDrawer *dr, const RangeReal& _rr, double rStep);
 	void apply(); 

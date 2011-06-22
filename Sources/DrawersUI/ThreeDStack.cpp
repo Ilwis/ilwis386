@@ -46,7 +46,7 @@ bool Cursor3DDrawer::draw( const CoordBounds& cbArea) const{
 }
 
 void Cursor3DDrawer::prepare(PreparationParameters *p){
-	properties.symbol = "slanted-cross";
+	properties.symbol = "crosshair";
 	setSpecialDrawingOptions(NewDrawer::sdoExtrusion, true);
 	PointDrawer::prepare(p);
 }
@@ -83,7 +83,19 @@ void ThreeDStack::OnLButtonUp(UINT nFlags, CPoint point) {
 	mouseCrd = drawer->getRootDrawer()->screenToWorld(RowCol(point.y, point.x));
 	if ( drawer->getRootDrawer()->getMapCoordBounds().fContains(mouseCrd)) {
 		if(cursor) {
-			mouseCrd.z = (drawer->getRootDrawer()->getDrawerCount() - 1) * distance * 1.05;
+			double offset = rUNDEF;
+			for(int i = 0; i < drawer->getRootDrawer()->getDrawerCount(); ++i) {
+				ComplexDrawer *cdr  = dynamic_cast<ComplexDrawer *>(drawer->getRootDrawer()->getDrawer(i));
+				if ( !cdr)
+					continue;
+				for(int j = 0; j < cdr->getDrawerCount(); ++j ){
+					ComplexDrawer *cdr2 = dynamic_cast<ComplexDrawer *>(cdr->getDrawer(j));
+					if (!cdr2)
+						continue;
+					offset = max(offset, cdr2->getZMaker()->getOffset());
+				}
+			}
+			mouseCrd.z = offset * 1.05; // slightly above the top map
 			cursor->setCoord(mouseCrd);	
 			PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER);
 			cursor->prepare(&pp);
@@ -223,7 +235,7 @@ void ThreeDStack::setIndividualStatckItem(void *v, HTREEITEM it) {
 //---------------------------------------------------
 
 ThreeDStackForm::ThreeDStackForm(CWnd *wPar, ComplexDrawer *dr, ILWIS::ThreeDStack *_stack, const ValueRange& _range, double *_distance, double *_offset) : 
-DisplayOptionsForm(dr,wPar,"ThreeDStack"),
+DisplayOptionsForm2(dr,wPar,"ThreeDStack"),
 distance(_distance),
 range(_range),
 stck(_stack),

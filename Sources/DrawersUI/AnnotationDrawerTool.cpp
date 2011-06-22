@@ -15,6 +15,8 @@
 #include "DrawersUI\AnnotationDrawerTool.h"
 #include "DrawersUI\AnnotationLegendDrawerTool.h"
 #include "DrawersUI\GlobalTool.h"
+#include "DrawersUI\SetDrawerTool.h"
+#include "DrawersUI\LayerDrawerTool.h"
 
 using namespace ILWIS;
 
@@ -35,10 +37,12 @@ void AnnotationDrawerTool::clear() {
 
 bool AnnotationDrawerTool::isToolUseableFor(ILWIS::DrawerTool *tool) { 
 
-	bool ok = dynamic_cast<GlobalTool *>(tool) != 0;
-	if (ok)
-		return true;
-	return false;
+	LayerDrawerTool *layerDrawerTool = dynamic_cast<LayerDrawerTool *>(tool);
+	SetDrawerTool *setDrawerTool = dynamic_cast<SetDrawerTool *>(tool);
+	if (!layerDrawerTool)
+		return false;
+	parentTool = tool;
+	return true;
 }
 
 HTREEITEM AnnotationDrawerTool::configure( HTREEITEM parentItem) {
