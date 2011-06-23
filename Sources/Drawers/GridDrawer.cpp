@@ -26,21 +26,17 @@ ComplexDrawer(parms,"GridDrawer")
 	rDist = rUNDEF;
 	setActive(false);
 	setTransparency(0.2);
-	transparencyPlane = 0.5;
 	threeDGrid = false;
 	lproperties.thickness = 1;
 	lproperties.drawColor = Color(0,0,0);
 	planeColor = Color(210,210,255);
 	lproperties.linestyle = 0xFFFF;
-	noOfPlanes = 4;
-	zdist = rUNDEF;
-	maxz = rUNDEF;
 	mode = mGRID | mVERTICALS | mAXIS;
 }
 
 GridDrawer::~GridDrawer() {
 	for(int i = 0; i < planeQuads.size(); ++i) {
-		planeQuads[i] = new Coord[4];
+		delete planeQuads[i];
 	}
 }
 
@@ -65,13 +61,6 @@ bool GridDrawer::draw( const CoordBounds& cbArea) const{
 	return true;
 }
 
-void GridDrawer::setTransparencyPlane( double v) {
-	transparencyPlane = v;
-}
-
-double GridDrawer::getTransparencyPlane() const{
-	return transparencyPlane;
-}
 
 bool GridDrawer::drawPlane(const CoordBounds& cbArea) const{
 	glClearColor(1.0,1.0,1.0,0.0);
@@ -81,7 +70,7 @@ bool GridDrawer::drawPlane(const CoordBounds& cbArea) const{
 	ComplexDrawer *cdrw = (ComplexDrawer *)getParentDrawer();
 	ZValueMaker *zmaker = cdrw->getZMaker();
 
-	glColor4f(planeColor.redP(),planeColor.greenP(), planeColor.blueP(), transparencyPlane);
+	glColor4f(planeColor.redP(),planeColor.greenP(), planeColor.blueP(), getTransparency());
 	double zscale = zmaker->getZScale();
 	double zoffset = zmaker->getOffset();
 	glPushMatrix();
@@ -116,12 +105,6 @@ void GridDrawer::prepare(PreparationParameters *pp) {
 		CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
 		cMin = cbMap.cMin;
 		cMax = cbMap.cMax;
-		if ( maxz == rUNDEF)
-			maxz = min(cbMap.width(), cbMap.height()) / 2.0;
-		if (zdist == rUNDEF) {
-			zdist = rRound(maxz / noOfPlanes);
-			maxz = zdist * noOfPlanes;
-		}
 		if ( rDist == rUNDEF)
 			rDist = rRound((cMax.x - cMin.x) / 7);
 
@@ -153,6 +136,7 @@ void GridDrawer::prepare(PreparationParameters *pp) {
 }
 
 void GridDrawer::prepareVAxis(double rDist,const Coord& cMax, const Coord& cMin) {
+	double maxz = planeDistances[planeDistances.size() - 1];
 	Coord c1, c2, oldc2,startc2;
 	c1 = cMin;
 	c1.z  = getZMaker()->getZ0(true);;
@@ -192,6 +176,7 @@ void GridDrawer::prepareVAxis(double rDist,const Coord& cMax, const Coord& cMin)
 }
 void GridDrawer::prepareVerticals(double rDist,const Coord& cMax, const Coord& cMin) {
 	Coord c1, c2;
+	double maxz = planeDistances[planeDistances.size() - 1];
 	for (double x = ceil(cMin.x / rDist) * rDist; x < cMax.x ; x += rDist)
 	{
 		for (double y = ceil(cMin.y / rDist) * rDist; y < cMax.y ; y += rDist)
@@ -206,10 +191,36 @@ void GridDrawer::prepareVerticals(double rDist,const Coord& cMax, const Coord& c
 		}
 	}
 }
+
+void GridDrawer::getLayerDistances(vector<double>& dist) {
+	RootDrawer *rootDrawer = getRootDrawer();
+	int n = rootDrawer->getDrawerCount();
+
+	double offset = rUNDEF;
+	for(int i = 0; i < n; ++i) {
+		ComplexDrawer *cdr  = dynamic_cast<ComplexDrawer *>(rootDrawer->getDrawer(i));
+		if ( !cdr)
+			continue;
+		for(int j = 0; j < cdr->getDrawerCount(); ++j ){
+			ComplexDrawer *cdr2 = dynamic_cast<ComplexDrawer *>(cdr->getDrawer(j));
+			if (!cdr2)
+				continue;
+			offset = cdr2->getZMaker()->getOffset();
+			dist.push_back(offset);
+		}
+	}
+	double minOffset = dist[dist.size() - 1] * 0.02;
+	for(int i = 0; i < dist.size(); ++i) {
+		dist[i] += minOffset;
+	}
+}
+
 void GridDrawer::preparePlanes(double rDist, const Coord& cMax, const Coord& cMin ) {
 	Coord c1, c2;
-	double z = 	getZMaker()->getZ0(true);;
-	int zplanes = threeDGrid ? 0.5 + maxz / zdist : 0;
+	double z = 	getZMaker()->getZ0(true);
+	planeDistances.clear();
+	getLayerDistances(planeDistances);
+	int zplanes = threeDGrid ? planeDistances.size() : 0;
 	resizeQuadsVector(zplanes);
 	for(int i=0; i <= zplanes; ++i) {
 		c1.z = c2.z = z;
@@ -220,15 +231,15 @@ void GridDrawer::preparePlanes(double rDist, const Coord& cMax, const Coord& cMi
 		planeQuads[i][2] = Coord(cMax.x,cMax.y,z);
 		planeQuads[i][3] = Coord(cMax.x,cMin.y,z);
 	
-		z += zdist;
+		z  = planeDistances[i];
 	}
-	maxz = z - zdist;
-		
+	
 }
 
 void GridDrawer::prepareCube(double rDist, const Coord& cMax, const Coord& cMin ) {
 	Coord c1, c2;
 	double z = 	getZMaker()->getZ0(true);;
+	double maxz = planeDistances[planeDistances.size() - 1];
 
 	c1 = cMin;
 	c1.z = c2.z = z;
@@ -284,11 +295,13 @@ void GridDrawer::prepareCube(double rDist, const Coord& cMax, const Coord& cMin 
 
 void GridDrawer::prepareGrid(double rDist, const Coord& cMax, const Coord& cMin ) {
 	Coord c1, c2;
-	double z = 	getZMaker()->getZ0(true);
-	int zplanes = threeDGrid ? 0.5 + maxz / zdist : 0;
+	planeDistances.clear();
+	getLayerDistances(planeDistances);
+	int zplanes = threeDGrid ? planeDistances.size() : 0;
 	resizeQuadsVector(zplanes);
 	int nPlanes = mode & mGRID ? zplanes : 0;
-	for(int i=0; i <= nPlanes; ++i) {
+	for(int i=0; i < nPlanes; ++i) {
+		double z = planeDistances[i];
 		c1.z = c2.z = z;
 		c1.y = cMin.y;
 		c2.y = cMax.y;
@@ -311,7 +324,7 @@ void GridDrawer::prepareGrid(double rDist, const Coord& cMax, const Coord& cMin 
 			AddGridLine(Coord(cMax.x,cMax.y,z), Coord(cMax.x, cMin.y,z));
 			AddGridLine(Coord(cMax.x,cMin.y,z), Coord(cMin.x, cMin.y,z));
 		}
-		z += zdist;
+		z = planeDistances[i];
 	}
 }
 
@@ -359,8 +372,6 @@ String GridDrawer::store(const FileName& fnView, const String& parentSection) co
 	ObjectInfo::WriteElement(getType().scVal(),"ThreeDGrid",fnView, threeDGrid);
 	ObjectInfo::WriteElement(getType().scVal(),"Mode",fnView, mode);
 	ObjectInfo::WriteElement(getType().scVal(),"PlaneColor",fnView, planeColor);
-	ObjectInfo::WriteElement(getType().scVal(),"NoOfPlanes",fnView, noOfPlanes);
-	ObjectInfo::WriteElement(getType().scVal(),"TransparencyPlane",fnView, transparencyPlane);
 	return getType();
 }
 
@@ -370,8 +381,6 @@ void GridDrawer::load(const FileName& fnView, const String& parenSection){
 	ObjectInfo::ReadElement(getType().scVal(),"ThreeDGrid",fnView, threeDGrid);
 	ObjectInfo::ReadElement(getType().scVal(),"Mode",fnView, mode);
 	ObjectInfo::ReadElement(getType().scVal(),"PlaneColor",fnView, planeColor);
-	ObjectInfo::ReadElement(getType().scVal(),"NoOfPlanes",fnView, noOfPlanes);
-	ObjectInfo::ReadElement(getType().scVal(),"TransparencyPlane",fnView, transparencyPlane);
 }
 
 
@@ -394,14 +403,6 @@ void GridDrawer::setMode(int m) {
 	mode = m;
 }
 
-double GridDrawer::getZSpacing() const{
-	return zdist;
-}
-void GridDrawer::setZSpacing(double z){
-	zdist = z;
-	maxz = zdist * noOfPlanes;
-}
-
 Color GridDrawer::getPlaneColor() const {
 	return planeColor;
 }
@@ -413,14 +414,6 @@ void GridDrawer::set3DGrid(bool yesno){
 	threeDGrid = yesno;
 }
 
-void GridDrawer::setNumberOfplanes(int n) {
-	noOfPlanes = n;
-	maxz = zdist * noOfPlanes;
-}
-
-int GridDrawer::getNumberOfPlanes() const {
-	return noOfPlanes;
-}
 //---------------------------------------------
 ILWIS::NewDrawer *createGridLine(DrawerParameters *parms) {
 	return new GridLine(parms);

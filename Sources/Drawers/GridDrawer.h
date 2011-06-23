@@ -52,17 +52,16 @@ namespace ILWIS{
 		void preparePlanes(double rDist, const Coord& cMax, const Coord& cMin );
 		void prepareCube(double rDist, const Coord& cMax, const Coord& cMin );
 		void prepareChildDrawers(PreparationParameters *parms);
+		void getLayerDistances(vector<double>& dist) ;
 
 		double          rDist;
 		LineProperties	lproperties;
 		bool			threeDGrid;
-		double			zdist;
-		double			maxz;
 		int				mode;
 		Color			planeColor;
 		int				noOfPlanes;
 		vector< Coord * >   planeQuads;
-		double transparencyPlane;
+		vector<double> planeDistances;
 	};
 
 	class GridLine: public LineDrawer {
