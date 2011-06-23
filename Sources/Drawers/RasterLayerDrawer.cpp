@@ -24,7 +24,7 @@ ILWIS::NewDrawer *createRasterLayerDrawer(DrawerParameters *parms) {
 
 RasterLayerDrawer::RasterLayerDrawer(DrawerParameters *parms) : 
 LayerDrawer(parms,"RasterLayerDrawer")
-, data(new RasterSetData()), isThreaded(true), sameCsy(true), fUsePalette(false), fPaletteOwner(false), palette(0), textureHeap(new TextureHeap()), demTriangulator(0)
+, data(new RasterSetData()), isThreaded(true), isThreadedBeforeOffscreen(true), sameCsy(true), fUsePalette(false), fPaletteOwner(false), palette(0), textureHeap(new TextureHeap()), textureHeapBeforeOffscreen(0), demTriangulator(0)
 {
 	setTransparency(1); // default, opaque
 	//	setDrawMethod(drmNOTSET); // default
@@ -87,6 +87,19 @@ void RasterLayerDrawer::prepare(PreparationParameters *pp){
 				demTriangulator = 0;
 			}
 		}
+	}
+	if (pp->type & ptOFFSCREENSTART) {
+		isThreadedBeforeOffscreen = isThreaded;
+		isThreaded = false;
+		textureHeapBeforeOffscreen = textureHeap;
+		DrawerContext* drawcontext = getRootDrawer()->getDrawerContext();
+		textureHeap = new TextureHeap();
+		textureHeap->SetData(rastermap, getDrawingColor(), getDrawMethod(), drawcontext->getMaxPaletteSize(), data->width, data->height, rrMinMax, drawcontext);
+	}
+	if (pp->type & ptOFFSCREENEND) {
+		isThreaded = isThreadedBeforeOffscreen;
+		delete textureHeap;
+		textureHeap = textureHeapBeforeOffscreen;
 	}
 }
 
