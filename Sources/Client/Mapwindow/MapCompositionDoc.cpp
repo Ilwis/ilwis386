@@ -1148,7 +1148,7 @@ void MapCompositionDoc::addToPixelInfo(const IlwisObject& obj, ComplexDrawer *dr
 	if (!pixInfoDoc) 
 		pixInfoDoc = new PixelInfoDoc();
 
-	pixInfoDoc->OnOpenDocument(obj->fnObj.sFullPath().scVal(), this,drw);
+	pixInfoDoc->OnOpenDocument(obj->fnObj.sFullPathQuoted().scVal(), this,drw);
 	pixInfoDoc->UpdateAllViews(0,2);
 }
 
