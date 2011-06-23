@@ -191,7 +191,7 @@ void  LineStyleForm::apply() {
 		}
 	} else {
 		lprops->linestyle = LineStyleTool::openGLLineStyle(style);
-		line->prepare(&pp);
+		drw->prepare(&pp);
 	}
 	updateMapView();
 }
