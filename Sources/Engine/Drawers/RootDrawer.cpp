@@ -43,7 +43,7 @@ void  RootDrawer::prepare(PreparationParameters *pp){
 	if ( pp->dc && (  v1 || v2 )) {
 		if ( ((pp->contextMode & DrawerContext::mFORCEINIT)!=0) && getDrawerContext())
 			getDrawerContext()->ReleaseContext();
-		if ( getDrawerContext()->initOpenGL(pp->dc, pp->contextMode)) {
+		if ( getDrawerContext()->initOpenGL(pp->dc->m_hDC, pp->dc->GetWindow(), pp->contextMode)) {
 			pp->type |= NewDrawer::ptGEOMETRY;
 			CWnd * wnd = pp->dc->GetWindow();
 			if ( wnd) {
