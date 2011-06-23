@@ -300,7 +300,7 @@ void GridDrawer::prepareGrid(double rDist, const Coord& cMax, const Coord& cMin 
 	int zplanes = threeDGrid ? planeDistances.size() : 0;
 	resizeQuadsVector(zplanes);
 	int nPlanes = mode & mGRID ? zplanes : 0;
-	for(int i=0; i < nPlanes; ++i) {
+	for(int i=0; i <= nPlanes; ++i) {
 		double z = planeDistances[i];
 		c1.z = c2.z = z;
 		c1.y = cMin.y;
