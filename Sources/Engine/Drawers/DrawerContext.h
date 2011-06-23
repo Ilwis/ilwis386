@@ -2,8 +2,6 @@
 
 #include <gl/gl.h>
 
-class MapCompositionDoc;
-
 namespace ILWIS { 
 	class RootDrawer;
 	class Palette;
@@ -12,14 +10,13 @@ namespace ILWIS {
 		enum Mode{mNONE=0,mFORCEINIT=1, mDRAWTOWINDOW=2, mDRAWTOBITMAP=4, mUSEDOUBLEBUFFER=8};
 		~DrawerContext();
 		DrawerContext();
-		bool initOpenGL(CDC *dc, int m= (mDRAWTOWINDOW | mUSEDOUBLEBUFFER));
+		bool initOpenGL(HDC hdc, CWnd * wnd, int m = (mDRAWTOWINDOW | mUSEDOUBLEBUFFER));
 		void clear();
 		GLint getMaxTextureSize() const { return maxTextureSize; };
 		GLint getMaxPaletteSize() const { return maxPaletteSize; };
 
 		void TakeContext();
 		void ReleaseContext();
-		void setContext(HDC hdc, HGLRC, int m= (mDRAWTOWINDOW | mUSEDOUBLEBUFFER));
 		void doDraw();
 		void swapBuffers() const;
 		void setActivePalette(const Palette * palette);

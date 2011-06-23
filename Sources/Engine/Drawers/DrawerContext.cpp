@@ -15,7 +15,7 @@ maxTextureSize(128)
 {
 }
 
-bool DrawerContext::initOpenGL(CDC *dc, int m) {  
+bool DrawerContext::initOpenGL(HDC hdc, CWnd * wnd, int m) {  
 	if ( (m & mFORCEINIT) == 0) {
 		if (fGLInitialized)
 			return false;// no init needed, already done
@@ -38,12 +38,12 @@ bool DrawerContext::initOpenGL(CDC *dc, int m) {
 	pfd.cColorBits = 24;
 	pfd.cDepthBits = 16;
 	pfd.iLayerType = PFD_MAIN_PLANE;
-	int iFormat = ChoosePixelFormat( dc->m_hDC, &pfd );
-	SetPixelFormat( dc->m_hDC, iFormat, &pfd );
+	int iFormat = ChoosePixelFormat( hdc, &pfd );
+	SetPixelFormat( hdc, iFormat, &pfd );
 
-	m_hdc = dc->m_hDC;
+	m_hdc = hdc;
 	m_hrc = wglCreateContext( m_hdc );    
-	m_wnd = dc->GetWindow();
+	m_wnd = wnd;
 
 	TakeContext();
 	glDisable(GL_DEPTH_TEST);
@@ -111,10 +111,4 @@ void DrawerContext::setActivePalette(const Palette * palette) {
 
 bool DrawerContext::isActivePalette(const Palette * palette) const {
 	return this->palette == palette;
-}
-
-void DrawerContext::setContext(HDC hdc, HGLRC hrc, int m) {
-	m_hdc = hdc;
-	m_hrc = hrc;
-	mode = m | PFD_SUPPORT_OPENGL; // last one is mandatory as we use opengl, so I add it anyway, gdi is for convenience
 }
