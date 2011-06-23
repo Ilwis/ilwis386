@@ -874,11 +874,8 @@ void MapPaneView::OnCopy()
 
 BOOL MapPaneView::EditCopy(CRect mRect, int nReduceResCount)
 {
-	//CGlWinApp *pApp = (CGlWinApp *)AfxGetApp();
-
 	RECT	rect;
 	HDC		hMemDC, hTmpDC;
-	HGLRC	hMemRC;
 
 	BITMAPINFO	bitmapInfo;
 	HBITMAP		hDib;
@@ -910,7 +907,7 @@ BOOL MapPaneView::EditCopy(CRect mRect, int nReduceResCount)
 	nXRes = nXRes & ~(sizeof(DWORD)-1);							// aligning width to 4 bytes (sizeof(DWORD)) avoids 
 																// pixel garbage at the upper line
 
-	// First of all, initialize the bitmap header information...
+	// Initialize the bitmap header information...
 	memset(&bitmapInfo, 0, sizeof(BITMAPINFO));
 	bitmapInfo.bmiHeader.biSize		= sizeof(BITMAPINFOHEADER);
 	bitmapInfo.bmiHeader.biWidth		= nXRes;
@@ -922,16 +919,13 @@ BOOL MapPaneView::EditCopy(CRect mRect, int nReduceResCount)
 	bitmapInfo.bmiHeader.biXPelsPerMeter = int(72.*fac/.0254);	// 72*fac DPI
 	bitmapInfo.bmiHeader.biYPelsPerMeter = int(72.*fac/.0254);	// 72*fac DPI
 
-	DrawerContext *context = GetDocument()->rootDrawer->getDrawerContext();
-
 	// create DIB
 	hTmpDC = ::GetDC(m_hWnd);
 	hDib = CreateDIBSection(hTmpDC, &bitmapInfo, DIB_RGB_COLORS, &pBitmapBits, NULL, (DWORD)0);
-	//::ReleaseDC(m_hWnd, hTmpDC);
 
 	// create memory device context
-	//HDC hdc = GetDocument()->rootDrawer->getDrawerContext()->getHDC();
 	CDC *pDC = new CWindowDC(this);
+	//pDC->m_bPrinting = TRUE;	// this does the trick in OnDraw: it prevents changing rendering context and swapping buffers
 	if ((hMemDC = CreateCompatibleDC(pDC == NULL ? NULL : pDC->GetSafeHdc())) == NULL)
 	{
 		DeleteObject(hDib);
@@ -939,68 +933,49 @@ BOOL MapPaneView::EditCopy(CRect mRect, int nReduceResCount)
 	}
 	HGDIOBJ hOldDib = SelectObject(hMemDC, hDib);
 
-	// setup pixel format
-	if (!SetMemDcPixelFormat(hMemDC) && !SetMemDcPixelFormat(hMemDC, TRUE))
-	{
-		if (hOldDib != NULL)
-			SelectObject(hMemDC, hOldDib);
-		DeleteObject(hDib);
-		DeleteDC(hMemDC);
-		return FALSE;
-	}
-
-	// create memory rendering context
-	if ((hMemRC = wglCreateContext(hMemDC)) == NULL)
-	{
-		if (hOldDib != NULL)
-			SelectObject(hMemDC, hOldDib);
-		DeleteObject(hDib);
-		DeleteDC(hMemDC);
-		return FALSE;
-	}
-
-	// Store current rendering and device contexts
-	GetDocument()->rootDrawer->getDrawerContext()->TakeContext();
-
-	HDC hDCOld = wglGetCurrentDC();
-	HGLRC hRCOld = wglGetCurrentContext();
+	// Store current context and viewport
+	DrawerContext *context = GetDocument()->rootDrawer->getDrawerContext();
 	RowCol viewportOld = GetDocument()->rootDrawer->getViewPort();
+
+	// Make hMemDC the current OpenGL rendering context.
+	DrawerContext * contextMem = new ILWIS::DrawerContext();
+	contextMem->initOpenGL(hMemDC, 0, DrawerContext::mDRAWTOBITMAP);
+	GetDocument()->rootDrawer->setDrawerContext(contextMem);
 	GetDocument()->rootDrawer->setViewPort(RowCol(nYRes,nXRes));
 
-	// Make this hMemRC the current OpenGL rendering context.
-	context->ReleaseContext();
-	context->setContext(hMemDC,hMemRC, DrawerContext::mDRAWTOBITMAP | ~DrawerContext::mUSEDOUBLEBUFFER);
-	context->TakeContext();
-
-	//SetOpenGLProperties();
-
-	//glViewport(0, 0, nXRes, nYRes);
-	//glMatrixMode(GL_MODELVIEW);
-	//glLoadIdentity();
-	//glEnable(GL_DEPTH_TEST);
-
-	// must be created once for hMemDC
-	//CreateFontBitmaps();
-	glClearColor(1,1,1,0.0);
-	CDC *pDummyDC = GetDC();
-	pDummyDC->m_bPrinting = TRUE;	// this does the trick in OnDraw: it prevents changing rendering context and swapping buffers
-	GetDocument()->rootDrawer->draw();
-	ReleaseDC(pDummyDC);
-	glFinish();	// Finish all OpenGL commands
-
-	// the rendering context will be no longer needed
-	GetDocument()->rootDrawer->getDrawerContext()->ReleaseContext();
-	wglDeleteContext(hMemRC);
-
-	// Restore last rendering and device contexts
-	GetDocument()->rootDrawer->setViewPort(viewportOld);
-	if (hDCOld != NULL && hRCOld != NULL) {
-		GetDocument()->rootDrawer->getDrawerContext()->setContext(hDCOld, hRCOld);
+	PreparationParameters ppEDITCOPY (ILWIS::NewDrawer::ptOFFSCREENSTART);
+	vector<ComplexDrawer*> drawerList;
+	int count = GetDocument()->rootDrawer->getDrawerCount();
+	for (int i = 0; i < count; ++i)	{
+		ILWIS::ComplexDrawer* spatialDataDrawer = dynamic_cast<ILWIS::ComplexDrawer*>(GetDocument()->rootDrawer->getDrawer(i));
+		if (spatialDataDrawer != 0)	{
+			int count2 = spatialDataDrawer->getDrawerCount();
+			for (int j = 0; j < count2; ++j) {
+				ILWIS::ComplexDrawer* drawer = dynamic_cast<ILWIS::ComplexDrawer*>(spatialDataDrawer->getDrawer(j));
+				if (drawer != 0)	{
+					drawerList.push_back(drawer); // remember for 2nd loop later on so that we dont need to repeat the dynamic_cast
+					drawer->prepare(&ppEDITCOPY);
+				}
+			}
+		}
 	}
 
-	// Restore the Views original font size
-	//UnScaleFont();
-	//CreateFontBitmaps();
+	contextMem->TakeContext();
+	//glClearColor(1,1,1,0.0); // override glClearColor of initOpenGL() to a more logical choice for Copy/Paste
+	GetDocument()->rootDrawer->draw();
+	glFinish();	// Finish all OpenGL commands
+	contextMem->ReleaseContext();
+
+	PreparationParameters ppEDITCOPYDONE (ILWIS::NewDrawer::ptOFFSCREENEND);
+	for (vector<ComplexDrawer*>::iterator it = drawerList.begin(); it != drawerList.end(); ++it)
+		(*it)->prepare(&ppEDITCOPYDONE);
+
+	// contextMem is no longer needed
+	delete contextMem;
+
+	// Restore original context and viewport
+	GetDocument()->rootDrawer->setDrawerContext(context);
+	GetDocument()->rootDrawer->setViewPort(viewportOld);
 
 	if (OpenClipboard())
 	{
@@ -1039,44 +1014,6 @@ BOOL MapPaneView::EditCopy(CRect mRect, int nReduceResCount)
 
 	return bSuccess;
 }
-
-BOOL MapPaneView::SetMemDcPixelFormat(HDC hMemDC, BOOL bUseAPI)
-{
-	PIXELFORMATDESCRIPTOR pfd = {
-		sizeof(PIXELFORMATDESCRIPTOR),	// Size of this structure
-		1,								// Version of this structure
-		PFD_DRAW_TO_BITMAP |			// Draw to bitmap (not to window)
-		PFD_SUPPORT_OPENGL |			// Support OpenGL calls in window
-		PFD_STEREO_DONTCARE,			// Don't need stereo mode
-		PFD_TYPE_RGBA,					// RGBA Color mode
-		24,								// Number of color bitplanes
-		0,0,0,0,0,0,					// Not used to select mode
-		0,								// Number of alpha bitplanes
-		0,								// Not used to select mode
-		64,								// Number of bitplanes in the accumulation buffer
-		0,0,0,0,						// Not used to select mode
-		32,								// Size of depth buffer
-		8,								// Size of stencil buffer
-		0,								// Size of auxiliary buffer
-		PFD_MAIN_PLANE,					// Draw in main plane
-		0,0,0,0 };						// Not used to select mode
-
-	int nGLPixelIndex = bUseAPI ? 
-		::ChoosePixelFormat(hMemDC, &pfd) : 
-		ChoosePixelFormat(hMemDC, &pfd);
-	if (nGLPixelIndex == 0) // Choose default
-		nGLPixelIndex = 1;
-
-	if (DescribePixelFormat(hMemDC, nGLPixelIndex, 
-		sizeof(PIXELFORMATDESCRIPTOR), &pfd) == 0)
-		return FALSE;
-
-	if (!SetPixelFormat(hMemDC, nGLPixelIndex, &pfd))
-		return FALSE;
-
-	return TRUE;
-}
-
 
 DROPEFFECT MapPaneView::OnDragEnter(COleDataObject* pDataObject, DWORD dwKeyState, CPoint point) 
 {
