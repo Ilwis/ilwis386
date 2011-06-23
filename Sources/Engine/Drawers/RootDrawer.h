@@ -36,6 +36,7 @@ namespace ILWIS {
 		double getAspectRatio() const;
 		DrawerContext *getDrawerContext() { return drawercontext; }
 		DrawerContext *getDrawerContext() const { return drawercontext; }
+		void setDrawerContext(DrawerContext * context) {drawercontext = context;};
 		void setSelectionDrawer(SelectionRectangle *selDraw);
 		int getZIndex() const;
 		void setZIndex(int);
