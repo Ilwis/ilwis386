@@ -198,15 +198,15 @@ void TextureHeap::RepresentationChanged()
 		textures[i]->RepresentationChanged();	
 }
 
-Texture * TextureHeap::GetTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, const Palette * palette, bool fInThread)
+Texture * TextureHeap::GetTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, unsigned int zoomFactor, const Palette * palette, bool fInThread)
 {
 	Texture * tex = 0;
 	if (fInThread) { // call Invalidate when done, to redraw the mapwindow
 		for (int i = 0; i < texturesArraySize; ++i) {
-			if (textures[i]->equals(xMin, yMin, xMax, yMax, zoomFactor)) {
+			if (textures[i]->equals(offsetX, offsetY, offsetX + sizeX, offsetY + sizeY, zoomFactor)) {
 				textures[i]->BindMe(drawerContext);
 				return textures[i];
-			} else if (textures[i]->contains(xMin, yMin, xMax, yMax)) {
+			} else if (textures[i]->contains(offsetX, offsetY, offsetX + sizeX, offsetY + sizeY)) {
 				if (tex != 0) {
 					if (tex->getZoomFactor() > textures[i]->getZoomFactor())
 						tex = textures[i];
@@ -215,14 +215,14 @@ Texture * TextureHeap::GetTexture(const unsigned int offsetX, const unsigned int
 			}
 		}
 
-		GenerateTexture(offsetX, offsetY, sizeX, sizeY, xMin, yMin, xMax, yMax, zoomFactor, palette, fInThread);
+		GenerateTexture(offsetX, offsetY, sizeX, sizeY, zoomFactor, palette, fInThread);
 	} else { // caller is waiting for the Texture*
 		for (int i = 0; i < texturesArraySize; ++i) {
-			if (textures[i]->equals(xMin, yMin, xMax, yMax, zoomFactor))
+			if (textures[i]->equals(offsetX, offsetY, offsetX + sizeX, offsetY + sizeY, zoomFactor))
 				tex = textures[i];
 		}
 		if (0 == tex)
-			tex = GenerateTexture(offsetX, offsetY, sizeX, sizeY, xMin, yMin, xMax, yMax, zoomFactor, palette, fInThread);
+			tex = GenerateTexture(offsetX, offsetY, sizeX, sizeY, zoomFactor, palette, fInThread);
 	}
 
 	if (tex != 0)
@@ -231,10 +231,10 @@ Texture * TextureHeap::GetTexture(const unsigned int offsetX, const unsigned int
 	return tex;
 }
 
-Texture * TextureHeap::GenerateTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, const Palette * palette, bool fInThread)
+Texture * TextureHeap::GenerateTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, unsigned int zoomFactor, const Palette * palette, bool fInThread)
 {
 	if (((writepos + 1) % BUF_SIZE) != readpos) {
-		textureRequest[writepos] = new Texture(mp, drawColor, drm, offsetX, offsetY, sizeX, sizeY, imgWidth2, imgHeight2, xMin, yMin, xMax, yMax, zoomFactor, iPaletteSize, rrMinMaxMap, palette);
+		textureRequest[writepos] = new Texture(mp, drawColor, drm, offsetX, offsetY, sizeX, sizeY, imgWidth2, imgHeight2, zoomFactor, iPaletteSize, rrMinMaxMap, palette);
 		writepos = (writepos + 1) % BUF_SIZE;
 	}
 	if (fInThread) {
