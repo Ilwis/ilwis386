@@ -24,7 +24,7 @@ ILWIS::NewDrawer *createRasterLayerDrawer(DrawerParameters *parms) {
 
 RasterLayerDrawer::RasterLayerDrawer(DrawerParameters *parms) : 
 LayerDrawer(parms,"RasterLayerDrawer")
-, data(new RasterSetData()), isThreaded(true), isThreadedBeforeOffscreen(true), sameCsy(true), fUsePalette(false), fPaletteOwner(false), palette(0), textureHeap(new TextureHeap()), textureHeapBeforeOffscreen(0), demTriangulator(0)
+, data(new RasterSetData()), isThreaded(true), isThreadedBeforeOffscreen(true), sameCsy(true), fGrfLinear(true), fUsePalette(false), fPaletteOwner(false), palette(0), textureHeap(new TextureHeap()), textureHeapBeforeOffscreen(0), demTriangulator(0)
 {
 	setTransparency(1); // default, opaque
 	//	setDrawMethod(drmNOTSET); // default
@@ -72,6 +72,7 @@ void RasterLayerDrawer::prepare(PreparationParameters *pp){
 		}
 		textureHeap->RepresentationChanged();
 		sameCsy = getRootDrawer()->getCoordinateSystem()->fnObj == csy->fnObj;
+		fGrfLinear = rastermap->gr()->fLinear();
 	}
 	if ((pp->type & pt3D) || ((pp->type & ptGEOMETRY || pp->type & ptRESTORE) && demTriangulator != 0)) {
 		ZValueMaker * zMaker = getZMaker();
@@ -146,7 +147,6 @@ void RasterLayerDrawer::init() const
 	// fetch the image's coordinate bounds
 	if (rastermap.fValid())
 	{
-		data->cb = rastermap->cb();
 		DrawerContext* drawcontext = (getRootDrawer())->getDrawerContext();
 		data->maxTextureSize = drawcontext->getMaxTextureSize();
 		int iXScreen = GetSystemMetrics(SM_CXFULLSCREEN); // maximum X size of client area (regardless of current viewport)
@@ -199,18 +199,6 @@ bool RasterLayerDrawer::draw( const CoordBounds& cbArea) const {
 
 		textureHeap->ClearQueuedTextures();
 
-		// Extend the image so that its width and height become ^2
-
-		// DisplayImagePortion(-1, 1, 1, -1, 0, 0, width, height);
-		CoordBounds cb = data->cb;
-		double minX = cb.MinX();
-		double maxX = cb.MaxX();
-		double minY = cb.MinY();
-		double maxY = cb.MaxY();
-		// Image has grown right-down
-		maxX = minX + (maxX - minX) * (double)data->width / (double)data->imageWidth;
-		minY = maxY + (minY - maxY) * (double)data->height / (double)data->imageHeight;
-
 		bool is3D = getRootDrawer()->is3D(); 
 		if (is3D) {
 			ZValueMaker *zmaker = getZMaker();
@@ -224,7 +212,7 @@ bool RasterLayerDrawer::draw( const CoordBounds& cbArea) const {
 		glEnable(GL_TEXTURE_2D);
 		glMatrixMode(GL_TEXTURE);
 		glPushMatrix();
-		DisplayImagePortion(minX, maxY, maxX, minY, 0, 0, data->width, data->height);
+		DisplayImagePortion(0, 0, data->width, data->height);
 		glPopMatrix();
 		glMatrixMode(GL_MODELVIEW);
 		glDisable(GL_TEXTURE_2D);
@@ -237,10 +225,10 @@ bool RasterLayerDrawer::draw( const CoordBounds& cbArea) const {
 	return true;
 }
 
-void RasterLayerDrawer::DisplayImagePortion(double x1, double y1, double x2, double y2, unsigned int imageOffsetX, unsigned int imageOffsetY, unsigned int imageSizeX, unsigned int imageSizeY) const
+void RasterLayerDrawer::DisplayImagePortion(unsigned int imageOffsetX, unsigned int imageOffsetY, unsigned int imageSizeX, unsigned int imageSizeY) const
 {
 	// if patch describes the "added" portion of the map, do not display
-	if (x1 > data->cb.MaxX() || y1 < data->cb.MinY())
+	if (imageOffsetX > data->imageWidth || imageOffsetY > data->imageHeight)
 		return;
 
 	// if patch is entirely outside viewport, do not display
@@ -259,20 +247,25 @@ void RasterLayerDrawer::DisplayImagePortion(double x1, double y1, double x2, dou
 	glGetDoublev(GL_PROJECTION_MATRIX, m_projMatrix);
 	glGetIntegerv(GL_VIEWPORT, m_viewport);
 
+	Coord b1, b2, b3, b4;
+	rastermap->gr()->RowCol2Coord(imageOffsetY, imageOffsetX, b1);
+	rastermap->gr()->RowCol2Coord(imageOffsetY, imageOffsetX + imageSizeX, b2);
+	rastermap->gr()->RowCol2Coord(imageOffsetY + imageSizeY, imageOffsetX + imageSizeX, b3);
+	rastermap->gr()->RowCol2Coord(imageOffsetY + imageSizeY, imageOffsetX, b4);
 	Coord c1, c2, c3, c4;
 	glFeedbackBuffer(2, GL_2D, feedbackBuffer);
 	glRenderMode(GL_FEEDBACK);
 	glBegin (GL_QUADS);
 	if (sameCsy) {
-		glVertex3d(x1, y1, 0.0);
-		glVertex3d(x2, y1, 0.0);
-		glVertex3d(x2, y2, 0.0);
-		glVertex3d(x1, y2, 0.0);
+		glVertex3d(b1.x, b1.y, 0.0);
+		glVertex3d(b2.x, b2.y, 0.0);
+		glVertex3d(b3.x, b3.y, 0.0);
+		glVertex3d(b4.x, b4.y, 0.0);
 	} else {
-		c1 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x1, y1, 0.0));
-		c2 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x2, y1, 0.0));
-		c3 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x2, y2, 0.0));
-		c4 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x1, y2, 0.0));
+		c1 = getRootDrawer()->getCoordinateSystem()->cConv(csy, b1);
+		c2 = getRootDrawer()->getCoordinateSystem()->cConv(csy, b2);
+		c3 = getRootDrawer()->getCoordinateSystem()->cConv(csy, b3);
+		c4 = getRootDrawer()->getCoordinateSystem()->cConv(csy, b4);
 		glVertex3d(c1.x, c1.y, 0.0);
 		glVertex3d(c2.x, c2.y, 0.0);
 		glVertex3d(c3.x, c3.y, 0.0);
@@ -290,10 +283,10 @@ void RasterLayerDrawer::DisplayImagePortion(double x1, double y1, double x2, dou
 
 	// project the patch to 2D
 	if (sameCsy) {
-		gluProject(x1, y1, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[0], &m_winy[0], &m_winz[0]);
-		gluProject(x2, y1, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[1], &m_winy[1], &m_winz[1]);
-		gluProject(x2, y2, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[2], &m_winy[2], &m_winz[2]);
-		gluProject(x1, y2, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[3], &m_winy[3], &m_winz[3]);
+		gluProject(b1.x, b1.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[0], &m_winy[0], &m_winz[0]);
+		gluProject(b2.x, b2.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[1], &m_winy[1], &m_winz[1]);
+		gluProject(b3.x, b3.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[2], &m_winy[2], &m_winz[2]);
+		gluProject(b4.x, b4.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[3], &m_winy[3], &m_winz[3]);
 	} else {
 		gluProject(c1.x, c1.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[0], &m_winy[0], &m_winz[0]);
 		gluProject(c2.x, c2.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[1], &m_winy[1], &m_winz[1]);
@@ -320,97 +313,139 @@ void RasterLayerDrawer::DisplayImagePortion(double x1, double y1, double x2, dou
 		ySplit = true;
 	if (xSplit && ySplit)
 	{
-		double dx = (x2 - x1) / 2.0;
-		double dy = (y2 - y1) / 2.0;
 		int sizeX2 = imageSizeX / 2;
 		int sizeY2 = imageSizeY / 2;
 		// Q1
-		DisplayImagePortion(x1, y1, x1 + dx, y1 + dy, imageOffsetX, imageOffsetY, sizeX2, sizeY2);
+		DisplayImagePortion(imageOffsetX, imageOffsetY, sizeX2, sizeY2);
 		// Q2
-		DisplayImagePortion(x1 + dx, y1, x2, y1 + dy, imageOffsetX + sizeX2, imageOffsetY, sizeX2, sizeY2);
+		DisplayImagePortion(imageOffsetX + sizeX2, imageOffsetY, sizeX2, sizeY2);
 		// Q3
-		DisplayImagePortion(x1 + dx, y1 + dy, x2, y2, imageOffsetX + sizeX2, imageOffsetY + sizeY2, sizeX2, sizeY2);
+		DisplayImagePortion(imageOffsetX + sizeX2, imageOffsetY + sizeY2, sizeX2, sizeY2);
 		// Q4
-		DisplayImagePortion(x1, y1 + dy, x1 + dx, y2, imageOffsetX, imageOffsetY + sizeY2, sizeX2, sizeY2);
+		DisplayImagePortion(imageOffsetX, imageOffsetY + sizeY2, sizeX2, sizeY2);
 	}
 	else if (xSplit)
 	{
-		double dx = (x2 - x1) / 2.0;
 		int sizeX2 = imageSizeX / 2;
 		// Q1
-		DisplayImagePortion(x1, y1, x1 + dx, y2, imageOffsetX, imageOffsetY, sizeX2, imageSizeY);
+		DisplayImagePortion(imageOffsetX, imageOffsetY, sizeX2, imageSizeY);
 		// Q2
-		DisplayImagePortion(x1 + dx, y1, x2, y2, imageOffsetX + sizeX2, imageOffsetY, sizeX2, imageSizeY);
+		DisplayImagePortion(imageOffsetX + sizeX2, imageOffsetY, sizeX2, imageSizeY);
 	}
 	else if (ySplit)
 	{
-		double dy = (y2 - y1) / 2.0;
 		int sizeY2 = imageSizeY / 2;
 		// Q1
-		DisplayImagePortion(x1, y1, x2, y1 + dy, imageOffsetX, imageOffsetY, imageSizeX, sizeY2);
+		DisplayImagePortion(imageOffsetX, imageOffsetY, imageSizeX, sizeY2);
 		// Q2
-		DisplayImagePortion(x1, y1 + dy, x2, y2, imageOffsetX, imageOffsetY + sizeY2, imageSizeX, sizeY2);
+		DisplayImagePortion(imageOffsetX, imageOffsetY + sizeY2, imageSizeX, sizeY2);
 	}
 	else
 	{
 		if (getRootDrawer()->is3D() && demTriangulator)
-			DisplayTexture3D(x1, y1, x2, y2, c1, c2, c3, c4, imageOffsetX, imageOffsetY, imageSizeX, imageSizeY, zoomFactor);
+			DisplayTexture3D(c1, c2, c3, c4, imageOffsetX, imageOffsetY, imageSizeX, imageSizeY, zoomFactor);
 		else
-			DisplayTexture(x1, y1, x2, y2, c1, c2, c3, c4, imageOffsetX, imageOffsetY, imageSizeX, imageSizeY, zoomFactor);
+			DisplayTexture(c1, c2, c3, c4, imageOffsetX, imageOffsetY, imageSizeX, imageSizeY, zoomFactor);
 	}
 }
 
-void RasterLayerDrawer::DisplayTexture(double x1, double y1, double x2, double y2, Coord & c1, Coord & c2, Coord & c3, Coord & c4, unsigned int imageOffsetX, unsigned int imageOffsetY, unsigned int imageSizeX, unsigned int imageSizeY, unsigned int zoomFactor) const
+void RasterLayerDrawer::DisplayTexture(Coord & c1, Coord & c2, Coord & c3, Coord & c4, unsigned int imageOffsetX, unsigned int imageOffsetY, unsigned int imageSizeX, unsigned int imageSizeY, unsigned int zoomFactor) const
 {
-	Texture* tex = textureHeap->GetTexture(imageOffsetX, imageOffsetY, imageSizeX, imageSizeY, x1, y1, x2, y2, zoomFactor, palette, isThreaded);
+	Texture* tex = textureHeap->GetTexture(imageOffsetX, imageOffsetY, imageSizeX, imageSizeY, zoomFactor, palette, isThreaded);
 
 	if (tex != 0)
 	{
 		// make the quad
 		glBegin (GL_QUADS);
 
-		if (sameCsy) {
+		if (sameCsy && fGrfLinear) {
 			// texture bounds
 			double s1 = imageOffsetX / (double)data->width;
 			double t1 = imageOffsetY / (double)data->height;
 			double s2 = min(imageOffsetX + imageSizeX, data->imageWidth) / (double)data->width;
 			double t2 = min(imageOffsetY + imageSizeY, data->imageHeight) / (double)data->height;
 
-			// avoid plotting the "added" portion of the map
-			x2 = min(x2, data->cb.MaxX());
-			y2 = max(y2, data->cb.MinY());
+			Coord b1, b2, b3, b4;
+			rastermap->gr()->RowCol2Coord(imageOffsetY, imageOffsetX, b1);
+			rastermap->gr()->RowCol2Coord(imageOffsetY, min(imageOffsetX + imageSizeX, data->imageWidth), b2);
+			rastermap->gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), min(imageOffsetX + imageSizeX, data->imageWidth), b3);
+			rastermap->gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), imageOffsetX, b4);
 
 			glTexCoord2d(s1, t1);
-			glVertex3d(x1, y1, 0.0);
+			glVertex3d(b1.x, b1.y, 0.0);
 
 			glTexCoord2d(s2, t1);
-			glVertex3d(x2, y1, 0.0);
+			glVertex3d(b2.x, b2.y, 0.0);
 
 			glTexCoord2d(s2, t2);
-			glVertex3d(x2, y2, 0.0);
+			glVertex3d(b3.x, b3.y, 0.0);
 
 			glTexCoord2d(s1, t2);
-			glVertex3d(x1, y2, 0.0);
-		} else {
+			glVertex3d(b4.x, b4.y, 0.0);
+		} else if (sameCsy) {
 			const unsigned int iSize = 10; // this makes 100 quads, thus 200 triangles per texture
 			// avoid plotting the "added" portion of the map that was there to make the texture size a power of 2
 			double colStep = min(imageSizeX, data->imageWidth - imageOffsetX) / (double)iSize;
 			double rowStep = min(imageSizeY, data->imageHeight - imageOffsetY) / (double)iSize;
-			x2 = min(x2, data->cb.MaxX());
-			y2 = max(y2, data->cb.MinY());
-			double xStep = (x2 - x1) / (double)iSize;
-			double yStep = (y2 - y1) / (double)iSize;
 
 			double s1 = imageOffsetX / (double)data->width;
 			for (int x = 0; x < iSize; ++x) {
 				double s2 = s1 + colStep / (double)data->width;
 				double t1 = imageOffsetY / (double)data->height;
-				c1 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x1 + xStep * x, y1, 0.0));
-				c2 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x1 + xStep * (x + 1), y1, 0.0));
+
+				Coord b1, b2, b3, b4;
+				rastermap->gr()->RowCol2Coord(imageOffsetY, imageOffsetX + colStep * x, b1);
+				rastermap->gr()->RowCol2Coord(imageOffsetY, imageOffsetX + colStep * (x + 1), b2);
+
 				for (int y = 1; y <= iSize ; ++y) {
 					double t2 = t1 + rowStep / (double)data->height;
-					c3 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x1 + xStep * (x + 1), y1 + yStep * y, 0.0));
-					c4 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x1 + xStep * x, y1 + yStep * y, 0.0));
+		
+					rastermap->gr()->RowCol2Coord(imageOffsetY + rowStep * y, imageOffsetX + colStep * (x + 1), b3);
+					rastermap->gr()->RowCol2Coord(imageOffsetY + rowStep * y, imageOffsetX + colStep * x, b4);
+
+					glTexCoord2d(s1, t1);
+					glVertex3d(b1.x, b1.y, 0.0);
+
+					glTexCoord2d(s2, t1);
+					glVertex3d(b2.x, b2.y, 0.0);
+
+					glTexCoord2d(s2, t2);
+					glVertex3d(b3.x, b3.y, 0.0);
+
+					glTexCoord2d(s1, t2);
+					glVertex3d(b4.x, b4.y, 0.0);
+
+					t1 = t2;
+					b1 = b4;
+					b2 = b3;
+				}
+				s1 = s2;
+			}
+		} else {
+			const unsigned int iSize = 10; // this makes 100 quads, thus 200 triangles per texture
+			// avoid plotting the "added" portion of the map that was there to make the texture size a power of 2
+			double colStep = min(imageSizeX, data->imageWidth - imageOffsetX) / (double)iSize;
+			double rowStep = min(imageSizeY, data->imageHeight - imageOffsetY) / (double)iSize;
+
+			double s1 = imageOffsetX / (double)data->width;
+			for (int x = 0; x < iSize; ++x) {
+				double s2 = s1 + colStep / (double)data->width;
+				double t1 = imageOffsetY / (double)data->height;
+
+				Coord b1, b2, b3, b4;
+				rastermap->gr()->RowCol2Coord(imageOffsetY, imageOffsetX + colStep * x, b1);
+				rastermap->gr()->RowCol2Coord(imageOffsetY, imageOffsetX + colStep * (x + 1), b2);
+
+				c1 = getRootDrawer()->getCoordinateSystem()->cConv(csy, b1);
+				c2 = getRootDrawer()->getCoordinateSystem()->cConv(csy, b2);
+				for (int y = 1; y <= iSize ; ++y) {
+					double t2 = t1 + rowStep / (double)data->height;
+		
+					rastermap->gr()->RowCol2Coord(imageOffsetY + rowStep * y, imageOffsetX + colStep * (x + 1), b3);
+					rastermap->gr()->RowCol2Coord(imageOffsetY + rowStep * y, imageOffsetX + colStep * x, b4);
+
+					c3 = getRootDrawer()->getCoordinateSystem()->cConv(csy, b3);
+					c4 = getRootDrawer()->getCoordinateSystem()->cConv(csy, b4);
 
 					glTexCoord2d(s1, t1);
 					glVertex3d(c1.x, c1.y, 0.0);
@@ -436,50 +471,35 @@ void RasterLayerDrawer::DisplayTexture(double x1, double y1, double x2, double y
 	}
 }
 
-void RasterLayerDrawer::DisplayTexture3D(double x1, double y1, double x2, double y2, Coord & c1, Coord & c2, Coord & c3, Coord & c4, unsigned int imageOffsetX, unsigned int imageOffsetY, unsigned int imageSizeX, unsigned int imageSizeY, unsigned int zoomFactor) const
+void RasterLayerDrawer::DisplayTexture3D(Coord & c1, Coord & c2, Coord & c3, Coord & c4, unsigned int imageOffsetX, unsigned int imageOffsetY, unsigned int imageSizeX, unsigned int imageSizeY, unsigned int zoomFactor) const
 {
-	Texture* tex = textureHeap->GetTexture(imageOffsetX, imageOffsetY, imageSizeX, imageSizeY, x1, y1, x2, y2, zoomFactor, palette, isThreaded);
+	Texture* tex = textureHeap->GetTexture(imageOffsetX, imageOffsetY, imageSizeX, imageSizeY, zoomFactor, palette, isThreaded);
 
 	if (tex != 0)
 	{
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-		if (sameCsy) {
-			// avoid plotting the "added" portion of the map
-			x2 = min(x2, data->cb.MaxX());
-			y2 = max(y2, data->cb.MinY());
+		Coord b1, b2, b3, b4;
+		rastermap->gr()->RowCol2Coord(imageOffsetY, imageOffsetX, b1);
+		rastermap->gr()->RowCol2Coord(imageOffsetY, min(imageOffsetX + imageSizeX, data->imageWidth), b2);
+		rastermap->gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), min(imageOffsetX + imageSizeX, data->imageWidth), b3);
+		rastermap->gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), imageOffsetX, b4);
 
-			double clip_plane0[]={-1.0,0.0,0.0,x2}; // x < x2
-			double clip_plane1[]={1.0,0.0,0.0,-x1}; // x > x1
-			double clip_plane2[]={0.0,-1.0,0.0,y1}; // y > y1
-			double clip_plane3[]={0.0,1.0,0.0,-y2}; // y < y2
+		if (sameCsy) {
+			double clip_plane0[]={b3.y - b2.y, b2.x - b3.x, 0.0, b3.x * (b2.y - b3.y) - b3.y * (b2.x - b3.x)}; // x < x2
+			double clip_plane1[]={b1.y - b4.y, b4.x - b1.x, 0.0, b1.x * (b4.y - b1.y) - b1.y * (b4.x - b1.x)}; // x > x1
+			double clip_plane2[]={b4.y - b3.y, b3.x - b4.x, 0.0, b4.x * (b3.y - b4.y) - b4.y * (b3.x - b4.x)}; // y > y1
+			double clip_plane3[]={b2.y - b1.y, b1.x - b2.x, 0.0, b2.x * (b1.y - b2.y) - b2.y * (b1.x - b2.x)}; // y < y2
 			glClipPlane(GL_CLIP_PLANE0,clip_plane0);
 			glClipPlane(GL_CLIP_PLANE1,clip_plane1);
 			glClipPlane(GL_CLIP_PLANE2,clip_plane2);
 			glClipPlane(GL_CLIP_PLANE3,clip_plane3);
 
 		} else {
-			// avoid plotting the "added" portion of the map
-			bool fRecalculateCX2 = false;
-			if (x2 > data->cb.MaxX())
-			{
-				x2 = data->cb.MaxX();
-				fRecalculateCX2 = true;
-			}
-			bool fRecalculateCY2 = false;
-			if (y2 < data->cb.MinY())
-			{
-				y2 = data->cb.MinY();
-				fRecalculateCY2 = true;
-			}
-
-			//c1 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x1, y1, 0.0));
-			if (fRecalculateCX2)
-				c2 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x2, y1, 0.0));
-			if (fRecalculateCX2 || fRecalculateCY2)
-				c3 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x2, y2, 0.0));
-			if (fRecalculateCY2)
-				c4 = getRootDrawer()->getCoordinateSystem()->cConv(csy, Coord(x1, y2, 0.0));
+			c1 = getRootDrawer()->getCoordinateSystem()->cConv(csy, b1);
+			c2 = getRootDrawer()->getCoordinateSystem()->cConv(csy, b2);
+			c3 = getRootDrawer()->getCoordinateSystem()->cConv(csy, b3);
+			c4 = getRootDrawer()->getCoordinateSystem()->cConv(csy, b4);
 			//double clip_plane0[]={c3.y - c2.y, c2.x - c3.x, 0.0, c2.x * (c2.y - c3.y) - c2.y * (c2.x - c3.x)}; // x < x2
 			//double clip_plane1[]={c1.y - c4.y, c4.x - c1.x, 0.0, c4.x * (c4.y - c1.y) - c4.y * (c4.x - c1.x)}; // x > x1
 			//double clip_plane2[]={c2.y - c1.y, c1.x - c2.x, 0.0, c1.x * (c1.y - c2.y) - c1.y * (c1.x - c2.x)}; // y > y1

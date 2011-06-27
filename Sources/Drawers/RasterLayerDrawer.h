@@ -22,7 +22,6 @@ namespace ILWIS {
 		}
 
 		GLint maxTextureSize;
-		CoordBounds cb;
 		unsigned long imageWidth, imageHeight; // actual image size
 		unsigned long width, height; // power of 2
 		bool init;
@@ -50,9 +49,9 @@ namespace ILWIS {
 
 	private:
 
-		void DisplayImagePortion(double x1, double y1, double x2, double y2, unsigned int imageOffsetX, unsigned int imageOffsetY, unsigned int imageSizeX, unsigned int imageSizeY) const;
-		void DisplayTexture(double x1, double y1, double x2, double y2, Coord & c1, Coord & c2, Coord & c3, Coord & c4, unsigned int imageOffsetX, unsigned int imageOffsetY, unsigned int imageSizeX, unsigned int imageSizeY, unsigned int zoomFactor) const;
-		void DisplayTexture3D(double x1, double y1, double x2, double y2, Coord & c1, Coord & c2, Coord & c3, Coord & c4, unsigned int imageOffsetX, unsigned int imageOffsetY, unsigned int imageSizeX, unsigned int imageSizeY, unsigned int zoomFactor) const;
+		void DisplayImagePortion(unsigned int imageOffsetX, unsigned int imageOffsetY, unsigned int imageSizeX, unsigned int imageSizeY) const;
+		void DisplayTexture(Coord & c1, Coord & c2, Coord & c3, Coord & c4, unsigned int imageOffsetX, unsigned int imageOffsetY, unsigned int imageSizeX, unsigned int imageSizeY, unsigned int zoomFactor) const;
+		void DisplayTexture3D(Coord & c1, Coord & c2, Coord & c3, Coord & c4, unsigned int imageOffsetX, unsigned int imageOffsetY, unsigned int imageSizeX, unsigned int imageSizeY, unsigned int zoomFactor) const;
 		double getMinZoom(unsigned int imageSizeX, unsigned int imageSizeY, GLdouble * m_winx, GLdouble * m_winy) const;
 		void init() const;
 		
@@ -60,6 +59,7 @@ namespace ILWIS {
 		RangeReal rrMinMax;
 		bool isThreaded;
 		bool isThreadedBeforeOffscreen;
+		bool fGrfLinear;
 		bool sameCsy;
 		bool fUsePalette;
 		bool fPaletteOwner; // for maplist animation: all have same palette, just use the one of the first band
