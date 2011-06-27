@@ -31,7 +31,6 @@ namespace ILWIS {
 	public:
 		DEMTriangulator(ZValueMaker * zMaker, BaseMapPtr * drapeMapPtr, CoordSystem & csyDest, bool fSmooth);
 		~DEMTriangulator(void);
-		void PlotTriangles(double xMin, double yMin, double xMax, double yMax, Texture * tex);
 		void PlotTriangles();
 		bool fValid();
 
@@ -69,10 +68,6 @@ namespace ILWIS {
 		int iSizeY;
 		unsigned long width;
 		unsigned long height;
-		double rStepX;
-		double rStepY;
-		double rMinX;
-		double rMaxY;
 		double rHeightAccuracy;
 		const bool fSmooth;
 		bool valid;

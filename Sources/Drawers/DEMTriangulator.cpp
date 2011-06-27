@@ -37,11 +37,6 @@ DEMTriangulator::DEMTriangulator(ZValueMaker * zMaker, BaseMapPtr * drapeMapPtr,
 		iSizeX = mp->rcSize().Col;
 		iSizeY = mp->rcSize().Row;
 
-		double minX = mp->cb().MinX();
-		double maxX = mp->cb().MaxX();
-		double minY = mp->cb().MinY();
-		double maxY = mp->cb().MaxY();
-
 		if (fSelfDrape) {
 			width = pow(2, max(6, ceil(log((double)iSizeX)/log(2.0))));
 			height = pow(2, max(6, ceil(log((double)iSizeY)/log(2.0))));
@@ -50,10 +45,6 @@ DEMTriangulator::DEMTriangulator(ZValueMaker * zMaker, BaseMapPtr * drapeMapPtr,
 			width = (pow(2, max(6, ceil(log((double)rc.Col)/log(2.0)))));
 			height = (pow(2, max(6, ceil(log((double)rc.Row)/log(2.0)))));
 		}
-		rStepX = (double) ((maxX - minX) / iSizeX);
-		rStepY = (double) ((maxY - minY) / iSizeY);
-		rMinX = minX + (rStepX / 2.0); // Provided: corner of corners; convert to centre of corners
-		rMaxY = maxY - (rStepY / 2.0);
 
 		if (iSizeX < iSizeY) {
 			iSize2l = (int) pow(2.0, (int) (log((double)iSizeX) / log(2.0)));
@@ -928,7 +919,9 @@ void DEMTriangulator::AddVertex(int x, int y, double rHeight)
 	// 4: drapemp to be draped over mp values, in projection drapemp->csy (!= drapemp->csy)
 	// 5: drapemp to be draped over mp values, in projection root->csy (!= drapemp->csy)
 	// 6: drapemp to be draped over mp values, in projection root->csy (!= drapemp->csy)
-	Coord c (rMinX + x * rStepX, rMaxY - y * rStepY, 0.0);
+	
+	Coord c;
+	mp->gr()->RowCol2Coord(0.5 + y, 0.5 + x, c);
 	double s, t;
 	if (fSelfDrape) {
 		s = x / (double)width;
@@ -944,47 +937,6 @@ void DEMTriangulator::AddVertex(int x, int y, double rHeight)
 	if (!fSameCsy)
 		c = csyDest->cConv(csyMap, c);
 	vertices[iNrVertices++] = Vertex(s, t, c.x, c.y, zMaker->scaleValue(rHeight));
-}
-
-void DEMTriangulator::PlotTriangles(double xMin, double yMin, double xMax, double yMax, Texture * tex)
-{
-	/*
-	int index = 0;
-	bool fDraw = false;
-	int iNr = vertices.size();
-	int iCount = 0;
-	for (vector<Vertex*>::iterator vertex = vertices.begin(); vertex != vertices.end(); ++vertex)
-	{
-		if (index % 3 == 0)
-			fDraw = ((*vertex)->x >= xMin && (*vertex)->x <= xMax && (*vertex)->y >= yMin && (*vertex)->y <= yMax);
-		if (fDraw)
-		{
-			glTexCoord2d((*vertex)->s, (*vertex)->t);
-			glVertex3f((*vertex)->x, (*vertex)->y, (*vertex)->z);
-			++iCount;
-		}
-		++index;
-	}
-	*/
-	
-
-	/*
-	float * vert = (float*)malloc(vertices.size() * 5 * sizeof(float));
-	int index = 0;
-	for (vector<Vertex*>::iterator vertex = vertices.begin(); vertex != vertices.end(); ++vertex)
-	{
-		vert[index++] = tex->getTexCoord2dX((*vertex)->x);
-		vert[index++] = tex->getTexCoord2dY((*vertex)->y);
-		vert[index++] = (*vertex)->x;
-		vert[index++] = (*vertex)->y;
-		vert[index++] = (*vertex)->z;
-	}
-	glInterleavedArrays(GL_T2F_V3F, 0, vert);
-	glDrawArrays(GL_TRIANGLES, 0, vertices.size());
-	free(vert);
-	*/
-
-//	TRACE("Count = %d\n", iCount);
 }
 
 void DEMTriangulator::PlotTriangles()
