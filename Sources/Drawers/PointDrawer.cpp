@@ -37,7 +37,7 @@ void PointDrawer::prepare(PreparationParameters *p){
 		const SVGLoader *loader = NewDrawer::getSvgLoader();
 		SVGLoader::const_iterator cur = loader->find(properties.symbol);
 		if ( cur == loader->end())
-			throw ErrorObject(TR("Unknow symbol"));
+			throw ErrorObject(TR("Unknow symbol used"));
 		element = (*cur).second;
 		calcSize();
 	}
@@ -94,10 +94,13 @@ bool PointDrawer::draw( const CoordBounds& cbArea) const {
 	glPushMatrix();
 	glTranslated(fx,fy,fz);
 	glScaled(xscale * properties.scaling(), yscale *  properties.scaling(), 1);
+	glRotated(properties.angle,0,0,100);
 	if ( properties.threeDOrientation){
 		glTranslated(0,0,symbolScale);
 		glRotated(90,100,0,0);
 	}
+	if ( element == 0)
+		throw ErrorObject(TR("Unknow symbol used"));
 
 	for(vector<SVGAttributes>::const_iterator cur = element->begin(); cur != element->end(); ++cur) {
 		switch((*cur).type) {

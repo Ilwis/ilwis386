@@ -37,7 +37,7 @@ bool PolygonDrawer::draw( const CoordBounds& cbArea) const{
 	if ( !cbZoom.fContains(cb))
 			return false;
     bool asQuad =  cbZoom.getArea() * 0.00001 > const_cast<PolygonDrawer *>(this)->cb.getArea() ? true : false;
-	if ( !cbArea.fValid())
+	if ( !cbZoom.fValid())
 		asQuad = false;
 
 	glShadeModel(GL_FLAT);

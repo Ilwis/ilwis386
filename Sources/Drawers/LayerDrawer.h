@@ -16,7 +16,7 @@ class _export LayerDrawer : public ComplexDrawer {
 		Representation getRepresentation() const;
 		virtual void setRepresentation(const Representation& rp);
 		//bool isLegendUsefull() const;
-		RangeReal getStretchRangeReal() const;
+		RangeReal getStretchRangeReal(bool useAttrb = false) const;
 		void setStretchRangeReal(const RangeReal& rr);
 		bool isStretched() const;
 		StretchMethod getStretchMethod() const;

@@ -61,7 +61,7 @@ bool CollectionDrawer::draw(int drawerIndex , const CoordBounds& cbArea) const{
 
 
 String CollectionDrawer::iconName(const String& subtype) const {
-	return "Set";
+	return ".ioc";
 }
 
 

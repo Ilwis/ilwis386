@@ -14,15 +14,16 @@ namespace ILWIS{
 		String description() const;
 		void updateLegendItem();
 		void setTransparency(double v);
-		RangeReal getRange() const { return rrMinMax; }
+		RangeReal getStretchRangeReal() const { return rrMinMax; }
+		void setStretchRangeReal(const RangeReal& rr);
 		bool isSet() const { return true; }
 
 
 	protected:
 		enum SourceType{sotUNKNOWN, sotFEATURE, sotMAPLIST, sotOBJECTCOLLECTION};
 		virtual String iconName(const String& subtype="?") const;
-		RangeReal getMinMax(const MapList& mlist) const;
-		RangeReal getMinMax(const ObjectCollection& oc) const;
+		RangeReal getStretchRangeReal(const MapList& mlist) const;
+		RangeReal getStretchRangeReal(const ObjectCollection& oc) const;
 		void drawLegendItem(CDC *dc, const CRect& rct, double rVal) const;
 		ILWIS::LayerDrawer *createIndexDrawer(int index, const BaseMap& basemap,ILWIS::DrawerParameters& dp, PreparationParameters* pp);
 		SourceType sourceType;

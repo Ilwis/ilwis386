@@ -120,12 +120,14 @@ void AnnotationLegendDrawer::prepare(PreparationParameters *pp) {
 		texts = new TextLayerDrawer(&dp,"LegendTexts");
 		texts->setFont(new OpenGLText(getRootDrawer(),"arial.ttf",10,true));
 		addPostDrawer(100,texts);
+		LayerDrawer *ldr = dynamic_cast<LayerDrawer *>(getParentDrawer());
+		if ( ldr) {
+			SpatialDataDrawer *spdr = (SpatialDataDrawer *)(getParentDrawer()->getParentDrawer());
+			BaseMapPtr *bmp = spdr->getBaseMap();
 
-		SpatialDataDrawer *spdr = (SpatialDataDrawer *)(getParentDrawer()->getParentDrawer());
-		BaseMapPtr *bmp = spdr->getBaseMap();
-
-		dm = Domain(bmp->dm()->fnObj);
-		fnName = bmp->fnObj;
+			dm = ldr->useAttributeColumn() ? ldr->getAtttributeColumn()->dm() :  bmp->dm();
+			fnName = bmp->fnObj;
+		}
 	}
 	if ( pp->type & NewDrawer::ptRENDER) {
 		DrawerParameters dp(getRootDrawer(), texts);
@@ -193,7 +195,13 @@ bool AnnotationLegendDrawer::draw( const CoordBounds& cbArea) const{
 void AnnotationLegendDrawer::setText(const vector<String>& v, int count, const Coord& c) const {
 	TextDrawer *txt = (TextDrawer *)texts->getDrawer( count);
 	if ( txt) {
-		txt->setCoord(c);
+		double h = txt->getHeight();
+		double l = v[count].size() * h * 0.2;
+		Coord crd = c;
+		if ( !vertical)
+			crd = Coord(c.x - l, c.y, c.z);
+
+		txt->setCoord(crd);
 		txt->setText(v[count]);
 		txt->setActive(true);
 	}
@@ -266,8 +274,6 @@ void AnnotationClassLegendDrawer::prepare(PreparationParameters *pp) {
 		columns = 1;
 		maxw = 0;
 		cellWidth = 0;
-		SpatialDataDrawer *spdr = (SpatialDataDrawer *)(getParentDrawer()->getParentDrawer());
-		BaseMapPtr *bmp = spdr->getBaseMap();
 		DrawingColor dc((LayerDrawer *)getParentDrawer());
 		DrawerParameters dp(getRootDrawer(), texts);
 		raws.clear();
@@ -373,7 +379,7 @@ noTicks(5)
 void AnnotationValueLegendDrawer::prepare(PreparationParameters *pp) {
 	AnnotationLegendDrawer::prepare(pp);
 	if ( pp->type & NewDrawer::ptGEOMETRY) {
-		for(int i=0; i < 10 ; ++i) {
+		for(int i=0; i < 20 ; ++i) {
 			DrawerParameters dp(getRootDrawer(), texts);
 			TextDrawer *txt = new TextDrawer(&dp,"LegendText");
 			txt->setActive(false);
@@ -454,7 +460,7 @@ void AnnotationValueLegendDrawer::drawVertical(CoordBounds& cbInner, const Range
 		glVertex3d(endx,endy,z);
 		glVertex3d(endx,starty,z);
 		glEnd();
-		if ( values[count].rVal() <= rV) { 
+		if ( count < values.size()  && values[count].rVal() <= rV) { 
 			setText(values, count, Coord(endx + cbBox.width() / 15.0, starty,z));
 			glColor4f(0,0, 0, getTransparency() );
 			glBegin(GL_LINE_STRIP);
@@ -505,9 +511,9 @@ void AnnotationValueLegendDrawer::drawHorizontal(CoordBounds& cbInner, const Ran
 		rV += rStep;
 	}
 	TextDrawer *txt = (TextDrawer *)texts->getDrawer( values.size()-1);
-	double h = txt->getHeight() * 0.9;
-	String s(values[values.size()-1]);
-	setText(values,values.size()-1,Coord(cbInner.MaxX() - s.size() * h/2, cbInner.MaxY( ) - cbInner.height() - cbBox.height() / shifty,z));
+	//double h = txt->getHeight() * 0.9;
+	//String s(values[values.size()-1]);
+	setText(values,values.size()-1,Coord(cbInner.MaxX(), cbInner.MaxY( ) - cbInner.height() - cbBox.height() / shifty,z));
 }
 
 String AnnotationValueLegendDrawer::store(const FileName& fnView, const String& parentSection) const{
@@ -531,15 +537,15 @@ vector<String> AnnotationValueLegendDrawer::makeRange(LayerDrawer *dr) const{
 		dvs = dr->getAtttributeColumn()->dvrs();
 	}
 
-	RangeReal rr = dr->getStretchRangeReal();
+	RangeReal rr = dr->getStretchRangeReal(true);
 	RangeReal rmd = roundRange(rr.rLo(), rr.rHi());
 	double rVal = rRound(rmd.rWidth()/ noTicks);
-	double rStart = rRound(rmd.rLo());
-	if ( rStart > rmd.rLo())
-		rStart = rmd.rLo();
+	double rStart = rmd.rLo();
+	if ( dvs.rValue(rStart) == rUNDEF)
+		rStart = rr.rLo();
 	double rHi = rmd.rHi();
 	if (dvs.rValue(rHi) == rUNDEF)
-		rHi = rmd.rHi();
+		rHi = rr.rHi();
 	bool fImage = dvs.dm()->pdi() != 0;
 
 	for (double v = rStart; v <= rHi; v += rVal) {

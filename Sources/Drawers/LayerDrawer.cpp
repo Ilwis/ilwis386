@@ -146,8 +146,10 @@ bool LayerDrawer::isStretched() const {
 	return stretched;
 }
 
-RangeReal LayerDrawer::getStretchRangeReal() const{
-	return rrStretch;
+RangeReal LayerDrawer::getStretchRangeReal(bool useAttrib) const{
+	if ( useAttrib && useAttributeColumn())
+			return getAtttributeColumn()->rrMinMax();
+    return rrStretch;
 }
 
 String LayerDrawer::getInfo(const Coord& c) const {

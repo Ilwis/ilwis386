@@ -6,6 +6,7 @@ namespace ILWIS {
 
 	class SpatialDataDrawer;
 	class LayerDrawer;
+	class SetDrawer;
 
 	class IlwisData{
 	public:
@@ -31,8 +32,10 @@ public:
 
 private:
 	void InitClrRandom();
+	RangeReal getStretchRangeReal() const;
 
 	LayerDrawer *drw;
+	SetDrawer *setDrawer;
 	MapCompositionDoc *mcd;
     vector<Color> m_clrRandom;
 	Color clr1;

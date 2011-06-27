@@ -35,9 +35,9 @@ ComplexDrawer(parms,"GridDrawer")
 }
 
 GridDrawer::~GridDrawer() {
-	for(int i = 0; i < planeQuads.size(); ++i) {
-		delete planeQuads[i];
-	}
+	//for(int i = 0; i < planeQuads.size(); ++i) {
+	//	delete planeQuads[i];
+	//}
 }
 
 

@@ -8,6 +8,7 @@
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Engine\Drawers\RootDrawer.h"
 #include "Engine\Drawers\SpatialDataDrawer.h"
+#include "Drawers\SetDrawer.h"
 #include "LayerDrawer.h"
 #include "FeatureLayerDrawer.h"
 #include "DrawingColor.h" 
@@ -55,6 +56,7 @@ mcd(0),
 index(ind)
 {
 	SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)drw->getParentDrawer();
+	setDrawer = dynamic_cast<SetDrawer *>(mapDrawer);
 	BaseMap bmap;
 	bmap.SetPointer(mapDrawer->getBaseMap(index));
 	dataValues.setBaseMap(bmap);
@@ -63,6 +65,10 @@ index(ind)
 
 void DrawingColor::setDataColumn(const Column& c) {
 	dataValues.setColumn(c);
+}
+
+RangeReal DrawingColor::getStretchRangeReal() const {
+	return setDrawer ? setDrawer->getStretchRangeReal() : drw->getStretchRangeReal();
 }
 
 Color DrawingColor::clrVal(double rVal) const
@@ -75,11 +81,11 @@ Color DrawingColor::clrVal(double rVal) const
 		switch (drw->getStretchMethod())
 		{
 		case LayerDrawer::smLINEAR:
-				cRet = (Color)rpr->clr(rVal, drw->getStretchRangeReal());
+				cRet = (Color)rpr->clr(rVal, getStretchRangeReal());
 			break;
 		case  LayerDrawer::smLOGARITHMIC:
 			{
-				RangeReal rr = drw->getStretchRangeReal();
+				RangeReal rr = getStretchRangeReal();
 				double rMax = 1 + rr.rHi() - rr.rLo();
 				rMax = log(rMax);
 				rVal -= rr.rLo();
@@ -135,7 +141,7 @@ Color DrawingColor::clrRaw(long iRaw, NewDrawer::DrawMethod drm) const
 		}  
 		break;
 	case NewDrawer::drmIMAGE: {
-		RangeReal rrStretch = drw->getStretchRangeReal();
+		RangeReal rrStretch = getStretchRangeReal();
 		int iMin = 0, iMax = 255;
 		if (drw->isStretched()) {
 			iMin = rrStretch.rLo();
@@ -176,13 +182,13 @@ void DrawingColor::clrVal(const double * buf, long * bufOut, long iLen) const
 		{
 		case LayerDrawer::smLINEAR:
 			{
-				RangeReal rr = drw->getStretchRangeReal();
+				RangeReal rr = getStretchRangeReal();
 				for (long i = 0; i < iLen; ++i)
 					bufOut[i] = rpr->clr(buf[i], rr).iVal();
 			} break;
 		case LayerDrawer::smLOGARITHMIC:
 			{
-				RangeReal rr = drw->getStretchRangeReal();
+				RangeReal rr = getStretchRangeReal();
 				double rMax = 1 + rr.rHi() - rr.rLo();
 				rr = RangeReal(0, log(rMax));
 				for (long i = 0; i < iLen; ++i)
@@ -213,14 +219,14 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 					switch (drw->getStretchMethod())
 					{
 					case LayerDrawer::smLINEAR: {
-						RangeReal rr = drw->getStretchRangeReal();
+						RangeReal rr = getStretchRangeReal();
 						DomainValueRangeStruct dvrs = dataValues.dvrs();
 						for (long i = 0; i < iLen; ++i)
 							bufOut[i] = rpr->clr(dvrs.rValue(buf[i]), rr).iVal();
 					} break;
 					case LayerDrawer::smLOGARITHMIC:
 						{
-							RangeReal rr = drw->getStretchRangeReal();
+							RangeReal rr = getStretchRangeReal();
 							double rMax = 1 + rr.rHi() - rr.rLo();
 							rr = RangeReal(0, log(rMax));
 							DomainValueRangeStruct dvrs = dataValues.dvrs();

@@ -38,34 +38,14 @@ SetDrawer::~SetDrawer(){
 
 String SetDrawer::description() const {
 	String sName = getName();
-	//String sDescr = (*datasource)->sDescr();
-	//if ("" != sDescr) 
-	//	sName = String("%S Animated", sName);
 	return sName;
 }
 
-RangeReal SetDrawer::getMinMax(const ObjectCollection& oc) const{
+RangeReal SetDrawer::getStretchRangeReal(const ObjectCollection& oc) const{
 	RangeReal rrMinMax (0, 255);
 	return oc->getRange();
-	//for(int i = 0; i < oc->iNrObjects(); ++i) {
-	//	if (IOTYPEBASEMAP( oc->fnObject(i))) {
-	//		BaseMap mp(oc->fnObject(i));
-	//		if (mp.fValid()) {
-	//			RangeReal rrMinMaxMap = mp->rrMinMax(BaseMapPtr::mmmSAMPLED);
-	//			if (rrMinMaxMap.rLo() > rrMinMaxMap.rHi())
-	//				rrMinMaxMap = mp->vr()->rrMinMax();
-	//			if (fFirst) {
-	//				rrMinMax = rrMinMaxMap;
-	//				fFirst = false;
-	//			}
-	//			else
-	//				rrMinMax += rrMinMaxMap;
-	//		}
-	//	}
-	//}
-	//return rrMinMax;
 }
-RangeReal SetDrawer::getMinMax(const MapList& mlist) const{
+RangeReal SetDrawer::getStretchRangeReal(const MapList& mlist) const{
 	RangeReal rrMinMax (0, 255);
 	if (mlist->iSize() > 0) {
 		if (mlist->map(0)->dm()->pdv()) {
@@ -109,7 +89,7 @@ void SetDrawer::prepare(PreparationParameters *pp){
 			}
 			Tranquilizer trq(TR("Adding maps"));
 			// Calculate the min/max over the whole maplist. This is used for palette and texture generation.
-			rrMinMax = getMinMax(oc);
+			rrMinMax = getStretchRangeReal(oc);
 			Palette * palette;
 			for(int i = 0; i < oc->iNrObjects(); ++i) {
 				//IlwisObject::iotIlwisObjectType type = IOTYPE();
@@ -157,7 +137,7 @@ void SetDrawer::prepare(PreparationParameters *pp){
 				clear();
 			}
 			// Calculate the min/max over the whole maplist. This is used for palette and texture generation.
-			rrMinMax = getMinMax(mpl);
+			rrMinMax = getStretchRangeReal(mpl);
 			Palette * palette;
 			for(int i = 0; i < mpl->iSize(); ++i) {
 				ILWIS::DrawerParameters parms(getRootDrawer(), this);
@@ -188,7 +168,8 @@ void SetDrawer::prepare(PreparationParameters *pp){
 			drawers.at(i)->prepare(pp);
 		}
 	}
-	setDrawMethod(getDrawer(0)->getDrawMethod());
+	if ( getDrawerCount() > 0)
+		setDrawMethod(getDrawer(0)->getDrawMethod());
 
 }
 void SetDrawer::setTransparency(double v) {
@@ -288,5 +269,17 @@ String SetDrawer::iconName(const String& subtype) const {
 void SetDrawer::updateLegendItem() {
 	//if ( doLegend)
 	//	doLegend->updateLegendItem();
+}
+
+void SetDrawer::setStretchRangeReal(const RangeReal& rr) {
+	rrMinMax = rr;
+	PreparationParameters pp(NewDrawer::ptRENDER, 0);
+	for(int i = 0; i < getDrawerCount(); ++i) {
+		LayerDrawer *ldr = dynamic_cast<LayerDrawer *>(getDrawer(i));
+		if ( ldr) {
+			ldr->setStretchRangeReal(rr);
+			ldr->prepareChildDrawers(&pp);
+		}
+	}
 }
 

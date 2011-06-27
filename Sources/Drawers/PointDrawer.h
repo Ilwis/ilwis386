@@ -18,7 +18,8 @@ public:
 		ignoreColor(false),scale(1.0), 
 		threeDOrientation(false), 
 		stretchScale(1.0), scaleMode(sNONE),
-		useDirection(false)
+		useDirection(false),
+		angle(0)
 		{}
 
 	PointProperties(PointProperties *lp) { set(lp);}
@@ -35,6 +36,8 @@ public:
 		directionColumn = lp->directionColumn;
 		scaleMode = lp->scaleMode;
 		useDirection = lp->useDirection;
+		angle = lp->angle;
+
 	}
 
 	double scaling() const {
@@ -53,6 +56,7 @@ public:
 	String directionColumn;
 	Scaling scaleMode;
 	bool useDirection;
+	double angle;
 
 	String store(const FileName& fnView, const String& parenSection) const;
 	void load(const FileName& fnView, const String& parenSection);
