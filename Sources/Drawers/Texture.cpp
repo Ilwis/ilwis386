@@ -21,7 +21,7 @@ using namespace ILWIS;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-Texture::Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDrawer::DrawMethod drm, const long offsetX, const long offsetY, const unsigned long sizeX, const unsigned long sizeY, const unsigned long imgWidth2, const unsigned long imgHeight2, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, unsigned int iPaletteSize, const RangeReal & rrMinMaxMap, const Palette * palette)
+Texture::Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDrawer::DrawMethod drm, const long offsetX, const long offsetY, const unsigned long sizeX, const unsigned long sizeY, const unsigned long imgWidth2, const unsigned long imgHeight2, unsigned int zoomFactor, unsigned int iPaletteSize, const RangeReal & rrMinMaxMap, const Palette * palette)
 : mp(mp)
 , texture_data(0)
 , drawColor(drawColor)
@@ -32,10 +32,6 @@ Texture::Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDr
 , sizeY(sizeY)
 , imgWidth2(imgWidth2)
 , imgHeight2(imgHeight2)
-, xMin(xMin)
-, xMax(xMax)
-, yMin(yMin)
-, yMax(yMax)
 , zoomFactor(zoomFactor)
 , iPaletteSize(iPaletteSize)
 , rrMinMaxMap(rrMinMaxMap)
@@ -133,14 +129,14 @@ void Texture::RepresentationChanged()
 	fRepresentationChanged = true;
 }
 
-bool Texture::equals(GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor)
+bool Texture::equals(const long offsetX1, const long offsetY1, const long offsetX2, const long offsetY2, unsigned int zoomFactor)
 {
-	return this->xMin == xMin && this->yMin == yMin && this->xMax == xMax && this->yMax == yMax && this->zoomFactor == zoomFactor && this->palette == palette;
+	return this->offsetX == offsetX1 && this->offsetY == offsetY1 && this->offsetX + this->sizeX == offsetX2 && this->offsetY + sizeY == offsetY2 && this->zoomFactor == zoomFactor && this->palette == palette;
 }
 
-bool Texture::contains(GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax)
+bool Texture::contains(const long offsetX1, const long offsetY1, const long offsetX2, const long offsetY2)
 {
-	return this->xMin <= xMin && this->yMin >= yMin && this->xMax >= xMax && this->yMax <= yMax;
+	return this->offsetX <= offsetX1 && this->offsetY <= offsetY1 && this->offsetX + sizeX >= offsetX2 && this->offsetY + sizeY >= offsetY2;
 }
 
 unsigned int Texture::getZoomFactor()

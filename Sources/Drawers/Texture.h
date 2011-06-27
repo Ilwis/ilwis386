@@ -22,13 +22,13 @@ namespace ILWIS {
 	class Texture
 	{
 	public:
-		Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDrawer::DrawMethod drm, const long offsetX, const long offsetY, const unsigned long sizeX, const unsigned long sizeY, const unsigned long imgWidth2, const unsigned long imgHeight2, GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor, unsigned int iPaletteSize, const RangeReal & rrMinMaxMap, const Palette * palette);
+		Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDrawer::DrawMethod drm, const long offsetX, const long offsetY, const unsigned long sizeX, const unsigned long sizeY, const unsigned long imgWidth2, const unsigned long imgHeight2, unsigned int zoomFactor, unsigned int iPaletteSize, const RangeReal & rrMinMaxMap, const Palette * palette);
 		virtual ~Texture();
 
 		void CreateTexture(DrawerContext * drawerContext, bool fInThread, volatile bool * fDrawStop);
 		void BindMe(DrawerContext * drawerContext); // To be called before glBegin
-		bool equals(GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax, unsigned int zoomFactor);
-		bool contains(GLdouble xMin, GLdouble yMin, GLdouble xMax, GLdouble yMax);
+		bool equals(const long offsetX1, const long offsetY1, const long offsetX2, const long offsetY2, unsigned int zoomFactor);
+		bool contains(const long offsetX1, const long offsetY1, const long offsetX2, const long offsetY2);
 		unsigned int getZoomFactor();
 		void RepresentationChanged();
 		bool fValid();
@@ -47,7 +47,6 @@ namespace ILWIS {
 		const Map mp;
 		GLuint texture;
 		char * texture_data;
-		const GLdouble xMin, yMin, xMax, yMax; // These are in world coordinates !! These are to be mapped to texture coordinates 0 to 1
 		const unsigned long sizeX, sizeY;
 		const long offsetX, offsetY;
 		const unsigned long imgWidth2, imgHeight2;
