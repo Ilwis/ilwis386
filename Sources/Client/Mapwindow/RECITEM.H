@@ -56,6 +56,7 @@ class RecItemGeoRef;
 class RecItemAnimation;
 class RecItemRasterMap;
 class RecItemCollection;
+class RecItemCollectionLayer;
 class ObjectCollection;
 
 
@@ -70,7 +71,7 @@ typedef Array<RecItem*> RecItemArray;
 class _export RecItem
 {
 public:
-  enum AddType{atNORMAL, atANIMATION, atCOLLECTION};
+  enum AddType{atNORMAL, atANIMATION, atCOLLECTION, atCOLLECTIONLAYER};
   virtual ~RecItem();
   virtual String sName() ;
   virtual int Configure(CWnd*);
@@ -91,6 +92,7 @@ public:
   RecItemGeoRef* AddGeoRef(const GeoRef&);
   RecItemAnimation *AddAnimation(const IlwisObject& obj, ILWIS::ComplexDrawer *drawr=0);
   RecItemCollection *AddCollection(const ObjectCollection& obj, ILWIS::ComplexDrawer *drawr=0);
+  RecItemCollectionLayer *RecItem::AddCollectionLayer(const IlwisObject& obj,  ILWIS::ComplexDrawer *drawr=0);
 //  RecItemTable* AddTable(TableView, bool fAllowEdit = false);
   bool fShowRec() { return fShow; }
   void ShowRec(bool fSR) { fShow = fSR; }
@@ -156,6 +158,20 @@ protected:
 private:
 	ILWIS::ComplexDrawer *animationDrawer;
   MapList mpl;
+  ObjectCollection collection;
+};
+
+class _export RecItemCollectionLayer: public RecItemMap
+{
+public:
+    RecItemCollectionLayer(RecItem* parent, const ObjectCollection& col, ILWIS::ComplexDrawer *drawr);
+    virtual FileName fnObj() ;
+  //virtual void setAssociatedDrawerTool(ILWIS::DrawerTool *drawr, const String& targetName);
+protected:
+  virtual String sName() ;
+  const BaseMap& map() ;
+private:
+  ILWIS::ComplexDrawer *collectionDrawer;
   ObjectCollection collection;
 };
 

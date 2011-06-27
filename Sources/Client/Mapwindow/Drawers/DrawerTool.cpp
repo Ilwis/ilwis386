@@ -57,7 +57,6 @@ void DrawerTool::addCreateTool(const String& name, CreateDrawerTool func) {
 	}
 }
 
-// - - - - - - - - - - - - - - - - - - - - -
 DrawerTool::DrawerTool(const String& tpe, ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
 MapPaneViewTool(zv),
 drawer(drw), tree(view), visible(true),parentTool(0),isConfigured(false), type(tpe),htiNode(0)
@@ -109,6 +108,16 @@ void DrawerTool::addDrawer(ComplexDrawer *cdrw) {
 	}
 }
 
+void DrawerTool::addChildTools(DrawerTool *tool) {
+	for( map<String, CreateDrawerTool>::iterator cur = factory.begin(); cur != factory.end(); ++cur) {
+		DrawerTool *dtool = ((*cur).second)(mpv,tree,tool->getDrawer());
+		if ( dtool->isToolUseableFor(tool) ) {
+			tool->addTool(dtool);			
+		} else
+			delete dtool;
+	}
+}
+
 bool DrawerTool::addTool(DrawerTool *tool, int proposedIndex) {
 	if ( tool == 0)
 		return false;
@@ -121,13 +130,9 @@ bool DrawerTool::addTool(DrawerTool *tool, int proposedIndex) {
 		tools.push_back(tool);
 	else
 		tools.insert(tools.begin() + proposedIndex, tool);
-	for( map<String, CreateDrawerTool>::iterator cur = factory.begin(); cur != factory.end(); ++cur) {
-		DrawerTool *dtool = ((*cur).second)(mpv,tree,tool->getDrawer());
-		if ( dtool->isToolUseableFor(tool) ) {
-			tool->addTool(dtool);			
-		} else
-			delete dtool;
-	}
+
+	addChildTools(tool);
+
 	tool->setParentTool(this);
 	return true;
 }
@@ -135,8 +140,10 @@ bool DrawerTool::addTool(DrawerTool *tool, int proposedIndex) {
 void DrawerTool::removeTool(DrawerTool *tool) {
 	for(vector<DrawerTool *>::iterator cur=tools.begin(); cur != tools.end(); ++cur) {
 		if ( (*cur)->getId() == tool->getId()) {
-				delete (*cur);
+				DrawerTool *dt = (*cur);
 				tools.erase(cur);
+				delete dt;
+				break;
 		}
 	}
 }

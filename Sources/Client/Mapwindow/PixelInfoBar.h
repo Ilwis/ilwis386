@@ -55,6 +55,9 @@ public:
 
 private:
 	void OnDestroy();
+	void contCheck();
+	void OnInitialUpdate();
+	CButton continousCheck;
 	LRESULT OnUpdate(WPARAM wParam, LPARAM lParam);
 	COleDropTarget* odt;
 	bool fDragging;

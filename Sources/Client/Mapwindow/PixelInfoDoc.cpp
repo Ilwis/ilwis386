@@ -136,7 +136,13 @@ BOOL PixelInfoDoc::OnOpenDocument(LPCTSTR lpszPathName, MapCompositionDoc *doc, 
 				AddMap(map);
 			} else if ( fn.sExt == ".ioc") {
 				ObjectCollection oc(fn);
-				AddCollection(oc, drw->getType() == "AnimationDrawer" ? RecItem::atANIMATION : RecItem::atNORMAL,drw);
+				String type = drw->getType();
+				RecItem::AddType atype = RecItem::atNORMAL;
+				if ( type == "AnimationDrawer")
+					atype = RecItem::atANIMATION;
+				if ( type == "CollectionDrawer")
+					atype = RecItem::atCOLLECTIONLAYER;
+				AddCollection(oc, atype ,drw);
 			}
 		}
 		catch (const ErrorObject& err) {
@@ -332,6 +338,9 @@ void PixelInfoDoc::AddCollection(const ObjectCollection& col, RecItem::AddType t
 			riCoord.AddCollection(col);
 		} else if ( tp == RecItem::atANIMATION ) {
 			riCoord.AddAnimation(col, drw);
+
+		}  else if ( tp == RecItem::atCOLLECTIONLAYER ) {
+			riCoord.AddCollectionLayer(col, drw);
 
 		}
 	Update();

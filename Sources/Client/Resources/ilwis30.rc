@@ -285,6 +285,7 @@ TRACK                   ICON                    "track.ico"
 SCALE                   ICON                    "scale.ico"
 ANNOTATION              ICON                    "Annotation.ico"
 Position                ICON                    "position.ico"
+Appearance              ICON                    "appearance.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //

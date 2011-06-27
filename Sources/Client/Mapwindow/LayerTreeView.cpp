@@ -62,6 +62,7 @@ Created on: 2007-02-8
 #include "Client\Mapwindow\LayerTreeItem.h"
 #include "Client\Mapwindow\MapPaneView.h"
 #include "Engine\Domain\dmclass.h"
+#include "Client\Base\Menu.h"
 #include "Headers\constant.h"
 #include "Headers\Hs\Mapwind.hs"
 

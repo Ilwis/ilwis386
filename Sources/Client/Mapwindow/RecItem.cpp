@@ -150,6 +150,14 @@ RecItemAnimation *RecItem::AddAnimation(const IlwisObject& obj,  ILWIS::ComplexD
 	return 0;
 }
 
+RecItemCollectionLayer *RecItem::AddCollectionLayer(const IlwisObject& obj,  ILWIS::ComplexDrawer *drawr) {
+	RecItemMap* ri = 0;
+	ri =  new RecItemCollectionLayer(this, ObjectCollection(obj->fnObj), drawr);
+	if ( ri)
+		children.append(ri);
+	return 0;
+}
+
 RecItemCollection *RecItem::AddCollection(const ObjectCollection& obj, ILWIS::ComplexDrawer *drawr) {
 	RecItemCollection *rcol = new RecItemCollection(this,obj, drawr);
 	children.append(rcol);
@@ -467,6 +475,38 @@ String RecItemAnimation::sName()
 	FileName fn = map()->fnObj;
 	String s = fn.sFile;
 	s &= ".Animation";
+	return s;
+}
+
+//-------------------------------------------------------------------------------
+RecItemCollectionLayer::RecItemCollectionLayer(RecItem* parent, const ObjectCollection& col,  ILWIS::ComplexDrawer *drawr)
+: RecItemMap(parent, BaseMap(col->fnObject(0))),collectionDrawer(drawr), collection(col)
+{
+	cwcs = _map->cs();
+}
+
+const BaseMap& RecItemCollectionLayer::map() {
+	if ( collection.fValid()) {
+		set<String> maps;
+		collection->getBaseMaps(cwcs.c(), maps);
+		if ( maps.size() > 0)
+			_map = BaseMap(FileName(*(maps.begin())));
+		else
+			_map = BaseMap();
+	}
+	return _map;
+}
+
+FileName RecItemCollectionLayer::fnObj() 
+{
+	return map()->fnObj;
+}
+
+String RecItemCollectionLayer::sName() 
+{
+	FileName fn = collection->fnObj;
+	String s = fn.sFile;
+	s &= ".ioc";
 	return s;
 }
 //-------------------------------------------------------------------------------------

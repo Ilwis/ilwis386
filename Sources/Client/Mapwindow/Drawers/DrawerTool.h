@@ -31,6 +31,7 @@ public:
 	DrawerTool *getTool(int index) const;
 	static void addCreateTool(const String& name, CreateDrawerTool func);
 	virtual void addDrawer(ComplexDrawer *cdrw);
+	void addChildTools(DrawerTool *tool);
 	virtual bool isToolUseableFor(ILWIS::NewDrawer *drw) { return false;}
 	virtual bool isToolUseableFor(ILWIS::DrawerTool *drw) { return false;}
 	NewDrawer *getDrawer() const;
@@ -45,7 +46,7 @@ public:
 	MapPaneView *mpvGetView() const;
 	virtual void clear();
 	virtual void timedEvent(UINT timerid);
-	void setActiveMode(bool yesno);
+	virtual void setActiveMode(bool yesno);
 
 protected:
 	HTREEITEM insertItem(const String& name,const String& icon, DisplayOptionTreeItem *item=0, int checkstatus = -1, HTREEITEM after=TVI_LAST);

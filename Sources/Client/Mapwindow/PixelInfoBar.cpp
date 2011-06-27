@@ -64,10 +64,13 @@
 #include "Client\Mapwindow\PixelInfoBar.h"
 #include "Headers\Hs\Mapwind.hs"
 
+#define CONT_CB_ID 5674
+
 BEGIN_MESSAGE_MAP( PixelInfoBar, CSizingControlBar )
 	ON_WM_SIZE()
 	ON_MESSAGE(ILW_UPDATE, OnUpdate)
 	ON_WM_DESTROY()
+	ON_BN_CLICKED(CONT_CB_ID, contCheck)
 END_MESSAGE_MAP()
 
 
@@ -85,9 +88,23 @@ PixelInfoBar::~PixelInfoBar()
 		//delete pixview;  -- gives crash ???
 }
 
+void PixelInfoBar::contCheck() {
+	if ( pixview) {
+		PixelInfoDoc* pid = (PixelInfoDoc*)pixview->GetDocument();	
+		pid->fMouseCont = continousCheck.GetCheck() == BST_CHECKED;
+	}
+}
+
 void PixelInfoBar::OnDestroy() {
 		AfxGetApp()->PostThreadMessage(ILW_REMOVEDATAWINDOW, (WPARAM)this->m_hWnd, 0);
 		CSizingControlBar::OnDestroy();
+}
+
+void PixelInfoBar::OnInitialUpdate() {
+	CSizingControlBar::OnInitialUpdate();
+
+	PixelInfoDoc* pid = (PixelInfoDoc*)pixview->GetDocument();
+	continousCheck.SetCheck(pid->fMouseCont ? TRUE : FALSE);
 }
 
 LRESULT PixelInfoBar::OnUpdate(WPARAM wParam, LPARAM lParam)
@@ -95,8 +112,8 @@ LRESULT PixelInfoBar::OnUpdate(WPARAM wParam, LPARAM lParam)
 	CoordMessage cm = (CoordMessage) wParam;
 	if ( cm & cmZOOMIN)
 		return 0;
-
 	PixelInfoDoc* pid = (PixelInfoDoc*)pixview->GetDocument();
+	continousCheck.SetCheck(pid->fMouseCont ? TRUE : FALSE);
 	return pid->OnUpdate(wParam, lParam);
 }
 
@@ -108,10 +125,13 @@ BOOL PixelInfoBar::Create(CWnd* pParent)
 
 	SetBarStyle(GetBarStyle() | CBRS_SIZE_DYNAMIC);
 	EnableDocking(CBRS_ALIGN_LEFT|CBRS_ALIGN_RIGHT);
-
 	pixview = new PixelInfoView;
 	pixview->Create(NULL, NULL, AFX_WS_DEFAULT_VIEW,
 			CRect(0,0,0,0), this, 100, 0);
+	continousCheck.Create(TR("Continious").scVal(),WS_CHILD | WS_VISIBLE | BS_AUTOCHECKBOX,CRect(5,0,110,20),this,CONT_CB_ID);
+	continousCheck.SetWindowText(TR("Continious").scVal());
+	CFont *fnt = ( IlwWinApp()->GetFont(IlwisWinApp::sfFORM));
+	continousCheck.SetFont(fnt);
 	AfxGetApp()->PostThreadMessage(ILW_ADDDATAWINDOW, (WPARAM)this->m_hWnd, 0);
 
 	return TRUE;
@@ -121,7 +141,7 @@ void PixelInfoBar::OnSize(UINT nType, int cx, int cy)
 {
 	if (0 == pixview)
 		return;
-	pixview->MoveWindow(0,0,cx,cy);
+	pixview->MoveWindow(0,20,cx,cy);
 }
 
 //--------------------------------
