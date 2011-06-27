@@ -38,12 +38,28 @@ HTREEITEM StretchTool::configure( HTREEITEM parentItem){
 	if ( isConfigured)
 		return htiNode;
 
-	LayerDrawer *sdrw = dynamic_cast<LayerDrawer *>(drawer);
-	SetDrawer *adrw = dynamic_cast<SetDrawer *>(drawer);
-	RangeReal rr = adrw ? adrw->getStretchRangeReal() : sdrw->getStretchRangeReal();
+	//LayerDrawer *ldrw = dynamic_cast<LayerDrawer *>(drawer);
+	//SetDrawer *sdrw = dynamic_cast<SetDrawer *>(drawer);
+	//RangeReal rr;
+	//if ( ldrw ) {
+	//	BaseMapPtr *bmp = ((SpatialDataDrawer *)ldrw->getParentDrawer())->getBaseMap();
+	//	rr = bmp->rrMinMax();
+	//} else if ( sdrw) {
+	//	IlwisObject *obj = (IlwisObject *)sdrw->getDataSource();
+	//	if ( IOTYPE((*obj)->fnObj) == IlwisObject::iotMAPLIST) {
+	//		MapList *mpl = (MapList *)obj;
+	//		rr = (*mpl)->getRange();
+	//	}else if ( IOTYPE((*obj)->fnObj) == IlwisObject::iotOBJECTCOLLECTION) {
+	//		ObjectCollection *oc = (ObjectCollection *)obj;
+	//		rr = (*oc)->getRange();
+	//	}
+	//}
+	RangeReal rr = getBaseRange();
+	if(!rr.fValid())
+		return parentItem;
+	//RangeReal rr = adrw ? adrw->getStretchRangeReal() : sdrw->getStretchRangeReal();
 
 	SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)drawer->getParentDrawer();
-	LayerDrawer *setdrw = (LayerDrawer *)drawer;
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&StretchTool::displayOptionStretch);
 	htiNode = insertItem("Stretch","Valuerange", item,-1); 
@@ -56,10 +72,34 @@ HTREEITEM StretchTool::configure( HTREEITEM parentItem){
 	return htiNode;
 }
 
+RangeReal StretchTool::getBaseRange() const {
+	LayerDrawer *ldrw = dynamic_cast<LayerDrawer *>(drawer);
+	SetDrawer *sdrw = dynamic_cast<SetDrawer *>(drawer);
+	RangeReal rr;
+	if ( ldrw ) {
+		BaseMapPtr *bmp = ((SpatialDataDrawer *)ldrw->getParentDrawer())->getBaseMap();
+		if ( ldrw->useAttributeColumn()) {
+			rr = ldrw->getAtttributeColumn()->rrMinMax();
+		} else
+			rr = bmp->rrMinMax();
+	} else if ( sdrw) {
+		IlwisObject *obj = (IlwisObject *)sdrw->getDataSource();
+		if ( IOTYPE((*obj)->fnObj) == IlwisObject::iotMAPLIST) {
+			MapList *mpl = (MapList *)obj;
+			rr = (*mpl)->getRange();
+		}else if ( IOTYPE((*obj)->fnObj) == IlwisObject::iotOBJECTCOLLECTION) {
+			ObjectCollection *oc = (ObjectCollection *)obj;
+			rr = (*oc)->getRange();
+		}
+	}
+	return rr;
+}
+
 void StretchTool::displayOptionStretch() {
 	LayerDrawer *sdrw = dynamic_cast<LayerDrawer *>(drawer);
 	SetDrawer *adrw = dynamic_cast<SetDrawer *>(drawer);
-	RangeReal rr = adrw ? adrw->getStretchRangeReal() : sdrw->getStretchRangeReal();
+	RangeReal rr = getBaseRange();
+	RangeReal currentrr = adrw ? adrw->getStretchRangeReal() : sdrw->getStretchRangeReal();
 	double rStep;
 	if ( sdrw) {
 		BaseMapPtr *bmp = ((SpatialDataDrawer *)(sdrw->getParentDrawer()))->getBaseMap();
@@ -69,7 +109,7 @@ void StretchTool::displayOptionStretch() {
 		rStep = bmp->dvrs().rStep();
 	}
 
-	new SetStretchValueForm(tree, drawer, rr, rStep);
+	new SetStretchValueForm(tree, drawer, rr,currentrr, rStep);
 }
 
 bool StretchTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
@@ -90,11 +130,11 @@ String StretchTool::getMenuString() const {
 }
 
 //------------------------------------
-SetStretchValueForm::SetStretchValueForm(CWnd *wPar, NewDrawer *dr, const RangeReal& _rr, double rStep) : 
+SetStretchValueForm::SetStretchValueForm(CWnd *wPar, NewDrawer *dr, const RangeReal& _baserr, const RangeReal& _currentrr, double rStep) : 
 	DisplayOptionsForm2((ComplexDrawer *)dr,wPar,"Set stretch"),
-	rr(_rr),
-	low(rr.rLo()),
-	high(rr.rHi())
+	rr(_baserr),
+	low(_currentrr.rLo()),
+	high(_currentrr.rHi())
 {
 	sliderLow = new FieldRealSliderEx(root,"Lower", &low,ValueRange(rr,rStep),true);
 	sliderHigh = new FieldRealSliderEx(root,"Upper", &high,ValueRange(rr,rStep),true);
@@ -108,6 +148,9 @@ int  SetStretchValueForm::check(Event *) {
 	sliderLow->StoreData();
 	sliderHigh->StoreData();
 
+	if ( low == rUNDEF || high == rUNDEF)
+		return 1;
+
 	if ( low > high){
 		low = high;
 		sliderLow->SetVal(low);
@@ -119,12 +162,7 @@ int  SetStretchValueForm::check(Event *) {
 	
 	SetDrawer *setdrw = dynamic_cast<SetDrawer *>(drw);
 	if ( setdrw) {
-		PreparationParameters pp(NewDrawer::ptRENDER, 0);
-		for(int i = 0; i < setdrw->getDrawerCount(); ++i) {
-			LayerDrawer *ldr = (LayerDrawer *)setdrw->getDrawer(i);
-			ldr->setStretchRangeReal(RangeReal(low,high));
-			ldr->prepareChildDrawers(&pp);
-		}
+		setdrw->setStretchRangeReal(RangeReal(low,high));
 	}
 	else {
 		LayerDrawer *setdr = (LayerDrawer *)drw;

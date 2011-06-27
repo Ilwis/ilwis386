@@ -44,7 +44,7 @@
 #include "DrawersUI\SetDrawerTool.h"
 #include "AnimationTool.h"
 #include "DrawersUI\CollectionTool.h"
-#include "AnimationControlTool.h"
+//#include "AnimationControlTool.h"
 #include "AnimationTimeSelection.h"
 #include "ThreeDTool.h"
 #include "GridTool.h"
@@ -90,7 +90,7 @@ DrawerToolInfoVector *createDrawerTool() {
 	infos->push_back(new DrawerToolInfo("LineStyleTool",createLineStyleTool));
 	infos->push_back(new DrawerToolInfo("NonRepresentationTool",createNonRepresentationToolTool));
 	infos->push_back(new DrawerToolInfo("AnimationTool",createAnimationTool));
-	infos->push_back(new DrawerToolInfo("AnimationControlTool",createAnimationControlTool));
+	
 	infos->push_back(new DrawerToolInfo("AnimationTimeSelectionTool",createAnimationTimeSelectionTool));
 	infos->push_back(new DrawerToolInfo("3DTool",createThreeDTool));
 	infos->push_back(new DrawerToolInfo("GridTool",createGridTool));

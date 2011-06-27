@@ -27,6 +27,7 @@ DrawerTool *createAnnotationDrawerTool(ZoomableView* zv, LayerTreeView *view, Ne
 AnnotationDrawerTool::AnnotationDrawerTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
 	DrawerTool(TR("AnnotationDrawerTool"),zv, view, drw)
 {
+	active= false;
 }
 
 AnnotationDrawerTool::~AnnotationDrawerTool() {
@@ -59,6 +60,6 @@ HTREEITEM AnnotationDrawerTool::configure( HTREEITEM parentItem) {
 }
 
 String AnnotationDrawerTool::getMenuString() const {
-	return "";
+	return "Annotations";
 }
 

@@ -208,10 +208,6 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			>
 			<File
-				RelativePath="..\..\Sources\DrawersUI\AnimationControlTool.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\Sources\DrawersUI\AnimationManagement.cpp"
 				>
 			</File>
@@ -265,10 +261,6 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\DrawersUI\DrawersToolList.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\DrawersUI\ExtrusionTool.cpp"
 				>
 			</File>
 			<File
@@ -389,10 +381,6 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			>
 			<File
-				RelativePath="..\..\Sources\DrawersUI\AnimationControlTool.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\Sources\DrawersUI\AnimationManagement.h"
 				>
 			</File>
@@ -442,10 +430,6 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\DrawersUI\DistanceMeasurer.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\DrawersUI\ExtrusionTool.h"
 				>
 			</File>
 			<File

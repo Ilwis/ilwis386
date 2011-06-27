@@ -11,13 +11,14 @@ public:
 	HTREEITEM configure( HTREEITEM parentItem);
 	bool isToolUseableFor(ILWIS::DrawerTool *tool);
 	String getMenuString() const;
-private:	
+private:
+	RangeReal getBaseRange() const ;
 	void displayOptionStretch();
 };
 
 class SetStretchValueForm : public DisplayOptionsForm2 {
 	public:
-	SetStretchValueForm(CWnd *wPar, NewDrawer *dr, const RangeReal& _rr, double rStep);
+	SetStretchValueForm(CWnd *wPar, NewDrawer *dr, const RangeReal& _baserr, const RangeReal& _currentrr, double rStep);
 	void apply(); 
 private:
 	RangeReal rr;

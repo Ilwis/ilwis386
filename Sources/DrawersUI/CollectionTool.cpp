@@ -59,27 +59,21 @@ HTREEITEM CollectionTool::configure( HTREEITEM parentItem) {
 	type = IOTYPE((*oc)->fnObject(0));
 	if (!oc)
 		return parentItem;
-	HTREEITEM hti;
-	HTREEITEM htiNodeGroup = insertItem(htiNode, TR("Collective tools"), ".ioc");
 	if ( type == IlwisObject::iotPOINTMAP) {
-		hti = insertItem(htiNodeGroup,TR("Point layers"),".mpp");
-		createNode(hti,"PointSymbolizationTool");
+		createNode(htiNode,"PointSymbolizationTool");
 	}
 	if ( type == IlwisObject::iotSEGMENTMAP) {
-		hti = insertItem(htiNodeGroup,TR("Segment layers"),".mps");
-		createNode(hti,"LineSetTool");
+		createNode(htiNode,"LineSetTool");
 	}
 	if ( type == IlwisObject::iotPOLYGONMAP) {
-		hti = insertItem(htiNodeGroup,TR("Polygon layers"),".mpa");
-		createNode(hti,"PolygonSetTool");
+		createNode(htiNode,"PolygonSetTool");
 	}
 	if ( type == IlwisObject::iotRASMAP) {
-		hti = insertItem(htiNodeGroup,TR("Raster layers"), ".mpr");
-		createNode(hti, "StretchTool");
-		createNode(hti, "InteractiveRepresentationTool");
+		createNode(htiNode, "StretchTool");
+		createNode(htiNode, "InteractiveRepresentationTool");
 	}
-	createNode(hti, "ColorTool");
-	createNode(hti, "3DTool");
+	createNode(htiNode, "ColorTool");
+	createNode(htiNode, "3DTool");
 
 	return parentItem;
 }
@@ -105,6 +99,6 @@ void CollectionTool::setcheckLayer(void *w, HTREEITEM item) {
 }
 
 String CollectionTool::getMenuString() const {
-	return TR("Set");
+	return TR(".ioc");
 }
 

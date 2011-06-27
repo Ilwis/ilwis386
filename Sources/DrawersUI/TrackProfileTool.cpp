@@ -161,11 +161,11 @@ void TrackProfileTool::setcheckTool(void *w, HTREEITEM item) {
 		tree->GetDocument()->mpvGetView()->addTool(this, getId());
 		if (!graphForm) {
 			graphForm = new TrackProfileGraphFrom(tree, (LayerDrawer *)drawer, this);
+			for(int i = 0; i < sources.size(); ++i) {
+				graphForm->addSource(sources[i]->getSource());
+			}
 		} else {
 			graphForm->ShowWindow(SW_SHOW);
-		}
-		for(int i = 0; i < sources.size(); ++i) {
-			graphForm->addSource(sources[i]->getMap());
 		}
 	}
 	else {
@@ -296,6 +296,12 @@ void TrackProfileTool::timedEvent(UINT timerid) {
 			graphForm->update();
 	}
 }
+
+void TrackProfileTool::setActiveMode(bool yesno) {
+	DrawerTool::setActiveMode(yesno);
+	setcheckTool(&yesno, 0);
+
+}
 //-------------------------------------------------------------------
 TrackDataSource::TrackDataSource(const IlwisObject& obj) {
 	addSource(obj);
@@ -312,13 +318,19 @@ void TrackDataSource::addSource(const IlwisObject& obj) {
 	}
 }
 
-BaseMap TrackDataSource::getMap() const{
+BaseMap TrackDataSource::getMap(const Coord& crd) const{
 	if ( bmp.fValid())
 		return bmp;
 	if ( mpl.fValid())
 		return mpl[currentIndex];
-	if ( oc.fValid())
-		return BaseMap(oc->fnObject(currentIndex));
+	if ( oc.fValid()) {
+		set<String> maps;
+		oc->getBaseMaps(crd,maps);
+		if ( maps.size() > 0) {
+			BaseMap bmp((*maps.begin()));
+			return bmp;
+		}
+	}
 	return BaseMap();
 }
 
@@ -376,7 +388,7 @@ void TrackProfileGraphFrom::setTrack(const vector<Coord>& crds) {
 		graph->setTrack(crds);
 }
 
-void TrackProfileGraphFrom::addSource(const BaseMap& bmp) {
+void TrackProfileGraphFrom::addSource(const IlwisObject& bmp) {
 	if ( graph)
 		graph->addSource(bmp);
 }

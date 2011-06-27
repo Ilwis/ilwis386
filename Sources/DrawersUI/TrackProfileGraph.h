@@ -6,6 +6,7 @@ class TrackProfileGraphEntry;
 
 namespace ILWIS {
 class TrackProfileTool;
+const DrawingColor;
 }
 
 struct LocInfo {
@@ -42,6 +43,11 @@ private:
 	LRESULT tick(WPARAM wp, LPARAM lp);
 	void saveAsCsv();
 	void saveAsTbl();
+	RangeReal getRange(int i) const;
+	Domain getDomain(int i) const;
+	double getValue(int i, const BaseMap& bmp, const Coord& crd) const;
+	Color getColor(int i, const BaseMap&bmp, long iRaw) const;
+	ILWIS::LayerDrawer *getLayerDrawer(ILWIS::NewDrawer *cdr) const ;
 
 	TrackProfileGraphEntry *fldGraph;
 	vector<vector<GraphInfo> > values;
@@ -53,7 +59,7 @@ class _export TrackProfileGraphEntry : public FormEntry {
 	friend class TrackProfileGraph;
 public:
 	TrackProfileGraphEntry(FormEntry* par, ILWIS::TrackProfileTool *t);
-	void addSource(const BaseMap& obj);
+	void addSource(const IlwisObject& obj);
 	void setRecordRange(const RangeInt& rng);
 	void create();
 	void setTrack( const vector<Coord>& crds);
@@ -65,7 +71,6 @@ public:
 
 private:
 	FieldListView *listview;
-	vector<RangeReal> ranges;
 	int currentIndex;
 	TrackProfileGraph *graph;
 };

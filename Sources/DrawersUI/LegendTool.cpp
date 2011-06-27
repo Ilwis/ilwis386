@@ -56,12 +56,13 @@ void LegendTool::insertLegendItemsValue(const Representation& rpr, const DomainV
 	int iItems = 5;
 	double rStep = dvs.rStep();
 	RangeReal rr;
-	LayerDrawer *sdrw = dynamic_cast<LayerDrawer *>(drawer);
-	SetDrawer *adrw = dynamic_cast<SetDrawer *>(drawer);
-	if ( adrw) {
-		rr = adrw->getStretchRangeReal();
-	} else
+	LayerDrawer *ldrw = dynamic_cast<LayerDrawer *>(drawer);
+	SetDrawer *sdrw = dynamic_cast<SetDrawer *>(drawer);
+	if ( sdrw) {
 		rr = sdrw->getStretchRangeReal();
+	} else {
+		rr = ldrw->getStretchRangeReal(true);
+	}
 
 	if (rStep > 1e-6) {
 		int iSteps = 1 + round(rr.rWidth() / rStep);

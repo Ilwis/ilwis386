@@ -24,7 +24,7 @@ DrawerTool *createBackgroundTool(ZoomableView* zv, LayerTreeView *view, NewDrawe
 BackgroundTool::BackgroundTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
 	DrawerTool("BackgroundTool",zv, view, drw)
 {
-	drawer = ((RootDrawer *)drw)->getBackgroundDrawer();
+	//drawer = ((RootDrawer *)drw)->getBackgroundDrawer();
 }
 
 BackgroundTool::~BackgroundTool() {
@@ -38,7 +38,7 @@ bool BackgroundTool::isToolUseableFor(ILWIS::NewDrawer *drw) {
 HTREEITEM BackgroundTool::configure( HTREEITEM parentItem) {
 
 	//htiNode = insertItem(TVI_ROOT,"","MapPane");
-	DisplayOptionColorItem *item = new DisplayOptionColorItem("BackgroundDrawer", tree,TVI_ROOT,drawer);
+	DisplayOptionColorItem *item = new DisplayOptionColorItem(TR("Background"), tree,TVI_ROOT,drawer);
 	htiNode = insertItem(TR("Background Area"),"MaPane",item,1);
 	item->setCheckAction(this,0,(DTSetCheckFunc )&BackgroundTool::makeActive);
 	bool is3D = drawer->getRootDrawer()->is3D();

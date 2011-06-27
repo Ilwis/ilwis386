@@ -153,7 +153,7 @@ void DisplayZDataSourceForm::apply() {
 	ILWIS::LayerDrawer *layerDrawer = dynamic_cast<ILWIS::LayerDrawer *>(drw);
 	SetDrawer *setDrawer = dynamic_cast<SetDrawer *>(drw);
 	if ( setDrawer) {
-		setDrawer->getZMaker()->setRange(setDrawer->getRange());
+		setDrawer->getZMaker()->setRange(setDrawer->getStretchRangeReal());
 		for(int i = 0 ; i < setDrawer->getDrawerCount(); ++i) {
 			RasterLayerDrawer *layerDrawer = (RasterLayerDrawer *)setDrawer->getDrawer(i);
 			MapList mpl;

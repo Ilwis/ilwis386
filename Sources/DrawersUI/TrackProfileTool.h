@@ -13,7 +13,7 @@ class TrackDataSource {
 public:
 	TrackDataSource(const IlwisObject& obj);
 	void addSource(const IlwisObject& obj);
-	BaseMap getMap() const;
+	BaseMap getMap(const Coord& crd=Coord()) const;
 	IlwisObject getSource() const;
 	void updateIndex(long ind);
 private:
@@ -46,6 +46,7 @@ private:
 
 		void displayOptionAddList( );
 		bool isUnique(const FileName& fn);
+		void setActiveMode(bool yesno);
 		void setCoords();
 		vector<Coord> coords;
 		TrackLine *line;
@@ -89,7 +90,7 @@ private:
 		//void apply(); 
 		void setTrack(const vector<Coord>& crds);
 		void reset();
-		void addSource(const BaseMap& bmp) ;
+		void addSource(const IlwisObject& bmp) ;
 		void update();
 	private:
 		TrackProfileGraphEntry *graph;

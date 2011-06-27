@@ -19,6 +19,7 @@
 #include "Client\Mapwindow\LayerTreeItem.h" 
 #include "Engine\Drawers\DrawerContext.h"
 #include "drawers\linedrawer.h"
+#include "Drawers\LayerDrawer.h"
 #include "Drawers\AnnotationDrawers.h"
 #include "DrawersUI\AnnotationLegendDrawerTool.h"
 
@@ -54,7 +55,7 @@ HTREEITEM AnnotationLegendDrawerTool::configure( HTREEITEM parentItem) {
 
 	item = new DisplayOptionTreeItem(tree, htiNode, drawer);
 	item->setDoubleCickAction(this,(DTDoubleClickActionFunc)&AnnotationLegendDrawerTool::setAppearance);
-	insertItem(TR("Size & Position"),"Picture",item);
+	insertItem(TR("Appearance"),"Appearance",item);
 
 	DrawerTool::configure(htiNode);
 	return htiNode;
@@ -85,13 +86,16 @@ void AnnotationLegendDrawerTool::makeActive(void *v, HTREEITEM ) {
 	else {
 		if ( act) {
 			PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER);
-			SpatialDataDrawer *spdr = (SpatialDataDrawer *)(drawer->getParentDrawer());
-			BaseMapPtr *bmp = spdr->getBaseMap();
-			ILWIS::DrawerParameters dp(drawer->getRootDrawer(), drawer);
-			if (  bmp->dm()->pdv())
-				legend = (AnnotationLegendDrawer *)NewDrawer::getDrawer("AnnotationValueLegendDrawer","ilwis38",&dp);
-			else if (  bmp->dm()->pdc()) {
-				legend = (AnnotationLegendDrawer *)NewDrawer::getDrawer("AnnotationClassLegendDrawer","ilwis38",&dp);
+			LayerDrawer *ldr = dynamic_cast<LayerDrawer *>(drawer);
+			if ( ldr) {
+				SpatialDataDrawer *spdr = (SpatialDataDrawer *)(drawer->getParentDrawer());
+				Domain dm = ldr->useAttributeColumn() ? ldr->getAtttributeColumn()->dm() : spdr->getBaseMap()->dm();
+				ILWIS::DrawerParameters dp(drawer->getRootDrawer(), drawer);
+				if (  dm->pdv())
+					legend = (AnnotationLegendDrawer *)NewDrawer::getDrawer("AnnotationValueLegendDrawer","ilwis38",&dp);
+				else if (  dm->pdc()) {
+					legend = (AnnotationLegendDrawer *)NewDrawer::getDrawer("AnnotationClassLegendDrawer","ilwis38",&dp);
+				}
 			}
 			if ( legend) {
 				legend->prepare(&pp);
@@ -216,7 +220,8 @@ void LegendAppearance::apply() {
 	cbColor->StoreData();
 	fc->StoreData();
 	vector<int> rows;
-	fview->getSelectedRowNumbers(rows);
+	if ( fview)
+		fview->getSelectedRowNumbers(rows);
 	cbBoundary->StoreData();
 
 	AnnotationLegendDrawer *andrw = (AnnotationLegendDrawer *)drw;

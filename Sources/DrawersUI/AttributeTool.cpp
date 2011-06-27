@@ -41,6 +41,10 @@ bool AttributeTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	LayerDrawer *ldrw = dynamic_cast<LayerDrawer *>(layerDrawerTool->getDrawer());
 	if ( !ldrw)
 		return false;
+
+	DrawerTool *tl = tool->getTool("AttributeTool");
+	if (tl) // there is already such a tool
+		return false;
 	Table attTable = ((SpatialDataDrawer *)ldrw->getParentDrawer())->getAtttributeTable();
 	parentTool = tool;
 	return attTable.fValid();
@@ -77,24 +81,26 @@ void AttributeTool::setcheckAttributeTable(void *w, HTREEITEM ) {
 void AttributeTool::update() {
 	LayerDrawer *sdr = (LayerDrawer *)drawer;
 	Column attColumn = sdr->getAtttributeColumn();
-	SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)sdr->getParentDrawer();
-	Domain dm = attColumn.fValid() ? attColumn->dm() : mapDrawer->getBaseMap()->dm();
-	sdr->setRepresentation(dm->rpr());
-	DrawerTool *stretchTool = getParentTool()->getTool("StretchTool");
+	if ( attColumn.fValid()) {
+		DrawerTool *parentTool = getParentTool();
+		int n = 0;
+		DrawerTool *current = parentTool->getTool(n);
+		while( current) {
+			if ( current->getId() != getId())
+				parentTool->removeTool(current);
+			else
+				++n;
+			current = parentTool->getTool(n);
+		}
+		tree->DeleteAllItems(getParentTool()->getTreeItem(),true);
+		addChildTools(parentTool);
+		for(int i =0; i < parentTool->getToolCount(); ++i) {
+			DrawerTool *current = parentTool->getTool(i);
+			if ( current && current->isActive())
+				current->configure(getParentTool()->getTreeItem());
+		}
 
-	if ((dm->pdv() || dm->pdi()) && stretchTool == 0)  {
-		stretchTool = DrawerTool::createTool("StretchTool",
-			getDocument()->mpvGetView(),tree, drawer);
-		getParentTool()->addTool(stretchTool);
-		stretchTool->setParentTool(getParentTool());
 	}
-	bool makeActive = (dm->pdv() || dm->pdi()) && stretchTool;
-	if ( stretchTool)
-		stretchTool->setActiveMode(makeActive);
-
-	DrawerTool *legendTool = getTool("LegendTool");
-	if ( legendTool)
-		legendTool->update();
 }
 
 

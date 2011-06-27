@@ -74,13 +74,15 @@ bool RepresentationTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	if ( dynamic_cast<ColorTool *>(tool) == 0)
 		return false;
 
-	LayerDrawer *sdrw = dynamic_cast<LayerDrawer *>(tool->getDrawer());
+	LayerDrawer *ldrw = dynamic_cast<LayerDrawer *>(tool->getDrawer());
 	SetDrawer *adrw = dynamic_cast<SetDrawer *>(tool->getDrawer());
 	if ( adrw) {
-		sdrw = (LayerDrawer *)adrw->getDrawer(0);
+		ldrw = (LayerDrawer *)adrw->getDrawer(0);
 	}
+	if ( !ldrw)
+		return false;
 
-	Representation rpr = sdrw->getRepresentation();
+	Representation rpr = ldrw->getRepresentation();
 	bool isValid = rpr.fValid();
 	if (!isValid)
 		return false;
