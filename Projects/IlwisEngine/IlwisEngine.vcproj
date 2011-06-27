@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="IlwisEngine"
 	ProjectGUID="{903CDF6B-45ED-4C7D-83BF-9ECC12B051D3}"
 	RootNamespace="IlwisEngine"
@@ -174,7 +174,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="RpcRT4.Lib libcurl.lib xerces-c_3.lib ftgl.lib opengl32.lib geos.lib glu32.lib freetype.lib xqilla22.lib"
+				AdditionalDependencies="RpcRT4.Lib libcurl.lib xerces-c_3.lib ftgl.lib opengl32.lib zlib.lib geos.lib glu32.lib freetype.lib xqilla22.lib"
 				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\$(ProjectName).dll"
 				Version="3.8"
 				LinkIncremental="1"

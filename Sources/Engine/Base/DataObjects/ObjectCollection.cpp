@@ -361,6 +361,7 @@ void ObjectCollectionPtr::GetDataFiles(Array<FileName>& afnDat, Array<String>* a
 
 void ObjectCollectionPtr::Add(const IlwisObject& obj)
 {
+	objects[obj->fnObj.sFullPath()] = obj;
 	Add(obj->fnObj);
 }
 
@@ -397,6 +398,7 @@ void ObjectCollectionPtr::Remove(const FileName& fnObject)
 		arObjects.erase(cur);	
 
 	ObjectInfo::WriteRemovalOfFileFromCollection(fnObject, fnObj);
+	objects.erase(fnObject.sFullPath());
 	range = RangeReal();
 	Updated();
 }
@@ -409,6 +411,7 @@ void ObjectCollectionPtr::RemoveAllObjects()
 		ObjectInfo::WriteRemovalOfFileFromCollection(*cur, fnObj);
 
 	arObjects.clear();
+	objects.clear();
 	Updated();
 }
 
@@ -448,7 +451,10 @@ FileName ObjectCollectionPtr::fnObject(int i)
 
 IlwisObject ObjectCollectionPtr::ioObj(int i)
 {
-	return IlwisObject::obj(arObjects[i]);
+	IlwisObject obj = IlwisObject::obj(arObjects[i]);
+	if ( objects.find(obj->fnObj.sFullPath()) == objects.end())
+		objects[obj->fnObj.sFullPath()] = obj;
+	return obj;
 }
 
 int ObjectCollectionPtr::iNrObjects()
@@ -593,18 +599,42 @@ bool ObjectCollectionPtr::getStatusFor(int query) const {
 
 RangeReal ObjectCollectionPtr::getRange() {
 	if ( !range.fValid()) {
+		Tranquilizer trq;
+		trq.SetText(TR("Calculating value ranges"));
+		trq.Start();
 		for(int i=0; i < arObjects.size(); ++i) {
+			if ( trq.fUpdate(i, arObjects.size()))
+				return RangeReal();
 			const FileName& fnMap = arObjects.at(i);
 			if ( IOTYPEBASEMAP(fnMap)) {
 				BaseMap bmp(fnMap);
 				if ( bmp->dm()->pdv()) {
-					range += bmp->dvrs().rrMinMax();
+					range += bmp->rrMinMax();
 				}
 
 			} 
 		}
+		fChanged = true;
+		trq.Stop();
 	}
 	return range;
+}
+void ObjectCollectionPtr::getBaseMaps(const Coord& crd, set<String>& bmps) {	
+	for(vector<FileName>::const_iterator cur=arObjects.begin(); cur != arObjects.end(); ++cur)	 {
+		if ( IOTYPEBASEMAP(*cur) ) {
+			BaseMap bmp;
+			map<String, IlwisObject>::iterator iter;
+			if ( (iter = objects.find((*cur).sFullPath())) == objects.end()) {
+				bmp  = BaseMap(*cur);
+				objects[(*cur).sFullPath()] == bmp;
+			} else {
+				bmp = BaseMap((*iter).second->fnObj);
+			}
+			
+			if ( bmp->cb().fContains(crd))
+				bmps.insert(bmp->fnObj.sFullPath());
+		}
+	}
 }
 
 CoordBounds ObjectCollectionPtr::cb() const {

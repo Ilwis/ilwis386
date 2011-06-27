@@ -35,8 +35,12 @@ public:
 	TextDrawer(DrawerParameters *parms);
 	~TextDrawer();
 	virtual void prepare(PreparationParameters *pp);
-	void draw( const CoordBounds& cbArea=CoordBounds() );
+	bool draw( const CoordBounds& cbArea=CoordBounds() ) const;
 	void addDataSource(void *);
+	void setCoord(const Coord& crd);
+	void setText(const String& txt) { text = txt;}
+	double getHeight() const;
+	String getText() const { return text; }
 private:
 	String text;
 	Coordinate c;

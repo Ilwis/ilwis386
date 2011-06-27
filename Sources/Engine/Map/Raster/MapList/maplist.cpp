@@ -1282,11 +1282,18 @@ void MapListPtr::SetAttributeTable(const Table& tbl){
 
 RangeReal MapListPtr::getRange() {
 	if ( !range.fValid()) {
+		Tranquilizer trq;
+		trq.SetText(TR("Calculating histograms"));
+		trq.Start();
 		for(int i=0; i < ma.size(); ++i) {
+			if ( trq.fUpdate(i, ma.size()))
+				return RangeReal();
 			if ( ma[i]->dm()->pdv()) {
-				range += ma[i]->dvrs().rrMinMax();
+				RangeReal rr2 = ma[i]->rrMinMax();
+				range += rr2;
 			}
 		}
+		trq.Stop();
 	}
 	return range;
 }

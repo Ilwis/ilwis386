@@ -113,10 +113,12 @@ void RemoteXMLObject::getRequest(char *url) {
 }
 
 void RemoteXMLObject::parse() {
-	parser = new XERCES_CPP_NAMESPACE::SAXParser;
-	parser->setValidationScheme(XERCES_CPP_NAMESPACE::SAXParser::Val_Auto);
-	parser->setDoNamespaces(false);
-	parser->setValidationSchemaFullChecking(false);
+	if ( !parser) {
+		parser = new XERCES_CPP_NAMESPACE::SAXParser;
+		parser->setValidationScheme(XERCES_CPP_NAMESPACE::SAXParser::Val_Auto);
+		parser->setDoNamespaces(false);
+		parser->setValidationSchemaFullChecking(false);
+	}
 
 }
 

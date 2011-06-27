@@ -67,6 +67,7 @@ public:
 	IlwisObject  _export    ioObj(int i);
 	int _export             iNrObjects();
 	FileName _export        fnObject(int i);
+	void _export            getBaseMaps(const Coord& crd, set<String>& bmps);
 	void _export            DeleteEntireCollection();
 	void _export			GetObjectStructure(ObjectStructure& os);
 	bool _export			fUsesDependentObjects() const;
@@ -94,6 +95,7 @@ protected:
 	void OpenCollectionVirtual();
 
 	vector<FileName>		arObjects;
+	map<String, IlwisObject>	objects;
 	ObjectDependency        objdep;
 	ObjectCollectionVirtual *ocv;
 	Table   				attTable;

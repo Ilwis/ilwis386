@@ -117,15 +117,28 @@ void  TextDrawer::prepare(PreparationParameters *pp){
 	SimpleDrawer::prepare(pp);
 }
 
-void TextDrawer::draw( const CoordBounds& cbArea){
+bool TextDrawer::draw( const CoordBounds& cbArea) const{
 	TextLayerDrawer *set = (TextLayerDrawer *)parentDrawer;
 	if ( set->getFont()) {
-		set->getFont()->renderText(getRootDrawer(),c, text);
+		set->getFont()->renderText(c, text);
 	}
+	return true;
 }
 
 void TextDrawer::addDataSource(void *v) {
 	if ( v != 0) {
 		text = *((String *)v);
 	}
+}
+
+void TextDrawer::setCoord(const Coord& crd) {
+	c = crd;
+}
+
+double TextDrawer::getHeight() const {
+	TextLayerDrawer *set = (TextLayerDrawer *)parentDrawer;
+	if ( set->getFont()) {
+		return set->getFont()->getHeight();
+	}
+	return 0;
 }

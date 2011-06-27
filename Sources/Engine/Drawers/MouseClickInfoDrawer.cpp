@@ -21,7 +21,7 @@ MouseClickInfoDrawer::MouseClickInfoDrawer(DrawerParameters *parms) :
 	hasText(false)
 {
 	name = id = "MouseClickInfoDrawer";
-	setFont(new OpenGLText("arial.ttf",20));
+	setFont(new OpenGLText(getRootDrawer(), "arial.ttf",20));
 }
 
 MouseClickInfoDrawer::~MouseClickInfoDrawer() {
@@ -48,7 +48,7 @@ void  MouseClickInfoDrawer::prepare(PreparationParameters *pp){
 
 bool MouseClickInfoDrawer::draw( const CoordBounds& cbArea) const {
 	if (getFont() && !activePoint.fUndef())
-		getFont()->renderText(getRootDrawer(),activePoint, sInfo);
+		getFont()->renderText(activePoint, sInfo);
 	return true;
 }
 
