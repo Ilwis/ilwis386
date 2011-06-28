@@ -85,7 +85,11 @@ ILWIS::LayerDrawer *TrackProfileGraph::getLayerDrawer(ILWIS::NewDrawer *ndr) con
 	return ldr;
 }
 
-double TrackProfileGraph::getValue(int i, const BaseMap& bmp, const Coord& crd) const{
+double TrackProfileGraph::getValue(int i, const BaseMap& bmp, const Coord& c1) const{
+	CoordSystem csRoot = fldGraph->tool->getDrawer()->getRootDrawer()->getCoordinateSystem();
+	Coord crd = c1;
+	if ( bmp->cs() != csRoot)
+		crd = bmp->cs()->cConv(csRoot, c1);
 	if ( i == 0) {
 		ILWIS::LayerDrawer *ldr = getLayerDrawer(fldGraph->tool->getDrawer());
 		if ( ldr && ldr->useAttributeColumn()) {

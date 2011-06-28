@@ -110,7 +110,10 @@ void CrossSectionGraph::saveAsTbl() {
 							bmp = BaseMap(objc->fnObj);
 					}
 					if ( bmp.fValid()) {
-						String v = bmp->sValue(fldGraph->crdSelect[i]);
+						Coord crd = fldGraph->crdSelect[i];
+						if ( bmp->cs() != fldGraph->csy)
+							crd = bmp->cs()->cConv(fldGraph->csy, crd);
+						String v = bmp->sValue(crd);
 						colIndex->PutVal(count,j);
 						colMap->PutVal(count,bmp->fnObj.sFile );
 						colValue->PutVal(count, v);
@@ -208,7 +211,10 @@ void CrossSectionGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 			rx = 0;
 			for(int i = 0; i < numberOfMaps; ++i) {
 				BaseMap bmp = getBaseMap(i, m);
-				double v = bmp->rValue(fldGraph->crdSelect[p]);
+				Coord crd = fldGraph->crdSelect[p];
+				if ( bmp->cs() != fldGraph->csy)
+					crd = bmp->cs()->cConv(fldGraph->csy, crd);
+				double v = bmp->rValue(crd);
 				values[m][p].push_back(v);
 				int y = y0 - ( v - rr.rLo()) * yscale;
 				if ( i == 0)

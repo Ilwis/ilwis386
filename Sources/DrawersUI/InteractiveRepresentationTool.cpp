@@ -52,7 +52,7 @@ HTREEITEM InteractiveRepresentationTool::configure( HTREEITEM parentItem) {
 
 	DisplayOptionTreeItem * itemSlicing = new DisplayOptionTreeItem(tree, parentItem,drawer);
 	itemSlicing->setDoubleCickAction(this, (DTDoubleClickActionFunc )&InteractiveRepresentationTool::rasterSlicing);
-	htiNode = insertItem(TR("Interactive Slicing"),"Slicing",itemSlicing);
+	htiNode = insertItem(TR("Interactive Representation"),"Slicing",itemSlicing);
 	DrawerTool::configure(htiNode);
 
 	return htiNode;

@@ -172,10 +172,12 @@ void TrackProfileTool::setcheckTool(void *w, HTREEITEM item) {
 		tree->GetDocument()->mpvGetView()->noTool(getId());
 		if ( graphForm) {
 			graphForm->ShowWindow(SW_HIDE);
-			line->setActive(false);
-			point->setActive(false);
-			coords.clear();
-			setCoords();
+			if (line && point) {
+				line->setActive(false);
+				point->setActive(false);
+				coords.clear();
+				setCoords();
+			}
 			mpvGetView()->Invalidate();
 		}
 	}

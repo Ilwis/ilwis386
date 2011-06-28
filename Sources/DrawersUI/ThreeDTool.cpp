@@ -58,11 +58,12 @@ HTREEITEM ThreeDTool::configure( HTREEITEM parentItem) {
 	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&ThreeDTool::displayZScaling);
 	insertItem("Scaling", "ScaleBar",item);
-	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
-	item->setCheckAction(this, 0, (DTSetCheckFunc)&ThreeDTool::setExtrusion);
-	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&ThreeDTool::extrusionOptions);
-	insertItem("Extrusion","Extrusion",item, drawer->getSpecialDrawingOption(NewDrawer::sdoExtrusion));
-	//insertItem("Axis", "Axis");
+	if ( drawer->getType() != "RasterLayerDrawer") {
+		item = new DisplayOptionTreeItem(tree,htiNode,drawer);
+		item->setCheckAction(this, 0, (DTSetCheckFunc)&ThreeDTool::setExtrusion);
+		item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&ThreeDTool::extrusionOptions);
+		insertItem("Extrusion","Extrusion",item, drawer->getSpecialDrawingOption(NewDrawer::sdoExtrusion));
+	}
 	DrawerTool::configure(htiNode);
 
 	return htiNode;
