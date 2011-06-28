@@ -81,6 +81,7 @@ bool DEMTriangulator::fDoTriangulate()
 	// Non-recursive Quad-Tree triangulation
 	bool fSuccess = false;
 	Tranquilizer trq(TR("Triangulating DEM"));
+	trq.SetText(mp->fnObj.sFile);
 	trq.fUpdate(0, iTrqMax);
 	iTrqVal = 0;
 	//clock_t start = clock();
