@@ -357,9 +357,10 @@ bool DEMTriangulator::fTriangulateMesh(Tranquilizer & trq)
 			int y = s2;
 			for (; y < iSizeY - s2; y += iSize) { // start up (north) and move down (south)
 				double rError = iSize * rFactors[x + iSize2u * y];
-				if ((rError <= rHeightAccuracy)) {
+				if (rError <= rHeightAccuracy && iSize < iSize2l) {
 					// the error of replacing this quad by a higher level quad is small
 					// however, don't skip this quad if the higher level quad is at the edge of the image and would not fit to be displayed in its entirety.
+					// also don't skip this quad if the current loop is already on the highest level.
 					//deleteNode(x, y, iSize);
 					rFactors[x + iSize2u * y] = rUNDEF;
 				} else {			
