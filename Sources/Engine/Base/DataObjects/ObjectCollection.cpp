@@ -452,8 +452,10 @@ FileName ObjectCollectionPtr::fnObject(int i)
 IlwisObject ObjectCollectionPtr::ioObj(int i)
 {
 	IlwisObject obj = IlwisObject::obj(arObjects[i]);
-	if ( objects.find(obj->fnObj.sFullPath()) == objects.end())
-		objects[obj->fnObj.sFullPath()] = obj;
+	//for the moment postponed; causes a crash in the drawers as apparently one references isnt deleted and so all object remain with invalid entries in the object list.
+	//unknwo cause at the moment.
+	//if ( objects.find(obj->fnObj.sFullPath()) == objects.end())
+	//	objects[obj->fnObj.sFullPath()] = obj;
 	return obj;
 }
 
@@ -622,14 +624,14 @@ RangeReal ObjectCollectionPtr::getRange() {
 void ObjectCollectionPtr::getBaseMaps(const Coord& crd, set<String>& bmps) {	
 	for(vector<FileName>::const_iterator cur=arObjects.begin(); cur != arObjects.end(); ++cur)	 {
 		if ( IOTYPEBASEMAP(*cur) ) {
-			BaseMap bmp;
-			map<String, IlwisObject>::iterator iter;
-			if ( (iter = objects.find((*cur).sFullPath())) == objects.end()) {
-				bmp  = BaseMap(*cur);
-				objects[(*cur).sFullPath()] == bmp;
-			} else {
-				bmp = BaseMap((*iter).second->fnObj);
-			}
+			BaseMap bmp(*cur);
+			//map<String, IlwisObject>::iterator iter;
+			//if ( (iter = objects.find((*cur).sFullPath())) == objects.end()) {
+			//	bmp  = BaseMap(*cur);
+			//	objects[(*cur).sFullPath()] == bmp;
+			//} else {
+			//	bmp = BaseMap((*iter).second->fnObj);
+			//}
 			
 			if ( bmp->cb().fContains(crd))
 				bmps.insert(bmp->fnObj.sFullPath());

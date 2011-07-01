@@ -626,6 +626,8 @@ RangeReal BaseMapPtr::rrMinMax(MinMaxMethod m)
 		if (  m == mmmSAMPLED)
 		  return rrMinMaxSampled();
   }
+  if ( !_rrMinMax.fValid() || _rrMinMax.rWidth() == 0)
+	  _rrMinMax = dvrs().rrMinMax();
   return _rrMinMax;
 }
 
