@@ -25,7 +25,7 @@ ComplexDrawer(parms,"GridDrawer")
 	id = name = "GridDrawer";
 	rDist = rUNDEF;
 	setActive(false);
-	setTransparency(0.2);
+	setTransparency(0.4);
 	threeDGrid = false;
 	lproperties.thickness = 1;
 	lproperties.drawColor = Color(0,0,0);

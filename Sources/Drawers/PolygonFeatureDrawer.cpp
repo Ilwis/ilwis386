@@ -67,9 +67,9 @@ void* PolygonFeatureDrawer::getDataSource() const{
 
 void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 	PolygonDrawer::prepare(p);
-	PolygonLayerDrawer *fdr = dynamic_cast<PolygonLayerDrawer *>(parentDrawer);
+	PolygonLayerDrawer *polygonLayer = dynamic_cast<PolygonLayerDrawer *>(parentDrawer);
 	if (  p->type & ptGEOMETRY || p->type & ptRESTORE) {
-		CoordSystem csy = fdr->getCoordSystem();
+		CoordSystem csy = polygonLayer->getCoordSystem();
 		if ( boundary) {
 			boundary->prepare(p);
 		}
@@ -86,30 +86,12 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 		cb.getArea(); // initializes the area
 		long *data;
 		long *count;
-		bool firstTime = fdr->getTriangleData(&data, &count);
+		bool firstTime = polygonLayer->getTriangleData(&data, &count);
 		if ( data) {
 			if ( firstTime)
 				tri->getTriangulation(data, count, csy, getRootDrawer()->getCoordinateSystem(),triangleStrips);
-			//readTriangleData(data, count, coordNeedsConversion, csy);
 		} else {
 			tri->getTriangulation(polygon,triangleStrips);
-	/*		gpc_vertex_list exteriorBoundary;
-			vector<gpc_vertex_list> holes;
-
-			const LineString *ring = polygon->getExteriorRing();
-			exteriorBoundary.num_vertices = ring->getNumPoints() - 1;
-			exteriorBoundary.vertex = makeVertexList(ring);
-			holes.resize(polygon->getNumInteriorRing());
-			for(int i = 0; i < polygon->getNumInteriorRing(); ++i) {
-				const LineString * ring = polygon->getInteriorRingN(i);
-				holes[i].num_vertices = ring->getNumPoints() - 1;
-				holes[i].vertex = makeVertexList(ring);
-			}
-			prepareList(exteriorBoundary, holes);
-			for(int i = 0; i < holes.size(); ++i) {
-				delete [] holes[i].vertex	;
-			}
-			delete [] exteriorBoundary.vertex;*/
 		}
 
 	}
@@ -129,18 +111,21 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 		}
 	}
 	if (  p->type & ptRESTORE || p->type & RootDrawer::ptRENDER) {
-		extrTransparency = fdr->getExtrusionTransparency();
-		drawColor = fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod());
+		extrTransparency = polygonLayer->getExtrusionTransparency();
+		drawColor = polygonLayer->getDrawingColor()->clrRaw(feature->iValue(), polygonLayer->getDrawMethod());
 		if ( boundary) {
-			LineProperties *lp = (LineProperties *)fdr->getProperties();
-			boundariesActive(fdr->getShowBoundaries());
-			areasActive(fdr->getShowAreas());
-			setTransparencyArea(fdr->getTransparencyArea());
+			LineProperties *lp = (LineProperties *)polygonLayer->getProperties();
+			boundariesActive(polygonLayer->getShowBoundaries());
+			areasActive(polygonLayer->getShowAreas());
+			setTransparencyArea(polygonLayer->getTransparencyArea());
 			((LineProperties *)boundary->getProperties())->linestyle = lp->linestyle;
 			((LineProperties *)boundary->getProperties())->thickness = lp->thickness;
+			double fvalue =  getFeature()->rValue();
+		/*	if ( polygonLayer->useAttributeColumn() && polygonLayer->getAtttributeColumn().fValid())
+				fvalue = polygonLayer->getAtttributeColumn()->iRe*/
 			for(int j =0 ; j < p->filteredRaws.size(); ++j) {
 				int raw = p->filteredRaws[j];
-				if ( getFeature()->rValue() == abs(raw)) {
+				if ( fvalue == abs(raw)) {
 					setActive(raw > 0);
 				}
 			}

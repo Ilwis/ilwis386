@@ -8,7 +8,7 @@ namespace ILWIS{
 
 class SVGElement;
 
-struct PointProperties : public GeneralDrawerProperties {
+struct _export PointProperties : public GeneralDrawerProperties {
 public:
 	enum Scaling{sNONE, sLOGARITHMIC, sLINEAR};
 	static String defaultSymbol;

@@ -41,8 +41,19 @@ Domain IlwisData::dm() const{
 
 double IlwisData::rValByRaw(int raw) const{
 	if ( col.fValid()) {
-		return col->rValue(raw);
+		if ( col->dm()->pdv())
+			return col->rValue(raw);
+		else if ( col->dm()->pdsrt()) {
+		/*	String vv = bmap->dm()->pdsrt()->sValueByRaw(raw);
+			long iRec = bmap->dm()->pdsrt()->iOrd(raw); */
+			String sV = col->sValue(raw);
+			long r = col->dm()->pdsrt()->iRaw(sV);
+			return r;
+		}
 	}
+	if ( dm()->pdsrt())
+		return raw;
+
 	return bmap->dvrs().rValue(raw);
 }
 
@@ -108,14 +119,16 @@ Color DrawingColor::clrRaw(long iRaw, NewDrawer::DrawMethod drm) const
 		return Color(0,0,0,255);
 	Color cRet;
 	switch (drm) {
-	case NewDrawer::drmRPR:
-		if (dataValues.dm()->pdv()) {
+	case NewDrawer::drmRPR: 
+		{
 			double rVal = dataValues.rValByRaw(iRaw);
-			return clrVal(rVal);
-		}
-		else {
-			Representation rpr = drw->getRepresentation();
-			cRet = Color(rpr->clrRaw(iRaw));
+			if (dataValues.dm()->pdv()) {
+				return clrVal(rVal);
+			}
+			else {
+				Representation rpr = drw->getRepresentation();
+				cRet = Color(rpr->clrRaw(rVal));
+			}
 		}
 		break;
 	case NewDrawer::drmSINGLE:

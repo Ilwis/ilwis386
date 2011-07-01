@@ -6,7 +6,7 @@ ILWIS::NewDrawer *createLineDrawer(ILWIS::DrawerParameters *parms);
 
 namespace ILWIS{
 
-	struct LineProperties : public GeneralDrawerProperties {
+	struct _export LineProperties : public GeneralDrawerProperties {
 		LineProperties(double t=1.0, int st=0xFFFF, Color clr=Color(0,0,0)) : thickness(t),linestyle(st),drawColor(clr), ignoreColor(false) {}
 		LineProperties(LineProperties *lp) { thickness=lp->thickness; linestyle=lp->linestyle;drawColor=lp->drawColor;ignoreColor=lp->ignoreColor;}
 
