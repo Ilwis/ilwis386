@@ -126,12 +126,12 @@ int MapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
     addSub(ID_CREATESMS);
     addSub(ID_CREATEGRF);
     addSub(ID_CREATECSY);
-    addSub(ID_CREATEANNTEXT);
+   // addSub(ID_CREATEANNTEXT);
 		addSub(ID_CREATESUBMAP)
   addSubMenu(ID_FILE_CREATE);
   add(ID_SAVEVIEW);
   add(ID_SAVEVIEWAS);
-	add(ID_CREATE_LAYOUT);
+	//add(ID_CREATE_LAYOUT);
   addBreak;
 	menPropLayer.CreateMenu();
   menPopup.AppendMenu(MF_POPUP, (UINT)menPropLayer.GetSafeHmenu(), sMen(ID_PROPLAYER)); 	

@@ -34,61 +34,11 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/*
-// $Log: /ILWIS 3.0/FormElements/frmgenap.cpp $
- * 
- * 12    5-07-00 9:36 Koolhoven
- * Application Forms now use Show and Define buttons instead of OK
- * 
- * 11    10-05-00 18:06 Koolhoven
- * in OnHelp() do no longer enlarge dialog box for help text but call base
- * function
- * 
- * 10    28-01-00 13:12 Koolhoven
- * New class HelpCtrl derived from CHHCtrl.
- * Clicking in this Ctrl does not open the html page inside the ctrl but
- * opens a HtmlHelp window
- * 
- * 9     12-01-00 12:35 Koolhoven
- * Replaced ilwismen.chm and ilwisapp.chm by ilwis.chm
- * 
- * 8     9-12-99 16:48 Koolhoven
- * Handle F1 (ID_HELP) in frame windows to call HtmlHelp()
- * 
- * 7     30-11-99 10:29a Martin
- * added function for setting commandline string
- * 
- * 6     21-10-99 11:22 Koolhoven
- * Now uses topic numbers to show the hep text in the ilwisapp.chm file
- * 
- * 5     5-10-99 12:55 Koolhoven
- * In application forms show the help in the dialog box itself.
- * Temporary fixed on SegmentTunneling,
- * as soon as the .chm file has a [MAP] section the htp number can be used
- * 
- * 4     10/01/99 1:11p Wind
- * comments
- * 
- * 3     30-09-99 15:22 Koolhoven
- * Application Forms now use the correct icon
 
- */
-// Revision 1.3  1998/09/16 17:37:53  Wim
-// 22beta2
-//
-// Revision 1.2  1997/08/11 16:02:56  Wim
-// HideOnOk true.
-//
-/* FormGeneralApplication
-   by Wim Koolhoven, november 1995
-   Copyright Ilwis System Development ITC
-	Last change:  WK   11 Aug 97    6:01 pm
-*/
 #include "Client\Headers\formelementspch.h"
 #include "Client\FormElements\frmgenap.h"
 #include "Client\ilwis.h"
 #include <afxdisp.h>        // MFC Automation classes
-#include "Client\Help\helpctrl.h"
 
 BEGIN_MESSAGE_MAP(FormGeneralApplication, FormBaseDialog)
   ON_COMMAND(IDHELP, OnHelp)
@@ -101,7 +51,6 @@ END_MESSAGE_MAP()
 
 FormGeneralApplication::FormGeneralApplication(CWnd* parent, const String& sTitle)
 : FormBaseDialog(parent, sTitle, true, false, true)
-, hhc(0)
 {
 	int iImg = IlwWinApp()->iImage("Exe16Ico");
 	HICON hIco = IlwWinApp()->ilSmall.ExtractIcon(iImg);
@@ -112,7 +61,6 @@ FormGeneralApplication::FormGeneralApplication(CWnd* parent, const String& sTitl
 
 FormGeneralApplication::~FormGeneralApplication()
 {
-	delete hhc;
 }
 
 int FormGeneralApplication::exec()

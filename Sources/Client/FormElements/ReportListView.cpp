@@ -109,11 +109,11 @@ void ReportListCtrlItem::SetDrawStaticColumns(bool fSet)
 
 void ReportListCtrlItem::ShowHelp()
 {
-	String sHelpFile (ChmFinder::sFindChmFile("ilwis.chm"));
+	//String sHelpFile (ChmFinder::sFindChmFile("ilwis.chm"));
 
-	int iHtp = trq->htp.iTopic;
-	HtmlHelp(::GetDesktopWindow(), sHelpFile.sVal(), HH_HELP_CONTEXT, iHtp);
-	HtmlHelp(0, sHelpFile.sVal(), HH_DISPLAY_TOC, 0);
+	//int iHtp = trq->htp.iTopic;
+	//HtmlHelp(::GetDesktopWindow(), sHelpFile.sVal(), HH_HELP_CONTEXT, iHtp);
+	//HtmlHelp(0, sHelpFile.sVal(), HH_DISPLAY_TOC, 0);
 }
 
 void ReportListCtrlItem::DrawProgressBar()

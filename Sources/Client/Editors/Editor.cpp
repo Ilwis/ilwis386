@@ -314,18 +314,18 @@ void Editor::OnHelp()
 
 void Editor::OnRelatedTopics()
 {
-	HH_AKLINK link;
-	link.cbStruct =     sizeof(HH_AKLINK);
-	link.fReserved =    FALSE;
-	link.pszKeywords =  sHelpKeywords.scVal(); 
-	link.pszUrl =       NULL; 
-	link.pszMsgText =   NULL; 
-	link.pszMsgTitle =  NULL; 
-	link.pszWindow =    NULL;
-	link.fIndexOnFail = TRUE;
-
-	String sHelpFile (ChmFinder::sFindChmFile("ilwis.chm"));
-	HtmlHelp(GetDesktopWindow(), sHelpFile.sVal(), HH_KEYWORD_LOOKUP, (DWORD)&link);
+//	HH_AKLINK link;
+//	link.cbStruct =     sizeof(HH_AKLINK);
+//	link.fReserved =    FALSE;
+//	link.pszKeywords =  sHelpKeywords.scVal(); 
+//	link.pszUrl =       NULL; 
+//	link.pszMsgText =   NULL; 
+//	link.pszMsgTitle =  NULL; 
+//	link.pszWindow =    NULL;
+//	link.fIndexOnFail = TRUE;
+//
+//	String sHelpFile (ChmFinder::sFindChmFile("ilwis.chm"));
+//	HtmlHelp(GetDesktopWindow(), sHelpFile.sVal(), HH_KEYWORD_LOOKUP, (DWORD)&link);
 }
 
 void Editor::PreSaveState()

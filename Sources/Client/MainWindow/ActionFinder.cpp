@@ -370,12 +370,12 @@ void ActionFinderList::OnContextMenu(CWnd* pWnd, CPoint point)
 			iwa->GetMainWnd()->SendMessage(ILWM_EXECUTE, 0, (LPARAM)str);	
 		} break;
 	case ID_ACT_HELP:
-		String 	sHelpFile (ChmFinder::sFindChmFile("ilwis.chm"));
+	/*	String 	sHelpFile (ChmFinder::sFindChmFile("ilwis.chm"));
 		String sHelpString ("%S>sec", sHelpFile);
 		::HtmlHelp(m_hWnd,
 			sHelpString.sVal(),
 			HH_HELP_CONTEXT,
-			act->iHelp());
+			act->iHelp());*/
 		break;
 	}
 }

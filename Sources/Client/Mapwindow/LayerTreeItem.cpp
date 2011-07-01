@@ -54,6 +54,7 @@ Created on: 2007-02-8
 #include "Client\FormElements\fldrpr.h"
 #include "Client\FormElements\fldcolor.h"
 #include "Engine\Drawers\drawer_n.h"
+#include "Engine\Domain\DmSort.h"
 #include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\Mapwindow\Drawers\DrawerTool.h"
@@ -415,8 +416,8 @@ void ColumnLayerTreeItem::FinishColumnField()
 // LegendClassLayerTreeItem
 //////////////////////////////////////////////////////////////////////
 
-LegendClassLayerTreeItem::LegendClassLayerTreeItem(LayerTreeView* ltv, NewDrawer* _dr, Domain _dm, int iR)
-: LayerTreeItem(ltv), dr(_dr), iRaw(iR), dm(_dm)
+LegendClassLayerTreeItem::LegendClassLayerTreeItem(LayerTreeView* ltv, NewDrawer* _dr, Domain _dm, int iR, const Column& col)
+: LayerTreeItem(ltv), dr(_dr), iRaw(iR), dm(_dm), attCol(col)
 {
 }
 
@@ -442,7 +443,17 @@ void LegendClassLayerTreeItem::OnLButtonDblClk(UINT nFlags, CPoint point)
 void LegendClassLayerTreeItem::SwitchCheckBox(bool fOn)
 {
 	PreparationParameters pp(NewDrawer::ptRENDER);
-	pp.filteredRaws.push_back(fOn ? iRaw : -iRaw);
+	if ( attCol.fValid()) {
+		for(int i = 1; i <= attCol->iRecs(); ++i) {
+			long iRawRec = attCol->iRaw(i);
+			if ( iRawRec == iRaw) {
+				long r = i;
+				pp.filteredRaws.push_back(fOn ? r : -r);
+			}
+		}
+	}
+	else
+		pp.filteredRaws.push_back(fOn ? iRaw : -iRaw);
 	dr->prepare(&pp);
 	MapCompositionDoc* doc = ltv->GetDocument();
 	doc->mpvGetView()->Invalidate();

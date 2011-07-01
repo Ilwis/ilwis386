@@ -134,7 +134,7 @@ private:
 class _export LegendClassLayerTreeItem: public LayerTreeItem
 {
 public:
-	LegendClassLayerTreeItem(LayerTreeView*, ILWIS::NewDrawer*, Domain _dm, int iRaw);
+	LegendClassLayerTreeItem(LayerTreeView*, ILWIS::NewDrawer*, Domain _dm, int iRaw, const Column& col);
 	virtual ~LegendClassLayerTreeItem();
 	virtual void OnLButtonDblClk(UINT nFlags, CPoint point);
 	virtual void OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult); 
@@ -142,6 +142,7 @@ public:
 private:
 	Domain dm;
 	int iRaw;
+	Column attCol;
 
 	ILWIS::NewDrawer *dr;
 

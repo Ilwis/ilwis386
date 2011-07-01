@@ -65,7 +65,6 @@ protected:
 	bool fShow;
   int exec();
   void OnHelp();                             
-	CHHCtrl* hhc;
   DECLARE_MESSAGE_MAP();
 };
 

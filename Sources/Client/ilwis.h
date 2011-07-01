@@ -91,6 +91,7 @@ namespace ILWIS {
 	class BaseMapEditor;
 	class BaseMapEditor;
 	class ComplexDrawer;
+	class HelpFinder;
 }
 
 typedef ILWIS::BaseMapEditor* (*BaseMapEditorCreate)(MapCompositionDoc *, const BaseMap& );
@@ -230,6 +231,7 @@ private:
 	bool m_fHideLogo;
 	IlwisAppContext    *ilwapp;
 	CommandHandlerUI *commandUI;
+	ILWIS::HelpFinder *helpFinder;
 	
 	CSemaphore smILWIS;
 	CSemaphore smMainWindow;

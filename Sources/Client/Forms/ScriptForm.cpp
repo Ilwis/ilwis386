@@ -44,7 +44,6 @@
 #include "Client\Forms\ScriptForm.h"
 #include "Client\FormElements\fldval.h"
 #include "Client\FormElements\fldtbl.h"
-#include "Client\Help\helpwindow.h"
 #include "Headers\Hs\Script.hs"
 
 #ifdef _DEBUG
@@ -274,7 +273,6 @@ void ScriptForm::OnHelp()
 			<< "</html>";
 	}
 	String sFile = fn.sFullPath();
-	new HelpWindow(this, fn.sFile.scVal(), sFile.scVal());
 }
 
 

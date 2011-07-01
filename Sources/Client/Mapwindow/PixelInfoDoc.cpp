@@ -81,7 +81,7 @@ END_MESSAGE_MAP()
 PixelInfoDoc::PixelInfoDoc()
 : riCoord(NULL,crdUNDEF)
 , fMouse(true)
-, fMouseCont(false)
+, fMouseCont(true)
 , fDigitizer(true)
 , fDigitizerCont(false),
 editFeature(0)

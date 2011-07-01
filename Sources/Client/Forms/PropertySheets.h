@@ -431,7 +431,6 @@ public:
 private:
 	String      help;
 	String   m_sExt;
-	CHHCtrl* m_hhc;
 };
 
 class StereoPairPropPage: public BasicPropertyFormPage

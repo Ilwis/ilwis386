@@ -208,7 +208,7 @@ int MainWindow::OnCreate(LPCREATESTRUCT lpc)
 	men.Add(sCreate, 0, MF_SEPARATOR);
 	men.Add(sCreate, ID_CREATEMPL);
 	men.Add(sCreate, ID_CREATEIOC);
-	men.Add(sCreate, ID_CREATEILO); 
+	//men.Add(sCreate, ID_CREATEILO); 
 	men.Add(sCreate, 0, MF_SEPARATOR);
 	men.Add(sCreate, ID_GRAPH); 
 	men.Add(sCreate, ID_ROSE); 

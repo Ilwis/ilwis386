@@ -55,6 +55,7 @@ $Header: /ILWIS 3.0/Main/ilwis.CPP 329   10-06-05 15:09 Retsios $
 #include "Client\MainWindow\CommandCombo.h"
 #include "Client\FormElements\fldcs.h"
 #include "Headers\constant.h"
+#include "Client\Help\HelpFinder.h"
 #include "Client\FormElements\FldOneSelectTextOnly.h"
 #include "Client\Editors\Digitizer\DIGITIZR.H"
 #include "Client\MainWindow\mainwind.h"
@@ -294,7 +295,8 @@ IlwisWinApp::IlwisWinApp()
 , actPairList(0)
 , thrDdeServer(0)
 , fRemoveUserRegistry(false)
-,fOldTranquilizers(false)
+,fOldTranquilizers(false),
+helpFinder(0)
 {
 	if (GetPrivateProfileInt("statusline", "numbers", 0, "ilwis.ini"))
 		fShowHelpNumbers = true;
@@ -308,6 +310,7 @@ IlwisWinApp::~IlwisWinApp()
 	delete actList;
 	delete actPairList;
 	delete commandUI;
+	delete helpFinder;
 	WEP_Color(); // clean some static allocations
 	if ( fRemoveUserRegistry )
 	{
@@ -510,6 +513,8 @@ BOOL IlwisWinApp::InitInstance()
 				return FALSE;
 			}
 		}
+		helpFinder = new ILWIS::HelpFinder();
+		helpFinder->indexHTMLFiles();
 
 		return TRUE;
 	}
@@ -2007,10 +2012,10 @@ void IlwisWinApp::OnHelpContents()
 
 void IlwisWinApp::OnHelpOperations()
 {
-	String sHelpFile (ChmFinder::sFindChmFile("ilwis.chm"));
+	//String sHelpFile (ChmFinder::sFindChmFile("ilwis.chm"));
 
-	::HtmlHelp(GetDesktopWindow(), sHelpFile.sVal(), HH_HELP_CONTEXT, htpAppOperationsExpanded);
-	::HtmlHelp(0, sHelpFile.sVal(), HH_DISPLAY_TOC, 0);
+	//::HtmlHelp(GetDesktopWindow(), sHelpFile.sVal(), HH_HELP_CONTEXT, htpAppOperationsExpanded);
+	//::HtmlHelp(0, sHelpFile.sVal(), HH_DISPLAY_TOC, 0);
 }
 
 void IlwisWinApp::OnHelpMenuCmds()
@@ -2020,18 +2025,18 @@ void IlwisWinApp::OnHelpMenuCmds()
 
 void IlwisWinApp::OnHelpSearch()
 {
-	HH_FTS_QUERY q;
-	q.cbStruct         = sizeof(HH_FTS_QUERY);
-	q.fUniCodeStrings  = FALSE;
-	q.pszSearchQuery   = "";
-	q.iProximity       = HH_FTS_DEFAULT_PROXIMITY;
-	q.fStemmedSearch   = FALSE;
-	q.fTitleOnly       = FALSE;
-	q.fExecute         = FALSE;
-	q.pszWindow        = NULL; 
+	//HH_FTS_QUERY q;
+	//q.cbStruct         = sizeof(HH_FTS_QUERY);
+	//q.fUniCodeStrings  = FALSE;
+	//q.pszSearchQuery   = "";
+	//q.iProximity       = HH_FTS_DEFAULT_PROXIMITY;
+	//q.fStemmedSearch   = FALSE;
+	//q.fTitleOnly       = FALSE;
+	//q.fExecute         = FALSE;
+	//q.pszWindow        = NULL; 
 
-	String sHelpFile (ChmFinder::sFindChmFile("ilwis.chm"));
-	::HtmlHelp(GetDesktopWindow(), sHelpFile.sVal(), HH_DISPLAY_SEARCH, (LPARAM)&q);
+	//String sHelpFile (ChmFinder::sFindChmFile("ilwis.chm"));
+	//::HtmlHelp(GetDesktopWindow(), sHelpFile.sVal(), HH_DISPLAY_SEARCH, (LPARAM)&q);
 }
 
 void IlwisWinApp::OnHelpIndex()
@@ -2063,16 +2068,16 @@ void IlwisWinApp::OnHelpIlwExpressions()
 void IlwisWinApp::OnHelpSebs()
 {
 	String sDir = getEngine()->getContext()->sIlwDir();
-	String sHelpFile (ChmFinder::sFindChmFile(sDir + "Extensions\\SEBS\\SEBS4ILWIS_help.chm"));
+	String sHelpFile (sDir + "Extensions\\SEBS\\SEBS4ILWIS_help.chm");
 	::ShellExecute(GetDesktopWindow(),"open",sHelpFile.scVal(),0,0,SW_SHOW);
 }
 
 void IlwisWinApp::OnHelpScriptSyntax()
 {
-	String sHelpFile (ChmFinder::sFindChmFile("ilwis.chm"));
+	//String sHelpFile (ChmFinder::sFindChmFile("ilwis.chm"));
 
-	::HtmlHelp(GetDesktopWindow(), sHelpFile.sVal(), HH_HELP_CONTEXT, htpIlwisScriptSyntax);
-	::HtmlHelp(0, sHelpFile.sVal(), HH_DISPLAY_TOC, 0);
+	//::HtmlHelp(GetDesktopWindow(), sHelpFile.sVal(), HH_HELP_CONTEXT, htpIlwisScriptSyntax);
+	//::HtmlHelp(0, sHelpFile.sVal(), HH_DISPLAY_TOC, 0);
 }
 
 void IlwisWinApp::DeleteDirDoc() 

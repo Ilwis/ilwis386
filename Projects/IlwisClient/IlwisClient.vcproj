@@ -4902,6 +4902,10 @@
 						>
 					</File>
 				</Filter>
+				<Filter
+					Name="SampleSet"
+					>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="Table"
@@ -5231,75 +5235,11 @@
 				Name="Help"
 				>
 				<File
-					RelativePath="..\..\Sources\Client\Help\CHHRES.H"
+					RelativePath="..\..\Sources\Client\Help\HelpFinder.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\Sources\Client\Help\ChmFinder.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Sources\Client\Help\ChmFinder.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Sources\Client\Help\CITS.CPP"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Sources\Client\Help\CITS.H"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Sources\Client\Help\HelpCtrl.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Sources\Client\Help\helpctrl.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Sources\Client\Help\HelpTools.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Sources\Client\Help\HelpView.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Sources\Client\Help\helpview.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Sources\Client\Help\HelpWindow.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Sources\Client\Help\helpwindow.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Sources\Client\Help\HHCTRL.CPP"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Sources\Client\Help\HHCTRL.H"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Sources\Client\Help\htmlhelp.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Sources\Client\Help\resource.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Sources\Client\Help\StdAfx.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Sources\Client\Help\StdAfx.h"
+					RelativePath="..\..\Sources\Client\Help\HelpFinder.h"
 					>
 				</File>
 			</Filter>

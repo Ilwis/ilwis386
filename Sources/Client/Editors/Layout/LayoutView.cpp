@@ -1123,10 +1123,10 @@ void LayoutView::OnMakeBitmap()
 
 LRESULT LayoutView::OnPrintHelp(WPARAM, LPARAM)
 {
-	String sHelpFile (ChmFinder::sFindChmFile("ilwis.chm"));
+	//String sHelpFile (ChmFinder::sFindChmFile("ilwis.chm"));
 
-	::HtmlHelp(::GetDesktopWindow(), sHelpFile.sVal(), HH_HELP_CONTEXT, htp.iTopic);
-	::HtmlHelp(0, sHelpFile.sVal(), HH_DISPLAY_TOC, 0);
+	//::HtmlHelp(::GetDesktopWindow(), sHelpFile.sVal(), HH_HELP_CONTEXT, htp.iTopic);
+	//::HtmlHelp(0, sHelpFile.sVal(), HH_DISPLAY_TOC, 0);
 
 	return 0;
 }

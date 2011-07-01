@@ -73,7 +73,6 @@
 #include "Engine\Base\Algorithm\Random.h"
 #include "Engine\Base\StlExtensions.h"
 #include <afxdisp.h>        // MFC Automation classes
-#include "Client\Help\helpctrl.h"
 #include "Client\FormElements\FormBasePropertyPage.h"
 #include "Client\FormElements\FieldObjShow.h"
 #include "Client\Forms\PropertySheets.h"
@@ -3074,14 +3073,13 @@ void ContainedByPropPage::CollectOwners()
 //-------------------------------
 // HelpPropPage member functions
 HelpPropPage::HelpPropPage(const FileName& fnObj)
-	: FormBasePropertyPage(SMSPropHelp), m_hhc(0),
+	: FormBasePropertyPage(SMSPropHelp),
 	m_sExt(fnObj.sExt)
 {
 }
 
 HelpPropPage::~HelpPropPage()
 {
-	delete m_hhc;
 }
 
 BOOL HelpPropPage::OnSetActive()

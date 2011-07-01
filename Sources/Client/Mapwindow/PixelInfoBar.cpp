@@ -130,6 +130,7 @@ BOOL PixelInfoBar::Create(CWnd* pParent)
 			CRect(0,0,0,0), this, 100, 0);
 	continousCheck.Create(TR("Continious").scVal(),WS_CHILD | WS_VISIBLE | BS_AUTOCHECKBOX,CRect(5,0,110,20),this,CONT_CB_ID);
 	continousCheck.SetWindowText(TR("Continious").scVal());
+	continousCheck.SetCheck(TRUE);
 	CFont *fnt = ( IlwWinApp()->GetFont(IlwisWinApp::sfFORM));
 	continousCheck.SetFont(fnt);
 	AfxGetApp()->PostThreadMessage(ILW_ADDDATAWINDOW, (WPARAM)this->m_hWnd, 0);
