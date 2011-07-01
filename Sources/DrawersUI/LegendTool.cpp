@@ -93,8 +93,8 @@ void LegendTool::insertLegendItemsClass(const Representation& rpr){
 	if ( htiNode) {
 		tree->DeleteAllItems(htiNode, true);
 	}
-	LayerDrawer *setdr = (LayerDrawer *)drawer;
-	tree->GetTreeCtrl().SetItemData(htiNode, (DWORD_PTR)new LegendLayerTreeItem(tree, setdr));		
+	LayerDrawer *layerDrawer = (LayerDrawer *)drawer;
+	tree->GetTreeCtrl().SetItemData(htiNode, (DWORD_PTR)new LegendLayerTreeItem(tree, layerDrawer));		
 	DomainClass* dc = rpr->dm()->pdc();
 	if (!dc) // huh, seen it happen though, rprclass without a domain class
 		return;
@@ -104,7 +104,10 @@ void LegendTool::insertLegendItemsClass(const Representation& rpr){
 		String sName = dc->sValueByRaw(iRaw, 0);
 		HTREEITEM hti = tree->GetTreeCtrl().InsertItem(sName.scVal(), htiNode);
 		tree->GetTreeCtrl().SetCheck(hti);
-		tree->GetTreeCtrl().SetItemData(hti, (DWORD_PTR)new LegendClassLayerTreeItem(tree, drawer, rpr->dm(), iRaw));		
+		Column col;
+		if ( layerDrawer->useAttributeColumn() && layerDrawer->getAtttributeColumn().fValid())
+			col = layerDrawer->getAtttributeColumn();
+		tree->GetTreeCtrl().SetItemData(hti, (DWORD_PTR)new LegendClassLayerTreeItem(tree, drawer, rpr->dm(), iRaw, col));		
 	}
 }
 
@@ -115,16 +118,16 @@ void LegendTool::update() {
 
 	DomainValueRangeStruct dvs = mapDrawer->getBaseMap()->dvrs();
 
-	LayerDrawer *sdrw = dynamic_cast<LayerDrawer *>(drawer);
+	LayerDrawer *layerDrawer = dynamic_cast<LayerDrawer *>(drawer);
 	SetDrawer *adrw = dynamic_cast<SetDrawer *>(drawer);
 	if ( adrw) {
-		sdrw = (LayerDrawer *)adrw->getDrawer(0);
+		layerDrawer = (LayerDrawer *)adrw->getDrawer(0);
 	}
 
-	if ( sdrw->useAttributeColumn() && sdrw->getAtttributeColumn().fValid()) {
-		dvs = sdrw->getAtttributeColumn()->dvrs();
+	if ( layerDrawer->useAttributeColumn() && layerDrawer->getAtttributeColumn().fValid()) {
+		dvs = layerDrawer->getAtttributeColumn()->dvrs();
 	}
-	Representation rpr = sdrw->getRepresentation();
+	Representation rpr = layerDrawer->getRepresentation();
 	if ( rpr->prg() || rpr->prv())
 		insertLegendItemsValue(rpr, dvs);
 	else if ( rpr->prc()) {

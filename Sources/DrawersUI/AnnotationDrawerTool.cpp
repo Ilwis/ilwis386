@@ -47,13 +47,13 @@ bool AnnotationDrawerTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 }
 
 HTREEITEM AnnotationDrawerTool::configure( HTREEITEM parentItem) {
-	DrawerTool::configure(htiNode);
 	htiNode = insertItem(parentItem, TR("Annotations"),"Annotation");
 	DrawerTool *dt = new AnnotationLegendDrawerTool(mpv,tree,drawer);
 	if ( dt) {
 		addTool(dt);
 		dt->configure(htiNode);
 	}
+	DrawerTool::configure(htiNode);
 
 
 	return htiNode;

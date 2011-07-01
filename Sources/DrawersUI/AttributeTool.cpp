@@ -68,9 +68,9 @@ void AttributeTool::setcheckAttributeTable(void *w, HTREEITEM ) {
 	sdr->setUseAttributeColumn(yesno);
 	if ( !yesno){
 		sdr->getDrawingColor()->setDataColumn(Column());
-		sdr->setAttributeColumn(Column());
+		BaseMapPtr *bmp = ((SpatialDataDrawer *)drawer->getParentDrawer())->getBaseMap();
+		sdr->setRepresentation(bmp->dm()->rpr());
 	}
-
 	update();
 
 	PreparationParameters pp(NewDrawer::ptRENDER, 0);
