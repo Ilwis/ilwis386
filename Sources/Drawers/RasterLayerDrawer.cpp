@@ -64,11 +64,9 @@ void RasterLayerDrawer::prepare(PreparationParameters *pp){
 				rprC->PutColor(abs(raw),clr);
 			}
 		}
-		if (fPaletteOwner) {
-			if (fUsePalette && palette->fValid()) {
-				palette->Refresh();
-				getRootDrawer()->getDrawerContext()->setActivePalette(0);
-			}
+		if (fPaletteOwner && fUsePalette && palette->fValid()) {
+			palette->Refresh();
+			getRootDrawer()->getDrawerContext()->setActivePalette(0);
 		}
 		textureHeap->RepresentationChanged();
 		sameCsy = getRootDrawer()->getCoordinateSystem()->fnObj == csy->fnObj;
@@ -167,14 +165,12 @@ void RasterLayerDrawer::init() const
 		data->height = pow(2, log2height);
 
 		textureHeap->SetData(rastermap, getDrawingColor(), getDrawMethod(), drawcontext->getMaxPaletteSize(), data->width, data->height, rrMinMax, drawcontext);
-		if (fPaletteOwner)
-			palette->SetData(rastermap, this, drawcontext->getMaxPaletteSize(), rrMinMax);
 
-		if (fPaletteOwner)
-			if (fUsePalette) {
-				palette->Refresh();
-				getRootDrawer()->getDrawerContext()->setActivePalette(0);
-			}
+		if (fPaletteOwner && fUsePalette) {
+			palette->SetData(rastermap, this, drawcontext->getMaxPaletteSize(), rrMinMax);
+			palette->Refresh();
+			getRootDrawer()->getDrawerContext()->setActivePalette(0);
+		}
 	}
 	data->init = true;
 }
@@ -351,7 +347,7 @@ void RasterLayerDrawer::DisplayImagePortion(unsigned int imageOffsetX, unsigned 
 
 void RasterLayerDrawer::DisplayTexture(Coord & c1, Coord & c2, Coord & c3, Coord & c4, unsigned int imageOffsetX, unsigned int imageOffsetY, unsigned int imageSizeX, unsigned int imageSizeY, unsigned int zoomFactor) const
 {
-	Texture* tex = textureHeap->GetTexture(imageOffsetX, imageOffsetY, imageSizeX, imageSizeY, zoomFactor, palette, isThreaded);
+	Texture* tex = textureHeap->GetTexture(imageOffsetX, imageOffsetY, imageSizeX, imageSizeY, zoomFactor, fUsePalette ? palette : 0, isThreaded);
 
 	if (tex != 0)
 	{
@@ -473,7 +469,7 @@ void RasterLayerDrawer::DisplayTexture(Coord & c1, Coord & c2, Coord & c3, Coord
 
 void RasterLayerDrawer::DisplayTexture3D(Coord & c1, Coord & c2, Coord & c3, Coord & c4, unsigned int imageOffsetX, unsigned int imageOffsetY, unsigned int imageSizeX, unsigned int imageSizeY, unsigned int zoomFactor) const
 {
-	Texture* tex = textureHeap->GetTexture(imageOffsetX, imageOffsetY, imageSizeX, imageSizeY, zoomFactor, palette, isThreaded);
+	Texture* tex = textureHeap->GetTexture(imageOffsetX, imageOffsetY, imageSizeX, imageSizeY, zoomFactor, fUsePalette ? palette : 0, isThreaded);
 
 	if (tex != 0)
 	{
