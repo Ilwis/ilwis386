@@ -136,8 +136,8 @@ Palette * RasterLayerDrawer::SetPaletteOwner()
 
 void RasterLayerDrawer::SetPalette(Palette * palette)
 {
-	if (fPaletteOwner && palette)
-		delete palette;
+	if (fPaletteOwner && this->palette)
+		delete this->palette;
 	this->palette = palette;
 	fPaletteOwner = false;
 }
