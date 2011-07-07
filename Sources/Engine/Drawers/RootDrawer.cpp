@@ -33,8 +33,9 @@ RootDrawer::RootDrawer(MapCompositionDoc *doc) : ComplexDrawer(0,"RootDrawer"){
 }
 
 RootDrawer::~RootDrawer() {
-	delete drawercontext;
+	clear();
 	delete backgroundDrawer;
+	delete drawercontext; // delete drawers before drawercontext, some drawers still work on the GL context and clean it up
 }
 
 void  RootDrawer::prepare(PreparationParameters *pp){
