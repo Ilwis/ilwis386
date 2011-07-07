@@ -10,16 +10,18 @@ namespace ILWIS {
 
 class _export OpenGLText {
 public:
-	OpenGLText(ILWIS::RootDrawer *rootdrawer,const String& name, int height, bool fixed=false);
+	OpenGLText(ILWIS::RootDrawer *rootdrawer,const String& name, int height, bool fixed = true, double horShift = 0, double verShift = 0);
 	~OpenGLText();
 	void renderText(const Coordinate& c, const String& text);
+	void setColor(const Color & clr);
 	double getHeight() const;
 private:
 	//void loadFont(const String& name, int height) ;
 	FTFont *font;
 	Color color;
-	int height;
-	int actualHeight;
+	int fontHeight;
+	double horizontalShift;
+	double verticalShift;
 	bool fixedSize;
 	double scale;
 
