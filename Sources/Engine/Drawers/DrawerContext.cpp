@@ -86,12 +86,10 @@ DrawerContext::~DrawerContext() {
 void DrawerContext::clear() {
 	csOpenglContext.Lock();
 
-	HGLRC hrc = ::wglGetCurrentContext();
-
 	::wglMakeCurrent(NULL,  NULL);
 
-	if (hrc)
-		::wglDeleteContext(hrc);
+	if (m_hrc)
+		::wglDeleteContext(m_hrc);
 	
 	m_hdc = 0;
 	m_hrc = 0;
