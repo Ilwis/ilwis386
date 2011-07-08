@@ -39,6 +39,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Client\Headers\formelementspch.h"
+#include "Engine\Drawers\RootDrawer.h"
 #include "Engine\Map\Segment\Seg.h"
 #include "engine\map\polygon\POL.H"
 #include "Engine\SpatialReference\Grortho.h"
@@ -422,14 +423,14 @@ void EditFiducialMarksForm::SetDirty(zPoint p)
   mpv->InvalidateRect(&rect);  
 }
 
-int EditFiducialMarksForm::draw(CDC* cdc, zRect rect, Positioner* psn)
+int EditFiducialMarksForm::draw()
 {
   Symbol smb;
   smb.smb = smbPlus;
   smb.col = colFidMarks;
-	cdc->SetTextAlign(TA_LEFT|TA_TOP); //	default
-  cdc->SetBkMode(TRANSPARENT);
-  cdc->SetTextColor(smb.col);
+	//cdc->SetTextAlign(TA_LEFT|TA_TOP); //	default
+  //cdc->SetBkMode(TRANSPARENT);
+  //cdc->SetTextColor(smb.col);
   for (int i = 0; i < iNrFiducialInputFields; ++i) {
     if (!ffm[i]->fRowCol && !ffm[i]->fDigGrid)
       continue;
@@ -437,46 +438,60 @@ int EditFiducialMarksForm::draw(CDC* cdc, zRect rect, Positioner* psn)
 		if (ffm[i]->fRowCol) {
 			double rX = ffm[i]->rRow();
 			double rY = ffm[i]->rCol();
-			pnt = psn->pntPos(rX-0.5,rY-0.5);
+			//pnt = psn->pntPos(rX-0.5,rY-0.5);
+			pnt = zPoint(rX-0.5,rY-0.5);
+
 		}
 		else {
 			Coord c = ffm[i]->cDG();
 			//Coord crdMap = cs->cConv(c);
 			//Coord crdMap = cs->cConvToOther(c);
-			pnt = psn->pntPos(c);
+			//pnt = psn->pntPos(c);
+			pnt = zPoint(c.x, c.y);
 		}
-    zPoint pntText = smb.pntText(cdc, pnt);
+    //zPoint pntText = smb.pntText(cdc, pnt);
     String s("%i", i+1);
-    cdc->TextOut(pnt.x,pnt.y,s.sVal());
-    smb.drawSmb(cdc, 0, pnt);
+    //cdc->TextOut(pnt.x,pnt.y,s.sVal());
+    //smb.drawSmb(cdc, 0, pnt);
+	glColor4d(colFidMarks.redP(), colFidMarks.greenP(), colFidMarks.blueP(), 1);
+	glBegin(GL_POINT);
+	glVertex3f(pnt.x, pnt.y, 0);
+	glEnd();
   }  
   return 0;
 }
 
-int EditFiducialMarksForm::drawPrincPoint(CDC* cdc, zRect rect, Positioner* psn)
+int EditFiducialMarksForm::drawPrincPoint()
 {
   Symbol smb;
   smb.smb = smbCross;
 	smb.col = colFidMarks;
-	cdc->SetTextAlign(TA_LEFT|TA_TOP); //	default
-  cdc->SetBkMode(TRANSPARENT);
-  cdc->SetTextColor(smb.col);
+	//cdc->SetTextAlign(TA_LEFT|TA_TOP); //	default
+  //cdc->SetBkMode(TRANSPARENT);
+  //cdc->SetTextColor(smb.col);
 	zPoint pnt;
 	if (fGeoRef) {
 		//RowCol rcPP = grf->rcGetPrincipalPoint();
 		//Coord crdPP = grf->crdGetPrincipalPoint();// this is obtained from intersection of fiducial connectors in scan geom
 		//Coord crdPP = cCameraPrincP;  // this is input from user (and if not, by default 0,0 in th affine inner orientation
 		Coord crdPP = grf->m_cScanPrincPoint;
-		pnt = psn->pntPos(crdPP.x-0.5,crdPP.y-0.5);
+		//pnt = psn->pntPos(crdPP.x-0.5,crdPP.y-0.5);
+		pnt = zPoint(crdPP.x-0.5,crdPP.y-0.5);
 	}
 	else {
 		Coord crdPP = cs->crdGetPrincipalPoint();
-		pnt = psn->pntPos(crdPP);
+		// pnt = psn->pntPos(crdPP);
+		pnt = zPoint(crdPP.x,crdPP.y);
 	}
-  zPoint pntText = smb.pntText(cdc, pnt);
+  //zPoint pntText = smb.pntText(cdc, pnt);
   String s("PP");
-  cdc->TextOut(pnt.x,pnt.y,s.sVal());
-  smb.drawSmb(cdc, 0, pnt);
+  //cdc->TextOut(pnt.x,pnt.y,s.sVal());
+  //smb.drawSmb(cdc, 0, pnt);
+	glColor4d(colFidMarks.redP(), colFidMarks.greenP(), colFidMarks.blueP(), 1);
+	glBegin(GL_POINT);
+	glVertex3f(pnt.x, pnt.y, 0);
+	glEnd();
+
 	return 0;
 }
 

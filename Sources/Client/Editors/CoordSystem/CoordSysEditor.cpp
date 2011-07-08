@@ -324,11 +324,10 @@ String CoordSystemEditor::sTitle() const
 	return s;
 }
 
-int CoordSystemEditor::draw(CDC* cdc, zRect rect, Positioner* psn, volatile bool* fDrawStop)
+int CoordSystemEditor::draw(volatile bool* fDrawStop)
 {
-	cdc->SetTextAlign(TA_LEFT|TA_TOP); //	default
-	cdc->SetBkMode(TRANSPARENT);
-	MinMax mm = psn->mmSize();
+	//cdc->SetTextAlign(TA_LEFT|TA_TOP); //	default
+	//cdc->SetBkMode(TRANSPARENT);
 	for (long r = 1; r <= csctp->iNr(); ++r) {
 		Color clr;
 		if (csctp->fActive(r))
@@ -349,18 +348,23 @@ int CoordSystemEditor::draw(CDC* cdc, zRect rect, Positioner* psn, volatile bool
 		}
 		else
 			clr = colPassive;
-		cdc->SetTextColor(clr);
+		//cdc->SetTextColor(clr);
 		smb.col = clr;
 		Coord crd = csctp->crd(r);
-		zPoint pnt = psn->pntPos(crd);
-		zPoint pntText = smb.pntText(cdc, pnt);
+		//zPoint pnt = psn->pntPos(crd);
+		zPoint pnt = zPoint(crd.x, crd.y);
+		//zPoint pntText = smb.pntText(cdc, pnt);
 		String s("%li", r);
-		cdc->TextOut(pntText.x,pntText.y,s.sVal());
-		smb.drawSmb(cdc, 0, pnt);
+		//cdc->TextOut(pntText.x,pntText.y,s.sVal());
+		//smb.drawSmb(cdc, 0, pnt);
+		glColor4d(clr.redP(), clr.greenP(), clr.blueP(), 1);
+		glBegin(GL_POINT);
+		glVertex3f(crd.x, crd.y, 0);
+		glEnd();
 	}
 	if (efmf) {
-		efmf->draw(cdc, rect, psn);
-		efmf->drawPrincPoint(cdc, rect, psn);
+		efmf->draw();
+		efmf->drawPrincPoint();
 	}
 	return 0;
 }

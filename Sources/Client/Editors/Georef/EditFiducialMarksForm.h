@@ -64,8 +64,8 @@ public:
   int exec();
 	void OnLButtonDownRC(Coord);
 	void OnLButtonDown(Coord);
-  int draw(CDC* cdc, zRect rect, Positioner* psn);
-	int drawPrincPoint(CDC* cdc, zRect rect, Positioner* psn);
+  int draw();
+	int drawPrincPoint();
   void SetActDigPoint(FieldFiducialMark*);
 	afx_msg HBRUSH OnCtlColor(CDC* cdc, CWnd* pWnd, UINT nCtlColor);
 	BOOL OnCommand(WPARAM wParam, LPARAM lParam);
