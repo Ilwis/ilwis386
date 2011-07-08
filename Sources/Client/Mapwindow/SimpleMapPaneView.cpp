@@ -80,7 +80,6 @@ Created on: 2007-02-8
 #include "Engine\Drawers\DrawerContext.h"
 #include "Client\Mapwindow\OverviewMapPaneView.h"
 
-
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -300,6 +299,9 @@ void SimpleMapPaneView::Draw()
 	fDrawRequest = false;
 	MapCompositionDoc* mcd = GetDocument();
 	mcd->rootDrawer->draw();
+	// draw editor
+	if (edit)
+		edit->draw(&fDrawStop);
 	csResizing.Lock();
 	if (fResizing) {
 		fResizing = false;
@@ -414,20 +416,26 @@ void SimpleMapPaneView::OnMouseMove(UINT nFlags, CPoint point)
 		//	msb->ShowCoord(SMWRem__NoCoordsCalculated);
 		//	msb->ShowLatLon(LatLon());
 		//}
-		else {    
-			msb->ShowCoord(csy->sValue(c));
-			if (csy->pcsDirect()) {
-				CoordSystemDirect *pcsd = csy->pcsDirect();
-				CoordSystemPtr * pcs = pcsd->csOther.ptr();
-				Coord crd = pcsd->cInverseConv(pcs,c);
-				msb->ShowRelCoord(pcsd->csOther->sValue(crd));
+		else {
+			if (edit) {
+				RowCol rc (1 + c.x, 1 - c.y);
+				msb->ShowRowCol(rc);
+				msb->ShowCoord(csy->sValue(Coord(0.5 + c.x, 0.5 - c.y))); // subpixel precision version
+			} else {
+				msb->ShowCoord(csy->sValue(c));
+				if (csy->pcsDirect()) {
+					CoordSystemDirect *pcsd = csy->pcsDirect();
+					CoordSystemPtr * pcs = pcsd->csOther.ptr();
+					Coord crd = pcsd->cInverseConv(pcs,c);
+					msb->ShowRelCoord(pcsd->csOther->sValue(crd));
+				}
+				if (csy->fCoord2LatLon()) {
+					LatLon ll = csy->llConv(c);
+					msb->ShowLatLon(ll);
+				}
+				else
+					msb->ShowLatLon(LatLon());
 			}
-			if (csy->fCoord2LatLon()) {
-				LatLon ll = csy->llConv(c);
-				msb->ShowLatLon(ll);
-			}
-			else
-				msb->ShowLatLon(LatLon());
 		}  
 	}
 
