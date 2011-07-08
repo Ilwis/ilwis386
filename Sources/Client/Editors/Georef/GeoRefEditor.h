@@ -58,7 +58,7 @@ public:
 	GeoRefEditor(MapPaneView*, GeoRef);
 	virtual ~GeoRefEditor();
   virtual IlwisObject obj() const;
-  virtual int draw(CDC*, zRect, Positioner*, volatile bool* fDrawStop);
+  virtual int draw(volatile bool* fDrawStop);
 	virtual zIcon icon() const;
 	virtual String sTitle() const;
 	virtual bool OnContextMenu(CWnd* pWnd, CPoint point);

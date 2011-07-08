@@ -82,6 +82,9 @@ Created on: 2007-02-8
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Editors\Georef\EditFiducialMarksForm.h"
 #include "Client\Editors\Digitizer\DIGITIZR.H"
+#include "Engine\Drawers\SimpleDrawer.h"
+#include "Engine\Drawers\TextDrawer.h"
+#include "Engine\Drawers\OpenGLText.h"
 
 
 using namespace ILWIS;
@@ -124,6 +127,15 @@ GeoRefEditor::GeoRefEditor(MapPaneView* mpvw, GeoRef georef)
 			break;
 		}  
 	}
+
+	SpatialDataDrawer *absndrw = CMAPDRW(mcd->rootDrawer, 0);;
+	MapPtr *mptr = (MapPtr *)(absndrw->getBaseMap());
+	mptr->SetGeoRef(GeoRef(FileName("none.grf")));
+	mptr->DoNotStore(true);
+	mcd->rootDrawer->setCoordinateSystem(CoordSystem());
+	CoordBounds cbNone (Coord(0,0), Coord(mptr->rcSize().Col, -mptr->rcSize().Row)); // none.grf bounds
+	mcd->rootDrawer->setCoordBoundsMap(cbNone);
+	mcd->rootDrawer->setCoordBoundsView(cbNone, true);
 
 	GeoRefDirectLinear* grdl = grc->pgDirectLinear();
 	if (grdl) 
@@ -285,6 +297,15 @@ GeoRefEditor::GeoRefEditor(MapPaneView* mpvw, GeoRef georef)
 GeoRefEditor::~GeoRefEditor()
 {
 	grc->Store();
+	MapCompositionDoc* mcd = mpv->GetDocument();
+	SpatialDataDrawer *absndrw = CMAPDRW(mcd->rootDrawer, 0);;
+	MapPtr *mptr = (MapPtr*)(absndrw->getBaseMap());
+	mptr->SetGeoRef(grf);
+	mptr->DoNotStore(false);
+	mcd->rootDrawer->setCoordinateSystem(grf->cs());
+	mcd->rootDrawer->setCoordBoundsMap(grf->cb());
+	mcd->rootDrawer->setCoordBoundsView(grf->cb(), true);
+
 	/*
 	CReBar& rebar = mpv->mwParent()->rebar;
 	CReBarCtrl& rbc = rebar.GetReBarCtrl();
@@ -336,11 +357,15 @@ String GeoRefEditor::sTitle() const
 	return s;
 }
 
-int GeoRefEditor::draw(CDC* cdc, zRect rect, Positioner* psn, volatile bool* fDrawStop)
+int GeoRefEditor::draw(volatile bool* fDrawStop)
 {
-	cdc->SetTextAlign(TA_LEFT|TA_TOP); //	default
-	cdc->SetBkMode(TRANSPARENT);
-	MinMax mm = psn->mmSize();
+	RootDrawer * rootDrawer = mpv->GetDocument()->rootDrawer;
+	ILWIS::DrawerParameters dpLayerDrawer (rootDrawer, 0);
+	ILWIS::TextLayerDrawer textLayerDrawer(&dpLayerDrawer, "TextLayerDrawer");
+	OpenGLText * font = new OpenGLText (rootDrawer, "arial.ttf", 15, true, 1, -15);
+	textLayerDrawer.setFont(font);
+	ILWIS::DrawerParameters dpTextDrawer (rootDrawer, &textLayerDrawer);
+	ILWIS::TextDrawer textDrawer (&dpTextDrawer, "TextDrawer");
 	for (long r = 1; r <= grc->iNr(); ++r) {
 		Color clr;
 		if (grc->fActive(r))
@@ -361,27 +386,31 @@ int GeoRefEditor::draw(CDC* cdc, zRect rect, Positioner* psn, volatile bool* fDr
 		}
 		else
 			clr = colPassive;
-		cdc->SetTextColor(clr);
-		smb.col = clr;
 		zPoint pnt;
 		if (!grc->fSubPixelPrecision)
 		{
 			RowCol rc = grc->rc(r);
-			pnt = psn->pntPos(rc.Row-0.5,rc.Col-0.5);
+			pnt = zPoint(rc.Col - 0.5, rc.Row - 0.5);
 		}
 		else
 		{
 			Coord crdRC = grc->crdRC(r);
-			pnt = psn->pntPos(crdRC.x-0.5,crdRC.y-0.5);
+			pnt = zPoint(crdRC.x-0.5,crdRC.y-0.5);
 		}
-		zPoint pntText = smb.pntText(cdc, pnt);
 		String s("%li", r);
-		cdc->TextOut(pntText.x,pntText.y,s.sVal());
-		smb.drawSmb(cdc, 0, pnt);
+		glColor4d(clr.redP(), clr.greenP(), clr.blueP(), 1);
+		glPointSize(5.0);
+		glBegin(GL_POINTS);
+		glVertex3f(pnt.x, -pnt.y, 0);
+		glEnd();
+		textDrawer.addDataSource(&s);
+		textDrawer.setCoord(Coordinate(pnt.x, -pnt.y, 0));
+		font->setColor(clr);
+		textDrawer.draw();
 	}
 	if (efmf) {
-		efmf->draw(cdc, rect, psn);
-		efmf->drawPrincPoint(cdc, rect, psn);
+		efmf->draw();
+		efmf->drawPrincPoint();
 	}
 	return 0;
 }
@@ -761,7 +790,9 @@ void GeoRefEditor::OnTransfChanged()
 bool GeoRefEditor::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	mpv->SetFocus();
-	RowCol rc = mpv->rcPos(point);
+	// RowCol rc = mpv->rcPos(point);
+	Coord c = mpv->GetDocument()->rootDrawer->screenToWorld(RowCol(point.y,point.x));
+	RowCol rc (-c.y, c.x);
 	rc.Row += 1;
 	rc.Col += 1;
 	Coord crdRC;
@@ -773,7 +804,9 @@ bool GeoRefEditor::OnLButtonDown(UINT nFlags, CPoint point)
 	}
 	else
 	{
-		mpv->Pnt2RowCol(point, crdRC.x, crdRC.y);
+		// mpv->Pnt2RowCol(point, crdRC.x, crdRC.y);
+		crdRC.x = -c.y;
+		crdRC.y = c.x;
 
 		crdRC.x += 0.5;
 		crdRC.y += 0.5;
