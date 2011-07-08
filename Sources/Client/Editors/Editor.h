@@ -56,6 +56,7 @@ public:
 	bool fOk;
 	bool OnSetCursor(); // called by MapPaneView::OnSetCursor
 	virtual void PreDraw(); // called before all other draw routines
+	virtual int draw(volatile bool* fDrawStop) = 0;
 	virtual bool OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	virtual bool OnLButtonDown(UINT nFlags, CPoint point);
 	virtual bool OnLButtonUp(UINT nFlags, CPoint point);
