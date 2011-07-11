@@ -137,7 +137,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)Sources\Headers&quot;;&quot;$(SolutionDir)Sources&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)Sources\Geos\headers&quot;;&quot;$(SolutionDir)Sources\Headers&quot;;&quot;$(SolutionDir)Sources&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;Tracking;_WIN32_WINNT=0x0400;_CRT_SECURE_NO_WARNINGS;_HAS_ITERATOR_DEBUGGING=0;_SECURE_SCL=0;_WIN32_IE=0x0400"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="0"
@@ -163,7 +163,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ILWISEngine.lib htmlhelp.lib geos.lib"
+				AdditionalDependencies="ILWISEngine.lib IlwisClient.lib geos.lib opengl32.lib glu32.lib gdiplus.lib ILWISDrawers.lib"
 				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\Extensions\IlwisTracking.dll"
 				Version="3.7"
 				LinkIncremental="1"
