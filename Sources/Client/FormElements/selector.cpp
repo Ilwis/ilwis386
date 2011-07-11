@@ -102,11 +102,12 @@ void BaseSelector::show(int sw)
 }
 
 //----[ StringArrayLister ]----------------------------------------------------------------------------------
-StringArrayLister::StringArrayLister(FormEntry* fe, const Array<String>& array)
-: BaseSelector(fe), 
-  as(array) 
+StringArrayLister::StringArrayLister(FormEntry* fe, const Array<String>& arr)
+: BaseSelector(fe) 
 {
   style = WS_VSCROLL | LBS_HASSTRINGS;
+  as.resize(arr.size());
+  copy(arr.begin(), arr.end(), as.begin());
 }
 
 void StringArrayLister::StoreData()
@@ -124,6 +125,8 @@ void StringArrayLister::create()
 
 String StringArrayLister::sName(int id)
 {
+  if ( id == -1)
+	return sUNDEF;
   if (lb) 
   {
     CString s;
@@ -133,6 +136,11 @@ String StringArrayLister::sName(int id)
   else
     return "";  
 }
+
+String _export StringArrayLister::sGetSelectedString(){
+	return sName(iGetSingleSelection());
+}
+
 
 void StringArrayLister::Remove(int index) {
 	if (lb){
@@ -152,6 +160,16 @@ String StringArrayLister::sGetText()
     sText &= "\r\n";
   }
   return sText;
+}
+
+void StringArrayLister:: resetContent(const Array<String>& arr){
+  lb->ResetContent();
+  as.resize(arr.size());
+  copy(arr.begin(), arr.end(), as.begin());
+  for(int i=0; i < arr.size(); ++i) 
+  {
+	  lb->AddString(arr[i].scVal());
+  }
 }
 
 void StringArrayLister::AddString(const String& s, int iWhere)

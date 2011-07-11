@@ -200,7 +200,7 @@ int MapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
   addBreak;
   add(ID_ADJUSTSIZE);
   add(ID_LAYERMANAGE);
-  add(ID_OVERVIEW);
+  add(ID_METRIC_COORD);
   add(ID_SCALECONTROL);
   add(ID_SHOWRECORDVIEW);
   add(ID_BUTTONBAR);

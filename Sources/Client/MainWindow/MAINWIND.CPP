@@ -690,7 +690,10 @@ void MainWindow::InitialUpdate(CDocument* pDoc, BOOL bMakeVisible)
 			SetActiveView(pView, FALSE);
 		}
 	}
-
+	zDisplay zz(this);
+	int p1= zz.pixPerInchX();
+	int p2= zz.pixPerInchY();
+	int p3 = GetSystemMetrics(SM_CXFULLSCREEN);
 	if (bMakeVisible)
 	{
 		// send initial update to all views (and other controls) in the frame

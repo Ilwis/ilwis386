@@ -124,6 +124,8 @@ protected:
 	afx_msg void OnCreateSubMap();
 	afx_msg void OnUpdateEntireMap(CCmdUI* pCmdUI);
 	afx_msg void OnTimer(UINT timerID);
+	afx_msg void OnMetricCoord() ;
+	afx_msg void OnUpdateMetricCoord(CCmdUI* pCmdUI);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	void OnShowRecordView();
 	void OnUpdateShowRecordView(CCmdUI* pCmdUI);

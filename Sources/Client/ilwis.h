@@ -168,6 +168,7 @@ public:
 	//void getDrawerTools(ILWIS::ComplexDrawer *drwin, vector<MapPaneViewTool *>& tools);
 	void getDocumentList(list<CDocument *>& opendocs);
 	void _export showHelp(const String& helpfile);
+	 _export  ILWIS::HelpFinder *getHelpFinder() { return helpFinder; }
 	
 	//{{AFX_MSG(IlwisWinApp)
 	afx_msg void OnAbout();

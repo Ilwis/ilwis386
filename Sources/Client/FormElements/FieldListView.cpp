@@ -43,6 +43,7 @@
 
 BEGIN_MESSAGE_MAP(FLVColumnListCtrl, CListCtrl)
 	//{{AFX_MSG_MAP(FLVColumnListCtrl)
+	ON_NOTIFY_REFLECT(LVN_ITEMCHANGED, OnItemchangedList)
 	ON_NOTIFY_REFLECT(LVN_GETDISPINFO,    OnGetDispInfo)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
@@ -50,6 +51,10 @@ END_MESSAGE_MAP()
 FLVColumnListCtrl::FLVColumnListCtrl()
 {
 
+}
+
+void FLVColumnListCtrl::OnItemchangedList(NMHDR* pNMHDR, LRESULT* pResult) {
+	//fProcess(Event(LVN_ITEMCHANGED, GetDlgCtrlID(), (LPARAM)pNMHDR)); 
 }
 
 void FLVColumnListCtrl::SetParent(FieldListView *view) {
@@ -130,6 +135,10 @@ void FieldListView::create()
 void FieldListView::show(int v) {
 	if ( m_clctrl.GetSafeHwnd() != NULL)
 		m_clctrl.ShowWindow(v)  ;
+}
+
+void FieldListView::clear() {
+	data.clear();
 }
 
 void FieldListView::setData(int row, const vector<String>& rowdata) {

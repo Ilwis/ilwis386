@@ -329,8 +329,8 @@ void ActionTreeCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
 			CMenu men;
 			men.CreatePopupMenu();
 			pmadd(ID_ACT_RUN);
-			if (act->iHelp() > 0)
-				pmadd(ID_ACT_HELP);
+			pmadd(ID_ACT_HELP);
+
 		  switch (men.TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON|TPM_NONOTIFY|TPM_RETURNCMD, point.x, point.y, this))
 			{
 				case ID_ACT_RUN:
@@ -341,12 +341,7 @@ void ActionTreeCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
 					iwa->GetMainWnd()->SendMessage(ILWM_EXECUTE, 0, (LPARAM)str);	
 				} break;
 				case ID_ACT_HELP:
-					//String sHelpFile (ChmFinder::sFindChmFile("ilwis.chm"));
-					//String sHelpString ("%S>sec", sHelpFile);
-					//::HtmlHelp(m_hWnd,
-					//				sHelpString.sVal(),
-					//				HH_HELP_CONTEXT,
-					//				act->iHelp());
+					IlwWinApp()->showHelp("/ilwis/how_to_use_the_operation_list.htm");
 					break;
 			}
 		}

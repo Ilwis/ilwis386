@@ -56,6 +56,7 @@ public:
 private:
 	FieldListView *parentFormEntry;
 	afx_msg void OnGetDispInfo(NMHDR* pNMHDR, LRESULT* pResult);
+	void OnItemchangedList(NMHDR* pNMHDR, LRESULT* pResult);
 
 	DECLARE_MESSAGE_MAP();
 };
@@ -80,6 +81,7 @@ public:
 	 void update();
 	 void getSelectedRowNumbers(vector<int>& rowNumbers) const;
 	 void setSelectedRows(vector<int>& rowNumbers);
+	 void clear();
 
 	//void ToggleAsKey(int iItem);
 	//void ToggleSelectedAsKey();

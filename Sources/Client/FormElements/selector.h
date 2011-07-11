@@ -67,8 +67,10 @@ public:
   _export StringArrayLister(FormEntry* fe, const Array<String>& array);
   virtual void StoreData();
   String sGetText();
+  void _export resetContent(const Array<String>& str);
 	void _export AddString(const String& s, int iWhere=iUNDEF);
   int _export iGetSingleSelection();
+  String _export sGetSelectedString();
   void _export Remove(int index);
   void _export Clear();
   virtual String _export sName(int id);
@@ -76,7 +78,7 @@ private:
    int OnKeyUp( Event* ev);	
 	virtual void _export DrawItem(Event* ev);
   void create();
-  const Array<String>& as;
+  Array<String> as;
 };
 
 #endif // SELECTOR_H

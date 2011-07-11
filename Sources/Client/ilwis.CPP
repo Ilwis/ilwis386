@@ -218,12 +218,13 @@ $Header: /ILWIS 3.0/Main/ilwis.CPP 329   10-06-05 15:09 Retsios $
 #include "Engine\DataExchange\WMSCollection.h"
 #include "MainWindow\Catalog\WMSCollectionDoc.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
+#include "Client\Help\HelpSearch.h"
 #include <gdiplus.h>
 #include "Headers\Hs\Mainwind.hs"
 
 IlwisWinApp TheIlwisApp;
 const CLSID CLSID_ILWIS_CommandLine = {0x524BCEF4,0x4370,0x4021,{0x92,0xD3,0xCE,0xC1,0x62,0x57,0x7C,0x08}};
-const String ILWIS::Version::IlwisVersion="3.8 beta";
+const String ILWIS::Version::IlwisVersion="3.8 beta - 1";
 const String ILWIS::Version::IlwisShortName="Ilwis38";
 
 BEGIN_MESSAGE_MAP( IlwisWinApp, CWinApp )
@@ -514,7 +515,7 @@ BOOL IlwisWinApp::InitInstance()
 			}
 		}
 		helpFinder = new ILWIS::HelpFinder();
-		helpFinder->indexHTMLFiles();
+		//helpFinder->indexHTMLFiles();
 
 		return TRUE;
 	}
@@ -2012,10 +2013,7 @@ void IlwisWinApp::OnHelpContents()
 
 void IlwisWinApp::OnHelpOperations()
 {
-	//String sHelpFile (ChmFinder::sFindChmFile("ilwis.chm"));
-
-	//::HtmlHelp(GetDesktopWindow(), sHelpFile.sVal(), HH_HELP_CONTEXT, htpAppOperationsExpanded);
-	//::HtmlHelp(0, sHelpFile.sVal(), HH_DISPLAY_TOC, 0);
+	showHelp("ilwisapp/ilwis_operations.htm");
 }
 
 void IlwisWinApp::OnHelpMenuCmds()
@@ -2025,18 +2023,7 @@ void IlwisWinApp::OnHelpMenuCmds()
 
 void IlwisWinApp::OnHelpSearch()
 {
-	//HH_FTS_QUERY q;
-	//q.cbStruct         = sizeof(HH_FTS_QUERY);
-	//q.fUniCodeStrings  = FALSE;
-	//q.pszSearchQuery   = "";
-	//q.iProximity       = HH_FTS_DEFAULT_PROXIMITY;
-	//q.fStemmedSearch   = FALSE;
-	//q.fTitleOnly       = FALSE;
-	//q.fExecute         = FALSE;
-	//q.pszWindow        = NULL; 
-
-	//String sHelpFile (ChmFinder::sFindChmFile("ilwis.chm"));
-	//::HtmlHelp(GetDesktopWindow(), sHelpFile.sVal(), HH_DISPLAY_SEARCH, (LPARAM)&q);
+	new HelpSearch(GetMainWnd());
 }
 
 void IlwisWinApp::OnHelpIndex()
@@ -2489,14 +2476,17 @@ void IlwisWinApp::showHelp(const String& helpfile) {
 		return;
 	String file;
 	string defaultFile = String("%S\\help\\eng\\%S",getEngine()->getContext()->sIlwDir(),help);
-	String language = getEngine()->getContext()->getLanguageExtension();
-	language = language.substr(1,language.size() - 1);
-	if ( help.toLower().find("extensions") == 0) {
-		file = String("%S\\%S",getEngine()->getContext()->sIlwDir(),help);
-	}
-	else {
-		file = String("%S\\help\\%S\\%S",getEngine()->getContext()->sIlwDir(),language,help);
-	}
+	if ( helpfile[1] != ':') {
+		String language = getEngine()->getContext()->getLanguageExtension();
+		language = language.substr(1,language.size() - 1);
+		if ( help.toLower().find("extensions") == 0) {
+			file = String("%S\\%S",getEngine()->getContext()->sIlwDir(),help);
+		}
+		else {
+			file = String("%S\\help\\%S\\%S",getEngine()->getContext()->sIlwDir(),language,help);
+		}
+	} else
+		file = helpfile;
 	FileName fn1 = FileName(file);
 	if ( !FileName(file).fExist())
 		file = defaultFile;

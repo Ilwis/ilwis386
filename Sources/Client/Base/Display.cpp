@@ -84,7 +84,7 @@ zDisplay::zDisplay() :
 
 zDisplay::zDisplay(CWnd *owner) :
 	_owner(owner),
-	_tempDC(NULL),
+		_tempDC(owner->GetDC()),
     _iLockCount(0),
     _oldFont(NULL),
     _oldBrush(NULL),

@@ -113,6 +113,7 @@ protected:
 	CoordWithCoordSystem cwcsButtonDown;
 	CDC* dcView; // dcView is our own CDC and should be cleaned up at next cycle
 	Editor *edit;
+	bool useMetricCoords;
 private:  
 	void RedrawInThread();
 	static UINT RedrawPaneInThread(LPVOID);

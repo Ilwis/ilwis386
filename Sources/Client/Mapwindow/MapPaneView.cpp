@@ -146,6 +146,8 @@ BEGIN_MESSAGE_MAP(MapPaneView, SimpleMapPaneView)
 	ON_COMMAND(ID_COPY, OnCopy)
 	ON_WM_TIMER()
 	ON_WM_MOUSEMOVE()
+	ON_COMMAND(ID_METRIC_COORD, OnMetricCoord)
+	ON_UPDATE_COMMAND_UI(ID_METRIC_COORD, OnUpdateMetricCoord)
 	ON_UPDATE_COMMAND_UI(ID_PASTE, OnUpdatePaste)
 	ON_COMMAND(ID_CREATEPNTMAP, OnCreatePntMap)
 	ON_COMMAND(ID_CREATESEGMAP, OnCreateSegMap)
@@ -839,6 +841,15 @@ void MapPaneView::OnPaste()
 	if (arFiles.size() == 0) 
 		return;
 	AddFiles(arFiles, false);
+}
+
+void MapPaneView::OnUpdateMetricCoord(CCmdUI* pCmdUI)
+{
+	pCmdUI->SetCheck(useMetricCoords);
+}
+
+void MapPaneView::OnMetricCoord() {
+	useMetricCoords = !useMetricCoords;
 }
 
 void MapPaneView::OnUpdatePaste(CCmdUI* pCmdUI)

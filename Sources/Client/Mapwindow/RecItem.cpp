@@ -305,7 +305,7 @@ RecItemMap::RecItemMap(RecItem* parent, BaseMap map)
 
 void RecItemMap::setAssociatedDrawerTool(DrawerTool *drawr, const String& targetName) {
 	String reason = targetName;
-	if ( _map->fnObj.sRelative() == reason || reason == ADDED_PARENT_CHILD) {
+	if ( _map.fValid() && _map->fnObj.sRelative() == reason || reason == ADDED_PARENT_CHILD) {
 		associatedDrawerTool = drawr;
 		reason = ADDED_PARENT_CHILD;
 	}
@@ -316,6 +316,8 @@ void RecItemMap::setAssociatedDrawerTool(DrawerTool *drawr, const String& target
 
 String RecItemMap::sName() 
 {
+	if (!_map.fValid())
+		return sUNDEF;
 	FileName fn = map()->fnObj;
 	String s = fn.sFile;
 	s &= fn.sExt;
@@ -324,6 +326,9 @@ String RecItemMap::sName()
 
 FileName RecItemMap::fnObj() 
 {
+	if (!_map.fValid())
+		return FileName();
+
 	return map()->fnObj;
 }
 

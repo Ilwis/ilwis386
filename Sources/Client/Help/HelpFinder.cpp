@@ -9,6 +9,20 @@
 using namespace ILWIS;
 
 HelpFinder::HelpFinder() {
+	String exc("wait,while,wants,was,were,what,whenever,where,whereas,whether,while,whole,whose,why,why,whishes,whithout,word,wording,words,work,working,works,would,wrapped,wrong,wrongly");
+	exc += "abbreviation,abc,about,above,absolute,absolutely,accept,access";
+	Array<String> parts;
+	Split(exc,parts,",");
+	for(int i=0; i < parts.size(); ++i)
+		exceptionsWords.insert(parts[i]);
+
+	String inc("");
+	inc += "";
+	parts.clear();
+	Split(exc,parts,",");
+	for(int i=0; i < parts.size(); ++i)
+		includedWords.insert(parts[i]);
+
 }
 
 UINT HelpFinder::startIndexing(LPVOID _hf) {
@@ -18,7 +32,7 @@ UINT HelpFinder::startIndexing(LPVOID _hf) {
 }
 
 void HelpFinder::findFolder(const String& folder) {
-	String pattern = folder + "help\\*.*";
+	String pattern = folder + "\\*.*";
 	CFileFind finder;
 	BOOL fFound = finder.FindFile(CString(pattern.c_str()));
 	while(fFound) {
@@ -30,10 +44,10 @@ void HelpFinder::findFolder(const String& folder) {
 			if ( skipFile(file))
 				indexFile(fn);
 		} else {
-			bool dir = folder.find_last_of(".") == folder.size() - 1;
-			dir = dir || folder.find_last_of("..") == folder.size() - 2;
+			String folder2(finder.GetFilePath());
+			bool dir = folder2.find_last_of(".") == folder2.size() - 1;
+			dir = dir || folder2.find_last_of("..") == folder2.size() - 2;
 			if ( !dir) {
-				String folder2(finder.GetFilePath());
 				findFolder(folder2);
 			}
 		}
@@ -42,62 +56,82 @@ void HelpFinder::findFolder(const String& folder) {
 
 bool HelpFinder::skipFile(const String& fn) const {
 	FileName f(fn);
-	if ( f.sExt != ".html" || f.sExt != ".htm")
+	if ( f.sExt != ".html" && f.sExt != ".htm")
 		return false;
 	set<String>::const_iterator cur = exceptionsFiles.find(fn);
-	return  cur != exceptionsFiles.end();
+	return  cur == exceptionsFiles.end();
 }
 
 bool HelpFinder::skipWord(const String& word) const {
-	if ( word.size() < 2)
+	if ( word.size() <= 2)
 		return true;
 	if ( word[0] == '<' && word[word.size() - 1] == '>')
 		return false;
 
+	return false;
 
-	set<String>::const_iterator cur = exceptionsWords.find(word);
-	return cur != exceptionsWords.end();
+
+}
+
+String HelpFinder::getTitle(int index, const String& s) {
+	String title;
+	for(int i=index; i < s.size(); ++i) {
+		if ( s[i] != '<')
+			title += s[i];
+		else
+			break;
+	}
+	return title;
 }
 
 void HelpFinder::indexFile(const FileName& fn) {
 	struct __stat64 fileStat; 
 	int err = _stat64( fn.sFullPath().scVal(), &fileStat );
-	char *buffer =  new char(fileStat.st_size + 1);
-	ifstream htmlfile( fn.sFullPath().scVal(), ios::in|ios::binary);
-	htmlfile.read(buffer, fileStat.st_size);
-	buffer[fileStat.st_size] = 0;
+	FILE *fp = fopen(fn.sFullPath().scVal(), "rb");
+	char * buffer = new char[fileStat.st_size + 1];
+	fread(buffer, 1, fileStat.st_size,fp);
+	fclose(fp);
 	set<String> words;
 	String s(buffer);
 	s.toLower();
-	int index = s.find("<body>");
+	String title;
+	int index = s.find("<title");
+	if ( index != string::npos) {
+		title = getTitle(index + 7,s);
+	}
+	index = s.find("<body");
 	if ( index == string::npos)
 		return;
 
-	while ( index < fileStat.st_size) {
+	while ( index < fileStat.st_size - 1) {
 		String word1;
-		getWord(buffer, index, word1);
-		if ( !skipWord(word1))
-			indexedWords[word1] = fn;
+		getWord(buffer, index, word1,fileStat.st_size);
+		if ( !skipWord(word1)) {
+			tempIndexedWords[word1].add(fn.sFullPath(), title);
+		}
 	}
-
 	delete [] buffer;
 }
 
-void HelpFinder::getWord(char buffer [], int& index, String& word1) {
+void HelpFinder::getWord(char buffer [], int& index, String& word1, int maxs) {
 	word1 = "";
 	char c = buffer[index];
 	bool isTag = false;
-	while( !isWhiteSpace(c) || isTag) {
-		if ( c == '<' && ! noSpecialSymbol(buffer[index+1]) ) {
+	while( (!isWhiteSpace(c) || isTag) && index < maxs - 1) {
+		char c2 = buffer[index+1];
+		if ( (c == '<' && noSpecialSymbol(c2)) || (c == '<' && c2 == '/') ) {
 			isTag = true;
 		}
 		if ( c == '>' && isTag) {
 			isTag = false;
 		}
 		if ( !isTag && noSpecialSymbol(c))
-			word1 += c;
+			if ( !(c >= 48 && c <= 57 && word1.size() == 0)) 
+				word1 += c;
 		c = buffer[++index];
 	}
+	if ( isWhiteSpace(c))
+		++index;
 }
 
 bool HelpFinder::noSpecialSymbol(char c) {
@@ -113,10 +147,61 @@ bool HelpFinder::isWhiteSpace(char c) {
 
 void HelpFinder::startIndexing() {
 	ILWISSingleLock sl(&csAccess, TRUE,SOURCE_LOCATION);
-	String folder = getEngine()->getContext()->sIlwDir();
+	String folder = getEngine()->getContext()->sIlwDir() + "help";
 	findFolder(folder);
+	for(map<String, WordInfo>::iterator cur = tempIndexedWords.begin(); cur != tempIndexedWords.end(); ++cur) {
+
+		if ( (*cur).second.count > 2 && (*cur).second.count < 30) {
+			String word = (*cur).first;
+			word.toLower();
+			//set<String>::const_iterator fnd = exceptionsWords.find(word);
+			//if ( fnd != exceptionsWords.end())
+			//	continue;
+
+			indexedWords[word] = (*cur).second;
+			indexedWords[word].word = word;
+		} else {
+			TRACE(String("%S(%d) >> ",(*cur).first, (*cur).second.count).scVal());
+
+		}
+	}
+	char c = 0;
+	for(map<String, WordInfo>::iterator cur = indexedWords.begin(); cur != indexedWords.end(); ++cur) {
+		String word = (*cur).first;
+		char c1 = word[0];
+		if ( c1 != c) {
+			startPoints[c1] = cur;
+			c = c1;
+		}
+	}
+	tempIndexedWords.clear();
 }
 
+void HelpFinder::find(const String& wrd, vector<WordInfo>& result) {
+	ILWISSingleLock sl(&csAccess, TRUE,SOURCE_LOCATION);
+	if ( wrd.size() == 0) {
+		result.resize(indexedWords.size());
+		for(map<String, WordInfo>::const_iterator cur = indexedWords.begin(); cur != indexedWords.end(); ++cur) {
+			result.push_back((*cur).second);
+		}
+	} else {
+		char c = wrd[0];
+		map<String, WordInfo>::iterator start = startPoints[c];
+		if ( (*start).second.count > 0) {
+			for(map<String, WordInfo>::const_iterator cur = start; cur != indexedWords.end(); ++cur) {
+				WordInfo inf = (*cur).second;
+				if ( inf.word[0] != c)
+					break;
+				else {
+					if ( inf.word.find(wrd) != string::npos)
+						result.push_back(inf);
+				}
+
+			}
+		}
+
+	}
+}
 
 void HelpFinder::indexHTMLFiles() {
 	AfxBeginThread(startIndexing,  this);

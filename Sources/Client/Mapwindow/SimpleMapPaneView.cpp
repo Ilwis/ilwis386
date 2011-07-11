@@ -422,7 +422,8 @@ void SimpleMapPaneView::OnMouseMove(UINT nFlags, CPoint point)
 				msb->ShowRowCol(rc);
 				msb->ShowCoord(csy->sValue(Coord(0.5 + c.x, 0.5 - c.y))); // subpixel precision version
 			} else {
-				msb->ShowCoord(csy->sValue(c));
+				String v = useMetricCoords ? String("%f, %f", c.y, c.x) : csy->sValue(c); 
+				msb->ShowCoord(v);
 				if (csy->pcsDirect()) {
 					CoordSystemDirect *pcsd = csy->pcsDirect();
 					CoordSystemPtr * pcs = pcsd->csOther.ptr();
