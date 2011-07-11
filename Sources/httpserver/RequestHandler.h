@@ -28,14 +28,11 @@ public:
 	String getValue(const String& key) const;
 	virtual void writeResponse(IlwisServer*server=0) const;
 	virtual bool needsResponse() const;
-	virtual void doCommand();
+	virtual bool doCommand();
 	void setConfig(map<String, String>* _config);
+	virtual void writeError(const String& err, const String& code="none") const;
 protected:
 	RequestHandler(struct mg_connection *c, const struct mg_request_info *request_info, const map<String, String>& kvps);
-	XercesDOMParser *initXerces() const;
-	//void createWPSHeader(XERCES_CPP_NAMESPACE::DOMDocument *doc, const String& xsd) const;
-	XERCES_CPP_NAMESPACE::DOMElement  *createTextNode(XERCES_CPP_NAMESPACE::DOMDocument *doc,const String& nodeName, const String& value) const;
-	String createOutput(XERCES_CPP_NAMESPACE::DOMDocument *doc) const;
 	String getConfigValue(const String& key) const;
 	struct mg_connection *connection;
 	const struct mg_request_info *request_info;

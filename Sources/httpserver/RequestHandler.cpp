@@ -1,17 +1,16 @@
 #include "headers/toolspch.h"
 #include "HttpServer\command.h"
 #include "httpserver\RequestHandler.h"
+#include "Engine\Base\DataObjects\XMLDocument.h"
+#include "httpserver\OWSHandler.h"
 #include "httpserver\WPSHandler.h"
 #include "httpserver\WPSGetCapabilities.h"
 #include "httpserver\WPSDescribeProcess.h"
 #include "httpserver\WPSExecute.h"
 #include "httpserver\WMSGetCapabilities.h"
 #include "httpserver\SharedDataHandler.h"
-#include "XQuila\xqilla\xqilla-dom3.hpp"
 #include "Engine\Base\System\Engine.h"
-#include <xercesc/framework/StdOutFormatTarget.hpp>
-#include "xqilla\exceptions\XMLParseException.hpp"
-#include <xercesc/framework/MemBufFormatTarget.hpp>
+
 
 using namespace ILWIS;
 
@@ -70,6 +69,9 @@ void RequestHandler::setConfig(map<String, String>* _config) {
 	config = _config;
 }
 
+void RequestHandler::writeError(const String& err, const String& code) const{
+}
+
 void RequestHandler::writeResponse(IlwisServer *server) const {
 }
 
@@ -97,56 +99,10 @@ String RequestHandler::getConfigValue(const String& key) const {
 	return sUNDEF;
 }
 
-XercesDOMParser *RequestHandler::initXerces() const{
-	XercesDOMParser *parser = new XERCES_CPP_NAMESPACE::XercesDOMParser;
-	parser->setValidationScheme(XERCES_CPP_NAMESPACE::XercesDOMParser::Val_Auto);
-	parser->setDoNamespaces(false);
-	parser->setDoSchema(false);
-	parser->setValidationSchemaFullChecking(false);
-	parser->setCreateEntityReferenceNodes(false);
-	return parser;
-
-}
-
-XERCES_CPP_NAMESPACE::DOMElement *RequestHandler::createTextNode(XERCES_CPP_NAMESPACE::DOMDocument *doc,const String& nodeName, const String& value) const {
-   wchar_t result[1000];
-   XERCES_CPP_NAMESPACE::DOMElement *ele = doc->createElement(nodeName.toWChar(result));
-   DOMText* text = doc->createTextNode(value.toWChar(result));
-   ele->appendChild(text);
-   return ele;
-
-}
-
-String RequestHandler::createOutput(XERCES_CPP_NAMESPACE::DOMDocument *doc) const{
-	DOMImplementationLS *domOut = (DOMImplementationLS*)DOMImplementationRegistry::getDOMImplementation(L"LS");
-	DOMLSSerializer*  writer = domOut->createLSSerializer();
-
-	DOMConfiguration* dc = writer->getDomConfig(); 
-	//dc->setParameter(XMLUni::fgDOMErrorHandler,errorHandler); 
-	dc->setParameter(XMLUni::fgDOMWRTDiscardDefaultContent,true); 
-	dc->setParameter(XMLUni::fgDOMWRTFormatPrettyPrint, true);
-	CString txt(writer->writeToString(doc));
 
 
-	doc->release();
-	XMLPlatformUtils::Terminate();
-	String endResult;
-	String temp(txt);
-	for(int i=0; i < temp.size(); ++i) {
-		if ( temp[i] == '\n') {
-			endResult += '\r';
-		}
-		endResult += temp[i];
-	}
-	int index = endResult.find("UTF-16");
-	if ( index != -1) { // hack, setting other encodings in xerces is a bit awkward
-		endResult.replace(index,6,"UTF-8");
-	}
-	return endResult;
-
-}
-
-void RequestHandler::doCommand() {
+bool RequestHandler::doCommand() {
+	return false;
 
 }
 

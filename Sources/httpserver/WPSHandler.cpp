@@ -3,31 +3,37 @@
 #include "Engine\Base\System\Engine.h"
 #include "HttpServer\command.h"
 #include "HttpServer\mongoose.h"
+#include "Engine\Base\DataObjects\XMLDocument.h"
 #include "httpserver\RequestHandler.h"
+#include "httpserver\OWSHandler.h"
 #include "httpserver\WPSHandler.h"
 #include "Engine\Base\System\module.h"
 #include "Engine\Applications\ModuleMap.h"
-#include "httpserver\XMLDocument.h"
-#include "Headers\XQuila\xqilla\utils\XStr.hpp"
-#include <xercesc\dom\DOMLSSerializer.hpp>
+#include "Engine\Base\DataObjects\XMLDocument.h"
+
 
 using namespace ILWIS;
 
 WPSHandler::WPSHandler(struct mg_connection *c, const struct mg_request_info *ri, const map<String, String>& kvps) : 
-RequestHandler(c,ri,kvps)
+OWSHandler(c,ri,kvps)
 {
 }
 
-void WPSHandler::createHeader(XERCES_CPP_NAMESPACE::DOMDocument *doc, const String& xsd) const{
-	XERCES_CPP_NAMESPACE::DOMElement *root = doc->getDocumentElement();
-	root->setAttribute(L"xmlns:wps",L"http://www.opengis.net/wps/1.0.0");
-	root->setAttribute(L"xmlns:ows",L"http://www.opengis.net/ows/1.1");
-	root->setAttribute(L"xmlns:xlink",L"http://www.w3.org/1999/xlink");
-	root->setAttribute(L"xmlns:xsi",L"http://www.w3.org/2001/XMLSchema-instance");
-	String schema("http://www.opengis.net/wps/1.0.0 ../%S", xsd);
-	root->setAttribute(L"xsi:schemaLocation",X(schema.scVal()));
-	root->setAttribute(L"service",L"WPS");
-	root->setAttribute(L"version",L"1.0");
-	root->setAttribute(L"xml:lang",L"en-CA");
+void WPSHandler::createHeader(ILWIS::XMLDocument& doc, const String& xsd) const{
+	pugi::xml_node first = doc.first_child();
+	if ( first == 0)
+		return;
+
+	doc.addNameSpace("xlink","http://www.w3.org/1999/xlink");
+	doc.addNameSpace("wps","http://www.opengis.net/wps/1.0.0");
+	doc.addNameSpace("ows","http://www.opengis.net/ows/1.1");
+	doc.addNameSpace("xsi","http://www.w3.org/2001/XMLSchema-instance");
+
+	first.append_attribute("service") = "WPS";
+	first.append_attribute("version") = "1.0.0";
+	first.append_attribute("xml:lang") = "en-CA";
+	first.append_attribute("xsi:schemaLocation") = xsd.scVal();
+	first.append_attribute("updateSequence") = "1";
 
 }
+

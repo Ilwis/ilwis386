@@ -4,11 +4,12 @@
 #include "HttpServer\command.h"
 #include "HttpServer\mongoose.h"
 #include "httpserver\RequestHandler.h"
+#include "httpserver\OWSHandler.h"
 #include "httpserver\WPSHandler.h"
 #include "httpserver\WPSDescribeProcess.h"
 #include "Engine\Base\System\module.h"
 #include "Engine\Applications\ModuleMap.h"
-#include "httpserver\XMLDocument.h"
+#include "Engine\Base\DataObjects\XMLDocument.h"
 #include <xercesc\dom\DOMLSSerializer.hpp>
 
 
@@ -26,13 +27,12 @@ WPSDescribeProcess::WPSDescribeProcess(struct mg_connection *c, const struct mg_
 }
 
 void WPSDescribeProcess::writeResponse(IlwisServer *server) const{
-	DOMImplementation* dom = DOMImplementationRegistry::getDOMImplementation(XMLString::transcode("core"));
-	XERCES_CPP_NAMESPACE::DOMDocument *doc = dom->createDocument(0, L"ProcessDescriptions", 0);
+	XMLDocument doc;
+	doc.set_name("wps:DescribeProcess");
+	doc.addNodeTo(doc,"wps:DescribeProcess");
 	createHeader(doc, "wpsDescribeProcess_response.xsd");
-	XERCES_CPP_NAMESPACE::DOMElement *root = doc->getDocumentElement();
+	pugi::xml_node descriptions = doc.addNodeTo(doc.first_child(),"wps:ProcessDescriptions");
 
-	//XERCES_CPP_NAMESPACE::DOMElement *node1,*node2,*node3, *node4, *node5;
-	String txt;
 	for(int i =0; i < processIDs.size(); ++i) {
 		vector<CommandInfo *> infos;
 		Engine::modules.getCommandInfo(processIDs[i], infos);
@@ -44,25 +44,13 @@ void WPSDescribeProcess::writeResponse(IlwisServer *server) const{
 			query.queryType = "WPSMETADATA";
 			ApplicationMetadata amd = (info->metadata)(&query);
 			if ( amd.wpsxml != "") {
-				String xml = amd.wpsxml;
-				vector<String> results;
-				ILWIS::XMLDocument xmldoc(xml);
-				xmldoc.addNameSpace("ows","http://www.opengis.net/ows/1.1");
-				xmldoc.addNameSpace("wps","http://www.opengis.net/wps/1.0.0");
-				xmldoc.executeXPathExpression("//ProcessDescription",results);
-				if ( results.size() > 0) {
-					txt += results[0];
-				}
+				XMLDocument xmldoc(amd.wpsxml);;
+				doc.addNodeTo(descriptions,xmldoc);
 			}
 		}
 
 	}
-	String header = createOutput(doc);
-	int index = header.find("/>");
-	header.replace(index,2,">");
-	//index = header.find_last_of("/>");
-	//header.replace(index,2,">");
-	txt = header + txt + "\r\n</ProcessDescriptions>";
+	String txt = doc.toString();
 	char *buf = new char[txt.size() + 1];
 	memset(buf,0,txt.size() + 1);
 	memcpy(buf,txt.scVal(), txt.size());

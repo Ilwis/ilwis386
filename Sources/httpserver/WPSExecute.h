@@ -14,7 +14,7 @@ namespace ILWIS{
 
 		void writeResponse(IlwisServer*server=0) const;
 		bool needsResponse() const;
-		void doCommand();
+		bool doCommand();
 	private:
 		bool isApplication(const String& sExpress) ;
 		String makeApplicationExpression(const String& expr, const map<String, ILWIS::WPSParameter>& orderedInput);

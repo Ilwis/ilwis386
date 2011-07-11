@@ -1,9 +1,11 @@
 #pragma once
 
 namespace ILWIS {
-	class WPSHandler : public RequestHandler {
+	class XMLDocument;
+
+	class WPSHandler : public OWSHandler {
 	protected:
 		WPSHandler(struct mg_connection *c, const struct mg_request_info *ri, const map<String, String>& kvps);
-		void createHeader(XERCES_CPP_NAMESPACE::DOMDocument *doc, const String& xsd) const;
+		void createHeader(ILWIS::XMLDocument& doc, const String& xsd) const;
 	};
 }

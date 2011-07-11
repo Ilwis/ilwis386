@@ -22,7 +22,7 @@ SharedDataHandler::SharedDataHandler(struct mg_connection *c, const struct mg_re
 
 void SharedDataHandler::writeResponse(IlwisServer*server) const{
 	String uri(request_info->uri);
-	int index = uri.find_last_of("/");
+	int index = uri.find("/process_");
 	String name;
 	if ( index != string::npos) {
 		name = uri.substr(index+1);

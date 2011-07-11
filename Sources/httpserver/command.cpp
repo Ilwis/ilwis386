@@ -1,4 +1,5 @@
 #include "headers/toolspch.h"
+#include  <Winsock2.h>
 #include "Engine\Base\System\module.h"
 #include "Engine\Base\DataObjects\ilwisobj.h"
 #include "Engine\Applications\ModuleMap.h"
@@ -54,7 +55,8 @@ IlwisServer::IlwisServer() : ctx(0),isValid(false){
 }
 
 IlwisServer::~IlwisServer() {
-	free_context(ctx);
+	if ( ctx)
+		mg_stop(ctx);
 	ctx = 0;
 	::WaitForSingleObject(watcherThread->m_hThread, 4000);
 	WSACleanup();
@@ -64,9 +66,10 @@ UINT IlwisServer::executeInThread(LPVOID lp) {
 	String *cmd = (String *)lp;
 	String ilwDir = getEngine()->getContext()->sIlwDir();
 	if ( server == 0) {
-		server = new IlwisServer();
+		IlwisServer *serverTemp = new IlwisServer();
 		String name("%Sconfig.ini",ilwDir);
-		server->ReadConfigFile(name);
+		serverTemp->ReadConfigFile(name);
+		server = serverTemp;
 	}
 	return 1;
 }
@@ -117,7 +120,7 @@ bool IlwisServer::start(String* cmd) {
 	}
 
 
-	ctx = mg_start(&event_handler, (const char **)coptions);
+	ctx = mg_start(&event_handler, 0, (const char **)coptions);
 	watcherThread = AfxBeginThread(IlwisServer::timeOutChecker, (void*)this);
 
 	return true;
@@ -142,8 +145,8 @@ void *IlwisServer::event_handler(enum mg_event ev, struct mg_connection *conn,  
 			RequestHandler *rh = RequestHandler::createHandler(conn, request_info);
 			if ( rh) {
 				rh->setConfig(&IlwisServer::config);
-				rh->doCommand();
-				if ( rh->needsResponse())
+				bool res = rh->doCommand();
+				if ( res || rh->needsResponse())
 					rh->writeResponse(server);
 				delete rh;
 			}
@@ -157,7 +160,7 @@ void *IlwisServer::event_handler(enum mg_event ev, struct mg_connection *conn,  
 		}
 		else if ( uri.find("/result_data/") != string::npos) {
 			map<String, String> dummy;
-			SharedDataHandler *sdh = new SharedDataHandler(conn, request_info, dummy, "WPS:ExecutionData:Root");
+			SharedDataHandler *sdh = new SharedDataHandler(conn, request_info, dummy, "WPS:ExecutionContext:Root");
 			sdh->setConfig(&IlwisServer::config);
 			sdh->writeResponse(server);
 			delete sdh;
@@ -173,7 +176,7 @@ void *IlwisServer::event_handler(enum mg_event ev, struct mg_connection *conn,  
 UINT IlwisServer::timeOutChecker(void *p) {
 	IlwisServer *serv = (IlwisServer *)p;
 	while(serv->ctx != 0) {
-		sleep(3);
+		Sleep(3000);
 		serv->checkTimeOutLocations();
 	}
 	return 1;
