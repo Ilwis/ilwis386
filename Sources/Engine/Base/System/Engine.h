@@ -53,6 +53,7 @@ public:
 	void addModule(ILWIS::Module *m);
 	ILWIS::Version *getVersion();
 	static ModuleMap modules;
+	bool fServerMode() const;
 
 public:
 	IlwisAppContext *context;

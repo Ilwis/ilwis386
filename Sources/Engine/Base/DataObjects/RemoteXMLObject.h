@@ -37,27 +37,6 @@ Created on: 2007-02-8
 
 class SAXParser;
 
-class StrX {
-public :
-    StrX(const XMLCh* const toTranscode) {
-        fLocalForm = XERCES_CPP_NAMESPACE::XMLString::transcode(toTranscode);
-    }
-
-    ~StrX() {
-        XERCES_CPP_NAMESPACE::XMLString::release(&fLocalForm);
-    }
-    const char* scVal() const  {
-        return fLocalForm;
-    }
-
-	double rVal() const {
-		return String(fLocalForm).rVal();
-	}
-private :
-    char*   fLocalForm;
-};
-
-
 class _export RemoteXMLObject {
 public:
 	RemoteXMLObject(const URL& url);
@@ -72,7 +51,6 @@ public:
 protected:
    void parse();
    MemoryStruct chunk;
-   XERCES_CPP_NAMESPACE::SAXParser* parser;
 
 };
 

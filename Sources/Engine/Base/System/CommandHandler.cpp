@@ -152,10 +152,11 @@ LRESULT BaseCommandHandler::fExecute(const String& sCmd)
 			String sParms = sParm.sTrimSpaces();
 			(cf)(sParms);
 			return true;
+		} else if ( !getEngine()->fServerMode()) {
+			ReroutPost(sCmd);
+			return true;
 		}
-		ReroutPost(sCmd);
-		return true;
-	} else {
+	} else if ( ! getEngine()->fServerMode()){
 		ReroutPost(sCmd);
 		return true;
 	}
@@ -604,7 +605,8 @@ LRESULT CommandHandler::fExecute(const String& sCmd)
 	catch(ErrorObject& err)
 	{
 		bool *fNoErrorDisplay = (bool *)(getEngine()->pGetThreadLocalVar(IlwisAppContext::tlvDONOTSHOWANYERROR));
-		if (*fNoErrorDisplay)
+		bool *fServerMode = (bool*)getEngine()->getContext()->pGetThreadLocalVar(IlwisAppContext::tlvSERVERMODE);
+		if (*fNoErrorDisplay || *fServerMode)
 			throw err;
 		else
 			err.Show();

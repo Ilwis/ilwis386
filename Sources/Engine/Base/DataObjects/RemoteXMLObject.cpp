@@ -36,8 +36,6 @@ Created on: 2007-02-8
 ***************************************************************/
 
 #include "Headers\toolspch.h"
-#include <xercesc/parsers/SAXParser.hpp>
-#include <xercesc/framework/MemBufInputSource.hpp>
 #include "Engine\DataExchange\curlIncludes\curl.h"
 #include "Engine\DataExchange\curlIncludes\easy.h"
 
@@ -47,7 +45,7 @@ Created on: 2007-02-8
 RemoteXMLObject::RemoteXMLObject() {
 }
 
-RemoteXMLObject::RemoteXMLObject(const URL& url): parser(NULL) {
+RemoteXMLObject::RemoteXMLObject(const URL& url) {
 	getRequest(url.sVal().sVal());
 }
 
@@ -113,12 +111,5 @@ void RemoteXMLObject::getRequest(char *url) {
 }
 
 void RemoteXMLObject::parse() {
-	if ( !parser) {
-		parser = new XERCES_CPP_NAMESPACE::SAXParser;
-		parser->setValidationScheme(XERCES_CPP_NAMESPACE::SAXParser::Val_Auto);
-		parser->setDoNamespaces(false);
-		parser->setValidationSchemaFullChecking(false);
-	}
-
 }
 

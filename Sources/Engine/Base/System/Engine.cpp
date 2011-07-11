@@ -16,6 +16,7 @@
 #include "Engine\Base\DataObjects\URL.h"
 #include "Engine\DataExchange\WMSCollection.h"
 #include <Headers\xercesc\util\PlatformUtils.hpp>
+#include "XQuila\xqilla\xqilla-dom3.hpp"
 #include <set>
 
 ModuleMap Engine::modules = ModuleMap();
@@ -55,6 +56,7 @@ Engine::~Engine()
 
 void Engine::Init(const String& prog, const String& sCmdLn) {
 	XERCES_CPP_NAMESPACE::XMLPlatformUtils::Initialize();
+	XQillaPlatformUtils::initialize();
 
 	context = new IlwisAppContext(prog, sCmdLn);
 	version = new ILWIS::Version();
@@ -211,3 +213,10 @@ void Engine::addModule(ILWIS::Module *m) {
 	}
 }
 
+bool Engine::fServerMode() const{
+	bool *fServerMode = (bool*)context->pGetThreadLocalVar(IlwisAppContext::tlvSERVERMODE);
+	if( fServerMode != 0 && *fServerMode)
+		return true;
+	return false;
+
+}
