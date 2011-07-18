@@ -49,7 +49,7 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 			cNorm = c;
 		}
 		else {
-			cNorm = csy->cConv(getRootDrawer()->getCoordinateSystem(), c);
+			cNorm = getRootDrawer()->getCoordinateSystem()->cConv(csy, c);
 		}
 		cb += cNorm;
 	}
