@@ -21,8 +21,12 @@ WMSGetCapabilities::WMSGetCapabilities(struct mg_connection *c, const struct mg_
 
 void WMSGetCapabilities::writeResponse(IlwisServer *server) const{
 	ILWIS::XMLDocument doc;
-	doc.set_name("<WMT_MS_Capabilities");
-	doc.append_attribute("version") = "1.1.1";
+	pugi::xml_node first = doc.addNodeTo(doc,"WMT_MS_Capabilities");
+
+	first.append_attribute("service") = "WMS";
+	first.append_attribute("version") = "1.1.1";
+	first.append_attribute("xml:lang") = "en-CA";
+	first.append_attribute("updateSequence") = "0";
 	
 	pugi::xml_node ser = doc.addNodeTo(doc,"Service");
 	doc.addNodeTo(ser,"Name", "WMS");
@@ -51,7 +55,7 @@ void WMSGetCapabilities::writeResponse(IlwisServer *server) const{
 	pugi::xml_node ores = doc.addNodeTo(get,"OnlineResource");
 	ores.append_attribute("xmlns:xlink")="http://www.w3.org/1999/xlink";
 	ores.append_attribute("xlink:type")="simple";
-	ores.append_attribute("xlink:href")=getConfigValue("WMS:OperationMetadata:GetCapabilities").scVal();
+	ores.append_attribute("xlink:href")=getConfigValue("WMS:OperationMetadata:GetCapabilities").c_str();
 
 	gcap = doc.addNodeTo(req, "GetMap");
 	doc.addNodeTo(gcap,"Format","image/png");
@@ -61,7 +65,7 @@ void WMSGetCapabilities::writeResponse(IlwisServer *server) const{
 	ores = doc.addNodeTo(get,"OnlineResource");
 	ores.append_attribute("xmlns:xlink")="http://www.w3.org/1999/xlink";
 	ores.append_attribute("xlink:type")="simple";
-	ores.append_attribute("xlink:href")=getConfigValue("WMS:OperationMetadata:GetMap").scVal();
+	ores.append_attribute("xlink:href")=getConfigValue("WMS:OperationMetadata:GetMap").c_str();
 
 
 	pugi::xml_node exc = doc.addNodeTo(doc,"Exception");
@@ -85,7 +89,7 @@ void WMSGetCapabilities::writeResponse(IlwisServer *server) const{
 	String txt = doc.toString();
 	char *buf = new char[txt.size() + 1];
 	memset(buf,0,txt.size() + 1);
-	memcpy(buf,txt.scVal(), txt.size());
+	memcpy(buf,txt.c_str(), txt.size());
 	mg_write(getConnection(), buf, txt.size()+1);
 	delete [] buf;
 }
@@ -93,14 +97,16 @@ void WMSGetCapabilities::writeResponse(IlwisServer *server) const{
 
 void WMSGetCapabilities::handleFilteredCatalog(const String& location,const String& filter, bool recursive, list<FileName>& files) const{
 	CFileFind finder;
+	FileName pseudoName(filter);
 	String pattern = location + "\\" + filter;
-	BOOL fFound = finder.FindFile(pattern.scVal());
+	BOOL fFound = finder.FindFile(pattern.c_str());
 	while(fFound) {
 		fFound = finder.FindNextFile();
 		if (!finder.IsDirectory())
 		{
 			FileName fnNew(finder.GetFilePath());
-			files.push_back(fnNew);
+			if ( pseudoName.sExt == "" || pseudoName.sExt == fnNew.sExt)
+				files.push_back(fnNew);
 		}
 	}
 }
@@ -132,10 +138,10 @@ void WMSGetCapabilities::handleFile(pugi::xml_node& layer,ILWIS::XMLDocument& do
 					String lonmin("%f",llMin.Lon);
 					String latmax("%f",llMax.Lat);
 					String lonmax("%f",llMax.Lon);
-					bb.append_attribute("minx") = latmin.scVal();
-					bb.append_attribute("miny") = latmin.scVal();
-					bb.append_attribute("maxx") = lonmax.scVal();
-					bb.append_attribute("maxy") = latmax.scVal();
+					bb.append_attribute("minx") = latmin.c_str();
+					bb.append_attribute("miny") = latmin.c_str();
+					bb.append_attribute("maxx") = lonmax.c_str();
+					bb.append_attribute("maxy") = latmax.c_str();
 				} 
 			}
 			if ( bmp->cs()->pcsViaLatLon() && !bmp->cs()->pcsLatLon()) {
@@ -145,16 +151,16 @@ void WMSGetCapabilities::handleFile(pugi::xml_node& layer,ILWIS::XMLDocument& do
 				if ( id.find("epsg") != string::npos)
 					id = id.sTail("=");
 				pugi::xml_node bb = doc.addNodeTo(lyr,"BoundingBox");
-				bb.append_attribute("SRS") = epsg.scVal();
+				bb.append_attribute("SRS") = epsg.c_str();
 			
 				String xmin("%f",cb.cMin.x);
 				String ymin("%f",cb.cMin.y);
 				String xmax("%f",cb.cMax.x);
 				String ymax("%f",cb.cMax.y);
-				bb.append_attribute("minx") = xmin.scVal();
-				bb.append_attribute("miny") = ymin.scVal();
-				bb.append_attribute("maxx") = xmax.scVal();
-				bb.append_attribute("maxy") = ymax.scVal();
+				bb.append_attribute("minx") = xmin.c_str();
+				bb.append_attribute("miny") = ymin.c_str();
+				bb.append_attribute("maxx") = xmax.c_str();
+				bb.append_attribute("maxy") = ymax.c_str();
 		
 			}
 		}

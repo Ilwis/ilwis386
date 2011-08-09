@@ -29,14 +29,14 @@ void OWSHandler::writeError(const String& err, const String& code) const{
 	doc.append_attribute("xml:lang") = "en-CA";
 
 	pugi::xml_node exc = doc.addNodeTo(doc,"ows:Exception");
-	exc.append_attribute("exceptionCode") = code.scVal();
+	exc.append_attribute("exceptionCode") = code.c_str();
 	doc.addNodeTo(exc,"ows:ExceptionText",err);
 
 	String txt = doc.toString();
 
 	char *buf = new char[txt.size() + 1];
 	memset(buf,0,txt.size() + 1);
-	memcpy(buf,txt.scVal(), txt.size());
+	memcpy(buf,txt.c_str(), txt.size());
 	mg_write(getConnection(), buf, txt.size()+1);
 	delete [] buf;
 }

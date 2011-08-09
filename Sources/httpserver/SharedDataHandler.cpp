@@ -31,7 +31,7 @@ void SharedDataHandler::writeResponse(IlwisServer*server) const{
 #undef close // huh? wie definieert nou een macro close, das vragen om problemen
 #undef read
 
-	fstream binfile(name.scVal(), ios::in | ios::binary);
+	fstream binfile(name.c_str(), ios::in | ios::binary);
 	if ( binfile.is_open()) {
 		char buffer[MAX_IN_BUF];
 		bool notFinished = true;

@@ -29,7 +29,7 @@ FileName Downloader::download(const String& executionDir) {
 
 	count = 0;
 	CURL* ctx = curl_easy_init() ;
-	curl_easy_setopt( ctx , CURLOPT_URL,  url.sVal().scVal() );
+	curl_easy_setopt( ctx , CURLOPT_URL,  url.sVal().c_str() );
 	int index = url.sVal().find_last_of("/");
 	if ( index == string::npos) 
 		return FileName();
@@ -39,7 +39,7 @@ FileName Downloader::download(const String& executionDir) {
 	trq.SetTitle("Downloading: " + name);
 	trq.SetText("Receiving data");
 	String targetPath("%S\\%S", executionDir, name);
-	file = fopen(targetPath.scVal(), "wb");
+	file = fopen(targetPath.c_str(), "wb");
 	if ( file == NULL)
 		return FileName();
 
@@ -54,9 +54,9 @@ FileName Downloader::download(const String& executionDir) {
 	fclose(file);
 
 	//struct stat fileStat;
-	//int err = stat( targetPath.scVal(), &fileStat );
+	//int err = stat( targetPath.c_str(), &fileStat );
 	struct __stat64 fileStat; 
-	int err = _stat64( targetPath.scVal(), &fileStat );
+	int err = _stat64( targetPath.c_str(), &fileStat );
 	FileName fn2(targetPath);
 
 	if ( fileStat.st_size == 0)

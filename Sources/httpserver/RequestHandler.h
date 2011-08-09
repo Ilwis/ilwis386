@@ -29,7 +29,7 @@ public:
 	virtual void writeResponse(IlwisServer*server=0) const;
 	virtual bool needsResponse() const;
 	virtual bool doCommand();
-	void setConfig(map<String, String>* _config);
+	virtual void setConfig(map<String, String>* _config);
 	virtual void writeError(const String& err, const String& code="none") const;
 protected:
 	RequestHandler(struct mg_connection *c, const struct mg_request_info *request_info, const map<String, String>& kvps);
@@ -38,5 +38,6 @@ protected:
 	const struct mg_request_info *request_info;
 	map<String, String> kvps;
 	map<String, String> *config;
+	static map<String, bool> activeServices;
 };
 }

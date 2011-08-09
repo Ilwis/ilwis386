@@ -77,7 +77,7 @@ UINT IlwisServer::executeInThread(LPVOID lp) {
 void IlwisServer::ReadConfigFile(FileName fnConfig) {
 	if ( fnConfig.fExist() == false)
 		return;
-	ifstream configfile(fnConfig.sFullPath().scVal());
+	ifstream configfile(fnConfig.sFullPath().c_str());
 	String line;
 	if ( configfile.is_open()) {
 		String prefix;
@@ -128,9 +128,9 @@ bool IlwisServer::start(String* cmd) {
 
 void IlwisServer::addOptions(int& index, char *coptions[40], const String& option, const String& value) {
 	coptions[index] = new char(option.size() + 1);
-	strcpy_s(coptions[index++],option.size() + 1,  option.scVal());
+	strcpy_s(coptions[index++],option.size() + 1,  option.c_str());
 	coptions[index] = new char(value.size() + 1);
-	strcpy_s(coptions[index++], value.size() + 1, value.scVal());
+	strcpy_s(coptions[index++], value.size() + 1, value.c_str());
 }
 
 
@@ -165,7 +165,7 @@ void *IlwisServer::event_handler(enum mg_event ev, struct mg_connection *conn,  
 			sdh->writeResponse(server);
 			delete sdh;
 		} else {
-			mg_printf(conn,"Ilwis Server  %s\n", ILWIS::Time::now().toString().scVal());
+			mg_printf(conn,"Ilwis Server  %s\n", ILWIS::Time::now().toString().c_str());
 		}
 
 	}
@@ -195,7 +195,7 @@ void IlwisServer::checkTimeOutLocations() {
 		time_t end = time(0);
 		double diff = difftime(end, (*cur).second);
 		if ( diff > REMOVE_TIME_OUT) { // if time out passed, removed dir
-			system(String("rmdir %S /s /q", (*cur).first).scVal());
+			system(String("rmdir %S /s /q", (*cur).first).c_str());
 			timeOuts.erase(cur);
 			break; // any other timouts will be handled in the next call; it isnt very critical anyway.
 		}

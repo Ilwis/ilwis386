@@ -233,7 +233,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\httpserver\UpdateService.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\httpserver\WMSGetCapabilities.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\httpserver\WMSGetMap.cpp"
 				>
 			</File>
 			<File
@@ -283,7 +291,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\httpserver\UpdateService.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\httpserver\WMSGetCapabilities.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\httpserver\WMSGetMap.h"
 				>
 			</File>
 			<File

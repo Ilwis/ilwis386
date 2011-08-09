@@ -61,7 +61,7 @@ bool WPSExecute::doCommand() {
 void WPSExecute::createExecutionEnviroment() {
 	String rootDir = getConfigValue("WPS:ExecutionContext:Root");
 	executionDir = String("%S\\process_%d", rootDir, folder_count);
-	_mkdir(executionDir.scVal());
+	_mkdir(executionDir.c_str());
 	getEngine()->SetCurDir(executionDir);
 }
 
@@ -207,17 +207,17 @@ void WPSExecute::executeOperation() {
 	getEngine()->Execute(expression);
 	CFileFind finder;
 	String path(getEngine()->sGetCurDir() + "*.*");
-	BOOL fFound = finder.FindFile(path.scVal());
+	BOOL fFound = finder.FindFile(path.c_str());
 	FileName fnOut(outputName);
 	FileName fnTxt(fnOut,".txt");
-	ofstream of(fnTxt.sFullPath().scVal());
+	ofstream of(fnTxt.sFullPath().c_str());
 	while(fFound) {
 		fFound = finder.FindNextFile();
 		if (!finder.IsDirectory())
 		{
 			FileName fnNew (finder.GetFilePath());
 			String line("%S\n",fnNew.sFile + fnNew.sExt);
-			of << line.scVal();
+			of << line.c_str();
 
 		}
 	}
@@ -228,7 +228,7 @@ void WPSExecute::executeOperation() {
 	fnOut = FileName(executionDir + "\\" + outputName);
 	getEngine()->Execute(String("zip %S",fnOut.sFullNameQuoted()));
 	fnZip = FileName(String("%S_%S.zip",fnOut.sFile, fnOut.sExt.sTail(".")));
-	ifstream ifs(fnTxt.sFullPath().scVal());
+	ifstream ifs(fnTxt.sFullPath().c_str());
 	String line;
 	if (ifs.is_open())
 	{
@@ -289,7 +289,7 @@ void WPSExecute::moveToLocal(const map<String, FileName>& files) {
 		FileName fnHere(fnObj.sFile + fnObj.sExt);
 		if ( fnHere.fExist())
 			continue;
-		CopyFile(fnObj.sFullPath().scVal(), fnHere.sFullPath().scVal(),true);
+		CopyFile(fnObj.sFullPath().c_str(), fnHere.sFullPath().c_str(),true);
 	}
 
 }
@@ -391,7 +391,7 @@ void WPSExecute::writeResponse(IlwisServer *server) const{
 			}
 			
 			pugi::xml_node st = doc.addNodeTo(erp,"wps:Status");
-			st.append_attribute("creationTime") = ILWIS::Time::now().toString().scVal();
+			st.append_attribute("creationTime") = ILWIS::Time::now().toString().c_str();
 			doc.addNodeTo(st,"wps:ProcessSucceeded");
 
 			//pugi::xml_node inp = doc.addNodeTo(doc.first_child(), "wps:DataInputs");
@@ -414,7 +414,7 @@ void WPSExecute::writeResponse(IlwisServer *server) const{
 					String root = getConfigValue("wps:OperationMetaData:ResultServer");
 					root += String("/result_data/process_%d/%S%S",folder_count, fnZip.sFile, fnZip.sExt);
 					pugi::xml_node ref = doc.addNodeTo(op, "wps:Reference");
-					ref.append_attribute("xlink:href") = root.scVal();
+					ref.append_attribute("xlink:href") = root.c_str();
 				}
 				String xpathq("//wps:Output/ows:Title[../ows:Identifier=\"%S\"]",parm.value);
 				xmldoc.executeXPathExpression(xpathq,results);
@@ -434,7 +434,7 @@ void WPSExecute::writeResponse(IlwisServer *server) const{
 	String txt = doc.toString();
 	char *buf = new char[txt.size() + 1];
 	memset(buf,0,txt.size() + 1);
-	memcpy(buf,txt.scVal(), txt.size());
+	memcpy(buf,txt.c_str(), txt.size());
 	mg_write(getConnection(), buf, txt.size()+1);
 
 	delete [] buf;
