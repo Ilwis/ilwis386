@@ -213,7 +213,7 @@ String GoalFunction::sGetFx(String sData)
 
 String GoalFunction::sDescription()
 {
-	return String("%S(%.3f,%.3f)", SSmcUiGoal, m_Anchors[0].X, m_Anchors[1].X);
+	return String("%S(%.3f,%.3f)", TR("Goal"), m_Anchors[0].X, m_Anchors[1].X);
 }
 
 //////////////////////////////////////////////////////////////////////

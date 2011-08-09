@@ -251,7 +251,7 @@ void LayoutDoc::Serialize(CArchive& ar)
 			LayoutItem* li = *iter;
 			li->SetID(iItem);
 			String sEntry("Item %i", iItem);
-			ObjectInfo::WriteElement("Layout", sEntry.scVal(), en, li->sType());
+			ObjectInfo::WriteElement("Layout", sEntry.c_str(), en, li->sType());
 			String sType = li->sType();
 		}
 		ObjectInfo::WriteElement("Layout", "Items", en, iItem);
@@ -263,7 +263,7 @@ void LayoutDoc::Serialize(CArchive& ar)
 			++iItem;
 			String sEntry("Item %i", iItem);
 			LayoutItem* li = *iter;
-			li->Serialize(ar, sEntry.scVal());
+			li->Serialize(ar, sEntry.c_str());
 		}
 	}
 	else
@@ -298,15 +298,15 @@ void LayoutDoc::Serialize(CArchive& ar)
 			size_t iPos = sizeof(DEVNAMES);
 			lpDevNames->wDriverOffset = iPos;
 			char* p = (char*)lpDevNames + lpDevNames->wDriverOffset;
-			strcpy(p, sDriver.scVal());
+			strcpy(p, sDriver.c_str());
 			iPos += strlen(p) + 1;
 			lpDevNames->wDeviceOffset = iPos;
 			p = (char*)lpDevNames + lpDevNames->wDeviceOffset;
-			strcpy(p, sDevice.scVal());
+			strcpy(p, sDevice.c_str());
 			iPos += strlen(p) + 1;
 			lpDevNames->wOutputOffset = iPos;
 			p = (char*)lpDevNames + lpDevNames->wOutputOffset;
-			strcpy(p, sOutput.scVal());
+			strcpy(p, sOutput.c_str());
 			iPos += strlen(p) + 1;
 			lpDevNames->wDefault = iPos;
 			p = (char*)lpDevNames + lpDevNames->wDefault;
@@ -321,7 +321,7 @@ void LayoutDoc::Serialize(CArchive& ar)
 			String sEntry("Item %i", i);
 			String sType;
 			LayoutItem* li = 0;
-			ObjectInfo::ReadElement("Layout", sEntry.scVal(), en, sType);
+			ObjectInfo::ReadElement("Layout", sEntry.c_str(), en, sType);
 			if (sType == "Text")
 				li = new TextLayoutItem(this);
 			else if (sType == "ScaleText")
@@ -355,7 +355,7 @@ void LayoutDoc::Serialize(CArchive& ar)
 		{
 			LayoutItem* li = *iter;
 			String sEntry("Item %i", li->iID());
-			li->Serialize(ar, sEntry.scVal());
+			li->Serialize(ar, sEntry.c_str());
 		}
 	}
 }
@@ -404,7 +404,7 @@ LayoutItem* LayoutDoc::liAddMapView(const String& sMapView)
 		dtViews.AddDocument(mcd);
 		FileName fn(sMapView);
 		KeepDir kd(fn.sPath());
-		if (!mcd->OnOpenDocument(sMapView.scVal()))
+		if (!mcd->OnOpenDocument(sMapView.c_str()))
 			return FALSE;
 		LayoutItem* li = new MapLayoutItem(this, mcd);
 		AddItem(li);
@@ -494,7 +494,7 @@ void LayoutDoc::OnAddMapView()
   {
   public:
     AddMapViewForm(CWnd* parent, String* sName)
-    : FormWithDest(parent, SLOTitleAddMapView)
+    : FormWithDest(parent, TR("Insert Map View"))
     {
 			new FieldDataTypeLarge(root, sName, ".mpv");
 	    SetMenHelpTopic("ilwismen\\layout_editor_insert_map_view.htm");
@@ -543,15 +543,15 @@ LayoutItem* LayoutDoc::liAddPicture(const String& sPicture)
 	HENHMETAFILE hMF = 0;
 	LayoutItem* li = 0;
 	if (fn.sExt == ".emf")
-		hMF = GetEnhMetaFile(sPicture.scVal());
+		hMF = GetEnhMetaFile(sPicture.c_str());
 	else if (fn.sExt == ".wmf") 
-		hMF = ReadMetaFile(sPicture.scVal());
+		hMF = ReadMetaFile(sPicture.c_str());
 	if (hMF) {
 		li = new PictureLayoutItem(this, hMF);
 		DeleteEnhMetaFile(hMF);
 	}
 	if (fn.sExt == ".bmp") {
-		HBITMAP hbm = (HBITMAP)LoadImage(NULL,sPicture.scVal(),IMAGE_BITMAP,0,0,LR_LOADFROMFILE);
+		HBITMAP hbm = (HBITMAP)LoadImage(NULL,sPicture.c_str(),IMAGE_BITMAP,0,0,LR_LOADFROMFILE);
 		li = new BitmapLayoutItem(this, hbm);
 		DeleteObject(hbm);
 	}
@@ -566,7 +566,7 @@ void LayoutDoc::OnAddPicture()
   {
   public:
     AddPictureForm(CWnd* parent, String* sName)
-    : FormWithDest(parent, SLOTitleAddPicture)
+    : FormWithDest(parent, TR("Insert Bitmap or Picture"))
     {
       new FieldDataTypeLarge(root, sName, ".emf.wmf.bmp", true);
 	    SetMenHelpTopic("ilwismen\\layout_editor_insert_bitmap_picture.htm");
@@ -631,7 +631,7 @@ void LayoutDoc::OnFileOpen()
   {
   public:
     OpenForm(CWnd* parent, String* sName)
-    : FormWithDest(parent, SLOTitleOpenLayout)
+    : FormWithDest(parent, TR("Open Layout"))
     {
 			new FieldDataTypeLarge(root, sName, ".ilo");
 			SetMenHelpTopic("ilwismen\\layout_editor_open_layout.htm");
@@ -641,7 +641,7 @@ void LayoutDoc::OnFileOpen()
   String sLayout;
   OpenForm frm(wndGetActiveView(), &sLayout);
 	if (frm.fOkClicked()) {
-		OnOpenDocument(sLayout.scVal());
+		OnOpenDocument(sLayout.c_str());
 		SetModifiedFlag(FALSE);
 	}
 }

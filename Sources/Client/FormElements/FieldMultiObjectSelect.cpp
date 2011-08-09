@@ -152,7 +152,7 @@ void ObjectSelectorBase::SetSelectedItem(const FMOSItem& item)
 	  lb->SetSel(-1, FALSE);
   }
   
-  int id = lb->FindString(-1, item.sItem().scVal());
+  int id = lb->FindString(-1, item.sItem().c_str());
   if ( id < 0)
   {
 	  lb->SetSel(-1, FALSE);
@@ -199,7 +199,7 @@ void ObjectSelectorBase::AddItem(FMOSItem* item)
 	if ( i >= vfiItems.size())
 	{
 		vfiItems.push_back(newitem);
-		lb->AddString(newitem->sItem().scVal());
+		lb->AddString(newitem->sItem().c_str());
 	}
 	else
 		delete newitem;
@@ -217,7 +217,7 @@ void ObjectSelectorBase::ChangeItem(int iIndex, FMOSItem *item)
 		delete vfiItems[iIndex];
 		vfiItems[iIndex] = item;
 		lb->DeleteString(iIndex);
-		lb->InsertString(iIndex, item->sItem().scVal());
+		lb->InsertString(iIndex, item->sItem().c_str());
 	}
 }
 

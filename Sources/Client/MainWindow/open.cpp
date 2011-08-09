@@ -78,7 +78,7 @@ LRESULT OpenImplicitObject(ParmList& pm) {
 			FileName fnTable(fnTemp.sFile, fnTemp.sExt); // name of the file to be produced
 			if ( IlwisObject::iotObjectType(fnRoot) != IlwisObject::iotANY) //  the container was an ILWIS container
 				pm.Add(new Parm("collection", fnRoot.sRelativeQuoted()));
-			IlwWinApp()->OpenDocumentFile(fnTable.sFullPath().scVal(), pm);
+			IlwWinApp()->OpenDocumentFile(fnTable.sFullPath().c_str(), pm);
 		}
 	}
 	return 1;
@@ -134,23 +134,23 @@ LRESULT OpenIlwisMaps(CWnd *parent, const String& sCmd) {
 			Cmdanaglyph(parent, sCmd);
 	}
 	else if (pm.fExist("noask"))
-		IlwWinApp()->OpenDocumentFile(fnFile.sFullNameQuoted().scVal(), IlwisDocument::otNOASK);
+		IlwWinApp()->OpenDocumentFile(fnFile.sFullNameQuoted().c_str(), IlwisDocument::otNOASK);
 	else if (pm.fExist("mpr"))
-		IlwWinApp()->OpenDocumentFile(fnFile.sFullNameQuoted().scVal(), IlwisDocument::otMPR);
+		IlwWinApp()->OpenDocumentFile(fnFile.sFullNameQuoted().c_str(), IlwisDocument::otMPR);
 	else if (pm.fExist("mpa"))
-		IlwWinApp()->OpenDocumentFile(fnFile.sFullNameQuoted().scVal(), IlwisDocument::otMPA);
+		IlwWinApp()->OpenDocumentFile(fnFile.sFullNameQuoted().c_str(), IlwisDocument::otMPA);
 	else if (pm.fExist("mps"))
-		IlwWinApp()->OpenDocumentFile(fnFile.sFullNameQuoted().scVal(), IlwisDocument::otMPS);
+		IlwWinApp()->OpenDocumentFile(fnFile.sFullNameQuoted().c_str(), IlwisDocument::otMPS);
 	else if (pm.fExist("mpp"))
-		IlwWinApp()->OpenDocumentFile(fnFile.sFullNameQuoted().scVal(), IlwisDocument::otMPP);
+		IlwWinApp()->OpenDocumentFile(fnFile.sFullNameQuoted().c_str(), IlwisDocument::otMPP);
 	else if (fnFile.sExt == ".mpl" && pm.fExist("animation"))
-		IlwWinApp()->OpenDocumentFile(fnFile.sFullNameQuoted().scVal(), IlwisDocument::otANIMATION);
+		IlwWinApp()->OpenDocumentFile(fnFile.sFullNameQuoted().c_str(), IlwisDocument::otANIMATION);
 	else if (fnFile.sExt == ".ioc" && pm.fExist("animation"))
-		IlwWinApp()->OpenDocumentFile(fnFile.sFullNameQuoted().scVal(), IlwisDocument::otANIMATION);
+		IlwWinApp()->OpenDocumentFile(fnFile.sFullNameQuoted().c_str(), IlwisDocument::otANIMATION);
 	else if (fnFile.sExt == ".ioc" && pm.fExist("layer"))
-		IlwWinApp()->OpenDocumentFile(fnFile.sFullNameQuoted().scVal(), IlwisDocument::otCOLLECTION);
+		IlwWinApp()->OpenDocumentFile(fnFile.sFullNameQuoted().c_str(), IlwisDocument::otCOLLECTION);
 	else
-		IlwWinApp()->OpenDocumentFile(fnFile.sFullNameQuoted().scVal());
+		IlwWinApp()->OpenDocumentFile(fnFile.sFullNameQuoted().c_str());
 
 	return 1;
 }
@@ -173,7 +173,7 @@ LRESULT Cmdopen(CWnd *parent, const String& sCmd){
 	}
 	String sCommand = sCmd.sHead("(");
 	if ( isCommand(sCommand)) {
-		IlwWinApp()->OpenDocumentFile(sCmd.scVal());
+		IlwWinApp()->OpenDocumentFile(sCmd.c_str());
 		return 1;
 	}
 	ParmList pm(sCmd);
@@ -212,8 +212,8 @@ LRESULT Cmdanaglyph(CWnd* parent, const String& sCmd)
 	bool fPalette = (dc->GetDeviceCaps(RASTERCAPS) & RC_PALETTE) != 0;
 	if (fPalette) {
 		MessageBox(0,
-			SMSMsgColorDepth16bitOrHigher.scVal(),
-			SMSTitleShowAnaglyph.scVal(),
+			TR("To display a map list as color composite,\nthe display settings in the Control Panel\nneed to be set on more than 256 colors").c_str(),
+			TR("Show Stereo Pair as Anaglyph").c_str(),
 			MB_OK|MB_ICONSTOP);
 		return -1;
 	}
@@ -226,12 +226,12 @@ LRESULT Cmdanaglyph(CWnd* parent, const String& sCmd)
 			fn.sExt = ".stp";
 		s = fn.sFullNameQuoted();
 		if (pm.fExist("noask") || pm.fExist("quiet")) {
-			WinThread* thr = new WinThread(IlwWinApp()->docTemplMapWindow(), s.scVal(), IlwisDocument::otNOASK);
+			WinThread* thr = new WinThread(IlwWinApp()->docTemplMapWindow(), s.c_str(), IlwisDocument::otNOASK);
 			if (thr) 
 				thr->CreateThread(0, 0);
 		}
 		else
-			IlwWinApp()->OpenDocumentAsMap(s.scVal());
+			IlwWinApp()->OpenDocumentAsMap(s.c_str());
 	}
 	return -1;
 }
@@ -242,7 +242,7 @@ void OpenAnaglyph(CWnd *parent)
 	{
 	public:
 		ShowAnaglyphForm(CWnd* parent, String* sName)
-			: FormWithDest(parent, SMSTitleShowAnaglyph)
+			: FormWithDest(parent, TR("Show Stereo Pair as Anaglyph"))
 		{
 			iImg = IlwWinApp()->iImage("DspMap16Ico");
 			new FieldDataTypeLarge(root, sName, ".stp");
@@ -266,7 +266,7 @@ void OpenBaseMap(CWnd *parent)
 	{
 	public:
 		ShowBaseMapForm(CWnd* parent, String* sName)
-			: FormWithDest(parent, SMSTitleShowMap)
+			: FormWithDest(parent, TR("Open Object"))
 		{
 			iImg = IlwWinApp()->iImage("DspMap16Ico");
 			
@@ -295,7 +295,7 @@ LRESULT Cmdedit(CWnd *parent, const String& sCmd)
 		if (".stp" == fn.sExt) 
 			Cmdmakestereopair(parent, sCmd);
 		else
-			IlwWinApp()->OpenDocumentFile(fn.sFullNameQuoted().scVal(), IlwisDocument::otEDIT);
+			IlwWinApp()->OpenDocumentFile(fn.sFullNameQuoted().c_str(), IlwisDocument::otEDIT);
 	}
 	return -1;
 }
@@ -314,7 +314,7 @@ int OpenMapListSlideShow(CWnd *parent)
 	class ShowMapListForm: public FormWithDest
 	{
 	public:
-		ShowMapListForm(CWnd* parent, String* sName) : FormWithDest(parent, SMSTitleShowMapListSlideShow)
+		ShowMapListForm(CWnd* parent, String* sName) : FormWithDest(parent, TR("Show Map List as Slide Show"))
 		{
 			iImg = IlwWinApp()->iImage("DspMap16Ico");
 			new FieldDataTypeLarge(root, sName, ".mpl");
@@ -343,7 +343,7 @@ LRESULT Cmdmplslideshow(CWnd *parent, const String& sCmd)
 	{
 		ParmList p(sCmd);
 		String sC = p.sGet(0);		
-		IlwWinApp()->OpenDocumentAsSlideShow(sC.scVal());
+		IlwWinApp()->OpenDocumentAsSlideShow(sC.c_str());
 	}
 	return -1;
 }
@@ -353,7 +353,7 @@ void EditBaseMap(CWnd *parent)
 	class EditBaseMapForm: public FormWithDest
 	{
 	public:
-		EditBaseMapForm(CWnd *p, String* sName) : FormWithDest(p, SMSTitleEditMap)
+		EditBaseMapForm(CWnd *p, String* sName) : FormWithDest(p, TR("Edit Object"))
 		{
 			iImg = IlwWinApp()->iImage("DspMap16Ico");
 			FieldDataObject* fdo = new FieldDataObject(root, sName);
@@ -375,20 +375,20 @@ void EditBaseMap(CWnd *parent)
 
 LRESULT Cmdlayout(CWnd *parent, const String& sCmd)
 {
-	IlwWinApp()->OpenDocumentAsLayout(sCmd.scVal());
+	IlwWinApp()->OpenDocumentAsLayout(sCmd.c_str());
 	return -1;
 }
 
 LRESULT Cmdgraph(CWnd *parent, const String& sCmd)
 {
-	IlwWinApp()->OpenDocumentAsGraph(sCmd.scVal());
+	IlwWinApp()->OpenDocumentAsGraph(sCmd.c_str());
 
   return -1;
 }
 
 LRESULT Cmdrosediagram(CWnd *parent, const String& sCmd)
 {
-  IlwWinApp()->OpenDocumentAsRoseDiagram(sCmd.scVal());
+  IlwWinApp()->OpenDocumentAsRoseDiagram(sCmd.c_str());
 
   return -1;
 }
@@ -399,10 +399,10 @@ LRESULT Cmddisplay3d(CWnd *wndOwner, const String& sCmd)
 	{
 	public:
 		Display3DForm(CWnd* parent, String* sGrf)
-			: FormWithDest(parent, S3DTitleDisplay3D)
+			: FormWithDest(parent, TR("Display 3D"))
 		{
 			iImg = IlwWinApp()->iImage("DspMap16Ico");
-			new FieldGeoRef3DC(root, S3DUiGrf, sGrf);
+			new FieldGeoRef3DC(root, TR("&GeoReference"), sGrf);
 			SetMenHelpTopic("ilwismen\\display_3d.htm");
 			create();
 		}
@@ -434,7 +434,7 @@ LRESULT Cmdpropobject(CWnd *wndOwner, const String& str)
 	String sObj = pl.sGet(0);
 	if (sObj.length() == 0)
 	{
-		DataObjectForm frm(wndOwner, SMSTitleViewProp, &sObj, "ilwismen\\view_edit_properties_of.htm");
+		DataObjectForm frm(wndOwner, TR("View Properties of..."), &sObj, "ilwismen\\view_edit_properties_of.htm");
 		if (!frm.fOkClicked()) 
 			return -1;
 	}

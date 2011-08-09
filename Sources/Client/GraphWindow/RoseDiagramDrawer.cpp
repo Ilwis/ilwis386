@@ -101,7 +101,7 @@ void RoseDiagramDrawer::drawTitle(CDC* cdc)
   fntTitle.CreateFontIndirect(&lfTitle);
 	CFont* fntOld =	cdc->SelectObject(&fntTitle);
   UINT ta = cdc->SetTextAlign(TA_CENTER);
-  cdc->TextOut(pt.x, pt.y, sTitle.scVal());
+  cdc->TextOut(pt.x, pt.y, sTitle.c_str());
   cdc->SetTextAlign(ta);
 	cdc->SelectObject(fntOld);
 }
@@ -154,7 +154,7 @@ void RoseDiagramDrawer::SaveSettings(const FileName& fn, const String& sSection)
 	rdaxX->SaveSettings(fn, sSec);
 	sSec = String("%S YRose", sSection);
 	rdaxY->SaveSettings(fn, sSec);
-	ObjectInfo::WriteElement(sSection.scVal(), "NrGraphs", fn, (long)agl.iSize());
+	ObjectInfo::WriteElement(sSection.c_str(), "NrGraphs", fn, (long)agl.iSize());
 	for (int i=0; i  < agl.iSize(); i++) {
   	sSec = String("%S %i", sSection, i);
 		agl[i]->SaveSettings(fn, sSec);
@@ -169,7 +169,7 @@ void RoseDiagramDrawer::LoadSettings(const FileName& fn, const String& sSection)
 	sSec = String("%S YRose", sSection);
 	rdaxY->LoadSettings(fn, sSec);
 	int iNrGraphs;
-	ObjectInfo::ReadElement(sSection.scVal(), "NrGraphs", fn, iNrGraphs);
+	ObjectInfo::ReadElement(sSection.c_str(), "NrGraphs", fn, iNrGraphs);
 	for (int i=0; i  < iNrGraphs; i++) {
   	sSec = String("%S %i", sSection, i);
 		GraphLayer* gl = new RoseDiagramLayer(this, fn, sSec);

@@ -94,13 +94,13 @@ void CollectionCatalog::OnInitialUpdate()
 // Get the title needed for the add objects form
 String CollectionCatalog::sAddObjectTitle()
 {
-	return SMSAddObjectToCollection;
+	return TR("Add Object to Collection");
 }
 
 // Get the object message needed for the add objects form
 String CollectionCatalog::sMsgAddObject()
 {
-	return SMSObjects;
+	return TR("Objects");
 }
 
 ObjectLister *CollectionCatalog::olActiveLister(const String& sExt)
@@ -156,7 +156,7 @@ void CollectionCatalog::OnCatDel()
 	CatalogDocument *doc = GetDocument();
 	while ((fn = GetNextSelectedFile(pos)) != FileName())
 	{
-		WritePrivateProfileString("Collection", NULL, NULL, fn.sFullPathQuoted().scVal());
+		WritePrivateProfileString("Collection", NULL, NULL, fn.sFullPathQuoted().c_str());
 		doc->RemoveObject(fn);
 	}
 
@@ -185,9 +185,9 @@ class NewNameQuestionForm : public FormWithDest
 			sType = obj->sType();
 			
 		sNewName = fnObjOld->sFile;
-		String sQuestion = String(SMSUiAlreadyExists_S.scVal(), sType, fnExist.sFileExt());
+		String sQuestion = String(TR("The %S %S already exists.").c_str(), sType, fnExist.sFileExt());
 		new StaticText(root, sQuestion);
-		fsN = new FieldString(root, SMSUiNewName2 , &sNewName);
+		fsN = new FieldString(root, TR("New name") , &sNewName);
 		fsN->SetIndependentPos();
 		fsN->SetWidth(100);
 
@@ -271,7 +271,7 @@ void CollectionCatalog::AddFile(const FileName &fn, ObjectCollectionDoc *doc)
 	if ( doc->fAlreadyInCollection(fn ))
 	{
 		FileName fnNew(String("Copy of %S", fn.sFile), fn.sExt);			
-		NewNameQuestionForm frm(this, SMSTitleCopyFiles, fn, fn, &fnNew);	
+		NewNameQuestionForm frm(this, TR("Copy files"), fn, fn, &fnNew);	
 		if ( frm.fOkClicked())
 		{
 			ObjectCopierUI::CopyFiles(fn, fnNew, true);

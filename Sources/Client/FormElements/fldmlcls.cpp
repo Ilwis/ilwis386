@@ -100,7 +100,7 @@ void GeneralClassSelector::SetSel(int id, bool fSel)
 
 void GeneralClassSelector::SetSel(const String& str, bool fSel)
 {
-  int id = lb->FindStringExact(-1, str.scVal());
+  int id = lb->FindStringExact(-1, str.c_str());
   lb->SetSel(id, fSel);
 }
 
@@ -133,7 +133,7 @@ void MultiClassSelector::create()
   lb->ResetContent();
   int iSize = dc->iNettoSize();
   for (int i = 1; i <= iSize; ++i)
-    lb->AddString(dc->sValue(i,0).scVal());
+    lb->AddString(dc->sValue(i,0).c_str());
 }
 
 ClassSequenceSelector::ClassSequenceSelector(FormEntry* par, DomainClass* dom, Array<int>& array)
@@ -253,9 +253,9 @@ int ClassSequenceSelector::mouseButtonUp(Event* Evt)
       if (id < 0)
 	      id = 0;
       if (id > lb->GetCount())
-        id = lb->AddString(s.scVal());
+        id = lb->AddString(s.c_str());
       else
-        id = lb->InsertString(id, s.scVal()); 
+        id = lb->InsertString(id, s.c_str()); 
       lb->SetCaretIndex(id); 
       lb->SetItemData(id, iRaw);
     }
@@ -296,7 +296,7 @@ int ClassSequenceSelector::Add(long iRaw)
       return id;
     }
   }
-  id = lb->AddString(sName(id).scVal());
+  id = lb->AddString(sName(id).c_str());
   lb->SetSel(id);
   lb->SetCaretIndex(id);
   lb->SetItemData(id, iRaw);

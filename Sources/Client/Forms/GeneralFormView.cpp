@@ -93,7 +93,7 @@ void GeneralFormView::create()
 
 	st->Font(fnt);
 
-	st = new StaticText(root, SMSUiDescription);
+	st = new StaticText(root, TR("&Description:"));
 	st->psn->SetBound(0,0,0,0);
 	st->SetIndependentPos();
 	if (obj->fReadOnly()) {
@@ -101,7 +101,7 @@ void GeneralFormView::create()
 		st->SetIndependentPos();
 		if (obj->fSystemObject()) {
 			st->psn->SetBound(0,0,0,0);
-			st = new StaticText(root, SMSRemSystemObject);
+			st = new StaticText(root, TR("System Object"));
 			st->SetIndependentPos();
 		}
 	 }

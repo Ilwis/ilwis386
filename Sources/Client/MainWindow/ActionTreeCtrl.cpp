@@ -133,7 +133,7 @@ void ActionTreeCtrl::Create(ActionTabs *tabs, CWnd* pWnd)
 			if ("" == sTop)
 				htiTop = TVI_ROOT;
 			else {
-				CString str(sTop.scVal());
+				CString str(sTop.c_str());
 				str.Remove('&');
 				iImgExe = IlwWinApp()->iImage(const_cast<ActionList *>(actList)->getTopIcon(sTop));
 				htiTop = InsertItem(str, iImgExe, iImgExe);
@@ -147,7 +147,7 @@ void ActionTreeCtrl::Create(ActionTabs *tabs, CWnd* pWnd)
 			if ("" == sMid)
 				htiMid = htiTop;
 			else {
-				CString str(sMid.scVal());
+				CString str(sMid.c_str());
 				str.Remove('&');
 				String entry = act->sMenOpt() + sMid;
 				iImgExe = IlwWinApp()->iImage(const_cast<ActionList *>(actList)->getMiddleIcon(entry));
@@ -156,7 +156,7 @@ void ActionTreeCtrl::Create(ActionTabs *tabs, CWnd* pWnd)
 			sLastMid = sMid;
 		}
 		int iImg = IlwWinApp()->iImage(act->sIcon());
-		htiOpt = InsertItem(sAction.scVal(), iImg, iImg, htiMid);
+		htiOpt = InsertItem(sAction.c_str(), iImg, iImg, htiMid);
 		SetItemData(htiOpt, (DWORD)act);
 		iImgExe = iImgDflt;
 	}
@@ -315,7 +315,7 @@ BOOL ActionTreeCtrl::OnDrop(COleDataObject* pDataObject, DROPEFFECT dropEffect, 
 	return TRUE;
 }
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define pmadd(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 
 void ActionTreeCtrl::OnContextMenu(CWnd* pWnd, CPoint point) 

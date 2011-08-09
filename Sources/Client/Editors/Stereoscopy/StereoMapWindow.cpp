@@ -141,7 +141,7 @@ StereoMapWindow::~StereoMapWindow()
 		fnt.DeleteObject();
 }
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 
 #define add(ID) menPopup.AppendMenu(MF_STRING, ID, sMen(ID)); 
 #define addBreak menPopup.AppendMenu(MF_SEPARATOR);
@@ -217,7 +217,7 @@ int StereoMapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	SetAcceleratorTable();
 
-	bbStereoscopy.Create(this, "stereoscopy.but", SStcUiStereoToolBar, 100); // to be substituted by string
+	bbStereoscopy.Create(this, "stereoscopy.but", TR("Toolbar"), 100); // to be substituted by string
 	DockControlBar(&bbStereoscopy, AFX_IDW_DOCKBAR_TOP);
 
 	// Still implement the box (a toolbar with CEdit) for user info / errors
@@ -249,7 +249,7 @@ int StereoMapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	CRect rectBB;
 	rectBB.SetRect(2,1,2,1);
 	bbTxt.CreateEx(this, dwCtrlStyle, dwStyle, rectBB, 201);
-	bbTxt.SetWindowText(SStcUiInfoWindowTitle.scVal());
+	bbTxt.SetWindowText(TR("Info Bar").c_str());
 	UINT ai[2];
 	ai[0] = ID_EDITGRFTRANSF;
 	ai[1] = ID_SEPARATOR;
@@ -304,19 +304,19 @@ class OpenMapPairForm: public FormWithDest
 {
 public:
   OpenMapPairForm(CWnd* wPar, String* sLeftMap, String* sRightMap, String* sStereoPairName, String* sDescr)
-    : FormWithDest(wPar, SStcTitleCreateEpiStereoPair), m_psStereoName(sStereoPairName), 
+    : FormWithDest(wPar, TR("Create Epipolar Stereo Pair")), m_psStereoName(sStereoPairName), 
 		  m_psLeftMap(sLeftMap), m_psRightMap(sRightMap)
   {
-    fmLeft  = new FieldMap(root, SStcUiLeftMap, m_psLeftMap);
-    fmRight = new FieldMap(root, SStcUiRightMap, m_psRightMap);
-		fdtc = new FieldDataTypeCreate(root, SStcUiOutputStereoPair, m_psStereoName, ".stp", true);
+    fmLeft  = new FieldMap(root, TR("&Left Image"), m_psLeftMap);
+    fmRight = new FieldMap(root, TR("&Right Image"), m_psRightMap);
+		fdtc = new FieldDataTypeCreate(root, TR("Output Stereo Pair"), m_psStereoName, ".stp", true);
 		fmLeft->SetCallBack((NotifyProc)&OpenMapPairForm::CallBackName);
 		fmRight->SetCallBack((NotifyProc)&OpenMapPairForm::CallBackName);
 		fdtc->SetCallBack((NotifyProc)&OpenMapPairForm::CallBackName);
 
-		FieldString * fs = new FieldString(root, SStcUiDescription, sDescr);
+		FieldString * fs = new FieldString(root, TR("Description"), sDescr);
 		fs->SetWidth(90);
-		stRemark = new StaticText(root, SStcErrStereopairExists); // trick to get enough space for the static
+		stRemark = new StaticText(root, TR("Stereopair already exists")); // trick to get enough space for the static
 		stRemark->SetVal(String());  // reset string value
     SetMenHelpTopic("ilwismen\\create_a_stereopair.htm");
 		create();    
@@ -329,7 +329,7 @@ public:
 		if (fn.fValid())
 		{
 			if (File::fExist(fn))   
-				stRemark->SetVal(SStcErrStereopairExists);
+				stRemark->SetVal(TR("Stereopair already exists"));
 			else
 			{
 				stRemark->SetVal(String());
@@ -367,7 +367,7 @@ void StereoMapWindow::OnNewStereoPair()
 		stp = StereoPair(FileName(sStereoPairName, ".stp"), sLeftMap, sRightMap);
 		if (sDescr.length() == 0)
 		{
-			sDescr = String(SStcTextStereopairFrom_S_S_S.scVal(), FileName(sStereoPairName).sFile,
+			sDescr = String(TR("Stereopair %S from %S and %S").c_str(), FileName(sStereoPairName).sFile,
 							FileName(sLeftMap).sFile, FileName(sRightMap).sFile);
 		}
 		stp->sDescription = sDescr;
@@ -381,9 +381,9 @@ class OpenStereoObjectForm: public FormWithDest
 {
 public:
   OpenStereoObjectForm(CWnd* wPar, String* sStereoPairName)
-    : FormWithDest(wPar, SStcTitleOpenMapPair)    
+    : FormWithDest(wPar, TR("Open Stereo Pair"))    
   {
-		new FieldDataType(root, SStcUiStereoPair, sStereoPairName, ".stp", true);
+		new FieldDataType(root, TR("Stereo Pair"), sStereoPairName, ".stp", true);
     create();    
   }    
 };
@@ -455,7 +455,7 @@ void StereoMapWindow::OnQuit()
 
 void StereoMapWindow::StereoPairUpdated()
 {
-	String sTitle = SStcTitleStereoPairCreation; // Start composing title
+	String sTitle = TR("Epipolar Stereo Pair - Creation window"); // Start composing title
 	// Reset: previous value may be invalid
 	mkDocLeft->SetGrEpiMember(0);
 	mkDocRight->SetGrEpiMember(0);
@@ -482,8 +482,8 @@ void StereoMapWindow::RefreshMaps(const String& sLeftMap, const String& sRightMa
 {
 	frmLeft->SetInputImageName(sLeftMap);
 	frmRight->SetInputImageName(sRightMap);
-  docLeft->OnOpenDocument(sLeftMap.scVal(), IlwisDocument::otNOASK);
-  docRight->OnOpenDocument(sRightMap.scVal(), IlwisDocument::otNOASK);
+  docLeft->OnOpenDocument(sLeftMap.c_str(), IlwisDocument::otNOASK);
+  docRight->OnOpenDocument(sRightMap.c_str(), IlwisDocument::otNOASK);
 	docLeft->UpdateAllViews(0,3); // entiremap to left views
 	docRight->UpdateAllViews(0,3); // entiremap to right views
 }
@@ -513,7 +513,7 @@ void StereoMapWindow::OnTimer(UINT nIDEvent)
 				sErr = spepi->sErrGeorefs();
 		}
 
-		edTxt.SetWindowText(sErr.scVal());
+		edTxt.SetWindowText(sErr.c_str());
 	}
 
 	// Still call base class
@@ -586,13 +586,13 @@ class StereoMakerConfigForm: public FormWithDest
 {
 public:
   StereoMakerConfigForm(CWnd* wPar, PreStereoMateView* vw, Color* colActive)
-  : FormWithDest(wPar, SStcTitleCustomize)
+  : FormWithDest(wPar, TR("Customize Stereo Maker"))
   {
-    new FieldColor(root, SStcUiColFidMarks, &vw->colFidMarks);
-    new FieldColor(root, SStcUiColScalePnt, &vw->colScalePnts);
-    new FieldColor(root, SStcUiColPrincPnt, &vw->colPrincPnts);
-    new FieldColor(root, SStcUiColUPPnt, &vw->colUserPrincPnts);
-		new FieldColor(root, SStcUiColActive, colActive);
+    new FieldColor(root, TR("Fiducial Marks"), &vw->colFidMarks);
+    new FieldColor(root, TR("Scaling Points"), &vw->colScalePnts);
+    new FieldColor(root, TR("Principal Points"), &vw->colPrincPnts);
+    new FieldColor(root, TR("User defined Principal Point"), &vw->colUserPrincPnts);
+		new FieldColor(root, TR("Next Input Box Color"), colActive);
     create();
   }
 };

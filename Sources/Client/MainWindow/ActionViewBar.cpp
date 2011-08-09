@@ -89,9 +89,9 @@ int ActionTabs::Create(ActionViewBar *av)
 	afnd->Create(this);
 
 //	SetImageList(&(IlwWinApp()->ilSmall));
-	InsertItem(0, SMSTitleOperationsTree.scVal());
-	InsertItem(1, SMSTitleNavigator.scVal());
-	InsertItem(2, TR("Finder").scVal());
+	InsertItem(0, TR("Operation-Tree").c_str());
+	InsertItem(1, TR("Navigator").c_str());
+	InsertItem(2, TR("Finder").c_str());
 	atc->ShowWindow(SW_SHOW);
 	nav->ShowWindow(SW_HIDE);
 	afnd->ShowWindow(SW_HIDE);
@@ -210,7 +210,7 @@ BOOL ActionViewBar::Create(CWnd* pParent)
 
 	SetBarStyle(GetBarStyle() | CBRS_SIZE_DYNAMIC);
 	EnableDocking(CBRS_ALIGN_LEFT|CBRS_ALIGN_RIGHT);
-	SetWindowText(SMSTitleOperations.scVal());
+	SetWindowText(TR("Operations").c_str());
 
 	tabs = new ActionTabs;
 	tabs->Create(this);

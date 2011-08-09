@@ -145,7 +145,7 @@ void TextDocument::OnFileOpen()
 
 	FileName fn(OpenFile.GetPathName());
 
-	OnOpenDocument(fn.sFullName().scVal());
+	OnOpenDocument(fn.sFullName().c_str());
   UpdateAllViews(NULL);
 	SetModifiedFlag(false);
 

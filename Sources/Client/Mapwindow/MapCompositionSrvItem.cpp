@@ -283,14 +283,14 @@ BOOL MapCompositionSrvItem::OnRenderFileData(LPFORMATETC lpFormatEtc, CFile* pFi
 	//			double rScale = mcd->rPrefScale(); 
 	//			if (rScale > 0) {
 	//				String sScale("Scale 1:%.f\n\r", rScale);
-	//				ar.WriteString(sScale.scVal());
+	//				ar.WriteString(sScale.c_str());
 	//			}
 	//			int i = 1;
 	//		  for (list<Drawer*>::iterator iter = mcd->dl.begin(); iter != mcd->dl.end(); ++iter) 
 	//			{
 	//				Drawer* dr = *iter;
 	//				String sText("%i:\t%S\n\r", i++, dr->sTitle());
-	//				ar.WriteString(sText.scVal());
+	//				ar.WriteString(sText.c_str());
 	//			}
 	//			ar << (BYTE)'\0';   
 	//			return TRUE;

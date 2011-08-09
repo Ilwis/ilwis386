@@ -84,7 +84,7 @@ LayoutWindow::~LayoutWindow()
 {
 }
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 
 #define add(ID) menPopup.AppendMenu(MF_STRING, ID, sMen(ID)); 
 #define addBreak menPopup.AppendMenu(MF_SEPARATOR);
@@ -160,10 +160,10 @@ int LayoutWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	AddHelpMenu();
 	SetAcceleratorTable();
 
-	bbStandard.Create(this, "ilostd.but", SLOTitleStandardBar, 100);
+	bbStandard.Create(this, "ilostd.but", TR("Standard"), 100);
 	DockControlBar(&bbStandard, AFX_IDW_DOCKBAR_TOP);
 
-	bbLayout.Create(this, "layout.but", SLOTitleLayoutBar, 101);
+	bbLayout.Create(this, "layout.but", TR("Layout"), 101);
 	DockControlBar(&bbLayout, AFX_IDW_DOCKBAR_TOP);
 
 	llb.Create(this);

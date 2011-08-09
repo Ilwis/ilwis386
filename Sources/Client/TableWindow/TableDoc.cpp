@@ -193,7 +193,7 @@ BOOL TableDoc::OnOpenDocument(LPCTSTR lpszPath, ParmList& pm)
 		fn = FileName::fnUnique(fn);
 		TableForeign::CreateDataBaseTable(fn, pm);		
 	}		
-	if (!IlwisDocument::OnOpenDocument(fn.sRelative().scVal()))
+	if (!IlwisDocument::OnOpenDocument(fn.sRelative().c_str()))
 		return FALSE;
 	Table table(fn);
 	return OnOpenDocument(table);
@@ -203,7 +203,7 @@ BOOL TableDoc::OnOpenDocument(LPCTSTR lpszOpenString)
 {
 	ParmList pm(lpszOpenString);
 	FileName fn = IlwisObjectPtr::fnCheckPath(pm.sGet(0));	
-	if (!IlwisDocument::OnOpenDocument(fn.sRelative().scVal()))
+	if (!IlwisDocument::OnOpenDocument(fn.sRelative().c_str()))
 		return FALSE;
 	Table table(fn);
 	return OnOpenDocument(table);
@@ -223,7 +223,7 @@ BOOL TableDoc::OnOpenDocument(const Table& table)
 	String s = tbl->sTypeName();
 	if (s != tbl->sDescription && "" != tbl->sDescription)
 		s = String("%S - %S", s, tbl->sDescription);
-	SetTitle(s.scVal());
+	SetTitle(s.c_str());
 	if ( tvw )
 		delete tvw;
 	tvw = new TableView(tbl);
@@ -482,18 +482,18 @@ void TableDoc::OnAddColumn()
 	{
 	public:
 		NewColumnForm(CWnd* parent)
-			: FormWithDest(parent, STBTitleAddCol),
+			: FormWithDest(parent, TR("Add Column")),
 			vr(0,100,1)
 		{
 			sDomName = "value.dom";
-			new FieldString(root, STBUiColName, &sColName, Domain(), false);
-			fdc = new FieldDomainC(root, STBUiDom, &sDomName, dmCLASS|dmIDENT|dmGROUP|dmVALUE|dmIMAGE|dmBOOL|dmCOORD|dmCOLOR|dmSTRING|dmPICT|dmTIME);
-			fvr = new FieldValueRange(root, STBUiRange, &vr, fdc);
+			new FieldString(root, TR("&Column Name"), &sColName, Domain(), false);
+			fdc = new FieldDomainC(root, TR("&Domain"), &sDomName, dmCLASS|dmIDENT|dmGROUP|dmVALUE|dmIMAGE|dmBOOL|dmCOORD|dmCOLOR|dmSTRING|dmPICT|dmTIME);
+			fvr = new FieldValueRange(root, TR("Value &Range"), &vr, fdc);
 			ftiv = new FieldTimeInterval(root,"Interval",&tiv,fdc);
 
 			fdc->SetCallBack((NotifyProc)&NewColumnForm::DomainCallBack);
 			fvr->Align(fdc, AL_UNDER);  
-			StaticText* st = new StaticText(root,STBUiDescription);
+			StaticText* st = new StaticText(root,TR("&Description:"));
 			st->psn->SetBound(0,0,0,0);
 			st->SetIndependentPos();
 			FieldString* fs = new FieldString(root, "", &sDescr);
@@ -562,7 +562,7 @@ void TableDoc::OnAddColumn()
 			}
 			catch (CMemoryException* err)
 			{
-				AfxMessageBox(STBErrCreateColumnNoMemory.scVal());
+				AfxMessageBox(TR("Could not create column (not enough memory)").c_str());
 				err->Delete();
 			}
 			if (!col.fValid()) 
@@ -592,25 +592,25 @@ bool TableDoc::fDelColumn(int iCol)
 	if (!col.fValid())
 		return false;
 	if (col.fUsedInOpenColumns()) {
-		String s(STBErrDelColUsed_S.sVal(), col->sNam);
-		wndGetActiveView()->MessageBox(s.sVal(), STBMsgDelColumn.sVal(),
+		String s(TR("Column %S is used in other columns\ndeleting it is not possible").c_str(), col->sNam);
+		wndGetActiveView()->MessageBox(s.sVal(), TR("Delete Column").c_str(),
 			MB_OK|MB_ICONSTOP);
 		return false;
 	}
 	if (col->fOwnedByTable()) {
-		String s(STBErrDelColTblOwned_S.sVal(), col->sNam);
-		wndGetActiveView()->MessageBox(s.sVal(), STBMsgDelColumn.sVal(),
+		String s(TR("Column %S is owned by its table\ndeleting it is not possible").c_str(), col->sNam);
+		wndGetActiveView()->MessageBox(s.sVal(), TR("Delete Column").c_str(),
 			MB_OK|MB_ICONSTOP);
 		return false;
 	}
 	if (col->fReadOnly()) {
-		String s(STBErrDelColReadOnly_S.sVal(), col->sNam);
-		wndGetActiveView()->MessageBox(s.sVal(), STBMsgDelColumn.sVal(),
+		String s(TR("Column %S is read-only\ndeleting it is not possible").c_str(), col->sNam);
+		wndGetActiveView()->MessageBox(s.sVal(), TR("Delete Column").c_str(),
 			MB_OK|MB_ICONSTOP);
 		return false;
 	}
-	String s(STBMsgDelColumn_S.sVal(), col->sNam);
-	int iRet = wndGetActiveView()->MessageBox(s.sVal(), STBMsgDelColumn.sVal(),
+	String s(TR("Delete Column %S").c_str(), col->sNam);
+	int iRet = wndGetActiveView()->MessageBox(s.sVal(), TR("Delete Column").c_str(),
 		MB_YESNOCANCEL|MB_ICONQUESTION|MB_DEFBUTTON2);
 	if (IDYES == iRet) {
 		tvw->RemoveCol(iCol);
@@ -631,19 +631,19 @@ void TableDoc::OnUpdateAddColumn(CCmdUI* pCmdUI)
 
 void TableDoc::OnNewGraph()
 {
-	IlwWinApp()->OpenDocumentAsGraph(obj()->sNameQuoted(true).scVal());
+	IlwWinApp()->OpenDocumentAsGraph(obj()->sNameQuoted(true).c_str());
 }
 
 void TableDoc::OnNewRoseDiagram()
 {
-	IlwWinApp()->OpenDocumentAsRoseDiagram(obj()->sNameQuoted(true).scVal());
+	IlwWinApp()->OpenDocumentAsRoseDiagram(obj()->sNameQuoted(true).c_str());
 }
 
 void TableDoc::OnFileSaveAs()
 {
 	FileName fn(obj()->fnObj);
 	fn.sExt = ".tbt";
-	CString sNewName(fn.sRelative().scVal());
+	CString sNewName(fn.sRelative().c_str());
 	CDocTemplate* pTemplate = GetDocTemplate();	
 	if (!AfxGetApp()->DoPromptFileName(sNewName,
 		TRUE ? AFX_IDS_SAVEFILE : AFX_IDS_SAVEFILECOPY,
@@ -662,7 +662,7 @@ BOOL TableDoc::OnSaveDocument(LPCTSTR lpszPathName)
 	{
 		if (obj()->fUseAs() && !fCIStrEqual(fnFrom.sPath(), fnTo.sPath()))
 		{
-			String sMessage(STBErrCannotCopyTableToOtherDir_S.scVal(), fnFrom.sRelative(false));
+			String sMessage(TR("Cannot copy use-as table %S to another directory").c_str(), fnFrom.sRelative(false));
 			throw ErrorObject(sMessage);
 		}
 
@@ -678,7 +678,7 @@ BOOL TableDoc::OnSaveDocument(LPCTSTR lpszPathName)
 		ObjectCopierUI cop(NULL, fnFrom, fnTo);
 		cop.Copy(true);
 		ObjectInfo::WriteElement("Ilwis", "Type", fnTo, "Table"); // transform new object to table
-		OnOpenDocument(fnTo.sFullPathQuoted().scVal());
+		OnOpenDocument(fnTo.sFullPathQuoted().c_str());
 		tbl->SetUseAs(false);
 		for (int i=0; i < tbl->iCols(); ++i )
 		{
@@ -701,7 +701,7 @@ BOOL TableDoc::OnSaveDocument(LPCTSTR lpszPathName)
 		return TRUE;
 	}	
 	else
-		throw ErrorObject(STBErrFileNameDifferent);
+		throw ErrorObject(TR("Filename must be different from original"));
 	return FALSE;
 }
 

@@ -118,29 +118,29 @@ int FieldTableC::CreateTable(Event*)
     CallCallBacks();
     String sCmd = "open ";
     sCmd &= fn.sFullPathQuoted(true);
-	IlwWinApp()->Execute(sCmd); //        winExec(s.scVal(), SW_SHOWNORMAL);
+	IlwWinApp()->Execute(sCmd); //        winExec(s.c_str(), SW_SHOWNORMAL);
   }  
   return 0;
 }
 
 FormCreateTable::FormCreateTable(CWnd* wPar, String* sTable, const String& sDom)
-: FormWithDest(wPar, STBTitleCreateTable),
+: FormWithDest(wPar, TR("Create Table")),
   sTable(sTable), sDomain(sDom), wParent(wPar), iRecs(100)
 {
 	iImg = IlwWinApp()->iImage(".tbt");
 
   FileName fn(*sTable);
   sNewName = fn.sFile;
-  fdt = new FieldTableCreate(root, STBUiTblName, &sNewName);
+  fdt = new FieldTableCreate(root, TR("&Table Name"), &sNewName);
   fdt->SetCallBack((NotifyProc)&FormCreateTable::CallBackName);
-  StaticText* st = new StaticText(root, STBUiDescription);
+  StaticText* st = new StaticText(root, TR("&Description:"));
   st->psn->SetBound(0,0,0,0);
   FieldString* fs = new FieldString(root, "", &sDescr);
   fs->SetWidth(120);
   fs->SetIndependentPos();
-  fdc = new FieldDomainC(root, STBUiDom, &sDomain, dmCLASS|dmIDENT|dmNONE|dmBOOL, true);
+  fdc = new FieldDomainC(root, TR("&Domain"), &sDomain, dmCLASS|dmIDENT|dmNONE|dmBOOL, true);
   fdc->SetCallBack((NotifyProc)&FormCreateTable::CallBackDomain);
-  fiRecs = new FieldInt(root, STBUiRecs, &iRecs);
+  fiRecs = new FieldInt(root, TR("&Records"), &iRecs);
   SetMenHelpTopic("ilwismen\\create_a_table.htm");
   String sFill('*', 40);
   stRemark = new StaticText(root, sFill);
@@ -160,9 +160,9 @@ int FormCreateTable::CallBackName(Event*)
   FileName fn(sNewName, ".tbt");
   bool fOk = false;
   if (!fn.fValid())
-    stRemark->SetVal(STBRemNotValidTblName);
+    stRemark->SetVal(TR("Not a valid table name"));
   else if(File::fExist(fn))   
-    stRemark->SetVal(STBRemTableExists);
+    stRemark->SetVal(TR("Table already exists"));
   else {
     fOk = true;  
     stRemark->SetVal("");

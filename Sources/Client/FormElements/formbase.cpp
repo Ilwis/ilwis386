@@ -450,19 +450,19 @@ int FormBase::Print(const String& sPageTitle)
 	memset(&docinfo, 0, sizeof(docinfo));   
 	docinfo.cbSize = sizeof(docinfo);
 
-	String sPrtFrom = SMSRemFormPrinting;
-	docinfo.lpszDocName = _T(sPrtFrom.scVal());
+	String sPrtFrom = TR("Printing Form");
+	docinfo.lpszDocName = _T(sPrtFrom.c_str());
 	// if it fails, complain and exit gracefully
 	if (dcPrinter.StartDoc(&docinfo) < 0)   
 	{
-		throw ErrorObject(SMSErrPrinterInit.scVal());   
+		throw ErrorObject(TR("Printer wouldn't initalize").c_str());   
 	}
 	else   
 	{
 		// start a page      
 		if (dcPrinter.StartPage() < 0)      
 		{
-			par->MessageBox(_T(SMSErrNoStartPAge.scVal()));         
+			par->MessageBox(_T(TR("Could not start page").c_str()));         
 			dcPrinter.AbortDoc();
 		}
 		else      

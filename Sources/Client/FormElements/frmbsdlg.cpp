@@ -176,8 +176,8 @@ BOOL FormBaseDialog::OnInitDialog()
 				DeleteMenu(SysMen->m_hMenu, iPos, MF_BYPOSITION);
 		}
 		SysMen->AppendMenu(MF_SEPARATOR, -1);
-		SysMen->AppendMenu( MF_STRING, ID_COPY, SUICopy.sVal());
-		SysMen->AppendMenu( MF_STRING, ID_PRINT, SUIPrint.sVal());
+		SysMen->AppendMenu( MF_STRING, ID_COPY, TR("Copy").c_str());
+		SysMen->AppendMenu( MF_STRING, ID_PRINT, TR("Print").c_str());
 	}
 
 	_windsp = new zDisplay(this);
@@ -300,7 +300,7 @@ void FormBaseDialog::CreateDefaultPositions()
 		int iMaxX = root->psn->iWidth + root->psn->iBndLeft ;//+ root->psn->iBndRight;
 		int iMaxY = root->psn->iHeight + root->psn->iBndUp + root->psn->iBndDown / 2;
 
-		// find widest of SUICancel, SUIOK and SUIHelp
+		// find widest of TR("Cancel"), TR("OK") and TR("Help")
 		zDimension dimButton;
 
 		CWindowDC dc(CWnd::GetDesktopWindow());
@@ -310,26 +310,26 @@ void FormBaseDialog::CreateDefaultPositions()
 			fntOld = dc.SelectObject(fnt);
 		zDimension d1;
 		if ( fbs && fbsCancelHasCLOSETEXT)
-			d1 = (zDimension)dc.GetTextExtent(SUIClose.sVal(), SUIClose.length());
+			d1 = (zDimension)dc.GetTextExtent(TR("Close").c_str(), TR("Close").length());
 		else
-			d1 = (zDimension)dc.GetTextExtent(SUICancel.sVal(), SUICancel.length());
+			d1 = (zDimension)dc.GetTextExtent(TR("Cancel").c_str(), TR("Cancel").length());
 
 		zDimension d2;
 		if ( fbs & fbsOKHASCLOSETEXT)
-			d2 = (zDimension)dc.GetTextExtent(SUIClose.sVal(), SUIClose.length());
+			d2 = (zDimension)dc.GetTextExtent(TR("Close").c_str(), TR("Close").length());
 		else
-			d2 = (zDimension)dc.GetTextExtent(SUIOK.sVal(), SUIOK.length());
+			d2 = (zDimension)dc.GetTextExtent(TR("OK").c_str(), TR("OK").length());
 
-		zDimension d3 = (zDimension)dc.GetTextExtent(SUIHelp.sVal(), SUIHelp.length());
+		zDimension d3 = (zDimension)dc.GetTextExtent(TR("Help").c_str(), TR("Help").length());
 		if (fnt != 0)
 			dc.SelectObject(fntOld);
 		dimButton = d1.width() > d2.width() ? d1 : d2;
 		if (dimButton.width() < d3.width()) dimButton = d3;
 		if (fbs & fbsAPPLIC) {
-			zDimension dShow = (zDimension)dc.GetTextExtent(SUIShow.sVal(), SUIShow.length());
-			zDimension dDef = (zDimension)dc.GetTextExtent(SUIDefine.sVal(), SUIDefine.length());
+			zDimension dShow = (zDimension)dc.GetTextExtent(TR("&Show").c_str(), TR("&Show").length());
+			zDimension dDef = (zDimension)dc.GetTextExtent(TR("&Define").c_str(), TR("&Define").length());
 			if (fbs & fbsCALC) 
-				dDef = (zDimension)dc.GetTextExtent(SUICalc.sVal(), SUICalc.length());
+				dDef = (zDimension)dc.GetTextExtent(TR("&Calculate").c_str(), TR("&Calculate").length());
 			if (dimButton.width() < dShow.width()) dimButton = dShow;
 			if (dimButton.width() < dDef.width()) dimButton = dDef;
 		}
@@ -403,13 +403,13 @@ void FormBaseDialog::CreateDefaultPositions()
 
 		if (fbs & fbsAPPLIC) {
 			if (butShow.GetSafeHwnd()==NULL)
-				butShow.Create(SUIShow.sVal(), BS_DEFPUSHBUTTON|WS_TABSTOP, CRect(pntButton, dimButton), this, IDYES);  
+				butShow.Create(TR("&Show").c_str(), BS_DEFPUSHBUTTON|WS_TABSTOP, CRect(pntButton, dimButton), this, IDYES);  
 			pntButton.x += dimButton.width() + dimOutSide.width()/2;
 			if (butDefine.GetSafeHwnd()==NULL)
 				if (fbs & fbsCALC)
-					butDefine.Create(SUICalc.sVal(), BS_PUSHBUTTON|WS_TABSTOP, CRect(pntButton, dimButton), this, IDNO); 
+					butDefine.Create(TR("&Calculate").c_str(), BS_PUSHBUTTON|WS_TABSTOP, CRect(pntButton, dimButton), this, IDNO); 
 				else
-					butDefine.Create(SUIDefine.sVal(), BS_PUSHBUTTON|WS_TABSTOP, CRect(pntButton, dimButton), this, IDNO);  
+					butDefine.Create(TR("&Define").c_str(), BS_PUSHBUTTON|WS_TABSTOP, CRect(pntButton, dimButton), this, IDNO);  
 			butShow.ShowWindow(SW_SHOWNA);
 			butShow.SetFocus();
 			butShow.SetFont(fnt);
@@ -420,9 +420,9 @@ void FormBaseDialog::CreateDefaultPositions()
 		{
 			if (butOK.GetSafeHwnd()==NULL)
 				if ( fbs & fbsOKHASCLOSETEXT)
-					butOK.Create(SUIClose.sVal(), BS_DEFPUSHBUTTON|WS_TABSTOP, CRect(pntButton, dimButton), this, IDOK);
+					butOK.Create(TR("Close").c_str(), BS_DEFPUSHBUTTON|WS_TABSTOP, CRect(pntButton, dimButton), this, IDOK);
 				else		
-					butOK.Create(SUIOK.sVal(), BS_DEFPUSHBUTTON|WS_TABSTOP, CRect(pntButton, dimButton), this, IDOK);  
+					butOK.Create(TR("OK").c_str(), BS_DEFPUSHBUTTON|WS_TABSTOP, CRect(pntButton, dimButton), this, IDOK);  
 
 			if (0 == (fbs & fbsNOOKBUTTON)) 
 			{
@@ -449,7 +449,7 @@ void FormBaseDialog::CreateDefaultPositions()
 
 		if (0 == (fbs & fbsNOCANCELBUTTON)) {
 			if (butCancel.GetSafeHwnd() == NULL){
-				String txt = fbs & fbsApplyButton ? SUIApply : SUICancel;
+				String txt = fbs & fbsApplyButton ? TR("Apply") : TR("Cancel");
 				butCancel.Create(txt.sVal(), BS_PUSHBUTTON|WS_TABSTOP, CRect(pntButton, dimButton), this, IDCANCEL); 
 			}
 			butCancel.ShowWindow(SW_SHOW);
@@ -505,7 +505,7 @@ void FormBaseDialog::CreateDefaultPositions()
 			shutdown(IDOK);
 			return;
 		}  
-		SetWindowText(sCaption.scVal());
+		SetWindowText(sCaption.c_str());
 		const CWnd* wTop = &wndTop;
 		if (fbs & fbsTOPMOST)
 			wTop = &wndTopMost;

@@ -159,11 +159,11 @@ String TableSummaryPaneView::sRowButton(long iRow) const
 	String s;
 	switch (iRow) 
 	{
-		case 1: s = STBInfMin; break;
-		case 2: s = STBInfMax; break;
-		case 3: s = STBInfAvg; break;
-		case 4: s = STBInfStd; break;
-		case 5: s = STBInfSum; break;
+		case 1: s = TR("Min"); break;
+		case 2: s = TR("Max"); break;
+		case 3: s = TR("Avg"); break;
+		case 4: s = TR("StD"); break;
+		case 5: s = TR("Sum"); break;
 		default: return "";
 	}
 	for (int i = s.length(); i < iButWidth(); i++)
@@ -200,11 +200,11 @@ String TableSummaryPaneView::sDescrRowButton(long iRow) const
 {
 	switch (iRow) 
 	{
-		case 1: return STBRemMin;
-		case 2: return STBRemMax;
-		case 3: return STBRemAvg;
-		case 4: return STBRemStD;
-		case 5: return STBRemSum;
+		case 1: return TR("Minimum of values in column");
+		case 2: return TR("Maximum of values in column");
+		case 3: return TR("Average of values in column");
+		case 4: return TR("Standard deviation of values in column");
+		case 5: return TR("Sum of values in column");
 		default: return "";
 	}
 }
@@ -214,7 +214,7 @@ void TableSummaryPaneView::OnUpdateProp(CCmdUI* pCmdUI)
 	pCmdUI->Enable(false);
 }
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define add(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 
 void TableSummaryPaneView::OnContextMenu(CWnd* pWnd, CPoint point) 

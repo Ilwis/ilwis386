@@ -91,9 +91,9 @@ void GeoRefFactorView::FillDerivedFields(FieldGroup* fgGenerRoot)
 	m_rcOffset = pgf->rcOffset();
 	double rPix = m_rParentPixSize / pgf->rFactor();
 
-	String sGRSize(SGRRemLinesCols_ii.c_str(), m_rcSize.Row, m_rcSize.Col);
+	String sGRSize(TR("%li lines and %li columns").c_str(), m_rcSize.Row, m_rcSize.Col);
 	SetSizeString(sGRSize);
-	String sPixSize(SGRRemPixSize_f.c_str(), rPix);
+	String sPixSize(TR("Pixel Size = %.3f m").c_str(), rPix);
 	SetPixelSizeString(sPixSize);
 
 	// Disabled editable Offset and Size fields for now; show R/O only
@@ -102,17 +102,17 @@ void GeoRefFactorView::FillDerivedFields(FieldGroup* fgGenerRoot)
 		StaticText* st;
 		if (m_iSizeDirection == 0)   // aggregation, pixel enlargement
 		{
-			String s("%S %lg", SGRInfIncreasedPixSize, m_rFactor);
+			String s("%S %lg", TR("Increased pixel size, factor ="), m_rFactor);
 			st = new StaticText(fgGenerRoot, s);
 			st->psn->SetBound(0, 0, 0, 0);
 
-			s = String("%S = (%ld, %ld)", SGRUiPixOffset, m_rcOffset.Row, m_rcOffset.Col);
+			s = String("%S = (%ld, %ld)", TR("&Offset Row, Col"), m_rcOffset.Row, m_rcOffset.Col);
 			st = new StaticText(fgGenerRoot, s);
 			st->psn->SetBound(0, 0, 0, 0);
 		}
 		else   // densify, pixel shrinking
 		{
-			String s("%S %lg", SGRInfDecreasedPixSize, m_rFactor);
+			String s("%S %lg", TR("Decreased pixel size, factor ="), m_rFactor);
 			st = new StaticText(fgGenerRoot, s);
 			st->psn->SetBound(0, 0, 0, 0);
 		}
@@ -120,15 +120,15 @@ void GeoRefFactorView::FillDerivedFields(FieldGroup* fgGenerRoot)
 	else 
 	{
 		// FieldGroup fgGenerRoot has been created in parent class
-		rgSizePixel = new RadioGroup(fgGenerRoot, SGRUiPixSize, &m_iSizeDirection, true);
+		rgSizePixel = new RadioGroup(fgGenerRoot, TR("&Pixel size"), &m_iSizeDirection, true);
 		rgSizePixel->SetCallBack((NotifyProc)&GeoRefFactorView::SizePixel);
-		new RadioButton(rgSizePixel, SGRUiFacAggregate);
-		new RadioButton(rgSizePixel, SGRUiFacDensify);
+		new RadioButton(rgSizePixel, TR("&Increase"));
+		new RadioButton(rgSizePixel, TR("Dec&rease"));
 
-		frFactor = new FieldReal(fgGenerRoot, SGRUiFactor, &m_rFactor, ValueRange(-1e300,1e300,1));
+		frFactor = new FieldReal(fgGenerRoot, TR("&Factor"), &m_rFactor, ValueRange(-1e300,1e300,1));
 		frFactor->SetCallBack((NotifyProc)&GeoRefFactorView::CheckFactor);
 		fgOffset = new FieldGroup(fgGenerRoot);
-		fiRow = new FieldInt(fgOffset, SGRUiPixOffset, &m_rcOffset.Row);
+		fiRow = new FieldInt(fgOffset, TR("&Offset Row, Col"), &m_rcOffset.Row);
 		fiCol = new FieldInt(fgOffset, "", &m_rcOffset.Col);
 		fiRow->SetCallBack((NotifyProc)&GeoRefFactorView::CheckWithFactor);
 		fiCol->SetCallBack((NotifyProc)&GeoRefFactorView::CheckWithFactor);
@@ -196,9 +196,9 @@ void GeoRefFactorView::ReCompute()
 		rPix /= m_rFactor;
 	}
 
-	String sGRSize(SGRRemLinesCols_ii.c_str(), m_rcSize.Row, m_rcSize.Col);
+	String sGRSize(TR("%li lines and %li columns").c_str(), m_rcSize.Row, m_rcSize.Col);
 	SetSizeString(sGRSize);
-	String sPixSize(SGRRemPixSize_f.c_str(), rPix);
+	String sPixSize(TR("Pixel Size = %.3f m").c_str(), rPix);
 	SetPixelSizeString(sPixSize);
 }
 
@@ -228,7 +228,7 @@ int GeoRefFactorView::CheckWithFactor(Event*)
 	if ( (m_rcOffset.Row >= m_rFactor || m_rcOffset.Row < 0) ||
 		 (m_rcOffset.Col >= m_rFactor || m_rcOffset.Col < 0) )
 	{
-		SetRemark(SGRRemOffsetTooLarge);
+		SetRemark(TR("Row and/or Col offset should be less than the Factor"));
 		DisableOK();
 	}
 	else
@@ -248,7 +248,7 @@ int GeoRefFactorView::CheckFactor(Event*)
 
 	if (m_rFactor < 1)
 	{
-		SetRemark(SGRRemInvalidFactor);
+		SetRemark(TR("Factor should be larger than 1"));
 		DisableOK();
 	}
 	else

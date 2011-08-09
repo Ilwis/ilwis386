@@ -86,7 +86,7 @@ void InfoLine::text(zPoint pnt, const String &s)
 //	GetParent()->GetWindowRect(&rect);
 //rect.left() += pnt.x + 2;
 //rect.bottom() = rect.top() + pnt.y - 2;
-	CString str = s.scVal();
+	CString str = s.c_str();
 	CSize siz = cdc.GetTextExtent(str);
   rect.left() = pnt.x + 2;
   rect.bottom() = pnt.y - 2;
@@ -101,7 +101,7 @@ void InfoLine::text(zPoint pnt, const String &s)
   if (sText != s) {
     sText = s;
     if (sText != "")
-      SetWindowText(sText.scVal());
+      SetWindowText(sText.c_str());
   }
   if (sText != "") {
     ShowWindow(SW_SHOWNA);

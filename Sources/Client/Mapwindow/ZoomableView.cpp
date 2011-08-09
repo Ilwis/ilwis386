@@ -862,7 +862,7 @@ void ZoomableView::changeStateTool(int id, bool isActive) {
 	if ( cur != tools.end()) {
 		if ( isActive) {
 			iActiveTool= id;
-			tools[id]->SetCursor(zCursor(tools[id]->cursorName().scVal()));
+			tools[id]->SetCursor(zCursor(tools[id]->cursorName().c_str()));
 		} else {
 			noTool(id);
 		}
@@ -893,7 +893,7 @@ void ZoomableView::selectArea(CCmdTarget *target, NotifyRectProc proc, const Str
 	else 
 		as = new AreaSelector(this, target, proc, dim, clr);
 	tools[ID_ZOOMIN] = as;
-	as->SetCursor(zCursor(cursor.scVal()));
+	as->SetCursor(zCursor(cursor.c_str()));
 	as->setActive(true);
 	iActiveTool = ID_ZOOMIN;
 }

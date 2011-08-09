@@ -48,7 +48,7 @@
 
 //--- [ FieldDataTypeSimple ]--------------------------------------------------------------------------
 FieldDataTypeSimple::FieldDataTypeSimple(FormEntry* p, Parm *prm, const String& sExt, bool fExt)
-  : FormEntry(p, prm), _sExt(sExt), _fExt(fExt)
+  : FormEntry(p, prm), _sExt(sExt), _fExt(fExt), showFullTree(true)
 {
 	_sName = prm->sVal();
 	_psName = 0;
@@ -58,11 +58,12 @@ FieldDataTypeSimple::FieldDataTypeSimple(FormEntry* p, Parm *prm, const String& 
 	Init();
 };
 
-FieldDataTypeSimple::FieldDataTypeSimple(FormEntry* p, String *psName, const String& sExt, bool fExt, ObjectLister *obl)
-  : FormEntry(p), _sExt(sExt), _fExt(fExt)
+FieldDataTypeSimple::FieldDataTypeSimple(FormEntry* p, String *psName, const String& sExt, bool fExt, ObjectLister *obl, const FileName& dir, bool fulltree)
+  : FormEntry(p), _sExt(sExt), _fExt(fExt), showFullTree(fulltree)
 {
 	_sName = *psName;
 	_psName = psName;
+	baseDir = dir;
 
 	ol = !obl ? new ObjectExtensionLister(0, sExt) : obl;
 
@@ -70,7 +71,7 @@ FieldDataTypeSimple::FieldDataTypeSimple(FormEntry* p, String *psName, const Str
 };
 
 FieldDataTypeSimple::FieldDataTypeSimple(FormEntry* p,Parm *prm, ObjectLister* objl, bool fExt)
-  : FormEntry(p, prm), ol(objl), _fExt(fExt)
+  : FormEntry(p, prm), ol(objl), _fExt(fExt), showFullTree(true)
 {
 	_sExt = ol->sFileExt();
 	_sName = prm->sVal();
@@ -80,7 +81,7 @@ FieldDataTypeSimple::FieldDataTypeSimple(FormEntry* p,Parm *prm, ObjectLister* o
 };
 
 FieldDataTypeSimple::FieldDataTypeSimple(FormEntry* p, String *psName, ObjectLister* objl, bool fExt)
-  : FormEntry(p), ol(objl), _fExt(fExt)
+  : FormEntry(p), ol(objl), _fExt(fExt), showFullTree(true)
 {
 	_sExt = ol->sFileExt();
 	_psName = psName;
@@ -109,6 +110,9 @@ void FieldDataTypeSimple::Init()
 			_sName = fn.sFullName();
 		else
 			_sName = String("%S%S", fn.sFile, fn.sExt);
+	}
+	if ( baseDir != FileName()) {
+		_sName = baseDir.sPath() + _sName;
 	}
 
 	setHelpItem(htpUiDataType);
@@ -153,7 +157,7 @@ void FieldDataTypeSimple::create()
   pntFld.x = psn->iPosX;
   pntFld.y = psn->iPosY;
   ne = new NameEdit(this, _frm, pntFld, Id(), _sName,
-                      true, ol, _fExt, psn->iMinWidth);
+                      true, ol, _fExt, psn->iMinWidth, showFullTree);
 
   ne->SetFont(_frm->fnt);
   CreateChildren();
@@ -172,7 +176,7 @@ void FieldDataTypeSimple::SetVal(const String& sVal)
   ne->SetVal(sVal);
   int iSel = ne->GetCurSel();
   if ((iSel < 0) && (sVal.length() > 0)) {
-    ne->AddString(sVal.scVal());
+    ne->AddString(sVal.c_str());
     ne->BaseNameEdit::SetVal(sVal);
   }
   if (_npChanged)
@@ -269,14 +273,14 @@ FieldDataType::FieldDataType(FormEntry* p, const String& sQuestion,
 }
 
 FieldDataType::FieldDataType(FormEntry* p, const String& sQuestion,
-                     String *psName, const String& sExt, bool fExt, ObjectLister *obl)
+                     String *psName, const String& sExt, bool fExt, ObjectLister *obl, const FileName& dir, bool fulltree)
   : FormEntry(p, 0, true)
 {
   if (sQuestion.length() != 0)
     st = new StaticTextSimple(this, sQuestion);
   else
     st = 0;
-  fld = new FieldDataTypeSimple(this, psName, sExt, fExt, obl);
+  fld = new FieldDataTypeSimple(this, psName, sExt, fExt, obl, dir, fulltree);
   if (st)
   {
     fld->Align(st, AL_AFTER);

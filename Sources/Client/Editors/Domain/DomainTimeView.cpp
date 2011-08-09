@@ -78,7 +78,7 @@ void DomainTimeView::CreateForm()
 	mode = dvt->getMode();
 	if (dm->fReadOnly())
 	{
-		String s("%S: %S", SDMUiMinMax, interval.toString(dvt->isLocalTime(), mode) );
+		String s("%S: %S", TR("&Min, Max"), interval.toString(dvt->isLocalTime(), mode) );
 		new StaticText(root, s);
 	}
 	else

@@ -175,7 +175,7 @@ CDocTemplate::Confidence IlwisDocTemplate::MatchDocType(LPCTSTR lpszPathName,
 				|| ".mps" == fn.sExt || ".mpa" == fn.sExt
 				|| ".mpv" == fn.sExt)
 			{
-				switch (MessageBox(hWnd, SMSMsgMapAlreadyOpen.scVal(), "ILWIS", MB_YESNO|MB_ICONEXCLAMATION|MB_DEFBUTTON2|MB_TOPMOST))
+				switch (MessageBox(hWnd, TR("Map is already shown in a MapWindow.\nDo you wish to open the map in a new map window again?").c_str(), "ILWIS", MB_YESNO|MB_ICONEXCLAMATION|MB_DEFBUTTON2|MB_TOPMOST))
 				{
 					case IDNO:
 						rpDocMatch = pDoc;
@@ -196,7 +196,7 @@ CDocTemplate::Confidence IlwisDocTemplate::MatchDocType(LPCTSTR lpszPathName,
 	FileName fn(lpszPathName);
 	if (fn.sExt == "")
 	  return noAttempt;
-  LPCTSTR lpszDot = fn.sExt.scVal();
+  LPCTSTR lpszDot = fn.sExt.c_str();
   if (ssExt.find(lpszDot) != ssExt.end()) {
 	bool ft = fTypeOk(lpszPathName);
 	if ( ft && ( fn.sExt == ".mpl" || fn.sExt ==".ioc"))
@@ -210,7 +210,7 @@ CDocTemplate::Confidence IlwisDocTemplate::MatchDocType(LPCTSTR lpszPathName,
 CDocTemplate::Confidence IlwisDocTemplate::MatchDocType(const FileName& fnFO, CDocument*& rpDocMatch, const String& sMethod)
 {
 	if ( IlwisObject::iotObjectType(fnFO) != IlwisObject::iotANY )
-		return MatchDocType(fnFO.sRelative().scVal(), rpDocMatch);
+		return MatchDocType(fnFO.sRelative().c_str(), rpDocMatch);
 
 	ForeignFormat *ff = ForeignFormat::Create(sMethod);		
 	if ( ff )
@@ -264,7 +264,7 @@ BOOL IlwisDocTemplate::GetDocString(CString& sRes, enum DocStringIndex index) co
 		{
 			sRes = "";
 			for (set<String>::const_iterator iter = ssExt.begin(); iter != ssExt.end(); iter++)
-				sRes += (*iter).scVal();
+				sRes += (*iter).c_str();
 			return TRUE;
 		}
     default:

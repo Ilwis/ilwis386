@@ -92,9 +92,9 @@ Import14Form::~Import14Form()
 }
 
 Import14MaskForm::Import14MaskForm(CWnd* wPar, String* sMask)
-  : Import14Form(wPar, SIETitleImp14)
+  : Import14Form(wPar, TR("Import from ILWIS 1.4"))
 {
-  FormEntry* fe = new FieldString(root, SIEUiMask, sMask);
+  FormEntry* fe = new FieldString(root, TR("&Mask"), sMask);
   fe->SetWidth(90);
   SetMenHelpTopic("ilwismen\\import_map.htm");
   create();
@@ -123,7 +123,7 @@ int Import14(CWnd* wPar, const String& sMask)
     String sDir = fn.sPath(); 
     if (sDir[sDir.length()-2] != ':' && sDir[sDir.length()-1] == '\\')
       sDir[sDir.length()-1] = 0;
-    SetCurrentDirectory(sDir.scVal());
+    SetCurrentDirectory(sDir.c_str());
 
     char sTemp[MAX_PATH];
     if (0 == GetCurrentDirectory(MAX_PATH, sTemp))
@@ -229,28 +229,28 @@ int Import14(CWnd* wPar, const String& sMask)
 //
 //  IlwisApp()->mh()->Show();
     if (fDoneSomething)
-      MessageBox(0, SIEMsgFinished.scVal(), SIEMsgImp14.scVal(), MB_ICONINFORMATION|MB_OK);
+      MessageBox(0, TR("Finished").c_str(), TR("Import from ILWIS 1.4").c_str(), MB_ICONINFORMATION|MB_OK);
     else
-      MessageBox(0, SIEMsgNothingToDo.scVal(), SIEMsgImp14.scVal(), MB_ICONINFORMATION|MB_OK);
+      MessageBox(0, TR("Nothing to do").c_str(), TR("Import from ILWIS 1.4").c_str(), MB_ICONINFORMATION|MB_OK);
 //  IlwisApp()->mh()->Message(SDFinished);
   }
   catch (ErrorObject& err) {
     err.Show();
   }
   catch (...) {
-    MessageBox(0, SIEErrImpError.scVal(), SIEErrError.scVal(), MB_ICONSTOP|MB_OK);
+    MessageBox(0, TR("Unknown Error during importing").c_str(), TR("Error").c_str(), MB_ICONSTOP|MB_OK);
   }
   String sCurDir = sOutDir;
 //  _chdrive(1 + tolower(sCurDir[0]) - 'a');
 //  if (sCurDir[sCurDir.length()-2] != ':')
 //    sCurDir[sCurDir.length()-1] = 0;
-  SetCurrentDirectory(sCurDir.scVal());
+  SetCurrentDirectory(sCurDir.c_str());
   ILWISAPP->DirChanged();
   return 0;
 }
 
 Import14MapForm::Import14MapForm(CWnd* wPar, const FileName& fn, const String& sDef)
-: Import14Form(wPar, SIETitleImpRas14),
+: Import14Form(wPar, TR("Import Raster Map from version 1.4")),
   fnMap(fn),
   fClass(false), fId(false), fValue(false), 
   fPicture(false), fImage(false), fBit(false),
@@ -298,45 +298,45 @@ Import14MapForm::Import14MapForm(CWnd* wPar, const FileName& fn, const String& s
     }
   }
   
-  sDescr = String(SIEDscRasMap_s.scVal(), fn.sFile);
+  sDescr = String(TR("Raster Map %S").c_str(), fn.sFile);
   new StaticText(root, sDescr);
-  rg = new RadioGroup(root, SIEUiDom, &iDom);
+  rg = new RadioGroup(root, TR("&Domain:"), &iDom);
   if (fClass) 
-    new RadioButton(rg, SIEUiClass);
+    new RadioButton(rg, TR("&Class"));
   if (fId) 
-    new RadioButton(rg, SIEUiIdentifier);
+    new RadioButton(rg, TR("&Identifier"));
   if (fImage) 
-    new RadioButton(rg, SIEUiImage);
+    new RadioButton(rg, TR("&Image"));
   if (fValue) 
-    new RadioButton(rg, SIEUiValue);
+    new RadioButton(rg, TR("&Value"));
   if (fPicture) 
-    new RadioButton(rg, SIEUiPicture);
+    new RadioButton(rg, TR("&Picture"));
   if (fBit) 
-    new RadioButton(rg, SIEUiBit);
+    new RadioButton(rg, TR("&Bit"));
   if (fClass || fId) {
     sDom = FileName(sOutMap).sRelative(false, fn.sPath());
     rg->SetCallBack((NotifyProc)&Import14MapForm::CallBack);
-    fldDom = new FieldDataTypeCreate(root, SIEUiDomName, &sDom, ".dom", true);
+    fldDom = new FieldDataTypeCreate(root, TR("Domain &Name"), &sDom, ".dom", true);
     fldDom->SetCallBack((NotifyProc)&Import14Form::DomCallBack);
   }
   if (fGrfNone) {
-    StaticText* st = new StaticText(root, SIERemNoGeoRef);
+    StaticText* st = new StaticText(root, TR("No GeoReference"));
     st->SetIndependentPos();
   }
   else if (fnGrf.fValid()) {
     sGrf = fnGrf.sRelative(false, fn.sPath());
-    String s(SIERemUsingGeoRef_s.scVal(), sGrf);
+    String s(TR("using GeoReference %S").c_str(), sGrf);
     StaticText* st = new StaticText(root, s);
     st->SetIndependentPos();
   }
   else {
 //  sGrf = fn.sFile;
     sGrf = FileName(sOutMap).sRelative(false, fn.sPath());
-    new FieldDataTypeCreate(root, SIEUiGrf, &sGrf, ".grf", true);
+    new FieldDataTypeCreate(root, TR("&GeoReference"), &sGrf, ".grf", true);
   }
   sOutMap = FileName(sOutMap).sRelative(false, fn.sPath());
-  new FieldMapCreate(root, SAFUiOutRasMap, &sOutMap);
-  StaticText* st = new StaticText(root, SAFUiDescription);
+  new FieldMapCreate(root, TR("&Output Raster Map"), &sOutMap);
+  StaticText* st = new StaticText(root, TR("&Description:"));
   st->psn->SetBound(0,0,0,0);
   FieldString* fs = new FieldString(root, "", &sDescr);
   fs->SetWidth(120);
@@ -417,7 +417,7 @@ ready:
 }
 
 Import14SegmentMapForm::Import14SegmentMapForm(CWnd* wPar, const FileName& fn, const String& sDef)
-: Import14Form(wPar, SIETitleImpSeg14),
+: Import14Form(wPar, TR("Import Segment Map from version 1.4")),
   fnMap(fn), sOutMap(sDef)
 {
   if ("" == sOutMap)
@@ -443,21 +443,21 @@ Import14SegmentMapForm::Import14SegmentMapForm(CWnd* wPar, const FileName& fn, c
       iDom = 0;
   }
   
-  sDescr = String(SIEDscSegMap_s.scVal(), fn.sFile);
+  sDescr = String(TR("Segment Map %S").c_str(), fn.sFile);
   new StaticText(root, sDescr);
-  rg = new RadioGroup(root, SIEUiDom, &iDom);
-  new RadioButton(rg, SIEUiClass);
-  new RadioButton(rg, SIEUiIdentifier);
-  new RadioButton(rg, SIEUiValue);
+  rg = new RadioGroup(root, TR("&Domain:"), &iDom);
+  new RadioButton(rg, TR("&Class"));
+  new RadioButton(rg, TR("&Identifier"));
+  new RadioButton(rg, TR("&Value"));
 //  sDom = fn.sFile;
   sDom = FileName(sOutMap).sRelative(false, fn.sPath());
   rg->SetCallBack((NotifyProc)&Import14SegmentMapForm::CallBack);
-  fldDom = new FieldDataTypeCreate(root, SIEUiDomName, &sDom, ".dom", true);
+  fldDom = new FieldDataTypeCreate(root, TR("Domain &Name"), &sDom, ".dom", true);
   fldDom->SetCallBack((NotifyProc)&Import14Form::DomCallBack);
   
   sOutMap = FileName(sOutMap).sRelative(false, fn.sPath());
-  new FieldSegmentMapCreate(root, SAFUiOutSegMap, &sOutMap);
-  StaticText* st = new StaticText(root, SAFUiDescription);
+  new FieldSegmentMapCreate(root, TR("&Output Segment Map"), &sOutMap);
+  StaticText* st = new StaticText(root, TR("&Description:"));
   st->psn->SetBound(0,0,0,0);
   FieldString* fs = new FieldString(root, "", &sDescr);
   fs->SetWidth(120);
@@ -500,7 +500,7 @@ int Import14SegmentMapForm::exec()
 }
 
 Import14PolygonMapForm::Import14PolygonMapForm(CWnd* wPar, const FileName& fn, const String& sDef)
-: Import14Form(wPar, SIETitleImpPol14),
+: Import14Form(wPar, TR("Import Polygon Map from version 1.4")),
   fnMap(fn), sOutMap(sDef)
 {
   if ("" == sOutMap)
@@ -522,21 +522,21 @@ Import14PolygonMapForm::Import14PolygonMapForm(CWnd* wPar, const FileName& fn, c
       iDom = 0;
   }
   
-  sDescr = String(SIEDscPolMap_s.scVal(), fn.sFile);
+  sDescr = String(TR("Polygon Map %S").c_str(), fn.sFile);
   new StaticText(root, sDescr);
-  rg = new RadioGroup(root, SIEUiDom, &iDom);
-  new RadioButton(rg, SIEUiClass);
-  new RadioButton(rg, SIEUiIdentifier);
-  new RadioButton(rg, SIEUiValue);
+  rg = new RadioGroup(root, TR("&Domain:"), &iDom);
+  new RadioButton(rg, TR("&Class"));
+  new RadioButton(rg, TR("&Identifier"));
+  new RadioButton(rg, TR("&Value"));
   sDom = FileName(sOutMap).sRelative(false, fn.sPath());
 //  sDom = fn.sFile;
   rg->SetCallBack((NotifyProc)&Import14PolygonMapForm::CallBack);
-  fldDom = new FieldDataTypeCreate(root, SIEUiDomName, &sDom, ".dom", true);
+  fldDom = new FieldDataTypeCreate(root, TR("Domain &Name"), &sDom, ".dom", true);
   fldDom->SetCallBack((NotifyProc)&Import14Form::DomCallBack);
   
   sOutMap = FileName(sOutMap).sRelative(false, fn.sPath());
-  new FieldPolygonMapCreate(root, SAFUiOutPolMap, &sOutMap);
-  StaticText* st = new StaticText(root, SAFUiDescription);
+  new FieldPolygonMapCreate(root, TR("&Output Polygon Map"), &sOutMap);
+  StaticText* st = new StaticText(root, TR("&Description:"));
   st->psn->SetBound(0,0,0,0);
   FieldString* fs = new FieldString(root, "", &sDescr);
   fs->SetWidth(120);
@@ -579,36 +579,36 @@ int Import14PolygonMapForm::exec()
 }
 
 Import14PointMapForm::Import14PointMapForm(CWnd* wPar, const FileName& fn, const String& sDef)
-: Import14Form(wPar, SIETitleImpPnt14),
+: Import14Form(wPar, TR("Import Point Map from version 1.4")),
   fnMap(fn), sOutMap(sDef)
 {
   if ("" == sOutMap)
     sOutMap = fn.sFile;
   bool fAttTablePossible;
   PointMapImport::GetImportInfo(fn, fNameCol, fAttTablePossible);
-  sDescr = String(SIEDscPntMap_s.scVal(), fn.sFile);
+  sDescr = String(TR("Point Map %S").c_str(), fn.sFile);
   new StaticText(root, sDescr);
   iDom = fNameCol ? 1 : 0;
-  rg = new RadioGroup(root, SIEUiDom, &iDom);
+  rg = new RadioGroup(root, TR("&Domain:"), &iDom);
   if (fNameCol)
-    new RadioButton(rg, SIEUiClass);
-  new RadioButton(rg, SIEUiIdentifier);
+    new RadioButton(rg, TR("&Class"));
+  new RadioButton(rg, TR("&Identifier"));
   if (fNameCol)
-    new RadioButton(rg, SIEUiValue);
+    new RadioButton(rg, TR("&Value"));
 //  sDom = fn.sFile;
   sDom = FileName(sOutMap).sRelative(false, fn.sPath());
   if (fNameCol || fAttTablePossible) {
     rg->SetCallBack((NotifyProc)&Import14PointMapForm::CallBack);
-    fldDom = new FieldDataTypeCreate(root, SIEUiDomName, &sDom, ".dom", true);
+    fldDom = new FieldDataTypeCreate(root, TR("Domain &Name"), &sDom, ".dom", true);
     fldDom->SetCallBack((NotifyProc)&Import14Form::DomCallBack);
   }  
   
   if (fAttTablePossible)
-    new FieldString(root, SIEUiAttTable, &sAttTbl);
+    new FieldString(root, TR("&Attribute Table"), &sAttTbl);
 
   sOutMap = FileName(sOutMap).sRelative(false, fn.sPath());
-  new FieldPointMapCreate(root, SAFUiOutPntMap, &sOutMap);
-  StaticText* st = new StaticText(root, SAFUiDescription);
+  new FieldPointMapCreate(root, TR("&Output Point Map"), &sOutMap);
+  StaticText* st = new StaticText(root, TR("&Description:"));
   st->psn->SetBound(0,0,0,0);
   FieldString* fs = new FieldString(root, "", &sDescr);
   fs->SetWidth(120);
@@ -661,34 +661,34 @@ int Import14PointMapForm::exec()
 }
 
 Import14TableForm::Import14TableForm(CWnd* wPar, const FileName& fn, const String& sDef)
-: Import14Form(wPar, SIETitleImpTbl14),
+: Import14Form(wPar, TR("Import Table from version 1.4")),
   fnTable(fn), sOutTbl(sDef)
 {
   if ("" == sOutTbl)
     sOutTbl = fn.sFile;
   TableImport::GetImportInfo(fn, fNameCol);
-  sDescr = String(SIEDscTable_s.scVal(), fn.sFile);
+  sDescr = String(TR("Table %S").c_str(), fn.sFile);
   new StaticText(root, sDescr);
   iDom = 0;
-  rg = new RadioGroup(root, SIEUiDom, &iDom);
+  rg = new RadioGroup(root, TR("&Domain:"), &iDom);
   if (fNameCol) {
-    new RadioButton(rg, SIEUiClass);
-    new RadioButton(rg, SIEUiIdentifier);
+    new RadioButton(rg, TR("&Class"));
+    new RadioButton(rg, TR("&Identifier"));
     SetMenHelpTopic("ilwismen\\import_map.htm");
   }
   else { 
-    new RadioButton(rg, SIEUiNone);
+    new RadioButton(rg, TR("&None"));
     SetMenHelpTopic("ilwismen\\import_map.htm");
   }
   if (fNameCol) {
 //    sDom = fn.sFile;
     sDom = FileName(sOutTbl).sRelative(false, fn.sPath());
-    fldDom = new FieldDataTypeCreate(root, SIEUiDomName, &sDom, ".dom", true);
+    fldDom = new FieldDataTypeCreate(root, TR("Domain &Name"), &sDom, ".dom", true);
     fldDom->SetCallBack((NotifyProc)&Import14Form::DomCallBack);
   }
   sOutTbl = FileName(sOutTbl).sRelative(false, fn.sPath());
-  new FieldTableCreate(root, SAFUiOutTable, &sOutTbl);
-  StaticText* st = new StaticText(root, SAFUiDescription);
+  new FieldTableCreate(root, TR("&Output Table"), &sOutTbl);
+  StaticText* st = new StaticText(root, TR("&Description:"));
   st->psn->SetBound(0,0,0,0);
   FieldString* fs = new FieldString(root, "", &sDescr);
   fs->SetWidth(120);

@@ -153,33 +153,33 @@ bool GraphDrawer::fConfigureTitle()
     ConfigForm(GraphDrawer* gd, const String& sTitle)
     : FormWithDest(0, sTitle)
     {
-      FieldString* fs = new FieldString(root, SGPUiTitle, &gd->sTitle);
+      FieldString* fs = new FieldString(root, TR("&Title"), &gd->sTitle);
       fs->SetWidth(90);
 			new FieldLogFont(root, &gd->lfTitle);
       SetMenHelpTopic("ilwismen\\graph_window_options_title.htm");
       create();      
     }
   };
-  ConfigForm frm(this, SGPTitleGraphTitle);
+  ConfigForm frm(this, TR("Graph Title"));
   return frm.fOkClicked();
 }
 
 void GraphDrawer::SaveSettings(const FileName& fn, const String& sSection)
 {
-	ObjectInfo::WriteElement(sSection.scVal(), "Title", fn, sTitle);
-	ObjectInfo::WriteElement(sSection.scVal(), "Font", fn, lfTitle.lfFaceName);
+	ObjectInfo::WriteElement(sSection.c_str(), "Title", fn, sTitle);
+	ObjectInfo::WriteElement(sSection.c_str(), "Font", fn, lfTitle.lfFaceName);
 	long iLen = sizeof(LOGFONT) - LF_FACESIZE;
-	ObjectInfo::WriteElement(sSection.scVal(), "LogFont", fn, (char*)&lfTitle, iLen);
+	ObjectInfo::WriteElement(sSection.c_str(), "LogFont", fn, (char*)&lfTitle, iLen);
 }
 
 void GraphDrawer::LoadSettings(const FileName& fn, const String& sSection)
 {
-	ObjectInfo::ReadElement(sSection.scVal(), "Title", fn, sTitle);
+	ObjectInfo::ReadElement(sSection.c_str(), "Title", fn, sTitle);
 	String sFont;
-	ObjectInfo::ReadElement(sSection.scVal(), "Font", fn, sFont);
-	lstrcpy(lfTitle.lfFaceName, sFont.scVal());
+	ObjectInfo::ReadElement(sSection.c_str(), "Font", fn, sFont);
+	lstrcpy(lfTitle.lfFaceName, sFont.c_str());
 	int iLen = sizeof(LOGFONT) - LF_FACESIZE;
-	int iRes = ObjectInfo::ReadElement(sSection.scVal(), "LogFont", fn, (char*)&lfTitle, iLen);
+	int iRes = ObjectInfo::ReadElement(sSection.c_str(), "LogFont", fn, (char*)&lfTitle, iLen);
   if (0 == iRes || "" == sFont) 
   {
     CFont* fnt = IlwWinApp()->GetFont(IlwisWinApp::sfGRAPH);
@@ -198,7 +198,7 @@ void GraphDrawer::CalcTitleSize()
     CFont fntTitle;
     fntTitle.CreateFontIndirect(&lfTitle);
     CFont* fntOld = dc.SelectObject(&fntTitle);  
-    CSize siz = dc.GetTextExtent(sTitle.scVal());
+    CSize siz = dc.GetTextExtent(sTitle.c_str());
     m_iTitleSize = siz.cy;
     dc.SelectObject(fntOld);
   }
@@ -269,7 +269,7 @@ void CartesianGraphDrawer::drawTitle(CDC* cdc)
   fntTitle.CreateFontIndirect(&lfTitle);
 	CFont* fntOld =	cdc->SelectObject(&fntTitle);
   UINT ta = cdc->SetTextAlign(TA_CENTER);
-  cdc->TextOut(pt.x, pt.y, sTitle.scVal());
+  cdc->TextOut(pt.x, pt.y, sTitle.c_str());
   cdc->SetTextAlign(ta);
 	cdc->SelectObject(fntOld);
 }
@@ -386,7 +386,7 @@ void CartesianGraphDrawer::SaveSettings(const FileName& fn, const String& sSecti
 	gaxYRight->SaveSettings(fn, sSec);
 	sSec = String("%S Legend", sSection);
   grleg->SaveSettings(fn, sSec);
-	ObjectInfo::WriteElement(sSection.scVal(), "NrGraphs", fn, (long)agl.iSize());
+	ObjectInfo::WriteElement(sSection.c_str(), "NrGraphs", fn, (long)agl.iSize());
 	for (unsigned int i=0; i  < agl.iSize(); i++) {
   	sSec = String("%S %i", sSection, i);
 		agl[i]->SaveSettings(fn, sSec);
@@ -405,7 +405,7 @@ void CartesianGraphDrawer::LoadSettings(const FileName& fn, const String& sSecti
 	sSec = String("%S Legend", sSection);
   grleg->LoadSettings(fn, sSec);
 	int iGraphs = 0;
-	ObjectInfo::ReadElement(sSection.scVal(), "NrGraphs", fn, iGraphs);
+	ObjectInfo::ReadElement(sSection.c_str(), "NrGraphs", fn, iGraphs);
 	for (int i=0; i  < iGraphs; i++) {
 		String sSec("%S %i", sSection, i);
 		CartesianGraphLayer* cgl = CartesianGraphLayer::create(fn, sSec, this);
@@ -416,18 +416,18 @@ void CartesianGraphDrawer::LoadSettings(const FileName& fn, const String& sSecti
 
 void CartesianGraphDrawer::ClearSettings(const FileName& fn, const String& sSection)
 {
-	ObjectInfo::WriteElement(sSection.scVal(), "Title", fn, 0);
+	ObjectInfo::WriteElement(sSection.c_str(), "Title", fn, 0);
 	String sSec("%S X", sSection);
-	ObjectInfo::WriteElement(sSec.scVal(), 0, fn, 0);
+	ObjectInfo::WriteElement(sSec.c_str(), 0, fn, 0);
 	sSec = String("%S YLeft", sSection);
-	ObjectInfo::WriteElement(sSec.scVal(), 0, fn, 0);
+	ObjectInfo::WriteElement(sSec.c_str(), 0, fn, 0);
 	sSec = String("%S YRight", sSection);
-	ObjectInfo::WriteElement(sSec.scVal(), 0, fn, 0);
+	ObjectInfo::WriteElement(sSec.c_str(), 0, fn, 0);
 	int iGraphs = 0;
-	ObjectInfo::ReadElement(sSection.scVal(), "NrGraphs", fn, iGraphs);
+	ObjectInfo::ReadElement(sSection.c_str(), "NrGraphs", fn, iGraphs);
 	for (int i=0; i  < iGraphs; i++) {
 		String sSec("%S %i", sSection, i);
-		ObjectInfo::WriteElement(sSec.scVal(), 0, fn, 0);
+		ObjectInfo::WriteElement(sSec.c_str(), 0, fn, 0);
 	}
 }
 

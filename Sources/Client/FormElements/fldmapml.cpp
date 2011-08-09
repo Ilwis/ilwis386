@@ -75,7 +75,7 @@ void FieldMapInMapList::create()
 //    sMap = ml[i]->sName(true);
     sMap = ml->sDisplayName(i);
 		sMap &= ".mpr";
-    fld->ose->AddString(sMap.scVal());
+    fld->ose->AddString(sMap.c_str());
   }
   long iMapNr = *iMap - ml->iLower();
   fld->ose->SetCurSel(iMapNr);

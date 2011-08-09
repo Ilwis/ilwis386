@@ -179,7 +179,7 @@ void FieldListView::BuildColumns()
 	CSize sz = m_clctrl.GetStringWidth(sDummy);
 
 	for(vector<FLVColumnInfo>::const_iterator cur = m_colInfo.begin(); cur < m_colInfo.end(); ++cur) {
-		m_clctrl.InsertColumn(iCurCol++, (*cur).columnName.scVal(), LVCFMT_LEFT, (*cur).width);
+		m_clctrl.InsertColumn(iCurCol++, (*cur).columnName.c_str(), LVCFMT_LEFT, (*cur).width);
 		iTotalWidth += (*cur).width;
 	}
 }

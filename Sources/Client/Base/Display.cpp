@@ -295,7 +295,7 @@ int zDisplay::setTextBackMode(int tm)
 BOOL zDisplay::text(const CPoint& pnt, String s)
 {
 	ISTRUE(fINotEqual, _tempDC, (CDC *)NULL);
-	return _tempDC->TextOut(pnt.x, pnt.y, s.scVal());
+	return _tempDC->TextOut(pnt.x, pnt.y, s.c_str());
 }
 
 COLORREF zDisplay::textColor(Color clr)

@@ -1175,7 +1175,7 @@ void BaseTablePaneView::OnMouseMove(UINT nFlags, CPoint point)
 				if (point.x > iColPix[c] + 2) continue;
 				fColMove = true;
 				SetCursor(curSplitCol);
-				s = STBRemChngColWidth;
+				s = TR("Change column width");
 				if (pMessageBar)
 					pMessageBar->SetWindowText(s.sVal());
 				return;
@@ -1315,7 +1315,7 @@ void BaseTablePaneView::OnLButtonDown(UINT nFlags, CPoint point)
 				mmSelect.MaxRow() = iRowMoving - 1;
 				iRowMoving = 0;
 				iColMoving = 0;
-				s = STBRemSelectBlock;
+				s = TR("Select a block");
 			}
 			else {
 				mmSelect.MinCol() = iColMoving;
@@ -1323,7 +1323,7 @@ void BaseTablePaneView::OnLButtonDown(UINT nFlags, CPoint point)
 				mmSelect.MinRow() = -1;
 				mmSelect.MaxRow() = LONG_MAX;
 				iRowMoving = -1;
-				s = STBRemSelectBlCol;
+				s = TR("Select a block of columns");
 			}
 		}
 		else {
@@ -1333,14 +1333,14 @@ void BaseTablePaneView::OnLButtonDown(UINT nFlags, CPoint point)
 				mmSelect.MinRow() = iRowMoving;
 				mmSelect.MaxRow() = iRowMoving;
 				iColMoving = -1;
-				s = STBRemSelectBlRec;
+				s = TR("Select a block of records");
 			}
 			else {
 				mmSelect.MinCol() = iColMoving;
 				mmSelect.MaxCol() = iColMoving;
 				mmSelect.MinRow() = iRowMoving;
 				mmSelect.MaxRow() = iRowMoving;
-				s = STBRemSelectBlock;
+				s = TR("Select a block");
 			}
 		}
 		CWnd* pMessageBar = GetParentFrame()->GetMessageBar();
@@ -1682,7 +1682,7 @@ void BaseTablePaneView::OnEditCopy()
 			if (str.sRight(4) == ".crd")
 				str = str.sLeft(str.length()-4);
 			else if (str.sRight(4) == ".clm")
-				str = String("%S %S ", SDColumn, str.sLeft(str.length()-4));
+				str = String("%S %S ", TR("Column"), str.sLeft(str.length()-4));
 			strcpy(s, str.sVal());
 			s += str.length();
 			*s++ = '\t';
@@ -1695,7 +1695,7 @@ void BaseTablePaneView::OnEditCopy()
 			s += str.length();
 			*s++ = '\t';
 			if (s > sMax) {
-				MessageBox(STBErrClpbrdSelNotFit.sVal(),STBErrClpbrdCopyError.sVal(),MB_OK|MB_ICONSTOP);
+				MessageBox(TR("Selection does not fit in clipboard").c_str(),TR("Copy error").c_str(),MB_OK|MB_ICONSTOP);
 				delete sBuf;
 				return;
 			}
@@ -1716,7 +1716,7 @@ void BaseTablePaneView::OnEditCopy()
 		String sTblFmt("rowheader=%i colheader=%i\r\n", (int)fRowHeader, (int)fColHeader);
 		hnd = GlobalAlloc(GMEM_MOVEABLE, strlen(sBuf)+sTblFmt.length()+1);
 		char* pc = (char*)GlobalLock(hnd);
-		strcpy(pc, sTblFmt.scVal());
+		strcpy(pc, sTblFmt.c_str());
 		strcpy(pc+sTblFmt.length(),sBuf);
 		GlobalUnlock(hnd);
 		SetClipboardData(iFmtTbl,hnd);
@@ -1861,15 +1861,15 @@ BOOL BaseTablePaneView::OnPreparePrinting(CPrintInfo* pInfo)
 		{
 		public:
 			FormPrintOptions(CWnd* parent, int* iSel, bool* fHeaderOnAllPages, bool* fLeftMostColOnAllPages, bool fSelect, LOGFONT* lf, HDC hDC)
-				: FormWithDest(parent, STBLTitlePrintOptions)
+				: FormWithDest(parent, TR("Print Options"))
 			{
-				new CheckBox(root, STBPrHeaderOnAllPages, fHeaderOnAllPages);
-				new CheckBox(root, STBPrLeftMostColOnAllPages, fLeftMostColOnAllPages);
+				new CheckBox(root, TR("&Header on all pages"), fHeaderOnAllPages);
+				new CheckBox(root, TR("&Leftmost column on all pages"), fLeftMostColOnAllPages);
 				(new FieldLogFont(root, lf))->SetIndependentPos();
 				if (fSelect) {
 					RadioGroup* rg = new RadioGroup(root, "", iSel);
-					new RadioButton(rg, STBPrAll);
-					new RadioButton(rg, STBPrSelection);
+					new RadioButton(rg, TR("&All"));
+					new RadioButton(rg, TR("&Selection"));
 				}
 				SetMenHelpTopic("ilwismen\\print_table.htm");
 				create();

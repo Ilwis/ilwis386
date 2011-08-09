@@ -328,7 +328,7 @@ BOOL PreStereoMateView::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 	//}
 }
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define add(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 #define addBreak men.AppendMenu(MF_SEPARATOR);
 void PreStereoMateView::OnContextMenu(CWnd* pWnd, CPoint point) 

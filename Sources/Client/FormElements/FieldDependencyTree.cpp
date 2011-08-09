@@ -77,7 +77,7 @@ DependencyTreeCtrl::DependencyTreeCtrl(const RECT& rect, CWnd* wnd, UINT id, con
 	SetImageList(&IlwWinApp()->ilSmall, TVSIL_NORMAL);
 	FileName fn = obj->fnObj;
 	int iImg = IlwWinApp()->iImage(fn.sExt);
-	htiRoot = InsertItem(fn.sFile.scVal(), iImg, iImg, TVI_ROOT);
+	htiRoot = InsertItem(fn.sFile.c_str(), iImg, iImg, TVI_ROOT);
 	afn &= fn;
 	SetItemData(htiRoot, afn.iSize());
 	Expand(htiRoot, fn);
@@ -133,7 +133,7 @@ void DependencyTreeCtrl::Expand(HTREEITEM hti, const FileName& fn)
 			sItem = fn.sFile;
 
 		int iImg = IlwWinApp()->iImage(sImg);
-		tvi.hItem = InsertItem(sItem.scVal(), iImg, iImg, hti);
+		tvi.hItem = InsertItem(sItem.c_str(), iImg, iImg, hti);
 		tvi.cChildren = ObjectInfo::fDependent(fn) ? 1 : 0;
 		SetItem(&tvi);
 		afn &= fn;

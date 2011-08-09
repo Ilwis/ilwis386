@@ -184,9 +184,9 @@ void GraphLayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 	int iImgTable = IlwWinApp()->iImage(".tbt");
   int iImgLegend = IlwWinApp()->iImage("Legend");
 
-  HTREEITEM hti = tc.InsertItem(grdr->sTitle.scVal(),iImgText,iImgText,htiGraph);
+  HTREEITEM hti = tc.InsertItem(grdr->sTitle.c_str(),iImgText,iImgText,htiGraph);
   tc.SetItemData(hti, (DWORD_PTR)new GraphTitleTreeItem(this, grdr));		
-  hti = tc.InsertItem(SGPRemLegend.scVal(),iImgLegend,iImgLegend,htiGraph);
+  hti = tc.InsertItem(TR("Legend").c_str(),iImgLegend,iImgLegend,htiGraph);
   tc.SetItemData(hti, (DWORD_PTR)new BoolGraphTreeItem(this, &grdr->grleg->fShow));		
 	tc.SetCheck(hti, grdr->grleg->fShow);
 
@@ -197,7 +197,7 @@ void GraphLayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 		String sDescr = tbl->sDescr();
 	  if ("" != sDescr) 
 			sName = String("%S - %S", sName, sDescr);
-		HTREEITEM htiTbl = tc.InsertItem(sName.scVal(), iImgTable, iImgTable, htiGraph);
+		HTREEITEM htiTbl = tc.InsertItem(sName.c_str(), iImgTable, iImgTable, htiGraph);
     if (0 == htiTbl)
       return;
     tc.SetItemData(htiTbl, (DWORD_PTR)new ObjectGraphTreeItem(this, tbl.ptr()));		
@@ -214,16 +214,16 @@ void GraphLayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
     if (0 == htiAxis)
       return;
     tc.SetItemData(htiAxis, (DWORD_PTR)new GraphAxisTreeItem(this, ga));		
-    HTREEITEM hti = tc.InsertItem(ga->sTitle.scVal(),iImgText,iImgText,htiAxis);
+    HTREEITEM hti = tc.InsertItem(ga->sTitle.c_str(),iImgText,iImgText,htiAxis);
     tc.SetItemData(hti, (DWORD_PTR)new StringGraphTreeItem(this, hti, &ga->sTitle));	
     String sMin, sMax;
     if (ga->dvrs.fValues())
     {
       sMin = ga->sText(ga->rMin(), false);
-      hti = tc.InsertItem(sMin.scVal(),iImgMinMax,iImgMinMax,htiAxis);
+      hti = tc.InsertItem(sMin.c_str(),iImgMinMax,iImgMinMax,htiAxis);
       tc.SetItemData(hti, (DWORD_PTR)new GraphAxisMinTreeItem(this, hti, ga));		
       sMax = ga->sText(ga->rMax(), false);
-      hti = hti = tc.InsertItem(sMax.scVal(),iImgMinMax,iImgMinMax,htiAxis);
+      hti = hti = tc.InsertItem(sMax.c_str(),iImgMinMax,iImgMinMax,htiAxis);
       tc.SetItemData(hti, (DWORD_PTR)new GraphAxisMaxTreeItem(this, hti, ga));		
     }
   	tc.Expand(htiAxis, TVE_EXPAND);
@@ -233,13 +233,13 @@ void GraphLayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
     if (0 == htiAxis)
       return;
     tc.SetItemData(htiAxis, (DWORD_PTR)new GraphAxisTreeItem(this, ga));		
-    hti = tc.InsertItem(ga->sTitle.scVal(),iImgText,iImgText,htiAxis);
+    hti = tc.InsertItem(ga->sTitle.c_str(),iImgText,iImgText,htiAxis);
     tc.SetItemData(hti, (DWORD_PTR)new StringGraphTreeItem(this, hti, &ga->sTitle));		
     sMin = ga->sText(ga->rMin(), false);
-    hti = tc.InsertItem(sMin.scVal(),iImgMinMax,iImgMinMax,htiAxis);
+    hti = tc.InsertItem(sMin.c_str(),iImgMinMax,iImgMinMax,htiAxis);
     tc.SetItemData(hti, (DWORD_PTR)new GraphAxisMinTreeItem(this, hti, ga));		
     sMax = ga->sText(ga->rMax(), false);
-    hti = tc.InsertItem(sMax.scVal(),iImgMinMax,iImgMinMax,htiAxis);
+    hti = tc.InsertItem(sMax.c_str(),iImgMinMax,iImgMinMax,htiAxis);
     tc.SetItemData(hti, (DWORD_PTR)new GraphAxisMaxTreeItem(this, hti, ga));		
   	tc.Expand(htiAxis, TVE_EXPAND);
 
@@ -251,13 +251,13 @@ void GraphLayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
     gati->fCheckBox = true;
     tc.SetItemData(htiAxis, (DWORD_PTR)gati);		
 		tc.SetCheck(htiAxis, ga->fVisible);
-    hti = tc.InsertItem(ga->sTitle.scVal(),iImgText,iImgText,htiAxis);
+    hti = tc.InsertItem(ga->sTitle.c_str(),iImgText,iImgText,htiAxis);
     tc.SetItemData(hti, (DWORD_PTR)new StringGraphTreeItem(this, hti, &ga->sTitle));	
     sMin = ga->sText(ga->rMin(), false);
-    hti = tc.InsertItem(sMin.scVal(),iImgMinMax,iImgMinMax,htiAxis);
+    hti = tc.InsertItem(sMin.c_str(),iImgMinMax,iImgMinMax,htiAxis);
     tc.SetItemData(hti, (DWORD_PTR)new GraphAxisMinTreeItem(this, hti, ga));		
     sMax = ga->sText(ga->rMax(), false);
-    hti = tc.InsertItem(sMax.scVal(),iImgMinMax,iImgMinMax,htiAxis);
+    hti = tc.InsertItem(sMax.c_str(),iImgMinMax,iImgMinMax,htiAxis);
     tc.SetItemData(hti, (DWORD_PTR)new GraphAxisMaxTreeItem(this, hti, ga));		
   	tc.Expand(htiAxis, TVE_EXPAND);
   }
@@ -279,10 +279,10 @@ void GraphLayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
       return;
     tc.SetItemData(htiAxis, (DWORD_PTR)new GraphAxisTreeItem(this, ga));		
     String sMin = ga->sText(ga->rMin(), false);
-    hti = tc.InsertItem(sMin.scVal(),iImgMinMax,iImgMinMax,htiAxis);
+    hti = tc.InsertItem(sMin.c_str(),iImgMinMax,iImgMinMax,htiAxis);
     tc.SetItemData(hti, (DWORD_PTR)new GraphAxisMinTreeItem(this, hti, ga));		
     String sMax = ga->sText(ga->rMax(), false);
-    hti = tc.InsertItem(sMax.scVal(),iImgMinMax,iImgMinMax,htiAxis);
+    hti = tc.InsertItem(sMax.c_str(),iImgMinMax,iImgMinMax,htiAxis);
     tc.SetItemData(hti, (DWORD_PTR)new GraphAxisMaxTreeItem(this, hti, ga));		
   	tc.Expand(htiAxis, TVE_EXPAND);
   }
@@ -293,7 +293,7 @@ void GraphLayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
   {
     GraphLayer* gl = gd->gl(iLayer);
     String sName = gl->sTitle;
-		HTREEITEM hti = tc.InsertItem(sName.scVal(),iImgGraph,iImgGraph,htiGraph);
+		HTREEITEM hti = tc.InsertItem(sName.c_str(),iImgGraph,iImgGraph,htiGraph);
     if (0 == hti)
       return;
     GraphLayerTreeItem* glti = new GraphLayerTreeItem(this, gl);
@@ -308,7 +308,7 @@ void GraphLayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 				String sDescr = cgl->tbl->sDescr();
 				if ("" != sDescr) 
 					sName = String("%S - %S", sName, sDescr);
-				HTREEITEM htiTbl = tc.InsertItem(sName.scVal(), iImgTable, iImgTable, hti);
+				HTREEITEM htiTbl = tc.InsertItem(sName.c_str(), iImgTable, iImgTable, hti);
         if (0 == htiTbl)
           return;
         tc.SetItemData(htiTbl, (DWORD_PTR)new ObjectGraphTreeItem(this, cgl->tbl.ptr()));		
@@ -319,14 +319,14 @@ void GraphLayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
   			String sDescr = cgl->colX->sDescr();
 	  		if ("" != sDescr) 
 		  		sName = String("%S - %S", sName, sDescr);
-				tc.InsertItem(sName.scVal(), iImgCol, iImgCol, hti);
+				tc.InsertItem(sName.c_str(), iImgCol, iImgCol, hti);
       }
       if (cgl->colY.fValid()) {
         sName = cgl->colY->sName();
   			String sDescr = cgl->colY->sDescr();
 	  		if ("" != sDescr) 
 		  		sName = String("%S - %S", sName, sDescr);
-  			tc.InsertItem(sName.scVal(), iImgCol, iImgCol, hti);
+  			tc.InsertItem(sName.c_str(), iImgCol, iImgCol, hti);
       }
     }
     else if (0 != rdl) {
@@ -336,7 +336,7 @@ void GraphLayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 				if ("" != sDescr) 
 					sName = String("%S - %S", sName, sDescr);
 				int iImg = IlwWinApp()->iImage(".tbt");
-				HTREEITEM htiTbl = tc.InsertItem(sName.scVal(), iImg, iImg, hti);
+				HTREEITEM htiTbl = tc.InsertItem(sName.c_str(), iImg, iImg, hti);
         if (0 == htiTbl)
           return;
       }
@@ -346,19 +346,19 @@ void GraphLayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 				String sDescr = rdl->colX->sDescr();
 				if ("" != sDescr) 
 					sName = String("%S - %S", sName, sDescr);
-				tc.InsertItem(sName.scVal(), iImgCol, iImgCol, hti);
+				tc.InsertItem(sName.c_str(), iImgCol, iImgCol, hti);
       }
       if (rdl->colY.fValid()) {
         sName = rdl->colY->sName();
 			  String sDescr = rdl->colY->sDescr();
 			  if ("" != sDescr) 
 				  sName = String("%S - %S", sName, sDescr);
-			  tc.InsertItem(sName.scVal(), iImgCol, iImgCol, hti);
+			  tc.InsertItem(sName.c_str(), iImgCol, iImgCol, hti);
       }        
     }
     else {
   		sName = gl->sName();
-			tc.InsertItem(sName.scVal(), iImgGraph, iImgGraph, hti);
+			tc.InsertItem(sName.c_str(), iImgGraph, iImgGraph, hti);
     }
   	tc.Expand(hti, TVE_EXPAND);
   }
@@ -530,7 +530,7 @@ void GraphLayerTreeView::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 	}
 }
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define pmadd(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 #define addSub(ID) menSub.AppendMenu(MF_STRING, ID, sMen(ID)); 
 #define addSubMenu(ID) men.AppendMenu(MF_POPUP, (UINT)menSub.GetSafeHmenu(), sMen(ID)); menSub.Detach();

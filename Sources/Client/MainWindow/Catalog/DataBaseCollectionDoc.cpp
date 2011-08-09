@@ -92,9 +92,9 @@ BOOL DataBaseCollectionDoc::OnOpenDocument(LPCTSTR lpszPathName)
 		IlwisSettings settings(String("%S\\%S", MainWindow::sBaseRegKey(), sRegID));
 		sPath = settings.sValue("DocName");
 	}
-	SetPathName(sPath.scVal());
+	SetPathName(sPath.c_str());
 
-	if (!IlwisDocument::OnOpenDocument(sPath.scVal()))
+	if (!IlwisDocument::OnOpenDocument(sPath.c_str()))
 		return FALSE;
 
 	FileName fn(sPath);

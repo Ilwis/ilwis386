@@ -97,6 +97,7 @@ Created on: 2007-02-8
 #include "Client\Mapwindow\ScaleBarSrvItem.h"
 #include "Client\Mapwindow\MapStatusBar.h"
 #include "Engine\SampleSet\SAMPLSET.H"
+#include "Client\Mapwindow\Printing\Printing.h"
 #include "Client\Editors\Editor.h"
 #include "Engine\Drawers\ZValueMaker.h"
 
@@ -159,7 +160,7 @@ MapCompositionDoc::MapCompositionDoc()
 	iListState = 0;
 	fInCmdMsg = false;
 	rDfltScale = rUNDEF;
-	rootDrawer = new RootDrawer(this);
+	rootDrawer = new RootDrawer();
 	fnView = FileName("mapview.mpv");
 	selectedDrawer = 0;
 	pixInfoDoc = 0;
@@ -313,7 +314,7 @@ BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPath, ParmList& pm)
 		if ( IlwisObject::iotObjectType(fn) == IlwisObject::iotPOLYGONMAP)
 			return OnOpenPolygonMap(PolygonMap(fn), (IlwisDocument::OpenType)ot);
 	}	
-	if (!IlwisDocument::OnOpenDocument(fn.sRelative().scVal()))
+	if (!IlwisDocument::OnOpenDocument(fn.sRelative().c_str()))
 		return FALSE;
 	Map map(fn);
 	return OnOpenDocument(lpszPath);
@@ -329,7 +330,7 @@ BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPathName, OpenType ot)
 		if (".mpv" == fn.sExt || lpszPathName == 0) 
 			fUseSerialize = true;
 		if (0 != lpszPathName)
-			SetPathName(fn.sFullName().scVal());
+			SetPathName(fn.sFullName().c_str());
 		if (!CatalogDocument::OnOpenDocument(lpszPathName))
 			return FALSE;
 		if (fUseSerialize)
@@ -348,8 +349,8 @@ BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPathName, OpenType ot)
 			if (!grf.fValid())
 				return FALSE;
 			if (grf->fReadOnly()) {
-				String sErr(SMWErrGeoRefReadOnly_S.scVal(), grf->sName());
-				MessageBox(0, sErr.scVal(), SMWErrError.scVal(), MB_OK|MB_ICONSTOP|MB_TOPMOST); 
+				String sErr(TR("GeoReference %S is read-only and thus cannot be edited").c_str(), grf->sName());
+				MessageBox(0, sErr.c_str(), TR("Error").c_str(), MB_OK|MB_ICONSTOP|MB_TOPMOST); 
 				return FALSE;
 			}
 			GeoRefCTP* gc = grf->pgCTP();
@@ -357,7 +358,7 @@ BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPathName, OpenType ot)
 				return FALSE;
 			FileName fn = gc->fnBackgroundMap;
 			if (!fn.fValid()) {
-				MessageBox(0, SMWErrNoBackgroundMap.scVal(), SMWErrError.scVal(), MB_OK|MB_ICONSTOP|MB_TOPMOST); 
+				MessageBox(0, TR("No Background Map specified, editing not possible").c_str(), TR("Error").c_str(), MB_OK|MB_ICONSTOP|MB_TOPMOST); 
 				return FALSE;
 			}
 			if (".mpl" == fn.sExt) {
@@ -365,7 +366,7 @@ BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPathName, OpenType ot)
 				if (!ml.fValid())
 					return FALSE;
 				if (ml->gr() != grf) {
-					MessageBox(0, SMWErrIncorrectBackgroundMap.scVal(), SMWErrError.scVal(), MB_OK|MB_ICONSTOP|MB_TOPMOST); 
+					MessageBox(0, TR("Incorrect Background Map, editing not possible").c_str(), TR("Error").c_str(), MB_OK|MB_ICONSTOP|MB_TOPMOST); 
 					return FALSE;
 				}
 				if (!OnOpenMapList(ml,otNORMAL))
@@ -376,7 +377,7 @@ BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPathName, OpenType ot)
 				if (!mp.fValid())
 					return FALSE;
 				if (mp->gr() != grf) {
-					MessageBox(0, SMWErrIncorrectBackgroundMap.scVal(), SMWErrError.scVal(), MB_OK|MB_ICONSTOP|MB_TOPMOST); 
+					MessageBox(0, TR("Incorrect Background Map, editing not possible").c_str(), TR("Error").c_str(), MB_OK|MB_ICONSTOP|MB_TOPMOST); 
 					return FALSE;
 				}
 				if (!OnOpenRasterMap(mp,otNORMAL))
@@ -415,7 +416,7 @@ BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPathName, OpenType ot)
 			if (!cstp->fnBackgroundMap.fValid())
 				return FALSE;
 			String s = cstp->fnBackgroundMap.sFullNameQuoted();
-			if (!OnOpenDocument(s.scVal()))
+			if (!OnOpenDocument(s.c_str()))
 				return FALSE;
 			::AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_EDITCSY, 0);
 			return TRUE;
@@ -467,22 +468,8 @@ BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPathName, OpenType ot)
 
 void MapCompositionDoc::OnCreateLayout()
 {
-	OnSaveView();
-	if (!mpv.fValid())
-		return;
-	String sViewName = mpv->sName(true);
-	if ("" == sViewName)
-	{
-		FileName fn = GetPathName(); // Convert to Ilwis fn to get quoted fullpath
-		sViewName = fn.sFullPathQuoted().scVal();
-	}
-	else // still sViewName can contain a LFN
-	{
-		FileName fn (sViewName);
-		sViewName = fn.sRelativeQuoted().scVal();
-	}
-	String sCmd("layout %S", sViewName);
-	IlwWinApp()->Execute(sCmd);
+	Printing printer;
+	printer.print(this);
 }
 
 void MapCompositionDoc::OnSaveView()
@@ -502,13 +489,13 @@ void MapCompositionDoc::OnSaveViewAs()
 	{
 	public:
 		SaveViewForm(CWnd* parent, String* sName, String* sTitle)
-			: FormWithDest(parent, SMWTitleSaveView)
+			: FormWithDest(parent, TR("Save View As"))
 		{
 			iImg = IlwWinApp()->iImage(".mpv");
 
 			new FieldBlank(root);
-			new FieldViewCreate(root, SMWUiViewName, sName);
-			FieldString *fs = new FieldString(root, SMWUiViewTitle, sTitle);
+			new FieldViewCreate(root, TR("&Map View Name"), sName);
+			FieldString *fs = new FieldString(root, TR("&Title"), sTitle);
 			fs->SetWidth(120);
 			//      setHelpItem("ilwismen\save_view_as.htm"Forms);
 			SetMenHelpTopic("ilwismen\\save_view_as.htm");
@@ -524,14 +511,14 @@ void MapCompositionDoc::OnSaveViewAs()
 	if (frm.fOkClicked()) {
 		FileName fn(sViewName, ".mpv", true);
 		if (fn.fExist()) {
-			String sErr(SAFMsgAlreadyExistsOverwrite_S.scVal(), fn.sFullPath(true));
-			if (IDYES != MessageBox(0, sErr.scVal(), SAFMsgAlreadyExists.scVal(), MB_YESNO|MB_ICONEXCLAMATION))
+			String sErr(TR("File %S already exists.\nOverwrite?").c_str(), fn.sFullPath(true));
+			if (IDYES != MessageBox(0, sErr.c_str(), TR("File already exists").c_str(), MB_YESNO|MB_ICONEXCLAMATION))
 				return;
 		}
 		mpv = MapView(sViewName, true);
 		mpv->sDescription = sTitle;
 		sViewName = mpv->fnObj.sFullName();
-		DoSave(sViewName.scVal());
+		DoSave(sViewName.c_str());
 		mpv->Store();
 		rootDrawer->store(mpv->fnObj,"Root");
 		SetTitle(mpv);
@@ -578,7 +565,7 @@ void MapCompositionDoc::OnExtPerc()
 	public:
 		ExtendForm(CWnd* wParent,
 			double* rTop, double* rBottom, double* rLeft, double* rRight, MapCompositionDoc *_mdoc)
-			: FormWithDest(wParent, SMWTitleExtWnd), mdoc(_mdoc)
+			: FormWithDest(wParent, TR("Extend Window by Percentage")), mdoc(_mdoc)
 		{
 			values.push_back(TR("User defined"));
 			values.push_back(TR("Center"));
@@ -587,10 +574,10 @@ void MapCompositionDoc::OnExtPerc()
 			values.push_back(TR("Right bottom"));
 			values.push_back(TR("Left bottom"));
 			ValueRange vrr(-99, 1000, 1);
-			frTop = new FieldReal(root, SMWUiPrcTop, rTop, vrr);
-			frBot = new FieldReal(root, SMWUiPrcBot, rBottom, vrr);
-			frLeft = new FieldReal(root, SMWUiPrcLft, rLeft  , vrr);
-			frRight = new FieldReal(root, SMWUiPrcRgt, rRight , vrr);
+			frTop = new FieldReal(root, TR("Percentage at &Top"), rTop, vrr);
+			frBot = new FieldReal(root, TR("Percentage at &Bottom"), rBottom, vrr);
+			frLeft = new FieldReal(root, TR("Percentage at &Left"), rLeft  , vrr);
+			frRight = new FieldReal(root, TR("Percentage at &Right"), rRight , vrr);
 			ftemplate = new FieldOneSelectString(root,TR("Templates"),&choice,values);
 			ftemplate->SetCallBack((NotifyProc)&ExtendForm::setTemplate,this);
 			SetMenHelpTopic("ilwismen\\extend_window_by_percentage.htm");
@@ -677,10 +664,10 @@ void MapCompositionDoc::OnExtCoord()
 	{
 	public:
 		BoundsForm(CWnd* parent, Coord* cMin, Coord* cMax)
-			: FormWithDest(parent, SMWTitleWndBnd)
+			: FormWithDest(parent, TR("Extend Window by Coordinates"))
 		{
-			fcMin = new FieldCoord(root, SMWUiMinXY, cMin);
-			new FieldCoord(root, SMWUiMaxXY, cMax);
+			fcMin = new FieldCoord(root, TR("Minimum X, Y"), cMin);
+			new FieldCoord(root, TR("Maximum X, Y"), cMax);
 			SetMenHelpTopic("");
 			create();
 		}
@@ -740,7 +727,7 @@ void MapCompositionDoc::menLayers(CMenu& men, int iBaseId)
 			str = String("txt %S", fn.sFile);
 		else
 			str = fn.sFile;
-		sprintf(s, "&%i %s", i+1, str.scVal());
+		sprintf(s, "&%i %s", i+1, str.c_str());
 		men.AppendMenu(MF_STRING, id, s);
 		UINT iFlag;
 		switch (iBaseId) {
@@ -1148,7 +1135,7 @@ void MapCompositionDoc::addToPixelInfo(const IlwisObject& obj, ComplexDrawer *dr
 	if (!pixInfoDoc) 
 		pixInfoDoc = new PixelInfoDoc();
 
-	pixInfoDoc->OnOpenDocument(obj->fnObj.sFullPathQuoted().scVal(), this,drw);
+	pixInfoDoc->OnOpenDocument(obj->fnObj.sFullPathQuoted().c_str(), this,drw);
 	pixInfoDoc->UpdateAllViews(0,2);
 }
 
@@ -1280,13 +1267,13 @@ class AddLayerForm: public FormWithDest
 {
 public:
 	AddLayerForm(CWnd* parent, String* sName, bool *asAnimation = 0)
-		: FormWithDest(parent, SMWTitleAddLayer), asAnim(asAnimation), cb(0)
+		: FormWithDest(parent, TR("Add Data Layer")), asAnim(asAnimation), cb(0)
 	{
 		new FieldBlank(root);
 		fdtl = new FieldDataTypeLarge(root, sName, ".mpr.mpl.mps.mpa.mpp.atx");
 		//    new FieldSegmentMap(root, SDUiSegMap, sName);
 		if ( asAnimation != 0) {
-			cb = new CheckBox(root,SMWUiAnimationLayer,asAnimation);
+			cb = new CheckBox(root,TR("As animation layer"),asAnimation);
 			cb->SetCallBack((NotifyProc)&AddLayerForm::changeFilter);
 		}
 		SetMenHelpTopic("ilwismen\\add_layer_to_map_window.htm");
@@ -1313,7 +1300,7 @@ class AddRasForm: public FormWithDest
 {
 public:
 	AddRasForm(CWnd* parent, String* sName)
-		: FormWithDest(parent, SMWTitleAddSegMap)
+		: FormWithDest(parent, TR("Add Segment Map"))
 	{
 		new FieldBlank(root);
 		new FieldDataTypeLarge(root, sName, ".mpr");
@@ -1327,7 +1314,7 @@ class AddSegForm: public FormWithDest
 {
 public:
 	AddSegForm(CWnd* parent, String* sName)
-		: FormWithDest(parent, SMWTitleAddSegMap)
+		: FormWithDest(parent, TR("Add Segment Map"))
 	{
 		new FieldBlank(root);
 		new FieldDataTypeLarge(root, sName, ".mps");
@@ -1341,7 +1328,7 @@ class AddPolForm: public FormWithDest
 {
 public:
 	AddPolForm(CWnd* parent, String* sName)
-		: FormWithDest(parent, SMWTitleAddPolMap)
+		: FormWithDest(parent, TR("Add Polygon Map"))
 	{
 		new FieldBlank(root);
 		new FieldDataTypeLarge(root, sName, ".mpa");
@@ -1355,7 +1342,7 @@ class AddPntForm: public FormWithDest
 {
 public:
 	AddPntForm(CWnd* parent, String* sName)
-		: FormWithDest(parent, SMWTitleAddPntMap)
+		: FormWithDest(parent, TR("Add Point Map"))
 	{
 		new FieldBlank(root);
 		new FieldDataTypeLarge(root, sName, ".mpp");
@@ -1395,8 +1382,8 @@ NewDrawer* MapCompositionDoc::drAppend(const FileName& fn, IlwisDocument::OpenTy
 {
 	if (!fAppendable(fn))
 	{
-		String sErr(SMWErrCannotBeAdded_S.scVal(), fn.sShortName());
-		AfxGetMainWnd()->MessageBox(sErr.scVal(), SMWUiAddDataLayer.sVal(), MB_OK|MB_ICONEXCLAMATION);
+		String sErr(TR("%S cannot be added as a layer").c_str(), fn.sShortName());
+		AfxGetMainWnd()->MessageBox(sErr.c_str(), TR("Add data layer").c_str(), MB_OK|MB_ICONEXCLAMATION);
 		return 0;
 
 		return 0;
@@ -1529,7 +1516,7 @@ NewDrawer* MapCompositionDoc::drAppend(const Map& rasmap)
 {
 	if (!fGeoRefOk(rasmap))
 	{
-		AfxGetMainWnd()->MessageBox(SMWErrNotSameGeoRef.sVal(), SMWUiAddDataLayer.sVal(), MB_OK|MB_ICONEXCLAMATION);
+		AfxGetMainWnd()->MessageBox(TR("Raster Map to Add does not have same GeoReference").c_str(), TR("Add data layer").c_str(), MB_OK|MB_ICONEXCLAMATION);
 		return 0;
 	}
 	if (!rasmap->fCalculated())
@@ -1689,12 +1676,12 @@ class _export AddAnnTextForm: public FormWithDest
 {
 public:
 	AddAnnTextForm(CWnd* parent, String* sName)
-		: FormWithDest(parent, SMWTitleAddAnnText)
+		: FormWithDest(parent, TR("Add Annotation Text"))
 		//, mw(parent)
 	{
 		new FieldBlank(root);
 		new FieldDataTypeLarge(root, sName, ".ATX");
-		//    new PushButton(root, SMWUiCreate, (NotifyProc)&AddAnnTextForm::CreateAtx);
+		//    new PushButton(root, TR("&Create..."), (NotifyProc)&AddAnnTextForm::CreateAtx);
 		SetMenHelpTopic("");
 		create();
 	}
@@ -1736,10 +1723,10 @@ class BmForm: public FormWithDest
 {
 public:
 BmForm(CWnd* parent, String* sName, bool* fIsotropic)
-: FormWithDest(parent, SMWTitleAddBitmapOrPicture)
+: FormWithDest(parent, TR("Add Bitmap or Picture"))
 {
 new FieldDataTypeLarge(root, sName, ".bmp.wmf.emf");
-new CheckBox(root, SMWUiIsotropic, fIsotropic);
+new CheckBox(root, TR("&Isotropic"), fIsotropic);
 SetMenHelpTopic("ilwismen\\layout_editor_insert_bitmap_picture.htm");
 create();
 }
@@ -1788,60 +1775,14 @@ return dr;
 void MapCompositionDoc::SetCoordSystem(const CoordSystem& cs)
 {
 	if (!cs->fConvertFrom(rootDrawer->getCoordinateSystem())) {
-		String s(SMWErrCSUnusable);
-		wndGetActiveView()->MessageBox(s.scVal(), SMWMsgRplCsy.scVal(), MB_OK|MB_ICONEXCLAMATION);
+		String s(TR("Coordinate system not usable here"));
+		wndGetActiveView()->MessageBox(s.c_str(), TR("Replace Coordinate System").c_str(), MB_OK|MB_ICONEXCLAMATION);
 		return; 
 	}
 	rootDrawer->setCoordinateSystem(cs, true);
 	PreparationParameters pp(NewDrawer::ptGEOMETRY);
 	rootDrawer->prepare(&pp);
-	//	String s(SMWErrCSUnusable);
-	//	wndGetActiveView()->MessageBox(s.scVal(), SMWMsgRplCsy.scVal(), MB_OK|MB_ICONEXCLAMATION);
-	//	return;  O
-	//if (!cs.fValid() || fRaster) 
-	//	return;
-	//if (georef->cs() == cs) 
-	//	return;		// nothing to be done
-	//if (!cs->fConvertFrom(georef->cs())) {
-	//	String s(SMWErrCSUnusable);
-	//	wndGetActiveView()->MessageBox(s.scVal(), SMWMsgRplCsy.scVal(), MB_OK|MB_ICONEXCLAMATION);
-	//	return;  O	//}  
-	//LatLon llMin, llMax;
-	//double rGrid;
-	//Drawer::CalcBounds(georef, mmBounds(), llMin, llMax);
-	//rGrid = llMax.Lat - llMin.Lat;
-	//rGrid /= 10;
-	//llMin.Lat -= rGrid;
-	//llMax.Lat += rGrid;
-	//rGrid = llMax.Lon - llMin.Lon;
-	//rGrid /= 10;
-	//llMin.Lon -= rGrid;
-	//llMax.Lon += rGrid;
-	//CoordBounds cb;
-	//Drawer::CalcBounds(cs, llMin, llMax, cb);
-	//rGrid = max(cb.width(), cb.height());
-	//rGrid /= 10;
-	//cb.MinX() -= rGrid;
-	//cb.MaxX() += rGrid;
-	//cb.MinY() -= rGrid;
-	//cb.MaxY() += rGrid;
-	//rGrid = max(cb.width(), cb.height());
-	//long iSize = 0x4000; //32767L;
-	//rGrid /= iSize;
-	//long iXSize = (long)(cb.width()  / rGrid);
-	//long iYSize = (long)(cb.height() / rGrid);
-	//float a11,a12,a21,a22,b1,b2;
-	//a11 = (float)(1.0 / rGrid);
-	//a21 = 0;
-	//a12 = 0;
-	//a22 = (float)(-1.0/ rGrid);
-	//b1  = (float)(- cb.MinX() / rGrid);
-	//b2  = (float)(cb.MaxY() / rGrid);
-	//georef = GeoRef(cs,RowCol(iYSize,iXSize),a11,a12,a21,a22,b1,b2);
-	//MinMax mm;
-	//mm.rcMin = RowCol(0L,0L);
-	//mm.rcMax = georef->rcSize();
-	//mmSize = mmMapBounds = mm;
+
 	ChangeState();
 	UpdateAllViews(0,3);
 }
@@ -1852,7 +1793,7 @@ void MapCompositionDoc::OnChangeCoordSystem()
 	{
 	public:
 		CCSForm(CWnd* parent, String* sName)
-			: FormWithDest(parent, SMWTitleChangeCoordSystem)
+			: FormWithDest(parent, TR("Change Coordinate System"))
 		{
 			new FieldDataTypeLarge(root, sName, ".csy");
 			SetMenHelpTopic("ilwismen\\change_coordinate_system_of_a_map_window.htm");
@@ -1902,8 +1843,8 @@ void MapCompositionDoc::OnShowHistogram()
 			hgv->Create(gbHist);
 			AddView(hgv);
 			hgv->OnInitialUpdate();
-			String sTitle(SMWTitleHistogramOf_S.scVal(), md->getName());
-			gbHist->SetWindowText(sTitle.scVal());
+			String sTitle(TR("Histogram of %S").c_str(), md->getName());
+			gbHist->SetWindowText(sTitle.c_str());
 			fw->FloatControlBar(gbHist,CPoint(100,100));
 			fw->ShowControlBar(gbHist,TRUE,FALSE);
 			return;
@@ -1922,8 +1863,8 @@ void MapCompositionDoc::OnShowHistogram()
 			hgv->Create(gbHist);
 			hgd->AddView(hgv);
 			hgv->OnInitialUpdate();
-			String sTitle(SMWTitleHistogramOf_S.scVal(), md->getName());
-			gbHist->SetWindowText(sTitle.scVal());
+			String sTitle(TR("Histogram of %S").c_str(), md->getName());
+			gbHist->SetWindowText(sTitle.c_str());
 			fw->FloatControlBar(gbHist,CPoint(100,100));
 			fw->ShowControlBar(gbHist,TRUE,FALSE);
 			return;
@@ -2010,7 +1951,7 @@ void MapCompositionDoc::OnOpen()
 	{
 	public:
 		ShowBaseMapForm(CWnd* parent, String* sName)
-			: FormWithDest(parent, SMSTitleShowMap)
+			: FormWithDest(parent, TR("Open Object"))
 		{
 			new FieldDataObject(root, sName);
 			SetMenHelpTopic("ilwismen\\open_show_map_or_other_object.htm");
@@ -2025,7 +1966,7 @@ void MapCompositionDoc::OnOpen()
 		OnNewDocument();
 		UpdateAllViews(0,0);
 		try {
-			OnOpenDocument(sMap.scVal());
+			OnOpenDocument(sMap.c_str());
 		}
 		catch (ErrorObject& err) {
 			err.Show();
@@ -2052,13 +1993,13 @@ BOOL MapCompositionDoc::fSaveModified(bool fAllowCancel)
 		return TRUE;
 
 	CString sTitle = GetTitle();
-	String sMsg(SMWMsgSaveChangesMapView_s.scVal(), (const char*)sTitle);
+	String sMsg(TR("Save the changes you made to Map View '%s'?").c_str(), (const char*)sTitle);
 	UINT nType = MB_ICONEXCLAMATION|MB_TOPMOST;
 	if (fAllowCancel)
 		nType |= MB_YESNOCANCEL;
 	else
 		nType |= MB_YESNO;
-	switch (wndGetActiveView()->MessageBox(sMsg.scVal(), SMWMsgSaveChanges.scVal(), nType))
+	switch (wndGetActiveView()->MessageBox(sMsg.c_str(), TR("Save Changes").c_str(), nType))
 	{
 	case IDCANCEL:
 		return FALSE;       // don't continue
@@ -2111,7 +2052,7 @@ void MapCompositionDoc::OnOpenPixelInfo()
 		sList &= " ";
 		sList &= md->getBaseMap()->fnObj.sFullNameQuoted();
 	}
-	IlwWinApp()->OpenPixelInfo(sList.scVal());
+	IlwWinApp()->OpenPixelInfo(sList.c_str());
 }
 
 bool MapCompositionDoc::fIsEmpty() const

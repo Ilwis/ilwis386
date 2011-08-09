@@ -235,35 +235,35 @@ void FileFilter::init()
 	ObjSections[otLayout].push_back(stIlwis);
 
 	lsExt.resize(IlwisObject::iotANY + 2);
-  lsExt[IlwisObject::iotMAPVIEW]						= NameExt(SMSCatMpv, ".mpv", true);
-  lsExt[IlwisObject::iotRASMAP]						= NameExt(SMSCatMpr, ".mpr", true);
-  lsExt[IlwisObject::iotPOLYGONMAP]				= NameExt(SMSCatMpa, ".mpa", true);
-  lsExt[IlwisObject::iotSEGMENTMAP]				= NameExt(SMSCatMps, ".mps", true);
-  lsExt[IlwisObject::iotPOINTMAP]					= NameExt(SMSCatMpp, ".mpp", true);
-  lsExt[IlwisObject::iotMAPLIST]						= NameExt(SMSCatMpl, ".mpl", true);
-  lsExt[IlwisObject::iotLAYOUT]					= NameExt(SMSCatIlo, ".ilo", true);
-	lsExt[IlwisObject::iotOBJECTCOLLECTION] = NameExt(SMSCatIoc, ".ioc", true);
-  lsExt[IlwisObject::iotTABLE]            = NameExt(SMSCatTbt, ".tbt", true);
-  lsExt[IlwisObject::iotTABLE2DIM]        = NameExt(SMSCatTa2, ".ta2", true);
-  lsExt[IlwisObject::iotANNOTATIONTEXT]   = NameExt(SMSCatAtx, ".atx", true);
-  lsExt[IlwisObject::iotDOMAIN]           = NameExt(SMSCatDom, ".dom", true);
-  lsExt[IlwisObject::iotREPRESENTATION]   = NameExt(SMSCatRpr, ".rpr", true);
-  lsExt[IlwisObject::iotGEOREF]					 = NameExt(SMSCatGrf, ".grf", true /*false*/);
-  lsExt[IlwisObject::iotCOORDSYSTEM]			 = NameExt(SMSCatCsy, ".csy", true /*false*/);
-  lsExt[IlwisObject::iotHISTRAS]					 = NameExt(SMSCatHis, ".his", true /*false*/);
-  lsExt[IlwisObject::iotHISTPOL]					 = NameExt(SMSCatHsa, ".hsa", true /*false*/);
-  lsExt[IlwisObject::iotHISTSEG]					 = NameExt(SMSCatHss, ".hss", true /*false*/);
-  lsExt[IlwisObject::iotHISTPNT]					 = NameExt(SMSCatHsp, ".hsp", true /*false*/);
-  lsExt[IlwisObject::iotSAMPLESET]				 = NameExt(SMSCatSms, ".sms", true /*false*/);
-  lsExt[IlwisObject::iotMATRIX]					 = NameExt(SMSCatMat, ".mat", true /*false*/);
-  lsExt[IlwisObject::iotFILTER]					 = NameExt(SMSCatFil, ".fil", true /*false*/);
-  lsExt[IlwisObject::iotFUNCTION]				 = NameExt(SMSCatFun, ".fun", true);
-  lsExt[IlwisObject::iotSCRIPT]					 = NameExt(SMSCatIsl, ".isl", true);
-  lsExt[IlwisObject::iotGRAPH]					 = NameExt(SMSCatGrh, ".grh", true);
-  lsExt[IlwisObject::iotSTEREOPAIR]				 = NameExt(SMSCatStp, ".stp", true);
-  lsExt[IlwisObject::iotCRITERIATREE]			 = NameExt(SMSCatSmc, ".smc", true);
-  lsExt[IlwisObject::iotANY]							 = NameExt(SMSCatDir, "directory", true);
-  lsExt[IlwisObject::iotANY + 1]					 = NameExt(SMSCatDrv, "drive", true);
+  lsExt[IlwisObject::iotMAPVIEW]						= NameExt(TR("Map View"), ".mpv", true);
+  lsExt[IlwisObject::iotRASMAP]						= NameExt(TR("Raster Map"), ".mpr", true);
+  lsExt[IlwisObject::iotPOLYGONMAP]				= NameExt(TR("Polygon Map"), ".mpa", true);
+  lsExt[IlwisObject::iotSEGMENTMAP]				= NameExt(TR("Segment Map"), ".mps", true);
+  lsExt[IlwisObject::iotPOINTMAP]					= NameExt(TR("Point Map"), ".mpp", true);
+  lsExt[IlwisObject::iotMAPLIST]						= NameExt(TR("Map List"), ".mpl", true);
+  lsExt[IlwisObject::iotLAYOUT]					= NameExt(TR("Layout"), ".ilo", true);
+	lsExt[IlwisObject::iotOBJECTCOLLECTION] = NameExt(TR("Object Collection"), ".ioc", true);
+  lsExt[IlwisObject::iotTABLE]            = NameExt(TR("Table"), ".tbt", true);
+  lsExt[IlwisObject::iotTABLE2DIM]        = NameExt(TR("2-Dimensional Table"), ".ta2", true);
+  lsExt[IlwisObject::iotANNOTATIONTEXT]   = NameExt(TR("Annotation Text"), ".atx", true);
+  lsExt[IlwisObject::iotDOMAIN]           = NameExt(TR("Domain"), ".dom", true);
+  lsExt[IlwisObject::iotREPRESENTATION]   = NameExt(TR("Representation"), ".rpr", true);
+  lsExt[IlwisObject::iotGEOREF]					 = NameExt(TR("GeoReference"), ".grf", true /*false*/);
+  lsExt[IlwisObject::iotCOORDSYSTEM]			 = NameExt(TR("Coordinate System"), ".csy", true /*false*/);
+  lsExt[IlwisObject::iotHISTRAS]					 = NameExt(TR("Histogram"), ".his", true /*false*/);
+  lsExt[IlwisObject::iotHISTPOL]					 = NameExt(TR("Polygon Histogram"), ".hsa", true /*false*/);
+  lsExt[IlwisObject::iotHISTSEG]					 = NameExt(TR("Segment Histogram"), ".hss", true /*false*/);
+  lsExt[IlwisObject::iotHISTPNT]					 = NameExt(TR("Point Histogram"), ".hsp", true /*false*/);
+  lsExt[IlwisObject::iotSAMPLESET]				 = NameExt(TR("Sample Set"), ".sms", true /*false*/);
+  lsExt[IlwisObject::iotMATRIX]					 = NameExt(TR("Matrix"), ".mat", true /*false*/);
+  lsExt[IlwisObject::iotFILTER]					 = NameExt(TR("Filter"), ".fil", true /*false*/);
+  lsExt[IlwisObject::iotFUNCTION]				 = NameExt(TR("Function"), ".fun", true);
+  lsExt[IlwisObject::iotSCRIPT]					 = NameExt(TR("Script"), ".isl", true);
+  lsExt[IlwisObject::iotGRAPH]					 = NameExt(TR("Graph"), ".grh", true);
+  lsExt[IlwisObject::iotSTEREOPAIR]				 = NameExt(TR("Stereo Pair"), ".stp", true);
+  lsExt[IlwisObject::iotCRITERIATREE]			 = NameExt(TR("Criteria Tree"), ".smc", true);
+  lsExt[IlwisObject::iotANY]							 = NameExt(TR("Directories"), "directory", true);
+  lsExt[IlwisObject::iotANY + 1]					 = NameExt(TR("Disk drives"), "drive", true);
 
 }
 
@@ -279,7 +279,7 @@ bool FileFilter::fCheckEntry(const FileName& fnObj, SectionEntry* entry)
 
 	if ( entry->next != NULL )
 	{
-		ObjectInfo::ReadElement(entry->sSection.scVal(), entry->sAttribute.scVal(), fnObj, sVal);
+		ObjectInfo::ReadElement(entry->sSection.c_str(), entry->sAttribute.c_str(), fnObj, sVal);
 		if ( sVal == "") return false;
 		FileName fnNext(sVal);
 		return fCheckEntry(fnNext, entry->next) && fTypeOK;
@@ -303,7 +303,7 @@ bool FileFilter::fCheckEntry(const FileName& fnObj, SectionEntry* entry)
 	{
 		if (entry->sAttribute == "time")
 		{
-			HANDLE hFile = CreateFile(fnObj.sFullName().scVal(), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING,
+			HANDLE hFile = CreateFile(fnObj.sFullName().c_str(), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING,
 		                             FILE_ATTRIBUTE_NORMAL, NULL);
 			if (0 == hFile || INVALID_HANDLE_VALUE == hFile ) 
 				sVal = "0";
@@ -317,7 +317,7 @@ bool FileFilter::fCheckEntry(const FileName& fnObj, SectionEntry* entry)
 			}				
 		}	
 		else
-			ObjectInfo::ReadElement(entry->sSection.scVal(), entry->sAttribute.scVal(), fnObj, sVal);
+			ObjectInfo::ReadElement(entry->sSection.c_str(), entry->sAttribute.c_str(), fnObj, sVal);
 		
 		sVal.toLower();
 		switch ( entry->op)
@@ -366,7 +366,7 @@ bool FileFilter::fCheckContains(const FileName& fnObj, SectionEntry *entry, cons
 		if ( rX == rUNDEF || rY == rUNDEF ) return false;
 		Coord crd(rX, rY);
 		CoordBounds cb;
-		ObjectInfo::ReadElement(entry->sSection.scVal(), entry->sAttribute.scVal(), fnObj, cb);
+		ObjectInfo::ReadElement(entry->sSection.c_str(), entry->sAttribute.c_str(), fnObj, cb);
 		return cb.fContains(crd);
 	}
 	else 
@@ -421,18 +421,18 @@ bool FileFilter::fAttributeTypeOK(SectionEntry *entry, const FileName& fnObj)
 		if ( fCIStrEqual(fnObj.sFile ,"image") && fCIStrEqual(sFindVal, "value")) return true;
 	}
 
-	String sVal = entry->sSection.scVal();
+	String sVal = entry->sSection.c_str();
 	if ( sFindVal.find("tablehistogram") != -1 )
 	{
 		String sNewVal;
-		ObjectInfo::ReadElement(sFindVal.scVal(), "map", fnObj, sNewVal);
+		ObjectInfo::ReadElement(sFindVal.c_str(), "map", fnObj, sNewVal);
 		return sNewVal != "";
 	}		
 
 	while( sVal != "" )
 	{
 		String sNewVal;
-		ObjectInfo::ReadElement(sVal.scVal(), "type", fnObj, sNewVal);
+		ObjectInfo::ReadElement(sVal.c_str(), "type", fnObj, sNewVal);
 		sNewVal.toLower();
 		if ( sVal == sNewVal ) return false; // end of line default value(=section name) is returned
 		if ( sNewVal == sFindVal )

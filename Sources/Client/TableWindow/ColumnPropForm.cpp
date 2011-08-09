@@ -55,7 +55,7 @@
 
 ColumnPropForm::ColumnPropForm(CWnd* parent, ColumnView& cv,
 							   int* iPos, bool fNew)
-							   : FormWithDest(parent, STBTitleColProp), _cv(cv), vr(0,100,1),
+							   : FormWithDest(parent, TR("Column properties")), _cv(cv), vr(0,100,1),
 							   stRemark(0), fiDec(0), fvr(0)
 {
 	if (!cv.fValid())
@@ -74,17 +74,17 @@ ColumnPropForm::ColumnPropForm(CWnd* parent, ColumnView& cv,
 	fWasReadOnly = fReadOnly;
 	if (cv->fOwnedByTable()) {
 		st->psn->SetBound(0,0,0,0);
-		st = new StaticText(root, STBRemColIsTblOwned);
+		st = new StaticText(root, TR("Column is table-owned"));
 		st->SetIndependentPos();
 		if (fReadOnly) {
 			st->psn->SetBound(0,0,0,0);
-			st = new StaticText(root, STBRemColIsReadOnly);
+			st = new StaticText(root, TR("Column is read only"));
 			st->SetIndependentPos();
 		}
 		fReadOnly = true;
 	}
 	else {
-		new CheckBox(root, STBUiReadOnly, &fReadOnly);
+		new CheckBox(root, TR("&Read Only"), &fReadOnly);
 	}
 
 	fSetDescFromExpr = false;
@@ -97,7 +97,7 @@ ColumnPropForm::ColumnPropForm(CWnd* parent, ColumnView& cv,
 		}
 		else {
 			fSetDescFromExpr = sExpr == cv->sDescription;
-			st = new StaticText(root,STBUiExpression);
+			st = new StaticText(root,TR("&Expression"));
 			st->psn->SetBound(0,0,0,0);
 			st->SetIndependentPos();
 			fsExpr = new FieldString(root, "", &sExpr);
@@ -110,17 +110,17 @@ ColumnPropForm::ColumnPropForm(CWnd* parent, ColumnView& cv,
 		new FieldObjShow(root, cv->dm());
 		if (cv->vr().fValid() && 0 == cv->dm()->pdbool()) {
 			st->psn->SetBound(0,0,0,0);
-			String s("%S: %S", STBInfRange, cv->vr()->sRange());
+			String s("%S: %S", TR("Value Range"), cv->vr()->sRange());
 			st = new StaticText(root, s);
 			st->SetIndependentPos();
 		}  
 	}
 	else {
 		sDomain = cv->dm()->sName(true);
-		fd = new FieldDomainC(root, STBUiDomain, &sDomain, 0xffff, true); // also internal domains
+		fd = new FieldDomainC(root, TR("&Domain"), &sDomain, 0xffff, true); // also internal domains
 		fd->SetCallBack((NotifyProc)&ColumnPropForm::CallBackDomainChange);
 		if (0 != fsExpr) {
-			PushButton* pb = new PushButton(root, STBUiDefaults,
+			PushButton* pb = new PushButton(root, TR("Defaults"),
 				(NotifyProc)&ColumnPropForm::SetDefaults);
 			pb->SetIndependentPos();
 			pb->Align(fd, AL_AFTER);
@@ -137,7 +137,7 @@ ColumnPropForm::ColumnPropForm(CWnd* parent, ColumnView& cv,
 			begin = dt->getInterval().getBegin();
 			end = dt->getInterval().getEnd();
 			duration = 	dt->getInterval().getStep();
-			ft1 = new FieldTime(fgTime,STBUiRange,&begin,dt);
+			ft1 = new FieldTime(fgTime,TR("Value &Range"),&begin,dt);
 			ft2 = new FieldTime(fgTime,"",&end,dt);
 			ft2->Align(ft1, AL_AFTER);
 			FieldBlank* fb = new FieldBlank(fgTime);
@@ -145,7 +145,7 @@ ColumnPropForm::ColumnPropForm(CWnd* parent, ColumnView& cv,
 
 		}
 		else {
-			fvr = new FieldValueRange(root, STBUiRange, &vr, fd);
+			fvr = new FieldValueRange(root, TR("Value &Range"), &vr, fd);
 			fvr->Align(stRemark, AL_UNDER);
 			fvr->SetCallBack((NotifyProc)&ColumnPropForm::ValueRangeCallBack);
 			FieldBlank* fb = new FieldBlank(root);
@@ -157,7 +157,7 @@ ColumnPropForm::ColumnPropForm(CWnd* parent, ColumnView& cv,
 		if (cv->dm()->pdvr()) {
 			RangeReal rr = cv->rrMinMax();
 			if (rr.rHi() >= rr.rLo()) {
-				s = String(STBInfMinMax_SS.sVal(), cv->dvrs().sValue(rr.rLo()), cv->dvrs().sValue(rr.rHi()));
+				s = String(TR("Minimum: %S  Maximum: %S").c_str(), cv->dvrs().sValue(rr.rLo()), cv->dvrs().sValue(rr.rHi()));
 				stMinMax = new StaticText(root, s);
 				stMinMax->SetIndependentPos();
 			}  
@@ -165,7 +165,7 @@ ColumnPropForm::ColumnPropForm(CWnd* parent, ColumnView& cv,
 		else {
 			RangeInt ri = cv->riMinMax();
 			if (ri.iHi() >= ri.iLo()) {
-				s = String(STBInfMinMax_ll.sVal(), ri.iLo(), ri.iHi());
+				s = String(TR("Minimum: %li  Maximum: %li").c_str(), ri.iLo(), ri.iHi());
 				stMinMax = new StaticText(root, s);
 				stMinMax->SetIndependentPos();
 			}  
@@ -177,7 +177,7 @@ ColumnPropForm::ColumnPropForm(CWnd* parent, ColumnView& cv,
 		Array<String> as;
 		cv->DependencyNames(as);
 		if (as.iSize() > 0) {
-			String s = SMSRemDependsOn;
+			String s = TR("Depends on");
 			s &= " ";
 			unsigned int i;
 			for (i = 0; i < as.iSize() - 1; ++i) {
@@ -201,28 +201,28 @@ ColumnPropForm::ColumnPropForm(CWnd* parent, ColumnView& cv,
 			fUpToDate = timNewest == 0;
 			switch (timNewest) {
 		case 0:
-			st = new StaticText(root, SMSRemObjectIsUpToDate);
+			st = new StaticText(root, TR("Object is up-to-date"));
 			break;
 		case -1:
-			st = new StaticText(root, String("%S: %S", SMSRemObjectMissing, sObjName));
+			st = new StaticText(root, String("%S: %S", TR("Object is missing"), sObjName));
 			break;
 		default:
-			st = new StaticText(root, String("%S: %S (%S)", SMSRemObjectIsNotUpToDate, sObjName, timNewest.sDateTime()));
+			st = new StaticText(root, String("%S: %S (%S)", TR("Object is not up-to-date"), sObjName, timNewest.sDateTime()));
 			}
 			st->SetIndependentPos();
 		}
 	}
 	// ColumnView Info
 	if (*iPos > 0)
-		new FieldInt(root, STBUiPosition, iPos, ValueRange(1L,10000L));
-	new FieldInt(root, STBUiWidth, &cv.iWidth, ValueRange(1L,100L));
+		new FieldInt(root, TR("&Position"), iPos, ValueRange(1L,10000L));
+	new FieldInt(root, TR("&Width"), &cv.iWidth, ValueRange(1L,100L));
 	if (cv->dm()->pdv() && !cv->dm()->pdbool()) {
 		if (fNew)
 			cv.iDec = vr->iDec();
-		fiDec = new FieldInt(root, STBUiDecimals, &cv.iDec, ValueRange(0L,50L));
+		fiDec = new FieldInt(root, TR("&Decimals"), &cv.iDec, ValueRange(0L,50L));
 	}
 	// Description
-	st = new StaticText(root,STBUiDescription);
+	st = new StaticText(root,TR("&Description:"));
 	st->psn->SetBound(0,0,0,0);
 	st->SetIndependentPos();
 	if (fReadOnly) {
@@ -236,19 +236,19 @@ ColumnPropForm::ColumnPropForm(CWnd* parent, ColumnView& cv,
 	}
 	// Radical Changes
 	if (!fReadOnly && !fNew && cv->dm()->pds()) {
-		PushButton* pb = new PushButton(root, STBUICreateDomainFromString,
+		PushButton* pb = new PushButton(root, TR("Create new &Domain from Strings in column"),
 			(NotifyProc)&ColumnPropForm::CreateDomain);
 		pb->SetIndependentPos();
 	}
 
 	if (!fUpToDate) {
-		PushButton* pb = new PushButton(root, STBUiMakeUpToDate,
+		PushButton* pb = new PushButton(root, TR("&Make Up to Date"),
 			(NotifyProc)&ColumnPropForm::MakeUpToDate);
 		pb->SetIndependentPos();
 	}
 
 	if (!fReadOnly && !fNew && cv->fDependent() /*&& !cv.fUsedInOpenColumns()*/) {
-		PushButton* pb = new PushButton(root, STBUiBreakDepLink,
+		PushButton* pb = new PushButton(root, TR("&Break Dependency Link"),
 			(NotifyProc)&ColumnPropForm::BreakLink);
 		pb->SetIndependentPos();
 	}
@@ -261,7 +261,7 @@ ColumnPropForm::ColumnPropForm(CWnd* parent, ColumnView& cv,
 void ColumnPropForm::AdditionalInfoButton()
 {
 	if (_cv->fAdditionalInfo())
-		new PushButton(root, SMSUiAdditionalInfo, (NotifyProc)&ColumnPropForm::AdditionalInfo);
+		new PushButton(root, TR("&Additional Info"), (NotifyProc)&ColumnPropForm::AdditionalInfo);
 }
 
 int ColumnPropForm::AdditionalInfo(Event*)
@@ -270,7 +270,7 @@ int ColumnPropForm::AdditionalInfo(Event*)
 	{
 	public:
 		AdditionalInfoBox(CWnd* wPar, const String& sTypeName, String* sInfo)
-			: FormBaseDialog(wPar, SMSTitleAdditionalInfo,
+			: FormBaseDialog(wPar, TR("Additional Info"),
 			fbsSHOWALWAYS|fbsMODAL|fbsNOCANCELBUTTON|fbsBUTTONSUNDER)
 		{
 			new StaticText(root, sTypeName);
@@ -309,7 +309,7 @@ int ColumnPropForm::CallBackDomainChange(Event*)
 		dm = Domain(fn);
 	}
 	catch (ErrorObject& err) {
-		err.Show(SMSErrDomChange);
+		err.Show(TR("Domain Change"));
 		stRemark->SetVal("");
 	}  
 	if (dm.fValid()) {
@@ -361,7 +361,7 @@ int ColumnPropForm::BreakLink(Event*)
 {
 	TableView* tvw = _cv.tview();
 
-	int iRes = MessageBox(STBMsgBreakDepLink.sVal(), STBTitleBreakDepLink.sVal(), MB_YESNO|MB_ICONQUESTION);
+	int iRes = MessageBox(TR("Break Dependency Link\nAre you sure?").c_str(), TR("Break Dependency Link").c_str(), MB_YESNO|MB_ICONQUESTION);
 	if (IDYES == iRes) {
 		tvw->VirtualToStore(_cv);
 		OnCancel();  
@@ -440,15 +440,15 @@ int ColumnPropForm::CreateDomain(Event*)
 	{
 	public:
 		FormDomain(CWnd* wPar, String* sDom, int* iType, bool* fApply)
-			: FormWithDest(wPar, SDMTitleCreateDomainFromString)
+			: FormWithDest(wPar, TR("Create Domain from String"))
 		{
 			sDomain = sDom;
-			fdm = new FieldDataTypeCreate(root, SDMUiDomName, sDom, ".DOM", true);
+			fdm = new FieldDataTypeCreate(root, TR("&Domain Name"), sDom, ".DOM", true);
 			fdm->SetCallBack((NotifyProc)&FormDomain::CallBackName);
 			RadioGroup* rg = new RadioGroup(root, "", iType);
-			new RadioButton(rg, SDMUiClass);
-			new RadioButton(rg, SDMUiIdentifier);
-			new CheckBox(root, STBUiApplyDomToCol, fApply);
+			new RadioButton(rg, TR("&Class"));
+			new RadioButton(rg, TR("&Identifier"));
+			new CheckBox(root, TR("&Apply Domain to Column"), fApply);
 			String sFill('*', 40);
 			stRemark = new StaticText(root, sFill);
 			stRemark->SetIndependentPos();
@@ -462,9 +462,9 @@ int ColumnPropForm::CreateDomain(Event*)
 			fn.sExt = ".dom";
 			bool fOk = false;
 			if (!fn.fValid())
-				stRemark->SetVal(SDMRemNotValidDomainName);
+				stRemark->SetVal(TR("Not a valid domain name"));
 			else if(File::fExist(fn))
-				stRemark->SetVal(SDMRemDomExists);
+				stRemark->SetVal(TR("Domain already exists"));
 			else {
 				fOk = true;
 				stRemark->SetVal("");

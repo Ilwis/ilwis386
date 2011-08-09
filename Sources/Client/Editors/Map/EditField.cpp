@@ -107,7 +107,7 @@ EditField::EditField(Editor* ed, Coord c, const DomainValueRangeStruct& dvs, con
   ed->pane()->GetWindowRect(rect);
   pnt.x += 2 + rect.left;
   pnt.y += 2 + rect.top;
-  SetWindowText(s.scVal());
+  SetWindowText(s.c_str());
   SetSel(0,-1);
 	SetWindowPos(&wndTop,pnt.x,pnt.y,iWdth,iHght,SWP_SHOWWINDOW);
   SetFocus();
@@ -193,7 +193,7 @@ void EditField::OnClose()
 	delete this;
 }
 
-static char* far sNEW = "< new >"; //SEDRemNew;  // can't initialize before IlwisApp() exists!
+static char* far sNEW = "< new >"; //TR("< new >");  // can't initialize before IlwisApp() exists!
 
 EditFieldClass::EditFieldClass(Editor* ed, Coord c, 
   DomainClass* domc, const String& s)
@@ -209,7 +209,7 @@ EditFieldClass::EditFieldClass(Editor* ed, Coord c,
 	}
   AddString("?");
   AddString(sNEW);
-  SelectString(-1,s.scVal());
+  SelectString(-1,s.c_str());
   zPoint pnt = edit->pane()->pntPos(crd);
 
   CClientDC cdc(edit->pane());
@@ -266,9 +266,9 @@ public:
   : FormWithDest(wPar, sTitle)
   {
     new FieldBlank(root);
-    new FieldString(root, SEDUiName, sName, Domain(), false);
-    new FieldString(root, SEDUiCode, sCode, Domain(), true);
-    new FieldColor(root, SEDUiColor, clr);
+    new FieldString(root, TR("&Name"), sName, Domain(), false);
+    new FieldString(root, TR("&Code"), sCode, Domain(), true);
+    new FieldColor(root, TR("&Color"), clr);
     
 //    setHelpItem("ilwis\domain_class_id_editor_functionality.htm");
     create();
@@ -294,7 +294,7 @@ void EditFieldClass::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
           start:
 					{
 						fBusy = true;
-            EditDomItemForm frm(edit->pane(), SEDTitleAddItemToDomain, 
+            EditDomItemForm frm(edit->pane(), TR("Add item to domain"), 
                                 &s, &sCode, &clr);
             fOk = frm.fOkClicked();
 						fBusy = false;
@@ -314,7 +314,7 @@ void EditFieldClass::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
               }
             }
             catch (ErrorObject& err) {
-              err.Show(SEDTitleAddItemToDomain);
+              err.Show(TR("Add item to domain"));
               goto start;
             }
           }    

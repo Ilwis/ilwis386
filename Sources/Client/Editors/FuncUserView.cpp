@@ -82,7 +82,7 @@ void FuncUserView::OnInitialUpdate()
 
 	FrameWindow* pfrm = dynamic_cast<FrameWindow*>(GetParentFrame());
 
-	m_bbTools.Create(pfrm, "txtedit.but", SSCRUiDFunEditor.scVal(), ID_FUNCBUTTONBAR);
+	m_bbTools.Create(pfrm, "txtedit.but", TR("Function editor").c_str(), ID_FUNCBUTTONBAR);
 
 	pfrm->DockControlBar(&m_bbTools, AFX_IDW_DOCKBAR_TOP);
 }

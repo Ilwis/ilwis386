@@ -84,7 +84,7 @@ GeoRefEditorTableBar::~GeoRefEditorTableBar()
 
 BOOL GeoRefEditorTableBar::Create(CWnd* pParent, TiePointEditor* gre)
 {
-	if (!CSizingControlBar::Create(SGRTitleTiepointTable.sVal(), pParent, CSize(600,200), TRUE, 123))
+	if (!CSizingControlBar::Create(TR("Tie Point Table").c_str(), pParent, CSize(600,200), TRUE, 123))
 		return FALSE;
   m_dwSCBStyle |= SCBS_SHOWEDGES;
 

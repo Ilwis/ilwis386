@@ -243,42 +243,42 @@ void Line::Read(const char* sSection, const char* sPrefix, const FileName& filen
 {
 	String sType("%s Type", sPrefix);
 	String sLineType;
-	ObjectInfo::ReadElement(sSection, sType.scVal(), filename, sLineType);
+	ObjectInfo::ReadElement(sSection, sType.c_str(), filename, sLineType);
 	ldt = ldtConv(sLineType);
 	String sWidth("%s Width", sPrefix);
-	ObjectInfo::ReadElement(sSection, sWidth.scVal(), filename, rWidth);
+	ObjectInfo::ReadElement(sSection, sWidth.c_str(), filename, rWidth);
 	String sDist("%s Dist", sPrefix);
-	ObjectInfo::ReadElement(sSection, sDist.scVal(), filename, rDist);
+	ObjectInfo::ReadElement(sSection, sDist.c_str(), filename, rDist);
 	String sColor("%s Color", sPrefix);
-	ObjectInfo::ReadElement(sSection, sColor.scVal(), filename, clr);
+	ObjectInfo::ReadElement(sSection, sColor.c_str(), filename, clr);
 	String sFillColor("%s Fill Color", sPrefix);
-	ObjectInfo::ReadElement(sSection, sFillColor.scVal(), filename, clrFill);
+	ObjectInfo::ReadElement(sSection, sFillColor.c_str(), filename, clrFill);
 	String sSupportLine("%s Support Line", sPrefix);
-	ObjectInfo::ReadElement(sSection, sSupportLine.scVal(), filename, fSupportLine);
+	ObjectInfo::ReadElement(sSection, sSupportLine.c_str(), filename, fSupportLine);
   if (ldtSymbol == ldt) {
 		smb = new ExtendedSymbol;
 		String sSymbol("%s Symbol", sPrefix);
-		smb->Read(sSection, sSymbol.scVal(), filename);
+		smb->Read(sSection, sSymbol.c_str(), filename);
 	}
 }
 
 void Line::Write(const char* sSection, const char* sPrefix, const FileName& filename)
 {
 	String sType("%s Type", sPrefix);
-	ObjectInfo::WriteElement(sSection, sType.scVal(), filename, sConv(ldt));
+	ObjectInfo::WriteElement(sSection, sType.c_str(), filename, sConv(ldt));
 	String sWidth("%s Width", sPrefix);
-	ObjectInfo::WriteElement(sSection, sWidth.scVal(), filename, rWidth);
+	ObjectInfo::WriteElement(sSection, sWidth.c_str(), filename, rWidth);
 	String sDist("%s Dist", sPrefix);
-	ObjectInfo::WriteElement(sSection, sDist.scVal(), filename, rDist);
+	ObjectInfo::WriteElement(sSection, sDist.c_str(), filename, rDist);
 	String sColor("%s Color", sPrefix);
-	ObjectInfo::WriteElement(sSection, sColor.scVal(), filename, clr);
+	ObjectInfo::WriteElement(sSection, sColor.c_str(), filename, clr);
 	String sFillColor("%s Fill Color", sPrefix);
-	ObjectInfo::WriteElement(sSection, sFillColor.scVal(), filename, clrFill);
+	ObjectInfo::WriteElement(sSection, sFillColor.c_str(), filename, clrFill);
 	String sSupportLine("%s Support Line", sPrefix);
-	ObjectInfo::WriteElement(sSection, sSupportLine.scVal(), filename, fSupportLine);
+	ObjectInfo::WriteElement(sSection, sSupportLine.c_str(), filename, fSupportLine);
   if (ldtSymbol == ldt) {
 		String sSymbol("%s Symbol", sPrefix);
-		smb->Write(sSection, sSymbol.scVal(), filename);
+		smb->Write(sSection, sSymbol.c_str(), filename);
 	}
 }
 
@@ -743,42 +743,42 @@ void FieldLineTypeSimple::create()
   FieldOneSelect::create();
   int id, iSel = -1;
 
-  id = ose->AddString(SRPLinSingle.scVal());
+  id = ose->AddString(TR("Single").c_str());
   ose->SetItemData(id, ldtSingle); //SendMessage(*ose,CB_SETITEMDATA,id,ldtSingle);
   if (ldtSingle == *ldt)
     iSel = id;
   if (!fOnlySimple) {
-    id = ose->AddString(SRPLinDouble.scVal());
+    id = ose->AddString(TR("Double").c_str());
     ose->SetItemData(id, ldtDouble); //(CB_SETITEMDATA,id,ldtDouble);
     if (ldtDouble == *ldt)
       iSel = id;
-    id = ose->AddString(SRPLinTriple.scVal());
+    id = ose->AddString(TR("Triple").c_str());
     ose->SetItemData(id,ldtTriple);
     if (ldtTriple == *ldt)
       iSel = id;
   }
-  id = ose->AddString(SRPLinDot.scVal());
+  id = ose->AddString(TR("Dot").c_str());
   ose->SetItemData(id,ldtDot);
   if (ldtDot == *ldt)
     iSel = id;
-  id = ose->AddString(SRPLinDash.scVal());
+  id = ose->AddString(TR("Dash").c_str());
   ose->SetItemData(id,ldtDash);
   if (ldtDash == *ldt)
     iSel = id;
-  id = ose->AddString(SRPLinDashDot.scVal());
+  id = ose->AddString(TR("Dash dot").c_str());
   ose->SetItemData(id,ldtDashDot);
   if (ldtDashDot == *ldt)
     iSel = id;
-  id = ose->AddString(SRPLinDashDotDot.scVal());
+  id = ose->AddString(TR("Dash dot dot").c_str());
   ose->SetItemData(id,ldtDashDotDot);
   if (ldtDashDotDot == *ldt)
     iSel = id;
   if (!fOnlySimple) {
-    id = ose->AddString(SRPLinBlocked.scVal());
+    id = ose->AddString(TR("Blocked").c_str());
     ose->SetItemData(id,ldtBlocked);
     if (ldtBlocked == *ldt)
       iSel = id;
-    id = ose->AddString(SRPLinSymbol.scVal());
+    id = ose->AddString(TR("Symbol").c_str());
     ose->SetItemData(id,ldtSymbol);
     if (ldtSymbol == *ldt)
       iSel = id;
@@ -876,22 +876,22 @@ String FieldLineType::sGetText()
 FieldLine::FieldLine(FormEntry* parent, Line* lin, bool fAskColor)
 : FieldGroup(parent), pLine(lin), line(*lin)
 {
-  flt = new FieldLineType(this, SRPLinType, &line.ldt, false);
+  flt = new FieldLineType(this, TR("&Line Type"), &line.ldt, false);
   flt->SetCallBack((NotifyProc)&FieldLine::TypeChanged, this);
 
 	if (fAskColor)
-		new FieldColor(this, SRPUiColor, &line.clr);
+		new FieldColor(this, TR("&Color"), &line.clr);
 
-  cbSupport = new CheckBox(this, SRPUiSupportLine, &line.fSupportLine);
+  cbSupport = new CheckBox(this, TR("&Support Line"), &line.fSupportLine);
   cbSupport->SetCallBack((NotifyProc)&FieldLine::SupportChanged, this);
-  fcBG = new FieldColor(this, SRPUiBackColor, &line.clrFill);
+  fcBG = new FieldColor(this, TR("&Background Color"), &line.clrFill);
   fcBG->Align(cbSupport, AL_UNDER);
-  frWidth = new FieldReal(this, SRPUiLineWidthMM, &line.rWidth, ValueRange(0,100,0.1));
-  frDist = new FieldReal(this, SRPUiBlockDistanceMM, &line.rDist, ValueRange(1,100,0.1));
-  pbSymbol = new PushButton(this, SRPUiSymbol,
+  frWidth = new FieldReal(this, TR("&Line width (mm)"), &line.rWidth, ValueRange(0,100,0.1));
+  frDist = new FieldReal(this, TR("&Block Distance (mm)"), &line.rDist, ValueRange(1,100,0.1));
+  pbSymbol = new PushButton(this, TR("&Symbol..."),
                    (NotifyProc)&FieldLine::SymbolButton, true);
   pbSymbol->Align(cbSupport, AL_AFTER);
-  frSymbDist = new FieldReal(this, SRPUiSymbolDistanceMM, &line.rDist, ValueRange(1,100,0.1));
+  frSymbDist = new FieldReal(this, TR("&Symbol Distance (mm)"), &line.rDist, ValueRange(1,100,0.1));
   frSymbDist->Align(frWidth, AL_UNDER);
 }
 
@@ -977,7 +977,7 @@ class SymbolForm: public FormWithDest
 {
 public:
   SymbolForm(CWnd* wPar, ExtendedSymbol& smb)
-  : FormWithDest(wPar, SRPTitleLineSymbol)
+  : FormWithDest(wPar, TR("Line Symbols"))
   {
     new FieldExtendedSymbol(root, smb, true, false);
     SetMenHelpTopic("ilwismen\\representation_class_editor_line_symbols_on_segments.htm");

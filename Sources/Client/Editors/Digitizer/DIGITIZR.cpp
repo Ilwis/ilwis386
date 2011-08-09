@@ -748,13 +748,13 @@ class StartDigRefForm: public FormWithDest
 {
 public:
   StartDigRefForm(CWnd* w, String* sCsy, int* iOption)
-  : FormWithDest(w, SDGTitleMapReferencingCoordSystem)
+  : FormWithDest(w, TR("Map Referencing - Coordinate System"))
   {
-    FormEntry* fe = new FieldCoordSystemC(root, SDGUiCoordSys, sCsy);
+    FormEntry* fe = new FieldCoordSystemC(root, TR("&Coordinate System"), sCsy);
     fe->SetIndependentPos();
-    RadioGroup* rg = new RadioGroup(root, SDGUiUseForCntrlPnts, iOption);
-    new RadioButton(rg, SDGUiMetricCoords);
-    new RadioButton(rg, SDGUiGeographicCoords);
+    RadioGroup* rg = new RadioGroup(root, TR("Use for Control Points:"), iOption);
+    new RadioButton(rg, TR("&Metric (Projected) Coordinates"));
+    new RadioButton(rg, TR("&Geographic Coordinates"));
     SetMenHelpTopic("ilwismen\\digitizer_map_referencing_coordsys.htm");
     create();
   }
@@ -867,9 +867,9 @@ void Digitizer::OpenComPort(const String& sPort)
 	{
 		act = actPASSIVE;  
 		hComPort = 0;
-		String sErr(SDGErrOpenCom_iS.scVal(), iPort, SDGErrComHardWare);
+		String sErr(TR("Error opening COM port %i\n%S").c_str(), iPort, TR("HARDWARE: The hardware is not available\n(is locked by another device)"));
 		ErrorObject err(sErr);
-		err.SetTitle(SDGErrDigError.scVal());
+		err.SetTitle(TR("Digitizer Error").c_str());
 		throw err;
 	}
 }

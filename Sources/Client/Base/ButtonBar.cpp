@@ -105,7 +105,7 @@ bool ButtonBar::Create(CWnd* pParent, const FileName& fnButtons, const string& s
 	if (sTitle != "")
 		SetWindowText(sTitle.c_str());
 	else
-		SetWindowText(SUITitleToolBar.scVal());
+		SetWindowText(TR("Tool Bar").c_str());
 
 	return TRUE;
 }

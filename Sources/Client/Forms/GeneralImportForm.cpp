@@ -135,8 +135,8 @@ int GeneralImportForm::OutputSelection(Event *ev) {
 	char path[255];
 	char title[20];
 	strcpy(title,"Input file");
-	strcpy(path,currentDir.scVal());
-	CFileDialog dlg(FALSE,NULL,fnO.sRelative().scVal(),4|2,String("ILWIS Object(%S)|%S",sExt,sExt).scVal());
+	strcpy(path,currentDir.c_str());
+	CFileDialog dlg(FALSE,NULL,fnO.sRelative().c_str(),4|2,String("ILWIS Object(%S)|%S",sExt,sExt).c_str());
 	dlg.m_ofn.lpstrInitialDir = path;
 	dlg.m_ofn.lpstrTitle = title;
 	if ( dlg.DoModal() == IDOK) {
@@ -232,8 +232,8 @@ int GeneralImportForm::ObjectSelection(Event *ev) {
 	char path[255];
 	char title[20];
 	strcpy(title,"Input file");
-	strcpy(path,currentDir.scVal());
-	CFileDialog dlg(TRUE,NULL,NULL,4|2,String("%S(%S)|%S",currentFormat.shortName,sExt,sExt).scVal());
+	strcpy(path,currentDir.c_str());
+	CFileDialog dlg(TRUE,NULL,NULL,4|2,String("%S(%S)|%S",currentFormat.shortName,sExt,sExt).c_str());
 	dlg.m_ofn.lpstrInitialDir = path;
 	dlg.m_ofn.lpstrTitle = title;
 	if ( dlg.DoModal() == IDOK) {
@@ -431,7 +431,7 @@ FieldImportPage *GeneralImportForm::GetPage(const String& sVal)
 }
 
 void GeneralImportForm::addModule(const FileName& fnModule,vector<GetImportOptionForms>& options) {
-	HMODULE hm = LoadLibrary(fnModule.sFullPath().scVal());
+	HMODULE hm = LoadLibrary(fnModule.sFullPath().c_str());
 	if ( hm != NULL) {
 		ImportDrivers dn = (ImportDrivers)GetProcAddress(hm, "getImportDriverList");
 		if ( dn != NULL ) {
@@ -450,7 +450,7 @@ void GeneralImportForm::addModules() {
 
 	AddOldStyleIlwisImports();
 	String path = IlwWinApp()->Context()->sIlwDir() + "\\Extensions\\*.*";
-	BOOL fFound = finder.FindFile(path.scVal());
+	BOOL fFound = finder.FindFile(path.c_str());
 	while(fFound) {
 		fFound = finder.FindNextFile();
 		if (!finder.IsDirectory())
@@ -474,7 +474,7 @@ void GeneralImportForm::addModules() {
 //void GeneralImportForm::addFolder(const String& dir,vector<GetImportOptionForms>& options) {
 //	CFileFind finder;
 //	String pattern = dir + "\\*.*";
-//	BOOL fFound = finder.FindFile(pattern.scVal());
+//	BOOL fFound = finder.FindFile(pattern.c_str());
 //	while(fFound) {
 //		fFound = finder.FindNextFile();
 //		if (!finder.IsDirectory())

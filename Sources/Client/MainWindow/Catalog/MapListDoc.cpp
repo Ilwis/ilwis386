@@ -97,7 +97,7 @@ BOOL MapListDoc::OnOpenDocument(LPCTSTR lpszPathName)
 		sPath = settings.sValue("DocName");
 	}
 
-	if (!CatalogDocument::OnOpenDocument(sPath.scVal()))
+	if (!CatalogDocument::OnOpenDocument(sPath.c_str()))
 		return FALSE;
 
 	FileName fn(sPath);

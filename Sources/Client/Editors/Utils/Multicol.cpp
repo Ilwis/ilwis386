@@ -111,7 +111,7 @@ void GeneralColumnSelector::SetSel(int id, bool fSel)
 void GeneralColumnSelector::SetSel(const String& str, bool fSel)
 {
 	String s = str ;
-  int id = lb->FindStringExact(-1, s.scVal());
+  int id = lb->FindStringExact(-1, s.c_str());
 	lb->SetSel(id);
 }
 
@@ -147,7 +147,7 @@ void MultiColumnSelector::create()
     DomainType dmt = col->dm()->dmt();
     if (dmtype(dmt) & dmTypes) {
       String s = col->sName();
-      lb ->AddString(s.scVal());
+      lb ->AddString(s.c_str());
     }
   }
 }
@@ -365,7 +365,7 @@ int ColumnAndColorSelector::Add(const Column& col)
       lb->SetCurSel(id);
       return id;
     }
-  id = lb->AddString(s.scVal());
+  id = lb->AddString(s.c_str());
   ColumnAndColor* cac = new ColumnAndColor();
   cac->col = col;
   cac->clr = clrStd(++iDfltCol);
@@ -426,13 +426,13 @@ int ColumnAndColorSelector::ChangeColor(Event*)
   {
   public:
     ColorForm(CWnd* wPar, const String& sCol, Color* clr)
-    : FormWithDest(wPar, SDCTitleColor)
+    : FormWithDest(wPar, TR("Color"))
     {
-      String sText(SDCRemSelColorFor_S.scVal(), sCol);
+      String sText(TR("Select Color for '%S'").c_str(), sCol);
       StaticText* st = new StaticText(root, sText);
       st->SetIndependentPos();
       cs = new ColorSelector(root, (Color*)clr);
-      PushButton* pb = new PushButton(root, SRPUiCustomColor,
+      PushButton* pb = new PushButton(root, TR("&Custom Color..."),
         (NotifyProc)&ColorForm::CustomColor);
       pb->Align(cs, AL_UNDER);
   //    SetMenHelpTopic("ilwismen\\representation_class_editor_edit_item_raster.htm");
@@ -479,7 +479,7 @@ FieldMultiColumn::FieldMultiColumn(FormEntry* par, const String& sQuestion, Tabl
   pbDel->SetWidth(30);
   cacs = new ColumnAndColorSelector(this, tbl, arr, fColor);
   cacs->Align(fb, AL_AFTER);
-  pbColor = new PushButton(this, SDCUiButtonColor, (NotifyProc)&FieldMultiColumn::ChangeColor, true);
+  pbColor = new PushButton(this, TR("&Color..."), (NotifyProc)&FieldMultiColumn::ChangeColor, true);
   pbColor->Align(cacs, AL_UNDER);
 }
 

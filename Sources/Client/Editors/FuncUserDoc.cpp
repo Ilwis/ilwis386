@@ -174,7 +174,7 @@ void FuncUserDoc::SaveDocumentAs(LPCTSTR s)
 			else
 				fnc->fErase = true;
 
-			OnOpenDocument(fnc->fnObj.sFullName().scVal());
+			OnOpenDocument(fnc->fnObj.sFullName().c_str());
 		}
 	}
 	SetModifiedFlag(false);

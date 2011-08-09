@@ -63,7 +63,7 @@ FieldDataTypeLarge::FieldDataTypeLarge(FormEntry* par,
 	FileName fn(*psName);
   sName = fn.sFile;
   sDir = fn.sPath();
-  SetCurrentDirectory(sDir.scVal());
+  SetCurrentDirectory(sDir.c_str());
 
   psn->iMinWidth = 2*FLDNAMEOUTPUTWIDTH + 20;
   psn->iMinHeight = psn->iHeight = 200;
@@ -84,7 +84,7 @@ FieldDataTypeLarge::FieldDataTypeLarge(FormEntry* par,
 	FileName fn(*psName);
   sName = fn.sFile;
   sDir = fn.sPath();
-  SetCurrentDirectory(sDir.scVal());
+  SetCurrentDirectory(sDir.c_str());
 
   psn->iMinWidth = 2*FLDNAMEOUTPUTWIDTH + 20;
   psn->iMinHeight = psn->iHeight = 200;
@@ -272,7 +272,7 @@ void FieldDataTypeLarge::Fill()
 		sPath &= sMaskExt;
 
 		CFileFind finder;
-		bool fWorking = finder.FindFile(sPath.scVal()) != 0;
+		bool fWorking = finder.FindFile(sPath.c_str()) != 0;
 		while (fWorking)
 		{
 			fWorking = finder.FindNextFile() != 0;
@@ -284,12 +284,12 @@ void FieldDataTypeLarge::Fill()
 					continue;
 				fn.Dir(sDir);
 				if (fOnlyEditable)
-					if (access(fn.sFullName().scVal(),2)!=0 || ObjectInfo::fVirtual(fn))
+					if (access(fn.sFullName().c_str(),2)!=0 || ObjectInfo::fVirtual(fn))
 						continue;
 				if (ol)
 					if (!ol->fOK(fn))
 						continue;
-    			lbObject->AddString(sFile.scVal());
+    			lbObject->AddString(sFile.c_str());
 			}
 		}
 		finder.Close();
@@ -304,7 +304,7 @@ void FieldDataTypeLarge::Fill()
 			String sPath = sStdPath;
 			sPath &= *asExt[i];
 			CFileFind finder;
-			bool fWorking = finder.FindFile(sPath.scVal()) != 0;
+			bool fWorking = finder.FindFile(sPath.c_str()) != 0;
 			while (fWorking)
 			{
 				fWorking = finder.FindNextFile() != 0;
@@ -316,7 +316,7 @@ void FieldDataTypeLarge::Fill()
 					if (ol)
 						if (!ol->fOK(fn))
 							continue;
-    				lbObject->AddString(sFile.scVal());
+    				lbObject->AddString(sFile.c_str());
 				}
 			}
 			finder.Close();
@@ -355,7 +355,7 @@ void FieldDataTypeLarge::Fill()
 
 void FieldDataTypeLarge::FillDir()
 {
-  String s = SUIMsgDirectory_;
+  String s = TR("Directory ");
 	String sTemp = sDir;
 	sTemp.toLower();
 
@@ -366,7 +366,7 @@ void FieldDataTypeLarge::FillDir()
   }  
   else
     s &= sTemp;
-  st->SetWindowText(s.scVal());
+  st->SetWindowText(s.c_str());
 
   SetCurrentDirectory(sDir.sVal());
   Fill();
@@ -383,7 +383,7 @@ void FieldDataTypeLarge::FillDir()
 		if (dirfinder.IsDirectory() && !dirfinder.IsDots())
 		{
 			String sDir = String("[%s]", dirfinder.GetFileName());
-    	lbDir->AddString(sDir.scVal());
+    	lbDir->AddString(sDir.c_str());
 		}
 	}
 	dirfinder.Close();
@@ -420,7 +420,7 @@ void FieldDataTypeLarge::FillDrive()
   cbDrive->Dir(DRIVES|ONLY,"*.*");
   String sDrv = "[-x-]";
   sDrv[2] = sDir[0];
-  cbDrive->SelectString(-1, sDrv.scVal());
+  cbDrive->SelectString(-1, sDrv.c_str());
 }
 
 FormEntry* FieldDataTypeLarge::CheckData()
@@ -475,15 +475,15 @@ int FieldDataTypeLarge::DblClkDir(void *)
       String sDrive;
       sDrive &= s[2];
       sDrive &= ':';
-      SetCurrentDirectory(sDrive.scVal());
+      SetCurrentDirectory(sDrive.c_str());
     }
     else {
       int sLen = s.length() - 2;
       for (int i = 0; i < sLen; i++)
         s[i] = s[i+1];
       s[sLen] = '\0';
-      if (SetCurrentDirectory(s.scVal()) == 0)
-        throw ErrorObject(SUIErrInvalidFolderChange);
+      if (SetCurrentDirectory(s.c_str()) == 0)
+        throw ErrorObject(TR("Invalid directory change"));
     }
     char sDummy[MAXPATH];
     if (0 == GetCurrentDirectory(MAX_PATH, sDummy))
@@ -511,7 +511,7 @@ int FieldDataTypeLarge::CloseDrive(void *)
       String sDrive;
       sDrive &= s[2];
       sDrive &= ':';
-      SetCurrentDirectory(sDrive.scVal());
+      SetCurrentDirectory(sDrive.c_str());
     }
     char sDummy[MAX_PATH];
     if (0 == GetCurrentDirectory(MAX_PATH, sDummy))
@@ -540,35 +540,35 @@ void FieldDataObject::create()
   fos->create();
   OneSelectEdit* ose = fos->ose;
   // Keep exact same sequence as in enum ObjectType !!
-  ose->AddString(SUIObjMaps.sVal());
-  ose->AddString(SUIObjMpr.sVal());
-  ose->AddString(SUIObjMpa.sVal());
-  ose->AddString(SUIObjMps.sVal());
-  ose->AddString(SUIObjMpp.sVal());
-  ose->AddString(SUIObjTbt.sVal());
-  ose->AddString(SUIObjMpl.sVal());
-  ose->AddString(SUIObjIoc.sVal());
-  ose->AddString(SUIObjMpv.sVal());
-  ose->AddString(SUIObjIlo.sVal());
-  ose->AddString(SUIObjAtx.sVal());
-  ose->AddString(SUIObjGrh.sVal());
-  ose->AddString(SUIObjDom.sVal());
-  ose->AddString(SUIObjRpr.sVal());
-  ose->AddString(SUIObjGrf.sVal());
-  ose->AddString(SUIObjCsy.sVal());
-  ose->AddString(SUIObjHis.sVal());
-  ose->AddString(SUIObjHsa.sVal());
-  ose->AddString(SUIObjHss.sVal());
-  ose->AddString(SUIObjHsp.sVal());
-  ose->AddString(SUIObjSms.sVal());
-  ose->AddString(SUIObjStp.sVal());
-  ose->AddString(SUIObjSmc.sVal());
-  ose->AddString(SUIObjTa2.sVal());
-  ose->AddString(SUIObjMat.sVal());
-  ose->AddString(SUIObjFil.sVal());
-  ose->AddString(SUIObjFun.sVal());
-  ose->AddString(SUIObjIsl.sVal());
-  ose->AddString(SUIObjIlw.sVal());
+  ose->AddString(TR("All Maps.ilw").c_str());
+  ose->AddString(TR("Raster Map.mpr").c_str());
+  ose->AddString(TR("Polygon Map.mpa").c_str());
+  ose->AddString(TR("Segment Map.mps").c_str());
+  ose->AddString(TR("Point Map.mpp").c_str());
+  ose->AddString(TR("Table.tbt").c_str());
+  ose->AddString(TR("Map List.mpl").c_str());
+  ose->AddString(TR("Object Collection.ioc").c_str());
+  ose->AddString(TR("Map View.mpv").c_str());
+  ose->AddString(TR("Layout.ilo").c_str());
+  ose->AddString(TR("Annotation Text.atx").c_str());
+  ose->AddString(TR("Graph.grh").c_str());
+  ose->AddString(TR("Domain.dom").c_str());
+  ose->AddString(TR("Representation.rpr").c_str());
+  ose->AddString(TR("GeoReference.grf").c_str());
+  ose->AddString(TR("Coordinate System.csy").c_str());
+  ose->AddString(TR("Histogram.his").c_str());
+  ose->AddString(TR("Polygon Histogram.hsa").c_str());
+  ose->AddString(TR("Segment Histogram.hss").c_str());
+  ose->AddString(TR("Point Histogram.hsp").c_str());
+  ose->AddString(TR("Sample Set.sms").c_str());
+  ose->AddString(TR("Stereo Pair.stp").c_str());
+  ose->AddString(TR("Criteria Tree.smc").c_str());
+  ose->AddString(TR("2-Dimensional Table.ta2").c_str());
+  ose->AddString(TR("Matrix.mat").c_str());
+  ose->AddString(TR("Filter.fil").c_str());
+  ose->AddString(TR("Function.fun").c_str());
+  ose->AddString(TR("Script.isl").c_str());
+  ose->AddString(TR("All ILWIS Objects.ilw").c_str());
   ose->SetCurSel(0);
   ose->setNotify(this, (NotifyProc)&FieldDataObject::TypeChanged, Notify(CBN_SELCHANGE));
 }

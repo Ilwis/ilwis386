@@ -76,7 +76,7 @@ UsedByTreeCtrl::UsedByTreeCtrl(const RECT& rect, CWnd* wnd, UINT id, const Ilwis
 	
 	FileName fn = obj->fnObj;
 	int iImg = IlwWinApp()->iImage(fn.sExt);
-	htiRoot = InsertItem(fn.sFile.scVal(), iImg, iImg, TVI_ROOT);
+	htiRoot = InsertItem(fn.sFile.c_str(), iImg, iImg, TVI_ROOT);
 	afn &= fn;
 	SetItemData(htiRoot, afn.iSize());
 	Expand(htiRoot, fn);
@@ -94,7 +94,7 @@ void UsedByTreeCtrl::OnPaint()
 		CPaintDC pdc(this);
 		CFont *oldFont = pdc.SelectObject(GetFont());
 
-		CString s(SUIRemNotUsedByObjects.scVal());
+		CString s(TR("Not used by other objects").c_str());
 		CSize sizeTxt = pdc.GetTextExtent((LPCTSTR )s, s.GetLength());
 		CRect rect;
 		GetWindowRect(&rect);
@@ -123,7 +123,7 @@ void UsedByTreeCtrl::Expand(HTREEITEM hti, const FileName& fn)
 	{
 		FileName fn(as[i]);
 		int iImg = IlwWinApp()->iImage(fn.sExt);
-		tvi.hItem = InsertItem(fn.sFile.scVal(), iImg, iImg, hti);
+		tvi.hItem = InsertItem(fn.sFile.c_str(), iImg, iImg, hti);
 		bool fUsedBy = ! (
 				".isl" == fn.sExt ||
 				".his" == fn.sExt ||

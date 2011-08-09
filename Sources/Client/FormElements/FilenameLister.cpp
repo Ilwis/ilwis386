@@ -86,7 +86,7 @@ void FilenameLister::create()
 	// Add all filename strings; these however are not the ones being displayed
 	// The OwnerDrawn listbox calls sName() for this purpose.
 	for (int i = 0; i < m_as.iSize(); ++i)
-		lb->AddString(m_as[i].scVal());
+		lb->AddString(m_as[i].c_str());
 }
 
 String FilenameLister::sName(int id)

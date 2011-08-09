@@ -86,14 +86,14 @@ BOOL WMSCollectionDoc::OnOpenDocument(LPCTSTR lpszPathName, ParmList& pm)
 	}
 
 	if ( dirOut.fReadOnly() )
-		throw ErrorObject(String(SMSErrorReadOnlyLocation_S.scVal(), dirOut.sPath()));
+		throw ErrorObject(String(TR("Target location, %S,  is Read-Only").c_str(), dirOut.sPath()));
 	
 	if (IlwisObject::iotObjectType(fnFile) == IlwisObject::iotOBJECTCOLLECTION)
 	{
 		if (!IlwisDocument::OnOpenDocument(lpszPathName))
 			return FALSE;
 
-		SetPathName(fnFile.sPath().scVal());		
+		SetPathName(fnFile.sPath().c_str());		
 		oc = WMSCollection(fnFile);
 	}
 	else
@@ -102,7 +102,7 @@ BOOL WMSCollectionDoc::OnOpenDocument(LPCTSTR lpszPathName, ParmList& pm)
 		if ( dirOut.fValid())
 			fnIOC.Dir(dirOut.sFullPath());
 		WMSCollection fc;
-		SetPathName(fnFile.sPath().scVal());				
+		SetPathName(fnFile.sPath().c_str());				
 		//if ( WMSCollection::fWMSFileTimeChanged(fnFile, fnIOC)) 
 		//{
 		//	SetCollectionPath(fnIOC, pm, "import"); // will do nothing if not present
@@ -115,7 +115,7 @@ BOOL WMSCollectionDoc::OnOpenDocument(LPCTSTR lpszPathName, ParmList& pm)
 			oc = WMSCollection(fnIOC);
 
 		String sTN = oc->sTypeName();
-		SetTitle(sTN.scVal());		
+		SetTitle(sTN.c_str());		
 	}
 	// If no show is on, dont open this collection and destroy the related ObjectCollection
 	if (pm.fExist("noshow") || !oc.fValid() || oc->fErase)
@@ -144,7 +144,7 @@ void WMSCollectionDoc::SetCollectionPath(FileName& fnIOC, ParmList& pm, const St
 					sF = sF + fnIOC.sFileExt();
 				fnIOC = FileName(sF);
 			}
-			SetPathName(fnIOC.sPath().scVal());							
+			SetPathName(fnIOC.sPath().c_str());							
 		}
 	}	
 }

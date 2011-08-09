@@ -86,15 +86,15 @@ FormPointMapCreate::FormPointMapCreate(CWnd* mwin, const String& sTitle)
 
 void FormPointMapCreate::initPointMapOut(bool fAskDomain)
 {  
-  fmc = new FieldPointMapCreate(root, SAFUiOutPntMap, &sOutMap);
+  fmc = new FieldPointMapCreate(root, TR("&Output Point Map"), &sOutMap);
   fmc->SetCallBack((NotifyProc)&FormPointMapCreate::OutPointMapCallBack);
   FormEntry* fe = fmc;
   if (fAskDomain) {
-    fdc = new FieldDomainC(root, SAFUiDomain, &sDomain);
+    fdc = new FieldDomainC(root, TR("&Domain"), &sDomain);
     fdc->Align(fe, AL_UNDER);
     fe = fdc;
   }  
-  StaticText* st = new StaticText(root, SAFUiDescription);
+  StaticText* st = new StaticText(root, TR("&Description:"));
   st->Align(fe, AL_UNDER);
   st->psn->SetBound(0,0,0,0);
   FieldString* fs = new FieldString(root, "", &sDescr);
@@ -114,8 +114,8 @@ void FormPointMapCreate::execPointMapOut(const String& sExpr)
   FileName fn(sOutMap);
   fn.sExt = ".mpp";
   if (fn.fExist()) {
-    String sErr(SAFMsgAlreadyExistsOverwrite_S.scVal(), fn.sFullPath(true));
-    int iRet = mw->MessageBox(sErr.scVal(), SAFMsgAlreadyExists.scVal(), MB_YESNO|MB_ICONEXCLAMATION);
+    String sErr(TR("File %S already exists.\nOverwrite?").c_str(), fn.sFullPath(true));
+    int iRet = mw->MessageBox(sErr.c_str(), TR("File already exists").c_str(), MB_YESNO|MB_ICONEXCLAMATION);
     if (iRet != IDYES)
       return;
   }
@@ -135,7 +135,7 @@ void FormPointMapCreate::execPointMapOut(const String& sExpr)
 		{
       String sExec = "show ";
       sExec &= mpOut->sNameQuoted(true);
-      //winExec(sExec.scVal(), SW_SHOWNORMAL);
+      //winExec(sExec.c_str(), SW_SHOWNORMAL);
 			ILWISAPP->Execute(sExec);
     }
   }  

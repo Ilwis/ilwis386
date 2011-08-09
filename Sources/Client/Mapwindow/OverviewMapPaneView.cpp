@@ -191,7 +191,7 @@ void OverviewMapPaneView::OnDraw(CDC* cdc)
   cdc->SelectObject(penOld);
 }
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define add(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 
 void OverviewMapPaneView::OnContextMenu(CWnd* pWnd, CPoint point)

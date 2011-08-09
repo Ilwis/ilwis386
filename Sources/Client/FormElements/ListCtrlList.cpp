@@ -107,7 +107,7 @@ void ListCtrlList::OnGetDispInfo(NMHDR* pNMHDR, LRESULT* pResult)
 
 		CString sField;
 		if (m_fclParent->iNrItems() > pDispInfo->item.iItem)
-			sField = m_fclParent->sListItem(pDispInfo->item.iItem, iSubItem).scVal();
+			sField = m_fclParent->sListItem(pDispInfo->item.iItem, iSubItem).c_str();
 		else
 			sField = "";
 
@@ -183,7 +183,7 @@ void ListCtrlList::OnBeginLabelEdit(NMHDR* pNMHDR, LRESULT* pResult)
 
 	// Create the InPlaceEdit; there is no need to delete it afterwards, it will destroy itself
 	DWORD style = WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL;
-	InPlaceEdit *m_Edit = new InPlaceEdit(m_iItem, m_iSubItem, sLabelText.scVal());
+	InPlaceEdit *m_Edit = new InPlaceEdit(m_iItem, m_iSubItem, sLabelText.c_str());
 	m_Edit->Create(style, rcSubItem, this, m_fclParent->Id());
 }
 

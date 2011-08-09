@@ -69,10 +69,10 @@ public:
   EvaluationForm(CWnd* wPar, String sTitle, int* iType)
     : FormWithDest(wPar, sTitle)
   {
-		RadioGroup* rgType = new RadioGroup(root, SSmcUiMethod, iType);
-		new RadioButton(rgType, SSmcUiDirect);
-		new RadioButton(rgType, SSmcUiPairwise);
-		new RadioButton(rgType, SSmcUiRankOrder);
+		RadioGroup* rgType = new RadioGroup(root, TR("Method"), iType);
+		new RadioButton(rgType, TR("Direct"));
+		new RadioButton(rgType, TR("Pairwise"));
+		new RadioButton(rgType, TR("Rank Order"));
 
 		create();
 	}
@@ -172,7 +172,7 @@ DirectEvaluation::~DirectEvaluation()
 
 String DirectEvaluation::sDescription()
 {
-	return SSmcUiDirect;
+	return TR("Direct");
 }
 
 void DirectEvaluation::Refresh(map <String, double> *mp)
@@ -188,7 +188,7 @@ class DirectEvaluationForm: public FormWithDest
 {
 public:
   DirectEvaluationForm(CWnd* wPar, list <String> *liNames, map <String, double> *mapEvaluation, map <String, double> * mp, bool* fChangeMethod, Evaluation::eResultType _eResult, String sLabel)
-    : FormWithDest(wPar, SSmcUiDirectMethod)
+    : FormWithDest(wPar, TR("Direct Method"))
 		, m_rSum(0)
 		, m_rNormSum(0)
 		, m_mapEvaluation(mapEvaluation)
@@ -205,10 +205,10 @@ public:
 		FieldGroup * fgRight = new FieldGroup(root);
 		fgRight->Align(fgLeft, AL_AFTER);
 
-		StaticText* stItemsTitle = new StaticText(fgLeft, SSmcUiItems);
+		StaticText* stItemsTitle = new StaticText(fgLeft, TR("Items"));
 		StaticText* stEvaluationTitle = new StaticText(fgLeft, sLabel);
 		stEvaluationTitle->Align(stItemsTitle, AL_AFTER);
-		StaticText* stNormalizedTitle = new StaticText(fgRight, SSmcUiNormalized);
+		StaticText* stNormalizedTitle = new StaticText(fgRight, TR("Normalized"));
 
 		int i = 0;
 		for (list <String>::iterator it = liNames->begin(); it != liNames->end(); ++it)
@@ -226,7 +226,7 @@ public:
 				vfrNormWeight[i]->Align(stNormalizedTitle, AL_UNDER);
 			++i;
 		}
-		frSum = new FieldReal(fgLeft, SSmcUiSum, &m_rSum, vrPrecision);
+		frSum = new FieldReal(fgLeft, TR("Sum"), &m_rSum, vrPrecision);
 		if (i>0)
 			frSum->Align(vfrUserWeight[i-1], AL_UNDER);
 		else
@@ -237,7 +237,7 @@ public:
 		else
 			frNormSum->Align(stNormalizedTitle, AL_UNDER);
 
-		PushButton* pbChangeMethod = new PushButton(root, SSmcUiChooseOtherMethod, (NotifyProc)&DirectEvaluationForm::PushButtonCallBack);
+		PushButton* pbChangeMethod = new PushButton(root, TR("Choose other method"), (NotifyProc)&DirectEvaluationForm::PushButtonCallBack);
 		pbChangeMethod->Align(fgLeft, AL_UNDER);
 
 		SetMenHelpTopic("ilwismen\\smce_window_weigh_direct.htm");
@@ -358,8 +358,8 @@ void DirectEvaluation::WriteElements(const char* sSection, const ElementContaine
 	int i=0;
 	for (map <String, double>::iterator it = mapDirectEvaluation.begin(); it != mapDirectEvaluation.end(); ++it)
 	{
-		ObjectInfo::WriteElement(sSection, String("Element%d", i).scVal(), en, (*it).first);
-		ObjectInfo::WriteElement(sSection, String("Value%d", i).scVal(), en, (*it).second);
+		ObjectInfo::WriteElement(sSection, String("Element%d", i).c_str(), en, (*it).first);
+		ObjectInfo::WriteElement(sSection, String("Value%d", i).c_str(), en, (*it).second);
 		++i;
 	}
 }
@@ -375,8 +375,8 @@ void DirectEvaluation::ReadElements(const char* sSection, const ElementContainer
 	{
 		String str;
 		double d;
-		ObjectInfo::ReadElement(sSection, String("Element%d", i).scVal(), en, str);
-		ObjectInfo::ReadElement(sSection, String("Value%d", i).scVal(), en, d);
+		ObjectInfo::ReadElement(sSection, String("Element%d", i).c_str(), en, str);
+		ObjectInfo::ReadElement(sSection, String("Value%d", i).c_str(), en, d);
 		mapDirectEvaluation[str]=d;
 	}
 }
@@ -443,7 +443,7 @@ PairwiseComparison::~PairwiseComparison()
 
 String PairwiseComparison::sDescription()
 {
-	return SSmcUiPairwise;
+	return TR("Pairwise");
 }
 
 void PairwiseComparison::Refresh(map <String, double> *mp)
@@ -482,9 +482,9 @@ void PairwiseComparison::WriteElements(const char* sSection, const ElementContai
 	int i=0;
 	for (map <pair <String, String>, double>::iterator it = mapPairwiseEvaluation.begin(); it != mapPairwiseEvaluation.end(); ++it)
 	{
-		ObjectInfo::WriteElement(sSection, String("ElementX%d", i).scVal(), en, (*it).first.first);
-		ObjectInfo::WriteElement(sSection, String("ElementY%d", i).scVal(), en, (*it).first.second);
-		ObjectInfo::WriteElement(sSection, String("Value%d", i).scVal(), en, (*it).second);
+		ObjectInfo::WriteElement(sSection, String("ElementX%d", i).c_str(), en, (*it).first.first);
+		ObjectInfo::WriteElement(sSection, String("ElementY%d", i).c_str(), en, (*it).first.second);
+		ObjectInfo::WriteElement(sSection, String("Value%d", i).c_str(), en, (*it).second);
 		++i;
 	}
 }
@@ -501,9 +501,9 @@ void PairwiseComparison::ReadElements(const char* sSection, const ElementContain
 		String str1;
 		String str2;
 		double d;
-		ObjectInfo::ReadElement(sSection, String("ElementX%d", i).scVal(), en, str1);
-		ObjectInfo::ReadElement(sSection, String("ElementY%d", i).scVal(), en, str2);
-		ObjectInfo::ReadElement(sSection, String("Value%d", i).scVal(), en, d);
+		ObjectInfo::ReadElement(sSection, String("ElementX%d", i).c_str(), en, str1);
+		ObjectInfo::ReadElement(sSection, String("ElementY%d", i).c_str(), en, str2);
+		ObjectInfo::ReadElement(sSection, String("Value%d", i).c_str(), en, d);
 		mapPairwiseEvaluation[pair<String,String>(str1,str2)]=d;
 	}
 }
@@ -688,22 +688,22 @@ public:
 		iOption = iDoubleToOption((*m_mp)[pair<String, String>(sX, sY)]);
 		vsSaatyOptions.clear();
     vsSaatyOptions.resize(9);
-    vsSaatyOptions[0] = SSmcUiExtremelyMore;
-    vsSaatyOptions[1] = SSmcUiVeryStronglyMore;
-    vsSaatyOptions[2] = SSmcUiStronglyMore;
-		vsSaatyOptions[3] = SSmcUiModeratelyMore;
-		vsSaatyOptions[4] = SSmcUiEqually;
-		vsSaatyOptions[5] = SSmcUiModeratelyLess;
-		vsSaatyOptions[6] = SSmcUiStronglyLess;
-		vsSaatyOptions[7] = SSmcUiVeryStronglyLess;
-		vsSaatyOptions[8] = SSmcUiExtremelyLess;
+    vsSaatyOptions[0] = TR("is extremely more important than");
+    vsSaatyOptions[1] = TR("is very strongly more important than");
+    vsSaatyOptions[2] = TR("is strongly more important than");
+		vsSaatyOptions[3] = TR("is moderately more important than");
+		vsSaatyOptions[4] = TR("is equally important as");
+		vsSaatyOptions[5] = TR("is moderately less important than");
+		vsSaatyOptions[6] = TR("is strongly less important than");
+		vsSaatyOptions[7] = TR("is very strongly less important than");
+		vsSaatyOptions[8] = TR("is extremely less important than");
 		sComboString = vsSaatyOptions[iOption];
 
 		FieldGroup * fgLeft = new FieldGroup(root);
 		FieldGroup * fgRight = new FieldGroup(root);
 		fgRight->Align(fgLeft, AL_AFTER);
 
-		StaticText * stLabel = new StaticText(fgLeft, SSmcUiCurrentComparison);
+		StaticText * stLabel = new StaticText(fgLeft, TR("Current comparison:"));
 		stLabel->SetIndependentPos();
 		
 		ValueRange vrRange(0, 8);
@@ -727,7 +727,7 @@ public:
 			m_rbComparison.resize(iTotalNrComparisons);
 			m_cbComparison.resize(iTotalNrComparisons);
 			int iCount = 0;
-			RadioGroup* rgComparisons = new RadioGroup(fgRight, SSmcUiComparisons, &iRadioDummy);
+			RadioGroup* rgComparisons = new RadioGroup(fgRight, TR("Comparison Progress:"), &iRadioDummy);
 			for (list <String>::iterator itX = liNames->begin(); itX != liNames->end(); ++itX)
 				for (list <String>::iterator itY = itX; itY != liNames->end(); ++itY)
 					if (itY != itX)
@@ -746,9 +746,9 @@ public:
 					}
 		}
 		else // we'd have too many comparisons (rows) to display
-			new StaticText(fgRight, String(SSmcUiComparison_D_D.scVal(), m_iCurrentComparisonIndex + 1, iTotalNrComparisons));
+			new StaticText(fgRight, String(TR("Comparison %d of %d").c_str(), m_iCurrentComparisonIndex + 1, iTotalNrComparisons));
 
-		PushButton* pbChangeMethod = new PushButton(root, SSmcUiChooseOtherMethod, (NotifyProc)&CompareTwoForm::PushButtonCallBack);
+		PushButton* pbChangeMethod = new PushButton(root, TR("Choose other method"), (NotifyProc)&CompareTwoForm::PushButtonCallBack);
 		pbChangeMethod->SetIndependentPos();
 		pbChangeMethod->Align(fgLeft, AL_UNDER, 10);
 
@@ -969,7 +969,7 @@ public:
 	{
 		vfrNormWeight.resize(liNames->size());
 
-		StaticText* stNormalizedTitle = new StaticText(root, String (SSmcUiResultingNormalized_S.scVal(), sLabel));
+		StaticText* stNormalizedTitle = new StaticText(root, String (TR("Resulting Normalized %S").c_str(), sLabel));
 
 		int i = 0;
 		for (list <String>::iterator it = liNames->begin(); it != liNames->end(); ++it)
@@ -982,12 +982,12 @@ public:
 				vfrNormWeight[i]->Align(stNormalizedTitle, AL_UNDER);
 			++i;
 		}
-		frConsistency = new FieldReal(root, SSmcUiInconsistencyRatio, &rConsistency);
+		frConsistency = new FieldReal(root, TR("Inconsistency ratio:"), &rConsistency);
 		frConsistency->SetCallBack((NotifyProc)&ShowPairwiseComparisonResultsForm::CallBackFunc);
-		stConsistency = new StaticText(root, SSmcUiInconsistencyIndication);
+		stConsistency = new StaticText(root, TR("A value above 0.1 is an indication for inconsistencies in the pairwise comparison"));
 		stConsistency->SetIndependentPos();
 
-		PushButton* pbChangeMethod = new PushButton(root, SSmcUiChooseOtherMethod, (NotifyProc)&ShowPairwiseComparisonResultsForm::PushButtonCallBack);
+		PushButton* pbChangeMethod = new PushButton(root, TR("Choose other method"), (NotifyProc)&ShowPairwiseComparisonResultsForm::PushButtonCallBack);
 
 		SetMenHelpTopic("ilwismen\\smce_window_weigh_pairwise.htm");
 
@@ -1049,7 +1049,7 @@ private:
 };
 
 PairwiseComparisonWizard::PairwiseComparisonWizard(CWnd* wPar, list <String> *liNames, map <pair <String, String>, double> *mapPairwiseEvaluation, map <String, double> * mp, bool* fChangeMethod, Evaluation::eResultType _eResult, String sLabel)
-: CPropertySheet(SSmcUiPairwiseComparison.scVal(), wPar)
+: CPropertySheet(TR("Pairwise Comparison").c_str(), wPar)
 , m_fChangeMethod(fChangeMethod)
 , m_eResult(_eResult)
 {
@@ -1071,14 +1071,14 @@ PairwiseComparisonWizard::PairwiseComparisonWizard(CWnd* wPar, list <String> *li
 		for (list <String>::iterator itY = itX; itY != liNames->end(); ++itY)
 			if (itY != itX)
 			{
-				FormBaseWizardPage *pg = new CompareTwoForm(SSmcUiPairwiseComparison, liNames, mapPairwiseEvaluation, &vfComparisonDone, *itX, *itY, iCurrentComparisonIndex, iTotalNrComparisons, m_fChangeMethod);
+				FormBaseWizardPage *pg = new CompareTwoForm(TR("Pairwise Comparison"), liNames, mapPairwiseEvaluation, &vfComparisonDone, *itX, *itY, iCurrentComparisonIndex, iTotalNrComparisons, m_fChangeMethod);
 				AddPage(pg);
 				pgVectorCompareTwo.push_back(pg);
 				++iCurrentComparisonIndex;
 			}
 			else
 				(*mapPairwiseEvaluation)[pair<String, String>((*itX), (*itX))] = 1; // the matrix diagonal
-	pgShowResults = new ShowPairwiseComparisonResultsForm(SSmcUiPairwCompResults, liNames, mapPairwiseEvaluation, mp, m_fChangeMethod, m_eResult, sLabel);
+	pgShowResults = new ShowPairwiseComparisonResultsForm(TR("Pairwise Comparison - Results"), liNames, mapPairwiseEvaluation, mp, m_fChangeMethod, m_eResult, sLabel);
 	AddPage(pgShowResults);
 }
 
@@ -1367,7 +1367,7 @@ void StringArraySelector::MoveItem(int iOldIndex, int iNewIndex, bool fBelowBott
 		DeleteString(iOldIndex);
 		bool fAddOne = (iOldIndex > iNewIndex) || fBelowBottomItem; // to "correct" the position of the item
 		InsertString((fAddOne?1:0) + iNewIndex, sLabel);
-		lb->SelectString(-1, sLabel.scVal()); // the moved item .. we have to do it like this coz the formula for the index depends on the behavior of the CListBox
+		lb->SelectString(-1, sLabel.c_str()); // the moved item .. we have to do it like this coz the formula for the index depends on the behavior of the CListBox
 		DoCallBack();
 	}
 }
@@ -1499,7 +1499,7 @@ String StringArraySelector::sGetString(int iIndex)
 
 void StringArraySelector::AddString(const String &s)
 {
-	lb->AddString(s.scVal());
+	lb->AddString(s.c_str());
 }
 
 void StringArraySelector::DeleteString(int iIndex)
@@ -1509,7 +1509,7 @@ void StringArraySelector::DeleteString(int iIndex)
 
 void StringArraySelector::InsertString(int iIndex, const String &s)
 {
-	lb->InsertString(min(iIndex, lb->GetCount()), s.scVal());
+	lb->InsertString(min(iIndex, lb->GetCount()), s.c_str());
 }
 
 CWnd* StringArraySelector::pWnd()
@@ -1565,10 +1565,10 @@ String RankOrdering::sDescription()
 	switch (eMethod)
 	{
 	case iEXPECTEDVALUE:
-		return SSmcUiExpVal;
+		return TR("ExpVal");
 		break;
 	case iRANKSUM:
-		return SSmcUiRankSum;
+		return TR("RankSum");
 		break;
 	default:
 		return "";
@@ -1646,8 +1646,8 @@ void RankOrdering::WriteElements(const char* sSection, const ElementContainer& e
 	int i=0;
 	for (map <String, int>::iterator it = mapRankOrdering.begin(); it != mapRankOrdering.end(); ++it)
 	{
-		ObjectInfo::WriteElement(sSection, String("Element%d", i).scVal(), en, (*it).first);
-		ObjectInfo::WriteElement(sSection, String("Value%d", i).scVal(), en, (*it).second);
+		ObjectInfo::WriteElement(sSection, String("Element%d", i).c_str(), en, (*it).first);
+		ObjectInfo::WriteElement(sSection, String("Value%d", i).c_str(), en, (*it).second);
 		++i;
 	}
 	ObjectInfo::WriteElement(sSection, "Method", en, sMethodTypeToString(eMethod));
@@ -1665,8 +1665,8 @@ void RankOrdering::ReadElements(const char* sSection, const ElementContainer& en
 	{
 		String str;
 		int d;
-		ObjectInfo::ReadElement(sSection, String("Element%d", i).scVal(), en, str);
-		ObjectInfo::ReadElement(sSection, String("Value%d", i).scVal(), en, d);
+		ObjectInfo::ReadElement(sSection, String("Element%d", i).c_str(), en, str);
+		ObjectInfo::ReadElement(sSection, String("Value%d", i).c_str(), en, d);
 		mapRankOrdering[str]=d;
 	}
 	String sType;
@@ -1795,7 +1795,7 @@ class RankOrderingForm: public FormWithDest
 {
 public:
   RankOrderingForm(CWnd* wPar, list <String> *liNames, map <String, int> *mapEvaluation, map <String, double> * mp, RankOrdering::eMethodTP * eMethod, bool* fChangeMethod, double* rRankSumPower, Evaluation::eResultType _eResult, String sLabel)
-    : FormWithDest(wPar, SSmcUiRankOrdering)
+    : FormWithDest(wPar, TR("Rank Ordering"))
 		, m_mapEvaluation(mapEvaluation)
 		, m_mp(mp)
 		, m_fChangeMethod(fChangeMethod)
@@ -1806,10 +1806,10 @@ public:
   {
 		vfrWeight.resize(iSize);
 
-		rgMethod = new RadioGroup(root, SSmcUiRankingMethod, (int*)eMethod);
-		new RadioButton(rgMethod, SSmcUiExpectedValue);
-		RadioButton* rbRankSum = new RadioButton(rgMethod, SSmcUiRank_Sum);
-		frPower = new FieldReal(rbRankSum, SSmcUiRank_Sum_Power, rRankSumPower);
+		rgMethod = new RadioGroup(root, TR("Ranking Method"), (int*)eMethod);
+		new RadioButton(rgMethod, TR("Expected Value"));
+		RadioButton* rbRankSum = new RadioButton(rgMethod, TR("Rank Sum"));
+		frPower = new FieldReal(rbRankSum, TR("Rank Sum Power"), rRankSumPower);
 		frPower->SetCallBack((NotifyProc)&RankOrderingForm::CallBackFunc);
 		rgMethod->SetCallBack((NotifyProc)&RankOrderingForm::CallBackFunc);
 		rgMethod->SetIndependentPos();
@@ -1838,7 +1838,7 @@ public:
 		sasLeft->SetCallBack((NotifyProc)&RankOrderingForm::CallBackFunc);
 		sasRight->SetCallBack((NotifyProc)&RankOrderingForm::CallBackFunc);
 
-		StaticText* stWeightsTitle = new StaticText(root, String(SSmcUiResulting_S.scVal(), sLabel));
+		StaticText* stWeightsTitle = new StaticText(root, String(TR("Resulting %S").c_str(), sLabel));
 		stWeightsTitle->Align(sasRight, AL_AFTER);
 		stWeightsTitle->SetIndependentPos();
 
@@ -1854,7 +1854,7 @@ public:
 			++i;
 		}
 
-		PushButton* pbChangeMethod = new PushButton(root, SSmcUiChooseOtherMethod, (NotifyProc)&RankOrderingForm::PushButtonCallBack);
+		PushButton* pbChangeMethod = new PushButton(root, TR("Choose other method"), (NotifyProc)&RankOrderingForm::PushButtonCallBack);
 		pbChangeMethod->Align(sasLeft, AL_UNDER);
 		pbChangeMethod->SetIndependentPos();
 

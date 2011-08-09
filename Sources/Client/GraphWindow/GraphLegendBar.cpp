@@ -108,7 +108,7 @@ void GraphLegendBar::OnPaint()
     dc.MoveTo(0.5 * iX, iY + iHeight / 2);
     dc.LineTo(1.5 * iX, iY + iHeight / 2);
 		String sName = gd->agl[i]->sName();
-		dc.TextOut(2 * iX, iY, sName.scVal());
+		dc.TextOut(2 * iX, iY, sName.c_str());
 
 		dc.SelectObject(&penClr);
 	}

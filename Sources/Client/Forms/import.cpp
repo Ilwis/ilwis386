@@ -276,7 +276,7 @@ void FieldImportFormat::create()
 {
 	FieldOneSelect::create();
 	for (unsigned int i = 0; i < aii.iSize(); ++i)
-		ose->AddString(aii[i].sDescr.scVal());
+		ose->AddString(aii[i].sDescr.c_str());
 	ose->SetCurSel(0);
 }
 
@@ -326,7 +326,7 @@ private:
 };
 
 ImportForm::ImportForm(CWnd* wPar, Importing* Import, String* sNam, String* sCmd, String* sOutput, bool* fShow)
-	: FormWithDest(wPar, SAFTitleImport), 
+	: FormWithDest(wPar, TR("Import")), 
 		imp(Import), sName(sNam), sCommand(sCmd), m_pfShow(fShow), m_fCombine(true), m_fConvert(false), m_fCreatePol(false), m_fUseRadiances(true), m_rGartripHeightOffset(0.0)
 {
 	sObjectName = *sName;
@@ -349,7 +349,7 @@ ImportForm::ImportForm(CWnd* wPar, Importing* Import, String* sNam, String* sCmd
 	fdtl->SetNoSystemDir();
 	fdtl->SetCallBack((NotifyProc)&ImportForm::FileCallBack);
 	fdtl->   SetWidth(250);
-	StaticText* st = new StaticText(root, SAFUiImportFormat);
+	StaticText* st = new StaticText(root, TR("Import &Format"));
 	iOption = 0;
 	fif = new FieldImportFormat(root, &iOption, imp->imp);
 	fif->Align(st, AL_UNDER);
@@ -358,7 +358,7 @@ ImportForm::ImportForm(CWnd* wPar, Importing* Import, String* sNam, String* sCmd
 	fb->Align(fif, AL_UNDER);
 
 	FieldGroup *fgTypes = new FieldGroup(root, true);
-	fdt = new FieldDataTypeCreate(fgTypes, SAFUiOutputFileName, sOutput, "", true);
+	fdt = new FieldDataTypeCreate(fgTypes, TR("&Output Filename"), sOutput, "", true);
 	fdt->SetCallBack((NotifyProc)&ImportForm::OutputFileCallBack);
 	fdt->SetIndependentPos();
 	pbs = new PushButton(fgTypes, "...", (NotifyProc)&ImportForm::BrowseClick);
@@ -368,30 +368,30 @@ ImportForm::ImportForm(CWnd* wPar, Importing* Import, String* sNam, String* sCmd
 	pbs->SetIndependentPos();
 
 	
-	cbShow = new CheckBox(fgTypes, SAFUiShow, &m_fShow);
+	cbShow = new CheckBox(fgTypes, TR("&Show"), &m_fShow);
 	cbShow->Align(pbs, AL_AFTER);
 
 	fgGDAL = new FieldGroup(fgTypes);
 	fgGDAL->Align(fdt, AL_UNDER);
 	
-	cbShow = new CheckBox(fgTypes, SAFUiShow, &m_fShow);
+	cbShow = new CheckBox(fgTypes, TR("&Show"), &m_fShow);
 	cbShow->Align(pbs, AL_AFTER);
-	new CheckBox(fgGDAL, SIERasConvertToILWIS, &m_fConvert);
+	new CheckBox(fgGDAL, TR("Con&vert to ILWIS data format"), &m_fConvert);
 
 
 	fgASTER = new FieldGroup(fgTypes);
 	fgASTER->Align(fdt, AL_UNDER);
 
-	new CheckBox(fgASTER, SAFUiUseRadiances, &m_fUseRadiances);
-	new CheckBox(fgASTER, SIERasConvertToILWIS, &m_fConvert);
+	new CheckBox(fgASTER, TR("Use Radiances (W/m2/sr/um)"), &m_fUseRadiances);
+	new CheckBox(fgASTER, TR("Con&vert to ILWIS data format"), &m_fConvert);
 
 	fgE00 = new FieldGroup(fgTypes);
 	fgE00->Align(fdt, AL_UNDER);
-	new CheckBox(fgE00, SAFUiCreatePolygonMapOpt, &m_fCreatePol);
+	new CheckBox(fgE00, TR("Optionally Create Polygon Map"), &m_fCreatePol);
 
 	fgGartrip = new FieldGroup(fgTypes);
 	fgGartrip->Align(fdt, AL_UNDER);
-	FieldReal* frGartripOffset = new FieldReal(fgGartrip, SAFUiHeightOffset, &m_rGartripHeightOffset);
+	FieldReal* frGartripOffset = new FieldReal(fgGartrip, TR("Height Offset"), &m_rGartripHeightOffset);
 	frGartripOffset->SetIndependentPos();
 
 	String s('x', 60);
@@ -413,7 +413,7 @@ int ImportForm::BrowseClick(Event*)
 		sPath = IlwWinApp()->sGetCurDir();
 	if (sPath[sPath.length() - 1] == '\\')
 		sPath = sPath.sLeft(sPath.length() - 1);  // remove trailing backslash
-	sb.SetInitialSelection(sPath.scVal());
+	sb.SetInitialSelection(sPath.c_str());
 	if (sb.SelectFolder())
 	{
 		CString sBrowse = sb.GetSelectedFolder();
@@ -436,7 +436,7 @@ int ImportForm::CallBack(Event*)
 			// menu options import|map (that is the simple "import" command
 			// if there was a previous import format select it
 			if (sLastImport.length() > 0)
-				iOption = fif->ose->SelectString(0, sLastImport.scVal());
+				iOption = fif->ose->SelectString(0, sLastImport.c_str());
 			else
 				iOption = 0;
 		}
@@ -453,7 +453,7 @@ int ImportForm::CallBack(Event*)
 			if (i < imp->imp.size())  // found the item
 			{
 				String sDescr = imp->imp[i].sDescr.sLeft(imp->imp[i].sDescr.length() - 5);
-				iOption = fif->ose->SelectString(0, sDescr.scVal()); // import submenu options (general raster)
+				iOption = fif->ose->SelectString(0, sDescr.c_str()); // import submenu options (general raster)
 			}
 		}
 	}
@@ -520,10 +520,10 @@ int ImportForm::OutputFileCallBack(Event*)
 		EnableOK();
 		Directory dir(fnOutput);
 		if (fnOutput.fExist())
-			stRemark->SetVal(SAFMsgAlreadyExists);
+			stRemark->SetVal(TR("File already exists"));
 		else if (dir.fReadOnly())
 		{
-			stRemark->SetVal(SAFRemDirectoryReadOnly);
+			stRemark->SetVal(TR("Cannot write output, directory is read/only"));
 			DisableOK();
 		}
 		else

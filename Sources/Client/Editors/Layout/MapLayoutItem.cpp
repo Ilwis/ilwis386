@@ -93,9 +93,9 @@ class MapLayoutItemSetScaleForm : public FormWithDest
 {
 public:
   MapLayoutItemSetScaleForm(CWnd* wnd, double* rScale) 
-		: FormWithDest(wnd, SLOTitleSetScale)
+		: FormWithDest(wnd, TR("Set Scale"))
   {
-			new FieldReal(root, SLOUiScale_1, rScale, ValueRange(0,1e9));
+			new FieldReal(root, TR("&Scale 1:      "), rScale, ValueRange(0,1e9));
 //      SetMenHelpTopic(htpCnfAnnMap);
       create();
   }
@@ -444,7 +444,7 @@ void MapLayoutItem::ReadElements(ElementContainer& en, const char* sSection)
 	fnMapView = sMapView;
 	String sOldDir = IlwWinApp()->sGetCurDir();
 	IlwWinApp()->SetCurDir(fnMapView.sPath());
-	mcd()->OnOpenDocument(sMapView.scVal());
+	mcd()->OnOpenDocument(sMapView.c_str());
 	IlwWinApp()->SetCurDir(sOldDir);
 	if (m_rScale <= 0)
 		InitScale();
@@ -479,9 +479,9 @@ const MapCompositionDoc* MapLayoutItem::mcd()	const
 String MapLayoutItem::sName() const
 {
 	if (0 == mcsi)
-		return SLONameMapView;
+		return TR("Map View");
 	else
-		return String(SLONameMapView_S.scVal(), fnMapView.sFile);
+		return String(TR("Map View %S").c_str(), fnMapView.sFile);
 }
 
 void MapLayoutItem::InitMetafile()
@@ -776,7 +776,7 @@ bool MapLayoutItem::fConfigure()
 	if (!fCreatedLayerTreeBar) {
 		fCreatedLayerTreeBar = true;
   	ltb.Create(fw, 124, CSize(150,200));
-    ltb.SetWindowText(SMWTitleLayerManagement.scVal());
+    ltb.SetWindowText(TR("Layer Management").c_str());
   	ltb.EnableDocking(CBRS_ALIGN_LEFT|CBRS_ALIGN_RIGHT);
     ltb.view = new LayerTreeView;
   	ltb.view->Create(NULL, NULL, AFX_WS_DEFAULT_VIEW|TVS_HASLINES|TVS_LINESATROOT|TVS_HASBUTTONS,
@@ -797,7 +797,7 @@ void MapLayoutItem::OnRedraw()
 	ld->UpdateAllViews(0, LayoutDoc::hintITEM, this);
 }
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define pmadd(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 
 void MapLayoutItem::OnContextMenu(CWnd* wnd, CPoint pt) 
@@ -951,11 +951,11 @@ class MapLayoutItemMapViewForm : public FormWithDest
 {
 public:
   MapLayoutItemMapViewForm(CWnd* wnd, String* sName) 
-		: FormWithDest(wnd, SLOTitleReplaceMapView),
+		: FormWithDest(wnd, TR("Replace Map View")),
 		  sN(sName),
 			fldView(NULL)
   {
-		fldView = new FieldView(root, SLOUiMapView, sName);
+		fldView = new FieldView(root, TR("&Map View"), sName);
 		fldView->SetCallBack((NotifyProc)&MapLayoutItemMapViewForm::iCallBackLegaleChoice);
 		SetMenHelpTopic("ilwismen\\layout_editor_replace_map_view.htm");
 		create();
@@ -988,7 +988,7 @@ void MapLayoutItem::OnItemReplaceMapView()
 		sName = sName.sUnQuote();
 		if (sName != fnMapView.sFullName()) {
 			fnMapView = sName;
-			mcd()->OnOpenDocument(sName.scVal());
+			mcd()->OnOpenDocument(sName.c_str());
 			Init();			 
 			OnSetScale();
 			mcd()->UpdateAllViews(0);

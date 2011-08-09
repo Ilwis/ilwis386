@@ -146,7 +146,7 @@ void InPlaceNameEdit::SendEndLabelNotify()
 	dispinfo.item.iItem = m_iItem;
 	dispinfo.item.lParam = m_iItem;
 	dispinfo.item.iSubItem = m_iSubItem;
-	dispinfo.item.pszText = LPTSTR(str.scVal());
+	dispinfo.item.pszText = LPTSTR(str.c_str());
 	dispinfo.item.cchTextMax = str.length();
 
 	GetParent()->GetParent()->SendMessage( WM_NOTIFY, GetParent()->GetDlgCtrlID(), (LPARAM)&dispinfo);

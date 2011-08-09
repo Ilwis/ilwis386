@@ -219,23 +219,23 @@ void ExtendedSymbol::Read(const char* sSection, const char* sPrefix, const FileN
 	String sSymbolChar("%s SymbolChar", sPrefix);
 	String sRotation("%s Rotation", sPrefix);
 
-  ObjectInfo::ReadElement(sSection, sSize.scVal(), filename, iSize);
-  ObjectInfo::ReadElement(sSection, sColor.scVal(), filename, col);
+  ObjectInfo::ReadElement(sSection, sSize.c_str(), filename, iSize);
+  ObjectInfo::ReadElement(sSection, sColor.c_str(), filename, col);
 	String sType;
-  ObjectInfo::ReadElement(sSection, sSymbolType.scVal(), filename, sType);
+  ObjectInfo::ReadElement(sSection, sSymbolType.c_str(), filename, sType);
 	if ("Simple" == sType) {
 		smType = smSIMPLE;
 		int iSmb;
-		ObjectInfo::ReadElement(sSection, sSymbol.scVal(), filename, iSmb);
+		ObjectInfo::ReadElement(sSection, sSymbol.c_str(), filename, iSmb);
     smb = (SymbolType)iSmb;
-    ObjectInfo::ReadElement(sSection, sFillColor.scVal(), filename, fillCol);
-    ObjectInfo::ReadElement(sSection, sWidth.scVal(), filename, iWidth);
+    ObjectInfo::ReadElement(sSection, sFillColor.c_str(), filename, fillCol);
+    ObjectInfo::ReadElement(sSection, sWidth.c_str(), filename, iWidth);
 	}
 	else {
 		smType = smFONT;
-    ObjectInfo::ReadElement(sSection, sSymbolFont.scVal(), filename, sFaceName);
+    ObjectInfo::ReadElement(sSection, sSymbolFont.c_str(), filename, sFaceName);
 		int iSmb;
-		ObjectInfo::ReadElement(sSection, sSymbolChar.scVal(), filename, iSmb);
+		ObjectInfo::ReadElement(sSection, sSymbolChar.c_str(), filename, iSmb);
     cSmb = iSmb;
 	}
 }
@@ -252,23 +252,23 @@ void ExtendedSymbol::Write(const char* sSection, const char* sPrefix, const File
 	String sSymbolChar("%s SymbolChar", sPrefix);
 	String sRotation("%s Rotation", sPrefix);
 
-  ObjectInfo::WriteElement(sSection, sSize.scVal(), filename, (long)iSize);
-  ObjectInfo::WriteElement(sSection, sColor.scVal(), filename, col);
+  ObjectInfo::WriteElement(sSection, sSize.c_str(), filename, (long)iSize);
+  ObjectInfo::WriteElement(sSection, sColor.c_str(), filename, col);
   switch (smType) 
 	{
     case smSIMPLE:
-      ObjectInfo::WriteElement(sSection, sSymbolType.scVal(), filename, "Simple");
-      ObjectInfo::WriteElement(sSection, sSymbol.scVal(), filename, (long)smb);
-      ObjectInfo::WriteElement(sSection, sWidth.scVal(), filename, (long)iWidth);
-      ObjectInfo::WriteElement(sSection, sFillColor.scVal(), filename, fillCol);
+      ObjectInfo::WriteElement(sSection, sSymbolType.c_str(), filename, "Simple");
+      ObjectInfo::WriteElement(sSection, sSymbol.c_str(), filename, (long)smb);
+      ObjectInfo::WriteElement(sSection, sWidth.c_str(), filename, (long)iWidth);
+      ObjectInfo::WriteElement(sSection, sFillColor.c_str(), filename, fillCol);
       break;
     case smFONT:
-      ObjectInfo::WriteElement(sSection, sSymbolType.scVal(), filename, "Font");
-      ObjectInfo::WriteElement(sSection, sSymbolFont.scVal(), filename, sFaceName);
-      ObjectInfo::WriteElement(sSection, sSymbolChar.scVal(), filename, (long)cSmb);
+      ObjectInfo::WriteElement(sSection, sSymbolType.c_str(), filename, "Font");
+      ObjectInfo::WriteElement(sSection, sSymbolFont.c_str(), filename, sFaceName);
+      ObjectInfo::WriteElement(sSection, sSymbolChar.c_str(), filename, (long)cSmb);
       break;  
   }
-  ObjectInfo::WriteElement(sSection, sRotation.scVal(), filename, rRotation);
+  ObjectInfo::WriteElement(sSection, sRotation.c_str(), filename, rRotation);
 }
 
 void ExtendedSymbol::WriteLayer(MapView& view, const char* sSection) const
@@ -463,7 +463,7 @@ void ExtendedSymbol::drawSmb(CDC* cdc, HPALETTE hPal, zPoint pnt)
 			CFont fnt;
 			fnt.CreateFont(iPixSize, 0, iOrientation, iOrientation, FW_NORMAL, 0, 0, 0,  
                  SYMBOL_CHARSET, OUT_TT_PRECIS , CLIP_DEFAULT_PRECIS,
-								 DEFAULT_QUALITY, FF_DONTCARE, sFaceName.scVal());   
+								 DEFAULT_QUALITY, FF_DONTCARE, sFaceName.c_str());   
 
 //      zFont fnt(sFaceName, zDimension(0,iPixSize), FW_NORMAL,
 //                ffDontCare, (zFntPitch)0x04, 0, iOrientation, iOrientation,
@@ -553,7 +553,7 @@ int CALLBACK AddFont(const LOGFONT* lplf, const TEXTMETRIC* lptm,
     return 1;
   OneSelectEdit* ose = (OneSelectEdit*) lp;
   String str("%s.ttfont", lf->lfFaceName);
-  ose->AddString(str.scVal());
+  ose->AddString(str.c_str());
   return 1;
 }                               
 
@@ -563,8 +563,8 @@ void FieldSymbolTypeSimple::create()
   HDC hdc = ::GetDC(NULL);
   ::EnumFontFamilies(hdc, NULL, &AddFont, (LPARAM)ose);
   ::ReleaseDC(NULL, hdc);
-  idSimple = ose->AddString(SSMTypSimple.scVal());
-  ose->SelectString( -1, sInitFont.scVal());
+  idSimple = ose->AddString(TR("Simple").c_str());
+  ose->SelectString( -1, sInitFont.c_str());
 }
 
 FieldSimpleSymbolSimple::FieldSimpleSymbolSimple(FormEntry* parent, long* smb)
@@ -576,21 +576,21 @@ void FieldSimpleSymbolSimple::create()
 {
   FieldOneSelect::create();
   int i = 0;
-  ose->AddString(SSMSmbCircle.scVal());
+  ose->AddString(TR("Circle").c_str());
   SendMessage(*ose,CB_SETITEMDATA,i++,(long)smbCircle);
-  ose->AddString(SSMSmbSquare.scVal());
+  ose->AddString(TR("Square").c_str());
   SendMessage(*ose,CB_SETITEMDATA,i++,(long)smbSquare);
-  ose->AddString(SSMSmbDiamond.scVal());
+  ose->AddString(TR("Diamond").c_str());
   SendMessage(*ose,CB_SETITEMDATA,i++,(long)smbDiamond);
-  ose->AddString(SSMSmbDeltaUp.scVal());
+  ose->AddString(TR("Delta Up").c_str());
   SendMessage(*ose,CB_SETITEMDATA,i++,(long)smbDeltaUp);
-  ose->AddString(SSMSmbDeltaDown.scVal());
+  ose->AddString(TR("Delta Down").c_str());
   SendMessage(*ose,CB_SETITEMDATA,i++,(long)smbDeltaDown);
-  ose->AddString(SSMSmbPlus.scVal());
+  ose->AddString(TR("Plus").c_str());
   SendMessage(*ose,CB_SETITEMDATA,i++,(long)smbPlus);
-  ose->AddString(SSMSmbMinus.scVal());
+  ose->AddString(TR("Minus").c_str());
   SendMessage(*ose,CB_SETITEMDATA,i++,(long)smbMinus);
-  ose->AddString(SSMSmbCross.scVal());
+  ose->AddString(TR("Cross").c_str());
   SendMessage(*ose,CB_SETITEMDATA,i++,(long)smbCross);
   ose->SetCurSel((int)*val);
 }
@@ -740,12 +740,12 @@ FieldExtendedSymbol::FieldExtendedSymbol(FormEntry* parent,
   : FieldGroup(parent), smb(symbol), ffc(0)
 {
   FormEntry *feFirst, *st, *fe;
-  feFirst = st = new StaticTextSimple(this,SSMUiSymbolType);
+  feFirst = st = new StaticTextSimple(this,TR("Symbol &Type"));
   feFirst->psn->SetBound(0,10,0,10);
   iType = 0;
   String sType;
   if (smb.smType == ExtendedSymbol::smSIMPLE)
-    sType = SSMTypSimple;
+    sType = TR("Simple");
   else  
     sType = smb.sFaceName;
   fsts = new FieldSymbolTypeSimple(this, &iType, sType);
@@ -754,25 +754,25 @@ FieldExtendedSymbol::FieldExtendedSymbol(FormEntry* parent,
     
   fgSimple = new FieldGroup(this);
   fgSimple->Align(feFirst, AL_UNDER);
-  st = new StaticTextSimple(fgSimple, SSMUiSymbol);
+  st = new StaticTextSimple(fgSimple, TR("&Symbol"));
   st->psn->SetBound(0,10,0,10);
   fsss = new FieldSimpleSymbolSimple(fgSimple, (long*)&smb.smb);
   fsss->SetCallBack((NotifyProc)&FieldExtendedSymbol::FieldSymbolCallBack, this);
   fsss->Align(st, AL_AFTER);
   if (fAskSize) {
-    fe = new FieldInt(fgSimple, SSMUiSize, &smb.iSize, ValueRangeInt(1L,250L));
+    fe = new FieldInt(fgSimple, TR("&Size"), &smb.iSize, ValueRangeInt(1L,250L));
     fe->Align(st, AL_UNDER);
-    ffc = new FieldFillColor(fgSimple, SSMUiFillColor, &smb.fillCol);
+    ffc = new FieldFillColor(fgSimple, TR("Fill Color"), &smb.fillCol);
   }
   else {
-    ffc = new FieldFillColor(fgSimple, SSMUiFillColor, &smb.fillCol);
+    ffc = new FieldFillColor(fgSimple, TR("Fill Color"), &smb.fillCol);
     ffc->Align(st, AL_UNDER);
   }
   if (smb.iWidth < 1)
     smb.iWidth = 1;
-  new FieldInt(fgSimple, SSMUiLineWidth, &smb.iWidth, ValueRangeInt(1L,100L));
+  new FieldInt(fgSimple, TR("&Line Width"), &smb.iWidth, ValueRangeInt(1L,100L));
   if (fAskColor)
-    new FieldColor(fgSimple, SSMUiColor, &smb.col);
+    new FieldColor(fgSimple, TR("&Color"), &smb.col);
   
   fgFont = new FieldGroup(this);    
   fgFont->Align(feFirst, AL_UNDER);
@@ -781,17 +781,17 @@ FieldExtendedSymbol::FieldExtendedSymbol(FormEntry* parent,
   ffss->SetIndependentPos();
   ffss->psn->SetBound(0,5,0,10);
   if (fAskSize) {
-    fe = new FieldInt(fgFont, SSMUiSize, &smb.iSize, ValueRangeInt(1L,250L));
+    fe = new FieldInt(fgFont, TR("&Size"), &smb.iSize, ValueRangeInt(1L,250L));
     fe->Align(ffss, AL_UNDER);
     if (fAskColor)
-      new FieldColor(fgFont, SSMUiColor, &smb.col);
+      new FieldColor(fgFont, TR("&Color"), &smb.col);
   }
   else if (fAskColor)
   {
-    fe = new FieldColor(fgFont, SSMUiColor, &smb.col);
+    fe = new FieldColor(fgFont, TR("&Color"), &smb.col);
     fe->Align(ffss, AL_UNDER);
   }
-  new FieldReal(fgFont, SSMUiRotation, &smb.rRotation, ValueRange(-360, 360, 0.1));
+  new FieldReal(fgFont, TR("&Rotation"), &smb.rRotation, ValueRange(-360, 360, 0.1));
 }
 
 int FieldExtendedSymbol::TypeChanged(void *)

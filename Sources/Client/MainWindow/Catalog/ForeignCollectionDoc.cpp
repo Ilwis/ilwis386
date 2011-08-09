@@ -82,9 +82,9 @@ BOOL ForeignCollectionDoc::OnOpenDocument(LPCTSTR lpszPathName)
 		IlwisSettings settings(String("%S\\%S", MainWindow::sBaseRegKey(), sRegID));
 		sPath = settings.sValue("DocName");
 	}
-	SetPathName(sPath.scVal());
+	SetPathName(sPath.c_str());
 
-	if (!IlwisDocument::OnOpenDocument(sPath.scVal()))
+	if (!IlwisDocument::OnOpenDocument(sPath.c_str()))
 		return FALSE;
 
 	FileName fn(sPath);
@@ -110,14 +110,14 @@ BOOL ForeignCollectionDoc::OnOpenDocument(LPCTSTR lpszPathName, ParmList& pm)
 	}
 
 	if ( dirOut.fReadOnly() )
-		throw ErrorObject(String(SMSErrorReadOnlyLocation_S.scVal(), dirOut.sPath()));
+		throw ErrorObject(String(TR("Target location, %S,  is Read-Only").c_str(), dirOut.sPath()));
 	
 	if (IlwisObject::iotObjectType(fnFile) == IlwisObject::iotOBJECTCOLLECTION)
 	{
 		if (!IlwisDocument::OnOpenDocument(lpszPathName))
 			return FALSE;
 
-		SetPathName(fnFile.sPath().scVal());		
+		SetPathName(fnFile.sPath().c_str());		
 		oc = ForeignCollection(fnFile);
 	}
 	else
@@ -126,7 +126,7 @@ BOOL ForeignCollectionDoc::OnOpenDocument(LPCTSTR lpszPathName, ParmList& pm)
 		if ( dirOut.fValid())
 			fnIOC.Dir(dirOut.sFullPath());
 		ForeignCollection fc;
-		SetPathName(fnFile.sPath().scVal());				
+		SetPathName(fnFile.sPath().c_str());				
 		if ( ForeignCollection::fForeignFileTimeChanged(fnFile, fnIOC)) 
 		{
 			SetCollectionPath(fnIOC, pm, "import"); // will do nothing if not present
@@ -139,7 +139,7 @@ BOOL ForeignCollectionDoc::OnOpenDocument(LPCTSTR lpszPathName, ParmList& pm)
 			oc = ForeignCollection(fnIOC);
 
 		String sTN = oc->sTypeName();
-		SetTitle(sTN.scVal());		
+		SetTitle(sTN.c_str());		
 	}
 	// If no show is on, dont open this collection and destroy the related ObjectCollection
 	if (pm.fExist("noshow") || !oc.fValid() || oc->fErase)
@@ -168,7 +168,7 @@ void ForeignCollectionDoc::SetCollectionPath(FileName& fnIOC, ParmList& pm, cons
 					sF = sF + fnIOC.sFileExt();
 				fnIOC = FileName(sF);
 			}
-			SetPathName(fnIOC.sPath().scVal());							
+			SetPathName(fnIOC.sPath().c_str());							
 		}
 	}	
 }

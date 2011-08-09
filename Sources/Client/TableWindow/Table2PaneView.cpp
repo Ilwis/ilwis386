@@ -204,7 +204,7 @@ String Table2PaneView::sField(int iCol, long iRow) const
 String Table2PaneView::sDescrULButton() const // upper left button
 {
 	return "";
-  //return STBRemRecView;
+  //return TR("Switch to record view: display the table record by record");
 }
 
 String Table2PaneView::sDescrColButton(int iCol) const
@@ -297,7 +297,7 @@ bool Table2PaneView::fAllowPaste() const
   return !GetDocument()->table2()->fReadOnly() && fValidSelection();
 }
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define add(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 #define addBreak men.AppendMenu(MF_SEPARATOR);
 
@@ -329,9 +329,9 @@ class EditFieldForm: public FormWithDest
 {
 public:
   EditFieldForm(CWnd* parent, const DomainValueRangeStruct& dvrs, String& sVal)
-  : FormWithDest(parent, STBTitleEditFields)
+  : FormWithDest(parent, TR("Edit selected field(s)"))
   {
-    new FieldVal(root, STBUINewValue.scVal(), dvrs, &sVal);
+    new FieldVal(root, TR("&New value").c_str(), dvrs, &sVal);
   	new FieldBlank(root);
 //		setHelpItem("ilwismen\table_window_edit_single_column.htm");
     create();
@@ -377,7 +377,7 @@ void Table2PaneView::OnEditClear()
   iMaxCol = min(iMaxCol, td->table2()->iMatrixCols()-1);
   if (iMinCol > iMaxCol)
     return;
-  int iRet = MessageBox(STBMsgClearSelFields.sVal(), STBMsgClearFields.sVal(),
+  int iRet = MessageBox(TR("Clear selected fields").c_str(), TR("Clear Fields").c_str(),
 	    MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2);
   if (IDYES == iRet) {
 		CWaitCursor cur;

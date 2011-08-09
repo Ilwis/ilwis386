@@ -82,22 +82,22 @@
 #include "Client\FormElements\objlist.h"
 
 FormCreateAnnotationText::FormCreateAnnotationText(CWnd* wPar, String* satx, double rWorkScale, const String& sDfltMap)
-  : FormWithDest(wPar, SMSTitleCreateAnnText), 
+  : FormWithDest(wPar, TR("Create Annotation Text")), 
 	sAtx(satx), rScale(rWorkScale), sMap(sDfltMap)
 {
 	iImg = IlwWinApp()->iImage(".atx");
 
   if (sAtx)
     sNewName = *sAtx;
-  fdc = new FieldDataTypeCreate(root, SMSUiAtxName, &sNewName, ".atx", false);
+  fdc = new FieldDataTypeCreate(root, TR("&AnnText Name"), &sNewName, ".atx", false);
   fdc->SetCallBack((NotifyProc)&FormCreateAnnotationText::CallBackName);
-  StaticText* st = new StaticText(root, SMSUiDescription);
+  StaticText* st = new StaticText(root, TR("&Description:"));
   st->psn->SetBound(0,0,0,0);
   FieldString* fs = new FieldString(root, "", &sDescr);
   fs->SetWidth(120);
   fs->SetIndependentPos();
   fBasedOnMap = true;
-  CheckBox* cb = new CheckBox(root, SMSUiBasedOnMap, &fBasedOnMap);
+  CheckBox* cb = new CheckBox(root, TR("&Based on Map"), &fBasedOnMap);
   FieldGroup* fg = new FieldGroup(cb);
   fdt = new FieldDataType(fg, "", &sMap, new MapListerDomainType(".mpp.mps.mpa",dmCLASS|dmIDENT|dmVALUE|dmSTRING,true),true);
 //  fdt = new FieldDataType(fg, "", &sMap, ".mpp.mps.mpa", true);
@@ -107,11 +107,11 @@ FormCreateAnnotationText::FormCreateAnnotationText(CWnd* wPar, String* satx, dou
   rg = new RadioGroup(fg, "", &iCodeName, true);
   rg->Align(cb, AL_UNDER);
   rg->SetIndependentPos();
-  new RadioButton(rg, SMSUiCode);
-  new RadioButton(rg, SMSUiName);
-  new RadioButton(rg, SMSUiBoth);
+  new RadioButton(rg, TR("&Code"));
+  new RadioButton(rg, TR("&Name"));
+  new RadioButton(rg, TR("&Both"));
 
-  FieldReal* fr = new FieldReal(root, SEDUiWorkingScale, &rScale, ValueRange(1,1e12,1));
+  FieldReal* fr = new FieldReal(root, TR("Working &Scale 1:"), &rScale, ValueRange(1,1e12,1));
   fr->Align(rg, AL_UNDER);
 
   String sFill('*', 40);
@@ -128,9 +128,9 @@ int FormCreateAnnotationText::CallBackName(Event *)
   FileName fn(sNewName, ".atx");
   bool fOk = false;
   if (!fn.fValid())
-    stRemark->SetVal(SMSRemNotAValidName);
+    stRemark->SetVal(TR("Not a valid name"));
   else if(File::fExist(fn))   
-    stRemark->SetVal(SMSRemObjectAlreadyExists);
+    stRemark->SetVal(TR("Object already exists"));
   else {
     fOk = true;  
     stRemark->SetVal("");

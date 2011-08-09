@@ -45,7 +45,7 @@
 #include "Headers\Hs\Appforms.hs"
 
 FormAggregateValueSingle::FormAggregateValueSingle(CWnd *parent, const String& sCmd) :
-	FormBaseDialog(parent, SAFTitleAggrValueS, true, false, true)
+	FormBaseDialog(parent, TR("Aggregate Values"), true, false, true)
 {
 	int iImg = IlwWinApp()->iImage("Calculationsingle");
 	HICON hIco = IlwWinApp()->ilSmall.ExtractIcon(iImg);
@@ -58,9 +58,9 @@ FormAggregateValueSingle::FormAggregateValueSingle(CWnd *parent, const String& s
 
 void FormAggregateValueSingle::create()
 {
-	fmInput = new FieldMap(root, SAFUiRasMap, &sOutMap);
-	fldCol = new FieldColumnWithNone(root, SAFUiAttributeColumns, Table(), &sAttributeColumn, dmVALUE);	
-	favf = new FieldAggregateValueFunc(root, SAFUiOperation, &sOperation);
+	fmInput = new FieldMap(root, TR("&Raster Map"), &sOutMap);
+	fldCol = new FieldColumnWithNone(root, TR("&Attribute column"), Table(), &sAttributeColumn, dmVALUE);	
+	favf = new FieldAggregateValueFunc(root, TR("&Operation"), &sOperation);
 	favf->SetCallBack((NotifyProc)(&FormAggregateValueSingle::HandleOperationChanges));
 	fmInput->SetCallBack((NotifyProc)&FormAggregateValueSingle::HandleInputMapChanges);
 	SetAdditionalBlock(root, favf, false);

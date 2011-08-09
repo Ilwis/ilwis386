@@ -92,15 +92,15 @@ void GeoRefSubmapView::FillDerivedFields(FieldGroup* fgGenerRoot)
 	m_rcOffset.Row++;
 	m_rcOffset.Col++;
 
-	String sGRSize(SGRRemLinesCols_ii.c_str(), m_rcSize.Row, m_rcSize.Col);
+	String sGRSize(TR("%li lines and %li columns").c_str(), m_rcSize.Row, m_rcSize.Col);
 	SetSizeString(sGRSize);
-	String sPixSize(SGRRemPixSize_f.c_str(), m_rParentPixSize);
+	String sPixSize(TR("Pixel Size = %.3f m").c_str(), m_rParentPixSize);
 	SetPixelSizeString(sPixSize);
 
 	// Disabled editable Offset and Size fields for now; show R/O only
 	if (1) // GetDocument()->gr()->fReadOnly())
 	{
-		sGRSize = String(SGRInfStartRowCol_ii.c_str(), m_rcOffset.Row, m_rcOffset.Col);
+		sGRSize = String(TR("First Row, Col: %li, %li").c_str(), m_rcOffset.Row, m_rcOffset.Col);
 		StaticText* stSize2 = new StaticText(fgGenerRoot, sGRSize);
 		stSize2->SetIndependentPos();
 		stSize2->psn->SetBound(0, 0, 0, 0);
@@ -108,15 +108,15 @@ void GeoRefSubmapView::FillDerivedFields(FieldGroup* fgGenerRoot)
 	else 
 	{
 		FieldGroup* fgOffset = new FieldGroup(fgGenerRoot);
-		fiRow = new FieldInt(fgOffset, SAFUiFirstLine, &m_rcOffset.Row);
-		fiCol = new FieldInt(fgOffset, SAFUiFirstCol, &m_rcOffset.Col);
+		fiRow = new FieldInt(fgOffset, TR("&First Line"), &m_rcOffset.Row);
+		fiCol = new FieldInt(fgOffset, TR("F&irst Column"), &m_rcOffset.Col);
 		fiRow->SetCallBack((NotifyProc)&GeoRefSubmapView::CheckWithSize);
 		fiCol->SetCallBack((NotifyProc)&GeoRefSubmapView::CheckWithSize);
 
 		FieldGroup* fgGrSize = new FieldGroup(fgGenerRoot);
 		fgGrSize->Align(fgOffset, AL_UNDER);
-		fiWidth = new FieldInt(fgGrSize, SAFUiNrLines, &m_rcSize.Row);
-		fiHeight = new FieldInt(fgGrSize, SAFUiNrCols, &m_rcSize.Col);
+		fiWidth = new FieldInt(fgGrSize, TR("&Number of Lines"), &m_rcSize.Row);
+		fiHeight = new FieldInt(fgGrSize, TR("N&umber of Columns"), &m_rcSize.Col);
 		fiWidth->SetCallBack((NotifyProc)&GeoRefSubmapView::CheckWithSize);
 		fiHeight->SetCallBack((NotifyProc)&GeoRefSubmapView::CheckWithSize);
 	}
@@ -154,9 +154,9 @@ int GeoRefSubmapView::CheckWithSize(Event*)
 {
 	root->StoreData();
 
-	String sGRSize(SGRRemLinesCols_ii.c_str(), m_rcSize.Row, m_rcSize.Col);
+	String sGRSize(TR("%li lines and %li columns").c_str(), m_rcSize.Row, m_rcSize.Col);
 	SetSizeString(sGRSize);
-	String sPixSize(SGRRemPixSize_f.c_str(), m_rParentPixSize);
+	String sPixSize(TR("Pixel Size = %.3f m").c_str(), m_rParentPixSize);
 	stPixelSize->SetVal(sPixSize);
 
 	return 0;

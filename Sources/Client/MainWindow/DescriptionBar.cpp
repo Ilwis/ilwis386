@@ -83,7 +83,7 @@ BOOL DescEdit::Create(CWnd *parent, CDocument* doc)
 		                        rct, parent, DESCRIPTION_ED_ID);
 	doc->AddView(this);
 	CEdit& ed = GetEditCtrl();
-	ed.SetWindowText(s.scVal());
+	ed.SetWindowText(s.c_str());
 	ed.SetReadOnly(ilwdoc->fReadOnly());
 
 	return iRet;
@@ -123,7 +123,7 @@ void DescEdit::OnUpdateDescriptionEdit()
 
 	if (String(s) != str)
 		if (!doc->fDelaySaveDoc() && !doc->IsModified())
-			SetWindowText(s.scVal());
+			SetWindowText(s.c_str());
 	ed.SetReadOnly(doc->fReadOnly());
 }
 
@@ -172,14 +172,14 @@ BOOL DescriptionBar::Create(CFrameWnd* fw, CDocument* doc)
 	descEdit->Create(this, doc);
 	descEdit->SetFont(fnt);
 
-	stText.Create(SDUiTitleDescription.c_str(), WS_VISIBLE | WS_CHILD, CRect(2, 2, 2, 2), this);
+	stText.Create(TR("Description").c_str(), WS_VISIBLE | WS_CHILD, CRect(2, 2, 2, 2), this);
 	stText.SetFont(fnt);
 
 	// Calculate the REAL size of the string length
   CDC pdc;
   pdc.CreateCompatibleDC(0);
 	CFont* fntOld = pdc.SelectObject(fnt);
-	CSize sz = pdc.GetTextExtent(SDUiTitleDescription.c_str());
+	CSize sz = pdc.GetTextExtent(TR("Description").c_str());
 	pdc.SelectObject(fntOld);
 	m_csLabelSize = sz;
 
@@ -187,7 +187,7 @@ BOOL DescriptionBar::Create(CFrameWnd* fw, CDocument* doc)
 	iHeight = m_csLabelSize.cy + 10;
 
 	// caption during floating
-	SetWindowText(SDUiTitleDescription.c_str());
+	SetWindowText(TR("Description").c_str());
 
 	return TRUE;
 }

@@ -608,7 +608,7 @@ void FrameWindow::OnRelatedTopics()
 	//HH_AKLINK link;
 	//link.cbStruct =     sizeof(HH_AKLINK);
 	//link.fReserved =    FALSE;
-	//link.pszKeywords =  sHelpKeywords.scVal(); 
+	//link.pszKeywords =  sHelpKeywords.c_str(); 
 	//link.pszUrl =       NULL; 
 	//link.pszMsgText =   NULL; 
 	//link.pszMsgTitle =  NULL; 
@@ -625,7 +625,7 @@ void FrameWindow::OnIlwisObjects()
 	IlwWinApp()->showHelp(help);
 }
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define add(ID) menPopup.AppendMenu(MF_STRING, ID, sMen(ID)); 
 #define addBreak menPopup.AppendMenu(MF_SEPARATOR);
 

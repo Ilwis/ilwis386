@@ -152,7 +152,7 @@ void FieldVal::Fill()
   for (i = 1; i <= ds->iNettoSize(); ++i) {
     long iKey = ds->iKey(i);
     String s = ds->sValueByRaw(iKey,0);
-    fos->ose->AddString(s.scVal());
+    fos->ose->AddString(s.c_str());
     fos->ose->SetItemData(i-1, iKey);
   }
   if (fEditor) {
@@ -161,7 +161,7 @@ void FieldVal::Fill()
     fos->ose->AddString(sNEW);
     fos->ose->SetItemData(i, iUNDEF);
   }  
-  fos->ose->SelectString(-1, (*sVal).scVal());
+  fos->ose->SelectString(-1, (*sVal).c_str());
 }
 
 void FieldVal::create()
@@ -185,12 +185,12 @@ int FieldVal::NewDomainItem(Event*)
   {
   public:
     Form(CWnd* wPar, String* sName, String* sCode, Color* clr)
-    : FormWithDest(wPar, SUITitleAddToDomain)
+    : FormWithDest(wPar, TR("Add item to Domain"))
     {
       new FieldBlank(root);
-      new FieldString(root, SUIFldName, sName, Domain(), false);
-      new FieldString(root, SUIFldCode, sCode, Domain(), true);
-      new FieldColor(root, SUIFldColor, clr);
+      new FieldString(root, TR("&Name"), sName, Domain(), false);
+      new FieldString(root, TR("&Code"), sCode, Domain(), true);
+      new FieldColor(root, TR("Co&lor"), clr);
   //    SetMenHelpTopic("ilwismen\\domain_class_id_editor_edit_item.htm");
       create();
     }
@@ -226,7 +226,7 @@ ShowForm:
         Fill();
         if (sCode.length() != 0)
           sName = String("%S: %S", sCode, sName);
-        ose->SelectString(-1, sName.scVal());
+        ose->SelectString(-1, sName.c_str());
       }
       catch (const ErrorObject& err) {
         err.Show();

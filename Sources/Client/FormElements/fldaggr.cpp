@@ -56,21 +56,21 @@ public:
     SetWidth(75);
     int i = 0;
     ag[i].sFun = "Avg";
-    ag[i++].sName = STBFunAggAvg;
+    ag[i++].sName = TR("Average.fun");
     ag[i].sFun = "Sum";
-    ag[i++].sName = STBFunAggSum;
+    ag[i++].sName = TR("Sum.fun");
     ag[i].sFun = "Std";
-    ag[i++].sName = STBFunAggStd;
+    ag[i++].sName = TR("Std Deviation.fun");
     ag[i].sFun = "Min";
-    ag[i++].sName = STBFunAggMin;
+    ag[i++].sName = TR("Minimum.fun");
     ag[i].sFun = "Max";
-    ag[i++].sName = STBFunAggMax;
+    ag[i++].sName = TR("Maximum.fun");
     ag[i].sFun = "Prd";
-    ag[i++].sName = STBFunAggPrd;
+    ag[i++].sName = TR("Predominant.fun");
     ag[i].sFun = "Med";
-    ag[i++].sName = STBFunAggMed;
+    ag[i++].sName = TR("Median.fun");
     ag[i].sFun = "Cnt";
-    ag[i++].sName = STBFunAggCnt;
+    ag[i++].sName = TR("Count.fun");
   }
   void create() {
     FieldOneSelect::create();
@@ -78,7 +78,7 @@ public:
       int id = ose->AddString(ag[i].sName.sVal());
       ose->SetItemDataPtr(id,(void *)&ag[i].sFun);
     }
-	int iRet = ose->FindString(0, m_sDef.scVal());
+	int iRet = ose->FindString(0, m_sDef.c_str());
 	if (iRet != CB_ERR)
 		ose->SetCurSel(iRet);
 	else	
@@ -124,15 +124,15 @@ public:
     SetWidth(75);
     int i = 0;
     rg[i].sFun = "polynomial";
-    rg[i++].sName = STBFunRgrPolynomial;
+    rg[i++].sName = TR("Polynomial.fun");
     rg[i].sFun = "trigonometric";
-    rg[i++].sName = STBFunRgrTrigonometric;
+    rg[i++].sName = TR("Trigonometric.fun");
     rg[i].sFun = "power";
-    rg[i++].sName = STBFunRgrPower;
+    rg[i++].sName = TR("Power Law.fun");
     rg[i].sFun = "exponential";
-    rg[i++].sName = STBFunRgrExponential;
+    rg[i++].sName = TR("Exponential.fun");
     rg[i].sFun = "logarithmic";
-    rg[i++].sName = STBFunRgrLogarithmic;
+    rg[i++].sName = TR("Logarithmic.fun");
   }
   void create() {
     FieldOneSelect::create();
@@ -140,7 +140,7 @@ public:
       int id = ose->AddString(rg[i].sName.sVal());
       ose->SetItemDataPtr(id,(void *)&rg[i].sFun);
     }
-	int iRet = ose->FindString(0, m_sDef.scVal());
+	int iRet = ose->FindString(0, m_sDef.c_str());
 	if (iRet != CB_ERR)
 		ose->SetCurSel(iRet);
 	else	
@@ -186,15 +186,15 @@ public:
     SetWidth(75);
     int i = 0;
     ag[i].sFun = "Avg";
-    ag[i++].sName = STBFunAggAvg;
+    ag[i++].sName = TR("Average.fun");
     ag[i].sFun = "Sum";
-    ag[i++].sName = STBFunAggSum;
+    ag[i++].sName = TR("Sum.fun");
     ag[i].sFun = "Min";
-    ag[i++].sName = STBFunAggMin;
+    ag[i++].sName = TR("Minimum.fun");
     ag[i].sFun = "Max";
-    ag[i++].sName = STBFunAggMax;
+    ag[i++].sName = TR("Maximum.fun");
     ag[i].sFun = "Last";
-    ag[i++].sName = STBFunAggLast;
+    ag[i++].sName = TR("Last.fun");
   }
   void create() {
     FieldOneSelect::create();
@@ -202,7 +202,7 @@ public:
       int id = ose->AddString(ag[i].sName.sVal());
       ose->SetItemDataPtr(id,(void *)&ag[i].sFun);
     }
-	int iRet = ose->FindString(0, m_sDef.scVal());
+	int iRet = ose->FindString(0, m_sDef.c_str());
 	if (iRet != CB_ERR)
 		ose->SetCurSel(iRet);
 	else	

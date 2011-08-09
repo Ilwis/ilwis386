@@ -57,35 +57,35 @@ int FieldFilterC::CreateFilter(void *)
     CallCallBacks();
     String s = "open ";
     s &= fn.sFullPathQuoted();
-	IlwWinApp()->Execute(s); //    winExec(s.scVal(), SW_SHOWNORMAL);
+	IlwWinApp()->Execute(s); //    winExec(s.c_str(), SW_SHOWNORMAL);
   }
   return 0;
 }
 
 FormCreateFilter::FormCreateFilter(CWnd* wPar, String* sFil)
-: FormWithDest(wPar, SFLTitleCreateFilter),
+: FormWithDest(wPar, TR("Create Filter")),
   sFilter(sFil), wParent(wPar)
 {
 	iImg = IlwWinApp()->iImage(".fil");
 
   sNewName = *sFilter;
-  fdm = new FieldDataTypeCreate(root, SFLUiFilName, &sNewName, ".FIL", true);
+  fdm = new FieldDataTypeCreate(root, TR("&Filter Name"), &sNewName, ".FIL", true);
   fdm->SetCallBack((NotifyProc)&FormCreateFilter::CallBackName);
-  StaticText* st = new StaticText(root, SFLUiDescription);
+  StaticText* st = new StaticText(root, TR("&Description:"));
   st->psn->SetBound(0,0,0,0);
   FieldString* fs = new FieldString(root, "", &sDescr);
   fs->SetWidth(120);
   fs->SetIndependentPos();
   
   iRgVal = 0;
-  RadioGroup* rg = new RadioGroup(root, SFLUiType, &iRgVal);
-  new RadioButton(rg, SFLUiLinearFilter);
+  RadioGroup* rg = new RadioGroup(root, TR("&Type"), &iRgVal);
+  new RadioButton(rg, TR("&Linear Filter"));
 
   iRows = 3;
   iCols = 3;
   fReal = false;
-  fiRows = new FieldInt(root, SFLUiRows, &iRows);
-  fiCols = new FieldInt(root, SFLUiColumns, &iCols);
+  fiRows = new FieldInt(root, TR("&Rows"), &iRows);
+  fiCols = new FieldInt(root, TR("&Columns"), &iCols);
 	fiRows->SetCallBack((NotifyProc)&FormCreateFilter::CallBackRowColSize);
 	fiCols->SetCallBack((NotifyProc)&FormCreateFilter::CallBackRowColSize);
 
@@ -129,7 +129,7 @@ int FormCreateFilter::CallBackRowColSize(Event*)
   fiCols->StoreData();
 	fRowColOk = ((iRows > 0) && (iCols > 0) && ((iRows % 2) != 0) && ((iCols % 2) != 0));
 
-	String sRem = fRowColOk ? String("") : SFLRemWrongFilterSize;
+	String sRem = fRowColOk ? String("") : TR("Filter rows and columns must be odd and positive");
 
 	stRemark->SetVal(sRem);
 
@@ -146,9 +146,9 @@ int FormCreateFilter::CallBackName(Event*)
   FileName fn(sNewName, ".fil");
   fNameOK = false;
   if (!fn.fValid())
-    stRemark->SetVal(SFLRemNotValidFilterName);
+    stRemark->SetVal(TR("Not a valid filter name"));
   else if(File::fExist(fn))   
-    stRemark->SetVal(SFLRemFilExists);
+    stRemark->SetVal(TR("Filter already exists"));
   else {
     fNameOK = true;  
     stRemark->SetVal("");

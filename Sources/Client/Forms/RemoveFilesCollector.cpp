@@ -88,13 +88,13 @@ public:
 
 		new FieldBlank(fg);
 		PushButton *pb2;
-		PushButton *pb1 = new PushButton(root, SMSYes, (NotifyProc)&MultipleObjectQuestionForm::Yes); 
+		PushButton *pb1 = new PushButton(root, TR("Yes"), (NotifyProc)&MultipleObjectQuestionForm::Yes); 
 		if (choice == chYES || choice == chANY)
 			pb1->SetDefault(true);
 		pb1->SetIndependentPos();
 		if ( fYesAllPresent )
 		{
-			pb2 = new PushButton(root, SMSYesToAll, (NotifyProc)&MultipleObjectQuestionForm::YesToAll); 
+			pb2 = new PushButton(root, TR("Yes to All"), (NotifyProc)&MultipleObjectQuestionForm::YesToAll); 
 			pb2->Align(pb1, AL_AFTER);
 			pb2->SetIndependentPos();
 			if (choice == chYESTOALL)		
@@ -102,12 +102,12 @@ public:
 		}
 		else
 			pb2 = pb1; // for alignment
-		pb1 = new PushButton(root, SMSNo, (NotifyProc)&MultipleObjectQuestionForm::No);
+		pb1 = new PushButton(root, TR("No"), (NotifyProc)&MultipleObjectQuestionForm::No);
 		if (choice == chNO )
 			pb1->SetDefault(true);
 		pb1->Align(pb2, AL_AFTER);
 		pb1->SetIndependentPos();
-		pb2 = new PushButton(root, SMSCancel, (NotifyProc)&MultipleObjectQuestionForm::Cancel); 
+		pb2 = new PushButton(root, TR("Cancel"), (NotifyProc)&MultipleObjectQuestionForm::Cancel); 
 		if (choice == chCANCEL)
 			pb2->SetDefault(true);
 		pb2->Align(pb1, AL_AFTER);
@@ -326,7 +326,7 @@ Choice FilesForRemovalCollector::chCheckForRemoval(const IlwisObject& obj)
 	}
 	else 
 	{
-		String s(SMSMsgDelete_s.c_str(), obj->sTypeName());
+		String s(TR("Delete %S").c_str(), obj->sTypeName());
 		if (obj->sDescription != "") 
 			s &= String("\n(%S)", obj->sDescription);
 		
@@ -335,20 +335,20 @@ Choice FilesForRemovalCollector::chCheckForRemoval(const IlwisObject& obj)
 		// error messages
 		if (obj->fSystemObject())
 		{
-			wnd->MessageBox(SMSErrSystemObject.c_str(), SMSErrDelNotPossible.c_str(), MB_OK|MB_ICONEXCLAMATION);
+			wnd->MessageBox(TR("Error: System Object").c_str(), TR("Delete not possible").c_str(), MB_OK|MB_ICONEXCLAMATION);
 			return chNO;
 		}
 
 		if (fUsedInOtherObjects && fStillOpen) 
 		{
-			String str(SMSErrDelNotPossibleStillInUse.c_str(), obj->sTypeName());
-			wnd->MessageBox(str.c_str(), SMSErrDelNotPossible.c_str(), MB_OK|MB_ICONEXCLAMATION);
+			String str(TR("Delete not possible\n%S is still in use").c_str(), obj->sTypeName());
+			wnd->MessageBox(str.c_str(), TR("Delete not possible").c_str(), MB_OK|MB_ICONEXCLAMATION);
 			return chNO;
 		}
 		if (fStillOpen) 
 		{
-			String s(SMSErrDelNotPossibleStillOpen.c_str(), obj->sTypeName());
-			wnd->MessageBox(s.c_str(), SMSErrDelNotPossible.c_str(), MB_OK|MB_ICONEXCLAMATION);
+			String s(TR("Delete not possible\n%S is still open").c_str(), obj->sTypeName());
+			wnd->MessageBox(s.c_str(), TR("Delete not possible").c_str(), MB_OK|MB_ICONEXCLAMATION);
 			return chNO;
 		}
 		// if read only is not important enough, do not ask anything
@@ -357,8 +357,8 @@ Choice FilesForRemovalCollector::chCheckForRemoval(const IlwisObject& obj)
 		// warning: Read Only
 		else if (obj->fReadOnly()) 
 		{
-			String sDelMsg(SMSMsgReadOnlyDeleteAnyway_S.scVal(), obj->fnObj.sRelative());
-			MultipleObjectQuestionForm frm(IlwWinApp()->GetMainWnd(), SMSErrReadOnly, sDelMsg, m_choices.choiceDelRO, m_fYesToAllPresent, IDI_WARNING);
+			String sDelMsg(TR("File %S is Read-Only, Delete anyway?").c_str(), obj->fnObj.sRelative());
+			MultipleObjectQuestionForm frm(IlwWinApp()->GetMainWnd(), TR("Warning: Read Only"), sDelMsg, m_choices.choiceDelRO, m_fYesToAllPresent, IDI_WARNING);
 			return m_choices.choiceDelRO;
 		}
 		// if still in use is not important enough, also do not ask the normal case
@@ -367,8 +367,8 @@ Choice FilesForRemovalCollector::chCheckForRemoval(const IlwisObject& obj)
 		// remark: Still in use
 		else if (fUsedInOtherObjects) 
 		{
-			String sDelMsg(SMSMsgDelNotPossibleStillInUseDelAnyway.c_str(), obj->sTypeName());
-			MultipleObjectQuestionForm frm(IlwWinApp()->GetMainWnd(), SMSErrDelNotPossible, sDelMsg, m_choices.choiceDelAnyWay, m_fYesToAllPresent);
+			String sDelMsg(TR("%S is still in use\nDelete anyway?").c_str(), obj->sTypeName());
+			MultipleObjectQuestionForm frm(IlwWinApp()->GetMainWnd(), TR("Delete not possible"), sDelMsg, m_choices.choiceDelAnyWay, m_fYesToAllPresent);
 			return m_choices.choiceDelAnyWay;
 		}
 		// if choice is yestoall no question needed
@@ -377,7 +377,7 @@ Choice FilesForRemovalCollector::chCheckForRemoval(const IlwisObject& obj)
 		// normal question
 		else 
 		{
-			MultipleObjectQuestionForm frm(IlwWinApp()->GetMainWnd(), SMSMsgDelObject, s, m_choices.choice, m_fYesToAllPresent);
+			MultipleObjectQuestionForm frm(IlwWinApp()->GetMainWnd(), TR("Delete Object"), s, m_choices.choice, m_fYesToAllPresent);
 			return m_choices.choice;
 		}
 	}
@@ -425,8 +425,8 @@ void FilesForRemovalCollector::HandleDeletionOfContainers(IlwisObject& obj, Arra
 	if (fAskQuestion)
 	{
 		Choice chDefault = chNO;
-		String sDelMsg(SMSDeleteContentsAlso_S.scVal(), obj->sType(),  fn.sRelative(false));
-		MultipleObjectQuestionForm frm(IlwWinApp()->GetMainWnd(), SMSTitleDeleteContainer, sDelMsg, chDefault, false);
+		String sDelMsg(TR("Delete the contents of %S '%S' as well ?").c_str(), obj->sType(),  fn.sRelative(false));
+		MultipleObjectQuestionForm frm(IlwWinApp()->GetMainWnd(), TR("Delete container"), sDelMsg, chDefault, false);
 		choice = chDefault;
 		if (choice != chYESTOALL && choice != chYES)
 			return;

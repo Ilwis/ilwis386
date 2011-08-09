@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="IlwisClient"
 	ProjectGUID="{12042408-86EA-4501-8797-F358A5447A86}"
 	RootNamespace="IlwisClient"
@@ -619,11 +619,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Client\Resources\Annotation.ico"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Client\Resources\ANNTXT.BMP"
 				>
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\annwmf.bmp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\appearance.ico"
 				>
 			</File>
 			<File
@@ -676,6 +684,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\ATX.ICO"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\AutoClose.ico"
 				>
 			</File>
 			<File
@@ -812,6 +824,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\DIR.BMP"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\direction.ico"
 				>
 			</File>
 			<File
@@ -1079,11 +1095,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\GNC.ico"
+				RelativePath="..\..\Sources\Client\Resources\GNC.ico"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Client\Resources\GNC.ico"
+				RelativePath=".\GNC.ico"
 				>
 			</File>
 			<File
@@ -1495,6 +1511,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Client\Resources\position.ico"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Client\Resources\POTLOOD.CUR"
 				>
 			</File>
@@ -1811,6 +1831,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Client\Resources\snap.ico"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Client\Resources\SortArrow.bmp"
 				>
 			</File>
@@ -1867,6 +1891,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Client\Resources\Symbol.ico"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Client\Resources\TA2.ICO"
 				>
 			</File>
@@ -1916,6 +1944,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\trnsform.bmp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\undefined.ico"
 				>
 			</File>
 			<File
@@ -2845,6 +2877,58 @@
 					</File>
 					<File
 						RelativePath="..\..\Sources\Client\Mapwindow\ZoomableView.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="Printing"
+					>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Printing\Mainfrm.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Printing\MAINFRM.H"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Printing\Printing.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Printing\Printing.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Printing\Ruler.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Printing\RULER.H"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Printing\Rulerv.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Printing\RULERV.H"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Printing\Textbmpdoc.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Printing\Textbmpdoc.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Printing\Textbmpview.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Mapwindow\Printing\Textbmpview.h"
 						>
 					</File>
 				</Filter>
@@ -5252,18 +5336,6 @@
 				</File>
 			</Filter>
 		</Filter>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\Annotation.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\appearance.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\position.ico"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

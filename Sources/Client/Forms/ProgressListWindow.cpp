@@ -177,7 +177,7 @@ void ProgressListWindow::Init()
 	rlvTrqList.SetFont(fnt);
 	
 
-	CSize sizHelp = cdc.GetTextExtent(SUIHelp.scVal());
+	CSize sizHelp = cdc.GetTextExtent(TR("Help").c_str());
 	
 	CRect rct;
 	IlwisSettings settings("ProgressWindow");	
@@ -207,15 +207,15 @@ void ProgressListWindow::Init()
 	else
 		MoveWindow(0,0,  iDEFWIDTH,iDEFHEIGHT + sizHelp.cy * 2);
 
-	butAbort.Create(SUIStop.scVal(), WS_CHILD|WS_VISIBLE|WS_TABSTOP|BS_PUSHBUTTON, CRect(0,0,0,0), this, IDCANCEL);	
+	butAbort.Create(TR("&Stop").c_str(), WS_CHILD|WS_VISIBLE|WS_TABSTOP|BS_PUSHBUTTON, CRect(0,0,0,0), this, IDCANCEL);	
 	butAbort.SetFont(fnt);
-	butHelp.Create(SUIHelp.scVal(), WS_CHILD|WS_VISIBLE|WS_TABSTOP|BS_PUSHBUTTON,  CRect(0,0,0,0), this, IDHELP);
+	butHelp.Create(TR("Help").c_str(), WS_CHILD|WS_VISIBLE|WS_TABSTOP|BS_PUSHBUTTON,  CRect(0,0,0,0), this, IDHELP);
 	butHelp.SetFont(fnt);
 	butAbort.EnableWindow(FALSE);
 	
 	OnSize(-1, -1, -1);
 
-	SetWindowText(SUITitleProgress.scVal());
+	SetWindowText(TR("Progress Manager").c_str());
 		
 	ShowWindow(SW_HIDE);
 
@@ -236,8 +236,8 @@ void ProgressListWindow::OnSize(UINT nType, int cx, int cy)
 		CFont *fnt = IlwWinApp()->GetFont(IlwisWinApp::sfWindowMedium);	
 		CClientDC cdc(this);
 
-		CString sStop = SUIStop.scVal();
-		CString sHelp = SUIHelp.scVal();
+		CString sStop = TR("&Stop").c_str();
+		CString sHelp = TR("Help").c_str();
 		CSize sizStop = cdc.GetTextExtent(sStop);
 		CSize sizHelp = cdc.GetTextExtent(sHelp);
 		CSize sizButton;

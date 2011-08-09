@@ -93,8 +93,8 @@ RecordEditField::~RecordEditField()
     DomainSort* ds = dm->pdsrt();
     if (0 != ds && !dm->fValid(s))
     {
-      String sMsg(STBMsgNotInDomain_SS.sVal(), s, ds->sName());
-      int iRet = tbpn->MessageBox(sMsg.sVal(), STBMsgInvalidValue.sVal(),
+      String sMsg(TR("%S is not in the domain %S\nAdd this item to the domain?").c_str(), s, ds->sName());
+      int iRet = tbpn->MessageBox(sMsg.sVal(), TR("Invalid Value").c_str(),
                    MB_YESNO|MB_ICONEXCLAMATION);
       if (IDYES == iRet)
         ds->iAdd(s);
@@ -234,7 +234,7 @@ String RecordView::sDescrField(int iCol, long iRow) const
 {
 	if (!rec.fValid())
 		return "";
-  return String(STBRemEditFld_s.scVal(), sRowButton(iRow));
+  return String(TR("Edit field %S").c_str(), sRowButton(iRow));
 }
 
 
@@ -244,7 +244,7 @@ bool RecordView::fAllowPaste() const
 		return false;
   return !tvw->fReadOnly() && !mmSelect.fUndef() && fValidSelection();
 }
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define add(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 
 void RecordView::OnContextMenu(CWnd* pWnd, CPoint point) 

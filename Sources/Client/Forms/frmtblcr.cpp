@@ -55,13 +55,13 @@ FormTableCreate::FormTableCreate(CWnd* mwin, const String& sTitle)
 
 void FormTableCreate::initTableOut(bool fAskDomain)
 {  
-  ftc = new FieldTableCreate(root, SAFUiOutTable, &sOutTable);
+  ftc = new FieldTableCreate(root, TR("&Output Table"), &sOutTable);
   FormEntry* fe = ftc;
   if (fAskDomain) {
-    fdc = new FieldDomainC(root, SAFUiDomain, &sDomain);
+    fdc = new FieldDomainC(root, TR("&Domain"), &sDomain);
     fdc->Align(fe, AL_UNDER);
   }  
-  StaticText* st = new StaticText(root, SAFUiDescription);
+  StaticText* st = new StaticText(root, TR("&Description:"));
   st->Align(fe, AL_UNDER);
   st->psn->SetBound(0,0,0,0);
   FieldString* fs = new FieldString(root, "", &sDescr);
@@ -75,8 +75,8 @@ void FormTableCreate::execTableOut(const String& sExpr)
   if (fn.sExt == "") // take care of histograms
     fn.sExt = ".tbt";
   if (".tbt" == fn.sExt && fn.fExist()) {
-    String sErr(SAFMsgAlreadyExistsOverwrite_S.scVal(), fn.sFullPath(true));
-    int iRet= mw->MessageBox(sErr.scVal(), SAFMsgAlreadyExists.scVal(), MB_YESNO|MB_ICONEXCLAMATION);
+    String sErr(TR("File %S already exists.\nOverwrite?").c_str(), fn.sFullPath(true));
+    int iRet= mw->MessageBox(sErr.c_str(), TR("File already exists").c_str(), MB_YESNO|MB_ICONEXCLAMATION);
     if (iRet != IDYES)
       return;
   }
@@ -96,7 +96,7 @@ void FormTableCreate::execTableOut(const String& sExpr)
 				{
             String s = "show ";
             s &= tbOut->sNameQuoted(true);
-            //winExec(s.scVal(), SW_SHOWNORMAL);
+            //winExec(s.c_str(), SW_SHOWNORMAL);
 						ILWISAPP->Execute(s);
         }
     }

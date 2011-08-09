@@ -75,7 +75,7 @@ BOOL GainEdit::Create(CWnd *parent, CDocument* doc)
 		                        rct, parent, 100);
 	doc->AddView(this);
 	CEdit& ed = GetEditCtrl();
-	ed.SetWindowText(s.scVal());
+	ed.SetWindowText(s.c_str());
 	ed.SetReadOnly(lfdoc->fReadOnly());
 
 	return iRet;
@@ -144,7 +144,7 @@ BOOL GainControlBar::Create(CFrameWnd* fw, CDocument* doc)
 	edGain->Create(this, doc);
 	edGain->SetFont(fnt);
 
-	String sLabel(SFLRemGain);
+	String sLabel(TR("Gain"));
 	stLabel.Create(sLabel.c_str(), WS_VISIBLE | WS_CHILD, CRect(2, 2, 2, 2), this);
 	stLabel.SetFont(fnt);
 
@@ -160,7 +160,7 @@ BOOL GainControlBar::Create(CFrameWnd* fw, CDocument* doc)
 	iLastWidth = szLabel.cx + 80;
 
 	// caption during floating
-	SetWindowText(SFLTitleGain.c_str());
+	SetWindowText(TR("Gain").c_str());
 
 	return TRUE;
 }

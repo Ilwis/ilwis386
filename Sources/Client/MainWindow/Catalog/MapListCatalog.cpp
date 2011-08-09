@@ -98,13 +98,13 @@ MapListDoc* MapListCatalog::GetDocument()
 
 String MapListCatalog::sAddObjectTitle()
 {
-	return SMSAddMapToMapList;
+	return TR("Add Map to Maplist");
 }
 
 // Get the object message needed for the add objects form
 String MapListCatalog::sMsgAddObject()
 {
-	return SMSUiRasterMap;
+	return TR("&Raster Map");
 }
 
 void MapListCatalog::OnInitialUpdate()
@@ -299,7 +299,7 @@ bool MapListCatalog::fInOrder()
 	return true;
 }
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define pmadd(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 void MapListCatalog::OnContextMenu(CWnd* pWnd, CPoint point) 
 {

@@ -207,17 +207,17 @@ int DigiEditor::SetDigiFunc(String sTitle, DigiFunc df0,
 		DigiFunc df3, String sdf3,
 		DigiFunc df4, String sdf4)
 {
-  info->SetWindowText(sTitle.scVal());
+  info->SetWindowText(sTitle.c_str());
   df[0] = df0;
   df[1] = df1;
   df[2] = df2;
   df[3] = df3;
   df[4] = df4;
 
-  info->button(1)->SetWindowText(sdf1.scVal());
-  info->button(2)->SetWindowText(sdf2.scVal());
-  info->button(3)->SetWindowText(sdf3.scVal());
-  info->button(4)->SetWindowText(sdf4.scVal());
+  info->button(1)->SetWindowText(sdf1.c_str());
+  info->button(2)->SetWindowText(sdf2.c_str());
+  info->button(3)->SetWindowText(sdf3.c_str());
+  info->button(4)->SetWindowText(sdf4.c_str());
 
   return 0;
 }
@@ -228,12 +228,12 @@ int DigiEditor::ChangeWindow(Coord c)
     return 1;
   dc = dcCROSS;
   cLast = cPivot = c;
-  return SetDigiFunc(SEDDigChangeWindow,
+  return SetDigiFunc(TR("Change Window"),
 		     (DigiFunc)&DigiEditor::ChangeWindowMove,
-		     (DigiFunc)&DigiEditor::ChangeWindowEntireMap, SEDDigEntireMap,
-		     (DigiFunc)&DigiEditor::ChangeWindowFirstPoint, SEDDig1stPoint,
-		     (DigiFunc)&DigiEditor::ChangeWindowExec, SEDDig2ndPoint,
-		     (DigiFunc)&DigiEditor::ChangeWindowQuit, SEDDigReturn);
+		     (DigiFunc)&DigiEditor::ChangeWindowEntireMap, TR("Entire Map"),
+		     (DigiFunc)&DigiEditor::ChangeWindowFirstPoint, TR("1st Point"),
+		     (DigiFunc)&DigiEditor::ChangeWindowExec, TR("2nd Point"),
+		     (DigiFunc)&DigiEditor::ChangeWindowQuit, TR("Return"));
 }
 
 int DigiEditor::ChangeWindowFirstPoint(Coord c)

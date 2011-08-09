@@ -200,7 +200,7 @@ void FieldColumn::FillWithColumns(TablePtr *t)
 	if ( sCol != "")
 	{
 		sCol &= ".clm";
-		fld->ose->SelectString(-1, sCol.scVal());
+		fld->ose->SelectString(-1, sCol.c_str());
 	}
 	else
 		fld->ose->SetCurSel(0);

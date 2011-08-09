@@ -115,18 +115,18 @@ class NewCriteriaTreeDocumentForm: public FormWithDest
 {
 public:
   NewCriteriaTreeDocumentForm(CWnd* wPar, int* iChoice, bool fFirstTime)
-  : FormWithDest(wPar, SSmcUiSMCE)
+  : FormWithDest(wPar, TR("Spatial Multicriteria Evaluation"))
 	{
 		fbs |= fbsNOCANCELBUTTON;
-		new StaticText(root, SSmcUiCreateNewTreeFor);
+		new StaticText(root, TR("Create a new Criteria Tree for:"));
 		rgChoice = new RadioGroup(root, "", iChoice);
 		rgChoice->SetCallBack((NotifyProc)&NewCriteriaTreeDocumentForm::CallBackFunc);
-		new RadioButton(rgChoice, SSmcUiProblemAnalysis);
-		new RadioButton(rgChoice, SSmcUiDesignOfAlternatives);
-		RadioButton* rbChoice3 = new RadioButton(rgChoice, SSmcUiDecisionMaking);
+		new RadioButton(rgChoice, TR("Problem Analysis"));
+		new RadioButton(rgChoice, TR("Design of Alternatives"));
+		RadioButton* rbChoice3 = new RadioButton(rgChoice, TR("Decision Making"));
 		if (fFirstTime)
 		{
-			RadioButton* rbChoice4 = new RadioButton(rgChoice, SSmcUiOpenExisting);
+			RadioButton* rbChoice4 = new RadioButton(rgChoice, TR("Open an existing Criteria Tree"));
 			rbChoice4->SetHeight(50);
 		}
 		fsMessage = new FieldString(root, &m_sDummy, WS_BORDER|ES_READONLY|ES_MULTILINE|ES_AUTOVSCROLL|WS_TABSTOP|WS_GROUP);
@@ -144,16 +144,16 @@ public:
 		switch (i)
 		{
 		case 0:
-			fsMessage->SetVal(SSmcUiProblemAnalysisDescr);
+			fsMessage->SetVal(TR("Analyse a problem situation using one set of maps as evaluation criteria, e.g. environmental impact assessment. The criteria tree editor will start with an empty tree and a placeholder for one data set."));
 			break;
 		case 1:
-			fsMessage->SetVal(SSmcUiDesignAlternativesDescr);
+			fsMessage->SetVal(TR("Perform analysis for designing alternatives/options using one set of maps as evaluation criteria, e.g. (un)suitability analysis. The criteria tree editor will start with an empty tree and a placeholder for one data set."));
 			break;
 		case 2:
-			fsMessage->SetVal(SSmcUiDecisionMakingDescr);
+			fsMessage->SetVal(TR("Decide between alternatives/options using one set of maps for each alternative as evaluation criteria. The criteria tree editor will start with an empty tree and placeholders for a number of data sets, each corresponding to an alternative."));
 			break;
 		default:
-			fsMessage->SetVal(SSmcUiOpenExistingDescr);
+			fsMessage->SetVal(TR("You will be offered the possibility to find and re-open a previously saved criteria tree."));
 			break;
 		}
 		return 0;
@@ -218,7 +218,7 @@ void CriteriaTreeDoc::OnFileOpen()
   {
   public:
     OpenForm(CWnd* parent, String* sName)
-    : FormWithDest(parent, SSmcUiOpenCriteriaTree)
+    : FormWithDest(parent, TR("Open Criteria Tree"))
     {
 			new FieldDataTypeLarge(root, sName, ".smc");
 
@@ -233,7 +233,7 @@ void CriteriaTreeDoc::OnFileOpen()
 	{
 		FileName fn (sCriteriaTree);
 		IlwWinApp()->SetCurDir(fn.sPath()); // make sure we're relative to the opened file
-		OnOpenDocument(sCriteriaTree.scVal());
+		OnOpenDocument(sCriteriaTree.c_str());
 		SetModifiedFlag(FALSE);
 		UpdateAllViews(0); // is this the place ???
 	}
@@ -279,11 +279,11 @@ class AllMapsForm: public FormWithDest
 {
 public:
   AllMapsForm(CWnd* wPar, int iNrMaps, bool* fShow)
-    : FormWithDest(wPar, SSmcUiCIMapCalc)
+    : FormWithDest(wPar, TR("Composite Index Map Calculation"))
 	{
-		new StaticText(root, String(SSmcUiGen_D_OutputMaps.scVal(), iNrMaps));
-		new StaticText(root, SSmcUiExistingOverwritten);
-		new CheckBox(root, SSmcUiShowAfterCalc, fShow);
+		new StaticText(root, String(TR("Generate the %d output map(s) in the criteria tree?").c_str(), iNrMaps));
+		new StaticText(root, TR("Existing maps will be overwritten."));
+		new CheckBox(root, TR("Show after calculation"), fShow);
 
 		SetMenHelpTopic("ilwismen\\smce_window_all_composite_index_maps.htm");
 		create();
@@ -319,7 +319,7 @@ class AskAlternativesForm: public FormWithDest
 {
 public:
   AskAlternativesForm(CWnd* wPar, vector<String> *vs)
-    : FormWithDest(wPar, SSmcUiEnterAlternatives)
+    : FormWithDest(wPar, TR("Enter the number of alternatives"))
 		, m_vs(vs)
 		, m_iNr(vs->size())
 		, iMAX(9)
@@ -332,11 +332,11 @@ public:
 			if ((*m_vs)[i] == "")
 				(*m_vs)[i] = String("Alternative %d", i+1);
 		}
-    fi = new FieldInt(root, SSmcUiNrAlternatives, &m_iNr, ValueRange(1,9), true);
+    fi = new FieldInt(root, TR("Number of alternatives:"), &m_iNr, ValueRange(1,9), true);
 		fi->SetCallBack((NotifyProc)&AskAlternativesForm::CallBackFunc);
 		for (int i=0; i<iMAX; ++i)
 		{
-			m_fs[i] = new FieldString(root, String(SSmcUiAlternative_D.scVal(), i+1), &(*m_vs)[i]);
+			m_fs[i] = new FieldString(root, String(TR("Alternative %d").c_str(), i+1), &(*m_vs)[i]);
 			m_fs[i]->SetCallBack((NotifyProc)&AskAlternativesForm::CallBackFunc);
 			if ((*m_vs)[i] == "")
 				m_fs[i]->SetVal(String("Alternative %d", i+1));
@@ -355,13 +355,13 @@ public:
 
 		if (m_iNr == 1)
 		{
-			fsMessage->SetVal(SSmcUiModePA_Design);
+			fsMessage->SetVal(TR("Performing Problem Analysis / Design."));
 			if (m_fs[0])
 				m_fs[0]->Hide();
 		}
 		else
 		{
-			fsMessage->SetVal(SSmcUiModeDM);
+			fsMessage->SetVal(TR("Performing Decision Making."));
 			if (m_fs[0])
 				m_fs[0]->Show();
 		}
@@ -425,7 +425,7 @@ void CriteriaTreeDoc::OnUpdateSetAlternatives(CCmdUI* pCmdUI)
 CString CriteriaTreeDoc::sAlternative(int iCol)
 {
 	if (iCol > 0)
-		return m_vsAlternatives[iCol-1].scVal();
+		return m_vsAlternatives[iCol-1].c_str();
 	else
 		return "";
 }
@@ -552,7 +552,7 @@ void CriteriaTreeDoc::Serialize(CArchive& ar)
 		ObjectInfo::WriteElement("Display", "MapView", en, m_fnOverlayMapViewTemplate);
 		ObjectInfo::WriteElement("Alternatives", "Total", en, (int)m_vsAlternatives.size());
 		for (unsigned int i=0; i<m_vsAlternatives.size(); ++i)
-			ObjectInfo::WriteElement("Alternatives", String("Alternative%d", i).scVal(), en, m_vsAlternatives[i]);
+			ObjectInfo::WriteElement("Alternatives", String("Alternative%d", i).c_str(), en, m_vsAlternatives[i]);
 
 		egCriteriaTreeRoot->WriteElements("Root", en); // the root is always there and we arrived here after a DeleteContents
 		// Now write all at once
@@ -587,7 +587,7 @@ void CriteriaTreeDoc::Serialize(CArchive& ar)
 			iSize = 1;
 		m_vsAlternatives.resize(iSize);
 		for (int i=0; i<iSize; ++i)
-			ObjectInfo::ReadElement("Alternatives", String("Alternative%d", i).scVal(), en, m_vsAlternatives[i]);
+			ObjectInfo::ReadElement("Alternatives", String("Alternative%d", i).c_str(), en, m_vsAlternatives[i]);
 
 		egCriteriaTreeRoot->ReadElements("Root", en); // the root is always there and we arrived here after a DeleteContents
 
@@ -635,7 +635,7 @@ public:
 			long iOffset = 0;  // Initialize to get rid of warning
 			ObjectInfo::ReadElement("MapList", "Offset", fnMap, iOffset);  // Offset is read properly
 			String sKey = String("Map%li", iOffset);
-			ObjectInfo::ReadElement("MapList", sKey.scVal(), fnMap, fnBand);
+			ObjectInfo::ReadElement("MapList", sKey.c_str(), fnMap, fnBand);
 		}
 		
 		// fnBand contains the map to be checked
@@ -679,7 +679,7 @@ public:
 			{
 				String sType;
 				String sSection("Layer%i", iCurrentLayer);
-				if (ObjectInfo::ReadElement(sSection.scVal(), "Type", fnMapView, sType))
+				if (ObjectInfo::ReadElement(sSection.c_str(), "Type", fnMapView, sType))
 					if ("MapDrawer" == sType)
 						fRasterLayerFound = true;
 				++iCurrentLayer;
@@ -712,14 +712,14 @@ class OverlayMapsForm: public FormWithDest
 {
 public:
   OverlayMapsForm(CWnd* wPar, int& iOption, String& sOverlayMap, String& sMapViewTemplate, FileName fnGrf)
-    : FormWithDest(wPar, SSmcUiOverlayMaps)
+    : FormWithDest(wPar, TR("Map Display Overlay Options"))
 	{
 		iImg = IlwWinApp()->iImage(".mpv");
 
-		RadioGroup* rg = new RadioGroup(root, SSmcUiWhenDisplayingMaps, &iOption);
-		RadioButton* rb1 = new RadioButton(rg, SSmcUiNoOverlay);
-		RadioButton* rb2 = new RadioButton(rg, SSmcUiOverlayOneMap);
-		RadioButton* rb3 = new RadioButton(rg, SSmcUiOverlayMapView);
+		RadioGroup* rg = new RadioGroup(root, TR("When displaying maps, show:"), &iOption);
+		RadioButton* rb1 = new RadioButton(rg, TR("Only requested maps"));
+		RadioButton* rb2 = new RadioButton(rg, TR("Overlay with map:"));
+		RadioButton* rb3 = new RadioButton(rg, TR("Overlay with MapView:"));
 
 		if (!FileName(sOverlayMap).fExist())
 			sOverlayMap = "";
@@ -779,8 +779,8 @@ public:
 		//	}
 		//	for (int i = iStartLayer; i <= iLayers; ++i) {
 		//		String sSection("Layer%i", i);
-		//		mapview->ReadElement(sSection.scVal(), "Type", sType);
-		//		NewDrawer* dw = drDrawer(mapview, sSection.scVal());
+		//		mapview->ReadElement(sSection.c_str(), "Type", sType);
+		//		NewDrawer* dw = drDrawer(mapview, sSection.c_str());
 		//		if (0 == dw) // protection against faulty .mpv files
 		//			continue;
 		//		if ("MapDrawer" == sType)
@@ -791,7 +791,7 @@ public:
 		//				dl.push_front(dw);
 		//			fRaster = true;
 		//			FileName fnMap;
-		//			mapview->ReadElement(sSection.scVal(), "Map", fnMap);
+		//			mapview->ReadElement(sSection.c_str(), "Map", fnMap);
 		//			Map rasmap(fnMap);
 		//			if (rasmap->gr() != georef) 
 		//				SetGeoRef(rasmap->gr());
@@ -875,7 +875,7 @@ public:
 		::OleInitialize(NULL);
 		
 		MapCompositionDocEx* mcdex = new MapCompositionDocEx;
-		if (mcdex->OnOpenDocument((m_vfnMaps[0].sFullPath().scVal()), IlwisDocument::otNOASK))
+		if (mcdex->OnOpenDocument((m_vfnMaps[0].sFullPath().c_str()), IlwisDocument::otNOASK))
 		{
 			IlwWinApp()->docTemplMapWindow()->AddDocument(mcdex); // so that MFC "knows" that this document is already open
 			

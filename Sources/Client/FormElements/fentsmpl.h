@@ -98,7 +98,7 @@ public:
     StringMultiEdit(FormEntry* f, CWnd *w, const CRect& rct, DWORD style, int id, char *pcInit);
 
     void                    SetVal(const String& sVal)
-                                { SetWindowText(sVal.scVal()); }
+                                { SetWindowText(sVal.c_str()); }
     afx_msg void            OnSetFocus(CWnd*);
     afx_msg void            OnKillFocus(CWnd*);
 

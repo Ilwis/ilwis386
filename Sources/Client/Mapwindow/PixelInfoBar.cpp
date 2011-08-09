@@ -119,7 +119,7 @@ LRESULT PixelInfoBar::OnUpdate(WPARAM wParam, LPARAM lParam)
 
 BOOL PixelInfoBar::Create(CWnd* pParent)
 {
-	if (!CSizingControlBar::Create(SMWTitleLayerManagement.scVal(), pParent, CSize(150,350), TRUE, 1267))
+	if (!CSizingControlBar::Create(TR("Layer Management").c_str(), pParent, CSize(150,350), TRUE, 1267))
 		return FALSE;
     m_dwSCBStyle |= SCBS_SHOWEDGES;
 
@@ -128,8 +128,8 @@ BOOL PixelInfoBar::Create(CWnd* pParent)
 	pixview = new PixelInfoView;
 	pixview->Create(NULL, NULL, AFX_WS_DEFAULT_VIEW,
 			CRect(0,0,0,0), this, 100, 0);
-	continousCheck.Create(TR("Continious").scVal(),WS_CHILD | WS_VISIBLE | BS_AUTOCHECKBOX,CRect(5,0,110,20),this,CONT_CB_ID);
-	continousCheck.SetWindowText(TR("Continious").scVal());
+	continousCheck.Create(TR("Continious").c_str(),WS_CHILD | WS_VISIBLE | BS_AUTOCHECKBOX,CRect(5,0,110,20),this,CONT_CB_ID);
+	continousCheck.SetWindowText(TR("Continious").c_str());
 	continousCheck.SetCheck(TRUE);
 	CFont *fnt = ( IlwWinApp()->GetFont(IlwisWinApp::sfFORM));
 	continousCheck.SetFont(fnt);

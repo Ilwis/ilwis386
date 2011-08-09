@@ -53,7 +53,7 @@
 
 
 DigSetPortForm::DigSetPortForm(DigitizerWizard* dw, Digitizer* dig)
-  : DigitizerWizardPage(dw, SDGTitleSelectPort, dig)
+  : DigitizerWizardPage(dw, TR("Setup Digitizer - Select Port"), dig)
 {
 	if (dig->iPort == 0)
 		iPrt = 0;
@@ -62,19 +62,19 @@ DigSetPortForm::DigSetPortForm(DigitizerWizard* dw, Digitizer* dig)
 	if (dig->fWinTab)
 		iPrt = 1;
 
-	rg = new RadioGroup(root, SDGUiDigPort, &iPrt);
+	rg = new RadioGroup(root, TR("Digitizer Port:"), &iPrt);
 	rg->SetCallBack((NotifyProc)&DigSetPortForm::CallBack);
 	rg->SetIndependentPos();
-	RadioButton* rb0 = new RadioButton(rg, SDGUiNone);
-	rbWinTab = new RadioButton(rg, SDGUiWinTab);
+	RadioButton* rb0 = new RadioButton(rg, TR("&None"));
+	rbWinTab = new RadioButton(rg, TR("&WinTab"));
 	rbWinTab->Align(rb0, AL_AFTER);
-	RadioButton* rb1 = new RadioButton(rg, SDGUiCom1);
+	RadioButton* rb1 = new RadioButton(rg, TR("COM&1:"));
 	rb1->Align(rb0, AL_UNDER);
-	RadioButton* rb2 = new RadioButton(rg, SDGUiCom2);
+	RadioButton* rb2 = new RadioButton(rg, TR("COM&2:"));
 	rb2->Align(rb1, AL_AFTER);
-	RadioButton* rb3 = new RadioButton(rg, SDGUiCom3);
+	RadioButton* rb3 = new RadioButton(rg, TR("COM&3:"));
 	rb3->Align(rb1, AL_UNDER);               
-	RadioButton* rb4 = new RadioButton(rg, SDGUiCom4);
+	RadioButton* rb4 = new RadioButton(rg, TR("COM&4:"));
 	rb4->Align(rb3, AL_AFTER);
 	SetMenHelpTopic("ilwismen\\digitizer_setup_digitizer_select_port.htm");
 	create();
@@ -91,7 +91,7 @@ int DigSetPortForm::CallBack(Event*)
 			if (0 == WTInfo(0,0,NULL)) {
 				rg->SetVal(0);
 				rbWinTab->Disable();
-				MessageBox(SDGErrNoWinTab.scVal(), SDGErrDigError.scVal(), MB_ICONSTOP);
+				MessageBox(TR("WinTab driver not found or not active ").c_str(), TR("Digitizer Error").c_str(), MB_ICONSTOP);
 			}
 			// fall trhough
 		case 0: // none
@@ -121,10 +121,10 @@ int DigSetPortForm::exec()
 }
 
 DigPortSettings::DigPortSettings(DigitizerWizard* dw, Digitizer *dig) :
-  DigitizerWizardPage(dw, SDGTitleCOMSettings, dig),
+  DigitizerWizardPage(dw, TR("Setup Digitizer - Port Settings"), dig),
 	fAdded(false)
 {
-	String sRem(SDGRemSpecifySettings.scVal());
+	String sRem(TR("Specify settings for the selected port:").c_str());
 	StaticText* st = new StaticText(root, sRem);
 	st->SetIndependentPos();
 
@@ -139,19 +139,19 @@ DigPortSettings::DigPortSettings(DigitizerWizard* dw, Digitizer *dig) :
  					  dig->iParity == MARKPARITY ?   "Mark":
 						                              "None";
 
-  StaticText *st1 = new StaticText(root, SDGUiBaudRate);
+  StaticText *st1 = new StaticText(root, TR("&Baud Rate"));
 	foBaud = new FieldOneSelectTextOnly(root, &sBaud, false);
 	foBaud->Align(st1, AL_AFTER);
 
-  st1 = new StaticText(root, SDGUiDataBits);
+  st1 = new StaticText(root, TR("&Data Bits"));
 	foData = new FieldOneSelectTextOnly(root, &sData, false);
 	foData->Align(st1, AL_AFTER);
 
-	st1 = new StaticText(root, SDGUiParity);
+	st1 = new StaticText(root, TR("&Parity"));
 	foParity = new FieldOneSelectTextOnly(root, &sParity, false);
 	foParity->Align(st1, AL_AFTER);
 
-  st1 = new StaticText(root, SDGUiStopBits);
+  st1 = new StaticText(root, TR("&Stop Bits"));
 	foStop = new FieldOneSelectTextOnly(root, &sStopBits, false);
 	foStop->Align(st1, AL_AFTER);
 
@@ -253,14 +253,14 @@ int DigPortSettings::FillAll(Event *)
 }
 
 DigAutoForm::DigAutoForm(DigitizerWizard* dw, Digitizer* dig)  
-  : DigitizerWizardPage(dw, SDGTitleDigConfigure, dig)
+  : DigitizerWizardPage(dw, TR("Setup Digitizer - Automatic Detection"), dig)
 {
 	fManual = false;
 	status = stINIT;
 	iCnt = 0;
 	iLength = 0;
 	String sFill('X', 30);
-	StaticText* st = new StaticText(root, SDGRemReceived);
+	StaticText* st = new StaticText(root, TR("Received:"));
 	st->Font(IlwWinApp()->GetFont(IlwisWinApp::sfFORM), false);
 
 	stReceive = new StaticText(root, sFill);
@@ -274,7 +274,7 @@ DigAutoForm::DigAutoForm(DigitizerWizard* dw, Digitizer* dig)
 	stMessage = new StaticText(root, sFill);
 	stMessage->SetIndependentPos();
 	new FieldBlank(root);
-	PushButton* pb = new PushButton(root, SDGUiManual,
+	PushButton* pb = new PushButton(root, TR("&Manual"),
 		(NotifyProc)&DigAutoForm::Manual);
 	pb->SetIndependentPos();
 	SetMenHelpTopic("ilwismen\\digitizer_setup_digitizer_autodetect.htm");
@@ -304,7 +304,7 @@ void DigAutoForm::Interpret(const char* s)
 			{
         if (++iCnt >= 4) 
 				{
-          stMessage->SetVal(SDGRemNrCharsNotConstant);
+          stMessage->SetVal(TR("Number of Received Characters is not constant"));
           iCnt = 0;
           status = stINIT;
         }
@@ -352,8 +352,8 @@ void DigAutoForm::Interpret(const char* s)
       cNone = s[iFlagPos];
       status = stBUTTON;
       iCnt = 0;
-      String sBut(SDGRemPressButton_i.scVal(), 0);
-      String s("%S.  %S", SDGRemTryingAutoDetect, sBut);
+      String sBut(TR("Press Button %i").c_str(), 0);
+      String s("%S.  %S", TR("Trying Automatic Detection"), sBut);
       stMessage->SetVal(s);
       for (i = 0; i < 5; ++i)
         _dig->sCodes[i] = 0;
@@ -372,8 +372,8 @@ void DigAutoForm::Interpret(const char* s)
       _dig->sCodes[iCnt] = sCodes[iCnt] = s[iFlagPos];
       iCnt += 1;
       if (iCnt < 4) {   
-        String sBut(SDGRemPressButton_i.scVal(), iCnt);
-        String s("%S.  %S", SDGRemTryingAutoDetect, sBut);
+        String sBut(TR("Press Button %i").c_str(), iCnt);
+        String s("%S.  %S", TR("Trying Automatic Detection"), sBut);
         stMessage->SetVal(s);
       }
       else {
@@ -393,8 +393,8 @@ BOOL DigAutoForm::OnSetActive()
   iLength = 0;
 	FormBaseWizardPage::OnSetActive();
 	wiz->SetWizardButtons(PSWIZB_BACK); // no next!
-  stReceive->SetVal(SDGRemNothing);
-  stMessage->SetVal(SDGRemTryingAutoDetect);
+  stReceive->SetVal(TR("Nothing"));
+  stMessage->SetVal(TR("Trying Automatic Detection"));
 	return TRUE;
 }
 
@@ -406,11 +406,11 @@ int DigAutoForm::Manual(Event*)
 }
 
 DigConfigForm::DigConfigForm(DigitizerWizard* dw, Digitizer* dig)  
-  : DigitizerWizardPage(dw, SDGTitleDigManualSetup, dig)
+  : DigitizerWizardPage(dw, TR("Setup Digitizer - Manual Setup"), dig)
 {
 	SetPPDisable();
   String sFill('X', 30);
-  StaticText* st = new StaticText(root, SDGRemReceived);
+  StaticText* st = new StaticText(root, TR("Received:"));
 	st->Font(IlwWinApp()->GetFont(IlwisWinApp::sfFORM), false);
   st->SetCallBack((NotifyProc)&DigConfigForm::CallBack);
   stReceive = new StaticText(root, sFill);
@@ -420,17 +420,17 @@ DigConfigForm::DigConfigForm(DigitizerWizard* dw, Digitizer* dig)
   sCodes = dig->sCodes;
   FieldBlank* fb = new FieldBlank(root);
 	fb->Align(st, AL_UNDER);
-  FieldInt* fiNrC = new FieldInt(root, SDGUiNrChars, &dig->iNrChars);
-  FieldInt* fiXPos = new FieldInt(root, SDGUiXPos, &dig->iXPos);
-  FieldInt* fiXLen = new FieldInt(root, SDGUiXLength, &dig->iXLen);
+  FieldInt* fiNrC = new FieldInt(root, TR("&Nr chars"), &dig->iNrChars);
+  FieldInt* fiXPos = new FieldInt(root, TR("&X Pos"), &dig->iXPos);
+  FieldInt* fiXLen = new FieldInt(root, TR("X &Length"), &dig->iXLen);
   fiXLen->Align(fiXPos, AL_AFTER);
-  FieldInt* fiYPos = new FieldInt(root, SDGUiYPos, &dig->iYPos);
+  FieldInt* fiYPos = new FieldInt(root, TR("&Y Pos"), &dig->iYPos);
   fiYPos->Align(fiXPos, AL_UNDER);
-  FieldInt* fiYLen = new FieldInt(root, SDGUiYLength, &dig->iYLen);
+  FieldInt* fiYLen = new FieldInt(root, TR("Y &Length"), &dig->iYLen);
   fiYLen->Align(fiYPos, AL_AFTER);
-  FieldInt* fiFlagPos = new FieldInt(root, SDGUiFlagPos, &dig->iFlagPos);
+  FieldInt* fiFlagPos = new FieldInt(root, TR("&Flag pos"), &dig->iFlagPos);
   fiFlagPos->Align(fiYPos, AL_UNDER);
-  FieldString* fiFlagCodes = new FieldString(root, SDGUiFlagCodes, &sCodes);
+  FieldString* fiFlagCodes = new FieldString(root, TR("Flag &Codes"), &sCodes);
   fiFlagCodes->Align(fiFlagPos, AL_AFTER);
   SetMenHelpTopic("ilwismen\\digitizer_setup_digitizer_manual.htm");
 	create();
@@ -443,7 +443,7 @@ void DigConfigForm::Interpret(const char* s)
 }
 int DigConfigForm::CallBack(Event*) 
 {
-	stReceive->SetVal(SDGRemNothing);
+	stReceive->SetVal(TR("Nothing"));
   return 0;
 }
 
@@ -459,7 +459,7 @@ int DigConfigForm::exec()
 
 
 DigConfigSizeForm::DigConfigSizeForm(DigitizerWizard* dw, Digitizer* dig)  
-: DigitizerWizardPage(dw, SDGTitleDigSetupSize, dig)
+: DigitizerWizardPage(dw, TR("Setup Digitizer - Size, Resolution and Final Check"), dig)
 {
   dig->rCurrX = rUNDEF;
   dig->rCurrY = rUNDEF;
@@ -483,7 +483,7 @@ DigConfigSizeForm::DigConfigSizeForm(DigitizerWizard* dw, Digitizer* dig)
   FieldBlank* fb = new FieldBlank(root);
 	fb->Align(stY, AL_UNDER);
   fMetric = true;
-  cbMetric = new CheckBox(root, SDGUiMetricSystem, &fMetric);    
+  cbMetric = new CheckBox(root, TR("&Metric System"), &fMetric);    
   cbMetric->SetCallBack((NotifyProc)&DigConfigSizeForm::MetricCallBack);
   cbMetric->SetIndependentPos();
   rXSizeM = dig->iMaxX / 10.0;
@@ -492,22 +492,22 @@ DigConfigSizeForm::DigConfigSizeForm(DigitizerWizard* dw, Digitizer* dig)
   rXSizeInch = dig->iMaxX / 254.0;
   rYSizeInch = dig->iMaxY / 254.0;
   rUnitSizeInch = 25.4 / dig->rUnitSize;
-  frUM = new FieldReal(root, SDGUiLinesPerMm, &rUnitSizeM);
+  frUM = new FieldReal(root, TR("&Lines per mm"), &rUnitSizeM);
   frUM->Align(cbMetric, AL_UNDER);
   frUM->SetCallBack((NotifyProc)&DigConfigSizeForm::CallBack);
-  frUI = new FieldReal(root, SDGUiLinesPerInch, &rUnitSizeInch);
+  frUI = new FieldReal(root, TR("&Lines per inch"), &rUnitSizeInch);
   frUI->Align(cbMetric, AL_UNDER);
   frUI->SetCallBack((NotifyProc)&DigConfigSizeForm::CallBack);
 
 //  new FieldBlank(root);
   fb = new FieldBlank(root);
 	fb->Align(stYmm, AL_UNDER);
-  frXM = new FieldReal(root, SDGUiXSizeM, &rXSizeM);
+  frXM = new FieldReal(root, TR("&X-size (mm)"), &rXSizeM);
   frXM->Align(fb, AL_UNDER);
-  frYM = new FieldReal(root, SDGUiYSizeM, &rYSizeM);
-  frXI = new FieldReal(root, SDGUiXSizeInch, &rXSizeInch);
+  frYM = new FieldReal(root, TR("&Y-size (mm)"), &rYSizeM);
+  frXI = new FieldReal(root, TR("&X-size (inch)"), &rXSizeInch);
   frXI->Align(fb, AL_UNDER);
-  frYI = new FieldReal(root, SDGUiYSizeInch, &rYSizeInch);
+  frYI = new FieldReal(root, TR("&Y-size (inch)"), &rYSizeInch);
   SetMenHelpTopic("ilwismen\\digitizer_setup_digitizer_size.htm");
 	create();
 }
@@ -557,9 +557,9 @@ int DigConfigSizeForm::CallBack(Event*)
   stY->SetVal(sY);
   String sButton;
   if (_dig->iButton < 0)
-    sButton = String("%S: %S", SDGRemButton, SDGRemNone);
+    sButton = String("%S: %S", TR("Button"), TR("None"));
   else
-    sButton = String("%S: %i", SDGRemButton, _dig->iButton);
+    sButton = String("%S: %i", TR("Button"), _dig->iButton);
   stButton->SetVal(sButton);
   
   sX = "";

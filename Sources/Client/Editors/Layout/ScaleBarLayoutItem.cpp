@@ -123,7 +123,7 @@ void ScaleBarLayoutItem::Setup()
 			sText = String("%li m", iText);
 	else
 		sText = String("%li", iText);
-	CString str = sText.scVal();
+	CString str = sText.c_str();
 	sz = cdc.GetTextExtent(str);
 	rect.right = x2 + sz.cx / 2 + 1;
 	rect.bottom = y1 + sz.cy;
@@ -244,7 +244,7 @@ void ScaleBarLayoutItem::OnDraw(CDC* cdc)
 			sText = String("%li m", iText);
 	else
 		sText = String("%li", iText);
-	cdc->TextOut(x2,iTextY,sText.scVal());
+	cdc->TextOut(x2,iTextY,sText.c_str());
 
 	cdc->SelectObject(penOld);
 	cdc->SelectObject(brOld);
@@ -260,32 +260,32 @@ class ScaleBarLayoutItemForm : public FormWithDest
 {
 public:
   ScaleBarLayoutItemForm(CWnd* wnd, ScaleBarLayoutItem* tli) 
-		: FormWithDest(wnd, SLOTitleScaleBar)
+		: FormWithDest(wnd, TR("Edit Scale Bar"))
   {
       FieldGroup *fg = new FieldGroup(root);
 
       RadioGroup *rg = new RadioGroup(fg, "", (int*)&tli->eType, true);
-      RadioButton *rb1 = new RadioButton(rg, SDCUiBlockScale);
-      RadioButton *rb = new RadioButton(rg, SDCUiTickScale);
-			RadioGroup *rg2 = new RadioGroup(rb, SLOUiTickOrientation, (int*)&tli->eTickOrientation, true);
+      RadioButton *rb1 = new RadioButton(rg, TR("&Blocked"));
+      RadioButton *rb = new RadioButton(rg, TR("&Line"));
+			RadioGroup *rg2 = new RadioGroup(rb, TR("Tick placement"), (int*)&tli->eTickOrientation, true);
 			rg2->Align(rb1, AL_UNDER);
-			new RadioButton(rg2, SLOUiTickTop);			
-			new RadioButton(rg2, SLOUiTickBottom);
-			FieldReal *f = new FieldReal(rb1, SLOUiBarThicness, &tli->rBarThickness, ValueRange(0.1, 10.0, 0.1));
+			new RadioButton(rg2, TR("Top"));			
+			new RadioButton(rg2, TR("Bottom"));
+			FieldReal *f = new FieldReal(rb1, TR("Height of Scalebar"), &tli->rBarThickness, ValueRange(0.1, 10.0, 0.1));
 			f->Align(rb1, AL_UNDER);		
 			
 
-			FieldInt *fi = new FieldInt(fg, SDCUiNrSteps, &tli->iSteps, ValueRange(2,12), true);
+			FieldInt *fi = new FieldInt(fg, TR("&Nr of Intervals"), &tli->iSteps, ValueRange(2,12), true);
 			fi->SetIndependentPos();
-	    new FieldInt(fg, SDCUiStepSizeScalebar, &tli->iStepLength);
-			CheckBox* cbSS = new CheckBox(fg, SDCUiSmallSteps, &tli->fSmallSteps);
+	    new FieldInt(fg, TR("Interval &Length"), &tli->iStepLength);
+			CheckBox* cbSS = new CheckBox(fg, TR("&1st interval divided into smaller parts"), &tli->fSmallSteps);
 			cbSS->SetIndependentPos();
-			CheckBox* cbUnits = new CheckBox(fg, SLOUiUnitIndication, &tli->fIndicateUnits);
+			CheckBox* cbUnits = new CheckBox(fg, TR("&Unit Indication"), &tli->fIndicateUnits);
 			cbUnits->Align(cbSS, AL_UNDER);
-			new CheckBox(cbUnits, SLOUiUseKm, &tli->fUseKm);
+			new CheckBox(cbUnits, TR("Use &km"), &tli->fUseKm);
 			cbUnits->SetIndependentPos();
 
-      FieldColor *fc = new FieldColor(fg, SDCUiColor, &tli->clr);
+      FieldColor *fc = new FieldColor(fg, TR("&Color"), &tli->clr);
 			fc->Align(cbUnits, AL_UNDER);
 
 	    FieldLogFont* flf = new FieldLogFont(fg, &tli->lf);
@@ -393,9 +393,9 @@ void ScaleBarLayoutItem::SetPosition(MinMax mm, int iHit)
 String ScaleBarLayoutItem::sName() const
 {
 	if (0 == mli)
-		return SLONameScaleBar;
+		return TR("Scale Bar");
 	else
-		return String(SLONameScaleBar_S.scVal(), mli->sName());
+		return String(TR("Scale Bar of %S").c_str(), mli->sName());
 }
 
 bool ScaleBarLayoutItem::fDependsOn(LayoutItem* li)

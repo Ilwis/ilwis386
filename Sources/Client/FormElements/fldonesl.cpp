@@ -394,7 +394,7 @@ void FieldOneSelectString::SetComboWidth(short iWidth)
 
 void FieldOneSelectString::SelectVal(const String& sVal) 
 { 
-	foss->ose->SelectString(-1,sVal.scVal());
+	foss->ose->SelectString(-1,sVal.c_str());
 }
 
 void FieldOneSelectString::SetVal(int iVal)

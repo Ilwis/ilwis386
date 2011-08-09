@@ -142,7 +142,7 @@ void TextLayoutItem::Setup()
 	if (!fInitialized) {
 		CWindowDC cdc(CWnd::GetDesktopWindow());
 		InitFont init(this,&cdc);
-		CString str = sText.scVal();
+		CString str = sText.c_str();
 		CRect rect = rectPos();
 		cdc.DrawText(str, &rect, DT_EXPANDTABS|DT_WORDBREAK|DT_CALCRECT);
 		CSize sz = rect.Size();
@@ -160,7 +160,7 @@ void TextLayoutItem::OnDraw(CDC* cdc)
 {
 	InitFont init(this,cdc);
 	cdc->SetTextAlign(TA_LEFT|TA_TOP);
-	CString str = sText.scVal();
+	CString str = sText.c_str();
 	CRect rect = rectPos();
 	//unsigned int iStyle = DT_NOPREFIX | DT_TABSTOP;
 	unsigned int iStyle = DT_NOPREFIX | DT_EXPANDTABS;
@@ -183,7 +183,7 @@ void TextLayoutItem::DrawSingleLine(CDC* cdc)
 {
 	InitFont init(this,cdc);
 	cdc->SetTextAlign(TA_LEFT|TA_TOP);
-	CString str = sText.scVal();
+	CString str = sText.c_str();
 	CRect rect = rectPos();
 	CPoint pt = rect.TopLeft();
 	CSize sz = cdc->GetTextExtent(str);
@@ -232,22 +232,22 @@ class TextLayoutItemForm : public FormWithDest
 {
 public:
   TextLayoutItemForm(CWnd* wnd, TextLayoutItem* tli, String& sText) 
-		: FormWithDest(wnd, SLOTitleText)
+		: FormWithDest(wnd, TR("Edit Text"))
   {
       fsm = new FieldStringMulti(root, &sText);
       fsm->SetWidth(200);
       fsm->SetHeight(50);
       fsm->SetIndependentPos();
 
-			RadioGroup* rg = new RadioGroup(root, SLOUiAlignment, (int*)&tli->eAlignment, true);
+			RadioGroup* rg = new RadioGroup(root, TR("&Alignment"), (int*)&tli->eAlignment, true);
 			rg->SetIndependentPos();
-			new RadioButton(rg, SLOUiLeft);
-			new RadioButton(rg, SLOUiCenter);
-			new RadioButton(rg, SLOUiRight);
+			new RadioButton(rg, TR("&Left"));
+			new RadioButton(rg, TR("&Center"));
+			new RadioButton(rg, TR("&Right"));
 
-      FieldColor *fc = new FieldColor(root, SDCUiColor, &tli->clr);
+      FieldColor *fc = new FieldColor(root, TR("&Color"), &tli->clr);
 			new FieldLogFont(root, &tli->lf, FieldLogFont::faROTATION);
-	    new CheckBox(root, SDCUiTransparent, &tli->fTransparent);
+	    new CheckBox(root, TR("&Transparent"), &tli->fTransparent);
 
       SetMenHelpTopic("ilwismen\\layout_editor_insert_edit_text.htm");
       create();
@@ -294,7 +294,7 @@ void TextLayoutItem::ReadElements(ElementContainer& en, const char* sSection)
 		eAlignment = eLEFT;
 	String sFont;
 	ObjectInfo::ReadElement(sSection, "Font", en, sFont);
-	lstrcpy(lf.lfFaceName, sFont.scVal());
+	lstrcpy(lf.lfFaceName, sFont.c_str());
 	int iLen = sizeof(LOGFONT) - LF_FACESIZE;
 	ObjectInfo::ReadElement(sSection, "LogFont", en, (char*)&lf, iLen);
 	iLen = 0;
@@ -326,7 +326,7 @@ void TextLayoutItem::WriteElements(ElementContainer& en, const char* sSection)
 	long iLen = sizeof(LOGFONT) - LF_FACESIZE;
 	ObjectInfo::WriteElement(sSection, "LogFont", en, (char*)&lf, iLen);
 	iLen = 1+sText.length();
-	ObjectInfo::WriteElement(sSection, "Text", en, sText.scVal(), iLen);
+	ObjectInfo::WriteElement(sSection, "Text", en, sText.c_str(), iLen);
 	ObjectInfo::WriteElement(sSection, "Text Length", en, iLen);
 }
 
@@ -341,7 +341,7 @@ bool TextLayoutItem::fAddExtraClipboardItems()
 		int iLen = sText.length();
 		HGLOBAL hnd = GlobalAlloc(GMEM_FIXED, iLen+2);
 		char* pc = (char*)GlobalLock(hnd);
-		strcpy(pc,sText.scVal());
+		strcpy(pc,sText.c_str());
 		GlobalUnlock(hnd);
 		SetClipboardData(CF_TEXT,hnd);
 		return false;

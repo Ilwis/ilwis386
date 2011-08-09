@@ -127,10 +127,10 @@ FieldValueRange::FieldValueRange(FormEntry* parent, const String& sQuestion,
 		rStep = (*vr)->rStep();
 		rr = (*vr)->rrMinMax();
 	}  
-	frr = new FieldRangeReal(this, (sQuestion != " " ? sQuestion : SUIUiValRange), &rr, vrRange);
+	frr = new FieldRangeReal(this, (sQuestion != " " ? sQuestion : TR("&Range")), &rr, vrRange);
 	if (0 != fdc)
 		frr->Align(fdc, AL_UNDER);
-	frStep = new FieldReal(this, SUIUiStepSize, &rStep, ValueRange(0,1e9,0));
+	frStep = new FieldReal(this, TR("&Precision"), &rStep, ValueRange(0,1e9,0));
 	if (rStep < 0.001)
 		frStep->SetStepSize(rStep); // prevent rounding to 0 in display!
 	if ( after) {

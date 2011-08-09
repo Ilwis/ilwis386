@@ -56,7 +56,7 @@
 
 void EditObject(const FileName& fn)
 {
-	IlwWinApp()->OpenDocumentFile(fn.sFullNameQuoted().scVal(), IlwisDocument::otEDIT);
+	IlwWinApp()->OpenDocumentFile(fn.sFullNameQuoted().c_str(), IlwisDocument::otEDIT);
 }
 
 LRESULT Cmdcreatemap(CWnd *parent, const String& parm )
@@ -328,13 +328,13 @@ LRESULT Cmdcreateioc(CWnd* parent, const String& sN)
 		{
 		public:
 			NameForm(CWnd *wnd, String& sVal) 
-				: FormWithDest(wnd, SDATTitleCreateObjectCollection)
+				: FormWithDest(wnd, TR("Create Object Collection"))
 			{
 				SetMenHelpTopic("ilwismen\\create_an_object_collection.htm");
 				iImg = IlwWinApp()->iImage(".ioc");
 			
-				new FieldDataTypeCreate(root, SDATTitleObjectCollection, &sVal, ".ioc", false);
-				StaticText *st = new StaticText(root, SDATMsgDescription);
+				new FieldDataTypeCreate(root, TR("Name"), &sVal, ".ioc", false);
+				StaticText *st = new StaticText(root, TR("Description"));
 				st->psn->SetBound(0,0,0,0);
 				FieldString *fsDesc = new FieldString(root, "", &m_sDesc);
 

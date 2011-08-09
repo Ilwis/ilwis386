@@ -98,7 +98,7 @@ BEGIN_MESSAGE_MAP(CoordSystemEditor, TiePointEditor)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define addmen(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 
 
@@ -107,7 +107,7 @@ CoordSystemEditor::CoordSystemEditor(MapPaneView* mpvw, CoordSystem csy)
 {
 	csctp = cs->pcsCTP();
 	if (0 == csctp) {
-		mpv->MessageBox(SCSErrCsyNotEditable.sVal(),SCSErrCsyEditor.sVal(),MB_OK|MB_ICONSTOP);
+		mpv->MessageBox(TR("Coordinate System not editable").c_str(),TR("Coordinate System Editor").c_str(),MB_OK|MB_ICONSTOP);
 		fOk = false;
 		return;
 	}
@@ -239,7 +239,7 @@ CoordSystemEditor::CoordSystemEditor(MapPaneView* mpvw, CoordSystem csy)
 	CRect rectBB;
 	rectBB.SetRect(2,1,2,1);
 	bbTxt.CreateEx(mpv->GetParentFrame(), dwCtrlStyle, dwStyle, rectBB, 201);
-	bbTxt.SetWindowText(SCSTitleInfoBar.scVal());
+	bbTxt.SetWindowText(TR("Quality Information").c_str());
 	bbTxt.GetToolBarCtrl().SetImageList(&ilReBar);
 	// without button the toolbar gets no height
 	// the width of a button can not be changed
@@ -320,7 +320,7 @@ zIcon CoordSystemEditor::icon() const
 
 String CoordSystemEditor::sTitle() const
 {
-	String s(SCSTitleCsyEditor_s.sVal(), cs->sName());
+	String s(TR("Coordinate System Editor: %S").c_str(), cs->sName());
 	return s;
 }
 
@@ -375,15 +375,15 @@ void CoordSystemEditor::OnTransformation()
 	{
 	public:
 		TransfForm(CWnd* wPar, int* transf)
-			: FormWithDest(wPar, SCSTitleTransf)
+			: FormWithDest(wPar, TR("Transformation"))
 		{ // same sequence as in enum CoordSystemCTP::Transf
-			RadioGroup* rg = new RadioGroup(root, SGRUiTransf, transf);
-			new RadioButton(rg, SGRUiConform);
-			new RadioButton(rg, SGRUiAffine);
-			new RadioButton(rg, SGRUiSecondOrder);
-			new RadioButton(rg, SGRUiFullSecondOrder);
-			new RadioButton(rg, SGRUiThirdOrder);
-			new RadioButton(rg, SGRUiProjective);
+			RadioGroup* rg = new RadioGroup(root, TR("Transformation:"), transf);
+			new RadioButton(rg, TR("&Conformal"));
+			new RadioButton(rg, TR("&Affine"));
+			new RadioButton(rg, TR("&Second Order Bilinear"));
+			new RadioButton(rg, TR("&Full Second Order"));
+			new RadioButton(rg, TR("&Third Order"));
+			new RadioButton(rg, TR("&Projective"));
 			SetMenHelpTopic("ilwismen\\coordinate_system_tiepoints_editor_transformation.htm");
 			create();
 		}
@@ -406,23 +406,23 @@ class AddTiePointCsyForm: public FormWithDest
 public: 
 	AddTiePointCsyForm(CWnd* wPar, CoordSystemEditor* cse,
 		const Coord& crdDflt, const Coord& crdRefDflt, int iNr, bool fLatLong)
-		: FormWithDest(wPar, SCSTitleAddTiePoint), 
+		: FormWithDest(wPar, TR("Add Tie Point")), 
 		edit(cse), crd(crdDflt), crdRef(crdRefDflt), frDTMheight(0)
 	{
-		String s(SCSRemAddTiepointNr_i.sVal(), iNr);
+		String s(TR("Add Tiepoint number %i").c_str(), iNr);
 		StaticText* st = new StaticText(root, s);
 		st->SetIndependentPos();
-		new FieldCoord(root, SCSUiXY, &crd);
+		new FieldCoord(root, TR("&X, Y"), &crd);
 		if (!fLatLong)
-			fldCrd = new FieldCoord(root, SCSUiRefXY, &crdRef);
+			fldCrd = new FieldCoord(root, TR("&Rel X, Y"), &crdRef);
 		else {
 			llRef = edit->csctp->csOther->llConv(crdRef);
-			fldLL = new FieldLatLon(root, SGRUiLatLon, &llRef);
+			fldLL = new FieldLatLon(root, TR("&Lat, Lon"), &llRef);
 		}
 		fZ = false;
 		rZ = rUNDEF;
 		if (edit->mapDTM.fValid()) {
-			CheckBox* cb = new CheckBox(root, SGRUiZ, &fZ);
+			CheckBox* cb = new CheckBox(root, TR("&Z"), &fZ);
 			frDTMheight = new FieldReal(cb, "", &rZ);
 		}
 		SetMenHelpTopic("ilwismen\\coordinate_system_tiepoints_editor_add_tiepoint.htm");
@@ -535,10 +535,10 @@ void CoordSystemEditor::Calc()
 			switch (iRes) {
 case -1:
 case -2:
-	edTxt.SetWindowText(SGRRemNotEnoughPoints.scVal());
+	edTxt.SetWindowText(TR("Not enough points").c_str());
 	break;
 case -3:
-	edTxt.SetWindowText(SGRRemSingularMatrix.scVal());
+	edTxt.SetWindowText(TR("Singular Matrix").c_str());
 	break;
 case -4:
 	edTxt.SetWindowText("Incorrect Heights");
@@ -547,7 +547,7 @@ case -5:
 	edTxt.SetWindowText("No valid DTM");
 	break;
 default:
-	edTxt.SetWindowText(SGRRemError.scVal());
+	edTxt.SetWindowText(TR("Error").c_str());
 	break;
 			}    
 			for (int i = 1; i <= csctp->iNr(); ++i) {
@@ -586,7 +586,7 @@ default:
 						rSigma = sqrt(rSigma / (2 * (iNr - csctp->iMinNr()) + 1));
 					else
 						rSigma = sqrt(rSigma / (2 * (iNr - csctp->iMinNr())));
-					s = String(SCSRemSigma_f.scVal(), rSigma);
+					s = String(TR("Sigma = %6.3f").c_str(), rSigma);
 				}
 				CVector cvPC;
 				if (csdl != 0)
@@ -612,7 +612,7 @@ default:
 					Coord cPP = csop->crdGetPrincipalPoint();
 					s &= String("  Princ. Point: X= %.1f, Y= %.1f " , cPP.x, cPP.y);
 				}
-				edTxt.SetWindowText(s.scVal());
+				edTxt.SetWindowText(s.c_str());
 			}
 			else {
 				edTxt.SetWindowText("");
@@ -734,9 +734,9 @@ void CoordSystemEditor::OnDelPoint()
 	{
 	public:
 		DelTiePointForm(CWnd* wPar, int* iNr, const RangeInt& ri)
-			: FormWithDest(wPar, SCSTitleDelTiePoint)
+			: FormWithDest(wPar, TR("Delete Tie Point"))
 		{
-			fi = new FieldInt(root, SGRUiTiePointNumber, iNr, ri);
+			fi = new FieldInt(root, TR("&Tiepoint number"), iNr, ri);
 			SetMenHelpTopic("ilwismen\\coordinate_system_tiepoints_editor_delete_tiepoint.htm");
 			create();
 		}
@@ -777,13 +777,13 @@ class CseConfigForm: public FormWithDest
 {
 public:
 	CseConfigForm(CWnd* parent, CoordSystemEditor* cse)
-		: FormWithDest(parent, SCSTitleConfCsyEditor)
+		: FormWithDest(parent, TR("Customize Coordinate System Editor"))
 	{
-		new FieldColor(root, SGRUiActGoodColor, &cse->colActGood);
-		new FieldColor(root, SGRUiActMedColor, &cse->colActive);
-		new FieldColor(root, SGRUiActBadColor, &cse->colActBad);
-		new FieldColor(root, SGRUiPassiveColor, &cse->colPassive);
-		new FieldInt(root, SGRUiSmbSize, &cse->smb.iSize, ValueRange(1L,100L), true);
+		new FieldColor(root, TR("&Active Color"), &cse->colActGood);
+		new FieldColor(root, TR("&Medium Error"), &cse->colActive);
+		new FieldColor(root, TR("&Large Error"), &cse->colActBad);
+		new FieldColor(root, TR("&Passive Color"), &cse->colPassive);
+		new FieldInt(root, TR("Symbol &Size"), &cse->smb.iSize, ValueRange(1L,100L), true);
 		SetMenHelpTopic("ilwismen\\coordinate_system_tiepoints_editor_customize.htm");
 		create();
 	}
@@ -811,20 +811,20 @@ class EditBoundsForm: public FormWithDest
 {
 public:
 	EditBoundsForm(CWnd* wPar, CoordSystemCTP* cs)
-		: FormWithDest(wPar, SCSTitleBoundaries), csctp(cs)
+		: FormWithDest(wPar, TR("Boundaries")), csctp(cs)
 	{
 		iImg = IlwWinApp()->iImage(".csy");
 
-		StaticText* st = new StaticText(root, SCSUiDescription);
+		StaticText* st = new StaticText(root, TR("&Description"));
 		st->psn->SetBound(0,0,0,0);
 		st->SetIndependentPos();
 		FieldString* fsDesc = new FieldString(root, "", &csctp->sDescription);
 		fsDesc->SetWidth(150);
 		fsDesc->SetIndependentPos();
 
-		fldCrdMin = new FieldCoord(root, SCSUiMinXY, &cs->cb.cMin);
-		fldCrdMax = new FieldCoord(root, SCSUiMaxXY, &cs->cb.cMax);
-		PushButton* pb = new PushButton(root, SCSUiDefaults,
+		fldCrdMin = new FieldCoord(root, TR("&Min X, Y"), &cs->cb.cMin);
+		fldCrdMax = new FieldCoord(root, TR("&Max X, Y"), &cs->cb.cMax);
+		PushButton* pb = new PushButton(root, TR("&Defaults"),
 			(NotifyProc)&EditBoundsForm::SetDefaults);
 		SetMenHelpTopic("ilwismen\\coordinate_system_tiepoints_editor_boundaries.htm");
 		create();

@@ -146,11 +146,11 @@ public:
 		if (gli.sName().length() != 0)
 			SetItem(gli);
 
-		fsName = new FieldString(root, SDMUiName, &sName, Domain(), false);
+		fsName = new FieldString(root, TR("&Name"), &sName, Domain(), false);
 		fsName->SetCallBack((NotifyProc)&EditDomainItemForm::CheckEmpty);
-		fsCode = new FieldString(root, SDMUiCode, &sCode, Domain());
+		fsCode = new FieldString(root, TR("&Code"), &sCode, Domain());
 		fsCode->SetCallBack((NotifyProc)&EditDomainItemForm::CheckDuplicate);
-		StaticText* st = new StaticText(root, SDMUiDescription);
+		StaticText* st = new StaticText(root, TR("&Description:"));
 		st->SetIndependentPos();
 		st->psn->SetBound(0,0,0,0);
 
@@ -215,7 +215,7 @@ private:
 		fIsDuplicate = fCIStrEqual(sCode, sName);
 		if (fIsDuplicate)
 		{
-			stRemark->SetVal(String(SDMRemNameCodeEqual_S.scVal(), String("Class/ID")));
+			stRemark->SetVal(String(TR("%S name and Code should be different").c_str(), String("Class/ID")));
 			DisableOK();
 		}
 		else
@@ -243,12 +243,12 @@ public:
 		else
 			rVal = rUNDEF;
 
-		frBound = new FieldReal(root, SDMUiUpperBound, &rVal);
-		fsName = new FieldString(root, SDMUiName, &sName, Domain(), false);
+		frBound = new FieldReal(root, TR("&Upper Bound"), &rVal);
+		fsName = new FieldString(root, TR("&Name"), &sName, Domain(), false);
 		fsName->SetCallBack((NotifyProc)&EditDomainGroupItemForm::CheckDuplicate);
-		fsCode = new FieldString(root, SDMUiCode, &sCode, Domain());
+		fsCode = new FieldString(root, TR("&Code"), &sCode, Domain());
 		fsCode->SetCallBack((NotifyProc)&EditDomainGroupItemForm::CheckDuplicate);
-		StaticText* st = new StaticText(root, SDMUiDescription);
+		StaticText* st = new StaticText(root, TR("&Description:"));
 		st->SetIndependentPos();
 		st->psn->SetBound(0,0,0,0);
 
@@ -290,7 +290,7 @@ public:
 		fIsDuplicate = fCIStrEqual(sCode, sName);
 		if (fIsDuplicate)
 		{
-			stRemark->SetVal(String(SDMRemNameCodeEqual_S.scVal(), String("Group")));
+			stRemark->SetVal(String(TR("%S name and Code should be different").c_str(), String("Group")));
 			DisableOK();
 		}
 		else
@@ -317,8 +317,8 @@ public:
 		String* sDescr, int iSelCount, const String& htp)
 		: FormWithDest(wPar, sTitle)
 	{
-		new StaticText(root, String(SDMMsgSelectedItems_I.scVal(), iSelCount));
-		StaticText* st = new StaticText(root, SDMUiDescription);
+		new StaticText(root, String(TR("%i items are selected").c_str(), iSelCount));
+		StaticText* st = new StaticText(root, TR("&Description:"));
 		st->SetIndependentPos();
 		st->psn->SetBound(0,0,0,0);
 
@@ -342,9 +342,9 @@ class MergeDomainForm: public FormWithDest
 {
 public:
 	MergeDomainForm(CWnd* wPar, String* sDomain)
-		: FormWithDest(wPar, SDMTitleDomainMerge)
+		: FormWithDest(wPar, TR("Merge Domain"))
 	{
-		new FieldDataType(root, SDMUiDomain, sDomain, new DomainLister(dmCLASS|dmIDENT), true);
+		new FieldDataType(root, TR("&Domain"), sDomain, new DomainLister(dmCLASS|dmIDENT), true);
 		SetMenHelpTopic("ilwismen\\domain_class_id_editor_merge_domains.htm");
 		create();
 	}
@@ -354,11 +354,11 @@ class ChangePrefixForm: public FormWithDest
 {
 public:
 	ChangePrefixForm(CWnd* wPar, const String& sPrefix)
-		: FormWithDest(wPar, SDMTitleDomainChangePrefix)
+		: FormWithDest(wPar, TR("Change Prefix"))
 	{
 		m_sPrefix = sPrefix;
 
-		fsPrefix = new FieldString(root, SDMUiPrefix, &m_sPrefix, Domain());
+		fsPrefix = new FieldString(root, TR("&Prefix"), &m_sPrefix, Domain());
 		fsPrefix->SetIndependentPos();
 		fsPrefix->SetWidth(120);
 		fsPrefix->SetCallBack((NotifyProc)&ChangePrefixForm::CheckPrefix);
@@ -380,7 +380,7 @@ private:
 		fsPrefix->StoreData();
 		if (m_sPrefix.find(':') != string::npos)
 		{
-			String sRemark = String(SDMErrInvalidCharInPrefix_c.scVal(), ':');
+			String sRemark = String(TR("The '%c' character is not allowed in the prefix").c_str(), ':');
 			stRemarks->SetVal(sRemark);
 			DisableOK();
 		}
@@ -520,7 +520,7 @@ void DomainSortView::AddToolBars()
 {
 	CFrameWnd *frm = GetParentFrame();
 
-	m_bbTools.Create(frm, "dmsedit.but", SDMTitleMainbar.c_str(), ID_DOMSORTBUTTONBAR);
+	m_bbTools.Create(frm, "dmsedit.but", TR("Domain editor").c_str(), ID_DOMSORTBUTTONBAR);
 
 	DomainSortDoc* pdocDom = GetDocument();
 	ASSERT_VALID(pdocDom);
@@ -548,9 +548,9 @@ void DomainSortView::BuildColumns()
 	CString sCurrent;
 
 	if (pdocDom->fIsClass())
-		sCurrent = SDATMsgClassName.scVal();
+		sCurrent = TR("Class Name").c_str();
 	else
-		sCurrent = SDATMsgIDName.scVal();
+		sCurrent = TR("ID Name").c_str();
 	CString sDummy('x', 30);  // used to set the class column to a fix size
 
 	HDITEM hdi;
@@ -565,7 +565,7 @@ void DomainSortView::BuildColumns()
 
 	iTotalWidth += iCheckWidth + isHeader.cx;
 
-	sCurrent = SDATMsgCode.scVal(); 
+	sCurrent = TR("Code").c_str(); 
 	sDummy = CString('x', 10);
 	isHeader = lvCtrl.GetStringWidth(sDummy);
 	lvCtrl.InsertColumn(iCurCol++, sCurrent, LVCFMT_LEFT, iCheckWidth + isHeader.cx);
@@ -578,7 +578,7 @@ void DomainSortView::BuildColumns()
 
 	iTotalWidth += iCheckWidth + isHeader.cx;
 
-	sCurrent = SDATMsgDescription.scVal(); 
+	sCurrent = TR("Description").c_str(); 
 	isHeader = lvCtrl.GetStringWidth(sCurrent);
 	lvCtrl.InsertColumn(iCurCol++, sCurrent, LVCFMT_LEFT, iCheckWidth + isHeader.cx * 4);
 	hdi.mask = HDI_WIDTH | HDI_TEXT | HDI_FORMAT;
@@ -1045,7 +1045,7 @@ void DomainSortView::OnEdit()
 			bool fOkClick = true;
 			while (!fEditReady && fOkClick)
 			{
-				EditDomainItemForm frm(GetParent(), SDMTitleEditDomainItem, gli, "ilwismen\\domain_class_id_editor_edit_item.htm");
+				EditDomainItemForm frm(GetParent(), TR("Edit Domain Item"), gli, "ilwismen\\domain_class_id_editor_edit_item.htm");
 				fOkClick = frm.fOkClicked();
 
 				if (fOkClick) 
@@ -1067,8 +1067,8 @@ void DomainSortView::OnEdit()
 					else
 					{
 						String sIDClass = pdocDom->fIsID() ? "ID" : "Class";
-						String sMsg = String(SDMErrEditDuplicate_S.scVal(), sIDClass);
-						fEditReady = IDYES != MessageBox(sMsg.scVal(), SDMErrDomainWarning.scVal(), MB_YESNO | MB_ICONEXCLAMATION | MB_DEFBUTTON1);
+						String sMsg = String(TR("%S or Code already in domain, cannot change, try again?").c_str(), sIDClass);
+						fEditReady = IDYES != MessageBox(sMsg.c_str(), TR("Domain warning").c_str(), MB_YESNO | MB_ICONEXCLAMATION | MB_DEFBUTTON1);
 					}
 				}
 			}
@@ -1076,7 +1076,7 @@ void DomainSortView::OnEdit()
 		else {
 			String sDescr;
 
-			EditDomainMultiForm frm(GetParent(), SDMTitleMultEditDomainItem, &sDescr, iSelected, "ilwismen\\domain_class_id_editor_edit_item.htm");
+			EditDomainMultiForm frm(GetParent(), TR("Edit Domain Items"), &sDescr, iSelected, "ilwismen\\domain_class_id_editor_edit_item.htm");
 			if (!frm.fOkClicked())
 				return;
 
@@ -1178,7 +1178,7 @@ void DomainSortView::OnBeginLabelEdit(NMHDR* pNMHDR, LRESULT* pResult)
 	sLabelText = String(GetListCtrl().GetItemText(m_iItem, m_iSubItem));
 	// Create the InPlaceEdit; there is no need to delete it afterwards, it will destroy itself
 	DWORD style = WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL;
-	m_Edit = new InPlaceEdit(m_iItem, m_iSubItem, sLabelText.scVal());
+	m_Edit = new InPlaceEdit(m_iItem, m_iSubItem, sLabelText.c_str());
 	m_Edit->Create(style, rcSubItem, &m_ListCtrl, 468);
 }
 
@@ -1287,7 +1287,7 @@ void DomainSortView::OnAdd()
 	bool fOkClick = true;
 	while (!fEditReady && fOkClick)
 	{
-		EditDomainItemForm frm(GetParent(), SDMTitleAddDomainItem, gli, "ilwismen\\domain_class_id_editor_add_item.htm");  // gli is dummy here
+		EditDomainItemForm frm(GetParent(), TR("Add Domain Item"), gli, "ilwismen\\domain_class_id_editor_add_item.htm");  // gli is dummy here
 		fOkClick = frm.fOkClicked();
 		if (fOkClick) 
 		{
@@ -1316,8 +1316,8 @@ void DomainSortView::OnAdd()
 			else
 			{
 				String sIDClass = pdocDom->fIsID() ? "ID" : "Class";
-				String sMsg = String(SDMErrAddDuplicate_S.scVal(), sIDClass);
-				fEditReady = IDYES != MessageBox(sMsg.scVal(), SDMErrDomainWarning.scVal(), MB_YESNO | MB_ICONEXCLAMATION | MB_DEFBUTTON1);
+				String sMsg = String(TR("%S or Code already in domain, cannot add, try again?").c_str(), sIDClass);
+				fEditReady = IDYES != MessageBox(sMsg.c_str(), TR("Domain warning").c_str(), MB_YESNO | MB_ICONEXCLAMATION | MB_DEFBUTTON1);
 			}
 		}
 	}
@@ -1379,21 +1379,21 @@ void DomainSortView::OnDelete()
 		else
 			sNC = gli.sName();
 		if (pdocDom->fIsID())
-			sMsg = String(SDMMsgDelIDValDom_S.sVal(), sNC);
+			sMsg = String(TR("Delete ID '%S' from the domain").c_str(), sNC);
 		else
-			sMsg = String(SDMMsgDelValDom_S.sVal(), sNC);
-		sTitle = SDMMsgDelDomainItem;
+			sMsg = String(TR("Delete class '%S' from the domain").c_str(), sNC);
+		sTitle = TR("Delete Domain Item");
 	}
 	else 
 	{
 		if (pdocDom->fIsID())
-			sMsg = String(SDMMsgMultiIDSelDelete_I.scVal(), iSelected);
+			sMsg = String(TR("%i ID's selected for deletion, proceed?").c_str(), iSelected);
 		else
-			sMsg = String(SDMMsgMultiSelDelete_I.scVal(), iSelected);
-		sTitle = SDMMsgMultDelDomainItem;
+			sMsg = String(TR("%i Classes selected for deletion, proceed?").c_str(), iSelected);
+		sTitle = TR("Delete Domain Items");
 	}
 
-	int iOk = MessageBox(sMsg.scVal(), sTitle.scVal(), MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON2);
+	int iOk = MessageBox(sMsg.c_str(), sTitle.c_str(), MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON2);
 
 	if (iOk == IDYES)
 		OnDeleteNoAsk();
@@ -1473,7 +1473,7 @@ void DomainSortView::OnMerge()
 		}
 	}
 	catch (SelfMergeError&) {
-		MessageBox(SDMErrNoSelfMerge.scVal(), SDMErrError.scVal());
+		MessageBox(TR("Not possible to merge with itself").c_str(), TR("Error").c_str());
 	}
 	catch (ErrorObject& err) {
 		err.Show();
@@ -1502,7 +1502,7 @@ void DomainSortView::OnChangePrefix()
 	}
 	catch (const WarningPrefixNotRenamed& err)
 	{
-		MessageBox(err.sWhat().scVal(), SDMErrDomainWarning.scVal(), MB_OK | MB_ICONEXCLAMATION);
+		MessageBox(err.sWhat().c_str(), TR("Domain warning").c_str(), MB_OK | MB_ICONEXCLAMATION);
 	}
 }
 
@@ -1564,8 +1564,8 @@ bool DomainSortView::fWarnForSortManualChangeOK()
 	ASSERT_VALID(pdocDom);
 
 	if (pdocDom->fManualSorted())
-		iOk = MessageBox(SDMMsgSortFromManual.scVal(), 
-			             SDMTitleSelectNewSortType.scVal(), 
+		iOk = MessageBox(TR("Changes in the domain caused by changing from Manual Ordering cannot be undone, continue?").c_str(), 
+			             TR("Selecting new domain sort type").c_str(), 
 						 MB_ICONEXCLAMATION | MB_YESNO | MB_DEFBUTTON2);
 	return (iOk == IDYES);
 }
@@ -1895,7 +1895,7 @@ void DomainSortView::PrintHeader(CDC *pDC, CPrintInfo *pInfo)
 	String sHeader;
 	if (fSelected || fSelPages)
 	{
-		sHeader = SDMMsgSelectionOnly.sVal();
+		sHeader = TR("Selection of: ").c_str();
 		sHeader &= pdocDom->obj()->sTypeName();
 	}
 	else
@@ -1904,17 +1904,17 @@ void DomainSortView::PrintHeader(CDC *pDC, CPrintInfo *pInfo)
 	string sTime = m_timeSys.Format("%d %b %Y, %H:%M    ");
 	String sPageNr(sTime);
 	if (fSelected)
-		sPageNr &= String(SDMMsgPageNumber_I.sVal(), pInfo->m_nCurPage);
+		sPageNr &= String(TR("Page: %i").c_str(), pInfo->m_nCurPage);
 	else
-		sPageNr &= String(SDMMsgPageNumberOf_II.sVal(), 
+		sPageNr &= String(TR("Page: %i / %i").c_str(), 
 					pInfo->m_nCurPage - pInfo->GetFromPage() + 1, 
 					pInfo->GetToPage() - pInfo->GetFromPage() + 1);
 
 	CRect& rectPage = pInfo->m_rectDraw;
 
 // print the header text
-	pDC->TextOut(rectPage.left, rectPage.top, sHeader.scVal());
-	pDC->DrawText(sPageNr.scVal(), pInfo->m_rectDraw, DT_TOP | DT_RIGHT | DT_SINGLELINE);
+	pDC->TextOut(rectPage.left, rectPage.top, sHeader.c_str());
+	pDC->DrawText(sPageNr.c_str(), pInfo->m_rectDraw, DT_TOP | DT_RIGHT | DT_SINGLELINE);
 	PrintNewLine(pDC, pInfo);
 	rectPage.top += m_cyChar / 4;  // some extra room
 
@@ -1960,14 +1960,14 @@ void DomainSortView::PrintItem(CDC *pDC, CPrintInfo *pInfo, int iIndex)
 	rect.left = rectPage.left;
 	rect.right = rectPage.left + m_aiColOffsets[0] - m_cxChar;
 	sField = sMakeShortString(pDC, pdocDom->sName(iIndex + 1), rect.Width());
-	pDC->DrawText(sField.scVal(), rect, DT_LEFT | DT_SINGLELINE);
+	pDC->DrawText(sField.c_str(), rect, DT_LEFT | DT_SINGLELINE);
 
 	rect.left = rectPage.left + m_aiColOffsets[0];
 	rect.right = rectPage.left + m_aiColOffsets[1] - m_cxChar;
 	sField = sMakeShortString(pDC, pdocDom->sCode(iIndex + 1), rect.Width());
-	pDC->DrawText(sField.scVal(), rect, DT_LEFT | DT_SINGLELINE);
+	pDC->DrawText(sField.c_str(), rect, DT_LEFT | DT_SINGLELINE);
 
-	pDC->TextOut(rectPage.left + m_aiColOffsets[1], rectPage.top, pdocDom->sDescription(iIndex + 1).scVal());
+	pDC->TextOut(rectPage.left + m_aiColOffsets[1], rectPage.top, pdocDom->sDescription(iIndex + 1).c_str());
 	PrintNewLine(pDC, pInfo);
 }
 
@@ -2106,7 +2106,7 @@ String DomainSortView::sMakeShortString(CDC* pDC, const String& sVal, int iColum
 	static const CString sThreeDots = _T("...");
 
 	int iStringLen = sVal.length();
-	CString sField(sVal.scVal());
+	CString sField(sVal.c_str());
 
 	if (iStringLen == 0 || pDC->GetTextExtent(sField).cx <= iColumnLen)
 		return sVal;
@@ -2372,7 +2372,7 @@ void DomainGroupView::AddToolBars()
 {
 	CFrameWnd *frm = GetParentFrame();
 
-	m_bbTools.Create(frm, "dmgedit.but", SDMTitleMainbar.c_str(), ID_DOMSORTBUTTONBAR);
+	m_bbTools.Create(frm, "dmgedit.but", TR("Domain editor").c_str(), ID_DOMSORTBUTTONBAR);
 	BOOL fRet = descBar.Create(frm, GetDocument());
 	ISTRUE(fINotEqual, fRet, FALSE);
 
@@ -2395,27 +2395,27 @@ void DomainGroupView::BuildColumns()
 	CSize isHeader;
 	CString sCurrent;
 
-	sCurrent = SDMMsgUpperBound.scVal();
+	sCurrent = TR("Upper Bound").c_str();
 
 	isHeader = lvCtrl.GetStringWidth(sCurrent);
 	lvCtrl.InsertColumn(iCurCol++, sCurrent, LVCFMT_LEFT, iCheckWidth + isHeader.cx);
 	iTotalWidth += iCheckWidth + isHeader.cx;
 	
-	sCurrent = SDATMsgClassName.scVal();
+	sCurrent = TR("Class Name").c_str();
 	CString sDummy('x', 30);  // use a fixed default size for the name column
 	isHeader = lvCtrl.GetStringWidth(sDummy);
 	lvCtrl.InsertColumn(iCurCol++, sCurrent, LVCFMT_LEFT, iCheckWidth + isHeader.cx);
 
 	iTotalWidth += iCheckWidth + isHeader.cx;
 
-	sCurrent = SDATMsgCode.scVal();
+	sCurrent = TR("Code").c_str();
 	sDummy = CString('x', 10);
 	isHeader = lvCtrl.GetStringWidth(sDummy);
 	lvCtrl.InsertColumn(iCurCol++, sCurrent, LVCFMT_LEFT, iCheckWidth + isHeader.cx);
 
 	iTotalWidth += iCheckWidth + isHeader.cx;
 
-	sCurrent = SDATMsgDescription.scVal(); 
+	sCurrent = TR("Description").c_str(); 
 	isHeader = lvCtrl.GetStringWidth(sCurrent);
 	iTotalWidth += iCheckWidth + isHeader.cx * 4;
 	lvCtrl.InsertColumn(iCurCol++, sCurrent, LVCFMT_LEFT, iCheckWidth + isHeader.cx * 4, 1);
@@ -2487,19 +2487,19 @@ void DomainGroupView::PrintItem(CDC *pDC, CPrintInfo *pInfo, int iIndex)
 	rect.left = rectPage.left;
 	rect.right = rectPage.left + m_aiColOffsets[0] - m_cxChar * 3;
 	sField = sMakeShortString(pDC, pdocDom->sGetItemPart(iIndex + 1, (DomainSortFields)0), rect.Width());
-	pDC->DrawText(sField.scVal(), rect, DT_RIGHT | DT_SINGLELINE);
+	pDC->DrawText(sField.c_str(), rect, DT_RIGHT | DT_SINGLELINE);
 
 	rect.left = rectPage.left + m_aiColOffsets[0];
 	rect.right = rectPage.left + m_aiColOffsets[1] - m_cxChar;
 	sField = sMakeShortString(pDC, pdocDom->sName(iIndex + 1), rect.Width());
-	pDC->DrawText(sField.scVal(), rect, DT_LEFT | DT_SINGLELINE);
+	pDC->DrawText(sField.c_str(), rect, DT_LEFT | DT_SINGLELINE);
 
 	rect.left = rectPage.left + m_aiColOffsets[1];
 	rect.right = rectPage.left + m_aiColOffsets[2] - m_cxChar;
 	sField = sMakeShortString(pDC, pdocDom->sCode(iIndex + 1), rect.Width());
-	pDC->DrawText(sField.scVal(), rect, DT_LEFT | DT_SINGLELINE);
+	pDC->DrawText(sField.c_str(), rect, DT_LEFT | DT_SINGLELINE);
 
-	pDC->TextOut(rectPage.left + m_aiColOffsets[2], rectPage.top, pdocDom->sDescription(iIndex + 1).scVal());
+	pDC->TextOut(rectPage.left + m_aiColOffsets[2], rectPage.top, pdocDom->sDescription(iIndex + 1).c_str());
 	PrintNewLine(pDC, pInfo);
 }
 
@@ -2539,7 +2539,7 @@ void DomainGroupView::OnEdit()
 		bool fOkClick = true;
 		while (!fEditReady && fOkClick)
 		{
-			EditDomainGroupItemForm frm(GetParent(), SDMTitleEditDomainItem, gli, "ilwismen\\domain_group_editor_edit_item.htm");
+			EditDomainGroupItemForm frm(GetParent(), TR("Edit Domain Item"), gli, "ilwismen\\domain_group_editor_edit_item.htm");
 			fOkClick = frm.fOkClicked();
 
 			if (fOkClick)
@@ -2561,8 +2561,8 @@ void DomainGroupView::OnEdit()
 				}
 				else
 				{
-					String sMsg = String(SDMErrEditDuplicate_S.scVal(), String("Upper Bound, Class"));
-					fEditReady = IDYES != MessageBox(sMsg.scVal(), SDMErrDomainWarning.scVal(), MB_OK | MB_ICONEXCLAMATION | MB_DEFBUTTON1);
+					String sMsg = String(TR("%S or Code already in domain, cannot change, try again?").c_str(), String("Upper Bound, Class"));
+					fEditReady = IDYES != MessageBox(sMsg.c_str(), TR("Domain warning").c_str(), MB_OK | MB_ICONEXCLAMATION | MB_DEFBUTTON1);
 				}
 			}
 		}
@@ -2589,7 +2589,7 @@ void DomainGroupView::OnAdd()
 	bool fOkClick = true;
 	while (!fEditReady && fOkClick)
 	{
-		EditDomainGroupItemForm frm(GetParent(), SDMTitleAddDomainItem, gli, "ilwismen\\domain_group_editor_add_item.htm");  // gli is dummy here
+		EditDomainGroupItemForm frm(GetParent(), TR("Add Domain Item"), gli, "ilwismen\\domain_group_editor_add_item.htm");  // gli is dummy here
 		fOkClick = frm.fOkClicked();
 		if (fOkClick) 
 		{
@@ -2617,8 +2617,8 @@ void DomainGroupView::OnAdd()
 			}
 			else
 			{
-				String sMsg = String(SDMErrAddDuplicate_S.scVal(), String("Upper Bound, Class"));
-				fEditReady = IDYES != MessageBox(sMsg.scVal(), SDMErrDomainWarning.scVal(), MB_YESNO | MB_ICONEXCLAMATION | MB_DEFBUTTON1);
+				String sMsg = String(TR("%S or Code already in domain, cannot add, try again?").c_str(), String("Upper Bound, Class"));
+				fEditReady = IDYES != MessageBox(sMsg.c_str(), TR("Domain warning").c_str(), MB_YESNO | MB_ICONEXCLAMATION | MB_DEFBUTTON1);
 			}
 		}
 	}
@@ -2653,12 +2653,12 @@ void DomainGroupView::OnDelete()
 			sNC = String("%g: %S:%S", gli.rBound(), gli.sCode(), gli.sName());
 		else
 			sNC = String("%g: %S", gli.rBound(), gli.sName());
-		sMsg = String(SDMMsgDelGroupValDom_S.sVal(), sNC);
+		sMsg = String(TR("Delete boundary class '%S' from the domain").c_str(), sNC);
 	}
 	else 
-		sMsg = String(SDMMsgMultiGroupSelDelete_I.scVal(), iSelected);
+		sMsg = String(TR("%i boundary classes selected for deletion, proceed?").c_str(), iSelected);
 
-	int iOk = MessageBox(sMsg.scVal(), SDMMsgDelDomainItem.scVal(), MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON2);
+	int iOk = MessageBox(sMsg.c_str(), TR("Delete Domain Item").c_str(), MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON2);
 
 	if (iOk == IDYES)
 		OnDeleteNoAsk();

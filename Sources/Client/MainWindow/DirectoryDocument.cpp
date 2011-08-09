@@ -96,7 +96,7 @@ BOOL DirectoryDocument::OnOpenDocument(LPCTSTR lpszPathName)
 	if (sPath != "") 
 	{
 		Directory dir(sPath);
-    SetCurrentDirectory(dir.sFullPath().scVal());
+    SetCurrentDirectory(dir.sFullPath().c_str());
 	}
   GetCurrentDirectory(_MAX_PATH, sBuf);
   IlwWinApp()->SetCurDir(sBuf);
@@ -143,7 +143,7 @@ void DirectoryDocument::GetFileNames(vector<FileName>& vfn)
 	if ( (iWhere = sFile.find("!REGKEY")) != -1 ) // initially (create) path is not correct, delete last part
 	{
 		sFile = sFile.substr(0, iWhere);
-		SetPathName(sFile.scVal());
+		SetPathName(sFile.c_str());
 	}
 	
 	int iLastPos = sFile.length() - 1;

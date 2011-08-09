@@ -104,13 +104,13 @@ void WMSCatalog::OnInitialUpdate()
 // Get the title needed for the add objects form
 String WMSCatalog::sAddObjectTitle()
 {
-	return SMSAddObjectToCollection;
+	return TR("Add Object to Collection");
 }
 
 // Get the object message needed for the add objects form
 String WMSCatalog::sMsgAddObject()
 {
-	return SMSObjects;
+	return TR("Objects");
 }
 
 ObjectLister *WMSCatalog::olActiveLister(const String& sExt)
@@ -275,7 +275,7 @@ ObjectCollectionDoc* WMSCatalog::GetDocument()
 	return (ObjectCollectionDoc*)m_pDocument;
 }
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define pmadd(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 #define addsub(ID) menSub.AppendMenu(MF_STRING, ID, sMen(ID)); 
 
@@ -370,7 +370,7 @@ void WMSCatalog::OnOpenQuery()
 	{
 	public:	
 		QueryForm(CWnd *par, String& sQ, String& sNewName) :
-				FormWithDest(par, SMSEnterQuery)
+				FormWithDest(par, TR("Enter SQL Query"))
 		{
 			FieldStringMulti *fs = new FieldStringMulti(root, &sQ);
 			fs->SetWidth(200);

@@ -74,13 +74,13 @@ GraphLayer::GraphLayer(GraphDrawer* grd)
 GraphLayer::GraphLayer(GraphDrawer* grd, const FileName& fn, const String& sSection)
 : gd(grd), fRprColor(true), fShow(true)
 {
-	ObjectInfo::ReadElement(sSection.scVal(), "Name", fn, sTitle);
-  line.Read(sSection.scVal(), "Line", fn);
-	ObjectInfo::ReadElement(sSection.scVal(), "Color", fn, color);
-	ObjectInfo::ReadElement(sSection.scVal(), "RprColor", fn, fRprColor);
+	ObjectInfo::ReadElement(sSection.c_str(), "Name", fn, sTitle);
+  line.Read(sSection.c_str(), "Line", fn);
+	ObjectInfo::ReadElement(sSection.c_str(), "Color", fn, color);
+	ObjectInfo::ReadElement(sSection.c_str(), "RprColor", fn, fRprColor);
 	String sSymbolDescr;
-	ObjectInfo::ReadElement(sSection.scVal(), "Symbol", fn, sSymbolDescr);
-	sscanf(sSymbolDescr.scVal(), "%i %i %i %i %i", &smb.iSize, &smb.iWidth, &smb.col, &smb.fillCol, &smb.smb);
+	ObjectInfo::ReadElement(sSection.c_str(), "Symbol", fn, sSymbolDescr);
+	sscanf(sSymbolDescr.c_str(), "%i %i %i %i %i", &smb.iSize, &smb.iWidth, &smb.col, &smb.fillCol, &smb.smb);
 }
 
 GraphLayer::~GraphLayer()
@@ -89,12 +89,12 @@ GraphLayer::~GraphLayer()
 
 void GraphLayer::SaveSettings(const FileName& fn, const String& sSection)
 {
-	ObjectInfo::WriteElement(sSection.scVal(), "Name", fn, sTitle);
-  line.Write(sSection.scVal(), "Line", fn);
-	ObjectInfo::WriteElement(sSection.scVal(), "Color", fn, color);
-	ObjectInfo::WriteElement(sSection.scVal(), "RprColor", fn, fRprColor);
+	ObjectInfo::WriteElement(sSection.c_str(), "Name", fn, sTitle);
+  line.Write(sSection.c_str(), "Line", fn);
+	ObjectInfo::WriteElement(sSection.c_str(), "Color", fn, color);
+	ObjectInfo::WriteElement(sSection.c_str(), "RprColor", fn, fRprColor);
 	String sSymbolDescr("%i %i %i %i %i", smb.iSize, smb.iWidth, (int)smb.col, (int)smb.fillCol, smb.smb);
-	ObjectInfo::WriteElement(sSection.scVal(), "Symbol", fn, sSymbolDescr);
+	ObjectInfo::WriteElement(sSection.c_str(), "Symbol", fn, sSymbolDescr);
 }
 
 bool GraphLayer::fConfig()
@@ -142,9 +142,9 @@ CartesianGraphLayer::CartesianGraphLayer(CartesianGraphDrawer* gd)
 CartesianGraphLayer::CartesianGraphLayer(CartesianGraphDrawer* gd, const FileName& fn, const String& sSection)
 : GraphLayer(gd, fn, sSection), cgd(gd), fYAxisLeft(true), cgt(cgtContineous)
 {
-	ObjectInfo::ReadElement(sSection.scVal(), "YAxisLeft", fn, fYAxisLeft);
+	ObjectInfo::ReadElement(sSection.c_str(), "YAxisLeft", fn, fYAxisLeft);
 	String sGraphType;
-	ObjectInfo::ReadElement(sSection.scVal(), "GraphType", fn, sGraphType);
+	ObjectInfo::ReadElement(sSection.c_str(), "GraphType", fn, sGraphType);
 	cgt = cgtContineous;
 	if (fCIStrEqual(sGraphType, "Contineous"))
 		cgt = cgtContineous;
@@ -165,7 +165,7 @@ CartesianGraphLayer::~CartesianGraphLayer()
 void CartesianGraphLayer::SaveSettings(const FileName& fn, const String& sSection)
 {
   GraphLayer::SaveSettings(fn, sSection);
-	ObjectInfo::WriteElement(sSection.scVal(), "YAxisLeft", fn, fYAxisLeft);
+	ObjectInfo::WriteElement(sSection.c_str(), "YAxisLeft", fn, fYAxisLeft);
   
 	String sGraphType;
   switch (cgt) {
@@ -177,7 +177,7 @@ void CartesianGraphLayer::SaveSettings(const FileName& fn, const String& sSectio
 		default: break;
 	}
 	if (sGraphType.length()>0)
-  	ObjectInfo::WriteElement(sSection.scVal(), "GraphType", fn, sGraphType);
+  	ObjectInfo::WriteElement(sSection.c_str(), "GraphType", fn, sGraphType);
 }
 
 bool CartesianGraphLayer::fConfig()
@@ -440,7 +440,7 @@ String CartesianGraphLayer::sName()
 CartesianGraphLayer* CartesianGraphLayer::create(const FileName& fn, const String& sSection, CartesianGraphDrawer* gd)
 {
 	String sType;
-	ObjectInfo::ReadElement(sSection.scVal(), "Type", fn, sType);
+	ObjectInfo::ReadElement(sSection.c_str(), "Type", fn, sType);
 	if (fCIStrEqual(sType, "Column"))
 		return new ColumnGraphLayer(gd, fn, sSection);
 	if (fCIStrEqual(sType, "Formula"))
@@ -476,15 +476,15 @@ ColumnGraphLayer::ColumnGraphLayer(CartesianGraphDrawer* cgd, const Table& t, co
 ColumnGraphLayer::ColumnGraphLayer(CartesianGraphDrawer* cgd, const FileName& fn, const String& sSection)
 : CartesianGraphLayer(cgd, fn, sSection)
 {
-	ObjectInfo::ReadElement(sSection.scVal(), "Table", fn, tbl);
+	ObjectInfo::ReadElement(sSection.c_str(), "Table", fn, tbl);
   if (!tbl.fValid())
     return;
 	String sCol;
-  ObjectInfo::ReadElement(sSection.scVal(), "ColumnX", fn, sCol);
+  ObjectInfo::ReadElement(sSection.c_str(), "ColumnX", fn, sCol);
 	if (sCol.length() > 0)
 	  colX = tbl->col(sCol);
 	sCol = "";
-	ObjectInfo::ReadElement(sSection.scVal(), "ColumnY", fn, sCol);
+	ObjectInfo::ReadElement(sSection.c_str(), "ColumnY", fn, sCol);
 	if (sCol.length() > 0)
   	colY = tbl->col(sCol);
 
@@ -505,13 +505,13 @@ ColumnGraphLayer::~ColumnGraphLayer()
 void ColumnGraphLayer::SaveSettings(const FileName& fn, const String& sSection)
 {
 	CartesianGraphLayer::SaveSettings(fn, sSection);
-	ObjectInfo::WriteElement(sSection.scVal(), "Type", fn, "Column");
+	ObjectInfo::WriteElement(sSection.c_str(), "Type", fn, "Column");
 	String sTblName = tbl->fnObj.sRelative();
-	ObjectInfo::WriteElement(sSection.scVal(), "Table", fn, sTblName);
+	ObjectInfo::WriteElement(sSection.c_str(), "Table", fn, sTblName);
 	if (colX.fValid())
-	  ObjectInfo::WriteElement(sSection.scVal(), "ColumnX", fn, colX);
+	  ObjectInfo::WriteElement(sSection.c_str(), "ColumnX", fn, colX);
 	if (colY.fValid())
-	  ObjectInfo::WriteElement(sSection.scVal(), "ColumnY", fn, colY);
+	  ObjectInfo::WriteElement(sSection.c_str(), "ColumnY", fn, colY);
 }
 
 int ColumnGraphLayer::iNrPoints() 
@@ -563,28 +563,28 @@ bool ColumnGraphLayer::fConfig()
   {
   public:
     ConfigForm(ColumnGraphLayer* cgl)
-    : FormWithDest(0, SGPTitleGraphOptionsFromCol)
+    : FormWithDest(0, TR("Graph Options - Graph from Columns"))
     {
       iImg = IlwWinApp()->iImage("Graph");
-//      new CheckBox(root, SGPUiShow, &cgl->fShow);
-      FieldString* fs = new FieldString(root, SGPUiName, &cgl->sTitle);
+//      new CheckBox(root, TR("&Show"), &cgl->fShow);
+      FieldString* fs = new FieldString(root, TR("&Name"), &cgl->sTitle);
       fs->SetWidth(120);
       RadioGroup* rgType;
   		rgType = new RadioGroup(root, "", (int*)&cgl->cgt);
-      RadioButton* rbLine = new RadioButton(rgType, SGPUiLine);
-      RadioButton* rbStep = new RadioButton(rgType, SGPUiStep);
-    	RadioButton* rbBar = new RadioButton(rgType, SGPUiBar);
-      RadioButton* rbNeedle = new RadioButton(rgType, SGPUiNeedle);
-    	RadioButton* rbPoint = new RadioButton(rgType, SGPUiPoint);
+      RadioButton* rbLine = new RadioButton(rgType, TR("&Line"));
+      RadioButton* rbStep = new RadioButton(rgType, TR("&Step"));
+    	RadioButton* rbBar = new RadioButton(rgType, TR("&Bar"));
+      RadioButton* rbNeedle = new RadioButton(rgType, TR("&Needle"));
+    	RadioButton* rbPoint = new RadioButton(rgType, TR("&Point"));
 
       FieldGroup* fg = new FieldGroup(rbLine, true);
       new FieldLine(fg, &cgl->line, true);
 
       fg = new FieldGroup(rbStep, true);
-      new FieldColor(fg, SGPUiColor, &cgl->color);
+      new FieldColor(fg, TR("&Color"), &cgl->color);
 
       fg = new FieldGroup(rbNeedle, true);
-      new FieldColor(fg, SGPUiColor, &cgl->color);
+      new FieldColor(fg, TR("&Color"), &cgl->color);
        
     	fg = new FieldGroup(rbBar, true);
     	iColor = cgl->fRprColor ? 1 : 0;
@@ -593,33 +593,33 @@ bool ColumnGraphLayer::fConfig()
       {
     		RadioGroup *rgCol = new RadioGroup(fg,"", &iColor);
     		rgCol->Align(rbBar, AL_AFTER);
-    		RadioButton *rbSingle = new RadioButton(rgCol, SGPUiSingleColor);
-    		RadioButton *rbFollow = new RadioButton(rgCol, SGPUiFollowsRepr);
+    		RadioButton *rbSingle = new RadioButton(rgCol, TR("&Single Color"));
+    		RadioButton *rbFollow = new RadioButton(rgCol, TR("Representation colors"));
     		rbSingle->SetIndependentPos();
     		new FieldColor(rbSingle, "", &cgl->color);
     	}
     	else {
     		iColor = 0;
-    		new FieldColor(fg, SGPUiColor, &cgl->color);
+    		new FieldColor(fg, TR("&Color"), &cgl->color);
     	}
 
     	fg = new FieldGroup(rbPoint, true);
     	fg->Align(rbLine, AL_AFTER);
     	smb = &cgl->smb;
-    	fsmb = new FieldSymbol(fg, SGPUiSmbType, (long*)&smb->smb, &smb->hIcon);
+    	fsmb = new FieldSymbol(fg, TR("Symbol &Type"), (long*)&smb->smb, &smb->hIcon);
     	fsmb->SetCallBack((NotifyProc)&ConfigForm::FieldSymbolCallBack);
-    	new FieldInt(fg, SGPUiSize, &smb->iSize, ValueRangeInt(1L,250L));
-    	ffc = new FieldFillColor(fg, SGPUiColor, &smb->fillCol);
-    	new FieldInt(fg, SGPUiLineWidth, &smb->iWidth, ValueRangeInt(1L,100L));
-    	new FieldColor(fg, SGPUiLineColor, &smb->col);
+    	new FieldInt(fg, TR("&Size"), &smb->iSize, ValueRangeInt(1L,250L));
+    	ffc = new FieldFillColor(fg, TR("&Color"), &smb->fillCol);
+    	new FieldInt(fg, TR("Line &Width"), &smb->iWidth, ValueRangeInt(1L,100L));
+    	new FieldColor(fg, TR("Line &Color"), &smb->col);
       
     	RadioGroup* rgax = 0;
       if (0 != cgl) {
       	iYAxis = !cgl->fYAxisLeft;
-    		rgax = new RadioGroup(root, SGPUiUseYAxis, &iYAxis, true);
+    		rgax = new RadioGroup(root, TR("Use Y-Axis"), &iYAxis, true);
     		rgax->Align(rgType , AL_UNDER);
-    		new RadioButton(rgax, SGPUiLeft);
-    		new RadioButton(rgax, SGPUiRight);
+    		new RadioButton(rgax, TR("&Left"));
+    		new RadioButton(rgax, TR("&Right"));
     		rgax->SetIndependentPos();
     	}
       SetMenHelpTopic("ilwismen\\graph_window_options_graph_from_columns.htm");
@@ -691,7 +691,7 @@ FormulaGraphLayer::FormulaGraphLayer(CartesianGraphDrawer* cgd, const FileName& 
 : CartesianGraphLayer(cgd, fn, sSection), inst(0)
 {
   String sExp;
-	ObjectInfo::ReadElement(sSection.scVal(), "Expression", fn, sExp);
+	ObjectInfo::ReadElement(sSection.c_str(), "Expression", fn, sExp);
 	SetExpression(sExp);
 }
 
@@ -704,8 +704,8 @@ FormulaGraphLayer::~FormulaGraphLayer()
 void FormulaGraphLayer::SaveSettings(const FileName& fn, const String& sSection)
 {
 	CartesianGraphLayer::SaveSettings(fn, sSection);
-	ObjectInfo::WriteElement(sSection.scVal(), "Type", fn, "Formula");
-	ObjectInfo::WriteElement(sSection.scVal(), "Expression", fn, sExpr);
+	ObjectInfo::WriteElement(sSection.c_str(), "Type", fn, "Formula");
+	ObjectInfo::WriteElement(sSection.c_str(), "Expression", fn, sExpr);
 }
 
 double FormulaGraphLayer::rY(int i)
@@ -731,15 +731,15 @@ bool FormulaGraphLayer::fConfig()
   {
   public:
     ConfigForm(FormulaGraphLayer* fgl)
-    : FormWithDest(0, SGPTitleGraphOptionsFormula)
+    : FormWithDest(0, TR("Graph Options - Graph from Formula"))
     {
       iImg = IlwWinApp()->iImage("Graph");
-//      new CheckBox(root, SGPUiShow, &fgl->fShow);
-      FieldString* fs = new FieldString(root, SGPUiName, &fgl->sTitle);
+//      new CheckBox(root, TR("&Show"), &fgl->fShow);
+      FieldString* fs = new FieldString(root, TR("&Name"), &fgl->sTitle);
       fs->SetWidth(120);
       new FieldLine(root, &fgl->line, true);
       sExpr = fgl->sExpr;
-      fs = new FieldString(root, SGPUiFormulaY, &sExpr, Domain(), false);
+      fs = new FieldString(root, TR("Formula:  y ="), &sExpr, Domain(), false);
       fs->SetWidth(120);
       SetMenHelpTopic("ilwismen\\graph_window_options_graph_from_formula.htm");
       create();      
@@ -792,8 +792,8 @@ LsfGraphLayer::LsfGraphLayer(CartesianGraphDrawer* cgd, const FileName& fn, cons
 {
 	String sFunc;	
 	int iTerms;
-	ObjectInfo::ReadElement(sSection.scVal(), "Func", fn, sFunc);
-	ObjectInfo::ReadElement(sSection.scVal(), "Terms", fn, iTerms);
+	ObjectInfo::ReadElement(sSection.c_str(), "Func", fn, sFunc);
+	ObjectInfo::ReadElement(sSection.c_str(), "Terms", fn, iTerms);
 	SetLsf(sFunc, iTerms);
 }
 
@@ -804,9 +804,9 @@ LsfGraphLayer::~LsfGraphLayer()
 void LsfGraphLayer::SaveSettings(const FileName& fn, const String& sSection)
 {
 	ColumnGraphLayer::SaveSettings(fn, sSection);
-	ObjectInfo::WriteElement(sSection.scVal(), "Type", fn, "LeastSquareFit");
-	ObjectInfo::WriteElement(sSection.scVal(), "Func", fn, sFitType);
-	ObjectInfo::WriteElement(sSection.scVal(), "Terms", fn, iTerms);
+	ObjectInfo::WriteElement(sSection.c_str(), "Type", fn, "LeastSquareFit");
+	ObjectInfo::WriteElement(sSection.c_str(), "Func", fn, sFitType);
+	ObjectInfo::WriteElement(sSection.c_str(), "Terms", fn, iTerms);
 }
 
 double LsfGraphLayer::rY(int i)
@@ -828,24 +828,24 @@ bool LsfGraphLayer::fConfig()
   {
   public:
     ConfigForm(LsfGraphLayer* gl)
-    : FormWithDest(0, SGPTitleGraphOptionsLSF)
+    : FormWithDest(0, TR("Graph Options - Least Squares Fit"))
     , lgl(gl)
     {
       iImg = IlwWinApp()->iImage("Graph");
-//      new CheckBox(root, SGPUiShow, &lgl->fShow);
-      FieldString* fs = new FieldString(root, SGPUiName, &lgl->sTitle);
+//      new CheckBox(root, TR("&Show"), &lgl->fShow);
+      FieldString* fs = new FieldString(root, TR("&Name"), &lgl->sTitle);
       fs->SetWidth(120);
       new FieldLine(root, &lgl->line, true);
 
     	sFitType = 0; 
     	iTerms = gl->iTerms;
-    	frf = new FieldRegressionFunc(root, STBUiFunction, &sFitType, gl->sFitType);
+    	frf = new FieldRegressionFunc(root, TR("&Function"), &sFitType, gl->sFitType);
     	frf->SetCallBack((NotifyProc)&ConfigForm::FitFuncCallBack);
     	String sFill('X', 50);
     	stRegr = new StaticText(root, sFill);
     	stRegr->SetVal(String());
     	stRegr->SetIndependentPos();
-    	fiTerms = new FieldInt(root, STBUiNrTerms, &iTerms, RangeInt(2,100));
+    	fiTerms = new FieldInt(root, TR("&Nr. of terms"), &iTerms, RangeInt(2,100));
       if (0 != gl->lsf) {
       	StaticText* stFormula = new StaticText(root, lgl->lsf->sFormula());
       	stFormula->SetIndependentPos();
@@ -969,7 +969,7 @@ SmvGraphLayer::SmvGraphLayer(CartesianGraphDrawer* cgd, const SemiVariogram& sem
 SmvGraphLayer::SmvGraphLayer(CartesianGraphDrawer* cgd, const FileName& fn, const String& sSection)
 : CartesianGraphLayer(cgd, fn, sSection)
 {
-	smv = SemiVariogram(fn, sSection.scVal());
+	smv = SemiVariogram(fn, sSection.c_str());
 }
 
 SmvGraphLayer::~SmvGraphLayer()
@@ -979,8 +979,8 @@ SmvGraphLayer::~SmvGraphLayer()
 void SmvGraphLayer::SaveSettings(const FileName& fn, const String& sSection)
 {
 	CartesianGraphLayer::SaveSettings(fn, sSection);
-	ObjectInfo::WriteElement(sSection.scVal(), "Type", fn, "SemiVariogram");
-	smv.Store(fn, sSection.scVal());
+	ObjectInfo::WriteElement(sSection.c_str(), "Type", fn, "SemiVariogram");
+	smv.Store(fn, sSection.c_str());
 }
 
 double SmvGraphLayer::rY(int i)
@@ -999,14 +999,14 @@ bool SmvGraphLayer::fConfig()
   {
   public:
     ConfigForm(SmvGraphLayer* sgl)
-    : FormWithDest(0, SGPTitleGraphOptionsSMV)
+    : FormWithDest(0, TR("Graph Options - Semivariogram Model"))
     {
       iImg = IlwWinApp()->iImage("Graph");
-//      new CheckBox(root, SGPUiShow, &sgl->fShow);
-      FieldString* fs = new FieldString(root, SGPUiName, &sgl->sTitle);
+//      new CheckBox(root, TR("&Show"), &sgl->fShow);
+      FieldString* fs = new FieldString(root, TR("&Name"), &sgl->sTitle);
       fs->SetWidth(120);
       new FieldLine(root, &sgl->line, true);
-    	new FieldSemiVariogram(root, SGPUiSemiVar, &sgl->smv);
+    	new FieldSemiVariogram(root, TR("&SemiVariogram"), &sgl->smv);
       SetMenHelpTopic("ilwismen\\graph_window_options_semivariogram_model.htm");
       create();      
     }

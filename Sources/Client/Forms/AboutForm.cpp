@@ -8,7 +8,7 @@
 #include "Client\FormElements\fldlist.h"
 #include "Headers\Hs\Mainwind.hs"
 
-AboutForm::AboutForm(CWnd* parent) : FormWithDest(parent,SABOUTTitle,fbsSHOWALWAYS | fbsMODAL | fbsNOCANCELBUTTON) {
+AboutForm::AboutForm(CWnd* parent) : FormWithDest(parent,TR("About ILWIS"),fbsSHOWALWAYS | fbsMODAL | fbsNOCANCELBUTTON) {
 	Array<String> modules;
 	Array<String> persons;
 	ILWIS::Module *m;
@@ -28,24 +28,24 @@ AboutForm::AboutForm(CWnd* parent) : FormWithDest(parent,SABOUTTitle,fbsSHOWALWA
 	persons.push_back("Base Retsios");
 	persons.push_back("Jan Hendrikse");
 	persons.push_back("Raymond Nijmeier");
-	dummy = SABOUT52Web;
+	dummy = TR("http://52north.org/ilwis");
 
 	FieldGroup *fg1 = new FieldGroup(root,true);
 	FieldPicture * fp1 = new FieldPicture(fg1, NULL,NULL, true);
 	fp1->LoadResource("n52");
-	String ilwis("%S %S",SABOUTILWIS,ILWIS::Version::IlwisVersion);
+	String ilwis("%S %S",TR("ILWIS Open"),ILWIS::Version::IlwisVersion);
 	StaticText *version = new StaticText(fg1,ilwis,true);
 	version->Align(fp1, AL_AFTER);
-	StaticText *txt = new StaticText(root, SABOUT52N);
+	StaticText *txt = new StaticText(root, TR("(c) 52North GmbH"));
 	txt->Align(fg1, AL_UNDER);
 	FieldString *fstr = new FieldString(root,"", &dummy, Domain(), true, WS_TABSTOP|WS_GROUP|ES_READONLY);
 	fstr->SetWidth(140);
 	new FieldBlank(root);
-	txt = new StaticText(root,SABOUTLoaded);
+	txt = new StaticText(root,TR("Loaded Modules"));
 	StringArrayLister *fs1 = new StringArrayLister(root, modules);
 	fs1->SetHeight(90);
 	fs1->SetWidth(140);
-	txt = new StaticText(root,SABOUTDevelopers);
+	txt = new StaticText(root,TR("Persons Involved"));
 	StringArrayLister *fs2 = new StringArrayLister(root, persons);
 	fs2->SetHeight(90);
 	fs2->SetWidth(140);

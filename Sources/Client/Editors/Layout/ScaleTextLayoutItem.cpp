@@ -100,12 +100,12 @@ class ScaleTextLayoutItemForm : public FormWithDest
 {
 public:
   ScaleTextLayoutItemForm(CWnd* wnd, ScaleTextLayoutItem* tli) 
-		: FormWithDest(wnd, SLOTitleScaleText)
+		: FormWithDest(wnd, TR("Edit Scale Text"))
   {
       FieldGroup *fg = new FieldGroup(root);
-      FieldColor *fc = new FieldColor(fg, SDCUiColor, &tli->clr);
+      FieldColor *fc = new FieldColor(fg, TR("&Color"), &tli->clr);
 	    new FieldLogFont(fg, &tli->lf);
-      new CheckBox(fg, SDCUiTransparent, &tli->fTransparent);
+      new CheckBox(fg, TR("&Transparent"), &tli->fTransparent);
 
       SetMenHelpTopic("ilwismen\\layout_editor_insert_edit_scale_text.htm");
       create();
@@ -144,9 +144,9 @@ void ScaleTextLayoutItem::WriteElements(ElementContainer& en, const char* sSecti
 String ScaleTextLayoutItem::sName() const
 {
 	if (0 == mli)
-		return SLONameScaleText;
+		return TR("Scale Text");
 	else
-		return String(SLONameScaleText_S.scVal(), mli->sName());
+		return String(TR("Scale Text of %S").c_str(), mli->sName());
 }
 
 bool ScaleTextLayoutItem::fDependsOn(LayoutItem* li)

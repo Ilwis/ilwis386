@@ -234,7 +234,7 @@ bool LayoutItem::fDependsOn(LayoutItem* li)
 	return false;
 }
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define pmadd(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 
 void LayoutItem::OnContextMenu(CWnd* wnd, CPoint pt) 

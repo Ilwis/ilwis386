@@ -333,14 +333,14 @@ unsigned long TopicServerSystem::command(char* str)
 			{
 				// this should popup the import dialog box
 		    String sCmd("*import"); // The * is for not putting the command in the history
-				const char *s = sCmd.scVal();		
+				const char *s = sCmd.c_str();		
 				IlwWinApp()->GetMainWnd()->SendMessage(ILWM_EXECUTE, 0, (LPARAM)s);
 			}
 			else if (fCIStrEqual(str,"export"))
 			{
 				// this should popup the export dialog box
 		    String sCmd("*export"); // The * is for not putting the command in the history
-				const char *s = sCmd.scVal();		
+				const char *s = sCmd.c_str();		
 				IlwWinApp()->GetMainWnd()->SendMessage(ILWM_EXECUTE, 0, (LPARAM)s);
 			}
 			else

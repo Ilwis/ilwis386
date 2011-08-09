@@ -57,10 +57,10 @@ void ExportObject(CWnd* wPar, const FileName& fn, const String& s)
 {
 	try {
 		Tranquilizer trq;
-		trq.SetTitle(SIETitleExportTo14);
+		trq.SetTitle(TR("Export to ILWIS 1.4"));
 		trq.SetDelayShow(false);
 		trq.SetNoStopButton(true);
-		trq.fText(SIEMOpeningGDB_S);
+		trq.fText(TR("Loading file. Please wait"));
 		if (".mpr" == fn.sExt) {
 			Map mp(fn);
 			ExportObject(wPar,mp,s);
@@ -83,7 +83,7 @@ void ExportObject(CWnd* wPar, const FileName& fn, const String& s)
 		}  
 		else
 		{
-			wPar->MessageBox(SIEErrImpossibleExpOpr.scVal(), SIEErrError.scVal(), MB_OK | MB_ICONEXCLAMATION);
+			wPar->MessageBox(TR("Impossible Export operation").c_str(), TR("Error").c_str(), MB_OK | MB_ICONEXCLAMATION);
 		}
 		trq.Stop();
 	}
@@ -98,12 +98,12 @@ void ExportObject(CWnd* wPar, Map& mp, const String& s)
   {
   public:
     ExportMapForm(CWnd* wPar, Map& mp, String* sMap)
-    : FormWithDest(wPar, SIETitleExportRasMap)
+    : FormWithDest(wPar, TR("Export Raster Map"))
     {
-      String sInf(SIERemExportMapTo_S.scVal(), mp->sName());
+      String sInf(TR("Export Raster Map %S to").c_str(), mp->sName());
       StaticText* st = new StaticText(root,sInf);
       st->SetIndependentPos();
-      new FieldMapCreate(root, SIEUiMapName, sMap);
+      new FieldMapCreate(root, TR("&Map Name"), sMap);
 //      SetMenHelpTopic("ilwismen\\export.htm"Map);      
       create();
     }
@@ -127,12 +127,12 @@ void ExportObject(CWnd* wPar, SegmentMap& mp, const String& s)
   {
   public:
     ExportSegmentMapForm(CWnd* wPar, SegmentMap& mp, String* sMap)
-    : FormWithDest(wPar, SIETitleExportSegMap)
+    : FormWithDest(wPar, TR("Export Segment Map"))
     {
-      String sInf(SIERemExportSegMapTo_S.scVal(), mp->sName());
+      String sInf(TR("Export Segment Map %S to").c_str(), mp->sName());
       StaticText* st = new StaticText(root,sInf);
       st->SetIndependentPos();
-      new FieldSegmentMapCreate(root, SIEUiMapName, sMap);
+      new FieldSegmentMapCreate(root, TR("&Map Name"), sMap);
 //      SetMenHelpTopic("ilwismen\\export.htm"SegMap);      
       create();
     }
@@ -156,12 +156,12 @@ void ExportObject(CWnd* wPar, PolygonMap& mp, const String& s)
   {
   public:
     ExportPolygonMapForm(CWnd* wPar, PolygonMap& mp, String* sMap)
-    : FormWithDest(wPar, SIETitleExportPolMap)
+    : FormWithDest(wPar, TR("Export Polygon Map"))
     {
-      String sInf(SIERemExportPolMapTo_S.scVal(), mp->sName());
+      String sInf(TR("Export Polygon Map %S to").c_str(), mp->sName());
       StaticText* st = new StaticText(root,sInf);
       st->SetIndependentPos();
-      new FieldPolygonMapCreate(root, SIEUiMapName, sMap);
+      new FieldPolygonMapCreate(root, TR("&Map Name"), sMap);
 //      SetMenHelpTopic("ilwismen\\export.htm"PolMap);      
       create();
     }
@@ -185,12 +185,12 @@ void ExportObject(CWnd* wPar, PointMap& mp, const String& s)
   {
   public:
     ExportPointMapForm(CWnd* wPar, PointMap& mp, String* sMap)
-    : FormWithDest(wPar, SIETitleExportPntMap)
+    : FormWithDest(wPar, TR("Export Point Map"))
     {
-      String sInf(SIERemExportPntMapTo_S.scVal(), mp->sName());
+      String sInf(TR("Export Point Map %S to").c_str(), mp->sName());
       StaticText* st = new StaticText(root,sInf);
       st->SetIndependentPos();
-      new FieldPointMapCreate(root, SIEUiMapName, sMap);
+      new FieldPointMapCreate(root, TR("&Map Name"), sMap);
 //      SetMenHelpTopic("ilwismen\\export.htm"PntMap);      
       create();
     }
@@ -214,12 +214,12 @@ void ExportObject(CWnd* wPar, Table& tbl, const String& s)
   {
   public:
     ExportTableForm(CWnd* wPar, Table& tbl, String* stbl)
-    : FormWithDest(wPar, SIETitleExportTable)
+    : FormWithDest(wPar, TR("Export Table"))
     {
-      String sInf(SIERemExportTableTo_S.scVal(), tbl->sName());
+      String sInf(TR("Export Table %S to").c_str(), tbl->sName());
       StaticText* st = new StaticText(root,sInf);
       st->SetIndependentPos();
-      new FieldTableCreate(root, SIEUiTblName, stbl);
+      new FieldTableCreate(root, TR("&Table Name"), stbl);
 //      SetMenHelpTopic("ilwismen\\export.htm"Table);
       create();
     }

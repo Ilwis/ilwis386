@@ -106,13 +106,13 @@ void DataBaseCatalog::OnInitialUpdate()
 // Get the title needed for the add objects form
 String DataBaseCatalog::sAddObjectTitle()
 {
-	return SMSAddObjectToCollection;
+	return TR("Add Object to Collection");
 }
 
 // Get the object message needed for the add objects form
 String DataBaseCatalog::sMsgAddObject()
 {
-	return SMSObjects;
+	return TR("Objects");
 }
 
 ObjectLister *DataBaseCatalog::olActiveLister(const String& sExt)
@@ -332,7 +332,7 @@ void DataBaseCatalog::OnOpenQuery()
 	{
 	public:	
 		QueryForm(CWnd *par, String& sQ, String& sNewName) :
-				FormWithDest(par, SMSEnterQuery)
+				FormWithDest(par, TR("Enter SQL Query"))
 		{
 			FieldStringMulti *fs = new FieldStringMulti(root, &sQ);
 			fs->SetWidth(200);

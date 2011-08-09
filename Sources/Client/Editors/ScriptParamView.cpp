@@ -96,7 +96,7 @@ void ScriptParamView::CreateForm()
 	}
 
   FormBaseView::CreateForm();
-	fiParam = new FieldInt(root, SSCRUiParams, &iParams, ValueRange(0,9), true);
+	fiParam = new FieldInt(root, TR("&Number of Parameters"), &iParams, ValueRange(0,9), true);
 	fiParam->SetReadOnly(fReadOnly);
 	fiParam->SetCallBack((NotifyProc)&ScriptParamView::CallBack); 
 	fiParam->SetIndependentPos();
@@ -107,11 +107,11 @@ void ScriptParamView::CreateForm()
 	feLast = fgHead;
 
 	FieldBlank* fb = new FieldBlank(fgHead);
-	StaticText* st1 = new StaticText(fgHead, SSCRRemName);
+	StaticText* st1 = new StaticText(fgHead, TR("Name"));
 	st1->Align(fb, AL_AFTER);
 	st1->SetCallBack((NotifyProc)&ScriptParamView::Init);
   st1->psn->iBndDown = 0;
-	StaticText* st2 = new StaticText(fgHead, SSCRRemType);
+	StaticText* st2 = new StaticText(fgHead, TR("Type"));
 	st2->Align(st1, AL_AFTER);
   st2->psn->iBndDown = 0;
 
@@ -120,7 +120,7 @@ void ScriptParamView::CreateForm()
 		fg[i] = new FieldGroup(root);
 		fg[i]->Align(feLast, AL_UNDER);
 		feLast = fg[i];
-		String s(SSCRUiParam_d.scVal(), i+1);
+		String s(TR("Parameter %%&%d").c_str(), i+1);
 		FieldString *fs = new FieldString(fg[i], s, &sQuestion[i], Domain(), true, iStyle);
 		fs->SetCallBack((NotifyProc)&ScriptParamView::Changed);
 		if (fReadOnly)
@@ -183,7 +183,7 @@ int ScriptParamView::Changed(Event *)
 		bool fChanged = fDataHasChanged();		
 		ScriptDoc	*doc = GetDocument();
 		String sV;
-		doc->obj()->ReadElement("Params",String("Param%d", i).scVal(), sV);
+		doc->obj()->ReadElement("Params",String("Param%d", i).c_str(), sV);
 		ScriptPtr::ParamType ptType = doc->scr()->ptParam(i);
 		bool fExt = doc->scr()->fParamIncludeExtension(i);
 		if ( ptType != ScriptPtr::ptANY)
@@ -201,28 +201,28 @@ int ScriptParamView::Changed(Event *)
 String ScriptParamView::sParamType(int i)
 {
 	map<int, String> mpParmNames;
-  mpParmNames[ ScriptPtr::ptRASMAP] =  SSCRPtRasMap;
-  mpParmNames[ ScriptPtr::ptSEGMAP] =  SSCRPtSegMap;
-  mpParmNames[ ScriptPtr::ptPOLMAP] =  SSCRPtPolMap;
-  mpParmNames[ ScriptPtr::ptPNTMAP] =  SSCRPtPntMap;
-  mpParmNames[ ScriptPtr::ptTABLE] =  SSCRPtTable;
-  mpParmNames[ ScriptPtr::ptCOLUMN] =  SSCRPtColumn;
-  mpParmNames[ ScriptPtr::ptMAPLIST] =  SSCRPtMapList;
-  mpParmNames[ ScriptPtr::ptMAPVIEW] =  SSCRPtMapView;
-  mpParmNames[ ScriptPtr::ptCOORDSYS] =  SSCRPtCoordSys;
-  mpParmNames[ ScriptPtr::ptGEOREF] =  SSCRPtGeoRef;
-  mpParmNames[ ScriptPtr::ptDOMAIN] =  SSCRPtDomain;
-  mpParmNames[ ScriptPtr::ptRPR] =  SSCRPtRpr;
-  mpParmNames[ ScriptPtr::ptFILTER] =  SSCRPtFilter;
-  mpParmNames[ ScriptPtr::ptSCRIPT] =  SSCRPtScript;
-  mpParmNames[ ScriptPtr::ptFUNCTION] =  SSCRPtFunction;
-  mpParmNames[ ScriptPtr::ptMATRIX] =  SSCRPtMatrix;
-  mpParmNames[ ScriptPtr::ptSMS] =  SSCRPtSms;
-  mpParmNames[ ScriptPtr::ptTBL2D] =  SSCRPtTbl2d;
-  mpParmNames[ ScriptPtr::ptANNTXT] =  SSCRPtAnnTxt;
-  mpParmNames[ ScriptPtr::ptSTRING ] =  SSCRPtString;
-  mpParmNames[ ScriptPtr::ptVALUE  ] =  SSCRPtValue;
-  mpParmNames[ ScriptPtr::ptFILENAME] =  SSCRPtFileName;
+  mpParmNames[ ScriptPtr::ptRASMAP] =  TR("Raster Map.mpr");
+  mpParmNames[ ScriptPtr::ptSEGMAP] =  TR("Segment Map.mps");
+  mpParmNames[ ScriptPtr::ptPOLMAP] =  TR("Polygon Map.mpa");
+  mpParmNames[ ScriptPtr::ptPNTMAP] =  TR("Point Map.mpp");
+  mpParmNames[ ScriptPtr::ptTABLE] =  TR("Table.tbt");
+  mpParmNames[ ScriptPtr::ptCOLUMN] =  TR("Column.clm");
+  mpParmNames[ ScriptPtr::ptMAPLIST] =  TR("Map List.mpl");
+  mpParmNames[ ScriptPtr::ptMAPVIEW] =  TR("Map View.mpv");
+  mpParmNames[ ScriptPtr::ptCOORDSYS] =  TR("CoordSystem.csy");
+  mpParmNames[ ScriptPtr::ptGEOREF] =  TR("GeoReference.grf");
+  mpParmNames[ ScriptPtr::ptDOMAIN] =  TR("Domain.dom");
+  mpParmNames[ ScriptPtr::ptRPR] =  TR("Representation.rpr");
+  mpParmNames[ ScriptPtr::ptFILTER] =  TR("Filter.fil");
+  mpParmNames[ ScriptPtr::ptSCRIPT] =  TR("Script.isl");
+  mpParmNames[ ScriptPtr::ptFUNCTION] =  TR("Function.fun");
+  mpParmNames[ ScriptPtr::ptMATRIX] =  TR("Matrix.mat");
+  mpParmNames[ ScriptPtr::ptSMS] =  TR("Sample Set.sms");
+  mpParmNames[ ScriptPtr::ptTBL2D] =  TR("2-Dimensional Table.ta2");
+  mpParmNames[ ScriptPtr::ptANNTXT] =  TR("Annotation Text.atx");
+  mpParmNames[ ScriptPtr::ptSTRING ] =  TR("String");
+  mpParmNames[ ScriptPtr::ptVALUE  ] =  TR("Value");
+  mpParmNames[ ScriptPtr::ptFILENAME] =  TR("Filename");
 
 	String sParm =  mpParmNames[ptParam(i)];
 	return sParm.sHead(".");

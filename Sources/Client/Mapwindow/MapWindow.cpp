@@ -94,7 +94,7 @@ MapWindow::~MapWindow()
 {
 }
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 
 #define add(ID) menPopup.AppendMenu(MF_STRING, ID, sMen(ID)); 
 #define addBreak menPopup.AppendMenu(MF_SEPARATOR);
@@ -131,7 +131,7 @@ int MapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
   addSubMenu(ID_FILE_CREATE);
   add(ID_SAVEVIEW);
   add(ID_SAVEVIEWAS);
-	//add(ID_CREATE_LAYOUT);
+	add(ID_CREATE_LAYOUT);
   addBreak;
 	menPropLayer.CreateMenu();
   menPopup.AppendMenu(MF_POPUP, (UINT)menPropLayer.GetSafeHmenu(), sMen(ID_PROPLAYER)); 	
@@ -240,7 +240,7 @@ int MapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	DockControlBar(&barScale,AFX_IDW_DOCKBAR_TOP,rect);
 
 	ltb.Create(this, 124, CSize(200,200));
-    ltb.SetWindowText(SMWTitleLayerManagement.scVal());
+    ltb.SetWindowText(TR("Layer Management").c_str());
 	ltb.EnableDocking(CBRS_ALIGN_LEFT|CBRS_ALIGN_RIGHT);
     ltb.view = new LayerTreeView;
 	ltb.view->Create(NULL, NULL, AFX_WS_DEFAULT_VIEW|TVS_HASLINES|TVS_LINESATROOT|TVS_HASBUTTONS,

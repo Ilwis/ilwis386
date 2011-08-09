@@ -109,7 +109,7 @@ void ScaleBar::Create(CWnd* pParent)
 	EnableDocking(CBRS_ALIGN_TOP|CBRS_ALIGN_BOTTOM);
 	SetBarStyle(GetBarStyle()|CBRS_GRIPPER|CBRS_BORDER_3D);
 
-	SetWindowText(SMWTitleScale.scVal());
+	SetWindowText(TR("Scale").c_str());
 }
 
 void ScaleBar::OnUpdateCmdUI(CFrameWnd* pParent, BOOL)
@@ -125,12 +125,12 @@ void ScaleBar::OnUpdateCmdUI(CFrameWnd* pParent, BOOL)
 	double rScale = mpv->rScaleShow();
 	if (rUNDEF == rScale)	{
 //		ed.ShowWindow(SW_HIDE);
-		ed.SetWindowText(SMWRemNoScale.scVal());
+		ed.SetWindowText(TR("No Scale").c_str());
 		ed.EnableWindow(FALSE);
 	}
 	else {
 		String sTxt("1:%.f", rScale);
-		ed.SetWindowText(sTxt.scVal());
+		ed.SetWindowText(sTxt.c_str());
 //		ed.ShowWindow(SW_SHOW);
 		ed.EnableWindow(TRUE);
 	}

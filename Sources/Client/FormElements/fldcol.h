@@ -55,7 +55,7 @@ public:
   _export FieldColumn(FormEntry*, const String& sQuestion,
               TableView*, String *psName, long types = 0);
   void SetVal(const String& sVal)
-    { fld->ose->SelectString(-1, sVal.scVal()); }
+    { fld->ose->SelectString(-1, sVal.c_str()); }
   virtual _export FormEntry* CheckData();       // validate entry value
   void _export FillWithColumns(Table* tbl);
   void _export FillWithColumns(TablePtr *tbl);

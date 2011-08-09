@@ -55,14 +55,14 @@ FieldMirrorRotateType::FieldMirrorRotateType(FormEntry* par, long* iType)
 	zDimension dim;
 	long iMax = 0;
 	int i = 0;
-	m_sTypes[i++] = sRemoveAmpersand(SAFUiMirRotOriginal);   dim = Dim(SAFUiMirRotOriginal);   iMax = max(iMax, dim.cx);
-	m_sTypes[i++] = sRemoveAmpersand(SAFUiMirrorHorizontal); dim = Dim(SAFUiMirrorHorizontal); iMax = max(iMax, dim.cx);
-	m_sTypes[i++] = sRemoveAmpersand(SAFUiMirrorVertical);   dim = Dim(SAFUiMirrorVertical);   iMax = max(iMax, dim.cx);
-	m_sTypes[i++] = sRemoveAmpersand(SAFUiTranspose);        dim = Dim(SAFUiTranspose);        iMax = max(iMax, dim.cx);
-	m_sTypes[i++] = sRemoveAmpersand(SAFUiMirrorDiagonal);   dim = Dim(SAFUiMirrorDiagonal);   iMax = max(iMax, dim.cx);
-	m_sTypes[i++] = sRemoveAmpersand(SAFUiRotate90);         dim = Dim(SAFUiRotate90);         iMax = max(iMax, dim.cx);
-	m_sTypes[i++] = sRemoveAmpersand(SAFUiRotate180);        dim = Dim(SAFUiRotate180);        iMax = max(iMax, dim.cx);
-	m_sTypes[i++] = sRemoveAmpersand(SAFUiRotate270);        dim = Dim(SAFUiRotate270);        iMax = max(iMax, dim.cx);
+	m_sTypes[i++] = sRemoveAmpersand(TR("No Resample"));   dim = Dim(TR("No Resample"));   iMax = max(iMax, dim.cx);
+	m_sTypes[i++] = sRemoveAmpersand(TR("Mirror &Horizontal")); dim = Dim(TR("Mirror &Horizontal")); iMax = max(iMax, dim.cx);
+	m_sTypes[i++] = sRemoveAmpersand(TR("Mirror &Vertical"));   dim = Dim(TR("Mirror &Vertical"));   iMax = max(iMax, dim.cx);
+	m_sTypes[i++] = sRemoveAmpersand(TR("&Transpose"));        dim = Dim(TR("&Transpose"));        iMax = max(iMax, dim.cx);
+	m_sTypes[i++] = sRemoveAmpersand(TR("Mirror &Diagonal"));   dim = Dim(TR("Mirror &Diagonal"));   iMax = max(iMax, dim.cx);
+	m_sTypes[i++] = sRemoveAmpersand(TR("Rotate &90 degrees clockwise"));         dim = Dim(TR("Rotate &90 degrees clockwise"));         iMax = max(iMax, dim.cx);
+	m_sTypes[i++] = sRemoveAmpersand(TR("Rotate &180 degrees clockwise"));        dim = Dim(TR("Rotate &180 degrees clockwise"));        iMax = max(iMax, dim.cx);
+	m_sTypes[i++] = sRemoveAmpersand(TR("Rotate &270 degrees clockwise"));        dim = Dim(TR("Rotate &270 degrees clockwise"));        iMax = max(iMax, dim.cx);
 	SetFieldWidth(iMax + 20);  // 20 for the arrow button;
 }
 
@@ -70,7 +70,7 @@ void FieldMirrorRotateType::create()
 {
 	FieldOneSelect::create();
 	for (int i = 0; i < 8; ++i)
-		ose->AddString(m_sTypes[i].scVal());
+		ose->AddString(m_sTypes[i].c_str());
 	ose->SetCurSel(*m_iType);
 }
 

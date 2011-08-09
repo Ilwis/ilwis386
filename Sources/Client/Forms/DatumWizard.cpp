@@ -983,7 +983,7 @@ Datum* CalculateDatumParmsBadekas::datCreate()
 ///=====================================================================================================
 /// ---------------------- SelectPointMapsPage
 SelectPointMapsPage::SelectPointMapsPage(DatumWizard* dw, const char* sPar)
-: FormBaseWizardPage(SAFTitleDatumParmsFromCtrlPnts)
+: FormBaseWizardPage(TR("Find Datum Parameters from Common Control Points"))
 {
 	if (sPar) {
     TextInput inp(sPar);
@@ -1008,23 +1008,23 @@ SelectPointMapsPage::SelectPointMapsPage(DatumWizard* dw, const char* sPar)
 	iNrPntsA = 9999;
 	iNrPntsB = 9999;
 	FormEntry* root = feRoot();
-	StaticText* st = new StaticText(root, SAFTitleFindDatumParms, true);
+	StaticText* st = new StaticText(root, TR("Select Point Maps and optional Height columns"), true);
 	st->SetIndependentPos();
 	fgA = new FieldGroup(root,true);
-	fldMapA = new FieldPointMap(fgA, SAFUiPntMapLocalDatum, &sMapA, new MapListerDomainType(".mpp", dmIDENT, false));;
+	fldMapA = new FieldPointMap(fgA, TR("Point Map with &Local Datum"), &sMapA, new MapListerDomainType(".mpp", dmIDENT, false));;
 	fldMapA->SetCallBack((NotifyProc)&SelectPointMapsPage::MapACallBack);
-	cbUseHeightsA = new CheckBox(fgA, SAFUiUseHeights, &m_dw->fUseHeightsA);
+	cbUseHeightsA = new CheckBox(fgA, TR("Use Heights (m)"), &m_dw->fUseHeightsA);
 	fldColA = new FieldColumn(cbUseHeightsA,"",Table(),&sColA, dmVALUE);
-	String sPntsA = String(SAFUiPnts_i.scVal(), iNrPntsA);
+	String sPntsA = String(TR("Number of control points %li").c_str(), iNrPntsA);
 	stNrPntsA = new StaticText(fgA, sPntsA);
 	stNrPntsA->Align(cbUseHeightsA, AL_UNDER);
 	stNrPntsA->SetIndependentPos();
-	String sCsyA = String(SAFUiCoordSys.scVal(), sCoordSysA);
+	String sCsyA = String(TR("&Coordinate System").c_str(), sCoordSysA);
 	stCsyNameA = new StaticText(fgA, sCsyA);
 	stCsyNameA->SetWidth(150);
 	stCsyNameA->SetIndependentPos();
 	sDatumA= String();
-	String sDatumNameA = String(SAFUiCurrDatum_S.scVal(), sDatumA);
+	String sDatumNameA = String(TR("Current Datum is %S").c_str(), sDatumA);
 	stDatumNameA = new StaticText(fgA, sDatumNameA);
 	stDatumNameA->SetWidth(150);
 	stDatumNameA->SetIndependentPos();
@@ -1035,20 +1035,20 @@ SelectPointMapsPage::SelectPointMapsPage(DatumWizard* dw, const char* sPar)
 	
 	fgB = new FieldGroup(root,true);
 	fgB->Align(fgA, AL_UNDER);
-	fldMapB = new FieldPointMap(fgB, SAFUiPntMapGlobalDatum, &sMapB, new MapListerDomainType(".mpp", dmIDENT, false));
+	fldMapB = new FieldPointMap(fgB, TR("Point Map with &Global Datum"), &sMapB, new MapListerDomainType(".mpp", dmIDENT, false));
 	fldMapB->SetCallBack((NotifyProc)&SelectPointMapsPage::MapBCallBack);
-	cbUseHeightsB = new CheckBox(fgB, SAFUiUseHeights, &m_dw->fUseHeightsB);
+	cbUseHeightsB = new CheckBox(fgB, TR("Use Heights (m)"), &m_dw->fUseHeightsB);
 	fldColB = new FieldColumn(cbUseHeightsB,"",Table(),&sColB, dmVALUE);
-	String sPntsB = String(SAFUiPnts_i.scVal(), iNrPntsB);
+	String sPntsB = String(TR("Number of control points %li").c_str(), iNrPntsB);
 	stNrPntsB = new StaticText(fgB, sPntsB);
 	stNrPntsB->Align(cbUseHeightsB, AL_UNDER);
 	stNrPntsB->SetIndependentPos();
-	String sCsyB = String(SAFUiCoordSys.scVal(),sCoordSysB);
+	String sCsyB = String(TR("&Coordinate System").c_str(),sCoordSysB);
 	stCsyNameB = new StaticText(fgB, sCsyB);
 	stCsyNameB->SetWidth(150);
 	stCsyNameB->SetIndependentPos();
 	sDatumB= String();
-	String sDatumNameB = String(SAFUiGlobalDatum_S.scVal(), sDatumB);
+	String sDatumNameB = String(TR("Global Datum is %S").c_str(), sDatumB);
 	stDatumNameB = new StaticText(fgB, sDatumNameB);
 	stDatumNameB->SetWidth(150);
 	stDatumNameB->SetIndependentPos();
@@ -1172,7 +1172,7 @@ int SelectPointMapsPage::MapACallBack(Event*)
 		return 0;
 
 	iNrPntsA = m_dw->pmdcA.pm->iFeatures();
-	String sPntsA = String(SAFUiPnts_i.scVal(), iNrPntsA);
+	String sPntsA = String(TR("Number of control points %li").c_str(), iNrPntsA);
 	stNrPntsA->SetVal(sPntsA);
 
 	sCoordSysA = m_dw->pmdcA.cs->sName();
@@ -1181,9 +1181,9 @@ int SelectPointMapsPage::MapACallBack(Event*)
 		sDatumA = m_dw->pmdcA.cs->pcsViaLatLon()->datum->sName();
 	else
 		sDatumA = String("unspecified");
-	String sCsyA = String(SAFUiCoordSys_SS.scVal(), sCoordSysA, sEllipsoidA);
+	String sCsyA = String(TR("Coordinate System %S with Ellipsoid %S").c_str(), sCoordSysA, sEllipsoidA);
 	stCsyNameA->SetVal(sCsyA);
-	String sDatumNameA = String(SAFUiCurrDatum_S.scVal(), sDatumA);
+	String sDatumNameA = String(TR("Current Datum is %S").c_str(), sDatumA);
 	stDatumNameA->SetVal(sDatumNameA);
 	if (fCheckDomainEquality(m_dw->pmdcA, m_dw->pmdcB))
 		m_dw->SetWizardButtons(PSWIZB_NEXT);
@@ -1208,7 +1208,7 @@ int SelectPointMapsPage::MapBCallBack(Event*)
 		return 0;
 
 	iNrPntsB = m_dw->pmdcB.pm->iFeatures();
-	String sPntsB = String(SAFUiPnts_i.scVal(), iNrPntsB);
+	String sPntsB = String(TR("Number of control points %li").c_str(), iNrPntsB);
 	stNrPntsB->SetVal(sPntsB);
 
 	sCoordSysB = m_dw->pmdcB.cs->sName();
@@ -1217,9 +1217,9 @@ int SelectPointMapsPage::MapBCallBack(Event*)
 		sDatumB = m_dw->pmdcB.cs->pcsViaLatLon()->datum->sName();
 	else
 		sDatumB = String("unspecified");
-	String sCsyB = String(SAFUiCoordSys_SS.scVal(), sCoordSysB, sEllipsoidB);
+	String sCsyB = String(TR("Coordinate System %S with Ellipsoid %S").c_str(), sCoordSysB, sEllipsoidB);
 	stCsyNameB->SetVal(sCsyB);
-	String sDatumNameB = String(SAFUiGlobalDatum_S.scVal(), sDatumB);
+	String sDatumNameB = String(TR("Global Datum is %S").c_str(), sDatumB);
 	stDatumNameB->SetVal(sDatumNameB);
 	if (fCheckDomainEquality(m_dw->pmdcA, m_dw->pmdcB))
 		m_dw->SetWizardButtons(PSWIZB_NEXT);
@@ -1228,14 +1228,14 @@ int SelectPointMapsPage::MapBCallBack(Event*)
 }
 
 ///---------------- SelectMethodPage
-SelectMethodPage::SelectMethodPage(DatumWizard* dw) : FormBaseWizardPage(SAFTitleDatumParmsFromCtrlPnts)
+SelectMethodPage::SelectMethodPage(DatumWizard* dw) : FormBaseWizardPage(TR("Find Datum Parameters from Common Control Points"))
 {
 	m_dw = dw;
 	m_dw->iMethod = 0;
 	
 	m_dw->fScaleAndRotationFirst = false;
 	FormEntry* root = feRoot();
-	StaticText* st = new StaticText(root, SAFTitleMethodPage, true);
+	StaticText* st = new StaticText(root, TR("Select Datum Transformation Method"), true);
 	st->SetIndependentPos();
 	rgMethod = new RadioGroup(root, "", &m_dw->iMethod, true);
 	rgMethod->SetIndependentPos();
@@ -1245,21 +1245,21 @@ SelectMethodPage::SelectMethodPage(DatumWizard* dw) : FormBaseWizardPage(SAFTitl
 	rb2->Align(rb1, AL_UNDER);
 	RadioButton *rb3 = new RadioButton(rgMethod, "Bursa &Wolf");
 	rb3->Align(rb2, AL_UNDER);
-	//cbScaleAndRotationFirstBW = new CheckBox(rb3, SAFUiScRotFirst, &m_dw->fScaleAndRotationFirst);
+	//cbScaleAndRotationFirstBW = new CheckBox(rb3, TR("&Calculate Scale and Rotations First"), &m_dw->fScaleAndRotationFirst);
 	//cbScaleAndRotationFirstBW->Align(rb3, AL_AFTER);
 	RadioButton *rb4 = new RadioButton(rgMethod, "Molodensky &Badekas");
 	rb4->Align(rb3, AL_UNDER);
-	//cbScaleAndRotationFirstMB = new CheckBox(rb4, SAFUiScRotFirst, &m_dw->fScaleAndRotationFirst);
+	//cbScaleAndRotationFirstMB = new CheckBox(rb4, TR("&Calculate Scale and Rotations First"), &m_dw->fScaleAndRotationFirst);
 	//cbScaleAndRotationFirstMB->Align(rb4, AL_AFTER);
 	stRemark = new InfoText(root,"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
 	stRemark->SetHeight(40);
 	stRemark->Align(rb4, AL_UNDER);
 	m_fgUserDefP = new FieldGroup(rb4, true);
 	m_fgUserDefP->Align(stRemark, AL_UNDER);
-  frXCoord = new FieldReal(m_fgUserDefP, SAFUiXCoord, &m_dw->ctsWizPivot.x, ValueRange(-1e7,1e7,0.001));
-  frYCoord = new FieldReal(m_fgUserDefP, SAFUiYCoord, &m_dw->ctsWizPivot.y, ValueRange(-1e7,1e7,0.001));
+  frXCoord = new FieldReal(m_fgUserDefP, TR("&Xo ="), &m_dw->ctsWizPivot.x, ValueRange(-1e7,1e7,0.001));
+  frYCoord = new FieldReal(m_fgUserDefP, TR("&Yo ="), &m_dw->ctsWizPivot.y, ValueRange(-1e7,1e7,0.001));
   frYCoord->Align(frXCoord, AL_AFTER);
-	frZCoord = new FieldReal(m_fgUserDefP, SAFUiZCoord, &m_dw->ctsWizPivot.z, ValueRange(-1e7,1e7,0.001));
+	frZCoord = new FieldReal(m_fgUserDefP, TR("&Zo ="), &m_dw->ctsWizPivot.z, ValueRange(-1e7,1e7,0.001));
   frZCoord->Align(frYCoord, AL_AFTER);
 }
 
@@ -1346,12 +1346,12 @@ BEGIN_MESSAGE_MAP(UpdateDatumPage, FormBaseWizardPage)
 END_MESSAGE_MAP()
 
 
-UpdateDatumPage::UpdateDatumPage(DatumWizard* dw) : FormBaseWizardPage(SAFTitleDatumParmsFromCtrlPnts)
+UpdateDatumPage::UpdateDatumPage(DatumWizard* dw) : FormBaseWizardPage(TR("Find Datum Parameters from Common Control Points"))
 {
 	m_dw = dw;
 
 	FormEntry* root = feRoot();
-	StaticText* st = new StaticText(root, SAFTitleUpdateDatumPage, true);
+	StaticText* st = new StaticText(root, TR("Datum Calculation Results"), true);
 	st->SetIndependentPos();
 	stRemark = new InfoText(root,"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
 	stRemark2 = new InfoText(root,"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
@@ -1360,7 +1360,7 @@ UpdateDatumPage::UpdateDatumPage(DatumWizard* dw) : FormBaseWizardPage(SAFTitleD
 	fsm->SetWidth(160);
 	cbUpdateDatum = new CheckBox(root, String(), &m_dw->fUpdateDatum);
 	cbUpdateDatum->SetIndependentPos();
-	stCsyNameA1 = new StaticText(root, SAFUiUpdateDatum1);
+	stCsyNameA1 = new StaticText(root, TR("&Save Datum Parameters as user-defined Datum"));
 	stCsyNameA1->Align(cbUpdateDatum, AL_AFTER);
 	stCsyNameA2 = new StaticText(root, "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
 	stCsyNameA2->Align(stCsyNameA1, AL_UNDER);
@@ -1380,7 +1380,7 @@ BOOL UpdateDatumPage::OnSetActive()
 	stRemark->SetVal("");
 	stRemark2->SetVal("");
 	String sCoordSysA = m_dw->pmdcA.cs->sName();
-	stCsyNameA2->SetVal(String(SAFUiUpdateDatum2_S.scVal(), sCoordSysA));
+	stCsyNameA2->SetVal(String(TR("in Coordinate System %S").c_str(), sCoordSysA));
 	cbUpdateDatum->StoreData();
 	String sDatumTrans;
 	switch (m_dw->iMethod)
@@ -1472,7 +1472,7 @@ LRESULT UpdateDatumPage::OnWizardBack()
 // The  wizard implementation
 
 DatumWizard::DatumWizard(CWnd* wnd, const char* sPar)
-: CPropertySheet(SAFTitleDatumParmsFromCtrlPnts.scVal(), wnd), 
+: CPropertySheet(TR("Find Datum Parameters from Common Control Points").c_str(), wnd), 
 	cdp(0), fUpdateDatum(false), fScaleAndRotationFirst(false)
 {
 	// Initialize the wizard

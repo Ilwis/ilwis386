@@ -60,11 +60,11 @@ String AggregateValueAdditional::sGetAttributeColumn()
 
 void AggregateValueAdditional::SetAdditionalBlock(FormEntry *feAbove, FormEntry *feAlignUnder, bool fMulti)
 {
-	frPower = new FieldReal(feAbove, SAFUiPower, &rPower, ValueRange(1.0001, 1000.0, 0));
+	frPower = new FieldReal(feAbove, TR("&Power"), &rPower, ValueRange(1.0001, 1000.0, 0));
 	frPower->Align(feAlignUnder, AL_UNDER);
 	frPower->Hide();
 
-	cbAdditional = new CheckBox(feAbove, SAFUiAdditionalParsm, &fAdditional );
+	cbAdditional = new CheckBox(feAbove, TR("Additional para&meters"), &fAdditional );
 	if ( fMulti)
 		cbAdditional->SetIndependentPos();
 	cbAdditional->Align(feAlignUnder, AL_UNDER);
@@ -73,9 +73,9 @@ void AggregateValueAdditional::SetAdditionalBlock(FormEntry *feAbove, FormEntry 
 	if ( fMulti)
 		rgBoolean->SetIndependentPos();
 	rgBoolean->Align(cbAdditional, AL_UNDER);
-	RadioButton *rbMapBoolean = new RadioButton(rgBoolean, SAFUiBooleanMap);
-	RadioButton *rbMapWeight = new RadioButton(rgBoolean, SAFUiWeightMap);	
-	RadioButton *rbExpression = new RadioButton(rgBoolean, SAFUiBooleanExpr);	
+	RadioButton *rbMapBoolean = new RadioButton(rgBoolean, TR("Mask &Map"));
+	RadioButton *rbMapWeight = new RadioButton(rgBoolean, TR("&Weight Map"));	
+	RadioButton *rbExpression = new RadioButton(rgBoolean, TR("Mask &Expression"));	
 	
 	fsExpression = new FieldString(rbExpression, "", &sBooleanExpression, Domain(), false);
     fsExpression->Align(rbExpression, AL_AFTER);
@@ -113,7 +113,7 @@ void FieldAggregateValueFuncSimple::create()
 
 	int iRet = 0;
 	if (sDefault.length() > 0)
-		iRet = ose->FindString(-1, sDefault.scVal());
+		iRet = ose->FindString(-1, sDefault.c_str());
 	if (iRet != CB_ERR)
 		ose->SetCurSel(iRet);
 	else	

@@ -298,23 +298,23 @@ void FieldSymbolSimple::create()
 {
   FieldOneSelect::create();
   int i = 0;
-  ose->AddString(SDCSmbCircle.scVal());
+  ose->AddString(TR("Circle").c_str());
   SendMessage(*ose,CB_SETITEMDATA,i++,(long)smbCircle);
-  ose->AddString(SDCSmbSquare.scVal());
+  ose->AddString(TR("Square").c_str());
   SendMessage(*ose,CB_SETITEMDATA,i++,(long)smbSquare);
-  ose->AddString(SDCSmbDiamond.scVal());
+  ose->AddString(TR("Diamond").c_str());
   SendMessage(*ose,CB_SETITEMDATA,i++,(long)smbDiamond);
-  ose->AddString(SDCSmbDeltaUp.scVal());
+  ose->AddString(TR("Delta Up").c_str());
   SendMessage(*ose,CB_SETITEMDATA,i++,(long)smbDeltaUp);
-  ose->AddString(SDCSmbDeltaDown.scVal());
+  ose->AddString(TR("Delta Down").c_str());
   SendMessage(*ose,CB_SETITEMDATA,i++,(long)smbDeltaDown);
-  ose->AddString(SDCSmbPlus.scVal());
+  ose->AddString(TR("Plus").c_str());
   SendMessage(*ose,CB_SETITEMDATA,i++,(long)smbPlus);
-  ose->AddString(SDCSmbMinus.scVal());
+  ose->AddString(TR("Minus").c_str());
   SendMessage(*ose,CB_SETITEMDATA,i++,(long)smbMinus);
-  ose->AddString(SDCSmbCross.scVal());
+  ose->AddString(TR("Cross").c_str());
   ose->SendMessage(CB_SETITEMDATA,i++,(long)smbCross);
-//  ose->add(SDCSmbIcon);
+//  ose->add(TR("Icon"));
 //  SendMessage(*ose,CB_SETITEMDATA,i++,(long)smbIcon);
   ose->SetCurSel((int)*val);
   ose->setNotify(this, (NotifyProc)&FieldSymbolSimple::SelChanged, Notify(CB_SETCURSEL));
@@ -395,10 +395,10 @@ int FieldSymbolSimple::SelChanged(Event*)
   int id = ose->GetCurSel();
   CString s;
   ose->GetLBText(id, s);
-  if (String(s) == SDCSmbIcon) {
-    String sTypes("%S (*.ico)", SDCSmbIcons);
-		CFileDialog frmIcon(TRUE, "*.ico", 0, 0, sTypes.scVal(), _frm->wnd());  
-    //zFileOpenForm frmIcon((zWindow*)_frm,SDCSmbSelIcon,"*.ico",types);
+  if (String(s) == TR("Icon")) {
+    String sTypes("%S (*.ico)", TR("Icons"));
+		CFileDialog frmIcon(TRUE, "*.ico", 0, 0, sTypes.c_str(), _frm->wnd());  
+    //zFileOpenForm frmIcon((zWindow*)_frm,TR("Select Icon"),"*.ico",types);
     if (frmIcon.DoModal() == IDOK) 
 		{
       if (*hicon) ::DestroyIcon(*hicon);

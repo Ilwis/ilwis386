@@ -150,7 +150,7 @@ void DrawerTool::removeTool(DrawerTool *tool) {
 
 HTREEITEM DrawerTool::insertItem(const String& name,const String& icon, DisplayOptionTreeItem *item, int checkstatus , HTREEITEM after) {
 	int iImg = IlwWinApp()->iImage(icon);
-	HTREEITEM htiDisplayOptions = tree->GetTreeCtrl().InsertItem(name.scVal(), iImg, iImg, item->getParent(), after);
+	HTREEITEM htiDisplayOptions = tree->GetTreeCtrl().InsertItem(name.c_str(), iImg, iImg, item->getParent(), after);
 	item->setTreeItem(htiDisplayOptions);
 	if ( checkstatus >=0) {
 		tree->GetTreeCtrl().SetCheck(htiDisplayOptions, checkstatus );
@@ -162,7 +162,7 @@ HTREEITEM DrawerTool::insertItem(const String& name,const String& icon, DisplayO
 
 HTREEITEM DrawerTool::insertItem(HTREEITEM parent, const String& name,const String& icon, LayerTreeItem *item) {
 	int iImg = IlwWinApp()->iImage(icon);
-	HTREEITEM htiDisplayOptions = tree->GetTreeCtrl().InsertItem(name.scVal(), iImg, iImg, parent);
+	HTREEITEM htiDisplayOptions = tree->GetTreeCtrl().InsertItem(name.c_str(), iImg, iImg, parent);
 	tree->GetTreeCtrl().SetItemData(htiDisplayOptions, (DWORD_PTR)item);
 	return htiDisplayOptions; 
 }

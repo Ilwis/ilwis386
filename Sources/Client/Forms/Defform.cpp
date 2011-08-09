@@ -203,7 +203,7 @@ void ObjectDefForm::OnDefine()
 }
 
 MapDefForm::MapDefForm(CWnd* wPar, Map& _mp, bool fShowButtons, bool fBreakDep)
-: ObjectDefForm(wPar, _mp, SMSTitleRasMapDef),
+: ObjectDefForm(wPar, _mp, TR("Raster Map Definition")),
 	mp(_mp), stDomain(0), fdm(0), fgr(0),
 	stRemark(0), frValueRange(0)
 {
@@ -218,23 +218,23 @@ MapDefForm::MapDefForm(CWnd* wPar, Map& _mp, bool fShowButtons, bool fBreakDep)
 	if (mp->fExpressionChangeable()) {
 		fSetDescFromExpr = sExpr == mp->sDescription;
 		
-		fsExpr = new FieldString(root, SMSUiExpr, &sExpr);
+		fsExpr = new FieldString(root, TR("Expression:"), &sExpr);
 		fsExpr->SetWidth(120);
 		fsExpr->SetIndependentPos();
-		fdm = new FieldDomainC(root, SMSUiDomain, &sDomain,
+		fdm = new FieldDomainC(root, TR("&Domain"), &sDomain,
 			dmCLASS|dmIDENT|dmVALUE|dmGROUP|dmIMAGE|dmPICT|dmBOOL|dmBIT|dmCOLOR);
 		fdm->SetCallBack((NotifyProc)&MapDefForm::CallBackDomainChange);
 		String sFill('X', 50);
 		stDomain = new StaticText(root, sFill);
 		stDomain->SetIndependentPos();
 		feLast = stDomain;
-		PushButton* pb = new PushButton(root, SMSUiDefaults, 
+		PushButton* pb = new PushButton(root, TR("Defaults"), 
 			(NotifyProc)&MapDefForm::SetDefaults);
 		pb->SetIndependentPos();
 		pb->Align(fdm, AL_AFTER);
 	}
 	else {
-		FormEntry* fs = new FieldString(root, SMSUiExpr, &sExpr, Domain(), true, ES_AUTOHSCROLL|WS_TABSTOP|WS_GROUP|ES_READONLY);
+		FormEntry* fs = new FieldString(root, TR("Expression:"), &sExpr, Domain(), true, ES_AUTOHSCROLL|WS_TABSTOP|WS_GROUP|ES_READONLY);
 		fs->SetWidth(120);
 		fs->SetIndependentPos();
 		StaticText *st;
@@ -259,7 +259,7 @@ MapDefForm::MapDefForm(CWnd* wPar, Map& _mp, bool fShowButtons, bool fBreakDep)
 				feLast->SetCallBack((NotifyProc)&MapDefForm::CallBackDomainChange);
 			if (mp->vr().fValid())
 				vr = mp->vr();
-			frValueRange = new FieldValueRange(root, SMSUiRange, &vr, fdm);
+			frValueRange = new FieldValueRange(root, TR("Value &Range"), &vr, fdm);
 			frValueRange->SetCallBack((NotifyProc)&MapDefForm::ValueRangeCallBack);
 			frValueRange->Align(feLast, AL_UNDER);  
 			feLast = frValueRange;  
@@ -267,7 +267,7 @@ MapDefForm::MapDefForm(CWnd* wPar, Map& _mp, bool fShowButtons, bool fBreakDep)
 		
 	if (mp->fGeoRefChangeable()) {
 		sGeoRef = mp->gr()->sName();
-		fgr = new FieldGeoRefExisting(root, SMSUiGrf, &sGeoRef);
+		fgr = new FieldGeoRefExisting(root, TR("&GeoReference"), &sGeoRef);
 		fgr->SetCallBack((NotifyProc)&MapDefForm::CallBackGeoRefChange); 
 		String sFill('X', 50);
 		stGeoRef = new StaticText(root, sFill);
@@ -275,7 +275,7 @@ MapDefForm::MapDefForm(CWnd* wPar, Map& _mp, bool fShowButtons, bool fBreakDep)
 		feLast = stGeoRef;  
 	}
 	
-	fsDesc = new FieldString(root, SMSUiDesc, &mp->sDescription);
+	fsDesc = new FieldString(root, TR("Desc."), &mp->sDescription);
 	if (feLast != frValueRange)
 		fsDesc->Align(feLast, AL_UNDER);
 	fsDesc->SetWidth(120);
@@ -331,10 +331,10 @@ int MapDefForm::CallBackDomainChange(Event*)
           frValueRange->DomainCallBack(0);
     }
     catch (ErrorObject& err) {
-      err.Show(SMSErrDomChange);
+      err.Show(TR("Domain Change"));
     }  
     if (!dm.fValid()) {
-      stDomain->SetVal(SMSRemInvalidDomain);
+      stDomain->SetVal(TR("Invalid Domain"));
       if (frValueRange)
         frValueRange->Hide();
       return 1;
@@ -367,18 +367,18 @@ int MapDefForm::ValueRangeCallBack(Event*)
     int iNr;
     if (st < stBYTE) {
       if (st == stBIT)
-        s = SAFRem1bit;
+        s = TR("1 bit");
       else {  
         switch (st) {
           case stDUET: iNr = 2; break;
           case stNIBBLE: iNr = 4; break;
         }
-        s = String(SAFRemBits_i.scVal(), iNr);
+        s = String(TR("%i bits").c_str(), iNr);
       }  
     }
     else {
       if (st == stBYTE)
-        s = SAFRem1byte;
+        s = TR("1 byte");
       else {  
         switch (st) {
           case stINT: iNr = 2; break;
@@ -386,15 +386,15 @@ int MapDefForm::ValueRangeCallBack(Event*)
           case stREAL: iNr = 8; break;
           case stCRD: iNr = 16; break;
         }
-        s = String(SAFRemBytes_i.scVal(), iNr);
+        s = String(TR("%i bytes").c_str(), iNr);
       }  
     }
-    String sRemark(SAFRemMapPixUse_S.scVal(), s);
+    String sRemark(TR("Map will use %S per pixel").c_str(), s);
     stRemark->SetVal(sRemark);
   }
   catch (ErrorObject&) 
   {
-    stRemark->SetVal(SAFRemInvalidDomain);
+    stRemark->SetVal(TR("Invalid Domain"));
   }  
   return 0;
 }
@@ -434,7 +434,7 @@ int MapDefForm::CallBackGeoRefChange(Event*)
     sRemark = grf->sDescription;
   }
   catch (ErrorObject&) {
-    sRemark = SMSRemInvalidGrf;
+    sRemark = TR("Invalid GeoReference");
   }  
   stGeoRef->SetVal(sRemark);
   return 1;
@@ -485,13 +485,13 @@ int MapDefForm::exec()
 }    
   
 SegmentMapDefForm::SegmentMapDefForm(CWnd* wPar, SegmentMap& _mp)
-  : ObjectDefForm(wPar, _mp, SMSTitleSegMapDef),
+  : ObjectDefForm(wPar, _mp, TR("Segment Map Definition")),
   mp(_mp)
 {
   String sExpr = mp->sExpression();
   Domain dm = mp->dm();
   String sDomain = dm->sName();
-  String s = String(SMSUiExpr_s.scVal(), sExpr);
+  String s = String(TR("Expression: %S").c_str(), sExpr);
   StaticText* st = new StaticText(root, s);
   st->SetIndependentPos();
   String sDomText = dm->sTypeName();
@@ -499,7 +499,7 @@ SegmentMapDefForm::SegmentMapDefForm(CWnd* wPar, SegmentMap& _mp)
   st->SetIndependentPos();
   st = new StaticText(root, dm->sDescription);
   
-  FieldString* fs = new FieldString(root, SMSUiDesc, &mp->sDescription);
+  FieldString* fs = new FieldString(root, TR("Desc."), &mp->sDescription);
   fs->Align(st, AL_UNDER);
   fs->SetWidth(120);
   fs->SetIndependentPos();
@@ -509,13 +509,13 @@ SegmentMapDefForm::SegmentMapDefForm(CWnd* wPar, SegmentMap& _mp)
 }
     
 PolygonMapDefForm::PolygonMapDefForm(CWnd* wPar, PolygonMap& _mp)
-  : ObjectDefForm(wPar, _mp, SMSTitlePolMapDef),
+  : ObjectDefForm(wPar, _mp, TR("Polygon Map Definition")),
   mp(_mp)
 {
   String sExpr = mp->sExpression();
   Domain dm = mp->dm();
   String sDomain = dm->sName();
-  String s = String(SMSUiExpr_s.scVal(), sExpr);
+  String s = String(TR("Expression: %S").c_str(), sExpr);
   StaticText* st = new StaticText(root, s);
   st->SetIndependentPos();
   String sDomText = dm->sTypeName();
@@ -523,7 +523,7 @@ PolygonMapDefForm::PolygonMapDefForm(CWnd* wPar, PolygonMap& _mp)
   st->SetIndependentPos();
   st = new StaticText(root, dm->sDescription);
   
-  FieldString* fs = new FieldString(root, SMSUiDesc, &mp->sDescription);
+  FieldString* fs = new FieldString(root, TR("Desc."), &mp->sDescription);
   fs->Align(st, AL_UNDER);
   fs->SetWidth(120);
   fs->SetIndependentPos();
@@ -533,13 +533,13 @@ PolygonMapDefForm::PolygonMapDefForm(CWnd* wPar, PolygonMap& _mp)
 }
     
 PointMapDefForm::PointMapDefForm(CWnd* wPar, PointMap& _mp)
-  : ObjectDefForm(wPar, _mp, SMSTitlePntMapDef),
+  : ObjectDefForm(wPar, _mp, TR("Point Map Definition")),
   mp(_mp)
 {
   String sExpr = mp->sExpression();
   Domain dm = mp->dm();
   String sDomain = dm->sName();
-  String s = String(SMSUiExpr_s.scVal(), sExpr);
+  String s = String(TR("Expression: %S").c_str(), sExpr);
   StaticText* st = new StaticText(root, s);
   st->SetIndependentPos();
   String sDomText = dm->sTypeName();
@@ -547,7 +547,7 @@ PointMapDefForm::PointMapDefForm(CWnd* wPar, PointMap& _mp)
   st->SetIndependentPos();
   st = new StaticText(root, dm->sDescription);
   
-  FieldString* fs = new FieldString(root, SMSUiDesc, &mp->sDescription);
+  FieldString* fs = new FieldString(root, TR("Desc."), &mp->sDescription);
   fs->Align(st, AL_UNDER);
   fs->SetWidth(120);
   fs->SetIndependentPos();
@@ -557,13 +557,13 @@ PointMapDefForm::PointMapDefForm(CWnd* wPar, PointMap& _mp)
 }
     
 TableDefForm::TableDefForm(CWnd* wPar, const Table& tb)
-  : ObjectDefForm(wPar, tb, SMSTitleTableDef),
+  : ObjectDefForm(wPar, tb, TR("Table Definition")),
   tbl(tb)
 {
   String sExpr = tbl->sExpression();
   Domain dm = tbl->dm();
   String sDomain = dm->sName();
-  String s = String(SMSUiExpr_s.scVal(), sExpr);
+  String s = String(TR("Expression: %S").c_str(), sExpr);
   StaticText* st = new StaticText(root, s);
   st->SetIndependentPos();
   String sDomText = dm->sTypeName();
@@ -571,7 +571,7 @@ TableDefForm::TableDefForm(CWnd* wPar, const Table& tb)
   st->SetIndependentPos();
   st = new StaticText(root, dm->sDescription);
   
-  FieldString* fs = new FieldString(root, SMSUiDesc, &tbl->sDescription);
+  FieldString* fs = new FieldString(root, TR("Desc."), &tbl->sDescription);
   fs->Align(st, AL_UNDER);
   fs->SetWidth(120);
   fs->SetIndependentPos();
@@ -582,13 +582,13 @@ TableDefForm::TableDefForm(CWnd* wPar, const Table& tb)
 
 /*
 MatrixObjectDefForm::MatrixObjectDefForm(CWnd* wPar, MatrixObject& mt)
-  : ObjectDefForm(wPar, mt, SMSTitleMatrixDef),
+  : ObjectDefForm(wPar, mt, TR("Matrix Definition")),
   mat(mt)
 {
   String sExpr = mat->sExpression();
   Domain dm = mp->dm();
   String sDomain = dm->sName();
-  s = String(SMSUiExpr_s, sExpr);
+  s = String(TR("Expression: %S"), sExpr);
   st = new StaticText(root, s);
   st->SetIndependentPos();
   String sDomText = dm->sTypeName();
@@ -596,7 +596,7 @@ MatrixObjectDefForm::MatrixObjectDefForm(CWnd* wPar, MatrixObject& mt)
   st->SetIndependentPos();
   st = new StaticText(root, dm->sDescription);
   
-  FieldString* fs = new FieldString(root, SMSUiDesc, &mp->sDescription);
+  FieldString* fs = new FieldString(root, TR("Desc."), &mp->sDescription);
   fs->Align(st, AL_UNDER);
   fs->SetWidth(120);
   fs->SetIndependentPos();

@@ -94,11 +94,11 @@ void CoordSysView::create()
       *cMin = *cMax = crdUNDEF;//Coord(0,0);
     if (cs->fDataReadOnly()) 
 		{
-      StaticText* stMin = new StaticText(root, SCSUiMinXY);
+      StaticText* stMin = new StaticText(root, TR("&Min X, Y"));
       String s = cs->sValue(*cMin);
       StaticText* stCrd = new StaticText(root, s);
       stCrd->Align(stMin, AL_AFTER);
-      StaticText* stMax = new StaticText(root, SCSUiMaxXY);
+      StaticText* stMax = new StaticText(root, TR("&Max X, Y"));
       stMax->Align(stMin, AL_UNDER);
       s = cs->sValue(*cMax);
       stCrd = new StaticText(root, s);
@@ -108,9 +108,9 @@ void CoordSysView::create()
     }
     else if (0 == cspr)
 		{
-      fldCrdMin = new FieldCoord(root, SCSUiMinXY, cMin);
+      fldCrdMin = new FieldCoord(root, TR("&Min X, Y"), cMin);
       fldCrdMin->SetCallBack((NotifyProc)&CoordSysView::CallBack);
-      fldCrdMax = new FieldCoord(root, SCSUiMaxXY, cMax);
+      fldCrdMax = new FieldCoord(root, TR("&Max X, Y"), cMax);
       fldCrdMax->SetCallBack((NotifyProc)&CoordSysView::CallBack);
     }
   }

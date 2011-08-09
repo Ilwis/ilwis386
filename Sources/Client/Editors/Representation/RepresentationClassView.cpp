@@ -250,17 +250,17 @@ private:
 };
 
 CustomizeForm::CustomizeForm(CWnd* wPar, const Domain& dom, int *iState, int* w)
-: FormWithDest(wPar, SRPTitleCustomize),
+: FormWithDest(wPar, TR("Customize")),
   dm(dom)
 {
 	new FieldBlank(root);
-	RadioGroup* rgNames = new RadioGroup(root, SRPUiSetDisplay, iState, true);
-	rb =  new RadioButton(rgNames, SRPUiName);
+	RadioGroup* rgNames = new RadioGroup(root, TR("Display Name/Code"), iState, true);
+	rb =  new RadioButton(rgNames, TR("Display Name"));
 	rb->Align(rgNames, AL_UNDER);
-	rb1 = new RadioButton(rgNames, SRPUiNameCode);
-	rb2 = new RadioButton(rgNames, SRPUiCode);
+	rb1 = new RadioButton(rgNames, TR("Display Name and Code"));
+	rb2 = new RadioButton(rgNames, TR("Display Code"));
 	new FieldBlank(root);
-	fi = new FieldInt(root, SRPUiColumnWidth, w, ValueRange(20L,250L));
+	fi = new FieldInt(root, TR("Column &Width"), w, ValueRange(20L,250L));
 	fi->SetCallBack((NotifyProc)& CustomizeForm::Check);
 	SetMenHelpTopic("ilwismen\\representation_class_editor_column_width.htm");
 	create();
@@ -439,7 +439,7 @@ class MultipleRprItemForm: public FormWithDest
 {
 public:
   MultipleRprItemForm(CWnd* wPar,  RepresentationClassLB::DrawMode mode, const Color& c1, const Color& c2, int *iSize)
-  : FormWithDest(wPar, SRPTitleEditMultipleItems)
+  : FormWithDest(wPar, TR("Edit Multiple Items"))
   {
     iOption = 1;
     fVariation = false;
@@ -447,19 +447,19 @@ public:
     col1 = c1;
     col2 = c2;
     RadioGroup* rg = new RadioGroup(root, "", &iOption);
-    RadioButton* rbSingle = new RadioButton(rg, SRPUiSingleColor);
-    RadioButton* rbRange = new RadioButton(rg, SRPUiColorRange);
+    RadioButton* rbSingle = new RadioButton(rg, TR("&Single Color"));
+    RadioButton* rbRange = new RadioButton(rg, TR("Color &Range"));
 
     FieldGroup* fgSingle = new FieldGroup(rbSingle);
     fgSingle->Align(rg, AL_UNDER);
-    new FieldColor(fgSingle, SRPUiColor, &col2);
+    new FieldColor(fgSingle, TR("&Color"), &col2);
 
     FieldGroup* fgRange = new FieldGroup(rbRange);
     fgRange->Align(rg, AL_UNDER);
-    new FieldColor(fgRange, SRPUiFromColor, &col1);
-    new FieldColor(fgRange, SRPUiToColor, &col2);
+    new FieldColor(fgRange, TR("&From Color"), &col1);
+    new FieldColor(fgRange, TR("&To Color"), &col2);
 
-    CheckBox* cbVar = new CheckBox(root, SRPUiVariation, &fVariation);
+    CheckBox* cbVar = new CheckBox(root, TR("&Variation"), &fVariation);
     cbVar->Align(fgRange, AL_UNDER);
     new FieldInt(cbVar, "", &iVariation, ValueRange(1,255));
 

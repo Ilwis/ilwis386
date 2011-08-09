@@ -127,7 +127,7 @@ void GeoRefGeneratedView::create()
 	int iImage = IlwWinApp()->iImage(".grf");
 	if (iImage) 
 	{
-		s = String("%S: ", SGRInfParentGeoRef);
+		s = String("%S: ", TR("Linked GeoRef"));
 		st = new StaticText(fgMain, s);
 		st->SetIndependentPos();
 		st->psn->SetBound(0, 0, 0, 0);
@@ -203,18 +203,18 @@ void GeoRefGeneratedView::create()
 
 int GeoRefGeneratedView::OpenParentGeoRef(Event*)
 {
-	IlwWinApp()->OpenDocumentFile(m_fnParent.sFullName().scVal());
+	IlwWinApp()->OpenDocumentFile(m_fnParent.sFullName().c_str());
 	return 0;
 }
 
 int GeoRefGeneratedView::OpenRootGeoRef(Event*)
 {
-	IlwWinApp()->OpenDocumentFile(m_fnRoot.sFullName().scVal());
+	IlwWinApp()->OpenDocumentFile(m_fnRoot.sFullName().c_str());
 	return 0;
 }
 
 int GeoRefGeneratedView::OpenCoordSystem(Event*)
 {
-	IlwWinApp()->OpenDocumentFile(GetDocument()->gr()->cs()->fnObj.sFullName().scVal());
+	IlwWinApp()->OpenDocumentFile(GetDocument()->gr()->cs()->fnObj.sFullName().c_str());
 	return 0;
 }

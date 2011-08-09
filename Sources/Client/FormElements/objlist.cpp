@@ -399,7 +399,7 @@ void ObjectExtensionLister::AddObjects(const String& sExt)
   sMask &= sExt;
 
   CFileFind finder;
-  BOOL fFound = finder.FindFile(sMask.scVal());
+  BOOL fFound = finder.FindFile(sMask.c_str());
 	while (fFound) 
 	{
 		fFound = finder.FindNextFile();
@@ -419,7 +419,7 @@ void ObjectExtensionLister::AddObjects(const String& sExt)
   sMask &= sExt;
 
 	finder.Close();
-	fFound = finder.FindFile(sMask.scVal());
+	fFound = finder.FindFile(sMask.c_str());
 	while (fFound) 
   {
 		fFound = finder.FindNextFile();
@@ -800,7 +800,7 @@ bool GeoRefLister::fOK(const FileName& fn, const String&)
 		long iOffset = 0;  // Initialize to get rid of warning
 		ObjectInfo::ReadElement("MapList", "Offset", fn, iOffset);  // Offset is read properly
 		String sKey = String("Map%li", iOffset);
-		ObjectInfo::ReadElement("MapList", sKey.scVal(), fn, fnBand);
+		ObjectInfo::ReadElement("MapList", sKey.c_str(), fn, fnBand);
 	}
 
 	// Check for raster maps (also in maplists): only they can contain georeferences
@@ -878,7 +878,7 @@ bool MapListerDomainType::fOK(const FileName& fnMap, const String& sColName)
 		long iOffset = 0;  // Initialize to get rid of warning
 		ObjectInfo::ReadElement("MapList", "Offset", fnMap, iOffset);  // Offset is read properly
 		String sKey = String("Map%li", iOffset);
-		ObjectInfo::ReadElement("MapList", sKey.scVal(), fnMap, fnBand);
+		ObjectInfo::ReadElement("MapList", sKey.c_str(), fnMap, fnBand);
 	}
 	FileName fnDom;
 	ObjectInfo::ReadElement("BaseMap", "Domain", fnBand, fnDom);
@@ -899,7 +899,7 @@ bool MapListerDomainType::fAcceptColumn(const FileName& fnAttrib, const String& 
 	if ( sCol != "")
 	{
 		FileName fnDom;
-		ObjectInfo::ReadElement(String("Col:%S", sCol.sQuote()).scVal(), "Domain", fnAttrib, fnDom);
+		ObjectInfo::ReadElement(String("Col:%S", sCol.sQuote()).c_str(), "Domain", fnAttrib, fnDom);
 		return fAcceptDomain(fnDom);
 	}
 	return false;
@@ -955,7 +955,7 @@ bool MapListerDomainType::fAcceptAttributeTable(const FileName& fn)
 	for ( int i=0; i< iCols; ++i)
 	{
 		String sCol;
-		ObjectInfo::ReadElement("TableStore", String("col%d", i).scVal(), fnAttrib, sCol);
+		ObjectInfo::ReadElement("TableStore", String("col%d", i).c_str(), fnAttrib, sCol);
 		fOK |= fAcceptColumn(fnAttrib, sCol);
 
 	}
@@ -1018,7 +1018,7 @@ bool MapListerDomainTypeAndGeoRef::fOK(const FileName& fnMap, const String& sCol
 		long iOffset = 0;  // Initialize to get rid of warning
 		ObjectInfo::ReadElement("MapList", "Offset", fnMap, iOffset);  // Offset is read properly
 		String sKey = String("Map%li", iOffset);
-		ObjectInfo::ReadElement("MapList", sKey.scVal(), fnMap, fnBand);
+		ObjectInfo::ReadElement("MapList", sKey.c_str(), fnMap, fnBand);
 	}
 
 	// fnBand is now a Map or a band in a maplist
@@ -1051,7 +1051,7 @@ bool MapListerGeoRef::fOK(const FileName& fnMap, const String&)
 		long iOffset = 0;  // Initialize to get rid of warning
 		ObjectInfo::ReadElement("MapList", "Offset", fnMap, iOffset);  // Offset is read properly
 		String sKey = String("Map%li", iOffset);
-		ObjectInfo::ReadElement("MapList", sKey.scVal(), fnMap, fnBand);
+		ObjectInfo::ReadElement("MapList", sKey.c_str(), fnMap, fnBand);
 	}
 
 	// fnBand is now a Map or a band in a maplist
@@ -1155,7 +1155,7 @@ bool MapListerDomainAndGeoRef::fAcceptColumn(const FileName& fnAttrib, const Str
 	if ( sCol != "")
 	{
 		FileName fnDom;
-		ObjectInfo::ReadElement(String("Col:%S", sCol.sQuote()).scVal(), "Domain", fnAttrib, fnDom);
+		ObjectInfo::ReadElement(String("Col:%S", sCol.sQuote()).c_str(), "Domain", fnAttrib, fnDom);
 		return fAcceptDomain(fnDom);
 	}
 	return false;
@@ -1179,7 +1179,7 @@ bool MapListerDomainAndGeoRef::fAcceptAttributeTable(const FileName& fn)
 	for ( int i=0; i< iCols; ++i)
 	{
 		String sCol;
-		ObjectInfo::ReadElement("TableStore", String("col%d", i).scVal(), fnAttrib, sCol);
+		ObjectInfo::ReadElement("TableStore", String("col%d", i).c_str(), fnAttrib, sCol);
 		fOK |= fAcceptColumn(fnAttrib, sCol);
 	}
 	return fOK;
@@ -1223,7 +1223,7 @@ bool BaseMapListerDomain::fOK(const FileName& fnMap, const String& sColName)
 		long iOffset = 0;  // Initialize to get rid of warning
 		ObjectInfo::ReadElement("MapList", "Offset", fnMap, iOffset);  // Offset is read properly
 		String sKey = String("Map%li", iOffset);
-		ObjectInfo::ReadElement("MapList", sKey.scVal(), fnMap, fnBand);
+		ObjectInfo::ReadElement("MapList", sKey.c_str(), fnMap, fnBand);
 	}
 
 	FileName fnDomain;
@@ -1248,7 +1248,7 @@ bool BaseMapListerDomain::fAcceptColumn(const FileName& fnAttrib, const String& 
 	if ( sCol != "")
 	{
 		FileName fnDom;
-		ObjectInfo::ReadElement(String("Col:%S", sCol.sQuote()).scVal(), "Domain", fnAttrib, fnDom);
+		ObjectInfo::ReadElement(String("Col:%S", sCol.sQuote()).c_str(), "Domain", fnAttrib, fnDom);
 		return fAcceptDomain(fnDom);
 	}
 	return false;
@@ -1272,7 +1272,7 @@ bool BaseMapListerDomain::fAcceptAttributeTable(const FileName& fn)
 	for ( int i=0; i< iCols; ++i)
 	{
 		String sCol;
-		ObjectInfo::ReadElement("TableStore", String("col%d", i).scVal(), fnAttrib, sCol);
+		ObjectInfo::ReadElement("TableStore", String("col%d", i).c_str(), fnAttrib, sCol);
 		fOK |= fAcceptColumn(fnAttrib, sCol);
 	}
 	return fOK;

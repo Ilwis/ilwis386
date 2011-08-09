@@ -171,7 +171,7 @@ StereoscopeWindow::~StereoscopeWindow()
 
 }
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 
 #define add(ID) menPopup.AppendMenu(MF_STRING, ID, sMen(ID)); 
 #define addBreak menPopup.AppendMenu(MF_SEPARATOR);
@@ -271,9 +271,9 @@ int StereoscopeWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
   men.Detach();
 
 	SetAcceleratorTable();
-	bbStereoscope.Create(this, "stereoscope.but", SStcUiStereoscope, 100); // contains steropair specific buttons
+	bbStereoscope.Create(this, "stereoscope.but", TR("Stereoscope"), 100); // contains steropair specific buttons
 	bbStereoscope.EnableDocking(CBRS_ALIGN_TOP|CBRS_ALIGN_BOTTOM);
-	bbDataWindow.Create(this, "stereoscopeGen.but", SStcUiStereoToolBar, 101); // contains general buttons (zoom etc)
+	bbDataWindow.Create(this, "stereoscopeGen.but", TR("Toolbar"), 101); // contains general buttons (zoom etc)
 	bbDataWindow.EnableDocking(CBRS_ALIGN_TOP|CBRS_ALIGN_BOTTOM);
 
 	DockControlBar(&bbDataWindow, AFX_IDW_DOCKBAR_TOP);
@@ -289,14 +289,14 @@ int StereoscopeWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	//DockControlBar(&barScale,AFX_IDW_DOCKBAR_TOP,rect);
 
 	ltbLeft.Create(this, 124, CSize(150,200));
-  ltbLeft.SetWindowText(SMWTitleLayerManagement.scVal());
+  ltbLeft.SetWindowText(TR("Layer Management").c_str());
 	ltbLeft.EnableDocking(CBRS_ALIGN_LEFT);
   ltbLeft.view = new LayerTreeView;
 	ltbLeft.view->Create(NULL, NULL, AFX_WS_DEFAULT_VIEW|TVS_HASLINES|TVS_LINESATROOT|TVS_HASBUTTONS,
 			CRect(0,0,0,0), &ltbLeft, 100, 0);
 	docLeft->AddView(ltbLeft.view);
 	ltbRight.Create(this, 124, CSize(150,200));
-  ltbRight.SetWindowText(SMWTitleLayerManagement.scVal());
+  ltbRight.SetWindowText(TR("Layer Management").c_str());
 	ltbRight.EnableDocking(CBRS_ALIGN_RIGHT);
   ltbRight.view = new LayerTreeView;
 	ltbRight.view->Create(NULL, NULL, AFX_WS_DEFAULT_VIEW|TVS_HASLINES|TVS_LINESATROOT|TVS_HASBUTTONS,
@@ -309,14 +309,14 @@ int StereoscopeWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	gbOverviewLeft.EnableDocking(CBRS_ALIGN_LEFT);
   gbOverviewLeft.view = new OverviewMapPaneView;
   gbOverviewLeft.view->Create(NULL,NULL,AFX_WS_DEFAULT_VIEW,CRect(0,0,0,0),&gbOverviewLeft,100.0);
-  gbOverviewLeft.SetWindowText(SMWTitleOverviewWindow.scVal());
+  gbOverviewLeft.SetWindowText(TR("Overview window").c_str());
 	docLeft->AddView(gbOverviewLeft.view);
 	gbOverviewRight.Create(this, 125, CSize(150,300));
   gbOverviewRight.m_szFloat = CSize(150,150);
 	gbOverviewRight.EnableDocking(CBRS_ALIGN_RIGHT);
   gbOverviewRight.view = new OverviewMapPaneView;
   gbOverviewRight.view->Create(NULL,NULL,AFX_WS_DEFAULT_VIEW,CRect(0,0,0,0),&gbOverviewRight,100.0);
-  gbOverviewRight.SetWindowText(SMWTitleOverviewWindow.scVal());
+  gbOverviewRight.SetWindowText(TR("Overview window").c_str());
 	docRight->AddView(gbOverviewRight.view);
 
 	DockControlBar(&ltbLeft,AFX_IDW_DOCKBAR_LEFT);
@@ -365,9 +365,9 @@ class OpenStereoObjectForm: public FormWithDest
 {
 public:
   OpenStereoObjectForm(CWnd* wPar, String* sStereoPairName)
-    : FormWithDest(wPar, SStcTitleOpenMapPair)    
+    : FormWithDest(wPar, TR("Open Stereo Pair"))    
   {
-		new FieldDataType(root, SStcUiStereoPair, sStereoPairName, ".stp", true);
+		new FieldDataType(root, TR("Stereo Pair"), sStereoPairName, ".stp", true);
     SetMenHelpTopic("ilwismen\\open_stereopair.htm");
     create();    
   }    
@@ -419,15 +419,15 @@ void StereoscopeWindow::OnUpdateActiveRightView(CCmdUI* pCmdUI)
 
 void StereoscopeWindow::RefreshMaps(const String& sLeftMap, const String& sRightMap)
 {
-  docLeft->OnOpenDocument(sLeftMap.scVal(), IlwisDocument::otNOASK);
-  docRight->OnOpenDocument(sRightMap.scVal(), IlwisDocument::otNOASK);
+  docLeft->OnOpenDocument(sLeftMap.c_str(), IlwisDocument::otNOASK);
+  docRight->OnOpenDocument(sRightMap.c_str(), IlwisDocument::otNOASK);
 	docLeft->UpdateAllViews(0,3); // entiremap to left views
 	docRight->UpdateAllViews(0,3); // entiremap to right views
 }
 
 void StereoscopeWindow::StereoPairUpdated()
 {
-	String sTitle = SStcTitleStereoPairScopeView;
+	String sTitle = TR("- Stereoscope window");
 	if (stp.fValid())
 		//sTitle = String ("%S - ", stp->sName()) + sTitle;
 		sTitle = stp->sDescription + sTitle;

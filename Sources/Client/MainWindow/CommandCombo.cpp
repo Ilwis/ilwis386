@@ -151,7 +151,7 @@ void CommandCombo::OnMouseMove(UINT nFlags, CPoint point)
 	CComboBox::OnMouseMove(nFlags, point);
 	MainWindow *mw = dynamic_cast<MainWindow *>( AfxGetMainWnd()) ;
 	if (mw)
-		mw->SetStatusLine(SMSRemCommandLine);
+		mw->SetStatusLine(TR("Type an expression on the command line"));
 }
 
 void CommandCombo::AddToHistory(const CString& str)
@@ -258,11 +258,11 @@ void CommandBar::SetCommandLine(const char* str, bool fAddToHistory)
 			++cur;
 
 	}
-	commLine.SetWindowText(sCmd.scVal());
+	commLine.SetWindowText(sCmd.c_str());
 	if ( fAddToHistory)
 	{
 		commLine.AddToHistory(CString(sCmd.c_str()));
-		commLine.logger.LogLine(String(sCmd.scVal()));
+		commLine.logger.LogLine(String(sCmd.c_str()));
 	}
 }
 

@@ -56,7 +56,7 @@ END_MESSAGE_MAP()
 
 // Class IlwisPropertySheet
 IlwisPropertySheet::IlwisPropertySheet(const String& sCaption)
-	: CPropertySheet(sCaption.scVal())
+	: CPropertySheet(sCaption.c_str())
 {
 }
 
@@ -75,8 +75,8 @@ BOOL IlwisPropertySheet::OnInitDialog()
 	if (SysMen)
 	{
 		SysMen->AppendMenu(MF_SEPARATOR, -1);
-		SysMen->AppendMenu(MF_STRING, ID_COPY,  SUICopy.sVal());
-		SysMen->AppendMenu(MF_STRING, ID_PRINT, SUIPrint.sVal());
+		SysMen->AppendMenu(MF_STRING, ID_COPY,  TR("Copy").c_str());
+		SysMen->AppendMenu(MF_STRING, ID_PRINT, TR("Print").c_str());
 	}
 
 	CRect rect;
@@ -95,8 +95,8 @@ void IlwisPropertySheet::OnContextMenu(CWnd* pWnd, CPoint point)
 	CMenu menu;
 	menu.CreatePopupMenu();
 
-	menu.AppendMenu(MF_STRING, ID_COPY,  SUICopy.sVal());
-	menu.AppendMenu(MF_STRING, ID_PRINT, SUIPrint.sVal());
+	menu.AppendMenu(MF_STRING, ID_COPY,  TR("Copy").c_str());
+	menu.AppendMenu(MF_STRING, ID_PRINT, TR("Print").c_str());
 
 	menu.TrackPopupMenu(TPM_LEFTALIGN | TPM_RIGHTBUTTON, point.x, point.y, this);
 	menu.Detach();
@@ -145,7 +145,7 @@ void IlwisPropertySheet::CopyAllPages()
 		FormBasePropertyPage *page = (FormBasePropertyPage*)GetPage(i);
 		if (page)
 		{
-			sTxt &= String("\r\n%S %s\r\n", SUIMsgPage, page->m_psp.pszTitle);
+			sTxt &= String("\r\n%S %s\r\n", TR("Page:"), page->m_psp.pszTitle);
 			sTxt &= page->sText();
 		}
 	}
@@ -167,7 +167,7 @@ void IlwisPropertySheet::PrintAllPages()
 		FormBasePropertyPage *page = (FormBasePropertyPage*)GetPage(i);
 		if (page)
 		{
-			sTxt &= String("\r\n%S %s\r\n", SUIMsgPage, page->m_psp.pszTitle);
+			sTxt &= String("\r\n%S %s\r\n", TR("Page:"), page->m_psp.pszTitle);
 			sTxt &= page->sText();
 		}
 	}
@@ -191,19 +191,19 @@ void IlwisPropertySheet::PrintAllPages()
 	memset(&docinfo, 0, sizeof(docinfo));   
 	docinfo.cbSize = sizeof(docinfo);
 
-	String sPrtFrom = SMSRemFormPrinting;
-	docinfo.lpszDocName = _T(sPrtFrom.scVal());
+	String sPrtFrom = TR("Printing Form");
+	docinfo.lpszDocName = _T(sPrtFrom.c_str());
 	// if it fails, complain and exit gracefully
 	if (dcPrinter.StartDoc(&docinfo) < 0)   
 	{
-		throw ErrorObject(SMSErrPrinterInit.scVal());   
+		throw ErrorObject(TR("Printer wouldn't initalize").c_str());   
 	}
 	else
 	{
 		// start a page      
 		if (dcPrinter.StartPage() < 0)      
 		{
-			MessageBox(_T(SMSErrNoStartPAge.scVal()));         
+			MessageBox(_T(TR("Could not start page").c_str()));         
 			dcPrinter.AbortDoc();
 		}
 		else      

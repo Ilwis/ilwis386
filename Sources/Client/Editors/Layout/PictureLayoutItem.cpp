@@ -130,9 +130,9 @@ bool PictureLayoutItem::fConfigure()
   {
   public:
     ConfigForm(CWnd* p, bool* fIsotropic)
-    : FormWithDest(p, SLOTitlePicture)
+    : FormWithDest(p, TR("Edit Picture"))
     {
-      new CheckBox(root, SLOUiIsotropic, fIsotropic);
+      new CheckBox(root, TR("&Isotropic"), fIsotropic);
       create();
     }
   };
@@ -147,10 +147,10 @@ String PictureLayoutItem::sType() const
 
 String PictureLayoutItem::sName() const
 {
-	return SLONamePicture;
+	return TR("Picture");
 }
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define pmadd(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 void PictureLayoutItem::OnContextMenu(CWnd* wnd, CPoint pt) 
 {

@@ -149,7 +149,7 @@ TableWindow::~TableWindow()
 /////////////////////////////////////////////////////////////////////////////
 // TableWindow message handlers
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 
 #define add(ID) menPopup.AppendMenu(MF_STRING, ID, sMen(ID)); 
 #define addBreak menPopup.AppendMenu(MF_SEPARATOR);
@@ -514,8 +514,8 @@ void TableWindow::InitSettings()
 
   wndSplitter.RecalcLayout();
 
-	String sTitle = String(STBTitleButtonBar_S.scVal(), tv->fnTbl().sShortName());
-	bBar.SetWindowText(sTitle.scVal());
+	String sTitle = String(TR("Toolbar for table %S").c_str(), tv->fnTbl().sShortName());
+	bBar.SetWindowText(sTitle.c_str());
 	
 }
 
@@ -661,8 +661,8 @@ void TableWindow::CreateRecordBar()
 		return;
 	recBar->Create(this, ID_RECORDBAR);
   GetActiveView()->GetDocument()->AddView(recBar->view);
-  String sTitle(STBTitleRecordView_S.scVal(), tvw()->fnTbl().sShortName());
-  recBar->SetWindowText(sTitle.scVal());
+  String sTitle(TR("Record view for table %S").c_str(), tvw()->fnTbl().sShortName());
+  recBar->SetWindowText(sTitle.c_str());
 	Ilwis::Record rec = tvw()->rec(1);
 	recBar->view->SetRecord(rec,tvw());
   FloatControlBar(recBar,CPoint(100,100));
@@ -769,10 +769,10 @@ void TableWindow::OnGotoRecord()
   {
   public:
     Form(CWnd* parent, const Domain& dm, String* sRec)
-    : FormWithDest(parent, STBTitleGotoRec)
+    : FormWithDest(parent, TR("Goto Record"))
     {
       new FieldBlank(root);
-      fv = new FieldVal(root, STBUiRec, dm, sRec);
+      fv = new FieldVal(root, TR("&Record"), dm, sRec);
       SetMenHelpTopic("ilwismen\\goto_record.htm");
       create();
     }

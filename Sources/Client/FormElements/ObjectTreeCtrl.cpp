@@ -364,7 +364,7 @@ void ObjectTreeCtrl::ExpandPath(HTREEITEM hti, const String& sP)
 	
 	sPath &= "\\*.*";
 	CFileFind finder;
-	BOOL fFound = finder.FindFile(sPath.scVal());
+	BOOL fFound = finder.FindFile(sPath.c_str());
 	while (fFound)
 	{
 		fFound = finder.FindNextFile();
@@ -418,7 +418,7 @@ void ObjectTreeCtrl::ExpandPath(HTREEITEM hti, const String& sP)
 			fObjects = true;
 			String str = fn.sExt.toLower();
 			int iImg = IlwWinApp()->iImage(str);
-			tvi.hItem = InsertItem(fn.sFile.scVal(), iImg, iImg, hti);
+			tvi.hItem = InsertItem(fn.sFile.c_str(), iImg, iImg, hti);
 			SetItem(&tvi);
 			afn &= fn;
 			int iNr = afn.iSize();
@@ -462,7 +462,7 @@ void ObjectTreeCtrl::ExpandAttribTable(HTREEITEM hti, const FileName& fnM)
 			fChildren = true;
 			String sName = arColumns[i];
 			int iImg = IlwWinApp()->iImage("column");
-			tvi.hItem = InsertItem(sName.scVal(), iImg, iImg, hti);
+			tvi.hItem = InsertItem(sName.c_str(), iImg, iImg, hti);
 			SetItem(&tvi);
 			FileName fn;
 			fn.sFile = String("%S|%S|%S", fnMap.sFullPath(), fnAttrib.sFullPath(false), arColumns[i]);
@@ -522,13 +522,13 @@ void ObjectTreeCtrl::ExpandObjectCollection(HTREEITEM hti)
 			{
 				FileName fno = obc->fnObject(i);
 				String sName = fno.sRelative(false);
-				int iImg = IlwWinApp()->iImage(fno.sExt.scVal());
+				int iImg = IlwWinApp()->iImage(fno.sExt.c_str());
 				IlwisObject::iotIlwisObjectType type = IlwisObject::iotObjectType(fno); // was fn since May 2000!!
 				if (ne->ol->fOK(fno) || type == IlwisObject::iotMAPLIST || type == IlwisObject::iotOBJECTCOLLECTION)
 				{
 					fChildren = true;
 					tvi.cChildren = (type == IlwisObject::iotMAPLIST || type == IlwisObject::iotOBJECTCOLLECTION)?1:0;
-					tvi.hItem = InsertItem(sName.scVal(), iImg, iImg, hti);
+					tvi.hItem = InsertItem(sName.c_str(), iImg, iImg, hti);
 					SetItem(&tvi);
 					afn &= fno;
 					int iNr = (type != IlwisObject::iotMAPLIST && type != IlwisObject::iotOBJECTCOLLECTION) ? -afn.iSize() : afn.iSize();
@@ -572,7 +572,7 @@ void ObjectTreeCtrl::ExpandMapList(HTREEITEM hti)
 			for (int i = iLo; i <= iHi; ++i) {
 				fChildren = true;
 				String sName = mpl->sDisplayName(i);
-				tvi.hItem = InsertItem(sName.scVal(), iImgMap, iImgMap, hti);
+				tvi.hItem = InsertItem(sName.c_str(), iImgMap, iImgMap, hti);
 				SetItem(&tvi);
 				afn &= mpl[i]->fnObj;
 				int iNr = afn.iSize();
@@ -725,7 +725,7 @@ void ObjectTreeCtrl::AddSystemObjects(HTREEITEM hti)
 	else
 		sPath &= "*.*";
 
-  BOOL fFound = finder.FindFile(sPath.scVal());
+  BOOL fFound = finder.FindFile(sPath.c_str());
 	while (fFound) {
 		fFound = finder.FindNextFile();
 		if (finder.IsHidden())
@@ -738,7 +738,7 @@ void ObjectTreeCtrl::AddSystemObjects(HTREEITEM hti)
 		if (!ne->ol->fOK(fn))
 			continue;
 		int iImg = IlwWinApp()->iImage(fn.sExt);
-		tvi.hItem = InsertItem(fn.sFile.scVal(), iImg, iImg, hti);
+		tvi.hItem = InsertItem(fn.sFile.c_str(), iImg, iImg, hti);
 		SetItem(&tvi);
 		afn &= fn;
 		int iNr = afn.iSize();

@@ -222,7 +222,7 @@ class IMPEXP NameEdit: public BaseNameEdit
 public:
 	NameEdit(FormEntry* fe, FormBase* parent, CPoint pos, int id,
 			const String& s, bool fExist, ObjectLister*, bool fExt,
-			int iWidth);
+			int iWidth, bool showFull=true);
 	~NameEdit();
 	void DrawItem(DRAWITEMSTRUCT* dis);
 	virtual int CheckData();
@@ -260,6 +260,7 @@ private:
 	NameEditDropTarget* nedt;
 	long dmTypes;
 	int iMinTreeWidth;
+	bool fullTree;
 
 	DECLARE_MESSAGE_MAP();
 };

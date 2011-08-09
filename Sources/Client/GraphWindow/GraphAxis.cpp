@@ -360,7 +360,7 @@ void GraphAxis::draw(CDC* cdc)
         cdc->LineTo(p);
         s = sText(x, false);
         s = s.sTrimSpaces();
-        cdc->TextOut(p.x, p.y, s.scVal());
+        cdc->TextOut(p.x, p.y, s.c_str());
         x = rNextGridLine(x);
       }
       if (iTextRot > 0) {
@@ -373,7 +373,7 @@ void GraphAxis::draw(CDC* cdc)
       p.y += iSize()-gvw->iCharHeight * 0.5;
       cdc->SelectObject(&fntTitle);      
       cdc->SetTextAlign(TA_BOTTOM|TA_CENTER);
-      cdc->TextOut(p.x, p.y, sTitle.scVal());
+      cdc->TextOut(p.x, p.y, sTitle.c_str());
       cdc->SetTextAlign(textalign);
     }
     break;
@@ -413,7 +413,7 @@ void GraphAxis::draw(CDC* cdc)
         s = s.sTrimSpaces();
         //			 p.x -= gvw->iBorder;
         p.y -= gvw->iCharHeight/2;
-        cdc->TextOut(p.x, p.y, s.scVal());
+        cdc->TextOut(p.x, p.y, s.c_str());
         y = rNextGridLine(y);
       }
       cdc->SelectObject(fntOld);
@@ -424,7 +424,7 @@ void GraphAxis::draw(CDC* cdc)
         p.x = iFloatOffset;
       p.x -= iSize();
       cdc->SetTextAlign(TA_CENTER);
-      cdc->TextOut(p.x, p.y, sTitle.scVal());
+      cdc->TextOut(p.x, p.y, sTitle.c_str());
       cdc->SelectObject(fntOld);
       delete fntVert;
       cdc->SetTextAlign(textalign);
@@ -467,7 +467,7 @@ void GraphAxis::draw(CDC* cdc)
         //					 if (iTextRot > 20)
         s = s.sTrimSpaces();
         p.y -= gvw->iCharHeight/2;
-        cdc->TextOut(p.x, p.y, s.scVal());
+        cdc->TextOut(p.x, p.y, s.c_str());
         y = rNextGridLine(y);
       }
       cdc->SelectObject(fntOld);
@@ -479,7 +479,7 @@ void GraphAxis::draw(CDC* cdc)
       p.x += iSize();
       p.x -= gvw->iCharHeight * 0.5;
       cdc->SetTextAlign(TA_CENTER|TA_BASELINE);
-      cdc->TextOut(p.x, p.y, sTitle.scVal());
+      cdc->TextOut(p.x, p.y, sTitle.c_str());
       cdc->SelectObject(fntOld);
       delete fntVert;
       cdc->SetTextAlign(textalign);
@@ -565,7 +565,7 @@ int GraphAxis::iCalcSize() const
 	while (y <= rMax()) {
 		String s = sText(y, false);
 		s = s.sTrimSpaces();
-		CSize siz = dc.GetTextExtent(s.scVal());
+		CSize siz = dc.GetTextExtent(s.c_str());
     if (siz.cx > iW)
 			iW = siz.cx;
      y = rNextGridLine(y);
@@ -581,7 +581,7 @@ int GraphAxis::iCalcSize() const
   CFont fntTitle;
   fntTitle.CreateFontIndirect(&lfTitle);
   fntOld = dc.SelectObject(&fntTitle);  
-	CSize siz = dc.GetTextExtent(sTitle.scVal());
+	CSize siz = dc.GetTextExtent(sTitle.c_str());
   iSize += siz.cy;
 	dc.SelectObject(fntOld);
   
@@ -663,20 +663,20 @@ double GraphAxis::rShift() const
 
 void GraphAxis::SaveSettings(const FileName& fn, const String& sSection)
 {
-	ObjectInfo::WriteElement(sSection.scVal(), "Title", fn, sTitle);
-	ObjectInfo::WriteElement(sSection.scVal(), "ShowGrid", fn, fShowGrid);
-	ObjectInfo::WriteElement(sSection.scVal(), "Visible", fn, fVisible);
+	ObjectInfo::WriteElement(sSection.c_str(), "Title", fn, sTitle);
+	ObjectInfo::WriteElement(sSection.c_str(), "ShowGrid", fn, fShowGrid);
+	ObjectInfo::WriteElement(sSection.c_str(), "Visible", fn, fVisible);
 	if (0 != ds)
-    ObjectInfo::WriteElement(sSection.scVal(), "ShowCodes", fn, fShowCodes);
+    ObjectInfo::WriteElement(sSection.c_str(), "ShowCodes", fn, fShowCodes);
 	else
-    ObjectInfo::WriteElement(sSection.scVal(), "ShowCodes", fn, (char*)0);
-	ObjectInfo::WriteElement(sSection.scVal(), "TextRotation", fn, iTextRot);
-	ObjectInfo::WriteElement(sSection.scVal(), "Domain", fn, dvrs.dm());
+    ObjectInfo::WriteElement(sSection.c_str(), "ShowCodes", fn, (char*)0);
+	ObjectInfo::WriteElement(sSection.c_str(), "TextRotation", fn, iTextRot);
+	ObjectInfo::WriteElement(sSection.c_str(), "Domain", fn, dvrs.dm());
   ValueRange valrng = vr;
   valrng.SetStep(m_rGridStep);
-	ObjectInfo::WriteElement(sSection.scVal(), "ValRange", fn, valrng);
-	ObjectInfo::WriteElement(sSection.scVal(), "DomainData", fn, dvrsData.dm());
-	ObjectInfo::WriteElement(sSection.scVal(), "ValRangeData", fn, dvrsData.vr());
+	ObjectInfo::WriteElement(sSection.c_str(), "ValRange", fn, valrng);
+	ObjectInfo::WriteElement(sSection.c_str(), "DomainData", fn, dvrsData.dm());
+	ObjectInfo::WriteElement(sSection.c_str(), "ValRangeData", fn, dvrsData.vr());
   String sAxisType;
   switch (gat)
   {
@@ -684,38 +684,38 @@ void GraphAxis::SaveSettings(const FileName& fn, const String& sSection)
     case gatLOGARITHMIC: sAxisType = "Logarithmic"; break;
     case gatNORMALPROBABILITY: sAxisType = "Normal Probability"; break;
   }
-	ObjectInfo::WriteElement(sSection.scVal(), "Axis Type", fn, sAxisType);
-	ObjectInfo::WriteElement(sSection.scVal(), "Font", fn, lfTitle.lfFaceName);
+	ObjectInfo::WriteElement(sSection.c_str(), "Axis Type", fn, sAxisType);
+	ObjectInfo::WriteElement(sSection.c_str(), "Font", fn, lfTitle.lfFaceName);
 	long iLen = sizeof(LOGFONT) - LF_FACESIZE;
-	ObjectInfo::WriteElement(sSection.scVal(), "LogFont", fn, (char*)&lfTitle, iLen);
+	ObjectInfo::WriteElement(sSection.c_str(), "LogFont", fn, (char*)&lfTitle, iLen);
 }
 
 void GraphAxis::LoadSettings(const FileName& fn, const String& sSection)
 {
-	ObjectInfo::ReadElement(sSection.scVal(), "Title", fn, sTitle);
-	ObjectInfo::ReadElement(sSection.scVal(), "ShowGrid", fn, fShowGrid);
-	ObjectInfo::ReadElement(sSection.scVal(), "Visible", fn, fVisible);
+	ObjectInfo::ReadElement(sSection.c_str(), "Title", fn, sTitle);
+	ObjectInfo::ReadElement(sSection.c_str(), "ShowGrid", fn, fShowGrid);
+	ObjectInfo::ReadElement(sSection.c_str(), "Visible", fn, fVisible);
 	Domain dm;
-	ObjectInfo::ReadElement(sSection.scVal(), "Domain", fn, dm);
+	ObjectInfo::ReadElement(sSection.c_str(), "Domain", fn, dm);
 	ValueRange vr;
-	ObjectInfo::ReadElement(sSection.scVal(), "ValRange", fn, vr);
+	ObjectInfo::ReadElement(sSection.c_str(), "ValRange", fn, vr);
 	Set(DomainValueRangeStruct(dm, vr));
 	if (vr.fValid()) {
     SetMinMax(vr->rrMinMax());
 		SetGridStep(vr->rStep());
 	}
 	else if (0 != ds)
-    ObjectInfo::ReadElement(sSection.scVal(), "ShowCodes", fn, fShowCodes);
-	ObjectInfo::ReadElement(sSection.scVal(), "TextRotation", fn, iTextRot);
+    ObjectInfo::ReadElement(sSection.c_str(), "ShowCodes", fn, fShowCodes);
+	ObjectInfo::ReadElement(sSection.c_str(), "TextRotation", fn, iTextRot);
 	String s;
-	ObjectInfo::ReadElement(sSection.scVal(), "DomainData", fn, s);
+	ObjectInfo::ReadElement(sSection.c_str(), "DomainData", fn, s);
 	if (s.length() > 0)
-	  ObjectInfo::ReadElement(sSection.scVal(), "DomainData", fn, dm);
+	  ObjectInfo::ReadElement(sSection.c_str(), "DomainData", fn, dm);
 	ValueRange vrData;
-	ObjectInfo::ReadElement(sSection.scVal(), "ValRangeData", fn, vrData);
+	ObjectInfo::ReadElement(sSection.c_str(), "ValRangeData", fn, vrData);
 	dvrsData = DomainValueRangeStruct(dm, vrData);
   String sAxisType;
-	ObjectInfo::ReadElement(sSection.scVal(), "Axis Type", fn, sAxisType);
+	ObjectInfo::ReadElement(sSection.c_str(), "Axis Type", fn, sAxisType);
   if ("Linear" == sAxisType)
     gat = gatNORMAL;
   else if ("Logarithmic" == sAxisType)
@@ -724,10 +724,10 @@ void GraphAxis::LoadSettings(const FileName& fn, const String& sSection)
     gat = gatNORMALPROBABILITY;
 
 	String sFont;
-	ObjectInfo::ReadElement(sSection.scVal(), "Font", fn, sFont);
-	lstrcpy(lfTitle.lfFaceName, sFont.scVal());
+	ObjectInfo::ReadElement(sSection.c_str(), "Font", fn, sFont);
+	lstrcpy(lfTitle.lfFaceName, sFont.c_str());
 	int iLen = sizeof(LOGFONT) - LF_FACESIZE;
-	int iRes = ObjectInfo::ReadElement(sSection.scVal(), "LogFont", fn, (char*)&lfTitle, iLen);
+	int iRes = ObjectInfo::ReadElement(sSection.c_str(), "LogFont", fn, (char*)&lfTitle, iLen);
   if (0 == iRes || "" == sFont) 
   {
     CFont* fnt = IlwWinApp()->GetFont(IlwisWinApp::sfGRAPH);
@@ -747,39 +747,39 @@ bool GraphAxis::fConfig()
       iImg = IlwWinApp()->iImage("Axis");
       if (gaxis->gap != GraphAxis::gapYRose) 
       {
-        FieldString* fs = new FieldString(root, SGPUiAxisText, &gaxis->sTitle);
+        FieldString* fs = new FieldString(root, TR("Axis &Text"), &gaxis->sTitle);
         fs->SetWidth(90);
       }        
       CheckBox* cb = 0;
       if (gaxis->gap == GraphAxis::gapYRight) {
-        cb = new CheckBox(root, SGPUiShowAxis, &gaxis->fVisible);
-        new CheckBox(cb, SGPUiShowGrid, &gaxis->fShowGrid);
+        cb = new CheckBox(root, TR("Show &Axis"), &gaxis->fVisible);
+        new CheckBox(cb, TR("Show &Grid"), &gaxis->fShowGrid);
       }
       else
-        new CheckBox(root, SGPUiShowGrid, &gaxis->fShowGrid);
+        new CheckBox(root, TR("Show &Grid"), &gaxis->fShowGrid);
 
       if (gaxis->dvrs.fValues()) 
       {
         iAxisType = (int)gaxis->gat;
         vsAxisType.resize(3);
-        vsAxisType[0] = SGPOptLinearAxis;
-        vsAxisType[1] = SGPOptLogarithmicAxis;
-        vsAxisType[2] = SGPOptNormalProbabilityAxis;
-        fosAxisType = new FieldOneSelectString(root, SGPUiAxisType, &iAxisType, vsAxisType);
+        vsAxisType[0] = TR("Linear.axis");
+        vsAxisType[1] = TR("Logarithmic.axis;");
+        vsAxisType[2] = TR("Normal Probability.axis;");
+        fosAxisType = new FieldOneSelectString(root, TR("&Axis Type"), &iAxisType, vsAxisType);
         if (cb)
   			  fosAxisType->Align(cb, AL_UNDER);
         fosAxisType->SetCallBack((NotifyProc)&ConfigForm::AxisTypeCallBack);
   			rrMinMax = RangeReal(gaxis->rMin(), gaxis->rMax());
   			rGridStep = gaxis->rGridStep();
-  			frr = new FieldRangeReal(root, SGPUiMinMax, &rrMinMax, ValueRange(-1e300, 1e300, gaxis->dvrs.rStep()));
-  			frGridstep = new FieldReal(root, SGPUiGridStep, &rGridStep, ValueRange(0, 1e308, gaxis->dvrs.rStep()));
+  			frr = new FieldRangeReal(root, TR("Min - Max"), &rrMinMax, ValueRange(-1e300, 1e300, gaxis->dvrs.rStep()));
+  			frGridstep = new FieldReal(root, TR("&Interval"), &rGridStep, ValueRange(0, 1e308, gaxis->dvrs.rStep()));
   		}
   		else if (0 != gaxis->ds) {
-  			CheckBox* cbx = new CheckBox(root, SGPUiShowCodes, &gaxis->fShowCodes);
+  			CheckBox* cbx = new CheckBox(root, TR("Show &Codes"), &gaxis->fShowCodes);
         if (cb)
     			cbx->Align(cb, AL_UNDER);
   		}
-  		FieldInt* fi = new FieldInt(root, SGPUiTextRotation, &gaxis->iTextRot, ValueRange(0,90), true);
+  		FieldInt* fi = new FieldInt(root, TR("Text &Rotation"), &gaxis->iTextRot, ValueRange(0,90), true);
   		if (!gaxis->dvrs.fValues() && 0 == gaxis->ds && cb) 
   			fi->Align(cb, AL_UNDER);
 
@@ -836,13 +836,13 @@ bool GraphAxis::fConfig()
   switch (gap)
   {
     case gapX: 
-      sTitle = SGPTitleXAxis; break;
+      sTitle = TR("X-Axis"); break;
     case gapYLeft:
-      sTitle = SGPTitleYAxisLeft; break;
+      sTitle = TR("Y-Axis (left)"); break;
     case gapYRight:
-      sTitle = SGPTitleYAxisRight; break;
+      sTitle = TR("Y-Axis (right)"); break;
     case gapYRose:
-      sTitle = SGPTitleYAxisRoseDiagram; break;
+      sTitle = TR("Y-Axis Rose Diagram"); break;
   }
   ConfigForm frm(this, sTitle);
   if (!frm.fOkClicked())

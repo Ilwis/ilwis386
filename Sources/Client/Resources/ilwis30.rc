@@ -284,8 +284,13 @@ CROSSSECTION            ICON                    "crosssection.ico"
 TRACK                   ICON                    "track.ico"
 SCALE                   ICON                    "scale.ico"
 ANNOTATION              ICON                    "Annotation.ico"
-Position                ICON                    "position.ico"
-Appearance              ICON                    "appearance.ico"
+POSITION                ICON                    "position.ico"
+APPEARANCE              ICON                    "appearance.ico"
+Direction               ICON                    "direction.ico"
+Symbol                  ICON                    "Symbol.ico"
+AutoClose               ICON                    "AutoClose.ico"
+Snap                    ICON                    "snap.ico"
+Undefined               ICON                    "undefined.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //

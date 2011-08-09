@@ -104,13 +104,13 @@ void ForeignCatalog::OnInitialUpdate()
 // Get the title needed for the add objects form
 String ForeignCatalog::sAddObjectTitle()
 {
-	return SMSAddObjectToCollection;
+	return TR("Add Object to Collection");
 }
 
 // Get the object message needed for the add objects form
 String ForeignCatalog::sMsgAddObject()
 {
-	return SMSObjects;
+	return TR("Objects");
 }
 
 ObjectLister *ForeignCatalog::olActiveLister(const String& sExt)
@@ -284,7 +284,7 @@ void ForeignCatalog::OnOpenQuery()
 	{
 	public:	
 		QueryForm(CWnd *par, String& sQ, String& sNewName) :
-				FormWithDest(par, SMSEnterQuery)
+				FormWithDest(par, TR("Enter SQL Query"))
 		{
 			FieldStringMulti *fs = new FieldStringMulti(root, &sQ);
 			fs->SetWidth(200);

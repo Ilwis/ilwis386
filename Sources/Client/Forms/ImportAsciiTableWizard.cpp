@@ -340,12 +340,12 @@ extern CComModule _Module;
 class SelectDBTable : public FormBaseWizardPage
 {
 public:
-	SelectDBTable(AsciiTableWizard* atw) : FormBaseWizardPage(STWTitleDBTableDomain)
+	SelectDBTable(AsciiTableWizard* atw) : FormBaseWizardPage(TR("Import Table Wizard - Select table and table domain"))
 	{
 		m_atw = atw;
 		FormEntry* root = feRoot();	
-		StaticText *txt = new StaticText(root, STWDatabaseTables);
-		StaticText *txt2 =new StaticText(root, STWKeyColumns);
+		StaticText *txt = new StaticText(root, TR("Database tables"));
+		StaticText *txt2 =new StaticText(root, TR("Possible key columns"));
 		txt2->Align(txt, AL_AFTER);
 		dbSel = new DBTableSelector(root, m_atw);
 		dbSel->Align(txt, AL_UNDER);
@@ -568,7 +568,7 @@ int TableColumnSelector::Selected(Event *)
 				sIllegalCol = sSelCol;
 				m_atw->m_sKeyCol = "none";
 				lb->SetSel(0);
-				frm()->wnd()->MessageBox(STWErrDomainNotPossible.scVal(), STWTilteDomainError.scVal(), MB_OK | MB_ICONSTOP);
+				frm()->wnd()->MessageBox(TR("The column is not valid as a domain because it contains double entries").c_str(), TR("Domain selection error").c_str(), MB_OK | MB_ICONSTOP);
 			}
 			else
 				m_atw->m_sKeyCol = sSelCol;
@@ -641,7 +641,7 @@ bool TableColumnSelector::OpenRecordSet(_ConnectionPtr& pConnection, _RecordsetP
 		pRstTable.CreateInstance(__uuidof(Recordset));	
 
 		FileName fn(m_atw->m_sDataBaseInputTable);
-		//v.SetString(m_atw->m_sDataBaseInputTable.scVal());
+		//v.SetString(m_atw->m_sDataBaseInputTable.c_str());
 		String sTableName = "\"" + m_atw->m_sDataBaseInputTable + "\"";
 		String sCurDir = IlwWinApp()->sGetCurDir();
 
@@ -650,7 +650,7 @@ bool TableColumnSelector::OpenRecordSet(_ConnectionPtr& pConnection, _RecordsetP
 			IlwWinApp()->SetCurDir(fn.sPath());
 			sTableName = "\"" + fn.sFileExt() + "\""; 
 		}			
-	 	HRESULT r = pRstTable->Open (sTableName.scVal(), variant_t((IDispatch*) pConnection, true),
+	 	HRESULT r = pRstTable->Open (sTableName.c_str(), variant_t((IDispatch*) pConnection, true),
 					adOpenForwardOnly, adLockReadOnly, adCmdTable);	
 
 		IlwWinApp()->SetCurDir(sCurDir);
@@ -697,7 +697,7 @@ bool TableColumnSelector::OpenRecordSet(_ConnectionPtr& pConnection, _RecordsetP
           break;
         default:
 				{
-						String sErr(STWErrNoConnection.scVal(), m_atw->fnInput().sRelative());
+						String sErr(TR("Could not establish connection to %S").c_str(), m_atw->fnInput().sRelative());
             ErrorObject err(sErr);
 						err.Show();
             return false;
@@ -767,7 +767,7 @@ void TableColumnSelector::StoreData()
 class SelectTableDomainPage: public FormBaseWizardPage
 {
 public:
-	SelectTableDomainPage(AsciiTableWizard* atw) : FormBaseWizardPage(STWTitleTableDomain)
+	SelectTableDomainPage(AsciiTableWizard* atw) : FormBaseWizardPage(TR("Import Table Wizard - Specify Table Domain"))
 	{
 		m_atw = atw;
 		new TableColumnSelector(root,atw);
@@ -789,7 +789,7 @@ private:
 class EnterSqlQuery : public FormBaseWizardPage
 {
 public:
-	EnterSqlQuery(AsciiTableWizard* atw) : FormBaseWizardPage(STWTitleSQLQuery)
+	EnterSqlQuery(AsciiTableWizard* atw) : FormBaseWizardPage(TR("Import Table Wizard - SQL Query"))
 	{
 		m_atw = atw;
 		fs = new FieldStringMulti(root, &(m_atw->m_sSQLQuery));
@@ -823,12 +823,12 @@ private:
 class FileViewPage : public FormBaseWizardPage
 {
 public:
-	FileViewPage(AsciiTableWizard* atw) : FormBaseWizardPage(STWTitlePageFileView)
+	FileViewPage(AsciiTableWizard* atw) : FormBaseWizardPage(TR("Import Table Wizard - View File"))
 	{
 		m_atw = atw;
 
 		FormEntry* root = feRoot();
-		(new StaticText(root, STWMsgContentsInput))->SetIndependentPos();
+		(new StaticText(root, TR("Contents of input table (first 100 lines):")))->SetIndependentPos();
 
 		DWORD style = WS_GROUP|WS_TABSTOP|ES_MULTILINE|ES_READONLY|
 						ES_AUTOVSCROLL|WS_VSCROLL|WS_HSCROLL|WS_BORDER;
@@ -873,7 +873,7 @@ private:
 class SpecifyColumnsDetailsPage : public FormBaseWizardPage
 {
 public:
-	SpecifyColumnsDetailsPage(AsciiTableWizard* atw) : FormBaseWizardPage(STWTitlePageColumnsDetails)
+	SpecifyColumnsDetailsPage(AsciiTableWizard* atw) : FormBaseWizardPage(TR("Import Table Wizard - Edit Column Details"))
 	{
 		m_atw = atw;
 		m_iKey = -1; // no column is selected as table domain
@@ -883,20 +883,20 @@ public:
 		fInColCountChange = false;
 
 		FormEntry* root = feRoot();
-		(new StaticText(root, STWMsgColumnProperties))->SetIndependentPos();
+		(new StaticText(root, TR("Specify the properties of all columns:")))->SetIndependentPos();
 		fclColumn = new FieldColumnLister(root, m_atw->m_colInfo);
 		fclColumn->SetIndependentPos();
 		fclColumn->SetCallBack((NotifyProc)&SpecifyColumnsDetailsPage::ColumnNamesChange);
-		m_cbTableDomain = new CheckBox(root, STWUiTableDomain, &m_fHasKey);
+		m_cbTableDomain = new CheckBox(root, TR("&Table Domain"), &m_fHasKey);
 		m_cbTableDomain->SetCallBack((NotifyProc)&SpecifyColumnsDetailsPage::ToggleTableDomain);
 		m_fos = new FieldOneSelectTextOnly(m_cbTableDomain, &m_sKey);
 		m_fos->SetCallBack((NotifyProc)&SpecifyColumnsDetailsPage::KeyColChange);
 		m_fos->Align(m_cbTableDomain, AL_AFTER);
 		m_fos->SetWidth(80);
 
-		m_fiCols = new FieldInt(root, STWUiColumns, &m_iCols, ValueRange(1, 9999), true);  // use with spin control
+		m_fiCols = new FieldInt(root, TR("Nr. of &Columns"), &m_iCols, ValueRange(1, 9999), true);  // use with spin control
 		m_fiCols->SetCallBack((NotifyProc)&SpecifyColumnsDetailsPage::ColCountChange);
-		m_fiSkip = new FieldInt(root, STWUiHeaderSkipLines, m_piSkip, ValueRange(0, 9999), true);  // use with spin control
+		m_fiSkip = new FieldInt(root, TR("Nr. of &Lines to skip"), m_piSkip, ValueRange(0, 9999), true);  // use with spin control
 		m_fiSkip->SetCallBack((NotifyProc)&SpecifyColumnsDetailsPage::SkipLinesChange);
 		String s('x', 60);
 		m_stRemark = new StaticText(root, s);
@@ -950,13 +950,13 @@ public:
 			if (ci.sColumnName.length() == 0)
 			{
 				dwButtons &= ~PSWIZB_FINISH;
-				sRem = String(STWRemColumnNameMissing_i.scVal(), i + 1);
+				sRem = String(TR("Column name of column %d is missing").c_str(), i + 1);
 				break;
 			}
 			if (!ci.fnDomain.fValid())
 			{
 				dwButtons &= ~PSWIZB_FINISH;
-				sRem = String(STWRemDomainnameMissing_S.scVal(), ci.sColumnName);
+				sRem = String(TR("Domain name of column %S is missing").c_str(), ci.sColumnName);
 				break;
 			}
 			if (m_atw->GetFormat() == TableExternalFormat::ifFixed)
@@ -964,7 +964,7 @@ public:
 				if (ci.iColumnWidth == iUNDEF)
 				{
 					dwButtons &= ~PSWIZB_FINISH;
-					sRem = String(STWRemIncorrectColumnWidth_S.scVal(), ci.sColumnName);
+					sRem = String(TR("Column width must be larger than 0 for column %S").c_str(), ci.sColumnName);
 					break;
 				}
 			}
@@ -1137,7 +1137,7 @@ private:
 
 
 
-AsciiTableWizard::AsciiTableWizard(CWnd* wnd) : CPropertySheet(STWTitleTableWizard.scVal(), wnd)  ,
+AsciiTableWizard::AsciiTableWizard(CWnd* wnd) : CPropertySheet(TR("Import Table Wizard").c_str(), wnd)  ,
 		m_fFullScanExecuted(false), 
 		m_sKeyCol("none"),
 		m_fDataBase(false),
@@ -1161,7 +1161,7 @@ AsciiTableWizard::AsciiTableWizard(CWnd* wnd) : CPropertySheet(STWTitleTableWiza
 
 // The table wizard implementation
 AsciiTableWizard::AsciiTableWizard(CWnd* wnd, const FileName& fnAscTable, const FileName& fnObject, TableExternalFormat::InputFormat _format) 
-		: CPropertySheet(STWTitleTableWizard.scVal(), wnd), 
+		: CPropertySheet(TR("Import Table Wizard").c_str(), wnd), 
 		m_fFullScanExecuted(false), 
 		m_sKeyCol("none"),
 		m_fDataBase(false),
@@ -1385,7 +1385,7 @@ void AsciiTableWizard::InitScan(String& sErr)
 	{
 		if (File::fIsBinary(m_fnInput))
 		{
-			sErr = String(STWErrNoTextFile_S.scVal(), m_fnInput.sShortName());
+			sErr = String(TR("%S is not a text file").c_str(), m_fnInput.sShortName());
 			return;
 		}
 
@@ -1510,7 +1510,7 @@ String AsciiTableWizard::sBuildExpression()
 			sColInfo &= String(",%S", ci.sUndefValue);
 		if (ci.sColumnName.find("-") != string::npos || ci.sColumnName.find("+") != string::npos || ci.sColumnName.find("(") != string::npos ||
 			  ci.sColumnName.find(")") != string::npos || ci.sColumnName.find("=") != string::npos || ci.sColumnName.find("/") != string::npos)
-			throw ErrorObject(STWErrIllegalColumnNames);
+			throw ErrorObject(TR("Table contains column names that can not be used in ILWIS"));
 		sColInfo &= String(",%S(", ci.sColumnName);
 		if (ci.dtDomainType != dmtSTRING && ci.fCreate == false)
 			sColInfo &= ci.fnDomain.sRelativeQuoted(true);

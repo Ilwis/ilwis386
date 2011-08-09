@@ -60,7 +60,7 @@
 
 MapRprEditForm::MapRprEditForm(CWnd* wPar, 
   RepresentationClass* rc, long raw, bool fModal)
-: FormBaseDialog(wPar, SRPTitleEditRprItem, true, fModal, false),
+: FormBaseDialog(wPar, TR("Edit Repr. Item"), true, fModal, false),
   rcl(rc), iRaw(raw)
 {
   String sText;
@@ -72,7 +72,7 @@ MapRprEditForm::MapRprEditForm(CWnd* wPar,
   StaticText* st = new StaticText(root, sText);
   st->SetIndependentPos();
   cs = new ColorSelector(root, &col);
-  PushButton* pb = new PushButton(root, SRPUiCustomColor, 
+  PushButton* pb = new PushButton(root, TR("&Custom Color..."), 
     (NotifyProc)&MapRprEditForm::CustomColor);
   pb->Align(cs, AL_UNDER);  
   SetMenHelpTopic("ilwismen\\representation_class_editor_edit_item_raster.htm");
@@ -94,7 +94,7 @@ int MapRprEditForm::exec() {
 
 SegmentMapRprEditForm::SegmentMapRprEditForm(CWnd* wPar, 
                           RepresentationClass* rc, long raw, bool fModal)
-: FormBaseDialog(wPar, SRPTitleEditRprItem, true, fModal, false),
+: FormBaseDialog(wPar, TR("Edit Repr. Item"), true, fModal, false),
   rcl(rc), iRaw(raw), line(rc, raw)
 {
   String sText;
@@ -108,7 +108,7 @@ SegmentMapRprEditForm::SegmentMapRprEditForm(CWnd* wPar,
   st->SetIndependentPos();
   cs = new ColorSelector(root, &col);
   cs->SetIndependentPos();
-  PushButton* pb = new PushButton(root, SRPUiCustomColor, 
+  PushButton* pb = new PushButton(root, TR("&Custom Color..."), 
     (NotifyProc)&SegmentMapRprEditForm::CustomColor);
   pb->Align(cs, AL_UNDER);  
   pb->SetIndependentPos();
@@ -149,7 +149,7 @@ public:
 
 PolygonMapRprEditForm::PolygonMapRprEditForm(CWnd* wPar, 
                         RepresentationClass* rc, long raw, bool fModal)
-: FormBaseDialog(wPar, SRPTitleEditRprItem, true, fModal, false),
+: FormBaseDialog(wPar, TR("Edit Repr. Item"), true, fModal, false),
   rcl(rc), iRaw(raw)
 {
   String sText;
@@ -193,16 +193,16 @@ PolygonMapRprEditForm::PolygonMapRprEditForm(CWnd* wPar,
   st->SetIndependentPos();
   cs = new ColorSelector(root, &col, true);
   cs->SetIndependentPos();
-  PushButton* pb = new PushButton(root, SRPUiCustomColor, 
+  PushButton* pb = new PushButton(root, TR("&Custom Color..."), 
     (NotifyProc)&PolygonMapRprEditForm::CustomColor);
   pb->SetIndependentPos();
   pb->Align(cs, AL_UNDER);
   new FieldBlank(root, 0.3);
 
   rgType = new RadioGroup(root, "", &iType);
-  new RadioButton(rgType, SRPUiSolid);
-  RadioButton* rbHatch = new RadioButton(rgType, SRPUiHatching);
-  RadioButton* rbPatt = new RadioButton(rgType, SRPUiPattern);
+  new RadioButton(rgType, TR("&Solid"));
+  RadioButton* rbHatch = new RadioButton(rgType, TR("&Hatching"));
+  RadioButton* rbPatt = new RadioButton(rgType, TR("&Pattern"));
 
   FieldPolHatchDsp* fphd = new FieldPolHatchDsp(rbHatch, "", &pHatch);
   fphd->Align(rbHatch, AL_AFTER);
@@ -211,18 +211,18 @@ PolygonMapRprEditForm::PolygonMapRprEditForm(CWnd* wPar,
   fpp->Align(rbPatt, AL_AFTER);
   rgType->SetCallBack((NotifyProc)&PolygonMapRprEditForm::OptionChanged);
 
-  feHatching = new FieldColor(root, SRPUiHatchColor, &col2);
+  feHatching = new FieldColor(root, TR("&Hatch Color"), &col2);
   feHatching->Align(rgType, AL_UNDER);
-  feHatchBG  = new FieldFillColor(root, SRPUiBackColor, &colHBG);
+  feHatchBG  = new FieldFillColor(root, TR("&Background Color"), &colHBG);
   feHatchBG->Align(rgType, AL_UNDER);
-  fePatFG = new FieldColor(root, SRPUiForeColor, &col2);
+  fePatFG = new FieldColor(root, TR("&Foreground Color"), &col2);
   fePatFG->Align(rgType, AL_UNDER);
 	if ( col2 == Color(-2))
 		col2 = Color(255,255,255);
-  fePatBG = new FieldColor(root, SRPUiBackColor, &col2);
+  fePatBG = new FieldColor(root, TR("&Background Color"), &col2);
   fePatBG->Align(rgType, AL_UNDER);
 
-  pbInverse = new PushButton(root, SRPUiInverseColors,
+  pbInverse = new PushButton(root, TR("&Switch Colors"),
     (NotifyProc)&PolygonMapRprEditForm::InverseColors);
   SetMenHelpTopic("ilwismen\\representation_class_editor_edit_item_polygon.htm");
   create();
@@ -333,7 +333,7 @@ int PolygonMapRprEditForm::exec() {
 
 PointMapRprEditForm::PointMapRprEditForm(CWnd* wPar, 
                         RepresentationClass* rc, long raw, bool fModal)
-: FormBaseDialog(wPar, SRPTitleEditRprItem, true, fModal, false),
+: FormBaseDialog(wPar, TR("Edit Repr. Item"), true, fModal, false),
   rcl(rc), iRaw(raw), smb(rc,raw)
 {
   String sText;
@@ -417,17 +417,17 @@ void FieldPolHatchDspSimple::create()
   FieldOneSelect::create();
   int i = 0;
   int iSel = 0;
-  ose->AddString(SRPPatUpwards.scVal());
+  ose->AddString(TR("Upwards").c_str());
 	ose->SetItemData(i++, (long)pDownHatch);
-  ose->AddString(SRPPatDownwards.scVal());
+  ose->AddString(TR("Downwards").c_str());
 	ose->SetItemData(i++, (long)pUpHatch);
-  ose->AddString(SRPPatCrossing.scVal());
+  ose->AddString(TR("Crossing").c_str());
 	ose->SetItemData(i++, (long)pCrossHatch);
-  ose->AddString(SRPPatDiagonal.scVal());
+  ose->AddString(TR("Diagonal").c_str());
   ose->SetItemData(i++, (long)pDiagCrossHatch);
-  ose->AddString(SRPPatHorizontal.scVal());
+  ose->AddString(TR("Horizontal").c_str());
 	ose->SetItemData(i++, (long)pHorzHatch);
-  ose->AddString(SRPPatVertical.scVal());
+  ose->AddString(TR("Vertical").c_str());
 	ose->SetItemData(i++, (long)pVertHatch);
 
   if (*val <= HS_VERTICAL)
@@ -523,7 +523,7 @@ void FieldPolPatternSimple::create()
   typedef short* pShort;
   ppi = new pShort[iPpiSize];
   for (int j = 0; j < iSize; ++j) {
-		const char *s = as[j].scVal();
+		const char *s = as[j].c_str();
     int id = ose->AddString(s);
     ppi[j] = new short[8];
     short* pi = RepresentationPtr::pPattern(as[j]);

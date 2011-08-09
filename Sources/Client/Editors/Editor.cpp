@@ -211,7 +211,7 @@ int Editor::AskValue(const String& sRemark, unsigned int htp)
   public:
     AskValueForm(CWnd* parent, const String& sRemark, const String& sQuestion, 
                  DomainValueRangeStruct& dvrs, String* sVal, unsigned int htp)
-    : FormWithDest(parent, SEDTitleEdit)
+    : FormWithDest(parent, TR("Edit"))
     {
       StaticText* st = new StaticText(root, sRemark);
       st->SetIndependentPos();
@@ -226,12 +226,12 @@ int Editor::AskValue(const String& sRemark, unsigned int htp)
   String sVal = sValue;
   StartBusy();
   DomainSort* ds = dm()->pdsrt();
-	String sQuestion = SEDUiValue;
+	String sQuestion = TR("&Value");
 	if (ds) {
 		if (ds->pdc())
-			sQuestion = SEDUiClassName;
+			sQuestion = TR("&Class Name");
 		else
-			sQuestion = SEDUiID;
+			sQuestion = TR("&ID");
 	}
 
 	int iNrItems;
@@ -266,8 +266,8 @@ retry:
     }
   }
   else if (!dvrs().fValid(sVal)) {
-    String sMsg(SEDMsgNotValidValue_s.sVal(), sVal);
-    int iRet = pane()->MessageBox(sMsg.sVal(), SEDMsgEditor.sVal(), MB_ICONEXCLAMATION|MB_OKCANCEL);
+    String sMsg(TR("'%S' is not a valid value").c_str(), sVal);
+    int iRet = pane()->MessageBox(sMsg.sVal(), TR("Editor").c_str(), MB_ICONEXCLAMATION|MB_OKCANCEL);
     if (IDCANCEL == iRet) {
       EndBusy();
       return 0;
@@ -317,7 +317,7 @@ void Editor::OnRelatedTopics()
 //	HH_AKLINK link;
 //	link.cbStruct =     sizeof(HH_AKLINK);
 //	link.fReserved =    FALSE;
-//	link.pszKeywords =  sHelpKeywords.scVal(); 
+//	link.pszKeywords =  sHelpKeywords.c_str(); 
 //	link.pszUrl =       NULL; 
 //	link.pszMsgText =   NULL; 
 //	link.pszMsgTitle =  NULL; 

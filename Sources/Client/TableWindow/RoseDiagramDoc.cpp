@@ -130,15 +130,15 @@ namespace
   {
 	public:
 		NewGraphForm(CWnd* wParent, const Table& table)
-		: FormWithDest(wParent, SGPTitleCreateRoseDiagram)
+		: FormWithDest(wParent, TR("Create Rose Diagram"))
     , tbl(table)
 		{
       if (tbl.fValid())
         sTbl = tbl->fnObj.sRelative();
-      ftbl = new FieldTable(root, SGPUiTable, &sTbl);
+      ftbl = new FieldTable(root, TR("&Table"), &sTbl);
       ftbl->SetCallBack((NotifyProc)&NewGraphForm::TableCallBack);
-			fcolX = new FieldColumn(root, SGPUiAngle, tbl, &sColX, dmVALUE);
-			fcolY = new FieldColumn(root, SGPUiValue, tbl, &sColY, dmVALUE | dmIMAGE | dmBOOL);
+			fcolX = new FieldColumn(root, TR("&Angle"), tbl, &sColX, dmVALUE);
+			fcolY = new FieldColumn(root, TR("&Value"), tbl, &sColY, dmVALUE | dmIMAGE | dmBOOL);
       SetMenHelpTopic("ilwismen\\create_a_rose_diagram.htm");
 			create();
 		}
@@ -171,7 +171,7 @@ void RoseDiagramDoc::OnFileOpen()
   {
   public:
     OpenForm(CWnd* parent, String* sName)
-    : FormWithDest(parent, SGPTitleOpenGraph)
+    : FormWithDest(parent, TR("Open Graph"))
     {
 			new FieldDataTypeLarge(root, sName, ".grh", new GraphLister(grhROSEDIAGRAM));
 			SetMenHelpTopic("ilwismen\\graph_window_open_graph.htm");
@@ -181,7 +181,7 @@ void RoseDiagramDoc::OnFileOpen()
   String sGraph;
   OpenForm frm(wndGetActiveView(), &sGraph);
 	if (frm.fOkClicked()) {
-		OnOpenDocument(sGraph.scVal());
+		OnOpenDocument(sGraph.c_str());
 		SetModifiedFlag(FALSE);
   	UpdateAllViews(0);
 	}
@@ -252,13 +252,13 @@ void RoseDiagramDoc::OnAddGraph()
   {
 	public:
 		AddGraphForm(CWnd* wParent, String* sTable, String* sColX, String* sColY)
-		: FormWithDest(wParent, SGPTitleAddRoseDiagram)
+		: FormWithDest(wParent, TR("Add Rose Diagram"))
     , sTbl(sTable)
 		{
-      ftbl = new FieldTable(root, SGPUiTable, sTbl);
+      ftbl = new FieldTable(root, TR("&Table"), sTbl);
       ftbl->SetCallBack((NotifyProc)&AddGraphForm::TableCallBack);
-			fcolX = new FieldColumn(root, SGPUiAngle, 0, sColX, dmVALUE);
-			fcolY = new FieldColumn(root, SGPUiValue, 0, sColY, dmVALUE | dmIMAGE | dmBOOL);
+			fcolX = new FieldColumn(root, TR("&Angle"), 0, sColX, dmVALUE);
+			fcolY = new FieldColumn(root, TR("&Value"), 0, sColY, dmVALUE | dmIMAGE | dmBOOL);
       SetMenHelpTopic("ilwismen\\graph_window_add_rose_diagram.htm");
 			create();
 		}

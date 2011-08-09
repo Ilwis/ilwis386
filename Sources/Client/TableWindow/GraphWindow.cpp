@@ -76,7 +76,7 @@ GraphWindow::~GraphWindow()
 }
 
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 
 #define add(ID) menPopup.AppendMenu(MF_STRING, ID, sMen(ID)); 
 #define addBreak menPopup.AppendMenu(MF_SEPARATOR);
@@ -146,7 +146,7 @@ int GraphWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
   }
 
 	gbGraphTree.Create(this, 125, CSize(200,200));
-  gbGraphTree.SetWindowText(SGPTitleGraphManagement.scVal());
+  gbGraphTree.SetWindowText(TR("Graph Management").c_str());
 	gbGraphTree.EnableDocking(CBRS_ALIGN_LEFT|CBRS_ALIGN_RIGHT);
   gbGraphTree.view = new GraphLayerTreeView;
 	gbGraphTree.view->Create(NULL, NULL, AFX_WS_DEFAULT_VIEW|TVS_HASLINES,

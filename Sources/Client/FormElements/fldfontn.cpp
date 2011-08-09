@@ -69,11 +69,11 @@ FieldFontNameSimple::~FieldFontNameSimple()
 void FieldFontNameSimple::SetVal(const String& s)
 {
 	String str = s;
-	int iRes = ose->FindStringExact(-1, str.scVal()); // select font
+	int iRes = ose->FindStringExact(-1, str.c_str()); // select font
 	if (iRes == CB_ERR)
 	{
 		str = String("%S.ttfont", s);   // try selecting font as truetype
-		iRes = ose->FindStringExact(-1, str.scVal());
+		iRes = ose->FindStringExact(-1, str.c_str());
 	}
 	ose->SetCurSel(iRes);
 }
@@ -141,19 +141,19 @@ FieldLogFont::FieldLogFont(FormEntry* parent, LOGFONT* logfont, unsigned long iA
 	fBold = lf->lfWeight > FW_MEDIUM;
 	fItalic = lf->lfItalic ? true : false;
 	iHeight = abs(lf->lfHeight);
-	new FieldFontName(this, SUIFontName, &sFont, iAttributes & 0x07);
-	new FieldInt(this, SUIFontSize, &iHeight, ValueRange(5,100), true); 
+	new FieldFontName(this, TR("&Font Name"), &sFont, iAttributes & 0x07);
+	new FieldInt(this, TR("Font &Size"), &iHeight, ValueRange(5,100), true); 
 	iRotation = lf->lfOrientation / 10;
 	if (iAttributes & faROTATION) 
-		new FieldInt(this, SUIFontRotation, &iRotation, ValueRange(0,359), true);
-	new CheckBox(this, SUIFontBold, &fBold);
-	new CheckBox(this, SUIFontItalic, &fItalic);
+		new FieldInt(this, TR("&Rotation"), &iRotation, ValueRange(0,359), true);
+	new CheckBox(this, TR("&Bold"), &fBold);
+	new CheckBox(this, TR("&Italic"), &fItalic);
 }
 
 void FieldLogFont::StoreData()
 {
 	FieldGroup::StoreData();
-	lstrcpy(lf->lfFaceName, sFont.scVal());
+	lstrcpy(lf->lfFaceName, sFont.c_str());
 	if (fBold)
 		lf->lfWeight = FW_BOLD;
 	else

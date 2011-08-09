@@ -162,8 +162,8 @@ void GraphLegend::draw(CDC* cdc)
     CPoint pt;
     pt.x = ptLayer.x + iW + 5;
     pt.y = ptLayer.y;
-		cdc->TextOut(pt.x, pt.y, sText.scVal(), sText.length());
-    CSize sz = cdc->GetTextExtent(sText.scVal(), sText.length());
+		cdc->TextOut(pt.x, pt.y, sText.c_str(), sText.length());
+    CSize sz = cdc->GetTextExtent(sText.c_str(), sText.length());
     pt.x += sz.cx + 5;
     pt.y += sz.cy + 5;
     if (rect.right < pt.x)
@@ -176,12 +176,12 @@ void GraphLegend::draw(CDC* cdc)
 
 void GraphLegend::SaveSettings(const FileName& fn, const String& sSection)
 {
-	ObjectInfo::WriteElement(sSection.scVal(), "Visible", fn, fShow);
-	ObjectInfo::WriteElement(sSection.scVal(), "Rectangle", fn, rect);
+	ObjectInfo::WriteElement(sSection.c_str(), "Visible", fn, fShow);
+	ObjectInfo::WriteElement(sSection.c_str(), "Rectangle", fn, rect);
 }
 
 void GraphLegend::LoadSettings(const FileName& fn, const String& sSection)
 {
-	ObjectInfo::ReadElement(sSection.scVal(), "Visible", fn, fShow);
-	ObjectInfo::ReadElement(sSection.scVal(), "Rectangle", fn, rect);
+	ObjectInfo::ReadElement(sSection.c_str(), "Visible", fn, fShow);
+	ObjectInfo::ReadElement(sSection.c_str(), "Rectangle", fn, rect);
 }

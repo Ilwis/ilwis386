@@ -162,7 +162,7 @@ String PixelInfoView::sField(int iCol, long iRow) const
 
 String PixelInfoView::sDescrULButton() const // upper left button
 {
-	return SPIRemCnfPixInfo;
+	return TR("Customize the Pixel Information Window");
 }
 
 void PixelInfoView::OnInitialUpdate()
@@ -296,7 +296,7 @@ BOOL PixelInfoView::OnDrop(COleDataObject* pDataObject, DROPEFFECT dropEffect, C
 	return fOk;
 }
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define add(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 
 void PixelInfoView::OnContextMenu(CWnd* pWnd, CPoint point) 
@@ -407,8 +407,8 @@ PixInfoField::~PixInfoField()
 		if (("?" != s) && !dvs.fValid(s)) {
 			DomainSort* ds = dvs.dm()->pdsrt();
 			if (0 != ds) {
-				String sMsg(STBMsgNotInDomain_SS.sVal(), s, ds->sName());
-				int iRet = pane->MessageBox(sMsg.sVal(), STBMsgInvalidValue.sVal(),
+				String sMsg(TR("%S is not in the domain %S\nAdd this item to the domain?").c_str(), s, ds->sName());
+				int iRet = pane->MessageBox(sMsg.c_str(), TR("Invalid Value").c_str(),
 					MB_YESNO|MB_ICONEXCLAMATION);
 				if (IDNO == iRet)
 				{
@@ -421,8 +421,8 @@ PixInfoField::~PixInfoField()
 				}
 			}
 			else {
-				String sMsg(STBMsgInvalidValue_S.sVal(), s);
-				pane->MessageBox(sMsg.sVal(), STBMsgInvalidValue.sVal(),
+				String sMsg(TR("%S is not a valid value").c_str(), s);
+				pane->MessageBox(sMsg.sVal(), TR("Invalid Value").c_str(),
 					MB_OK|MB_ICONEXCLAMATION);
 				return;
 			}

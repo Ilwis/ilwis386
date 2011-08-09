@@ -152,8 +152,8 @@ BOOL ReportWindow::OnInitDialog()
 	CFont *fnt = IlwWinApp()->GetFont(IlwisWinApp::sfWindowMedium);	
 	CClientDC cdc(this);
 	
-	CString sStop = SUIStop.scVal();
-	CString sHelp = SUIHelp.scVal();
+	CString sStop = SUIStop.c_str();
+	CString sHelp = SUIHelp.c_str();
 	CSize sizStop = cdc.GetTextExtent(sStop);
 	CSize sizHelp = cdc.GetTextExtent(sHelp);
 	CSize sizButton;

@@ -331,7 +331,7 @@ void MapPaneView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 }
 
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define add(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 void MapPaneView::OnContextMenu(CWnd* pWnd, CPoint point) 
 {
@@ -375,7 +375,7 @@ void MapPaneView::ShowRecord(const Ilwis::Record& rec)
 		if (0 == recBar) {
 			recBar = new RecordBar();
 			recBar->Create(fw, ID_RECORDBAR);
-			recBar->SetWindowText(SMWTitleAttributeRecord.scVal());
+			recBar->SetWindowText(TR("Attributes").c_str());
 			fw->FloatControlBar(recBar,CPoint(100,100));
 		}
 		recBar->view->SetRecord(rec,0);
@@ -441,7 +441,7 @@ void MapPaneView::OnLButtonDblClk(UINT nFlags, CPoint point)
 void MapPaneView::EditNamedLayer(const FileName& fn)
 {
 	if (fn.sFile[0] == '#') {
-		MessageBox(SMWErrCantEditBackup.sVal(), SMWErrError.sVal());
+		MessageBox(TR("Can't edit backup file").c_str(), TR("Error").c_str());
 		return;
 	}
 	delete edit;
@@ -503,7 +503,7 @@ void MapPaneView::OnPixelEdit()
 	{
 	public:
 		PixMapForm(CWnd* parent, String* sName)
-			: FormWithDest(parent, SMWTitleEditRasMap)
+			: FormWithDest(parent, TR("Edit Raster Map"))
 		{
 			new FieldBlank(root);
 			FieldDataTypeLarge* fdtl = 
@@ -548,7 +548,7 @@ void MapPaneView::OnPointEdit()
 	{
 	public:
 		PntMapForm(CWnd* parent, String* sName)
-			: FormWithDest(parent, SMWTitleEditPntMap)
+			: FormWithDest(parent, TR("Edit Point Map"))
 		{
 			new FieldBlank(root);
 			FieldDataTypeLarge* fdtl = 
@@ -586,7 +586,7 @@ void MapPaneView::OnSegmentEdit()
 	{
 	public:
 		SegMapForm(CWnd* parent, String* sName)
-			: FormWithDest(parent, SMWTitleEditSegMap)
+			: FormWithDest(parent, TR("Edit Segment Map"))
 		{
 			new FieldBlank(root);
 			FieldDataTypeLarge* fdtl = 
@@ -611,7 +611,7 @@ void MapPaneView::OnPolygonEdit()
 	{
 	public:
 		PolMapForm(CWnd* parent, String* sName)
-			: FormWithDest(parent, SMWTitleEditPolMap)
+			: FormWithDest(parent, TR("Edit Polygon Map"))
 		{
 			new FieldBlank(root);
 			FieldDataTypeLarge* fdtl = 
@@ -816,13 +816,13 @@ void MapPaneView::OnSetDoublClickAction()
 	{
 	public:
 		SetDblClkActionForm(CWnd* parent, int* iDblClkAct)
-			: FormWithDest(parent, SMWTitleDblClkAction)
+			: FormWithDest(parent, TR("Double Click Action"))
 		{
 			new FieldBlank(root);
-			RadioGroup* rg = new RadioGroup(root, SMWUiDblClkTo, iDblClkAct);
-			new RadioButton(rg, SMWUiEditAttribute);
-			new RadioButton(rg, SMWUiEditRepres);
-			new RadioButton(rg, SMWUiExecuteAction);
+			RadioGroup* rg = new RadioGroup(root, TR("Double Click to"), iDblClkAct);
+			new RadioButton(rg, TR("&Edit Attribute"));
+			new RadioButton(rg, TR("Edit &Representation"));
+			new RadioButton(rg, TR("Execute &Action"));
 			SetMenHelpTopic("ilwismen\\double_click_action.htm");
 			create();
 		}
@@ -1167,8 +1167,8 @@ dc.SetTextAlign(TA_CENTER|TA_BASELINE);
 CRect rect;
 GetClientRect(&rect);
 CPoint pt = rect.CenterPoint();
-String s = SMWRemLoading;
-CString str = s.scVal();
+String s = TR("Loading ...");
+CString str = s.c_str();
 dc.TextOut(pt.x,pt.y,str);
 dc.SelectObject(fntOld);
 }
@@ -1280,8 +1280,8 @@ void MapPaneView::OnCreateCoordSys()
 			SpatialDataDrawer* bmd = dynamic_cast<SpatialDataDrawer*>(drw);
 			if (bmd) {
 				BaseMapPtr* bmp = bmd->getBaseMap();
-				String s(SMWMsgRplCsy_SSS.scVal(), bmp->sName(true), bmp->cs()->sName(), csy->sName());
-				int iRes = MessageBox(s.scVal(), SMWMsgRplCsy.scVal(), MB_ICONQUESTION|MB_YESNO);
+				String s(TR("Replace Coordinate System of %S (now %S) with %S?").c_str(), bmp->sName(true), bmp->cs()->sName(), csy->sName());
+				int iRes = MessageBox(s.c_str(), TR("Replace Coordinate System").c_str(), MB_ICONQUESTION|MB_YESNO);
 				if (IDYES == iRes)
 					bmp->SetCoordSystem(csy);
 			}
@@ -1341,7 +1341,7 @@ void MapPaneView::OnCreateSubMap()
 		{
 			String sCommand("subras %S %d %d %d %d", mptr->fnObj.sRelativeQuoted(),mm.rcMin.Row, mm.rcMin.Col, mm.rcMax.Row, mm.rcMax.Col);
 
-			//FormMapSubMap *frm = new FormMapSubMap(this, sCommand.scVal());
+			//FormMapSubMap *frm = new FormMapSubMap(this, sCommand.c_str());
 			IlwWinApp()->ExecuteUI(sCommand, this);
 		}
 		if ( type == IlwisObject::iotPOINTMAP || type == IlwisObject::iotSEGMENTMAP)

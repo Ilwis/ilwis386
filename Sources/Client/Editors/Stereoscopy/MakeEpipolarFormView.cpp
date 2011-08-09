@@ -86,7 +86,7 @@ MakeEpipolarFormView::MakeEpipolarFormView()
 	stDummy->psn->SetBound(0,0,0,0);
 	// FieldBlank *fbDummy = new FieldBlank(fgLeft);
 
-	stFiducials = new StaticText(fgLeft, SStcUiFiducials);
+	stFiducials = new StaticText(fgLeft, TR("Fiducial Marks"));
 	stFiducials->Align(stDummy, AL_AFTER);
 	stFiducials->psn->SetBound(0,0,0,0);
 	int i;
@@ -103,7 +103,7 @@ MakeEpipolarFormView::MakeEpipolarFormView()
 	stDummy->psn->SetBound(0,0,0,0);
 	stDummy->Align(fFm[3], AL_UNDER);
 
-	stOffFlight = new StaticText(fgLeft, SStcUiOffFLScalePts);
+	stOffFlight = new StaticText(fgLeft, TR("Scaling Points"));
 	stOffFlight->Align(stDummy, AL_AFTER);
 	stOffFlight->psn->SetBound(0,0,0,0);
 	for (i = 0; i < 2; ++i)
@@ -113,13 +113,13 @@ MakeEpipolarFormView::MakeEpipolarFormView()
 	sFm[0]->Align(stDummy, AL_UNDER);
 	sFm[1]->Align(sFm[0], AL_UNDER);
 
-	stPP = new StaticText(fgRight, SStcUiPrincPoint);
+	stPP = new StaticText(fgRight, TR("Principal Point (Pivot)"));
 	stPP->psn->SetBound(0,0,0,0);
 	
 	String sDummy = "1234.5"; // To reserve space in PP, rotation and SF
 	
 	//fgUserPivot = new FieldGroup(fgRight);
-	//stUPP = new StaticText(fgUserPivot, SStcUiUserPP);
+	//stUPP = new StaticText(fgUserPivot, TR("'User pivot"));
 
 	frcPP = new FieldRowCol(fgRight, "", &rcPP, true);
 	frcPP->psn->SetBound(0,0,0,0);
@@ -127,7 +127,7 @@ MakeEpipolarFormView::MakeEpipolarFormView()
 	frcPP->SetWidth(iFieldSize);
 	//frcPP->Align(stPP, AL_UNDER);
 
-	stTPP = new StaticText(fgRight, SStcUiTransfPP);
+	stTPP = new StaticText(fgRight, TR("Transferred PP"));
 	stTPP->psn->SetBound(0,0,0,0);
 	//stTPP->Align(frcPP, AL_UNDER);
 	frcTPP = new FieldRowCol(fgRight, "", &rcTPP, true);
@@ -136,7 +136,7 @@ MakeEpipolarFormView::MakeEpipolarFormView()
 	frcTPP->SetWidth(iFieldSize);
 	//frcTPP->Align(stTPP, AL_UNDER);
  
-	stRot = new StaticText(fgRight, SStcUiRotation);
+	stRot = new StaticText(fgRight, TR("Rotation:"));
 	stRot->psn->SetBound(0,0,0,0);
 	//stRot->Align(frcTPP, AL_UNDER);
 	stfRot = new StaticText(fgRight, sDummy);
@@ -144,7 +144,7 @@ MakeEpipolarFormView::MakeEpipolarFormView()
 	stfRot->SetWidth(iFieldSize * 2);
 	//stfRot->Align(stRot, AL_UNDER);
 
-	stScf = new StaticText(fgRight, SStcUiTotDistfrFline);
+	stScf = new StaticText(fgRight, TR("Total Distance from Flight-line:"));
 	stScf->psn->SetBound(0,0,0,0);
 	//stScf->Align(stfRot, AL_UNDER);
 	stfScf = new StaticText(fgRight, sDummy);
@@ -152,7 +152,7 @@ MakeEpipolarFormView::MakeEpipolarFormView()
 	stfScf->SetWidth(iFieldSize);
 	//stfScf->Align(stScf, AL_UNDER);
 
-	stInputTxt = new StaticText(fgRight, SStcUIInputImage);
+	stInputTxt = new StaticText(fgRight, TR("Raster Map: "));
 	stInputTxt->psn->SetBound(0,0,0,0);
 	//stScf->Align(stfRot, AL_UNDER);
 	stInputName = new StaticText(fgRight, sDummy);
@@ -417,14 +417,14 @@ int MakeEpipolarFormView::DataChanged(Event*)
 
 	// check whether the rotation is valid:
 	if (!rcTPP.fUndef() && ((iErr < -17) || (iErr == 0)))
-		stfRot->SetVal(String(SStcUiDegrees_F.scVal(), med->rGetAngle() * 180 / M_PI));
+		stfRot->SetVal(String(TR("%5.3f degrees").c_str(), med->rGetAngle() * 180 / M_PI));
 	else
 		stfRot->SetVal("");
 	stfRot->Show();
 
 	// check whether the scaling is valid:
 	if (med->iGetNrOffFlightPts() > 0 && iErr == 0)
-		stfScf->SetVal(String(SStcUIPixels_F.scVal(), med->rGetScale()));
+		stfScf->SetVal(String(TR("%5.1f pixels").c_str(), med->rGetScale()));
 	else
 		stfScf->SetVal("");
 	stfScf->Show();

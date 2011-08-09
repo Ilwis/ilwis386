@@ -96,9 +96,9 @@ bool BitmapLayoutItem::fConfigure()
   {
   public:
     ConfigForm(CWnd* p, bool* fIsotropic)
-    : FormWithDest(p, SLOTitleBitmap)
+    : FormWithDest(p, TR("Edit Bitmap"))
     {
-      new CheckBox(root, SLOUiIsotropic, fIsotropic);
+      new CheckBox(root, TR("&Isotropic"), fIsotropic);
       create();
     }
   };
@@ -113,7 +113,7 @@ String BitmapLayoutItem::sType() const
 
 String BitmapLayoutItem::sName() const
 {
-	return SLONameBitmap;
+	return TR("Bitmap");
 }
 
 void BitmapLayoutItem::Serialize(CArchive& ar, const char* sSection)

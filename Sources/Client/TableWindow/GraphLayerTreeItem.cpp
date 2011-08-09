@@ -57,7 +57,7 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define pmadd(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 
 
@@ -156,8 +156,8 @@ void GraphLayerTreeItem::DisplayOptions()
 
 void GraphLayerTreeItem::Remove()
 {
-  String s(SGPMsgRemove_s.scVal(), gl->sName());
-  int iRet = ltv->MessageBox(s.scVal(), SGPMsgRemoveGraph.scVal(), MB_YESNO|MB_ICONQUESTION);
+  String s(TR("Remove %S\nAre you sure?").c_str(), gl->sName());
+  int iRet = ltv->MessageBox(s.c_str(), TR("Remove Graph").c_str(), MB_YESNO|MB_ICONQUESTION);
   if (IDYES == iRet) {
     GraphDoc* doc = ltv->GetDocument();
     GraphDrawer* gd = doc->grdrGet();
@@ -293,7 +293,7 @@ void GraphLayerTreeItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
       CPoint pt;
       pt.x = rect.left + 40;
       pt.y = rect.top;
-			cdc.TextOut(pt.x, pt.y, sText.scVal(), sText.length());
+			cdc.TextOut(pt.x, pt.y, sText.c_str(), sText.length());
 			cdc.Detach();
 			return;
 	}
@@ -356,7 +356,7 @@ void ObjectGraphTreeItem::OnEdit()
 	if (ptr->fnObj.fValid())
 	{
 		String sName = ptr->fnObj.sFullPathQuoted();
-		IlwWinApp()->OpenDocumentFile(sName.scVal());
+		IlwWinApp()->OpenDocumentFile(sName.c_str());
 	}
 }
 
@@ -402,7 +402,7 @@ void StringGraphTreeItem::OnNotifyFieldFinished()
     CDocument* doc = ltv->CView::GetDocument();
     doc->SetModifiedFlag();
     doc->UpdateAllViews(ltv);
-    ltv->GetTreeCtrl().SetItemText(hti,str->scVal());
+    ltv->GetTreeCtrl().SetItemText(hti,str->c_str());
   }
   delete gtf;
   gtf = 0;
@@ -446,7 +446,7 @@ void GraphAxisMinTreeItem::OnNotifyFieldFinished()
       CDocument* doc = ltv->CView::GetDocument();
       doc->SetModifiedFlag();
       doc->UpdateAllViews(ltv);
-      ltv->GetTreeCtrl().SetItemText(hti,str.scVal());
+      ltv->GetTreeCtrl().SetItemText(hti,str.c_str());
     }
   }
   delete gtf;
@@ -491,7 +491,7 @@ void GraphAxisMaxTreeItem::OnNotifyFieldFinished()
       CDocument* doc = ltv->CView::GetDocument();
       doc->SetModifiedFlag();
       doc->UpdateAllViews(ltv);
-      ltv->GetTreeCtrl().SetItemText(hti,str.scVal());
+      ltv->GetTreeCtrl().SetItemText(hti,str.c_str());
     }
   }
   delete gtf;

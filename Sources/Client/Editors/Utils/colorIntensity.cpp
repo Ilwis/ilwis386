@@ -102,8 +102,8 @@ BOOL ColorIntensity::Create(CRect& rct, CWnd *par, COLORREF iC, UINT nID)
 	cscbRedH.ShowWindow(fVertical ? SW_HIDE : SW_SHOW);
 
 	String s("255");
-	cz = cdc->GetTextExtent(s.scVal());
-	stRed.Create(s.scVal(), WS_VISIBLE | WS_CHILD, 
+	cz = cdc->GetTextExtent(s.c_str());
+	stRed.Create(s.c_str(), WS_VISIBLE | WS_CHILD, 
 		           CRect(scrollRect.CenterPoint().x - cz.cx/2 + 1, 0, scrollRect.CenterPoint().x + cz.cx/2, cz.cy - 2 ), this);
 	stRed.SetFont(fnt);
 	stRed.MoveWindow(CRect(5, 5, 25, 25));
@@ -115,8 +115,8 @@ BOOL ColorIntensity::Create(CRect& rct, CWnd *par, COLORREF iC, UINT nID)
 	cscbGreenH.Create(WS_CHILD | WS_VISIBLE | TBS_HORZ | TBS_AUTOTICKS | TBS_TOP , scrollRect, this, ID_COLORINTENSITY_GREENH);
 	cscbGreenH.ShowWindow(fVertical ? SW_HIDE : SW_SHOW);
 
-	cz = cdc->GetTextExtent(s.scVal());
-	stGreen.Create(s.scVal(), WS_VISIBLE | WS_CHILD, 
+	cz = cdc->GetTextExtent(s.c_str());
+	stGreen.Create(s.c_str(), WS_VISIBLE | WS_CHILD, 
 		           CRect(scrollRect.CenterPoint().x - cz.cx/2, 0, scrollRect.CenterPoint().x + cz.cx/2, cz.cy -2 ), this);
 	stGreen.SetFont(fnt);
 
@@ -127,8 +127,8 @@ BOOL ColorIntensity::Create(CRect& rct, CWnd *par, COLORREF iC, UINT nID)
 	cscbBlueH.Create(WS_CHILD | WS_VISIBLE | TBS_HORZ | TBS_AUTOTICKS | TBS_TOP , scrollRect, this, ID_COLORINTENSITY_BLUEH);
 	cscbBlueH.ShowWindow(fVertical ? SW_HIDE : SW_SHOW);
 
-	cz = cdc->GetTextExtent(s.scVal());
-	stBlue.Create(s.scVal(), WS_VISIBLE | WS_CHILD, 
+	cz = cdc->GetTextExtent(s.c_str());
+	stBlue.Create(s.c_str(), WS_VISIBLE | WS_CHILD, 
 		           CRect(scrollRect.CenterPoint().x - cz.cx/2, 0, scrollRect.CenterPoint().x + cz.cx/2, cz.cy - 2 ), this);
 	stBlue.SetFont(fnt);
 
@@ -294,7 +294,7 @@ void ColorIntensity::SetText(const CSliderCtrl& bar, const String& s, CStatic& t
 {
 	CDC *dc = GetWindowDC();
 	CRect rct, rct2;
-	CSize cz = dc->GetTextExtent(s.scVal());
+	CSize cz = dc->GetTextExtent(s.c_str());
 
 	text.GetWindowRect(&rct);
   ScreenToClient(&rct);
@@ -309,7 +309,7 @@ void ColorIntensity::SetText(const CSliderCtrl& bar, const String& s, CStatic& t
 	else
 		rect = CRect(rct.left - cz.cx - 10 , rct.CenterPoint().y - cz.cy/2 + 1, rct.left, rct.CenterPoint().y + cz.cy/2);
 	text.MoveWindow(&rect);
-	text.SetWindowText(s.scVal());
+	text.SetWindowText(s.c_str());
 }
 
 void ColorIntensity::SetColor(COLORREF col, bool fPostMessage)

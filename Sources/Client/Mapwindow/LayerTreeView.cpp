@@ -206,7 +206,7 @@ HTREEITEM LayerTreeView::addMapItem(ILWIS::SpatialDataDrawer *mapDrawer, HTREEIT
 	int iImg = IlwWinApp()->iImage(mapDrawer->iconName());
 	String sName = mapDrawer->description();
 
-	HTREEITEM htiMap = tc.InsertItem(sName.scVal(),iImg,iImg,TVI_ROOT,after);
+	HTREEITEM htiMap = tc.InsertItem(sName.c_str(),iImg,iImg,TVI_ROOT,after);
 	tc.SetItemData(htiMap, (DWORD_PTR)new DrawerLayerTreeItem(this, mapDrawer));		
 	tc.SetCheck(htiMap, mapDrawer->isActive());
 
@@ -246,7 +246,7 @@ HTREEITEM LayerTreeView::addMapItem(ILWIS::SpatialDataDrawer *mapDrawer, HTREEIT
 
 	sName = "Properties";
 	int iImgProp = IlwWinApp()->iImage("prop");
-	HTREEITEM htiProp = tc.InsertItem(sName.scVal(), iImgProp, iImgProp, htiMap);
+	HTREEITEM htiProp = tc.InsertItem(sName.c_str(), iImgProp, iImgProp, htiMap);
 	if (0 == htiProp)
 		return htiMap;
 	tc.SetItemData(htiProp, (DWORD_PTR)new PropertiesLayerTreeItem(this, bmp));		
@@ -255,7 +255,7 @@ HTREEITEM LayerTreeView::addMapItem(ILWIS::SpatialDataDrawer *mapDrawer, HTREEIT
 
 		sName = String("%S - %S", dm->sName(), dm->sType());
 		iImg = IlwWinApp()->iImage(".dom");
-		HTREEITEM htiDom = tc.InsertItem(sName.scVal(), iImg, iImg, htiProp);
+		HTREEITEM htiDom = tc.InsertItem(sName.c_str(), iImg, iImg, htiProp);
 		if (0 == htiDom)
 			return htiMap;
 
@@ -265,7 +265,7 @@ HTREEITEM LayerTreeView::addMapItem(ILWIS::SpatialDataDrawer *mapDrawer, HTREEIT
 		if (rpr.fValid()) {
 			sName = String("%S - %S", rpr->sName(), rpr->sType());
 			iImg = IlwWinApp()->iImage(".rpr");
-			HTREEITEM htiRpr = tc.InsertItem(sName.scVal(), iImg, iImg, htiDom);
+			HTREEITEM htiRpr = tc.InsertItem(sName.c_str(), iImg, iImg, htiDom);
 			if (0 == htiRpr)
 				return htiMap;
 			tc.SetItemData(htiRpr, (DWORD_PTR)new ObjectLayerTreeItem(this, rpr.ptr()));		
@@ -276,7 +276,7 @@ HTREEITEM LayerTreeView::addMapItem(ILWIS::SpatialDataDrawer *mapDrawer, HTREEIT
 			GeoRef grf =  mp->gr();
 			sName = String("%S - %S", grf->sName(), grf->sType());
 			iImg = IlwWinApp()->iImage(".grf");
-			htiGrf = tc.InsertItem(sName.scVal(), iImg, iImg, htiProp);
+			htiGrf = tc.InsertItem(sName.c_str(), iImg, iImg, htiProp);
 			if (0 == htiGrf)
 				return htiMap;
 
@@ -285,7 +285,7 @@ HTREEITEM LayerTreeView::addMapItem(ILWIS::SpatialDataDrawer *mapDrawer, HTREEIT
 		CoordSystem csy = bmp->cs();
 		sName = String("%S - %S", csy->sName(), csy->sType());
 		iImg = IlwWinApp()->iImage(".csy");
-		HTREEITEM htiCsy = tc.InsertItem(sName.scVal(), iImg, iImg, htiGrf);
+		HTREEITEM htiCsy = tc.InsertItem(sName.c_str(), iImg, iImg, htiGrf);
 		if (0 != htiCsy)
 			tc.SetItemData(htiCsy, (DWORD_PTR)new ObjectLayerTreeItem(this, csy.pointer()));		
 
@@ -297,7 +297,7 @@ HTREEITEM LayerTreeView::addMapItem(ILWIS::SpatialDataDrawer *mapDrawer, HTREEIT
 				if ("" != sDescr) 
 					sName = String("%S - %S", sName, sDescr);
 				iImg = IlwWinApp()->iImage(".tbt");
-				HTREEITEM htiTbl = tc.InsertItem(sName.scVal(), iImg, iImg, htiProp);
+				HTREEITEM htiTbl = tc.InsertItem(sName.c_str(), iImg, iImg, htiProp);
 				if (0 == htiTbl)
 					return htiMap;
 				//						AddPropItems(htiTbl, iImg, tbl);
@@ -498,7 +498,7 @@ void LayerTreeView::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 	}
 }
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define pmadd(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 
 void LayerTreeView::OnContextMenu(CWnd* pWnd, CPoint point) 
@@ -749,8 +749,8 @@ void LayerTreeView::OnRemoveLayer()
 	NewDrawer* drw = dlti->drw();
 
 	String str = drw->getName();
-	String s(SMWMsgRemoveLayer_s.scVal(), str);
-	int iRet = MessageBox(s.scVal(), SMWMsgRemoveLayer.scVal(), MB_YESNO|MB_ICONQUESTION);
+	String s(TR("Remove %S\nAre you sure?").c_str(), str);
+	int iRet = MessageBox(s.c_str(), TR("Remove Layer").c_str(), MB_YESNO|MB_ICONQUESTION);
 	if (IDYES == iRet) {
 		MapCompositionDoc* mcd = GetDocument();	 
 		mcd->rootDrawer->removeDrawer(drw->getId());

@@ -68,7 +68,7 @@ InPlaceComboBox::InPlaceComboBox(CWnd* wndParent, int iItem, int iSubItem, vecto
 
 	vector<String>::iterator iter;
 	for (iter = vcStrings.begin(); iter != vcStrings.end(); ++iter)
-		AddString(iter->scVal());
+		AddString(iter->c_str());
 
 	ShowWindow(SW_SHOW);
 

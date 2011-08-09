@@ -74,16 +74,16 @@ END_MESSAGE_MAP()
 		{
 		public:
 			ConfigInitForm(CWnd* wParent, const Table& tbl, bool fXAxis)
-				: FormWithDest(wParent, SGPTitleGraph)
+				: FormWithDest(wParent, TR("Create Graph"))
 			{
 				fColX = true;
 				CheckBox* cb = 0;
 				tvw = new TableView(tbl);
 				if (fXAxis) {
-					cb = new CheckBox(root, STBUiColX, &fColX);
+					cb = new CheckBox(root, TR("&X-column"), &fColX);
 					new FieldColumn(cb, "", tvw, &sColX, dmVALUE | dmIMAGE | dmCLASS | dmIDENT);
 				}
-				FieldColumn* fc = new FieldColumn(root, STBUiColY, tvw, &sColY, dmVALUE | dmIMAGE | dmBOOL);
+				FieldColumn* fc = new FieldColumn(root, TR("&Y-column"), tvw, &sColY, dmVALUE | dmIMAGE | dmBOOL);
 				if (0 != cb)
   				fc->Align(cb, AL_UNDER);
 				create();
@@ -133,7 +133,7 @@ bool ColumnGraphDrawer::fAddGraph(bool fConfigLayer)
 			AddGraphFormulaForm(CWnd *parent, const String& sTitle)
 			: FormWithDest(parent, sTitle)
 			{
-				new StaticText(root, SGPUiExpression);
+				new StaticText(root, TR("&Expression"));
 				sExpr = "x";
 				FieldString* fs = new FieldString(root, "y =", &sExpr, Domain(), false);
 				fs->SetWidth(120);
@@ -146,7 +146,7 @@ bool ColumnGraphDrawer::fAddGraph(bool fConfigLayer)
 
 bool ColumnGraphDrawer::fAddFormulaGraph(bool fConfigLayer)
 {
-	AddGraphFormulaForm frm(tgv, SGPTitleAddGraphFormula);
+	AddGraphFormulaForm frm(tgv, TR("Add Graph from Formula"));
 	bool fOk = frm.fOkClicked();
 	if (fOk) 
 		fOk = tgv->AddFormulaGraph(frm.sExpr, fConfigLayer);
@@ -164,16 +164,16 @@ bool ColumnGraphDrawer::fAddFormulaGraph(bool fConfigLayer)
 					sColX = tvw->cv(0)->sName();
 				if (tvw->iCols() > 1)
 					sColY = tvw->cv(1)->sName();
-				new FieldColumn(root, STBUiColX, tvw, &sColX, dmVALUE|dmIMAGE);
-				new FieldColumn(root, STBUiColY, tvw, &sColY, dmVALUE|dmIMAGE);
+				new FieldColumn(root, TR("&X-column"), tvw, &sColX, dmVALUE|dmIMAGE);
+				new FieldColumn(root, TR("&Y-column"), tvw, &sColY, dmVALUE|dmIMAGE);
 				sFunc = 0;
 				m_sDefault = String();
-				frf = new FieldRegressionFunc(root, STBUiFunction, &sFunc, m_sDefault);
+				frf = new FieldRegressionFunc(root, TR("&Function"), &sFunc, m_sDefault);
 				frf->SetCallBack((NotifyProc)&AddLsfForm::FuncCallBack);
 				String sFill('x', 50);
 				stRegr = new StaticText(root, sFill);
 				stRegr->SetIndependentPos();
-				fiTerms = new FieldInt(root, STBUiNrTerms, &iTerms, RangeInt(2,100));
+				fiTerms = new FieldInt(root, TR("&Nr. of terms"), &iTerms, RangeInt(2,100));
 				SetMenHelpTopic("ilwismen\\graph_window_add_graph_least_squares_fit.htm");
 				create();
 			}
@@ -214,7 +214,7 @@ bool ColumnGraphDrawer::fAddFormulaGraph(bool fConfigLayer)
 
 bool ColumnGraphDrawer::fAddLsfGraph(bool fConfigLayer)
 {
-	AddLsfForm frm(tgv, SGPTitleAddGraphLsf, tgv->GetDocument()->table());
+	AddLsfForm frm(tgv, TR("Add Graph Least Squares Fit"), tgv->GetDocument()->table());
 	bool fOk = frm.fOkClicked();
 	if (fOk)
 		fOk = tgv->AddLsfGraph(frm.sColX, frm.sColY, *frm.sFunc, frm.iTerms, fConfigLayer);
@@ -227,7 +227,7 @@ bool ColumnGraphDrawer::fAddLsfGraph(bool fConfigLayer)
 			AddSmvForm(CWnd *parent, const String& sTitle)
 			: FormWithDest(parent, sTitle)
 			{
-				new FieldSemiVariogram(root, SGPUiSemiVar, &smv);
+				new FieldSemiVariogram(root, TR("&SemiVariogram"), &smv);
 				SetMenHelpTopic("ilwismen\\graph_window_add_semivariogram_model.htm");
 				create();
 			}
@@ -236,7 +236,7 @@ bool ColumnGraphDrawer::fAddLsfGraph(bool fConfigLayer)
 
 bool ColumnGraphDrawer::fAddSmvGraph(bool fConfigLayer)
 {
-	AddSmvForm frm(tgv, SGPTitleAddGraphSemiVar);
+	AddSmvForm frm(tgv, TR("Add Graph Semivariogram Model"));
 	bool fOk = frm.fOkClicked();
 	if (fOk)
 		fOk = tgv->AddSmvGraph(frm.smv, fConfigLayer);
@@ -484,7 +484,7 @@ void TableGraphView::LoadSettings(const FileName& fn, int iGraphWindow)
 	cgd->LoadSettings(fn, sSection);
 }
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define add(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 #define addSub(ID) menSub.AppendMenu(MF_STRING, ID, sMen(ID)); 
 #define addSubMenu(ID) men.AppendMenu(MF_POPUP, (UINT)menSub.GetSafeHmenu(), sMen(ID)); menSub.Detach();

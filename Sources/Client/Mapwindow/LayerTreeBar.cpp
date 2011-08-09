@@ -86,7 +86,7 @@ LayerTreeBar::~LayerTreeBar()
 
 BOOL LayerTreeBar::Create(CWnd* pParent)
 {
-	if (!CSizingControlBar::Create(SMWTitleLayerManagement.scVal(), pParent, CSize(150,350), TRUE, 124))
+	if (!CSizingControlBar::Create(TR("Layer Management").c_str(), pParent, CSize(150,350), TRUE, 124))
 		return FALSE;
   m_dwSCBStyle |= SCBS_SHOWEDGES;
 

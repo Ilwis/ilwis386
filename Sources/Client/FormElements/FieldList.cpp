@@ -146,7 +146,7 @@ void FieldLister::BuildColumns()
 	CString sColName, sDummy;
 
 	for(int i = 0; i < columns.size(); ++i) {
-		sColName = columns[i].scVal();
+		sColName = columns[i].c_str();
 		sDummy = CString('x', 15);
 		isHeader = m_clctrl.GetStringWidth(sDummy);
 		m_clctrl.InsertColumn(iCurCol++, sColName, LVCFMT_LEFT, iCheckWidth + isHeader.cx);

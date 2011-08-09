@@ -113,7 +113,7 @@ void MapListSelector::create()
 		if (!finder.IsDirectory())
 		{
 			String sFile = String(finder.GetFileName());
-    	lb->AddString(sFile.scVal());
+    	lb->AddString(sFile.c_str());
 		}
 	}
 	finder.Close();
@@ -127,15 +127,15 @@ String MapListSelector::sName(int id)
 }
 
 FormCreateMapList::FormCreateMapList(CWnd* wPar, String* sML)
-: FormWithDest(wPar, SUITitleCreateMapList),
+: FormWithDest(wPar, TR("Create MapList")),
   sMapList(sML)
 {
 	iImg = IlwWinApp()->iImage(".mpl");
 
   sNewName = *sMapList;
-  fml = new FieldDataTypeCreate(root, SUIMapList, &sNewName, ".MPL", true);
+  fml = new FieldDataTypeCreate(root, TR("&Map List"), &sNewName, ".MPL", true);
   fml->SetCallBack((NotifyProc)&FormCreateMapList::CallBackName);
-  FieldString* fs = new FieldString(root, SUIDescription, &sDescr);
+  FieldString* fs = new FieldString(root, TR("&Description"), &sDescr);
   fs->SetWidth(120);
   fmm = new FieldMultiMap(root, "", arr);
   fmm->SetIndependentPos();
@@ -175,9 +175,9 @@ int FormCreateMapList::CallBackName(Event*)
   FileName fn(sNewName, ".mpl");
   bool fOk = false;
   if (!fn.fValid())
-    stRemark->SetVal(SUIErrInvalidMapListName);
+    stRemark->SetVal(TR("Not a valid maplist name"));
   else if(File::fExist(fn))   
-    stRemark->SetVal(SUIErrMapListExists);
+    stRemark->SetVal(TR("MapList already exists"));
   else {
     fOk = true;  
     stRemark->SetVal("");
@@ -297,7 +297,7 @@ void GeneralMapSelector::SetSel(int id, bool fSel)
 
 void GeneralMapSelector::SetSel(const String& str, bool fSel)
 {
-  int id = lb->FindString(-1, str.scVal());
+  int id = lb->FindString(-1, str.c_str());
   lb->SetCurSel(id);
 }
 
@@ -539,12 +539,12 @@ bool MapSequenceSelector::fCheckDomains(const Map& mp, String& sErr) const
 { 
 	if (arr[0]->dm() == Domain("none"))
 	{
-		sErr = SMPLErrDomainNoneNotAllowed;
+		sErr = TR("Map in List cannot have Domain None");
 		return false;
 	}
 	if (arr[0]->dm() != mp->dm())
 	{
-		sErr = String(SDATErrIncompatDomain_SS.sVal(), arr[0]->dm()->sName(true), mp->dm()->sName(true));
+		sErr = String(TR("Incompatible domains: %S and %S").c_str(), arr[0]->dm()->sName(true), mp->dm()->sName(true));
 		return false;
 	}
 
@@ -558,7 +558,7 @@ bool MapSequenceSelector::fCheckGeoRefs(const Map& mp, String& sErr) const
 	{
 		if (arr[0]->gr()->rcSize() != mp->gr()->rcSize())
 		{
-			sErr = String(SDATErrIncompatMapSize_SS.sVal(), arr[0]->gr()->sName(true), mp->gr()->sName(true));
+			sErr = String(TR("Incompatible map size: %S and %S").c_str(), arr[0]->gr()->sName(true), mp->gr()->sName(true));
 			return false;
 		}
 	}                 
@@ -566,7 +566,7 @@ bool MapSequenceSelector::fCheckGeoRefs(const Map& mp, String& sErr) const
 	{
 		if (arr[0]->gr() != mp->gr())
 		{
-			sErr = String(SDATErrIncompatGeoRef_SS.sVal(), arr[0]->gr()->sName(true),  mp->gr()->sName(true));
+			sErr = String(TR("Incompatible georefs: %S and %S").c_str(), arr[0]->gr()->sName(true),  mp->gr()->sName(true));
 			return false;
 		}
 	}
@@ -583,13 +583,13 @@ int MapSequenceSelector::Add(const String& s)
 		Map mp(s);
 		if (!fCheckGeoRefs(mp, sErr))
 		{
-			IlwWinApp()->GetMainWnd()->MessageBox(sErr.scVal(), SDATErrMapListError.scVal(), MB_OK | MB_ICONSTOP);
+			IlwWinApp()->GetMainWnd()->MessageBox(sErr.c_str(), TR("Map List Error").c_str(), MB_OK | MB_ICONSTOP);
 			return -1;
 		}
 
 		if (!fCheckDomains(mp, sErr))
 		{
-			IlwWinApp()->GetMainWnd()->MessageBox(sErr.scVal(), SDATErrMapListError.scVal(), MB_OK | MB_ICONSTOP);
+			IlwWinApp()->GetMainWnd()->MessageBox(sErr.c_str(), TR("Map List Error").c_str(), MB_OK | MB_ICONSTOP);
 			return -1;
 		}
 	}
@@ -602,7 +602,7 @@ int MapSequenceSelector::Add(const String& s)
 			lb->SetSel(id);
 			return id;
 		}
-	id = lb->AddString(s.scVal());
+	id = lb->AddString(s.c_str());
 	lb->SetSel(id);
 	lb->SetCaretIndex(id);
 	RecalcHScrollSize();

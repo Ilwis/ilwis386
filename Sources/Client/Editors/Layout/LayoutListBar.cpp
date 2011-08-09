@@ -71,7 +71,7 @@ BOOL LayoutListBar::Create(CWnd* pParent)
 	if (!CSizingControlBar::Create("", pParent, CSize(200,120), TRUE, 124))
 		return FALSE;
   m_dwSCBStyle |= SCBS_SHOWEDGES;
-	SetWindowText(SLOTitleLayoutManagement.scVal());
+	SetWindowText(TR("Layout Management").c_str());
 
 	SetBarStyle(GetBarStyle() | CBRS_SIZE_DYNAMIC);
 	EnableDocking(CBRS_ALIGN_ANY);

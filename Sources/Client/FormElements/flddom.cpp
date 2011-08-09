@@ -120,7 +120,7 @@ void FieldDomainC::SetValueRange(const ValueRange& vr)
 
 // FormCreateDomain implementation
 FormCreateDomain::FormCreateDomain(CWnd* wPar, String* sDom, long types)
-	: FormWithDest(wPar, SDMTitleCreateDomain)
+	: FormWithDest(wPar, TR("Create Domain"))
 	, sDomain(sDom)
 	, dmTypes(types)
 	, wParent(wPar)
@@ -162,7 +162,7 @@ FormCreateDomain::FormCreateDomain(CWnd* wPar, String* sDom, long types)
 }
 
 FormCreateDomain::FormCreateDomain(CWnd* wPar, String* sDom, const DomainInfo& dminf, long types) 
-	: FormWithDest(wPar, SDMTitleCreateDomain)
+	: FormWithDest(wPar, TR("Create Domain"))
 	, sDomain(sDom)
 	, dmTypes(types)
 	, wParent(wPar)
@@ -198,12 +198,12 @@ void FormCreateDomain::init(dmType type)
 {
 	iImg = IlwWinApp()->iImage(".dom");
 
-	fdm = new FieldDataTypeCreate(root, SDMUiDomName, &sNewName, ".dom", true);
+	fdm = new FieldDataTypeCreate(root, TR("&Domain Name"), &sNewName, ".dom", true);
 	fdm->SetIndependentPos();
 	fdm->SetCallBack((NotifyProc)&FormCreateDomain::CallBackName);
 
 	iRgVal = 0;  // default: first choice, to prevent crashes
-	rg = new RadioGroup(root, SDMUiType, &iRgVal);
+	rg = new RadioGroup(root, TR("Type"), &iRgVal);
 	rg->SetCallBack((NotifyProc)&FormCreateDomain::CallBackVrrChange); 
 
 	int iRg = 0;
@@ -212,9 +212,9 @@ void FormCreateDomain::init(dmType type)
 		if ((dmCLASS == type) || dmGROUP == type)
 			iRgVal = iRg;
 		dmt[iRg++] = dmCLASS; 
-		RadioButton* rb = new RadioButton(rg, SDMUiClass);
+		RadioButton* rb = new RadioButton(rg, TR("&Class"));
 		fDomainGroup = (dmGROUP == type) && (dmGROUP & dmTypes) && !(dmCLASS & dmTypes);
-		new CheckBox(rb, SDMUiGroup, &fDomainGroup);
+		new CheckBox(rb, TR("&Group"), &fDomainGroup);
 	}  
 	RadioButton* rbId = 0;
 	FieldGroup* fgId = 0;
@@ -223,7 +223,7 @@ void FormCreateDomain::init(dmType type)
 		if (dmIDENT == type)
 			iRgVal = iRg;
 		dmt[iRg++] = dmIDENT; 
-		rbId = new RadioButton(rg, SDMUiIdentifier);
+		rbId = new RadioButton(rg, TR("&Identifier"));
 		fgId = new FieldGroup(rbId);
 	}
 
@@ -232,7 +232,7 @@ void FormCreateDomain::init(dmType type)
 		if (type == dmBOOL)
 			iRgVal = iRg;
 		dmt[iRg++] = dmBOOL;
-		new RadioButton(rg, SDMUiBool);
+		new RadioButton(rg, TR("&Bool"));
 	}
 	FieldGroup *fgValue = 0;
 	if (dmVALUE & dmTypes) 
@@ -240,17 +240,17 @@ void FormCreateDomain::init(dmType type)
 		if (dmVALUE == type)
 			iRgVal = iRg;
 		dmt[iRg++] = dmVALUE; 
-		RadioButton* rbValue = new RadioButton(rg, SDMUiValue);
+		RadioButton* rbValue = new RadioButton(rg, TR("&Value"));
 		fgValue = new FieldGroup(rbValue);
 		fValueInt = false;
 	}  
 
 	if (fgId) 
 	{
-		fiNrItems = new FieldInt(fgId, SDMUiNrItems, &iNr, ValueRange(0, 9999999));
+		fiNrItems = new FieldInt(fgId, TR("&Nr of items"), &iNr, ValueRange(0, 9999999));
 		fiNrItems->Align(rbId, AL_AFTER);
 		sPrefix = "nr";
-		fsPrefix = new FieldString(fgId, SDMUiPrefix, &sPrefix, Domain(), false);
+		fsPrefix = new FieldString(fgId, TR("&Prefix"), &sPrefix, Domain(), false);
 		fsPrefix->Align(fiNrItems, AL_UNDER);
 		fiNrItems->SetCallBack((NotifyProc)&FormCreateDomain::CallBackNrItemsChange); 
 		fsPrefix->SetCallBack((NotifyProc)&FormCreateDomain::CallBackPrefixChange); 
@@ -258,7 +258,7 @@ void FormCreateDomain::init(dmType type)
 
 	if (fgValue)
 	{
-		fvr = new FieldValueRange(fgValue, SDMUiMinMax, &vr, 0);
+		fvr = new FieldValueRange(fgValue, TR("&Min, Max"), &vr, 0);
 		fvr->SetCallBack((NotifyProc)&FormCreateDomain::CallBackVrrChange); 
 		if (rbId)
 			fvr->Align(rbId, AL_AFTER);
@@ -288,11 +288,11 @@ void FormCreateDomain::init(dmType type)
 
 
 
-	fiWidth = new FieldInt(root, SDMUiWidth, &iWidth);
+	fiWidth = new FieldInt(root, TR("&Width"), &iWidth);
 	//fiWidth->Align(fb, AL_UNDER);
 
 	// Description field
-	StaticText* st = new StaticText(root, SDMUiDescription);
+	StaticText* st = new StaticText(root, TR("&Description:"));
 	st->psn->SetBound(0,0,0,0);
 	st->Align(fiWidth, AL_UNDER);
 	FieldString* fs = new FieldString(root, "", &sDescr);
@@ -438,7 +438,7 @@ int FormCreateDomain::CallBackPrefixChange(Event *)
 	if (fPrefixOk)
 		stRemark->SetVal("");
 	else
-		stRemark->SetVal(SDMRemNoEmptyPrefixAllowed);
+		stRemark->SetVal(TR("No empty prefix allowed"));
 
 	if (fPrefixOk && fVrOk)
 		EnableOK();
@@ -454,14 +454,14 @@ int FormCreateDomain::CallBackName(Event*)
 	FileName fn(sNewName, ".dom");
 	fVrOk = false;
 	if (!fn.fValid())
-		stRemark->SetVal(SDMRemNotValidDomainName);
+		stRemark->SetVal(TR("Not a valid domain name"));
 	else if(File::fExist(fn))   
-		stRemark->SetVal(SDMRemDomExists);
+		stRemark->SetVal(TR("Domain already exists"));
 	else
 	{
 		FileName fnSys = IlwisObjectPtr::fnCheckPath(fn);
 		if (ObjectInfo::fSystemObject(fnSys))
-			stRemark->SetVal(String("%S %S", SDMRemDomExists, SDMRemAsSystemDomain));
+			stRemark->SetVal(String("%S %S", TR("Domain already exists"), TR("as system domain")));
 		else
 		{
 			fVrOk = true;  

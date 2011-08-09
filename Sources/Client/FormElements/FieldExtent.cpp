@@ -64,10 +64,10 @@ FieldExtent::FieldExtent(FormEntry* feRoot, const GeoRef& gr)
 
 void FieldExtent::BuildField()
 {
-	m_stTitle = new InfoText(this, SUiExtCornersOfCorners);
+	m_stTitle = new InfoText(this, TR("&Corner of Corner Coordinates"));
 	m_stTitle->SetWidth(250);
 	m_stTitle->psn->iBndDown = 0;
-	StaticText *stTL = new InfoText(this, SUiExtTopLeft);
+	StaticText *stTL = new InfoText(this, TR("Top &Left:"));
 	stTL->psn->SetBound(0,0,0,0);  // set space around previous InfoText to a minimum.
 	m_fsTL = new FieldString(this, &m_sTL, ES_AUTOHSCROLL|WS_TABSTOP|WS_GROUP|ES_READONLY);
 	m_fsTL->psn->SetBound(0,0,0,0);
@@ -76,7 +76,7 @@ void FieldExtent::BuildField()
 	m_fsTL->Align(stTL, AL_AFTER);
 
 	StaticText *stAbove = stTL;
-	StaticText *stTR = new InfoText(this, SUiExtTopRight);
+	StaticText *stTR = new InfoText(this, TR("Top &Right:"));
 	stTR->psn->SetBound(0,0,0,0);  // set space around previous InfoText to a minimum.
 	stTR->Align(stAbove, AL_UNDER);
 	m_fsTR = new FieldString(this, &m_sTR, ES_AUTOHSCROLL|WS_TABSTOP|WS_GROUP|ES_READONLY);
@@ -86,7 +86,7 @@ void FieldExtent::BuildField()
 	m_fsTR->Align(stTR, AL_AFTER);
 
 	stAbove = stTR;
-	StaticText *stBL = new InfoText(this, SUiExtBottomLeft);
+	StaticText *stBL = new InfoText(this, TR("&Bottom Left:"));
 	stBL->psn->SetBound(0,0,0,0);  // set space around previous InfoText to a minimum.
 	stBL->Align(stAbove, AL_UNDER);
 	m_fsBL = new FieldString(this, &m_sBL, ES_AUTOHSCROLL|WS_TABSTOP|WS_GROUP|ES_READONLY);
@@ -96,7 +96,7 @@ void FieldExtent::BuildField()
 	m_fsBL->Align(stBL, AL_AFTER);
 
 	stAbove = stBL;
-	StaticText *st = new InfoText(this, SUiExtBottomRight);
+	StaticText *st = new InfoText(this, TR("B&ottom Right:"));
 	int iMaxW = st->psn->iMinWidth + 15;
 	st->psn->SetBound(0,0,0,0);  // set space around previous InfoText to a minimum.
 	st->Align(stAbove, AL_UNDER);

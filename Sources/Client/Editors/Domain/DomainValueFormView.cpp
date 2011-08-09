@@ -78,34 +78,34 @@ void DomainValueFormView::CreateForm()
 	vr = ValueRange(dvr->rrMinMax(), dvr->rStep());
 	if (dm->fReadOnly())
 	{
-		String s("%S: %S", SDMUiMinMax, vr->sRange());
+		String s("%S: %S", TR("&Min, Max"), vr->sRange());
 		new StaticText(root, s);
 		if (dvr->fFixedRange())
-			new StaticText(root, SDMUiFixedRange);
+			new StaticText(root, TR("Fixed Range"));
 		if (dvr->fFixedPrecision())
-			new StaticText(root, SDMUiFixedPrecision);
-		s = String("%S: %i", SDMUiWidth, iWidth);
+			new StaticText(root, TR("Fixed Precision"));
+		s = String("%S: %i", TR("&Width"), iWidth);
 		new StaticText(root, s);
 
 		if (dvr->m_fUnit)
 		{
-			s = String("%S: %S", SDMUiUnit, dvr->m_sUnit);
+			s = String("%S: %S", TR("&Unit"), dvr->m_sUnit);
 			new StaticText(root, s);
 		}
 	}
 	else
 	{
-		fvr = new FieldValueRange(root, SDMUiMinMax, &vr, 0);
+		fvr = new FieldValueRange(root, TR("&Min, Max"), &vr, 0);
 		fvr->Align(root, AL_UNDER);
 		
-		CheckBox* cb = new CheckBox(root, SDMUiFixedRange, &dvr->m_fFixedRange);
+		CheckBox* cb = new CheckBox(root, TR("Fixed Range"), &dvr->m_fFixedRange);
 		cb->SetIndependentPos();
-		cb = new CheckBox(root, SDMUiFixedPrecision, &dvr->m_fFixedPrecision);
+		cb = new CheckBox(root, TR("Fixed Precision"), &dvr->m_fFixedPrecision);
 		cb->SetIndependentPos();
 		
-		cb = new CheckBox(root, SDMUiUnit, &dvr->m_fUnit);
+		cb = new CheckBox(root, TR("&Unit"), &dvr->m_fUnit);
 		new FieldString(cb, "", &dvr->m_sUnit);
-		fiWidth = new FieldInt(root, SDMUiWidth, &iWidth);
+		fiWidth = new FieldInt(root, TR("&Width"), &iWidth);
 		fiWidth->Align(cb, AL_UNDER);
 	}  
 	if (dm->fSystemObject())

@@ -86,17 +86,17 @@ int FieldCoordSystemC::CreateCoordSystem(void *)
 }
 
 FormCreateCoordSystem::FormCreateCoordSystem(CWnd* wPar, String* sCS, long types)
-: FormWithDest(wPar, SCSTitleCreateCoordSystem),
+: FormWithDest(wPar, TR("Create Coordinate System")),
   sCoordSystem(sCS), wParent(wPar), csTypes(types)
 {
 	iImg = IlwWinApp()->iImage(".csy");
 
   FileName fn(*sCoordSystem);
   sNewName = fn.sFile;
-  fcs = new FieldDataTypeCreate(root, SCSUiCoordSysName, &sNewName, ".CSY", false);
+  fcs = new FieldDataTypeCreate(root, TR("&Coordinate System Name"), &sNewName, ".CSY", false);
   fcs->SetCallBack((NotifyProc)&FormCreateCoordSystem::CallBackName);
   fcs->SetIndependentPos();
-  StaticText* st = new StaticText(root, SCSUiDescription);
+  StaticText* st = new StaticText(root, TR("&Description"));
   st->psn->SetBound(0,0,0,0);
   FieldString* fs = new FieldString(root, "", &sDescr);
   fs->SetWidth(120);
@@ -106,51 +106,51 @@ FormCreateCoordSystem::FormCreateCoordSystem(CWnd* wPar, String* sCS, long types
   rg = new RadioGroup(root, "", &iOption);
 	RadioButton* rb = 0;
 	if (csBOUNDSONLY & csTypes)
-	  rb = new RadioButton(rg, SCSUiCsyBoundsOnly);
+	  rb = new RadioButton(rg, TR("CoordSystem &Boundary Only"));
 	if (csPROJ & csTypes)
-		rb = new RadioButton(rg, SCSUiCsyProjection);
+		rb = new RadioButton(rg, TR("CoordSystem &Projection"));
 	if (csLATLON & csTypes)
-		rb = new RadioButton(rg, SCSUiCsyLatLon);
+		rb = new RadioButton(rg, TR("CoordSystem &LatLon"));
 
 	if (csFORMULA & csTypes) {
-		RadioButton* rbFormu = new RadioButton(rg, SCSUiCsyFormula);
+		RadioButton* rbFormu = new RadioButton(rg, TR("CoordSystem &Formula"));
 		FieldGroup* fgFormu = new FieldGroup(rbFormu,true);
-		FormEntry* fcsRelCsy0 = new FieldCoordSystem(fgFormu, SCSUiReferenceCsy, &sRelCsy0);
+		FormEntry* fcsRelCsy0 = new FieldCoordSystem(fgFormu, TR("&Related CoordSys"), &sRelCsy0);
 		fcsRelCsy0->Align(rbFormu, AL_AFTER);
 		rb = rbFormu;
 	}
 
 	if (csTIEPOINTS & csTypes) {
-		RadioButton* rbCTP = new RadioButton(rg, SCSUiCsyTiePoints);
+		RadioButton* rbCTP = new RadioButton(rg, TR("CoordSystem &TiePoints"));
 		FieldGroup* fgCTP = new FieldGroup(rbCTP,true);
 		//fgCTP->Align(rg, AL_UNDER);
-		FormEntry* fcsRelCsy1 = new FieldCoordSystem(fgCTP, SCSUiReferenceCsy, &sRelCsy1);
+		FormEntry* fcsRelCsy1 = new FieldCoordSystem(fgCTP, TR("&Related CoordSys"), &sRelCsy1);
 		fcsRelCsy1->Align(rb, AL_AFTER);
-		FormEntry* fdtRefMap1 = new FieldDataType(fgCTP, SCSUiReferenceMap,
+		FormEntry* fdtRefMap1 = new FieldDataType(fgCTP, TR("&Background Map"),
 														 &sRefMap, ".mpp.mps.mpa", true); //backgr map
 		fdtRefMap1->Align(rbCTP, AL_AFTER);
 		rb = rbCTP;
 	}
   
 	if (csDIRECTLINEAR & csTypes) {
-		RadioButton* rbDirLin = new RadioButton(rg, SCSUiCsyDirLin);
+		RadioButton* rbDirLin = new RadioButton(rg, TR("CoordSystem &Direct Linear"));
 		FieldGroup* fgDirLin = new FieldGroup(rbDirLin,true);
-		FormEntry* fdtRefMap2 = new FieldDataType(fgDirLin, SCSUiReferenceMap,
+		FormEntry* fdtRefMap2 = new FieldDataType(fgDirLin, TR("&Background Map"),
 														 &sRefMap, ".mpp.mps.mpa", true); //backgr map
 		fdtRefMap2->Align(rb, AL_AFTER);
-		FormEntry* fdtDtmMap2 = new FieldDataType(fgDirLin, SCSUiDtmMap,
+		FormEntry* fdtDtmMap2 = new FieldDataType(fgDirLin, TR("&DTM"),
 														 &sDTM, new MapListerDomainType(dmVALUE), true);
 		fdtDtmMap2->Align(rbDirLin, AL_AFTER);
 		rb = rbDirLin;
 	}
 
 	if (csORTHOPHOTO & csTypes) {
-		RadioButton* rbOrthoPh = new RadioButton(rg, SCSUiCsyOrthoPhoto);
+		RadioButton* rbOrthoPh = new RadioButton(rg, TR("CoordSystem &Ortho Photo"));
 		FieldGroup* fgOrthoPh = new FieldGroup(rbOrthoPh,true);
-		FormEntry* fdtRefMap3 = new FieldDataType(fgOrthoPh, SCSUiReferenceMap,
+		FormEntry* fdtRefMap3 = new FieldDataType(fgOrthoPh, TR("&Background Map"),
 														 &sRefMap, ".mpp.mps.mpa", true); //backgr map
 		fdtRefMap3->Align(rb, AL_AFTER);
-		FormEntry* fdtDtmMap3 = new FieldDataType(fgOrthoPh, SCSUiDtmMap,
+		FormEntry* fdtDtmMap3 = new FieldDataType(fgOrthoPh, TR("&DTM"),
 														 &sDTM, new MapListerDomainType(dmVALUE), true);
 		fdtDtmMap3->Align(rbOrthoPh, AL_AFTER);
 		rb = rbOrthoPh;
@@ -251,9 +251,9 @@ int FormCreateCoordSystem::CallBackName(Event *)
   FileName fn(sNewName, ".csy");
   bool fOk = false;
   if (!fn.fValid())
-    stRemark->SetVal(SCSRemNotValidCsyName);
+    stRemark->SetVal(TR("Not a valid coordinate system name"));
   else if(File::fExist(fn))
-    stRemark->SetVal(SCSRemCsyExists);
+    stRemark->SetVal(TR("Coordinate System already exists"));
   else {
     fOk = true;
     stRemark->SetVal("");
@@ -266,7 +266,7 @@ int FormCreateCoordSystem::CallBackName(Event *)
 }
 
 FormCreateCoordSystemMW::FormCreateCoordSystemMW(CWnd* wPar, String* sCS)
-: FormWithDest(wPar, SCSTitleCreateCoordSystem),
+: FormWithDest(wPar, TR("Create Coordinate System")),
 	sCoordSystem(sCS), wParent(wPar)
 {
 	iImg = IlwWinApp()->iImage(".csy");
@@ -274,10 +274,10 @@ FormCreateCoordSystemMW::FormCreateCoordSystemMW(CWnd* wPar, String* sCS)
 	StaticText* st = 0;
 	FileName fn(*sCoordSystem);
 	sNewName = fn.sFile;
-	fcs = new FieldDataTypeCreate(root, SCSUiCoordSysName, &sNewName, ".CSY", false);
+	fcs = new FieldDataTypeCreate(root, TR("&Coordinate System Name"), &sNewName, ".CSY", false);
 	fcs->SetCallBack((NotifyProc)&FormCreateCoordSystemMW::CallBackName);
 	fcs->SetIndependentPos();
-	st = new StaticText(root, SCSUiDescription);
+	st = new StaticText(root, TR("&Description"));
 	st->psn->SetBound(0,0,0,0);
 	FieldString* fs = new FieldString(root, "", &sDescr);
 	fs->SetWidth(120);
@@ -285,27 +285,27 @@ FormCreateCoordSystemMW::FormCreateCoordSystemMW(CWnd* wPar, String* sCS)
 	
 	iOption = 0;
 	rg = new RadioGroup(root, "", &iOption);
-	RadioButton* rbFormu = new RadioButton(rg, SCSUiCsyFormula);
+	RadioButton* rbFormu = new RadioButton(rg, TR("CoordSystem &Formula"));
 	FieldGroup* fgFormu = new FieldGroup(rbFormu,true);
-	FormEntry* fcsRelCsy0 = new FieldCoordSystem(fgFormu, SCSUiReferenceCsy, &sRelCsy0);
+	FormEntry* fcsRelCsy0 = new FieldCoordSystem(fgFormu, TR("&Related CoordSys"), &sRelCsy0);
 	fcsRelCsy0->Align(rbFormu, AL_AFTER);
 	
-	RadioButton* rbCTP = new RadioButton(rg, SCSUiCsyTiePoints);
+	RadioButton* rbCTP = new RadioButton(rg, TR("CoordSystem &TiePoints"));
 	FieldGroup* fgCTP = new FieldGroup(rbCTP,true);
-	FormEntry* fcsRelCsy1 = new FieldCoordSystem(fgCTP, SCSUiReferenceCsy, &sRelCsy1);
+	FormEntry* fcsRelCsy1 = new FieldCoordSystem(fgCTP, TR("&Related CoordSys"), &sRelCsy1);
 	fcsRelCsy1->Align(rbFormu, AL_AFTER);
 	
-	RadioButton* rbDirLin = new RadioButton(rg, SCSUiCsyDirLin);
+	RadioButton* rbDirLin = new RadioButton(rg, TR("CoordSystem &Direct Linear"));
 	FieldGroup* fgDirLin = new FieldGroup(rbDirLin,true);
 	
-	FormEntry* fdtDtmMap2 = new FieldDataType(fgDirLin, SCSUiDtmMap,
+	FormEntry* fdtDtmMap2 = new FieldDataType(fgDirLin, TR("&DTM"),
 		&sDTM, new MapListerDomainType(dmVALUE), true);
 	fdtDtmMap2->Align(rbDirLin, AL_AFTER);
 	
-	RadioButton* rbOrthoPh = new RadioButton(rg, SCSUiCsyOrthoPhoto);
+	RadioButton* rbOrthoPh = new RadioButton(rg, TR("CoordSystem &Ortho Photo"));
 	FieldGroup* fgOrthoPh = new FieldGroup(rbOrthoPh,true);
 	
-	FormEntry* fdtDtmMap3 = new FieldDataType(fgOrthoPh, SCSUiDtmMap,
+	FormEntry* fdtDtmMap3 = new FieldDataType(fgOrthoPh, TR("&DTM"),
 		&sDTM, new MapListerDomainType(dmVALUE), true);
 	fdtDtmMap3->Align(rbOrthoPh, AL_AFTER);
 	
@@ -368,9 +368,9 @@ int FormCreateCoordSystemMW::CallBackName(Event *)
   FileName fn(sNewName, ".csy");
   bool fOk = false;
   if (!fn.fValid())
-    stRemark->SetVal(SCSRemNotValidCsyName);
+    stRemark->SetVal(TR("Not a valid coordinate system name"));
   else if(File::fExist(fn))
-    stRemark->SetVal(SCSRemCsyExists);
+    stRemark->SetVal(TR("Coordinate System already exists"));
   else {
     fOk = true;
     stRemark->SetVal("");

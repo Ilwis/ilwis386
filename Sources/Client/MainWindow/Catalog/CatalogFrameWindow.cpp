@@ -232,7 +232,7 @@ void CatalogFrameWindow::resize(CSize& sz) // change size (increment)
 };
 
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 
 void CatalogFrameWindow::OnHelp() 
 {
@@ -264,8 +264,8 @@ void CatalogFrameWindow::OnMDIActivate(BOOL bActivate, CWnd* pActivateWnd, CWnd*
 		fnPath = FileName(sPath);
 		if (fnPath.sExt != "")
 			sPath = fnPath.sPath();
-		SetCurrentDirectory(sPath.scVal());
-		IlwWinApp()->SetCurDir(sPath.scVal());
+		SetCurrentDirectory(sPath.c_str());
+		IlwWinApp()->SetCurDir(sPath.c_str());
 		Catalog* cat = dynamic_cast<Catalog*>(doc->wndGetActiveView());
 		if (cat)
 			cat->SetFilterPane();
@@ -294,7 +294,7 @@ void CatalogFrameWindow::OnRelatedTopics()
 	//HH_AKLINK link;
 	//link.cbStruct =     sizeof(HH_AKLINK);
 	//link.fReserved =    FALSE;
-	//link.pszKeywords =  sHelpKeywords.scVal(); 
+	//link.pszKeywords =  sHelpKeywords.c_str(); 
 	//link.pszUrl =       NULL; 
 	//link.pszMsgText =   NULL; 
 	//link.pszMsgTitle =  NULL; 

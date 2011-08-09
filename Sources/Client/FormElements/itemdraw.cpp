@@ -163,7 +163,7 @@ int ItemDrawer::DrawItem(DRAWITEMSTRUCT* dis, const String& str,
 		String sDrive = str[2];
 		sDrive += ":";
 		String sIcon;				
-		switch(GetDriveType(sDrive.scVal()) )
+		switch(GetDriveType(sDrive.c_str()) )
 		{
 
 			case DRIVE_CDROM:
@@ -176,7 +176,7 @@ int ItemDrawer::DrawItem(DRAWITEMSTRUCT* dis, const String& str,
 			default:
 				sIcon ="Drv16Ico"; 
 		}		
-		zIcon icon(sIcon.scVal());
+		zIcon icon(sIcon.c_str());
 		int iTop = dis->rcItem.top + dis->rcItem.bottom/2 - dis->rcItem.top/2 - 8 + iDown/2;
 		DrawIcon(dis->hDC, dis->rcItem.left + 2, iTop, icon);
 		sName = String("%c:", str[2]);
@@ -197,7 +197,7 @@ int ItemDrawer::DrawItem(DRAWITEMSTRUCT* dis, const String& str,
 	SetTextColor(dis->hDC, col);  
 	SetTextAlign(dis->hDC, TA_BASELINE);
 	int iV = dis->rcItem.top / 2 + dis->rcItem.bottom / 2 + 5;
-	TextOut(dis->hDC, dis->rcItem.left + 20, iV, sName.scVal(), sName.size());
+	TextOut(dis->hDC, dis->rcItem.left + 20, iV, sName.c_str(), sName.size());
 
 	return 1;
 }

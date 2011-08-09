@@ -652,7 +652,7 @@ void CriteriaTreeView::RecursiveReadChildren(HTREEITEM hInsertAt, CriteriaTreeIt
 	}
 }
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define add(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 #define addBreak men.AppendMenu(MF_SEPARATOR);
 
@@ -754,7 +754,7 @@ void CriteriaTreeView::OnSelChanged(NMHDR* pNMHDR, LRESULT* pResult)
 	if (fw)
 	{
 		if (ctiSelected)
-			fw->status->SetWindowText(ctiSelected->sStatusBarText().scVal());
+			fw->status->SetWindowText(ctiSelected->sStatusBarText().c_str());
 		else
 			fw->status->SetWindowText("");
 	}

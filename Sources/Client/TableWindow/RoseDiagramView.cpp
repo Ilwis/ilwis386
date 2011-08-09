@@ -71,16 +71,16 @@ namespace {
 		{
 		public:
 			ConfigInitForm(CWnd* wParent, const Table& tbl, bool fXAxis)
-				: FormWithDest(wParent, SGPTitleGraph)
+				: FormWithDest(wParent, TR("Create Graph"))
 			{
 				fColX = true;
 				CheckBox* cb = 0;
 				tvw = new TableView(tbl);
 				if (fXAxis) {
-					cb = new CheckBox(root, STBUiColX, &fColX);
+					cb = new CheckBox(root, TR("&X-column"), &fColX);
 					new FieldColumn(cb, "", tvw, &sColX, dmVALUE);
 				}
-				FieldColumn* fc = new FieldColumn(root, STBUiColY, tvw, &sColY, dmVALUE);
+				FieldColumn* fc = new FieldColumn(root, TR("&Y-column"), tvw, &sColY, dmVALUE);
 				if (0 != cb)
   				fc->Align(cb, AL_UNDER);
 				create();
@@ -217,7 +217,7 @@ void RoseDiagramView::LoadSettings(const FileName& fn, int iGraphWindow)
 	rdd->LoadSettings(fn, sSection);
 }
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define add(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 
 void RoseDiagramView::OnContextMenu(CWnd* pWnd, CPoint point)

@@ -52,7 +52,7 @@ class _export FieldDataTypeSimple: public FormEntry
 {
 public:
 	FieldDataTypeSimple(FormEntry*, Parm *prm, const String& sExt, bool fExt);
-	FieldDataTypeSimple(FormEntry*, String *psName, const String& sExt, bool fExt, ObjectLister *obl);
+	FieldDataTypeSimple(FormEntry*, String *psName, const String& sExt, bool fExt, ObjectLister *obl, const FileName& dir=FileName(), bool fulltree=true);
 	FieldDataTypeSimple(FormEntry*, Parm *prm, ObjectLister*, bool fExt);
 	FieldDataTypeSimple(FormEntry*, String *psName, ObjectLister*, bool fExt);
                 // psName : destination for result
@@ -82,6 +82,8 @@ protected:
 	String _sName, *_psName;              // local storage and destination
 	String _sExt;                         // used extension for files
 	bool _fExt;                           // return name with extension ?
+	FileName baseDir;
+	bool showFullTree;
 
 	int iDialogWidth;                     // width of name edit
 	bool fAllowEmpty;
@@ -93,7 +95,7 @@ class FieldDataType: public FormEntry
 {
 public:
   _export FieldDataType(FormEntry*, const String& sQuestion,Parm *prm, const String& sExt, bool fExt);
-  _export FieldDataType(FormEntry*, const String& sQuestion,String *psName, const String& sExt, bool fExt, ObjectLister *obl=NULL);
+  _export FieldDataType(FormEntry*, const String& sQuestion,String *psName, const String& sExt, bool fExt, ObjectLister *obl=NULL, const FileName& baseDir=FileName(), bool showFullTree=true);
   _export FieldDataType(FormEntry*, const String& sQuestion,Parm *prm, ObjectLister*, bool fExt);
   _export FieldDataType(FormEntry*, const String& sQuestion, String *psName, ObjectLister*, bool fExt);
                 // psName : destination for result
@@ -445,7 +447,7 @@ class _export FieldMapFromMapList: public FormEntry
 public:
   FieldMapFromMapList(FormEntry*, const String& sQuestion, const MapList&, int* iMapNr);
   void SetVal(const String& sVal)
-    { fld->ose->SelectString(-1, sVal.scVal()); }
+    { fld->ose->SelectString(-1, sVal.c_str()); }
   virtual FormEntry* CheckData();       // validate entry value
   void FillWithMaps(const MapList&);
   //long DrawItem(DRAWITEMSTRUCT *dis) { return fld->DrawItem(dis); }

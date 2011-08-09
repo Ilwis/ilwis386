@@ -155,7 +155,7 @@ void BaseNameEdit::DrawItem(DRAWITEMSTRUCT* dis)
 
 void BaseNameEdit::SetVal(const String& sVal)
 {
-  SelectString(-1, sVal.scVal());
+  SelectString(-1, sVal.c_str());
 }
 
 void BaseNameEdit::OnSelEndOk()
@@ -250,35 +250,42 @@ END_MESSAGE_MAP()
 
 NameEdit::NameEdit(FormEntry* fe, FormBase* parent, CPoint pos, int id,
            const String& s, bool fExist_, ObjectLister* objl, bool fExt_,
-           int iWidth)
+           int iWidth, bool full)
   : BaseNameEdit(fe,parent,pos,id,fExist_,iWidth, CBS_DROPDOWNLIST | CBS_SORT),
-	  dmTypes(0), otc(0), iMinTreeWidth(0)
+	  dmTypes(0), otc(0), iMinTreeWidth(0), fullTree(full)
 {
 	ol = objl;
 	ol->ne = this;
 	fExt = fExt_;
-	strcpy(sDir, IlwWinApp()->sGetCurDir().scVal());  // sDir includes closing backslash
-	FileName fn = IlwisObjectPtr::fnCheckPath(s);
-	if (s.length() != 0)
-	{
-		String sFileDir = fn.sPath();
-		if ("" != sFileDir) {
-			String sStdDir = IlwWinApp()->Context()->sStdDir();
-			if (sStdDir[sStdDir.length() - 1] != '\\')
-				sStdDir &= "\\";
-			if (sFileDir != sStdDir)
-				strcpy(sDir, String("%S%S", fn.sDrive, fn.sDir).scVal());
+	strcpy(sDir, IlwWinApp()->sGetCurDir().c_str());  // sDir includes closing backslash
+	if ( FileName(s).sFile == "")  {//  folder path 
+		strcpy(sDir,s.c_str());
+		FillDir();
+	}
+	else {
+		FileName fn = IlwisObjectPtr::fnCheckPath(s);
+		if (s.length() != 0)
+		{
+			String sFileDir = fn.sPath();
+			if ("" != sFileDir) {
+				String sStdDir = IlwWinApp()->Context()->sStdDir();
+				if (sStdDir[sStdDir.length() - 1] != '\\')
+					sStdDir &= "\\";
+				if (sFileDir != sStdDir)
+					strcpy(sDir, String("%S%S", fn.sDrive, fn.sDir).c_str());
+			}
+		}
+		FillDir();
+		if ( ol->fOK(fn.sFullPath(), sCHECK_OBJECT_ONLY) )
+		{
+			String sSel = objl->sDefaultSelectedValue(fn);
+			SetVal(sSel);
+	//		AddString(sSel.c_str());
+	//		SelectString(-1, sSel.c_str());
 		}
 	}
-	FillDir();
 	nedt = new NameEditDropTarget(this);
-	if ( ol->fOK(fn.sFullPath(), sCHECK_OBJECT_ONLY) )
-	{
-		String sSel = objl->sDefaultSelectedValue(fn);
-		SetVal(sSel);
-//		AddString(sSel.scVal());
-//		SelectString(-1, sSel.scVal());
-	}
+
 
 	otc = new ObjectTreeCtrl(this);
 
@@ -351,8 +358,8 @@ void NameEdit::SetVal(const String& sVal)
 		sV = parts[2];
 		sMap = parts[0];
 		sAttrib = parts[1];
-		AddString(sV.scVal());
-		SelectString(-1, sV.scVal());
+		AddString(sV.c_str());
+		SelectString(-1, sV.c_str());
 		if (_fe && _fe->npChanged())
 		{
 			if (CheckData())
@@ -377,15 +384,15 @@ void NameEdit::SetVal(const FileName& fnVal)
 		sStdDir &= '\\';
 	if (!fCIStrEqual(sNewDir, sStdDir))
 	{
-		strcpy(sDir, sNewDir.scVal()); // sDir includes closing backslash
+		strcpy(sDir, sNewDir.c_str()); // sDir includes closing backslash
 		ShowDropDown(FALSE);
 		FillDir();
 	}
 	String s("%S%S%S", fnVal.sFile, fnVal.sExt, fnVal.sSectionPostFix);
 	// Make sure the selected string is in the listbox of the combobox to be able to select it
-	if (FindStringExact(-1, s.scVal()) == LB_ERR)
-		AddString(s.scVal());
-	SelectString(-1, s.scVal());  // display the selected object in the combobox edit control
+	if (FindStringExact(-1, s.c_str()) == LB_ERR)
+		AddString(s.c_str());
+	SelectString(-1, s.c_str());  // display the selected object in the combobox edit control
 
 	if (_fe && _fe->npChanged())
 	{
@@ -412,7 +419,7 @@ int NameEdit::CheckData()
 	SetCurrentDirectory(sDir);
 	int id = GetCurSel();
 	//CString s1 = CString(_sName.sVal());
-	String sx =FileName(_sName.scVal()).sFullPath();
+	String sx =FileName(_sName.c_str()).sFullPath();
 	CString s1 = CString(sx.sVal());
 	_sName = "";
 	if (id >= 0)
@@ -439,7 +446,7 @@ int NameEdit::CheckData()
 		}
 	}  
 	String sCurDir = IlwWinApp()->sGetCurDir();
-	SetCurrentDirectory(sCurDir.scVal());
+	SetCurrentDirectory(sCurDir.c_str());
 	return 1;
 }
 

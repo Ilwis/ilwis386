@@ -140,21 +140,21 @@ void MapStatusBar::ShowRowCol(RowCol rc)
 		str = String("%li,%li", rc.Row, rc.Col);
 	else
 		str = String("%li,%li", rc.Col, rc.Row);
-	SetPaneText(iRowCol, str.scVal());
+	SetPaneText(iRowCol, str.c_str());
 }
 
 void MapStatusBar::ShowCoord(const String& str)
 {
 	if (iCoord < 0)
 		Init(sbiCOORD);
-	SetPaneText(iCoord, str.scVal());
+	SetPaneText(iCoord, str.c_str());
 }
 
 void MapStatusBar::ShowRelCoord(const String& str)
 {
 	if (iRelCoord < 0)
 		Init(sbiRELCOORD);
-	SetPaneText(iRelCoord, str.scVal());
+	SetPaneText(iRelCoord, str.c_str());
 }
 
 void MapStatusBar::ShowLatLon(LatLon ll)
@@ -165,7 +165,7 @@ void MapStatusBar::ShowLatLon(LatLon ll)
 		Init(sbiLATLON);
 	}
 	String str = ll.sValue();
-	SetPaneText(iLatLon, str.scVal());
+	SetPaneText(iLatLon, str.c_str());
 }
 
 void MapStatusBar::OnUpdateCmdUI(CFrameWnd*, BOOL)

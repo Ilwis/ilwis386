@@ -89,7 +89,7 @@ String BoxLayoutItem::sType() const
 
 String BoxLayoutItem::sName() const
 {
-	return SLONameBox;
+	return TR("Box");
 }
 
 void BoxLayoutItem::OnDraw(CDC* cdc)
@@ -113,10 +113,10 @@ class BoxLayoutItemForm : public FormWithDest
 {
 public:
   BoxLayoutItemForm(CWnd* wnd, BoxLayoutItem* li) 
-		: FormWithDest(wnd, SLOTitleBox)
+		: FormWithDest(wnd, TR("Edit Box"))
   {
 		new FieldLine(root, &li->lnBox, true);
-		CheckBox* cb = new CheckBox(root, SLOUiFillColor, &li->fFill);
+		CheckBox* cb = new CheckBox(root, TR("&Fill Color"), &li->fFill);
 		new FieldColor(cb, "", &li->clrFill);
     SetMenHelpTopic("ilwismen\\layout_editor_insert_edit_box.htm");
 		create();

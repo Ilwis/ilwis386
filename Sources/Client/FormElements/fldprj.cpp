@@ -115,14 +115,14 @@ void FieldProjection::create()
   char* sBuf = new char[iSize];
   String sPath = IlwWinApp()->Context()->sIlwDir();
   sPath &= "\\Resources\\Def\\projs.def";
-  GetPrivateProfileString("Projections", NULL, "", sBuf, iSize, sPath.scVal());
+  GetPrivateProfileString("Projections", NULL, "", sBuf, iSize, sPath.c_str());
   lbObject->AddString("Unknown");
   for (char* s = sBuf; *s; ++s) {
     lbObject->AddString(s);
     for (; *s; ++s);
   }
   delete sBuf;
-  lbObject->SelectString(-1, (*sName).scVal());
+  lbObject->SelectString(-1, (*sName).c_str());
 }
 
 FieldEllipsoid::FieldEllipsoid(FormEntry* parent, String *psName)
@@ -138,14 +138,14 @@ void FieldEllipsoid::create()
   char* sBuf = new char[iSize];
   String sPath = IlwWinApp()->Context()->sIlwDir();
   sPath &= "\\Resources\\Def\\ellips.def";
-  GetPrivateProfileString("Ellipsoids", NULL, "", sBuf, iSize, sPath.scVal());
+  GetPrivateProfileString("Ellipsoids", NULL, "", sBuf, iSize, sPath.c_str());
   lbObject->AddString("Sphere");
   for (char* s = sBuf; *s; ++s) {
     lbObject->AddString(s);
     for (; *s; ++s);
   }
   delete sBuf;
-  lbObject->SelectString(-1, (*sName).scVal());
+  lbObject->SelectString(-1, (*sName).c_str());
 }
 
 FieldDatum::FieldDatum(FormEntry* parent, String *psName)
@@ -161,14 +161,14 @@ void FieldDatum::create()
   char* sBuf = new char[iSize];
   String sPath = getEngine()->getContext()->sIlwDir();
   sPath &= "\\Resources\\Def\\datum.def";
-  GetPrivateProfileString("Datums", NULL, "", sBuf, iSize, sPath.scVal());
+  GetPrivateProfileString("Datums", NULL, "", sBuf, iSize, sPath.c_str());
   lbObject->AddString("Not Specified");
   for (char* s = sBuf; *s; ++s) {
     lbObject->AddString(s);
     for (; *s; ++s);
   }
   delete sBuf;
-  lbObject->SelectString(-1, (*sName).scVal());
+  lbObject->SelectString(-1, (*sName).c_str());
 }
 
 FieldDatumArea::FieldDatumArea(FormEntry* parent, String *psName)
@@ -188,12 +188,12 @@ bool FieldDatumArea::fInit(const String& sDatum)
   char* sBuf = new char[iSize];
   String sPath = getEngine()->getContext()->sIlwDir();
   sPath &= "\\Resources\\Def\\datum.def";
-  if (0 != GetPrivateProfileString(sDatum.scVal(), NULL, "", sBuf, iSize, sPath.scVal())) {
+  if (0 != GetPrivateProfileString(sDatum.c_str(), NULL, "", sBuf, iSize, sPath.c_str())) {
     for (char* s = sBuf; *s; ++s) {
       lbObject->AddString(s);
       for (; *s; ++s);
     }
-		if ( lbObject->SelectString(-1, (*sName).scVal()) == -1)
+		if ( lbObject->SelectString(-1, (*sName).c_str()) == -1)
 			lbObject->SetCurSel(0);
 
     delete sBuf;

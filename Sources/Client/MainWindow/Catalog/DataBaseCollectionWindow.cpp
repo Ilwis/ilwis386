@@ -77,7 +77,7 @@ DataBaseCollectionWindow::~DataBaseCollectionWindow()
 }
 
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 
 void DataBaseCollectionWindow::OnUpdateFrameMenu(BOOL bActivate, CWnd* pActivateWnd, HMENU hMenuAlt)
 {

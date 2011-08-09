@@ -76,7 +76,7 @@ ObjectCollectionWindow::~ObjectCollectionWindow()
 }
 
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 
 void ObjectCollectionWindow::OnUpdateFrameMenu(BOOL bActivate, CWnd* pActivateWnd, HMENU hMenuAlt)
 {

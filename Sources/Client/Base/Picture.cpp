@@ -24,8 +24,8 @@ CPicture::~CPicture()
 BOOL CPicture::Load(HINSTANCE hInst, String name)
 {
 	// find resource in resource file
-	//HBITMAP hb = ::LoadBitmap(hInst, name.scVal());
-	BOOL ok = bm.LoadBitmapA(name.scVal());
+	//HBITMAP hb = ::LoadBitmap(hInst, name.c_str());
+	BOOL ok = bm.LoadBitmapA(name.c_str());
 	//BOOL ok = bm.Attach(hb);
 	
 	return TRUE;

@@ -113,11 +113,11 @@ Action::Action(const String& s, const String& sObject, const String& sPathExtern
 	{
 		// substitute every occurrence of ".\" in sCmd with sPathExternCommand
 		// use CString as its Replace works much better
-		CString csCmd (sCmd.scVal());
+		CString csCmd (sCmd.c_str());
 		if (sPathExternCommand[sPathExternCommand.length() - 1] != '\\')
-			csCmd.Replace(".\\", String(sPathExternCommand + "\\").scVal());
+			csCmd.Replace(".\\", String(sPathExternCommand + "\\").c_str());
 		else
-			csCmd.Replace(".\\", sPathExternCommand.scVal());
+			csCmd.Replace(".\\", sPathExternCommand.c_str());
 		sCmd = csCmd;
 	}
   tok = tokenizer.tokGet();
@@ -192,7 +192,7 @@ void ActionList::AddScripts()
 	{
 		CFileFind finder;
 		String sDirPath = sPaths[i];
-		BOOL fFound = finder.FindFile(String("%S\\*.isl", sDirPath).scVal());
+		BOOL fFound = finder.FindFile(String("%S\\*.isl", sDirPath).c_str());
 		while(fFound)
 		{
 			fFound = finder.FindNextFile();
@@ -216,7 +216,7 @@ void ActionList::AddTools()
 	{
 		CFileFind finder;
 		String sDirPath = sPaths[i];
-		BOOL fFound = finder.FindFile(String("%S\\*.*", sDirPath).scVal());
+		BOOL fFound = finder.FindFile(String("%S\\*.*", sDirPath).c_str());
 		while(fFound)
 		{
 			fFound = finder.FindNextFile();
@@ -250,9 +250,9 @@ void ActionList::AddExtraActions(const String& sStartDir)
 	if (sStartDir.length() > 0)
 	{
 		if (sStartDir[sStartDir.length() - 1] != '\\')
-			strWildcard = String(sStartDir + "\\*.*").scVal();
+			strWildcard = String(sStartDir + "\\*.*").c_str();
 		else
-			strWildcard = String(sStartDir + "*.*").scVal();
+			strWildcard = String(sStartDir + "*.*").c_str();
 	}
 	else
 	{ // first call
@@ -260,9 +260,9 @@ void ActionList::AddExtraActions(const String& sStartDir)
 		IlwisAppContext *ilwapp = IlwWinApp()->Context();
 		String sIlwisDir (ilwapp->svl()->sGet("IlwDir"));
 		if ((sIlwisDir.length() > 0) && (sIlwisDir[sIlwisDir.length() - 1] != '\\'))
-			strWildcard = String(sIlwisDir + "\\*.*").scVal();
+			strWildcard = String(sIlwisDir + "\\*.*").c_str();
 		else
-			strWildcard = String(sIlwisDir + "*.*").scVal();
+			strWildcard = String(sIlwisDir + "*.*").c_str();
 	}
 
 	BOOL bWorking = finder.FindFile(strWildcard);
@@ -281,7 +281,7 @@ void ActionList::AddExtraActions(const String& sStartDir)
 
 		if (finder.IsDirectory())
 			AddExtraActions(finder.GetFilePath());
-		else if (!fFirstCall && finder.GetFileName().CompareNoCase(sSearchFile.scVal()) == 0)
+		else if (!fFirstCall && finder.GetFileName().CompareNoCase(sSearchFile.c_str()) == 0)
 		{
 			FileName fn(finder.GetFilePath());
 			File fil(fn);

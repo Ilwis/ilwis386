@@ -69,7 +69,7 @@ bool FieldPicture::Load(unsigned char *buf, int len) {
 }
 
 bool FieldPicture::Load(const FileName& fnPicture) {
-	bool ret =  picture.Load(fnPicture.sFullPath().scVal()) == TRUE;
+	bool ret =  picture.Load(fnPicture.sFullPath().c_str()) == TRUE;
 	if ( pb)
 		pb->Invalidate();
 	return ret;

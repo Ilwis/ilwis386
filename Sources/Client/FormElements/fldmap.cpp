@@ -120,7 +120,7 @@ FormCreateBaseMap::FormCreateBaseMap(CWnd* wPar, const String& sTitle,
 
   if (sMap)
     sNewName = *sMap;
-  fmc = new FieldDataTypeCreate(root, SMSUiMapName, &sNewName, sExt, false);
+  fmc = new FieldDataTypeCreate(root, TR("&Map Name"), &sNewName, sExt, false);
   fmc->SetCallBack((NotifyProc)&FormCreateBaseMap::CallBackName);
   initDescr();
 }
@@ -131,9 +131,9 @@ int FormCreateBaseMap::CallBackName(Event*)
   FileName fn(sNewName, sExt);
   bool fOk = false;
   if (!fn.fValid())
-    stRemark->SetVal(SAFErrInvalidMapName);
+    stRemark->SetVal(TR("Not a valid map name"));
   else if(File::fExist(fn))   
-    stRemark->SetVal(SAFErrMapExists);
+    stRemark->SetVal(TR("Map already exists"));
   else {
     fOk = true;  
     stRemark->SetVal("");
@@ -169,7 +169,7 @@ int FormCreateBaseMap::DomainCallBack(Event*)
 
 void FormCreateBaseMap::initDescr()
 {
-  StaticText* st = new StaticText(root, SAFUiDescription);
+  StaticText* st = new StaticText(root, TR("&Description:"));
   st->psn->SetBound(0,0,0,0);
   FieldString* fs = new FieldString(root, "", &sDescr);
   fs->SetWidth(120);
@@ -178,9 +178,9 @@ void FormCreateBaseMap::initDescr()
 
 void FormCreateBaseMap::initDomain(long dmTypes)
 {
-  fdc = new FieldDomainC(root, SAFUiDomain, &sDomain, dmTypes);
+  fdc = new FieldDomainC(root, TR("&Domain"), &sDomain, dmTypes);
   fdc->SetCallBack((NotifyProc)&FormCreateBaseMap::DomainCallBack);
-	fvr = new FieldValueRange(root, SAFUIRange, &vr, fdc);
+	fvr = new FieldValueRange(root, TR("&Range"), &vr, fdc);
   fvr->Align(fdc, AL_UNDER);
 
   String sFill('*', 40);
@@ -200,10 +200,10 @@ int FormCreateBaseMap::exec()
 
 FormCreateMap::FormCreateMap(CWnd* wPar, String* smap, 
                 const String& sGrf, const String& sDom)
-: FormCreateBaseMap(wPar, SAFTitleCreateMap, ".mpr", smap, sDom),
+: FormCreateBaseMap(wPar, TR("Create Raster Map"), ".mpr", smap, sDom),
   sGeoRef(sGrf)
 {
-  new FieldGeoRefC(root, SAFUiGeoRef, &sGeoRef);
+  new FieldGeoRefC(root, TR("&GeoReference"), &sGeoRef);
   initDomain(dmCLASS|dmIDENT|dmVALUE|dmIMAGE|dmBOOL|dmBIT);
   fdc->SetCallBack((NotifyProc)&FormCreateMap::DomainCallBack);
   fvr->SetCallBack((NotifyProc)&FormCreateMap::ValueRangeCallBack);
@@ -218,7 +218,7 @@ int FormCreateMap::exec()
   FormCreateBaseMap::exec();
   GeoRef grf(sGeoRef);
   if (grf->rcSize().Row < 2 || grf->rcSize().Col < 2) {
-    MessageBox(SAFErrWrongSizeGeoref.scVal(), SAFTitleCreateMap.scVal(), MB_OK | MB_ICONEXCLAMATION);
+    MessageBox(TR("Invalid size of GeoReference").c_str(), TR("Create Raster Map").c_str(), MB_OK | MB_ICONEXCLAMATION);
     return 0;
   }
   Domain dm(sDomain);
@@ -262,18 +262,18 @@ void FormCreateMap::SetRemarkOnBytesPerPixel()
     int iNr;
     if (st < stBYTE) {
       if (st == stBIT)
-        s = SAFRem1bit;
+        s = TR("1 bit");
       else {  
         switch (st) {
           case stDUET: iNr = 2; break;
           case stNIBBLE: iNr = 4; break;
         }
-        s = String(SAFRemBits_i.sVal(), iNr);
+        s = String(TR("%i bits").c_str(), iNr);
       }  
     }
     else {
       if (st == stBYTE)
-        s = SAFRem1byte;
+        s = TR("1 byte");
       else {  
         switch (st) {
           case stINT: iNr = 2; break;
@@ -281,15 +281,15 @@ void FormCreateMap::SetRemarkOnBytesPerPixel()
           case stREAL: iNr = 8; break;
           case stCRD: iNr = 16; break;
         }
-        s = String(SAFRemBytes_i.sVal(), iNr);
+        s = String(TR("%i bytes").c_str(), iNr);
       }  
     }
-    String sRemark(SAFRemMapPixUse_S.scVal(), s);
+    String sRemark(TR("Map will use %S per pixel").c_str(), s);
     stRemark->SetVal(sRemark);
   }
   catch (ErrorObject&) 
   {
-    stRemark->SetVal(SAFRemInvalidDomain);
+    stRemark->SetVal(TR("Invalid Domain"));
   }  
 }
 
@@ -300,26 +300,26 @@ FormCreateVectorMap::FormCreateVectorMap(CWnd* wPar,
   : FormCreateBaseMap(wPar, sTitle, sExt, sMap, sDom),
   sCsys(sCsy)
 {
-  fcsc = new FieldCoordSystemC(root, SMSUiCoordSys, &sCsys);
+  fcsc = new FieldCoordSystemC(root, TR("&Coordinate System"), &sCsys);
   fcsc->SetCallBack((NotifyProc)&FormCreateVectorMap::CSysCallBack);
 
   fgCoord = new FieldGroup(root);
-  fldCrdMin = new FieldCoord(fgCoord, SMSUiMinXY, &cb.cMin);
+  fldCrdMin = new FieldCoord(fgCoord, TR("&Min X, Y"), &cb.cMin);
   fldCrdMin->SetCallBack((NotifyProc)&FormCreateVectorMap::CallBackXY);
-  fldCrdMax = new FieldCoord(fgCoord, SMSUiMaxXY, &cb.cMax);
+  fldCrdMax = new FieldCoord(fgCoord, TR("&Max X, Y"), &cb.cMax);
   fldCrdMax->SetCallBack((NotifyProc)&FormCreateVectorMap::CallBackXY);
 
   fgLatLon = new FieldGroup(root);
 	fgLatLon->Align(fcsc, AL_UNDER);
-  fldMinLat = new FieldLat(fgLatLon, SCSUiMinLat, &llMin.Lat);
+  fldMinLat = new FieldLat(fgLatLon, TR("Min Latitude"), &llMin.Lat);
   fldMinLat->SetCallBack((NotifyProc)&FormCreateVectorMap::CallBackLatLon);
-  fldMinLon = new FieldLon(fgLatLon, SCSUiMinLon, &llMin.Lon);
+  fldMinLon = new FieldLon(fgLatLon, TR("Min Longitude"), &llMin.Lon);
 //  fldMinLon->Align(fldMinLat, AL_AFTER);
   fldMinLon->SetCallBack((NotifyProc)&FormCreateVectorMap::CallBackLatLon);
-  fldMaxLat = new FieldLat(fgLatLon, SCSUiMaxLat, &llMax.Lat);
+  fldMaxLat = new FieldLat(fgLatLon, TR("Max Latitude"), &llMax.Lat);
 //  fldMaxLat->Align(fldMinLon, AL_UNDER);
   fldMaxLat->SetCallBack((NotifyProc)&FormCreateVectorMap::CallBackLatLon);
-  fldMaxLon = new FieldLon(fgLatLon, SCSUiMaxLon, &llMax.Lon);
+  fldMaxLon = new FieldLon(fgLatLon, TR("Max Longitude"), &llMax.Lon);
 //  fldMaxLon->Align(fldMaxLat, AL_AFTER);
   fldMaxLon->SetCallBack((NotifyProc)&FormCreateVectorMap::CallBackLatLon);
 
@@ -333,7 +333,7 @@ FormCreateVectorMap::FormCreateVectorMap(CWnd* wPar,
   : FormCreateBaseMap(wPar, sTitle, sExt, sMap, sDom),
   sCsys(sCsy), cb(crdbnds)
 {
-  StaticText* st = new StaticText(root, SMSUiCoordSys);
+  StaticText* st = new StaticText(root, TR("&Coordinate System"));
   StaticText* st2 = new StaticText(root, sCsys);
   st2->Align(st, AL_AFTER);
   
@@ -343,22 +343,22 @@ FormCreateVectorMap::FormCreateVectorMap(CWnd* wPar,
 	if (cs.fValid()) {
 	  bool fFromLatLon = cs->pcsLatLon() != 0;
 		if (!fFromLatLon) {
-			fldCrdMin = new FieldCoord(fg, SMSUiMinXY, &cb.cMin);
+			fldCrdMin = new FieldCoord(fg, TR("&Min X, Y"), &cb.cMin);
 			fldCrdMin->SetCallBack((NotifyProc)&FormCreateVectorMap::CallBackXY);
-			fldCrdMax = new FieldCoord(fg, SMSUiMaxXY, &cb.cMax);
+			fldCrdMax = new FieldCoord(fg, TR("&Max X, Y"), &cb.cMax);
 			fldCrdMax->SetCallBack((NotifyProc)&FormCreateVectorMap::CallBackXY);
 		}
 		else {
 		  fg->SetIndependentPos();
-			fldMinLat = new FieldLat(fg, SCSUiMinLat, &llMin.Lat);
+			fldMinLat = new FieldLat(fg, TR("Min Latitude"), &llMin.Lat);
 			fldMinLat->SetCallBack((NotifyProc)&FormCreateVectorMap::CallBackLatLon);
-			fldMinLon = new FieldLon(fg, SCSUiMinLon, &llMin.Lon);
+			fldMinLon = new FieldLon(fg, TR("Min Longitude"), &llMin.Lon);
 		//  fldMinLon->Align(fldMinLat, AL_AFTER);
 			fldMinLon->SetCallBack((NotifyProc)&FormCreateVectorMap::CallBackLatLon);
-			fldMaxLat = new FieldLat(fg, SCSUiMaxLat, &llMax.Lat);
+			fldMaxLat = new FieldLat(fg, TR("Max Latitude"), &llMax.Lat);
 			fldMaxLat->Align(fldMinLon, AL_UNDER);
 			fldMaxLat->SetCallBack((NotifyProc)&FormCreateVectorMap::CallBackLatLon);
-			fldMaxLon = new FieldLon(fg, SCSUiMaxLon, &llMax.Lon);
+			fldMaxLon = new FieldLon(fg, TR("Max Longitude"), &llMax.Lon);
 		//  fldMaxLon->Align(fldMaxLat, AL_AFTER);
 			fldMaxLon->SetCallBack((NotifyProc)&FormCreateVectorMap::CallBackLatLon);
 		}
@@ -462,7 +462,7 @@ int FormCreateVectorMap::exec()
 
 FormCreateSeg::FormCreateSeg(CWnd* wPar, String* sMap,
     const String& sCsy, const String& sDomain)
-: FormCreateVectorMap(wPar, SMSTitleCreateSegMap,
+: FormCreateVectorMap(wPar, TR("Create Segment Map"),
   ".mps", sMap, sCsy, sDomain)
 {
   SetMenHelpTopic("ilwismen\\create_a_segment_map.htm");
@@ -471,7 +471,7 @@ FormCreateSeg::FormCreateSeg(CWnd* wPar, String* sMap,
 
 FormCreateSeg::FormCreateSeg(CWnd* wPar, String* sMap,
     const String& sCsy, const CoordBounds& cb, const String& sDomain)
-: FormCreateVectorMap(wPar, SMSTitleCreateSegMap,
+: FormCreateVectorMap(wPar, TR("Create Segment Map"),
   ".mps", sMap, sCsy, cb, sDomain)
 {
   SetMenHelpTopic("ilwismen\\create_a_segment_map.htm");
@@ -505,7 +505,7 @@ int FormCreateSeg::exec()
 
 FormCreatePol::FormCreatePol(CWnd* wPar, String* sMap,
     const String& sCsy, const String& sDomain)
-: FormCreateVectorMap(wPar, SMSTitleCreatePolMap,
+: FormCreateVectorMap(wPar, TR("Create Polygon Map"),
   ".mpa", sMap, sCsy, sDomain)
 {
   SetMenHelpTopic("");
@@ -514,7 +514,7 @@ FormCreatePol::FormCreatePol(CWnd* wPar, String* sMap,
 
 FormCreatePol::FormCreatePol(CWnd* wPar, String* sMap,
     const String& sCsy, const CoordBounds& cb, const String& sDomain)
-: FormCreateVectorMap(wPar, SMSTitleCreatePolMap,
+: FormCreateVectorMap(wPar, TR("Create Polygon Map"),
   ".mpa", sMap, sCsy, cb, sDomain)
 {
   SetMenHelpTopic("");
@@ -536,7 +536,7 @@ int FormCreatePol::exec()
 
 FormCreatePnt::FormCreatePnt(CWnd* wPar, String* sMap,
     const String& sCsy, const String& sDomain)
-: FormCreateVectorMap(wPar, SMSTitleCreatePntMap,
+: FormCreateVectorMap(wPar, TR("Create Point Map"),
   ".mpp", sMap, sCsy, sDomain)
 {
   SetMenHelpTopic("ilwismen\\create_a_point_map.htm");
@@ -545,7 +545,7 @@ FormCreatePnt::FormCreatePnt(CWnd* wPar, String* sMap,
 
 FormCreatePnt::FormCreatePnt(CWnd* wPar, String* sMap,
     const String& sCsy, const CoordBounds& cb, const String& sDomain)
-: FormCreateVectorMap(wPar, SMSTitleCreatePntMap,
+: FormCreateVectorMap(wPar, TR("Create Point Map"),
   ".mpp", sMap, sCsy, cb, sDomain)
 {
   SetMenHelpTopic("ilwismen\\create_a_point_map.htm");

@@ -439,12 +439,12 @@ void FormEntry::SetCallBackForAll(NotifyProc np)
 
 void FormEntry::Enable()
 {
-    _frm->wnd()->MessageBox(SUIErrEnableNotImplem.sVal(), SUIErrProgrammingError.sVal(), MB_ICONSTOP|MB_OK);
+    _frm->wnd()->MessageBox(TR("Enable() not implemented").c_str(), TR("Programming Error").c_str(), MB_ICONSTOP|MB_OK);
 }
 
 void FormEntry::Disable()
 {
-    _frm->wnd()->MessageBox(SUIErrDisableNotImplem.sVal(), SUIErrProgrammingError.sVal(), MB_ICONSTOP|MB_OK);
+    _frm->wnd()->MessageBox(TR("Disable() not implemented").c_str(), TR("Programming Error").c_str(), MB_ICONSTOP|MB_OK);
 }
 
 void FormEntry::EnableChildren()

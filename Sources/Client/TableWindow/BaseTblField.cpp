@@ -340,8 +340,8 @@ public:
   : FormWithDest(wPar, sTitle)
   {
     new FieldBlank(root);
-    new FieldString(root, SEDUiName, sName, Domain(), false);
-    new FieldString(root, SEDUiCode, sCode, Domain(), true);
+    new FieldString(root, TR("&Name"), sName, Domain(), false);
+    new FieldString(root, TR("&Code"), sCode, Domain(), true);
 
 //    setHelpItem("ilwis\domain_class_id_editor_functionality.htm");
     create();
@@ -364,7 +364,7 @@ String BaseTblField::sText()
       retry:
       {
         s = "";
-        EditDomItemForm frm(tbpn, SEDTitleAddItemToDomain,
+        EditDomItemForm frm(tbpn, TR("Add item to domain"),
                             &s, &sCode);
         fOk = frm.fOkClicked();
       }
@@ -430,7 +430,7 @@ void BaseTblField::FrameHandlesAccelerators(bool fYes)
 
 void BaseTblField::init(const String& str)
 {
-  const char* s = str.scVal();
+  const char* s = str.c_str();
   while (*s == ' ') ++s;
   EditFieldComboBox* efcb = dynamic_cast<EditFieldComboBox*>(ctrl);
   if (efcb)

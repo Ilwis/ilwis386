@@ -93,7 +93,7 @@ void LinFilGainFormView::CreateForm()
 	if (0 == fd || !fd->flt().fValid())
 		return;
 	rGain = fd->fltlin()->rGetGain();
-	frGain = new FieldReal(root, SFLUiGain, &rGain);
+	frGain = new FieldReal(root, TR("&Gain"), &rGain);
 	frGain->SetCallBack((NotifyProc)&LinFilGainFormView::CallBackGainChange);
 }
 

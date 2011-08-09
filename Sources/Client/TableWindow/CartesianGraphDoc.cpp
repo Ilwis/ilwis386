@@ -136,18 +136,18 @@ namespace
   {
 	public:
 		NewGraphForm(CWnd* wParent, const Table& table)
-		: FormWithDest(wParent, SGPTitleGraph)
+		: FormWithDest(wParent, TR("Create Graph"))
     , tbl(table)
 		{
       if (tbl.fValid())
         sTbl = tbl->fnObj.sRelative();
-      ftbl = new FieldTable(root, SGPUiTable, &sTbl);
+      ftbl = new FieldTable(root, TR("&Table"), &sTbl);
       ftbl->SetCallBack((NotifyProc)&NewGraphForm::TableCallBack);
 			fColX = true;
 			CheckBox* cb = 0;
-			cb = new CheckBox(root, SGPUiXAxis, &fColX);
+			cb = new CheckBox(root, TR("X-Axis"), &fColX);
 			fcolX = new FieldColumn(cb, "", tbl, &sColX, dmVALUE | dmIMAGE | dmCLASS | dmIDENT);
-			fcolY = new FieldColumn(root, SGPUiYAxis, tbl, &sColY, dmVALUE | dmIMAGE | dmBOOL);
+			fcolY = new FieldColumn(root, TR("Y-Axis"), tbl, &sColY, dmVALUE | dmIMAGE | dmBOOL);
  			fcolY->Align(cb, AL_UNDER);
       SetMenHelpTopic("ilwismen\\create_a_graph.htm");
 			create();
@@ -182,7 +182,7 @@ void CartesianGraphDoc::OnFileOpen()
   {
   public:
     OpenForm(CWnd* parent, String* sName)
-    : FormWithDest(parent, SGPTitleOpenGraph)
+    : FormWithDest(parent, TR("Open Graph"))
     {
 			new FieldDataTypeLarge(root, sName, ".grh", new GraphLister(grhGRAPH));
       SetMenHelpTopic("ilwismen\\graph_window_open_graph.htm");
@@ -192,7 +192,7 @@ void CartesianGraphDoc::OnFileOpen()
   String sGraph;
   OpenForm frm(wndGetActiveView(), &sGraph);
 	if (frm.fOkClicked()) {
-		OnOpenDocument(sGraph.scVal());
+		OnOpenDocument(sGraph.c_str());
 		SetModifiedFlag(FALSE);
   	UpdateAllViews(0);
 	}
@@ -287,14 +287,14 @@ void CartesianGraphDoc::OnAddColumnGraph()
   {
 	public:
 		AddGraphForm(CWnd* wParent, const Domain& dom, String* sTable, String* sColX, String* sColY)
-		: FormWithDest(wParent, SGPTitleAddGraph)
+		: FormWithDest(wParent, TR("Add Graph from Columns"))
     , dm(dom)
     , sTbl(sTable)
 		{
-      ftbl = new FieldTable(root, SGPUiTable, sTbl, ".tbt.his.hsa.hss.hsp.rpr");
+      ftbl = new FieldTable(root, TR("&Table"), sTbl, ".tbt.his.hsa.hss.hsp.rpr");
       ftbl->SetCallBack((NotifyProc)&AddGraphForm::TableCallBack);
-			fcolX = new FieldColumn(root, SGPUiXAxis, 0, sColX);
-			fcolY = new FieldColumn(root, SGPUiYAxis, 0, sColY, dmVALUE | dmIMAGE | dmBOOL);
+			fcolX = new FieldColumn(root, TR("X-Axis"), 0, sColX);
+			fcolY = new FieldColumn(root, TR("Y-Axis"), 0, sColY, dmVALUE | dmIMAGE | dmBOOL);
       SetMenHelpTopic("ilwismen\\graph_window_add_graph_from_columns.htm");
 			create();
 		}
@@ -321,9 +321,9 @@ void CartesianGraphDoc::OnAddColumnGraph()
   {
 	public:
 		AddGraphFormColY(CWnd* wParent, const Table& tbl, String* sColY)
-		: FormWithDest(wParent, SGPTitleAddGraph)
+		: FormWithDest(wParent, TR("Add Graph from Columns"))
 		{
-			new FieldColumn(root, SGPUiYAxis, tbl, sColY, dmVALUE | dmIMAGE | dmBOOL);
+			new FieldColumn(root, TR("Y-Axis"), tbl, sColY, dmVALUE | dmIMAGE | dmBOOL);
       SetMenHelpTopic("ilwismen\\graph_window_add_graph_from_columns.htm");
 			create();
 		}
@@ -373,7 +373,7 @@ void CartesianGraphDoc::OnAddFormulaGraph()
 		AddGraphFormulaForm(CWnd *parent, const String& sTitle)
 		: FormWithDest(parent, sTitle)
 		{
-			new StaticText(root, SGPUiExpression);
+			new StaticText(root, TR("&Expression"));
 			sExpr = "x";
 			FieldString* fs = new FieldString(root, "y =", &sExpr, Domain(), false);
 			fs->SetWidth(120);
@@ -383,7 +383,7 @@ void CartesianGraphDoc::OnAddFormulaGraph()
 		}
 		String sExpr;
 	};
-	AddGraphFormulaForm frm(wndGetActiveView(), SGPTitleAddGraphFormula);
+	AddGraphFormulaForm frm(wndGetActiveView(), TR("Add Graph from Formula"));
 	if (!frm.fOkClicked())
     return;
 	FormulaGraphLayer* gl = new FormulaGraphLayer(cgd, frm.sExpr);
@@ -406,16 +406,16 @@ void CartesianGraphDoc::OnAddLsfGraph()
 				sColX = tbl->col(0)->sName();
 			if (tbl->iCols() > 1)
 				sColY = tbl->col(1)->sName();
-			new FieldColumn(root, STBUiColX, tbl, &sColX, dmVALUE|dmIMAGE);
-			new FieldColumn(root, STBUiColY, tbl, &sColY, dmVALUE|dmIMAGE);
+			new FieldColumn(root, TR("&X-column"), tbl, &sColX, dmVALUE|dmIMAGE);
+			new FieldColumn(root, TR("&Y-column"), tbl, &sColY, dmVALUE|dmIMAGE);
 			sFunc = 0;
 			m_sDefault = String();
-			frf = new FieldRegressionFunc(root, STBUiFunction, &sFunc, m_sDefault);
+			frf = new FieldRegressionFunc(root, TR("&Function"), &sFunc, m_sDefault);
 			frf->SetCallBack((NotifyProc)&AddLsfForm::FuncCallBack);
 			String sFill('x', 50);
 			stRegr = new StaticText(root, sFill);
 			stRegr->SetIndependentPos();
-			fiTerms = new FieldInt(root, STBUiNrTerms, &iTerms, RangeInt(2,100));
+			fiTerms = new FieldInt(root, TR("&Nr. of terms"), &iTerms, RangeInt(2,100));
 			SetMenHelpTopic("ilwismen\\graph_window_add_graph_least_squares_fit.htm");
 			create();
 		}
@@ -452,7 +452,7 @@ void CartesianGraphDoc::OnAddLsfGraph()
 		StaticText* stRegr;
 		FieldInt* fiTerms;
 	};
-	AddLsfForm frm(wndGetActiveView(), SGPTitleAddGraphLsf, tbl);
+	AddLsfForm frm(wndGetActiveView(), TR("Add Graph Least Squares Fit"), tbl);
 	if (!frm.fOkClicked())
     return;
 
@@ -479,13 +479,13 @@ void CartesianGraphDoc::OnAddSvmGraph()
 		AddSmvForm(CWnd *parent, const String& sTitle)
 		: FormWithDest(parent, sTitle)
 		{
-			new FieldSemiVariogram(root, SGPUiSemiVar, &smv);
+			new FieldSemiVariogram(root, TR("&SemiVariogram"), &smv);
 			SetMenHelpTopic("ilwismen\\graph_window_add_semivariogram_model.htm");
 			create();
 		}
 		SemiVariogram smv;
 	};
-	AddSmvForm frm(wndGetActiveView(), SGPTitleAddGraphSemiVar);
+	AddSmvForm frm(wndGetActiveView(), TR("Add Graph Semivariogram Model"));
   if (!frm.fOkClicked())
     return;
 

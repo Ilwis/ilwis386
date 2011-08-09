@@ -91,28 +91,28 @@ void GeoRefSubMapCoordView::FillDerivedFields(FieldGroup* fgGenerRoot)
 	m_crdFirst = pgs->crd1();
 	m_crdSecond = pgs->crd2();
 
-	String sGRSize(SGRRemLinesCols_ii.c_str(), m_rcSize.Row, m_rcSize.Col);
+	String sGRSize(TR("%li lines and %li columns").c_str(), m_rcSize.Row, m_rcSize.Col);
 	SetSizeString(sGRSize);
-	String sPixSize(SGRRemPixSize_f.c_str(), m_rParentPixSize);
+	String sPixSize(TR("Pixel Size = %.3f m").c_str(), m_rParentPixSize);
 	SetPixelSizeString(sPixSize);
 
 	// Disabled editable Offset and Size fields for now; show R/O only
 	if (1) // GetDocument()->gr()->fReadOnly())
 	{
-		sGRSize = String(SGRInfFirstCoord_ff.c_str(), m_crdFirst.x, m_crdFirst.y);
+		sGRSize = String(TR("First Coordinate: (%.3lf, %.3lf)").c_str(), m_crdFirst.x, m_crdFirst.y);
 		StaticText* stSize2 = new StaticText(fgGenerRoot, sGRSize);
 		stSize2->SetIndependentPos();
 
-		sGRSize = String(SGRInfSecondCoord_ff.c_str(), m_crdSecond.x, m_crdSecond.y);
+		sGRSize = String(TR("Opposite Coordinate: (%.3lf, %.3lf)").c_str(), m_crdSecond.x, m_crdSecond.y);
 		stSize2 = new StaticText(fgGenerRoot, sGRSize);
 		stSize2->SetIndependentPos();
 	}
 	else 
 	{
 		FieldGroup* fgOffset = new FieldGroup(fgGenerRoot);
-		fcFirst = new FieldCoord(fgOffset, SAFUiFirstCoord, &m_crdFirst);
+		fcFirst = new FieldCoord(fgOffset, TR("&First Coordinate"), &m_crdFirst);
 
-		fcSecond = new FieldCoord(fgOffset, SAFUiOppositeCoord, &m_crdSecond);
+		fcSecond = new FieldCoord(fgOffset, TR("O&pposite Coordinate"), &m_crdSecond);
 		fcSecond->Align(fcFirst, AL_UNDER);
 	}
 

@@ -112,11 +112,11 @@ void CoordSysLatLonView::create()
   if (csll->fDataReadOnly()) 
   {
     fg = new FieldGroup(root);
-    StaticText* stMin = new StaticText(fg, SMSUiMinLatLon);
+    StaticText* stMin = new StaticText(fg, TR("&MinLatLon"));
     String s = csll->sValue(*cMin);
     StaticText* stCrd = new StaticText(fg, s);
     stCrd->Align(stMin, AL_AFTER);
-    StaticText* stMax = new StaticText(fg, SMSUiMaxLatLon);
+    StaticText* stMax = new StaticText(fg, TR("&MaxLatLon"));
     stMax->Align(stMin, AL_UNDER);
     s = csll->sValue(*cMax);
     stCrd = new StaticText(fg, s);
@@ -126,21 +126,21 @@ void CoordSysLatLonView::create()
   }
   else 
   {
-    fldLatMin = new FieldLat(root, SCSUiMinLat, &cMin->y);
+    fldLatMin = new FieldLat(root, TR("Min Latitude"), &cMin->y);
 	fldLatMin->SetCallBack((NotifyProc)&CoordSysLatLonView::CallBack);
-    fldLonMin = new FieldLon(root, SCSUiMinLon, &cMin->x);
+    fldLonMin = new FieldLon(root, TR("Min Longitude"), &cMin->x);
 	fldLonMin->SetCallBack((NotifyProc)&CoordSysLatLonView::CallBack);
-	fldLatMax = new FieldLat(root, SCSUiMaxLat, &cMax->y);
+	fldLatMax = new FieldLat(root, TR("Max Latitude"), &cMax->y);
 	fldLatMax->SetCallBack((NotifyProc)&CoordSysLatLonView::CallBack);
-    fldLonMax = new FieldLon(root, SCSUiMaxLon, &cMax->x);
+    fldLonMax = new FieldLon(root, TR("Max Longitude"), &cMax->x);
 	fldLonMax->SetCallBack((NotifyProc)&CoordSysLatLonView::CallBack);
   }
   if (!csll->fDataReadOnly()) 
 	{
     FieldGroup* fgButtons = new FieldGroup(root, true);
     PushButton *pbEll, *pbDat;
-    pbEll = new PushButton(fgButtons, SCSUiEll, (NotifyProc)&CoordSysViaLatLonView::ButtonEllipsoid);
-    pbDat = new PushButton(fgButtons, SCSUiDatum, (NotifyProc)&CoordSysViaLatLonView::ButtonDatum);
+    pbEll = new PushButton(fgButtons, TR("&Ellipsoid"), (NotifyProc)&CoordSysViaLatLonView::ButtonEllipsoid);
+    pbDat = new PushButton(fgButtons, TR("&Datum"), (NotifyProc)&CoordSysViaLatLonView::ButtonDatum);
     pbDat->Align(pbEll, AL_AFTER);
     FieldBlank* fb = new FieldBlank(root, (float)0.2);
     fb->Align(fgButtons, AL_UNDER);

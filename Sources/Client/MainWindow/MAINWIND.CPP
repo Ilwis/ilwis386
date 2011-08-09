@@ -133,7 +133,7 @@ BEGIN_MESSAGE_MAP( MainWindow, CMDIFrameWnd )
 END_MESSAGE_MAP()
 
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 
 #define add(ID) menPopup.AppendMenu(MF_STRING, ID, sMen(ID)); 
 #define addBreak menPopup.AppendMenu(MF_SEPARATOR);
@@ -149,15 +149,15 @@ MainWindow::MainWindow()
 	, plwProgress(0)
 {
   htpTopic = htpContentsMainWindow;
-  mpQueries[SMSQueryAll] = "";
-//  mpQueries["DEF:All Maps"] = "type=map";
-//  mpQueries["DEF:All Data"] = "type=map or type=table or type=mapview or type=maplist";
-	mpQueries[SMSQueryMapImage] = "map.domain.type=image";
-	mpQueries[SMSQueryMapValue ] = "map.domain.type=value";
-	mpQueries[SMSQueryMapSort] = "map.domain.type=class or map.domain.type=identifier";
-	mpQueries[SMSQueryMapCorners] = "map.georef.type=georefcorners";
-	mpQueries[SMSQueryMapTiePoints] = "map.georef.type=georefctp";
-	mpQueries[SMSQueryToday] = "time > now-1";
+    mpQueries[ TR("DEF:All")] = "";
+
+	mpQueries[TR("DEF:Maps with domain image")] = "map.domain.type=image";
+	mpQueries[TR("DEF:Maps with domain value")] = "map.domain.type=value";
+	mpQueries[TR("DEF:Maps with domain class or id")] = "map.domain.type=class or map.domain.type=identifier";
+	mpQueries[TR("DEF:Maps with georef corners")] = "map.georef.type=georefcorners";
+	mpQueries[TR("DEF:Maps with georef tiepoints")] = "map.georef.type=georefctp";
+	mpQueries[TR("DEF:All objects made today")] = "time > now-1";
+
 
 	IlwisSettings settings(String("%S\\Queries", MainWindow::sBaseRegKey()));
 	int iNr = settings.iValue("NrOfQueries", 0);
@@ -387,7 +387,7 @@ void MainWindow::SetQueryMenu(Menu& menu)
 	String sItem;
 	for(vector<String>::iterator cur2 = defaults.begin(); cur2 != defaults.end(); ++cur2)
 	{
-		sItem = sTop + "," + (*cur2).sTail(":").scVal();
+		sItem = sTop + "," + (*cur2).sTail(":").c_str();
 		menu.AppendMenuItem(sItem, iStartOwnerQueries++);
 	}
 	if ( owner.size() > 0 )
@@ -396,7 +396,7 @@ void MainWindow::SetQueryMenu(Menu& menu)
 		menu.AppendSeparatorAfter(sItem);
 		for(vector<String>::iterator cur2 = owner.begin(); cur2 != owner.end(); ++cur2)
 		{
-			sItem = sTop  + "," + (*cur2).scVal();
+			sItem = sTop  + "," + (*cur2).c_str();
 			menu.AppendMenuItem(sItem, iID++);
 		}
 	}
@@ -423,7 +423,7 @@ LONG MainWindow::OnIlwisStart(const char* str)
 		}
 		CWinApp* app = AfxGetApp();
 		Script::Exec(sMsg);
-		//  CDocument* doc = app->OpenDocumentFile(sMsg.scVal());
+		//  CDocument* doc = app->OpenDocumentFile(sMsg.c_str());
 		//  if (doc)
 		//    return TRUE;
 		//  else
@@ -507,7 +507,7 @@ void MainWindow::OnClose()
 		  IlwWinApp()->iOpeningDoc > 0 ||
 			iNrReportWindows > 0)
 	{
-	  int iRet = MessageBox(SMSMsgLeavingSure.scVal(), SMSMsgLeaving.scVal(),
+	  int iRet = MessageBox(SMSMsgLeavingSure.c_str(), SMSMsgLeaving.c_str(),
 	       MB_YESNO | MB_ICONEXCLAMATION | MB_TOPMOST);
 		if (IDYES != iRet)
 			return;
@@ -596,7 +596,7 @@ void MainWindow::OnUpdateCommandLine(CCmdUI* pCmdUI)
 void MainWindow::SetCommandLine(const String& s, bool fAddToHistory )
 {
 	if ( s.sHead(" ").toLower() != "showexpressionerror")
-		commBar.SetCommandLine(s.scVal(), fAddToHistory);
+		commBar.SetCommandLine(s.c_str(), fAddToHistory);
 }
 
 void MainWindow::GetMessageString(UINT nID, CString& sMessage) const
@@ -606,7 +606,7 @@ void MainWindow::GetMessageString(UINT nID, CString& sMessage) const
 		const ActionList& actList = *iwa->acl();
 		Action* act = actList[nID-ID_OPERATION0];
 		String sDsc = act->sDescription();
-		sMessage = sDsc.scVal();
+		sMessage = sDsc.c_str();
 	}
 	else {
 		string s;
@@ -743,7 +743,7 @@ void MainWindow::OnNewCatalog()
 
 	CSBDestination sb(m_hWnd, "");
 	sb.SetFlags(BIF_RETURNONLYFSDIRS | BIF_STATUSTEXT);
-	sb.SetInitialSelection(sPath.scVal());
+	sb.SetInitialSelection(sPath.c_str());
 	if (!sb.SelectFolder())
 		return;
 	sPath = sb.GetSelectedFolder();
@@ -1111,7 +1111,7 @@ void MainWindow::RefreshNavigator()
 
 void MainWindow::SetStatusLine(const String& sTxt, MainWindow::spStatusPanes iIndex)
 {
-	status.SetPaneText(iIndex, sTxt.scVal())	;
+	status.SetPaneText(iIndex, sTxt.c_str())	;
 }
 
 void MainWindow::OnSetFocus(CWnd* pWndOld)
@@ -1134,7 +1134,7 @@ LRESULT MainWindow::OnOpenCatalog(WPARAM iW, LPARAM iL)
 {
 	Directory *dir = (Directory *) iW;
 	if ( dir )
-		IlwWinApp()->OpenNewDirectory( dir->sFullPath().scVal() );
+		IlwWinApp()->OpenNewDirectory( dir->sFullPath().c_str() );
 
 	return 1;
 }

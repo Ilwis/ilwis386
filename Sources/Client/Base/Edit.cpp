@@ -53,7 +53,7 @@ ZappEdit::ZappEdit(FormEntry *f, CWnd *parent, const CRect& rct, unsigned int iF
           _storedString(NULL)
 {
   Create(iFlags, rct, parent, id);
-  if(psInit) SetWindowText(psInit->scVal());
+  if(psInit) SetWindowText(psInit->c_str());
 }
 
 
@@ -78,7 +78,7 @@ bool ZappEdit::checkData()
 
 void ZappEdit::text(const String& sVal)
 {
-  SetWindowText(sVal.scVal());
+  SetWindowText(sVal.c_str());
 }
 
 String ZappEdit::text()

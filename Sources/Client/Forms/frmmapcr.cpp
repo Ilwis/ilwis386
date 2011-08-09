@@ -170,12 +170,12 @@ void FormMapCreate::initMapOut(bool fAskGeoRef, long dmTypes)
 
 void FormMapCreate::initMapOutGeoRef3D()
 {
-  fmc = new FieldMapCreate(root, SAFUiOutRasMap, &sOutMap);
+  fmc = new FieldMapCreate(root, TR("&Output Raster Map"), &sOutMap);
   fmc->SetCallBack((NotifyProc)&FormMapCreate::OutMapCallBack);
   FormEntry* fe = fmc;
-  fe = new FieldGeoRef3DC(fmc, SAFUiGeoRef, &sGeoRef);
+  fe = new FieldGeoRef3DC(fmc, TR("&GeoReference"), &sGeoRef);
   fe->Align(fmc, AL_UNDER);
-  StaticText* st = new StaticText(root, SAFUiDescription);
+  StaticText* st = new StaticText(root, TR("&Description:"));
   st->Align(fe, AL_UNDER);
   st->psn->SetBound(0,0,0,0);
   FieldString* fs = new FieldString(root, "", &sDescr);
@@ -188,13 +188,13 @@ void FormMapCreate::initMapOut(long grTypes, long dmTypes)
 	if (fOutMapList)
 		fmc = new FieldMapCreate(root, "&Output MapList", &sOutMap);
 	else
-		fmc = new FieldMapCreate(root, SAFUiOutRasMap, &sOutMap);
+		fmc = new FieldMapCreate(root, TR("&Output Raster Map"), &sOutMap);
   fmc->SetCallBack((NotifyProc)&FormMapCreate::OutMapCallBack);
   FormEntry* fe = fmc;
   if (0 != grTypes) {
     if (-1 == grTypes)
       grTypes = grALL | grNONONE | grNO3D;
-    fgr = new FieldGeoRefC(root, SAFUiGeoRef, &sGeoRef, grTypes);  
+    fgr = new FieldGeoRefC(root, TR("&GeoReference"), &sGeoRef, grTypes);  
 	fgr->SetCallBack((NotifyProc)&FormMapCreate::ChangeGeoRef);
     fgr->Align(fmc, AL_UNDER);
 	String s('X', 50);
@@ -207,18 +207,18 @@ void FormMapCreate::initMapOut(long grTypes, long dmTypes)
   if (0 != dmTypes) {
     if (-1 == dmTypes)
       dmTypes = dmCLASS|dmIDENT|dmVALUE|dmIMAGE|dmPICT|dmCOLOR|dmBOOL|dmBIT;
-    fdc = new FieldDomainC(root, SAFUiDomain, &sDomain, dmTypes);
+    fdc = new FieldDomainC(root, TR("&Domain"), &sDomain, dmTypes);
     fdc->Align(fe, AL_UNDER);
     fe = fdc;
     if (dmTypes & dmVALUE) {
       fdc->SetCallBack((NotifyProc)&FormMapCreate::DomainCallBack);
-      fvr = new FieldValueRange(root, SAFUiValRange, &vr, fdc);
+      fvr = new FieldValueRange(root, TR("Value &Range"), &vr, fdc);
       fvr->SetCallBack((NotifyProc)&FormMapCreate::ValueRangeCallBack);
       fvr->Align(fdc, AL_UNDER);
       fe = fvr;
     }
   }  
-  StaticText* st = new StaticText(root, SAFUiDescription);
+  StaticText* st = new StaticText(root, TR("&Description:"));
   st->Align(fe, AL_UNDER);
   st->psn->SetBound(0,0,0,0);
   FieldString* fs = new FieldString(root, "", &sDescr);
@@ -230,10 +230,10 @@ void FormMapCreate::initMapOut(long grTypes, long dmTypes)
 
 void FormMapCreate::initMapOutValRange(bool fAskGeoRef)
 {
-  fmc = new FieldMapCreate(root, SAFUiOutRasMap, &sOutMap);
+  fmc = new FieldMapCreate(root, TR("&Output Raster Map"), &sOutMap);
   fmc->SetCallBack((NotifyProc)&FormMapCreate::OutMapCallBack);
   if (fAskGeoRef) {
-    fgr = new FieldGeoRefC(root, SAFUiGeoRef, &sGeoRef);  
+    fgr = new FieldGeoRefC(root, TR("&GeoReference"), &sGeoRef);  
 	fgr->SetCallBack((NotifyProc)&FormMapCreate::ChangeGeoRef);
     fgr->Align(fmc, AL_UNDER);
 	String s('X', 50);
@@ -245,9 +245,9 @@ void FormMapCreate::initMapOutValRange(bool fAskGeoRef)
     FieldBlank* fb = new FieldBlank(root, 0);
     fb->Align(fmc, AL_UNDER);
   }
-  fvr = new FieldValueRange(root, SAFUiValRange, &vr, 0);
+  fvr = new FieldValueRange(root, TR("Value &Range"), &vr, 0);
   fvr->SetCallBack((NotifyProc)&FormMapCreate::ValueRangeCallBack);
-  StaticText* st = new StaticText(root, SAFUiDescription);
+  StaticText* st = new StaticText(root, TR("&Description:"));
   st->psn->SetBound(0,0,0,0);
   FieldString* fs = new FieldString(root, "", &sDescr);
   fs->SetWidth(120);
@@ -326,18 +326,18 @@ void FormMapCreate::SetRemarkOnBytesPerPixel()
     int iNr;
     if (st < stBYTE) {
       if (st == stBIT)
-        s = SAFRem1bit;
+        s = TR("1 bit");
       else {  
         switch (st) {
           case stDUET: iNr = 2; break;
           case stNIBBLE: iNr = 4; break;
         }
-        s = String(SAFRemBits_i.scVal(), iNr);
+        s = String(TR("%i bits").c_str(), iNr);
       }  
     }
     else {
       if (st == stBYTE)
-        s = SAFRem1byte;
+        s = TR("1 byte");
       else {  
         switch (st) {
           case stINT: iNr = 2; break;
@@ -345,18 +345,18 @@ void FormMapCreate::SetRemarkOnBytesPerPixel()
           case stREAL: iNr = 8; break;
           case stCRD: iNr = 16; break;
 					default:
-				    stRemark->SetVal(SAFRemInvalidDomain);
+				    stRemark->SetVal(TR("Invalid Domain"));
 						return;
         }
-        s = String(SAFRemBytes_i.scVal(), iNr);
+        s = String(TR("%i bytes").c_str(), iNr);
       }  
     }
-    String sRemark(SAFRemMapPixUse_S.scVal(), s);
+	String sRemark(TR("Map will use %S per pixel").c_str(), s);
     stRemark->SetVal(sRemark);
   }
   catch (ErrorObject&) 
   {
-    stRemark->SetVal(SAFRemInvalidDomain);
+    stRemark->SetVal(TR("Invalid Domain"));
   }  
 }
    
@@ -379,8 +379,8 @@ void FormMapCreate::execMapOut(const String& sExpr)
   if (fOutMapList)
     fn.sExt = ".mpl";
   if (fn.fExist()) {
-    String sErr(SAFMsgAlreadyExistsOverwrite_S.scVal(), fn.sFullPath(true));
-    int iRet=mw->MessageBox(sErr.scVal(), SAFMsgAlreadyExists.scVal(), MB_YESNO|MB_ICONEXCLAMATION);
+    String sErr(TR("File %S already exists.\nOverwrite?").c_str(), fn.sFullPath(true));
+    int iRet=mw->MessageBox(sErr.c_str(), TR("File already exists").c_str(), MB_YESNO|MB_ICONEXCLAMATION);
     if (iRet != IDYES)
       return;
   }

@@ -108,12 +108,12 @@ void LayoutListView::OnInitialUpdate()
 	// CListView::OnInitialUpdate(); // Would call OnUpdate() too early causing display problems on 95/98/ME
 	CListCtrl& lvCtrl = GetListCtrl();
 	lvCtrl.SetExtendedStyle(LVS_EX_FULLROWSELECT|LVS_EX_GRIDLINES);
-	lvCtrl.InsertColumn(0, SLOColItem.scVal(), LVCFMT_LEFT, 200);
-	lvCtrl.InsertColumn(1, SLOColLeft.scVal(), LVCFMT_RIGHT, 60);
-	lvCtrl.InsertColumn(2, SLOColTop.scVal(), LVCFMT_RIGHT, 60);
-	lvCtrl.InsertColumn(3, SLOColWidth.scVal(), LVCFMT_RIGHT, 60);
-	lvCtrl.InsertColumn(4, SLOColHeight.scVal(), LVCFMT_RIGHT, 60);
-	lvCtrl.InsertColumn(5, SLOColScale.scVal(), LVCFMT_LEFT, 80);
+	lvCtrl.InsertColumn(0, TR("Item").c_str(), LVCFMT_LEFT, 200);
+	lvCtrl.InsertColumn(1, TR("Left").c_str(), LVCFMT_RIGHT, 60);
+	lvCtrl.InsertColumn(2, TR("Top").c_str(), LVCFMT_RIGHT, 60);
+	lvCtrl.InsertColumn(3, TR("Width").c_str(), LVCFMT_RIGHT, 60);
+	lvCtrl.InsertColumn(4, TR("Height").c_str(), LVCFMT_RIGHT, 60);
+	lvCtrl.InsertColumn(5, TR("Scale").c_str(), LVCFMT_LEFT, 80);
   IlwisWinApp *app = IlwWinApp();
 	lvCtrl.SetImageList(&app->ilSmall, LVSIL_SMALL);
 	lvCtrl.SetImageList(&app->ilLarge, LVSIL_NORMAL);
@@ -192,7 +192,7 @@ void LayoutListView::OnGetdispinfo(NMHDR* pNMHDR, LRESULT* pResult)
 					str = String("1:%.f", rScale);
 			} break;
 		}
-		strcpy(item.pszText, str.scVal());
+		strcpy(item.pszText, str.c_str());
   }
   if (item.mask & LVIF_IMAGE) {
 		String sType = vli[iNr]->sType();

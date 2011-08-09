@@ -175,7 +175,7 @@ void GraphView::OnInitialUpdate()
 }
 
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define add(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 #define addSub(ID) menSub.AppendMenu(MF_STRING, ID, sMen(ID)); 
 #define addSubMenu(ID) men.AppendMenu(MF_POPUP, (UINT)menSub.GetSafeHmenu(), sMen(ID)); menSub.Detach();
@@ -339,11 +339,11 @@ BOOL GraphView::OnPreparePrinting(CPrintInfo* pInfo)
 		{
 		public:
 			FormPrintOptions(CWnd* parent, int* iSel, double* rWidthInCm, CDC* dcPrinter)
-				: FormWithDest(parent, SGPTitleGraphPrintOptions)
+				: FormWithDest(parent, TR("Print Options"))
 			{
 				RadioGroup* rg = new RadioGroup(root, "", iSel);
-				new RadioButton(rg, SGPUiFitOnPage);
-				RadioButton* rb = new RadioButton(rg, SGPUiWidthInCm);
+				new RadioButton(rg, TR("&Fit on Page"));
+				RadioButton* rb = new RadioButton(rg, TR("&Width (cm)"));
 				int iPrWidth = dcPrinter->GetDeviceCaps(HORZSIZE)/10 - 1.5; // margins
 				new FieldReal(rb, "", rWidthInCm, ValueRange(0, iPrWidth, 0.1));
 				SetMenHelpTopic("ilwismen\\graph_window_print_graph.htm");

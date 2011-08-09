@@ -88,7 +88,7 @@ PixelInfoWindow::~PixelInfoWindow()
 /////////////////////////////////////////////////////////////////////////////
 // PixelInfoWindow message handlers
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 
 #define add(ID) menPopup.AppendMenu(MF_STRING, ID, sMen(ID)); 
 #define addBreak menPopup.AppendMenu(MF_SEPARATOR);

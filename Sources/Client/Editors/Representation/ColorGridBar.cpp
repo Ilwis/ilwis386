@@ -82,7 +82,7 @@ BOOL ColorGridBar::Create(CView* v)
 	CFrameWnd* pParent = view->GetParentFrame();
 	ASSERT(pParent);
 
-	BOOL iRet = CSizingControlBar::Create(SEDTitleColorGridBar.scVal(), pParent, CSize(iBARWIDTH+20, iBARWIDTH+20), TRUE, ID_COLORGRIDBAR);
+	BOOL iRet = CSizingControlBar::Create(TR("Color Selector").c_str(), pParent, CSize(iBARWIDTH+20, iBARWIDTH+20), TRUE, ID_COLORGRIDBAR);
 
 	ASSERT_VALID(this);
 

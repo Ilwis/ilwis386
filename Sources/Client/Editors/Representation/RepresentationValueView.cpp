@@ -338,10 +338,10 @@ public:
   : FormWithDest(wPar, sTitle)
   {
     if ("value" == dm->fnObj.sFile && fUsesGrad )
-      fr = new FieldReal(root, SRPUiValue, rVal, ValueRange(0,100,0.1));
+      fr = new FieldReal(root, TR("&Value"), rVal, ValueRange(0,100,0.1));
     else
-      fr = new FieldReal(root, SRPUiValue, rVal, dm);
-    new FieldColor(root, SRPUiColor, col);
+      fr = new FieldReal(root, TR("&Value"), rVal, dm);
+    new FieldColor(root, TR("&Color"), col);
     SetMenHelpTopic(htp);
     create();
   }
@@ -370,8 +370,8 @@ class LimitRow : public FieldGroup
 
 			if ( iRow == 0 )
 			{
-				fs1 = new StaticText(this, SRPUiValue);
-				fs2 = new StaticText(this, SRPUiColor);
+				fs1 = new StaticText(this, TR("&Value"));
+				fs2 = new StaticText(this, TR("&Color"));
 				fs2->Align(fs1, AL_AFTER);
 				fs1->psn->iBndDown = 0;
 			}
@@ -386,14 +386,14 @@ class MultiLimitForm : public FormWithDest
 {
 public:
 	MultiLimitForm(CWnd* par, vector<BandInfo> &info) 
-	:	FormWithDest(par, SRPTitleMultiLimits),
+	:	FormWithDest(par, TR("Insert Multiple Limits")),
     iLimits(2),
 		arBInf(info)
 	{
     FormEntry *fe, *fe1;
 		fes.resize(6);
 		arBInfTemp.resize(6);
-	  fe = fi = new FieldInt(root, SRPUiNrLimits, &iLimits, ValueRange(1,6), true);
+	  fe = fi = new FieldInt(root, TR("&Number of Limits"), &iLimits, ValueRange(1,6), true);
 		fi->SetCallBack((NotifyProc)&MultiLimitForm::ChangeNoOfLimits);
 		for(int i=0; i < 6; ++i)
 		{
@@ -435,7 +435,7 @@ public:
 				continue;
 			if (i > 0 && arBInfTemp[i-1].rMax >= arBInfTemp[i].rMax)
 			{
-				throw ErrorObject(SPRErrMultLimitOrder);
+				throw ErrorObject(TR("Limit values must be from low to high"));
 			}
 			arBInf[i] = arBInfTemp[i];
 			iLimits++;
@@ -499,9 +499,9 @@ BOOL RepresentationValueLB::Create(RepresentationValueView *rv)
 	clrMethod.Create(WS_CHILD | WS_BORDER | CBS_DROPDOWNLIST ,  CRect(0,0,100,100), this, ID_COLORMETHOD_CB);
 	value.SetFont(fnt);
 	clrMethod.SetFont(fnt);
-	clrMethod.AddString(SRPUiUpper.c_str());
-	clrMethod.AddString(SRPUiLower.c_str());
-	clrMethod.AddString(SRPUiStretch.c_str());	
+	clrMethod.AddString(TR("Upper").c_str());
+	clrMethod.AddString(TR("Lower").c_str());
+	clrMethod.AddString(TR("Stretch").c_str());	
 
 	return iRet;
 }
@@ -555,13 +555,13 @@ void RepresentationValueLB::DrawItem( LPDRAWITEMSTRUCT dis )
 		switch (rgDoc->GetColorMethod(i-1))
 		{
 			case RepresentationGradual::crUPPER:
-				str = SRPRemUpper;
+				str = TR("upper ");
 				break;
 			case RepresentationGradual::crLOWER:
-				str = SRPRemLower;
+				str = TR("lower ");
 				break;
 			case RepresentationGradual::crSTRETCH:
-				str = SRPRemStretch;
+				str = TR("stretch ");
 				break;
 		}    
 	}
@@ -688,9 +688,9 @@ void RepresentationValueLB::OnContextMenu( CWnd* pWnd, CPoint point )
 		SetCurSel(iIndex);
 		unsigned int uiCheck1 = MF_UNCHECKED ,uiCheck2 = MF_UNCHECKED , uiCheck3 = MF_UNCHECKED ;
 
-		menu.AppendMenu(MF_STRING | uFlagsRO | uiCheck1, ID_RPRUPPER, SRPUiUpper.c_str());
-		menu.AppendMenu(MF_STRING | uFlagsRO | uiCheck3, ID_RPRSTRETCH, SRPUiStretch.c_str());
-		menu.AppendMenu(MF_STRING | uFlagsRO | uiCheck2, ID_RPRLOWER, SRPUiLower.c_str());
+		menu.AppendMenu(MF_STRING | uFlagsRO | uiCheck1, ID_RPRUPPER, TR("Upper").c_str());
+		menu.AppendMenu(MF_STRING | uFlagsRO | uiCheck3, ID_RPRSTRETCH, TR("Stretch").c_str());
+		menu.AppendMenu(MF_STRING | uFlagsRO | uiCheck2, ID_RPRLOWER, TR("Lower").c_str());
 	}
 
 	menu.TrackPopupMenu(TPM_LEFTALIGN | TPM_RIGHTBUTTON, point.x, point.y, this);
@@ -943,7 +943,7 @@ void RepresentationValueView::OnInsert()
 	int iIndex = rgDoc->iNoColors() - max(lb.GetCurSel(), 0)/2 - 1;
 	Color col = GetDocument()->GetColor(iIndex);
   //Color col(128,128,128);
-  LimitForm frm(this, SRPTitleInsertLimit, 
+  LimitForm frm(this, TR("Insert Limit"), 
     &rVal, rgDoc->dm(), &col, rgDoc->fUsesGradual(), "ilwismen\\representation_value_gradual_editor_insert_limit.htm");
   if (frm.fOkClicked()) {
     if (! rgDoc->fRepresentationValue())
@@ -986,9 +986,9 @@ void RepresentationValueView::OnStretchSteps()
   {
   public:
     StretchStepsForm(CWnd* wPar, int* iStretchSteps)
-    : FormWithDest(wPar, SRPTitleStretchSteps)
+    : FormWithDest(wPar, TR("Stretch Steps"))
     {
-      fi = new FieldInt(root, SRPUiStretchSteps, iStretchSteps, ValueRange(2,30), true);
+      fi = new FieldInt(root, TR("&Stretch Steps"), iStretchSteps, ValueRange(2,30), true);
       SetMenHelpTopic("ilwismen\\representation_value_gradual_editor_stretch_steps.htm");
       create();
     }
@@ -1064,7 +1064,7 @@ void RepresentationValueView::OnEdit()
       rVal *= 100;
     Color col = rgDoc->GetColor(id);
 		
-    LimitForm frm(this, SRPTitleEditLimit, &rVal, rgDoc->dm(), &col, rgDoc->fUsesGradual(), "ilwismen\\representation_value_gradual_editor_edit_limit.htm");
+    LimitForm frm(this, TR("Edit Limit"), &rVal, rgDoc->dm(), &col, rgDoc->fUsesGradual(), "ilwismen\\representation_value_gradual_editor_edit_limit.htm");
     if (frm.fOkClicked()) 
 		{
       if ( ! rgDoc->fRepresentationValue())
@@ -1121,7 +1121,7 @@ void RepresentationValueView::init()
 			s = rgDoc->sValue(rgDoc->rGetLimitValue(i-1));
 		else        
 			s = String("%5.1f %%", 100 * rgDoc->rGetLimitValue(i-1));
-		lb.AddString(s.scVal());
+		lb.AddString(s.c_str());
 	}
 	lb.SetCurSel(0);
 	ColorBuf clrBuf;

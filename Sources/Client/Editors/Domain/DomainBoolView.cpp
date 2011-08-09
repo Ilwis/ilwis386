@@ -108,15 +108,15 @@ void DomainBoolView::CreateForm()
 
 	if (dm->fReadOnly())
 	{
-		String s("%S: %S", SDMUiTrueString, sTrue);
+		String s("%S: %S", TR("'&True' string"), sTrue);
 		new StaticText(root, s);
-		s = String("%S: %S", SDMUiFalseString, sFalse);
+		s = String("%S: %S", TR("'&False' string"), sFalse);
 		new StaticText(root, s);
 	}
 	else {
 		new FieldBlank(root);
-		fsTrue = new FieldString(root, SDMUiTrueString, &sTrue);
-		fsFalse = new FieldString(root, SDMUiFalseString, &sFalse);
+		fsTrue = new FieldString(root, TR("'&True' string"), &sTrue);
+		fsFalse = new FieldString(root, TR("'&False' string"), &sFalse);
 		fsTrue->SetCallBack((NotifyProc)&DomainBoolView::CheckYesNoEqual);
 		fsFalse->SetCallBack((NotifyProc)&DomainBoolView::CheckYesNoEqual);
 	}  

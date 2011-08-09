@@ -124,7 +124,7 @@ void ColumnSelector::Fill()
 			continue;
     String s = tbl->col(i)->sName();
 		s &= ".clm";
-    lb->AddString(s.scVal());
+    lb->AddString(s.c_str());
   }
 }
 
@@ -204,7 +204,7 @@ void ColumnSelector::StoreData()
 }
 
 ColumnManageForm::ColumnManageForm(TableDoc* tdoc, TableView* view)
-: FormWithDest(tdoc->wndGetActiveView(), STBTitleColManagement, false/* no cancel button*/ ),
+: FormWithDest(tdoc->wndGetActiveView(), TR("Column Management"), false/* no cancel button*/ ),
   tvw(view), tbldoc(tdoc)
 {
   cs = new ColumnSelector(root,this,tvw);
@@ -218,18 +218,18 @@ ColumnManageForm::ColumnManageForm(TableDoc* tdoc, TableView* view)
   stRemark = new StaticText(root, sFill);
   stRemark->SetIndependentPos();
 
-  pbAdd = new PushButton(root, STBUiAddColumn, (NotifyProc)&ColumnManageForm::Add);
+  pbAdd = new PushButton(root, TR("&Add Column"), (NotifyProc)&ColumnManageForm::Add);
   pbAdd->SetIndependentPos();
-  pbProp = new PushButton(root, STBUiProperties, (NotifyProc)&ColumnManageForm::Prop);
+  pbProp = new PushButton(root, TR("&Properties"), (NotifyProc)&ColumnManageForm::Prop);
   pbProp->Align(pbAdd, AL_AFTER);
   pbProp->SetIndependentPos();
-  pbRemove = new PushButton(root, STBUiDelete, (NotifyProc)&ColumnManageForm::Remove);
+  pbRemove = new PushButton(root, TR("&Delete"), (NotifyProc)&ColumnManageForm::Remove);
   pbRemove->Align(pbAdd, AL_UNDER);
   pbRemove->SetIndependentPos();
-  pbMakeUpToDate = new PushButton(root, STBUiMakeUpToDate, (NotifyProc)&ColumnManageForm::MakeUpToDate);
+  pbMakeUpToDate = new PushButton(root, TR("&Make Up to Date"), (NotifyProc)&ColumnManageForm::MakeUpToDate);
   pbMakeUpToDate->Align(pbRemove, AL_AFTER);
   pbMakeUpToDate->SetIndependentPos();
-  StaticText* st = new StaticText(root, STBRemDragToOrder);
+  StaticText* st = new StaticText(root, TR("Drag objects to change order"));
   st->Align(pbRemove, AL_UNDER);
   st->SetIndependentPos();
   st->SetCallBack((NotifyProc)&ColumnManageForm::Select);
@@ -271,27 +271,27 @@ int ColumnManageForm::Select(Event* Evt)
     stDescr->SetVal(col->sDescription);
     bool fMakeUpToDate = false;
     if (col->fOwnedByTable())
-      stRemark->SetVal(STBRemColIsTblOwned);
+      stRemark->SetVal(TR("Column is table-owned"));
     else if (col->fDependent()) {
       ObjectTime timNewest = 0;
       String sObjName, s;
       col->GetNewestDependentObject(sObjName, timNewest);
       switch (timNewest) {
         case 0:
-          s = SMSRemObjectIsUpToDate;
+          s = TR("Object is up-to-date");
           break;
         case -1:
-          s = String("%S: %S", SMSRemObjectMissing, sObjName);
+          s = String("%S: %S", TR("Object is missing"), sObjName);
           break;
         default: {
-          s = String("%S: %S (%S)", SMSRemObjectIsNotUpToDate, sObjName, timNewest.sDateTime());
+          s = String("%S: %S (%S)", TR("Object is not up-to-date"), sObjName, timNewest.sDateTime());
           fMakeUpToDate = true;
         }
       }
       stRemark->SetVal(s);
     }
     else if (col->fReadOnly())
-      stRemark->SetVal(STBRemColIsReadOnly);
+      stRemark->SetVal(TR("Column is read only"));
     else
       stRemark->SetVal(col->objtime.sDateTime());
     if (fMakeUpToDate)
@@ -338,9 +338,9 @@ int ColumnManageForm::MakeUpToDate(Event* Evt)
   if (id < 0) 
     return 1;
   Column col = cs->col(id);
-  String s1(SMSMsgIsNotUpToDate_S.scVal(), col->sTypeName());
-  String s("%S\n%S", s1, SMSMsgRecalcMakeUpToDate);
-  if (IDYES == MessageBox(s.scVal(), SMSMsgCheckUpToDate.scVal(), MB_YESNO|MB_ICONINFORMATION)) {
+  String s1(TR("%S is not up-to-date").c_str(), col->sTypeName());
+  String s("%S\n%S", s1, TR("Recalculate it to make it up-to-date?"));
+  if (IDYES == MessageBox(s.c_str(), TR("Check Up-to-date").c_str(), MB_YESNO|MB_ICONINFORMATION)) {
     col->MakeUpToDate();
     Select(0);
   }

@@ -78,30 +78,30 @@ void DomainValueIntFormView::CreateForm()
 	ri = vr->riMinMax();
 	if (dm->fReadOnly())
 	{
-		String s("%S: %S", SDMUiMinMax, vr->sRange());
+		String s("%S: %S", TR("&Min, Max"), vr->sRange());
 		new StaticText(root, s);
 		if (dvi->fFixedRange())
-			new StaticText(root, SDMUiFixedRange);
-		s = String("%S: %i", SDMUiWidth, iWidth);
+			new StaticText(root, TR("Fixed Range"));
+		s = String("%S: %i", TR("&Width"), iWidth);
 		new StaticText(root, s);
 
 		if (dvi->m_fUnit)
 		{
-			s = String("%S: %S", SDMUiUnit, dvi->m_sUnit);
+			s = String("%S: %S", TR("&Unit"), dvi->m_sUnit);
 			new StaticText(root, s);
 		}
 	}
 	else
 	{
-		fri = new FieldRangeInt(root, SDMUiMinMax, &ri);
+		fri = new FieldRangeInt(root, TR("&Min, Max"), &ri);
 		fri->Align(root, AL_UNDER);
 		
-		CheckBox* cb = new CheckBox(root, SDMUiFixedRange, &dvi->m_fFixedRange);
+		CheckBox* cb = new CheckBox(root, TR("Fixed Range"), &dvi->m_fFixedRange);
 		cb->SetIndependentPos();
 		
-		cb = new CheckBox(root, SDMUiUnit, &dvi->m_fUnit);
+		cb = new CheckBox(root, TR("&Unit"), &dvi->m_fUnit);
 		new FieldString(cb, "", &dvi->m_sUnit);
-		fiWidth = new FieldInt(root, SDMUiWidth, &iWidth);
+		fiWidth = new FieldInt(root, TR("&Width"), &iWidth);
 		fiWidth->Align(cb, AL_UNDER);
 	}
 	if (dm->fSystemObject())

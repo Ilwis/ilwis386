@@ -433,9 +433,9 @@ void LayoutView::OnMouseMove(UINT nFlags, CPoint point)
 		Pnt2RowCol(point, rRow, rCol);
 		String strX("x = %.1f mm", rCol/10);
 		String strY("y = %.1f mm", rRow/10);
-		fw->status->SetPaneText(1, strX.scVal());
-		fw->status->SetPaneText(2, strY.scVal());
-//		fw->status->SetWindowText(str.scVal());
+		fw->status->SetPaneText(1, strX.c_str());
+		fw->status->SetPaneText(2, strY.c_str());
+//		fw->status->SetWindowText(str.c_str());
 	}
 }
 
@@ -928,7 +928,7 @@ BOOL LayoutView::PreTranslateMessage(MSG* pMsg)
 	return ZoomableView::PreTranslateMessage(pMsg);
 }
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define pmadd(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 
 void LayoutView::OnContextMenu(CWnd* pWnd, CPoint point) 
@@ -963,9 +963,9 @@ void LayoutView::ReportPaperSizeOnStatusBar()
 	HGDIOBJ hOldFont = NULL;
 	if (hFont != NULL)
 		hOldFont = dcScreen.SelectObject(hFont);
-	int iWidth = dcScreen.GetTextExtent(str.scVal()).cx;
+	int iWidth = dcScreen.GetTextExtent(str.c_str()).cx;
 	fw->status->SetPaneInfo(3, 0, SBPS_NORMAL, iWidth);
-	fw->status->SetPaneText(3, str.scVal());
+	fw->status->SetPaneText(3, str.c_str());
 	if (hOldFont != NULL)
 		dcScreen.SelectObject(hOldFont);
 }
@@ -974,12 +974,12 @@ class MakeBitmapForm: public FormWithDest
 {
 public:
 	MakeBitmapForm(CWnd* wnd, LayoutDoc* doc, String* _sFile, int* iResDpi) 
-		: FormWithDest(wnd, SLOTitleMakeBitmap)
+		: FormWithDest(wnd, TR("Export to Bitmap"))
 		, ld(doc), iDpi(iResDpi),
 		sFile(_sFile)
 	{
-		fsOutName = new FieldString(root, SLOUiFileName, sFile);
-		fiDpi = new FieldInt(root, SLOUiResDpi, iResDpi, ValueRange(30,1250), true);
+		fsOutName = new FieldString(root, TR("&File name"), sFile);
+		fiDpi = new FieldInt(root, TR("&Resolution (dpi)"), iResDpi, ValueRange(30,1250), true);
 		fiDpi->SetCallBack((NotifyProc)&MakeBitmapForm::CallBack);
 		String sDummy('X', 30);
 		st1 = new StaticText(root, sDummy);
@@ -997,8 +997,8 @@ public:
 		{
 			if ( fnFile.fExist())
 			{
-				int iRet = wnd()->MessageBox(String(SLOErrFileAlreadyExists_S.scVal(), fnFile.sRelative()).scVal(), 
-					                         SLOTitleErrorFile.scVal(), MB_YESNO | MB_ICONERROR );
+				int iRet = wnd()->MessageBox(String(TR("File %S already exists, overwrite anyway?").c_str(), fnFile.sRelative()).c_str(), 
+					                         TR("File Error").c_str(), MB_YESNO | MB_ICONERROR );
 				if ( iRet == IDNO )
 					return fsOutName;				
 			}				
@@ -1012,13 +1012,13 @@ private:
 		fiDpi->StoreData();
 		int iWidth, iHeight, iFileSize;
 		ld->CalcBitmapSize(*iDpi, iWidth, iHeight, iFileSize);
-		String s1(SLORemWidthHeight_ii.scVal(), iWidth, iHeight);
+		String s1(TR("Size: %i x %i pixels").c_str(), iWidth, iHeight);
 		String s2;
 		double rMB = (double)iFileSize / 1024 / 1024;
 		if (rMB < 1) 
-			s2 = String(SLORemFileSizekB_i.scVal(), iFileSize / 1024);
+			s2 = String(TR("File size: %i kB").c_str(), iFileSize / 1024);
 		else
-			s2 = String(SLORemFileSizeMB_f.scVal(), rMB);
+			s2 = String(TR("File size: %.1f MB").c_str(), rMB);
 		st1->SetVal(s1);
 		st2->SetVal(s2);
 		return 0;
@@ -1062,7 +1062,7 @@ void LayoutView::OnMakeBitmap()
 	CBitmap bm;
 	if (!bm.CreateCompatibleBitmap(&dcView,iWidth,iHeight)) 
 	{
-		MessageBox(SLOErrNotEnoughMemory.scVal(), SLOTitleMakeBitmap.scVal(), MB_ICONSTOP);
+		MessageBox(TR("Error: Not enough memory").c_str(), TR("Export to Bitmap").c_str(), MB_ICONSTOP);
 		return;
 	}		
 

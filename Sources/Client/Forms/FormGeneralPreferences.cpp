@@ -96,30 +96,30 @@ FormGeneralPreferences::FormGeneralPreferences() :
 
   tree = new TreeSelector(root,1);
 	tree->SetCallBack((NotifyProc)&FormGeneralPreferences::Fill);
-	pages.push_back(FormGeneralPreferences::Page(SPFMainWindow, new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(SPFMainWindowSP, new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(SPFMainWindowMenu, new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(SPFMapWindow, new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(SPFMapWindowDisPlayOpt, new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(SPFMapWindowDisplayOptRM, new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(SPFMapWindowDisplayOptSM, new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(SPFMapWindowDisplayOptPM, new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(SPFMapWindowDisplayOptPoM, new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(SPFMapWindowDefRpr, new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(SPFMapWindowSizePos, new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(SPFMapWindowEdit, new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(SPFMapWindowEditPnt, new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(SPFMapWindowEditSeg, new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(SPFTableWindow, new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(SPFTableWindowGraph, new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(SPFFont, new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(SPFFontGeneral, new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(SPFFontDialog, new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(SPFFontTable, new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(SPFFontGraphs, new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(SPFGeneral, new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(SPFDirectories, new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(SPFAdvanced, new FieldPage(root)));	
+	pages.push_back(FormGeneralPreferences::Page(TR("Main Window"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Main Window|Position & Size"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Main Window|Menu"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Map Window"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Map Window|Display"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Map Window|Display|Raster Maps"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Map Window|Display|Segment Maps"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Map Window|Display|Polygon Maps"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Map Window|Display|Point Maps"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Map Window|Default Representations"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Map Window|Position & Size"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Map Window|Editors"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Map Window|Editors|Point Editor"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Map Window|Editors|Segment Editor"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Table Window"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Table Window|Graph Window"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Font"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Font|General Font"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Font|Dialog Font"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Font|Table Font"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Font|Graphs Font"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("General"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Directories"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Advanced"), new FieldPage(root)));	
 	for(PageIter cur=pages.begin(); cur != pages.end(); ++cur)
 		(*cur).page->Align(tree, AL_AFTER);
 
@@ -148,25 +148,25 @@ FormGeneralPreferences::~FormGeneralPreferences()
 
 void FormGeneralPreferences::GeneralPage(IlwisSettings& settings)
 {
-	FieldPage *page = GetPage(SPFGeneral);
+	FieldPage *page = GetPage(TR("General"));
 	fOldTranquilizers = settings.fValue("OldTranquilizers", false);
 	language = settings.sValue("LanguageExtension",".eng");
 
-	cbOldTranquilizers = new CheckBox(page, SPFCUseOldStyleTranquilizers, &fOldTranquilizers);
-	new FieldString(page,SPFCLanguageExtension,&language);
+	cbOldTranquilizers = new CheckBox(page, TR("Old style  progress indicators"), &fOldTranquilizers);
+	new FieldString(page,TR("Language extension used"),&language);
 }
 
 void FormGeneralPreferences::FontPage(IlwisSettings& settings)
 {
-	FieldPage *page = GetPage(SPFFont);
-	new StaticText(page, SPFCRemContSubEntries);
+	FieldPage *page = GetPage(TR("Font"));
+	new StaticText(page, TR("This item contains subentries, please expand. "));
 
-	page = GetPage(SPFFontGeneral);
+	page = GetPage(TR("Font|General Font"));
 	FieldGroup *grp = new FieldGroup(page);
-	new StaticText(grp, SPFCGeneralFont, true);
-	StaticText* st = new StaticText(grp, SPFCGenFntInfo1);
+	new StaticText(grp, TR("General Font"), true);
+	StaticText* st = new StaticText(grp, TR("The font that is used in the Main Window, in Catalogs"));
 	st->psn->SetBound(0,0,0,0);
-	new StaticText(grp, SPFCGenFntInfo2);
+	new StaticText(grp, TR("and in data windows"));
 	grp->SetBevelStyle(FormEntry::bsLOWERED);
 
 	new FieldBlank(page);
@@ -176,12 +176,12 @@ void FormGeneralPreferences::FontPage(IlwisSettings& settings)
 	FieldLogFont *fl = new FieldLogFont(page, &lfGeneral);
 	fl->SetIndependentPos();
 
-	page = GetPage(SPFFontDialog);
+	page = GetPage(TR("Font|Dialog Font"));
 	grp = new FieldGroup(page);
-	new StaticText(grp,SPFCDialogFont, true);
-	st = new StaticText(grp, SPFCFrmFntInfo1);
+	new StaticText(grp,TR("Dialog Font"), true);
+	st = new StaticText(grp, TR("The font that is used in all dialog boxes"));
 //	st->psn->SetBound(0,0,0,0);
-//	new StaticText(grp, SPFCFrmFntInfo2);
+//	new StaticText(grp, TR("<Not used>"));
 	grp->SetBevelStyle(FormEntry::bsLOWERED);
 
 	new FieldBlank(page);
@@ -191,11 +191,11 @@ void FormGeneralPreferences::FontPage(IlwisSettings& settings)
   fl = new FieldLogFont(page, &lfForm, FieldLogFont::faVECTOR);
 	fl->SetIndependentPos();
 
-	page = GetPage(SPFFontTable);
+	page = GetPage(TR("Font|Table Font"));
 
 	grp = new FieldGroup(page);
-	new StaticText(grp, SPFCTableFont, true);
-	new StaticText(grp, SPFCTblFntInfo);
+	new StaticText(grp, TR("Table Font"), true);
+	new StaticText(grp, TR("The font that is used in all tables."));
 	grp->SetBevelStyle(FormEntry::bsLOWERED);
 
 	new FieldBlank(page);
@@ -204,11 +204,11 @@ void FormGeneralPreferences::FontPage(IlwisSettings& settings)
   fl = new FieldLogFont(page, &lfTable, FieldLogFont::faFIXED);
 	fl->SetIndependentPos();
 
-	page = GetPage(SPFFontGraphs);
+	page = GetPage(TR("Font|Graphs Font"));
 
 	grp = new FieldGroup(page);
-	new StaticText(grp, SPFCGraphFont, true);
-	new StaticText(grp, SPFCGrpFntInfo);
+	new StaticText(grp, TR("Graph Font"), true);
+	new StaticText(grp, TR("The font that is used in all graphs."));
 	grp->SetBevelStyle(FormEntry::bsLOWERED);
 
 	new FieldBlank(page);
@@ -221,53 +221,53 @@ void FormGeneralPreferences::FontPage(IlwisSettings& settings)
 
 void FormGeneralPreferences::MainWindowPage(IlwisSettings& settings)
 {
-	FieldPage *page = GetPage(SPFMainWindow);
-	StaticText* st = new StaticText(page, SPFCCommandLine, true);
+	FieldPage *page = GetPage(TR("Main Window"));
+	StaticText* st = new StaticText(page, TR("Commandline"), true);
 	st->SetIndependentPos();
 	iHistoryEntries = settings.iValue("HistoryEntries", 8);
-	new FieldInt(page, SPFCHistoryEntries, &iHistoryEntries, ValueRange(0, 30), true);
+	new FieldInt(page, TR("&History entries"), &iHistoryEntries, ValueRange(0, 30), true);
 
 	new FieldBlank(page);
-	st = new StaticText(page, SPFCGeneral, true);
+	st = new StaticText(page, TR("General Options"), true);
 	st->psn->SetBound(0,0,0,0);
 	st->SetIndependentPos();
 
 	fWarnNotUpToDate = settings.fValue("WarnNotUpToDate", false);
 	fShowRasterDef = settings.fValue("ShowRasterDefForm", true);
-	CheckBox* cb = new CheckBox(page, SPFUiWarnNotUpToDate, &fWarnNotUpToDate);
+	CheckBox* cb = new CheckBox(page, TR("Give a &Warning when an object is opened which is not up-to-date"), &fWarnNotUpToDate);
 	cb->SetIndependentPos();
-	cb = new CheckBox(page, SPFCShowRasDefFrm, &fShowRasterDef);
+	cb = new CheckBox(page, TR("Show a &Raster map definition form when calculating"), &fShowRasterDef);
 	cb->SetIndependentPos();
 
 	new FieldBlank(page);
-	st = new StaticText(page, SPFCDefActions, true);
+	st = new StaticText(page, TR("Default double-click actions"), true);
 	st->psn->SetBound(0,0,0,0);
 	st->SetIndependentPos();
 	sMplAction = settings.sValue("MapListDblClkAction", "Open");
-	st = new StaticText(page, SPFCFilter);
+	st = new StaticText(page, TR("&Filter"));
 	sFltAction = settings.sValue("FilterDblClkAction", "Open");
 	ftoFlt = new FieldOneSelectTextOnly(page, &sFltAction);
 	sStpAction = settings.sValue("StereoPairDblClkAction", "Stereoscope");
 	
 	ftoFlt->Align(st, AL_AFTER);
-	st = new StaticText(page, SPFCMapList);
+	st = new StaticText(page, TR("&Map List"));
 	ftoMpl = new FieldOneSelectTextOnly(page, &sMplAction);
 	ftoMpl->Align(st, AL_AFTER);
-	st = new StaticText(page, SPFCStereoPair);
+	st = new StaticText(page, TR("&Stereo Pair"));
 	ftoStp = new FieldOneSelectTextOnly(page, &sStpAction);
 	ftoStp->Align(st, AL_AFTER);
 
-	page = GetPage(SPFMainWindowSP);
-	st = new StaticText(page, SPFCMainWindowSP, true);
+	page = GetPage(TR("Main Window|Position & Size"));
+	st = new StaticText(page, TR("Default position and size of Main Window"), true);
 	st->SetIndependentPos();
-	MWX = new FieldInt(page, SPFCXPos, &(mapPos[mpMAIN].rcMin.Col), ValueRange(1, 2000), false, true);
-	MWY = new FieldInt(page, SPFCYPos, &(mapPos[mpMAIN].rcMin.Row), ValueRange(1, 2000), false, true);
-	MWW = new FieldInt(page, SPFCWidth, &(mapPos[mpMAIN].rcMax.Col), ValueRange(100, 2000), false, true);
-	MWH = new FieldInt(page, SPFCHeight, &(mapPos[mpMAIN].rcMax.Row), ValueRange(100, 2000), false, true);
+	MWX = new FieldInt(page, TR("&X Position"), &(mapPos[mpMAIN].rcMin.Col), ValueRange(1, 2000), false, true);
+	MWY = new FieldInt(page, TR("&Y Position"), &(mapPos[mpMAIN].rcMin.Row), ValueRange(1, 2000), false, true);
+	MWW = new FieldInt(page, TR("&Width"), &(mapPos[mpMAIN].rcMax.Col), ValueRange(100, 2000), false, true);
+	MWH = new FieldInt(page, TR("&Height"), &(mapPos[mpMAIN].rcMax.Row), ValueRange(100, 2000), false, true);
 
-	new PushButton(page, SPFUiReset, (NotifyProc)&FormGeneralPreferences::ResetButtonMW);
+	new PushButton(page, TR("&Reset"), (NotifyProc)&FormGeneralPreferences::ResetButtonMW);
 
-	page = GetPage(SPFMainWindowMenu);
+	page = GetPage(TR("Main Window|Menu"));
 	useAltLayout = settings.fValue("OperationsMenu",false);
 	st = new StaticText(page,"Operations Menu structure", true);
 	st->SetIndependentPos();
@@ -293,22 +293,22 @@ int FormGeneralPreferences::ResetButtonMW(Event *)
 
 void FormGeneralPreferences::TableWindowPage(IlwisSettings& settings)
 {
-	FieldPage *page = GetPage(SPFTableWindow);
+	FieldPage *page = GetPage(TR("Table Window"));
 
 	fShowAsTableCL = settings.fValue("ShowAsTableCL", false);
-	new StaticText(page, SPFCCommandLine, true);
-  new CheckBox(page, SPFCShowAsTableComLine, &fShowAsTableCL);
+	new StaticText(page, TR("Commandline"), true);
+  new CheckBox(page, TR("&Show Command Line when showing non-tables"), &fShowAsTableCL);
 	new FieldBlank(page);
 
-	new StaticText(page, SPFCTableWndPos, true);
+	new StaticText(page, TR("Default position and size of Table Window"), true);
 	FieldGroup* fg = new FieldGroup(page);
-	TWX = new FieldInt(fg, SPFCXPos, &(mapPos[mpTABLE].rcMin.Col), ValueRange(1, 2000), false, true);
-	TWY = new FieldInt(fg, SPFCYPos, &(mapPos[mpTABLE].rcMin.Row), ValueRange(1, 2000), false, true);
-	TWW = new FieldInt(fg, SPFCWidth, &(mapPos[mpTABLE].rcMax.Col), ValueRange(100, 2000), false, true);
-	TWH = new FieldInt(fg, SPFCHeight, &(mapPos[mpTABLE].rcMax.Row), ValueRange(100, 2000), false, true);
+	TWX = new FieldInt(fg, TR("&X Position"), &(mapPos[mpTABLE].rcMin.Col), ValueRange(1, 2000), false, true);
+	TWY = new FieldInt(fg, TR("&Y Position"), &(mapPos[mpTABLE].rcMin.Row), ValueRange(1, 2000), false, true);
+	TWW = new FieldInt(fg, TR("&Width"), &(mapPos[mpTABLE].rcMax.Col), ValueRange(100, 2000), false, true);
+	TWH = new FieldInt(fg, TR("&Height"), &(mapPos[mpTABLE].rcMax.Row), ValueRange(100, 2000), false, true);
 	fg->SetIndependentPos();
 	
-	new PushButton(page, SPFUiReset, (NotifyProc)&FormGeneralPreferences::ResetButtonTW);
+	new PushButton(page, TR("&Reset"), (NotifyProc)&FormGeneralPreferences::ResetButtonTW);
 
 	GraphWindowPage(settings);
 }
@@ -325,16 +325,16 @@ int FormGeneralPreferences::ResetButtonTW(Event *)
 
 void FormGeneralPreferences::GraphWindowPage(IlwisSettings& settings)
 {
-	FieldPage *page = GetPage(SPFTableWindowGraph);
+	FieldPage *page = GetPage(TR("Table Window|Graph Window"));
 
-	StaticText* st = new StaticText(page, SPFCGraphWindowSizePos, true);
+	StaticText* st = new StaticText(page, TR("Default position and size of Graph Window"), true);
 	st->SetIndependentPos();
-	GWX = new FieldInt(page, SPFCXPos, &(mapPos[mpGRAPH].rcMin.Col), ValueRange(1, 2000), false, true);
-	GWY = new FieldInt(page, SPFCYPos, &(mapPos[mpGRAPH].rcMin.Row), ValueRange(1, 2000), false, true);
-	GWW = new FieldInt(page, SPFCWidth, &(mapPos[mpGRAPH].rcMax.Col), ValueRange(100, 2000), false, true);
-	GWH = new FieldInt(page, SPFCHeight, &(mapPos[mpGRAPH].rcMax.Row), ValueRange(100, 2000), false, true);
+	GWX = new FieldInt(page, TR("&X Position"), &(mapPos[mpGRAPH].rcMin.Col), ValueRange(1, 2000), false, true);
+	GWY = new FieldInt(page, TR("&Y Position"), &(mapPos[mpGRAPH].rcMin.Row), ValueRange(1, 2000), false, true);
+	GWW = new FieldInt(page, TR("&Width"), &(mapPos[mpGRAPH].rcMax.Col), ValueRange(100, 2000), false, true);
+	GWH = new FieldInt(page, TR("&Height"), &(mapPos[mpGRAPH].rcMax.Row), ValueRange(100, 2000), false, true);
 
-	new PushButton(page, SPFUiReset, (NotifyProc)&FormGeneralPreferences::ResetButtonGW);	
+	new PushButton(page, TR("&Reset"), (NotifyProc)&FormGeneralPreferences::ResetButtonGW);	
 
 }
 
@@ -350,24 +350,24 @@ int FormGeneralPreferences::ResetButtonGW(Event *)
 
 void FormGeneralPreferences::MapWindowPage(IlwisSettings& settings)
 {
-	FieldPage *pg = GetPage(SPFMapWindow);
-	new StaticText(pg, SPFCRemContSubEntries);
+	FieldPage *pg = GetPage(TR("Map Window"));
+	new StaticText(pg, TR("This item contains subentries, please expand. "));
 
-	FieldPage *page = GetPage(SPFMapWindowSizePos);
+	FieldPage *page = GetPage(TR("Map Window|Position & Size"));
 
-	StaticText* st = new StaticText(page, SPFCMapWindowSizePos, true);
+	StaticText* st = new StaticText(page, TR("Default position and size of Map Window"), true);
 	st->SetIndependentPos();
-	MpWX = new FieldInt(page, SPFCXPos , &(mapPos[mpMAPS].rcMin.Col), ValueRange(1, 2000), false, true);
-	MpWY = new FieldInt(page, SPFCYPos, &(mapPos[mpMAPS].rcMin.Row), ValueRange(1, 2000), false, true);
-	MpWW = new FieldInt(page, SPFCWidth, &(mapPos[mpMAPS].rcMax.Col), ValueRange(100, 2000), false, true);
-	MpWH = new FieldInt(page, SPFCHeight, &(mapPos[mpMAPS].rcMax.Row), ValueRange(100, 2000), false, true);
+	MpWX = new FieldInt(page, TR("&X Position") , &(mapPos[mpMAPS].rcMin.Col), ValueRange(1, 2000), false, true);
+	MpWY = new FieldInt(page, TR("&Y Position"), &(mapPos[mpMAPS].rcMin.Row), ValueRange(1, 2000), false, true);
+	MpWW = new FieldInt(page, TR("&Width"), &(mapPos[mpMAPS].rcMax.Col), ValueRange(100, 2000), false, true);
+	MpWH = new FieldInt(page, TR("&Height"), &(mapPos[mpMAPS].rcMax.Row), ValueRange(100, 2000), false, true);
 
-	new PushButton(page, SPFUiReset, (NotifyProc)&FormGeneralPreferences::ResetButtonMpW);		
+	new PushButton(page, TR("&Reset"), (NotifyProc)&FormGeneralPreferences::ResetButtonMpW);		
 
 	DefaultRprPage(settings);
 
-	pg = GetPage(SPFMapWindowEdit);
-	new StaticText(pg, SPFCRemContSubEntries);
+	pg = GetPage(TR("Map Window|Editors"));
+	new StaticText(pg, TR("This item contains subentries, please expand. "));
 	SegmentEdMapPage();
 
 	PointEdMapPage();
@@ -388,10 +388,10 @@ int FormGeneralPreferences::ResetButtonMpW(Event *)
 void FormGeneralPreferences::PointEdMapPage()
 {
 	IlwisSettings settings("Map Window\\Point Editor");
-	FieldPage *page = GetPage(SPFMapWindowEditPnt);
+	FieldPage *page = GetPage(TR("Map Window|Editors|Point Editor"));
 	// to ensure that on show time the fill color field is only shoen when needed
   page->SetCallBack((NotifyProc)&FormGeneralPreferences::FieldSymbolCallBack);
-	StaticText* st = new StaticText(page, SPFCPointEditor, true);
+	StaticText* st = new StaticText(page, TR("Point Editor"), true);
 	st->SetIndependentPos();
 
   String fn = IlwWinApp()->Context()->fnUserINI().sFullName();
@@ -430,18 +430,18 @@ void FormGeneralPreferences::PointEdMapPage()
   sscanf(sBuf,"%lx",&colFill);
 	colFill = settings.clrValue("Fill Color", colFill);
 
-  CheckBox* cbText = new CheckBox (page, SEDUiShowText, &fText);
+  CheckBox* cbText = new CheckBox (page, TR("&Show Text"), &fText);
   FieldGroup* fg = new FieldGroup(cbText);
   fg->Align(cbText,AL_UNDER);
-  new FieldColor(fg, SEDUiTextColor, &colText);
-  new FieldFillColor(fg, SEDUiBackground, &colBackText);
+  new FieldColor(fg, TR("Text &Color"), &colText);
+  new FieldFillColor(fg, TR("&Background"), &colBackText);
   new FieldBlank(page);
-  fsmb = new FieldSymbol(page, SEDUiSmbType, &iSmb, &hIcon);
+  fsmb = new FieldSymbol(page, TR("Symbol &Type"), &iSmb, &hIcon);
   fsmb->SetCallBack((NotifyProc)&FormGeneralPreferences::FieldSymbolCallBack);
-  new FieldInt(page, SEDUiSmbSize, &iSmbSize, ValueRange(1L,100L), true);
-  new FieldInt(page, SEDUiPenWidth, &iSmbWidth, ValueRange(1L,100L), true);
-  new FieldColor(page, SEDUiColor, &colBound);
-  ffc = new FieldFillColor(page, SEDUiFillColor, &colFill);
+  new FieldInt(page, TR("Symbol &Size"), &iSmbSize, ValueRange(1L,100L), true);
+  new FieldInt(page, TR("Pen &width"), &iSmbWidth, ValueRange(1L,100L), true);
+  new FieldColor(page, TR("&Color"), &colBound);
+  ffc = new FieldFillColor(page, TR("&Fill Color"), &colFill);
 }
 
 int FormGeneralPreferences::FieldSymbolCallBack(Event*)
@@ -503,24 +503,24 @@ void FormGeneralPreferences::SegmentEdMapPage()
   colFindUndef = Color(255,0,0); // red
 	colFindUndef = settings.clrValue("Find Undef Color", colFindUndef);
 
-	FieldPage *page = GetPage(SPFMapWindowEditSeg);
-	StaticText* st = new StaticText(page, SPFCSegmentEditor, true);
+	FieldPage *page = GetPage(TR("Map Window|Editors|Segment Editor"));
+	StaticText* st = new StaticText(page, TR("Segment Editor"), true);
 	st->SetIndependentPos();
-  new FieldColor(page, SEDUiCursorColor, &colDig);
-  new CheckBox(page, SEDUiAutoSnap, &fAutoSnap);
-  new CheckBox(page, SEDUiShowNodes,&fShowNodes);
-	new FieldInt(page, SEDUiSnapPixels, &iSnapPixels, ValueRange(2,30), true);
-	new FieldColor(page, SEDUiNormalColor, &colNorm);
-	new FieldColor(page, SEDUiRetoucheColor, &colRetouch);
-	new FieldColor(page, SEDUiDeletedColor, &colDeleted);
-	new FieldColor(page, SEDUiFindUndefColor, &colFindUndef);
+  new FieldColor(page, TR("&Color Digitizer Cursor"), &colDig);
+  new CheckBox(page, TR("&Auto Snap"), &fAutoSnap);
+  new CheckBox(page, TR("Show &Nodes"),&fShowNodes);
+	new FieldInt(page, TR("&Snap tolerance (pixels)"), &iSnapPixels, ValueRange(2,30), true);
+	new FieldColor(page, TR("&Normal color"), &colNorm);
+	new FieldColor(page, TR("&Retouch color"), &colRetouch);
+	new FieldColor(page, TR("&Deleted color"), &colDeleted);
+	new FieldColor(page, TR("Find &Undef color"), &colFindUndef);
 }
 
 void FormGeneralPreferences::GetSystemRpr(IlwisSettings& settings)
 {
 	String sSystemDir = IlwWinApp()->ilwapp->sStdDir();
 	CFileFind finder;
-	BOOL fFound  = finder.FindFile(String("%S\\*.dom", sSystemDir).scVal());
+	BOOL fFound  = finder.FindFile(String("%S\\*.dom", sSystemDir).c_str());
 	fFound = finder.FindNextFile();
 	while ( fFound )
 	{
@@ -549,14 +549,14 @@ void FormGeneralPreferences::GetSystemRpr(IlwisSettings& settings)
 
 void FormGeneralPreferences::DefaultRprPage(IlwisSettings& settings)
 {
-	FieldPage *page = GetPage(SPFMapWindowDefRpr);
+	FieldPage *page = GetPage(TR("Map Window|Default Representations"));
 	GetSystemRpr(settings);
 	rprList = new FieldRprListView(page, defRpr);
 }
 
 void FormGeneralPreferences::DirectoryPage(IlwisSettings& settings)
 {
-	FieldPage *page = GetPage(SPFDirectories);
+	FieldPage *page = GetPage(TR("Directories"));
 
 	sToolDir = settings.sValue("ToolDir", "");
 	sScriptDirs = settings.sValue("ScriptDirs", "");
@@ -575,29 +575,29 @@ void FormGeneralPreferences::DirectoryPage(IlwisSettings& settings)
 	sLogDir = settings.sValue("LogDir",sDef);
 	sDefaultStartUpDir = settings.sValue("DefaultStartUpDir", sDef);
 
-	FormEntry *fe = new FieldBrowseDir(page, SPFCToolDir, SPFCToolDir, &sToolDir);
+	FormEntry *fe = new FieldBrowseDir(page, TR("&Tool Directories"), TR("&Tool Directories"), &sToolDir);
 	fe->SetWidth(100);
-	fe = new FieldBrowseDir(page, SPFCScriptDir, SPFCScriptDir, &sScriptDirs);
+	fe = new FieldBrowseDir(page, TR("&Script Directories"), TR("&Script Directories"), &sScriptDirs);
 	fe->SetWidth(100);
-	fe = new FieldBrowseDir(page, SPFCLogDir, SPFCLogDir, &sLogDir);
+	fe = new FieldBrowseDir(page, TR("Directory for &Log file"), TR("Directory for &Log file"), &sLogDir);
 	fe->SetWidth(100);
-	fe = new FieldBrowseDir(page, SPFCStartDir, SPFCStartDir, &sDefaultStartUpDir);
+	fe = new FieldBrowseDir(page, TR("&Default Startup dir"), TR("&Default Startup dir"), &sDefaultStartUpDir);
 	fe->SetWidth(100);
 }
 
 
 void FormGeneralPreferences::AdvancedPage()
 {
-	FieldPage *page = GetPage(SPFAdvanced);	
+	FieldPage *page = GetPage(TR("Advanced"));	
 
   FieldGroup *grp = new FieldGroup(page);
-	new StaticText(grp, SPFCRestoreDefaults, true);
-	new StaticText(grp, SPFCRemoveRegKeys1);
-	new StaticText(grp, SPFCRemoveRegKeys2);
+	new StaticText(grp, TR("Restore Defaults"), true);
+	new StaticText(grp, TR("To remove user-specific registry keys upon exit"));
+	new StaticText(grp, TR("i.e. all default settings will be restored upon exit."));
 	grp->SetBevelStyle(FormEntry::bsLOWERED);	
 	new FieldBlank(page, 0.25);	
-	new PushButton(page, SPFUiRestoreDefaults, (NotifyProc)&FormGeneralPreferences::RestoreDefaults);
-	new CheckBox(page,SPFUiDebugMode,&debugLog);
+	new PushButton(page, TR("Restore defaults"), (NotifyProc)&FormGeneralPreferences::RestoreDefaults);
+	new CheckBox(page,TR("Use debug logging"),&debugLog);
 }
 
 int FormGeneralPreferences::RestoreDefaults(Event *)
@@ -605,7 +605,7 @@ int FormGeneralPreferences::RestoreDefaults(Event *)
 	if ( IlwisSettings::fDeletePossible() )
 		IlwWinApp()->fRemoveUserRegistry = true;
 	else
-		MessageBox(SPFCNoDeletePossible.scVal(), SPFCError.scVal(), MB_OK | MB_ICONEXCLAMATION);
+		MessageBox(TR("Delete not possible, Administrator rights required").c_str(), TR("Error").c_str(), MB_OK | MB_ICONEXCLAMATION);
 	return 1;
 }
 
@@ -628,67 +628,67 @@ void FormGeneralPreferences::DisplayOptionsPages(IlwisSettings& settings)
 	}
 	dispChecks.resize(dispOptions.size());
 
-	FieldPage *page = GetPage(SPFMapWindowDisPlayOpt);
+	FieldPage *page = GetPage(TR("Map Window|Display"));
 	dispOptions[IlwisWinApp::dosALL] = false;
-//	dispChecks[IlwisWinApp::dosALL] = new CheckBox(page, SPFCDispOptAll, &dispOptions[IlwisWinApp::dosALL]);
+//	dispChecks[IlwisWinApp::dosALL] = new CheckBox(page, TR("&Show display options when opening a map"), &dispOptions[IlwisWinApp::dosALL]);
 
 	new FieldBlank(page);
-	new StaticText(page, SPFCBoolColors, true);
+	new StaticText(page, TR("Default Colors for domain Bool"), true);
 	FieldGroup* fg = new FieldGroup(page);
 	clrYes = Color(0,176,20);
 	clrYes = settings.clrGetRGBColor("YesColor", clrYes);
-	new FieldColor(fg, SPFCYes, &clrYes);
+	new FieldColor(fg, TR("&True"), &clrYes);
 	clrNo = Color(168,168,168);
 	clrNo = settings.clrGetRGBColor("NoColor", clrNo);
-	new FieldColor(fg, SPFCNo, &clrNo);
+	new FieldColor(fg, TR("&False"), &clrNo);
 	fg->SetIndependentPos();
 
-	page = GetPage(SPFMapWindowDisplayOptRM);
-	new StaticText(page, SPFCShowDisOp, true);
-	dispChecks[IlwisWinApp::dosRAS]			= new CheckBox(page, SPFCAllRas, &dispOptions[IlwisWinApp::dosRAS]);
-	dispChecks[IlwisWinApp::dosRASIMG]		= new CheckBox(page, SPFCDomImg, &dispOptions[IlwisWinApp::dosRASIMG]);
+	page = GetPage(TR("Map Window|Display|Raster Maps"));
+	new StaticText(page, TR("Show Display Options dialog box for:"), true);
+	dispChecks[IlwisWinApp::dosRAS]			= new CheckBox(page, TR("&All Raster maps"), &dispOptions[IlwisWinApp::dosRAS]);
+	dispChecks[IlwisWinApp::dosRASIMG]		= new CheckBox(page, TR("using domain &Image"), &dispOptions[IlwisWinApp::dosRASIMG]);
 	dispChecks[IlwisWinApp::dosRASIMG]->psn->iBndLeft += 15;
-	dispChecks[IlwisWinApp::dosRASVAL]		= new CheckBox(page, SPFCDomVal, &dispOptions[IlwisWinApp::dosRASVAL]);
-	dispChecks[IlwisWinApp::dosRASSORT]	= new CheckBox(page, SPFCDomSort, &dispOptions[IlwisWinApp::dosRASSORT]);
-	dispChecks[IlwisWinApp::dosRASBOOL]	= new CheckBox(page, SPFCDomBool, &dispOptions[IlwisWinApp::dosRASBOOL]);
-	dispChecks[IlwisWinApp::dosRASOTHER] = new CheckBox(page, SPFCDomOther, &dispOptions[IlwisWinApp::dosRASOTHER]);
+	dispChecks[IlwisWinApp::dosRASVAL]		= new CheckBox(page, TR("using domain &Value"), &dispOptions[IlwisWinApp::dosRASVAL]);
+	dispChecks[IlwisWinApp::dosRASSORT]	= new CheckBox(page, TR("using domain &Class/ID"), &dispOptions[IlwisWinApp::dosRASSORT]);
+	dispChecks[IlwisWinApp::dosRASBOOL]	= new CheckBox(page, TR("using domain &Bool"), &dispOptions[IlwisWinApp::dosRASBOOL]);
+	dispChecks[IlwisWinApp::dosRASOTHER] = new CheckBox(page, TR("using &other domains"), &dispOptions[IlwisWinApp::dosRASOTHER]);
 
 	dispChecks[IlwisWinApp::dosRAS]->SetCallBack((NotifyProc)&FormGeneralPreferences::ShowMapDispOptionsChecks);
 	for ( int i=IlwisWinApp::dosRASIMG; i<= IlwisWinApp::dosRASOTHER; ++i)
 		dispChecks[i]->SetCallBack((NotifyProc)&FormGeneralPreferences::ShowDomainDispOptionsChecks);
 
-	StaticText * stPyramidFiles = new StaticText(page, SPFPyramidFiles, true);
+	StaticText * stPyramidFiles = new StaticText(page, TR("Pyramid Layers"), true);
 	stPyramidFiles->psn->iBndLeft -= 15;
 	fPyrCreateFirstDisplay = settings.fValue("CreatePyrWhenFirstDisplayed", false);
-	new CheckBox(page, SPFPyrsWhenFirstDisp, &fPyrCreateFirstDisplay);	
+	new CheckBox(page, TR("Create Pyramid Layers by default"), &fPyrCreateFirstDisplay);	
 
-	page = GetPage(SPFMapWindowDisplayOptSM);
-	new StaticText(page, SPFCShowDisOp, true);
-	dispChecks[IlwisWinApp::dosSEG] = new CheckBox(page, SPFCAllSeg, &dispOptions[IlwisWinApp::dosSEG]);
-	dispChecks[IlwisWinApp::dosSEGVAL]		= new CheckBox(page, SPFCDomVal, &dispOptions[IlwisWinApp::dosSEGVAL]);
+	page = GetPage(TR("Map Window|Display|Segment Maps"));
+	new StaticText(page, TR("Show Display Options dialog box for:"), true);
+	dispChecks[IlwisWinApp::dosSEG] = new CheckBox(page, TR("&All Segment maps"), &dispOptions[IlwisWinApp::dosSEG]);
+	dispChecks[IlwisWinApp::dosSEGVAL]		= new CheckBox(page, TR("using domain &Value"), &dispOptions[IlwisWinApp::dosSEGVAL]);
 	dispChecks[IlwisWinApp::dosSEGVAL]->psn->iBndLeft += 15;
-	dispChecks[IlwisWinApp::dosSEGSORT]	= new CheckBox(page, SPFCDomSort, &dispOptions[IlwisWinApp::dosSEGSORT]);
-	dispChecks[IlwisWinApp::dosSEGBOOL]	= new CheckBox(page, SPFCDomBool, &dispOptions[IlwisWinApp::dosSEGBOOL]);
-	dispChecks[IlwisWinApp::dosSEGOTHER] = new CheckBox(page, SPFCDomOther, &dispOptions[IlwisWinApp::dosSEGOTHER]);
+	dispChecks[IlwisWinApp::dosSEGSORT]	= new CheckBox(page, TR("using domain &Class/ID"), &dispOptions[IlwisWinApp::dosSEGSORT]);
+	dispChecks[IlwisWinApp::dosSEGBOOL]	= new CheckBox(page, TR("using domain &Bool"), &dispOptions[IlwisWinApp::dosSEGBOOL]);
+	dispChecks[IlwisWinApp::dosSEGOTHER] = new CheckBox(page, TR("using &other domains"), &dispOptions[IlwisWinApp::dosSEGOTHER]);
 
 
-	page = GetPage(SPFMapWindowDisplayOptPM);
-	new StaticText(page, SPFCShowDisOp, true);
-	dispChecks[IlwisWinApp::dosPOL] = new CheckBox(page, SPFCAllPol, &dispOptions[IlwisWinApp::dosPOL]);
-	dispChecks[IlwisWinApp::dosPOLVAL]		= new CheckBox(page, SPFCDomVal, &dispOptions[IlwisWinApp::dosPOLVAL]);
+	page = GetPage(TR("Map Window|Display|Polygon Maps"));
+	new StaticText(page, TR("Show Display Options dialog box for:"), true);
+	dispChecks[IlwisWinApp::dosPOL] = new CheckBox(page, TR("&All Polygon maps"), &dispOptions[IlwisWinApp::dosPOL]);
+	dispChecks[IlwisWinApp::dosPOLVAL]		= new CheckBox(page, TR("using domain &Value"), &dispOptions[IlwisWinApp::dosPOLVAL]);
 	dispChecks[IlwisWinApp::dosPOLVAL]->psn->iBndLeft += 15;
-	dispChecks[IlwisWinApp::dosPOLSORT]	= new CheckBox(page, SPFCDomSort, &dispOptions[IlwisWinApp::dosPOLSORT]);
-	dispChecks[IlwisWinApp::dosPOLBOOL]	= new CheckBox(page, SPFCDomBool, &dispOptions[IlwisWinApp::dosPOLBOOL]);
-	dispChecks[IlwisWinApp::dosPOLOTHER] = new CheckBox(page, SPFCDomOther, &dispOptions[IlwisWinApp::dosPOLOTHER]);
+	dispChecks[IlwisWinApp::dosPOLSORT]	= new CheckBox(page, TR("using domain &Class/ID"), &dispOptions[IlwisWinApp::dosPOLSORT]);
+	dispChecks[IlwisWinApp::dosPOLBOOL]	= new CheckBox(page, TR("using domain &Bool"), &dispOptions[IlwisWinApp::dosPOLBOOL]);
+	dispChecks[IlwisWinApp::dosPOLOTHER] = new CheckBox(page, TR("using &other domains"), &dispOptions[IlwisWinApp::dosPOLOTHER]);
 
-	page = GetPage(SPFMapWindowDisplayOptPoM);
-	new StaticText(page, SPFCShowDisOp, true);
-	dispChecks[IlwisWinApp::dosPNT] = new CheckBox(page, SPFCAllPoint, &dispOptions[IlwisWinApp::dosPNT]);
-	dispChecks[IlwisWinApp::dosPNTVAL]		= new CheckBox(page, SPFCDomVal, &dispOptions[IlwisWinApp::dosPNTVAL]);
+	page = GetPage(TR("Map Window|Display|Point Maps"));
+	new StaticText(page, TR("Show Display Options dialog box for:"), true);
+	dispChecks[IlwisWinApp::dosPNT] = new CheckBox(page, TR("&All Point maps"), &dispOptions[IlwisWinApp::dosPNT]);
+	dispChecks[IlwisWinApp::dosPNTVAL]		= new CheckBox(page, TR("using domain &Value"), &dispOptions[IlwisWinApp::dosPNTVAL]);
 	dispChecks[IlwisWinApp::dosPNTVAL]->psn->iBndLeft += 15;
-	dispChecks[IlwisWinApp::dosPNTSORT]	= new CheckBox(page, SPFCDomSort, &dispOptions[IlwisWinApp::dosPNTSORT]);
-	dispChecks[IlwisWinApp::dosPNTBOOL]	= new CheckBox(page, SPFCDomBool, &dispOptions[IlwisWinApp::dosPNTBOOL]);
-	dispChecks[IlwisWinApp::dosPNTOTHER] = new CheckBox(page, SPFCDomOther, &dispOptions[IlwisWinApp::dosPNTOTHER]);
+	dispChecks[IlwisWinApp::dosPNTSORT]	= new CheckBox(page, TR("using domain &Class/ID"), &dispOptions[IlwisWinApp::dosPNTSORT]);
+	dispChecks[IlwisWinApp::dosPNTBOOL]	= new CheckBox(page, TR("using domain &Bool"), &dispOptions[IlwisWinApp::dosPNTBOOL]);
+	dispChecks[IlwisWinApp::dosPNTOTHER] = new CheckBox(page, TR("using &other domains"), &dispOptions[IlwisWinApp::dosPNTOTHER]);
 
 	for (int i=IlwisWinApp::dosRAS; i < IlwisWinApp::dosEND; ++i)
 		dispChecks[i]->SetCallBack((NotifyProc)&FormGeneralPreferences::ShowDomainDispOptionsChecks);

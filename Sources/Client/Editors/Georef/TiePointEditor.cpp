@@ -77,7 +77,7 @@ END_MESSAGE_MAP()
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 
 TiePointEditor::TiePointEditor(MapPaneView* mpvw)
 : Editor(mpvw)

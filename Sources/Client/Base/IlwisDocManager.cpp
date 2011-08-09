@@ -136,7 +136,7 @@ BOOL IlwisDocManager::DoPromptFileName(CString& fileName, UINT nIDSTitle, DWORD 
 	dlgFile.m_ofn.lpstrTitle = title;
 	dlgFile.m_ofn.lpstrFile = fileName.GetBuffer(_MAX_PATH);
 	String sDir = IlwWinApp()->sGetCurDir();
-	dlgFile.m_ofn.lpstrInitialDir = sDir.scVal();
+	dlgFile.m_ofn.lpstrInitialDir = sDir.c_str();
 
 	int nResult = dlgFile.DoModal();
 	fileName.ReleaseBuffer();

@@ -103,13 +103,13 @@ void CoordSysProjectionView::create()
 		fDefineCrdMinMax = false;
 		*cMin = *cMax = crdUNDEF;
 	}
-	cbDefineCrdMinMax = new CheckBox(root, SCSUiDefineCoordBounds, &fDefineCrdMinMax);
+	cbDefineCrdMinMax = new CheckBox(root, TR("Define Coordinate Boundaries"), &fDefineCrdMinMax);
 	cbDefineCrdMinMax->SetIndependentPos();
 	cbDefineCrdMinMax->SetCallBack((NotifyProc)&CoordSysView::CrdMinMaxCallBack);
-	fldCrdMin = new FieldCoord(cbDefineCrdMinMax, SCSUiMinXY, cMin);
+	fldCrdMin = new FieldCoord(cbDefineCrdMinMax, TR("&Min X, Y"), cMin);
 	fldCrdMin->Align(cbDefineCrdMinMax, AL_UNDER);
 	fldCrdMin->SetCallBack((NotifyProc)&CoordSysView::CallBack);
-	fldCrdMax = new FieldCoord(cbDefineCrdMinMax, SCSUiMaxXY, cMax);
+	fldCrdMax = new FieldCoord(cbDefineCrdMinMax, TR("&Max X, Y"), cMax);
 	fldCrdMax->Align(fldCrdMin, AL_UNDER);
 	fldCrdMax->SetCallBack((NotifyProc)&CoordSysView::CallBack);
 	
@@ -124,11 +124,11 @@ void CoordSysProjectionView::create()
 		fgButtons = new FieldGroup(root, true);
 		fgButtons->Align(fldCrdMax, AL_UNDER);
 		PushButton *pbPrj, *pbEll, *pbDat;
-		pbPrj = new PushButton(fgButtons, SCSUiProj, (NotifyProc)&CoordSysProjectionView::ButtonProjection);
+		pbPrj = new PushButton(fgButtons, TR("&Projection"), (NotifyProc)&CoordSysProjectionView::ButtonProjection);
 		if (csprj->prj.fValid() && csprj->prj->fEllipsoid()) {
-			pbEll = new PushButton(fgButtons, SCSUiEll, (NotifyProc)&CoordSysViaLatLonView::ButtonEllipsoid);
+			pbEll = new PushButton(fgButtons, TR("&Ellipsoid"), (NotifyProc)&CoordSysViaLatLonView::ButtonEllipsoid);
 			pbEll->Align(pbPrj, AL_AFTER);
-			pbDat = new PushButton(fgButtons, SCSUiDatum, (NotifyProc)&CoordSysViaLatLonView::ButtonDatum);
+			pbDat = new PushButton(fgButtons, TR("&Datum"), (NotifyProc)&CoordSysViaLatLonView::ButtonDatum);
 			pbDat->Align(pbEll, AL_AFTER);
 		}
 	}
@@ -284,7 +284,7 @@ void CoordSysProjectionView::ShowProjInfo()
   FieldGroup* fg = new FieldGroup(root, true);
   Projection prj = csprj->prj;
   String sPrjName = prj->sName();
-  String s = SCSInfProj;
+  String s = TR("Projection: ");
   s &= sPrjName;
   StaticText* st = new StaticText(fg, s);
 
@@ -292,7 +292,7 @@ void CoordSysProjectionView::ShowProjInfo()
   char sBuf[100];
   String sPath = IlwWinApp()->Context()->sIlwDir();
   sPath &= "\\Resources\\Def\\projs.def";
-  GetPrivateProfileString("Projections", sPrjName.scVal(), "", sBuf, iSize, sPath.scVal());
+  GetPrivateProfileString("Projections", sPrjName.c_str(), "", sBuf, iSize, sPath.c_str());
   if (*sBuf) 
 	{
     st->psn->SetBound(0,0,0,0);
@@ -306,9 +306,9 @@ int CoordSysProjectionView::ButtonProjection(Event*)
 	{
   public:
     ChangePrjForm(CWnd* w, String* sPrj) 
-    : FormWithDest(w, SCSTitleSelectProj)
+    : FormWithDest(w, TR("Select Projection"))
     {
-      new StaticText(root, SCSUiProj);
+      new StaticText(root, TR("&Projection"));
       new FieldProjection(root, sPrj);
       SetMenHelpTopic("ilwismen\\select_projection.htm");
       create();
@@ -320,7 +320,7 @@ int CoordSysProjectionView::ButtonProjection(Event*)
 	ISTRUE(fINotEqual, csprj, (CoordSystemProjection*) NULL);
 
 	Projection prj = csprj->prj;
-  String sPrj = SCSUnknownPrj;
+  String sPrj = TR("Unknown");
   if (prj.fValid())
     sPrj = prj->sName();
   ChangePrjForm frm(this, &sPrj);
@@ -380,7 +380,7 @@ int CoordSysProjectionView::ZoneCallBack(Event*)
 	iZoneNr = fiZone->iVal();
 	if (iZoneNr <= 0 || iZoneNr > iMaxZone)
 	{
-		String sRem(SPRJErrWrongZoneNumber_i.sVal(), iMaxZone);
+		String sRem(TR("Zone number must be in the range [1 .. %li]").c_str(), iMaxZone);
 			//String sRem = prj->sInvalidZone();
 		stRemark->SetVal(sRem);
 		DisableOK();

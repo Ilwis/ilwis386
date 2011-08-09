@@ -54,7 +54,7 @@
 #include "Client\ilwis.h" // for IlwWinApp
 #include "Headers\messages.h" // for ILWM_EXECUTE
 #include "Headers\Hs\Mainwind.hs" // for ErrAttrTable
-#include "Headers\Hs\Table.hs" // for STBErrCreateColumnNoMemory
+#include "Headers\Hs\Table.hs" // for TR("Could not create column (not enough memory)")
 #include "Headers\Hs\smce.hs"
 #include "Headers\Htp\Ilwismen.htp"
 
@@ -367,7 +367,7 @@ class StandardizationValueForm: public FormWithDest
 {
 public:
 	StandardizationValueForm(CWnd* wPar, StandardizationValue::eStdValueMethodTP* eMethod, StandardizationValue::eCostBenefitTP* eCostBenefit, RangeReal rrMinMax, int iNrAlternatives, SmceFunction ** ppFunction)
-	: FormWithDest(wPar, SSmcUiStdValueInput)
+	: FormWithDest(wPar, TR("Standardize Value Input"))
 	, vrPrecision(ValueRange(-LONG_MAX+1, LONG_MAX, 0.001))
 	, m_rrMinMax(rrMinMax)
 	, m_ppFunction(ppFunction)
@@ -386,37 +386,37 @@ public:
 		{
 			String sAlternativesRemark ("");
 			if (iNrAlternatives > 1)
-				sAlternativesRemark = SSmcUiOverAllAlternatives;
-			StaticText* stMin = new StaticText(fgLeft, String(SSmcUiTheMinimumIs_S_L.scVal(), sAlternativesRemark, rrMinMax.rLo()));
-			StaticText* stMax = new StaticText(fgLeft, String(SSmcUiTheMaximumIs_S_L.scVal(), sAlternativesRemark, rrMinMax.rHi()));
+				sAlternativesRemark = TR("over all alternatives ");
+			StaticText* stMin = new StaticText(fgLeft, String(TR("The minimum %Sis %lg").c_str(), sAlternativesRemark, rrMinMax.rLo()));
+			StaticText* stMax = new StaticText(fgLeft, String(TR("The maximum %Sis %lg").c_str(), sAlternativesRemark, rrMinMax.rHi()));
 			stMin->SetIndependentPos();
 			stMax->SetIndependentPos();
 		}
 		else
 		{
-			StaticText* stOne = new StaticText(fgLeft, SSmcErrProblemCalcMinMax);
-			StaticText* stTwo = new StaticText(fgLeft, SSmcErrAvoidMaxInterval);
+			StaticText* stOne = new StaticText(fgLeft, TR("Problem calculating min/max values."));
+			StaticText* stTwo = new StaticText(fgLeft, TR("Maximum and Interval standardization not recommended."));
 			stOne->SetIndependentPos();
 			stTwo->SetIndependentPos();
 		}
 
 
 		// Cost/Benefit consideration
-		rgCostBenefit = new RadioGroup(fgLeft, SSmcUiConsiderAs, &m_iCostBenefit);
+		rgCostBenefit = new RadioGroup(fgLeft, TR("Consider as:"), &m_iCostBenefit);
 		rgCostBenefit->SetCallBack((NotifyProc)&StandardizationValueForm::CallBackCostBenefitChanged);
 		// rgCostBenefit->Align(fs, AL_UNDER);
-		new RadioButton(rgCostBenefit, SSmcUiBenefit);
-		new RadioButton(rgCostBenefit, SSmcUiCost);
+		new RadioButton(rgCostBenefit, TR("Benefit"));
+		new RadioButton(rgCostBenefit, TR("Cost"));
 		new RadioButton(rgCostBenefit, "Combination");
 
 
 
-		StaticText * stMethodLabel = new StaticText(fgLeft, SSmcUiMethod);
+		StaticText * stMethodLabel = new StaticText(fgLeft, TR("Method"));
 		rgStdValueMethod = new RadioGroup(fgLeft, "", &m_iMethod);
 		rgStdValueMethod->SetCallBack((NotifyProc)&StandardizationValueForm::CallBackStdMethodChanged);
-		rbMaximum = new RadioButton(rgStdValueMethod, SSmcUiMaximum);
-		rbInterval = new RadioButton(rgStdValueMethod, SSmcUiInterval);
-		rbGoal = new RadioButton(rgStdValueMethod, SSmcUiGoal);
+		rbMaximum = new RadioButton(rgStdValueMethod, TR("Maximum"));
+		rbInterval = new RadioButton(rgStdValueMethod, TR("Interval"));
+		rbGoal = new RadioButton(rgStdValueMethod, TR("Goal"));
 		rbConvex = new RadioButton(rgStdValueMethod, "Convex");
 		rbConcave = new RadioButton(rgStdValueMethod, "Concave");
 		rbUShape_up = new RadioButton(rgStdValueMethod, "U-Shape, up");
@@ -924,7 +924,7 @@ StdValueMethod* StdValueMaximum::copy(Effect* peOwner)
 
 String StdValueMaximum::sDescription()
 {
-	return SSmcUiMaximum;
+	return TR("Maximum");
 }
 
 String StdValueMaximum::sStandardize(String sData)
@@ -988,7 +988,7 @@ StdValueMethod* StdValueInterval::copy(Effect* peOwner)
 
 String StdValueInterval::sDescription()
 {
-	return SSmcUiInterval;
+	return TR("Interval");
 }
 
 String StdValueInterval::sStandardize(String sData)
@@ -1084,8 +1084,8 @@ void StdValueGeneral::WriteElements(const char* sSection, const ElementContainer
 			ObjectInfo::WriteElement(sSection, "MaxY", en, m_pFunction->vAnchors()[m_pFunction->vAnchors().size() - 1].Y);
 			for (unsigned int i = 1; i < m_pFunction->vAnchors().size() - 1; ++i)
 			{
-				ObjectInfo::WriteElement(sSection, String("Anchor%dX", i).scVal(), en, m_pFunction->vAnchors()[i].X);
-				ObjectInfo::WriteElement(sSection, String("Anchor%dY", i).scVal(), en, m_pFunction->vAnchors()[i].Y);
+				ObjectInfo::WriteElement(sSection, String("Anchor%dX", i).c_str(), en, m_pFunction->vAnchors()[i].X);
+				ObjectInfo::WriteElement(sSection, String("Anchor%dY", i).c_str(), en, m_pFunction->vAnchors()[i].Y);
 			}
 		}
 	}
@@ -1125,8 +1125,8 @@ void StdValueGeneral::ReadElements(const char* sSection, const ElementContainer&
 			ObjectInfo::ReadElement(sSection, "MaxY", en, vAnchors[vAnchors.size() - 1].Y);
 			for (unsigned int i = 1; i < m_pFunction->vAnchors().size() - 1; ++i)
 			{
-				ObjectInfo::ReadElement(sSection, String("Anchor%dX", i).scVal(), en, vAnchors[i].X);
-				ObjectInfo::ReadElement(sSection, String("Anchor%dY", i).scVal(), en, vAnchors[i].Y);
+				ObjectInfo::ReadElement(sSection, String("Anchor%dX", i).c_str(), en, vAnchors[i].X);
+				ObjectInfo::ReadElement(sSection, String("Anchor%dY", i).c_str(), en, vAnchors[i].Y);
 			}
 			m_pFunction->SetAnchors(vAnchors);
 		}
@@ -1173,27 +1173,27 @@ class StandardizationValueConstraintForm: public FormWithDest
 {
 public:
 	StandardizationValueConstraintForm(CWnd* wPar, RangeReal rrMinMax, double* rMin, double* rMax, bool* fMin, bool* fMax, int iNrAlternatives)
-	: FormWithDest(wPar, SSmcUiStdValueInput)
+	: FormWithDest(wPar, TR("Standardize Value Input"))
 	, vrPrecision(ValueRange(-LONG_MAX+1, LONG_MAX, 0.001))
 	{
 		if (rrMinMax.fValid())
 		{
 			String sAlternativesRemark("");
 			if (iNrAlternatives > 1)
-				sAlternativesRemark = SSmcUiOverAllAlternatives;
-			StaticText* stMin = new StaticText(root, String(SSmcUiTheMinimumIs_S_L.scVal(), sAlternativesRemark, rrMinMax.rLo()));
-			StaticText* stMax = new StaticText(root, String(SSmcUiTheMaximumIs_S_L.scVal(), sAlternativesRemark, rrMinMax.rHi()));
+				sAlternativesRemark = TR("over all alternatives ");
+			StaticText* stMin = new StaticText(root, String(TR("The minimum %Sis %lg").c_str(), sAlternativesRemark, rrMinMax.rLo()));
+			StaticText* stMax = new StaticText(root, String(TR("The maximum %Sis %lg").c_str(), sAlternativesRemark, rrMinMax.rHi()));
 			stMin->SetIndependentPos();
 			stMax->SetIndependentPos();
 		}
-		StaticText* stTitle = new StaticText(root, SSmcUiPassConditions);
+		StaticText* stTitle = new StaticText(root, TR("Pass on the following condition(s):"));
 		stTitle->SetIndependentPos();
-		cbUseMinimum = new CheckBox(root, SSmcUiMinimum, fMin);
+		cbUseMinimum = new CheckBox(root, TR("Minimum"), fMin);
 		cbUseMinimum->SetCallBack((NotifyProc)&StandardizationValueConstraintForm::CallBackChange);
 		frMinimum = new FieldReal(cbUseMinimum, "", rMin, vrPrecision);
 		frMinimum->Align(cbUseMinimum, AL_AFTER);
 		frMinimum->SetCallBack((NotifyProc)&StandardizationValueConstraintForm::CallBackChange);
-		cbUseMaximum = new CheckBox(root, SSmcUiMaximum, fMax);
+		cbUseMaximum = new CheckBox(root, TR("Maximum"), fMax);
 		cbUseMaximum->Align(cbUseMinimum, AL_UNDER);
 		cbUseMaximum->SetCallBack((NotifyProc)&StandardizationValueConstraintForm::CallBackChange);
 		frMaximum = new FieldReal(cbUseMaximum, "", rMax, vrPrecision);
@@ -1219,17 +1219,17 @@ public:
 		if (!(fMin || fMax))
 			sDescription = "<>0";
 		else if (fMin && !fMax)
-			sDescription = String("%S=%lg", SSmcUiMin, rMin);
+			sDescription = String("%S=%lg", TR("Min"), rMin);
 		else if (!fMin && fMax)
-			sDescription = String("%S=%lg", SSmcUiMax, rMax);
+			sDescription = String("%S=%lg", TR("Max"), rMax);
 		else // (fMin && fMax)
 		{
 			if (rMin <= rMax)
-				sDescription = String("%S [%lg,%lg]", SSmcUiInside, rMin, rMax);
+				sDescription = String("%S [%lg,%lg]", TR("Inside"), rMin, rMax);
 			else // rMax < rMin
-				sDescription = String("%S (%lg, %lg)", SSmcUiOutside, rMax, rMin);
+				sDescription = String("%S (%lg, %lg)", TR("Outside"), rMax, rMin);
 		}
-		frDescription->SetVal(String(SSmcUiResultingCondition_S.scVal(), sDescription));
+		frDescription->SetVal(String(TR("Resulting condition: %S").c_str(), sDescription));
 
 		return 0;
 	}
@@ -1329,15 +1329,15 @@ String StandardizationValueConstraint::sDescription()
 	if (!(fMin || fMax))
 		return "<>0";
 	else if (fMin && !fMax)
-		return String("%S=%lg", SSmcUiMin, rMin);
+		return String("%S=%lg", TR("Min"), rMin);
 	else if (!fMin && fMax)
-		return String("%S=%lg", SSmcUiMax, rMax);
+		return String("%S=%lg", TR("Max"), rMax);
 	else // (fMin && fMax)
 	{
 		if (rMin <= rMax)
-			return String("%S [%lg,%lg]", SSmcUiInside, rMin, rMax);
+			return String("%S [%lg,%lg]", TR("Inside"), rMin, rMax);
 		else // rMax < rMin
-			return String("%S (%lg, %lg)", SSmcUiOutside, rMax, rMin);
+			return String("%S (%lg, %lg)", TR("Outside"), rMax, rMin);
 	}
 }
 
@@ -1379,7 +1379,7 @@ int StandardizationClass::iCostBenefit()
 
 String StandardizationClass::sDescription()
 {
-	return String(SSmcUiAttributeEquals_S.scVal(), sAttribCol);
+	return String(TR("Attr='%S'").c_str(), sAttribCol);
 }
 
 String StandardizationClass::sStandardize(String sData)
@@ -1442,7 +1442,7 @@ public:
 		if ( sCol != "")
 		{
 			sCol &= ".clm";
-			fld->ose->SelectString(-1, sCol.scVal());
+			fld->ose->SelectString(-1, sCol.c_str());
 		}
 		else
 			fld->ose->SetCurSel(0);
@@ -1453,7 +1453,7 @@ class StandardizationClassForm: public FormWithDest
 {
 public:
 	StandardizationClassForm(CWnd* wPar, AttributeFileName afnMap, String *sAttrTable, String* sAttribCol, Evaluation** ppWeights, bool fIsConstraint)
-	: FormWithDest(wPar, SSmcUiStdClassInput)
+	: FormWithDest(wPar, TR("Standardize Class Input"))
 	, m_fInitDone(false)
 	, m_sAttrTable(sAttrTable)
 	, m_sAttribCol(sAttribCol)
@@ -1496,7 +1496,7 @@ public:
 				m_ds = colMapAttr->dm()->pdsrt();
 		}
 
-		new StaticText(root, SSmcUiAttributeTable);
+		new StaticText(root, TR("Attribute Table:"));
 		FormEntry* feFirstElement;
 		if (m_sAttrTable->length() == 0)
 		{
@@ -1511,21 +1511,21 @@ public:
 			m_fAttrTableLinkReadOnly = true;
 		}
 		feFirstElement->SetIndependentPos();
-		PushButton* pbOpenTbl = new PushButton(root, SSmcUiEdit, (NotifyProc)&StandardizationClassForm::CallBackOpenAttrib);
+		PushButton* pbOpenTbl = new PushButton(root, TR("Edit"), (NotifyProc)&StandardizationClassForm::CallBackOpenAttrib);
 		pbOpenTbl->Align(feFirstElement, AL_AFTER);
 		pbOpenTbl->SetIndependentPos();
 		FieldBlank* fbDummy1 = new FieldBlank(root, 0.5);
 		fbDummy1->Align(feFirstElement, AL_UNDER);
-		PushButton* pbRefresh = new PushButton(root, SSmcUiRefetchAttrs, (NotifyProc)&StandardizationClassForm::CallBackUpdateColumns);
+		PushButton* pbRefresh = new PushButton(root, TR("Refresh Attribute List"), (NotifyProc)&StandardizationClassForm::CallBackUpdateColumns);
 		pbRefresh->Align(fbDummy1, AL_UNDER);
 		FieldBlank* fbDummy2 = new FieldBlank(root, 0.3);
 		fbDummy2->Align(pbRefresh, AL_UNDER);
 
 		StaticText* stAttrLabel;
 		if (fIsConstraint)
-			stAttrLabel = new StaticText(root, SSmcUiBooleanAttribute);
+			stAttrLabel = new StaticText(root, TR("Boolean Attribute:"));
 		else
-			stAttrLabel = new StaticText(root, SSmcUiAttributeBetween);
+			stAttrLabel = new StaticText(root, TR("Attribute between 0 and 1:"));
 		stAttrLabel->Align(fbDummy2, AL_UNDER);
 
 		if (fIsConstraint)
@@ -1542,7 +1542,7 @@ public:
 		if (!fIsConstraint && m_ds && m_ds->iNettoSize() <= 15) // max. 15 classes .. could be improved but needs more time
 		{
 			m_fWizardAvailable = true;
-			PushButton* pbApplyWizard = new PushButton(root, SSmcUiApplyWizard, (NotifyProc)&StandardizationClassForm::CallBackApplyWizard);
+			PushButton* pbApplyWizard = new PushButton(root, TR("Apply Weigh Wizard"), (NotifyProc)&StandardizationClassForm::CallBackApplyWizard);
 			pbApplyWizard->Align(pbCreateColumn, AL_AFTER);
 		}
 
@@ -1577,7 +1577,7 @@ public:
 		{
 		public:
 			NewColumnForm(CWnd* parent, bool fIsConstraint)
-			: FormWithDest(parent, SSmcUiAddAttribute)
+			: FormWithDest(parent, TR("Add Attribute"))
 			,	vr(0, 1, 0.01)
 			{
 				if (fIsConstraint)
@@ -1591,7 +1591,7 @@ public:
 					sDomName = "value.dom";
 					sDescr = "standardized values";
 				}
-				new FieldString(root, SSmcUiAttributeName, &sColName, Domain(), false);
+				new FieldString(root, TR("&Attribute Name"), &sColName, Domain(), false);
 				create();
 			}
 			String sColName;
@@ -1627,7 +1627,7 @@ public:
 				}
 				catch (CMemoryException* err)
 				{
-					AfxMessageBox(STBErrCreateColumnNoMemory.scVal());
+					AfxMessageBox(TR("Could not create column (not enough memory)").c_str());
 					err->Delete();
 				}
 				if (!col.fValid()) // failed to create .. also if it already exists
@@ -1696,7 +1696,7 @@ public:
 		{
 			long iKey = m_ds->iKey(i);
 			String s = m_ds->sValueByRaw(iKey,0);
-			liClasses.push_back(s.scVal());
+			liClasses.push_back(s.c_str());
 			long iKeyInMapDomain = iKey; // default
 			if (m_ds != m_dsMap)
 			{
@@ -1715,7 +1715,7 @@ public:
 					++j;
 				}
 			}
-			mpClassWeights[s.scVal()]= colStd->rValue(iKeyInMapDomain);
+			mpClassWeights[s.c_str()]= colStd->rValue(iKeyInMapDomain);
 		}
 
 		// Call the "Evaluation wizard" - let the user alter mpClassWeights
@@ -1725,7 +1725,7 @@ public:
 			if (action == Evaluation::iOTHERMETHOD)
 			{
 				// user wants different method ..
-				Evaluation* pNewWeights = Evaluation::create(wnd(), &liClasses, &mpClassWeights, *m_ppWeights, Evaluation::iMAXISONE, SSmcUiPriorityValues);
+				Evaluation* pNewWeights = Evaluation::create(wnd(), &liClasses, &mpClassWeights, *m_ppWeights, Evaluation::iMAXISONE, TR("Priority Values"));
 				if (pNewWeights != *m_ppWeights)
 				{
 					delete *m_ppWeights;
@@ -1738,7 +1738,7 @@ public:
 		}
 		else
 		{
-			*m_ppWeights = Evaluation::create(wnd(), &liClasses, &mpClassWeights, 0, Evaluation::iMAXISONE, SSmcUiPriorityValues);
+			*m_ppWeights = Evaluation::create(wnd(), &liClasses, &mpClassWeights, 0, Evaluation::iMAXISONE, TR("Priority Values"));
 			if (*m_ppWeights)
 				fModified = true;
 		}
@@ -1755,7 +1755,7 @@ public:
 				if (m_ds != m_dsMap)
 					s = colMapAttr->sValue(iKey, 0); // do the "join": s should come from colMapAttr
 				
-				colStd->PutVal(iKey, mpClassWeights[s.scVal()]);
+				colStd->PutVal(iKey, mpClassWeights[s.c_str()]);
 			}
 			tblAttribute->Updated();
 		}
@@ -1835,7 +1835,7 @@ public:
 				if (m_dsMap->fEqual(*tblAttribute->dm().ptr()))
 					m_dsMap->SetAttributeTable(tblAttribute);
 				else
-					MessageBox(SMSErrAttrSameAsDomain.scVal(), SMSErrError.scVal());
+					MessageBox(TR("Attribute Table should have same domain!").c_str(), TR("Error").c_str());
 			}
 		}  
 		return 0;
@@ -1908,7 +1908,7 @@ void StandardizationClass::ShowForm()
 						m_fStandardized = true;
 				}
 				else
-					MessageBox(wnd->GetSafeHwnd(), String(SSmcErrAttrNotFound_S_S.scVal(), sAttribCol, fnAttribTbl.sFileExt()).scVal(), SSmcErrProblemWithAttribute.scVal(), MB_OK);
+					MessageBox(wnd->GetSafeHwnd(), String(TR("Attribute '%S' not found in attribute table '%S'.").c_str(), sAttribCol, fnAttribTbl.sFileExt()).c_str(), TR("Problem with selected attribute").c_str(), MB_OK);
 			}
 		}
 		catch (ErrorObject& err)
@@ -1916,7 +1916,7 @@ void StandardizationClass::ShowForm()
 			err.Show();
 		}
 		if (!m_fStandardized) // no success
-			MessageBox(wnd->GetSafeHwnd(), SSmcErrPleaseSelectAttr.scVal(), SSmcErrProblemWithAttribute.scVal(), MB_OK);
+			MessageBox(wnd->GetSafeHwnd(), TR("Please select an attribute with values in the range [0,1].").c_str(), TR("Problem with selected attribute").c_str(), MB_OK);
 
 		SetModifiedFlag();
 	}
@@ -1938,7 +1938,7 @@ void StandardizationClass::ReadElements(const char* sSection, const ElementConta
 	Standardization::ReadElements(sSection, en);
 
 	ObjectInfo::ReadElement(sSection, "AttribCol", en, sAttribCol);
-	pWeights = Evaluation::CreateFromElementContainer(sSection, en, Evaluation::iMAXISONE, SSmcUiPriorityValues);
+	pWeights = Evaluation::CreateFromElementContainer(sSection, en, Evaluation::iMAXISONE, TR("Priority Values"));
 }
 
 //////////////////////////////////////////////////////////////////
@@ -1992,10 +1992,10 @@ class StandardizationBoolForm: public FormWithDest
 {
 public:
 	StandardizationBoolForm(CWnd* wPar, ValueRange m_ValueRange, double* rTrue, double* rFalse)
-	: FormWithDest(wPar, SSmcUiStdBoolInput)
+	: FormWithDest(wPar, TR("Standardize Boolean Input"))
 	{
-		FieldReal* frTrue = new FieldReal(root, SSmcUiValueForTrue, rTrue, m_ValueRange);
-		FieldReal* frFalse = new FieldReal(root, SSmcUiValueForFalse, rFalse, m_ValueRange);
+		FieldReal* frTrue = new FieldReal(root, TR("Value for TRUE"), rTrue, m_ValueRange);
+		FieldReal* frFalse = new FieldReal(root, TR("Value for FALSE"), rFalse, m_ValueRange);
 
 		SetMenHelpTopic("ilwismen\\smce_window_standardize_boolean.htm");
 
@@ -2090,9 +2090,9 @@ int StandardizationBoolConstraint::iCostBenefit()
 String StandardizationBoolConstraint::sDescription()
 {
 	if (m_eCostBenefit == StandardizationValue::iBENEFIT)
-		return SSmcUiTrue;
+		return TR("True");
 	else // cost
-		return SSmcUiFalse;
+		return TR("False");
 }
 
 String StandardizationBoolConstraint::sStandardize(String sData)
@@ -2107,11 +2107,11 @@ class StandardizationBoolConstraintForm: public FormWithDest
 {
 public:
 	StandardizationBoolConstraintForm(CWnd* wPar, int* iCostBenefit)
-	: FormWithDest(wPar, SSmcUiStdBoolInput)
+	: FormWithDest(wPar, TR("Standardize Boolean Input"))
 	{
 		RadioGroup* rgCostBenefit = new RadioGroup(root, "", iCostBenefit);
-		RadioButton* rbBenefit = new RadioButton(rgCostBenefit, SSmcUiTruePasses);
-		RadioButton* rbCost = new RadioButton(rgCostBenefit, SSmcUiFalsePasses);
+		RadioButton* rbBenefit = new RadioButton(rgCostBenefit, TR("TRUE passes, FALSE will be blocked"));
+		RadioButton* rbCost = new RadioButton(rgCostBenefit, TR("FALSE passes, TRUE will be blocked"));
 		
 		SetMenHelpTopic("ilwismen\\smce_window_standardize_boolean.htm");
 		

@@ -132,7 +132,7 @@ String SelectedFMOItem::sItem() const
 
 FormAggregateValueMulti::FormAggregateValueMulti(CWnd* parent, vector<AttributeFileName>* vfnInputMaps, 
 						vector< AggregateValueStruct >* vrOutputV, const dmType fd, const String& operation) :
-FormBaseDialog(parent, ((fd&dmCLASS)==dmCLASS)?SAFTitleAggrValueSliced:SAFTitleAggrValueS, true, false, true),		
+FormBaseDialog(parent, ((fd&dmCLASS)==dmCLASS)?TR("Aggregate Values Sliced"):TR("Aggregate Values"), true, false, true),		
 	arrInput(0),
 	vrOutputValues(vrOutputV),
 	m_fd(fd),
@@ -148,7 +148,7 @@ FormBaseDialog(parent, ((fd&dmCLASS)==dmCLASS)?SAFTitleAggrValueSliced:SAFTitleA
 }
 
 FormAggregateValueMulti::FormAggregateValueMulti(CWnd* parent)
-: 	FormBaseDialog(parent, SAFTitleAggrValue, true, false, true),
+: 	FormBaseDialog(parent, TR("Aggregate Value Finder"), true, false, true),
   arrInput(0),
   vrOutputValues(0),
 	m_fd((dmType)(dmVALUE|dmCLASS)),
@@ -172,13 +172,13 @@ void FormAggregateValueMulti::create()
 	FieldGroup *fgrp = new FieldGroup(root);
 	FieldGroup *fgrp2 = new FieldGroup(fgrp);
 
-	favf = new FieldAggregateValueFunc(fgrp2, SAFUiOperation, &sOperation, m_fd);
+	favf = new FieldAggregateValueFunc(fgrp2, TR("&Operation"), &sOperation, m_fd);
 	favf->SetCallBack((NotifyProc)(&FormAggregateValueMulti::HandleOperationChanges));
 	fgrp->SetCallBack((NotifyProc)(&FormAggregateValueMulti::Init));
 	new FieldBlank(fgrp2, 0.2);
 
 	ObjectExtensionLister *obj = new MapListerDomainType(dmVALUE | dmBOOL | dmIMAGE, true);
-	fld = new FieldMultiAggregateValueSelect(fgrp2, SAFUiInputMaps, obj, *arrInput, &ts);
+	fld = new FieldMultiAggregateValueSelect(fgrp2, TR("Input maps"), obj, *arrInput, &ts);
 	fld->SetSelectionFunction(this, (NotifyProc)&FormAggregateValueMulti::Selection);
 
 	FieldBlank *fb = new FieldBlank(fgrp2, 0.2);
@@ -200,7 +200,7 @@ void FormAggregateValueMulti::create()
 
 	if ( arrInput->size() == 0)
 	{
-		fldCol = new FieldColumnWithNone(fgrp2, SAFUiAttributeColumns, Table(), &sAttributeColumn, dmVALUE | dmBOOL);
+		fldCol = new FieldColumnWithNone(fgrp2, TR("&Attribute column"), Table(), &sAttributeColumn, dmVALUE | dmBOOL);
 		fldCol->Align(fld, AL_UNDER);
 		fldCol->SetCallBack((NotifyProc)&FormAggregateValueMulti::HandleAttributeColumnChanges);
 		SetAdditionalBlock(fgrp2, fldCol, true);		
@@ -208,7 +208,7 @@ void FormAggregateValueMulti::create()
 	else
 		SetAdditionalBlock(fgrp2, fgrp2, true);		
 
-	pbCalc = new PushButton(root, SAFUiCalculate, (NotifyProc) (&FormAggregateValueMulti::CalculateAggregateValues));
+	pbCalc = new PushButton(root, TR("&Calculate"), (NotifyProc) (&FormAggregateValueMulti::CalculateAggregateValues));
 	fld->SetCallBack((NotifyProc)(&FormAggregateValueMulti::HandleChangesInMultiSelect));
 	pbCalc->Align(rgBoolean, AL_UNDER);
 

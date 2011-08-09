@@ -67,7 +67,7 @@ BEGIN_MESSAGE_MAP(SmceMapWindow, MapWindow)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 
 #define add(ID) menPopup.AppendMenu(MF_STRING, ID, sMen(ID)); 
 #define addBreak menPopup.AppendMenu(MF_SEPARATOR);
@@ -222,7 +222,7 @@ afx_msg int SmceMapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	DockControlBar(&barScale,AFX_IDW_DOCKBAR_TOP,rect);
 
 	ltb.Create(this, 124, CSize(150,200));
-	ltb.SetWindowText(SMWTitleLayerManagement.scVal());
+	ltb.SetWindowText(TR("Layer Management").c_str());
 	ltb.EnableDocking(CBRS_ALIGN_LEFT|CBRS_ALIGN_RIGHT);
 	ltb.view = new LayerTreeView;
 	ltb.view->Create(NULL, NULL, AFX_WS_DEFAULT_VIEW|TVS_HASLINES|TVS_LINESATROOT|TVS_HASBUTTONS,
@@ -234,7 +234,7 @@ afx_msg int SmceMapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	gbOverview.EnableDocking(CBRS_ALIGN_LEFT|CBRS_ALIGN_RIGHT);
 	gbOverview.view = new OverviewMapPaneView;
 	gbOverview.view->Create(NULL,NULL,AFX_WS_DEFAULT_VIEW,CRect(0,0,0,0),&gbOverview,100.0);
-	gbOverview.SetWindowText(SMWTitleOverviewWindow.scVal());
+	gbOverview.SetWindowText(TR("Overview window").c_str());
 
 	if (0 == pFirstView) 
 		pFirstView = dynamic_cast<CView*>(GetDescendantWindow(AFX_IDW_PANE_FIRST, TRUE));
@@ -260,7 +260,7 @@ void SmceMapWindow::OnSegmentToPolygon()
 		sMostRecentPointMap = " " + sMostRecentPointMap;
 	String sParms("%S%S", sMostRecentSegmentMap, sMostRecentPointMap);
 
-	//new FormPolygonMapFromSegment(this, sParms.scVal());
+	//new FormPolygonMapFromSegment(this, sParms.c_str());
 	IlwWinApp()->ExecuteUI(sParms, this);
 }
 
@@ -274,7 +274,7 @@ void SmceMapWindow::OnPolygonToRaster()
 		sGeoRef = " " + m_grf->fnObj.sRelativeQuoted();
 	String sParms("%S%S", sMostRecentPolygonMap, sGeoRef);
 
-//	new FormRasPolygon(this, sParms.scVal());
+//	new FormRasPolygon(this, sParms.c_str());
 	IlwWinApp()->ExecuteUI(sParms, this);
 }
 
@@ -286,7 +286,7 @@ FileName SmceMapWindow::fnGetMostRecentMap(String sExt)
 	bool fFound = false;
 	CFileFind finder;
 	String strPattern(sDir + "\\*" + sExt);
-	BOOL bWorking = finder.FindFile(strPattern.scVal());
+	BOOL bWorking = finder.FindFile(strPattern.c_str());
 	while (bWorking)
 	{
 		bWorking = finder.FindNextFile();

@@ -72,15 +72,15 @@ void DomainUniqueIDFormView::CreateForm()
 	iWidth = dm->iWidth();
 	if (dm->fReadOnly())
 	{
-		String s = String("%S: %S", SDMUiPrefix, sPrefix);
+		String s = String("%S: %S", TR("&Prefix"), sPrefix);
 		new StaticText(root, s);
-		s = String("%S: %i", SDMUiWidth, iWidth);
+		s = String("%S: %i", TR("&Width"), iWidth);
 		new StaticText(root, s);
 	}
 	else
 	{
-		new FieldString(root, SDMUiPrefix, &sPrefix);
-		new FieldInt(root, SDMUiWidth, &iWidth);
+		new FieldString(root, TR("&Prefix"), &sPrefix);
+		new FieldInt(root, TR("&Width"), &iWidth);
 	}
 }
 

@@ -326,7 +326,7 @@ void RepresentationClassLB::DrawItem(LPDRAWITEMSTRUCT dis)
 	}
 
 	CFont *oldFont = dcLoc.SelectObject(const_cast<CFont *>(ILWISAPP->GetFont(IlwisWinApp::sfFORM)));
-	dcLoc.TextOut( rectItem.left + 5, rectItem.top + iYShift , str.scVal(), str.size());
+	dcLoc.TextOut( rectItem.left + 5, rectItem.top + iYShift , str.c_str(), str.size());
 	dcLoc.SelectObject(oldFont);
 	dcLoc.SetBkMode(iOldM);
 
@@ -573,7 +573,7 @@ void RepresentationClassLB::OnMouseMove( UINT nFlags, CPoint point )
 			FrameWindow *frm = (FrameWindow *)view->GetParentFrame();
 			long iRaw = pdsrt->iKey(iIndex + 1);
 			String sDesc = _rpr->dm()->pdsrt()->sDescriptionByRaw(iRaw);
-			frm->status->SetWindowText(sDesc.scVal());
+			frm->status->SetWindowText(sDesc.c_str());
 		}
 	}
 }
@@ -601,7 +601,7 @@ void RepresentationClassLB::Refresh()
 		for (int i = 1; i <= ds->iNettoSize(); ++i) 
 		{
 			String s = ds->sValue(i, 0);
-			AddString(s.scVal());
+			AddString(s.c_str());
 		}
 	}
 	else {
@@ -612,7 +612,7 @@ void RepresentationClassLB::Refresh()
 			iMax = dp->iColors();
 		for (int i = 0; i < iMax; ++i) {
 			String s("%i",i);
-			AddString(s.scVal());
+			AddString(s.c_str());
 		}
 	}  
 	SetColumnWidth(iColWidth);

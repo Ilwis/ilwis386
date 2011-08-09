@@ -99,7 +99,7 @@ void RadioButton::create()
 {
   zPoint pntFld = zPoint(psn->iPosX, psn->iPosY);
   zDimension dimFld = zDimension(psn->iMinWidth , psn->iMinHeight);
-  rb = new RadBut(this, _frm->wnd(), CRect(pntFld, dimFld), 0, sQuest.scVal(), Id());
+  rb = new RadBut(this, _frm->wnd(), CRect(pntFld, dimFld), 0, sQuest.c_str(), Id());
   rb->SetFont(_frm->fnt);                                         
   if (_npChanged != 0)
     rb->setNotify(_cb, _npChanged, Notify(BN_CLICKED));
@@ -132,7 +132,7 @@ void RadioButton::show(int sw)
 			rb->SetWindowText("");
 		}
 		else {
-			rb->SetWindowText(sQuest.scVal());
+			rb->SetWindowText(sQuest.c_str());
 			rb->ShowWindow(SW_SHOW);
 		}
   if (fVal() && (sw == SW_SHOW))
@@ -457,7 +457,7 @@ void CheckBox::show(int sw)
 			cbx->SetWindowText("");
 		}
 		else {
-			cbx->SetWindowText(sQuest.scVal());
+			cbx->SetWindowText(sQuest.c_str());
 			cbx->ShowWindow(SW_SHOW);
 		}
   if (sw == SW_HIDE || !fVal())
@@ -604,7 +604,7 @@ void Check3Box::show(int sw)
 			cbx->SetWindowText("");
 		}
 		else {
-			cbx->SetWindowText(sQuest.scVal());
+			cbx->SetWindowText(sQuest.c_str());
 			cbx->ShowWindow(SW_SHOW);
 		}
 }
@@ -725,7 +725,7 @@ void PushButtonSimple::show(int sw)
 			pb->SetWindowText("");
 		}
 		else {
-			pb->SetWindowText(sQuest.scVal());
+			pb->SetWindowText(sQuest.c_str());
 			pb->ShowWindow(SW_SHOW);
 		}
 }
@@ -740,7 +740,7 @@ void PushButtonSimple::SetFocus()
 void PushButtonSimple::SetText(const String& sTxt)
 {
 	if ( pb )
-		pb->SetWindowText(sTxt.scVal());
+		pb->SetWindowText(sTxt.c_str());
 }
 
 PushButton::PushButton(FormEntry* parent, const String& sQuestion, NotifyProc np, FormEntry* _alternativeCBHandler)
@@ -844,7 +844,7 @@ String FlatIconButton::sGetText()
 void FlatIconButton::SetText(const String& sTxt)
 {
 	if ( pb )
-		m_sCaption = sTxt.scVal();
+		m_sCaption = sTxt.c_str();
 }
 
 void FlatIconButton::SetFocus()
@@ -912,7 +912,7 @@ void OwnButtonSimple::create()
   pb = new ZappButton(this, _frm->wnd(), CRect(pntFld, dimFld), WS_TABSTOP | BS_ICON, 0, Id());
   if (sIcon.length()) 
   {
-    zIcon ic(sIcon.scVal());
+    zIcon ic(sIcon.c_str());
     pb->SetIcon(ic);
     
   }	
@@ -957,7 +957,7 @@ void OwnButtonSimple::DrawItem(DRAWITEMSTRUCT* dis)
 
   bool fPress = (dis->itemState & ODS_SELECTED);
   if (sIcon.length()) {
-    zIcon ic(sIcon.scVal());
+    zIcon ic(sIcon.c_str());
     DrawIcon(dis->hDC, rect.left, rect.top-1, ic);
   }
   rect.right  -= 1;

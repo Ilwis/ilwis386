@@ -64,17 +64,17 @@ class CollisionQuestionForm : public FormBaseDialog
 				icon = IlwWinApp()->ilLarge.ExtractIcon(iImage);
 
 			String sName = fnObj1.sRelative();
-			String sMessage(SMSMsgFileExists_S.scVal() , sName);
+			String sMessage(TR("This folder already contains a file named %S").c_str() , sName);
 			new StaticText ( root, sMessage);			
 			new FieldBlank(root);
-			sMessage = String(SMSMsgFileReplaceQuestion);
+			sMessage = String(TR("Would you like to replace the existing file ?"));
 			new StaticText ( root, sMessage);			
 			
 			FlatIconButton *fib = new FlatIconButton(root, icon, sName, (NotifyProc)&CollisionQuestionForm::PressButton1, fnObj1, false, FlatIconButton::fbsNORMAL | FlatIconButton::fbsNOCONTEXTMENU);
 			GetAttributes(fnObj1, sMessage);
 			new StaticText ( root, sMessage);
 			new FieldBlank(root);
-			new StaticText(root, SMSMsgWithThisOne);
+			new StaticText(root, TR("With this one ?"));
 
 			sName = fnObj2.sRelative();	
 
@@ -90,32 +90,32 @@ class CollisionQuestionForm : public FormBaseDialog
 
 			new FieldBlank(fg);
 			PushButton *pb2;
-			PushButton *pb1 = new PushButton(root, SMSYes, (NotifyProc)&CollisionQuestionForm::Yes); 
+			PushButton *pb1 = new PushButton(root, TR("Yes"), (NotifyProc)&CollisionQuestionForm::Yes); 
 			pb1->SetIndependentPos();
 			if ( fYesAllPresent )
 			{
-				pb2 = new PushButton(root, SMSYesToAll, (NotifyProc)&CollisionQuestionForm::YesToAll); 
+				pb2 = new PushButton(root, TR("Yes to All"), (NotifyProc)&CollisionQuestionForm::YesToAll); 
 				pb2->Align(pb1, AL_AFTER);
 				pb2->SetIndependentPos();
 			}
 			else
 				pb2 = pb1; // for alignment
-			pb1 = new PushButton(root, SMSNo, (NotifyProc)&CollisionQuestionForm::No); 
+			pb1 = new PushButton(root, TR("No"), (NotifyProc)&CollisionQuestionForm::No); 
 			pb1->Align(pb2, AL_AFTER);
 			pb1->SetIndependentPos();
-			pb2 = new PushButton(root, SMSCancel, (NotifyProc)&CollisionQuestionForm::Cancel); 
+			pb2 = new PushButton(root, TR("Cancel"), (NotifyProc)&CollisionQuestionForm::Cancel); 
 			pb2->Align(pb1, AL_AFTER);
 //			fg->Align(ic, AL_AFTER);
 			create();
 		}
     void GetAttributes(const FileName& fn, String& sMessage)
 		{
-			CFile file(fn.sFullPath().scVal(), CFile::shareDenyWrite);
+			CFile file(fn.sFullPath().c_str(), CFile::shareDenyWrite);
 			CFileStatus status;
 			file.GetStatus(status);
 			String sTime(status.m_mtime.Format("%c"));
 			String sSize("%d", status.m_size);
-			sMessage = String(SMSMsgSimpleInfo_S.scVal(), sSize, sTime);
+			sMessage = String(TR("%S bytes, modified: %S").c_str(), sSize, sTime);
 		}			
 
     int Yes(Event *)
@@ -181,20 +181,20 @@ class MultipleObjectQuestionForm : public FormBaseDialog
 
 			new FieldBlank(fg);
 			PushButton *pb2;
-			PushButton *pb1 = new PushButton(root, SMSYes, (NotifyProc)&MultipleObjectQuestionForm::Yes); 
+			PushButton *pb1 = new PushButton(root, TR("Yes"), (NotifyProc)&MultipleObjectQuestionForm::Yes); 
 			pb1->SetIndependentPos();
 			if ( fYesAllPresent )
 			{
-				pb2 = new PushButton(root, SMSYesToAll, (NotifyProc)&MultipleObjectQuestionForm::YesToAll); 
+				pb2 = new PushButton(root, TR("Yes to All"), (NotifyProc)&MultipleObjectQuestionForm::YesToAll); 
 				pb2->Align(pb1, AL_AFTER);
 				pb2->SetIndependentPos();
 			}
 			else
 				pb2 = pb1; // for alignment
-			pb1 = new PushButton(root, SMSNo, (NotifyProc)&MultipleObjectQuestionForm::No); 
+			pb1 = new PushButton(root, TR("No"), (NotifyProc)&MultipleObjectQuestionForm::No); 
 			pb1->Align(pb2, AL_AFTER);
 			pb1->SetIndependentPos();
-			pb2 = new PushButton(root, SMSCancel, (NotifyProc)&MultipleObjectQuestionForm::Cancel); 
+			pb2 = new PushButton(root, TR("Cancel"), (NotifyProc)&MultipleObjectQuestionForm::Cancel); 
 			pb2->Align(pb1, AL_AFTER);
 			fg->Align(ic, AL_AFTER);
 			create();
@@ -300,7 +300,7 @@ bool ObjectCopierUI::GatherFiles(ObjectStructure& osStruct, bool fBreakDep, bool
 	{
 		osStruct.RetrieveEntireCollection( choiceCopyEntireContainer == chYESTOALL || choiceCopyEntireContainer == chANY ? true : false);
 		
-		if ( trq.fText(String(SMWMsgCollectingFiles_S.scVal(), (*file).sRelative())))
+		if ( trq.fText(String(TR("Collecting files of: %S").c_str(), (*file).sRelative())))
 			return false;
 
 		
@@ -315,13 +315,13 @@ bool ObjectCopierUI::GatherFiles(ObjectStructure& osStruct, bool fBreakDep, bool
 				String sType, sMessage;
 				ObjectInfo::ReadElement("Ilwis", "Type", obj->fnObj, sType);
 				if (fCIStrEqual(sType, "DataBaseCollection"))  // Cannot copy database collections
-					sMessage = SMSErrorCannotCopyDBCollections;
+					sMessage = TR("Cannot copy database collections to another directory");
 				if (IlwisObject::iotObjectType(obj->fnObj) == IlwisObject::iotTABLE)
 					if (obj->fUseAs())   // cannot copy UseAs tables
-						sMessage = SMSErrorCannotCopyUseAsTables;
+						sMessage = TR("Cannot copy use-as tables to another directory");
 				if (!sMessage.empty())
 				{
-						IlwWinApp()->GetMainWnd()->MessageBox(sMessage.scVal(), SMSTitleCopyFiles.scVal(), MB_OK | MB_ICONEXCLAMATION );
+						IlwWinApp()->GetMainWnd()->MessageBox(sMessage.c_str(), TR("Copy files").c_str(), MB_OK | MB_ICONEXCLAMATION );
 						continue;
 				}
 			}
@@ -332,8 +332,8 @@ bool ObjectCopierUI::GatherFiles(ObjectStructure& osStruct, bool fBreakDep, bool
 				bool fBreak = osStruct.fBreakDependencies();
 				if ( chBreakDependencies == chANY)
 				{
-					String sMessage(SMSMsgBreakDep_S.scVal(), obj->fnObj.sRelative(false));
-					int iRet = IlwWinApp()->GetMainWnd()->MessageBox(sMessage.scVal(), SMSTitleBreakDep.scVal(), MB_YESNOCANCEL | MB_ICONQUESTION );
+					String sMessage(TR("Break Dependencies of %S").c_str(), obj->fnObj.sRelative(false));
+					int iRet = IlwWinApp()->GetMainWnd()->MessageBox(sMessage.c_str(), TR("Break Dependencies").c_str(), MB_YESNOCANCEL | MB_ICONQUESTION );
 					if ( iRet == IDCANCEL)
 						return false;
 					fBreak = iRet == IDNO ? false : true;
@@ -348,8 +348,8 @@ bool ObjectCopierUI::GatherFiles(ObjectStructure& osStruct, bool fBreakDep, bool
 				if (choiceCopyEntireContainer != chYESTOALL || choiceCopyEntireContainer == chANY)
 				{
 					String sObjType;
-					String sMessage(SMSMsgCopyEntireColl_S.scVal(), obj->sType(),  obj->fnObj.sFile);
-					String sTitle(SMSTitleCopyEntireContainer_S.scVal(), obj->sType()); 
+					String sMessage(TR("Copy entire %S '%S', (object plus contents)?").c_str(), obj->sType(),  obj->fnObj.sFile);
+					String sTitle(TR("Copy Entire %S").c_str(), obj->sType()); 
 					MultipleObjectQuestionForm frm(wndParent, sTitle, sMessage, choiceCopyEntireContainer, iCountContainers > 1);
 				}
 				if ( choiceCopyEntireContainer == chNO )
@@ -393,8 +393,8 @@ bool ObjectCopierUI::GatherFiles(ObjectStructure& osStruct, bool fBreakDep, bool
 
 	if (chCopyLinkedTables == chANY && osStruct.fFindLinkedTables(fnFiles))
 	{
-		String sMessage(SMSDomainAttribLink);
-		int iRet =  IlwWinApp()->GetMainWnd()->MessageBox(sMessage.scVal(), SMSTitleCopyFiles.scVal(), MB_YESNOCANCEL | MB_ICONQUESTION );
+		String sMessage(TR("Copy attribute tables linked to domains?"));
+		int iRet =  IlwWinApp()->GetMainWnd()->MessageBox(sMessage.c_str(), TR("Copy files").c_str(), MB_YESNOCANCEL | MB_ICONQUESTION );
 		if ( iRet == IDCANCEL )
 			return false;
 		
@@ -429,7 +429,7 @@ void ObjectCopierUI::Copy(bool fBreakDependencies, bool fQuiet)
 			wndParent = IlwWinApp()->GetMainWnd();
 
 		if (!dirDestination.fExist())
-			throw ErrorObject(String(SMSErrorDirectoryDoesNotExist.scVal(), dirDestination.sFullPath()));
+			throw ErrorObject(String(TR("Directory, %S does not exist").c_str(), dirDestination.sFullPath()));
 
 		bool fCopyInSameDir = false;
 		if ( fCIStrEqual(dirDestination.sFullPath(), fnFiles[0].sPath()))
@@ -454,7 +454,7 @@ void ObjectCopierUI::Copy(bool fBreakDependencies, bool fQuiet)
 			char sTemp2[100];
 			sprintf(sTemp1, "%I64u", iSpaceAvailable);
 			sprintf(sTemp2, "%I64u", iSpaceRequired);
-			String sMessage(SMSErrorDiskFull_S.scVal(), sTemp2, sTemp1);
+			String sMessage(TR("Not Enough Disk space.\nRequired is %s bytes, Available are %s bytes").c_str(), sTemp2, sTemp1);
 			throw ErrorObject(sMessage);
 		}
 
@@ -463,7 +463,7 @@ void ObjectCopierUI::Copy(bool fBreakDependencies, bool fQuiet)
 		if (osStruct.fFilesContainRelevantPathInfo(dirDestination))
 		{
 			chChoice choice = chANY;
-			MultipleObjectQuestionForm frm(IlwWinApp()->GetMainWnd(), SMSTitleCopyFiles, SMSMsgAbsolutePaths, choice, false);
+			MultipleObjectQuestionForm frm(IlwWinApp()->GetMainWnd(), TR("Copy files"), TR("Some objects used by the objects to be copied are not located in the initial directory.\nShould these files also be copied?"), choice, false);
 			if ( choice == chNO) 
 				fUseAbsolutePaths = true;
 			if ( choice == chCANCEL )
@@ -554,8 +554,8 @@ bool ObjectCopierUI::ResolveCollisions(ObjectStructure& osStruct, bool fQuiet)
 		if ( fnExist != FileName() )
 		{
 			CFileStatus fstat1, fstat2;
-			CFile::GetStatus((*cur).sFullPath().scVal(), fstat1);
-			CFile::GetStatus(fnExist.sFullPath().scVal(), fstat2);
+			CFile::GetStatus((*cur).sFullPath().c_str(), fstat1);
+			CFile::GetStatus(fnExist.sFullPath().c_str(), fstat2);
 			// are we talking about the same file ??, if so do not copy
 			if (fstat1.m_mtime == fstat2.m_mtime && fstat1.m_size == fstat2.m_size  )
 			{
@@ -564,7 +564,7 @@ bool ObjectCopierUI::ResolveCollisions(ObjectStructure& osStruct, bool fQuiet)
 			}
 			if ( choice != chYESTOALL )
 			{
-				CollisionQuestionForm frm(wndParent, SMSTitleOverwrite, *cur, fnExist, choice, true);
+				CollisionQuestionForm frm(wndParent, TR("Overwrite existing files"), *cur, fnExist, choice, true);
 			}
 			if ( choice == chCANCEL )
 				return false;
@@ -578,8 +578,8 @@ bool ObjectCopierUI::ResolveCollisions(ObjectStructure& osStruct, bool fQuiet)
 			{
 				if ( choiceRO != chYESTOALL )
 				{
-					String sMessage(SMSMsgCopyToReadOnly_S.scVal(), (*cur).sFile + (*cur).sExt);
-					MultipleObjectQuestionForm frm(wndParent, SMSTitleOverwrite, sMessage, choiceRO, true);
+					String sMessage(TR("The file %S that will be overwritten is read-only.\n Should it be overwritten?").c_str(), (*cur).sFile + (*cur).sExt);
+					MultipleObjectQuestionForm frm(wndParent, TR("Overwrite existing files"), sMessage, choiceRO, true);
 				}
 				if ( choiceRO == chNO )
 					osStruct.RemoveFile(*cur, FileName(), ObjectStructure::rmFILEONLY);
@@ -630,9 +630,9 @@ class NewNameQuestionForm : public FormWithDest
 			sType = obj->sType();
 			
 		sNewName = fnObjOld->sFile;
-		String sQuestion = String(SMSUiAlreadyExists_S.scVal(), sType, fnExist.sFileExt());
+		String sQuestion = String(TR("The %S %S already exists.").c_str(), sType, fnExist.sFileExt());
 		new StaticText(root, sQuestion);
-		FieldString *fsN = new FieldString(root, SMSUiNewName2 , &sNewName);
+		FieldString *fsN = new FieldString(root, TR("New name") , &sNewName);
 		fsN->SetIndependentPos();
 		fsN->SetWidth(100);
 
@@ -688,7 +688,7 @@ bool ObjectCopierUI::SetNewNames(ObjectStructure& osStruct, bool fUseAbsolutePat
 					FileName fnObjOld = entry->fnDestination; 
 					entry->fnDestination.sFile = String("Copy of %S", entry->fnDestination.sFile);
 					FileName fnObjNew = entry->fnDestination;
-					NewNameQuestionForm frm(wndParent, SMSTitleCopyFiles, entry->fnFile, fnObjOld, &fnObjNew);
+					NewNameQuestionForm frm(wndParent, TR("Copy files"), entry->fnFile, fnObjOld, &fnObjNew);
 					if (frm.fOkClicked())
 					{
 						if (!fnObjNew.fExist())
@@ -699,7 +699,7 @@ bool ObjectCopierUI::SetNewNames(ObjectStructure& osStruct, bool fUseAbsolutePat
 						else
 						{
 							fAsk = true;
-							wndParent->MessageBox( String(SMSMsgFileAlreadyExist_S.scVal(), fnObjNew.sRelative()).scVal(), SMSErrError.scVal(), MB_OK | MB_ICONERROR);
+							wndParent->MessageBox( String(TR("%S already exists in destination directory").c_str(), fnObjNew.sRelative()).c_str(), TR("Error").c_str(), MB_OK | MB_ICONERROR);
 						}							
 					}
 					else

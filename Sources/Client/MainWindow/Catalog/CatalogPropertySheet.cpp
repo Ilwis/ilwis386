@@ -52,7 +52,7 @@
 #include "Client\MainWindow\Catalog\CatalogPropertySheet.h"
 
 CatalogPropertySheet::CatalogPropertySheet(Catalog *cat) :
-	CPropertySheet(SMSTitleCustomizeCatalog.scVal()),
+	CPropertySheet(TR("Customize Catalog").c_str()),
   catalog(cat)
 {}
 
@@ -88,7 +88,7 @@ void CatItemSelector::create()
 	{
 		String sExt = (ane[i].sExt != "drive" && ane[i].sExt != "directory") ? ane[i].sExt : String(".%S",ane[i].sExt);
     String s("%S%S", ane[i].sName, sExt);
-    int ind = lb->AddString(s.scVal());
+    int ind = lb->AddString(s.c_str());
 		lb->SetItemData(ind, (LPARAM)&ane[i]);
 		lb->SetSel(ind, ane[i].fShow);
   }
@@ -118,24 +118,24 @@ String CatItemSelector::sName(int id)
 }
 
 SimpleQueryPropPage::SimpleQueryPropPage(CatalogPropertySheet& sh, vector<NameExt>& ane) :
-	FormBasePropertyPage(SMSUiSimpleQuery.scVal()),
+	FormBasePropertyPage(TR("Selection").c_str()),
   sheet(sh)
 {
 	new CatItemSelector(root, ane);
 
 	Catalog* cat = sheet.catalog;
 	fAll = cat->fIncludeSystemObjects();
-	new CheckBox(root, SMSUiInclSysObj, &fAll);  
+	new CheckBox(root, TR("&Include System Objects"), &fAll);  
 
 	fHideCollCont = !cat->fShowContainerContents();
 	CatalogDocument* doc = cat->GetDocument();
 	FileName fn(doc->sName());
 	if (!(IlwisObject::iotObjectType(fn) == IlwisObject::iotOBJECTCOLLECTION))
-		new CheckBox(root, SMSUiIncludeCollectionContents, &fHideCollCont);
+		new CheckBox(root, TR("&Hide objects which are member of an Object Collection"), &fHideCollCont);
 
 	new FieldBlank(root, 0.2);
 	sExtensions = cat->sGetExternalFileExtensions();
-	FieldString *fs = new FieldString(root, SMSUiExtFileExtensions, &sExtensions);
+	FieldString *fs = new FieldString(root, TR("&External file extensions"), &sExtensions);
 	fs->SetIndependentPos();
 
   SetMenHelpTopic("ilwismen\\customize_catalog_selection.htm");
@@ -197,7 +197,7 @@ void VisibleColSelector::create()
     String s("%S", cat->sGetColumnName(i));
     if ("" == s)
       break;
-    int ind = lb->AddString(s.scVal());
+    int ind = lb->AddString(s.c_str());
 //		lb->SetItemData(ind, (LPARAM)&ane[i]);
 		lb->SetSel(ind, fVisibleColumns[i]);
   }
@@ -222,7 +222,7 @@ String VisibleColSelector::sName(int id)
 
 
 VisibleColumnsPropPage::VisibleColumnsPropPage(Catalog *c) :
-	FormBasePropertyPage(SMSUiVisibleColumns.scVal()),
+	FormBasePropertyPage(TR("Details View").c_str()),
 	cat(c),
 	fShowGrid(c->fGrid())
 {
@@ -230,13 +230,13 @@ VisibleColumnsPropPage::VisibleColumnsPropPage(Catalog *c) :
 	for ( int  i = 0; i < Catalog::ctALL; ++i)
 		fVisibleColumns[i] = cat->fColVisible(i);
 
-	new StaticText(root, SMSUiColumns);
+	new StaticText(root, TR("Visible Columns"));
 	new VisibleColSelector(root, cat, fVisibleColumns);
 
 	FieldBlank *fb = new FieldBlank(root);
-	new CheckBox(root, SMSGrid, &fShowGrid);
-	PushButton *pb1 = new PushButton(root, SMSUiSaveTemplate, (NotifyProc)&VisibleColumnsPropPage::SetDefault);
-	PushButton *pb2 = new PushButton(root, SMSUiRestoreDefault, (NotifyProc)&VisibleColumnsPropPage::RestoreDefault);
+	new CheckBox(root, TR("Grid visible"), &fShowGrid);
+	PushButton *pb1 = new PushButton(root, TR("Use current settings for new Catalogs"), (NotifyProc)&VisibleColumnsPropPage::SetDefault);
+	PushButton *pb2 = new PushButton(root, TR("Use default settings for new Catalogs"), (NotifyProc)&VisibleColumnsPropPage::RestoreDefault);
 	pb2->Align(pb1, AL_AFTER);
   SetMenHelpTopic("ilwismen\\customize_catalog_details_view.htm");
 	create();
@@ -274,11 +274,11 @@ FormEntry* VisibleColumnsPropPage::CheckData()
 
 //-------------------------------------------------------------
 QueryPropPage::QueryPropPage(CatalogPropertySheet& sh, map<String, String>& mpQ) :
-	FormBasePropertyPage(SMSUiQuery.scVal()),
+	FormBasePropertyPage(TR("Query").c_str()),
   mpQueries(mpQ),
 	sheet(sh)
 {
-	StaticText *st = new StaticText(root, SMSUiQueries);
+	StaticText *st = new StaticText(root, TR("Catalog Queries"));
 	st->SetCallBack((NotifyProc)&QueryPropPage::FillAll);
   fld = new FieldOneSelectTextOnly(root, &sChoice, true);
 	fld->SetCallBack((NotifyProc)&QueryPropPage::ChangeQuery);
@@ -291,9 +291,9 @@ QueryPropPage::QueryPropPage(CatalogPropertySheet& sh, map<String, String>& mpQ)
 	fsExpr->SetIndependentPos();
 	fsExpr->SetWidth(180);
 	fsExpr->SetHeight(150);
-	pbSave  = new PushButton(root, SMSUiReplaceQuery, (NotifyProc)&QueryPropPage::Replace);
-	pbSaveAs =  new PushButton(root, SMSUiAddQuery, (NotifyProc)&QueryPropPage::Add);
-	pbDelete =  new PushButton(root, SMSUiDeleteQuery, (NotifyProc)&QueryPropPage::Delete);
+	pbSave  = new PushButton(root, TR("Save"), (NotifyProc)&QueryPropPage::Replace);
+	pbSaveAs =  new PushButton(root, TR("Save As ..."), (NotifyProc)&QueryPropPage::Add);
+	pbDelete =  new PushButton(root, TR("Delete"), (NotifyProc)&QueryPropPage::Delete);
 	pbSave->SetIndependentPos();
 	pbSave->Align(fsExpr, AL_UNDER);
 	pbSaveAs->SetIndependentPos();

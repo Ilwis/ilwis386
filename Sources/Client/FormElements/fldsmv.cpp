@@ -55,25 +55,25 @@ public:
     SetWidth(75);
     int i = 0;
     mt[i].svm = svmSPHERICAL;
-    mt[i++].sName = STBSvmSpherical;
+    mt[i++].sName = TR("Spherical Model");
     mt[i].svm = svmEXPONENTIAL;
-    mt[i++].sName = STBSvmExponential;
+    mt[i++].sName = TR("Exponential Model");
     mt[i].svm = svmGAUSSIAN;
-    mt[i++].sName = STBSvmGaussian;
+    mt[i++].sName = TR("Gaussian Model");
     mt[i].svm = svmWAVE;
-    mt[i++].sName = STBSvmWave;
+    mt[i++].sName = TR("Wave Model");
     mt[i].svm = svmCIRCULAR;
-    mt[i++].sName = STBSvmCircular;
+    mt[i++].sName = TR("Circular Model");
     mt[i].svm = svmPOWER;
-    mt[i++].sName = STBSvmPower;
+    mt[i++].sName = TR("Power Model");
     mt[i].svm = svmRATQUAD;
-    mt[i++].sName = STBSvmRatQuad;
+    mt[i++].sName = TR("Rational Quadratic Model");
   }
   void create() {
     FieldOneSelect::create();
     for (int i = 0; i < iSMVS; ++i) {
       String s("%S.svm", mt[i].sName);
-      int id = ose->AddString(s.scVal());
+      int id = ose->AddString(s.c_str());
       if (*svmod == mt[i].svm)
         ose->SetCurSel(id);
       ose->SetItemData(id, (long)&mt[i].svm);
@@ -117,14 +117,14 @@ FieldSemiVariogram::FieldSemiVariogram(FormEntry* parent, const String& sQuestio
   svm = &smv->svm;
   fsvm = new FieldSemiVarModel(this, sQuestion, &svm);
   fsvm->SetCallBack((NotifyProc)&FieldSemiVariogram::CallBack, this);
-  frNugget =new FieldReal(this, STBSvmUiNugget, &smv->rNugget); //, ValueRange(0,1e20,0));
+  frNugget =new FieldReal(this, TR("&Nugget"), &smv->rNugget); //, ValueRange(0,1e20,0));
   frNugget->Align(fsvm, AL_UNDER);
-  frSill = new FieldReal(this, STBSvmUiSill, &smv->rSill, ValueRange(0,1e20,0));
-  frRange = new FieldReal(this, STBSvmUiRange, &smv->rRange); //, ValueRange(0,1e20,0));
+  frSill = new FieldReal(this, TR("&Sill"), &smv->rSill, ValueRange(0,1e20,0));
+  frRange = new FieldReal(this, TR("&Range"), &smv->rRange); //, ValueRange(0,1e20,0));
   // power model:
-  frSlope = new FieldReal(this, STBSvmUiSlope, &smv->rSlope); //, ValueRange(0,1e20,0));
+  frSlope = new FieldReal(this, TR("&Slope"), &smv->rSlope); //, ValueRange(0,1e20,0));
   frSlope->Align(frNugget, AL_UNDER);
-  frPower = new FieldReal(this, STBSvmUiPower, &smv->rPower); // ValueRange(0,10,0));
+  frPower = new FieldReal(this, TR("&Power"), &smv->rPower); // ValueRange(0,10,0));
 }
 
 int FieldSemiVariogram::CallBack(Event*)
@@ -171,11 +171,11 @@ FieldSemiVariogramList::FieldSemiVariogramList(FormEntry* parent,
   FormEntry* feLast = st;
   FieldBlank* fb = new FieldBlank(this);
   fb->Align(st, AL_AFTER);
-  StaticText* st1 = new StaticText(this, STBSvmNugget);
+  StaticText* st1 = new StaticText(this, TR("Nugget"));
   st1->Align(fb, AL_AFTER);
-  StaticText* st2 = new StaticText(this, STBSvmSillSlope);
+  StaticText* st2 = new StaticText(this, TR("Sill/Slope"));
   st2->Align(st1, AL_AFTER);
-  StaticText* st3 = new StaticText(this, STBSvmRangePower);
+  StaticText* st3 = new StaticText(this, TR("Range/Power"));
   st3->Align(st2, AL_AFTER);
 
   for (int i = 0; i < iNrSmv; ++i) {

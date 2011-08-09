@@ -157,10 +157,10 @@ void ColorGrid::OnNoOfCells()
  {
   public:
     NoOfCellsForm(CWnd* wPar, int* iX)
-    : FormWithDest(wPar, SRPTitleGridCells)
+    : FormWithDest(wPar, TR("Resolution Color Selector"))
     {
       new FieldBlank(root);
-      new FieldInt(root, SRPUiNoOfCells, iX, ValueRange(2L,100L), true);
+      new FieldInt(root, TR("Nr. of colors along edge"), iX, ValueRange(2L,100L), true);
       SetMenHelpTopic("ilwismen\\representation_class_editor_column_width.htm");
       create();
     }  

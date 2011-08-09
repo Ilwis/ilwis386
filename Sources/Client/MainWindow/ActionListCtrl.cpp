@@ -177,7 +177,7 @@ void ActionListCtrl::OnGetInfoTip(NMHDR* pNMHDR, LRESULT* pResult)
 	LPNMLVGETINFOTIP git = (LPNMLVGETINFOTIP) pNMHDR;
 	Action* act = (Action*) GetItemData(git->iItem);
 	String s = act->sDescription();
-	strcpy(git->pszText, s.scVal());
+	strcpy(git->pszText, s.c_str());
 }
 
 
@@ -283,7 +283,7 @@ BOOL ActionListCtrl::OnDrop(COleDataObject* pDataObject, DROPEFFECT dropEffect, 
 	return TRUE;
 }
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define pmadd(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 
 void ActionListCtrl::OnContextMenu(CWnd* pWnd, CPoint point) 

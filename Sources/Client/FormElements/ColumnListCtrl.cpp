@@ -225,31 +225,31 @@ void ColumnListCtrl::OnGetDispInfo(NMHDR* pNMHDR, LRESULT* pResult)
 		{
 			case 0: // column name
 				if (ci.fKey)
-					sField = String("* %S", ci.sColumnName).scVal();
+					sField = String("* %S", ci.sColumnName).c_str();
 				else
-					sField = ci.sColumnName.scVal();
+					sField = ci.sColumnName.c_str();
 				break;
 			case 1:  // field width
 				{
 					int iVal = ci.iColumnWidth == iUNDEF ? 0 : ci.iColumnWidth;
-					sField = String("%li", iVal).scVal();
+					sField = String("%li", iVal).c_str();
 					break;
 				}
 			case 2:  // new domain toggle
 				if (ci.fCreate && ci.dtDomainType != dmtSTRING)
-					sField = SUIYes.scVal();
+					sField = TR("Yes").c_str();
 				else
-					sField = SUINo.scVal();
+					sField = TR("No").c_str();
 				break;
 			case 3:  // domain type
-				sField = Domain::sDomainType(ci.dtDomainType).scVal();
+				sField = Domain::sDomainType(ci.dtDomainType).c_str();
 				// Check for DomainNone, because this is not allowed for columns
 				if (fCIStrEqual(sField, "none"))
 					sField = "";
 				break;
 			case 4:  // domain
 				if (ci.fnDomain.fValid())
-					sField = ci.fnDomain.sRelative(false).scVal();
+					sField = ci.fnDomain.sRelative(false).c_str();
 				else
 					sField = "";
 				break;
@@ -257,28 +257,28 @@ void ColumnListCtrl::OnGetDispInfo(NMHDR* pNMHDR, LRESULT* pResult)
 				if (ci.dtDomainType != dmtCLASS && ci.dtDomainType != dmtID)
 					sField = "";
 				else
-					sField = ci.fCreate ? SUIYes.scVal() : SUINo.scVal();
+					sField = ci.fCreate ? TR("Yes").c_str() : TR("No").c_str();
 				break;
 			case 6: 
 				if (ci.dtDomainType != dmtVALUE)
 					sField = "";
 				else
-					sField = String("%g", ci.dvs.vr()->rrMinMax().rLo()).scVal();
+					sField = String("%g", ci.dvs.vr()->rrMinMax().rLo()).c_str();
 				break;
 			case 7:
 				if (ci.dtDomainType != dmtVALUE)
 					sField = "";
 				else
-					sField = String("%g", ci.dvs.vr()->rrMinMax().rHi()).scVal();
+					sField = String("%g", ci.dvs.vr()->rrMinMax().rHi()).c_str();
 				break;
 			case 8:
 				if (ci.dtDomainType != dmtVALUE)
 					sField = "";
 				else
-					sField = String("%g", ci.dvs.vr()->rStep()).scVal();
+					sField = String("%g", ci.dvs.vr()->rStep()).c_str();
 				break;
 			case 9: 
-				sField = ci.sUndefValue.scVal(); 
+				sField = ci.sUndefValue.c_str(); 
 				break;
 			default:
 				sField = "";
@@ -342,7 +342,7 @@ void ColumnListCtrl::ToggleSelectedAsKey()
 		ClmInfo& ci = m_fclParent->ciColumn(i);
 		if (m_iItem == i && !ci.fKeyAllowed)
 		{
-			AfxMessageBox(STWErrDuplicateKeyValues.scVal());
+			AfxMessageBox(TR("This column has duplicate values and therefore cannot be used for the table domain").c_str());
 			return;
 		}
 	}
@@ -414,8 +414,8 @@ void ColumnListCtrl::OnBeginLabelEdit(NMHDR* pNMHDR, LRESULT* pResult)
 		if (ci.dtDomainType == dmtCLASS || ci.dtDomainType == dmtID)
 		{
 			vector<String> vcYesNo;
-			vcYesNo.push_back(SUIYes);
-			vcYesNo.push_back(SUINo);
+			vcYesNo.push_back(TR("Yes"));
+			vcYesNo.push_back(TR("No"));
 			rcSubItem.InflateRect(0, 0, 0, 150);
 			InPlaceComboBox *icb = new InPlaceComboBox(this, m_iItem, m_iSubItem, vcYesNo, rcSubItem, m_fclParent->Id());
 			icb->SelectString(-1, (LPCTSTR)GetItemText(m_iItem, m_iSubItem));
@@ -426,8 +426,8 @@ void ColumnListCtrl::OnBeginLabelEdit(NMHDR* pNMHDR, LRESULT* pResult)
 		if (ci.dtDomainType != dmtSTRING)  // Cannot create a new string domain
 		{
 			vector<String> vcYesNo;
-			vcYesNo.push_back(SUIYes);
-			vcYesNo.push_back(SUINo);
+			vcYesNo.push_back(TR("Yes"));
+			vcYesNo.push_back(TR("No"));
 			rcSubItem.InflateRect(0, 0, 0, 150);
 			InPlaceComboBox *icb = new InPlaceComboBox(this, m_iItem, m_iSubItem, vcYesNo, rcSubItem, m_fclParent->Id());
 			icb->SelectString(-1, (LPCTSTR)GetItemText(m_iItem, m_iSubItem));
@@ -459,7 +459,7 @@ void ColumnListCtrl::OnBeginLabelEdit(NMHDR* pNMHDR, LRESULT* pResult)
 
 			// Create the InPlaceEdit; there is no need to delete it afterwards, it will destroy itself
 			DWORD style = WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL;
-			m_Edit = new InPlaceEdit(m_iItem, m_iSubItem, sLabelText.scVal());
+			m_Edit = new InPlaceEdit(m_iItem, m_iSubItem, sLabelText.c_str());
 			m_Edit->Create(style, rcSubItem, this, m_fclParent->Id());
 		}
 	}
@@ -491,7 +491,7 @@ void ColumnListCtrl::OnEndLabelEdit(NMHDR* pNMHDR, LRESULT* pResult)
 					ci.iColumnWidth = iWidth;
 				break;
 			case 2:  // new domain
-				ci.fCreate = fCIStrEqual(sField, SUIYes);
+				ci.fCreate = fCIStrEqual(sField, TR("Yes"));
 				if (ci.fCreate)
 				{
 					FileName fnDom = IlwisObjectPtr::fnCheckPath(ci.fnDomain);
@@ -525,7 +525,7 @@ void ColumnListCtrl::OnEndLabelEdit(NMHDR* pNMHDR, LRESULT* pResult)
 					{
 						ci.fnDomain = FileName();
 						if (m_iErrCnt == 0)  // display the message only once
-							AfxMessageBox(STWErrDomainExists.scVal());
+							AfxMessageBox(TR("Domain already exists, choose another").c_str());
 						m_iErrCnt++;
 					}
 					else if (!ci.fCreate)
@@ -543,7 +543,7 @@ void ColumnListCtrl::OnEndLabelEdit(NMHDR* pNMHDR, LRESULT* pResult)
 					ci.fnDomain = FileName();
 				break;
 			case 5:  // Extend
-				ci.fExtend = fCIStrEqual(sField, SUIYes);
+				ci.fExtend = fCIStrEqual(sField, TR("Yes"));
 				break;
 			case 6:  // min value
 				rMin = sField.rVal();

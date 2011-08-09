@@ -190,7 +190,7 @@ void MapBorderItem::ReadElements(ElementContainer& ec, const char* sSection)
 	ObjectInfo::ReadElement(sSection, "Grid Text Offset", ec, rGridTextOffset);
 	String sFont;
 	ObjectInfo::ReadElement(sSection, "Grid Text Font", ec, sFont);
-	lstrcpy(lfGridText.lfFaceName, sFont.scVal());
+	lstrcpy(lfGridText.lfFaceName, sFont.c_str());
 	int iLen = sizeof(LOGFONT) - LF_FACESIZE;
 	ObjectInfo::ReadElement(sSection, "Grid Text LogFont", ec, (char*)&lfGridText, iLen);
 	ObjectInfo::ReadElement(sSection, "Grid Text Coord Type", ec, sType);
@@ -204,7 +204,7 @@ void MapBorderItem::ReadElements(ElementContainer& ec, const char* sSection)
 	ObjectInfo::ReadElement(sSection, "Grat Text Interval", ec, rGratTextInterval);
 	ObjectInfo::ReadElement(sSection, "Grat Text Offset", ec, rGratTextOffset);
 	ObjectInfo::ReadElement(sSection, "Grat Text Font", ec, sFont);
-	lstrcpy(lfGratText.lfFaceName, sFont.scVal());
+	lstrcpy(lfGratText.lfFaceName, sFont.c_str());
 	iLen = sizeof(LOGFONT) - LF_FACESIZE;
 	ObjectInfo::ReadElement(sSection, "Grat Text LogFont", ec, (char*)&lfGratText, iLen);
 	ObjectInfo::ReadElement(sSection, "Grat Text Coord Type", ec, sType);
@@ -224,12 +224,12 @@ void MapBorderItem::ReadElements(ElementContainer& ec, const char* sSection)
 	if ( ObjectInfo::ReadElement(sSection, "EnabledBorderTexts1", ec, fDummy) != 0 )
 	{
 		for(int i=1; i<=4; ++i)
-			ObjectInfo::ReadElement(sSection, String("EnabledBorderTexts%d",i).scVal(), ec, arfEnabledTextLocations[i]);
+			ObjectInfo::ReadElement(sSection, String("EnabledBorderTexts%d",i).c_str(), ec, arfEnabledTextLocations[i]);
 	}		
 	if ( ObjectInfo::ReadElement(sSection, "EnabledBorderGrat Texts1", ec, fDummy ) != 0)	
 	{
 		for(int i=1; i<=4; ++i)
-			ObjectInfo::ReadElement(sSection, String("EnabledBorderGrat Texts%d",i).scVal(), ec, arfEnabledGratTextLocations[i]);
+			ObjectInfo::ReadElement(sSection, String("EnabledBorderGrat Texts%d",i).c_str(), ec, arfEnabledGratTextLocations[i]);
 	}		
 
 	ObjectInfo::ReadElement(sSection, "Horizontal border text rotation", ec, iHorzBorderTextRot);
@@ -319,9 +319,9 @@ void MapBorderItem::WriteElements(ElementContainer& ec, const char* sSection)
 		lnBorder.Write(sSection, "Border Line", ec);
 
 	for(int i=1; i<=4; ++i)
-		ObjectInfo::WriteElement(sSection, String("EnabledBorderTexts%d",i).scVal(), ec, arfEnabledTextLocations[i]);
+		ObjectInfo::WriteElement(sSection, String("EnabledBorderTexts%d",i).c_str(), ec, arfEnabledTextLocations[i]);
 	for(int i=1; i<=4; ++i)
-		ObjectInfo::WriteElement(sSection, String("EnabledBorderGrat Texts%d",i).scVal(), ec, arfEnabledGratTextLocations[i]);	
+		ObjectInfo::WriteElement(sSection, String("EnabledBorderGrat Texts%d",i).c_str(), ec, arfEnabledGratTextLocations[i]);	
 
 	ObjectInfo::WriteElement(sSection, "Horizontal border text rotation", ec, iHorzBorderTextRot);
 	ObjectInfo::WriteElement(sSection, "Vertical border text rotation", ec, iVertBorderTextRot);		
@@ -561,7 +561,7 @@ String MapBorderItem::sTextMetric(double rVal, CoordType ct) const
 			}
 			int iVal = iStep * (iStep1 + rounding(rVal/iStep) % iStep1);
 			String sVal("%i", iVal);
-			return sVal.scVal() + 1;
+			return sVal.c_str() + 1;
 		}
 	}
 	return "";
@@ -585,13 +585,13 @@ String MapBorderItem::sTextDMS(double rVal, bool fLat, CoordType ct) const
 				rVal = rounding(rVal * 3600) % 60;
 				int iVal = 100 + rounding(rVal) % 100;
 				String sVal("%i\"", iVal);
-				return sVal.scVal() + 1;
+				return sVal.c_str() + 1;
 			}
 			else if (rGratTextInterval < 1) {
 				rVal = rounding(rVal * 60) % 60;
 				int iVal = 100 + rounding(rVal) % 100;
 				String sVal("%i\'", iVal);
-				return sVal.scVal() + 1;
+				return sVal.c_str() + 1;
 			}
 			else {
 				int iVal = rounding(rVal);
@@ -616,7 +616,7 @@ void MapBorderItem::DrawHorizontalTexts(CDC* cdc, vector<CPoint>& vp, vector<dou
 			sVal = sTextMetric(rVal, ct);
 		else
 			sVal = sTextDMS(rVal, fLatHor, ct);
-		CString str = sVal.scVal();
+		CString str = sVal.c_str();
 		CSize sz = cdc->GetTextExtent(str);
 		if ( side == MapLayoutItem::sideTOP )
 		{
@@ -663,7 +663,7 @@ void MapBorderItem::DrawVerticalTexts(CDC* cdc, vector<CPoint>& vp, vector<doubl
 			sVal = sTextMetric(rVal, ct);
 		else
 			sVal = sTextDMS(rVal, !fLatHor, ct);
-		CString str = sVal.scVal();
+		CString str = sVal.c_str();
 		CSize sz = cdc->GetTextExtent(str);
 		if ( side == MapLayoutItem::sideLEFT )
 		{
@@ -1092,9 +1092,9 @@ String MapBorderItem::sType() const
 String MapBorderItem::sName() const
 {
 	if (0 == mli)
-		return SLONameMapBorder;
+		return TR("Map Border");
 	else
-		return String(SLONameMapBorder_S.scVal(), mli->sName());
+		return String(TR("Map Border of %S").c_str(), mli->sName());
 }
 
 bool MapBorderItem::fDependsOn(LayoutItem* li)
@@ -1176,26 +1176,26 @@ class MapBorderItemForm : public CPropertySheet
 {
 public:
   MapBorderItemForm(CWnd* wnd, MapBorderItem* mbi) 
-		: CPropertySheet(SLOTitleMapBorder.scVal(), wnd)
+		: CPropertySheet(TR("Edit Map Border").c_str(), wnd)
   {
 		// --- NeatLine
-		ppNeatLine = new MapBorderPropPage(SLOTabNeatLine, mbi->ld);
+		ppNeatLine = new MapBorderPropPage(TR("Neat Line"), mbi->ld);
 		FormEntry* root = ppNeatLine->feRoot();
 
 		// neatline
-		new FieldColor(root, SLOUiColor, &mbi->clrNeatLine);
-		CheckBox* cb = new CheckBox(root, SLOUiNeatLineGraduation, &mbi->fNeatLineGraduation);
+		new FieldColor(root, TR("&Color"), &mbi->clrNeatLine);
+		CheckBox* cb = new CheckBox(root, TR("Neat Line &Graduation"), &mbi->fNeatLineGraduation);
 		cb->SetIndependentPos();
 		FieldGroup* fg = new FieldGroup(cb);
 		fg->Align(cb,AL_UNDER);
 		RadioGroup* rg = new RadioGroup(fg, "", (int*)&mbi->eGraduationType);
-		RadioButton* rbMetres = new RadioButton(rg, SLOUiMetres);
-		RadioButton* rbDegrees = new RadioButton(rg, SLOUiDegrees);
-		FieldReal* frMetres = new FieldReal(rbMetres, SLOUiInterval_m, &mbi->rNeatLineInterval, ValueRange(0.1,1e9,0.1));
+		RadioButton* rbMetres = new RadioButton(rg, TR("&Meters"));
+		RadioButton* rbDegrees = new RadioButton(rg, TR("&Degrees"));
+		FieldReal* frMetres = new FieldReal(rbMetres, TR("&Interval (m)"), &mbi->rNeatLineInterval, ValueRange(0.1,1e9,0.1));
 		frMetres->Align(rbDegrees, AL_UNDER);
-		FieldDMS* fdDegrees = new FieldDMS(rbDegrees, SLOUiInterval, &mbi->rNeatLineDegreesInterval, 50);
+		FieldDMS* fdDegrees = new FieldDMS(rbDegrees, TR("&Interval"), &mbi->rNeatLineDegreesInterval, 50);
 		fdDegrees->Align(rbDegrees, AL_UNDER);
-		new FieldReal(fg, SLOUiWidth_mm, &mbi->rNeatLineWidth, ValueRange(0.1,20,0.1));
+		new FieldReal(fg, TR("&Width (mm)"), &mbi->rNeatLineWidth, ValueRange(0.1,20,0.1));
 		new FieldBlank(root);
 
 		ppNeatLine->SetMenHelpTopic("ilwismen\\layout_editor_insert_edit_map_border_neatline.htm");
@@ -1203,52 +1203,52 @@ public:
 		AddPage(ppNeatLine);
 
 		// --- Grid 
-		ppGrid = new MapBorderPropPage(SLOTabGrid, mbi->ld);
+		ppGrid = new MapBorderPropPage(TR("Grid"), mbi->ld);
 		root = ppGrid->feRoot();
 
 		// ticks
-		cb = new CheckBox(root, SLOUiGridTicks, &mbi->fGridTicks);
+		cb = new CheckBox(root, TR("&Grid Ticks"), &mbi->fGridTicks);
 		cb->SetIndependentPos();
 		fg = new FieldGroup(cb);
 		fg->Align(cb,AL_UNDER);
-		new FieldReal(fg, SLOUiInterval_m, &mbi->rGridTickInterval, ValueRange(0.1,1e9,0.1));
-		new FieldReal(fg, SLOUiTickLength_mm, &mbi->rGridTickLength, ValueRange(-20,30,0.1));
-		new FieldColor(fg, SLOUiColor, &mbi->clrGridTick);
+		new FieldReal(fg, TR("&Interval (m)"), &mbi->rGridTickInterval, ValueRange(0.1,1e9,0.1));
+		new FieldReal(fg, TR("Tick &Length (mm)"), &mbi->rGridTickLength, ValueRange(-20,30,0.1));
+		new FieldColor(fg, TR("&Color"), &mbi->clrGridTick);
 		new FieldBlank(root);
 
 		// Grid text
-		cb = new CheckBox(root, SLOUiGridText, &mbi->fGridText);
+		cb = new CheckBox(root, TR("Grid &Coordinates"), &mbi->fGridText);
 		cb->SetIndependentPos();
 		fg = new FieldGroup(cb);
 		fg->Align(cb,AL_UNDER);
 		
-		StaticText *st2 = new StaticText(fg, SLOUiBorderTexts);
-		CheckBox *cb1 = new CheckBox(fg, SLOUiLeftText, &(mbi->arfEnabledTextLocations[MapLayoutItem::sideLEFT]));
+		StaticText *st2 = new StaticText(fg, TR("Border texts"));
+		CheckBox *cb1 = new CheckBox(fg, TR("Left"), &(mbi->arfEnabledTextLocations[MapLayoutItem::sideLEFT]));
 		CheckBox *cb3 = cb1;
 		cb1->Align(st2, AL_UNDER);		
 		cb1->SetIndependentPos();
-		CheckBox *cb2 = new CheckBox(fg, SLOUiRightText, &(mbi->arfEnabledTextLocations[MapLayoutItem::sideRIGHT]));
+		CheckBox *cb2 = new CheckBox(fg, TR("Right"), &(mbi->arfEnabledTextLocations[MapLayoutItem::sideRIGHT]));
 		cb2->Align(cb1, AL_AFTER);
 		cb2->SetIndependentPos();
-		cb1 = new CheckBox(fg, SLOUiTopText, &(mbi->arfEnabledTextLocations[MapLayoutItem::sideTOP]));
+		cb1 = new CheckBox(fg, TR("Top"), &(mbi->arfEnabledTextLocations[MapLayoutItem::sideTOP]));
 		cb1->Align(cb2, AL_AFTER);		
 		cb1->SetIndependentPos();		
-		cb2 = new CheckBox(fg, SLOUiBottomText, &(mbi->arfEnabledTextLocations[MapLayoutItem::sideBOTTOM]));					
+		cb2 = new CheckBox(fg, TR("Bottom"), &(mbi->arfEnabledTextLocations[MapLayoutItem::sideBOTTOM]));					
 		cb2->Align(cb1, AL_AFTER);
 		cb2->SetIndependentPos();	
-		FieldInt *fr1 = new FieldInt(fg, SLOUiHorz90, &mbi->iHorzBorderTextRot, ValueRangeInt(0,90), true);
+		FieldInt *fr1 = new FieldInt(fg, TR("Rotate horizontal border texts"), &mbi->iHorzBorderTextRot, ValueRangeInt(0,90), true);
 		fr1->Align(cb3, AL_UNDER);
-		FieldInt *fr2 = new FieldInt(fg, SLOUiVert90, &mbi->iVertBorderTextRot, ValueRangeInt(0,90), true);		
+		FieldInt *fr2 = new FieldInt(fg, TR("Rotate vertical border texts"), &mbi->iVertBorderTextRot, ValueRangeInt(0,90), true);		
 		
-		FieldReal *fr = new FieldReal(fg, SLOUiInterval_m, &mbi->rGridTextInterval, ValueRange(0.1,1e9,0.1));
+		FieldReal *fr = new FieldReal(fg, TR("&Interval (m)"), &mbi->rGridTextInterval, ValueRange(0.1,1e9,0.1));
 		fr->Align(fr2, AL_UNDER);
 		fr->SetIndependentPos();
 		RadioGroup* rgGrid = new RadioGroup(fg, "", (int*)&mbi->eGridTextType, true);
 		rgGrid->SetIndependentPos();
-		new RadioButton(rgGrid, SLOUiFullCoords);
-		new RadioButton(rgGrid, SLOUiShortenedCoords);
-		new FieldReal(fg, SLOUiTextOffset_mm, &mbi->rGridTextOffset, ValueRange(-10,30,0.1));
-		new FieldColor(fg, SLOUiColor, &mbi->clrGridText);
+		new RadioButton(rgGrid, TR("&Full Coordinates"));
+		new RadioButton(rgGrid, TR("&Shortened Coordinates"));
+		new FieldReal(fg, TR("Text &Offset (mm)"), &mbi->rGridTextOffset, ValueRange(-10,30,0.1));
+		new FieldColor(fg, TR("&Color"), &mbi->clrGridText);
     FieldLogFont *fl = new FieldLogFont(fg, &mbi->lfGridText);
 	
 
@@ -1258,52 +1258,52 @@ public:
 
 
 		// --- Graticule
-		ppGrat = new MapBorderPropPage(SLOTabGrat, mbi->ld);
+		ppGrat = new MapBorderPropPage(TR("Graticule"), mbi->ld);
 		root = ppGrat->feRoot();
 
 		// graticule ticks
-		cb = new CheckBox(root, SLOUiGratTicks, &mbi->fGratTicks);
+		cb = new CheckBox(root, TR("&Graticule Ticks"), &mbi->fGratTicks);
 		cb->SetIndependentPos();
 		fg = new FieldGroup(cb);
 		fg->Align(cb,AL_UNDER);
-		new FieldDMS(fg, SLOUiInterval, &mbi->rGratTickInterval, 50);
-		new FieldReal(fg, SLOUiTickLength_mm, &mbi->rGratTickLength, ValueRange(-20,30,0.1));
-		new FieldColor(fg, SLOUiColor, &mbi->clrGratTick);
+		new FieldDMS(fg, TR("&Interval"), &mbi->rGratTickInterval, 50);
+		new FieldReal(fg, TR("Tick &Length (mm)"), &mbi->rGratTickLength, ValueRange(-20,30,0.1));
+		new FieldColor(fg, TR("&Color"), &mbi->clrGratTick);
 		new FieldBlank(root);
 
 		// Grat text
-		cb = new CheckBox(root, SLOUiGratText, &mbi->fGratText);
+		cb = new CheckBox(root, TR("Graticule &Coordinates"), &mbi->fGratText);
 		cb->SetIndependentPos();
 		fg = new FieldGroup(cb);
 		fg->Align(cb,AL_UNDER);
 
-		st2 = new StaticText(fg, SLOUiBorderTexts);
-		cb1 = new CheckBox(fg, SLOUiLeftText, &(mbi->arfEnabledGratTextLocations[MapLayoutItem::sideLEFT]));
+		st2 = new StaticText(fg, TR("Border texts"));
+		cb1 = new CheckBox(fg, TR("Left"), &(mbi->arfEnabledGratTextLocations[MapLayoutItem::sideLEFT]));
 		cb3 = cb1;
 		cb1->Align(st2, AL_UNDER);		
 		cb1->SetIndependentPos();
-		cb2 = new CheckBox(fg, SLOUiRightText, &(mbi->arfEnabledGratTextLocations[MapLayoutItem::sideRIGHT]));
+		cb2 = new CheckBox(fg, TR("Right"), &(mbi->arfEnabledGratTextLocations[MapLayoutItem::sideRIGHT]));
 		cb2->Align(cb1, AL_AFTER);
 		cb2->SetIndependentPos();
-		cb1 = new CheckBox(fg, SLOUiTopText, &(mbi->arfEnabledGratTextLocations[MapLayoutItem::sideTOP]));
+		cb1 = new CheckBox(fg, TR("Top"), &(mbi->arfEnabledGratTextLocations[MapLayoutItem::sideTOP]));
 		cb1->Align(cb2, AL_AFTER);		
 		cb1->SetIndependentPos();		
-		cb2 = new CheckBox(fg, SLOUiBottomText, &(mbi->arfEnabledGratTextLocations[MapLayoutItem::sideBOTTOM]));					
+		cb2 = new CheckBox(fg, TR("Bottom"), &(mbi->arfEnabledGratTextLocations[MapLayoutItem::sideBOTTOM]));					
 		cb2->Align(cb1, AL_AFTER);
 		cb2->SetIndependentPos();	
-		fr1 = new FieldInt(fg, SLOUiHorz90, &mbi->iHorzBorderGratTextRot, ValueRangeInt(0,90), true);
+		fr1 = new FieldInt(fg, TR("Rotate horizontal border texts"), &mbi->iHorzBorderGratTextRot, ValueRangeInt(0,90), true);
 		fr1->Align(cb3, AL_UNDER);
-		fr2 = new FieldInt(fg, SLOUiVert90, &mbi->iVertBorderGratTextRot, ValueRangeInt(0,90), true);		
+		fr2 = new FieldInt(fg, TR("Rotate vertical border texts"), &mbi->iVertBorderGratTextRot, ValueRangeInt(0,90), true);		
 
-		FieldDMS *fdms = new FieldDMS(fg, SLOUiInterval, &mbi->rGratTextInterval, 50);
+		FieldDMS *fdms = new FieldDMS(fg, TR("&Interval"), &mbi->rGratTextInterval, 50);
 		fdms->Align(fr2, AL_UNDER);
 		fdms->SetIndependentPos();		
 		RadioGroup* rgGrat = new RadioGroup(fg, "", (int*)&mbi->eGratTextType, true);
 		rgGrat->SetIndependentPos();
-		new RadioButton(rgGrat, SLOUiFullCoords);
-		new RadioButton(rgGrat, SLOUiShortenedCoords);
-		new FieldReal(fg, SLOUiTextOffset_mm, &mbi->rGratTextOffset, ValueRange(-10,30,0.1));
-		new FieldColor(fg, SLOUiColor, &mbi->clrGratText);
+		new RadioButton(rgGrat, TR("&Full Coordinates"));
+		new RadioButton(rgGrat, TR("&Shortened Coordinates"));
+		new FieldReal(fg, TR("Text &Offset (mm)"), &mbi->rGratTextOffset, ValueRange(-10,30,0.1));
+		new FieldColor(fg, TR("&Color"), &mbi->clrGratText);
     new FieldLogFont(fg, &mbi->lfGratText);
 
 		ppGrat->SetMenHelpTopic("ilwismen\\layout_editor_insert_edit_map_border_graticule.htm");
@@ -1311,27 +1311,27 @@ public:
 		AddPage(ppGrat);
 
 		// --- Corners
-		ppCorners = new MapBorderPropPage(SLOTabCorners, mbi->ld);
+		ppCorners = new MapBorderPropPage(TR("Corners"), mbi->ld);
 		root = ppCorners->feRoot();
 
-		cb = new CheckBox(root, SLOUiCornerCoords, &mbi->fCornerCoords);
+		cb = new CheckBox(root, TR("&Corner Coordinates"), &mbi->fCornerCoords);
 		fg = new FieldGroup(cb);
 		fg->Align(cb,AL_UNDER);
-		new FieldColor(fg, SLOUiColor, &mbi->clrCornerCoords);
+		new FieldColor(fg, TR("&Color"), &mbi->clrCornerCoords);
     new FieldLogFont(fg, &mbi->lf);
 		ppCorners->SetMenHelpTopic("ilwismen\\layout_editor_insert_edit_map_border_corners.htm");
 		ppCorners->create();
 		AddPage(ppCorners);
 
 		// --- Border
-		ppBorder = new MapBorderPropPage(SLOTabBorder, mbi->ld);
+		ppBorder = new MapBorderPropPage(TR("Outline"), mbi->ld);
 		root = ppBorder->feRoot();
 
 		// border
-		cb = new CheckBox(root, SLOUiBorder, &mbi->fBorderLine);
+		cb = new CheckBox(root, TR("&Outline"), &mbi->fBorderLine);
 		fg = new FieldGroup(cb);
 		fg->Align(cb,AL_UNDER);
-		new FieldReal(fg, SLOUiBorderOffset_mm, &mbi->rBorderLineDist, ValueRange(0.1, 50, 0.1));
+		new FieldReal(fg, TR("Outline &Offset (mm)"), &mbi->rBorderLineDist, ValueRange(0.1, 50, 0.1));
 		new FieldLine(fg, &mbi->lnBorder, true);
 
 		ppBorder->SetMenHelpTopic("ilwismen\\layout_editor_insert_edit_map_border_outline.htm");

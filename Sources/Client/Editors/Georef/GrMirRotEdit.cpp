@@ -92,21 +92,21 @@ void GeoRefMirrorRotateView::FillDerivedFields(FieldGroup* fgGenerRoot)
 	m_mrtMethod = pgmr->mrtMethod();
 	iMethod = (long)m_mrtMethod;
 
-	String sGRSize(SGRRemLinesCols_ii.c_str(), m_rcSize.Row, m_rcSize.Col);
+	String sGRSize(TR("%li lines and %li columns").c_str(), m_rcSize.Row, m_rcSize.Col);
 	SetSizeString(sGRSize);
-	String sPixSize(SGRRemPixSize_f.c_str(), m_rParentPixSize);
+	String sPixSize(TR("Pixel Size = %.3f m").c_str(), m_rParentPixSize);
 	SetPixelSizeString(sPixSize);
 
 	// Disabled editable Offset and Size fields for now; show R/O only
 	if (1) // GetDocument()->gr()->fReadOnly())
 	{
-		String s = String("%S: %S", SAFUiResampleMethod, pgmr->sMirrorRotateType(m_mrtMethod));
+		String s = String("%S: %S", TR("&Resampling Method"), pgmr->sMirrorRotateType(m_mrtMethod));
 		StaticText* st = new StaticText(fgGenerRoot, s);
 		st->psn->SetBound(0, 0, 0, 0);
 	}
 	else 
 	{
-		StaticText *st = new StaticText(fgGenerRoot, SAFUIMirRotMethod);
+		StaticText *st = new StaticText(fgGenerRoot, TR("Rotate &Method"));
 		st->SetIndependentPos();
 		fosMirRotType = new FieldMirrorRotateType(fgGenerRoot, &iMethod);
 		fosMirRotType->SetCallBack((NotifyProc)&GeoRefMirrorRotateView::DispType);
@@ -160,9 +160,9 @@ int GeoRefMirrorRotateView::DispType(Event*)
 			m_rcSize.Col = m_rcOrgSize.Row;
 			break;
 	}
-	String sGRSize(SGRRemLinesCols_ii.c_str(), m_rcSize.Row, m_rcSize.Col);
+	String sGRSize(TR("%li lines and %li columns").c_str(), m_rcSize.Row, m_rcSize.Col);
 	SetSizeString(sGRSize);
-	String sPixSize(SGRRemPixSize_f.c_str(), m_rParentPixSize);
+	String sPixSize(TR("Pixel Size = %.3f m").c_str(), m_rParentPixSize);
 	SetPixelSizeString(sPixSize);
 
 	return 0;

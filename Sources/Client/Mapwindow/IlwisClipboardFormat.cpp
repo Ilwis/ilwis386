@@ -40,12 +40,12 @@
 IlwisDomain::IlwisDomain(const Domain& dm, const ValueRange& vr)
 {
   String s = dm->fnObj.sFullNameQuoted();
-  strcpy(sFnObj, s.scVal());
+  strcpy(sFnObj, s.c_str());
   if (vr.fValid())
     s = vr->sRange();
   else
     s = "";
-  strcpy(sRange, s.scVal());
+  strcpy(sRange, s.c_str());
 };
 
 Domain IlwisDomain::dm() const

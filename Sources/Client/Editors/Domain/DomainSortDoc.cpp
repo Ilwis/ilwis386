@@ -134,7 +134,7 @@ void DomainSortDoc::OnRepresentation()
 	try
 	{
 		Representation rpr = dm()->rpr();
-		IlwWinApp()->OpenDocumentAsRpr(rpr->fnObj.sFullNameQuoted().scVal());
+		IlwWinApp()->OpenDocumentAsRpr(rpr->fnObj.sFullNameQuoted().c_str());
 	}
 	catch (const ErrorObject& err)
 	{

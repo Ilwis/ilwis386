@@ -60,13 +60,13 @@ FieldJustification::FieldJustification(FormEntry* fe, const String& sQuestion, i
   StaticText* st = new StaticText(this, sQuestion);
   st->SetIndependentPos();
   RadioGroup* rgTB = new RadioGroup(this, "", &iTopBottom, true);
-  new RadioButton(rgTB, SDUIJstTop);
-  new RadioButton(rgTB, SDUIJstBaseline);
-  new RadioButton(rgTB, SDUIJstBottom);
+  new RadioButton(rgTB, TR("&Top"));
+  new RadioButton(rgTB, TR("&Baseline"));
+  new RadioButton(rgTB, TR("&Bottom"));
   RadioGroup* rgLR = new RadioGroup(this, "", &iLeftRight, true);
-  new RadioButton(rgLR, SDUIJstLeft);
-  new RadioButton(rgLR, SDUIJstCenter);
-  new RadioButton(rgLR, SDUIJstRight);
+  new RadioButton(rgLR, TR("&Left"));
+  new RadioButton(rgLR, TR("&Center"));
+  new RadioButton(rgLR, TR("&Right"));
 }
 
 void FieldJustification::StoreData()

@@ -154,7 +154,7 @@ BOOL Table2Doc::OnOpenDocument(const Table2Dim& table2)
 	String s = tbl2->sTypeName();
 	if (s != tbl2->sDescription && "" != tbl2->sDescription)
 		s = String("%S - %S", s, tbl2->sDescription);
-  SetTitle(s.scVal());
+  SetTitle(s.c_str());
 	return TRUE;
 }
  

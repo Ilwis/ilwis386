@@ -78,7 +78,7 @@ zIcon::zIcon(const char* s)
 
 bool zIcon::fLoad(const String& s)
 {
-  hi = LoadIcon(IlwWinApp()->m_hInstance, s.scVal());
+  hi = LoadIcon(IlwWinApp()->m_hInstance, s.c_str());
 	if (hi == NULL)
 		return false;
 

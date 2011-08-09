@@ -391,7 +391,7 @@ const String& RecItemMap::sValue(int iWidth)   // meaning
 			fResValid = true;
 			fStrValid = true;
 			iVal = iUNDEF;
-			sVal = String("%-*S", 45, SPIErrNoCoordinate);
+			sVal = String("%-*S", 45, TR("? No Coordinate"));
 		}
 		else {
 			cwcs = cwcs->cConv(cPar, cPar);
@@ -399,13 +399,13 @@ const String& RecItemMap::sValue(int iWidth)   // meaning
 				fResValid = true;
 				fStrValid = true;
 				iVal = iUNDEF;
-				sVal = String("%-*S", 45, SPIErrImpossibleCoord);
+				sVal = String("%-*S", 45, TR("? impossible coordinate"));
 			}
 			else if (!map()->cb().fContains(cwcs.c())) {
 				fResValid = true;
 				fStrValid = true;
 				iVal = iUNDEF;
-				sVal = String("%-*S", 45, SPIErrOutsideMap);
+				sVal = String("%-*S", 45, TR("? outside map"));
 			}
 			else
 				fStrValid = false;
@@ -775,7 +775,7 @@ RecItemCoord::RecItemCoord(RecItem* parent, const CoordWithCoordSystem& c)
 : RecItem(parent)
 {
 	cwcs = c;
-	sNam = String("%S.crd", SPIRemCoordinate);
+	sNam = String("%S.crd", TR("Coordinate"));
 	sValue(0);
 }
 
@@ -812,7 +812,7 @@ const String& RecItemCoord::sValue(int iWidth)
 		fStrValid = true;
 		Coord c = crdValue();
 		if (c.fUndef())
-			sVal = String("%-*S", 45, SPIErrNoCoordinate);
+			sVal = String("%-*S", 45, TR("? No Coordinate"));
 		else
 			sVal = cwcs->sValue(c, iWidth);
 		/*    

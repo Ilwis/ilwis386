@@ -48,7 +48,7 @@
 #include "Client\MainWindow\ACTPAIR.H"
 
 //#define pmadd(ID) pm->addStr(ID, sMen(ID))
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define pmadd(ID) AppendMenu(MF_STRING, ID, sMen(ID)); 
 
 void AssociationSelector::AddOperMenuItems(CMenu& men, const ActionList* actList, const ActionPair* ap, const String& sExt, int& iDfltOption)
@@ -74,7 +74,7 @@ void AssociationSelector::AddOperMenuItems(CMenu& men, const ActionList* actList
 			if ( s == "") continue;
 			s &= "...";
 			iSub += 1;
-			menSub.AppendMenu(MF_STRING, id, s.scVal());
+			menSub.AppendMenu(MF_STRING, id, s.c_str());
 		}  
 		else {
 			if (menSub.m_hMenu) {
@@ -82,12 +82,12 @@ void AssociationSelector::AddOperMenuItems(CMenu& men, const ActionList* actList
 					String s = sLastSubOpt;
 					if ( s != "") {
 						s &= "...";
-						men.AppendMenu(MF_STRING, iLastOpt, s.scVal());
+						men.AppendMenu(MF_STRING, iLastOpt, s.c_str());
 						menSub.DestroyMenu();
 					}
 				}
 				else {
-					men.AppendMenu(MF_POPUP, (UINT)menSub.GetSafeHmenu(), sLastOpt.scVal()); 
+					men.AppendMenu(MF_POPUP, (UINT)menSub.GetSafeHmenu(), sLastOpt.c_str()); 
 					menSub.Detach();
 				}
 				iSub = 0;
@@ -96,7 +96,7 @@ void AssociationSelector::AddOperMenuItems(CMenu& men, const ActionList* actList
 				String s = act->sSubOpt();
 				if ( s == "") continue;
 				s &= "...";
-				men.AppendMenu(MF_STRING, id, s.scVal());
+				men.AppendMenu(MF_STRING, id, s.c_str());
 				sLastOpt = "-";
 				iLastOpt = id;
 			}
@@ -108,7 +108,7 @@ void AssociationSelector::AddOperMenuItems(CMenu& men, const ActionList* actList
 				String s = act->sSubOpt();
 				if ( s == "") continue;
 				s &= "...";
-				menSub.AppendMenu(MF_STRING, id, s.scVal());
+				menSub.AppendMenu(MF_STRING, id, s.c_str());
 				iLastOpt = id;
 			}
 		}
@@ -118,12 +118,12 @@ void AssociationSelector::AddOperMenuItems(CMenu& men, const ActionList* actList
 			String s = sLastSubOpt;
 			if ( s == "") {
 			s &= "...";
-				men.AppendMenu(MF_STRING, iLastOpt, s.scVal());
+				men.AppendMenu(MF_STRING, iLastOpt, s.c_str());
 				menSub.DestroyMenu();
 			}
 		}
 		else {
-			men.AppendMenu(MF_POPUP, (UINT)menSub.GetSafeHmenu(), sLastOpt.scVal()); 
+			men.AppendMenu(MF_POPUP, (UINT)menSub.GetSafeHmenu(), sLastOpt.c_str()); 
 			menSub.Detach();
 		}
 	}
@@ -198,12 +198,12 @@ AssociationSelector::AssociationSelector(CWnd* w, zPoint p,
 	if (".mpr" == sExt || ".mpa" == sExt || 
 			".mps" == sExt || ".mpp" == sExt) {
 		pmadd(ID_CAT_EDIT);  
-		if (_access(fn.sFullPath(true).scVal(),2)!=0 || ObjectInfo::fVirtual(fn))
+		if (_access(fn.sFullPath(true).c_str(),2)!=0 || ObjectInfo::fVirtual(fn))
 			EnableMenuItem(ID_CAT_EDIT, MF_GRAYED|MF_BYCOMMAND);
 	}  
 	if (".stp" == sExt) {
 		pmadd(ID_CAT_EDIT);  
-		if (_access(fn.sFullPath(true).scVal(),2)!=0 || !ObjectInfo::fVirtual(fn))
+		if (_access(fn.sFullPath(true).c_str(),2)!=0 || !ObjectInfo::fVirtual(fn))
 			EnableMenuItem(ID_CAT_EDIT, MF_GRAYED|MF_BYCOMMAND);
 	}  
 	pmadd(ID_EDIT_COPY);
@@ -320,7 +320,7 @@ void AssociationSelector::OnMenuSelect(CWnd* wnd, UINT nItemID, UINT nFlags)
 	{
     String sFileName("\"%S\"", fnAct.sShortName(false));
     String sDscS = actList[nItemID-ID_OPERATION1]->sDescriptionS();
-    sMsg = String(sDscS.scVal(), sFileName);
+    sMsg = String(sDscS.c_str(), sFileName);
   }
   else if (nItemID >= ID_CAT_START && nItemID <= ID_CAT_LAST) 
 	{
@@ -332,7 +332,7 @@ void AssociationSelector::OnMenuSelect(CWnd* wnd, UINT nItemID, UINT nFlags)
     else if (sDescr == "Function")
       ObjectInfo::ReadElement("Function", "Type", fnAct, sDescr);
     String str("%S \"%S\"", sDescr, fnAct.sFile); 
-    sMsg = String(sBase.scVal(), str);
+    sMsg = String(sBase.c_str(), str);
   }
 
 	if (pMessageBar)

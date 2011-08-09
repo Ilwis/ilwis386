@@ -275,7 +275,7 @@ bool IlwisWinApp::fShowHelpNumbers = false;
 IlwisWinApp::IlwisWinApp() 
 : CWinApp(ILWIS_VERSION_NAME)
 , smILWIS(1,1,ILWIS_VERSION_NAME)
-, smMainWindow(1,1,String("%sMW",ILWIS_VERSION_NAME).scVal())
+, smMainWindow(1,1,String("%sMW",ILWIS_VERSION_NAME).c_str())
 , lockMWCreated(&smMainWindow)
 , lockILWIS(&smILWIS)
 , dirdoc(0)
@@ -330,7 +330,7 @@ void IlwisWinApp::SendCommandLine(CWnd* wnd) const
 		return;
 	COPYDATASTRUCT cds;
 	cds.dwData = ID_ILWISSTART;
-	cds.lpData = (void*)m_sCommand.scVal();
+	cds.lpData = (void*)m_sCommand.c_str();
 	cds.cbData = (DWORD)strlen(m_lpCmdLine) + 1;
 	if (wnd)
 		wnd->SendMessage(WM_COPYDATA, 0, (LPARAM)&cds);
@@ -403,7 +403,7 @@ BOOL IlwisWinApp::InitApplication()
 	if (m_fEmbedded)
 		sParms.replace(sParms.find("-Embedding"), 9, "");
 	if (m_fHideLogo || m_fEmbedded)
-		strcpy(m_lpCmdLine, sParms.scVal());
+		strcpy(m_lpCmdLine, sParms.c_str());
 
 	return TRUE;
 }
@@ -471,13 +471,13 @@ BOOL IlwisWinApp::InitInstance()
 				switch(iotType)
 				{
 				case IlwisObject::iotOBJECTCOLLECTION :
-					doc = dynamic_cast<CatalogDocument*>(m_pDocManager->OpenDocumentFile(sName.scVal()));
+					doc = dynamic_cast<CatalogDocument*>(m_pDocManager->OpenDocumentFile(sName.c_str()));
 					break;
 				case  IlwisObject::iotMAPLIST:
-					doc = dynamic_cast<CatalogDocument*>(dtMapList->OpenDocumentFile(sV.scVal()));
+					doc = dynamic_cast<CatalogDocument*>(dtMapList->OpenDocumentFile(sV.c_str()));
 					break;
 				default:
-					doc = dynamic_cast<CatalogDocument*>(OpenNewDirectory(sV.scVal())); 
+					doc = dynamic_cast<CatalogDocument*>(OpenNewDirectory(sV.c_str())); 
 				}
 				if (!doc) // next time start clean, this time failed
 				{
@@ -498,7 +498,7 @@ BOOL IlwisWinApp::InitInstance()
 		}
 
 		if ( iNr <=  0 )
-			dirdoc = dynamic_cast<CatalogDocument*>(OpenNewDirectory(sGetCurDir().scVal()));
+			dirdoc = dynamic_cast<CatalogDocument*>(OpenNewDirectory(sGetCurDir().c_str()));
 		Context()->ComHandler()->SetOwner(mw);
 		thrDdeServer = new DdeServerThread();
 		thrDdeServer->CreateThread(0, 0);
@@ -593,7 +593,7 @@ void IlwisWinApp::LoadSettings(const String& sSettingName)
 		while( prop.fKeyExists(sKey) )
 		{
 			prop.sValue(sKey, sPath);
-			if ( _access(sPath.scVal(), 0) != -1)
+			if ( _access(sPath.c_str(), 0) != -1)
 			{
 				AddSearchPath( String("%S\\",sPath));
 				sKey = String("SearchPaths\\SearchPath%d", i);
@@ -1210,8 +1210,8 @@ void IlwisWinApp::InitImageLists()
 {
 	ilSmall.Create(16,16,TRUE,4,4);
 	ilLarge.Create(32,32,TRUE,4,4);
-	ilSmall.SetImageCount(115);
-	ilLarge.SetImageCount(115);
+	ilSmall.SetImageCount(120);
+	ilLarge.SetImageCount(120);
 
 	int i = 0;
 	InitImage("ilwis", "LogoIcon", i++);
@@ -1341,6 +1341,11 @@ void IlwisWinApp::InitImageLists()
 	InitImage("Annotation", "Annotation", i++);	
 	InitImage("Position", "Position", i++);	
 	InitImage("Appearance", "Appearance", i++);	
+	InitImage("Direction", "direction", i++);	
+	InitImage(".ivg", "Symbol", i++);	
+	InitImage("AutoClose", "AutoClose", i++);
+	InitImage("Snap", "snap", i++);
+	InitImage("Undefined", "undefined", i++);
 
 }
 
@@ -1391,7 +1396,7 @@ CDocument* IlwisWinApp::OpenDocumentFile(LPCTSTR lpszFileName)
 CDocument* IlwisWinApp::OpenDocumentFile(LPCTSTR lpszFileName, const String& sCom)
 {
 	String sCommand("%s %S", lpszFileName, sCom);
-	return dtForeign->OpenDocumentFile(sCommand.scVal());
+	return dtForeign->OpenDocumentFile(sCommand.c_str());
 }
 
 /*****************************************************************************
@@ -1702,7 +1707,7 @@ CDocument* IlwisWinApp::OpenDocumentFile(LPCTSTR lpszFileName, IlwisDocument::Op
 	FileName fn(pLongFileName);
 	String sFileName = pLongFileName;
 	sFileName = sFileName.sUnQuote();
-	bool fExisting = _access(sFileName.scVal(), 0) == 0; // check needed for inline matrices like MatrixVarCov
+	bool fExisting = _access(sFileName.c_str(), 0) == 0; // check needed for inline matrices like MatrixVarCov
 	IlwisObject::iotIlwisObjectType iotType = IlwisObject::iotObjectType(fn);
 	if (iotType == IlwisObject::iotMAPLIST)
 	{
@@ -1712,14 +1717,14 @@ CDocument* IlwisWinApp::OpenDocumentFile(LPCTSTR lpszFileName, IlwisDocument::Op
 		ml.SetPointer(0);
 		if (fCalculated) {
 			if ( ot == IlwisDocument::otANIMATION) {
-				//((IlwisDocManager *)m_pDocManager)->OpenDocumentAsAnimation(fn.sFullName().scVal());
+				//((IlwisDocManager *)m_pDocManager)->OpenDocumentAsAnimation(fn.sFullName().c_str());
 				WinThread *thr = new WinThread(m_pDocManager, pLongFileName, ot);
 				if ( thr)
 					thr->CreateThread(0,0);
 
 			}
 			else
-				m_pDocManager->OpenDocumentFile(fn.sFullName().scVal());
+				m_pDocManager->OpenDocumentFile(fn.sFullName().c_str());
 		}
 		else
 			AfxBeginThread(CommandHandler::CalcObjectAndShow, (LPVOID)(new String(fn.sFullName(true))));
@@ -1733,21 +1738,21 @@ CDocument* IlwisWinApp::OpenDocumentFile(LPCTSTR lpszFileName, IlwisDocument::Op
 		oc.SetPointer(0);
 		if (fCalculated) {
 			if ( ot == IlwisDocument::otANIMATION  || ot == IlwisDocument::otCOLLECTION) {
-				//((IlwisDocManager *)m_pDocManager)->OpenDocumentAsAnimation(fn.sFullName().scVal());
+				//((IlwisDocManager *)m_pDocManager)->OpenDocumentAsAnimation(fn.sFullName().c_str());
 				WinThread *thr = new WinThread(m_pDocManager, pLongFileName, ot);
 				if ( thr)
 					thr->CreateThread(0,0);
 
 			}
 			else
-				m_pDocManager->OpenDocumentFile(fn.sFullName().scVal());
+				m_pDocManager->OpenDocumentFile(fn.sFullName().c_str());
 		}
 		else
 			AfxBeginThread(CommandHandler::CalcObjectAndShow, (LPVOID)(new String(fn.sFullName(true))));
 	}
 	else if	(iotType == IlwisObject::iotANY && fExisting) // catch all will go the foreignformat
 	{
-		m_pDocManager->OpenDocumentFile(fn.sFullName().scVal());
+		m_pDocManager->OpenDocumentFile(fn.sFullName().c_str());
 	}
 	else
 	{
@@ -1756,7 +1761,7 @@ CDocument* IlwisWinApp::OpenDocumentFile(LPCTSTR lpszFileName, IlwisDocument::Op
 		{
 			if (fn.sExt.length() == 0)
 				fn.sExt = ".mpl";
-			thr = new WinThread(dtMapWindow, fn.sFullNameQuoted().scVal(), ot);
+			thr = new WinThread(dtMapWindow, fn.sFullNameQuoted().c_str(), ot);
 		}
 		else 
 			thr = new WinThread(m_pDocManager, pLongFileName, ot);
@@ -2056,7 +2061,7 @@ void IlwisWinApp::OnHelpSebs()
 {
 	String sDir = getEngine()->getContext()->sIlwDir();
 	String sHelpFile (sDir + "Extensions\\SEBS\\SEBS4ILWIS_help.chm");
-	::ShellExecute(GetDesktopWindow(),"open",sHelpFile.scVal(),0,0,SW_SHOW);
+	::ShellExecute(GetDesktopWindow(),"open",sHelpFile.c_str(),0,0,SW_SHOW);
 }
 
 void IlwisWinApp::OnHelpScriptSyntax()
@@ -2414,7 +2419,7 @@ CDocument *IlwisWinApp::OpenDocumentFile(const URL& url, ParmList& pm)
 		}
 
 		fc->Create(pm);
-		m_pDocManager->OpenDocumentFile(fnIOC.sFullName().scVal());
+		m_pDocManager->OpenDocumentFile(fnIOC.sFullName().c_str());
 	}		
 	delete ff;	
 	return NULL;
@@ -2492,7 +2497,7 @@ void IlwisWinApp::showHelp(const String& helpfile) {
 		file = defaultFile;
 	if ( FileName(file).fExist())
 
-		ShellExecute(GetMainWnd()->m_hWnd,"open",file.scVal(),0,0,SW_SHOW);
+		ShellExecute(GetMainWnd()->m_hWnd,"open",file.c_str(),0,0,SW_SHOW);
 	else
 		throw ErrorObject(String("Help file %S.%S doenst exist",fn1.sFile, fn1.sExt));
 }

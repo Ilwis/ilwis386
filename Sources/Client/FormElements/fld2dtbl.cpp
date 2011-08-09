@@ -51,26 +51,26 @@
 #include "Client\ilwis.h"
 
 FormCreateTable2Dim::FormCreateTable2Dim(CWnd* wPar, String* sTbl2Dim, const String& sDom)
-: FormWithDest(wPar, STBTitleCreateTable2Dim),
+: FormWithDest(wPar, TR("Create 2-Dimensional Table")),
   sTable2Dim(sTbl2Dim), sDom1(sDom), wParent(wPar)
 {
 	iImg = IlwWinApp()->iImage(".ta2");
 
   sDomFill = "value.dom";
   sNewName = *sTable2Dim;
-  fdt = new FieldTable2DimCreate(root, STBUiTblName, &sNewName);
+  fdt = new FieldTable2DimCreate(root, TR("&Table Name"), &sNewName);
   fdt->SetCallBack((NotifyProc)&FormCreateTable2Dim::CallBackName);
-  StaticText* st = new StaticText(root, STBUiDescription);
+  StaticText* st = new StaticText(root, TR("&Description:"));
   st->psn->SetBound(0,0,0,0);
   FieldString* fs = new FieldString(root, "", &sDescr);
   fs->SetWidth(120);
   fs->SetIndependentPos();
-  new FieldDomainC(root, STB2dPrimDom, &sDom1, dmCLASS|dmIDENT);
-  new FieldDomainC(root, STB2dSecDom, &sDom2, dmCLASS|dmIDENT);
+  new FieldDomainC(root, TR("&Primary Domain"), &sDom1, dmCLASS|dmIDENT);
+  new FieldDomainC(root, TR("&Secondary Domain"), &sDom2, dmCLASS|dmIDENT);
 
-  new StaticText(root, STB2dContents);
-  FieldDomainC* fdc = new FieldDomainC(root, STBUiDom, &sDomFill);
-  FieldValueRange* fvr = new FieldValueRange(root, STBUiRange, &vr, fdc);
+  new StaticText(root, TR("Contents:"));
+  FieldDomainC* fdc = new FieldDomainC(root, TR("&Domain"), &sDomFill);
+  FieldValueRange* fvr = new FieldValueRange(root, TR("Value &Range"), &vr, fdc);
   fdc->SetCallBack((NotifyProc)&FieldValueRange::DomainCallBack, fvr);
 
   SetMenHelpTopic("ilwismen\\create_a_two_dimensional_table.htm");
@@ -92,9 +92,9 @@ int FormCreateTable2Dim::CallBackName(Event *)
   FileName fn(sNewName, ".ta2");
   bool fOk = false;
   if (!fn.fValid())
-    stRemark->SetVal(STBRemNotValidTblName);
+    stRemark->SetVal(TR("Not a valid table name"));
   else if(File::fExist(fn))   
-    stRemark->SetVal(STBRemTable2DimExists);
+    stRemark->SetVal(TR("2-Dimensional Table already exists"));
   else {
     fOk = true;  
     stRemark->SetVal("");

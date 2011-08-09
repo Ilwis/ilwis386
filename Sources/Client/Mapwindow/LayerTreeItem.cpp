@@ -70,7 +70,7 @@ static char THIS_FILE[]=__FILE__;
 #endif
 
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define pmadd(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 
 using namespace ILWIS;
@@ -236,7 +236,7 @@ void ObjectLayerTreeItem::OnLButtonDblClk(UINT nFlags, CPoint point)
 	if (ptr->fnObj.fValid())
 	{
 		String sName = ptr->fnObj.sFullPathQuoted();
-		IlwWinApp()->OpenDocumentFile(sName.scVal());
+		IlwWinApp()->OpenDocumentFile(sName.c_str());
 	}
 }
 
@@ -334,12 +334,12 @@ ChooseColumnComboBox::ChooseColumnComboBox(CWnd* wnd, ColumnLayerTreeItem* lti, 
 			dm->pdp() || dm->pdcol())
 		{
 			String sCol = col->sName();
-			AddString(sCol.scVal());
+			AddString(sCol.c_str());
 		}
 	}
 	if (clti->mdr()->getAtttributeColumn().fValid()) {
 		String sCol = clti->mdr()->getAtttributeColumn()->sName();
-		SelectString(-1, sCol.scVal());
+		SelectString(-1, sCol.c_str());
 	}
 	ShowWindow(SW_SHOW);
 }
@@ -514,7 +514,7 @@ void LegendClassLayerTreeItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 				cdc.SetBkColor(clrBack);
 			}
 			cdc.SetBkMode(OPAQUE);
-			cdc.TextOut(pt.x, pt.y, sText.scVal(), sText.length());
+			cdc.TextOut(pt.x, pt.y, sText.c_str(), sText.length());
 			cdc.SelectObject(penOld);
 			cdc.SelectObject(brOld);
 			cdc.Detach();
@@ -587,7 +587,7 @@ void LegendValueLayerTreeItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 				cdc.SetBkColor(clrBack);
 			}
 			cdc.SetBkMode(OPAQUE);
-			cdc.TextOut(pt.x, pt.y, sText.scVal(), sText.length());
+			cdc.TextOut(pt.x, pt.y, sText.c_str(), sText.length());
 			cdc.SelectObject(penOld);
 			cdc.SelectObject(brOld);
 			cdc.Detach();
@@ -693,7 +693,7 @@ void DisplayOptionTree::OnContextMenu(CWnd* pWnd, CPoint pos){
 		DrawerTool *tool = setTool->getTool(i);
 		String sMenu = tool->getMenuString();
 		if ( sMenu != "")
-			men.AppendMenu(MF_STRING, tool->getId(),sMenu.scVal());
+			men.AppendMenu(MF_STRING, tool->getId(),sMenu.c_str());
 			if (tool->isActive())
 				men.CheckMenuItem(tool->getId(), MF_CHECKED);
 	}
@@ -776,7 +776,7 @@ void DisplayOptionColorItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult){
 				cdc.SetBkColor(clrBack);
 			}
 			cdc.SetBkMode(OPAQUE);
-			cdc.TextOut(pt.x, pt.y, sText.scVal(), sText.length());
+			cdc.TextOut(pt.x, pt.y, sText.c_str(), sText.length());
 			cdc.SelectObject(penOld);
 			cdc.SelectObject(brOld);
 			cdc.Detach();
@@ -873,7 +873,7 @@ void DisplayOptionRadioButtonItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 				cdc.SetBkColor(clrBack);
 			}
 			cdc.SetBkMode(OPAQUE);
-			cdc.TextOut(pt.x, pt.y, sText.scVal(), sText.length());
+			cdc.TextOut(pt.x, pt.y, sText.c_str(), sText.length());
 			cdc.SelectObject(penOld);
 			cdc.SelectObject(brOld);
 			cdc.Detach();
@@ -975,7 +975,7 @@ void DisplayOptionButtonItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult){
 				cdc.SetBkColor(clrBack);
 			}
 			cdc.SetBkMode(OPAQUE);
-			cdc.TextOut(pt.x, pt.y, sText.scVal(), sText.length());
+			cdc.TextOut(pt.x, pt.y, sText.c_str(), sText.length());
 			cdc.SelectObject(penOld);
 			cdc.SelectObject(brOld);
 			cdc.Detach();

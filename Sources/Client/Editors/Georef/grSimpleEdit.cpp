@@ -96,7 +96,7 @@ void GeoRefSimpleView::create()
 
 	rcSize  = pgs->rcSize();
 
-	String sRemark(SGRRemLinesCols_ii.c_str(), rcSize.Row, rcSize.Col);
+	String sRemark(TR("%li lines and %li columns").c_str(), rcSize.Row, rcSize.Col);
 	FormEntry* fe = new StaticText(root, sRemark);
 	fe->SetIndependentPos();
 
@@ -104,19 +104,19 @@ void GeoRefSimpleView::create()
 
 	if (GetDocument()->gr()->fReadOnly())
 	{
-		String s("%S: %S", SGRUiCoordSys, sCoordSystem);
+		String s("%S: %S", TR("&Coordinate System"), sCoordSystem);
 		StaticText* st = new StaticText(root, s);
 		st->psn->SetBound(0, 0, 0, 0);
 
-		s = String(SGRUiSimpleA11A12_ff.c_str(), a11, a12);
+		s = String(TR("a11= %lg,   a12= %lg").c_str(), a11, a12);
 		st = new StaticText(root, s);
 		st->psn->SetBound(0, 0, 0, 0);
 
-		s = String(SGRUiSimpleA21A22_ff.c_str(), a21, a22);
+		s = String(TR("a21= %lg,   a22= %lg").c_str(), a21, a22);
 		st = new StaticText(root, s);
 		st->psn->SetBound(0, 0, 0, 0);
 
-		s = String(SGRUiSimpleB1B2_ff.c_str(), b1, b2);
+		s = String(TR("b1= %lg,   b2= %lg").c_str(), b1, b2);
 		st = new StaticText(root, s);
 		st->psn->SetBound(0, 0, 0, 0);
 
@@ -177,13 +177,13 @@ int GeoRefSimpleView::CallBack(Event*)
 	if (rDet > 1e-13)
 	{
 		double rPixSize = 1 /sqrt(rDet);
-		String s(SGRRemPixSize_f.c_str(), rPixSize);
+		String s(TR("Pixel Size = %.3f m").c_str(), rPixSize);
 		stRemark->SetVal(s);
 		EnableOK(); 
 	}
 	else
 	{
-		stRemark->SetVal(SGRRemSingularMatrix);
+		stRemark->SetVal(TR("Singular Matrix"));
 		DisableOK(); 
 	}
 

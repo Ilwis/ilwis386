@@ -285,7 +285,7 @@ void StaticTextSimple::SetVal(const String& sVal)
 	sText = sVal;
 	if (txt && txt->GetSafeHwnd() != NULL) 
 	{
-		txt->SetWindowText(sVal.scVal());
+		txt->SetWindowText(sVal.c_str());
 	}  
 }
 
@@ -298,7 +298,7 @@ void StaticTextSimple::show(int sw)
 			txt->SetWindowText("");
 		}
 		else {
-			txt->SetWindowText(sText.scVal());
+			txt->SetWindowText(sText.c_str());
 			txt->ShowWindow(SW_SHOW);
 		}
 	}
@@ -728,8 +728,8 @@ void DoubleEdit::text(const String& s)
 {
   String str;
   zRange pos(0,0);
-  int iLen = strlen(s.scVal());
-  format->addChars(str, s.scVal(), iLen, pos);
+  int iLen = strlen(s.c_str());
+  format->addChars(str, s.c_str(), iLen, pos);
   ZappEdit::text(str);
 }
 

@@ -97,22 +97,22 @@ String ActionPair::sExec(const FileName& fn1, const FileName& fn2) const
 
 String ActionPair::sDescription(const FileName& fn) const
 {
-  const char* s = sDescr.scVal();
+  const char* s = sDescr.c_str();
   const char* p = strchr(s, '%');
   if (p == 0)
     return sDescr;
   if (p[1] != 'S')
-    return SMSRemInvalidDescription;  
+    return TR("Invalid Description");  
   s = &p[1];
   const char *p2 = strchr(s, '%');
   if (p2 != 0) 
-    return SMSRemInvalidDescription;  
+    return TR("Invalid Description");  
   if (s2 == "") { 
     String sFile = fn.sFile;
     sFile &= fn.sExt;
-     return String(sDescr.scVal(), sFile);  
+     return String(sDescr.c_str(), sFile);  
   }   
-  return String(sDescr.scVal(), fn.sFile);  
+  return String(sDescr.c_str(), fn.sFile);  
 }
 
 String ActionPair::sDescription(const FileName& fn1, const FileName& fn2) const
@@ -125,39 +125,39 @@ String ActionPair::sDescription(const FileName& fn1, const FileName& fn2) const
     return sTmp;
   if (p[1] == '1')
     if (fn1.sExt == s1)
-      str1 = fn1.sFile.scVal();
+      str1 = fn1.sFile.c_str();
     else  
-      str1 = fn2.sFile.scVal();
+      str1 = fn2.sFile.c_str();
   else if (p[1] == '2')  
     if (fn1.sExt == s2)
-      str1 = fn1.sFile.scVal();
+      str1 = fn1.sFile.c_str();
     else  
-      str1 = fn2.sFile.scVal();
+      str1 = fn2.sFile.c_str();
   else  
-    return SMSRemInvalidDescription;  
+    return TR("Invalid Description");  
   p[1] = 's';  
   s = &p[1];
   p = strchr(s, '%');
   if (p == 0)
-    return String(sTmp.scVal(), str1);  
+    return String(sTmp.c_str(), str1);  
   if (p[1] == '1')
     if (fn1.sExt == s1)
-      str2 = fn1.sFile.scVal();
+      str2 = fn1.sFile.c_str();
     else  
-      str2 = fn2.sFile.scVal();
+      str2 = fn2.sFile.c_str();
   else if (p[1] == '2')  
     if (fn1.sExt == s2)
-      str2 = fn1.sFile.scVal();
+      str2 = fn1.sFile.c_str();
     else  
-      str2 = fn2.sFile.scVal();
+      str2 = fn2.sFile.c_str();
   else  
-    return SMSRemInvalidDescription;  
+    return TR("Invalid Description");  
   s = &p[1];
   p[1] = 's';  
   p = strchr(s, '%');
   if (p != 0) 
-    return SMSRemInvalidDescription;  
-  return String(sTmp.scVal(), str1, str2);  
+    return TR("Invalid Description");  
+  return String(sTmp.c_str(), str1, str2);  
 }
 
 bool ActionPair::fAction(const Action* act) const

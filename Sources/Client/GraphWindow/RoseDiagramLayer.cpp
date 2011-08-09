@@ -74,7 +74,7 @@ RoseDiagramLayer::RoseDiagramLayer(RoseDiagramDrawer* rd, const FileName& fn, co
 , rdd(rd), rdt(rdtNeedle) 
 {
 	String sGraphType;
-	ObjectInfo::ReadElement(sSection.scVal(), "GraphType", fn, sGraphType);
+	ObjectInfo::ReadElement(sSection.c_str(), "GraphType", fn, sGraphType);
 	rdt = rdtContineous;
 	if (fCIStrEqual(sGraphType, "Contineous"))
 		rdt = rdtContineous;
@@ -82,13 +82,13 @@ RoseDiagramLayer::RoseDiagramLayer(RoseDiagramDrawer* rd, const FileName& fn, co
 		rdt = rdtStep;
 	else if (fCIStrEqual(sGraphType, "Needle"))
 		rdt = rdtNeedle; 
-	ObjectInfo::ReadElement(sSection.scVal(), "Table", fn, tbl);
+	ObjectInfo::ReadElement(sSection.c_str(), "Table", fn, tbl);
 	String sCol;
-  ObjectInfo::ReadElement(sSection.scVal(), "ColumnX", fn, sCol);
+  ObjectInfo::ReadElement(sSection.c_str(), "ColumnX", fn, sCol);
 	if (sCol.length() > 0)
 	  colX = tbl->col(sCol);
 	sCol = "";
-	ObjectInfo::ReadElement(sSection.scVal(), "ColumnY", fn, sCol);
+	ObjectInfo::ReadElement(sSection.c_str(), "ColumnY", fn, sCol);
 	if (sCol.length() > 0)
   	colY = tbl->col(sCol);
 }
@@ -105,14 +105,14 @@ void RoseDiagramLayer::SaveSettings(const FileName& fn, const String& sSection)
 		default: break;
 	}
 	if (sGraphType.length()>0)
-  	ObjectInfo::WriteElement(sSection.scVal(), "GraphType", fn, sGraphType);
-	ObjectInfo::WriteElement(sSection.scVal(), "Type", fn, "Column");
+  	ObjectInfo::WriteElement(sSection.c_str(), "GraphType", fn, sGraphType);
+	ObjectInfo::WriteElement(sSection.c_str(), "Type", fn, "Column");
 
-	ObjectInfo::WriteElement(sSection.scVal(), "Table", fn, tbl);
+	ObjectInfo::WriteElement(sSection.c_str(), "Table", fn, tbl);
 	if (colX.fValid())
-	  ObjectInfo::WriteElement(sSection.scVal(), "ColumnX", fn, colX);
+	  ObjectInfo::WriteElement(sSection.c_str(), "ColumnX", fn, colX);
 	if (colY.fValid())
-	  ObjectInfo::WriteElement(sSection.scVal(), "ColumnY", fn, colY);
+	  ObjectInfo::WriteElement(sSection.c_str(), "ColumnY", fn, colY);
 }
 
 RoseDiagramLayer::~RoseDiagramLayer()
@@ -125,25 +125,25 @@ bool RoseDiagramLayer::fConfig()
   {
   public:
     ConfigForm(RoseDiagramLayer* rdl)
-    : FormWithDest(0, SGPTitleGraphOptionsRoseDiagram)
+    : FormWithDest(0, TR("Graph Options - Rose Diagram"))
     {
       iImg = IlwWinApp()->iImage("Graph");
-//      new CheckBox(root, SGPUiShow, &rdl->fShow);
-      FieldString* fs = new FieldString(root, SGPUiName, &rdl->sTitle);
+//      new CheckBox(root, TR("&Show"), &rdl->fShow);
+      FieldString* fs = new FieldString(root, TR("&Name"), &rdl->sTitle);
       fs->SetWidth(120);
   		RadioGroup* rgType = new RadioGroup(root, "", (int*)&rdl->rdt);
-      RadioButton* rbLine = new RadioButton(rgType, SGPUiLine);
-      RadioButton* rbStep = new RadioButton(rgType, SGPUiStep);
-      RadioButton* rbNeedle = new RadioButton(rgType, SGPUiNeedle);
+      RadioButton* rbLine = new RadioButton(rgType, TR("&Line"));
+      RadioButton* rbStep = new RadioButton(rgType, TR("&Step"));
+      RadioButton* rbNeedle = new RadioButton(rgType, TR("&Needle"));
 
       FieldGroup* fg = new FieldGroup(rbLine, true);
-      new FieldColor(fg, SGPUiColor, &rdl->color);
+      new FieldColor(fg, TR("&Color"), &rdl->color);
 
       fg = new FieldGroup(rbStep, true);
-      new FieldColor(fg, SGPUiColor, &rdl->color);
+      new FieldColor(fg, TR("&Color"), &rdl->color);
 
       fg = new FieldGroup(rbNeedle, true);
-      new FieldColor(fg, SGPUiColor, &rdl->color);
+      new FieldColor(fg, TR("&Color"), &rdl->color);
    
       SetMenHelpTopic("ilwismen\\graph_window_options_rose_diagram.htm");
       create();

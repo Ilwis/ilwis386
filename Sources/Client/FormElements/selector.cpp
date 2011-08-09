@@ -90,7 +90,7 @@ void BaseSelector::DrawItem(Event* ev)
 	bool fSel = ((dis->itemAction | ODA_SELECT) && (dis->itemState & ODS_SELECTED));
 
   idw.DrawItem(dis, s, fSel, true, false);
-//  dc.TextOut( iLeft, iV, s.scVal(), s.length());
+//  dc.TextOut( iLeft, iV, s.c_str(), s.length());
 
 	dc.Detach();
 }
@@ -118,7 +118,7 @@ void StringArrayLister::create()
   BaseSelector::create();
   lb->ResetContent();
   for (int i = 0; i < as.iSize(); ++i)
-    lb->AddString(as[i].scVal());
+    lb->AddString(as[i].c_str());
 
 	lb->setNotify(this,(NotifyProc)&StringArrayLister::OnKeyUp, WM_KEYDOWN);		
 }
@@ -168,16 +168,16 @@ void StringArrayLister:: resetContent(const Array<String>& arr){
   copy(arr.begin(), arr.end(), as.begin());
   for(int i=0; i < arr.size(); ++i) 
   {
-	  lb->AddString(arr[i].scVal());
+	  lb->AddString(arr[i].c_str());
   }
 }
 
 void StringArrayLister::AddString(const String& s, int iWhere)
 {
 	if ( iWhere != iUNDEF)
-		lb->InsertString(iWhere, s.scVal());
+		lb->InsertString(iWhere, s.c_str());
 	else
-		lb->AddString(s.scVal());
+		lb->AddString(s.c_str());
 }
 
 void StringArrayLister::Clear() {

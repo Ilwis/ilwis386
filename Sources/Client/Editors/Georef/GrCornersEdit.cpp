@@ -106,51 +106,51 @@ void GeoRefCornersView::create()
 	fCenter = !pgcr->fCornersOfCorners;
 	rcSize  = pgcr->rcSize();
 
-	String sRemark(SGRRemLinesCols_ii.c_str(), rcSize.Row, rcSize.Col);
+	String sRemark(TR("%li lines and %li columns").c_str(), rcSize.Row, rcSize.Col);
 	FormEntry* fe = new StaticText(root, sRemark);
 	fe->SetIndependentPos();
 
 	if (GetDocument()->gr()->fReadOnly())
 	{
-		String s("%S: %S", SGRUiCoordSys, sCoordSystem);
+		String s("%S: %S", TR("&Coordinate System"), sCoordSystem);
 		StaticText* st = new StaticText(root, s);
 		st->psn->SetBound(0,0,0,0);
-		s = String("%S: %s", SGRUiCenterOfCorners, fCenter ? "Yes" : "No");
+		s = String("%S: %s", TR("&Center of Corner pixels"), fCenter ? "Yes" : "No");
 		st = new StaticText(root, s);
 		st->psn->SetBound(0,0,0,0);
-		s = String("%S: %S", SGRUiMinXY, pgcr->cs()->sValue(crdMin));
+		s = String("%S: %S", TR("&Min X, Y"), pgcr->cs()->sValue(crdMin));
 		st = new StaticText(root, s);
 		st->psn->SetBound(0,0,0,0);
-		s = String("%S: %S", SGRUiMaxXY, pgcr->cs()->sValue(crdMax));
+		s = String("%S: %S", TR("&Max X, Y"), pgcr->cs()->sValue(crdMax));
 		st = new StaticText(root, s);
 		s = String(' ', 50);
 		stRemark = new StaticText(root, s);
 	}
 	else
 	{
-		fldCsyC = new FieldCoordSystemC(root, SGRUiCoordSys, &sCoordSystem);
+		fldCsyC = new FieldCoordSystemC(root, TR("&Coordinate System"), &sCoordSystem);
 		fldCsyC->SetCallBack((NotifyProc)&GeoRefCornersView::CoordSysCallBack);
 		FieldGroup* fg = new FieldGroup(root);
-		cbCoC = new CheckBox(fg, SGRUiCenterOfCorners, &fCenter);
+		cbCoC = new CheckBox(fg, TR("&Center of Corner pixels"), &fCenter);
 		cbCoC->SetCallBack((NotifyProc)&GeoRefCornersView::CallBackCenterOfCorner);
 		cbCoC->SetIndependentPos();
 
 		fgCoord = new FieldGroup(root);
 		fgCoord->Align(cbCoC, AL_UNDER);
-		fldCrdMin = new FieldCoord(fgCoord, SGRUiMinXY, &crdMin);
+		fldCrdMin = new FieldCoord(fgCoord, TR("&Min X, Y"), &crdMin);
 		fldCrdMin->SetCallBack((NotifyProc)&GeoRefCornersView::CallBackMinMaxXY);
-		fldCrdMax = new FieldCoord(fgCoord, SGRUiMaxXY, &crdMax);
+		fldCrdMax = new FieldCoord(fgCoord, TR("&Max X, Y"), &crdMax);
 		fldCrdMax->SetCallBack((NotifyProc)&GeoRefCornersView::CallBackMinMaxXY);
 
 		fgLatLon = new FieldGroup(root);
 		fgLatLon->Align(cbCoC, AL_UNDER);
-		fldMinLat = new FieldLat(fgLatLon, SCSUiMinLat, &llMin.Lat);
+		fldMinLat = new FieldLat(fgLatLon, TR("Min Latitude"), &llMin.Lat);
 		fldMinLat->SetCallBack((NotifyProc)&GeoRefCornersView::CallBackMinMaxLatLon);
-		fldMinLon = new FieldLon(fgLatLon, SCSUiMinLon, &llMin.Lon);
+		fldMinLon = new FieldLon(fgLatLon, TR("Min Longitude"), &llMin.Lon);
 		fldMinLon->SetCallBack((NotifyProc)&GeoRefCornersView::CallBackMinMaxLatLon);
-		fldMaxLat = new FieldLat(fgLatLon, SCSUiMaxLat, &llMax.Lat);
+		fldMaxLat = new FieldLat(fgLatLon, TR("Max Latitude"), &llMax.Lat);
 		fldMaxLat->SetCallBack((NotifyProc)&GeoRefCornersView::CallBackMinMaxLatLon);
-		fldMaxLon = new FieldLon(fgLatLon, SCSUiMaxLon, &llMax.Lon);
+		fldMaxLon = new FieldLon(fgLatLon, TR("Max Longitude"), &llMax.Lon);
 		fldMaxLon->SetCallBack((NotifyProc)&GeoRefCornersView::CallBackMinMaxLatLon);
 
 		String s('X', 45);
@@ -297,14 +297,14 @@ int GeoRefCornersView::CallBackMinMaxXY(Event*)
 		rX = (crdMax.x - crdMin.x) / iCol;
 		rY = (crdMax.y - crdMin.y) / iRow;
 
-		String s(SGRRemPixSize_ff.c_str(), rX, rY);
+		String s(TR("Pixel Size = %.3f m, %.3f m").c_str(), rX, rY);
 		stRemark->SetVal(s);
 
 		EnableOK(); 
 	}
 	else
 	{
-		stRemark->SetVal(SGRRemMinSmallerMax);
+		stRemark->SetVal(TR("Minimum should be smaller than maximum"));
 		DisableOK(); 
 	}  
 	return 0;
@@ -337,12 +337,12 @@ int GeoRefCornersView::CallBackMinMaxLatLon(Event*)
 
 		String sLat = LatLon::sDegree(rLat); 
 		String sLon = LatLon::sDegree(rLon); 
-		String s(SGRRemPixSizeLatLon_SS.c_str(), sLon, sLat);
+		String s(TR("Pixel Size = %S, %S").c_str(), sLon, sLat);
 		stRemark->SetVal(s);
 		EnableOK();
 	}
 	else {
-		stRemark->SetVal(SGRRemMinSmallerMax);
+		stRemark->SetVal(TR("Minimum should be smaller than maximum"));
 		DisableOK();
 	}
 	return 0;  

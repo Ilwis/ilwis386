@@ -303,24 +303,24 @@ void Catalog::CreateColumns()
 	farColumns[ctEXPRESSION] = LVColumnInfo(true, 200, ctEXPRESSION);
 	farColumns[ctOBJECTSIZE] = LVColumnInfo(true, 100, ctOBJECTSIZE);
 
-	lvCtrl.InsertColumn(ctNAME, SMSName.scVal(), LVCFMT_LEFT, farColumns[ctNAME].iWidth);
-	lvCtrl.InsertColumn(ctTYPE, SMSType.scVal(), LVCFMT_LEFT, farColumns[ctTYPE].iWidth);
-	lvCtrl.InsertColumn(ctDEPENDENT, SMSD.scVal(), LVCFMT_LEFT, farColumns[ctDEPENDENT].iWidth);
-	lvCtrl.InsertColumn(ctCALCULATED, SMSC.scVal(),  LVCFMT_LEFT, farColumns[ctCALCULATED].iWidth);
-	lvCtrl.InsertColumn(ctUPTODATE, SMSU.scVal(), LVCFMT_LEFT, farColumns[ctUPTODATE].iWidth);
-	lvCtrl.InsertColumn(ctREADONLY, SMSR.scVal(),  LVCFMT_LEFT, farColumns[ctREADONLY].iWidth);
-	lvCtrl.InsertColumn(ctMODIFIED, SMSModified.scVal(),  LVCFMT_LEFT, farColumns[ctMODIFIED].iWidth);
-	lvCtrl.InsertColumn(ctDOMAIN, SMSDomain.scVal(), LVCFMT_LEFT, farColumns[ctDOMAIN].iWidth);
-	lvCtrl.InsertColumn(ctDOMAINTYPE, SMSDomainType.scVal(), LVCFMT_LEFT, farColumns[ctDOMAINTYPE].iWidth);
-	lvCtrl.InsertColumn(ctCOORDSYSTEM, SMSCoordSystem.scVal(), LVCFMT_LEFT, farColumns[ctCOORDSYSTEM].iWidth);
-	lvCtrl.InsertColumn(ctCOORDSYSTEMTYPE, SMSCsyType.scVal(), LVCFMT_LEFT, farColumns[ctCOORDSYSTEMTYPE].iWidth);
-	lvCtrl.InsertColumn(ctGEOREF, SMSGeoref.scVal(), LVCFMT_LEFT, farColumns[ctGEOREF].iWidth);
-	lvCtrl.InsertColumn(ctGEOREFTYPE, SMSGeorefType.scVal(),  LVCFMT_LEFT, farColumns[ctGEOREFTYPE].iWidth);
-	lvCtrl.InsertColumn(ctGSIZE,  SMSSize.scVal(), LVCFMT_LEFT, farColumns[ctGSIZE].iWidth);	
-	lvCtrl.InsertColumn(ctATTRIBUTETABLE, SMSAttribute.scVal(), LVCFMT_LEFT, farColumns[ctATTRIBUTETABLE].iWidth);
-	lvCtrl.InsertColumn(ctDESCRIPTION, SMSDescription.scVal(), LVCFMT_LEFT, farColumns[ctDESCRIPTION].iWidth);
-	lvCtrl.InsertColumn(ctEXPRESSION, SMSExpression.scVal(), LVCFMT_LEFT, farColumns[ctEXPRESSION].iWidth);
-	lvCtrl.InsertColumn(ctOBJECTSIZE, SMSObjectSize.scVal(), LVCFMT_LEFT, farColumns[ctOBJECTSIZE].iWidth);
+	lvCtrl.InsertColumn(ctNAME, TR("Name").c_str(), LVCFMT_LEFT, farColumns[ctNAME].iWidth);
+	lvCtrl.InsertColumn(ctTYPE, TR("Type").c_str(), LVCFMT_LEFT, farColumns[ctTYPE].iWidth);
+	lvCtrl.InsertColumn(ctDEPENDENT, TR("D ").c_str(), LVCFMT_LEFT, farColumns[ctDEPENDENT].iWidth);
+	lvCtrl.InsertColumn(ctCALCULATED, TR("C ").c_str(),  LVCFMT_LEFT, farColumns[ctCALCULATED].iWidth);
+	lvCtrl.InsertColumn(ctUPTODATE, TR("U ").c_str(), LVCFMT_LEFT, farColumns[ctUPTODATE].iWidth);
+	lvCtrl.InsertColumn(ctREADONLY, TR("R ").c_str(),  LVCFMT_LEFT, farColumns[ctREADONLY].iWidth);
+	lvCtrl.InsertColumn(ctMODIFIED, TR("Modified").c_str(),  LVCFMT_LEFT, farColumns[ctMODIFIED].iWidth);
+	lvCtrl.InsertColumn(ctDOMAIN, TR("Domain").c_str(), LVCFMT_LEFT, farColumns[ctDOMAIN].iWidth);
+	lvCtrl.InsertColumn(ctDOMAINTYPE, TR("Domain type").c_str(), LVCFMT_LEFT, farColumns[ctDOMAINTYPE].iWidth);
+	lvCtrl.InsertColumn(ctCOORDSYSTEM, TR("CoordSystem ").c_str(), LVCFMT_LEFT, farColumns[ctCOORDSYSTEM].iWidth);
+	lvCtrl.InsertColumn(ctCOORDSYSTEMTYPE, TR("Csy type ").c_str(), LVCFMT_LEFT, farColumns[ctCOORDSYSTEMTYPE].iWidth);
+	lvCtrl.InsertColumn(ctGEOREF, TR("Georef ").c_str(), LVCFMT_LEFT, farColumns[ctGEOREF].iWidth);
+	lvCtrl.InsertColumn(ctGEOREFTYPE, TR("Georef type").c_str(),  LVCFMT_LEFT, farColumns[ctGEOREFTYPE].iWidth);
+	lvCtrl.InsertColumn(ctGSIZE,  TR("Size").c_str(), LVCFMT_LEFT, farColumns[ctGSIZE].iWidth);	
+	lvCtrl.InsertColumn(ctATTRIBUTETABLE, TR("Attribute ").c_str(), LVCFMT_LEFT, farColumns[ctATTRIBUTETABLE].iWidth);
+	lvCtrl.InsertColumn(ctDESCRIPTION, TR("Description").c_str(), LVCFMT_LEFT, farColumns[ctDESCRIPTION].iWidth);
+	lvCtrl.InsertColumn(ctEXPRESSION, TR("Expression ").c_str(), LVCFMT_LEFT, farColumns[ctEXPRESSION].iWidth);
+	lvCtrl.InsertColumn(ctOBJECTSIZE, TR("Object size").c_str(), LVCFMT_LEFT, farColumns[ctOBJECTSIZE].iWidth);
 }
 
 void Catalog::FillCatalog()
@@ -328,7 +328,7 @@ void Catalog::FillCatalog()
 	fFilling = true;
 	CFrameWnd* pFrameWnd = GetTopLevelFrame();
 	CStatusBar* pMessageBar = (CStatusBar *)pFrameWnd->GetMessageBar();
-	pMessageBar->SetPaneText(MainWindow::spDESCRIPTION, SMSMsgReadingCatalog.sVal()); 
+	pMessageBar->SetPaneText(MainWindow::spDESCRIPTION, TR("Reading Catalog...").c_str()); 
 	
 	QueryFileNames();
 	SortColumn(iSortColumn);
@@ -478,7 +478,7 @@ String Catalog::sODFValue(const FileName& fn, const String& sSection, const Stri
 	if (IlwisObject::iotANY == IlwisObject::iotObjectType(fn))
 		return "";
 	String sVal, sReturn;
-	int iRet = ObjectInfo::ReadElement(sSection.scVal(), sEntry.scVal(), fn, sVal);
+	int iRet = ObjectInfo::ReadElement(sSection.c_str(), sEntry.c_str(), fn, sVal);
 	if ( iRet == 0 ) return "";
 	int iLastPnt = sVal.rfind('.');
 	if ( !fExtension )
@@ -493,7 +493,7 @@ String Catalog::sODFValue(const FileName& fn, const String& sSection, const Stri
 		// We can not be sure here that FileName::sRelative uses the correct working directory
 		if (sVal.rfind('\\') == string::npos)
 			fnType.Dir(fn.sPath());
-		sReturn = sODFValue(fnType, sEntry.scVal(), "type", false);
+		sReturn = sODFValue(fnType, sEntry.c_str(), "type", false);
 		if ( sReturn == "")
 			sReturn = sVal.toLower();
 	}
@@ -514,7 +514,7 @@ long Catalog::iGetColumnString(int i, const FileName& fnObj)
 			CTime t;
 			if ( sTime == "")
 			{
-				HANDLE hFile = CreateFile(fnObj.sFullName().scVal(), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING,
+				HANDLE hFile = CreateFile(fnObj.sFullName().c_str(), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING,
 				                             FILE_ATTRIBUTE_NORMAL, NULL);
 				if (0 == hFile) 
 					return 0;
@@ -629,7 +629,7 @@ String Catalog::sGetColumnString(int i, const FileName& fnObj, bool fExtension)
 			CTime t;
 			if ( sTime == "" )
 			{
-				HANDLE hFile = CreateFile(fnObj.sFullName().scVal(), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING,
+				HANDLE hFile = CreateFile(fnObj.sFullName().c_str(), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING,
 					                             FILE_ATTRIBUTE_NORMAL, NULL);
 				if (0 == hFile) 
 					return "";
@@ -941,7 +941,7 @@ String Catalog::sGetColumnString(int i, const FileName& fnObj, bool fExtension)
 		{
 			if ("drive" == fnObj.sExt || "directory" == fnObj.sExt)
 				return "";
-			return GetFileAttributes(fnObj.sFullPath().scVal()) & FILE_ATTRIBUTE_READONLY ? "R" : "";
+			return GetFileAttributes(fnObj.sFullPath().c_str()) & FILE_ATTRIBUTE_READONLY ? "R" : "";
 		}
 		break;
 		case ctATTRIBUTETABLE:
@@ -989,7 +989,7 @@ Catalog::CalcState Catalog::csTraceUpToDate(const FileName& fnObj, int iTime)
 		FileName fnNew;
 		String sFile;
 
-		int iRet = ObjectInfo::ReadElement("ObjectDependency", String("object%d", i).scVal(), fnObj, sFile);
+		int iRet = ObjectInfo::ReadElement("ObjectDependency", String("object%d", i).c_str(), fnObj, sFile);
 		if (0 == iRet) 
 			return csUNKNOWN; // file does not exits anymore ??
 		sFile.toLower();
@@ -1258,7 +1258,7 @@ bool Catalog::fIsManualSortAvail()
 	return false;
 }
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define pmadd(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 #define addsub(ID) menSub.AppendMenu(MF_STRING, ID, sMen(ID)); 
 
@@ -1465,7 +1465,7 @@ void Catalog::OnContextMenu(CWnd* pWnd, CPoint point)
 			case ID_CAT_OPENHERE: 
 			{
 				CDocument* doc = GetDocument();
-				doc->OnOpenDocument(fn.sFile.scVal());
+				doc->OnOpenDocument(fn.sFile.c_str());
 				doc->UpdateAllViews(0);
 				break;
 			}
@@ -1550,7 +1550,7 @@ void Catalog::Execute(int iItem)
 	if ("directory" == fn.sExt || "drive" == fn.sExt) 
 	{
 		CDocument* doc = GetDocument();
-		doc->OnOpenDocument(fn.sFile.scVal());
+		doc->OnOpenDocument(fn.sFile.c_str());
 		doc->UpdateAllViews(0);
 	}
 	else if ( IlwisObject::iotObjectType(fn) == IlwisObject::iotANY )
@@ -1729,16 +1729,16 @@ void Catalog::OnBegindrag(NMHDR* pNMHDR, LRESULT* pResult)
 	df->fWide = false;
 	df->pt = pNMListView->ptAction;
 	df->fNC = false;
-	memcpy(df + 1, sFileList.scVal(), iLen);
+	memcpy(df + 1, sFileList.c_str(), iLen);
 	GlobalUnlock(hnd);
 
 	COleDataSource ods;
 	ods.CacheGlobalData(CF_HDROP, hnd);
 
 	if (1 == iNr) {
-		const char* sExt = fn.sExt.scVal() + 1;
+		const char* sExt = fn.sExt.c_str() + 1;
 		String sCur("Arr%sCur", sExt);
-		zCursor cur(sCur.scVal());
+		zCursor cur(sCur.c_str());
 		ShowCursorDropSource scds(cur);
 		ods.DoDragDrop(DROPEFFECT_COPY, 0, &scds);
 	}
@@ -1778,7 +1778,7 @@ DROPEFFECT Catalog::OnDragOver(COleDataObject* pDataObject, DWORD dwKeyState, CP
 					String sCmd = ap->sExec(fnDrag, fnOn);
 					String sDesc = ap->sDescription(fnDrag, fnOn);
 					IlwWinApp()->SetCommandLine(sCmd);
-					pMessageBar->SetWindowText(sDesc.scVal());
+					pMessageBar->SetWindowText(sDesc.c_str());
 					deResult = DROPEFFECT_COPY;
 				}
 				else
@@ -1860,7 +1860,7 @@ void Catalog::SetFilterPane()
 		if ( sCatalogQuery != "")
 		{
 			pMessageBar->GetStatusBarCtrl().SetText(
-				String("Query : %S", sCatalogQuery).scVal(), MainWindow::spFILTER_PANE, 0);
+				String("Query : %S", sCatalogQuery).c_str(), MainWindow::spFILTER_PANE, 0);
 		}
 		else
 			pMessageBar->GetStatusBarCtrl().SetText("Query : None", MainWindow::spFILTER_PANE, 0);
@@ -2241,7 +2241,7 @@ void Catalog::OnUpdateEdit(CCmdUI* pCmdUI)
 			pCmdUI->Enable(FALSE);
 		else
 		{
-//			if ( pCmdUI->m_nID == ID_CAT_DEL && GetFileAttributes(fn.sFullPath().scVal()) & FILE_ATTRIBUTE_READONLY)
+//			if ( pCmdUI->m_nID == ID_CAT_DEL && GetFileAttributes(fn.sFullPath().c_str()) & FILE_ATTRIBUTE_READONLY)
 //				pCmdUI->Enable(FALSE);
 //			else
 				pCmdUI->Enable();
@@ -2375,13 +2375,13 @@ void Catalog::OnEditObject()
 	FileName fn;
 	while ( (fn = GetNextSelectedFile(pos)) != FileName())
 	{
-		if (!(GetFileAttributes(fn.sFullPath().scVal()) & FILE_ATTRIBUTE_READONLY) 
+		if (!(GetFileAttributes(fn.sFullPath().c_str()) & FILE_ATTRIBUTE_READONLY) 
 			&& !ObjectInfo::fSystemObject(fn)
 			&& !ObjectInfo::fVirtual(fn))
 			IlwWinApp()->Execute(String("edit %S", fn.sFullPathQuoted()));
 		else
 		{
-			if (MessageBox(String(SMSMsgCanNotEdit_S.scVal(), fn.sFile).scVal(), "", MB_ICONWARNING | MB_OKCANCEL | MB_TOPMOST) == IDCANCEL)
+			if (MessageBox(String(TR("Can not edit : %S ").c_str(), fn.sFile).c_str(), "", MB_ICONWARNING | MB_OKCANCEL | MB_TOPMOST) == IDCANCEL)
 				break;
 		}
 	}
@@ -2397,9 +2397,9 @@ void Catalog::OnUpdateEditObject(CCmdUI* pCmdUI)
 	DWORD dw;
 	while ( (fn = GetNextSelectedFile(pos)) != FileName())
 	{
-		dw = GetFileAttributes(fn.sFullPath().scVal());
+		dw = GetFileAttributes(fn.sFullPath().c_str());
 		if ( IlwisObject::iotObjectType( fn) != IlwisObject::iotANY &&   // it is an ILWIS object
-			((GetFileAttributes(fn.sFullPath().scVal()) & FILE_ATTRIBUTE_READONLY) != FILE_ATTRIBUTE_READONLY) && // it is writable
+			((GetFileAttributes(fn.sFullPath().c_str()) & FILE_ATTRIBUTE_READONLY) != FILE_ATTRIBUTE_READONLY) && // it is writable
 			!ObjectInfo::fSystemObject(fn) &&  // it is not a system object
 			!ObjectInfo::fVirtual(fn) )       // it is not a dependent object
 		{
@@ -2530,15 +2530,15 @@ class CopyObjectQuestionForm : public FormBaseDialog
 			new StaticText(fg, sQuestion.sHead("\n"));
 			new StaticText(fg, sQuestion.sTail("\n"));
 			new FieldBlank(fg);
-			PushButton *pb1 = new PushButton(root, SMSYes, (NotifyProc)&CopyObjectQuestionForm::Yes); 
+			PushButton *pb1 = new PushButton(root, TR("Yes"), (NotifyProc)&CopyObjectQuestionForm::Yes); 
 			pb1->SetIndependentPos();
-			PushButton *pb2 = new PushButton(root, SMSYesToAll, (NotifyProc)&CopyObjectQuestionForm::YesToAll); 
+			PushButton *pb2 = new PushButton(root, TR("Yes to All"), (NotifyProc)&CopyObjectQuestionForm::YesToAll); 
 			pb2->Align(pb1, AL_AFTER);
 			pb2->SetIndependentPos();
-			pb1 = new PushButton(root, SMSNo, (NotifyProc)&CopyObjectQuestionForm::No); 
+			pb1 = new PushButton(root, TR("No"), (NotifyProc)&CopyObjectQuestionForm::No); 
 			pb1->Align(pb2, AL_AFTER);
 			pb1->SetIndependentPos();
-			pb2 = new PushButton(root, SMSCancel, (NotifyProc)&CopyObjectQuestionForm::Cancel);
+			pb2 = new PushButton(root, TR("Cancel"), (NotifyProc)&CopyObjectQuestionForm::Cancel);
 			pb2->Align(pb1, AL_AFTER);
 			fg->Align(ic, AL_AFTER);
 			create();
@@ -2615,7 +2615,7 @@ void Catalog::OnCatViewOptions()
 			else
 			{
 				owner.push_back((*cur).first);
-				String sItem = sTop  + "," + (*cur).first.scVal();
+				String sItem = sTop  + "," + (*cur).first.c_str();
 				menu.DeleteMenuItem(sItem);
 			}
 		}
@@ -2889,13 +2889,13 @@ long Catalog::iGetObjectSize(const FileName& fn, const char* sSection, const cha
 {
 	CFileStatus status;
 	status.m_size = 0;
-	CFile::GetStatus( fn.sFullPath().scVal(), status);
+	CFile::GetStatus( fn.sFullPath().c_str(), status);
 	if ( sSection != 0 )
 	{
 		FileName fnData;
 		ObjectInfo::ReadElement(sSection, sKey, fn, fnData);
 		if ( fnData != FileName() && fnData.fExist() )
-			CFile::GetStatus( fnData.sFullPath().scVal(), status);
+			CFile::GetStatus( fnData.sFullPath().c_str(), status);
 	}
 	return status.m_size;
 }

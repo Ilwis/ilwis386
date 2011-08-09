@@ -403,19 +403,19 @@ class NorthArrowLayoutItemForm : public FormWithDest
 {
 public:
   NorthArrowLayoutItemForm(CWnd* wnd, NorthArrowLayoutItem* tli) 
-		: FormWithDest(wnd, SLOTitleNorthArrow)
+		: FormWithDest(wnd, TR("Edit North Arrow"))
   {
-      RadioGroup *rg = new RadioGroup(root, SLOUiArrowType, (int*)&tli->eType);
-      RadioButton* rbSimple = new RadioButton(rg, SLOUiSimpleArrow);
-      RadioButton* rbCross  = new RadioButton(rg, SLOUiSimpleCross);
-      RadioButton* rbUp     = new RadioButton(rg, SLOUiUpArrow);
-      RadioButton* rbRose   = new RadioButton(rg, SLOUiWindRose);
+      RadioGroup *rg = new RadioGroup(root, TR("Arrow Type:"), (int*)&tli->eType);
+      RadioButton* rbSimple = new RadioButton(rg, TR("&Simple"));
+      RadioButton* rbCross  = new RadioButton(rg, TR("&Cross"));
+      RadioButton* rbUp     = new RadioButton(rg, TR("&Wing"));
+      RadioButton* rbRose   = new RadioButton(rg, TR("&Compass"));
 
-			CheckBox* cb = new CheckBox(rbSimple, SLOUiHalf, &tli->fHalf);
+			CheckBox* cb = new CheckBox(rbSimple, TR("&Half"), &tli->fHalf);
 			cb->Align(rbSimple, AL_AFTER);
-			cb = new CheckBox(rbUp, SLOUiHalf, &tli->fHalf);
+			cb = new CheckBox(rbUp, TR("&Half"), &tli->fHalf);
 			cb->Align(rbSimple, AL_AFTER);
-			FieldReal *fi = new FieldReal(rbSimple, SLOUiLineWidth, &tli->rLineWidth, ValueRangeReal(0.0,100,0.1));			
+			FieldReal *fi = new FieldReal(rbSimple, TR("&Width (mm)"), &tli->rLineWidth, ValueRangeReal(0.0,100,0.1));			
 			fi->Align(cb, AL_AFTER);
 			fi->SetIndependentPos();
 			RadioGroup* rgRose = new RadioGroup(rbRose, "", (int*)&tli->eRose, true);
@@ -424,18 +424,18 @@ public:
 			new RadioButton(rgRose, "&8");
 			new RadioButton(rgRose, "1&6");
 
-			CheckBox* cbCircle = new CheckBox(root, SLOUiCircle, &tli->fCircle);
+			CheckBox* cbCircle = new CheckBox(root, TR("&Circle"), &tli->fCircle);
 			cbCircle->Align(cb, AL_UNDER);
-			fi = new FieldReal(rbCross, SLOUiLineWidth, &tli->rLineWidth, ValueRangeReal(0.0,100,0.1));
+			fi = new FieldReal(rbCross, TR("&Width (mm)"), &tli->rLineWidth, ValueRangeReal(0.0,100,0.1));
 			fi->Align(cbCircle, AL_AFTER);
 			fi->SetIndependentPos();
 
-      FieldColor* fc = new FieldColor(root, SLOUiColor, &tli->clr);
+      FieldColor* fc = new FieldColor(root, TR("&Color"), &tli->clr);
 			fc->Align(rg, AL_UNDER);
 
-      cb = new CheckBox(root, SLOUiText, &tli->fText);
+      cb = new CheckBox(root, TR("&Text"), &tli->fText);
       FieldGroup *fg = new FieldGroup(cb);
-      CheckBox* cbAS = new CheckBox(fg, SLOUiAllSides, &tli->fAllSides);
+      CheckBox* cbAS = new CheckBox(fg, TR("&All Sides"), &tli->fAllSides);
 			cbAS->Align(cb, AL_AFTER);
 
 	    FieldLogFont* flf = new FieldLogFont(fg, &tli->lf);
@@ -526,9 +526,9 @@ void NorthArrowLayoutItem::WriteElements(ElementContainer& en, const char* sSect
 String NorthArrowLayoutItem::sName() const
 {
 	if (0 == mli)
-		return SLONameNorthArrow;
+		return TR("North Arrow");
 	else
-		return String(SLONameNorthArrow_S.scVal(), mli->sName());
+		return String(TR("North Arrow of %S").c_str(), mli->sName());
 }
 
 bool NorthArrowLayoutItem::fDependsOn(LayoutItem* li)

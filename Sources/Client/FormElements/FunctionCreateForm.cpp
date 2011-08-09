@@ -95,20 +95,20 @@ static char* sInternWords[] =
 	};
 
 FormCreateFunction::FormCreateFunction(CWnd* wPar, String* str)
-: FormWithDest(wPar, SOOTitleCreateFunction),
+: FormWithDest(wPar, TR("Create Function")),
   sFun(str)
 {
 	iImg = IlwWinApp()->iImage(".fun");
 
 	sNewName = *sFun;
-	ffn = new FieldDataTypeCreate(root, SOOUiFunctionName, &sNewName, ".FUN", true);
+	ffn = new FieldDataTypeCreate(root, TR("Function &Name"), &sNewName, ".FUN", true);
 	ffn->SetCallBack((NotifyProc)&FormCreateFunction::CallBackName);
-	StaticText* st = new StaticText(root, SOOUiExpression);
+	StaticText* st = new StaticText(root, TR("&Expression:"));
 	st->psn->SetBound(0,0,0,0);
 	FieldString* fs = new FieldString(root, "", &sExpr);
 	fs->SetWidth(120);
 	fs->SetIndependentPos();
-	st = new StaticText(root, SOOUiDescription);
+	st = new StaticText(root, TR("&Description:"));
 	st->psn->SetBound(0,0,0,0);
 	fs = new FieldString(root, "", &sDescr);
 	fs->SetWidth(120);
@@ -147,16 +147,16 @@ int FormCreateFunction::CallBackName(Event*)
 		int i;
 		FileName fn(sNewName, ".fun");
 		if (!fn.fValid())
-			stRemark->SetVal(SOORemNotValidFunName);
+			stRemark->SetVal(TR("Not a valid function name"));
 		else if(File::fExist(fn))
-			stRemark->SetVal(SOORemFunExists);
+			stRemark->SetVal(TR("Function already exists"));
 		else
 		{
 			for (i = 0; sInternFunc[i]; ++i)
 				if (fn.sFile == sInternFunc[i])
 				{
 					fIntern = true;
-					stRemark->SetVal(SOORemInternalFunction);
+					stRemark->SetVal(TR("Function is an internal calculator function"));
         }
 			if (!fIntern)
 			{
@@ -164,7 +164,7 @@ int FormCreateFunction::CallBackName(Event*)
 					if (fn.sFile == sInternParserFunc[i])
 					{
 						fIntern = true;
-						stRemark->SetVal(SOORemParserFunction);
+						stRemark->SetVal(TR("Function is an internal parser function"));
           }
       }
 			if (!fIntern)
@@ -173,7 +173,7 @@ int FormCreateFunction::CallBackName(Event*)
 					if (fn.sFile == sInternWords[i])
 					{
 						fIntern = true;
-						stRemark->SetVal(SOORemReservedWord);
+						stRemark->SetVal(TR("Function is a reserved word"));
           }
       }
 			if (!fIntern)
@@ -182,7 +182,7 @@ int FormCreateFunction::CallBackName(Event*)
 					if (fn.sFile == sInternNbFunc[i])
 					{
 						fIntern = true;
-						stRemark->SetVal(SOORemNeighbourhoodFunction);
+						stRemark->SetVal(TR("Function is an internal neighbourhood function"));
           }
       }
 			if (!fIntern)

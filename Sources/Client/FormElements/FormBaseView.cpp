@@ -261,7 +261,7 @@ void FormBaseView::create()
     int iMaxX = root->psn->iWidth + root->psn->iBndLeft; // + root->psn->iBndRight;
     int iMaxY = root->psn->iHeight + root->psn->iBndUp + root->psn->iBndDown;
 
-    // find widest of SUICancel, SUIOK and SUIHelp
+    // find widest of TR("Cancel"), TR("OK") and TR("Help")
     zDimension dimButton;
 
 		CWindowDC dc(CWnd::GetDesktopWindow());
@@ -269,9 +269,9 @@ void FormBaseView::create()
 
     if (fnt != 0)
         fntOld = dc.SelectObject(fnt);
-    zDimension d1 = (zDimension)dc.GetTextExtent(SUICancel.sVal(), SUICancel.length());
-    zDimension d2 = (zDimension)dc.GetTextExtent(SUIOK.sVal(), SUIOK.length());
-    zDimension d3 = (zDimension)dc.GetTextExtent(SUIHelp.sVal(), SUIHelp.length());
+    zDimension d1 = (zDimension)dc.GetTextExtent(TR("Cancel").c_str(), TR("Cancel").length());
+    zDimension d2 = (zDimension)dc.GetTextExtent(TR("OK").c_str(), TR("OK").length());
+    zDimension d3 = (zDimension)dc.GetTextExtent(TR("Help").c_str(), TR("Help").length());
     if (fnt != 0)
 			dc.SelectObject(fntOld);
     dimButton = d1.width() > d2.width() ? d1 : d2;
@@ -285,7 +285,7 @@ void FormBaseView::create()
 
     String sHelp;
     help = htp();
-    sHelp = SUIHelp;
+    sHelp = TR("Help");
     bool fButtonsRight = (0 == (fbs & fbsBUTTONSUNDER));
     int iButtons = 0;
     if (0 == (fbs & fbsNOOKBUTTON)) iButtons += 1;     // OK
@@ -330,7 +330,7 @@ void FormBaseView::create()
     }
 
 		if ( butOK.GetSafeHwnd()==NULL)
-			butOK.Create(SUIOK.sVal(), BS_DEFPUSHBUTTON|WS_TABSTOP, CRect(pntButton, dimButton), this, IDOK);  
+			butOK.Create(TR("OK").c_str(), BS_DEFPUSHBUTTON|WS_TABSTOP, CRect(pntButton, dimButton), this, IDOK);  
 
     if (0 == (fbs & fbsNOOKBUTTON)) 
     {
@@ -355,7 +355,7 @@ void FormBaseView::create()
     }
 
 		if ( butCancel.GetSafeHwnd()==NULL)
-	  	butCancel.Create(SUICancel.sVal(), BS_PUSHBUTTON|WS_TABSTOP, CRect(pntButton, dimButton), this, IDCANCEL); 
+	  	butCancel.Create(TR("Cancel").c_str(), BS_PUSHBUTTON|WS_TABSTOP, CRect(pntButton, dimButton), this, IDCANCEL); 
 
     if (0 == (fbs & fbsNOCANCELBUTTON)) 
         butCancel.ShowWindow(SW_SHOW);

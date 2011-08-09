@@ -89,7 +89,7 @@ void TimeGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	else {
 		s = fldGraph->interval.getBegin().toString(true, ILWIS::Time::mDATE);
 	}
-	 ::TextOut(lpDIS->hDC,crct.left, crct.bottom - 16,s.scVal(),s.size());
+	 ::TextOut(lpDIS->hDC,crct.left, crct.bottom - 16,s.c_str(),s.size());
 	double yscale = rct.Height() / rr.rWidth();
 	double y0 = rr.rWidth() * yscale;
 	double xscale = (double)rct.Width() / fldGraph->recordRange.iWidth();
@@ -106,8 +106,8 @@ void TimeGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	else {
 		s = fldGraph->interval.getEnd().toString(true, ILWIS::Time::mDATE);
 	}
-	CSize szTxt = dc->GetTextExtent(s.scVal());
-	::TextOut(lpDIS->hDC,crct.right - szTxt.cx, crct.bottom - 16, s.scVal(),s.size());
+	CSize szTxt = dc->GetTextExtent(s.c_str());
+	::TextOut(lpDIS->hDC,crct.right - szTxt.cx, crct.bottom - 16, s.c_str(),s.size());
 	pts[fldGraph->recordRange.iWidth() + 1] = CPoint(rct.Width(), rct.Height());
 	pts[fldGraph->recordRange.iWidth() + 2] = CPoint(0, rct.Height());
 
@@ -134,8 +134,8 @@ void TimeGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 			ILWIS::Time::Mode m = fldGraph->interval.rWidth() > 3 ? ILWIS::Time::mDATE : ILWIS::Time::mTIME;
 			s = time.toString(true,m);
 		}
-		CSize szTxt = dc->GetTextExtent(s.scVal());
-		::TextOut(lpDIS->hDC,timePoint.x - szTxt.cx/2, crct.top+2, s.scVal(),s.size());
+		CSize szTxt = dc->GetTextExtent(s.c_str());
+		::TextOut(lpDIS->hDC,timePoint.x - szTxt.cx/2, crct.top+2, s.c_str(),s.size());
 	}
 
 	delete [] pts;

@@ -204,20 +204,20 @@ void ScriptForm::OnHelp()
 	fnCss.sExt = ".css";
 	if (!File::fExist(fnCss)) {
 		String sOrig = IlwWinApp()->Context()->sIlwDir() + "Scripts\\ilwis.css";
-		CopyFile(sOrig.scVal(), fnCss.sFullPath().scVal(), TRUE);
+		CopyFile(sOrig.c_str(), fnCss.sFullPath().c_str(), TRUE);
 	}
 
 	fn.sExt = ".htm";
 	if (!File::fExist(fn)) {
-		ofstream os(fn.sFullName().scVal());
+		ofstream os(fn.sFullName().c_str());
 		os << "<html>\n<head>\n<title>" 
-			<< fn.sFile.scVal() << "</title>\n"
+			<< fn.sFile.c_str() << "</title>\n"
 			<< "<meta name=\"Generator\" content=\"ILWIS Script Form\">\n"
 			<< "<link rel=stylesheet type=\"text/css\" href=\"ilwis.css\">\n"
 			<< "</head>\n"
 			<< "<body text=\"#000000\" bgcolor=\"#FFFFFF\">\n"
-			<< "<h1 class=only1>Script " << fn.sFile.scVal() << "</h1>\n"
-			<< "<p>" << scr->sDescription.scVal() << "</p>\n"
+			<< "<h1 class=only1>Script " << fn.sFile.c_str() << "</h1>\n"
+			<< "<p>" << scr->sDescription.c_str() << "</p>\n"
 			<< "<p class=defnewpar>Some more explanation could be written.</p>\n"
 			<< "<p class=diakopje>Dialog box options:</p>\n"
 			<< "<table cellspacing=0>\n";
@@ -229,35 +229,35 @@ void ScriptForm::OnHelp()
 			String sType;
 			switch (pt) 
 			{
-				case ScriptPtr::ptRASMAP: sType =  SSCRPtRasMap; break;
-				case ScriptPtr::ptSEGMAP: sType =  SSCRPtSegMap; break;
-				case ScriptPtr::ptPOLMAP: sType =  SSCRPtPolMap; break;
-				case ScriptPtr::ptPNTMAP: sType =  SSCRPtPntMap; break;
-				case ScriptPtr::ptTABLE: sType =  SSCRPtTable; break;
-				case ScriptPtr::ptCOLUMN: sType =  SSCRPtColumn; break;
-				case ScriptPtr::ptMAPLIST: sType =  SSCRPtMapList; break;
-				case ScriptPtr::ptMAPVIEW: sType =  SSCRPtMapView; break;
-				case ScriptPtr::ptCOORDSYS: sType =  SSCRPtCoordSys; break;
-				case ScriptPtr::ptGEOREF: sType =  SSCRPtGeoRef; break;
-				case ScriptPtr::ptDOMAIN: sType =  SSCRPtDomain; break;
-				case ScriptPtr::ptRPR: sType =  SSCRPtRpr; break;
-				case ScriptPtr::ptFILTER: sType =  SSCRPtFilter; break;
-				case ScriptPtr::ptSCRIPT: sType =  SSCRPtScript; break;
-				case ScriptPtr::ptFUNCTION: sType =  SSCRPtFunction; break;
-				case ScriptPtr::ptMATRIX: sType =  SSCRPtMatrix; break;
-				case ScriptPtr::ptSMS: sType =  SSCRPtSms; break;
-				case ScriptPtr::ptTBL2D: sType =  SSCRPtTbl2d; break;
-				case ScriptPtr::ptANNTXT: sType =  SSCRPtAnnTxt; break;
-				case ScriptPtr::ptSTRING : sType =  SSCRPtString; break;
-				case ScriptPtr::ptVALUE  : sType =  SSCRPtValue; break;
-				case ScriptPtr::ptFILENAME: sType =  SSCRPtFileName; break;
+				case ScriptPtr::ptRASMAP: sType =  TR("Raster Map.mpr"); break;
+				case ScriptPtr::ptSEGMAP: sType =  TR("Segment Map.mps"); break;
+				case ScriptPtr::ptPOLMAP: sType =  TR("Polygon Map.mpa"); break;
+				case ScriptPtr::ptPNTMAP: sType =  TR("Point Map.mpp"); break;
+				case ScriptPtr::ptTABLE: sType =  TR("Table.tbt"); break;
+				case ScriptPtr::ptCOLUMN: sType =  TR("Column.clm"); break;
+				case ScriptPtr::ptMAPLIST: sType =  TR("Map List.mpl"); break;
+				case ScriptPtr::ptMAPVIEW: sType =  TR("Map View.mpv"); break;
+				case ScriptPtr::ptCOORDSYS: sType =  TR("CoordSystem.csy"); break;
+				case ScriptPtr::ptGEOREF: sType =  TR("GeoReference.grf"); break;
+				case ScriptPtr::ptDOMAIN: sType =  TR("Domain.dom"); break;
+				case ScriptPtr::ptRPR: sType =  TR("Representation.rpr"); break;
+				case ScriptPtr::ptFILTER: sType =  TR("Filter.fil"); break;
+				case ScriptPtr::ptSCRIPT: sType =  TR("Script.isl"); break;
+				case ScriptPtr::ptFUNCTION: sType =  TR("Function.fun"); break;
+				case ScriptPtr::ptMATRIX: sType =  TR("Matrix.mat"); break;
+				case ScriptPtr::ptSMS: sType =  TR("Sample Set.sms"); break;
+				case ScriptPtr::ptTBL2D: sType =  TR("2-Dimensional Table.ta2"); break;
+				case ScriptPtr::ptANNTXT: sType =  TR("Annotation Text.atx"); break;
+				case ScriptPtr::ptSTRING : sType =  TR("String"); break;
+				case ScriptPtr::ptVALUE  : sType =  TR("Value"); break;
+				case ScriptPtr::ptFILENAME: sType =  TR("Filename"); break;
 			}
 			FileName fnType(sType);
 			sType = fnType.sFile;
-			os << "<tr><td valign=\"top\" width=\"30%\"><p class=diabox>" << sParam.scVal() << ":</p></td>\n<td valign=\"top\"><p class=diabox>" 
-				<< "Select a " << sType << " parameter to be used as " << sParam.scVal() << ".\n";
+			os << "<tr><td valign=\"top\" width=\"30%\"><p class=diabox>" << sParam.c_str() << ":</p></td>\n<td valign=\"top\"><p class=diabox>" 
+				<< "Select a " << sType << " parameter to be used as " << sParam.c_str() << ".\n";
 			if (sDefault != "")
-				os << "Default is <i>" << sDefault.scVal() << "</i>";
+				os << "Default is <i>" << sDefault.c_str() << "</i>";
 			else 
 				os << "There is no default value, you always have to specify this parameter yourself.";
 			os << "</p></td>\n";

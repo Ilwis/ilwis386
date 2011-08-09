@@ -257,7 +257,7 @@ END_MESSAGE_MAP()
 
 
 MapReferenceForm::MapReferenceForm(CWnd* par, Digitizer* dg, bool fMetric)
-: FormUsingDigitizer(par,dg,SDGTitleMapReferencingCtrlPnts)
+: FormUsingDigitizer(par,dg,TR("Map Referencing - Digitizer Control Points"))
 {
   clrNormal = GetSysColor(COLOR_WINDOWTEXT);
   clrActive = GetSysColor(COLOR_HIGHLIGHTTEXT);
@@ -275,16 +275,16 @@ MapReferenceForm::MapReferenceForm(CWnd* par, Digitizer* dg, bool fMetric)
   FieldGroup* fg = new FieldGroup(root);
   StaticText *st;
   int iH;
-  st = new StaticText(fg, SDGRemDigitizer);
+  st = new StaticText(fg, TR("digitizer"));
   iH = frp[0]->stDigX->psn->iHeight + frp[0]->stDigX->psn->iBndDown + 33;
   st->Align(frp[0]->stDigX, AL_UNDER, -iH);
-  st = new StaticText(fg, SDGRemCoordinates);
+  st = new StaticText(fg, TR("coordinates"));
   iH = frp[0]->fCrd->psn->iHeight + frp[0]->fCrd->psn->iBndDown + 33;
   st->Align(frp[0]->fCrd, AL_UNDER, -iH);
-  st = new StaticText(fg, SDGRemDiffX);
+  st = new StaticText(fg, TR("diff X"));
   iH = frp[0]->stDX->psn->iHeight + frp[0]->stDX->psn->iBndDown + 33;
   st->Align(frp[0]->stDX, AL_UNDER, -iH);
-  st = new StaticText(fg, SDGRemDiffY);
+  st = new StaticText(fg, TR("diff Y"));
   iH = frp[0]->stDY->psn->iHeight + frp[0]->stDY->psn->iBndDown + 33;
   st->Align(frp[0]->stDY, AL_UNDER, -iH);
     
@@ -296,14 +296,14 @@ MapReferenceForm::MapReferenceForm(CWnd* par, Digitizer* dg, bool fMetric)
   fginfo->SetIndependentPos();
   fginfo->Align(frp[5], AL_UNDER);
   rgAffine = new RadioGroup(fginfo, "", &iAffine);
-  new RadioButton(rgAffine, SDGUiConformTrans);
-  new RadioButton(rgAffine, SDGUiAffineTrans);
+  new RadioButton(rgAffine, TR("&Conformal transformation"));
+  new RadioButton(rgAffine, TR("&Affine transformation"));
   rgAffine->SetCallBack((NotifyProc)&MapReferenceForm::calc);
 
-  stSigma = new StaticText(fginfo, SDGRemMin3Pnts);
+  stSigma = new StaticText(fginfo, TR("Minimum three points required"));
   stSigma->Align(rgAffine, AL_AFTER);
-  stScale = new StaticText(fginfo, SDGRemScale);
-  stRot   = new StaticText(fginfo, SDGRemRotation);
+  stScale = new StaticText(fginfo, TR("Scale 1:XXXXXXXXXXXX / XXXXXXXXXXXX"));
+  stRot   = new StaticText(fginfo, TR("Rotation XXXXX.x / XXXXX.x degrees"));
   fginfo->SetCallBack((NotifyProc)&MapReferenceForm::initMRF);
   SetMenHelpTopic("ilwismen\\digitizer_map_referencing_dig_ctrl_points.htm");
 }
@@ -368,10 +368,10 @@ int MapReferenceForm::initMRF(Event*)
 	DigitizerInfoWindow* diw = new DigitizerInfoWindow();
 	diw->Create(this);
 	info = diw;
-  info->SetWindowText(SDGDigMapRef.c_str());
-  info->button(1)->SetWindowText(SDGDigDigPnt.c_str());
-  info->button(2)->SetWindowText(SDGDigNextPnt.c_str());
-  info->button(3)->SetWindowText(SDGDigDelPnt.c_str());
+  info->SetWindowText(TR("Map Referencing").c_str());
+  info->button(1)->SetWindowText(TR("Digitize Point").c_str());
+  info->button(2)->SetWindowText(TR("Next Point").c_str());
+  info->button(3)->SetWindowText(TR("Delete Point").c_str());
   info->ShowWindow(SW_SHOW);
 	info->EnableDocking(0);
 	return 0;
@@ -397,10 +397,10 @@ int MapReferenceForm::calc(Event*)
   int iErr = dtf.Transform(fAffine);
   switch (iErr) {
     case -1:
-      stSigma->SetVal(SDGRemNotEnoughPoints);
+      stSigma->SetVal(TR("Not enough points"));
       break;
     case -2:
-      stSigma->SetVal(SDGRemSingularMatrix);
+      stSigma->SetVal(TR("Singular Matrix"));
       break;
     default:
       stSigma->SetVal(" ");
@@ -436,7 +436,7 @@ int MapReferenceForm::calc(Event*)
       }
       frp[i]->ShowVals();
     }
-    String s(SDGRemSigma_f.c_str(), dtf.rSigma);
+    String s(TR("Sigma = %2.1f mm").c_str(), dtf.rSigma);
     stSigma->SetVal(s);
     double rScX = 1000 * sqrt(x10 * x10 + y10 * y10);   // 1000 mm per m
     double rScY = 1000 * sqrt(x01 * x01 + y01 * y01);
@@ -444,12 +444,12 @@ int MapReferenceForm::calc(Event*)
     double rRotY =  atan2(x01,y01) * 180 / M_PI;
     String sScale, sRot;
     if (fAffine) {
-      sScale = String(SDGRemScale_ff.c_str(), rScX, rScY);
-      sRot = String(SDGRemRotation_ff.c_str(), rRotX, rRotY);
+      sScale = String(TR("Scale 1:%1.0f / 1:%1.0f").c_str(), rScX, rScY);
+      sRot = String(TR("Rotation %1.1f / %1.1f degrees").c_str(), rRotX, rRotY);
     }
     else {
-      sScale = String(SDGRemScale_f.c_str(), rScX);
-      sRot = String(SDGRemRotation_f.c_str(), rRotX);
+      sScale = String(TR("Scale 1:%1.0f").c_str(), rScX);
+      sRot = String(TR("Rotation %1.1f degrees").c_str(), rRotX);
     }
     stScale->SetVal(sScale);
     stRot->SetVal(sRot);

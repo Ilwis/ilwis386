@@ -52,7 +52,7 @@
 String CopyObjectForm::sLastDir = "";
 
 CopyObjectForm::CopyObjectForm(CWnd* wPar, list<FileName>& lfnFiles, String& _sTo, bool fOnlyDirectory)
-: FormWithDest(wPar, SMSTitleCopyObject), m_fsNewName(0), sTo(_sTo)
+: FormWithDest(wPar, TR("Copy Object To")), m_fsNewName(0), sTo(_sTo)
 {
 	FileName fn((*(lfnFiles.begin())));
 	fnOld = fn;
@@ -60,9 +60,9 @@ CopyObjectForm::CopyObjectForm(CWnd* wPar, list<FileName>& lfnFiles, String& _sT
 	String sTypeName = obj.fValid() ? obj->sTypeName() : fn.sRelative();
 	String str;
 	if ( lfnFiles.size() > 1)
-		str = SMWMMsgCopySelectedObjectsTo;
+		str = TR("Copy selected objects to:");
 	else
-		str = String(SMSRemCopy_s.scVal(), sTypeName);
+		str = String(TR("Copy %S").c_str(), sTypeName);
 
 	StaticText* st;
 	FormEntry *fb = 0;
@@ -80,7 +80,7 @@ CopyObjectForm::CopyObjectForm(CWnd* wPar, list<FileName>& lfnFiles, String& _sT
 		st->SetFieldWidth((short)dim.width());
 
 	}
-	DWORD iFileAtt=GetFileAttributes(sTo.scVal());
+	DWORD iFileAtt=GetFileAttributes(sTo.c_str());
 	if ((-1 != iFileAtt) && (iFileAtt & FILE_ATTRIBUTE_DIRECTORY))
 	{
 		iOption = 1;
@@ -97,13 +97,13 @@ CopyObjectForm::CopyObjectForm(CWnd* wPar, list<FileName>& lfnFiles, String& _sT
 	if ( !fOnlyDirectory )
 	{
 		RadioGroup* rg = new RadioGroup(root, "", &iOption);
-		RadioButton* rb = new RadioButton(rg, SMSUiNewName);
+		RadioButton* rb = new RadioButton(rg, TR("New &Name"));
 		m_fsNewName = new FieldString(rb, "", &sNewName, Domain(), false);
 		m_fsNewName->SetWidth(120);
 
-		rb = new RadioButton(rg, SMSUiNewDirectory);
+		rb = new RadioButton(rg, TR("New &Directory"));
 		FieldGroup* fg = new FieldGroup(rb);
-		String strCopyTo(SMSRemCopyTo_s.scVal(), sTypeName);
+		String strCopyTo(TR("Copy %S to").c_str(), sTypeName);
 		FormEntry *fb = new FieldBrowseDir(fg, "", strCopyTo, &sDirectory);
 		fb->SetIndependentPos();
 		fb->SetWidth(120);
@@ -111,7 +111,7 @@ CopyObjectForm::CopyObjectForm(CWnd* wPar, list<FileName>& lfnFiles, String& _sT
 	}
 	else
 	{
-		String strCopyTo(SMSRemCopyTo_s.scVal(), sTypeName);		
+		String strCopyTo(TR("Copy %S to").c_str(), sTypeName);		
 		FormEntry *fb = new FieldBrowseDir(root, "", strCopyTo, &sDirectory);		
 		fb->SetWidth(120);
 		fb->SetIndependentPos();
@@ -119,7 +119,7 @@ CopyObjectForm::CopyObjectForm(CWnd* wPar, list<FileName>& lfnFiles, String& _sT
 	fBreakDep = false;
 	if (fb && ".mpv" != fn.sExt && ObjectInfo::fDependenciesForCopy(fn))
 	{
-		CheckBox* cb = new CheckBox(root, SMSUiBreakDepLink, &fBreakDep);
+		CheckBox* cb = new CheckBox(root, TR("&Break Dependency Link"), &fBreakDep);
 		cb->Align(fb, AL_UNDER);
 		cb->SetIndependentPos();
 	}  
@@ -144,7 +144,7 @@ class BrowseForm: public FormWithDest
 {
 public:
   BrowseForm(CWnd* wPar)
-  : FormWithDest(wPar, SMSTitleBrowseDir)
+  : FormWithDest(wPar, TR("Browse Directory"))
   {
     new FieldDataTypeLarge(root, &sName, "");
     create();

@@ -84,7 +84,7 @@ BOOL ColorIntensityBar::Create(CView* v, Color clr)
 	CFrameWnd* pParent = view->GetParentFrame();
 	ASSERT(pParent);
 
-	BOOL iRet = CSizingControlBar::Create(SEDTitleColorIntensity.scVal(), pParent, CSize(iBARWIDTH, iBARWIDTH*2), TRUE, ID_COLORINTENSITYBAR);
+	BOOL iRet = CSizingControlBar::Create(TR("Color Sliders").c_str(), pParent, CSize(iBARWIDTH, iBARWIDTH*2), TRUE, ID_COLORINTENSITYBAR);
 
 	ASSERT_VALID(this);
 

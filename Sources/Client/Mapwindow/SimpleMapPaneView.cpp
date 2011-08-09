@@ -276,7 +276,7 @@ UINT SimpleMapPaneView::DrawInThread(LPVOID lp)
 
 			//clock_t end = clock();
 			//double total =  1000.0 * (double)(end - start) / CLOCKS_PER_SEC;
-			//TRACE(String("drawn DrawInThread in %2.2f milliseconds;\n", total).scVal());
+			//TRACE(String("drawn DrawInThread in %2.2f milliseconds;\n", total).c_str());
 			//TRACE("------\n");
 
 			if (!mpv->fStopDrawThread)
@@ -409,11 +409,11 @@ void SimpleMapPaneView::OnMouseMove(UINT nFlags, CPoint point)
 		if (c.fUndef())
 			fValid = false; // fNone = true;  
 		//if (fNone) {
-		//	msb->ShowCoord(SMWRem__NoCoords);
+		//	msb->ShowCoord(TR("No Coordinates"));
 		//	msb->ShowLatLon(LatLon());
 		//}
 		//else if (!fValid) {
-		//	msb->ShowCoord(SMWRem__NoCoordsCalculated);
+		//	msb->ShowCoord(TR("No Coordinates calculated"));
 		//	msb->ShowLatLon(LatLon());
 		//}
 		else {
@@ -665,7 +665,7 @@ void SimpleMapPaneView::createPixInfoBar() {
 		MapWindow *parent = dynamic_cast<MapWindow*>(fw);
 		pib = new PixelInfoBar();
 		pib->Create(parent);
-		pib->SetWindowText(TR("Pixel Info").scVal());
+		pib->SetWindowText(TR("Pixel Info").c_str());
 		pib->EnableDocking(CBRS_ALIGN_LEFT|CBRS_ALIGN_RIGHT | CBRS_ALIGN_BOTTOM | CBRS_ALIGN_TOP);
 		GetDocument()->pixInfoDoc->AddView(pib->pixview);
 		parent->RecalcLayout();

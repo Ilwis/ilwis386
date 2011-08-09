@@ -107,7 +107,7 @@ void ScriptView::OnInitialUpdate()
 	CEdit& ed = edv->GetEditCtrl();
 	ed.SetWindowText(sTxt.c_str());
 
-	m_bbTools.Create(pfrm, "script.but", SSCRUiScrEditor.scVal(), ID_SCRIPTBUTTONBAR);
+	m_bbTools.Create(pfrm, "script.but", TR("Script editor").c_str(), ID_SCRIPTBUTTONBAR);
 
 	pfrm->DockControlBar(&m_bbTools, AFX_IDW_DOCKBAR_TOP);
 }

@@ -95,12 +95,12 @@ void TransformationComboBox::Create(CWnd* wPar,CRect rect,TiePointEditor* grfed,
 {
 	gre = grfed;
 	CComboBox::Create(WS_CHILD|WS_VISIBLE|CBS_DROPDOWNLIST|CBS_HASSTRINGS,rect,wPar,ID_EDITGRFTRANSF);
-	AddString(SGRInfConform.scVal());
-	AddString(SGRInfAffine.scVal());
-	AddString(SGRInfSecondOrder.scVal());
-	AddString(SGRInfFullSecondOrder.scVal());
-	AddString(SGRInfThirdOrder.scVal());
-	AddString(SGRInfProjective.scVal());
+	AddString(TR("Conformal").c_str());
+	AddString(TR("Affine").c_str());
+	AddString(TR("Second Order Bilinear").c_str());
+	AddString(TR("Full Second Order").c_str());
+	AddString(TR("Third Order").c_str());
+	AddString(TR("Projective").c_str());
 	SetCurSel(iTransf);
 }
 

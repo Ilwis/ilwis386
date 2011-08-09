@@ -111,7 +111,7 @@ void MapListSplitterWindow::InitialUpdate(CDocument* pDoc, BOOL bMakeVisible)
   {
     MapPaneView* vw = dynamic_cast<MapPaneView*>(wndSplitter.GetPane(iH,iV));
     MapCompositionDoc* mcd = vw->GetDocument();
-    mcd->OnOpenDocument(mpl[i]->fnObj.sFullName().scVal(), IlwisDocument::otNOASK);
+    mcd->OnOpenDocument(mpl[i]->fnObj.sFullName().c_str(), IlwisDocument::otNOASK);
     if (++iH >= iHor) {
       iH = 0;
       ++iV;

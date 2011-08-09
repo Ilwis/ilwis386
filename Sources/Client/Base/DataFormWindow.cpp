@@ -85,8 +85,8 @@ int DataFormWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	menSys->DeleteMenu(SC_SIZE,MF_BYCOMMAND);
 	menSys->DeleteMenu(SC_MAXIMIZE,MF_BYCOMMAND);
   menSys->AppendMenu(MF_SEPARATOR, -1);
-	menSys->AppendMenu( MF_STRING, ID_COPY, SUICopy.sVal());
-  menSys->AppendMenu( MF_STRING, ID_PRINT, SUIPrint.sVal());
+	menSys->AppendMenu( MF_STRING, ID_COPY, TR("Copy").c_str());
+  menSys->AppendMenu( MF_STRING, ID_PRINT, TR("Print").c_str());
 	return 0;
 }
 

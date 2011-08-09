@@ -56,10 +56,10 @@ FormMatrixCreate::FormMatrixCreate(CWnd* mwin, const String& sTitle)
 
 void FormMatrixCreate::initMatrixOut()
 {  
-  fmc = new FieldMatrixCreate(root, SAFUiOutMatrix, &sOutMat);
+  fmc = new FieldMatrixCreate(root, TR("&Output Matrix"), &sOutMat);
   fmc->SetCallBack((NotifyProc)&FormMatrixCreate::OutMatrixCallBack);
   FormEntry* fe = fmc;
-  StaticText* st = new StaticText(root, SAFUiDescription);
+  StaticText* st = new StaticText(root, TR("&Description:"));
   st->Align(fe, AL_UNDER);
   st->psn->SetBound(0,0,0,0);
   FieldString* fs = new FieldString(root, "", &sDescr);
@@ -80,8 +80,8 @@ void FormMatrixCreate::execMatrixOut(const String& sExpr)
   fn.sExt = ".mat";
   if (sOutMat != "") {
     if (fn.fExist()) {
-      String sErr(SAFMsgAlreadyExistsOverwrite_S.scVal(), fn.sFullPath(true));
-      int iRet = mw->MessageBox(sErr.scVal(), SAFMsgAlreadyExists.scVal(), MB_YESNO|MB_ICONEXCLAMATION);
+      String sErr(TR("File %S already exists.\nOverwrite?").c_str(), fn.sFullPath(true));
+      int iRet = mw->MessageBox(sErr.c_str(), TR("File already exists").c_str(), MB_YESNO|MB_ICONEXCLAMATION);
       if (iRet != IDYES)
         return;
     }

@@ -52,7 +52,7 @@ GraphTreeField::GraphTreeField(CWnd* wnd, CRect rect, String str, GraphTreeItem*
 : gti(grti), nff(nfldfin)
 {
   Create(WS_CHILD|WS_BORDER|ES_AUTOHSCROLL|WS_VISIBLE, rect, wnd, 100);
-  SetWindowText(str.scVal());
+  SetWindowText(str.c_str());
   SetFocus();
 }
 

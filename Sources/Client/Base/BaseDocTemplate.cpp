@@ -354,7 +354,7 @@ CFrameWnd* BaseDocTemplate::CreateNewFrame(CDocument* pDoc, CFrameWnd* pOther)
 		TRACE0("Warning: creating frame with no default view.\n");
 
 	String clsName("ILWIS");
-	if (!pFrame->Create(NULL, clsName.scVal(), WS_OVERLAPPEDWINDOW|FWS_ADDTOTITLE, CFrameWnd::rectDefault,
+	if (!pFrame->Create(NULL, clsName.c_str(), WS_OVERLAPPEDWINDOW|FWS_ADDTOTITLE, CFrameWnd::rectDefault,
 		::AfxGetMainWnd(), NULL, 0, &context)) 
 	{
 		TRACE0("Warning: BaseDocTemplate couldn't create a frame.\n");
@@ -389,12 +389,12 @@ BOOL BaseDocTemplate::GetDocString(CString& sRes, enum DocStringIndex index) con
 		case docName:            // user visible name for default document
 			return FALSE;
 		case fileNewName:        // user visible name for FileNew
-			sRes = sObjectType.scVal();
+			sRes = sObjectType.c_str();
 			return TRUE;
 			return FALSE;
 			// for file based documents:
 		case filterName:         // user visible name for FileOpen
-			sRes = sObjectType.scVal();
+			sRes = sObjectType.c_str();
 			return TRUE;
 			// for file based documents with Shell open support:
 		case regFileTypeId:      // REGEDIT visible registered file type identifier

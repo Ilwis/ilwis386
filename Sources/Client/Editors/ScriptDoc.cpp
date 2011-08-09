@@ -198,7 +198,7 @@ void ScriptDoc::SaveDocumentAs(LPCTSTR s)
 		scr->SetDescription(tv->sGetDescription());
 		scr->Store();
 
-		OnOpenDocument(scr->fnObj.sFullName().scVal()); // reopen the script with the new name
+		OnOpenDocument(scr->fnObj.sFullName().c_str()); // reopen the script with the new name
 	}
 	SetModifiedFlag(false);
 }

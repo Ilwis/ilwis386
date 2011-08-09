@@ -67,7 +67,7 @@ void AcceleratorManager::HandleAccelerators(bool fYes)
 	fHandleAccelerator = fYes;
 }
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 
 void AcceleratorManager::AddAccel(CMenu* men, vector<ACCEL>& va)
 {

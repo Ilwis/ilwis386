@@ -64,7 +64,7 @@ END_MESSAGE_MAP()
 
 
 DigitizerWizard::DigitizerWizard(CWnd* wnd, Digitizer* dig)
-: CPropertySheet(SDGTitleDigSetup.scVal(), wnd)
+: CPropertySheet(TR("Setup Digitizer").c_str(), wnd)
 {
 	SetWizardMode();
 	pgSetPort = new DigSetPortForm(this, dig);	

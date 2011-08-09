@@ -73,7 +73,7 @@ LRESULT Cmdimport(CWnd *wndOwner, const String& sPar)
 	// call the form within the mainwindow thread
 	// AskImport will start the actual import in a thread
 	Importing import;
-	import.AskImport(wndOwner, sPar.scVal());
+	import.AskImport(wndOwner, sPar.c_str());
 
 	return -1;
 }
@@ -85,7 +85,7 @@ int OpenMapListColorComp(CWnd * wnd)
 	{
 	public:
 		ShowMapListForm(CWnd* parent, String* sName)
-			: FormWithDest(parent, SMSTitleShowMapListColorComp)
+			: FormWithDest(parent, TR("Show Map List as Color Composite"))
 		{
 			iImg = IlwWinApp()->iImage("DspMap16Ico");
 			new FieldDataTypeLarge(root, sName, ".mpl");
@@ -111,8 +111,8 @@ LRESULT Cmdmplcolorcomp(CWnd *wnd, const String& sCmd)
 	bool fPalette = (dc->GetDeviceCaps(RASTERCAPS) & RC_PALETTE) != 0;
 	if (fPalette) {
 		MessageBox(0,
-			SMSMsgColorDepth16bitOrHigher.scVal(),
-			SMSTitleShowMapListColorComp.scVal(),
+			TR("To display a map list as color composite,\nthe display settings in the Control Panel\nneed to be set on more than 256 colors").c_str(),
+			TR("Show Map List as Color Composite").c_str(),
 			MB_OK|MB_ICONSTOP);
 		return -1;
 	}
@@ -127,12 +127,12 @@ LRESULT Cmdmplcolorcomp(CWnd *wnd, const String& sCmd)
 		s = fn.sFullNameQuoted();
 		if (pm.fExist("noask")) //  || pm.fExist("quiet")) // quiet is always supplied by script. I leave it up to the user to decide whether to get the form or not.
 		{
-			WinThread* thr = new WinThread(IlwWinApp()->docTemplMapWindow(), s.scVal(), IlwisDocument::otNOASK);
+			WinThread* thr = new WinThread(IlwWinApp()->docTemplMapWindow(), s.c_str(), IlwisDocument::otNOASK);
 			if (thr) 
 				thr->CreateThread(0, 0);
 		}
 		else
-			IlwWinApp()->OpenDocumentAsMap(s.scVal());
+			IlwWinApp()->OpenDocumentAsMap(s.c_str());
 	}
 
 	return -1;
@@ -142,7 +142,7 @@ LRESULT Cmddel(CWnd *wndOwner, const String& sCmd)
 {
 	String sFn;
 	if (sCmd == "") {
-		DataObjectForm frm(wndOwner, SMSTitleDelObject.c_str(), &sFn, "ilwismen\\delete_object_select_object.htm");
+		DataObjectForm frm(wndOwner, TR("Delete Object").c_str(), &sFn, "ilwismen\\delete_object_select_object.htm");
 		if (!frm.fOkClicked()) 
 			return -1;
 	}
@@ -158,7 +158,7 @@ void CommandHandlerUI::CmdExport14(const String& sCmd)
 	String sFn;
 	if (s1.length() == 0)
 	{
-		DataObjectForm frm(wndOwner, SMSTitleExport14, &sFn, "");
+		DataObjectForm frm(wndOwner, TR("Export to Version 1.4"), &sFn, "");
 		if (!frm.fOkClicked()) 
 			return;
 	}
@@ -171,7 +171,7 @@ void CommandHandlerUI::CmdExport14(const String& sCmd)
 
 LRESULT Cmdsmce(CWnd* parent, const String& sCmd)
 {
-  IlwWinApp()->OpenDocumentAsSMCE(sCmd.scVal());
+  IlwWinApp()->OpenDocumentAsSMCE(sCmd.c_str());
 
   return -1;
 }
@@ -218,14 +218,14 @@ void CommandHandlerUI::CmdSetWindowRect(const String& sC)
 			arParts.at(arParts.size() - 1) += sCmd[i];
 	}
 	if ( arParts.size() < 4)
-		throw ErrorObject(SMSErrNotEnoughParameters);
+		throw ErrorObject(TR("Not enough parameters"));
 	IlwWinApp()->SetNextWindowRect(CPoint(arParts[0].iVal(), arParts[1].iVal()),
 		                             CSize(arParts[2].iVal(), arParts[3].iVal()));
 }
 
 void CommandHandlerUI::EditObject(const FileName& fn)
 {
-	IlwWinApp()->OpenDocumentFile(fn.sFullNameQuoted().scVal(), IlwisDocument::otEDIT);
+	IlwWinApp()->OpenDocumentFile(fn.sFullNameQuoted().c_str(), IlwisDocument::otEDIT);
 }
 
 LRESULT Cmdmkdir(CWnd *wndOwner, const String& str)
@@ -234,17 +234,17 @@ LRESULT Cmdmkdir(CWnd *wndOwner, const String& str)
 	{
 	public:
 		FormCreateDir(CWnd* wPar, String* sDir)
-			: FormWithDest(wPar, SMSTitleCreateDirectory)
+			: FormWithDest(wPar, TR("Create Directory"))
 		{
 			iImg = IlwWinApp()->iImage("directory");
 			
-			new FieldString(root, SMSUiDirName, sDir);
+			new FieldString(root, TR("&Directory Name"), sDir);
 			create();
 		}
 	};
 	ParmList p(str);
 	String sDir = p.sGet(0);
-	SetCurrentDirectory(IlwWinApp()->sGetCurDir().scVal());
+	SetCurrentDirectory(IlwWinApp()->sGetCurDir().c_str());
 	if ("" == sDir) 
 	{
 		FormCreateDir frm(wndOwner, &sDir);
@@ -275,16 +275,16 @@ LRESULT Cmdremovedir(CWnd *wndOwner, const String& str)
 	{
 	public:
 		FormRemoveDir(CWnd* wPar, String* sDir)
-			: FormWithDest(wPar, SMSTitleRemoveDirectory)
+			: FormWithDest(wPar, TR("Remove Directory"))
 		{
 			iImg = IlwWinApp()->iImage("directory");
-			new FieldString(root, SMSUiDirName, sDir);
+			new FieldString(root, TR("&Directory Name"), sDir);
 			create();
 		}
 	};
 	ParmList p(str);
 	String sDir = p.sGet(0).sUnQuote();
-	SetCurrentDirectory(IlwWinApp()->sGetCurDir().scVal());
+	SetCurrentDirectory(IlwWinApp()->sGetCurDir().c_str());
 	if ("" == sDir) 
 	{
 		FormRemoveDir frm(wndOwner, &sDir);
@@ -307,7 +307,7 @@ LRESULT Cmdremovedir(CWnd *wndOwner, const String& str)
 
 //void CommandHandlerUI::CmdColorComp(const String& s)
 //{
-//  new FormColorComp(wndOwner, s.scVal());
+//  new FormColorComp(wndOwner, s.c_str());
 //}
 
 void CommandHandlerUI::PopupHelpObject(const String& sObj)
@@ -329,7 +329,7 @@ LRESULT Cmdseg(CWnd *wndOwner, const String& s)
 	{
 	public:
 		ShowMapForm(CWnd* parent, String* sName)
-			: FormWithDest(parent, SMSTitleShowMap)
+			: FormWithDest(parent, TR("Open Object"))
 		{
 			iImg = IlwWinApp()->iImage("DspMap16Ico");
 			new FieldDataTypeLarge(root, sName, ".mps");
@@ -358,7 +358,7 @@ LRESULT Cmdpol(CWnd *wndOwner, const String& s)
 	{
 	public:
 		ShowMapForm(CWnd* parent, String* sName)
-			: FormWithDest(parent, SMSTitleShowMap)
+			: FormWithDest(parent, TR("Open Object"))
 		{
 			iImg = IlwWinApp()->iImage("DspMap16Ico");
 			new FieldDataTypeLarge(root, sName, ".mpa");
@@ -388,7 +388,7 @@ LRESULT Cmdtbl(CWnd *wndOwner, const String& s)
 	{
 	public:
 		ShowTblForm(CWnd* parent, String* sName)
-			: FormWithDest(parent, SMSTitleShowTable)
+			: FormWithDest(parent, TR("Show Table"))
 		{
 			iImg = IlwWinApp()->iImage("DspMap16Ico");
 			new FieldDataTypeLarge(root, sName, ".tbt.ta2");
@@ -418,7 +418,7 @@ LRESULT Cmdpnt(CWnd *wndOwner,const String& s)
 	{
 	public:
 		ShowMapForm(CWnd* parent, String* sName)
-			: FormWithDest(parent, SMSTitleShowMap)
+			: FormWithDest(parent, TR("Open Object"))
 		{
 			iImg = IlwWinApp()->iImage("DspMap16Ico");
 			new FieldDataTypeLarge(root, sName, ".mpp");
@@ -448,7 +448,7 @@ LRESULT Cmdshowastable(CWnd *wndOwner, const String& s)
 	{
 	public:
 		ShowTblForm(CWnd* parent, String* sName)
-			: FormWithDest(parent, SMSTitleShowTable)
+			: FormWithDest(parent, TR("Show Table"))
 		{
 			iImg = IlwWinApp()->iImage("DspMap16Ico");
 			new FieldDataTypeLarge(root, sName, ".dom.rpr.mpp.grf.tbt.ta2.his.hsa.hss.hsp.atx", new TableAsLister(""));
@@ -467,7 +467,7 @@ LRESULT Cmdshowastable(CWnd *wndOwner, const String& s)
 	if ("" == fnTbl.sExt) 
 		fnTbl.sExt = ".tbt";
 	sTbl = fnTbl.sFullNameQuoted();
-	IlwWinApp()->OpenDocumentAsTable(sTbl.scVal());
+	IlwWinApp()->OpenDocumentAsTable(sTbl.c_str());
 
 	return -1;
 }
@@ -480,7 +480,7 @@ LRESULT Cmdshowasdomain(CWnd *wndOwner, const String& s)
 	if ("" == fn.sExt) 
 		fn.sExt = ".dom";
 	String str = fn.sFullNameQuoted();
-	IlwWinApp()->OpenDocumentAsDomain(str.scVal());
+	IlwWinApp()->OpenDocumentAsDomain(str.c_str());
 
 	return -1;
 }
@@ -493,7 +493,7 @@ LRESULT Cmdshowasrepresentation(CWnd *wndOwner, const String& s)
 	if ("" == fn.sExt) 
 		fn.sExt = ".rpr";
 	String str = fn.sFullNameQuoted();
-	IlwWinApp()->OpenDocumentAsRpr(str.scVal());
+	IlwWinApp()->OpenDocumentAsRpr(str.c_str());
 
 	return -1;
 }
@@ -504,7 +504,7 @@ LRESULT Cmdmap(CWnd *wndOwner, const String& s)
 	{
 	public:
 		ShowMapForm(CWnd* parent, String* sName)
-			: FormWithDest(parent, SMSTitleShowMap)
+			: FormWithDest(parent, TR("Open Object"))
 		{
 			iImg = IlwWinApp()->iImage("DspMap16Ico");
 			new FieldDataTypeLarge(root, sName, ".mpr");
@@ -534,7 +534,7 @@ LRESULT Cmdview(CWnd *wndOwner,const String& s)
 	{
 	public:
 		ShowMapForm(CWnd* parent, String* sName)
-			: FormWithDest(parent, SMSTitleShowMap)
+			: FormWithDest(parent, TR("Open Object"))
 		{
 			iImg = IlwWinApp()->iImage("DspMap16Ico");
 			new FieldDataTypeLarge(root, sName, ".mpv");
@@ -559,7 +559,7 @@ LRESULT Cmdview(CWnd *wndOwner,const String& s)
 
 LRESULT Cmdpixelinfo(CWnd *parent, const String& s)
 {
-	IlwWinApp()->OpenPixelInfo(s.scVal());
+	IlwWinApp()->OpenPixelInfo(s.c_str());
 	return -1;
 }
 
@@ -576,7 +576,7 @@ static void SortDomainError(const String& sDomain)
 static void NotDomainGroupError(const String& sDomain)
 {
 	throw ErrorObject(
-		WhatError(String(SDATErrDomainGroupExpected_S.scVal(), sDomain), 0), 
+		WhatError(String(TR("Only group domain allowed: '%S'").c_str(), sDomain), 0), 
 		FileName());
 }
 
@@ -585,7 +585,7 @@ void CommandHandlerUI::CmdDelFile(const String& sFiles)
 	Array<FileName> afn;
 	File::GetFileNames(sFiles, afn);
 	for (unsigned int i=0; i < afn.iSize(); ++i) 
-		_unlink(afn[i].sFullName(true).scVal());
+		_unlink(afn[i].sFullName(true).c_str());
 	UpdateCatalog();
 }
 
@@ -1036,8 +1036,8 @@ void CommandHandlerUI::CmdCreateTable(const String& s)
 	ParmList pm(s);
 	FileName fnTbl(pm.sGet(0), ".tbt", true);
 	if (File::fExist(fnTbl))
-		if (!DeleteFile(fnTbl.sFullPath().scVal()))
-			throw ErrorObject(String(SMSErrorCouldNotOverWrite_S.scVal(), fnTbl.sRelative()));
+		if (!DeleteFile(fnTbl.sFullPath().c_str()))
+			throw ErrorObject(String(TR("Could not overwrite %S").c_str(), fnTbl.sRelative()));
 	String sDom = pm.sGet(1);
 	if ( sDom == "")
 		return;
@@ -1058,8 +1058,8 @@ void CommandHandlerUI::CmdCreateMap(const String& s)
 	ParmList pm(s);
 	FileName fnMap(pm.sGet(0), ".mpr", true);
 	if (File::fExist(fnMap))
-		if (!DeleteFile(fnMap.sFullPath().scVal()))
-			throw ErrorObject(String(SMSErrorCouldNotOverWrite_S.scVal(), fnMap.sRelative()));
+		if (!DeleteFile(fnMap.sFullPath().c_str()))
+			throw ErrorObject(String(TR("Could not overwrite %S").c_str(), fnMap.sRelative()));
 	String sGrf = pm.sGet(1);
 	String sDom = pm.sGet(2);
 	GeoRef grf(sGrf);
@@ -1087,8 +1087,8 @@ void CommandHandlerUI::CmdCreatePointMap(const String& s)
 	ParmList pm(s);
 	FileName fnMap(pm.sGet(0), ".mpp", true);
 	if (File::fExist(fnMap))
-		if (!DeleteFile(fnMap.sFullPath().scVal()))
-			throw ErrorObject(String(SMSErrorCouldNotOverWrite_S.scVal(), fnMap.sRelative()));
+		if (!DeleteFile(fnMap.sFullPath().c_str()))
+			throw ErrorObject(String(TR("Could not overwrite %S").c_str(), fnMap.sRelative()));
 	Domain dm;
 	CoordSystem csy;
 	
@@ -1116,8 +1116,8 @@ void CommandHandlerUI::CmdCreateSegMap(const String& s)
 	ParmList pm(s);
 	FileName fnMap(pm.sGet(0), ".mps", true);
 	if (File::fExist(fnMap))
-		if (!DeleteFile(fnMap.sFullPath().scVal()))
-			throw ErrorObject(String(SMSErrorCouldNotOverWrite_S.scVal(), fnMap.sRelative()));
+		if (!DeleteFile(fnMap.sFullPath().c_str()))
+			throw ErrorObject(String(TR("Could not overwrite %S").c_str(), fnMap.sRelative()));
 	Domain dm;
 	CoordSystem csy;
 	
@@ -1145,8 +1145,8 @@ void CommandHandlerUI::CmdCreateDom(const String& s)
 	ParmList pm(s);
 	FileName fnDom(pm.sGet(0), ".dom", true);
 	if (File::fExist(fnDom))
-		if (!DeleteFile(fnDom.sFullPath().scVal()))
-			throw ErrorObject(String(SMSErrorCouldNotOverWrite_S.scVal(), fnDom.sRelative()));
+		if (!DeleteFile(fnDom.sFullPath().c_str()))
+			throw ErrorObject(String(TR("Could not overwrite %S").c_str(), fnDom.sRelative()));
 	String sType = pm.sGet("type");
 	DomainType dmt = dmtNONE;
 	if ((fCIStrEqual(sType , "class")) || (sType == "")) 
@@ -1212,8 +1212,8 @@ void CommandHandlerUI::CmdCreateRpr(const String& s)
 	ParmList pm(s);
 	FileName fnRpr(pm.sGet(0), ".rpr", true);
 	if (File::fExist(fnRpr))
-		if (!DeleteFile(fnRpr.sFullPath().scVal()))
-			throw ErrorObject(String(SMSErrorCouldNotOverWrite_S.scVal(), fnRpr.sRelative()));
+		if (!DeleteFile(fnRpr.sFullPath().c_str()))
+			throw ErrorObject(String(TR("Could not overwrite %S").c_str(), fnRpr.sRelative()));
 	Domain dm(pm.sGet(1));
 	Representation(fnRpr, dm);
 }
@@ -1223,8 +1223,8 @@ void CommandHandlerUI::CmdCreateGrf(const String& s)
 	ParmList pm(s);
 	FileName fnGrf(pm.sGet(0), ".grf", true);
 	if (File::fExist(fnGrf))
-		if (!DeleteFile(fnGrf.sFullPath().scVal()))
-			throw ErrorObject(String(SMSErrorCouldNotOverWrite_S.scVal(), fnGrf.sRelative()));
+		if (!DeleteFile(fnGrf.sFullPath().c_str()))
+			throw ErrorObject(String(TR("Could not overwrite %S").c_str(), fnGrf.sRelative()));
 	GeoRef gr;
 	RowCol rc;
 	rc.Row = pm.sGet(1).iVal();
@@ -1486,7 +1486,7 @@ void CommandHandlerUI::CopyObjects(const String& sCommand, Tranquilizer* trq, CW
 		afnFiles[iParm] = FileName(pm.sGet(iParm));
 	
 	if ( afnFiles.size() == 0 )
-		throw ErrorObject(SMSErrorNoFilesToCopy);
+		throw ErrorObject(TR("No files to be copied"));
 	
 	if ( fnTo.sExt == "" && Directory::fIsExistingDir( Directory(sTo)))
 	{
@@ -1538,7 +1538,7 @@ void CommandHandlerUI::CopyFiles(const String& sCommand, Tranquilizer* trq)
 
 LRESULT Cmdfinddatumparms(CWnd* parent, const String& s)
 {
-	DatumWizard frm(parent, s.scVal());
+	DatumWizard frm(parent, s.c_str());
 	frm.DoModal();
 
 	return -1;
@@ -1563,7 +1563,7 @@ LRESULT fCmdSimpleCalc(CWnd *wnd, const String& sCmd)
 		}
 		else
 		{
-			MessageBox(0, sMsg.scVal(), SMSTitleSimpleCalc.scVal(), MB_OK);
+			MessageBox(0, sMsg.c_str(), TR("Calculation Result ").c_str(), MB_OK);
 		}
 	}
 
@@ -1591,10 +1591,10 @@ LRESULT Cmdsample(CWnd *parent, const String& s)
 	{
 	public:
 		SampleMapForm(CWnd* parent, String* sSample)
-			: FormWithDest(parent, SSSTitleSampling)
+			: FormWithDest(parent, TR("Sampling"))
 		{
 			iImg = IlwWinApp()->iImage("DspMap16Ico");
-			new FieldSampleSetC(root, SSSUiSampleSet, sSample);
+			new FieldSampleSetC(root, TR("&Sample Set"), sSample);
 			SetMenHelpTopic("ilwismen\\sampling.htm");
 			create();
 		}
@@ -1648,7 +1648,7 @@ static UINT ExportInThread(LPVOID p)
 	
 	try
 	{
-		exprt.Export(wnd, wp->s->scVal());
+		exprt.Export(wnd, wp->s->c_str());
 	}
 	catch(ErrorObject& err)
 	{
@@ -1679,7 +1679,7 @@ UINT CommandHandlerUI::CmdCopyFileInThread(void *p)
 	WinAndParm* wp = (WinAndParm*)(p);
 	IlwWinApp()->Context()->InitThreadLocalVars();
 	IlwWinApp()->SetCurDir(*(wp->sPath));
-	String s(wp->s->scVal());
+	String s(wp->s->c_str());
 
 	CWnd *wnd= CWnd::FromHandle(wp->handle);
 
@@ -1689,7 +1689,7 @@ UINT CommandHandlerUI::CmdCopyFileInThread(void *p)
 	try
 	{
     Tranquilizer trq;
-    // trq.SetTitle(String(SMAPTextImportRasterFrom14.scVal(), fn.sFile));
+    // trq.SetTitle(String(TR("Importing 1.4 raster map '%S'").c_str(), fn.sFile));
     trq.Start();
 		CopyFiles(s, &trq);
 	}
@@ -1719,7 +1719,7 @@ UINT CommandHandlerUI::CmdCopyInThread(void *p)
 	WinAndParm* wp = (WinAndParm*)(p);
 	IlwWinApp()->Context()->InitThreadLocalVars();
 	IlwWinApp()->SetCurDir(*(wp->sPath));
-	String s(wp->s->scVal());
+	String s(wp->s->c_str());
 
 	CWnd *wnd= CWnd::FromHandle(wp->handle);
 
@@ -1885,44 +1885,44 @@ void CommandHandlerUI::addExtraCommands() {
 	addCommand(CommandHandlerUI::createCommandInfo("showdefform","", Cmdshowdefform,"..","","","",-1,"", false));
 	addCommand(CommandHandlerUI::createCommandInfo("deleteobjects","",Cmddeleteobjects,"","",".",".",0000,"", false));
 
-	addCommand(CommandHandlerUI::createCommandInfo("open","show",Cmdopen,SMENUopen,SMENUSopen,"DspMap16Ico","",7010,SMENUDopen));
-	addCommand(CommandHandlerUI::createCommandInfo("slideshow","",Cmdmplslideshow,SMENUslideshow,SMENUSslideshow,"DspMap16Ico",".mpl",7013,SMENUDslideshow));
-	addCommand(CommandHandlerUI::createCommandInfo("showastbl","showastable",Cmdshowastable,SMENUshowastable,SMENUSshowastable,".tbt",".tbt",0,SMENUDshowastable));
-	addCommand(CommandHandlerUI::createCommandInfo("display3d","",Cmddisplay3d,SMENUdisplay3d,SMENUSdisplay3d,"DspMap16Ico","",7002,SMENUDdisplay3d));
-	addCommand(CommandHandlerUI::createCommandInfo("edit","",Cmdedit,SMENUedit,SMENUSedit,"DspMap16Ico","",7001,SMENUDedit));
-    addCommand(CommandHandlerUI::createCommandInfo("pixelinfo","",Cmdpixelinfo,SMENUpixelinfo,SMENUSpixelinfo,"info","",7004,SMENUDpixelinfo));
-	addCommand(CommandHandlerUI::createCommandInfo("makestereopair","",Cmdmakestereopair,SMENUmakestereopair,SMENUSmakestereopair,".stp","",7015,SMENUDmakestereopair));
-	addCommand(CommandHandlerUI::createCommandInfo("sample","",Cmdsample,SMENUsample,SMENUSsample,"DspMap16Ico","",7003,SMENUDsample));
-	addCommand(CommandHandlerUI::createCommandInfo("anaglyph","",Cmdanaglyph,SMENUanaglyph,SMENUSanaglyph,".stp",".stp",7017,SMENUDanaglyph));
-	addCommand(CommandHandlerUI::createCommandInfo("stereoscope","",Cmdstereoscope,SMENUstereoscope,SMENUSstereoscope,".stp",".stp",7016,SMENUDstereoscope));
-	addCommand(CommandHandlerUI::createCommandInfo("finddatumparms","",Cmdfinddatumparms,SMENUfinddatumparms,SMENUSfinddatumparms,".csy",".mpp",4778,SMENUDfinddatumparms));
-	addCommand(CommandHandlerUI::createCommandInfo("smce","",Cmdsmce,SMENUsmce,SMENUSsmce,".smc","",8110,SMENUDsmce));
-	addCommand(CommandHandlerUI::createCommandInfo("createmap","",Cmdcreatemap,SMENUcreatemap,SMENUScreatemap,".mpr",".dom.grf",1000,SMENUDcreatemap));
-	addCommand(CommandHandlerUI::createCommandInfo("createpol","",Cmdcreatepol,SMENUcreatepol,SMENUScreatepol,".mpa",".dom.csy",1001,SMENUDcreatepol));
-	addCommand(CommandHandlerUI::createCommandInfo("createseg","",Cmdcreateseg,SMENUcreateseg,SMENUScreateseg,".mps",".dom.csy",1002,SMENUDcreateseg));
-	addCommand(CommandHandlerUI::createCommandInfo("createpnt","",Cmdcreatepnt,SMENUcreatepnt,SMENUScreatepnt,".mpp",".dom.csy",1003,SMENUDcreatepnt));
-	addCommand(CommandHandlerUI::createCommandInfo("layout","",Cmdlayout,SMENUlayout,SMENUSlayout,".ilo",".mpv",1000,SMENUDlayout));
-	addCommand(CommandHandlerUI::createCommandInfo("createtbl","",Cmdcreatetbl,SMENUcreatetbl,SMENUScreatetbl,".tbt",".dom",1005,SMENUDcreatetbl));
-	addCommand(CommandHandlerUI::createCommandInfo("createtb2","",Cmdcreatetb2,SMENUcreatetb2,SMENUScreatetb2,".ta2",".dom",1027,SMENUDcreatetb2));
-	addCommand(CommandHandlerUI::createCommandInfo("graph","",Cmdgraph,SMENUgraph,SMENUSgraph,".grh",".tbt",1000,SMENUDgraph));
-	addCommand(CommandHandlerUI::createCommandInfo("rosediagram","",Cmdrosediagram,SMENUrosediagram,SMENUSrosediagram,".grh",".tbt",1000,SMENUDrosediagram));
-	addCommand(CommandHandlerUI::createCommandInfo("createdom","",Cmdcreatedom,SMENUcreatedom,SMENUScreatedom,".dom","",1010,SMENUDcreatedom));
-	addCommand(CommandHandlerUI::createCommandInfo("createrpr","",Cmdcreaterpr,SMENUcreaterpr,SMENUScreaterpr,".rpr",".dom",1011,SMENUDcreaterpr));
-	addCommand(CommandHandlerUI::createCommandInfo("creategrf","",Cmdcreategrf,SMENUcreategrf,SMENUScreategrf,".grf",".csy",1012,SMENUDcreategrf));
-	addCommand(CommandHandlerUI::createCommandInfo("createcsy","",Cmdcreatecsy,SMENUcreatecsy,SMENUScreatecsy,".csy","",1013,SMENUDcreatecsy));
-	addCommand(CommandHandlerUI::createCommandInfo("creatempl","",Cmdcreatempl,SMENUcreatempl,SMENUScreatempl,".mpl","",1004,SMENUDcreatempl));
-	addCommand(CommandHandlerUI::createCommandInfo("createsms","",Cmdcreatesms,SMENUcreatesms,SMENUScreatesms,".sms",".mpl",1022,SMENUDcreatesms));
-	addCommand(CommandHandlerUI::createCommandInfo("createfil","",Cmdcreatefil,SMENUcreatefil,SMENUScreatefil,".fil","",1024,SMENUDcreatefil));
-	addCommand(CommandHandlerUI::createCommandInfo("createfun","",Cmdcreatefun,SMENUcreatefun,SMENUScreatefun,".fun","",1025,SMENUDcreatefun));
-	addCommand(CommandHandlerUI::createCommandInfo("createisl","",Cmdcreateisl,SMENUcreateisl,SMENUScreateisl,".isl","",1026,SMENUDcreateisl));
-	addCommand(CommandHandlerUI::createCommandInfo("createioc","",Cmdcreateioc,SMENUcreateioc,SMENUScreateioc,".ioc","",1026,SMENUDcreateioc));
-	addCommand(CommandHandlerUI::createCommandInfo("import","",Cmdimport,SMENUimport,SMENUSimport,"ExeIcoL","",7006,SMENUDimport));
-	addCommand(CommandHandlerUI::createCommandInfo("import -tablewizard","",Cmdimport,SMENUimportTable,SMENUSimportTable,".tbt","",7006,SMENUDimportTable));
-	addCommand(CommandHandlerUI::createCommandInfo("import -gdal","",Cmdimport,SMENUimportGdal,SMENUSimportGdal,".mpr","",7006,SMENUDimportGdal));
-	addCommand(CommandHandlerUI::createCommandInfo("import -generalraster","",Cmdimport,SMENUimportGR,SMENUSimportGR,".mpr","",7006,SMENUDimportGR));
-	addCommand(CommandHandlerUI::createCommandInfo("export","",Cmdexport,SMENUexport,SMENUSexport,"ExeIcoL",".mpr.mpa.mps.mpp.tbt.mpl.his.hss.hsa.hsp",7008,SMENUDexport));
-	addCommand(CommandHandlerUI::createCommandInfo("colorcomp","mpl",Cmdmplcolorcomp,SMENUcolorcomp,SMENUScolorcomp,"DspMap16Ico","",7014,SMENUDcolorcomp));
-	addCommand(CommandHandlerUI::createCommandInfo("colorcomp","mpl",Cmdmplcolorcomp,SMENUcolorcomp,SMENUScolorcomp,"DspMap16Ico","",7014,SMENUDcolorcomp));
+	addCommand(CommandHandlerUI::createCommandInfo("open","show",Cmdopen,TR("Visuali&zation..&Show Map"),TR("Show"),"DspMap16Ico","",7010,TR("Show a map in a new map window")));
+	addCommand(CommandHandlerUI::createCommandInfo("slideshow","",Cmdmplslideshow,TR("Visuali&zation.Show Map &List.as &Slide Show"),TR("Slide Show"),"DspMap16Ico",".mpl",7013,TR("Show a map list as a slide show in a new window")));
+	addCommand(CommandHandlerUI::createCommandInfo("showastbl","showastable",Cmdshowastable,TR("Visuali&zation..Show as Table"),TR("Show as Table"),".tbt",".tbt",0,TR("Shows table based Ilwisobjects as true tables")));
+	addCommand(CommandHandlerUI::createCommandInfo("display3d","",Cmddisplay3d,TR("Visuali&zation..&Display 3D"),TR("Display 3D"),"DspMap16Ico","",7002,TR("Edit a 3D georeference to display a map in three dimensions")));
+	addCommand(CommandHandlerUI::createCommandInfo("edit","",Cmdedit,TR("..Edit Map"),TR("Edit"),"DspMap16Ico","",7001,TR("Edit a map in a map window")));
+    addCommand(CommandHandlerUI::createCommandInfo("pixelinfo","",Cmdpixelinfo,TR(".."),TR("Pixel Info"),"info","",7004,TR("Open or activate the pixel information window")));
+	addCommand(CommandHandlerUI::createCommandInfo("makestereopair","",Cmdmakestereopair,TR("Image &Processing..&Epipolar Stereo Pair"),TR("Epipolar Stereo Pair"),".stp","",7015,TR("Interactively create a stereo pair from two overlapping aerial photographs")));
+	addCommand(CommandHandlerUI::createCommandInfo("sample","",Cmdsample,TR("Image &Processing..S&ample"),TR("Sample Map"),"DspMap16Ico","",7003,TR("Select training pixels in a sample set prior to an image classification")));
+	addCommand(CommandHandlerUI::createCommandInfo("anaglyph","",Cmdanaglyph,TR("Visuali&zation.Show Stereo Pair.as &Anaglyph"),TR("Anaglyph"),".stp",".stp",7017,TR("Show a Stereo Pair as anaglyph in a Map Window")));
+	addCommand(CommandHandlerUI::createCommandInfo("stereoscope","",Cmdstereoscope,TR("Visuali&zation.Show Stereo Pair.with &Stereoscope"),TR("Stereoscope"),".stp",".stp",7016,TR("Show a Stereo Pair in a Stereoscope Window with two views")));
+	addCommand(CommandHandlerUI::createCommandInfo("finddatumparms","",Cmdfinddatumparms,TR("&Spatial Reference Operations.&Coordinates.Find Datum &Parameters"),TR("Find Datum Parameters"),".csy",".mpp",4778,TR("Find, and optionally save, datum parameters between two coordinate systems")));
+	addCommand(CommandHandlerUI::createCommandInfo("smce","",Cmdsmce,TR("&Raster Operations..Spatial Multi-Criteria &Evaluation"),TR("Spatial Multi-Criteria Evaluation"),".smc","",8110,TR("Perform spatial multi-criteria evaluation")));
+	addCommand(CommandHandlerUI::createCommandInfo("createmap","",Cmdcreatemap,TR(".Create.Create &Raster Map"),TR("New Raster Map"),".mpr",".dom.grf",1000,TR("Create a new raster map")));
+	addCommand(CommandHandlerUI::createCommandInfo("createpol","",Cmdcreatepol,TR(".Create.Create &Polygon Map"),TR("New Polygon Map"),".mpa",".dom.csy",1001,TR("Create a new polygon map")));
+	addCommand(CommandHandlerUI::createCommandInfo("createseg","",Cmdcreateseg,TR(".Create.Create &Segment Map"),TR("New Segment Map"),".mps",".dom.csy",1002,TR("Create a new segment map")));
+	addCommand(CommandHandlerUI::createCommandInfo("createpnt","",Cmdcreatepnt,TR(".Create.Create P&oint Map"),TR("New Point Map"),".mpp",".dom.csy",1003,TR("Create a new point map")));
+	addCommand(CommandHandlerUI::createCommandInfo("layout","",Cmdlayout,TR(".Create.Create &Layout"),TR("New Layout"),".ilo",".mpv",1000,TR("Create a new layout")));
+	addCommand(CommandHandlerUI::createCommandInfo("createtbl","",Cmdcreatetbl,TR(".Create.Create &Table"),TR("New Table"),".tbt",".dom",1005,TR("Create a new table")));
+	addCommand(CommandHandlerUI::createCommandInfo("createtb2","",Cmdcreatetb2,TR(".Create.Create &2-Dimensional Table"),TR("New 2-Dimensional Table"),".ta2",".dom",1027,TR("Create a new two dimensional table")));
+	addCommand(CommandHandlerUI::createCommandInfo("graph","",Cmdgraph,TR(".Create.Create &Graph"),TR("New Graph"),".grh",".tbt",1000,TR("Create a new graph")));
+	addCommand(CommandHandlerUI::createCommandInfo("rosediagram","",Cmdrosediagram,TR(".Create.Create &Rose Diagram"),TR("New Rose Diagram"),".grh",".tbt",1000,TR("Create a new rose diagram")));
+	addCommand(CommandHandlerUI::createCommandInfo("createdom","",Cmdcreatedom,TR(".Create."),TR("New Domain"),".dom","",1010,TR("Create a new domain")));
+	addCommand(CommandHandlerUI::createCommandInfo("createrpr","",Cmdcreaterpr,TR(".Create.Create &Representation"),TR("New Representation"),".rpr",".dom",1011,TR("Create a new representation")));
+	addCommand(CommandHandlerUI::createCommandInfo("creategrf","",Cmdcreategrf,TR(".Create.Create &GeoReference"),TR("New GeoReference"),".grf",".csy",1012,TR("Create a new georeference")));
+	addCommand(CommandHandlerUI::createCommandInfo("createcsy","",Cmdcreatecsy,TR(".Create."),TR("New Coordinate System"),".csy","",1013,TR("Create a new coordinate system")));
+	addCommand(CommandHandlerUI::createCommandInfo("creatempl","",Cmdcreatempl,TR(".Create."),TR("New Map List"),".mpl","",1004,TR("Create a new map list")));
+	addCommand(CommandHandlerUI::createCommandInfo("createsms","",Cmdcreatesms,TR(".Create.Create &Sample Set"),TR("New Sample Set"),".sms",".mpl",1022,TR("Create a new sample set")));
+	addCommand(CommandHandlerUI::createCommandInfo("createfil","",Cmdcreatefil,TR(".Create."),TR("New Filter"),".fil","",1024,TR("Create a new user-defined filter")));
+	addCommand(CommandHandlerUI::createCommandInfo("createfun","",Cmdcreatefun,TR(".Create."),TR("New Function"),".fun","",1025,TR("Create a new user-defined function")));
+	addCommand(CommandHandlerUI::createCommandInfo("createisl","",Cmdcreateisl,TR(".Create."),TR("New Script"),".isl","",1026,TR("Create a new ILWIS script")));
+	addCommand(CommandHandlerUI::createCommandInfo("createioc","",Cmdcreateioc,TR(".Create."),TR("New Object Collection"),".ioc","",1026,TR("Create a new ILWIS Object Collection")));
+	addCommand(CommandHandlerUI::createCommandInfo("import","",Cmdimport,TR("Import/Export..Import"),TR("Import Map"),"ExeIcoL","",7006,TR("Import a map from another software format into ILWIS")));
+	addCommand(CommandHandlerUI::createCommandInfo("import -tablewizard","",Cmdimport,TR("Import/Export..Table"),TR("Import Table"),".tbt","",7006,TR("Import a table from another software format into ILWIS")));
+	addCommand(CommandHandlerUI::createCommandInfo("import -gdal","",Cmdimport,TR("Import/Export..GDAL"),TR("Import Via GDAL"),".mpr","",7006,TR("Use GDAL to import a file from another software format into ILWIS")));
+	addCommand(CommandHandlerUI::createCommandInfo("import -generalraster","",Cmdimport,TR("Import/Export..General Raster"),TR("Import General Raster"),".mpr","",7006,TR("Import a general raster file from another software format into ILWIS")));
+	addCommand(CommandHandlerUI::createCommandInfo("export","",Cmdexport,TR("Import/Export..Export"),TR("Export"),"ExeIcoL",".mpr.mpa.mps.mpp.tbt.mpl.his.hss.hsa.hsp",7008,TR("Export an ILWIS object to another software format")));
+	addCommand(CommandHandlerUI::createCommandInfo("colorcomp","mpl",Cmdmplcolorcomp,TR("Visuali&zation.Show Map &List.as &Color Composite"),TR("Color Composite Interactive"),"DspMap16Ico","",7014,TR("Show a map list as a color composite in a new window")));
+	addCommand(CommandHandlerUI::createCommandInfo("colorcomp","mpl",Cmdmplcolorcomp,TR("Visuali&zation.Show Map &List.as &Color Composite"),TR("Color Composite Interactive"),"DspMap16Ico","",7014,TR("Show a map list as a color composite in a new window")));
 	addCommand(CommandHandlerUI::createCommandInfo("createView","",createView,"","","","",0,""));
 }
 
@@ -1932,11 +1932,11 @@ vector<Action *> CommandHandlerUI::CreateActions() {
 	map<CString, CommandInfoUI *> alternateOrdering;
 	for(CommandIterUI iter = commands.begin(); iter != commands.end(); ++iter) {
 		CommandInfoUI *ai = (*iter).second;
-		CString temp(ai->menuString.scVal());
+		CString temp(ai->menuString.c_str());
 		temp.Remove('&');
 		CString temp2;
 		//temp2.Format("%s%d", temp, rootCounter++);
-		temp2.Format("%s|%s",temp, ai->command.scVal());
+		temp2.Format("%s|%s",temp, ai->command.c_str());
 			 
 		sortedActions.push_back(temp2);
 		alternateOrdering[temp2]=ai;
@@ -1949,7 +1949,7 @@ vector<Action *> CommandHandlerUI::CreateActions() {
 		sortedActions.clear();
 		String line;
 		while(file.ReadLnAscii(line) != 0) {
-			sortedActions.push_back(CString(line.scVal()));
+			sortedActions.push_back(CString(line.c_str()));
 		}
 	} else
 		sort(sortedActions.begin(), sortedActions.end());
@@ -1971,10 +1971,10 @@ void CommandHandlerUI::saveOperationsDefinitions(const FileName& fn) {
 	int rootCounter = 0;
 	for(CommandIterUI iter = commands.begin(); iter != commands.end(); ++iter) {
 		CommandInfoUI *ai = (*iter).second;
-		CString temp(ai->menuString.scVal());
+		CString temp(ai->menuString.c_str());
 		temp.Remove('&');
 		CString temp2;
-		temp2.Format("%s|%s",temp, ai->command.scVal());
+		temp2.Format("%s|%s",temp, ai->command.c_str());
 			 
 		sortedActions.push_back(temp2);
 

@@ -85,15 +85,15 @@ FormPolygonMapCreate::FormPolygonMapCreate(CWnd* mwin, const String& sTitle)
 
 void FormPolygonMapCreate::initPolygonMapOut(bool fAskDomain)
 {  
-  fmc = new FieldPolygonMapCreate(root, SAFUiOutPolMap, &sOutMap);
+  fmc = new FieldPolygonMapCreate(root, TR("&Output Polygon Map"), &sOutMap);
   fmc->SetCallBack((NotifyProc)&FormPolygonMapCreate::OutPolygonMapCallBack);
   FormEntry* fe = fmc;
   if (fAskDomain) {
-    fdc = new FieldDomainC(root, SAFUiDomain, &sDomain);
+    fdc = new FieldDomainC(root, TR("&Domain"), &sDomain);
     fdc->Align(fe, AL_UNDER);
     fe = fdc;
   }  
-  StaticText* st = new StaticText(root, SAFUiDescription);
+  StaticText* st = new StaticText(root, TR("&Description:"));
   st->Align(fe, AL_UNDER);
   st->psn->SetBound(0,0,0,0);
   FieldString* fs = new FieldString(root, "", &sDescr);
@@ -113,8 +113,8 @@ void FormPolygonMapCreate::execPolygonMapOut(const String& sExpr)
   FileName fn(sOutMap);
   fn.sExt = ".mpa";
   if (fn.fExist()) {
-    String sErr(SAFMsgAlreadyExistsOverwrite_S.scVal(), fn.sFullPath(true));
-    int iRet = mw->MessageBox(sErr.scVal(), SAFMsgAlreadyExists.scVal(), MB_YESNO|MB_ICONEXCLAMATION);
+    String sErr(TR("File %S already exists.\nOverwrite?").c_str(), fn.sFullPath(true));
+    int iRet = mw->MessageBox(sErr.c_str(), TR("File already exists").c_str(), MB_YESNO|MB_ICONEXCLAMATION);
     if ( iRet != IDYES ) //== is replaced by !=
       return;
   }
@@ -134,7 +134,7 @@ void FormPolygonMapCreate::execPolygonMapOut(const String& sExpr)
 		{
       String sExec = "show ";
       sExec &= mpOut->sNameQuoted(true);
-      //winExec(sExec.scVal(), SW_SHOWNORMAL);
+      //winExec(sExec.c_str(), SW_SHOWNORMAL);
 			ILWISAPP->Execute(sExec);
     }
   }  

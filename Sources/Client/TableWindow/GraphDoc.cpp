@@ -96,7 +96,7 @@ int GraphDoc::OnOpenDocument(LPCTSTR lpszPathName)
 		if (".grh" == fn.sExt || lpszPathName == 0) 
     {
   		if (0 != lpszPathName)
-	  		SetPathName(fn.sFullName().scVal());
+	  		SetPathName(fn.sFullName().c_str());
       return IlwisDocument::OnOpenDocument(lpszPathName);
     }      
     else
@@ -116,7 +116,7 @@ int GraphDoc::OnOpenDocument(LPCTSTR lpszPathName)
 
 void GraphDoc::OnOpenTable()
 {
-  IlwWinApp()->OpenDocumentAsTable(tbl->sName(true).scVal());
+  IlwWinApp()->OpenDocumentAsTable(tbl->sName(true).c_str());
 }
 
 int GraphDoc::iLayers() const 

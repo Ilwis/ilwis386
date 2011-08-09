@@ -178,10 +178,10 @@ class FactorPropertyForm: public FormWithDest
 {
 public:
   FactorPropertyForm(CWnd* wPar, String* sName, int* iMapScore, list <String> *liReservedLabels)
-    : FormWithDest(wPar, SSmcUiFactor)
+    : FormWithDest(wPar, TR("Factor"))
 		, m_liReservedLabels(liReservedLabels)
 	{
-		fs = new FieldString(root, SSmcUiName, sName);
+		fs = new FieldString(root, TR("Name: "), sName);
 		fs->SetWidth(60);
 		fs->SetCallBack((NotifyProc)&FactorPropertyForm::CallBackFunc);
 
@@ -207,11 +207,11 @@ class ConstraintPropertyForm : public FormWithDest
 {
 public:
   ConstraintPropertyForm(CWnd* wPar, String* sName, int* iMapScore, list <String> *liReservedLabels)
-    : FormWithDest(wPar, SSmcUiConstraint)
+    : FormWithDest(wPar, TR("Constraint"))
 		, vrStdValue(ValueRange(0, 1, 0.001))
 		, m_liReservedLabels(liReservedLabels)
   {
-		fs = new FieldString(root, SSmcUiName, sName);
+		fs = new FieldString(root, TR("Name: "), sName);
 		fs->SetWidth(60);
 		fs->SetCallBack((NotifyProc)&ConstraintPropertyForm::CallBackFunc);
 
@@ -244,11 +244,11 @@ class GroupPropertyForm: public FormWithDest
 {
 public:
   GroupPropertyForm(CWnd* wPar, String* sName, list <String> *liReservedLabels)
-    : FormWithDest(wPar, SSmcUiGroup)
+    : FormWithDest(wPar, TR("Group"))
 		, m_sName(sName)
 		, m_liReservedLabels(liReservedLabels)
 	{
-		fs = new FieldString(root, SSmcUiName, m_sName);
+		fs = new FieldString(root, TR("Name: "), m_sName);
 		fs->SetWidth(60);
 		fs->SetCallBack((NotifyProc)&GroupPropertyForm::CallBackFunc);
 		
@@ -320,7 +320,7 @@ void CriteriaTreeItem::EditTreeElement()
 				egParent->ptrWeights()->Rename(sName(), sLabel);
 		}
 		// first the general changes received from the form
-		SetName(sLabel.scVal());
+		SetName(sLabel.c_str());
 		// then change type if needed
 		if (iMapScore != iOldMapScore)
 		{
@@ -442,7 +442,7 @@ void CriteriaTreeItem::ReadElements(const char* sSection, const ElementContainer
 	eCtiType = eCtiTypeFromString(sType);
 	String sName;
 	ObjectInfo::ReadElement(sSection, "Name", en, sName);
-	m_sName = sName.scVal();
+	m_sName = sName.c_str();
 	if (!ObjectInfo::ReadElement(sSection, "Weight", en, rWeight))
 		rWeight = 0;
 }
@@ -583,7 +583,7 @@ void EffectGroup::OnInsertGroup()
 	if (frm.fOkClicked())
 	{
 		// create the new object and set object-specific settings
-		cti = new EffectGroup(this, sLabel.scVal());
+		cti = new EffectGroup(this, sLabel.c_str());
 		// now set cti settings
 		cti->eCtiType = iFACTOR;
 		cti->SetNrAlternatives(iGetNrAlternatives());
@@ -607,7 +607,7 @@ void EffectGroup::OnInsertFactor()
 	if (frm.fOkClicked())
 	{
 		// create the new object and set object-specific settings
-		cti = Effect::create(this, sLabel.scVal(), eType, Effect::iUNKNOWN, "", iFACTOR);
+		cti = Effect::create(this, sLabel.c_str(), eType, Effect::iUNKNOWN, "", iFACTOR);
 		// now set cti settings
 		cti->eCtiType = iFACTOR;
 		cti->SetNrAlternatives(iGetNrAlternatives());
@@ -640,7 +640,7 @@ void EffectGroup::OnInsertConstraint()
 			if (frm.fOkClicked())
 			{
 				// create the new object and set object-specific settings
-				cti = Effect::create(egRoot, sLabel.scVal(), eType, Effect::iUNKNOWN, "", iCONSTRAINT);
+				cti = Effect::create(egRoot, sLabel.c_str(), eType, Effect::iUNKNOWN, "", iCONSTRAINT);
 				// now set cti settings
 				cti->SetNrAlternatives(iGetNrAlternatives());
 				list<CriteriaTreeItem*>::iterator it = egRoot->itFirstChild();
@@ -668,7 +668,7 @@ void EffectGroup::OnInsertScoreFactor()
 	if (frm.fOkClicked())
 	{
 		// create the new object and set object-specific settings
-		cti = Effect::create(this, sLabel.scVal(), eType, Effect::iUNKNOWN, "", iFACTOR);
+		cti = Effect::create(this, sLabel.c_str(), eType, Effect::iUNKNOWN, "", iFACTOR);
 		// now set cti settings
 		cti->eCtiType = iFACTOR;
 		cti->SetNrAlternatives(iGetNrAlternatives());
@@ -701,7 +701,7 @@ void EffectGroup::OnInsertScoreConstraint()
 			if (frm.fOkClicked())
 			{
 				// create the new object and set object-specific settings
-				cti = Effect::create(egRoot, sLabel.scVal(), eType, Effect::iUNKNOWN, "", iCONSTRAINT);
+				cti = Effect::create(egRoot, sLabel.c_str(), eType, Effect::iUNKNOWN, "", iCONSTRAINT);
 				// now set cti settings
 				cti->SetNrAlternatives(iGetNrAlternatives());
 				list<CriteriaTreeItem*>::iterator it = egRoot->itFirstChild();
@@ -722,9 +722,9 @@ void EffectGroup::DeleteTreeElement()
 {
 	bool fOKToDelete = true;
 	if (liChildren.size() > 0)
-		fOKToDelete = (IDYES == MessageBox(GetDocument()->wndGetActiveView()->GetSafeHwnd(), String(SSmcErrDeleteItem_S_D.scVal(), sName(), liChildren.size()).scVal(), SSmcErrWarning.scVal(), MB_YESNO|MB_ICONEXCLAMATION));
+		fOKToDelete = (IDYES == MessageBox(GetDocument()->wndGetActiveView()->GetSafeHwnd(), String(TR("The item named '%S' that you are about to delete has %d children that will be deleted as well. Proceed?").c_str(), sName(), liChildren.size()).c_str(), TR("Warning").c_str(), MB_YESNO|MB_ICONEXCLAMATION));
 	else
-		fOKToDelete = (IDYES == MessageBox(GetDocument()->wndGetActiveView()->GetSafeHwnd(), String(SSmcErrDeleteItem_S.scVal(), sName()).scVal(), SSmcErrWarning.scVal(), MB_YESNO|MB_ICONEXCLAMATION));
+		fOKToDelete = (IDYES == MessageBox(GetDocument()->wndGetActiveView()->GetSafeHwnd(), String(TR("You are about to delete the item named '%S'. Proceed?").c_str(), sName()).c_str(), TR("Warning").c_str(), MB_YESNO|MB_ICONEXCLAMATION));
 
 	if (fOKToDelete)
 		CriteriaTreeItem::DeleteTreeElement();
@@ -920,16 +920,16 @@ CString EffectGroup::sDisplayText(int iCol)
 		{
 			String sRet = String(vOutputMaps[iCol-1].sFileExt());
 			if ((sRet.length() == 0) && (GetParent() == 0))
-				sRet = SSmcErrNoFilenameGiven;
-			return sRet.scVal();
+				sRet = TR("<no filename given>");
+			return sRet.c_str();
 		}
 		else if (fCalculationPossible(iCol))
-			return vScores[iCol-1].scVal();
+			return vScores[iCol-1].c_str();
 		else
 			return "";
 	}
 	else
-		return String("%S%S", CriteriaTreeItem::sDisplayText(), sWeighMethod()).scVal();
+		return String("%S%S", CriteriaTreeItem::sDisplayText(), sWeighMethod()).c_str();
 }
 
 void EffectGroup::Edit(int iCol, RECT rect, CWnd* wnd)
@@ -942,7 +942,7 @@ void EffectGroup::Edit(int iCol, RECT rect, CWnd* wnd)
 		if (fSpatialItem() || fEditNeeded)
 		{
 			DWORD style = WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL;
-			m_e = new InPlaceEdit((int)this, iCol, vOutputMaps[iCol-1].sRelative(false).scVal());
+			m_e = new InPlaceEdit((int)this, iCol, vOutputMaps[iCol-1].sRelative(false).c_str());
 			m_e->Create(style, rect, wnd, ID_CRITERIA_TREE_EDIT);
 		}
 		// (int)this :: misuse of the m_iItem argument for passing a pointer
@@ -1011,7 +1011,7 @@ void EffectGroup::OnWeigh()
 		if (action == Evaluation::iOTHERMETHOD)
 		{
 			// user wants different method ..
-			Evaluation* pNewWeights = Evaluation::create(GetDocument()->wndGetActiveView(), &liNames, &mpChildWeights, pWeights, Evaluation::iSUMTOONE, SSmcUiWeights);
+			Evaluation* pNewWeights = Evaluation::create(GetDocument()->wndGetActiveView(), &liNames, &mpChildWeights, pWeights, Evaluation::iSUMTOONE, TR("Weights"));
 			if (pNewWeights != pWeights)
 			{
 				delete pWeights;
@@ -1028,7 +1028,7 @@ void EffectGroup::OnWeigh()
 	}
 	else
 	{
-		pWeights = Evaluation::create(GetDocument()->wndGetActiveView(), &liNames, &mpChildWeights, 0, Evaluation::iSUMTOONE, SSmcUiWeights);
+		pWeights = Evaluation::create(GetDocument()->wndGetActiveView(), &liNames, &mpChildWeights, 0, Evaluation::iSUMTOONE, TR("Weights"));
 		if (pWeights)
 		{
 			SetModifiedFlag();
@@ -1263,7 +1263,7 @@ class FormGenerateOutput: public FormWithDest
 {
 public:
   FormGenerateOutput(CWnd* mwin, EffectGroup* eg, CriteriaTreeDoc* ctd, int iCol, bool* fShow)
-	: FormWithDest(mwin, SSmcUiCIMapCalc)
+	: FormWithDest(mwin, TR("Composite Index Map Calculation"))
 	{
 		String sAlternativeDescr ("");
 		if (ctd->iGetNrAlternatives() == 1)
@@ -1271,30 +1271,30 @@ public:
 		if (iCol > 0) // one map
 		{
 			if (eg->GetParent())
-				new StaticText(root, SSmcUiGenIntermediateMap);
+				new StaticText(root, TR("Generate the following intermediate map?"));
 			else
-				new StaticText(root, SSmcUiGenCIMap);
+				new StaticText(root, TR("Generate the following composite index map?"));
 			if (eg->GetDocument()->iGetNrAlternatives() > 1)
-				sAlternativeDescr = String(SSmcUiForAlternative_s.scVal(), eg->GetDocument()->sAlternative(iCol));
+				sAlternativeDescr = String(TR("for alternative '%s', ").c_str(), eg->GetDocument()->sAlternative(iCol));
 			if (eg->fCalculationPossible(iCol))
-				new StaticText(root, String(SSmcUiMapName_S_S.scVal(), sAlternativeDescr, eg->sOutputMap(iCol)));
+				new StaticText(root, String(TR("Map %Sname='%S'").c_str(), sAlternativeDescr, eg->sOutputMap(iCol)));
 		}
 		else // (iCol <= 0); all maps
 		{
 			if (eg->GetParent())
-				new StaticText(root, SSmcUiGenIntermediateMaps);
+				new StaticText(root, TR("Generate the following intermediate maps?"));
 			else
-				new StaticText(root, SSmcUiGenCIMaps);
+				new StaticText(root, TR("Generate the following composite index maps?"));
 			for (int i=1; i<=ctd->iGetNrAlternatives(); ++i)
 			{
 				if (ctd->iGetNrAlternatives() > 1)
-					sAlternativeDescr = String(SSmcUiForAlternative_s.scVal(), ctd->sAlternative(i));
+					sAlternativeDescr = String(TR("for alternative '%s', ").c_str(), ctd->sAlternative(i));
 				if (eg->fCalculationPossible(i))
-					new StaticText(root, String(SSmcUiMap_S_S.scVal(), sAlternativeDescr, eg->sOutputMap(i)));
+					new StaticText(root, String(TR("Map %Sname='%S'").c_str(), sAlternativeDescr, eg->sOutputMap(i)));
 			}
 		}
 
-		CheckBox* cbShow = new CheckBox(root, SSmcUiShowAfterCalc, fShow);
+		CheckBox* cbShow = new CheckBox(root, TR("Show after calculation"), fShow);
 
 		SetMenHelpTopic("ilwismen\\smce_window_generate_selected_map.htm");
 		create();
@@ -1315,7 +1315,7 @@ void EffectGroup::GenerateOutput(int iCol)
 			if (iCol > 0) // one map
 			{
 				if (vOutputMaps[iCol-1].fExist())
-					iProceed = MessageBox(0, SSmcErrOutputExists.scVal(), SSmcErrWarning.scVal(), MB_YESNO);
+					iProceed = MessageBox(0, TR("Output already exists. Overwrite?").c_str(), TR("Warning").c_str(), MB_YESNO);
 				if (iProceed == IDYES)
 					GenerateItem(iCol, true, fShow);
 			}
@@ -1329,16 +1329,16 @@ void EffectGroup::GenerateOutput(int iCol)
 						fExists = true;
 				}
 				if (fExists)
-					iProceed = MessageBox(0, SSmcErrMultiOutputExists.scVal(), SSmcErrWarning.scVal(), MB_YESNO);
+					iProceed = MessageBox(0, TR("At least one of the output files already exists. Proceeding will overwrite the file. Continue?").c_str(), TR("Warning").c_str(), MB_YESNO);
 				if (iProceed == IDYES)
 				{
 					Tranquilizer trq;
 					trq.Start();
-					trq.SetTitle(SSmcUiGeneratingMaps);
+					trq.SetTitle(TR("Generating requested maps"));
 
 					for (i=1; i<=iNrOutputMaps; ++i)
 					{
-						trq.SetText(String(SSmcUiGenerating_s.scVal(), sDisplayText(i)));
+						trq.SetText(String(TR("Generating '%s'").c_str(), sDisplayText(i)));
 						if (trq.fUpdate(i-1, iNrOutputMaps))
 							break;
 						GenerateItem(i, true, fShow);
@@ -1379,11 +1379,11 @@ void EffectGroup::GenerateItem(int iCol, bool fCalc, bool fShow)
 						mp->SetDomainValueRangeStruct(dm);
 					String sAlternativeDescr ("");
 					if (GetDocument()->iGetNrAlternatives() > 1)
-						sAlternativeDescr = String(SSmcUiOfAlternative_s.scVal(), GetDocument()->sAlternative(iCol));
+						sAlternativeDescr = String(TR("of Alternative '%s'").c_str(), GetDocument()->sAlternative(iCol));
 					if (GetParent()) // we're intermediate
-						mp->SetDescription(String(SSmcUiIntermediateMap_S_S.scVal(), sName(), sAlternativeDescr));
+						mp->SetDescription(String(TR("Intermediate map for '%S'%S").c_str(), sName(), sAlternativeDescr));
 					else
-						mp->SetDescription(String(SSmcUiCompositeIndexMap_S.scVal(), sAlternativeDescr));
+						mp->SetDescription(String(TR("Composite index map%S").c_str(), sAlternativeDescr));
 					if (fCalc)
 					{
 						mp->Calc();
@@ -1601,9 +1601,9 @@ public:
 	{
 		fbs	|= fbsBUTTONSUNDER | fbsAPPLIC;
 		ValueRange vri (2,99);
-		new FieldInt(root, SSmcUiNrSlices, iSlices, vri, true);
-		new FieldRangeReal(root, SSmcUiMinMax, rrMinMax, vrStdValue);
-		cb = new CheckBox(root, SSmcUiEditOutputClasses, fEditClassNames);
+		new FieldInt(root, TR("Number of slices"), iSlices, vri, true);
+		new FieldRangeReal(root, TR("Min, Max"), rrMinMax, vrStdValue);
+		cb = new CheckBox(root, TR("Edit output class names and/or boundary values"), fEditClassNames);
 		cb->SetCallBack((NotifyProc)&FormSlice::CBCallBackFunc);
 		cb->SetIndependentPos();
 
@@ -1726,9 +1726,9 @@ void EffectGroup::Slice()
 			int iTrqStep = 0;
 			Tranquilizer trq;
 			trq.Start();
-			trq.SetTitle(SSmcUiTrqSlicingMaps);
+			trq.SetTitle(TR("Slicing Maps"));
 			
-			trq.SetText(SSmcUiTrqCreatingDomain);
+			trq.SetText(TR("Creating Domain"));
 			trq.fUpdate(iTrqStep, iMaxTrq);
 
 			// create a domain group
@@ -1758,7 +1758,7 @@ void EffectGroup::Slice()
 					pdg->SetUpperBound(id, rrMinMax.rHi());
 			}
 
-			trq.fText(SSmcUiTrqCreatingRpr);
+			trq.fText(TR("Creating Representation"));
 			trq.fUpdate(++iTrqStep, iMaxTrq);
 			// fill the representation for this domain
 
@@ -1776,7 +1776,7 @@ void EffectGroup::Slice()
 				try
 				{
 					String sOutputMapName ("%S_sliced", vfnMaps[i].sShortName(false));
-					trq.fText(String(SSmcUiTrqCreatingMap_S.scVal(), sOutputMapName));
+					trq.fText(String(TR("Creating Map %S").c_str(), sOutputMapName));
 					trq.fUpdate(++iTrqStep, iMaxTrq);
 					FileName fnOutputMapName (sOutputMapName.sQuote(), ".mpr");
 					String sExpression ("MapSlicing(%S,%S)", vfnMaps[i].sFullPathQuoted(), fnDomainName.sFullPathQuoted());
@@ -1956,7 +1956,7 @@ void EffectGroup::DeleteContourMaps()
 
 					CFileFind finder;
 					String strPattern(fnContourMapName.sFullPath(false) + "_*.mps");
-					BOOL bWorking = finder.FindFile(strPattern.scVal());
+					BOOL bWorking = finder.FindFile(strPattern.c_str());
 					while (bWorking)
 					{
 						bWorking = finder.FindNextFile();
@@ -2033,7 +2033,7 @@ void EffectGroup::GenerateContourMaps()
 						for (int j = 0; j < iNrIsoLines; ++j)
 						{
 							String sOutputMapName ("%S_contours_%.2f_%.2f_%.2f", vfnMaps[i].sShortName(false), rCurrentIsoLine + rFineIsoLineInterval, rCurrentIsoLine + rIsoLineInterval - rFineIsoLineInterval, rFineIsoLineInterval);
-							trq.fText(String(SSmcUiTrqCreatingMap_S.scVal(), sOutputMapName));
+							trq.fText(String(TR("Creating Map %S").c_str(), sOutputMapName));
 							trq.fUpdate(i * iNrIsoLines + j, iNrOutputMaps * (iNrIsoLines + 1));
 							FileName fnOutputMapName (sOutputMapName.sQuote(), ".mps");
 							String sExpression ("SegmentMapFromRasValueBnd(%S,%lg,%lg,%lg,8,NoSmooth)", vfnMaps[i].sFullPathQuoted(), rCurrentIsoLine + rFineIsoLineInterval, rCurrentIsoLine + rIsoLineInterval, rFineIsoLineInterval); // skip first iso line, which is already in the general contour map
@@ -2044,7 +2044,7 @@ void EffectGroup::GenerateContourMaps()
 						}
 					}
 					String sOutputMapName ("%S_contours", vfnMaps[i].sShortName(false));
-					trq.fText(String(SSmcUiTrqCreatingMap_S.scVal(), sOutputMapName));
+					trq.fText(String(TR("Creating Map %S").c_str(), sOutputMapName));
 					if (fFineIsoLines)
 						trq.fUpdate((i + 1) * iNrIsoLines, iNrOutputMaps * (iNrIsoLines + 1));
 					else
@@ -2120,7 +2120,7 @@ void EffectGroup::ShowContourMaps(int iCol, bool* pfInitRpr)
 
 			CFileFind finder;
 			String strPattern(fnContourMapName.sFullPath(false) + "_*.mps");
-			BOOL bWorking = finder.FindFile(strPattern.scVal());
+			BOOL bWorking = finder.FindFile(strPattern.c_str());
 			while (bWorking)
 			{
 				bWorking = finder.FindNextFile();
@@ -2153,7 +2153,7 @@ void EffectGroup::ShowContourMaps(int iCol, bool* pfInitRpr)
 }
 
 // #defines also used later at Effect::AddContextMenuOptions
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define add(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 #define addBreak men.AppendMenu(MF_SEPARATOR);
 
@@ -2269,7 +2269,7 @@ void EffectGroup::WriteElements(const char* sSection, const ElementContainer& en
 	int iNrOutputMaps = vOutputMaps.size();
 	ObjectInfo::WriteElement(sSection, "NrOutputMaps", en, iNrOutputMaps);
 	for (int i=0; i<iNrOutputMaps; ++i)
-		ObjectInfo::WriteElement(sSection, String("OutputMap%d", i).scVal(), en, vOutputMaps[i]);
+		ObjectInfo::WriteElement(sSection, String("OutputMap%d", i).c_str(), en, vOutputMaps[i]);
 
 	int iNrChildren = liChildren.size();
 	ObjectInfo::WriteElement(sSection, "NrChildren", en, iNrChildren);
@@ -2287,8 +2287,8 @@ void EffectGroup::WriteElements(const char* sSection, const ElementContainer& en
 			if (se) // success .. it was a ScoreEffect
 				sType = "Score";
 		} // cti sType done!!
-		ObjectInfo::WriteElement(sSection, String("Child%dType", i).scVal(), en, sType);
-		cti->WriteElements(String("%s_%S_%d", sSection, sName(), i).scVal(), en);
+		ObjectInfo::WriteElement(sSection, String("Child%dType", i).c_str(), en, sType);
+		cti->WriteElements(String("%s_%S_%d", sSection, sName(), i).c_str(), en);
 		++i;
 	}
 	if (pWeights)
@@ -2304,7 +2304,7 @@ void EffectGroup::ReadElements(const char* sSection, const ElementContainer& en)
 		iNrOutputMaps = 1;
 	vOutputMaps.resize(iNrOutputMaps);
 	for (int i=0; i<iNrOutputMaps; ++i)
-		ObjectInfo::ReadElement(sSection, String("OutputMap%d", i).scVal(), en, vOutputMaps[i]);
+		ObjectInfo::ReadElement(sSection, String("OutputMap%d", i).c_str(), en, vOutputMaps[i]);
 
 	vScores.resize(iNrOutputMaps);
 
@@ -2317,7 +2317,7 @@ void EffectGroup::ReadElements(const char* sSection, const ElementContainer& en)
 		// first find out what we should "new" ...
 		String sType;
 		CriteriaTreeItem* cti = 0;
-		ObjectInfo::ReadElement(sSection, String("Child%dType", i).scVal(), en, sType);
+		ObjectInfo::ReadElement(sSection, String("Child%dType", i).c_str(), en, sType);
 		// then "new" it!
 		if ("Group" == sType)
 			cti = new EffectGroup(this, ""); // default params .. will be filled by ReadElements
@@ -2327,19 +2327,19 @@ void EffectGroup::ReadElements(const char* sSection, const ElementContainer& en)
 			cti = new ScoreEffect(this, "", (Effect::eValueTP)0, "", (eCtiTypeTP)0); // default params .. will be filled by ReadElements
 		if (cti) // prevent unknown type -> boom
 		{
-			cti->ReadElements(String("%s_%S_%d", sSection, sName(), i).scVal(), en);
+			cti->ReadElements(String("%s_%S_%d", sSection, sName(), i).c_str(), en);
 			liChildren.push_back(cti);
 		}
 	}
-	pWeights = Evaluation::CreateFromElementContainer(sSection, en, Evaluation::iSUMTOONE, SSmcUiWeights);
+	pWeights = Evaluation::CreateFromElementContainer(sSection, en, Evaluation::iSUMTOONE, TR("Weights"));
 }
 
 String EffectGroup::sStatusBarText()
 {
 	if (GetParent())
-		return String(SSmcUiStatusTextGroup_S_L_D_s.scVal(), sName(), rWeight, liChildren.size(), (liChildren.size()==1)?"":SSmcUiChild_ren.scVal());
+		return String(TR("Group '%S'; Weight=%lg; %d child%s").c_str(), sName(), rWeight, liChildren.size(), (liChildren.size()==1)?"":TR("ren").c_str());
 	else
-		return String(SSmcUiStatusTextGroup_S_D_s.scVal(), sName(), liChildren.size(), (liChildren.size()==1)?"":SSmcUiChild_ren.scVal());
+		return String(TR("Root Group '%S'; %d child%s").c_str(), sName(), liChildren.size(), (liChildren.size()==1)?"":TR("ren").c_str());
 }
 
 list <String> EffectGroup::liChildLabels()
@@ -2409,7 +2409,7 @@ void EffectGroup::GetObjectStructure(ObjectStructure& os)
 
 			CFileFind finder;
 			String strPattern(fnContourMapName.sFullPath(false) + "_*.mps");
-			BOOL bWorking = finder.FindFile(strPattern.scVal());
+			BOOL bWorking = finder.FindFile(strPattern.c_str());
 			while (bWorking)
 			{
 				bWorking = finder.FindNextFile();
@@ -2703,13 +2703,13 @@ String Effect::sStatusBarText()
 	switch(m_eInputValue)
 	{
 	case iVALUE:
-		sInputValue = SSmcTypeValue;
+		sInputValue = TR("Type='Value'; ");
 		break;
 	case iCLASS:
-		sInputValue = SSmcTypeClass;
+		sInputValue = TR("Type='Class'; ");
 		break;
 	case iBOOL:
-		sInputValue = SSmcTypeBool;
+		sInputValue = TR("Type='Bool'; ");
 		break;
 	}
 
@@ -2717,16 +2717,16 @@ String Effect::sStatusBarText()
 	switch(iCostBenefit())
 	{
 		case 0:
-			sCostBenefit = SSmcUiBenefit + "; ";
+			sCostBenefit = TR("Benefit") + "; ";
 			break;
 		case 1:
-			sCostBenefit = SSmcUiCost + "; ";
+			sCostBenefit = TR("Cost") + "; ";
 			break;
 	}
 	if (eCtiType == iFACTOR)
-		return String(SSmcUiStatusTextEffect_S_S_l.scVal(), sName(), sInputValue, sCostBenefit, rWeight);
+		return String(TR("Effect '%S'; %SFactor; %SWeight=%lg").c_str(), sName(), sInputValue, sCostBenefit, rWeight);
 	else // iCONSTRAINT
-		return String(SSmcUiStatusTextEffect_S_S.scVal(), sName(), sInputValue);
+		return String(TR("Effect '%S'; %SConstraint").c_str(), sName(), sInputValue);
 }
 
 String Effect::sStandardizationMethod()
@@ -2739,7 +2739,7 @@ String Effect::sStandardizationMethod()
 
 void Effect::DeleteTreeElement()
 {
-	bool fOKToDelete = (IDYES == MessageBox(GetDocument()->wndGetActiveView()->GetSafeHwnd(), String(SSmcErrDeleteItem_S.scVal(), sName()).scVal(), SSmcErrWarning.scVal(), MB_YESNO|MB_ICONEXCLAMATION));
+	bool fOKToDelete = (IDYES == MessageBox(GetDocument()->wndGetActiveView()->GetSafeHwnd(), String(TR("You are about to delete the item named '%S'. Proceed?").c_str(), sName()).c_str(), TR("Warning").c_str(), MB_YESNO|MB_ICONEXCLAMATION));
 	if (fOKToDelete)
 		CriteriaTreeItem::DeleteTreeElement();
 }
@@ -2830,9 +2830,9 @@ CString MapEffect::sDisplayText(int iCol)
 	if (iCol>0)
 	{
 		if (vMaps[iCol-1].sCol != "")
-			return String("%S:%S.clm", vMaps[iCol-1].sFile, vMaps[iCol-1].sCol).scVal();
+			return String("%S:%S.clm", vMaps[iCol-1].sFile, vMaps[iCol-1].sCol).c_str();
 		else
-			return String(vMaps[iCol-1].sFileExt()).scVal();
+			return String(vMaps[iCol-1].sFileExt()).c_str();
 	}
 	else
 	{
@@ -2852,7 +2852,7 @@ CString MapEffect::sDisplayText(int iCol)
 			sCostBenefit = ":none";
 			break;
 		}
-		return String("%S%S%S", CriteriaTreeItem::sDisplayText(), sStandardizationMethod(), sCostBenefit).scVal();
+		return String("%S%S%S", CriteriaTreeItem::sDisplayText(), sStandardizationMethod(), sCostBenefit).c_str();
 	}
 }
 
@@ -3179,7 +3179,7 @@ void MapEffect::RefreshDomain()
 		{
 			FileName fnBand = vMaps[i]; // workaround for sCol bug: fnAttributeTable can't use it
 			FileName fnAttrib = ObjectInfo::fnAttributeTable(fnBand);
-			ObjectInfo::ReadElement(String("Col:%S", vMaps[i].sCol).scVal(), "Domain", fnAttrib, fnDom);
+			ObjectInfo::ReadElement(String("Col:%S", vMaps[i].sCol).c_str(), "Domain", fnAttrib, fnDom);
 		}
 		else
 		{
@@ -3210,7 +3210,7 @@ void MapEffect::RefreshInputType()
 		{
 			FileName fnBand = vMaps[i]; // workaround for sCol bug: fnAttributeTable can't use it
 			FileName fnAttrib = ObjectInfo::fnAttributeTable(fnBand);
-			ObjectInfo::ReadElement(String("Col:%S", vMaps[i].sCol).scVal(), "Domain", fnAttrib, fnDom);
+			ObjectInfo::ReadElement(String("Col:%S", vMaps[i].sCol).c_str(), "Domain", fnAttrib, fnDom);
 		}
 		else
 		{
@@ -3377,7 +3377,7 @@ void MapEffect::ShowStandardized(int iCol, bool* pfInitRpr)
 			i += (iCol > 0) ? iNrMaps : 1; // jump out of "while loop" if the iCol had a value > 0
 		}
 		if (sMessage.length() > 0)
-			MessageBox(0, sMessage.scVal(), String("Standardized value%s for aggregated criterion '%S'", (iGetNrAlternatives() > 1) ? "s" : "", sName()).scVal(), MB_OK);
+			MessageBox(0, sMessage.c_str(), String("Standardized value%s for aggregated criterion '%S'", (iGetNrAlternatives() > 1) ? "s" : "", sName()).c_str(), MB_OK);
 	}
 }
 
@@ -3726,7 +3726,7 @@ void MapEffect::WriteElements(const char* sSection, const ElementContainer& en)
 	int iSize = vMaps.size();
 	ObjectInfo::WriteElement(sSection, "NrInputMaps", en, iSize);
 	for (int i=0; i<iSize; ++i)
-		ObjectInfo::WriteElement(sSection, String("InputMap%d", i).scVal(), en, vMaps[i].sRelativeQuoted());
+		ObjectInfo::WriteElement(sSection, String("InputMap%d", i).c_str(), en, vMaps[i].sRelativeQuoted());
 	// although WriteElement does work with a filename, we also want to preserve sCol. Here sRelativeQuoted is used for consistency, but below we have no choice.
 	if (m_pavos)
 	{
@@ -3765,7 +3765,7 @@ void MapEffect::ReadElements(const char* sSection, const ElementContainer& en)
 	for (int i=0; i<iSize; ++i)
 	{
 		String sMapFileName; // this is a workaround -- sCol is lost when reading a FileName
-		ObjectInfo::ReadElement(sSection, String("InputMap%d", i).scVal(), en, sMapFileName);
+		ObjectInfo::ReadElement(sSection, String("InputMap%d", i).c_str(), en, sMapFileName);
 		vMaps[i] = sMapFileName;
 	}
 
@@ -3849,7 +3849,7 @@ class FormAggregateValueFunc : public FormWithDest, public AggregateValueAdditio
 {
 public:
 	FormAggregateValueFunc(CWnd *wPar, AggregateValueOperationStruct * pavos, const dmType fd, vector <AttributeFileName> & arrSelected)
-	 : FormWithDest(wPar, SAFTitleAggrValueS)
+	 : FormWithDest(wPar, TR("Aggregate Values"))
 	, m_pavos(pavos)
 	, m_pcts(0)
 	{
@@ -3882,11 +3882,11 @@ public:
 			iBooleanChoice = 2;
 		}
 
-		favf = new FieldAggregateValueFunc(root, SAFUiOperation, &(m_pavos->sOperation), fd, m_pavos->sOperation);
+		favf = new FieldAggregateValueFunc(root, TR("&Operation"), &(m_pavos->sOperation), fd, m_pavos->sOperation);
 		favf->SetCallBack((NotifyProc)&FormAggregateValueFunc::HandleOperationChanges);
 		SetAdditionalBlock(root, favf, false);
 		
-		pbCalc = new PushButton(root, SSmcUiAggregateValPreview, (NotifyProc) &FormAggregateValueFunc::CalculateAggregateValues);
+		pbCalc = new PushButton(root, TR("Preview"), (NotifyProc) &FormAggregateValueFunc::CalculateAggregateValues);
 		pbCalc->Align(rgBoolean, AL_UNDER);
 
 		ossSelected = new AggregateValueResultSelector(root, arrSelected);
@@ -4100,7 +4100,7 @@ void MapEffect::DoNotAggregateValues()
 {
 	if (m_pavos != 0) // do not bother if the user does this operation for the second time
 	{
-		if (IDYES == MessageBox(GetDocument()->wndGetActiveView()->GetSafeHwnd(), SSmcUiConfirmCancelAggregation.scVal(), SSmcUiConfirmation.scVal(), MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON1))
+		if (IDYES == MessageBox(GetDocument()->wndGetActiveView()->GetSafeHwnd(), TR("Remove aggregation for this item?").c_str(), TR("Confirmation").c_str(), MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON1))
 		{
 			for (unsigned int i=0; i<vMaps.size(); ++i)
 			{
@@ -4233,7 +4233,7 @@ CString ScoreEffect::sDisplayText(int iCol)
 	if (iCol>0)
 	{
 		if (vScores[iCol-1] != rUNDEF)
-			return String("%lg", vScores[iCol-1]).scVal();
+			return String("%lg", vScores[iCol-1]).c_str();
 		else
 			return "";
 	}
@@ -4256,7 +4256,7 @@ CString ScoreEffect::sDisplayText(int iCol)
 			break;
 		}
 
-		return String("%S%S%S", CriteriaTreeItem::sDisplayText(), sStandardizationMethod(), sCostBenefit).scVal();
+		return String("%S%S%S", CriteriaTreeItem::sDisplayText(), sStandardizationMethod(), sCostBenefit).c_str();
 	}
 }
 
@@ -4269,7 +4269,7 @@ void ScoreEffect::Edit(int iCol, RECT rect, CWnd* wnd)
 			sScore = String("%lg", vScores[iCol-1]);
 
 		DWORD style = WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL;
-		m_e = new InPlaceEdit((int)this, iCol, sScore.scVal());
+		m_e = new InPlaceEdit((int)this, iCol, sScore.c_str());
 		m_e->Create(style, rect, wnd, ID_CRITERIA_TREE_EDIT);
 		// (int)this :: misuse of the m_iItem argument for passing a pointer
 		// the pointer will be returned by InPlaceEdit::SendEndLabelNotify()
@@ -4439,12 +4439,12 @@ void ScoreEffect::ShowStandardized(int iCol, bool* pfInitRpr)
 		i += (iCol > 0) ? iNrScores : 1; // jump out of "while loop" if the iCol had a value > 0
 	}
 	if (sMessage.length() > 0)
-		MessageBox(0, sMessage.scVal(), String("Standardized value%s for criterion '%S'", (iGetNrAlternatives() > 1) ? "s" : "", sName()).scVal(), MB_OK);
+		MessageBox(0, sMessage.c_str(), String("Standardized value%s for criterion '%S'", (iGetNrAlternatives() > 1) ? "s" : "", sName()).c_str(), MB_OK);
 }
 
 String ScoreEffect::sInputMinMax(int iCol, bool fMax)
 {
-	return String ("%lg", vScores[iCol-1]).scVal(); // ignoring max which is meant for maps
+	return String ("%lg", vScores[iCol-1]).c_str(); // ignoring max which is meant for maps
 }
 
 RangeReal ScoreEffect::rrMinMax(int iCol)
@@ -4464,7 +4464,7 @@ void ScoreEffect::WriteElements(const char* sSection, const ElementContainer& en
 	int iSize = vScores.size();
 	ObjectInfo::WriteElement(sSection, "NrInputScores", en, iSize);
 	for (int i=0; i<iSize; ++i)
-		ObjectInfo::WriteElement(sSection, String("InputScore%d", i).scVal(), en, vScores[i]);
+		ObjectInfo::WriteElement(sSection, String("InputScore%d", i).c_str(), en, vScores[i]);
 }
 
 void ScoreEffect::ReadElements(const char* sSection, const ElementContainer& en)
@@ -4474,7 +4474,7 @@ void ScoreEffect::ReadElements(const char* sSection, const ElementContainer& en)
 		iSize = 1;
 	vScores.resize(iSize);
 	for (int i=0; i<iSize; ++i)
-		ObjectInfo::ReadElement(sSection, String("InputScore%d", i).scVal(), en, vScores[i]);
+		ObjectInfo::ReadElement(sSection, String("InputScore%d", i).c_str(), en, vScores[i]);
 
 	Effect::ReadElements(sSection, en);
 }

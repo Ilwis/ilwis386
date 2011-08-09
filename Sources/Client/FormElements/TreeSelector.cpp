@@ -169,7 +169,7 @@ void TreeSelector::Add(const String& sValue, HTREEITEM hti, DWORD data, bool fLe
 	//tvi.cChildren = fDynamic && !fLeaf ? 1 : 0;
 	tvi.cChildren = !fLeaf ? 1 : 0;
 
-	tvi.hItem = it = tree->InsertItem(sValue.sHead("|").scVal(), -1,-1, hti);
+	tvi.hItem = it = tree->InsertItem(sValue.sHead("|").c_str(), -1,-1, hti);
 	tree->SetItemData(it, (DWORD) data);
 	Add(sValue.sTail("|"), it, data, fLeaf, depth + 1);
 	/*if ( maxExpansionDepth != 0) {

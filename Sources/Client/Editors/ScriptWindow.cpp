@@ -91,7 +91,7 @@ ScriptWindow::~ScriptWindow()
 {
 }
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 
 #define add(ID) menPopup.AppendMenu(MF_STRING, ID, sMen(ID)); 
 #define addBreak menPopup.AppendMenu(MF_SEPARATOR);
@@ -163,9 +163,9 @@ int ScriptWindow::OnCreate(LPCREATESTRUCT lpc)
 BOOL ScriptWindow::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext) 
 {
 	tabWnd.Create(WS_VISIBLE|WS_CHILD, this, 0x1245);
-	tabWnd.CreateView(SSCRRemScript.scVal(), RUNTIME_CLASS(ScriptView), pContext);
-	tabWnd.CreateView(SSCRRemParams.scVal(), RUNTIME_CLASS(ScriptParamView), pContext);
-	tabWnd.CreateView(SSCRemDefault.scVal(), RUNTIME_CLASS(ScriptParamDefaultView), pContext);
+	tabWnd.CreateView(TR("Script").c_str(), RUNTIME_CLASS(ScriptView), pContext);
+	tabWnd.CreateView(TR("Parameters").c_str(), RUNTIME_CLASS(ScriptParamView), pContext);
+	tabWnd.CreateView(TR("Default Values").c_str(), RUNTIME_CLASS(ScriptParamDefaultView), pContext);
 	ModifyStyleEx(WS_EX_CLIENTEDGE, 0, SWP_FRAMECHANGED);
 	return TRUE;	
 }

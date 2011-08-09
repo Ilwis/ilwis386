@@ -145,7 +145,7 @@ bool TableCommandHandler::fCmdSimpleCalc(const String& sCmd)
 {
   String sRes = Calculator::sSimpleCalc(sCmd, tbldoc->table());
 	String sMsg("%S = %S ", sRes, sCmd);
-	//wndOwner->MessageBox(sMsg.scVal(), STBTitleSimpleCalc.scVal(), MB_OK | MB_ICONINFORMATION);
+	//wndOwner->MessageBox(sMsg.c_str(), TR("Calculation Result ").c_str(), MB_OK | MB_ICONINFORMATION);
 
 	TableWindow *tw = dynamic_cast<TableWindow *>( AfxGetMainWnd()) ;
 	if ( tw)
@@ -203,19 +203,19 @@ bool TableCommandHandler::fCmdSimpleCalc(const String& sCmd)
 //{
 //	try {
 //		if (tbldoc->tvw->fReadOnly())
-//			throw ErrorObject(STBErrTableReadOnly);
+//			throw ErrorObject(TR("Table is read-only"));
 //		if (tbldoc->tvw->dm()->pdnone() == 0)
-//			throw ErrorObject(STBErrAddRecordNone);
+//			throw ErrorObject(TR("Add records only possible for tables with domain 'none'"));
 //		// only allow add record for real tables
 //		if (".tbt" != tbldoc->tbl->fnObj.sExt)
-//			throw ErrorObject(STBErrAddRecordNone);
+//			throw ErrorObject(TR("Add records only possible for tables with domain 'none'"));
 //		int iNewRecs;
 //    if ("" == s)
 //      iNewRecs = 1;
 //    else
 //      iNewRecs = s.iVal();
 //		if (iNewRecs <= 0) 
-//			throw ErrorObject(String("%S : %S", SDATErrInvalidParameter, s));
+//			throw ErrorObject(String("%S : %S", TR("Invalid parameter"), s));
 //		tbldoc->tvw->iRecNew(iNewRecs);
 //		tbldoc->UpdateAllViews(0);
 //	}

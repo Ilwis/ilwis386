@@ -116,38 +116,38 @@ static void ColorInitialize()
   if (!fColorInitialized) {
     fColorInitialized = true;
     int i = 0;
-    ColorStruct[i++].sName = new String(SCLColBlack);
-    ColorStruct[i++].sName = new String(SCLColDimGrey);
-    ColorStruct[i++].sName = new String(SCLColGrey);
-    ColorStruct[i++].sName = new String(SCLColLightGrey);
-    ColorStruct[i++].sName = new String(SCLColWhite);
-    ColorStruct[i++].sName = new String(SCLColRed);
-    ColorStruct[i++].sName = new String(SCLColGreen);
-    ColorStruct[i++].sName = new String(SCLColBlue);
-    ColorStruct[i++].sName = new String(SCLColCyan);
-    ColorStruct[i++].sName = new String(SCLColMagenta);
-    ColorStruct[i++].sName = new String(SCLColYellow);
-    ColorStruct[i++].sName = new String(SCLColOrange);
-    ColorStruct[i++].sName = new String(SCLColOrangeRed);
-    ColorStruct[i++].sName = new String(SCLColGold);
-    ColorStruct[i++].sName = new String(SCLColBrown);
-    ColorStruct[i++].sName = new String(SCLColSandyBrown);
-    ColorStruct[i++].sName = new String(SCLColSaddleBrown);
-    ColorStruct[i++].sName = new String(SCLColPink);
-    ColorStruct[i++].sName = new String(SCLColPurple);
-    ColorStruct[i++].sName = new String(SCLColLawnGreen);
-    ColorStruct[i++].sName = new String(SCLColYellowGreen);
-    ColorStruct[i++].sName = new String(SCLColForestGreen);
-    ColorStruct[i++].sName = new String(SCLColPaleGreen);
-    ColorStruct[i++].sName = new String(SCLColOliveGreen);
-    ColorStruct[i++].sName = new String(SCLColLimeGreen);
-    ColorStruct[i++].sName = new String(SCLColDarkGreen);
-    ColorStruct[i++].sName = new String(SCLColSeaGreen);
-    ColorStruct[i++].sName = new String(SCLColTurquoise);
-    ColorStruct[i++].sName = new String(SCLColDodgerBlue);
-    ColorStruct[i++].sName = new String(SCLColRoyalBlue);
-    ColorStruct[i++].sName = new String(SCLColSkyBlue);
-    ColorStruct[i++].sName = new String(SCLColMidnightBlue);
+    ColorStruct[i++].sName = new String(TR("Black"));
+    ColorStruct[i++].sName = new String(TR("DimGray"));
+    ColorStruct[i++].sName = new String(TR("Gray"));
+    ColorStruct[i++].sName = new String(TR("LightGray"));
+    ColorStruct[i++].sName = new String(TR("White"));
+    ColorStruct[i++].sName = new String(TR("Red"));
+    ColorStruct[i++].sName = new String(TR("Green"));
+    ColorStruct[i++].sName = new String(TR("Blue"));
+    ColorStruct[i++].sName = new String(TR("Cyan"));
+    ColorStruct[i++].sName = new String(TR("Magenta"));
+    ColorStruct[i++].sName = new String(TR("Yellow"));
+    ColorStruct[i++].sName = new String(TR("Orange"));
+    ColorStruct[i++].sName = new String(TR("OrangeRed"));
+    ColorStruct[i++].sName = new String(TR("Gold"));
+    ColorStruct[i++].sName = new String(TR("Brown"));
+    ColorStruct[i++].sName = new String(TR("SandyBrown"));
+    ColorStruct[i++].sName = new String(TR("SaddleBrown"));
+    ColorStruct[i++].sName = new String(TR("Pink"));
+    ColorStruct[i++].sName = new String(TR("Purple"));
+    ColorStruct[i++].sName = new String(TR("LawnGreen"));
+    ColorStruct[i++].sName = new String(TR("YellowGreen"));
+    ColorStruct[i++].sName = new String(TR("ForestGreen"));
+    ColorStruct[i++].sName = new String(TR("PaleGreen"));
+    ColorStruct[i++].sName = new String(TR("OliveGreen"));
+    ColorStruct[i++].sName = new String(TR("LimeGreen"));
+    ColorStruct[i++].sName = new String(TR("DarkGreen"));
+    ColorStruct[i++].sName = new String(TR("SeaGreen"));
+    ColorStruct[i++].sName = new String(TR("Turquoise"));
+    ColorStruct[i++].sName = new String(TR("DodgerBlue"));
+    ColorStruct[i++].sName = new String(TR("RoyalBlue"));
+    ColorStruct[i++].sName = new String(TR("SkyBlue"));
+    ColorStruct[i++].sName = new String(TR("MidnightBlue"));
   }
   csColorInit.Unlock();
 }                     
@@ -173,7 +173,7 @@ void FieldColorSimple::create()
 
   int i = 0;
   for (; i < iCols; ++i) {
-    const char* cstr = ColorStruct[i].sName->scVal();
+    const char* cstr = ColorStruct[i].sName->c_str();
     ose->AddString(cstr);
     Color color(ColorStruct[i].r,ColorStruct[i].g,ColorStruct[i].b);
     ose->SetItemData(i,color);
@@ -184,14 +184,14 @@ void FieldColorSimple::create()
     if ((long)c == (long)cText) {
       iCol = 0;
       i += 1;
-      String s = SCLColDefault;
+      String s = TR("Default");
       ose->InsertString(0, s.sVal());
       ose->SetItemData(0,c);
     }
     else
       iCol = i;
   }
-  String s = SCLColCustom;
+  String s = TR("Custom");
   idCustom = ose->AddString(s.sVal());
   ose->SetItemData(idCustom,c);
   ose->SetCurSel(iCol);
@@ -338,7 +338,7 @@ void FieldFillColorSimple::create()
 {
   FieldColorSimple::create();
   int iSel = ose->GetCurSel();
-  String s = SCLColTransparent;
+  String s = TR("Transparent");
   ose->InsertString(0, s.sVal());
   ose->SetItemData(0,-2);
   if (*val == -2)
@@ -377,13 +377,13 @@ void ColorSelector::create()
   else if ((long)c == -2)
     iCol = 0;  
   if (fTrans) {  
-    String s = SCLColTransparent;
+    String s = TR("Transparent");
     lb->AddString(s.sVal());
     lb->SetItemData(0,-2);
   }  
   int i = 0;
   for (; i < iCols; ++i) {
-    int id = lb->AddString(ColorStruct[i].sName->scVal());
+    int id = lb->AddString(ColorStruct[i].sName->c_str());
     Color color(ColorStruct[i].r,ColorStruct[i].g,ColorStruct[i].b);
     lb->SetItemData(id,color);
     if (iCol == -1 && (long)c == (long)color)
@@ -393,7 +393,7 @@ void ColorSelector::create()
     if ((long)c == (long)cText) {
       iCol = 0;
       i += 1;
-      String s = SCLColDefault;
+      String s = TR("Default");
       lb->InsertString(0, s.sVal());
       lb->SetItemData(0,c);
     }
@@ -401,7 +401,7 @@ void ColorSelector::create()
       iCol = i + fTrans;
     }  
   }
-  String s = SCLColCustom;
+  String s = TR("Custom");
   idCustom = lb->AddString(s.sVal());
   lb->SetItemData(idCustom,c);
   lb->SetCurSel(iCol);

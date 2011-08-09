@@ -154,7 +154,7 @@ void GeoRefEditorTableView::OnEditClear()
 {
 	gre->SelectPoint(0);	
   if (mmSelect.MinCol() < 0) {
-    int iRet = MessageBox(SGRMsgDelSelTP.sVal(), SGRMsgDelTPs.sVal(),
+    int iRet = MessageBox(TR("Delete selected tiepoints").c_str(), TR("Delete tiepoints").c_str(),
 			MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2);
     if (IDYES == iRet) 
 		{

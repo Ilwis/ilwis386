@@ -90,7 +90,7 @@ CDocTemplate::Confidence ForeignMultiDocTemplate::MatchDocType(LPCTSTR lpszPathN
 		CDocument* pDoc = GetNextDoc(pos);
 		if (AfxComparePath(pDoc->GetPathName(), lpszPathName))
 		{
-			switch (MessageBox(0, SMSMsgMapAlreadyOpen.scVal(), "ILWIS", MB_YESNOCANCEL|MB_ICONEXCLAMATION|MB_DEFBUTTON2|MB_TOPMOST))
+			switch (MessageBox(0, TR("Map is already shown in a MapWindow.\nDo you wish to open the map in a new map window again?").c_str(), "ILWIS", MB_YESNOCANCEL|MB_ICONEXCLAMATION|MB_DEFBUTTON2|MB_TOPMOST))
 			{
         case IDCANCEL:
 				  return noAttempt;
@@ -124,9 +124,9 @@ CDocTemplate::Confidence ForeignMultiDocTemplate::MatchDocType(const FileName& f
 	while (pos != NULL)
 	{
 		CDocument* pDoc = GetNextDoc(pos);
-		if (AfxComparePath(pDoc->GetPathName(), fnFO.sFullPath().scVal()))
+		if (AfxComparePath(pDoc->GetPathName(), fnFO.sFullPath().c_str()))
 		{
-			switch (MessageBox(0, SMSMsgMapAlreadyOpen.scVal(), "ILWIS", MB_YESNOCANCEL|MB_ICONEXCLAMATION|MB_DEFBUTTON2|MB_TOPMOST))
+			switch (MessageBox(0, TR("Map is already shown in a MapWindow.\nDo you wish to open the map in a new map window again?").c_str(), "ILWIS", MB_YESNOCANCEL|MB_ICONEXCLAMATION|MB_DEFBUTTON2|MB_TOPMOST))
 			{
         case IDCANCEL:
 				  return noAttempt;

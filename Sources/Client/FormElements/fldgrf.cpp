@@ -122,7 +122,7 @@ int FieldGeoRefC::CreateGeoRef(void*)
 
 FormCreateGeoRef::FormCreateGeoRef(CWnd* wPar, String* sGrf,
                    CoordSystem cs, CoordBounds cb, bool fOnlyCorners)
-: FormWithDest(wPar, SGRTitleCreateGrf), wParent(wPar),
+: FormWithDest(wPar, TR("Create GeoReference")), wParent(wPar),
   sGeoRef(sGrf), crdMin(cb.cMin), crdMax(cb.cMax),
   fgr(0), rg(0), fgCorn(0), stRemark(0), cbSubPixel(0)
 {
@@ -132,10 +132,10 @@ FormCreateGeoRef::FormCreateGeoRef(CWnd* wPar, String* sGrf,
 	sCoordSys = cs->sName();
 	if ("unknown" == sCoordSys)
 		sCoordSys = "";
-	fgr = new FieldDataTypeCreate(root, SGRUiGrfName, &sNewName, ".GRF", false);
+	fgr = new FieldDataTypeCreate(root, TR("&GeoReference Name"), &sNewName, ".GRF", false);
 	fgr->SetIndependentPos();
 	fgr->SetCallBack((NotifyProc)&FormCreateGeoRef::NameChange);
-	StaticText* st = new StaticText(root, SGRUiDescription);
+	StaticText* st = new StaticText(root, TR("&Description:"));
 	st->psn->SetBound(0,0,0,0);
 	FieldString* fs = new FieldString(root, "", &sDescr);
 	fs->SetWidth(120);
@@ -155,18 +155,18 @@ FormCreateGeoRef::FormCreateGeoRef(CWnd* wPar, String* sGrf,
 	else {
 		rg = new RadioGroup(root, "", &iOption);
 		rg->SetCallBack((NotifyProc)&FormCreateGeoRef::GeoRefTypeChange);
-		rbCorners = new RadioButton(rg, SGRUiGrfCorners);
-		rbCTP = new RadioButton(rg, SGRUiGrfTiepoints);
-		rbDirLin = new RadioButton(rg, SGRUiGrfDirLin);
-		rbOrthoPhoto = new RadioButton(rg, SGRUiGrfTiepointsPhoto);
-		rbParallProj = new RadioButton(rg, SGRUiGrfParallProj);
-		rb3D = new RadioButton(rg, SGRUiGrf3D);
+		rbCorners = new RadioButton(rg, TR("GeoRef &Corners"));
+		rbCTP = new RadioButton(rg, TR("GeoRef &Tiepoints"));
+		rbDirLin = new RadioButton(rg, TR("GeoRef &Direct Linear"));
+		rbOrthoPhoto = new RadioButton(rg, TR("GeoRef &Ortho Photo"));
+		rbParallProj = new RadioButton(rg, TR("GeoRef &Parallel Projective"));
+		rb3D = new RadioButton(rg, TR("GeoRef &3-D display"));
 		fgCorn = new FieldGroup(rbCorners, true);
 		fgCorn->Align(rb3D, AL_UNDER);
 	}
   
 	fCoC = true;
-	fcsc = new FieldCoordSystemC(fgCorn, SGRUiCoordSys, &sCoordSys);
+	fcsc = new FieldCoordSystemC(fgCorn, TR("&Coordinate System"), &sCoordSys);
 	fcsc->SetCallBack((NotifyProc)&FormCreateGeoRef::CSysCallBack);
   
 	bool fCrdUndef = false;
@@ -198,35 +198,35 @@ FormCreateGeoRef::FormCreateGeoRef(CWnd* wPar, String* sGrf,
 	fgCsyMeters = new FieldGroup(fgCorn, true);
 	fgCsyMeters->Align(fcsc, AL_UNDER);
 	
-	fldPixInMeters = new FieldReal(fgCsyMeters, SGRUiPixSize, &rPixSize, vrrPixSize);
+	fldPixInMeters = new FieldReal(fgCsyMeters, TR("&Pixel size"), &rPixSize, vrrPixSize);
 	fldPixInMeters->SetCallBack((NotifyProc)&FormCreateGeoRef::CallBackCorners);
 	
-	fldCrdMin = new FieldCoord(fgCsyMeters, SGRUiMinXY, &crdMin);
+	fldCrdMin = new FieldCoord(fgCsyMeters, TR("&Min X, Y"), &crdMin);
 	fldCrdMin->SetCallBack((NotifyProc)&FormCreateGeoRef::CallBackCorners);
-	fldCrdMax = new FieldCoord(fgCsyMeters, SGRUiMaxXY, &crdMax);
+	fldCrdMax = new FieldCoord(fgCsyMeters, TR("&Max X, Y"), &crdMax);
 	fldCrdMax->SetCallBack((NotifyProc)&FormCreateGeoRef::CallBackCorners);
 
 	// GeoRefCorners in LatLon
 	fgCsyLatLons = new FieldGroup(fgCorn, true);
 	fgCsyLatLons->Align(fcsc, AL_UNDER);
 	
-	fldPixInDegMinSec = new FieldDMS(fgCsyLatLons, SGRUiPixSize, &rPixSizeDMS, 30.0, true);
+	fldPixInDegMinSec = new FieldDMS(fgCsyLatLons, TR("&Pixel size"), &rPixSizeDMS, 30.0, true);
 	fldPixInDegMinSec->SetCallBack((NotifyProc)&FormCreateGeoRef::CallBackCorners);
 	
-	fldMinLat = new FieldLat(fgCsyLatLons, SMSUiMinLatLon, &llMin.Lat);
+	fldMinLat = new FieldLat(fgCsyLatLons, TR("&MinLatLon"), &llMin.Lat);
 	fldMinLat->SetCallBack((NotifyProc)&FormCreateGeoRef::CallBackCorners);
 	fldMinLat->Align(fldPixInDegMinSec, AL_UNDER);
 	fldMinLon = new FieldLon(fgCsyLatLons, "", &llMin.Lon);
 	fldMinLon->SetCallBack((NotifyProc)&FormCreateGeoRef::CallBackCorners);
 	fldMinLon->Align(fldMinLat, AL_AFTER);
-	fldMaxLat = new FieldLat(fgCsyLatLons, SMSUiMaxLatLon, &llMax.Lat);
+	fldMaxLat = new FieldLat(fgCsyLatLons, TR("&MaxLatLon"), &llMax.Lat);
 	fldMaxLat->SetCallBack((NotifyProc)&FormCreateGeoRef::CallBackCorners);
 	fldMaxLat->Align(fldMinLat, AL_UNDER);
 	fldMaxLon = new FieldLon(fgCsyLatLons, "", &llMax.Lon);
 	fldMaxLon->SetCallBack((NotifyProc)&FormCreateGeoRef::CallBackCorners);
 	fldMaxLon->Align(fldMaxLat, AL_AFTER);
 	
-	cbCoC = new CheckBox(fgCorn, SGRUiCenterOfCorners, &fCoC);
+	cbCoC = new CheckBox(fgCorn, TR("&Center of Corner pixels"), &fCoC);
 	cbCoC->Align(fldMaxLat, AL_UNDER);
 	cbCoC->SetIndependentPos();
 	cbCoC->SetCallBack((NotifyProc)&FormCreateGeoRef::CallBackCorners);
@@ -234,8 +234,8 @@ FormCreateGeoRef::FormCreateGeoRef(CWnd* wPar, String* sGrf,
 	if (!fOnlyCorners) {
 		FieldGroup* fgCTP = new FieldGroup(rbCTP,true);
 		fgCTP->Align(rg, AL_UNDER);
-		new FieldCoordSystemC(fgCTP, SGRUiCoordSys, &sCoordSys);
-		new FieldDataType(fgCTP, SGRUiReferenceMap, &sRefMap, ".mpr.mpl", true);
+		new FieldCoordSystemC(fgCTP, TR("&Coordinate System"), &sCoordSys);
+		new FieldDataType(fgCTP, TR("&Background Map"), &sRefMap, ".mpr.mpl", true);
 		FieldBlank* fb = new FieldBlank(root,8);
 		fb->Align(fb, AL_UNDER);
 		cbSubPixel = new CheckBox(fb, "Sub-Pixel Precision", &fSubPixelPrecise);
@@ -243,24 +243,24 @@ FormCreateGeoRef::FormCreateGeoRef(CWnd* wPar, String* sGrf,
 
 		FieldGroup* fgDirLin = new FieldGroup(rbDirLin, true);
 		fgDirLin->Align(rg, AL_UNDER);
-		new FieldDataType(fgDirLin, SGRUiReferenceMap, &sRefMap, ".mpr.mpl", true);
-		new FieldDataType(fgDirLin, SGRUiDTM, &sDTM, new MapListerDomainType(dmVALUE), true);
+		new FieldDataType(fgDirLin, TR("&Background Map"), &sRefMap, ".mpr.mpl", true);
+		new FieldDataType(fgDirLin, TR("&DTM"), &sDTM, new MapListerDomainType(dmVALUE), true);
 		
 		FieldGroup* fgOrthoPhoto = new FieldGroup(rbOrthoPhoto, true);
 		fgOrthoPhoto->Align(rg, AL_UNDER);
-		new FieldDataType(fgOrthoPhoto, SGRUiReferenceMap, &sRefMap, ".mpr.mpl", true);
-		new FieldDataType(fgOrthoPhoto, SGRUiDTM, &sDTM, new MapListerDomainType(dmVALUE), true);
+		new FieldDataType(fgOrthoPhoto, TR("&Background Map"), &sRefMap, ".mpr.mpl", true);
+		new FieldDataType(fgOrthoPhoto, TR("&DTM"), &sDTM, new MapListerDomainType(dmVALUE), true);
 
 		FieldGroup* fgParallProj = new FieldGroup(rbParallProj, true);
 		fgParallProj->Align(rg, AL_UNDER);
-		new FieldDataType(fgParallProj, SGRUiReferenceMap, &sRefMap, ".mpr.mpl", true);
-		new FieldDataType(fgParallProj, SGRUiDTM, &sDTM, new MapListerDomainType(dmVALUE), true);
+		new FieldDataType(fgParallProj, TR("&Background Map"), &sRefMap, ".mpr.mpl", true);
+		new FieldDataType(fgParallProj, TR("&DTM"), &sDTM, new MapListerDomainType(dmVALUE), true);
 		
 		FieldGroup* fg3D = new FieldGroup(rb3D,true);
 		fg3D->Align(rg, AL_UNDER);
 		rcSize = RowCol(300L,400L);
-		new FieldRowCol(fg3D, SGRUiRowsCols, &rcSize);
-		new FieldDataType(fg3D, SGRUiDTM, &sDTM, new MapListerDomainType(dmVALUE), true);
+		new FieldRowCol(fg3D, TR("&Rows, Columns"), &rcSize);
+		new FieldDataType(fg3D, TR("&DTM"), &sDTM, new MapListerDomainType(dmVALUE), true);
 	}
 	
 	String s('X', 50);
@@ -320,9 +320,9 @@ int FormCreateGeoRef::NameChange(Event*)
 
 	m_fNameOK = false;
 	if (!fn.fValid())
-		stRemark->SetVal(SGRRemNotValidGrfName);
+		stRemark->SetVal(TR("Not a valid GeoReference name"));
 	else if(File::fExist(fn))   
-		stRemark->SetVal(SGRRemGrfExists);
+		stRemark->SetVal(TR("GeoReference already exists"));
 	else
 	{
 		stRemark->SetVal(String());
@@ -486,19 +486,19 @@ int FormCreateGeoRef::CallBackCorners(Event*)
 						rcSize.Col += 1;
 						rcSize.Row += 1;
 					} 
-					String s(SGRRemLinesCols_ii.scVal(), rcSize.Row, rcSize.Col);
+					String s(TR("%li lines and %li columns").c_str(), rcSize.Row, rcSize.Col);
 					stRemark->SetVal(s);
 					m_fBoundsOK = true;
 				}
 				else
 				{
-					stRemark->SetVal(SGRRemMinSmallerMax);
+					stRemark->SetVal(TR("Minimum should be smaller than maximum"));
 					m_fBoundsOK = false;
 				}
 			}
 			else
 				if (rPixSize != rUNDEF && rPixSize <= 0.001)
-					stRemark->SetVal(SGRRemPixTooSmall);
+					stRemark->SetVal(TR("Pixel size too small"));
 		}
 	}
 	catch (ErrorObject&) 
@@ -762,7 +762,7 @@ int FormCreateGeoRef::exec()
 
 FormCreateGeoRefRC::FormCreateGeoRefRC(CWnd* wPar, String* sGrf, 
   const Map& mp, CoordSystem cs, CoordBounds cb, bool fOnlyTiep, bool fStartEdit)
-: FormWithDest(wPar, SGRTitleCreateGrf),
+: FormWithDest(wPar, TR("Create GeoReference")),
   sGeoRef(sGrf), map(mp), rcSize(mp->rcSize()), fOnlyTiepoints(fOnlyTiep),
   crdMin(cb.cMin), crdMax(cb.cMax), fEditStart(fStartEdit),
   fgr(0), rg(0), stRemark(0), fgCorners(0), cbSubPixel(0)
@@ -771,10 +771,10 @@ FormCreateGeoRefRC::FormCreateGeoRefRC(CWnd* wPar, String* sGrf,
 
   sNewName = *sGeoRef;
   sCoordSys = cs->sName();
-  fgr = new FieldDataTypeCreate(root, SGRUiGrfName, &sNewName, ".GRF", false);
+  fgr = new FieldDataTypeCreate(root, TR("&GeoReference Name"), &sNewName, ".GRF", false);
 	fgr->SetIndependentPos();
   fgr->SetCallBack((NotifyProc)&FormCreateGeoRefRC::CallBack);
-  StaticText* st = new StaticText(root, SGRUiDescription);
+  StaticText* st = new StaticText(root, TR("&Description:"));
   st->psn->SetBound(0,0,0,0);
   FieldString* fs = new FieldString(root, "", &sDescr);
   fs->SetWidth(120);
@@ -796,20 +796,20 @@ FormCreateGeoRefRC::FormCreateGeoRefRC(CWnd* wPar, String* sGrf,
   rg->SetCallBack((NotifyProc)&FormCreateGeoRefRC::CallBack);
   RadioButton* rbCorners = 0;
   if (!fOnlyTiepoints)
-    rbCorners = new RadioButton(rg, SGRUiGrfCorners);
-  RadioButton* rbTiePoints = new RadioButton(rg, SGRUiGrfTiepoints);
-  RadioButton* rbDirLin = new RadioButton(rg, SGRUiGrfDirLin);
-  RadioButton* rbOrthoPhoto = new RadioButton(rg, SGRUiGrfTiepointsPhoto);
-	RadioButton* rbParallProj = new RadioButton(rg, SGRUiGrfParallProj);
+    rbCorners = new RadioButton(rg, TR("GeoRef &Corners"));
+  RadioButton* rbTiePoints = new RadioButton(rg, TR("GeoRef &Tiepoints"));
+  RadioButton* rbDirLin = new RadioButton(rg, TR("GeoRef &Direct Linear"));
+  RadioButton* rbOrthoPhoto = new RadioButton(rg, TR("GeoRef &Ortho Photo"));
+	RadioButton* rbParallProj = new RadioButton(rg, TR("GeoRef &Parallel Projective"));
 
   if (rbCorners) {
     fCoC = true;
     fgCorners = new FieldGroup(rbCorners, true);
     fgCorners->Align(rg, AL_UNDER);
-    new FieldCoordSystemC(fgCorners, SGRUiCoordSys, &sCoordSys);
-    FieldCoord* fc1 = new FieldCoord(fgCorners, SGRUiMinXY, &crdMin);
-    FieldCoord* fc2 = new FieldCoord(fgCorners, SGRUiMaxXY, &crdMax);
-    cbCoC = new CheckBox(fgCorners, SGRUiCenterOfCorners, &fCoC);
+    new FieldCoordSystemC(fgCorners, TR("&Coordinate System"), &sCoordSys);
+    FieldCoord* fc1 = new FieldCoord(fgCorners, TR("&Min X, Y"), &crdMin);
+    FieldCoord* fc2 = new FieldCoord(fgCorners, TR("&Max X, Y"), &crdMax);
+    cbCoC = new CheckBox(fgCorners, TR("&Center of Corner pixels"), &fCoC);
     cbCoC->SetIndependentPos();
     fgCorners->SetCallBack((NotifyProc)&FormCreateGeoRefRC::CallBack);
     cbCoC->SetCallBack((NotifyProc)&FormCreateGeoRefRC::CallBack);
@@ -820,26 +820,26 @@ FormCreateGeoRefRC::FormCreateGeoRefRC(CWnd* wPar, String* sGrf,
   if (rbTiePoints) {
     FieldGroup* fg = new FieldGroup(rbTiePoints, true);
     fg->Align(rg, AL_UNDER);
-    new FieldCoordSystemC(fg, SGRUiCoordSys, &sCoordSys);
+    new FieldCoordSystemC(fg, TR("&Coordinate System"), &sCoordSys);
   }
 
   if (rbDirLin) {
     FieldGroup* fgDirLin = new FieldGroup(rbDirLin, true);
     fgDirLin->Align(rg, AL_UNDER);
-    new FieldDataType(fgDirLin, SGRUiDTM, &sDTM, new MapListerDomainType(dmVALUE), true);
+    new FieldDataType(fgDirLin, TR("&DTM"), &sDTM, new MapListerDomainType(dmVALUE), true);
   }
    
 	FieldGroup* fgOrthoPhoto = 0;
   if (rbOrthoPhoto) {
     fgOrthoPhoto = new FieldGroup(rbOrthoPhoto, true);
     fgOrthoPhoto->Align(rg, AL_UNDER);
-    new FieldDataType(fgOrthoPhoto, SGRUiDTM, &sDTM, new MapListerDomainType(dmVALUE), true);
+    new FieldDataType(fgOrthoPhoto, TR("&DTM"), &sDTM, new MapListerDomainType(dmVALUE), true);
   }
 
 	if (rbParallProj) {
 		FieldGroup* fgParallProj= new FieldGroup(rbParallProj, true);
 		fgParallProj->Align(rg, AL_UNDER);
-		new FieldDataType(fgParallProj, SGRUiDTM, &sDTM, new MapListerDomainType(dmVALUE), true);
+		new FieldDataType(fgParallProj, TR("&DTM"), &sDTM, new MapListerDomainType(dmVALUE), true);
   }
 
 	if (rbTiePoints||rbDirLin||rbOrthoPhoto||rbParallProj)
@@ -985,9 +985,9 @@ int FormCreateGeoRefRC::CallBack(Event*)
   bool fOk = false;
   FileName fn(sNewName, ".grf");
   if (!fn.fValid())
-    stRemark->SetVal(SGRRemNotValidGrfName);
+    stRemark->SetVal(TR("Not a valid GeoReference name"));
   else if(File::fExist(fn))   
-    stRemark->SetVal(SGRRemGrfExists);
+    stRemark->SetVal(TR("GeoReference already exists"));
   else {
     rg->StoreData();
     if (iType == 0 && !fOnlyTiepoints) {
@@ -997,12 +997,12 @@ int FormCreateGeoRefRC::CallBack(Event*)
         int iCorr = fCoC ? 1 : 0;
         rX = (crdMax.x - crdMin.x) / (rcSize.Col - iCorr);
         rY = (crdMax.y - crdMin.y) / (rcSize.Row - iCorr);
-        String s(SGRRemPixSize_ff.scVal(), rX, rY);
+        String s(TR("Pixel Size = %.3f m, %.3f m").c_str(), rX, rY);
         stRemark->SetVal(s);
         fOk = true;
       }  
       else 
-        stRemark->SetVal(SGRRemMinSmallerMax);
+        stRemark->SetVal(TR("Minimum should be smaller than maximum"));
     }
     else {
       stRemark->SetVal("");
@@ -1038,16 +1038,16 @@ class FormCreateGeoRef3D: public FormWithDest
 public:
   FormCreateGeoRef3D(CWnd* wPar, String* sGrf, String* sDTM, 
                      RowCol* rcSize, String* sDescr)
-  : FormWithDest(wPar, SGRTitleCreateGrf3D)
+  : FormWithDest(wPar, TR("Create GeoReference 3D"))
   {
-    new FieldDataTypeCreate(root, SGRUiGrfName, sGrf, ".GRF", false);
-    StaticText* st = new StaticText(root, SGRUiDescription);
+    new FieldDataTypeCreate(root, TR("&GeoReference Name"), sGrf, ".GRF", false);
+    StaticText* st = new StaticText(root, TR("&Description:"));
     st->psn->SetBound(0,0,0,0);
     FieldString* fs = new FieldString(root, "", sDescr);
     fs->SetWidth(120);
     fs->SetIndependentPos();
-    new FieldRowCol(root, SGRUiRowsCols, rcSize);
-    new FieldMap(root, SGRUiDTM, sDTM);
+    new FieldRowCol(root, TR("&Rows, Columns"), rcSize);
+    new FieldMap(root, TR("&DTM"), sDTM);
     SetMenHelpTopic("ilwismen\\create_a_georeference_3d.htm");
     create();
   }                   

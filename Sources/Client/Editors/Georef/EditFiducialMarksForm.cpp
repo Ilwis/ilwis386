@@ -67,7 +67,7 @@ static char THIS_FILE[]=__FILE__;
 //////////////////////////////////////////////////////////////////////
 
 EditFiducialMarksForm::EditFiducialMarksForm(MapPaneView* wnd, GeoRefOrthoPhoto* gcd)
-: FormWithDest(wnd, SDGTitleLocateFiducialMarks, fbsSHOWALWAYS|fbsBUTTONSUNDER),
+: FormWithDest(wnd, TR("Locate Fiducial Marks"), fbsSHOWALWAYS|fbsBUTTONSUNDER),
   grf(gcd), mpv(wnd)
 {
 	fGeoRef = true;
@@ -84,12 +84,12 @@ EditFiducialMarksForm::EditFiducialMarksForm(MapPaneView* wnd, GeoRefOrthoPhoto*
   brActive = new CBrush(clrBackActive);
 
   rPrincDist = 1000 * grf->rPrincDistance; // change from m to mm.
-  frPrincDist = new FieldReal(root, SGRUiPrincDist, &rPrincDist, ValueRangeReal(0, 1e3, 0.001));
+  frPrincDist = new FieldReal(root, TR("&Principal Distance (mm)"), &rPrincDist, ValueRangeReal(0, 1e3, 0.001));
   frPrincDist->SetIndependentPos();
 	frPrincDist->SetCallBack((NotifyProc)&EditFiducialMarksForm::ChangePDistCallBack);
 	cCameraPrincPmm.x = grf->cCameraPPoint.x*1000;
 	cCameraPrincPmm.y = grf->cCameraPPoint.y*1000;
-	fcPrincPoint = new FieldCoord(root,SGRUiPrincPoint, &cCameraPrincPmm);
+	fcPrincPoint = new FieldCoord(root,TR("&Principal Point (mm,mm)"), &cCameraPrincPmm);
 	fcPrincPoint->Align(frPrincDist, AL_AFTER);
 	fcPrincPoint->SetIndependentPos();
 	grf->cCameraPPoint.x = cCameraPrincPmm.x / 1000; // pass UI-entered PP to the georef (in meters)
@@ -139,19 +139,19 @@ EditFiducialMarksForm::EditFiducialMarksForm(MapPaneView* wnd, GeoRefOrthoPhoto*
   FieldGroup* fg = new FieldGroup(root);
   StaticText *st;
   int iH;
-  st = new StaticText(fg, SDGRemCameraCrds);
+  st = new StaticText(fg, TR("Photo (mm in camera-system)"));
   iH = ffm[0]->fcPhoto->psn->iHeight + ffm[0]->fcPhoto->psn->iBndDown + 20;
   st->Align(ffm[0]->fcPhoto, AL_UNDER, -iH);
 	if (!grf->fSubPixelPrecision)
-		st = new StaticText(fg, SDGRemRowCol);
+		st = new StaticText(fg, TR("RowCol (pixels)"));
 	else
-		st = new StaticText(fg, SDGRemRowColSubPix);
+		st = new StaticText(fg, TR("RowCol (sub-pixel precision)"));
   iH = ffm[0]->frc->psn->iHeight + ffm[0]->frc->psn->iBndDown + 20;
   st->Align(ffm[0]->frc, AL_UNDER, -iH);
-  st = new StaticText(fg, SDGRemDiffRow);
+  st = new StaticText(fg, TR("diff Row"));
   iH = ffm[0]->stDRow->psn->iHeight + ffm[0]->stDRow->psn->iBndDown + 20;
   st->Align(ffm[0]->stDRow, AL_UNDER, -iH);
-  st = new StaticText(fg, SDGRemDiffCol);
+  st = new StaticText(fg, TR("diff Col"));
   iH = ffm[0]->stDCol->psn->iHeight + ffm[0]->stDCol->psn->iBndDown + 20;
   st->Align(ffm[0]->stDCol, AL_UNDER, -iH);
 	
@@ -184,7 +184,7 @@ EditFiducialMarksForm::EditFiducialMarksForm(MapPaneView* wnd, GeoRefOrthoPhoto*
 }
 
 EditFiducialMarksForm::EditFiducialMarksForm(MapPaneView* wnd, CoordSystemOrthoPhoto* csortho)
-: FormWithDest(wnd,SDGTitleLocateFiducialMarks,fbsSHOWALWAYS|fbsBUTTONSUNDER),
+: FormWithDest(wnd,TR("Locate Fiducial Marks"),fbsSHOWALWAYS|fbsBUTTONSUNDER),
   cs(csortho), mpv(wnd)
 {
 		fGeoRef = false;
@@ -201,7 +201,7 @@ EditFiducialMarksForm::EditFiducialMarksForm(MapPaneView* wnd, CoordSystemOrthoP
   brActive = new CBrush(clrBackActive);
 
   rPrincDist = 150;//1000 * cs->rPrincDistance; // change from m to mm.
-  FieldReal* fr = new FieldReal(root, SGRUiPrincDist, &rPrincDist);
+  FieldReal* fr = new FieldReal(root, TR("&Principal Distance (mm)"), &rPrincDist);
   fr->SetIndependentPos();
   new FieldBlank(root, 1.1);
   int i;
@@ -230,16 +230,16 @@ EditFiducialMarksForm::EditFiducialMarksForm(MapPaneView* wnd, CoordSystemOrthoP
   FieldGroup* fg = new FieldGroup(root);
   StaticText *st;
   int iH;
-  st = new StaticText(fg, SDGRemPhoto);
+  st = new StaticText(fg, TR("Photo (mm)"));
   iH = ffm[0]->fcPhoto->psn->iHeight + ffm[0]->fcPhoto->psn->iBndDown + 30;
   st->Align(ffm[0]->fcPhoto, AL_UNDER, -iH);
-  st = new StaticText(fg, SDGRemDigGridXY);
+  st = new StaticText(fg, TR("Grid XY (digitizer grid units)"));
   iH = ffm[0]->fcDigGrid->psn->iHeight + ffm[0]->fcDigGrid->psn->iBndDown + 30;
   st->Align(ffm[0]->fcDigGrid, AL_UNDER, -iH);
-  st = new StaticText(fg, SDGRemDiffGridX);
+  st = new StaticText(fg, TR("diff Grid X"));
   iH = ffm[0]->stDCol->psn->iHeight + ffm[0]->stDCol->psn->iBndDown + 30;
   st->Align(ffm[0]->stDRow, AL_UNDER, -iH);
-  st = new StaticText(fg, SDGRemDiffGridY);
+  st = new StaticText(fg, TR("diff Grid Y"));
   iH = ffm[0]->stDRow->psn->iHeight + ffm[0]->stDRow->psn->iBndDown + 30;
   st->Align(ffm[0]->stDCol, AL_UNDER, -iH);
 
@@ -570,22 +570,22 @@ int EditFiducialMarksForm::calc(Event*)
 		rScannedFidCol, rPhoto2ScanScale, grf->rScanPrincPointRow, grf->rScanPrincPointCol, 
 									cScanPrincPoint, cResiduals);
 	int iMinNrFiducials = min(iTransformOption + 2, 4);
-	String sMinNrF(SDGErrLessFiducialsThanNeed_i.scVal(), iMinNrFiducials);
+	String sMinNrF(TR("Too few fiducials, %i needed").c_str(), iMinNrFiducials);
 	switch (iErr) {
     case -11:
-      stRem1->SetVal(SDGErrNoValidFiducials);
+      stRem1->SetVal(TR("No valid fiducial marks found"));
       break;
     case -12:
       stRem1->SetVal(sMinNrF);
       break;
     case -13:
-      stRem1->SetVal(SDGErrIncorrectFiducialPos);
+      stRem1->SetVal(TR("Incorrect positions of fiducial marks"));
       break;
     case -14:
-      stRem1->SetVal(SDGErrIncorrectFiducialOrder);
+      stRem1->SetVal(TR("Incorrect ordering of 4 fiducial marks"));
       break;
     case -15:
-      stRem1->SetVal(SDGErrWrongNumber);
+      stRem1->SetVal(TR("Wrong number"));
       break;
     default:
       stRem1->SetVal("                    ");
@@ -625,7 +625,7 @@ int EditFiducialMarksForm::calc(Event*)
 		String sDPI, sDPmm, sMMpix, sPPinRowCols, sRMSrow, sRMScol;
 		if (fGeoRef) {
 			double rDPI = abs(0.0254 * rPhoto2ScanScale); // dots per inch
-			sDPI = String("%S %.2f dpi		                                    RMS:", SDGMsgScanResolution, rDPI);
+			sDPI = String("%S %.2f dpi		                                    RMS:", TR("Scan Resolution:"), rDPI);
 			if (rSigmaDRow <= 10)
 				sRMSrow = String("%.2f rows,",rSigmaDRow);
 			else
@@ -634,7 +634,7 @@ int EditFiducialMarksForm::calc(Event*)
 				sRMScol = String("%.2f cols",rSigmaDCol);
 			else
 				sRMScol = String(">10 cols !");
-			sMMpix = String("%.2f mm / %S", rMMpix, SDGMsgPixel);
+			sMMpix = String("%.2f mm / %S", rMMpix, TR("pixel"));
 			sPPinRowCols = String("Principal Point in scan: ");
 			if (grf->fSubPixelPrecision) {
 				sPPinRowCols &= String("Row %.2f, ", grf->rScanPrincPointRow);
@@ -648,8 +648,8 @@ int EditFiducialMarksForm::calc(Event*)
 		}
 		else { // when digitizing from digitizer tablet
 			double rDPmm = 0.001 * rPhoto2ScanScale; //dots per mm
-			sDPmm = String("%S %.2f grid units per mm", SDGMsgDigGridResolution, rDPmm);
-			sMMpix = String("%.2f mm / %S", rMMpix, SDGMsgDigGridUnit);
+			sDPmm = String("%S %.2f grid units per mm", TR("Digitizer Grid Resolution:"), rDPmm);
+			sMMpix = String("%.2f mm / %S", rMMpix, TR("Digitizer-Grid Unit"));
 		}
     stRem1->SetVal(sDPI);
     stRem2->SetVal(sMMpix);

@@ -127,9 +127,9 @@ BOOL IlwisDocument::OnOpenDocument(LPCTSTR lpszPathName)
 		ilwisobj = 0;
 		FileName fn(lpszPathName);
 		String sFileName = fn.sFullName();
-		SetPathName(sFileName.scVal());
+		SetPathName(sFileName.c_str());
 		if (fUseSerialize)
-			return COleServerDoc::OnOpenDocument(sFileName.scVal());
+			return COleServerDoc::OnOpenDocument(sFileName.c_str());
 
 		ilwisobj = new IlwisObject(IlwisObject::obj(fn));
 		if (!ilwisobj->fValid())
@@ -146,8 +146,8 @@ BOOL IlwisDocument::OnOpenDocument(LPCTSTR lpszPathName)
 		bool fWarnNotUpToDate = settings.fValue("WarnNotUpToDate", false);
 		if (fWarnNotUpToDate && !(*ilwisobj)->fUpToDate()) 
 		{
-			String sMsg(SMSMsgObjectNotUpToDate_S.scVal(), (*ilwisobj)->sTypeName());
-			switch (MessageBox(0, sMsg.scVal(), SMSMsgObjectNotUpToDate.scVal(), 
+			String sMsg(TR("Warning: %S is not up-to-date.\nDo you wish to make it up-to-date ?").c_str(), (*ilwisobj)->sTypeName());
+			switch (MessageBox(0, sMsg.c_str(), TR("Warning: Object Not Up-To-Date").c_str(), 
 				MB_YESNOCANCEL|MB_ICONWARNING|MB_DEFBUTTON2|MB_TOPMOST))
 			{
 			case IDYES:
@@ -170,7 +170,7 @@ BOOL IlwisDocument::OnOpenDocument(LPCTSTR lpszPathName)
 		}
 
 		String sTN = (*ilwisobj)->sTypeName();
-		SetTitle(sTN.scVal());
+		SetTitle(sTN.c_str());
 		return TRUE;
 	}
 	catch (ErrorObject &err)
@@ -192,7 +192,7 @@ void IlwisDocument::OnOpenExpressionDoc(IlwisObject& ob)
 {
 	delete ilwisobj;
 	ilwisobj = new IlwisObject(ob);
-	//SetPathName(ob->fnObj.sFullPath().scVal());	
+	//SetPathName(ob->fnObj.sFullPath().c_str());	
 
 }
 BOOL IlwisDocument::OnOpenDocument(LPCTSTR lpszPathName, OpenType ot)
@@ -311,7 +311,7 @@ void IlwisDocument::ShowAddInfo(bool fDock)
 	gbAddInfo->view = aiv;
 	gbAddInfo->Create(fw, ID_ADDINFOBAR, CSize(250,120));
 	String sTit = obj()->sTypeName();
-	gbAddInfo->SetWindowText(sTit.scVal());
+	gbAddInfo->SetWindowText(sTit.c_str());
 	aiv->Create(NULL, NULL, AFX_WS_DEFAULT_VIEW,
 		CRect(0,0,0,0), gbAddInfo, 100, 0);
 	AddView(aiv);

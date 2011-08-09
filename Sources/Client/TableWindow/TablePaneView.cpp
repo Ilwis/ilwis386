@@ -266,7 +266,7 @@ String TablePaneView::sField(int iCol, long iRow) const
 
 String TablePaneView::sDescrULButton() const // upper left button
 {
-	return STBRemColumnManagement;
+	return TR("Open Column Management dialog box");
 }
 
 String TablePaneView::sDescrColButton(int iCol) const
@@ -278,7 +278,7 @@ String TablePaneView::sDescrColButton(int iCol) const
 		Column col = td->cv(iCol);
 		if ( col.ptr() == NULL )
 			return "";
-		String s = STBRemChgColProp;
+		String s = TR("Double click to change column properties of ");
 		s &= col->sName();
 		if ("" != col->sDescription) {
 			s &= ": ";
@@ -287,13 +287,13 @@ String TablePaneView::sDescrColButton(int iCol) const
 		return s;
 	}  
 	else
-		return STBRemAddNewCol;
+		return TR("Add new column");
 }
 
 String TablePaneView::sDescrRowButton(long iRow) const
 {
 	String s = sRowButton(iRow);
-	return String(STBRemEditRec_s.sVal(), s.sTrimSpaces());
+	return String(TR("Show record %S in record view").c_str(), s.sTrimSpaces());
 }
 
 String TablePaneView::sDescrField(int iCol, long iRow) const
@@ -394,10 +394,10 @@ void TablePaneView::OnGotoColumn()
 	{
 	public:
 		Form(CWnd* parent, TableView* tvw, String* sCol)
-			: FormWithDest(parent, STBTitleGotoCol)
+			: FormWithDest(parent, TR("Goto Column"))
 		{
 			new FieldBlank(root);
-			new FieldColumn(root, STBUiCol, tvw, sCol);
+			new FieldColumn(root, TR("&Column"), tvw, sCol);
 			SetMenHelpTopic("ilwismen\\goto_column.htm");
 			create();
 		}
@@ -481,15 +481,15 @@ void TablePaneView::OnFieldPressed(int iCol, long iRow, bool fLeft)
 			return;
 		if (td->tvw->fEditable(iCol)) {
 			tField = new TblField(this,iCol,iRow);
-			String s(STBRemEditField);
+			String s(TR("Edit Field"));
 			if (fw) 
-				fw->status->SetWindowText(s.scVal());
+				fw->status->SetWindowText(s.c_str());
 		}  
 		else {
 			tField = new TblReadOnlyField(this,iCol,iRow);  
-			String s(STBRemFieldIsReadOnly);
+			String s(TR("Field is read only"));
 			if (fw) 
-				fw->status->SetWindowText(s.scVal());
+				fw->status->SetWindowText(s.c_str());
 		}  
 	}    
 }
@@ -509,7 +509,7 @@ void TablePaneView::OnEditClear()
 		td->tvw->Updated();
 	}
 	else if (0 != td->tvw->dm()->pdnone() && mmSelect.MinCol() < 0) {
-		int iRet = MessageBox(STBMsgDelSelRows.sVal(), STBMsgDelRows.sVal(),
+		int iRet = MessageBox(TR("Delete selected rows").c_str(), TR("Delete Rows").c_str(),
 			MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2);
 		if (IDYES == iRet) 
 		{
@@ -531,7 +531,7 @@ void TablePaneView::OnEditClear()
 		iMaxCol = min(iMaxCol, td->tvw->iCols()-1);
 		if (iMinCol > iMaxCol)
 			return;
-		int iRet = MessageBox(STBMsgClearSelFields.sVal(), STBMsgClearFields.sVal(),
+		int iRet = MessageBox(TR("Clear selected fields").c_str(), TR("Clear Fields").c_str(),
 			MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2);
 		if (IDYES == iRet) {
 			CWaitCursor cur;
@@ -701,8 +701,8 @@ TblField::~TblField()
 		if (("?" != s) && !dvs.fValid(s)) {
 			DomainSort* ds = dvs.dm()->pdsrt();
 			if (0 != ds) {
-				String sMsg(STBMsgNotInDomain_SS.sVal(), s, ds->sName());
-				int iRet = pane->MessageBox(sMsg.sVal(), STBMsgInvalidValue.sVal(),
+				String sMsg(TR("%S is not in the domain %S\nAdd this item to the domain?").c_str(), s, ds->sName());
+				int iRet = pane->MessageBox(sMsg.sVal(), TR("Invalid Value").c_str(),
 					MB_YESNO|MB_ICONEXCLAMATION);
 				if (IDNO == iRet)
 				{
@@ -713,8 +713,8 @@ TblField::~TblField()
 					ds->iAdd(s);
 			}
 			else {
-				String sMsg(STBMsgInvalidValue_S.sVal(), s);
-				pane->MessageBox(sMsg.sVal(), STBMsgInvalidValue.sVal(),
+				String sMsg(TR("%S is not a valid value").c_str(), s);
+				pane->MessageBox(sMsg.sVal(), TR("Invalid Value").c_str(),
 					MB_OK|MB_ICONEXCLAMATION);
 				return;
 			}
@@ -757,17 +757,17 @@ public:
 			return;
 		String sCol = cl->sName();
 		if (cl->fDataReadOnly()) {
-			String str(STBRemColIsReadOnly_S.scVal(), sCol);
+			String str(TR("Column %S is read only").c_str(), sCol);
 			new StaticText(root, str);
 			fbs |= fbsNOOKBUTTON;
 		}
 		else {
-			String s(STBRemEditRecord_S.scVal(), view->sRow(iRowMin));
+			String s(TR("Edit record %S").c_str(), view->sRow(iRowMin));
 			StaticText* st = new StaticText(root, s);
 			st->SetIndependentPos();
 			if (iRowMax > iRowMin) {
 				st->psn->SetBound(0,0,0,0);
-				s = String(STBRemUntilRecord_S.scVal(), view->sRow(iRowMax));
+				s = String(TR("until record %S").c_str(), view->sRow(iRowMax));
 				st = new StaticText(root, s);
 				st->SetIndependentPos();
 			}
@@ -797,7 +797,7 @@ public:
 		: FormWithDest(parent, "Edit"),
 		view(tvw), iColMin(colMin), iColMax(colMax), iRow(row)
 	{
-		String s(STBRemEditRecord_S.scVal(), view->sRow(iRow));
+		String s(TR("Edit record %S").c_str(), view->sRow(iRow));
 		StaticText* st = new StaticText(root, s);
 		st->SetIndependentPos();
 
@@ -907,7 +907,7 @@ void TablePaneView::OnEditField()
 	PostMessage(ILW_GOTOFIELD,iCol,iRec);
 }
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define add(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 #define addBreak men.AppendMenu(MF_SEPARATOR);
 

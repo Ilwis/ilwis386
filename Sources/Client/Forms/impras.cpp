@@ -55,7 +55,7 @@
 #include "Client\ilwis.h"
 
 ImportRasterForm::ImportRasterForm(CWnd* wPar, const FileName& fn, const String& sDef)
-: FormExtraImportOptions(wPar, SIETitleImportRaster),
+: FormExtraImportOptions(wPar, TR("Import General Raster")),
   fnMap(fn)
 {
 	iHeaderSize = 0;
@@ -71,23 +71,23 @@ ImportRasterForm::ImportRasterForm(CWnd* wPar, const FileName& fn, const String&
 	fUseAs = true;
 	fCreateMPR = true;
 	
-	new FieldInt(root, SIERasHeaderSize, &iHeaderSize, ValueRange(0,64000));
-	fiBands = new FieldInt(root, SIERasNrBands, &iNrBands, ValueRange(1,9999), true);  // use with spin control
+	new FieldInt(root, TR("&Header Size"), &iHeaderSize, ValueRange(0,64000));
+	fiBands = new FieldInt(root, TR("Number of &Bands"), &iNrBands, ValueRange(1,9999), true);  // use with spin control
 	fiBands->SetCallBack((NotifyProc)&ImportRasterForm::CallBackBands);
-	new FieldInt(root, SIERasNrCols, &iNrCols, ValueRange(2,1000000));
+	new FieldInt(root, TR("Number of &Columns"), &iNrCols, ValueRange(2,1000000));
 	
 	FieldGroup* fg = new FieldGroup(root, true);
-	rgPix = new RadioGroup(fg, SIERasPixStruct, &iPixelStructure);
+	rgPix = new RadioGroup(fg, TR("&Pixel Structure:"), &iPixelStructure);
 	rgPix->SetCallBack((NotifyProc)&ImportRasterForm::CallBackPixelStructure);
-	new RadioButton(rgPix, SIERasBit);
-	new RadioButton(rgPix, SIERasByte);
-	RadioButton* rbInt = new RadioButton(rgPix, SIERasInt);
-	cbSwap = new CheckBox(rbInt, SIERasHighEndian, &fByteSwap);
-	RadioButton* rbFlt = new RadioButton(rgPix, SIERasFlt);
-	new CheckBox(rbFlt, SIERasHighEndian, &fByteSwap);
+	new RadioButton(rgPix, TR("&Bit"));
+	new RadioButton(rgPix, TR("B&yte"));
+	RadioButton* rbInt = new RadioButton(rgPix, TR("&Integer numbers"));
+	cbSwap = new CheckBox(rbInt, TR("High Endian Byte Order"), &fByteSwap);
+	RadioButton* rbFlt = new RadioButton(rgPix, TR("&Floating point numbers"));
+	new CheckBox(rbFlt, TR("High Endian Byte Order"), &fByteSwap);
 	rbFlt->Align(rbInt, AL_UNDER);
 	
-	rgInt = new RadioGroup(rbInt, SIERasBytesPerPixel, &iNrBytes, true);
+	rgInt = new RadioGroup(rbInt, TR("Number of bytes per pixel:"), &iNrBytes, true);
 	rgInt->SetCallBack((NotifyProc)&ImportRasterForm::CallBackPixelStructure);
 	rgInt->Align(rbFlt, AL_UNDER);
 	rgInt->SetIndependentPos();
@@ -95,25 +95,25 @@ ImportRasterForm::ImportRasterForm(CWnd* wPar, const FileName& fn, const String&
 	new RadioButton(rgInt, "&2");
 	new RadioButton(rgInt, "&4");
 	
-	RadioGroup* rgFlt = new RadioGroup(rbFlt, SIERasBytesPerPixel, &iRealType, true);
+	RadioGroup* rgFlt = new RadioGroup(rbFlt, TR("Number of bytes per pixel:"), &iRealType, true);
 	rgFlt->Align(rbFlt, AL_UNDER);
 	rgFlt->SetIndependentPos();
 	new RadioButton(rgFlt, "&4");
 	new RadioButton(rgFlt, "&8");
 	
-	rgFile = new RadioGroup(fg, SIERasFileStruct, &iFileStructure);
-	new RadioButton(rgFile, SIERasBIL);
-	new RadioButton(rgFile, SIERasBSQ);
-	new RadioButton(rgFile, SIERasPixelInterleaved);
+	rgFile = new RadioGroup(fg, TR("File Str&ucture:"), &iFileStructure);
+	new RadioButton(rgFile, TR("Band &Interleaved (BIL)"));
+	new RadioButton(rgFile, TR("Band Se&quential (BSQ)"));
+	new RadioButton(rgFile, TR("Pi&xel Interleaved (BIP)"));
 	
-	rgCopyUseAs = new RadioGroup(fg, SIERasUseAsOrCopy, &iCopyUseAs);
+	rgCopyUseAs = new RadioGroup(fg, TR("Use &As and/or Copy"), &iCopyUseAs);
 	rgCopyUseAs->SetCallBack((NotifyProc)&ImportRasterForm::CallBackBands);
-	RadioButton *rbUseAs = new RadioButton(rgCopyUseAs, SIERasUseOriginal);
-	new RadioButton(rgCopyUseAs, SIERasConvertToILWIS);
-	cbCreateMPR = new CheckBox(rbUseAs, SIERasCreateMPR, &fCreateMPR);
+	RadioButton *rbUseAs = new RadioButton(rgCopyUseAs, TR("Use data file in &original format"));
+	new RadioButton(rgCopyUseAs, TR("Con&vert to ILWIS data format"));
+	cbCreateMPR = new CheckBox(rbUseAs, TR("Create separate maps"), &fCreateMPR);
 	cbCreateMPR->Align(rbUseAs, AL_AFTER);
 	
-	new StaticText(root, SIEUiDescription);
+	new StaticText(root, TR("&Description:"));
 	FieldString * fsDesc = new FieldString(root, "", &sDescr);
 	fsDesc->SetWidth(200);
 	fsDesc->SetIndependentPos();

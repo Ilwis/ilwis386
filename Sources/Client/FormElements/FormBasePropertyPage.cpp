@@ -175,13 +175,13 @@ int FormBasePropertyPage::exec()
 
 int FormBasePropertyPage::Copy()
 {
-	String sPageTitle = String("\r\n%S %s\r\n", SUIMsgPage, m_psp.pszTitle);
+	String sPageTitle = String("\r\n%S %s\r\n", TR("Page:"), m_psp.pszTitle);
 	return FormBase::Copy(sPageTitle);
 }
 
 int FormBasePropertyPage::Print()
 {
-	String sPageTitle = String("\r\n%S %s\r\n", SUIMsgPage, m_psp.pszTitle);
+	String sPageTitle = String("\r\n%S %s\r\n", TR("Page:"), m_psp.pszTitle);
 	return FormBase::Print(sPageTitle);
 }
   

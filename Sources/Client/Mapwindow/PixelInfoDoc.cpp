@@ -103,7 +103,7 @@ BOOL PixelInfoDoc::OnNewDocument()
 	// IlwisDocument does not accept OnNewDocument()
 	if (!CDocument::OnNewDocument())
 		return FALSE;
-	SetTitle(SPITitlePixelInfo.sVal());
+	SetTitle(TR("Pixel Information").c_str());
 	riCoord.AllowEdit(true);
 	Update();
 	return TRUE;
@@ -275,7 +275,7 @@ void PixelInfoDoc::setAssociatedDrawerTool(ILWIS::DrawerTool *drw, const String&
 void PixelInfoDoc::OnAddMaps()
 {
 	String s;
-	DataObjectForm frm(wndGetActiveView(), SPITitleAddMap, &s, ".mpr.mpa.mps.mpp.mpl", "ilwismen\add_map_to_pixel_information_window.htm");
+	DataObjectForm frm(wndGetActiveView(), TR("Pixel Info - Add Map"), &s, ".mpr.mpa.mps.mpp.mpl", "ilwismen\add_map_to_pixel_information_window.htm");
 	if (frm.fOkClicked()) {
 		FileName fn = s;
 		if (fn.sExt == ".mpl") {
@@ -292,7 +292,7 @@ void PixelInfoDoc::OnAddMaps()
 void PixelInfoDoc::OnAddCsys()
 {
 	String s;
-	DataObjectForm frm(wndGetActiveView(), SPITitleAddCsys, &s, ".csy", "ilwismen\add_coordinate_system_to_pixel_info_window.htm");
+	DataObjectForm frm(wndGetActiveView(), TR("Pixel Info - Add Coordinate System"), &s, ".csy", "ilwismen\add_coordinate_system_to_pixel_info_window.htm");
 	if (frm.fOkClicked()) {
 		CoordSystem cs(s);
 		AddCoordSystem(cs);
@@ -302,7 +302,7 @@ void PixelInfoDoc::OnAddCsys()
 void PixelInfoDoc::OnAddGrf()
 {
 	String s;
-	DataObjectForm frm(wndGetActiveView(), SPITitleAddGrf, &s, ".grf", "");
+	DataObjectForm frm(wndGetActiveView(), TR("Pixel Info - Add GeoReference"), &s, ".grf", "");
 	if (frm.fOkClicked()) {
 		GeoRef grf(s);
 		AddGeoRef(grf);
@@ -363,16 +363,16 @@ class PixelInfoConfigureForm: public FormWithDest
 {
 public:
 	PixelInfoConfigureForm(CWnd* w, PixelInfoDoc* pid)
-		: FormWithDest(w, SPITitleCnfPixInfo)
+		: FormWithDest(w, TR("Customize Pixel Info"))
 	{
-		StaticText* st = new StaticText(root, SPIRemRecvCoordFrom);
+		StaticText* st = new StaticText(root, TR("Receive coordinate data from:"));
 		st->SetIndependentPos();
-		CheckBox* cbMouse = new CheckBox (root, SPIUiMouse, &pid->fMouse);
-		new CheckBox (cbMouse, SPIUiContinuous, &pid->fMouseCont);
-		CheckBox* cbDig = new CheckBox (root, SPIUiDigitizer, &pid->fDigitizer);
+		CheckBox* cbMouse = new CheckBox (root, TR("&Mouse"), &pid->fMouse);
+		new CheckBox (cbMouse, TR("&Continuous"), &pid->fMouseCont);
+		CheckBox* cbDig = new CheckBox (root, TR("&Digitizer"), &pid->fDigitizer);
 		cbDig->Align(cbMouse, AL_UNDER);
-		new CheckBox (cbDig, SPIUiContinuous, &pid->fDigitizerCont);
-		st = new StaticText(root, SPIRemShowValuesOf);
+		new CheckBox (cbDig, TR("&Continuous"), &pid->fDigitizerCont);
+		st = new StaticText(root, TR("Show values of:"));
 		st->Align(cbDig, AL_UNDER);
 		st->SetIndependentPos();
 		RecItemSelector* ris = new RecItemSelector(root, &pid->riCoord);

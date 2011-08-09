@@ -179,7 +179,7 @@ CDocument* IlwisMDIDocTemplate::OpenDocumentFile(
 		// open an existing document
 		CWaitCursor wait;
 		//FileName fn(lpszPathName);
-		if (!pDocument->OnOpenDocument(lpszPathName)) //fn.sFullPathQuoted().scVal()))
+		if (!pDocument->OnOpenDocument(lpszPathName)) //fn.sFullPathQuoted().c_str()))
 		{
 			// user has be alerted to what failed in OnOpenDocument
 			TRACE0("CDocument::OnOpenDocument returned FALSE.\n");

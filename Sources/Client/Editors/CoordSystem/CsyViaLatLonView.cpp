@@ -99,14 +99,14 @@ void CoordSysViaLatLonView::ShowDatumEllInfo()
 
   if (csvll->datum) 
 	{
-			String s= SCSInfDatum;
+			String s= TR("Datum: ");
 			s &= csvll->datum->sName();
 			st = new StaticText(root, s);
 			st->SetIndependentPos();
 			if (csvll->datum->sArea.length()) 
 			{
 				st->psn->SetBound(0,0,0,0);
-				s = SCSInfDatumArea;
+				s = TR("Datum Area: ");
 				s &= csvll->datum->sArea;
 				st = new StaticText(root, s);
 				st->SetIndependentPos();
@@ -123,25 +123,25 @@ void CoordSysViaLatLonView::ShowDatumEllInfo()
 		{
       if (st)
         st->psn->SetBound(0,0,0,0);
-      String s("%S %.7f", SCSUiSphereRadius, rRadius);
+      String s("%S %.7f", TR("Sphere &Radius (m)"), rRadius);
       st = new StaticText(root, s);
       st->SetIndependentPos();
     }
     else
-      new FieldReal(root, SCSUiSphereRadius, &rRadius, ValueRange(0.001,1e40,0.0000001));
+      new FieldReal(root, TR("Sphere &Radius (m)"), &rRadius, ValueRange(0.001,1e40,0.0000001));
   }
   else 
 	{
     if (st)
       st->psn->SetBound(0,0,0,0);
-    String s = SCSInfEll;
+    String s = TR("Ellipsoid: ");
     s &= csvll->ell.sName;
     st = new StaticText(root, s);
     st->SetIndependentPos();
 	st->psn->SetBound(0,0,0,0);
 	double a = csvll->ell.a;
 	double f_inv = 1 / csvll->ell.f;
-	s = String(SCSInfEllipsoid_a_and_1f_ff.scVal(), a, f_inv);
+	s = String(TR("Ellipsoid parameters: a = %8.3lf, 1/f = %.9lf").c_str(), a, f_inv);
 	st = new StaticText(root, s);
     st->SetIndependentPos();
   }
@@ -174,15 +174,15 @@ int CoordSysViaLatLonView::ButtonDatum(Event*)
 	{
 		public:
 			ChangeDatumForm(CWnd* w, String* sDatum, String* sArea, UserDefDatumInfo* info) 
-			: FormWithDest(w, SCSTitleSelectDatum)
+			: FormWithDest(w, TR("Select Datum"))
       , datumInfo(info)
 			{
-				StaticText *st = new StaticText(root, SCSUiDatum);
+				StaticText *st = new StaticText(root, TR("&Datum"));
 		
         iType = fCIStrEqual("User Defined" , *sDatum) ? 1 : 0;
         RadioGroup* rg = new RadioGroup(root, "", &iType);
-        RadioButton* rbPreDef = new RadioButton(rg, SCSUiPreDefined);
-        RadioButton* rbUserDef = new RadioButton(rg, SCSUiUserDefined);
+        RadioButton* rbPreDef = new RadioButton(rg, TR("&Predefined"));
+        RadioButton* rbUserDef = new RadioButton(rg, TR("&User Defined"));
         
         FieldGroup* fgUserDef = new FieldGroup(rbUserDef);
         fgUserDef->Align(rbUserDef, AL_UNDER);
@@ -211,7 +211,7 @@ int CoordSysViaLatLonView::ButtonDatum(Event*)
         fgPreDef->SetIndependentPos();
 				fldDatum = new FieldDatum(fgPreDef, sDatum);
 				fldDatum->SetCallBack((NotifyProc)&ChangeDatumForm::DatumChanged);
-				stArea = new StaticText(fgPreDef, SCSUiArea);
+				stArea = new StaticText(fgPreDef, TR("&Area"));
 				stArea->psn->SetBound(0,0,0,0);
 				fldDatumArea = new FieldDatumArea(fgPreDef, sArea);
 				fldDatumArea->SetCallBack((NotifyProc)&ChangeDatumForm::AreaChanged);
@@ -243,7 +243,7 @@ int CoordSysViaLatLonView::ButtonDatum(Event*)
 			{
 				char *s0, *sTmp;
 				char str[1000];
-				strcpy(str, strng.scVal());
+				strcpy(str, strng.c_str());
 				s0 = sTmp = str;
 				if (0 == str || strlen(str) < 70)
 					s0 = 0;
@@ -287,7 +287,7 @@ int CoordSysViaLatLonView::ButtonDatum(Event*)
         }
 				String sDatum = fldDatum->sValue();
 				String sArea = fldDatumArea->sValue();
-				if (sDatum != "" && sDatum != SCSDatumNotSpecified)
+				if (sDatum != "" && sDatum != TR("Not Specified"))
         {
 					 MolodenskyDatum dat(sDatum, sArea);
   				 SetRemark(dat.sDescription);
@@ -377,7 +377,7 @@ int CoordSysViaLatLonView::ButtonDatum(Event*)
     }
   }
   else
-    sDatum = SCSDatumNotSpecified;  
+    sDatum = TR("Not Specified");  
   ChangeDatumForm frm(this, &sDatum, &sArea, &info);
   if (frm.fOkClicked()) 
 	{
@@ -404,7 +404,7 @@ int CoordSysViaLatLonView::ButtonDatum(Event*)
         break;
       }
     }
-    else if (sDatum == SCSDatumNotSpecified)
+    else if (sDatum == TR("Not Specified"))
       csvll->datum = 0;
     else  
       csvll->datum = new MolodenskyDatum(sDatum, sArea);
@@ -429,13 +429,13 @@ int CoordSysViaLatLonView::ButtonEllipsoid(Event*)
 	{
   public:
     ChangeEllForm(CWnd* w, String* sEll, double& a, double& f1) 
-    : FormWithDest(w, SCSTitleSelectEll)
+    : FormWithDest(w, TR("Select Ellipsoid"))
     {
-      new StaticText(root, SCSUiEll);
+      new StaticText(root, TR("&Ellipsoid"));
       iType = fCIStrEqual("User Defined" , *sEll) ? 1 : 0;
       RadioGroup* rg = new RadioGroup(root, "", &iType);
-      RadioButton* rbPreDef = new RadioButton(rg, SCSUiPreDefined);
-      RadioButton* rbUserDef = new RadioButton(rg, SCSUiUserDefined);
+      RadioButton* rbPreDef = new RadioButton(rg, TR("&Predefined"));
+      RadioButton* rbUserDef = new RadioButton(rg, TR("&User Defined"));
       FieldGroup* fg = new FieldGroup(rbUserDef);
       fg->Align(rbUserDef, AL_UNDER);
       fg->SetIndependentPos();

@@ -70,10 +70,10 @@ void FieldBrowseDir::create()
 
 int FieldBrowseDir::ShowBrowseForm(Event *ev)
 {
-	CSBDestination sb(0, sRemark.scVal());
+	CSBDestination sb(0, sRemark.c_str());
 	sb.SetFlags(BIF_RETURNONLYFSDIRS | BIF_STATUSTEXT);
 	String sV = sVal();
-	sb.SetInitialSelection(sV.scVal());
+	sb.SetInitialSelection(sV.c_str());
 	if (sb.SelectFolder())
 	{
 		CString sBrowse = sb.GetSelectedFolder();

@@ -66,20 +66,20 @@ int FieldSampleSetC::CreateSampleSet(void*)
 
 FormCreateSampleSet::FormCreateSampleSet(CWnd* wPar, String* sm,
                                          const String& sMpr, const String& sMpl)
-: FormWithDest(wPar, SSSTitleCreateSampleSet),
+: FormWithDest(wPar, TR("Create Sample Set")),
   sMap(sm), sBgMap(sMpr), sMapList(sMpl)
 {
 	iImg = IlwWinApp()->iImage(".sms");
 
-  fdss = new FieldDataTypeCreate(root, SSSUiSampleSetName, sMap, ".SMS", false);
+  fdss = new FieldDataTypeCreate(root, TR("&Sample Set Name"), sMap, ".SMS", false);
   fdss->SetCallBack((NotifyProc)&FormCreateSampleSet::CallBackName);
-  StaticText* st = new StaticText(root, SSSUiDescription);
+  StaticText* st = new StaticText(root, TR("&Description:"));
   st->psn->SetBound(0,0,0,0);
   FieldString* fs = new FieldString(root, "", &sDescr);
   fs->SetWidth(120);
   fs->SetIndependentPos();
-  new FieldDomainC(root, SSSUiDomain, &sDom, dmCLASS);
-  m_fml = new FieldMapList(root, SSSUiMapList, &sMapList);
+  new FieldDomainC(root, TR("&Domain"), &sDom, dmCLASS);
+  m_fml = new FieldMapList(root, TR("&MapList"), &sMapList);
   m_fml->SetCallBack((NotifyProc)&FormCreateSampleSet::ChangeMapList);
 
   String sFill('X', 50);
@@ -110,9 +110,9 @@ int FormCreateSampleSet::CallBackName(Event *)
 	fdss->StoreData();
 	FileName fn(*sMap, ".sms");
 	if (!fn.fValid())
-		m_sNameErr = SSSRemNotValidSmsName;
+		m_sNameErr = TR("Not a valid sample set name");
 	else if(File::fExist(fn))   
-		m_sNameErr = SSSRemSmsExists;
+		m_sNameErr = TR("Sample Set already exists");
 	else
 		m_sNameErr = String();
 
@@ -136,7 +136,7 @@ int FormCreateSampleSet::ChangeMapList(Event*)
 	Domain dm = ml[ml->iLower()]->dm();
 	m_fOkDomain = dm->pdi() != 0;
 	if (!m_fOkDomain)
-		m_sDomErr = String(SDATErrDomImageExpected_S.scVal(), dm->sName(true, dm->fnObj.sPath()));
+		m_sDomErr = String(TR("Only image domain allowed, found: '%S'").c_str(), dm->sName(true, dm->fnObj.sPath()));
 	else
 		m_sDomErr = String();
 	
@@ -158,7 +158,7 @@ int FormCreateSampleSet::exec()
     ms->fInitStat();
   }
   catch (ErrorObject& err) {
-    err.Show(SSSErrCreateSampleSet);
+    err.Show(TR("Create Sample Set"));
   }  
   return 0;
 }

@@ -202,7 +202,7 @@ void FieldExportFormat::create()
 {
   FieldOneSelect::create();
   for (int i = 0; i < aei.iSize(); ++i)
-    ose->AddString(aei[i].sDescr.scVal());
+    ose->AddString(aei[i].sDescr.c_str());
   ose->SetCurSel(0);
 }
 
@@ -243,7 +243,7 @@ private:
 };
 
 ExportForm::ExportForm(CWnd* wPar, Exporting* export, String* sNam, String* sCmd, String* sOutput)
-: FormWithDest(wPar, SAFTitleExport), 
+: FormWithDest(wPar, TR("Export")), 
   exp(export), sName(sNam), sCommand(sCmd), iExportMethod(0), fInMethodCallback(false)
 {
 	sObjectName = *sName;
@@ -254,17 +254,17 @@ ExportForm::ExportForm(CWnd* wPar, Exporting* export, String* sNam, String* sCmd
 	fdtl = new FieldDataTypeLarge(root, &sObjectName, ".mpr.mpa.mps.mpp.tbt.his.hsp.hsa.hss.mpl.csy");
 	fdtl->SetNoSystemDir();
 	fdtl->SetCallBack((NotifyProc)&ExportForm::CallBack);
-	stMethod = new StaticText(root, SAFUiExportMethod);
+	stMethod = new StaticText(root, TR("&Method"));
 	rgExportMethod = new RadioGroup(root,"", &iExportMethod, true);
-	rbILWIS = new RadioButton(rgExportMethod, SAFUiUsingILWIS);
+	rbILWIS = new RadioButton(rgExportMethod, TR("ILWIS"));
 	rbILWIS->SetIndependentPos();
-	//rbGDAL = new RadioButton(rgExportMethod, SAFUiUsingGDAL);
+	//rbGDAL = new RadioButton(rgExportMethod, TR("GDAL"));
 	//rbGDAL->SetIndependentPos();
-	rbGDB = new RadioButton(rgExportMethod, SAFUiUsingGDAL);
+	rbGDB = new RadioButton(rgExportMethod, TR("GDAL"));
 	rbGDB->SetIndependentPos();
 	rgExportMethod->SetCallBack((NotifyProc)&ExportForm::CallBackExportMethod);
 
-	StaticText* st = new StaticText(root, SAFUiExportFormat);
+	StaticText* st = new StaticText(root, TR("&Format"));
 	iOption = 0;
 	fefRas = new FieldExportFormat(root, &iOption, exp->expRas);
 	fefRas->Align(st, AL_UNDER);
@@ -288,7 +288,7 @@ ExportForm::ExportForm(CWnd* wPar, Exporting* export, String* sNam, String* sCmd
 	fefCsy->Align(st, AL_UNDER);
 	FieldBlank* fb = new FieldBlank(root);
 	fb->Align(fefTbl, AL_UNDER);
-	fsOutName = new FieldString(root, SAFUiOutputFileName, sOutputName);
+	fsOutName = new FieldString(root, TR("&Output Filename"), sOutputName);
 	fsOutName->SetWidth(120);
 	fsOutName->SetCallBack((NotifyProc)&ExportForm::CallBackOutName);
 	fsOutName->SetIndependentPos();
@@ -339,7 +339,7 @@ int ExportForm::BrowseClick(Event*)
 		sPath = IlwWinApp()->sGetCurDir();
 	if (sPath[sPath.length() - 1] == '\\')
 		sPath = sPath.sLeft(sPath.length() - 1);  // remove trailing backslash
-	sb.SetInitialSelection(sPath.scVal());
+	sb.SetInitialSelection(sPath.c_str());
 	if (sb.SelectFolder())
 	{
 		CString sBrowse = sb.GetSelectedFolder();
@@ -358,17 +358,17 @@ int ExportForm::CallBackExportMethod(Event*)
 	if (2 == iExportMethod) // GeoGateway
 	{
 		fdtl->SetExt(".mpr");
-		iOption = fefRasGDB->ose->SelectString(0, mssPrevExport[".mprgeo"].scVal());
+		iOption = fefRasGDB->ose->SelectString(0, mssPrevExport[".mprgeo"].c_str());
 	}
 	else if (1 == iExportMethod) // GDAL
 	{
 		fdtl->SetExt(".mpr");
-		iOption = fefRasGDAL->ose->SelectString(0, mssPrevExport[".mprgdal"].scVal());
+		iOption = fefRasGDAL->ose->SelectString(0, mssPrevExport[".mprgdal"].c_str());
 	}
 	else // ILWIS native Export
 	{
 		fdtl->SetExt(".mpr.mpa.mps.mpp.tbt.his.hsp.hsa.hss.mpl.csy");
-		iOption = fefRas->ose->SelectString(0, mssPrevExport[".mpr"].scVal());
+		iOption = fefRas->ose->SelectString(0, mssPrevExport[".mpr"].c_str());
 	}
 
 	CallBack(0);
@@ -391,7 +391,7 @@ int ExportForm::CallBackOutName(Event*)
 	}
 	else if (sOutputName->length() == 0)
 	{
-		stRemark->SetVal(SAFRemOutputNameRequired);
+		stRemark->SetVal(TR("Output file name required"));
 		DisableOK();
 		return 1;
 	}
@@ -399,13 +399,13 @@ int ExportForm::CallBackOutName(Event*)
 	{
 		if (!fn.fValid())
 		{
-			stRemark->SetVal(SAFRemILWISNameBeginWithLetter);
+			stRemark->SetVal(TR("ILWIS object names must begin with a letter"));
 			DisableOK();
 			return 1;
 		}
 		if (fn.sFile.length() > 8 || fn.sExt.length() > 3)
 		{
-			stRemark->SetVal(SAFRemShortOutputNameRequired);
+			stRemark->SetVal(TR("Filename must be a short name (8.3)"));
 			DisableOK();
 			return 1;
 		}
@@ -441,32 +441,32 @@ int ExportForm::CallBack(Event*)
 	
 	if (fn.sExt == ".mps")
 	{
-		iOption = fefSeg->ose->SelectString(0, mssPrevExport[".mps"].scVal());
+		iOption = fefSeg->ose->SelectString(0, mssPrevExport[".mps"].c_str());
 		fefSeg->Show();
 	}
 	else if (fn.sExt == ".mpa")
 	{
-		iOption = fefPol->ose->SelectString(0, mssPrevExport[".mpa"].scVal());
+		iOption = fefPol->ose->SelectString(0, mssPrevExport[".mpa"].c_str());
 		fefPol->Show();
 	}
 	else if (fn.sExt == ".mpp")
 	{
-		iOption = fefPnt->ose->SelectString(0, mssPrevExport[".mpp"].scVal());
+		iOption = fefPnt->ose->SelectString(0, mssPrevExport[".mpp"].c_str());
 		fefPnt->Show();
 	}
 	else if (fn.sExt == ".tbt" || fn.sExt == ".his" || fn.sExt == ".hsa" || fn.sExt == ".hsp" || fn.sExt == ".hss")
 	{
-		iOption = fefTbl->ose->SelectString(0, mssPrevExport[".tbt"].scVal());
+		iOption = fefTbl->ose->SelectString(0, mssPrevExport[".tbt"].c_str());
 		fefTbl->Show();
 	}
 	else if (fn.sExt == ".mpl")
 	{
-		iOption = fefMpl->ose->SelectString(0, mssPrevExport[".mpl"].scVal());
+		iOption = fefMpl->ose->SelectString(0, mssPrevExport[".mpl"].c_str());
 		fefMpl->Show();
 	}
 	else if (fn.sExt == ".csy")
 	{
-		iOption = fefCsy->ose->SelectString(0, mssPrevExport[".csy"].scVal());
+		iOption = fefCsy->ose->SelectString(0, mssPrevExport[".csy"].c_str());
 		fefCsy->Show();
 	}
 	else
@@ -478,17 +478,17 @@ int ExportForm::CallBack(Event*)
 
 		if (2 == iExportMethod) // GeoGateway
 		{
-			iOption = fefRasGDB->ose->SelectString(0, mssPrevExport[".mprgeo"].scVal());
+			iOption = fefRasGDB->ose->SelectString(0, mssPrevExport[".mprgeo"].c_str());
 			fefRasGDB->Show();
 		}
 		else if (1 == iExportMethod) // GDAL
 		{
-			iOption = fefRasGDAL->ose->SelectString(0, mssPrevExport[".mprgdal"].scVal());
+			iOption = fefRasGDAL->ose->SelectString(0, mssPrevExport[".mprgdal"].c_str());
 			fefRasGDAL->Show();
 		}
 		else // ILWIS native raster export
 		{
-			iOption = fefRas->ose->SelectString(0, mssPrevExport[".mpr"].scVal());
+			iOption = fefRas->ose->SelectString(0, mssPrevExport[".mpr"].c_str());
 			fefRas->Show();
 		}
 	}

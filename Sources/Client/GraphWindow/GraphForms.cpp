@@ -89,26 +89,26 @@ GraphLayerOptionsForm::GraphLayerOptionsForm(GraphLayer* grl)
 		rgType = new RadioGroup(root, "", (int*)&cgl->cgt);
 	else
 		rgType = new RadioGroup(root, "", (int*)&rdl->rdt);
-  RadioButton* rbLine = new RadioButton(rgType, SGPUiLine);
-  RadioButton* rbStep = new RadioButton(rgType, SGPUiStep);
+  RadioButton* rbLine = new RadioButton(rgType, TR("&Line"));
+  RadioButton* rbStep = new RadioButton(rgType, TR("&Step"));
 	RadioButton* rbBar = 0;
 	if (0 != cgl) {
-    rbBar = new RadioButton(rgType, SGPUiBar);
+    rbBar = new RadioButton(rgType, TR("&Bar"));
 	}
-  RadioButton* rbNeedle = new RadioButton(rgType, SGPUiNeedle);
+  RadioButton* rbNeedle = new RadioButton(rgType, TR("&Needle"));
 	RadioButton* rbPoint = 0;
 	if (0 != cgl) {
-    rbPoint = new RadioButton(rgType, SGPUiPoint);
+    rbPoint = new RadioButton(rgType, TR("&Point"));
 	}
 
   FieldGroup* fg = new FieldGroup(rbLine, true);
-  new FieldColor(fg, SGPUiColor, &gl->color);
+  new FieldColor(fg, TR("&Color"), &gl->color);
 
   fg = new FieldGroup(rbStep, true);
-  new FieldColor(fg, SGPUiColor, &gl->color);
+  new FieldColor(fg, TR("&Color"), &gl->color);
 
   fg = new FieldGroup(rbNeedle, true);
-  new FieldColor(fg, SGPUiColor, &gl->color);
+  new FieldColor(fg, TR("&Color"), &gl->color);
    
 	if (0 != rbBar) {
 		fg = new FieldGroup(rbBar, true);
@@ -117,14 +117,14 @@ GraphLayerOptionsForm::GraphLayerOptionsForm(GraphLayer* grl)
 		if (0 != cgd->gaxX->ds && 0 != cgd->gaxX->ds->pdc()) {
 			RadioGroup *rgCol = new RadioGroup(fg,"", &iColor);
 			rgCol->Align(rbBar, AL_AFTER);
-			RadioButton *rbSingle = new RadioButton(rgCol, SGPUiSingleColor);
-			RadioButton *rbFollow = new RadioButton(rgCol, SGPUiFollowsRepr);
+			RadioButton *rbSingle = new RadioButton(rgCol, TR("&Single Color"));
+			RadioButton *rbFollow = new RadioButton(rgCol, TR("Representation colors"));
 			rbSingle->SetIndependentPos();
 			new FieldColor(rbSingle, "", &gl->color);
 		}
 		else {
 			iColor = 0;
-			new FieldColor(fg, SGPUiColor, &gl->color);
+			new FieldColor(fg, TR("&Color"), &gl->color);
 		}
 	}
 
@@ -132,23 +132,23 @@ GraphLayerOptionsForm::GraphLayerOptionsForm(GraphLayer* grl)
 		fg = new FieldGroup(rbPoint, true);
 		fg->Align(rbLine, AL_AFTER);
 		smb = &gl->smb;
-		fsmb = new FieldSymbol(fg, SGPUiSmbType, (long*)&smb->smb, &smb->hIcon);
+		fsmb = new FieldSymbol(fg, TR("Symbol &Type"), (long*)&smb->smb, &smb->hIcon);
 		fsmb->SetCallBack((NotifyProc)&GraphLayerOptionsForm::FieldSymbolCallBack);
-		new FieldInt(fg, SGPUiSize, &smb->iSize, ValueRangeInt(1L,250L));
-		ffc = new FieldFillColor(fg, SGPUiColor, &smb->fillCol);
-		new FieldInt(fg, SGPUiLineWidth, &smb->iWidth, ValueRangeInt(1L,100L));
-		new FieldColor(fg, SGPUiLineColor, &smb->col);
+		new FieldInt(fg, TR("&Size"), &smb->iSize, ValueRangeInt(1L,250L));
+		ffc = new FieldFillColor(fg, TR("&Color"), &smb->fillCol);
+		new FieldInt(fg, TR("Line &Width"), &smb->iWidth, ValueRangeInt(1L,100L));
+		new FieldColor(fg, TR("Line &Color"), &smb->col);
 	}
 	RadioGroup* rgax = 0;
   if (0 != cgl) {
   	iYAxis = !cgl->fYAxisLeft;
-		rgax = new RadioGroup(root, SGPUiUseYAxis, &iYAxis, true);
+		rgax = new RadioGroup(root, TR("Use Y-Axis"), &iYAxis, true);
 		rgax->Align(rbPoint , AL_UNDER);
-		new RadioButton(rgax, SGPUiLeft);
-		new RadioButton(rgax, SGPUiRight);
+		new RadioButton(rgax, TR("&Left"));
+		new RadioButton(rgax, TR("&Right"));
 		rgax->SetIndependentPos();
 	}
-  PushButton* pbRemove = new PushButton(root, SGPUiRemoveGraph, (NotifyProc)&GraphLayerOptionsForm::Remove);
+  PushButton* pbRemove = new PushButton(root, TR("&Remove Graph"), (NotifyProc)&GraphLayerOptionsForm::Remove);
 	if (0 != rgax)
     pbRemove->Align(rgax, AL_UNDER);
   pbRemove->SetIndependentPos();
@@ -251,13 +251,13 @@ LsfGraphLayerOptionsForm::LsfGraphLayerOptionsForm(LsfGraphLayer* gl)
 {
 	sFitType = 0; 
 	iTerms = gl->iTerms;
-	frf = new FieldRegressionFunc(root, STBUiFunction, &sFitType, gl->sFitType);
+	frf = new FieldRegressionFunc(root, TR("&Function"), &sFitType, gl->sFitType);
 	frf->SetCallBack((NotifyProc)&LsfGraphLayerOptionsForm::FitFuncCallBack);
 	String sFill('X', 50);
 	stRegr = new StaticText(root, sFill);
 	stRegr->SetVal(String());
 	stRegr->SetIndependentPos();
-	fiTerms = new FieldInt(root, STBUiNrTerms, &iTerms, RangeInt(2,100));
+	fiTerms = new FieldInt(root, TR("&Nr. of terms"), &iTerms, RangeInt(2,100));
 	stFormula = new StaticText(root, sFill);
 	if (0 != lsfgl->lsf)
 		stFormula->SetVal(lsfgl->lsf->sFormula());
@@ -314,7 +314,7 @@ int LsfGraphLayerOptionsForm::exec()
 SmvGraphLayerOptionsForm::SmvGraphLayerOptionsForm(SmvGraphLayer* gl)
 : GraphLayerOptionsForm(gl), smvgl(gl)
 {
-	new FieldSemiVariogram(root, SGPUiSemiVar, &gl->smv);
+	new FieldSemiVariogram(root, TR("&SemiVariogram"), &gl->smv);
 }
 
 SmvGraphLayerOptionsForm::~SmvGraphLayerOptionsForm()
@@ -369,7 +369,7 @@ void GraphLayerSelector::Fill()
   lb->ResetContent();
 	for (unsigned int i=0; i < gd->agl.iSize(); i++) {
     GraphLayer* gl = gd->agl[i];
-    int ind = lb->AddString(gl->sName().scVal());
+    int ind = lb->AddString(gl->sName().c_str());
     SendMessage(*lb,LB_SETITEMDATA,ind,(LPARAM)gl);
   }
   lb->SetSel(lb->GetCount()-1);
@@ -474,20 +474,20 @@ int GraphLayerSelector::mouseButtonUp(Event* Evt)
 ////////////// GraphLayerManPage
 
 GraphLayerManPage::GraphLayerManPage(GraphDrawer* gdr)
-: GraphPropertyPage(SGPTitleGraphManagement), gd(gdr)
+: GraphPropertyPage(TR("Graph Management")), gd(gdr)
 {
   gls = new GraphLayerSelector(root,this,gd);
   String sFill('x', 50);
 
-  pbAdd = new PushButton(root, SGPUiAddGraph, (NotifyProc)&GraphLayerManPage::Add);
+  pbAdd = new PushButton(root, TR("&Add Graph"), (NotifyProc)&GraphLayerManPage::Add);
   pbAdd->SetIndependentPos();
-  pbProp = new PushButton(root, SGPUiGraphConfiguration, (NotifyProc)&GraphLayerManPage::Prop);
+  pbProp = new PushButton(root, TR("Graph &Configuration"), (NotifyProc)&GraphLayerManPage::Prop);
   pbProp->Align(pbAdd, AL_AFTER);
   pbProp->SetIndependentPos();
-  pbRemove = new PushButton(root, SGPUiRemoveGraph, (NotifyProc)&GraphLayerManPage::Remove);
+  pbRemove = new PushButton(root, TR("&Remove Graph"), (NotifyProc)&GraphLayerManPage::Remove);
   pbRemove->Align(pbAdd, AL_UNDER);
   pbRemove->SetIndependentPos();
-  StaticText* st = new StaticText(root, SGPRemDragToOrder); 
+  StaticText* st = new StaticText(root, TR("Drag to change order")); 
   st->Align(pbRemove, AL_UNDER);
   st->SetIndependentPos();
   st->SetCallBack((NotifyProc)&GraphLayerManPage::Select);
@@ -545,7 +545,7 @@ int GraphLayerManPage::Prop(Event* Evt)
   return 1;
 }
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define add(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 
 int GraphLayerManPage::Add(Event* Evt)
@@ -622,18 +622,18 @@ GraphAxisPage::GraphAxisPage(GraphAxis* ga, const String& sTitle)
 void GraphAxisPage::Init()
 { 
 	if (gaxis->gap != GraphAxis::gapXRose) {
-    FieldString* fs = new FieldString(root, SGPUiAxisText, &gaxis->sTitle);
+    FieldString* fs = new FieldString(root, TR("Axis &Text"), &gaxis->sTitle);
     fs->SetWidth(90);
 	}
-  CheckBox* cb = new CheckBox(root, SGPUiShowAxis, &gaxis->fVisible);
-  new CheckBox(cb, SGPUiShowGrid, &gaxis->fShowGrid);
+  CheckBox* cb = new CheckBox(root, TR("Show &Axis"), &gaxis->fVisible);
+  new CheckBox(cb, TR("Show &Grid"), &gaxis->fShowGrid);
 	RoseDiagramAxis* rda = dynamic_cast<RoseDiagramAxis*>(gaxis);
 	if (0 != rda && rda->gap == GraphAxis::gapXRose) {
-      RadioGroup* rg = new RadioGroup(root, SGPUiRoseSize, (int*)&rda->deg, true);
+      RadioGroup* rg = new RadioGroup(root, TR("&Rose Size"), (int*)&rda->deg, true);
 			rg->Align(cb, AL_UNDER);
 		  new RadioButton(rg, "1&80°");
 		  new RadioButton(rg, "3&60°");
- 			rg = new RadioGroup(root, SGPUiGridStep, (int*)&rda->ds, true);
+ 			rg = new RadioGroup(root, TR("&Interval"), (int*)&rda->ds, true);
 	    new RadioButton(rg, "&30°");
 		  new RadioButton(rg, "&45°");
 		  new RadioButton(rg, "&90°");
@@ -642,15 +642,15 @@ void GraphAxisPage::Init()
 		if (gaxis->dvrs.fValues()) {
 			rrMinMax = RangeReal(gaxis->rMin(), gaxis->rMax());
 			rGridStep = gaxis->rGridStep();
-			FieldRangeReal* frr = new FieldRangeReal(root, SGPUiMinMax, &rrMinMax, ValueRange(-1e300, 1e300, gaxis->dvrs.rStep()));
+			FieldRangeReal* frr = new FieldRangeReal(root, TR("Min - Max"), &rrMinMax, ValueRange(-1e300, 1e300, gaxis->dvrs.rStep()));
 			frr->Align(cb, AL_UNDER);
-			new FieldReal(root, SGPUiGridStep, &rGridStep, ValueRange(0, 1e308, gaxis->dvrs.rStep()));
+			new FieldReal(root, TR("&Interval"), &rGridStep, ValueRange(0, 1e308, gaxis->dvrs.rStep()));
 		}
 		else if (0 != gaxis->ds) {
-			CheckBox* cbx = new CheckBox(root, SGPUiShowCodes, &gaxis->fShowCodes);
+			CheckBox* cbx = new CheckBox(root, TR("Show &Codes"), &gaxis->fShowCodes);
 			cbx->Align(cb, AL_UNDER);
 		}
-		FieldInt* fi = new FieldInt(root, SGPUiTextRotation, &gaxis->iTextRot, ValueRange(0,90), true);
+		FieldInt* fi = new FieldInt(root, TR("Text &Rotation"), &gaxis->iTextRot, ValueRange(0,90), true);
 		if (!gaxis->dvrs.fValues() && 0 == gaxis->ds) 
 			fi->Align(cb, AL_UNDER);
 	}
@@ -685,15 +685,15 @@ RoseDiagramAxisPage::RoseDiagramAxisPage(RoseDiagramAxis* ga, const String& sTit
 
 void RoseDiagramAxisPage::Init()
 {
-  FieldString* fs = new FieldString(root, SGPUiAxisText, &rdaxis->sTitle);
+  FieldString* fs = new FieldString(root, TR("Axis &Text"), &rdaxis->sTitle);
   fs->SetWidth(90);
-  CheckBox* cb = new CheckBox(root, SGPUiShowAxis, &rdaxis->fVisible);
-  new CheckBox(cb, SGPUiShowGrid, &rdaxis->fShowGrid);
+  CheckBox* cb = new CheckBox(root, TR("Show &Axis"), &rdaxis->fVisible);
+  new CheckBox(cb, TR("Show &Grid"), &rdaxis->fShowGrid);
 	rrMinMax = RangeReal(gaxis->rMin(), rdaxis->rMax());
 	rGridStep = rdaxis->rGridStep();
-  FieldRangeReal* frr = new FieldRangeReal(root, SGPUiMinMax, &rrMinMax, ValueRange(-1e300, 1e300, gaxis->dvrs.rStep()));
+  FieldRangeReal* frr = new FieldRangeReal(root, TR("Min - Max"), &rrMinMax, ValueRange(-1e300, 1e300, gaxis->dvrs.rStep()));
 	frr->Align(cb, AL_UNDER);
-	new FieldReal(root, SGPUiGridStep, &rGridStep, ValueRange(0, 1e308, rdaxis->dvrs.rStep()));
+	new FieldReal(root, TR("&Interval"), &rGridStep, ValueRange(0, 1e308, rdaxis->dvrs.rStep()));
 	create();
 }
 
@@ -706,7 +706,7 @@ int RoseDiagramAxisPage::exec()
 // GraphOptionsForm 
 
 GraphOptionsForm::GraphOptionsForm(GraphDrawer* grdrw)
-	: CPropertySheet(SGPTitleGraphOptions.scVal())
+	: CPropertySheet(TR("Graph Options").c_str())
 	, gd(grdrw), glmp(0), iGraphPropPages(0)
 {
 }
@@ -749,9 +749,9 @@ void GraphOptionsForm::Refill(int iActivePage)
 CartesianGraphOptionsForm::CartesianGraphOptionsForm(CartesianGraphDrawer* cgd, bool fAxisInfoOnly)
 : GraphOptionsForm(cgd)
 {
-	AddPage(new GraphAxisPage(cgd->gaxX, SGPTitleXAxis));
-	AddPage(new GraphAxisPage(cgd->gaxYLeft, SGPTitleYAxisLeft));
-	AddPage(new GraphAxisPage(cgd->gaxYRight, SGPTitleYAxisRight));
+	AddPage(new GraphAxisPage(cgd->gaxX, TR("X-Axis")));
+	AddPage(new GraphAxisPage(cgd->gaxYLeft, TR("Y-Axis (left)")));
+	AddPage(new GraphAxisPage(cgd->gaxYRight, TR("Y-Axis (right)")));
 	iGraphPropPages = 3;
 	if (fAxisInfoOnly)
 		return;
@@ -771,8 +771,8 @@ CartesianGraphOptionsForm::~CartesianGraphOptionsForm()
 RoseDiagramOptionsForm::RoseDiagramOptionsForm(RoseDiagramDrawer* rdd, bool fAxisInfoOnly)
 : GraphOptionsForm(rdd)
 {
-	AddPage(new RoseDiagramAxisPage(rdd->rdaxX, SGPTitleXAxis));
-	AddPage(new RoseDiagramAxisPage(rdd->rdaxY, SGPTitleYAxisRoseDiagram));
+	AddPage(new RoseDiagramAxisPage(rdd->rdaxX, TR("X-Axis")));
+	AddPage(new RoseDiagramAxisPage(rdd->rdaxY, TR("Y-Axis Rose Diagram")));
 	iGraphPropPages = 2;
 	if (fAxisInfoOnly)
 		return;

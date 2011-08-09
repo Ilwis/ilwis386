@@ -165,7 +165,7 @@ void RoseDiagramAxis::draw(CDC* cdc)
 						 textalign = TA_LEFT | TA_TOP;
 					 }
 					 int taOld = cdc->SetTextAlign(textalign);
-					 cdc->TextOut(p2.x+iXOff, p2.y+iYOff, s.scVal());
+					 cdc->TextOut(p2.x+iXOff, p2.y+iYOff, s.c_str());
 					 cdc->SetTextAlign(taOld);
 				 }
 			 }
@@ -200,7 +200,7 @@ void RoseDiagramAxis::draw(CDC* cdc)
 				 cdc->LineTo(p);
 				 s = sText(rMin(), false);
   			 s = s.sTrimSpaces();
-				 cdc->TextOut(p.x, p.y, s.scVal());
+				 cdc->TextOut(p.x, p.y, s.c_str());
 
 				 r = rFirstGridLine();
 				 while (r <= rMax()) {
@@ -211,12 +211,12 @@ void RoseDiagramAxis::draw(CDC* cdc)
 					 cdc->LineTo(p);
 					 s = sText(r, false);
   				 s = s.sTrimSpaces();
-					 cdc->TextOut(p.x, p.y, s.scVal());
+					 cdc->TextOut(p.x, p.y, s.c_str());
 					 p = rdd->ptPos(cp.x, cp.y+iL);
 					 cdc->MoveTo(p);
            p.y += gvw->iCharHeight/2;
 					 cdc->LineTo(p);
-					 cdc->TextOut(p.x, p.y, s.scVal());
+					 cdc->TextOut(p.x, p.y, s.c_str());
 					 r += rGridStep();
 				 }
 				 if (iTextRot > 0) 
@@ -231,7 +231,7 @@ void RoseDiagramAxis::draw(CDC* cdc)
 				 else  
 					 p = rdd->ptPos(cp.x-rLen(rMax()), cp.y);
 				 p.y -= 3*gvw->iCharHeight;
-				 cdc->TextOut(p.x, p.y, rdd->sTitle.scVal());
+				 cdc->TextOut(p.x, p.y, rdd->sTitle.c_str());
 				 cdc->SetTextAlign(textalign);
 */         
 			 }
@@ -331,13 +331,13 @@ void RoseDiagramAxis::SaveSettings(const FileName& fn, const String& sSection)
       case deg360: s = "Deg360"; break;
 		}
 		
-	  ObjectInfo::WriteElement(sSection.scVal(), "Degrees", fn, s);
+	  ObjectInfo::WriteElement(sSection.c_str(), "Degrees", fn, s);
 		switch (ds) {
       case ds30: s = "Grid30"; break;
       case ds45: s = "Grid45"; break;
       case ds90: s = "Grid90"; break;
 		}
-		ObjectInfo::WriteElement(sSection.scVal(), "Grid", fn, s);
+		ObjectInfo::WriteElement(sSection.c_str(), "Grid", fn, s);
 	}
 }
 
@@ -346,12 +346,12 @@ void RoseDiagramAxis::LoadSettings(const FileName& fn, const String& sSection)
 	GraphAxis::LoadSettings(fn, sSection);
 	if (gap == gapXRose) {
 		String s;
-		ObjectInfo::ReadElement(sSection.scVal(), "Degrees", fn, s);
+		ObjectInfo::ReadElement(sSection.c_str(), "Degrees", fn, s);
 		if (fCIStrEqual(s, "Deg180"))
 			deg = deg180;
 		else if (fCIStrEqual(s, "Deg360"))
 			deg = deg360;
-		ObjectInfo::ReadElement(sSection.scVal(), "Grid", fn, s);
+		ObjectInfo::ReadElement(sSection.c_str(), "Grid", fn, s);
 		if (fCIStrEqual(s, "Grid30"))
 			ds = ds30;
 		else if (fCIStrEqual(s, "Grid45"))
@@ -409,11 +409,11 @@ bool RoseDiagramAxis::fConfig()
     : FormWithDest(0, sTitle)
     {
       iImg = IlwWinApp()->iImage("Axis");
-      new CheckBox(root, SGPUiShowGrid, &rda->fShowGrid);
-      RadioGroup* rg = new RadioGroup(root, SGPUiRoseSize, (int*)&rda->deg, true);
+      new CheckBox(root, TR("Show &Grid"), &rda->fShowGrid);
+      RadioGroup* rg = new RadioGroup(root, TR("&Rose Size"), (int*)&rda->deg, true);
 		  new RadioButton(rg, "1&80°");
 		  new RadioButton(rg, "3&60°");
- 			rg = new RadioGroup(root, SGPUiGridStep, (int*)&rda->ds, true);
+ 			rg = new RadioGroup(root, TR("&Interval"), (int*)&rda->ds, true);
 	    new RadioButton(rg, "&30°");
 		  new RadioButton(rg, "&45°");
 		  new RadioButton(rg, "&90°");
@@ -424,7 +424,7 @@ bool RoseDiagramAxis::fConfig()
   switch (gap)
   {
     case gapXRose: 
-      sTitle = SGPTitleXAxisRoseDiagram; break;
+      sTitle = TR("X-Axis Rose Diagram"); break;
     default:
       return GraphAxis::fConfig();
   }

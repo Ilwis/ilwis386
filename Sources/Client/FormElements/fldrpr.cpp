@@ -151,13 +151,13 @@ int FieldRepresentationC::CreateRepresentation(void*)
     Representation rpr(fn);
     String s = "edit ";
     s &= fn.sFullPathQuoted();
-	IlwWinApp()->Execute(s); //        winExec(s.scVal(), SW_SHOWNORMAL);
+	IlwWinApp()->Execute(s); //        winExec(s.c_str(), SW_SHOWNORMAL);
   }
   return 0;
 }
 
 FormCreateRepresentation::FormCreateRepresentation(CWnd* wPar, String* str, const Domain& dom) :
-  FormWithDest(wPar, SRPTitleCreateRepresentation),
+  FormWithDest(wPar, TR("Create Representation")),
   sRpr(str),
   fdr(NULL)
 {
@@ -165,7 +165,7 @@ FormCreateRepresentation::FormCreateRepresentation(CWnd* wPar, String* str, cons
 	bool fOk = dom->pdc() || dom->pdv(); 
 	if (!fOk)
 	{
-		MessageBox(SRPErrOnlyCVdomRpr.sVal(), SRPErrError.sVal(), MB_OK | MB_ICONEXCLAMATION);
+		MessageBox(TR("Only Class and Value domains\ncan have a representation").c_str(), TR("Error").c_str(), MB_OK | MB_ICONEXCLAMATION);
 	    _fOkClicked = false;
 		return;
 	}
@@ -175,18 +175,18 @@ FormCreateRepresentation::FormCreateRepresentation(CWnd* wPar, String* str, cons
   sNewName = *sRpr;
   if (dom.fValid())
     sDom = dom->sName(true);
-  fdr = new FieldDataTypeCreate(root, SRPUiRprName, &sNewName, ".RPR", true);
+  fdr = new FieldDataTypeCreate(root, TR("&Representation Name"), &sNewName, ".RPR", true);
   fdr->SetCallBack((NotifyProc)&FormCreateRepresentation::CallBackName);
-  StaticText* st = new StaticText(root, SRPUiDescription);
+  StaticText* st = new StaticText(root, TR("&Description:"));
   st->psn->SetBound(0,0,0,0);
   FieldString* fs = new FieldString(root, "", &sDescr);
   fs->SetWidth(120);
   fs->SetIndependentPos();
   String sFill('*', 40);
-  fdom = new FieldDataType(root, SRPUiDomain, &sDom, new DomainLister(dmCLASS|dmVALUE|dmIMAGE),true);
+  fdom = new FieldDataType(root, TR("&Domain"), &sDom, new DomainLister(dmCLASS|dmVALUE|dmIMAGE),true);
   fdom->SetCallBack((NotifyProc)&FormCreateRepresentation::CallBackDomain);
 
-	fcCreateGradual = new CheckBox(root, SRPUiUsePercentages, &fCreateGradual);
+	fcCreateGradual = new CheckBox(root, TR("Use Percentages"), &fCreateGradual);
   stRemark = new StaticText(root, sFill);
   stRemark->SetIndependentPos();
   SetMenHelpTopic("ilwismen\\create_a_representation.htm");
@@ -208,8 +208,8 @@ int FormCreateRepresentation::exec()
   fn = FileName(*sRpr, ".rpr");
   bool fOk = dm->pdc() || dm->pdv(); 
   if (!fOk) {
-    char *s1=SRPErrOnlyCVdomRpr.sVal();
-    char *s2=SRPErrError.sVal();
+    const char *s1=TR("Only Class and Value domains\ncan have a representation").c_str();
+    const char *s2=TR("Error").c_str();
     MessageBox(s1, s2, MB_OK|MB_ICONINFORMATION);
     return 0;
   }
@@ -221,7 +221,7 @@ int FormCreateRepresentation::exec()
   }
   catch (ErrorObject& err) {
     _fOkClicked = false;
-    err.Show(SUITitleCreateRPR);
+    err.Show(TR("Create Representation"));
   }
   return 0;
 }
@@ -232,9 +232,9 @@ int FormCreateRepresentation::CallBackName(Event *)
   FileName fn(sNewName, ".rpr");
   bool fOk = false;
   if (!fn.fValid())
-    stRemark->SetVal(SRPRemNotValidRprName);
+    stRemark->SetVal(TR("Not a valid representation name"));
   else if(File::fExist(fn))   
-    stRemark->SetVal(SRPRemRprAlreadyExists);
+    stRemark->SetVal(TR("Representation already exists"));
   else {
     fOk = true;  
     stRemark->SetVal("");

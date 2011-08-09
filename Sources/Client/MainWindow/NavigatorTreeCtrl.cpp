@@ -265,7 +265,7 @@ void NavigatorTreeCtrl::ExpandPath(HTREEITEM hti, const String& sP)
 	
 	sPath &= "\\*.*";
   CFileFind finder;
-  BOOL fFound = finder.FindFile(sPath.scVal());
+  BOOL fFound = finder.FindFile(sPath.c_str());
 	while (fFound) {
 		fFound = finder.FindNextFile();
 		if (finder.IsHidden())
@@ -309,7 +309,7 @@ void NavigatorTreeCtrl::OnUpdateCmdUI()
 
 	HTREEITEM hti = TVI_ROOT;
 	char sPath[MAXPATH];
-	strcpy(sPath, sDir.scVal());
+	strcpy(sPath, sDir.c_str());
 	FileName fnDir;
 	fnDir.sExt = "directory";
 	int iLen = strlen(sPath);
@@ -357,7 +357,7 @@ void NavigatorTreeCtrl::OnLButtonDblClk(UINT nFlags, CPoint point)
 		IlwWinApp()->Execute(cmd);
 	}
 	else
-		IlwWinApp()->OpenDirectory(fn.sFile.scVal());
+		IlwWinApp()->OpenDirectory(fn.sFile.c_str());
 }
 
 BOOL NavigatorTreeCtrl::PreTranslateMessage(MSG* pMsg) 
@@ -370,7 +370,7 @@ BOOL NavigatorTreeCtrl::PreTranslateMessage(MSG* pMsg)
 				HTREEITEM hti = GetSelectedItem();
 				int iNr = GetItemData(hti);
 				const FileName& fn = afn[abs(iNr)-1];
-				IlwWinApp()->OpenDirectory(fn.sFile.scVal());
+				IlwWinApp()->OpenDirectory(fn.sFile.c_str());
 			} // fall through
 			case VK_ESCAPE:
 //				ShowWindow(SW_HIDE);
@@ -394,9 +394,9 @@ void NavigatorTreeCtrl::OnLButtonDown(UINT nFlags, CPoint point)
 		const FileName& fn = afn[abs(iNr)-1];
 		SelectItem(hti);
 		SetFocus();
-		CDocument *doc = IlwWinApp()->OpenDirectory(fn.sFile.scVal());
+		CDocument *doc = IlwWinApp()->OpenDirectory(fn.sFile.c_str());
 		if ( doc == NULL )
-			IlwWinApp()->OpenNewDirectory(fn.sFile.scVal());
+			IlwWinApp()->OpenNewDirectory(fn.sFile.c_str());
 	}
 	else
 		CTreeCtrl::OnLButtonDown(nFlags, point);
@@ -406,7 +406,7 @@ void NavigatorTreeCtrl::AddToHistoryNode(const String& sFn)
 {
 	int iImgDir = IlwWinApp()->iImage("directory");
 	TVITEM tvi;
-	tvi.hItem = InsertItem(sFn.scVal(), iImgDir, iImgDir, htiHistory, TVI_FIRST);
+	tvi.hItem = InsertItem(sFn.c_str(), iImgDir, iImgDir, htiHistory, TVI_FIRST);
 	FileName fn;
 	fn.sExt = "directory";
 	fn.sFile = sFn;
@@ -425,7 +425,7 @@ void NavigatorTreeCtrl::AddToWMSNode(const String& sUrl)
 	lsWMSUrls.push_front(sUrl);
 	int iImgDir = IlwWinApp()->iImage(".mpl");
 	TVITEM tvi;
-	tvi.hItem = InsertItem(sUrl.scVal(), iImgDir, iImgDir, htiWMS, TVI_FIRST);
+	tvi.hItem = InsertItem(sUrl.c_str(), iImgDir, iImgDir, htiWMS, TVI_FIRST);
 	FileName fn;
 	fn.sExt = "url";
 	fn.sFile = sUrl;
@@ -441,7 +441,7 @@ void NavigatorTreeCtrl::AddToUrlNode(HTREEITEM hti, const FileName& fn)
 	}
 	int iImgDir = IlwWinApp()->iImage(".ioc");
 	TVITEM tvi;
-	tvi.hItem = InsertItem(fn.sFile.scVal(), iImgDir, iImgDir, hti, TVI_FIRST);
+	tvi.hItem = InsertItem(fn.sFile.c_str(), iImgDir, iImgDir, hti, TVI_FIRST);
 	afn &= FileName(fn);
 	SetItemData(tvi.hItem, afn.iSize());
 }
@@ -543,16 +543,16 @@ BOOL NavigatorTreeCtrl::OnDrop(COleDataObject* pDataObject, DROPEFFECT dropEffec
 	return TRUE;
 }
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define pmadd(ID) men.AppendMenu(MF_STRING, ID, sMen(ID));
 class NameForm : public FormWithDest
 {
 public:
 	NameForm(CWnd *par, String& sUrl, String& version) :
-	  FormWithDest(par, SMWMSTitle)
+	  FormWithDest(par, TR("WMS GetCapabilities Request"))
 	  {
 
-		FieldStringMulti *fs = new FieldStringMulti(root, SMWMsgWMSName, &sUrl);
+		FieldStringMulti *fs = new FieldStringMulti(root, TR("WMS Server"), &sUrl);
 		zDimension dim = fs->Dim("gk");
 		fs->SetWidth((short)(13 * dim.width()));
 		fs->SetHeight((short)(4 * dim.height()));
@@ -692,9 +692,9 @@ void NavigatorTreeCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
 					{
 					public:
 						NameForm(CWnd *par, String& sDirName) :
-							FormWithDest(par, SMSTitleNewDirectory)
+							FormWithDest(par, TR("New Directory"))
 						{
-							FieldString *fs = new FieldString(root, SMWMsgDirName, &sDirName);
+							FieldString *fs = new FieldString(root, TR("Directory Name"), &sDirName);
 							create();
 
 						}							

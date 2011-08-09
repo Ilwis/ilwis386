@@ -375,9 +375,9 @@ class EditFieldForm: public FormWithDest
 {
 public:
   EditFieldForm(CWnd* parent, long* iVal)
-  : FormWithDest(parent, SFLTitleEditFields)
+  : FormWithDest(parent, TR("Edit Fields"))
   {
-    new FieldInt(root, SFLUiValue.scVal(), iVal);
+    new FieldInt(root, TR("&Value").c_str(), iVal);
   	new FieldBlank(root);
 //		setHelpItem("ilwismen\table_window_edit_single_column.htm");
     create();
@@ -415,7 +415,7 @@ void LinearFilterView::OnEdit()
 	}
 }
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define add(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 #define addBreak men.AppendMenu(MF_SEPARATOR);
 

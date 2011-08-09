@@ -86,8 +86,8 @@ String HelpFinder::getTitle(int index, const String& s) {
 
 void HelpFinder::indexFile(const FileName& fn) {
 	struct __stat64 fileStat; 
-	int err = _stat64( fn.sFullPath().scVal(), &fileStat );
-	FILE *fp = fopen(fn.sFullPath().scVal(), "rb");
+	int err = _stat64( fn.sFullPath().c_str(), &fileStat );
+	FILE *fp = fopen(fn.sFullPath().c_str(), "rb");
 	char * buffer = new char[fileStat.st_size + 1];
 	fread(buffer, 1, fileStat.st_size,fp);
 	fclose(fp);
@@ -161,7 +161,7 @@ void HelpFinder::startIndexing() {
 			indexedWords[word] = (*cur).second;
 			indexedWords[word].word = word;
 		} else {
-			TRACE(String("%S(%d) >> ",(*cur).first, (*cur).second.count).scVal());
+			TRACE(String("%S(%d) >> ",(*cur).first, (*cur).second.count).c_str());
 
 		}
 	}

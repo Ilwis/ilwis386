@@ -102,7 +102,7 @@ BEGIN_MESSAGE_MAP(GeoRefEditor, TiePointEditor)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define addmen(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 
 GeoRefEditor::GeoRefEditor(MapPaneView* mpvw, GeoRef georef)
@@ -110,7 +110,7 @@ GeoRefEditor::GeoRefEditor(MapPaneView* mpvw, GeoRef georef)
 {
 	grc = georef->pgCTP();
 	if (0 == grc) {
-		mpv->MessageBox(SGRErrGrfNotEditable.sVal(),SGRErrGrfEditor.sVal(),MB_OK|MB_ICONSTOP);
+		mpv->MessageBox(TR("GeoReference not editable").c_str(),TR("GeoReference Editor").c_str(),MB_OK|MB_ICONSTOP);
 		fOk = false;
 		return;
 	}
@@ -250,7 +250,7 @@ GeoRefEditor::GeoRefEditor(MapPaneView* mpvw, GeoRef georef)
 	CRect rectBB;
 	rectBB.SetRect(2,1,2,1);
 	bbTxt.CreateEx(mpv->GetParentFrame(), dwCtrlStyle, dwStyle, rectBB, 201);
-	bbTxt.SetWindowText(SGRTitleInfoBar.scVal());
+	bbTxt.SetWindowText(TR("Quality Information").c_str());
 	bbTxt.GetToolBarCtrl().SetImageList(&ilReBar);
 	// without button the toolbar gets no height
 	// the width of a button can not be changed
@@ -353,7 +353,7 @@ zIcon GeoRefEditor::icon() const
 
 String GeoRefEditor::sTitle() const
 {
-	String s(SGRTitleGrfEditor_s.sVal(), grf->sName());
+	String s(TR("GeoReference Editor: %S").c_str(), grf->sName());
 	return s;
 }
 
@@ -420,27 +420,27 @@ class AddTiePointForm: public FormWithDest
 public: 
 	AddTiePointForm(CWnd* wPar, GeoRefEditor* gre, RowCol rcDflt, Coord crdRCDflt, 
 		Coord crdDflt, int iNr, bool fLatLong)  
-		: FormWithDest(wPar, SGRTitleAddTiePoint),
+		: FormWithDest(wPar, TR("Add Tie Point")),
 		edit(gre), rc(rcDflt), crdRC(crdRCDflt), crd(crdDflt), frDTMheight(0)
 	{
-		String s(SGRRemAddTiepointNr_i.sVal(), iNr);
+		String s(TR("Add Tiepoint number %i").c_str(), iNr);
 		StaticText* st = new StaticText(root, s);
 		st->SetIndependentPos();
 		if (!gre->grc->fHasSubpixelPrecision())
-			new FieldRowCol(root, SGRUiRowCol, &rc);
+			new FieldRowCol(root, TR("&Row, Col"), &rc);
 		else
-			new FieldCoord(root, SGRUiRowCol, &crdRC);
+			new FieldCoord(root, TR("&Row, Col"), &crdRC);
 		//edit->fLatLon = ( 0 != edit->grc->cs()->pcsLatLon());
 		if (!fLatLong)
-			fldCrd = new FieldCoord(root, SGRUiXY, &crd);
+			fldCrd = new FieldCoord(root, TR("&X, Y"), &crd);
 		else {
 			ll = edit->grc->cs()->llConv(crd);
-			fldLL = new FieldLatLon(root, SGRUiLatLon, &ll);
+			fldLL = new FieldLatLon(root, TR("&Lat, Lon"), &ll);
 		}
 		fZ = false;
 		rZ = rUNDEF;
 		if (edit->mapDTM.fValid()) {
-			CheckBox* cb = new CheckBox(root, SGRUiZ, &fZ);
+			CheckBox* cb = new CheckBox(root, TR("&Z"), &fZ);
 			frDTMheight = new FieldReal(cb, "", &rZ);
 		}
 		SetMenHelpTopic("ilwismen\\georeference_tiepoints_editor_add_tiepoint.htm");
@@ -664,10 +664,10 @@ void GeoRefEditor::Calc()
 			switch (iRes) {
 				case -1:
 				case -2:
-					edTxt.SetWindowText(SGRRemNotEnoughPoints.scVal());
+					edTxt.SetWindowText(TR("Not enough points").c_str());
 					break;
 				case -3:
-					edTxt.SetWindowText(SGRRemSingularMatrix.scVal());
+					edTxt.SetWindowText(TR("Singular Matrix").c_str());
 					break;
 				case -4:
 					edTxt.SetWindowText("Incorrect Heights");
@@ -676,7 +676,7 @@ void GeoRefEditor::Calc()
 					edTxt.SetWindowText("No valid DTM");
 					break;
 				default:  
-					edTxt.SetWindowText(SGRRemError.scVal());
+					edTxt.SetWindowText(TR("Error").c_str());
 					break;
 			}    
 			for (int i = 1; i <= grc->iNr(); ++i) {
@@ -729,7 +729,7 @@ void GeoRefEditor::Calc()
 				}
 				else {
 					rSigma = sqrt(rSigma / (2 * (iNr - grc->iMinNr())));
-					s = String(SGRRemSigma_f.sVal(), rSigma);
+					s = String(TR("Sigma = %6.3f pixels").c_str(), rSigma);
 				}
 				GeoRefCTPplanar* grcp = grc->pgCTPplanar();
 				if (grcp != 0)
@@ -767,7 +767,7 @@ void GeoRefEditor::Calc()
 					Coord cPP = grop->crdGetPrincipalPoint();
 					s &= String("  Princ. Point: row %.1f, col %.1f " , cPP.x, cPP.y);
 				}
-				edTxt.SetWindowText(s.scVal());
+				edTxt.SetWindowText(s.c_str());
 			}
 			else {
 				edTxt.SetWindowText("");
@@ -872,9 +872,9 @@ void GeoRefEditor::OnDelPoint()
 	{
 	public:
 		DelTiePointForm(CWnd* wPar, int* iNr, const RangeInt& ri)
-			: FormWithDest(wPar, SGRTitleDelTiePoint)
+			: FormWithDest(wPar, TR("Delete Tie Point"))
 		{
-			fi = new FieldInt(root, SGRUiTiePointNumber, iNr, ri);
+			fi = new FieldInt(root, TR("&Tiepoint number"), iNr, ri);
 			SetMenHelpTopic("ilwismen\\georeference_tiepoints_editor_delete_tiepoint.htm");
 			create();
 		}
@@ -915,15 +915,15 @@ void GeoRefEditor::OnTransformation()
 	{
 	public:
 		TransfForm(CWnd* wPar, int* transf)
-			: FormWithDest(wPar, SGRTitleTransf)
+			: FormWithDest(wPar, TR("Transformation"))
 		{ // same sequence as in enum GeoRefCTP::Transf
-			RadioGroup* rg = new RadioGroup(root, SGRUiTransf, transf);
-			new RadioButton(rg, SGRUiConform);
-			new RadioButton(rg, SGRUiAffine);
-			new RadioButton(rg, SGRUiSecondOrder);
-			new RadioButton(rg, SGRUiFullSecondOrder);
-			new RadioButton(rg, SGRUiThirdOrder);
-			new RadioButton(rg, SGRUiProjective);
+			RadioGroup* rg = new RadioGroup(root, TR("Transformation:"), transf);
+			new RadioButton(rg, TR("&Conformal"));
+			new RadioButton(rg, TR("&Affine"));
+			new RadioButton(rg, TR("&Second Order Bilinear"));
+			new RadioButton(rg, TR("&Full Second Order"));
+			new RadioButton(rg, TR("&Third Order"));
+			new RadioButton(rg, TR("&Projective"));
 			//    setHelpItem("ilwis\georeference_tiepoints_editor.htm");
 			SetMenHelpTopic("ilwismen\\georeference_tiepoints_editor_transformation.htm");
 			create();
@@ -945,15 +945,15 @@ class GreConfigForm: public FormWithDest
 {
 public:
 	GreConfigForm(CWnd* parent, GeoRefEditor* gre)
-		: FormWithDest(parent, SGRTitleConfGrfEditor)
+		: FormWithDest(parent, TR("Customize GeoRefEditor"))
 	{
-		new FieldColor(root, SGRUiActGoodColor, &gre->colActGood);
-		new FieldColor(root, SGRUiActMedColor, &gre->colActive);
-		new FieldColor(root, SGRUiActBadColor, &gre->colActBad);
-		new FieldColor(root, SGRUiPassiveColor, &gre->colPassive);
+		new FieldColor(root, TR("&Active Color"), &gre->colActGood);
+		new FieldColor(root, TR("&Medium Error"), &gre->colActive);
+		new FieldColor(root, TR("&Large Error"), &gre->colActBad);
+		new FieldColor(root, TR("&Passive Color"), &gre->colPassive);
 		if (0 != gre->efmf)
-			new FieldColor(root, SGRUiFidMarkColor, &gre->efmf->colFidMarks);
-		new FieldInt(root, SGRUiSmbSize, &gre->smb.iSize, ValueRange(1L,100L),true);
+			new FieldColor(root, TR("&Fiducial Marks Color"), &gre->efmf->colFidMarks);
+		new FieldInt(root, TR("Symbol &Size"), &gre->smb.iSize, ValueRange(1L,100L),true);
 		SetMenHelpTopic("ilwismen\\georeference_tiepoints_editor_customize.htm");
 		create();
 	}
