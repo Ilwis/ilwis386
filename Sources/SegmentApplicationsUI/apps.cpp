@@ -74,25 +74,25 @@ InfoUIVector* getCommandInfoUI(ILWIS::Module *module) {
 	String ilwDir = IlwWinApp()->Context()->sIlwDir();
 	
 
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("attribseg","",Cmdattribseg,SMENUattribseg,SMENUSattribseg,"ExeSeg16IcoL",".mps",4822,SMENUDattribseg));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("maskseg","",Cmdmaskseg,SMENUmaskseg,SMENUSmaskseg,"ExeSeg16IcoL",".mps",4812,SMENUDmaskseg));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("labelseg","",Cmdlabelseg,SMENUlabelseg,SMENUSlabelseg,"ExeSeg16IcoL",".mps",4832,SMENUDlabelseg));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("subseg","",Cmdsubseg,SMENUsubseg,SMENUSsubseg,"ExeSeg16IcoL",".mps",4862,SMENUDsubseg));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("glueseg","",Cmdglueseg,SMENUglueseg,SMENUSglueseg,"ExeSeg16IcoL",".mps",4882,SMENUDglueseg));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("densseg","",Cmddensseg,SMENUdensseg,SMENUSdensseg,"ExeSeg16IcoL",".mps",4872,SMENUDdensseg));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("transfseg","",Cmdtransfseg,SMENUtransfseg,SMENUStransfseg,"ExeSeg16IcoL",".mps.csy",4842,SMENUDtransfseg));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("tunnelseg","",Cmdtunnelseg,SMENUtunnelseg,SMENUStunnelseg,"ExeSeg16IcoL",".mps",4852,SMENUDtunnelseg));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("cleanseg","",Cmdcleanseg,SMENUcleanseg,SMENUScleanseg,"ExeSeg16IcoL",".mps",4802,SMENUDcleanseg));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("polseg","",Cmdpolseg,SMENUpolseg,SMENUSpolseg,"ExeSeg16IcoL",".mpa",4892,SMENUDpolseg));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("rasseg","",Cmdrasseg,SMENUrasseg,SMENUSrasseg,"ExeSeg16IcoL",".mpr",4902,SMENUDrasseg));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("attribseg","",Cmdattribseg,TR("&Segment Operations..&Attribute Map"),TR("Attribute Map of Segment Map "),"ExeSeg16IcoL",".mps",4822,TR("Create an attribute segment map")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("maskseg","",Cmdmaskseg,TR("&Segment Operations..&Mask Segments"),TR("Mask Segments "),"ExeSeg16IcoL",".mps",4812,TR("Selectively copy segments from a segment map into a new segment map")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("labelseg","",Cmdlabelseg,TR("&Segment Operations..Assign &Labels"),TR("Labels to Segments "),"ExeSeg16IcoL",".mps",4832,TR("Recode segments according to label points")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("subseg","",Cmdsubseg,TR("&Spatial Reference Operations.&Vector.&Sub Map"),TR("SubMap of Segment Map "),"ExeSeg16IcoL",".mps",4862,TR("Copy part of a segment map into a new map")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("glueseg","",Cmdglueseg,TR("&Segment Operations..&Glue Maps"),TR("Glue Segment Maps "),"ExeSeg16IcoL",".mps",4882,TR("Glue multiple segment maps into one segment map")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("densseg","",Cmddensseg,TR("&Segment Operations..&Densify Coordinates"),TR("Densify Segment Coordinates "),"ExeSeg16IcoL",".mps",4872,TR("Add more intermediate points in the segments of a segment map")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("transfseg","",Cmdtransfseg,TR("&Spatial Reference Operations.&Vector.&Transform Segments"),TR("Transform Segments "),"ExeSeg16IcoL",".mps.csy",4842,TR("Transform segments to a new coordinate system")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("tunnelseg","",Cmdtunnelseg,TR("&Segment Operations..T&unneling"),TR("Tunnel Segments "),"ExeSeg16IcoL",".mps",4852,TR("Reduce the number of intermediate points in the segments")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("cleanseg","",Cmdcleanseg,TR("&Segment Operations..&Clean Segments"),TR("Clean Segments"),"ExeSeg16IcoL",".mps",4802,TR("Clean segments: remove double segments/insert nodes")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("polseg","",Cmdpolseg,TR("V&ectorize..&Polygon to Segment"),TR("Polygon to Segment "),"ExeSeg16IcoL",".mpa",4892,TR("Extract boundaries from a polygon map")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("rasseg","",Cmdrasseg,TR("V&ectorize..&Raster to Segment"),TR("Raster to Segment "),"ExeSeg16IcoL",".mpr",4902,TR("Extract boundaries from a raster map and return a segment map")));
 
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("intersectseg","",Cmdsegmentmapintersect,SMENUsintersection,SMENUSsintersection,"ExeSeg16IcoL",".mpa.mps",0,SMENUDsintersection));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("unionseg","",Cmdsegmentmapunion,SMENUsunion,SMENUSsunion,"ExeSeg16IcoL",".mpa.mps",0,SMENUDsunion));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("diffseg","",Cmdsegmentmapdifference,SMENUsdifference,SMENUSsdifference,"ExeSeg16IcoL",".mpa.mps",0,SMENUDsdifference));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("voronoi","",Cmdsegmentmapvoronoi,SMENUvoronoi,SMENUSvoronoi,"ExeSeg16IcoL",".mpp",0,SMENUDvoronoi));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("symdiffseg","",Cmdsegmentmapsymetricdifference,SMENUssymetricdifference,SMENUSssymetricdifference,"ExeSeg16IcoL",".mpa.mps",0,SMENUDssymetricdifference));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("relateseg","",Cmdsegmentmaprelate,SMENUsegrelate,SMENUSsegrelate,"ExeSeg16IcoL",".mps",0,SMENUDsegrelate));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("tin","",Cmdsegmentmaptin,SMENUsegTIN,SMENUSsegTIN,"ExeSeg16IcoL",".mps",0,SMENUDsegTIN));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("intersectseg","",Cmdsegmentmapintersect,TR("&Segment Operations..&Intersection"),TR("Intersection of Segments"),"ExeSeg16IcoL",".mpa.mps",0,TR("Create a new Segment map by intersecting two Segment maps")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("unionseg","",Cmdsegmentmapunion,TR("&Segment Operations..&Union"),TR("Segment Union"),"ExeSeg16IcoL",".mpa.mps",0,TR("Create a new Segment map by Union of the Segments of two Segment maps")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("diffseg","",Cmdsegmentmapdifference,TR("&Segment Operations..&Difference"),TR("Difference of Segments"),"ExeSeg16IcoL",".mpa.mps",0,TR("Create a new Segment map by difference of the Segments of two Segment maps")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("voronoi","",Cmdsegmentmapvoronoi,TR("&Segment Operations..&Voronoi map"),TR("Voronoi map of a point map"),"ExeSeg16IcoL",".mpp",0,TR("Create a Voronoi map from a pointmap")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("symdiffseg","",Cmdsegmentmapsymetricdifference,TR("&Segment Operations..&Symetric Difference"),TR("Symetric Difference of Segments"),"ExeSeg16IcoL",".mpa.mps",0,TR("Create a new Segment map by the symetric difference of the Segments of two Segment maps")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("relateseg","",Cmdsegmentmaprelate,TR("&Segment Operations..&Relate"),TR("Spatial Relation"),"ExeSeg16IcoL",".mps",0,TR("Create a segment map out of spatial relation(s) with other feature maps")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("tin","",Cmdsegmentmaptin,TR("&Segment Operations..&TIN"),TR("Triangulated Irregular Network(TIN)"),"ExeSeg16IcoL",".mps",0,TR("Create a Triangulated Irregular Network from a pointmap")));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("isolines","",Cmdsegmentisoline,TR("&Segment Operations..&Iso Lines"),TR("Iso lines"),"ExeSeg16IcoL",".mps",0,TR("Creates Iso lines from a value raster map")));
 
 return infosui;

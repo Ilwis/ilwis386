@@ -40,12 +40,12 @@
 
 LRESULT Cmdsegmentmaptin(CWnd *wnd, const String& s)
 {
-	new FormSegmentMapTIN(wnd, s.scVal());
+	new FormSegmentMapTIN(wnd, s.c_str());
 	return -1;
 }
 
 FormSegmentMapTIN::FormSegmentMapTIN(CWnd* mw, const char* sPar)
-: FormSegmentMapCreate(mw, SAFTilteSegmentMapTIN),convex(false)
+: FormSegmentMapCreate(mw, TR("Create a TIN of a pointmap")),convex(false)
 {
 	if (sPar)
 	{
@@ -64,8 +64,8 @@ FormSegmentMapTIN::FormSegmentMapTIN(CWnd* mw, const char* sPar)
 				sOutMap = fn.sFullName(true);
 		}
 	}
-	new FieldDataType(root, SAFUiFirstInput, &sInMap1, ".mpp", true);
-	new CheckBox(root, SAFUiUseConvexHull,&convex);
+	new FieldDataType(root, TR("First Input map"), &sInMap1, ".mpp", true);
+	new CheckBox(root, TR("Use Convex hull"),&convex);
 	
 	new FieldBlank(root);
 			

@@ -39,12 +39,12 @@
 
 LRESULT Cmdsegmentmapsymetricdifference(CWnd *wnd, const String& s)
 {
-	new FormSegmentMapSymetricDifferenceion(wnd, s.scVal());
+	new FormSegmentMapSymetricDifferenceion(wnd, s.c_str());
 	return -1;
 }
 
 FormSegmentMapSymetricDifferenceion::FormSegmentMapSymetricDifferenceion(CWnd* mw, const char* sPar)
-: FormSegmentMapCreate(mw, SAFTilteSegmentMapSymetricDifference)
+: FormSegmentMapCreate(mw, TR("Create a symetric difference map of Segments"))
 {
 	if (sPar)
 	{
@@ -63,8 +63,8 @@ FormSegmentMapSymetricDifferenceion::FormSegmentMapSymetricDifferenceion(CWnd* m
 				sOutMap = fn.sFullName(true);
 		}
 	}
-	new FieldDataType(root, SAFUiFirstInput, &sInMap1, ".mpa.mps", true);
-	new FieldDataType(root, SAFUiSecondInput, &sInMap2, ".mpa.mps", true);
+	new FieldDataType(root, TR("First Input map"), &sInMap1, ".mpa.mps", true);
+	new FieldDataType(root, TR("Second Input map"), &sInMap2, ".mpa.mps", true);
 	
 	new FieldBlank(root);
 			

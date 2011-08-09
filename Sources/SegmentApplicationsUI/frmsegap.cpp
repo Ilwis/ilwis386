@@ -143,7 +143,7 @@
  * prevent warning of casting from a pointer to a bool
  * 
  * 7     14-03-00 18:33 Hendrikse
- * replaced SAFUiDistanceInDegrees by SAFUiDistance
+ * replaced TR("Distance (deg,min,sec)") by TR("&Distance")
  * 
  * 6     14-03-00 13:16 Hendrikse
  * added callbacks etc for FieldDMS* use with densif dist in degrees
@@ -218,12 +218,12 @@
 
 LRESULT Cmdattribseg(CWnd *wnd, const String& s)
 {
-	new FormAttributeSegmentMap(wnd, s.scVal());
+	new FormAttributeSegmentMap(wnd, s.c_str());
 	return -1;
 }
 
 FormAttributeSegmentMap::FormAttributeSegmentMap(CWnd* mw, const char* sPar)
-: FormSegmentMapCreate(mw, SAFTitleAttribSegMap)
+: FormSegmentMapCreate(mw, TR("Attribute Map of Segment Map"))
 {
   if (sPar) {
     TextInput ip(sPar);
@@ -242,12 +242,12 @@ FormAttributeSegmentMap::FormAttributeSegmentMap(CWnd* mw, const char* sPar)
           sOutMap = fn.sFullName(false);
     }
   }
-  fldSegmentMap = new FieldSegmentMap(root, SAFUiSegMap, &sSegmentMap,
+  fldSegmentMap = new FieldSegmentMap(root, TR("&Segment Map"), &sSegmentMap,
   	                                  new MapListerDomainType(".mps", dmCLASS | dmIDENT | dmGROUP | dmBOOL | dmUNIQUEID));
   fldSegmentMap->SetCallBack((NotifyProc)&FormAttributeSegmentMap::SegmentMapCallBack);
-  fldTbl = new FieldTable(root, SAFUiTable, &sTbl);
+  fldTbl = new FieldTable(root, TR("&Table"), &sTbl);
   fldTbl->SetCallBack((NotifyProc)&FormAttributeSegmentMap::TblCallBack);
-  fldCol = new FieldColumn(root, SAFUiAttribute, Table(), &sCol,
+  fldCol = new FieldColumn(root, TR("&Attribute"), Table(), &sCol,
     dmCLASS|dmIDENT|dmUNIQUEID|dmVALUE|dmBOOL);
   fldCol->SetCallBack((NotifyProc)&FormAttributeSegmentMap::ColCallBack);
   stColRemark = new StaticText(root, String('x',50));
@@ -330,12 +330,12 @@ int FormAttributeSegmentMap::ColCallBack(Event*)
 
 LRESULT Cmdtunnelseg(CWnd *wnd, const String& s)
 {
-	new FormSegmentMapTunneling(wnd, s.scVal());
+	new FormSegmentMapTunneling(wnd, s.c_str());
 	return -1;
 }
 
 FormSegmentMapTunneling::FormSegmentMapTunneling(CWnd* mw, const char* sPar)
-: FormSegmentMapCreate(mw, SAFTitleTunnelSegMap)
+: FormSegmentMapCreate(mw, TR("Tunnel Segments"))
 {
   if (sPar) {
     TextInput ip(sPar);
@@ -354,11 +354,11 @@ FormSegmentMapTunneling::FormSegmentMapTunneling(CWnd* mw, const char* sPar)
           sOutMap = fn.sFullName(false);
     }
   }
-  new FieldSegmentMap(root, SAFUiSegMap, &sSegmentMap, new MapListerDomainType(".mps", 0, false));
+  new FieldSegmentMap(root, TR("&Segment Map"), &sSegmentMap, new MapListerDomainType(".mps", 0, false));
   rTunnelWidth = 1.0;
-  new FieldReal(root, SAFUiTunnelWidth, &rTunnelWidth, ValueRangeReal(0, 1e6, 0));
+  new FieldReal(root, TR("&Tunnel Width"), &rTunnelWidth, ValueRangeReal(0, 1e6, 0));
   fRemoveNodes = false;
-  CheckBox* cb = new CheckBox(root, SAFUIRemoveNodes, &fRemoveNodes);
+  CheckBox* cb = new CheckBox(root, TR("&Remove Superfluous Nodes"), &fRemoveNodes);
   cb->SetIndependentPos();
   initSegmentMapOut(false);
   SetHelpItem("ilwisapp\\tunnel_segments_dialogbox.htm");
@@ -380,12 +380,12 @@ int FormSegmentMapTunneling::exec()
 
 LRESULT Cmdlabelseg(CWnd *wnd, const String& s)
 {
-	new FormSegmentMapLabels(wnd, s.scVal());
+	new FormSegmentMapLabels(wnd, s.c_str());
 	return -1;
 }
 
 FormSegmentMapLabels::FormSegmentMapLabels(CWnd* mw, const char* sPar)
-: FormSegmentMapCreate(mw, SAFTitleLabelSegMap)
+: FormSegmentMapCreate(mw, TR("Assign Labels to Segments"))
 {
   if (sPar) {
     TextInput ip(sPar);
@@ -404,8 +404,8 @@ FormSegmentMapLabels::FormSegmentMapLabels(CWnd* mw, const char* sPar)
           sOutMap = fn.sFullName(false);
     }
   }
-  new FieldSegmentMap(root, SAFUiSegMap, &sSegmentMap);
-  new FieldPointMap(root, SAFUiLabelPnts, &sLabels, new MapListerDomainType(".mpp", 0/*dmVALUE|dmCLASS|dmIDENT|dmBOOL*/, true));
+  new FieldSegmentMap(root, TR("&Segment Map"), &sSegmentMap);
+  new FieldPointMap(root, TR("&Label Points"), &sLabels, new MapListerDomainType(".mpp", 0/*dmVALUE|dmCLASS|dmIDENT|dmBOOL*/, true));
   initSegmentMapOut(false);
   SetHelpItem("ilwisapp\\assign_labels_to_segments_dialog_box.htm");
   create();
@@ -428,12 +428,12 @@ int FormSegmentMapLabels::exec()
 
 LRESULT Cmdmaskseg(CWnd *wnd, const String& s)
 {
-	new FormSegmentMapMask(wnd, s.scVal());
+	new FormSegmentMapMask(wnd, s.c_str());
 	return -1;
 }
 
 FormSegmentMapMask::FormSegmentMapMask(CWnd* mw, const char* sPar)
-: FormSegmentMapCreate(mw, SAFTitleMaskSegMap)
+: FormSegmentMapCreate(mw, TR("Mask Segments"))
 {
   if (sPar) {
     TextInput ip(sPar);
@@ -452,8 +452,8 @@ FormSegmentMapMask::FormSegmentMapMask(CWnd* mw, const char* sPar)
           sOutMap = fn.sFullName(false);
     }
   }
-  new FieldSegmentMap(root, SAFUiSegMap, &sSegmentMap, new MapListerDomainType(".mps", 0, false));
-  new FieldString(root, SAFUiMask, &sMask, Domain(), false);
+  new FieldSegmentMap(root, TR("&Segment Map"), &sSegmentMap, new MapListerDomainType(".mps", 0, false));
+  new FieldString(root, TR("&Mask"), &sMask, Domain(), false);
   initSegmentMapOut(false);
   SetHelpItem("ilwisapp\\mask_segments_dialogbox.htm");
   create();
@@ -474,12 +474,12 @@ int FormSegmentMapMask::exec()
 
 LRESULT Cmdcleanseg(CWnd *wnd, const String& s)
 {
-	new FormSegmentMapCleaning(wnd, s.scVal());
+	new FormSegmentMapCleaning(wnd, s.c_str());
 	return -1;
 }
 
 FormSegmentMapCleaning::FormSegmentMapCleaning(CWnd* mw, const char* sPar)
-: FormSegmentMapCreate(mw, SAFTitleCleanSegMap)
+: FormSegmentMapCreate(mw, TR("Clean Segments"))
 {
   if (sPar) {
     TextInput ip(sPar);
@@ -498,7 +498,7 @@ FormSegmentMapCleaning::FormSegmentMapCleaning(CWnd* mw, const char* sPar)
           sOutMap = fn.sFullName(false);
     }
   }
-  new FieldSegmentMap(root, SAFUiSegMap, &sSegmentMap);
+  new FieldSegmentMap(root, TR("&Segment Map"), &sSegmentMap);
   initSegmentMapOut(false);
   SetAppHelpTopic("");
   create();
@@ -519,12 +519,12 @@ int FormSegmentMapCleaning::exec()
 
 LRESULT Cmdtransfseg(CWnd *wnd, const String& s)
 {
-	new FormSegmentMapTransform(wnd, s.scVal());
+	new FormSegmentMapTransform(wnd, s.c_str());
 	return -1;
 }
 
 FormSegmentMapTransform::FormSegmentMapTransform(CWnd* mw, const char* sPar)
-: FormSegmentMapCreate(mw, SAFTitleTransfSegMap)
+: FormSegmentMapCreate(mw, TR("Transform Segment Map"))
 {
   if (sPar) {
     TextInput ip(sPar);
@@ -545,27 +545,27 @@ FormSegmentMapTransform::FormSegmentMapTransform(CWnd* mw, const char* sPar)
           sOutMap = fn.sFullName(false);
     }
   }
-  fldMap = new FieldSegmentMap(root, SAFUiSegMap, &sSegmentMap, new MapListerDomainType(".mps", 0, false));
+  fldMap = new FieldSegmentMap(root, TR("&Segment Map"), &sSegmentMap, new MapListerDomainType(".mps", 0, false));
   fldMap->SetCallBack((NotifyProc)&FormSegmentMapTransform::MapCallBack);
   String sFill('x', 50);
   stCsy = new StaticText(root, sFill);
   stCsy->SetIndependentPos();
 	fDensify = false;
-	cbDensify = new CheckBox(root, SAFUiDensify, &fDensify);
+	cbDensify = new CheckBox(root, TR("Densify Coordinates"), &fDensify);
 	cbDensify->SetCallBack((NotifyProc)&FormSegmentMapTransform::DensifyCallBack);
 
 	cbDensify->SetIndependentPos();
 
-	fldDegMinSec = new FieldDMS(cbDensify, SAFUiDistance, &rDistance, 30, true);
+	fldDegMinSec = new FieldDMS(cbDensify, TR("&Distance"), &rDistance, 30, true);
 	fldDegMinSec->Align(cbDensify, AL_UNDER);
-	fldMeters = new FieldReal(cbDensify, SAFUiDistanceInMeters, &rDistance, ValueRange(0.001,1e12,0));
+	fldMeters = new FieldReal(cbDensify, TR("Distance (m)"), &rDistance, ValueRange(0.001,1e12,0));
 	fldMeters->Align(cbDensify, AL_UNDER);
 
 // do not call initSegmentMapOut(false) because also csy has to be asked
-  fmc = new FieldSegmentMapCreate(root, SAFUiOutSegMap, &sOutMap);
+  fmc = new FieldSegmentMapCreate(root, TR("&Output Segment Map"), &sOutMap);
   fmc->SetCallBack((NotifyProc)&FormSegmentMapCreate::OutSegmentMapCallBack);
-	new FieldCoordSystemC(root, SAFUiCoordSys, &sCoordSys);
-  StaticText* st = new StaticText(root, SAFUiDescription);
+	new FieldCoordSystemC(root, TR("&Coordinate System"), &sCoordSys);
+  StaticText* st = new StaticText(root, TR("&Description:"));
   st->psn->SetBound(0,0,0,0);
   FieldString* fs = new FieldString(root, "", &sDescr);
   fs->SetWidth(120);
@@ -683,12 +683,12 @@ int FormSegmentMapTransform::exec()
 
 LRESULT Cmdsubseg(CWnd *wnd, const String& s)
 {
-	new FormSegmentMapSubMap(wnd, s.scVal());
+	new FormSegmentMapSubMap(wnd, s.c_str());
 	return -1;
 }
 
 FormSegmentMapSubMap::FormSegmentMapSubMap(CWnd* mw, const char* sPar)
-: FormSegmentMapCreate(mw, SAFTitleSubMapSegMap),
+: FormSegmentMapCreate(mw, TR("Sub Map of Segment Map")),
   fPreset(false)
 {
   cMin = cMax = Coord(0,0);	
@@ -728,26 +728,26 @@ FormSegmentMapSubMap::FormSegmentMapSubMap(CWnd* mw, const char* sPar)
 			}								
     }
   }
-  fldSegmentMap = new FieldSegmentMap(root, SAFUiSegMap, &sSegmentMap, new MapListerDomainType(".mps", 0, false));
+  fldSegmentMap = new FieldSegmentMap(root, TR("&Segment Map"), &sSegmentMap, new MapListerDomainType(".mps", 0, false));
   fldSegmentMap->SetCallBack((NotifyProc)&FormSegmentMapSubMap::SegmentMapCallBack);
   String sFill('x', 50);
   stCsy = new StaticText(root, sFill);
   stCsy->SetIndependentPos();
   FieldGroup *fg = new FieldGroup(root);
   fg->SetIndependentPos();
-  fldCrdMin = new FieldCoord(fg, SAFUiMinXY, &cMin);
+  fldCrdMin = new FieldCoord(fg, TR("&Min X, Y"), &cMin);
   fldCrdMin->SetCallBack((NotifyProc)&FormSegmentMapSubMap::CallBackMinMaxXY);
-  fldCrdMax = new FieldCoord(fg, SAFUiMaxXY, &cMax);
+  fldCrdMax = new FieldCoord(fg, TR("&Max X, Y"), &cMax);
   fldCrdMax->SetCallBack((NotifyProc)&FormSegmentMapSubMap::CallBackMinMaxXY);
-  fldMinLat = new FieldLat(fg, SCSUiMinLat, &llMin.Lat);
+  fldMinLat = new FieldLat(fg, TR("Min Latitude"), &llMin.Lat);
   fldMinLat->Align(stCsy, AL_UNDER);
   fldMinLat->SetCallBack((NotifyProc)&FormSegmentMapSubMap::CallBackMinMaxLatLon);
-  fldMinLon = new FieldLon(fg, SCSUiMinLon, &llMin.Lon);
+  fldMinLon = new FieldLon(fg, TR("Min Longitude"), &llMin.Lon);
   fldMinLon->SetCallBack((NotifyProc)&FormSegmentMapSubMap::CallBackMinMaxLatLon);
-  fldMaxLat = new FieldLat(fg, SCSUiMaxLat, &llMax.Lat);
+  fldMaxLat = new FieldLat(fg, TR("Max Latitude"), &llMax.Lat);
   fldMaxLat->Align(fldMinLon, AL_UNDER);
   fldMaxLat->SetCallBack((NotifyProc)&FormSegmentMapSubMap::CallBackMinMaxLatLon);
-  fldMaxLon = new FieldLon(fg, SCSUiMaxLon, &llMax.Lon);
+  fldMaxLon = new FieldLon(fg, TR("Max Longitude"), &llMax.Lon);
   fldMaxLon->SetCallBack((NotifyProc)&FormSegmentMapSubMap::CallBackMinMaxLatLon);
   initSegmentMapOut(false);
   SetHelpItem("ilwisapp\\submap_of_segment_map_dialogbox.htm");
@@ -880,12 +880,12 @@ void FormSegmentMapSubMap::HideCoordsAndLatLon()
 
 LRESULT Cmddensseg(CWnd *wnd, const String& s)
 {
-	new FormSegmentMapDensify(wnd, s.scVal());
+	new FormSegmentMapDensify(wnd, s.c_str());
 	return -1;
 }
 
 FormSegmentMapDensify::FormSegmentMapDensify(CWnd* mw, const char* sPar)
-: FormSegmentMapCreate(mw, SAFTitleDensifySegMap)
+: FormSegmentMapCreate(mw, TR("Densify Segment Coordinates"))
 {
   if (sPar) {
     TextInput ip(sPar);
@@ -904,12 +904,12 @@ FormSegmentMapDensify::FormSegmentMapDensify(CWnd* mw, const char* sPar)
           sOutMap = fn.sFullName(false);
     }
   }
-  fldMap = new FieldSegmentMap(root, SAFUiSegMap, &sSegmentMap);
+  fldMap = new FieldSegmentMap(root, TR("&Segment Map"), &sSegmentMap);
 	fldMap->SetCallBack((NotifyProc)&FormSegmentMapDensify::SegmentMapCallBack);
 
-	fldMeters = new FieldReal(root, SAFUiDistanceInMeters, &rDistance, ValueRange(0.001,1e12,0));
+	fldMeters = new FieldReal(root, TR("Distance (m)"), &rDistance, ValueRange(0.001,1e12,0));
 	fldMeters->Align(fldMap, AL_UNDER);
-	fldDegMinSec = new FieldDMS(root, SAFUiDistance, &rDistance, 30, true);
+	fldDegMinSec = new FieldDMS(root, TR("&Distance"), &rDistance, 30, true);
 	fldDegMinSec->Align(fldMap, AL_UNDER);
 
   initSegmentMapOut(false);
@@ -963,12 +963,12 @@ int FormSegmentMapDensify::exec()
 
 LRESULT Cmdglueseg(CWnd *wnd, const String& s)
 {
-	new FormSegmentMapGlue(wnd, s.scVal());
+	new FormSegmentMapGlue(wnd, s.c_str());
 	return -1;
 }
 
 FormSegmentMapGlue::FormSegmentMapGlue(CWnd* mw, const char* sPar)
-: FormSegmentMapCreate(mw, SAFTitleGlueSegMap)
+: FormSegmentMapCreate(mw, TR("Glue Segment Maps"))
 {
   iMaps = 2;
 	asMaps.resize(4);
@@ -1007,7 +1007,7 @@ FormSegmentMapGlue::FormSegmentMapGlue(CWnd* mw, const char* sPar)
     }
   }
   iMaps -= 2;
-  StaticText* st = new StaticText(root, SAFUiNrInpMaps);
+  StaticText* st = new StaticText(root, TR("&Number of Input Maps"));
   st->SetIndependentPos();
   rgMaps = new RadioGroup(root, "", &iMaps, true);
   rgMaps->SetIndependentPos();
@@ -1018,33 +1018,33 @@ FormSegmentMapGlue::FormSegmentMapGlue(CWnd* mw, const char* sPar)
 
   fg1 = new FieldGroup(root,true);
   fg1->Align(rgMaps, AL_UNDER);
-  FieldSegmentMap* fsm = new FieldSegmentMap(fg1, SAFUiMap, &(asMaps[0]), new MapListerDomainType(".mps", 0, false));
+  FieldSegmentMap* fsm = new FieldSegmentMap(fg1, TR("&Map"), &(asMaps[0]), new MapListerDomainType(".mps", 0, false));
   fsm->SetCallBack((NotifyProc)&FormSegmentMapGlue::SegmentMap_1CallBack);
-  FieldString* fs = new FieldString(fg1, SAFUiMask, &sMask1);
+  FieldString* fs = new FieldString(fg1, TR("&Mask"), &sMask1);
   fs->Align(fsm, AL_AFTER);
   
   fg2 = new FieldGroup(root,true);
   fg2->Align(fg1, AL_UNDER);
-  fsm = new FieldSegmentMap(fg2, SAFUiMap, &(asMaps[1]), new MapListerDomainType(".mps", 0/*dmVALUE|dmCLASS|dmIDENT|dmBOOL*/, false));
+  fsm = new FieldSegmentMap(fg2, TR("&Map"), &(asMaps[1]), new MapListerDomainType(".mps", 0/*dmVALUE|dmCLASS|dmIDENT|dmBOOL*/, false));
   fsm->SetCallBack((NotifyProc)&FormSegmentMapGlue::SegmentMap_2CallBack);
-	fs = new FieldString(fg2, SAFUiMask, &sMask2);
+	fs = new FieldString(fg2, TR("&Mask"), &sMask2);
   fs->Align(fsm, AL_AFTER);
   
   fg3 = new FieldGroup(root,true);
   fg3->Align(fg2, AL_UNDER);
-  fsm = new FieldSegmentMap(fg3, SAFUiMap, &(asMaps[2]), new MapListerDomainType(".mps", 0/*dmVALUE|dmCLASS|dmIDENT|dmBOOL*/, false));
+  fsm = new FieldSegmentMap(fg3, TR("&Map"), &(asMaps[2]), new MapListerDomainType(".mps", 0/*dmVALUE|dmCLASS|dmIDENT|dmBOOL*/, false));
   fsm->SetCallBack((NotifyProc)&FormSegmentMapGlue::SegmentMap_3CallBack);
-	fs = new FieldString(fg3, SAFUiMask, &sMask3);
+	fs = new FieldString(fg3, TR("&Mask"), &sMask3);
   fs->Align(fsm, AL_AFTER);
   
   fg4 = new FieldGroup(root,true);
   fg4->Align(fg3, AL_UNDER);
-  fsm = new FieldSegmentMap(fg4, SAFUiMap, &(asMaps[3]), new MapListerDomainType(".mps", 0/*dmCLASS|dmIDENT|dmBOOL|dmVALUE|dmIMAGE*/, false));
+  fsm = new FieldSegmentMap(fg4, TR("&Map"), &(asMaps[3]), new MapListerDomainType(".mps", 0/*dmCLASS|dmIDENT|dmBOOL|dmVALUE|dmIMAGE*/, false));
   fsm->SetCallBack((NotifyProc)&FormSegmentMapGlue::SegmentMap_4CallBack);
-	fs = new FieldString(fg4, SAFUiMask, &sMask4);
+	fs = new FieldString(fg4, TR("&Mask"), &sMask4);
   fs->Align(fsm, AL_AFTER);
   
-  cbClip = new CheckBox(root, SAFUiClipBoundary, &fClipBoundary);
+  cbClip = new CheckBox(root, TR("&Clip Boundary"), &fClipBoundary);
   cbClip->SetCallBack((NotifyProc)&FormSegmentMapGlue::CallBackClipBoundary);
   cbClip->Align(fg4, AL_UNDER);
   String sFill50('x', 50);
@@ -1053,26 +1053,26 @@ FormSegmentMapGlue::FormSegmentMapGlue(CWnd* mw, const char* sPar)
   FieldGroup* fg = new FieldGroup(cbClip);
   fg->Align(cbClip,AL_UNDER);
   cMin = cMax = Coord(0,0);
-  fldCrdMin = new FieldCoord(fg, SAFUiMinXY, &cMin);
+  fldCrdMin = new FieldCoord(fg, TR("&Min X, Y"), &cMin);
   fldCrdMin->SetCallBack((NotifyProc)&FormSegmentMapGlue::CallBackMinMaxXY);
-  fldCrdMax = new FieldCoord(fg, SAFUiMaxXY, &cMax);
+  fldCrdMax = new FieldCoord(fg, TR("&Max X, Y"), &cMax);
   fldCrdMax->SetCallBack((NotifyProc)&FormSegmentMapGlue::CallBackMinMaxXY);
 
-  fldMinLat = new FieldLat(fg, SCSUiMinLat, &llMin.Lat);
+  fldMinLat = new FieldLat(fg, TR("Min Latitude"), &llMin.Lat);
   fldMinLat->Align(cbClip, AL_UNDER);
   fldMinLat->SetCallBack((NotifyProc)&FormSegmentMapGlue::CallBackMinMaxLatLon);
-  fldMinLon = new FieldLon(fg, SCSUiMinLon, &llMin.Lon);
+  fldMinLon = new FieldLon(fg, TR("Min Longitude"), &llMin.Lon);
 //  fldMinLon->Align(fldMinLat, AL_AFTER);
   fldMinLon->SetCallBack((NotifyProc)&FormSegmentMapGlue::CallBackMinMaxLatLon);
-  fldMaxLat = new FieldLat(fg, SCSUiMaxLat, &llMax.Lat);
+  fldMaxLat = new FieldLat(fg, TR("Max Latitude"), &llMax.Lat);
   fldMaxLat->Align(fldMinLon, AL_UNDER);
   fldMaxLat->SetCallBack((NotifyProc)&FormSegmentMapGlue::CallBackMinMaxLatLon);
-  fldMaxLon = new FieldLon(fg, SCSUiMaxLon, &llMax.Lon);
+  fldMaxLon = new FieldLon(fg, TR("Max Longitude"), &llMax.Lon);
 //  fldMaxLon->Align(fldMaxLat, AL_AFTER);
   fldMaxLon->SetCallBack((NotifyProc)&FormSegmentMapGlue::CallBackMinMaxLatLon);
 
   fNewDom = true;
-  cbDom = new CheckBox(root, SAFUiNewDomain, &fNewDom);
+  cbDom = new CheckBox(root, TR("&New Domain"), &fNewDom);
   cbDom->SetCallBack((NotifyProc)&FormSegmentMapGlue::DomCallBack);
   fldDom = new FieldDataTypeCreate(cbDom, "", &sNewDom, ".dom", true);
   fldDom->SetCallBack((NotifyProc)&FormSegmentMapGlue::DomCallBack);
@@ -1338,9 +1338,9 @@ int FormSegmentMapGlue::DomCallBack(Event*)
     fldDom->StoreData();
     FileName fn(sNewDom);
     if (!fn.fValid())
-      stRemark->SetVal(SDMRemNotValidDomainName);
+      stRemark->SetVal(TR("Not a valid domain name"));
     else if(fn.fExist())
-      stRemark->SetVal(SDMRemDomExists);
+      stRemark->SetVal(TR("Domain already exists"));
     else {
       fOk = true;
       stRemark->SetVal("");                                 
@@ -1413,12 +1413,12 @@ int FormSegmentMapGlue::exec()
 
 LRESULT Cmdpolseg(CWnd *wnd, const String& s)
 {
-	new FormSegmentMapPolBoundaries(wnd, s.scVal());
+	new FormSegmentMapPolBoundaries(wnd, s.c_str());
 	return -1;
 }
 
 FormSegmentMapPolBoundaries::FormSegmentMapPolBoundaries(CWnd* mw, const char* sPar)
-: FormSegmentMapCreate(mw, SAFTitlePolBndSegMap)
+: FormSegmentMapCreate(mw, TR("Boundaries of Polygons"))
 {
   if (sPar) {
     TextInput ip(sPar);
@@ -1436,11 +1436,11 @@ FormSegmentMapPolBoundaries::FormSegmentMapPolBoundaries(CWnd* mw, const char* s
         sOutMap = fn.sFullName(false);
     }
   }
-  new FieldPolygonMap(root, SAFUiPolMap, &sPolygonMap, new MapListerDomainType(".mpa", 0));
+  new FieldPolygonMap(root, TR("&Polygon Map"), &sPolygonMap, new MapListerDomainType(".mpa", 0));
   sMask = "*";
-  new FieldString(root, SAFUiMask, &sMask);
+  new FieldString(root, TR("&Mask"), &sMask);
   fSingleName = false;
-  CheckBox* cb = new CheckBox(root, SAFUiSingleName, &fSingleName);
+  CheckBox* cb = new CheckBox(root, TR("&Single Name"), &fSingleName);
   FieldBlank* fb = new FieldBlank(root, 0);
   fb->Align(cb, AL_UNDER);
   initSegmentMapOut(false);
@@ -1463,12 +1463,12 @@ int FormSegmentMapPolBoundaries::exec()
 }
 
 LRESULT Cmdrasseg(CWnd *parent, const String& s) {
-	new FormSegmentMapFromRaster(parent, s.scVal());
+	new FormSegmentMapFromRaster(parent, s.c_str());
 	return -1;
 }
 
 FormSegmentMapFromRaster::FormSegmentMapFromRaster(CWnd* mw, const char* sPar)
-: FormSegmentMapCreate(mw, SAFTitleSegMapFromRas)
+: FormSegmentMapCreate(mw, TR("Segments of Raster Map"))
 {
   iType = 0;
   fSmooth = true;
@@ -1489,19 +1489,19 @@ FormSegmentMapFromRaster::FormSegmentMapFromRaster(CWnd* mw, const char* sPar)
         sOutMap = fn.sFullName(true);
     }
   }
-  new FieldDataType(root, SAFUiRasMap, &sMap,
+  new FieldDataType(root, TR("&Raster Map"), &sMap,
                  new MapListerDomainType(dmCLASS|dmIDENT|dmBOOL|dmUNIQUEID), true);
   
-  RadioGroup* rgConnect = new RadioGroup(root, SAFUiConnect, &iConnect);
+  RadioGroup* rgConnect = new RadioGroup(root, TR("&Connect"), &iConnect);
   rgConnect->SetIndependentPos();
-  RadioButton* rb4 = new RadioButton(rgConnect, SAFUi4Connected);
+  RadioButton* rb4 = new RadioButton(rgConnect, TR("&4"));
   rb4->Align(rgConnect, AL_AFTER);
-  RadioButton* rb8 = new RadioButton(rgConnect, SAFUi8Connected);
+  RadioButton* rb8 = new RadioButton(rgConnect, TR("&8"));
   rb8->Align(rb4, AL_AFTER);
 
-  new CheckBox(root, SAFUiSmoothLines, &fSmooth);
+  new CheckBox(root, TR("&Smooth Lines"), &fSmooth);
   fSingleName = false;
-  new CheckBox(root, SAFUiSingleName, &fSingleName);
+  new CheckBox(root, TR("&Single Name"), &fSingleName);
   
   initSegmentMapOut(false);
   SetHelpItem("ilwisapp\\raster_to_segments_dialog_box.htm");

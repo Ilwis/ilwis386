@@ -40,12 +40,12 @@
 
 LRESULT Cmdsegmentmapdifference(CWnd *wnd, const String& s)
 {
-	new FormSegmentMapDifference(wnd, s.scVal());
+	new FormSegmentMapDifference(wnd, s.c_str());
 	return -1;
 }
 
 FormSegmentMapDifference::FormSegmentMapDifference(CWnd* mw, const char* sPar)
-: FormSegmentMapCreate(mw, SAFTilteSegmentMapIntersect)
+: FormSegmentMapCreate(mw, TR("Create a Intersection map of Segments"))
 {
 	if (sPar)
 	{
@@ -64,8 +64,8 @@ FormSegmentMapDifference::FormSegmentMapDifference(CWnd* mw, const char* sPar)
 				sOutMap = fn.sFullName(true);
 		}
 	}
-	new FieldDataType(root, SAFUiFirstInput, &sInMap1, ".mpa.mps", true);
-	new FieldDataType(root, SAFUiSecondInput, &sInMap2, ".mpa.mps", true);
+	new FieldDataType(root, TR("First Input map"), &sInMap1, ".mpa.mps", true);
+	new FieldDataType(root, TR("Second Input map"), &sInMap2, ".mpa.mps", true);
 	
 	new FieldBlank(root);
 			

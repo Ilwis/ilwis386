@@ -7,7 +7,7 @@
 
 LRESULT Cmdsegmentisoline(CWnd *wnd, const String& s)
 {
-	new SegmentMapFromRasValueBndFrm(wnd, s.scVal());
+	new SegmentMapFromRasValueBndFrm(wnd, s.c_str());
 	return -1;
 }
 

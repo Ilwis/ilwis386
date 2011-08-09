@@ -83,12 +83,12 @@
 
 LRESULT Cmdsegmentmapunion(CWnd *wnd, const String& s)
 {
-	new FormSegmentMapUnionion(wnd, s.scVal());
+	new FormSegmentMapUnionion(wnd, s.c_str());
 	return -1;
 }
 
 FormSegmentMapUnionion::FormSegmentMapUnionion(CWnd* mw, const char* sPar)
-: FormSegmentMapCreate(mw, SAFTilteSegmentMapUnion)
+: FormSegmentMapCreate(mw, TR("Create a Union map of Segments"))
 {
 	if (sPar)
 	{
@@ -107,8 +107,8 @@ FormSegmentMapUnionion::FormSegmentMapUnionion(CWnd* mw, const char* sPar)
 				sOutMap = fn.sFullName(true);
 		}
 	}
-	new FieldDataType(root, SAFUiFirstInput, &sInMap1, ".mpa.mps", true);
-	new FieldDataType(root, SAFUiSecondInput, &sInMap2, ".mpa.mps", true);
+	new FieldDataType(root, TR("First Input map"), &sInMap1, ".mpa.mps", true);
+	new FieldDataType(root, TR("Second Input map"), &sInMap2, ".mpa.mps", true);
 	
 	new FieldBlank(root);
 			

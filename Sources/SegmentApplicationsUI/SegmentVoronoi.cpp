@@ -40,12 +40,12 @@
 
 LRESULT Cmdsegmentmapvoronoi(CWnd *wnd, const String& s)
 {
-	new FormSegmentMapVoronoi(wnd, s.scVal());
+	new FormSegmentMapVoronoi(wnd, s.c_str());
 	return -1;
 }
 
 FormSegmentMapVoronoi::FormSegmentMapVoronoi(CWnd* mw, const char* sPar)
-: FormSegmentMapCreate(mw, SAFTilteSegmentMapVoronoi),minDistance(0)
+: FormSegmentMapCreate(mw, TR("Create a Voronoi map of a pointmap")),minDistance(0)
 {
 	if (sPar)
 	{
@@ -64,8 +64,8 @@ FormSegmentMapVoronoi::FormSegmentMapVoronoi(CWnd* mw, const char* sPar)
 				sOutMap = fn.sFullName(true);
 		}
 	}
-	new FieldDataType(root, SAFUiFirstInput, &sInMap1, ".mpp", true);
-	new FieldReal(root, SAFUiMinDistance, &minDistance);
+	new FieldDataType(root, TR("First Input map"), &sInMap1, ".mpp", true);
+	new FieldReal(root, TR("Minimum Distance"), &minDistance);
 	
 	new FieldBlank(root);
 			
