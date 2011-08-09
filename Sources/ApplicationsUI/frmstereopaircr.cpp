@@ -58,10 +58,10 @@ FormStereoPairCreate::FormStereoPairCreate(CWnd* mwin, const String& sTitle)
 
 void FormStereoPairCreate::initStereoPairOut()
 {
-	fstc = new FieldStereoPairCreate(root, SStcUiOutputStereoPair, &sOutStereoPair);
+	fstc = new FieldStereoPairCreate(root, TR("Output Stereo Pair"), &sOutStereoPair);
   ///fstc->SetCallBack((NotifyProc)&FormStereoPairCreate::OutStereoPairCallBack);
   FormEntry* fe = fstc;
-  StaticText* st = new StaticText(root, SAFUiDescription);
+  StaticText* st = new StaticText(root, TR("&Description:"));
   st->Align(fe, AL_UNDER);
   st->psn->SetBound(0,0,0,0);
   FieldString* fs = new FieldString(root, "", &sDescr);
@@ -76,8 +76,8 @@ void FormStereoPairCreate::execStereoPairOut(const String& sExpr)
 	fn.sExt = ".stp";
 	if (sOutStereoPair != "") {
     if (fn.fExist()) {
-      String sErr(SAFMsgAlreadyExistsOverwrite_S.scVal(), fn.sFullPath(true));
-      int iRet = mw->MessageBox(sErr.scVal(), SAFMsgAlreadyExists.scVal(), MB_YESNO|MB_ICONEXCLAMATION);
+      String sErr(TR("File %S already exists.\nOverwrite?").c_str(), fn.sFullPath(true));
+      int iRet = mw->MessageBox(sErr.c_str(), TR("File already exists").c_str(), MB_YESNO|MB_ICONEXCLAMATION);
       if (iRet != IDYES)
         return;
     }
@@ -120,12 +120,12 @@ int FormStereoPairCreate::OutStereoPairCallBack(Event*)
 }
 
 LRESULT Cmdmakestpfromdtm(CWnd *parent, const String& s) {
-	new FormStereoPairFromDTM(parent, s.scVal());
+	new FormStereoPairFromDTM(parent, s.c_str());
 	return -1;
 }
 
 FormStereoPairFromDTM::FormStereoPairFromDTM(CWnd* mw, const char* sPar)
-: FormStereoPairCreate(mw, SStcTitleStereoPairFromDTM)
+: FormStereoPairCreate(mw, TR("Stereo Pair from DTM"))
 {
 	//lmodus = lmBOTH;
 	iLookModus = 1; // == lmBOTH (default)
@@ -153,24 +153,24 @@ FormStereoPairFromDTM::FormStereoPairFromDTM(CWnd* mw, const char* sPar)
   }
   ///sDomain = "value.dom";
   ///fldSourceMap = 
-		new FieldDataType(root, SAFUiRasMap, &sSourceMap, 
+		new FieldDataType(root, TR("&Raster Map"), &sSourceMap, 
                                    new MapListerDomainType(".mpr", dmIMAGE|dmCOLOR|dmPICT|dmVALUE, true), true);
   ///fldSourceMap->SetCallBack((NotifyProc)&FormStereoPairFromDTM::SrcMapCallBack);
   ///fldDTMMap = 
-	fldDTMMap =	new FieldDataType(root, SStcUIInputDTMMap, &sDTMMap, new MapListerDomainType(".mpr", dmVALUE, true), true);
+	fldDTMMap =	new FieldDataType(root, TR("&DTM"), &sDTMMap, new MapListerDomainType(".mpr", dmVALUE, true), true);
   fldDTMMap->SetCallBack((NotifyProc)&FormStereoPairFromDTM::DTMMapCallBack);
   
-	FieldInt* fiLookAngle = new FieldInt(root, SStcUILookAngle, &iLookAngle, RangeInt(0,90),true);
+	FieldInt* fiLookAngle = new FieldInt(root, TR("Look &Angle"), &iLookAngle, RangeInt(0,90),true);
   ///frLookAngle->Align(fldDTMMap, AL_UNDER);
 	fiLookAngle->SetWidth(30);
-  fiRefHeight = new FieldInt(root, SStcUIRefHeight, &iRefHeight, RangeInt(0,9999),true);
+  fiRefHeight = new FieldInt(root, TR("Reference &Height"), &iRefHeight, RangeInt(0,9999),true);
 	fiRefHeight->SetWidth(30);
   fiRefHeight->Align(fiLookAngle, AL_UNDER);
-	RadioGroup* rgLookModus = new RadioGroup(root, SStcUILookModus, &iLookModus, true);
+	RadioGroup* rgLookModus = new RadioGroup(root, TR("Look &Modus"), &iLookModus, true);
 	(new RadioButton(rgLookModus, "&Left"))->SetIndependentPos();
   (new RadioButton(rgLookModus, "&Both"))->SetIndependentPos(); // default choice
   new RadioButton(rgLookModus, "&Right");
-	RadioGroup* rgResampModus = new RadioGroup(root, SStcUIResampModus, &iResampleModus, true);
+	RadioGroup* rgResampModus = new RadioGroup(root, TR("Resample Modus"), &iResampleModus, true);
 	(new RadioButton(rgResampModus, "&Fast"))->SetIndependentPos();// default choice
   new RadioButton(rgResampModus, "&Accurate"); 
   initStereoPairOut();

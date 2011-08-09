@@ -9,7 +9,7 @@
 
 LRESULT Cmdchangedetection(CWnd *wnd, const String& s)
 {
-	new FormMapListChangeDetection(wnd, s.scVal());
+	new FormMapListChangeDetection(wnd, s.c_str());
 	return -1;
 }
 

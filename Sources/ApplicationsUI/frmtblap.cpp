@@ -139,12 +139,12 @@
 
 LRESULT Cmdhistogram(CWnd *wnd, const String& s)
 {
-	new FormTableHistogram(wnd, s.scVal());
+	new FormTableHistogram(wnd, s.c_str());
 	return -1;
 }
 
 FormTableHistogram::FormTableHistogram(CWnd* mw, const char* sPar)
-: FormTableCreate(mw, SAFTitleTableHistogram)
+: FormTableCreate(mw, TR("Calculate Histogram"))
 {
   if (sPar) {
     TextInput inp(sPar);
@@ -163,9 +163,9 @@ FormTableHistogram::FormTableHistogram(CWnd* mw, const char* sPar)
         sMap = fn.sFullNameQuoted(true);
     }
   }
-  new FieldBaseMap(root, SAFUiMap, &sMap);
+  new FieldBaseMap(root, TR("&Map"), &sMap);
   fShow = true;
-//  new CheckBox(root, SAFUiShow, &fShow);
+//  new CheckBox(root, TR("&Show"), &fShow);
   SetHelpItem("ilwisapp\\histogram_dialogbox.htm");
   create();
 }                    
@@ -206,12 +206,12 @@ int FormTableHistogram::exec()
 
 LRESULT Cmdautocorr(CWnd *wnd, const String& s)
 {
-	new FormTableAutoCorr(wnd, s.scVal());
+	new FormTableAutoCorr(wnd, s.c_str());
 	return -1;
 }
 
 FormTableAutoCorr::FormTableAutoCorr(CWnd* mw, const char* sPar)
-: FormTableCreate(mw, SAFTitleTableAutoCorr)
+: FormTableCreate(mw, TR("AutoCorrelation and SemiVariogram"))
 {
   iPixShift = 100;
   if (sPar) {
@@ -230,10 +230,10 @@ FormTableAutoCorr::FormTableAutoCorr(CWnd* mw, const char* sPar)
         sOutTable = fn.sFullName(true);
     }
   }
-  fldMap = new FieldDataType(root, SAFUiRasMap, &sMap,
+  fldMap = new FieldDataType(root, TR("&Raster Map"), &sMap,
                     new MapListerDomainType(dmVALUE|dmIMAGE|dmBOOL), true);
   fldMap->SetCallBack((NotifyProc)&FormTableAutoCorr::CallBack);
-  fiMaxShift = new FieldInt(root, SAFUiMaxPixShift, &iPixShift, ValueRange(1,8000), true);
+  fiMaxShift = new FieldInt(root, TR("Maximum Pixel &Shift"), &iPixShift, ValueRange(1,8000), true);
   initTableOut(false);
   SetHelpItem("ilwisapp\\auto_correlation_semivariance_dialog_box.htm");
   create();
@@ -269,12 +269,12 @@ int FormTableAutoCorr::CallBack(Event*)
 
 LRESULT Cmdspatcorr(CWnd *wnd, const String& s)
 {
-	new FormTableSpatCorr(wnd, s.scVal());
+	new FormTableSpatCorr(wnd, s.c_str());
 	return -1;
 }
 
 FormTableSpatCorr::FormTableSpatCorr(CWnd* mw, const char* sPar)
-: FormTableCreate(mw, SAFTitleTableSpatCorr)
+: FormTableCreate(mw, TR("Spatial Correlation"))
 {
   rLagLength = rUNDEF; //1000;
   iOmniBi = 0;
@@ -299,24 +299,24 @@ FormTableSpatCorr::FormTableSpatCorr(CWnd* mw, const char* sPar)
         sOutTable = fn.sFullName(false);
     }
   }
-	fldMap = new FieldPointMap(root, SAFUiPntMap, &sMap, new MapListerDomainType(".mpp", dmVALUE, true));
+	fldMap = new FieldPointMap(root, TR("&Point Map"), &sMap, new MapListerDomainType(".mpp", dmVALUE, true));
   fldMap->SetCallBack((NotifyProc)&FormTableSpatCorr::CallBack);
 
   RadioGroup* rg = new RadioGroup(root, "", &iOmniBi);
-  RadioButton* rbOmniDir = new RadioButton(rg, SAFUiOmniDirectional);
-  RadioButton* rbBiDir = new RadioButton(rg, SAFUiBiDirectional);
+  RadioButton* rbOmniDir = new RadioButton(rg, TR("&Omnidirectional"));
+  RadioButton* rbBiDir = new RadioButton(rg, TR("&Bidirectional"));
 
-  FieldReal* frLag = new FieldReal(root, SAFUiLagLengthM, &rLagLength, ValueRange(1e-5,1e9,1e-5));
+  FieldReal* frLag = new FieldReal(root, TR("&Lag spacing (m)"), &rLagLength, ValueRange(1e-5,1e9,1e-5));
 
-	CheckBox* cbSphDist = new CheckBox(rbOmniDir, SAFUiSphericalDist, &fSphericalDistance);
+	CheckBox* cbSphDist = new CheckBox(rbOmniDir, TR("Use &Spherical Distance"), &fSphericalDistance);
 	cbSphDist->Align(frLag, AL_UNDER);
 	cbSphDist->SetIndependentPos();
 	
 	FieldGroup* fg = new FieldGroup(rbBiDir);
   fg->Align(frLag, AL_UNDER);
-  new FieldReal(fg, SAFUiDirectionD, &rDir, ValueRange(0,90,0.1));
-  new FieldReal(fg, SAFUiToleranceD, &rTol, ValueRange(0,45,0.1));
-  CheckBox* cbBW = new CheckBox(fg, SAFUiBandWidthM, &fBandWidth);
+  new FieldReal(fg, TR("&Direction (deg)"), &rDir, ValueRange(0,90,0.1));
+  new FieldReal(fg, TR("&Tolerance (deg)"), &rTol, ValueRange(0,45,0.1));
+  CheckBox* cbBW = new CheckBox(fg, TR("&Band width (m)"), &fBandWidth);
   new FieldReal(cbBW, "", &rBandWidth, ValueRange(0.1,1e9,0.1));
 	
   FieldBlank* fb = new FieldBlank(root, 0);
@@ -379,12 +379,12 @@ int FormTableSpatCorr::CallBack(Event*)
 
 LRESULT Cmdpattanal(CWnd *wnd, const String& s)
 {
-	new FormTablePattAnal(wnd, s.scVal());
+	new FormTablePattAnal(wnd, s.c_str());
 	return -1;
 }
 
 FormTablePattAnal::FormTablePattAnal(CWnd* mw, const char* sPar)
-: FormTableCreate(mw, SAFTitleTablePattAnal)
+: FormTableCreate(mw, TR("Pattern Analysis"))
 {
   if (sPar) {
     TextInput inp(sPar);
@@ -402,7 +402,7 @@ FormTablePattAnal::FormTablePattAnal(CWnd* mw, const char* sPar)
         sOutTable = fn.sFullName(false);
     }
   }
-  new FieldPointMap(root, SAFUiPntMap, &sMap);
+  new FieldPointMap(root, TR("&Point Map"), &sMap);
   initTableOut(false);
   SetHelpItem("ilwisapp\\pattern_analysis_dialog_box.htm");
   create();
@@ -422,12 +422,12 @@ int FormTablePattAnal::exec()
 
 LRESULT Cmdhistnbpol(CWnd *wnd, const String& s)
 {
-	new FormTableNeighbourPol(wnd, s.scVal());
+	new FormTableNeighbourPol(wnd, s.c_str());
 	return -1;
 }
 
 FormTableNeighbourPol::FormTableNeighbourPol(CWnd* mw, const char* sPar)
-: FormTableCreate(mw, SAFTitleTableNeighbourPol)
+: FormTableCreate(mw, TR("Neighbouring Polygons"))
 {
   if (sPar) {
     TextInput inp(sPar);
@@ -445,7 +445,7 @@ FormTableNeighbourPol::FormTableNeighbourPol(CWnd* mw, const char* sPar)
         sOutTable = fn.sFullName(false);
     }
   }
-  new FieldPolygonMap(root, SAFUiPolMap, &sMap);
+  new FieldPolygonMap(root, TR("&Polygon Map"), &sMap);
   initTableOut(false);
   SetHelpItem("ilwisapp\\neighbour_polygons_dialog_box.htm");
   create();
@@ -464,7 +464,7 @@ int FormTableNeighbourPol::exec()
 }
 
 FormTableLinAnal::FormTableLinAnal(CWnd* mw, const char* sPar)
-: FormTableCreate(mw, SAFTitleLinAnalysis)
+: FormTableCreate(mw, TR("Segment Direction Histogram"))
 {
   if (sPar) {
     TextInput inp(sPar);
@@ -482,7 +482,7 @@ FormTableLinAnal::FormTableLinAnal(CWnd* mw, const char* sPar)
         sOutTable = fn.sFullName(false);
     }
   }
-  new FieldSegmentMap(root, SAFUiSegMap, &sMap);
+  new FieldSegmentMap(root, TR("&Segment Map"), &sMap);
   initTableOut(false);
   SetHelpItem("ilwisapp\\segment_direction_histogram_dialog_box.htm");
   create();
@@ -490,7 +490,7 @@ FormTableLinAnal::FormTableLinAnal(CWnd* mw, const char* sPar)
 
 LRESULT Cmdhistsegdir(CWnd *wnd, const String& s)
 {
-	new FormTableLinAnal(wnd, s.scVal());
+	new FormTableLinAnal(wnd, s.c_str());
 	return -1;
 }
 
@@ -508,12 +508,12 @@ int FormTableLinAnal::exec()
 
 LRESULT Cmdcross(CWnd *wnd, const String& s)
 {
-	new FormMapCross(wnd, s.scVal());
+	new FormMapCross(wnd, s.c_str());
 	return -1;
 }
 
 FormMapCross::FormMapCross(CWnd* mw, const char* sPar)
-: FormTableCreate(mw, SAFTitleTableCross)
+: FormTableCreate(mw, TR("Cross"))
 {
   fMap = false;
   fIgnoreUndef1 = true;
@@ -540,17 +540,17 @@ FormMapCross::FormMapCross(CWnd* mw, const char* sPar)
       }  
     }
   }
-  new FieldMap(root, SAFUiFirstMap, &sMap1, new MapListerDomainType(".mpr", 0, true));
-  CheckBox* cb = new CheckBox(root, SAFUiIgnoreUndefs, &fIgnoreUndef1);
+  new FieldMap(root, TR("&1st Map"), &sMap1, new MapListerDomainType(".mpr", 0, true));
+  CheckBox* cb = new CheckBox(root, TR("&Ignore Undefs"), &fIgnoreUndef1);
   cb->SetIndependentPos();
-  FieldMap* fm = new FieldMap(root, SAFUiSecondMap, &sMap2, new MapListerDomainType(".mpr", 0, true));
+  FieldMap* fm = new FieldMap(root, TR("&2nd Map"), &sMap2, new MapListerDomainType(".mpr", 0, true));
   fm->Align(cb, AL_UNDER);
-  cb = new CheckBox(root, SAFUiIgnoreUndefs, &fIgnoreUndef2);
+  cb = new CheckBox(root, TR("&Ignore Undefs"), &fIgnoreUndef2);
   cb->SetIndependentPos();
   FieldBlank* fb = new FieldBlank(root, 0);
   fb->Align(cb, AL_UNDER);
   initTableOut(false);
-  CheckBox* cbMap = new CheckBox(root, SAFUiOutMap, &fMap);
+  CheckBox* cbMap = new CheckBox(root, TR("&Output Map"), &fMap);
   new FieldMapCreate(cbMap, "", &sOutMap);
   SetHelpItem("ilwisapp\\cross_dialogbox.htm");
   create();
@@ -586,12 +586,12 @@ int FormMapCross::exec()
 
 LRESULT Cmdtranspose(CWnd *wnd, const String& s)
 {
-	new FormTableTranspose(wnd, s.scVal());
+	new FormTableTranspose(wnd, s.c_str());
 	return -1;
 }
 
 FormTableTranspose::FormTableTranspose(CWnd* mw, const char* sPar)
-: FormTableCreate(mw, SAFTitleTableTranspose)
+: FormTableCreate(mw, TR("Transpose Table"))
 {
   if (sPar) {
     TextInput inp(sPar);
@@ -611,10 +611,10 @@ FormTableTranspose::FormTableTranspose(CWnd* mw, const char* sPar)
         sOutTable = fn.sFullName(false);
     }
   }
-  ftbl = new FieldTable(root, SAFUiTable, &sTable);
+  ftbl = new FieldTable(root, TR("&Table"), &sTable);
   ftbl->SetCallBack((NotifyProc)&FormTableTranspose::CallBack);
-  fdom = new FieldDomain(root, SAFUiDomainForColumns, &sDomain);
-  FieldValueRange* fvr = new FieldValueRange(root, SAFUiValRange, &vr, fdom);
+  fdom = new FieldDomain(root, TR("&Domain for Columns"), &sDomain);
+  FieldValueRange* fvr = new FieldValueRange(root, TR("Value &Range"), &vr, fdom);
   fdom->SetCallBack((NotifyProc)&FieldValueRange::DomainCallBack, fvr);
   fvr->Align(fdom, AL_UNDER);  
   initTableOut(false);
@@ -674,12 +674,12 @@ int FormTableTranspose::CallBack(Event*)
 
 LRESULT Cmdtblchdom(CWnd *wnd, const String& s)
 {
-	new FormTableChangeDomain(wnd, s.scVal());
+	new FormTableChangeDomain(wnd, s.c_str());
 	return -1;
 }
 
 FormTableChangeDomain::FormTableChangeDomain(CWnd* mw, const char* sPar)
-: FormTableCreate(mw, SAFTitleTableChangeDomain)
+: FormTableCreate(mw, TR("Change Domain of Table"))
 {
 	iColDom = 0;
 	sDomain = "none";
@@ -709,20 +709,20 @@ FormTableChangeDomain::FormTableChangeDomain(CWnd* mw, const char* sPar)
 				sOutTable = fn.sFullName(false);
 		}
 	}
-	fldTbl = new FieldTable(root, SAFUiTable, &sTable);
+	fldTbl = new FieldTable(root, TR("&Table"), &sTable);
 	fldTbl->SetCallBack((NotifyProc)&FormTableChangeDomain::TblCallBack);
-	StaticText* st = new StaticText(root, SAFUiChangeDomainTo);
+	StaticText* st = new StaticText(root, TR("Change Domain To:"));
 	st->SetIndependentPos();
 	RadioGroup* rg = new RadioGroup(root, "", &iColDom);
-	RadioButton* rbCol = new RadioButton(rg, SAFUiColumn);
-	RadioButton* rbDom = new RadioButton(rg, SAFUiDomain);
+	RadioButton* rbCol = new RadioButton(rg, TR("&Column"));
+	RadioButton* rbDom = new RadioButton(rg, TR("&Domain"));
 	new FieldDomainC(rbDom, "", &sDomain, dmCLASS|dmIDENT|dmNONE, true); // Use DomainAllExtLister
 	
 	FieldGroup* fgCol = new FieldGroup(rbCol);
 	fldCol = new FieldColumn(fgCol, "", Table(), &sCol,
 		dmCLASS|dmIDENT);
 	fldCol->Align(rbCol, AL_AFTER);
-	CheckBox* cb = new CheckBox(fgCol, SAFUiAggregate, &fAggregate);
+	CheckBox* cb = new CheckBox(fgCol, TR("&Aggregate"), &fAggregate);
 	cb->Align(rbDom, AL_UNDER);
 	new FieldAggrLastFunc(cb, "", &sFunc, m_sDefault);
 	
@@ -778,12 +778,12 @@ int FormTableChangeDomain::TblCallBack(Event*)
 
 LRESULT Cmdtblglue(CWnd *wnd, const String& s)
 {
-	new FormTableGlue(wnd, s.scVal());
+	new FormTableGlue(wnd, s.c_str());
 	return -1;
 }
 
 FormTableGlue::FormTableGlue(CWnd* mw, const char* sPar)
-: FormTableCreate(mw, SAFTitleTableGlue)
+: FormTableCreate(mw, TR("Glue Tables"))
 {
   iTbls = 2;
   fVertical = false;
@@ -815,7 +815,7 @@ FormTableGlue::FormTableGlue(CWnd* mw, const char* sPar)
     }
   }
   iTbls -= 2;
-  StaticText* st = new StaticText(root, SAFUiNrInpTables);
+  StaticText* st = new StaticText(root, TR("&Number of Input Tables"));
   st->SetIndependentPos();
   rgTbls = new RadioGroup(root, "", &iTbls, true);
   rgTbls->SetIndependentPos();
@@ -824,21 +824,21 @@ FormTableGlue::FormTableGlue(CWnd* mw, const char* sPar)
   new RadioButton(rgTbls, "&3");
   new RadioButton(rgTbls, "&4");
 
-  fldTbl1 = new FieldTable(root, SAFUiFirstTable, &sTbl1);
+  fldTbl1 = new FieldTable(root, TR("&1st Table"), &sTbl1);
   fldTbl1->SetCallBack((NotifyProc)&FormTableGlue::TblCallBack);
-  fldTbl2 = new FieldTable(root, SAFUiSecondTable, &sTbl2);
+  fldTbl2 = new FieldTable(root, TR("&2nd Table"), &sTbl2);
   fldTbl2->SetCallBack((NotifyProc)&FormTableGlue::TblCallBack);
-  fldTbl3 = new FieldTable(root, SAFUiThirdTable, &sTbl3);
+  fldTbl3 = new FieldTable(root, TR("&3rd Table"), &sTbl3);
   fldTbl3->SetCallBack((NotifyProc)&FormTableGlue::TblCallBack);
-  fldTbl4 = new FieldTable(root, SAFUiFourthTable, &sTbl4);
+  fldTbl4 = new FieldTable(root, TR("&4th Table"), &sTbl4);
   fldTbl4->SetCallBack((NotifyProc)&FormTableGlue::TblCallBack);
 
   initTableOut(false);
 
   FieldBlank* fb = new FieldBlank(root, 0);
-  cbVertical = new CheckBox(root, SAFUiVertical, &fVertical);
+  cbVertical = new CheckBox(root, TR("&Vertical"), &fVertical);
   cbVertical->SetIndependentPos();
-  stRemark = new StaticText(root, SAFRemIncompatableDomains);
+  stRemark = new StaticText(root, TR("Incompatible Domains"));
   stRemark->Align(fb, AL_UNDER);
   stRemark->SetIndependentPos();
   SetHelpItem("ilwisapp\\glue_tables_dialog_box.htm");
@@ -999,12 +999,12 @@ int FormTableGlue::exec()
 
 LRESULT Cmdcrossvariogram(CWnd *wnd, const String& s)
 {
-	new FormTableCrossVariogram(wnd, s.scVal());
+	new FormTableCrossVariogram(wnd, s.c_str());
 	return -1;
 }
 
 FormTableCrossVariogram::FormTableCrossVariogram(CWnd* mw, const char* sPar)
-: FormTableCreate(mw, SAFTitleTableCrossVariogram)
+: FormTableCreate(mw, TR("Cross Variogram"))
 {
   rLagSpacing = rUNDEF;
 	fSphericalDistance = false;
@@ -1025,12 +1025,12 @@ FormTableCrossVariogram::FormTableCrossVariogram(CWnd* mw, const char* sPar)
         sOutTable = fn.sFullName(false);
     }
   }
-  fldMap = new FieldPointMap(root, SAFUiPntMap, &sMap);
+  fldMap = new FieldPointMap(root, TR("&Point Map"), &sMap);
   fldMap->SetCallBack((NotifyProc)&FormTableCrossVariogram::MapCallBack);
-  fldColA = new FieldColumn(root, SAFUiColumnA, Table(), &sColA, dmVALUE|dmBOOL);
-  fldColB = new FieldColumn(root, SAFUiColumnB, Table(), &sColB, dmVALUE|dmBOOL);
-  new FieldReal(root, SAFUiLagLengthM, &rLagSpacing, ValueRange(1e-5,1e9,1e-5));
-	CheckBox* cbSphDist = new CheckBox(root, SAFUiSphericalDist, &fSphericalDistance);
+  fldColA = new FieldColumn(root, TR("&Column A"), Table(), &sColA, dmVALUE|dmBOOL);
+  fldColB = new FieldColumn(root, TR("&Column B"), Table(), &sColB, dmVALUE|dmBOOL);
+  new FieldReal(root, TR("&Lag spacing (m)"), &rLagSpacing, ValueRange(1e-5,1e9,1e-5));
+	CheckBox* cbSphDist = new CheckBox(root, TR("Use &Spherical Distance"), &fSphericalDistance);
 	cbSphDist->SetIndependentPos();
   initTableOut(false);
   SetHelpItem("ilwisapp\\cross_variogram_dialog_box.htm");
@@ -1077,12 +1077,12 @@ int FormTableCrossVariogram::MapCallBack(Event*)
 
 LRESULT Cmdbursawolf(CWnd *wnd, const String& s)
 {
-	new FormTableBursaWolf(wnd, s.scVal());
+	new FormTableBursaWolf(wnd, s.c_str());
 	return -1;
 }
 
 FormTableBursaWolf::FormTableBursaWolf(CWnd* mw, const char* sPar)
-: FormTableCreate(mw, SAFTitleTableBursaWolfDatumTr)
+: FormTableCreate(mw, TR("Bursa-Wolf Datum Transformation"))
 {
   if (sPar) 
 	{
@@ -1101,28 +1101,28 @@ FormTableBursaWolf::FormTableBursaWolf(CWnd* mw, const char* sPar)
         sOutTable = fn.sFullName(false);
     }
   }
-  fldTblIn = new FieldTable(root, SAFUiTable, &sTbl);
+  fldTblIn = new FieldTable(root, TR("&Table"), &sTbl);
   fldTblIn->SetCallBack((NotifyProc)&FormTableBursaWolf::TableCallBack);
-  fldColCrds = new FieldColumn(root, SAFUiColumnCrdIn, Table(), &sColCrds, dmCOORD);
-  fldColHeights = new FieldColumn(root, SAFUiColumnHeightsIn, Table(), &sColHeights, dmVALUE);
+  fldColCrds = new FieldColumn(root, TR("Input &Coord Column"), Table(), &sColCrds, dmCOORD);
+  fldColHeights = new FieldColumn(root, TR("Input &Heights Column"), Table(), &sColHeights, dmVALUE);
 	FieldGroup * fgLeft = new FieldGroup(root);
 	fgLeft->SetIndependentPos();
 	FieldGroup * fgRight = new FieldGroup(root);
 	fgRight->Align(fgLeft, AL_AFTER);
-	StaticText* stShifts = new StaticText(fgLeft, SAFUiShifts);
+	StaticText* stShifts = new StaticText(fgLeft, TR("Shifts: (m)"));
   //Shifts entered in meters
-  FieldReal* flddX = new FieldReal(fgLeft, SAFUiDx, &m_rX, ValueRangeReal(-1e4, 1e4, 0.001));
-  FieldReal* flddY = new FieldReal(fgLeft, SAFUiDy, &m_rY, ValueRangeReal(-1e4, 1e4, 0.001));
-  FieldReal* flddZ = new FieldReal(fgLeft, SAFUiDz, &m_rZ, ValueRangeReal(-1e4, 1e4, 0.001));
+  FieldReal* flddX = new FieldReal(fgLeft, TR("D&x"), &m_rX, ValueRangeReal(-1e4, 1e4, 0.001));
+  FieldReal* flddY = new FieldReal(fgLeft, TR("D&y"), &m_rY, ValueRangeReal(-1e4, 1e4, 0.001));
+  FieldReal* flddZ = new FieldReal(fgLeft, TR("D&z"), &m_rZ, ValueRangeReal(-1e4, 1e4, 0.001));
 	//rot-angles entered by user in arcsecs
-	StaticText* stRotations = new StaticText(fgRight, SAFUiRotations);
-	FieldReal* fldrX = new FieldReal(fgRight, SAFUiDxRot, &m_rXrot, ValueRangeReal(-1e3, 1e3, 0.000001));
-  FieldReal* fldrY = new FieldReal(fgRight, SAFUiDyRot, &m_rYrot, ValueRangeReal(-1e3, 1e3, 0.000001));
-  FieldReal* fldrZ = new FieldReal(fgRight, SAFUiDzRot, &m_rZrot, ValueRangeReal(-1e3, 1e3, 0.000001));
+	StaticText* stRotations = new StaticText(fgRight, TR("Rotations: (arcsec)"));
+	FieldReal* fldrX = new FieldReal(fgRight, TR("Rx = &alpha"), &m_rXrot, ValueRangeReal(-1e3, 1e3, 0.000001));
+  FieldReal* fldrY = new FieldReal(fgRight, TR("Ry = &beta"), &m_rYrot, ValueRangeReal(-1e3, 1e3, 0.000001));
+  FieldReal* fldrZ = new FieldReal(fgRight, TR("Rz = &gamma"), &m_rZrot, ValueRangeReal(-1e3, 1e3, 0.000001));
 	//scale diff entered by user in ppm (parts per million)
-	FieldReal* fldScale = new FieldReal(root, SAFUiDscale, &m_rScaleDiff, ValueRangeReal(-1e3, 1e3, 0.00001));
+	FieldReal* fldScale = new FieldReal(root, TR("&Scale difference (ppm)"), &m_rScaleDiff, ValueRangeReal(-1e3, 1e3, 0.00001));
 	fldScale->Align(fgLeft, AL_UNDER);
-  fcs = new FieldCoordSystem(root, SAFUiTargCoordSys, &m_sCsyOut);
+  fcs = new FieldCoordSystem(root, TR("&Target Coordinate System"), &m_sCsyOut);
   fcs->SetCallBack((NotifyProc)&FormTableBursaWolf::CallBackCsyName);
   initTableOut(false);
   SetHelpItem("ilwisapp\\cross_variogram_dialog_box.htm");

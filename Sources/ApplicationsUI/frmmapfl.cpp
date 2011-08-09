@@ -100,19 +100,19 @@ public:
   {
     SetWidth(60);
     int i = 0;
-    sTypes[i++] = SAFUiLinFilter;
-    sTypes[i++] = SAFUiAverageFilter;
-    sTypes[i++] = SAFUiMajorityFilter;
-    sTypes[i++] = SAFUiRankOrderFilter;
-    sTypes[i++] = SAFUiMedianFilter;
-    sTypes[i++] = SAFUiPatternFilter;
-    sTypes[i++] = SAFUiBinFilter;
-    sTypes[i++] = SAFUiStdDevFilter;
+    sTypes[i++] = TR("Linear.fil");
+    sTypes[i++] = TR("Average.fil");
+    sTypes[i++] = TR("Majority.fil");
+    sTypes[i++] = TR("Rank Order.fil");
+    sTypes[i++] = TR("Median.fil");
+    sTypes[i++] = TR("Pattern.fil");
+    sTypes[i++] = TR("Binary.fil");
+    sTypes[i++] = TR("Standard Dev.fil");
   }
   void create() {
     FieldOneSelect::create();
     for (int i = 0; i < 8; ++i)
-      ose->AddString(sTypes[i].scVal());
+      ose->AddString(sTypes[i].c_str());
     ose->SetCurSel(*iTyp);
   }
 private:
@@ -140,12 +140,12 @@ private:
 
 LRESULT Cmdfilter(CWnd *wnd, const String& s)
 {
-	new FormFilterMap(wnd, s.scVal());
+	new FormFilterMap(wnd, s.c_str());
 	return -1;
 }
 
 FormFilterMap::FormFilterMap(CWnd* mw, const char* sPar)
-: FormMapCreate(mw, SAFTitleFilterMap)
+: FormMapCreate(mw, TR("Filtering"))
 {
   iType = 0;
   if (sPar) {
@@ -179,7 +179,7 @@ FormFilterMap::FormFilterMap(CWnd* mw, const char* sPar)
           sOutMap = fn.sFullName(false);
     }
   }
-  fldMap = new FieldDataType(root, SAFUiRasMap, &sMap, new MapListerDomainType(0,true,true), true);
+  fldMap = new FieldDataType(root, TR("&Raster Map"), &sMap, new MapListerDomainType(0,true,true), true);
   fldMap->SetCallBack((NotifyProc)&FormFilterMap::MapCallBack);
   stMapRemark = new StaticText(root, String('x',50));
   stMapRemark->SetIndependentPos();
@@ -195,13 +195,13 @@ FormFilterMap::FormFilterMap(CWnd* mw, const char* sPar)
   String sFill('X', 50);
   CheckBox *cbPreDef, *cbThreshold;
 
-  fft = new FieldFilterType(root, SAFUiFilterType, &iType);
+  fft = new FieldFilterType(root, TR("Filter &Type"), &iType);
   fft->SetCallBack((NotifyProc)&FormFilterMap::FilTypeCallBack);
   
   fgLin = new FieldGroup(root);
   fgLin->Align(fft, AL_UNDER);
   new FieldBlank(fgLin);
-  fldFilLin = new FieldFilterC(fgLin, SAFUiFilterName, &sFil, filLINEAR);
+  fldFilLin = new FieldFilterC(fgLin, TR("&Filter Name"), &sFil, filLINEAR);
   fldFilLin->SetCallBack((NotifyProc)&FormFilterMap::FilLinCallBack);
   stFilLin = new StaticText(fgLin, sFill);
   stFilLin->SetIndependentPos();
@@ -209,7 +209,7 @@ FormFilterMap::FormFilterMap(CWnd* mw, const char* sPar)
   fgBin = new FieldGroup(root);
   fgBin->Align(fft, AL_UNDER);
   new FieldBlank(fgBin);
-  fldFilBin = new FieldFilter(fgBin, SAFUiFilterName, &sFil, filBINARY);
+  fldFilBin = new FieldFilter(fgBin, TR("&Filter Name"), &sFil, filBINARY);
   fldFilBin->SetCallBack((NotifyProc)&FormFilterMap::FilBinCallBack);
   stFilBin = new StaticText(fgBin, sFill);
   stFilBin->SetIndependentPos();
@@ -217,49 +217,49 @@ FormFilterMap::FormFilterMap(CWnd* mw, const char* sPar)
   fgAvg = new FieldGroup(root);
   fgAvg->Align(fft, AL_UNDER);
   new FieldBlank(fgAvg);
-  (new FieldRowCol(fgAvg, SAFUiRowsColumns, &rc))->SetCallBack((NotifyProc)&FormFilterMap::FilAvgCallBack);
+  (new FieldRowCol(fgAvg, TR("&Rows, Columns"), &rc))->SetCallBack((NotifyProc)&FormFilterMap::FilAvgCallBack);
 
   fgMaj = new FieldGroup(root);
   fgMaj->Align(fft, AL_UNDER);
-  cbPreDef = new CheckBox(fgMaj, SAFUiPreDefFil, &fPreDef);
+  cbPreDef = new CheckBox(fgMaj, TR("&Predefined"), &fPreDef);
   cbPreDef->SetCallBack((NotifyProc)&FormFilterMap::FilMajPrdCallBack);
-  fldFilMaj = new FieldFilter(fgMaj, SAFUiFilterName, &sFil, filMAJORITY);
+  fldFilMaj = new FieldFilter(fgMaj, TR("&Filter Name"), &sFil, filMAJORITY);
   fldFilMaj->SetCallBack((NotifyProc)&FormFilterMap::FilMajCallBack);
   stFilMaj = new StaticText(fgMaj, sFill);
   stFilMaj->SetIndependentPos();
   fgUMaj = new FieldGroup(fgMaj);
   fgUMaj->Align(cbPreDef, AL_UNDER);
-  (new FieldRowCol(fgUMaj, SAFUiRowsColumns, &rc))->SetCallBack((NotifyProc)&FormFilterMap::FilMajCallBack);
-  (new CheckBox(fgUMaj, SAFUiOnlyUndef, &fUndefOnly))->SetCallBack((NotifyProc)&FormFilterMap::FilMajCallBack);
+  (new FieldRowCol(fgUMaj, TR("&Rows, Columns"), &rc))->SetCallBack((NotifyProc)&FormFilterMap::FilMajCallBack);
+  (new CheckBox(fgUMaj, TR("&Undefined"), &fUndefOnly))->SetCallBack((NotifyProc)&FormFilterMap::FilMajCallBack);
   
   fgMed = new FieldGroup(root);
   fgMed->Align(fft, AL_UNDER);
   (new FieldBlank(fgMed))->SetCallBack((NotifyProc)&FormFilterMap::FilMedCallBack);
-  (new FieldRowCol(fgMed, SAFUiRowsColumns, &rc))->SetCallBack((NotifyProc)&FormFilterMap::FilMedCallBack);
-  cbThreshold = new CheckBox(fgMed, SAFUiThreshold, &fThreshold);
+  (new FieldRowCol(fgMed, TR("&Rows, Columns"), &rc))->SetCallBack((NotifyProc)&FormFilterMap::FilMedCallBack);
+  cbThreshold = new CheckBox(fgMed, TR("&Threshold"), &fThreshold);
   cbThreshold->SetCallBack((NotifyProc)&FormFilterMap::FilMedCallBack);
   (new FieldReal(cbThreshold, "", &rThreshold))->SetCallBack((NotifyProc)&FormFilterMap::FilMedCallBack);
 
   fgRnk = new FieldGroup(root);
   fgRnk->Align(fft, AL_UNDER);
-  cbPreDef = new CheckBox(fgRnk, SAFUiPreDefFil, &fPreDef);
+  cbPreDef = new CheckBox(fgRnk, TR("&Predefined"), &fPreDef);
   cbPreDef->SetCallBack((NotifyProc)&FormFilterMap::FilRnkPrdCallBack);
-  fldFilRnk = new FieldFilter(fgRnk, SAFUiFilterName, &sFil, filRANK);
+  fldFilRnk = new FieldFilter(fgRnk, TR("&Filter Name"), &sFil, filRANK);
   fldFilRnk->SetCallBack((NotifyProc)&FormFilterMap::FilRnkCallBack);
   stFilRnk = new StaticText(fgRnk, sFill);
   stFilRnk->SetIndependentPos();
   fgURnk = new FieldGroup(fgRnk);
   fgURnk->Align(cbPreDef, AL_UNDER);
-  (new FieldRowCol(fgURnk, SAFUiRowsColumns, &rc))->SetCallBack((NotifyProc)&FormFilterMap::FilRnkCallBack);
-  (new FieldInt(fgURnk, SAFUiRank, &iRank))->SetCallBack((NotifyProc)&FormFilterMap::FilRnkCallBack);
-  cbThreshold = new CheckBox(fgURnk, SAFUiThreshold, &fThreshold);
+  (new FieldRowCol(fgURnk, TR("&Rows, Columns"), &rc))->SetCallBack((NotifyProc)&FormFilterMap::FilRnkCallBack);
+  (new FieldInt(fgURnk, TR("&Rank"), &iRank))->SetCallBack((NotifyProc)&FormFilterMap::FilRnkCallBack);
+  cbThreshold = new CheckBox(fgURnk, TR("&Threshold"), &fThreshold);
   cbThreshold->SetCallBack((NotifyProc)&FormFilterMap::FilRnkCallBack);
   (new FieldReal(cbThreshold, "", &rThreshold))->SetCallBack((NotifyProc)&FormFilterMap::FilRnkCallBack);
   
   fgPat = new FieldGroup(root);
   fgPat->Align(fft, AL_UNDER);
   new FieldBlank(fgPat);
-  (new FieldReal(fgPat, SAFUiThreshold, &rThreshold))->SetCallBack((NotifyProc)&FormFilterMap::FilPatCallBack);
+  (new FieldReal(fgPat, TR("&Threshold"), &rThreshold))->SetCallBack((NotifyProc)&FormFilterMap::FilPatCallBack);
 
   FieldBlank* fb = new FieldBlank(root, 0);
   fb->Align(cbThreshold, AL_UNDER);
@@ -502,13 +502,13 @@ int FormFilterMap::MapCallBack(Event*)
     RangeReal rr = mp->rrMinMax();
     if (dm->pdvi() || dm->pdvr() || dm->pdi()) {
       if (rr.fValid()) {
-        String sRemark(SAFInfMinMax_SS.scVal(),
+        String sRemark(TR("Minimum: %S  Maximum: %S").c_str(),
                  dvs.sValue(rr.rLo()), dvs.sValue(rr.rHi()));
         stMapRemark->SetVal(sRemark);
       }
       else {
         RangeReal rr = dvs.rrMinMax();
-        String sRemark(SAFInfRangeMinMax_SS.scVal(), 
+        String sRemark(TR("Ranges from %S to %S").c_str(), 
                  dvs.sValue(rr.rLo()), dvs.sValue(rr.rHi()));
         stMapRemark->SetVal(sRemark);
       } 

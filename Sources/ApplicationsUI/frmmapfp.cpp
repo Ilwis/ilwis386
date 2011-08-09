@@ -179,12 +179,12 @@
 
 LRESULT Cmdpntras(CWnd *wnd, const String& s)
 {
-	new FormRasPoint(wnd, s.scVal());
+	new FormRasPoint(wnd, s.c_str());
 	return -1;
 }
 
 FormRasPoint::FormRasPoint(CWnd* mw, const char* sPar)
-: FormRasterize(mw, SAFTitleRasPntMap)
+: FormRasterize(mw, TR("Rasterize Point Map"))
 {
   if (sPar) {
     TextInput ip(sPar); 
@@ -204,13 +204,13 @@ FormRasPoint::FormRasPoint(CWnd* mw, const char* sPar)
         sOutMap = fn.sFullName(false);
     }
   }
-  feMap = new FieldPointMap(root, SAFUiPntMap, &sMap, new MapListerDomainType(".mpp", 0, true));
+  feMap = new FieldPointMap(root, TR("&Point Map"), &sMap, new MapListerDomainType(".mpp", 0, true));
   feMap->SetCallBack((NotifyProc)&FormRasterize::MapCallBack);
 	initAsk( dmVALUE | dmCLASS | dmIDENT | dmBOOL | dmSTRING | dmUNIQUEID);
   void *adress=&feMap;
 
   iPointSize = 1;
-  new FieldInt(root, SAFUiPointSize, &iPointSize);
+  new FieldInt(root, TR("Point &Size"), &iPointSize);
   initMapOutValRange(true);
   SetHelpItem("ilwisapp\\points_to_raster_dialogbox.htm");
   create();
@@ -227,12 +227,12 @@ int FormRasPoint::exec()
 }
 
 LRESULT Cmdpntdensity(CWnd *parent, const String& s) {
-	new FormRasPointCount(parent, s.scVal());
+	new FormRasPointCount(parent, s.c_str());
 	return -1;
 }
 
 FormRasPointCount::FormRasPointCount(CWnd* mw, const char* sPar)
-: FormRasterize(mw, SAFTitleRasPntDensity)
+: FormRasterize(mw, TR("Point Density"))
 {
   sDomain = "count.dom";
   if (sPar) {
@@ -253,11 +253,11 @@ FormRasPointCount::FormRasPointCount(CWnd* mw, const char* sPar)
         sOutMap = fn.sFullName(false);
     }
   }
-  feMap = new FieldPointMap(root, SAFUiPntMap, &sMap);
+  feMap = new FieldPointMap(root, TR("&Point Map"), &sMap);
   initAsk(dmVALUE|dmCLASS|dmIDENT|dmBOOL);
 
   iPointSize = 1;
-  new FieldInt(root, SAFUiPointSize, &iPointSize);
+  new FieldInt(root, TR("Point &Size"), &iPointSize);
   initMapOut(true,(long)dmVALUE);
   SetHelpItem("ilwisapp\\point_density_dialog_box.htm");
   create();
@@ -275,12 +275,12 @@ int FormRasPointCount::exec()
 
 LRESULT Cmdnearestpnt(CWnd *wnd, const String& s)
 {
-	new FormMapNearestPoint(wnd, s.scVal());
+	new FormMapNearestPoint(wnd, s.c_str());
 	return -1;
 }
 
 FormMapNearestPoint::FormMapNearestPoint(CWnd* mw, const char* sPar)
-: FormRasterize(mw, SAFTitleInterpolNearestPoint)
+: FormRasterize(mw, TR("Nearest Point"))
 {
 	fSphericalDistance = false;
   if (sPar) {
@@ -301,9 +301,9 @@ FormMapNearestPoint::FormMapNearestPoint(CWnd* mw, const char* sPar)
         sOutMap = fn.sFullName(false);
     }
   }
-  feMap = new FieldPointMap(root, SAFUiPntMap, &sMap, new MapListerDomainType(".mpp", 0, true));
+  feMap = new FieldPointMap(root, TR("&Point Map"), &sMap, new MapListerDomainType(".mpp", 0, true));
 	initAsk(dmVALUE|dmCLASS|dmIDENT|dmBOOL);
-	CheckBox* cb = new CheckBox(root, SAFUiSphericalDist, &fSphericalDistance);
+	CheckBox* cb = new CheckBox(root, TR("Use &Spherical Distance"), &fSphericalDistance);
 	cb->SetIndependentPos();
   initMapOutValRange(true);
   SetAppHelpTopic("	ilwisapp\nearest_point_dialogbox.htm");
@@ -343,7 +343,7 @@ FormMapGridding::FormMapGridding(CWnd* mw, const String& sTitle,
         sOutMap = fn.sFullName(false);
     }
   }
-  feMap = new FieldPointMap(root, SAFUiPntMap, &sMap, new MapListerDomainType(".mpp", dmVALUE, true));
+  feMap = new FieldPointMap(root, TR("&Point Map"), &sMap, new MapListerDomainType(".mpp", dmVALUE, true));
   initAsk(dmVALUE);
 }
 
@@ -363,15 +363,15 @@ FormMapGriddingWeighted::FormMapGriddingWeighted(CWnd* mw, const String& sTitle,
     rExp = 1;
     rLimDist = 100;
 		feMap->SetCallBack((NotifyProc)&FormMapGriddingWeighted::MapCallBack);
-    RadioGroup* rg = new RadioGroup(root, SAFUiWeightFunction, &iWeight);
+    RadioGroup* rg = new RadioGroup(root, TR("&Weight Function:"), &iWeight);
     rg->SetIndependentPos();
-    new RadioButton(rg, SAFUiInvDist);
-    new RadioButton(rg, SAFUiLinDecr);
+    new RadioButton(rg, TR("&Inverse Distance"));
+    new RadioButton(rg, TR("&Linear Decrease"));
 //    Domain dm(0, 1e6, 0);
-    new FieldReal(root, SAFUiPowerValue, &rExp, ValueRangeReal(0, 1e6, 0));
-    frLimDist = new FieldReal(root, SAFUiLimDist, &rLimDist, ValueRangeReal(0, 1e8, 1));
+    new FieldReal(root, TR("Weight &Exponent"), &rExp, ValueRangeReal(0, 1e6, 0));
+    frLimDist = new FieldReal(root, TR("Limiting &Distance"), &rLimDist, ValueRangeReal(0, 1e8, 1));
 		fSphericalDistance = false;
-		cbSphDis = new CheckBox(root, SAFUiSphericalDist, &fSphericalDistance);
+		cbSphDis = new CheckBox(root, TR("Use &Spherical Distance"), &fSphericalDistance);
 		cbSphDis->SetIndependentPos();
 		cbSphDis->SetCallBack((NotifyProc)&FormMapGriddingWeighted::DistanceMethodCallBack);
 }
@@ -422,12 +422,12 @@ int FormMapGriddingWeighted::exec()
 
 LRESULT Cmdmovaverage(CWnd *wnd, const String& s)
 {
-	new FormMapMovingAverage(wnd, s.scVal());
+	new FormMapMovingAverage(wnd, s.c_str());
 	return -1;
 }
 
 FormMapMovingAverage::FormMapMovingAverage(CWnd* mw, const char* sPar)
-: FormMapGriddingWeighted(mw, SAFTitleInterpolMovAvg, sPar)
+: FormMapGriddingWeighted(mw, TR("Moving Average"), sPar)
 {
   initMapOutValRange(true);
   SetHelpItem("ilwisapp\\moving_average_dialogbox.htm");
@@ -455,14 +455,14 @@ public:
   }
   void create() {
     FieldOneSelect::create();
-    ose->AddString(SAFUiPlane.scVal());
-    ose->AddString(SAFUi2Linear.scVal());	    
-    ose->AddString(SAFUi2Parabolic.scVal());	    
-    ose->AddString(SAFUi2Degree.scVal());	    
-    ose->AddString(SAFUi3Degree.scVal());	    
-    ose->AddString(SAFUi4Degree.scVal());	    
-    ose->AddString(SAFUi5Degree.scVal());	    
-    ose->AddString(SAFUi6Degree.scVal());	    
+    ose->AddString(TR("Plane.srf").c_str());
+    ose->AddString(TR("2nd degree Linear.srf").c_str());	    
+    ose->AddString(TR("2nd degree Parabolic.srf").c_str());	    
+    ose->AddString(TR("2nd degree.srf").c_str());	    
+    ose->AddString(TR("3rd degree.srf").c_str());	    
+    ose->AddString(TR("4th degree.srf").c_str());	    
+    ose->AddString(TR("5th degree.srf").c_str());	    
+    ose->AddString(TR("6th degree.srf").c_str());	    
     ose->SetCurSel(*val);
   }
 };
@@ -488,16 +488,16 @@ private:
 
 LRESULT Cmdmovsurface(CWnd *wnd, const String& s)
 {
-	new FormMapMovingSurface(wnd, s.scVal());
+	new FormMapMovingSurface(wnd, s.c_str());
 	return -1;
 }
 
 FormMapMovingSurface::FormMapMovingSurface(CWnd* mw, const char* sPar)
-: FormMapGriddingWeighted(mw, SAFTitleInterpolMovSurface, sPar)
+: FormMapGriddingWeighted(mw, TR("Moving Surface"), sPar)
 {
   fWiderValRange = true;
   iSurface = 0;
-  FieldSurface* fs = new FieldSurface(root, SAFUiSurface, &iSurface);
+  FieldSurface* fs = new FieldSurface(root, TR("&Surface"), &iSurface);
   initMapOutValRange(true);
   SetHelpItem("ilwisapp\\moving_surface_dialog_box.htm");
   create();
@@ -527,26 +527,26 @@ int FormMapMovingSurface::exec()
 
 LRESULT Cmdtrendsurface(CWnd *wnd, const String& s)
 {
-	new FormMapTrendSurface(wnd, s.scVal());
+	new FormMapTrendSurface(wnd, s.c_str());
 	return -1;
 }
 
 FormMapTrendSurface::FormMapTrendSurface(CWnd* mw, const char* sPar)
-: FormMapGridding(mw, SAFTitleInterpolTrendSurface, sPar)
+: FormMapGridding(mw, TR("Trend Surface"), sPar)
 {
   fWiderValRange = true;
   iSurface = 3;
-  new FieldSurface(root, SAFUiSurface, &iSurface);
+  new FieldSurface(root, TR("&Surface"), &iSurface);
 /*  
-  RadioGroup* rg = new RadioGroup(root, SAFUiSurface, &iSurface);
-  new RadioButton(rg, SAFUiPlane);
-  new RadioButton(rg, SAFUi2Linear);
-  new RadioButton(rg, SAFUi2Parabolic);
-  new RadioButton(rg, SAFUi2Degree);
-  new RadioButton(rg, SAFUi3Degree);
-  new RadioButton(rg, SAFUi4Degree);
-  new RadioButton(rg, SAFUi5Degree);
-  new RadioButton(rg, SAFUi6Degree);
+  RadioGroup* rg = new RadioGroup(root, TR("&Surface"), &iSurface);
+  new RadioButton(rg, TR("Plane.srf"));
+  new RadioButton(rg, TR("2nd degree Linear.srf"));
+  new RadioButton(rg, TR("2nd degree Parabolic.srf"));
+  new RadioButton(rg, TR("2nd degree.srf"));
+  new RadioButton(rg, TR("3rd degree.srf"));
+  new RadioButton(rg, TR("4th degree.srf"));
+  new RadioButton(rg, TR("5th degree.srf"));
+  new RadioButton(rg, TR("6th degree.srf"));
 */  
   initMapOutValRange(true);
   SetHelpItem("ilwisapp\\trend_surface_dialog_box.htm");
@@ -576,12 +576,12 @@ int FormMapTrendSurface::exec()
 
 LRESULT Cmdkriging(CWnd *wnd, const String& s)
 {
-	new FormMapKriging(wnd, s.scVal());
+	new FormMapKriging(wnd, s.c_str());
 	return -1;
 } 
 
 FormMapKriging::FormMapKriging(CWnd* mw, const char* sPar)
-: FormRasterize(mw, SAFTitleMapKriging)
+: FormRasterize(mw, TR("Kriging"))
 {
   fWiderValRange = true;
   iSimpleOrdinary = 1;
@@ -611,35 +611,35 @@ FormMapKriging::FormMapKriging(CWnd* mw, const char* sPar)
         sOutMap = fn.sFullName(false);
     }
   }
-  feMap = new FieldPointMap(root, SAFUiPntMap, &sMap, new MapListerDomainType(".mpp", dmVALUE|dmBOOL, true));
+  feMap = new FieldPointMap(root, TR("&Point Map"), &sMap, new MapListerDomainType(".mpp", dmVALUE|dmBOOL, true));
   initAsk(dmVALUE);
 	feMap->SetCallBack((NotifyProc)&FormMapKriging::MapCallBack);
 
-  FieldSemiVariogram* fsv = new FieldSemiVariogram(root, SAFUiSemiVar, &smv);
+  FieldSemiVariogram* fsv = new FieldSemiVariogram(root, TR("&SemiVariogram"), &smv);
   fsv->SetIndependentPos();
-  RadioGroup* rg = new RadioGroup(root, SAFUiMethod, &iSimpleOrdinary);
+  RadioGroup* rg = new RadioGroup(root, TR("&Method:"), &iSimpleOrdinary);
   rg->Align(fsv, AL_AFTER);
-  new RadioButton(rg, SAFUiSimpleKriging);
-  RadioButton* rbOrdinary = new RadioButton(rg, SAFUiOrdinaryKriging);
+  new RadioButton(rg, TR("&Simple Kriging"));
+  RadioButton* rbOrdinary = new RadioButton(rg, TR("&Ordinary Kriging"));
 
   FieldGroup* fgOrdinary = new FieldGroup(rbOrdinary);
   fgOrdinary->Align(fsv, AL_UNDER);
-  new FieldReal(fgOrdinary, SAFUiLimDist, &rLimDist, ValueRangeReal(0, 1e6, 0));
-  new FieldRangeInt(fgOrdinary, SAFUiMinMaxNrPnts, &riMinMax, ValueRange(1,100));
+  new FieldReal(fgOrdinary, TR("Limiting &Distance"), &rLimDist, ValueRangeReal(0, 1e6, 0));
+  new FieldRangeInt(fgOrdinary, TR("&Min, max nr of points"), &riMinMax, ValueRange(1,100));
 
-  CheckBox* cb = new CheckBox(root, SAFUiRemoveDuplicates, &fDuplicRemoval);
+  CheckBox* cb = new CheckBox(root, TR("&Remove Duplicates"), &fDuplicRemoval);
   FieldGroup* fgRemDup = new FieldGroup(cb);
   RadioGroup* rgDup = new RadioGroup(fgRemDup, "", &iDuplicRemoval,true);
   rgDup->Align(cb, AL_AFTER);
-  new RadioButton(rgDup, SAFUiRemDupAverage);
-  new RadioButton(rgDup, SAFUiRemDupFirstValue);
-  FieldReal* frTol = new FieldReal(fgRemDup, SAFUiRemDupToleranceM, &rTolerance, ValueRange(0,1e12,0.1));
+  new RadioButton(rgDup, TR("&Average"));
+  new RadioButton(rgDup, TR("&First Value"));
+  FieldReal* frTol = new FieldReal(fgRemDup, TR("&Tolerance (m)"), &rTolerance, ValueRange(0,1e12,0.1));
   frTol->Align(cb, AL_UNDER);
 
-	CheckBox* cbSphDist = new CheckBox(root, SAFUiSphericalDist, &fSphericalDistance);
+	CheckBox* cbSphDist = new CheckBox(root, TR("Use &Spherical Distance"), &fSphericalDistance);
 	cbSphDist->SetIndependentPos();
   initMapOutValRange(true);
-  CheckBox* cbEr = new CheckBox(root, SAFUiErrorMap, &fErrorMap);
+  CheckBox* cbEr = new CheckBox(root, TR("&Error Map"), &fErrorMap);
 
   SetHelpItem("ilwisapp\\kriging_dialog_box.htm");
   create();
@@ -697,12 +697,12 @@ int FormMapKriging::exec()
 
 LRESULT Cmdunivkriging(CWnd *wnd, const String& s)
 {
-	new FormMapUniversalKriging(wnd, s.scVal());
+	new FormMapUniversalKriging(wnd, s.c_str());
 	return -1;
 } 
 
 FormMapUniversalKriging::FormMapUniversalKriging(CWnd* mw, const char* sPar)
-: FormRasterize(mw, SAFTitleMapUniversalKriging)
+: FormRasterize(mw, TR("Universal Kriging"))
 {
   fWiderValRange = true;
   iTrend = 0;
@@ -732,35 +732,35 @@ FormMapUniversalKriging::FormMapUniversalKriging(CWnd* mw, const char* sPar)
         sOutMap = fn.sFullName(false);
     }
   }
-  feMap = new FieldPointMap(root, SAFUiPntMap, &sMap, new MapListerDomainType(".mpp", dmVALUE, true));
+  feMap = new FieldPointMap(root, TR("&Point Map"), &sMap, new MapListerDomainType(".mpp", dmVALUE, true));
   initAsk(dmVALUE);
 	feMap->SetCallBack((NotifyProc)&FormMapUniversalKriging::MapCallBack);
 
-  rgTrend = new RadioGroup(root, SAFUiTrend, &iTrend, true);
+  rgTrend = new RadioGroup(root, TR("&Trend"), &iTrend, true);
   rgTrend->SetCallBack((NotifyProc)&FormMapUniversalKriging::TrendCallBack);
   rgTrend->SetIndependentPos();
   new RadioButton(rgTrend, "&1");
   new RadioButton(rgTrend, "&2");
 
-  FieldSemiVariogram* fsv = new FieldSemiVariogram(root, SAFUiSemiVar, &smv);
+  FieldSemiVariogram* fsv = new FieldSemiVariogram(root, TR("&SemiVariogram"), &smv);
   fsv->SetIndependentPos();
 
-  CheckBox* cb = new CheckBox(root, SAFUiRemoveDuplicates, &fDuplicRemoval);
+  CheckBox* cb = new CheckBox(root, TR("&Remove Duplicates"), &fDuplicRemoval);
   cb->Align(fsv, AL_AFTER);
   FieldGroup* fgRemDup = new FieldGroup(cb);
   RadioGroup* rgDup = new RadioGroup(fgRemDup, "", &iDuplicRemoval,true);
   rgDup->Align(cb, AL_UNDER);
-  new RadioButton(rgDup, SAFUiRemDupAverage);
-  new RadioButton(rgDup, SAFUiRemDupFirstValue);
-  FieldReal* frTol = new FieldReal(fgRemDup, SAFUiRemDupToleranceM, &rTolerance, ValueRange(0,1e12,0.1));
+  new RadioButton(rgDup, TR("&Average"));
+  new RadioButton(rgDup, TR("&First Value"));
+  FieldReal* frTol = new FieldReal(fgRemDup, TR("&Tolerance (m)"), &rTolerance, ValueRange(0,1e12,0.1));
   frTol->Align(rgDup, AL_UNDER);
 
-  FieldReal* fr = new FieldReal(root, SAFUiLimDist, &rLimDist, ValueRangeReal(0, 1e6, 0));
+  FieldReal* fr = new FieldReal(root, TR("Limiting &Distance"), &rLimDist, ValueRangeReal(0, 1e6, 0));
   fr->Align(fsv, AL_UNDER);
-  fmm = new FieldRangeInt(root, SAFUiMinMaxNrPnts, &riMinMax, ValueRange(3,100));
+  fmm = new FieldRangeInt(root, TR("&Min, max nr of points"), &riMinMax, ValueRange(3,100));
 
   initMapOutValRange(true);
-  CheckBox* cbEr = new CheckBox(root, SAFUiErrorMap, &fErrorMap);
+  CheckBox* cbEr = new CheckBox(root, TR("&Error Map"), &fErrorMap);
   //new FieldMapCreate(cbEr, "", &sErrorMap);
 
   SetHelpItem("ilwisapp\\universal_kriging_dialog_box.htm");
@@ -825,12 +825,12 @@ int FormMapUniversalKriging::exec()
 
 LRESULT Cmdanisotrkriging(CWnd *wnd, const String& s)
 {
-	new FormMapAnisotropicKriging(wnd, s.scVal());
+	new FormMapAnisotropicKriging(wnd, s.c_str());
 	return -1;
 } 
 
 FormMapAnisotropicKriging::FormMapAnisotropicKriging(CWnd* mw, const char* sPar)
-: FormRasterize(mw, SAFTitleMapAnisotropicKriging)
+: FormRasterize(mw, TR("Anisotropic Kriging"))
 {
   rRatio = 1;
   rAngle = 0;
@@ -860,37 +860,37 @@ FormMapAnisotropicKriging::FormMapAnisotropicKriging(CWnd* mw, const char* sPar)
         sOutMap = fn.sFullName(false);
     }
   }
-  feMap = new FieldPointMap(root, SAFUiPntMap, &sMap, new MapListerDomainType(".mpp", dmVALUE, true));
+  feMap = new FieldPointMap(root, TR("&Point Map"), &sMap, new MapListerDomainType(".mpp", dmVALUE, true));
   initAsk(dmVALUE);
 	feMap->SetCallBack((NotifyProc)&FormMapAnisotropicKriging::MapCallBack);
 
   FieldGroup* fg = new FieldGroup(root);
   fg->SetIndependentPos();
-  FieldReal* frAngle = new FieldReal(fg, SAFUiAngle, &rAngle, ValueRange(-360,360,0.01));
-  FieldReal* frRatio = new FieldReal(fg, SAFUiRatio, &rRatio, ValueRange(1,10,0.01));
+  FieldReal* frAngle = new FieldReal(fg, TR("&Angle"), &rAngle, ValueRange(-360,360,0.01));
+  FieldReal* frRatio = new FieldReal(fg, TR("&Ratio"), &rRatio, ValueRange(1,10,0.01));
   frRatio->Align(frAngle, AL_AFTER);
 
-  FieldSemiVariogram* fsv = new FieldSemiVariogram(root, SAFUiSemiVar, &smv);
+  FieldSemiVariogram* fsv = new FieldSemiVariogram(root, TR("&SemiVariogram"), &smv);
   fsv->Align(fg, AL_UNDER);
   fsv->SetIndependentPos();
 
-  CheckBox* cb = new CheckBox(root, SAFUiRemoveDuplicates, &fDuplicRemoval);
+  CheckBox* cb = new CheckBox(root, TR("&Remove Duplicates"), &fDuplicRemoval);
   cb->Align(fsv, AL_AFTER);
   FieldGroup* fgRemDup = new FieldGroup(cb);
   RadioGroup* rgDup = new RadioGroup(fgRemDup, "", &iDuplicRemoval,true);
   rgDup->Align(cb, AL_UNDER);
-  new RadioButton(rgDup, SAFUiRemDupAverage);
-  new RadioButton(rgDup, SAFUiRemDupFirstValue);
-  FieldReal* frTol = new FieldReal(fgRemDup, SAFUiRemDupToleranceM, &rTolerance, ValueRange(0,1e12,0.1));
+  new RadioButton(rgDup, TR("&Average"));
+  new RadioButton(rgDup, TR("&First Value"));
+  FieldReal* frTol = new FieldReal(fgRemDup, TR("&Tolerance (m)"), &rTolerance, ValueRange(0,1e12,0.1));
   frTol->Align(rgDup, AL_UNDER);
 
-  FieldReal* fr = new FieldReal(root, SAFUiLimDist, &rLimDist, ValueRangeReal(0, 1e6, 0));
+  FieldReal* fr = new FieldReal(root, TR("Limiting &Distance"), &rLimDist, ValueRangeReal(0, 1e6, 0));
   fr->Align(fsv, AL_UNDER);
-  new FieldRangeInt(root, SAFUiMinMaxNrPnts, &riMinMax, ValueRange(1,100));
+  new FieldRangeInt(root, TR("&Min, max nr of points"), &riMinMax, ValueRange(1,100));
 
 
   initMapOutValRange(true);
-  CheckBox* cbEr = new CheckBox(root, SAFUiErrorMap, &fErrorMap);
+  CheckBox* cbEr = new CheckBox(root, TR("&Error Map"), &fErrorMap);
   //new FieldMapCreate(cbEr, "", &sErrorMap);
 
   SetHelpItem("ilwisapp\\anisotropic_kriging_dialog_box.htm");
@@ -941,12 +941,12 @@ int FormMapAnisotropicKriging::exec()
 
 LRESULT Cmdcokriging(CWnd *wnd, const String& s)
 {
-	new FormMapCoKriging(wnd, s.scVal());
+	new FormMapCoKriging(wnd, s.c_str());
 	return -1;
 }
 
 FormMapCoKriging::FormMapCoKriging(CWnd* mw, const char* sPar)
-: FormRasterize(mw, SAFTitleMapCoKriging)
+: FormRasterize(mw, TR("CoKriging"))
 {
   fWiderValRange = true;
   fDuplicRemoval = true;
@@ -977,34 +977,34 @@ FormMapCoKriging::FormMapCoKriging(CWnd* mw, const char* sPar)
         sOutMap = fn.sFullName(false);
     }
   }
-  feMap = new FieldPointMap(root, SAFUiPredictand, &sMap, new MapListerDomainType(".mpp",dmVALUE, true));
+  feMap = new FieldPointMap(root, TR("&Predictand"), &sMap, new MapListerDomainType(".mpp",dmVALUE, true));
 	initAsk(dmVALUE);
 	feMap->SetCallBack((NotifyProc)&FormMapCoKriging::MapCallBack);
 
-	new FieldPointMap(root, SAFUiCoVariable, &sMapCoVar, new MapListerDomainType(".mpp",dmVALUE, true));
+	new FieldPointMap(root, TR("&Covariable"), &sMapCoVar, new MapListerDomainType(".mpp",dmVALUE, true));
 
-  as[0] = SAFUiSemiVar;
-  as[1] = SAFUiSemiVarCoVar;
-  as[2] = SAFUiCrossVar;
+  as[0] = TR("&SemiVariogram");
+  as[1] = TR("CoVariogram");
+  as[2] = TR("CrossVariogram");
   FieldSemiVariogramList* fsvl = new FieldSemiVariogramList(root, 3, as, smv);
   fsvl->SetIndependentPos();
 
-  FieldReal* fr = new FieldReal(root, SAFUiLimDist, &rLimDist, ValueRangeReal(0, 1e6, 0));
+  FieldReal* fr = new FieldReal(root, TR("Limiting &Distance"), &rLimDist, ValueRangeReal(0, 1e6, 0));
   fr->Align(fsvl, AL_UNDER);
-  new FieldRangeInt(root, SAFUiMinMaxNrPnts, &riMinMax, ValueRange(1,100));
-  CheckBox* cb = new CheckBox(root, SAFUiRemoveDuplicates, &fDuplicRemoval);
+  new FieldRangeInt(root, TR("&Min, max nr of points"), &riMinMax, ValueRange(1,100));
+  CheckBox* cb = new CheckBox(root, TR("&Remove Duplicates"), &fDuplicRemoval);
   FieldGroup* fgRemDup = new FieldGroup(cb);
   RadioGroup* rgDup = new RadioGroup(fgRemDup, "", &iDuplicRemoval,true);
   rgDup->Align(cb, AL_AFTER);
-  new RadioButton(rgDup, SAFUiRemDupAverage);
-  new RadioButton(rgDup, SAFUiRemDupFirstValue);
-  FieldReal* frTol = new FieldReal(fgRemDup, SAFUiRemDupToleranceM, &rTolerance, ValueRange(0,1e12,0.1));
+  new RadioButton(rgDup, TR("&Average"));
+  new RadioButton(rgDup, TR("&First Value"));
+  FieldReal* frTol = new FieldReal(fgRemDup, TR("&Tolerance (m)"), &rTolerance, ValueRange(0,1e12,0.1));
   frTol->Align(cb, AL_UNDER);
-	CheckBox* cbSphDist = new CheckBox(root, SAFUiSphericalDist, &fSphericalDistance);
+	CheckBox* cbSphDist = new CheckBox(root, TR("Use &Spherical Distance"), &fSphericalDistance);
 	cbSphDist->SetIndependentPos();
 	
   initMapOutValRange(true);
-  CheckBox* cbEr = new CheckBox(root, SAFUiErrorMap, &fErrorMap);
+  CheckBox* cbEr = new CheckBox(root, TR("&Error Map"), &fErrorMap);
   //new FieldMapCreate(cbEr, "", &sErrorMap);
 
   SetHelpItem("ilwisapp\\cokriging_dialog_box.htm");

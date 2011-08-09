@@ -8,7 +8,7 @@
 
 LRESULT Cmdaggregatemaplist(CWnd *wnd, const String& s)
 {
-	new FormMapAggregateMapList(wnd, s.scVal());
+	new FormMapAggregateMapList(wnd, s.c_str());
 	return -1;
 }
 

@@ -83,12 +83,12 @@
 
 LRESULT Cmduniqueid(CWnd *wnd, const String& s)
 {
-	new FormUniqueID(wnd, s.scVal());
+	new FormUniqueID(wnd, s.c_str());
 	return -1;
 }
 
 FormUniqueID::FormUniqueID(CWnd* mw, const char* sPar)
-: FormGeneralMapCreate(mw, SAFTitleUniqueID)
+: FormGeneralMapCreate(mw, TR("Unique ID"))
 {
 	if (sPar)
 	{
@@ -109,7 +109,7 @@ FormUniqueID::FormUniqueID(CWnd* mw, const char* sPar)
 	}
 	initMapIn(".mpp.mps.mpa");
 	
-	fsPrefix = new FieldString(root, SAFUiDomPrefix, &sNewPrefix, Domain());
+	fsPrefix = new FieldString(root, TR("Domain &Prefix"), &sNewPrefix, Domain());
 	fsPrefix->SetCallBack((NotifyProc)&FormUniqueID::CheckPrefix);
 	
 	FieldBlank* fb = new FieldBlank(root, 0);
@@ -162,7 +162,7 @@ int FormUniqueID::CheckPrefix(Event*)
 	}
 	else    
 	{
-		String sRemark = String(SDMErrInvalidCharInPrefix_c.scVal(), ':');
+		String sRemark = String(TR("The '%c' character is not allowed in the prefix").c_str(), ':');
 		stRemark->SetVal(sRemark);
 		DisableOK();
 	}

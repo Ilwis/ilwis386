@@ -83,7 +83,7 @@
  * Class/Id/Group/Bool/UniqueID
  * 
  * 30    10-01-01 18:24 Hendrikse
- * improved in FormKrigingFromRaster: SAFUiMinMaxNrInpPix  text
+ * improved in FormKrigingFromRaster: TR("&Min, max nr of input pixels")  text
  * 
  * 29    4-01-01 21:08 Hendrikse
  * added rRadiusInMetersOrPixels in exec() to make the radius value
@@ -158,7 +158,7 @@
  * 
  * 11    1-02-00 10:26 Hendrikse
  * improved line spacings with Fieldblank o.2
- * made use of new texts SAFUiUnitsMeters and SAFUiUnitsPixels 
+ * made use of new texts TR("&Meters:") and TR("&Pixels:") 
  * 
  * 10    31-01-00 12:55 Hendrikse
  * included  fldsmv.h
@@ -271,12 +271,12 @@
 #include "Headers\constant.h"
 
 LRESULT Cmddistance(CWnd *parent, const String& s) {
-	new FormDistanceMap(parent, s.scVal());
+	new FormDistanceMap(parent, s.c_str());
 	return -1;
 }
 
 FormDistanceMap::FormDistanceMap(CWnd* mw, const char* sPar)
-: FormMapCreate(mw, SAFTitleDistanceMap)
+: FormMapCreate(mw, TR("Distance Calculation"))
 {
   fWeightMap = false;
   if (sPar) {
@@ -301,10 +301,10 @@ FormDistanceMap::FormDistanceMap(CWnd* mw, const char* sPar)
     }
   }
   sDomain = "distance.dom";
-  fldSourceMap = new FieldDataType(root, SAFUiSourceMap, &sSourceMap, 
+  fldSourceMap = new FieldDataType(root, TR("&Source Map"), &sSourceMap, 
                                    new MapListerDomainType(".mpr", dmCLASS|dmIDENT|dmBOOL, true), true);
   fldSourceMap->SetCallBack((NotifyProc)&FormDistanceMap::CallBack);
-  CheckBox* cb = new CheckBox(root, SAFUiWeightMap, &fWeightMap);
+  CheckBox* cb = new CheckBox(root, TR("&Weight Map"), &fWeightMap);
   fldWeightMap = new FieldDataType(cb, "", &sWeightMap, new MapListerDomainType(".mpr", dmVALUE, true), true);
   fldWeightMap->SetCallBack((NotifyProc)&FormDistanceMap::WeightMapCallBack);
   stWeightMapRemark = new StaticText(root, String('x',50));
@@ -314,7 +314,7 @@ FormDistanceMap::FormDistanceMap(CWnd* mw, const char* sPar)
   initMapOut(false, (long)dmVALUE);
 
   fThiessenMap = false;
-  CheckBox* cbTm = new CheckBox(root, SAFUiThiessenMap, &fThiessenMap);
+  CheckBox* cbTm = new CheckBox(root, TR("&Thiessen Map"), &fThiessenMap);
   new FieldMapCreate(cbTm, "", &sThiessenMap);
   
   SetHelpItem("ilwisapp\\distance_calculation_dialogbox.htm");
@@ -379,7 +379,7 @@ int FormDistanceMap::WeightMapCallBack(Event*)
     Map mp(fnMap);
     DomainValueRangeStruct dvs = mp->dvrs();
     RangeReal rr = mp->rrMinMax();
-    String sRemark(SAFInfMinMax_SS.scVal(),
+    String sRemark(TR("Minimum: %S  Maximum: %S").c_str(),
                dvs.sValue(rr.rLo()), dvs.sValue(rr.rHi()));
     stWeightMapRemark->SetVal(sRemark);
   }
@@ -389,7 +389,7 @@ int FormDistanceMap::WeightMapCallBack(Event*)
   return 0;
 }
 LRESULT Cmdeffectdistance(CWnd *parent, const String& s) {
-	new FormEffectDistanceMap(parent, s.scVal());
+	new FormEffectDistanceMap(parent, s.c_str());
 	return -1;
 }
 
@@ -426,7 +426,7 @@ FormEffectDistanceMap::FormEffectDistanceMap(CWnd* mw, const char* sPar)
     }
   }
   sDomain = "distance.dom";
-  FieldMap *fm = new FieldMap(root, SAFUiSourceMap, &sSourceMap);
+  FieldMap *fm = new FieldMap(root, TR("&Source Map"), &sSourceMap);
   fm->SetCallBack((NotifyProc)&FormEffectDistanceMap::OnSelect);
   ValueRange vr1(0, 1e300, 1e-2);
   FieldReal* fldMaxDist = new FieldReal(root, "Max. distance", &m_rDist, vr1);
@@ -526,8 +526,8 @@ int FormEffectDistanceMap::exec()
 
 
   if (fn.fExist()) {
-	String sErr(SAFMsgAlreadyExistsOverwrite_S.scVal(), fn.sFullPath(true));
-	int iRet=mw->MessageBox(sErr.scVal(), SAFMsgAlreadyExists.scVal(), MB_YESNO|MB_ICONEXCLAMATION);
+	String sErr(TR("File %S already exists.\nOverwrite?").c_str(), fn.sFullPath(true));
+	int iRet=mw->MessageBox(sErr.c_str(), TR("File already exists").c_str(), MB_YESNO|MB_ICONEXCLAMATION);
 	if (iRet != IDYES)
 		return 1;
   }
@@ -662,12 +662,12 @@ int FormEffectDistanceMap::OnDirectionSelect(Event *)
 }
 
 LRESULT Cmdareanumb(CWnd *parent, const String& s) {
-	new FormAreaNumbering(parent, s.scVal());
+	new FormAreaNumbering(parent, s.c_str());
 	return -1;
 }
 
 FormAreaNumbering::FormAreaNumbering(CWnd* mw, const char* sPar)
-: FormMapCreate(mw, SAFTitleAreaNumbering)
+: FormMapCreate(mw, TR("Area Numbering"))
 {
   if (sPar) {
     TextInput inp(sPar);
@@ -686,16 +686,16 @@ FormAreaNumbering::FormAreaNumbering(CWnd* mw, const char* sPar)
           sOutMap = fn.sFullName(false);
     }
   }
-  fdtMapIn = new FieldDataType(root, SAFUiRasMap, &sMap,
+  fdtMapIn = new FieldDataType(root, TR("&Raster Map"), &sMap,
                     new MapListerDomainType(".mpr", dmCLASS|dmIDENT|dmBOOL, true), true);
   fdtMapIn->SetCallBack((NotifyProc)&FormAreaNumbering::MapCallBack);
 
   iConnect = 1;
-  RadioGroup* rg = new RadioGroup(root, SAFUiConnect, &iConnect);
+  RadioGroup* rg = new RadioGroup(root, TR("&Connect"), &iConnect);
   rg->SetIndependentPos();
-  RadioButton* rb4 = new RadioButton(rg, SAFUi4Connected);
+  RadioButton* rb4 = new RadioButton(rg, TR("&4"));
   rb4->Align(rg, AL_AFTER);
-  RadioButton* rb8 = new RadioButton(rg, SAFUi8Connected);
+  RadioButton* rb8 = new RadioButton(rg, TR("&8"));
   rb8->Align(rb4, AL_AFTER);
 
   initMapOut(false, false);
@@ -740,12 +740,12 @@ int FormAreaNumbering::exec()
 }
 
 LRESULT Cmdattribras(CWnd *parent, const String& s) {
-	new FormAttributeMap(parent, s.scVal());
+	new FormAttributeMap(parent, s.c_str());
 	return -1;
 }
 
 FormAttributeMap::FormAttributeMap(CWnd* mw, const char* sPar)
-: FormMapCreate(mw, SAFTitleAttribMap)
+: FormMapCreate(mw, TR("Attribute Map of Raster Map"))
 {
   if (sPar) {
     TextInput inp(sPar);
@@ -764,12 +764,12 @@ FormAttributeMap::FormAttributeMap(CWnd* mw, const char* sPar)
           sOutMap = fn.sFullName(false);
     }
   }
-  fldMap = new FieldMap(root, SAFUiRasMap, &sMap,
+  fldMap = new FieldMap(root, TR("&Raster Map"), &sMap,
   	                    new MapListerDomainType(".mpr", dmCLASS | dmIDENT | dmGROUP | dmBOOL | dmUNIQUEID));
   fldMap->SetCallBack((NotifyProc)&FormAttributeMap::MapCallBack);
-  fldTbl = new FieldTable(root, SAFUiTable, &sTbl, ".TBT.HIS.RPR");
+  fldTbl = new FieldTable(root, TR("&Table"), &sTbl, ".TBT.HIS.RPR");
   fldTbl->SetCallBack((NotifyProc)&FormAttributeMap::TblCallBack);
-  fldCol = new FieldColumn(root, SAFUiAttribute, Table(), &sCol, 
+  fldCol = new FieldColumn(root, TR("&Attribute"), Table(), &sCol, 
     dmCLASS|dmIDENT|dmUNIQUEID|dmVALUE|dmIMAGE|dmPICT|dmCOLOR|dmBOOL|dmBIT);
   fldCol->SetCallBack((NotifyProc)&FormAttributeMap::ColCallBack);
   stColRemark = new StaticText(root, String('x',50));
@@ -873,7 +873,7 @@ int FormAttributeMap::ColCallBack(Event*)
       fvr->Show();
       RangeReal rr = colinf.rrMinMax();
       if (rr.fValid()) {
-        String sRemark(SAFInfMinMax_SS.scVal(),
+        String sRemark(TR("Minimum: %S  Maximum: %S").c_str(),
                  dvs.sValue(rr.rLo()), dvs.sValue(rr.rHi()));
         stColRemark->SetVal(sRemark);
         ValueRange vr(rr, dvs.rStep());
@@ -881,7 +881,7 @@ int FormAttributeMap::ColCallBack(Event*)
       }
       else {
         RangeReal rr = dvs.rrMinMax();
-        String sRemark(SAFInfRangeMinMax_SS.scVal(), 
+        String sRemark(TR("Ranges from %S to %S").c_str(), 
                  dvs.sValue(rr.rLo()), dvs.sValue(rr.rHi()));
         stColRemark->SetVal(sRemark);
         SetDefaultValueRange(colinf.vr());
@@ -906,12 +906,12 @@ int FormAttributeMap::ColCallBack(Event*)
 }
 
 LRESULT Cmdslicing(CWnd *parent, const String& s) {
-	new FormMapSlicing(parent, s.scVal());
+	new FormMapSlicing(parent, s.c_str());
 	return -1;
 }
 
 FormMapSlicing::FormMapSlicing(CWnd* mw, const char* sPar)
-: FormMapCreate(mw, SAFTitleMapSlicing)
+: FormMapCreate(mw, TR("Slicing"))
 {
   if (sPar) {
     TextInput inp(sPar);
@@ -932,7 +932,7 @@ FormMapSlicing::FormMapSlicing(CWnd* mw, const char* sPar)
           sOutMap = fn.sFullName(false);
     }
   }
-  fdtMapIn = new FieldDataType(root, SAFUiRasMap, &sMap, new MapListerDomainType(".mpr", dmVALUE|dmIMAGE, true),true);
+  fdtMapIn = new FieldDataType(root, TR("&Raster Map"), &sMap, new MapListerDomainType(".mpr", dmVALUE|dmIMAGE, true),true);
   fdtMapIn->SetCallBack((NotifyProc)&FormMapSlicing::MapCallBack);
 
   initMapOut(false, (long)dmGROUP);
@@ -971,12 +971,12 @@ int FormMapSlicing::exec()
 
 LRESULT Cmdaggregate(CWnd *wnd, const String& s)
 {
-	new FormMapAggregate(wnd, s.scVal());
+	new FormMapAggregate(wnd, s.c_str());
 	return -1;
 }
 
 FormMapAggregate::FormMapAggregate(CWnd* mw, const char* sPar)
-: FormMapCreate(mw, SAFTitleMapAggregate)
+: FormMapCreate(mw, TR("Aggregate"))
 {
   iFactor = 4;
   sFunc = 0;
@@ -1001,14 +1001,14 @@ FormMapAggregate::FormMapAggregate(CWnd* mw, const char* sPar)
           sOutMap = fn.sFullName(false);
     }
   }
-  fldMap = new FieldDataType(root, SAFUiRasMap, &sMap, new MapListerDomainType(0,true,true), true);
+  fldMap = new FieldDataType(root, TR("&Raster Map"), &sMap, new MapListerDomainType(0,true,true), true);
   fldMap->SetCallBack((NotifyProc)&FormMapAggregate::CallBack);
-  fldGrf = new FieldInt(root, SAFUiGroupFact, &iFactor, RangeInt(2,1000), true);
+  fldGrf = new FieldInt(root, TR("&Group Factor"), &iFactor, RangeInt(2,1000), true);
   fldGrf->SetCallBack((NotifyProc)&FormMapAggregate::CallBack);
-  fldAgf = new FieldAggrFunc(root, SAFUiFunction, &sFunc, m_sDefault);
+  fldAgf = new FieldAggrFunc(root, TR("&Function"), &sFunc, m_sDefault);
   fldAgf->SetCallBack((NotifyProc)&FormMapAggregate::CallBack);
-  new CheckBox(root, SAFUiGroup, &fGroup);
-  CheckBox* cb = new CheckBox(root, SAFUiOffset, &fOffset);
+  new CheckBox(root, TR("&Group"), &fGroup);
+  CheckBox* cb = new CheckBox(root, TR("&Offset"), &fOffset);
   new FieldRowCol(cb, "", &rcOffset);
   FieldBlank* fb = new FieldBlank(root,0);
   fb->Align(cb, AL_UNDER);
@@ -1052,7 +1052,7 @@ int FormMapAggregate::CallBack(Event*)
 				stRemark->SetVal("");
 			}
       else
-        stRemark->SetVal(SAFRemDomainValueRequired);
+        stRemark->SetVal(TR("Map should have a domain value with this function"));
     }
     else if (*sFunc == "Med" || *sFunc == "Min" || *sFunc == "Max") {
       if (dm->pdvi() || dm->pdvr() || dm->pdi() || dm->pdsrt()) {
@@ -1060,7 +1060,7 @@ int FormMapAggregate::CallBack(Event*)
 				stRemark->SetVal("");
 			}
       else
-        stRemark->SetVal(SAFRemSortableDomRequired);
+        stRemark->SetVal(TR("Map should have a sortable domain with this function"));
     }
     else {
       fOk = true;
@@ -1163,12 +1163,12 @@ int FormMapAggregate::exec()
 
 LRESULT Cmdglueras(CWnd *wnd, const String& s)
 {
-	new FormMapGlue(wnd, s.scVal());
+	new FormMapGlue(wnd, s.c_str());
 	return -1;
 }
 
 FormMapGlue::FormMapGlue(CWnd* mw, const char* sPar)
-: FormMapCreate(mw, SAFTitleMapGlue)
+: FormMapCreate(mw, TR("Glue Raster Maps"))
 {
   iMaps = 2;
   fGeoRef = false;
@@ -1205,7 +1205,7 @@ FormMapGlue::FormMapGlue(CWnd* mw, const char* sPar)
     }
   }
   iMaps -= 2;
-  StaticText* st = new StaticText(root, SAFUiNrInpMaps);
+  StaticText* st = new StaticText(root, TR("&Number of Input Maps"));
   st->SetIndependentPos();
   rgMaps = new RadioGroup(root, "", &iMaps, true);
   rgMaps->SetIndependentPos();
@@ -1214,24 +1214,24 @@ FormMapGlue::FormMapGlue(CWnd* mw, const char* sPar)
   new RadioButton(rgMaps, "&3");
   new RadioButton(rgMaps, "&4");
 
-  fldMap1 = new FieldMap(root, SAFUiFirstMap, &sMap1, new MapListerDomainType(".mpr", 0, true));
+  fldMap1 = new FieldMap(root, TR("&1st Map"), &sMap1, new MapListerDomainType(".mpr", 0, true));
   fldMap1->SetCallBack((NotifyProc)&FormMapGlue::MapCallBack);
-  fldMap2 = new FieldMap(root, SAFUiSecondMap, &sMap2, new MapListerDomainType(".mpr", 0, true));
+  fldMap2 = new FieldMap(root, TR("&2nd Map"), &sMap2, new MapListerDomainType(".mpr", 0, true));
   fldMap2->SetCallBack((NotifyProc)&FormMapGlue::MapCallBack);
-  fldMap3 = new FieldMap(root, SAFUiThirdMap, &sMap3, new MapListerDomainType(".mpr", 0, true));
+  fldMap3 = new FieldMap(root, TR("&3rd Map"), &sMap3, new MapListerDomainType(".mpr", 0, true));
   fldMap3->SetCallBack((NotifyProc)&FormMapGlue::MapCallBack);
-  fldMap4 = new FieldMap(root, SAFUiFourthMap, &sMap4, new MapListerDomainType(".mpr", 0, true));
+  fldMap4 = new FieldMap(root, TR("&4th Map"), &sMap4, new MapListerDomainType(".mpr", 0, true));
   fldMap4->SetCallBack((NotifyProc)&FormMapGlue::MapCallBack);
 
   fReplaceAll = true;
-  new CheckBox(root, SAFUiReplaceAll, &fReplaceAll);
+  new CheckBox(root, TR("&Last Map on top"), &fReplaceAll);
   fNewDom = false;
-  cbDom = new CheckBox(root, SAFUiNewDomain, &fNewDom);
+  cbDom = new CheckBox(root, TR("&New Domain"), &fNewDom);
   cbDom->SetCallBack((NotifyProc)&FormMapGlue::DomCallBack);
   fldDom = new FieldDataTypeCreate(cbDom, "", &sNewDom, ".dom", true);
   fldDom->SetCallBack((NotifyProc)&FormMapGlue::DomCallBack);
 
-  CheckBox* cb = new CheckBox(root, SAFUiGeoRef, &fGeoRef);
+  CheckBox* cb = new CheckBox(root, TR("&GeoReference"), &fGeoRef);
   new FieldGeoRefC(cb, "", &sGeoRef);
   cb->Align(cbDom, AL_UNDER);
 
@@ -1328,9 +1328,9 @@ int FormMapGlue::DomCallBack(Event*)
     fldDom->StoreData();
     FileName fn(sNewDom);
     if (!fn.fValid())
-      stRemark->SetVal(SDMRemNotValidDomainName);
+      stRemark->SetVal(TR("Not a valid domain name"));
     else if(fn.fExist())
-      stRemark->SetVal(SDMRemDomExists);
+      stRemark->SetVal(TR("Domain already exists"));
     else {
       fOk = true;
       stRemark->SetVal("");
@@ -1391,12 +1391,12 @@ int FormMapGlue::exec()
 
 LRESULT Cmdvariogramsurface(CWnd *wnd, const String& s)
 {
-	new FormMapVariogramSurface(wnd, s.scVal());
+	new FormMapVariogramSurface(wnd, s.c_str());
 	return -1;
 }
 
 FormMapVariogramSurface::FormMapVariogramSurface(CWnd* mw, const char* sPar)
-: FormMapCreate(mw, SAFTitleMapVariogramSurface)
+: FormMapCreate(mw, TR("Variogram Surface"))
 {
   rLagSpacing = rUNDEF;
   iLags = 10;
@@ -1418,11 +1418,11 @@ FormMapVariogramSurface::FormMapVariogramSurface(CWnd* mw, const char* sPar)
           sOutMap = fn.sFullName(false);
     }
   }
-  fldMap = new FieldDataType(root, SAFUiInputMap, &sMap, 
+  fldMap = new FieldDataType(root, TR("&Input Map"), &sMap, 
                     new MapListerDomainType(".mpr.mpp", dmVALUE|dmIMAGE|dmBOOL, true), true);
   fldMap->SetCallBack((NotifyProc)&FormMapVariogramSurface::MapCallBack);
-  frLagSpacing = new FieldReal(root, SAFUiLagLengthM, &rLagSpacing, ValueRange(0.01,1e9,0.2));
-  new FieldInt(root, SAFUiNrLags, &iLags, ValueRange(2,45), true);
+  frLagSpacing = new FieldReal(root, TR("&Lag spacing (m)"), &rLagSpacing, ValueRange(0.01,1e9,0.2));
+  new FieldInt(root, TR("&Number of lags"), &iLags, ValueRange(2,45), true);
   initMapOutValRange(false);
   SetHelpItem("ilwisapp\\variogram_surface_dialog_box.htm");
   create();
@@ -1461,7 +1461,7 @@ int FormMapVariogramSurface::MapCallBack(Event* Evt)
 		}
 		else 
 		{
-			stRemark->SetVal(SAFRemOnlyValueDomain);
+			stRemark->SetVal(TR("Only Value domains allowed"));
 			DisableOK();
 		}
     
@@ -1489,12 +1489,12 @@ int FormMapVariogramSurface::exec()
 
 LRESULT Cmdkrigingras(CWnd *wnd, const String& s)
 {
-	new FormMapKrigingFromRaster(wnd, s.scVal());
+	new FormMapKrigingFromRaster(wnd, s.c_str());
 	return -1;
 }
 
 FormMapKrigingFromRaster::FormMapKrigingFromRaster(CWnd* mw, const char* sPar)
-: FormMapCreate(mw, SAFTitleMapKrigingFromRaster)
+: FormMapCreate(mw, TR("Kriging From Raster"))
 {
   fWiderValRange = true; 
   riMinMax = RangeInt(1,16);
@@ -1516,32 +1516,32 @@ FormMapKrigingFromRaster::FormMapKrigingFromRaster(CWnd* mw, const char* sPar)
         sOutMap = fn.sFullName(false);
     }
   }
-	fldMap = new FieldDataType(root, SAFUiRasMap, &sMap, new MapListerDomainType(".mpr", dmVALUE|dmIMAGE|dmBOOL, true), true);
+	fldMap = new FieldDataType(root, TR("&Raster Map"), &sMap, new MapListerDomainType(".mpr", dmVALUE|dmIMAGE|dmBOOL, true), true);
   //initAsk(dmVALUE);  
 	fldMap->SetCallBack((NotifyProc)&FormMapKrigingFromRaster::MapCallBack);
 	new FieldBlank(root, 0.2);
-  FieldSemiVariogram* fsv = new FieldSemiVariogram(root, SAFUiSemiVar, &smv);
+  FieldSemiVariogram* fsv = new FieldSemiVariogram(root, TR("&SemiVariogram"), &smv);
   fsv->SetIndependentPos();
 	new FieldBlank(root, 0);
 	FieldGroup* fgUseUnits = new FieldGroup(root);
-  rgUnits = new RadioGroup(fgUseUnits, SAFUiLimDist, &iUnitChoice,true);
+  rgUnits = new RadioGroup(fgUseUnits, TR("Limiting &Distance"), &iUnitChoice,true);
 	rgUnits->SetCallBack((NotifyProc)&FormMapKrigingFromRaster::UnitsCallBack);
-  RadioButton *rbMeter = new RadioButton(rgUnits, SAFUiUnitsMeters);
+  RadioButton *rbMeter = new RadioButton(rgUnits, TR("&Meters:"));
 	rbMeter->Align(rgUnits, AL_UNDER);
   frMeter = new FieldReal(fgUseUnits, "", &rRadius, ValueRangeReal(0, 1e6, 0));
 	frMeter->SetCallBack((NotifyProc)&FormMapKrigingFromRaster::MeterEditCallBack);
 	frMeter->Align(rbMeter, AL_AFTER);
-  RadioButton *rbPixels = new RadioButton(rgUnits, SAFUiUnitsPixels);
+  RadioButton *rbPixels = new RadioButton(rgUnits, TR("&Pixels:"));
 	rbPixels->Align(rbMeter, AL_UNDER);
 	fiPixels = new FieldInt(fgUseUnits, "", &iPixels, ValueRange(1, 40), true);
 	fiPixels->SetCallBack((NotifyProc)&FormMapKrigingFromRaster::PixelEditCallBack);
 	fiPixels->Align(rbPixels, AL_AFTER);
 
-  FieldRangeInt *fri = new FieldRangeInt(root, SAFUiMinMaxNrInpPix, &riMinMax, ValueRange(1,100));
+  FieldRangeInt *fri = new FieldRangeInt(root, TR("&Min, max nr of input pixels"), &riMinMax, ValueRange(1,100));
 	fri->Align(fgUseUnits, AL_UNDER);
 
   initMapOutValRange(false);
-  CheckBox* cbEr = new CheckBox(root, SAFUiErrorMap, &fErrorMap);
+  CheckBox* cbEr = new CheckBox(root, TR("&Error Map"), &fErrorMap);
 	initRemark();
   SetHelpItem("ilwisapp\\kriging_from_raster_dialog_box.htm");
   create();
@@ -1567,7 +1567,7 @@ int FormMapKrigingFromRaster::MeterEditCallBack(Event*)
 			{
 				double rInMeters = rPixS * 40.0;
 				double rMin = round(rPixS / 2.0);
-				stRemark->SetVal(String(SAFErrRadiusMeterRange_rr.scVal(), rMin, rInMeters));
+				stRemark->SetVal(String(TR("Radius must be between %.2lf and %.2lf meter (1 to 40 pixels)").c_str(), rMin, rInMeters));
 				DisableOK();
 			}
 			else
@@ -1576,7 +1576,7 @@ int FormMapKrigingFromRaster::MeterEditCallBack(Event*)
 				if (fValues)
 					EnableOK();
 				else {
-					stRemark->SetVal(SAFRemOnlyValueDomain);
+					stRemark->SetVal(TR("Only Value domains allowed"));
 					DisableOK();
 				}
 			}
@@ -1604,7 +1604,7 @@ int FormMapKrigingFromRaster::PixelEditCallBack(Event*)
 			frMeter->SetVal(rRadius);
 			if (iPixels <= 0 || iPixels > 40)
 			{
-				stRemark->SetVal(SAFErrRadiusPixelRange.scVal());
+				stRemark->SetVal(TR("Radius must be between 1 and 40 pixels").c_str());
 				DisableOK();
 			}
 			else
@@ -1613,7 +1613,7 @@ int FormMapKrigingFromRaster::PixelEditCallBack(Event*)
 				if (fValues)
 					EnableOK();
 				else {
-					stRemark->SetVal(SAFRemOnlyValueDomain);
+					stRemark->SetVal(TR("Only Value domains allowed"));
 					DisableOK();
 				}
 			}
@@ -1673,7 +1673,7 @@ int FormMapKrigingFromRaster::MapCallBack(Event*)
   
 		if (mp->gr()->fGeoRefNone())
 		{
-			stRemark->SetVal(SDATErrGeoRefCoordNeeded);
+			stRemark->SetVal(TR("Georeference with coordinates needed"));
 			DisableOK();
 		}
 		else
@@ -1700,7 +1700,7 @@ int FormMapKrigingFromRaster::MapCallBack(Event*)
 			if (fValues)
 				EnableOK();
 			else {
-				stRemark->SetVal(SAFRemOnlyValueDomain);
+				stRemark->SetVal(TR("Only Value domains allowed"));
 				DisableOK();
 			}
 		}

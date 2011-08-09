@@ -48,12 +48,12 @@
 
 LRESULT Cmdprinccmp(CWnd *wnd, const String& s)
 {
-	new FormMatrixPrincCmp(wnd, s.scVal());
+	new FormMatrixPrincCmp(wnd, s.c_str());
 	return -1;
 }
 
 FormMatrixPrincCmp::FormMatrixPrincCmp(CWnd* mw, const char* sPar)
-: FormMatrixCreate(mw, SAFTitlePrincCmp)
+: FormMatrixCreate(mw, TR("Principal Components"))
 {
   if (sPar) {
     TextInput inp(sPar);
@@ -75,9 +75,9 @@ FormMatrixPrincCmp::FormMatrixPrincCmp(CWnd* mw, const char* sPar)
           sOutMat = fn.sFullNameQuoted(false);  
     }
   }
-  fldMpl = new FieldMapList(root, SAFUiMapList, &sMapList);
+  fldMpl = new FieldMapList(root, TR("&Map List"), &sMapList);
   fldMpl->SetCallBack((NotifyProc)&FormMatrixPrincCmp::MapListCallBack);
-  fldOutBands = new FieldInt(root, SAFUINrOutputBands, &iOutBands, ValueRange(1,99), true);
+  fldOutBands = new FieldInt(root, TR("Nr. Output &Bands"), &iOutBands, ValueRange(1,99), true);
   fldOutBands->SetCallBack((NotifyProc)&FormMatrixPrincCmp::OutBandsCallBack);
   initMatrixOut();
   SetHelpItem("ilwisapp\\principal_component_analysis_dialog_box.htm");
@@ -125,12 +125,12 @@ int FormMatrixPrincCmp::OutBandsCallBack(Event*)
 
 LRESULT Cmdfactanal(CWnd *wnd, const String& s)
 {
-	new FormMatrixFactorAnal(wnd, s.scVal());
+	new FormMatrixFactorAnal(wnd, s.c_str());
 	return -1;
 }
 
 FormMatrixFactorAnal::FormMatrixFactorAnal(CWnd* mw, const char* sPar)
-: FormMatrixCreate(mw, SAFTitleFactorAnal)
+: FormMatrixCreate(mw, TR("Factor Analysis"))
 {
   if (sPar) {
     TextInput inp(sPar);
@@ -152,9 +152,9 @@ FormMatrixFactorAnal::FormMatrixFactorAnal(CWnd* mw, const char* sPar)
           sOutMat = fn.sFullName(false);  
     }
   }
-  fldMpl = new FieldMapList(root, SAFUiMapList, &sMapList);
+  fldMpl = new FieldMapList(root, TR("&Map List"), &sMapList);
   fldMpl->SetCallBack((NotifyProc)&FormMatrixFactorAnal::MapListCallBack);
-  fldOutBands = new FieldInt(root, SAFUINrOutputBands, &iOutBands, ValueRange(1,99), true);
+  fldOutBands = new FieldInt(root, TR("Nr. Output &Bands"), &iOutBands, ValueRange(1,99), true);
   fldOutBands->SetCallBack((NotifyProc)&FormMatrixFactorAnal::OutBandsCallBack);
   initMatrixOut();
   SetHelpItem("ilwisapp\\factor_analysis_dialog_box.htm");
@@ -202,12 +202,12 @@ int FormMatrixFactorAnal::OutBandsCallBack(Event*)
 
 LRESULT Cmdmatvarcov(CWnd *wnd, const String& s)
 {
-	new FormMatrixVarCov(wnd, s.scVal());
+	new FormMatrixVarCov(wnd, s.c_str());
 	return -1;
 }
 
 FormMatrixVarCov::FormMatrixVarCov(CWnd* mw, const char* sPar)
-: FormMatrixCreate(mw, SAFTitleVarCovMatrix)
+: FormMatrixCreate(mw, TR("Show Variance Covariance Matrix"))
 {
 	fbs	&= ~fbsAPPLIC;
   if (sPar) {
@@ -227,7 +227,7 @@ FormMatrixVarCov::FormMatrixVarCov(CWnd* mw, const char* sPar)
         }  
     }
   }
-  new FieldMapList(root, SAFUiMapList, &sMapList);
+  new FieldMapList(root, TR("&Map List"), &sMapList);
   fShow = true;
   SetHelpItem("ilwisapp\\variance_covariance_matrix_dialog_box.htm");
   create();
@@ -247,11 +247,11 @@ int FormMatrixVarCov::exec()
 
 LRESULT Cmdmatcorr(CWnd *wnd, const String& s)
 {
-	new FormMatrixCorr(wnd, s.scVal());
+	new FormMatrixCorr(wnd, s.c_str());
 	return -1;
 }
 FormMatrixCorr::FormMatrixCorr(CWnd* mw, const char* sPar)
-: FormMatrixCreate(mw, SAFTitleCorrMatrix)
+: FormMatrixCreate(mw, TR("Show Correlation Matrix"))
 {
 	fbs	&= ~fbsAPPLIC;
   if (sPar) {
@@ -271,7 +271,7 @@ FormMatrixCorr::FormMatrixCorr(CWnd* mw, const char* sPar)
         }  
     }
   }
-  new FieldMapList(root, SAFUiMapList, &sMapList);
+  new FieldMapList(root, TR("&Map List"), &sMapList);
   fShow = true;
   SetHelpItem("ilwisapp\\correlation_matrix_dialog_box.htm");
   create();

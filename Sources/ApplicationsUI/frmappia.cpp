@@ -60,7 +60,7 @@ int FormInteractiveApplication::exec()
 }  
 
 FormTransformCoordinates::FormTransformCoordinates(CWnd* mw, const char* sPar)
-: FormInteractiveApplication(mw, SAFTitleTransfCoords)
+: FormInteractiveApplication(mw, TR("Transform Coordinates"))
 {
 	int iImg = IlwWinApp()->iImage(".csy");
 	HICON hIco = IlwWinApp()->ilSmall.ExtractIcon(iImg);
@@ -84,31 +84,31 @@ FormTransformCoordinates::FormTransformCoordinates(CWnd* mw, const char* sPar)
     }      
   }
   String sFill('x', 100);
-  fcsInput = new FieldCoordSystem(root, SAFUiInpCoordSys, &sCsyInput);
+  fcsInput = new FieldCoordSystem(root, TR("&Input Coordinate System"), &sCsyInput);
   fcsInput->SetCallBack((NotifyProc)&FormTransformCoordinates::CsyInputCallBack);
   stCsyInput = new StaticText(root, sFill);
   stCsyInput->SetIndependentPos();
 	fDDD = false;
-	cbDDD = new CheckBox(root, SAFRemDDD, &fDDD);
+	cbDDD = new CheckBox(root, TR("decimal degrees (D.DDD...)"), &fDDD);
 	cbDDD->SetCallBack((NotifyProc)&FormTransformCoordinates::DDDCallBack);
 	cbDDD->Align(stCsyInput, AL_UNDER);
 	cbDDD->SetIndependentPos();
-  fldLL = new FieldLatLon(root, SAFUiInpCoord, &ll);
+  fldLL = new FieldLatLon(root, TR("Input &Coordinate"), &ll);
   fldLL->SetCallBack((NotifyProc)&FormTransformCoordinates::CoordInputCallBack);
 	fldLL->Align(cbDDD, AL_UNDER);
 	crdLL = Coord(0,0);
-	fldLLDDD = new FieldCoord(root, SAFUiInpCoordNE, &crdLL);
+	fldLLDDD = new FieldCoord(root, TR("Input &Coordinate (N,E)"), &crdLL);
 	fldLLDDD->SetCallBack((NotifyProc)&FormTransformCoordinates::CoordInputCallBack);
 	fldLLDDD->Align(cbDDD, AL_UNDER);
-  fldCrd = new FieldCoord(root, SAFUiInpCoord, &crd);
+  fldCrd = new FieldCoord(root, TR("Input &Coordinate"), &crd);
   fldCrd->Align(stCsyInput, AL_UNDER);
   fldCrd->SetCallBack((NotifyProc)&FormTransformCoordinates::CoordInputCallBack);
-  fcsOutput = new FieldCoordSystem(root, SAFUiOutCoordSys, &sCsyOutput);
+  fcsOutput = new FieldCoordSystem(root, TR("&Output Coordinate System"), &sCsyOutput);
   fcsOutput->Align(fldLL, AL_UNDER);
   fcsOutput->SetCallBack((NotifyProc)&FormTransformCoordinates::CsyOutputCallBack);
   stCsyOutput = new StaticText(root, sFill);
   stCsyOutput->SetIndependentPos();
-  StaticText* stOutpCrd = new StaticText(root, SAFRemOutputCoord);
+  StaticText* stOutpCrd = new StaticText(root, TR("Output Coordinate:"));
 	fsResult = new FieldString(root, &sFill64, ES_AUTOHSCROLL|WS_TABSTOP|WS_GROUP|ES_READONLY);
   fsResult->Align(stOutpCrd, AL_AFTER);
   fsResult->SetIndependentPos();
@@ -118,7 +118,7 @@ FormTransformCoordinates::FormTransformCoordinates(CWnd* mw, const char* sPar)
 }
 
 LRESULT Cmdtransform(CWnd *parent, const String& s) {
-	new FormTransformCoordinates(parent, s.scVal());
+	new FormTransformCoordinates(parent, s.c_str());
 	return -1;
 }
 
@@ -160,7 +160,7 @@ int FormTransformCoordinates::CsyInputCallBack(Event*)
   }
   catch (ErrorObject& err) {
     err.Show();
-    stCsyInput->SetVal(SAFRemInvalidCoordSys);
+    stCsyInput->SetVal(TR("Invalid Coordinate System"));
     csInput = CoordSystem();
     fldCrd->Hide();
     fldLL->Hide();
@@ -185,7 +185,7 @@ int FormTransformCoordinates::CsyOutputCallBack(Event*)
   }
   catch (ErrorObject& err) {
     err.Show();
-    stCsyOutput->SetVal(SAFRemInvalidCoordSys);
+    stCsyOutput->SetVal(TR("Invalid Coordinate System"));
     csOutput = CoordSystem();
   }  
   return CoordInputCallBack(0);
@@ -198,7 +198,7 @@ int FormTransformCoordinates::CoordInputCallBack(Event*)
 		return 0;
   }  
   if (!csOutput->fConvertFrom(csInput)) {
-    fsResult->SetVal(SAFRemNoTransfPossible);
+    fsResult->SetVal(TR("No Coordinate Transformation possible"));
 		return 0;
   }
   Coord crdOut;
@@ -265,7 +265,7 @@ int FormTransformCoordinates::DDDCallBack(Event*)
   }
   catch (ErrorObject& err) {
     err.Show();
-    stCsyInput->SetVal(SAFRemInvalidCoordSys);
+    stCsyInput->SetVal(TR("Invalid Coordinate System"));
     csInput = CoordSystem();
     fldCrd->Hide();
     fldLL->Hide();
@@ -276,12 +276,12 @@ int FormTransformCoordinates::DDDCallBack(Event*)
 
 LRESULT Cmdtransformheight(CWnd *parent, const String& s)
 {
-	new FormTransformCoordinatesH(parent, s.scVal());
+	new FormTransformCoordinatesH(parent, s.c_str());
 	return -1;
 }
 
 FormTransformCoordinatesH::FormTransformCoordinatesH(CWnd* mw, const char* sPar)
-: FormInteractiveApplication(mw, SAFTitleTransfCoordsHeights)
+: FormInteractiveApplication(mw, TR("Transform Coordinates and Heights"))
 {
 	int iImg = IlwWinApp()->iImage(".csy");
 	HICON hIco = IlwWinApp()->ilSmall.ExtractIcon(iImg);
@@ -313,7 +313,7 @@ FormTransformCoordinatesH::FormTransformCoordinatesH(CWnd* mw, const char* sPar)
 	iNrOfDatumParms = 0;
 	rLatIn = 0;
 	rLonIn = 0;
-  fcsInput = new FieldCoordSystem(root, SAFUiInpCoordSys, &sCsyInput);
+  fcsInput = new FieldCoordSystem(root, TR("&Input Coordinate System"), &sCsyInput);
   fcsInput->SetCallBack((NotifyProc)&FormTransformCoordinatesH::CsyInputCallBack);
   stCsyInput = new StaticText(root, sFill);
   stCsyInput->SetIndependentPos();
@@ -321,31 +321,31 @@ FormTransformCoordinatesH::FormTransformCoordinatesH(CWnd* mw, const char* sPar)
   stDatumName1->Align(stCsyInput, AL_UNDER);
   stDatumName1->SetIndependentPos();
 	fDDD = false;
-	cbDDD = new CheckBox(root, SAFRemDDD, &fDDD);
+	cbDDD = new CheckBox(root, TR("decimal degrees (D.DDD...)"), &fDDD);
 	cbDDD->SetCallBack((NotifyProc)&FormTransformCoordinatesH::DDDCallBack);
 	cbDDD->Align(stDatumName1, AL_UNDER);
 	cbDDD->SetIndependentPos();
-  fldLLDMS = new FieldLatLon(root, SAFUiInpCoord, &ll);
+  fldLLDMS = new FieldLatLon(root, TR("Input &Coordinate"), &ll);
   fldLLDMS->SetCallBack((NotifyProc)&FormTransformCoordinatesH::CoordInputCallBack);
 	fldLLDMS->Align(cbDDD, AL_UNDER);
 	fgLLDDD = new FieldGroup(cbDDD);// belonging to this group
   fgLLDDD->Align(cbDDD, AL_UNDER);
-	StaticText *stLoc = new StaticText(fgLLDDD, SAFUiInpCoord);
+	StaticText *stLoc = new StaticText(fgLLDDD, TR("Input &Coordinate"));
 	frLatIn = new FieldReal(fgLLDDD, "", &rLatIn, ValueRange(-90,90,0.000000001));
 	frLatIn->Align(stLoc, AL_AFTER);
 	frLatIn->SetIndependentPos();
 	frLonIn = new FieldReal(fgLLDDD, "", &rLonIn, ValueRange(-360,360,0.000000001));
   frLonIn->Align(frLatIn, AL_AFTER);
-  fldCrd = new FieldCoord(root, SAFUiInpCoord, &crd);
+  fldCrd = new FieldCoord(root, TR("Input &Coordinate"), &crd);
   fldCrd->Align(stDatumName1, AL_UNDER);
   fldCrd->SetCallBack((NotifyProc)&FormTransformCoordinatesH::CoordInputCallBack);
   fldCrd->SetIndependentPos();
   FieldBlank* fb = new FieldBlank(root,1);
   fb->Align(fldCrd, AL_UNDER);
-  frHeightIn = new FieldReal(root, SAFRemHeightInput, &rHeightIn, ValueRange(-1e4,1e6,0.001));
+  frHeightIn = new FieldReal(root, TR("Input h (ellipsoidal height)"), &rHeightIn, ValueRange(-1e4,1e6,0.001));
   frHeightIn->Align(fb, AL_UNDER);
   frHeightIn->SetCallBack((NotifyProc)&FormTransformCoordinatesH::HeightInCallBack);
-  fcsOutput = new FieldCoordSystem(root, SAFUiOutCoordSys, &sCsyOutput);
+  fcsOutput = new FieldCoordSystem(root, TR("&Output Coordinate System"), &sCsyOutput);
   fcsOutput->Align(frHeightIn, AL_UNDER);
   fcsOutput->SetCallBack((NotifyProc)&FormTransformCoordinatesH::CsyOutputCallBack);
   stCsyOutput = new StaticText(root, sFill);
@@ -353,12 +353,12 @@ FormTransformCoordinatesH::FormTransformCoordinatesH(CWnd* mw, const char* sPar)
   stDatumName2 = new StaticText(root, sFill99);
   stDatumName2->Align(stCsyOutput, AL_UNDER);
   stDatumName2->SetIndependentPos();
-  StaticText* stOutpCrd = new StaticText(root, SAFRemOutputCoord);
+  StaticText* stOutpCrd = new StaticText(root, TR("Output Coordinate:"));
 	fsResult = new FieldString(root, &sFill64, ES_AUTOHSCROLL|WS_TABSTOP|WS_GROUP|ES_READONLY);
   fsResult->Align(stOutpCrd, AL_AFTER);
   fsResult->SetIndependentPos();
 	fsResult->SetWidth(180);
-  StaticText* stH = new StaticText(root, SAFRemHeightOutput);
+  StaticText* stH = new StaticText(root, TR("Output h (ellipsoidal height)"));
   stH->Align(stOutpCrd, AL_UNDER);
   fsHeightOut = new FieldString(root, &sFill38, ES_AUTOHSCROLL|WS_TABSTOP|WS_GROUP|ES_READONLY);
   fsHeightOut->Align(stH, AL_AFTER);
@@ -418,7 +418,7 @@ int FormTransformCoordinatesH::CsyInputCallBack(Event*)
 		  sDatum1 = String("No 3D- ");
 	  sDatum1 &= String(" Datum definition");
 	  if (bwdat1 || badat1)
-		sDatum1 &= String(SAFUiNrOfDatumParms_i.scVal(), iNrOfDatumParms);
+		sDatum1 &= String(TR("using %li datum parameters").c_str(), iNrOfDatumParms);
 	  stDatumName1->SetVal(sDatum1);
 	}
     if (csInput->pcsLatLon()) {
@@ -442,7 +442,7 @@ int FormTransformCoordinatesH::CsyInputCallBack(Event*)
   }
   catch (ErrorObject& err) {
     err.Show();
-    stCsyInput->SetVal(SAFRemInvalidCoordSys);
+    stCsyInput->SetVal(TR("Invalid Coordinate System"));
     csInput = CoordSystem();
 	fCsyInpValid = false;
     fldCrd->Hide();
@@ -497,13 +497,13 @@ int FormTransformCoordinatesH::CsyOutputCallBack(Event*)
 		  sDatum2 = String("No 3D-");
 		sDatum2 &= String(" Datum definition");
 		if (bwdat2 || badat2)
-			sDatum2 &= String(SAFUiNrOfDatumParms_i.scVal(), iNrOfDatumParms);
+			sDatum2 &= String(TR("using %li datum parameters").c_str(), iNrOfDatumParms);
 		stDatumName2->SetVal(sDatum2);
 	}
   }
   catch (ErrorObject& err) {
     err.Show();
-    stCsyOutput->SetVal(SAFRemInvalidCoordSys);
+    stCsyOutput->SetVal(TR("Invalid Coordinate System"));
     csOutput = CoordSystem();
   }
   return RecomputeRewriteOutput();
@@ -570,7 +570,7 @@ int FormTransformCoordinatesH::DDDCallBack(Event*)
   }
   catch (ErrorObject& err) {
     err.Show();
-    stCsyInput->SetVal(SAFRemInvalidCoordSys);
+    stCsyInput->SetVal(TR("Invalid Coordinate System"));
     csInput = CoordSystem();
     fldCrd->Hide();
     fldLLDMS->Hide();
@@ -618,7 +618,7 @@ int FormTransformCoordinatesH::RecomputeRewriteOutput()
   csvll2 = csOutput->pcsViaLatLon();
   if (csvll1 == 0 || csvll2 == 0 )
   {
-		fsResult->SetVal(SAFRemNo3DTransfPossible);
+		fsResult->SetVal(TR("No 3D Coordinate Transformation possible"));
 		return 0;
   }
   Datum* datum1 = csvll1->datum;
@@ -642,7 +642,7 @@ int FormTransformCoordinatesH::RecomputeRewriteOutput()
   if ((bwdat1 == 0 && badat1 == 0 && !fFromWGS) 
 	  || (bwdat2 == 0 && badat2 == 0 && !fToWGS))
   {
-		fsResult->SetVal(SAFRemNo3DTransfPossible);
+		fsResult->SetVal(TR("No 3D Coordinate Transformation possible"));
 		return 0;
   }
   fBursaWolf1 = (bwdat1 != 0);
@@ -703,12 +703,12 @@ int FormTransformCoordinatesH::RecomputeRewriteOutput()
 }
 
 LRESULT Cmdtransformtogeocentric(CWnd *parent, const String& s) {
-	new FormTransformCoordinatesH_to_ctsXYZ(parent, s.scVal());
+	new FormTransformCoordinatesH_to_ctsXYZ(parent, s.c_str());
 	return -1;
 }
 
 FormTransformCoordinatesH_to_ctsXYZ::FormTransformCoordinatesH_to_ctsXYZ(CWnd* mw, const char* sPar)
-: FormInteractiveApplication(mw, SAFTitleTransf_to_Geocentric)
+: FormInteractiveApplication(mw, TR("Transform Coordinates and Heights to Geocentric XYZ"))
 {
 	int iImg = IlwWinApp()->iImage(".csy");
 	HICON hIco = IlwWinApp()->ilSmall.ExtractIcon(iImg);
@@ -741,7 +741,7 @@ FormTransformCoordinatesH_to_ctsXYZ::FormTransformCoordinatesH_to_ctsXYZ(CWnd* m
 	String sFill99('x', 99);
 	rLatIn = 0;
 	rLonIn = 0;
-  fcsInput = new FieldCoordSystem(root, SAFUiInpCoordSys, &sCsyInput);
+  fcsInput = new FieldCoordSystem(root, TR("&Input Coordinate System"), &sCsyInput);
   fcsInput->SetCallBack((NotifyProc)&FormTransformCoordinatesH_to_ctsXYZ::CsyInputCallBack);
   stCsyInput = new StaticText(root, sFill);
   stCsyInput->SetIndependentPos();
@@ -749,43 +749,43 @@ FormTransformCoordinatesH_to_ctsXYZ::FormTransformCoordinatesH_to_ctsXYZ(CWnd* m
   //stDatumName->Align(stCsyInput, AL_UNDER);
   //stDatumName->SetIndependentPos();
 	fDDD = false;
-	cbDDD = new CheckBox(root, SAFRemDDD, &fDDD);
+	cbDDD = new CheckBox(root, TR("decimal degrees (D.DDD...)"), &fDDD);
 	cbDDD->SetCallBack((NotifyProc)&FormTransformCoordinatesH_to_ctsXYZ::DDDCallBack);
 	cbDDD->Align(stCsyInput, AL_UNDER);
 	cbDDD->SetIndependentPos();
-  fldLLDMS = new FieldLatLon(root, SAFUiInpCoord, &ll);
+  fldLLDMS = new FieldLatLon(root, TR("Input &Coordinate"), &ll);
   fldLLDMS->SetCallBack((NotifyProc)&FormTransformCoordinatesH_to_ctsXYZ::CoordInputCallBack);
 	fldLLDMS->Align(cbDDD, AL_UNDER);
 	//crdLL = Coord(0,0);////for precision fldLLDDD must be replaced by 2 fldReals !!!!!!!!!!!!!!!
 	fgLLDDD = new FieldGroup(cbDDD);// belonging to this group
   fgLLDDD->Align(cbDDD, AL_UNDER);
-	StaticText *stLoc = new StaticText(fgLLDDD, SAFUiInpCoord);
+	StaticText *stLoc = new StaticText(fgLLDDD, TR("Input &Coordinate"));
 	frLatIn = new FieldReal(fgLLDDD, "", &rLatIn, ValueRange(-90,90,0.000000001));
 	frLatIn->Align(stLoc, AL_AFTER);
 	frLatIn->SetIndependentPos();
 	frLonIn = new FieldReal(fgLLDDD, "", &rLonIn, ValueRange(-360,360,0.000000001));
   frLonIn->Align(frLatIn, AL_AFTER);
-  fldCrd = new FieldCoord(root, SAFUiInpCoord, &crd);
+  fldCrd = new FieldCoord(root, TR("Input &Coordinate"), &crd);
   fldCrd->Align(stCsyInput, AL_UNDER);
   fldCrd->SetCallBack((NotifyProc)&FormTransformCoordinatesH_to_ctsXYZ::CoordInputCallBack);
   fldCrd->SetIndependentPos();
   FieldBlank* fb = new FieldBlank(root,1);
   fb->Align(fldCrd, AL_UNDER);
-  frHeightIn = new FieldReal(root, SAFRemHeightInput, &rHeightIn, ValueRange(-1e4,1e6,0.001));
+  frHeightIn = new FieldReal(root, TR("Input h (ellipsoidal height)"), &rHeightIn, ValueRange(-1e4,1e6,0.001));
   frHeightIn->Align(fb, AL_UNDER);
   frHeightIn->SetCallBack((NotifyProc)&FormTransformCoordinatesH_to_ctsXYZ::HeightInCallBack);
  
-  StaticText* stOutpCrd = new StaticText(root, SAFRemOutputCoord);
+  StaticText* stOutpCrd = new StaticText(root, TR("Output Coordinate:"));
   stResult = new StaticText(root, sFill64);
   stResult->Align(stOutpCrd, AL_UNDER);
   stResult->SetIndependentPos();
-  frXCoordOut = new FieldReal(root, SAFUiXcts, &ctsOut.x, ValueRange(-1e12,1e12,0.001));
+  frXCoordOut = new FieldReal(root, TR("&X (geocentric) ="), &ctsOut.x, ValueRange(-1e12,1e12,0.001));
   frXCoordOut->Align(stResult, AL_UNDER);
   frXCoordOut->SetIndependentPos();
-  frYCoordOut = new FieldReal(root, SAFUiYcts, &ctsOut.y, ValueRange(-1e12,1e12,0.001));
+  frYCoordOut = new FieldReal(root, TR("&Y (geocentric) ="), &ctsOut.y, ValueRange(-1e12,1e12,0.001));
   frYCoordOut->Align(frXCoordOut, AL_UNDER);
     frYCoordOut->SetIndependentPos();
-	frZCoordOut = new FieldReal(root, SAFUiZcts, &ctsOut.z, ValueRange(-1e12,1e12,0.001));
+	frZCoordOut = new FieldReal(root, TR("&Z (geocentric) ="), &ctsOut.z, ValueRange(-1e12,1e12,0.001));
   frZCoordOut->Align(frYCoordOut, AL_UNDER);
     frZCoordOut->SetIndependentPos();
   SetHelpItem("ilwisapp\\find_datum_trans_params_methodpage.htm");
@@ -836,7 +836,7 @@ int FormTransformCoordinatesH_to_ctsXYZ::CsyInputCallBack(Event*)
   }
   catch (ErrorObject& err) {
     err.Show();
-    stCsyInput->SetVal(SAFRemInvalidCoordSys);
+    stCsyInput->SetVal(TR("Invalid Coordinate System"));
     csInput = CoordSystem();
 	fCsyInpValid = false;
     fldCrd->Hide();
@@ -903,7 +903,7 @@ int FormTransformCoordinatesH_to_ctsXYZ::DDDCallBack(Event*)
   }
   catch (ErrorObject& err) {
     err.Show();
-    stCsyInput->SetVal(SAFRemInvalidCoordSys);
+    stCsyInput->SetVal(TR("Invalid Coordinate System"));
     csInput = CoordSystem();
     fldCrd->Hide();
     fldLLDMS->Hide();
@@ -947,7 +947,7 @@ int FormTransformCoordinatesH_to_ctsXYZ::RecomputeRewriteOutput()
   csvll = csInput->pcsViaLatLon();
   if (csvll == 0)
   {
-		stResult->SetVal(SAFRemNo3DTransfPossible);
+		stResult->SetVal(TR("No 3D Coordinate Transformation possible"));
 		return 0;
   }
   Ellipsoid ell = csvll->ell;
@@ -976,12 +976,12 @@ int FormTransformCoordinatesH_to_ctsXYZ::RecomputeRewriteOutput()
 }
 
 LRESULT Cmdtransformfromgeocentric(CWnd *parent, const String& s) {
-	new FormTransformCoordinatesH_from_ctsXYZ(parent, s.scVal());
+	new FormTransformCoordinatesH_from_ctsXYZ(parent, s.c_str());
 	return -1;
 }
 
 FormTransformCoordinatesH_from_ctsXYZ::FormTransformCoordinatesH_from_ctsXYZ(CWnd* mw, const char* sPar)
-: FormInteractiveApplication(mw, SAFTitleTransf_from_Geocentric)
+: FormInteractiveApplication(mw, TR("Transform Coordinates and Heights from Geocentric XYZ"))
 {
 	int iImg = IlwWinApp()->iImage(".csy");
 	HICON hIco = IlwWinApp()->ilSmall.ExtractIcon(iImg);
@@ -1014,19 +1014,19 @@ FormTransformCoordinatesH_from_ctsXYZ::FormTransformCoordinatesH_from_ctsXYZ(CWn
 	rX_In = 0;
 	rY_In = 0;
 	rZ_In = 0;
-  frXCoordIn = new FieldReal(root, SAFUiXcts, &rX_In, ValueRange(-1e12,1e12,0.001));
+  frXCoordIn = new FieldReal(root, TR("&X (geocentric) ="), &rX_In, ValueRange(-1e12,1e12,0.001));
   //frXCoordIn->Align(stResult, AL_UNDER);
   frXCoordIn->SetIndependentPos();
   frXCoordIn->SetCallBack((NotifyProc)&FormTransformCoordinatesH_from_ctsXYZ::CoordInputCallBack);
-  frYCoordIn = new FieldReal(root, SAFUiYcts, &rY_In, ValueRange(-1e12,1e12,0.001));
+  frYCoordIn = new FieldReal(root, TR("&Y (geocentric) ="), &rY_In, ValueRange(-1e12,1e12,0.001));
   //frYCoordIn->Align(frXCoordIn, AL_UNDER);
     frYCoordIn->SetIndependentPos();
     frYCoordIn->SetCallBack((NotifyProc)&FormTransformCoordinatesH_from_ctsXYZ::CoordInputCallBack);
-	frZCoordIn = new FieldReal(root, SAFUiZcts, &rZ_In, ValueRange(-1e12,1e12,0.001));
+	frZCoordIn = new FieldReal(root, TR("&Z (geocentric) ="), &rZ_In, ValueRange(-1e12,1e12,0.001));
   //frZCoordIn->Align(frYCoordIn, AL_UNDER);
     frZCoordIn->SetIndependentPos();
     frZCoordIn->SetCallBack((NotifyProc)&FormTransformCoordinatesH_from_ctsXYZ::CoordInputCallBack);
-  fcsOutput = new FieldCoordSystem(root, SAFUiOutCoordSys, &sCsyOutput);
+  fcsOutput = new FieldCoordSystem(root, TR("&Output Coordinate System"), &sCsyOutput);
   fcsOutput->Align(frZCoordIn, AL_UNDER);
   fcsOutput->SetCallBack((NotifyProc)&FormTransformCoordinatesH_from_ctsXYZ::CsyOutputCallBack);
   stCsyOutput = new StaticText(root, sFill);
@@ -1035,11 +1035,11 @@ FormTransformCoordinatesH_from_ctsXYZ::FormTransformCoordinatesH_from_ctsXYZ(CWn
   //stDatumName2->SetWidth(50);
   //stDatumName->Align(stCsyOutput, AL_UNDER);
   //stDatumName->SetIndependentPos();
-  StaticText* stOutpCrd = new StaticText(root, SAFRemOutputCoord);
+  StaticText* stOutpCrd = new StaticText(root, TR("Output Coordinate:"));
   stResult = new StaticText(root, sFill64);
   stResult->Align(stOutpCrd, AL_AFTER);
   stResult->SetIndependentPos();
-  StaticText* stH = new StaticText(root, SAFRemHeightOutput);
+  StaticText* stH = new StaticText(root, TR("Output h (ellipsoidal height)"));
   stH->Align(stOutpCrd, AL_UNDER);
   stHeightOut = new StaticText(root, sFill38);
   stHeightOut->Align(stH, AL_AFTER);
@@ -1087,7 +1087,7 @@ int FormTransformCoordinatesH_from_ctsXYZ::CsyOutputCallBack(Event*)
   }
   catch (ErrorObject& err) {
     err.Show();
-    stCsyOutput->SetVal(SAFRemInvalidCoordSys);
+    stCsyOutput->SetVal(TR("Invalid Coordinate System"));
     csOutput = CoordSystem();
   }
   return RecomputeRewriteOutput();
@@ -1106,7 +1106,7 @@ int FormTransformCoordinatesH_from_ctsXYZ::RecomputeRewriteOutput()
  csvll = csOutput->pcsViaLatLon();
   if (csvll == 0)
   {
-		stResult->SetVal(SAFRemNo3DTransfPossible);
+		stResult->SetVal(TR("No 3D Coordinate Transformation possible"));
 		return 0;
   }
   Ellipsoid ell = csvll->ell;
@@ -1139,12 +1139,12 @@ int FormTransformCoordinatesH_from_ctsXYZ::RecomputeRewriteOutput()
 }
 
 LRESULT Cmdtransformviageocentric(CWnd *parent, const String& s) {
-	new FormTransformCoordinatesH_via_ctsXYZ(parent, s.scVal());
+	new FormTransformCoordinatesH_via_ctsXYZ(parent, s.c_str());
 	return -1;
 }
 
 FormTransformCoordinatesH_via_ctsXYZ::FormTransformCoordinatesH_via_ctsXYZ(CWnd* mw, const char* sPar)
-: FormInteractiveApplication(mw, SAFTitleTransf_via_Geocentric)
+: FormInteractiveApplication(mw, TR("Transform Coordinates and Heights via Geocentric XYZ"))
 {
 	int iImg = IlwWinApp()->iImage(".csy");
 	HICON hIco = IlwWinApp()->ilSmall.ExtractIcon(iImg);
@@ -1177,7 +1177,7 @@ FormTransformCoordinatesH_via_ctsXYZ::FormTransformCoordinatesH_via_ctsXYZ(CWnd*
 	iNrOfDatumParms = 0;
 	rLatIn = 0;
 	rLonIn = 0;
-  fcsInput = new FieldCoordSystem(root, SAFUiInpCoordSys, &sCsyInput);
+  fcsInput = new FieldCoordSystem(root, TR("&Input Coordinate System"), &sCsyInput);
   fcsInput->SetCallBack((NotifyProc)&FormTransformCoordinatesH_via_ctsXYZ::CsyInputCallBack);
   stCsyInput = new StaticText(root, sFill);
   stCsyInput->SetIndependentPos();
@@ -1185,53 +1185,53 @@ FormTransformCoordinatesH_via_ctsXYZ::FormTransformCoordinatesH_via_ctsXYZ(CWnd*
   stDatumName1->Align(stCsyInput, AL_UNDER);
   stDatumName1->SetIndependentPos();
 	fDDD = false;
-	cbDDD = new CheckBox(root, SAFRemDDD, &fDDD);
+	cbDDD = new CheckBox(root, TR("decimal degrees (D.DDD...)"), &fDDD);
 	cbDDD->SetCallBack((NotifyProc)&FormTransformCoordinatesH_via_ctsXYZ::DDDCallBack);
 	cbDDD->Align(stDatumName1, AL_UNDER);
 	cbDDD->SetIndependentPos();
-  fldLLDMS = new FieldLatLon(root, SAFUiInpCoord, &ll);
+  fldLLDMS = new FieldLatLon(root, TR("Input &Coordinate"), &ll);
   fldLLDMS->SetCallBack((NotifyProc)&FormTransformCoordinatesH_via_ctsXYZ::CoordInputCallBack);
 	fldLLDMS->Align(cbDDD, AL_UNDER);
 	fgLLDDD = new FieldGroup(cbDDD);// belonging to this group
   fgLLDDD->Align(cbDDD, AL_UNDER);
-	StaticText *stLoc = new StaticText(fgLLDDD, SAFUiInpCoord);
+	StaticText *stLoc = new StaticText(fgLLDDD, TR("Input &Coordinate"));
 	frLatIn = new FieldReal(fgLLDDD, "", &rLatIn, ValueRange(-90,90,0.000000001));
 	frLatIn->Align(stLoc, AL_AFTER);
 	frLatIn->SetIndependentPos();
 	frLonIn = new FieldReal(fgLLDDD, "", &rLonIn, ValueRange(-360,360,0.000000001));
   frLonIn->Align(frLatIn, AL_AFTER);
-  fldCrd = new FieldCoord(root, SAFUiInpCoord, &crd);
+  fldCrd = new FieldCoord(root, TR("Input &Coordinate"), &crd);
   fldCrd->Align(stDatumName1, AL_UNDER);
   fldCrd->SetCallBack((NotifyProc)&FormTransformCoordinatesH_via_ctsXYZ::CoordInputCallBack);
   fldCrd->SetIndependentPos();
   FieldBlank* fb = new FieldBlank(root,1);
   fb->Align(fldCrd, AL_UNDER);
-  frHeightIn = new FieldReal(root, SAFRemHeightInput, &rHeightIn, ValueRange(-1e4,1e9,0.001));
+  frHeightIn = new FieldReal(root, TR("Input h (ellipsoidal height)"), &rHeightIn, ValueRange(-1e4,1e9,0.001));
   frHeightIn->Align(fb, AL_UNDER);
   frHeightIn->SetCallBack((NotifyProc)&FormTransformCoordinatesH_via_ctsXYZ::HeightInCallBack);
-  frXCoordIn = new FieldReal(root, SAFUiX1Coord, &rX_In, ValueRange(-1e12,1e12,0.001));
+  frXCoordIn = new FieldReal(root, TR("&X1 ="), &rX_In, ValueRange(-1e12,1e12,0.001));
   frXCoordIn->Align(frHeightIn, AL_UNDER);
   frXCoordIn->SetIndependentPos();
-  frYCoordIn = new FieldReal(root, SAFUiY1Coord, &rY_In, ValueRange(-1e12,1e12,0.001));
+  frYCoordIn = new FieldReal(root, TR("&Y1 ="), &rY_In, ValueRange(-1e12,1e12,0.001));
   frYCoordIn->Align(frXCoordIn, AL_AFTER);
   frYCoordIn->SetIndependentPos();
-  frZCoordIn = new FieldReal(root, SAFUiZ1Coord, &rZ_In, ValueRange(-1e12,1e12,0.001));
+  frZCoordIn = new FieldReal(root, TR("&Z1 ="), &rZ_In, ValueRange(-1e12,1e12,0.001));
   frZCoordIn->Align(frYCoordIn, AL_AFTER);
     frZCoordIn->SetIndependentPos();
 	stEllipsoidInput = new StaticText(root, sFill25);
 	stEllipsoidInput->Align(frZCoordIn, AL_AFTER);
-frXCoordOut = new FieldReal(root, SAFUiX2Coord, &rX_Out, ValueRange(-1e12,1e12,0.001));
+frXCoordOut = new FieldReal(root, TR("&X2 ="), &rX_Out, ValueRange(-1e12,1e12,0.001));
   frXCoordOut->Align(frXCoordIn, AL_UNDER);
   frXCoordOut->SetIndependentPos();
-  frYCoordOut = new FieldReal(root, SAFUiY2Coord, &rY_Out, ValueRange(-1e12,1e12,0.001));
+  frYCoordOut = new FieldReal(root, TR("&Y2 ="), &rY_Out, ValueRange(-1e12,1e12,0.001));
   frYCoordOut->Align(frXCoordOut, AL_AFTER);
       frYCoordOut->SetIndependentPos();
-	frZCoordOut = new FieldReal(root, SAFUiZ2Coord, &rZ_Out, ValueRange(-1e12,1e12,0.001));
+	frZCoordOut = new FieldReal(root, TR("&Z2 ="), &rZ_Out, ValueRange(-1e12,1e12,0.001));
   frZCoordOut->Align(frYCoordOut, AL_AFTER);
     frZCoordOut->SetIndependentPos();
 	stEllipsoidOutput = new StaticText(root, sFill25);
 	stEllipsoidOutput->Align(frZCoordOut, AL_AFTER);
-  fcsOutput = new FieldCoordSystem(root, SAFUiOutCoordSys, &sCsyOutput);
+  fcsOutput = new FieldCoordSystem(root, TR("&Output Coordinate System"), &sCsyOutput);
   fcsOutput->Align(frXCoordOut, AL_UNDER);
   fcsOutput->SetCallBack((NotifyProc)&FormTransformCoordinatesH_via_ctsXYZ::CsyOutputCallBack);
   stCsyOutput = new StaticText(root, sFill);
@@ -1239,12 +1239,12 @@ frXCoordOut = new FieldReal(root, SAFUiX2Coord, &rX_Out, ValueRange(-1e12,1e12,0
   stDatumName2 = new StaticText(root, sFill90);
   stDatumName2->Align(stCsyOutput, AL_UNDER);
   stDatumName2->SetIndependentPos();
-  StaticText* stOutpCrd = new StaticText(root, SAFRemOutputCoord);
+  StaticText* stOutpCrd = new StaticText(root, TR("Output Coordinate:"));
   fsResult = new FieldString(root, &sFill64, ES_AUTOHSCROLL|WS_TABSTOP|WS_GROUP|ES_READONLY);
   fsResult->Align(stOutpCrd, AL_AFTER);
   fsResult->SetIndependentPos();
 	fsResult->SetWidth(180);
-  StaticText* stH = new StaticText(root, SAFRemHeightOutput);
+  StaticText* stH = new StaticText(root, TR("Output h (ellipsoidal height)"));
   stH->Align(stOutpCrd, AL_UNDER);
   fsHeightOut = new FieldString(root, &sFill38, ES_AUTOHSCROLL|WS_TABSTOP|WS_GROUP|ES_READONLY);
   fsHeightOut->Align(stH, AL_AFTER);
@@ -1304,7 +1304,7 @@ int FormTransformCoordinatesH_via_ctsXYZ::CsyInputCallBack(Event*)
 		  sDatum1 = String("No 3D- ");
 	  sDatum1 &= String(" Datum definition");
 	  if (bwdat1 || badat1)
-		sDatum1 &= String(SAFUiNrOfDatumParms_i.scVal(), iNrOfDatumParms);
+		sDatum1 &= String(TR("using %li datum parameters").c_str(), iNrOfDatumParms);
 	  stDatumName1->SetVal(sDatum1);
 	}
     if (csInput->pcsLatLon()) {
@@ -1328,7 +1328,7 @@ int FormTransformCoordinatesH_via_ctsXYZ::CsyInputCallBack(Event*)
   }
   catch (ErrorObject& err) {
     err.Show();
-    stCsyInput->SetVal(SAFRemInvalidCoordSys);
+    stCsyInput->SetVal(TR("Invalid Coordinate System"));
     csInput = CoordSystem();
 	fCsyInpValid = false;
     fldCrd->Hide();
@@ -1384,13 +1384,13 @@ int FormTransformCoordinatesH_via_ctsXYZ::CsyOutputCallBack(Event*)
 		  sDatum2 = String("No 3D-");
 		sDatum2 &= String(" Datum definition");
 		if (bwdat2 || badat2)
-			sDatum2 &= String(SAFUiNrOfDatumParms_i.scVal(), iNrOfDatumParms);
+			sDatum2 &= String(TR("using %li datum parameters").c_str(), iNrOfDatumParms);
 		stDatumName2->SetVal(sDatum2);
 	}
   }
   catch (ErrorObject& err) {
     err.Show();
-    stCsyOutput->SetVal(SAFRemInvalidCoordSys);
+    stCsyOutput->SetVal(TR("Invalid Coordinate System"));
     csOutput = CoordSystem();
   }
   return RecomputeRewriteOutput();
@@ -1457,7 +1457,7 @@ int FormTransformCoordinatesH_via_ctsXYZ::DDDCallBack(Event*)
   }
   catch (ErrorObject& err) {
     err.Show();
-    stCsyInput->SetVal(SAFRemInvalidCoordSys);
+    stCsyInput->SetVal(TR("Invalid Coordinate System"));
     csInput = CoordSystem();
     fldCrd->Hide();
     fldLLDMS->Hide();
@@ -1514,7 +1514,7 @@ int FormTransformCoordinatesH_via_ctsXYZ::RecomputeRewriteOutput()
   LatLonHeight llhOut;
   if (csvll1 == 0)
   {
-		fsResult->SetVal(SAFRemNo3DTransfPossible);
+		fsResult->SetVal(TR("No 3D Coordinate Transformation possible"));
 		return 0;
   }
   Ellipsoid ell1 = csvll1->ell;
@@ -1532,7 +1532,7 @@ int FormTransformCoordinatesH_via_ctsXYZ::RecomputeRewriteOutput()
   
   if (bwdat1 == 0 && badat1 == 0 && !fFromWGS) 
   {
-		fsResult->SetVal(SAFRemNo3DTransfPossible);
+		fsResult->SetVal(TR("No 3D Coordinate Transformation possible"));
 		return 0;
   }
   fBursaWolf1 = (bwdat1 != 0); 
@@ -1564,7 +1564,7 @@ int FormTransformCoordinatesH_via_ctsXYZ::RecomputeRewriteOutput()
     //******************** check output coord system csvll2 and height *********************//
   if (csvll2 == 0 )
   {
-		fsResult->SetVal(SAFRemNo3DTransfPossible);
+		fsResult->SetVal(TR("No 3D Coordinate Transformation possible"));
 		return 0;
   }
   Ellipsoid ell2 = csvll2->ell;
@@ -1579,7 +1579,7 @@ int FormTransformCoordinatesH_via_ctsXYZ::RecomputeRewriteOutput()
   }
   if (bwdat2 == 0 && badat2 == 0 && !fToWGS)
   {
-		fsResult->SetVal(SAFRemNo3DTransfPossible);
+		fsResult->SetVal(TR("No 3D Coordinate Transformation possible"));
 		return 0;
   }
   fBursaWolf2 = (bwdat2 != 0);

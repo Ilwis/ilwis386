@@ -97,27 +97,27 @@ LRESULT Cmdclmaggregate(CWnd *parent, const String& dummy)
 }
 
 AggregateForm::AggregateForm(CWnd* parent)
-: TableForm(parent, STBTitleAggregate)
+: TableForm(parent, TR("Aggregate Column"))
 {
 	setView(parent);
-	fcol = new FieldColumn(root, STBUiCol, view, &sCol);
+	fcol = new FieldColumn(root, TR("&Column"), view, &sCol);
 	fcol->SetCallBack((NotifyProc)&AggregateForm::FuncCallBack);
 	sFunc = 0;
 	m_sDefault = String();
-	faf = new FieldAggrFunc(root, STBUiFunction, &sFunc, m_sDefault);
+	faf = new FieldAggrFunc(root, TR("&Function"), &sFunc, m_sDefault);
 	faf->SetCallBack((NotifyProc)&AggregateForm::FuncCallBack);
 	fGroupBy = false;
-	cbGroup = new CheckBox(root, STBUiGroupBy, &fGroupBy);
+	cbGroup = new CheckBox(root, TR("&Group by"), &fGroupBy);
 	new FieldColumn(cbGroup, "", view, &sGroupCol, dmCLASS|dmIDENT|dmBOOL);
 	fWeight = false;
-	cbWeight = new CheckBox(root, STBUiWeight, &fWeight);
+	cbWeight = new CheckBox(root, TR("&Weight"), &fWeight);
 	cbWeight->Align(cbGroup, AL_UNDER);
 	new FieldColumn(cbWeight, "", view, &sWeightCol, dmVALUE);
 	fTable = false;
-	cbTable = new CheckBox(root, STBUiOutTbl, &fTable);
+	cbTable = new CheckBox(root, TR("&Output Table"), &fTable);
 	cbTable->Align(cbWeight, AL_UNDER);
 	new FieldTableCreate(cbTable, "", &sTable);
-	FieldString* fs = new FieldString(root, STBUiOutCol, &sOutCol, Domain(), false);
+	FieldString* fs = new FieldString(root, TR("&Output Column"), &sOutCol, Domain(), false);
 	fs->Align(cbTable, AL_UNDER);
 	String sFill('x', 60);
 	stRemark = new StaticText(root, sFill);
@@ -137,13 +137,13 @@ int AggregateForm::ColFuncCallBack(Event*)
 			if (dm->pdv() && !dm->pdbool())
 				fOk = true;
 			else
-				stRemark->SetVal(SMSErrColNeedsDomainValue);    
+				stRemark->SetVal(TR("Column should have a domain value with this function"));    
 		}
 		else if (*sFunc == "Med") {
 			if (dm->pdv() || dm->pdsrt())
 				fOk = true;
 			else
-				stRemark->SetVal(SMSErrColNeedsSortableDomain);    
+				stRemark->SetVal(TR("Column should have a sortable domain with this function"));    
 		}    
 		else
 			fOk = true;
@@ -231,7 +231,7 @@ LRESULT Cmdclmconfusionmatrix(CWnd *parent, const String& dummy)
 }
 
 ConfusionMatrixForm::ConfusionMatrixForm(CWnd* parent)
-: TableForm(parent, STBTitleConfusionMatrix)
+: TableForm(parent, TR("Confusion Matrix"))
 {
 	setView(parent);
 	if (view->iCols() > 0)
@@ -240,9 +240,9 @@ ConfusionMatrixForm::ConfusionMatrixForm(CWnd* parent)
 		sCol2 = view->cv(1)->sName();
 	if (view->iCols() > 2)
 		sColFreq = view->cv(2)->sName();
-	new FieldColumn(root, STBUiFirstColumn, view, &sCol1, dmCLASS|dmIDENT|dmGROUP);
-	new FieldColumn(root, STBUiSecondColumn, view, &sCol2, dmCLASS|dmIDENT|dmGROUP);
-	new FieldColumn(root, STBUiFrequencyColumn, view, &sColFreq, dmVALUE);
+	new FieldColumn(root, TR("&First Column"), view, &sCol1, dmCLASS|dmIDENT|dmGROUP);
+	new FieldColumn(root, TR("&Second Column"), view, &sCol2, dmCLASS|dmIDENT|dmGROUP);
+	new FieldColumn(root, TR("&Frequency"), view, &sColFreq, dmVALUE);
 	SetMenHelpTopic("ilwismen\\confusion_matrix.htm");
 	create();
 }
@@ -263,15 +263,15 @@ LRESULT Cmdclmcumulative(CWnd *parent, const String& dummy)
 }
 
 CumulativeForm::CumulativeForm(CWnd* parent)
-: TableForm(parent, STBTitleCumulative)
+: TableForm(parent, TR("Cumulative Column"))
 {
 
 	setView(parent);
 	fSortBy = false;
-	new FieldColumn(root, STBUiCol, view, &sCol, dmVALUE);
-	CheckBox* cb = new CheckBox(root, STBUISortByCol, &fSortBy);
+	new FieldColumn(root, TR("&Column"), view, &sCol, dmVALUE);
+	CheckBox* cb = new CheckBox(root, TR("&Sort by column"), &fSortBy);
 	new FieldColumn(cb, "", view, &sColSortBy, dmCLASS|dmIDENT|dmIMAGE|dmBOOL|dmBIT|dmVALUE|dmGROUP);
-	FieldString* fs = new FieldString(root, STBUiOutCol, &sOutCol, Domain(), false);
+	FieldString* fs = new FieldString(root, TR("&Output Column"), &sOutCol, Domain(), false);
 	fs->Align(cb, AL_UNDER);
 
 	SetMenHelpTopic("ilwismen\\cumulative_column.htm");
@@ -301,21 +301,21 @@ LRESULT Cmdclmleastsquares(CWnd *parent, const String& dummy)
 
 
 LeastSquaresForm::LeastSquaresForm(CWnd* parent)
-: TableForm(parent, STBTitleLeastSquares)
+: TableForm(parent, TR("Least Squares Fit"))
 {
 	setView(parent);
 	if (view->iCols() > 0)
 		sColX = view->cv(0)->sName();
 	if (view->iCols() > 1)
 		sColY = view->cv(1)->sName();
-	new FieldColumn(root, STBUiColX, view, &sColX, dmVALUE|dmIMAGE);
-	new FieldColumn(root, STBUiColY, view, &sColY, dmVALUE|dmIMAGE);
+	new FieldColumn(root, TR("&X-column"), view, &sColX, dmVALUE|dmIMAGE);
+	new FieldColumn(root, TR("&Y-column"), view, &sColY, dmVALUE|dmIMAGE);
 	sFunc = 0;
 	m_sDefault = String();
-	frf = new FieldRegressionFunc(root, STBUiFunction, &sFunc, m_sDefault);
+	frf = new FieldRegressionFunc(root, TR("&Function"), &sFunc, m_sDefault);
 	frf->SetCallBack((NotifyProc)&LeastSquaresForm::FuncCallBack);
-	fiTerms = new FieldInt(root, STBUiNrTerms, &iTerms, RangeInt(2,100));
-	FieldString* fs = new FieldString(root, STBUiOutCol, &sOutCol, Domain(), false);
+	fiTerms = new FieldInt(root, TR("&Nr. of terms"), &iTerms, RangeInt(2,100));
+	FieldString* fs = new FieldString(root, TR("&Output Column"), &sOutCol, Domain(), false);
 	SetMenHelpTopic("ilwismen\\least_squares_fit.htm");
 	create();
 }
@@ -375,29 +375,29 @@ public:
 		SetWidth(75);
 		int i = 0;
 		ts[i].sFun = "Avg";
-		ts[i++].sName = STBFunStatAvg;
+		ts[i++].sName = TR("Average.fun");
 		ts[i].sFun = "Min";
-		ts[i++].sName = STBFunStatMin;
+		ts[i++].sName = TR("Minimum.fun");
 		ts[i].sFun = "Max";
-		ts[i++].sName = STBFunStatMax;
+		ts[i++].sName = TR("Maximum.fun");
 		ts[i].sFun = "Sum";
-		ts[i++].sName = STBFunStatSum;
+		ts[i++].sName = TR("Sum.fun");
 		ts[i].sFun = "Cnt";
-		ts[i++].sName = STBFunStatCnt;
+		ts[i++].sName = TR("Cnt.fun");
 		ts[i].sFun = "StDev";
-		ts[i++].sName = STBFunStatStDev;
+		ts[i++].sName = TR("Std Deviation.fun");
 		ts[i].sFun = "Corr";
-		ts[i++].sName = STBFunStatCorr;
+		ts[i++].sName = TR("Correlation.fun");
 		ts[i].sFun = "Var";
-		ts[i++].sName = STBFunStatVar;
+		ts[i++].sName = TR("Variance.fun");
 		ts[i].sFun = "Covar";
-		ts[i++].sName = STBFunStatCovar;
+		ts[i++].sName = TR("Covariance.fun");
 		ts[i].sFun = "StdErr";
-		ts[i++].sName = STBFunStatStdErr;
+		ts[i++].sName = TR("Std Error.fun");
 		ts[i].sFun = "ttest";
-		ts[i++].sName = STBFunStatTtest;
+		ts[i++].sName = TR("t test.fun");
 		ts[i].sFun = "ChiSquare";
-		ts[i++].sName = STBFunStatChiSquare;
+		ts[i++].sName = TR("chi square.fun");
 	}
 	void create() {
 		FieldOneSelect::create();
@@ -438,11 +438,11 @@ LRESULT Cmdclmstatistiscs(CWnd *parent, const String& dummy)
 }
 
 TblStatsForm::TblStatsForm(CWnd* parent)
-: TableForm(parent, STBTitleStatistics)
+: TableForm(parent, TR("Column Statistics"))
 {
 	view = getView(parent);
 	sFunc = 0;
-	fsf = new FieldTblStatsFunc(root, STBUiFunction, &sFunc);
+	fsf = new FieldTblStatsFunc(root, TR("&Function"), &sFunc);
 	fsf->SetCallBack((NotifyProc)&TblStatsForm::FuncCallBack);
 	int iFirstValCol = iUNDEF;
 	int i=0;
@@ -462,11 +462,11 @@ TblStatsForm::TblStatsForm(CWnd* parent)
 			if (iSecondValCol >= 1)
 				sCol2 = view->cv(iSecondValCol)->sName();
 			rVal = 0;
-			fc1 = new FieldColumn(root, STBUiCol, view, &sCol1, dmVALUE|dmIMAGE);
-			fc2 = new FieldColumn(root, STBUiCol2, view, &sCol2, dmVALUE|dmIMAGE);
-			fcExp = new FieldColumn(root, STBUiExpected, view, &sCol2, dmVALUE|dmIMAGE);
+			fc1 = new FieldColumn(root, TR("&Column"), view, &sCol1, dmVALUE|dmIMAGE);
+			fc2 = new FieldColumn(root, TR("&2nd column"), view, &sCol2, dmVALUE|dmIMAGE);
+			fcExp = new FieldColumn(root, TR("&Expected"), view, &sCol2, dmVALUE|dmIMAGE);
 			fcExp->Align(fc1, AL_UNDER);
-			fr = new FieldReal(root, STBUiTrueValue, &rVal);
+			fr = new FieldReal(root, TR("&True value"), &rVal);
 			fr->Align(fc1, AL_UNDER);
 			SetMenHelpTopic("ilwismen\\column_statistics.htm");
 			create();
@@ -529,7 +529,7 @@ int TblStatsForm::exec()
 	else
 		sExpr = String("? %S(%S,%S)", *sFunc, sCol1, sCol2);
 
-	const char* sm = sExpr.scVal();
+	const char* sm = sExpr.c_str();
 
 	GetOwner()->SendMessage(ILWM_EXECUTE, 1, (LPARAM)sm);
 	return 0;
@@ -598,21 +598,21 @@ LRESULT Cmdclmsort(CWnd *parent, const String& s)
 	return -1;
 }
 
-ColSortOnForm::ColSortOnForm(CWnd* parent, int* iSort, String* sCol, int* iSortOrder) : TableForm(parent, STBTitleSort)
+ColSortOnForm::ColSortOnForm(CWnd* parent, int* iSort, String* sCol, int* iSortOrder) : TableForm(parent, TR("Sort"))
 {
 	TableView *tvw = getView(parent);
 	      new FieldBlank(root);
-      RadioGroup* rg = new RadioGroup(root, STBUiRecordSequence, iSort);
+      RadioGroup* rg = new RadioGroup(root, TR("Record sequence"), iSort);
       if (tvw->dm()->pdsrt())
-        new RadioButton(rg, STBUiDomain);
+        new RadioButton(rg, TR("&Domain"));
       else  
-        new RadioButton(rg, STBUiRawData);
-      RadioButton* rb = new RadioButton(rg, STBUiCol);
+        new RadioButton(rg, TR("&Record Number"));
+      RadioButton* rb = new RadioButton(rg, TR("&Column"));
       new FieldColumn(rb, "", tvw, sCol);
-      RadioGroup* rgsort = new RadioGroup(rb, STBUISortOrder, iSortOrder);
+      RadioGroup* rgsort = new RadioGroup(rb, TR("Sort &Order"), iSortOrder);
       rgsort->Align(rb, AL_UNDER);
-      new RadioButton(rgsort, STBUIAscending);
-      new RadioButton(rgsort, STBUIDescending);
+      new RadioButton(rgsort, TR("&Ascending"));
+      new RadioButton(rgsort, TR("&Descending"));
       SetMenHelpTopic("ilwismen\\sort_records.htm");
       create();
 }
@@ -629,16 +629,16 @@ LRESULT Cmdclmslicing(CWnd *parent, const String& dummy)
 	return -1;
 }
 
-ColSlicingForm::ColSlicingForm(CWnd *parent) :TableForm(parent, STBTitleSort)
+ColSlicingForm::ColSlicingForm(CWnd *parent) :TableForm(parent, TR("Sort"))
 {
 	view = getView(parent);
 	new FieldBlank(root);
-	new FieldColumn(root, STBUiColName, Table(view->fnTbl()), &sInpCol, dmVALUE|dmIMAGE);
+	new FieldColumn(root, TR("&Column Name"), Table(view->fnTbl()), &sInpCol, dmVALUE|dmIMAGE);
 	new FieldBlank(root);
 
-	new FieldDomainC(root, STBUiDomain, &sDomain, dmGROUP);
+	new FieldDomainC(root, TR("&Domain"), &sDomain, dmGROUP);
 	new FieldBlank(root);
-	new FieldString(root, STBUiOutCol, &sOutCol, Domain(), false);
+	new FieldString(root, TR("&Output Column"), &sOutCol, Domain(), false);
 	new FieldBlank(root);
 
 	SetMenHelpTopic("ilwismen\\column_slicing.htm");
@@ -662,14 +662,14 @@ LRESULT Cmdclmsemivar(CWnd *parent, const String& dummy)
 }
 
 ColSemiVarForm::ColSemiVarForm(CWnd* parent)
-: TableForm(parent, STBTitleSemiVariogram)
+: TableForm(parent, TR("Column SemiVariogram"))
 {
 	view = getView(parent);
 	if (view->iCols() > 0)
 		sColDist = view->cv(0)->sName();
-	new FieldColumn(root, STBUiDistCol, view, &sColDist, dmVALUE);
-	new FieldSemiVariogram(root, STBUiSemiVar, &smv);
-	new FieldString(root, STBUiOutCol, &sOutCol, Domain(), false);
+	new FieldColumn(root, TR("&Distance column"), view, &sColDist, dmVALUE);
+	new FieldSemiVariogram(root, TR("&SemiVariogram"), &smv);
+	new FieldString(root, TR("&Output Column"), &sOutCol, Domain(), false);
 	SetMenHelpTopic("ilwismen\\column_semivariogram.htm");
 	create();
 }
@@ -736,21 +736,21 @@ LRESULT Cmdjoin(CWnd *parent, const String& s)
 class JoinInputColumnPP : public FormBaseWizardPage
 {
 public:
-	JoinInputColumnPP(JoinWizard* jnwz) : FormBaseWizardPage(SJWTitleInputCol) 
+	JoinInputColumnPP(JoinWizard* jnwz) : FormBaseWizardPage(TR("Join Wizard - Select input table and column")) 
 	{
 		jw = jnwz;
 
 		FormEntry* root = feRoot();
-		(new StaticText(root, SJWIntroInputCol, true))->SetIndependentPos();
+		(new StaticText(root, TR("Select a table and a column to be joined into the current table:"), true))->SetIndependentPos();
 		new FieldBlank(root);
-		jw->ftbl = new FieldDataType(root, STBUiTbl, &jw->sTbl, 
+		jw->ftbl = new FieldDataType(root, TR("&Table"), &jw->sTbl, 
 			new TableAsLister(".TBT.HIS.HSA.HSS.HSP.RPR.MPP"), true);
 		jw->ftbl->SetCallBack((NotifyProc)&JoinWizard::TblCallBack, jw);
-		jw->fcCol = new FieldColumn(root, STBUiCol, Table(), &jw->sCol);
+		jw->fcCol = new FieldColumn(root, TR("&Column"), Table(), &jw->sCol);
 		jw->fcCol->SetCallBack((NotifyProc)&JoinWizard::ColCallBack, jw);
-		jw->stNone1 = new StaticText(root,SJWRemNone1);
+		jw->stNone1 = new StaticText(root,TR("There is no common Class or ID domain in the two tables through which a link could be established."));
 		jw->stNone1->SetIndependentPos();
-		jw->stNone2 = new StaticText(root, SJWRemNone2);
+		jw->stNone2 = new StaticText(root, TR("You can not join any column from the selected table into the current table."));
 		jw->stNone2->SetIndependentPos();
 	}
 	virtual BOOL OnSetActive() 
@@ -767,33 +767,33 @@ public:
 class JoinJoinTypePP : public FormBaseWizardPage
 {
 public:
-	JoinJoinTypePP(JoinWizard* jnwz) : FormBaseWizardPage(SJWTitleJoinMethod) 
+	JoinJoinTypePP(JoinWizard* jnwz) : FormBaseWizardPage(TR("Join Wizard - Join method")) 
 	{
 		jw = jnwz;
 
 		FormEntry* root = feRoot();
 		jw->iJoinType = 1;
-		(new StaticText(root, SJWIntroJoinMethod1, true))->SetIndependentPos();
-		(new StaticText(root, SJWIntroJoinMethod2, true))->SetIndependentPos();
+		(new StaticText(root, TR("To be able to join data, a link has to be established between the two tables."), true))->SetIndependentPos();
+		(new StaticText(root, TR("You need to select and confirm the Join method, i.e. the link between these tables:"), true))->SetIndependentPos();
 		new FieldBlank(root);
 		jw->rgJoinType = new RadioGroup(root, "", &jw->iJoinType);
 		jw->rgJoinType->SetCallBack((NotifyProc)&JoinWizard::JoinTypeCallBack, jw);
-		jw->rbTblTbl = new RadioButton(jw->rgJoinType, SJWJoinType1);
-		jw->rbColTbl = new RadioButton(jw->rgJoinType, SJWJoinType2);
-		jw->rbTblCol = new RadioButton(jw->rgJoinType, SJWJoinType3);
-		jw->rbColCol = new RadioButton(jw->rgJoinType, SJWJoinType4);
+		jw->rbTblTbl = new RadioButton(jw->rgJoinType, TR("Use domain of current table (key1) and use Domain of selected table (key2)"));
+		jw->rbColTbl = new RadioButton(jw->rgJoinType, TR("Choose key Column from current table (key1) and use Domain of selected table (key2)"));
+		jw->rbTblCol = new RadioButton(jw->rgJoinType, TR("Use Domain of current table (key1) and choose key Column from selected table (key2)"));
+		jw->rbColCol = new RadioButton(jw->rgJoinType, TR("Choose key Column from current table (key1) and choose key Column from selected table (key2)"));
 		new FieldBlank(root);
 		String sDummy('X', 20);
 
 		FieldGroup* fg1 = new FieldGroup(root);
 		fg1->SetIndependentPos();
 		fg1->SetBevelStyle(FormEntry::bsLOWERED);
-		StaticText* st1 = new StaticText(fg1, SJWCurrentTable);  
+		StaticText* st1 = new StaticText(fg1, TR("Current table:"));  
 		StaticText* st2 = new StaticText(fg1, jw->view->sName(jw->view->fnObj.sExt != ".tbt"));
 		st2->Align(st1, AL_AFTER);
 		StaticText* st5 = new StaticText(fg1, "");  // dummy
 		st5->Align(st1, AL_UNDER);
-		StaticText* st9 = new StaticText(fg1, SJWKey1);  
+		StaticText* st9 = new StaticText(fg1, TR("Key 1:"));  
 		st9->Align(st5, AL_UNDER);
 		StaticText* st10 = new StaticText(fg1, sDummy);  
 		st10->Align(st9, AL_AFTER);
@@ -802,14 +802,14 @@ public:
 		fg2->SetIndependentPos();
 		fg2->SetBevelStyle(FormEntry::bsLOWERED);
 		fg2->Align(fg1, AL_AFTER);
-		StaticText* st3 = new StaticText(fg2, SJWSelectedTable);  
+		StaticText* st3 = new StaticText(fg2, TR("Selected table:"));  
 		StaticText* st4 = new StaticText(fg2, sDummy);  
 		st4->Align(st3, AL_AFTER);
-		StaticText* st7 = new StaticText(fg2, SJWSelectedJoinCol);
+		StaticText* st7 = new StaticText(fg2, TR("Selected column to be joined:"));
 		st7->Align(st3, AL_UNDER);
 		StaticText* st8 = new StaticText(fg2, sDummy);  
 		st8->Align(st7, AL_AFTER);
-		StaticText* st11 = new StaticText(fg2, SJWKey2);  
+		StaticText* st11 = new StaticText(fg2, TR("Key 2:"));  
 		st11->Align(st7, AL_UNDER);
 		StaticText* st12 = new StaticText(fg2, sDummy);  
 		st12->Align(st11, AL_AFTER);
@@ -835,19 +835,19 @@ public:
 class JoinKeysPP : public FormBaseWizardPage
 {
 public:
-	JoinKeysPP(JoinWizard* jnwz) : FormBaseWizardPage(SJWTitleLink) 
+	JoinKeysPP(JoinWizard* jnwz) : FormBaseWizardPage(TR("Join Wizard - Link between two tables")) 
 	{
 		jw = jnwz;
 
 		FormEntry* root = feRoot();
-		(new StaticText(root, SJWIntroJoinMethod1, true))->SetIndependentPos();
+		(new StaticText(root, TR("To be able to join data, a link has to be established between the two tables."), true))->SetIndependentPos();
 
-		asIntro1.push_back(SJWIntroLink1A);
-		asIntro2.push_back(SJWIntroLink1B);
-		asIntro1.push_back(SJWIntroLink2A);
-		asIntro2.push_back(SJWIntroLink2B);
-		asIntro1.push_back(SJWIntroLink3A);
-		asIntro2.push_back(SJWIntroLink3B);
+		asIntro1.push_back(TR("The domain of the selected table will be used for key 2."));
+		asIntro2.push_back(TR("Select a column from the current table for key 1."));
+		asIntro1.push_back(TR("The domain of the current table will be used for key 1."));
+		asIntro2.push_back(TR("Select a column from the selected table for key 2."));
+		asIntro1.push_back(TR("Select a column from the current table for key 1"));
+		asIntro2.push_back(TR("and select a column from the selected table for key 2."));
 		// determine longest string
 		String s;
 		for (int i=0; i < 3; i++) {
@@ -866,12 +866,12 @@ public:
 		FieldGroup* fg1 = new FieldGroup(root);
 		fg1->SetIndependentPos();
 		fg1->SetBevelStyle(FormEntry::bsLOWERED);
-		StaticText* st1 = new StaticText(fg1, SJWCurrentTable);  
+		StaticText* st1 = new StaticText(fg1, TR("Current table:"));  
 		StaticText* st2 = new StaticText(fg1, jw->view->sName(jw->view->fnObj.sExt != ".tbt"));
 		st2->Align(st1, AL_AFTER);
 		StaticText* st5 = new StaticText(fg1, "");  // dummy
 		st5->Align(st1, AL_UNDER);
-		StaticText* st9 = new StaticText(fg1, SJWKey1);  
+		StaticText* st9 = new StaticText(fg1, TR("Key 1:"));  
 		st9->Align(st5, AL_UNDER);
 		st10 = new StaticText(fg1, sDummy);  
 		st10->Align(st9, AL_AFTER);
@@ -883,14 +883,14 @@ public:
 		fg2->SetIndependentPos();
 		fg2->SetBevelStyle(FormEntry::bsLOWERED);
 		fg2->Align(fg1, AL_AFTER);
-		StaticText* st3 = new StaticText(fg2, SJWSelectedTable);  
+		StaticText* st3 = new StaticText(fg2, TR("Selected table:"));  
 		st4 = new StaticText(fg2, sDummy);  
 		st4->Align(st3, AL_AFTER);
-		StaticText* st7 = new StaticText(fg2, SJWSelectedJoinCol);  
+		StaticText* st7 = new StaticText(fg2, TR("Selected column to be joined:"));  
 		st7->Align(st3, AL_UNDER);
 		st8 = new StaticText(fg2, sDummy);  
 		st8->Align(st7, AL_AFTER);
-		StaticText* st11 = new StaticText(fg2, SJWKey2);  
+		StaticText* st11 = new StaticText(fg2, TR("Key 2:"));  
 		st11->Align(st7, AL_UNDER);
 		st12 = new StaticText(fg2, sDummy);  
 		st12->Align(st11, AL_AFTER);
@@ -901,9 +901,9 @@ public:
 		FieldBlank* fb = new FieldBlank(root);
 		fb->Align(st9, AL_UNDER);
 
-		jw->stAggr1 = new StaticText(root, SJWRemAggr1);
+		jw->stAggr1 = new StaticText(root, TR("The classes/ID's of the selected column (key 2) are not unique."));
 		jw->stAggr1->SetIndependentPos();
-		s = String(SJWRemAggr2_SS.scVal(), String('X', 15), String('X', 15));
+		s = String(TR("You need to aggregate the data values in column '%S' by groups of key 2 (column '%S')").c_str(), String('X', 15), String('X', 15));
 		jw->stAggr2 = new StaticText(root, s);
 		jw->stAggr2->SetIndependentPos();
 	}
@@ -926,7 +926,7 @@ case 1 :
 	jw->fcKeyCol->FillWithColumns(jw->view->fnTbl(), jw->tblinf.dm());
 	jw->fcKeyCol->Show();
 	jw->fcViaKey->Hide();
-	st12->SetVal(String(SJWTableDomain_S.scVal(), jw->tblinf.dm()->sName()));
+	st12->SetVal(String(TR("Table domain '%S'").c_str(), jw->tblinf.dm()->sName()));
 	st12->Show();
 	jw->KeyColCallBack(0);
 	break;
@@ -935,7 +935,7 @@ case 2 :
 	jw->fcViaKey->FillWithColumns(jw->tblinf.fnTbl(), jw->view->dm());
 	jw->fcKeyCol->Hide();
 	jw->fcViaKey->Show();
-	st10->SetVal(String(SJWTableDomain_S.scVal(), jw->view->dm()->sName()));
+	st10->SetVal(String(TR("Table domain '%S'").c_str(), jw->view->dm()->sName()));
 	st10->Show();
 	jw->ViaKeyCallBack(0);
 	break;
@@ -961,34 +961,34 @@ case 3 :
 class JoinAggrPP : public FormBaseWizardPage
 {
 public:
-	JoinAggrPP(JoinWizard* jnwz) : FormBaseWizardPage(SJWTitleAggrMethod) 
+	JoinAggrPP(JoinWizard* jnwz) : FormBaseWizardPage(TR("Join Wizard - Aggregation method")) 
 	{
 		jw = jnwz;
 
 		FormEntry* root = feRoot();
-		(new StaticText(root, SJWRemAggr1, true))->SetIndependentPos();
+		(new StaticText(root, TR("The classes/ID's of the selected column (key 2) are not unique."), true))->SetIndependentPos();
 		String sFill('X', 20);
-		String s(SJWRemAggr2_SS.scVal(), sFill, sFill);
+		String s(TR("You need to aggregate the data values in column '%S' by groups of key 2 (column '%S')").c_str(), sFill, sFill);
 		stGroupBy = new StaticText(root, s, true);
 		stGroupBy->SetIndependentPos();
 		new FieldBlank(root);
 		jw->sFunc = 0;
 		m_sDefault = String();
-		jw->faf = new FieldAggrFunc(root, STBUiFunction, &jw->sFunc, m_sDefault);
+		jw->faf = new FieldAggrFunc(root, TR("&Function"), &jw->sFunc, m_sDefault);
 		jw->faf->SetCallBack((NotifyProc)&JoinAggrPP::FuncCallBack, this);
 		FieldBlank* fb = new FieldBlank(root);
-		stWeight = new StaticText(root,SJWRemUseWeight);
+		stWeight = new StaticText(root,TR("A column can be selected to be used as weight factor for the aggregation."));
 		stWeight->SetIndependentPos();
 		stWeight->Align(fb, AL_UNDER);
 		jw->fWeight = false;
-		cbWeight = new CheckBox(root, STBUiWeight, &jw->fWeight);
+		cbWeight = new CheckBox(root, TR("&Weight"), &jw->fWeight);
 		fcWeight = new FieldColumn(cbWeight, "", Table(), &jw->sWeightCol, dmVALUE);
 	}
 	virtual BOOL OnSetActive() 
 	{
 		jw->SetWizardButtons(PSWIZB_BACK | PSWIZB_NEXT);
 		bool f = FormBaseWizardPage::OnSetActive() != 0;
-		String s(SJWRemAggr2_SS.scVal(), jw->sCol, jw->sViaKey);
+		String s(TR("You need to aggregate the data values in column '%S' by groups of key 2 (column '%S')").c_str(), jw->sCol, jw->sViaKey);
 		stGroupBy->SetVal(s);
 		fcWeight->FillWithColumns(jw->tblinf.fnTbl());
 		FuncCallBack(0);
@@ -1024,16 +1024,16 @@ public:
 class JoinOutputColumnPP : public FormBaseWizardPage
 {
 public:
-	JoinOutputColumnPP(JoinWizard* jnwz) : FormBaseWizardPage(SJWTitleOutputCol) 
+	JoinOutputColumnPP(JoinWizard* jnwz) : FormBaseWizardPage(TR("Join Wizard - Select output column")) 
 	{
 		jw = jnwz;
 
 		FormEntry* root = feRoot();
-		(new StaticText(root, SJWIntroOutputCol, true))->SetIndependentPos();
+		(new StaticText(root, TR("Specify a new output column in the current table:"), true))->SetIndependentPos();
 		new FieldBlank(root);
-		jw->fsOutCol = new FieldString(root, STBUiOutCol, &jw->sOutCol, Domain(), false);
+		jw->fsOutCol = new FieldString(root, TR("&Output Column"), &jw->sOutCol, Domain(), false);
 		jw->fsOutCol->SetCallBack((NotifyProc)&JoinWizard::OutColCallBack, jw);
-		jw->stAlreadyExists = new StaticText(root, SJWRemColExists );
+		jw->stAlreadyExists = new StaticText(root, TR("Column name already exists in current table.") );
 	}
 	virtual BOOL OnSetActive() 
 	{
@@ -1203,8 +1203,8 @@ case 1 : {
 	ppKeys->SetPPEnable();
 	fKeyCol = true;
 	fViaKey = false;
-	stKey1->SetVal(SJWToBeSelected);
-	String sTblInpDom(SJWTableDomain_S.scVal(), tblinf.dm()->sName());
+	stKey1->SetVal(TR("To be selected..."));
+	String sTblInpDom(TR("Table domain '%S'").c_str(), tblinf.dm()->sName());
 	stKey2->SetVal(sTblInpDom);
 			}
 		 break;
@@ -1213,9 +1213,9 @@ case 2 : {
 	ppKeys->SetPPEnable();
 	fKeyCol = false;
 	fViaKey = true;
-	String sTblDom(SJWTableDomain_S.scVal(), view->dm()->sName());
+	String sTblDom(TR("Table domain '%S'").c_str(), view->dm()->sName());
 	stKey1->SetVal(sTblDom);
-	stKey2->SetVal(SJWToBeSelected);
+	stKey2->SetVal(TR("To be selected..."));
 			}
 		 break;
 case 3 : {
@@ -1223,8 +1223,8 @@ case 3 : {
 	ppKeys->SetPPEnable();
 	fKeyCol = true;
 	fViaKey = true;
-	stKey1->SetVal(SJWToBeSelected);
-	stKey2->SetVal(SJWToBeSelected);
+	stKey1->SetVal(TR("To be selected..."));
+	stKey2->SetVal(TR("To be selected..."));
 			}
 		 break;
 	}
@@ -1291,13 +1291,13 @@ int JoinWizard::ViaKeyCallBack(Event*)
 									delete sFunc;
 								sFunc = new String("Prd");
 								stAggr1->Show();
-								String s(SJWRemAggr3_S.scVal(), sCol);
+								String s(TR("Data in column '%S' are automatically aggregated using the predominant value per group.").c_str(), sCol);
 								stAggr2->SetVal(s);
 								stAggr2->Show();
 							}
 							else {
 								stAggr1->Show();
-								String s(SJWRemAggr2_SS.scVal(), sCol, sViaKey);
+								String s(TR("You need to aggregate the data values in column '%S' by groups of key 2 (column '%S')").c_str(), sCol, sViaKey);
 								stAggr2->SetVal(s);
 								stAggr2->Show();
 							}
@@ -1391,7 +1391,7 @@ LRESULT Cmdclminvmoldensky(CWnd *parent, const String& dummy)
 }
 
 InverseMolodenskyForm::InverseMolodenskyForm(CWnd* parent)
-: TableForm(parent, STBTitleInverseMolodensky)
+: TableForm(parent, TR("InverseMolodensky"))
 {
 	setView(parent);
 	int iFirstCoordCol = iUNDEF;
@@ -1432,10 +1432,10 @@ InverseMolodenskyForm::InverseMolodenskyForm(CWnd* parent)
 	}
 	if (iSecondHeightsCol >= 1)
 		sHghtCol2 = view->cv(iSecondHeightsCol)->sName();
-	new FieldColumn(root, STBUiFirstCrdColumn, view, &sCrdCol1, dmCOORD);
-	new FieldColumn(root, STBUiSecondCrdColumn, view, &sCrdCol2, dmCOORD);
-	new FieldColumn(root, STBUiFirstHghtColumn, view, &sHghtCol1, dmVALUE);
-	new FieldColumn(root, STBUiSecondHghtColumn, view, &sHghtCol2, dmVALUE);
+	new FieldColumn(root, TR("First Coords"), view, &sCrdCol1, dmCOORD);
+	new FieldColumn(root, TR("Second Coords"), view, &sCrdCol2, dmCOORD);
+	new FieldColumn(root, TR("First Heights"), view, &sHghtCol1, dmVALUE);
+	new FieldColumn(root, TR("Second Heights"), view, &sHghtCol2, dmVALUE);
 	//SetMenHelpTopic(htpInverseMolodensky);
 	create();
 }
@@ -1742,7 +1742,7 @@ LRESULT Cmdclmfindmoldensky(CWnd *parent, const String& dummy)
 }
 
 FindMolodenskyShiftsForm::FindMolodenskyShiftsForm(CWnd* parent)
-: TableForm(parent, STBTitleInverseMolodensky)
+: TableForm(parent, TR("InverseMolodensky"))
 {
 	setView(parent);
 	int iFirstCoordCol = iUNDEF;
@@ -1783,10 +1783,10 @@ FindMolodenskyShiftsForm::FindMolodenskyShiftsForm(CWnd* parent)
 	}
 	if (iSecondHeightsCol >= 1)
 		sHghtCol2 = view->cv(iSecondHeightsCol)->sName();
-	new FieldColumn(root, STBUiFirstCrdColumn, view, &sCrdCol1, dmCOORD);
-	new FieldColumn(root, STBUiSecondCrdColumn, view, &sCrdCol2, dmCOORD);
-	new FieldColumn(root, STBUiFirstHghtColumn, view, &sHghtCol1, dmVALUE);
-	new FieldColumn(root, STBUiSecondHghtColumn, view, &sHghtCol2, dmVALUE);
+	new FieldColumn(root, TR("First Coords"), view, &sCrdCol1, dmCOORD);
+	new FieldColumn(root, TR("Second Coords"), view, &sCrdCol2, dmCOORD);
+	new FieldColumn(root, TR("First Heights"), view, &sHghtCol1, dmVALUE);
+	new FieldColumn(root, TR("Second Heights"), view, &sHghtCol2, dmVALUE);
 
 	create();
 }
@@ -1872,7 +1872,7 @@ int FindMolodenskyShiftsForm::exec()
 
 	if (iActivePnt == 0) { 
 		String sMsg = String("\r\nNo valid active control points found");
-		MessageBox(sMsg.scVal(), "Datum Shifts", MB_OK);
+		MessageBox(sMsg.c_str(), "Datum Shifts", MB_OK);
 		return 0; // no valid active ctrl points
 	}
 	CoordCTS cts1, cts2; // cartesian Geocentric coords
@@ -2003,7 +2003,7 @@ LRESULT Cmdclmfind7parameters(CWnd *parent, const String& dummy)
 
 
 Find7ParametersForm::Find7ParametersForm(CWnd* parent)
-: TableForm(parent, STBTitleFind7Parameters)
+: TableForm(parent, TR("Find 7 Datum Parameters"))
 , iActivePnt(0)
 {
 	setView(parent);
@@ -2048,16 +2048,16 @@ Find7ParametersForm::Find7ParametersForm(CWnd* parent)
 		sHghtCol2 = view->cv(iSecondHeightsCol)->sName();
 
 	FieldGroup *fgCols = new FieldGroup(root, true);
-	fcFirst = new FieldColumn(fgCols, STBUiFirstCrdColumn, view, &sCrdCol1, dmCOORD);
+	fcFirst = new FieldColumn(fgCols, TR("First Coords"), view, &sCrdCol1, dmCOORD);
 	fcFirst->SetCallBack((NotifyProc)&Find7ParametersForm::CoordColumnsCallBack);
-	fcSecond = new FieldColumn(fgCols, STBUiSecondCrdColumn, view, &sCrdCol2, dmCOORD);
+	fcSecond = new FieldColumn(fgCols, TR("Second Coords"), view, &sCrdCol2, dmCOORD);
 	fcSecond->SetCallBack((NotifyProc)&Find7ParametersForm::CoordColumnsCallBack);
 
-	cbUseHghtCol1 = new CheckBox(fgCols, STBUiFirstHghtColumn, &fUseHghtCol1);
+	cbUseHghtCol1 = new CheckBox(fgCols, TR("First Heights"), &fUseHghtCol1);
 	cbUseHghtCol1->Align(fcSecond, AL_UNDER);
 	fcFirstHgt = new FieldColumn(cbUseHghtCol1, String() , view, &sHghtCol1, dmVALUE);
 	fcFirstHgt->SetCallBack((NotifyProc)&Find7ParametersForm::UseHghtColumnsCallBack);
-	cbUseHghtCol2 = new CheckBox(fgCols, STBUiSecondHghtColumn, &fUseHghtCol2);
+	cbUseHghtCol2 = new CheckBox(fgCols, TR("Second Heights"), &fUseHghtCol2);
 	cbUseHghtCol2->Align(cbUseHghtCol1, AL_UNDER);
 	fcSecondHgt = new FieldColumn(cbUseHghtCol2, String(), view, &sHghtCol2, dmVALUE);
 	fcSecondHgt->SetCallBack((NotifyProc)&Find7ParametersForm::UseHghtColumnsCallBack);
@@ -2070,31 +2070,31 @@ Find7ParametersForm::Find7ParametersForm(CWnd* parent)
 	rAvgX1 = 0.0; //defaults
 	rAvgY1 = 0.0;
 	rAvgZ1 = 0.0;
-	StaticText* st = new StaticText(root, STBUiRotationPivot);
+	StaticText* st = new StaticText(root, TR("Rotation Pivot"));
 	st->Align(cbUseHghtCol2, AL_UNDER);
 	st->psn->SetBound(0,0,0,0);
 
 	rgPivotDefinition = new RadioGroup(root, "", &iDefPivot, true);
 	rgPivotDefinition->SetCallBack((NotifyProc)&Find7ParametersForm::PivotDefinitionCallBack);
-	RadioButton* rbU = new RadioButton(rgPivotDefinition, STBUiUserDefP);
-	RadioButton* rbC = new RadioButton(rgPivotDefinition, STBUiCentroidAsP);
+	RadioButton* rbU = new RadioButton(rgPivotDefinition, TR("User-Defined (0,0,0 = Earth-center)"));
+	RadioButton* rbC = new RadioButton(rgPivotDefinition, TR("Local Centroid of Points"));
 	rbU->SetIndependentPos();
 	rbC->SetIndependentPos();
 
 	m_fgUserDefP = new FieldGroup(root, true);
 	m_fgUserDefP->Align(rgPivotDefinition, AL_UNDER);
-	frXCoord = new FieldReal(m_fgUserDefP, STBUiXCoord, &rXpiv, ValueRange(-1e7,1e7,0.001));
-	frYCoord = new FieldReal(m_fgUserDefP, STBUiYCoord, &rYpiv, ValueRange(-1e7,1e7,0.001));
+	frXCoord = new FieldReal(m_fgUserDefP, TR("Xo ="), &rXpiv, ValueRange(-1e7,1e7,0.001));
+	frYCoord = new FieldReal(m_fgUserDefP, TR("Yo ="), &rYpiv, ValueRange(-1e7,1e7,0.001));
 	frYCoord->Align(frXCoord, AL_AFTER);
-	frZCoord = new FieldReal(m_fgUserDefP, STBUiZCoord, &rZpiv, ValueRange(-1e7,1e7,0.001));
+	frZCoord = new FieldReal(m_fgUserDefP, TR("Zo="), &rZpiv, ValueRange(-1e7,1e7,0.001));
 	frZCoord->Align(frYCoord, AL_AFTER);
 
 	m_fgCentroidP = new FieldGroup(root, true);
 	m_fgCentroidP->Align(rgPivotDefinition, AL_UNDER);
-	String s3Dcrds = String(STBMsgCentroidCoords_rrr.scVal(), rAvgX1, rAvgY1, rAvgZ1);
+	String s3Dcrds = String(TR("Xc = %7.3f, Yc = %7.3f, Zc = %7.3f ").c_str(), rAvgX1, rAvgY1, rAvgZ1);
 	m_fsCentroidP = new FieldString(m_fgCentroidP, &s3Dcrds, ES_AUTOHSCROLL|WS_TABSTOP|WS_GROUP|ES_READONLY);
 	m_fsCentroidP->SetWidth(150);
-	String sActivePnts = String(STBMsgActivePnts_i.scVal(), iActivePnt);
+	String sActivePnts = String(TR("3-D Cartesian Coordinates in WGS84 system using %i points").c_str(), iActivePnt);
 	m_fsGeocentricActivePnts = new FieldString(root, &sActivePnts, ES_READONLY);
 	iRec = view->iRecs();
 	create();
@@ -2107,7 +2107,7 @@ void Find7ParametersForm::RecomputeCentroid()
 	{
 		iActivePnt = iActiv;
 		FindCentroid();
-		m_fsCentroidP->SetVal(String(STBMsgCentroidCoords_rrr.scVal(), rAvgX1, rAvgY1, rAvgZ1));
+		m_fsCentroidP->SetVal(String(TR("Xc = %7.3f, Yc = %7.3f, Zc = %7.3f ").c_str(), rAvgX1, rAvgY1, rAvgZ1));
 	}
 }
 
@@ -2494,7 +2494,7 @@ LRESULT Cmdclmmoledensky(CWnd *parent, const String& dummy)
 
 
 ColMolodenskyForm::ColMolodenskyForm(CWnd* parent)
-: TableForm(parent, STBTitleInverseMolodensky)
+: TableForm(parent, TR("InverseMolodensky"))
 {
 	setView(parent);
 	int iInputCoordCol = iUNDEF;
@@ -2506,9 +2506,9 @@ ColMolodenskyForm::ColMolodenskyForm(CWnd* parent)
 	}
 	if (iInputCoordCol >= 0) 
 		sInpCrdCol = view->cv(iInputCoordCol)->sName();
-	new FieldString(root, STBUiOutCol, &sOutpCrdCol, Domain(), false);
+	new FieldString(root, TR("&Output Column"), &sOutpCrdCol, Domain(), false);
 
-	new FieldColumn(root, STBUiFirstCrdColumn, view, &sInpCrdCol, dmCOORD);
+	new FieldColumn(root, TR("First Coords"), view, &sInpCrdCol, dmCOORD);
 	create();
 }
 
@@ -2530,7 +2530,7 @@ LRESULT Cmdclmhelmert7parms(CWnd *parent, const String& dummy)
 }
 
 ColHelmert7ParmsForm::ColHelmert7ParmsForm(CWnd* parent)
-: TableForm(parent, STBTitleFind7Parameters)
+: TableForm(parent, TR("Find 7 Datum Parameters"))
 {
 	view = getView(parent);
 	int iInputCoordCol = iUNDEF;
@@ -2542,9 +2542,9 @@ ColHelmert7ParmsForm::ColHelmert7ParmsForm(CWnd* parent)
 	}
 	if (iInputCoordCol >= 0) 
 		sInpCrdCol = view->cv(iInputCoordCol)->sName();
-	new FieldString(root, STBUiOutCol, &sOutpCrdCol, Domain(), false);
+	new FieldString(root, TR("&Output Column"), &sOutpCrdCol, Domain(), false);
 
-	new FieldColumn(root, STBUiFirstCrdColumn, view, &sInpCrdCol, dmCOORD); 
+	new FieldColumn(root, TR("First Coords"), view, &sInpCrdCol, dmCOORD); 
 	create();
 }
 
@@ -2588,8 +2588,8 @@ FindAzimuthAndDistanceForm::FindAzimuthAndDistanceForm(CWnd* parent)
 		if (iSecondCoordCol >= 1)
 			sCrdCol2 = view->cv(iSecondCoordCol)->sName();
 
-		new FieldColumn(root, STBUiFirstCrdColumn, view, &sCrdCol1, dmCOORD);
-		new FieldColumn(root, STBUiSecondCrdColumn, view, &sCrdCol2, dmCOORD);
+		new FieldColumn(root, TR("First Coords"), view, &sCrdCol1, dmCOORD);
+		new FieldColumn(root, TR("Second Coords"), view, &sCrdCol2, dmCOORD);
 		create();
 }
 
@@ -2616,7 +2616,7 @@ int FindAzimuthAndDistanceForm::exec()
 	CoordSystemProjection* cspr2 = cs2->pcsProjection();
 	if (csvll1 == 0 || csvll2 == 0) { 
 		String sMsg = String("\r\nGeographic or projected coordinates needed");
-		MessageBox(sMsg.scVal(), "Azimuths and Distances", MB_OK);
+		MessageBox(sMsg.c_str(), "Azimuths and Distances", MB_OK);
 		return 0; // no valid active ctrl points
 	}
 	bool fProj1 = (0 != cspr1);
@@ -2639,7 +2639,7 @@ int FindAzimuthAndDistanceForm::exec()
 	bool fActColExists = colActive.fValid() || colactive.fValid();
 	if (!colActive.fValid() && !colactive.fValid()) { 
 		String sMsg = String("\r\nNo column named active or Active found");
-		MessageBox(sMsg.scVal(), "Azimuths and Distances", MB_OK);
+		MessageBox(sMsg.c_str(), "Azimuths and Distances", MB_OK);
 		return 0; // no active points can be set
 	}
 	for (long i = 0; i < iRec; i++) {
@@ -2677,7 +2677,7 @@ int FindAzimuthAndDistanceForm::exec()
 
 	if (iActivePnt == 0) { 
 		String sMsg = String("\r\nNo valid active points found");
-		MessageBox(sMsg.scVal(), "Azimuths and Distances", MB_OK);
+		MessageBox(sMsg.c_str(), "Azimuths and Distances", MB_OK);
 		return 0; // no valid active ctrl points
 	}
 

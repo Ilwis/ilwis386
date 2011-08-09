@@ -183,7 +183,7 @@
 
 LRESULT OpenMapListColorComp(CWnd *wnd, const String& sCmd)
 {
-	new FormColorComp(wnd, sCmd.scVal());
+	new FormColorComp(wnd, sCmd.c_str());
 	return -1;
 }
 
@@ -194,8 +194,8 @@ LRESULT OpenMapListColorComp(CWnd *wnd, const String& sCmd)
 //	bool fPalette = (dc->GetDeviceCaps(RASTERCAPS) & RC_PALETTE) != 0;
 //	if (fPalette) {
 //		MessageBox(0,
-//			SMSMsgColorDepth16bitOrHigher.scVal(),
-//			SMSTitleShowMapListColorComp.scVal(),
+//			TR("To display a map list as color composite,\nthe display settings in the Control Panel\nneed to be set on more than 256 colors").c_str(),
+//			TR("Show Map List as Color Composite").c_str(),
 //			MB_OK|MB_ICONSTOP);
 //		return -1;
 //	}
@@ -210,18 +210,18 @@ LRESULT OpenMapListColorComp(CWnd *wnd, const String& sCmd)
 //		s = fn.sFullNameQuoted();
 //		if (pm.fExist("noask")) //  || pm.fExist("quiet")) // quiet is always supplied by script. I leave it up to the user to decide whether to get the form or not.
 //		{
-//			WinThread* thr = new WinThread(IlwWinApp()->docTemplMapWindow(), s.scVal(), IlwisDocument::otNOASK);
+//			WinThread* thr = new WinThread(IlwWinApp()->docTemplMapWindow(), s.c_str(), IlwisDocument::otNOASK);
 //			if (thr) 
 //				thr->CreateThread(0, 0);
 //		}
 //		else
-//			IlwWinApp()->OpenDocumentAsMap(s.scVal());
+//			IlwWinApp()->OpenDocumentAsMap(s.c_str());
 //	}
 //	return -1;
 //}
 
 FormColorComp::FormColorComp(CWnd* mw, const char* sPar)
-: FormMapCreate(mw, SAFTitleColorComposite)
+: FormMapCreate(mw, TR("Color Composite"))
 {
   iRgbHsi = 0;
   iMethod = 1;
@@ -256,40 +256,40 @@ FormColorComp::FormColorComp(CWnd* mw, const char* sPar)
   }
   FieldGroup* fgTop = new FieldGroup(root);
 
-  cb24Bit = new CheckBox(fgTop, SAFUi24bit, &f24Bit);
+  cb24Bit = new CheckBox(fgTop, TR("&24 bit"), &f24Bit);
   cb24Bit->SetCallBack((NotifyProc)&FormColorComp::CallBack24Bit);
 
   rgRgbHsi = new RadioGroup(fgTop, "", &iRgbHsi);
   rgRgbHsi->Align(cb24Bit, AL_UNDER);
   rgRgbHsi->SetCallBack((NotifyProc)&FormColorComp::RgbHsiCallBack);
-  new RadioButton(rgRgbHsi, SAFUiRGB);
-  new RadioButton(rgRgbHsi, SAFUiHSI);
+  new RadioButton(rgRgbHsi, TR("&RGB"));
+  new RadioButton(rgRgbHsi, TR("&HSI"));
 
   rgMethod = new RadioGroup(fgTop, "", &iMethod);
   rgMethod->Align(cb24Bit, AL_UNDER);
   rgMethod->SetCallBack((NotifyProc)&FormColorComp::StretchCallBack);
-  RadioButton* rbStandard = new RadioButton(rgMethod, SAFUiStandard);
-  RadioButton* rbDynamic = new RadioButton(rgMethod, SAFUiDynamic);
+  RadioButton* rbStandard = new RadioButton(rgMethod, TR("&Standard"));
+  RadioButton* rbDynamic = new RadioButton(rgMethod, TR("&Dynamic"));
 
   FieldGroup* fgDynamic = new FieldGroup(rbDynamic, true);
-  new FieldInt(fgDynamic, SAFUiColors, &iColors, ValueRange(1,255), true);
+  new FieldInt(fgDynamic, TR("&Colors"), &iColors, ValueRange(1,255), true);
 
   fgStretch = new FieldGroup(root, true);
   fgStretch->Align(cb24Bit, AL_AFTER);
 
   iInterpol = 0;  
   RadioGroup* rgInterpol = new RadioGroup(fgStretch, "", &iInterpol);
-  new RadioButton(rgInterpol, SAFUiLinStretch);
-  new RadioButton(rgInterpol, SAFUiHistEqual);
+  new RadioButton(rgInterpol, TR("&Linear Stretching"));
+  new RadioButton(rgInterpol, TR("&Histogram Equalization"));
 
   fPerc = true;
-  cbPerc = new CheckBox(fgStretch, SAFUiPerc, &fPerc);
+  cbPerc = new CheckBox(fgStretch, TR("&Percentage"), &fPerc);
   cbPerc->SetCallBack((NotifyProc)&FormColorComp::PercCallBack);
   cbPerc->Align(rgInterpol, AL_UNDER);
 
   fgRGB = new FieldGroup(root);  
   fgRGB->Align(fgTop, AL_UNDER);
-  FieldDataType* fmRed = new FieldDataType(fgRGB, SAFUiRedBand, &sMapRed,
+  FieldDataType* fmRed = new FieldDataType(fgRGB, TR("&Red Band"), &sMapRed,
                              new MapListerDomainType(dmIMAGE), true);
   fmRed->SetWidth(140);
   rrRed = RangeReal(0,255);
@@ -299,7 +299,7 @@ FormColorComp::FormColorComp(CWnd* mw, const char* sPar)
   fPercRed = new FieldReal(fgRGB, "", &rPercRed, ValueRange(0,40,0.01));
   fPercRed->Align(fmRed, AL_AFTER);
   
-  FieldDataType* fmGreen = new FieldDataType(fgRGB, SAFUiGreenBand, &sMapGreen,
+  FieldDataType* fmGreen = new FieldDataType(fgRGB, TR("&Green Band"), &sMapGreen,
                              new MapListerDomainType(dmIMAGE), true);
   fmGreen->SetWidth(140);
   fmGreen->Align(fmRed, AL_UNDER);
@@ -310,7 +310,7 @@ FormColorComp::FormColorComp(CWnd* mw, const char* sPar)
   fPercGreen = new FieldReal(fgRGB, "", &rPercGreen, ValueRange(0,40,0.01));
   fPercGreen->Align(fmGreen, AL_AFTER);
   
-  FieldDataType* fmBlue = new FieldDataType(fgRGB, SAFUiBlueBand, &sMapBlue,
+  FieldDataType* fmBlue = new FieldDataType(fgRGB, TR("&Blue Band"), &sMapBlue,
                              new MapListerDomainType(dmIMAGE), true);
   fmBlue->SetWidth(140);
   fmBlue->Align(fmGreen, AL_UNDER);
@@ -323,11 +323,11 @@ FormColorComp::FormColorComp(CWnd* mw, const char* sPar)
 
   fgHSI = new FieldGroup(root);  
   fgHSI->Align(fgTop, AL_UNDER);
-  new FieldDataType(fgHSI, SAFUiHue, &sMapHue,
+  new FieldDataType(fgHSI, TR("&Hue"), &sMapHue,
                            new MapListerDomainType(dmIMAGE), true);
-  new FieldDataType(fgHSI, SAFUiSaturation, &sMapSat,
+  new FieldDataType(fgHSI, TR("&Saturation"), &sMapSat,
                              new MapListerDomainType(dmIMAGE), true);
-  new FieldDataType(fgHSI, SAFUiIntensity, &sMapInt,
+  new FieldDataType(fgHSI, TR("&Intensity"), &sMapInt,
                              new MapListerDomainType(dmIMAGE), true);
 
   FieldBlank* fb = new FieldBlank(root, 0);
@@ -512,12 +512,12 @@ int FormColorComp::exec()
 
 LRESULT Cmdclassify(CWnd *wnd, const String& s)
 {
-	new FormClassifyMap(wnd, s.scVal());
+	new FormClassifyMap(wnd, s.c_str());
 	return -1;
 }
 
 FormClassifyMap::FormClassifyMap(CWnd* mw, const char* sPar)
-: FormMapCreate(mw, SAFTitleClassifyMap)
+: FormMapCreate(mw, TR("Classification"))
 {
   if (sPar) {
     TextInput inp(sPar);
@@ -540,31 +540,31 @@ FormClassifyMap::FormClassifyMap(CWnd* mw, const char* sPar)
         sOutMap = fn.sFullName(false);
     }
   }
-  fssMap = new FieldSampleSet(root, SAFUiSampleSet, &sMap);
+  fssMap = new FieldSampleSet(root, TR("&Sample Set"), &sMap);
 	fssMap->SetCallBack((NotifyProc)&FormClassifyMap::SampleSetChanged);
   iClf = 0;
-  rg = new RadioGroup(root, SAFUiClassMethod, &iClf);
-  new RadioButton(rg, SAFUiBoxClass);
-  new RadioButton(rg, SAFUiMinDist);
-  new RadioButton(rg, SAFUiMahalanobis);
-  new RadioButton(rg, SAFUiMaxLikelihood);
-	new RadioButton(rg, SAFUiSpectralAngle);
-	RadioButton *rbPriorProb = new RadioButton(rg, SAFUiPriorProb);
+  rg = new RadioGroup(root, TR("&Classification Method:"), &iClf);
+  new RadioButton(rg, TR("&Box Classifier"));
+  new RadioButton(rg, TR("&Minimum &Distance"));
+  new RadioButton(rg, TR("Minimum &Mahalanobis Distance"));
+  new RadioButton(rg, TR("Maximum &Likelihood"));
+	new RadioButton(rg, TR("&Spectral Angle"));
+	RadioButton *rbPriorProb = new RadioButton(rg, TR("Prior &Probability"));
   rg->SetCallBack((NotifyProc)&FormClassifyMap::ClfCallBack);
   rg->SetIndependentPos();
   fDist = false;
   rDist = 100;
-  cbDist = new CheckBox(root, SAFUiThresholdDist, &fDist);
+  cbDist = new CheckBox(root, TR("&Threshold Distance"), &fDist);
   cbDist->Align(rg, AL_UNDER);
   new FieldReal(cbDist, "", &rDist, ValueRangeReal(0.001, 1e6, 0.001));
   rFact = sqrt(3.0);
-  frFact = new FieldReal(root, SAFUiMultFact, &rFact, ValueRangeReal(0.001, 1e6, 0.001));
+  frFact = new FieldReal(root, TR("Multiplication &Factor"), &rFact, ValueRangeReal(0.001, 1e6, 0.001));
   frFact->Align(rg, AL_UNDER);
 	FieldGroup *fgPrior = new FieldGroup(rbPriorProb);
 	fgPrior->Align(frFact, AL_UNDER);
-	fldPriorProbTbl = new FieldTable(fgPrior, SAFUiTable, &sTable);
+	fldPriorProbTbl = new FieldTable(fgPrior, TR("&Table"), &sTable);
 	fldPriorProbTbl->SetCallBack((NotifyProc)&FormClassifyMap::PriorProbTblChanged);
-  fldPriorProbCol = new FieldColumn(fgPrior, SAFUiColumn, Table(), &sCol, dmVALUE);
+  fldPriorProbCol = new FieldColumn(fgPrior, TR("&Column"), Table(), &sCol, dmVALUE);
 	new FieldBlank(fgPrior, 0.25);
   initMapOut(false,false);
   SetHelpItem("ilwisapp\\classify_dialogbox.htm");
@@ -675,12 +675,12 @@ int FormClassifyMap::exec()
 
 LRESULT Cmdstretch(CWnd *wnd, const String& s)
 {
-	new FormMapStretch(wnd, s.scVal());
+	new FormMapStretch(wnd, s.c_str());
 	return -1;
 }
 
 FormMapStretch::FormMapStretch(CWnd* mw, const char* sPar)
-: FormMapCreate(mw, SAFTitleMapStretch)
+: FormMapCreate(mw, TR("Stretch"))
 {
   if (sPar) {
     TextInput inp(sPar);
@@ -701,7 +701,7 @@ FormMapStretch::FormMapStretch(CWnd* mw, const char* sPar)
           sOutMap = fn.sFullName(false);
     }
   }
-  fldMap = new FieldDataType(root, SAFUiRasMap, &sMap, new MapListerDomainType(dmVALUE|dmIMAGE,false,true),true);
+  fldMap = new FieldDataType(root, TR("&Raster Map"), &sMap, new MapListerDomainType(dmVALUE|dmIMAGE,false,true),true);
   fldMap->SetCallBack((NotifyProc)&FormMapStretch::MapCallBack);
   iMethod = 0;
   iFrom = 1;
@@ -709,17 +709,17 @@ FormMapStretch::FormMapStretch(CWnd* mw, const char* sPar)
   iIntervals = 256;
   sDomain = "image.dom";
   rr = RangeReal(0,255);
-  rgMethod = new RadioGroup(root, SAFUiStretchMethod, &iMethod);
+  rgMethod = new RadioGroup(root, TR("Stretch &Method:"), &iMethod);
   rgMethod->SetIndependentPos();
-  new RadioButton(rgMethod, SAFUiLinStretch);
-  RadioButton* rbHistEq = new RadioButton(rgMethod, SAFUiHistEqual);
-  (new FieldInt(rbHistEq, SAFUiIntervals, &iIntervals))->SetIndependentPos();
+  new RadioButton(rgMethod, TR("&Linear Stretching"));
+  RadioButton* rbHistEq = new RadioButton(rgMethod, TR("&Histogram Equalization"));
+  (new FieldInt(rbHistEq, TR("&Intervals"), &iIntervals))->SetIndependentPos();
   rgMethod->SetCallBack((NotifyProc)&FormMapStretch::MethodCallBack);
-  RadioGroup* rg = new RadioGroup(root, SAFUiStretchFrom, &iFrom);
+  RadioGroup* rg = new RadioGroup(root, TR("Stretch &From:"), &iFrom);
   rg->Align(rgMethod, AL_UNDER);
-  RadioButton* rb = new RadioButton(rg, SAFUiMinMax);
+  RadioButton* rb = new RadioButton(rg, TR("&Min, Max"));
   frrMinMax = new FieldRangeReal(rb, "", &rr);
-  rb = new RadioButton(rg, SAFUiPerc); 
+  rb = new RadioButton(rg, TR("&Percentage")); 
   frPerc = new FieldReal(rb, "", &rPerc, ValueRange(0,40,0.01));
   FieldBlank* fb = new FieldBlank(root,0);
   fb->Align(rb, AL_UNDER);
@@ -850,12 +850,12 @@ int FormMapStretch::MethodCallBack(Event*)
 
 LRESULT Cmdcluster(CWnd *wnd, const String& s)
 {
-	new FormMapCluster(wnd, s.scVal());
+	new FormMapCluster(wnd, s.c_str());
 	return -1;
 }
 
 FormMapCluster::FormMapCluster(CWnd* mw, const char* sPar)
-: FormMapCreate(mw, SAFTitleMapCluster)
+: FormMapCreate(mw, TR("Clustering"))
 {
   iMaps = 3;
   iClasses = 10;
@@ -891,7 +891,7 @@ FormMapCluster::FormMapCluster(CWnd* mw, const char* sPar)
     }
   }
   iMaps -= 1;
-  new StaticText(root, SAFUiNrInpMaps);
+  new StaticText(root, TR("&Number of Input Maps"));
   rgMaps = new RadioGroup(root, "", &iMaps, true);
   rgMaps->SetIndependentPos();
   rgMaps->SetCallBack((NotifyProc)&FormMapCluster::MapsCallBack);
@@ -907,9 +907,9 @@ FormMapCluster::FormMapCluster(CWnd* mw, const char* sPar)
 	fm3->SetIndependentPos();
   fm4 = new FieldDataType(root, "", &sMap4, new MapListerDomainType(dmIMAGE | dmVALUE),true);
 	fm4->SetIndependentPos();
-  new FieldInt(root, SAFUiNrClusters, &iClasses, ValueRange(2,60), true);
+  new FieldInt(root, TR("Number of &Clusters"), &iClasses, ValueRange(2,60), true);
   initMapOut(false, false);
-	CheckBox* cbTb = new CheckBox(root, SAFUiOutTable, &fStatTable);
+	CheckBox* cbTb = new CheckBox(root, TR("&Output Table"), &fStatTable);
   ftc = new FieldTableCreate(cbTb, "", &sOutTable);
   SetHelpItem("ilwisapp\\cluster_dialog_box.htm");
   create();
@@ -980,12 +980,12 @@ int FormMapCluster::exec()
 
 LRESULT Cmdcolorsep(CWnd *wnd, const String& s)
 {
-	new FormMapColorSep(wnd, s.scVal());
+	new FormMapColorSep(wnd, s.c_str());
 	return -1;
 }
 
 FormMapColorSep::FormMapColorSep(CWnd* mw, const char* sPar)
-: FormMapCreate(mw, SAFTitleMapColorSep)
+: FormMapCreate(mw, TR("Color Separation"))
 {
   if (sPar) {
     TextInput inp(sPar);
@@ -1004,28 +1004,28 @@ FormMapColorSep::FormMapColorSep(CWnd* mw, const char* sPar)
           sOutMap = fn.sFullName(true);
     }
   }
-  new FieldDataType(root, SAFUiRasMap, &sMap, new MapListerDomainType(dmPICT|dmCOLOR), true);
+  new FieldDataType(root, TR("&Raster Map"), &sMap, new MapListerDomainType(dmPICT|dmCOLOR), true);
   iOption = 0;
   RadioGroup* rg = new RadioGroup(root, "", &iOption);
   rg->SetIndependentPos();
-  RadioButton *rbR = new RadioButton(rg, SAFUiRed);
-  RadioButton *rbG = new RadioButton(rg, SAFUiGreen);
+  RadioButton *rbR = new RadioButton(rg, TR("&Red"));
+  RadioButton *rbG = new RadioButton(rg, TR("&Green"));
   rbG->Align(rbR, AL_AFTER);
-  RadioButton *rbB = new RadioButton(rg, SAFUiBlue);
+  RadioButton *rbB = new RadioButton(rg, TR("&Blue"));
   rbB->Align(rbG, AL_AFTER);
-  RadioButton *rbY = new RadioButton(rg, SAFUiYellow);
+  RadioButton *rbY = new RadioButton(rg, TR("&Yellow"));
   rbY->Align(rbR, AL_UNDER);
-  RadioButton *rbM = new RadioButton(rg, SAFUiMagenta);
+  RadioButton *rbM = new RadioButton(rg, TR("&Magenta"));
   rbM->Align(rbY, AL_AFTER);
-  RadioButton *rbC = new RadioButton(rg, SAFUiCyan);
+  RadioButton *rbC = new RadioButton(rg, TR("&Cyan"));
   rbC->Align(rbM, AL_AFTER);
-  RadioButton *rbH = new RadioButton(rg, SAFUiHue);
+  RadioButton *rbH = new RadioButton(rg, TR("&Hue"));
   rbH->Align(rbY, AL_UNDER);
-  RadioButton *rbS = new RadioButton(rg, SAFUiSaturation);
+  RadioButton *rbS = new RadioButton(rg, TR("&Saturation"));
   rbS->Align(rbH, AL_AFTER);
-  RadioButton *rbI = new RadioButton(rg, SAFUiIntensity);
+  RadioButton *rbI = new RadioButton(rg, TR("&Intensity"));
   rbI->Align(rbS, AL_AFTER);
-  RadioButton *rbGr = new RadioButton(rg, SAFUiGrey);
+  RadioButton *rbGr = new RadioButton(rg, TR("&Gray"));
   rbGr->Align(rbH, AL_UNDER);
   
   initMapOut(false, false);
@@ -1114,7 +1114,7 @@ private:
 //---------- FormMapMaplistStatistics --------
 LRESULT Cmdmapliststatistics(CWnd *wnd, const String& s)
 {
-	new FormMapMaplistStatistics(wnd, s.scVal());
+	new FormMapMaplistStatistics(wnd, s.c_str());
 	return -1;
 }
 
@@ -1163,7 +1163,7 @@ FormMapMaplistStatistics::FormMapMaplistStatistics(CWnd* mw, const char* sPar)
     FieldBlank *blank = new FieldBlank(root, 0.5);
     blank->Align(st, AL_UNDER);
 
-    // SAFUiNrClusters
+    // TR("Number of &Clusters")
     StaticText *st2 = st = new StaticText(root, "Start band");
     st2->Align(blank, AL_UNDER);
     m_fieldMinBand = new FieldInt(root, "", &m_iStart, ValueRange(2,60), true, true);

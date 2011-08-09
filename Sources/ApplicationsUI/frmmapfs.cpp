@@ -179,13 +179,13 @@ int FormRasterize::MapCallBack(Event*)
       sDomain = dm->sName();
       if (dm->pdvi() || dm->pdvr()) {
         if (rr.fValid()) {
-          String sRemark(SAFInfMinMax_SS.scVal(),
+          String sRemark(TR("Minimum: %S  Maximum: %S").c_str(),
                    dvs.sValue(rr.rLo()), dvs.sValue(rr.rHi()));
           stMapRemark->SetVal(sRemark);
         }
         else {
           rr = dvs.rrMinMax();
-          String sRemark(SAFInfRangeMinMax_SS.scVal(), 
+          String sRemark(TR("Ranges from %S to %S").c_str(), 
                    dvs.sValue(rr.rLo()), dvs.sValue(rr.rHi()));
           stMapRemark->SetVal(sRemark);
         }
@@ -210,7 +210,7 @@ int FormRasterize::MapCallBack(Event*)
     ValueRangeCallBack(0);
     if (fOnlyValue)
       if (!dm->pdv()) {
-        stRemark->SetVal(SAFRemOnlyValueDomain);
+        stRemark->SetVal(TR("Only Value domains allowed"));
         DisableOK();
       }  
       else
@@ -239,12 +239,12 @@ int FormRasterize::exec()
 
 LRESULT Cmdsegras(CWnd *wnd, const String& s)
 {
-	new FormRasSegment(wnd, s.scVal());
+	new FormRasSegment(wnd, s.c_str());
 	return -1;
 }
 
 FormRasSegment::FormRasSegment(CWnd* mw, const char* sPar)
-: FormRasterize(mw, SAFTitleSegRas)
+: FormRasterize(mw, TR("Rasterize Segment Map"))
 {
   if (sPar) {
     TextInput ip(sPar);
@@ -264,7 +264,7 @@ FormRasSegment::FormRasSegment(CWnd* mw, const char* sPar)
         sOutMap = fn.sFullName(false);
     }
   }
-  feMap = new FieldSegmentMap(root, SAFUiSegMap, &sMap, new MapListerDomainType(".mps", 0, false)); /*dmVALUE|dmCLASS|dmIDENT|dmBOOL*/
+  feMap = new FieldSegmentMap(root, TR("&Segment Map"), &sMap, new MapListerDomainType(".mps", 0, false)); /*dmVALUE|dmCLASS|dmIDENT|dmBOOL*/
   feMap->SetCallBack((NotifyProc)&FormRasterize::MapCallBack);
 //  initAsk(dmVALUE|dmCLASS|dmIDENT|dmBOOL);
 //  initMapOutValRange(true);
@@ -285,12 +285,12 @@ int FormRasSegment::exec()
 
 LRESULT Cmdsegdensity(CWnd *wnd, const String& s)
 {
-	new FormMapSegmentDensity(wnd, s.scVal());
+	new FormMapSegmentDensity(wnd, s.c_str());
 	return -1;
 }
 
 FormMapSegmentDensity::FormMapSegmentDensity(CWnd* mw, const char* sPar)
-: FormRasterize(mw, SAFTitleRasSegDensity)
+: FormRasterize(mw, TR("Segment Density"))
 {
   sMask = "*";
   fMask = false;
@@ -313,10 +313,10 @@ FormMapSegmentDensity::FormMapSegmentDensity(CWnd* mw, const char* sPar)
         sOutMap = fn.sFullName(false);
     }
   }
-  feMap = new FieldSegmentMap(root, SAFUiSegMap, &sMap, new MapListerDomainType(".mps", 0, true));
+  feMap = new FieldSegmentMap(root, TR("&Segment Map"), &sMap, new MapListerDomainType(".mps", 0, true));
 	//initAsk(dmVALUE|dmCLASS|dmIDENT|dmBOOL);
   feMap->SetCallBack((NotifyProc)&FormRasterize::MapCallBack);
-  CheckBox* cb = new CheckBox(root, SAFUiMask, &fMask);
+  CheckBox* cb = new CheckBox(root, TR("&Mask"), &fMask);
   new FieldString(cb, "", &sMask);
   FieldBlank* fb = new FieldBlank(root, 0);
   fb->Align(cb, AL_UNDER);
@@ -340,12 +340,12 @@ int FormMapSegmentDensity::exec()
 
 LRESULT Cmdpolras(CWnd *wnd, const String& s)
 {
-	new FormRasPolygon(wnd, s.scVal());
+	new FormRasPolygon(wnd, s.c_str());
 	return -1;
 }
 
 FormRasPolygon::FormRasPolygon(CWnd* mw, const char* sPar)
-: FormRasterize(mw, SAFTitlePolRas)
+: FormRasterize(mw, TR("Rasterize Polygon Map"))
 {
 	if (sPar)
 	{
@@ -368,7 +368,7 @@ FormRasPolygon::FormRasPolygon(CWnd* mw, const char* sPar)
 				sOutMap = fn.sFullName(false);
 		}
 	}
-	feMap = new FieldPolygonMap(root, SAFUiPolMap, &sMap, new MapListerDomainType(".mpa", 0));
+	feMap = new FieldPolygonMap(root, TR("&Polygon Map"), &sMap, new MapListerDomainType(".mpa", 0));
 	feMap->SetCallBack((NotifyProc)&FormRasterize::MapCallBack);
 	
 	initMapOut(true,false);
@@ -388,12 +388,12 @@ int FormRasPolygon::exec()
 
 LRESULT Cmdinterpolseg(CWnd *wnd, const String& s)
 {
-	new FormInterpolMap(wnd, s.scVal());
+	new FormInterpolMap(wnd, s.c_str());
 	return -1;
 }
 
 FormInterpolMap::FormInterpolMap(CWnd* mw, const char* sPar)
-: FormRasterize(mw, SAFTitleInterpolContours)
+: FormRasterize(mw, TR("Contour Interpolation"))
 {
   if (sPar) {
     TextInput ip(sPar);
@@ -413,8 +413,8 @@ FormInterpolMap::FormInterpolMap(CWnd* mw, const char* sPar)
         sOutMap = fn.sFullName(false);
     }
   }
-//  feMap = new FieldSegmentMap(root, SAFUiContourMap, &sMap);
-  feMap = new FieldDataType(root, SAFUiContourMap, &sMap, new MapListerDomainType(".mps",dmVALUE, false),true);
+//  feMap = new FieldSegmentMap(root, TR("&Contour Map"), &sMap);
+  feMap = new FieldDataType(root, TR("&Contour Map"), &sMap, new MapListerDomainType(".mps",dmVALUE, false),true);
   feMap->SetCallBack((NotifyProc)&FormInterpolMap::MapCallBack);
 //  initAsk(dmVALUE);
 //  initMapOutValRange(true);

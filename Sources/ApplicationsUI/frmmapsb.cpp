@@ -173,12 +173,12 @@
 
 LRESULT Cmddensras(CWnd *wnd, const String& s)
 {
-	new FormDensifyMap(wnd, s.scVal());
+	new FormDensifyMap(wnd, s.c_str());
 	return -1;
 }
 
 FormDensifyMap::FormDensifyMap(CWnd* mw, const char* sPar)
-: FormMapCreate(mw, SAFTitleDensifyMap)
+: FormMapCreate(mw, TR("Densify Map"))
 {
   rEnl = 2;
   iMeth = 1;
@@ -200,19 +200,19 @@ FormDensifyMap::FormDensifyMap(CWnd* mw, const char* sPar)
           sOutMap = fn.sFullName(false);
     }
   }
-  fldMap = new FieldDataType(root, SAFUiRasMap, &sMap, new MapListerDomainType(0,false,true), true);
+  fldMap = new FieldDataType(root, TR("&Raster Map"), &sMap, new MapListerDomainType(0,false,true), true);
   fldMap->SetCallBack((NotifyProc)&FormDensifyMap::MapCallBack);
   stMapRemark = new StaticText(root, String('x',50));
   stMapRemark->SetIndependentPos();
 //  Domain dm(1,100,0.1);
-  new FieldReal(root, SAFUiDensFact, &rEnl, ValueRangeReal(1.0001,100,0.1));
-  rg = new RadioGroup(root, SAFUiInterpolMethod, &iMeth);
+  new FieldReal(root, TR("Densify &Factor"), &rEnl, ValueRangeReal(1.0001,100,0.1));
+  rg = new RadioGroup(root, TR("&Interpolation Method:"), &iMeth);
   rg->SetCallBack((NotifyProc)&FormDensifyMap::MethodCallBack);
   rg->SetIndependentPos();
-  RadioButton* rbNN = new RadioButton(rg, SAFUiNearestNeighbour);
-  rbLin = new RadioButton(rg, SAFUiBilinear);
+  RadioButton* rbNN = new RadioButton(rg, TR("&Nearest Neighbour"));
+  rbLin = new RadioButton(rg, TR("Bi&linear"));
   rbLin->Align(rbNN, AL_AFTER);
-  rbCub = new RadioButton(rg, SAFUiBicubic);
+  rbCub = new RadioButton(rg, TR("Bi&cubic"));
   rbCub->Align(rbLin, AL_AFTER);
   initMapOutValRange(false);
   SetHelpItem("ilwisapp\\densify_dialogbox.htm");
@@ -285,7 +285,7 @@ int FormDensifyMap::exec()
     fGeoRefNone = 0 != dynamic_cast<GeoRefNone*>(gr.ptr());
   }
   if (fGeoRefNone) {
-    MessageBox(SAFErrDensNonGrfMap.scVal(), SAFError.scVal(), MB_OK | MB_ICONEXCLAMATION);
+    MessageBox(TR("Non georeferenced map can not be densified").c_str(), TR("Error").c_str(), MB_OK | MB_ICONEXCLAMATION);
     return 0;
   }
   String sMethod;
@@ -331,12 +331,12 @@ int FormDensifyMap::MapCallBack(Event*)
       rbCub->Enable();
       RangeReal rr = mp->rrMinMax();
       if (rr.fValid()) {
-        sRemark = String(SAFInfMinMax_SS.scVal(),
+        sRemark = String(TR("Minimum: %S  Maximum: %S").c_str(),
                      dvs.sValue(rr.rLo()), dvs.sValue(rr.rHi()));
       }
       else {
         RangeReal rr = dvs.rrMinMax();
-        sRemark = String(SAFInfRangeMinMax_SS.scVal(),
+        sRemark = String(TR("Ranges from %S to %S").c_str(),
                      dvs.sValue(rr.rLo()), dvs.sValue(rr.rHi()));
       }
     }
@@ -351,12 +351,12 @@ int FormDensifyMap::MapCallBack(Event*)
 
 LRESULT Cmdresample(CWnd *wnd, const String& s)
 {
-	new FormResampleMap(wnd, s.scVal());
+	new FormResampleMap(wnd, s.c_str());
 	return -1;
 }
 
 FormResampleMap::FormResampleMap(CWnd* mw, const char* sPar)
-: FormMapCreate(mw, SAFTitleResampleMap)
+: FormMapCreate(mw, TR("Resample Map"))
 {
   if (sPar) {
     TextInput inp(sPar);
@@ -377,7 +377,7 @@ FormResampleMap::FormResampleMap(CWnd* mw, const char* sPar)
           sOutMap = fn.sFullName(false);
     }
   }
-  fldMap = new FieldDataType(root, SAFUiRasMap, &sMap, new MapListerDomainType(0,false,true),true);
+  fldMap = new FieldDataType(root, TR("&Raster Map"), &sMap, new MapListerDomainType(0,false,true),true);
   fldMap->SetCallBack((NotifyProc)&FormResampleMap::MapCallBack);
   stRemGeoRef = new StaticText(root, String('x',50));
   stRemGeoRef->SetIndependentPos();
@@ -385,12 +385,12 @@ FormResampleMap::FormResampleMap(CWnd* mw, const char* sPar)
   stMapRemark->SetIndependentPos();
 
   iMeth = 2;
-  rg = new RadioGroup(root, SAFUiResampleMethod, &iMeth);
+  rg = new RadioGroup(root, TR("&Resampling Method"), &iMeth);
   rg->SetCallBack((NotifyProc)&FormResampleMap::MethodCallBack);
   rg->SetIndependentPos();
-  rbNearest = new RadioButton(rg, SAFUiNearestNeighbour);
-  rbBiLin = new RadioButton(rg, SAFUiBilinear);
-  rbBiCub = new RadioButton(rg, SAFUiBicubic);
+  rbNearest = new RadioButton(rg, TR("&Nearest Neighbour"));
+  rbBiLin = new RadioButton(rg, TR("Bi&linear"));
+  rbBiCub = new RadioButton(rg, TR("Bi&cubic"));
   initMapOutValRange(true);
   // re-assign the GRF call back
   fgr->SetCallBack((NotifyProc)&FormResampleMap::ChangeGeoRef);
@@ -442,7 +442,7 @@ int FormResampleMap::ChangeGeoRef(Event* ev)
 	GeoRefPtr* pgr = m_gr.ptr();
 	if (mp->gr()->fEqual(*pgr))
 	{
-		sRem = SAFRemMapGeoRefEqual;
+		sRem = TR("Georef of Map and GeoRef are equal, no resample needed");
 		DisableOK();
 	}
 	else
@@ -527,7 +527,7 @@ int FormResampleMap::MapCallBack(Event*)
 		sDomain = dm->sName(true);
 		if (dm->pdi())
 		{
-			stMapRemark->SetVal(SAFRemImageRange);
+			stMapRemark->SetVal(TR("Domain Image ranges from 0 to 255"));
 			fvr->Hide();
 			rbBiLin->Enable();
 			rbBiCub->Enable();
@@ -538,15 +538,15 @@ int FormResampleMap::MapCallBack(Event*)
 			RangeReal rr = mp->rrMinMax();
 			String sRemark;
 			if (rr.fValid())
-				sRemark = String(SAFInfMinMax_SS.scVal(),
+				sRemark = String(TR("Minimum: %S  Maximum: %S").c_str(),
 				dvs.sValue(rr.rLo()), dvs.sValue(rr.rHi()));
 			else
 			{
 				rr = dvs.rrMinMax();
-				sRemark = String(SAFInfRangeMinMax_SS.scVal(),
+				sRemark = String(TR("Ranges from %S to %S").c_str(),
 					dvs.sValue(rr.rLo()), dvs.sValue(rr.rHi()));
 			}
-			stMapRemark->SetVal(String("%S: %S", SAFUiValRange, sRemark));
+			stMapRemark->SetVal(String("%S: %S", TR("Value &Range"), sRemark));
 			
 			MethodCallBack(0);
 			if (iMeth == 0)
@@ -591,12 +591,12 @@ int FormResampleMap::MapCallBack(Event*)
 
 LRESULT Cmdapply3d(CWnd *wnd, const String& s)
 {
-	new FormMapApply3D(wnd, s.scVal());
+	new FormMapApply3D(wnd, s.c_str());
 	return -1;
 }
 
 FormMapApply3D::FormMapApply3D(CWnd* mw, const char* sPar)
-: FormMapCreate(mw, SAFTitleMapApply3D)
+: FormMapCreate(mw, TR("Apply 3D"))
 {
   if (sPar) {
     TextInput inp(sPar);
@@ -617,7 +617,7 @@ FormMapApply3D::FormMapApply3D(CWnd* mw, const char* sPar)
           sOutMap = fn.sFullName(false);
     }
   }
-  new FieldMap(root, SAFUiRasMap, &sMap);
+  new FieldMap(root, TR("&Raster Map"), &sMap);
   initMapOutGeoRef3D();
   SetHelpItem("ilwisapp\\apply_3d_dialog_box.htm");
   create();
@@ -637,12 +637,12 @@ int FormMapApply3D::exec()
 }
 
 long Cmdmirror(CWnd *parent, const String& s) {
-	new FormMapMirrorRotate(parent, s.scVal());
+	new FormMapMirrorRotate(parent, s.c_str());
 	return -1;
 }
 
 FormMapMirrorRotate::FormMapMirrorRotate(CWnd* mw, const char* sPar)
-: FormMapCreate(mw, SAFTitleMirrorRotate)
+: FormMapCreate(mw, TR("Mirror Rotate"))
 {
   if (sPar) {
     TextInput inp(sPar);
@@ -663,16 +663,16 @@ FormMapMirrorRotate::FormMapMirrorRotate(CWnd* mw, const char* sPar)
           sOutMap = fn.sFullName(false);
     }
   }
-  new FieldDataType(root, SAFUiRasMap, &sMap, new MapListerDomainType(0, 0, true), true);
+  new FieldDataType(root, TR("&Raster Map"), &sMap, new MapListerDomainType(0, 0, true), true);
   iMethod = 0;
   rg = new RadioGroup(root, "", &iMethod);
-  new RadioButton(rg, SAFUiMirrorHorizontal);
-  new RadioButton(rg, SAFUiMirrorVertical);
-  new RadioButton(rg, SAFUiTranspose);
-  new RadioButton(rg, SAFUiMirrorDiagonal);
-  new RadioButton(rg, SAFUiRotate90);
-  new RadioButton(rg, SAFUiRotate180);
-  new RadioButton(rg, SAFUiRotate270);
+  new RadioButton(rg, TR("Mirror &Horizontal"));
+  new RadioButton(rg, TR("Mirror &Vertical"));
+  new RadioButton(rg, TR("&Transpose"));
+  new RadioButton(rg, TR("Mirror &Diagonal"));
+  new RadioButton(rg, TR("Rotate &90 degrees clockwise"));
+  new RadioButton(rg, TR("Rotate &180 degrees clockwise"));
+  new RadioButton(rg, TR("Rotate &270 degrees clockwise"));
   rg->SetIndependentPos();
   initMapOut(false,false);
   SetHelpItem("ilwisapp\\mirror_rotate_dialogbox.htm");
@@ -712,12 +712,12 @@ int FormMapMirrorRotate::exec()
 
 LRESULT Cmdsubras(CWnd *wnd, const String& s)
 {
-	new FormMapSubMap(wnd, s.scVal());
+	new FormMapSubMap(wnd, s.c_str());
 	return -1;
 }
 
 FormMapSubMap::FormMapSubMap(CWnd* mw, const char* sPar)
-: FormMapCreate(mw, SAFTitleMapSubMap),
+: FormMapCreate(mw, TR("Sub Map of Raster Map")),
  	fPreSet(false)
 {
 	iFirstLine = iFirstCol = iUNDEF;
@@ -760,42 +760,42 @@ FormMapSubMap::FormMapSubMap(CWnd* mw, const char* sPar)
 		}
 	}		
 
-  fldMap = new FieldDataType(root, SAFUiRasMap, &sMap, new MapListerDomainType(0,true,true), true);
+  fldMap = new FieldDataType(root, TR("&Raster Map"), &sMap, new MapListerDomainType(0,true,true), true);
   fldMap->SetCallBack((NotifyProc)&FormMapSubMap::MapCallBack);
 	iMethod = 0;
 	rgMethod = new RadioGroup(root, "", &iMethod);
   rgMethod->SetCallBack((NotifyProc)&FormMapSubMap::MethodCallBack);
-  RadioButton* rb1 = new RadioButton(rgMethod, SAFUiLinesColumns);
-  RadioButton* rb2 = new RadioButton(rgMethod, SAFUiOppositeCorners);
-  rbCoords = new RadioButton(rgMethod, SAFUiOppositeCoordinates);
+  RadioButton* rb1 = new RadioButton(rgMethod, TR("&Lines and Columns "));
+  RadioButton* rb2 = new RadioButton(rgMethod, TR("Co&rners"));
+  rbCoords = new RadioButton(rgMethod, TR("&Coordinates"));
   FieldBlank* fb = new FieldBlank(root, 0);
 
 	// In case of regular GeoRefSubMap
-  feFirstLine = new FieldInt(rb1, SAFUiFirstLine, &iFirstLine);
+  feFirstLine = new FieldInt(rb1, TR("&First Line"), &iFirstLine);
   feFirstLine->Align(fb, AL_UNDER);
-  feFirstCol = new FieldInt(rb1, SAFUiFirstCol, &iFirstCol);
+  feFirstCol = new FieldInt(rb1, TR("F&irst Column"), &iFirstCol);
   feFirstCol->Align(feFirstLine, AL_UNDER);
 
-  feNrLines = new FieldInt(rb1, SAFUiNrLines, &iLines);
+  feNrLines = new FieldInt(rb1, TR("&Number of Lines"), &iLines);
   feNrLines->Align(feFirstCol, AL_UNDER);
-  feNrCols = new FieldInt(rb1, SAFUiNrCols, &iCols);
+  feNrCols = new FieldInt(rb1, TR("N&umber of Columns"), &iCols);
   feNrCols->Align(feNrLines, AL_UNDER);
 
 	// In case of GeoRefSubMapCorners
-  feFirstLineCrnr = new FieldInt(rb2, SAFUiFirstLine, &iFirstLine);
+  feFirstLineCrnr = new FieldInt(rb2, TR("&First Line"), &iFirstLine);
   feFirstLineCrnr->Align(fb, AL_UNDER);
-  feFirstColCrnr = new FieldInt(rb2, SAFUiFirstCol, &iFirstCol);
+  feFirstColCrnr = new FieldInt(rb2, TR("F&irst Column"), &iFirstCol);
   feFirstColCrnr->Align(feFirstLineCrnr, AL_UNDER);
 
-  feLastLineCrnr = new FieldInt(rb2, SAFUiLastLine, &iLastLine);
+  feLastLineCrnr = new FieldInt(rb2, TR("La&st Line"), &iLastLine);
   feLastLineCrnr->Align(feFirstColCrnr, AL_UNDER);
-  feLastColCrnr = new FieldInt(rb2, SAFUiLastCol, &iLastCol);
+  feLastColCrnr = new FieldInt(rb2, TR("Las&t Column"), &iLastCol);
   feLastColCrnr->Align(feLastLineCrnr, AL_UNDER);
 
 	// In case of GeoRefSubMapCoords
-  fcFirst = new FieldCoord(rbCoords, SAFUiFirstCoord, &crd1);
+  fcFirst = new FieldCoord(rbCoords, TR("&First Coordinate"), &crd1);
   fcFirst->Align(fb, AL_UNDER);
-  fcSecond = new FieldCoord(rbCoords, SAFUiOppositeCoord, &crd2);
+  fcSecond = new FieldCoord(rbCoords, TR("O&pposite Coordinate"), &crd2);
   fcSecond->Align(fcFirst, AL_UNDER);
 
   FieldBlank* fbEmpty = new FieldBlank(rbCoords,  1);
@@ -884,12 +884,12 @@ int FormMapSubMap::MapCallBack(Event*)
 		String sNorth;
 		if (mp->gr()->fNorthOriented())
 		{
-			sNorth = String(SAFRemInMapIsNorthOriented);
+			sNorth = String(TR("Input map is north-oriented"));
 			rbCoords->Enable();
 		}
 		else
 		{
-			sNorth = String(SAFRemInMapNotNorthOriented);
+			sNorth = String(TR("Input map is not north-oriented"));
 			rbCoords->Disable();
 			if (iMethod == 2)   // Coordinates can not be handled for not-north oriented maps
 			{

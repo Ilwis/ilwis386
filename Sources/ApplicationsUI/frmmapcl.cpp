@@ -121,12 +121,12 @@ FormEntry* FieldMapCalc::CheckData()
 
 LRESULT Cmdmapcalc(CWnd *wnd, const String& s)
 {
-	new FormMapCalc(wnd, s.scVal());
+	new FormMapCalc(wnd, s.c_str());
 	return -1;
 }
 
 FormMapCalc::FormMapCalc(CWnd* mw, const char* sPar)
-: FormMapCreate(mw, SAFTitleMapCalc)
+: FormMapCreate(mw, TR("Map Calculation"))
 {
   if (sPar) {
 		TextInput ip(sPar);
@@ -143,14 +143,14 @@ FormMapCalc::FormMapCalc(CWnd* mw, const char* sPar)
           sOutMap = fn.sFullName(false);
     }
   }
-  new StaticText(root, SAFUiExpression);
+  new StaticText(root, TR("&Expression:"));
 //  fsExpr = new FieldStringMulti(root, &sExpr);
   fsExpr = new FieldMapCalc(root, &sExpr);
   fsExpr->SetWidth(240);
   fsExpr->SetHeight(100);
   fsExpr->SetIndependentPos();
   initMapOut(false, true);
-  PushButton* pb = new PushButton(root, SAFUiDefaults, 
+  PushButton* pb = new PushButton(root, TR("&Defaults"), 
                    (NotifyProc)&FormMapCalc::SetDefaults);
   pb->SetIndependentPos();
   pb->Align(fdc, AL_AFTER);
@@ -203,12 +203,12 @@ int FormMapCalc::SetDefaults(Event*)
 
 LRESULT Cmdmapiter(CWnd *wnd, const String& s)
 {
-	new FormMapIter(wnd, s.scVal());
+	new FormMapIter(wnd, s.c_str());
 	return -1;
 }
 
 FormMapIter::FormMapIter(CWnd* mw, const char* sPar)
-: FormMapCreate(mw, SAFTitleMapIter)
+: FormMapCreate(mw, TR("Map Iteration"))
 {
   fPropagation = true;
   iStopCriterium = 0;
@@ -230,26 +230,26 @@ FormMapIter::FormMapIter(CWnd* mw, const char* sPar)
           sOutMap = fn.sRelative(false);
     }
   }
-  new FieldDataType(root, SAFUiInitialMap, &sInitMap,
+  new FieldDataType(root, TR("&Start Map"), &sInitMap,
                     new MapListerDomainType(dmBOOL|dmVALUE|dmCLASS|dmIDENT),true);
-//  new FieldMap(root, SAFUiInitialMap, &sInitMap);
-  new StaticText(root, SAFUiExpression);
+//  new FieldMap(root, TR("&Start Map"), &sInitMap);
+  new StaticText(root, TR("&Expression:"));
 //  fsExpr = new FieldStringMulti(root, &sExpr);
   fsExpr = new FieldMapCalc(root, &sExpr);
   fsExpr->SetWidth(240);
   fsExpr->SetHeight(100);
   fsExpr->SetIndependentPos();
 
-  RadioGroup* rg = new RadioGroup(root, SAFUiStopCriterium, &iStopCriterium);
-  new RadioButton(rg, SAFUiUntilNoChanges);
-  RadioButton* rb = new RadioButton(rg, SAFUiNrIterations);
+  RadioGroup* rg = new RadioGroup(root, TR("&Stop Criterium"), &iStopCriterium);
+  new RadioButton(rg, TR("Until &No changes"));
+  RadioButton* rb = new RadioButton(rg, TR("Number of &Iterations"));
   new FieldInt(rb, "", &iNrIterations, ValueRange(1,100000L));
 
-  CheckBox* cbProp = new CheckBox(root, SAFUiPropagation, &fPropagation);
+  CheckBox* cbProp = new CheckBox(root, TR("&Propagation"), &fPropagation);
   cbProp->Align(rg, AL_UNDER);
 
   initMapOut(false, true);
-  PushButton* pb = new PushButton(root, SAFUiDefaults, 
+  PushButton* pb = new PushButton(root, TR("&Defaults"), 
                    (NotifyProc)&FormMapIter::SetDefaults);
   pb->SetIndependentPos();
   pb->Align(fdc, AL_AFTER);
@@ -336,7 +336,7 @@ FormEntry* FieldMapListCalc::CheckData()
 				if (j > i+1) // something found
 				{
 					String sNum (sExpr.substr(i+1, j-i-1));
-					int iNum = atoi(sNum.scVal());
+					int iNum = atoi(sNum.c_str());
 					if (iNum > iCountMapLists)
 						iCountMapLists = iNum;
 				}
@@ -366,7 +366,7 @@ FormEntry* FieldMapListCalc::CheckData()
 
 LRESULT Cmdmaplistcalc(CWnd *wnd, const String& s)
 {
-	new FormMapListCalc(wnd, s.scVal());
+	new FormMapListCalc(wnd, s.c_str());
 	return -1;
 }
 
@@ -408,7 +408,7 @@ FormMapListCalc::FormMapListCalc(CWnd* mw, const char* sPar)
 	m_vfml.resize(iMAX);
 	m_sml.resize(iMAX); // this is so that the thing "remembers" what the user selected while he resizes the list
 
-  new StaticText(root, SAFUiExpression);
+  new StaticText(root, TR("&Expression:"));
   fsExpr = new FieldMapListCalc(root, &sExpr, this);
   fsExpr->SetWidth(240);
   fsExpr->SetHeight(100);

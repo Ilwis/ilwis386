@@ -248,7 +248,7 @@ int FormMaplistGraph::ClipboardCopy(Event *)
 			int iLen = sClipboardText.length();
 			HGLOBAL hnd = GlobalAlloc(GMEM_FIXED, iLen+2);
 			char* pc = (char*)GlobalLock(hnd);
-			strcpy(pc, sClipboardText.scVal());
+			strcpy(pc, sClipboardText.c_str());
 			GlobalUnlock(hnd);
 			SetClipboardData(CF_TEXT,hnd);
 			CloseClipboard();
