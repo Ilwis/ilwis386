@@ -90,7 +90,7 @@ const char* PointMapFromTable::sSyntax() {
 void TableNeedsIdentifierDomainError(const FileName& fnTbl)
 {
   throw ErrorObject(
-    WhatError(String(SPNTErrTableNoDomainID),
+    WhatError(String(TR("Table does not have identifier domain")),
                 errPointMapFromTable), fnTbl);
 }
 

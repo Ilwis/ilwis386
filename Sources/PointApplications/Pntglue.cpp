@@ -225,13 +225,13 @@ PointMapGlue::PointMapGlue(const FileName& fn, PointMapPtr& p)
 	{
 		try
 		{
-			ReadElement("PointMapGlue", String("PointMap%i", i).scVal(), apmp[i]);
+			ReadElement("PointMapGlue", String("PointMap%i", i).c_str(), apmp[i]);
 		}
 		catch (const ErrorObject& err) {  // catch to prevent invalid object
 			err.Show();
 			return;
 		}
-		ReadElement("PointMapGlue", String("PointMapMask%i", i).scVal(), asMask[i]);
+		ReadElement("PointMapGlue", String("PointMapMask%i", i).c_str(), asMask[i]);
 	}
 	Table tblAtt0 = apmp[0]->tblAtt();
 	fAllAttrTablesEqual = tblAtt0.fValid();
@@ -325,8 +325,8 @@ void PointMapGlue::Store()
   WriteElement("PointMapVirtual", "Type", "PointMapGlue");
   WriteElement("PointMapGlue", "NrPointMap", (long)iPntMap);
   for (int i=0;  i < iPntMap; ++i) {
-    WriteElement("PointMapGlue", String("PointMap%i", i).scVal(), apmp[i]);
-    WriteElement("PointMapGlue", String("PointMapMask%i",i).scVal(), asMask[i]);
+    WriteElement("PointMapGlue", String("PointMap%i", i).c_str(), apmp[i]);
+    WriteElement("PointMapGlue", String("PointMapMask%i",i).c_str(), asMask[i]);
   }
   if (sNewDom.length())
     WriteElement("PointMapGlue", "NewDomain", sNewDom);
@@ -396,7 +396,7 @@ bool PointMapGlue::fFreezing()
 
 	if (!fSameDom) {
 		if (0 != pdsrt) {
-			trq.SetText(SPNTTextCreatingNewDomain);
+			trq.SetText(TR("Creating new domain"));
 			if (sNewDom.length()) {
 				if (odFinal == odUNIQUEID)
 					dom = Domain(fnObj, 0, dmtUNIQUEID, apmp[0]->dm()->pdUniqueID()->sGetPrefix());
@@ -493,7 +493,7 @@ bool PointMapGlue::fFreezing()
 		if (cb().fContains(cbnd)) {  // apmp[i] will be (partly) glued
 			PointMap pmp = apmp[iMapNr];
 			String sMask = asMask[iMapNr];
-			trq.SetText(String(SPNTTextCopyWithMask_SS.scVal(), pmp->sName(true, fnObj.sPath()), sMask));
+			trq.SetText(String(TR("Copy %S with mask '%S'").c_str(), pmp->sName(true, fnObj.sPath()), sMask));
 			Mask mask(pmp->dm(), sMask);
 			long iPnt = pmp->iFeatures();
 			for (long i = 0; i < pmp->iFeatures(); ++i)

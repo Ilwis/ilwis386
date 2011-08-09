@@ -87,7 +87,7 @@ PointMapFromRas::PointMapFromRas(const FileName& fn, PointMapPtr& p, const Map& 
 : PointMapVirtual(fn, p, mp->cs(), mp->cb(), mp->dvrs()), map(mp)
 {
   if (map->gr()->fnObj.sFile == "none")
-    throw ErrorObject(WhatError(SPNTErrMapWithoutGeoRef, errPointMapFromRas),
+    throw ErrorObject(WhatError(TR("Map has no georeference"), errPointMapFromRas),
                                 sTypeName());
   if (map->gr()->fGeoRefNone())
     throw ErrorGeoRefNone(map->gr()->fnObj, errPointMapFromRas);
@@ -125,7 +125,7 @@ void PointMapFromRas::Init()
 
 bool PointMapFromRas::fFreezing()
 {
-  trq.SetText(String(SPNTTextCalculateNrPoints_S.scVal(), sName(true, fnObj.sPath())));
+  trq.SetText(String(TR("Calculating number of points. '%S'").c_str(), sName(true, fnObj.sPath())));
   
   long i,j;
   long iMapCol=map->iCols(),iMapLines= map->iLines(), iCount=0, iRec=1;
@@ -157,7 +157,7 @@ bool PointMapFromRas::fFreezing()
     }
   }
    _iPoints=iCount;
-  trq.SetText(SPNTTextMapRasterToPoints);
+  trq.SetText(TR("Mapping Raster points to pointmap"));
   if ( fUseReals() )
   {
     RealBuf rBufLine(iMapCol);

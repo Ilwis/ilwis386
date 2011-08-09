@@ -206,7 +206,7 @@ ValueRange PointMapTransform::vrDefault(const PointMap& pmap)
 
 bool PointMapTransform::fFreezing()
 {
-  trq.SetText(String(SPNTTextTransforming_S.scVal(), sName(true, fnObj.sPath())));
+  trq.SetText(String(TR("Transforming '%S'").c_str(), sName(true, fnObj.sPath())));
   pms->iAdd(pmp->iFeatures());
   Coord crd;
 	/// additions to enable Datum-height transf in pointmaps

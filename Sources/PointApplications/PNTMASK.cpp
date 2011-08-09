@@ -147,7 +147,7 @@ void PointMapMask::Init()
 bool PointMapMask::fFreezing()
 {
   mask.SetDomain(dm());
-  trq.SetText(String(SPNTTextCopyWithMask_S.scVal(), mask.sMask()));
+  trq.SetText(String(TR("Copy with mask '%S'").c_str(), mask.sMask()));
   long iPoints = pmp->iFeatures();
   for (long i=0; i < iPoints; ++i) {
     if (trq.fUpdate(i, iPoints))

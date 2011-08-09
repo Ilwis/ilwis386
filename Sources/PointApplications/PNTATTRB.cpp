@@ -67,7 +67,7 @@ class DATEXPORT ErrorInvalidAttDomain: public ErrorObject
 {
 public:
   ErrorInvalidAttDomain(const String& sDomain, const WhereError& where)
-  : ErrorObject(WhatError(String(SPNTErrWrongAttrDomain.scVal(), sDomain), 
+  : ErrorObject(WhatError(String(TR("Invalid domain type for attribute column: '%S'").c_str(), sDomain), 
                 errPolygonMapAttribute+1), where) {}
 };
 

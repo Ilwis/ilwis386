@@ -80,11 +80,11 @@ PointMapSegDist* PointMapSegDist::create(const FileName& fn, PointMapPtr& p, con
 		String sInputSegMapName = as[0];
 		char *pCh = sInputSegMapName.strrchrQuoted('.');
 		if ((pCh != 0) && (0 != _strcmpi(pCh, ".mps")))  // attrib map
-			throw ErrorObject(WhatError(String(SSEGErrNoAttColumnAllowed_S.scVal(), as[0]),
+			throw ErrorObject(WhatError(String(TR("Use of attribute maps is not possible: '%S'").c_str(), as[0]),
 																 errPointMapSegCoords), fn);
     rInterval = as[1].rVal();
     if (rInterval <= 0)
-      throw ErrorObject(WhatError(SPNTErrDistanceMustBePositive, errPointMapSegDist), fn);
+      throw ErrorObject(WhatError(TR("Distance needs to be > 0"), errPointMapSegDist), fn);
     SegmentMap smp(as[0], fn.sPath());
     return new PointMapSegDist(fn, p, smp, rInterval);
   }
@@ -98,7 +98,7 @@ PointMapSegDist* PointMapSegDist::create(const FileName& fn, PointMapPtr& p, con
 			if (!IlwisObjectPtr::fParseParm(sExpr, as))
 				throw ErrorExpression(sExpr, sSyntaxSegCoords());
 			if ((pCh != 0) && (0 != _strcmpi(pCh, ".mps")))  // attrib map
-				throw ErrorObject(WhatError(String(SSEGErrNoAttColumnAllowed_S.scVal(), as[0]),
+				throw ErrorObject(WhatError(String(TR("Use of attribute maps is not possible: '%S'").c_str(), as[0]),
 																	 errPointMapSegCoords), fn);
 			SegmentMap smp(as[0], fn.sPath());
 			return new PointMapSegDist(fn, p, smp, 0);
@@ -107,7 +107,7 @@ PointMapSegDist* PointMapSegDist::create(const FileName& fn, PointMapPtr& p, con
 			if (!IlwisObjectPtr::fParseParm(sExpr, as))
 				throw ErrorExpression(sExpr, sSyntaxSegNodes());
 			if ((pCh != 0) && (0 != _strcmpi(pCh, ".mps")))  // attrib map
-				throw ErrorObject(WhatError(String(SSEGErrNoAttColumnAllowed_S.scVal(), as[0]),
+				throw ErrorObject(WhatError(String(TR("Use of attribute maps is not possible: '%S'").c_str(), as[0]),
 																	 errPointMapSegNodes), fn);
 			SegmentMap smp(as[0], fn.sPath());
 			return new PointMapSegDist(fn, p, smp, rUNDEF);
@@ -199,7 +199,7 @@ void PointMapSegDist::Init()
 bool PointMapSegDist::fFreezing()
 {
   Init();
-  trq.SetText(SPNTTextCalculating);
+  trq.SetText(TR("Calculating"));
   long iCode,iNumbrLegs;
   CoordinateSequence *crdBuf;
   if (rInterval == 0 ) {   //  take all coordinates in segment map

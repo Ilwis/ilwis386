@@ -38,7 +38,7 @@
 // $Log: /ILWIS 3.0/PointMap/SEGMASK.cpp $
  * 
  * 6     8-02-01 17:13 Hendrikse
- * implem errormessage SSEGErrNoAttColumnAllowed_S
+ * implem errormessage TR("Use of attribute maps is not possible: '%S'")
  * 
  * 5     17-01-00 8:17a Martin
  * changed rowcols to coords

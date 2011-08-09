@@ -148,7 +148,7 @@ void PointMapSubMap::Init()
 
 bool PointMapSubMap::fFreezing()
 {
-  trq.SetText(String(SPNTTextSelectPoints_S.scVal(), sName(true, fnObj.sPath())));
+  trq.SetText(String(TR("Selecting Points '%S'").c_str(), sName(true, fnObj.sPath())));
   for (long i=1; i <= pmp->iFeatures(); ++i ) {
     if (trq.fUpdate(i, pmp->iFeatures()))
       return false;

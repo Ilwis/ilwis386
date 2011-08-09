@@ -133,7 +133,7 @@ void PointMapPolLabels::Init()
 bool PointMapPolLabels::fFreezing()
 {
   Init();
-  trq.SetText(SPNTTextCalculating);
+  trq.SetText(TR("Calculating"));
   for (int i = 0; i < polmp->iFeatures(); ++i) {
 	ILWIS::Polygon *pol = (ILWIS::Polygon *)polmp->getFeature(i);
 	if ( pol == NULL || !pol->fValid())

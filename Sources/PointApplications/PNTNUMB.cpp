@@ -176,8 +176,8 @@ void PointMapNumbering::Init()
 
 bool PointMapNumbering::fFreezing()
 {
-	trq.SetTitle(SPNTTitlePointMapNumbering);
-	trq.SetText(SPNTTextCheckPoints);
+	trq.SetTitle(TR("Numbering points"));
+	trq.SetText(TR("Check points"));
 	long iNewPnt = 0;
 	Coord crd;
 	for (long i=1; i <= pmp->iFeatures(); ++i ) {
@@ -218,7 +218,7 @@ bool PointMapNumbering::fFreezing()
 		col->fErase = true;
 	}
 	
-	trq.SetText(String(SPNTTextNumbering_S.scVal(), sName(true, fnObj.sPath())));
+	trq.SetText(String(TR("Numbering '%S'").c_str(), sName(true, fnObj.sPath())));
 	iNewPnt = 0;
 	double rVal;
 	long iRaw;
