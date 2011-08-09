@@ -230,7 +230,7 @@ MapSMAC::MapSMAC(const FileName& fn,
      objtime = objdep.tmNewest();
 	ptr.Store(); 
 	fNeedFreeze = true;
-	sFreezeTitle = SMAPTextSMAC;
+	sFreezeTitle = TR("Atmospheric Effect Correction (SMAC)");
 }
 
 MapSMAC::MapSMAC(const FileName& fn, 
@@ -314,7 +314,7 @@ MapSMAC::MapSMAC(const FileName& fn,
      objtime = objdep.tmNewest();
 	ptr.Store(); 
 	fNeedFreeze = true;
-	sFreezeTitle = SMAPTextSMAC;
+	sFreezeTitle = TR("Atmospheric Effect Correction (SMAC)");
 }
 
 MapSMAC::~MapSMAC()
@@ -503,7 +503,7 @@ bool MapSMAC::fFreezing()
 
 
 	double invalidvalue = 0.f;
-	trq.SetText(SMAPTextSMAC);
+	trq.SetText(TR("Atmospheric Effect Correction (SMAC)"));
 	for (int iRow = 0; iRow < iLines(); ++iRow)
 	{
 		mp_r_toa->GetLineVal(iRow, buf_toa);

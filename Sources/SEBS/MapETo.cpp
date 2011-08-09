@@ -62,7 +62,7 @@ MapETo::MapETo(const FileName& fn, MapPtr& p)
 : MapFromMap(fn, p)
 {
 	fNeedFreeze = true;
-	sFreezeTitle = SMAPTextETo;
+	sFreezeTitle = TR("Reference ETo");
 	//htpFreeze = "ilwisapp\flow_accumulation_algorithm.htm";
 
 	ReadElement("ReferenceETo", "WindSpeed", m_mpU);
@@ -652,7 +652,7 @@ bool MapETo::fFreezing()
 	double pi = 3.1415926;
 	// loop over all scanlines
 	trq.SetTitle(sFreezeTitle);
-	trq.SetText(SMAPTextGeneratingEToMap);
+	trq.SetText(TR("Generating reference ETo map..."));
 	trq.Start();
 
 	for (int y = 0; y < height; y++) {

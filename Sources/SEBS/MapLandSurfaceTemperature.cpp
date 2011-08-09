@@ -61,7 +61,7 @@ MapLandSurfaceTemperature::MapLandSurfaceTemperature(const FileName& fn, MapPtr&
 : MapFromMap(fn, p)
 {
 	fNeedFreeze = true;
-	sFreezeTitle = SMAPTextComputeLandSurfaceTemperature;
+	sFreezeTitle = TR("Compute Land Surface Temperature");
 	ReadElement("LandSurfaceTemperature", "Sensor", m_sSensor);
 	ReadElement("LandSurfaceTemperature", "BrightnessTemperature12", m_mpBtemp12);
 	ReadElement("LandSurfaceTemperature", "BrightnessTemperature11", m_mpBtemp11);
@@ -191,7 +191,7 @@ bool MapLandSurfaceTemperature::fGeoRefChangeable() const
 
 void MapLandSurfaceTemperature::ReadBrightnessTemperatureMaps()
 {
-    trq.SetText(SMAPTextComputeBrightnessTemperature);
+    trq.SetText(TR("Compute Brightness Temperature"));
 	RealBuf rBuf1;
 	RealBuf rBuf2;
 	rBuf1.Size(iCols());
@@ -236,7 +236,7 @@ bool MapLandSurfaceTemperature::fFreezing()
 	ReadBrightnessTemperatureMaps();
     
 	trq.SetTitle(sFreezeTitle);
-	trq.SetText(SMAPTextComputeLandSurfaceTemperature);
+	trq.SetText(TR("Compute Land Surface Temperature"));
 	trq.Start();
 	Map mpInWaterVapor;
 	bool fInWaterVapor = false;

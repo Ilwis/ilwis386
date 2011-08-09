@@ -76,7 +76,7 @@ MapRadiance2Reflectance::MapRadiance2Reflectance(const FileName& fn, MapPtr& p)
 	else
 		ReadElement("MapRadiance2Reflectance", "ESUN", m_esun);
 	fNeedFreeze = true;
-	sFreezeTitle = SMAPTextRadiance2Reflectance;
+	sFreezeTitle = TR("Converting Radiance Values to Reflectance");
 }
 
 MapRadiance2Reflectance::MapRadiance2Reflectance(const FileName& fn, 
@@ -102,7 +102,7 @@ MapRadiance2Reflectance::MapRadiance2Reflectance(const FileName& fn,
      objtime = objdep.tmNewest();
 	ptr.Store(); 
 	fNeedFreeze = true;
-	sFreezeTitle = SMAPTextRadiance2Reflectance;
+	sFreezeTitle = TR("Converting Radiance Values to Reflectance");
 }
 
 MapRadiance2Reflectance::MapRadiance2Reflectance(const FileName& fn, 
@@ -127,7 +127,7 @@ MapRadiance2Reflectance::MapRadiance2Reflectance(const FileName& fn,
      objtime = objdep.tmNewest();
 	ptr.Store(); 
 	fNeedFreeze = true;
-	sFreezeTitle = SMAPTextRadiance2Reflectance;
+	sFreezeTitle = TR("Converting Radiance Values to Reflectance");
 }
 
 MapRadiance2Reflectance::~MapRadiance2Reflectance()
@@ -217,7 +217,7 @@ bool MapRadiance2Reflectance::fGeoRefChangeable() const
 
 bool MapRadiance2Reflectance::fFreezing()
 {
-	trq.SetText(SMAPTextRadiance2Reflectance);
+	trq.SetText(TR("Converting Radiance Values to Reflectance"));
 
 	RealBuf rBufRad;
 	RealBuf rBufOutput;

@@ -93,7 +93,7 @@ MapAlbedo::MapAlbedo(const FileName& fn, MapPtr& p)
 			CompitableGeorefs(fn, mp, m_mpBand7);
 		}
 	fNeedFreeze = true;
-	sFreezeTitle = SMAPTextCalculateAlbedo;
+	sFreezeTitle = TR("Calculating Land Surface Albedo");
 }
 
 MapAlbedo::MapAlbedo(const FileName& fn, 
@@ -118,7 +118,7 @@ MapAlbedo::MapAlbedo(const FileName& fn,
      objtime = objdep.tmNewest();
 	ptr.Store(); 
 	fNeedFreeze = true;
-	sFreezeTitle = SMAPTextCalculateAlbedo;
+	sFreezeTitle = TR("Calculating Land Surface Albedo");
 }
 
 //Modis or Aster
@@ -160,7 +160,7 @@ MapAlbedo::MapAlbedo(const FileName& fn,
      objtime = objdep.tmNewest();
 	ptr.Store(); 
 	fNeedFreeze = true;
-	sFreezeTitle = SMAPTextCalculateAlbedo;
+	sFreezeTitle = TR("Calculating Land Surface Albedo");
 }
 
 MapAlbedo::~MapAlbedo()
@@ -293,7 +293,7 @@ bool MapAlbedo::fGeoRefChangeable() const
 
 bool MapAlbedo::fFreezing()
 {
-	trq.SetText(SMAPTextCalculateAlbedo);
+	trq.SetText(TR("Calculating Land Surface Albedo"));
 
 	RealBuf rBufRed;
 	RealBuf rBufNIR;

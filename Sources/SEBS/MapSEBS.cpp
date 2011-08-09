@@ -75,7 +75,7 @@ MapSEBS::MapSEBS(const FileName& fn, MapPtr& p)
 : MapFromMap(fn, p)
 {
 	fNeedFreeze = true;
-	sFreezeTitle = SMAPTextSebs;
+	sFreezeTitle = TR("Surface Energy Balance System (SEBS)");
 	//htpFreeze = "ilwisapp\flow_accumulation_algorithm.htm";
 
 	ReadElement("RelativeEvaporationFraction", "LandSurfaceTemperature", m_mpLST);
@@ -866,7 +866,7 @@ bool MapSEBS::fFreezing()
 		
 	// loop over all scanlines
 	trq.SetTitle(sFreezeTitle);
-	trq.SetText(SMAPTextGeneratingSEBSMaps);
+	trq.SetText(TR("Generating SEBS maps..."));
 	trq.Start();
 
 	int _julianday;

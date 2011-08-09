@@ -62,7 +62,7 @@ MapSI2Radiance::MapSI2Radiance(const FileName& fn, MapPtr& p)
 : MapFromMap(fn, p)
 {
 	fNeedFreeze = true;
-	sFreezeTitle = SMAPTextRaw2Radiance;
+	sFreezeTitle = TR("Convert raw to radiance/reflectance (MODIS)");
 	//htpFreeze = "ilwisapp\flow_accumulation_algorithm.htm";
 
 	ReadElement("Radiance", "RawDataMap", m_mpRawData);
@@ -152,7 +152,7 @@ bool MapSI2Radiance::fGeoRefChangeable() const
 
 bool MapSI2Radiance::fFreezing()
 {
-	trq.SetText(SMAPTextRaw2Radiance);
+	trq.SetText(TR("Convert raw to radiance/reflectance (MODIS)"));
 	RealBuf rBuf1;
 	RealBuf rBuf2;
 	rBuf1.Size(iCols());

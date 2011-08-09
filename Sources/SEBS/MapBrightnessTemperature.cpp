@@ -60,7 +60,7 @@ MapBrightnessTemperature::MapBrightnessTemperature(const FileName& fn, MapPtr& p
 : MapFromMap(fn, p)
 {
 	fNeedFreeze = true;
-	sFreezeTitle = SMAPTextComputeBrightnessTemperature;
+	sFreezeTitle = TR("Compute Brightness Temperature");
 	ReadElement("BrightnessTemperature", "Sensor", m_sSensor);
 	Sensor sensor;
 	if (fCIStrEqual(m_sSensor, "modis"))
@@ -104,7 +104,7 @@ MapBrightnessTemperature::MapBrightnessTemperature(const FileName& fn,
      objtime = objdep.tmNewest();
 	ptr.Store(); 
 	fNeedFreeze = true;
-	sFreezeTitle = SMAPTextComputeBrightnessTemperature;
+	sFreezeTitle = TR("Compute Brightness Temperature");
 }
 MapBrightnessTemperature::MapBrightnessTemperature(const FileName& fn, 
 				 MapPtr& p,
@@ -129,7 +129,7 @@ MapBrightnessTemperature::MapBrightnessTemperature(const FileName& fn,
      objtime = objdep.tmNewest();
 	ptr.Store(); 
 	fNeedFreeze = true;
-	sFreezeTitle = SMAPTextComputeBrightnessTemperature;
+	sFreezeTitle = TR("Compute Brightness Temperature");
 }
 
 MapBrightnessTemperature::~MapBrightnessTemperature()
@@ -226,7 +226,7 @@ bool MapBrightnessTemperature::fGeoRefChangeable() const
 
 bool MapBrightnessTemperature::fFreezing()
 {
-	trq.SetText(SMAPTextComputeBrightnessTemperature);
+	trq.SetText(TR("Compute Brightness Temperature"));
 	RealBuf rBuf1_in;
 	RealBuf rBuf2_in;
 	RealBuf rBuf1_out;

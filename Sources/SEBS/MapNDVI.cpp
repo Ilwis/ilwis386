@@ -62,7 +62,7 @@ MapEmissivity::MapEmissivity(const FileName& fn, MapPtr& p)
 : MapFromMap(fn, p)
 {
 	fNeedFreeze = true;
-	sFreezeTitle = SMAPTextComputeEmissivity;
+	sFreezeTitle = TR("Compute Surface Emissivity");
 	ReadElement("Emissivity", "Sensor", m_sSensor);
 	ReadElement("Emissivity", "RedBand", m_mpRedBand);
 	ReadElement("Emissivity", "NearInfraredBand", m_mpNIR);
@@ -180,7 +180,7 @@ bool MapEmissivity::fGeoRefChangeable() const
 
 bool MapEmissivity::fFreezing()
 {
-	trq.SetText("SAFTitleComputeEmissivity");
+	trq.SetText(TR("Compute Surface Emissivity"));
 	RealBuf rBufRed;
 	RealBuf rBufNIR;
 	RealBuf rBufAlbedo;
