@@ -96,7 +96,7 @@ class ReadingLayerError : public ErrorObject
 {
 public:
 		ReadingLayerError(int iLayer) :
-			ErrorObject(String(SIEErrErrorReadingLayer_i.scVal(), iLayer)) {}
+			ErrorObject(String(TR("Error reading layer %d, layer skipped").c_str(), iLayer)) {}
 };
 
 //----------------------------------------------------------------------------------------
@@ -251,7 +251,7 @@ void GeoGatewayFormat::InitExportMaps(const FileName& fn, ParmList& pm)
 				fRGB = true;
 			}				
 			if ( mapFormatInfo[iGDBID].fSupports(FormatInfo::epBANDS))
-				fdp[0] = GDBCreate(iGDBID, fnNew.sFullPath().scVal(), iCol, iRow, iBands, iDataType, "");
+				fdp[0] = GDBCreate(iGDBID, fnNew.sFullPath().c_str(), iCol, iRow, iBands, iDataType, "");
 			else
 			{
 				for(int i=0; i < iBands; ++i)
@@ -264,15 +264,15 @@ void GeoGatewayFormat::InitExportMaps(const FileName& fn, ParmList& pm)
   				}
 					else
 						fnN = FileName::fnUnique(fnNew);
-					fdp[i] = GDBCreate(iGDBID, fnN.sFullPath().scVal(), iCol, iRow, 1, iDataType, "");
+					fdp[i] = GDBCreate(iGDBID, fnN.sFullPath().c_str(), iCol, iRow, 1, iDataType, "");
 				}					
 			}				
 			if ( !fdp[0] )
-				throw ErrorObject(String(SIEErrNoConversionPossible.scVal(), fnForeign.sFullPath()));	
+				throw ErrorObject(String(TR("No acceptable conversion method found").c_str(), fnForeign.sFullPath()));	
 			iLayer = 1;
 	}
 	else
-		throw ErrorObject(SIEErrFormatNotRecognized);
+		throw ErrorObject(TR("File format is not recognized by GDAL"));
 }
 
 void GeoGatewayFormat::DetermineOutputType(const FileName& fnMap, int& iBands, int& iDataType) 
@@ -396,12 +396,12 @@ void GeoGatewayFormat::Init()
 	if ( fdp[0] != NULL ) return; // already done
 	
 	if ( !File::fExist(fnForeign) )
-		throw ErrorObject(String(SIEErrFileNotFound_S.scVal(), fnForeign.sFullPath()));
+		throw ErrorObject(String(TR("File %S \ncan not be opened. The file may be corrupt, incomplete or the format is not supported").c_str(), fnForeign.sFullPath()));
 
 	ILWISSingleLock lock(&m_CriticalSection, TRUE);	 	
 	InitGeoGateway();
 	
-	int iRet = GDBTestOpen(fnForeign.sFullPath().scVal());
+	int iRet = GDBTestOpen(fnForeign.sFullPath().c_str());
 	if ( iRet != 0 )
 	{
 		if (0 == trq)
@@ -410,17 +410,17 @@ void GeoGatewayFormat::Init()
 		trq->SetNoStopButton(true);
 		trq->SetTitle(SIETitleGeoGateway);
 		trq->setHelpItem("ilwismen\import_geogateway.htm");
-		trq->fText(String(SIEMOpeningGDB_S.scVal(), fnForeign.sRelative()));
-		fdp[0] = GDBOpen(fnForeign.sFullPath().scVal(), "r+");
+		trq->fText(String(TR("Loading file. Please wait").c_str(), fnForeign.sRelative()));
+		fdp[0] = GDBOpen(fnForeign.sFullPath().c_str(), "r+");
 		if ( fdp[0] == NULL) //  if not, try  again but this time only read access
-			fdp[0] = GDBOpen(fnForeign.sFullPath().scVal(), "r");
+			fdp[0] = GDBOpen(fnForeign.sFullPath().c_str(), "r");
 		if ( !fdp[0] )
-			throw ErrorObject(String(SIEErrFileNotFound_S.scVal(), fnForeign.sFullPath()));
+			throw ErrorObject(String(TR("File %S \ncan not be opened. The file may be corrupt, incomplete or the format is not supported").c_str(), fnForeign.sFullPath()));
 		delete trq;
 		trq = 0;
 	}
 	else
-		throw ErrorObject(SIEErrFormatNotRecognized);
+		throw ErrorObject(TR("File format is not recognized by GDAL"));
 }
 
 struct GGThreadData
@@ -510,14 +510,14 @@ void GeoGatewayFormat::ReadForeignFormat(ForeignCollectionPtr* col)
 			ReadAllLayers();
 
 		if ( collection->iNrObjects() == 0 )
-			throw ErrorObject(SIEErrNotRecognizedLayer);
+			throw ErrorObject(TR("No layer recognized (not supported ?)"));
 	
 		AfxGetApp()->GetMainWnd()->SendMessage(ILW_READCATALOG, WP_RESUMEREADING, 0);
 		collection->Store();
 		AfxGetApp()->GetMainWnd()->PostMessage(ILW_READCATALOG, 0, 0);
 		String sCommand("*open %S", col->fnObj.sRelativeQuoted());
 		if ( fShowCollection)
-			AfxGetApp()->GetMainWnd()->SendMessage(ILWM_EXECUTE, 0, (LPARAM)sCommand.scVal());				
+			AfxGetApp()->GetMainWnd()->SendMessage(ILWM_EXECUTE, 0, (LPARAM)sCommand.c_str());				
 		delete trq;
 		trq = NULL;
 	}
@@ -589,7 +589,7 @@ void GeoGatewayFormat::ReadAllLayers(	)
 		CreateLayer(li);
 	}
 	else
-		throw ErrorObject(SIEErrCombineImpossible);
+		throw ErrorObject(TR("Combination of layers impossible.\nAttribute tables incompatbile"));
 }
 
 bool GeoGatewayFormat::fCombinePossible()
@@ -648,34 +648,34 @@ void GeoGatewayFormat::CreateLayer(vector<LayerInfo> &li)
 	{
 		FileName fnPointMap(FileName::fnUnique(fnBaseOutputName), ".mpp");
 		PointMap mp(fnPointMap, li[ForeignFormat::mtPointMap]);
-		mp->SetDescription(String(SIEDscPntMapFromUsingGDB_s.scVal(), fnForeign.sRelative(), sMethod));
+		mp->SetDescription(String(SIEDscPntMapFromUsingGDB_s.c_str(), fnForeign.sRelative(), sMethod));
 		mp->SetUseAs(fUseAs);
 		mp->Updated();
 		mp->Store();
 		collection->Add(mp);
 //		mp->SetReadOnly(true); // read only does not seem to work properly, to many store attempts from tables
-		li[ForeignFormat::mtPointMap].tblattr->SetDescription(String(SIEDscTableFromUsingGDB_s.scVal(), fnForeign.sRelative(), sMethod));
+		li[ForeignFormat::mtPointMap].tblattr->SetDescription(String(SIEDscTableFromUsingGDB_s.c_str(), fnForeign.sRelative(), sMethod));
 		li[ForeignFormat::mtPointMap].tblattr->Store();
 	}
 	if ( li[ForeignFormat::mtSegmentMap].iShapes > 0)
 	{
 		FileName fnSegMap(FileName::fnUnique(FileName(fnBaseOutputName, ".mps")));
 		SegmentMap mp(fnSegMap, li[ForeignFormat::mtSegmentMap]);
-		mp->SetDescription(String(SIEDscSegMapFromUsingGDB_s.scVal(), fnForeign.sRelative(), sMethod));
+		mp->SetDescription(String(SIEDscSegMapFromUsingGDB_s.c_str(), fnForeign.sRelative(), sMethod));
 		mp->SetUseAs(fUseAs);
 		mp->Updated();		
 		mp->Store();
 		collection->Add(mp);
 //		mp->SetReadOnly(true);
-		li[ForeignFormat::mtSegmentMap].tblattr->SetDescription(String(SIEDscTableFromUsingGDB_s.scVal(), fnForeign.sRelative(), sMethod));
+		li[ForeignFormat::mtSegmentMap].tblattr->SetDescription(String(SIEDscTableFromUsingGDB_s.c_str(), fnForeign.sRelative(), sMethod));
 		li[ForeignFormat::mtSegmentMap].tblattr->Store();
 	}
 	if ( li[ForeignFormat::mtPolygonMap].iShapes > 0)
 	{
 		FileName fnPolMap(FileName::fnUnique(fnBaseOutputName), ".mpa");
 		PolygonMap mp(fnPolMap, li[ForeignFormat::mtPolygonMap]);
-		mp->SetDescription(String(SIEDscPolMapFromUsingGDB_s.scVal(), fnForeign.sRelative(), sMethod));
-		li[ForeignFormat::mtPolygonMap].tblattr->SetDescription(String(SIEDscTableFromUsingGDB_s.scVal(), fnForeign.sRelative(), sMethod));
+		mp->SetDescription(String(SIEDscPolMapFromUsingGDB_s.c_str(), fnForeign.sRelative(), sMethod));
+		li[ForeignFormat::mtPolygonMap].tblattr->SetDescription(String(SIEDscTableFromUsingGDB_s.c_str(), fnForeign.sRelative(), sMethod));
 		li[ForeignFormat::mtPolygonMap].tblattr->Store();
 		mp->SetUseAs(fUseAs);
 		mp->Updated();		
@@ -724,7 +724,7 @@ void GeoGatewayFormat::GetRasterLayer(int iLayerIndex, Map& mp, Array<FileName>&
 		// sets MinMax to undef. MinMax will be calculated when first showing
 		mp->SetMinMax(RangeInt());
 		mp->SetMinMax(RangeReal());
-		mp->SetDescription(String(SIEDscRasMapFromUsingGDB_s.scVal(), fnForeign.sRelative(), sMethod));
+		mp->SetDescription(String(TR("Raster Map from %S, using GDAL, method %S").c_str(), fnForeign.sRelative(), sMethod));
 		mp->Store();
 
 		// check if the domains are equal, needed if a maplist is created
@@ -811,7 +811,7 @@ void GeoGatewayFormat::ImportRasterMap(const FileName& fnRasMap, Map& mp ,LayerI
 {
 	if (0 == trq)
 		trq = new Tranquilizer();
-	trq->SetTitle(String(SIEMImportingRaster_S.scVal(), fnForeign.sShortName()));
+	trq->SetTitle(String(TR("Importing raster map %S").c_str(), fnForeign.sShortName()));
 	trq->setHelpItem("ilwismen\import_geogateway.htm");
 
 	iLayer = iChannel;
@@ -842,7 +842,7 @@ GDBLayer GeoGatewayFormat::OpenLayer(int iType)
 	ILWISSingleLock lock(&m_CriticalSection, TRUE);	 				
 	if ( iType == SEG_UNKNOWN) return NULL; // general open, no interest in layer
 	if ( iLayer == iUNDEF )
-		throw ErrorObject(SIEErrNoLayerDefined);
+		throw ErrorObject(TR("Opening an undefined GDAL layer"));
 
 	GDBLayer psLayer = GDBGetLayer( fdp[0], iLayer);
 
@@ -1000,7 +1000,7 @@ CoordSystem GeoGatewayFormat::GetCoordSystem()
 			cs->Store();
 		if ( collection)
 			collection->Add(cs);
-		cs->SetDescription(String(SIEDscCsyFromUsingGDB_s.scVal(), fnForeign.sRelative()));
+		cs->SetDescription(String(TR("CoordinateSystem from %S, using GDAL").c_str(), fnForeign.sRelative()));
 		cs->Store();
 		addedCsy.push_back(cs);
 		return cs;
@@ -1405,7 +1405,7 @@ void GeoGatewayFormat::CreateTables(LayerInfo& obj, mtMapType mtType)
 
 	if (0 == trq)
 		trq = new Tranquilizer();
-	trq->SetText(String(SIETitleAddingToColumns_S.scVal(), obj.tblattr->fnObj.sFile));	
+	trq->SetText(String(TR("Adding Columns to %S").c_str(), obj.tblattr->fnObj.sFile));	
 	for (int i = 0; i < attrDomains.size(); i++)
 	{
 		if ( trq->fUpdate(i, attrDomains.size()))
@@ -1433,7 +1433,7 @@ bool GeoGatewayFormat::fReUseExisting(const FileName& fn)
 	{
 		String sItem("Item%d", i);
 		FileName fnCollection;
-		ObjectInfo::ReadElement("Collection", sItem.scVal(), fn, fnCollection);
+		ObjectInfo::ReadElement("Collection", sItem.c_str(), fn, fnCollection);
 		if ( fnForeignCollection == fnCollection )
 			return true;
 	}
@@ -1478,7 +1478,7 @@ void GeoGatewayFormat::ScanValues(GDBLayer psLayer, vector<LayerInfo>& objects, 
 {
 	if (0 == trq)
 		trq = new Tranquilizer();
-	trq->SetTitle(SIEMScanningValues);
+	trq->SetTitle(TR("Scanning values"));
 	trq->setHelpItem("ilwismen\import_geogateway.htm");
 	int iTotalShapes = GDBGetNumShapes(psLayer);
 	ILWISSingleLock lock(&m_CriticalSection, TRUE);	 				
@@ -1486,7 +1486,7 @@ void GeoGatewayFormat::ScanValues(GDBLayer psLayer, vector<LayerInfo>& objects, 
   int iShape = GDBGetFirst(psLayer);
 	lock.Unlock();
 	
-	trq->SetText(SIEMScanningValues);	
+	trq->SetText(TR("Scanning values"));	
 	int iCur = 0;
 	bool fDisplayError = false;
 	int iTopoError;
@@ -1553,7 +1553,7 @@ void GeoGatewayFormat::CreateDomains(vector < set<String> > &values)
 				if ( values[i].size() > 0 )
 				{
 					attrDomains[i].dvrs = Domain(fnDomain, 0, dmt);
-					attrDomains[i].dvrs.dm()->SetDescription(String(SIEDscDomainFromUsingGDB_s.scVal(), fnForeign.sRelative()));
+					attrDomains[i].dvrs.dm()->SetDescription(String(TR("Domain from %S, using GeoGateway").c_str(), fnForeign.sRelative()));
 				}
 				else
 					attrDomains[i].dvrs = Domain("String");
@@ -1567,10 +1567,10 @@ void GeoGatewayFormat::CreateDomains(vector < set<String> > &values)
 			if ( values[i].size() > 0 )
 			{	
 				// if a domain is created, add it to the object collection
-//				AddedFiles.insert(fnDomain.sFullPath().scVal());
+//				AddedFiles.insert(fnDomain.sFullPath().c_str());
 				AddNewFiles(fnDomain);
 				if ( dmt == dmtCLASS)
-//					AddedFiles.insert(FileName(fnDomain, ".rpr").sFullPath().scVal());
+//					AddedFiles.insert(FileName(fnDomain, ".rpr").sFullPath().c_str());
 						AddNewFiles(FileName(fnDomain, ".rpr"));
 			}
 		}
@@ -1603,7 +1603,7 @@ void GeoGatewayFormat::AddDomainValues(vector <set<String> > &values)
 				attrDomains[i].dvrs.dm()->pdsrt()->dsType = DomainSort::dsMANUAL;
 				if (0 == trq)
 					trq = new Tranquilizer();
-				trq->SetText(SIETitleAddingToDomain);
+				trq->SetText(TR("Adding to domain"));
 				int iNr=0, iSize = vals.size();
 				for(set<String>::iterator cur = vals.begin(); cur != vals.end(); ++cur)
 				{
@@ -1784,7 +1784,7 @@ void GeoGatewayFormat::IterateLayer(vector<LayerInfo>& objects, bool fCreate)
 				trq = new Tranquilizer();
 			while ( iLayer != iGDB_NOT_FOUND )
 			{
-				if ( trq->fText(String(SIEMConvertingLayer_S.scVal(), iLayer)))
+				if ( trq->fText(String(TR("Converting layer %d").c_str(), iLayer)))
 					break;
 				lock.Lock(); 												
 				GDBLayer psLayer = GDBGetLayer( fdp[0], iLayer);
@@ -2173,7 +2173,7 @@ void GeoGatewayFormat::GetGeoRef(GeoRef& grf)
 			cs = CoordSystem("Unknown");
 		}			
 		grf.SetPointer(new GeoRefCorners(fnGeo, cs, rcSize, true, cMin, cMax)); 
-		grf->SetDescription(String(SIEDscGrfFromUsingGDB_s.scVal(), fnForeign.sRelative()));
+		grf->SetDescription(String(TR("GeoReference from %S, using GDAL").c_str(), fnForeign.sRelative()));
 		grf->cs()->cb = CoordBounds(cMin, cMax);
 		cs->cb = grf->cs()->cb;
 		cs->Updated();
@@ -2434,8 +2434,8 @@ void GeoGatewayFormat::AddNewFiles(const FileName& fnNew)
 	if (0 == trq)
 		trq = new Tranquilizer();
 	trq->SetDelayShow(false);	
-	trq->fText(String(SIEMAddingFile_S.scVal(), fnNew.sRelative()));	
-	AddedFiles.insert(fnNew.sFullPath().scVal());	
+	trq->fText(String(TR("Adding File %S").c_str(), fnNew.sRelative()));	
+	AddedFiles.insert(fnNew.sFullPath().c_str());	
 }
 
 void GeoGatewayFormat::PutLineVal(const FileName& fnMap, long iLine, const RealBuf& buf, long iFrom, long iNum) 
@@ -2691,7 +2691,7 @@ void GeoGatewayFormat::SetForeignGeoTransformations(const CoordSystem &cs, const
 					Ellipsoid ell = csp->ell;
 					sUnitCode += " " + sForeignIlwisEllipsoidCode(ell.sName);
 				}
-				strcpy(projInfo.Units, sUnitCode.scVal());				
+				strcpy(projInfo.Units, sUnitCode.c_str());				
 				SetForeignProjectionParm func = (*cur).second.forparmfunc;
 				if ( func)
 					(func)(prj, projInfo);

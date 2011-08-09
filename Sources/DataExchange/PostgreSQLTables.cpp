@@ -107,7 +107,7 @@ PostgreSQLTables::PostgreSQLTables(const FileName& fn, ParmList& pm)
 {
 	int currentSize = pm.iSize();
 	String collection = pm.sGet("collection");
-	ForeignCollection db(FileName(collection.scVal()));
+	ForeignCollection db(FileName(collection.c_str()));
 	sConnectionString = sCreateConnectionString(db, pm);
 	tableName = pm.sGet("table");
 	username = pm.sGet("username");
@@ -190,11 +190,11 @@ String PostgreSQLTables::sCreateConnectionString(const ForeignCollection& coll, 
 String PostgreSQLTables::encrypt(const FileName& fn, const String& sentence) {
 	String key = makeKey(fn);
 	CRijndael rd;
-	rd.MakeKey(key.scVal(), CRijndael::sm_chain0,32,32);
+	rd.MakeKey(key.c_str(), CRijndael::sm_chain0,32,32);
 	String s = expandSentence(sentence);
     char out[1024];
 	memset(out,0,1024);
-	rd.Encrypt(s.scVal(), out, s.size(), CRijndael::CBC);
+	rd.Encrypt(s.c_str(), out, s.size(), CRijndael::CBC);
 	String sOut;
 	for(int i = 0; i < s.size(); ++i) {
 		//sOut += String("%03d",(int)out[i]);
@@ -220,7 +220,7 @@ String PostgreSQLTables::decrypt(const FileName& fn, const String& sentence) {
 	}
 	String key = makeKey(fn);
 	CRijndael rd;
-	rd.MakeKey(key.scVal(), CRijndael::sm_chain0,32,32);
+	rd.MakeKey(key.c_str(), CRijndael::sm_chain0,32,32);
 	char out[1024];
 	memset(out,0,1024);
 	rd.Decrypt(in,out,sz,CRijndael::CBC);
@@ -310,7 +310,7 @@ PostgreSQLTables::~PostgreSQLTables()
 // fills a database collection with appropriate tables
 void PostgreSQLTables::PutDataInCollection(ForeignCollectionPtr* collection, ParmList& pm)
 {
-	PostGreSQL db(sConnectionString.scVal());
+	PostGreSQL db(sConnectionString.c_str());
 	db.getNTResult("SELECT table_name, table_schema FROM INFORMATION_SCHEMA.Columns	WHERE table_schema = 'public'");
 	int rows = db.getNumberOf(PostGreSQL::ROW);
 	if ( rows <= 0)
@@ -392,10 +392,10 @@ void PostgreSQLTables::FillRecords(PostGreSQL& db, TablePtr* tbl, int iNumRecord
 // this loads the table with the data. It creates the appropriate columns and then fills them
 void PostgreSQLTables::LoadTable(TablePtr *tbl)
 {
-	PostGreSQL db(sConnectionString.scVal());
+	PostGreSQL db(sConnectionString.c_str());
 
 	String schemaQuery("SELECT column_name, data_type FROM INFORMATION_SCHEMA.Columns WHERE table_schema = 'public' and table_name='%S'", tableName);
-	db.getNTResult(schemaQuery.scVal());
+	db.getNTResult(schemaQuery.c_str());
 
 	
 	
@@ -405,7 +405,7 @@ void PostgreSQLTables::LoadTable(TablePtr *tbl)
 	vDataTypes.resize(iNumColumns);
 	CreateColumns(db, tbl, iNumColumns, vDataTypes);
 
-	db.getNTResult(sQuery.scVal());
+	db.getNTResult(sQuery.c_str());
 	int iNumRecords = db.getNumberOf(PostGreSQL::ROW);
 	if ( tbl->iRecs()!= iNumRecords) 
 	{
@@ -448,7 +448,7 @@ DomainValueRangeStruct PostgreSQLTables::dmTranslateDataTypeToIlwis(String dte, 
 {
 	FileName fnDom;
 	String sColSection("Col:%S", sColName);
-	ObjectInfo::ReadElement(sColSection.scVal(), "Domain", tbl->fnObj, fnDom);
+	ObjectInfo::ReadElement(sColSection.c_str(), "Domain", tbl->fnObj, fnDom);
 	if ( fnDom.fExist() && !ObjectInfo::fSystemObject(fnDom))
 	{
 		Domain dom(fnDom);
@@ -502,8 +502,8 @@ void PostgreSQLTables::PutStringField(const String& sColumn, long iRecord, const
 	if (dmt == dmtSTRING || dmt == dmtID || dmt == dmtCLASS)
 		setValue = String("'%S'", setValue);	
 	String query("Update %S Set %S = %S Where %S", tableName, sColumn, setValue, sWhereClause);
-	PostGreSQL db(sConnectionString.scVal());
-	db.getNTResult(query.scVal());
+	PostGreSQL db(sConnectionString.c_str());
+	db.getNTResult(query.c_str());
 }
 
 bool PostgreSQLTables::fIsCollection(const String& sForeignObject) const 

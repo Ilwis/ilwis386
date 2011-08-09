@@ -34,6 +34,8 @@ Software Foundation, http://www.fsf.org.
 
 Created on: 2007-02-8
 ***************************************************************/
+#include "Engine\Base\DataObjects\XMLDocument.h"
+
 class WMSGetCapabilities;
 
 
@@ -47,56 +49,24 @@ public:
 	String title;
 	String compatibleName;
 	String name;
-	map<String, vector<double>> srs;
+	map<String, CoordBounds> srs;
 	WMSLayerInfo *prevLayer;
 	vector<WMSLayerInfo *> layers;
-	vector<double> bbLatLon;
+	CoordBounds bbLatLon;
 
 };
 
-XERCES_CPP_NAMESPACE_BEGIN
-
-class WMSSaxHandler : public HandlerBase {
-
-private:
-	void handleLayerEnd(String &tag);
-	//void handleSRS(String &tag);
-	vector<double> handleBBBounds(AttributeList&  attributes);
-	//void propagateSRS(vector<WMSLayerInfo *>& curlayers);
-	void handleBoundingBox(map<String, vector<double> >& srs, AttributeList&  attributes);
-
-	int prev, cur;
-	WMSLayerInfo *currentLayer, *root;
-	String currentTag;
-	stack<WMSLayerInfo *> lstack;
-	WMSGetCapabilities *capabilities;
-	bool inStyle;
-
-public:
-	WMSSaxHandler(WMSGetCapabilities *cap);
-	~WMSSaxHandler();
-    void startElement(const XMLCh* const name, AttributeList& attributes);
-	void endElement(const XMLCh* const name);
-    void characters(const XMLCh* const chars, const unsigned int length);
-    void ignorableWhitespace(const XMLCh* const chars, const unsigned int length);
-	void error(const SAXParseException& e);
-	void fatalError(const SAXParseException& e);
-	void warning(const SAXParseException& e);
-	vector<WMSLayerInfo *> getLayers();
-	//void getLayers(vector<WMSLayerInfo *>& newlayers, vector<WMSLayerInfo *>& oldlayers);
-    void resetDocument();
-};
-
-XERCES_CPP_NAMESPACE_END
-
-class WMSGetCapabilities : public RemoteXMLObject {
-	friend class WMSSaxHandler;
+class WMSGetCapabilities : public RemoteObject {
 	vector<WMSLayerInfo *> layers;
 	void parse();
 	void propagateSRSInfo(WMSLayerInfo *prevlyr);
 public:
 	WMSGetCapabilities(const URL& url);
+	~WMSGetCapabilities();
 	vector<WMSLayerInfo *> getLayerInfo();
+	void parseLayer(const ILWIS::XMLDocument& doc, const String& base, vector<WMSLayerInfo *>& parent );
+	CoordBounds parseBoundingBox(const pugi::xml_node& node, String& srs );
+	void postprocess(WMSLayerInfo *info);
 
 
 };

@@ -193,14 +193,14 @@ ASTERFormat::ASTERFormat(const FileName& fn, ParmList& pm) :
 	if ( !fnGetForeignFile().fExist() )
 	{
 		CleanUp();
-		throw ErrorObject(String(SIErrDataFileMissing_S.scVal(), fnGetForeignFile().sRelative()));
+		throw ErrorObject(String(TR("Data file '%S' missing.").c_str(), fnGetForeignFile().sRelative()));
 	}		
 	
 	HDFData *da = HDFData::Create(fnGetForeignFile(), HDFData::daDataSet, "");	
 	if ( da == 0)
 	{
 		CleanUp();
-		throw ErrorObject(String(SIErrNoAsterFile_S.scVal(), fnGetForeignFile().sFileExt()));
+		throw ErrorObject(String(TR("%S is not an ASTER 1A or ASTER 1B file").c_str(), fnGetForeignFile().sFileExt()));
 	}		
 	
 	String s = da->sGetAttribute("coremetadata.0");
@@ -219,7 +219,7 @@ ASTERFormat::ASTERFormat(const FileName& fn, ParmList& pm) :
 	if ( aplLevel == aplANY)
 	{
 		CleanUp();
-		throw ErrorObject(String(SIErrNoAsterFile_S.scVal(), fnGetForeignFile().sFileExt()));		
+		throw ErrorObject(String(TR("%S is not an ASTER 1A or ASTER 1B file").c_str(), fnGetForeignFile().sFileExt()));		
 	}	
 	if ( pm.fExist("layer")) // an individual band will be opnened. we must open the correct dataset
 	{
@@ -270,7 +270,7 @@ void ASTERFormat::InitData(ASTERBands abBand)
 		sPathImageData = sNameToPath(ab1B_DEM_IMAGEDATA, sBandName);
 	pImageData = HDFData::Create(fnGetForeignFile(), HDFData::daDataSet, sPathImageData);
 	if ( pImageData == NULL )
-		throw ErrorObject(String(SIErrrNoImageDataFound_S.scVal(), sPathImageData));
+		throw ErrorObject(String(TR("%S contains no image data").c_str(), sPathImageData));
 	
 	clMapSize = pImageData->clGetSize();
 
@@ -409,7 +409,7 @@ void ASTERFormat::PutDataInCollection(ForeignCollectionPtr* col, ParmList& pm)
 	bool fDirRO = dir.fReadOnly();
 	
 	if (fDirRO)
-		throw ErrorObject(SIErrNotValid);
+		throw ErrorObject(TR("Output location is not valid (maybe read only)"));
 
 	bool *fDoNotLoadGDB = (bool *)(getEngine()->pGetThreadLocalVar(IlwisAppContext::tlvDONOTLOADGDB));	
 	if ( *fDoNotLoadGDB == true )	
@@ -472,8 +472,8 @@ void  ASTERFormat::ReadForeignFormat(ForeignCollectionPtr* col)
 {
 	trq = new Tranquilizer();
 	trq->Start();
-	trq->SetTitle(String(SIEMImportingRaster_S.scVal(), fnGetForeignFile().sShortName()));
-	trq->setHelpItem("ilwismen\import_aster.htm");		
+	trq->SetTitle(String(TR("Importing raster map %S").c_str(), fnGetForeignFile().sShortName()));
+	trq->setHelpItem("ilwismen\\import_aster.htm");		
 
 	AfxGetApp()->GetMainWnd()->SendMessage(ILW_READCATALOG, WP_STOPREADING, 0);
 	LayerInfo li;			
@@ -486,7 +486,7 @@ void  ASTERFormat::ReadForeignFormat(ForeignCollectionPtr* col)
 		    cur != ASTERFormat::m_BandNames.end();
 				++cur)
 		{
-			if ( trq->fText(String(SIEMAddingBand_S.scVal(), m_BandNames[(ASTERBands)(*cur).first])) )
+			if ( trq->fText(String(TR("Adding band %S").c_str(), m_BandNames[(ASTERBands)(*cur).first])) )
 				throw StopASTERConversion();
 			if ((aplLevel == apl1DEM) && ((int)(*cur).first < 15)) continue;
 			if ((aplLevel != apl1DEM) && ((int)(*cur).first >= 15)) continue;			
@@ -500,7 +500,7 @@ void  ASTERFormat::ReadForeignFormat(ForeignCollectionPtr* col)
 			// for a true import all the data must be read and stored in ILWIS format
 			if ( fImport )
 				ImportRasterMap(li.fnObj, mp, li, (*cur).first);
-			mp->SetDescription(String(SIEDscBand_sFromAsterImport_s.scVal(),
+			mp->SetDescription(String(TR("Band %S, from Aster Import of %S ").c_str(),
 												m_BandNames[(ASTERBands)(*cur).first],fnGetForeignFile().sFileExt()));
 			mp->Store();
 			li.grf->Store();
@@ -520,7 +520,7 @@ void  ASTERFormat::ReadForeignFormat(ForeignCollectionPtr* col)
 		AfxGetApp()->GetMainWnd()->PostMessage(ILW_READCATALOG, 0, 0);
 		String sCommand("*open %S", col->fnObj.sRelativeQuoted());
 		if ( fShowCollection)
-			AfxGetApp()->GetMainWnd()->SendMessage(ILWM_EXECUTE, 0, (LPARAM)sCommand.scVal());		
+			AfxGetApp()->GetMainWnd()->SendMessage(ILWM_EXECUTE, 0, (LPARAM)sCommand.c_str());		
 		delete trq;
 		trq = NULL;				
 	}			
@@ -1150,9 +1150,9 @@ void ASTERFormat::GetCoordSystem(CoordSystem& cs)
 
 			sAddInfo &= sPrj;
 		  sAddInfo &= String("\r\nZone: %i \r\n", iUTMZoneNr);
-			sAddInfo &= String(SPRJInfoCentralMeridian_f.scVal(),cspr->prj->lam0*180/M_PI);
+			sAddInfo &= String(TR("Central Meridian: %.8lf degrees").c_str(),cspr->prj->lam0*180/M_PI);
 			sAddInfo &= String("\r\n");
-			sAddInfo &= String(SPRJInfoCentralScaleF_f.scVal(),cspr->prj->rGetCentralScaleFactor());
+			sAddInfo &= String(TR("Scale Factor at Central Meridian: %.8lf").c_str(),cspr->prj->rGetCentralScaleFactor());
 		}
 		// other projections e.g. 'conformal conic' , 'oblique mercator' etc. still to be implemented
 		else {
@@ -1176,7 +1176,7 @@ void ASTERFormat::GetCoordSystem(CoordSystem& cs)
 		if (cs.fValid())
 			cs->SetAdditionalInfo(sAddInfo);
 		cs->fErase = true;			
-		cs->SetDescription(String(SIEDscCsyFor_sUsingAsterImport.scVal(), fnGetForeignFile().sFile));
+		cs->SetDescription(String(TR("CoordinateSystem for %S, using Aster Import").c_str(), fnGetForeignFile().sFile));
 		cs->Store();
 		fCsyCreatedAndStored = true;
 		cs->fErase = true;		
@@ -1228,7 +1228,7 @@ void ASTERFormat::GetGeoRef(GeoRef& grf, 	CoordSystem& csy, ASTERBands abpType, 
 		sPath = sNameToPath(ab1A_X_LATTICEPOINT, sName);
 		HDFData *dsLatticeRowCol = HDFData::Create(fnGetForeignFile(), HDFData::daDataSet, sPath);
 		if ( ! (dsLat->fValid() && dsLong->fValid() && dsLatticeRowCol->fValid()) )
-				throw ErrorObject(String(SIErrrNoGeoReferencingData.scVal(), fnGetForeignFile().sRelative()));
+				throw ErrorObject(String(TR("%S contains insufficient Georeferencing data").c_str(), fnGetForeignFile().sRelative()));
 
 		long iLatticeWidth = dsLatticeRowCol->clGetSize().iCoord(HDFData::Cell::aY);
 		long iLatticeHeight = dsLatticeRowCol->clGetSize().iCoord(HDFData::Cell::aX);
@@ -1360,7 +1360,7 @@ void ASTERFormat::GetGeoRef(GeoRef& grf, 	CoordSystem& csy, ASTERBands abpType, 
 			gcp->transf = GeoRefCTP::THIRDORDER;
 		delete dsLat; 
 	}
-	grf->SetDescription(String(SIEDscGrfFor_sUsingAsterImport.scVal(), fnNew.sFile));
+	grf->SetDescription(String(TR("GeoReference for %S, using Aster Import").c_str(), fnNew.sFile));
 	grf->Updated();
 	grf->fErase = true;
 	delete pHdfImage;
@@ -1407,7 +1407,7 @@ void ASTERFormat::GetCoordSystemDem(CoordSystem& cs)
 	pv = pvNORTH;
 	prj->Param(pv, (long)fNorthernHemisphere);
 	cs->fErase = true;			
-	cs->SetDescription(String(SIEDscCsyFor_sUsingAsterImport.scVal(), fnGetForeignFile().sFile));
+	cs->SetDescription(String(TR("CoordinateSystem for %S, using Aster Import").c_str(), fnGetForeignFile().sFile));
 	cs->Store();
 	fCsyCreatedAndStored = true;
 	cs->fErase = true;		

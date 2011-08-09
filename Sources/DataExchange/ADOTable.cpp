@@ -87,7 +87,7 @@ String Com_Error(VARTYPE vt, _com_error &e, _ConnectionPtr pConnection, FileName
 			break;
 		default:
 			{
-				sErr = String(SIEErrNoConnection.scVal(), fnDB.sRelative());
+				sErr = String(TR("Could not establish connection to %S ").c_str(), fnDB.sRelative());
 				ErrorObject err(sErr);
 				err.Show();
 				return sErr;
@@ -221,7 +221,7 @@ void ADOTable::Store(IlwisObject ob) {
 
 void ADOTable::ReadParameter(const FileName& fnObj, ParmList& pm, const String& entry, const String& parmName) {
 	String sV = "";
-	ObjectInfo::ReadElement("ForeignFormat",entry.scVal(),fnObj,sV);
+	ObjectInfo::ReadElement("ForeignFormat",entry.c_str(),fnObj,sV);
 	if ( sV != "")
 		pm.Add(new Parm(parmName,sV));
 }
@@ -271,7 +271,7 @@ void ADOTable::CreateKeyDomain(const String& sKeyDomain)
     pConnection->Open(strCnn,"","",adConnectUnspecified);
 
 		pRstTable.CreateInstance(__uuidof(Recordset));
-		HRESULT r = pRstTable->Open (sQuery.scVal(), variant_t((IDispatch*) pConnection, true),
+		HRESULT r = pRstTable->Open (sQuery.c_str(), variant_t((IDispatch*) pConnection, true),
 			        adOpenForwardOnly, adLockReadOnly, adCmdText);
 
 		pFields = pRstTable->GetFields();	
@@ -309,7 +309,7 @@ void ADOTable::CreateKeyDomain(const String& sKeyDomain)
 					{
 						pRstTable->Close();	
 						pConnection->Close();								
-						throw ErrorObject(SIEErrKeyColumnError);
+						throw ErrorObject(TR("Column is not fit as Key domain. All elements must be unique"));
 					}						
 					vector<String> arItems;
 					// transfer set items to vector. set can not go over DLL boundaries (MS bug)
@@ -430,9 +430,9 @@ void ADOTable::LoadTable(TablePtr *tbl)
 		pConnection->Open(strCnn,"","",adConnectUnspecified);
 		
 		pRstTable.CreateInstance(__uuidof(Recordset));
-		pRstTable = pConnection->Execute(sQuery.scVal(), 0, 0);
+		pRstTable = pConnection->Execute(sQuery.c_str(), 0, 0);
 		// open a table in the database
-//		HRESULT r = pRstTable->Open (sQuery.scVal(), variant_t((IDispatch*) pConnection, true),
+//		HRESULT r = pRstTable->Open (sQuery.c_str(), variant_t((IDispatch*) pConnection, true),
 //			adOpenForwardOnly, adLockReadOnly, adCmdText);
 		
 		pFields = pRstTable->GetFields();	
@@ -645,7 +645,7 @@ DomainValueRangeStruct ADOTable::dmTranslateDataTypeToIlwis(DataTypeEnum dte, bo
 {
 	FileName fnDom;
 	String sColSection("Col:%S", sColName);
-	ObjectInfo::ReadElement(sColSection.scVal(), "Domain", tbl->fnObj, fnDom);
+	ObjectInfo::ReadElement(sColSection.c_str(), "Domain", tbl->fnObj, fnDom);
 	if ( fnDom.fExist() && !ObjectInfo::fSystemObject(fnDom))
 	{
 		Domain dom(fnDom);
@@ -708,7 +708,7 @@ void ADOTable::PutStringField(const String& sColumn, long iRecord, const String&
 	{	
 		pRstTable.CreateInstance(__uuidof(Recordset));
 
-		HRESULT r = pRstTable->Open (sQuery.scVal(), strCnn,
+		HRESULT r = pRstTable->Open (sQuery.c_str(), strCnn,
 				        adOpenKeyset, adLockOptimistic, adCmdText);
 
 		pRstTable->MoveFirst();
@@ -723,7 +723,7 @@ void ADOTable::PutStringField(const String& sColumn, long iRecord, const String&
 				_variant_t Index;
 	      Index.vt = VT_I2;
 	      Index.iVal = iC;				
-				if ( pFields->GetItem(Index)->Name.GetBSTR() == CString(sColumn.scVal()))
+				if ( pFields->GetItem(Index)->Name.GetBSTR() == CString(sColumn.c_str()))
 				{
 					long iMaxFieldSize = pFields->GetItem(Index)->DefinedSize;
 					DataTypeEnum dteType = pFields->GetItem(Index)->Type;
@@ -740,7 +740,7 @@ void ADOTable::PutStringField(const String& sColumn, long iRecord, const String&
 							long iMaxVal = pow(10.0, iMaxFieldSize);
 							long iVal = sValue.iVal();
 							if ( iVal > iMaxVal )
-								throw ErrorObject(String(SIEErrFieldDoesNotFit_i.scVal(), iMaxFieldSize));
+								throw ErrorObject(String(TR("Data does not fit in the defined field size (%d)").c_str(), iMaxFieldSize));
 						}							
 						break;
 						case adChar:
@@ -748,7 +748,7 @@ void ADOTable::PutStringField(const String& sColumn, long iRecord, const String&
 						case adLongVarChar:
 						{
 							if ( sValue.size() > iMaxFieldSize )
-								throw ErrorObject(String(SIEErrFieldDoesNotFit_i.scVal(), iMaxFieldSize));
+								throw ErrorObject(String(TR("Data does not fit in the defined field size (%d)").c_str(), iMaxFieldSize));
 						}
 						break;
 						case adBSTR:
@@ -756,7 +756,7 @@ void ADOTable::PutStringField(const String& sColumn, long iRecord, const String&
 						case adWChar:	
 						{
 							if ( sValue.size() * 2 > iMaxFieldSize )
-								throw ErrorObject(String(SIEErrFieldDoesNotFit_i.scVal(), iMaxFieldSize));
+								throw ErrorObject(String(TR("Data does not fit in the defined field size (%d)").c_str(), iMaxFieldSize));
 						}
 						break;						
 					}

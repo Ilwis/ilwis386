@@ -96,7 +96,7 @@ class ReadingLayerError : public ErrorObject
 {
 public:
 		ReadingLayerError(int iLayer) :
-			ErrorObject(String(SIEErrErrorReadingLayer_i.scVal(), iLayer)) {}
+			ErrorObject(String(TR("Error reading layer %d, layer skipped").c_str(), iLayer)) {}
 };
 
 //----------------------------------------------------------------------------------------
@@ -249,7 +249,7 @@ void GDALFormat::InitExportMaps(const FileName& fn, ParmList& pm)
 				fRGB = true;
 			}				
 			if ( mapFormatInfo[id].fSupports(FormatInfo::epBANDS))
-				dataSet = funcs.create(gdalDriver, fnNew.sFullPath().scVal(), iCol, iRow, iBands, gdalDataType, NULL);
+				dataSet = funcs.create(gdalDriver, fnNew.sFullPath().c_str(), iCol, iRow, iBands, gdalDataType, NULL);
 			else
 			{
 				for(int i=0; i < iBands; ++i)
@@ -262,15 +262,15 @@ void GDALFormat::InitExportMaps(const FileName& fn, ParmList& pm)
   				}
 					else
 						fnN = FileName::fnUnique(fnNew);
-					dataSet = funcs.create(gdalDriver, fnN.sFullPath().scVal(), iCol, iRow, 1, gdalDataType, NULL);
+					dataSet = funcs.create(gdalDriver, fnN.sFullPath().c_str(), iCol, iRow, 1, gdalDataType, NULL);
 				}					
 			}				
 			if ( !dataSet )
-				throw ErrorObject(String(SIEErrNoConversionPossible.scVal(), fnGetForeignFile().sFullPath()));	
+				throw ErrorObject(String(TR("No acceptable conversion method found").c_str(), fnGetForeignFile().sFullPath()));	
 			iLayer = 1;
 	}
 	else
-		throw ErrorObject(SIEErrFormatNotRecognized);
+		throw ErrorObject(TR("File format is not recognized by GDAL"));
 }
 
 void GDALFormat::DetermineOutputType(const FileName& fnMap, int& iBands, GDALDataType& gdalDataType) 
@@ -369,13 +369,13 @@ void GDALFormat::InitGDAL()
 void GDALFormat::LoadMethods() {
 	CFileFind finder;
 	String path = getEngine()->getContext()->sIlwDir() + "\\gdal*.dll";
-	BOOL fFound = finder.FindFile(path.scVal());
+	BOOL fFound = finder.FindFile(path.c_str());
 	while(fFound) {
 		fFound = finder.FindNextFile();
 		if (!finder.IsDirectory())
 		{
 			FileName fnModule (finder.GetFilePath());
-			HMODULE hm = LoadLibrary(fnModule.sFullPath().scVal());
+			HMODULE hm = LoadLibrary(fnModule.sFullPath().c_str());
 			if ( hm != NULL ) {
 				funcs.close = (GDALCloseFunc)GetProcAddress(hm, "_GDALClose@4");
 				funcs.registerAll = (GDALAllRegisterFunc)GetProcAddress(hm,"_GDALAllRegister@0");
@@ -413,7 +413,7 @@ void GDALFormat::Init()
 	ForeignFormat::Init();
 
 	if ( !File::fExist(fnGetForeignFile()) )
-		throw ErrorObject(String(SIEErrFileNotFound_S.scVal(), fnGetForeignFile().sFullPath()));
+		throw ErrorObject(String(TR("File %S \ncan not be opened. The file may be corrupt, incomplete or the format is not supported").c_str(), fnGetForeignFile().sFullPath()));
 
 	LoadMethods();
 	ILWISSingleLock lock(&m_CriticalSection, TRUE, SOURCE_LOCATION);
@@ -421,25 +421,25 @@ void GDALFormat::Init()
 
 	//GDALAllRegister();
 	
-	gdalDriver = funcs.identifyDriver(fnGetForeignFile().sFullPath().scVal(), NULL);
+	gdalDriver = funcs.identifyDriver(fnGetForeignFile().sFullPath().c_str(), NULL);
 	if ( gdalDriver != 0 )
 	{
 		if (0 == trq)
 			trq = new Tranquilizer();
 		trq->SetDelayShow(false);
 		trq->SetNoStopButton(true);
-		trq->SetTitle(SIETitleGDAL);
-		trq->fText(String(SIEMOpeningGDB_S.scVal(), fnGetForeignFile().sRelative()));
-		dataSet = funcs.open(fnGetForeignFile().sFullPath().scVal(), GA_ReadOnly);
+		trq->SetTitle(TR("GDAL"));
+		trq->fText(String(TR("Loading file. Please wait").c_str(), fnGetForeignFile().sRelative()));
+		dataSet = funcs.open(fnGetForeignFile().sFullPath().c_str(), GA_ReadOnly);
 		if ( dataSet == NULL) //  if not, try  again but this time only read access
-			dataSet = funcs.open(fnGetForeignFile().sFullPath().scVal(), GA_ReadOnly);
+			dataSet = funcs.open(fnGetForeignFile().sFullPath().c_str(), GA_ReadOnly);
 		if ( !dataSet )
-			throw ErrorObject(String(SIEErrFileNotFound_S.scVal(), fnGetForeignFile().sFullPath()));
+			throw ErrorObject(String(TR("File %S \ncan not be opened. The file may be corrupt, incomplete or the format is not supported").c_str(), fnGetForeignFile().sFullPath()));
 		delete trq;
 		trq = 0;
 	}
 	else
-		throw ErrorObject(SIEErrFormatNotRecognized);
+		throw ErrorObject(TR("File format is not recognized by GDAL"));
 }
 
 struct GGThreadData
@@ -522,14 +522,14 @@ void GDALFormat::ReadForeignFormat(ForeignCollectionPtr* col)
 		}
 
 		if ( collection->iNrObjects() == 0 )
-			throw ErrorObject(SIEErrNotRecognizedLayer);
+			throw ErrorObject(TR("No layer recognized (not supported ?)"));
 	
 		AfxGetApp()->GetMainWnd()->SendMessage(ILW_READCATALOG, WP_RESUMEREADING, 0);
 		collection->Store();
 		AfxGetApp()->GetMainWnd()->PostMessage(ILW_READCATALOG, 0, 0);
 		String sCommand("*open %S", col->fnObj.sRelativeQuoted());
 		if ( fShowCollection)
-			AfxGetApp()->GetMainWnd()->SendMessage(ILWM_EXECUTE, 0, (LPARAM)sCommand.scVal());				
+			AfxGetApp()->GetMainWnd()->SendMessage(ILWM_EXECUTE, 0, (LPARAM)sCommand.c_str());				
 		delete trq;
 		trq = NULL;
 	}
@@ -582,7 +582,7 @@ void GDALFormat::GetRasterLayer(int iLayerIndex, Map& mp, Array<FileName>& arMap
 		// sets MinMax to undef. MinMax will be calculated when first showing
 		mp->SetMinMax(RangeInt());
 		mp->SetMinMax(RangeReal());
-		mp->SetDescription(String(SIEDscRasMapFromUsingGDB_s.scVal(), fnGetForeignFile().sRelative(), sMethod));
+		mp->SetDescription(String(TR("Raster Map from %S, using GDAL, method %S").c_str(), fnGetForeignFile().sRelative(), sMethod));
 		mp->Store();
 
 		// check if the domains are equal, needed if a maplist is created
@@ -657,7 +657,7 @@ void GDALFormat::ImportRasterMap(const FileName& fnRasMap, Map& mp ,LayerInfo& l
 {
 	if (0 == trq)
 		trq = new Tranquilizer();
-	trq->SetTitle(String(SIEMImportingRaster_S.scVal(), fnGetForeignFile().sShortName()));
+	trq->SetTitle(String(TR("Importing raster map %S").c_str(), fnGetForeignFile().sShortName()));
 
 	iLayer = iChannel;
 	mp = Map(li.fnObj, li.grf, li.grf->rcSize(), li.dvrsMap);
@@ -686,7 +686,7 @@ GDALRasterBandH GDALFormat::OpenLayer()
 
 	ILWISSingleLock lock(&m_CriticalSection, TRUE, SOURCE_LOCATION);	 				
 	if ( iLayer == iUNDEF )
-		throw ErrorObject(SIEErrNoLayerDefined);
+		throw ErrorObject(TR("Opening an undefined GDAL layer"));
 
 	GDALRasterBandH  gdalRasterBand = funcs.getBand( dataSet, iLayer);
 	dataType = funcs.getDataType(gdalRasterBand);
@@ -750,7 +750,7 @@ bool GDALFormat::fReUseExisting(const FileName& fn)
 	{
 		String sItem("Item%d", i);
 		FileName fnCollection;
-		ObjectInfo::ReadElement("Collection", sItem.scVal(), fn, fnCollection);
+		ObjectInfo::ReadElement("Collection", sItem.c_str(), fn, fnCollection);
 		if ( fnForeignCollection == fnCollection )
 			return true;
 	}
@@ -900,7 +900,7 @@ void GDALFormat::GetGeoRef(GeoRef& grf)
 			AddNewFiles(cs->fnObj);
 		}
 		grf.SetPointer(new GeoRefCorners(fnGeo, cs, rcSize, true, cMin, cMax)); 
-		grf->SetDescription(String(SIEDscGrfFromUsingGDB_s.scVal(), fnGetForeignFile().sRelative()));
+		grf->SetDescription(String(TR("GeoReference from %S, using GDAL").c_str(), fnGetForeignFile().sRelative()));
 		grf->cs()->cb = CoordBounds(cMin, cMax);
 		cs->cb = grf->cs()->cb;
 		cs->Updated();
@@ -1118,8 +1118,8 @@ void GDALFormat::AddNewFiles(const FileName& fnNew)
 	if (0 == trq)
 		trq = new Tranquilizer();
 	trq->SetDelayShow(false);	
-	trq->fText(String(SIEMAddingFile_S.scVal(), fnNew.sRelative()));	
-	AddedFiles.insert(fnNew.sFullPath().scVal());	
+	trq->fText(String(TR("Adding File %S").c_str(), fnNew.sRelative()));	
+	AddedFiles.insert(fnNew.sFullPath().c_str());	
 }
 
 void GDALFormat::PutLineVal(const FileName& fnMap, long iLine, const RealBuf& buf, long iFrom, long iNum) 

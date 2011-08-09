@@ -105,9 +105,9 @@ PostGisMaps::PostGisMaps(const FileName& fn, ParmList& pm) :
 		geometryColumn = fn.sFile.sTail("_");
 		sQuery = "Select * From " + tableName;
 		tableName = fn.sFile.sHead("_");
-		PostGreSQL db(sConnectionString.scVal());
+		PostGreSQL db(sConnectionString.c_str());
    	    String query("Select srid from geometry_columns where f_geometry_column='%S'", geometryColumn);
-		db.getNTResult(query.scVal());
+		db.getNTResult(query.c_str());
 		ForeignCollection fc(pm.sGet("collection"));
 		if(db.getNumberOf(PostGreSQL::ROW) > 0) {
 			String srid(db.getValue(0,"srid"));
@@ -153,7 +153,7 @@ PostGisMaps::~PostGisMaps()
 // fills a database collection with appropriate tables
 void PostGisMaps::PutDataInCollection(ForeignCollectionPtr* collection, ParmList& pm)
 {
-	PostGreSQL db(sConnectionString.scVal());
+	PostGreSQL db(sConnectionString.c_str());
 	db.getNTResult("SELECT table_name,column_name FROM INFORMATION_SCHEMA.Columns WHERE table_schema = 'public' and udt_name='geometry'");
 	int rows = db.getNumberOf(PostGreSQL::ROW);
 	if ( rows <= 0)
@@ -163,9 +163,9 @@ void PostGisMaps::PutDataInCollection(ForeignCollectionPtr* collection, ParmList
 	{
 		String tname(db.getValue(i, "table_name"));
 		String cname(db.getValue(i, "column_name"));
-		PostGreSQL db2(sConnectionString.scVal());
+		PostGreSQL db2(sConnectionString.c_str());
 		String query = String("Select distinct(ST_GeometryType(%S)) from %S",cname, tname);
-		db2.getNTResult(query.scVal());
+		db2.getNTResult(query.c_str());
 		if (db2.getNumberOf(PostGreSQL::ROW) > 0) {
 			for(int j = 0; j < db2.getNumberOf(PostGreSQL::ROW); ++j) {
 				String type = String(db2.getValue(j,0)).toLower();
@@ -253,11 +253,11 @@ void PostGisMaps::FillRecords(PostGreSQL& db, TablePtr* tbl, int iNumRecords, co
 // this loads the table with the data. It creates the appropriate columns and then fills them
 void PostGisMaps::LoadTable(TablePtr *tbl)
 {
-	PostGreSQL db(sConnectionString.scVal());
+	PostGreSQL db(sConnectionString.c_str());
 
 	String type = mtLoadType == mtPointMap ? "point" : "linestring";
 	String geometryQuery("Select st_astext(%S) from %S where lower(ST_GeometryType(%S)) like '%%%S'",geometryColumn,tableName,geometryColumn,type);
-	db.getNTResult(geometryQuery.scVal());
+	db.getNTResult(geometryQuery.c_str());
 
 	
 	
@@ -270,7 +270,7 @@ void PostGisMaps::LoadTable(TablePtr *tbl)
 		dmKey = new Domain(fnTable);
 	CreateColumns(db, tbl, iNumColumns, iKeyColumn, vDataTypes);
 
-//	db.getNTResult(sQuery.scVal());
+//	db.getNTResult(sQuery.c_str());
 	int iNumRecords = db.getNumberOf(PostGreSQL::ROW);
 	if ( tbl->iRecs() == 0) // true for new tables
 	{
@@ -340,10 +340,10 @@ bool PostGisMaps::fMatchType(const String& sFileName, const String& sType)
 LayerInfo PostGisMaps::GetLayerInfo(ParmList& parms) {
 	LayerInfo info;
 	FileName fn(fnTable,".mpp");
-	PostGreSQL db(sConnectionString.scVal());
+	PostGreSQL db(sConnectionString.c_str());
 
 	String type = mtLoadType == mtPointMap ? "point" : "linestring";
-	String query = parms.sGet("query").sUnQuote().scVal();
+	String query = parms.sGet("query").sUnQuote().c_str();
 	String geometryQuery("Select *,st_astext(%S) as _coords_ from %S where lower(ST_GeometryType(%S)) like'%%%S'",geometryColumn,tableName,geometryColumn,type);
 	if (query != "")
 		query = query + "in (" + geometryQuery + ")";
@@ -351,7 +351,7 @@ LayerInfo PostGisMaps::GetLayerInfo(ParmList& parms) {
 		query = geometryQuery;
 	parms.Add(new Parm("query",query));
 		
-	db.getNTResult(query.scVal());
+	db.getNTResult(query.c_str());
 	info.iShapes = db.getNumberOf(PostGreSQL::ROW);
 
 	String sKey = parms.sGet("key");
@@ -406,8 +406,8 @@ LayerInfo PostGisMaps::GetLayerInfo(ParmList& parms) {
 // main routine for reading a vector layer. It construct all data objects (tables. csy)
 void PostGisMaps::IterateLayer(vector<LayerInfo>& objects, bool fCreate)
 {
-	PostGreSQL db(sConnectionString.scVal());
-	db.getNTResult(sQuery.scVal());
+	PostGreSQL db(sConnectionString.c_str());
+	db.getNTResult(sQuery.c_str());
 
 	objects[mtLoadType].tbl.SetPointer(new TablePtr(objects[mtLoadType].fnObj, "",false));
 	objects[mtLoadType].tbl->Load();
@@ -424,12 +424,12 @@ typedef int (*OSRIsProjectedFunc)( OGRSpatialReferenceH );
 CoordSystem PostGisMaps::getCoordSystem(const FileName& fnBase, const String& srsName) {
 	CFileFind finder;
 	String path = getEngine()->getContext()->sIlwDir() + "\\gdal*.dll";
-	BOOL found = finder.FindFile(path.scVal());
+	BOOL found = finder.FindFile(path.c_str());
 	if ( !found) 
 		return CoordSystem();
 	finder.FindNextFile();
 	FileName fnModule (finder.GetFilePath());
-	HMODULE hm = LoadLibrary(fnModule.sFullPath().scVal());
+	HMODULE hm = LoadLibrary(fnModule.sFullPath().c_str());
 	CPLPushFinderLocationFunc findGdal = (CPLPushFinderLocationFunc)GetProcAddress(hm, "CPLPushFinderLocation");
 	OSRNewSpatialReferenceFunc newsrs = (OSRNewSpatialReferenceFunc)GetProcAddress(hm, "_OSRNewSpatialReference@4");
 	OSRImportFromEPSGFunc importepsg = (OSRImportFromEPSGFunc)GetProcAddress(hm,"_OSRImportFromEPSG@8");
@@ -438,7 +438,7 @@ CoordSystem PostGisMaps::getCoordSystem(const FileName& fnBase, const String& sr
 
 	path = getEngine()->getContext()->sIlwDir();
 	path += "Resources\\gdal_data";
-	findGdal(path.scVal());
+	findGdal(path.c_str());
 	OGRSpatialReferenceH handle = newsrs(NULL);
 	//char epsg[5000];
 	//strcpy(epsg,srsName.sTail(":").sVal()); 
@@ -453,7 +453,7 @@ CoordSystem PostGisMaps::getCoordSystem(const FileName& fnBase, const String& sr
 
 
 	FileName fnCsy(fnBase, ".csy");
-	if ( _access(fnCsy.sRelative().scVal(),0) == 0)
+	if ( _access(fnCsy.sRelative().c_str(),0) == 0)
 		return CoordSystem(fnCsy);
 
 	CoordSystemViaLatLon *csv=NULL;

@@ -13,7 +13,7 @@ PostgresBlobber::PostgresBlobber(const FileName& _fn) {
 void PostgresBlobber::setBuffer() {
 	if ( fn.sFile == "")
 		return;
-	FILE *fp = fopen(fn.sFullPath().scVal(),"rb");
+	FILE *fp = fopen(fn.sFullPath().c_str(),"rb");
 	String escapedBuffer;
 	char buffer[BUF_SIZE];
 	size_t bytesRead = BUF_SIZE;
@@ -36,7 +36,7 @@ void PostgresBlobber::setBuffer() {
 		}
 	}
 	escapedCharBuffer = new char[escapedBuffer.size()];
-	strcpy(escapedCharBuffer,escapedBuffer.scVal());
+	strcpy(escapedCharBuffer,escapedBuffer.c_str());
 }
 
 const char* PostgresBlobber::escapedRepresentation() {

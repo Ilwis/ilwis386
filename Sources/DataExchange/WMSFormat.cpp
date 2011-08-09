@@ -171,13 +171,13 @@ ForeignFormat* CreateQueryObjectWMS()
 void WMSFormat::Init() {
 	CFileFind finder;
 	String path = getEngine()->getContext()->sIlwDir() + "\\gdal*.dll";
-	BOOL fFound = finder.FindFile(path.scVal());
+	BOOL fFound = finder.FindFile(path.c_str());
 	while(fFound) {
 		fFound = finder.FindNextFile();
 		if (!finder.IsDirectory())
 		{
 			FileName fnModule (finder.GetFilePath());
-			HMODULE hm = LoadLibrary(fnModule.sFullPath().scVal());
+			HMODULE hm = LoadLibrary(fnModule.sFullPath().c_str());
 			if ( hm != NULL ) {
 				funcs.close = (GDALCloseFunc)GetProcAddress(hm, "_GDALClose@4");
 				funcs.registerAll = (GDALAllRegisterFunc)GetProcAddress(hm,"_GDALAllRegister@0");
@@ -201,8 +201,8 @@ void WMSFormat::Init() {
 		trq = new Tranquilizer();
 	trq->SetDelayShow(false);
 	trq->SetNoStopButton(true);
-	trq->SetTitle(WMSOpening);
-	trq->fText(WMSOpening);
+	trq->SetTitle(TR("Opening WMS"));
+	trq->fText(TR("Opening WMS"));
 }
 
 void WMSFormat::ReadParameters(const FileName& fnObj, ParmList& pm) 
@@ -326,8 +326,8 @@ void WMSFormat::PutData(vector<WMSLayerInfo *> layers, WMSCollectionPtr* col, Pa
 	Tranquilizer trq;
 	trq.SetDelayShow(false);
 	trq.SetNoStopButton(true);
-	trq.SetTitle(WMSOpening);
-	trq.SetText(WMSFilling);
+	trq.SetTitle(TR("Opening WMS"));
+	trq.SetText(TR("Filling Catalog"));
 	long count = 0;
 	for(vector<WMSLayerInfo *>::iterator cur = layers.begin(); cur != layers.end(); ++cur,++count) {
 		trq.fUpdate(count, layers.size());
@@ -381,7 +381,7 @@ CoordSystem WMSFormat::getCoordSystem(const FileName& fnBase, const String& srsN
 	String path = getEngine()->getContext()->sIlwDir();
 	path += "Resources\\gdal_data";
 //	OGRSpatialReference oSRS;
-	//funcs.finderLoc(path.scVal());
+	//funcs.finderLoc(path.c_str());
 
 	OGRSpatialReferenceH handle = funcs.newSRS(NULL);
 	OGRErr err = funcs.srsImportFromEPSG( handle, srsName.sTail(":").iVal());
@@ -452,17 +452,17 @@ void WMSFormat::GetRasterInfo(LayerInfo& inf, String sLayers) {
 
 	FileName fnBase(FileName::fnUnique(FileName(makeCompatible(sLayers), ".mpr")));
 
-	pair<String, vector<double> > start;
+	pair<String, CoordBounds > start;
 	bool containsWGS84 = false;
 	WMSLayerInfo *srsLayer = findRelevantSrsLayer(layers, layer,NULL);
-	for(map<String, vector<double> >::iterator p = srsLayer->srs.begin() ; p != srsLayer->srs.end(); ++p) {
-		if ( (*p).second.size() == 4)
+	for(map<String, CoordBounds>::iterator p = srsLayer->srs.begin() ; p != srsLayer->srs.end(); ++p) {
+		if ( (*p).second.fValid())
 			start = *p;
 		if ( (*p).first == "EPSG:4326")
 			containsWGS84 = true;
 
 	}
-	bool validSRSDef= start.first != "" || start.second.size() == 4;
+	bool validSRSDef= start.first != "" || start.second.fValid();
 	if (  !validSRSDef && !containsWGS84) {
 		throw ErrorObject("Can't render this layer; no valid entries found for either SRS or Bounding box");
 	}
@@ -473,18 +473,15 @@ void WMSFormat::GetRasterInfo(LayerInfo& inf, String sLayers) {
 	inf.dvrsMap = DomainValueRangeStruct(Domain("color"));
 	inf.fnObj = fnBase;
 
-	vector<double> v = validSRSDef ? start.second : layer->bbLatLon;
+	CoordBounds cb = validSRSDef ? start.second : layer->bbLatLon;
 
-	Coord cMin(v[0], v[1]);
-	Coord cMax(v[2], v[3]);
-	cb = CoordBounds(cMin, cMax);
 	inf.cbActual = inf.cbMap = cb;
 
 	FileName fnGeo(FileName::fnUnique(FileName(fnBase, ".grf")));
 	inf.fnObj = FileName(fnBase, ".mpr");
 	double ratio = cb.width()/ cb.height();
 	MinMax mm(RowCol(0,0),RowCol(1500, (int)(1500*ratio))); // dummy size
-	grf.SetPointer(new GeoRefCornersWMS(fnGeo, csy, mm, true, cMin, cMax)); 
+	grf.SetPointer(new GeoRefCornersWMS(fnGeo, csy, mm, true, cb.cMin, cb.cMax)); 
 	inf.grf = grf;
 
 }
@@ -533,7 +530,7 @@ void WMSFormat::Store(IlwisObject obj) {
 void WMSFormat::retrieveImage() const {
 	CoordBounds cb2 = grf->cb();
 	String sExpr = getMapRequest(cb2, layers, srsName, grf->rcSize());
-	RemoteXMLObject rxo(sExpr);
+	RemoteObject rxo(sExpr);
 	MemoryStruct *image;
 	image = rxo.get();
 	if(image->memory[0] == '<' && image->memory[1] == '?' && image->memory[2] == 'x' && image->memory[3]== 'm') {

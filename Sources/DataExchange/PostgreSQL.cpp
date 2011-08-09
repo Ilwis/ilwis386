@@ -45,7 +45,7 @@ PostGreSQL::PostGreSQL(const char *conninfo, bool fThrowException) : res(NULL), 
     if (PQstatus(conn) != CONNECTION_OK)
     {
 		char *s = PQerrorMessage(conn);
-		String error(String(SIPGCONNECTIONFAILED.scVal(), s));
+		String error(String(TR("Connection to database failed: %s:").c_str(), s));
 
         exit();
 		
@@ -90,7 +90,7 @@ void PostGreSQL::getNTResult(const char *query) {
 	if ( !(status == PGRES_TUPLES_OK || status == PGRES_COMMAND_OK) )
     {
 		const char *s = PQerrorMessage(conn);
-		String error(String(SIPGQUERYFAILED.scVal(), PQerrorMessage(conn)));
+		String error(String(TR("Query failed: %s").c_str(), PQerrorMessage(conn)));
         exit();
 		throw ErrorObject(error);
     }
@@ -106,11 +106,11 @@ int PostGreSQL::getNumberOf(PostGreSQL::Dim d) {
 char * PostGreSQL::getValue(int row, const char* column) {
 	int columnIndex = PQfnumber(res, column);
 	if ( res == NULL) {
-		String error(SIPGNOQUERYEXECUTED);
+		String error(TR("No query yet executed"));
 		throw ErrorObject(error);
 	}
 	if (columnIndex == -1) {
-		String error(String(SIPGCOLUMNNOTFOUND.scVal(), column));
+		String error(String(TR("No column found: %s").c_str(), column));
 		throw ErrorObject(error);
 	}
 	if ( row < 0)
@@ -120,7 +120,7 @@ char * PostGreSQL::getValue(int row, const char* column) {
 
 char * PostGreSQL::getValue(int row, int column) {
 	if ( res == NULL) {
-		String error(SIPGNOQUERYEXECUTED);
+		String error(TR("No query yet executed"));
 		throw ErrorObject(error);
 	}
 	if ( row < 0 || column < 0 )

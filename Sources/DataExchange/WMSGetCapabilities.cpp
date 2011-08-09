@@ -35,19 +35,17 @@ Software Foundation, http://www.fsf.org.
 Created on: 2007-02-8
 ***************************************************************/
 #include "Headers\toolspch.h"
-
-#include <xercesc/parsers/SAXParser.hpp>
-#include <xercesc/framework/MemBufInputSource.hpp>
-#include <xercesc/util/OutOfMemoryException.hpp>
-#include <xercesc/sax/HandlerBase.hpp>
 #include <stack>
 #include "Engine\Base\DataObjects\URL.h"
 #include "Engine\Base\DataObjects\RemoteXMLObject.h"
 #include "DataExchange\WMSGetCapabilities.h"
 
+
 static const char*  gMemBufId = "prodInfo";
 
-WMSGetCapabilities::WMSGetCapabilities(const URL& url) : RemoteXMLObject(url) {
+using namespace ILWIS;
+
+WMSGetCapabilities::WMSGetCapabilities(const URL& url) : RemoteObject(url) {
 }
 
 vector<WMSLayerInfo *> WMSGetCapabilities::getLayerInfo() {
@@ -56,179 +54,92 @@ vector<WMSLayerInfo *> WMSGetCapabilities::getLayerInfo() {
 	return layers;
 }
 
+WMSGetCapabilities::~WMSGetCapabilities() {
+	for(int  i =0; i < layers.size(); ++i)
+		delete layers[i];
+	layers.clear();
+}
+
 void WMSGetCapabilities::parse() {
-	RemoteXMLObject::parse();
+	RemoteObject::parse();
 
-	XERCES_CPP_NAMESPACE::WMSSaxHandler handler(this);
-	parser->setDocumentHandler(&handler);
-	parser->setErrorHandler(&handler);
 
-	XERCES_CPP_NAMESPACE::MemBufInputSource* source = new XERCES_CPP_NAMESPACE::MemBufInputSource
-    (
-        (const XMLByte*)chunk.memory
-        , (const unsigned int)chunk.size
-        , gMemBufId
-        , false
-    );
-
-	parser->parse(*source);
-	int p = parser->getErrorCount();
-
-	layers = handler.getLayers();
-	for(vector<WMSLayerInfo *>::iterator cur = layers.begin(); cur != layers.end(); ++cur) {
-		WMSLayerInfo *lyr = *cur;
-		propagateSRSInfo(lyr);
-	}
-	delete source;
-
-	XERCES_CPP_NAMESPACE::XMLPlatformUtils::Terminate();
+	String txt((const char*)chunk.memory);
+	ILWIS::XMLDocument doc(txt);
+	parseLayer(doc, "//Capability/Layer", layers);
+	for(int i=0; i < layers.size(); ++i)
+		postprocess(layers[i]);
 
 }
 
-void WMSGetCapabilities::propagateSRSInfo(WMSLayerInfo *prevlyr) {
-	for(vector<WMSLayerInfo *>::iterator nextlyr = prevlyr->layers.begin(); nextlyr != prevlyr->layers.end(); ++nextlyr   ) {
-		for(map<String, vector<double>>::iterator cursrs = (*nextlyr)->srs.begin(); cursrs != (*nextlyr)->srs.end() ; ++cursrs) {
-				for(map<String, vector<double>>::iterator cursrs2 = prevlyr->srs.begin(); cursrs2 != prevlyr->srs.end() ; ++cursrs2) {
-					if ( (*cursrs).first == (*cursrs2).first && (*cursrs).second.size() == 0 && (*cursrs2).second.size() > 0) {
-						(*cursrs).second.push_back((*cursrs2).second[0]);
-						(*cursrs).second.push_back((*cursrs2).second[1]);
-						(*cursrs).second.push_back((*cursrs2).second[2]);
-						(*cursrs).second.push_back((*cursrs2).second[3]);
-				}
+void WMSGetCapabilities::postprocess(WMSLayerInfo *info) {
+	for(map<String, CoordBounds>::iterator cur = info->srs.begin(); cur !=  info->srs.end(); ++cur) {
+		String srs = (*cur).first;
+		for(int i = 0; i < info->layers.size(); ++i) {
+			WMSLayerInfo *childInfo = info->layers[i];
+			if ( childInfo->srs.find(srs) == childInfo->srs.end()) {
+				childInfo->srs[srs] = (*cur).second;
 			}
-		} 
-		propagateSRSInfo(*nextlyr);
+			postprocess(childInfo);
+		}
 	}
-
 }
+
+CoordBounds WMSGetCapabilities::parseBoundingBox(const pugi::xml_node& node, String& srs ) {
+	double max,may,mix,miy;
+	for(pugi::xml_attribute atr = node.first_attribute(); atr; atr = atr.next_attribute()) {
+		String name = atr.name();
+		name.toLower();
+		if ( name == "srs")
+			srs = atr.value();
+		if ( name == "maxx")
+			max = String("%s", atr.value()).rVal();
+		if ( name == "maxy")
+			may = String("%s", atr.value()).rVal();
+		if ( name == "minx")
+			mix = String("%s", atr.value()).rVal();
+		if ( name == "miny")
+			miy = String("%s", atr.value()).rVal();
+	}
+	return CoordBounds(Coord(mix, miy), Coord(max, may));
+}
+
+void WMSGetCapabilities::parseLayer(const ILWIS::XMLDocument& doc, const String& expr, vector<WMSLayerInfo *>& parent) {
+	vector<pugi::xml_node> results;
+	doc.executeXPathExpression(expr, results);
+
+	for (int i=0; i < results.size(); ++i) {
+		pugi::xml_node n = results[i];
+		WMSLayerInfo *info = new WMSLayerInfo();
+		for(pugi::xml_node child = n.first_child(); child; child = child.next_sibling()) {
+			String name = child.name();
+			name.toLower();
+			if ( name == "title") {
+				info->title = child.child_value();
+			}
+			if ( name == "name") {
+				info->name = child.child_value();
+			}
+			if ( name == "boundingbox") {
+				String srs;
+				CoordBounds cb = parseBoundingBox(child,srs);
+				if ( srs != "")
+					info->srs[srs] = cb;
+			}
+			if ( name == "latlonboundingbox") {
+				String srs;
+				CoordBounds cb = parseBoundingBox(child,srs);
+				if ( cb.fValid())
+					info->bbLatLon = cb;
+			}
+
 	
-
-
-//--------------------------------------------
-XERCES_CPP_NAMESPACE::WMSSaxHandler::WMSSaxHandler(WMSGetCapabilities *cap) {
-	capabilities = cap;
-	prev = cur = 0;
-	inStyle = false;
-	root = currentLayer = new WMSLayerInfo("");
-}
-
-XERCES_CPP_NAMESPACE::WMSSaxHandler::~WMSSaxHandler() {
-}
-
-void XERCES_CPP_NAMESPACE::WMSSaxHandler::startElement(const XMLCh* const name, AttributeList&  attributes)
-{
-	currentTag = String(StrX(name).scVal());
-	if ( currentTag == "Layer" ) {
-		WMSLayerInfo *layer = new WMSLayerInfo("");
-		currentLayer->layers.push_back(layer);
-		if (prev != cur) {
-			lstack.push(currentLayer);
-			layer->prevLayer = currentLayer;
 		}
-		else
-			layer->prevLayer = currentLayer->prevLayer;
-		currentLayer = layer;
-		prev = cur++;
-	}
-	if ( currentTag == "LatLonBoundingBox") {
-		currentLayer->bbLatLon = handleBBBounds(attributes);
-	}
-
-	if ( currentTag == "BoundingBox") {
-		handleBoundingBox(currentLayer->srs, attributes);
-	}
-
-	if ( currentTag == "Style")
-		inStyle = true;
-	if ( currentTag == "HTML" )
-		throw ErrorObject("Fatal error in request");
-}
-
-void XERCES_CPP_NAMESPACE::WMSSaxHandler::handleBoundingBox(map<String, vector<double> >& srs, AttributeList&  attributes) {
-	String srsName = String(StrX(attributes.getValue("SRS")).scVal());
-	vector<double> v = handleBBBounds(attributes);
-	srs[srsName] = v;
-}
-
-vector<double> XERCES_CPP_NAMESPACE::WMSSaxHandler::handleBBBounds(AttributeList&  attributes) {
-	vector<double> bb;
-	bb.push_back(StrX(attributes.getValue("minx")).rVal());
-	bb.push_back(StrX(attributes.getValue("miny")).rVal());
-	bb.push_back(StrX(attributes.getValue("maxx")).rVal());
-	bb.push_back(StrX(attributes.getValue("maxy")).rVal());
-
-	return bb;
-}
-
-void XERCES_CPP_NAMESPACE::WMSSaxHandler::handleLayerEnd(String &tag)
-{
-	if ( tag == "Layer" ) {
-		currentTag = "";
-		currentLayer = lstack.top();
-		if ( cur == prev) {
-			lstack.pop();
-			if ( lstack.size() != 0)
-				currentLayer = lstack.top();
-			else
-				currentLayer = root;
-		}
-		--cur;
+		parseLayer(doc, expr + "/Layer",info->layers);
+		parent.push_back(info);
 	}
 }
 
-void XERCES_CPP_NAMESPACE::WMSSaxHandler::endElement(const XMLCh* const name) {
-	String tag(StrX(name).scVal());
-	handleLayerEnd(tag);
-	if ( tag == "Style")
-		inStyle = false;
-}
-
-void XERCES_CPP_NAMESPACE::WMSSaxHandler::characters(const XMLCh* const chars, const unsigned int length)
-{
-	String sVal = String(StrX(chars).scVal());
-	if ( currentTag == "Title" && !inStyle) {
-		if ( currentLayer->title == "")
-			currentLayer->title = sVal;
-	}
-	if ( currentTag == "Name" && !inStyle) {
-		if ( currentLayer->name == "")
-			currentLayer->name = sVal;
-	}
-	if ( currentTag == "ServiceException" )
-		throw ErrorObject(sVal);
-	if ( currentTag == "SRS") {
-		currentLayer->srs[sVal] = vector<double>();
-	}
-}
-
-vector<WMSLayerInfo *> XERCES_CPP_NAMESPACE::WMSSaxHandler::getLayers() {
-	return root->layers;
-}
-
-void XERCES_CPP_NAMESPACE::WMSSaxHandler::ignorableWhitespace(const XMLCh* const chars, const unsigned int length)
-{
-}
-
-void XERCES_CPP_NAMESPACE::WMSSaxHandler::resetDocument()
-{
-}
-
-void  XERCES_CPP_NAMESPACE::WMSSaxHandler::error(const SAXParseException& e)
-{
-	String sError("Error : %S at line %d column %d", String(StrX(e.getMessage()).scVal()), e.getLineNumber(), e.getColumnNumber());
-	throw ErrorObject(sError);
-}
-
-void  XERCES_CPP_NAMESPACE::WMSSaxHandler::fatalError(const SAXParseException& e)
-{
-	String sError("Fatal error : %S at line %d column %d", String(StrX(e.getMessage()).scVal()), e.getLineNumber(), e.getColumnNumber());
-	throw ErrorObject(sError);
-
-}
-
-void  XERCES_CPP_NAMESPACE::WMSSaxHandler::warning(const SAXParseException& e)
-{
-}
 
 //-------------------------
 WMSLayerInfo::~WMSLayerInfo() {
@@ -239,10 +150,10 @@ WMSLayerInfo::~WMSLayerInfo() {
 }
 
 void WMSLayerInfo::PartialCopy(WMSLayerInfo *inf) {
-	name = inf->name;
-	for(map<String, vector<double> >::iterator cur3 = inf->srs.begin(); cur3 != inf->srs.end(); ++cur3) {
-		srs[(*cur3).first] = (*cur3).second;
-	}
+	//name = inf->name;
+	//for(map<String, vector<double> >::iterator cur3 = inf->srs.begin(); cur3 != inf->srs.end(); ++cur3) {
+	//	srs[(*cur3).first] = (*cur3).second;
+	//}
 }
 
 
