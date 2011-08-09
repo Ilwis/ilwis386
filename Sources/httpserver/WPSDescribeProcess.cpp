@@ -10,11 +10,10 @@
 #include "Engine\Base\System\module.h"
 #include "Engine\Applications\ModuleMap.h"
 #include "Engine\Base\DataObjects\XMLDocument.h"
-#include <xercesc\dom\DOMLSSerializer.hpp>
 
 
 using namespace ILWIS;
-using namespace XERCES_CPP_NAMESPACE;
+
 
 WPSDescribeProcess::WPSDescribeProcess(struct mg_connection *c, const struct mg_request_info *ri, const map<String, String>& kvps)
 : WPSHandler(c,ri,kvps)

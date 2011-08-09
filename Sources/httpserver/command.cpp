@@ -9,7 +9,6 @@
 #include "httpserver\SharedDataHandler.h"
 #include "HttpServer\command.h"
 
-using namespace XERCES_CPP_NAMESPACE;
 using namespace ILWIS;
 
 IlwisServer *server = 0;

@@ -12,7 +12,6 @@
 
 
 using namespace ILWIS;
-using namespace XERCES_CPP_NAMESPACE;
 
 WMSGetCapabilities::WMSGetCapabilities(struct mg_connection *c, const struct mg_request_info *ri, const map<String, String>& kvps)
 : RequestHandler(c,ri,kvps)
