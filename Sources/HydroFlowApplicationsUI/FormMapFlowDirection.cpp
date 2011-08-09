@@ -54,12 +54,12 @@
 
 LRESULT Cmdfillsinks(CWnd *wnd, const String& s)
 {
-	new FormMapFillSinks(wnd, s.scVal());
+	new FormMapFillSinks(wnd, s.c_str());
 	return -1;
 }
 
 FormMapFillSinks::FormMapFillSinks(CWnd* mw, const char* sPar)
-:FormMapCreate(mw, SAFTitleFlowFillSinks)
+:FormMapCreate(mw, TR("Fill Sinks"))
 {
 		if (sPar) {
 			TextInput inp(sPar);
@@ -78,14 +78,14 @@ FormMapFillSinks::FormMapFillSinks(CWnd* mw, const char* sPar)
 							sOutMap = fn.sFullName(false);
 			}
 	  }
-		new FieldMap(root, SAFUiInputDEM, &m_sMap, new MapListerDomainType(".mpr", dmVALUE, false));
+		new FieldMap(root, TR("&Input DEM"), &m_sMap, new MapListerDomainType(".mpr", dmVALUE, false));
 		m_iMethod = 0;
 		RadioGroup* rg = new RadioGroup(root, "Method", &m_iMethod, true);
 		RadioButton* rbFill = new RadioButton(rg, "Fill sink");
 		RadioButton* rbCut = new RadioButton(rg, "Cut terrain");
 		rbCut->Align(rbFill, AL_UNDER);
 		initMapOut(false, false);
-		SetAppHelpTopic(htpFillSinks);
+		SetHelpItem("ilwisapp\\fill_sinks_dialogbox.htm");
 		create();
 }
 
@@ -110,12 +110,12 @@ int FormMapFillSinks::exec()
 }
 LRESULT Cmdflowdirection(CWnd *wnd, const String& s)
 {
-	new FormMapFlowDirection(wnd, s.scVal());
+	new FormMapFlowDirection(wnd, s.c_str());
 	return -1;
 }
 
 FormMapFlowDirection::FormMapFlowDirection(CWnd* mw, const char* sPar)
-:FormMapCreate(mw, SAFTitleFlowDirection)
+:FormMapCreate(mw, TR("Flow Direction"))
 {
 		if (sPar) {
 			TextInput inp(sPar);
@@ -135,12 +135,12 @@ FormMapFlowDirection::FormMapFlowDirection(CWnd* mw, const char* sPar)
 			}
 	  }
 		   
-		new FieldDataType(root, SAFUiInputDEM, &sMap, new MapListerDomainType(".mpr", dmVALUE, false),true);
+		new FieldDataType(root, TR("&Input DEM"), &sMap, new MapListerDomainType(".mpr", dmVALUE, false),true);
     //*FieldBlank *fb1 = new FieldBlank(root, 0); // Used to force proper alignment
 		m_iMethod = 0;
-		RadioGroup* rg = new RadioGroup(root, SAFUiFlowMethod, &m_iMethod, true);
-		RadioButton* rbSlope = new RadioButton(rg, SAFUiSlope);
-    RadioButton* rbHeight = new RadioButton(rg, SAFUiHeight);
+		RadioGroup* rg = new RadioGroup(root, TR("Method"), &m_iMethod, true);
+		RadioButton* rbSlope = new RadioButton(rg, TR("Steepest Slope"));
+    RadioButton* rbHeight = new RadioButton(rg, TR("Lowest Height"));
 		rbHeight->Align(rbSlope, AL_UNDER);
 	  m_fParallelDrainageCorrection = false;
     m_chkParallelDrainageCorrection = new CheckBox(root, "Parallel drainage correction algorithm", &m_fParallelDrainageCorrection);
@@ -149,7 +149,7 @@ FormMapFlowDirection::FormMapFlowDirection(CWnd* mw, const char* sPar)
     FieldBlank *fb = new FieldBlank(root, 0); // Used to force proper alignment	
     fb->Align(m_chkParallelDrainageCorrection, AL_UNDER);
     initMapOut(false, false);
-    SetAppHelpTopic(htpFlowDirection);
+    SetHelpItem("ilwisapp\\flow_direction_dialogbox.htm");
 		create();
 }
 
@@ -203,12 +203,12 @@ int FormMapFlowDirection::PDCOnSelect(Event *)
 
 LRESULT Cmdflowaccumulation(CWnd *wnd, const String& s)
 {
-	new FormMapFlowAccumulation(wnd, s.scVal());
+	new FormMapFlowAccumulation(wnd, s.c_str());
 	return -1;
 }
 
 FormMapFlowAccumulation::FormMapFlowAccumulation(CWnd* mw, const char* sPar)
-:FormMapCreate(mw, SAFTitleFlowAccumulation)
+:FormMapCreate(mw, TR("Flow Accumulation"))
 {
 		if (sPar) {
 			TextInput inp(sPar);
@@ -227,10 +227,10 @@ FormMapFlowAccumulation::FormMapFlowAccumulation(CWnd* mw, const char* sPar)
 							sOutMap = fn.sFullName(false);
 			}
 	  }
-		new FieldDataType(root, SAFUiInputFlowDirection, &sMap, new MapListerDomainName(FileName("FlowDirection.dom")), true);
+		new FieldDataType(root, TR("&Flow Direction Map"), &sMap, new MapListerDomainName(FileName("FlowDirection.dom")), true);
 		
 		initMapOut(false, false);
-		SetAppHelpTopic(htpFlowAccumulation);
+		SetHelpItem("ilwisapp\\flow_accumulation_dialogbox.htm");
 		create();
 }
 
@@ -251,12 +251,12 @@ int FormMapFlowAccumulation::exec()
 
 LRESULT Cmddemoptimization(CWnd *wnd, const String& s)
 {
-	new FormMapDemOptimization(wnd, s.scVal());
+	new FormMapDemOptimization(wnd, s.c_str());
 	return -1;
 }
 
 FormMapDemOptimization::FormMapDemOptimization(CWnd* mw, const char* sPar)
-:FormMapCreate(mw, SAFTitleDemOptimization)
+:FormMapCreate(mw, TR("DEM Optimization"))
 {
 		if (sPar) {
 			TextInput inp(sPar);
@@ -277,29 +277,29 @@ FormMapDemOptimization::FormMapDemOptimization(CWnd* mw, const char* sPar)
 	  }
 		m_DrainageMapType =  dmtSegment;
 		
-		m_fldmp = new FieldMap(root, SAFUiInputDEM, &m_sMap, new MapListerDomainType(".mpr", dmVALUE, false));
+		m_fldmp = new FieldMap(root, TR("&Input DEM"), &m_sMap, new MapListerDomainType(".mpr", dmVALUE, false));
 		
-		m_fdtDrainage = new FieldDataType(root, SAFUiDrainageMap, &m_sDrainageMap, new MapListerDomainType(".mps.mpa",0,false),true);
+		m_fdtDrainage = new FieldDataType(root, TR("&Drainage Map"), &m_sDrainageMap, new MapListerDomainType(".mps.mpa",0,false),true);
 		m_fdtDrainage->SetCallBack((NotifyProc)&FormMapDemOptimization::DrainageMap);
 		
 		m_fChkAttTbl = false;
-		m_chkAttTbl = new CheckBox(root, SAFUiTable, &m_fChkAttTbl);
+		m_chkAttTbl = new CheckBox(root, TR("&Table"), &m_fChkAttTbl);
 		m_chkAttTbl->SetCallBack((NotifyProc)&FormMapDemOptimization::TableFlagOnSelect);
 		m_ftbl = new FieldTable(m_chkAttTbl, "", &m_sTbl);
 		m_ftbl->Align(m_chkAttTbl,AL_AFTER);
 		m_ftbl->SetCallBack((NotifyProc)&FormMapDemOptimization::TableOnSelect);
 
-		m_stBufDist = new StaticText(root, SAFUiBufferDistance);
+		m_stBufDist = new StaticText(root, TR("&Buffer Distance (m)"));
 		m_stBufDist->Align(m_chkAttTbl,AL_UNDER);
 		m_fldColBufDist = new FieldColumn(m_chkAttTbl, "", Table(),&m_sBufDist, dmVALUE);
 		m_fldColBufDist->Align(m_stBufDist, AL_AFTER);
 		
-		m_stSmooth = new StaticText(root, SAFUiSmoothDrop);
+		m_stSmooth = new StaticText(root, TR("&Smooth Drop (m)"));
 		m_stSmooth->Align(m_stBufDist, AL_UNDER);
 		m_fldColSmooth = new FieldColumn(m_chkAttTbl,"", Table(), &m_sSmooth, dmVALUE);
 		m_fldColSmooth->Align(m_stSmooth, AL_AFTER);
 		
-		StaticText *stSharp = new StaticText(root, SAFUiSharpDrop);
+		StaticText *stSharp = new StaticText(root, TR("&Sharp Drop (m)"));
 		stSharp->Align(m_stSmooth, AL_UNDER);
 		m_fldColSharp = new FieldColumn(m_chkAttTbl,"", Table(), &m_sSharp, dmVALUE);
 		m_fldColSharp->Align(stSharp, AL_AFTER);
@@ -322,7 +322,7 @@ FormMapDemOptimization::FormMapDemOptimization(CWnd* mw, const char* sPar)
 		fb->Align(stSharp,AL_UNDER) ;
 		
 		initMapOut(false, false);
-		SetAppHelpTopic(htpDemOptimization);
+		SetHelpItem("ilwisapp\\dem_optimization_dialogbox.htm");
 		create();
 }
 

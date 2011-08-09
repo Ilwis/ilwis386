@@ -49,13 +49,13 @@ using namespace std;
 //////////////////////////////////////////////////////////////////////
 LRESULT Cmddrainagenetworkextraction(CWnd *wnd, const String& s)
 {
-	new FormDrainageNetworkExtraction(wnd, s.scVal());
+	new FormDrainageNetworkExtraction(wnd, s.c_str());
 	return -1;
 }
 
 
 FormDrainageNetworkExtraction::FormDrainageNetworkExtraction(CWnd* mw, const char* sPar)
-:FormMapCreate(mw, SAFTitleDrainageNetworkExtraction)
+:FormMapCreate(mw, TR("Drainage Network Extraction"))
 {
 		if (sPar) {
 			TextInput inp(sPar);
@@ -75,16 +75,16 @@ FormDrainageNetworkExtraction::FormDrainageNetworkExtraction(CWnd* mw, const cha
 			}
 	  }
 		   
-		new FieldDataType(root, SAFUiInputFlowAccumulation, &m_sMap, new MapListerDomainType(".mpr", dmVALUE, false),true);
+		new FieldDataType(root, TR("Flow &Accumulation Map"), &m_sMap, new MapListerDomainType(".mpr", dmVALUE, false),true);
 		
 		ValueRange vr1(1, LONG_MAX);
-		StaticText *stThreshold = new StaticText(root, SAFUiStreamThreshold);
+		StaticText *stThreshold = new StaticText(root, TR("Stream &Threshold (Nr. of Pixels)"));
 		m_fldThreshold = new FieldInt(root, "", &m_iThreshold, vr1);
 		m_fldThreshold->Align(stThreshold, AL_AFTER);
 
 
 		m_fChkThresholdMap = false;
-		m_chkThresholdMap = new CheckBox(root, SAFUiUseStreamThresholdMap, &m_fChkThresholdMap);
+		m_chkThresholdMap = new CheckBox(root, TR("Use Stream Threshold &Map"), &m_fChkThresholdMap);
 		m_chkThresholdMap->Align(stThreshold, AL_UNDER);
 		m_chkThresholdMap->SetCallBack((NotifyProc)&FormDrainageNetworkExtraction::ThresholdMapOnSelect);
 		m_fldThresholdMap = new FieldMap(root, "", &m_sThresholdMap, new MapListerDomainType(".mpr", dmVALUE, true));
@@ -92,7 +92,7 @@ FormDrainageNetworkExtraction::FormDrainageNetworkExtraction(CWnd* mw, const cha
 
     FieldBlank *fb1 = new FieldBlank(root, 0); 
 		fb1->Align(m_chkThresholdMap,AL_UNDER) ;
-		m_fltFlowMap = new FieldDataType(root, SAFUiInputFlowDirection, &m_sFlowMap, new MapListerDomainName(FileName("FlowDirection.dom")), true);
+		m_fltFlowMap = new FieldDataType(root, TR("&Flow Direction Map"), &m_sFlowMap, new MapListerDomainName(FileName("FlowDirection.dom")), true);
 		//m_fltFlowMap->Align(m_chkThresholdMap,AL_UNDER);
     m_fltFlowMap->Align(fb1,AL_UNDER);
 
@@ -100,7 +100,7 @@ FormDrainageNetworkExtraction::FormDrainageNetworkExtraction(CWnd* mw, const cha
 		fb2->Align(m_fltFlowMap,AL_UNDER) ;
 		
 		initMapOut(false, false);
-		SetAppHelpTopic(htpNetworkExtraction);
+		SetHelpItem("ilwisapp\\drainage_network_extraction_dialog_box.htm");
 		create();
 }
 
@@ -161,12 +161,12 @@ int FormDrainageNetworkExtraction::ThresholdMapOnSelect(Event *)
 //////////////////////////////////////////////////////////////////////
 LRESULT Cmddrainagenetworkordering(CWnd *wnd, const String& s)
 {
-	new FormDrainageNetworkOrdering(wnd, s.scVal());
+	new FormDrainageNetworkOrdering(wnd, s.c_str());
 	return -1;
 }
 
 FormDrainageNetworkOrdering::FormDrainageNetworkOrdering(CWnd* mw, const char* sPar)
-:FormMapCreate(mw, SAFTitleDrainageNetworkOrdering)
+:FormMapCreate(mw, TR("Drainage Network Ordering"))
 {
 		if (sPar) {
 			TextInput inp(sPar);
@@ -185,13 +185,13 @@ FormDrainageNetworkOrdering::FormDrainageNetworkOrdering(CWnd* mw, const char* s
 							sOutMap = fn.sFullName(false);
 			}
 	  }
-		new FieldDataType(root, SAFUiInputDEM, &m_sMap, new MapListerDomainType(".mpr", dmVALUE, false),true);
-		new FieldDataType(root, SAFUiInputFlowDirection, &m_sFlowMap, new MapListerDomainName(FileName("FlowDirection.dom")), true);
+		new FieldDataType(root, TR("&Input DEM"), &m_sMap, new MapListerDomainType(".mpr", dmVALUE, false),true);
+		new FieldDataType(root, TR("&Flow Direction Map"), &m_sFlowMap, new MapListerDomainName(FileName("FlowDirection.dom")), true);
 		new FieldDataType(root, "Drainage Network Map", &m_sDrainageMap, new MapListerDomainType(".mpr", dmBOOL, false), true);
 		
 		m_rThreshold = rUNDEF;
 		ValueRange vr1(0, 1e300, 1e-6);
-		StaticText *stThreshold = new StaticText(root, SAFUiMinimumDrainageLength);
+		StaticText *stThreshold = new StaticText(root, TR("&Minimum Drainage Length"));
 		FieldReal *fldThreshold = new FieldReal(root, "", &m_rThreshold, vr1);
 		fldThreshold->Align(stThreshold, AL_AFTER);
 
@@ -199,9 +199,9 @@ FormDrainageNetworkOrdering::FormDrainageNetworkOrdering(CWnd* mw, const char* s
 		fb->Align(stThreshold,AL_UNDER) ;
 		initMapOut(false, false);
 
-    StaticText *stSegmentMapRemark = new StaticText(root, SAFUiSegmentMapRemark);
+    StaticText *stSegmentMapRemark = new StaticText(root, TR("A segment vector map will be created with the same name as output raster"));
     stSegmentMapRemark->SetIndependentPos();
-    SetAppHelpTopic(htpNetworkOrdering);
+    SetHelpItem("ilwisapp\\drainage_network_ordering_dialog_box.htm");
 		create();
 }
 
@@ -236,12 +236,12 @@ int FormDrainageNetworkOrdering::exec()
 
 LRESULT Cmdcatchmentextraction(CWnd *wnd, const String& s)
 {
-	new FormCatchmentExtraction(wnd, s.scVal());
+	new FormCatchmentExtraction(wnd, s.c_str());
 	return -1;
 }
 
 FormCatchmentExtraction::FormCatchmentExtraction(CWnd* mw, const char* sPar)
-:FormMapCreate(mw, SAFTitleCatchmentExtraction)
+:FormMapCreate(mw, TR("Catchment Extraction"))
 {
 		if (sPar) {
 			TextInput inp(sPar);
@@ -262,12 +262,12 @@ FormCatchmentExtraction::FormCatchmentExtraction(CWnd* mw, const char* sPar)
 	  }
 
 		new FieldDataType(root, "Drainage Network Ordering Map", &m_sDrainageMap, new MapListerDomainType(".mpr", dmIDENT, false), true);
-		FieldDataType *fdt = new FieldDataType(root, SAFUiInputFlowDirection, &m_sFlowMap, new MapListerDomainName(FileName("FlowDirection.dom")), true);
+		FieldDataType *fdt = new FieldDataType(root, TR("&Flow Direction Map"), &m_sFlowMap, new MapListerDomainName(FileName("FlowDirection.dom")), true);
 		
 		FieldBlank *fb = new FieldBlank(root, 0); // Used to force proper alignment
 		fb->Align(fdt,AL_UNDER) ;
 		initMapOut(false, false);
-		SetAppHelpTopic(htpCatchmentExtraction);
+		SetHelpItem("ilwisapp\\catchment_extraction_dialog_box.htm");
 		create();
 }
 
@@ -296,12 +296,12 @@ int FormCatchmentExtraction::exec()
 
 LRESULT Cmdcatchmentmerge(CWnd *wnd, const String& s)
 {
-	new FormCatchmentMerge(wnd, s.scVal());
+	new FormCatchmentMerge(wnd, s.c_str());
 	return -1;
 }
 
 FormCatchmentMerge::FormCatchmentMerge(CWnd* mw, const char* sPar)
-:FormMapCreate(mw, SAFTitleCatchmentMerge)
+:FormMapCreate(mw, TR("Catchment Merging"))
 {
 	if (sPar) {
 		TextInput inp(sPar);
@@ -321,22 +321,22 @@ FormCatchmentMerge::FormCatchmentMerge(CWnd* mw, const char* sPar)
 		}
 	}
 
-	new FieldDataType(root, SAFUiInputDrainageOrderingMap, &m_sDrainageMap, new MapListerDomainType(".mpr", dmIDENT, false), true);
-	FieldDataType *fdt = new FieldDataType(root, SAFUiInputFlowDirection, &m_sFlowMap, new MapListerDomainName(FileName("FlowDirection.dom")), true);
-	new FieldDataType(root, SAFUiInputFlowAccumulation, &m_sFacc, new MapListerDomainType(".mpr", dmVALUE, true),true);
+	new FieldDataType(root, TR("&Drainage Network Ordering Map"), &m_sDrainageMap, new MapListerDomainType(".mpr", dmIDENT, false), true);
+	FieldDataType *fdt = new FieldDataType(root, TR("&Flow Direction Map"), &m_sFlowMap, new MapListerDomainName(FileName("FlowDirection.dom")), true);
+	new FieldDataType(root, TR("Flow &Accumulation Map"), &m_sFacc, new MapListerDomainType(".mpr", dmVALUE, true),true);
     new FieldDataType(root, String("DEM"), &m_sDEM, new MapListerDomainType(".mpr", dmVALUE, true),true);
 	FieldBlank *fb1 = new FieldBlank(root, 0); // Used to force proper alignment
 
     m_iMergeOption = 0;
     m_iOrderSystem = 0;
     m_fExtractStreamNetwork = false;
-    RadioGroup* rg = new RadioGroup(root, SAFUiMergingOption, &m_iMergeOption, true);
+    RadioGroup* rg = new RadioGroup(root, TR("&Merging Option"), &m_iMergeOption, true);
     
-    RadioButton* rbOutletLocations = new RadioButton(rg, SAFUiUseOutletLocations);
+    RadioButton* rbOutletLocations = new RadioButton(rg, TR("&Use Outlet Locations"));
     rbOutletLocations->Align(rg, AL_UNDER);
     FieldPointMap *feMap = new FieldPointMap(rbOutletLocations, "", &m_sOutletMap, new MapListerDomainType(".mpp", 0, false));
     feMap->Align(rbOutletLocations, AL_AFTER);
-	RadioButton* rbStreamOrders = new RadioButton(rg, SAFUiUseStreamOrders);
+	RadioButton* rbStreamOrders = new RadioButton(rg, TR("&Use Stream Orders"));
 	rbStreamOrders->Align(rbOutletLocations, AL_UNDER);
 		
     m_fUndefined = false;
@@ -353,11 +353,11 @@ FormCatchmentMerge::FormCatchmentMerge(CWnd* mw, const char* sPar)
 	CheckBox* chkExtractOriginalOrder = new CheckBox(rbStreamOrders, "Extract Original Order", &m_fExtractOriginalOrder);
 	chkExtractOriginalOrder->Align(rbStreamOrders, AL_UNDER);
     m_iOrderSystem = 0;
-	RadioGroup* rgOrderSystem = new RadioGroup(rbStreamOrders, SAFUiOrderingSystem, &m_iOrderSystem, true);
+	RadioGroup* rgOrderSystem = new RadioGroup(rbStreamOrders, TR("&Ordering System"), &m_iOrderSystem, true);
 	rgOrderSystem->Align(chkExtractOriginalOrder, AL_UNDER);
-	RadioButton* rbStrahler = new RadioButton(rgOrderSystem, SAFUiStrahlerOrderSystem);
+	RadioButton* rbStrahler = new RadioButton(rgOrderSystem, TR("&Strahler Order System"));
 	rbStrahler->Align(rgOrderSystem, AL_UNDER);
-	RadioButton* rbStreve = new RadioButton(rgOrderSystem, SAFUiStreveOrderSystem);
+	RadioButton* rbStreve = new RadioButton(rgOrderSystem, TR("&Shreve Order System"));
 	rbStreve->Align(rgOrderSystem, AL_UNDER);
 		
 	FieldBlank *fb3 = new FieldBlank(root, 0); // Used to force proper alignment
@@ -365,19 +365,19 @@ FormCatchmentMerge::FormCatchmentMerge(CWnd* mw, const char* sPar)
 	initMapOut(false, false);
 
     m_fLongestSegmentMap = false;
-    CheckBox* cbLSegmap = new CheckBox(root, SAFUiLongestSegmentMap, &m_fLongestSegmentMap);
+    CheckBox* cbLSegmap = new CheckBox(root, TR("Longest Flow Path Segment Map"), &m_fLongestSegmentMap);
     FieldMapCreate* fmc = new FieldMapCreate(cbLSegmap, "", &m_sLongestFlowSegmentMap);
     
     m_fExtractStreamNetwork = false;
-    m_chkSegExtractedMap = new CheckBox(rbOutletLocations, SAFUiExtractStreamSegments, &m_fExtractStreamNetwork);
+    m_chkSegExtractedMap = new CheckBox(rbOutletLocations, TR("&Extract Stream Segments and Attributes"), &m_fExtractStreamNetwork);
     m_chkSegExtractedMap->SetCallBack((NotifyProc)&FormCatchmentMerge::ExtractSegmentMapOnSelect);
 		m_chkSegExtractedMap->Align(cbLSegmap, AL_UNDER);
     m_chkSegExtractedMap->SetIndependentPos();
 
-    m_stSegmentMapRemark = new StaticText(rbOutletLocations, SAFUiSegmentMapAndTableRemark);
+    m_stSegmentMapRemark = new StaticText(rbOutletLocations, TR("Segment map and table obtain the same name as the output raster map"));
     m_stSegmentMapRemark->Align(m_chkSegExtractedMap, AL_UNDER);
     m_stSegmentMapRemark->SetIndependentPos();
-    SetAppHelpTopic(htpCatchmentMerging);
+    SetHelpItem("ilwisapp\\catchment_merge_dialog_box.htm");
 	create();
 }
 
@@ -480,12 +480,12 @@ int FormCatchmentMerge::ExtractSegmentMapOnSelect(Event *)
 
 LRESULT Cmdoverlandflowlength(CWnd *wnd, const String& s)
 {
-	new FormSlopeLengths(wnd, s.scVal());
+	new FormSlopeLengths(wnd, s.c_str());
 	return -1;
 }
 
 FormSlopeLengths::FormSlopeLengths(CWnd* mw, const char* sPar)
-:FormMapCreate(mw, SAFTitleSlopeLengths)
+:FormMapCreate(mw, TR("Overland Flow Length"))
 {
 		if (sPar) {
 			TextInput inp(sPar);
@@ -505,13 +505,13 @@ FormSlopeLengths::FormSlopeLengths(CWnd* mw, const char* sPar)
 			}
 	  }
 
-		new FieldDataType(root, SAFUiInputDrainageOrderingMap, &m_sDrainageMap, new MapListerDomainType(".mpr", dmIDENT, false), true);
-		FieldDataType *fdt = new FieldDataType(root, SAFUiInputFlowDirection, &m_sFlowMap, new MapListerDomainName(FileName("FlowDirection.dom")), true);
+		new FieldDataType(root, TR("&Drainage Network Ordering Map"), &m_sDrainageMap, new MapListerDomainType(".mpr", dmIDENT, false), true);
+		FieldDataType *fdt = new FieldDataType(root, TR("&Flow Direction Map"), &m_sFlowMap, new MapListerDomainName(FileName("FlowDirection.dom")), true);
 		
 		FieldBlank *fb = new FieldBlank(root, 0); // Used to force proper alignment
 		fb->Align(fdt,AL_UNDER) ;
 		initMapOut(false, false);
-		SetAppHelpTopic(htpOverlandFlowLength);
+		SetHelpItem("ilwisapp\\overland_flow_length_dialog_box.htm");
 		create();
 }
 
@@ -540,7 +540,7 @@ int FormSlopeLengths::exec()
 //////////////////////////////////////////////////////////////////////
 LRESULT Cmdflowlengthtooutlet(CWnd *wnd, const String& s)
 {
-	new FormFlowLength2Outlet(wnd, s.scVal());
+	new FormFlowLength2Outlet(wnd, s.c_str());
 	return -1;
 }
 
@@ -565,8 +565,8 @@ FormFlowLength2Outlet::FormFlowLength2Outlet(CWnd* mw, const char* sPar)
 			}
 	  }
 
-		new FieldDataType(root, SAFUiInputDrainageOrderingMap, &m_sDrainageMap, new MapListerDomainType(".mpr", dmIDENT, false), true);
-		FieldDataType *fdt = new FieldDataType(root, SAFUiInputFlowDirection, &m_sFlowMap, new MapListerDomainName(FileName("FlowDirection.dom")), true);
+		new FieldDataType(root, TR("&Drainage Network Ordering Map"), &m_sDrainageMap, new MapListerDomainType(".mpr", dmIDENT, false), true);
+		FieldDataType *fdt = new FieldDataType(root, TR("&Flow Direction Map"), &m_sFlowMap, new MapListerDomainName(FileName("FlowDirection.dom")), true);
 		
 		FieldBlank *fb = new FieldBlank(root, 0); // Used to force proper alignment
 		fb->Align(fdt,AL_UNDER) ;
@@ -600,12 +600,12 @@ int FormFlowLength2Outlet::exec()
 
 LRESULT Cmdhortonplots(CWnd *wnd, const String& s)
 {
-	new FormHortonPlots(wnd, s.scVal());
+	new FormHortonPlots(wnd, s.c_str());
 	return -1;
 }
 
 FormHortonPlots::FormHortonPlots(CWnd* mw, const char* sPar)
-:FormTableCreate(mw, SAFTitleHortonPlots)
+:FormTableCreate(mw, TR("Parameters for Horton Plots"))
 {
 		if (sPar) {
 			TextInput inp(sPar);
@@ -625,14 +625,14 @@ FormHortonPlots::FormHortonPlots(CWnd* mw, const char* sPar)
 			}
 	  }
 
-		new FieldDataType(root, SAFUiCatchmentMap, &m_sCatchmentMap, new MapListerDomainType(".mpr", dmIDENT, false), true);
+		new FieldDataType(root, TR("&Catchment Map"), &m_sCatchmentMap, new MapListerDomainType(".mpr", dmIDENT, false), true);
     new FieldDataType(root, "Merged Catchment Map", &m_sMergedCatchmentMap, new MapListerDomainType(".mpr", dmVALUE, true), true);
-		FieldDataType *fdt = new FieldDataType(root, SAFUiInputDrainageOrderingMap, &m_sDrainageMap, new MapListerDomainType(".mpr", dmVALUE, true), true);
+		FieldDataType *fdt = new FieldDataType(root, TR("&Drainage Network Ordering Map"), &m_sDrainageMap, new MapListerDomainType(".mpr", dmVALUE, true), true);
 		
 		FieldBlank *fb = new FieldBlank(root, 0); // Used to force proper alignment
 		fb->Align(fdt,AL_UNDER) ;
 		initTableOut(false);
-		SetAppHelpTopic(htpHorntonPlots);
+		SetHelpItem("ilwisapp\\horton_statistics_dialog_box.htm");
 		create();
 }
 
@@ -665,7 +665,7 @@ int FormHortonPlots::exec()
 //////////////////////////////////////////////////////////////////////
 LRESULT Cmdflowpathlongitudinalprofile(CWnd *wnd, const String& s)
 {
-	new FormFlowPathLongitudinalProfile(wnd, s.scVal());
+	new FormFlowPathLongitudinalProfile(wnd, s.c_str());
 	return -1;
 }
 
@@ -699,7 +699,7 @@ FormFlowPathLongitudinalProfile::FormFlowPathLongitudinalProfile(CWnd* mw, const
 	 new FieldDataType(root, "Attribute Map", &m_sAttMap, new MapListerDomainType(".mpr", dmVALUE, true), true);
 	 FieldBlank *fb = new FieldBlank(root, 0); // Used to force proper alignment
 	initTableOut(false);
-		//SetAppHelpTopic(htpHorntonPlots);
+		//SetHelpItem("ilwisapp\\horton_statistics_dialog_box.htm");
 	create();
 }
 
@@ -729,12 +729,12 @@ int FormFlowPathLongitudinalProfile::exec()
 //////////////////////////////////////////////////////////////////////
 LRESULT Cmdtopologicaloptimization(CWnd *wnd, const String& s)
 {
-	new FormTopologicalOptimization(wnd, s.scVal());
+	new FormTopologicalOptimization(wnd, s.c_str());
 	return -1;
 }
 
 FormTopologicalOptimization::FormTopologicalOptimization(CWnd* mw, const char* sPar)
-:FormMapCreate(mw, SAFTitleTopologicalOptimization)
+:FormMapCreate(mw, TR("Topological Optimization"))
 {
 		if (sPar) {
 			TextInput inp(sPar);
@@ -755,15 +755,15 @@ FormTopologicalOptimization::FormTopologicalOptimization(CWnd* mw, const char* s
 	  }
     
     new FieldDataType(root, "Drainage Network Map", &m_sDrainageMap, new MapListerDomainType(".mpr", dmBOOL, false), true);
-		new FieldDataType(root, SAFUiInputFlowDirection, &m_sFlowMap, new MapListerDomainName(FileName("FlowDirection.dom")), true);
+		new FieldDataType(root, TR("&Flow Direction Map"), &m_sFlowMap, new MapListerDomainName(FileName("FlowDirection.dom")), true);
 		
-    FieldDataType *fdt = new FieldDataType(root, SAFUiInputStreamSegmentMap, &m_sStreamSegMap, new MapListerDomainType(".mps",0,false),true);
+    FieldDataType *fdt = new FieldDataType(root, TR("Stream Segment Map"), &m_sStreamSegMap, new MapListerDomainType(".mps",0,false),true);
 		FieldBlank *fb = new FieldBlank(root, 0); // Used to force proper alignment
 		fb->Align(fdt,AL_UNDER) ;
 		initMapOut(false, false);
 
-    FieldMapCreate* fmc = new FieldMapCreate(root, SAFUiModifiedFlowDirectionMap, &m_sModifiedFlowMap);
-		SetAppHelpTopic(htpTopologicalOptimization);
+    FieldMapCreate* fmc = new FieldMapCreate(root, TR("Modified Flow Direction Map"), &m_sModifiedFlowMap);
+		SetHelpItem("ilwisapp\\topological_optimization_dialog_box.htm");
 		create();
 }
 
@@ -801,7 +801,7 @@ int FormTopologicalOptimization::exec()
 //////////////////////////////////////////////////////////////////////
 LRESULT Cmdvariablethresholdcomputation(CWnd *wnd, const String& s)
 {
-	new FormVariableThresholdComputation(wnd, s.scVal());
+	new FormVariableThresholdComputation(wnd, s.c_str());
 	return -1;
 }
 
@@ -826,7 +826,7 @@ FormVariableThresholdComputation::FormVariableThresholdComputation(CWnd* mw, con
 			}
 	  }
     m_AddString = false;
-		new FieldDataType(root, SAFUiInputDEM, &m_sMap, new MapListerDomainType(".mpr", dmVALUE, false), true);
+		new FieldDataType(root, TR("&Input DEM"), &m_sMap, new MapListerDomainType(".mpr", dmVALUE, false), true);
 		ValueRange vr1(1, LONG_MAX);
     m_iMax = 5;
     m_iFilterSize = 3;
@@ -857,7 +857,7 @@ FormVariableThresholdComputation::FormVariableThresholdComputation(CWnd* mw, con
     StaticText *st = new StaticText(chkMap, "The map obtains unique name to the specified output map");
     st->Align(chkMap,AL_UNDER);
     st->SetIndependentPos();
-    SetAppHelpTopic(htpVariableThresholdComputation);
+    SetHelpItem("ilwisapp\\variable_threshold_computation_dialog_box.htm");
 		create();
 }
 
