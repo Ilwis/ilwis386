@@ -40,12 +40,12 @@
 
 LRESULT Cmdpointinsegment(CWnd *wnd, const String& s)
 {
-	new FormPointInSegmention(wnd, s.scVal());
+	new FormPointInSegmention(wnd, s.c_str());
 	return -1;
 }
 
 FormPointInSegmention::FormPointInSegmention(CWnd* mw, const char* sPar)
-: FormPointMapCreate(mw, SAFTiltePointInSegment),choice(0)
+: FormPointMapCreate(mw, TR("Create a pointmap with points centered on segments")),choice(0)
 {
 	if (sPar)
 	{
@@ -64,11 +64,11 @@ FormPointInSegmention::FormPointInSegmention(CWnd* mw, const char* sPar)
 				sOutMap = fn.sFullName(true);
 		}
 	}
-	new FieldDataType(root, SAFUiFirstInput, &sInMap1, ".mps", true);
-	RadioGroup *rg = new RadioGroup(root,SAFUiPointOptions,&choice);
-	new RadioButton(rg,SAFUiCentroid);
-	new RadioButton(rg,SAFUiVertex);
-	new RadioButton(rg,SAFUiMiddlePoint);
+	new FieldDataType(root, TR("First Input map"), &sInMap1, ".mps", true);
+	RadioGroup *rg = new RadioGroup(root,TR("Type of point"),&choice);
+	new RadioButton(rg,TR("Centroid"));
+	new RadioButton(rg,TR("Vertex"));
+	new RadioButton(rg,TR("Middle point"));
 	
 	new FieldBlank(root);
 			

@@ -49,12 +49,12 @@ Created on: 2007-02-8
 
 LRESULT Cmdattribpnt(CWnd *wnd, const String& s)
 {
-	new FormAttributePointMap(wnd, s.scVal());
+	new FormAttributePointMap(wnd, s.c_str());
 	return -1;
 }
 
 FormAttributePointMap::FormAttributePointMap(CWnd* mw, const char* sPar)
-: FormPointMapCreate(mw, SAFTitleAttribPntMap)
+: FormPointMapCreate(mw, TR("Attribute Map of Point Map"))
 {
 	if (sPar) {
 		TextInput inp(sPar);
@@ -73,12 +73,12 @@ FormAttributePointMap::FormAttributePointMap(CWnd* mw, const char* sPar)
 					sOutMap = fn.sFullName(false);
 		}
 	}
-	fldPointMap = new FieldPointMap(root, SAFUiPntMap, &sPointMap,
+	fldPointMap = new FieldPointMap(root, TR("&Point Map"), &sPointMap,
 		new MapListerDomainType(".mpp", dmCLASS | dmIDENT | dmGROUP | dmBOOL | dmUNIQUEID));
 	fldPointMap->SetCallBack((NotifyProc)&FormAttributePointMap::PointMapCallBack);
-	fldTbl = new FieldTable(root, SAFUiTable, &sTbl);
+	fldTbl = new FieldTable(root, TR("&Table"), &sTbl);
 	fldTbl->SetCallBack((NotifyProc)&FormAttributePointMap::TblCallBack);
-	fldCol = new FieldColumn(root, SAFUiAttribute, Table(), &sCol,
+	fldCol = new FieldColumn(root, TR("&Attribute"), Table(), &sCol,
 		dmCLASS|dmIDENT|dmUNIQUEID|dmVALUE|dmBOOL);
 	fldCol->SetCallBack((NotifyProc)&FormAttributePointMap::ColCallBack);
 	stColRemark = new StaticText(root, String('x',50));
@@ -176,12 +176,12 @@ int FormAttributePointMap::ColCallBack(Event*)
 //--[ FormPointMapFromRas ]-----------------------------------------------------------------------
 LRESULT Cmdraspnt(CWnd *wnd, const String& s)
 {
-	new FormPointMapFromRas(wnd, s.scVal());
+	new FormPointMapFromRas(wnd, s.c_str());
 	return -1;
 }
 
 FormPointMapFromRas::FormPointMapFromRas(CWnd* mw, const char* sPar)
-: FormPointMapCreate(mw, SAFTitlePntMapFromRasMap)
+: FormPointMapCreate(mw, TR("Raster to Points"))
 {
 	if (sPar) {
 		TextInput inp(sPar);
@@ -199,7 +199,7 @@ FormPointMapFromRas::FormPointMapFromRas(CWnd* mw, const char* sPar)
 				sOutMap = fn.sFullName(false);
 		}
 	}
-	new FieldMap(root, SAFUiRasMap, &sMap, new MapListerDomainType(".mpr", 0, true));
+	new FieldMap(root, TR("&Raster Map"), &sMap, new MapListerDomainType(".mpr", 0, true));
 	initPointMapOut(false);
 	SetHelpItem("ilwisapp\\raster_to_points_dialogbox.htm");
 	create();
@@ -221,12 +221,12 @@ int FormPointMapFromRas::exec()
 //--[ FormPointMapFromTable ]-----------------------------------------------------------------------
 LRESULT Cmdtblpnt(CWnd *wnd, const String& s)
 {
-	new FormPointMapFromTable(wnd, s.scVal());
+	new FormPointMapFromTable(wnd, s.c_str());
 	return -1;
 }
 
 FormPointMapFromTable::FormPointMapFromTable(CWnd* mw, const char* sPar)
-: FormPointMapCreate(mw, SAFTitleTblToPnts),
+: FormPointMapCreate(mw, TR("Table to Point Map")),
 rg(0), rgDmNone(0), fldColCoord(0), fldColX(0), fldColY(0), fUseCoords(true)
 {
 	sColX = "X";
@@ -251,36 +251,36 @@ rg(0), rgDmNone(0), fldColCoord(0), fldColX(0), fldColY(0), fUseCoords(true)
 				sOutMap = fn.sFullName(false);
 		}
 	}
-	fldTbl = new FieldTable(root, SAFUiTable, &sTbl);
+	fldTbl = new FieldTable(root, TR("&Table"), &sTbl);
 	fldTbl->SetCallBack((NotifyProc)&FormPointMapFromTable::TblCallBack);
-	cc = new CheckBox(root, SAFUiUseCoordColumn, &fUseCoords);
+	cc = new CheckBox(root, TR("&Use single column with XY-coordinates"), &fUseCoords);
 	cc->SetCallBack((NotifyProc)&FormPointMapFromTable::ColCoordCallBack);		
 	cc->SetIndependentPos();
-	fldColCoord = new FieldColumn(cc, SAFUiColumnXY, Table(), &sColCoord, dmCOORD);
+	fldColCoord = new FieldColumn(cc, TR("&XY Column"), Table(), &sColCoord, dmCOORD);
 	fldColCoord->Align(cc, AL_UNDER);
 
-	fldColX = new FieldColumn(root, SAFUiColumnX, Table(), &sColX, dmVALUE);
+	fldColX = new FieldColumn(root, TR("&X Column"), Table(), &sColX, dmVALUE);
 	fldColX->Align(cc, AL_UNDER);
-	fldColY = new FieldColumn(root, SAFUiColumnY, Table(), &sColY, dmVALUE);
-	feCs = new FieldCoordSystemC(root, SAFUiCoordSys, &sCsy);
+	fldColY = new FieldColumn(root, TR("&Y Column"), Table(), &sColY, dmVALUE);
+	feCs = new FieldCoordSystemC(root, TR("&Coordinate System"), &sCsy);
 
-	rg = new RadioGroup(root, SAFUiDomOutMap, &iOption);
+	rg = new RadioGroup(root, TR("Domain of Output map:"), &iOption);
 	rg->SetCallBack((NotifyProc)&FormPointMapFromTable::OptionCallBack);
 	rg->SetIndependentPos();
-	new RadioButton(rg, SAFUiUseTableDomain);
-	new RadioButton(rg, SAFUiUseAttColumn);
+	new RadioButton(rg, TR("Use &Table Domain"));
+	new RadioButton(rg, TR("Use &Attribute Column"));
 
-	rgDmNone = new RadioGroup(root, SAFUiDomOutMap, &iOption);
+	rgDmNone = new RadioGroup(root, TR("Domain of Output map:"), &iOption);
 	rgDmNone->SetCallBack((NotifyProc)&FormPointMapFromTable::OptionCallBack);
 	rgDmNone->Align(feCs, AL_UNDER);
 	rgDmNone->SetIndependentPos();
-	RadioButton* rbRec = new RadioButton(rgDmNone, SAFUiUseRecNrsAsIds);
-	new RadioButton(rgDmNone, SAFUiUseColOfTable);
+	RadioButton* rbRec = new RadioButton(rgDmNone, TR("Use &Record numbers as Identifiers"));
+	new RadioButton(rgDmNone, TR("Use &Column of Table"));
 
-	FieldString* fsPrefix = new FieldString(rbRec, SAFUiDomPrefix, &sPrefix, Domain(), false);
+	FieldString* fsPrefix = new FieldString(rbRec, TR("Domain &Prefix"), &sPrefix, Domain(), false);
 	fsPrefix->Align(rg, AL_UNDER);
 
-	fldColAttrib = new FieldColumn(root, SAFUiColumn, Table(), &sColAttrib,
+	fldColAttrib = new FieldColumn(root, TR("&Column"), Table(), &sColAttrib,
 		dmCLASS|dmIDENT|dmVALUE|dmBOOL);
 	fldColAttrib->Align(rg, AL_UNDER);
 
@@ -432,12 +432,12 @@ int FormPointMapFromTable::exec()
 
 LRESULT Cmdsegpnt(CWnd *wnd, const String& s)
 {
-	new FormPointMapSegments(wnd, s.scVal());
+	new FormPointMapSegments(wnd, s.c_str());
 	return -1;
 }
 
 FormPointMapSegments::FormPointMapSegments(CWnd* mw, const char* sPar)
-: FormPointMapCreate(mw, SAFTitleSegToPnts)
+: FormPointMapCreate(mw, TR("Segments to Points"))
 {
 	if (sPar) {
 		TextInput inp(sPar);
@@ -455,23 +455,23 @@ FormPointMapSegments::FormPointMapSegments(CWnd* mw, const char* sPar)
 				sOutMap = fn.sFullName(false);
 		}
 	}
-	fldSegmentMap = new FieldSegmentMap(root, SAFUiSegMap, &sMap, new MapListerDomainType(".mps", 0, false));
+	fldSegmentMap = new FieldSegmentMap(root, TR("&Segment Map"), &sMap, new MapListerDomainType(".mps", 0, false));
 	fldSegmentMap->SetCallBack((NotifyProc)&FormPointMapSegments::SegmentMapCallBack);
 	String sFill('x', 50);
 	stCsy = new StaticText(root, sFill);
 	stCsy->SetIndependentPos();
 	iOption = 0;
 	rgOptions = new RadioGroup(root, "" , &iOption);
-	RadioButton *rbNodes = new RadioButton(rgOptions, SAFUiOnlyNodes);
-	rbMeters = new RadioButton(rgOptions, SAFUiDistanceInMeters);
+	RadioButton *rbNodes = new RadioButton(rgOptions, TR("Only &Nodes"));
+	rbMeters = new RadioButton(rgOptions, TR("Distance (m)"));
 	rbMeters->Align(rbNodes, AL_UNDER);
-	rbDegr = new RadioButton(rgOptions, SAFUiDistance);
+	rbDegr = new RadioButton(rgOptions, TR("&Distance"));
 	rbDegr->Align(rbNodes, AL_UNDER);
 	fldMeters = new FieldReal(rbMeters, "", &rDist, ValueRange(0.001,1e12,0));
 	fldMeters->Align(rbMeters, AL_AFTER);
 	fldDegMinSec = new FieldDMS(rbDegr, "", &rDist, 30, true);
 	fldDegMinSec->Align(rbDegr, AL_AFTER);
-	new RadioButton(rgOptions, SAFUiAllPnts);
+	new RadioButton(rgOptions, TR("&All Points"));
 	initPointMapOut(false);
 	SetHelpItem("ilwisapp\\segments_to_points_dialogbox.htm");
 	create();
@@ -578,12 +578,12 @@ int FormPointMapSegments::exec()
 
 LRESULT Cmdpolpnt(CWnd *wnd, const String& s)
 {
-	new FormPointMapPolygons(wnd, s.scVal());
+	new FormPointMapPolygons(wnd, s.c_str());
 	return -1;
 }
 
 FormPointMapPolygons::FormPointMapPolygons(CWnd* mw, const char* sPar)
-: FormPointMapCreate(mw, SAFTitlePolToPnts)
+: FormPointMapCreate(mw, TR("Polygons to Points"))
 {
 	fIncludeUndefs = false;
 	if (sPar) {
@@ -602,11 +602,11 @@ FormPointMapPolygons::FormPointMapPolygons(CWnd* mw, const char* sPar)
 				sOutMap = fn.sFullName(false);
 		}
 	}
-	new FieldPolygonMap(root, SAFUiPolMap, &sMap, new MapListerDomainType(".mpa", 0/*dmVALUE|dmCLASS|dmIDENT|dmBOOL*/, false));
+	new FieldPolygonMap(root, TR("&Polygon Map"), &sMap, new MapListerDomainType(".mpa", 0/*dmVALUE|dmCLASS|dmIDENT|dmBOOL*/, false));
 	iOption = 0;
 	//RadioGroup* rg = new RadioGroup(root, "" , &iOption);
-	//new RadioButton(rg, SAFUiLabelPnts);
-	CheckBox* cb = new CheckBox(root, SAFUiIncludeUndefs, &fIncludeUndefs);
+	//new RadioButton(rg, TR("&Label Points"));
+	CheckBox* cb = new CheckBox(root, TR("&Include Undefineds"), &fIncludeUndefs);
 	cb->SetIndependentPos();
 	initPointMapOut(false);
 	SetHelpItem("ilwisapp\\polygons_to_points_dialogbox.htm");
@@ -635,12 +635,12 @@ int FormPointMapPolygons::exec()
 
 LRESULT Cmdtransfpnt(CWnd *wnd, const String& s)
 {
-	new FormPointMapTransform(wnd, s.scVal());
+	new FormPointMapTransform(wnd, s.c_str());
 	return -1;
 }
 
 FormPointMapTransform::FormPointMapTransform(CWnd* mw, const char* sPar)
-: FormPointMapCreate(mw, SAFTitlePntMapTransform)
+: FormPointMapCreate(mw, TR("Transform Point Map"))
 {
 	if (sPar) {
 		TextInput inp(sPar);
@@ -661,23 +661,23 @@ FormPointMapTransform::FormPointMapTransform(CWnd* mw, const char* sPar)
 					sOutMap = fn.sFullName(false);
 		}
 	}
-	fldMap = new FieldPointMap(root, SAFUiPntMap, &sPointMap, new MapListerDomainType(".mpp", 0, true));
+	fldMap = new FieldPointMap(root, TR("&Point Map"), &sPointMap, new MapListerDomainType(".mpp", 0, true));
 	fldMap->SetCallBack((NotifyProc)&FormPointMapTransform::MapCallBack);
 	String sFill('x', 50);
 	stCsy = new StaticText(root, sFill);
 	stCsy->SetIndependentPos();
 
 	// do not call initPointMapOut(false) because also csy has to be asked
-	fmc = new FieldPointMapCreate(root, SAFUiOutPntMap, &sOutMap);
+	fmc = new FieldPointMapCreate(root, TR("&Output Point Map"), &sOutMap);
 	fmc->SetCallBack((NotifyProc)&FormPointMapCreate::OutPointMapCallBack);
-	new FieldCoordSystemC(root, SAFUiCoordSys, &sCoordSys);
-	StaticText* st = new StaticText(root, SAFUiDescription);
+	new FieldCoordSystemC(root, TR("&Coordinate System"), &sCoordSys);
+	StaticText* st = new StaticText(root, TR("&Description:"));
 	st->psn->SetBound(0,0,0,0);
 	FieldString* fs = new FieldString(root, "", &sDescr);
 	fs->SetWidth(120);
 	fs->SetIndependentPos();
 	fTransformHeights = false;
-	CheckBox* cb = new CheckBox(root, SAFUiUseHeights, &fTransformHeights);
+	CheckBox* cb = new CheckBox(root, TR("Use Heights (m)"), &fTransformHeights);
 	cb->SetIndependentPos();
 	SetHelpItem("ilwisapp\\transform_point_map_dialog_box.htm");
 	create();
@@ -720,12 +720,12 @@ int FormPointMapTransform::exec()
 
 LRESULT Cmdsubpnt(CWnd *wnd, const String& s)
 {
-	new FormPointMapSubMap(wnd, s.scVal());
+	new FormPointMapSubMap(wnd, s.c_str());
 	return -1;
 }
 
 FormPointMapSubMap::FormPointMapSubMap(CWnd* mw, const char* sPar)
-: FormPointMapCreate(mw, SAFTitleSubMapPntMap),
+: FormPointMapCreate(mw, TR("Sub Map of Point Map")),
 fPreset(0)
 {
 	cMin = cMax = Coord(0,0);
@@ -766,26 +766,26 @@ fPreset(0)
 			}								
 		}
 	}
-	fldPointMap = new FieldPointMap(root, SAFUiPntMap, &sPointMap, new MapListerDomainType(".mpp", 0, true));
+	fldPointMap = new FieldPointMap(root, TR("&Point Map"), &sPointMap, new MapListerDomainType(".mpp", 0, true));
 	fldPointMap->SetCallBack((NotifyProc)&FormPointMapSubMap::PointMapCallBack);
 	String sFill('x', 50);
 	stCsy = new StaticText(root, sFill);
 	stCsy->SetIndependentPos();
 	FieldGroup *fg = new FieldGroup(root);
 	fg->SetIndependentPos();
-	fcMin = new FieldCoord(fg, SAFUiMinXY, &cMin);
+	fcMin = new FieldCoord(fg, TR("&Min X, Y"), &cMin);
 	fcMin->SetCallBack((NotifyProc)&FormPointMapSubMap::CallBackMinMaxXY);
-	fcMax = new FieldCoord(fg, SAFUiMaxXY, &cMax);
+	fcMax = new FieldCoord(fg, TR("&Max X, Y"), &cMax);
 	fcMax->SetCallBack((NotifyProc)&FormPointMapSubMap::CallBackMinMaxXY);
-	fldMinLat = new FieldLat(fg, SCSUiMinLat, &llMin.Lat);
+	fldMinLat = new FieldLat(fg, TR("Min Latitude"), &llMin.Lat);
 	fldMinLat->Align(stCsy, AL_UNDER);
 	fldMinLat->SetCallBack((NotifyProc)&FormPointMapSubMap::CallBackMinMaxLatLon);
-	fldMinLon = new FieldLon(fg, SCSUiMinLon, &llMin.Lon);
+	fldMinLon = new FieldLon(fg, TR("Min Longitude"), &llMin.Lon);
 	fldMinLon->SetCallBack((NotifyProc)&FormPointMapSubMap::CallBackMinMaxLatLon);
-	fldMaxLat = new FieldLat(fg, SCSUiMaxLat, &llMax.Lat);
+	fldMaxLat = new FieldLat(fg, TR("Max Latitude"), &llMax.Lat);
 	fldMaxLat->Align(fldMinLon, AL_UNDER);
 	fldMaxLat->SetCallBack((NotifyProc)&FormPointMapSubMap::CallBackMinMaxLatLon);
-	fldMaxLon = new FieldLon(fg, SCSUiMaxLon, &llMax.Lon);
+	fldMaxLon = new FieldLon(fg, TR("Max Longitude"), &llMax.Lon);
 	fldMaxLon->SetCallBack((NotifyProc)&FormPointMapSubMap::CallBackMinMaxLatLon);
 	initPointMapOut(false);
 	SetHelpItem("ilwisapp\\submap_of_point_map_dialogbox.htm");
@@ -913,12 +913,12 @@ void FormPointMapSubMap::HideCoordsAndLatLon()
 
 LRESULT Cmdgluepnt(CWnd *wnd, const String& s)
 {
-	new FormPointMapGlue(wnd, s.scVal());
+	new FormPointMapGlue(wnd, s.c_str());
 	return -1;
 }
 
 FormPointMapGlue::FormPointMapGlue(CWnd* mw, const char* sPar)
-: FormPointMapCreate(mw, SAFTitleGluePntMap)
+: FormPointMapCreate(mw, TR("Glue Point Maps"))
 {
 	iMaps = 2;
 	asMaps.resize(4);
@@ -957,7 +957,7 @@ FormPointMapGlue::FormPointMapGlue(CWnd* mw, const char* sPar)
 		}
 	}
 	iMaps -= 2;
-	StaticText* st = new StaticText(root, SAFUiNrInpMaps);
+	StaticText* st = new StaticText(root, TR("&Number of Input Maps"));
 	st->SetIndependentPos();
 	rgMaps = new RadioGroup(root, "", &iMaps, true);
 	rgMaps->SetIndependentPos();
@@ -968,33 +968,33 @@ FormPointMapGlue::FormPointMapGlue(CWnd* mw, const char* sPar)
 
 	fg1 = new FieldGroup(root,true);
 	fg1->Align(rgMaps, AL_UNDER);
-	FieldPointMap* fpm = new FieldPointMap(fg1, SAFUiMap, &(asMaps[0]), new MapListerDomainType(".mpp", 0/*dmVALUE|dmCLASS|dmIDENT|dmBOOL*/, true));
+	FieldPointMap* fpm = new FieldPointMap(fg1, TR("&Map"), &(asMaps[0]), new MapListerDomainType(".mpp", 0/*dmVALUE|dmCLASS|dmIDENT|dmBOOL*/, true));
 	fpm->SetCallBack((NotifyProc)&FormPointMapGlue::PointMap_1CallBack);
-	FieldString* fs = new FieldString(fg1, SAFUiMask, &sMask1);
+	FieldString* fs = new FieldString(fg1, TR("&Mask"), &sMask1);
 	fs->Align(fpm, AL_AFTER);
 
 	fg2 = new FieldGroup(root,true);
 	fg2->Align(fg1, AL_UNDER);
-	fpm = new FieldPointMap(fg2, SAFUiMap, &(asMaps[1]), new MapListerDomainType(".mpp", 0/*dmVALUE|dmCLASS|dmIDENT|dmBOOL*/, true));
+	fpm = new FieldPointMap(fg2, TR("&Map"), &(asMaps[1]), new MapListerDomainType(".mpp", 0/*dmVALUE|dmCLASS|dmIDENT|dmBOOL*/, true));
 	fpm->SetCallBack((NotifyProc)&FormPointMapGlue::PointMap_2CallBack);
-	fs = new FieldString(fg2, SAFUiMask, &sMask2);
+	fs = new FieldString(fg2, TR("&Mask"), &sMask2);
 	fs->Align(fpm, AL_AFTER);
 
 	fg3 = new FieldGroup(root,true);
 	fg3->Align(fg2, AL_UNDER);
-	fpm = new FieldPointMap(fg3, SAFUiMap, &(asMaps[2]), new MapListerDomainType(".mpp", 0/*dmVALUE|dmCLASS|dmIDENT|dmBOOL*/, true));
+	fpm = new FieldPointMap(fg3, TR("&Map"), &(asMaps[2]), new MapListerDomainType(".mpp", 0/*dmVALUE|dmCLASS|dmIDENT|dmBOOL*/, true));
 	fpm->SetCallBack((NotifyProc)&FormPointMapGlue::PointMap_3CallBack);
-	fs = new FieldString(fg3, SAFUiMask, &sMask3);
+	fs = new FieldString(fg3, TR("&Mask"), &sMask3);
 	fs->Align(fpm, AL_AFTER);
 
 	fg4 = new FieldGroup(root,true);
 	fg4->Align(fg3, AL_UNDER);
-	fpm = new FieldPointMap(fg4, SAFUiMap, &(asMaps[3]), new MapListerDomainType(".mpp", 0/*dmVALUE|dmCLASS|dmIDENT|dmBOOL*/, true));
+	fpm = new FieldPointMap(fg4, TR("&Map"), &(asMaps[3]), new MapListerDomainType(".mpp", 0/*dmVALUE|dmCLASS|dmIDENT|dmBOOL*/, true));
 	fpm->SetCallBack((NotifyProc)&FormPointMapGlue::PointMap_4CallBack);
-	fs = new FieldString(fg4, SAFUiMask, &sMask4);
+	fs = new FieldString(fg4, TR("&Mask"), &sMask4);
 	fs->Align(fpm, AL_AFTER);
 
-	cbClip = new CheckBox(root, SAFUiClipBoundary, &fClipBoundary);
+	cbClip = new CheckBox(root, TR("&Clip Boundary"), &fClipBoundary);
 	cbClip->SetCallBack((NotifyProc)&FormPointMapGlue::CallBackClipBoundary);
 	cbClip->Align(fg4, AL_UNDER);
 	String sFill50('x', 50);
@@ -1003,26 +1003,26 @@ FormPointMapGlue::FormPointMapGlue(CWnd* mw, const char* sPar)
 	FieldGroup* fg = new FieldGroup(cbClip);
 	fg->Align(cbClip,AL_UNDER);
 	cMin = cMax = Coord(0,0);
-	fldCrdMin = new FieldCoord(fg, SAFUiMinXY, &cMin);
+	fldCrdMin = new FieldCoord(fg, TR("&Min X, Y"), &cMin);
 	fldCrdMin->SetCallBack((NotifyProc)&FormPointMapGlue::CallBackMinMaxXY);
-	fldCrdMax = new FieldCoord(fg, SAFUiMaxXY, &cMax);
+	fldCrdMax = new FieldCoord(fg, TR("&Max X, Y"), &cMax);
 	fldCrdMax->SetCallBack((NotifyProc)&FormPointMapGlue::CallBackMinMaxXY);
 
-	fldMinLat = new FieldLat(fg, SCSUiMinLat, &llMin.Lat);
+	fldMinLat = new FieldLat(fg, TR("Min Latitude"), &llMin.Lat);
 	fldMinLat->Align(cbClip, AL_UNDER);
 	fldMinLat->SetCallBack((NotifyProc)&FormPointMapGlue::CallBackMinMaxLatLon);
-	fldMinLon = new FieldLon(fg, SCSUiMinLon, &llMin.Lon);
+	fldMinLon = new FieldLon(fg, TR("Min Longitude"), &llMin.Lon);
 	//  fldMinLon->Align(fldMinLat, AL_AFTER);
 	fldMinLon->SetCallBack((NotifyProc)&FormPointMapGlue::CallBackMinMaxLatLon);
-	fldMaxLat = new FieldLat(fg, SCSUiMaxLat, &llMax.Lat);
+	fldMaxLat = new FieldLat(fg, TR("Max Latitude"), &llMax.Lat);
 	fldMaxLat->Align(fldMinLon, AL_UNDER);
 	fldMaxLat->SetCallBack((NotifyProc)&FormPointMapGlue::CallBackMinMaxLatLon);
-	fldMaxLon = new FieldLon(fg, SCSUiMaxLon, &llMax.Lon);
+	fldMaxLon = new FieldLon(fg, TR("Max Longitude"), &llMax.Lon);
 	//  fldMaxLon->Align(fldMaxLat, AL_AFTER);
 	fldMaxLon->SetCallBack((NotifyProc)&FormPointMapGlue::CallBackMinMaxLatLon);
 
 	fNewDom = true;
-	cbDom = new CheckBox(root, SAFUiNewDomain, &fNewDom);
+	cbDom = new CheckBox(root, TR("&New Domain"), &fNewDom);
 	cbDom->SetCallBack((NotifyProc)&FormPointMapGlue::DomCallBack);
 	fldDom = new FieldDataTypeCreate(cbDom, "", &sNewDom, ".dom", true);
 	fldDom->SetCallBack((NotifyProc)&FormPointMapGlue::DomCallBack);
@@ -1287,9 +1287,9 @@ int FormPointMapGlue::DomCallBack(Event*)
 		fldDom->StoreData();
 		FileName fn(sNewDom);
 		if (!fn.fValid())
-			stRemark->SetVal(SDMRemNotValidDomainName);
+			stRemark->SetVal(TR("Not a valid domain name"));
 		else if(fn.fExist())
-			stRemark->SetVal(SDMRemDomExists);
+			stRemark->SetVal(TR("Domain already exists"));
 		else {
 			fOk = true;
 			stRemark->SetVal("");
@@ -1364,12 +1364,12 @@ int FormPointMapGlue::exec()
 
 LRESULT Cmdmaskpnt(CWnd *wnd, const String& s)
 {
-	new FormPointMapMask(wnd, s.scVal());
+	new FormPointMapMask(wnd, s.c_str());
 	return -1;
 }
 
 FormPointMapMask::FormPointMapMask(CWnd* mw, const char* sPar)
-: FormPointMapCreate(mw, SAFTitleMaskPntMap)
+: FormPointMapCreate(mw, TR("Mask Points"))
 {
 	if (sPar) {
 		TextInput inp(sPar);
@@ -1388,8 +1388,8 @@ FormPointMapMask::FormPointMapMask(CWnd* mw, const char* sPar)
 					sOutMap = fn.sFullName(false);
 		}
 	}
-	new FieldPointMap(root, SAFUiPntMap, &sPointMap, new MapListerDomainType(".mpp", 0, true));
-	new FieldString(root, SAFUiMask, &sMask, Domain(), false);
+	new FieldPointMap(root, TR("&Point Map"), &sPointMap, new MapListerDomainType(".mpp", 0, true));
+	new FieldString(root, TR("&Mask"), &sMask, Domain(), false);
 	initPointMapOut(false);
 	SetHelpItem("ilwisapp\\mask_points_dialog_box.htm");
 	create();

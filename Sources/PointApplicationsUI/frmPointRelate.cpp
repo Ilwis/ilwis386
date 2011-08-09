@@ -83,12 +83,12 @@
 
 LRESULT Cmdpointmaprelate(CWnd *wnd, const String& s)
 {
-	new FormPointMapRelate(wnd, s.scVal());
+	new FormPointMapRelate(wnd, s.c_str());
 	return -1;
 }
 
 FormPointMapRelate::FormPointMapRelate(CWnd* mw, const char* sPar)
-: FormPointMapCreate(mw, SAFTilteMaprelate),negation(false),fsMatrix(NULL),relation(0)
+: FormPointMapCreate(mw, TR("Relation to other Features")),negation(false),fsMatrix(NULL),relation(0)
 {
 	if (sPar)
 	{
@@ -108,34 +108,34 @@ FormPointMapRelate::FormPointMapRelate(CWnd* mw, const char* sPar)
 		}
 	}
 
-	relations.push_back(SAFUIContains + ".Contains");
-	relations.push_back(SAFUICoveredBy + ".CoveredBy");
-	relations.push_back(SAFUICovers + ".Covers");
-	relations.push_back(SAFUICrosses + ".Crosses");
-	relations.push_back(SAFUIDisJoint + ".DisJoint");
-	relations.push_back(SAFUIEquals + ".Equals");
-	relations.push_back(SAFUiIntersect + ".Intersect");
-	relations.push_back(SAFUIDE9IM + ".MAT16ICO");
-	relations.push_back(SAFUIOverlaps + ".Overlaps");
-	relations.push_back(SAFUITouches + ".Touches");
-	relations.push_back(SAFUIWithin + ".Within");
+	relations.push_back(TR("Contains") + ".Contains");
+	relations.push_back(TR("CoveredBy") + ".CoveredBy");
+	relations.push_back(TR("Covers") + ".Covers");
+	relations.push_back(TR("Crosses") + ".Crosses");
+	relations.push_back(TR("Disjoint") + ".DisJoint");
+	relations.push_back(TR("Equals") + ".Equals");
+	relations.push_back(TR("Intersects") + ".Intersect");
+	relations.push_back(TR("DE9IM Matrix") + ".MAT16ICO");
+	relations.push_back(TR("Overlaps") + ".Overlaps");
+	relations.push_back(TR("Touches") + ".Touches");
+	relations.push_back(TR("Within") + ".Within");
 
-	FieldDataType *fd = new FieldDataType(root, SAFUiFirstInput, &sInMap1, ".mpp", true);
-	StaticText *txt = new StaticText(root,SAFUIRelations);
+	FieldDataType *fd = new FieldDataType(root, TR("First Input map"), &sInMap1, ".mpp", true);
+	StaticText *txt = new StaticText(root,TR("Relation"));
 	FieldGroup *fg = new FieldGroup(root);
-	CheckBox *cb = new CheckBox(fg,SAFUiNot,&negation);
+	CheckBox *cb = new CheckBox(fg,TR("Not"),&negation);
 	cb->Align(txt, AL_AFTER);
 	fsRelation = new FieldOneSelectString(fg, "", &relation, relations);
 	fsRelation->Align(cb,AL_AFTER);
 	fsRelation->SetComboWidth(60);
 	fsRelation->SetCallBack((NotifyProc)&FormPointMapRelate::SetPattern);
 	fg->SetIndependentPos();
-	fsMatrix = new FieldString(root,SAFUIDE9IMPattern,&pattern);
+	fsMatrix = new FieldString(root,TR("DE9IM Patterm"),&pattern);
 	fsMatrix->Hide();
 	fsMatrix->Align(txt,AL_UNDER);
 	FieldBlank *fb  = new FieldBlank(root,0.1);
 	//fb->Align(fsMatrix,AL_UNDER);
-	fd = new FieldDataType(root, SAFUiSecondInput, &sInMap2, ".mpa.mps.mpp", true);
+	fd = new FieldDataType(root, TR("Second Input map"), &sInMap2, ".mpa.mps.mpp", true);
 		
 	new FieldBlank(root);
 			
@@ -162,7 +162,7 @@ FormEntry *FormPointMapRelate::CheckData() {
 int FormPointMapRelate::SetPattern(Event *ev) {
 	fsRelation->StoreData();
 	if ( relations.size() > 0 && fsMatrix ) {
-		if (relations[relation] == SAFUIDE9IM + ".MAT16ICO") {
+		if (relations[relation] == TR("DE9IM Matrix") + ".MAT16ICO") {
 			fsMatrix->Show();
 		} else {
 			fsMatrix->Hide();

@@ -40,12 +40,12 @@
 
 LRESULT Cmdpointmapunion(CWnd *wnd, const String& s)
 {
-	new FormPointMapUnionion(wnd, s.scVal());
+	new FormPointMapUnionion(wnd, s.c_str());
 	return -1;
 }
 
 FormPointMapUnionion::FormPointMapUnionion(CWnd* mw, const char* sPar)
-: FormPointMapCreate(mw, SAFTiltePointMapUnion)
+: FormPointMapCreate(mw, TR("Create a Union map of Points"))
 {
 	if (sPar)
 	{
@@ -64,8 +64,8 @@ FormPointMapUnionion::FormPointMapUnionion(CWnd* mw, const char* sPar)
 				sOutMap = fn.sFullName(true);
 		}
 	}
-	new FieldDataType(root, SAFUiFirstInput, &sInMap1, ".mpp", true);
-	new FieldDataType(root, SAFUiSecondInput, &sInMap2, ".mpp", true);
+	new FieldDataType(root, TR("First Input map"), &sInMap1, ".mpp", true);
+	new FieldDataType(root, TR("Second Input map"), &sInMap2, ".mpp", true);
 	
 	new FieldBlank(root);
 			

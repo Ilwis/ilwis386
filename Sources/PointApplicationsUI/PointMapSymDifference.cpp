@@ -39,12 +39,12 @@
 
 LRESULT Cmdpointmapsymetricdifference(CWnd *wnd, const String& s)
 {
-	new FormPointMapSymetricDifferenceion(wnd, s.scVal());
+	new FormPointMapSymetricDifferenceion(wnd, s.c_str());
 	return -1;
 }
 
 FormPointMapSymetricDifferenceion::FormPointMapSymetricDifferenceion(CWnd* mw, const char* sPar)
-: FormPointMapCreate(mw, SAFTiltePointMapSymetricDifference)
+: FormPointMapCreate(mw, TR("Create a symetric difference map of Points"))
 {
 	if (sPar)
 	{
@@ -63,8 +63,8 @@ FormPointMapSymetricDifferenceion::FormPointMapSymetricDifferenceion(CWnd* mw, c
 				sOutMap = fn.sFullName(true);
 		}
 	}
-	new FieldDataType(root, SAFUiFirstInput, &sInMap1, ".mpp", true);
-	new FieldDataType(root, SAFUiSecondInput, &sInMap2, ".mpp", true);
+	new FieldDataType(root, TR("First Input map"), &sInMap1, ".mpp", true);
+	new FieldDataType(root, TR("Second Input map"), &sInMap2, ".mpp", true);
 	
 	new FieldBlank(root);
 			

@@ -40,12 +40,12 @@
 
 LRESULT Cmdpointmapdifference(CWnd *wnd, const String& s)
 {
-	new FormPointMapDifference(wnd, s.scVal());
+	new FormPointMapDifference(wnd, s.c_str());
 	return -1;
 }
 
 FormPointMapDifference::FormPointMapDifference(CWnd* mw, const char* sPar)
-: FormPointMapCreate(mw, SAFTiltePointMapIntersect)
+: FormPointMapCreate(mw, TR("Create a Intersection map of Points"))
 {
 	if (sPar)
 	{
@@ -64,8 +64,8 @@ FormPointMapDifference::FormPointMapDifference(CWnd* mw, const char* sPar)
 				sOutMap = fn.sFullName(true);
 		}
 	}
-	new FieldDataType(root, SAFUiFirstInput, &sInMap1, ".mpp", true);
-	new FieldDataType(root, SAFUiSecondInput, &sInMap2, ".mpp", true);
+	new FieldDataType(root, TR("First Input map"), &sInMap1, ".mpp", true);
+	new FieldDataType(root, TR("Second Input map"), &sInMap2, ".mpp", true);
 	
 	new FieldBlank(root);
 			

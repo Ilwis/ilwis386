@@ -60,22 +60,22 @@ extern "C" _export InfoUIVector* getCommandInfoUI(ILWIS::Module *module) {
 	String ilwDir = IlwWinApp()->Context()->sIlwDir();
 	String hyrdoDemBase = ilwDir + "Scripts\\Hydro-DEM\\";
 
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("attribpnt","",Cmdattribpnt,SMENUattribpnt,SMENUSattribpnt,"ExePnt16IcoL",".mpp",4702,SMENUDattribpnt));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("maskpnt","",Cmdmaskpnt,SMENUmaskpnt,SMENUSmaskpnt,"ExePnt16IcoL",".mpp",4782,SMENUDmaskpnt));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("subpnt","",Cmdsubpnt,SMENUsubpnt,SMENUSsubpnt,"ExePnt16IcoL",".mpp",4752,SMENUDsubpnt));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("gluepnt","",Cmdgluepnt,SMENUgluepnt,SMENUSgluepnt,"ExePnt16IcoL",".mpp",4762,SMENUDgluepnt));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("transfpnt","",Cmdtransfpnt,SMENUtransfpnt,SMENUStransfpnt,"ExePnt16IcoL",".mpp.csy",4742,SMENUDtransfpnt));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("raspnt","",Cmdraspnt,SMENUraspnt,SMENUSraspnt,"ExePnt16IcoL",".mpr",4712,SMENUDraspnt));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("polpnt","",Cmdpolpnt,SMENUpolpnt,SMENUSpolpnt,"ExePnt16IcoL",".mpa",4732,SMENUDpolpnt));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("segpnt","",Cmdsegpnt,SMENUsegpnt,SMENUSsegpnt,"ExePnt16IcoL",".mps",4724,SMENUDsegpnt));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("tblpnt","",Cmdtblpnt,SMENUtblpnt,SMENUStblpnt,"ExePnt16IcoL",".tbt",4792,SMENUDtblpnt));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("attribpnt","",Cmdattribpnt,TR("P&oint Operations..&Attribute Map"),TR("Attribute Map of Point Map "),"ExePnt16IcoL",".mpp",4702,TR("Create an attribute point map")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("maskpnt","",Cmdmaskpnt,TR("P&oint Operations..&Mask Points"),TR("Mask Points "),"ExePnt16IcoL",".mpp",4782,TR("Selectively copy points from a point map into a new point map")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("subpnt","",Cmdsubpnt,TR("&Spatial Reference Operations.&Vector.&Sub Map"),TR("SubMap of Point Map "),"ExePnt16IcoL",".mpp",4752,TR("Copy part of a point map into a new map")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("gluepnt","",Cmdgluepnt,TR("P&oint Operations..&Glue Maps"),TR("Glue Point Maps "),"ExePnt16IcoL",".mpp",4762,TR("Glue multiple point maps into one point map")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("transfpnt","",Cmdtransfpnt,TR("&Spatial Reference Operations.&Vector.&Transform Points"),TR("Transform Points "),"ExePnt16IcoL",".mpp.csy",4742,TR("Transform points to a new coordinate system")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("raspnt","",Cmdraspnt,TR("V&ectorize..&Raster to Point"),TR("Raster to Point "),"ExePnt16IcoL",".mpr",4712,TR("Extract points from a raster map and return a point map")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("polpnt","",Cmdpolpnt,TR("V&ectorize..&Polygon to Point"),TR("Polygon to Point "),"ExePnt16IcoL",".mpa",4732,TR("Extract a point from each polygon")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("segpnt","",Cmdsegpnt,TR("V&ectorize..&Segment to Point"),TR("Segment to Point,"),"ExePnt16IcoL",".mps",4724,TR("Extract points from segments: distance interval, nodes or all coordinates")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("tblpnt","",Cmdtblpnt,TR("&Table Operations..Table to &PointMap"),TR("Table to Point "),"ExePnt16IcoL",".tbt",4792,TR("Create a point map from the X and Y columns of a table")));
 
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("intersectpnt","",Cmdpointmapintersect,SMENUpntintersection,SMENUSpntintersection,"ExePnt16IcoL",".mpp.mps.mpa",0,SMENUDpntintersection));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("unionpnt","",Cmdpointmapunion,SMENUpntunion,SMENUSpntunion,"ExePnt16IcoL",".mpp.mps",0,SMENUDpntunion));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("diffpnt","",Cmdpointmapdifference,SMENUpntdifference,SMENUSpntdifference,"ExePnt16IcoL",".mpp",0,SMENUDpntdifference));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("symdiffpnt","",Cmdpointmapsymetricdifference,SMENUpntsymetricdifference,SMENUSpntsymetricdifference,"ExePnt16IcoL",".mpp.mps",0,SMENUDpntsymetricdifference));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("segmiddlepnt","",Cmdpointinsegment,SMENUpointinsegment,SMENUSpointinsegment,"ExePnt16IcoL",".mps",0,SMENUDpointinsegment));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("relatepnt","",Cmdpointmaprelate,SMENUpntrelate,SMENUSpntrelate,"ExePnt16IcoL",".mpp",0,SMENUDpntrelate));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("intersectpnt","",Cmdpointmapintersect,TR("P&oint Operations..&Intersection"),TR("Intersection of Points"),"ExePnt16IcoL",".mpp.mps.mpa",0,TR("Create a new Point map by intersecting two Point maps")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("unionpnt","",Cmdpointmapunion,TR("P&oint Operations..&Union"),TR("Point Union"),"ExePnt16IcoL",".mpp.mps",0,TR("Create a new Point map by Union of the Points of two Point maps")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("diffpnt","",Cmdpointmapdifference,TR("P&oint Operations..&Difference"),TR("Difference of Points"),"ExePnt16IcoL",".mpp",0,TR("Create a new Point map by difference of the Points of two Point maps")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("symdiffpnt","",Cmdpointmapsymetricdifference,TR("P&oint Operations..&Symetric Difference"),TR("Symetric Difference of Points"),"ExePnt16IcoL",".mpp.mps",0,TR("Create a new Point map by the symetric difference of the Points of two Point maps")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("segmiddlepnt","",Cmdpointinsegment,TR("P&oint Operations..&Point in Segment"),TR("Find a point in a segment"),"ExePnt16IcoL",".mps",0,TR("Create a pointmap with points that are in the middle of segments")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("relatepnt","",Cmdpointmaprelate,TR("P&oint Operations..&Relate"),TR("Spatial Relation"),"ExePnt16IcoL",".mpp",0,TR("Create a point map out of spatial relation(s) with other feature maps")));
 
 	return infosui;
 }

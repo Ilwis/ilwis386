@@ -83,12 +83,12 @@
 
 LRESULT Cmdpointmapintersect(CWnd *wnd, const String& s)
 {
-	new FormPointMapIntersection(wnd, s.scVal());
+	new FormPointMapIntersection(wnd, s.c_str());
 	return -1;
 }
 
 FormPointMapIntersection::FormPointMapIntersection(CWnd* mw, const char* sPar)
-: FormPointMapCreate(mw, SAFTiltePointMapIntersect)
+: FormPointMapCreate(mw, TR("Create a Intersection map of Points"))
 {
 	if (sPar)
 	{
@@ -107,8 +107,8 @@ FormPointMapIntersection::FormPointMapIntersection(CWnd* mw, const char* sPar)
 				sOutMap = fn.sFullName(true);
 		}
 	}
-	new FieldDataType(root, SAFUiFirstInput, &sInMap1, ".mpp.mps.mpa", true);
-	new FieldDataType(root, SAFUiSecondInput, &sInMap2, ".mpp.mps.mpa", true);
+	new FieldDataType(root, TR("First Input map"), &sInMap1, ".mpp.mps.mpa", true);
+	new FieldDataType(root, TR("Second Input map"), &sInMap2, ".mpp.mps.mpa", true);
 	
 	new FieldBlank(root);
 			
