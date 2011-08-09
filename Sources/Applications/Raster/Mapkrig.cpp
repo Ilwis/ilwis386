@@ -107,58 +107,58 @@ const char* MapKriging::sSyntax() {
 
 static void SameNameErrMapError(const FileName& fn)
 {
-  throw ErrorObject(WhatError(String(SMAPErrNameErrMapAlreadyUsed), errMapKriging), fn);
+  throw ErrorObject(WhatError(String(TR("Name of Error Map already used")), errMapKriging), fn);
 }
 static void PointMapEmpty(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrPointMapEmpty), errMapKriging +3), fn);
+  throw ErrorObject(WhatError(String(TR("Point map needs to contain at least 2 points")), errMapKriging +3), fn);
 }
 static void TooManyKrigingSPoints(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrTooManyKSPoints_S.scVal(), String("Simple Kriging")), errMapKriging +4), fn);
+  throw ErrorObject(WhatError(String(TR("%S cannot interpolate with more than 200 points").c_str(), String("Simple Kriging")), errMapKriging +4), fn);
 }
 static void TooManyKrigingOPoints(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrTooManyKOPoints_S.scVal(), String("Kriging")), errMapKriging +5), fn);
+  throw ErrorObject(WhatError(String(TR("%S cannot interpolate with more than 25000 points").c_str(), String("Kriging")), errMapKriging +5), fn);
 }
 static void MinNrKrigingPnts(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrMinNrKrigingPnts), errMapKriging +6), fn);
+  throw ErrorObject(WhatError(String(TR("Minimum number must be at least 1")), errMapKriging +6), fn);
 }
 static void MaxNrKrigingPnts(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrMaxNrKrigingPnts), errMapKriging +7), fn);
+  throw ErrorObject(WhatError(String(TR("Maximum number may not be less than minimum")), errMapKriging +7), fn);
 }
 static void LimitingDistanceOutsideRange(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrLimitingDistance), errMapKriging +8), fn);
+  throw ErrorObject(WhatError(String(TR("Limiting distance must be positive and < 2 x greatest point pair distance")), errMapKriging +8), fn);
 }
 static void TrendDegree_012(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrTrendDegree_012), errMapKriging +9), fn);
+  throw ErrorObject(WhatError(String(TR("Degree of trend surface must be 0, 1 or 2")), errMapKriging +9), fn);
 }
 static void AzimFrom_360to360(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrAzimFrom_360to360), errMapKriging +10), fn);
+  throw ErrorObject(WhatError(String(TR("Azimuth of Anisotropy must be between -360 and 360 degrees")), errMapKriging +10), fn);
 }
 static void RatioFrom1To10(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrRatioFrom1To10), errMapKriging +11), fn);
+  throw ErrorObject(WhatError(String(TR("Ratio of Anisotropy must be between 1 and 10")), errMapKriging +11), fn);
 }
 static void MinNrPnts3orMore(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrMinNrPnts3orMore), errMapKriging +12), fn);
+  throw ErrorObject(WhatError(String(TR("Trend degree is 1 so MinNr of points must be 3 or more")), errMapKriging +12), fn);
 }
 static void MinNrPnts6orMore(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrMinNrPnts6orMore), errMapKriging +13), fn);
+  throw ErrorObject(WhatError(String(TR("Trend degree is 2 so MinNr of points must be 6 or more")), errMapKriging +13), fn);
 }
 static void TolerancePos(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrTolerancePos), errMapKriging +14), fn);
+  throw ErrorObject(WhatError(String(TR("Tolerance must be greater than 0")), errMapKriging +14), fn);
 }
 static void NrParamSimpleKr(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrNrParamSimpleKr), errMapKriging +15), fn);
+  throw ErrorObject(WhatError(String(TR("Simple Kriging needs 3 to 6 parameters")), errMapKriging +15), fn);
 }
 static void NrParamOrdinaKr(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrNrParamOrdinaKr), errMapKriging +16), fn);
+  throw ErrorObject(WhatError(String(TR("Ordinary Kriging needs 4 to 9 parameters")), errMapKriging +16), fn);
 }
 static void NrParamAnisotKr(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrNrParamAnisotKr), errMapKriging +17), fn);
+  throw ErrorObject(WhatError(String(TR("Anisotropic Kriging needs 5 to 11 parameters")), errMapKriging +17), fn);
 }
 static void NrParamUniverKr(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrNrParamUniverKr), errMapKriging +18), fn);
+  throw ErrorObject(WhatError(String(TR("Universal Kriging needs 5 to 12 parameters")), errMapKriging +18), fn);
 }
 static void IllegalNameErrMap(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrIllegalNameErrMap), errMapKriging + 19), fn);
+  throw ErrorObject(WhatError(String(TR("Illegal Name for Error Map")), errMapKriging + 19), fn);
 }
 
 bool MapKriging::fValueRangeChangeable() const
@@ -624,7 +624,7 @@ MapKriging::MapKriging(const FileName& fn, MapPtr& ptr,
 	String sExpr("MapComputedElsewhere(%S)",ptr.sNameQuoted());
 	if (ptr.fErrorMap()) {// open Error map
 		Map mpComputedElsewhere(ptr.fnErrorMap(), sExpr);
-		String sDescr(SMAPTextKrigingErrorMap_S.scVal(), ptr.sName());
+		String sDescr(TR("Kriging Error Map of %S").c_str(), ptr.sName());
     mpComputedElsewhere->sDescription = sDescr;
 		mpComputedElsewhere->Store();
   }
@@ -729,7 +729,7 @@ Coord MapKriging::crdEllipTransform(const Coord& crd,
 
 bool MapKriging::fKrigingSimple(Array<Array<double> > & aaH2, Map & mpErreur)
 {
-  trq.SetText(SMAPTextCalculating);
+  trq.SetText(TR("Calculating"));
   RealMatrix matKrige(iNrValidPnts + 1);
   int i,j;
   for (i= 0; i < iNrValidPnts; i++)
@@ -755,7 +755,7 @@ bool MapKriging::fKrigingSimple(Array<Array<double> > & aaH2, Map & mpErreur)
   RealBuf rBufOutError(iMCol); 
 	Distance dis = Distance(pmp->cs(), m_distMeth);
 
-  trq.SetText(SMAPTextSimpleKriging);
+  trq.SetText(TR("Simple Kriging"));
   for (long iRow = 0; iRow < iMRow; iRow++)  { // estimate ('predict') NonVisited pixels row by row
     if (trq.fUpdate(iRow, iMRow))
       return false;
@@ -826,7 +826,7 @@ static void SwapFunc(long i1, long i2, void* p)
 
 bool MapKriging::fKrigingUniversal(Array<Array<double> > & aaH2, Map & mpErreur)
 { //  Kriging with anisotropy and trend (0|1|2) assumed
-  trq.SetText(SMAPTextCalculating);
+  trq.SetText(TR("Calculating"));
   int i,j;
   Array<int> iClosestPnts(iNrValidPnts);  // temp array of pntnrs of pnts within limiting circle
   Array<int> iClosestPntsBefore(iNrValidPnts); // idem within previous limiting circle
@@ -849,11 +849,11 @@ bool MapKriging::fKrigingUniversal(Array<Array<double> > & aaH2, Map & mpErreur)
   RealBuf rBufOutError(iMCol);
 	Distance dis = Distance(pmp->cs(), m_distMeth);
   
-  trq.SetText(SMAPTextOrdinaryKriging);  
+  trq.SetText(TR("Ordinary Kriging"));  
   if (rRatio != 1)
-    trq.SetText(SMAPTextAnisotropicKriging); 
+    trq.SetText(TR("Anisotropic Kriging")); 
   if (iDegree != 0)
-    trq.SetText(SMAPTextUniversalKriging);
+    trq.SetText(TR("Universal Kriging"));
   
   for (long iRow = 0; iRow < iMRow; iRow++)  {  // estimate ('predict') NonVisited pixels row by row
     if (trq.fUpdate(iRow, iMRow))
@@ -1060,7 +1060,7 @@ struct PointStructure {
 
 bool MapKriging::fFreezing()
 {
-  trq.SetText(SMAPTextCalculating);
+  trq.SetText(TR("Calculating"));
   trq.fUpdate(0);
   bool fKriSimple = (krigMeth == kmSIMPLE);
 // Changing of formula not allowed!
@@ -1123,7 +1123,7 @@ bool MapKriging::fFreezing()
   // iDuplicRemoval==0; no removal; it will cause UNDEF estimates 
   // iDuplicRemoval==1 remove duplic; take the average attrib values
   // iDuplicRemoval==2 remove duplic; take the first attrib value 
-  trq.SetText(SMAPTextFindingDuplicates);
+  trq.SetText(TR("Finding duplicate points  "));
   { // begin of scope of aPtS
      Array<PointStructure> aPtS(iNrPoints);
      if (duplicRemoval != drmNO) {
@@ -1171,10 +1171,10 @@ bool MapKriging::fFreezing()
     } // end of iDuplicRemoval and possible averaging of attrib_values
   }
 
-  trq.SetText(SMAPTextFindingPointPDist);
+  trq.SetText(TR("Finding point pair distances"));
   if (iNrValidPnts < iMinNrPoints) {
     ///pms->FillWithUndef();
-    String s(SMAPErrNotEnoughPoints_ii.scVal(), iNrValidPnts, iMinNrPoints);
+    String s(TR("Too few valid points (%li), at least %i needed.").c_str(), iNrValidPnts, iMinNrPoints);
     throw ErrorObject(WhatError(s, errMapKriging+20), fnObj);
   }  
   else  {
@@ -1243,7 +1243,7 @@ bool MapKriging::fFreezing()
 			ValueRange vr = ValueRange(rMin, rMax, rStep);
 			DomainValueRangeStruct dvs(dom, vr);
 			mpError->SetDomainValueRangeStruct(dvs);
-			String sDescr(SMAPTextKrigingErrorMap_S.scVal(), ptr.sName());
+			String sDescr(TR("Kriging Error Map of %S").c_str(), ptr.sName());
 			mpError->sDescription = sDescr;
 			mpError->CreateMapStore();
 			mpError->KeepOpen(true);

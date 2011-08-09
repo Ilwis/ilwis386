@@ -143,11 +143,11 @@ TableAutoCorrSemiVar::TableAutoCorrSemiVar(const FileName& fn, TablePtr& p, Map&
   if (!map->dvrs().fValues())
     throw ErrorValueDomain(map->dm()->sName(true, fnObj.sPath()), map->sTypeName(), errTableAutoCorrSemiVar);
   if (iMaxPixelShift <= 0)
-    throw ErrorObject(WhatError(STBLErrMaxPixShiftNotNegative, errTableAutoCorrSemiVar+1), sTypeName());
+    throw ErrorObject(WhatError(TR("Maximum pixel shift must be a positive integer number"), errTableAutoCorrSemiVar+1), sTypeName());
   if (iMaxPixelShift > 8000)
-    throw ErrorObject(WhatError(STBLErrMaxPixShiftTooLarge, errTableAutoCorrSemiVar+2), sTypeName());
+    throw ErrorObject(WhatError(TR("Maximum pixel shift too large, (more than 8000)"), errTableAutoCorrSemiVar+2), sTypeName());
   if (iMaxPixelShift > iMaxMapSize(map))
-    throw ErrorObject(WhatError(STBLErrMaxPixShiftLargerThanMap, errTableAutoCorrSemiVar+3), sTypeName());
+    throw ErrorObject(WhatError(TR("Maximum pixel shift larger than map size"), errTableAutoCorrSemiVar+3), sTypeName());
 
   objdep.Add(map.ptr());
   if (!fnObj.fValid())
@@ -225,7 +225,7 @@ void TableAutoCorrSemiVar::Init()
     _colDistance = pts->col("Distance");
     if (!_colDistance.fValid()) {
       _colDistance = pts->colNew("Distance", Domain("distance"));
-      _colDistance->sDescription = STBLMsgPointDistance;
+      _colDistance->sDescription = TR("Point distance");
     }
     _colDistance->SetReadOnly(true);
     _colDistance->SetOwnedByTable(true);
@@ -234,28 +234,28 @@ void TableAutoCorrSemiVar::Init()
   _colHorCorr = pts->col("HorCorr");
   if (!_colHorCorr.fValid()) {
     _colHorCorr = pts->colNew("HorCorr", Domain("value"), ValueRange(-1,1,0.001));
-    _colHorCorr->sDescription = STBLMsgHorCorrelation;
+    _colHorCorr->sDescription = TR("Horizontal correlation");
   }
   _colHorCorr->SetReadOnly(true);
   _colHorCorr->SetOwnedByTable(true);
   _colVertCorr = pts->col("VertCorr");
   if (!_colVertCorr.fValid()) {
     _colVertCorr = pts->colNew("VertCorr", Domain("value"), ValueRange(-1,1,0.001));
-    _colVertCorr->sDescription = STBLMsgVertCorrelation;
+    _colVertCorr->sDescription = TR("Vertical correlation");
   }
   _colVertCorr->SetReadOnly(true);
   _colVertCorr->SetOwnedByTable(true);
   _colHorVar = pts->col("HorSemVar");
   if (!_colHorVar.fValid()) {
      _colHorVar = pts->colNew("HorSemVar", Domain("value"), ValueRange(0,1e10,0.01));
-    _colHorVar->sDescription = STBLMsgHorSemVariance;
+    _colHorVar->sDescription = TR("Horizontal semivariance");
   }
   _colHorVar->SetOwnedByTable(true);
   _colHorVar->SetReadOnly(true);
   _colVertVar = pts->col("VertSemVar");
   if (!_colVertVar.fValid()) {
     _colVertVar = pts->colNew("VertSemVar", Domain("value"), ValueRange(0,1e10,0.01));
-    _colVertVar->sDescription = STBLMsgVertSemVariance;
+    _colVertVar->sDescription = TR("Vertical semivariance");
   }
   _colVertVar->SetOwnedByTable(true);
   _colVertVar->SetReadOnly(true);
@@ -307,7 +307,7 @@ bool TableAutoCorrSemiVar::fCalculate(const Map& map)
     RealBuf rsq(iCols);
     double rt;
 
-    trq.SetText(STBLCalculate);
+    trq.SetText(TR("Calculate"));
     for (long iLC=0; iLC<iLines; iLC++) {
       map->GetLineVal(iLC,rBuf);
       if (trq.fUpdate(iLC, iLines))

@@ -65,22 +65,22 @@ const char* MapVariogramSurfacePnt::sSyntax() {
 }
 
 static void PointMapEmpty(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrPointMapEmpty), errMapVariogramSurfacePnt), fn);
+  throw ErrorObject(WhatError(String(TR("Point map needs to contain at least 2 points")), errMapVariogramSurfacePnt), fn);
 }
 static void LagSpacingNotPos(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrLagSpacingNotPos), errMapVariogramSurfacePnt +1), fn);
+  throw ErrorObject(WhatError(String(TR("Lag Spacing must be greater than 0")), errMapVariogramSurfacePnt +1), fn);
 }
 static void LagSpacingTooLarge(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrLagSpacingTooLarge), errMapVariogramSurfacePnt +2), fn);
+  throw ErrorObject(WhatError(String(TR("Lag Spacing may not exceed diagonal size of map")), errMapVariogramSurfacePnt +2), fn);
 }
 static void NrLagsNotPos(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrNrLagsNotPos), errMapVariogramSurfacePnt +3), fn);
+  throw ErrorObject(WhatError(String(TR("Number of Lags must be greater then 0")), errMapVariogramSurfacePnt +3), fn);
 }
 static void NrLagsTooLargePnt(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrNrLagsTooLargePnt), errMapVariogramSurfacePnt +4), fn);
+  throw ErrorObject(WhatError(String(TR("Number of Lags may not exceed 45")), errMapVariogramSurfacePnt +4), fn);
 }
 static void MostLagsTooLong(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrMostLagsTooLong), errMapVariogramSurfacePnt +5), fn);
+  throw ErrorObject(WhatError(String(TR("Most Lags exceed point map boundaries (due to large lag spacing or too many lags)")), errMapVariogramSurfacePnt +5), fn);
 }
 
 double MapVariogramSurfacePnt::rDefaultLagSpacing(const PointMap& pmap)

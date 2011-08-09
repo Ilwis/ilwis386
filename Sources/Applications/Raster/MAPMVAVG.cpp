@@ -88,7 +88,7 @@ static int iFind(const String& s, const char* sArr[])
 {
   int i = 0;
   while (sArr[i]) {
-    if (_strnicmp(sArr[i], s.scVal(), s.length()) == 0)
+    if (_strnicmp(sArr[i], s.c_str(), s.length()) == 0)
       return i;
     i++;
   }
@@ -99,7 +99,7 @@ class DATEXPORT ErrorWeightFunc: public ErrorObject
 {
 public:
   ErrorWeightFunc(const String& sWeightFunc, const WhereError& where)
-  : ErrorObject(WhatError(String(SMAPErrInvalidWeightFunction.scVal(), sWeightFunc),
+  : ErrorObject(WhatError(String(TR("Invalid weight function: '%S'\nSyntax: InvDist(exp,limdist) or Linear(exp,limdist)").c_str(), sWeightFunc),
                 errMapMovingAverage), where) {}
 };
 
@@ -112,12 +112,12 @@ class DATEXPORT ErrorWeightFuncExpr: public ErrorExpression
 {
 public:
   ErrorWeightFuncExpr(const String& sExpr, const char* sWeightFunc)
-  : ErrorExpression(sExpr, String("%s(exp,limdist)", sWeightFunc).scVal()) {}
+  : ErrorExpression(sExpr, String("%s(exp,limdist)", sWeightFunc).c_str()) {}
 };
 
 static void WeightFuncExprError(const String& sExpr, const String& sWeightFunc)
 {
-  throw ErrorWeightFuncExpr(sExpr, sWeightFunc.scVal());
+  throw ErrorWeightFuncExpr(sExpr, sWeightFunc.c_str());
 }
 
 MapMovingAverage* MapMovingAverage::create(const FileName& fn, MapPtr& p, const String& sExpr)
@@ -253,8 +253,8 @@ bool MapMovingAverage::fFreezing()
 	double rLimD = rLimDist; //local substit
   double rMinDist = rLimDist * 1.0e-10; // minimal distance taken into account
   double rLimDist2 = rLimD * rLimD;
-  trq.SetText(SMAPTextCalculating);
-  trq.SetTitle(SMAPTextMapMovingAverage);
+  trq.SetText(TR("Calculating"));
+  trq.SetTitle(TR("MapMovingAverage"));
   iNrValidPnts = 0;   // valid point counter
   cPoints.Resize(iNrPoints);
   rAttrib.Resize(iNrPoints);

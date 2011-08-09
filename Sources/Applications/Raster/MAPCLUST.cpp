@@ -52,27 +52,7 @@ IlwisObjectPtr * createMapCluster(const FileName& fn, IlwisObjectPtr& ptr, const
 
 String wpsmetadataMapCluster() {
 	WPSMetaData metadata("MapCluster");
-	metadata.AddTitle("MapCluster");
-	metadata.AddAbstract("An unsupervised classification in which image data is grouped into spectral clusters based on the statistical properties of all pixel values");
-	metadata.AddKeyword("spatial");
-	metadata.AddKeyword("raster");
-	metadata.AddKeyword("classification");
 
-	WPSParameter *parm1 = new WPSParameter("1","Input Map list",WPSParameter::pmtMAPLIST);
-	parm1->AddAbstract("Input map list with");
-	WPSParameter *parm2 = new WPSParameter("2","Number of clusters", WPSParameter::pmtINTEGER);
-	parm2->AddAbstract("the number of clusters/spectral classes you want to obtain in the output map; number of clusters between 2 and 60");
-	WPSParameter *parm3 = new WPSParameter("3","Number of clusters", WPSParameter::pmtTABLE);
-	parm3->AddAbstract("Attribute table for the output map containing statistical information on the clusters ");
-	parm3->setOptional(true);
-
-	metadata.AddParameter(parm1);
-	metadata.AddParameter(parm2);
-	metadata.AddParameter(parm3);
-	WPSParameter *parmout = new WPSParameter("Result","Output Map", WPSParameter::pmtRASMAP, false);
-	parmout->AddAbstract("Reference Outputmap and supporting data objects");
-	metadata.AddParameter(parmout);
-	
 
 	return metadata.toString();
 }
@@ -110,7 +90,7 @@ MapCluster* MapCluster::create(const FileName& fn, MapPtr& p, const String& sExp
 	{
 		int iClasses = as[1].iVal();
 		if (iClasses == shUNDEF)
-			throw ErrorObject(WhatError(String(SMAPErrInvalidNrClasses_S.scVal(), as[1]), errMapCluster+4), fn);
+			throw ErrorObject(WhatError(String(TR("Invalid nr of class: %S").c_str(), as[1]), errMapCluster+4), fn);
 		String sStatTable;
 		if (iParms == 3)
 			sStatTable = as[2];
@@ -134,12 +114,12 @@ MapCluster::MapCluster(const FileName& fn, MapPtr& p, const MapList& mpl, int iC
 : MapFromMapList(fn, p, mpl, Domain("image")/* just temp, see below*/), iClasses(iClass), sStatTable(sStatTbl)
 {
   if (iClasses < 2)
-    throw ErrorObject(WhatError(String(SMAPErrTooFewClasses_i.scVal(), iClasses), errMapCluster+1), sTypeName());
+    throw ErrorObject(WhatError(String(TR("2 or more classes needed: %i").c_str(), iClasses), errMapCluster+1), sTypeName());
   if (iClasses > MAXCLASSES)
-    throw ErrorObject(WhatError(String(SMAPErrTooManyClasses_ii.scVal(), MAXCLASSES, iClasses), errMapCluster+2), sTypeName());
+    throw ErrorObject(WhatError(String(TR("No more than %i classes allowed: %i").c_str(), MAXCLASSES, iClasses), errMapCluster+2), sTypeName());
   iBands = mpl->iSize();
   if ((iBands == 0) || (iBands > MAXBANDS))
-    throw ErrorObject(WhatError(String(SMAPErrTooManyBands_i.scVal(), iBands), errMapCluster+3), sTypeName());
+    throw ErrorObject(WhatError(String(TR("Only 1..4 input bands allowed: %i").c_str(), iBands), errMapCluster+3), sTypeName());
 /*  // check on image domain
   Map mp = mpl->map(mpl->iLower());
   if (0 == mp->dm()->pdi())
@@ -265,7 +245,7 @@ void MapCluster::writeStatisticsTable(String& sStatTable) {
 			for (int i=0; i < iBands; i++) {
 				// create avg, prd, min and max columns per cluster for each band
 				// first make (temp) cross table
-        trq.SetText(String(SMAPTextCrossClusterMap_S.scVal(), mpl[i+mpl->iLower()]->sName(true, fnObj.sPath())));
+        trq.SetText(String(TR("Cross cluster map and map '%S'").c_str(), mpl[i+mpl->iLower()]->sName(true, fnObj.sPath())));
 			  String sTblCross("TableCross(%S, %S,IgnoreUndefs)", fnObj.sRelativeQuoted(false), mpl[i+mpl->iLower()]->sNameQuoted(true, fnObj.sPath()));
 				Table tblCross(FileName::fnUnique(fnStatTbl), sTblCross);
 				tblCross->Calc();
@@ -276,7 +256,7 @@ void MapCluster::writeStatisticsTable(String& sStatTable) {
 				String sTbl = tblCross->sNameQuoted(true, fnObj.sPath());
 				
 				String sColName("%S_Avg", sBand);
-        trq.SetText(String(SMAPTextCreateStatTableCol_S.scVal(), sColName));
+        trq.SetText(String(TR("Create Statistics Table column '%S'").c_str(), sColName));
 				String sColDef("ColumnAggregateAvg(%S.%S,%S.%S,%S.NPix)", sTbl, sBand, sTbl, fnObj.sRelativeQuoted(false), sTbl);
 				Column col(tblStat,sColName, sColDef);
 				col->BreakDependency();
@@ -284,7 +264,7 @@ void MapCluster::writeStatisticsTable(String& sStatTable) {
 				col->SetOwnedByTable(true);
 				
 				sColName = String("%S_Prd", sBand);
-        trq.SetText(String(SMAPTextCreateStatTableCol_S.scVal(), sColName));
+        trq.SetText(String(TR("Create Statistics Table column '%S'").c_str(), sColName));
 				sColDef = String("ColumnAggregatePrd(%S.%S,%S.%S,%S.NPix)", sTbl, sBand, sTbl, fnObj.sRelativeQuoted(false), sTbl);
 				col = Column(tblStat,sColName, sColDef);
 				col->BreakDependency();
@@ -292,7 +272,7 @@ void MapCluster::writeStatisticsTable(String& sStatTable) {
 				col->SetOwnedByTable(true);
 				
 				sColName = String("%S_Min", sBand);
-        trq.SetText(String(SMAPTextCreateStatTableCol_S.scVal(), sColName));
+        trq.SetText(String(TR("Create Statistics Table column '%S'").c_str(), sColName));
 				sColDef = String("ColumnAggregateMin(%S.%S,%S.%S)", sTbl, sBand, sTbl, fnObj.sRelativeQuoted(false));
 				col = Column(tblStat,sColName, sColDef);
 				col->BreakDependency();
@@ -300,7 +280,7 @@ void MapCluster::writeStatisticsTable(String& sStatTable) {
 				col->SetOwnedByTable(true);
 				
 				sColName = String("%S_Max", sBand);
-        trq.SetText(String(SMAPTextCreateStatTableCol_S.scVal(), sColName));
+        trq.SetText(String(TR("Create Statistics Table column '%S'").c_str(), sColName));
 				sColDef = String("ColumnAggregateMax(%S.%S,%S.%S)", sTbl, sBand, sTbl, fnObj.sRelativeQuoted(false));
 				col = Column(tblStat,sColName, sColDef);
 				col->BreakDependency();
@@ -376,7 +356,7 @@ bool MapCluster::fFreezing()
     ByteBuf bTmpLine(iCols);
     unsigned int iIndex;
     
-    trq.SetText(SMAPTextCalcCompHist);
+    trq.SetText(TR("Calculate histograms"));
     trq.SetTitle(sFreezeTitle);
     trq.setHelpItem(htpFreeze);
 
@@ -437,7 +417,7 @@ bool MapCluster::fFreezing()
             pClassTab[HistBands[k].iComb] = i + 1;
         
     // create output map from temp map using classify table pClassTab
-    trq.SetText(SMAPTextWriteOutMap);
+    trq.SetText(TR("Write output map"));
     filTmp.Seek(0);
     for (l=0; l<iLines; l++ ) {
         if (l % 10 == 0) {

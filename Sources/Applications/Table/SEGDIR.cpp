@@ -147,7 +147,7 @@ bool TableSegDir::fFreezing()
 	for (long iRec = 1; iRec <= 180; iRec++)
 		colDirection->PutVal(iRec, (long)(iRec-1));
 
-	trq.SetText(SSEGTextCalculating);
+	trq.SetText(TR("Calculating"));
 
 	for (long iSeg = 0; iSeg < smp->iFeatures(); iSeg++) {
 		ILWIS::Segment *seg = CSEGMENT(smp->getFeature(iSeg));
@@ -206,21 +206,21 @@ void TableSegDir::Init()
   colDirection = pts->col("Direction");
   if (!colDirection.fValid()) {
     colDirection = pts->colNew("Direction", Domain("value"), ValueRange(0,179));
-    colDirection->sDescription = SSEGMsgDirectionDegree;
+    colDirection->sDescription = TR("Direction in degrees");
   }
   colDirection->SetOwnedByTable(true);
   colDirection->SetReadOnly(true);
   colLength= pts->col("Length");
   if (!colLength.fValid()) {
     colLength = pts->colNew("Length", Domain("distance"));
-    colLength->sDescription = SSEGMsgTotalLengthDirection;
+    colLength->sDescription = TR("Total length for direction");
   }
   colLength->SetOwnedByTable(true);
   colLength->SetReadOnly(true);
   colFreq = pts->col("NrLines");
   if (!colFreq.fValid()) {
     colFreq = pts->colNew("NrLines", Domain("count"));
-    colFreq->sDescription = SSEGMsgLinesPerDirection;
+    colFreq->sDescription = TR("Number of lines for direction");
   }
   colFreq->SetOwnedByTable(true);
   colFreq->SetReadOnly(true);

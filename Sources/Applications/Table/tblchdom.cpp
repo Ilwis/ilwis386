@@ -122,7 +122,7 @@ TableChangeDomain* TableChangeDomain::create(const FileName& fn, TablePtr& p, co
     if (iParms==3)
       ThrowErrorExpression(sExpr, sSyntax());
     if (!dom->pdsrt() && !dom->pdnone())
-      ThrowIncompatibleDomainError(STBLErrDomainSortOrNoneRequired, fn);
+      ThrowIncompatibleDomainError(TR("Domain must be Class/Id or None"), fn);
     return new TableChangeDomain(fn, p, tab, dom);
   }
 }
@@ -229,7 +229,7 @@ long TableChangeDomain::iInd(DomainSort* pdsrt, long iK)
 
 bool TableChangeDomain::fFreezing()
 {   
-  trq.SetText(STBLTextCopyingData);
+  trq.SetText(TR("Copying data"));
   long iOffsetNew = iOffset();
   long iOffsetOld = tblSource->iOffset();
   int c;
@@ -391,7 +391,7 @@ bool TableChangeDomain::fFreezing()
 void TableChangeDomain::CheckColumn(const Column& col, bool fAgg)
 {
   if (!col->dm()->pdsrt())
-    ThrowIncompatibleDomainError(STBLErrDomainSortRequired, col->fnObj);
+    ThrowIncompatibleDomainError(TR("Column Domain must be Class or ID"), col->fnObj);
   if (fAgg)
     return;
   for (long i=0; i < col->iRecs(); ++i)
@@ -399,7 +399,7 @@ void TableChangeDomain::CheckColumn(const Column& col, bool fAgg)
     long iRaw = col->iRaw(i);
     for (long j = 0; j < i; ++j)
       if ((iRaw == col->iRaw(j)) && (iRaw != iUNDEF))
-        ThrowIncompatibleDomainError(STBLErrColumnHasDuplicates,
+        ThrowIncompatibleDomainError(TR("Column contains duplicates"),
                         col->fnObj);
   }
 }

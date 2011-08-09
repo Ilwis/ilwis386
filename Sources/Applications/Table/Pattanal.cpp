@@ -276,7 +276,7 @@ bool TablePattAnal::fFreezing()
       iValidPoints++;
   }
   if (iValidPoints < 3)
-    throw ErrorObject(WhatError(STBLErrTooFewPoints, errTablePattAnal), sTypeName());
+    throw ErrorObject(WhatError(TR("More than two points needed"), errTablePattAnal), sTypeName());
 
   DistPrep(iNrPoints);   // create neighbours distance list
   // calculate bounding rectangle area
@@ -288,7 +288,7 @@ bool TablePattAnal::fFreezing()
   double rMaxDiff = sqrt(rDiffX * rDiffX + rDiffY * rDiffY);
   GroupingLimits GrpLim (rMaxDiff, MAXLIMIT, 24);   //make list of distance limits
   // main computation loop
-  trq.SetText(STBLCalculate);
+  trq.SetText(TR("Calculate"));
   for (iPntNmbr = 1; iPntNmbr <= iNrPoints; iPntNmbr++)
   {
     if (fInvalid[iPntNmbr])

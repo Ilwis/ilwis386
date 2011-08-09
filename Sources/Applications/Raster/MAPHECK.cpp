@@ -53,24 +53,6 @@ IlwisObjectPtr * createMapHeckbert(const FileName& fn, IlwisObjectPtr& ptr, cons
 
 String wpsmetadataMapHeckbert() {
 	WPSMetaData metadata("MapHeckbert");
-	metadata.AddTitle("MapHeckbert");
-	metadata.AddAbstract("A color composite is a combination of three raster bands. One band is displayed in shades of red, one in shades of green and one in shades of blue. Putting three bands together in one color composite map can give a better visual impression of the reality on the ground");
-	metadata.AddKeyword("spatial");
-	metadata.AddKeyword("raster");
-	metadata.AddKeyword("color composite");
-
-	WPSParameter *parm1 = new WPSParameter("1","Input Map list",WPSParameter::pmtMAPLIST);
-	parm1->AddAbstract("Input map list");
-	WPSParameter *parm2 = new WPSParameter("2","Number of colors", WPSParameter::pmtINTEGER);
-	parm2->AddAbstract("For Dynamic color composites: the number of colors present in the output map (2-255)");
-	
-
-	metadata.AddParameter(parm1);
-	metadata.AddParameter(parm2);
-	WPSParameter *parmout = new WPSParameter("Result","Output Map", WPSParameter::pmtRASMAP, false);
-	parmout->AddAbstract("Reference Outputmap and supporting data objects");
-	metadata.AddParameter(parmout);
-	
 
 	return metadata.toString();
 }
@@ -115,9 +97,9 @@ MapHeckbert::MapHeckbert(const FileName& fn, MapPtr& p, const MapList& mpl, int 
 : MapFromMapList(fn, p, mpl, Domain("image")/* just temp, see below*/), iNumColors(iColors)
 {
   if (iColors < 2)
-    throw ErrorObject(WhatError(String(SMAPErrTooFewColors_i.scVal(), iNumColors), errMapHeckbert+1), sTypeName());
+    throw ErrorObject(WhatError(String(TR("2 or more colors needed: %i").c_str(), iNumColors), errMapHeckbert+1), sTypeName());
   if (iColors > 255)
-    throw ErrorObject(WhatError(String(SMAPErrTooManyColors_i.scVal(), iNumColors), errMapHeckbert+2), sTypeName());
+    throw ErrorObject(WhatError(String(TR("Less than 256 colors needed: %i").c_str(), iNumColors), errMapHeckbert+2), sTypeName());
   // check on image domain
   Map mp = mpl->map(mpl->iLower());
   if (0 == mp->dm()->pdi())
@@ -218,7 +200,7 @@ bool MapHeckbert::fFreezing()
   IntBuf iTmpLine(iCols);
   ByteBuf bTmpLine(iCols);
   unsigned int iIndex;
-  trq.SetText(SMAPTextCalcCompHist);
+  trq.SetText(TR("Calculate histograms"));
   trq.SetTitle(sFreezeTitle);
   trq.setHelpItem(htpFreeze);
   for (l=0; l<iLines; l++) {
@@ -296,7 +278,7 @@ bool MapHeckbert::fFreezing()
       rprc->PutColor(i+1, Color(byteConv(r),byteConv(g), byteConv(b)));
     }
   // create output map from temp map using classify table pClassTab
-  trq.SetText(SMAPTextWriteOutMap);
+  trq.SetText(TR("Write output map"));
   for (l=0; l<iLines; l++ ) {
     if (l % 10 == 0) {
       if (trq.fUpdate(l, iLines)) 
@@ -382,7 +364,7 @@ int MapHeckbert::iHeckCalc(ArrayLarge<ColorCubeRec>& pNewColor, int iColorComb, 
   pNewColor[0].iCount = iTotal;
 
   iNewColors = 1;  // count for new nr. of cubes
-  trq.SetText(SMAPTextDetermineColors);
+  trq.SetText(TR("Determining colors..."));
   while (iNewColors < iNumColors) {
     long iSum, iCnt;
 //    if ((iNewColors < 10) || !(iNewColors % 10))

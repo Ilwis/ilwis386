@@ -157,10 +157,10 @@ TableTranspose::TableTranspose(const FileName& fn, TablePtr& p, const Table& tab
 {
   Domain dmTbl = tbl->dm();
   if ((0 == dmTbl->pdnone()) && (0 == dmTbl->pdsrt()))
-    throw ErrorObject(WhatError(String(STBLErrDomSortOrNoneRequired_S.scVal(), dmTbl->sName(true, fnObj.sPath())),
+    throw ErrorObject(WhatError(String(TR("Only domain class/ID/none allowed: '%S'").c_str(), dmTbl->sName(true, fnObj.sPath())),
        		errTableTranspose), fnObj);
   if (tbl->iRecs() > 1000)
-    throw ErrorObject(WhatError(String(STBLErrMax1000Records_S.scVal(), dmTbl->sName(true, fnObj.sPath())),
+    throw ErrorObject(WhatError(String(TR("No more than 1000 records allowed: '%S'").c_str(), dmTbl->sName(true, fnObj.sPath())),
        		errTableTranspose+1), fnObj);
   dmCol = dvrs.dm();
   vrCol = dvrs.vr();
@@ -238,7 +238,7 @@ bool TableTranspose::fFreezing()
 	Domain dmTbl = tbl->dm();
 	
 	trq.SetTitle(sFreezeTitle);
-	trq.SetText(STBLTextCreateColumns);
+	trq.SetText(TR("Create columns"));
 	if (dmTbl->pdnone()) {
 		for (long iRec=1; iRec <= tbl->iRecs(); ++iRec) {
 			String sColName("Col%li", iRec);
@@ -249,7 +249,7 @@ bool TableTranspose::fFreezing()
 			col->SetReadOnly(true);
 			//      _iCols += 1;
 		}  
-		trq.SetText(STBLTextFillColumns);
+		trq.SetText(TR("Fill columns"));
 		for (long iCol=1; iCol <= iCols(); ++iCol) {
 			if (trq.fUpdate(iCol, iCols()))
 				return false;
@@ -282,7 +282,7 @@ bool TableTranspose::fFreezing()
 			}  
 			aiCol[iRec] = iCols();
 		}  
-		trq.SetText(STBLTextFillColumns);
+		trq.SetText(TR("Fill columns"));
 		for (long iCol=1; iCol <= iCols(); ++iCol) {
 			if (trq.fUpdate(iCol, iCols()))
 				return false;

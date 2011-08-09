@@ -81,7 +81,7 @@ static int iFind(const String& s, const char* sArr[])
 {
   int i = 0;
   while (sArr[i]) {
-    if (_strnicmp(sArr[i], s.scVal(), s.length()) == 0)
+    if (_strnicmp(sArr[i], s.c_str(), s.length()) == 0)
       return i;
     i++;
   }
@@ -93,7 +93,7 @@ class DATEXPORT ErrorSurface: public ErrorObject
 {
 public:
   ErrorSurface(const String& sSurfaceType, const WhereError& where)
-  : ErrorObject(WhatError(String(SMAPErrInvalidSurfaceType_S.scVal(), sSurfaceType), errMapTrendSurface), where) {}
+  : ErrorObject(WhatError(String(TR("Invalid surface type: '%S'").c_str(), sSurfaceType), errMapTrendSurface), where) {}
 };
 
 MapTrendSurface* MapTrendSurface::create(const FileName& fn, MapPtr& p, const String& sExpr)
@@ -211,8 +211,8 @@ enum esft{Plane, Lin2, Parab2, o2, o3, o4, o5, o6 };
 //    iBufOut.Size(iMCol);
   bool fTransformCoords = cs() != pmp->cs();
   
-  trq.SetText(SMAPTextCalculating);
-  trq.SetTitle(SMAPTextMapTrendSurface);
+  trq.SetText(TR("Calculating"));
+  trq.SetTitle(TR("MapTrendSurface"));
   int iDim=0;    // dimension of matrices
   // determine dimension of matrices depending of surface type
   switch (sft) {
@@ -247,7 +247,7 @@ enum esft{Plane, Lin2, Parab2, o2, o3, o4, o5, o6 };
 	}
 
   if (iDim > iVPc) { 
-    String s(SMAPErrNotEnoughPoints_ii.scVal(), iVPc, iDim);
+    String s(TR("Too few valid points (%li), at least %i needed.").c_str(), iVPc, iDim);
     throw ErrorObject(WhatError(s, errMapTrendSurface+3), fnObj);
   }  
 

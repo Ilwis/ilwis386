@@ -51,64 +51,7 @@ IlwisObjectPtr * createMapColorComp(const FileName& fn, IlwisObjectPtr& ptr, con
 
 String wpsmetadataMapColorComp() {
 	WPSMetaData metadata("MapColorComp");
-	metadata.AddTitle("MapColorComp");
-	metadata.AddAbstract("A color composite is a combination of three raster bands. One band is displayed in shades of red, one in shades of green and one in shades of blue. Putting three bands together in one color composite map can give a better visual impression of the reality on the ground");
-	metadata.AddKeyword("spatial");
-	metadata.AddKeyword("raster");
-	metadata.AddKeyword("Color composite");
 
-	WPSParameter *parm1 = new WPSParameter("1","MapList", WPSParameter::pmtMAPLIST);
-	parm1->AddAbstract("An existing map list which contains 3 raster maps with the Image domain");
-
-	WPSParameter * parm2 = new WPSParameter("2","Method", WPSParameter::pmtENUM);
-	parm2->AddAbstract("Method used for combining the values of the three bands. Allowed are <empty>, Linear, 24, 24Linear, 24HistEq, 24HSI");
-
-	WPSParameterGroup *exclList = new WPSParameterGroup();
-
-	WPSParameterGroup *grp1 = new WPSParameterGroup("Range Bands",2,"Bands");
-	grp1->setOptional(true);
-
-	WPSParameterGroup *grp2 = new WPSParameterGroup("Percentage Bands",2,"Bands");
-	grp2->setOptional(true);
-	
-	WPSParameter * parm3 = new WPSParameter("0","range band one",WPSParameter::pmtRANGE);
-	parm3->AddAbstract(" the intervals of input values to be used as min:max ");
-
-	WPSParameter * parm4 = new WPSParameter("1","range band two",WPSParameter::pmtRANGE);
-	parm4->AddAbstract(" the intervals of input values to be used as min:max");
-
-	WPSParameter * parm5 = new WPSParameter("2","range band three",WPSParameter::pmtRANGE);
-	parm5->AddAbstract(" the intervals of input values to be used as min:max");
-
-	grp1->addParameter(parm3);
-	grp1->addParameter(parm4);
-	grp1->addParameter(parm5);
-
-	WPSParameter * parm6 = new WPSParameter("0","range band one",WPSParameter::pmtRANGE);
-	parm3->AddAbstract("The interval to be used as stretch percentage");
-
-	WPSParameter * parm7 = new WPSParameter("1","range band two",WPSParameter::pmtRANGE);
-	parm4->AddAbstract("The interval to be used as stretch percentage");
-
-	WPSParameter * parm8 = new WPSParameter("2","range band three",WPSParameter::pmtRANGE);
-	parm5->AddAbstract("The interval to be used as stretch percentage");
-
-	grp2->addParameter(parm6);
-	grp2->addParameter(parm7);
-	grp2->addParameter(parm8);
-
-	exclList->addParameter(grp1);
-	exclList->addParameter(grp2);
-
-	metadata.AddParameter(parm1);
-	metadata.AddParameter(parm2);
-	metadata.AddParameter(exclList);
-
-
-	WPSParameter *parmout = new WPSParameter("Result","Map", WPSParameter::pmtRASMAP, false);
-	parmout->AddAbstract("reference Outputmap and supporting data objects");
-	metadata.AddParameter(parmout);
-	
 
 	return metadata.toString();
 }
@@ -139,9 +82,9 @@ MapColorComp* MapColorComp::create(const FileName& fn, MapPtr& p, const String& 
   bool fLinear = false;
   bool fHSI = false;
   if ( fCIStrEqual(sFunc, "MapColorComp") && iParms == 5) {
-	  f24Bit = strstr(as[1].scVal(), "24") != 0;
-	  fLinear = strstr(as[1].scVal(), "Linear") != 0;
-	  fHSI = strstr(as[1].scVal(), "HSI") != 0;
+	  f24Bit = strstr(as[1].c_str(), "24") != 0;
+	  fLinear = strstr(as[1].c_str(), "Linear") != 0;
+	  fHSI = strstr(as[1].c_str(), "HSI") != 0;
 
   } else {
 	  if (fCIStrEqual(sFunc, "MapColorCompLinear")   || fCIStrEqual(sFunc, "MapColorComp") ||

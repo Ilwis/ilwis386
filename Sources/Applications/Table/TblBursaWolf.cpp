@@ -273,7 +273,7 @@ long TableBursaWolf::iCollectValidInputLatLonHeights()
 	}
 	if (iNrValidPts == 0) { 
 		String sMsg = String("\r\nNo complete and valid control points found");
-		//MessageBox(sMsg.scVal(), "Datum Transformation with 7 Parameters", MB_OK);
+		//MessageBox(sMsg.c_str(), "Datum Transformation with 7 Parameters", MB_OK);
 		return 0; // no valid active ctrl points
 	}
 	return iNrValidPts;

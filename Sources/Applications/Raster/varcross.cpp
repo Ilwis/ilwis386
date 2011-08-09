@@ -56,10 +56,10 @@ const char* MapCrossVariogramSurfaceRas::sSyntax() {
 }
 
 static void NrLagsNotPos(const FileName& fn) {
-  throw ErrorObject(SMAPErrNrLagsNotPos);
+  throw ErrorObject(TR("Number of Lags must be greater then 0"));
 }
 static void NrLagsTooLargeRas(const FileName& fn) {
-  throw ErrorObject(SMAPErrNrLagsTooLargeRas);
+  throw ErrorObject(TR("Number of Lags may not exceed 45"));
 }
 static void GeoRefNoneError(const FileName& fn, IlwisError err)
 {

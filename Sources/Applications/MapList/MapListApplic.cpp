@@ -103,7 +103,7 @@ bool MapListApplic::fFreezing()
 { 
   try {
     SetSize(0);
-    trq.SetText(SMPLTextConstructing);
+    trq.SetText(TR("Constructing"));
     int iMaps = ml->iSize();
     SetSize(iMaps);
 
@@ -138,7 +138,7 @@ bool MapListApplic::fFreezing()
       return false;
     }
     ptr.SetGeoRef(map(0)->gr());
-    trq.SetText(SMPLTextCalculatingMap);
+    trq.SetText(TR("Calculating Map"));
     for (int i = 0; i < iMaps; ++i) 
     {
       if (trq.fUpdate(i, iMaps)) 

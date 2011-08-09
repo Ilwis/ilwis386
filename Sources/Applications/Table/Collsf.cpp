@@ -91,7 +91,7 @@ ColumnLeastSquaresFit::FitType ColumnLeastSquaresFit::ftFitType(const String& s)
 {
   int i = 1;
   while (sFT[i]) {
-    if (strnicmp(sFT[i], s.scVal(), s.length()) == 0)
+    if (strnicmp(sFT[i], s.c_str(), s.length()) == 0)
       return (FitType)i;
     i++;
   }
@@ -105,7 +105,7 @@ String ColumnLeastSquaresFit::sFitType(FitType ft)
 
 static void FitTypeError(const String& sFitType, const FileName& fn)
 {
-  throw ErrorObject(WhatError(String("%S '%S'", STBLInvalidFitType, sFitType),
+  throw ErrorObject(WhatError(String("%S '%S'", TR("Invalid fittype:"), sFitType),
                     errLeastSquaresFit + 5), fn);
 }
 
@@ -118,14 +118,14 @@ ColumnLeastSquaresFit::ColumnLeastSquaresFit(const Table& tbl, const String& sCo
 : ColumnVirtual(tbl, sColName, ptr), lsf(0)
 {
   String s;
-  ReadElement(sSection().scVal(), "FitType", s);
+  ReadElement(sSection().c_str(), "FitType", s);
   ft = ftFitType(s);
-  ReadElement(sSection().scVal(), "Terms", iNrTerms);
+  ReadElement(sSection().c_str(), "Terms", iNrTerms);
   s = String();
-  ReadElement(sSection().scVal(), "ColumnX", s);
+  ReadElement(sSection().c_str(), "ColumnX", s);
   colX = Column(s, tbl);
   s = String();
-  ReadElement(sSection().scVal(), "ColumnY", s);
+  ReadElement(sSection().c_str(), "ColumnY", s);
   colY = Column(s, tbl);
   objdep.Add(colX);
   objdep.Add(colY);
@@ -245,7 +245,7 @@ bool ColumnLeastSquaresFit::fFreezing()
       default: 
         return false;  
     }  
-    String str("%S:\r\n%S", SDATMsgFitFormula, lsf->sFormula()); 
+    String str("%S:\r\n%S", TR("Equation of Fitting Function"), lsf->sFormula()); 
     ptr.SetAdditionalInfo(str);
     ptr.SetAdditionalInfoFlag(true);
   }

@@ -97,7 +97,7 @@ static int iHash(const HashAggLR& halr) {
 static int iHash(const HashAggSL& hasl) {
   unsigned long h = 0;
   int i=0;  
-  char *ps = const_cast<char *>(hasl.sVal.scVal());
+  char *ps = const_cast<char *>(hasl.sVal.c_str());
   while (*ps)
     h = (h + (i++) * tolower(*ps++)) % 16001;
   return (int)h;  
@@ -106,7 +106,7 @@ static int iHash(const HashAggSL& hasl) {
 static int iHash(const HashAggSR& hasr) {
   unsigned long h = 0;
   int i=0;  
-  char *ps = const_cast<char *>(hasr.sVal.scVal());
+  char *ps = const_cast<char *>(hasr.sVal.c_str());
   while (*ps)
     h = (h + (i++) * tolower(*ps++)) % 16001;
   return (int)h;  
@@ -142,7 +142,7 @@ static int iHash(const HashAggRRR& harrr) {
 static int iHash(const HashAggSRR& hasrr) {
   unsigned long h = 0;
   int i=0;  
-  char *ps = const_cast<char *>(hasrr.sVal.scVal());
+  char *ps = const_cast<char *>(hasrr.sVal.c_str());
   while (*ps)
     h = (h + (i++) * tolower(*ps++)) % 16001;
   return (int)h;  
@@ -169,7 +169,7 @@ static int iHash(const HashAggRRRR& harrrr) {
 static int iHash(const HashAggSRRR& hasrrr) {
   unsigned long h = 0;
   int i=0;  
-  char *ps = const_cast<char *>(hasrrr.sVal.scVal());
+  char *ps = const_cast<char *>(hasrrr.sVal.c_str());
   while (*ps)
     h = (h + (i++) * tolower(*ps++)) % 16001;
   return (int)h;  

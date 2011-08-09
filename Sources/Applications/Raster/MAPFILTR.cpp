@@ -53,125 +53,6 @@ IlwisObjectPtr * createMapFilter(const FileName& fn, IlwisObjectPtr& ptr, const 
 
 String wpsmetadataMapFilter() {
 	WPSMetaData metadata("MapFilter");
-	metadata.AddTitle("MapFilter");
-	metadata.AddAbstract("each pixel value in a raster map is replaced with a new value.The new value is obtained by applying a certain function to each input pixel and its direct neighbours");
-	metadata.AddKeyword("spatial");
-	metadata.AddKeyword("raster");
-	metadata.AddKeyword("filter");
-	WPSParameter *parm1 = new WPSParameter("1","Input Map",WPSParameter::pmtRASMAP);
-	parm1->AddAbstract("Map to be filtered");
-
-	WPSParameterGroup *excList = new WPSParameterGroup();
-
-	WPSParameter *parm2 = new WPSParameter("0","FilterName", WPSParameter::pmtENUM);
-	parm2->AddAbstract("Unique name identifying the filter");
-	excList->addParameter(parm2);
-
-	WPSParameterGroup *grp1 = new WPSParameterGroup("Filter Linear",0,"Name");
-	grp1->AddAbstract("Unique name identifying the filter expression");
-	WPSParameter *parm3 = new WPSParameter("0","Row", WPSParameter::pmtINTEGER);
-	parm3->AddAbstract("Number of rows around the central pixel");
-	WPSParameter *parm4 = new WPSParameter("0","Col", WPSParameter::pmtINTEGER);
-	parm4->AddAbstract("Number of columns around the central pixel");
-	WPSParameter *parm5 = new WPSParameter("0","Expression", WPSParameter::pmtSTRING);
-	parm5->AddAbstract("Expression identifying the operation applied on the pixels");
-	grp1->addParameter(parm3);
-	grp1->addParameter(parm4);
-	grp1->addParameter(parm5);
-
-	WPSParameterGroup *grp2 = new WPSParameterGroup("Average",0,"Name");
-	grp2->AddAbstract("Unique name identifying the filter expression");
-	parm3 = new WPSParameter("0","Row", WPSParameter::pmtINTEGER);
-	parm3->AddAbstract("Number of rows around the central pixel");
-	parm4 = new WPSParameter("0","Col", WPSParameter::pmtINTEGER);
-	parm4->AddAbstract("Number of columns around the central pixel");
-	grp2->addParameter(parm3);
-	grp2->addParameter(parm4);
-
-	WPSParameterGroup *grp3 = new WPSParameterGroup("RankOrder",0,"Name");
-	grp3->AddAbstract("Unique name identifying the filter expression");
-	parm3 = new WPSParameter("0","Row", WPSParameter::pmtINTEGER);
-	parm3->AddAbstract("Number of rows around the central pixel");
-	parm4 = new WPSParameter("0","Col", WPSParameter::pmtINTEGER);
-	parm4->AddAbstract("Number of columns around the central pixel");
-	parm5 = new WPSParameter("0","Threshold", WPSParameter::pmtREAL);
-	parm5->AddAbstract("center pixel will only be replaced with the new value if the difference between the original and new value is smaller than or equal to the threshold");
-	parm5->setOptional(true);
-	grp3->addParameter(parm3);
-	grp3->addParameter(parm4);
-	grp3->addParameter(parm5);
-
-	WPSParameterGroup *grp4 = new WPSParameterGroup("Median",0,"Name");
-	grp4->AddAbstract("Unique name identifying the filter expression");
-	parm3 = new WPSParameter("0","Row", WPSParameter::pmtINTEGER);
-	parm3->AddAbstract("Number of rows around the central pixel");
-	parm4 = new WPSParameter("0","Col", WPSParameter::pmtINTEGER);
-	parm4->AddAbstract("Number of columns around the central pixel");
-	parm5 = new WPSParameter("0","Threshold", WPSParameter::pmtREAL);
-	parm5->AddAbstract("center pixel will only be replaced with the new value if the difference between the original and new value is smaller than or equal to the threshold");
-	parm5->setOptional(true);
-	grp4->addParameter(parm3);
-	grp4->addParameter(parm4);
-	grp4->addParameter(parm5);
-
-	WPSParameterGroup *grp5 = new WPSParameterGroup("Majority",0,"Name");
-	grp5->AddAbstract("Unique name identifying the filter expression");
-	parm3 = new WPSParameter("0","Row", WPSParameter::pmtINTEGER);
-	parm3->AddAbstract("Number of rows around the central pixel");
-	parm4 = new WPSParameter("0","Col", WPSParameter::pmtINTEGER);
-	parm4->AddAbstract("Number of columns around the central pixel");
-	grp5->addParameter(parm3);
-	grp5->addParameter(parm4);
-
-	WPSParameterGroup *grp6 = new WPSParameterGroup("MajorityZero",0,"Name");
-	grp6->AddAbstract("Unique name identifying the filter expression");
-	parm3 = new WPSParameter("0","Row", WPSParameter::pmtINTEGER);
-	parm3->AddAbstract("Number of rows around the central pixel");
-	parm4 = new WPSParameter("0","Col", WPSParameter::pmtINTEGER);
-	parm4->AddAbstract("Number of columns around the central pixel");
-	grp6->addParameter(parm3);
-	grp6->addParameter(parm4);
-
-	WPSParameterGroup *grp7 = new WPSParameterGroup("UndefMajority",0,"Name");
-	grp7->AddAbstract("Unique name identifying the filter expression");
-	parm3 = new WPSParameter("0","Row", WPSParameter::pmtINTEGER);
-	parm3->AddAbstract("Number of rows around the central pixel");
-	parm4 = new WPSParameter("0","Col", WPSParameter::pmtINTEGER);
-	parm4->AddAbstract("Number of columns around the central pixel");
-	grp7->addParameter(parm3);
-	grp7->addParameter(parm4);
-
-	WPSParameterGroup *grp8 = new WPSParameterGroup("Patter",0,"Name");
-	parm5 = new WPSParameter("0","Threshold", WPSParameter::pmtREAL);
-	parm5->AddAbstract("center pixel will only be replaced with the new value if the difference between the original and new value is smaller than or equal to the threshold");
-	parm5->setOptional(true);
-	grp8->addParameter(parm5);
-
-	WPSParameterGroup *grp9 = new WPSParameterGroup("FilterStandardDev",0,"Name");
-	grp9->AddAbstract("Unique name identifying the filter expression");
-	parm3 = new WPSParameter("0","Row", WPSParameter::pmtINTEGER);
-	parm3->AddAbstract("Number of rows around the central pixel");
-	parm4 = new WPSParameter("0","Col", WPSParameter::pmtINTEGER);
-	parm4->AddAbstract("Number of columns around the central pixel");
-	grp9->addParameter(parm3);
-	grp9->addParameter(parm4);
-
-	excList->addParameter(grp1);
-	excList->addParameter(grp2);
-	excList->addParameter(grp3);
-	excList->addParameter(grp4);
-	excList->addParameter(grp5);
-	excList->addParameter(grp6);
-	excList->addParameter(grp7);
-	excList->addParameter(grp8);
-	excList->addParameter(grp9);
-
-	metadata.AddParameter(parm1);
-	metadata.AddParameter(excList);
-	WPSParameter *parmout = new WPSParameter("Result","Output Map", WPSParameter::pmtRASMAP, false);
-	parmout->AddAbstract("reference Outputmap and supporting data objects");
-	metadata.AddParameter(parmout);
-	
 
 	return metadata.toString();
 }
@@ -196,7 +77,7 @@ class ErrorValueDomainFilter : public ErrorObject
 {
 public:
   ErrorValueDomainFilter(const WhereError& where, const Domain& dm, const Filter& flt)
-   : ErrorObject(WhatError(String(SMAPErrDomainValueRequired_SS.scVal(), flt->sName(), dm->sName()),
+   : ErrorObject(WhatError(String(TR("Only value domain allowed for filter %S: %S").c_str(), flt->sName(), dm->sName()),
                            errMapFilter), where) {}
 };
 
@@ -207,13 +88,13 @@ void ValueDomainFilterError(const String& s, const Domain& dm, const Filter& flt
 
 void InvalidFilterError(const String& sExpr)
 {
-  String s(SMAPErrInvalidFilter_S.scVal(), sExpr);
+  String s(TR("Invalid filter in MapFilter\n:%S").c_str(), sExpr);
   throw ErrorObject(s, errMapFilter+1);
 }
 
 static void InvalidFilterMapCombination(const Map& mp, const Filter& flt)
 {
-  String s(SMAPErrFilterNotPossible_SS.scVal(), flt->sName(), mp->sName());
+  String s(TR("Filter %S\n cannot be applied on map %S").c_str(), flt->sName(), mp->sName());
   throw ErrorObject(s, errMapFilter+2);
 }
 

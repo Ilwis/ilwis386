@@ -61,7 +61,7 @@ static DList<StackObject> dlsoDummy;
 class ErrorEmptyExpr : public ErrorObject
 {
 public:
-  ErrorEmptyExpr() : ErrorObject(WhatError(STBLErrEmptyExpression, errColumnCalculate+2)) {}
+  ErrorEmptyExpr() : ErrorObject(WhatError(TR("Empty Expression"), errColumnCalculate+2)) {}
 };
 
 static void EmptyExprError()
@@ -71,14 +71,14 @@ static void EmptyExprError()
 
 static void UnexpectedTokenError(const String& sVal)
 {
-  ErrorObject(WhatError(String("%S '%S'", STBLOthUnexpected, sVal), errColumnCalculate+3)).Show();
+  ErrorObject(WhatError(String("%S '%S'", TR("Unexpected"), sVal), errColumnCalculate+3)).Show();
 }
 
 class ErrorCalcExpression : public ErrorObject
 {
 public:
   ErrorCalcExpression(const WhereError& where, const String& sExpr)
-    : ErrorObject(WhatError(String("%S '%S'", STBLOthInvalidExpr, sExpr), errColumnCalculate+1), where) {}
+    : ErrorObject(WhatError(String("%S '%S'", TR("Invalid calc expression:"), sExpr), errColumnCalculate+1), where) {}
 };
 
 static void CalcExpressionError(const FileName& fn, const String& sCol,  const String& sExpr)
@@ -187,7 +187,7 @@ ColumnCalculate::ColumnCalculate(const Table& tbl, const String& sColName, Colum
 {
   fNeedFreeze = false;
   instruc = 0;
-  ReadElement(sSection().scVal(), "Expression", _sExpression);
+  ReadElement(sSection().c_str(), "Expression", _sExpression);
 // err: invalid calc expression (syntax or data)        ::ColumnCalculate(fn)
 //  if (instruc->dm()->pdv() == 0)
 //    throw ErrorCalcExpression(this, instruc->dm());
@@ -287,7 +287,7 @@ void ColumnCalculate::Replace(const String& sExpr)
   Column col;
   col.SetPointer(&ptr);
   if (od.fUses(col))
-    throw ErrorObject(WhatError(STBLErrCyclicDefinition, errColumnCalculate+1), 
+    throw ErrorObject(WhatError(TR("Cyclic definition"), errColumnCalculate+1), 
                       WhereErrorColumn(tbl->fnObj, sName()));
   ColumnVirtual::Replace(sExpr);
   if (0 != instruc)

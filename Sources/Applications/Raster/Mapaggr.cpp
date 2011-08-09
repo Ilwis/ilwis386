@@ -53,58 +53,6 @@ IlwisObjectPtr * createMapAggregate(const FileName& fn, IlwisObjectPtr& ptr, con
 
 String wpsmetadataMapAggregate() {
 	WPSMetaData metadata("MapAggregate");
-	metadata.AddTitle("MapAggregate");
-	metadata.AddAbstract("aggregates blocks of input pixels by applying an aggregation function: Average, Count, Maximum, Median, Minimum, Predominant, Standard Deviation or Sum " 
-		"The Aggregate Map operation either creates a new georeference in which each block of input pixels corresponds to one output pixel (group) or the output raster map uses the same georeference as the input map (no group).");
-	metadata.AddKeyword("spatial");
-	metadata.AddKeyword("raster");
-	metadata.AddKeyword("Classification");
-	metadata.AddKeyword("Aggregation");
-	WPSParameter *parm1 = new WPSParameter("1","Input Map name", WPSParameter::pmtRASMAP);
-	parm1->AddAbstract("Name of the the input map");
-
-	WPSParameter *parm2 = new WPSParameter("2","Aggregation Function", WPSParameter::pmtENUM);
-	parm2->AddAbstract("Type an aggregation function");
-
-	WPSParameter *parm3 = new WPSParameter("3","Group factor", WPSParameter::pmtINTEGER);
-	parm3->AddAbstract("value for the size of the blocks of input pixels to be aggregated");
-
-	WPSParameter *parm4 = new WPSParameter("4","Use grouping", WPSParameter::pmtENUM);
-	parm4->AddAbstract("The pixel size will be grouped according the output(group) georef or the input georef(nogroup)");
-
-	WPSParameter *parm5 = new WPSParameter("0","Row Offset", WPSParameter::pmtINTEGER);
-	parm5->AddAbstract("Optional parameter to skip the specified number of lines at the top of the input map");
-
-	WPSParameter *parm6 = new WPSParameter("1","Col Offset", WPSParameter::pmtINTEGER);
-	parm6->AddAbstract("Optional parameter to skip the specified number of columns at the top of the input map");
-
-	WPSParameter *parm7 = new WPSParameter("2","New Georef", WPSParameter::pmtGEOREF);
-	parm7->AddAbstract("optional parameter to specify a name for the output georeference; if not specified, the output georeference will obtain the same name as the output map");
-	parm7->setOptional(true);
-
-	WPSParameter *parm8 = new WPSParameter("5","New Georef", WPSParameter::pmtGEOREF);
-	parm8->AddAbstract("optional parameter to specify a name for the output georeference; if not specified, the output georeference will obtain the same name as the output map");
-	parm8->setOptional(true);
-
-	WPSParameterGroup *pg1  = new WPSParameterGroup("Offsets", 5, "Offsets");
-	pg1->setOptional(true);
-	pg1->addParameter(parm5);
-	pg1->addParameter(parm6);
-	pg1->addParameter(parm7);
-
-	WPSParameterGroup *exclList = new WPSParameterGroup();
-	exclList->addParameter(pg1);
-	exclList->addParameter(parm8);
-
-	metadata.AddParameter(parm1);
-	metadata.AddParameter(parm2);
-	metadata.AddParameter(parm3);
-	metadata.AddParameter(parm4);
-	metadata.AddParameter(exclList);
-
-	WPSParameter *parmout= new WPSParameter("Result","Output Map", WPSParameter::pmtRASMAP, false);
-	parmout->AddAbstract("Reference Outputmap and supporting data objects");
-	metadata.AddParameter(parmout);
 
 
 	return metadata.toString();
@@ -126,12 +74,11 @@ ApplicationMetadata metadataMapAggregate(ApplicationQueryData *query) {
 #define rHalf 0.4999999999
 
 const char* MapAggregate::sSyntax() {
-	return "MapAggregateFunc(map,groupfactor,group|nogroup)\n"
-		"MapAggregateFunc(map,groupfactor,group|nogroup,rowoffset,coloffset)";
+	return "MapAggregateFunc(map,groupfactor,group|nogroup)\nMapAggregate(map,Func,groupfactor,group|nogroup[,rowoffset,coloffset])\n";
 }
 
 const char* MapAggregate::sSyntax2() {
-	return "MapAggregateFunc(map,groupfactor,group|nogroup,grf)";
+	return "MapAggregateFunc(map,groupfactor,group|nogroup[,grf])\nMapAggregate(map,Func,groupfactor,group|nogroup,grf)\n";
 }
 
 static void ThrowTooLargeError(String& sMessage, const FileName& fn)
@@ -150,9 +97,9 @@ void GroupFactorError(bool fTooSmall, const FileName& fn)
 {
 	String sErr;
 	if (fTooSmall)
-		sErr = String(SMAPErrGroupFactorTooSmall);
+		sErr = String(TR("Group factor should be >= 2"));
 	else
-		sErr = String(SMAPErrGroupFactorTooLarge);
+		sErr = String(TR("Group factor should not exceed row or column size of input map"));
 	throw ErrorGroupFactor(sErr, fn);
 }
 
@@ -167,9 +114,9 @@ void OffsetError(const String& sOff, bool fRow, const FileName& fn)
 {
 	String sErr;
 	if (fRow)
-		sErr = String(SMAPErrRowOffset_S.scVal(), sOff);
+		sErr = String(TR("Invalid row offset: %S").c_str(), sOff);
 	else
-		sErr = String(SMAPErrColOffset_S.scVal(), sOff);
+		sErr = String(TR("Invalid column offset: %S").c_str(), sOff);
 	throw ErrorOffset(sErr, fn);
 }
 
@@ -180,13 +127,15 @@ MapAggregate* MapAggregate::create(const FileName& fn, MapPtr& p, const String& 
 	int iParms = IlwisObjectPtr::iParseParm(sExpr, as);
 	AggregateFunction* agf = 0;
 	int parmOffset = 0; // new style syntax has one parm more
-	if ((iParms < 4) || (iParms > 7))
+	if ((iParms < 3) || (iParms > 7))
 		ExpressionError(sExpr, sSyntax());
 	if ( sAggFunc.size() == String("MapAggregate").size()) { // new style
 		agf = AggregateFunction::create(String("agg%S", as[1]));
 		parmOffset = 1;
 	} else
 		agf = AggregateFunction::create(String("agg%S", sAggFunc.sRight(3))); // old style
+	if ( agf == 0)
+		ExpressionError(sExpr, sSyntax());
 
 	Map mp(as[0], fn.sPath());
 	long h = mp->iLines();
@@ -212,7 +161,7 @@ MapAggregate* MapAggregate::create(const FileName& fn, MapPtr& p, const String& 
 			OffsetError(as[4 + parmOffset], false, fn);
 	}
 	String sGrf = fn.sFile;
-	if ((iParms == 4) || (iParms == 6))
+	if ((iParms == 5) || (iParms == 7))
 		sGrf = as[iParms-1 + parmOffset];
 	if (fGrpPix && (sGrf.length() == 0))
 		ExpressionError(sExpr, sSyntax2());
@@ -340,7 +289,7 @@ bool MapAggregate::fFreezing()
 	if (fGrpPixels) // follow 'normal' procedure
 		return MapVirtual::fFreezing();
 	// else special case
-	trq.SetText(String(SMAPTextCalculating_S.scVal(), sName(true, fnObj.sPath())));
+	trq.SetText(String(TR("Calculating '%S'").c_str(), sName(true, fnObj.sPath())));
 	RealBuf bufOutReal(iCols());
 	LongBuf bufOutRaw(iCols());
 	long i, j;

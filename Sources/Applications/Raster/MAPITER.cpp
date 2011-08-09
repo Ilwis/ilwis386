@@ -53,35 +53,6 @@ IlwisObjectPtr * createMapIterator(const FileName& fn, IlwisObjectPtr& ptr, cons
 
 String wpsmetadataMapIter() {
 	WPSMetaData metadata("MapIter");
-	metadata.AddTitle("MapIter");
-	metadata.AddAbstract("using the result of one calculation as input for the next. These calculations are performed line by line, pixel by pixel and take place in all directions");
-	metadata.AddKeyword("spatial");
-	metadata.AddKeyword("raster");
-	metadata.AddKeyword("iteration");
-
-	WPSParameter *parm1 = new WPSParameter("1","Start map",WPSParameter::pmtRASMAP);
-	parm1->AddAbstract("input map which contains one or more pixels acting as the starting point for the calculation");
-
-	WPSParameter *parm2 = new WPSParameter("2","Use propagation", WPSParameter::pmtBOOL);
-	parm2->AddAbstract("use propagation");
-
-	WPSParameter *parm3 = new WPSParameter("3","Iteration expression", WPSParameter::pmtSTRING);
-	parm3->AddAbstract("defines the calculation to be performed");
-
-	WPSParameter *parm4 = new WPSParameter("3","Number of iterations", WPSParameter::pmtINTEGER);
-	parm4->AddAbstract("number of iterations to be performed");
-	parm4->setOptional(true);
-
-
-	metadata.AddParameter(parm1);
-	metadata.AddParameter(parm2);
-	metadata.AddParameter(parm3);
-	metadata.AddParameter(parm4);
-	WPSParameter *parmout = new WPSParameter("Result","Output Map", WPSParameter::pmtRASMAP, false);
-	parmout->AddAbstract("Reference Outputmap and supporting data objects");
-	metadata.AddParameter(parmout);
-
-
 	return metadata.toString();
 }
 
@@ -257,18 +228,18 @@ bool MapIterator::fFreezing()
 		iTotalChanges=0;
 		if (fPropagation) {
 			inst->env.dnb = dirNbDOWN;
-			trq.SetText(String(SCLCTextIterDown_ii.scVal(), iIter, iTotalLastChanges));
+			trq.SetText(String(TR("Iterate %li down (last changes=%li), line").c_str(), iIter, iTotalLastChanges));
 			for (unsigned i=0; i<amp.iSize(); ++i)
 				amp[i]->KeepOpen(true);
 		}
 		else
-			trq.SetText(String(SCLCTextIter_ii.scVal(), iIter, iChanges));
+			trq.SetText(String(TR("Iterate %li (last changes=%li), line").c_str(), iIter, iChanges));
 		if (!fCalcIter(iChanges, true, iLines(), iCols(), mpCalc))
 			break;
 		iTotalChanges += iChanges;
 		if (fPropagation) {
 			inst->env.dnb = dirNbUP;
-			trq.SetText(String(SCLCTextIterUp_ii.scVal(), iIter, iChanges));
+			trq.SetText(String(TR("Iterate %li up (last changes=%li), line").c_str(), iIter, iChanges));
 			if (!fCalcIter(iChanges, false, iLines(), iCols(), mpCalc))
 				break;
 			iTotalChanges += iChanges;
@@ -286,12 +257,12 @@ bool MapIterator::fFreezing()
 				amp[i]->KeepOpen(false);
 				ampRot[i]->KeepOpen(true);
 			}
-			trq.SetText(String(SCLCTextIterRight_ii.scVal(), iIter, iChanges));
+			trq.SetText(String(TR("Iterate %li right (last changes=%li), line").c_str(), iIter, iChanges));
 			bool fInterrupt = false;
 			if (fCalcIter(iChanges, true, iCols(), iLines(), mpCalcRot)) {
 				iTotalChanges += iChanges;
 				inst->env.dnb = dirNbLEFT;
-				trq.SetText(String(SCLCTextIterLeft_ii.scVal(), iIter, iChanges));
+				trq.SetText(String(TR("Iterate %li left (last changes=%li), line").c_str(), iIter, iChanges));
 				if (!fCalcIter(iChanges, false, iCols(), iLines(), mpCalcRot))
 					fInterrupt = true;
 			}
@@ -318,7 +289,7 @@ bool MapIterator::fFreezing()
 			ampRot[i] = Map();
 		}
 
-		trq.SetText(SCLCTextStoringResult);
+		trq.SetText(TR("Storing result"));
 		if ( dvrs().fRealValues())
 			for (long i=0; i < iLines(); ++i) {
 				if (trq.fUpdate(i, iLines()))

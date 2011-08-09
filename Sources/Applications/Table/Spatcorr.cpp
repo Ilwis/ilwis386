@@ -135,15 +135,15 @@
 #define sSPTBiDirecBW  "BiDirecBW"
 
 static void DirecFrom_360To360(const FileName& fn) {
-  throw ErrorObject(WhatError(String(STBLErrDirecFrom_360To360), errTableSpatCorr +6), fn);
+  throw ErrorObject(WhatError(String(TR("Direction must be between -360 and 360")), errTableSpatCorr +6), fn);
 }
 
 static void TolerFrom0To45(const FileName& fn) {
-  throw ErrorObject(WhatError(String(STBLErrTolerFrom0To45), errTableSpatCorr +6), fn);
+  throw ErrorObject(WhatError(String(TR("Tolerance must be between 0 and 45")), errTableSpatCorr +6), fn);
 }
 
 static void BandWidthPositive(const FileName& fn) {
-  throw ErrorObject(WhatError(String(STBLErrBandWidthPositive), errTableSpatCorr +5), fn);
+  throw ErrorObject(WhatError(String(TR("Band width must be positive")), errTableSpatCorr +5), fn);
 }
  
 const char* TableSpatCorr::sSyntax()
@@ -234,7 +234,7 @@ TableSpatCorr* TableSpatCorr::create(const FileName& fn, TablePtr& p,
   if (iParms > 1) {
     rLagSpacing = as[1].rVal();
     if (rLagSpacing <= 0) 
-      throw ErrorObject(WhatError(String(STBLErrLagSpacingNotPos), errTableSpatCorr +3), fn);
+      throw ErrorObject(WhatError(String(TR("Lag spacing must be positive")), errTableSpatCorr +3), fn);
     iNrDistClasses = 1 + (long)(rMaxDiff / rLagSpacing);
     iNrDistClasses = min (iNrDistClasses,100);
   }  
@@ -455,8 +455,8 @@ bool TableSpatCorr::StatSemiVar()
 	dis = Distance(pmp->cs(), m_distMeth);
   double rDifX,rDifY,rDifZ, rDis;
   Coord cPoint_i, cPoint_j;
-  trq.SetTitle(STBLTitleSpatialCorrelation);
-  trq.SetText(STBLCalculate);
+  trq.SetTitle(TR("Spatial Correlation"));
+  trq.SetText(TR("Calculate"));
   for (long i = 0; i < iValidPoints; i++) {
     if (trq.fUpdate(i, iValidPoints)) 
       return false;
@@ -549,7 +549,7 @@ bool TableSpatCorr::fFreezing()
   long iNrPoints = pmp->iFeatures();        // iNrPoints=number of points( local copy for speed)
    if (iNrPoints < 3 )
    {
-        throw ErrorObject(WhatError(STBLErrTooFewPoints, errTableSpatCorr+1),
+        throw ErrorObject(WhatError(TR("More than two points needed"), errTableSpatCorr+1),
                       sTypeName());
    }
 	dis = Distance(pmp->cs(), m_distMeth);
@@ -601,7 +601,7 @@ bool TableSpatCorr::fFreezing()
     rZAvg += rZ;
   }
   if (iValidPoints < 3)
-    throw ErrorObject(WhatError(STBLErrTooFewValidPoints, errTableSpatCorr+2),
+    throw ErrorObject(WhatError(TR("More than two valid points needed"), errTableSpatCorr+2),
                       sTypeName());
   bool fInterrupted;  // call semivariogram if appropriate and check if stop pressed
   if (eSPType != eLogT) {
@@ -621,8 +621,8 @@ bool TableSpatCorr::fFreezing()
   double rZi, rZj, rZiMinAvg, rDifZ;
   Coord crdI, crdJ;
   //double rt1, rt2;  // temp storage
-  trq.SetTitle(STBLTitleSpatialCorrelation);
-  trq.SetText(STBLCalculate);
+  trq.SetTitle(TR("Spatial Correlation"));
+  trq.SetText(TR("Calculate"));
   for (long i = 0; i < iNrPoints; i++) {
     if (fInvalid[i])
       continue;
@@ -694,16 +694,16 @@ void TableSpatCorr::Init()
   sFreezeTitle = "TableSpatCorr";
   htpFreeze = "ilwisapp\\spatial_correlation_algorithm.htm";
 
-  String sDescAvLag = STBLMsgAvgPointDistanceAll;
-  String sDescAvLag1 = STBLMsgAvgPointDistance1;
-  String sDescAvLag2 = STBLMsgAvgPointDistance2;
+  String sDescAvLag = TR("Average Lag length in all directions");
+  String sDescAvLag1 = TR("Average Lag length in direction 1: ");
+  String sDescAvLag2 = TR("Average Lag length in direction 2: ");
 
   if (pts==0)
     return;
   colDist = pts->col("Distance");
   if (!colDist.fValid()) {
     colDist = pts->colNew("Distance", Domain("distance"));
-    colDist->sDescription = STBLMsgPointDistance;
+    colDist->sDescription = TR("Point distance");
   }
   colDist->SetOwnedByTable(true);
   colDist->SetReadOnly(true);
@@ -711,7 +711,7 @@ void TableSpatCorr::Init()
   colPairs = pts->col("NrPairs");
   if (!colPairs.fValid()) {
     colPairs = pts->colNew("NrPairs", Domain("count"));
-    colPairs->sDescription = STBLMsgNumberPointPairs;
+    colPairs->sDescription = TR("Number of point pairs");
   }
   colPairs->SetOwnedByTable(true);
   colPairs->SetReadOnly(true);
@@ -723,7 +723,7 @@ void TableSpatCorr::Init()
       colCorr = pts->col("Correlation");
     if (!colCorr.fValid()) {
       colCorr = pts->colNew("I", Domain("value"), ValueRange(-1e10,1e10,0.001));
-      colCorr->sDescription = STBLMsgCorrPointPairs;
+      colCorr->sDescription = TR("Moran's I, a standardized spatial autocorrelation");
     }
     colCorr->SetOwnedByTable(true);
     colCorr->SetReadOnly(true);
@@ -733,7 +733,7 @@ void TableSpatCorr::Init()
       colVar = pts->col("Variance");
     if (!colVar.fValid()) {
       colVar = pts->colNew("c", Domain("value"), ValueRange(0,1e10,0.01));
-      colVar->sDescription = STBLMsgNormVarPointPairs;
+      colVar->sDescription = TR("Geary's c, a statistic for spatial autovariance");
     }
     colVar->SetOwnedByTable(true);
     colVar->SetReadOnly(true);
@@ -752,19 +752,19 @@ if (eSPType == eOmniDirT)  {
    colSem1 = pts->col("SemiVar");
    if (!colSem1.fValid()) {
      colSem1 = pts->colNew("SemiVar", Domain("value"), ValueRange(0,1e10,0.01));
-     colSem1->sDescription = STBLMsgOmniDirSemiVariogram;
+     colSem1->sDescription = TR("OmniDirectional SemiVariogram");
    }
    colSem1->SetOwnedByTable(true);
    colSem1->SetReadOnly(true);
 }
 else if (eSPType > eOmniDirT)  {
-   sDes1 = String("%S %.1f %S %.1f", STBLOthAngle,
-                    c_rDirection, STBLOthTolerance, c_rTolerance);
-   sDes2 = String("%S %.1f %S %.1f", STBLOthAngle,
-                    c_rDirection + 90.0, STBLOthTolerance, c_rTolerance);
+   sDes1 = String("%S %.1f %S %.1f", TR("Angle"),
+                    c_rDirection, TR("Tolerance"), c_rTolerance);
+   sDes2 = String("%S %.1f %S %.1f", TR("Angle"),
+                    c_rDirection + 90.0, TR("Tolerance"), c_rTolerance);
    if (eSPType == eBiDirecBWT)  {
-     sDes1 = String("%S %S %.1f",sDes1,STBLOthBandWidth,c_rBandWidth);
-     sDes2 = String("%S %S %.1f",sDes2,STBLOthBandWidth,c_rBandWidth);
+     sDes1 = String("%S %S %.1f",sDes1,TR("BandWidth"),c_rBandWidth);
+     sDes2 = String("%S %S %.1f",sDes2,TR("BandWidth"),c_rBandWidth);
    } 
 	 
    colDistAvg1 = pts->col("AvgLag1");
@@ -780,7 +780,7 @@ else if (eSPType > eOmniDirT)  {
    colPairs1 = pts->col("NrPairs1");
    if (!colPairs1.fValid()) {
      colPairs1 = pts->colNew("NrPairs1", Domain("count"));
-     colPairs1->sDescription = String(STBLMsgNumberPointPairs_S.scVal(), sDes1);
+     colPairs1->sDescription = String(TR("Number of point pairs %S").c_str(), sDes1);
    }
    colPairs1->SetOwnedByTable(true);
    colPairs1->SetReadOnly(true);
@@ -788,7 +788,7 @@ else if (eSPType > eOmniDirT)  {
    colSem1 = pts->col("SemiVar1");
    if (!colSem1.fValid()) {
      colSem1 = pts->colNew("SemiVar1", Domain("value"), ValueRange(0,1e10,0.01));
-     colSem1->sDescription = String(STBLMsgSemiVariance_S.scVal(), sDes1);
+     colSem1->sDescription = String(TR("SemiVariance %S").c_str(), sDes1);
    }
    colSem1->SetOwnedByTable(true);
    colSem1->SetReadOnly(true);
@@ -805,7 +805,7 @@ else if (eSPType > eOmniDirT)  {
    colPairs2 = pts->col("NrPairs2");
    if (!colPairs2.fValid()) {
      colPairs2 = pts->colNew("NrPairs2", Domain("count"));
-     colPairs2->sDescription = String(STBLMsgNumberPointPairs_S.scVal(), sDes2);
+     colPairs2->sDescription = String(TR("Number of point pairs %S").c_str(), sDes2);
    }
    colPairs2->SetOwnedByTable(true);
    colPairs2->SetReadOnly(true);
@@ -813,7 +813,7 @@ else if (eSPType > eOmniDirT)  {
    colSem2 = pts->col("SemiVar2");
    if (!colSem2.fValid()) {
      colSem2 = pts->colNew("SemiVar2", Domain("value"), ValueRange(0,1e10,0.01));
-     colSem2->sDescription = String(STBLMsgSemiVariance_S.scVal(), sDes2);
+     colSem2->sDescription = String(TR("SemiVariance %S").c_str(), sDes2);
    }
    colSem2->SetOwnedByTable(true);
    colSem2->SetReadOnly(true);

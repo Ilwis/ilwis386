@@ -154,7 +154,7 @@ MapRasterizePolygon* MapRasterizePolygon::create(const FileName& fn, MapPtr& p, 
 	String sInputMapName = as[0];
 	char *pCh = sInputMapName.strrchrQuoted('.');
 	if ((pCh != 0) && (0 != _strcmpi(pCh, ".mpa")))  // attrib map
-		throw ErrorObject(WhatError(String(SMAPErrNoAttColumnAllowed_S.scVal(), as[0]), errMapRasterizePolygon), fn);
+		throw ErrorObject(WhatError(String(TR("Use of attribute maps is not possible: '%S'").c_str(), as[0]), errMapRasterizePolygon), fn);
 	
 	PolygonMap pm(as[0], fn.sPath());
 	GeoRef gr(as[1], fn.sPath());
@@ -178,7 +178,7 @@ MapRasterizePolygon::MapRasterizePolygon(const FileName& fn, MapPtr& p,
 : MapFromPolygonMap(fn, p, pm, gr)
 {
 //  if (st() == stREAL)
-//    throw ErrorObject(SPOLErrRealMapNotSupported, errMapRasterizePolygon+1);
+//    throw ErrorObject(TR("Not implemented for real-value maps"), errMapRasterizePolygon+1);
   if (gr->fGeoRefNone())
     throw ErrorGeoRefNone(gr->fnObj, errMapRasterizePolygon);
   if (!cs()->fConvertFrom(pm->cs()))

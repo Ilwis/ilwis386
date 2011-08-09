@@ -89,7 +89,7 @@ class DATEXPORT ErrorInvalidAttDomain: public ErrorObject
 {
 public:
   ErrorInvalidAttDomain(const String& sDomain, const WhereError& where)
-  : ErrorObject(WhatError(String(SMAPErrInvalidAttrDomain.scVal(), sDomain.scVal()), 
+  : ErrorObject(WhatError(String(TR("Invalid domain type for attribute column: '%S'").c_str(), sDomain.c_str()), 
                 errMapAttribute), where) {}
 };
 
@@ -191,7 +191,7 @@ void MapAttribute::Init()
   sFreezeTitle = "MapAttribute";
   DomainSort* pdsrt = colAtt->dmKey()->pdsrt();
 	if ( !pdsrt )
-		throw ErrorObject(SMAPErrNoDomainSort);
+		throw ErrorObject(TR("Source map must have domain class or id"));
 
   long iSize = pdsrt->iSize();
   fRawsDifferent = false;
@@ -360,7 +360,7 @@ String MapAttribute::sExpression() const
 
 bool MapAttribute::fFreezing()
 {
-  trq.SetText(String(SMAPTextCalculating_S.scVal(), sName(true, fnObj.sPath())));
+  trq.SetText(String(TR("Calculating '%S'").c_str(), sName(true, fnObj.sPath())));
   if ( dm()->pdv())
   {
     RealBuf buf(iCols());

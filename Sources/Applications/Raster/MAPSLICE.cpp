@@ -58,24 +58,6 @@ IlwisObjectPtr * createMapSlicing(const FileName& fn, IlwisObjectPtr& ptr, const
 
 String wpsmetadataMapSlicing() {
 	WPSMetaData metadata("MapSlicing");
-	metadata.AddTitle("Slicing");
-	metadata.AddAbstract("Slice classification on raster map");
-	metadata.AddKeyword("spatial");
-	metadata.AddKeyword("raster");
-	metadata.AddKeyword("Classification");
-
-	WPSParameter *parm1 = new WPSParameter("1","Input Map", WPSParameter::pmtRASMAP);
-	parm1->AddAbstract("Filename Inputmap");
-
-	WPSParameter *parm2 = new WPSParameter("2","Input domain", WPSParameter::pmtDOMAIN);
-	parm2->AddAbstract("is the name of your domain Group which contains the boundaries of the values and the group names for the output map.");
-
-	metadata.AddParameter(parm1);
-	metadata.AddParameter(parm2);
-	WPSParameter *parmout = new WPSParameter("outputmap","Output Map",WPSParameter::pmtRASMAP, false);
-	parmout->AddAbstract("Filename Outputmap");
-	metadata.AddParameter(parmout);
-
 	return metadata.toString();
 }
 
@@ -99,7 +81,7 @@ class DATEXPORT ErrorGroupDomain: public ErrorObject
 {
 public:
   ErrorGroupDomain(const String& sDomain, const WhereError& where)
-  : ErrorObject(WhatError(String(SMAPErrDomainGroupOnly_S.scVal(), sDomain), errMapSlicing+1), where) {}
+  : ErrorObject(WhatError(String(TR("Only group domain allowed: '%S'").c_str(), sDomain), errMapSlicing+1), where) {}
 };
 
 MapSlicing* MapSlicing::create(const FileName& fn, MapPtr& p, const String& sExpr)

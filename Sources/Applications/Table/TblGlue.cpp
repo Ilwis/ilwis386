@@ -57,14 +57,14 @@ const char* TableGlue::sSyntax()
 
 void ThrowCouldNotCreateTable(const FileName& fn, String& sName)
 {
-		String s(STBLErrCreateTable_S.scVal(), sName);
+		String s(TR("Could not create table %S").c_str(), sName);
 		
 		throw ErrorObject(WhatError(s, errTableGlue+1), fn);
 }
 
 void ThrowIllegalDomainCombination(const FileName& fn)
 {
-		String s(STBLErrIncompatibleDomains); 	 
+		String s(TR("Tables to be merged do not have \nthe correct domain combinations")); 	 
 		throw ErrorObject(WhatError(s, errTableGlue+2), fn);
 } 	 
  
@@ -189,7 +189,7 @@ TableGlue::TableGlue(const FileName& fName, TablePtr &tab) :
 		{
 				FileName fn;
 				String s("Table%d", i);
-				ReadElement("TableGlue", s.scVal(), fn);
+				ReadElement("TableGlue", s.c_str(), fn);
 				Table tab(fn);
 				if (tab.fValid())
 				{
@@ -213,14 +213,14 @@ void TableGlue::Store()
 		for(unsigned int i=0; i<tableAr.iSize(); ++i)
 		{
 				String s("Table%d", i);
-				WriteElement("TableGlue", s.scVal(), tableAr[i]->fnObj);
+				WriteElement("TableGlue", s.c_str(), tableAr[i]->fnObj);
 		}
 }
 
 bool TableGlue::fFreezing()
 {
-		trq.SetTitle(STBLTitleTableGlue);
-		trq.SetText(STBLTextAddingRecords);
+		trq.SetTitle(TR("TableGlue"));
+		trq.SetText(TR("Adding records"));
 		ArrayLarge<long> aiRecode;
 		long iStartRecNo = 1, iTotalUniqueIDs = 0;
 		DomainSort* pdsrt1 = dm()->pdsrt();
@@ -272,7 +272,7 @@ bool TableGlue::fFreezing()
 
 bool TableGlue::fMakeRecodeTable(DomainSort *pdsrt2, ArrayLarge<long>& aiRecode, long& iStartRecNo)
 {
-	trq.SetText(STBLTextMakingRecodeTable);
+	trq.SetText(TR("Making recoding table"));
 	DomainSort* pdsrt1 = dm()->pdsrt();
 //		aiRecode.Resize(pdsrt2->iSize(),1); 			
 	aiRecode.Resize(pdsrt2->iSize()); // zero based
@@ -299,7 +299,7 @@ bool TableGlue::fMergeTable(Table& SourceTable, ArrayLarge<long>& aiRecode, long
 		//String sColSrcName = colSource->sName();
 		//if (sColSrcName == "npix" || sColSrcName == "Area")
 		//	continue; //don't copy numerical area info in the glued result map
-		String sN(STBLTestMergingTableCol_S.scVal(), SourceTable->sName(), colSource->sName());
+		String sN(TR("Merging table %S : Col %S").c_str(), SourceTable->sName(), colSource->sName());
 		trq.SetText(sN);
 		
 		Column colNew = NewColumn(colSource);

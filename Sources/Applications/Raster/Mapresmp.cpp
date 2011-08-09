@@ -122,29 +122,6 @@ IlwisObjectPtr * createMapResample(const FileName& fn, IlwisObjectPtr& ptr, cons
 
 String wpsmetadataMapResample() {
 	WPSMetaData metadata("MapResample");
-	metadata.AddTitle("Resampling raster map");
-	metadata.AddAbstract("Resample a raster map to another georeference");
-	metadata.AddKeyword("spatial");
-	metadata.AddKeyword("raster");
-	metadata.AddKeyword("Spatial reference system");
-	metadata.AddKeyword("Georeference");
-	WPSParameter *parm1 = new WPSParameter("1","Input Map", WPSParameter::pmtRASMAP);
-	parm1->AddAbstract("Filename Inputmap");
-
-	WPSParameter *parm2= new WPSParameter("2","Georeference", WPSParameter::pmtGEOREF);
-	parm2->AddTitle("The Georeference to resample to");
-
-	WPSParameter *parm3 = new WPSParameter("3","Resample Method", WPSParameter::pmtENUM);
-	parm3->AddAbstract("resampling method using nearest neighbour, bi-linear or bi-cubic");
-	parm3->AddDefault("bi-cubic");
-
-	metadata.AddParameter(parm1);
-	metadata.AddParameter(parm2);
-	metadata.AddParameter(parm3);
-
-	WPSParameter *parmout = new WPSParameter("outputmap","Output Map", WPSParameter::pmtRASMAP, false);
-	metadata.AddParameter(parmout);
-
 	return metadata.toString();
 }
 
@@ -175,7 +152,7 @@ static int iFind(const String& s, const char* sArr[])
 {
   int i = 0; 
   while (sArr[i]) {
-    if (_strnicmp(sArr[i], s.scVal(), s.length()) == 0)
+    if (_strnicmp(sArr[i], s.c_str(), s.length()) == 0)
       return i;
     i++;
   }
@@ -186,7 +163,7 @@ class DATEXPORT ErrorResample: public ErrorObject
 {
 public:
   ErrorResample(const String& sResampleType, const WhereError& where)
-  : ErrorObject(WhatError(String(SMAPErrInvalidResampleMethod_S.scVal(), sResampleType), errMapResample), where) {}
+  : ErrorObject(WhatError(String(TR("Invalid Resample Method: '%S'").c_str(), sResampleType), errMapResample), where) {}
 };
 
 static void GeoRefNoneError(const FileName& fn, IlwisError err)
@@ -211,13 +188,13 @@ MapResample* MapResample::create(const FileName& fn, MapPtr& p, const String& sE
 	String sInputMapName = as[0];
 	char *pCh = sInputMapName.strrchrQuoted('.');
 	if ((pCh != 0) && (0 != _strcmpi(pCh, ".mpr")))  // attrib map
-		throw ErrorObject(WhatError(String(SMAPErrNoAttColumnAllowed_S.scVal(), as[0]), errMapResample), fn);
+		throw ErrorObject(WhatError(String(TR("Use of attribute maps is not possible: '%S'").c_str(), as[0]), errMapResample), fn);
 	
 	Map mp(as[0], fn.sPath());
 	GeoRef gr = GeoRef(as[1], fn.sPath());
 	GeoRefPtr* pgr = gr.ptr();
 	if (mp->gr()->fEqual(*pgr))
-		throw ErrorObject(String(SMAPMsgMapGeoRefEqual_SS.scVal(), mp->sName(), gr->sName()));
+		throw ErrorObject(String(TR("GeoRef of Map %S and GeoRef %S are equal, no resample needed").c_str(), mp->sName(), gr->sName()));
 	
 	int iRsmMeth = iFind(as[2], sResampleMethods);
 	if (shUNDEF == iRsmMeth)
@@ -226,13 +203,13 @@ MapResample* MapResample::create(const FileName& fn, MapPtr& p, const String& sE
 	bool fPatch = true;
 	if (iParms == 4) {
 		if ((!fCIStrEqual(as[3] , "Patch")) && (!fCIStrEqual(as[3] , "NoPatch")))
-			throw ErrorObject(WhatError(String(SMAPErrInvalidParameter4_S.scVal(), as[3]), errMapResample+5), fn);
+			throw ErrorObject(WhatError(String(TR("Invalid 4th parameter (Patch|NoPatch) '%S'").c_str(), as[3]), errMapResample+5), fn);
 		fPatch = fCIStrEqual(as[3] , "Patch");
 	}
 	bool fGrNoneAllowed = false;
 	if (iParms == 5) {
 		if ((!fCIStrEqual(as[4] , "GrNoneAllowed")) && (!fCIStrEqual(as[4] , "GrNoneDenied")))
-			throw ErrorObject(WhatError(String(SMAPErrInvalidParameter5_S.scVal(), as[4]), errMapResample+6), fn);
+			throw ErrorObject(WhatError(String(TR("Invalid 5th parameter (GrNoneAllowed|GrNoneDenied) '%S'").c_str(), as[4]), errMapResample+6), fn);
 		fGrNoneAllowed = fCIStrEqual(as[4] , "GrNoneAllowed");
 	}
 	return new MapResample(fn, p, mp, gr, rm, fPatch, fGrNoneAllowed);
@@ -377,7 +354,7 @@ bool MapResample::fFreezing()
 	iNrPatches = iNrPatchCols * iNrPatchRows;
 	
 	// walk through the output map
-	trq.SetText(String(SMAPTextResampling_S.scVal(), mp->sName(true, mp->fnObj.sPath())));
+	trq.SetText(String(TR("Resampling map '%S'").c_str(), mp->sName(true, mp->fnObj.sPath())));
 	RealBuf rBuf(iCols());
 	LongBuf iBuf(iCols());
 	switch (rm) {

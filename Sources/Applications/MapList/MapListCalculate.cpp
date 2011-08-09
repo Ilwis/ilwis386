@@ -71,7 +71,7 @@ MapListCalculate::MapListCalculate(const FileName& fn, MapListPtr& ptr)
 	{
 		String sSection ("MapList%d", i);
 		MapList ml;
-	  ReadElement("MapListCalculate", sSection.scVal(), ml);
+	  ReadElement("MapListCalculate", sSection.c_str(), ml);
 		m_vml.push_back(ml);
 	}
   Init();
@@ -110,7 +110,7 @@ void MapListCalculate::Store()
 	for (int i = 0; i < m_vml.size(); ++i)
 	{
 		String sSection ("MapList%d", i);
-		WriteElement("MapListCalculate", sSection.scVal(), m_vml[i]);
+		WriteElement("MapListCalculate", sSection.c_str(), m_vml[i]);
 	}
 }
 
@@ -167,7 +167,7 @@ bool MapListCalculate::fFreezing()
 
 		CheckExpression();
 			
-    trq.SetText(SMPLTextConstructing);
+    trq.SetText(TR("Constructing"));
     
 		int iMaps = m_iLastBand - m_iFirstBand + 1;
 
@@ -220,7 +220,7 @@ bool MapListCalculate::fFreezing()
 			return false;
 		}
 		ptr.SetGeoRef(map(0)->gr());
-		trq.SetText(SMPLTextCalculatingMap);
+		trq.SetText(TR("Calculating Map"));
 		for (int i = 0; i < iMaps; ++i) 
 		{
 			if (trq.fUpdate(i, iMaps)) 

@@ -58,21 +58,7 @@ IlwisObjectPtr * createMapAreaNumbering(const FileName& fn, IlwisObjectPtr& ptr,
 
 String wpsmetadataMapAreaNumbering() {
 	WPSMetaData metadata("MapAreaNumbering");
-	metadata.AddTitle("MapAreaNumbering");
-	metadata.AddAbstract("A raster operation which assigns unique identifiers to pixels with the same class names or values that are horizontally, vertically or diagonally connected");
-	metadata.AddKeyword("spatial");
-	metadata.AddKeyword("raster");
-	metadata.AddKeyword("Classification");
-	WPSParameter *parm1 = new WPSParameter("1","Input Map", WPSParameter::pmtRASMAP);
-	parm1->AddAbstract("Input raster map");
-	WPSParameter *parm2 = new WPSParameter("2","Connected", WPSParameter::pmtINTEGER);
-	parm2->AddAbstract("Indicates whether to construct 8-connected or 4-connected areas");
-	metadata.AddParameter(parm1);
-	metadata.AddParameter(parm2);
-	WPSParameter *parmout = new WPSParameter("Result","Output Map",WPSParameter::pmtRASMAP, false);
-	parmout->AddAbstract("Reference Outputmap and supporting data objects");
-	metadata.AddParameter(parmout);
-	
+
 
 	return metadata.toString();
 }
@@ -187,7 +173,7 @@ bool MapAreaNumbering::fFreezing()
 		iPrevArnLine[i] = 0;
 	for (i=-1; i <= iCols(); i++)
 		iArnLine[i] = iUNDEF;
-	trq.SetText(SMAPMsgFirstPass);
+	trq.SetText(TR("Find Areas"));
 	if (!mp->dvrs().fRealValues()) {
 		long iValue;
 		iCurrLine.Size(iCols(), 1, 1);
@@ -347,7 +333,7 @@ bool MapAreaNumbering::fFreezing()
 		colAr->fErase = true;
 	}
 
-	trq.SetText(SMAPTextCreateAttrTable);
+	trq.SetText(TR("Create attribute table"));
 	iFinalArn = 1;
 	for (iTempArn = 1; iTempArn <= iArn; iTempArn++) {
 		if (ArnToBeReplacedWith[iTempArn] == 0) {
@@ -375,7 +361,7 @@ bool MapAreaNumbering::fFreezing()
 	}
 	col->fErase = false;
 	tbl->fErase = false;
-	trq.SetText(SMAPMsgSecondPass);
+	trq.SetText(TR("Renumber"));
 	// renumber
 	CreateMapStore();
 	Store();

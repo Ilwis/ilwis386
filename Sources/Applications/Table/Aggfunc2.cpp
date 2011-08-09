@@ -48,7 +48,7 @@
 static int iHash(const HashAggSPrdMed& haspm) {
   unsigned long h = 0;
   int i=0;  
-  char *ps = const_cast<char *>(haspm.sVal.scVal());
+  char *ps = const_cast<char *>(haspm.sVal.c_str());
   while (*ps)
     h = (h + (i++) * tolower(*ps++)) % 16001;
   return (int)h;  

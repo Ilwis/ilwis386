@@ -67,11 +67,11 @@ ColumnCumulative::ColumnCumulative(const Table& tbl, const String& sColName, Col
 : ColumnVirtual(tbl, sColName, ptr)
 {
   String s;
-  ReadElement(sSection().scVal(), "InputColumn", s);
+  ReadElement(sSection().c_str(), "InputColumn", s);
   if (s.length())
     colInp = Column(s, tbl);
   objdep.Add(colInp.ptr());
-  ReadElement(sSection().scVal(), "SortColumn", s);
+  ReadElement(sSection().c_str(), "SortColumn", s);
   if (s.length()) {
     colSort = Column(s, tbl);
     objdep.Add(colSort.ptr());

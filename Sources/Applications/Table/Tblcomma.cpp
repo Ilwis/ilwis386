@@ -45,14 +45,14 @@
 TableCommaDelimited::TableCommaDelimited(const FileName& fnObj, TablePtr& p)
 : TableStore(fnObj, p)
 {
-  ObjectInfo::ReadElement(ptr.sSection("TableCommaDelimited").scVal(),
+  ObjectInfo::ReadElement(ptr.sSection("TableCommaDelimited").c_str(),
                           "SkipLines", ptr.fnObj, iSkipLines);
   // read undef info per column
   for (int c = 0; c < iCols(); ++c) {
     String sEntry("Undef%i", c);
     String sUndef;
-    ObjectInfo::ReadElement(ptr.sSection("TableCommaDelimited").scVal(),
-       sEntry.scVal(), ptr.fnObj, sUndef);
+    ObjectInfo::ReadElement(ptr.sSection("TableCommaDelimited").c_str(),
+       sEntry.c_str(), ptr.fnObj, sUndef);
     asUndef[c] = sUndef;
   }
   Load();
@@ -181,17 +181,17 @@ void TableCommaDelimited::Store()
   if (ptr.fnObj.sFile.length() == 0)  // empty file name
     return;
   TableStore::Store();
-  ObjectInfo::WriteElement(ptr.sSection("TableStore").scVal(), "Type", ptr.fnObj, "CommaDelimited");
+  ObjectInfo::WriteElement(ptr.sSection("TableStore").c_str(), "Type", ptr.fnObj, "CommaDelimited");
   // write undef info per column
   for (int c = 0; c < iCols(); ++c) {
     String sEntry("Undef%i", c);
     String sUndef = asUndef[c];
     if (sUndef[0])
-      ObjectInfo::WriteElement(ptr.sSection("TableCommaDelimited").scVal(),
-         sEntry.scVal(), ptr.fnObj, sUndef);
+      ObjectInfo::WriteElement(ptr.sSection("TableCommaDelimited").c_str(),
+         sEntry.c_str(), ptr.fnObj, sUndef);
     else
-      ObjectInfo::WriteElement(ptr.sSection("TableCommaDelimited").scVal(),
-         sEntry.scVal(), ptr.fnObj, (char*)0);
+      ObjectInfo::WriteElement(ptr.sSection("TableCommaDelimited").c_str(),
+         sEntry.c_str(), ptr.fnObj, (char*)0);
   }
 }
 

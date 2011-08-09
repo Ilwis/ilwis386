@@ -285,7 +285,7 @@ bool MapMaplistStatistics::fFreezing()
     long iCols = rc.Col;
     long iLines = rc.Row;
 
-    trq.SetText("Calculating maplist statistics"); //SMAPTextCalcCompHist);
+    trq.SetText("Calculating maplist statistics"); //TR("Calculate histograms"));
     trq.SetTitle(sFreezeTitle);
     trq.setHelpItem(htpFreeze);
 

@@ -128,7 +128,7 @@ MapSegmentDensity::MapSegmentDensity(const FileName& fn, MapPtr& p)
 {
   fNeedFreeze = true;
   sFreezeTitle = "MapSegmentDensity";
-  htpFreeze = "ilwisapp\\\segment_density_algorithm.htm";
+  htpFreeze = "ilwisapp\\segment_density_algorithm.htm";
   String sMask;
   ReadElement("SegmentMapDensity", "Mask", sMask);
   mask.SetMask(sMask);
@@ -146,7 +146,7 @@ MapSegmentDensity::MapSegmentDensity(const FileName& fn, MapPtr& p,
     IncompatibleCoordSystemsError(cs()->sName(true, fnObj.sPath()), sm->cs()->sName(true, fnObj.sPath()), sTypeName(), errMapSegmentDensity+1);
   fNeedFreeze = true;
   sFreezeTitle = "MapSegmentDensity";
-  htpFreeze = "ilwisapp\\\segment_density_algorithm.htm";
+  htpFreeze = "ilwisapp\\segment_density_algorithm.htm";
   mask.SetMask(sMsk);
   objdep.Add(gr.ptr());
   if (!fnObj.fValid())
@@ -190,7 +190,7 @@ bool MapSegmentDensity::fFreezing()
   Coord cFrom, cTo;
   RowCol rcTopLeft, rcFrom, rcTo;
   bool fPatchChanged;
-  trq.SetText(SMAPTextCalculating);
+  trq.SetText(TR("Calculating"));
 // 26/8/97 Wim: I do not see any reason for more than one calculation type,
 // always work with real patches.
   RealPatch ptCur;
@@ -586,7 +586,7 @@ bool MapSegmentDensity::fInitFill(Map& mp)
 
   long iNrPatch = 0;
   long iTotPatch = ((iLine + PATCH_SIDE) / PATCH_SIDE) * ((iCol + PATCH_SIDE) / PATCH_SIDE);
-  trq.SetText(SMAPTextInitializeMap);
+  trq.SetText(TR("Initialize map"));
 
   switch (st()) {
     case stBIT :

@@ -304,8 +304,8 @@ bool MapNearestPoint::fFreezing()
 		}
   };
 
-  trq.SetText(SMAPTextCalculating);
-  trq.SetTitle(SMAPTextMapNearestPoint);
+  trq.SetText(TR("Calculating"));
+  trq.SetTitle(TR("MapNearestPoint"));
   // Code changed so that points with undef values are not entered
   // in the list DV
   long iValCnt = 0;

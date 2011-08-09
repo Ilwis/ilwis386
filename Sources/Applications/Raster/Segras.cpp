@@ -312,7 +312,7 @@ void MapRasterizeSegment::StoreMapBuffer(void *buf) {
 bool MapRasterizeSegment::fFreezing()
 {
 	if (0 == sm->sms()) {
-		throw ErrorObject(SMAPErrRasterizingAttrMap);
+		throw ErrorObject(TR("Rasterizing of Attribute Map not possible"));
 	}
 
 	bool fTransformCoords = cs() != sm->cs();

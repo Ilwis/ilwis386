@@ -53,34 +53,6 @@ IlwisObjectPtr * createMapDistance(const FileName& fn, IlwisObjectPtr& ptr, cons
 
 String wpsmetadataMapDistance() {
 	WPSMetaData metadata("MapDistance");
-	metadata.AddTitle("MapDistance");
-	metadata.AddAbstract("each pixel is assigned the distance in meters towards user-specified source pixels, for example distance to schools, distance to roads etc.");
-	metadata.AddKeyword("spatial");
-	metadata.AddKeyword("raster");
-	metadata.AddKeyword("distance");
-	WPSParameter *parm1 = new WPSParameter("1","Input Map",WPSParameter::pmtRASMAP);
-	parm1->AddAbstract("is the name of the source map");
-
-	WPSParameterGroup *grp = new WPSParameterGroup("Weight",0,"Weight");
-
-	WPSParameter *parm2 = new WPSParameter("0","Weight map", WPSParameter::pmtRASMAP);
-	parm2->AddAbstract("is the name of the weight map; the weight map should be a map with a value domain.");
-
-	WPSParameter *parm3= new WPSParameter("2","Thiessen Map", WPSParameter::pmtENUM);
-	parm3->AddAbstract("Optional calculation of a Thiessen map. When calculating a Thiessen map, also a distance map is calculated");
-	parm3->setOptional(true);
-
-	grp->addParameter(parm2);
-	grp->addParameter(parm3);
-	grp->setOptional(true);
-
-	metadata.AddParameter(parm1);
-	metadata.AddParameter(grp);
-
-	WPSParameter *parmout = new WPSParameter("Result","Output Map", WPSParameter::pmtRASMAP, false);
-	parmout->AddAbstract("reference Outputmap and supporting data objects");
-	metadata.AddParameter(parmout);
-	
 
 	return metadata.toString();
 }
@@ -123,7 +95,7 @@ ValueRange MapDistance::vrDefault(const Map& mp)
 
 static void SameNameDistThiessenError(const FileName& fn)
 {
-  throw ErrorObject(WhatError(SMAPErrDuplicateName, errMapDistance+4), fn);
+  throw ErrorObject(WhatError(TR("Same name used for Thiessen Map\nand Distance Map"), errMapDistance+4), fn);
 }
 
 MapDistance* MapDistance::create(const FileName& fn, MapPtr& p, const String& sExpr)
@@ -297,7 +269,7 @@ bool MapDistance::fForwardDistances(long& iChanges, bool fFirstPass)
 // iStart = position to read/write in temporary file
 
 	bool fCalcThiessen = sMapThiessen.length() != 0;
-	trq.SetText(SMAPTextForward);
+	trq.SetText(TR("Forward"));
 	iChanges = 0;
 	trq.fUpdate(iChanges); 
 	iLineChanges = 0;
@@ -305,7 +277,7 @@ bool MapDistance::fForwardDistances(long& iChanges, bool fFirstPass)
 	{
 		if (iLineChanges != 0)
 		{
-			String s = String(SMAPTextForwardChanges_i.scVal(), iChanges);
+			String s = String(TR("Changes forward %li. Line").c_str(), iChanges);
 			trq.SetText(s);
 		}
 		if (trq.fUpdate(iCurLine, iLines()))
@@ -494,13 +466,13 @@ bool MapDistance::fBackwardDistances(long& iChanges)
 
 
   bool fCalcThiessen = sMapThiessen.length() != 0;
-  trq.SetText(SMAPTextBackward);
+  trq.SetText(TR("Backward"));
   iChanges = 0;
   iLineChanges = 0;
   trq.fUpdate(iChanges); 
   for (iCurLine = iLines() - 1; iCurLine >= 0; iCurLine--) {
     if (iLineChanges != 0) {
-      String s = String(SMAPTextBackwardChanges_i.scVal(), iChanges);
+      String s = String(TR("Changes backward %li. Line").c_str(), iChanges);
       trq.SetText(s);
     }
     if (trq.fUpdate(iCurLine, iLines()))
@@ -650,7 +622,7 @@ bool MapDistance::fCorrectDistances()
   // Best correction factor, smallest variance
   RealBuf rBufDist(iColumns);
   LongBuf iThiess(iColumns);
-  trq.SetText(SMAPTextFinal);
+  trq.SetText(TR("Final"));
   filTemp->Seek(0);
   for (long iLine = 0; iLine < iLines(); iLine++) {
     if (!(iLine % 10))

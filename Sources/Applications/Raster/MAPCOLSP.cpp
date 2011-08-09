@@ -57,20 +57,6 @@ IlwisObjectPtr * createMapColorSep(const FileName& fn, IlwisObjectPtr& ptr, cons
 
 String wpsmetadataMapColorSep() {
 	WPSMetaData metadata("MapColorSep");
-	metadata.AddTitle("MapColorSep");
-	metadata.AddAbstract("allows you to extract different 'bands' for instance from a scanned or digital color photo as if using color filters when taking the picture");
-	metadata.AddKeyword("spatial");
-	metadata.AddKeyword("raster");
-	metadata.AddKeyword("color");
-	WPSParameter *parm1 = new WPSParameter("1","Input Map",WPSParameter::pmtRASMAP);
-	parm1->AddAbstract("Input raster map.The input maps must have a Picture domain or the Color domain");
-	WPSParameter *parm2 = new WPSParameter("2","Extracted Color", WPSParameter::pmtSTRING);
-	parm2->AddAbstract("The color you want to extract");
-	metadata.AddParameter(parm1);
-	metadata.AddParameter(parm2);
-	WPSParameter *parmout = new WPSParameter("Result","Output Map", WPSParameter::pmtRASMAP, false);
-	parmout->AddAbstract("reference Outputmap and supporting data objects");
-	metadata.AddParameter(parmout);
 	
 
 	return metadata.toString();
@@ -134,7 +120,7 @@ MapColorSep::MapColorSep(const FileName& fn, MapPtr& p,const Map& mp, const Stri
 {
   iColor = iColorType(sColor);
   if (iColor == shUNDEF)
-    throw ErrorObject(WhatError(String(SMAPErrInvalidColor_S.scVal(), sColor), errMapColorSep), fnObj);
+    throw ErrorObject(WhatError(String(TR("Invalid color type: %S").c_str(), sColor), errMapColorSep), fnObj);
 
   SetDomainValueRangeStruct(Domain("image"));
 assert(dm()->pdi());  
@@ -144,7 +130,7 @@ assert(dm()->pdi());
     rpr = mp->dm()->rpr();
   else if (0 == mp->dm()->pdcol())
     throw ErrorObject(
-      WhatError(String(SMAPErrPictOrColorRequired_S.scVal(), dm()->sName(true, fnObj.sPath())), errMapColorSep+1), 
+      WhatError(String(TR("Only picture or domain 'Color' allowed: %S").c_str(), dm()->sName(true, fnObj.sPath())), errMapColorSep+1), 
       fnObj);
   fNeedFreeze = false;
   if (!fnObj.fValid())

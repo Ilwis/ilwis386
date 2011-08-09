@@ -85,10 +85,10 @@ const char* MapVariogramSurfaceRas::sSyntax() {
 }
 
 static void NrLagsNotPos(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrNrLagsNotPos), errMapVariogramSurfaceRas), fn);
+  throw ErrorObject(WhatError(String(TR("Number of Lags must be greater then 0")), errMapVariogramSurfaceRas), fn);
 }
 static void NrLagsTooLargeRas(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrNrLagsTooLargeRas), errMapVariogramSurfaceRas +1), fn);
+  throw ErrorObject(WhatError(String(TR("Number of Lags may not exceed 45")), errMapVariogramSurfaceRas +1), fn);
 }
 static void GeoRefNoneError(const FileName& fn, IlwisError err)
 {

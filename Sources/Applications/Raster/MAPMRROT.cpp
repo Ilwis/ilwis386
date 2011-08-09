@@ -82,7 +82,7 @@ static int iFind(const String& s, const char* sArr[])
 {
   int i = 0; 
   while (sArr[i]) {
-    if (_strnicmp(sArr[i], s.scVal(), s.length()) == 0)
+    if (_strnicmp(sArr[i], s.c_str(), s.length()) == 0)
       return i;
     i++;
   }
@@ -93,7 +93,7 @@ class DATEXPORT ErrorRotateMethod: public ErrorObject
 {
 public:
   ErrorRotateMethod(const String& sMethod, const WhereError& where)
-  : ErrorObject(WhatError(String(SMAPErrInvalidRotateMethod_S.scVal(), sMethod), errMapMirrorRotate), where) {}
+  : ErrorObject(WhatError(String(TR("Invalid rotate method: '%S'").c_str(), sMethod), errMapMirrorRotate), where) {}
 };
 
 void RotateMethodError(const String& sMethod, const FileName& fn)
@@ -138,7 +138,7 @@ MapMirrorRotate::MapMirrorRotate(const FileName& fn, MapPtr& p, const Map& mp, i
 		grNew.SetPointer(new GeoRefMirrorRotate(FileName(fn, ".grf"), mp->gr(), (MirrorRotateType)iMethod));
 		ptr.SetGeoRef(grNew);
 		ptr.SetSize(grNew->rcSize());
-		ptr.gr()->SetDescription(String(SMAPMsgGeoRefCreatedFrom_S.scVal(), sExpression()));
+		ptr.gr()->SetDescription(String(TR("Created from %S").c_str(), sExpression()));
 		ptr.gr()->Store();
 	}
 	else
@@ -457,7 +457,7 @@ bool MapMirrorRotate::fCompute(MapPtr* ptr, MapPtr* ptrRot, MirrorRotateType mrt
   long iCols = ptr->iCols();
   long iLines = ptr->iLines();
 
-  trq->SetText(SMAPTextRotating);
+  trq->SetText(TR("Rotating"));
   switch (ptr->st()) {
     case stREAL : {
       int iNrBufCol = (32767>>2) / iLines > iCols ? iCols : 32767/iLines;

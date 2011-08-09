@@ -58,38 +58,6 @@ IlwisObjectPtr * createMapGlue(const FileName& fn, IlwisObjectPtr& ptr, const St
 
 String wpsmetadataMapGlue() {
 	WPSMetaData metadata("MapGlue");
-	metadata.AddTitle("MapGlue");
-	metadata.AddAbstract("merges two or more georeferenced input raster maps into one output raster map");
-	metadata.AddKeyword("spatial");
-	metadata.AddKeyword("raster");
-	metadata.AddKeyword("mosaicing");
-
-	WPSParameter *parm1 = new WPSParameter("0","Georeference",WPSParameter::pmtGEOREF);
-	parm1->AddAbstract("optional parameter to specify the name of an existing georeference that you wish to use as the georeference for the output raster map");
-	parm1->setOptional(true);
-
-	WPSParameter *parm2 = new WPSParameter("1","Input Map 1",WPSParameter::pmtRASMAP);
-	parm2->setRange(RangeInt(2,100));
-
-	WPSParameterGroup *grp1 = new WPSParameterGroup("Addtional",2,"Additional");
-	grp1->setOptional(true);
-	WPSParameter *parm3 = new WPSParameter("0","Create new merged domain",WPSParameter::pmtDOMAIN);
-	parm3->setOptional(true);
-	parm3->AddAbstract("optional parameter in case of merging Class or ID maps that do not have the same domain");
-	WPSParameter *parm4 = new WPSParameter("1","Overlap handling",WPSParameter::pmtBOOL);
-	parm4->setOptional(true);
-	parm4->AddAbstract("When this parameter is not used, then the values, class names, IDs or colors of the first input map will be used for overlapping pixels");
-	grp1->addParameter(parm3);
-	grp1->addParameter(parm4);
-
-
-	metadata.AddParameter(parm1);
-	metadata.AddParameter(parm2);
-	metadata.AddParameter(grp1);
-	WPSParameter *parmout = new WPSParameter("Result","Output Map", WPSParameter::pmtRASMAP, false);
-	parmout->AddAbstract("Reference Outputmap and supporting data objects");
-	metadata.AddParameter(parmout);
-	
 
 	return metadata.toString();
 }
@@ -197,7 +165,7 @@ MapGlue::MapGlue(const FileName& fn, MapPtr& p)
     for (int i=1; i < iNMaps; ++i)
     {
       String sEntry("RasterMap%d", i);
-      ReadElement("MapGlue", sEntry.scVal(), map2);
+      ReadElement("MapGlue", sEntry.c_str(), map2);
       maps &= map2;
       objdep.Add(map2.ptr());
     }
@@ -294,7 +262,7 @@ void MapGlue::Store()
   {
     String sEntry("RasterMap%d", i);
     Map map_j=maps[i];
-    WriteElement("MapGlue", sEntry.scVal(), map_j);
+    WriteElement("MapGlue", sEntry.c_str(), map_j);
   }
   WriteElement("MapGlue", "ReplaceAlways", fReplaceAlways);
   if (sNewDom.length())
@@ -329,7 +297,7 @@ void MapGlue::LegalMapCollection()
   for (int i=0; i < iNMaps; ++i) // no georef nones present
   {
     if (!maps[i].fValid())    
-      ThrowInvalidMapError(SMAPErrInvalidMap, mp->fnObj);
+      ThrowInvalidMapError(TR("Invalid map"), mp->fnObj);
     if (maps[i]->gr()->fGeoRefNone())
       GeoRefNoneError(mp->fnObj, errMapGlue);
   }          
@@ -446,7 +414,7 @@ bool MapGlue::fFreezing()
 	unsigned short iMaxSize = USHRT_MAX / iStoreBytes;
 	if (fCreateGeoRef)
 		if (iMaxSize < mmMapLimits.width() || iMaxSize < mmMapLimits.height())
-			ThrowIncompatibleGeorefError(SMAPErrIncompatibleGeoRef, fnObj);
+			ThrowIncompatibleGeorefError(TR("Incompatible Georefs.\n Pixel size is too different or \n Distance between maps is too large."), fnObj);
 		
 	bool fResampleNeeded = false;
 	for (i = iFirstMap; i < iNMaps; ++i)
@@ -521,7 +489,7 @@ bool MapGlue::fGlueRasterMaps(const Map& map_i, bool fResampleNeeded, MinMax& mm
   DomainCombinations dcomb = dcDomainCombination(dm(), map_i->dm());
   
   trq.SetTitle(sFreezeTitle);
-  trq.SetText(SMAPTextCalculating);
+  trq.SetText(TR("Calculating"));
     // merge maps: first one takes precedence over second
   if (fValues()) 
   {
@@ -664,7 +632,7 @@ bool MapGlue::fMergeColorImage(Map& mpResample)
 bool MapGlue::fMergeSortSortOrPicturePicture(Map& mpResample, int  & iEndLastID ) // and picture, 
 {
     LongBuf iBuf1(iCols()), iBuf2(iCols());
-    trq.SetText(SMAPTextCalculating);
+    trq.SetText(TR("Calculating"));
     ArrayLarge<long> aiRecode;
     MakeRecodeTable(mpResample, aiRecode, iEndLastID);
     for (long i=0; i <  iLines(); ++i) 

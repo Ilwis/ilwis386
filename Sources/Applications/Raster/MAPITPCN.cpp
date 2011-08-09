@@ -53,25 +53,6 @@ IlwisObjectPtr * createMapInterpolContour(const FileName& fn, IlwisObjectPtr& pt
 
 String wpsmetadataMapInterpolContour() {
 	WPSMetaData metadata("MapInterpolContour");
-	metadata.AddTitle("MapInterpolContour");
-	metadata.AddAbstract("an operation which first rasterizes contour lines of a segment map with a value domain, and then calculates values for pixels that are not covered by segments by means of a linear interpolation");
-	metadata.AddKeyword("spatial");
-	metadata.AddKeyword("raster");
-	metadata.AddKeyword("linestring");
-	metadata.AddKeyword("interpolation");
-
-	WPSParameter *parm1 = new WPSParameter("1","Input Segment map",WPSParameter::pmtSEGMENTMAP);
-	parm1->AddAbstract("input segment map (value domain).");
-	WPSParameter *parm2 = new WPSParameter("2","Georeference", WPSParameter::pmtINTEGER);
-	parm2->AddAbstract("georeference that should be used for the output raster map");
-	parm2->setOptional(true);
-
-	metadata.AddParameter(parm1);
-	metadata.AddParameter(parm2);
-	WPSParameter *parmout = new WPSParameter("Result","Output Map", WPSParameter::pmtRASMAP, false);
-	parmout->AddAbstract("Reference Outputmap and supporting data objects");
-	metadata.AddParameter(parmout);
-	
 
 	return metadata.toString();
 }
@@ -215,7 +196,7 @@ bool MapInterpolContour::fFreezing()
   FileName filen=FileName::fnUnique(FileName("ic.tmp"));
   filTemp = new File(filen, facCRT);
 	if ( filTemp == NULL || filTemp->m_hFile == CFile::hFileNull)
-		throw ErrorObject(String(SMAPErrFileCouldNotBeCreated_S.scVal(), filen.sRelative()));
+		throw ErrorObject(String(TR("File %S can not be created").c_str(), filen.sRelative()));
   filTemp->SetErase();
   filTemp->KeepOpen(true);
 
@@ -300,10 +281,10 @@ bool MapInterpolContour::fForwardDistances(long& iChanges, bool fFirstPass)
   double* rPrevNearestCont2;
 
   iChanges = 0; iLineChanges = 0;
-  trq.SetText(SMAPTextScanningForward);
+  trq.SetText(TR("Scanning forward"));
   for (iCurLine = 0; iCurLine < iLines(); iCurLine++) {
     if (iLineChanges != 0) {
-      String s = String(SMAPTextForwardChanges_i.scVal(), iChanges);
+      String s = String(TR("Changes forward %li. Line").c_str(), iChanges);
       trq.SetText(s);
     }
     if (trq.fUpdate(iCurLine, iLines()))
@@ -494,13 +475,13 @@ bool MapInterpolContour::fBackwardDistances(long& iChanges)
   short*  iPrevDistToNearestCont2;
   double* rPrevNearestCont2;
 
-  trq.SetText(SMAPTextScanningBackward);
+  trq.SetText(TR("Scanning backward"));
   iChanges = 0; iLineChanges = 0;
   if (trq.fUpdate(iChanges))
     return false;
   for (iCurLine = iLines() - 1; iCurLine >= 0; iCurLine--) {
     if (iLineChanges != 0) {
-      String s = String(SMAPTextBackwardChanges_i.scVal(), iChanges);
+      String s = String(TR("Changes backward %li. Line").c_str(), iChanges);
       trq.SetText(s);
     }
     if (trq.fUpdate(iCurLine, iLines()))
@@ -667,7 +648,7 @@ bool MapInterpolContour::fInterpolate()
   // rW1 =  weight of the distance to the first nearest contour
   // rW2 =  weight of the distance to the second nearest contour
   // iStart = position to read/write in temporary file
-  trq.SetText(SMAPTextInterpolate);
+  trq.SetText(TR("Interpolate"));
   for (iCurLine = 0; iCurLine < iLines(); iCurLine++) {
     if (trq.fUpdate(iCurLine, iLines()))
       return false;

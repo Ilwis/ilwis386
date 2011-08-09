@@ -111,7 +111,7 @@ bool MapAggregateMapList::fFreezing()
 { 
   unsigned char *mapBlock = 0;
   try {
-    trq.SetText(SMPLTextConstructing);
+    trq.SetText(TR("Constructing"));
 	Map mp = ml[ ml->iLower()];
 	RowCol size = mp->rcSize();
 	int storeType = mp->st();
@@ -143,7 +143,7 @@ bool MapAggregateMapList::fFreezing()
 	for(int i =ml->iLower(); i < ml->iSize(); ++i) {
 		Map mp = ml[ i];
 		FileName fnData(mp->fnObj,".mp#");
-		FILE *fp = fopen(fnData.sFullPath().scVal(),"r");
+		FILE *fp = fopen(fnData.sFullPath().c_str(),"r");
 		fread((void *)(mapBlock + offset),1,blockSize, fp);
 		offset += blockSize;
 		fclose(fp);

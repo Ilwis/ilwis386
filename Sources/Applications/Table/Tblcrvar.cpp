@@ -63,10 +63,10 @@ const char* TableCrossVarioGram::sSyntax()
 }
 
 static void AttrTableNotFound(const FileName& fn) {
-  throw ErrorObject(WhatError(String(STBLErrAttrTableNotFound), errTableCrossVar), fn);
+  throw ErrorObject(WhatError(String(TR("Attribute table not found ")), errTableCrossVar), fn);
 }
 static void ColumnNotFound(const FileName& fn) {
-  throw ErrorObject(WhatError(String(STBLErrAttrColNotFound), errTableCrossVar +1), fn);
+  throw ErrorObject(WhatError(String(TR("Attribute column not found in table")), errTableCrossVar +1), fn);
 }
 
 TableCrossVarioGram* TableCrossVarioGram::create(const FileName& fn, TablePtr& p,
@@ -92,7 +92,7 @@ TableCrossVarioGram* TableCrossVarioGram::create(const FileName& fn, TablePtr& p
     ColumnNotFound(tbl->fnObj);
   rLagSp = as[3].rVal();
   if (rLagSp <= 0) 
-    throw ErrorObject(WhatError(String(STBLErrLagSpacingNotPos), errTableCrossVar +2), fn);
+    throw ErrorObject(WhatError(String(TR("Lag spacing must be positive")), errTableCrossVar +2), fn);
 	bool fSphericDist = false; //default
 	if (iParms == 5) { 
 		if (fCIStrEqual("plane", as[4]))
@@ -229,11 +229,11 @@ String TableCrossVarioGram::sAddInfo() const
   s &= String("\r\n  = %.3f (in squared B units)", rDataVarianceB);
   s &= "\r\nCrossVariance over all data shared by A and B\r\n(mean of all cross-multiplied deviations from the average)";
   s &= String("\r\n  = %.3f (in mixed 'AxB' units)", rDataCoVarianceAB);
-	/* String s = String(STBInfDataMeanA_lf.scVal(), rDataMeanA);
-	s &= String(STBInfDataVarianceA_lf.scVal(), rDataVarianceA);
-	s &= String(STBInfDataMeanB_lf.scVal(), rDataMeanB);
-	s &= String(STBInfDataVarianceB_lf.scVal(), rDataVarianceB);
-	s &= String(STBInfDataCoVarianceAB_lf.scVal(), rDataCoVarianceAB); */
+	/* String s = String(TR("Average over all data of attribute A:\n %.3f (in units of A)\n").c_str(), rDataMeanA);
+	s &= String(TR("Variance over all data of attribute A:\n %.3f (in squared A units)\n").c_str(), rDataVarianceA);
+	s &= String(TR("Average over all data of attribute B:\n %.3f (in units of B)\n").c_str(), rDataMeanB);
+	s &= String(TR("Variance over all data of attribute B:\n %.3f (in squared B units)\n").c_str(), rDataVarianceB);
+	s &= String(TR("CrossVariance over all data shared by A and B:\n %.3f (in mixed AxB units)").c_str(), rDataCoVarianceAB); */
   return s;
 }
 
@@ -302,8 +302,8 @@ bool TableCrossVarioGram::fComputeSemiAndCrossVar()
   double rDeviBSquared = 0.0;
   double rDeviABCrossed = 0.0;
   Coord cPoint_i, cPoint_j;
-  trq.SetTitle(STBLTitleCrossVariogram);
-  trq.SetText(STBLCalculate); 
+  trq.SetTitle(TR("CrossVariogram"));
+  trq.SetText(TR("Calculate")); 
   for (i = 1; i <= iNrPoints; i++) {  // collecting squared differences
     if (trq.fUpdate(i, iNrPoints))    // of variable 
       return false;
@@ -395,7 +395,7 @@ bool TableCrossVarioGram::fFreezing()
   long iNrPoints = pmp->iFeatures();      
   
   if (iNrPoints < 3 )
-    throw ErrorObject(WhatError(STBLErrTooFewPoints, errTableCrossVar+4),
+    throw ErrorObject(WhatError(TR("More than two points needed"), errTableCrossVar+4),
                       sTypeName());
   long iPnt;
   double rZ;
@@ -416,7 +416,7 @@ bool TableCrossVarioGram::fFreezing()
       // look for domain of X, Y and attribute
   }
   if (iValidPointsA < 3)
-    throw ErrorObject(WhatError(STBLErrTooFewValidPoints, errTableCrossVar+5),
+    throw ErrorObject(WhatError(TR("More than two valid points needed"), errTableCrossVar+5),
                       sTypeName());
 	rDataMeanA /= iValidPointsA;
 
@@ -435,7 +435,7 @@ bool TableCrossVarioGram::fFreezing()
       // look for domain of X, Y and attribute
   }
   if (iValidPointsB < 3)
-    throw ErrorObject(WhatError(STBLErrTooFewValidPoints, errTableCrossVar+6),
+    throw ErrorObject(WhatError(TR("More than two valid points needed"), errTableCrossVar+6),
                       sTypeName());   
 	rDataMeanB /= iValidPointsB; 
 
@@ -463,7 +463,7 @@ void TableCrossVarioGram::Init()
   colDist = pts->col("Distance");
   if (!colDist.fValid()) {
     colDist = pts->colNew("Distance", Domain("distance"));
-    colDist->sDescription = STBLMsgPointDistance;
+    colDist->sDescription = TR("Point distance");
   }
   colDist->SetOwnedByTable(true);
   colDist->SetReadOnly(true);
@@ -471,7 +471,7 @@ void TableCrossVarioGram::Init()
   colDistAvg = pts->col("AvgLag");
   if (!colDistAvg.fValid()) {
     colDistAvg = pts->colNew("AvgLag", Domain("distance"));
-    colDistAvg->sDescription = STBLMsgAvgPointDistanceAll & sDescAB;
+    colDistAvg->sDescription = TR("Average Lag length in all directions") + sDescAB;
   }
   colDistAvg->SetOwnedByTable(true);
   colDistAvg->SetReadOnly(true);
@@ -479,7 +479,7 @@ void TableCrossVarioGram::Init()
   colPairsA = pts->col("NrPairsA");
   if (!colPairsA.fValid()) {
     colPairsA = pts->colNew("NrPairsA", Domain("count"));
-    colPairsA->sDescription = String(STBLMsgNumberPointPairs_S.scVal(), sDescA);
+    colPairsA->sDescription = String(TR("Number of point pairs %S").c_str(), sDescA);
   }
   colPairsA->SetOwnedByTable(true);
   colPairsA->SetReadOnly(true);
@@ -487,7 +487,7 @@ void TableCrossVarioGram::Init()
   colPairsB = pts->col("NrPairsB");
   if (!colPairsB.fValid()) {
     colPairsB = pts->colNew("NrPairsB", Domain("count"));
-    colPairsB->sDescription = String(STBLMsgNumberPointPairs_S.scVal(), sDescB);
+    colPairsB->sDescription = String(TR("Number of point pairs %S").c_str(), sDescB);
   }
   colPairsB->SetOwnedByTable(true);
   colPairsB->SetReadOnly(true);
@@ -495,7 +495,7 @@ void TableCrossVarioGram::Init()
   colPairsAB = pts->col("NrPairsAB");
   if (!colPairsAB.fValid()) {
     colPairsAB = pts->colNew("NrPairsAB", Domain("count"));
-    colPairsAB->sDescription = String(STBLMsgNumberPointPairs_S.scVal(), sDescAB);
+    colPairsAB->sDescription = String(TR("Number of point pairs %S").c_str(), sDescAB);
   }
   colPairsB->SetOwnedByTable(true);
   colPairsB->SetReadOnly(true);
@@ -503,7 +503,7 @@ void TableCrossVarioGram::Init()
   colSemA = pts->col("SemiVarA");
   if (!colSemA.fValid()) {
     colSemA = pts->colNew("SemiVarA", Domain("value"), ValueRange(0,1e10,0.01));
-    colSemA->sDescription = String(STBLMsgSemiVariogram_S.scVal(), sDescA);
+    colSemA->sDescription = String(TR("SemiVariogram %S").c_str(), sDescA);
   }
   colSemA->SetOwnedByTable(true);
   colSemA->SetReadOnly(true);
@@ -511,7 +511,7 @@ void TableCrossVarioGram::Init()
   colSemB = pts->col("SemiVarB");
   if (!colSemB.fValid()) {
     colSemB = pts->colNew("SemiVarB", Domain("value"), ValueRange(0,1e10,0.01));
-    colSemB->sDescription = String(STBLMsgSemiVariogram_S.scVal(), sDescB);
+    colSemB->sDescription = String(TR("SemiVariogram %S").c_str(), sDescB);
   }
   colSemB->SetOwnedByTable(true);
   colSemB->SetReadOnly(true);
@@ -519,7 +519,7 @@ void TableCrossVarioGram::Init()
   colCross = pts->col("CrossVarAB");
   if (!colCross.fValid()) {
     colCross = pts->colNew("CrossVarAB", Domain("value"), ValueRange(-1e10,1e10,0.01));
-    colCross->sDescription = String(STBLMsgCrossVariogram_S.scVal(), sDescAB);
+    colCross->sDescription = String(TR("CrossVariogram %S").c_str(), sDescAB);
   }
   colCross->SetOwnedByTable(true);
   colCross->SetReadOnly(true);

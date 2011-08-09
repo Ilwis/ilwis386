@@ -346,7 +346,7 @@ bool TableCross::fFreezing()
   fnTemp.sExt = ".tmp";
   File filTemp(FileName::fnUnique(fnTemp), facCRT);
   filTemp.SetErase(true);
-  trq.SetText(STBLTextFillHashTable);
+  trq.SetText(TR("Fill hash table"));
   long iMaxCount = 0;
   if (fUseReal1) {
     for (long i = 0; i < iLines; ++i) {
@@ -495,7 +495,7 @@ bool TableCross::fFreezing()
 
   Init();
 
-  trq.SetText(STBLTextFillCrossTable);
+  trq.SetText(TR("Fill cross table"));
   long iIndex;
   long iChangName = 0;
   pdsrt->dsType = DomainSort::dsMANUAL;
@@ -668,7 +668,7 @@ bool TableCross::fFreezing()
 //  else 
 	{
 		trq.fUpdate(iComb, iComb); 
-		trq.SetText(STBLTextSorting);
+		trq.SetText(TR("Sorting"));
 		vector<long> index(iComb);
 		for (long i = 0; i < iComb; ++i)
 			index[i] = 1+i;
@@ -714,7 +714,7 @@ bool TableCross::fFreezing()
 	dvs = DomainValueRangeStruct(dm());
 	mpCross->SetDomainValueRangeStruct(dvs);
     mpCross->CreateMapStore();
-    trq.SetText(STBLTextWritingCrossMap);
+    trq.SetText(TR("Writing cross map"));
     filTemp.Seek(0);
     for (long i=0; i< mpCross->iLines(); ++i) {
       if (trq.fUpdate(i, mpCross->iLines()))

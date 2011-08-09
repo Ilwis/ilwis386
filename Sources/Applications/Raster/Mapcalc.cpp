@@ -98,14 +98,14 @@ static DList<StackObject> dlsoDummy;
 */
 
 const char* MapCalculate::sSyntax() {
-  return SCLCMsgSeeManual.scVal();
+  return TR("(see manual)").c_str();
 }
 
 class ErrorEmptyExpr : public ErrorObject
 {
 public:
   ErrorEmptyExpr(const WhereError& where)
-    : ErrorObject(WhatError(SCLCErrEmptyExpression, errMapCalculate), where) {}
+    : ErrorObject(WhatError(TR("Empty Expression"), errMapCalculate), where) {}
 };
 
 static void EmptyExprError()
@@ -120,14 +120,14 @@ static void EmptyExprError(const FileName& fn)
 
 static void UnexpectedTokenError(const String& sVal)
 {
-  ErrorObject(WhatError(String(SCLCErrUnexpected_S.scVal(), sVal), errColumnCalculate+3)).Show();
+  ErrorObject(WhatError(String(TR("Unexpected '%S'").c_str(), sVal), errColumnCalculate+3)).Show();
 }
 
 class ErrorCalcExpression : public ErrorObject
 {
 public:
   ErrorCalcExpression(const WhereError& where, const String& sExpr)
-    : ErrorObject(WhatError(String(SCLCErrInvalidCalcExpr.scVal(), sExpr), errMapCalculate+1), where) {}
+    : ErrorObject(WhatError(String(TR("Invalid calc expression: '%S'").c_str(), sExpr), errMapCalculate+1), where) {}
 };
 
 static void CalcExpressionError(const String& s, const String& sExpr)
@@ -143,12 +143,12 @@ static void CalcExpressionError(const FileName& fn, const String& sExpr)
 
 static void NoGeoRefError()
 {
-  throw ErrorObject(WhatError(SCLCErrNoGeoReference, errMapCalculate+2));
+  throw ErrorObject(WhatError(TR("No georeference"), errMapCalculate+2));
 } 
 
 static void CyclicDefError(const FileName& fn)
 {
-  throw ErrorObject(WhatError(SMAPErrCyclicDefine, errMapCalculate+1), fn);
+  throw ErrorObject(WhatError(TR("Cyclic definition"), errMapCalculate+1), fn);
 }
 
 Instructions* MapCalculate::instCreate(const String& sExpr, const FileName& fn, ObjectDependency& objdep, bool& fNoGeoRef)
@@ -250,7 +250,7 @@ void MapCalculate::Replace(const String& sExpr)
   if (0 == inst)
     CalcExpressionError(sTypeName(), sExpr);
   if (od.fUses(&ptr))
-    throw ErrorObject(WhatError(SMAPErrCyclicDefine, errMapCalculate+1), fnObj);
+    throw ErrorObject(WhatError(TR("Cyclic definition"), errMapCalculate+1), fnObj);
 //  MapVirtual::Replace(sExpr);
   if (0 != instruc)
     delete instruc;

@@ -70,7 +70,7 @@ TableNeighbourPol* TableNeighbourPol::create(const FileName& fn, TablePtr& p, co
   PolygonMap pmp(as[0], fn.sPath());
 
 	if (!pmp->fTopologicalMap())
-		throw ErrorObject(WhatError(STBLErrNonTopoMap, errTableNeighbourPol+1), fn);
+		throw ErrorObject(WhatError(TR("Polygon Map does not have topology"), errTableNeighbourPol+1), fn);
 
   return new TableNeighbourPol(fn, p, pmp);
 }
@@ -121,7 +121,7 @@ bool TableNeighbourPol::fFreezing()
 {
   Init();
   trq.SetTitle(sFreezeTitle);
-  trq.SetText(STBLTextGetNeigbours);
+  trq.SetText(TR("Determining neighbours"));
   long iPol = pmp->iFeatures();
   long iPol2 = pmp->iFeatures() * pmp->iFeatures();
   vector<recordInfo> output;

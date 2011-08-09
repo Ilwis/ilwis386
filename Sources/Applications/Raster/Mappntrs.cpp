@@ -138,7 +138,7 @@ MapRasterizePoint::MapRasterizePoint(const FileName& fn, MapPtr& p, const PointM
   if (gr->fGeoRefNone())
     throw ErrorGeoRefNone(gr->fnObj, err);
   if (iPointSize <= 0)
-    throw ErrorObject(WhatError(String(SMAPErrPointSizeNotPositiv.scVal(), iPointSize), err+1), sTypeName());
+    throw ErrorObject(WhatError(String(TR("Point size needs to be positive: %i").c_str(), iPointSize), err+1), sTypeName());
   if (!cs()->fConvertFrom(pmp->cs()))
     IncompatibleCoordSystemsError(cs()->sName(true, fnObj.sPath()), pmp->cs()->sName(true, fnObj.sPath()), sTypeName(), err+2);
 
@@ -212,7 +212,7 @@ bool MapRasterizePoint::fFreezing()
   
   bool fTransformCoords = cs() != pmp->cs();
   
-  trq.SetText(SMAPTextRasterize);
+  trq.SetText(TR("Rasterize"));
   for (long p = 1; p <= iPoints; p++) {
     if (trq.fUpdate(p, iPoints))
       return false;
@@ -284,7 +284,7 @@ void MapRasterizePoint::Init()
 
 bool MapRasterizePoint::fInitFill()
 {
-  trq.SetText(SMAPTextInitializeMap);
+  trq.SetText(TR("Initialize map"));
   if (dvrs().fValues() && (type == ptrsNORM)) { //rev 1.2 changed from fUseReals to fValues
     RealBuf rBufLine(iCols());
     for (int c = 0; c < iCols(); c++)

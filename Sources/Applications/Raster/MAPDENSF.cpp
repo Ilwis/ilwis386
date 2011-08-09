@@ -61,24 +61,7 @@ IlwisObjectPtr * createMapDensify(const FileName& fn, IlwisObjectPtr& ptr, const
 
 String wpsmetadataMapDensify() {
 	WPSMetaData metadata("MapDensify");
-	metadata.AddTitle("MapDensify");
-	metadata.AddAbstract("allows you to reduce the pixel size of a raster map, i.e. the number of rows and columns is increased in the output map");
-	metadata.AddKeyword("spatial");
-	metadata.AddKeyword("raster");
-	metadata.AddKeyword("georeference");
-	WPSParameter *parm1 = new WPSParameter("1","Input Map",WPSParameter::pmtRASMAP);
-	parm1->AddAbstract("Input raster map with associated attribute table");
-	WPSParameter *parm2 = new WPSParameter("2","Enlargement Factor", WPSParameter::pmtREAL);
-	parm2->AddAbstract("enlargement factor (real value > 1)");
-	WPSParameter *parm3= new WPSParameter("2","Interpolation method", WPSParameter::pmtENUM);
-	parm3->AddAbstract("Method of how pixel values are calculated");
-	metadata.AddParameter(parm1);
-	metadata.AddParameter(parm2);
-	metadata.AddParameter(parm3);
-	WPSParameter *parmout = new WPSParameter("Result","Output Map", WPSParameter::pmtRASMAP, false);
-	parmout->AddAbstract("reference Outputmap and supporting data objects");
-	metadata.AddParameter(parmout);
-	
+
 
 	return metadata.toString();
 }
@@ -110,7 +93,7 @@ static int iFind(const String& s, const char* sArr[])
 {
   int i = 0; 
   while (sArr[i]) {
-    if (_strnicmp(sArr[i], s.scVal(), s.length()) == 0)
+    if (_strnicmp(sArr[i], s.c_str(), s.length()) == 0)
       return i;
     i++;
   }
@@ -121,7 +104,7 @@ class DATEXPORT ErrorEnlarge: public ErrorObject
 {
 public:
   ErrorEnlarge(double rEnlFac, const WhereError& where)
-  : ErrorObject(WhatError(SMAPErrTooSmallFactor, errMapDensify+1), where) {}
+  : ErrorObject(WhatError(TR("Enlarge factor should be > 1)"), errMapDensify+1), where) {}
 };
 
 void EnlargeError(double rEnlFac, const FileName& fn)
@@ -133,7 +116,7 @@ class DATEXPORT ErrorMethod: public ErrorObject
 {
 public:
   ErrorMethod(const String& sMethod, const WhereError& where)
-  : ErrorObject(WhatError(String(SMAPErrInvalidDensifyMethod_S.scVal(), sMethod), errMapDensify+2), where) {}
+  : ErrorObject(WhatError(String(TR("Invalid densify method: '%S'").c_str(), sMethod), errMapDensify+2), where) {}
 };
 
 void MethodError(const String& sMethod, const FileName& fn)
@@ -191,7 +174,7 @@ MapDensify::MapDensify(const FileName& fn, MapPtr& p,
     ptr.SetSize(grNew->rcSize());
   }
   Init();
-	ptr.gr()->SetDescription(String(SMAPMsgGeoRefCreatedFrom_S.scVal(), sExpression()));
+	ptr.gr()->SetDescription(String(TR("Created from %S").c_str(), sExpression()));
 	ptr.gr()->Store();
 	objdep.Add(ptr.gr());
 

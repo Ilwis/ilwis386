@@ -105,7 +105,7 @@ class DATEXPORT ErrorNoWeightAllowed: public ErrorObject
 {
 public:
   ErrorNoWeightAllowed(const String& sAggFunc, const WhereError& where)
-  : ErrorObject(WhatError(String(STBLErrNoWeightAllowed_S.sVal(), sAggFunc), errColumnAggregate+2),
+  : ErrorObject(WhatError(String(TR("No weight allowed for '%S'").c_str(), sAggFunc), errColumnAggregate+2),
                 where) {}
 };
 
@@ -118,7 +118,7 @@ class DATEXPORT ErrorIncompatibleTables: public ErrorObject
 {
 public:
   ErrorIncompatibleTables(const String& sTblDom1, const String& sTblDom2, const WhereError& where)
-  : ErrorObject(WhatError(String(STBLErrIncompTblDomains_SS.sVal(), sTblDom1, sTblDom2), errColumnAggregate+1),
+  : ErrorObject(WhatError(String(TR("Incompatible domain of tables '%S' and '%S'").c_str(), sTblDom1, sTblDom2), errColumnAggregate+1),
                 where) {}
 };
 
@@ -131,7 +131,7 @@ class DATEXPORT ErrorIncompatibleJoinColumns: public ErrorObject
 {
 public:
   ErrorIncompatibleJoinColumns(const String& sColDom1, const String& sColDom2, const WhereError& where)
-  : ErrorObject(WhatError(String(STBLErrIncompDomains_SS.sVal(), sColDom1, sColDom2), errColumnAggregate+3),
+  : ErrorObject(WhatError(String(TR("Incompatible domains '%S' and '%S'").c_str(), sColDom1, sColDom2), errColumnAggregate+3),
                 where) {}
 };
 
@@ -144,7 +144,7 @@ class DATEXPORT ErrorStringColPrd: public ErrorObject
 {
 public:
   ErrorStringColPrd(const WhereError& where, const String& sColAgg)
-  : ErrorObject(WhatError(String(STBLErrDomStringNotAllowed_S.sVal(), sColAgg), errColumnAggregate+4),
+  : ErrorObject(WhatError(String(TR("No string domain allowed for predominant function for column '%S'").c_str(), sColAgg), errColumnAggregate+4),
                 where) {}
 };
 
@@ -186,20 +186,20 @@ ColumnAggregate::ColumnAggregate(const Table& tbl, const String& sColName, Colum
   tblOther(Table())
 {
   String s;
-  ReadElement(sSection().scVal(), "AggregateFunction", s);
+  ReadElement(sSection().c_str(), "AggregateFunction", s);
   agf = AggregateFunction::create(s);
-  ReadElement(sSection().scVal(), "ColumnAggregate", s);
+  ReadElement(sSection().c_str(), "ColumnAggregate", s);
   colAgg = Column(s, tbl);
   s = String();
-  ReadElement(sSection().scVal(), "ColumnGroupBy", s);
+  ReadElement(sSection().c_str(), "ColumnGroupBy", s);
   if (s.length())
     colGroup = Column(s, tbl);
   s = String();
-  ReadElement(sSection().scVal(), "ColumnWeight", s);
+  ReadElement(sSection().c_str(), "ColumnWeight", s);
   if (s.length())
     colWeight = Column(s, tbl);
   s = String();
-  ReadElement(sSection().scVal(), "ColumnLocalJoin", s);
+  ReadElement(sSection().c_str(), "ColumnLocalJoin", s);
   if (s.length())
     colLocalJoin = Column(s, tbl);
   objdep.Add(colAgg.ptr());

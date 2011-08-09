@@ -63,37 +63,37 @@ const char* MapCoKriging::sSyntax() {
 
 static void SameNameErrMapError(const FileName& fn)
 {
-  throw ErrorObject(WhatError(String(SMAPErrNameErrMapAlreadyUsed), errMapCoKriging), fn);
+  throw ErrorObject(WhatError(String(TR("Name of Error Map already used")), errMapCoKriging), fn);
 }
 //static void TooManyKrigingKSPoints(const FileName& fn) {
-//  throw ErrorObject(WhatError(String(SMAPErrTooManyKSPoints_S, "CoKriging"), errMapCoKriging), fn);
+//  throw ErrorObject(WhatError(String(TR("%S cannot interpolate with more than 200 points"), "CoKriging"), errMapCoKriging), fn);
 //}
 static void PointMapEmpty(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrPointMapEmpty), errMapCoKriging +1), fn);
+  throw ErrorObject(WhatError(String(TR("Point map needs to contain at least 2 points")), errMapCoKriging +1), fn);
 }
 static void TooManyKrigingOPoints(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrTooManyKOPoints_S.scVal(), String("CoKriging")), errMapCoKriging +1), fn);
+  throw ErrorObject(WhatError(String(TR("%S cannot interpolate with more than 25000 points").c_str(), String("CoKriging")), errMapCoKriging +1), fn);
 }
 static void MinNrKrigingPnts(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrMinNrKrigingPnts), errMapCoKriging +6), fn);
+  throw ErrorObject(WhatError(String(TR("Minimum number must be at least 1")), errMapCoKriging +6), fn);
 }
 static void MaxNrKrigingPnts(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrMaxNrKrigingPnts), errMapCoKriging +7), fn);
+  throw ErrorObject(WhatError(String(TR("Maximum number may not be less than minimum")), errMapCoKriging +7), fn);
 }
 static void LimitingDistanceOutsideRange(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrLimitingDistance), errMapCoKriging +8), fn);
+  throw ErrorObject(WhatError(String(TR("Limiting distance must be positive and < 2 x greatest point pair distance")), errMapCoKriging +8), fn);
 }
 static void TolerancePos(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrTolerancePos), errMapCoKriging +9), fn);
+  throw ErrorObject(WhatError(String(TR("Tolerance must be greater than 0")), errMapCoKriging +9), fn);
 }
 static void NrParamCoKriging(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrNrParamCoKriging), errMapCoKriging +10), fn);
+  throw ErrorObject(WhatError(String(TR("CoKriging needs 7 to 12 parameters")), errMapCoKriging +10), fn);
 }
 static void NoOverlap(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrNoOverlap), errMapCoKriging +11), fn);
+  throw ErrorObject(WhatError(String(TR("Predictand and Covariable Maps don't overlap")), errMapCoKriging +11), fn);
 }
 static void IllegalNameErrMap(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrIllegalNameErrMap), errMapCoKriging + 12), fn);
+  throw ErrorObject(WhatError(String(TR("Illegal Name for Error Map")), errMapCoKriging + 12), fn);
 }
 
 bool MapCoKriging::fValueRangeChangeable() const
@@ -296,7 +296,7 @@ MapCoKriging::MapCoKriging(const FileName& fn, MapPtr& ptr,
 	String sExpr("MapComputedElsewhere(%S)",ptr.sNameQuoted());
 	if (ptr.fErrorMap()) {// create Error map
 		Map mpComputedElsewhere(ptr.fnErrorMap(), sExpr);
-		String sDescr(SMAPTextKrigingErrorMap_S.scVal(), ptr.sName());
+		String sDescr(TR("Kriging Error Map of %S").c_str(), ptr.sName());
     mpComputedElsewhere->sDescription = sDescr;
 		mpComputedElsewhere->Store();
 		if (fSpheric)
@@ -372,7 +372,7 @@ bool MapCoKriging::fCoKriging(Array<Array<double> > & aaAA,
                    Array<Array<double> > & aaBB, Array<Array<double> > & aaAB,
 									 Map & mpErreur)
 { //  CoKriging with predictand A and covariable B in limiting circle
-  trq.SetText(SMAPTextCalculating);
+  trq.SetText(TR("Calculating"));
   int i,j;
   Array<int> iClosestPntsA(iNrValidPntsA);  // temp array of pntnrs of pnts A thin limiting circle
   Array<double> rLimAttribA(iNrValidPntsA);  // their respective attrib values
@@ -404,7 +404,7 @@ bool MapCoKriging::fCoKriging(Array<Array<double> > & aaAA,
   RealBuf rBufOutError(iMCol); 
 	Distance dis = Distance(pmp->cs(), m_distMeth);
   
-  trq.SetText(SMAPTextCoKriging);   
+  trq.SetText(TR("CoKriging"));   
  
 	for (long iRow = 0; iRow < iMRow; iRow++)  {  // estimate ('predict') NonVisited pixels row by row
     if (trq.fUpdate(iRow, iMRow))
@@ -687,7 +687,7 @@ struct PointStruc {
 
 bool MapCoKriging::fFreezing()
 {
-  trq.SetText(SMAPTextCalculating);
+  trq.SetText(TR("Calculating"));
   trq.fUpdate(0);
   PointMap pmpA = pmp;   // give clear alias to member pmp 
                   //(the pointmap  with predictands)
@@ -764,7 +764,7 @@ bool MapCoKriging::fFreezing()
   // iDuplicRemoval==0; no removal; it will cause UNDEF estimates 
   // iDuplicRemoval==1 remove duplic; take the average attrib values
   // iDuplicRemoval==2 remove duplic; take the first attrib value 
-  trq.SetText(SMAPTextFindingDuplicates);
+  trq.SetText(TR("Finding duplicate points  "));
   { // begin of scope of aPtSA and of aPtSB
     Array<PointStruc> aPtSA(iNrPointsA);
     Array<PointStruc> aPtSB(iNrPointsB);
@@ -843,12 +843,12 @@ bool MapCoKriging::fFreezing()
     } // end of iDuplicRemovalB and possible averaging of attrib_valuesB
   }
 
-  trq.SetText(SMAPTextFindingPointPDist);
+  trq.SetText(TR("Finding point pair distances"));
   if (iNrValidPntsA < iMinNrPoints || iNrValidPntsB < iMinNrPoints) {
   ///  pms->FillWithUndef();
   ///if (iDim > iVPc) { 
     long iMin = min(iNrValidPntsA, iNrValidPntsB);
-    String s(SMAPErrNotEnoughPoints_ii.scVal(), iMin, iMinNrPoints);
+    String s(TR("Too few valid points (%li), at least %i needed.").c_str(), iMin, iMinNrPoints);
     throw ErrorObject(WhatError(s, errMapCoKriging+13), fnObj);
   }    
   else  {
@@ -931,7 +931,7 @@ bool MapCoKriging::fFreezing()
 			ValueRange vr = ValueRange(rMin, rMax, rStep);
 			DomainValueRangeStruct dvs(dom, vr);
 			mpError->SetDomainValueRangeStruct(dvs);
-			String sDescr(SMAPTextKrigingErrorMap_S.scVal(), ptr.sName());
+			String sDescr(TR("Kriging Error Map of %S").c_str(), ptr.sName());
 			mpError->sDescription = sDescr;
 			mpError->CreateMapStore();
 			mpError->KeepOpen(true);

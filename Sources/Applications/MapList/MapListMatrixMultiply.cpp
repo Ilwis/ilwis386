@@ -62,27 +62,6 @@ IlwisObjectPtr * createMapListMatrixMultiply(const FileName& fn, IlwisObjectPtr&
 
 String wpsmetadataMapListMatrixMultiply() {
 	WPSMetaData metadata("MapListMatrixMultiply");
-	metadata.AddTitle("MapListMatrixMultiply");
-	metadata.AddAbstract("A maplist is created which contains the transformed raster maps when the matrix is applied to the map(s). This is done with Principal components and Factor Analysis ");
-	metadata.AddKeyword("spatial");
-	metadata.AddKeyword("raster");
-	metadata.AddKeyword("Principal Components");
-	metadata.AddKeyword("Factor Analysis");
-
-	WPSParameter * parm1 = new WPSParameter("1","Input Map", WPSParameter::pmtMAPLIST);
-
-	WPSParameter *parm2 = new WPSParameter("2","Input Matrix", WPSParameter::pmtMATRIX);
-	parm2->AddTitle("Matrix object to be used. e.g from factoranalysis or principle components");
-
-	WPSParameter *parm3 = new WPSParameter("3","Number of output maps", WPSParameter::pmtINTEGER);
-	parm3->AddTitle("Number of output maps in resulting maplist");
-
-	metadata.AddParameter(parm1);
-	metadata.AddParameter(parm2);
-	metadata.AddParameter(parm3);
-
-	WPSParameter *parmout = new WPSParameter("outputmaplist","Output MapList", WPSParameter::pmtMAPLIST,false);
-	metadata.AddParameter(parmout);
 
 	return metadata.toString();
 }
@@ -160,7 +139,7 @@ bool MapListMatrixMultiply::fFreezing()
   GeoRef grf = ml->gr();
   ptr.SetGeoRef(grf);
 
-  trq.SetText(SMPLTextConstructing);
+  trq.SetText(TR("Constructing"));
   int iMaps = mat->iRows();
   if (iOutBands > 0 && iOutBands < iMaps)
     iMaps = iOutBands;
@@ -183,7 +162,7 @@ bool MapListMatrixMultiply::fFreezing()
     map(i) = Map(fnMap, grf, grf->rcSize(), dmValue);
   }
 
-  trq.SetText(SMPLTextCalculating);
+  trq.SetText(TR("Calculating"));
   RowCol rcSize = grf->rcSize();
   int iLines = rcSize.Row;
   int iCols = rcSize.Col;

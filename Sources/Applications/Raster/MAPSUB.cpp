@@ -77,7 +77,7 @@ ApplicationMetadata metadataMapSubMap(ApplicationQueryData *query) {
 	if ( query->queryType == "OUTPUTTYPE" || query->queryType == "")
 		md.returnType = IlwisObject::iotRASMAP;
 	if ( query->queryType == "EXPERSSION" || query->queryType == "")
-		md.skeletonExpression =  String("%s %s", MapSubMap::sSyntax(),sSyntax2()).scVal();
+		md.skeletonExpression =  String("%s %s", MapSubMap::sSyntax(),sSyntax2()).c_str();
 
 	return md;
 }
@@ -191,23 +191,23 @@ MapSubMap::MapSubMap(const FileName& fn, MapPtr& p,
 		if (grNew->sGetDescription() == "")
 		{
 			String sD = grNew->sTypeName();
-			sD &= String(SGRInfLinkedTo_S.scVal(), sTypeName());
+			sD &= String(TR(", linked to %S").c_str(), sTypeName());
 			grNew->SetDescription(sD);
 		}
   }  
   if ((rcOffset.Row + rcSiz.Row < 0) || (rcOffset.Row >= mp->rcSize().Row))
-    throw ErrorObject(WhatError(String(SMAPErrInvalidStartRow_i.scVal(), rcOffset.Row+1), errMapSubMap), fnObj);
+    throw ErrorObject(WhatError(String(TR("Invalid start row %li").c_str(), rcOffset.Row+1), errMapSubMap), fnObj);
   if ((rcOffset.Col + rcSiz.Col < 0) || (rcOffset.Col >= mp->rcSize().Col))
-    throw ErrorObject(WhatError(String(SMAPErrInvalidStartCol_i.scVal(), rcOffset.Col+1), errMapSubMap+1), fnObj);
+    throw ErrorObject(WhatError(String(TR("Invalid start column %li").c_str(), rcOffset.Col+1), errMapSubMap+1), fnObj);
   if (st() == stBIT) {
     if ((rcSiz.Row<=0) || (rcSiz.Row > mp->rcSize().Row))
-      throw ErrorObject(WhatError(String(SMAPErrInvalidHeight_i.scVal(), rcSiz.Row), errMapSubMap+2), fnObj);
+      throw ErrorObject(WhatError(String(TR("Invalid row size %li").c_str(), rcSiz.Row), errMapSubMap+2), fnObj);
     if ((rcSiz.Col<=0) || (rcSiz.Col > mp->rcSize().Col))
-      throw ErrorObject(WhatError(String(SMAPErrInvalidWidth_i.scVal(), rcSiz.Col), errMapSubMap+3), fnObj);
+      throw ErrorObject(WhatError(String(TR("Invalid col size %li").c_str(), rcSiz.Col), errMapSubMap+3), fnObj);
   }  
 
   Init();
-	ptr.gr()->SetDescription(String(SMAPMsgGeoRefCreatedFrom_S.scVal(), sExpression()));
+	ptr.gr()->SetDescription(String(TR("Created from %S").c_str(), sExpression()));
 	ptr.gr()->Store();
   objdep.Add(gr().ptr());
   if (mp->fTblAtt()) 

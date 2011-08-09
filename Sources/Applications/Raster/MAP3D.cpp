@@ -95,7 +95,7 @@ static void GeoRefNoneError(const FileName& fn, IlwisError err)
 
 static void NoGeoRef3DError(const FileName& fn)
 {
-  throw ErrorObject(WhatError(SMAPErrGeoRef3DRequired, errMapApply3D+2), fn);
+  throw ErrorObject(WhatError(TR("Only GeoRef3D allowed in MapApply3D"), errMapApply3D+2), fn);
 }
 
 MapApply3D* MapApply3D::create(const FileName& fn, MapPtr& p, const String& sExpr)
@@ -169,7 +169,7 @@ String MapApply3D::sExpression() const
 
 bool MapApply3D::fFreezing()
 {
-  trq.SetText(SMAPTextInitMap);
+  trq.SetText(TR("Init map"));
   pms->FillWithUndef();
 
   grf3d = gr()->pg3d();
@@ -251,7 +251,7 @@ bool MapApply3D::fFreezing()
   long iRuns = mp->iLines()+1;
   long iRow = iStartRow;
   short iTopN=0, iBottomN=0, n=0;
-  trq.SetText(String(SMAPTextCreate3D_S.scVal(), mp->sName(true, mp->fnObj.sPath())));
+  trq.SetText(String(TR("Creating 3D for map '%S'").c_str(), mp->sName(true, mp->fnObj.sPath())));
   aiCol1.Resize(iLines() + 2);
   aiCol2.Resize(iLines() + 2);
   for (unsigned long i=0; i < aiCol1.iSize(); ++i) {

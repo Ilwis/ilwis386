@@ -64,35 +64,35 @@ const char* MapKrigingFromRaster::sSyntax() {
 
 static void SameNameErrMapError(const FileName& fn)
 {
-  throw ErrorObject(WhatError(String(SMAPErrNameErrMapAlreadyUsed), errMapKrigingFromRaster), fn);
+  throw ErrorObject(WhatError(String(TR("Name of Error Map already used")), errMapKrigingFromRaster), fn);
 }
 static void NrParamKrFromRas(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrNrParamKrFromRas), errMapKrigingFromRaster +17), fn);
+  throw ErrorObject(WhatError(String(TR("Kriging From RasterMaps needs 2 to 6 parameters")), errMapKrigingFromRaster +17), fn);
 }
 
 static void RadiusNotPos(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrRadiusNotPos), errMapKrigingFromRaster +8), fn);
+  throw ErrorObject(WhatError(String(TR("Search radius must be positive")), errMapKrigingFromRaster +8), fn);
 }
 static void PixSizeNotDefined(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrPixSizeNotDefined), errMapKrigingFromRaster +7), fn);
+  throw ErrorObject(WhatError(String(TR("Pixel size is not well-defined")), errMapKrigingFromRaster +7), fn);
 }
 static void RadiusNotLargeEnough(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrRadiusNotLargeEnough), errMapKrigingFromRaster +6), fn);
+  throw ErrorObject(WhatError(String(TR("Search radius must be large enough, more than 1 pixel")), errMapKrigingFromRaster +6), fn);
 }
 static void RadiusTooLarge(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrRadiusTooLargeRas), errMapKrigingFromRaster +1), fn);
+  throw ErrorObject(WhatError(String(TR("Search radius may not exceed 40 pixels")), errMapKrigingFromRaster +1), fn);
 }
 static void RadiusUnitsWrong(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrRadiusUnitsWrong), errMapKrigingFromRaster +5), fn);
+  throw ErrorObject(WhatError(String(TR("Search-radius Units must be meter(m) or pixels(p) ")), errMapKrigingFromRaster +5), fn);
 }
 static void MinNrKrigingSamples(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrMinNrKrigingSamples), errMapKrigingFromRaster +2), fn);
+  throw ErrorObject(WhatError(String(TR("Minimum number of input samples is 1")), errMapKrigingFromRaster +2), fn);
 }
 static void MaxNrKrigingSamples(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrMaxNrKrigingSamples), errMapKrigingFromRaster +3), fn);
+  throw ErrorObject(WhatError(String(TR("Maximum number of input samples is 100")), errMapKrigingFromRaster +3), fn);
 } 
 static void IllegalNameErrMap(const FileName& fn) {
-  throw ErrorObject(WhatError(String(SMAPErrIllegalNameErrMap), errMapKrigingFromRaster + 4), fn);
+  throw ErrorObject(WhatError(String(TR("Illegal Name for Error Map")), errMapKrigingFromRaster + 4), fn);
 }
 static void GeoRefNoneError(const FileName& fn, IlwisError err)
 {
@@ -260,7 +260,7 @@ MapKrigingFromRaster::MapKrigingFromRaster(const FileName& fn, MapPtr& ptr,
 	String sExpr("MapComputedElsewhere(%S)",ptr.sNameQuoted());
 	if (ptr.fErrorMap()) {// open Error map:
 		Map mpComputedElsewhere(ptr.fnErrorMap(), sExpr);
-		String sDescr(SMAPTextKrigingErrorMap_S.scVal(), ptr.sName());
+		String sDescr(TR("Kriging Error Map of %S").c_str(), ptr.sName());
     mpComputedElsewhere->sDescription = sDescr;
 		mpComputedElsewhere->Store();
   }
@@ -351,7 +351,7 @@ bool MapKrigingFromRaster::fFreezing()
 
   //************ DEFINE MAP AND SEARCH WINDOW DIMENSIONS 
 
-  trq.SetText(SMAPTextCalculating);
+  trq.SetText(TR("Calculating"));
  
   RowCol rcMrc = gr()->rcSize();
   int iMaxRow = rcMrc.Row;
@@ -392,12 +392,12 @@ bool MapKrigingFromRaster::fFreezing()
 		ValueRange vr = ValueRange(rMin, rMax, rStep);
 		DomainValueRangeStruct dvs(dom, vr);
 		mpError->SetDomainValueRangeStruct(dvs);
-		String sDescr(SMAPTextKrigingErrorMap_S.scVal(), ptr.sName());
+		String sDescr(TR("Kriging Error Map of %S").c_str(), ptr.sName());
 		mpError->sDescription = sDescr;
 		mpError->CreateMapStore();
 		mpError->KeepOpen(true);
 	}
-  trq.SetText(SMAPTextKriging_From_Raster);  
+  trq.SetText(TR("Kriging From Raster"));  
   int iR, iC; // the pixels with Defined value ('Visited') used for the estimation
 	double rR;  // search radius in map scale (meters)
 	if (ruUnits == ruMETERS)
