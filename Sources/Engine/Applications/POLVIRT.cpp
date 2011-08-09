@@ -172,9 +172,9 @@ void PolygonMapVirtual::Freeze()
     pms->Updated();
     // delete histogram
     FileName fnHis(fnObj, ".hsa", true);
-    _unlink(fnHis.sFullName().scVal());
+    _unlink(fnHis.sFullName().c_str());
     fnHis.sExt = ".ha#";
-    _unlink(fnHis.sFullName().scVal());
+    _unlink(fnHis.sFullName().c_str());
     // reset minmax
     ptr.SetMinMax(RangeInt());
     ptr.SetMinMax(RangeReal());

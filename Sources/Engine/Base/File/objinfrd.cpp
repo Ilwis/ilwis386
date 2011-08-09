@@ -81,15 +81,15 @@ int ObjectInfo::ReadElement(const char* sSection, const char* sEntry,
 	if ( IlwisObject::iotObjectType( filename) == IlwisObject::iotANY )
 		return 0;
   String s = filename.sFullName();
-  const char* sFileName = s.scVal();
+  const char* sFileName = s.c_str();
   int iRet;
   if (filename.sSectionPostFix.length() == 0)
-    iRet = GetPrivateProfileString(sSection, sEntry, sValue.scVal(),
+    iRet = GetPrivateProfileString(sSection, sEntry, sValue.c_str(),
                                      sBuf, 32000, sFileName);
   else {
     String sSec(const_cast<char*>(sSection));
     sSec &= filename.sSectionPostFix;
-    iRet = GetPrivateProfileString(sSec.scVal(), sEntry, sValue.scVal(),
+    iRet = GetPrivateProfileString(sSec.c_str(), sEntry, sValue.c_str(),
                                      sBuf, 32000, sFileName);
   }
   sValue = String(sBuf);
@@ -246,11 +246,11 @@ int ObjectInfo::ReadElement(const char* sSection, const char* sEntry,
   String sEnt = sEntry;
   sEnt &= "_Size";
   String sSize;
-  iRet = ReadElement(sSection, sEnt.scVal(), fnObj, sSize);
+  iRet = ReadElement(sSection, sEnt.c_str(), fnObj, sSize);
   if (iRet == 0)
     return iRet;
   int iRows, iCols;
-  sscanf(sSize.scVal(), "%i %i", &iRows, &iCols);
+  sscanf(sSize.c_str(), "%i %i", &iRows, &iCols);
   if (iRows <= 0 || iCols <= 0) 
   {
     mat = RealMatrix();
@@ -261,7 +261,7 @@ int ObjectInfo::ReadElement(const char* sSection, const char* sEntry,
     sEnt = sEntry;
     sEnt &= String("_Row%i", i);
     String sRow;
-    iRet += ReadElement(sSection, sEnt.scVal(), fnObj, sRow);
+    iRet += ReadElement(sSection, sEnt.c_str(), fnObj, sRow);
     char * p = strtok(sRow.sVal(), " ");
     for (int j=0; j < mat.iCols(); j++ ) {
       mat(i, j) = atofILW(p);
@@ -278,15 +278,15 @@ int ObjectInfo::ReadElement(const char* sSection, const char* sEntry,
   String sEnt = sEntry;
   sEnt &= "_Size";
   String sSize;
-  iRet = ReadElement(sSection, sEnt.scVal(), fnObj, sSize);
+  iRet = ReadElement(sSection, sEnt.c_str(), fnObj, sSize);
   int iRows, iCols;
-  sscanf(sSize.scVal(), "%i %i", &iRows, &iCols);
+  sscanf(sSize.c_str(), "%i %i", &iRows, &iCols);
   mat = IntMatrix(iRows, iCols);
   for (int i=0; i < mat.iRows(); i++) {
     sEnt = sEntry;
     sEnt &= String("_Row%i", i);
     String sRow;
-    iRet += ReadElement(sSection, sEnt.scVal(), fnObj, sRow);
+    iRet += ReadElement(sSection, sEnt.c_str(), fnObj, sRow);
     char * p = strtok(sRow.sVal(), " ");
     for (int j=0; j < mat.iCols(); j++ ) {
       mat(i, j) = atoi(p);
@@ -473,7 +473,7 @@ int ObjectInfo::ReadElement(const char* sSection, const char* sEntry,
   }
   else 
 	{
-    throw ErrorObject(WhatError(String(SDATErrEmptySection_ss.sVal(), sEntry, sSection), errOPEN), fnObj); //.Show();
+    throw ErrorObject(WhatError(String(TR("Empty or no '%s=' entry found in section '%s'").c_str(), sEntry, sSection), errOPEN), fnObj); //.Show();
     DomainInfo dinf(fnObj, sSection);
     dm = dinf.dmUnknown();
   }  
@@ -817,7 +817,7 @@ int ObjectInfo::ReadElement(const char* sSection, const char* sEntry,
 {
 	String sVal;
 	int iRet = ReadElement(sSection, sEntry, fnObj, sVal);
-	const char* s = sVal.scVal();
+	const char* s = sVal.c_str();
 
 	for (int i = 0; i < iLen; ++i) 
 	{
@@ -846,7 +846,7 @@ int ObjectInfo::ReadElement(const char* sSection, const char* sEntry, const File
 {
 	int iRead, iLen;
 	String sEntryLen("%sLen", sEntry);
-  ObjectInfo::ReadElement(sSection, sEntryLen.scVal(), fnObj, iLen);
+  ObjectInfo::ReadElement(sSection, sEntryLen.c_str(), fnObj, iLen);
 	if (iLen > 0) {
 		char* sMem = new char[iLen];
 		iRead = ObjectInfo::ReadElement(sSection, sEntry, fnObj, sMem, iLen);

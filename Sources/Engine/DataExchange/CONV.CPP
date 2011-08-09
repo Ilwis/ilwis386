@@ -178,7 +178,7 @@ void Import(const FileName& fnFile, const FileName& fnObject, const String& sExt
 	catch (ErrorImportExport& err)
 	{
 		String sErr = err.sExcError();
-		getEngine()->Message(sErr.scVal(), SCVErrImportError.scVal(), MB_ICONSTOP|MB_OK);
+		getEngine()->Message(sErr.c_str(), SCVErrImportError.c_str(), MB_ICONSTOP|MB_OK);
 	}
 }
 
@@ -242,7 +242,7 @@ void Export(const FileName& fnObject, const FileName& fnFile, const String& sExt
   }
   catch (ErrorImportExport& err) {
     String sErr = err.sExcError();
-	AfxGetMainWnd()->MessageBox(sErr.scVal(), SCVErrExportError.scVal(), MB_ICONSTOP|MB_OK);
+	AfxGetMainWnd()->MessageBox(sErr.c_str(), SCVErrExportError.c_str(), MB_ICONSTOP|MB_OK);
   }    
 }
 
@@ -257,7 +257,7 @@ void Import(const String& sExpr)
 	try
 	{
 		if (iParms < 2)
-			throw ErrorObject(String(SCVErrIncorrectParam_S.scVal(), sExpr.sTrimSpaces()));
+			throw ErrorObject(String(SCVErrIncorrectParam_S.c_str(), sExpr.sTrimSpaces()));
 
 		FileName fn = FileName(as[1]);
 		Directory dir(fn); 

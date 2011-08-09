@@ -125,16 +125,16 @@ ObjectDependency::ObjectDependency(const FileName& fnObj, const String& sColName
   String sSection("Col:%S", sColName);
   int iNrDep = 0;
   String s;
-  ObjectInfo::ReadElement(sSection.scVal(), "Type", fnObj, s);
+  ObjectInfo::ReadElement(sSection.c_str(), "Type", fnObj, s);
   if (s == "ColumnStore")
     return;
-  ObjectInfo::ReadElement(sSection.scVal(), "NrDepObjects", fnObj, iNrDep);
+  ObjectInfo::ReadElement(sSection.c_str(), "NrDepObjects", fnObj, iNrDep);
   FileName fn;
   Table tbl(fnObj);
   for (int i=0; i < iNrDep; i++) {
     String sEntry("Object%i", i);
-    ObjectInfo::ReadElement(sSection.scVal(), sEntry.scVal(), fnObj, s);
-    if (0 == strncmp("Column", s.scVal(), 6)) {
+    ObjectInfo::ReadElement(sSection.c_str(), sEntry.c_str(), fnObj, s);
+    if (0 == strncmp("Column", s.c_str(), 6)) {
       String sCol = &s[7]; // skip "Column "
       if (0 != sCol.strchrQuoted('.')) // table.colname
         sCol = String("%S\\%S", fnObj.sPath(), sCol);
@@ -142,7 +142,7 @@ ObjectDependency::ObjectDependency(const FileName& fnObj, const String& sColName
       Add(col);
     }
     else {
-      ObjectInfo::ReadElement(sSection.scVal(), sEntry.scVal(), fnObj, fn);
+      ObjectInfo::ReadElement(sSection.c_str(), sEntry.c_str(), fnObj, fn);
       IlwisObject io = IlwisObject::obj(fn);
       Add(io);
     }  
@@ -341,18 +341,18 @@ void ObjectDependency::Store(IlwisObjectPtr* ptr, const String& sSection)
   String sSec = sSection;
   if (0 == sSection.length())
     sSec = "ObjectDependency";
-  ptr->WriteElement(sSec.scVal(), "NrDepObjects", (long)objs.iSize());
+  ptr->WriteElement(sSec.c_str(), "NrDepObjects", (long)objs.iSize());
   String s;
   for (unsigned int i=0; i < objs.iSize(); i++) {
     String s("Object%i", i);
     ColumnPtr* pCol = dynamic_cast<ColumnPtr*>(objs[i]->pointer());
     if (0 == pCol)
-      ptr->WriteElement(sSec.scVal(), s.scVal(), (*objs[i])->sNameQuoted(true, ptr->fnObj.sPath()));
+      ptr->WriteElement(sSec.c_str(), s.c_str(), (*objs[i])->sNameQuoted(true, ptr->fnObj.sPath()));
     else {
       if (ptr->fnObj == pCol->fnTbl)
-        ptr->WriteElement(sSec.scVal(), s.scVal(), String("Column %S", pCol->sNameQuoted()));
+        ptr->WriteElement(sSec.c_str(), s.c_str(), String("Column %S", pCol->sNameQuoted()));
       else
-        ptr->WriteElement(sSec.scVal(), s.scVal(), String("Column %S", pCol->sTableAndColumnName(ptr->fnObj.sPath())));
+        ptr->WriteElement(sSec.c_str(), s.c_str(), String("Column %S", pCol->sTableAndColumnName(ptr->fnObj.sPath())));
     }  
   }
 }
@@ -494,13 +494,13 @@ static void Split(String& sCol, FileName& fnTbl, String& sColName)
 void ObjectDependency::Read(const String& sSection, const FileName& fnObj, Array<FileName>& afnObj, Array<String>& asColName)
 {
   int iNrDep = 0;
-  ObjectInfo::ReadElement(sSection.scVal(), "NrDepObjects", fnObj, iNrDep);
+  ObjectInfo::ReadElement(sSection.c_str(), "NrDepObjects", fnObj, iNrDep);
   FileName fn;
   String s, sType;
   for (int i=0; i < iNrDep; i++) {
     String sEntry("Object%i", i);
-    ObjectInfo::ReadElement(sSection.scVal(), sEntry.scVal(), fnObj, s);
-    if (0 == strncmp("Column", s.scVal(), 6)) {
+    ObjectInfo::ReadElement(sSection.c_str(), sEntry.c_str(), fnObj, s);
+    if (0 == strncmp("Column", s.c_str(), 6)) {
       String sCol;
       if (fCIStrEqual(sType , "Table")) {
         sCol = fnObj.sFile;
@@ -516,7 +516,7 @@ void ObjectDependency::Read(const String& sSection, const FileName& fnObj, Array
       asColName &= sCol;
     }
     else {
-      ObjectInfo::ReadElement(sSection.scVal(), sEntry.scVal(), fnObj, fn);
+      ObjectInfo::ReadElement(sSection.c_str(), sEntry.c_str(), fnObj, fn);
       afnObj &= fn;
       AddFileName(fn, afnObj);
     }  
@@ -568,7 +568,7 @@ void ObjectDependency::GetNewestDependentObject(const FileName& fn, const String
 		if (!fnTbl.fValid())
 			fnTbl = fn;
 		tm = 0;
-		ObjectInfo::ReadElement(String("Col:%S", sCol).scVal(), "Time", fnTbl, tm);
+		ObjectInfo::ReadElement(String("Col:%S", sCol).c_str(), "Time", fnTbl, tm);
 		if ((tm > tmObj) && (tm > tmNewer)) {
 			sObjName = String("Column %S", asColName[i]);
 			tmNewer = tm;

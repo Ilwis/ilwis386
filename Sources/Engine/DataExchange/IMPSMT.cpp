@@ -107,13 +107,13 @@ void SMTList::GetNextLine()
 
 bool SMTList::fSMTCoord(Coord& cFile) 
 {
-	short iRes = sscanf(sLine.scVal(), "%lf %lf", &cFile.x, &cFile.y);
+	short iRes = sscanf(sLine.c_str(), "%lf %lf", &cFile.x, &cFile.y);
 	return (2 == iRes);
 }
 
 kind SMTList::kndSMTCode(String& sC) {
 	double r;
-	short iRes = sscanf(sLine.scVal(), "%lf", &r);
+	short iRes = sscanf(sLine.c_str(), "%lf", &r);
 	if ((0 == iRes) || (1 == iRes)) {
 		Array<String> as;
 		Split(sLine, as, " \t");
@@ -132,10 +132,10 @@ kind SMTList::kndSMTCode(String& sC) {
 }
 
 bool SMTList::fVectorType() {
-	sReason = SCVErrFileNotFound;
+	sReason = TR("File not found");
 	if (!fileSMT)
 		throw ErrorObject(sReason, errSMTFileNotFound);
-	sReason = SCVErrIllegalSMT;
+	sReason = TR("Illegal SMT format");
 	GetNextLine();
 	sLine.toLower();
 	fPolygons = sLine.find("polygons") != String::npos;
@@ -145,16 +145,16 @@ bool SMTList::fVectorType() {
 }
 
 void SMTList::GetBounds(const FileName& fnObject, CoordSystem& csVect, CoordBounds& cbVect) {
-	sReason = SCVErrWrongBoundary;
+	sReason = TR("Error in boundary coordinates");
 	Coord cMin, cMax;
 	GetNextLine();
-	if (2 != sscanf(sLine.scVal(), "%lf %lf", &cMin.x, &cMin.y) ) {
-		sReason &= String(SCVTextInLine_l.scVal(), _iLins);
+	if (2 != sscanf(sLine.c_str(), "%lf %lf", &cMin.x, &cMin.y) ) {
+		sReason &= String(TR(", in line %ld").c_str(), _iLins);
 		throw ErrorObject(sReason, errSMTFormatError);
 	}
 	GetNextLine();
-	if (2 != sscanf(sLine.scVal(), "%lf %lf", &cMax.x, &cMax.y) ) {
-		sReason &= String(SCVTextInLine_l.scVal(), _iLins);
+	if (2 != sscanf(sLine.c_str(), "%lf %lf", &cMax.x, &cMax.y) ) {
+		sReason &= String(TR(", in line %ld").c_str(), _iLins);
 		throw ErrorObject(sReason, errSMTFormatError);
 	}
 	cbVect = CoordBounds(cMin, cMax);
@@ -199,7 +199,7 @@ void SMTList::ScanMap(Tranquilizer& trq, CoordBuf& cbSegment)
 	GetNextLine();  // skip boundary info
 	GetNextLine();  // position now at first segment
 	
-	trq.SetText(SCVTextScanSegment_);
+	trq.SetText(TR("Scanning ... Segment "));
 	while (fSMTSegment(cbSegment, iNrCoord)) 
 	{
 		if (trq.fUpdate(fileSMT->iLoc(), iSize))
@@ -229,14 +229,14 @@ void SMTList::SetupSegMap(const FileName& fnObject) {
 	}
 	DomainValueRangeStruct dvs(dm);
 	SegmentMap sm(fnObject, csSMT, cbSMT, dvs);
-	sm->sDescription = String("%S %S", SCVTextSegmentMap, fnObject.sFile);
+	sm->sDescription = String("%S %S", TR("Segment Map"), fnObject.sFile);
 	sm->Store();
 	GetNextLine();     // Set file pointer to first line of segment ( Segment code }
 }
 
 void ImpExp::ImportSMT(const FileName& fnFile, const FileName& fnObject ) {
 	try {
-		trq.SetTitle(SCVTitleImportSmtList);
+		trq.SetTitle(TR("Importing from SMT list"));
 		trq.fUpdate(0);
 		SMTList smt(fnFile);
 		
@@ -247,13 +247,13 @@ void ImpExp::ImportSMT(const FileName& fnFile, const FileName& fnObject ) {
 		smt.SetupSegMap(fnObject);            // create the segment map
 		SegmentMap sm = SegmentMap(fnObject); // reuse the segment map, forcing a mapstore
 		sm->fErase = true;
-		smt.sReason = SCVErrCreateVector;
+		smt.sReason = TR("Can not create vector map");
 		if (sm->fDependent()) {
-			smt.sReason &= String(SCVTextInLine_l.scVal(), smt.iLinesRead());
+			smt.sReason &= String(TR(", in line %ld").c_str(), smt.iLinesRead());
 			throw ErrorObject(smt.sReason, errSMTFormatError);
 		}
 		
-		smt.sReason = SCVErrIllegalSMT;
+		smt.sReason = TR("Illegal SMT format");
 		sm->Updated();
 		trq.fUpdate(0);
 		
@@ -261,7 +261,7 @@ void ImpExp::ImportSMT(const FileName& fnFile, const FileName& fnObject ) {
 		DomainSort *pds = sm->dm()->pdsrt();
 		while (smt.fSMTSegment(cbSegment, iNrCoord)) 
 		{
-			s = SCVTextProcSegment_;
+			s = TR("Importing Segment ");
 			s &= smt.sSegmentCode();
 			trq.SetText(s);
 			if (trq.fUpdate(smt.iSegmentsRead()))

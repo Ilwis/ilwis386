@@ -324,7 +324,7 @@ String Calculator::sSimpleCalc(const String& sExpr)
 {
   String s;
   if (sExpr[0] == '@') {
-    FileName fn(String("%s", (sExpr.scVal())+1));
+    FileName fn(String("%s", (sExpr.c_str())+1));
     if (File::fExist(fn)) {
       File fil(fn);
       fil.Read(s);
@@ -363,7 +363,7 @@ String Calculator::sSimpleCalc(const String& sExpr, const Table& tbl)
   CodeGenerator cg(tbl, &inst);
   String s;
   if (sExpr[0] == '@') {
-    FileName fn(String("%s", (sExpr.scVal())+1));
+    FileName fn(String("%s", (sExpr.c_str())+1));
     if (File::fExist(fn)) {
       File fil(fn);
       fil.Read(s);

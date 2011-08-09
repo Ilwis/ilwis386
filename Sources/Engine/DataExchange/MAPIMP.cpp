@@ -243,7 +243,7 @@ void MapImport::import(const FileName& fn, const FileName& fnNew, DomainType dmt
   fnMPD.sExt = ".mpd";
   try {
     Tranquilizer trq;
-    trq.SetTitle(String(SMAPTextImportRasterFrom14.scVal(), fn.sFile));
+    trq.SetTitle(String(TR("Importing 1.4 raster map '%S'").c_str(), fn.sFile));
     trq.Start();
 
     // open 1.4 mpi-file
@@ -260,7 +260,7 @@ void MapImport::import(const FileName& fn, const FileName& fnNew, DomainType dmt
     if (File::fExist(fnGrf))
       gr = GeoRef(fnGrf);
     else {
-      trq.SetText(SMAPTextCreateGeoReference);
+      trq.SetText(TR("Create GeoReference"));
   /*    if (fnGrf.fValid()) // use user supplied name
         const_cast<FileName&>(gr->fnObj) = fnGrf;
       else if (!mpi.fNone()) // use name of map as name for georef
@@ -285,7 +285,7 @@ void MapImport::import(const FileName& fn, const FileName& fnNew, DomainType dmt
           dmt = dmtID;  
       }  
       else if (File::fExist(FileName(fnMPD, ".inf"))) {
-        trq.SetText(SMAPTextCreateDomain);
+        trq.SetText(TR("Create Domain"));
         File filINF(FileName(fnMPD, ".inf"));
 //      if (filMPI.err())
 //        NotFoundError(FileName(fnMPD, ".inf"));
@@ -339,7 +339,7 @@ void MapImport::import(const FileName& fn, const FileName& fnNew, DomainType dmt
         }
         ds->SortRawValues();
         dm->Store();
-        _unlink(FileName(fnMap, ".BAK").sFullName().scVal());
+        _unlink(FileName(fnMap, ".BAK").sFullName().c_str());
       }
       else {
         if (dmt == dmtCLASS)
@@ -392,7 +392,7 @@ void MapImport::import(const FileName& fn, const FileName& fnNew, DomainType dmt
       FileName fnCol(fnMPD, ".col");
       FileName fnTmp(fnCol, ".$$$");
       if (File::fExist(fnCol)) {  // use .COL to create representation
-        trq.fText(SMAPTextCreateReprFromLUT);
+        trq.fText(TR("Create Representation from Look Up Table"));
         try {
           TableImport::import(fnCol, ".$$$");
           Table tLut(fnTmp);
@@ -408,9 +408,9 @@ void MapImport::import(const FileName& fn, const FileName& fnNew, DomainType dmt
             if (trq.fAborted())
               UserAbort();
             sHeader.toLower();
-            bool fRed1000   = strstr(sHeader.scVal(), "red%") != 0;
-            bool fGreen1000 = strstr(sHeader.scVal(), "green%") != 0;
-            bool fBlue1000  = strstr(sHeader.scVal(), "blue%") != 0;
+            bool fRed1000   = strstr(sHeader.c_str(), "red%") != 0;
+            bool fGreen1000 = strstr(sHeader.c_str(), "green%") != 0;
+            bool fBlue1000  = strstr(sHeader.c_str(), "blue%") != 0;
             int red, green, blue;
             int iStart = dmt == dmtPICTURE ? 0 : 1;
             int iMax = dmt == dmtPICTURE ? 255 : dm->pdc()->iSize();
@@ -450,22 +450,22 @@ void MapImport::import(const FileName& fn, const FileName& fnNew, DomainType dmt
   catch (const ErrorObject& err) {
     err.Show();
     // delete files
-    _unlink(FileName(fnMap, ".mpr").sFullName().scVal());
-    _unlink(FileName(fnMap, ".mp#").sFullName().scVal());
+    _unlink(FileName(fnMap, ".mpr").sFullName().c_str());
+    _unlink(FileName(fnMap, ".mp#").sFullName().c_str());
     if (fnDomNew.fValid()) {
-      _unlink(fnDomNew.sFullName().scVal());
+      _unlink(fnDomNew.sFullName().c_str());
       fnDomNew.sExt = ".dm#";
-      _unlink(fnDomNew.sFullName().scVal());
+      _unlink(fnDomNew.sFullName().c_str());
     }  
     if (fnRprNew.fValid()) {
-      _unlink(fnRprNew.sFullName().scVal());
+      _unlink(fnRprNew.sFullName().c_str());
       fnRprNew.sExt = ".rp#";
-      _unlink(fnRprNew.sFullName().scVal());
+      _unlink(fnRprNew.sFullName().c_str());
     }  
     if (fnGrfNew.fValid()) {
-      _unlink(fnGrfNew.sFullName().scVal());
+      _unlink(fnGrfNew.sFullName().c_str());
       fnGrfNew.sExt = ".gr#";
-      _unlink(fnGrfNew.sFullName().scVal());
+      _unlink(fnGrfNew.sFullName().c_str());
     }  
   }
 }

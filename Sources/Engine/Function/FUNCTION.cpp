@@ -120,7 +120,7 @@ FunctionPtr::FunctionPtr(const FileName& fn)
 }
 
 FunctionPtr::FunctionPtr(const FileName& fn, const Domain& dmDefault)
-: IlwisObjectPtr(fn, true, fn.sExt.scVal())
+: IlwisObjectPtr(fn, true, fn.sExt.c_str())
 {
   dmDeflt = dmDefault;
   if (dmDeflt.fValid())

@@ -110,7 +110,7 @@ bool ForeignCollection::GetTime(const FileName& fnForeign, CTime& LastWrite)
 	if (!fnForeign.fExist()) 
     return false;
 	CFileStatus status;
-	CFile::GetStatus(fnForeign.sFullPath().scVal(), status);
+	CFile::GetStatus(fnForeign.sFullPath().c_str(), status);
 	LastWrite = status.m_mtime;
 	return true;
 }
@@ -121,7 +121,7 @@ void ForeignCollection::CreateImplicitObject(const FileName& fnObject, ParmList&
 	FileName fnCollection(sC);
 	ForeignCollection fc(fnCollection);
 	if ( !fc.fValid() )
-		throw ErrorObject(String(SDATErrCouldNotOpenCollection_S.sVal(), fnCollection.sFile));
+		throw ErrorObject(String(TR("Could not open collection %S").c_str(), fnCollection.sFile));
 	
 	if ( !pm.fExist("method"))
 		pm.Add(new Parm("method", fc->sGetMethod()));

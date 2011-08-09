@@ -133,7 +133,7 @@ TableIlwis14::TableIlwis14(const FileName& fnIn, const FileName& fnObj, TablePtr
 void TableIlwis14::Scan(const FileName& fnIn, int& iSkipLines, int& iSpecFields, vector<ClmInfo> &columnInfo, bool fFullScan, bool fUseColInfo)
 {
 	if (File::fIsBinary(fnIn))
-		throw ErrorObject(String(SCVErrNotTextFile_S.scVal(), fnIn.sFullPath()));
+		throw ErrorObject(String(TR("%S is not a text file").c_str(), fnIn.sFullPath()));
 
 	File InputFile(fnIn);
 	String sHeader;

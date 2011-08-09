@@ -184,7 +184,7 @@ GeoRef3D::GeoRef3D(const FileName& fn)
 	  ComputeLoc();
 	}
 	else
-		throw ErrorObject(S3ErrDTMNotValid);
+		throw ErrorObject(TR("DTM is not valid"));
 }	
 
 GeoRef3D::GeoRef3D(const FileName& fn, RowCol rc, const Map& mp)

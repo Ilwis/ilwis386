@@ -286,7 +286,7 @@ ProjectionPtr* ProjectionPtr::create(const String& sName, const Ellipsoid& ell)
   String sPath = getEngine()->getContext()->sIlwDir();
   sPath &= "\\Resources\\Def\\Projs.def";
   char buf[1024];
-  GetPrivateProfileString("Projections",sName.scVal(),"",buf,1024, sPath.scVal());
+  GetPrivateProfileString("Projections",sName.c_str(),"",buf,1024, sPath.c_str());
   String sid(buf);
   sid = sid.sTail(":");
   if ( sid != "")
@@ -393,24 +393,24 @@ String ProjectionPtr::sParamName(ProjectionParamValue pv) const
 String ProjectionPtr::sParamUiName(ProjectionParamValue pv) const
 {
   switch (pv) {
-    case pvX0:        return SPRJTermFalseEasting;
-    case pvY0:        return SPRJTermFalseNorthing;
-    case pvLON0:      return SPRJTermCentralMeridian;
-    case pvLATTS:     return SPRJTermLatitudeTrueScale;
-    case pvLAT0:      return SPRJTermCentralParallel;
-    case pvLAT1:      return SPRJTermStandardParallel1_;
-    case pvLAT2:      return SPRJTermStandardParallel2_;
-    case pvK0:        return SPRJTermScaleFactor;
-    case pvNORTH:     return SPRJTermNorthernHemisphere;
-    case pvZONE:      return SPRJTermZone;
-    case pvHEIGHT:    return SPRJTermHeightPerspCenter;
-    case pvTILTED:    return SPRJtermTiltRotProjPlane;
-    case pvTILT:      return SPRJTermTiltProjectionPlane;
-    case pvAZIMYAXIS: return SPRJTermAzimProjectionYAxis;
-    case pvAZIMCLINE: return SPRJTermAzimCentralTrueScale;
-    case pvPOLE:      return SPRJTermPoleObliqueCylinder;
-    case pvNORIENTED: return SPRJTermNorthOrientedXYCS;
-    default:          return SPRJTermUnknownParameter;
+    case pvX0:        return TR("False &Easting");
+    case pvY0:        return TR("False &Northing");
+    case pvLON0:      return TR("&Central Meridian");
+    case pvLATTS:     return TR("&Latitude of True Scale");
+    case pvLAT0:      return TR("Central &Parallel");
+    case pvLAT1:      return TR("Standard Parallel &1 ");
+    case pvLAT2:      return TR("Standard Parallel &2 ");
+    case pvK0:        return TR("&Scale Factor");
+    case pvNORTH:     return TR("Northern &Hemisphere");
+    case pvZONE:      return TR("&Zone");
+    case pvHEIGHT:    return TR("Height &Persp. Center");
+    case pvTILTED:    return TR("Tilted/&Rotated Projection Plane");
+    case pvTILT:      return TR("&Tilt of Projection Plane");
+    case pvAZIMYAXIS: return TR("Azim of Projection &Y-Axis");
+    case pvAZIMCLINE: return TR("&Azim of Central Line of True Scale");
+    case pvPOLE:      return TR("Pole of &Oblique Cylinder");
+    case pvNORIENTED: return TR("&North Oriented XY Coord System");
+    default:          return TR("Unknown Parameter");
   }  
 }
 
@@ -518,17 +518,17 @@ void ProjectionPtr::Param(ProjectionParamValue pv, double rValue)
 {
   if (pvLAT0 == pv || pvLAT1 == pv || pvLAT2 == pv || pvLATTS == pv)
     if (abs(rValue) > 90)
-      throw ErrorObject(SPRJErrInvalidLatitude, 2210);
+      throw ErrorObject(TR("Latitudes are invalid outside [-90,90]"), 2210);
   if (pvK0 == pv)
     if (rValue <= EPS10)
-      throw ErrorObject(SPRJErrInvalidScaleFactor, 2211); 
+      throw ErrorObject(TR("Scale factor should be larger than zero"), 2211); 
 	if (pvHEIGHT == pv) 
     if (rValue <= EPS10)
 			return;
-  //    throw ErrorObject(SPRJErrInvalidPerspectHeight, 2212);
+  //    throw ErrorObject(TR("Height of perspective center must be larger than zero"), 2212);
 	if (pvLON0 == pv) 
 		if (abs(rValue) > 360)
-      throw ErrorObject(SPRJErrInvalidLongitude, 2213); 
+      throw ErrorObject(TR("Longitudes are invalid outside [-360,360]"), 2213); 
 
   switch (pv) {
     case pvX0:       x0 = rValue; break;
@@ -742,12 +742,12 @@ double ProjectionPtr::authlat(double beta, const double *APA) const
 
 void ProjectionPtr::InvalidLat()
 {
-   throw  ErrorObject(SPRJErrInvalidLatitude, errProjection);
+   throw  ErrorObject(TR("Latitudes are invalid outside [-90,90]"), errProjection);
 }
 
 void ProjectionPtr::InvalidStandardParallels()
 {
-   throw  ErrorObject(SPRJErrInvalidStandardParallel, errProjection+1);
+   throw  ErrorObject(TR("Invalid Standard Parallels"), errProjection+1);
 }
 
 String ProjectionPtr::sInvalidZone() const
@@ -757,27 +757,27 @@ String ProjectionPtr::sInvalidZone() const
 
 void ProjectionPtr::InvalidUtmZone()
 {
-   throw  ErrorObject(SPRJErrWrongUTMZoneNumber, errProjection+2);
+   throw  ErrorObject(TR("UTM zones are numbered 1..60"), errProjection+2);
 }
 
 void ProjectionPtr::InvalidGaussBoagaZone()
 {
-   throw  ErrorObject(SPRJErrWrongGaussBoagaZone, errProjection+3);
+   throw  ErrorObject(TR("Gauss-Boaga zones are numbered 1,2"), errProjection+3);
 }
 
 void ProjectionPtr::InvalidGKColombiaZone()
 {
-   throw  ErrorObject(SPRJErrWrongGaussColombiaZone, errProjection+6);
+   throw  ErrorObject(TR("Gauss Colombia zones are numbered 1..4"), errProjection+6);
 }
 
 void ProjectionPtr::InvalidGKGermanyZone()
 {
-   throw  ErrorObject(SPRJErrWrongGaussKrugerZone, errProjection+4);
+   throw  ErrorObject(TR("Gauss-Krueger zones are numbered 1,2,3"), errProjection+4);
 }
 
 void ProjectionPtr::InvalidLaFranceZone()
 {
-   throw  ErrorObject(SPRJErrWrongLambertFranceZone, errProjection+5);
+   throw  ErrorObject(TR("Lambert France zones are numbered 1..4"), errProjection+5);
 }
 
 

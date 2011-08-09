@@ -109,6 +109,10 @@ String sToken(String& sLine, int iTok)
 	return s;
 }
 
+string TR(const string& text) {
+	return getEngine()->getContext()->sm()->translate(text);
+}
+
 String ILWSF(const String& sMod, long id)
 {
 	try
@@ -122,12 +126,23 @@ String ILWSF(const String& sMod, long id)
 	return String();
 }
 
-String TR(const String& text) {
-	return text;
-	//return getEngine()->getContext()->sm()->translate(text);
-}
-StringManager::StringManager()
+StringManager::StringManager(const String& ilwDir, const String& lan)
 {
+	currentLanguage = lan;
+	FileName fn(String("%SResources\\Strings\\string_table%S",ilwDir,lan));
+	ifstream input(fn.sFullPath().c_str());
+	if ( input.is_open()) {
+		while(input.good()) {
+			String txt;
+			getline(input,txt);
+			String eng = txt.sHead("|");
+			String trans = txt.sTail("|");
+			if ( trans == "??")
+				continue;
+			languages[lan][eng] = trans;
+		}
+		currentTexts = languages[lan];
+	}
 }
 
 StringManager::~StringManager()
@@ -137,14 +152,25 @@ StringManager::~StringManager()
 long StringManager::LoadLanguageStrings(const String& sModName)
 {
 	// Locate the language module file
-	FileName fnLangFile = fnFindLng(FileName(sModName, String("%S", getEngine()->getContext()->getLanguageExtension())));
+	FileName fn(sModName, String("%S", getEngine()->getContext()->getLanguageExtension()));
+	FileName fnLangFile = fnFindLng(fn);
 	
-	if (fnLangFile == FileName())
-		throw LanguageStringError(String("Fatal: Language module not found"));
+	if (fnLangFile == FileName()) {
+		if ( fn.sExt.toLower() != ".eng"){ // maybe language file in non default is missing; replace with default if possible
+			fn.sExt = ".eng";
+			fnLangFile = fnFindLng(fn);
+		}
+		if (fnLangFile == FileName())
+			throw LanguageStringError(String("Fatal: Language module not found"));
+	}
 
 	try
 	{
-		ReadText(fnLangFile.sFullName());
+		ReadText(fnLangFile.sFullName(), m_mpMessages);
+		if ( fnLangFile.sExt.toLower() != ".eng") {
+			FileName fnDefault(fnLangFile,".eng");
+			ReadText(fnDefault.sFullName(), m_mpMessages_default);
+		}
 	}
 	catch (const FileErrorObject&)
 	{
@@ -181,6 +207,11 @@ String StringManager::sFormatted(const String& sModName, const long iID)
 	map<long, String>::iterator itMes = m_mpMessages.find(iMesID);
 	if (itMes != m_mpMessages.end())
 		return (*itMes).second;
+	else {
+		map<long, String>::iterator itMes = m_mpMessages_default.find(iMesID);
+		if (itMes != m_mpMessages_default.end())
+			return (*itMes).second;
+	}
 
 	return String();  // unknown ID in this module
 }
@@ -219,7 +250,7 @@ String ReplaceTabsAndNewlines(const String& sText)
 
    String sFil              = the fully specified name of the file
 */
-void StringManager::ReadText(const String& sFil)
+void StringManager::ReadText(const String& sFil,map<long, String>& messages)
 {
 	String sP, s;
 	long id;
@@ -268,7 +299,7 @@ void StringManager::ReadText(const String& sFil)
 			throw LanguageStringError(sErr);
 		}
 		m_cs.Lock();
-		m_mpMessages[id] = s;
+		messages[id] = s;
 		m_cs.Unlock();
 	}
 }
@@ -349,4 +380,22 @@ FileName fnFindLng(const FileName& fnName)
 	
 	// check ilwis dir
 	return fnFindFile(FileName(), "IlwDir", fn);
+}
+
+string StringManager::translate(const string& text) {
+	if ( currentLanguage == ".eng")
+		return text;
+	LanguageTexts::iterator cur = currentTexts.begin();
+	if (( cur = currentTexts.find(text)) != currentTexts.end())
+		return (*cur).second;
+	return text;
+
+}
+
+void StringManager::setLanguage(const String& lan) {
+	currentLanguage = lan;
+	Languages::iterator cur = languages.begin();
+	if ((cur = languages.find(lan)) != languages.end()) {
+		currentTexts = (*cur).second;
+	}
 }

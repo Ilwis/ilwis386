@@ -113,8 +113,8 @@ inline long abs(long x) { return x > 0 ? x : -x; }
 inline long sqr(int x) { return sqr(long(x)); }*/
 
 #define SOURCE_LOCATION (NULL)
-#define SOURCE_LOCATION1 (getEngine()->getDebugMode(typeid(this)) ? String("%s::%s line %d",typeid(this).name(),__FUNCTION__,__LINE__).scVal() : NULL)
-#define SOURCE_LOCATION2 (getEngine()->getDebugMode() ? String("%s::%s line %d",typeid(this).name(),__FUNCTION__,__LINE__).scVal() : NULL)
+#define SOURCE_LOCATION1 (getEngine()->getDebugMode(typeid(this)) ? String("%s::%s line %d",typeid(this).name(),__FUNCTION__,__LINE__).c_str() : NULL)
+#define SOURCE_LOCATION2 (getEngine()->getDebugMode() ? String("%s::%s line %d",typeid(this).name(),__FUNCTION__,__LINE__).c_str() : NULL)
 
 #define sqr(x) ((x) * (x))
 

@@ -65,8 +65,8 @@
 
 void ImpExp::ExportPnt2Infocam(const FileName& fnObject, const FileName& fnFile)
 {
-    trq.SetTitle(SCVTitleExpPntInfocam);
-    trq.SetText(SCVTextProcessing);
+    trq.SetTitle(TR("Exporting Points to Infocam SEQ"));
+    trq.SetText(TR("Processing..."));
     PointMap pm(fnObject);
     long iNrPoints=pm->iFeatures();
     if ( iNrPoints==0 )
@@ -87,8 +87,8 @@ void ImpExp::ExportPnt2Infocam(const FileName& fnObject, const FileName& fnFile)
 
 void ImpExp::ExportSegment2Infocam(const FileName& fnObject, const FileName& fnFile)
 {
-    trq.SetTitle(SCVTitleExpSegInfocam);
-    trq.SetText(SCVTextProcessing);
+    trq.SetTitle(TR("Exporting Segments to Infocam SEQ"));
+    trq.SetText(TR("Processing..."));
     SegmentMap segmap(fnObject);
     if ( !segmap.fValid() ) return; // foutmelding geven
     long i=0,iNrSegs = 0;
@@ -115,8 +115,8 @@ void ImpExp::ExportSegment2Infocam(const FileName& fnObject, const FileName& fnF
 
 void ImpExp::ExportPolygon2Infocam(const FileName& fnObject, const FileName& fnFile)
 {
-    trq.SetTitle(SCVTitleExpPolygonInfocam);
-    trq.SetText(SCVTextProcessing);
+    trq.SetTitle(TR("Exporting Polygons to Infocam SEQ"));
+    trq.SetText(TR("Processing..."));
     PolygonMap polmap(fnObject);
     if ( !polmap.fValid() ) return; // foutmelding geven
     long iPol = polmap->iFeatures();

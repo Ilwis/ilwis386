@@ -140,7 +140,7 @@ TableHistogramPnt::TableHistogramPnt(PointMap& mp, TablePtr& p)
   if (mp->dm()->pdi() || mp->dm()->pdsrt() || mp->dm()->pdbit() || mp->dm()->pdp()) {
     ptr.SetDomain(mp->dm());
     if (iRecs() > 16000)
-      throw ErrorObject(WhatError(String(STBLErrTooLargeDomain.scVal(), mp->sName(true, fnObj.sPath())), errTableHistogramPnt), fnObj);
+      throw ErrorObject(WhatError(String(TR("Too large domain").c_str(), mp->sName(true, fnObj.sPath())), errTableHistogramPnt), fnObj);
   }  
   else
     ptr.SetDomain("none");
@@ -219,7 +219,7 @@ bool TableHistogramPnt::fCount()
   long iMax = iMin + iRecs() - 1;
   for (long i = iMin; i <= iMax; i++)
     _colFreq->PutVal(i, 0L);
-  trq.fText(STBLTextDetermineFreq);
+  trq.fText(TR("Determine frequencies"));
   if (0 == dm()->pdnone())
     for (long i=0; i < map->iFeatures(); ++i ) {
       if (trq.fAborted())
@@ -233,7 +233,7 @@ bool TableHistogramPnt::fCount()
   else { // use hashtable
 
     HashTable<HistItemPnt> htp(16000);
-    trq.SetText(STBLTextCalcHistogram);
+    trq.SetText(TR("Calculating histogram"));
     trq.HelpEnable(false);
     long iItem = 0;
     for (long i=0; i < map->iFeatures(); ++i ) {
@@ -258,7 +258,7 @@ bool TableHistogramPnt::fCount()
 
     // prepare for sorting
     arSort.Resize(iItem);
-    trq.fText(STBLTextGoSort);
+    trq.fText(TR("Prepare for sorting"));
     long n = 0;
     for (int k = 0; k < htp.iTabSize; ++k) {
       if (!(n % 100))
@@ -269,7 +269,7 @@ bool TableHistogramPnt::fCount()
           arSort[n++] = iter().r;
     }     
     trq.fUpdate(iItem, iItem);
-    trq.fText(STBLTextSortValues);
+    trq.fText(TR("Sort values"));
     try {
 			if (iItem > 1)
 				::QuickSort(0L, iItem-1, fLessRealVal, SwapRealVal, this);
@@ -278,7 +278,7 @@ bool TableHistogramPnt::fCount()
       arSort.Resize(0);
       return false;
     }  
-    trq.fText(STBLFillTable);
+    trq.fText(TR("Fill table"));
     for (long m=1; m <= iItem; ++m) {
       if (!(m % 100))
         if (trq.fUpdate(m, iItem)) {
@@ -300,7 +300,7 @@ bool TableHistogramPnt::fCount()
 void TableHistogramPnt::FillColumns()
 {
   long i;
-  trq.fText(STBLTextFillOtherColumns);
+  trq.fText(TR("Fill other columns"));
   // reset undefined values
   bool fChanged = false;
   long iMin = iOffset();
@@ -395,7 +395,7 @@ void TableHistogramPnt::Init()
     _colValue = pts->col("Value");
     if (!_colValue.ptr()) {
       _colValue = pts->colNew("Value", map->dvrs());
-      _colValue->sDescription = STBLMsgPointValue;
+      _colValue->sDescription = TR("Point value");
     }
     _colValue->SetOwnedByTable(true);
     _colValue->SetReadOnly(true);
@@ -403,7 +403,7 @@ void TableHistogramPnt::Init()
   _colFreq = pts->col("NrPnt");
   if (!_colFreq.ptr()) {
     _colFreq = pts->colNew("NrPnt", Domain("count"));
-    _colFreq->sDescription = STBLMsgPointCount;
+    _colFreq->sDescription = TR("Number of points");
   }
   _colFreq->SetOwnedByTable(true);
   _colFreq->SetReadOnly(true);
@@ -411,7 +411,7 @@ void TableHistogramPnt::Init()
     _colFreqCum = pts->col("NrPntCum");
     if (!_colFreqCum.ptr()) {
       _colFreqCum = pts->colNew("NrPntCum", Domain("count"));
-    _colFreqCum->sDescription = STBLMsgCumPointCount;
+    _colFreqCum->sDescription = TR("Cumulative number of points");
     }
     _colFreqCum->SetOwnedByTable(true);
     _colFreqCum->SetReadOnly(true);
@@ -540,10 +540,10 @@ void TableHistogramPnt::Erase(const FileName& fnMap)
 {
   FileName fnHis = fnMap;
   fnHis.sExt = ".hp#"; 
-  _unlink(fnHis.sFullName(true).scVal()); // delete data file
+  _unlink(fnHis.sFullName(true).c_str()); // delete data file
   fnHis.sExt = ".hsp";
   // delete ODF of histogram
-  if (0 == _unlink(fnHis.sFullName(true).scVal())) 
+  if (0 == _unlink(fnHis.sFullName(true).c_str())) 
 		AfxGetApp()->GetMainWnd()->PostMessage(ILW_READCATALOG); 
 }
 

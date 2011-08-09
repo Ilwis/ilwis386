@@ -144,7 +144,7 @@ TableHistogramPol::TableHistogramPol(PolygonMap& mp, TablePtr& p)
   if (mp->dm()->pdi() || mp->dm()->pdsrt() || mp->dm()->pdbit() || mp->dm()->pdp()) {
     ptr.SetDomain(mp->dm());
     if (iRecs() > 16000)
-      throw ErrorObject(WhatError(String(STBLErrTooLargeDomain.scVal(), mp->sName(true, fnObj.sPath())), errTableHistogramPol), fnObj);
+      throw ErrorObject(WhatError(String(TR("Too large domain").c_str(), mp->sName(true, fnObj.sPath())), errTableHistogramPol), fnObj);
   }  
   else
     ptr.SetDomain("none");
@@ -238,7 +238,7 @@ bool TableHistogramPol::fCount()
     _colLength->PutVal(i, 0.0);
     _colArea->PutVal(i, 0.0);
   }  
-  trq.fText(STBLTextDetermineFreq);
+  trq.fText(TR("Determine frequencies"));
   if (0 == dm()->pdnone())
 	  for (int i=0 ; i < map->iFeatures(); ++i) {
 		  ILWIS::Polygon *pol = (ILWIS::Polygon *) map->getFeature(i);
@@ -262,7 +262,7 @@ bool TableHistogramPol::fCount()
     }
   else { // use hashtable
     HashTable<HistItemPolLengthArea> htpla(16000);
-    trq.SetText(STBLTextCalcHistogram);
+    trq.SetText(TR("Calculating histogram"));
     trq.HelpEnable(false);
     long iItem = 0;
 	for (int i=0 ; i < map->iFeatures(); ++i) {
@@ -294,7 +294,7 @@ bool TableHistogramPol::fCount()
 
     // prepare for sorting
     arSort.Resize(iItem);
-    trq.fText(STBLTextGoSort);
+    trq.fText(TR("Prepare for sorting"));
     long n = 0;
     for (int k = 0; k < htpla.iTabSize; ++k) {
       if (!(n % 100))
@@ -305,7 +305,7 @@ bool TableHistogramPol::fCount()
           arSort[n++] = iter().r;
     }     
     trq.fUpdate(iItem, iItem);
-    trq.fText(STBLTextSortValues);
+    trq.fText(TR("Sort values"));
     try {
 			if (iItem > 1)
 	      ::QuickSort(0L, iItem-1, fLessRealVal, SwapRealVal, this);
@@ -314,7 +314,7 @@ bool TableHistogramPol::fCount()
       arSort.Resize(0);
       return false;
     }  
-    trq.fText(STBLFillTable);
+    trq.fText(TR("Fill table"));
     for (long m=1; m <= iItem; ++m) {
       if (!(m % 100))
         if (trq.fUpdate(m, iItem)) {
@@ -337,7 +337,7 @@ bool TableHistogramPol::fCount()
 void TableHistogramPol::FillColumns()
 {
   long i;
-  trq.fText(STBLTextFillOtherColumns);
+  trq.fText(TR("Fill other columns"));
   // reset undefined values
   bool fChanged = false;
   long iMin = iOffset();
@@ -461,7 +461,7 @@ void TableHistogramPol::Init()
     _colValue = pts->col("Value");
     if (!_colValue.ptr()) {
       _colValue = pts->colNew("Value", map->dvrs());
-      _colValue->sDescription = STBLMsgPolygonValue;
+      _colValue->sDescription = TR("Polygon value");
     }
     _colValue->SetOwnedByTable(true);
     _colValue->SetReadOnly(true);
@@ -469,7 +469,7 @@ void TableHistogramPol::Init()
   _colFreq = pts->col("NrPol");
   if (!_colFreq.ptr()) {
     _colFreq = pts->colNew("NrPol", Domain("count"));
-    _colFreq->sDescription = STBLMsgNumberPolygons;
+    _colFreq->sDescription = TR("Number of polygons");
   }
   _colFreq->SetOwnedByTable(true);
   _colFreq->SetReadOnly(true);
@@ -477,7 +477,7 @@ void TableHistogramPol::Init()
     _colFreqCum = pts->col("NrPolCum");
     if (!_colFreqCum.ptr()) {
       _colFreqCum = pts->colNew("NrPolCum", Domain("count"));
-      _colFreqCum->sDescription = STBLMsgCumulativePolygons;
+      _colFreqCum->sDescription = TR("Cumulative number of polygons");
     }
     _colFreqCum->SetOwnedByTable(true);
     _colFreqCum->SetReadOnly(true);
@@ -485,7 +485,7 @@ void TableHistogramPol::Init()
   _colLength = pts->col("Perimeter");
   if (!_colLength.ptr()) {
     _colLength = pts->colNew("Perimeter", Domain("value"), ValueRange(0,1e20,0.01));
-    _colLength->sDescription = STBLMsgPerimeterPolygon;
+    _colLength->sDescription = TR("Perimeter of polygons");
   }
   _colLength->SetOwnedByTable(true);
   _colLength->SetReadOnly(true);
@@ -493,7 +493,7 @@ void TableHistogramPol::Init()
     _colLengthCum = pts->col("PerimeterCum");
     if (!_colLengthCum.ptr()) {
       _colLengthCum = pts->colNew("PerimeterCum", Domain("value"), ValueRange(0,1e20,0.01));
-      _colLengthCum->sDescription = STBLMsgCumPolPerimeter;
+      _colLengthCum->sDescription = TR("Cumulative perimeter of polygons");
     }
     _colLengthCum->SetOwnedByTable(true);
     _colLengthCum->SetReadOnly(true);
@@ -502,7 +502,7 @@ void TableHistogramPol::Init()
   if (!_colArea.ptr()) {
     _colArea = pts->colNew("Area", Domain("value"), ValueRange(0,1e40,0.01));
 
-    _colArea->sDescription = STBLMsgPolygonArea;
+    _colArea->sDescription = TR("Area of polygons");
   }
   _colArea->SetOwnedByTable(true);
   _colArea->SetReadOnly(true);
@@ -510,7 +510,7 @@ void TableHistogramPol::Init()
     _colAreaCum = pts->col("AreaCum");
     if (!_colAreaCum.ptr()) {
       _colAreaCum = pts->colNew("AreaCum", Domain("value"), ValueRange(0,1e40,0.01));
-      _colAreaCum->sDescription = STBLMsgCumPolygonArea;
+      _colAreaCum->sDescription = TR("Cumulative area of polygons");
     }
     _colAreaCum->SetOwnedByTable(true);
     _colAreaCum->SetReadOnly(true);
@@ -661,10 +661,10 @@ void TableHistogramPol::Erase(const FileName& fnMap)
 {
   FileName fnHis = fnMap;
   fnHis.sExt = ".ha#"; 
-  _unlink(fnHis.sFullName(true).scVal()); // delete data file
+  _unlink(fnHis.sFullName(true).c_str()); // delete data file
   fnHis.sExt = ".hsa";
    // delete object def file
-  if (0 == _unlink(fnHis.sFullName(true).scVal()))
+  if (0 == _unlink(fnHis.sFullName(true).c_str()))
 		AfxGetApp()->GetMainWnd()->PostMessage(ILW_READCATALOG); 
 }
 

@@ -179,7 +179,7 @@ BaseMapPtr::~BaseMapPtr()
 
 String BaseMapPtr::sType() const
 {
-  return SDATMsgUnspecifiedMap;
+  return TR("Unspecified Map");
 }
 
 BaseMapPtr* BaseMapPtr::create(const FileName& fn)
@@ -196,7 +196,7 @@ BaseMapPtr* BaseMapPtr::create(const FileName& fn)
     fnMpl.sSectionPostFix = "";
     ObjectInfo::ReadElement("MapList", "Offset", fnMpl, iOffsetForBands);
     FileName fnMap;
-    ObjectInfo::ReadElement("MapList", String("Map%li", iBandNr-1+iOffsetForBands).scVal(), fnMpl, fnMap);
+    ObjectInfo::ReadElement("MapList", String("Map%li", iBandNr-1+iOffsetForBands).c_str(), fnMpl, fnMap);
     if (fnMap.sSectionPostFix.length() > 0) {
       fnMpl.sSectionPostFix = fnMap.sSectionPostFix;
       fnMpl.sExt = ".mpl";
@@ -283,7 +283,7 @@ BaseMapPtr::BaseMapPtr(const FileName& fn, bool fCreate)
 
 BaseMapPtr::BaseMapPtr(const FileName& fn, const CoordSystem& cs,
                        const CoordBounds& cb, const DomainValueRangeStruct& _dvs)
-: IlwisObjectPtr(fn, true, fn.sExt.scVal())
+: IlwisObjectPtr(fn, true, fn.sExt.c_str())
 {
   _csys = cs;
   cbOuter = cb;
@@ -452,12 +452,12 @@ Table BaseMapPtr::tblAttLoad()
     ReadElement("BaseMap", "AttributeTable", tbl);
     if (tbl.fValid()) 
       if (dm() != tbl->dm()) {
-         MessageBox(0, SDATErrInvalidAttrDomain.scVal(),SDATTitleLoadingAttrTable.scVal(), MB_OK | MB_ICONSTOP);
+         MessageBox(0, TR("Attribute Table has wrong Domain").c_str(),TR("Loading attribute table").c_str(), MB_OK | MB_ICONSTOP);
         tbl = Table();
       }
   }
   catch (const ErrorObject& err) {
-    err.Show(SDATErrLoadAttrTableMap);
+    err.Show(TR("Loading Attribute Table of Map"));
     tbl = Table();
   }
   if (tbl.fValid())
@@ -569,7 +569,7 @@ void BaseMapPtr::SetAttributeTable(const Table& tbl)
   if (tbl.fValid()) {
     if (dm() != tbl->dm()) 
     {
-        MessageBox(0, SDATErrInvalidAttrDomain.scVal(), SDATTitleLoadingAttrTable.scVal(), MB_OK | MB_ICONSTOP);
+        MessageBox(0, TR("Attribute Table has wrong Domain").c_str(), TR("Loading attribute table").c_str(), MB_OK | MB_ICONSTOP);
         return;
     }
   }

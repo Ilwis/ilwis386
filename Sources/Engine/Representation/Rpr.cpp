@@ -388,7 +388,7 @@ short* RepresentationPtr::pPattern(const String& sPattern)
 {
   static short pBuf[8];
   char sBuf[100];
-  GetPrivateProfileString("Patterns", sPattern.scVal(), "", sBuf, 100, "control.ini");
+  GetPrivateProfileString("Patterns", sPattern.c_str(), "", sBuf, 100, "control.ini");
   int iRet = sscanf(sBuf, "%i %i %i %i %i %i %i %i", 
                     &pBuf[0], &pBuf[1], &pBuf[2], &pBuf[3], 
                     &pBuf[4], &pBuf[5], &pBuf[6], &pBuf[7]);

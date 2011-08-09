@@ -336,15 +336,15 @@ void ImpExp::ExportIDRISI(const FileName& fnObject, const FileName& fnFile)
 {
 
   try {
-    trq.SetTitle(SCVTitleExportIdrisi);   // the title in the report window
-    trq.SetText(SCVTextProcessing);   // the text in the report window
+    trq.SetTitle(TR("Export to Idrisi IMG"));   // the title in the report window
+    trq.SetText(TR("Processing..."));   // the text in the report window
     IDRExporter IDRex(fnFile);
     IDRex.iConv = IDRExporter::ieNotPos;
     IDRex.mp = Map(fnObject);
     IDRex.gr = IDRex.mp->gr();
 		if (!IDRex.gr->fNorthOriented())
 		{
-			int iRet = getEngine()->Message(SCVWarnNotNorthOriented.scVal(), SCVMsgExportWarning.scVal(), MB_ICONEXCLAMATION|MB_YESNO);
+			int iRet = getEngine()->Message(TR("Map not North oriented or pixels not evenly spaced. Continue?").c_str(), TR("Export warning").c_str(), MB_ICONEXCLAMATION|MB_YESNO);
 
       if (iRet != IDYES)
         return;
@@ -353,7 +353,7 @@ void ImpExp::ExportIDRISI(const FileName& fnObject, const FileName& fnFile)
     IDRex.IDRDetOutSize();
     if ( IDRex.iConv == IDRExporter::ieNotPos )
 		{
-			String sErr = String(SCVErrTooManyValues_S.scVal(), "IDRISI image");
+			String sErr = String(TR("Values will not fit in %S file").c_str(), "IDRISI image");
       throw ErrorImportExport(sErr);
 		}
 

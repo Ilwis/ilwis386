@@ -74,8 +74,8 @@ void ArcInfoPntExporter::WriteTrailer() {
 
 void ImpExp::ExportPntAi(const FileName& fnObject, const FileName& fnFile) {
   try {
-    trq.SetTitle(SCVTitleExpPntArcInfo);
-    trq.SetText(SCVTextProcessing);
+    trq.SetTitle(TR("Exporting to Arc/Info Generate"));
+    trq.SetText(TR("Processing..."));
     PointMap pm(fnObject);
     long iPntCnt = 0, iNrPoints = pm->iFeatures();
     if (iNrPoints == 0) {

@@ -122,7 +122,7 @@ CoordSystemDirectLinear::~CoordSystemDirectLinear()
 void CoordSystemDirectLinear::init()
 {
 	if (!mapDTM.fValid())
-		throw ErrorObject(SCSErrDTMNotValid);
+		throw ErrorObject(TR("DTM is not valid"));
   mapDTM->KeepOpen(true);
 	
   rHeightAccuracy = 7.5;     // default terrain Height Accuracy in meters

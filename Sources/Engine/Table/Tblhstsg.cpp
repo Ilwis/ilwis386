@@ -151,7 +151,7 @@ TableHistogramSeg::TableHistogramSeg(SegmentMap& mp, TablePtr& p)
   if (mp->dm()->pdi() || mp->dm()->pdsrt() || mp->dm()->pdbit() || mp->dm()->pdp()) {
     ptr.SetDomain(mp->dm());
     if (iRecs() > 16000)
-      throw ErrorObject(WhatError(String(STBLErrTooLargeDomain.scVal(), mp->sName(true, fnObj.sPath())), errTableHistogramSeg), fnObj);
+      throw ErrorObject(WhatError(String(TR("Too large domain").c_str(), mp->sName(true, fnObj.sPath())), errTableHistogramSeg), fnObj);
   }  
   else
     ptr.SetDomain("none");
@@ -233,7 +233,7 @@ bool TableHistogramSeg::fCount()
     _colFreq->PutVal(i, 0L);
     _colLength->PutVal(i, 0.0);
   }  
-  trq.fText(STBLTextDetermineFreq);
+  trq.fText(TR("Determine frequencies"));
   if (0 == dm()->pdnone())
 	  for (int i=0 ; i < map->iFeatures(); ++i) {
 		  ILWIS::Segment *seg = (ILWIS::Segment *)map->getFeature(i);
@@ -253,7 +253,7 @@ bool TableHistogramSeg::fCount()
 	  }
   else { // use hashtable
     HashTable<HistItemSegLength> htsl(16000);
-    trq.SetText(STBLTextCalcHistogram);
+    trq.SetText(TR("Calculating histogram"));
     trq.HelpEnable(false);
     long iItem = 0;
     	  for (int i=0 ; i < map->iFeatures(); ++i) {
@@ -283,7 +283,7 @@ bool TableHistogramSeg::fCount()
 
     // prepare for sorting
     arSort.Resize(iItem);
-    trq.fText(STBLTextGoSort);
+    trq.fText(TR("Prepare for sorting"));
     long n = 0;
     for (int k = 0; k < htsl.iTabSize; ++k) {
       if (!(n % 100))
@@ -294,7 +294,7 @@ bool TableHistogramSeg::fCount()
           arSort[n++] = iter().r;
     }     
     trq.fUpdate(iItem, iItem);
-    trq.fText(STBLTextSortValues);
+    trq.fText(TR("Sort values"));
     try {
 			if (iItem > 1)
 	      ::QuickSort(0L, iItem-1, fLessRealVal, SwapRealVal, this);
@@ -303,7 +303,7 @@ bool TableHistogramSeg::fCount()
       arSort.Resize(0);
       return false;
     }  
-    trq.fText(STBLFillTable);
+    trq.fText(TR("Fill table"));
     for (long m=1; m <= iItem; ++m) {
       if (!(m % 100))
         if (trq.fUpdate(m, iItem)) {
@@ -325,7 +325,7 @@ bool TableHistogramSeg::fCount()
 void TableHistogramSeg::FillColumns()
 {
   long i;
-  trq.fText(STBLTextFillOtherColumns);
+  trq.fText(TR("Fill other columns"));
   // reset undefined values
   bool fChanged = false;
   long iMin = iOffset();
@@ -435,7 +435,7 @@ void TableHistogramSeg::Init()
     _colValue = pts->col("Value");
     if (!_colValue.ptr()) {
       _colValue = pts->colNew("Value", map->dvrs());
-      _colValue->sDescription = STBLMsgSegmentValue;
+      _colValue->sDescription = TR("Segment value");
     }
     _colValue->SetOwnedByTable(true);
     _colValue->SetReadOnly(true);
@@ -443,7 +443,7 @@ void TableHistogramSeg::Init()
   _colFreq = pts->col("NrSeg");
   if (!_colFreq.ptr()) {
     _colFreq = pts->colNew("NrSeg", Domain("count"));
-    _colFreq->sDescription = STBLMsgSegmentCount;
+    _colFreq->sDescription = TR("Number of segments");
   }
   _colFreq->SetOwnedByTable(true);
   _colFreq->SetReadOnly(true);
@@ -451,7 +451,7 @@ void TableHistogramSeg::Init()
     _colFreqCum = pts->col("NrSegCum");
     if (!_colFreqCum.ptr()) {
       _colFreqCum = pts->colNew("NrSegCum", Domain("count"));
-      _colFreqCum->sDescription = STBLMsgCumSegmentCount;
+      _colFreqCum->sDescription = TR("Cumulative number of segments");
     }
     _colFreqCum->SetOwnedByTable(true);
     _colFreqCum->SetReadOnly(true);
@@ -459,7 +459,7 @@ void TableHistogramSeg::Init()
   _colLength = pts->col("Length");
   if (!_colLength.ptr()) {
     _colLength = pts->colNew("Length", Domain("value"), ValueRange(0,1e20,0.01));
-    _colLength->sDescription = STBLMsgSegmentLengths;
+    _colLength->sDescription = TR("Length of segments");
   }
   _colLength->SetReadOnly(true);
   _colLength->SetOwnedByTable(true);
@@ -467,7 +467,7 @@ void TableHistogramSeg::Init()
     _colLengthCum = pts->col("LengthCum");
     if (!_colLengthCum.ptr()) {
       _colLengthCum = pts->colNew("LengthCum", Domain("value"), ValueRange(0,1e20,0.01));
-      _colLengthCum->sDescription = STBLMsgCumSegmentLengths;
+      _colLengthCum->sDescription = TR("Cumulative length of segments");
     }
     _colLengthCum->SetReadOnly(true);
     _colLengthCum->SetOwnedByTable(true);
@@ -608,10 +608,10 @@ void TableHistogramSeg::Erase(const FileName& fnMap)
 {
   FileName fnHis = fnMap;
   fnHis.sExt = ".hs#"; 
-  _unlink(fnHis.sFullName(true).scVal()); // delete data file
+  _unlink(fnHis.sFullName(true).c_str()); // delete data file
   fnHis.sExt = ".hss";
    // delete object def file
-  if (0 == _unlink(fnHis.sFullName(true).scVal()))
+  if (0 == _unlink(fnHis.sFullName(true).c_str()))
 		AfxGetApp()->GetMainWnd()->PostMessage(ILW_READCATALOG); 
 }
 

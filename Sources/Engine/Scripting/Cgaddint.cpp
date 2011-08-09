@@ -58,7 +58,7 @@ class DATEXPORT ErrorIncompatibleDoms: public ErrorObject
 {
 public:
   ErrorIncompatibleDoms(const String& sDom, const WhereError& where)
-    : ErrorObject(WhatError(String(SCLCErrIncompatibleDomains_S.scVal(), sDom), errCALC), where)
+    : ErrorObject(WhatError(String(TR("Incompatible domain: %S").c_str(), sDom), errCALC), where)
     {}
 };
 
@@ -70,7 +70,7 @@ void CodeGenerator::FuncNotAllowedInUserDefFunc(const String& sFunc) const
       iLine = stkParmLinePos.top()[0];
       iCol = stkParmColPos.top()[0];
     }
-  Error(String(SCLCErrParmNotAllowedInFunc_S.scVal(), sFunc), iLine, iCol);
+  Error(String(TR("Function '%S' not allowed with parm in user defined function").c_str(), sFunc), iLine, iCol);
 }
 
 void CodeGenerator::CoordinateNeeded(const String& sFunc, int iParm) const
@@ -81,7 +81,7 @@ void CodeGenerator::CoordinateNeeded(const String& sFunc, int iParm) const
       iLine = stkParmLinePos.top()[iParm];
       iCol = stkParmColPos.top()[iParm];
     }
-  Error(String(SCLCErrCoordRequiredInFunc_S.scVal(), sFunc), iLine, iCol);
+  Error(String(TR("Coordinate needed as parameter for function '%S'").c_str(), sFunc), iLine, iCol);
 }
 
 void CodeGenerator::AddInstCoord(const String& sVal)
@@ -177,7 +177,7 @@ void CodeGenerator::AddInstMinMaxVal(const String& sFunc,
     AddInst1("consti", String("%li", i));
   }
   else {
-    String sErr(SDATErrDomainValueExpected_S.sVal(), bmap->dm()->sName(true, bmap->fnObj.sPath()));
+    String sErr(TR("Only value domain allowed: '%S'").c_str(), bmap->dm()->sName(true, bmap->fnObj.sPath()));
     Error(sErr, iCursorLine);
   }
   MapPtr* map = dynamic_cast<MapPtr*>(bmap.ptr());
@@ -462,7 +462,7 @@ void CodeGenerator::AddInst(const char* sInst,
   }
   else if (fCIStrEqual(sInstruct , "callcheck")) {
     if (!fCheckFuncName(sVal))
-      Error(String(SCLCErrFunctionNotFound_s.scVal(), sVal.scVal()), iCursorLine, iCursorCol);
+      Error(String(TR("Function '%s' not found").c_str(), sVal.c_str()), iCursorLine, iCursorCol);
   }
   else
     AddInst1(sInstruct, sVal);
@@ -501,14 +501,14 @@ void CodeGenerator::AddInstAggregateValue(const String& sVal)
 			Column col = tbl->col(sAttribColumn);
 			dmUsed = col->dm();
 			if ( !col.fValid())
-				Error(String(SCLCErrNoAttribColumn_S.scVal(), sAttribColumn), iCursorLine, iCursorCol);
+				Error(String(TR("Column %S is not an attrib column").c_str(), sAttribColumn), iCursorLine, iCursorCol);
 		}
 		else
-			Error(String(SCLCErrNoAttribColumn_S.scVal(), sAttribColumn), iCursorLine, iCursorCol);
+			Error(String(TR("Column %S is not an attrib column").c_str(), sAttribColumn), iCursorLine, iCursorCol);
 	}		
 	
 	if (!mpInput.fValid())
-		Error(String(SCLCErrInputMapMustBeRasterMap_S.scVal(), sVal), iCursorLine, iCursorCol);
+		Error(String(TR("Input map %S must be a valid raster map").c_str(), sVal), iCursorLine, iCursorCol);
 	CalcVariable oper = stkCalcVar.pop();
 	String sOper = oper->sValue();
 	if ( !InstAggregateValue::fValidOperation(sOper)) // three parms or not?
@@ -524,20 +524,20 @@ void CodeGenerator::AddInstAggregateValue(const String& sVal)
 			}
 	
 			if (stkCalcVar.fEmpty())
-				Error(String(SCLCErrUnknownOperation_S.scVal(), sOper), iCursorLine, iCursorCol);
+				Error(String(TR("Operation '%S' is not known ").c_str(), sOper), iCursorLine, iCursorCol);
 			oper = stkCalcVar.pop();	// next parm must be the operation
 			sOper = oper->sValue();
 
 			if ( !InstAggregateValue::fValidOperation(sOper))
-				Error(String(SCLCErrUnknownOperation_S.scVal(), sOper), iCursorLine, iCursorCol);
+				Error(String(TR("Operation '%S' is not known ").c_str(), sOper), iCursorLine, iCursorCol);
 			if ( !mpAddit.fValid())
-				Error(String(SCLCErrAdditMapNotValid_S.scVal(), fn.sRelative()), iCursorLine, iCursorCol);			
+				Error(String(TR("Additional map %S is not valid").c_str(), fn.sRelative()), iCursorLine, iCursorCol);			
 			if ( mpInput->gr() != mpAddit->gr() )
-				Error(String(SCLCErrIncompatibleGeorefs.scVal()), iCursorLine, iCursorCol);				
+				Error(String(TR("Input map and additional map have different georefs").c_str()), iCursorLine, iCursorCol);				
 			if ( !InstAggregateValue::fMatchDomain(sOper, mpAddit->dm()))						
-				Error(String(SCLCErrAdditMapOperationDom_S.scVal(), fn.sRelative()), iCursorLine, iCursorCol);				
+				Error(String(TR("Additional map %S's domain is not suitable").c_str(), fn.sRelative()), iCursorLine, iCursorCol);				
 			if (!InstAggregateValue::fMatchDomain(sOper, dmUsed))
-				Error(String(SCLCErrInputMapOperationDom_S.scVal(), sVal, sOper), iCursorLine, iCursorCol);	
+				Error(String(TR("Input map %S's domain is not suitable for operation %S").c_str(), sVal, sOper), iCursorLine, iCursorCol);	
 			
 			inst->Add(new InstAggregateValue(inst, mpInput, sAttribColumn, sOper, mpAddit));			
 		}
@@ -545,18 +545,18 @@ void CodeGenerator::AddInstAggregateValue(const String& sVal)
 		{
 			double rPower = sOper.rVal();
 			if ( rPower <= 1.0 )
-				Error(SCLCErrPowerIncorrect, iCursorLine, iCursorCol);
+				Error(TR("Power must be larger than 1"), iCursorLine, iCursorCol);
 			oper = stkCalcVar.pop();	
 			String sOper = oper->sValue(); // next oper must be 
 			if (!InstAggregateValue::fMatchDomain(sOper, dmUsed))
-				Error(String(SCLCErrInputMapOperationDom_S.scVal(), sVal, sOper), iCursorLine, iCursorCol);			
+				Error(String(TR("Input map %S's domain is not suitable for operation %S").c_str(), sVal, sOper), iCursorLine, iCursorCol);			
 			inst->Add(new InstAggregateValue(inst, mpInput, sAttribColumn, sOper, rPower));				
 		}
 	}		
 	else
 	{
 		if (!InstAggregateValue::fMatchDomain(sOper, dmUsed))
-				Error(String(SCLCErrInputMapOperationDom_S.scVal(), sVal, sOper), iCursorLine, iCursorCol);		
+				Error(String(TR("Input map %S's domain is not suitable for operation %S").c_str(), sVal, sOper), iCursorLine, iCursorCol);		
 		inst->Add(new InstAggregateValue(inst, mpInput, sAttribColumn, sOper, Map()));
 	}
  	DomainValueRangeStruct dvs (-1.0e300, 1.0e300, 0.00001);

@@ -63,7 +63,7 @@ TableTBL::TableTBL(const FileName& fn, TablePtr& p)
       continue;
     if (ac[c].fValid()) {
       sColName = ac[c]->sName();
-      ptr.ReadElement(ptr.sSection(String("Col:%S", sColName)).scVal(), "Stored", s);
+      ptr.ReadElement(ptr.sSection(String("Col:%S", sColName)).c_str(), "Stored", s);
       if (s.length())
         fStored[c] = s.fVal();
       else

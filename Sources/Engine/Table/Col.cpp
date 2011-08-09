@@ -610,9 +610,9 @@ void ColumnPtr::BreakDependency()
 	pcv = 0;
 	fChanged = true;
 	
-	ObjectInfo::WriteElement(sSection().scVal(), "Type", fnObj, "ColumnStore");
+	ObjectInfo::WriteElement(sSection().c_str(), "Type", fnObj, "ColumnStore");
 	Store();
-	ObjectInfo::WriteElement(sSection().scVal(), "NrDepObjects", fnObj, 0L);
+	ObjectInfo::WriteElement(sSection().c_str(), "NrDepObjects", fnObj, 0L);
 }
 
 bool Column::fUsedInOpenColumns() const
@@ -630,12 +630,12 @@ bool Column::fUsedInOpenColumns() const
 static bool fColCalc(const String& sSection, const FileName& fnTbl)
 {
   String s;
-  ObjectInfo::ReadElement(sSection.scVal(), "Calc", fnTbl, s);
+  ObjectInfo::ReadElement(sSection.c_str(), "Calc", fnTbl, s);
   if (s == "True")
     return true;
   // for downward  comp. with 2.02:
   String sExpr;
-  if (0 == ObjectInfo::ReadElement(sSection.scVal(), "Expression", fnTbl, sExpr))
+  if (0 == ObjectInfo::ReadElement(sSection.c_str(), "Expression", fnTbl, sExpr))
     return false;
   String sFunc = IlwisObjectPtr::sParseFunc(sExpr);
   if (sFunc.length() > 0) {
@@ -653,7 +653,7 @@ String ColumnPtr::sType() const
   if (0 != pcv)
     return pcv->sType();
   else if (fDependent()) {
-    if (fColCalc(sSection().scVal(), fnTbl))
+    if (fColCalc(sSection().c_str(), fnTbl))
       return "Column Calculate";
     return "Dependent Column";
   }
@@ -794,18 +794,18 @@ ColumnPtr::ColumnPtr(const Table& t, const String& sColName, bool fCreate)
   SetAdditionalInfoFlag(false); // this has been read in by constructor IlwisObjectPtr
   SetAdditionalInfo(String());
   SetDescription("");
-  ReadElement(sSection().scVal(), "Description", sDescription);
+  ReadElement(sSection().c_str(), "Description", sDescription);
 
   long iInfoLines = iUNDEF;
-  String sTemp=sSection().scVal();
+  String sTemp=sSection().c_str();
   String sAddInfo("%S: AdditionalInfo", sSection());
-  ReadElement(sAddInfo.scVal(), "Lines", iInfoLines);
+  ReadElement(sAddInfo.c_str(), "Lines", iInfoLines);
   if (iInfoLines > 0) {
     SetAdditionalInfoFlag(true);
     String sInfo;
     for (int i=0; i < iInfoLines; ++i) {
       String s;
-      ReadElement(sAddInfo.scVal(), String("Line%i", i).scVal(), s);
+      ReadElement(sAddInfo.c_str(), String("Line%i", i).c_str(), s);
       sInfo &= s;
       sInfo &= "\r\n";
     }
@@ -813,40 +813,40 @@ ColumnPtr::ColumnPtr(const Table& t, const String& sColName, bool fCreate)
   }
 
   Domain dom;
-  ReadElement(sSection().scVal(), "Domain", dom);
+  ReadElement(sSection().c_str(), "Domain", dom);
   dvs.SetDomain(dom);
   if (dvs.fValues()) {
     ValueRange vr;
-    ReadElement(sSection().scVal(), "Range", vr);
+    ReadElement(sSection().c_str(), "Range", vr);
     if (vr.fValid())
       dvs.SetValueRange(vr);
   }
-  ReadElement(sSection().scVal(), "Time", objtime);
+  ReadElement(sSection().c_str(), "Time", objtime);
   if (!fReadOnly()) {
-    ReadElement(sSection().scVal(), "ReadOnly", _fReadOnly);
+    ReadElement(sSection().c_str(), "ReadOnly", _fReadOnly);
   }
-  ReadElement(sSection().scVal(), "OwnedByTable", _fOwnedByTable);
+  ReadElement(sSection().c_str(), "OwnedByTable", _fOwnedByTable);
   if (dvs.fValues()) {
     if (dvs.fRealValues()) {
-      ReadElement(sSection().scVal(), "MinMax", _rrMinMax);
+      ReadElement(sSection().c_str(), "MinMax", _rrMinMax);
       _riMinMax = RangeInt(longConv(_rrMinMax.rLo()),
                            longConv(_rrMinMax.rHi()));
     }
     else {
-      ReadElement(sSection().scVal(), "MinMax", _riMinMax);
+      ReadElement(sSection().c_str(), "MinMax", _riMinMax);
       _rrMinMax = RangeReal(doubleConv(_riMinMax.iLo()), doubleConv(_riMinMax.iHi()));
     }
-    ReadElement(sSection().scVal(), "Sum", _rSum);
-    ReadElement(sSection().scVal(), "Mean", _rMean);
-    ReadElement(sSection().scVal(), "StdDev", _rStdDev);
+    ReadElement(sSection().c_str(), "Sum", _rSum);
+    ReadElement(sSection().c_str(), "Mean", _rMean);
+    ReadElement(sSection().c_str(), "StdDev", _rStdDev);
   }
 
   bool fStored = true;
-  ReadElement(sSection().scVal(), "Stored", fStored);
+  ReadElement(sSection().c_str(), "Stored", fStored);
   if (fStored || !fDependent() )
     pcs = new ColumnStore(t, sColName, *this);
   if (fDependent()) {
-    if (fColCalc(sSection().scVal(), fnTbl)) {
+    if (fColCalc(sSection().c_str(), fnTbl)) {
       SetDomainChangeable(true);
       SetValueRangeChangeable(true);
       SetExpressionChangeable(true);
@@ -877,7 +877,7 @@ ColumnPtr::ColumnPtr(const Table& t, const String& sColName, const DomainValueRa
 ColumnPtr::~ColumnPtr()
 {
   if (fErase && ptrTbl->fStore() )
-    WriteElement(sSection().scVal(), (char*)0, (char*)0);
+    WriteElement(sSection().c_str(), (char*)0, (char*)0);
   if (0 != pcs) {
     delete pcs;
     pcs = 0;
@@ -890,7 +890,7 @@ ColumnPtr::~ColumnPtr()
 
 void ColumnPtr::StoreTime()
 {
-  WriteElement(sSection().scVal(), "Time", objtime);
+  WriteElement(sSection().c_str(), "Time", objtime);
 }
 
 void ColumnPtr::Store()
@@ -900,42 +900,42 @@ void ColumnPtr::Store()
   if (fnObj.sFile.length() == 0)  // empty file name
     return;
   if (fErase || (sNam[0] == '#')/* temp column*/) {
-    WriteElement(sSection().scVal(), NULL, NULL);
+    WriteElement(sSection().c_str(), NULL, NULL);
     return;
   }
   if ((0 != pcv) && (sDescription == ""))
     SetDescription(pcv->sExpression());
-  WriteBaseInfo(sSection().scVal());
-  WriteElement(sSection().scVal(), "Domain", dm());
-  WriteElement(sSection().scVal(), "Range", vr());
-  WriteElement(sSection().scVal(), "ReadOnly", _fReadOnly);
-  WriteElement(sSection().scVal(), "OwnedByTable", fOwnedByTable());
+  WriteBaseInfo(sSection().c_str());
+  WriteElement(sSection().c_str(), "Domain", dm());
+  WriteElement(sSection().c_str(), "Range", vr());
+  WriteElement(sSection().c_str(), "ReadOnly", _fReadOnly);
+  WriteElement(sSection().c_str(), "OwnedByTable", fOwnedByTable());
   if (dvs.fValues()) {
     if (dvs.fRealValues())
-      WriteElement(sSection().scVal(), "MinMax", _rrMinMax);
+      WriteElement(sSection().c_str(), "MinMax", _rrMinMax);
     else
-      WriteElement(sSection().scVal(), "MinMax", _riMinMax);
-    WriteElement(sSection().scVal(), "Sum", _rSum);
-    WriteElement(sSection().scVal(), "Mean", _rMean);
-    WriteElement(sSection().scVal(), "StdDev", _rStdDev);
+      WriteElement(sSection().c_str(), "MinMax", _riMinMax);
+    WriteElement(sSection().c_str(), "Sum", _rSum);
+    WriteElement(sSection().c_str(), "Mean", _rMean);
+    WriteElement(sSection().c_str(), "StdDev", _rStdDev);
   }
   else {
-    WriteElement(sSection().scVal(), "MinMax", (char*)0);
-    WriteElement(sSection().scVal(), "Sum", (char*)0);
-    WriteElement(sSection().scVal(), "Mean", (char*)0);
-    WriteElement(sSection().scVal(), "StdDev", (char*)0);
+    WriteElement(sSection().c_str(), "MinMax", (char*)0);
+    WriteElement(sSection().c_str(), "Sum", (char*)0);
+    WriteElement(sSection().c_str(), "Mean", (char*)0);
+    WriteElement(sSection().c_str(), "StdDev", (char*)0);
   }
   if (0 != pcs)
     pcs->Store();
   if (0 != pcv)
     pcv->Store();
   String s;
-  if (0 == ReadElement(sSection().scVal(), "Type", s))
-    WriteElement(sSection().scVal(), "Type", "ColumnStore");
+  if (0 == ReadElement(sSection().c_str(), "Type", s))
+    WriteElement(sSection().c_str(), "Type", "ColumnStore");
 
-  String sAddInfo("%s: AdditionalInfo", sSection().scVal());
+  String sAddInfo("%s: AdditionalInfo", sSection().c_str());
   if (!fAdditionalInfo())
-    WriteElement(sAddInfo.scVal(), (char*)NULL, (char*)NULL);
+    WriteElement(sAddInfo.c_str(), (char*)NULL, (char*)NULL);
   else {
     String s;
     short iLines = 0;
@@ -943,7 +943,7 @@ void ColumnPtr::Store()
     for (unsigned int i=0; i < sInfo.length(); ++i) {
       char c = sInfo[i];
       if (c == '\n') {
-        WriteElement(sAddInfo.scVal(), String("Line%i", iLines).scVal(), s);
+        WriteElement(sAddInfo.c_str(), String("Line%i", iLines).c_str(), s);
         s = String();
         iLines++;
       }
@@ -951,10 +951,10 @@ void ColumnPtr::Store()
         s &= c;
     }
     if (sInfo[sInfo.length()-1] != '\n') {
-      WriteElement(sAddInfo.scVal(), String("Line%i", iLines).scVal(), s);
+      WriteElement(sAddInfo.c_str(), String("Line%i", iLines).c_str(), s);
       iLines++;
     }
-    WriteElement(sAddInfo.scVal(), "Lines", iLines);
+    WriteElement(sAddInfo.c_str(), "Lines", iLines);
   }
 }
 
@@ -1024,31 +1024,31 @@ String ColumnPtr::sSection() const
 
 int ColumnPtr::ReadEntry(const char* sEntry, String& sValue)
 {
-  return ReadElement(sSection().scVal(), sEntry, sValue);
+  return ReadElement(sSection().c_str(), sEntry, sValue);
 }
 
 long ColumnPtr::iReadEntry(const char* sEntry)
 {
-  return iReadElement(sSection().scVal(), sEntry);
+  return iReadElement(sSection().c_str(), sEntry);
 }
 
 double ColumnPtr::rReadEntry(const char* sEntry)
 {
-  return rReadElement(sSection().scVal(), sEntry);
+  return rReadElement(sSection().c_str(), sEntry);
 }
 
 bool ColumnPtr::WriteEntry(const char* sEntry, const String& sValue)
 {
   if (fErase)
     return false;
-  return WriteElement(sSection().scVal(), sEntry, sValue);
+  return WriteElement(sSection().c_str(), sEntry, sValue);
 }
 
 bool ColumnPtr::WriteEntry(const char* sEntry, const char* sValue)
 {
   if (fErase)
     return false;
-  return WriteElement(sSection().scVal(), sEntry, sValue);
+  return WriteElement(sSection().c_str(), sEntry, sValue);
 }
 
 
@@ -1056,21 +1056,21 @@ bool ColumnPtr::WriteEntry(const char* sEntry, bool fValue)
 {
   if (fErase)
     return false;
-  return WriteElement(sSection().scVal(), sEntry, fValue);
+  return WriteElement(sSection().c_str(), sEntry, fValue);
 }
 
 bool ColumnPtr::WriteEntry(const char* sEntry, long iValue)
 {
   if (fErase)
     return false;
-  return WriteElement(sSection().scVal(), sEntry, iValue);
+  return WriteElement(sSection().c_str(), sEntry, iValue);
 }
 
 bool ColumnPtr::WriteEntry(const char* sEntry, double rValue)
 {
   if (fErase)
     return false;
-  return WriteElement(sSection().scVal(), sEntry, rValue);
+  return WriteElement(sSection().c_str(), sEntry, rValue);
 }
 
 long ColumnPtr::iRaw(long iKey) const
@@ -1351,10 +1351,10 @@ void ColumnPtr::Updated()
   IlwisObjectPtr::Updated();
   _riMinMax = RangeInt();
   _rrMinMax = RangeReal();
-  WriteElement(sSection().scVal(), "MinMax", (char*)0);
-  WriteElement(sSection().scVal(), "Sum", (char*)0);
-  WriteElement(sSection().scVal(), "Mean", (char*)0);
-  WriteElement(sSection().scVal(), "StdDev", (char*)0);
+  WriteElement(sSection().c_str(), "MinMax", (char*)0);
+  WriteElement(sSection().c_str(), "Sum", (char*)0);
+  WriteElement(sSection().c_str(), "Mean", (char*)0);
+  WriteElement(sSection().c_str(), "StdDev", (char*)0);
   if (!fErase)
     StoreTime();
 }
@@ -1467,7 +1467,7 @@ Domain ColumnPtr::dmFromStrings(const FileName& fnDom, DomainType dmt)
 
 DomainInfo ColumnPtr::dminf() const
 {
-  return DomainInfo(fnObj, sSection().scVal());
+  return DomainInfo(fnObj, sSection().c_str());
 }
 
 void ColumnPtr::Rename(const String& sNewColName)
@@ -1622,7 +1622,7 @@ bool ColumnPtr::fDependent() const
   if (0 != pcv)
     return true;
   String s;
-  ReadElement(sSection().scVal(), "Type", s);
+  ReadElement(sSection().c_str(), "Type", s);
   return (s.length() != 0) && (!fCIStrEqual(s , "ColumnStore"));
 }
 
@@ -1632,7 +1632,7 @@ String ColumnPtr::sExpression() const
 		return pcv->sExpression();
 
 	String s;
-    ReadElement(sSection().scVal(), "Expression", s);
+    ReadElement(sSection().c_str(), "Expression", s);
 
 	return s;
 }
@@ -1651,7 +1651,7 @@ bool ColumnPtr::fDefOnlyPossible() const
   if (!fDependent())
     return IlwisObjectPtr::fDefOnlyPossible();
   bool f;
-  if (0 != ReadElement(sSection().scVal(), "DefOnlyPossible", f))
+  if (0 != ReadElement(sSection().c_str(), "DefOnlyPossible", f))
     return f;
   return false;
 }
@@ -1691,7 +1691,7 @@ void ColumnPtr::OpenColumnVirtual()
     pcv = ColumnVirtual::create(Table(fnTbl), sName(), *this);
     // for downward compatibility with 2.02 :
     String s;
-    if (0 == ReadElement(sSection().scVal(), "DomainInfo", s)) {
+    if (0 == ReadElement(sSection().c_str(), "DomainInfo", s)) {
       SetDomainChangeable(pcv->fDomainChangeable());
       SetValueRangeChangeable(pcv->fValueRangeChangeable());
       SetExpressionChangeable(pcv->fExpressionChangeable());
@@ -1721,7 +1721,7 @@ void ColumnPtr::Replace(const String& sExpr)
     // reset to previous
     pcvx = ColumnVirtual::create(Table(fnTbl), sName(), *this, sExpression(), dvrs());
     delete pcvx;
-    throw ErrorObject(SMAPErrCyclicDefine);
+    throw ErrorObject(TR("Cyclic definition"));
   }
   if (0 != pcv)
     delete pcv;
@@ -1747,7 +1747,7 @@ void ColumnPtr::SetOwnedByTable(bool f)
 
 String ColumnPtr::sObjectSection() const
 {
-  return sSection().scVal();
+  return sSection().c_str();
 }
 
 void ColumnPtr::GetNewestDependentObject(String& sObjName, ObjectTime& tmNewer) const
@@ -1766,7 +1766,7 @@ DomainValueRangeStruct ColumnPtr::dvrsDefault(const String& sExpression) const
 
 void ColumnPtr::DependencyNames(Array<String>& asNames) const
 { 
-  ObjectDependency::ReadNames(sSection().scVal(), fnObj, asNames);
+  ObjectDependency::ReadNames(sSection().c_str(), fnObj, asNames);
 }
 
 bool ColumnPtr::fMergeDomainForCalc(Domain& dm, const String& sExpr)
@@ -1787,7 +1787,7 @@ BinMemBlock ColumnPtr::binValue(long iKey) const
 {
   ColumnBinary* cb = dynamic_cast<ColumnBinary*>(pcs->csb);
   if (0 == cb)
-    throw ErrorObject(STBLErrNoBinaryValues, -1);
+    throw ErrorObject(TR("Binary value asked for non-binary Column"), -1);
   BinMemBlock bmb;
   cb->GetVal(iKey, bmb);
   return bmb;
@@ -1797,7 +1797,7 @@ void ColumnPtr::GetVal(long iKey, BinMemBlock& bmb) const
 {
   ColumnBinary* cb = dynamic_cast<ColumnBinary*>(pcs->csb);
   if (0 == cb)
-    throw ErrorObject(STBLErrNoBinaryValues, -1);
+    throw ErrorObject(TR("Binary value asked for non-binary Column"), -1);
   cb->GetVal(iKey, bmb);
 }
 
@@ -1805,7 +1805,7 @@ void ColumnPtr::PutVal(long iKey, const BinMemBlock& bmb)
 {
   ColumnBinary* cb = dynamic_cast<ColumnBinary*>(pcs->csb);
   if (0 == cb)
-    throw ErrorObject(STBLErrNoBinaryValues, -1);
+    throw ErrorObject(TR("Binary value asked for non-binary Column"), -1);
   cb->PutVal(iKey, bmb);
 }
 

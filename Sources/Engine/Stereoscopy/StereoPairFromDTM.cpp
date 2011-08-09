@@ -81,7 +81,7 @@ StereoPairFromDTM* StereoPairFromDTM::create(const FileName& fn, StereoPairPtr& 
 		if (as[2].rVal() != rUNDEF)
 			rAngl = as[2].rVal();
 		if (!((rAngl >= 0 && rAngl <= 90) || rAngl == rUNDEF))
-			throw (ErrorObject(SStcErrLookAngleFrom0to90));
+			throw (ErrorObject(TR("Look Angle must be between 0 and 90 degrees")));
 	}
 	if (iParms > 3) {
 		if (as[3].rVal() != rUNDEF)
@@ -309,7 +309,7 @@ bool StereoPairFromDTM::fFreezing()
 		RealBuf rBufIn(iInpCols), rBufOut(iColsExtended);
 		LongBuf iBufIn(iInpCols), iBufOut(iColsExtended);
 
-		trq.SetText(SStcUiCalcLeftStMate);
+		trq.SetText(TR("Calculate Left StereoMate"));
 		for (long iRow = 0; iRow < iInpLines; ++iRow) 
 		{
 		  mpInputImage->GetLineRaw(iRow, iBufIn);
@@ -361,7 +361,7 @@ bool StereoPairFromDTM::fFreezing()
 		    ptr.mapLeft->PutLineRaw(iRow, iBufOut);
 		}
 		
-		trq.SetText(SStcUiCalcRightStMate);
+		trq.SetText(TR("Calculate Right StereoMate"));
 		for (long iRow = 0; iRow < iInpLines; ++iRow) 
 		{
 		  mpInputImage->GetLineRaw(iRow, iBufIn);
@@ -431,14 +431,14 @@ bool StereoPairFromDTM::fFreezing()
 											mpInputImage->fnObj.sFullNameQuoted(), grNewRight->fnObj.sFullNameQuoted(),sResampleMethod));
 
 		// Now perform the resampling
-		trq.SetTitle(String(SStcTextStereoPfrom_S_andDTM.scVal(),mpInputImage->fnObj.sFullNameQuoted()));
-		trq.SetText(SStcUiCalcLeftStMate);
+		trq.SetTitle(String(TR("Stereopair from %S and DTM").c_str(),mpInputImage->fnObj.sFullNameQuoted()));
+		trq.SetText(TR("Calculate Left StereoMate"));
 		trq.fUpdate(1,100);
 		ptr.mapLeft->Calc();
 		if (!ptr.mapLeft->fCalculated())
 			return false;
 		
-		trq.SetText(SStcUiCalcRightStMate);
+		trq.SetText(TR("Calculate Right StereoMate"));
 		trq.fUpdate(50, 100);
 		ptr.mapRight->Calc();
 		if (!ptr.mapRight->fCalculated())

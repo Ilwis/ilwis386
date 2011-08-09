@@ -51,8 +51,8 @@
 
 void ImpExp::ExportDBF(const FileName& fnObject, const FileName& fnFile)
 {
-	trq.SetTitle(SCVTitleExportDBF);
-	trq.SetText(SCVTextOpeningTable);
+	trq.SetTitle(TR("Export table to dBase DBF"));
+	trq.SetText(TR("Loading Table. Please wait..."));
 	trq.fUpdate(0);  // needed to display the text
 	trq.SetDelayShow(false);
 	Table tbl = Table(fnObject);
@@ -64,7 +64,7 @@ void ImpExp::ExportDBF(const FileName& fnObject, const FileName& fnFile)
 	
 	fileOut.Write(sizeof(DBF.Header), &DBF.Header);
 
-	trq.SetText(SCVTextWriteColumnInfo);
+	trq.SetText(TR("Write Column Info"));
 	int iCol = 0;
 	while (DBF.fFillDescriptor())
 	{
@@ -83,7 +83,7 @@ void ImpExp::ExportDBF(const FileName& fnObject, const FileName& fnFile)
 	for (short i=0; i<DBF.Header.iszRecord; i++)
 		DBF.carRecord[i] = ' ';
 
-	trq.SetText(SCVTextProcessing);
+	trq.SetText(TR("Processing..."));
 	for (long iRec = DBF.iMinRec; iRec <= DBF.iMaxRec; iRec++ )
 	{
 		DBF.FillRecord(iRec);

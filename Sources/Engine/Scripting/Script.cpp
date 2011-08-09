@@ -415,7 +415,7 @@ ScriptPtr::~ScriptPtr()
   for (unsigned int i=0; i < atbl.iSize(); ++i)
     atbl[i] = Table();
   if (fErase)
-    _unlink(fnScript.sFullName().scVal());
+    _unlink(fnScript.sFullName().c_str());
 }
 
 String ScriptPtr::sType() const
@@ -577,7 +577,7 @@ bool ScriptPtr::fScanDomainValueRange(Token& tok, TokenizerBase& tkn, Domain& dm
       tok = tkn.tokGet();
   }
   if (tok != "}") {
-    ErrorObject(SDATErrRightCurlyExpected, 0).Show();  // '}'
+    ErrorObject(TR("\'}\' expected"), 0).Show();  // '}'
     return false;
   }
   tok = tkn.tokGet(); 
@@ -603,16 +603,16 @@ void ScriptPtr::Exec(const String& sParmList)
   Exec(&asParms);
 }
 void ScriptPtr::UnknownCommandError(const String& sComm, const FileName& fnObj) {
-  throw ErrorObject(WhatError(String(SDATErrUnknownCommand_S.scVal(), sComm), errScript));
+  throw ErrorObject(WhatError(String(TR("Unknown command: '%S'").c_str(), sComm), errScript));
 }  
 
 void ScriptPtr::DomainValueRangeExpected(const FileName& fnObj)
 {
-  throw ErrorObject(WhatError(SDATErrDomainVRExpected, errScript+4));
+  throw ErrorObject(WhatError(TR("Domain/valuerange expected"), errScript+4));
 } 
 
 void ScriptPtr::InvalidLineError(const String& sLine, const FileName& fnObj) {
-  throw ErrorObject(WhatError(String(SDATErrInvalidLine_S.scVal(), sLine), errScript+2), fnObj);
+  throw ErrorObject(WhatError(String(TR("Invalid line: ' %S '").c_str(), sLine), errScript+2), fnObj);
 } 
 
 void ScriptPtr::SortDomainError(const String& sDomain, const FileName& fnObj)
@@ -623,13 +623,13 @@ void ScriptPtr::SortDomainError(const String& sDomain, const FileName& fnObj)
 void ScriptPtr::NotDomainGroupError(const String& sDomain, const FileName& fnObj)
 {
   throw ErrorObject(
-    WhatError(String(SDATErrDomainGroupExpected_S.scVal(), sDomain),
+    WhatError(String(TR("Only group domain allowed: '%S'").c_str(), sDomain),
 		errScript+1), fnObj);
 }
 
 void ScriptPtr::InvalidDirError(const String& sDir, const FileName& fnObj)
 {
-  throw ErrorObject(WhatError(String(SDATErrInvalidDir_S.scVal(), sDir), errScript+1), fnObj);
+  throw ErrorObject(WhatError(String(TR("Invalid directory: \'%S\'").c_str(), sDir), errScript+1), fnObj);
 }
 
 void ScriptPtr::Pause(ParmList& pm)
@@ -663,7 +663,7 @@ void ScriptPtr::ExecAction(Token& tok, TokenizerBase& tkn)
 	else if (fCIStrEqual(tok.sVal() , "cd")) 
 	{
 		String sDir = sCurrLine.sTrimSpaces();
-		SetCurrentDirectory(getEngine()->sGetCurDir().scVal());
+		SetCurrentDirectory(getEngine()->sGetCurDir().c_str());
 		Directory dir(sDir);
 		if (sDir == "\\")
 			SetCurrentDirectory("\\");
@@ -671,11 +671,11 @@ void ScriptPtr::ExecAction(Token& tok, TokenizerBase& tkn)
 			SetCurrentDirectory("..");
 		else {
 			word iFileAtt;
-			iFileAtt=GetFileAttributes(dir.sFullPath().scVal());
+			iFileAtt=GetFileAttributes(dir.sFullPath().c_str());
 			bool fExist = 0xffff != iFileAtt;
 			if (!fExist || !(iFileAtt & FILE_ATTRIBUTE_DIRECTORY))
 				InvalidDirError(sDir, fnObj);
-			SetCurrentDirectory(dir.sFullPath().scVal());
+			SetCurrentDirectory(dir.sFullPath().c_str());
 		}
 		char sBuf[MAX_PATH];
 		GetCurrentDirectory(MAX_PATH, sBuf);
@@ -715,7 +715,7 @@ void ScriptPtr::ExecAction(Token& tok, TokenizerBase& tkn)
 	else if (fCIStrEqual(tok.sVal() , "message"))
 	{
 		AfxGetApp()->GetMainWnd()->PostMessage(ILW_READCATALOG);
-		MessageBox(0, sCurrLine.sTrimSpaces().scVal(), sName().scVal(), MB_OK|MB_TOPMOST);
+		MessageBox(0, sCurrLine.sTrimSpaces().c_str(), sName().c_str(), MB_OK|MB_TOPMOST);
 	}		
 	else if (fCIStrEqual(tok.sVal() , "pause"))
 		Pause(pm);
@@ -745,7 +745,7 @@ void ScriptPtr::ExecAction(Token& tok, TokenizerBase& tkn)
 		IlwisObject::iotIlwisObjectType iotType = IlwisObject::iotObjectType(fn);
 		String sC = pm.sCmd();	
 		String sCmd("*%S %S", tok.sVal(), sC); // * means: don't show put in history of command line and don't ask questions		
-		const char *s = sCmd.scVal();	
+		const char *s = sCmd.c_str();	
 		if (iotType == IlwisObject::iotOBJECTCOLLECTION || iotType == IlwisObject::iotMAPLIST)
 			getEngine()->SendMessage(ILWM_EXECUTE, 0, (LPARAM)s);
 		else
@@ -769,14 +769,14 @@ String ScriptPtr::sParam(int i)
 {
 	String s("Param%d", i);
 	String sPar;
-	ReadElement("Params", s.scVal(), sPar);
+	ReadElement("Params", s.c_str(), sPar);
 	return sPar;
 }
 
 String ScriptPtr::sDefaultValue(int i)
 {
 	String sVal;
-	ReadElement("Params", String("DefaultValue%d", i).scVal(), sVal);
+	ReadElement("Params", String("DefaultValue%d", i).c_str(), sVal);
 	return sVal;
 }
 
@@ -785,7 +785,7 @@ ScriptPtr::ParamType ScriptPtr::ptParam(int i)
 {
 	String s("Type%d", i);
 	String sPar;
-	ReadElement("Params", s.scVal(), sPar);
+	ReadElement("Params", s.c_str(), sPar);
 	sPar = sPar.toLower();
 
 	if ("string" == sPar)
@@ -839,7 +839,7 @@ bool ScriptPtr::fParamIncludeExtension(int i)
 {
 	String s("Ext%d", i);
   bool fExt;
-  if (0 == ReadElement("Params", s.scVal(), fExt))
+  if (0 == ReadElement("Params", s.c_str(), fExt))
     fExt = true; // default is the old behaviour of always including the extension
   return fExt;
 }
@@ -925,13 +925,13 @@ void ScriptPtr::SetParams(int iNr)
 
 void ScriptPtr::SetDefaultParam(int i, const String& sDefault)
 {
-	if ( sDefault != "" ) WriteElement("Params", String("DefaultValue%d", i).scVal(), sDefault);
+	if ( sDefault != "" ) WriteElement("Params", String("DefaultValue%d", i).c_str(), sDefault);
 }
 
 void ScriptPtr::SetParam(int i, ParamType pt, const String& sQuestion, bool fIncExt, const String& sDefault)
 {
 	String sParam("Param%d", i);
-	WriteElement("Params", sParam.scVal(), sQuestion);
+	WriteElement("Params", sParam.c_str(), sQuestion);
 	iParms = max(iParms, i+1);
 	String sType("Type%d", i);
 	String s;
@@ -1003,10 +1003,10 @@ void ScriptPtr::SetParam(int i, ParamType pt, const String& sQuestion, bool fInc
 		  s = "column";
 			break;
 	}
-	WriteElement("Params", sType.scVal(), s);
+	WriteElement("Params", sType.c_str(), s);
 	SetDefaultParam(i, sDefault);
 	String sExt("Ext%d", i);
-	WriteElement("Params", sExt.scVal(), fIncExt);
+	WriteElement("Params", sExt.c_str(), fIncExt);
 }
 
 void ScriptPtr::GetObjectStructure(ObjectStructure& os)

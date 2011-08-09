@@ -71,9 +71,9 @@ public:
   const String& sVal()  const { return _sVal; }
   TokenType tt() const { return _tt; }
   bool operator==(const char*s) const
-                      { return 0 == _strcmpi(sVal().scVal(), s); }
+                      { return 0 == _strcmpi(sVal().c_str(), s); }
   bool operator!=(const char*s) const
-                      { return 0 != _strcmpi(sVal().scVal(), s); }
+                      { return 0 != _strcmpi(sVal().c_str(), s); }
 private:
   String _sVal;      // character representation of token
   int _iLine, _iPos; // position of token

@@ -87,8 +87,8 @@ void TableIlwis20::Store(IlwisObject obj)
 {
 	if (File::fExist(fnGetForeignFile())) 
 	{
-		getEngine()->Message(SDATWarnFileAlreadyExists.scVal(),
-                              STBTitleExport20Table.scVal(),
+		getEngine()->Message(TR("File already exists, choose another name").c_str(),
+                              TR("Export table to ILWIS 2").c_str(),
                               MB_OK | MB_ICONEXCLAMATION);
 		return;
 	}
@@ -132,9 +132,9 @@ void TableIlwis20::Store(IlwisObject obj)
 	}
 	ObjectInfo::WriteElement("TableView", (char*)0, fnGetForeignFile(), (char*)0); // remove clutter
 
-	Tranquilizer trq(STBTitleExport20Table);
+	Tranquilizer trq(TR("Export table to ILWIS 2"));
 	trq.Start();
-	trq.SetText(STBMsgStoringRecords);
+	trq.SetText(TR("Writing records"));
 
 	if (fCoordColFound)
 	{

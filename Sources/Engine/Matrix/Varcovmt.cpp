@@ -118,9 +118,9 @@ VarCovCorrMatrix::VarCovCorrMatrix(const MapList& maplist, bool fCorr)
 {
   objdep.Add(mpl.ptr());
   if (fCorrMat)
-    sDescription = String(SDATMsgCorrelationMatrix_S.scVal(), mpl->sName());
+    sDescription = String(TR("Correlation Matrix for %S").c_str(), mpl->sName());
   else
-    sDescription = String(SDATMsgVarCovarMatrix_S.scVal(), mpl->sName());
+    sDescription = String(TR("Variance-Covariance Matrix for %S").c_str(), mpl->sName());
   RealMatrix* rmt;
   if (fCorrMat)
     rmt = mpl->mtCorr(false);
@@ -170,13 +170,13 @@ void VarCovCorrMatrix::GetColumnText(Array<String>& as) const
 String VarCovCorrMatrix::sSummary() const
 {
   CVector vec = *(mpl->vecMean(true));
-  String s(SDATOthMeanPerBand);
+  String s(TR("Mean per band:"));
 	s &= "\r\n";
   for (int i=0; i < vec.iRows(); i++)
     s &= String("%8.2f", vec(i));
   s &= "\r\n";
   vec = *(mpl->vecStd(true));
-  s &= SDATOthStdPerBand;
+  s &= TR("Std. per band:");
 	s &= "\r\n";
   for (int i=0; i < vec.iRows(); i++)
     s &= String("%8.2f", vec(i));

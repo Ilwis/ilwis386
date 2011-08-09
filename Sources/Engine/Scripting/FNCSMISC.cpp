@@ -577,7 +577,7 @@ void instr_so(StackObject* soRes, const StackObject* so0, const StackObject* so1
 			String sName = buf0[i].find(':') == -1 ? buf0[i] : buf0[i].substr(buf0[i].find(':') + 2);
 			bufRes[i] = sName.toUpper().find(buf1[i].toUpper()) != -1;
 		}			
-      //bufRes[i] = strstr(buf0[i].scVal(), buf1[i].scVal()) != 0;
+      //bufRes[i] = strstr(buf0[i].c_str(), buf1[i].c_str()) != 0;
   soRes->PutVal(bufRes);
 }
 
@@ -594,7 +594,7 @@ void strpos_so(StackObject* soRes, const StackObject* so0, const StackObject* so
     else 
 		{
 			int iPos = buf0[i].iPos(buf1[i]);
-      //p = strstr(buf0[i].scVal(), buf1[i].scVal());
+      //p = strstr(buf0[i].c_str(), buf1[i].c_str());
       if (iPos == iUNDEF )
         bufRes[i] = 0;
       else

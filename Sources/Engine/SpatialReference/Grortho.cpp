@@ -73,7 +73,7 @@ GeoRefOrthoPhoto::GeoRefOrthoPhoto(const FileName& fn)
 	ReadElement("GeoRefOrthoPhoto", "DTM", mapDTM);
 	*fDoNotShowError = fPrev;
 	if (!mapDTM.fValid())
-		throw ErrorObject(SGRErrDTMNotValid);
+		throw ErrorObject(TR("DTM is not valid"));
   mapDTM->KeepOpen(true);
 	ReadElement("GeoRefOrthoPhoto", "Principal Distance (mm)", rTempPrincD);// in mm on photograph
   ReadElement("GeoRefOrthoPhoto", "Height Accuracy", rHeightAccuracy);
@@ -93,7 +93,7 @@ GeoRefOrthoPhoto::GeoRefOrthoPhoto(const FileName& fn)
   for (; i < iNrFiduc; ++i)
   {
 		 String sEntry("Photo Fiduc. Mark %i (mm)", i);
-    ReadElement("GeoRefOrthoPhoto", sEntry.scVal(), cPhotoFid[i]);
+    ReadElement("GeoRefOrthoPhoto", sEntry.c_str(), cPhotoFid[i]);
     cPhotoFid[i].x /= 1000;
     cPhotoFid[i].y /= 1000;
   }  
@@ -101,7 +101,7 @@ GeoRefOrthoPhoto::GeoRefOrthoPhoto(const FileName& fn)
   {
     String sEntry("Scanned Fiduc. Mark %i", i);
 	Coord crd;
-    ReadElement("GeoRefOrthoPhoto", sEntry.scVal(), crd); 
+    ReadElement("GeoRefOrthoPhoto", sEntry.c_str(), crd); 
 	rScannedFidRow[i] = crd.x;
 	rScannedFidCol[i] = crd.y;
   }
@@ -125,7 +125,7 @@ GeoRefOrthoPhoto::GeoRefOrthoPhoto(const FileName& fn, const Map& mp, RowCol rc,
 : GeoRefCTP(fn,mp->cs(),rc, true, fSubPixelPrecise), mapDTM(mp)
 {
 	if (!mapDTM.fValid())
-		throw ErrorObject(SGRErrDTMNotValid);
+		throw ErrorObject(TR("DTM is not valid"));
 	mapDTM->KeepOpen(true);
   GeoRef grDTM = mapDTM->gr();
   if (grDTM->fGeoRefNone())
@@ -159,18 +159,18 @@ void GeoRefOrthoPhoto::Store()
     Coord crd = cPhotoFid[i];
     crd.x *= 1000;
     crd.y *= 1000;
-    WriteElement("GeoRefOrthoPhoto", sEntry.scVal(), crd);
+    WriteElement("GeoRefOrthoPhoto", sEntry.c_str(), crd);
   }  
   for (i = 0; i < iNrFiduc; ++i)
   {
     String sEntry("Scanned Fiduc. Mark %i", i);
 		if(!fSubPixelPrecision) {
 			RowCol rcScannedFid = RowCol(rScannedFidRow[i], rScannedFidCol[i]);
-			WriteElement("GeoRefOrthoPhoto", sEntry.scVal(), rcScannedFid);
+			WriteElement("GeoRefOrthoPhoto", sEntry.c_str(), rcScannedFid);
 		}
 		else {
 			Coord crdRC = Coord(rScannedFidRow[i], rScannedFidCol[i]);
-			WriteElement("GeoRefOrthoPhoto", sEntry.scVal(), crdRC);
+			WriteElement("GeoRefOrthoPhoto", sEntry.c_str(), crdRC);
 		}
   }
   WriteElement("GeoRefOrthoPhoto", "Principal Point in Scan X-Coord", m_cScanPrincPoint.x);

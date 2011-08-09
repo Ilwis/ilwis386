@@ -61,10 +61,10 @@ void ImpExp::ImportIMG(File& FileIn, const FileName& fnObject)
 	} Hd;
 #pragma pack()
 	
-	trq.SetTitle(SCVTitleImportAtlasIMG);
+	trq.SetTitle(TR("Importing from Atlas Image"));
 	trq.fUpdate(0);
 	if ( (sizeof Hd) != FileIn.Read(sizeof Hd , &Hd) )
-		throw ErrorImportExport(SCVErrHeadSizeMismatch);
+		throw ErrorImportExport(TR("Solving File size mismatch in header."));
 	
 	int iMapSubType = (int)(Hd.image_type);
 	bool fOK = false;
@@ -84,7 +84,7 @@ void ImpExp::ImportIMG(File& FileIn, const FileName& fnObject)
 	}
 	if (!fOK)
 	{
-		String sErr = String("%S (%i)", SCVErrInvalidImageType, iMapSubType);
+		String sErr = String("%S (%i)", TR("Invalid image type found"), iMapSubType);
 		throw ErrorImportExport(sErr);
 	}
 	
@@ -92,12 +92,12 @@ void ImpExp::ImportIMG(File& FileIn, const FileName& fnObject)
 	long iCols = Hd.width;
 	if (iLines <= 0 || iCols <= 0)
 	{
-		String sErr = String("%S (%ld x %ld)", SCVErrWrongLineCol, iLines, iCols);
+		String sErr = String("%S (%ld x %ld)", TR("Incorrect number of lines or columns"), iLines, iCols);
 		throw ErrorImportExport(sErr);
 	}
 	if ((iLines * iCols + 512) != FileIn.iSize())
 	{
-		String sErr(SCVErrWrongFileSize_S.scVal(), FileIn.sName());
+		String sErr(TR("Size of %S does not match number of lines and columns").c_str(), FileIn.sName());
 		throw ErrorImportExport(sErr);
 	}
 
@@ -117,13 +117,13 @@ void ImpExp::ImportIMG(File& FileIn, const FileName& fnObject)
 		mp->SetDescription(sDesc);
 
 	mp->fErase = true;
-	trq.SetText(SCVTextConverting);
+	trq.SetText(TR("Converting..."));
 	for (long i = 0; i < iLines; i++) {
 		if (trq.fUpdate(i, iLines))
 			return;
 		
 		if ( iCols != FileIn.Read( iCols, bbuf.buf() ) )
-			throw ErrorImportExport(SCVErrReading);
+			throw ErrorImportExport(TR("File Reading Error"));
 		
 		mp->PutLineRaw(i,bbuf);
 	}

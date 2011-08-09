@@ -210,9 +210,9 @@ void SegmentMapVirtual::Freeze()
     pms->Updated();
     // delete histogram
     FileName fnHis(fnObj, ".hss", true);
-    _unlink(fnHis.sFullName().scVal());
+    _unlink(fnHis.sFullName().c_str());
     fnHis.sExt = ".hs#";
-    _unlink(fnHis.sFullName().scVal());
+    _unlink(fnHis.sFullName().c_str());
     // reset minmax
     ptr.SetMinMax(RangeInt());
     ptr.SetMinMax(RangeReal());

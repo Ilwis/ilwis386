@@ -60,7 +60,7 @@ using namespace ILWIS;
 
 static void TooManySegments()
 {
-  String sWhat(SSEGErrTooManySegments_i.scVal(), MAX_SEGMENTS);
+  String sWhat(TR("Too many segments, must be smaller than %d").c_str(), MAX_SEGMENTS);
   throw ErrorObject(WhatError(sWhat, errMAXSEG));
 }  
 
@@ -162,20 +162,20 @@ void SegmentMapStore::Store()
 	if ( ptr.ReadElement("SegmentMapStore", "DataCrd", fnCoordFile))
 	{
 		if ( fnCoordFile.fExist() )
-			DeleteFile(fnCoordFile.sFullPath().scVal());
+			DeleteFile(fnCoordFile.sFullPath().c_str());
 		ptr.WriteElement("SegmentMapStore", "DataCrd", (char*)0);			
 	}		
 	if ( ptr.ReadElement("SegmentMapStore", "DataSeg", fnSegmentFile))
 	{
 		if ( fnSegmentFile.fExist() )
-			DeleteFile(fnSegmentFile.sFullPath().scVal());
+			DeleteFile(fnSegmentFile.sFullPath().c_str());
 		ptr.WriteElement("SegmentMapStore", "DataSeg", (char*)0);			
 	}					
 
 	if ( ptr.ReadElement("SegmentMapStore", "DataSegCode", fnValueFile))
 	{
 		if ( fnValueFile.fExist() )
-			DeleteFile(fnValueFile.sFullPath().scVal());
+			DeleteFile(fnValueFile.sFullPath().c_str());
 		ptr.WriteElement("SegmentMapStore", "DataSegCode", (char*)0);					
 	}		
 
@@ -229,7 +229,7 @@ void SegmentMapStore::UnStore(const FileName& fn)
 SegmentMapStore::~SegmentMapStore() {            // automatic close the map
 	if (ptr.fErase || fErase) {
 		FileName fnDat(ptr.fnObj,".mps#");
-		_unlink(fnDat.sFullName().scVal());
+		_unlink(fnDat.sFullName().c_str());
 	}
 
 }
@@ -252,7 +252,7 @@ void SegmentMapStore::Export(const FileName& fn) const
 	//filSegments.SetErase(true);
 	//filCoords.SetErase(true);
 
- // Tranquilizer trq(SSEGTitleExport14Segments_S);
+ // Tranquilizer trq(TR("Export segment map to ILWIS 1.4"));
  // trq.Start();
 
 	//CoordBounds cb = ptr.cbGetCoordBounds();
@@ -273,7 +273,7 @@ void SegmentMapStore::Export(const FileName& fn) const
 
  // segtype st;
  // String sSegVal;
- // trq.SetText(SSEGTextStoringSegmentNames);
+ // trq.SetText(TR("Storing segment names"));
  // DomainSort *pdsrt = ptr.dm()->pdsrt();
  // bool fCodes = (0 != pdsrt) && pdsrt->fCodesAvailable();
 
@@ -372,9 +372,9 @@ void SegmentMapStore::Export(const FileName& fn) const
 	//		mmSeg.rcMin.Row -= mmSeg.height() / 20;
 	//		mmSeg.rcMax.Col += mmSeg.width() / 20;
 	//		mmSeg.rcMax.Row += mmSeg.height() / 20;
-	//		String sWarn = String(SCVWarnTooManySegments_I.scVal(), iSegCnt);
-	//	  getEngine()->Message(sWarn.scVal(),
- //                             SSEGTitleExport14Segments_S.scVal(),
+	//		String sWarn = String(TR("Too many segments in input, only first %ld will be converted.\nContinue ?").c_str(), iSegCnt);
+	//	  getEngine()->Message(sWarn.c_str(),
+ //                             TR("Export segment map to ILWIS 1.4").c_str(),
  //                             MB_OK | MB_ICONEXCLAMATION);
 	//		break;
 	//	}
@@ -744,8 +744,8 @@ bool SegmentMapStore::fConvertTo(const DomainValueRangeStruct& _dvrsTo, const Co
  // if (col.fValid())
  //   dvrsTo = col->dvrs();
  // Tranquilizer trq;
- // trq.SetTitle(SSEGTitleDomainConversion);
- // trq.SetText(SSEGTextConverting);
+ // trq.SetTitle(TR("Domain Conversion"));
+ // trq.SetText(TR("Converting"));
  //
  // ILWIS::Segment sg;
 	//Column colValue = tblSegment->col("SegmentValue");
@@ -784,8 +784,8 @@ void SegmentMapStore::Pack()
 {
   ILWISSingleLock sl(&ptr.csAccess, TRUE, SOURCE_LOCATION);
   Tranquilizer trq;
-  trq.SetTitle(SSEGTitlePackSegments);
-  trq.SetText(SSEGTextPacking);
+  trq.SetTitle(TR("Pack Segments"));
+  trq.SetText(TR("Packing"));
   trq.Start();
   int i =0;
   while(i < ptr.iFeatures()) {
@@ -807,10 +807,11 @@ void SegmentMapStore::removeFeature(const String& id, const vector<int>& selecte
 	for(vector<Geometry *>::iterator cur = geometries->begin(); cur != geometries->end(); ++cur) {
 		ILWIS::Segment *seg = CSEGMENT(*cur);
 		if ( seg->getGuid() == id  ) {
-			if ( selectedCoords.size() == 0 || selectedCoords.size() == geometries->size()) {
+			if ( selectedCoords.size() == 0 || selectedCoords.size() == seg->getNumPoints() || seg->getNumPoints() - selectedCoords.size() < 2) {
 				spatialIndex->remove(seg->getEnvelopeInternal(),seg);
 				delete seg;
 				geometries->erase(cur);
+				break;
 			} else {
 				CoordBuf crdBuf;
 				CoordinateSequence *seq = seg->getCoordinates();

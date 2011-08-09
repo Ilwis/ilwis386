@@ -200,8 +200,8 @@ void ImpExp::ExportASCII(const FileName& fnObject, const FileName& fnFile)
 {
 
   try {
-    trq.SetTitle(SCVTitleExportASCII);   // the title in the report window
-    trq.SetText(SCVTextProcessing);      // the text in the report window
+    trq.SetTitle(TR("Export to Ilwis ASCII format"));   // the title in the report window
+    trq.SetText(TR("Processing..."));      // the text in the report window
     ASCExporter ASCex(fnFile);
     ASCex.sFileName = fnObject.sFile;
     ASCex.mp = Map(fnObject);
@@ -210,7 +210,7 @@ void ImpExp::ExportASCII(const FileName& fnObject, const FileName& fnFile)
     ASCex.ASCDetMapDomType();
     if ( ASCex.iConv == ASCExporter::ieNotPos )  {
       ASCex.filASC->SetErase(true);
-      throw ErrorImportExport(SCVErrNotSupported);
+      throw ErrorImportExport(TR("File format not supported"));
     }
     ASCex.iLines = ASCex.mp->iLines();
     ASCex.iCols = ASCex.mp->iCols();
@@ -230,7 +230,7 @@ void ImpExp::ExportASCII(const FileName& fnObject, const FileName& fnFile)
           for ( iRc = 0; iRc < ASCex.iCols ; iRc++ )  {
             if ( iRc !=0 && ((iRc % 30) == 0 )) ASCex.filASC->WriteLnAscii("");
             sString=ASCex.mp->dvrs().sValue(ASCex.lBuf[iRc],2);
-            ASCex.filASC->Write((long)sString.length(),sString.scVal());
+            ASCex.filASC->Write((long)sString.length(),sString.c_str());
           }
          ASCex.filASC->WriteLnAscii("");
         }
@@ -245,7 +245,7 @@ void ImpExp::ExportASCII(const FileName& fnObject, const FileName& fnFile)
           for ( iRc = 0; iRc < ASCex.iCols ; iRc++ )  {
             if ( iRc !=0 && ((iRc % 15) == 0 )) ASCex.filASC->WriteLnAscii("");
             sString =String("%5i", ASCex.bBuf[iRc]);
-            ASCex.filASC->Write((long)sString.length(),sString.scVal());
+            ASCex.filASC->Write((long)sString.length(),sString.c_str());
           }
         ASCex.filASC->WriteLnAscii("");
         }
@@ -260,7 +260,7 @@ void ImpExp::ExportASCII(const FileName& fnObject, const FileName& fnFile)
             if ( iRc !=0 && ((iRc % 15) == 0 )) ASCex.filASC->WriteLnAscii("");
             if ( ASCex.lBuf[iRc] == iUNDEF ) ASCex.lBuf[iRc] = 0;
             sString=ASCex.mp->dvrs().sValue(ASCex.lBuf[iRc],5);
-            ASCex.filASC->Write((long)sString.length(),sString.scVal());
+            ASCex.filASC->Write((long)sString.length(),sString.c_str());
           }
          ASCex.filASC->WriteLnAscii("");
         }
@@ -283,7 +283,7 @@ void ImpExp::ExportASCII(const FileName& fnObject, const FileName& fnFile)
                  sString = "    0";
                 break;
             }
-          ASCex.filASC->Write((long)sString.length(),sString.scVal());
+          ASCex.filASC->Write((long)sString.length(),sString.c_str());
           }
         ASCex.filASC->WriteLnAscii("");
         }
@@ -298,7 +298,7 @@ void ImpExp::ExportASCII(const FileName& fnObject, const FileName& fnFile)
           for ( iRc = 0; iRc < ASCex.iCols ; iRc++ )  {
             if ( iRc !=0 && ((iRc % 8) == 0 )) ASCex.filASC->WriteLnAscii("");
             sString =String(" %7i.", ASCex.lBuf[iRc]);
-            ASCex.filASC->Write((long)sString.length(),sString.scVal());
+            ASCex.filASC->Write((long)sString.length(),sString.c_str());
           }
         ASCex.filASC->WriteLnAscii("");
         }
@@ -318,7 +318,7 @@ void ImpExp::ExportASCII(const FileName& fnObject, const FileName& fnFile)
               sString =String("%6e ", rTmp);
             else
               sString =String("%#9.*f", ASCex.iNdec, rTmp);
-            ASCex.filASC->Write((long)sString.length(),sString.scVal());
+            ASCex.filASC->Write((long)sString.length(),sString.c_str());
           }
         ASCex.filASC->WriteLnAscii("");
         }

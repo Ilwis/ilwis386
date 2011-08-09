@@ -39,37 +39,38 @@
 // 4 october 1993, by Willem Nieuwenhuis
 // (c) Computer Department ITC
 
-#ifndef ILWSM_H
-#define ILWSM_H
-
-#undef IMPEXP
-#ifdef ILWISENGINE
-  #define IMPEXP __export
-#else
-  #define IMPEXP __import
-#endif
+#pragma once
 
 #include <map>
 
-String _export TR(const String& text);
+string _export TR(const string& text);
 
 String _export ILWSF(const String& sMod, long id);
+
+typedef map<string,string> LanguageTexts;
+typedef map<string,LanguageTexts > Languages;
 
 class StringManager 
 {
 public:
-    _export StringManager();        // setup the string manager, check the files
+    _export StringManager(const String& ilwDir, const String& lan=".eng");        // setup the string manager, check the files
     _export ~StringManager();
 
     String                      sFormatted(const String& sModName, const long iID);
+	string						translate(const string& text);
+	void						setLanguage(const String& lan);
 	
 private:
-    void                        ReadText(const String&);
+    void                        ReadText(const String&,map<long, String>& messages);
 	long                        LoadLanguageStrings(const String& sModName);
+	void						loadLanguage(const String& languageCode);
 
 	map<String, long>           m_mpModules;
 	map<long, String>           m_mpMessages;
+	map<long, String>           m_mpMessages_default;
     CCriticalSection            m_cs;
+	Languages					languages;
+	String						currentLanguage;
+	LanguageTexts				currentTexts;
 };
 
-#endif  // ILWSM_H

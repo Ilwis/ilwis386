@@ -430,7 +430,7 @@ String ArcInfoE00::sDecodeToken(String sNumToken, char cType)
 			iPos = (int)cType - (int)'O' + 1;
 		if (iPos > sOut.length())
 		{
-			String sErr = String(SCVErrCompressionUnknown_SI.scVal(), fileE00->sName(), iLinesRead());
+			String sErr = String(TR("Unrecognized compression token in %S, in line %li").c_str(), fileE00->sName(), iLinesRead());
 			throw ErrorObject(WhatError(sErr, errFORMERROR));
 		}
 		else
@@ -583,7 +583,7 @@ void ArcInfoE00::GetAndDecompressLine()
 			}
 			else
 			{
-				String sErr = String(SCVErrCompressionUnknown_SI.scVal(), fileE00->sName(), iLinesRead());
+				String sErr = String(TR("Unrecognized compression token in %S, in line %li").c_str(), fileE00->sName(), iLinesRead());
 				throw ErrorObject(WhatError(sErr, errFORMERROR));
 			}
 		}
@@ -672,7 +672,7 @@ AIFileType ArcInfoE00::aiDetermineFile()
 	else if (sSubSection == "IFO")  return aiIFO;
 	else if (sSubSection == "EOS")  return aiEOF;
 	else
-		UnrecognizedTag(String(SCVTextInLine_SI.scVal(), fileE00->sName(), iLinesRead()), sSubSection);
+		UnrecognizedTag(String(TR("%S, in line %ld").c_str(), fileE00->sName(), iLinesRead()), sSubSection);
 	return aiNONE;    // cannot come here
 }
 
@@ -823,7 +823,7 @@ void ArcInfoE00::E00SegmentSingle(AISegInfo& si) {
 	}
 
 	if (asSeg.iSize() != 7)
-		FormatProblem(String(SCVTextInLine_SI.scVal(), fileE00->sName(), iLinesRead()));
+		FormatProblem(String(TR("%S, in line %ld").c_str(), fileE00->sName(), iLinesRead()));
 	si.iCount = 0;
 	si.iArcID = asSeg[0].iVal();
 	if (si.iArcID == -1)
@@ -850,7 +850,7 @@ void ArcInfoE00::E00SegmentSingle(AISegInfo& si) {
 			iPos += iChars;
 			crd.y = sCrd.rVal();
 			if (crd.fUndef())
-				FormatProblem(String(SCVTextInLine_SI.scVal(), fileE00->sName(), iLinesRead()));
+				FormatProblem(String(TR("%S, in line %ld").c_str(), fileE00->sName(), iLinesRead()));
 			cbuf[si.iCount] = crd;
 			si.iCount++;
 			if (si.iCount == si.iNrCoord)
@@ -880,8 +880,8 @@ void ArcInfoE00::E00Segments() {
 // through the input file
     if ((si.iArcID < 0) || (oi.iCur > MAX_SEGMENTS)) {
       if (fScanning && (oi.iCur == MAX_SEGMENTS + 1)) {
-        int iAns = MessageBox(GetDesktopWindow(), String(SCVWarnTooManySegments_I.scVal(), MAX_SEGMENTS).scVal(),
-                                 SCVTitleImportE00.scVal(),
+        int iAns = MessageBox(GetDesktopWindow(), String(TR("Too many segments in input, only first %ld will be converted.\nContinue ?").c_str(), MAX_SEGMENTS).c_str(),
+                                 TR("Importing from Arc/Info E00").c_str(),
                                  MB_YESNO | MB_ICONEXCLAMATION);
         if (iAns == IDNO)
           UserAbort(fileE00->sName());
@@ -963,7 +963,7 @@ void ArcInfoE00::E00Centroids() {
   int iCnt = 0;
   while (iCnt >= 0) {
     GetNextLine();
-    sscanf(sLine.scVal(), "%d", &iCnt);
+    sscanf(sLine.c_str(), "%d", &iCnt);
   }
 }
 
@@ -993,7 +993,7 @@ void ArcInfoE00::E00LabelPoints() {
     sTmp = sLine.sSub(iPos, iRealChars);
     crd.y = sTmp.rVal();
     if (crd.fUndef())
-      FormatProblem(String(SCVTextInLine_SI.scVal(), fileE00->sName(), iLinesRead()));
+      FormatProblem(String(TR("%S, in line %ld").c_str(), fileE00->sName(), iLinesRead()));
     GetNextLine();                            // skip the dummy coordinates
     if (fDblPrecision)
       GetNextLine();                          // skip the dummy coordinates
@@ -1042,7 +1042,7 @@ void ArcInfoE00::SkipMSKSection() {
     iPos = fileE00->iLoc();
     GetNextLine();
     // sscanf result: 0 == no conversion, -1 (EOF) == error in conversion
-    fEndMsk = (sscanf(sLine.scVal(), "%d", &iVal) <= 0);
+    fEndMsk = (sscanf(sLine.c_str(), "%d", &iVal) <= 0);
   }
   // set file position to first line of next section.
   fileE00->Seek(iPos);
@@ -1134,7 +1134,7 @@ void ArcInfoE00::E00Polygon() {
 //    if (iNrPols > 0)
 //      AddCode(iNrPols, okPOLYGON);   // don't count the universe polygon
     if (asBounds.iSize() != 5)
-      FormatProblem(String(SCVTextInLine_SI.scVal(), fileE00->sName(), iLinesRead()));
+      FormatProblem(String(TR("%S, in line %ld").c_str(), fileE00->sName(), iLinesRead()));
     cbE00 += Coord(asBounds[1].rVal(), asBounds[2].rVal());
     cbE00 += Coord(asBounds[3].rVal(), asBounds[4].rVal());
     Array<short> aiTops;
@@ -1144,7 +1144,7 @@ void ArcInfoE00::E00Polygon() {
       asTopInfo.Reset();
       Split(sLine, asTopInfo);
       if (asTopInfo.iSize() != 3 && asTopInfo.iSize() != 6)
-        FormatProblem(String(SCVTextInLine_SI.scVal(), fileE00->sName(), iLinesRead()));
+        FormatProblem(String(TR("%S, in line %ld").c_str(), fileE00->sName(), iLinesRead()));
       aiTops &= asTopInfo[0].iVal();
       aiRightPol &= asTopInfo[2].iVal();
       iNrTops--;
@@ -1163,7 +1163,7 @@ void ArcInfoE00::E00ParFile() {
   int iCnt = 0;
   while (iCnt >= 0) {
     GetNextLine();
-    sscanf(sLine.scVal(), "%d", &iCnt);
+    sscanf(sLine.c_str(), "%d", &iCnt);
   }
 }
 
@@ -1187,7 +1187,7 @@ void ArcInfoE00::E00TextSection() {
   int i2, i3, i4, i5, i6, i7;
   while (iCnt >= 0) {
     GetNextLine();
-    if (7 != sscanf(sLine.scVal(), "%d %d %d %d %d %d %d", &iCnt, &i2, &i3, &i4, &i5, &i6, &i7))
+    if (7 != sscanf(sLine.c_str(), "%d %d %d %d %d %d %d", &iCnt, &i2, &i3, &i4, &i5, &i6, &i7))
       iCnt = 0; 
   }
 }
@@ -1199,7 +1199,7 @@ void ArcInfoE00::E00PFFSection() {
   int i2, i3, i4, i5, i6, i7;
   while (iCnt >= 0) {
     GetNextLine();
-    if (7 != sscanf(sLine.scVal(), "%d %d %d %d %d %d %d", &iCnt, &i2, &i3, &i4, &i5, &i6, &i7))
+    if (7 != sscanf(sLine.c_str(), "%d %d %d %d %d %d %d", &iCnt, &i2, &i3, &i4, &i5, &i6, &i7))
       iCnt = 0; 
   }
 }
@@ -1208,7 +1208,7 @@ void ArcInfoE00::E00Tolerances() {
   int iCnt = 0;
   while (iCnt >= 0) {
     GetNextLine();
-    sscanf(sLine.scVal(), "%d", &iCnt);
+    sscanf(sLine.c_str(), "%d", &iCnt);
   }
 }
 
@@ -1286,10 +1286,10 @@ void ArcInfoE00::E00InfoFile() {
         }
       }
       if (cbGlobal.cMin.fUndef() || cbGlobal.cMax.fUndef())
-        FormatProblem(String(SCVTextInLine_SI.scVal(), fileE00->sName(), iLinesRead()));
+        FormatProblem(String(TR("%S, in line %ld").c_str(), fileE00->sName(), iLinesRead()));
     }
     else if (asFile[1] == "AAT") {
-      trq.SetText(SCVTextReadSegAttrib);
+      trq.SetText(TR("Segment attributes"));
 
       DoAttributes(okSEGMENT);
     }
@@ -1297,12 +1297,12 @@ void ArcInfoE00::E00InfoFile() {
 // polygons can optionally be created in a later stadium by Ilwis, so 
 // attributes will be linked to the labels, not to polygons.
 			String sPoint("Point");
-      trq.SetText(String(SCVTextReadPPPAttrib_S.scVal(), sPoint));
+      trq.SetText(String(TR("%S attributes").c_str(), sPoint));
 
       DoAttributes(okPOINT);
     }
     else if (asFile.iSize() == 1) { // no info type indicated => plain table
-      trq.SetText(SCVTextReadTable);
+      trq.SetText(TR("Plain table"));
       DoAttributes(okTABLE);
       if (fScanning)
         oiMaps[okTABLE].fValid = true;  // valid table found
@@ -1391,7 +1391,7 @@ void ArcInfoE00::atiFieldInfo(AttribInfo& ati) {
 	}
 	
 	if (as.iSize() != 5 && as.iSize() != 6)  
-		FormatProblem(String(SCVTextInLine_SI.scVal(), fileE00->sName(), iLinesRead()));
+		FormatProblem(String(TR("%S, in line %ld").c_str(), fileE00->sName(), iLinesRead()));
 	
 	bool fNative = as.iSize() == 6;
 	ati.iNrActiveFields = as[fNative?2:1].iVal();
@@ -1490,7 +1490,7 @@ void ArcInfoE00::MakeTable(const Domain& dmTable, Table& tbl) {
     tbl.SetPointer(new TablePtr(fnTable, fnTblDat, dmTable, String()));
   else
     tbl.SetPointer(new TablePtr(fnTable, fnTblDat, oiMaps[okTABLE].atiInfo.iNrRecords, String()));
-  String sD = SCVTextTableName_;
+  String sD = TR("Table ");
   sD &= fnTable.sFile;
   sD &= fnTable.sExt;
   tbl->sDescription = sD;
@@ -1642,7 +1642,7 @@ void ArcInfoE00::GetAttributes(ObjectKind ok)
 }
 
 long ArcInfoE00::ScanInfo() {
-	trq.SetText(SCVTextScanning);
+	trq.SetText(TR("Scanning..."));
 	ReStart();
 	SkipHeader();
 	fScanning = true;
@@ -1711,7 +1711,7 @@ long ArcInfoE00::ScanInfo() {
 }
 
 short ArcInfoE00::SetupMaps(const FileName& fnObject) {
-  trq.SetText(SCVTextInitializing);
+  trq.SetText(TR("Initializing maps"));
   short iMaps = 0;
   ParmList pm;
   collection = ObjectCollection(FileName(fnObject,".ioc"), "ObjectCollection", pm);
@@ -1741,7 +1741,7 @@ short ArcInfoE00::SetupMaps(const FileName& fnObject) {
           dvs = DomainValueRangeStruct(dm);
           cb = cbGlobal.fUndef() ? oi.cbMap : cbGlobal;
           oi.mp = SegmentMap(FileName(fnObject,".mps"), cs, cb, dvs);
-          oi.mp->sDescription  = SCVTextSegmentMap;
+          oi.mp->sDescription  = TR("Segment Map");
 		  collection->Add(oi.mp);
 		  collection->Add(oi.mp->dm());
           iMaps++;
@@ -1753,7 +1753,7 @@ short ArcInfoE00::SetupMaps(const FileName& fnObject) {
         dvs = DomainValueRangeStruct(dm);
         cb = cbGlobal.fUndef() ? oi.cbMap : cbGlobal;
         oi.mp = PolygonMap(FileName(fnObject,".mpa"), cs, cb, dvs);
-        oi.mp->sDescription  = SCVTextPolygonMap;
+        oi.mp->sDescription  = TR("Polygon Map");
 	    collection->Add(oi.mp);
     	  collection->Add(oi.mp->dm());
         iMaps++;
@@ -1765,7 +1765,7 @@ short ArcInfoE00::SetupMaps(const FileName& fnObject) {
         dvs = DomainValueRangeStruct(dm);
         cb = cbGlobal.fUndef() ? oi.cbMap : cbGlobal;
         oi.mp = PointMap(FileName(fnObject,".mpp"), cs, cb, dvs);
-        oi.mp->sDescription  = SCVTextPointMap;
+        oi.mp->sDescription  = TR("Point Map");
         collection->Add(oi.mp);
 		  collection->Add(oi.mp->dm());
         iMaps++;
@@ -1785,7 +1785,7 @@ short ArcInfoE00::SetupMaps(const FileName& fnObject) {
         dvs = DomainValueRangeStruct(dm, vr);
         cb = cbGlobal.fUndef() ? oi.cbMap : cbGlobal;
         oi.mp = Map(FileName(fnObject,".mpr"), gr, oi.rcSize, dvs);
-        oi.mp->sDescription  = SCVTextRasterMap;
+        oi.mp->sDescription  = TR("Raster Map");
     	  collection->Add(oi.mp);
   		  collection->Add(gr);
         iMaps++;
@@ -1824,7 +1824,7 @@ short ArcInfoE00::SetupMaps(const FileName& fnObject) {
           AddDomainToAttrib(oi);
       }
       if (ok <= okRASTER) {
-        oi.mp->sDescription &= SCVText_ImportedFrom_;
+        oi.mp->sDescription &= TR("imported from ");
         oi.mp->sDescription &= String("%S.e00", fnE00.sFile);
         oi.mp->Store();
       }
@@ -1841,7 +1841,7 @@ void ArcInfoE00::Convert(const FileName& fnObject) {
 // Clean up garbage when the user presses stop button
   MarkErase(true);  
   
-  trq.SetText(SCVTextConverting);
+  trq.SetText(TR("Converting..."));
   _iLinsTot = iLinesRead();
   ReStart();
   SkipHeader();
@@ -1931,7 +1931,7 @@ void ImpExp::ImportE00(const FileName& fnFile, const FileName& fnObject, const S
 {
 	try 
 	{
-		trq.SetTitle(SCVTitleImportE00);
+		trq.SetTitle(TR("Importing from Arc/Info E00"));
 		ArcInfoE00 ai(fnFile, sOptions, trq, win);
 		
 		long iLines = ai.ScanInfo();

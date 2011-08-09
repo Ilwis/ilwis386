@@ -97,7 +97,7 @@ long ProjectionGKColombia::iMaxZoneNr() const
 
 String ProjectionGKColombia::sInvalidZone() const
 {
-   return SPRJErrWrongGaussColombiaZone;
+   return TR("Gauss Colombia zones are numbered 1..4");
 }
 
 

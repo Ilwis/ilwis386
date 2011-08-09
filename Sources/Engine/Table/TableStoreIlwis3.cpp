@@ -5,7 +5,7 @@
 #include "Engine\Table\TableStoreIlwis3.h"
 
 using namespace ILWIS;
-#define S(a) String(a).scVal()
+#define S(a) String(a).c_str()
 
 TableStoreIlwis3::TableStoreIlwis3() : records(0){
 }
@@ -108,7 +108,7 @@ void TableStoreIlwis3::load(const FileName& fnODF, const String& prfix){
 
 	setColumnInfo(fnODF, simpleDataTypes);
 
-	ifstream file (fnData.sFullPath().scVal(), ios::in|ios::binary|ios::ate);
+	ifstream file (fnData.sFullPath().c_str(), ios::in|ios::binary|ios::ate);
 	if (!file.is_open())
 		return; // throw some error
 	long size = file.tellg();
@@ -127,7 +127,7 @@ void TableStoreIlwis3::load(const FileName& fnODF, const String& prfix){
 	}
 
 	long time2 = clock();
-	TRACE(String("loaded %S in %f ms\n", fnODF.sRelative(), ((double)time2-time1)/1000.0).scVal());
+	TRACE(String("loaded %S in %f ms\n", fnODF.sRelative(), ((double)time2-time1)/1000.0).c_str());
 
 	delete[] memblock;
 }

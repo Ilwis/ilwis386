@@ -37,20 +37,24 @@ Created on: 2007-02-8
 
 class SAXParser;
 
-class _export RemoteXMLObject {
+class _export RemoteObject {
 public:
-	RemoteXMLObject(const URL& url);
-	RemoteXMLObject();
-	void getRequest(char *url);
+	RemoteObject(const URL& url);
+	RemoteObject();
+	void getRequest(const String& url);
 	static void *myrealloc(void *ptr, long size);
 	static size_t WriteMemoryCallback(void *ptr, size_t size, size_t nmemb, void *data);
 	static void *myrealloc(void *ptr, size_t size);
-	~RemoteXMLObject();
+	~RemoteObject();
 	MemoryStruct *get();
+	void setStream(ofstream *stream);
+	String toString();
 
 protected:
    void parse();
    MemoryStruct chunk;
+   ofstream *file;
+
 
 };
 

@@ -48,7 +48,7 @@
 static inline const char * GetEnv(const String& sVar)
 // same as getenv, but with environment var in upper case
 {
-  return (const char*)getenv(String(sVar).toUpper().scVal());
+  return (const char*)getenv(String(sVar).toUpper().c_str());
 }
 
 SysVarList::SysVarList()
@@ -83,7 +83,7 @@ void SysVarList::Add(Parm *prm)
   char sBuf[100];
   String sIni = "ilwis.ini";
   String sEntry = prm->sOpt();
-  GetPrivateProfileString("ilwis", sEntry.scVal(), "", sBuf, 100, sIni.scVal());
+  GetPrivateProfileString("ilwis", sEntry.c_str(), "", sBuf, 100, sIni.c_str());
   String s = sBuf;
   if (s != "") 
     if (prm->pmt() == pmtOpt)

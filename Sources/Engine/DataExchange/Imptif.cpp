@@ -410,17 +410,17 @@ void GeoTiffInfo::SetOwner(TiffImporter* ITC)
 {
 	m_ITC = ITC;
 
-	CFile cfGeotiff(m_sPathGeoDef.scVal(), CFile::modeRead);
+	CFile cfGeotiff(m_sPathGeoDef.c_str(), CFile::modeRead);
 	CArchive ca(&cfGeotiff, CArchive::load);
 	m_ecDef.em = new ElementMap;    // m_ecDef will delete the element map
 	m_ecDef.em->Serialize(ca);
 
-	CFile cfDatum(m_sPathDatDef.scVal(), CFile::modeRead);
+	CFile cfDatum(m_sPathDatDef.c_str(), CFile::modeRead);
 	CArchive ca2(&cfDatum, CArchive::load);
 	m_ecDatum.em = new ElementMap;  // m_ecDatum will delete the element map
 	m_ecDatum.em->Serialize(ca2);
 
-	CFile cfEllipsoid(m_sPathEllDef.scVal(), CFile::modeRead);
+	CFile cfEllipsoid(m_sPathEllDef.c_str(), CFile::modeRead);
 	CArchive ca3(&cfEllipsoid, CArchive::load);
 	m_ecEllipsoid.em = new ElementMap;  // m_ecEllipsoid will delete the element map
 	m_ecEllipsoid.em->Serialize(ca3);
@@ -1057,7 +1057,7 @@ void TiffImporter::ReadLZWLine(ByteBuf& bufLine)
 			{
 				m_CodeMax++;
 				if ( Code != m_CodeMax )
-					throw ErrorImportExport(SCVErrGifCode);
+					throw ErrorImportExport(TR("Error code in the file"));
 				StrArrBef[Code] = m_CodeOld;
 				StrArrLen[Code] = StrArrLen[m_CodeOld] + 1;
 				C = m_CodeOld;
@@ -1371,7 +1371,7 @@ Domain TiffImporter::dmDetermine()
 		{
 			dm->fErase = true;
 			rpr->fErase = true;
-			throw ErrorImportExport(SCVErrReading);
+			throw ErrorImportExport(TR("File Reading Error"));
 		}
 		return dm;
 	}
@@ -1381,7 +1381,7 @@ Domain TiffImporter::dmDetermine()
 
 long TiffImporter::iReadTiffIntro()
 {
-	String sErr = SCVErrNoTIFF;
+	String sErr = TR("not a TIFF file");
 	TIFF_HeaderStruct TIFF_Header(filTIFF);
 	bool fOk = TIFF_Header.fIsTiff() && (TIFF_Header.iVersion() == 42);
 	if (!fOk)
@@ -1405,7 +1405,7 @@ long TiffImporter::iReadTiffImageInfo()
 	for (int i = 0; i < NrFields; i++) 
 	{
 		if (!ttfFromFile.ReadFrom(filTIFF) )
-		  throw ErrorImportExport(SCVErrReading);
+		  throw ErrorImportExport(TR("File Reading Error"));
 
 		switch (ttfFromFile.iTag())
 		{
@@ -1451,12 +1451,12 @@ long TiffImporter::iReadTiffImageInfo()
 		for (short ibps = 0; ibps < iBpsCount; ibps++)
 			tii().iBitsPerSample += shRead();
 	}
-	String sErr = SCVErrNoTIFF;
+	String sErr = TR("not a TIFF file");
 	bool fOk = true;
 	if (tii().iBitsPerSample > 24)
 	{
 		fOk = false;
-		sErr = SCVErrTooManyPlanes;
+		sErr = TR("Only 1, 4, 8, 16 or 24 bit format are supported");
 	}
 
 	// PhotoMetricInterpretation:
@@ -1481,31 +1481,31 @@ long TiffImporter::iReadTiffImageInfo()
 	if (iPlanarConf == 2)    // 2=planar format, hardly ever used so no support now
 	{
 		fOk = false;
-		sErr = SCVErrNoPlanarTIF;
+		sErr = TR("Planar format is not supported");
 	}
 	else if ( m_tii.iNrCols < 1 || m_tii.iNrLines < 1 ) 
 	{
 		fOk = false;
-		sErr = SCVErrWrongLineCol;
+		sErr = TR("Incorrect number of lines or columns");
 	}
 	else if (Predictor != 1)    // No support for compression predictors yet
 	{
 		fOk = false;
-		sErr = SCVErrNoHorDiffLZW;
+		sErr = TR("LZW Compression with horizontal differencing is not supported");
 	}
 	else if (m_tii.iCompression != 1 && 
 	         m_tii.iCompression != 5 && 
 	         m_tii.iCompression != (short)32773L)
 	{
 		fOk = false;
-		sErr = SCVErrUnsupCompres;
+		sErr = TR("Compression type not supported");
 	}
 	if (m_tii.iCompression == 5)
 	{
 		if (m_tii.iBitsPerSample < 8)
 		{
 			fOk = false;
-			sErr = SCVErrUnsuppTIFLZW;
+			sErr = TR("LZW compression for 1 and 4 bit not supported");
 		}
 		else
 		{
@@ -1560,7 +1560,7 @@ void TiffImporter::Import()
 		mpOut->fErase = true;
 
 		m_iMapLine = 0;
-		trq.SetText(SCVTextConverting);
+		trq.SetText(TR("Converting..."));
 		if (tii().iNrStrips == 1)  // skip
 		{
 			filTIFF.Seek(tii().iStripOffset);
@@ -1613,7 +1613,7 @@ void TiffImporter::Import()
 
 void ImpExp::ImportTIF(File& filTIFF, const FileName& fnObject)
 {
-	trq.SetTitle(SCVTitleImportTIFF);
+	trq.SetTitle(TR("Importing from TIFF image"));
 	trq.fUpdate(0);
 
 	// fnObject is the base name for the ILWIS map

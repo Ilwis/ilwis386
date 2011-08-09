@@ -65,7 +65,7 @@
 //    default:
 //      sTmp = SDErrUnknown;
 //  }
-//  return String("%S (%S)", sTmp, String(SDErrorNr.scVal(), err()));
+//  return String("%S (%S)", sTmp, String(SDErrorNr.c_str(), err()));
 //}
 
 

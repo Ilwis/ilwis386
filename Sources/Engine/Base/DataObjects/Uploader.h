@@ -35,6 +35,7 @@ Software Foundation, http://www.fsf.org.
 Created on: 2007-02-8
 ***************************************************************/
 
+
 class _export Uploader {
 public:
 	Uploader(const URL& url);
@@ -43,10 +44,16 @@ public:
 	virtual int getSizeLeft();
 	virtual size_t getNextBytes(void* bytes, size_t size);
 	void setFile(const FileName& fn);
+	void setText(const String& txt);
+	void setStream(std::iostream *str);
+	std::iostream *getStream();
+	static size_t write_callback(void *ptr, size_t size, size_t nmemb, void *userp);
+	void close();
 protected:
 	URL url;
 	int sizeleft;
 	FILE *file;
+	String text;
 	FileName fnFile;
 	int dataSize;
 	bool fValid;

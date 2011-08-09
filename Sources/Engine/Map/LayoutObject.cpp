@@ -72,9 +72,9 @@ void LayoutObjectPtr::GetObjectStructure( ObjectStructure& os)
 		{
 			String sWhere("Item %d", i);
 			String sKey;				
-			ObjectInfo::ReadElement("Layout", sWhere.scVal(), fnObj, sKey);
+			ObjectInfo::ReadElement("Layout", sWhere.c_str(), fnObj, sKey);
 			FileName fnFile;					
-			ObjectInfo::ReadElement(sWhere.scVal(), sKey.scVal(), fnObj, fnFile);
+			ObjectInfo::ReadElement(sWhere.c_str(), sKey.c_str(), fnObj, fnFile);
 			if ( IlwisObject::iotObjectType( fnFile) != IlwisObject::iotANY || 
 				   fCIStrEqual(fnFile.sExt, ".bmp") || 
 					 fCIStrEqual(fnFile.sExt, ".wmf"))
@@ -91,9 +91,9 @@ bool LayoutObjectPtr::fUsesDependentObjects() const
 	{
 		String sWhere("Item %d", i);
 		String sKey;				
-		ObjectInfo::ReadElement("Layout", sWhere.scVal(), fnObj, sKey);
+		ObjectInfo::ReadElement("Layout", sWhere.c_str(), fnObj, sKey);
 		FileName fnFile;					
-		ObjectInfo::ReadElement(sWhere.scVal(), sKey.scVal(), fnObj, fnFile);
+		ObjectInfo::ReadElement(sWhere.c_str(), sKey.c_str(), fnObj, fnFile);
 		if ( IlwisObject::iotObjectType( fnFile) != IlwisObject::iotANY )
 		{
 			IlwisObject obj = IlwisObject::obj(fnFile);

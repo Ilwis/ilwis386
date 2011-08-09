@@ -91,7 +91,7 @@ Ellipsoid::Ellipsoid(const String& sEll)
   String sPath = getEngine()->getContext()->sIlwDir();
   sPath &= "\\Resources\\Def\\ellips.def";
   char sBuf[100];
-  if (0 == GetPrivateProfileString("Ellipsoids", sName.scVal(), "", sBuf, 100, sPath.scVal())) 
+  if (0 == GetPrivateProfileString("Ellipsoids", sName.c_str(), "", sBuf, 100, sPath.c_str())) 
     throw ErrorNotFound(sEll);
   double rMajor, f1;
   String definition(sBuf);
@@ -110,7 +110,7 @@ Ellipsoid::Ellipsoid(const String& sEll)
 }
 
 void Ellipsoid::InvalidEllipsoidDef() {
-  throw ErrorObject(SPRJErrInvalidEllipsDefine, errEllipsoid);
+  throw ErrorObject(TR("Invalid Ellipsoid Definition"), errEllipsoid);
 }
     
 void Ellipsoid::init(double rMajor, double f1)
@@ -134,7 +134,7 @@ void Ellipsoid::GetEllipsoids(char* sBuf, int iSize)
 {
   String sPath = getEngine()->getContext()->sIlwDir();
   sPath &= "\\Resources\\Def\\ellips.def";
-  GetPrivateProfileString("Ellipsoids", NULL, "", sBuf, iSize, sPath.scVal());
+  GetPrivateProfileString("Ellipsoids", NULL, "", sBuf, iSize, sPath.c_str());
 }
 
 

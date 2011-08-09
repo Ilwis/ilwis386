@@ -12,7 +12,7 @@ bool ILWIS::Version::fSupportsBinaryVersion(ILWIS::Version::BinaryVersion versio
 	}
 	if ( throwError) {
 		String sVers = BinaryVersionNumberToString(version);
-		throw ErrorObject(String(SDErrBinaryVersionNotSupported_S.scVal(), sVers));
+		throw ErrorObject(String(TR("This binary version( %S) of the data file(s) is not supported").c_str(), sVers));
 	}
 	return false;
 }
@@ -23,7 +23,7 @@ bool ILWIS::Version::fSupportsODFVersion(const String& version, bool throwError)
 			return true;
 	}
 	if ( throwError)
-		throw ErrorObject(String(SDErrODFVersionNotSupported_S.scVal(), version));
+		throw ErrorObject(String(TR("This Object definition version( %S) of the data file(s) is not supported").c_str(), version));
 
 	return false;
 }
@@ -75,7 +75,7 @@ bool ILWIS::Version::fSupportsModuleInterfaceVersion(ILWIS::Module::ModuleInterf
 	}
 	if ( throwError) {
 		String sVers = ModuleVersionNumberToString(version);
-		throw ErrorObject(String(SDErrModuleVersionNotSupported_S.scVal(), sVers, module));
+		throw ErrorObject(String(TR("This module interface version( %S) of the plugin %S is not supported").c_str(), sVers, module));
 	}
 	return false;
 

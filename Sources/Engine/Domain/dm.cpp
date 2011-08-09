@@ -729,7 +729,7 @@ DomainPtr* DomainPtr::create(const String& sExpression)
 {
   if (fCIStrEqual(sExpression.sRight(4), ".csy"))// coordinate system
     return new DomainCoord(FileName(), CoordSystem(sExpression));
-  const char *p = sExpression.scVal();
+  const char *p = sExpression.c_str();
   String s = p;
   char *pparm = s.strchrQuoted('(');
   if (pparm != 0) 
@@ -942,7 +942,7 @@ Domain Domain::dmFindSameOnDisk(const Domain& dm, const String& sSearchDir)
     else
         sSearchFile = getEngine()->sGetCurDir();
     sSearchFile &= "*.dom";
-    if ((handle=FindFirstFile(sSearchFile.scVal(), &findData))!=INVALID_HANDLE_VALUE)
+    if ((handle=FindFirstFile(sSearchFile.c_str(), &findData))!=INVALID_HANDLE_VALUE)
     {
         do 
         {
@@ -966,7 +966,7 @@ void Domain::ClassToIdent()
 		return;
 
 	if ( pdc->iRef > 1) 
-		throw ErrorObject(String(SDMErrObjectsStillOpen_S.scVal(), pdc->sName()));	
+		throw ErrorObject(String(TR("Close all other objects that use %S before attempting to convert it").c_str(), pdc->sName()));	
 
 	DomainIdentifier* pdi;
 	FileName fnAttr;
@@ -979,18 +979,18 @@ void Domain::ClassToIdent()
 	{
 		pdi = new DomainIdentifier(pdc->fnObj, pdc->iSize());
 		pdi->dsType = DomainSort::dsMANUAL;
-		Tranquilizer trq(SDMTitleConvertingClassID);
+		Tranquilizer trq(TR("Converting Class to Id"));
 		trq.SetDelayShow(false);
 		trq.SetNoStopButton(true);
-		trq.fText(SDMMsgLoadingDomain);
+		trq.fText(TR("Loading Domain. Please wait..."));
 		bool fHasCode = pdc->colCode.fValid();
 		bool fHasDescr = pdc->colDesc.fValid();
 
 		pdc->Load(); // force the table load here to be able to set the tranquilizer
-		trq.fText(SDMMsgCreateNewDomain);
+		trq.fText(TR("Creating Domain. Please wait..."));
 		pdi->SetVal(1, "--_Dummy_--"); // force creation of new domain table
 
-		trq.SetText(SDMConverting);
+		trq.SetText(TR("Converting..."));
 		trq.SetNoStopButton(false);
 		for (long i=1; i <= pdc->iSize(); i++) 
 		{
@@ -1036,7 +1036,7 @@ void Domain::IdentToClass()
 		return;
 	
 	if ( pdi->iRef > 1) 
-		throw ErrorObject(String(SDMErrObjectsStillOpen_S.scVal(), pdi->sName()));
+		throw ErrorObject(String(TR("Close all other objects that use %S before attempting to convert it").c_str(), pdi->sName()));
 
 	FileName fnAttr;
 	if (pdi->fTblAtt())
@@ -1050,18 +1050,18 @@ void Domain::IdentToClass()
 		pdc = new DomainClass(pdi->fnObj, pdi->iSize());
 		pdc->dsType = DomainSort::dsMANUAL;
 		pdc->sDescription = pdi->sDescription;
-		Tranquilizer trq(SDMTitleConvertingIDClass);
+		Tranquilizer trq(TR("Converting Id to Class"));
 		trq.SetDelayShow(false);
 		trq.SetNoStopButton(true);
-		trq.fText(SDMMsgLoadingDomain);
+		trq.fText(TR("Loading Domain. Please wait..."));
 		bool fHasCode = pdi->colCode.fValid();
 		bool fHasDescr = pdi->colDesc.fValid();
 
 		pdi->Load();             // force the table load here to be able to set the tranquilizer
-		trq.fText(SDMMsgCreateNewDomain);
+		trq.fText(TR("Creating Domain. Please wait..."));
 		pdc->SetVal(1, "--_Dummy_--"); // force creation of new domain table
 
-		trq.SetText(SDMConverting);
+		trq.SetText(TR("Converting..."));
 		trq.SetNoStopButton(false);
 		for (long i=1; i <= pdi->iSize(); i++) 
 		{
@@ -1104,7 +1104,7 @@ void Domain::PictureToClass()
 		return;
 
 	if ( pdp->iRef > 1 )
-		throw ErrorObject(String(SDMErrObjectsStillOpen_S.scVal(), pdp->sName()));
+		throw ErrorObject(String(TR("Close all other objects that use %S before attempting to convert it").c_str(), pdp->sName()));
 	
 	Representation rprPict = pdp->rpr();
 	DomainClass* pdc;

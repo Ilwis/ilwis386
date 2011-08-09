@@ -76,7 +76,7 @@ void BaseCopier::ExpandWildcards(vector <FileName> & fnList)
 
 void BaseCopier::ExpandWildcards(FileName & fnWildcard, vector <FileName> & fnList)
 {
-	CString sPattern = fnWildcard.sFullPath().scVal();
+	CString sPattern = fnWildcard.sFullPath().c_str();
 	CFileFind finder;
 	BOOL bWorking = finder.FindFile(sPattern);
 	while (bWorking)
@@ -95,7 +95,7 @@ void BaseCopier::GetDestinationDirFiles(list<FileName>& lstFiles)
 {
 	CFileFind finder;
 	String sDirFiles = dirDestination.sFullPath() + "*.*";
-	bool fFound = finder.FindFile(sDirFiles.scVal()) == TRUE;
+	bool fFound = finder.FindFile(sDirFiles.c_str()) == TRUE;
 	if ( !fFound) return;
 	finder.FindNextFile();
 	while (finder.FindNextFile() ) 
@@ -125,13 +125,13 @@ bool BaseCopier::fSufficientDiskSpace(unsigned __int64 & iSpaceRequired, unsigne
 	bool fResult;
 	if (pGetDiskFreeSpaceEx)
 	{
-		fResult = pGetDiskFreeSpaceEx (sDrive.scVal(), &iAvail, &dummy1, &dummy2) > 0;
+		fResult = pGetDiskFreeSpaceEx (sDrive.c_str(), &iAvail, &dummy1, &dummy2) > 0;
 	  iSpaceAvailable = iAvail.QuadPart;
 	}
 	else 
 	{
 		DWORD dwSectPerClust, dwBytesPerSect, dwFreeClusters, dwTotalClusters;
-		fResult = GetDiskFreeSpace (sDrive.scVal(), 
+		fResult = GetDiskFreeSpace (sDrive.c_str(), 
 									&dwSectPerClust, 
 									&dwBytesPerSect,
 									&dwFreeClusters, 
@@ -184,9 +184,9 @@ void BaseCopier::CopyFileList(list<String>& lstFilesUsed, char *sNameBuf, char *
 	for( list<String>::iterator cur = lstFilesUsed.begin(); cur != lstFilesUsed.end(); ++cur)
 	{
 		FileName fn(*cur);
-		DWORD iAttrib = GetFileAttributes( fn.sFullPath().scVal() );
-		SetFileAttributes( fn.sFullPath().scVal(), iAttrib & ~FILE_ATTRIBUTE_READONLY );
-		DeleteFile(fn.sFullPath().scVal());
+		DWORD iAttrib = GetFileAttributes( fn.sFullPath().c_str() );
+		SetFileAttributes( fn.sFullPath().c_str(), iAttrib & ~FILE_ATTRIBUTE_READONLY );
+		DeleteFile(fn.sFullPath().c_str());
 	}
 
 	SHFILEOPSTRUCT shFo;

@@ -80,14 +80,14 @@
 #include "Engine\Base\System\Engine.h"
 
 void ImpExp::ExpPntToSHP( const FileName& fnObject, const FileName& fnFile ) {
-  trq.SetTitle(SCVTitleExpPntShape);
-  trq.SetText(SCVTextProcessing);
+  trq.SetTitle(TR("Exporting Points to Arcview shapefile"));
+  trq.SetText(TR("Processing..."));
   const PointMap pntmap = PointMap(fnObject);
   long iNrPnts = pntmap->iFeatures();
   if (iNrPnts == 0) 
 	{
-	  getEngine()->Message(String(SCVWarnEmptyMap_S.scVal(), "Point").scVal(),
-                                 SCVTitleExpPntShape.scVal(), 
+	  getEngine()->Message(String(TR("%S Map is empty, nothing has been exported").c_str(), "Point").c_str(),
+                                 TR("Exporting Points to Arcview shapefile").c_str(), 
                                  MB_OK | MB_ICONEXCLAMATION);
     return;
   }

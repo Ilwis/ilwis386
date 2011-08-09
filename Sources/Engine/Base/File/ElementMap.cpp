@@ -71,7 +71,7 @@ void ElementMap::Serialize(CArchive& ar)
 		{
 			String sSection = it->first;
 			String s("[%S]\r\n", sSection);
-			ar.WriteString(s.scVal());
+			ar.WriteString(s.c_str());
 			const msS& ss = it->second;
 			for (CImsS entry = ss.begin(); entry != ss.end(); ++entry) 
 			{
@@ -80,7 +80,7 @@ void ElementMap::Serialize(CArchive& ar)
 				if (sValue == "")
 					continue;
 				String s("%S=%S\r\n", sEntry, sValue);
-				ar.WriteString(s.scVal());
+				ar.WriteString(s.c_str());
 				ar.Flush();
 			}
 			ar.WriteString("\r\n");
@@ -114,7 +114,7 @@ void ElementMap::SerializeSection(CArchive& ar, const string& sSect)
 	if (ar.IsStoring())
 	{
 		String s("[%S]\r\n", sSection);
-		ar.WriteString(s.scVal());
+		ar.WriteString(s.c_str());
 
 		const msS& ss = operator[](sSection);
 		for (CImsS entry = ss.begin(); entry != ss.end(); ++entry) 
@@ -124,7 +124,7 @@ void ElementMap::SerializeSection(CArchive& ar, const string& sSect)
 			if (sValue == "")
 				continue;
 			String s("%S=%S\r\n", sEntry, sValue);
-			ar.WriteString(s.scVal());
+			ar.WriteString(s.c_str());
 		}
 		ar.WriteString("\r\n");
 	}

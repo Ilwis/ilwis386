@@ -63,7 +63,7 @@ Table2Dim::Table2Dim(const FileName& fn)
 : Table()
 {
     FileName fil = FileName(fn, ".ta2");
-//    CMutex mut(TRUE, fn.sFullName().scVal());
+//    CMutex mut(TRUE, fn.sFullName().c_str());
     IlwisObjectPtr *iptr=pGet(fil);
     if (iptr==NULL)
     {
@@ -123,14 +123,14 @@ Table2DimPtr::Table2DimPtr(const FileName& fn, const DomainValueRangeStruct& dvr
   pdsrt2 = dom2->pdsrt();
 	if (!pdsrt1)
 		if (dom1.fValid())
-			throw ErrorObject(String(STB2dErrDomainSortRequired_S.scVal(), dom1->sName()));
+			throw ErrorObject(String(TR("'%S': domain must be Class or ID").c_str(), dom1->sName()));
 		else
-			throw ErrorObject(STB2dErrDomainSortRequired);
+			throw ErrorObject(TR("Domain Class or ID required"));
 	if (!pdsrt2)
 		if (dom2.fValid())
-			throw ErrorObject(String(STB2dErrDomainSortRequired_S.scVal(), dom2->sName()));
+			throw ErrorObject(String(TR("'%S': domain must be Class or ID").c_str(), dom2->sName()));
 		else
-			throw ErrorObject(STB2dErrDomainSortRequired);
+			throw ErrorObject(TR("Domain Class or ID required"));
   assert((0 != pdsrt1) && (0 != pdsrt2)); // proper error message needed
   {
     Table tbl;

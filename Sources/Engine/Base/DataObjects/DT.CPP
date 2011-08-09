@@ -119,7 +119,9 @@ ILWIS::Time::Time(int yr, int mnth, int dy, int hr, int min, double sec)
 			else
 				valid = false;
 		}else {
-			if ( month % 2 == 0 && dy <= 31)
+			if ( month < 8 && (month + 1) % 2 == 0 && dy <= 31)
+				day = dy;
+			else if ( month >= 8 && month % 2 == 0 && dy <= 31)
 				day = dy;
 			else if ( dy <= 30)
 				day = dy;

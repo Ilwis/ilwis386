@@ -156,18 +156,18 @@ void TiffExporter::Export(Tranquilizer& trq)
 	_outFile->SetErase(true);  // remove the file in case of errors.
 
 	// write header
-	trq.SetText(SCVTextTiffHeader);
+	trq.SetText(TR("Writing TIFF file header"));
 	_outFile->Write(sizeof(VByteOrder), &VByteOrder);
 	_outFile->Write(sizeof(VHgtg), &VHgtg);
 	_outFile->Write(sizeof(VIFDOffset), &VIFDOffset);
 
 	// write data
-	trq.SetText(SCVTextProcessing);
+	trq.SetText(TR("Processing..."));
 
 	TiffExportInfo teiData = transformer->transform(trq);
 
 	//write IFD
-	trq.SetText(SCVTextTiffIFD);
+	trq.SetText(TR("Writing TIFF Key directory"));
 
 	WriteIFD(teiData);
 	long iEndTable=_outFile->iLoc();
@@ -650,7 +650,7 @@ GeoTiffExporter::GeoTiffExporter(const FileName& _fnIn, const FileName& _fnOut) 
 	String sPath = getEngine()->getContext()->sIlwDir();
 	sPath &= "\\Resources\\Def\\geotiff.def";
 
-	CFile cfGeotiff(sPath.scVal(), CFile::modeRead);
+	CFile cfGeotiff(sPath.c_str(), CFile::modeRead);
 	CArchive ca(&cfGeotiff, CArchive::load);
 	m_ecGeoTiff.em = new ElementMap;    // m_ecGeoTiff will delete the element map
 	m_ecGeoTiff.em->Serialize(ca);
@@ -658,12 +658,12 @@ GeoTiffExporter::GeoTiffExporter(const FileName& _fnIn, const FileName& _fnOut) 
 
 void GeoTiffExporter::Export(Tranquilizer& trq)
 {
-	trq.SetTitle(SCVTitleExportTiff);
+	trq.SetTitle(TR("Export to TIFF format"));
 	TiffExporter::Export(trq);
 
 	if (!_inMap->gr()->fGeoRefNone())
 	{
-		trq.SetText(SCVTextTiffGeoKeys);
+		trq.SetText(TR("Writing GeoTIFF information"));
 		String sAscii;
 
 		Array<double> rVals;
@@ -780,7 +780,7 @@ unsigned short GeoTiffExporter::iGetGeoTiffCode(String sSection, String sCode)
 {
 	String sBuf = (*m_ecGeoTiff.em)(sSection, sCode);
 	if (sBuf.length() > 0)
-		return atoi(sBuf.scVal());
+		return atoi(sBuf.c_str());
 
 	return 0;
 }

@@ -170,7 +170,7 @@ ForeignFormat* ForeignFormat::Create(const FileName& fnObj, ParmList& pm )
 
 bool ForeignFormat::GetTime(FILETIME& LastWrite)
 {
-	HANDLE hFile = CreateFile(sForeignInput.scVal(), 
+	HANDLE hFile = CreateFile(sForeignInput.c_str(), 
 	                          GENERIC_READ,
 														FILE_SHARE_READ,
 														NULL,
@@ -219,7 +219,7 @@ void ForeignFormat::Store(IlwisObject obj)
 
 CoordSystem ForeignFormat::GetCoordSystem()
 {
-	throw ErrorObject(String(SIEErrShouldBeImplenented_S.scVal(), "GetCoordSystem()"));
+	throw ErrorObject(String(TR("Function %S should be implemented").c_str(), "GetCoordSystem()"));
 	return CoordSystem("unknown");
 }
 
@@ -325,7 +325,7 @@ String ForeignFormat::sFindDefaultMethod(const FileName& fnForeignFile)
 	// try to find the find in the def file 
 		String sSystemDir = getEngine()->getContext()->sIlwDir() + "\\Resources\\Def\\ForeignFormatNames.def";
 		char sNameBuf[50];
-		GetPrivateProfileString("Default method", sFormat.scVal(), "", sNameBuf, 50, sSystemDir.scVal());
+		GetPrivateProfileString("Default method", sFormat.c_str(), "", sNameBuf, 50, sSystemDir.c_str());
 		String sName(sNameBuf);
 		if ( sName != "")
 			return sName;
@@ -344,7 +344,7 @@ String ForeignFormat::sFindFormatName(const String& sFO)
 	char sNameBuf[20];
 	sNameBuf[0] = 0;
 	if ( fnFO.sExt != "")
-		GetPrivateProfileString("Formats", fnFO.sExt.scVal(), "", sNameBuf, 20, fnff.sFullPath().scVal());
+		GetPrivateProfileString("Formats", fnFO.sExt.c_str(), "", sNameBuf, 20, fnff.sFullPath().c_str());
 	String sName(sNameBuf);
 	// if present this is the name we need
 	if ( sName != "" )

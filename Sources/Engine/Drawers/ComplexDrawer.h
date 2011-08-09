@@ -79,6 +79,8 @@ class _export ComplexDrawer : public NewDrawer {
 		virtual MapPaneViewTool *createTool(ZoomableView*) { return 0;}
 		virtual GeneralDrawerProperties *getProperties() { return 0;}
 		virtual bool isSet() const { return false; }
+		Color getSelectionColor() const { return selectionColor; }
+		void setSelectionColor(const Color& clr) { selectionColor = clr; }
 	
 	protected:
 		vector<NewDrawer *> drawers;
@@ -104,6 +106,7 @@ class _export ComplexDrawer : public NewDrawer {
 		int specialOptions;
 		bool dirty;
 		int totalDrawerCount;
+		Color selectionColor;
 
 		
 		ComplexDrawer(DrawerParameters *context, const String& ty);

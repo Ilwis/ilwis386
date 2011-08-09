@@ -84,7 +84,7 @@ String ExternalCommand::sFindFullPathToFile(String sFile)
 	// the full path to the same executable that CreateProcess finds (at least, in theory)
 	char cBuffer [BUFSIZE];
 	LPTSTR pDummy;
-	if (SearchPath(NULL, sFile.scVal(), ".exe", BUFSIZE, cBuffer, &pDummy))
+	if (SearchPath(NULL, sFile.c_str(), ".exe", BUFSIZE, cBuffer, &pDummy))
 		return String(cBuffer);
 	else
 		return sFile; // return the original by default .. we failed to find it
@@ -129,7 +129,7 @@ bool ExternalCommand::fIsConsoleApplication(String sFile)
 
 	// Open the application file.
 
-	hImage = CreateFile(sFilePath.scVal(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING,
+	hImage = CreateFile(sFilePath.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING,
 		FILE_ATTRIBUTE_NORMAL, NULL);
 
 	if (hImage == INVALID_HANDLE_VALUE)
@@ -368,7 +368,7 @@ void ExternalCommand::Execute(bool fBlockWhileExecuting)
 		}
 		else if (iExitCode != 0)
 		{
-			String sError(SMSErrExternalCommand_i.scVal(), iExitCode);
+			String sError(TR("The external command has terminated with exit code %li.").c_str(), iExitCode);
 			throw ErrorObject(sError);
 		}
 	}
@@ -398,7 +398,7 @@ void ExternalCommand::Execute(bool fBlockWhileExecuting)
 			// Free the buffer.
 			LocalFree( lpMsgBuf );
 			// Display the string.
-			throw ErrorObject(String(SMSErrExternalCommand_S_S.scVal(), sCommandLine(), sError));
+			throw ErrorObject(String(TR("External command '%S' generated error:\n%S").c_str(), sCommandLine(), sError));
 		}
 	}
 }

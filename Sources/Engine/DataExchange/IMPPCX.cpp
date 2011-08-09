@@ -64,10 +64,10 @@ void ImpExp::ImportPCX(File& FileIn, const FileName& fnObject)
 #pragma pack()
 
   if ( (sizeof PCXHeader) != FileIn.Read(sizeof PCXHeader, &PCXHeader) )
-    throw ErrorImportExport(SCVErrReading);
+    throw ErrorImportExport(TR("File Reading Error"));
 
   if ( PCXHeader.Manuf!=10 || PCXHeader.Encoding!=1 )
-    throw ErrorImportExport(SCVErrNoPCX);
+    throw ErrorImportExport(TR("Not a PCX file"));
 
   long iCol = PCXHeader.Xmax - PCXHeader.Xmin + 1;
   long iLine = PCXHeader.Ymax - PCXHeader.Ymin + 1;
@@ -118,8 +118,8 @@ void ImpExp::ImportPCX(File& FileIn, const FileName& fnObject)
   long iConst=(1<<PCXHeader.BitsPerPixel)-1;
 
   FileIn.Seek(Loc,false);
-  trq.SetTitle(SCVTitleImportPCX);
-  trq.SetText(SCVTextConverting);
+  trq.SetTitle(TR("Importing from Painbrush-PCX"));
+  trq.SetText(TR("Converting..."));
 
   if (PCXHeader.Planes != 3) 
 	{

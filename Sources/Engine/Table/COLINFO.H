@@ -68,7 +68,7 @@ public:
     DomainType       dmt() const;
     ValueRange       vr() const;
     StoreType        st() const;
-	long 					iOffset() const { TRACE(String("%s %d",__FILE__, __LINE__).scVal()); return 1;}
+	long 					iOffset() const { TRACE(String("%s %d",__FILE__, __LINE__).c_str()); return 1;}
     long                    getOffset() const;
     long                    iRecs() const;
     RangeInt                riMinMax() const;

@@ -85,7 +85,7 @@ String CalculateAggregateValue::sBuildExpression(const FileName& fnInput, const 
 	}
 	sExpr &= ")";	
 
-	TRACE("%s\n", sExpr.scVal());
+	TRACE("%s\n", sExpr.c_str());
 	return sExpr;
 }
 

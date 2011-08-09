@@ -115,15 +115,15 @@ bool ObjectStructure::AddEntry(ODFEntry& entry)
 			else
 			{
 				CFileStatus fstat1, fstat2;
-				CFile::GetStatus((*cur).fnFile.sFullPath().scVal(), fstat1);
-				CFile::GetStatus(entry.fnFile.sFullPath().scVal(), fstat2);
+				CFile::GetStatus((*cur).fnFile.sFullPath().c_str(), fstat1);
+				CFile::GetStatus(entry.fnFile.sFullPath().c_str(), fstat2);
 				iTime1 = fstat1.m_mtime.GetTime();
 				iTime2 = fstat2.m_mtime.GetTime();				
 			}				
 			if ( caAction == caCOPY && (iTime1 != iTime2) || (iTime1==iUNDEF && iTime2 == iUNDEF )) // same name but different dates possible conflict
 			{
-				String sMessage1(SOOUiErrorNameConflict1);
-				String sMessage2 = sMessage1 + String(SOOUiErrorNameConflict2_S.scVal(), (*cur).fnFile.sFullPath(), entry.fnFile.sFullPath());
+				String sMessage1(TR("Name Conflict. Two different files with the same name but located in different directories\n are copied to the same directory. Copy aborted."));
+				String sMessage2 = sMessage1 + String(TR("\n The files are : %S and\n %S").c_str(), (*cur).fnFile.sFullPath(), entry.fnFile.sFullPath());
 				throw ErrorObject(sMessage2);
 			}
 			entry.fFirst = false; // ok the locations may be different but they are the same
@@ -154,7 +154,7 @@ void ObjectStructure::AddFile(const FileName& fnODF, const String& sSection, con
 { 
 	String sValue;
 	// retrieve value from odf.
-	ObjectInfo::ReadElement(sSection.scVal(), sEntry.scVal(), fnODF, sValue);
+	ObjectInfo::ReadElement(sSection.c_str(), sEntry.c_str(), fnODF, sValue);
 	if ( sValue == "")
 		return;	
 	
@@ -219,7 +219,7 @@ bool ObjectStructure::fObjectContainDependecies(const FileName& fnObj)
 unsigned __int64* iFileSize(ObjectStructure::ODFEntry oeEntry, unsigned __int64* iSize)
 {
 	String sPath = oeEntry.fnFile.sFullPath();
-	HANDLE handle =CreateFile(sPath.scVal(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING,
+	HANDLE handle =CreateFile(sPath.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING,
 		                             FILE_ATTRIBUTE_NORMAL, NULL);
 	if ( handle && handle != INVALID_HANDLE_VALUE )
 	{
@@ -534,7 +534,7 @@ void ObjectStructure::SetPathsToDestination(const Directory& dirDestination, boo
 					// make sure the file is in read/write mode
 					if (fIsNewReadOnly)
 						File::SetReadOnly(fnDest.sFullPath(), false);
-					WritePrivateProfileString("DomainSort", "AttributeTable", NULL, fnDest.sFullPath().scVal());
+					WritePrivateProfileString("DomainSort", "AttributeTable", NULL, fnDest.sFullPath().c_str());
 					// return the file to its original read/write mode
 					if (fIsNewReadOnly)
 						File::SetReadOnly(fnDest.sFullPath(), true);
@@ -621,7 +621,7 @@ void ObjectStructure::SetPathsToDestination(const Directory& dirDestination, boo
 				// make sure the destination ODF is writable
 				if (fIsNewReadOnly)
 					File::SetReadOnly(fnDestODF.sFullPath(), false);
-				CFile file(fnDestODF.sFullPath().scVal(), CFile::modeReadWrite);
+				CFile file(fnDestODF.sFullPath().c_str(), CFile::modeReadWrite);
 				
 				String sNewFile	;
 				// container entries that are not copied should be relinked and
@@ -708,7 +708,7 @@ void ObjectStructure::SetPathsToDestination(const Directory& dirDestination, boo
 				String sRest = sODF.substr(iStart); // the rest;
 				sNewODF += sRest;
 				file.SetLength(0); // wipe the original;
-				file.Write(sNewODF.scVal(), sNewODF.size());
+				file.Write(sNewODF.c_str(), sNewODF.size());
 				file.Close();
 				delete sFile;
 				// restore the original read/write mode of the current ODF
@@ -744,7 +744,7 @@ void ObjectStructure::SetPathsToDestination()
 				if (fIsNewReadOnly)
 					File::SetReadOnly(fnDestODF.sFullPath(), false);
 
-				ObjectInfo::WriteElement((*cur).sSection.scVal(), (*cur).sEntry.scVal(), fnDestODF, sNewFile);
+				ObjectInfo::WriteElement((*cur).sSection.c_str(), (*cur).sEntry.c_str(), fnDestODF, sNewFile);
 				// exception needed for crosslinked dom/rpr
 				if ( IlwisObject::iotObjectType(fnDestODF) == IlwisObject::iotDOMAIN )
 				{
@@ -760,7 +760,7 @@ void ObjectStructure::SetPathsToDestination()
 							ObjectInfo::WriteElement("Table", "Domain", fnRpr, fnDestODF.sRelative());
 					}
 					// Copying domains in the same directory will always lose the attribute table.
-					WritePrivateProfileString("DomainSort", "AttributeTable", NULL, fnDestODF.sFullPath().scVal());
+					WritePrivateProfileString("DomainSort", "AttributeTable", NULL, fnDestODF.sFullPath().c_str());
 				}
 				// Now set the copied ODF file in readonly again if it had been changed temporarily only
 				if (fIsNewReadOnly)
@@ -828,7 +828,7 @@ void ObjectStructure::RemoveSuperflousCollectionReferences(const Directory& dirD
 				for (int i=0; i < iNr; ++i)
 				{
 					String sKey("Item%d", i++);
-					ObjectInfo::ReadElement("Collection", sKey.scVal(), (*cur).fnFile, sCollection);	
+					ObjectInfo::ReadElement("Collection", sKey.c_str(), (*cur).fnFile, sCollection);	
 					FileName fnCol(sCollection);
 					fnCol.Dir(dirDestination.sFullPath());
 					bool fFound = false;

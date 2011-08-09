@@ -208,13 +208,13 @@ ObjectCollectionPtr::ObjectCollectionPtr(const FileName& fn)
 	ReadElement("ObjectCollection", "FilterTypes", ft);
 	for(int i=0; i < ft; ++i) {
 		long ft;
-		ReadElement("ObjectCollection", String("FilterType%d",i).scVal(), ft);
+		ReadElement("ObjectCollection", String("FilterType%d",i).c_str(), ft);
 		filterTypes.insert((IObjectType)ft);
 	}
 	FileName fnObject;
 	for(int i = 0; i < iNr; ++i)
 	{
-		ReadElement("ObjectCollection", String("Object%d", i).scVal(), fnObject);
+		ReadElement("ObjectCollection", String("Object%d", i).c_str(), fnObject);
 		arObjects.push_back(fnObject);
 	}
 }
@@ -303,7 +303,7 @@ void ObjectCollectionPtr::Store()
 {
 	IlwisObjectPtr::Store();
 	WriteElement("Ilwis", "Type", "ObjectCollection");
-	WritePrivateProfileString("ObjectCollection", NULL, NULL, fnObj.sFullPath().scVal()); // remove entire section
+	WritePrivateProfileString("ObjectCollection", NULL, NULL, fnObj.sFullPath().c_str()); // remove entire section
 	if ( sType() != sTypeObjectCollection) // else it gets circular in on open document
 		WriteElement("ObjectCollection", "Type", sType());	
 	WriteElement("ObjectCollection", "NrObjects", (long)arObjects.size());
@@ -314,7 +314,7 @@ void ObjectCollectionPtr::Store()
 	int count = 0;
 	for(set<IObjectType>::iterator cur=filterTypes.begin(); cur != filterTypes.end(); ++cur) {
 		long ft = (*cur);
-		WriteElement("ObjectCollection", String("FilterType%d",count++).scVal(), ft);
+		WriteElement("ObjectCollection", String("FilterType%d",count++).c_str(), ft);
 	}
 
 
@@ -323,9 +323,9 @@ void ObjectCollectionPtr::Store()
 		// storing may have started from a different directory than the oc is. sRelative does not work properly then
 		// all files may be in the same dir but they still get a full path because current dir is different
 		if ( fCIStrEqual(arObjects[i].sPath(), fnObj.sPath()) )
-			WriteElement("ObjectCollection", String("Object%i", i).scVal(), arObjects[i].sFileExtQuoted());
+			WriteElement("ObjectCollection", String("Object%i", i).c_str(), arObjects[i].sFileExtQuoted());
 		else
-			WriteElement("ObjectCollection", String("Object%i", i).scVal(), arObjects[i].sFullPathQuoted());
+			WriteElement("ObjectCollection", String("Object%i", i).c_str(), arObjects[i].sFullPathQuoted());
 	}
 	if ( fDependent())
 		WriteElement("ObjectCollection", "Type", "ObjectCollectionVirtual");

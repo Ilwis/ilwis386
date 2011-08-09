@@ -384,7 +384,7 @@ CalcVariable CodeGenerator::cvFind(const String& sName, VarType vt)
 			}
 			catch (const ErrorObject& ) 
 			{
-				Error(String(SCLCErrMapNotFound_S.scVal(), sName), iLine, iCol);
+				Error(String(TR("Map '%S' not found").c_str(), sName), iLine, iCol);
 			}
 			cv.SetPointer(new CalcVarMap(map));
 			lstCalcVars.top() &= cv;
@@ -399,10 +399,10 @@ CalcVariable CodeGenerator::cvFind(const String& sName, VarType vt)
           if (!col.fValid())
             col = Column(tbl, sName);
           if (!col.fValid())
-            Error(String(SCLCErrColumnNotFound_S.scVal(), sName), iLine, iCol);
+            Error(String(TR("Column '%S' not found").c_str(), sName), iLine, iCol);
         }
         catch (const ErrorObject& ) {
-          Error(String(SCLCErrColumnNotFound_S.scVal(), sName), iLine, iCol);
+          Error(String(TR("Column '%S' not found").c_str(), sName), iLine, iCol);
         }
 				if ( col->fnTbl != tbl->fnObj ) // previous assumption incorrect
 					tbl = Table(col->fnTbl);
@@ -415,7 +415,7 @@ CalcVariable CodeGenerator::cvFind(const String& sName, VarType vt)
         return cv;
   }
 
-  Error(String(SCLCErrVariableNotFound_S.scVal(), sName), iLine, iCol);
+  Error(String(TR("Variable '%S' not found").c_str(), sName), iLine, iCol);
   return cv;
 }
 
@@ -476,7 +476,7 @@ void CodeGenerator::InvalidParm(int iParm, const String& sFunc)
     iLine = stkParmLinePos.top()[iParm];
     iCol = stkParmColPos.top()[iParm];
    }
-   Error(String(SCLCErrInvalidParameter_iS.scVal(), iParm+1, sFunc), iLine, iCol);
+   Error(String(TR("Invalid parameter %i for function '%S'").c_str(), iParm+1, sFunc), iLine, iCol);
 }
 
 

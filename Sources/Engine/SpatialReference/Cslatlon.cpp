@@ -91,9 +91,9 @@ String CoordSystemLatLon::sValue(const Coord& c, short wid, short dec) const
 Coord CoordSystemLatLon::cValue(const String& s) const
 {
   Coord crd;
-  if (2 != sscanf(s.scVal(), "(%lg,%lg)", &crd.y, &crd.x))
-    if (2 != sscanf(s.scVal(), "%lg,%lg", &crd.y, &crd.x))
-      sscanf(s.scVal(), "%lg%lg", &crd.y, &crd.x);
+  if (2 != sscanf(s.c_str(), "(%lg,%lg)", &crd.y, &crd.x))
+    if (2 != sscanf(s.c_str(), "%lg,%lg", &crd.y, &crd.x))
+      sscanf(s.c_str(), "%lg%lg", &crd.y, &crd.x);
   return crd;
 }
 
@@ -112,7 +112,7 @@ Coord CoordSystemLatLon::cValue(const String& s) const
 	if (asComma.iSize() == 1) {  // no comma's found
 		Split(sCrdPair , asSpace , " ");
 		if (asSpace.iSize() == 2) // metric coords
-			sscanf(sCrdPair.scVal(), "%lg%lg", &crd.y, &crd.x);
+			sscanf(sCrdPair.c_str(), "%lg%lg", &crd.y, &crd.x);
 		else {
 			int i = 0;
 			int iHalf = asSpace.iSize() / 2;
@@ -131,7 +131,7 @@ Coord CoordSystemLatLon::cValue(const String& s) const
 		Split(asComma[0], asDegree, "°");
 		if (asSpace.iSize() == 1 && asDegree.iSize() == 1) 
 													// metric coords without spaces
-			sscanf(s.scVal(), "%lg,%lg", &crd.y, &crd.x);
+			sscanf(s.c_str(), "%lg,%lg", &crd.y, &crd.x);
 		else
 		{ 
 			Split(sCrdPair , asComma , ",");

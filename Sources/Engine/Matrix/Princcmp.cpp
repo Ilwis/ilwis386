@@ -214,7 +214,7 @@ PrincCompPtr::PrincCompPtr(const FileName& fn, MatrixObjectPtr& ptr)
 		for (long i = 0; i < m_iInputBands; i++)
 		{
 			FileName fn;
-			ReadElement("Bands", String("Band%d", i).scVal(), fn);
+			ReadElement("Bands", String("Band%d", i).c_str(), fn);
 			m_asInputBandNames &= fn.sFile;
 		}
 	}
@@ -289,7 +289,7 @@ void PrincCompPtr::Store()
 	}
 	WriteElement("Bands", "InputBands", m_iInputBands);
 	for (long i = 0; i < m_iInputBands; i++)
-		WriteElement("Bands", String("Band%d", i).scVal(), m_asInputBandNames[i]);
+		WriteElement("Bands", String("Band%d", i).c_str(), m_asInputBandNames[i]);
 
 	WriteElement("MatrixPrincComp", "FactorAnalysis", m_fFactorAnal);
 	WriteElement("MatrixPrincComp", "CalcTime", m_tmCalc);
@@ -310,11 +310,11 @@ void PrincCompPtr::Freeze()
 	{ 
 		Tranquilizer trq;
 		if (m_fFactorAnal)
-			trq.SetTitle(SDATTitleCalcMatrixFactors);
+			trq.SetTitle(TR("Calculate factors"));
 		else
-			trq.SetTitle(SDATTitleCalcPrincipleComp);
+			trq.SetTitle(TR("Calculate principal components"));
 		trq.Start();
-		trq.SetText(SDATTextCalcEigenVectors);
+		trq.SetText(TR("Calculating eigen vectors"));
 		trq.fUpdate(0,0);
 
 		CalcEigen(matrix);

@@ -66,8 +66,8 @@ bool ExportCsy2EsriPrj::fInit(const FileName& fnIlwisObject, const FileName& fnE
 	if (File::fExist(fnEsriPrj)) 
 	{
 		int iRet = getEngine()->Message(
-															String(SIEMFileAlreadyExists_S.scVal(), fnEsriPrj.sFileExt()).scVal(),
-                              SCVTitleExportArcGisPRJ.scVal(),
+															String(TR("File %S already exists, overwrite ?").c_str(), fnEsriPrj.sFileExt()).c_str(),
+                              TR("Exporting to ArcGis PRJ-file").c_str(),
                               MB_YESNO | MB_ICONEXCLAMATION);
 		if (iRet==IDNO)
       return false;//don't re-use existing filename, but give a new one
@@ -98,14 +98,14 @@ bool ExportCsy2EsriPrj::fInitSucces(const FileName& fnObject, const FileName& fn
   CoordSystemProjection *csprj = csy->pcsProjection();
 	csviall = csy->pcsViaLatLon();
 	if (!csviall)
-		throw ErrorImportExport(SCVWarnNoProjectionOrLL);
+		throw ErrorImportExport(TR("Coordinate system is not a Projection or LatLon system"));
 
 	fSpherical = csviall->ell.fSpherical();
   if (0 != csprj)
 	{	 
 		prj = csprj->prj;
 		if (!prj.fValid())
-		throw ErrorImportExport(SCVWarnUnknownProjection);
+		throw ErrorImportExport(TR("Coordinate system has an Unknown Projection"));
 
 		sProj = prj->sName();
 		Datum* da = csprj->datum;
@@ -117,7 +117,7 @@ bool ExportCsy2EsriPrj::fInitSucces(const FileName& fnObject, const FileName& fn
 		//don't make an Esri prj file without datum
 			 sDatum = "WGS 1984"; //use WGS 1984 
 		else if (!da && !fCIStrEqual(sEllips,"WGS 84"))
-		 throw ErrorImportExport(SCVWarnNoSpheroidWithoutDatum);
+		 throw ErrorImportExport(TR("Esri doesn't support Spheroids without Datum"));
 	}
 	return true;
 }

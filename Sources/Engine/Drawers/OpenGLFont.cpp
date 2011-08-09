@@ -21,7 +21,7 @@ void OpenGLFont::renderText(const Coordinate& c, const String& text) {
 	glColor3ub(1.0,0,0);
 	glRasterPos2d(c.x,c.y);
 	glListBase(displaylist);
-	//glCallLists(text.size(), GL_UNSIGNED_BYTE, text.scVal());
+	//glCallLists(text.size(), GL_UNSIGNED_BYTE, text.c_str());
 	glCallLists(3, GL_UNSIGNED_BYTE, "AAP");
 }
 
@@ -40,7 +40,7 @@ void OpenGLFont::loadFont(const String& name, int height) {
 	displaylist = glGenLists(128);
 
 	int err = FT_Init_FreeType(&lib);
-	err = FT_New_Face(lib, name.scVal(), 0, &face);
+	err = FT_New_Face(lib, name.c_str(), 0, &face);
 	err = FT_Set_Char_Size(face, height << 6, height << 6, 96, 96);
 
 	for (i=0;i<128;i++){

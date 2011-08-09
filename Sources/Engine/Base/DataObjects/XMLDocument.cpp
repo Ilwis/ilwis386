@@ -5,14 +5,14 @@
 using namespace ILWIS;
 
 ILWIS::XMLDocument::XMLDocument(const FileName& fn) {
-	ifstream istream(fn.sFullPath().scVal());
+	ifstream istream(fn.sFullPath().c_str());
 	load(istream);
 
 }
 
 ILWIS::XMLDocument::XMLDocument(const String& xml) {
 	if ( xml != "")
-		load(xml.scVal());
+		load(xml.c_str());
 }
 
 ILWIS::XMLDocument::~XMLDocument() {
@@ -20,7 +20,7 @@ ILWIS::XMLDocument::~XMLDocument() {
 
 void ILWIS::XMLDocument::executeXPathExpression(const String& xpathexpr, vector<String>& results) const {
 	results.clear();
-	pugi::xpath_node_set tools = select_nodes(xpathexpr.scVal());
+	pugi::xpath_node_set tools = select_nodes(xpathexpr.c_str());
 	for (pugi::xpath_node_set::const_iterator it = tools.begin(); it != tools.end(); ++it)
 	{
 		stringstream str;
@@ -29,6 +29,17 @@ void ILWIS::XMLDocument::executeXPathExpression(const String& xpathexpr, vector<
 		results.push_back(str.str());
 	}
 }
+
+void ILWIS::XMLDocument::executeXPathExpression(const String& xpathexpr, vector<pugi::xml_node>& results) const {
+	results.clear();
+	pugi::xpath_node_set tools = select_nodes(xpathexpr.c_str());
+	for (pugi::xpath_node_set::const_iterator it = tools.begin(); it != tools.end(); ++it)
+	{
+		pugi::xpath_node node = *it;
+		results.push_back(node.node());
+	}
+}
+
 
 String ILWIS::XMLDocument::toString() {
 	stringstream str;
@@ -43,17 +54,17 @@ void ILWIS::XMLDocument::addNameSpace(const String& name, const String& uri) {
 	pugi::xml_node first = first_child();
 	if ( first == 0)
 		return;
-	first.append_attribute(name.scVal()) = uri.scVal();
+	first.append_attribute(name.c_str()) = uri.c_str();
 }
 
 pugi::xml_node ILWIS::XMLDocument::addNodeTo(pugi::xml_node& nodeParent, const String& name, const String& value) {
 	pugi::xml_node_type type = pugi::node_element;
-	if ( value != "")
-		type = pugi::node_pcdata;
 	pugi::xml_node nodeChild = nodeParent.append_child();
-	nodeChild.set_name(name.scVal());
-	if ( value != "")
-		nodeChild.set_value(value.scVal());
+	nodeChild.set_name(name.c_str());
+	if ( value != "") {
+		pugi::xml_node nodeGrandChild = nodeChild.append_child(pugi::node_pcdata);
+		nodeGrandChild.set_value(value.c_str());
+	}
 
 	return nodeChild;
 }

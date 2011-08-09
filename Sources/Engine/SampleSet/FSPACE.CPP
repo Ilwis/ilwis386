@@ -209,7 +209,7 @@ int FeatureSpace::Compute()
   byte bv;
   RowCol rc;
   Tranquilizer trq;
-  trq.SetTitle(String(SDATTitleFeatureSpaceOf_SS.scVal(), map1->sName(false, sampleset->fnObj.sPath()), map2->sName(false, sampleset->fnObj.sPath())));
+  trq.SetTitle(String(SDATTitleFeatureSpaceOf_SS.c_str(), map1->sName(false, sampleset->fnObj.sPath()), map2->sName(false, sampleset->fnObj.sPath())));
   trq.SetText(SDATTextCalculating);
   trq.Start();
   for (i = 0; i < MXBYTsqr; i++) { 

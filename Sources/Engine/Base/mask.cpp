@@ -111,7 +111,7 @@ bool Mask::fAcceptPart(const String& sValue, const String& sMaskPart) const
 {
 	int iSz = sValue.size();
 	char *sV = new char[iSz + 1];
-	strcpy(sV, sValue.scVal());
+	strcpy(sV, sValue.c_str());
 	int i = -1;
 	char *sCode=sV, *sName=sV;
   while( i< iSz && sV[++i] != ':' );

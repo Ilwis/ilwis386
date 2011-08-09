@@ -76,7 +76,7 @@ void CriteriaTreeObjectPtr::GetObjectStructure(ObjectStructure& os)
 		  os.caGetCommandAction() != ObjectStructure::caDELETE)
 		)
 	{
-		CFile cfCriteriaTreeFile(fnObj.sFullPath().scVal(), CFile::modeRead);
+		CFile cfCriteriaTreeFile(fnObj.sFullPath().c_str(), CFile::modeRead);
 		CArchive ar(&cfCriteriaTreeFile, CArchive::load);
 		//ElementMap em = new ElementMap;
 		//em->Serialize(ca);

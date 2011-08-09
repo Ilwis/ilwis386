@@ -260,11 +260,11 @@ TableStore::TableStore(const FileName& fn, TablePtr& p)
 	String sEntry, sColName;
 	int c;
 	String s;
-	if (0 == ptr.ReadElement(ptr.sSection("TableStore").scVal(), "StoreTime", timStore))
+	if (0 == ptr.ReadElement(ptr.sSection("TableStore").c_str(), "StoreTime", timStore))
 		timStore = ptr.objtime;
-	ptr.ReadElement(ptr.sSection("TableStore").scVal(), "Data", ptr.fnDat);
+	ptr.ReadElement(ptr.sSection("TableStore").c_str(), "Data", ptr.fnDat);
 	bool fUseAs;
-	ptr.ReadElement(ptr.sSection("TableStore").scVal(), "UseAs", fUseAs);		
+	ptr.ReadElement(ptr.sSection("TableStore").c_str(), "UseAs", fUseAs);		
 	ptr.SetUseAs(fUseAs);
 	if (ptr.fnDat.fValid() && !File::fExist(ptr.fnDat))
 		NotFoundError(ptr.fnDat);
@@ -277,7 +277,7 @@ TableStore::TableStore(const FileName& fn, TablePtr& p)
 	    for (c = 0; c < iCols(); ++c)
 		{
 			sEntry = String("Col%i", c);
-			ptr.ReadElement(ptr.sSection(String("TableStore")).scVal(), sEntry.scVal(), sColName);
+			ptr.ReadElement(ptr.sSection(String("TableStore")).c_str(), sEntry.c_str(), sColName);
 			sColName = sColName.sQuote(); // single quotes are stripped by ReadPrivateProfileString
 			try
 			{
@@ -286,7 +286,7 @@ TableStore::TableStore(const FileName& fn, TablePtr& p)
 			catch (const ErrorObject& err)
 			{
 				String sErr = err.sShowError() + "\n";
-				sErr += String(STBErrCreateColumn_S.scVal(), sColName);
+				sErr += String(TR("Could not create column: %S").c_str(), sColName);
 				ErrorObject(sErr).Show();
 			}
 	    }
@@ -296,7 +296,7 @@ TableStore::TableStore(const FileName& fn, TablePtr& p)
 	
 	ptr._fReadOnly = false;
 	if (File::fExist(ptr.fnDat))
-		ptr._fReadOnly = _access(ptr.fnDat.sFullName().scVal(), 2) == -1;  // mode 2: check for write permission
+		ptr._fReadOnly = _access(ptr.fnDat.sFullName().c_str(), 2) == -1;  // mode 2: check for write permission
 }
 
 TableStore::TableStore(const FileName& fnFil, TablePtr& p, const FileName& _fnDat)
@@ -325,14 +325,14 @@ TableStore::TableStore(const FileName& fnFil, TablePtr& p, const FileName& _fnDa
 TableStore::~TableStore()
 {
   if (ptr.fErase || fErase) {
-    _unlink(ptr.fnDat.sFullName().scVal());
-    ptr.WriteElement(ptr.sSection("TableStore").scVal(), (char*)0, (char*)0);
+    _unlink(ptr.fnDat.sFullName().c_str());
+    ptr.WriteElement(ptr.sSection("TableStore").c_str(), (char*)0, (char*)0);
     // delete column info
     for (long c = 0; c < iCols(); ++c) {
       String sColName;
       String sEntry = String("Col%i", c);
-      if (0 != ptr.ReadElement(ptr.sSection("TableStore").scVal(), sEntry.scVal(), sColName))
-        ptr.WriteElement(ptr.sSection(String("Col:%S", sColName)).scVal(), (char*)0, (char*)0);
+      if (0 != ptr.ReadElement(ptr.sSection("TableStore").c_str(), sEntry.c_str(), sColName))
+        ptr.WriteElement(ptr.sSection(String("Col:%S", sColName)).c_str(), (char*)0, (char*)0);
     }
   } 
 }
@@ -341,7 +341,7 @@ void TableStore::UnStore(const FileName& fnObj)
 {
   FileName fnData;
   if (ObjectInfo::ReadElement("TableStore", "Data", fnObj, fnData))
-    _unlink(fnData.sFullName(true).scVal()); // delete data file if it's still there
+    _unlink(fnData.sFullName(true).c_str()); // delete data file if it's still there
   ObjectInfo::WriteElement("TableStore", (char*)0, fnObj, (char*)0);
 }
 
@@ -358,10 +358,10 @@ void TableStore::StoreColNames()
 	for (short c = 0; c < iCols(); ++c)
 	{
 		String sEntry("Col%i", c);
-		ObjectInfo::WriteElement(ptr.sSection("TableStore").scVal(), sEntry.scVal(), ptr.fnObj, ac.ind(c)->sNameQuoted());
+		ObjectInfo::WriteElement(ptr.sSection("TableStore").c_str(), sEntry.c_str(), ptr.fnObj, ac.ind(c)->sNameQuoted());
 	}
 	// Update the column count
-	ObjectInfo::WriteElement(ptr.sSection("Table").scVal(), "Columns", ptr.fnObj, iCols());
+	ObjectInfo::WriteElement(ptr.sSection("Table").c_str(), "Columns", ptr.fnObj, iCols());
 }
 
 void TableStore::Store()
@@ -369,26 +369,26 @@ void TableStore::Store()
 	if (ptr.fnObj.sFile.length() == 0)  // empty file name
 		return;
 	long iOldNrCol = iCols();
-	ptr.ReadElement(ptr.sSection("Table").scVal(), "Columns", iOldNrCol);
+	ptr.ReadElement(ptr.sSection("Table").c_str(), "Columns", iOldNrCol);
 	if ( ptr.fUseAs() == false)
-		ptr.WriteElement(ptr.sSection("TableStore").scVal(), "Data", ptr.fnDat);
-	ptr.WriteElement(ptr.sSection("TableStore").scVal(), "StoreTime", timStore);
-	ptr.WriteElement(ptr.sSection("TableStore").scVal(), "UseAs", ptr.fUseAs());	
+		ptr.WriteElement(ptr.sSection("TableStore").c_str(), "Data", ptr.fnDat);
+	ptr.WriteElement(ptr.sSection("TableStore").c_str(), "StoreTime", timStore);
+	ptr.WriteElement(ptr.sSection("TableStore").c_str(), "UseAs", ptr.fUseAs());	
 	long iNonErasedCols = 0;
 	short c = 0;
 	for (; c < iCols(); ++c) {
 		String sEntry("Col%i", iNonErasedCols);
 		ac[c]->Store();
 		if (!ac.ind(c)->fErase) {
-			ObjectInfo::WriteElement(ptr.sSection("TableStore").scVal(), sEntry.scVal(), ptr.fnObj, ac.ind(c)->sNameQuoted());
+			ObjectInfo::WriteElement(ptr.sSection("TableStore").c_str(), sEntry.c_str(), ptr.fnObj, ac.ind(c)->sNameQuoted());
 			++iNonErasedCols;
 		}
 	}
 	for (c = iNonErasedCols; c < iOldNrCol; ++c) {
 		String sEntry("Col%i", c);
-		ObjectInfo::WriteElement(ptr.sSection("TableStore").scVal(), sEntry.scVal(), ptr.fnObj, (const char*)0);
+		ObjectInfo::WriteElement(ptr.sSection("TableStore").c_str(), sEntry.c_str(), ptr.fnObj, (const char*)0);
 	}  
-	ObjectInfo::WriteElement(ptr.sSection("Table").scVal(), "Columns", ptr.fnObj, iNonErasedCols);
+	ObjectInfo::WriteElement(ptr.sSection("Table").c_str(), "Columns", ptr.fnObj, iNonErasedCols);
 }
 
 void TableStore::SetDataFile(const FileName& fn)
@@ -586,7 +586,7 @@ void TableStore::LoadBinary()
 	// the data
 	String sSectionString;
 	sSectionString = ptr.sSectionPrefix != "" ? String("%STable", ptr.sSectionPrefix) : "Table";
-	ptr.ReadElement( sSectionString.scVal(), "Columns", iNrCols);
+	ptr.ReadElement( sSectionString.c_str(), "Columns", iNrCols);
 	if (iNrCols <= 0)
 		return;
 
@@ -652,7 +652,7 @@ void TableStore::LoadBinary()
 		else
 			sColName = acinf[c].sName();
 
-		ptr.ReadElement(ptr.sSection(String("Col:%S", sColName)).scVal(), "Stored", s);
+		ptr.ReadElement(ptr.sSection(String("Col:%S", sColName)).c_str(), "Stored", s);
 		if (s.length())
 			fStored[c] = s.fVal();
 		else
@@ -759,10 +759,10 @@ void TableStore::StoreAsBinary(const FileName& fnDat)
   if (!fnDat.fValid())
     return;
   if (File::fExist(fnDat))
-    if (_access(fnDat.sFullName().scVal(), 2)==-1) // read only
+    if (_access(fnDat.sFullName().c_str(), 2)==-1) // read only
       return; 
 //  WaitCursor wc;
-  ObjectInfo::WriteElement(ptr.sSection("TableStore").scVal(), "Type", ptr.fnObj, "TableBinary");
+  ObjectInfo::WriteElement(ptr.sSection("TableStore").c_str(), "Type", ptr.fnObj, "TableBinary");
   FileName fnBackUp = fnDat;
   fnBackUp.sExt = ".BAK";
   FileName fnTmp = fnDat;
@@ -858,17 +858,17 @@ void TableStore::StoreAsBinary(const FileName& fnDat)
   String sDat = fnDat.sFullName();
   String sTmp = fnTmp.sFullName();
   if (File::fExist(fnBackUp))
-    _unlink(sBackUp.scVal());
-  rename(sDat.scVal(), sBackUp.scVal());
+    _unlink(sBackUp.c_str());
+  rename(sDat.c_str(), sBackUp.c_str());
 //    unlink(sDat);
-  rename(sTmp.scVal(), sDat.scVal());
-  _unlink(sBackUp.scVal());
+  rename(sTmp.c_str(), sDat.c_str());
+  _unlink(sBackUp.c_str());
 }
 
 void TableStore::StoreAsTBL(const FileName& fnDat)
 {
 	TableStore::Store();
-	ObjectInfo::WriteElement(ptr.sSection("TableStore").scVal(), "Type", ptr.fnObj, "TableTBL");
+	ObjectInfo::WriteElement(ptr.sSection("TableStore").c_str(), "Type", ptr.fnObj, "TableTBL");
 	// make back up of original file
 	FileName fnBackUp = fnDat;
 	fnBackUp.sExt = ".BAK";
@@ -949,10 +949,10 @@ void TableStore::StoreAsTBL(const FileName& fnDat)
 	String sDat = fnDat.sFullName();
 	String sTmp = fnTmp.sFullName();
 	if (File::fExist(fnBackUp))
-		_unlink(sBackUp.scVal());
+		_unlink(sBackUp.c_str());
 
-	rename(sDat.scVal(), sBackUp.scVal());
-	rename(sTmp.scVal(), sDat.scVal());
+	rename(sDat.c_str(), sBackUp.c_str());
+	rename(sTmp.c_str(), sDat.c_str());
 }
 
 
@@ -960,12 +960,12 @@ void TableStore::Export(const FileName& fn) const
 {
 	if (iCols() > 100)
 	{
-		String sErr(SCVErrTooManyColumnIlwis14_SI.scVal(), ptr.fnObj.sFullName(), iCols());
+		String sErr(TR("ILWIS 1.4 can only have less than 100 columns.\nTable %S contains %i columns.").c_str(), ptr.fnObj.sFullName(), iCols());
 		throw ErrorObject(sErr);
 	}
 	if (iRecs() > 16000)
 	{
-		String sErr(SCVErrTooManyRecords16000_SI.scVal(), ptr.fnObj.sFullName(), iRecs());
+		String sErr(TR("ILWIS 1.4 only allows 16000 records for number columns.\nTable %S contains %i records.").c_str(), ptr.fnObj.sFullName(), iRecs());
 		throw ErrorObject(sErr);
 	}
 
@@ -1009,7 +1009,7 @@ void TableStore::Export(const FileName& fn) const
 	}
 	if (fStringColCreated && iRecs() > 2900)
 	{
-		String sErr(SCVErrTooManyRecords2900_SI.scVal(), ptr.fnObj.sFullName(), iRecs());
+		String sErr(TR("ILWIS 1.4 only allows 2900 records for string columns.\nTable %S contains %i records.").c_str(), ptr.fnObj.sFullName(), iRecs());
 		throw ErrorObject(sErr);
 	}
 

@@ -80,7 +80,7 @@ CoordSystemOrthoPhoto::CoordSystemOrthoPhoto(const FileName& fn)
 	*fDoNotShowError = fPrev;
 	//if (mapDTM->sName() == "" || 
 	if (!mapDTM.fValid())
-		throw ErrorObject(SCSErrDTMNotValid);
+		throw ErrorObject(TR("DTM is not valid"));
 	mapDTM->KeepOpen(true);
   ReadElement("CoordSystemOrthoPhoto", "Principal Distance (mm)", rTempPrincD);// in mm on photograph
   ReadElement("CoordSystemOrthoPhoto", "Height Accuracy", rHeightAccuracy);
@@ -101,7 +101,7 @@ CoordSystemOrthoPhoto::CoordSystemOrthoPhoto(const FileName& fn)
   for (; i < iNrFiduc; ++i)
   {
     String sEntry("Photo Fiduc. Mark %i (mm)", i);
-    ReadElement("CoordSystemOrthoPhoto", sEntry.scVal(), cPhotoFid[i]);
+    ReadElement("CoordSystemOrthoPhoto", sEntry.c_str(), cPhotoFid[i]);
     cPhotoFid[i].x /= 1000;
     cPhotoFid[i].y /= 1000;
   }  
@@ -109,7 +109,7 @@ CoordSystemOrthoPhoto::CoordSystemOrthoPhoto(const FileName& fn)
   {
     String sEntry("Scanned Fiduc. Mark %i", i);
     Coord crd;
-    ReadElement("CoordSystemOrthoPhoto", sEntry.scVal(), crd); 
+    ReadElement("CoordSystemOrthoPhoto", sEntry.c_str(), crd); 
 	rScannedFidRow[i] = crd.x;
 	rScannedFidCol[i] = crd.y;
   }  
@@ -121,7 +121,7 @@ CoordSystemOrthoPhoto::CoordSystemOrthoPhoto(const FileName& fn, const Map& mp, 
 {
   fUseCornerFiducials = true;
 	if (!mapDTM.fValid())
-		throw ErrorObject(SCSErrDTMNotValid);
+		throw ErrorObject(TR("DTM is not valid"));
 	mapDTM->KeepOpen(true);
   GeoRef grDTM = mapDTM->gr();
   if (grDTM->fGeoRefNone())
@@ -155,13 +155,13 @@ void CoordSystemOrthoPhoto::Store()
     Coord crd = cPhotoFid[i];
     crd.x *= 1000;
     crd.y *= 1000;
-    WriteElement("CoordSystemOrthoPhoto", sEntry.scVal(), crd);
+    WriteElement("CoordSystemOrthoPhoto", sEntry.c_str(), crd);
   }  
   for (i = 0; i < iNrFiduc; ++i)
   {
     String sEntry("Scanned Fiduc. Mark %i", i);
     RowCol rcScannedFid = RowCol(rScannedFidRow[i], rScannedFidCol[i]);
-    WriteElement("CoordSystemOrthoPhoto", sEntry.scVal(), rcScannedFid);
+    WriteElement("CoordSystemOrthoPhoto", sEntry.c_str(), rcScannedFid);
   }
   ///WriteElement("CoordSystemOrthoPhoto", "Principal Point in Scan X-Coord", cScanPrincPoint.x);
   ///WriteElement("CoordSystemOrthoPhoto", "Principal Point in Scan Y-Coord", cScanPrincPoint.y);

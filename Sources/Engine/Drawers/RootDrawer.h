@@ -11,7 +11,7 @@ namespace ILWIS {
 
 	class _export RootDrawer : public ComplexDrawer {
 	public:
-		RootDrawer(MapCompositionDoc *doc);
+		RootDrawer();
 		~RootDrawer();
 		virtual void prepare(PreparationParameters *pp);
 		String addDrawer(NewDrawer *drw);

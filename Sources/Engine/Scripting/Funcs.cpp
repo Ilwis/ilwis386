@@ -1074,7 +1074,7 @@ InternFuncDesc* InternFuncDesc::fdFindFunc(const Array<InternFuncDesc*>& fdl,
   int iParms = acv.iSize();
   for (int i=0; i < fdl.iSize(); i++) {
     InternFuncDesc* fd = fdl[i];
-    if (0 != _stricmp(sFunc.scVal(), fd->sFunc)) // not the same name
+    if (0 != _stricmp(sFunc.c_str(), fd->sFunc)) // not the same name
       continue;
     if (iParms != fd->iParms()) // incorrect nr of parameters
       continue;

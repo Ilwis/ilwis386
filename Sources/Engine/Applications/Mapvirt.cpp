@@ -53,7 +53,7 @@
 
 static void InvalidFileNameError(const FileName& fn)
 {
-  throw ErrorObject(WhatError(SMAPErrInvalidFileName, errNAME), fn);
+  throw ErrorObject(WhatError(TR("Invalid file name"), errNAME), fn);
 }  
 
 MapVirtual* MapVirtual::create(const FileName& fn, MapPtr& p)
@@ -66,7 +66,7 @@ MapVirtual* MapVirtual::create(const FileName& fn, MapPtr& p)
 	if ( mv) return mv;
 
 	String sSubType;
-	if (0 == ObjectInfo::ReadElement(sType.scVal(), "Type", fn, sSubType))
+	if (0 == ObjectInfo::ReadElement(sType.c_str(), "Type", fn, sSubType))
 		return NULL;
 
 	mv = (MapVirtual *)getMapVirtual(fn, p, sSubType);
@@ -156,7 +156,7 @@ MapVirtual *MapVirtual::dottedExpressionMaps(const FileName& fn, MapPtr& p, cons
 			iNext = 1;
 		if (iNext < asParts.iSize()) {
 			FileName fnMap(sMap, ".mpr", true);
-			if (0 == strchr(sMap.scVal(), ':')) // no path set
+			if (0 == strchr(sMap.c_str(), ':')) // no path set
 				fnMap.Dir(fn.sPath());       
 			if (!File::fExist(fnMap)) {
 				fnMap = FileName(sMap, ".mpr", true);
@@ -318,10 +318,10 @@ void MapVirtual::Freeze()
 		// delete histogram
 		FileName fnHis(fnObj, ".his", true);
 		if (File::fExist(fnHis))
-			_unlink(fnHis.sFullName().scVal());
+			_unlink(fnHis.sFullName().c_str());
 		fnHis.sExt = ".hi#";
 		if (File::fExist(fnHis))
-			_unlink(fnHis.sFullName().scVal());
+			_unlink(fnHis.sFullName().c_str());
 		// reset minmax
 		ptr.SetMinMax(RangeInt());
 		ptr.SetMinMax(RangeReal());
@@ -375,7 +375,7 @@ void MapVirtual::UnFreeze()
 
 bool MapVirtual::fFreezing()
 {
-  trq.SetText(String(SMAPTextCalculating_S.scVal(), sName(true, fnObj.sPath())));
+  trq.SetText(String(TR("Calculating '%S'").c_str(), sName(true, fnObj.sPath())));
   switch (st()) {
     case stBIT:
     case stDUET:
@@ -547,7 +547,7 @@ void MapVirtual::CreateMapStore()
   } 
 	RowCol rc = rcSize();
 	if ( rc.Row == 0 || rc.Col == 0 )
-		throw ErrorObject(SMAPErrIllegalMapSize);
+		throw ErrorObject(TR("Map size is illegal (0,0)"));
   pms = new MapStore(fnObj, ptr, gr(), rcSize(), dvrs(), mf());
 //  ptr.SetDataReadOnly(); // previous statement sets it on false
 }

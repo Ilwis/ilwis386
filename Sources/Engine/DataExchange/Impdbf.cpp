@@ -112,7 +112,7 @@
 
 void ThrowIncompatibleDomainError(const FileName& fn)
 {
-    throw ErrorObject(WhatError(SCVErrIncorrectDomain, 1), fn);
+    throw ErrorObject(WhatError(TR("Only domain Class or ID allowed"), 1), fn);
 }
 
 
@@ -125,7 +125,7 @@ void ImpExp::ImportDBF(const FileName& fnDBF, const FileName& fnObject)
  /*   DBIVImport dbi(fnDBF, fnObject, trq);
     DBChoiceForm frm(win, &dbi.Info);
     if ( frm.fOkClicked() ) {
-      trq.SetTitle(SCVTitleImportDBF);
+      trq.SetTitle(TR("Importing dBase III/IV table"));
       dbi.fImport();
     }*/
 }
@@ -257,7 +257,7 @@ bool DBIVImport::fImport()
       tbl->iRecNew(Info.iNrRecords);
     bool fFirstRecord = true;
     file.Seek(Info.iHeaderSize);
-    trq.SetText(SCVTextReadDBFRecords);
+    trq.SetText(TR("Reading records"));
     for ( long iRec=1; iRec <= Info.iNrRecords; ++iRec)
     {
         short count=0;
@@ -294,7 +294,7 @@ bool DBIVImport::fImport()
                 long v = dmTable->pdsrt()->iRaw(sField);
                 if ( v != iUNDEF )                        // value exists in the domain, do not add
                 {
-                    int n = getEngine()->Message(SCVWarnElementExist.scVal(), SCVErrDomain.scVal(), MB_YESNO | MB_ICONHAND);
+                    int n = getEngine()->Message(TR("Domain element exists already. Continue ?").c_str(), TR("Domain error").c_str(), MB_YESNO | MB_ICONHAND);
                     if ( n ==IDNO )
                     {
                         delete [] RecBuf;
@@ -354,7 +354,7 @@ void DBIVImport::MakeColumn(short iFld)
         break;
     case dtId:
         {
-        FileName fn(Info.sName(iFld).scVal(), ".dom");
+        FileName fn(Info.sName(iFld).c_str(), ".dom");
         dom = FileName::fnUnique(fn).sFullName();
         Domain ColDomain = Domain(dom, 0, dmtID); //
         ColDomain->pdsrt()->dsType=DomainSort::dsMANUAL;
@@ -364,7 +364,7 @@ void DBIVImport::MakeColumn(short iFld)
         }
     case dtClass:
         {
-        FileName fn(Info.sName(iFld).scVal(), ".dom");
+        FileName fn(Info.sName(iFld).c_str(), ".dom");
         dom = FileName::fnUnique(fn).sFullName();
         Domain ColDomain = Domain(dom, 0, dmtCLASS); //
         ColDomain->pdsrt()->dsType=DomainSort::dsMANUAL;
@@ -423,12 +423,12 @@ void DBIVImport::MakeTable()
             if ( sName.toUpper() == "NAME" )
                 dmTable = Domain(FileName::fnUnique(FileName(fnIlwisTable, ".dom")),Info.iNrRecords, Info.dtType(iFld) == dtTableClass ? dmtCLASS : dmtID);
             else
-               dmTable = Domain(FileName::fnUnique(FileName(sName.sLeft(8).scVal(), ".dom")),Info.iNrRecords, Info.dtType(iFld) == dtTableClass ? dmtCLASS : dmtID);
+               dmTable = Domain(FileName::fnUnique(FileName(sName.sLeft(8).c_str(), ".dom")),Info.iNrRecords, Info.dtType(iFld) == dtTableClass ? dmtCLASS : dmtID);
             break;
         }
     }
     tbl.SetPointer(new TablePtr(fnTable, fnTblDat, dmTable, String()));
-    String sD = SCVTextTableName_;
+    String sD = TR("Table ");
     sD &= fnTable.sFile;
     sD &= fnTable.sExt;
     tbl->sDescription = sD;

@@ -124,7 +124,7 @@
 
 static void TooDeepError()
 {
-  throw ErrorObject(SCLCErrTooMuchNesting, errCalculate);
+  throw ErrorObject(TR("Too many nested statements"), errCalculate);
 }
 
 Parser::Parser(TokenizerBase* tokenizer, CodeGeneratorBase *gen)
@@ -142,9 +142,9 @@ void Parser::ErrExp(const Token& tok, const String& s)
 //    return; // 17/1/97 - Wim - to prevent double error messages
   String sErr;
   if (tok.tt() != ttNONE)
-    sErr = String(SCLCErrWasExpected_S.scVal(), s);
+    sErr = String(TR("'%S' expected").c_str(), s);
   else
-    sErr = SCLCErrUnexpectedEndOfText;
+    sErr = TR("Unexpected end of text");
   codegen->Error(sErr, tok.iLine(), tok.iPos());
 }
 
@@ -152,9 +152,9 @@ void Parser::ErrUnexp(const Token& tok)
 {
   String sErr;
   if (tok.tt() != ttNONE)
-    sErr = String(SCLCErrUnexpected_S.scVal(), tok.sVal());
+    sErr = String(TR("Unexpected '%S'").c_str(), tok.sVal());
   else
-    sErr = SCLCErrUnexpectedEndOfText;
+    sErr = TR("Unexpected end of text");
   codegen->Error(sErr, tok.iLine(), tok.iPos());
 }
 
@@ -402,7 +402,7 @@ void ExpressionParser::FuncCall(const String& s)
         SkipTo(cSEMICOLON);
         return;
       }
-      codegen->AddInst(s.scVal()); // color or colorhsi
+      codegen->AddInst(s.c_str()); // color or colorhsi
       codegen->AddInst("parmend");
       GetNextToken(); // skip right bracket
       return;
@@ -469,7 +469,7 @@ void ExpressionParser::FuncCall(const String& s)
         SkipTo(cSEMICOLON);
         return;
       }
-      codegen->AddInst(s.scVal(), sMap);
+      codegen->AddInst(s.c_str(), sMap);
       codegen->AddInst("parmend");
       GetNextToken(); // skip right bracket
       return;
@@ -609,7 +609,7 @@ void ExpressionParser::FuncCall(const String& s)
         SkipTo(cSEMICOLON);
         return;
       }
-      codegen->AddInst(s.scVal(), sMap);
+      codegen->AddInst(s.c_str(), sMap);
       codegen->AddInst("parmend");
       GetNextToken(); // skip right bracket
       return;
@@ -621,7 +621,7 @@ void ExpressionParser::FuncCall(const String& s)
       String sMap = tok.sVal();
       GetNextToken(); // skip map name
       if (tok == cRIGHTBRACKET) {
-        codegen->AddInst(s.scVal(), sMap);
+        codegen->AddInst(s.c_str(), sMap);
         GetNextToken(); // skip right bracket
         return;
       }
@@ -653,7 +653,7 @@ void ExpressionParser::FuncCall(const String& s)
         return;
       }
       const_cast<String&>(s) &= String("rc");
-      codegen->AddInst(s.scVal(), sMap);
+      codegen->AddInst(s.c_str(), sMap);
       codegen->AddInst("parmend");
       GetNextToken(); // skip right bracket
       return;
@@ -708,7 +708,7 @@ void ExpressionParser::FuncCall(const String& s)
         SkipTo(cSEMICOLON);
         return;
       }
-      codegen->AddInst(s.scVal(), sPnt);
+      codegen->AddInst(s.c_str(), sPnt);
       codegen->AddInst("parmend");
       GetNextToken(); // skip right bracket
       return;
@@ -772,7 +772,7 @@ void ExpressionParser::FuncCall(const String& s)
         SkipTo(cSEMICOLON);
         return;
       }
-      codegen->AddInst(s.scVal());
+      codegen->AddInst(s.c_str());
       codegen->AddInst("parmend");
       GetNextToken(); // skip right bracket
       return;
@@ -822,7 +822,7 @@ bool ExpressionParser::fNeighbFunc(const String& s2)
 		if ( fInNBFunction )
 		{
 			fInNBFunction = false;
-			throw ErrorObject(String(SCLCErrNestedUseNotPossible_S.scVal(), s));
+			throw ErrorObject(String(TR("Nested use of %S not possible here").c_str(), s));
 		}
 		fInNBFunction = true;
     char c = s[5];
@@ -891,7 +891,7 @@ bool ExpressionParser::fNeighbFunc(const String& s2)
       return true;
     }
     codegen->AddInst("nbend");
-    codegen->AddInst(s.scVal(), long(fPos)+2*long(fCond));
+    codegen->AddInst(s.c_str(), long(fPos)+2*long(fCond));
     codegen->AddInst("parmend");
     GetNextToken(); // skip right bracket
     return true;
@@ -1168,7 +1168,7 @@ void ProgramParser::Statement()
           if (tok.tt() != ttINT)
             ErrExp(tok, "integer constant");
           else
-            iStep = atoi(tok.sVal().scVal());
+            iStep = atoi(tok.sVal().c_str());
           GetNextToken();
         }
         if (tok != kwDO)

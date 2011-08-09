@@ -113,11 +113,11 @@ void MapViewPtr::GetDataFiles(Array<FileName>& afnDat, Array<String>* asSection,
 	{
 		String sSection("Layer%i", i);
 		String sType;
-		ReadElement(sSection.scVal(), "Type", sType);
+		ReadElement(sSection.c_str(), "Type", sType);
 		if ("MetafileDrawer" == sType || "BitmapDrawer" == sType)
 		{
 			FileName fnData;
-			ReadElement(sSection.scVal(), "Data", fnData);
+			ReadElement(sSection.c_str(), "Data", fnData);
 			ObjectInfo::Add(afnDat, fnData, fnObj.sPath());
 			if (asSection != 0)
 				(*asSection) &= sSection;
@@ -141,18 +141,18 @@ void MapViewPtr::GetObjectStructure(ObjectStructure& os)
 			String sSection("Layer%i", i);
 			String sType;
 			FileName fnData;
-			ReadElement(sSection.scVal(), "Type", sType);
+			ReadElement(sSection.c_str(), "Type", sType);
 			if ("MetafileDrawer" == sType || "BitmapDrawer" == sType) 
 			{
-				ReadElement(sSection.scVal(), "Data", fnData);
-				os.AddFile(fnObj, sSection.scVal(), "Data", "", fLeaveFiles);
+				ReadElement(sSection.c_str(), "Data", fnData);
+				os.AddFile(fnObj, sSection.c_str(), "Data", "", fLeaveFiles);
 			}
 			else if (sType == "AnnotationTextDrawer")
 			{
 				// AnnotationText must be detected by its drawer, because in an
 				// ATX layer sometimes the map from which it is created is mentioned
 				String sLayer("Layer%d", i);
-				ReadElement(sSection.scVal(), "AnnotationText", fnData);
+				ReadElement(sSection.c_str(), "AnnotationText", fnData);
 				os.AddFile(fnObj, sLayer, "AnnotationText", "" , fLeaveFiles );
 			}
 			else
@@ -160,19 +160,19 @@ void MapViewPtr::GetObjectStructure(ObjectStructure& os)
 				// The following code allows a drawer to have all maptypes at the same time (one of each)
 				// Currently a drawer at most has one, but this may change in the future
 				String sLayer("Layer%d", i);
-				if ( ReadElement(sSection.scVal(), "Map" , fnData) != 0 )
+				if ( ReadElement(sSection.c_str(), "Map" , fnData) != 0 )
 				{
 					os.AddFile(fnObj,sLayer, "Map", "" , fLeaveFiles );
 					os.AddFile(fnObj,sLayer, "MapList", "", fLeaveFiles);
 					os.AddFile(fnObj,sLayer, "Representation", ".rpr", fLeaveFiles);
 				}					
-				if ( ReadElement(sSection.scVal(), "PolygonMap", fnData) != 0 )
+				if ( ReadElement(sSection.c_str(), "PolygonMap", fnData) != 0 )
 					os.AddFile(fnObj,sLayer, "PolygonMap", "" , fLeaveFiles );				
-				if ( ReadElement(sSection.scVal(), "SegmentMap", fnData) != 0 )
+				if ( ReadElement(sSection.c_str(), "SegmentMap", fnData) != 0 )
 					os.AddFile(fnObj, sLayer, "SegmentMap", "" , fLeaveFiles );								
-				if ( ReadElement(sSection.scVal(), "PointMap", fnData) != 0 )
+				if ( ReadElement(sSection.c_str(), "PointMap", fnData) != 0 )
 					os.AddFile(fnObj,sLayer, "PointMap", "" , fLeaveFiles );
-				if ( ReadElement(sSection.scVal(), "Texture Map", fnData ) != 0 )
+				if ( ReadElement(sSection.c_str(), "Texture Map", fnData ) != 0 )
 					os.AddFile(fnObj, sLayer, "Texture Map", "", fLeaveFiles);
 			}				
 		}
@@ -187,7 +187,7 @@ bool MapViewPtr::fUsesDependentObjects() const
 		String sSection("Layer%i", i);
 		String sType;
 		FileName fnData;
-		ReadElement(sSection.scVal(), "Type", sType);
+		ReadElement(sSection.c_str(), "Type", sType);
 		if ("MetafileDrawer" == sType || "BitmapDrawer" == sType) 
 			continue;
 		else if (sType == "AnnotationTextDrawer")
@@ -199,10 +199,10 @@ bool MapViewPtr::fUsesDependentObjects() const
 		else
 		{
 			String sLayer("Layer%d", i);
-			if ( ReadElement(sSection.scVal(), "Map" , fnData) == 0 )
-				if ( ReadElement(sSection.scVal(), "PolygonMap", fnData) == 0 )
-					if ( ReadElement(sSection.scVal(), "SegmentMap", fnData) == 0 )
-						ReadElement(sSection.scVal(), "PointMap", fnData);
+			if ( ReadElement(sSection.c_str(), "Map" , fnData) == 0 )
+				if ( ReadElement(sSection.c_str(), "PolygonMap", fnData) == 0 )
+					if ( ReadElement(sSection.c_str(), "SegmentMap", fnData) == 0 )
+						ReadElement(sSection.c_str(), "PointMap", fnData);
 
 			if ( fnData != FileName() )
 			{
@@ -224,7 +224,7 @@ bool MapViewPtr::fCalculated() const
 		String sSection("Layer%i", i);
 		String sType;
 		FileName fnData;
-		ReadElement(sSection.scVal(), "Type", sType);
+		ReadElement(sSection.c_str(), "Type", sType);
 		if ("MetafileDrawer" == sType || "BitmapDrawer" == sType) 
 			continue;
 		else if (sType == "AnnotationTextDrawer")
@@ -232,10 +232,10 @@ bool MapViewPtr::fCalculated() const
 		else
 		{
 			String sLayer("Layer%d", i);
-			if ( ReadElement(sSection.scVal(), "Map" , fnData) == 0 )
-				if ( ReadElement(sSection.scVal(), "PolygonMap", fnData) == 0 )
-					if ( ReadElement(sSection.scVal(), "SegmentMap", fnData) == 0 )
-						ReadElement(sSection.scVal(), "PointMap", fnData);
+			if ( ReadElement(sSection.c_str(), "Map" , fnData) == 0 )
+				if ( ReadElement(sSection.c_str(), "PolygonMap", fnData) == 0 )
+					if ( ReadElement(sSection.c_str(), "SegmentMap", fnData) == 0 )
+						ReadElement(sSection.c_str(), "PointMap", fnData);
 
 			if ( fnData != FileName() )
 			{
@@ -258,7 +258,7 @@ void MapViewPtr::Calc(bool fMakeUpToDate)
 		String sSection("Layer%i", i);
 		String sType;
 		FileName fnData;
-		ReadElement(sSection.scVal(), "Type", sType);
+		ReadElement(sSection.c_str(), "Type", sType);
 		if ("MetafileDrawer" == sType || "BitmapDrawer" == sType) 
 			continue;
 		else if (sType == "AnnotationTextDrawer")
@@ -266,10 +266,10 @@ void MapViewPtr::Calc(bool fMakeUpToDate)
 		else
 		{
 			String sLayer("Layer%d", i);
-			if ( ReadElement(sSection.scVal(), "Map" , fnData) == 0 )
-				if ( ReadElement(sSection.scVal(), "PolygonMap", fnData) == 0 )
-					if ( ReadElement(sSection.scVal(), "SegmentMap", fnData) == 0 )
-						ReadElement(sSection.scVal(), "PointMap", fnData);
+			if ( ReadElement(sSection.c_str(), "Map" , fnData) == 0 )
+				if ( ReadElement(sSection.c_str(), "PolygonMap", fnData) == 0 )
+					if ( ReadElement(sSection.c_str(), "SegmentMap", fnData) == 0 )
+						ReadElement(sSection.c_str(), "PointMap", fnData);
 
 			if ( fnData != FileName() )
 			{

@@ -70,7 +70,7 @@ GeoRefStereoMate::GeoRefStereoMate(const FileName& fn, const GeoRef& grSource, c
 																					rAngle(rAngl), rRefHeight(rHeigh), iColLeftExtra(iColOffs)
 {
 	if (abs(rAngle) > MAXANGLE)
-		throw (ErrorObject(SStcErrLookAngleFrom0to90));
+		throw (ErrorObject(TR("Look Angle must be between 0 and 90 degrees")));
 	Init();
 }
 
@@ -81,7 +81,7 @@ GeoRefStereoMate::~GeoRefStereoMate()
 void GeoRefStereoMate::Init()
 {
 	if (!mapDTM.fValid())
-		throw ErrorObject(SGRErrDTMNotValid);
+		throw ErrorObject(TR("DTM is not valid"));
 	GeoRef grDTM = mapDTM->gr();
 	csDTM = mapDTM->gr()->cs();
 	//mapDTM->SetInterpolMethod(imBILINEAR);

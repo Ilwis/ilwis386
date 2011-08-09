@@ -509,7 +509,7 @@ void E00::WriteAAT(SegmentMap& sm)
 		GetAttributeInfo(tblAtt, aciCols, iRecSize);
 	WriteArcFieldInfo(aciCols, iTotalArcs, iRecSize);
 	
-	trq.SetText(SCVTextWriteAttributes);
+	trq.SetText(TR("Writing attributes"));
 	
 	long iCurSeg = 0;
 	iCurCoverage = 1;
@@ -585,7 +585,7 @@ void E00::WritePAT(PointMap& pnt)
 		GetAttributeInfo(tblAtt, aciCols, iRecSize);
 	WritePATFieldInfo(aciCols, iPnts, iRecSize);
 	
-	trq.SetText(SCVTextWriteAttributes);
+	trq.SetText(TR("Writing attributes"));
 	
 	for (long iCurPnt = 1; iCurPnt <= iPnts; ++iCurPnt)
 	{
@@ -643,7 +643,7 @@ void E00::WritePAT(PolygonMap& pm)
 
 	if (pm->fTblAtt())
 	{
-		trq.fText(SCVTextOpeningAttributes);
+		trq.fText(TR("Loading attributes. Please wait..."));
 		tblAtt = pm->tblAtt();
 		pds = tblAtt->dm()->pdsrt();
 	}
@@ -661,7 +661,7 @@ void E00::WritePAT(PolygonMap& pm)
 		GetAttributeInfo(tblAtt, aciCols, iRecSize);
 	WritePATFieldInfo(aciCols, iPols, iRecSize);
 	
-	trq.SetText(SCVTextWriteAttributes);
+	trq.SetText(TR("Writing attributes"));
 	
 	long iCurPol = 0;
 	for (int i=0 ; i < pm->iFeatures(); ++i) {
@@ -761,7 +761,7 @@ bool E00::DoSegments() {
   PutName();
   StartArcFile();
   ILWIS::Segment *seg = sm->segFirst();
-  trq.SetText(SCVTextWriteSegments);
+  trq.SetText(TR("Writing segments"));
   iTotalArcs = 0;
   while (seg && seg->fValid()) {
     PutSegment(seg);
@@ -814,7 +814,7 @@ bool E00::DoPolygons() {
 	seg = sm->getFeature(iSegCnt);
   }*/
   EndFileMarker();
-  trq.SetText(SCVTextWritePolLabels);
+  trq.SetText(TR("Writing polygon label points"));
   StartLabFile();
   long iPolCnt = 1;
   for (int i=0 ; i < pm->iFeatures(); ++i) {
@@ -848,7 +848,7 @@ bool E00::DoPoints() {
   PutName();
   StartLabFile();
 
-  trq.SetText(SCVTextWriteLabels);
+  trq.SetText(TR("Writing points"));
   for (long i = 1; i <= iNrPnts; ++i) {
     if (trq.fUpdate(i, iNrPnts))
       return false;
@@ -867,8 +867,8 @@ bool E00::DoPoints() {
   
 void ImpExp::ExportE00(const FileName& fnObject, const FileName& fnFile) {
   try {
-    trq.SetTitle(SCVTitleExportE00);
-    trq.SetText(SCVTextProcessing);
+    trq.SetTitle(TR("Exporting to Arc/Info E00"));
+    trq.SetText(TR("Processing..."));
     E00 e00(fnFile, fnObject, trq);
     if (fnObject.sExt == ".mps") {
       if (!e00.DoSegments())

@@ -156,8 +156,8 @@ void ImpExp::ExportLIN(const FileName& fnObject, const FileName& fnFile)
 {
 	try 
 	{
-		trq.SetTitle(SCVTitleExportToLin);
-		trq.SetText(SCVTextProcessing);
+		trq.SetTitle(TR("Exporting to Arc/Info Generate"));
+		trq.SetText(TR("Processing..."));
 		SegmentMap sm(fnObject);
 		long iSegCnt = 0, iNrSegs = sm->iFeatures();
 		ArcInfoLinExporter aile(fnFile);

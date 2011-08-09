@@ -9,7 +9,7 @@
 #define VERSION_PRODUCTVERSION "3, 7, 0, 0\0"
 #define VERSION_PRIVATEBUILD "\0"
 #define VERSION_SPECIALBUILD ""
-#define ILWIS_VERSION_NAME ILWIS::Version::IlwisShortName.scVal()
+#define ILWIS_VERSION_NAME ILWIS::Version::IlwisShortName.c_str()
 // #define BETA_VERSION
 #define EXP_DATE_YEAR 2030
 #define EXP_DATE_MONTH 10

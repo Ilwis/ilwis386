@@ -71,7 +71,7 @@ class DATEXPORT ErrorLinearFilterSize : public ErrorObject
 {
 public:  
   ErrorLinearFilterSize(int iRows, int iCols, const WhereError& where)
-  : ErrorObject(WhatError(String("%S %i x %i", SDATErrFilterTooLarge, iRows, iCols), errFilter+1), where) 
+  : ErrorObject(WhatError(String("%S %i x %i", TR("Filter size too large:"), iRows, iCols), errFilter+1), where) 
   {}
 };
 

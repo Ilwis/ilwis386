@@ -445,7 +445,7 @@ GeoRef GeoRef::grFindSameOnDisk(const GeoRef& gr, const String& sSearchDir)
   else
     sSearchFile = getEngine()->sGetCurDir();
   sSearchFile &= "*.grf";
-  if ((findHandle=FindFirstFile(sSearchFile.scVal(), &findData))!= (void *)INVALID_HANDLE_VALUE)
+  if ((findHandle=FindFirstFile(sSearchFile.c_str(), &findData))!= (void *)INVALID_HANDLE_VALUE)
   {  
     do 
     {
@@ -557,7 +557,7 @@ void GeoRefPtr::GetObjectDependencies(Array<FileName>& afnObjDep)
   String sType;
   ReadElement("GeoRef", "Type", sType);
   GeoRef gr;
-  ReadElement(sType.scVal(), "GeoRef", gr);
+  ReadElement(sType.c_str(), "GeoRef", gr);
   if (gr.fValid())
     afnObjDep &= gr->fnObj;
 }

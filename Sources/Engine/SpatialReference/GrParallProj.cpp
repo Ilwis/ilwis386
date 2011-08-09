@@ -97,7 +97,7 @@ GeoRefParallelProjective::GeoRefParallelProjective(const FileName& fn, const Map
 void GeoRefParallelProjective::init()
 {
 	if (!mapDTM.fValid())
-		throw ErrorObject(SGRErrDTMNotValid);
+		throw ErrorObject(TR("DTM is not valid"));
 
 	mapDTM->KeepOpen(true);
   GeoRef grDTM = mapDTM->gr();

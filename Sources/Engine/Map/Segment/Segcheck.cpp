@@ -118,12 +118,12 @@ bool SegmentMapPtr::fCheckForPolygonize(const String& sMask, bool fAutoCorrect, 
 	Mask mask(dm(), sMask);
 	bool fMask = sMask.length() > 0;
 
-	trq.SetTitle(SSEGTitleCheckSegments);
+	trq.SetTitle(TR("Check Segments"));
 	do {
 		fFoundError = false;
 
 		// Check Individual Self
-		trq.SetText(SSEGTextSelfOverlapCheck);
+		trq.SetText(TR("Self Overlap Check"));
 		for (int i = 0; i < iFeatures(); ++i) {
 			ILWIS::Segment *sg = (ILWIS::Segment *) (ILWIS::Segment *)getFeature(i);
 			if ( sg == NULL || sg->fValid() == false)
@@ -156,7 +156,7 @@ bool SegmentMapPtr::fCheckForPolygonize(const String& sMask, bool fAutoCorrect, 
 			continue;
 
 		// Check Connected
-		trq.SetText(SSEGTextCheckDeadEnds);
+		trq.SetText(TR("Check Dead Ends"));
 		if (trq.fUpdate(0, iFeatures()))
 			return false;
 		FillCRDFL(this,crdF,crdL,fMask,mask);
@@ -244,7 +244,7 @@ bool SegmentMapPtr::fCheckForPolygonize(const String& sMask, bool fAutoCorrect, 
 			continue;
 
 		// Check Intersections
-		trq.SetText(SSEGTextCheckIntersections);
+		trq.SetText(TR("Check Intersections"));
 		if (trq.fUpdate(0, iFeatures()))
 			return false;
 		FillCB(this,acb,fMask,mask);
@@ -293,7 +293,7 @@ bool SegmentMapPtr::fCheckForPolygonize(const String& sMask, bool fAutoCorrect, 
 
 void SegmentMapPtr::RemoveRedundantNodes(Tranquilizer& trq)
 {
-  trq.SetText(SSEGTextRemoveRedundantNodes);
+  trq.SetText(TR("Remove Redundant Nodes"));
   ArrayLarge<Coord> crdF, crdL;
   CoordinateSequence *buf1, *buf2;
   CoordBuf buf;

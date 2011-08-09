@@ -122,8 +122,8 @@ void ImpExp::ExportLAN(const FileName& fnObject, const FileName& fnFile)
 {
   int iMapCnt;
   try {
-    trq.SetTitle(SCVTitleExportLAN);   // the title in the report window
-    trq.SetText(SCVTextProcessing);    // the text in the report window
+    trq.SetTitle(TR("Export to LAN format"));   // the title in the report window
+    trq.SetText(TR("Processing..."));    // the text in the report window
     LANExporter gisex(fnFile);
     gisex.iIOcase = tpErr;
     if (fnObject.sExt == ".mpr") {     // create a MapList with only one map
@@ -138,7 +138,7 @@ void ImpExp::ExportLAN(const FileName& fnObject, const FileName& fnFile)
 // check on empty map list
     int iNrMaps = gisex.mpl->iSize();
     if ( iNrMaps < 1 )
-			throw ErrorImportExport( SCVErrEmptyMaplist);
+			throw ErrorImportExport( TR("Error Empty map list"));
 
     // check if domains of the different maps are the same
     gisex.mp = gisex.mpl->map(gisex.mpl->iLower()); // temporary
@@ -147,12 +147,12 @@ void ImpExp::ExportLAN(const FileName& fnObject, const FileName& fnFile)
 		{
       Domain dmothers = gisex.mpl->map(iMapCnt)->dm();
       if ( dmothers != gisex.dm )
-        throw ErrorImportExport(SCVErrDomainNotEqual);
+        throw ErrorImportExport(TR("Domain of maps must be equal"));
     }
     gisex.gr = gisex.mpl->gr();
     gisex.st = gisex.mp->st();
     if (gisex.st > stINT)                         // if StoreType> 16 bit return error !!!
-      throw ErrorImportExport(SCVErrOutOfRange);  // Error input map contains too wide range
+      throw ErrorImportExport(TR("Range too large for Erdas format"));  // Error input map contains too wide range
 
     gisex.iLines = gisex.mp->iLines();
     gisex.iCols = gisex.mp->iCols();
@@ -162,7 +162,7 @@ void ImpExp::ExportLAN(const FileName& fnObject, const FileName& fnFile)
     Coord crBot = gisex.gr->cConv(RowCol(gisex.iLines, 0L));
     if (abs(crTop.x - crBot.x) > 0.001)
 		{
-			int iRet = getEngine()->Message(SCVWarnNotNorthOriented.scVal(), SCVMsgExportWarning.scVal(), MB_ICONEXCLAMATION|MB_YESNO);
+			int iRet = getEngine()->Message(TR("Map not North oriented or pixels not evenly spaced. Continue?").c_str(), TR("Export warning").c_str(), MB_ICONEXCLAMATION|MB_YESNO);
 
       if (iRet != IDYES)
         return;
@@ -170,7 +170,7 @@ void ImpExp::ExportLAN(const FileName& fnObject, const FileName& fnFile)
 
     gisex.iIOcase = gisex.DetOutSize();
     if (gisex.iIOcase == tpErr)
-      throw ErrorImportExport(SCVErrOutOfRange);
+      throw ErrorImportExport(TR("Range too large for Erdas format"));
 
     gisex.WriteHeader();
     switch (gisex.iIOcase) {
@@ -267,7 +267,7 @@ void ImpExp::ExportLAN(const FileName& fnObject, const FileName& fnFile)
       gisex.filGISLAN->Write(bb.iSize(), bb.buf());
     }
     trq.fUpdate(gisex.iLines, gisex.iLines);
-    trq.SetText(SCVTextErdasTrailer);
+    trq.SetText(TR("Writing trailer file"));
     trq.fUpdate(0);
     gisex.WriteTrlFile();
     gisex.SetErase(false);

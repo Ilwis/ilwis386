@@ -200,7 +200,7 @@ IlwisObject IlwisObject::obj(const FileName& fil)
 		fn.sSectionPostFix = "";
 		ObjectInfo::ReadElement("MapList", "Offset", fn, iOffsetForBands);
 		FileName fnMap;
-		ObjectInfo::ReadElement("MapList", String("Map%li", iBandNr-1+iOffsetForBands).scVal(), fn, fnMap);
+		ObjectInfo::ReadElement("MapList", String("Map%li", iBandNr-1+iOffsetForBands).c_str(), fn, fnMap);
 		if (fnMap.sSectionPostFix.length() > 0) {
 			fn.sSectionPostFix = fnMap.sSectionPostFix;
 			fn.sExt = ".mpl";
@@ -355,7 +355,7 @@ IlwisObjectPtr::IlwisObjectPtr(const FileName& fn, bool fCreate, const char* pcD
 		}
 		else
 		{
-			_fReadOnly = _access(fnObj.sFullPath().scVal(), 2)==-1;
+			_fReadOnly = _access(fnObj.sFullPath().c_str(), 2)==-1;
 		}
 		fUpdateCatalog = false;
 	}
@@ -369,7 +369,7 @@ IlwisObjectPtr::IlwisObjectPtr(const FileName& fn, bool fCreate, const char* pcD
 			if (i > 0)
 				_sAdditionalInfo &= "\r\n";
 			String s;
-			ReadElement("AdditionalInfo", String("Line%i", i).scVal(), s);
+			ReadElement("AdditionalInfo", String("Line%i", i).c_str(), s);
 			_sAdditionalInfo &= s;
 		}
 	}
@@ -392,7 +392,7 @@ IlwisObjectPtr::~IlwisObjectPtr()
 		for(int i = 0; i < iN; ++i )
 		{
 			String sKey("Item%d", i);
-			ObjectInfo::ReadElement("Collection", sKey.scVal(), fnObj, fnCol);
+			ObjectInfo::ReadElement("Collection", sKey.c_str(), fnObj, fnCol);
 			if ( !File::fExist(fnCol) ) 
 				RemoveCollectionFromODF(fnObj, sKey);			
 		}
@@ -415,7 +415,7 @@ void IlwisObjectPtr::Store()
 			if ('\r' == c)
 				continue;
 			if ('\n' == c) {
-				WriteElement("AdditionalInfo", String("Line%i", iLines).scVal(), s);
+				WriteElement("AdditionalInfo", String("Line%i", iLines).c_str(), s);
 				s = String();
 				iLines++;
 			}
@@ -423,7 +423,7 @@ void IlwisObjectPtr::Store()
 				s &= c;
 		}
 		if ("" != s) {
-			WriteElement("AdditionalInfo", String("Line%i", iLines).scVal(), s);
+			WriteElement("AdditionalInfo", String("Line%i", iLines).c_str(), s);
 			iLines++;
 		}
 		WriteElement("AdditionalInfo", "Lines", iLines);
@@ -763,7 +763,7 @@ void IlwisObjectPtr::Updated()
 void IlwisObjectPtr::UpdateTime()
 {
 	Updated();
-	WriteElement(sObjectSection().scVal(), "Time", objtime);
+	WriteElement(sObjectSection().c_str(), "Time", objtime);
 }
 
 String IlwisObjectPtr::sObjectSection() const
@@ -853,7 +853,7 @@ void IlwisObjectPtr::Rename(const FileName& fnNew)
 			throw ErrorRename(afnData[i]);
 	}  
 	csAccess.Lock();
-	rename(fnObj.sFullName().scVal(), fnNew.sFullName().scVal());
+	rename(fnObj.sFullName().c_str(), fnNew.sFullName().c_str());
 	const_cast<String&>(fnObj.sFile) = fnNew.sFile;
 	const_cast<String&>(fnObj.sExt) = fnNew.sExt;
 	fChanged = true;
@@ -1014,19 +1014,19 @@ void IlwisObjectPtr::RemoveCollectionFromODF(const FileName& fnCol, const String
 			if ( sOldKey != sEntry )
 			{
 				String sText;
-				ObjectInfo::ReadElement("Collection", sOldKey.scVal(), fnCol, sText);
+				ObjectInfo::ReadElement("Collection", sOldKey.c_str(), fnCol, sText);
 				String sNewKey("Item%d", j++);
-				ObjectInfo::WriteElement("Collection", sNewKey.scVal(), fnCol, sText);
+				ObjectInfo::WriteElement("Collection", sNewKey.c_str(), fnCol, sText);
 			}
 		}
 		// now adjust the number of collections referred to
 		ObjectInfo::WriteElement("Collection", "NrOfItems", fnCol, iNr - 1);
 		// Remove the now unused collection item from the ODF
 		String sKey("Item%d", iNr - 1);
-		WritePrivateProfileString("Collection", sKey.scVal(), NULL, fnCol.sFullPath().scVal());
+		WritePrivateProfileString("Collection", sKey.c_str(), NULL, fnCol.sFullPath().c_str());
 	}
 	else
-		WritePrivateProfileString("Collection", NULL, NULL, fnCol.sFullPath().scVal());
+		WritePrivateProfileString("Collection", NULL, NULL, fnCol.sFullPath().c_str());
 }
 
 void IlwisObjectPtr::GetObjectStructure(ObjectStructure& os)

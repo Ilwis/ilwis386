@@ -103,7 +103,7 @@
 
 void ColumnCoordNotSupportedError()
 {
-  throw ErrorObject(STBLErrCoordColUnsupported, 1001);
+  throw ErrorObject(TR("Coordinate Columns are not yet supported"), 1001);
 }
 
 ColumnStoreBase::ColumnStoreBase(long iRecs, long iOffset, ColumnStore& _pcs, bool fCreate)
@@ -118,7 +118,7 @@ ColumnStoreBase* ColumnStoreBase::create(const Table& tbl, const String& sColNam
 {
   String sSection("%SCol:%S", tbl->sSectionPrefix, sColName.sQuote());
   String sType;
-  ObjectInfo::ReadElement(sSection.scVal(), "StoreType", tbl->fnObj.sFullPath(true), sType);
+  ObjectInfo::ReadElement(sSection.c_str(), "StoreType", tbl->fnObj.sFullPath(true), sType);
   // type is store type, not meaning type
   if (fCIStrEqual("Byte" , sType) || 
 		  fCIStrEqual("Int" , sType) || 
@@ -134,7 +134,7 @@ ColumnStoreBase* ColumnStoreBase::create(const Table& tbl, const String& sColNam
 		return new ColumnCoordBuf(tbl->iRecs(), tbl->iOffset(), p, false);
   if (fCIStrEqual("Coord" , sType))
      return new ColumnCoord(tbl->iRecs(), tbl->iOffset(), p, false);
-  InvalidTypeError(tbl->fnObj, sSection.scVal(), sType);
+  InvalidTypeError(tbl->fnObj, sSection.c_str(), sType);
   return 0;
 }
 
@@ -424,7 +424,7 @@ void ColumnStore::Store()
 {
   ILWISSingleLock sl(&ptr.csAccess, TRUE, SOURCE_LOCATION);
   if (ptr.fErase) {
-    ptr.WriteElement(ptr.sSection().scVal(), NULL, NULL);
+    ptr.WriteElement(ptr.sSection().c_str(), NULL, NULL);
     return;
   }  
 //  ColumnPtr::Store();

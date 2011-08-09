@@ -288,7 +288,7 @@ bool DXFExporter::WriteLayerTable(Array<String>& asLayer) {
     else
       iNrItems = asLayer.iSize();
     WriteLn(String("%i", iNrItems + 1));
-    SetText(SCVTextWriteLayerTable);
+    SetText(TR("Writing layer table"));
 
     WriteLn("0");
     WriteLn("LAYER");
@@ -356,7 +356,7 @@ void DXFExporter::WritePolylineHeader(const String& sName, bool fIsPolygon) {
 }
 
 static int iCompCodes(const String* s1, const String* s2) {
-  return _stricmp((*s1).scVal(), (*s2).scVal());
+  return _stricmp((*s1).c_str(), (*s2).c_str());
 }
 
 void DXFExporter::ExportToDXF() {
@@ -396,7 +396,7 @@ bool DXFFromSegmentMap::BuildValLayer(Array<String>& asLayer) {
     asLayer &= _sm->fnObj.sFile;
     return false;
   }
-  SetText(SCVTextBuildValueLayer);
+  SetText(TR("Building layer table for values"));
   long iNrSegs = _sm->iFeatures();
   for (int i=0 ; i < _sm->iFeatures(); ++i) {
 	  ILWIS::Segment *seg = (ILWIS::Segment *) _sm->getFeature(i);
@@ -445,7 +445,7 @@ void DXFFromSegmentMap::WriteEntities() {
   WriteLn("ENTITIES");
   long iSegCnt = 0;
   long iNrSegs = _sm->iFeatures();
-  SetText(SCVTextWriteSegments);
+  SetText(TR("Writing segments"));
   int i=0;
   for ( ; i < _sm->iFeatures(); ++i) {
 	  ILWIS::Segment *seg = (ILWIS::Segment *) _sm->getFeature(i);
@@ -477,7 +477,7 @@ bool DXFFromPolygonMap::BuildValLayer(Array<String>& asLayer) {
     asLayer &= _pm->fnObj.sFile;
     return false;
   }
-  SetText(SCVTextBuildValueLayer);
+  SetText(TR("Building layer table for values"));
   long iNrPols = 0;
   long iTotPol = _pm->iFeatures();
   for (int i=0 ; i < _pm->iFeatures(); ++i) {
@@ -611,7 +611,7 @@ void DXFFromPolygonMap::WriteEntities() {
   WriteLn("ENTITIES");
   long iNrPols = 0;
   long iTotPol = _pm->iFeatures();
-  SetText(SCVTextWritePolygons);
+  SetText(TR("Writing polygons"));
   for (int i=0 ; i < _pm->iFeatures(); ++i) {
 	  ILWIS::Polygon *pol = (ILWIS::Polygon *) _pm->getFeature(i);
 	  if ( pol == NULL || !pol->fValid())
@@ -644,7 +644,7 @@ bool DXFFromPointMap::BuildValLayer(Array<String>& asLayer) {
     asLayer &= _pt->fnObj.sFile;
     return false;
   }
-  SetText(SCVTextBuildValueLayer);
+  SetText(TR("Building layer table for values"));
   for (long i = 1; i <= _pt->iFeatures(); i++) {
     asLayer &= _pt->sValue(i, 0);
     if (i % 25 == 1)
@@ -680,7 +680,7 @@ void DXFFromPointMap::WriteEntities() {
   WriteLn("SECTION");
   WriteLn("2");
   WriteLn("ENTITIES");
-  SetText(SCVTextWriteLabels);
+  SetText(TR("Writing points"));
   for (long i = 1; i <= _pt->iFeatures(); i++) {
     WritePoint(i);
     if (i % 25 == 1)
@@ -717,8 +717,8 @@ void DXFFromIlwis::Export() {
 
 void ImpExp::ExportDXF(const FileName& fnObject, const FileName& fnFile) {
   try {
-    trq.SetTitle(SCVTitleExportToDXF);
-    trq.SetText(SCVTextProcessing);
+    trq.SetTitle(TR("Exporting to AutoCAD DXF"));
+    trq.SetText(TR("Processing..."));
 
     DXFFromIlwis(fnObject, fnFile, &trq).Export();
 

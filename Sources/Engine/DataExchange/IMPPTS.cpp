@@ -92,7 +92,7 @@ void ArcInfoPts::MakeTable(const Domain& dmTable, Table& tbl) {
   FileName fnTable  = FileName::fnUnique(FileName(fnIlwis, ".tbt", true));
   FileName fnTblDat = FileName(fnTable, ".tb#", true);
   tbl.SetPointer(new TablePtr(fnTable, fnTblDat, dmTable, String()));
-  String sD = SCVTextTableName_;
+  String sD = TR("Table ");
   sD &= fnTable.sFile;
   sD &= fnTable.sExt;
   tbl->sDescription = sD;
@@ -186,7 +186,7 @@ bool ArcInfoPts::fArcInfoCoord() {
   Coord crdFile;
   long iCode;
   GetNextLine();
-  short iRes = sscanf(sLine.scVal(), "%li %lf %lf", &iCode, &crdFile.x, &crdFile.y);
+  short iRes = sscanf(sLine.c_str(), "%li %lf %lf", &iCode, &crdFile.x, &crdFile.y);
   if (3 == iRes) {
     _iPoint++;
     if (fScanning) {
@@ -245,20 +245,20 @@ void ArcInfoPts::SetupPointMap(const FileName& fnObject) {
     }
   }
 
-  oi.mp->sDescription = String(SCVTextPointMap_S.scVal(), fnObject.sFile);
+  oi.mp->sDescription = String(TR("Point Map %S").c_str(), fnObject.sFile);
   oi.mp->Store();
 }
 
 long ArcInfoPts::ScanInfo() {
-  trq.SetText(SCVTextScanning);
+  trq.SetText(TR("Scanning..."));
   fScanning = true;
 
   String s;
   while (fArcInfoCoord()) {
     if (fScanning)
-      s = SCVTextScanPoint_;
+      s = TR("Scanning ... Point ");
     else
-      s = SCVTextScanPoint_;
+      s = TR("Scanning ... Point ");
     s &= sPointCode();
     trq.SetText(s);
   }
@@ -272,14 +272,14 @@ void ArcInfoPts::Convert(const FileName& fnObject ) {
   _iPoint = 0;
   _iLins = 0;
   fnIlwis = fnObject;
-  String s = SCVTextArcInfoLinScan;
+  String s = TR("Scanning Arc/Info Generate");
   fScanning = false;
 
   SetupPointMap(fnIlwis);    // create point map
 
   MarkErase(true);
   while (fArcInfoCoord()) {
-    s = SCVTextImportPoint_;
+    s = TR("Importing Point ");
     s &= sPointCode();
     trq.SetText(s);
   }
@@ -288,7 +288,7 @@ void ArcInfoPts::Convert(const FileName& fnObject ) {
 
 void ImpExp::ImportPtsAi(const FileName& fnFile, const FileName& fnObject) {
   try {
-    trq.SetTitle(SCVTitleImpPtsArcInfo);
+    trq.SetTitle(TR("Importing from Arc/Info Generate"));
     ArcInfoPts ai(fnFile, trq);
 
     long iLines = ai.ScanInfo();

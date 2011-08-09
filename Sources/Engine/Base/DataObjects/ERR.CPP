@@ -179,8 +179,6 @@ void ErrorObject::Show(const String& sTitl) const
 	String sTtl = sTitl;
 	if (sTtl.length() == 0)
 		sTtl = where.sTitle();
-	if (sTtl.length() == 0)
-		sTtl = SDATTitleILWISError;
 	try {
 		String sErr = sShowError();
 		if (sErr.length() == 0)

@@ -79,7 +79,7 @@ String Datum::WKTToILWISName(const String& wkt) {
 		char line[1024];
 		String sPath = getEngine()->getContext()->sIlwDir();
 		sPath &= "\\Resources\\Def\\datum.def";
-		FILE* fp = fopen(sPath.scVal(),"r");
+		FILE* fp = fopen(sPath.c_str(),"r");
 		while (fgets(line,1024,fp)){
 			if (*line == 0) break;
 			String sLine(line);
@@ -173,14 +173,14 @@ MolodenskyDatum::MolodenskyDatum(const String& sN, const String& sA)
 	Array<String> parts;
 
 	String sShifts = "";
-	if (GetPrivateProfileString("Datums", sName().scVal(), "", sBuf1, 1024, sPath.scVal())) {
+	if (GetPrivateProfileString("Datums", sName().c_str(), "", sBuf1, 1024, sPath.c_str())) {
 		String line(sBuf1);
 		SplitOn(line, parts, ",");
 		ell = Ellipsoid(parts[0]);
 		if ( parts.iSize() == 2) {
 			sDescription = parts[1];
 		} else if (parts.iSize() == 3) {
-			sDescription = parts[1];
+			sDescription = parts[2];
 		} else if (parts.iSize() > 3 ) {
 			dx = parts[1].rVal();
 			dy = parts[2].rVal();
@@ -191,7 +191,7 @@ MolodenskyDatum::MolodenskyDatum(const String& sN, const String& sA)
 		if ( id != "")
 			identification = id;
 	}    
-	if (sArea.length() > 0 && GetPrivateProfileString(sName().scVal(), sArea.scVal(), "", sBuf2, 1024, sPath.scVal())) {
+	if (sArea.length() > 0 && GetPrivateProfileString(sName().c_str(), sArea.c_str(), "", sBuf2, 1024, sPath.c_str())) {
 		for (s = sBuf2; *s; ++s)
 			if (isspace(*s)) *s = '_';
 		sscanf(sBuf2, "%lf,%lf,%lf,%s", &dx, &dy, &dz, sDesc);

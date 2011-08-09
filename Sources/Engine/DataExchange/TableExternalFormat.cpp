@@ -65,11 +65,11 @@ TableExternalFormat::TableExternalFormat(const FileName& fnObj, TablePtr& p) :
 	int iFormat = iUNDEF;
 	String sUndefs, sDomainTypes, sExternalDomains;
 	int iCol;
-	ObjectInfo::ReadElement(ptr.sSection("TableExternalFormat").scVal(), "SkipLines", ptr.fnObj, iSkipLines);
-	ObjectInfo::ReadElement(ptr.sSection("TableExternalFormat").scVal(), "Delimiter", ptr.fnObj, iFormat);
-	ObjectInfo::ReadElement(ptr.sSection("TableExternalFormat").scVal(), "KeyColumn", ptr.fnObj, sKeyColumn);
-	ObjectInfo::ReadElement(ptr.sSection("TableExternalFormat").scVal(), "NrOfColumns", ptr.fnObj, iCol);
-	ObjectInfo::ReadElement(ptr.sSection("TableExternalFormat").scVal(), "UndefValues", ptr.fnObj, sUndefs);
+	ObjectInfo::ReadElement(ptr.sSection("TableExternalFormat").c_str(), "SkipLines", ptr.fnObj, iSkipLines);
+	ObjectInfo::ReadElement(ptr.sSection("TableExternalFormat").c_str(), "Delimiter", ptr.fnObj, iFormat);
+	ObjectInfo::ReadElement(ptr.sSection("TableExternalFormat").c_str(), "KeyColumn", ptr.fnObj, sKeyColumn);
+	ObjectInfo::ReadElement(ptr.sSection("TableExternalFormat").c_str(), "NrOfColumns", ptr.fnObj, iCol);
+	ObjectInfo::ReadElement(ptr.sSection("TableExternalFormat").c_str(), "UndefValues", ptr.fnObj, sUndefs);
 
 	colInfo.resize(iCol);
 	for (int c = 0; c < iCol; ++c) 
@@ -150,7 +150,7 @@ TableExternalFormat::TableExternalFormat( const FileName& _FileIn, const FileNam
 							sKeyColumn = cli.sColumnName;
 						}
 						else
-							throw ErrorObject(SCVErrDuplicateKeyValues);
+							throw ErrorObject(TR("Key column is not allowed to have duplicate values"));
 					}
 					else
 						colNew(cli.sColumnName, dm);
@@ -193,7 +193,7 @@ void TableExternalFormat::Load()
 	File InputFile(FileIn);
 
 	if ( InputFile.fEof() )
-		throw ErrorObject(String(SDATErrCouldNotFind_S.scVal(), fnData().sFullPath()));
+		throw ErrorObject(String(TR("Could not find %S").c_str(), fnData().sFullPath()));
 
 	int iKeyColumn = iGetKeyColumnIndex();
 	m_pdsTable = 0;
@@ -206,10 +206,10 @@ void TableExternalFormat::Load()
 	int iFileSz = InputFile.iSize();
 	Tranquilizer trq;
 	if (ifFormat == ifDBF)
-		trq.SetTitle(SCVTitleImportDBF);
+		trq.SetTitle(TR("Importing dBase III/IV table"));
 	else
-		trq.SetTitle(SCVTitleImportASCII);
-	trq.SetText(SCVTextReadDBFFile);
+		trq.SetTitle(TR("Import ASCII Table"));
+	trq.SetText(TR("Reading File"));
 
 	iTotalRec = colInfo[0].iNrRecs;
 	ProcessHeader(InputFile);
@@ -377,10 +377,10 @@ void TableExternalFormat::Store()
 	
 	TableStore::Store();
 	// write undef info per column
-	ObjectInfo::WriteElement(ptr.sSection("TableExternalFormat").scVal(),"SkipLines", ptr.fnObj, (long)iSkipLines);
-	ObjectInfo::WriteElement(ptr.sSection("TableExternalFormat").scVal(),"Delimiter", ptr.fnObj, (long)ifFormat);
-	ObjectInfo::WriteElement(ptr.sSection("TableExternalFormat").scVal(),"KeyColumn", ptr.fnObj, sKeyColumn);
-	ObjectInfo::WriteElement(ptr.sSection("TableExternalFormat").scVal(),"NrOfColumns", ptr.fnObj, (long)colInfo.size());
+	ObjectInfo::WriteElement(ptr.sSection("TableExternalFormat").c_str(),"SkipLines", ptr.fnObj, (long)iSkipLines);
+	ObjectInfo::WriteElement(ptr.sSection("TableExternalFormat").c_str(),"Delimiter", ptr.fnObj, (long)ifFormat);
+	ObjectInfo::WriteElement(ptr.sSection("TableExternalFormat").c_str(),"KeyColumn", ptr.fnObj, sKeyColumn);
+	ObjectInfo::WriteElement(ptr.sSection("TableExternalFormat").c_str(),"NrOfColumns", ptr.fnObj, (long)colInfo.size());
 	String sUndefs, sDomainTypes, sExternalDomains;
 	int c = 0;
 	for (; c < colInfo.size() - 1; ++c) 
@@ -389,6 +389,6 @@ void TableExternalFormat::Store()
 	}
 	sUndefs += String("%S", colInfo[c].sUndefValue);
 	
-	ObjectInfo::WriteElement(ptr.sSection("TableExternalFormat").scVal(), "UndefValues", ptr.fnObj, sUndefs);
+	ObjectInfo::WriteElement(ptr.sSection("TableExternalFormat").c_str(), "UndefValues", ptr.fnObj, sUndefs);
 }
 

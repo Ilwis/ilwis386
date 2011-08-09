@@ -116,11 +116,11 @@ public:
   // size_t Write(long iSize, const void huge* p);
 //  size_t Append(long iSize, const void * p);
   // append iSize bytes from p to file
-  size_t Write(const String& s) { return Write(s.length()+1, s.scVal()); }
+  size_t Write(const String& s) { return Write(s.length()+1, s.c_str()); }
   // write String s to file
   // (including terminating 0, so only suitable for binary files)
   size_t WriteLnAscii(const String& s)
-    { return (Write(s.length(),s.scVal()) + Write(2, "\r\n")); }
+    { return (Write(s.length(),s.c_str()) + Write(2, "\r\n")); }
   // Write String s to file and appends cr/lf. Only for ascii files.
 
   void KeepOpen(bool f) {};  // to keep file open all the time (true: increase count, false: decrease count)
@@ -141,7 +141,7 @@ public:
   static void Copy(const FileName& fnSrc, const FileName& fnDest);
   static bool fCopy(const FileName& fnSrc, const FileName& fnDest, Tranquilizer& trq);
   static bool fExist(const FileName& fn)
-   { return fn.fValid() && _access(fn.sFullPath().scVal(), 0)==0 ; }
+   { return fn.fValid() && _access(fn.sFullPath().c_str(), 0)==0 ; }
   static void SetReadOnly(const String& sFileName, bool f);
   static void GetFileNames(const String& sMask, Array<FileName>& afn, const Array<String>* asExt = 0);
   static bool fIllegalName(const String& sName);

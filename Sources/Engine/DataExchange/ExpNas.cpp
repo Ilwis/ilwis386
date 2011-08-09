@@ -342,7 +342,7 @@ void NASExporter::Export()
 	iconvtype ictConv = ictDetermineDomainType(mp);
 
 	if (ictConv == ictNONE)
-		throw ErrorImportExport(String(SCVErrTooManyValues_S.scVal(), m_fnFile.sFile));
+		throw ErrorImportExport(String(TR("Values will not fit in %S file").c_str(), m_fnFile.sFile));
 
 	long iCols = mp->iCols();
 	long iLines = mp->iLines();
@@ -410,7 +410,7 @@ void NASExporter::Export()
 		for (iCol = 0; iCol < iCols ; iCol++)
 		{
 			String sNumVal = GetBufVal(iCol, ictConv);
-			m_filASC->Write(sNumVal.length(), sNumVal.scVal());
+			m_filASC->Write(sNumVal.length(), sNumVal.c_str());
 		}
 		m_filASC->WriteLnAscii(String());
 	}
@@ -428,8 +428,8 @@ void ImpExp::ExportNAS(const FileName& fnObject, const FileName& fnFile)
 {
 	try
 	{
-		trq.SetTitle(SCVTitleExportARCASC);   // the title in the report window
-		trq.SetText(SCVTextProcessing);      // the text in the report window
+		trq.SetTitle(TR("Exporting to Arc/Info ASCII"));   // the title in the report window
+		trq.SetText(TR("Processing..."));      // the text in the report window
 
 		NASExporter NASex(fnObject, fnFile, trq);
 

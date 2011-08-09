@@ -47,19 +47,19 @@
 
 
 static void ModelUnknown() {
-  throw ErrorObject(WhatError(String(SDATErrModelUnknown), errSemiVariogram));
+  throw ErrorObject(WhatError(String(TR("SemiVariogram Model name is not known in ILWIS")), errSemiVariogram));
 }
 static void SemVarParamUndef() {
-  throw ErrorObject(WhatError(String(SDATErrSemVarParamUndef), errSemiVariogram +1));
+  throw ErrorObject(WhatError(String(TR("Semivariogram parameter is undefined")), errSemiVariogram +1));
 }
 static void RangeNotPos() {
-  throw ErrorObject(WhatError(String(SDATErrRangeNotPos), errSemiVariogram +2));
+  throw ErrorObject(WhatError(String(TR("Range of Semivariogram must be positive")), errSemiVariogram +2));
 }
 static void PowerNotPos() {
-  throw ErrorObject(WhatError(String(SDATErrPowerNotPos), errSemiVariogram +3));
+  throw ErrorObject(WhatError(String(TR("Power exponent of Semivariogram must be positive")), errSemiVariogram +3));
 }
 static void PowerAbove10() {
-  throw ErrorObject(WhatError(String(SDATErrPowerAbove10), errSemiVariogram +4));
+  throw ErrorObject(WhatError(String(TR("Power exponent of Semivariogram may not be greater than 10")), errSemiVariogram +4));
 }
 
 
@@ -288,19 +288,19 @@ String SemiVariogram::sModel() const
 {
   switch (svm) {
     case svmSPHERICAL:
-      return STBSvmSpherical;
+      return TR("Spherical Model");
     case svmEXPONENTIAL:
-      return STBSvmExponential;
+      return TR("Exponential Model");
     case svmGAUSSIAN:
-      return STBSvmGaussian;
+      return TR("Gaussian Model");
     case svmWAVE:
-      return STBSvmWave;
+      return TR("Wave Model");
     case svmCIRCULAR:
-      return STBSvmCircular;
+      return TR("Circular Model");
     case svmPOWER:
-      return STBSvmPower;
+      return TR("Power Model");
     case svmRATQUAD:
-      return STBSvmRatQuad;
+      return TR("Rational Quadratic Model");
     default:
       return "Undefined";
   }

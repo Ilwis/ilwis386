@@ -51,10 +51,10 @@ MutexFileName::MutexFileName(const FileName& fn, const String& sExtra)
   for (unsigned int i=0; i <= s.length(); i++)
     if (s[i] == '\\')
   	  s[i] = '/';
- // TRACE3("%5li, %li Wait Mutex Lock   %s\n",  GetTickCount() % 10000, GetCurrentThreadId(), s.scVal());
-  mut = new CMutex(FALSE, s.scVal());
+ // TRACE3("%5li, %li Wait Mutex Lock   %s\n",  GetTickCount() % 10000, GetCurrentThreadId(), s.c_str());
+  mut = new CMutex(FALSE, s.c_str());
 	mut->Lock();
-  //TRACE3("%5li %li Mutex Lock        %s\n",  GetTickCount() % 10000, GetCurrentThreadId(), s.scVal());
+  //TRACE3("%5li %li Mutex Lock        %s\n",  GetTickCount() % 10000, GetCurrentThreadId(), s.c_str());
 	
 }
 
@@ -63,7 +63,7 @@ MutexFileName::~MutexFileName()
   if (0 != mut) 
 	{
 		mut->Unlock();
-  //  TRACE3("%5li %li Mutex Unlock      %s \n",  GetTickCount() % 10000, GetCurrentThreadId(), s.scVal());		
+  //  TRACE3("%5li %li Mutex Unlock      %s \n",  GetTickCount() % 10000, GetCurrentThreadId(), s.c_str());		
     delete mut;
   }
 }

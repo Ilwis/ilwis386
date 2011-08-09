@@ -62,7 +62,7 @@ void ImpExp::ImportASC(File& FileIn, const FileName& fnObject)
 	long iLine = iNr - iFr + 1;
 	int iMpTp = atoi(strtok(0, " \t\v"));
 	if (iLine < 1 || iCol < 1 || iMpTp < 0 || iMpTp > 2)
-		throw ErrorImportExport(SCVErrNotSupported);
+		throw ErrorImportExport(TR("File format not supported"));
 
 	int iScale = atoi(strtok(0, " \t\v"));
 	double rTemp = pow(10.0, iScale);
@@ -84,8 +84,8 @@ void ImpExp::ImportASC(File& FileIn, const FileName& fnObject)
 	int i = 0, j = 0;
 	char *p;
 	rTemp = 1 / pow(10.0, iScale);
-	trq.SetTitle(SCVTitleImportIlwisASC);
-	trq.SetText(SCVTextConverting);
+	trq.SetTitle(TR("Importing from ILWIS ASCII"));
+	trq.SetText(TR("Converting..."));
 	while (!(FileIn.fEof()) && j < iLine) {
 		if (trq.fUpdate(j, iLine))
 			return;

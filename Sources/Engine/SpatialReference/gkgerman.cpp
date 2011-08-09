@@ -87,7 +87,7 @@ long ProjectionGKGermany::iMaxZoneNr() const
 
 String ProjectionGKGermany::sInvalidZone() const
 {
-  return SPRJErrWrongGaussKrugerZone;
+  return TR("Gauss-Krueger zones are numbered 1,2,3");
 }
 
 

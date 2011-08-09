@@ -95,7 +95,7 @@ FuncUserPtr::~FuncUserPtr()
 		String s;
 		ReadElement("FuncUser", "FuncDefFile", s);
 		if ( s != "" && File::fExist(s))
-			DeleteFile(s.scVal());
+			DeleteFile(s.c_str());
 	}
 }
 
@@ -311,7 +311,7 @@ void FuncUserPtr::Rename(const FileName& fnNew)
   // rename script data file
   FileName fn = fnFuncDef;
   fn.sFile = fnNew.sFile;
-  rename(fnFuncDef.sFullName().scVal(), fn.sFullName().scVal());
+  rename(fnFuncDef.sFullName().c_str(), fn.sFullName().c_str());
   fnFuncDef.sFile = fnNew.sFile;
 }
 

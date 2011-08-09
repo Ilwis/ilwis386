@@ -66,7 +66,7 @@ Last change:  WK   10 Jun 98    6:38 pm
 bool ObjectInfo::WriteElement(const char* sSection, const char* sEntry,
 							  const FileName& fn, const char* sValue)
 {
-	if (File::fExist(fn) && _access(fn.sFullPath().scVal(), 2) == -1) // file readonly
+	if (File::fExist(fn) && _access(fn.sFullPath().c_str(), 2) == -1) // file readonly
 		return false;
 
 	//const ElementContainer* ec = dynamic_cast<const ElementContainer*>(&fn);
@@ -92,20 +92,20 @@ bool ObjectInfo::WriteElement(const char* sSection, const char* sEntry,
 		// if sVal is quoted, add extra quotes because the ReadPrivateProfileString removes the quotes
 		if ((sVal[0] == '\'') && (sVal[sVal.length()-1] == '\''))
 			sVal = String("\'%S\'", sVal);
-		return WritePrivateProfileString(sSec.scVal(), sEntry,
-			sVal.scVal(), fn.sFullName().scVal()) == TRUE;
+		return WritePrivateProfileString(sSec.c_str(), sEntry,
+			sVal.c_str(), fn.sFullName().c_str()) == TRUE;
 	}
 	else
-		return WritePrivateProfileString(sSec.scVal(), sEntry,
-		sValue, fn.sFullName().scVal()) == TRUE;
+		return WritePrivateProfileString(sSec.c_str(), sEntry,
+		sValue, fn.sFullName().c_str()) == TRUE;
 }
 
 bool ObjectInfo::WriteElement(const char* sSection, const char* sEntry,
 							  const FileName& fn, const String& sValue)
 {
-	return WriteElement(sSection, sEntry, fn, sValue.scVal());
+	return WriteElement(sSection, sEntry, fn, sValue.c_str());
 	//  return WritePrivateProfileString(sSection, sEntry,
-	//                                   sValue.scVal(), fn.sFullName().scVal()) == TRUE;
+	//                                   sValue.c_str(), fn.sFullName().c_str()) == TRUE;
 }
 
 bool ObjectInfo::WriteElement(const char* sSection, const char* sEntry,
@@ -135,10 +135,10 @@ bool ObjectInfo::WriteElement(const char* sSection, const char* sEntry,
 {
 	if ( fValue)
 		return WriteElement(sSection, sEntry, fn, "Yes");
-	//     return WritePrivateProfileString(sSection, sEntry, "Yes", fn.sFullName().scVal())==TRUE;
+	//     return WritePrivateProfileString(sSection, sEntry, "Yes", fn.sFullName().c_str())==TRUE;
 	else
 		return WriteElement(sSection, sEntry, fn, "No");
-	//     return WritePrivateProfileString(sSection, sEntry, "No", fn.sFullName().scVal())==TRUE;
+	//     return WritePrivateProfileString(sSection, sEntry, "No", fn.sFullName().c_str())==TRUE;
 }
 
 bool ObjectInfo::WriteElement(const char* sSection, const char* sEntry,
@@ -242,7 +242,7 @@ bool ObjectInfo::WriteElement(const char* sSection, const char* sEntry,
 							  const FileName& fnObj, Color col)
 {
 	String sValue("%lx", (long)col);
-	return WriteElement(sSection, sEntry, fnObj, sValue.scVal());
+	return WriteElement(sSection, sEntry, fnObj, sValue.c_str());
 }
 
 bool ObjectInfo::WriteElement(const char* sSection, const char* sEntry,
@@ -312,17 +312,17 @@ bool ObjectInfo::WriteElement(const char* sSection, const char* sEntry,
 	String sEnt = sEntry;
 	sEnt &= "_Size";
 	if ((mat.iRows() == 0) || (mat.iCols() == 0)) {
-		f = WriteElement(sSection, sEnt.scVal(), fnObj, 0L);
+		f = WriteElement(sSection, sEnt.c_str(), fnObj, 0L);
 		return f;
 	}   
-	f = WriteElement(sSection, sEnt.scVal(), fnObj, String("%i %i", mat.iRows(), mat.iCols()));
+	f = WriteElement(sSection, sEnt.c_str(), fnObj, String("%i %i", mat.iRows(), mat.iCols()));
 	for (int i=0; i < mat.iRows(); i++) {
 		sEnt = sEntry;
 		sEnt &= String("_Row%i", i);
 		String sRow;
 		for (int j=0; j < mat.iCols(); j++ )
 			sRow &= String("%f ", mat(i, j));
-		f = WriteElement(sSection, sEnt.scVal(), fnObj, sRow);
+		f = WriteElement(sSection, sEnt.c_str(), fnObj, sRow);
 	}
 	return f;
 }
@@ -333,14 +333,14 @@ bool ObjectInfo::WriteElement(const char* sSection, const char* sEntry,
 	bool f;
 	String sEnt = sEntry;
 	sEnt &= "_Size";
-	f = WriteElement(sSection, sEnt.scVal(), fnObj, String("%i %i", mat.iRows(), mat.iCols()));
+	f = WriteElement(sSection, sEnt.c_str(), fnObj, String("%i %i", mat.iRows(), mat.iCols()));
 	for (int i=0; i < mat.iRows(); i++) {
 		sEnt = sEntry;
 		sEnt &= String("_Row%i", i);
 		String sRow;
 		for (int j=0; j < mat.iCols(); j++ )
 			sRow &= String("%i ", mat(i, j));
-		f = WriteElement(sSection, sEnt.scVal(), fnObj, sRow);
+		f = WriteElement(sSection, sEnt.c_str(), fnObj, sRow);
 	}
 	return f;
 }
@@ -391,16 +391,16 @@ bool ObjectInfo::WriteElement(const char* sSection, const char* sEntry, const Fi
 	char* sMem = new char[iLen];
 	memobj.Read(sMem, iLen);
 	String sEntryLen("%sLen", sEntry);
-	ObjectInfo::WriteElement(sSection, sEntryLen.scVal(), fnObj, iLen);
+	ObjectInfo::WriteElement(sSection, sEntryLen.c_str(), fnObj, iLen);
 	return ObjectInfo::WriteElement(sSection, sEntry, fnObj, sMem, iLen);
 }
 
 void ObjectInfo::RemoveSection(const FileName& fn, const String& sSection)
 {
-	WritePrivateProfileString(sSection.scVal(), NULL, NULL, fn.sFullPath().scVal() );
+	WritePrivateProfileString(sSection.c_str(), NULL, NULL, fn.sFullPath().c_str() );
 }
 
 void ObjectInfo::RemoveKey(const FileName& fn, const String& sSection, const String& sKey)
 {
-	WritePrivateProfileString(sSection.scVal(), sKey.scVal(), NULL, fn.sFullPath().scVal() );
+	WritePrivateProfileString(sSection.c_str(), sKey.c_str(), NULL, fn.sFullPath().c_str() );
 }

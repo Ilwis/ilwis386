@@ -70,7 +70,7 @@ struct DATEXPORT lstring15  // compatible with ILWIS 1.4 LString(15)
 		memset(data, 0, 16);
     len() = s.length();
     if (len() > 15) len() = 15;
-    memcpy(&data[1],(const void *)(s.scVal()),len());
+    memcpy(&data[1],(const void *)(s.c_str()),len());
   }
   lstring15(const char* s) {
 		memset(data, 0, 16); 

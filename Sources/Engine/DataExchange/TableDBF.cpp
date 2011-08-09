@@ -142,7 +142,7 @@ TableDBF::TableDBF(const FileName& fnObj, TablePtr& p)
 	Header hdrDBF;
 	File InputFile(fnData());
 	if ( InputFile.fEof() )
-		throw ErrorObject(String(SDATErrCouldNotFind_S.scVal(), fnData().sFullPath()));
+		throw ErrorObject(String(TR("Could not find %S").c_str(), fnData().sFullPath()));
 
 	InputFile.Read(sizeof(hdrDBF ), &hdrDBF);
 
@@ -206,7 +206,7 @@ void TableDBF::Scan(const FileName &fnDBF, vector<ClmInfo>& columnInfo, bool fFu
 	Header hdrDBF;
 	File InputFile(fnDBF);
 	if ( InputFile.fEof() )
-		throw ErrorObject(String(SDATErrCouldNotFind_S.scVal(), fnDBF.sFullPath()));
+		throw ErrorObject(String(TR("Could not find %S").c_str(), fnDBF.sFullPath()));
 
 	InputFile.Seek(0);
 	InputFile.Read(sizeof(hdrDBF ), &hdrDBF);
@@ -218,18 +218,18 @@ void TableDBF::Scan(const FileName &fnDBF, vector<ClmInfo>& columnInfo, bool fFu
 	long iCalcSize = iHeaderSize + iNrRecords * iRecordSize;
 	// Check the file size 
 	if (iCalcSize <= 0)
-		throw ErrorObject(SCVImpDBFheaderincorrect);
+		throw ErrorObject(TR("DBF file header information is incorrect"));
 	// Check the file size against what is expected:
 	if (iCalcSize > InputFile.iSize())
-		throw ErrorObject(SCVImpDBFFileTooSmall);
+		throw ErrorObject(TR("DBF file is smaller than indicated by the number of records"));
 	// Check the record size, must be smaller than 32768
 	if (iRecordSize > 32767)
-		throw ErrorObject(SCVImpRecordsTooLarge);
+		throw ErrorObject(TR("Record size is larger than allowed"));
 	// The number of records and also the number of fields should be larger than 0
 	if (iNrFields <= 0)
-		throw ErrorObject(SCVImpFieldCountIncorrect);
+		throw ErrorObject(TR("The number of fields must be larger than 0"));
 	if (iNrRecords <= 0)
-		throw ErrorObject(SCVImpRecordCountIncorrect);
+		throw ErrorObject(TR("The number of records must be larger than 0"));
 
 	if (!fUseColInfo)
 	{
@@ -456,11 +456,11 @@ void TableDBF::Store()
 	TableExternalFormat::Store();
 	if ( fnData().sExt != ".tb#" ) 
 	{
-		ObjectInfo::WriteElement(ptr.sSection("TableStore").scVal(),"Type", ptr.fnObj, "TableDBF");
+		ObjectInfo::WriteElement(ptr.sSection("TableStore").c_str(),"Type", ptr.fnObj, "TableDBF");
 		StoreAsDBF();
 	}
 	else
-		ObjectInfo::WriteElement(ptr.sSection("TableStore").scVal(),"Type", ptr.fnObj, "TableBinary");
+		ObjectInfo::WriteElement(ptr.sSection("TableStore").c_str(),"Type", ptr.fnObj, "TableBinary");
 }
 
 void TableDBF::StoreAsDBF()
@@ -571,7 +571,7 @@ void TableDBF::WriteDescriptorField(File* Out, String sName, const Domain& dm, c
 		memset(&desc, 0, sizeof(Descriptor));
 		char buf[12];
 		memset(buf, 0, 12);
-    strcpy(buf, sName.sLeft(11).scVal());
+    strcpy(buf, sName.sLeft(11).c_str());
 		memcpy(desc.cNameField, buf, 11);
 
 		desc.bFieldSize = dm->iWidth();

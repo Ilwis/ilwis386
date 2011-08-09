@@ -69,7 +69,7 @@ void ProjectionLambConfConic::Prepare()
     rPhi1 = rTemp;
   }
   if ( abs(rPhi1 + rPhi2) < EPS10 )
-     throw  ErrorObject(SPRJErrNoConeDefined, 2211);
+     throw  ErrorObject(TR("Standard Parallels should define a cone, not a cylinder"), 2211);
   fSecant = abs(rPhi1 - rPhi2) >= EPS10;
   rN = rSinPhi1;                   // Cone constant of cone being tangent at rPhi1
   if (!ell.fSpherical()) {         // Ellipsoidal case

@@ -391,7 +391,7 @@ CalcVarConstReal::CalcVarConstReal(double rVal, const String& sVal)
 { 
   // sVal is needed to determine step size
   // mathematical method causes problems due to rounding
-  const char *p = strchr(sVal.scVal(), '.');
+  const char *p = strchr(sVal.c_str(), '.');
   if (0 != p) { // check numbers after decimal point, ignore trailing zeroes
     char* pEnd = const_cast<String &>(sVal).sVal()+sVal.length()-1;
     // skip trailing zeroes

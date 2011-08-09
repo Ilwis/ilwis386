@@ -186,14 +186,14 @@ void TableToSDF::SetupRecord(long iRec) {
 }
 
 void TableToSDF::WriteRecord() {
-  CharToOem(sRecord.scVal(), pcOem);
+  CharToOem(sRecord.c_str(), pcOem);
   filOut->Write(sRecord.length(), pcOem);
   filOut->Write(2, "\r\n");
 }
 
 void ImpExp::ExportSDF(const FileName& fnObject, const FileName& fnFile) {
-  trq.SetTitle(SCVTitleExportSDF);
-  trq.SetText(SCVTextProcessing);
+  trq.SetTitle(TR("Export table to dBase SDF"));
+  trq.SetText(TR("Processing..."));
   TableToSDF SDF(fnObject, fnFile);
   for (long iRec = SDF.iMinRec; iRec <= SDF.iMaxRec; iRec++ ) {
     SDF.SetupRecord(iRec);

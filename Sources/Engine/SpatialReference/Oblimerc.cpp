@@ -80,11 +80,11 @@ void ProjectionObliqueMercator::Prepare()
     lamc = lam0; //pj_param( params, "rlonc").f;
     alpha = rAzimCLine; //pj_param( params, "ralpha").f;
     if (abs( phi0) <= TOL)
-      throw  ErrorObject(SDATErrCentralLatEqualZero, 2211);
+      throw  ErrorObject(TR("Central Latitude should not be 0"), 2211);
     if (abs(abs( phi0) - M_PI_2) <= TOL)
-      throw  ErrorObject(SDATErrCentralLatEqual90, 2211);
+      throw  ErrorObject(TR("Central Latitude should not be +/-90"), 2211);
     if (abs(abs( alpha) - M_PI_2) <= TOL)
-      throw  ErrorObject(SDATErrAzimuthEqual90, 2211);
+      throw  ErrorObject(TR("Azimuth should not be +/-90"), 2211);
 	///E_ERROR(-32);
   }     /*
   else

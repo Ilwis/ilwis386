@@ -51,6 +51,8 @@
 static char* _pcCharsToBeQuoted = "`~!@#$%^&()-+=[]{};, .'";
 static char* _pcCharsNotAllowedOutsideQuotes = "`~!@#$%^&()-+=[]{};, \\/:*?\"<>"; 
 
+
+
 //const String sUNDEF = String("?");
 
 char cDecimalPoint()
@@ -77,7 +79,7 @@ String::String(const string& s) :
 {}
 
 String::String(const String& s) :
-        string(s.scVal())
+        string(s.c_str())
 {}
 
 String::String(const CString& s) :
@@ -163,7 +165,7 @@ double String::rVal() const
   }
   if (p == s.p) return *this;
 //  len = s.length();
-  len = strlen(s.scVal());
+  len = strlen(s.c_str());
   if (len >= block) {
     if (p) delete [] p;
     p = new char[block = s.block];
@@ -306,6 +308,7 @@ static void  doexponent(char * *ps,int exp);
 static char * dosign(int,int);
 static char * trim0(char *s);
 
+//#define NUMARGS(...)  (sizeof((int[]){__VA_ARGS__})/sizeof(int))
 
 void String::VarFormat(const char *format,va_list pargs)
 { int nout;        // # of chars sent to func()
@@ -329,6 +332,7 @@ void String::VarFormat(const char *format,va_list pargs)
   String str;
 
   nout = 0;
+ 
   while ((c = *format++) != 0) {   // while not end of format string
     if (c != '%') {     // not a format control character
       (*this) &= c;

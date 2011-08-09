@@ -77,8 +77,8 @@ void AtlasBNAExporter::WriteSegment(const ILWIS::Segment* seg, const Domain& dm)
 
 void ImpExp::ExportBNA(const FileName& fnObject, const FileName& fnFile) {
   try {
-    trq.SetTitle(SCVTitleExportBNA);
-    trq.SetText(SCVTextProcessing);
+    trq.SetTitle(TR("Exporting to Atlas BNA"));
+    trq.SetText(TR("Processing..."));
     SegmentMap sm(fnObject);
     long iSegCnt = 0, iNrSegs = sm->iFeatures();
     AtlasBNAExporter abe(fnFile);

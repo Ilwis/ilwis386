@@ -130,9 +130,9 @@ PointMap::PointMap(const String& sExpression, const String& sPath)
 	// Now we're (only) sure that p points to the last dot in the filename
   if (p)
     *p = 0;
-  const String sFile = sExpr.scVal();
+  const String sFile = sExpr.c_str();
   FileName fn(sFile, ".mpp", true);
-  if (0 == strchr(sFile.scVal(), ':')) // no path set
+  if (0 == strchr(sFile.c_str(), ':')) // no path set
     fn.Dir(sPath); 
   MutexFileName mut(fn);
   if (p && (0 != _strcmpi(p+1, "mpp"))) {

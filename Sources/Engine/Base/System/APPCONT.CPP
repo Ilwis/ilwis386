@@ -86,7 +86,7 @@ IlwisAppContext::IlwisAppContext(const String& sProg, const String& sCmdLine)
   _svl->Add(new Parm("IlwTmpDir", sTmp)); //"c:\\ilwis\\temp"));
   sTmp = "";
   _svl->Add(new Parm("Temp", sTmp));
-  char sLang[5];//, sLng[5];
+
   _svl->Add(new Parm("SysProgName", String("ilwis")));
   _svl->Add(new Parm("verbose", true));
   _svl->Add(new Parm("timer", false));
@@ -97,7 +97,7 @@ IlwisAppContext::IlwisAppContext(const String& sProg, const String& sCmdLine)
      GetCurrentDirectory(_MAX_DIR, sDir);
      strcpy(_sCurDir, sDir);
    }
-  _sm = new StringManager();
+  _sm = new StringManager(sIlwDir(), languageExtension);
   commHandler = new CommandHandler();
 }
 

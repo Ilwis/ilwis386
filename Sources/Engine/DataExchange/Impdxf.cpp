@@ -198,24 +198,24 @@ void AutoCadDXF::MarkErase(BaseMap& bm, bool fRemove) {
 void AutoCadDXF::ReadGroup() {
   GetNextLine();
   if (_dg.sValue.length() == 0)
-    FormatProblem(String(SCVTextInLine_SI.scVal(), fileDXF->sName().scVal(), iLinesRead()));
+    FormatProblem(String(TR("%S, in line %ld").c_str(), fileDXF->sName().c_str(), iLinesRead()));
   _dg.iCode = iGroupValue();
   GetNextLine();
 }
 
 double AutoCadDXF::rGroupValue() {
   double r;
-  short iRes = sscanf(_dg.sValue.scVal(), "%lf", &r);
+  short iRes = sscanf(_dg.sValue.c_str(), "%lf", &r);
   if (0 == iRes)
-    FormatProblem(String(SCVTextInLine_SI.scVal(), fileDXF->sName().scVal(), iLinesRead()));
+    FormatProblem(String(TR("%S, in line %ld").c_str(), fileDXF->sName().c_str(), iLinesRead()));
   return r;
 }
 
 long AutoCadDXF::iGroupValue() {
   long i;
-  short iRes = sscanf(_dg.sValue.scVal(), "%ld", &i);
+  short iRes = sscanf(_dg.sValue.c_str(), "%ld", &i);
   if (0 == iRes)
-    FormatProblem(String(SCVTextInLine_SI.scVal(), fileDXF->sName().scVal(), iLinesRead()));
+    FormatProblem(String(TR("%S, in line %ld").c_str(), fileDXF->sName().c_str(), iLinesRead()));
   return i;
 }
 
@@ -253,7 +253,7 @@ bool AutoCadDXF::fIsDXFBinary() {
   The return value of true indicates a valid cbVect
 */
 bool AutoCadDXF::fScanHeader(CoordSystem& csVect, CoordBounds& cbVect) {
-  sReason = SCVErrWrongBoundary;
+  sReason = TR("Error in boundary coordinates");
   Coord cMin, cMax;
   bool fBoundsFound = false;
   bool fLow, fHigh;
@@ -664,7 +664,7 @@ void AutoCadDXF::UpdateCodes(const String& sCode, Array<String>& asDXFCodes, boo
     double rVal = sCode.rVal();
     fValues = fValues && (rVal != rUNDEF);
     if (fValues) {
-      fDecimals = fDecimals || (strchr(sCode.scVal(), '.') != 0);    // detect floats
+      fDecimals = fDecimals || (strchr(sCode.c_str(), '.') != 0);    // detect floats
       if (fFirstVal) {
         fFirstVal = false;
         _rMin = _rMax = rVal;
@@ -820,7 +820,7 @@ bool AutoCadDXF::fScanSection(CoordBounds& cbVect, CoordSystem& csVect,
 */
 bool AutoCadDXF::fScanDXFInfo(CoordBounds& cbVect, CoordSystem& csVect, 
                               Array<String>& asDXFCodes, RangeReal& rrHeight) {
-  _trq->SetText(SCVTextDXFImportScan);
+  _trq->SetText(TR("Scanning DXF file ..."));
   long iFileSize = fileDXF->iSize();
   String sCode;
   fileDXF->Seek(0);   // back to start of file
@@ -1524,14 +1524,14 @@ void AutoCadDXF::AddBulge(const Coord& cStart, const Coord& cEnd, double rBulge)
 }
 
 static int iCompCodes(const String* s1, const String* s2) {
-  return _stricmp((*s1).scVal(), (*s2).scVal());
+  return _stricmp((*s1).c_str(), (*s2).c_str());
 }
 
 bool AutoCadDXF::SetupAllMaps(const FileName& fnObject, const FileName& fnFile) {
   if (fIsDXFBinary()) 
 	{
-	  getEngine()->Message(SCVErrNoBinaryDXFAllow.scVal(),
-                                 SCVTitleImportFromDXF.scVal(), 
+	  getEngine()->Message(TR("Binary DXF is not supported").c_str(),
+                                 TR("Importing from AutoCAD DXF").c_str(), 
                                  MB_OK | MB_ICONEXCLAMATION);
     return false;
   }
@@ -1579,7 +1579,7 @@ bool AutoCadDXF::SetupAllMaps(const FileName& fnObject, const FileName& fnFile) 
     vr = ValueRangeReal(rrHeight.rLo(), rrHeight.rHi(), 0.1);
   }
   else {
-    _trq->SetText(SCVTextNewDomain);
+    _trq->SetText(TR("Create new domain"));
     if (asDXFCodes.iSize() == 0) {
       fUseID = true;
     }
@@ -1605,8 +1605,8 @@ bool AutoCadDXF::SetupAllMaps(const FileName& fnObject, const FileName& fnFile) 
       dvs = DomainValueRangeStruct(dm, ValueRange());
     }
     SegmentMap sm(FileName(fnObject,".mps"), csDXF, cbDXF, dvs);
-    sm->sDescription  = SCVTextSegmentMap;
-    sm->sDescription &= SCVText_ImportedFrom_;
+    sm->sDescription  = TR("Segment Map");
+    sm->sDescription &= TR("imported from ");
     sm->sDescription &= sDXF;
     sm->Store();
 	col->Add(sm);
@@ -1619,8 +1619,8 @@ bool AutoCadDXF::SetupAllMaps(const FileName& fnObject, const FileName& fnFile) 
       dvs = DomainValueRangeStruct(dm, ValueRange());
     }
     PolygonMap pm(FileName(fnObject,".mpa"), csDXF, cbDXF, dvs);
-    pm->sDescription  = SCVTextPolygonMap;
-    pm->sDescription &= SCVText_ImportedFrom_;
+    pm->sDescription  = TR("Polygon Map");
+    pm->sDescription &= TR("imported from ");
     pm->sDescription &= sDXF;
 	pm->TopologicalMap(false);
     pm->Store();
@@ -1634,8 +1634,8 @@ bool AutoCadDXF::SetupAllMaps(const FileName& fnObject, const FileName& fnFile) 
       dvs = DomainValueRangeStruct(dm, ValueRange());
     }
     PointMap pt(FileName(fnObject,".mpp"), csDXF, cbDXF, dvs);
-    pt->sDescription  = SCVTextPointMap;
-    pt->sDescription &= SCVText_ImportedFrom_;
+    pt->sDescription  = TR("Point Map");
+    pt->sDescription &= TR("imported from ");
     pt->sDescription &= sDXF;
     pt->Store();
 	col->Add(pt);
@@ -1655,7 +1655,7 @@ void AutoCadDXF::SetAllMaps(SegmentMap& sm, PolygonMap& pm, PointMap& pt) {
 
 void ImpExp::ImportDXF(const FileName& fnFile, const FileName& fnObject ) {
   try {
-    trq.SetTitle(SCVTitleImportFromDXF);
+    trq.SetTitle(TR("Importing from AutoCAD DXF"));
     trq.fUpdate(0);                           // make the reportwindow fill out immediately
     AutoCadDXF dxf(fnFile, &trq);
     if (!dxf.SetupAllMaps(fnObject, fnFile))  // create the segment (& polygon) map
@@ -1670,15 +1670,15 @@ void ImpExp::ImportDXF(const FileName& fnFile, const FileName& fnObject ) {
     if (dxf.iPoints > 0)
       pt = PointMap(FileName(fnObject,".mpp"));
     if (dxf.iSegments + dxf.iPolygons + dxf.iPoints == 0) {
-      getEngine()->Message(SCVWarnNoElements.scVal(),
-                    SCVTitleImportFromDXF.scVal(),
+      getEngine()->Message(TR("No elements recognized, no ILWIS maps will be created").c_str(),
+                    TR("Importing from AutoCAD DXF").c_str(),
                     MB_OK | MB_ICONEXCLAMATION);
       UserAbort();
     }
-    dxf.sReason = SCVErrCreateVector;
+    dxf.sReason = TR("Can not create vector map");
     if (dxf.iSegments > 0) {
       if (sm->fDependent()) {
-        dxf.sReason &= String(SCVTextInLine_l.scVal(), dxf.iLinesRead());
+        dxf.sReason &= String(TR(", in line %ld").c_str(), dxf.iLinesRead());
         ErrorObject(dxf.sReason, 6500).Show();
         return;
       }
@@ -1687,7 +1687,7 @@ void ImpExp::ImportDXF(const FileName& fnFile, const FileName& fnObject ) {
     RowColBuf rcb;
     rcb.Size(1000);
     CoordBuf cbSegment(1000);
-    dxf.sReason = SCVErrIllegalDXF;
+    dxf.sReason = TR("Illegal DXF format");
     if (dxf.iSegments > 0) {
       sm->Updated();
       dxf.MarkErase(sm, true);
@@ -1700,7 +1700,7 @@ void ImpExp::ImportDXF(const FileName& fnFile, const FileName& fnObject ) {
       pt->Updated();
       dxf.MarkErase(pt, true);
     }
-    trq.SetText(SCVTextProcessing);
+    trq.SetText(TR("Processing..."));
     do {
       dxf.ReadGroup();
       if (dxf.iGroupCode() != 0)

@@ -31,14 +31,14 @@ void ModuleMap::addModules() {
 	CFileFind finder;
 
 	String path = getEngine()->getContext()->sIlwDir() + "\\Extensions\\*.zip";
-	BOOL fFound = finder.FindFile(path.scVal());
+	BOOL fFound = finder.FindFile(path.c_str());
 	while(fFound) {
 		fFound = finder.FindNextFile();
 		if (!finder.IsDirectory())
 		{
 			FileName fnNew (finder.GetFilePath());
 			unzip(fnNew);
-			_unlink(fnNew.sFullPath().scVal());
+			_unlink(fnNew.sFullPath().c_str());
 		}
 	}   
 
@@ -54,7 +54,7 @@ void ModuleMap::addFolder(const String& dir, int depth) {
 		return;
 	CFileFind finder;
 	String pattern = dir + "\\*.*";
-	BOOL fFound = finder.FindFile(pattern.scVal());
+	BOOL fFound = finder.FindFile(pattern.c_str());
 	while(fFound) {
 		fFound = finder.FindNextFile();
 		if (!finder.IsDirectory())
@@ -83,7 +83,7 @@ void ModuleMap::addModule(const FileName& fnModule, bool retry) {
 		sName = sName.toLower();
 		if ( sName == "cygpng12.dll" || sName == "cygz.dll") // these two are problematic and will be skipped, not ILWIS anyway
 			return;
-		HMODULE hm = LoadLibrary(fnModule.sFullPath().scVal());
+		HMODULE hm = LoadLibrary(fnModule.sFullPath().c_str());
 		if ( hm != NULL ) {
 			//AppInfo f = (AppInfo)GetProcAddress(hm, "getCommandInfo");
 			ModuleInfo m = (ModuleInfo)GetProcAddress(hm, "getModuleInfo");

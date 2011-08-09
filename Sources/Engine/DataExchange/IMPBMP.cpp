@@ -76,21 +76,21 @@ void ImpExp::ImportBMP(File& FileIn, const FileName& fnObject)
 #pragma pack()
 
   if ( (sizeof FileHd) != FileIn.Read(sizeof FileHd, &FileHd) )
-    throw ErrorImportExport(SCVErrReading);
+    throw ErrorImportExport(TR("File Reading Error"));
 
   if (FileHd.FileHd == 0)
-    throw ErrorImportExport(SCVErrTooOldVersion);
+    throw ErrorImportExport(TR("Bitmap versions 1.x and 2.x are not supported"));
 
   else if ( FileHd.FileHd != 0x4d42 )  // 'MB'
-    throw ErrorImportExport(SCVErrNoBitmap);
+    throw ErrorImportExport(TR("Not a Microsoft Windows Bitmap"));
 
   if ( (sizeof InfoHd) != FileIn.Read(sizeof InfoHd, &InfoHd) )
-    throw ErrorImportExport(SCVErrReading);
+    throw ErrorImportExport(TR("File Reading Error"));
 
   if (InfoHd.biCom != BI_RGB) // only uncompressed allowed
-    throw ErrorImportExport(SCVErrNoCompresAllow);
+    throw ErrorImportExport(TR("Compressed Bitmap is not supported"));
 
-  trq.SetTitle(SCVTitleImportBMP);
+  trq.SetTitle(TR("Importing from Windows Bitmap"));
   int iNrRGB,iNrByte;
   Domain dm;
   switch (InfoHd.biBitCount) {
@@ -103,7 +103,7 @@ void ImpExp::ImportBMP(File& FileIn, const FileName& fnObject)
             iNrByte=((InfoHd.biWidth*2+2)/4)*4;break;
     case 24:iNrRGB=0;dm=Domain("color");
             iNrByte=((InfoHd.biWidth*3+3)/4)*4;break;
-    default:throw ErrorImportExport(SCVErrTooManyPlanes);
+    default:throw ErrorImportExport(TR("Only 1, 4, 8, 16 or 24 bit format are supported"));
   }
   long iLine=abs(InfoHd.biHeight);
 	bool fUpDirection = InfoHd.biHeight > 0; // true: bottom to top; false: top to bottom
@@ -115,7 +115,7 @@ void ImpExp::ImportBMP(File& FileIn, const FileName& fnObject)
       iNrRGB=InfoHd.biClru;
     for ( int i=0;i<iNrRGB;i++) {
       if ( 4 != FileIn.Read(4,&RGB) )
-        throw ErrorImportExport(SCVErrReading);
+        throw ErrorImportExport(TR("File Reading Error"));
       prc->PutColor(i, Color( RGB.ucRd, RGB.ucGr, RGB.ucBl ) );
     }
     dm->SetRepresentation(rp);
@@ -130,18 +130,18 @@ void ImpExp::ImportBMP(File& FileIn, const FileName& fnObject)
   ByteBuf bbuf(3 * (InfoHd.biWidth + 31));
   LongBuf colorbuf(InfoHd.biWidth);
 
-  trq.SetText(SCVTextConverting);
+  trq.SetText(TR("Converting..."));
   for (int i=0;i<iLine;i++) {
     if ( trq.fUpdate( i, iLine ) )
       return;
     if ( iNrByte != FileIn.Read(iNrByte,bbuf.buf() ) )
       if ( i==0 )
-        throw ErrorImportExport(SCVErrReading);
+        throw ErrorImportExport(TR("File Reading Error"));
       else {
         grOut=GeoRef( RowCol( (long)i, (long)InfoHd.biWidth ) );
         mpOut->SetGeoRef( grOut );
-			  getEngine()->Message(SCVErrHeadSizeMismatch.scVal(),
-                                 SCVTitleImportBMP.scVal(), 
+			  getEngine()->Message(TR("Solving File size mismatch in header.").c_str(),
+                                 TR("Importing from Windows Bitmap").c_str(), 
                                  MB_OK | MB_ICONEXCLAMATION);
         break;
       }

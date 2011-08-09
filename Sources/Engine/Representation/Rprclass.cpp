@@ -367,7 +367,7 @@ void RepresentationClass::GetDataFiles(Array<FileName>& afnDat, Array<String>* a
 {
 	IlwisObjectPtr::GetDataFiles(afnDat, asSection, asEntry);
 	FileName fnDat;
-	ReadElement(String("%STableStore", tbl->sSectionPrefix).scVal(), "Data", fnDat);
+	ReadElement(String("%STableStore", tbl->sSectionPrefix).c_str(), "Data", fnDat);
 	ObjectInfo::Add(afnDat, fnDat, fnObj.sPath());
 	if (asSection != 0) {
 		(*asSection) &= String("%STableStore", tbl->sSectionPrefix);

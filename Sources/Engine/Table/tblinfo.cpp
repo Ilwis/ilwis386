@@ -73,7 +73,7 @@ void TableInfo::Read(const FileName& fnTbl)
 		_dminf = DomainInfo(dom);
 	}
 	ObjectInfo::ReadElement("Table", "Time", _fnTbl, _objtime);
-	_fReadOnly = _access(fnTbl.sFullPath().scVal(), 2)==-1;
+	_fReadOnly = _access(fnTbl.sFullPath().c_str(), 2)==-1;
 
 	ObjectInfo::ReadElement("Table", "Type", _fnTbl, s);
 	_fDependent = s != "TableStore";
@@ -84,7 +84,7 @@ void TableInfo::Read(const FileName& fnTbl)
 	for (long i=0; i < _iCols; ++i)
 	{
 		String sCol;
-		ObjectInfo::ReadElement("TableStore", String("Col%li", i).scVal(), _fnTbl, sCol);
+		ObjectInfo::ReadElement("TableStore", String("Col%li", i).c_str(), _fnTbl, sCol);
 		aci &= ColumnInfo(_fnTbl, sCol.sUnQuote());
 	}
 	if (!fDependent())
@@ -184,10 +184,10 @@ void TableInfo::DependencyNames(Array<String>& asNames)
 bool TableInfo::fExistCol(const FileName& fnTbl, const String& sSectionPrefix, const String& sColName)
 {
   long iCols = 0;
-  ObjectInfo::ReadElement(String("%STable", sSectionPrefix).scVal(), "Columns", fnTbl, iCols);
+  ObjectInfo::ReadElement(String("%STable", sSectionPrefix).c_str(), "Columns", fnTbl, iCols);
   for (long i=0; i < iCols; ++i) {
     String sCol;
-    ObjectInfo::ReadElement(String("%STableStore", sSectionPrefix).scVal(), String("Col%li", i).scVal(), fnTbl, sCol);
+    ObjectInfo::ReadElement(String("%STableStore", sSectionPrefix).c_str(), String("Col%li", i).c_str(), fnTbl, sCol);
 		sCol = sCol.sUnQuote();
     if (fCIStrEqual(sCol, sColName))
       return true;

@@ -64,42 +64,42 @@ void ZValueMaker::setTable(const Table& tbl, const String& colName) {
 
 void ZValueMaker::store(const FileName& fnView, const String& section) {
 	if ( table.fValid())
-		ObjectInfo::WriteElement(section.scVal(),"Table",fnView, table);
+		ObjectInfo::WriteElement(section.c_str(),"Table",fnView, table);
 	if ( columns.size() > 0)
-		ObjectInfo::WriteElement(section.scVal(),"Column",fnView, columns.at(0));
+		ObjectInfo::WriteElement(section.c_str(),"Column",fnView, columns.at(0));
 	if ( spatialsourcemap.fValid()) 
-		ObjectInfo::WriteElement(section.scVal(),"Spatialsourcemap",fnView, spatialsourcemap);
+		ObjectInfo::WriteElement(section.c_str(),"Spatialsourcemap",fnView, spatialsourcemap);
 	if ( datasourcemap.fValid())
-		ObjectInfo::WriteElement(section.scVal(),"Datasourcemap",fnView, datasourcemap);
+		ObjectInfo::WriteElement(section.c_str(),"Datasourcemap",fnView, datasourcemap);
 	if ( range.fValid())
-		ObjectInfo::WriteElement(section.scVal(),"Range",fnView, range);
-	ObjectInfo::WriteElement(section.scVal(),"Self",fnView, self);
-	ObjectInfo::WriteElement(section.scVal(),"Zscale",fnView, zscale);
-	ObjectInfo::WriteElement(section.scVal(),"Offset",fnView, offset);
+		ObjectInfo::WriteElement(section.c_str(),"Range",fnView, range);
+	ObjectInfo::WriteElement(section.c_str(),"Self",fnView, self);
+	ObjectInfo::WriteElement(section.c_str(),"Zscale",fnView, zscale);
+	ObjectInfo::WriteElement(section.c_str(),"Offset",fnView, offset);
 }
 
 void ZValueMaker::load(const FileName& fnView, const String& section) {
 	String sCol;
-	ObjectInfo::ReadElement(section.scVal(),"Column",fnView, sCol);
+	ObjectInfo::ReadElement(section.c_str(),"Column",fnView, sCol);
 	if ( sCol != "") {
-		ObjectInfo::ReadElement(section.scVal(),"Table",fnView, table);
+		ObjectInfo::ReadElement(section.c_str(),"Table",fnView, table);
 		if ( table.fValid()) {
 			setTable(table, sCol);
 		}
 	}
 	FileName fn;
-	ObjectInfo::ReadElement(section.scVal(),"Spatialsourcemap",fnView, fn);
+	ObjectInfo::ReadElement(section.c_str(),"Spatialsourcemap",fnView, fn);
 	if ( fn.fValid()){
 		setSpatialSource(BaseMap(fn),associatedDrawer->getRootDrawer()->getMapCoordBounds());
 	}
-	ObjectInfo::ReadElement(section.scVal(),"Datasourcemap",fnView, fn);
+	ObjectInfo::ReadElement(section.c_str(),"Datasourcemap",fnView, fn);
 	if ( fn.fValid()) {
 		setDataSourceMap(BaseMap(fn));
 	}
-	ObjectInfo::ReadElement(section.scVal(),"Range",fnView, range);
-	ObjectInfo::ReadElement(section.scVal(),"Self",fnView, self);
-	ObjectInfo::ReadElement(section.scVal(),"Zscale",fnView, zscale);
-	ObjectInfo::ReadElement(section.scVal(),"Offset",fnView, offset);
+	ObjectInfo::ReadElement(section.c_str(),"Range",fnView, range);
+	ObjectInfo::ReadElement(section.c_str(),"Self",fnView, self);
+	ObjectInfo::ReadElement(section.c_str(),"Zscale",fnView, zscale);
+	ObjectInfo::ReadElement(section.c_str(),"Offset",fnView, offset);
 }
 
 void ZValueMaker::setTable(const Table& tbl, const vector<String>& names) {

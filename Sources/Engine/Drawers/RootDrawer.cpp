@@ -10,7 +10,7 @@
 
 using namespace ILWIS;
 
-RootDrawer::RootDrawer(MapCompositionDoc *doc) : ComplexDrawer(0,"RootDrawer"){
+RootDrawer::RootDrawer() : ComplexDrawer(0,"RootDrawer"){
 	drawercontext = new ILWIS::DrawerContext();
 	ILWIS::DrawerParameters dp(this, this);
 	ILWIS::PreparationParameters pp(RootDrawer::ptALL,0);

@@ -480,9 +480,9 @@ void TableDelimited::Store()
 {
 	TableExternalFormat::Store();
 	if ( fnData().sExt != ".tb#" ) 
-		ObjectInfo::WriteElement(ptr.sSection("TableStore").scVal(),"Type", ptr.fnObj, "TableDelimited");
+		ObjectInfo::WriteElement(ptr.sSection("TableStore").c_str(),"Type", ptr.fnObj, "TableDelimited");
 	else
-		ObjectInfo::WriteElement(ptr.sSection("TableStore").scVal(),"Type", ptr.fnObj, "TableBinary");
+		ObjectInfo::WriteElement(ptr.sSection("TableStore").c_str(),"Type", ptr.fnObj, "TableBinary");
 }
 
 

@@ -87,6 +87,6 @@ long ProjectionUTM::iMaxZoneNr() const
 
 String ProjectionUTM::sInvalidZone() const
 {
-   return SPRJErrWrongUTMZoneNumber;
+   return TR("UTM zones are numbered 1..60");
 }
 

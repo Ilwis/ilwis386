@@ -108,7 +108,7 @@ static VarType VarTypes[] = { vtVALUE,  vtMAP, vtTABLE, vtCOLUMN,
 VarType vt(Array<char*>& sList, const String& sVal)
 {
   for (int i = 0; i < sList.iSize(); i++)
-    if (!_stricmp(sList[i], sVal.scVal()))
+    if (!_stricmp(sList[i], sVal.c_str()))
       return VarTypes[i];
   return vtNONE;
 }
@@ -124,7 +124,7 @@ class DATEXPORT ErrorIncompatibleDoms: public ErrorObject
 {
 public:
   ErrorIncompatibleDoms(const String& sDom, const WhereError& where)
-    : ErrorObject(WhatError(String(SCLCErrIncompatibleDomains_S.scVal(), sDom), errCALC), where)
+    : ErrorObject(WhatError(String(TR("Incompatible domain: %S").c_str(), sDom), errCALC), where)
     {}
 };
 
@@ -177,7 +177,7 @@ void CodeGenerator::AddInstIndexLoad(const String& sVal1, const String& sVal2)
 {
   int iDim = sVal2.shVal();
   if (iDim < 1 || iDim > 2)
-    Error(SCLCErrParmsExpected, iCursorLine, iCursorCol-1);
+    Error(TR("One or two parameters expected\nbetween square brackets"), iCursorLine, iCursorCol-1);
   if (iDim == 1) {
     CalcVariable cv = cvFind(sVal1, vtCOLUMN);
     CalcVariable cvIndex = stkCalcVar.top();
@@ -383,7 +383,7 @@ void CodeGenerator::AddInstCall(const String& sVal1, const String& sVal2)
   InternFuncDesc* fd = InternFuncDesc::fdFindFunc(lstInternFuncs, sVal1, acv);
   if (fd != 0) {
     if (!fCheckGeoRefs(acv)) {
-      Error(String(SCLCErrIncompGeoRefsInFunc_S.scVal(), sVal1), iCursorLine);
+      Error(String(TR("Incompatible georefs for function %S").c_str(), sVal1), iCursorLine);
       CalcVariable cv(Domain("value"), vtVALUE);
       stkCalcVar.push(cv);
       return;
@@ -461,7 +461,7 @@ void CodeGenerator::AddInstCall(const String& sVal1, const String& sVal2)
         String sErr;
         int iWrongParm = 0;
         if (lstInternFuncs[i]->iParms() != iParms) {
-          sErr = String(SCLCErrFuncRequiresParms_Si.scVal(), sVal1, lstInternFuncs[i]->iParms());
+          sErr = String(TR("Function '%S' needs %i parameters").c_str(), sVal1, lstInternFuncs[i]->iParms());
           iWrongParm = max(0,min(lstInternFuncs[i]->iParms(), iParms)-1);
         }
         else
@@ -473,16 +473,16 @@ void CodeGenerator::AddInstCall(const String& sVal1, const String& sVal2)
         }
         if (sErr.length() == 0) {
           if (fCIStrEqual(sVal1 , "ifundef") || fCIStrEqual(sVal1 , "ifnotundef")) 
-            sErr = String(SCLCErrIncompatibleDomains_S.scVal(), acv[iWrongParm]->dvs.dm()->sName(true));
+            sErr = String(TR("Incompatible domain: %S").c_str(), acv[iWrongParm]->dvs.dm()->sName(true));
           else
-            sErr = String(SCLCErrInvalidParameter_iS.scVal(), iWrongParm+1, sVal1);
+            sErr = String(TR("Invalid parameter %i for function '%S'").c_str(), iWrongParm+1, sVal1);
         }
         Error(sErr, iLine, iCol);
         break;
       }
     }
     if (i == lstInternFuncs.iSize()) // not found
-      Error(String(SCLCErrFuncParmNotFound_Si.scVal(), sVal1, acv.iSize()), iCursorLine, iCursorCol);
+      Error(String(TR("Function '%S' with %i parameters not found").c_str(), sVal1, acv.iSize()), iCursorLine, iCursorCol);
     CalcVariable cv(Domain("value"), vtVALUE);
     stkCalcVar.push(cv);
   }
@@ -501,7 +501,7 @@ void CodeGenerator::AddInst(const char* sInst,
   else if (fCIStrEqual(sInstruct , "indexstore"))
     AddInstIndexStore(sVal1, sVal2);
   else {
-    Error(String(SCLCErrInvalidInstruction_S.scVal(), sInstruct), iCursorLine);
+    Error(String(TR("Invalid instruction: '%S'").c_str(), sInstruct), iCursorLine);
   }
 }
 
@@ -553,7 +553,7 @@ void CodeGenerator::AddInst(const char* sInst,
     lstParms.top() &= cv;
   }
   else {
-    Error(String(SCLCErrInvalidInstruction_S.scVal(), sInstruct), iCursorLine);
+    Error(String(TR("Invalid instruction: '%S'").c_str(), sInstruct), iCursorLine);
   }
 }
 

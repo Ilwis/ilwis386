@@ -190,7 +190,7 @@ void Instructions::CalcExec()
 /*
   for (int i=0; i < lstInst.iSize(); i++) {
     String s("%2li %2li %2li %2li, %2i %s\n", lstInst.iSize(),stkCalc.iSize(), lstLabels.iSize(), i, typeid(*lstInst[i]).name());
-    TRACE(s.scVal());
+    TRACE(s.c_str());
   }
   TRACE("\n\n");
 */
@@ -203,7 +203,7 @@ void Instructions::CalcExec()
         fStop = true;
       else {
 //String s("%2li %2li %2li %2li, %2i %s\n", lstInst.iSize(),stkCalc.iSize(), lstLabels.iSize(), iNextInst, typeid(*lstInst[iNextInst]).name());
-//TRACE(s.scVal());
+//TRACE(s.c_str());
         lstInst[iNextInst]->Exec();
       }
     }

@@ -62,7 +62,7 @@ class DATEXPORT ErrorInvalidFilterSize : public ErrorObject
 {
 public:  
   ErrorInvalidFilterSize::ErrorInvalidFilterSize(int iRows, int iCols, const WhereError& where)
-  : ErrorObject(WhatError(String("%S %i x %i", SDATErrInvalidFilterSize, iRows, iCols), errFilter), where) 
+  : ErrorObject(WhatError(String("%S %i x %i", TR("Invalid filter size:"), iRows, iCols), errFilter), where) 
   {}
 };
 
@@ -318,7 +318,7 @@ void FilterPtr::ExecuteVal(const RealBufExt* bufListInp, LongBuf& bufRes)
 
 void Filter::ErrorThreshold(double rThres, const String& sObjName)
 {
-  throw ErrorObject(WhatError(String("%S %g", SDATErrPositiveThreshNeeded, rThres), errFilter+2), sObjName);
+  throw ErrorObject(WhatError(String("%S %g", TR("Positive threshold needed:"), rThres), errFilter+2), sObjName);
 }
 
 

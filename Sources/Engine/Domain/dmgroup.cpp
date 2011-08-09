@@ -268,8 +268,8 @@ void DomainGroup::Merge(const DomainSort* pdsrt, Tranquilizer* trq)
 	long iNew = 0;
 	if ( trq)
 	{
-		trq->SetTitle(SDATTextMergingDomains);
-		trq->SetText(SDATTextSizeNewDomain);
+		trq->SetTitle(TR("Merging domains"));
+		trq->SetText(TR("Sizing new domain"));
 	}
 	DomainGroup* pdg2 = dynamic_cast<DomainGroup*>(const_cast<DomainSort*>(pdsrt));
 	for (long i = 1; i <= pdsrt->iSize(); ++i) 
@@ -306,7 +306,7 @@ void DomainGroup::Merge(const DomainSort* pdsrt, Tranquilizer* trq)
 	Updated();
 	Table::EnlargeTables(this);
 	long iStartInd=iNettoSize();
-	if (trq) trq->SetText(SDATTextAddToDomain);
+	if (trq) trq->SetText(TR("Adding to new domain"));
 	for (int i = 1; i <= pdsrt->iSize(); ++i) 
 	{
 		if ( trq && trq->fUpdate(i, pdsrt->iSize())) 

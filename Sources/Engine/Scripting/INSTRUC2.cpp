@@ -689,7 +689,7 @@ void InstTblValue::Exec()
   soCol->GetVal(bufCol);
 	Column col = tbl->col(bufCol[0]);	
 	if ( !col.fValid())
-		throw ErrorObject(String(STBLErrInvalidColumn_S.scVal(), bufCol[0]));
+		throw ErrorObject(String(TR("Invalid column %S").c_str(), bufCol[0]));
 
 	long iKey = iUNDEF;
 	if ( dmsrt)

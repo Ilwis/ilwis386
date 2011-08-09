@@ -193,7 +193,7 @@ ColumnView::ColumnView(const TableView* view,
 	if (ptr() == NULL) return;
   tvw = const_cast<TableView*>(view);
   String sSection = ptr()->sSection();
-  iWidth = shortConv(tvw->iReadElement(sSection.scVal(), "Width"));
+  iWidth = shortConv(tvw->iReadElement(sSection.c_str(), "Width"));
   if (iWidth < 0) {
     iWidth = ptr()->dvrs().iWidth();
     int iLen = sColName.length();
@@ -204,11 +204,11 @@ ColumnView::ColumnView(const TableView* view,
     iWidth = 100;
   iDec = 0;
   if (ptr()->fRealValues() || ptr()->fCoords()) {
-    iDec = shortConv(tvw->iReadElement(sSection.scVal(), "Decimals"));
+    iDec = shortConv(tvw->iReadElement(sSection.c_str(), "Decimals"));
     if (iDec < 0)
       iDec = ptr()->dvrs().iDec();
   }
-  tvw->ReadElement(sSection.scVal(), "Title", sTitle);
+  tvw->ReadElement(sSection.c_str(), "Title", sTitle);
   ptr()->MakeUsable();
 //  if (ptr()->pcv())
 //    if (!ptr()->pcv()->fUsable())
@@ -223,7 +223,7 @@ ColumnView::ColumnView(const TableView* view, const Column& col)
 	
   String sSection = ptr()->sSection();
   if (0 != tvw)
-    iWidth = shortConv(tvw->iReadElement(sSection.scVal(), "Width"));
+    iWidth = shortConv(tvw->iReadElement(sSection.c_str(), "Width"));
   if (iWidth < 0) {
     iWidth = ptr()->dvrs().iWidth();
     int iLen = col->sName().length();
@@ -235,14 +235,14 @@ ColumnView::ColumnView(const TableView* view, const Column& col)
   iDec = 0;
   if (ptr()->fRealValues() || ptr()->fCoords()) {
     if (0 != tvw)
-      iDec = shortConv(tvw->iReadElement(sSection.scVal(), "Decimals"));
+      iDec = shortConv(tvw->iReadElement(sSection.c_str(), "Decimals"));
     else
       iDec = iUNDEF;
     if (iDec < 0)
       iDec = ptr()->dvrs().iDec();
   }
   if (0 != tvw)
-    tvw->ReadElement(sSection.scVal(), "Title", sTitle);
+    tvw->ReadElement(sSection.c_str(), "Title", sTitle);
   ptr()->MakeUsable();
 //  if (ptr()->pcv())
 //    if (!ptr()->pcv()->fUsable())
@@ -272,11 +272,11 @@ void ColumnView::Store()
   if (0 == tvw || ptr() == NULL)
     return;
   String sSection = ptr()->sSection();
-  tvw->WriteElement(sSection.scVal(), "Width", (long)iWidth);
+  tvw->WriteElement(sSection.c_str(), "Width", (long)iWidth);
   if (ptr()->fRealValues() || ptr()->fCoords())
-    tvw->WriteElement(sSection.scVal(), "Decimals", (long)iDec);
+    tvw->WriteElement(sSection.c_str(), "Decimals", (long)iDec);
   if (sTitle.length() > 0)
-    tvw->WriteElement(sSection.scVal(), "Title", sTitle);
+    tvw->WriteElement(sSection.c_str(), "Title", sTitle);
 }
 
 TableView::TableView(const FileName& fn)
@@ -308,7 +308,7 @@ TableView::TableView(const FileName& fn)
   for (short c = 0; c < iCols(); ++c) {
     String sEntry("Col%i", c);
     String sColName;
-    ReadElement("TableView", sEntry.scVal(), sColName);
+    ReadElement("TableView", sEntry.c_str(), sColName);
     ac[c] = ColumnView(this, tbl->col(sColName));
   }
   ApplySorting();
@@ -357,7 +357,7 @@ TableView::~TableView()
 {
 //  delete &ac;
   if (fErase)
-    _unlink(fnObj.sFullName().scVal());
+    _unlink(fnObj.sFullName().c_str());
 //  if (fChanged)
 //    tbl->fChanged = true;
 
@@ -410,7 +410,7 @@ void TableView::init(TablePtr* ptr)
   for (short c = 0; c < iCols; ++c) {
     String sEntry("Col%i", c);
     String sColName;
-    ReadElement("TableView", sEntry.scVal(), sColName);
+    ReadElement("TableView", sEntry.c_str(), sColName);
 // Jelle: is solved in ReadElement and WriteElement:
 //    sColName = sColName.sQuote(); // ReadPrivateProfileString strips single quotes
     int iC = iCol(sColName);
@@ -446,7 +446,7 @@ void TableView::Store()
 		if (ac[c].fValid())
 		{
 			String sEntry("Col%i", c);
-			WriteElement("TableView", sEntry.scVal(), ac[c]->sNameQuoted());
+			WriteElement("TableView", sEntry.c_str(), ac[c]->sNameQuoted());
 			ac[c].Store();
 		}
   }

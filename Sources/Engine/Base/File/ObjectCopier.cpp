@@ -131,7 +131,7 @@ void ObjectCopier::Copy(bool fBreakDependencies)
 			return;
 
 		if (!dirDestination.fExist())
-			throw ErrorObject(String(SMSErrorDirectoryDoesNotExist.scVal(), dirDestination.sFullPath()));
+			throw ErrorObject(String(TR("Directory, %S does not exist").c_str(), dirDestination.sFullPath()));
 
 		bool fCopyInSameDir = false;
 		if ( fCIStrEqual(dirDestination.sFullPath(), fnFiles[0].sPath()))
@@ -156,7 +156,7 @@ void ObjectCopier::Copy(bool fBreakDependencies)
 			char sTemp2[100];
 			sprintf(sTemp1, "%I64u", iSpaceAvailable);
 			sprintf(sTemp2, "%I64u", iSpaceRequired);
-			String sMessage(SMSErrorDiskFull_S.scVal(), sTemp2, sTemp1);
+			String sMessage(TR("Not Enough Disk space.\nRequired is %s bytes, Available are %s bytes").c_str(), sTemp2, sTemp1);
 			throw ErrorObject(sMessage);
 		}
 
@@ -245,8 +245,8 @@ bool ObjectCopier::ResolveCollisions(ObjectStructure& osStruct)
 		if ( fnExist != FileName() )
 		{
 			CFileStatus fstat1, fstat2;
-			CFile::GetStatus((*cur).sFullPath().scVal(), fstat1);
-			CFile::GetStatus(fnExist.sFullPath().scVal(), fstat2);
+			CFile::GetStatus((*cur).sFullPath().c_str(), fstat1);
+			CFile::GetStatus(fnExist.sFullPath().c_str(), fstat2);
 			// are we talking about the same file ??, if so do not copy
 			if (fstat1.m_mtime == fstat2.m_mtime && fstat1.m_size == fstat2.m_size  )
 			{

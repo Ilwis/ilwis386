@@ -245,8 +245,8 @@ String ObjectInfo::sExpression(const FileName& fn)
 	ReadElement("Ilwis", "Type", fn, sType);
 	if (fCIStrEqual(sType , "BaseMap"))
 		ReadElement("BaseMap", "Type", fn, sType);
-	ReadElement(sType.scVal(), "Type", fn, s);
-	ReadElement(s.scVal(), "Expression", fn, sExpr);
+	ReadElement(sType.c_str(), "Type", fn, s);
+	ReadElement(s.c_str(), "Expression", fn, sExpr);
 	return sExpr;
 }  
 
@@ -292,7 +292,7 @@ bool ObjectInfo::fDependent(const FileName& fn)
 	else if (fCIStrEqual(sType , "Layout"))
 		return true;
 	String s;
-	ReadElement(sType.scVal(), "Type", fn, s);
+	ReadElement(sType.c_str(), "Type", fn, s);
 	if (fCIStrEqual(sType , "Matrix"))
     return !fCIStrEqual(s, "RealMatrix");
 	sType &= "Virtual";
@@ -316,7 +316,7 @@ bool ObjectInfo::fDependenciesForCopy(const FileName& fn)
 		for(int i = 0; i < iN; ++i )
 		{
 			String sKey("Object%d", i);
-			ObjectInfo::ReadElement("ObjectCollection", sKey.scVal(), fn, fnOb);
+			ObjectInfo::ReadElement("ObjectCollection", sKey.c_str(), fn, fnOb);
 			if ( File::fExist(fnOb) ) 
 			{
 				if ( fDependent(fnOb) )
@@ -335,15 +335,15 @@ bool ObjectInfo::fDependenciesForCopy(const FileName& fn)
 	ReadElement("Table", "Columns", fn, iCols);
 	for (int i=0; i < iCols; ++i)
 	{
-		ReadElement("TableStore", String("Col%i", i).scVal(), fn, sCol);
-		ReadElement(String("Col:%S", sCol).scVal(), "Type", fn, s);
+		ReadElement("TableStore", String("Col%i", i).c_str(), fn, sCol);
+		ReadElement(String("Col:%S", sCol).c_str(), "Type", fn, s);
 		if (s == "ColumnStore")
 			continue;
-		if (0 == ReadElement(String("Col:%S", sCol).scVal(), "NrDepObjects", fn, iObjs))
+		if (0 == ReadElement(String("Col:%S", sCol).c_str(), "NrDepObjects", fn, iObjs))
 			continue;
 		for (int j=0; j < iObjs; ++j)
 		{
-			ReadElement(String("Col:%S", sCol).scVal(), String("Object%i", j).scVal(), fn, s);
+			ReadElement(String("Col:%S", sCol).c_str(), String("Object%i", j).c_str(), fn, s);
 			if (!fCIStrEqual(s.sLeft(7) , "Column "))
 				continue;
 			s = s.sRight(s.length()-7);
@@ -366,7 +366,7 @@ bool ObjectInfo::fUses(const FileName& fn, const Domain& dm)
 	String sType;
 	FileName fnDom;
 	ReadElement("Ilwis", "Type", fn, sType);
-	ReadElement(sType.scVal(), "Domain", fn, fnDom);
+	ReadElement(sType.c_str(), "Domain", fn, fnDom);
 	if (!fnDom.fValid())
 		return false;
 	if (fnDom == dm->fnObj)
@@ -376,9 +376,9 @@ bool ObjectInfo::fUses(const FileName& fn, const Domain& dm)
 	ReadElement("Table", "Columns", fn, s);
 	int iCols = s.shVal();
 	for (int i=0; i < iCols; i++) {
-		ReadElement("TableStore", String("Col%i", i).scVal(), fn, s); // column name
+		ReadElement("TableStore", String("Col%i", i).c_str(), fn, s); // column name
 		fnDom = FileName();
-		ReadElement(String("Col:%S", s).scVal(), "Domain", fn, fnDom);
+		ReadElement(String("Col:%S", s).c_str(), "Domain", fn, fnDom);
 		if (!fnDom.fValid())
 			continue;
 		if (fnDom == dm->fnObj)
@@ -412,7 +412,7 @@ bool ObjectInfo::fUses(const FileName& fn, const GeoRef& gr)
 	if (fCIStrEqual(fn.sExt, ".grf")) {
 		String sType;
 		ReadElement("GeoRef", "Type", fn, sType);
-		ReadElement(sType.scVal(), "GeoRef", fn, fnGrf);
+		ReadElement(sType.c_str(), "GeoRef", fn, fnGrf);
 		if (!fnGrf.fValid())
 			return false;
 		return fnGrf == gr->fnObj;
@@ -449,12 +449,12 @@ bool ObjectInfo::fUses(const FileName& fn, const String& sSect, const FileName& 
 {
 	// checks the dependencies
 	String s;
-	ReadElement(sSect.scVal(), "NrDepObjects", fn, s);
+	ReadElement(sSect.c_str(), "NrDepObjects", fn, s);
 	int iObjDep = s.shVal();
 	String sPath = fn.sPath();
 	FileName filnam;
 	for (int i=0; i < iObjDep; i++) {
-		ReadElement(sSect.scVal(), String("Object%i", i).scVal(), fn, filnam);
+		ReadElement(sSect.c_str(), String("Object%i", i).c_str(), fn, filnam);
 		if (filnam == fnCheck)
 			return true;
 	}
@@ -477,7 +477,7 @@ bool ObjectInfo::fUses(const FileName& fn, const FileName& fnCheck)
 		for (int i = 0; i < iCols; ++i)
 		{
 			String sCol;
-			ReadElement("TableStore", String("Col%i", i).scVal(), fnCheck, sCol);
+			ReadElement("TableStore", String("Col%i", i).c_str(), fnCheck, sCol);
 			if ("" == sCol)
 				continue;
 			Table tbl(fnCheck);
@@ -507,7 +507,7 @@ bool ObjectInfo::fUses(const FileName& fn, const FileName& fnCheck)
 	ReadElement("Table", "Columns", fn, s);
 	int iCols = s.shVal();
 	for (int i=0; i < iCols; i++) {
-		ReadElement("TableStore", String("Col%i", i).scVal(), fn, sColName);
+		ReadElement("TableStore", String("Col%i", i).c_str(), fn, sColName);
 		if (fUses(fn, String("Col:%S", sColName), fnCheck))
 			return true;
 	}
@@ -518,11 +518,11 @@ bool ObjectInfo::fUses(const FileName& fn, const String& sSection, const Column&
 {
 	String sColName("Column %S.%S", col->fnTbl.sRelativeQuoted(false, fn.sPath()), col->sNameQuoted());
 	String s;
-	ReadElement(sSection.scVal(), "NrDepObjects", fn, s);
+	ReadElement(sSection.c_str(), "NrDepObjects", fn, s);
 	int iObjDep =  s.shVal();
 	String sPath = fn.sPath();
 	for (int i=0; i < iObjDep; i++) {
-		ReadElement(sSection.scVal(), String("Object%i", i).scVal(), fn, s);
+		ReadElement(sSection.c_str(), String("Object%i", i).c_str(), fn, s);
 		if (fCIStrEqual(s, sColName))
 			return true;
 	}
@@ -537,7 +537,7 @@ bool ObjectInfo::fUses(const FileName& fn, const Column& col)
 	ReadElement("Table", "Columns", fn, s);
 	int iCols = s.shVal();
 	for (int i=0; i < iCols; i++) {
-		ReadElement("TableStore", String("Col%i", i).scVal(), fn, sColName);
+		ReadElement("TableStore", String("Col%i", i).c_str(), fn, sColName);
 		if (fUses(fn, sColName, col))
 			return true;
 	}
@@ -965,8 +965,8 @@ long ObjectInfo::iTotalFileSize(const Array<FileName>& afn)
 	long iFileSize = 0;
 	for (unsigned int i=0; i < afn.iSize(); ++i) {
 		//    OFSTRUCT OfStr;
-		//    int file = OpenFile(afn[i].sFullName().scVal(), &OfStr, OF_READ | OF_SHARE_COMPAT);
-		HFILE file = (HFILE)CreateFile(afn[i].sFullName().scVal(), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, 0, OPEN_EXISTING,
+		//    int file = OpenFile(afn[i].sFullName().c_str(), &OfStr, OF_READ | OF_SHARE_COMPAT);
+		HFILE file = (HFILE)CreateFile(afn[i].sFullName().c_str(), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, 0, OPEN_EXISTING,
 			FILE_ATTRIBUTE_NORMAL, NULL);
 		if (file < 0)
 			continue;
@@ -1005,7 +1005,7 @@ bool ObjectInfo::fSystemObject(const FileName& fn)
 bool ObjectInfo::fUpToDate(const FileName& fn, const String& sCol)
 {
 	ObjectTime objtime;
-	ReadElement(String("Col:%S", sCol).scVal(), "Time", fn, objtime);
+	ReadElement(String("Col:%S", sCol).c_str(), "Time", fn, objtime);
 	String sObjName;
 	ObjectTime tmNewer;
 	Array<FileName> afnChecked;
@@ -1039,7 +1039,7 @@ bool ObjectInfo::fInCollection(const FileName& fn)
 	for(int i = 0; i < iN; ++i )
 	{
 		String sKey("Item%d", i);
-		ReadElement("Collection", sKey.scVal(), fn, fnCol);
+		ReadElement("Collection", sKey.c_str(), fn, fnCol);
 		if ( File::fExist(fnCol) ) return true;
 	}
 	return false;
@@ -1056,12 +1056,12 @@ void ObjectInfo::WriteAdditionOfFileToCollection(const FileName& filename, const
 	for(int i=0; i < iNr; ++i)
 	{
 		FileName fnItem;
-		ObjectInfo::ReadElement("Collection", String("Item%d", i).scVal(), filename, fnItem);
+		ObjectInfo::ReadElement("Collection", String("Item%d", i).c_str(), filename, fnItem);
 		if (fnItem == fnCollection)
 			return;
 	}
 	WriteElement("Collection", "NrOfItems", filename, iNr+1);
-	WriteElement("Collection", String("Item%d", iNr).scVal(), filename, fnCollection); 
+	WriteElement("Collection", String("Item%d", iNr).c_str(), filename, fnCollection); 
 }
 
 void ObjectInfo::WriteRemovalOfFileFromCollection(const FileName& filename, const FileName& fnCollection)
@@ -1075,7 +1075,7 @@ void ObjectInfo::WriteRemovalOfFileFromCollection(const FileName& filename, cons
 	{
 		FileName fnItem;
 		String sEntry("Item%d", i);
-		ObjectInfo::ReadElement("Collection", sEntry.scVal(), filename, fnItem);
+		ObjectInfo::ReadElement("Collection", sEntry.c_str(), filename, fnItem);
 		if (fnItem == fnCollection)
 			IlwisObjectPtr::RemoveCollectionFromODF(filename, sEntry);
 		int iNrNew = 0;
@@ -1100,7 +1100,7 @@ void ObjectInfo::RemoveFileFromLinkedCollections(const FileName& filename)
 	{
 		FileName fnItem;
 		String sEntry("Item%d", i);
-		ObjectInfo::ReadElement("Collection", sEntry.scVal(), filename, fnItem);
+		ObjectInfo::ReadElement("Collection", sEntry.c_str(), filename, fnItem);
 		if ( IlwisObject::iotObjectType(fnItem) == IlwisObject::iotOBJECTCOLLECTION )
 		{
 			ObjectCollection obc(fnItem);
@@ -1169,7 +1169,7 @@ bool ObjectInfo::fIsPartOfDataBase(const FileName& fn, const FileName& fnDB)
 		{
 			String sKey("Object%d", i);
 			FileName fnFile;
-			ReadElement("ObjectCollection", sKey.scVal(), fnDB, fnFile);
+			ReadElement("ObjectCollection", sKey.c_str(), fnDB, fnFile);
 			if ( fnFile == fn)  return true;
 		}
 	}		

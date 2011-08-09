@@ -53,7 +53,7 @@ const char* ClassifierPriorProb::sSyntax()
 }
 
 static void ColumnNotFound(const String sCol) {
-  throw ErrorObject(WhatError(String(STBLErrInvalidProbabColumn_S.scVal(), sCol), errClassifier +8));
+  throw ErrorObject(WhatError(String(TR("Invalid Probabilty Column %S").c_str(), sCol), errClassifier +8));
 }
 
 ClassifierPriorProb::~ClassifierPriorProb()
@@ -78,7 +78,7 @@ ClassifierPriorProb* ClassifierPriorProb::create(const FileName& fn, const Strin
   }
   tbl = Table(as[iFirstParm]);
 	if (!tbl.fValid())
-		ErrorObject(WhatError(String(STBRemNotValidTblName), errClassifier+7), fn);		
+		ErrorObject(WhatError(String(TR("Not a valid table name")), errClassifier+7), fn);		
 	col = Column(tbl->col(as[iFirstParm + 1]));
 	if (!col.fValid())
 		ColumnNotFound(as[iFirstParm + 1]);
@@ -89,19 +89,19 @@ ClassifierPriorProb* ClassifierPriorProb::create(const FileName& fn, const Strin
 	//moet nog geimplementeerd
 	// bv throw  errMapClassify
 	// Domain dmTbl = tbl->dm();
-	//throw ErrorObject(WhatError(String(SMAPErrInvalidTableDom_S.scVal(), as[1]), errClassifier+3), fn);
+	//throw ErrorObject(WhatError(String(SMAPErrInvalidTableDom_S.c_str(), as[1]), errClassifier+3), fn);
 
 	Domain dmCol = col->dm();
 	if (0 == dmCol->pdv())
-		throw ErrorObject(WhatError(String(SMAPErrValueDomNeeded_S.scVal(), sCol), errClassifier+4), fn);
+		throw ErrorObject(WhatError(String(TR("Column %S should have value domain").c_str(), sCol), errClassifier+4), fn);
 	long iRec = tbl->iRecs();
 	double rTmp;
 	for (long i = 0; i < iRec; i++) {
 		rTmp = col->rValue(i+1);
 		if (rTmp == rUNDEF) 
-			throw ErrorObject(WhatError(String(SMAPErrUndefinedProbab), errClassifier+5), fn);
+			throw ErrorObject(WhatError(String(TR("Undefined probability is not allowed")), errClassifier+5), fn);
 		else if (rTmp < 0) 
-			throw ErrorObject(WhatError(String(SMAPErrNegativeProbab_f.scVal(), rTmp), errClassifier+6), fn);
+			throw ErrorObject(WhatError(String(TR("Negative probability %.f is not allowed").c_str(), rTmp), errClassifier+6), fn);
 		else
 			continue;
 	}

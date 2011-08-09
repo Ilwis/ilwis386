@@ -282,11 +282,11 @@ MapStore::MapStore(const FileName& fn, MapPtr& p)
 {
 	String sSection = "MapStore";
 	String sType;
-	ptr.ReadElement(sSection.scVal(), "Type", sType);
-	ptr.ReadElement(sSection.scVal(), "UseAs", fUseAs);
+	ptr.ReadElement(sSection.c_str(), "Type", sType);
+	ptr.ReadElement(sSection.c_str(), "UseAs", fUseAs);
 	ptr.SetUseAs(fUseAs);  // make sure the MapPtr also knows the UseAs status
 	String sStruc;
-	ptr.ReadElement(sSection.scVal(), "Structure", sStruc);
+	ptr.ReadElement(sSection.c_str(), "Structure", sStruc);
 	if (sStruc.length() == 0)
 		sStruc = "Line";
 	FileName fnDat;
@@ -299,7 +299,7 @@ MapStore::MapStore(const FileName& fn, MapPtr& p)
 	if ( !fCIStrEqual(sType , "foreignformat") )
 	{
 		if ( 0 == ptr.ReadElement("ForeignFormat", "Filename", fnDat))			
-			if (0 == ptr.ReadElement(sSection.scVal(), "Data", fnDat)) 
+			if (0 == ptr.ReadElement(sSection.c_str(), "Data", fnDat)) 
 			{
 				mpsb = 0;
 				throw(ErrorObject());
@@ -329,7 +329,7 @@ MapStore::MapStore(const FileName& fn, MapPtr& p)
 			if ( ff )
 				mpsb = new MapStoreForeignFormat(*this); 
 			else
-				throw ErrorObject(SMAPErrFormatNotSupported);
+				throw ErrorObject(TR("This fileformat is in its native form nnot supported by ILWIS"));
 		}
 		else
 			InvalidTypeError(fn, "Structure", sType);
@@ -346,9 +346,9 @@ MapStore::MapStore(const FileName& fn, MapPtr& p)
 		else
 			mpl->iRowLength = iCols();
 		bool f;
-		ptr.ReadElement(sSection.scVal(), "PixelInterLeaved", f);
+		ptr.ReadElement(sSection.c_str(), "PixelInterLeaved", f);
 		mpl->fPixelInterLeaved = f;
-		ptr.ReadElement(sSection.scVal(), "SwapBytes", f);
+		ptr.ReadElement(sSection.c_str(), "SwapBytes", f);
 		mpl->fSwapBytes= f;
 		mpl->iNrBands = mpl->iRowLength / iCols();
 	}
@@ -582,7 +582,7 @@ void MapStore::UnStore(const FileName& fnObjFile)
 		FileName fnData;
 		ObjectInfo::ReadElement("MapStore", "Data", fnObjFile, fnData);
 		if (File::fExist(fnData))
-			_unlink(fnData.sFullName(true).scVal()); // delete data file if it's still there
+			_unlink(fnData.sFullName(true).c_str()); // delete data file if it's still there
 		ObjectInfo::WriteElement("MapStore", (char*)0, fnObjFile, (char*)0);
 	}
 }  
@@ -682,20 +682,20 @@ ErrorExportDomain::ErrorExportDomain(const Domain& dm, IlwisError err)
   String s;
   switch (err - errMapExport) {
     case 1:
-      s = String(SMAPErrTooManyDomClasses_S.scVal(), dm->sName());
+      s = String(TR("Too many classes for domain %S").c_str(), dm->sName());
       break;
     case 2:
-      s = String(SMAPErrCannotExport.scVal(), dm->sName());
+      s = String(TR("Map with domain %S can't be exported").c_str(), dm->sName());
       break;
     case 3:
-      s = String(SMAPErrOutOfRange.scVal(), dm->sName());
+      s = String(TR("Value Range of map %S too large to export").c_str(), dm->sName());
       break;
     default :
-      s = SMAPErrUnknown;
+      s = TR("Unknown error");
       break;
   }
   what = WhatError(s, err);
-  where.SetTitle(SMAPTitleMapExport);
+  where.SetTitle(TR("Map export"));
 }
 
 /* --------------- static functions ----------------- */
@@ -1053,7 +1053,7 @@ void MapStore::GetDataFiles(Array<FileName>& afnDat, Array<String>* asSection, A
 
 bool MapStore::fPatchByte(MapPtr* mpPatch, const String& sTitle, Tranquilizer& trq)
 {
-  trq.SetText(String(SMAPErrPatchingMap_S.scVal(), ptr.sName(true, fnObj.sPath())));
+  trq.SetText(String(TR("Patching map '%S'").c_str(), ptr.sName(true, fnObj.sPath())));
   long iNrLines=iLines(), iNrCols=iCols();
   BytePatch aptCur[16];
   int i, j, iNrPt;
@@ -1099,7 +1099,7 @@ bool MapStore::fPatchByte(MapPtr* mpPatch, const String& sTitle, Tranquilizer& t
 
 bool MapStore::fPatchInt(MapPtr *mpPatch, const String& sTitle, Tranquilizer& trq)
 {
-  trq.SetText(String(SMAPErrPatchingMap_S.scVal(), ptr.sName(true, fnObj.sPath())));
+  trq.SetText(String(TR("Patching map '%S'").c_str(), ptr.sName(true, fnObj.sPath())));
   long iNrLines=iLines(), iNrCols=iCols();
   IntPatch aptCur[16];
   int i, j, iNrPt;
@@ -1145,7 +1145,7 @@ bool MapStore::fPatchInt(MapPtr *mpPatch, const String& sTitle, Tranquilizer& tr
 
 bool MapStore::fPatchLong(MapPtr *mpPatch, const String& sTitle, Tranquilizer& trq)
 {
-  trq.SetText(String(SMAPErrPatchingMap_S.scVal(), ptr.sName(true, fnObj.sPath())));
+  trq.SetText(String(TR("Patching map '%S'").c_str(), ptr.sName(true, fnObj.sPath())));
   long iNrLines=iLines(), iNrCols=iCols();
   LongPatch aptCur[16];
   int i, j, iNrPt;
@@ -1191,7 +1191,7 @@ bool MapStore::fPatchLong(MapPtr *mpPatch, const String& sTitle, Tranquilizer& t
 
 bool MapStore::fPatchReal(MapPtr *mpPatch, const String& sTitle, Tranquilizer& trq)
 {
-  trq.SetText(String(SMAPErrPatchingMap_S.scVal(), ptr.sName(true, fnObj.sPath())));
+  trq.SetText(String(TR("Patching map '%S'").c_str(), ptr.sName(true, fnObj.sPath())));
   long iNrLines=iLines(), iNrCols=iCols();
   RealPatch aptCur[16];
   int i, j, iNrPt;
@@ -1237,7 +1237,7 @@ bool MapStore::fPatchReal(MapPtr *mpPatch, const String& sTitle, Tranquilizer& t
 
 bool MapStore::fUnPatchByte(MapPtr *mpPatch, const String& sTitle, Tranquilizer& trq)
 {
-  trq.SetText(String(SMAPErrUnpatchingMap_S.scVal(), ptr.sName(true, fnObj.sPath())));
+  trq.SetText(String(TR("Unpatching map '%S'").c_str(), ptr.sName(true, fnObj.sPath())));
   long iNrLines=iLines(), iNrCols=iCols();
   BytePatch aptCur[16];
   int i, j, iNrPt;
@@ -1283,7 +1283,7 @@ bool MapStore::fUnPatchByte(MapPtr *mpPatch, const String& sTitle, Tranquilizer&
 
 bool MapStore::fUnPatchInt(MapPtr *mpPatch, const String& sTitle, Tranquilizer& trq)
 {
-  trq.SetText(String(SMAPErrUnpatchingMap_S.scVal(), ptr.sName(true, fnObj.sPath())));
+  trq.SetText(String(TR("Unpatching map '%S'").c_str(), ptr.sName(true, fnObj.sPath())));
   long iNrLines=iLines(), iNrCols=iCols();
   IntPatch aptCur[16];
   int i, j, iNrPt;
@@ -1329,7 +1329,7 @@ bool MapStore::fUnPatchInt(MapPtr *mpPatch, const String& sTitle, Tranquilizer& 
 
 bool MapStore::fUnPatchLong(MapPtr *mpPatch, const String& sTitle, Tranquilizer& trq)
 {
-  trq.SetText(String(SMAPErrUnpatchingMap_S.scVal(), ptr.sName(true, fnObj.sPath())));
+  trq.SetText(String(TR("Unpatching map '%S'").c_str(), ptr.sName(true, fnObj.sPath())));
   long iNrLines=iLines(), iNrCols=iCols();
   LongPatch aptCur[16];
   int i, j, iNrPt;
@@ -1375,7 +1375,7 @@ bool MapStore::fUnPatchLong(MapPtr *mpPatch, const String& sTitle, Tranquilizer&
 
 bool MapStore::fUnPatchReal(MapPtr *mpPatch, const String& sTitle, Tranquilizer& trq)
 {
-  trq.SetText(String(SMAPErrUnpatchingMap_S.scVal(), ptr.sName(true, fnObj.sPath())));
+  trq.SetText(String(TR("Unpatching map '%S'").c_str(), ptr.sName(true, fnObj.sPath())));
   long iNrLines=iLines(), iNrCols=iCols();
   RealPatch aptCur[16];
   int i, j, iNrPt;
@@ -1425,8 +1425,8 @@ bool MapStore::fConvertTo(const DomainValueRangeStruct& _dvrsTo, const Column& c
   if (col.fValid())
     dvrsTo = col->dvrs();
   Tranquilizer trq;
-  trq.SetTitle(SMAPTitleConvertDomain);
-  trq.SetText(SMAPTextConverting);
+  trq.SetTitle(TR("Domain Conversion"));
+  trq.SetText(TR("Converting"));
   if (0 == mpsb->file)
     return false;
   String sDatOld = mpsb->file->sName();
@@ -1532,7 +1532,7 @@ void MapStore::StoreAs(const String& sExpression)
 	Array<String> arsParts;
 	if (!ptr.gr()->fNorthOriented() && !ptr.gr()->fGeoRefNone())
 	{
-		throw ErrorObject(SMAPErrOnlyNorthOriented);
+		throw ErrorObject(TR("The GeoReference should be North oriented."));
 	}		
 	Split(sExpression, arsParts, "(,)");
 	ParmList pm;
@@ -1549,10 +1549,10 @@ void MapStore::StoreAs(const String& sExpression)
 		if ( fnNew.fExist())	
 		{
 			int iRet = MessageBox(::AfxGetApp()->GetMainWnd()->m_hWnd, 
-  									String(SIEMFileAlreadyExists_S.scVal(), fnNew.sRelative().scVal()).scVal(),
+  									String(TR("File %S already exists, overwrite ?").c_str(), fnNew.sRelative().c_str()).c_str(),
 										"Dummy", MB_YESNO | MB_ICONQUESTION );
 				if ( iRet == IDYES)
-					DeleteFile(fnNew.sFullPath().scVal());
+					DeleteFile(fnNew.sFullPath().c_str());
 				else 
 					return;
 		}
@@ -1560,8 +1560,8 @@ void MapStore::StoreAs(const String& sExpression)
 					
 		ForeignFormat *ff = ForeignFormat::Create(fnNew, pm);
 	  Tranquilizer trq;
-	  trq.SetTitle(SMAPTextConverting);
-	  trq.SetText(String(SMAPTextConverting_S.scVal(), ptr.fnObj.sRelative(false)));
+	  trq.SetTitle(TR("Converting"));
+	  trq.SetText(String(TR("Converting %S").c_str(), ptr.fnObj.sRelative(false)));
 		
 	  if (dvrs().fValues()) 
 		{
@@ -1635,19 +1635,19 @@ void MapStoreBase::CreatePyramidLayers(const FileName& fn)
 		delete filePyramid;
 		filePyramid = 0;
 	}		
-	filePyramid = new File(fnNew.sFullPath().scVal(), facCRT);
+	filePyramid = new File(fnNew.sFullPath().c_str(), facCRT);
 	MutexFileName mutD2(fnNew);	
 	long iPyrLayer = 0;
 	int iDiv = (int)pow(2, (double)iPyrLayer);
 	long iLastFilePos = 0;
 	Tranquilizer trq;
-	trq.SetTitle(SMAPTextCreatingPyramidLayers);
+	trq.SetTitle(TR("Creating Pyramid layer"));
 	trq.Start();
 	trq.SetOnlyGauge(true);
 	iPyramidLayerOffset.resize(0);
 	while( iLines() / iDiv > 32 && iCols() / iDiv > 32 )
 	{
-		String sMessage(SMAPTextCreatingLayer_S.scVal(), iLines()/(iDiv*2), iCols()/(iDiv*2), fnNew.sRelative(false));
+		String sMessage(TR("Creating layer %d x %d for map %S").c_str(), iLines()/(iDiv*2), iCols()/(iDiv*2), fnNew.sRelative(false));
 		if ( trq.fText(sMessage))
 		{
 			filePyramid->SetErase();

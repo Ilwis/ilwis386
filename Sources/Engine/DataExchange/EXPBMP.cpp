@@ -97,8 +97,8 @@ BMPExporter::~BMPExporter()
 
 void BMPExporter::Export(Tranquilizer& trq)
 {
-  trq.SetTitle(SCVTitleExportBMP);  // the title in the report window
-  trq.SetText(SCVTextProcessing);   // the text in the report window
+  trq.SetTitle(TR("Exporting to Windows BMP"));  // the title in the report window
+  trq.SetText(TR("Processing..."));   // the text in the report window
   
   inMap = Map(fnIn);
 
@@ -110,7 +110,7 @@ void BMPExporter::Export(Tranquilizer& trq)
   PrepareHeaders();
 
   // write data
-  trq.SetText(SCVTextProcessing);
+  trq.SetText(TR("Processing..."));
   if (inMap->dm()->pdi())         // Image map
       ExportImagePixels(trq);
   else if (inMap->dm()->pdbool()) // Bool map

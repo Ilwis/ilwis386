@@ -111,7 +111,7 @@ long ProjectionLaFrance::iMaxZoneNr() const
 
 String ProjectionLaFrance::sInvalidZone() const
 {
-   return SPRJErrWrongLambertFranceZone;
+   return TR("Lambert France zones are numbered 1..4");
 }
 
 

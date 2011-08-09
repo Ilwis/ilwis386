@@ -113,14 +113,14 @@ void COMCmdLineThread::OnExecute(WPARAM wParam, LPARAM lParam)
 			{
 				// this should popup the import dialog box
 				String sImpCmd("*import"); // The * is for not putting the command in the history
-				const char *s = sImpCmd.scVal();		
+				const char *s = sImpCmd.c_str();		
 				getEngine()->SendMessage(ILWM_EXECUTE, 0, (LPARAM)s);
 			}
 			else if (fCIStrEqual(sCmd,"export"))
 			{
 				// this should popup the export dialog box
 				String sExpCmd("*export"); // The * is for not putting the command in the history
-				const char *s = sExpCmd.scVal();		
+				const char *s = sExpCmd.c_str();		
 				getEngine()->SendMessage(ILWM_EXECUTE, 0, (LPARAM)s);
 			}
 			else

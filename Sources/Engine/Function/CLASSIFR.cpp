@@ -184,5 +184,5 @@ void ClassifierPtr::SetSampleSet(const SampleSet& smpls)
 
 void Classifier::ErrorThreshold(double rThres, const String& sObjName)
 {
-  throw ErrorObject(WhatError(String("%S %g", SDATErrPositiveThreshNeeded, rThres), errClassifier), sObjName);
+  throw ErrorObject(WhatError(String("%S %g", TR("Positive threshold needed:"), rThres), errClassifier), sObjName);
 }

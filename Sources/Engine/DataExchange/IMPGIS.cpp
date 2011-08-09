@@ -118,7 +118,7 @@ void ImpExp::ImportGISLAN(File& FileIn, const FileName& fnObject)
 #pragma pack()
 
 	if (128 != FileIn.Read(128, &erdheader))
-		throw ErrorImportExport(SCVErrReading);
+		throw ErrorImportExport(TR("File Reading Error"));
 
 	short iver = 0;
 	if (!strncmp(erdheader.caHDWORD,"HEADER", 6))
@@ -126,9 +126,9 @@ void ImpExp::ImportGISLAN(File& FileIn, const FileName& fnObject)
 	else if (!strncmp(erdheader.caHDWORD,"HEAD", 4))
 		iver = 2;
 	if (!iver)
-		throw ErrorImportExport(SCVErrNoErdasGL);
+		throw ErrorImportExport(TR("Not an Erdas LAN or GIS File"));
 	
-	trq.SetTitle(SCVTitleImportErdasLG);
+	trq.SetTitle(TR("Importing from Erdas"));
 	long iLine = erdheader.unRows.lg;
 	long iCol = erdheader.unRCols.lg;
 	if (iver == 1)
@@ -244,7 +244,7 @@ void ImpExp::ImportGISLAN(File& FileIn, const FileName& fnObject)
 		amp[0] = Map(fnObject, gr, gr->rcSize(), dvs);
 		amp[0]->fErase = true;
 	} 
-	trq.SetText(SCVTextConverting);
+	trq.SetText(TR("Converting..."));
 	if (erdheader.iPack == 2 || (erdheader.iPack == 1 && erdheader.iNclass == 256))
 	{
 		IntBuf ibuf(iCol);
@@ -257,13 +257,13 @@ void ImpExp::ImportGISLAN(File& FileIn, const FileName& fnObject)
 
 				if (2 * iCol != FileIn.Read(2 * iCol, ibuf.buf()))
 					if (i == 0)
-						throw ErrorImportExport(SCVErrReading);
+						throw ErrorImportExport(TR("File Reading Error"));
 					else
 					{
 						gr = GeoRef(RowCol( i, iCol ) );
 						amp[j]->SetGeoRef(gr);
-						getEngine()->Message(SCVErrHeadSizeMismatch.scVal(),
-							SCVTitleImportErdasLG.scVal(), 
+						getEngine()->Message(TR("Solving File size mismatch in header.").c_str(),
+							TR("Importing from Erdas").c_str(), 
 							MB_OK | MB_ICONEXCLAMATION);
 						break;
 					}
@@ -291,13 +291,13 @@ void ImpExp::ImportGISLAN(File& FileIn, const FileName& fnObject)
 
 					if (iCol != FileIn.Read(iCol, bbuf.buf()))
 						if (i == 0)
-							throw ErrorImportExport(SCVErrReading);
+							throw ErrorImportExport(TR("File Reading Error"));
 						else
 						{
 							gr = GeoRef(RowCol(i, iCol));
 							amp[j]->SetGeoRef(gr);
-							getEngine()->Message(SCVErrHeadSizeMismatch.scVal(),
-								SCVTitleImportErdasLG.scVal(), 
+							getEngine()->Message(TR("Solving File size mismatch in header.").c_str(),
+								TR("Importing from Erdas").c_str(), 
 								MB_OK | MB_ICONEXCLAMATION);
 							break;
 						}
@@ -321,13 +321,13 @@ void ImpExp::ImportGISLAN(File& FileIn, const FileName& fnObject)
 
 						if (iCol / 2 != FileIn.Read(iCol / 2, bbuf.buf()))
 							if (i == 0)
-								throw ErrorImportExport(SCVErrReading);
+								throw ErrorImportExport(TR("File Reading Error"));
 							else
 							{
 								gr = GeoRef(RowCol(i, iCol));
 								amp[j]->SetGeoRef(gr);
-								getEngine()->Message(SCVErrHeadSizeMismatch.scVal(),
-									SCVTitleImportErdasLG.scVal(), 
+								getEngine()->Message(TR("Solving File size mismatch in header.").c_str(),
+									TR("Importing from Erdas").c_str(), 
 									MB_OK | MB_ICONEXCLAMATION);
 								break;
 							}
@@ -357,13 +357,13 @@ void ImpExp::ImportGISLAN(File& FileIn, const FileName& fnObject)
 
 						if (iCol / 2 + 1 != FileIn.Read(iCol / 2 + 1, bbuf.buf()))
 							if (i == 0)
-								throw ErrorImportExport(SCVErrReading);
+								throw ErrorImportExport(TR("File Reading Error"));
 							else
 							{
 								gr = GeoRef(RowCol(i, iCol));
 								amp[j]->SetGeoRef(gr);
-								getEngine()->Message(SCVErrHeadSizeMismatch.scVal(),
-									SCVTitleImportErdasLG.scVal(), 
+								getEngine()->Message(TR("Solving File size mismatch in header.").c_str(),
+									TR("Importing from Erdas").c_str(), 
 									MB_OK | MB_ICONEXCLAMATION);
 								break;
 							}

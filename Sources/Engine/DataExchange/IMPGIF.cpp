@@ -115,9 +115,9 @@ void ReadWriteLine( File& FileIn, Array<stbl>& stblarT, ByteBuf& bbuf, Array<byt
         aParam.iInd += 2 - aParam.LastLen1;
         FileIn.Read(1, &aParam.PackedBlockLen);
         if (aParam.PackedBlockLen == 0)
-          throw ErrorImportExport(SCVErrGifCode);
+          throw ErrorImportExport(TR("Error code in the file"));
         if (aParam.PackedBlockLen != FileIn.Read(aParam.PackedBlockLen, &aParam.ucaPkBlk[2]))
-          throw ErrorImportExport(SCVErrReading);
+          throw ErrorImportExport(TR("File Reading Error"));
         aParam.LastLen1 = aParam.PackedBlockLen + 2;
       }
       I4 = ((long)aParam.ucaPkBlk[aParam.iInd + 2] << 16) +
@@ -160,7 +160,7 @@ void ReadWriteLine( File& FileIn, Array<stbl>& stblarT, ByteBuf& bbuf, Array<byt
       else {
         aParam.iCdMax++;
         if ( aParam.Code != aParam.iCdMax )
-          throw ErrorImportExport(SCVErrGifCode);
+          throw ErrorImportExport(TR("Error code in the file"));
         stblarT[aParam.Code].iBef = aParam.iCdOd;
         stblarT[aParam.Code].Len = stblarT[aParam.iCdOd].Len + 1;
         C = aParam.iCdOd;
@@ -195,21 +195,21 @@ void ImpExp::ImportGIF(File& FileIn, const FileName& fnObject)
   Array<byte> Block1(5001);
   param aParam;
 
-  trq.SetTitle(SCVTitleImportGIF);
+  trq.SetTitle(TR("Importing from GIF image"));
   trq.fUpdate(0);
 
 	ScreenStruct screen;
   FileIn.Read(sizeof screen, &screen);
   if (strncmp(screen.ucSig, "GIF", 3))
-    throw ErrorImportExport(SCVErrNoGIF);
+    throw ErrorImportExport(TR("not a GIF file"));
 
   if (screen.ucNul)
-    throw ErrorImportExport(SCVErrNotSupported);
+    throw ErrorImportExport(TR("File format not supported"));
 
   byte bCol[3], b;
   Domain dm("Image");
   if (screen.ucM & 0x80) {          // Global Color Table
-    trq.SetText(SCVTextGifGetGlobalLUT);
+    trq.SetText(TR("Retrieving global color table"));
     int iNrCol = 1 << ((screen.ucM & 0x07) + 1);
     dm = Domain(fnObject, iNrCol, dmtPICTURE);
     Representation rp(FileName(fnObject, ".RPR"), dm);
@@ -225,7 +225,7 @@ void ImpExp::ImportGIF(File& FileIn, const FileName& fnObject)
   do {
     FileIn.Read(1, &b);
     if (b == '!') {
-      trq.SetText(SCVTextGifSkipExt);
+      trq.SetText(TR("Skipping the extension block"));
       byte count, buf[256];
       FileIn.Read(1, &count);
       do {
@@ -239,11 +239,11 @@ void ImpExp::ImportGIF(File& FileIn, const FileName& fnObject)
   
   while (b != ',' && !FileIn.fEof());    // Found an image descriptor
   if (FileIn.fEof())
-    throw ErrorImportExport(SCVErrGifNoImage);
+    throw ErrorImportExport(TR("No image in the file"));
 
 	ImageStruct image;
   if ((sizeof image) != FileIn.Read(sizeof(image), &image) )
-    throw ErrorImportExport(SCVErrReading);
+    throw ErrorImportExport(TR("File Reading Error"));
 
   aParam.iCol = image.iWcols;
   long iLine = image.iWlines;
@@ -252,14 +252,14 @@ void ImpExp::ImportGIF(File& FileIn, const FileName& fnObject)
 
   int iNrp = (image.uc & 0x07) + 1;
   if (image.uc & 0x80) {             // Local Color Table
-    trq.SetText(SCVTextGifGetLocalLUT);
+    trq.SetText(TR("Retrieving local color table"));
     int iNrCol = 1 << iNrp;
     dm = Domain(fnObject, iNrCol, dmtPICTURE);
     Representation rp(FileName(fnObject, ".RPR"), dm);
     RepresentationClass* prc = dynamic_cast<RepresentationClass*>(rp.ptr());
     for (int i = 0; i < iNrCol; i++) {
       if (3 != FileIn.Read(3, bCol))
-        throw ErrorImportExport(SCVErrReading);
+        throw ErrorImportExport(TR("File Reading Error"));
       prc->PutColor(i, Color(bCol[0], bCol[1], bCol[2]));
     }
     dm->SetRepresentation(rp);
@@ -279,7 +279,7 @@ void ImpExp::ImportGIF(File& FileIn, const FileName& fnObject)
   aParam.LastLen1 = 0;
   InitArray1(stblarT, aParam);
   String sErr;
-  trq.SetText(SCVTextConverting);
+  trq.SetText(TR("Converting..."));
 
   if (image.uc & 0x40) {    // Interlaced
     long iCnt = 0;

@@ -105,7 +105,7 @@ public:
 class ErrorUnrecognizedTag : public ErrorObject {
 public:
   ErrorUnrecognizedTag(const WhereError& where, const String& sTag)
-    : ErrorObject(WhatError(String(SCVErrUnrecognizedTag_S.scVal(), sTag), errUNRECTAG), where) {}
+    : ErrorObject(WhatError(String(SCVErrUnrecognizedTag_S.c_str(), sTag), errUNRECTAG), where) {}
 };    
 
 class ErrorUnexpectedEOF : public ErrorObject {

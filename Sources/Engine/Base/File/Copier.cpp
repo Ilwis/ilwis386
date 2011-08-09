@@ -202,7 +202,7 @@ void Copier::init(const String& sDestPath, bool fCopyAttTable, bool fBreakDep)
     sSystemDir &= '\\';
   fIncludeSystemFiles = false;
   fObjectListConstructed = false;
-  trq.SetTitle(SDATTitleCopyObjects);
+  trq.SetTitle(TR("Copy Object(s)"));
   trq.Start();
 }
 
@@ -237,13 +237,13 @@ void Copier::AddObject(const Domain& dm)
 void Copier::SetDestinationPath(const String& sPath)
 {
   //char *sFullDestPath = new char[MAXPATH];
-  //_fullpath(sFullDestPath, sPath.scVal(), MAX_PATH);
+  //_fullpath(sFullDestPath, sPath.c_str(), MAX_PATH);
 	String sPathu = sPath.sUnQuote();
 
-  if (strlen(sPathu.scVal()) != 0) {
+  if (strlen(sPathu.c_str()) != 0) {
     DWORD dwFileAtt;
 
-    if ((dwFileAtt=GetFileAttributes(sPathu.scVal()))==0xFFFFFFFF)
+    if ((dwFileAtt=GetFileAttributes(sPathu.c_str()))==0xFFFFFFFF)
       throw ErrorDirNotFound(sPath);
   }  
   sDestPath = sPath;
@@ -328,7 +328,7 @@ void Copier::DetermineDataFiles()
     Array<FileName> afnDat;
     try {
       IlwisObject obj = IlwisObject::obj(afnObj[i]);
-      if (trq.fText(String("%S '%S'", SDATMsgFindDataFilesFor, afnObj[i].sFullName())))
+      if (trq.fText(String("%S '%S'", TR("Find data files for"), afnObj[i].sFullName())))
         return;
       if (!obj.fValid())
         continue;
@@ -346,7 +346,7 @@ void Copier::DetermineDataFiles()
 void Copier::AddObjectAndProp(const FileName& fnObj)
 {
   AddObject(fnObj);
-  if (trq.fText(String("%S '%S'", SDATMsgCreateObjectListFor, fnObj.sFullName())))
+  if (trq.fText(String("%S '%S'", TR("Create list of objects for"), fnObj.sFullName())))
     return;
   if (fCIStrEqual(fnObj.sExt, ".sms")) { // also copy sample map under new name
     FileName fn;
@@ -526,7 +526,7 @@ bool Copier::fSufficientDiskSpace(unsigned __int64 & iSpaceRequired, unsigned __
   iSpaceRequired = 0;
   for (unsigned int i=0; i < afnData.iSize(); ++i) {
     struct _stati64 st; 
-    if (0 != _stati64(afnData[i].sFullName().scVal(), &st))
+    if (0 != _stati64(afnData[i].sFullName().c_str(), &st))
       continue;
     iSpaceRequired += st.st_size; 
   }
@@ -593,14 +593,14 @@ void Copier::Exec()
 				continue;
       FileName fnDataCopy = afnData[j];
       fnDataCopy.sFile = afnObj[0].sFile;
-			ObjectInfo::WriteElement(asSection[j].scVal(), asEntry[j].scVal(), fnCopy, fnDataCopy);
-			MoveFile(afnData[j].sFullName().scVal(), fnDataCopy.sFullName().scVal());
+			ObjectInfo::WriteElement(asSection[j].c_str(), asEntry[j].c_str(), fnCopy, fnDataCopy);
+			MoveFile(afnData[j].sFullName().c_str(), fnDataCopy.sFullName().c_str());
     }
     FileName fnDataCopy = afnData[0];
     fnDataCopy.sFile = afnObj[0].sFile;
 		if ( fnDataCopy.fExist())
-			DeleteFile(fnDataCopy.sFullName().scVal());
-    MoveFile(afnData[0].sFullName().scVal(), fnDataCopy.sFullName().scVal());
+			DeleteFile(fnDataCopy.sFullName().c_str());
+    MoveFile(afnData[0].sFullName().c_str(), fnDataCopy.sFullName().c_str());
     return;
   }
   if (!fObjectListConstructed)
@@ -610,13 +610,13 @@ void Copier::Exec()
     for (unsigned int i=0; i < afnData.iSize(); ++i) {
       FileName fnDest = afnData[i];
       fnDest.Dir(sDestPath);
-      trq.fText(String("%S %S --> %S", SDATOthCopy, afnData[i].sFullName(), fnDest.sFullName()));
+      trq.fText(String("%S %S --> %S", TR("Copy"), afnData[i].sFullName(), fnDest.sFullName()));
       File::Copy(afnData[i], fnDest);
       if (trq.fAborted()) {
         for (int j=i; j>=0; --j) {
           FileName fnDest = afnData[j];
           fnDest.Dir(sDestPath);
-          _unlink(fnDest.sFullName().scVal());
+          _unlink(fnDest.sFullName().c_str());
         }
         return;
       } 
@@ -640,13 +640,13 @@ void Copier::Exec()
         fnDest.sFile = fnAttTableCopy.sFile;
       else // sample map
         fnDest.sFile = fnObjCopy.sFile;
-      trq.fText(String("%S %S --> %S", SDATOthCopy, afnData[i].sFullName(), fnDest.sFullName()));
+      trq.fText(String("%S %S --> %S", TR("Copy"), afnData[i].sFullName(), fnDest.sFullName()));
       File::Copy(afnData[i], fnDest);
       if (trq.fAborted()) {
         for (int j=i; j>=0; --j) {
           FileName fnDest = afnData[j];
           fnDest.Dir(sDestPath);
-          _unlink(fnDest.sFullName().scVal());
+          _unlink(fnDest.sFullName().c_str());
         }
         return;
       }
@@ -711,15 +711,15 @@ void Copier::Exec()
         ObjectInfo::ReadElement("Ilwis", "Type", fnObjCopy, sType);
         if ((sType == "BaseMap") || (sType == "Table")) {
           String s;
-          ObjectInfo::ReadElement(sType.scVal(), "Type", fnObjCopy, s);
+          ObjectInfo::ReadElement(sType.c_str(), "Type", fnObjCopy, s);
           sType = s;
-          ObjectInfo::ReadElement(sType.scVal(), "Type", fnObjCopy, s);
+          ObjectInfo::ReadElement(sType.c_str(), "Type", fnObjCopy, s);
           String sTypeVirt = sType;
           sTypeVirt &= "Virtual";
           if (s == sTypeVirt) { // virtual object
             s = s.sLeft(s.length()-7); // remove Virtual
             s &= "Store";
-            ObjectInfo::WriteElement(sType.scVal(), "Type", fnObjCopy, s);
+            ObjectInfo::WriteElement(sType.c_str(), "Type", fnObjCopy, s);
           }  
           // break dependencies of columns in table
           ObjectInfo::ReadElement("Ilwis", "Type", fnObjCopy, sType);
@@ -757,7 +757,7 @@ void Copier::Exec()
         fnDataCopy.sFile = fnAttTableCopy.sFile;
         fnObjCop.sFile = fnAttTableCopy.sFile;
       }  
-      ObjectInfo::WriteElement(asSection[j].scVal(), asEntry[j].scVal(), fnObjCop, fnDataCopy);
+      ObjectInfo::WriteElement(asSection[j].c_str(), asEntry[j].c_str(), fnObjCop, fnDataCopy);
     }  
     if (fnAttTableCopy.fValid())
       ObjectInfo::WriteElement("BaseMap", "AttributeTable", fnObjCopy, fnAttTableCopy);
@@ -781,7 +781,7 @@ void Copier::Copy(const FileName& fnObj, const FileName& fnCopy, bool fBreakDep)
 void Copier::Copy(const FileName& fnObj, const String& sDestDir, bool fBreakDep)
 {
   char *sFullDestPath = new char[MAXPATH];
-  _fullpath(sFullDestPath, sDestDir.scVal(), MAX_PATH);
+  _fullpath(sFullDestPath, sDestDir.c_str(), MAX_PATH);
   String sDstDir = sFullDestPath;
   delete [] sFullDestPath;
   if (fCIStrEqual(fnObj.sPath(), sDstDir))
@@ -798,7 +798,7 @@ void Copier::Copy(const Array<FileName>& afnObj, const String& sDestDir, bool fB
   if (afnObj.iSize() == 0)
     return;
   char *sFullDestPath = new char[MAXPATH];
-  _fullpath(sFullDestPath, sDestDir.scVal(), 80);
+  _fullpath(sFullDestPath, sDestDir.c_str(), 80);
   String sDstDir = sFullDestPath;
   delete [] sFullDestPath;
   if (fCIStrEqual(afnObj[0].sPath(), sDstDir))

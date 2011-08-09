@@ -139,7 +139,7 @@ SampleSet::SampleSet(const String& sExpr, const String& sPath)
 : IlwisObject(listSmpl)
 {
   FileName fn(sExpr, ".sms", true);
-  if (0 == strchr(sExpr.scVal(), ':')) // no path set
+  if (0 == strchr(sExpr.c_str(), ':')) // no path set
     fn.Dir(sPath); 
 	if (!File::fExist(fn))
     NotFoundError(fn);
@@ -482,7 +482,7 @@ void SampleSetPtr::DelClass(byte bKey)
   long iNrCols = smplmap->iCols();
   long iNrRows = smplmap->iLines();
   trq.SetTitle(SDATTitleDeleteFromSampleSet);
-  trq.SetText(String(SDATTextDeleteClass_S.scVal(), dc()->sValueByRaw(bKey,0)));
+  trq.SetText(String(SDATTextDeleteClass_S.c_str(), dc()->sValueByRaw(bKey,0)));
   trq.fUpdate(0, iNrRows);
   trq.Start();
   long c, r;
@@ -525,7 +525,7 @@ byte SampleSetPtr::MrgClass(byte bKey1,
   ilwapp->UseYield(true);
   Tranquilizer trq;
   trq.SetTitle(SDATTitleMergeSampleClasses);
-  trq.SetText(String(SDATTextMergeClasses_SS.scVal(), dc()->sValueByRaw(bKey1,0), dc()->sValueByRaw(bKey2,0)));
+  trq.SetText(String(SDATTextMergeClasses_SS.c_str(), dc()->sValueByRaw(bKey1,0), dc()->sValueByRaw(bKey2,0)));
   bool fAborted = false;
 //  MapStore* ptr = smplmap->pms();
   long iNrCols = smplmap->iCols();

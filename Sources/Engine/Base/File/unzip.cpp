@@ -1683,7 +1683,7 @@ int do_extract_currentfile(unzFile uf, const String& path, const char* password)
             {
                 char c=*(filename_withoutpath-1);
                 *(filename_withoutpath-1)='\0';
-                makedir(write_filename);
+				makedir(FileName(write_filename).sPath().c_str());
                 *(filename_withoutpath-1)=c;
                 fout=fopen(write_filename,"wb");
             }
@@ -1798,7 +1798,7 @@ bool unzip(const FileName & fn)
         zlib_filefunc_def ffunc;
 
         fill_win32_filefunc(&ffunc);
-		uf = unzOpen2(fn.sFullPath().scVal(),&ffunc);
+		uf = unzOpen2(fn.sFullPath().c_str(),&ffunc);
 		if ( uf == 0)
 			return false;
 

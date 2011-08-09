@@ -222,7 +222,7 @@ void TableVirtual::Freeze()
   else {
     UnFreeze();
   }
-  trq.SetText(STBLTextStoreTable);
+  trq.SetText(TR("Store Table"));
   ptr.Store();
   trq.Stop();
 }

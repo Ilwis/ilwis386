@@ -10,7 +10,7 @@ void ForeignFormatMap::AddFormats()
 	CFileFind finder;
 
 	String path = getEngine()->getContext()->sIlwDir() + "\\Extensions\\*.dll";
-	BOOL fFound = finder.FindFile(path.scVal());
+	BOOL fFound = finder.FindFile(path.c_str());
 	while(fFound) {
 		fFound = finder.FindNextFile();
 		if (!finder.IsDirectory())
@@ -23,7 +23,7 @@ void ForeignFormatMap::AddFormats()
 
 void ForeignFormatMap::AddModule(const FileName& fnModule) {
 	String path = fnModule.sFullPath();
-	HMODULE hm = LoadLibrary(path.scVal());
+	HMODULE hm = LoadLibrary(path.c_str());
 	if ( hm == NULL) {
 		DWORD err = GetLastError();
 		int z = 0;

@@ -89,7 +89,7 @@ GartripText::GartripText(const FileName& fnFile, const FileName& fnObject, const
 	if (as.size() > 0)
 	{
 		double rTemp;
-		if (0 < sscanf(as[0].scVal(), "%lf", &rTemp))
+		if (0 < sscanf(as[0].c_str(), "%lf", &rTemp))
 			rHeightOffset = rTemp;
 	}
 }
@@ -100,7 +100,7 @@ GartripText::~GartripText()
 
 void GartripText::Import()
 {
-	CStdioFile fileIn (fnIn.sFullPath().scVal(), CFile::modeRead|CFile::shareDenyNone|CFile::typeText);
+	CStdioFile fileIn (fnIn.sFullPath().c_str(), CFile::modeRead|CFile::shareDenyNone|CFile::typeText);
 	CFileStatus rStatus;
 	fileIn.GetStatus(rStatus);
 	iFnInSize = rStatus.m_size;
@@ -253,7 +253,7 @@ void GartripText::Import()
 			if ((iCurrentCol == iAltitudeCol) && (rHeightOffset != 0.0))
 			{
 				double rAltitude;
-				if (1 == sscanf(sTokenBuffer.scVal(), "%lf", &rAltitude))
+				if (1 == sscanf(sTokenBuffer.c_str(), "%lf", &rAltitude))
 					sTokenBuffer = String("%lf", rAltitude + rHeightOffset);
 			}
 			else if (iCurrentCol == iDescriptionColWithValues)
@@ -266,7 +266,7 @@ void GartripText::Import()
 			{
 				// Trackfile .. check if we need to close the segment
 				int iFlag;
-				if (1 == sscanf(sTokenBuffer.scVal(), "%d", &iFlag))
+				if (1 == sscanf(sTokenBuffer.c_str(), "%d", &iFlag))
 					if (iFlag != 0)
 					{
 						if (cPoints.iSize() > 0)
@@ -346,7 +346,7 @@ void GartripText::Import()
 	{
 		// extra handling for "Routes"
 		fSegmentsFound = true;
-		trq.SetText(SCVTextImportRoutes);
+		trq.SetText(TR("Importing Routes"));
 		cPoints.Reset();
 		bool fRouteNameFollows = true;
 		// secondary import loop for the routes
@@ -393,7 +393,7 @@ void GartripText::Import()
 			if (dmSegmentMap.fValid()) dmSegmentMap->fErase = false;
 			if (segMap.fValid()) segMap->fErase = false;
 		}
-		trq.SetText(SCVTextWritingToDisk);
+		trq.SetText(TR("Storing imported data..."));
 	}
 }
 
@@ -432,7 +432,7 @@ bool GartripText::fStripNextToken(CString &csInOut, String &sTokenOut)
 
 bool GartripText::fGetCoordsFromStrings(String sFirstCoord, String sSecondCoord, double & rFirst, double & rSecond)
 {
-	if ((1 == sscanf(sFirstCoord.scVal(), "%lf", &rFirst)) && (1 == sscanf(sSecondCoord.scVal(), "%lf", &rSecond)))
+	if ((1 == sscanf(sFirstCoord.c_str(), "%lf", &rFirst)) && (1 == sscanf(sSecondCoord.c_str(), "%lf", &rSecond)))
 	{
 		// basically rFirst and rSecond have their corresponding values here
 		// depending on conditions, several adjustments may be needed
@@ -479,8 +479,8 @@ bool GartripText::fGetCoordsFromStrings(String sFirstCoord, String sSecondCoord,
 		String sThreeDoubles ("%lf%*[^-0-9]%lf%*[^-0-9]%lf");
 		double rDeg1, rMin1, rSec1;
 		double rDeg2, rMin2, rSec2;
-		int iScannedFirst = sscanf(sFirstCoord.scVal(), sThreeDoubles.scVal(), &rDeg1, &rMin1, &rSec1);
-		int iScannedSecond = sscanf(sSecondCoord.scVal(), sThreeDoubles.scVal(), &rDeg2, &rMin2, &rSec2);
+		int iScannedFirst = sscanf(sFirstCoord.c_str(), sThreeDoubles.c_str(), &rDeg1, &rMin1, &rSec1);
+		int iScannedSecond = sscanf(sSecondCoord.c_str(), sThreeDoubles.c_str(), &rDeg2, &rMin2, &rSec2);
 		if ((iScannedFirst == 3) && (iScannedSecond == 3))
 		{
 			// LatLon case: swap them .. in the gartrip txt file they're in the wrong order
@@ -529,7 +529,7 @@ void GartripText::ParseHeaderLines(CStdioFile &fileIn)
 		fWaypoints = true;
 	else
 	{
-		String sErr (SCVErrNoGartrip);
+		String sErr (TR("Not a valid GARtrip file"));
 		throw ErrorObject(WhatError(sErr, errFORMERROR));
 	}
 
@@ -633,7 +633,7 @@ void GartripText::CreateCoordinateSystems()
 	}
 	if (!(csySrc.fValid() && csyDest.fValid()))
 	{
-		String sErr (SCVErrCoordinateSys);
+		String sErr (TR("Error in coordinate system"));
 		throw ErrorObject(WhatError(sErr, errFORMERROR));
 	}
 }
@@ -642,13 +642,13 @@ void GartripText::SetTranquilizer()
 {
 	if (fWaypoints)
 	{
-    trq.SetTitle(SCVTextImportGartrip);
-    trq.SetText(SCVTextImportWaypoints);
+    trq.SetTitle(TR("Import GARtrip text file"));
+    trq.SetText(TR("Importing Waypoints"));
 	}
 	else // Tracks
 	{
-    trq.SetTitle(SCVTextImportGartrip);
-    trq.SetText(SCVTextImportTracks);
+    trq.SetTitle(TR("Import GARtrip text file"));
+    trq.SetText(TR("Importing Tracks"));
 	}
 	trq.SetOnlyGauge(true); // otherwise the current file pos is displayed, misleading us to think that we have so many tracks
 }
@@ -703,7 +703,7 @@ void GartripText::AddSegment(long iRec, ArrayLarge<Coord> &cPoints, SegmentMap& 
 
 bool GartripText::fColHasValues(int iCol)
 {
-	CStdioFile fileIn (fnIn.sFullPath().scVal(), CFile::modeRead|CFile::shareDenyNone|CFile::typeText);
+	CStdioFile fileIn (fnIn.sFullPath().c_str(), CFile::modeRead|CFile::shareDenyNone|CFile::typeText);
 	CString csLineBuffer;
 	int iLinesRead = -2; // to skip the headers
 	bool fTryMoreLines = true;
@@ -746,7 +746,7 @@ void GartripText::MakeUTMCoordSystem(FileName fnCoord, CoordSystem& cs)
 
 bool GartripText::fParseFirstDouble(String sString, double & rValue)
 {
-	return (1 == sscanf(sString.scVal(), "%*[^-0-9]%lf", &rValue));
+	return (1 == sscanf(sString.c_str(), "%*[^-0-9]%lf", &rValue));
 }
 
 bool GartripText::fIsGartripFormat(String sFileName, string &sCoordSysInfo)
@@ -755,7 +755,7 @@ bool GartripText::fIsGartripFormat(String sFileName, string &sCoordSysInfo)
 	FileName fnFile (sFileName);
 	if (fnFile.fExist())
 	{
-		CStdioFile fileIn (fnFile.sFullPath().scVal(), CFile::modeRead|CFile::shareDenyNone|CFile::typeText);
+		CStdioFile fileIn (fnFile.sFullPath().c_str(), CFile::modeRead|CFile::shareDenyNone|CFile::typeText);
 		CString csLineBuffer;
 		if (fileIn.ReadString(csLineBuffer))
 		{
@@ -798,7 +798,7 @@ bool GartripText::fToUTMZone(String sUTMString, int &iZone, bool &fNorth)
 {
 	// expected format for sUTM: nnC or nC where n is a digit and C is a character
 	char cBand;
-	if (2 == sscanf(sUTMString.scVal(), "%d%c", &iZone, &cBand))
+	if (2 == sscanf(sUTMString.c_str(), "%d%c", &iZone, &cBand))
 	{
 		// cBand in A..M: south; cBand in N..Z: north
 		fNorth = (('n' <= cBand) && (cBand <= 'z'))||(('N' <= cBand) && (cBand <= 'Z'));
@@ -812,7 +812,7 @@ void ImpExp::ImportGartrip(const FileName& fnFile, const FileName& fnObject, con
 {
 	try 
 	{
-		trq.SetTitle(SCVTextImportGartrip);
+		trq.SetTitle(TR("Import GARtrip text file"));
 		GartripText gt(fnFile, fnObject, sOptions, trq, win);
 		
 		gt.Import();

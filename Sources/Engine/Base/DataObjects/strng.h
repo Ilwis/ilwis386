@@ -58,8 +58,6 @@ public:
    
     char*                sVal() 
                            { return const_cast<char *>(c_str()); }
-    const char *         scVal() const 
-                           { return c_str(); }
     short                shVal() const 
                            { return shortConv(iVal()); }
     bool _export         fVal() const;

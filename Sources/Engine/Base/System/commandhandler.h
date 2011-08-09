@@ -44,7 +44,36 @@ class BaseCommandHandler;
 class CommandHandler;
 class Tranquilizer;
 
+struct IlwisFileInfo {
+	IlwisFileInfo() { size = 0; status = true; check = 0; }
 
+	String id() const {
+		if ( location != "")
+			return location + name;
+		return name;
+	}
+
+	//bool operator<(const IlwisFileInfo& inf) {
+	//	return id() < inf.id();
+	//}
+	bool operator==(const IlwisFileInfo& inf) const{
+		bool ok = id() == inf.id();
+		ok = ok && size == inf.size;
+		ok = ok && modifiedTime == inf.modifiedTime;
+		ok = ok && check == inf.check;
+		return ok;
+	}
+	bool operator!=(const IlwisFileInfo& inf) const{
+		return ! (operator==(inf));
+	}
+
+	String location;
+	String name;
+	long size;
+	ILWIS::Time modifiedTime;
+	short check;
+	bool status;
+};
 
 class IMPEXP BaseCommandHandler
 {
@@ -79,6 +108,7 @@ public:
 	static void _export CopyObjects(const String& sCmd, Tranquilizer* trq, CWnd* wnd=0, bool fOnlyDirectory=false);
 	static void _export CopyFiles(const String& sCmd, Tranquilizer* trq);
 	static UINT CmdCopyFileInThread(void *p);
+	static void _export gatherFromFolder(const string& root, const string& folder, vector<IlwisFileInfo>& files);
 	
 protected:
 	void Init();
@@ -174,6 +204,8 @@ private:
 	static void CmdAppMetaData(const String& sN);
 	static void CmdSend(const String& sN);
 	static void CmdZip(const String& filename);
+	static void CmdUpdateIlwis(const String& expr);
+	static void CreatePyramidFiles(const String& str);
 
 
 	// this command is only for testing purposes, it will show the connect db dialog
@@ -195,8 +227,10 @@ private:
 	static UINT CmdDomPicToClassInThread(void *p);
 	static UINT CmdDomIDToClassInThread(void *p);
 	static UINT CreatePyrInThread(LPVOID p);
+//	static UINT CmdCopyFileInThread(void *p);
 
-	static void CreatePyramidFiles(const String& s);
+	static UINT UpdateIlwis(void *p);
+	static void cleanupDownloadDir(const String& path);
 	
 };
 

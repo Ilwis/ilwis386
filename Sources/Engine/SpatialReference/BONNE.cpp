@@ -88,7 +88,7 @@ void ProjectionBonne::Prepare()
 	double c;
 	 //P->phi1 = pj_param(P->params, "rlat_1").f;
 	if (abs(phits) < EPS10) //E_ERROR(-23);
-		throw ErrorObject(SPRJErrWrongTrueScaleLat, 2211);
+		throw ErrorObject(TR("Latitude of True Scale should not be 0"), 2211);
 	fNorth = (phits > 0);
 	if (ell.e2 > 0) {
 		enfn(en);

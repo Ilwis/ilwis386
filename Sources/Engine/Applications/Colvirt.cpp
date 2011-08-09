@@ -55,7 +55,7 @@
 ColumnVirtual* ColumnVirtual::create(const Table& tbl, const String& sColName, ColumnPtr& p)
 {
    String sExpr;
-  ObjectInfo::ReadElement(String("%SCol:%S", tbl->sSectionPrefix, sColName).scVal(), "Expression", tbl->fnObj, sExpr);
+  ObjectInfo::ReadElement(String("%SCol:%S", tbl->sSectionPrefix, sColName).c_str(), "Expression", tbl->fnObj, sExpr);
   String sFunc = IlwisObjectPtr::sParseFunc(sExpr);
   vector<CommandInfo *> infos;
   Engine::modules.getCommandInfo(sFunc, infos);
@@ -158,7 +158,7 @@ ColumnVirtual::ColumnVirtual(const Table& tbl, const String& sColName, ColumnPtr
 //  ReadElement(sSection(), "Expression", _sExpression);
 //  if (_sExpression.length() == 0)
 //    throw ErrorExpression(fnObj, _sExpression);
-  ptr.ReadElement(sSection().scVal(), "SearchTbl", fnTblSearch);
+  ptr.ReadElement(sSection().c_str(), "SearchTbl", fnTblSearch);
 /*  ReadElement(sSection(), "Stored", fFrozen);
   ptr = 0;
   if (fFrozen)
@@ -196,7 +196,7 @@ void ColumnVirtual::Store()
   if (ptr.sNam[0] == '#') // temp column
     return;
   if (ptr.fErase) {
-    WriteElement(sSection().scVal(), NULL, NULL);
+    WriteElement(sSection().c_str(), NULL, NULL);
     return;
   }  
   WriteEntry("Type", "ColumnVirtual");
@@ -470,7 +470,7 @@ String ColumnVirtual::sTblSearch(String& sExpression)
     tok = tkn.tokGet(); 
   } 
   if (tok.sVal() != "}") {
-    ErrorObject(STBLErrCurlyExpected, 0).Show();  // '}'
+    ErrorObject(TR("\'}\' expected"), 0).Show();  // '}'
     return String();
   }
   return sTbl; 

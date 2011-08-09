@@ -42,33 +42,42 @@ Created on: 2007-02-8
 #include "Engine\Base\DataObjects\URL.h"
 #include "Engine\Base\DataObjects\RemoteXMLObject.h"
 
-RemoteXMLObject::RemoteXMLObject() {
+RemoteObject::RemoteObject() : file(0) {
 }
 
-RemoteXMLObject::RemoteXMLObject(const URL& url) {
-	getRequest(url.sVal().sVal());
+RemoteObject::RemoteObject(const URL& url) : file(0) {
+	getRequest(url.sVal());
 }
 
-size_t RemoteXMLObject::WriteMemoryCallback(void *ptr, size_t size, size_t nmemb, void *data)
+size_t RemoteObject::WriteMemoryCallback(void *ptr, size_t size, size_t nmemb, void *obj)
 {
+	RemoteObject *ro = (RemoteObject *)obj;
 	size_t realsize = size * nmemb;
-	MemoryStruct *mem = (MemoryStruct *)data;
-    char *ss = (char *)ptr;
-	mem->memory = (unsigned char *)myrealloc(mem->memory, mem->size + realsize + 1);
-	if (mem->memory) {
-		memcpy(&(mem->memory[mem->size]), ptr, realsize);
-		mem->size += realsize;
-		mem->memory[mem->size] = 0;
+	if ( ro->file == 0) {
+		MemoryStruct *mem = &(ro->chunk);
+		char *ss = (char *)ptr;
+		mem->memory = (unsigned char *)myrealloc(mem->memory, mem->size + realsize + 1);
+		if (mem->memory) {
+			memcpy(&(mem->memory[mem->size]), ptr, realsize);
+			mem->size += realsize;
+			mem->memory[mem->size] = 0;
+		}
+	} else {
+		ro->file->write((char *)ptr, realsize);
+
+		//for(int i = 0 ; i < realsize; ++i) {
+		//	*(ro->file) << ((char *)ptr)[i];
+		//}
 	}
 	return realsize;
 }
 
-RemoteXMLObject::~RemoteXMLObject() {
+RemoteObject::~RemoteObject() {
     if(chunk.memory)
       free(chunk.memory);
 }
 
-void *RemoteXMLObject::myrealloc(void *ptr, size_t size)
+void *RemoteObject::myrealloc(void *ptr, size_t size)
 {
 	/* There might be a realloc() out there that doesn't like reallocing
 	NULL pointers, so we take care of it here */
@@ -79,7 +88,7 @@ void *RemoteXMLObject::myrealloc(void *ptr, size_t size)
 
 }
 
-MemoryStruct *RemoteXMLObject::get() {
+MemoryStruct *RemoteObject::get() {
 	MemoryStruct *mem = new MemoryStruct();
 	mem->size = chunk.size;
 	mem->memory = new unsigned char[mem->size];
@@ -88,7 +97,7 @@ MemoryStruct *RemoteXMLObject::get() {
 	return mem;
 }
 
-void RemoteXMLObject::getRequest(char *url) {
+void RemoteObject::getRequest(const String& url) {
 	CURL *curl_handle;
   
 
@@ -97,9 +106,9 @@ void RemoteXMLObject::getRequest(char *url) {
   
     curl_global_init(CURL_GLOBAL_ALL);
     curl_handle = curl_easy_init();
-    curl_easy_setopt(curl_handle, CURLOPT_URL, url);
+	curl_easy_setopt(curl_handle, CURLOPT_URL, url.c_str());
     curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
-    curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&chunk);
+    curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)this);
     curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
     CURLcode result = curl_easy_perform(curl_handle);
 	if ( result != 0)
@@ -110,6 +119,28 @@ void RemoteXMLObject::getRequest(char *url) {
     curl_global_cleanup();
 }
 
-void RemoteXMLObject::parse() {
+void RemoteObject::parse() {
+}
+
+void RemoteObject::setStream(ofstream *stream){
+	if ( stream == 0) {
+		if ( file && file->is_open()) {
+			file->close();
+		}
+	} else {
+		file = stream;
+		if(chunk.memory)
+			free(chunk.memory);
+		chunk.memory = 0;
+	}
+}
+
+String RemoteObject::toString() {
+	String txt;
+	if(chunk.memory) {
+		for(int i = 0; i < chunk.size; ++i)
+			txt += chunk.memory[i];
+	}
+	return txt;
 }
 

@@ -62,7 +62,7 @@
 class ImpossibleError : public ErrorObject
 {
 public:
-	ImpossibleError() : ErrorObject(WhatError(SCVErrImportError, 9999)) {}
+	ImpossibleError() : ErrorObject(WhatError(TR("Import Error"), 9999)) {}
 };
 
 /* 
@@ -106,7 +106,7 @@ void ImpExp::ImportOTH(const FileName& fnFile, const FileName& fnObject,
 	Array<FileName> objects;
 	try
 	{
-		trq.SetTitle(SCVTitleImportRaster);
+		trq.SetTitle(TR("Import Raster"));
 		bool fCreateMapList = iNrBands > 1;
 		if (iNrBands == 0)
 			iNrBands = 1;
@@ -192,7 +192,7 @@ void ImpExp::ImportOTH(const FileName& fnFile, const FileName& fnObject,
 			afnObj[i] = fnObject;
 			if (iNrBands > 1)
 			{
-				String sNr(String("%%0%ii", iDigits).scVal(), 1 + i);
+				String sNr(String("%%0%ii", iDigits).c_str(), 1 + i);
 				String& sFile = afnObj[i].sFile;
 				sFile &= sNr;
 			}
@@ -238,7 +238,7 @@ void ImpExp::ImportOTH(const FileName& fnFile, const FileName& fnObject,
 			if (!fUseAs)  // copy relevant data and convert data to .mp#
 			{
 				char* buf = new char[iBytesPerLine];
-				trq.SetText(String("%S %S --> %S", SCVTextCopy, fnFile.sFullName(), fnObj.sFullName()));
+				trq.SetText(String("%S %S --> %S", TR("Copy"), fnFile.sFullName(), fnObj.sFullName()));
 				trq.Start();
 				File filOld(fnFile, facRO);
 				File filNew(fnData, facCRT);
@@ -361,7 +361,7 @@ void ImpExp::ImportOTH(const FileName& fnFile, const FileName& fnObject,
 			ObjectInfo::WriteElement("MapStore", "Type", fnObj, sStoreType);
 		}
 		
-		trq.SetText(String("%S %S", SCVTextCreateMaplist, fnObject.sFullName()));
+		trq.SetText(String("%S %S", TR("Creating maplist"), fnObject.sFullName()));
 		if (fCreateMapList && fCreateMPR)
 		{
 			MapList mpl(fnObject, afnObj);

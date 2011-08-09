@@ -260,10 +260,10 @@ void AnnotationTextPtr::CreateColumns()
     ValueRange vr(-1e8,1e8,0.01);
     colRow = tbl->colNew("Row", dmReal,vr);
     colRow->SetOwnedByTable(true);
-    colRow->SetDescription(SDATMsgRowOfText);
+    colRow->SetDescription(TR("Row position of text"));
     colCol = tbl->colNew("Col", dmReal,vr);
     colCol->SetOwnedByTable(true);
-    colCol->SetDescription(SDATMsgColOfText);
+    colCol->SetDescription(TR("Col position of text"));
   }
 }
 
@@ -276,10 +276,10 @@ void AnnotationTextPtr::UseXY(const GeoRef& gr)
   ValueRange vr(-1e8,1e8,0.001);
   colX = tbl->colNew("X", dmReal,vr);
   colX->SetOwnedByTable(true);
-  colX->SetDescription(SDATMsgXcoord);
+  colX->SetDescription(TR("X-coord"));
   colY = tbl->colNew("Y", dmReal,vr);
   colY->SetOwnedByTable(true);
-  colY->SetDescription(SDATMsgYcoord);
+  colY->SetDescription(TR("Y-coord"));
   long iMax = iSize();
   for (long i = 1; i <= iMax; ++i) {
     double rRow, rCol;
@@ -305,10 +305,10 @@ void AnnotationTextPtr::UseRowCol(const GeoRef& gr)
   ValueRange vr(-1e8,1e8,0.01);
   colRow = tbl->colNew("Row", dmReal,vr);
   colRow->SetOwnedByTable(true);
-  colRow->sDescription = SDATMsgRowOfText;
+  colRow->sDescription = TR("Row position of text");
   colCol = tbl->colNew("Col", dmReal,vr);
   colCol->SetOwnedByTable(true);
-  colCol->sDescription = SDATMsgColOfText;
+  colCol->sDescription = TR("Col position of text");
   long iMax = iSize();
   for (long i = 1; i <= iMax; ++i) {
     double rRow, rCol;
@@ -707,7 +707,7 @@ void AnnotationTextPtr::GetObjectStructure(ObjectStructure& os)
 		{
 			String sCol("Col%d", i);
 			String sKey;
-			ObjectInfo::ReadElement("TableStore", sCol.scVal(), fnObj, sKey);
+			ObjectInfo::ReadElement("TableStore", sCol.c_str(), fnObj, sKey);
 			os.AddFile(fnObj, String("Col:%S", sKey), "Domain");
 		}			
 	}

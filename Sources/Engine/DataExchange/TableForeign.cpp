@@ -75,11 +75,11 @@ void TableForeign::Store()
 
 	if ( ptr.fUseAs() )
 	{
-		ObjectInfo::WriteElement(ptr.sSection("TableStore").scVal(),"Type", ptr.fnObj, "TableForeign");
+		ObjectInfo::WriteElement(ptr.sSection("TableStore").c_str(),"Type", ptr.fnObj, "TableForeign");
 	/*	if ( sDataBase != "")
-			ObjectInfo::WriteElement(ptr.sSection("ForeignFormat").scVal(),"DataBase", ptr.fnObj, sDataBase);		
+			ObjectInfo::WriteElement(ptr.sSection("ForeignFormat").c_str(),"DataBase", ptr.fnObj, sDataBase);		
 		if ( sMethod != "")
-			ObjectInfo::WriteElement(ptr.sSection("ForeignFormat").scVal(),"Method", ptr.fnObj, sMethod);*/
+			ObjectInfo::WriteElement(ptr.sSection("ForeignFormat").c_str(),"Method", ptr.fnObj, sMethod);*/
 	}		
 	else
 	{
@@ -90,7 +90,7 @@ void TableForeign::Store()
 	
 	TableStore::Store();	
 //	if ( sTableName != "")
-//		ObjectInfo::WriteElement(ptr.sSection("DataBaseCollection").scVal(),"TableName", ptr.fnObj, sTableName);	
+//		ObjectInfo::WriteElement(ptr.sSection("DataBaseCollection").c_str(),"TableName", ptr.fnObj, sTableName);	
 }
 
 void TableForeign::SetLoading(bool fYesNo)

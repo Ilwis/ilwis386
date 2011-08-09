@@ -83,14 +83,14 @@ StereoPairEpiPolar::StereoPairEpiPolar(const FileName& fn, StereoPairPtr& p)
 	for (int i = 0; i < 4; ++i)
   {
     String sEntry("Active Fiducial Mark %i ", i);
-		ReadElement("GeoRefEpiPolarLeft", sEntry.scVal(), fActive);
+		ReadElement("GeoRefEpiPolarLeft", sEntry.c_str(), fActive);
 		grEpiLeft->fSelectedFiducial[i] = fActive;
 	}
 	Coord crd;
 	for (int i = 0; i < 4; ++i)
   {
     String sEntry("Scanned Fiducial Mark %i", i);
-    ReadElement("GeoRefEpiPolarLeft", sEntry.scVal(), crd); 
+    ReadElement("GeoRefEpiPolarLeft", sEntry.c_str(), crd); 
 		grEpiLeft->rScannedFidRow[i] = crd.x;
 		grEpiLeft->rScannedFidCol[i] = crd.y;
 	}
@@ -105,13 +105,13 @@ StereoPairEpiPolar::StereoPairEpiPolar(const FileName& fn, StereoPairPtr& p)
 	for (int i = 0; i < 2; ++i)
   {
 		String sEntry("Active Scaling Point %i ", i);
-		ReadElement("GeoRefEpiPolarLeft", sEntry.scVal(), fActive);
+		ReadElement("GeoRefEpiPolarLeft", sEntry.c_str(), fActive);
 		grEpiLeft->fSelectedScalingPoint[i] = fActive;
 	}
 	for (int i = 0; i < 2; ++i)
   {
     String sEntry("Scanned Scaling Point %i", i);
-    ReadElement("GeoRefEpiPolarLeft", sEntry.scVal(), crd); 
+    ReadElement("GeoRefEpiPolarLeft", sEntry.c_str(), crd); 
 		grEpiLeft->rScannedScalingPntRow[i] = crd.x;
 		grEpiLeft->rScannedScalingPntCol[i] = crd.y;
 	}
@@ -120,13 +120,13 @@ StereoPairEpiPolar::StereoPairEpiPolar(const FileName& fn, StereoPairPtr& p)
 	for (int i = 0; i < 4; ++i)
   {
     String sEntry("Active Fiducial Mark %i ", i);
-		ReadElement("GeoRefEpiPolarRight", sEntry.scVal(), fActive);
+		ReadElement("GeoRefEpiPolarRight", sEntry.c_str(), fActive);
 		grEpiRight->fSelectedFiducial[i] = fActive;
 	}
 	for ( int i = 0; i < 4; ++i)
   {
     String sEntry("Scanned Fiducial Mark %i", i);
-    ReadElement("GeoRefEpiPolarRight", sEntry.scVal(), crd); 
+    ReadElement("GeoRefEpiPolarRight", sEntry.c_str(), crd); 
 		grEpiRight->rScannedFidRow[i] = crd.x;
 		grEpiRight->rScannedFidCol[i] = crd.y;
 	}
@@ -141,13 +141,13 @@ StereoPairEpiPolar::StereoPairEpiPolar(const FileName& fn, StereoPairPtr& p)
 	for (int i=0; i < 2; ++i)
   {
 		String sEntry("Active Scaling Point %i ", i);
-		ReadElement("GeoRefEpiPolarRight", sEntry.scVal(), fActive);
+		ReadElement("GeoRefEpiPolarRight", sEntry.c_str(), fActive);
 		grEpiRight->fSelectedScalingPoint[i] = fActive;
 	}
 	for (int i=0; i < 2; ++i)
   {
     String sEntry("Scanned Scaling Point %i", i);
-    ReadElement("GeoRefEpiPolarRight", sEntry.scVal(), crd); 
+    ReadElement("GeoRefEpiPolarRight", sEntry.c_str(), crd); 
 		grEpiRight->rScannedScalingPntRow[i] = crd.x;
 		grEpiRight->rScannedScalingPntCol[i] = crd.y;
 	}
@@ -227,13 +227,13 @@ void StereoPairEpiPolar::Store()
 			fActive = true;
 		else
 			fActive = false;
-		WriteElement("GeoRefEpiPolarLeft", sEntry.scVal(), fActive);
+		WriteElement("GeoRefEpiPolarLeft", sEntry.c_str(), fActive);
   }  
   for (i = 0; i < 4; ++i)
   {
     String sEntry("Scanned Fiducial Mark %i", i);
 		Coord crdScannedFid (grEpiLeft->rScannedFidRow[i], grEpiLeft->rScannedFidCol[i]);
-    WriteElement("GeoRefEpiPolarLeft", sEntry.scVal(), crdScannedFid);
+    WriteElement("GeoRefEpiPolarLeft", sEntry.c_str(), crdScannedFid);
   }
 	WriteElement("GeoRefEpiPolarLeft", "Principal Point in Scan X-Coord", grEpiLeft->cScanPrincPoint.x);
   WriteElement("GeoRefEpiPolarLeft", "Principal Point in Scan Y-Coord", grEpiLeft->cScanPrincPoint.y);
@@ -247,13 +247,13 @@ void StereoPairEpiPolar::Store()
 			fActive = true;
 		else
 			fActive = false;
-		WriteElement("GeoRefEpiPolarLeft", sEntry.scVal(), fActive);
+		WriteElement("GeoRefEpiPolarLeft", sEntry.c_str(), fActive);
   }  
 	for (i = 0; i < 2; ++i)
   {
     String sEntry("Scanned Scaling Point %i", i);
 		Coord crdScannedScaleingPnt (grEpiLeft->rScannedScalingPntRow[i], grEpiLeft->rScannedScalingPntCol[i]);
-    WriteElement("GeoRefEpiPolarLeft", sEntry.scVal(), crdScannedScaleingPnt);
+    WriteElement("GeoRefEpiPolarLeft", sEntry.c_str(), crdScannedScaleingPnt);
   }
 	
 	//String sGeoRefEpiRight;
@@ -268,13 +268,13 @@ void StereoPairEpiPolar::Store()
 			fActive = true;
 		else
 			fActive = false;
-		WriteElement("GeoRefEpiPolarRight", sEntry.scVal(), fActive);
+		WriteElement("GeoRefEpiPolarRight", sEntry.c_str(), fActive);
   }  
   for (i = 0; i < 4; ++i)
   {
     String sEntry("Scanned Fiducial Mark %i", i);
 		Coord crdScannedFid (grEpiRight->rScannedFidRow[i], grEpiRight->rScannedFidCol[i]);
-    WriteElement("GeoRefEpiPolarRight", sEntry.scVal(), crdScannedFid);
+    WriteElement("GeoRefEpiPolarRight", sEntry.c_str(), crdScannedFid);
   }
 	WriteElement("GeoRefEpiPolarRight", "Principal Point in Scan X-Coord", grEpiRight->cScanPrincPoint.x);
   WriteElement("GeoRefEpiPolarRight", "Principal Point in Scan Y-Coord", grEpiRight->cScanPrincPoint.y);
@@ -288,13 +288,13 @@ void StereoPairEpiPolar::Store()
 			fActive = true;
 		else
 			fActive = false;
-		WriteElement("GeoRefEpiPolarRight", sEntry.scVal(), fActive);
+		WriteElement("GeoRefEpiPolarRight", sEntry.c_str(), fActive);
   }  
 	for (i = 0; i < 2; ++i)
   {
     String sEntry("Scanned Scaling Point %i", i);
 		Coord crdScannedScaleingPnt (grEpiRight->rScannedScalingPntRow[i], grEpiRight->rScannedScalingPntCol[i]);
-    WriteElement("GeoRefEpiPolarRight", sEntry.scVal(), crdScannedScaleingPnt);
+    WriteElement("GeoRefEpiPolarRight", sEntry.c_str(), crdScannedScaleingPnt);
   }
 	/*RowCol rcLeftPiv = grEpiLeft->rGetPivotRowCol();
 	Coord rcPivotLeft = Coord(rcLeftPiv.Row, rcLeftPiv.Col);
@@ -333,7 +333,7 @@ bool StereoPairEpiPolar::fFreezing()
 	String sErr = sErrGeorefs();
 	if (sErr.length() > 0)
 	{
-		MessageBox(0,sErr.scVal(),0,MB_OK|MB_ICONSTOP);
+		MessageBox(0,sErr.c_str(),0,MB_OK|MB_ICONSTOP);
 		return false;
 	}
 	// if we arrived here, it means it is okay
@@ -587,7 +587,7 @@ bool StereoPairEpiPolar::fFreezing()
 										String("MapResample(%S,%S,%S,Patch,GrNoneAllowed)", 
 										fnRightIn.sFullNameQuoted(), grScaRotRight.fnObj.sFullNameQuoted(),sResampleMethod));
   // ptr.mapRight->fErase = false;
-	String sDescrp(SMAPTextStereoMateOf_S.scVal(), ptr.sName());
+	String sDescrp(TR("stereomate of %S").c_str(), ptr.sName());
 	String sDescrLeft("Left-hand %S", sDescrp);
 	String sDescrRight("Right-hand %S", sDescrp);
 	ptr.mapLeft->sDescription = sDescrLeft;
@@ -653,47 +653,47 @@ String StereoPairEpiPolar::sErrGeorefs()
 		if (iErrLeft)
 		{
 			iErr = iErrLeft;
-			sErr = SStcUILeftPhoto;
+			sErr = TR("Left photo: ");
 		}
 		else if (iErrRight)
 		{
 			iErr = iErrRight;
-			sErr = SStcUIRightPhoto;
+			sErr = TR("Right photo: ");
 		}
 		switch (iErr)
 		{
 			case 0: // no error in left or right; check if combination is ok
 				if (grEpiLeft->iNrOffFlight != grEpiRight->iNrOffFlight)
-					sErr = SStcErrWrongNrScPts;
+					sErr = TR("Number of left and right scaling points should be equal");
 				break;
 			case -12:
-				sErr += SDGErrTooFewFiducials;
+				sErr += TR("Less than 2 fiducial marks");
 				break;
 			case -13:
-				sErr += SDGErrIncorrectFiducialPos;
+				sErr += TR("Incorrect positions of fiducial marks");
 				break;
 			case -14:
-				sErr += SDGErrIncorrectFiducialOrder;
+				sErr += TR("Incorrect ordering of 4 fiducial marks");
 				break;
 			case -15:
-				sErr += SDGErrWrongNumber;
+				sErr += TR("Wrong number");
 				break;
 			case -16:
-				sErr += SGRErrPhotobaseTooShort;
+				sErr += TR("Photobase is too short");
 				break;
 			case -17:
-				sErr += SGRErrTPPAtWrongSide;
+				sErr += TR("Transferred PP undefined or at wrong side");
 				break;
 			case -18:
-				sErr += SGRErrScalePt1TooClose;
+				sErr += TR("Scale point 1 too close to flight-line");
 				break;
 			case -19:
-				sErr += SGRErrScalePt2TooClose;
+				sErr += TR("Scale point 2 too close to flight-line");
 				break;
 		}
 	}
 	else // should NEVER happen !!!
-		sErr = SStcErrGrfNotYetCmp;
+		sErr = TR("Georeference not yet computed");
 	
 	return sErr;
 }
@@ -703,5 +703,5 @@ String StereoPairEpiPolar::sExpression() const
 	String sL = sLeftInputPhoto;
 	String sR = sRightInputPhoto;
 	String sPair = ptr.sName();
-	return String(SStcTextStereopairFrom_S_S_S.scVal(),sPair,sL,sR);
+	return String(TR("Stereopair %S from %S and %S").c_str(),sPair,sL,sR);
 }

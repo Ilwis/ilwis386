@@ -150,8 +150,8 @@ long IDRImporter::fCheckTitle(const String& sIn, const String& sComp, String& sO
 	}
 	else 
 	{
-		String sWarning = String(SCVWarnIdrDoc.scVal(), iDocLn, filDOC->sName(), sIn, sComp);
-		int iRet = getEngine()->Message(sWarning.scVal(), SCVMsgExportWarning.scVal(), MB_ICONEXCLAMATION|MB_YESNO);
+		String sWarning = String(TR("At line %li in %S file \n found %S\n expected %S. Continue?").c_str(), iDocLn, filDOC->sName(), sIn, sComp);
+		int iRet = getEngine()->Message(sWarning.c_str(), TR("Export warning").c_str(), MB_ICONEXCLAMATION|MB_YESNO);
 		if (iRet != IDOK)
 			UserAbort(filDOC->sName());
 		return 1;
@@ -218,7 +218,7 @@ void IDRImporter::IDRReadDOC(const FileName& fnObject)
   filDOC->ReadLnAscii (sIDRfilety);
   iErrCnt += fCheckTitle(sIDRfilety, "file type", sIDRfilety);
   if ( sIDRfilety != "binary" )
-    throw ErrorImportExport(SCVErrNotSupported);
+    throw ErrorImportExport(TR("File format not supported"));
 
   iDocLn ++;
   filDOC->ReadLnAscii (sTmp);
@@ -376,12 +376,12 @@ void IDRImporter::IDRReadDOC(const FileName& fnObject)
   if (sIDRTitle.length() > 0)
     mp->sDescription = sIDRTitle;
   else {
-    mp->sDescription &= SCVText_ImportedFrom_;
+    mp->sDescription &= TR("imported from ");
     mp->sDescription &= "Idrisi";
   }
   
   short iRowCnt,iColCnt;
-  trq.SetText(SCVTextProcessing);
+  trq.SetText(TR("Processing..."));
   switch (iInType) {
     case ebyte: {
       ByteBuf bIBuf(iIDRcol);
@@ -445,7 +445,7 @@ void IDRImporter::IDRReadDOC(const FileName& fnObject)
 
 void  ImpExp::ImportIDRISI (const FileName& fnFile ,const FileName& fnObject)  {
   try {
-    trq.SetTitle (SCVTitleImportIDRISI);
+    trq.SetTitle (TR("Importing from Idrisi DOC"));
     IDRImporter IDRIm(fnFile, trq);
 
     IDRIm.IDRReadDOC(fnObject);

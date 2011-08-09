@@ -244,7 +244,7 @@ void ScriptPtr::Exec(const Array<String>* asParms)
 {
 	bool fShowTranq = fnObj.fValid();
 	if (fShowTranq) {
-		trq.SetTitle(String(SDATTitleExecuteScript_S.scVal(), fnObj.sFile));
+		trq.SetTitle(String(TR("Execute script '%S'").c_str(), fnObj.sFile));
 		trq.SetDelayShow(false);
 		trq.Start();
 	}
@@ -266,7 +266,7 @@ void ScriptPtr::Exec(const Array<String>* asParms)
 				s = sLine.sLeft(42);
 				s &= "...";
 			}
-			TRACE2("%i trq=%s\n",GetCurrentThreadId(), s.scVal());
+			TRACE2("%i trq=%s\n",GetCurrentThreadId(), s.c_str());
 			if (trq.fText(s))
 				return;
 		}
@@ -322,6 +322,6 @@ void ScriptPtr::Rename(const FileName& fnNew)
   // rename script data file
   FileName fn = fnScript;
   fn.sFile = fnNew.sFile;
-  rename(fnScript.sFullName().scVal(), fn.sFullName().scVal());
+  rename(fnScript.sFullName().c_str(), fn.sFullName().c_str());
   fnScript.sFile = fnNew.sFile;
 }

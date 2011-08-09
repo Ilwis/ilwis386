@@ -38,6 +38,7 @@ void ComplexDrawer::init() {
 	dirty = true;
 	currentIndex = 0;
 	editmode = false;
+	selectionColor = Color(255,0,0);
 }
 
 String ComplexDrawer::getType() const {
@@ -127,7 +128,7 @@ bool ComplexDrawer::draw( const CoordBounds& cb) const{
 
 /*	clock_t end = clock();
 		total =  1000 *(double)(end - start) / CLOCKS_PER_SEC;
-		TRACE(String("drawn %S in %2.2f milliseconds;\n", getName(), total).scVal());*/
+		TRACE(String("drawn %S in %2.2f milliseconds;\n", getName(), total).c_str());*/
 
 	return true;
 }
@@ -439,16 +440,16 @@ ZValueMaker *ComplexDrawer::getZMaker() const{
 }
 
 String ComplexDrawer::store(const FileName& fnView, const String& parentSection) const{
-	ObjectInfo::WriteElement(parentSection.scVal(),"UiCode",fnView, uiCode);
-	ObjectInfo::WriteElement(parentSection.scVal(),"HasInfo",fnView, info);
-	ObjectInfo::WriteElement(parentSection.scVal(),"DrawMethod",fnView, drm);
-	ObjectInfo::WriteElement(parentSection.scVal(),"Transparency",fnView, transparency);
-	ObjectInfo::WriteElement(parentSection.scVal(),"Type",fnView, type);
-	ObjectInfo::WriteElement(parentSection.scVal(),"IsActive",fnView, active);
-	ObjectInfo::WriteElement(parentSection.scVal(),"editable",fnView, editable);
-	ObjectInfo::WriteElement(parentSection.scVal(),"HasInfo",fnView, info);
-	ObjectInfo::WriteElement(parentSection.scVal(),"Name",fnView, name);
-	ObjectInfo::WriteElement(parentSection.scVal(),"SpecialOptions",fnView, specialOptions);
+	ObjectInfo::WriteElement(parentSection.c_str(),"UiCode",fnView, uiCode);
+	ObjectInfo::WriteElement(parentSection.c_str(),"HasInfo",fnView, info);
+	ObjectInfo::WriteElement(parentSection.c_str(),"DrawMethod",fnView, drm);
+	ObjectInfo::WriteElement(parentSection.c_str(),"Transparency",fnView, transparency);
+	ObjectInfo::WriteElement(parentSection.c_str(),"Type",fnView, type);
+	ObjectInfo::WriteElement(parentSection.c_str(),"IsActive",fnView, active);
+	ObjectInfo::WriteElement(parentSection.c_str(),"editable",fnView, editable);
+	ObjectInfo::WriteElement(parentSection.c_str(),"HasInfo",fnView, info);
+	ObjectInfo::WriteElement(parentSection.c_str(),"Name",fnView, name);
+	ObjectInfo::WriteElement(parentSection.c_str(),"SpecialOptions",fnView, specialOptions);
 
 	int count = 0;
 	for(DrawerIter_C cur = preDrawers.begin(); cur != preDrawers.end(); ++cur) {
@@ -457,11 +458,11 @@ String ComplexDrawer::store(const FileName& fnView, const String& parentSection)
 		String order = String("%03d", (*cur).first.sHead("|").iVal());
 		if ( !drw->isSimple() ) {
 			String section = drw->store(fnView, currentSection);
-			ObjectInfo::WriteElement(section.scVal(),"Order",fnView, order);
-			ObjectInfo::WriteElement(parentSection.scVal(),String("PreDrawer%03d",count++).scVal(),fnView, section);
+			ObjectInfo::WriteElement(section.c_str(),"Order",fnView, order);
+			ObjectInfo::WriteElement(parentSection.c_str(),String("PreDrawer%03d",count++).c_str(),fnView, section);
 		}
 	}
-	ObjectInfo::WriteElement(parentSection.scVal(),"PreDrawerCount",fnView, count);
+	ObjectInfo::WriteElement(parentSection.c_str(),"PreDrawerCount",fnView, count);
 	int drCount = getDrawerCount();
 	count = 0; 
 	for(int index = 0; index < drCount; ++index) {
@@ -469,11 +470,11 @@ String ComplexDrawer::store(const FileName& fnView, const String& parentSection)
 		NewDrawer *drw = drawers[index];
 		if ( !drw->isSimple() ) {
 			String section = drw->store(fnView, currentSection);
-			ObjectInfo::WriteElement(parentSection.scVal(),String("Drawer%03d",count++).scVal(),fnView, section);
+			ObjectInfo::WriteElement(parentSection.c_str(),String("Drawer%03d",count++).c_str(),fnView, section);
 		}
 
 	}
-	ObjectInfo::WriteElement(parentSection.scVal(),"DrawerCount",fnView, count);
+	ObjectInfo::WriteElement(parentSection.c_str(),"DrawerCount",fnView, count);
 	count = 0;
 	for(DrawerIter_C cur = postDrawers.begin(); cur != postDrawers.end(); ++cur) {
 		String currentSection("%S%03d",parentSection,count);
@@ -481,11 +482,11 @@ String ComplexDrawer::store(const FileName& fnView, const String& parentSection)
 		NewDrawer *drw = (*cur).second;
 		if ( !drw->isSimple() ) {
 			String section = drw->store(fnView, currentSection);
-			ObjectInfo::WriteElement(section.scVal(),"Order",fnView, order);
-			ObjectInfo::WriteElement(parentSection.scVal(),String("PostDrawer%03d",count++).scVal(),fnView, section);
+			ObjectInfo::WriteElement(section.c_str(),"Order",fnView, order);
+			ObjectInfo::WriteElement(parentSection.c_str(),String("PostDrawer%03d",count++).c_str(),fnView, section);
 		}
 	}
-	ObjectInfo::WriteElement(parentSection.scVal(),"PostDrawerCount",fnView, count);
+	ObjectInfo::WriteElement(parentSection.c_str(),"PostDrawerCount",fnView, count);
 
 	zmaker->store(fnView,parentSection);
 
@@ -494,38 +495,38 @@ String ComplexDrawer::store(const FileName& fnView, const String& parentSection)
 }
 
 void ComplexDrawer::load(const FileName& fnView, const String& parentSection){
-	ObjectInfo::ReadElement(parentSection.scVal(),"UiCode",fnView, uiCode);
-	ObjectInfo::ReadElement(parentSection.scVal(),"HasInfo",fnView, info);
+	ObjectInfo::ReadElement(parentSection.c_str(),"UiCode",fnView, uiCode);
+	ObjectInfo::ReadElement(parentSection.c_str(),"HasInfo",fnView, info);
 	int temp;
-	ObjectInfo::ReadElement(parentSection.scVal(),"DrawMethod",fnView, temp);
+	ObjectInfo::ReadElement(parentSection.c_str(),"DrawMethod",fnView, temp);
 	drm = (ILWIS::NewDrawer::DrawMethod)temp;
-	ObjectInfo::ReadElement(parentSection.scVal(),"Transparency",fnView, transparency);
-	ObjectInfo::ReadElement(parentSection.scVal(),"Type",fnView, type);
-	ObjectInfo::ReadElement(parentSection.scVal(),"IsActive",fnView, active);
-	ObjectInfo::ReadElement(parentSection.scVal(),"editable",fnView, editable);
-	ObjectInfo::ReadElement(parentSection.scVal(),"HasInfo",fnView, info);
-	ObjectInfo::ReadElement(parentSection.scVal(),"Name",fnView, name);
-	ObjectInfo::ReadElement(parentSection.scVal(),"SpecialOptions",fnView, specialOptions);
+	ObjectInfo::ReadElement(parentSection.c_str(),"Transparency",fnView, transparency);
+	ObjectInfo::ReadElement(parentSection.c_str(),"Type",fnView, type);
+	ObjectInfo::ReadElement(parentSection.c_str(),"IsActive",fnView, active);
+	ObjectInfo::ReadElement(parentSection.c_str(),"editable",fnView, editable);
+	ObjectInfo::ReadElement(parentSection.c_str(),"HasInfo",fnView, info);
+	ObjectInfo::ReadElement(parentSection.c_str(),"Name",fnView, name);
+	ObjectInfo::ReadElement(parentSection.c_str(),"SpecialOptions",fnView, specialOptions);
 
 	long count, order;
 	String drawerSection;
-	ObjectInfo::ReadElement(parentSection.scVal(),"PreDrawerCount",fnView, count);
+	ObjectInfo::ReadElement(parentSection.c_str(),"PreDrawerCount",fnView, count);
 	for(int i = 0; i < count ; ++i) {
-		ObjectInfo::ReadElement(parentSection.scVal(),String("PreDrawer%03d",i).scVal(),fnView, drawerSection);
-		ObjectInfo::ReadElement(drawerSection.scVal(),"Order",fnView, order);
+		ObjectInfo::ReadElement(parentSection.c_str(),String("PreDrawer%03d",i).c_str(),fnView, drawerSection);
+		ObjectInfo::ReadElement(drawerSection.c_str(),"Order",fnView, order);
 		addPreDrawer(order,loadDrawer(fnView, drawerSection ));
 	}
 
-	ObjectInfo::ReadElement(parentSection.scVal(),"DrawerCount",fnView, count);
+	ObjectInfo::ReadElement(parentSection.c_str(),"DrawerCount",fnView, count);
 	for(int i = 0; i < count; ++i) {
-		ObjectInfo::ReadElement(parentSection.scVal(),String("Drawer%03d",i).scVal(),fnView, drawerSection);
+		ObjectInfo::ReadElement(parentSection.c_str(),String("Drawer%03d",i).c_str(),fnView, drawerSection);
 		addDrawer(loadDrawer(fnView, drawerSection));
 	}
 
-	ObjectInfo::ReadElement(parentSection.scVal(),"PostDrawerCount",fnView, count);
+	ObjectInfo::ReadElement(parentSection.c_str(),"PostDrawerCount",fnView, count);
 	for(int i = 0; i < count ; ++i) {
-		ObjectInfo::ReadElement(parentSection.scVal(),String("PostDrawer%03d",i).scVal(),fnView, drawerSection);
-		ObjectInfo::ReadElement(drawerSection.scVal(),"Order",fnView, order);
+		ObjectInfo::ReadElement(parentSection.c_str(),String("PostDrawer%03d",i).c_str(),fnView, drawerSection);
+		ObjectInfo::ReadElement(drawerSection.c_str(),"Order",fnView, order);
 		addPostDrawer(order,loadDrawer(fnView, drawerSection));
 	}
 
@@ -535,7 +536,7 @@ void ComplexDrawer::load(const FileName& fnView, const String& parentSection){
 
 NewDrawer *ComplexDrawer::loadDrawer(const FileName& fnView, const String& drawerSection) {
 	String sType;
-	ObjectInfo::ReadElement(drawerSection.scVal(),"Type",fnView, sType);
+	ObjectInfo::ReadElement(drawerSection.c_str(),"Type",fnView, sType);
 	ILWIS::DrawerParameters dp(rootDrawer, this);
 	ILWIS::NewDrawer *drawer = NewDrawer::getDrawer(sType, "Ilwis38", &dp);
 	if (drawer) {

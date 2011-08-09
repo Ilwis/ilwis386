@@ -181,7 +181,7 @@ void ParmList::AddFrom(const String& sCmdLine, int *iFixedPos)
 	//  fSemicolon = false;
 	int iLen;
 	char *ps = new char[(iLen = sCmdLine.length())+1];
-	strcpy(ps, sCmdLine.scVal());
+	strcpy(ps, sCmdLine.c_str());
 	SList<String> sl;
 
 	char * p1 = ps, *p2 = 0;

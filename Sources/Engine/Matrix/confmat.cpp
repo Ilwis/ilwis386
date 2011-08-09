@@ -205,7 +205,7 @@ MatrixConfusion::MatrixConfusion(const Column& cl1, const Column& cl2, const Col
 	objdep.Add(col1.ptr());
 	objdep.Add(col2.ptr());
 	objdep.Add(colFreq.ptr());
-	sDescription = String(SDATMsgConfusionMatrix_SSS.scVal(), col1->sName(), col2->sName(), colFreq->sName());
+	sDescription = String(TR("Confusion Matrix for %S, %S and %S").c_str(), col1->sName(), col2->sName(), colFreq->sName());
 	tmCalc = 0;
 	MakeUsable();
 }
@@ -304,17 +304,17 @@ String MatrixConfusion::sSummary() const
 	else
 	{
 		if (rAcc == rUNDEF) 
-			s = String(SDATMsgAvgAccuracyUndef);  
+			s = String(TR("Average Accuracy is Undefined\n"));  
 		else
-			s = String("%S   = %6.2f %%\r\n", SDATMsgAverageAccuracy, rAcc);
+			s = String("%S   = %6.2f %%\r\n", TR("Average Accuracy"), rAcc);
 		if (rRel == rUNDEF) 
-			s &= String(SDATMsgAvgReliabilityUndef);  
+			s &= String(TR("Average Reliablity is Undefined\n"));  
 		else  
-			s &= String("%S = %6.2f %%\r\n", SDATMsgAverageReliablity, rRel);
+			s &= String("%S = %6.2f %%\r\n", TR("Average Reliablity"), rRel);
 		if (rOverallAcc == rUNDEF) 
-			s &= String(SDATMsgOverallAccurUndef);  
+			s &= String(TR("Overall Accuracy is Undefined\n"));  
 		else  
-			s &= String("%S   = %6.2f %%\r\n", SDATMsgOverallAccuracy, rOverallAcc);
+			s &= String("%S   = %6.2f %%\r\n", TR("Overall Accuracy"), rOverallAcc);
 	}
 	return s;
 }

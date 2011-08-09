@@ -86,7 +86,7 @@ long ProjectionGaussBoaga::iMaxZoneNr() const
 
 String ProjectionGaussBoaga::sInvalidZone() const
 {
-   return SPRJErrWrongGaussBoagaZone;
+   return TR("Gauss-Boaga zones are numbered 1,2");
 }
 
 

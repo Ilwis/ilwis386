@@ -114,7 +114,7 @@ void PolygonMapImport::GetImportInfo(const FileName& fn, DomainType& dmt, ValueR
     r = aPolCodes[i].rVal();
     if (r == rUNDEF)
       break;
-    if (!fDec && strchr(aPolCodes[i].scVal(), '.') != 0)
+    if (!fDec && strchr(aPolCodes[i].c_str(), '.') != 0)
       fDec = true;
     if (r < rMin)
       rMin = r;  
@@ -136,7 +136,7 @@ void PolygonMapImport::GetImportInfo(const FileName& fn, DomainType& dmt, ValueR
 
 static void StorePolCodes(const PolygonMap& pm, Tranquilizer& trq)
 {
-  trq.SetText(SPOLTextStorePolygonCodes);
+  trq.SetText(TR("Store polygon codes"));
   File filPolCode(FileName(pm->fnObj, ".pc#"), facRW);
   File filPol(FileName(pm->fnObj, ".pl#"), facRW);
   if (pm->fUseReals())  {
@@ -211,7 +211,7 @@ static void StorePolCodes(const PolygonMap& pm, Tranquilizer& trq)
 
 static int iCompPolCodes(const String* a, const String* b)
 {
-  return _stricmp((*a).scVal(), (*b).scVal());
+  return _stricmp((*a).c_str(), (*b).c_str());
 }
 
 void PolygonMapImport::import(const FileName& fn, const FileName& fnOut)
@@ -236,7 +236,7 @@ void PolygonMapImport::import(const FileName& fn, const FileName& fnNew, DomainT
   FileName fnDomNew, fnRprNew;
   try {
     Tranquilizer trq;
-    trq.SetTitle(String(SPOLTitleImport14Polygons_S.scVal(), fn.sFile));
+    trq.SetTitle(String(TR("Importing 1.4 polygon map '%S'").c_str(), fn.sFile));
     trq.Start();
 
     File filPLG(FileName(fn, ".PLG", true));
@@ -249,7 +249,7 @@ void PolygonMapImport::import(const FileName& fn, const FileName& fnNew, DomainT
     FileName fnData14 = fn;
     FileName fnData20 = fnNew;
 
-    trq.fText(SPOLTextCreateODFPol);
+    trq.fText(TR("Creating object definition file"));
     FileName fnPol(fnNew);
     fnPol.sExt = ".mpa";
     { 
@@ -282,7 +282,7 @@ void PolygonMapImport::import(const FileName& fn, const FileName& fnNew, DomainT
 
     Array<String> aPolCodes;
     File filPol(FileName(pm->fnObj, ".pl#"), facRO);
-    trq.fText(SPOLTextRetrievePolygonCodes);
+    trq.fText(TR("Retrieve polygon codes"));
     long iDeleted;
     GetCodes(filPol, aPolCodes, iDeleted);
   //  IlwisObjectPtr::WriteElement("PolygonMapStore", "DeletedPolygons", fnPol, String("%li",iDeleted));
@@ -292,7 +292,7 @@ void PolygonMapImport::import(const FileName& fn, const FileName& fnNew, DomainT
     else if (dmt == dmtVALUE) 
       dm = Domain(FileName("value", ".dom"));
     else {
-      trq.fText(SPOLTextCreateNewDomain);
+      trq.fText(TR("Create new domain"));
 //      typedef int (*iFncCmp)(const void*, const void*);
 //      qsort(aPolCodes.buf(), aPolCodes.iSize(), sizeof(String), (iFncCmp)iCompPolCodes);
     //  FileName fnDom = FileName::fnUnique(FileName(fn, ".DOM"));
@@ -317,21 +317,21 @@ void PolygonMapImport::import(const FileName& fn, const FileName& fnNew, DomainT
   catch (const ErrorObject& err) {
     err.Show();
     // delete files
-    _unlink(FileName(fnNew, ".mpa").sFullName().scVal());
-    _unlink(FileName(fnNew, ".ps#").sFullName().scVal());
-    _unlink(FileName(fnNew, ".pd#").sFullName().scVal());
-    _unlink(FileName(fnNew, ".pl#").sFullName().scVal());
-    _unlink(FileName(fnNew, ".tp#").sFullName().scVal());
-    _unlink(FileName(fnNew, ".pc#").sFullName().scVal());
+    _unlink(FileName(fnNew, ".mpa").sFullName().c_str());
+    _unlink(FileName(fnNew, ".ps#").sFullName().c_str());
+    _unlink(FileName(fnNew, ".pd#").sFullName().c_str());
+    _unlink(FileName(fnNew, ".pl#").sFullName().c_str());
+    _unlink(FileName(fnNew, ".tp#").sFullName().c_str());
+    _unlink(FileName(fnNew, ".pc#").sFullName().c_str());
     if (fnDomNew.fValid()) {
-      _unlink(fnDomNew.sFullName().scVal());
+      _unlink(fnDomNew.sFullName().c_str());
       fnDomNew.sExt = ".dm#";
-      _unlink(fnDomNew.sFullName().scVal());
+      _unlink(fnDomNew.sFullName().c_str());
     }  
     if (fnRprNew.fValid()) {
-      _unlink(fnRprNew.sFullName().scVal());
+      _unlink(fnRprNew.sFullName().c_str());
       fnRprNew.sExt = ".rp#";
-      _unlink(fnRprNew.sFullName().scVal());
+      _unlink(fnRprNew.sFullName().c_str());
     }  
   }
 }  
@@ -383,7 +383,7 @@ void PolygonMapImport::Store()
   WriteElement("SegmentMap", "Beta1", flBeta1);
   WriteElement("SegmentMap", "Beta2", flBeta2);*/
   WriteElement("SegmentMapStore", "DataSegCode", (char*)0);
-  _unlink(FileName(fn, ".sc#").sFullName().scVal());
+  _unlink(FileName(fn, ".sc#").sFullName().c_str());
 }
 
 

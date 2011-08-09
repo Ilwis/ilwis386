@@ -75,28 +75,28 @@ CoordSystemProjection::CoordSystemProjection(const FileName& fn)
           case ppANGLE:
           case ppACUTANGLE:{
             double rValue;
-            if (ReadElement("Projection", sParam.scVal(), rValue))
+            if (ReadElement("Projection", sParam.c_str(), rValue))
               prj->Param(ppv, rValue);
           } break;
 				  case ppZONE:
           case ppINT: {
             long iValue;
-            if (ReadElement("Projection", sParam.scVal(), iValue))
+            if (ReadElement("Projection", sParam.c_str(), iValue))
               prj->Param(ppv, iValue);
           } break;
           case ppBOOL: {
             bool fValue;
-            if (ReadElement("Projection", sParam.scVal(), fValue))
+            if (ReadElement("Projection", sParam.c_str(), fValue))
               prj->Param(ppv, (long)fValue);
           } break;
           case ppLATLON: {
             LatLon ll;
-            if (ReadElement("Projection", sParam.scVal(), ll))
+            if (ReadElement("Projection", sParam.c_str(), ll))
               prj->Param(ppv, ll);
           } break;
           case ppCOORD: {
             Coord crd;
-            if (ReadElement("Projection", sParam.scVal(), crd))
+            if (ReadElement("Projection", sParam.c_str(), crd))
               prj->Param(ppv, crd);
           } break;
         }
@@ -136,7 +136,7 @@ void CoordSystemProjection::Store()
       try {
         switch (pp) {
           case ppNONE:
-            WriteElement("Projection", sParam.scVal(), (char*)0);
+            WriteElement("Projection", sParam.c_str(), (char*)0);
             break;
           case ppLAT:
           case ppLON:
@@ -145,29 +145,29 @@ void CoordSystemProjection::Store()
           case ppANGLE: 
           case ppACUTANGLE:{
             double rValue = prj->rParam(ppv);
-            WriteElement("Projection", sParam.scVal(), rValue);
+            WriteElement("Projection", sParam.c_str(), rValue);
           } break;
           case ppSCALE: {
             double rValue = prj->rParam(ppv);
 						String str("%.10f", rValue);
-            WriteElement("Projection", sParam.scVal(), str);
+            WriteElement("Projection", sParam.c_str(), str);
           } break;
 				  case ppZONE:
           case ppINT: {
             long iValue = prj->iParam(ppv);
-            WriteElement("Projection", sParam.scVal(), iValue);
+            WriteElement("Projection", sParam.c_str(), iValue);
           } break;
           case ppBOOL: {
             bool fValue = prj->iParam(ppv)!=0;
-            WriteElement("Projection", sParam.scVal(), fValue);
+            WriteElement("Projection", sParam.c_str(), fValue);
           } break;
           case ppLATLON: {
             LatLon llValue = prj->llParam(ppv);
-            WriteElement("Projection", sParam.scVal(), llValue);
+            WriteElement("Projection", sParam.c_str(), llValue);
           } break;
           case ppCOORD: {
             Coord cValue = prj->cParam(ppv);
-            WriteElement("Projection", sParam.scVal(), cValue);
+            WriteElement("Projection", sParam.c_str(), cValue);
           } break;
         }
       }

@@ -84,9 +84,9 @@ SegmentMap::SegmentMap(const String& sExpression, const String& sPath)
   // Now we're (only) sure that if p!=0 it points to the last dot in the filename
   if (p)
     *p = 0;
-  String sFile = sExpr.scVal();
+  String sFile = sExpr.c_str();
   FileName fn(sFile, ".mps", true);
-  if (0 == strchr(sFile.scVal(), ':')) // no path set
+  if (0 == strchr(sFile.c_str(), ':')) // no path set
     fn.Dir(sPath); 
   MutexFileName mut(fn);
   if (p && (0 != _strcmpi(p+1, "mps"))) {

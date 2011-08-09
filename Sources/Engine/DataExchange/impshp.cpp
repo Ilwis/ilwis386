@@ -47,32 +47,32 @@ void ThrowUnsupportedShapeType(const FileName& fn, const String& sErr)
 
 void ThrowImportingTableError(const FileName& fn)
 {
-    throw ErrorObject(WhatError(String(SCVErrImpTableError), 1), fn);
+    throw ErrorObject(WhatError(String(TR("dBase table could not be imported")), 1), fn);
 }
 
 void ThrowReadFileError(const FileName& fn)
 {
-    throw ErrorObject(WhatError(String(SCVErrReading), 1), fn);
+    throw ErrorObject(WhatError(String(TR("File Reading Error")), 1), fn);
 }
 
 void ThrowAbortImportError(const FileName& fn)
 {
-    throw ErrorObject(WhatError(String(SCVErrAbortImport), 1), fn);
+    throw ErrorObject(WhatError(String(TR("Error during converting, aborting conversion.")), 1), fn);
 }
 
 void ThrowFileDoesNotExistError(const FileName& fn)
 {
-    throw ErrorObject(WhatError(String(SCVErrFileNotFound), 1), fn);
+    throw ErrorObject(WhatError(String(TR("File not found")), 1), fn);
 }
 
 void ThrowRecordOutOfRangeError(const FileName& fn)
 {
-    throw ErrorObject(WhatError(String(SCVErrRecordOutOfRange), 1), fn);
+    throw ErrorObject(WhatError(String(TR("Record number out of Range.")), 1), fn);
 }
 
 void ThrowCouldNotCreatePolygonError(const FileName& fn)
 {
-    throw ErrorObject(WhatError(String(SCVErrNoPol), 1), fn);
+    throw ErrorObject(WhatError(String(TR("Could not create Polygon")), 1), fn);
 }
 
 inline void BigToLittle(unsigned long &iVal)    // create intel type long
@@ -142,7 +142,7 @@ void ImpShapeFile::Init()
       case isfMultiPointM:
         break;
       default:
-        ThrowUnsupportedShapeType(fnMain, String(SCVErrUnsuppShapeType_I.scVal(), isfType));
+        ThrowUnsupportedShapeType(fnMain, String(TR("Unsupported Shape Type: %d").c_str(), isfType));
     }
     double rMinX=header.rBox[0];
     double rMinY=header.rBox[1];
@@ -164,8 +164,8 @@ bool ImpShapeFile::fImport(Tranquilizer& trq)
     dbTable.SetTableDomain(dmSimpleId); // the imported table will have a ID domain
     if (!dbTable.fImport()) // importing the dbf file. The result will be used as attribute table
        ThrowImportingTableError(fnDBF) ;
-    trq.SetTitle(SCVTitleImportShape);
-    trq.SetText(SCVTextProcessing);
+    trq.SetTitle(TR("Importing from Arcview Shapefile"));
+    trq.SetText(TR("Processing..."));
     dbTable.GetTable()->fErase = true;        // keep table only if import shape succeeds
     dbTable.GetTable()->dm()->fErase = true;  // same for the table domain    
 
@@ -191,7 +191,7 @@ bool ImpShapeFile::fImport(Tranquilizer& trq)
             fFailed = fImportPolygons(dbTable.GetTable(), trq);
             break;
         default:
-            ThrowUnsupportedShapeType(fnMain, String(SCVErrUnsuppShapeType_I.scVal(), isfType));
+            ThrowUnsupportedShapeType(fnMain, String(TR("Unsupported Shape Type: %d").c_str(), isfType));
     }
 
     dbTable.GetTable()->fErase = !fFailed;        // keep table only if import shape succeeds
@@ -285,7 +285,7 @@ bool ImpShapeFile::fReadArcRecord(long iRec, ArcStruct& Arc)
     }
     catch(ErrorObject& err)
     {
-        err.Show(SCVErrErrorTitle);
+        err.Show(TR("Conversion Error"));
         return false;
     }        
 
@@ -316,7 +316,7 @@ bool ImpShapeFile::fReadMultiPointRecord(long iRec, MultiPointStruct& pntRecord)
     }        
     catch(ErrorObject& err)
     {
-        err.Show(SCVErrErrorTitle);
+        err.Show(TR("Conversion Error"));
         return false;
     } 
 }
@@ -341,7 +341,7 @@ bool ImpShapeFile::fReadPointRecord(long iRec, PointStruct& pntRecord)
     }
     catch(ErrorObject& err)
     {
-        err.Show(SCVErrErrorTitle);
+        err.Show(TR("Conversion Error"));
         return false;
     } 
     

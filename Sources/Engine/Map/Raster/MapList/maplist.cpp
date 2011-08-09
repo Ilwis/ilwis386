@@ -136,7 +136,7 @@ bool fImportMapList(const FileName& fnMpl, const Array<String>& as)
 		int iParms = as.iSize();
 		if (iParms < 6) {
 			// too little parms 
-			sErr = String(SCVErrMapTooLittleParms_i.scVal(), 6);
+			sErr = String(TR("Too little parameters, at least %i needed").c_str(), 6);
 			throw ErrorObject(sErr);
 		}
 		
@@ -155,19 +155,19 @@ bool fImportMapList(const FileName& fnMpl, const Array<String>& as)
 				fUseAs =  false;
 			else {
 				// invalid conversion type
-				sErr = String(SCVErrMapConvType_S.scVal(), as[2]);
+				sErr = String(TR("Incorrect 'conversion type' parameter: %S").c_str(), as[2]);
 				throw ErrorObject(sErr);
 			}
 			long iCols = as[3].iVal();
 			if (iCols <= 0) {
 				// invalid nr of columns
-				sErr = String(SCVErrMapColumns_S.scVal(), as[3]);
+				sErr = String(TR("Incorrect 'nr. of columns' parameter: %S").c_str(), as[3]);
 				throw ErrorObject(sErr);
 			}
 			long iBands = as[4].iVal();
 			if (iBands <= 0) {
 				// invalid nr of bands
-				sErr = String(SCVErrMapHeaderSize_S.scVal(), as[4]);
+				sErr = String(TR("Incorrect 'header size' parameter: %S").c_str(), as[4]);
 				throw ErrorObject(sErr);
 			}
 			// check non fixed parms
@@ -176,7 +176,7 @@ bool fImportMapList(const FileName& fnMpl, const Array<String>& as)
 				iHeaderSize = as[5].iVal();
 				if (iHeaderSize < 0) {
 					// invalid header size
-					sErr = String(SCVErrMapHeaderSize_S.scVal(), as[5]);
+					sErr = String(TR("Incorrect 'header size' parameter: %S").c_str(), as[5]);
 					throw ErrorObject(sErr);
 				}
 			}
@@ -191,7 +191,7 @@ bool fImportMapList(const FileName& fnMpl, const Array<String>& as)
 					irfs = irfsPIXELINTERLEAVED;
 				else {
 					// invalid raster file structure
-					sErr = String(SCVErrMapListFileStruct_S.scVal(), as[6]);
+					sErr = String(TR("Incorrect 'file structure' parameter: %S").c_str(), as[6]);
 					throw ErrorObject(sErr);
 				}
 			}
@@ -213,7 +213,7 @@ bool fImportMapList(const FileName& fnMpl, const Array<String>& as)
 				}
 				else {
 					// invalid raster pixel structure
-					sErr = String(SCVErrMapPixStruct_S.scVal(), as[7]);
+					sErr = String(TR("Incorrect 'pixel structure' parameter: %S").c_str(), as[7]);
 					throw ErrorObject(sErr);
 				}
 			}
@@ -221,7 +221,7 @@ bool fImportMapList(const FileName& fnMpl, const Array<String>& as)
 				int i = as[8].iVal();
 				if ((i != 1) && (i != 2) && (i != 4) && (i != 8)) {
 					// invalid nr of bytes
-					sErr = String(SCVErrMapBytes_S.scVal(), as[8]);
+					sErr = String(TR("Incorrect 'nr of bytes' parameter: %S").c_str(), as[8]);
 					throw ErrorObject(sErr);
 				}
 				iNrBytesPerPixel = i;
@@ -236,7 +236,7 @@ bool fImportMapList(const FileName& fnMpl, const Array<String>& as)
 					fByteSwap = false;
 				else {
 					// invalid parm swap bytes
-					sErr = String(SCVErrMapSwap_S.scVal(), as[9]);
+					sErr = String(TR("Incorrect 'swap bytes' parameter: %S").c_str(), as[9]);
 					throw ErrorObject(sErr);
 				}
 			} 
@@ -249,7 +249,7 @@ bool fImportMapList(const FileName& fnMpl, const Array<String>& as)
 					fCreateMPR = false;
 				else {
 					// invalid parm create mpr
-					sErr = String(SCVErrMapListCreateMPR_S.scVal(), as[10]);
+					sErr = String(TR("Incorrect 'create MPR' parameter: %S").c_str(), as[10]);
 					throw ErrorObject(sErr);
 				}
 			}
@@ -263,7 +263,7 @@ bool fImportMapList(const FileName& fnMpl, const Array<String>& as)
 		}
 		else {
 		// invalid format
-		sErr = String(SCVErrMapFormat_S.scVal(), as[1]);
+		sErr = String(TR("Incorrect raster import format: %S").c_str(), as[1]);
 		throw ErrorObject(sErr);
 		}
 	}
@@ -285,8 +285,8 @@ MapListPtr* MapListPtr::create(const FileName& fn, const String& sExpression)
 		// It is no valid function so now check if the expression is a maplist filename
 		if (!(fnMpl.fValid() && fCIStrEqual(fnMpl.sExt, ".mpl")))
 		{
-			String sErr(SCVErrMapParamNr_i.scVal(), as.iSize());
-			ErrorObject(sErr.scVal()).Show();
+			String sErr(TR("Incorrect parameter %i").c_str(), as.iSize());
+			ErrorObject(sErr.c_str()).Show();
 			return 0;
 		}
 	}
@@ -294,7 +294,7 @@ MapListPtr* MapListPtr::create(const FileName& fn, const String& sExpression)
 	if (fCIStrEqual(sFunc, "mlist"))
 	{
 		if (iParms <= 0)
-			throw ErrorObject(WhatError(SMPLErrEmptyMapList, errMapList+1), fn);
+			throw ErrorObject(WhatError(TR("Empty map list"), errMapList+1), fn);
 
 		Array<Map> mpArr(iParms);
 		for (int i=0; i<iParms; i++)
@@ -358,7 +358,7 @@ MapListPtr::MapListPtr(const FileName& fn)
 	FileName fnMap;
 	int i = iLower();
 	for (; i <= iUpper(); i++) {
-		ReadElement("MapList", String("Map%i", i).scVal(), fnMap);
+		ReadElement("MapList", String("Map%i", i).c_str(), fnMap);
 		try {
 			ma[i] = Map(fnMap);
 		}
@@ -430,7 +430,7 @@ MapListPtr::MapListPtr(const FileName& fn, const Array<FileName>& fnaMaps)
 , pmlv(0)
 {
 	if (fnaMaps.iSize() == 0)
-		throw ErrorObject(WhatError(SMPLErrEmptyMapList, errMapList+1), fn);
+		throw ErrorObject(WhatError(TR("Empty map list"), errMapList+1), fn);
 	// retrieve maplist
 	iOffset = 0; //fnaMaps.iLower();
 	ma.Resize(fnaMaps.iSize()+iOffset);
@@ -461,7 +461,7 @@ MapListPtr::MapListPtr(const FileName& fn, const Array<Map>& aMaps)
 , pmlv(0)
 {
 	if (aMaps.iSize() == 0)
-		throw ErrorObject(WhatError(SMPLErrEmptyMapList, errMapList+1), fn);
+		throw ErrorObject(WhatError(TR("Empty map list"), errMapList+1), fn);
 	// retrieve maplist
 	iOffset = 0; // aMaps.iLower();
 	ma.Resize(aMaps.iSize()+iOffset);
@@ -541,7 +541,7 @@ void MapListPtr::Store()
 	WriteElement("MapList", "Range", range);
 	int i;
 	for (i  = iLower(); i <= iUpper(); i++)
-		WriteElement("MapList", String("Map%i", i).scVal(), map(i)->fnObj);
+		WriteElement("MapList", String("Map%i", i).c_str(), map(i)->fnObj);
 	WriteElement("MultiBandStat", "VarCov", _mtVarCov);
 	WriteElement("MultiBandStat", "CalcStatTime", tmCalcStat);
 	WriteElement("MultiBandStat", "Correlation", _mtCorr);
@@ -592,7 +592,7 @@ void MapListPtr::CheckDomains() const
 		return;
 	Domain dom0 = ma[iLower()]->dm();
 	if (dom0 == Domain("none"))
-		throw ErrorObject(WhatError(SMPLErrDomainNoneNotAllowed, errMapList+2), fnObj.sPath());
+		throw ErrorObject(WhatError(TR("Map in List cannot have Domain None"), errMapList+2), fnObj.sPath());
 	for (int i = iLower()+1; i <= iUpper(); i++)
 		if (dom0 != ma[i]->dm())
 			IncompatibleDomainsError(dom0->sName(true, fnObj.sPath()),
@@ -690,7 +690,7 @@ void MapListPtr::CalculateStats()
 	IntArray aiBnd1, aiBnd2, aiBnd3;
 	GetOIFList(asBands, aiBnd1, aiBnd2, aiBnd3);
 	for (int ii=0;ii < asBands.iSize(); ++ii)
-		WriteElement("OIF", String("OIF%i", ii).scVal(), asBands[ii]);
+		WriteElement("OIF", String("OIF%i", ii).c_str(), asBands[ii]);
 	SetAdditionalInfoFlag(true);
 	SetAdditionalInfo(sOIF());
 	Store();
@@ -725,8 +725,8 @@ bool MapListPtr::fCalcRealVarCov()
 	for (nr = 0; nr < iMaps; ++nr)
 		mapBuf[nr] = new RealBuf(iCols);
 	Tranquilizer trq;
-	trq.SetTitle(SMPLTextCalculateVarcovMatrix);
-	trq.SetText(SMPLTextCalculating);
+	trq.SetTitle(TR("Calculate varcov matrix"));
+	trq.SetText(TR("Calculating"));
 	trq.Start();
 	
 	for (r = 0; r < iRows; ++r) {
@@ -802,8 +802,8 @@ bool MapListPtr::fCalcLongVarCov()
 	for (nr = 0; nr < iMaps; ++nr)
 		mapBuf[nr] = new LongBuf(iCols);
 	Tranquilizer trq;
-	trq.SetTitle(SMPLTextCalculateVarcovMatrix);
-	trq.SetText(SMPLTextCalculating);
+	trq.SetTitle(TR("Calculate varcov matrix"));
+	trq.SetText(TR("Calculating"));
 	trq.Start();
 	
 	for (r = 0; r < iRows; ++r) {
@@ -1008,7 +1008,7 @@ FileName MapListPtr::fnRealName(const FileName& fn) const
 void MapListPtr::AddMap(const Map& mp)
 {
 	if (!fOK(mp))
-		throw ErrorObject(String(SMPLErrDomainGeoRefMismatch_S.scVal(), mp->sName()));
+		throw ErrorObject(String(TR("Incompatible Domain and/or Georeference in map %S").c_str(), mp->sName()));
 	int i = iLower();
 	for(; i <= iUpper(); ++i)
 	{

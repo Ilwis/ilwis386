@@ -20,8 +20,8 @@ OpenGLText::OpenGLText(ILWIS::RootDrawer *rootdrawer,const String& name, int hei
 		String file("%s\\fonts\\%S",szPath, name);
 		fn = FileName(file);
     }
-	//font = new FTTextureFont(fn.sFullPath().scVal());
-	font = new FTPolygonFont(fn.sFullPath().scVal());
+	//font = new FTTextureFont(fn.sFullPath().c_str());
+	font = new FTPolygonFont(fn.sFullPath().c_str());
 	font->FaceSize(fontHeight);
 	color = Color(0,0,0);
 	if (fixedSize) {
@@ -50,7 +50,7 @@ void OpenGLText::renderText(const Coordinate& c, const String& text) {
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 	glHint (GL_POLYGON_SMOOTH, GL_DONT_CARE);
-	font->Render(text.scVal(),text.size(),FTPoint(horizontalShift + c.x / scale, verticalShift + c.y / scale, c.z));
+	font->Render(text.c_str(),text.size(),FTPoint(horizontalShift + c.x / scale, verticalShift + c.y / scale, c.z));
 	glPopMatrix();
 }
 

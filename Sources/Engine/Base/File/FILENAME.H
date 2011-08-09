@@ -118,7 +118,7 @@ public:
 //  friend bool operator != (const FileName& fnA, const FileName& fnB) 
 //    { return !(fnA == fnB); }
 
-	bool fExist() const { return _access(sFullPath(true).scVal(), 0)==0 ; }
+	bool fExist() const { return _access(sFullPath(true).c_str(), 0)==0 ; }
 	bool _export fValid() const;
 
 	static FileName _export fnUnique(const FileName& fnTemplate);
@@ -149,7 +149,7 @@ public:
   String _export sFullPathQuoted(bool fExt = true) const;
   String _export sRelativeQuoted(bool fExt = true, const String& sDirRelative = "") const;
   String _export sShortNameQuoted(bool fExt = true) const;
-  bool fDelete() { return _unlink(sFullPath().scVal()) == 0; }
+  bool fDelete() { return _unlink(sFullPath().c_str()) == 0; }
 
   void Split(const char * sFileName);
   static FileName _export fnPathOnly(const String& sPath);

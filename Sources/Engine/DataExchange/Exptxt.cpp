@@ -207,14 +207,14 @@ void TableToDelim::SetupRecord(long iRec) {
 }
 
 void TableToDelim::WriteRecord() {
-  AnsiToOem(sRecord.scVal(), pcOem);
+  AnsiToOem(sRecord.c_str(), pcOem);
   filOut->Write(sRecord.length(), pcOem);
   filOut->Write(2, "\r\n");
 }
 
 void ImpExp::ExportDelim(const FileName& fnObject, const FileName& fnFile) {
-  trq.SetTitle(SCVTitleExportDelim);
-  trq.SetText(SCVTextProcessing);
+  trq.SetTitle(TR("Export table to delimited text"));
+  trq.SetText(TR("Processing..."));
   TableToDelim Delim(fnObject, fnFile);
   for (long iRec = Delim.iMinRec; iRec <= Delim.iMaxRec; iRec++ ) {
     Delim.SetupRecord(iRec);

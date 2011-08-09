@@ -85,24 +85,24 @@ CoordSystemCTP::CoordSystemCTP(const FileName& fn, const CoordSystem& csRef, con
   Domain dmBool("bool");
   colX = tblCTP->colNew("X", dvsReal);
   colX->SetOwnedByTable(true);
-  colX->SetDescription(SDATMsgXcoord);
+  colX->SetDescription(TR("X-coord"));
   colY = tblCTP->colNew("Y", dvsReal);
   colY->SetOwnedByTable(true);
-  colY->SetDescription(SDATMsgYcoord);
+  colY->SetDescription(TR("Y-coord"));
   colRefX = tblCTP->colNew("RelX", dvsReal);
   colRefX->SetOwnedByTable(true);
-  colRefX->SetDescription(SDATMsgReferenceXcoord);
+  colRefX->SetDescription(TR("Reference X-coord"));
   colRefY = tblCTP->colNew("RelY", dvsReal);
   colRefY->SetOwnedByTable(true);
-  colRefY->SetDescription(SDATMsgReferenceYcoord);
+  colRefY->SetDescription(TR("Reference Y-coord"));
   if (fUseColZ) {
     colRefZ = tblCTP->colNew("RelZ", dvsReal);
     colRefZ->SetOwnedByTable(true);
-    colRefZ->SetDescription(SDATMsgReferenceZcoord);
+    colRefZ->SetDescription(TR("Reference Z-coord"));
   }
   colAct = tblCTP->colNew("Active", dmBool);
   colAct->SetOwnedByTable(true);
-  colAct->SetDescription(SDATMsgActivePoint);
+  colAct->SetDescription(TR("Active point"));
   fChanged = true;
 
   try {

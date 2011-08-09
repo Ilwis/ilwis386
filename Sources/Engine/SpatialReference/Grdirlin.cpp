@@ -147,7 +147,7 @@ GeoRefDirectLinear::GeoRefDirectLinear(const FileName& fn, const Map& mp, RowCol
 void GeoRefDirectLinear::init()
 {
 	if (!mapDTM.fValid())
-		throw ErrorObject(SGRErrDTMNotValid);
+		throw ErrorObject(TR("DTM is not valid"));
 	mapDTM->KeepOpen(true);
   GeoRef grDTM = mapDTM->gr();
   if (grDTM->fGeoRefNone())

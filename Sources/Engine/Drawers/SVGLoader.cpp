@@ -1,4 +1,5 @@
 #include "Headers\toolspch.h"
+#include "Engine\Base\DataObjects\XMLDocument.h"
 #include "Engine\base\system\engine.h"
 #include <map>
 #include "Engine\Drawers\SimpleDrawer.h"
@@ -8,7 +9,7 @@
 
 
 using namespace ILWIS;
-using namespace XERCES_CPP_NAMESPACE;
+
 
 //-----------------------------
 SVGLoader::SVGLoader() {
@@ -22,54 +23,73 @@ SVGLoader::SVGLoader() {
 }
 SVGLoader::~SVGLoader() {
 }
-void SVGLoader::load() {
-	String ilwDir = getEngine()->getContext()->sIlwDir();
-	String pathToSvg = ilwDir + "\\Resources\\symbols\\*.ivg";
-	try{
+void SVGLoader::load(const String& folder) {
+	String pathToSvg;
+	if ( folder == "") {
+		String ilwDir = getEngine()->getContext()->sIlwDir();
+		pathToSvg = ilwDir + "\\Resources\\symbols\\*.*";
+	} else
+		pathToSvg = folder;
 
-		CFileFind finder;
-		BOOL fFound = finder.FindFile(pathToSvg.scVal());
-		while(fFound) {
-			fFound = finder.FindNextFile();
-			FileName fnSvg(finder.GetFilePath());
-			parseFile(fnSvg);
+	CFileFind finder;
+	BOOL fFound = finder.FindFile(pathToSvg.c_str());
+	while(fFound) {
+		fFound = finder.FindNextFile();
+		if (finder.IsDirectory())
+		{
+			FileName fnFolder(finder.GetFilePath());
+			if ( fnFolder.sFile != "." && fnFolder.sFile != ".." && fnFolder.sFile != "")
+				load(fnFolder.sFullPath());
 		}
-	XMLPlatformUtils::Terminate();
-	}catch( xercesc::XMLException& e ) {
-		throw ErrorObject(CString(e.getMessage()));
+		else {
+			FileName fnSvg(finder.GetFilePath());
+			String ext = fnSvg.sExt;
+			if ( ext.toLower() == ".ivg")
+				parseFile(fnSvg);
+		}
 	}
-
 }
 
-void SVGLoader::parseFile(const FileName& fn) {
-	XercesDOMParser *parser = new XercesDOMParser;
-	parser->setValidationScheme(XercesDOMParser::Val_Auto);
-	parser->setDoNamespaces(false);
-	parser->setDoSchema(false);
-	parser->setValidationSchemaFullChecking(false);
-	parser->setCreateEntityReferenceNodes(false);
+SVGElement *SVGLoader::parseFile(const FileName& fn) {
+	if ( !fn.fExist())
+		return 0;
 
-	parser->parse(fn.sFullPath().scVal());
-	XERCES_CPP_NAMESPACE::DOMDocument* xmlDoc = parser->getDocument();
-	XERCES_CPP_NAMESPACE::DOMElement* elementRoot = xmlDoc->getDocumentElement();
-	String rootName = CString(elementRoot->getNodeName());
+	ILWIS::XMLDocument doc(fn);
+
 	String id = fn.sFile;
 	SVGElement *element = new SVGElement(id);
-	element->parse(elementRoot);
+	element->parse(doc.first_child());
 	(*this)[id] = element;
+
+	return element;
 }
 
-String SVGLoader::getAttributeValue(DOMNamedNodeMap *map, const String& key) const{
-	if ( !map)
+String SVGLoader::getAttributeValue(const pugi::xml_node& node, const String& key) const{
+	if ( node.attributes_begin() == node.attributes_end())
 		return "";
-	XMLCh *str = XERCES_CPP_NAMESPACE::XMLString::transcode(key.scVal());
-	XERCES_CPP_NAMESPACE::DOMNode* attnode = map->getNamedItem(str);
-	delete str;
-	if ( attnode) {
-		String value = CString(attnode->getTextContent());
-		return value;
+	pugi:: xml_attribute attr = node.attribute(key.c_str());
+	if ( attr.empty())
+		return "";
+	return attr.value();
+}
+
+SVGElement *SVGLoader::getSVGSymbol(const String& name) {
+	FileName fn(name);
+	String shortName = fn.sFile;
+	map<String, SVGElement *>::const_iterator iter = find(shortName);
+	if ( iter != end())
+		return (*iter).second;
+	if ( name.sHead("\\") == "" && name.sHead("/") == "") {
+		String ilwDir = getEngine()->getContext()->sIlwDir();
+		String pathToSvg = ilwDir + "\\Resources\\symbols\\";
+		fn  = FileName(pathToSvg + name, ".ivg");
+	} else {
+		fn = FileName(name, ".ivg");
 	}
-	return "";
+	SVGElement *el =  parseFile(fn);
+	if ( el != 0)
+		(*this)[shortName] = el;
+	return el;
 }
 
 

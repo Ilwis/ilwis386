@@ -124,7 +124,7 @@ bool Directory::operator==(const Directory& dir) const
 
 bool Directory::fIsExistingDir(const Directory& dir)
 {
-	DWORD attr = GetFileAttributes(dir.sFullPath().scVal());
+	DWORD attr = GetFileAttributes(dir.sFullPath().c_str());
 	if (attr == 0xFFFFFFFF) // the non-existing constant INVALID_FILE_ATTRIBUTES
 		return false; // 'dir' does not exist
 	attr &= FILE_ATTRIBUTE_DIRECTORY;
@@ -135,9 +135,9 @@ bool Directory::fIsExistingDir(const Directory& dir)
 bool Directory::fReadOnly() const
 {
 	String s("%S\\702v2as.ypr@", sFullPath());
-	HANDLE hH = CreateFile(s.scVal(), 0, FILE_SHARE_READ, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+	HANDLE hH = CreateFile(s.c_str(), 0, FILE_SHARE_READ, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 	bool fR = hH == INVALID_HANDLE_VALUE;
 	CloseHandle(hH);
-	DeleteFile(s.scVal());
+	DeleteFile(s.c_str());
 	return fR;
 }

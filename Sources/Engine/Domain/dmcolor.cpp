@@ -95,7 +95,7 @@ String DomainColor::sValueByRaw(long iRaw, short iWidth, short) const
 long DomainColor::iRaw(const String& str) const
 {
   int iRed, iGreen, iBlue = shUNDEF;
-  char* s = const_cast<char *>(str.scVal()); //beeeuuh; als string geen functie hier bevat maak hem dan!
+  char* s = const_cast<char *>(str.c_str()); //beeeuuh; als string geen functie hier bevat maak hem dan!
   while ((*s == ' ') || (*s == '(')) ++s;
   sscanf(s, "%d,%d,%d", &iRed, &iGreen, &iBlue);
   if (iBlue == shUNDEF)

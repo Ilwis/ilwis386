@@ -613,7 +613,7 @@ void IlwisSettings::GetFont(const String& sValueName, CFont *fnt) const
 	lfFont.lfClipPrecision = (BYTE)reg.iValue("ClipPrecision");
 	lfFont.lfQuality = (BYTE)reg.iValue("Quality"); 
   lfFont.lfPitchAndFamily = (BYTE)reg.iValue("PitchAndFamily");
-	strcpy(lfFont.lfFaceName, reg.sValue("FaceName").scVal());
+	strcpy(lfFont.lfFaceName, reg.sValue("FaceName").c_str());
 
 	fnt->CreateFontIndirect(&lfFont);
 

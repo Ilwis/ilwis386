@@ -99,7 +99,7 @@ struct segtype        // compatible with ILWIS 1.4 record
 
 static int iCompSegCodes(const String* a, const String* b)
 {
-  return stricmp((*a).scVal(), (*b).scVal());
+  return stricmp((*a).c_str(), (*b).c_str());
 }
 
 static void GetCodes(File& filSeg, ArrayLarge<String>& aSegCodes, long& iDeleted, Tranquilizer* trq)
@@ -107,7 +107,7 @@ static void GetCodes(File& filSeg, ArrayLarge<String>& aSegCodes, long& iDeleted
   filSeg.Seek(sizeof(segtype));
   iDeleted = 0;
   if (0 != trq)
-    trq->SetText(SSEGTextScanForCodes);
+    trq->SetText(TR("Scan file for codes"));
   long i=0;
   long iNrSeg = filSeg.iSize() / sizeof(segtype) - 1;
   filSeg.KeepOpen(true);
@@ -145,7 +145,7 @@ void SegmentMapImport::GetImportInfo(const FileName& fn, DomainType& dmt, ValueR
     r = aSegCodes[i].rVal();
     if (r == rUNDEF)
       break;
-    if (!fDec && strchr(aSegCodes[i].scVal(), '.') != 0)
+    if (!fDec && strchr(aSegCodes[i].c_str(), '.') != 0)
       fDec = true;
     if (r < rMin)
       rMin = r;  
@@ -184,7 +184,7 @@ void SegmentMapImport::StoreSegCodes(const SegmentMapPtr* ptr, Tranquilizer& trq
 {
   File filSegCode(FileName(ptr->fnObj, ".sc#"), facRW);
   File filSeg(FileName(ptr->fnObj, ".sg#"), facRO);
-  trq.SetText(SSEGTextStoreSegmentCodes);
+  trq.SetText(TR("Store segment codes"));
   if (ptr->fUseReals())  {
     double* rCodes = new double[ptr->iFeatures()];
     for (long i=0; i < ptr->iFeatures(); ++i) {
@@ -230,12 +230,12 @@ void SegmentMapImport::import(const FileName& fn, const FileName& fnNew, DomainT
   FileName fnDomNew, fnRprNew;
   try {
     Tranquilizer trq;
-    trq.SetTitle(String(SSEGTitleImport14Segments_S.scVal(), fn.sFile));
+    trq.SetTitle(String(TR("Importing 1.4 segment map '%S'").c_str(), fn.sFile));
     trq.Start();
     long i;
     FileName fnSeg(fnNew);
 
-    trq.fText(SSEGTextCreateSegmentODF);
+    trq.fText(TR("Creating object definition file"));
   //if (File::fExist(FileName(fn, ".pol")))
   //  return; // polygon map should be imported
     fnSeg.sExt = ".mps";
@@ -263,7 +263,7 @@ void SegmentMapImport::import(const FileName& fn, const FileName& fnNew, DomainT
     File filSeg(FileName(fnSeg, ".sg#"), facRO);
     ArrayLarge<String> aSegCodes;
     long iDeleted;
-    trq.fText(SSEGTextRetrieveSegmentCodes);
+    trq.fText(TR("Retrieve segment codes"));
     GetCodes(filSeg, aSegCodes, iDeleted, &trq);
     ObjectInfo::WriteElement("SegmentMapStore", "DeletedSegments", fnSeg, String("%li",iDeleted));
   
@@ -273,7 +273,7 @@ void SegmentMapImport::import(const FileName& fn, const FileName& fnNew, DomainT
     else if (dmt == dmtVALUE) 
       dm = Domain(FileName("value", ".dom"));
     else {
-      trq.fText(SSEGTextCreateNewDomain);
+      trq.fText(TR("Create new domain"));
       dm = Domain(fnDom, aSegCodes.iSize(), dmt);
       fnDomNew = fnDom;
       fnRprNew = fnDom;
@@ -295,19 +295,19 @@ void SegmentMapImport::import(const FileName& fn, const FileName& fnNew, DomainT
   catch (const ErrorObject& err) {
     err.Show();  
     // delete files
-    _unlink(FileName(fnNew, ".mps").sFullName().scVal());
-    _unlink(FileName(fnNew, ".sg#").sFullName().scVal());
-    _unlink(FileName(fnNew, ".cd#").sFullName().scVal());
-    _unlink(FileName(fnNew, ".sc#").sFullName().scVal());
+    _unlink(FileName(fnNew, ".mps").sFullName().c_str());
+    _unlink(FileName(fnNew, ".sg#").sFullName().c_str());
+    _unlink(FileName(fnNew, ".cd#").sFullName().c_str());
+    _unlink(FileName(fnNew, ".sc#").sFullName().c_str());
     if (fnDomNew.fValid()) {
-      _unlink(fnDomNew.sFullName().scVal());
+      _unlink(fnDomNew.sFullName().c_str());
       fnDomNew.sExt = ".dm#";
-      _unlink(fnDomNew.sFullName().scVal());
+      _unlink(fnDomNew.sFullName().c_str());
     }  
     if (fnRprNew.fValid()) {
-      _unlink(fnRprNew.sFullName().scVal());
+      _unlink(fnRprNew.sFullName().c_str());
       fnRprNew.sExt = ".rp#";
-      _unlink(fnRprNew.sFullName().scVal());
+      _unlink(fnRprNew.sFullName().c_str());
     }  
   }  
 }

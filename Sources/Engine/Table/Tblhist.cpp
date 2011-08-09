@@ -334,7 +334,7 @@ TableHistogram::TableHistogram(TablePtr& p, const FileName& fnTbl, Map& mp, bool
   ptr.SetAdditionalInfoFlag(true);
   _fIgnZero = fIgnZero;
   if (0 != mp->dm()->pdcol())
-    ThrowHistogramError(String(STBLErrColorDomainNotAllowed_S.scVal(), mp->sName(true, fnObj.sPath())), errTableHistogram+1, fnObj);
+    ThrowHistogramError(String(TR("No color domain allowed %S").c_str(), mp->sName(true, fnObj.sPath())), errTableHistogram+1, fnObj);
   if (mp->dm()->pdi() || mp->dm()->pdsrt() || mp->dm()->pdbit() || mp->dm()->pdp()) {
     ptr.SetDomain(mp->dm());
   }  
@@ -403,7 +403,7 @@ bool TableHistogram::fCount()
     LongBuf line(iMapCols);
     for (i = iMin; i <= iMax; i++)
       buf[i] = 0;
-    trq.SetText(STBLTextCalcHistogram);
+    trq.SetText(TR("Calculating histogram"));
     trq.HelpEnable(false);
     for (l = 0; l < iMapLines; l++) {
       if (trq.fUpdate(l, iMapLines))
@@ -428,7 +428,7 @@ bool TableHistogram::fCount()
       ahitem ahitSort;
       htab htl(hf(16000));
       LongBuf line(iMapCols);
-      trq.SetText(STBLTextCalcHistogram);
+      trq.SetText(TR("Calculating histogram"));
       trq.HelpEnable(false);
       long iItem = 0;
       for (l = 0; l < iMapLines; l++) {
@@ -450,7 +450,7 @@ bool TableHistogram::fCount()
         }
       }
       trq.fUpdate(iMapLines, iMapLines);
-      trq.SetText(STBLTextGoSort);
+      trq.SetText(TR("Prepare for sorting"));
 
       ptr.DeleteRec(iOffset(),iRecs());
       pts->iRecNew(iItem); 
@@ -468,10 +468,10 @@ bool TableHistogram::fCount()
 
       }
 
-      trq.SetText(STBLTextSortValues);
+      trq.SetText(TR("Sort values"));
       sort(ahitSort.begin(), ahitSort.end()); 
 
-      trq.SetText(STBLFillTable);
+      trq.SetText(TR("Fill table"));
       DomainValueRangeStruct dvs = map->dvrs();
       DomainSort *pdsrt = dm()->pdsrt();    
       for (long m=1; m <= iItem; ++m) {
@@ -493,7 +493,7 @@ bool TableHistogram::fCount()
       ahitemr ahitrSort;
       htabr htr(hfr(16000));
       RealBuf line(iMapCols);
-      trq.SetText(STBLTextCalcHistogram);
+      trq.SetText(TR("Calculating histogram"));
       trq.HelpEnable(false);
       long iItem = 0;
       for (l = 0; l < iMapLines; l++) {
@@ -515,7 +515,7 @@ bool TableHistogram::fCount()
         }
       }
       trq.fUpdate(iMapLines, iMapLines);
-      trq.SetText(STBLTextGoSort);
+      trq.SetText(TR("Prepare for sorting"));
 
       ptr.DeleteRec(iOffset(),iRecs());
       pts->iRecNew(iItem);
@@ -531,10 +531,10 @@ bool TableHistogram::fCount()
         ahitrSort[n++] = *iter;
       }
 
-      trq.SetText(STBLTextSortValues);
+      trq.SetText(TR("Sort values"));
       sort(ahitrSort.begin(), ahitrSort.end()); 
 
-      trq.SetText(STBLFillTable);
+      trq.SetText(TR("Fill table"));
       for (long m=1; m <= iItem; ++m) {
         if (0 == m % 100)
           if (trq.fUpdate(m, iItem)) {
@@ -556,7 +556,7 @@ bool TableHistogram::fCount()
 void TableHistogram::FillColumns()
 {
   long i;
-  trq.fText(STBLTextFillOtherColumns);
+  trq.fText(TR("Fill other columns"));
   // reset undefined values
   long iMin = iOffset();
   long iMax = iMin + iRecs() - 1;
@@ -638,7 +638,7 @@ void TableHistogram::FillColumns()
   ptr.fChanged = false;
   // Store(); // Stored histograms everytime they were opened (not necessary)
   
-  trq.fText(STBLTextCalcMeanStdDev);
+  trq.fText(TR("Calculate mean and standard deviation"));
   rMean = rUNDEF;
   rStd = rUNDEF;
   rPred = rUNDEF;
@@ -697,7 +697,7 @@ void TableHistogram::Init()
 {
 	ptr.DoNotStore(true);
 	
-  String sTitle("%S - %S", STBLTitleTableHistogram, sName(true));
+  String sTitle("%S - %S", TR("TableHistogram"), sName(true));
   trq.SetTitle(sTitle);
   trq.setHelpItem("ilwisapp\\histogram_algorithm.htm");
   if (0 == pts)
@@ -706,7 +706,7 @@ void TableHistogram::Init()
     _colValue = pts->col("value");
     if (!_colValue.ptr()) {
       _colValue = pts->colNew("value", map->dvrs());
-      _colValue->sDescription = STBLMsgPixelValue;
+      _colValue->sDescription = TR("Pixel value");
     }
     _colValue->SetOwnedByTable(true);
     _colValue->SetReadOnly(true);
@@ -715,7 +715,7 @@ void TableHistogram::Init()
   long iMaxCount = map->iLines() * map->iCols();
   if (!_colNPix.ptr()) {
     _colNPix = pts->colNew("npix", Domain("count"), ValueRange(0, iMaxCount));
-    _colNPix->sDescription = STBLMsgNumberPixels;
+    _colNPix->sDescription = TR("Number of pixels");
     for (long i=iOffset(); i <= iOffset()+iRecs()-1; ++i)
        _colNPix->PutVal(i, 0L);
   }
@@ -724,20 +724,20 @@ void TableHistogram::Init()
   _colNPixPct = pts->col("npixpct");
   if (!_colNPixPct.ptr()) {
     _colNPixPct = pts->colNew("npixpct", Domain("perc"));
-    _colNPixPct->sDescription = STBLMsgPercPixels;
+    _colNPixPct->sDescription = TR("Percentage of pixels");
   }
   _colNPixPct->SetOwnedByTable(true);
   _colNPixPct->SetReadOnly(true);
   String sNotUndef = "pctnotund";
-  String s = STBLMsgNotUndef;
+  String s = TR("not undef");
   if (_fIgnZero || (0 != dm()->pdi())) {
     sNotUndef = "pctnotzero";
-    s = STBLMsgNotZero;
+    s = TR("not zero");
   }
   _colNPixPctNotUndef = pts->col(sNotUndef);
   if (!_colNPixPctNotUndef.ptr()) {
     _colNPixPctNotUndef = pts->colNew(sNotUndef, Domain("perc"));
-    _colNPixPctNotUndef->sDescription = String(STBLMsgPercNrPixels_S.scVal(), s);
+    _colNPixPctNotUndef->sDescription = String(TR("Percentage of %S pixels").c_str(), s);
   }
   _colNPixPctNotUndef->SetOwnedByTable(true);
   _colNPixPctNotUndef->SetReadOnly(true);
@@ -745,14 +745,14 @@ void TableHistogram::Init()
     _colNPixCum = pts->col("npixcum");
     if (!_colNPixCum.ptr()) {
       _colNPixCum = pts->colNew("npixcum", Domain("count"), ValueRange(0, iMaxCount));
-      _colNPixCum->sDescription = STBLMsgCumulativePixels;
+      _colNPixCum->sDescription = TR("Cumulative number of pixels");
     }
     _colNPixCum->SetOwnedByTable(true);
     _colNPixCum->SetReadOnly(true);
     _colNPixCumPct = pts->col("npcumpct");
     if (!_colNPixCumPct.ptr()) {
       _colNPixCumPct = pts->colNew("npcumpct", Domain("perc"));
-      _colNPixCumPct->sDescription = STBLMsgCumulativePercPixels;
+      _colNPixCumPct->sDescription = TR("Cumulative percentage of pixels");
     }
     _colNPixCumPct->SetOwnedByTable(true);
     _colNPixCumPct->SetReadOnly(true);
@@ -777,7 +777,7 @@ void TableHistogram::Init()
       ValueRange vrr(0, iMaxCount*rPixSize, rStep);
       vrr->AdjustRangeToStep();
       _colArea = pts->colNew("Area", Domain("value"), vrr);
-      _colArea->sDescription = STBLMsgAreaPixelValue;
+      _colArea->sDescription = TR("Area for pixel value");
       if (fOldFormat) {
         try {
           for (long i=iOffset(); i <= iOffset()+iRecs()-1; ++i)
@@ -892,34 +892,34 @@ String TableHistogram::sSummary() const
   long iMapSize = map->rcSize().Row * map->rcSize().Col;
   String s;
   if (iTotalPix == 0) {
-      s &= String(STBLMsgUndefPixels_i.scVal(),iMapSize);
+      s &= String(TR("Number of Undef pixels = %li (100%%)").c_str(),iMapSize);
     return s;
   }
   if (!map->fValues()) {
-    s = String("%S=%S (%li)\r\n", STBLOthPred, map->dvrs().sValueByRaw(longConv(rPred)), iPredCount);
+    s = String("%S=%S (%li)\r\n", TR("Pred"), map->dvrs().sValueByRaw(longConv(rPred)), iPredCount);
     if (iMapSize != iTotalPix)
-      s &= String(STBLMsgUndefPixels_if.scVal(),iMapSize - iTotalPix, (iMapSize - iTotalPix) * 100.0 / iMapSize);
+      s &= String(TR("Number of Undef pixels = %li (%.2f%%)").c_str(),iMapSize - iTotalPix, (iMapSize - iTotalPix) * 100.0 / iMapSize);
     return s;
   }  
 
 	String sSpaces;
 	if ( rMean != rUNDEF)
 	{
-		String sMean("%S=%.2lf", STBLOthMean, rMean); 
+		String sMean("%S=%.2lf", TR("Mean"), rMean); 
     int iLen = 20 - sMean.length();
     if (iLen < 0)
       iLen = 0;
 		sSpaces = String(' ', iLen);
-		s = String("%S %S %S=%.2f\r\n", sMean, sSpaces, STBLOthStdDev, rStd);
+		s = String("%S %S %S=%.2f\r\n", sMean, sSpaces, TR("Std.Dev"), rStd);
 	}
-  String sMedian("%S=%S", STBLOthMedian,map->dvrs().sValue(rMedian,0));
+  String sMedian("%S=%S", TR("Median"),map->dvrs().sValue(rMedian,0));
   int iLen = 20 - sMedian.length();
   if (iLen < 0)
     iLen = 0;
   sSpaces = String(' ', iLen);
-  s &= String("%S %S %S=%S (%li)\r\n", sMedian, sSpaces, STBLOthPred, map->dvrs().sValue(rPred,0), max(0L, iPredCount));
+  s &= String("%S %S %S=%S (%li)\r\n", sMedian, sSpaces, TR("Pred"), map->dvrs().sValue(rPred,0), max(0L, iPredCount));
   if (iMapSize != iTotalPix) 
-    s &= String("%S=%li (%.2f%%)\r\n", STBLOthUndefCount, iMapSize - iTotalPix, (iMapSize - iTotalPix) * 100.0 / iMapSize);
+    s &= String("%S=%li (%.2f%%)\r\n", TR("Undef count"), iMapSize - iTotalPix, (iMapSize - iTotalPix) * 100.0 / iMapSize);
   RangeReal rr = rrMinMax(0);
   s &= String("0.0%% int= %S:%S   ", map->dvrs().sValue(rr.rLo()), map->dvrs().sValue(rr.rHi()));
   rr = rrMinMax(0.5);
@@ -977,10 +977,10 @@ void TableHistogram::Erase(const FileName& fnMap)
 {
   FileName fnHis = fnMap;
   fnHis.sExt = ".hi#"; 
-  _unlink(fnHis.sFullName(true).scVal()); // delete data file
+  _unlink(fnHis.sFullName(true).c_str()); // delete data file
   fnHis.sExt = ".his";
    // delete object def file
-  if (0 == _unlink(fnHis.sFullName(true).scVal()))
+  if (0 == _unlink(fnHis.sFullName(true).c_str()))
 		AfxGetApp()->GetMainWnd()->PostMessage(ILW_READCATALOG); 
 }
 

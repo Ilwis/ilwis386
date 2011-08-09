@@ -177,7 +177,7 @@ void DomainInfo::Store(const FileName& fn, const char* sSect, const char* sEntry
   String sEnt = "DomainInfo";
   if (0 != sEntry)
     sEnt = sEntry;
-  ObjectInfo::WriteElement(sSect, sEnt.scVal(), fn, s);
+  ObjectInfo::WriteElement(sSect, sEnt.c_str(), fn, s);
 }
 
 
@@ -189,7 +189,7 @@ void DomainInfo::Load(const FileName& fn, const char* sSect, const char* sEntry)
   String sEnt = "DomainInfo";
   if (0 != sEntry)
     sEnt = sEntry;
-  if (0 == ObjectInfo::ReadElement(sSect, sEnt.scVal(), fn, s))
+  if (0 == ObjectInfo::ReadElement(sSect, sEnt.c_str(), fn, s))
     return;
   char *p = strtok(s.sVal(), ";");
   if (p == 0)

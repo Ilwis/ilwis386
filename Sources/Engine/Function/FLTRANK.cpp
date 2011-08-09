@@ -96,7 +96,7 @@ FilterRankOrder::FilterRankOrder(const FileName& fn, short iRows, short iCols,
  if ((rThreshold <= 0) && (rThreshold != rUNDEF))
    Filter::ErrorThreshold(rThreshold, sTypeName());
  if ((iRank < 0) || (iRank >= iCols*iRows))
-   throw ErrorObject(WhatError(String("%S 1..%i: %i", SDATErrRankOutOfRange, iCols*iRows, iRank), errFilter+3), sTypeName());
+   throw ErrorObject(WhatError(String("%S 1..%i: %i", TR("Rank needs to be in range"), iCols*iRows, iRank), errFilter+3), sTypeName());
  rSorted.Resize(iFltRows*iFltCols);
 }
 

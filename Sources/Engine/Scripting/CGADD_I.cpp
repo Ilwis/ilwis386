@@ -290,5 +290,5 @@ void CodeGenerator::AddInst(const char* sInst, long iVal)
    inst->Add(new InstGotoFalse(inst, iVal));
   }
   else
-    Error(String(SCLCErrInvalidInstruction_S.scVal(), sInstruct), iCursorLine, iCursorCol);
+    Error(String(TR("Invalid instruction: '%S'").c_str(), sInstruct), iCursorLine, iCursorCol);
 }

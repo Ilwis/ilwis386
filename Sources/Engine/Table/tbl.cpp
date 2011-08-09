@@ -549,7 +549,7 @@ TablePtr* TablePtr::create(const FileName& fn, const String& sSecPrf)
   if (p) // if already open return it
     return p;
   String sType;
-  ObjectInfo::ReadElement(String("%STable", sSecPrf).scVal(), "Type", fn, sType);
+  ObjectInfo::ReadElement(String("%STable", sSecPrf).c_str(), "Type", fn, sType);
 	if ("" == sType)
 		return 0;
   if (fCIStrEqual("Table2Dim", sType))
@@ -655,7 +655,7 @@ TablePtr* TablePtr::create(const FileName& fn, const String& sExpression, bool& 
 	// Now restore backed-up file if the process failed, or delete backup if succeeded
 	if (fBackupMade)
 		if (0 != p->ptv) // TablePtr creation succeeded => delete backup
-			File::Remove(FileName(filnam, ".ba~", true).sShortName().scVal());
+			File::Remove(FileName(filnam, ".ba~", true).sShortName().c_str());
 		else // TablePtr creation failed; restore the backup that we have
 			File(FileName(filnam, ".ba~", true).sShortName()).Rename(filnam.sShortName());
 		
@@ -678,20 +678,20 @@ TablePtr::TablePtr(const FileName& fn, const String& sSecPrf, bool fCreate)
 		NotFoundError(fn);
 	
 	Domain dom;
-	ReadElement(sSection("Table").scVal(), "Domain", dom);
+	ReadElement(sSection("Table").c_str(), "Domain", dom);
 	if (!dom.fValid())
 		dom = Domain("none");
 	SetDomain(dom);
-	ObjectInfo::ReadElement(sSection("Table").scVal(), "Columns", fnObj, _iCols);
+	ObjectInfo::ReadElement(sSection("Table").c_str(), "Columns", fnObj, _iCols);
 	if (_iCols == shUNDEF)
 		_iCols = 0;
 	if (_iCols < 0)
-		throw ErrorObject(String(STBErrColumnNumberNotPositiv_S.scVal(), fnObj.sRelativeQuoted()));
-	_iRecs = iReadElement(sSection("Table").scVal(), "Records");
+		throw ErrorObject(String(TR("Error opening table %S: Number of columns must be positiv").c_str(), fnObj.sRelativeQuoted()));
+	_iRecs = iReadElement(sSection("Table").c_str(), "Records");
 	if (_iRecs == iUNDEF)
 		_iRecs = 0;
 	if (_iRecs < 0)
-		throw ErrorObject(String(STBErrRecordNumberNotPositiv_S.scVal(), fnObj.sRelativeQuoted()));
+		throw ErrorObject(String(TR("Error opening table %S: Number of records must be positiv").c_str(), fnObj.sRelativeQuoted()));
 	if (0 != dom->pdv()) {
 		if (0 != dom->pdvr())
 			_iOffset = 0;
@@ -701,7 +701,7 @@ TablePtr::TablePtr(const FileName& fn, const String& sSecPrf, bool fCreate)
 	else if (dm()->pdp())
 		_iOffset = 0;
 	else if (dm()->pdnone()) {
-		long iOff = iReadElement(sSection("Table").scVal(), "Offset");
+		long iOff = iReadElement(sSection("Table").c_str(), "Offset");
 		if (iOff != iUNDEF)
 			_iOffset = iOff;
 	}
@@ -713,7 +713,7 @@ void TablePtr::Load()
 		return;
 	String s;
 	MutexFileName mut(fnObj);
-	if (0 != ReadElement(sSection("TableStore").scVal(), "Type", s)) {
+	if (0 != ReadElement(sSection("TableStore").c_str(), "Type", s)) {
 		if (fCIStrEqual("TableBinary" , s))
 			pts = new TableBinary(fnObj, *this);
 		else if (fCIStrEqual("TableTBL" , s))
@@ -836,13 +836,13 @@ void TablePtr::Store()
     WriteElement("Ilwis", "Type", "Table");
   }
   else
-    WriteBaseInfo(sSection("Table").scVal());  
-  WriteElement(sSection("Table").scVal(), "Domain", dm());
-  WriteElement(sSection("Table").scVal(), "Columns", (long)iCols());
-  WriteElement(sSection("Table").scVal(), "Records", iRecs());
+    WriteBaseInfo(sSection("Table").c_str());  
+  WriteElement(sSection("Table").c_str(), "Domain", dm());
+  WriteElement(sSection("Table").c_str(), "Columns", (long)iCols());
+  WriteElement(sSection("Table").c_str(), "Records", iRecs());
   if (dm()->pdnone())
     if (iOffset() != 1)
-      WriteElement(sSection("Table").scVal(), "Offset", iOffset());
+      WriteElement(sSection("Table").c_str(), "Offset", iOffset());
   if (0 != pts)
     pts->Store();
   else
@@ -850,8 +850,8 @@ void TablePtr::Store()
   if (0 != ptv)
     ptv->Store();
   String s;
-  if (0 == ReadElement(sSection("Table").scVal(), "Type", s))
-    WriteElement(sSection("Table").scVal(), "Type", "TableStore");
+  if (0 == ReadElement(sSection("Table").c_str(), "Type", s))
+    WriteElement(sSection("Table").c_str(), "Type", "TableStore");
 	fChanged = false;
 }
 
@@ -1043,7 +1043,7 @@ long TablePtr::iRecNew(long iRecords)
 
 DomainInfo TablePtr::dminf() const
 {
-  return DomainInfo(fnObj, sSection("Table").scVal());
+  return DomainInfo(fnObj, sSection("Table").c_str());
 }
 
 void TablePtr::Rename(const FileName& fnNew)
@@ -1218,11 +1218,11 @@ TablePtr* TablePtr::ImportTable(const FileName& fnTable, const String& sExpressi
 
 		int iNrArg = as.iSize();
 		if ( iNrArg < 3 )
-			throw ErrorObject(String(SCVImpAsErrNotEnougPar));
+			throw ErrorObject(String(TR("Too few parameters")));
 
 		FileName fnIn(as[0]);
 		if (!File::fExist(fnIn))
-			throw ErrorObject(String(SCVImpImportTableNotFound_S.scVal(), fnIn.sRelative()));
+			throw ErrorObject(String(TR("Import table '%S' not found").c_str(), fnIn.sRelative()));
 		
 		FileName fnBinary(fnObj);
 		fnBinary.sExt = ".tb#";
@@ -1245,14 +1245,14 @@ TablePtr* TablePtr::ImportTable(const FileName& fnTable, const String& sExpressi
 					TableDelimited::Scan(fnIn, iSkip, eFormat, columnInfo);
 				break;
 			default:
-				throw ErrorObject(String("%S", SCVImpAsErrUnknownInpType));
+				throw ErrorObject(String("%S", TR("Unknown input type")));
 		}
 
 		if ( fCIStrEqual("UseAs", as[2]))
 		{
 			// UseAs for table import this way is not supported
 			// The table routines can not handle TableExternalFormat as UseAs
-			throw ErrorObject(SCVImpAsErrNoUseAs); 
+			throw ErrorObject(TR("UseAs not available for this type of table")); 
 		}
 
 		int iArgCnt = 3;
@@ -1268,7 +1268,7 @@ TablePtr* TablePtr::ImportTable(const FileName& fnTable, const String& sExpressi
 				iSkip = 0;
 		}
 		if (iSkip < 0)
-			throw ErrorObject(SCVImpSkipMustBePositive);
+			throw ErrorObject(TR("Skip lines must be a positive number"));
 
 
    		if (iNrArg > iArgCnt )
@@ -1287,7 +1287,7 @@ TablePtr* TablePtr::ImportTable(const FileName& fnTable, const String& sExpressi
 			{
 				long iTemp = as[iArgCnt].iVal();
 				if (iTemp <= 0)
-					throw ErrorObject(SCVImpAsErrNoWidth);
+					throw ErrorObject(TR("Fixed Format: no or invalid column width found"));
 				cinf.iColumnWidth = iTemp;
 				iArgCnt++;
 			}
@@ -1306,7 +1306,7 @@ TablePtr* TablePtr::ImportTable(const FileName& fnTable, const String& sExpressi
 			}				
 
 			if ( cinf.sColumnName == "")
-				throw ErrorObject(String(SCVImpAsErrEmptyColumnName_i.scVal(), iColumn + 1));
+				throw ErrorObject(String(TR("Empty column name specified for column %d. ").c_str(), iColumn + 1));
 
 			cinf.dvs = DomainValueRangeStruct(0.0, 1.0,0.0); //add Domain element
 
@@ -1334,7 +1334,7 @@ TablePtr* TablePtr::ImportTable(const FileName& fnTable, const String& sExpressi
 //--------------------------
 			if (sDom.length() == 0 || sDomain.length() == 0)
 			{
-				String sErr = String(SCVImpAsErrEmptyDomain_i.scVal(), iColumn + 1);
+				String sErr = String(TR("Empty domain specified for column %d. ").c_str(), iColumn + 1);
 				throw ErrorObject(sErr);
 			}
 
@@ -1368,7 +1368,7 @@ TablePtr* TablePtr::ImportTable(const FileName& fnTable, const String& sExpressi
 					double rMin = asParts[0].rVal();
 					double rMax = asParts[1].rVal();
 					if (rMin == rUNDEF || rMax == rUNDEF || rStep == rUNDEF)
-						throw ErrorObject(String(SCVImpInvalidValueRange_S.scVal(), sDom));
+						throw ErrorObject(String(TR("Invalid domain or value range specified: '%S'").c_str(), sDom));
 					cinf.dvs = DomainValueRangeStruct(rMin, rMax, rStep);
 				}
 				if (!fIsSystemValue)
@@ -1398,14 +1398,14 @@ TablePtr* TablePtr::ImportTable(const FileName& fnTable, const String& sExpressi
 						if ( fCIStrEqual(sEntry , "Key") )
 						{ 
 							if ( iNrKeys != 0)
-								throw ErrorObject(SCVImpAsErrOneKeyOnly);
+								throw ErrorObject(TR("Only one key column per table may be used"));
 							++iNrKeys;
 							cinf.fKey = true;
 							sTableDomain="none";
 							continue;
 						}
 						else
-							throw ErrorObject(String(SCVImpAsErrUnexpectedTokem_S.scVal(), asParts[i]));
+							throw ErrorObject(String(TR("Unexpected word ' %S 'found").c_str(), asParts[i]));
 				}
 			}
 							

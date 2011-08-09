@@ -67,7 +67,7 @@ RangeInt::RangeInt(const String& s) : SetBaseInt()
     return;
   }
   char *p1 = new char[s.length()+1];
-  strcpy(p1, s.scVal());
+  strcpy(p1, s.c_str());
   char *p2 = strchr(p1, ':');
   if (p2 != 0) {
     *p2 = 0;
@@ -91,7 +91,7 @@ RangeReal::RangeReal(const String& s) : SetBaseReal()
     return;
   }
   char *p1 = new char[s.length()+1];
-  strcpy(p1, s.scVal());
+  strcpy(p1, s.c_str());
   char *p2 = strchr(p1, ':');
   if (p2 != 0) {
     *p2 = 0;

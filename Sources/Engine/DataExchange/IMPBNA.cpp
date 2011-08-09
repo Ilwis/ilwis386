@@ -213,7 +213,7 @@ Coord& BNAEntity::operator [](long iIndex)
 	if (iIndex >= 0 && iIndex < m_iPos)
 		return m_cbuf[iIndex];
 
-	throw ErrorImportExport(SCVErrCoordIndexOutOfBounds); // very, very unlikely to happen!!!
+	throw ErrorImportExport(TR("CoordIndex out of bounds")); // very, very unlikely to happen!!!
 }
 
 /*--------------------------------------------------*/
@@ -395,8 +395,8 @@ void BNAReader::GetEntityInfo(BNAEntity& bna)
 	int iSize = as.iSize();
 	if (iSize < 2 || iSize > 4)
 	{
-		String sErr = SCVErrIllegalBNA;
-		sErr &= String(SCVTextInLine_l.scVal(), m_iLine);
+		String sErr = TR("Illegal Atlas BNA format");
+		sErr &= String(TR(", in line %ld").c_str(), m_iLine);
 		throw ErrorImportExport(sErr);
 	}
 
@@ -415,8 +415,8 @@ void BNAReader::GetEntityInfo(BNAEntity& bna)
 		bna.m_be = BNAEntity::bePOLYGON;
 	else
 	{
-		String sErr = SCVErrIllegalBNA;
-		sErr &= String(SCVTextInLine_l.scVal(), m_iLine);
+		String sErr = TR("Illegal Atlas BNA format");
+		sErr &= String(TR(", in line %ld").c_str(), m_iLine);
 		throw ErrorImportExport(sErr);
 	}
 
@@ -441,8 +441,8 @@ Coord BNAReader::crdRead()
 	Split(sLine, as, ",\t");
 	if (as.iSize() != 2 && as.iSize() != 3)
 	{
-		String sErr = SCVErrCoordinateExpected;
-		sErr &= String(SCVTextInLine_l.scVal(), m_iLine);
+		String sErr = TR("Coordinate pair expected");
+		sErr &= String(TR(", in line %ld").c_str(), m_iLine);
 		throw ErrorImportExport(sErr);
 	}
 
@@ -453,8 +453,8 @@ Coord BNAReader::crdRead()
 	cFile.y = as[iFirst + 1].rVal();
 	if (cFile.x == rUNDEF || cFile.y == rUNDEF)
 	{
-		String sErr = SCVErrCoordinateExpected;
-		sErr &= String(SCVTextInLine_l.scVal(), m_iLine);
+		String sErr = TR("Coordinate pair expected");
+		sErr &= String(TR(", in line %ld").c_str(), m_iLine);
 		throw ErrorImportExport(sErr);
 	}
 
@@ -472,16 +472,16 @@ double BNAReader::rReadRadius()
 	Split(sLine, as, ",\t");
 	if (as.iSize() != 1 && as.iSize() != 2)
 	{
-		String sErr = SCVErrCircleRadiusExpected;
-		sErr &= String(SCVTextInLine_l.scVal(), m_iLine);
+		String sErr = TR("Circle radius expected");
+		sErr &= String(TR(", in line %ld").c_str(), m_iLine);
 		throw ErrorImportExport(sErr);
 	}
 
 	double rRadius = as[0].rVal();
 	if (rRadius == rUNDEF)
 	{
-		String sErr = SCVErrNumberExpected;
-		sErr &= String(SCVTextInLine_l.scVal(), m_iLine);
+		String sErr = TR("Number expected");
+		sErr &= String(TR(", in line %ld").c_str(), m_iLine);
 		throw ErrorImportExport(sErr);
 	}
 
@@ -581,8 +581,8 @@ void BNAReader::ReadPolygon(BNAEntity& bna, long iPos)
 		bna.AddCoord(crd);
 		if (crdFirst != crd)
 		{
-			String sErr = SCVErrClosingCoordMissing;
-			sErr &= String(SCVTextInLine_l.scVal(), m_iLine);
+			String sErr = TR("Closing coordinate of outer polygon missing");
+			sErr &= String(TR(", in line %ld").c_str(), m_iLine);
 			throw ErrorImportExport(sErr);
 		}
 	}
@@ -591,8 +591,8 @@ void BNAReader::ReadPolygon(BNAEntity& bna, long iPos)
 		i++;
 		if (crdFirst != crdRead())
 		{
-			String sErr = SCVErrClosingCoordMissing;
-			sErr &= String(SCVTextInLine_l.scVal(), m_iLine);
+			String sErr = TR("Closing coordinate of outer polygon missing");
+			sErr &= String(TR(", in line %ld").c_str(), m_iLine);
 			throw ErrorImportExport(sErr);
 		}
 	}
@@ -814,8 +814,8 @@ public:
 void BNAConvertor::DoTheWork(const FileName& fnBNA, const FileName& fnBase)
 {
 	Tranquilizer trq;
-	trq.SetTitle(SCVTitleImportBNA);
-	trq.SetText(SCVTextProcessing);
+	trq.SetTitle(TR("Importing from Atlas BNA"));
+	trq.SetText(TR("Processing..."));
 	trq.fUpdate(0);
 	BNAReader    reader(fnBNA, trq);
 	ObjectWriter writer(fnBase);

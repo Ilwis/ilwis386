@@ -73,8 +73,8 @@
 #include "Engine\Base\System\Engine.h"
 
 void ImpExp::ExpSegToSHP( const FileName& fnObject, const FileName& fnFile ) {
-  trq.SetTitle(SCVTitleExpSegShape);
-  trq.SetText(SCVTextProcessing);
+  trq.SetTitle(TR("Exporting Segments to Arcview shapefile"));
+  trq.SetText(TR("Processing..."));
   const SegmentMap segmap = SegmentMap(fnObject);
 /*
 // the following lines don't give the correct result (E4!), because the number of
@@ -85,8 +85,8 @@ void ImpExp::ExpSegToSHP( const FileName& fnObject, const FileName& fnFile ) {
 */
   long iNrSegs = segmap->iFeatures();
   if (iNrSegs == 0) {
-	  getEngine()->Message(String(SCVWarnEmptyMap_S.scVal(), "Segment").scVal(),
-                                 SCVTitleExpSegShape.scVal(), 
+	  getEngine()->Message(String(TR("%S Map is empty, nothing has been exported").c_str(), "Segment").c_str(),
+                                 TR("Exporting Segments to Arcview shapefile").c_str(), 
                                  MB_OK | MB_ICONEXCLAMATION);
     return;
   }
@@ -94,8 +94,8 @@ void ImpExp::ExpSegToSHP( const FileName& fnObject, const FileName& fnFile ) {
   iNrSegs = (iNrDel == iUNDEF) ? iNrSegs : iNrSegs - iNrDel;
   if (iNrSegs == 0) 
 	{
-	  getEngine()->Message(String(SCVWarnEmptyMap_S.scVal(), "Segment").scVal(),
-                                 SCVTitleExpSegShape.scVal(), 
+	  getEngine()->Message(String(TR("%S Map is empty, nothing has been exported").c_str(), "Segment").c_str(),
+                                 TR("Exporting Segments to Arcview shapefile").c_str(), 
                                  MB_OK | MB_ICONEXCLAMATION);
     return;
   }

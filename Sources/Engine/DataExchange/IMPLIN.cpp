@@ -99,16 +99,16 @@ void ArcInfoLin::GetNextLine() {
 
 bool ArcInfoLin::fArcInfoCoord(Coord& cFile) {
   GetNextLine();
-  short iRes = sscanf(sLine.scVal(), "%lf %lf", &cFile.x, &cFile.y);
+  short iRes = sscanf(sLine.c_str(), "%lf %lf", &cFile.x, &cFile.y);
   return (2 == iRes);
 }
 
 String ArcInfoLin::sArcInfoCode() {
   char pc[40];
   GetNextLine();
-  short iRes = sscanf(sLine.scVal(), "%s", pc);
+  short iRes = sscanf(sLine.c_str(), "%s", pc);
   if (0 == iRes)
-    FormatProblem(String(SCVTextInLine_SI.scVal(), fileArcInfo->sName().scVal(), iLinesRead()));
+    FormatProblem(String(TR("%S, in line %ld").c_str(), fileArcInfo->sName().c_str(), iLinesRead()));
   return String(pc);
 }
 
@@ -118,8 +118,8 @@ bool ArcInfoLin::fArcInfoSegment()
 {
   if (_iNrSeg > MAX_SEGMENTS) {
     if (fScanning) {
-      int iAns = getEngine()->Message(String(SCVWarnTooManySegments_I.scVal(), MAX_SEGMENTS).scVal(),
-                               SCVTitleImportLin.scVal(),
+      int iAns = getEngine()->Message(String(TR("Too many segments in input, only first %ld will be converted.\nContinue ?").c_str(), MAX_SEGMENTS).c_str(),
+                               TR("Importing from Arc/Info Generate").c_str(),
                                MB_YESNO | MB_ICONEXCLAMATION);
       if (iAns == IDNO)
         UserAbort(fileArcInfo->sName());
@@ -162,7 +162,7 @@ bool ArcInfoLin::fArcInfoSegment()
   else
     WriteSegment(_iNrSeg, iNrCoord);
   if (!fInSegment && (sLine.sLeft(3) != "END"))
-    FormatProblem(String(SCVTextInLine_SI.scVal(), fileArcInfo->sName().scVal(), iLinesRead()));
+    FormatProblem(String(TR("%S, in line %ld").c_str(), fileArcInfo->sName().c_str(), iLinesRead()));
   return true;
 }
 
@@ -211,7 +211,7 @@ void ArcInfoLin::MakeTable(const Domain& dmTable, Table& tbl) {
   FileName fnTable  = FileName::fnUnique(FileName(fnIlwis, ".tbt", true));
   FileName fnTblDat = FileName(fnTable, ".tb#", true);
   tbl.SetPointer(new TablePtr(fnTable, fnTblDat, dmTable, String()));
-  String sD = SCVTextTableName_;
+  String sD = TR("Table ");
   sD &= fnTable.sFile;
   sD &= fnTable.sExt;
   tbl->sDescription = sD;
@@ -253,15 +253,15 @@ void ArcInfoLin::AddCode(long iCode, TObjectInfo& oi) {
 }
 
 long ArcInfoLin::ScanInfo() {
-  trq.SetText(SCVTextScanning);
+  trq.SetText(TR("Scanning..."));
   fScanning = true;
 
   String s;
   while (fArcInfoSegment()) {
     if (fScanning)
-      s = SCVTextScanSegment_;
+      s = TR("Scanning ... Segment ");
     else
-      s = SCVTextProcSegment_;
+      s = TR("Importing Segment ");
     s &= sSegmentCode();
     trq.SetText(s);
   }
@@ -288,7 +288,7 @@ void ArcInfoLin::SetupSegMap(const FileName& fnObject) {
     }
   }
 
-  oi.mp->sDescription = String(SCVTextSegmentMap_S.scVal(), fnObject.sFile);
+  oi.mp->sDescription = String(TR("Segment map %S").c_str(), fnObject.sFile);
   oi.mp->Store();
 }
 
@@ -311,7 +311,7 @@ void ArcInfoLin::Convert(const FileName& fnObject ) {
   _iNrSeg = 0;
   _iLins = 0;
   fnIlwis = fnObject;
-  String s = SCVTextArcInfoLinScan;
+  String s = TR("Scanning Arc/Info Generate");
   fScanning = false;
 
   SetupSegMap(fnIlwis);    // create segment map
@@ -320,7 +320,7 @@ void ArcInfoLin::Convert(const FileName& fnObject ) {
   MarkErase(true);
 
   while (fArcInfoSegment()) {
-    s = SCVTextProcSegment_;
+    s = TR("Importing Segment ");
     s &= sSegmentCode();
     trq.SetText(s);
   }
@@ -332,7 +332,7 @@ void ArcInfoLin::Convert(const FileName& fnObject ) {
 
 void ImpExp::ImportLIN(const FileName& fnFile, const FileName& fnObject) {
   try {
-    trq.SetTitle(SCVTitleImportLin);
+    trq.SetTitle(TR("Importing from Arc/Info Generate"));
     ArcInfoLin ai(fnFile, trq, win);
 
     long iLines = ai.ScanInfo();

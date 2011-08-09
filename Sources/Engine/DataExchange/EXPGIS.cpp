@@ -251,7 +251,7 @@ void GISExporter::WriteTrlFile()
 		{
 			memset(pcClass, 0, 32);
 			sName = dm->sValueByRaw(i, 0).sLeft(31);
-			strcpy(pcClass, sName.scVal());
+			strcpy(pcClass, sName.c_str());
 			pcClass[sName.length()] = '~';
 			
 			filTRL.Write(sizeof(pcClass), pcClass);
@@ -269,15 +269,15 @@ void ImpExp::ExportGIS(const FileName& fnObject, const FileName& fnFile)
 {
 	try
 	{
-		trq.SetTitle(SCVTitleExportGIS);   // the title in the report window
-		trq.SetText(SCVTextProcessing);    // the text in the report window
+		trq.SetTitle(TR("Exporting to Erdas GIS"));   // the title in the report window
+		trq.SetText(TR("Processing..."));    // the text in the report window
 		GISExporter gisex(fnFile);
 		gisex.iIOcase = tpErr;
 		gisex.mp = Map(fnObject);
 		gisex.gr = gisex.mp->gr();
 		gisex.st = gisex.mp->st();
 		if (gisex.st > stINT)                         // if StoreType> 16 bit return error !!!
-			throw ErrorImportExport(SCVErrOutOfRange);  // Error input map contains too wide range
+			throw ErrorImportExport(TR("Range too large for Erdas format"));  // Error input map contains too wide range
 		
 		gisex.iLines = gisex.mp->iLines();
 		gisex.iCols = gisex.mp->iCols();
@@ -287,7 +287,7 @@ void ImpExp::ExportGIS(const FileName& fnObject, const FileName& fnFile)
 		Coord crBot = gisex.gr->cConv(RowCol(gisex.iLines, 0L));
 		if (abs(crTop.x - crBot.x) > 0.001)
 		{
-			int iRet = getEngine()->Message(SCVWarnNotNorthOriented.scVal(), SCVMsgExportWarning.scVal(), MB_ICONEXCLAMATION|MB_YESNO);
+			int iRet = getEngine()->Message(TR("Map not North oriented or pixels not evenly spaced. Continue?").c_str(), TR("Export warning").c_str(), MB_ICONEXCLAMATION|MB_YESNO);
 			
 			if (iRet != IDYES)
 				return;
@@ -295,7 +295,7 @@ void ImpExp::ExportGIS(const FileName& fnObject, const FileName& fnFile)
 		
 		gisex.iIOcase = gisex.DetOutSize();
 		if (gisex.iIOcase == tpErr)
-			throw ErrorImportExport(SCVErrOutOfRange);
+			throw ErrorImportExport(TR("Range too large for Erdas format"));
 
 		gisex.WriteHeader();
 		switch (gisex.iIOcase) 
@@ -383,7 +383,7 @@ void ImpExp::ExportGIS(const FileName& fnObject, const FileName& fnFile)
 			gisex.filGISLAN->Write(bb.iSize(), bb.buf());
 		}
 		trq.fUpdate(gisex.iLines, gisex.iLines);
-		trq.SetText(SCVTextErdasTrailer);
+		trq.SetText(TR("Writing trailer file"));
 		trq.fUpdate(0);
 		gisex.WriteTrlFile();
 		gisex.SetErase(false);

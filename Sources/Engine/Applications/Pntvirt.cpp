@@ -223,9 +223,9 @@ void PointMapVirtual::Freeze()
     pms->Updated();
     // delete histogram
     FileName fnHis(fnObj, ".hsp", true);
-    _unlink(fnHis.sFullName().scVal());
+    _unlink(fnHis.sFullName().c_str());
     fnHis.sExt = ".hp#";
-    _unlink(fnHis.sFullName().scVal());
+    _unlink(fnHis.sFullName().c_str());
     // reset minmax
     ptr.SetMinMax(RangeInt());
     ptr.SetMinMax(RangeReal());
@@ -256,7 +256,7 @@ void PointMapVirtual::UnFreeze()
 
 bool PointMapVirtual::fFreezing()
 {
-  trq.SetText(String(SPNTTextCalculating_S.scVal(), sName(true, fnObj.sPath())));
+  trq.SetText(String(TR("Calculating '%S'").c_str(), sName(true, fnObj.sPath())));
   StoreType stp = dvrs().st();
   long iPoints = iPnt();
   for (long i=0; i < iPoints; i++) {

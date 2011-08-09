@@ -191,7 +191,7 @@ void PointMapStore::UnStore(const FileName& fn)
 {
 	FileName fnData;
 	if (ObjectInfo::ReadElement("TableStore", "Data", fn, fnData))
-		_unlink(fnData.sFullName(true).scVal()); // delete data file if it's still there
+		_unlink(fnData.sFullName(true).c_str()); // delete data file if it's still there
 	// not in all cases next unlink works, so also delete the following two sections
 	ObjectInfo::WriteElement("Table", (char*)0, fn, (char*)0);
 	ObjectInfo::WriteElement("TableStore", (char*)0, fn, (char*)0);
@@ -506,8 +506,8 @@ bool PointMapStore::fConvertTo(const DomainValueRangeStruct& _dvrsTo, const Colu
 	if (col.fValid())
 		dvrsTo = col->dvrs();
 	Tranquilizer trq;
-	trq.SetTitle(SPNTTitleDomainConversion);
-	trq.SetText(SPNTTextConverting);
+	trq.SetTitle(TR("Domain Conversion"));
+	trq.SetText(TR("Converting"));
 	//  ColumnStore* pcsNewVal = colNewVal->pcs();
 	if (ptr.dvrs().fValues()) {
 		trq.Start();

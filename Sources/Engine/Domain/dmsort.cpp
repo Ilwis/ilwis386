@@ -81,7 +81,7 @@ DomainSort::DomainSort(const FileName& fn)
 			sSection = Table::sSectionPrefix(".dom");
 		sSection &= "Table";
 		String s;
-		if (0 != ReadElement(sSection.scVal(), "Type", s)) {
+		if (0 != ReadElement(sSection.c_str(), "Type", s)) {
 			try {
 				String sSec;
 				if (!fCIStrEqual(fnObj.sExt , ".dom"))
@@ -130,22 +130,22 @@ DomainSort::DomainSort(const FileName& fn)
 		colStr->SetOwnedByTable(true);
 		
 		if (0 == pdid())
-			colStr->SetDescription(SDATMsgClassName);
+			colStr->SetDescription(TR("Class Name"));
 		else
-			colStr->SetDescription(SDATMsgIDName);
+			colStr->SetDescription(TR("ID Name"));
 		colOrd->SetOwnedByTable(true);
-		colOrd->SetDescription(SDATMsgOrder);
+		colOrd->SetDescription(TR("Order"));
 		colInd->SetOwnedByTable(true);
-		colInd->SetDescription(SDATMsgInverseOrder);
+		colInd->SetDescription(TR("Inverse Order"));
 		if (colCode.fValid())
 		{
 			colCode->SetOwnedByTable(true);
-			colCode->SetDescription(SDATMsgCode);
+			colCode->SetDescription(TR("Code"));
 		}
 		if (colDesc.fValid())
 		{
 			colDesc->SetOwnedByTable(true);
-			colDesc->SetDescription(SDATMsgDescription);
+			colDesc->SetDescription(TR("Description"));
 		}
 	}
 	
@@ -230,8 +230,8 @@ void DomainSort::SetPrefix(const String& sNewPrefix, Tranquilizer* trq)
 	{
 		if ( trq)
 		{
-			trq->SetTitle(SDMTitleDomainChangePrefix);
-			trq->SetText(String(SDMMsgRenamingPrefix_SS.scVal(), sOldPrefix, sPrefix));
+			trq->SetTitle(TR("Change Prefix"));
+			trq->SetText(String(TR("Renaming prefix from '%S' to '%S'").c_str(), sOldPrefix, sPrefix));
 		}      
 
 		for (int i = 1; i <= iSize(); i++)
@@ -267,7 +267,7 @@ void DomainSort::SetPrefix(const String& sNewPrefix, Tranquilizer* trq)
 		}
 	}
 	if (iFails > 0)
-		throw WarningPrefixNotRenamed(String(SDMErrPrefixNotRenamed_I.scVal(), iFails));
+		throw WarningPrefixNotRenamed(String(TR("Could not rename %i item(s)").c_str(), iFails));
 	Updated();
 }
 
@@ -476,16 +476,16 @@ long DomainSort::iAdd(const String& _s, bool fAllNew)
 		if (iOrdCode == iOrdName)
 			return iRaw(sName);
 		if (pdid() != 0)
-			throwError(SDATErrIDNotUnique);
+			throwError(TR("ID name must be unique                    "));
 		else
-			throwError(SDATErrClassNotUnique);
+			throwError(TR("Class name must be unique                    "));
 	}
 	if (iUNDEF != iOrdCode)
 	{
 		if (pdid() != 0)
-			throwError(SDATErrIDCodeNotUnique);
+			throwError(TR("ID code must be unique"));
 		else
-			throwError(SDATErrClassCodeNotUnique);
+			throwError(TR("Class code must be unique"));
 	}
 
 	long iMax = iRecs();  
@@ -554,7 +554,7 @@ void DomainSort::SetVal(long raw, const String& _s)
 			// else small change (eg case)
 		}
 		else
-		  throwError(SDATErrNameNotUnique);
+		  throwError(TR("Name must be unique"));
 	}
 	if (fHashName()) {
 		String sVal;
@@ -599,7 +599,7 @@ void DomainSort::SetCode(long raw, const String& _s)
 			// else small change (eg case)
 		}
 		else
-			throwError(SDATErrNameNotUnique);
+			throwError(TR("Name must be unique"));
 	}
 	if (!colCode.fValid())
 		CreateCodeColumn();
@@ -895,7 +895,7 @@ public:
 	  String s2 = _ds->sNameByRaw(b, 0).sVal();
 	  if ((s2.length() != 0) && (s2[0] == '?'))
 		  return true;
-	  return _stricmp(s1.scVal(), s2.scVal()) < 0;
+	  return _stricmp(s1.c_str(), s2.c_str()) < 0;
   }
   DomainSort* _ds;
 };
@@ -931,7 +931,7 @@ public:
 		  else
 			  s2 = String(" %S", s);
 	  }
-	  return _stricmp(s1.scVal(), s2.scVal()) < 0;
+	  return _stricmp(s1.c_str(), s2.c_str()) < 0;
   }
   DomainSort* _ds;
 };
@@ -962,11 +962,11 @@ public:
 	  if (rNum1 != rUNDEF && rNum2 != rUNDEF)
 		  if (fCIStrEqual(sPrefix1 , sPrefix2))
 				if (abs(rNum1 - rNum2) < 1.0e-6)
-					return _stricmp(sPostfix1.scVal(), sPostfix2.scVal()) < 0;
+					return _stricmp(sPostfix1.c_str(), sPostfix2.c_str()) < 0;
 				else
 					return rNum1 < rNum2;
 
-	  return _stricmp(sA.scVal(), sB.scVal()) < 0;
+	  return _stricmp(sA.c_str(), sB.c_str()) < 0;
   }
   DomainSort* _ds;
 };
@@ -1012,11 +1012,11 @@ public:
 	  if (rNum1 != rUNDEF && rNum2 != rUNDEF)
 		  if (fCIStrEqual(sPrefix1 , sPrefix2))
 				if (abs(rNum1 - rNum2) < 1.0e-6)
-					return _stricmp(sPostfix1.scVal(), sPostfix2.scVal()) < 0;
+					return _stricmp(sPostfix1.c_str(), sPostfix2.c_str()) < 0;
 				else
 					return rNum1 < rNum2;
 
-		return _stricmp(s1.scVal(), s2.scVal()) < 0;
+		return _stricmp(s1.c_str(), s2.c_str()) < 0;
   }
   DomainSort* _ds;
 };
@@ -1050,8 +1050,8 @@ public:
 	  if (iA > iB) return false;
 
 	  char *cA, *cB;
-	  iA = strtol(sA.scVal(), &cA, 36);
-	  iB = strtol(sB.scVal(), &cB, 36);
+	  iA = strtol(sA.c_str(), &cA, 36);
+	  iB = strtol(sB.c_str(), &cB, 36);
 	  if (iA < iB) return true;
 	  if (iA > iB) return false;
 	  return _stricmp(cA, cB) < 0;
@@ -1248,21 +1248,21 @@ void DomainSort::CreateColumns()
 	Column colStrDum = pt->colNew("Name", dmString);
 	colStrDum->SetOwnedByTable(true);
 	if (0 == pdid())
-		colStrDum->SetDescription(SDATMsgClassName);
+		colStrDum->SetDescription(TR("Class Name"));
 	else
-		colStrDum->SetDescription(SDATMsgIDName);
+		colStrDum->SetDescription(TR("ID Name"));
 // sValueByRaw checks on existence of colStr !, so set it later
 	for (long i = 1; i <= iNr; ++i)
 		colStrDum->PutVal(i,sValueByRaw(i));
 	colStr = colStrDum;
 	colOrd = pt->colNew("Ord", DomainValueRangeStruct(0,LONG_MAX-1));
 	colOrd->SetOwnedByTable(true);
-	colOrd->SetDescription(SDATMsgOrder);
+	colOrd->SetDescription(TR("Order"));
 	for ( long i = 1; i <= iNr; ++i)
 		colOrd->PutVal(i,i);  
 	colInd = pt->colNew("Ind", DomainValueRangeStruct(0,LONG_MAX-1));
 	colInd->SetOwnedByTable(true);
-	colInd->SetDescription(SDATMsgInverseOrder);
+	colInd->SetDescription(TR("Inverse Order"));
 	for ( long i = 1; i <= iNr; ++i)
 		colInd->PutVal(i,i);    
 	Updated();
@@ -1283,7 +1283,7 @@ void DomainSort::CreateCodeColumn()
 		CreateColumns();
 	colCode = tbl->colNew("Code", Domain("string"));
 	colCode->SetOwnedByTable(true);
-	colCode->SetDescription(SDATMsgCode);
+	colCode->SetDescription(TR("Code"));
 	long iMax = iRecs();
 	for (long i = 1; i <= iMax; ++i)
 		colCode->PutVal(i,"");
@@ -1301,7 +1301,7 @@ void DomainSort::CreateDescriptionColumn()
 		CreateColumns();
 	colDesc = tbl->colNew("Description", Domain("string"));
 	colDesc->SetOwnedByTable(true);
-	colDesc->SetDescription(SDATMsgDescription);
+	colDesc->SetDescription(TR("Description"));
 	long iMax = iRecs();
 	for (long i = 1; i <= iMax; ++i)
 		colDesc->PutVal(i,"");
@@ -1337,7 +1337,7 @@ String DomainSort::sDescriptionByRaw(long iRaw) const
     if (iOrd(iRaw) != iUNDEF)
       return colDesc->sValue(iRaw, 0);
     else
-      return SDATMsgDeletedDomainItem;
+      return TR("? Deleted domain item");
   else
     return "";
 }
@@ -1380,12 +1380,12 @@ Table DomainSort::tblAttLoad()
     ReadElement("DomainSort", "AttributeTable", tbl);
     if (tbl.fValid()) 
       if (!fEqual(*tbl->dm().ptr())) {
-        MessageBox(0, SDATErrWrongAttrDomain.scVal(), SDATErrLoadAttrTable.scVal(), MB_OK | MB_ICONSTOP | MB_TOPMOST);
+        MessageBox(0, TR("Attribute Table has wrong Domain").c_str(), TR("Loading attribute table").c_str(), MB_OK | MB_ICONSTOP | MB_TOPMOST);
         tbl = Table();
       }
   }
   catch (const ErrorObject& err) {
-    err.Show(SDATErrLoadDomAttrTable);
+    err.Show(TR("Loading Attribute Table of Domain"));
     tbl = Table();
   }
   return tbl;
@@ -1401,7 +1401,7 @@ void DomainSort::SetAttributeTable(const Table& tbl)
     {
         if (!fEqual(*tbl->dm().ptr())) 
         {
-            MessageBox(0, SDATErrWrongAttrDomain.scVal(), SDATErrLoadAttrTable.scVal(), MB_OK | MB_ICONSTOP| MB_TOPMOST);
+            MessageBox(0, TR("Attribute Table has wrong Domain").c_str(), TR("Loading attribute table").c_str(), MB_OK | MB_ICONSTOP| MB_TOPMOST);
             return;
         }
     }
@@ -1440,7 +1440,7 @@ void DomainSort::GetDataFiles(Array<FileName>& afnDat, Array<String>* asSection,
   IlwisObjectPtr::GetDataFiles(afnDat, asSection, asEntry);
   if (tbl.fValid()) {
     FileName fnDat;
-    ReadElement(String("%STableStore", tbl->sSectionPrefix).scVal(), "Data", fnDat);
+    ReadElement(String("%STableStore", tbl->sSectionPrefix).c_str(), "Data", fnDat);
     if (!fnDat.fValid())
       return;
     ObjectInfo::Add(afnDat, fnDat, fnObj.sPath());
@@ -1463,7 +1463,7 @@ static int iHash(const StringIndexDmSort& si)
 {
   unsigned long h = 0;
   int i=0;
-  char *ps = const_cast<char *>(si.s.scVal());
+  char *ps = const_cast<char *>(si.s.c_str());
   while (*ps)
     h = (h + (++i) * tolower(*ps++)) % HASHVAL;
   return (int)h;
@@ -1597,8 +1597,8 @@ void DomainSort::Merge(const DomainSort* pdsrt, Tranquilizer* trq)
 	long iNew = 0;
 	if ( trq)
 	{
-		trq->SetTitle(SDATTextMergingDomains);
-		trq->SetText(SDATTextSizeNewDomain);
+		trq->SetTitle(TR("Merging domains"));
+		trq->SetText(TR("Sizing new domain"));
 	}
 	bool fUsesUniqueID = pdsrt->pdUniqueID() != 0;
 	if (!fUsesUniqueID)
@@ -1633,7 +1633,7 @@ void DomainSort::Merge(const DomainSort* pdsrt, Tranquilizer* trq)
 	Updated();
 	Table::EnlargeTables(this);
 	long iStartInd=iNettoSize();
-	if (trq) trq->SetText(SDATTextAddToDomain);
+	if (trq) trq->SetText(TR("Adding to new domain"));
 	for (int i = 1; i <= pdsrt->iSize(); ++i) 
 	{
 		if ( trq && trq->fUpdate(i, pdsrt->iSize())) 
@@ -1807,8 +1807,8 @@ void DomainSort::Load()
 		CreateColumns();
 	if (FillHash())
 	{
-		String sMsg(SDATWarnDomainChanged.scVal(), fnObj.sFile);
-		MessageBox(0, sMsg.scVal(), "", MB_OK | MB_ICONINFORMATION | MB_TOPMOST);
+		String sMsg(TR("Domain '%S' contained double items.\nThis may have caused problems.\nItem names have been changed.").c_str(), fnObj.sFile);
+		MessageBox(0, sMsg.c_str(), "", MB_OK | MB_ICONINFORMATION | MB_TOPMOST);
 		Store(); // ?? bah but Updated() did not work
 	}
 	ObjectTime tim = objtime;

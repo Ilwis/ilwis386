@@ -597,7 +597,7 @@ bool HDF4DataSet::fFindData(int32 iRef)
 	{
 		m_iSDID = SDstart(m_fnFile.sFullPath().c_str(), DFACC_READ);
 		if ( m_iSDID < 0 ) 
-			throw ErrorObject(String(SIEErrFileNotFound_S.scVal(), m_fnFile.sFullPath()));
+			throw ErrorObject(String(TR("File %S \ncan not be opened. The file may be corrupt, incomplete or the format is not supported").c_str(), m_fnFile.sFullPath()));
 	}
 
 	int32 iIndex2 = SDreftoindex(m_iSDID, iRef);

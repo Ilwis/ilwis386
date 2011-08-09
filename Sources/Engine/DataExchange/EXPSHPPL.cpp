@@ -96,8 +96,8 @@ values became UNDEF. Solved.
 #include "Engine\Base\System\Engine.h"
 
 void ImpExp::ExpPolToSHP(const FileName& fnObject, const FileName& fnFile) {
-	trq.SetTitle(SCVTitleExpPolShape);
-	trq.SetText(SCVTextProcessing);
+	trq.SetTitle(TR("Exporting Polygons to Arcview shapefile"));
+	trq.SetText(TR("Processing..."));
 	const PolygonMap polmap = PolygonMap(fnObject);
 	/*
 	// the following lines don't give the correct result (E4!), because the number of
@@ -108,18 +108,18 @@ void ImpExp::ExpPolToSHP(const FileName& fnObject, const FileName& fnFile) {
 	*/
 	long iNrPols = polmap->iFeatures();
 	if (iNrPols == 0) {
-		String sMsg = String(SCVWarnEmptyMap_S.scVal(), String("ILWIS::Polygon"));
-		getEngine()->Message(sMsg.scVal(),
-			SCVTitleExpPolShape.scVal(), 
+		String sMsg = String(TR("%S Map is empty, nothing has been exported").c_str(), String("ILWIS::Polygon"));
+		getEngine()->Message(sMsg.c_str(),
+			TR("Exporting Polygons to Arcview shapefile").c_str(), 
 			MB_OK | MB_ICONEXCLAMATION);
 		return;
 	}
 	long iNrDel = polmap->iPolDeleted();
 	iNrPols = (iNrDel == iUNDEF) ? iNrPols : iNrPols - iNrDel;
 	if (iNrPols == 0) {
-		String sMsg = String(SCVWarnEmptyMap_S.scVal(), String("ILWIS::Polygon"));
-		getEngine()->Message(sMsg.scVal(),
-			SCVTitleExpPolShape.scVal(), 
+		String sMsg = String(TR("%S Map is empty, nothing has been exported").c_str(), String("ILWIS::Polygon"));
+		getEngine()->Message(sMsg.c_str(),
+			TR("Exporting Polygons to Arcview shapefile").c_str(), 
 			MB_OK | MB_ICONEXCLAMATION);
 		return;
 	}

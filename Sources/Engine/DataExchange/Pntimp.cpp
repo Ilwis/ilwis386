@@ -102,8 +102,8 @@ void PointMapImport::GetImportInfo(const FileName& fn, bool& fNameCol, bool& fAt
 		for (unsigned int i=0; i < asColNames.iSize(); ++i)
 			if (fCIStrEqual(asColNames[i], "Name") && avr[i].fValid())  
 			{
-			  getEngine()->Message(SPNTErrNameColCannotBeValue.scVal(),
-                                 String(SPNTTitleImport14Points.scVal(), fn.sFile).scVal(), 
+			  getEngine()->Message(TR("The Name$ column cannot be converted to Val Domain").c_str(),
+                                 String(TR("Importing 1.4 point map '%S'").c_str(), fn.sFile).c_str(), 
                                  MB_OK | MB_ICONEXCLAMATION);
 				UserAbort();
 			}
@@ -135,9 +135,9 @@ void PointMapImport::import(const FileName& fn, const FileName& fnNew, DomainTyp
   FileName fnDomNew, fnRprNew;
   try {
     Tranquilizer trq;
-    trq.SetTitle(String(SPNTTitleImport14Points.scVal(), fn.sFile));
+    trq.SetTitle(String(TR("Importing 1.4 point map '%S'").c_str(), fn.sFile));
     trq.Start();
-    if (trq.fText(SPNTTextGetImportInfo))
+    if (trq.fText(TR("Getting Import Info")))
       DummyError();
     bool fNameCol, fAttTablePossible;
     PointMapImport::GetImportInfo(fn, fNameCol, fAttTablePossible);
@@ -169,7 +169,7 @@ void PointMapImport::import(const FileName& fn, const FileName& fnNew, DomainTyp
     tbl->fErase = true;
     tbl->Load(); // load columns
     //trq.SetText(SCVTextReadPntRecords);
-    trq.SetText(SPNTTextReadPointRecords);
+    trq.SetText(TR("Reading Point Records"));
     Domain dm;
     if (!fNameCol) {
       dm = Domain(FileName::fnUnique(fnDom), tbl->iRecs(), dmt, "pnt");
@@ -203,7 +203,7 @@ void PointMapImport::import(const FileName& fn, const FileName& fnNew, DomainTyp
       if (dmt == dmtCLASS || dmt == dmtID) {
         if (!dm.fValid()) {
           // fill domain
-          trq.SetText(SPNTTextReadFromNameColumn);
+          trq.SetText(TR("Reading Strings from Name Column"));
           ArrayLarge<String> asValues;
           long iRecs = tbl->iRecs();
           for (long i=1; i<=iRecs; i++) {
@@ -224,7 +224,7 @@ void PointMapImport::import(const FileName& fn, const FileName& fnNew, DomainTyp
           fnRprNew.sExt = ".rpr";
           DomainSort * dsrt = dm->pdsrt();
           dsrt->dsType = DomainSort::dsMANUAL;
-          trq.SetText(SPNTTextSetDomainValues);
+          trq.SetText(TR("Setting Domain Values"));
           for (unsigned int j=0; j < asValues.iSize(); j++) {
             if (trq.fUpdate(j, asValues.iSize()))
               DummyError();
@@ -234,7 +234,7 @@ void PointMapImport::import(const FileName& fn, const FileName& fnNew, DomainTyp
         DomainSort * dsrt = dm->pdsrt();
         Column colNew = tbl->colNew("Name", dm);
         dsrt->dsType = DomainSort::dsMANUAL;
-        trq.SetText(SPNTTextPutRawValues);
+        trq.SetText(TR("Putting Raw values"));
         for (long i=1; i<=tbl->iRecs(); i++) {
           if (trq.fUpdate(i, tbl->iRecs()))
             DummyError();
@@ -247,7 +247,7 @@ void PointMapImport::import(const FileName& fn, const FileName& fnNew, DomainTyp
   //      if (trq.fText(String("With NameCol, dmtValue Search dot")))
 //          DummyError();
         for (long i=1; i<=tbl->iRecs(); i++)
-          if (strchr(colName->sValue(i,0).scVal(), '.')) {
+          if (strchr(colName->sValue(i,0).c_str(), '.')) {
             fReal = true;
             break;
           }
@@ -281,7 +281,7 @@ void PointMapImport::import(const FileName& fn, const FileName& fnNew, DomainTyp
     map.fErase = true;
     map.sDescription = sDesc;
     map.Store();
-    _unlink(FileName(fn, ".BAK").sFullName().scVal()); // an exact copy of the .PNT file
+    _unlink(FileName(fn, ".BAK").sFullName().c_str()); // an exact copy of the .PNT file
     // has been made by function TableTbl::Store() when importing the table
     if (fnAttTbl.fValid()) {
       Array<String> asColNames;
@@ -304,7 +304,7 @@ void PointMapImport::import(const FileName& fn, const FileName& fnNew, DomainTyp
       FileName fnAttTblCopy(fnAttTbl, ".tbl", true);  
       File::Copy(fn, fnAttTblCopy);
       TableImport::import(fnAttTblCopy, fnAttTblCopy, ".tbt", dmt, dm->fnObj, afnDmCol, avr);
-      _unlink(fnAttTblCopy.sFullName().scVal());
+      _unlink(fnAttTblCopy.sFullName().c_str());
       ObjectInfo::WriteElement("BaseMap", "AttributeTable", fnMap, FileName(fnAttTbl, ".tbt", true).sRelative(true, fnMap.sPath()));
     }
     map.fErase = false;
@@ -314,17 +314,17 @@ void PointMapImport::import(const FileName& fn, const FileName& fnNew, DomainTyp
   catch (const ErrorObject& err) {
     err.Show();
     // delete files
-    _unlink(FileName(fnNew, ".mpp").sFullName().scVal());
-    _unlink(FileName(fnNew, ".pn#").sFullName().scVal());
+    _unlink(FileName(fnNew, ".mpp").sFullName().c_str());
+    _unlink(FileName(fnNew, ".pn#").sFullName().c_str());
     if (fnDomNew.fValid()) {
-      _unlink(fnDomNew.sFullName().scVal());
+      _unlink(fnDomNew.sFullName().c_str());
       fnDomNew.sExt = ".dm#";
-      _unlink(fnDomNew.sFullName().scVal());
+      _unlink(fnDomNew.sFullName().c_str());
     }  
     if (fnRprNew.fValid()) {
-      _unlink(fnRprNew.sFullName().scVal());
+      _unlink(fnRprNew.sFullName().c_str());
       fnRprNew.sExt = ".rp#";
-      _unlink(fnRprNew.sFullName().scVal());
+      _unlink(fnRprNew.sFullName().c_str());
     }  
   }
 }

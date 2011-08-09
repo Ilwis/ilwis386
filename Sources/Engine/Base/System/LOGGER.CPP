@@ -61,7 +61,7 @@ Logger::Logger()
 	sDirName = sDirName + "Log";
 	Directory dir(sDirName);
 	if ( !Directory::fIsExistingDir(dir)) {
-		_mkdir(dir.sFullPath().scVal());
+		_mkdir(dir.sFullPath().c_str());
 	}
 }
 
@@ -126,7 +126,7 @@ void Logger::LogLine(const String& sLine, ofstream& os, Mode m) {
   LogTime(os);
   if (sPrefix.length() != 0)
     LogPrefix(os);
-  os << "  " << sLine.scVal() << endl;
+  os << "  " << sLine.c_str() << endl;
   os.flush();
 }
 

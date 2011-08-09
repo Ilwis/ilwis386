@@ -57,7 +57,7 @@ class DATEXPORT ErrorIncompatibleDoms: public ErrorObject
 {
 public:
   ErrorIncompatibleDoms(const String& sDom, const WhereError& where)
-    : ErrorObject(WhatError(String(SCLCErrIncompatibleDomains_S.scVal(), sDom), errCALC), where)
+    : ErrorObject(WhatError(String(TR("Incompatible domain: %S").c_str(), sDom), errCALC), where)
     {}
 };
 
@@ -138,7 +138,7 @@ void CodeGenerator::AddOperator(const String& sVal)
     InternFuncDesc* fd = InternFuncDesc::fdFindFunc(lstInternFuncs, sVal, acv);
     if (fd != 0) {
       if (!fCheckGeoRefs(acv)) {
-        Error(String(SCLCErrIncompGeoRefsInFunc_S.scVal(), sVal), iCursorLine, iCursorCol);
+        Error(String(TR("Incompatible georefs for function %S").c_str(), sVal), iCursorLine, iCursorCol);
         CalcVariable cv(Domain("value"), vtVALUE);
         stkCalcVar.push(cv);
         return;
@@ -173,7 +173,7 @@ void CodeGenerator::AddOperator(const String& sVal)
               iLine = stkParmLinePos.top()[iWrongParm];
               iCol = stkParmColPos.top()[iWrongParm];
             }
-          Error(String(SCLCErrInvalidOperand_S.scVal(), iWrongParm+1, sVal), iLine, iCol);
+          Error(String(TR("Invalid operand %i for operator %S").c_str(), iWrongParm+1, sVal), iLine, iCol);
         }
       }
       CalcVariable cv(Domain("value"), vtVALUE);
@@ -211,7 +211,7 @@ void CodeGenerator::AddInst1(const String& sInstruct,
     inst->Add(ics);
   }
   else {
-    Error(String(SCLCErrInvalidInstruction_S.scVal(), sInstruct), iCursorLine, iCursorCol);
+    Error(String(TR("Invalid instruction: '%S'").c_str(), sInstruct), iCursorLine, iCursorCol);
   }
 }
 
@@ -332,9 +332,9 @@ void CodeGenerator::AddInstNbFlt(const String& sVal)
   Filter flt(sVal);
   FilterLinear* fltLin = dynamic_cast<FilterLinear*>(flt.ptr());
   if (0 == fltLin)
-    Error(String(SCLCErrNoLinearFilter_S.scVal(), sVal), iCursorLine, iCursorCol);
+    Error(String(TR("Not a linear filter: '%S'").c_str(), sVal), iCursorLine, iCursorCol);
   if ((flt->iRows() != 3) || (flt->iCols() != 3))
-    Error(String("%S '%S' : %i x %i", SCLCErrInvalidFilterSize, sVal, flt->iRows(), flt->iCols()), iCursorLine, iCursorCol);
+    Error(String("%S '%S' : %i x %i", TR("Invalid size for filter"), sVal, flt->iRows(), flt->iCols()), iCursorLine, iCursorCol);
   InstNbFlt* instnbf = new InstNbFlt(inst, fltLin);
   inst->Add(instnbf);
   CalcVariable cv(instnbf->dvsNbFlt, vtVALUE);
@@ -346,7 +346,7 @@ void CodeGenerator::AddInstClfy(const String& sVal)
   Domain dom(sVal);
   DomainGroup* pdgrp = dom->pdgrp();
   if (0 == pdgrp) {
-    Error(String(SCLCErrDomainGroupRequired_S.scVal(), dom->sName(true)), iCursorLine, iCursorCol);
+    Error(String(TR("Only group domain allowed: '%S'").c_str(), dom->sName(true)), iCursorLine, iCursorCol);
     return;
   }
   CalcVariable cv = stkCalcVar.top();

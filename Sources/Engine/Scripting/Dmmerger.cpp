@@ -109,8 +109,8 @@ bool DomainMerger::fAskMergeDomain(DomainSort* pdsrt)
     String s = pcvcs1->sValue();
     if (s != sUNDEF)
       if (iUNDEF == pdsrt->iRaw(s)) {
-        int iRet = MessageBox(0, String(SDATTextAddToDomain_SS.scVal(), s, pdsrt->sName()).scVal(),
-                     SDATTextMergingDomains.scVal(), MB_YESNOCANCEL|MB_ICONQUESTION|MB_DEFBUTTON2);
+        int iRet = MessageBox(0, String(TR("Add string '%S' to domain '%S'").c_str(), s, pdsrt->sName()).c_str(),
+                     TR("Merging domains").c_str(), MB_YESNOCANCEL|MB_ICONQUESTION|MB_DEFBUTTON2);
         if (iRet == IDCANCEL)
           return false;
         if (iRet == IDYES)
@@ -128,9 +128,9 @@ bool DomainMerger::fAskMergeDomain(DomainSort* pdsrt)
           fOk = false;
       }
       if (!fOk) {
-        int iRet = MessageBox(0, String(SDATTextMergeIntoDomain_SS.scVal(),
-                       pdsrt1->sName(), pdsrt->sName()).scVal(),
-                       SDATTextMergingDomains.scVal(), MB_YESNOCANCEL|MB_ICONQUESTION|MB_DEFBUTTON2);
+        int iRet = MessageBox(0, String(TR("Merge strings of domain '%S' into domain '%S'\n\nWarning: the combination of iff() and merging of domains can lead to incorrect results\nPlease read the help topic 'Map and Table Calculation: Merging domains (workaround)'").c_str(),
+                       pdsrt1->sName(), pdsrt->sName()).c_str(),
+                       TR("Merging domains").c_str(), MB_YESNOCANCEL|MB_ICONQUESTION|MB_DEFBUTTON2);
         if (iRet == IDCANCEL)
           return false;
         if (iRet == IDYES)
@@ -144,8 +144,8 @@ bool DomainMerger::fAskMergeDomain(DomainSort* pdsrt)
     String s = pcvcs2->sValue();
     if (s != sUNDEF)
       if (iUNDEF == pdsrt->iRaw(s)) {
-        int iRet = MessageBox(0, String(SDATTextAddToDomain_SS.scVal(), s, pdsrt->sName()).scVal(),
-                     SDATTextMergingDomains.scVal(), MB_YESNOCANCEL|MB_ICONQUESTION|MB_DEFBUTTON2);
+        int iRet = MessageBox(0, String(TR("Add string '%S' to domain '%S'").c_str(), s, pdsrt->sName()).c_str(),
+                     TR("Merging domains").c_str(), MB_YESNOCANCEL|MB_ICONQUESTION|MB_DEFBUTTON2);
         if (iRet == IDCANCEL)
           return false;
         if (iRet == IDYES)
@@ -164,8 +164,8 @@ bool DomainMerger::fAskMergeDomain(DomainSort* pdsrt)
       }
       if (fOk)
         return true;
-      int iRet = MessageBox(0, String(SDATTextMergeIntoDomain_SS.scVal(), pdsrt2->sName(), pdsrt->sName()).scVal(),
-                     SDATTextMergingDomains.scVal(), MB_YESNOCANCEL|MB_ICONQUESTION|MB_DEFBUTTON2);
+      int iRet = MessageBox(0, String(TR("Merge strings of domain '%S' into domain '%S'\n\nWarning: the combination of iff() and merging of domains can lead to incorrect results\nPlease read the help topic 'Map and Table Calculation: Merging domains (workaround)'").c_str(), pdsrt2->sName(), pdsrt->sName()).c_str(),
+                     TR("Merging domains").c_str(), MB_YESNOCANCEL|MB_ICONQUESTION|MB_DEFBUTTON2);
       if (iRet == IDCANCEL)
         return false;
       if (iRet == IDYES)

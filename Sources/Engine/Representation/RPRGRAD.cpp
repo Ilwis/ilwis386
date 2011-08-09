@@ -56,7 +56,7 @@ RepresentationGradual::RepresentationGradual(const FileName& fn)
     if (i > 0) {
       String sBetween("Step%i", i);
       String s;
-      ReadElement("RepresentationGradual", sBetween.scVal(), s);
+      ReadElement("RepresentationGradual", sBetween.c_str(), s);
       if (fCIStrEqual(s , "Upper"))
         acr[i-1] = crUPPER;
       else if (fCIStrEqual(s , "Lower"))
@@ -67,9 +67,9 @@ RepresentationGradual::RepresentationGradual(const FileName& fn)
         acr[i-1] = crSTRETCH;    
     }  
     String sLimit("Limit%i", i);
-    ReadElement("RepresentationGradual", sLimit.scVal(), arLimits[i]);
+    ReadElement("RepresentationGradual", sLimit.c_str(), arLimits[i]);
     String sColor("Color%i", i);
-    ReadElement("RepresentationGradual", sColor.scVal(), ac[i]);
+    ReadElement("RepresentationGradual", sColor.c_str(), ac[i]);
   }
   init();
 }
@@ -147,12 +147,12 @@ void RepresentationGradual::Store()
 				case crLOWER: s = "Lower"; break;
 				case crSTRETCH: s = "Stretch"; break;
 			}
-			WriteElement("RepresentationGradual", sBetween.scVal(), s);
+			WriteElement("RepresentationGradual", sBetween.c_str(), s);
 		}  
 		String sLimit("Limit%i", i);
-		WriteElement("RepresentationGradual", sLimit.scVal(), arLimits[i]);
+		WriteElement("RepresentationGradual", sLimit.c_str(), arLimits[i]);
 		String sColor("Color%i", i);
-		WriteElement("RepresentationGradual", sColor.scVal(), ac[i]);
+		WriteElement("RepresentationGradual", sColor.c_str(), ac[i]);
 	}
 }
 

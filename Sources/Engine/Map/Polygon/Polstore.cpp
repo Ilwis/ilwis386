@@ -150,17 +150,17 @@ void PolygonMapStore::UnStore(const FileName& fn)
 {
   FileName fnData;
   if (ObjectInfo::ReadElement("VoronoiPointMapStore", "DataSeg", fn, fnData))
-    _unlink(fnData.sFullName(true).scVal()); // delete data file if it's still there
+    _unlink(fnData.sFullName(true).c_str()); // delete data file if it's still there
   if (ObjectInfo::ReadElement("VoronoiPointMapStore", "DataCrd", fn, fnData))
-    _unlink(fnData.sFullName(true).scVal()); // delete data file if it's still there
+    _unlink(fnData.sFullName(true).c_str()); // delete data file if it's still there
   if (ObjectInfo::ReadElement("VoronoiPointMapStore", "DataSegCode", fn, fnData))
-    _unlink(fnData.sFullName(true).scVal()); // delete data file if it's still there
+    _unlink(fnData.sFullName(true).c_str()); // delete data file if it's still there
   if (ObjectInfo::ReadElement("PolygonMapStore", "DataPol", fn, fnData))
-    _unlink(fnData.sFullName(true).scVal()); // delete data file if it's still there
+    _unlink(fnData.sFullName(true).c_str()); // delete data file if it's still there
   if (ObjectInfo::ReadElement("PolygonMapStore", "DataTop", fn, fnData))
-    _unlink(fnData.sFullName(true).scVal()); // delete data file if it's still there
+    _unlink(fnData.sFullName(true).c_str()); // delete data file if it's still there
   if (ObjectInfo::ReadElement("PolygonMapStore", "DataPolCode", fn, fnData))
-    _unlink(fnData.sFullName(true).scVal()); // delete data file if it's still there
+    _unlink(fnData.sFullName(true).c_str()); // delete data file if it's still there
   ObjectInfo::WriteElement("PolygonMapStore", (char*)0, fn, (char*)0);
 }  
 
@@ -196,7 +196,7 @@ void PolygonMapStore::Export(const FileName& fn) const
 
 //File::Copy(FileName(fnObj, ".PS#"), FileName(fn, ".SEG"));
 //File::Copy(FileName(fnObj, ".PD#"), FileName(fn, ".CRD"));
-  Tranquilizer trq(SPOLTitleExport14Polygons);
+  Tranquilizer trq(TR("Export polygon map to ILWIS 1.4"));
   trq.Start();
   if (!File::fCopy(FileName(sm->pms->filSeg->sName()), FileName(fn, ".SEG"), trq))
     return;
@@ -227,7 +227,7 @@ void PolygonMapStore::Export(const FileName& fn) const
   File filPol(FileName(fn, ".POL", true), facRW);
   filPol.Seek(sizeof(poltype));
   poltype pt;
-  trq.SetText(SPOLTextStoringPolygonNames);
+  trq.SetText(TR("Storing polygon names"));
   for (i=0; i < iPol(); ++i) {
     if (trq.fUpdate(i, iPol()))
       return;
@@ -416,7 +416,7 @@ void PolygonMapStore::addPolygon(ILWIS::Polygon *pol) {
 	else if (!fVals && !rpol )
 		geometries->push_back(pol);
 	else
-		throw ErrorObject(SPOLErrPolDomainError);
+		throw ErrorObject(TR("Trying Polgyon of wrong data type to map"));
 	ptr._iPol = geometries->size();
 }
 

@@ -26,7 +26,7 @@ void SVGContainer::load() {
 	try{
 
 		CFileFind finder;
-		BOOL fFound = finder.FindFile(pathToSvg.scVal());
+		BOOL fFound = finder.FindFile(pathToSvg.c_str());
 		while(fFound) {
 			fFound = finder.FindNextFile();
 			if (fFound)
@@ -50,5 +50,5 @@ void SVGContainer::parseFile(const FileName& fn) {
 	parser->setValidationSchemaFullChecking(false);
 	parser->setCreateEntityReferenceNodes(false);
 
-	parser->parse(fn.sFullPath().scVal());
+	parser->parse(fn.sFullPath().c_str());
 }

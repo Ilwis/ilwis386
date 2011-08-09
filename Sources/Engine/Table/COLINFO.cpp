@@ -51,7 +51,7 @@ ColumnInfo::ColumnInfo(): _valueIsShared(false)
 ColumnInfo::ColumnInfo(const FileName& fnTbl, long iCol)
 {
 	String sColName;
-	if (0 == ObjectInfo::ReadElement("TableStore", String("Col%li", iCol).scVal(), fnTbl, sColName))
+	if (0 == ObjectInfo::ReadElement("TableStore", String("Col%li", iCol).c_str(), fnTbl, sColName))
 		return;
 	Read(fnTbl, sColName);
 	_valueIsShared = false;
@@ -110,7 +110,7 @@ Domain ColumnInfo::dm() const
 	{
 		String sSection("Col:%S", sName().sQuote());
 		Domain dom;
-		ObjectInfo::ReadElement(sSection.scVal(), "Domain", _fnTbl, dom);
+		ObjectInfo::ReadElement(sSection.c_str(), "Domain", _fnTbl, dom);
 		return dom;
 	}
 }
@@ -122,7 +122,7 @@ DomainValueRangeStruct ColumnInfo::dvrs() const
 
 void ColumnInfo::Read(const FileName& fnTbl, long iCol) {
 	String sColName;
-	if (0 == ObjectInfo::ReadElement("TableStore", String("Col%li", iCol).scVal(), fnTbl, sColName))
+	if (0 == ObjectInfo::ReadElement("TableStore", String("Col%li", iCol).c_str(), fnTbl, sColName))
 		return;
 	Read(fnTbl, sColName);
 }
@@ -131,36 +131,36 @@ void ColumnInfo::Read(const FileName& fnTbl, const String& sColName)
 {
 	String sSection("Col:%S", sColName.sQuote());
 	String s;
-	ObjectInfo::ReadElement(sSection.scVal(), (char*)0, fnTbl, s);
+	ObjectInfo::ReadElement(sSection.c_str(), (char*)0, fnTbl, s);
 	if (s.length() == 0)
 		return;
 	_sName = sColName;
 	_fnTbl = fnTbl;
 	ObjectInfo::ReadElement("Table", "Records", _fnTbl, _iRecs);
-	ObjectInfo::ReadElement(sSection.scVal(), "Description", _fnTbl, _sDescription);
-	_dminf = DomainInfo(fnTbl, sSection.scVal());
+	ObjectInfo::ReadElement(sSection.c_str(), "Description", _fnTbl, _sDescription);
+	_dminf = DomainInfo(fnTbl, sSection.c_str());
 	if (!_dminf.fnDom().fValid()) {
 		Domain dom;
-		ObjectInfo::ReadElement(sSection.scVal(), "Domain", _fnTbl, dom);
+		ObjectInfo::ReadElement(sSection.c_str(), "Domain", _fnTbl, dom);
 		_dminf = DomainInfo(dom);
 	}
 	if (_dminf.fValues())
-		ObjectInfo::ReadElement(sSection.scVal(), "Range", _fnTbl, _vr);
-	ObjectInfo::ReadElement(sSection.scVal(), "Time", _fnTbl, _objtime);
+		ObjectInfo::ReadElement(sSection.c_str(), "Range", _fnTbl, _vr);
+	ObjectInfo::ReadElement(sSection.c_str(), "Time", _fnTbl, _objtime);
 
 	_fReadOnly =  true;
-	ObjectInfo::ReadElement(sSection.scVal(), "ReadOnly", _fnTbl, _fReadOnly);
+	ObjectInfo::ReadElement(sSection.c_str(), "ReadOnly", _fnTbl, _fReadOnly);
 	_fOwnedByTable = false;
 	if (ObjectInfo::fDependent(_fnTbl))
-		ObjectInfo::ReadElement(sSection.scVal(), "OwnedByTable", _fnTbl,  _fOwnedByTable);
+		ObjectInfo::ReadElement(sSection.c_str(), "OwnedByTable", _fnTbl,  _fOwnedByTable);
 	if (_dminf.fValues()) {
 		if (_dminf.fRealValues()) {
-			ObjectInfo::ReadElement(sSection.scVal(), "MinMax", _fnTbl, _rrMinMax);
+			ObjectInfo::ReadElement(sSection.c_str(), "MinMax", _fnTbl, _rrMinMax);
 			_riMinMax = RangeInt(longConv(_rrMinMax.rLo()),
 				longConv(_rrMinMax.rHi()));
 		}
 		else {
-			ObjectInfo::ReadElement(sSection.scVal(), "MinMax", _fnTbl, _riMinMax);
+			ObjectInfo::ReadElement(sSection.c_str(), "MinMax", _fnTbl, _riMinMax);
 			_rrMinMax = RangeReal(doubleConv(_riMinMax.iLo()), doubleConv(_riMinMax.iHi()));
 		}
 	}
@@ -169,15 +169,15 @@ void ColumnInfo::Read(const FileName& fnTbl, const String& sColName)
 	else
 		_st = _dminf.st();
 	s = String();
-	ObjectInfo::ReadElement(sSection.scVal(), "Type", _fnTbl, s);
+	ObjectInfo::ReadElement(sSection.c_str(), "Type", _fnTbl, s);
 	_fDependent = s != "ColumnStore";
 	if (_fDependent)
-		ObjectInfo::ReadElement(sSection.scVal(), "Expression", _fnTbl, _sExpression);
+		ObjectInfo::ReadElement(sSection.c_str(), "Expression", _fnTbl, _sExpression);
 
 	DomainValue *pdv = 0;
 	if (_dminf.dmt() == dmtCOORD) {
 		String _sCsy;
-		ObjectInfo::ReadElement(sSection.scVal(), "Domain", _fnTbl, _sCsy);	
+		ObjectInfo::ReadElement(sSection.c_str(), "Domain", _fnTbl, _sCsy);	
 		_dvrs = DomainValueRangeStruct(Domain(FileName(_sCsy)));
 	} else {
 		pdv = dm()->pdv();

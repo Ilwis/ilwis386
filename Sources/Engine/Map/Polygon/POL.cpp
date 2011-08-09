@@ -131,7 +131,7 @@ PolygonMap::PolygonMap(const String& sExpression, const String& sPath)
     *p = 0;
   String sFile = sExpr.sVal();
   FileName fn(sFile, ".mpa", true);
-  if (0 == strchr(sFile.scVal(), ':')) // no path set
+  if (0 == strchr(sFile.c_str(), ':')) // no path set
     fn.Dir(sPath); 
   MutexFileName mut(fn);
   if (p && (0 != _strcmpi(p+1, "mpa"))) {
@@ -251,7 +251,7 @@ PolygonMapPtr::PolygonMapPtr(const FileName& fn, bool fCreate)
 				delete ff;
 			}
 			else
-				throw ErrorObject(String(SPOLErrCouldNotOpen_S.scVal(), fn.sRelative()));
+				throw ErrorObject(String(TR("Could not open %S").c_str(), fn.sRelative()));
 		}else 
 			pms = new PolygonMapStoreFormat20(fn, *this);
 	}

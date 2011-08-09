@@ -71,7 +71,7 @@ SMTListExporter::~SMTListExporter() {
 }
 
 void SMTListExporter::WriteHeader(const CoordBounds& cbVec) {
-  fileSMT->WriteLnAscii(SCVTextSegments);
+  fileSMT->WriteLnAscii(TR("Segments"));
   String sCoord(" %10ld %10ld", long(cbVec.MinX()), long(cbVec.MinY()));
   fileSMT->WriteLnAscii(sCoord);
   sCoord = String(" %10ld %10ld", long(cbVec.MaxX()), long(cbVec.MaxY()));
@@ -95,8 +95,8 @@ void SMTListExporter::WriteSegment(const ILWIS::Segment* seg, const DomainValueR
 
 void ImpExp::ExportSMT(const FileName& fnObject, const FileName& fnFile) {
   try {
-    trq.SetTitle(SCVTitleExportSmtList);
-    trq.SetText(SCVTextProcessing);
+    trq.SetTitle(TR("Exporting to SMT list"));
+    trq.SetText(TR("Processing..."));
     SegmentMap sm(fnObject);
     long iSegCnt = 0, iNrSegs = sm->iFeatures();
     SMTListExporter smt(fnFile);

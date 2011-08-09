@@ -323,7 +323,7 @@
 
 static void InvalidFileNameError(const FileName& fn)
 {
-  throw ErrorObject(WhatError(SMAPErrInvalidFileName, errNAME), fn);
+  throw ErrorObject(WhatError(TR("Invalid file name"), errNAME), fn);
 }  
 
 FileName Map::fnFromExpression(const String& sExpr)
@@ -360,7 +360,7 @@ Map::Map(const FileName& fn, const String& sExpression)
 	for(unsigned int i=0; i<arParts.size(); ++i)
 	{
 		if (arParts[i][0] == '%' && isdigit(arParts[i][1]))
-			throw StopScriptError(String(SMAPErrMissingParameter_S.scVal(), arParts[i]));
+			throw StopScriptError(String(TR("Missing parameter : %S").c_str(), arParts[i]));
 	}		
   SetPointer(MapPtr::create(fnMap,sExpression));
   if (fValid())
@@ -478,7 +478,7 @@ Map::Map(const String& sExpression, const String& sPath)
     fnMpl.sSectionPostFix = "";
     ObjectInfo::ReadElement("MapList", "Offset", fnMpl, iOffsetForBands);
     String sMap;
-    ObjectInfo::ReadElement("MapList", String("Map%li", iBandNr-1+iOffsetForBands).scVal(), fnMpl, sMap);
+    ObjectInfo::ReadElement("MapList", String("Map%li", iBandNr-1+iOffsetForBands).c_str(), fnMpl, sMap);
     char *p = sMap.strrchrQuoted(':');
     if ((p != 0) && isdigit(*(p+1))) {
       fnMpl.sSectionPostFix = String(":%li", iBandNr);
@@ -587,7 +587,7 @@ bool fImportMap(const FileName& fnMpr, const Array<String>& as)
     // [SwapBytes], [Description]
     if (iParms < 5) {
       // too little parms 
-      sErr = String(SCVErrMapTooLittleParms_i.scVal(), 5);
+      sErr = String(TR("Too little parameters, at least %i needed").c_str(), 5);
       throw ErrorObject(sErr);
     }
     FileName fnInp(as[0]);
@@ -604,13 +604,13 @@ bool fImportMap(const FileName& fnMpr, const Array<String>& as)
         fUseAs =  false;
       else {
         // invalid conversion type
-        sErr = String(SCVErrMapConvType_S.scVal(), as[2]);
+        sErr = String(TR("Incorrect 'conversion type' parameter: %S").c_str(), as[2]);
         throw ErrorObject(sErr);
       }
       long iCols = as[3].iVal();
       if (iCols <= 0) {
         // invalid nr of columns
-        sErr = String(SCVErrMapColumns_S.scVal(), as[3]);
+        sErr = String(TR("Incorrect 'nr. of columns' parameter: %S").c_str(), as[3]);
         throw ErrorObject(sErr);
       }
       // check non fixed parms
@@ -619,7 +619,7 @@ bool fImportMap(const FileName& fnMpr, const Array<String>& as)
         iHeaderSize = as[4].iVal();
         if (iHeaderSize < 0) {
           // invalid header size
-          sErr = String(SCVErrMapHeaderSize_S.scVal(), as[4]);
+          sErr = String(TR("Incorrect 'header size' parameter: %S").c_str(), as[4]);
           throw ErrorObject(sErr);
         }
       }
@@ -642,7 +642,7 @@ bool fImportMap(const FileName& fnMpr, const Array<String>& as)
         }
         else {
           // invalid raster pixel structure
-          sErr = String(SCVErrMapPixStruct_S.scVal(), as[5]);
+          sErr = String(TR("Incorrect 'pixel structure' parameter: %S").c_str(), as[5]);
           throw ErrorObject(sErr);
         }
       }
@@ -650,7 +650,7 @@ bool fImportMap(const FileName& fnMpr, const Array<String>& as)
         int i = as[6].iVal();
         if ((i != 1) && (i != 2) && (i != 4) && (i != 8)) {
           // invalid nr of bytes
-          sErr = String(SCVErrMapBytes_S.scVal(), as[6]);
+          sErr = String(TR("Incorrect 'nr of bytes' parameter: %S").c_str(), as[6]);
           throw ErrorObject(sErr);
         }
         iNrBytesPerPixel = i;
@@ -665,7 +665,7 @@ bool fImportMap(const FileName& fnMpr, const Array<String>& as)
         else if ((s == "noswap") || (s == "noswapbytes"))
           fByteSwap = false;
         else {
-          sErr = String(SCVErrMapSwap_S.scVal(), as[7]);
+          sErr = String(TR("Incorrect 'swap bytes' parameter: %S").c_str(), as[7]);
           throw ErrorObject(sErr);
         }
       }
@@ -677,7 +677,7 @@ bool fImportMap(const FileName& fnMpr, const Array<String>& as)
                        irps, iNrBytesPerPixel, irfsBANDSEQUENTIAL, fUseAs, fByteSwap, true, sDescr);
     }
     else {
-      sErr = String(SCVErrMapFormat_S.scVal(), as[1]);
+      sErr = String(TR("Incorrect raster import format: %S").c_str(), as[1]);
       throw ErrorObject(sErr);
     }
   }
@@ -763,7 +763,7 @@ MapPtr* MapPtr::create(const FileName& fn, const String& sExpression)
     MapStore::UnStore(fn); // delete previous calculated result
     ObjectInfo::WriteElement("ObjectDependency", (char*)0, fn, (char*)0);
     ObjectInfo::WriteElement("MapVirtual", (char*)0, fn, (char*)0);
-    _unlink(fn.sFullName(true).scVal()); // delete previous object def file
+    _unlink(fn.sFullName(true).c_str()); // delete previous object def file
     TableHistogram::Erase(fn); // delete previous histogram
   }  
 
@@ -772,8 +772,8 @@ MapPtr* MapPtr::create(const FileName& fn, const String& sExpression)
     Array<String> as;
     short iParms = IlwisObjectPtr::iParseParm(sExpression, as);
     if (iParms == shUNDEF) {
-      String sErr(SCVErrMapParamNr_i.scVal(), as.iSize());
-      ErrorObject(sErr.scVal()).Show();
+      String sErr(TR("Incorrect parameter %i").c_str(), as.iSize());
+      ErrorObject(sErr.c_str()).Show();
       return 0;
     }
     FileName fnMap(fn, ".mpr", true);
@@ -822,7 +822,7 @@ MapPtr::MapPtr(const FileName& fn, bool fCreate, long iBndNr)
 {
 	if ((iBandNr == iUNDEF) && (fnObj.sSectionPostFix.length() > 0)) 
 		// skip colon and only use the number
-		iBandNr = String (1+const_cast<char*>(fnObj.sSectionPostFix.scVal())).iVal();
+		iBandNr = String (1+const_cast<char*>(fnObj.sSectionPostFix.c_str())).iVal();
 	if (fCreate)
 		return;
 	GeoRef gr;
@@ -1240,8 +1240,8 @@ void MapPtr::CalcMinMax()
     if (!fCalculated())
       Calc();
     Tranquilizer trq;
-    trq.SetTitle(SMAPCalcMinMaxCaption);
-    trq.SetText(String("%S %S", SMAPCalcMinMax, sNameQuoted(false, fnObj.sPath())));
+    trq.SetTitle(TR("Calculate minimum and maximum"));
+    trq.SetText(String("%S %S", TR("Calculating minmax of map"), sNameQuoted(false, fnObj.sPath())));
     trq.HelpEnable(false);
     trq.Start();
     if (!dvs.fRealValues()) {
@@ -1745,12 +1745,12 @@ void MapPtr::FillWithUndef()
 
 static void CyclicDefError(const FileName& fn)
 {
-  throw ErrorObject(WhatError(SMAPErrCyclicDefine, errEXPRESSION), fn);
+  throw ErrorObject(WhatError(TR("Cyclic definition"), errEXPRESSION), fn);
 }
 
 static void FileExistsError(const FileName& fn)
 {
-  throw ErrorObject(WhatError(SMAPErrNameInUse, errEXPRESSION), fn);
+  throw ErrorObject(WhatError(TR("Output Object Name already in use"), errEXPRESSION), fn);
 }
 
 void MapPtr::InitName(const FileName& fn)
@@ -1763,7 +1763,7 @@ void MapPtr::InitName(const FileName& fn)
     FileExistsError(fn);
 	SetFileName(fn);
   MapStore::UnStore(fn); // delete previous calculated result
-  _unlink(fn.sFullName(true).scVal()); // delete previous object def file
+  _unlink(fn.sFullName(true).c_str()); // delete previous object def file
   TableHistogram::Erase(fn); // delete previous histogram
   if (0 != pmv)
     pmv->InitName(fn);

@@ -52,7 +52,7 @@
 
 void ImpExp::ImportNAS(File& FileIn, const FileName& fnObject)
 {
-	trq.SetTitle(SCVTitleImportNAS);
+	trq.SetTitle(TR("Importing from Arc/Info uncompressed ASCII"));
 	trq.fUpdate(0);
 
 	bool fPc = true;
@@ -106,10 +106,10 @@ void ImpExp::ImportNAS(File& FileIn, const FileName& fnObject)
 		}
 	}
 	else
-		throw ErrorImportExport(SCVErrNotSupported);
+		throw ErrorImportExport(TR("File format not supported"));
 
 	if (iLine < 1 || iCol < 1)
-		throw ErrorImportExport(SCVErrWrongLineCol);
+		throw ErrorImportExport(TR("Incorrect number of lines or columns"));
 	
 	RowCol rc((long)iLine, (long)iCol);  
 	FileName fnGrf = FileName::fnUnique(FileName(fnObject, ".grf", true));
@@ -139,7 +139,7 @@ void ImpExp::ImportNAS(File& FileIn, const FileName& fnObject)
 
 	long i = 0, j = 0;
 	char *p;
-	trq.SetText(SCVTextConverting);
+	trq.SetText(TR("Converting..."));
 
 	bool fFirst = true;
 	bool fHasUndef = nodata != rUNDEF;

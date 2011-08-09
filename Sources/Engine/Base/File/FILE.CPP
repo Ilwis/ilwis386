@@ -70,7 +70,7 @@ void UnlinkError(const String& sName, int iErr);
 void FileReadOnlyError(const String& sName);
 
 File::File(const FileName& fn, FileAccess fac) :
- CFile(fn.sFullPath().scVal(), (UINT)fac ),
+ CFile(fn.sFullPath().c_str(), (UINT)fac ),
  iMode(fac),
  fErase(false)
 {
@@ -79,7 +79,7 @@ File::File(const FileName& fn, FileAccess fac) :
 	iFileSize = (long)fs.m_size;
 }
 
-File::File(const String& s, FileAccess fac) : CFile(s.scVal()
+File::File(const String& s, FileAccess fac) : CFile(s.c_str()
 , (UINT)fac),
 iMode(fac),
 fErase(false)
@@ -106,7 +106,7 @@ File::~File()
 		String sN = sName();
 		if ( sN == "") return;
 		Close();
-		DeleteFile(sN.scVal());
+		DeleteFile(sN.c_str());
 	}
 }
 
@@ -292,7 +292,7 @@ void File::SetFileTime(const FileName& fn,
 	sa.lpSecurityDescriptor = NULL;
 	sa.bInheritHandle = 1;
 
-	hFile = CreateFile(fn.sFullName().sUnQuote().scVal(), GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, &sa, OPEN_EXISTING,
+	hFile = CreateFile(fn.sFullName().sUnQuote().c_str(), GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, &sa, OPEN_EXISTING,
 		                             FILE_ATTRIBUTE_NORMAL, NULL);
 
 	::SetFileTime(hFile, lpCreationTime, lpLastAccessTime, lpLastWriteTime);
@@ -305,11 +305,11 @@ void File::Rename(const String& sNewName)
 	CString sOldName = GetFileName();
 	bool fOpen = m_hFile != CFile::hFileNull;
 	Close();
-	CFile::Rename(sOldName, sNewName.scVal());
+	CFile::Rename(sOldName, sNewName.c_str());
 	if ( fOpen)
 	{
     iMode &= ~CFile::modeCreate; // prevent truncation
-		Open(sNewName.scVal(), iMode);
+		Open(sNewName.c_str(), iMode);
 	}		
 }
 
@@ -350,11 +350,11 @@ void File::Copy(const FileName& fnSrc, const FileName& fnDest)
 	sa.lpSecurityDescriptor = NULL;
 	sa.bInheritHandle = 1;
 
-  HFILE fileSrc = (HFILE)CreateFile(fnSrc.sFullName().sUnQuote().scVal(), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, &sa, OPEN_EXISTING,
+  HFILE fileSrc = (HFILE)CreateFile(fnSrc.sFullName().sUnQuote().c_str(), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, &sa, OPEN_EXISTING,
 		                             FILE_ATTRIBUTE_NORMAL, NULL);
   if (fileSrc == HFILE_ERROR)
     FileOpenError(fnSrc.sFullName(), GetLastError()); //OfStrSrc.nErrCode);
-	HFILE fileDest = (HFILE)CreateFile(fnDest.sFullName().sUnQuote().scVal(), GENERIC_READ|GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, &sa, CREATE_ALWAYS,
+	HFILE fileDest = (HFILE)CreateFile(fnDest.sFullName().sUnQuote().c_str(), GENERIC_READ|GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, &sa, CREATE_ALWAYS,
 		                             FILE_ATTRIBUTE_NORMAL, NULL);
   if (fileDest == HFILE_ERROR)
     FileCreateError(fnDest.sFullName(), GetLastError()); //OfStrDest.nErrCode);
@@ -392,12 +392,12 @@ bool File::fCopy(const FileName& fnSrc, const FileName& fnDest, Tranquilizer& tr
   trq.fText(String("%S %S --> %S", SDATOthCopy, fnSrc.sFullName(), fnDest.sFullName()));
 
   bool f = false;
-  HFILE fileSrc = (HFILE)CreateFile(fnSrc.sFullName().sUnQuote().scVal(), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, &sa, OPEN_EXISTING,
+  HFILE fileSrc = (HFILE)CreateFile(fnSrc.sFullName().sUnQuote().c_str(), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, &sa, OPEN_EXISTING,
 		                             FILE_ATTRIBUTE_NORMAL, NULL);
   if (fileSrc == HFILE_ERROR)
     FileOpenError(fnSrc.sFullName(), GetLastError()); //OfStrSrc.nErrCode);
 
-  HFILE fileDest = (HFILE)CreateFile(fnDest.sFullName().sUnQuote().scVal(), GENERIC_READ|GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, &sa, CREATE_ALWAYS,
+  HFILE fileDest = (HFILE)CreateFile(fnDest.sFullName().sUnQuote().c_str(), GENERIC_READ|GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, &sa, CREATE_ALWAYS,
 		                             FILE_ATTRIBUTE_NORMAL, NULL);
   if (fileDest == HFILE_ERROR)
     FileCreateError(fnDest.sFullName(), GetLastError()); //OfStrDest.nErrCode);
@@ -465,7 +465,7 @@ void File::GetFileNames(const String& sMask, Array<FileName>& afn, const Array<S
 
 bool File::fReadOnly(const FileName& fn)
 {
-	DWORD iAttrib = GetFileAttributes(fn.sFullPath().scVal());
+	DWORD iAttrib = GetFileAttributes(fn.sFullPath().c_str());
 	return iAttrib & FILE_ATTRIBUTE_READONLY;
 }
 
@@ -477,9 +477,9 @@ bool File::fReadOnly() const
 void File::SetReadOnly(const String& sFileName, bool f)
 {
   if (f)
-    _chmod(sFileName.scVal(), S_IREAD);
+    _chmod(sFileName.c_str(), S_IREAD);
   else
-    _chmod(sFileName.scVal(), S_IREAD | S_IWRITE);
+    _chmod(sFileName.c_str(), S_IREAD | S_IWRITE);
 }
 
 String sErrOfStruct(int iErr)

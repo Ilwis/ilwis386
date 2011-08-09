@@ -288,9 +288,9 @@ String CoordSystemPtr::sValue(const Coord& c, short wid, short dec) const
 Coord CoordSystemPtr::cValue(const String& s) const
 {
   Coord crd;
-  if (2 != sscanf(s.scVal(), "(%lg,%lg)", &crd.x, &crd.y))
-    if (2 != sscanf(s.scVal(), "%lg,%lg", &crd.x, &crd.y))
-      sscanf(s.scVal(), "%lg%lg", &crd.x, &crd.y);
+  if (2 != sscanf(s.c_str(), "(%lg,%lg)", &crd.x, &crd.y))
+    if (2 != sscanf(s.c_str(), "%lg,%lg", &crd.x, &crd.y))
+      sscanf(s.c_str(), "%lg%lg", &crd.x, &crd.y);
   return crd;
 }
 

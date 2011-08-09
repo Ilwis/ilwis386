@@ -100,7 +100,7 @@ void IlwisObjectVirtual::Store()
 				for(unsigned int iC = 0; iC < (unsigned int)iNr; ++iC)
 				{
 					FileName fnCol;
-					ObjectInfo::ReadElement("Collection", String("Item%d", iC).scVal(), fn, fnCol);
+					ObjectInfo::ReadElement("Collection", String("Item%d", iC).c_str(), fn, fnCol);
 					// only for real object colections, not for maplists etc.
 					if (".ioc" != fnCol.sExt)
 						continue;

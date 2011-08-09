@@ -75,7 +75,7 @@ HTREEITEM MouseClickInfoDrawer::configure(LayerTreeView  *tv, HTREEITEM parent){
 	//CTreeCtrl& tc = tv->GetTreeCtrl();
 	//int iImg = IlwWinApp()->iImage("info");
 	//String sName = "Info";
-	//HTREEITEM hti = tc.InsertItem(sName.scVal(),iImg,iImg,TVI_ROOT,TVI_FIRST);
+	//HTREEITEM hti = tc.InsertItem(sName.c_str(),iImg,iImg,TVI_ROOT,TVI_FIRST);
 	//tc.SetItemData(hti, (DWORD_PTR)new DrawerLayerTreeItem(tv, this));		
 	//tc.SetCheck(hti, isActive());
 	//return hti;

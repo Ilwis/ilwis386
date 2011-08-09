@@ -80,8 +80,11 @@
 #include "Engine\Base\DataObjects\URL.h"
 #include "Engine\Base\DataObjects\URLEncode.h"
 #include "Engine\Base\DataObjects\RemoteXMLObject.h"
+#include "Engine\Base\DataObjects\XMLDocument.h"
 #include "Engine\Base\File\zlib.h"
 #include "Engine\Base\File\zip.h"
+#include "Engine\Base\File\Zipper.h"
+#include "Engine\Base\DataObjects\Uploader.h"
 
 
 CFrameWnd *BaseCommandHandler::wndOwner=0;
@@ -502,6 +505,7 @@ AddCommand("crrpr",(CommandFunc)&CommandHandler::CmdCreateRpr);
 AddCommand("appmetadata",(CommandFunc)&CommandHandler::CmdAppMetaData);
 AddCommand("send",(CommandFunc) &CommandHandler::CmdSend);
 AddCommand("zip",(CommandFunc) &CommandHandler::CmdZip); 
+AddCommand("updateIlwis",(CommandFunc) &CommandHandler::CmdUpdateIlwis); 
 
 //commands["testingdbconnection"]=(CommandFunction)&CommandHandler::CmdTestingDBConnection;
 }
@@ -587,7 +591,7 @@ LRESULT CommandHandler::fExecute(const String& sCmd)
 					return true;
 				}
 			}
-			throw ErrorObject(String(SMSErrIncorrectCmd_S.scVal(), sOldCommand));
+			throw ErrorObject(String(TR("Unknown command:\n %S").c_str(), sOldCommand));
 		}
 	}
 	catch(StopScriptError& err)
@@ -622,9 +626,9 @@ void CommandHandler::CmdChangeDir(const String& sDir)
 		size_t iPos;
 		if ( (iPos = sDirLoc.find("-quiet", sDirLoc.size() - 8)) != string::npos)
 		sDirLoc = sDirLoc.substr(0, iPos)	;		
-		SetCurrentDirectory(getEngine()->sGetCurDir().scVal());				
+		SetCurrentDirectory(getEngine()->sGetCurDir().c_str());				
 		Directory dir(sDirLoc);
-		if (!SetCurrentDirectory(dir.sFullPath().scVal())) {
+		if (!SetCurrentDirectory(dir.sFullPath().c_str())) {
 			String sErr("ChangeDirError: %i", GetLastError());
 			throw ErrorObject(sErr);
 		}
@@ -648,11 +652,11 @@ void CommandHandler::CmdOpenDir(const String& sDir)
 		size_t iPos;
 		if ( (iPos = sDirLoc.find("-quiet", sDirLoc.size() - 8)) != string::npos)
 			sDirLoc = sDirLoc.substr(0, iPos - 1);
-		SetCurrentDirectory(getEngine()->sGetCurDir().scVal());
+		SetCurrentDirectory(getEngine()->sGetCurDir().c_str());
 		Directory dir(sDirLoc);		
-		if (SetCurrentDirectory(dir.sFullPath().scVal()) == 0 )
+		if (SetCurrentDirectory(dir.sFullPath().c_str()) == 0 )
 		{
-			String sErr(SMSErrorCouldNotChangeDirectory);
+			String sErr(TR("Could not change directory"));
 			throw ErrorObject(sErr);
 		}
 		
@@ -701,17 +705,17 @@ bool CommandHandler::fCmdExtern(const String& sCmd)
 	}
 	else
 	{
-		int hInst = (int)ShellExecute(0, "open", sCommand.scVal(), NULL, "", SW_SHOWNORMAL);
+		int hInst = (int)ShellExecute(0, "open", sCommand.c_str(), NULL, "", SW_SHOWNORMAL);
 		switch(hInst)
 		{
 			case 0:
 				throw ErrorMemAlloc();
 				break;
 			case ERROR_BAD_FORMAT:
-				throw ErrorObject(String(SMSErrExecuteError_S.scVal() , sCmd));
+				throw ErrorObject(String(TR("'%S' is not a Win32 program or may be corrupt").c_str() , sCmd));
 				break;
 			case ERROR_FILE_NOT_FOUND:
-				throw ErrorObject(String(SMSErrExternalCommand_S.scVal(), sCmd));
+				throw ErrorObject(String(TR("No external command '%S' found").c_str(), sCmd));
 				break;
 			case ERROR_PATH_NOT_FOUND:
 				throw ErrorDirNotFound(FileName(sCmd).sPath());
@@ -732,7 +736,7 @@ void CommandHandler::CmdMakeDir(const String& str)
 		}
 	}
 
-	SetCurrentDirectory(getEngine()->sGetCurDir().scVal());
+	SetCurrentDirectory(getEngine()->sGetCurDir().c_str());
 	if ("" == sDir) 
 	{
 		String *sDir2 = (String *)ReroutSend(wndOwner, "mkdir " + sDir);
@@ -756,7 +760,7 @@ void CommandHandler::CmdRemoveDir(const String& str)
 {
 	ParmList p(str);
 	String sDir = p.sGet(0).sUnQuote();
-	SetCurrentDirectory(getEngine()->sGetCurDir().scVal());
+	SetCurrentDirectory(getEngine()->sGetCurDir().c_str());
 	if ("" == sDir) 
 	{
 		String *sDir2 = (String *)ReroutSend(wndOwner, "rmdir " + sDir);
@@ -902,7 +906,7 @@ void CommandHandler::CmdCreate(const String& s)
 	else if ("ilo" == sType || "lay" == sType || "layout" == sType)
 		CmdLayout(sVal);
 	else 
-		MessageBox(0, SMSErrImpCreateCmd.scVal(), SMSErrCreate.scVal(), MB_OK | MB_ICONEXCLAMATION);
+		MessageBox(0, TR("Impossible Create command").c_str(), TR("Create").c_str(), MB_OK | MB_ICONEXCLAMATION);
 }
 
 void CommandHandler::CmdLayout(const String& sCmd)
@@ -1116,11 +1120,11 @@ bool CommandHandler::fCmdCalc(const String& sCmd)
 	}
 	
 	if (!fn.fValid()) {
-		throw ErrorObject( String(SMSErrInvalidOutObj_s.scVal(), sObj.sVal()));
+		throw ErrorObject( String(TR("Invalid output object: %s").c_str(), sObj.sVal()));
 	}
 	if (fAskOverwrite && fn.fExist()) {
-		String sErr(SAFMsgAlreadyExistsOverwrite_S.scVal(), fn.sFullNameQuoted(true));
-		int iRet=wndOwner->MessageBox(sErr.scVal(), SAFMsgAlreadyExists.scVal(), MB_YESNO|MB_ICONEXCLAMATION);
+		String sErr(TR("File %S already exists.\nOverwrite?").c_str(), fn.sFullNameQuoted(true));
+		int iRet=wndOwner->MessageBox(sErr.c_str(), TR("File already exists").c_str(), MB_YESNO|MB_ICONEXCLAMATION);
 		if (iRet!=IDYES)
 			return false;
 		else
@@ -1215,7 +1219,7 @@ bool CommandHandler::fCmdCalc(const String& sCmd)
 		fOk = col.fValid();
 	}
 	else {
-		throw ErrorObject( SMSErrInvalidCmdLine.scVal());
+		throw ErrorObject( TR("Invalid commandline").c_str());
 	}
 	if (fOk)
 	{
@@ -1560,14 +1564,14 @@ void CommandHandler::CmdImport14(const String& sCmd)
 
 void CommandHandler::CmdConvert14(const String& sCmd)
 {
-	throw ErrorObject(String(SMSErrOperationNotAvailable_s.scVal(), "convert14"));
+	throw ErrorObject(String(TR("Operation '%s' is no longer available").c_str(), "convert14"));
 }
 
 void CommandHandler::CmdSetDescr(const String& sCmd)
 {
 	ParmList pl(sCmd);	
 	if ( pl.iFixed() < 2 )
-		throw ErrorObject(SMSErrNotEnoughParameters);
+		throw ErrorObject(TR("Not enough parameters"));
 	String sFile = pl.sGet(0);
 	String sRest = sCmd.substr(sFile.size(), sCmd.size());
 	IlwisObject object = IlwisObject::obj(pl.sGet(0));
@@ -1605,7 +1609,7 @@ void CommandHandler::CreatePyramidFiles(const String& str)
 		CFileFind finder;		
 		FileName fn(pl.sGet(iFile), ".mpr", false);
 
-		BOOL fFound = finder.FindFile(fn.sFullName().scVal());
+		BOOL fFound = finder.FindFile(fn.sFullName().c_str());
 		while ( fFound )
 		{
 			fFound = finder.FindNextFile();
@@ -1654,7 +1658,7 @@ void CommandHandler::CmdDeletePyramidFiles(const String& sCmd)
 		CFileFind finder;
 		FileName fn(pl.sGet(iFile), ".mpr", false);
 
-		BOOL fFound = finder.FindFile(fn.sFullName().scVal());
+		BOOL fFound = finder.FindFile(fn.sFullName().c_str());
 		while ( fFound )
 		{
 			fFound = finder.FindNextFile();
@@ -1693,7 +1697,7 @@ void BaseCommandHandler::ReroutPost(const String& s) {
 
 	size_t len = s.size();
 	char * str = new char[len + 1];
-	strcpy(str, s.scVal());
+	strcpy(str, s.c_str());
 	getEngine()->PostMessage(ILWM_CMDHANDLERUI, 0, (LPARAM)str);
 }
 
@@ -1705,7 +1709,7 @@ LRESULT BaseCommandHandler::ReroutSend(CWnd *owner, String s) {
 	if ( owner != 0) {
 		size_t len = s.size();
 		char * str = new char[len + 1];
-		strcpy(str, s.scVal());
+		strcpy(str, s.c_str());
 		return getEngine()->SendMessage(ILWM_CMDHANDLERUI, 0, (LPARAM)str);
 	}
 	return 0;
@@ -1719,7 +1723,7 @@ static void SortDomainError(const String& sDomain)
 static void NotDomainGroupError(const String& sDomain)
 {
 	throw ErrorObject(
-		WhatError(String(SDATErrDomainGroupExpected_S.scVal(), sDomain), 0), 
+		WhatError(String(TR("Only group domain allowed: '%S'").c_str(), sDomain), 0), 
 		FileName());
 }
 
@@ -1728,7 +1732,7 @@ void CommandHandler::CmdDelFile(const String& sFiles)
 	Array<FileName> afn;
 	File::GetFileNames(sFiles, afn);
 	for (unsigned int i=0; i < afn.iSize(); ++i) 
-		_unlink(afn[i].sFullName(true).scVal());
+		_unlink(afn[i].sFullName(true).c_str());
 	UpdateCatalog();
 }
 
@@ -2181,8 +2185,8 @@ void CommandHandler::CmdCreateTable(const String& s)
 	ParmList pm(s);
 	FileName fnTbl(pm.sGet(0), ".tbt", true);
 	if (File::fExist(fnTbl))
-		if (!DeleteFile(fnTbl.sFullPath().scVal()))
-			throw ErrorObject(String(SMSErrorCouldNotOverWrite_S.scVal(), fnTbl.sRelative()));
+		if (!DeleteFile(fnTbl.sFullPath().c_str()))
+			throw ErrorObject(String(TR("Could not overwrite %S").c_str(), fnTbl.sRelative()));
 	String sDom = pm.sGet(1);
 	if ( sDom == "")
 		return;
@@ -2203,8 +2207,8 @@ void CommandHandler::CmdCreateMap(const String& s)
 	ParmList pm(s);
 	FileName fnMap(pm.sGet(0), ".mpr", true);
 	if (File::fExist(fnMap))
-		if (!DeleteFile(fnMap.sFullPath().scVal()))
-			throw ErrorObject(String(SMSErrorCouldNotOverWrite_S.scVal(), fnMap.sRelative()));
+		if (!DeleteFile(fnMap.sFullPath().c_str()))
+			throw ErrorObject(String(TR("Could not overwrite %S").c_str(), fnMap.sRelative()));
 	String sGrf = pm.sGet(1);
 	String sDom = pm.sGet(2);
 	GeoRef grf(sGrf);
@@ -2232,8 +2236,8 @@ void CommandHandler::CmdCreatePointMap(const String& s)
 	ParmList pm(s);
 	FileName fnMap(pm.sGet(0), ".mpp", true);
 	if (File::fExist(fnMap))
-		if (!DeleteFile(fnMap.sFullPath().scVal()))
-			throw ErrorObject(String(SMSErrorCouldNotOverWrite_S.scVal(), fnMap.sRelative()));
+		if (!DeleteFile(fnMap.sFullPath().c_str()))
+			throw ErrorObject(String(TR("Could not overwrite %S").c_str(), fnMap.sRelative()));
 	Domain dm;
 	CoordSystem csy;
 	
@@ -2261,8 +2265,8 @@ void CommandHandler::CmdCreateSegMap(const String& s)
 	ParmList pm(s);
 	FileName fnMap(pm.sGet(0), ".mps", true);
 	if (File::fExist(fnMap))
-		if (!DeleteFile(fnMap.sFullPath().scVal()))
-			throw ErrorObject(String(SMSErrorCouldNotOverWrite_S.scVal(), fnMap.sRelative()));
+		if (!DeleteFile(fnMap.sFullPath().c_str()))
+			throw ErrorObject(String(TR("Could not overwrite %S").c_str(), fnMap.sRelative()));
 	Domain dm;
 	CoordSystem csy;
 	
@@ -2290,8 +2294,8 @@ void CommandHandler::CmdCreateDom(const String& s)
 	ParmList pm(s);
 	FileName fnDom(pm.sGet(0), ".dom", true);
 	if (File::fExist(fnDom))
-		if (!DeleteFile(fnDom.sFullPath().scVal()))
-			throw ErrorObject(String(SMSErrorCouldNotOverWrite_S.scVal(), fnDom.sRelative()));
+		if (!DeleteFile(fnDom.sFullPath().c_str()))
+			throw ErrorObject(String(TR("Could not overwrite %S").c_str(), fnDom.sRelative()));
 	String sType = pm.sGet("type");
 	DomainType dmt = dmtNONE;
 	if ((fCIStrEqual(sType , "class")) || (sType == "")) 
@@ -2357,8 +2361,8 @@ void CommandHandler::CmdCreateRpr(const String& s)
 	ParmList pm(s);
 	FileName fnRpr(pm.sGet(0), ".rpr", true);
 	if (File::fExist(fnRpr))
-		if (!DeleteFile(fnRpr.sFullPath().scVal()))
-			throw ErrorObject(String(SMSErrorCouldNotOverWrite_S.scVal(), fnRpr.sRelative()));
+		if (!DeleteFile(fnRpr.sFullPath().c_str()))
+			throw ErrorObject(String(TR("Could not overwrite %S").c_str(), fnRpr.sRelative()));
 	Domain dm(pm.sGet(1));
 	Representation(fnRpr, dm);
 }
@@ -2368,8 +2372,8 @@ void CommandHandler::CmdCreateGrf(const String& s)
 	ParmList pm(s);
 	FileName fnGrf(pm.sGet(0), ".grf", true);
 	if (File::fExist(fnGrf))
-		if (!DeleteFile(fnGrf.sFullPath().scVal()))
-			throw ErrorObject(String(SMSErrorCouldNotOverWrite_S.scVal(), fnGrf.sRelative()));
+		if (!DeleteFile(fnGrf.sFullPath().c_str()))
+			throw ErrorObject(String(TR("Could not overwrite %S").c_str(), fnGrf.sRelative()));
 	GeoRef gr;
 	RowCol rc;
 	rc.Row = pm.sGet(1).iVal();
@@ -2525,9 +2529,9 @@ void CommandHandler::DeleteObjects(CWnd *owner, const String& sCommand, Tranquil
 					}
 
 					ObjectInfo::RemoveFileFromLinkedCollections(fn);
-					DWORD iAttrib = GetFileAttributes( fn.sFullPath().scVal() );
-					SetFileAttributes( fn.sFullPath().scVal(), iAttrib & ~FILE_ATTRIBUTE_READONLY );
-					BOOL fRet = DeleteFile(fn.sFullPath().scVal());
+					DWORD iAttrib = GetFileAttributes( fn.sFullPath().c_str() );
+					SetFileAttributes( fn.sFullPath().c_str(), iAttrib & ~FILE_ATTRIBUTE_READONLY );
+					BOOL fRet = DeleteFile(fn.sFullPath().c_str());
 				}
 			}
 			if (lstFiles.size() > 0)
@@ -2704,14 +2708,14 @@ UINT CommandHandler::CmdCopyFileInThread(void *p)
 	WinAndParm* wp = (WinAndParm*)(p);
 	getEngine()->getContext()->InitThreadLocalVars();
 	getEngine()->getContext()->SetCurDir(*(wp->sPath));
-	String s(wp->s->scVal());
+	String s(wp->s->c_str());
 
 	delete wp;
 
 	try
 	{
     Tranquilizer trq;
-    // trq.SetTitle(String(SMAPTextImportRasterFrom14.scVal(), fn.sFile));
+    // trq.SetTitle(String(TR("Importing 1.4 raster map '%S'").c_str(), fn.sFile));
     trq.Start();
 		CopyFiles(s, &trq);
 	}
@@ -2747,7 +2751,7 @@ void CommandHandler::CopyObjects(const String& sCommand, Tranquilizer* trq, CWnd
 		afnFiles[iParm] = FileName(pm.sGet(iParm));
 	
 	if ( afnFiles.size() == 0 )
-		throw ErrorObject(SMSErrorNoFilesToCopy);
+		throw ErrorObject(TR("No files to be copied"));
 	
 	if ( fnTo.sExt == "" && Directory::fIsExistingDir( Directory(sTo)))
 	{
@@ -2911,7 +2915,7 @@ void CommandHandler::CmdAppMetaData(const String& sN)
 
 void CommandHandler::CmdSend(const String& sN) {
 	CURLEncode encode;
-	RemoteXMLObject xmlObj(sN);
+	RemoteObject xmlObj(sN);
 	MemoryStruct *mem = xmlObj.get();
 	String txt;
 	for(int i = 0; i < mem->size; ++i)
@@ -2945,7 +2949,7 @@ void CommandHandler::CmdZip(const String& expr) {
 	}
 
 	String path = fnZip.sRelative();
-	zipFile zf = zf = zipOpen(fnZip.sFullName().scVal(),0);
+	zipFile zf = zf = zipOpen(fnZip.sFullName().c_str(),0);
 
 	for(int i=0; (i < pm.iSize() - 1) || (pm.iSize() == 1 && i != 1); ++i) {
 		FileName fnobj(pm.sGet(i));
@@ -2976,7 +2980,7 @@ void CommandHandler::CmdZip(const String& expr) {
 			zi.dosDate = 0;
 			zi.internal_fa = 0;
 			zi.external_fa = 0;
-			int err = zipOpenNewFileInZip(zf, curfile.scVal(), &zi,NULL,0,NULL,0,NULL /* comment*/,(opt_compress_level != 0) ? Z_DEFLATED : 0,opt_compress_level);
+			int err = zipOpenNewFileInZip(zf, curfile.c_str(), &zi,NULL,0,NULL,0,NULL /* comment*/,(opt_compress_level != 0) ? Z_DEFLATED : 0,opt_compress_level);
 
 			if (err != ZIP_OK)
 			{
@@ -2985,7 +2989,7 @@ void CommandHandler::CmdZip(const String& expr) {
 			}
 			else
 			{
-				fin = fopen(fnt.sFullName().scVal(),_T("rb"));
+				fin = fopen(fnt.sFullName().c_str(),_T("rb"));
 				if (fin==NULL)
 				{
 					throw ErrorObject(String("error in opening %S for reading\n",curfile));
@@ -3027,6 +3031,138 @@ void CommandHandler::CmdZip(const String& expr) {
    }
    int errclose = zipClose(zf,NULL);
    free (buf);
+}
+
+void CommandHandler::gatherFromFolder(const string& root, const string& folder, vector<IlwisFileInfo>& files) {
+	CFileFind finder;
+	string pattern = folder + "*.*";
+	BOOL fFound = finder.FindFile(CString(pattern.c_str()));
+	while(fFound) {
+		fFound = finder.FindNextFile();
+		if (!finder.IsDirectory())
+		{
+			string file(finder.GetFilePath());
+			FileName fn(file);
+			if ( fn.sExt == ".htm" || fn.sExt == ".log" || fn.sExt==".ini" || fn.sExt == ".xml") // skip theae files
+				continue;
+			CFileStatus fstat;
+			CFile::GetStatus(file.c_str(), fstat);
+			IlwisFileInfo info;
+			String head = fn.sPath();
+			info.location = head.substr(root.size(), head.size() - root.size());
+			info.name = fn.sFile + fn.sExt;
+			info.size = fstat.m_size;
+			info.modifiedTime = ILWIS::Time(fstat.m_mtime);
+			info.check = 0;
+			files.push_back(info);
+
+
+		} else {
+			string newfolder(finder.GetFilePath());
+			bool dir = newfolder.find_last_of(".") == newfolder.size() - 1;
+			dir = dir || newfolder.find_last_of("..") == newfolder.size() - 2;
+			if ( !dir ) {
+				gatherFromFolder(root, newfolder + "\\", files);
+			}
+		}
+	}
+
+}
+
+void CommandHandler::CmdUpdateIlwis(const String& expr) {
+	String *cmd = new String(expr);
+	AfxBeginThread(CommandHandler::UpdateIlwis, (LPVOID)(cmd));
+}
+
+UINT CommandHandler::UpdateIlwis(void *p) {
+	String expr = *(String *)p;
+	delete p;
+	char usBUF[300];
+	GetPrivateProfileString("ILWIS_UPDATE:Context","UpdateServer","",usBUF,300,String("%Sconfig.ini", getEngine()->getContext()->sIlwDir()).c_str());
+	String server(usBUF);
+	vector<IlwisFileInfo> files;
+	gatherFromFolder(getEngine()->getContext()->sIlwDir(), getEngine()->getContext()->sIlwDir(), files);
+	ILWIS::XMLDocument doc;
+	pugi::xml_node first = doc.addNodeTo(doc,"ILWIS_Update_Info");
+
+	GUID gd;
+	CoCreateGuid(&gd);
+	WCHAR buf[39];
+	::StringFromGUID2(gd,buf,39);
+	CString str(buf);
+	String guid = str;
+	unsigned long checksum = 0;
+
+	for(int i = 0 ; i < files.size(); ++i) {
+		pugi::xml_node fl = doc.addNodeTo(first,"File");
+		doc.addNodeTo(fl,"Location",files[i].location);
+		doc.addNodeTo(fl,"Name",files[i].name);
+		doc.addNodeTo(fl,"Size",String("%d", files[i].size));
+		doc.addNodeTo(fl,"ModifiedTime",files[i].modifiedTime.toString());
+		doc.addNodeTo(fl,"Check",String("%d", files[i].check));
+		String t = files[i].id() + files[i].modifiedTime.toString();
+		for(int j=0; j < t.size(); ++j)
+			checksum += t[i];
+	}
+	Uploader upload(URL(String("%S?Service=IlwisUpdate",server))); // << from config of course, now for testing
+	String txt = doc.toString();
+	first.append_attribute("client_id") = guid.c_str();
+	first.append_attribute("check") = String("%lu", checksum).c_str();
+	txt = doc.toString();
+
+	upload.setText(txt);
+	upload.upload();
+
+	bool done = false;
+	do {
+		Sleep(10000);
+		RemoteObject ro(String("%S?Service=IlwisUpdate&client_id=%S&query=status",server,guid));
+		String result = ro.toString();
+		if ( result == "finished")
+			done = true;
+	} while(!done);
+
+	char buffer[500];
+	GetTempPath(500, buffer);
+	String path("%sIlwisUpdates\\",buffer);
+	_mkdir(path.c_str());
+	cleanupDownloadDir(path);
+	String dataFile("%Silwis_update.zip",path);
+	//String dataFile("d:\\temp\\iupdate.zip");
+	ofstream updateFile(dataFile.c_str(), ios_base::out| ios_base::binary);
+	RemoteObject ro;
+	ro.setStream(&updateFile);
+	ro.getRequest(String("%S?Service=IlwisUpdate&client_id=%S&query=getupdate",server,guid));
+	updateFile.flush();
+	updateFile.close();
+	ILWIS::Zipper zipper;
+	zipper.unzip(FileName(dataFile));
+	_unlink(dataFile.c_str());
+
+	return 1;
+}
+
+void CommandHandler::cleanupDownloadDir(const String& folder) {
+	CFileFind finder;
+	string pattern = folder + "*.*";
+	BOOL fFound = finder.FindFile(CString(pattern.c_str()));
+	while(fFound) {
+		fFound = finder.FindNextFile();
+		if (!finder.IsDirectory())
+		{
+			string file(finder.GetFilePath());
+			_unlink(file.c_str());
+
+		} else {
+			string newfolder(finder.GetFilePath());
+			bool dir = newfolder.find_last_of(".") == newfolder.size() - 1;
+			dir = dir || newfolder.find_last_of("..") == newfolder.size() - 2;
+			if ( !dir ) {
+				cleanupDownloadDir(newfolder + "\\");
+				_rmdir(newfolder.c_str());
+			}
+		}
+	}
 }
 
 

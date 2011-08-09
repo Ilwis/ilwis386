@@ -95,7 +95,7 @@ void WMSCollectionPtr::Store()
 	int count = 0;
 	for(map<String, String>::iterator cur = layers.begin(); cur != layers.end(); ++cur) {
 		String lyr("%S|%S", (*cur).first, (*cur).second);
-		WriteElement("WMSCollection", String("layer%d", count++).scVal(), lyr);
+		WriteElement("WMSCollection", String("layer%d", count++).c_str(), lyr);
 	}
 }
 
@@ -127,7 +127,7 @@ WMSCollectionPtr::WMSCollectionPtr(const FileName& fn, ParmList& pm) :
 		ReadElement("ObjectCollection", "NrObjects", count);
 		for(int i = 0; i < count; ++i) {
 			String lyr;
-			ReadElement("WMSCollection", String("layer%d", i).scVal(), lyr);
+			ReadElement("WMSCollection", String("layer%d", i).c_str(), lyr);
 			String file = lyr.sHead("|");
 			String name = lyr.sTail("|");
 			layers[file] = name;
@@ -162,7 +162,7 @@ Map	WMSCollection::CreateImplicitObject(const FileName& fnObject, ParmList& pm) 
 	FileName fnCollection(sC);
 	WMSCollection wms(fnCollection);
 	if ( !wms.fValid() )
-		throw ErrorObject(String(SDATErrCouldNotOpenCollection_S.sVal(), fnCollection.sFile));
+		throw ErrorObject(String(TR("Could not open collection %S").c_str(), fnCollection.sFile));
 	
 	if ( !pm.fExist("method"))
 		pm.Add(new Parm("method", wms->sGetMethod()));

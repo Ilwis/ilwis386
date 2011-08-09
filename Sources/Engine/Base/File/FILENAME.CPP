@@ -201,7 +201,7 @@ void FileName::init(const char* sName)
 	{
 		char *sFullPath = new char[MAX_PATH];
 		String sPath = sDrive+sDir;
-		_fullpath(sFullPath, sPath.scVal(), MAX_PATH);
+		_fullpath(sFullPath, sPath.c_str(), MAX_PATH);
 		Dir(sFullPath);
 		delete [] sFullPath;
 	}
@@ -240,7 +240,7 @@ FileName::FileName(const char* sName)
 
 FileName::FileName(const String& sName)
 {
-	init(sName.scVal());
+	init(sName.c_str());
 }
 
 FileName::FileName(const CString& sName)
@@ -264,13 +264,13 @@ FileName::FileName(const CString& sName, const CString& sExtension,
 FileName::FileName(const String& sName, const String& sExtension,
            bool fReplaceExtension)
 {
-	initExt(sName.scVal(), sExtension.scVal(), fReplaceExtension);
+	initExt(sName.c_str(), sExtension.c_str(), fReplaceExtension);
 }
 
 FileName::FileName(const String& sName, const char* sExtension,
            bool fReplaceExtension)
 {
-	initExt(sName.scVal(), sExtension, fReplaceExtension);
+	initExt(sName.c_str(), sExtension, fReplaceExtension);
 }
 
 // Copy constructors
@@ -464,7 +464,7 @@ FileName::FileName(const String& sName, const FileName& fn)
 {
   if (sName.length() == 0)  return;
 
-  Split(const_cast<char *>(sName.scVal()));
+  Split(const_cast<char *>(sName.c_str()));
 
   if ((sDrive.length()==0) && (sDir.length()==0)) {
 		String sPath = fn.sPath();
@@ -475,7 +475,7 @@ FileName::FileName(const String& sName, const FileName& fn)
   else { // complete path to full path
     char sFullPath[MAX_PATH];
     String sPath = sDrive+sDir;
-    _fullpath(sFullPath, sPath.scVal(), MAX_PATH);
+    _fullpath(sFullPath, sPath.c_str(), MAX_PATH);
     Dir(sFullPath);
   }
 }
@@ -488,7 +488,7 @@ void FileName::Dir(const String& s)
     sDrive = String();
     return;
   }  
-  char * c = const_cast<char *>(s.scVal());
+  char * c = const_cast<char *>(s.c_str());
   char* tmp = strrchr(c, ':');
   if (tmp == NULL)
     sDir = s;
@@ -694,7 +694,7 @@ void FileName::FileSet(Array<String>& sFileSet)
 {
   HANDLE findHandle;
   WIN32_FIND_DATA findData;
-  if ((findHandle = FindFirstFile(sFullPath().scVal(),&findData)) != INVALID_HANDLE_VALUE )
+  if ((findHandle = FindFirstFile(sFullPath().c_str(),&findData)) != INVALID_HANDLE_VALUE )
   { 
     do 
     {
