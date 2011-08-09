@@ -59,7 +59,7 @@ IlwisObjectPtr * createPolygonMapFromRas(const FileName& fn, IlwisObjectPtr& ptr
 
 static void TooManySegments(const FileName& fnObj)
 {
-  throw ErrorObject(WhatError(SPOLErrTooManySegments, errPolygonMapFromRas), fnObj);
+  throw ErrorObject(WhatError(TR("Too many segments created"), errPolygonMapFromRas), fnObj);
 }
 
 const char* PolygonMapFromRas::sSyntax() {
@@ -163,13 +163,13 @@ bool PolygonMapFromRas::fDomainChangeable() const
 
 void PolygonMapFromRas::Init()
 {
-  htpFreeze = htpPolygonMapFromRasT;
+  htpFreeze = "ilwisapp\raster_to_polygons_algorithm.htm";
   sFreezeTitle = "PolygonMapFromRas";
 }
 
 bool PolygonMapFromRas::fSetPolygonLabels(const Map& mpAreas)
 {
-	trq.SetText(SPOLTextInitPolygons);
+	trq.SetText(TR("Initialize polygons"));
 	Table tblArnAtt = mpAreas->tblAtt();
 	assert(tblArnAtt.fValid());
 	tblArnAtt->fErase = true;
@@ -414,7 +414,7 @@ bool PolygonMapFromRas::fFreezing()
 		return false;    // tranquilizer: cancel is clicked in the function
 
 	//trq.SetTitle(sFreezeTitle);
-	//trq.SetText(SPOLTextExtractTopologies);
+	//trq.SetText(TR("Extract topologies"));
 
 	//return fFindBoundaries(mapArn); // if false then tranquilizer:cancel is clicked in the function
 	return true;

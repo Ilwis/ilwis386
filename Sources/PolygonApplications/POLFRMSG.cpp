@@ -152,7 +152,7 @@ PolygonMapFromSegment* PolygonMapFromSegment::create(const FileName& fn, Polygon
 	String sInputMapName = as[0];
 	char *pCh = sInputMapName.strrchrQuoted('.');
 	if ((pCh != 0) && (0 != _strcmpi(pCh, ".mps")))  // attrib map
-		throw ErrorObject(WhatError(String(SPOLErrNoAttColumnAllowed_S.scVal(), as[0]), errPolygonMapFromSegment), fn);
+		throw ErrorObject(WhatError(String(TR("Use of attribute maps is not possible: '%S'").c_str(), as[0]), errPolygonMapFromSegment), fn);
 	
 	SegmentMap smp(as[0], fn.sPath());
 	String sMask;
@@ -304,7 +304,7 @@ void PolygonMapFromSegment::Init()
 {
   fNeedFreeze = true;
   fSegmentsChecked = false;
-  htpFreeze = htpPolygonMapFromSegmentT;
+  htpFreeze = "ilwisapp\\segments_to_polygons_algorithm.htm";
   sFreezeTitle = "PolygonMapFromSegment";
 }
 
@@ -316,7 +316,7 @@ bool PolygonMapFromSegment::fFreezing()
 	CoordBuf crdBuf;
 	long iSeg = smap->iFeatures();
 	trq.SetTitle(sFreezeTitle);
-	trq.SetText(SPOLTextCopySegments);
+	trq.SetText(TR("Copy Segments"));
 	geos::operation::polygonize::Polygonizer polygonizer;
 	for (long i=0; i < smap->iFeatures(); ++i) {
 		const ILWIS::Segment *seg = (ILWIS::Segment *)smap->getFeature(i);

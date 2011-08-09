@@ -149,14 +149,14 @@ PolygonMapGrid* PolygonMapGrid::create(const FileName& fn, PolygonMapPtr& p,cons
 	long iParms = IlwisObjectPtr::iParseParm(sExp, as);
 	iParms = (long)as.size();
 	if (iParms < 7) //Requiring at least 7 parameters in the routine  
-		throw ErrorExpression(SPOLErrParameters, sSyntax());
+		throw ErrorExpression(TR("Specify input parameters"), sSyntax());
 	
 	FileName fnCSY(as[0],".csy");
 	as[0] = fnCSY.sRelativeQuoted(false,fn.sPath());
 	CoordSystem csy(as[0]);
 	if (!csy.fValid())
 	{
-		throw ErrorExpression(String(SPOLErrCouldNotFind_S.scVal(), as[0]), sSyntax());
+		throw ErrorExpression(String(TR("Could not find CoordSystem %S").c_str(), as[0]), sSyntax());
 	}
 
 	Domain dm;
@@ -175,14 +175,14 @@ PolygonMapGrid* PolygonMapGrid::create(const FileName& fn, PolygonMapPtr& p,cons
 					if (dm.fValid()  && dm->pdsrt() != 0 )
 						fDomainExist = dm.fValid();
 					else
-						throw ErrorExpression(String(SPOLErrDomainTypeInValid.scVal(), as[11]), sSyntax());
+						throw ErrorExpression(String(TR("Invalid domain type for table %S").c_str(), as[11]), sSyntax());
 					sTbl = as[11].sVal();
 					FileName fnTbl(sTbl,".tbt");
 					sTbl = fnTbl.sRelativeQuoted(false,fn.sPath());
 				}
 			}
 			else
-				throw ErrorExpression(String(SPOLErrCouldNotFindTable_S.scVal(), as[11]), sSyntax());
+				throw ErrorExpression(String(TR("Could not find table %S").c_str(), as[11]), sSyntax());
 	}
 	
 	long iNrRows, iNrCols;	
@@ -198,7 +198,7 @@ PolygonMapGrid* PolygonMapGrid::create(const FileName& fn, PolygonMapPtr& p,cons
 		crdLL.y  = as[2].rVal();
 	}	
 	else
-		throw ErrorExpression(SPOLErrDefineOrigin, sSyntax()); 
+		throw ErrorExpression(TR("Define the origin coodinate X,Y"), sSyntax()); 
 
 	if ((iParms > 10) && (as[9] != "") && (as[10] != "")){
 		crdP.x = as[9].rVal();
@@ -211,7 +211,7 @@ PolygonMapGrid* PolygonMapGrid::create(const FileName& fn, PolygonMapPtr& p,cons
 
 	//Direction point is on the positive Y-axis from origin(most left point) 
 	if ((crdP.x < crdLL.x) || (crdP.y < crdLL.y)){
-		throw ErrorExpression(SPOLErrDirectionPoint, sSyntax());
+		throw ErrorExpression(TR("Externalling direction point"), sSyntax());
 	}
 		
 	if (( as[3].rVal()  != rUNDEF)  && ( as[3].rVal()  != 0)  &&
@@ -235,7 +235,7 @@ PolygonMapGrid* PolygonMapGrid::create(const FileName& fn, PolygonMapPtr& p,cons
 			crdUR.x = as[7].sTrimSpaces().rVal();
 			crdUR.y = as[8].sTrimSpaces().rVal();
 			if (crdUR.x < crdLL.x)
-					throw ErrorExpression(SPOLErrOppositePoint, sSyntax());
+					throw ErrorExpression(TR("Externalling opposite coordinate"), sSyntax());
 	
 	}
 
@@ -249,10 +249,10 @@ PolygonMapGrid* PolygonMapGrid::create(const FileName& fn, PolygonMapPtr& p,cons
 			crdUR.x = as[7].sTrimSpaces().rVal();
 			crdUR.y = as[8].sTrimSpaces().rVal();
 			if (crdUR.x < crdLL.x)
-					throw ErrorExpression(SPOLErrOppositePoint, sSyntax());
+					throw ErrorExpression(TR("Externalling opposite coordinate"), sSyntax());
 	}
 	else
-			throw ErrorExpression(SPOLErrParameters, sSyntax());
+			throw ErrorExpression(TR("Specify input parameters"), sSyntax());
 	
 	String sOdLbl,sLabels,sScLbl;
 	if ((iParms > 12) && (fCIStrEqual(as[12], "LabelPoints")) )
@@ -376,7 +376,7 @@ void PolygonMapGrid::Init()
 {
   fNeedFreeze = true;
   sFreezeTitle = "PolygonMapGrid";
-	htpFreeze = htpPolygonMapGridT;
+	htpFreeze = "ilwisapp\\id_grid_map_algorithm.htm";
 }
 
 String PolygonMapGrid::sExpression() const
@@ -413,7 +413,7 @@ bool PolygonMapGrid::fFreezing()
 	Coord cNodeX, cNodeY;
 
 	trq.SetTitle(sFreezeTitle);
-	trq.SetText(SPOLTextCalculatingGridCells);
+	trq.SetText(TR("Calculating grid cells"));
 	trq.Start();
 
 	DomainSort* gdsrt = dm()->pdsrt();

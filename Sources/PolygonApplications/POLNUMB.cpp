@@ -182,7 +182,7 @@ String PolygonMapNumbering::sExpression() const
 
 void PolygonMapNumbering::Init()
 {
-  htpFreeze = htpPolygonMapNumberingT;
+  htpFreeze = "ilwisapp\unique_id_algorithm.htm";
   sFreezeTitle = "PolygonMapNumbering";
 }
 
@@ -190,7 +190,7 @@ bool PolygonMapNumbering::fFreezing()
 {
 	long iPol = pmp->iFeatures();
 	long iNrNewPol = 0;
-	trq.SetText(SPOLTextCalcNumberOfPolygons);
+	trq.SetText(TR("Determine number of polygons"));
 	for (int i=0; i < iPol; ++i) {
 		if (trq.fUpdate(i, iPol))
 			return false;
@@ -238,7 +238,7 @@ bool PolygonMapNumbering::fFreezing()
 	if ( !colArea.fValid())
 		colArea = tbl->colNew("Area",DomainValueRangeStruct(-1e307, 1e307, 0.001));	
 	
-	trq.SetText(String(SPOLTextNumbering_S.scVal(), sName(true, fnObj.sPath())));
+	trq.SetText(String(TR("Numbering '%S'").c_str(), sName(true, fnObj.sPath())));
 	iNrNewPol = 0;
 	CoordBuf crdBuf(1000);
 	double rVal;

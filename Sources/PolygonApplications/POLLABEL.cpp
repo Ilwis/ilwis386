@@ -126,13 +126,13 @@ String PolygonMapLabels::sExpression() const
 
 void PolygonMapLabels::Init()
 {
-  htpFreeze = htpPolygonMapLabelsT;
+  htpFreeze = "ilwisapp\assign_labels_to_polygons_algoritm.htm";
   sFreezeTitle = "PolygonMapLabels";
 }
 
 bool PolygonMapLabels::fFreezing()
 {
-	trq.SetText(SPOLTextCopyPolygons);
+	trq.SetText(TR("Copying polygons"));
 	bool fUseReals = dvrs().fUseReals();
 	CoordSystem csOld = polmap->cs();
 	bool fTransformCoords = cs() != csOld;

@@ -38,7 +38,7 @@
 // $Log: /ILWIS 3.0/PolygonMap/POLMASK.cpp $
  * 
  * 6     8-02-01 17:10 Hendrikse
- * implem errormessage SPOLErrNoAttColumnAllowed_S 
+ * implem errormessage TR("Use of attribute maps is not possible: '%S'") 
  * 
  * 5     17-01-00 8:17a Martin
  * changed rowcols to coords
@@ -89,7 +89,7 @@ PolygonMapMask* PolygonMapMask::create(const FileName& fn, PolygonMapPtr& p, con
 	String sInputPolMapName = as[0];
 	char *pCh = sInputPolMapName.strrchrQuoted('.');
   if ((pCh != 0) && (0 != _strcmpi(pCh, ".mpa")))  // attrib map
-		throw ErrorObject(WhatError(String(SPOLErrNoAttColumnAllowed_S.scVal(), as[0]),
+		throw ErrorObject(WhatError(String(TR("Use of attribute maps is not possible: '%S'").c_str(), as[0]),
 																 errPolygonMapMask), fn);
   PolygonMap pmp(as[0], fn.sPath());
   return new PolygonMapMask(fn, p, pmp, as[1]);
@@ -152,7 +152,7 @@ bool PolygonMapMask::fDomainChangeable() const
 
 void PolygonMapMask::Init()
 {
-  htpFreeze = htpPolygonMapMaskT;
+  htpFreeze = "ilwisapp\\mask_polygons_algorithm.htm";
   sFreezeTitle = "PolygonMapMask";
 }
 
@@ -160,7 +160,7 @@ void PolygonMapMask::Init()
 bool PolygonMapMask::fFreezing()
 {
 	mask.SetDomain(dm());
-	trq.SetText(SPOLTextCopyPolygons);
+	trq.SetText(TR("Copying polygons"));
 	for(int i=0; i < pmp->iFeatures(); ++i) {
 		if (trq.fUpdate(i, pmp->iFeatures()))
 			return false;

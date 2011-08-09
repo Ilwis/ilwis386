@@ -65,7 +65,7 @@ class DATEXPORT ErrorInvalidAttDomain: public ErrorObject
 {
 public:
   ErrorInvalidAttDomain(const String& sDomain, const WhereError& where)
-  : ErrorObject(WhatError(String(SPOLErrInvalidColumnDomain_S.scVal(), sDomain), 
+  : ErrorObject(WhatError(String(TR("Invalid domain type for attribute column: '%S'").c_str(), sDomain), 
                 errPolygonMapAttribute+1), where) {}
 };
 
@@ -161,7 +161,7 @@ bool PolygonMapAttribute::fDomainChangeable() const
 
 void PolygonMapAttribute::Init()
 {
-  htpFreeze = htpPolygonMapAttributeT;
+  htpFreeze = "ilwisapp\attribute_map_of_polygon_map_algorithm.htm";
   sFreezeTitle = "PolygonMapAttribute";
   DomainSort* pdsrt = colAtt->dmKey()->pdsrt();
   assert(pdsrt);
@@ -185,7 +185,7 @@ void PolygonMapAttribute::Init()
 bool PolygonMapAttribute::fFreezing()
 {
   StoreType stp = st();
-  trq.SetText(SPOLTextCopyPolygons);
+  trq.SetText(TR("Copying polygons"));
   long iPol = pmp->iFeatures();
   for (long i=0; i < iPol; ++i) {
     if (trq.fUpdate(i, iPol))

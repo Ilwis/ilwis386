@@ -38,7 +38,7 @@
 // $Log: /ILWIS 3.0/PolygonMap/POLTRNSF.cpp $
  * 
  * 7     8-02-01 17:12 Hendrikse
- * implem errormessage SPOLErrNoAttColumnAllowed_S 
+ * implem errormessage TR("Use of attribute maps is not possible: '%S'") 
  * 
  * 6     17-10-00 14:34 Hendrikse
  * implementeded members and functions for densifying polygon coords
@@ -115,7 +115,7 @@ PolygonMapTransform* PolygonMapTransform::create(const FileName& fn, PolygonMapP
 	String sInputPolMapName = as[0];
 	char *pCh = sInputPolMapName.strrchrQuoted('.');
   if ((pCh != 0) && (0 != _strcmpi(pCh, ".mps")))  // attrib map
-		throw ErrorObject(WhatError(String(SPOLErrNoAttColumnAllowed_S.scVal(), as[0]),
+		throw ErrorObject(WhatError(String(TR("Use of attribute maps is not possible: '%S'").c_str(), as[0]),
 																 errPolygonMapTransform), fn);
   PolygonMap pmp(as[0], fn.sPath());
   CoordSystem csy(as[1], fn.sPath());
@@ -184,7 +184,7 @@ String PolygonMapTransform::sExpression() const
 
 void PolygonMapTransform::Init()
 {
-  htpFreeze = htpPolygonMapTransformT;
+  htpFreeze = "ilwisapp\transform_polygon_map_functionality_algorithm.htm";
   sFreezeTitle = "PolygonMapTransform";
 }
 
@@ -206,13 +206,13 @@ private:
 
 bool PolygonMapTransform::fFreezing()
 {
-	trq.SetText(SPOLTextCopyPolygons);
+	trq.SetText(TR("Copying polygons"));
 	long iPol = pmp->iFeatures();
 	CoordBuf crdBufIn, crdBufOut;
 	bool fDensify = false;
 	if (rDistance > EPS10)
 		fDensify = true;
-	trq.SetText(String(SPOLTextTransformSegments_S.scVal(), sName(true, fnObj.sPath())));
+	trq.SetText(String(TR("Transforming segments for '%S'").c_str(), sName(true, fnObj.sPath())));
 	Coord crd;
 	CoordSystem csOld = pmp->cs();
 	for (long i = 0; i < iPol; ++i) {
