@@ -60,20 +60,20 @@ InfoUIVector* getCommandInfoUI(ILWIS::Module *module) {
 	InfoUIVector *infosui = new InfoUIVector();
 	String ilwDir = IlwWinApp()->Context()->sIlwDir();
 
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("raspol","",Cmdraspol,SMENUraspol,SMENUSraspol,"ExePol16IcoL",".mpr",4652,SMENUDraspol));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("segpol","",Cmdsegpol,SMENUsegpol,SMENUSsegpol,"ExePol16IcoL",".mps",4612,SMENUDsegpol));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("attribpol","",Cmdattribpol,SMENUattribpol,SMENUSattribpol,"ExePol16IcoL",".mpa",4602,SMENUDattribpol));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("maskpol","",Cmdmaskpol,SMENUmaskpol,SMENUSmaskpol,"ExePol16IcoL",".mpa",4642,SMENUDmaskpol));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("labelpol","",Cmdlabelpol,SMENUlabelpol,SMENUSlabelpol,"ExePol16IcoL",".mpa",4622,SMENUDlabelpol));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("transfpol","",Cmdtransfpol,SMENUtransfpol,SMENUStransfpol,"ExePol16IcoL",".mpa.csy",4632,SMENUDtransfpol));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("idgrid","",Cmdidgrid,SMENUidgrid,SMENUSidgrid,"ExePol16IcoL",".csy",4672,SMENUDidgrid));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("bufpol","",Cmdpolygonmapbuffer,SMENUbufpol,SMENUSbufpol,"ExePol16IcoL",".mpa.mps.mpp",0,SMENUDbufpol));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("convexhull","",Cmdpolygonmapconvexhull,SMENUconvexhull,SMENUSconvexhull,"ExePol16IcoL",".mpa.mps.mpp",0,SMENUDconvexhull));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("intersectpol","",Cmdpolygonmapintersect,SMENUintersection,SMENUSintersection,"ExePol16IcoL",".mpa",0,SMENUDintersection));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("unionpol","",Cmdpolygonmapunion,SMENUunion,SMENUSunion,"ExePol16IcoL",".mpa",0,SMENUDunion));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("diffpol","",Cmdpolygonmapdifference,SMENUdifference,SMENUSdifference,"ExePol16IcoL",".mpa",0,SMENUDdifference));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("symdiffpol","",Cmdpolygonmapsymetricdifference,SMENUsymetricdifference,SMENUSsymetricdifference,"ExePol16IcoL",".mpa",0,SMENUDsymetricdifference));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("relatepol","",Cmdpolygonmaprelate,SMENUpolrelate,SMENUSpolrelate,"ExePol16IcoL",".mpa",0,SMENUDpolrelate));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("raspol","",Cmdraspol,TR("V&ectorize..&Raster to Polygon"),TR("Raster to Polygon "),"ExePol16IcoL",".mpr",4652,TR("Extract polygons from a raster map and return a polygon map")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("segpol","",Cmdsegpol,TR("V&ectorize..&Segment to Polygon"),TR("Segment to Polygon "),"ExePol16IcoL",".mps",4612,TR("Polygonize a segment map")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("attribpol","",Cmdattribpol,TR("&Polygon Operations..&Attribute Map"),TR("Attribute Map of Polygon Map "),"ExePol16IcoL",".mpa",4602,TR("Create an attribute polygon map")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("maskpol","",Cmdmaskpol,TR("&Polygon Operations..&Mask Polygons"),TR("Mask Polygons "),"ExePol16IcoL",".mpa",4642,TR("Selectively copy polygons from a polygon map into a new polygon map")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("labelpol","",Cmdlabelpol,TR("&Polygon Operations..Assign &Labels"),TR("Labels to Polygons "),"ExePol16IcoL",".mpa",4622,TR("Recode polygons according to label points")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("transfpol","",Cmdtransfpol,TR("&Spatial Reference Operations.&Vector.&Transform Polygons"),TR("Transform Polygons "),"ExePol16IcoL",".mpa.csy",4632,TR("Transform polygons to a new coordinate system")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("idgrid","",Cmdidgrid,TR("&Polygon Operations..&ID Grid Map"),TR("ID Grid Map "),"ExePol16IcoL",".csy",4672,TR("Create polygon ID grid map")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("bufpol","",Cmdpolygonmapbuffer,TR("&Polygon Operations..&Buffer"),TR("Buffer "),"ExePol16IcoL",".mpa.mps.mpp",0,TR("Create a polygon map by buffering polygon,point or segment maps")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("convexhull","",Cmdpolygonmapconvexhull,TR("&Polygon Operations..&Convex Hull"),TR("Convex Hull"),"ExePol16IcoL",".mpa.mps.mpp",0,TR("Create a polygon map by making a convex hull for a point, segment or polygon map")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("intersectpol","",Cmdpolygonmapintersect,TR("&Polygon Operations..&Intersection"),TR("Intersection of Polygons"),"ExePol16IcoL",".mpa",0,TR("Create a new polygon map by intersecting two polygon maps")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("unionpol","",Cmdpolygonmapunion,TR("&Polygon Operations..&Union"),TR("Polygon Union"),"ExePol16IcoL",".mpa",0,TR("Create a new polygon map by Union of the polygons of two polygon maps")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("diffpol","",Cmdpolygonmapdifference,TR("&Polygon Operations..&Difference"),TR("Difference of Polygons"),"ExePol16IcoL",".mpa",0,TR("Create a new polygon map by difference of the polygons of two polygon maps")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("symdiffpol","",Cmdpolygonmapsymetricdifference,TR("&Polygon Operations..&Symetric Difference"),TR("Symetric Difference of Polygons"),"ExePol16IcoL",".mpa",0,TR("Create a new polygon map by the symetric difference of the polygons of two polygon maps")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("relatepol","",Cmdpolygonmaprelate,TR("&Polygon Operations..&Relate"),TR("Spatial Relation"),"ExePol16IcoL",".mpa",0,TR("Create a polygon map out of spatial relation(s) with other feature maps")));
 
 	return infosui;
 }

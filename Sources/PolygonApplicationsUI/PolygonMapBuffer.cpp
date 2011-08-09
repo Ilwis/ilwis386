@@ -83,12 +83,12 @@
 
 LRESULT Cmdpolygonmapbuffer(CWnd *wnd, const String& s)
 {
-	new FormPolygonMapBuffer(wnd, s.scVal());
+	new FormPolygonMapBuffer(wnd, s.c_str());
 	return -1;
 }
 
 FormPolygonMapBuffer::FormPolygonMapBuffer(CWnd* mw, const char* sPar)
-: FormPolygonMapCreate(mw, SAFTitlePolygonMapBuffer), distance(0)
+: FormPolygonMapCreate(mw, TR("Create a Buffer Map")), distance(0)
 {
 	if (sPar)
 	{
@@ -107,13 +107,13 @@ FormPolygonMapBuffer::FormPolygonMapBuffer(CWnd* mw, const char* sPar)
 				sOutMap = fn.sFullName(true);
 		}
 	}
-	styles.push_back(SAFUiOptionRound + ".PBRound");
-	styles.push_back(SAFUiOptionSquare + ".PBSquare");
-	styles.push_back(SAFUiOptionButt + ".PBButt");
-	new FieldDataType(root, SAFUiInputMap, &sInMap, ".mpp.mps.mpa", true);
+	styles.push_back(TR("Round") + ".PBRound");
+	styles.push_back(TR("Square") + ".PBSquare");
+	styles.push_back(TR("Butt") + ".PBButt");
+	new FieldDataType(root, TR("&Input Map"), &sInMap, ".mpp.mps.mpa", true);
 	
-	frDistance = new FieldReal(root, SAFUiPolBufferDistance, &distance, ValueRange(-1e9,1e9,0.0));
-	new FieldOneSelectString(root, SAFUiEndStyle, &endStyle, styles);
+	frDistance = new FieldReal(root, TR("&Buffer distance"), &distance, ValueRange(-1e9,1e9,0.0));
+	new FieldOneSelectString(root, TR("&End cap style"), &endStyle, styles);
 	new FieldBlank(root);
 			
     initPolygonMapOut(false);

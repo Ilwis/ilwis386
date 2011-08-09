@@ -83,12 +83,12 @@
 
 LRESULT Cmdpolygonmapconvexhull(CWnd *wnd, const String& s)
 {
-	new FormPolygonMapConvexHull(wnd, s.scVal());
+	new FormPolygonMapConvexHull(wnd, s.c_str());
 	return -1;
 }
 
 FormPolygonMapConvexHull::FormPolygonMapConvexHull(CWnd* mw, const char* sPar)
-: FormPolygonMapCreate(mw, SAFTiltePolygonMapConvexHull),choice(0)
+: FormPolygonMapCreate(mw, TR("Create a Convex Hull")),choice(0)
 {
 	if (sPar)
 	{
@@ -107,11 +107,11 @@ FormPolygonMapConvexHull::FormPolygonMapConvexHull(CWnd* mw, const char* sPar)
 				sOutMap = fn.sFullName(true);
 		}
 	}
-	new FieldDataType(root, SAFUiInputMap, &sInMap, ".mpp.mps.mpa", true);
-	RadioGroup *grp = new RadioGroup(root,SAFUiCombineFeatures,&choice,true);
+	new FieldDataType(root, TR("&Input Map"), &sInMap, ".mpp.mps.mpa", true);
+	RadioGroup *grp = new RadioGroup(root,TR("Combination Rule"),&choice,true);
 	grp->SetIndependentPos();
-	new RadioButton(grp,SAFUiCombineAll);
-	RadioButton *but = new RadioButton(grp,SAFUiCombineNone);
+	new RadioButton(grp,TR("All"));
+	RadioButton *but = new RadioButton(grp,TR("None"));
 
 	new FieldBlank(root);
 			

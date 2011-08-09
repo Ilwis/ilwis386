@@ -166,12 +166,12 @@
 
 LRESULT Cmdattribpol(CWnd *wnd, const String& s)
 {
-	new FormAttributePolygonMap(wnd, s.scVal());
+	new FormAttributePolygonMap(wnd, s.c_str());
 	return -1;
 }
 
 FormAttributePolygonMap::FormAttributePolygonMap(CWnd* mw, const char* sPar)
-: FormPolygonMapCreate(mw, SAFTitleAttribPolMap)
+: FormPolygonMapCreate(mw, TR("Attribute Map of Polygon Map"))
 {
   if (sPar) {
     TextInput inp(sPar);
@@ -190,12 +190,12 @@ FormAttributePolygonMap::FormAttributePolygonMap(CWnd* mw, const char* sPar)
           sOutMap = fn.sFullName(false);
     }
   }
-  fldPolygonMap = new FieldPolygonMap(root, SAFUiPolMap, &sPolygonMap,
+  fldPolygonMap = new FieldPolygonMap(root, TR("&Polygon Map"), &sPolygonMap,
 	                              new MapListerDomainType(".mpa", dmCLASS | dmIDENT | dmGROUP | dmBOOL | dmUNIQUEID));
   fldPolygonMap->SetCallBack((NotifyProc)&FormAttributePolygonMap::PolygonMapCallBack);
-  fldTbl = new FieldTable(root, SAFUiTable, &sTbl);
+  fldTbl = new FieldTable(root, TR("&Table"), &sTbl);
   fldTbl->SetCallBack((NotifyProc)&FormAttributePolygonMap::TblCallBack);
-  fldCol = new FieldColumn(root, SAFUiAttribute, Table(), &sCol,
+  fldCol = new FieldColumn(root, TR("&Attribute"), Table(), &sCol,
     dmCLASS|dmIDENT|dmVALUE|dmBOOL|dmUNIQUEID);
   fldCol->SetCallBack((NotifyProc)&FormAttributePolygonMap::ColCallBack);
   stColRemark = new StaticText(root, String('x',50));
@@ -291,12 +291,12 @@ int FormAttributePolygonMap::ColCallBack(Event*)
 
 LRESULT Cmdlabelpol(CWnd *wnd, const String& s)
 {
-	new FormPolygonMapLabels(wnd, s.scVal());
+	new FormPolygonMapLabels(wnd, s.c_str());
 	return -1;
 }
 
 FormPolygonMapLabels::FormPolygonMapLabels(CWnd* mw, const char* sPar)
-: FormPolygonMapCreate(mw, SAFTitlePolMapLabels)
+: FormPolygonMapCreate(mw, TR("Assign Labels to Polygons"))
 {
   if (sPar) {
     TextInput inp(sPar);
@@ -316,8 +316,8 @@ FormPolygonMapLabels::FormPolygonMapLabels(CWnd* mw, const char* sPar)
         sOutMap = fn.sFullName(false);
     }
   }
-  new FieldPolygonMap(root, SAFUiPolMap, &sPolygonMap);
-  new FieldPointMap(root, SAFUiLabelPnts, &sPointMap, new MapListerDomainType(".mpp", 0/*dmVALUE|dmCLASS|dmIDENT|dmBOOL*/, true));
+  new FieldPolygonMap(root, TR("&Polygon Map"), &sPolygonMap);
+  new FieldPointMap(root, TR("&Label Points"), &sPointMap, new MapListerDomainType(".mpp", 0/*dmVALUE|dmCLASS|dmIDENT|dmBOOL*/, true));
   initPolygonMapOut(false);
   SetHelpItem("ilwisapp\\assign_labels_to_polygons_dialog_box.htm");
   create();
@@ -340,12 +340,12 @@ int FormPolygonMapLabels::exec()
 
 LRESULT Cmdsegpol(CWnd *wnd, const String& s)
 {
-	new FormPolygonMapFromSegment(wnd, s.scVal());
+	new FormPolygonMapFromSegment(wnd, s.c_str());
 	return -1;
 }
 
 FormPolygonMapFromSegment::FormPolygonMapFromSegment(CWnd* mw, const char* sPar)
-: FormPolygonMapCreate(mw, SAFTitlePolMapFromSeg)
+: FormPolygonMapCreate(mw, TR("Polygonize Segment Map"))
 {
 	sMask = "*";
 	fMask = false;
@@ -376,30 +376,30 @@ FormPolygonMapFromSegment::FormPolygonMapFromSegment(CWnd* mw, const char* sPar)
 				sOutMap = fn.sFullName(false);
 		}
 	}
-	new FieldSegmentMap(root, SAFUiSegMap, &sSegmentMap, new MapListerDomainType(".mps", 0));
-	CheckBox* cbMask = new CheckBox(root, SAFUiMask, &fMask);
+	new FieldSegmentMap(root, TR("&Segment Map"), &sSegmentMap, new MapListerDomainType(".mps", 0));
+	CheckBox* cbMask = new CheckBox(root, TR("&Mask"), &fMask);
 	new FieldString(cbMask, "", &sMask);
 	
-	cbTopology = new CheckBox(root, SAFUiTopology, &fTopology);
+	cbTopology = new CheckBox(root, TR("&Topology"), &fTopology);
 	cbTopology->Align(cbMask, AL_UNDER);
 	cbTopology->SetCallBack((NotifyProc)&FormPolygonMapFromSegment::CallBack);
 	
 	fgTop = new FieldGroup(root);
 	fgTop->Align(cbTopology, AL_UNDER);
 	RadioGroup* rgTop = new RadioGroup(fgTop, "", &iOption);
-	RadioButton* rbLbl = new RadioButton(rgTop, SAFUiLabelPnts);
+	RadioButton* rbLbl = new RadioButton(rgTop, TR("&Label Points"));
 	new FieldPointMap(rbLbl, "", &sLblPointMap);
-	new RadioButton(rgTop, SAFUiPolAutoIdent);
-	CheckBox* cb = new CheckBox(fgTop, SAFUiAutoCorrection, &fAutoCorrect);
+	new RadioButton(rgTop, TR("&Unique Identifiers"));
+	CheckBox* cb = new CheckBox(fgTop, TR("&Auto Correction"), &fAutoCorrect);
 	cb->Align(rgTop, AL_UNDER);
 	
 	fgNonTop = new FieldGroup(root);
 	fgNonTop->Align(cbTopology, AL_UNDER);
 	RadioGroup* rgNonTop = new RadioGroup(fgNonTop, "", &iOption);
-	new RadioButton(rgNonTop, SAFUiUseSegCode);
-	rbLbl = new RadioButton(rgNonTop, SAFUiLabelPnts);
+	new RadioButton(rgNonTop, TR("&Segment Codes"));
+	rbLbl = new RadioButton(rgNonTop, TR("&Label Points"));
 	new FieldPointMap(rbLbl, "", &sLblPointMap);
-	new RadioButton(rgNonTop, SAFUiPolAutoIdent);
+	new RadioButton(rgNonTop, TR("&Unique Identifiers"));
 	
 	initPolygonMapOut(false);
 	SetHelpItem("ilwisapp\\segments_to_polygons_dialog_box.htm");
@@ -468,12 +468,12 @@ int FormPolygonMapFromSegment::exec()
 
 LRESULT Cmdtransfpol(CWnd *wnd, const String& s)
 {
-	new FormPolygonMapTransform(wnd, s.scVal());
+	new FormPolygonMapTransform(wnd, s.c_str());
 	return -1;
 }
 
 FormPolygonMapTransform::FormPolygonMapTransform(CWnd* mw, const char* sPar)
-: FormPolygonMapCreate(mw, SAFTitlePolMapTransform)
+: FormPolygonMapCreate(mw, TR("Transform Polygon Map"))
 {
   if (sPar) {
     TextInput inp(sPar);
@@ -494,27 +494,27 @@ FormPolygonMapTransform::FormPolygonMapTransform(CWnd* mw, const char* sPar)
 					 sOutMap = fn.sFullName(false);
     }
   }
-  fldMap = new FieldPolygonMap(root, SAFUiPolMap, &sPolygonMap, new MapListerDomainType(".mpa", 0));
+  fldMap = new FieldPolygonMap(root, TR("&Polygon Map"), &sPolygonMap, new MapListerDomainType(".mpa", 0));
   fldMap->SetCallBack((NotifyProc)&FormPolygonMapTransform::MapCallBack);
   String sFill('x', 50);
   stCsy = new StaticText(root, sFill);
   stCsy->SetIndependentPos();
 	fDensify = false;
-	cbDensify = new CheckBox(root, SAFUiDensify, &fDensify);
+	cbDensify = new CheckBox(root, TR("Densify Coordinates"), &fDensify);
 	cbDensify->SetCallBack((NotifyProc)&FormPolygonMapTransform::DensifyCallBack);
 
 	cbDensify->SetIndependentPos();
 
-	fldDegMinSec = new FieldDMS(cbDensify, SAFUiDistance, &rDistance, 30, true);
+	fldDegMinSec = new FieldDMS(cbDensify, TR("&Distance"), &rDistance, 30, true);
 	fldDegMinSec->Align(cbDensify, AL_UNDER);
-	fldMeters = new FieldReal(cbDensify, SAFUiDistanceInMeters, &rDistance, ValueRange(0.001,1e12,0));
+	fldMeters = new FieldReal(cbDensify, TR("Distance (m)"), &rDistance, ValueRange(0.001,1e12,0));
 	fldMeters->Align(cbDensify, AL_UNDER);
 
 	// do not call initPolygonMapOut(false) because also csy has to be asked
-  fmc = new FieldPolygonMapCreate(root, SAFUiOutPolMap, &sOutMap);
+  fmc = new FieldPolygonMapCreate(root, TR("&Output Polygon Map"), &sOutMap);
   fmc->SetCallBack((NotifyProc)&FormPolygonMapCreate::OutPolygonMapCallBack);
-  new FieldCoordSystemC(root, SAFUiCoordSys, &sCoordSys);
-  StaticText* st = new StaticText(root, SAFUiDescription);
+  new FieldCoordSystemC(root, TR("&Coordinate System"), &sCoordSys);
+  StaticText* st = new StaticText(root, TR("&Description:"));
   st->psn->SetBound(0,0,0,0);
   FieldString* fs = new FieldString(root, "", &sDescr);
   fs->SetWidth(120);
@@ -632,12 +632,12 @@ int FormPolygonMapTransform::exec()
 
 LRESULT Cmdmaskpol(CWnd *wnd, const String& s)
 {
-	new FormPolygonMapMask(wnd, s.scVal());
+	new FormPolygonMapMask(wnd, s.c_str());
 	return -1;
 }
 
 FormPolygonMapMask::FormPolygonMapMask(CWnd* mw, const char* sPar)
-: FormPolygonMapCreate(mw, SAFTitleMaskPolMap)
+: FormPolygonMapCreate(mw, TR("Mask Polygons"))
 {
   if (sPar) {
     TextInput inp(sPar);
@@ -656,8 +656,8 @@ FormPolygonMapMask::FormPolygonMapMask(CWnd* mw, const char* sPar)
           sOutMap = fn.sFullName(false);
     }
   }
-  new FieldPolygonMap(root, SAFUiPolMap, &sPolygonMap, new MapListerDomainType(".mpa", 0, false));
-  new FieldString(root, SAFUiMask, &sMask, Domain(), false);
+  new FieldPolygonMap(root, TR("&Polygon Map"), &sPolygonMap, new MapListerDomainType(".mpa", 0, false));
+  new FieldString(root, TR("&Mask"), &sMask, Domain(), false);
   initPolygonMapOut(false);
   SetHelpItem("ilwisapp\\mask_polygons_dialog_box.htm");
   create();
@@ -678,12 +678,12 @@ int FormPolygonMapMask::exec()
 
 LRESULT Cmdraspol(CWnd *wnd, const String& s)
 {
-	new FormPolygonMapFromRaster(wnd, s.scVal());
+	new FormPolygonMapFromRaster(wnd, s.c_str());
 	return -1;
 }
 
 FormPolygonMapFromRaster::FormPolygonMapFromRaster(CWnd* mw, const char* sPar)
-: FormPolygonMapCreate(mw, SAFTitlePolMapFromRas)
+: FormPolygonMapCreate(mw, TR("Polygons of Raster Map"))
 {
   fSmooth = true;
   iConnect = 1;
@@ -703,15 +703,15 @@ FormPolygonMapFromRaster::FormPolygonMapFromRaster(CWnd* mw, const char* sPar)
         sOutMap = fn.sFullName(true);
     }
   }
-  new FieldDataType(root, SAFUiRasMap, &sMap,
+  new FieldDataType(root, TR("&Raster Map"), &sMap,
                  new MapListerDomainType(".mpr", dmCLASS|dmIDENT|dmBOOL|dmUNIQUEID, true), true);
-  RadioGroup* rg = new RadioGroup(root, SAFUiConnect, &iConnect);
+  RadioGroup* rg = new RadioGroup(root, TR("&Connect"), &iConnect);
   rg->SetIndependentPos();
-  RadioButton* rb4 = new RadioButton(rg, SAFUi4Connected);
+  RadioButton* rb4 = new RadioButton(rg, TR("&4"));
   rb4->Align(rg, AL_AFTER);
-  RadioButton* rb8 = new RadioButton(rg, SAFUi8Connected);
+  RadioButton* rb8 = new RadioButton(rg, TR("&8"));
   rb8->Align(rb4, AL_AFTER);
-  new CheckBox(root, SAFUiSmoothLines, &fSmooth);
+  new CheckBox(root, TR("&Smooth Lines"), &fSmooth);
   initPolygonMapOut(false);
   SetHelpItem("ilwisapp\\raster_to_polygons_dialog_box.htm");
   create();
@@ -737,12 +737,12 @@ int FormPolygonMapFromRaster::exec()
 
 LRESULT Cmdidgrid(CWnd *wnd, const String& s)
 {
-	new FormPolygonMapGrid(wnd, s.scVal());
+	new FormPolygonMapGrid(wnd, s.c_str());
 	return -1;
 }
 
 FormPolygonMapGrid::FormPolygonMapGrid(CWnd* mw, const char* sPar)
-	: FormPolygonMapCreate(mw, SAFTitlePolygonMapGrid),
+	: FormPolygonMapCreate(mw, TR("Create ID Grid Map")),
 	m_fOrderFilled(false),m_fCornerFilled(false),m_fLatLon(false)
 {
 	if (sPar) {
@@ -767,14 +767,14 @@ FormPolygonMapGrid::FormPolygonMapGrid(CWnd* mw, const char* sPar)
 	m_iChkDirXY = 0;
 	m_iChkDirLL = 0;
 	
-  m_fldCSY = new FieldCoordSystemC(root, SAFUiCoordSys, &m_sCSY);
+  m_fldCSY = new FieldCoordSystemC(root, TR("&Coordinate System"), &m_sCSY);
   m_fldCSY->SetCallBack((NotifyProc)&FormPolygonMapGrid::ChangeCSY);
 
-	m_fldOrigin = new FieldCoord(root, SAFUiOriginCoord, &m_crdOrigin);
+	m_fldOrigin = new FieldCoord(root, TR("&Origin Coordinate (X,Y)"), &m_crdOrigin);
 
 	FieldGroup *fg = new FieldGroup(root);
 	fg->Align(m_fldCSY,AL_UNDER);
-	m_stOriCoordLL = new StaticText(fg, SAFUiOriginCoordLL);
+	m_stOriCoordLL = new StaticText(fg, TR("&Origin Coordinate (Lat,Lon)"));
 	m_fldOriLat = new FieldLat(fg, "", &m_llOri.Lat);
 	m_fldOriLat->Align(m_stOriCoordLL,AL_AFTER);
 	StaticText *stEmpty = new StaticText(fg, "");
@@ -782,7 +782,7 @@ FormPolygonMapGrid::FormPolygonMapGrid(CWnd* mw, const char* sPar)
 	m_fldOriLon = new FieldLon(fg, "", &m_llOri.Lon);
 	m_fldOriLon->Align(m_fldOriLat,AL_UNDER); 
 	
-	m_chkGridSize = new CheckBox(root, SAFUiGridSize, &m_iChkSizeValue);
+	m_chkGridSize = new CheckBox(root, TR("Grid Size (&Width,Height)"), &m_iChkSizeValue);
 	m_chkGridSize->Align(stEmpty, AL_UNDER); 
 	m_chkGridSize->SetCallBack((NotifyProc)&FormPolygonMapGrid::ChangeGridProperties);
 
@@ -797,7 +797,7 @@ FormPolygonMapGrid::FormPolygonMapGrid(CWnd* mw, const char* sPar)
 	fldHeight->Align(fldWidth, AL_AFTER);
 	fldHeight->SetWidth(45);
 
-	m_chkRowCol = new CheckBox(root, SAFUiNrVerticalHorizontalGrids, &m_iChkRowColValue);
+	m_chkRowCol = new CheckBox(root, TR("Nr.of vert, horz &Grids"), &m_iChkRowColValue);
 	m_chkRowCol->SetCallBack((NotifyProc)&FormPolygonMapGrid::ChangeGridProperties);
 	m_chkRowCol->Align(m_chkGridSize, AL_UNDER);
 	ValueRange vr2(1, 1e300, 1e-6);
@@ -811,10 +811,10 @@ FormPolygonMapGrid::FormPolygonMapGrid(CWnd* mw, const char* sPar)
 	fldCols->Align(fldRows, AL_AFTER);
 	fldCols->SetWidth(45);
 
-	m_fldCrdUR =  new FieldCoord(root, String("%S (X,Y)", SAFUiOppositeCoord), &m_crdUR);
+	m_fldCrdUR =  new FieldCoord(root, String("%S (X,Y)", TR("O&pposite Coordinate")), &m_crdUR);
 	m_fldCrdUR->Align(m_chkRowCol,AL_UNDER);
 	
-	m_stURLL = new StaticText(root, SAFUiOppositeCoordLL);
+	m_stURLL = new StaticText(root, TR("Opposite Coordinate (&Lat,Lon)"));
 	m_stURLL->Align(m_chkRowCol,AL_UNDER);
 	m_fldURLat = new FieldLat(root, "", &m_llUR.Lat);
 	m_fldURLat->Align(fldRows,AL_UNDER);
@@ -823,9 +823,9 @@ FormPolygonMapGrid::FormPolygonMapGrid(CWnd* mw, const char* sPar)
 	m_fldURLon = new FieldLon(root, "", &m_llUR.Lon);
 	m_fldURLon->Align(m_fldURLat,AL_UNDER); 
 
-	m_chkDirXY = new CheckBox(root, String("%S (X,Y)", SAFUiDirectionPoint), &m_iChkDirXY);
+	m_chkDirXY = new CheckBox(root, String("%S (X,Y)", TR("&Direction Point ")), &m_iChkDirXY);
 	m_chkDirXY->Align(stEmpty1,AL_UNDER); 
-	m_chkDirLL = new CheckBox(root, String("%S (Lat,Lon)", SAFUiDirectionPoint), &m_iChkDirLL);
+	m_chkDirLL = new CheckBox(root, String("%S (Lat,Lon)", TR("&Direction Point ")), &m_iChkDirLL);
 	m_chkDirLL->Align(stEmpty1,AL_UNDER);
 	m_chkDirLL->Hide(); 
 	
@@ -849,12 +849,12 @@ FormPolygonMapGrid::FormPolygonMapGrid(CWnd* mw, const char* sPar)
 	fgCorner->Align(fgOrder,AL_AFTER);
 	fgCorner->SetIndependentPos();
 	
-	StaticText *stOrder = new StaticText(fgOrder, SAFUiOrder);
+	StaticText *stOrder = new StaticText(fgOrder, TR("O&rder"));
 	m_fldOrder = new FieldOneSelectTextOnly(fgOrder, &m_sOrder, false);
 	m_fldOrder->SetCallBack((NotifyProc)&FormPolygonMapGrid::FillOrder);
 	m_fldOrder->SetWidth(53);
 	m_fldOrder->Align(stOrder, AL_AFTER);
-	StaticText *stSC = new StaticText(fgCorner, SAFUiStartCorner);
+	StaticText *stSC = new StaticText(fgCorner, TR("Start &Corner"));
 	//FieldBlank *fb = new FieldBlank(fgOrder, 0); // Used to force proper alignment
 	m_fldCorner = new FieldOneSelectTextOnly(fgCorner, &m_sStartCorner, false);
 	m_fldCorner->SetCallBack((NotifyProc)&FormPolygonMapGrid::FillStartCorner);
@@ -864,28 +864,28 @@ FormPolygonMapGrid::FormPolygonMapGrid(CWnd* mw, const char* sPar)
 	ValueRange vr3(0, 1e300, 1e-6);
 	m_iStartNr = 1;
 	m_iSteps = 1;
-	FieldInt *fldStareNr = new FieldInt(fgOrder, SAFUiStartNumber, &m_iStartNr, vr3);
+	FieldInt *fldStareNr = new FieldInt(fgOrder, TR("Start &Nr."), &m_iStartNr, vr3);
 	fldStareNr->Align(fgOrder,AL_UNDER);
 	fldStareNr->SetWidth(52.9);
-	FieldInt *fldSteps = new FieldInt(fgCorner, SAFUiSteps, &m_iSteps, vr3);
+	FieldInt *fldSteps = new FieldInt(fgCorner, TR("&Steps"), &m_iSteps, vr3);
 	fldSteps->Align(fgCorner,AL_UNDER);
 	fldSteps->SetWidth(49.9);
 		
-	FieldString *fldPrefix = new FieldString(fgOrder, SAFUiPrefix, &m_sPrefix);
+	FieldString *fldPrefix = new FieldString(fgOrder, TR("&Prefix"), &m_sPrefix);
 	fldPrefix->Align(fldStareNr,AL_UNDER);
 	fldPrefix->SetWidth(52.9);
 	
-	FieldString *fldPostfix = new FieldString(fgCorner, SAFUiPostfix, &m_sPostfix);
+	FieldString *fldPostfix = new FieldString(fgCorner, TR("Post&fix"), &m_sPostfix);
 	fldPostfix->Align(fldSteps,AL_UNDER);
 	fldPostfix->SetWidth(49.9);
 	
 	m_iTable = 0;
 	m_iLabels = 0;
-	CheckBox *chkTable = new CheckBox(root, SAFUiTable, &m_iTable);
+	CheckBox *chkTable = new CheckBox(root, TR("&Table"), &m_iTable);
 	chkTable->Align(fgOrder,AL_UNDER);
 	FieldDataType *ftbl = new FieldDataType(chkTable, "", &m_sTbl, new TableListerDomainType(dmCLASS|dmIDENT|dmUNIQUEID), false);
   ftbl->Align(chkTable,AL_AFTER);
-	CheckBox *chkLabels = new CheckBox(root, SAFUiOutputLabelPoints, &m_iLabels);
+	CheckBox *chkLabels = new CheckBox(root, TR("Output &Label Points"), &m_iLabels);
 	chkLabels->Align(chkTable,AL_UNDER);
 	
 	initPolygonMapOut(false);

@@ -83,12 +83,12 @@
 
 LRESULT Cmdpolygonmapintersect(CWnd *wnd, const String& s)
 {
-	new FormPolygonMapIntersection(wnd, s.scVal());
+	new FormPolygonMapIntersection(wnd, s.c_str());
 	return -1;
 }
 
 FormPolygonMapIntersection::FormPolygonMapIntersection(CWnd* mw, const char* sPar)
-: FormPolygonMapCreate(mw, SAFTiltePolygonMapIntersect)
+: FormPolygonMapCreate(mw, TR("Create a Intersection map of Polygons"))
 {
 	if (sPar)
 	{
@@ -107,8 +107,8 @@ FormPolygonMapIntersection::FormPolygonMapIntersection(CWnd* mw, const char* sPa
 				sOutMap = fn.sFullName(true);
 		}
 	}
-	new FieldDataType(root, SAFUiFirstInput, &sInMap1, ".mpa", true);
-	new FieldDataType(root, SAFUiSecondInput, &sInMap2, ".mpa", true);
+	new FieldDataType(root, TR("First Input map"), &sInMap1, ".mpa", true);
+	new FieldDataType(root, TR("Second Input map"), &sInMap2, ".mpa", true);
 	
 	new FieldBlank(root);
 			

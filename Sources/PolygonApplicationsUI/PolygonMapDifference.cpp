@@ -40,12 +40,12 @@
 
 LRESULT Cmdpolygonmapdifference(CWnd *wnd, const String& s)
 {
-	new FormPolygonMapDifference(wnd, s.scVal());
+	new FormPolygonMapDifference(wnd, s.c_str());
 	return -1;
 }
 
 FormPolygonMapDifference::FormPolygonMapDifference(CWnd* mw, const char* sPar)
-: FormPolygonMapCreate(mw, SAFTiltePolygonMapDifference)
+: FormPolygonMapCreate(mw, TR("Create a difference map of Polygons"))
 {
 	if (sPar)
 	{
@@ -64,8 +64,8 @@ FormPolygonMapDifference::FormPolygonMapDifference(CWnd* mw, const char* sPar)
 				sOutMap = fn.sFullName(true);
 		}
 	}
-	new FieldDataType(root, SAFUiFirstInput, &sInMap1, ".mpa", true);
-	new FieldDataType(root, SAFUiSecondInput, &sInMap2, ".mpa", true);
+	new FieldDataType(root, TR("First Input map"), &sInMap1, ".mpa", true);
+	new FieldDataType(root, TR("Second Input map"), &sInMap2, ".mpa", true);
 	
 	new FieldBlank(root);
 			
