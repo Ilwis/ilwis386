@@ -126,7 +126,7 @@ IlwisObjectPtr * createSegmentMapFromRasAreaBnd(const FileName& fn, IlwisObjectP
 
 static void TooManySegments(const FileName& fnObj)
 {
-  throw ErrorObject(WhatError(SSEGErrTooManySegmentsCreated, errSegmentMapFromRasAreaBnd), fnObj);
+  throw ErrorObject(WhatError(TR("Too many segments created"), errSegmentMapFromRasAreaBnd), fnObj);
 }
 
 const char* SegmentMapFromRasAreaBnd::sSyntax() {
@@ -284,7 +284,7 @@ bool SegmentMapFromRasAreaBnd::fFreezing()
 
   cleanupList.clear();
   long i, j;
-  trq.SetText(SSEGTextExtractSegments);
+  trq.SetText(TR("Extract segments"));
   long iLines = map->iLines();
   long iCols = map->iCols();  
   iBufInp.Size(iCols, 1, 1);  // rasvec var: line

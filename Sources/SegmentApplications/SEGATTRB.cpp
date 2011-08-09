@@ -63,7 +63,7 @@ class DATEXPORT ErrorInvalidAttDomain: public ErrorObject
 {
 public:
   ErrorInvalidAttDomain(const String& sDomain, const WhereError& where)
-  : ErrorObject(WhatError(String(SSEGErrInvalidAttColumnDomain.scVal(), sDomain), 
+  : ErrorObject(WhatError(String(TR("Invalid domain type for attribute column: '%S'").c_str(), sDomain), 
                 errSegmentMapAttribute+1), where) {}
 };
 
@@ -189,7 +189,7 @@ void SegmentMapAttribute::Init()
 
 bool SegmentMapAttribute::fFreezing()
 {
-  trq.SetText(String(SSEGTextCalculating_S.scVal(), sName(true, fnObj.sPath())));
+  trq.SetText(String(TR("Calculating '%S'").c_str(), sName(true, fnObj.sPath())));
   bool fUseReals = dvrs().fUseReals();
   long iSeg = smp->iFeatures();
   for(int i = 0; i < iSeg; ++i) {

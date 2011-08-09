@@ -188,7 +188,7 @@ bool SegmentMapNumbering::fFreezing()
 {
 	long iSeg = smp->iFeatures();
 	long iNrNewSeg = 0;
-	trq.SetText(SSEGTextCalcNumberSegments);
+	trq.SetText(TR("Determine number of segments"));
 	for (int i=0; i < smp->iFeatures(); ++i )  {
 	  ILWIS::Segment *seg = (ILWIS::Segment *)smp->getFeature(i);
 	  if ( seg == NULL || !seg->fValid())
@@ -229,7 +229,7 @@ bool SegmentMapNumbering::fFreezing()
 	if ( !colLength.fValid())
 		colLength = tbl->colNew("Length",DomainValueRangeStruct(-1e307, 1e307, 0.001));	
 	
-	trq.SetText(String(SSEGTextNumbering_S.scVal(), sName(true, fnObj.sPath())));
+	trq.SetText(String(TR("Numbering '%S'").c_str(), sName(true, fnObj.sPath())));
 	iNrNewSeg = 0;
 	double rVal;
 

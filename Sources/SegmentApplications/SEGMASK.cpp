@@ -38,7 +38,7 @@
 // $Log: /ILWIS 3.0/SegmentMap/SEGMASK.cpp $
  * 
  * 6     8-02-01 17:13 Hendrikse
- * implem errormessage SSEGErrNoAttColumnAllowed_S
+ * implem errormessage TR("Use of attribute maps is not possible: '%S'")
  * 
  * 5     17-01-00 8:17a Martin
  * changed rowcols to coords
@@ -89,7 +89,7 @@ SegmentMapMask* SegmentMapMask::create(const FileName& fn, SegmentMapPtr& p, con
 	String sInputSegMapName = as[0];
 	char *pCh = sInputSegMapName.strrchrQuoted('.');
   if ((pCh != 0) && (0 != _strcmpi(pCh, ".mps")))  // attrib map
-		throw ErrorObject(WhatError(String(SSEGErrNoAttColumnAllowed_S.scVal(), as[0]),
+		throw ErrorObject(WhatError(String(TR("Use of attribute maps is not possible: '%S'").c_str(), as[0]),
 																 errSegmentMapMask), fn);
   SegmentMap smp(as[0], fn.sPath());
   return new SegmentMapMask(fn, p, smp, as[1]);
@@ -158,7 +158,7 @@ void SegmentMapMask::Init()
 
 bool SegmentMapMask::fFreezing()
 {
-  trq.SetText(String(SSEGTExtCopyWithMask_S.scVal(), sName(true, fnObj.sPath())));
+  trq.SetText(String(TR("Copy with mask '%S'").c_str(), sName(true, fnObj.sPath())));
   long iSeg = smp->iFeatures();
   long iSegNr = 1;
   CoordBuf crdBuf;

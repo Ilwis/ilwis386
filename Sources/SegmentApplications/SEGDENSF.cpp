@@ -69,7 +69,7 @@ SegmentMapDensifyCoords* SegmentMapDensifyCoords::create(const FileName& fn, Seg
 	String sInputSegMapName = as[0];
 	char *pCh = sInputSegMapName.strrchrQuoted('.');
   if ((pCh != 0) && (0 != _strcmpi(pCh, ".mps")))  // attrib map
-		throw ErrorObject(WhatError(String(SSEGErrNoAttColumnAllowed_S.scVal(), as[0]),
+		throw ErrorObject(WhatError(String(TR("Use of attribute maps is not possible: '%S'").c_str(), as[0]),
 																 errSegmentMapDensifyCoords), fn);
   SegmentMap smp(as[0], fn.sPath());
   double rDistance = as[1].rVal();
@@ -93,7 +93,7 @@ SegmentMapDensifyCoords::SegmentMapDensifyCoords(const FileName& fn, SegmentMapP
   rDistance(rDist)
 {
   if (rDistance < EPS10)
-    throw ErrorObject(WhatError(SSEGErrCoordDistNotPositive, errSegmentMapDensifyCoords+1), sTypeName());
+    throw ErrorObject(WhatError(TR("Coordinate distance must be > 0"), errSegmentMapDensifyCoords+1), sTypeName());
   fNeedFreeze = true;
   Init();
   objdep.Add(smp.ptr());
@@ -143,7 +143,7 @@ bool SegmentMapDensifyCoords::fFreezing()
   bool fUseRaw = !dvrs().fUseReals();                         
   ILWIS::Segment *segOut;
   long iCrdOut;
-  trq.SetText(SSEGTextDensifyCoordinates);
+  trq.SetText(TR("Densifying Coordinates of Segments"));
  for (int i=0; i < smp->iFeatures(); ++i )  {
 	  ILWIS::Segment *seg = (ILWIS::Segment *)smp->getFeature(i);
 	  if ( seg == NULL || !seg->fValid())

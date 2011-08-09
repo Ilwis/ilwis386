@@ -70,7 +70,7 @@ SegmentMapSubMap* SegmentMapSubMap::create(const FileName& fn, SegmentMapPtr& p,
 	String sInputSegMapName = as[0];
 	char *pCh = sInputSegMapName.strrchrQuoted('.');
   if ((pCh != 0) && (0 != _strcmpi(pCh, ".mps")))  // attrib map
-		throw ErrorObject(WhatError(String(SSEGErrNoAttColumnAllowed_S.scVal(), as[0]),
+		throw ErrorObject(WhatError(String(TR("Use of attribute maps is not possible: '%S'").c_str(), as[0]),
 																 errSegmentMapSubMap), fn);
   SegmentMap smp(as[0], fn.sPath());
   CoordBounds cb(Coord(as[1].rVal(), as[2].rVal()), Coord(as[3].rVal(), as[4].rVal()));
@@ -143,7 +143,7 @@ bool SegmentMapSubMap::fFreezing()
 {
   Init();
   bool fUseRaw = !fUseReals();
-  trq.SetText(SSEGTextCalculating);
+  trq.SetText(TR("Calculating"));
   ILWIS::Segment *segOut;
   long  iCrdOut;
   CoordBounds cbClip = cb();

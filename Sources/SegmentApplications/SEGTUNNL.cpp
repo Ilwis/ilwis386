@@ -69,12 +69,12 @@ SegmentMapTunneling* SegmentMapTunneling::create(const FileName& fn, SegmentMapP
 	String sInputSegMapName = as[0];
 	char *pCh = sInputSegMapName.strrchrQuoted('.');
   if ((pCh != 0) && (0 != _strcmpi(pCh, ".mps")))  // attrib map
-		throw ErrorObject(WhatError(String(SSEGErrNoAttColumnAllowed_S.scVal(), as[0]),
+		throw ErrorObject(WhatError(String(TR("Use of attribute maps is not possible: '%S'").c_str(), as[0]),
 																 errSegmentMapTunneling), fn);
   SegmentMap smp(as[0], fn.sPath());
 	double rTunnelWidth = as[1].rVal();
   if (rTunnelWidth < 0)
-    throw ErrorObject(WhatError(String(SSEGErrTunnelWidthNotPositive_S.scVal(), as[1]),
+    throw ErrorObject(WhatError(String(TR("Tunnel width %S ,needs to be >= 0").c_str(), as[1]),
                                  errSegmentMapTunneling+1), fn);
   bool fRemoveNodes = false;
   if (iParms == 3)
@@ -236,7 +236,7 @@ bool SegmentMapTunneling::fRemovePseudoNodes(double rTol2)  {
 	// of RowCols having iSeg places (nr of segmts in smp
 	fPossible.Resize(smp->iFeatures()+1); // is zero based
 	long iSegNr,iNrCrd, iNrCrd2;
-	trq.SetText(SSEGTextRemovingPseudoNodes);
+	trq.SetText(TR("Removing PseudoNodes"));
 	ILWIS::Segment *segNodeLess;
 	for (iSegNr=0; iSegNr < smp->iFeatures(); ++iSegNr) {
 		ILWIS::Segment *seg = (ILWIS::Segment *)smp->getFeature(iSegNr);
@@ -428,7 +428,7 @@ bool SegmentMapTunneling::fFreezing()
 			return false;
 	}  // Pseudonodes are removed inclusive tunneling if rTol2 > 0
 	else if (rTunnelWidth > 0) {
-		trq.SetText(SSEGTextTunnelingSegments_);
+		trq.SetText(TR("Tunneling all Segments "));
 		for (int iSegNr=0; iSegNr < smp->iFeatures(); ++iSegNr) {
 			ILWIS::Segment *seg = (ILWIS::Segment *)smp->getFeature(iSegNr);
 			if ( !seg || ! seg->fValid())
@@ -446,7 +446,7 @@ bool SegmentMapTunneling::fFreezing()
 		}
 	}
 	else if (rTunnelWidth == 0) { // copy each seg to segOut without Tunnel
-		trq.SetText(SSEGTextJustCopyingSegments);
+		trq.SetText(TR("Just Copying all Segments"));
 		for (int iSegNr=0; iSegNr < smp->iFeatures(); ++iSegNr) {
 			ILWIS::Segment *seg = (ILWIS::Segment *)smp->getFeature(iSegNr);
 			if ( !seg || ! seg->fValid())

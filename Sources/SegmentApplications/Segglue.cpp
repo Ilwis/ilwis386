@@ -178,7 +178,7 @@ SegmentMapGlue* SegmentMapGlue::create(const FileName& fn, SegmentMapPtr& p, con
 		String sInputSegMapName = as[i];
 		char *pCh = sInputSegMapName.strrchrQuoted('.');
 		if ((pCh != 0) && (0 != _strcmpi(pCh, ".mps")))  // attrib map
-			throw ErrorObject(WhatError(String(SSEGErrNoAttColumnAllowed_S.scVal(), as[i]),
+			throw ErrorObject(WhatError(String(TR("Use of attribute maps is not possible: '%S'").c_str(), as[i]),
 																	 errSegmentMapTransform), fn);
     SegmentMap smp = SegmentMap(as[i], fn.sPath());
     asmp &= smp;
@@ -200,13 +200,13 @@ SegmentMapGlue::SegmentMapGlue(const FileName& fn, SegmentMapPtr& p)
   asMask.Resize(iSegMap);
   for (int i=0;  i < iSegMap; ++i) {
     try {
-      ReadElement("SegmentMapGlue", String("SegmentMap%i", i).scVal(), asmp[i]);
+      ReadElement("SegmentMapGlue", String("SegmentMap%i", i).c_str(), asmp[i]);
     }
     catch (const ErrorObject& err) {  // catch to prevent invalid object
       err.Show();
       return;
     }
-    ReadElement("SegmentMapGlue", String("SegmentMapMask%i", i).scVal(), asMask[i]);
+    ReadElement("SegmentMapGlue", String("SegmentMapMask%i", i).c_str(), asMask[i]);
   }  
 	Table tblAtt0 = asmp[0]->tblAtt();
 	fAllAttrTablesEqual = tblAtt0.fValid();
@@ -296,8 +296,8 @@ void SegmentMapGlue::Store()
   WriteElement("SegmentMapVirtual", "Type", "SegmentMapGlue");
   WriteElement("SegmentMapGlue", "NrSegmentMap", (long)iSegMap);
   for (int i=0;  i < iSegMap; ++i) {
-    WriteElement("SegmentMapGlue", String("SegmentMap%i", i).scVal(), asmp[i]);
-    WriteElement("SegmentMapGlue", String("SegmentMapMask%i",i).scVal(), asMask[i]);
+    WriteElement("SegmentMapGlue", String("SegmentMap%i", i).c_str(), asmp[i]);
+    WriteElement("SegmentMapGlue", String("SegmentMapMask%i",i).c_str(), asMask[i]);
   }  
   if (sNewDom.length())
     WriteElement("SegmentMapGlue", "NewDomain", sNewDom);
@@ -356,7 +356,7 @@ bool SegmentMapGlue::fFreezing()
 		}
 		if (!fSameDom) {
 			if (0 != pdsrt) {
-				trq.SetText(SSEGTextCreatingNewDomain);
+				trq.SetText(TR("Creating new domain"));
 				if (sNewDom.length()) {
 					if (odFinal == odUNIQUEID) 
 						dom = Domain(fnObj, 0, dmtUNIQUEID, asmp[0]->dm()->pdUniqueID()->sGetPrefix());
@@ -465,7 +465,7 @@ bool SegmentMapGlue::fFreezing()
 			{
 				SegmentMap smp = asmp[iMapNr];
 				String sMask = asMask[iMapNr];
-				trq.SetText(String(SSEGTextCopyWithMask_SS.scVal(), smp->sName(true, fnObj.sPath()), sMask));
+				trq.SetText(String(TR("Copy %S with mask '%S'").c_str(), smp->sName(true, fnObj.sPath()), sMask));
 				Mask mask(smp->dm(), sMask);
 				long iSeg = smp->iFeatures();
 

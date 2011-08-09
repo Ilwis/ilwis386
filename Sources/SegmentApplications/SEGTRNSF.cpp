@@ -87,7 +87,7 @@ SegmentMapTransform* SegmentMapTransform::create(const FileName& fn, SegmentMapP
 	String sInputSegMapName = as[0];
 	char *pCh = sInputSegMapName.strrchrQuoted('.');
   if ((pCh != 0) && (0 != _strcmpi(pCh, ".mps")))  // attrib map
-		throw ErrorObject(WhatError(String(SSEGErrNoAttColumnAllowed_S.scVal(), as[0]),
+		throw ErrorObject(WhatError(String(TR("Use of attribute maps is not possible: '%S'").c_str(), as[0]),
 																 errSegmentMapTransform), fn);
   SegmentMap smp(as[0], fn.sPath());
   CoordSystem csy(as[1], fn.sPath());
@@ -164,7 +164,7 @@ void SegmentMapTransform::Init()
 
 bool SegmentMapTransform::fFreezing()
 {
-	trq.SetText(String(SSEGTextTransforming_S.scVal(), sName(true, fnObj.sPath())));
+	trq.SetText(String(TR("Transforming '%S'").c_str(), sName(true, fnObj.sPath())));
 
 	CoordinateSequence *seq;
 

@@ -129,7 +129,7 @@ SegmentMapPolBoundaries* SegmentMapPolBoundaries::create(const FileName& fn, Seg
 	String sInputMapName = as[0];
 	char *pCh = sInputMapName.strrchrQuoted('.');
 	if ((pCh != 0) && (0 != _strcmpi(pCh, ".mpa")))  // attrib map
-		throw ErrorObject(WhatError(String(SSEGErrNoAttColumnAllowed_S.scVal(), as[0]), errSegmentMapPolBoundaries), fn);
+		throw ErrorObject(WhatError(String(TR("Use of attribute maps is not possible: '%S'").c_str(), as[0]), errSegmentMapPolBoundaries), fn);
 	
 	String sNaming = as[2];
 	bool fSingle;
@@ -239,7 +239,7 @@ bool SegmentMapPolBoundaries::fFreezing()
 			seg->PutVal(fSingleName ? 1L : i);
 		}
 	}
- // trq.SetText(SSEGTextExtractSegments);
+ // trq.SetText(TR("Extract segments"));
  // mask.SetDomain(pmp->dm());
  // SegmentMap smp = pmp->smp();
 

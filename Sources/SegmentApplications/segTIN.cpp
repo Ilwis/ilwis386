@@ -239,7 +239,7 @@ bool SegmentMapTIN::MakeTin(vector<TINPoint>* Pnt2List, vector<TINTriangle>* Tri
 		}
 
 		if( 3 > npoints ) {
-			throw ErrorObject(String(SSEGErrTINPntError_i.scVal(), npoints ));
+			throw ErrorObject(String(TR("Less than 3 unique points! %d").c_str(), npoints ));
 		}
 
 		/*------------------------------------------------------------------
@@ -259,13 +259,13 @@ bool SegmentMapTIN::MakeTin(vector<TINPoint>* Pnt2List, vector<TINTriangle>* Tri
 
 		iNbrCount = new int[npoints];
 		if( NULL == iNbrCount ) {
-			throw ErrorObject(SSEGErrTINMemError);
+			throw ErrorObject(TR("Failed in Memory Allocation"));
 		}
 
 		// --- initilize neibur list ---
 
 		if( ! iNbrList.Alloc( npoints, npoints ) ) {
-			throw ErrorObject(SSEGErrTINMemError);
+			throw ErrorObject(TR("Failed in Memory Allocation"));
 		}
 
 		for ( i = 0; i < npoints; i++ ) iNbrCount[i] = 0;	
@@ -279,12 +279,12 @@ bool SegmentMapTIN::MakeTin(vector<TINPoint>* Pnt2List, vector<TINTriangle>* Tri
 		// --- initialize belong list ---
 
 		if( ! iBlgList.Alloc( npoints, npoints ) ) {
-			throw ErrorObject(SSEGErrTINMemError);
+			throw ErrorObject(TR("Failed in Memory Allocation"));
 		}
 
 		iBelongCount = new int[npoints];
 		if( NULL == iBelongCount ) {
-			throw ErrorObject(SSEGErrTINMemError);
+			throw ErrorObject(TR("Failed in Memory Allocation"));
 		}
 
 		for ( i = 0; i < npoints; i++ ) iBelongCount[i] = 0; 
@@ -300,7 +300,7 @@ bool SegmentMapTIN::MakeTin(vector<TINPoint>* Pnt2List, vector<TINTriangle>* Tri
 
 		iBoxSorted = new int[npoints];
 		if( NULL == iBoxSorted ) {
-			throw ErrorObject(SSEGErrTINMemError);
+			throw ErrorObject(TR("Failed in Memory Allocation"));
 		}
 
 		bRet = bBoxSortPoint_TRI( opoints, Pnt2List, iBoxSorted );
@@ -308,7 +308,7 @@ bool SegmentMapTIN::MakeTin(vector<TINPoint>* Pnt2List, vector<TINTriangle>* Tri
 		// --- START!! constructing neighbour and triangle list. ---
 
 		TriVector.clear( );
-		trq.SetText(SSEGMESTIMPoints);
+		trq.SetText(TR("Processing Points"));
 		for( i = 0; i < opoints; i++ ) {
 			if( trq.fUpdate(i,npoints))
 				return 0;
@@ -334,7 +334,7 @@ bool SegmentMapTIN::MakeTin(vector<TINPoint>* Pnt2List, vector<TINTriangle>* Tri
 			iChPoints = (int)Cnv2List.size( );
 
 			// --- process points on ConvexHull ---
-			trq.SetText(SSEGMESTINConvex);
+			trq.SetText(TR("Processing convex hulls"));
 			for( i = 0; i < iChPoints; i++ ) {
 				if( trq.fUpdate(i,iChPoints))
 					return 0;

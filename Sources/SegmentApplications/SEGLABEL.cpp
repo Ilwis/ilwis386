@@ -38,7 +38,7 @@
 // $Log: /ILWIS 3.0/SegmentMap/SEGLABEL.cpp $
  * 
  * 6     8-02-01 17:13 Hendrikse
- * implem errormessage SSEGErrNoAttColumnAllowed_S
+ * implem errormessage TR("Use of attribute maps is not possible: '%S'")
  * 
  * 5     17-01-00 8:17a Martin
  * changed rowcols to coords
@@ -91,7 +91,7 @@ SegmentMapLabels* SegmentMapLabels::create(const FileName& fn, SegmentMapPtr& p,
 	String sInputSegMapName = as[0];
 	char *pCh = sInputSegMapName.strrchrQuoted('.');
   if ((pCh != 0) && (0 != _strcmpi(pCh, ".mps")))  // attrib map
-		throw ErrorObject(WhatError(String(SSEGErrNoAttColumnAllowed_S.scVal(), as[0]),
+		throw ErrorObject(WhatError(String(TR("Use of attribute maps is not possible: '%S'").c_str(), as[0]),
 																 errSegmentMapLabels), fn);
   SegmentMap smp(as[0], fn.sPath());
   PointMap pmp(as[1], fn.sPath());
@@ -172,7 +172,7 @@ void SegmentMapLabels::Init()
 bool SegmentMapLabels::fFreezing()
 {
   bool fUseReal = st() == stREAL;
-  trq.SetText(String(SSEGTextInitializing_S.scVal(), sName(true, fnObj.sPath())));
+  trq.SetText(String(TR("Initializing '%S'").c_str(), sName(true, fnObj.sPath())));
   long iSeg = smp->iFeatures();
   long iSegNr = 1;
   CoordBuf crdBuf;
@@ -190,7 +190,7 @@ bool SegmentMapLabels::fFreezing()
     else
       segNew->PutVal(seg->rValue());
   }
-  trq.SetText(String(SSEGTextLabeling_S.scVal(), sName(true, fnObj.sPath())));
+  trq.SetText(String(TR("Labeling '%S'").c_str(), sName(true, fnObj.sPath())));
   long iPnt = pmp->iFeatures();
   CoordSystem csOld = pmp->cs();
   bool fTransformCoords = cs() != csOld;
