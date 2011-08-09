@@ -14,15 +14,15 @@
 InfoUIVector* getCommandInfoUI(ILWIS::Module *module) {
 	InfoUIVector *infosui = new InfoUIVector();
 
-	(*infosui).push_back(CommandHandlerUI::createCommandInfo("sebs","",Cmdmapsebs,SMENUmapsebs,SMENUSmapsebs,"ExePnt16IcoL",".tbt",4792,SMENUDmapsebs));
-	(*infosui).push_back(CommandHandlerUI::createCommandInfo("landsurfacetemperature","",Cmdlandsurfacetemperature,SMENUlandsurfacetemperature,SMENUSlandsurfacetemperature,"ExeMap16IcoL",".mpr",5062,SMENUDlandsurfacetemperature));
-	(*infosui).push_back(CommandHandlerUI::createCommandInfo("emissivity","",Cmdemissivity,SMENUemissivity,SMENUSemissivity,"ExeMap16IcoL",".mpr",5062,SMENUDemissivity));
-	(*infosui).push_back(CommandHandlerUI::createCommandInfo("albedo","",Cmdalbedo,SMENUalbedo,SMENUSalbedo,"ExeMap16IcoL",".mpr",5062,SMENUDalbedo));
-	(*infosui).push_back(CommandHandlerUI::createCommandInfo("smac","",Cmdsmac,SMENUsmac,SMENUSsmac,"ExeMap16IcoL",".mpr",5062,SMENUDsmac));
-	(*infosui).push_back(CommandHandlerUI::createCommandInfo("rawdata2radiance","",Cmdrawdata2radiance,SMENUrawdata2radiance,SMENUSrawdata2radiance,"ExeMap16IcoL",".mpr",5062,SMENUSrawdata2radiance));
-	(*infosui).push_back(CommandHandlerUI::createCommandInfo("brightnesstemperature","",Cmdbrightnesstemperature,SMENUbrightnesstemperature,SMENUSbrightnesstemperature,"ExeMap16IcoL",".mpr",5062,SMENUDbrightnesstemperature));
-	(*infosui).push_back(CommandHandlerUI::createCommandInfo("et0","",Cmdmapeto,SMENUFaoEto,SMENUSFaoEto,"ExeMap16IcoL",".tbt",4792,SMENUDFaoEto));
-	(*infosui).push_back(CommandHandlerUI::createCommandInfo("radiance2reflectance","",Cmdmapradiance2reflectance,SMENURad2Reflec,SMENUSRad2Reflec,"ExeMap16IcoL",".mpr",5052,SMENUDRad2Reflec));
+	(*infosui).push_back(CommandHandlerUI::createCommandInfo("sebs","",Cmdmapsebs,TR("&SEBS Tools..&SEBS"),TR("Retrieve surface bio-geophysical parameters"),"ExePnt16IcoL",".tbt",4792,TR("Retrieve surface bio-geophysical parameters")));
+	(*infosui).push_back(CommandHandlerUI::createCommandInfo("landsurfacetemperature","",Cmdlandsurfacetemperature,TR("&SEBS Tools.Pre-processing.Land Surface &Temperature Computation"),TR("Compute land surface temperature"),"ExeMap16IcoL",".mpr",5062,TR("Compute land surface temperature")));
+	(*infosui).push_back(CommandHandlerUI::createCommandInfo("emissivity","",Cmdemissivity,TR("&SEBS Tools.Pre-processing.Land Surface &Emissivity Computation"),TR("Compute land surface temperature"),"ExeMap16IcoL",".mpr",5062,TR("Compute land surface temperature")));
+	(*infosui).push_back(CommandHandlerUI::createCommandInfo("albedo","",Cmdalbedo,TR("&SEBS Tools.Pre-processing.Land Surface &Albedo Computation"),TR("Compute land surface albedo"),"ExeMap16IcoL",".mpr",5062,TR("Compute land surface albedo")));
+	(*infosui).push_back(CommandHandlerUI::createCommandInfo("smac","",Cmdsmac,TR("&SEBS Tools.Pre-processing.&Atmospheric Correction (SMAC)"),TR("Atmospheric correction"),"ExeMap16IcoL",".mpr",5062,TR("Atmospheric correction")));
+	(*infosui).push_back(CommandHandlerUI::createCommandInfo("rawdata2radiance","",Cmdrawdata2radiance,TR("&SEBS Tools.Pre-processing.&Raw to radiances/reflectance (MODIS)"),TR("Convert raw data into radiances"),"ExeMap16IcoL",".mpr",5062,TR("Convert raw data into radiances")));
+	(*infosui).push_back(CommandHandlerUI::createCommandInfo("brightnesstemperature","",Cmdbrightnesstemperature,TR("&SEBS Tools.Pre-processing.&Brightness Temperature Computation"),TR("Compute brightness temperature"),"ExeMap16IcoL",".mpr",5062,TR("Compute brightness temperature")));
+	(*infosui).push_back(CommandHandlerUI::createCommandInfo("et0","",Cmdmapeto,TR("&SEBS Tools..&Reference ETo"),TR("FAO reference ETo calculation"),"ExeMap16IcoL",".tbt",4792,TR("FAO reference ETo estimation")));
+	(*infosui).push_back(CommandHandlerUI::createCommandInfo("radiance2reflectance","",Cmdmapradiance2reflectance,TR("&SEBS Tools.Pre-processing.&Radiances to reflectance (ASTER)"),TR("Convert radiances to reflectance"),"ExeMap16IcoL",".mpr",5052,TR("Convert radiance to reflectance")));
 
 	return infosui;
 }

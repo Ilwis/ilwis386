@@ -59,12 +59,12 @@
 
 LRESULT Cmdmapeto(CWnd *wnd, const String& s)
 {
-	new FormMapETo(wnd, s.scVal());
+	new FormMapETo(wnd, s.c_str());
 	return -1;
 }
 
 FormMapETo::FormMapETo(CWnd* mw, const char* sPar)
-:FormMapCreate(mw, SAFTitleETo)
+:FormMapCreate(mw, TR("Reference ETo"))
 {
 	if (sPar) {
 		TextInput inp(sPar);
@@ -84,15 +84,15 @@ FormMapETo::FormMapETo(CWnd* mw, const char* sPar)
 		}
 	}
 	ValueRange vr(-1e300, 1e300, 1e-2);		   
-	new FieldDataType(root, SAFUiAverageWindSpeedMap, &m_sU2, new MapListerDomainType(".mpr", dmVALUE, false),true);
+	new FieldDataType(root, TR("Average daily wind speed map at 2m (m/s)"), &m_sU2, new MapListerDomainType(".mpr", dmVALUE, false),true);
 	m_iEa_RH = 0;
 	rg_Ea_RH = new RadioGroup(root, "", &m_iEa_RH, true);
 	rg_Ea_RH->SetCallBack((NotifyProc)&FormMapETo::MapEaRHOnSelect);
-	RadioButton* rbEa = new RadioButton(rg_Ea_RH, SAFUiDailyActualWaterVaporPressure);
-	RadioButton* rbRH = new RadioButton(rg_Ea_RH, SAFUiDailyRelativeHumidity);
+	RadioButton* rbEa = new RadioButton(rg_Ea_RH, TR("Daily actual water vapor pressure (kPa)"));
+	RadioButton* rbRH = new RadioButton(rg_Ea_RH, TR("Daily relative humidity (%)"));
 	m_useEa = true;
 	m_useEa_max_map = false;
-	m_chkEa_max_map = new CheckBox(root, SAFUiMaxDailyActualWaterVaporPressureMap, &m_useEa_max_map);
+	m_chkEa_max_map = new CheckBox(root, TR("Max. daily actual water vapor pressure map (kPa)"), &m_useEa_max_map);
 	m_chkEa_max_map->SetCallBack((NotifyProc)&FormMapETo::MapEaMaxOnSelect);
 	m_chkEa_max_map->Align(rbEa,AL_UNDER);
 	m_rEa_max=rUNDEF;
@@ -101,7 +101,7 @@ FormMapETo::FormMapETo(CWnd* mw, const char* sPar)
 	m_fldEa_max->Align(m_chkEa_max_map,AL_AFTER);
 	
 	m_useEa_min_map = false;
-	m_chkEa_min_map = new CheckBox(root, SAFUiMinDailyActualWaterVaporPressureMap, &m_useEa_min_map);
+	m_chkEa_min_map = new CheckBox(root, TR("Min. daily actual water vapor pressure map (kPa)"), &m_useEa_min_map);
 	m_chkEa_min_map->SetCallBack((NotifyProc)&FormMapETo::MapEaMinOnSelect);
 	m_chkEa_min_map->Align(m_chkEa_max_map,AL_UNDER);
 	m_fdtEa_min_map = new FieldDataType(m_chkEa_min_map, "", &m_sEa_min, new MapListerDomainType(".mpr", dmVALUE, false),true);
@@ -110,12 +110,12 @@ FormMapETo::FormMapETo(CWnd* mw, const char* sPar)
 	m_fldEa_min->Align(m_chkEa_min_map,AL_AFTER);
 
 	m_useRH_max_min = true;
-	m_chkRH_max_min = new CheckBox(root, SAFUiMaxMinRelativeHumidity, &m_useRH_max_min);
+	m_chkRH_max_min = new CheckBox(root, TR("Max. and Min. relative humidity (%)"), &m_useRH_max_min);
 	m_chkRH_max_min->SetCallBack((NotifyProc)&FormMapETo::MapRHMaxMinOnSelect);
 	m_chkRH_max_min->Align(rg_Ea_RH,AL_UNDER);
 	
 	m_useRH_max_map = false;
-	m_chkRH_max_map = new CheckBox(root, SAFUiMaxRelativeHumidityMap, &m_useRH_max_map);
+	m_chkRH_max_map = new CheckBox(root, TR("Max. daily relative humidity map (%)"), &m_useRH_max_map);
 	m_chkRH_max_map->SetCallBack((NotifyProc)&FormMapETo::MapRHMaxOnSelect);
 	m_chkRH_max_map->Align(m_chkRH_max_min,AL_UNDER);
 	m_fdtRH_max_map = new FieldDataType(m_chkRH_max_map, "", &m_sRH_max, new MapListerDomainType(".mpr", dmVALUE, false),true);
@@ -124,7 +124,7 @@ FormMapETo::FormMapETo(CWnd* mw, const char* sPar)
 	m_fldRH_max->Align(m_chkRH_max_map,AL_AFTER);
 
 	m_useRH_min_map = false;
-	m_chkRH_min_map = new CheckBox(root, SAFUiMinRelativeHumidityMap, &m_useRH_min_map);
+	m_chkRH_min_map = new CheckBox(root, TR("Min. daily relative humidity map (%)"), &m_useRH_min_map);
 	m_chkRH_min_map->SetCallBack((NotifyProc)&FormMapETo::MapRHMinOnSelect);
 	m_chkRH_min_map->Align(m_chkRH_max_map,AL_UNDER);
 	m_fdtRH_min_map = new FieldDataType(m_chkRH_min_map, "", &m_sRH_min, new MapListerDomainType(".mpr", dmVALUE, false),true);
@@ -136,7 +136,7 @@ FormMapETo::FormMapETo(CWnd* mw, const char* sPar)
     fb1->Align(m_chkRH_min_map, AL_UNDER);
 
 	m_useRH_avg_map = false;
-	m_chkRH_avg_map = new CheckBox(root, SAFUiAvgRelativeHumidityMap, &m_useRH_avg_map);
+	m_chkRH_avg_map = new CheckBox(root, TR("Average daily relative humidity map (%)"), &m_useRH_avg_map);
 	m_chkRH_avg_map->SetCallBack((NotifyProc)&FormMapETo::MapRHAvgOnSelect);
 	m_chkRH_avg_map->Align(m_chkRH_max_min,AL_UNDER);
 	m_fdtRH_avg_map = new FieldDataType(m_chkRH_avg_map, "", &m_sRH_avg, new MapListerDomainType(".mpr", dmVALUE, false),true);
@@ -145,7 +145,7 @@ FormMapETo::FormMapETo(CWnd* mw, const char* sPar)
 	m_fldRH_avg->Align(m_chkRH_avg_map,AL_AFTER);
 
 	m_useT_max_map = false;
-	m_chkT_max_map = new CheckBox(root, SAFUiMaxAirTemperatureMap, &m_useT_max_map);
+	m_chkT_max_map = new CheckBox(root, TR("Max daily air temperature map (Celsius)"), &m_useT_max_map);
 	m_chkT_max_map->SetCallBack((NotifyProc)&FormMapETo::MapTMaxOnSelect);
 	m_chkT_max_map->Align(fb1,AL_UNDER);
 	m_fdtT_max_map = new FieldDataType(m_chkT_max_map, "", &m_sT_max, new MapListerDomainType(".mpr", dmVALUE, false),true);
@@ -154,7 +154,7 @@ FormMapETo::FormMapETo(CWnd* mw, const char* sPar)
 	m_fldT_max->Align(m_chkT_max_map,AL_AFTER);
 	
 	m_useT_min_map = false;
-	m_chkT_min_map = new CheckBox(root, SAFUiMinAirTemperatureMap, &m_useT_min_map);
+	m_chkT_min_map = new CheckBox(root, TR("Min daily air temperature map (Celsius)"), &m_useT_min_map);
 	m_chkT_min_map->SetCallBack((NotifyProc)&FormMapETo::MapTMinOnSelect);
 	m_chkT_min_map->Align(m_chkT_max_map,AL_UNDER);
 	m_fdtT_min_map = new FieldDataType(m_chkT_min_map, "", &m_sT_min, new MapListerDomainType(".mpr", dmVALUE, false),true);
@@ -164,7 +164,7 @@ FormMapETo::FormMapETo(CWnd* mw, const char* sPar)
 	
 	
 	m_useT_avg_map = false;
-	m_chkT_avg_map = new CheckBox(root, SAFUiAvgAirTemperatureMap, &m_useT_avg_map);
+	m_chkT_avg_map = new CheckBox(root, TR("Average daily air temperature map (Celsius)"), &m_useT_avg_map);
 	m_chkT_avg_map->SetCallBack((NotifyProc)&FormMapETo::MapTAvgOnSelect);
 	m_chkT_avg_map->Align(m_chkT_min_map,AL_UNDER);
 	m_fdtT_avg_map = new FieldDataType(m_chkT_avg_map, "", &m_sT_avg, new MapListerDomainType(".mpr", dmVALUE, false),true);
@@ -178,10 +178,10 @@ FormMapETo::FormMapETo(CWnd* mw, const char* sPar)
 	rg_Rn_E = new RadioGroup(root, "", &m_iRn_E, true);
 	rg_Rn_E->Align(fb2,AL_UNDER);
 	rg_Rn_E->SetCallBack((NotifyProc)&FormMapETo::MapRnEOnSelect);
-	RadioButton* rbNa = new RadioButton(rg_Rn_E, SAFUiSolarRadiationCropsurface);
-	RadioButton* rbE = new RadioButton(rg_Rn_E, SAFUiAvgDailyShortwaveTransmissivity);
+	RadioButton* rbNa = new RadioButton(rg_Rn_E, TR("Solar net radiation at crop surface (MJ.m^-2/day)"));
+	RadioButton* rbE = new RadioButton(rg_Rn_E, TR("Average daily shortwave transmissivity"));
 	m_useRn_map=false;
-	m_chkRn_map = new CheckBox(root, SAFUiSolarRadiationCropsurfaceMap, &m_useRn_map);
+	m_chkRn_map = new CheckBox(root, TR("Solar net radiation at crop surface map (MJ.m^-2/day)"), &m_useRn_map);
 	m_chkRn_map->SetCallBack((NotifyProc)&FormMapETo::MapRnOnSelect);
 	m_chkRn_map->Align(rg_Rn_E,AL_UNDER);
 	m_fdtRn_map = new FieldDataType(m_chkRn_map, "", &m_sRn, new MapListerDomainType(".mpr", dmVALUE, false),true);
@@ -190,7 +190,7 @@ FormMapETo::FormMapETo(CWnd* mw, const char* sPar)
 	m_fldRn->Align(m_chkRn_map,AL_AFTER);
 	
 	m_useE_map=false;
-	m_chkE_map = new CheckBox(root, SAFUiAvgDailyShortwaveTransmissivityMap, &m_useE_map);
+	m_chkE_map = new CheckBox(root, TR("Average daily shortwave transmissivity map"), &m_useE_map);
 	m_chkE_map->SetCallBack((NotifyProc)&FormMapETo::MapEOnSelect);
 	m_chkE_map->Align(m_chkRn_map,AL_UNDER);
 	m_fdtE_map = new FieldDataType(m_chkE_map, "", &m_sE, new MapListerDomainType(".mpr", dmVALUE, false),true);
@@ -199,7 +199,7 @@ FormMapETo::FormMapETo(CWnd* mw, const char* sPar)
 	m_fldE->Align(m_chkE_map,AL_AFTER);
 	
 	m_useHeight_map = false;
-	m_chkDem_map = new CheckBox(root, SAFUiDemMap, &m_useHeight_map);
+	m_chkDem_map = new CheckBox(root, TR("DEM map"), &m_useHeight_map);
 	m_chkDem_map->Align(m_chkE_map,AL_UNDER);
 	m_chkDem_map->SetCallBack((NotifyProc)&FormMapETo::MapDemOnSelect);
 	m_fdtDEM_map = new FieldDataType(m_chkDem_map, "", &m_sHeight, new MapListerDomainType(".mpr", dmVALUE, false),true);
@@ -207,14 +207,14 @@ FormMapETo::FormMapETo(CWnd* mw, const char* sPar)
 	m_fldDem = new FieldReal(root, "", &m_rHeight, vr);
 	m_fldDem->Align(m_chkDem_map,AL_AFTER);
 
-	FieldInt* fldDaynumber = new FieldInt(root, SAFUiJulianDayNumber, &m_daynumber, ValueRange(1,365));
+	FieldInt* fldDaynumber = new FieldInt(root, TR("Julian day number"), &m_daynumber, ValueRange(1,365));
 	fldDaynumber->Align(m_chkDem_map,AL_UNDER);
 	FieldBlank *fb3 = new FieldBlank(root, 1); // Used to force proper alignment	
     fb3->Align(fldDaynumber, AL_UNDER);
 
    	initMapOut(false, false);
 	m_fRaMap = true;
-	CheckBox* chkRa = new CheckBox(root, SAFUiOutputTerrestrialIncomingDailySloarRadiationMap, &m_fRaMap);
+	CheckBox* chkRa = new CheckBox(root, TR("Output daily terrestrial SW incoming solar radiation map"), &m_fRaMap);
 	FieldMapCreate* fmRa = new FieldMapCreate(chkRa, "", &m_sRa);
 		
     //SetHelpItem("ilwisapp\\flow_direction.htm");
@@ -691,12 +691,12 @@ int FormMapETo::MapDemOnSelect(Event *)
 
 LRESULT Cmdmapsebs(CWnd *wnd, const String& s)
 {
-	new FormMapSebs(wnd, s.scVal());
+	new FormMapSebs(wnd, s.c_str());
 	return -1;
 }
 
 FormMapSebs::FormMapSebs(CWnd* mw, const char* sPar)
-:FormMapCreate(mw, SAFTitleSebs)
+:FormMapCreate(mw, TR("Surface Energy Balance System (SEBS)"))
 {
 	if (sPar) {
 		TextInput inp(sPar);
@@ -718,10 +718,10 @@ FormMapSebs::FormMapSebs(CWnd* mw, const char* sPar)
 	ValueRange vr(-1e300, 1e300, 1e-2);
 	FieldGroup *fg3 = new FieldGroup(root);
 	FieldGroup *fg1 = new FieldGroup(fg3);
-	new FieldDataType(fg1, SAFUiLSTMap, &m_sMapLST, new MapListerDomainType(".mpr", dmVALUE, false),true);
-	new FieldDataType(fg1, SAFUiEmissivityMap , &m_sMapEmis, new MapListerDomainType(".mpr", dmVALUE, false),true);
-	new FieldDataType(fg1, SAFUiAlbedoMap, &m_sMapAlbedo, new MapListerDomainType(".mpr", dmVALUE, false),true);
-	FieldDataType *fldNDVI = new FieldDataType(fg1, SAFUiNdviMap, &m_sMapNDVI, new MapListerDomainType(".mpr", dmVALUE, false),true);
+	new FieldDataType(fg1, TR("Land Surface Temperature"), &m_sMapLST, new MapListerDomainType(".mpr", dmVALUE, false),true);
+	new FieldDataType(fg1, TR("Emissivity") , &m_sMapEmis, new MapListerDomainType(".mpr", dmVALUE, false),true);
+	new FieldDataType(fg1, TR("Land Surface Albedo"), &m_sMapAlbedo, new MapListerDomainType(".mpr", dmVALUE, false),true);
+	FieldDataType *fldNDVI = new FieldDataType(fg1, TR("NDVI"), &m_sMapNDVI, new MapListerDomainType(".mpr", dmVALUE, false),true);
 	
 
 	m_fPv = false;
@@ -730,12 +730,12 @@ FormMapSebs::FormMapSebs(CWnd* mw, const char* sPar)
 	new FieldDataType(chkPv, "", &m_sMapPv, new MapListerDomainType(".mpr", dmVALUE, false),true);
 	
 	m_fLai = false;
-	CheckBox *chkLai = new CheckBox(fg1, SAFUiLaiMap, &m_fLai);
+	CheckBox *chkLai = new CheckBox(fg1, TR("Leaf Area Index"), &m_fLai);
 	chkLai->Align(chkPv,AL_UNDER);
 	new FieldDataType(chkLai, "", &m_sMapLai, new MapListerDomainType(".mpr", dmVALUE, false),true);
 	
 	m_fSza = false;
-	m_chkSza = new CheckBox(fg1, SAFUiSzaMap, &m_fSza);
+	m_chkSza = new CheckBox(fg1, TR("Sun Zenith Angle Map (degree)"), &m_fSza);
 	m_chkSza->Align(chkLai, AL_UNDER);
 	m_chkSza->SetCallBack((NotifyProc)&FormMapSebs::MapOnSelect);
 	new FieldDataType(m_chkSza, "", &m_sMapSza, new MapListerDomainType(".mpr", dmVALUE, false), true);
@@ -744,7 +744,7 @@ FormMapSebs::FormMapSebs(CWnd* mw, const char* sPar)
 	m_fldSza->Align(m_chkSza,AL_AFTER);
 
 	m_fDem = false;
-	m_chkDem = new CheckBox(fg1, SAFUiDemMap, &m_fDem);
+	m_chkDem = new CheckBox(fg1, TR("DEM map"), &m_fDem);
 	m_chkDem->SetCallBack((NotifyProc)&FormMapSebs::DemMapOnSelect);
 	m_chkDem->Align(m_chkSza,AL_UNDER);
 	new FieldDataType(m_chkDem, "", &m_sMapDem, new MapListerDomainType(".mpr", dmVALUE, false), true);
@@ -752,12 +752,12 @@ FormMapSebs::FormMapSebs(CWnd* mw, const char* sPar)
 	m_fldDem = new FieldReal(fg1, "", &m_rDem, vr);//Avg. DEM value
 	m_fldDem->Align(m_chkDem,AL_AFTER);
 	m_fSdwnMap = false;
-	m_chkSdwnMap = new CheckBox(fg1, SAFUiDownwardSolarRadiationMap, &m_fSdwnMap);
+	m_chkSdwnMap = new CheckBox(fg1, TR("Inst. downward solar radiation map(Watts/m^2)"), &m_fSdwnMap);
 	m_chkSdwnMap->Align(m_chkDem, AL_UNDER);
 	m_chkSdwnMap->SetCallBack((NotifyProc)&FormMapSebs::SdwnMapOnSelect);
 	m_fldSdwn = new FieldDataType(m_chkSdwnMap, "", &m_sSdwnMap, new MapListerDomainType(".mpr", dmVALUE, false),true);
 	m_fS_dwn = true;
-	m_chkSdwn = new CheckBox(fg1, SAFUiDownwardSolarRadiation, &m_fS_dwn);
+	m_chkSdwn = new CheckBox(fg1, TR("Inst. downward solar radiation value(Watts/m^2)"), &m_fS_dwn);
 	m_S_dwn = 1025.0;
 	m_chkSdwn->SetCallBack((NotifyProc)&FormMapSebs::CalcSdwnOnSelect);
 	m_chkSdwn->Align(m_chkSdwnMap, AL_UNDER);
@@ -765,55 +765,55 @@ FormMapSebs::FormMapSebs(CWnd* mw, const char* sPar)
 	flS_dwn->Align(m_chkSdwn, AL_AFTER);
 
 	m_Visi = 39.2;
-	m_flVisi = new FieldReal(fg1, SAFUiVisibility, &m_Visi, vr);
+	m_flVisi = new FieldReal(fg1, TR("Horizontal visibility (km)"), &m_Visi, vr);
 	m_flVisi->Align(m_chkSdwn, AL_UNDER);
 	
 	FieldGroup *fg2 = new FieldGroup(fg3);
-	StaticText *st = new StaticText(fg2, SAFUiLandUseMap, true);
+	StaticText *st = new StaticText(fg2, TR("Land use map with associated surface parameters"), true);
 	
 	m_fHc = false;
-	CheckBox *chkHc = new CheckBox(fg2, SAFUiCanopyHeightMap, &m_fHc);
+	CheckBox *chkHc = new CheckBox(fg2, TR("Canopy height map [m]"), &m_fHc);
 	chkHc->Align(st, AL_UNDER);
 	new FieldDataType(chkHc, "", &m_sHc, new MapListerDomainType(".mpr", dmVALUE, true), true);
 
 	m_fD0 = false;
-	CheckBox *chkD0 = new CheckBox(fg2, SAFUiDisplacementMap, &m_fD0);
+	CheckBox *chkD0 = new CheckBox(fg2, TR("Displacement height map [m]"), &m_fD0);
 	chkD0->Align(chkHc, AL_UNDER);
 	new FieldDataType(chkD0, "", &m_sD0, new MapListerDomainType(".mpr", dmVALUE, true), true);
 
 	m_fLUM = false;
-	CheckBox *chkLUM = new CheckBox(fg2, SAFUiRoughnessMap, &m_fLUM);
+	CheckBox *chkLUM = new CheckBox(fg2, TR("Surface roughness map [m]"), &m_fLUM);
 	chkLUM->Align(chkD0, AL_UNDER);
 	new FieldDataType(chkLUM, "", &m_sLUM, new MapListerDomainType(".mpr", dmVALUE, true), true);
 	
 	m_fDaynumber = true;
-	m_chkDaynumber = new CheckBox(fg2, SAFUiJulianDayNumber, &m_fDaynumber);
+	m_chkDaynumber = new CheckBox(fg2, TR("Julian day number"), &m_fDaynumber);
 	m_chkDaynumber->Align(chkLUM, AL_UNDER);
 	m_chkDaynumber->SetCallBack((NotifyProc)&FormMapSebs::DaynumberOnSelect);
 	FieldInt* fldDaynumber = new FieldInt(m_chkDaynumber, "", &m_iDaynumber, ValueRange(1,365));
 	m_iMonth = iUNDEF;
-	m_fldMonth = new FieldInt(fg2, SAFUiMonth, &m_iMonth, ValueRange(1,12));
+	m_fldMonth = new FieldInt(fg2, TR("Month"), &m_iMonth, ValueRange(1,12));
 	m_fldMonth->SetIndependentPos();
 	m_fldMonth->Align(m_chkDaynumber,AL_UNDER);
 	//m_fldMonth->SetWidth(45);
 	
 	m_iDay = iUNDEF;
-    m_fldDay = new FieldInt(fg2, SAFUiDay, &m_iDay, ValueRange(1,31,1)); //Day
+    m_fldDay = new FieldInt(fg2, TR("Day"), &m_iDay, ValueRange(1,31,1)); //Day
 	m_fldDay->SetIndependentPos();
 	m_fldDay->Align(m_fldMonth,AL_AFTER);
 	m_iYear = iUNDEF;
-	m_fldYear = new FieldInt(fg2, SAFUiYear, &m_iYear, ValueRange(1,LONG_MAX)); //Year
+	m_fldYear = new FieldInt(fg2, TR("Year"), &m_iYear, ValueRange(1,LONG_MAX)); //Year
 	m_fldYear->SetIndependentPos();
 	m_fldYear->Align(m_fldDay,AL_AFTER);
 	
 	m_Z_ref = 2.0;
-	FieldReal* fldReferenceHeight = new FieldReal(fg2, SAFUiReferenceHeight, &m_Z_ref, vr);
+	FieldReal* fldReferenceHeight = new FieldReal(fg2, TR("Reference Height (m)"), &m_Z_ref, vr);
 	fldReferenceHeight->Align(m_fldMonth,AL_UNDER);
 	m_hi = 1000.0;
-	FieldReal* fldBPLHeight = new FieldReal(fg2, SAFUiPBLHeight, &m_hi, vr);
+	FieldReal* fldBPLHeight = new FieldReal(fg2, TR("PBL height (m)"), &m_hi, vr);
 	
 	m_fQ_ref = false;
-	m_chkQ_ref = new CheckBox(fg2, SAFUiHumidityMap, &m_fQ_ref);
+	m_chkQ_ref = new CheckBox(fg2, TR("Specific humidity map (kg/kg)"), &m_fQ_ref);
 	m_chkQ_ref->SetCallBack((NotifyProc)&FormMapSebs::MapOnSelect);
 	new FieldDataType(m_chkQ_ref, "", &m_sQ_ref, new MapListerDomainType(".mpr", dmVALUE, false), true);
 	
@@ -823,7 +823,7 @@ FormMapSebs::FormMapSebs(CWnd* mw, const char* sPar)
 	m_fldQ_ref->Align(m_chkQ_ref,AL_AFTER);
 	
 	m_fU_ref = false;
-	m_chkU_ref = new CheckBox(fg2, SAFUiWindSpeedMap, &m_fU_ref);
+	m_chkU_ref = new CheckBox(fg2, TR("Wind speed map (m/s)"), &m_fU_ref);
 	m_chkU_ref->SetCallBack((NotifyProc)&FormMapSebs::MapOnSelect);
 	m_chkU_ref->Align(m_chkQ_ref,AL_UNDER);
 	new FieldDataType(m_chkU_ref, "", &m_sU_ref, new MapListerDomainType(".mpr", dmVALUE, false), true);
@@ -832,7 +832,7 @@ FormMapSebs::FormMapSebs(CWnd* mw, const char* sPar)
 	m_fldU_ref->Align(m_chkU_ref,AL_AFTER);
 	
 	m_fT_ref = false;
-	m_chkT_ref = new CheckBox(fg2, SAFUiAirTemperatureMap, &m_fT_ref);
+	m_chkT_ref = new CheckBox(fg2, TR("Air temperature map (Celsius)"), &m_fT_ref);
 	m_chkT_ref->SetCallBack((NotifyProc)&FormMapSebs::MapOnSelect);
 	m_chkT_ref->Align(m_chkU_ref,AL_UNDER);
 	new FieldDataType(m_chkT_ref, "", &m_sT_ref, new MapListerDomainType(".mpr", dmVALUE, false), true);
@@ -841,7 +841,7 @@ FormMapSebs::FormMapSebs(CWnd* mw, const char* sPar)
 	m_fldT_ref->Align(m_chkT_ref,AL_AFTER);
 	
 	m_fP_ref = false;
-	m_chkP_ref = new CheckBox(fg2, SAFUiPressureAtReferenceHeightMap, &m_fP_ref);
+	m_chkP_ref = new CheckBox(fg2, TR("Pressure at reference height map (Pa)"), &m_fP_ref);
 	m_chkP_ref->SetCallBack((NotifyProc)&FormMapSebs::MapOnSelect);
 	m_chkP_ref->Align(m_chkT_ref,AL_UNDER);
 	new FieldDataType(m_chkP_ref, "", &m_sP_ref, new MapListerDomainType(".mpr", dmVALUE, false), true);
@@ -850,7 +850,7 @@ FormMapSebs::FormMapSebs(CWnd* mw, const char* sPar)
 	m_fldP_ref->Align(m_chkP_ref, AL_AFTER);
 
 	m_fP_sur = false;
-	m_chkP_sur = new CheckBox(fg2, SAFUiPressureAtSurfaceMap, &m_fP_sur);
+	m_chkP_sur = new CheckBox(fg2, TR("Pressure at surface map (Pa)"), &m_fP_sur);
 	m_chkP_sur->SetCallBack((NotifyProc)&FormMapSebs::MapOnSelect);
 	m_chkP_sur->Align(m_chkP_ref,AL_UNDER);
 	new FieldDataType(m_chkP_sur, "", &m_sP_sur, new MapListerDomainType(".mpr", dmVALUE, false), true);
@@ -863,7 +863,7 @@ FormMapSebs::FormMapSebs(CWnd* mw, const char* sPar)
     
 
 	m_fTa_avg_map = false;
-	m_chkTa_avg_map = new CheckBox(fg2, SAFUiMeanAirTemperatureMap, &m_fTa_avg_map);
+	m_chkTa_avg_map = new CheckBox(fg2, TR("Mean daily air temperature map (Celsius)"), &m_fTa_avg_map);
 	m_chkTa_avg_map->SetCallBack((NotifyProc)&FormMapSebs::MapOnSelect);
 	m_chkTa_avg_map->Align(m_chkP_sur,AL_UNDER);
 	new FieldDataType(m_chkTa_avg_map, "", &m_sTa_avg, new MapListerDomainType(".mpr", dmVALUE, false), true);
@@ -872,7 +872,7 @@ FormMapSebs::FormMapSebs(CWnd* mw, const char* sPar)
 	m_fldTa_avg->Align(m_chkTa_avg_map,AL_AFTER);
 
 	m_fN_s_map = false;
-	m_chkN_s_map = new CheckBox(fg2, SAFUiSunshineHours, &m_fN_s_map);
+	m_chkN_s_map = new CheckBox(fg2, TR("Sunshine hours per day"), &m_fN_s_map);
 	m_chkN_s_map->SetCallBack((NotifyProc)&FormMapSebs::MapOnSelect);
 	m_chkN_s_map->Align(m_chkTa_avg_map,AL_UNDER);
 	new FieldDataType(m_chkN_s_map, "", &m_sN_s, new MapListerDomainType(".mpr", dmVALUE, false), true);
@@ -903,9 +903,9 @@ FormMapSebs::FormMapSebs(CWnd* mw, const char* sPar)
     //initMapOut(false, false);
 	FieldGroup *fg4 = new FieldGroup(root);
 
-	FieldMapCreate *fmc = new FieldMapCreate(fg4, SAFUiOutRasMap, &sOutMap);
+	FieldMapCreate *fmc = new FieldMapCreate(fg4, TR("&Output Raster Map"), &sOutMap);
 	fmc->Align(fg3,AL_UNDER);
-    FieldString* fs = new FieldString(fg4, SAFUiDescription, &sDescr);
+    FieldString* fs = new FieldString(fg4, TR("&Description:"), &sDescr);
     fs->Align(fmc, AL_AFTER);
 
     fs->SetWidth(120);
@@ -1251,12 +1251,12 @@ int FormMapSebs::DaynumberOnSelect(Event *)
 
 LRESULT Cmdrawdata2radiance(CWnd *wnd, const String& s)
 {
-	new FormMapSI2Radiance(wnd, s.scVal());
+	new FormMapSI2Radiance(wnd, s.c_str());
 	return -1;
 }
 
 FormMapSI2Radiance::FormMapSI2Radiance(CWnd* mw, const char* sPar)
-:FormMapCreate(mw, SAFTitleRaw2Radiance)
+:FormMapCreate(mw, TR("Raw to radiance/reflectance (MODIS)"))
 {
 		if (sPar) {
 			TextInput inp(sPar);
@@ -1275,13 +1275,13 @@ FormMapSI2Radiance::FormMapSI2Radiance(CWnd* mw, const char* sPar)
 							sOutMap = fn.sFullName(false);
 			}
 	  }
-		new FieldMap(root, SAFUiRawDataMap, &m_sMapRawdata, new MapListerDomainType(".mpr", dmVALUE, false));
+		new FieldMap(root, TR("Input Raw Data File"), &m_sMapRawdata, new MapListerDomainType(".mpr", dmVALUE, false));
 		m_rScale = rUNDEF;
 		ValueRange vr(-1e300, 1e300, 1e-10);
-		FieldReal* fldRadianceScale = new FieldReal(root, SAFUiRadianceScale, &m_rScale, vr);
+		FieldReal* fldRadianceScale = new FieldReal(root, TR("Radiance/Reflectance scale"), &m_rScale, vr);
 	
 		m_rOffset = rUNDEF;
-		FieldReal* fldRadianceOffset = new FieldReal(root, SAFUiRadianceOffset, &m_rOffset,vr);
+		FieldReal* fldRadianceOffset = new FieldReal(root, TR("Radiance/Reflectance Offset"), &m_rOffset,vr);
 		
 		initMapOut(false, false);
 		//SetHelpItem("ilwisapp\\fill_sinks.htm");
@@ -1304,12 +1304,12 @@ int FormMapSI2Radiance::exec()
 
 LRESULT Cmdmapradiance2reflectance(CWnd *wnd, const String& s)
 {
-	new FormMapRadiance2Reflectance(wnd, s.scVal());
+	new FormMapRadiance2Reflectance(wnd, s.c_str());
 	return -1;
 }
 
 FormMapRadiance2Reflectance::FormMapRadiance2Reflectance(CWnd* mw, const char* sPar)
-:FormMapCreate(mw, SAFTitleRadiance2Reflectance)
+:FormMapCreate(mw, TR("Convert Radiance to Reflectance"))
 {
 	  if (sPar) {
 			TextInput inp(sPar);
@@ -1328,20 +1328,20 @@ FormMapRadiance2Reflectance::FormMapRadiance2Reflectance(CWnd* mw, const char* s
 							sOutMap = fn.sFullName(false);
 			}
 	  }
-		new FieldMap(root, SAFUiRadianceDataMap, &m_sMapRad, new MapListerDomainType(".mpr", dmVALUE, false));
-		FieldInt* fldDaynumber = new FieldInt(root, SAFUiJulianDayNumber, &m_iDaynumber, ValueRange(1,365));
+		new FieldMap(root, TR("Input Radiance Data File"), &m_sMapRad, new MapListerDomainType(".mpr", dmVALUE, false));
+		FieldInt* fldDaynumber = new FieldInt(root, TR("Julian day number"), &m_iDaynumber, ValueRange(1,365));
 		
 		m_rSza= rUNDEF;
 		m_AddSensorString = false;
 		ValueRange vr(0, 90, 0.0001);
 		m_fldSolarZenithAngle= new FieldReal(root, "Solar Zenith Angle (deg)", &m_rSza, vr); 
 		m_fSensor= true;
-		m_chkSensor= new CheckBox(root, SAFUiSensor, &m_fSensor);
+		m_chkSensor= new CheckBox(root, TR("Sensor"), &m_fSensor);
 		m_chkSensor->SetCallBack((NotifyProc)&FormMapRadiance2Reflectance::SensorOnSelect);
 		m_fldSensor = new FieldOneSelectTextOnly(m_chkSensor, &m_sSensor, false);
 		m_fldSensor->SetCallBack((NotifyProc)&FormMapRadiance2Reflectance::SensorOnChange);
 		m_fldSensor->Align(m_chkSensor, AL_AFTER);
-		fldBandnumber = new FieldInt(m_chkSensor, SAFUiBandNumber, &m_iBandnumber, ValueRange(1,9));
+		fldBandnumber = new FieldInt(m_chkSensor, TR("Band Number"), &m_iBandnumber, ValueRange(1,9));
 		fldBandnumber->Align(m_chkSensor, AL_UNDER);
 		m_fldESUN= new FieldReal(root, "ESUN", &m_rEsun, ValueRange(0, 10000, 0.01)); 
 		m_fldESUN->Align(m_chkSensor, AL_UNDER);
@@ -1392,12 +1392,12 @@ int FormMapRadiance2Reflectance::SensorOnChange(Event *)
 
 LRESULT Cmdbrightnesstemperature(CWnd *wnd, const String& s)
 {
-	new FormMapBrightnessTemperature(wnd, s.scVal());
+	new FormMapBrightnessTemperature(wnd, s.c_str());
 	return -1;
 }
 
 FormMapBrightnessTemperature::FormMapBrightnessTemperature(CWnd* mw, const char* sPar)
-:FormMapCreate(mw, SAFTitleComputeBrightnessTemperature)
+:FormMapCreate(mw, TR("Compute Brightness Temperature"))
 {
 		if (sPar) {
 			TextInput inp(sPar);
@@ -1417,30 +1417,30 @@ FormMapBrightnessTemperature::FormMapBrightnessTemperature(CWnd* mw, const char*
 			}
 		}
 		m_AddString = false;
-		StaticText *stSensor = new StaticText(root,SAFUiSensor);
+		StaticText *stSensor = new StaticText(root,TR("Sensor"));
 		m_fldSensor = new FieldOneSelectTextOnly(root, &m_sSensor, false);
 		m_fldSensor->Align(stSensor, AL_AFTER);
 		m_fldSensor->SetCallBack((NotifyProc)&FormMapBrightnessTemperature::SensorOnChange);
 		m_fldSensor->SetWidth(90);
 		FieldBlank *fb1 = new FieldBlank(root, 0.1); 
 		fb1->Align(stSensor, AL_UNDER);
-		m_fldBand1 = new FieldMap(root, SAFUiRadianceBand31, &m_sMapRadiance31, new MapListerDomainType(".mpr", dmVALUE, false));
-		m_fldBand13 = new FieldMap(root, SAFUiTIR_Band13, &m_sMapRadiance13, new MapListerDomainType(".mpr", dmVALUE, false));
+		m_fldBand1 = new FieldMap(root, TR("Input Radiance Band 31"), &m_sMapRadiance31, new MapListerDomainType(".mpr", dmVALUE, false));
+		m_fldBand13 = new FieldMap(root, TR("Input TIR_Band 13"), &m_sMapRadiance13, new MapListerDomainType(".mpr", dmVALUE, false));
 		m_fldBand13->Align(fb1, AL_UNDER);
 		//m_fldBand2 = new FieldMap(root, "Input Radiance Band 32", &m_sMapRadiance32, new MapListerDomainType(".mpr", dmVALUE, false));
-		m_fldBand = new FieldMap(root, SAFUiInputRadianceFile, &m_sMapRadiance, new MapListerDomainType(".mpr", dmVALUE, false));
+		m_fldBand = new FieldMap(root, TR("Input Radiance File"), &m_sMapRadiance, new MapListerDomainType(".mpr", dmVALUE, false));
 		m_fldBand->Align(fb1, AL_UNDER);
 		m_rWavelength = rUNDEF;
 		ValueRange vr(0, 1e300, 1e-10);
-		m_fldWavelength = new FieldReal(root, SAFUiWavelength, &m_rWavelength, vr);
+		m_fldWavelength = new FieldReal(root, TR("Wavelength (um)"), &m_rWavelength, vr);
 		initMapOut(false, false);
 		FieldBlank *fb2 = new FieldBlank(root, 0.1); 
-		m_fldBand2 = new FieldMap(root, SAFUiRadianceBand32, &m_sMapRadiance32, new MapListerDomainType(".mpr", dmVALUE, false));
+		m_fldBand2 = new FieldMap(root, TR("Input Radiance Band 32"), &m_sMapRadiance32, new MapListerDomainType(".mpr", dmVALUE, false));
 		m_fldBand2->Align(fb2, AL_UNDER);
-		m_fldBand14 = new FieldMap(root, SAFUiTIR_Band14, &m_sMapRadiance14, new MapListerDomainType(".mpr", dmVALUE, false));
+		m_fldBand14 = new FieldMap(root, TR("Input TIR_Band 14"), &m_sMapRadiance14, new MapListerDomainType(".mpr", dmVALUE, false));
 		m_fldBand14->Align(fb2, AL_UNDER);
-		m_fmcBT32 = new FieldMapCreate(root, SAFUiOutputMapBand32, &m_sBTMap32);
-		m_fmcBT14 = new FieldMapCreate(root, SAFUiOutputMapBand14, &m_sBTMap14);
+		m_fmcBT32 = new FieldMapCreate(root, TR("Output Map for Band 32"), &m_sBTMap32);
+		m_fmcBT14 = new FieldMapCreate(root, TR("Output Map for TIR_Band 14"), &m_sBTMap14);
 		m_fmcBT14->Align(m_fldBand14, AL_UNDER);
 		//SetHelpItem("ilwisapp\\fill_sinks.htm");
 		create();
@@ -1530,12 +1530,12 @@ int FormMapBrightnessTemperature::SensorOnChange(Event *)
 
 LRESULT Cmdemissivity(CWnd *wnd, const String& s)
 {
-	new FormMapEmissivity(wnd, s.scVal());
+	new FormMapEmissivity(wnd, s.c_str());
 	return -1;
 }
 
 FormMapEmissivity::FormMapEmissivity(CWnd* mw, const char* sPar)
-:FormMapCreate(mw, SAFTitleComputeEmissivity)
+:FormMapCreate(mw, TR("Compute Surface Emissivity"))
 {
 		if (sPar) {
 			TextInput inp(sPar);
@@ -1555,7 +1555,7 @@ FormMapEmissivity::FormMapEmissivity(CWnd* mw, const char* sPar)
 			}
 		}
 		m_AddSensorString = false;
-		StaticText *stSensor = new StaticText(root,SAFUiSensor);
+		StaticText *stSensor = new StaticText(root,TR("Sensor"));
 		m_fldSensor = new FieldOneSelectTextOnly(root, &m_sSensor, false);
 		m_fldSensor->Align(stSensor, AL_AFTER);
 		m_fldSensor->SetCallBack((NotifyProc)&FormMapEmissivity::SensorOnChange);
@@ -1563,24 +1563,24 @@ FormMapEmissivity::FormMapEmissivity(CWnd* mw, const char* sPar)
 
 		FieldBlank *fb = new FieldBlank(root, 0.1); // Used to force proper alignment
 		fb->Align(stSensor, AL_UNDER);
-		new FieldMap(root, SAFUiInputRedMap, &m_sMapRed, new MapListerDomainType(".mpr", dmVALUE, false));
-		new FieldMap(root, SAFUiInputNearInfraredMap, &m_sMapNIR, new MapListerDomainType(".mpr", dmVALUE, false));
+		new FieldMap(root, TR("Input Red Map"), &m_sMapRed, new MapListerDomainType(".mpr", dmVALUE, false));
+		new FieldMap(root, TR("Input Near Infrared Map"), &m_sMapNIR, new MapListerDomainType(".mpr", dmVALUE, false));
 		m_fAlbedoMap = false;
-		CheckBox* chkAlbedoMap = new CheckBox(root, SAFUiInputAlbedoMap, &m_fAlbedoMap);
+		CheckBox* chkAlbedoMap = new CheckBox(root, TR("Input Albedo Map"), &m_fAlbedoMap);
 		new FieldMap(chkAlbedoMap, "", &m_sMapAlbedo, new MapListerDomainType(".mpr", dmVALUE, false));
     
 		FieldBlank *fb1 = new FieldBlank(root, 0); // Used to force proper alignment
 		fb1->Align(chkAlbedoMap, AL_UNDER);
 		initMapOut(false, false);
 		m_fNdviMap = false;
-		CheckBox* chkNdvi = new CheckBox(root, SAFUiCreateNDVIMap, &m_fNdviMap);
+		CheckBox* chkNdvi = new CheckBox(root, TR("Create NDVI Map"), &m_fNdviMap);
 		FieldMapCreate* fmNdvi = new FieldMapCreate(chkNdvi, "", &m_sMapNdvi);
 		m_fEmisDifMap = false;
-		CheckBox* chkEmisDif = new CheckBox(root, SAFUiCreateEmissivityDifferenceMap, &m_fEmisDifMap);
+		CheckBox* chkEmisDif = new CheckBox(root, TR("Create Emissivity Difference Map"), &m_fEmisDifMap);
 		chkEmisDif->Align(chkNdvi, AL_UNDER);
 		FieldMapCreate* fmEmisDif = new FieldMapCreate(chkEmisDif, "", &m_sMapEmisDif);
 		m_fPvMap = false;
-		CheckBox* chkPv = new CheckBox(root, SAFUiCreateVegetationProportionMap, &m_fPvMap);
+		CheckBox* chkPv = new CheckBox(root, TR("Create Vegetation Proportion Map"), &m_fPvMap);
 		chkPv->Align(chkEmisDif, AL_UNDER);
 		FieldMapCreate* fmPv = new FieldMapCreate(chkPv, "", &m_sMapPv);
     
@@ -1650,12 +1650,12 @@ int FormMapEmissivity::SensorOnChange(Event *)
 
 LRESULT Cmdlandsurfacetemperature(CWnd *wnd, const String& s)
 {
-	new FormMapLandSurfaceTemperature(wnd, s.scVal());
+	new FormMapLandSurfaceTemperature(wnd, s.c_str());
 	return -1;
 }
 
 FormMapLandSurfaceTemperature::FormMapLandSurfaceTemperature(CWnd* mw, const char* sPar)
-:FormMapCreate(mw, SAFTitleComputeLandSurfaceTemperature)
+:FormMapCreate(mw, TR("Compute Land Surface Temperature"))
 {
 		if (sPar) {
 			TextInput inp(sPar);
@@ -1675,33 +1675,33 @@ FormMapLandSurfaceTemperature::FormMapLandSurfaceTemperature(CWnd* mw, const cha
 			}
 		}
 		m_AddSensorString = false;
-		StaticText *stSensor = new StaticText(root,SAFUiSensor);
+		StaticText *stSensor = new StaticText(root,TR("Sensor"));
 		m_fldSensor = new FieldOneSelectTextOnly(root, &m_sSensor, false);
 		m_fldSensor->Align(stSensor, AL_AFTER);
 		m_fldSensor->SetCallBack((NotifyProc)&FormMapLandSurfaceTemperature::SensorOnChange);
 		m_fldSensor->SetWidth(90);
 		FieldBlank *fb = new FieldBlank(root, 0.1); // Used to force proper alignment
 		fb->Align(stSensor, AL_UNDER);
-		m_stModisBand31 = new StaticText(root,SAFUiBrightnessTemperatureBand31);
-		m_stAATSRBand1 = new StaticText(root,SAFUiBrightnessTemperatureBand1);
+		m_stModisBand31 = new StaticText(root,TR("Brightness Temperature Band31"));
+		m_stAATSRBand1 = new StaticText(root,TR("Brightness Temperature Band1"));
 		m_stAATSRBand1->Align(fb, AL_UNDER);
-		m_stAsterBand13 = new StaticText(root,SAFUiBrightnessTemperatureBand13 );
+		m_stAsterBand13 = new StaticText(root,TR("Brightness Temperature Band13") );
 		m_stAsterBand13->Align(fb, AL_UNDER);
-		m_stModisBand32 = new StaticText(root,SAFUiBrightnessTemperatureBand32);
+		m_stModisBand32 = new StaticText(root,TR("Brightness Temperature Band32"));
 		m_stModisBand32->Align(m_stModisBand31,AL_UNDER);
 		FieldMap *fldBand1 = new FieldMap(root, "", &m_sMapBtemp12, new MapListerDomainType(".mpr", dmVALUE, false));
 		fldBand1->Align(m_stAATSRBand1, AL_AFTER);
-		m_stAATSRBand2 = new StaticText(root,SAFUiBrightnessTemperatureBand2);
+		m_stAATSRBand2 = new StaticText(root,TR("Brightness Temperature Band2"));
 		m_stAATSRBand2->Align(m_stAATSRBand1,AL_UNDER);
-		m_stAsterBand14 = new StaticText(root,SAFUiBrightnessTemperatureBand14);
+		m_stAsterBand14 = new StaticText(root,TR("Brightness Temperature Band14"));
 		m_stAsterBand14->Align(m_stAATSRBand1,AL_UNDER);
 		FieldMap *fldBand2 = new FieldMap(root, "", &m_sMapBtemp11, new MapListerDomainType(".mpr", dmVALUE, false));
 		fldBand2->Align(m_stAATSRBand2, AL_AFTER);
-		FieldMap *fldEmis = new FieldMap(root, SAFUiSurfaceEmissivityMap, &m_sMapEmissivity, new MapListerDomainType(".mpr", dmVALUE, false));
+		FieldMap *fldEmis = new FieldMap(root, TR("Surface Emissivity"), &m_sMapEmissivity, new MapListerDomainType(".mpr", dmVALUE, false));
 		fldEmis->Align(m_stAATSRBand2,AL_UNDER);
 		new FieldMap(root, "Emissivity Difference", &m_sMapEmisDif, new MapListerDomainType(".mpr", dmVALUE, false));
 		m_fInWaterVapor = false;
-		CheckBox* chkInWaterVapor = new CheckBox(root, SAFUiWaterVaporMap, &m_fInWaterVapor);
+		CheckBox* chkInWaterVapor = new CheckBox(root, TR("Water vapor content map(g.cm^-2)"), &m_fInWaterVapor);
 		new FieldMap(chkInWaterVapor, "", &m_sMapInWaterVapor, new MapListerDomainType(".mpr", dmVALUE, false));
     
 		FieldBlank *fb1 = new FieldBlank(root, 0); // Used to force proper alignment
@@ -1787,12 +1787,12 @@ int FormMapLandSurfaceTemperature::SensorOnChange(Event *)
 
 LRESULT Cmdalbedo(CWnd *wnd, const String& s)
 {
-	new FormMapAlbedo(wnd, s.scVal());
+	new FormMapAlbedo(wnd, s.c_str());
 	return -1;
 }
 
 FormMapAlbedo::FormMapAlbedo(CWnd* mw, const char* sPar)
-:FormMapCreate(mw, SAFTitleComputeAlbedo)
+:FormMapCreate(mw, TR("Compute Land Surface Albedo"))
 {
 		if (sPar) {
 			TextInput inp(sPar);
@@ -1812,51 +1812,51 @@ FormMapAlbedo::FormMapAlbedo(CWnd* mw, const char* sPar)
 			}
 		}
 		m_AddString = false;
-		StaticText *stMethod = new StaticText(root,SAFUiSensor);
+		StaticText *stMethod = new StaticText(root,TR("Sensor"));
 		m_fldMethod = new FieldOneSelectTextOnly(root, &m_sMethod, false);
 		m_fldMethod->Align(stMethod, AL_AFTER);
 		m_fldMethod->SetCallBack((NotifyProc)&FormMapAlbedo::MethodOnChange);
 		m_fldMethod->SetWidth(90);
 
-		m_stBand1 = new StaticText(root,SAFUiInputBand1);
+		m_stBand1 = new StaticText(root,TR("Band1"));
 		m_stBand1->Align(stMethod, AL_UNDER);
 		FieldMap *fldRed = new FieldMap(root, "", &m_sMapBand1, new MapListerDomainType(".mpr", dmVALUE, false));
 		fldRed->Align(m_stBand1, AL_AFTER);
-		m_stBand2 = new StaticText(root,SAFUiInputBand2);
+		m_stBand2 = new StaticText(root,TR("Band2"));
 		m_stBand2->Align(m_stBand1, AL_UNDER);
-		m_stBandAster3 = new StaticText(root,SAFUiInputBand3);
+		m_stBandAster3 = new StaticText(root,TR("Band3"));
 		m_stBandAster3->Align(m_stBand1, AL_UNDER);
 		FieldMap *fldNir = new FieldMap(root, "", &m_sMapBand2, new MapListerDomainType(".mpr", dmVALUE, false));
 		fldNir->Align(m_stBand2, AL_AFTER);
-		m_stVis = new StaticText(root,SAFUiVisibleBand);
+		m_stVis = new StaticText(root,TR("Visible Band"));
 		m_stVis->Align(stMethod, AL_UNDER);
-		m_stNIR = new StaticText(root,SAFUiNearIRBand);
+		m_stNIR = new StaticText(root,TR("Near IR Band"));
 		m_stNIR->Align(m_stBand1, AL_UNDER);
 		
-		m_stBand3 = new StaticText(root,SAFUiInputBand3);
+		m_stBand3 = new StaticText(root,TR("Band3"));
 		m_stBand3->Align(m_stBand2, AL_UNDER);
 		m_fldBand3 = new FieldMap(root, "", &m_sBand3, new MapListerDomainType(".mpr", dmVALUE, false));
 		m_fldBand3->Align(m_stBand3, AL_AFTER);
-		m_stBand4 = new StaticText(root,SAFUiInputBand4);
+		m_stBand4 = new StaticText(root,TR("Band4"));
 		m_stBand4->Align(m_stBand3, AL_UNDER);
 		m_fldBand4 = new FieldMap(root, "", &m_sBand4, new MapListerDomainType(".mpr", dmVALUE, false));
 		m_fldBand4->Align(m_stBand4, AL_AFTER);
-		m_stBand5 = new StaticText(root,SAFUiInputBand5);
+		m_stBand5 = new StaticText(root,TR("Band5"));
 		m_stBand5->Align(m_stBand4, AL_UNDER);
 		m_fldBand5 = new FieldMap(root, "", &m_sBand5, new MapListerDomainType(".mpr", dmVALUE, false));
 		m_fldBand5->Align(m_stBand5, AL_AFTER);
-		m_stBand7 = new StaticText(root,SAFUiInputBand7);
+		m_stBand7 = new StaticText(root,TR("Band7"));
 		m_stBand7->Align(m_stBand5, AL_UNDER);
 		m_fldBand7 = new FieldMap(root, "", &m_sBand7, new MapListerDomainType(".mpr", dmVALUE, false));
 		m_fldBand7->Align(m_stBand7, AL_AFTER);
 		
-		m_stBandAster5 = new StaticText(root,SAFUiInputBand5);
+		m_stBandAster5 = new StaticText(root,TR("Band5"));
 		m_stBandAster5->Align(m_stBand2, AL_UNDER);
-		m_stBandAster6 = new StaticText(root,SAFUiInputBand6);
+		m_stBandAster6 = new StaticText(root,TR("Band6"));
 		m_stBandAster6->Align(m_stBandAster5, AL_UNDER);
-		m_stBandAster8 = new StaticText(root,SAFUiInputBand8);
+		m_stBandAster8 = new StaticText(root,TR("Band8"));
 		m_stBandAster8->Align(m_stBandAster6, AL_UNDER);
-		m_stBandAster9 = new StaticText(root,SAFUiInputBand9);
+		m_stBandAster9 = new StaticText(root,TR("Band9"));
 		m_stBandAster9->Align(m_stBandAster8, AL_UNDER);
 				
 		FieldBlank *fb1 = new FieldBlank(root, 0); // Used to force proper alignment
@@ -1991,12 +1991,12 @@ int FormMapAlbedo::MethodOnChange(Event *)
 
 LRESULT Cmdsmac(CWnd *wnd, const String& s)
 {
-	new FormMapSmac(wnd, s.scVal());
+	new FormMapSmac(wnd, s.c_str());
 	return -1;
 }
 
 FormMapSmac::FormMapSmac(CWnd* mw, const char* sPar)
-:FormMapCreate(mw, SAFTitleSMAC)
+:FormMapCreate(mw, TR("Atmospheric Effect Correction (SMAC)"))
 {
 	if (sPar) {
 		TextInput inp(sPar);
@@ -2016,11 +2016,11 @@ FormMapSmac::FormMapSmac(CWnd* mw, const char* sPar)
 		}
 	}
 	  
-	new FieldDataType(root, SAFUiTopAtmoReflectanceChannel, &m_sMapRef, new MapListerDomainType(".mpr", dmVALUE, false),true);
-	new FieldDataType(root, SAFUiCoefficientFile, &m_coef_file, new DatFileLister(".dat"), true);
-	new StaticText(root, SAFUiAtmosphericCorrectionData);
+	new FieldDataType(root, TR("Top atmo. reflectance channel"), &m_sMapRef, new MapListerDomainType(".mpr", dmVALUE, false),true);
+	new FieldDataType(root, TR("Coefficient file for sensor"), &m_coef_file, new DatFileLister(".dat"), true);
+	new StaticText(root, TR("Atmospheric correction data (source)"));
 	m_fMapOpticalDepth = false;
-	m_chkMapOpticalDepth = new CheckBox(root, SAFUiOpticalThicknessMap, &m_fMapOpticalDepth);
+	m_chkMapOpticalDepth = new CheckBox(root, TR("Optical thickness map (nm)"), &m_fMapOpticalDepth);
 	m_chkMapOpticalDepth ->SetCallBack((NotifyProc)&FormMapSmac::MapOnSelect);
 	new FieldDataType(m_chkMapOpticalDepth , "", &m_sMapOpticalDepth, new MapListerDomainType(".mpr", dmVALUE, false), true);
 	m_r_taup550 = rUNDEF;
@@ -2029,7 +2029,7 @@ FormMapSmac::FormMapSmac(CWnd* mw, const char* sPar)
 	m_fldOpticalDepth->Align(m_chkMapOpticalDepth,AL_AFTER);
 
 	m_fMapWaterVapor = false;
-	m_chkMapWaterVapor = new CheckBox(root, SAFUiWaterVaporMap, &m_fMapWaterVapor);
+	m_chkMapWaterVapor = new CheckBox(root, TR("Water vapor content map(g.cm^-2)"), &m_fMapWaterVapor);
 	m_chkMapWaterVapor->Align(m_chkMapOpticalDepth , AL_UNDER);
 	m_chkMapWaterVapor->SetCallBack((NotifyProc)&FormMapSmac::MapOnSelect);
 	new FieldDataType(m_chkMapWaterVapor, "", &m_sMapWaterVapor, new MapListerDomainType(".mpr", dmVALUE, false), true);
@@ -2038,7 +2038,7 @@ FormMapSmac::FormMapSmac(CWnd* mw, const char* sPar)
 	m_fldWaterVapor->Align(m_chkMapWaterVapor,AL_AFTER);
 
 	m_fMapOzoneContent= false;
-	m_chkMapOzoneContent= new CheckBox(root, SAFUiOzoneContentMap, &m_fMapOzoneContent);
+	m_chkMapOzoneContent= new CheckBox(root, TR("Ozone content map (atm.cm)"), &m_fMapOzoneContent);
 	m_chkMapOzoneContent->Align(m_chkMapWaterVapor, AL_UNDER);
 	m_chkMapOzoneContent->SetCallBack((NotifyProc)&FormMapSmac::MapOnSelect);
 	new FieldDataType(m_chkMapOzoneContent, "", &m_sMapOzoneContent, new MapListerDomainType(".mpr", dmVALUE, false), true);
@@ -2048,7 +2048,7 @@ FormMapSmac::FormMapSmac(CWnd* mw, const char* sPar)
 
 	ValueRange vr(-1e300, 1e300, 1e-2);
 	m_fMapSurfacePressure= false;
-	m_chkMapSurfacePressure= new CheckBox(root, SAFUiSurfacePressureMap, &m_fMapSurfacePressure);
+	m_chkMapSurfacePressure= new CheckBox(root, TR("Surface pressure map (hpa)"), &m_fMapSurfacePressure);
 	m_chkMapSurfacePressure->Align(m_chkMapOzoneContent, AL_UNDER);
 	m_chkMapSurfacePressure->SetCallBack((NotifyProc)&FormMapSmac::MapOnSelect);
 	new FieldDataType(m_chkMapSurfacePressure, "", &m_sMapSurfacePressure, new MapListerDomainType(".mpr", dmVALUE, false), true);
@@ -2059,10 +2059,10 @@ FormMapSmac::FormMapSmac(CWnd* mw, const char* sPar)
 	FieldBlank *fb2 = new FieldBlank(root, 0.2);
 	fb2->Align(m_chkMapSurfacePressure, AL_UNDER);
 	ValueRange vr2(-360, 360, 0.0001);
-	StaticText* st2 = new StaticText(root, SAFUiSunAngleData);
+	StaticText* st2 = new StaticText(root, TR("Sun/satellite angle data (source)"));
 	st2->Align(fb2, AL_UNDER);
 	m_fMapSolarZenithAngle= false;
-	m_chkMapSolarZenithAngle= new CheckBox(root, SAFUiSolarZenithAngleMap, &m_fMapSolarZenithAngle);
+	m_chkMapSolarZenithAngle= new CheckBox(root, TR("Solar zenith angle map (degree)"), &m_fMapSolarZenithAngle);
 	m_chkMapSolarZenithAngle->Align(st2, AL_UNDER);
 	m_chkMapSolarZenithAngle->SetCallBack((NotifyProc)&FormMapSmac::MapOnSelect);
 	new FieldDataType(m_chkMapSolarZenithAngle, "", &m_sMapSolarZenithAngle, new MapListerDomainType(".mpr", dmVALUE, false), true);
@@ -2071,7 +2071,7 @@ FormMapSmac::FormMapSmac(CWnd* mw, const char* sPar)
 	m_fldSolarZenithAngle->Align(m_chkMapSolarZenithAngle,AL_AFTER);
 
 	m_fMapSolarAzimutAngle= false;
-	m_chkMapSolarAzimutAngle= new CheckBox(root, SAFUiSolarAzimutAngleMap, &m_fMapSolarAzimutAngle);
+	m_chkMapSolarAzimutAngle= new CheckBox(root, TR("Solar azimut angle map (degree)"), &m_fMapSolarAzimutAngle);
 	m_chkMapSolarAzimutAngle->Align(m_chkMapSolarZenithAngle, AL_UNDER);
 	m_chkMapSolarAzimutAngle->SetCallBack((NotifyProc)&FormMapSmac::MapOnSelect);
 	new FieldDataType(m_chkMapSolarAzimutAngle, "", &m_sMapSolarAzimutAngle, new MapListerDomainType(".mpr", dmVALUE, false), true);
@@ -2080,7 +2080,7 @@ FormMapSmac::FormMapSmac(CWnd* mw, const char* sPar)
 	m_fldSolarAzimutAngle->Align(m_chkMapSolarAzimutAngle,AL_AFTER);
 
 	m_fMapViewZenithAngle= false;
-	m_chkMapViewZenithAngle= new CheckBox(root, SAFUiSensorZenithAngleMap, &m_fMapViewZenithAngle);
+	m_chkMapViewZenithAngle= new CheckBox(root, TR("Sensor zenith angle map (degree)"), &m_fMapViewZenithAngle);
 	m_chkMapViewZenithAngle->Align(m_chkMapSolarAzimutAngle, AL_UNDER);
 	m_chkMapViewZenithAngle->SetCallBack((NotifyProc)&FormMapSmac::MapOnSelect);
 	new FieldDataType(m_chkMapViewZenithAngle, "", &m_sMapViewZenithAngle, new MapListerDomainType(".mpr", dmVALUE, false), true);
@@ -2089,7 +2089,7 @@ FormMapSmac::FormMapSmac(CWnd* mw, const char* sPar)
 	m_fldViewZenithAngle->Align(m_chkMapViewZenithAngle,AL_AFTER);
 
 	m_fMapViewAzimutAngle= false;
-	m_chkMapViewAzimutAngle= new CheckBox(root, SAFUiSensorAzimutAngleMap, &m_fMapViewAzimutAngle);
+	m_chkMapViewAzimutAngle= new CheckBox(root, TR("Sensor azimut angle map (degree)"), &m_fMapViewAzimutAngle);
 	m_chkMapViewAzimutAngle->Align(m_chkMapViewZenithAngle, AL_UNDER);
 	m_chkMapViewAzimutAngle->SetCallBack((NotifyProc)&FormMapSmac::MapOnSelect);
 	new FieldDataType(m_chkMapViewAzimutAngle, "", &m_sMapViewAzimutAngle, new MapListerDomainType(".mpr", dmVALUE, false), true);
@@ -2217,7 +2217,7 @@ int FormMapSmac::MapOnSelect(Event *)
 
 LRESULT Cmdwatervapour(CWnd *wnd, const String& s)
 {
-	new FormMapWaterVapour(wnd, s.scVal());
+	new FormMapWaterVapour(wnd, s.c_str());
 	return -1;
 }
 
