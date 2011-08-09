@@ -61,7 +61,7 @@ BEGIN_MESSAGE_MAP(PointSetEditor, BaseMapEditor)
 END_MESSAGE_MAP()
 //
 //
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define addmen(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 #define addSub(ID) menSub.AppendMenu(MF_STRING, ID, sMen(ID));
 

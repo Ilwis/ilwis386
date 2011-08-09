@@ -33,7 +33,7 @@ void CrossSectionGraph::OnContextMenu(CWnd* pWnd, CPoint point)
 	//	return;
 	CMenu men;
 	men.CreatePopupMenu();
-	men.AppendMenu(MF_STRING, ID_SAVE_AS_TABLE, TR("Open as Table").scVal());
+	men.AppendMenu(MF_STRING, ID_SAVE_AS_TABLE, TR("Open as Table").c_str());
 	int cmd = men.TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON|TPM_RETURNCMD, point.x, point.y, pWnd);
 	switch (cmd) {
 		case ID_GR_COPY:
@@ -223,8 +223,8 @@ void CrossSectionGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 					dc->LineTo(rx,y);
 				if ( i % 5 == 0) {
 					String s("%d", i);
-					CSize sz = dc->GetTextExtent(s.scVal(), s.size());
-					dc->TextOut(rx - sz.cx / 2, crct.bottom - 16,s.scVal(),s.size());
+					CSize sz = dc->GetTextExtent(s.c_str(), s.size());
+					dc->TextOut(rx - sz.cx / 2, crct.bottom - 16,s.c_str(),s.size());
 				}
 				rx += xscale;
 			}

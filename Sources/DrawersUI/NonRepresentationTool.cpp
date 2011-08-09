@@ -49,7 +49,7 @@ bool NonRepresentationToolTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 
 HTREEITEM NonRepresentationToolTool::configure( HTREEITEM parentItem) {
 	int iImgLeg = IlwWinApp()->iImage("Picture");
-	htiNode = tree->GetTreeCtrl().InsertItem(TR("Fixed Colors").scVal(), iImgLeg, iImgLeg, parentItem);
+	htiNode = tree->GetTreeCtrl().InsertItem(TR("Fixed Colors").c_str(), iImgLeg, iImgLeg, parentItem);
 	FeatureLayerDrawer *sdrw = dynamic_cast<FeatureLayerDrawer *>(drawer);
 	ColorTool *ctool = (ColorTool *)parentTool;
 	bool useSingleColor = sdrw->getDrawMethod() == NewDrawer::drmSINGLE;

@@ -2,6 +2,7 @@
 #include "Engine\Drawers\RootDrawer.h"
 #include "Engine\Drawers\ComplexDrawer.h"
 #include "Client\Ilwis.h"
+#include "Engine\Base\System\engine.h"
 #include "Engine\Representation\Rpr.h"
 #include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Client\Mapwindow\LayerTreeView.h"
@@ -77,8 +78,11 @@ DisplayOptionsForm(dr,wPar,TR("Symbolization")), selection(0)
 		name = name.sHead("|");
 		names.push_back(name);
 	}
+	String base = getEngine()->getContext()->sIlwDir();
+	base += "Resources\\Symbols\\";
 	props = (PointProperties *)dr->getProperties();
-	fselect = new FieldOneSelectString(root,TR("Symbols"),&selection, names);
+	fdSelect = new FieldDataType(root,TR("Symbols"),&name,".ivg",false,0,FileName(base),false);
+	// fselect = new FieldOneSelectString(root,TR("Symbols"),&selection, names);
 	fiThick = new FieldReal(root,TR("Line thickness"),&(props->thickness));
 	frScale = new FieldReal(root,TR("Symbol scale"),&(props->scale),ValueRange(RangeReal(0.1,100.0),0.1));
 	t3dOr = props->threeDOrientation ? 1 : 0;
@@ -87,13 +91,20 @@ DisplayOptionsForm(dr,wPar,TR("Symbolization")), selection(0)
 }
 
 void PointSymbolizationForm::apply(){
-	fselect->StoreData();
+	fdSelect->StoreData();
 	fiThick->StoreData();
 	frScale->StoreData();
 	f3d->StoreData();
 
 	SetDrawer *setDrw = dynamic_cast<SetDrawer *>(drw);
-	String symbol = names[selection];
+	//String symbol = names[selection];
+	SVGLoader *loader = NewDrawer::getSvgLoader();
+	SVGLoader::const_iterator cur = loader->find(name);
+	if ( cur == loader->end()) {
+		loader->getSVGSymbol(name);
+
+	}
+
 	if ( setDrw) {
 		for(int i = 0; i < setDrw->getDrawerCount(); ++i) {
 			PointLayerDrawer *psdrw = (PointLayerDrawer *) (setDrw->getDrawer(i));
@@ -104,7 +115,8 @@ void PointSymbolizationForm::apply(){
 			psdrw->prepareChildDrawers(&pp);
 		}
 	} else {
-		props->symbol = symbol;
+		FileName fn(name);
+		props->symbol = fn.sFile;
 		props->threeDOrientation = t3dOr != 0;
 		PreparationParameters pp(NewDrawer::ptRENDER, 0);
 		drw->prepare(&pp);

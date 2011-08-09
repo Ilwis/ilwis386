@@ -38,9 +38,9 @@ LegendTool::~LegendTool(){
 
 HTREEITEM LegendTool::configure( HTREEITEM parentItem){
 
-	String sName = SDCRemLegend;
+	String sName = TR("Legend");
 	int iImgLeg = IlwWinApp()->iImage("legend");
-	htiNode = tree->GetTreeCtrl().InsertItem(sName.scVal(), iImgLeg, iImgLeg, parentItem);
+	htiNode = tree->GetTreeCtrl().InsertItem(sName.c_str(), iImgLeg, iImgLeg, parentItem);
 
 	update();
 	tree->GetTreeCtrl().Expand(htiNode, TVE_EXPAND);
@@ -81,7 +81,7 @@ void LegendTool::insertLegendItemsValue(const Representation& rpr, const DomainV
 
 	for (double v = rStart; v <= rHi; v += rVal) {
 		String sName = dvs.sValue(v);
-		HTREEITEM hti = tree->GetTreeCtrl().InsertItem(sName.scVal(), htiNode);
+		HTREEITEM hti = tree->GetTreeCtrl().InsertItem(sName.c_str(), htiNode);
 		if ( fImage && v + rVal > 255) {
 			v = 255;
 		}
@@ -102,7 +102,7 @@ void LegendTool::insertLegendItemsClass(const Representation& rpr){
 	for (int i = 1; i <= iItems; ++i) {
 		int iRaw = dc->iKey(i);
 		String sName = dc->sValueByRaw(iRaw, 0);
-		HTREEITEM hti = tree->GetTreeCtrl().InsertItem(sName.scVal(), htiNode);
+		HTREEITEM hti = tree->GetTreeCtrl().InsertItem(sName.c_str(), htiNode);
 		tree->GetTreeCtrl().SetCheck(hti);
 		Column col;
 		if ( layerDrawer->useAttributeColumn() && layerDrawer->getAtttributeColumn().fValid())

@@ -118,14 +118,14 @@ void ValueSlicer::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 
 	double y = 0;
 	String txt = fldslicer->valrange->vri() ? String("%d",(int)fldslicer->bounds[0]) : String("%.03f", fldslicer->bounds[0]);
-	::TextOut(lpDIS->hDC,rct.right, rct.bottom - y - 8, txt.scVal(),txt.size());
+	::TextOut(lpDIS->hDC,rct.right, rct.bottom - y - 8, txt.c_str(),txt.size());
 	for(int i = 1; i < fldslicer->bounds.size(); ++i) {
 	
 		double v1 =  fldslicer->bounds[i-1];
 		double v2 = fldslicer->bounds[i];
 		y += (v2 - v1) * yscale;
 		String txt = fldslicer->valrange->vri() ? String("%d",(int)v2) : String("%.03f", v2);
-		::TextOut(lpDIS->hDC,rct.right, rct.bottom - y - 8, txt.scVal(),txt.size());
+		::TextOut(lpDIS->hDC,rct.right, rct.bottom - y - 8, txt.c_str(),txt.size());
 		ylimits[i] = rct.bottom - y;
 		
 	}

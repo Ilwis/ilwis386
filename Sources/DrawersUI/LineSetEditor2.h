@@ -79,6 +79,7 @@ namespace ILWIS {
 		void deleteVertices();
 		void storeUndoState(States state, bool created = false);
 		void checkSegments();
+		bool hasSelection() const;
 
 
 		void setMode(LineSetEditor2::States state) ;
@@ -86,6 +87,9 @@ namespace ILWIS {
 		void OnLButtonDown(UINT nFlags, CPoint point);
 		bool OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 		void OnMouseMove(UINT nFlags, CPoint point);
+		void checkUndefined(void *v, HTREEITEM it);
+		void checkAutoClose(void *v, HTREEITEM it);
+		void checkSnap(void *v, HTREEITEM it);
 		String sTitle() const;
 		zIcon icon() const;
 		int iFmtPnt, iFmtDom;
@@ -98,6 +102,7 @@ namespace ILWIS {
 		Coord crdMouse;
 		PointClickInfo pci;
 		stack<UndoItem *> undoItems;
+		bool useAutoClose;
 
 		DECLARE_MESSAGE_MAP()
 	};

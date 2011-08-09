@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="DrawersUI"
 	ProjectGUID="{8DF70E96-104A-4E41-8A67-633B975E6A6D}"
 	RootNamespace="DrawersUI"
@@ -292,6 +292,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\DrawersUI\InfoTool.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\DrawersUI\InteractiveRepresentationTool.cpp"
 				>
 			</File>
@@ -317,6 +321,14 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\DrawersUI\NonRepresentationTool.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\PointDirectionTool.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\PointDirectionTool.h"
 				>
 			</File>
 			<File
@@ -458,6 +470,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\DrawersUI\HighlightTool.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\InfoTool.h"
 				>
 			</File>
 			<File

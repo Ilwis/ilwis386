@@ -72,6 +72,8 @@
 #include "DrawersUI\PointScalingTool.h"
 #include "DrawersUI\AnnotationDrawerTool.h"
 #include "DrawersUI\AnnotationLegendDrawerTool.h"
+#include "DrawersUI\PointDirectionTool.h"
+#include "InfoTool.h"
 
 
 using namespace ILWIS;
@@ -114,6 +116,8 @@ DrawerToolInfoVector *createDrawerTool() {
 	infos->push_back(new DrawerToolInfo("TrackProfileTool",createTrackProfileTool));
 	infos->push_back(new DrawerToolInfo("PointScalingTool",createPointScalingTool));
 	infos->push_back(new DrawerToolInfo("AnnotationDrawerTool",createAnnotationDrawerTool));
+	infos->push_back(new DrawerToolInfo("PointDirectionTool",createPointDirectionTool));
+	infos->push_back(new DrawerToolInfo("InfoTool",createInfoTool));
 
 	return infos;
 }

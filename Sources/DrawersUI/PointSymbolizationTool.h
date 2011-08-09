@@ -25,9 +25,11 @@ class PointSymbolizationForm : public DisplayOptionsForm {
 	void apply(); 
 private:
 	vector<string> names;
+	String name;
 	long selection;
 	long t3dOr;
 	FieldOneSelectString *fselect;
+	FieldDataType *fdSelect;
 	FieldReal *fiThick;
 	CheckBox *f3d;
 	FieldReal *frScale;

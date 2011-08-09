@@ -140,7 +140,7 @@ END_MESSAGE_MAP()
 //
 //
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define addmen(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 #define addSub(ID) menSub.AppendMenu(MF_STRING, ID, sMen(ID)); 
 
@@ -152,12 +152,14 @@ LineSetEditor2::LineSetEditor2(ZoomableView* zv, LayerTreeView *view, NewDrawer 
 FeatureSetEditor2("LineSetEditor2",zv, view, drw),
 curSegSplit("EditSplitCursor"),
 curSegSplitting("EditSplittingCursor"),
-rSnapDistance(0.01),
+rSnapDistance(0.02),
 insertionPoint(iUNDEF)
 {
 	iFmtPnt = RegisterClipboardFormat("IlwisPoints");
 	iFmtDom = RegisterClipboardFormat("IlwisDomain");
 	editorState = msNONE;
+	useAutoClose = false;
+	fAutoSnap = true;
 
 }
 
@@ -170,10 +172,10 @@ LineSetEditor2::~LineSetEditor2(){
 
 String LineSetEditor2::getMenuString() const {
 	if ( drawer->inEditMode()) {
-		return TR("Close Segmentmap Editor");
+		return TR("Exit Segmentmap Editor");
 	}
 	else{
-		return TR("Open Segmentmap Editor");
+		return TR("Segmentmap Editor");
 	}
 }
 
@@ -206,6 +208,16 @@ HTREEITEM LineSetEditor2::configure( HTREEITEM parentItem) {
 	ritem->setState(false);
 	ritem->setCheckAction(this,editModeItems,0);
 	insertItem(TR("Split"),"Bitmap", ritem);
+	item = new DisplayOptionTreeItem(tree,hitInsert,drawer);
+	item->setCheckAction(this, 0, (DTSetCheckFunc) &LineSetEditor2::checkAutoClose);
+	insertItem(TR("Auto Close"),"AutoClose",item,useAutoClose);
+	item = new DisplayOptionTreeItem(tree,hitInsert,drawer);
+	item->setCheckAction(this, 0, (DTSetCheckFunc) &LineSetEditor2::checkSnap);
+	insertItem(TR("Enable Snap"),"Snap",item,fAutoSnap);
+	item = new DisplayOptionTreeItem(tree,hitSelect,drawer);
+	item->setCheckAction(this, 0, (DTSetCheckFunc) &LineSetEditor2::checkUndefined);
+	insertItem(TR("Mark Undefined"),"Undefined",item,fAutoSnap);
+
 
 
 	CMenu men;
@@ -233,6 +245,19 @@ HTREEITEM LineSetEditor2::configure( HTREEITEM parentItem) {
 	}
 	return htiNode;
 }
+void LineSetEditor2::checkUndefined(void *v, HTREEITEM it) {
+	bool val = *(bool *)v;
+}
+
+void LineSetEditor2::checkAutoClose(void *v, HTREEITEM it) {
+	bool val = *(bool *)v;
+	useAutoClose = val;
+}
+
+void LineSetEditor2::checkSnap(void *v, HTREEITEM it) {
+	bool val = *(bool *)v;
+	fAutoSnap = val;
+}
 
 void LineSetEditor2::checkSegments() {
 	new CheckSegmentsForm(tree, (ILWIS::LayerDrawer *)layerDrawer, this);
@@ -257,7 +282,7 @@ bool LineSetEditor2::OnContextMenu(CWnd* pWnd, CPoint point)
 		case BaseMapEditor::mSELECT: {
 			addmen(ID_EDIT);
 			addmen(ID_EDIT_COPY);
-			BOOL fEdit = selectedFeatures.size() > 0;
+			BOOL fEdit = selectedSegments.size() > 0;
 			men.EnableMenuItem(ID_EDIT, fEdit ? MF_ENABLED : MF_GRAYED);
 			addmen(ID_CLEAR);
 			men.EnableMenuItem(ID_CLEAR, fEdit ? MF_ENABLED : MF_GRAYED);
@@ -291,7 +316,9 @@ String LineSetEditor2::sTitle() const
 
 
 
-
+bool LineSetEditor2::hasSelection() const { 
+	return selectedSegments.size() > 0; 
+}
 
 
 void LineSetEditor2::updateFeature(SelectedFeature *f) {
@@ -432,8 +459,11 @@ void LineSetEditor2::fillPointClickInfo(const Coord& crd) {
 		pci.seg = seg;
 		double d1 = rDist(crd,seg->getCoordinateN(after - 1));
 		double d2 = rDist(crd,seg->getCoordinateN(after));
-		if ( d1 < d2) {
-			pci.crdIndex = after -1;
+		if ( d1 < d2 && after < seg->getNumPoints()) {
+			if ( selectedSegments.size() == 0) // extending existing segment; it will be selected after this operation
+				pci.crdIndex = after -1;
+			else
+				pci.crdIndex = seg->getNumPoints() - 1; // snapping a segment being created. It is selected so we are already busy with it.
 		} else {
 			pci.crdIndex = after;
 		}
@@ -472,6 +502,9 @@ void LineSetEditor2::createFeature() {
 }
 
 int LineSetEditor2::noSnap(CoordinateSequence *seq, double snap) {
+	if ( !fAutoSnap)
+		return iUNDEF;
+
 	for(int i = 0; i < seq->size() - 1; ++i) {
 		Coordinate c = seq->getAt(i);
 		double d = rDist(c, pci.crdClick);
@@ -489,26 +522,25 @@ void LineSetEditor2::insertVertex(bool endEdit) {
 	CoordBounds cb = pci.drawer->getRootDrawer()->getCoordBoundsZoom();
 	double snap = rSnapDistance * min(cb.width(), cb.height());
 	CoordinateSequence *seq = boundaries[0];
-	//for(int i =0; i < seq->size(); ++i) {
-	//	Coord c = seq->getAt(i);
-	//	if ( rDist(c,pci.crdClick) < snap) {
-	//		break;
-	//	}
-	//}
+	
 	vector<Coordinate> *copyv = new vector<Coordinate>();
 	int k = 0;
 	bool added = false;
+	Coord cOld, cCurrent;
 	while(k < seq->size()){
 		if ( (k != pci.crdIndex + 1) || added) {
 			copyv->push_back(seq->getAt(k++));
 			if ( pci.crdIndex == seq->size() - 1 && k == pci.crdIndex) { // insert beyond the end
 				long snapPoint = 0;
-				if ( (snapPoint = noSnap(seq, snap)) == iUNDEF) {
-					copyv->push_back(pci.crdClick);
-				} else {
-					copyv->push_back(copyv->at(0));
+				if ( !pci.crdClick.fNear(copyv->back(), snap / 10.0)) { // dont insert double points;
+
+					if ( (snapPoint = noSnap(seq, snap)) == iUNDEF) {
+						copyv->push_back(pci.crdClick);
+					} else {
+						copyv->push_back(copyv->at(0));
+					}
+					pci.crdIndex += 1;
 				}
-				pci.crdIndex += 1;
 			}
 		}
 		else {
@@ -516,6 +548,8 @@ void LineSetEditor2::insertVertex(bool endEdit) {
 			added = true;
 		}
 	}
+	if ( endEdit && useAutoClose && copyv->at(0) != copyv->back())
+		copyv->at(copyv->size() - 1) = copyv->at(0);
 	pci.seg->PutCoords(new CoordinateArraySequence(copyv));
 	PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER,bmapptr->cs());
 	pci.drawer->prepare(&pp);
@@ -735,8 +769,9 @@ void LineSetEditor2::updateState() {
 	// clikced somewhere on the map where a feature was present and clicked on a vertex, additional vertex will be created. this
 	// mode is used when extending the ends of the line
 	} else if ( pci.crdIndex != iUNDEF && hasState(msINSERT) &&  hasState(msLMOUSEUP)) {
+		selectedSegments.empty();
 		storeUndoState(msINSERT);
-		insertVertex(hasState(msCTRL));
+		insertVertex(hasState(msENTER));
 		editorState |= msMOVEVERTICES;
 
 	// cliked somewhere on the map where a feature was present and clicked in the middel of a line. A new vertex will be created at the click point
@@ -775,15 +810,20 @@ void LineSetEditor2::updateState() {
 		editorState = editorState & ~ ( msENTER | msMOVEVERTICES);
 
 	} else if ( hasState( msINSERT ) && hasState( msENTER)) {
+		fillPointClickInfo(crdMouse);
+		insertVertex(true);
+		selectedSegments.empty();
 		pci = PointClickInfo(); // end inserting op point(s)
 		editorState = editorState & ~ ( msENTER | msMOVEVERTICES);
 
 	}else if ( (pci.seg != 0 && pci.linePoint) && hasState( msSPLIT ) && hasState( msLMOUSEUP)) {
 		split();
+		selectVertex();
 
 	}else if ( pci.seg != 0 && pci.linePoint == false && hasState( msMOVE ) && hasState( msMOUSEMOVE)) {
 		updatePositions();
 
+		// end movement of point
 	} else if ( hasState( msMOVEVERTICES ) && hasState( msLMOUSEUP)) {
 		editorState = editorState & ~msMOVEVERTICES;
 		pci = PointClickInfo(); // end the move

@@ -193,7 +193,7 @@ void  TransparencyFormP::apply() {
 		TreeItem titem;
 		view->getItem(htiTransparent,TVIF_TEXT | TVIF_HANDLE | TVIF_IMAGE | TVIF_PARAM | TVIS_SELECTED,titem);
 
-		strcpy(titem.item.pszText,transp.scVal());
+		strcpy(titem.item.pszText,transp.c_str());
 		view->GetTreeCtrl().SetItem(&titem.item);
 	}
 

@@ -275,8 +275,8 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 			dc->MoveTo(rx,rct.bottom);
 			dc->LineTo(rx,rct.bottom + 3);
 			String s("%3.1f", rStep * i);
-			CSize sz = dc->GetTextExtent(s.scVal(), s.size());
-			dc->TextOut(rx - sz.cx / 2, crct.bottom - 16,s.scVal(),s.size());
+			CSize sz = dc->GetTextExtent(s.c_str(), s.size());
+			dc->TextOut(rx - sz.cx / 2, crct.bottom - 16,s.c_str(),s.size());
 			rx +=  rct.Width() *  rStep / totDist;
 		}
 	}
@@ -356,8 +356,8 @@ void TrackProfileGraph::OnContextMenu(CWnd* pWnd, CPoint point)
 	//	return;
 	CMenu men;
 	men.CreatePopupMenu();
-	//men.AppendMenu(MF_STRING, ID_SAVE_AS_CSV, TR("Save as CSV").scVal());
-	men.AppendMenu(MF_STRING, ID_SAVE_AS_TABLE, TR("Open as Table").scVal());
+	//men.AppendMenu(MF_STRING, ID_SAVE_AS_CSV, TR("Save as CSV").c_str());
+	men.AppendMenu(MF_STRING, ID_SAVE_AS_TABLE, TR("Open as Table").c_str());
 	int cmd = men.TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON|TPM_RETURNCMD, point.x, point.y, pWnd);
 	switch (cmd) {
 		case ID_GR_COPY:
@@ -376,7 +376,7 @@ void TrackProfileGraph::saveAsCsv() {
 	CFileDialog saveForm(FALSE,".csv",0,0,strFilter);
 	if ( saveForm.DoModal() == IDOK) {
 		FileName fn(saveForm.GetPathName());
-		ofstream out(fn.sFullPath().scVal());
+		ofstream out(fn.sFullPath().c_str());
 		if ( out.is_open()) {
 			out<<"map name" << "coordinate index" << "x coordinate" << "y coordinate" << "value" << "\n";
 			for(int m =0; m < fldGraph->tool->sources.size(); ++m) {
@@ -385,7 +385,7 @@ void TrackProfileGraph::saveAsCsv() {
 				for(int i=0; i < values[m].size(); ++i) {
 					GraphInfo info= values[m][i];
 					String v = bmp->sValue(info.crd);
-					out << name.scVal() << "," << info.index <<"," << info.crd.x << "," << info.crd.y << "," << v.scVal() << "\n";
+					out << name.c_str() << "," << info.index <<"," << info.crd.x << "," << info.crd.y << "," << v.c_str() << "\n";
 				}
 			}
 			out.close();

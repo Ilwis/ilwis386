@@ -7,6 +7,7 @@ class MapCompositionDoc;
 class BaseMap;
 class Feature;
 class BaseMapPtr;
+class FieldColor;
 
 namespace ILWIS{
 
@@ -30,7 +31,7 @@ namespace ILWIS{
 		virtual bool fCopyOk();
 		virtual bool fPasteOk();
 		void clear();
-		bool hasSelection() const;
+		virtual bool hasSelection() const;
 		HTREEITEM configure( HTREEITEM parentItem);
 		void setcheckEditMode(void *value, HTREEITEM );
 		virtual void OnInsertMode() ;
@@ -47,6 +48,7 @@ namespace ILWIS{
 	protected:
 		void OnUpdateMode(CCmdUI* pCmdUI);
 		virtual void setMode(FeatureSetEditor2::States state) ;
+		void setSelectionOptions();
 
 		long iCoordIndex(const vector<Coord *>& coords, const Coord& c) const;
 		MapCompositionDoc *mdoc;
@@ -63,7 +65,18 @@ namespace ILWIS{
 		SetChecks *editModeItems;
 		zCursor curInsert, curEdit, curMove, curMoving;
 		long editorState;
+		HTREEITEM hitSelect, hitInsert, hitMove;
 
 		DECLARE_MESSAGE_MAP()
+	};
+
+	class SelectionOptionsForm : public DisplayOptionsForm {
+	public:
+		SelectionOptionsForm(CWnd *wPar, ComplexDrawer *dr);
+		void apply();
+	private:
+		FieldColor *fc;
+		Color c;
+
 	};
 }

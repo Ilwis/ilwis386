@@ -223,24 +223,24 @@ void DistanceMeasurer::Report()
 	String sMsg = String("");
 	String sMgsDist, sMgsAzim, sMgsEllDist, sMgsEllAzim, sMsgEnd;
 	if (rDist == rUNDEF || rDir == rUNDEF)
-		sMsg = SMWMsgDistCalcImpossible;
+		sMsg = TR("Distance calculation impossible");
 	else {
-		sMsg = String(SMWMsgFrom_S.scVal(),csy->sValue(cStart(),0));
+		sMsg = String(TR("From %S").c_str(),csy->sValue(cStart(),0));
 		sMsg &= String("\n");
-		sMsg &= String(SMWMsgTo_S.scVal(),csy->sValue(cEnd(),0));
+		sMsg &= String(TR("To %S").c_str(),csy->sValue(cEnd(),0));
 		if (fLatLonCoords())
 			sMsg &= String("\n\nNo metric co-ordinates available");
 		else {
-			sMsg &= String("\n\n%S: %.2f m", SMWMsgMapDistance, rDist); 
-			sMsg &= String("\n%S: %.2f °", SMWMsgMapAzim, rDir);
+			sMsg &= String("\n\n%S: %.2f m", TR("Distance on map"), rDist); 
+			sMsg &= String("\n%S: %.2f °", TR("Azimuth on map"), rDir);
 		}
 		if(fLatLonCoords() || fProjectedCoords())
 		{	
 			double rScaleF, rMeridConv;
 			if(fEllipsoidalCoords() && (rEllDist < 800000)) { //above 800km ellips dist unreliable
 				sMsg &= String("\n\n%S: %.2f m", 
-					SMWMsgEllDistance, rEllDist);
-				sMsg &= String("\n%S: %.2f °",	SMWMsgEllAzim, rEllAzim);
+					TR("Ellipsoidal Distance"), rEllDist);
+				sMsg &= String("\n%S: %.2f °",	TR("Ellipsoidal Azimuth"), rEllAzim);
 				rScaleF = rDist / rEllDist;
 				rMeridConv = rEllAzim - rDir;
 				if (rMeridConv > M_PI_2)
@@ -248,24 +248,24 @@ void DistanceMeasurer::Report()
 			}
 			else {
 				if 	(rSphDist < 1000)
-					sMsg &= String("\n\n%S: %.2f m", SMWMsgSphDistance, rSphDist);
+					sMsg &= String("\n\n%S: %.2f m", TR("Spherical Distance"), rSphDist);
 				else 
 					sMsg &= String("\n\n%S: %.3f km", 
-					SMWMsgSphDistance, rSphDist/1000); // long distances in km
+					TR("Spherical Distance"), rSphDist/1000); // long distances in km
 				rScaleF = rDist / rSphDist;
-				sMsg &= String("\n%S: %.2f °", SMWMsgSphAzim, rSphAzim);
+				sMsg &= String("\n%S: %.2f °", TR("Spherical Azimuth"), rSphAzim);
 				rMeridConv = rSphAzim - rDir;
 				if (rMeridConv > M_PI_2)
 					rMeridConv = rMeridConv - M_PI * 2;
 			}
 			if(!fLatLonCoords()) {
-				sMsg &= String("\n\n%S: %.10f", SMWMsgScaleFactor, rScaleF);
-				//sMsg &= String("\n%S: %.3f °", SMWMsgMeridConverg, rMeridConv);
-				sMsg &= String("\n%S: %.3f °", SMWMsgMeridConverg, rSphericalMeridConv(rRadi));
+				sMsg &= String("\n\n%S: %.10f", TR("Scale Factor"), rScaleF);
+				//sMsg &= String("\n%S: %.3f °", TR("Meridian Convergence"), rMeridConv);
+				sMsg &= String("\n%S: %.3f °", TR("Meridian Convergence"), rSphericalMeridConv(rRadi));
 			}
 		}
 	}
-	tree->GetDocument()->mpvGetView()->MessageBox(sMsg.scVal(), SMWMsgDistance.scVal());
+	tree->GetDocument()->mpvGetView()->MessageBox(sMsg.c_str(), TR("Distance").c_str());
 }
 
 void DistanceMeasurer::drawLine()

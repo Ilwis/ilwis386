@@ -1,4 +1,5 @@
 #include "Client\Headers\formelementspch.h"
+#include "Client\FormElements\fldcolor.h"
 #include "Engine\Map\basemap.h"
 #include "Engine\Map\Point\ilwPoint.h"
 #include "Engine\Map\Point\PNT.H"
@@ -22,7 +23,7 @@
 #include "Client\Mapwindow\LayerTreeItem.h"
 #include "FeatureSetEditor2.h"
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define addmen(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 #define addSub(ID) menSub.AppendMenu(MF_STRING, ID, sMen(ID));
 
@@ -72,19 +73,24 @@ HTREEITEM FeatureSetEditor2::configure( HTREEITEM parentItem) {
 	DisplayOptionRadioButtonItem *item = new DisplayOptionRadioButtonItem(TR("Select"), tree,parentItem,drawer);
 	item->setState(true);
 	item->setCheckAction(this,editModeItems,0); 
-	insertItem(TR("Select"),"Bitmap", item);
+	item->setDoubleCickAction(this,(DTDoubleClickActionFunc ) &FeatureSetEditor2::setSelectionOptions);
+	hitSelect = insertItem(TR("Select"),"Bitmap", item);
 	item = new DisplayOptionRadioButtonItem(TR("Insert"), tree,parentItem,drawer);
 	item->setState(false);
 	item->setCheckAction(this,editModeItems,0);
-	insertItem(TR("Insert"),"Bitmap", item);
+	hitInsert = insertItem(TR("Insert"),"Bitmap", item);
 	item = new DisplayOptionRadioButtonItem(TR("Move"), tree,parentItem,drawer);
 	item->setState(false);
 	item->setCheckAction(this,editModeItems,0); 
-	insertItem(TR("Move"),"Bitmap", item);
+	hitMove = insertItem(TR("Move"),"Bitmap", item);
 	DrawerTool::configure(htiNode);
 
 
 	return parentItem;
+}
+
+void FeatureSetEditor2::setSelectionOptions() {
+	new SelectionOptionsForm(tree, (ComplexDrawer *)drawer);
 }
 
 void FeatureSetEditor2::setcheckEditMode(void *value, HTREEITEM ) {
@@ -133,7 +139,7 @@ bool FeatureSetEditor2::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags){
 		return true;
 	}
 	if ( nChar == VK_DELETE && hasSelection()) {
-		if ( MessageBox(tree->m_hWnd, TR("Remove selected point(s)?").scVal(),TR("Delete").scVal(), MB_YESNO) == IDYES  ) {
+		if ( MessageBox(tree->m_hWnd, TR("Remove selected point(s)?").c_str(),TR("Delete").c_str(), MB_YESNO) == IDYES  ) {
 			removeSelectedFeatures();
 	
 			mpvGetView()->Invalidate();
@@ -221,7 +227,7 @@ long FeatureSetEditor2::iCoordIndex(const vector<Coord *>& coords, const Coord& 
 		}
 	}
 	if ( iRes != iUNDEF) {
-		TRACE(String("crdIndex %d\n",iRes).scVal());
+		TRACE(String("crdIndex %d\n",iRes).c_str());
 		return iRes;
 	}
 	return iUNDEF;
@@ -318,6 +324,23 @@ void FeatureSetEditor2::removeSelectedFeatures() {
 
 bool FeatureSetEditor2::hasState(int state) {
 	return (editorState & state) != 0;
+}
+
+//---------------------------------------------
+SelectionOptionsForm::SelectionOptionsForm(CWnd *wPar, ComplexDrawer *dr) : 
+	DisplayOptionsForm(dr, wPar,String("Single draw color for %S",dr->getName())),
+	c(dr->getSelectionColor())
+{
+	fc = new FieldColor(root, TR("Selection color"), &c);
+	create();
+}
+
+void  SelectionOptionsForm::apply() {
+	fc->StoreData();
+	drw->setSelectionColor(c);
+	PreparationParameters parm(NewDrawer::ptRENDER, 0);
+	drw->prepareChildDrawers(&parm);
+	updateMapView();
 }
 
 

@@ -22,7 +22,7 @@
 #include "Client\Mapwindow\LayerTreeItem.h"
 #include "FeatureSetEditor.h"
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define addmen(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 #define addSub(ID) menSub.AppendMenu(MF_STRING, ID, sMen(ID));
 
@@ -167,7 +167,7 @@ bool FeatureSetEditor::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags){
 		return true;
 	}
 	if ( nChar == VK_DELETE && hasSelection()) {
-		if ( MessageBox(tree->m_hWnd, TR("Remove selected point(s)?").scVal(),TR("Delete").scVal(), MB_YESNO) == IDYES  ) {
+		if ( MessageBox(tree->m_hWnd, TR("Remove selected point(s)?").c_str(),TR("Delete").c_str(), MB_YESNO) == IDYES  ) {
 			removeSelectedFeatures();
 	
 			mpvGetView()->Invalidate();
@@ -459,7 +459,7 @@ long FeatureSetEditor::iCoordIndex(const vector<Coord *>& coords, const Coord& c
 		}
 	}
 	if ( iRes != iUNDEF) {
-		TRACE(String("crdIndex %d\n",iRes).scVal());
+		TRACE(String("crdIndex %d\n",iRes).c_str());
 		return iRes;
 	}
 	return iUNDEF;

@@ -40,7 +40,7 @@ BEGIN_MESSAGE_MAP(AnimationPropertySheet, CPropertySheet)
 END_MESSAGE_MAP()
 
 AnimationPropertySheet::AnimationPropertySheet() :
-CPropertySheet(TR("Animation Management").scVal()), activeIndex(-1)
+CPropertySheet(TR("Animation Management").c_str()), activeIndex(-1)
 {
 }
 
@@ -159,7 +159,7 @@ void AnimationPropertySheet::OnSysCommand(UINT nID, LPARAM p) {
 //------------------------------------
 
 
-AnimationRun::AnimationRun(AnimationPropertySheet& sheet) : FormBasePropertyPage(TR("Run").scVal()), propsheet(sheet), animIndex(0), fps(1)
+AnimationRun::AnimationRun(AnimationPropertySheet& sheet) : FormBasePropertyPage(TR("Run").c_str()), propsheet(sheet), animIndex(0), fps(1)
 {
 	FieldGroup *fgRest = new FieldGroup(root, true);
 	foAnimations = new FieldOneSelect(fgRest,&animIndex);
@@ -221,7 +221,7 @@ int AnimationRun::DataChanged(Event* ev) {
 		animIndex = propsheet.getActiveIndex();
 		foAnimations->ose->ResetContent();
 		while((props = propsheet.getAnimation(index++)) != 0) {
-			foAnimations->ose->AddString(String("%S.Animation",props->drawer->getName()).scVal());
+			foAnimations->ose->AddString(String("%S.Animation",props->drawer->getName()).c_str());
 		}
 		if ( animIndex >= 0)
 			foAnimations->ose->SetCurSel(animIndex);
@@ -316,7 +316,7 @@ int AnimationRun::begin(Event  *ev) {
 }
 //-------------------------------------------------------------------
 AnimationSynchronization::AnimationSynchronization(AnimationPropertySheet& sheet) : 
-FormBasePropertyPage(TR("Synchronization").scVal()), 
+FormBasePropertyPage(TR("Synchronization").c_str()), 
 propsheet(sheet),
 offset1(0),
 choiceSlave1(-1),
@@ -406,14 +406,14 @@ int AnimationSynchronization::DataChanged(Event*ev) {
 			while((props = propsheet.getAnimation(index)) != 0) {
 				bool slaveTime = props->drawer->getUseTime();
 				if ( useMasterTime == slaveTime) {
-					foSlave1->ose->AddString(String("%S.Animation",props->drawer->getName()).scVal());
+					foSlave1->ose->AddString(String("%S.Animation",props->drawer->getName()).c_str());
 					foSlave1->ose->SetItemData(index, (DWORD_PTR)props);
 				}
 				++index;
 			}
 			String name = props->drawer->getName();
 			String v = TR("Master animation %%S");
-			stMaster->SetVal(String(v.scVal(),name));
+			stMaster->SetVal(String(v.c_str(),name));
 			initial = false;
 		}
 	}
@@ -446,7 +446,7 @@ BEGIN_MESSAGE_MAP(AnimationProgress, FormBasePropertyPage)
 	ON_MESSAGE(ID_TIME_TICK, OnTimeTick)
 END_MESSAGE_MAP()
 
-AnimationProgress::AnimationProgress(AnimationPropertySheet& sheet) : FormBasePropertyPage(TR("Progress Control").scVal()), propsheet(sheet)
+AnimationProgress::AnimationProgress(AnimationPropertySheet& sheet) : FormBasePropertyPage(TR("Progress Control").c_str()), propsheet(sheet)
 {
 	fgMaster = new FieldGroup(root, true);
 
@@ -516,7 +516,7 @@ int AnimationProgress::DataChanged(Event*ev) {
 		}
 		String name = props->drawer->getName();
 		String v = TR("Selected Animation: %%S");
-		stMaster->SetVal(String(v.scVal(),name));
+		stMaster->SetVal(String(v.c_str(),name));
 	}
 	if ( tbl.fValid()) {
 		fcol->Show();
@@ -548,7 +548,7 @@ int AnimationProgress::changeColumn(Event *) {
 }
 
 //---------------------------------------------
-RealTimePage::RealTimePage(ILWIS::AnimationPropertySheet &sheet) :FormBasePropertyPage(TR("Real time progress").scVal()), propsheet(sheet), useTimeAttribute(false) 
+RealTimePage::RealTimePage(ILWIS::AnimationPropertySheet &sheet) :FormBasePropertyPage(TR("Real time progress").c_str()), propsheet(sheet), useTimeAttribute(false) 
 {
 	year = month = day = hour = minute = 0;
 
@@ -622,7 +622,7 @@ int RealTimePage::DataChanged(Event*ev) {
 
 		String name = props->drawer->getName();
 		String v = TR("Selected Animation: %%S");
-		stMaster->SetVal(String(v.scVal(),name));
+		stMaster->SetVal(String(v.c_str(),name));
 	}
 	
 
@@ -825,7 +825,7 @@ void AnimationBar::Create(CWnd* pParent)
 	EnableDocking(CBRS_ALIGN_TOP|CBRS_ALIGN_BOTTOM);
 	SetBarStyle(GetBarStyle()|CBRS_GRIPPER|CBRS_BORDER_3D);
 
-	SetWindowText(TR("Animation").scVal());
+	SetWindowText(TR("Animation").c_str());
 }
 
 void AnimationBar::OnUpdateCmdUI(CFrameWnd* pParent, BOOL)
@@ -855,10 +855,10 @@ void AnimationBar::updateTime(const AnimationProperties* props) // called by Ani
 {
 	if ( props->drawer->getUseTime()) {
 		String tmstring = setTimeString(props);
-		ed.SetWindowText(String("%S",tmstring).scVal());
+		ed.SetWindowText(String("%S",tmstring).c_str());
 	}
 	else {
-		ed.SetWindowText(String("index : %d",props->drawer->getMapIndex()).scVal());
+		ed.SetWindowText(String("index : %d",props->drawer->getMapIndex()).c_str());
 	}
 }
 

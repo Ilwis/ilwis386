@@ -71,7 +71,7 @@ HTREEITEM LineSetTool::configure( HTREEITEM parentItem) {
 }
 
 String LineSetTool::getMenuString() const {
-	return TR("Segment Drawer");
+	return TR("Segment tool");
 }
 
 //---------------------------------------------------

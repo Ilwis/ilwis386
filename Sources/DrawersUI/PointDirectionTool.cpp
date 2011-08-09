@@ -17,7 +17,7 @@
 #include "Engine\Drawers\SVGLoader.h"
 #include "Engine\Drawers\SimpleDrawer.h" 
 #include "drawers\pointdrawer.h"
-#include "DrawersUI\PointScalingTool.h"
+#include "DrawersUI\PointDirectionTool.h"
 #include "DrawersUI\LayerDrawerTool.h"
 #include "DrawersUI\SetDrawerTool.h"
 #include "DrawersUI\PointSymbolizationTool.h"
@@ -25,19 +25,19 @@
 #include "Headers\Hs\Drwforms.hs"
 
 
-DrawerTool *createPointScalingTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) {
-	return new PointScalingTool(zv, view, drw);
+DrawerTool *createPointDirectionTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) {
+	return new PointDirectionTool(zv, view, drw);
 }
 
-PointScalingTool::PointScalingTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
-	DrawerTool("PointScalingTool", zv, view, drw)
+PointDirectionTool::PointDirectionTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
+	DrawerTool("PointDirectionTool", zv, view, drw)
 {
 }
 
-PointScalingTool::~PointScalingTool() {
+PointDirectionTool::~PointDirectionTool() {
 }
 
-bool PointScalingTool::isToolUseableFor(ILWIS::DrawerTool *tool) { 
+bool PointDirectionTool::isToolUseableFor(ILWIS::DrawerTool *tool) { 
 
 	PointSymbolizationTool *pst = dynamic_cast<PointSymbolizationTool *>(tool);
 	if ( !pst)
@@ -60,26 +60,26 @@ bool PointScalingTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	return false;
 }
 
-HTREEITEM PointScalingTool::configure( HTREEITEM parentItem) {
+HTREEITEM PointDirectionTool::configure( HTREEITEM parentItem) {
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
-	item->setDoubleCickAction(this,(DTDoubleClickActionFunc)&PointScalingTool::setScaling); 
-	htiNode = insertItem(TR("Stretching"),"Scale",item);
+	item->setDoubleCickAction(this,(DTDoubleClickActionFunc)&PointDirectionTool::setScaling); 
+	htiNode = insertItem(TR("Direction"),"Direction",item);
 	DrawerTool::configure(htiNode);
 
 	return htiNode;
 }
 
-void PointScalingTool::setScaling() {
-	new PointScalingForm(tree, (PointLayerDrawer *)drawer, tbl);
+void PointDirectionTool::setScaling() {
+	new PointDirectionForm(tree, (PointLayerDrawer *)drawer, tbl);
 }
 
-String PointScalingTool::getMenuString() const {
-	return TR("Size Scaling");
+String PointDirectionTool::getMenuString() const {
+	return TR("Direction");
 }
 
 //---------------------------------------------------
-PointScalingForm::PointScalingForm(CWnd *wPar, PointLayerDrawer *dr, const Table& _tbl):
-DisplayOptionsForm(dr,wPar,TR("Scaling")), tbl(_tbl), fcColumn(0), rrScale(RangeReal(0.1,10)), scaleModel(0), stretchModel(0)
+PointDirectionForm::PointDirectionForm(CWnd *wPar, PointLayerDrawer *dr, const Table& _tbl):
+DisplayOptionsForm(dr,wPar,TR("Scaling")), tbl(_tbl), fcColumn(0), clockwise(true)
 {
 	props = (PointProperties *)dr->getProperties();
 	if ( tbl.fValid()) {
@@ -92,48 +92,38 @@ DisplayOptionsForm(dr,wPar,TR("Scaling")), tbl(_tbl), fcColumn(0), rrScale(Range
 				}
 			}
 		}
-		fcColumn = new FieldColumn(root, TR("Attribute Column"), tbl, &(props->stretchColumn), dmVALUE);
-		fcColumn->SetCallBack((NotifyProc)&PointScalingForm::ColValCallBack);
+		inf = dr->getRotationInfo();
+		fcColumn = new FieldColumn(root, TR("Attribute Column"), tbl, &(inf.rotationColumn), dmVALUE);
+		fcColumn->SetCallBack((NotifyProc)&PointDirectionForm::ColValCallBack);
+
+		Column  col = tbl->col(props->stretchColumn);
+		new FieldBlank(root);
+		if ( !inf.rr.fValid())
+			inf.rr = col->rrMinMax();
+		frr = new FieldRangeReal(root, TR("Rotation range"), &(inf.rr));
+		cbClockwise = new CheckBox(root,TR("Clockwise"),&(inf.clockwise));
+	
 	}
-
-    frr = new FieldRangeReal(root, TR("&Stretch"), &(props->stretchRange));
-
-   // fri = new FieldRangeReal(root, TR("&Size (pt)"), &rrScale, ValueRange(0.1,10));
-
-	RadioGroup* rgLinLog = new RadioGroup(root, "", &stretchModel, true);
-    rgLinLog->Align(frr, AL_UNDER);
-    rgLinLog->SetIndependentPos();
-    new RadioButton(rgLinLog, TR("&Linear"));
-    new RadioButton(rgLinLog, TR("Lo&garithmic"));
-	new RadioButton(rgLinLog, TR("None"));
-    RadioGroup* rgRadiusArea = new RadioGroup(root, "", &scaleModel, true);
-    rgRadiusArea->SetIndependentPos();
-    new RadioButton(rgRadiusArea, TR("&Radius"));
-    new RadioButton(rgRadiusArea, TR("&Area"));
 
 	create();
 }
 
-int PointScalingForm::ColValCallBack(Event*) {
+int PointDirectionForm::ColValCallBack(Event*) {
 	if ( !fcColumn)
 		return -1;
 
-    String sOldCol = sCol;
+    String sOldCol = inf.rotationColumn;
     fcColumn->StoreData();
-    if (sOldCol != sCol) {
-      Column col = tbl->col(sCol);
+    if (sOldCol != inf.rotationColumn) {
+      Column col = tbl->col(inf.rotationColumn);
       frr->SetVal(col->rrMinMax());
     }
     return 1;
   }
-void PointScalingForm::apply(){
+void PointDirectionForm::apply(){
 	root->StoreData();
-	if ( stretchModel == 0) {
-		props->scaleMode = PointProperties::sLINEAR;
-	} else if (stretchModel == 1)
-		props->scaleMode = PointProperties::sLOGARITHMIC;
-	else
-		props->scaleMode = PointProperties::sNONE;
+	PointLayerDrawer *pdr = (PointLayerDrawer *)drw;
+	pdr->setRotationInfo(inf);
 	PreparationParameters pp(NewDrawer::ptRENDER, 0);
 	drw->prepare(&pp);
 
