@@ -64,7 +64,7 @@ MapFlowAccumulation::MapFlowAccumulation(const FileName& fn, MapPtr& p)
 {
 		fNeedFreeze = true;
 		sFreezeTitle = "MapFlowAccumulation";
-		htpFreeze = htpFlowAccumulationT;
+		htpFreeze = "ilwisapp\flow_accumulation_algorithm.htm";
 
 }
 
@@ -98,7 +98,7 @@ MapFlowAccumulation* MapFlowAccumulation::create(const FileName& fn, MapPtr& p, 
   Map mp(as[0], fn.sPath());
 	Domain dm = mp->dm();
 	if (!(dm.fValid() && (fCIStrEqual(dm->fnObj.sFileExt(), "FlowDirection.dom"))))
-			throw ErrorObject(WhatError(SMAPErrInvalidDomain_S, errMapFlowAccumulation)); 
+			throw ErrorObject(WhatError(TR("Use an input map with domain FlowDirection   "), errMapFlowAccumulation)); 
 
 	return new MapFlowAccumulation(fn, p, mp);
 }
@@ -132,7 +132,7 @@ bool MapFlowAccumulation::fFreezing()
 	m_vFlowDirection.resize(iLines());  //allocate memory for input flow direction 
 	m_vFlowAcc.resize(iLines()); //allocate memory for output flow acc. 
 	trq.SetTitle(sFreezeTitle);
-	trq.SetText(SMAPTextReadingFlowDirection);
+	trq.SetText(TR("Reading Flow Direction Map"));
 	trq.Start();
 	long iRow;
 	for (iRow = 0; iRow < iLines(); iRow++)
@@ -148,7 +148,7 @@ bool MapFlowAccumulation::fFreezing()
 	}
 	trq.fUpdate(iLines(), iLines());
 	
-	trq.SetText(SMAPTextCalculatingFlowAcc);
+	trq.SetText(TR("Calculating Flow Accumulation"));
 
 	for (iRow = 0; iRow < iLines(); iRow++)
 	{
@@ -168,7 +168,7 @@ bool MapFlowAccumulation::fFreezing()
 	trq.fUpdate(iLines(), iLines());
 
 	//write flow accumulation for the output map
-	trq.SetText(SMAPTextWritingFlowAcc);
+	trq.SetText(TR("Writing Flow Accumulation Map"));
   for (iRow = 0; iRow < iLines(); iRow++ )
 	{
 		ptr.PutLineVal(iRow, m_vFlowAcc[iRow]);

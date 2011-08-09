@@ -72,7 +72,7 @@ MapOverlandFlowLength::MapOverlandFlowLength(const FileName& fn, MapPtr& p)
 	init();
 	fNeedFreeze = true;
   sFreezeTitle = "MapOverlandFlowLength";
-	//htpFreeze = htpOverlandFlowLengthT;
+	//htpFreeze = "ilwisapp\overland_flow_length_algorithm.htm";
 }
 
 MapOverlandFlowLength::MapOverlandFlowLength(const FileName& fn, 
@@ -104,7 +104,7 @@ void MapOverlandFlowLength::init()
 	//Verify domain and attribute table
 	Domain dm = mp->dm();
 	if (!(dm.fValid())) 
-			throw ErrorObject(WhatError(SMAPErrIDDomain_S, errMapSlopeLengths), mp->fnObj);
+			throw ErrorObject(WhatError(TR("Map should have identifier domain"), errMapSlopeLengths), mp->fnObj);
 
 	Table tbl = mp->tblAtt();
 	if (!tbl.fValid())
@@ -121,11 +121,11 @@ void MapOverlandFlowLength::init()
 
 	Domain flowdm = m_mpFlow->dm();
 	if (!(flowdm.fValid() && (fCIStrEqual(flowdm->fnObj.sFileExt(), "FlowDirection.dom"))))
-			throw ErrorObject(WhatError(SMAPErrInvalidDomain_S, errMapSlopeLengths), m_mpFlow->fnObj);
+			throw ErrorObject(WhatError(TR("Use an input map with domain FlowDirection   "), errMapSlopeLengths), m_mpFlow->fnObj);
 
 	fNeedFreeze = true;
 	sFreezeTitle = "MapOverlandFlowLength";
-	//htpFreeze = htpOverlandFlowLengthT;
+	//htpFreeze = "ilwisapp\overland_flow_length_algorithm.htm";
 
 	objdep.Add(m_mpFlow);
 }
@@ -216,7 +216,7 @@ static void SplitString(String s, vector<long> &results)
 bool MapOverlandFlowLength::fFreezing()
 {
 	trq.SetTitle(sFreezeTitle);
-	trq.SetText(SMAPTextInitializeMap);
+	trq.SetText(TR("Initialize map"));
 	trq.Start();
 
 	m_vDrainageMap.resize(iLines());  
@@ -243,14 +243,14 @@ bool MapOverlandFlowLength::fFreezing()
 	}
 	trq.fUpdate(iLines(), iLines());
 	
-	trq.SetText(SMAPTextCalculatingFlowLength);
+	trq.SetText(TR("Calculating overland flow length"));
   Table tbl = mp->tblAtt();
 	Column colDownstreamCoord = tbl->col(sDownstreamCoord);
 	Column colUpstreamCoord = tbl->col(sUpstreamCoord);
 	Column colUpstreamID = tbl->col(sUpstreamID);
 	DomainSort* pdsrt = colDownstreamCoord->dmKey()->pdsrt();
 	if ( !pdsrt )
-		throw ErrorObject(SMAPErrNoDomainSort);
+		throw ErrorObject(TR("Source map must have domain class or id"));
   long iSize = pdsrt->iSize();
 
 	InitFlowNums(m_vReceiveNum);
@@ -283,7 +283,7 @@ bool MapOverlandFlowLength::fFreezing()
 	Map mapDivide(FileName(m_sDivide, ".mpr"), mp->gr(), rcSize(), dv);
 	mapDivide->CreateMapStore();
 	mapDivide->KeepOpen(true);*/
-	trq.SetText(SMAPTextWriteOutMap);
+	trq.SetText(TR("Write output map"));
 	for (long iRow = 0; iRow < iLines(); iRow++ )
 	{
 		RealBuf& bDist_s = m_vOutput_s[iRow];

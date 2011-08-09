@@ -76,7 +76,7 @@ MapFillSinks::MapFillSinks(const FileName& fn, MapPtr& p)
 	
 	fNeedFreeze = true;
 	sFreezeTitle = "MapFillSinks";
-	htpFreeze = htpFillSinksT;
+	htpFreeze = "ilwisapp\fill_sinks_algorithm.htm";
 }
 
 MapFillSinks::MapFillSinks(const FileName& fn, MapPtr& p, const Map& mp, FillMethod sMethod)
@@ -184,7 +184,7 @@ bool MapFillSinks::fFreezing()
 		m_vFlag.resize(iLines());
 		m_vSinks.resize(0);
 		trq.SetTitle(sFreezeTitle);
-		trq.SetText(SMAPTextReadingDEM);
+		trq.SetText(TR("Reading DEM"));
 		trq.Start();
 		for (long iRow = 0; iRow < iLines(); iRow++)
 		{
@@ -213,7 +213,7 @@ bool MapFillSinks::fFreezing()
 		RowCol rcSink;
 		m_iFlag = 0;
 		if (m_fmMethods == fmFill)
-			trq.SetText(SMAPTextFillSinks);
+			trq.SetText(TR("Fill sinks"));
 		else
 			trq.SetText("Cut terrain");
 		for (long iRow = 1; iRow < iLines()-1; ++iRow)
@@ -255,7 +255,7 @@ bool MapFillSinks::fFreezing()
 			}
 			if (trq.fUpdate(iRow, iLines())) return false;
 		}
-		trq.SetText(SMAPTextWriteOutMap);
+		trq.SetText(TR("Write output map"));
 
 		for (long iRow = 0; iRow < iLines(); iRow++)
 		{
@@ -276,7 +276,7 @@ void MapFillSinks::SingleSinkFill()
 		  Filling by raising its elevation to the lowest neighbor*/
 		vector<double>::iterator pos;
 		
-		trq.SetText(SMAPTextSingleSinkFill);
+		trq.SetText(TR("Fill single-cell depressions"));
 		for (long iRow = 0; iRow < iLines(); ++iRow)
 		{
 			for (long iCol = 0; iCol < iCols(); ++iCol)  

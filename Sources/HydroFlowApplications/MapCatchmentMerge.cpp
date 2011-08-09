@@ -151,7 +151,7 @@ MapCatchmentMerge::MapCatchmentMerge(const FileName& fn, MapPtr& p)
 	ReadElement("CatchmentMerge", "FlowDirection", m_mpFlow);
 	Domain dm = m_mpFlow->dm();
 	if (!(dm.fValid() && (fCIStrEqual(dm->fnObj.sFileExt(), "FlowDirection.dom"))))
-			throw ErrorObject(WhatError(SMAPErrInvalidDomain_S, errMapCatchmentMerging), m_mpFlow->fnObj);
+			throw ErrorObject(WhatError(TR("Use an input map with domain FlowDirection   "), errMapCatchmentMerging), m_mpFlow->fnObj);
 
 	ReadElement("CatchmentMerge", "FlowAccumulation", m_mpFacc);
 	ReadElement("CatchmentMerge", "DEM", m_mpDEM);
@@ -173,7 +173,7 @@ MapCatchmentMerge::MapCatchmentMerge(const FileName& fn, MapPtr& p)
 	
 	dm = mp->dm();
 	if (!(dm.fValid())) 
-			throw ErrorObject(WhatError(SMAPErrIDDomain_S, errMapCatchmentMerging), mp->fnObj);
+			throw ErrorObject(WhatError(TR("Map should have identifier domain"), errMapCatchmentMerging), mp->fnObj);
 
 	CompitableGeorefs(fn, mp, m_mpFlow);
 	CompitableGeorefs(fn, mp, m_mpFacc);
@@ -181,7 +181,7 @@ MapCatchmentMerge::MapCatchmentMerge(const FileName& fn, MapPtr& p)
 	m_dm = p.dm();
 	fNeedFreeze = true;
 	sFreezeTitle = "MapCatchmentMerge";
-	htpFreeze = htpCatchmentMergingT;
+	htpFreeze = "ilwisapp\\catchment_merge_algorithm.htm";
 }
 
 MapCatchmentMerge::MapCatchmentMerge(const FileName& fn, 
@@ -323,7 +323,7 @@ void MapCatchmentMerge::init()
 	//Verify domain and attribute table
 	Domain dm = mp->dm();
 	if (!(dm.fValid())) 
-			throw ErrorObject(WhatError(SMAPErrIDDomain_S, errMapCatchmentMerging), mp->fnObj);
+			throw ErrorObject(WhatError(TR("Map should have identifier domain"), errMapCatchmentMerging), mp->fnObj);
 
 	Table tblDrainage = VerifyAttributes(mp);
 	if (!tblDrainage[String("Strahler")].fValid())
@@ -333,12 +333,12 @@ void MapCatchmentMerge::init()
 
 	Domain flowdm = m_mpFlow->dm();
 	if (!(flowdm.fValid() && (fCIStrEqual(flowdm->fnObj.sFileExt(), "FlowDirection.dom"))))
-			throw ErrorObject(WhatError(SMAPErrInvalidDomain_S, errMapCatchmentMerging), m_mpFlow->fnObj);
+			throw ErrorObject(WhatError(TR("Use an input map with domain FlowDirection   "), errMapCatchmentMerging), m_mpFlow->fnObj);
 
 	SetDomainValueRangeStruct(m_dm);  
 	fNeedFreeze = true;
 	sFreezeTitle = "MapCatchmentMerge";
-	htpFreeze = htpCatchmentMergingT;
+	htpFreeze = "ilwisapp\\catchment_merge_algorithm.htm";
 
 	objdep.Add(m_mpFlow);
 	objdep.Add(m_mpFacc);
@@ -358,7 +358,7 @@ const char* MapCatchmentMerge::sSyntax()
 
 static void SameNameError(const FileName& fn)
 {
-  throw ErrorObject(WhatError(SMAPErrSameNameUsed, errMapCatchmentMerging+4), fn);
+  throw ErrorObject(WhatError(TR("Same name used for Longest flow path segment map\nand output Catchment map"), errMapCatchmentMerging+4), fn);
 }
 
 MapCatchmentMerge* MapCatchmentMerge::create(const FileName& fn, 
@@ -396,7 +396,7 @@ MapCatchmentMerge* MapCatchmentMerge::create(const FileName& fn,
 		if (iParms == 8 )
 			sLongestFlowPathSegmentMap = as[7].sVal();
 		if (iStreamOrder<=0) 
-			throw ErrorObject(WhatError(SMAPErrStreamOrder, errMapCatchmentMerging));
+			throw ErrorObject(WhatError(TR("Stream order must be greater than 0"), errMapCatchmentMerging));
   
    		return new MapCatchmentMerge(fn, p, dm, mpstream, mpflowdir, mpFacc, mpDEM, sOrderSystem, iStreamOrder, bExtractOriginalOrder, sLongestFlowPathSegmentMap);
 	} 
@@ -524,7 +524,7 @@ bool IsOutletExists(vector<OutletLocation> vOutlet, RowCol rc)
 void MapCatchmentMerge::InitInOutMaps()
 {
   
-	trq.SetText(SMAPTextInitializeMap);
+	trq.SetText(TR("Initialize map"));
 	trq.Start();
 	m_vStreamMap.resize(iLines());  
 	m_vFlowDir.resize(iLines());  
@@ -549,7 +549,7 @@ void MapCatchmentMerge::InitInOutMaps()
 
 void MapCatchmentMerge::WriteOutputRaster()
 {
-  trq.SetText(SMAPTextWriteOutMap);
+  trq.SetText(TR("Write output map"));
 	for (long iRow = 0; iRow < iLines(); iRow++ )
 	{
 		LongBuf& bCatchment = m_vOutput[iRow];
@@ -561,7 +561,7 @@ void MapCatchmentMerge::WriteOutputRaster()
 
 void MapCatchmentMerge::CreatePolygonMap(FileName fn)  
 {
-  trq.SetText(SMAPTextCreateCatchmentPolygonMap);
+  trq.SetText(TR("Create catchment polygon map"));
   //including the udefined pixels within the catchment merged
   //this option is allowed only to a catchment merged using one outlet location  
   if(m_UseOutlets && m_fUndefined && m_vOutlet.size() == 1)
@@ -604,7 +604,7 @@ void MapCatchmentMerge::CreatePolygonMap(FileName fn)
     mpRas->Calc();
     mpRas->fErase = true;
     
-    trq.SetText(SMAPTextWriteOutMap);
+    trq.SetText(TR("Write output map"));
     for (long iRow = 0; iRow< iLines(); iRow++ )
 	  {
       LongBuf bCatchment;
@@ -685,7 +685,7 @@ bool MapCatchmentMerge::fFreezing()
 		EvaluateJointOutletsbyOrder();
 	}
 	//Merging sub-catchments here
-	trq.SetText(SMAPTextMergeCatchment);
+	trq.SetText(TR("Merge sub-catchments"));
 	for (vector<OutletLocation>::iterator pos = m_vOutlet.begin(); pos < m_vOutlet.end(); ++pos)
 	{		
 		RowCol rc = pos->rc;
@@ -730,7 +730,7 @@ bool MapCatchmentMerge::fFreezing()
 	FileName fnPol(fnObj,".mpa");
 	CreatePolygonMap(fnPol);  
 
-	trq.SetText(SMAPTextComputeCatchmentAttributes);
+	trq.SetText(TR("Compute catchment attributes"));
 	Table tblHsa;
 	GeneratePolygonStatistics(fnPol,tblHsa);
 
@@ -800,7 +800,7 @@ SegmentMap MapCatchmentMerge::ExtractSegments()
 
 void MapCatchmentMerge::ReadFlowAccumulation()
 {
-  trq.SetText(SMAPTextReadingFlowAccumulationMap);
+  trq.SetText(TR("Reading Flow Accumulation Map"));
 	m_vFAcc.resize(iLines());  
 	for (long iRow = 0; iRow< iLines(); iRow++ )
 	{
@@ -1165,7 +1165,7 @@ void MapCatchmentMerge::AddLink2StreamSegments()
 
 	DomainSort* pdsrt = colUpstreamLink->dmKey()->pdsrt();
 	if ( !pdsrt )
-		throw ErrorObject(SMAPErrNoDomainSort);
+		throw ErrorObject(TR("Source map must have domain class or id"));
 	long iSize = pdsrt->iSize();
 
 	m_iMaxOrderNumber = 0;
@@ -1255,7 +1255,7 @@ bool MapCatchmentMerge::fLatLonCoords()
 
 void MapCatchmentMerge::ComputeCatchmentArea(Table tblHsa)
 {
-	trq.SetText(SMAPTextcreateCatchmentAttributeTable);
+	trq.SetText(TR("Create merged catchment attribute table"));
 
 	//retrive area and perimeter attributes from histogram table 
 	Column cArea = tblHsa->col("Area");
@@ -1269,7 +1269,7 @@ void MapCatchmentMerge::ComputeCatchmentArea(Table tblHsa)
 	
 	DomainSort* pdsrt = colCatchmentArea->dmKey()->pdsrt();
 	if ( !pdsrt )
-		throw ErrorObject(SMAPErrNoDomainSort);
+		throw ErrorObject(TR("Source map must have domain class or id"));
     long iSize = pdsrt->iSize();
 
 	long index = 0;	
@@ -1301,7 +1301,7 @@ void MapCatchmentMerge::ComputeTotalUpStreamCatchmentArea(Table tblHsa)
 	
 	DomainSort* pdsrt = colCatchmentArea->dmKey()->pdsrt();
 	if ( !pdsrt )
-		throw ErrorObject(SMAPErrNoDomainSort);
+		throw ErrorObject(TR("Source map must have domain class or id"));
     long iSize = pdsrt->iSize();
 
 	bool fComputeTotalArea = true;
@@ -1355,7 +1355,7 @@ Coord MapCatchmentMerge::ComputeCenterDrainage(long iDrainageID, double rLength,
 	Column colFlowLength = tblAtt->col("Length");
 	DomainSort* pdsrt = colFlowLength->dmKey()->pdsrt();
 	if ( !pdsrt )
-		throw ErrorObject(SMAPErrNoDomainSort);
+		throw ErrorObject(TR("Source map must have domain class or id"));
 
 	double rLenDrainage = 0;
 	Coord c1;
@@ -1445,12 +1445,12 @@ void MapCatchmentMerge::ComputeOtherAttributes()
 	
   DomainSort* pdsrtCatchment = colDrainageID->dmKey()->pdsrt();
   if ( !pdsrtCatchment )
-		throw ErrorObject(SMAPErrNoDomainSort);
+		throw ErrorObject(TR("Source map must have domain class or id"));
   long iCatchments = pdsrtCatchment->iSize();
 
   DomainSort* pdsrtDrainage = colFlowLength->dmKey()->pdsrt();
   if ( !pdsrtDrainage )
-		throw ErrorObject(SMAPErrNoDomainSort);
+		throw ErrorObject(TR("Source map must have domain class or id"));
 
   FileName fnSrcSeg = mp->fnObj; //input segments 
   fnSrcSeg.sExt = ".mps";
@@ -1458,7 +1458,7 @@ void MapCatchmentMerge::ComputeOtherAttributes()
 
   AttLongestPath FlowPathAtt;
   vector<AttLongestPath> vFlowPathAtt;
-  trq.SetText(SMAPTextGenerateCatchmentAttributes);
+  trq.SetText(TR("Generate Catchment Attributes"));
   for (long i=1; i<= iCatchments ; i++)
   {	
     double rTotlaDrainageLen = 0; 
@@ -1810,7 +1810,7 @@ void MapCatchmentMerge::ComputeCenterPolygon(FileName fn)
 {
 	//First lable point map of the polygon
 	//then, put the point coordinates to the catchment attribute table
-	trq.SetText(SMAPTextCalculateCenterPolygon);
+	trq.SetText(TR("Compute the center of polygon"));
 	FileName fnTmpPoint(fnObj, ".mpp");
 	fnTmpPoint = FileName::fnUnique(fnTmpPoint);
 	String sExpr("PointMapPolLabels(%S)", fn.sFullPathQuoted(false)); 
@@ -1990,7 +1990,7 @@ String MapCatchmentMerge::BuildMaskIDs()
   Column colDrainageID = m_tbl->col(String("DrainageID"));
 	DomainSort* pdsrt = colDrainageID->dmKey()->pdsrt();
 	if ( !pdsrt )
-		throw ErrorObject(SMAPErrNoDomainSort);
+		throw ErrorObject(TR("Source map must have domain class or id"));
   long iSize = pdsrt->iSize();
 
   String sMask = "";
@@ -2129,7 +2129,7 @@ void MapCatchmentMerge::CleanSegment(SegmentMap smpTo, SegmentMap smpFrom)
 {
 	vector<RowCol> vOutlet;
   vector<long> vOutletID;
-  trq.SetText(SMAPTextExtractStreamSegments);
+  trq.SetText(TR("Extract stream segments"));
   //check if the outlet has a downflow to catchment merged
   //if no, the rest of the segment at the outlet should be removed from
   //otherwise, just copy the complete segment
@@ -2187,7 +2187,7 @@ void MapCatchmentMerge::CleanSegment(SegmentMap smpTo, SegmentMap smpFrom)
 void MapCatchmentMerge::CreateTableSegmentsExtracted(SegmentMap sm)
 {
   //Create a table to store the attributes for the segments extracted
-  trq.SetText(SMAPTextExtractStreamSegmentAttributes);
+  trq.SetText(TR("Extract stream segment attributes"));
   //FileName fnTbl(fnObj, ".tbt");
 	//fnTbl = FileName::fnUnique(fnTbl);
 	//m_tbl = Table(fnTbl, m_dm);
@@ -2252,7 +2252,7 @@ void MapCatchmentMerge::CreateTableSegmentsExtracted(SegmentMap sm)
   
 	DomainSort* pdsrt = cUpstreamLinkSrc->dmKey()->pdsrt();
 	if ( !pdsrt )
-		throw ErrorObject(SMAPErrNoDomainSort);
+		throw ErrorObject(TR("Source map must have domain class or id"));
   long iSize = pdsrt->iSize();
 
   vector<long> vSegIDs = GetSegmentIDsExtracted();
@@ -2332,7 +2332,7 @@ vector<long> MapCatchmentMerge::GetSegmentIDsExtracted()
   Column colDrainageID = m_tbl->col(String("DrainageID"));
 	DomainSort* pdsrt = colDrainageID->dmKey()->pdsrt();
 	if ( !pdsrt )
-		throw ErrorObject(SMAPErrNoDomainSort);
+		throw ErrorObject(TR("Source map must have domain class or id"));
   long iSize = pdsrt->iSize();
 
   vector<long> vSegIDs;

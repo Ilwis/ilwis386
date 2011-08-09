@@ -70,7 +70,7 @@ MapTopologicalOptimization::MapTopologicalOptimization(const FileName& fn, MapPt
   
 	fNeedFreeze = true;
   sFreezeTitle = "MapTopologicalOptimization";
-	htpFreeze = htpTopologicalOptimizationT;
+	htpFreeze = "ilwisapp\topological_optimization_algorithm.htm";
 }
 
 MapTopologicalOptimization::MapTopologicalOptimization(const FileName& fn, 
@@ -87,7 +87,7 @@ MapTopologicalOptimization::MapTopologicalOptimization(const FileName& fn,
 {
 	fNeedFreeze = true;
 	sFreezeTitle = "MapTopologicalOptimization";
-	htpFreeze = htpTopologicalOptimizationT;
+	htpFreeze = "ilwisapp\topological_optimization_algorithm.htm";
 
 	objdep.Add(m_mpFlow);
 	objdep.Add(m_smStream);
@@ -122,11 +122,11 @@ MapTopologicalOptimization* MapTopologicalOptimization::create(const FileName& f
 	
 	Domain dm = mpDrainage->dm();
 	if (!(dm.fValid() && (fCIStrEqual(dm->fnObj.sFileExt(), "bool.dom"))))
-			throw ErrorObject(WhatError(SMAPErrBoolDomain_S, errMapDrainageNetworkOrdering), mpDrainage->fnObj);
+			throw ErrorObject(WhatError(TR("Map should have domain bool"), errMapDrainageNetworkOrdering), mpDrainage->fnObj);
 
 	dm = mpflowdir->dm();
 	if (!(dm.fValid() && (fCIStrEqual(dm->fnObj.sFileExt(), "FlowDirection.dom"))))
-			throw ErrorObject(WhatError(SMAPErrInvalidDomain_S, errMapDrainageNetworkOrdering), mpflowdir->fnObj);
+			throw ErrorObject(WhatError(TR("Use an input map with domain FlowDirection   "), errMapDrainageNetworkOrdering), mpflowdir->fnObj);
 
 	bool fIncompGeoRef = false;
 	if (mpDrainage->gr()->fGeoRefNone() && mpflowdir->gr()->fGeoRefNone())
@@ -173,7 +173,7 @@ bool MapTopologicalOptimization::fGeoRefChangeable() const
 bool MapTopologicalOptimization::fFreezing()
 {
 	trq.SetTitle(sFreezeTitle);
-	trq.SetText(SMAPTextInitializeMap);
+	trq.SetText(TR("Initialize map"));
 	trq.Start();
 
 	//Rasterize the stream segments
@@ -181,7 +181,7 @@ bool MapTopologicalOptimization::fFreezing()
 	tmpRasMap->fErase = true;
 	ReadInputMaps(tmpRasMap);
 
-	trq.SetText(SMAPTextTopologicalOptimization);
+	trq.SetText(TR("Topological Optimization"));
 	bool fTransformCoords = cs() != m_smStream->cs();
 	for (int j=0; j <m_smStream->iFeatures(); ++j){
 		ILWIS::Segment *seg = (ILWIS::Segment *)m_smStream->getFeature(j);
@@ -208,7 +208,7 @@ bool MapTopologicalOptimization::fFreezing()
 	FileName fnModifiedflowMap(m_sModifiedflowMap, fnObj);
 	fnModifiedflowMap.sExt = ".mpr";
 	Map mpModFlow(FileName::fnUnique(fnModifiedflowMap), gr(), rcSize(), Domain("FlowDirection"));
-	trq.SetText(SMAPTextWriteOutMap);
+	trq.SetText(TR("Write output map"));
 	for (long iRow = 0; iRow < iLines(); iRow++ )
 	{
 		ByteBuf& bFlow = m_vFlowDir[iRow];
@@ -237,7 +237,7 @@ bool MapTopologicalOptimization::IsEdgeCell(long iRow, long iCol)
 Map MapTopologicalOptimization::RasterizeStream()
 {
   if (0 == m_smStream->sms()) {
-    throw ErrorObject(SMAPErrStreamSegments);
+    throw ErrorObject(TR("Error of stream segment map "));
   }
   FileName fnStream = m_smStream->fnObj;
   fnStream.sExt = ".mpr"; 

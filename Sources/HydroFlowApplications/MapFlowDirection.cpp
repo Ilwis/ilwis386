@@ -80,7 +80,7 @@ MapFlowDirection::MapFlowDirection(const FileName& fn, MapPtr& p)
 
 	fNeedFreeze = true;
 	sFreezeTitle = "MapFlowDirection";
-	htpFreeze = htpFlowDirectionT;
+	htpFreeze = "ilwisapp\flow_direction_algorithm.htm";
 }
 
 MapFlowDirection::MapFlowDirection(const FileName& fn, MapPtr& p, const Map& mp, 
@@ -185,7 +185,7 @@ bool MapFlowDirection::fFreezing()
 	m_vFlow.resize(iLines());  //allocate memory for the output flows 
 	InitPars();
 	trq.SetTitle(sFreezeTitle);
-	trq.SetText(SMAPTextReadingDEM);
+	trq.SetText(TR("Reading DEM"));
 	trq.Start();
 	for (long iRow = 0; iRow< iLines(); iRow++ )
 	{
@@ -202,7 +202,7 @@ bool MapFlowDirection::fFreezing()
 	}
 	trq.fUpdate(iLines(), iLines());
 
-	trq.SetText(SMAPTextCalculatingFlowDirection);
+	trq.SetText(TR("Calculating Flow Direction"));
 
 	if (m_fParallel) {
 		FlowDirectionAlgorithm fda(&trq);
@@ -457,7 +457,7 @@ bool MapFlowDirection::isInOneEdge(int iPos1, int iPos2, int iPos3, vector<int>&
 
 void MapFlowDirection::TreatFlatAreas()
 {
-		trq.SetText(SMapTextFlatArea);		
+		trq.SetText(TR("Treatment of Flat Area"));		
 		m_vFlag.resize(iLines());
 
 		//m_vFlag is initialized to zero, first

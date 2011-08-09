@@ -154,11 +154,11 @@ MapDrainageNetworkOrdering* MapDrainageNetworkOrdering::create(const FileName& f
 	
 	Domain dm = mpDrainage->dm();
 	if (!(dm.fValid() && (fCIStrEqual(dm->fnObj.sFileExt(), "bool.dom"))))
-			throw ErrorObject(WhatError(SMAPErrBoolDomain_S, errMapDrainageNetworkOrdering), mpDrainage->fnObj);
+			throw ErrorObject(WhatError(TR("Map should have domain bool"), errMapDrainageNetworkOrdering), mpDrainage->fnObj);
 
 	dm = mpflowdir->dm();
 	if (!(dm.fValid() && (fCIStrEqual(dm->fnObj.sFileExt(), "FlowDirection.dom"))))
-			throw ErrorObject(WhatError(SMAPErrInvalidDomain_S, errMapDrainageNetworkOrdering), mpflowdir->fnObj);
+			throw ErrorObject(WhatError(TR("Use an input map with domain FlowDirection   "), errMapDrainageNetworkOrdering), mpflowdir->fnObj);
 
 	bool fIncompGeoRef = false;
 	if (mpDEM->gr()->fGeoRefNone() && mpflowdir->gr()->fGeoRefNone())
@@ -223,7 +223,7 @@ bool MapDrainageNetworkOrdering::fFreezing()
 	IniParms();
 	
 	trq.SetTitle(sFreezeTitle);
-	trq.SetText(SMAPTextInitializeMap);
+	trq.SetText(TR("Initialize map"));
 	trq.Start();
 
 	for (long iRow = 0; iRow< iLines(); iRow++ )
@@ -261,7 +261,7 @@ bool MapDrainageNetworkOrdering::fFreezing()
 
 	//*Source link traces starts from a sorcecell along 
 	//*the downstream channel till a junction is reached
-	trq.SetText(SMAPTextExteriorDrainageOrdering);
+	trq.SetText(TR("Exterior Drainage Channel Ordering"));
   double rPixDist = mp->gr()->rPixSize() * 1.41; //max. a pixel distance 
 	for (long iRow = 1; iRow< iLines() - 1; iRow++ )
 	{
@@ -328,7 +328,7 @@ bool MapDrainageNetworkOrdering::fFreezing()
 	//*every time a junction is erased from the vector, while a drainage
 	//*starting at the junction has been identified 
 	//*The traces stop, when every junction in m_vJunction has been evaluated 
-	trq.SetText(SMAPTextInteriorDrainageOrdering);
+	trq.SetText(TR("Interior Drainage Channel Ordering"));
 	size_t size = m_vJunction.size();
 	while (m_vJunction.size() != 0 )
 	{
@@ -377,7 +377,7 @@ bool MapDrainageNetworkOrdering::fFreezing()
 	
 	//Write drainage map
 	m_dm->pdsrt()->Resize(m_iLinkNumber);
-	trq.SetText(SMAPTextWriteDrainageRasterMap);
+	trq.SetText(TR("Write Drainage Network Raster Map"));
   for (long iRow = 0; iRow < iLines(); iRow++ )
 	{
 		LongBuf& bDrainage = m_vDrainageMap[iRow];
@@ -390,7 +390,7 @@ bool MapDrainageNetworkOrdering::fFreezing()
 
 	
 	//Read DEM map
-	trq.SetText(SMAPTextReadingDEM);
+	trq.SetText(TR("Reading DEM"));
 	for (long iRow = 0; iRow< iLines(); iRow++ )
 	{
 		m_vDem[iRow].Size(iCols()); 
@@ -834,7 +834,7 @@ double MapDrainageNetworkOrdering::rComputeSinuosity(double rLength, double rStr
 
 void MapDrainageNetworkOrdering::CreateTable()
 {
-	trq.SetText(SMAPTextcreateDrainageNetworkTable);
+	trq.SetText(TR("Create Drainage Network Table"));
 	FileName fnTbl(fnObj, ".tbt");
 	fnTbl = FileName::fnUnique(fnTbl);
 	

@@ -79,7 +79,7 @@ void MapVariableThresholdComputation::Init()
 {
 		fNeedFreeze = true;
 		sFreezeTitle = "MapVariableThresholdComputation";
-		htpFreeze = htpVariableThresholdComputationT;
+		htpFreeze = "ilwisapp\variable_threshold_computation_algorithm.htm";
 
 		if (!fnObj.fValid())
       objtime = objdep.tmNewest();
@@ -134,10 +134,10 @@ MapVariableThresholdComputation* MapVariableThresholdComputation::create(const F
 	String sThreshold = as[3];
   
   if ((iFilterSize < 3) )  //must be odd values
-		throw ErrorObject(WhatError(String(SMAPErrInvalidFilterSize.scVal(), as[1].iVal()),
+		throw ErrorObject(WhatError(String(TR("Filter size must be an odd value and greater than 1").c_str(), as[1].iVal()),
                                 errMapVariableThresholdComputation));
   if ((iClasses < 1) )  //must be positive values
-		throw ErrorObject(WhatError(String(SMAPErrInvalidNrofClasses.scVal(), as[2].iVal()),
+		throw ErrorObject(WhatError(String(TR("Invalid number of classes %li").c_str(), as[2].iVal()),
                                 errMapVariableThresholdComputation));
   if (isEven(iFilterSize))
     iFilterSize += 1;
@@ -194,7 +194,7 @@ bool MapVariableThresholdComputation::fFreezing()
   SplitString(m_sThreshold, vThreshold);
   
 	trq.SetTitle(sFreezeTitle);
-	trq.SetText(SMAPTextInitializeMap);
+	trq.SetText(TR("Initialize map"));
 	trq.Start();
   
 	long iRow;
@@ -300,7 +300,7 @@ void MapVariableThresholdComputation::ComputeInternalRelief()
 
 void MapVariableThresholdComputation::ReClassify(vector<ThresholdValues> vThreshold)
 {
-  trq.SetText(SMAPTextVariableThresholdComputation);
+  trq.SetText(TR("Variable Threshold Computation"));
   for ( long iRow = 0; iRow< iLines(); iRow++ )
 	{
     for ( long iCol = 0; iCol < iCols(); iCol++)
@@ -323,7 +323,7 @@ void MapVariableThresholdComputation::ReClassify(vector<ThresholdValues> vThresh
 	}
 	trq.fUpdate(iLines(), iLines());
 
-  trq.SetText(SMAPTextVariableThresholdComputation);
+  trq.SetText(TR("Variable Threshold Computation"));
   int iSize = (m_iFilterSize)/2;
   for ( long iRow = 0; iRow< iLines(); iRow++ )
 	{

@@ -204,7 +204,7 @@ bool TblFlowPathLongitudinalProfile::fFreezing()
 {
   vector<LongitudinalProfile> vlp;
   trq.SetTitle(sFreezeTitle);
-  trq.SetText(SMAPTextInitializeMap);
+  trq.SetText(TR("Initialize map"));
   trq.Start();
   bool fTransformCoords = m_mpAttributeMap->cs() != m_segmpFlowPath->cs();
   long iLines = m_mpAttributeMap->iLines();
@@ -308,7 +308,7 @@ void TblFlowPathLongitudinalProfile::Init()
   objdep.Add(m_mpAttributeMap.ptr());
   fNeedFreeze = true;
   sFreezeTitle = "TblFlowPathLongitudinalProfile";
-  //htpFreeze = htpHorntonPlotsT;
+  //htpFreeze = "ilwisapp\horton_statistics_algorithm.htm";
 }
 
 void TblFlowPathLongitudinalProfile::CreateColumns(vector<LongitudinalProfile> vlp)

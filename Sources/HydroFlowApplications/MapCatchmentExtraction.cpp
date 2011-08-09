@@ -131,13 +131,13 @@ MapCatchmentExtraction::MapCatchmentExtraction(const FileName& fn, MapPtr& p)
 	ReadElement("CatchmentExtraction", "FlowDirection", m_mpFlow);
 	Domain dm = m_mpFlow->dm();
 	if (!(dm.fValid() && (fCIStrEqual(dm->fnObj.sFileExt(), "FlowDirection.dom"))))
-			throw ErrorObject(WhatError(SMAPErrInvalidDomain_S, errMapCatchmentExtraction), m_mpFlow->fnObj);
+			throw ErrorObject(WhatError(TR("Use an input map with domain FlowDirection   "), errMapCatchmentExtraction), m_mpFlow->fnObj);
 
 
 	ReadElement("CatchmentExtraction", "DrainageNetworkOrderingMap", mp);
 	dm = mp->dm();
 	if (!(dm.fValid())) // && (fCIStrEqual(dm.sDomainType , dmtID))))
-			throw ErrorObject(WhatError(SMAPErrIDDomain_S, errMapCatchmentExtraction), mp->fnObj);
+			throw ErrorObject(WhatError(TR("Map should have identifier domain"), errMapCatchmentExtraction), mp->fnObj);
 
 	VerifyColumns(mp);
 
@@ -145,7 +145,7 @@ MapCatchmentExtraction::MapCatchmentExtraction(const FileName& fn, MapPtr& p)
 	
 	fNeedFreeze = true;
   sFreezeTitle = "MapCatchmentExtraction";
-	htpFreeze = htpCatchmentExtractionT;
+	htpFreeze = "ilwisapp\\catchment_extraction_algorithm.htm";
 }
 
 MapCatchmentExtraction::MapCatchmentExtraction(const FileName& fn, 
@@ -162,18 +162,18 @@ MapCatchmentExtraction::MapCatchmentExtraction(const FileName& fn,
 	//Verify domain and attribute table
 	Domain dm = mpDrainage->dm();
 	if (!(dm.fValid())) // && (fCIStrEqual(dm.sDomainType , dmtID))))
-			throw ErrorObject(WhatError(SMAPErrIDDomain_S, errMapCatchmentExtraction), mpDrainage->fnObj);
+			throw ErrorObject(WhatError(TR("Map should have identifier domain"), errMapCatchmentExtraction), mpDrainage->fnObj);
 
 	VerifyColumns(mpDrainage);
 	
 	Domain flowdm = mpFlowDir->dm();
 	if (!(flowdm.fValid() && (fCIStrEqual(flowdm->fnObj.sFileExt(), "FlowDirection.dom"))))
-			throw ErrorObject(WhatError(SMAPErrInvalidDomain_S, errMapCatchmentExtraction), mpFlowDir->fnObj);
+			throw ErrorObject(WhatError(TR("Use an input map with domain FlowDirection   "), errMapCatchmentExtraction), mpFlowDir->fnObj);
 
 	SetDomainValueRangeStruct(dm);  
 	fNeedFreeze = true;
 	sFreezeTitle = "MapCatchmentExtraction";
-	htpFreeze = htpCatchmentExtractionT;
+	htpFreeze = "ilwisapp\\catchment_extraction_algorithm.htm";
 
 	objdep.Add(m_mpFlow);
 	objdep.Add(mpDrainage);
@@ -243,7 +243,7 @@ bool MapCatchmentExtraction::fLatLonCoords()
 bool MapCatchmentExtraction::fFreezing()
 {
 	trq.SetTitle(sFreezeTitle);
-	trq.SetText(SMAPTextInitializeMap);
+	trq.SetText(TR("Initialize map"));
 	trq.Start();
 
 	m_vDrainageMap.resize(iLines());  
@@ -274,7 +274,7 @@ bool MapCatchmentExtraction::fFreezing()
 	GetAttributes();
 	
 	//Delineate catchment per drainage channel
-	trq.SetText(SMAPTextExtractCatchment);
+	trq.SetText(TR("Extract Catchment"));
 	while (m_vRecords.size() != 0 )
 	{
 		for (unsigned long index=0; index < m_vRecords.size(); ++index)
@@ -300,7 +300,7 @@ bool MapCatchmentExtraction::fFreezing()
 	} 
 
 	//Write catchment map
-	trq.SetText(SMAPTextCreateCatchmentMap);
+	trq.SetText(TR("Create catchment raster map"));
   for (long iRow = 0; iRow < iLines(); iRow++ )
 	{
 		//LongBuf& bDrainage = m_vDrainageMap[iRow];
@@ -321,7 +321,7 @@ bool MapCatchmentExtraction::fFreezing()
   SetAttributeTable(m_tbl);
 
 	//Vectorize the raster catchment map 
-	trq.SetText(SMAPTextCreateCatchmentPolygonMap);
+	trq.SetText(TR("Create catchment polygon map"));
 	FileName fnPol(fnObj,".mpa");
 	String sExprPol("PolygonMapFromRas(%S, %li, %S)", fnObj.sFullPathQuoted(), 8, String("smooth")); 
 						                                        
@@ -330,7 +330,7 @@ bool MapCatchmentExtraction::fFreezing()
 	polMap->Calc();
 	polMap->SetAttributeTable(m_tbl);
 
-	trq.SetText(SMAPTextComputeCatchmentAttributes);
+	trq.SetText(TR("Compute catchment attributes"));
 	FileName fnTmpHsa;
 	String sExprTbl;
 	Table tblHsa;
@@ -419,7 +419,7 @@ void MapCatchmentExtraction::GetAttributes()
 
 	DomainSort* pdsrt = colUpstreamLink->dmKey()->pdsrt();
 	if ( !pdsrt )
-		throw ErrorObject(SMAPErrNoDomainSort);
+		throw ErrorObject(TR("Source map must have domain class or id"));
   long iSize = pdsrt->iSize();
 	
 	AttCols ac;
@@ -437,7 +437,7 @@ void MapCatchmentExtraction::GetAttributes()
 
 void MapCatchmentExtraction::ComputeCatchmentAttributes()
 {
-	trq.SetText(SMAPTextcreateCatchmentAttributeTable);
+	trq.SetText(TR("Create merged catchment attribute table"));
 
 	//Retrieve attributes from drainage network attribute table needed 
 	//for updating the catchment attributes  
@@ -448,7 +448,7 @@ void MapCatchmentExtraction::ComputeCatchmentAttributes()
 
 	DomainSort* pdsrt = colUpstreamLink->dmKey()->pdsrt();
 	if ( !pdsrt )
-		throw ErrorObject(SMAPErrNoDomainSort);
+		throw ErrorObject(TR("Source map must have domain class or id"));
   long iSize = pdsrt->iSize();
 
 	//Define catchment attributes
@@ -512,7 +512,7 @@ void MapCatchmentExtraction::ComputeTotalUpstreamArea(DomainSort* pdsrt, Column 
 {
 	bool fComputeTotalArea = true;
 	long iSize = pdsrt->iSize();
-	trq.SetText(SMAPTextCalculateTotalUpstreamCatchmentArea);
+	trq.SetText(TR("Calculate the total upstream catchment area"));
 	while(fComputeTotalArea)
 	{
 		fComputeTotalArea = false;
@@ -549,7 +549,7 @@ void MapCatchmentExtraction::ComputerCenterPolygon(FileName fn)
 {
 	//First lable point map of the polygon
 	//then, put the point coordinates to the catchment attribute table
-	trq.SetText(SMAPTextCalculateCenterPolygon);
+	trq.SetText(TR("Compute the center of polygon"));
   FileName fnTmpPoint(fnObj, ".mpp");
 	fnTmpPoint = FileName::fnUnique(fnTmpPoint);
 	String sExpr("PointMapPolLabels(%S)", fn.sFullPathQuoted(false)); 
@@ -661,7 +661,7 @@ void MapCatchmentExtraction::ComputeCenterDrainage()
 {
 	//Retrieve UpstreamCoord attributes from drainage network attribute table needed
   //to be able to trace the flow path and get the center of drainage.
-	trq.SetText(SMAPTextCalculateCenterDrainage);
+	trq.SetText(TR("Compute the center of drainage channel"));
 	Table tblAtt = mp->tblAtt();
 	Column colUpstreamCoord = tblAtt->col(String("UpstreamCoord"));
 	Column colLength = tblAtt->col(String("Length"));
@@ -672,7 +672,7 @@ void MapCatchmentExtraction::ComputeCenterDrainage()
 
 	DomainSort* pdsrt = colUpstreamCoord->dmKey()->pdsrt();
 	if ( !pdsrt )
-		throw ErrorObject(SMAPErrNoDomainSort);
+		throw ErrorObject(TR("Source map must have domain class or id"));
   long iSize = pdsrt->iSize();
 	for (long i=1; i<= iSize ; i++ ) 
 	{

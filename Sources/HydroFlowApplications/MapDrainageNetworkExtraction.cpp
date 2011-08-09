@@ -60,7 +60,7 @@ void MapDrainageNetworkExtraction::Init()
 		SetDomainValueRangeStruct(Domain("bool"));  
 		fNeedFreeze = true;
 		sFreezeTitle = "MapDrainageNetworkExtraction";
-		htpFreeze = htpNetworkExtractionT;
+		htpFreeze = "ilwisapp\\drainage_network_extraction_algorithm.htm";
 
 		switch (m_tmMethods)
 		{
@@ -165,7 +165,7 @@ MapDrainageNetworkExtraction* MapDrainageNetworkExtraction::create(const FileNam
 			Map mpFlowDir(as[2],fn.sPath());
 			Domain dm = mpFlowDir->dm();
 			if (!(dm.fValid() && (fCIStrEqual(dm->fnObj.sFileExt(), "FlowDirection.dom"))))
-				throw ErrorObject(WhatError(SMAPErrInvalidDomain_S, errMapDrainageNetworkExtraction)); 
+				throw ErrorObject(WhatError(TR("Use an input map with domain FlowDirection   "), errMapDrainageNetworkExtraction)); 
 
 			if (mp->gr()->fGeoRefNone() && thmap->gr()->fGeoRefNone())
 					fIncompGeoRef = mp->rcSize() != mpFlowDir->rcSize();
@@ -242,7 +242,7 @@ bool MapDrainageNetworkExtraction::fFreezing()
 	m_vOutput.resize(iLines());  //allocate memory for the output map  
 
 	trq.SetTitle(sFreezeTitle);
-	trq.SetText(SMAPTextDrainageNetworkExtraction);
+	trq.SetText(TR("Calculating Drainage Network Extraction"));
 	trq.Start();
 
 	long iRow, iCol;
@@ -304,7 +304,7 @@ bool MapDrainageNetworkExtraction::fFreezing()
 	//Construct dead-end drainage lines, if stream threshold map is used
 	if (m_tmMethods == tmMap )
 	{
-		trq.SetText(SMAPTextConstructDrainage);
+		trq.SetText(TR("Construct dead-end drainage lines"));
 		for (iRow = 1; iRow < iLines() - 1; ++iRow)
 		{
 			for( iCol = 1; iCol < iCols() - 1; ++iCol)

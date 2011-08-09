@@ -241,7 +241,7 @@ void MapDEMOptimization::Init()
 {
 		fNeedFreeze = true;
 		sFreezeTitle = "MapDEMOptimization";
-		htpFreeze = htpDemOptimizationT;
+		htpFreeze = "ilwisapp\\dem_optimization_algorithm.htm";
 		
 		switch (m_DrainageMapType)
 		{
@@ -381,7 +381,7 @@ bool MapDEMOptimization::fValueRangeChangeable() const
 bool MapDEMOptimization::fFreezing()
 {
 		trq.SetTitle(sFreezeTitle);
-		trq.SetText(SMAPTextReadingDEM);
+		trq.SetText(TR("Reading DEM"));
 		trq.Start();
 		
 		Table tbl;
@@ -450,7 +450,7 @@ bool MapDEMOptimization::fFreezing()
 		
 		vector<RealBuf> vDem;  //vector for the output DEM
 		vDem.resize(iLines());
-		trq.SetText(SMAPTextCalculatingDemOptimization);
+		trq.SetText(TR("Calculating Optimized DEM"));
 		RangeReal rrInput  = m_mp->rrMinMax();
 		double rMax = rrInput.rHi();
 		double rMin = rrInput.rLo();
@@ -526,7 +526,7 @@ bool MapDEMOptimization::fFreezing()
 bool MapDEMOptimization::WriteData(vector<RealBuf>& vData)
 {
 	//write DEM to disk 
-	trq.SetText(SMAPTextWriteOutMap);
+	trq.SetText(TR("Write output map"));
 	for (long iRow = 0; iRow< iLines(); iRow++ )
 	{
 		ptr.PutLineVal(iRow, vData[iRow]);

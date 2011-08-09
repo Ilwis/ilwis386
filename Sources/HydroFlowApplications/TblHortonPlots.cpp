@@ -181,7 +181,7 @@ void TableHortonPlots::AddDomainItem(Domain dm, long iItem )
 bool TableHortonPlots::fFreezing()
 {
   trq.SetTitle(sFreezeTitle);
-  trq.SetText(SMAPTextInitializeMap);
+  trq.SetText(TR("Initialize map"));
   trq.Start();
 
   long iLines = m_mpCatchment->iLines();
@@ -209,7 +209,7 @@ bool TableHortonPlots::fFreezing()
   Column colDrainageID = tblAtt->col(String("DrainageID"));
   DomainSort* pdsrt = colDrainageID->dmKey()->pdsrt();
   if ( !pdsrt )
-	throw ErrorObject(SMAPErrNoDomainSort);
+	throw ErrorObject(TR("Source map must have domain class or id"));
   long iSize = pdsrt->iSize();
   CreateColumns(iSize);
   long iMaxOrderNumber = 0;
@@ -269,15 +269,15 @@ void TableHortonPlots::Init()
   //Verify domain and attribute table
 	Domain dm = m_mpCatchment->dm();
 	if (!(dm.fValid())) 
-			throw ErrorObject(WhatError(SMAPErrIDDomain_S, errTableHortonPlots), m_mpCatchment->fnObj);
+			throw ErrorObject(WhatError(TR("Map should have identifier domain"), errTableHortonPlots), m_mpCatchment->fnObj);
 
   dm = m_mpMergedCatchment->dm();
 	if (!(dm.fValid())) 
-			throw ErrorObject(WhatError(SMAPErrIDDomain_S, errTableHortonPlots), m_mpMergedCatchment->fnObj);
+			throw ErrorObject(WhatError(TR("Map should have identifier domain"), errTableHortonPlots), m_mpMergedCatchment->fnObj);
 
   dm = m_mpDrainage->dm();
 	if (!(dm.fValid())) 
-			throw ErrorObject(WhatError(SMAPErrIDDomain_S, errTableHortonPlots), m_mpDrainage->fnObj);
+			throw ErrorObject(WhatError(TR("Map should have identifier domain"), errTableHortonPlots), m_mpDrainage->fnObj);
 
 	Table tblCachment = VerifyAttributes(m_mpCatchment);
 	if (!tblCachment[String("DrainageID")].fValid())
@@ -301,7 +301,7 @@ void TableHortonPlots::Init()
   objdep.Add(m_mpDrainage.ptr());
   fNeedFreeze = true;
   sFreezeTitle = "TableHortonPlots";
-  htpFreeze = htpHorntonPlotsT;
+  htpFreeze = "ilwisapp\horton_statistics_algorithm.htm";
 }
 
 void TableHortonPlots::CreateColumns(long iSize)
