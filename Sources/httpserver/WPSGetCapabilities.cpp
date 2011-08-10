@@ -79,7 +79,7 @@ void WPSGetCapabilities::writeResponse(IlwisServer *server) const{
 	oper.append_attribute("name") = "Execute";
 	dcp = doc.addNodeTo(oper, "ows:DCP");
 	http = doc.addNodeTo(dcp,"ows:HTTP");
-	serv = getConfigValue("WPS:OperationMetadata:Execute") + "?";
+	serv = getConfigValue("WPS:OperationMetadata:ExecuteProcess") + "?";
 	doc.addNodeTo(http,"ows:Get").append_attribute("xlink:href") = serv.c_str();
 
 	pugi::xml_node offerings = doc.addNodeTo(si, "wps:ProcessOfferings");
