@@ -65,19 +65,19 @@ void WPSGetCapabilities::writeResponse(IlwisServer *server) const{
 	oper.append_attribute("name") = "GetCapabilities";
 	pugi::xml_node dcp = doc.addNodeTo(oper, "ows:DCP");
 	pugi::xml_node http = doc.addNodeTo(dcp,"ows:HTTP");
-	doc.addNodeTo(http,"ows:Get").append_attribute("xlink:href") = getConfigValue("WPS:OperationMetadata:GetCapabilities").c_str();
+	doc.addNodeTo(http,"ows:Get").append_attribute("xlink:href") = getConfigValue("WPS:OperationMetadata:GetCapabilities?").c_str();
 		
 	oper = doc.addNodeTo(meta,"ows:Operation");
 	oper.append_attribute("name") = "DescribeProcess";
 	dcp = doc.addNodeTo(oper, "ows:DCP");
 	http = doc.addNodeTo(dcp,"ows:HTTP");
-	doc.addNodeTo(http,"ows:Get").append_attribute("xlink:href") = getConfigValue("WPS:OperationMetadata:DescribeProcess").c_str();
+	doc.addNodeTo(http,"ows:Get").append_attribute("xlink:href") = getConfigValue("WPS:OperationMetadata:DescribeProcess?").c_str();
 
 	oper = doc.addNodeTo(meta,"ows:Operation");
 	oper.append_attribute("name") = "Execute";
 	dcp = doc.addNodeTo(oper, "ows:DCP");
 	http = doc.addNodeTo(dcp,"ows:HTTP");
-	doc.addNodeTo(http,"ows:Get").append_attribute("xlink:href") = getConfigValue("WPS:OperationMetadata:Execute").c_str();
+	doc.addNodeTo(http,"ows:Get").append_attribute("xlink:href") = getConfigValue("WPS:OperationMetadata:Execute?").c_str();
 
 	pugi::xml_node offerings = doc.addNodeTo(si, "wps:ProcessOfferings");
 
