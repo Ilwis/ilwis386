@@ -28,10 +28,11 @@ bool WPSGetCapabilities::doCommand() {
 void WPSGetCapabilities::writeResponse(IlwisServer *server) const{
 	ILWIS::XMLDocument doc;
 	doc.set_name("wps:Capabilities");
+	pugi::xml_node capaNode = doc.addNodeTo(doc,"wps:Capabilities");
 	createHeader(doc, "http://www.opengis.net/wps/1.0.0 ../wpsGetCapabilities_response.xsd"); 
 
 
-	pugi::xml_node si = doc.addNodeTo(doc,"ows:ServiceIdentification");
+	pugi::xml_node si = doc.addNodeTo(capaNode,"ows:ServiceIdentification");
 	doc.addNodeTo(si,"ows:Title", getConfigValue("WPS:ServiceIdentification:Title"));
 	pugi::xml_node kw = doc.addNodeTo(si,"ows:Keywords");
 
