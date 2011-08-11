@@ -77,7 +77,7 @@ void FieldPage::create()
 
 //------------------------------------------------------------
 FormGeneralPreferences::FormGeneralPreferences() :
-  FormWithDest(IlwWinApp()->GetMainWnd(), "Preferences"),
+  FormWithDest(IlwWinApp()->GetMainWnd(), TR("Preferences")),
 	fInitial(true),
 	curPage(NULL)
 {
