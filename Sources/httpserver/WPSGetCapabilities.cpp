@@ -76,7 +76,7 @@ void WPSGetCapabilities::writeResponse(IlwisServer *server) const{
 	doc.addNodeTo(http,"ows:Get").append_attribute("xlink:href") = serv.c_str();
 
 	oper = doc.addNodeTo(meta,"ows:Operation");
-	oper.append_attribute("name") = "Execute";
+	oper.append_attribute("name") = "ExecuteProcess";
 	dcp = doc.addNodeTo(oper, "ows:DCP");
 	http = doc.addNodeTo(dcp,"ows:HTTP");
 	serv = getConfigValue("WPS:OperationMetadata:ExecuteProcess") + "?";
