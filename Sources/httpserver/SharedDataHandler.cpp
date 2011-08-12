@@ -27,6 +27,10 @@ void SharedDataHandler::writeResponse(IlwisServer*server) const{
 	if ( index != string::npos) {
 		name = uri.substr(index+1);
 		name = String("%S\\%S", getConfigValue(context), name);
+	} else {
+		index = uri.find_last_of("/");
+		name = name = uri.substr(index+1);
+		name = String("%S\\%S", getConfigValue(context), name);
 	}
 #undef close // huh? wie definieert nou een macro close, das vragen om problemen
 #undef read
