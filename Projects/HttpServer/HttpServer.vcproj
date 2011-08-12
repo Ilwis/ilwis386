@@ -213,10 +213,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\httpserver\DownLoader.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\Sources\httpserver\mongoose.c"
 				>
 			</File>
@@ -268,10 +264,6 @@
 			>
 			<File
 				RelativePath="..\..\Sources\httpserver\command.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\httpserver\DownLoader.h"
 				>
 			</File>
 			<File
