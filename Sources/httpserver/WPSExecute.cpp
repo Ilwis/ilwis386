@@ -121,13 +121,13 @@ String WPSExecute::makeApplicationExpression(const String& expr, const map<Strin
 			if ( index != string::npos) {
 				name =  url.substr(index+1);
 			}
-			name = executionDir + "\\" + name;
+	/*		name = executionDir + "\\" + name;
 			index = name.find_last_of("_");
 			if ( index != string::npos) {
 				String ext = name.substr(index+1);
 				name = name.substr(0,index);
 				name = String("%S.%S",name, ext.sHead("."));
-			} else
+			} else*/
 				name = FileName(name).sFile;
 
 			expression += name;
@@ -153,13 +153,13 @@ String WPSExecute::makeNonApplicationExpression(const String& expr, const map<St
 			if ( index != string::npos) {
 				name =  url.substr(index+1);
 			}
-			name = executionDir + "\\" + name;
-			index = name.find_last_of("_");
-			if ( index != string::npos) {
-				String ext = name.substr(index+1);
-				name = name.substr(0,index);
-				name = String("%S.%S",name, ext.sHead("."));
-			} else
+			//name = executionDir + "\\" + name;
+			//index = name.find_last_of("_");
+			//if ( index != string::npos) {
+			//	String ext = name.substr(index+1);
+			//	name = name.substr(0,index);
+			//	name = String("%S.%S",name, ext.sHead("."));
+			//} else
 				name = FileName(name).sFile;
 
 			expression += name;
