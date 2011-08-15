@@ -72,10 +72,6 @@
 #include "Engine\Base\File\BaseCopier.h"
 #include "Engine\Base\File\ObjectCopier.h"
 #include "Engine\Base\DataObjects\ObjectStructure.h"
-#include <xercesc/parsers/SAXParser.hpp>
-#include <xercesc/framework/MemBufInputSource.hpp>
-#include <xercesc/util/OutOfMemoryException.hpp>
-#include <xercesc/sax/HandlerBase.hpp>
 #include <stack>
 #include "Engine\Base\DataObjects\URL.h"
 #include "Engine\Base\DataObjects\URLEncode.h"
@@ -85,7 +81,6 @@
 #include "Engine\Base\File\zip.h"
 #include "Engine\Base\File\Zipper.h"
 #include "Engine\Base\DataObjects\Uploader.h"
-
 
 CFrameWnd *BaseCommandHandler::wndOwner=0;
 
@@ -506,6 +501,7 @@ AddCommand("appmetadata",(CommandFunc)&CommandHandler::CmdAppMetaData);
 AddCommand("send",(CommandFunc) &CommandHandler::CmdSend);
 AddCommand("zip",(CommandFunc) &CommandHandler::CmdZip); 
 AddCommand("updateIlwis",(CommandFunc) &CommandHandler::CmdUpdateIlwis); 
+AddCommand("addtomaplist",(CommandFunc) &CommandHandler::CmdAddToMapList); 
 
 //commands["testingdbconnection"]=(CommandFunction)&CommandHandler::CmdTestingDBConnection;
 }
@@ -3164,6 +3160,36 @@ void CommandHandler::cleanupDownloadDir(const String& folder) {
 		}
 	}
 }
+
+void CommandHandler::CmdAddToMapList(const String& sN) {
+	String maplist = sN.sHead(" ");
+	FileName fnMpl(maplist,".mpl");
+	String sTail = sN.sTail(" ");
+	Array<String> parts;
+	Split(sTail,parts," ");
+	Array<FileName> maps;
+	for(int i=0; i < parts.size(); ++i) {
+		FilenameIter fi(parts[i]);
+		while(fi.fValid())
+		{
+			String s=String(*fi).toLower();
+			FileName fn(s);
+			if ( IOTYPE(fn) == IlwisObject::iotRASMAP)
+				maps.push_back(fn);
+			++fi;
+		}
+	}
+	if ( maps.size() > 0) {
+		MapList mpl(fnMpl, maps);
+		mpl->Store();
+	}
+}
+
+
+
+
+
+
 
 
 

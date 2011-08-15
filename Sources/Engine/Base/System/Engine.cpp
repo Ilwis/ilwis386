@@ -15,8 +15,6 @@
 #include "Engine\DataExchange\ForeignFormat.h"
 #include "Engine\Base\DataObjects\URL.h"
 #include "Engine\DataExchange\WMSCollection.h"
-#include <Headers\xercesc\util\PlatformUtils.hpp>
-#include "XQuila\xqilla\xqilla-dom3.hpp"
 #include <set>
 
 ModuleMap Engine::modules = ModuleMap();
@@ -48,15 +46,12 @@ Engine::~Engine()
 	logger = NULL;
 	delete version;
 	version = NULL;
-	XERCES_CPP_NAMESPACE::XMLPlatformUtils::Terminate();
 }
 
 // Engine initialization
 
 
 void Engine::Init(const String& prog, const String& sCmdLn) {
-	XERCES_CPP_NAMESPACE::XMLPlatformUtils::Initialize();
-	XQillaPlatformUtils::initialize();
 
 	context = new IlwisAppContext(prog, sCmdLn);
 	version = new ILWIS::Version();
@@ -107,7 +102,7 @@ void Engine::RemoveThreadLocalVars() {
 		context->RemoveThreadLocalVars();
 }
 
-void Engine::Execute(String& command) {
+void Engine::Execute(const String& command) {
 	if ( context)
 		context->Execute(command);
 }

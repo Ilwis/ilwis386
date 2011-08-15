@@ -33,7 +33,7 @@ public:
 	void SetThreadLocalVar(IlwisAppContext::ThreadLocalVars tvType, void *var);
 	void InitThreadLocalVars();
 	void RemoveThreadLocalVars();
-	void Execute(String& command);
+	void Execute(const String& command);
 	FileName fnGetSearchPath(int iIndex);
 	void AddSearchPath(const FileName& fn);
 	void RemoveSearchPath(const FileName& fn);

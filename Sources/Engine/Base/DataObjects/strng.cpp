@@ -257,7 +257,7 @@ String& String::toUpper()
   return *this;
 }
 
-String String::sTrimSpaces() const {
+String String::sTrimSpaces(bool removeCRLF) const {
 	// find first non space
 	if ( size() <= 0 ) 
 		return "";
@@ -267,7 +267,18 @@ String String::sTrimSpaces() const {
 	if (iFirstNonSpace == npos || iFindLastSpace == npos)
 		return "";
 
-	return substr(iFirstNonSpace, iFindLastSpace - iFirstNonSpace + 1);
+	if ( removeCRLF) {
+		String temp = substr(iFirstNonSpace, iFindLastSpace - iFirstNonSpace + 1);
+		String result;
+		int fromStart, fromEnd;
+		fromStart = temp.find_first_not_of("\r\n");
+		fromEnd = temp.find_last_not_of("\r\n");
+		fromStart = max(0, fromStart);
+		fromEnd = fromEnd == string::npos ? temp.size(): fromEnd;
+		return substr(fromStart, fromEnd - fromStart + 1);
+
+	} else
+		return  substr(iFirstNonSpace, iFindLastSpace - iFirstNonSpace + 1);
 }
 
 const String& String::operator&=(const char* s) 

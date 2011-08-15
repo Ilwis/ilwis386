@@ -109,7 +109,7 @@ public:
                             { return sSub(0, iLength); }
     String               sRight(int iLength) const 
                             { return sSub(length()-iLength, iLength); }
-    String _export       sTrimSpaces() const; // at begin and end of string!
+    String _export       sTrimSpaces(bool removeCRLF=false) const; // at begin and end of string!
     String _export       &toLower();
     String _export       &toUpper();
   	String _export       sTail(const String& sDelim) const;

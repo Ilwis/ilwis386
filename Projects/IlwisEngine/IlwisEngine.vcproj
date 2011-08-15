@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="IlwisEngine"
 	ProjectGUID="{903CDF6B-45ED-4C7D-83BF-9ECC12B051D3}"
 	RootNamespace="IlwisEngine"
@@ -51,7 +51,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/GS"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)Sources\Headers\Xquila&quot;;&quot;$(SolutionDir)Sources\Headers&quot;;&quot;$(SolutionDir)Sources\Geos\headers&quot;;&quot;$(SolutionDir)Sources&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)Sources\Headers&quot;;&quot;$(SolutionDir)Sources\Geos\headers&quot;;&quot;$(SolutionDir)Sources&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;ILWISENGINE;_WIN32_DCOM;_CRTDBG_MAP_ALLOC;_WIN32_WINNT=0x0400;_WIN32_IE=0x0400;_CRT_SECURE_NO_WARNINGS;_SECURE_SCL=0;_HAS_ITERATOR_DEBUGGING=0"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -78,7 +78,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="RpcRT4.Lib libcurl.lib xerces-c_3D.lib ftgl.lib opengl32.lib geos.lib glu32.lib freetype.lib xqilla22d.lib zlib.lib"
+				AdditionalDependencies="RpcRT4.Lib libcurl.lib ftgl.lib opengl32.lib geos.lib glu32.lib freetype.lib xqilla22d.lib zlib.lib"
 				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\$(ProjectName).dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)libraries\import&quot;;&quot;$(SolutionDir)libraries\$(ConfigurationName)&quot;;&quot;$(SolutionDir)\libraries\debug&quot;;&quot;C:\Program Files\Microsoft Visual Studio 8\VC\PlatformSDK\Lib&quot;"
@@ -873,6 +873,14 @@
 					</File>
 					<File
 						RelativePath="..\..\Sources\Engine\Base\DataObjects\DAT2.CPP"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Engine\Base\DataObjects\DownLoader.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Engine\Base\DataObjects\DownLoader.h"
 						>
 					</File>
 					<File

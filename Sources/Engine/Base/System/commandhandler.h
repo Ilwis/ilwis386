@@ -206,7 +206,7 @@ private:
 	static void CmdZip(const String& filename);
 	static void CmdUpdateIlwis(const String& expr);
 	static void CreatePyramidFiles(const String& str);
-
+	static void CmdAddToMapList(const String& sN);
 
 	// this command is only for testing purposes, it will show the connect db dialog
 	void CmdTestingDBConnection(const String& sCmd);

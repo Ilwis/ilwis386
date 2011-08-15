@@ -77,23 +77,23 @@ String WhatError::sWhat() const
   String sTmp;
   switch (err) {
     case errMEMALL:
-      sTmp = SDErrInsuffMem; break;
+      sTmp = TR("Insufficient Memory"); break;
     case errCREATE:
-      sTmp = SDErrCreate; break;
+      sTmp = TR("Creation error"); break;
     case errCREATESYS:
-      sTmp = SDErrCreate;
+      sTmp = TR("Creation error");
       sTmp &= "; ";
-      sTmp &= SDATErrNotAllowedInSysDir;
+      sTmp &= TR("Not allowed in system folder"); break;
       break;
     case errCREATEOPEN:
-      sTmp = SDErrCreate; 
+      sTmp = TR("Creation error"); 
       sTmp &= "; ";
-      sTmp &= SDATErrObjectStillOpen;
+      sTmp &= TR("Object still open");
       break;
     case errCREATEACC:
-      sTmp = SDErrCreate; 
+      sTmp = TR("Creation error"); 
       sTmp &= "; ";
-      sTmp &= SDATErrFileReadOnly;
+      sTmp &= TR("File is readonly");
       break;
     case errOPEN:
       sTmp = SDErrFind; break;
@@ -104,11 +104,11 @@ String WhatError::sWhat() const
     case errACCESS:
       sTmp = SDErrAccess; break;
     case errCOPYSELF :
-      sTmp = SDATErrCannotCopySelf; break;
+      sTmp = TR("Can not copy to self"); break;
     case errNOATTTBL :
-      sTmp = SDATErrNoAttributeTable; break;
+      sTmp = TR("No attribute table"); break;
     default:
-      sTmp = SDErrUnknown;
+      sTmp = TR("Unknown Error");
   }
   return sTmp;
 }
