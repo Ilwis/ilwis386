@@ -65,10 +65,10 @@
 #include "Headers\Htp\Ilwismen.htp"
 
 #include "Headers\toolspch.h"
-#include <xercesc/parsers/SAXParser.hpp>
-#include <xercesc/framework/MemBufInputSource.hpp>
-#include <xercesc/util/OutOfMemoryException.hpp>
-#include <xercesc/sax/HandlerBase.hpp>
+//#include <xercesc/parsers/SAXParser.hpp>
+//#include <xercesc/framework/MemBufInputSource.hpp>
+//#include <xercesc/util/OutOfMemoryException.hpp>
+//#include <xercesc/sax/HandlerBase.hpp>
 
 #include "Engine\Base\DataObjects\URL.h"
 #include "Engine\DataExchange\WMSCollection.h"
