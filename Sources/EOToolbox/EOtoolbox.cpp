@@ -16,7 +16,7 @@ EOToolbox *GNCObject = new EOToolbox();
 String createTimeString(const String& timep, const FormatInfo& info) {
 	if ( info.format == "yyyymmddhhmm") {
 		ILWIS::Time time(timep);
-		String stime("%d%2d%2d",time.get(ILWIS::Time::tpDATE), time.get(ILWIS::Time::tpHOUR), time.get(ILWIS::Time::tpMINUTE));
+		String stime("%d%2d%2d",(int)time.get(ILWIS::Time::tpDATE), (int)time.get(ILWIS::Time::tpHOUR), (int)time.get(ILWIS::Time::tpMINUTE));
 		return stime;
 	}
 	if ( info.format == "yyyymmdd") {
