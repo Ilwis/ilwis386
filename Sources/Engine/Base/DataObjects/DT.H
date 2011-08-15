@@ -73,7 +73,7 @@ private:
 namespace ILWIS {
 	class _export Time {
 	public:
-		enum TimePart{tpYEAR, tpMONTH, tpDAYOFMONTH, tpJULIANDAY, tpDAYOFTHEWEEK, tpHOUR, tpMINUTE, tpSECOND};
+		enum TimePart{tpYEAR, tpMONTH, tpDAYOFMONTH, tpJULIANDAY, tpDAYOFTHEWEEK, tpHOUR, tpMINUTE, tpSECOND, tpDATE, tpDAYTIME};
 		enum Mode{mUNKNOWN, mDATE,mDATETIME,mTIME,mDURATION};
 		Time(int yr=-4713, int mnth=1, int dy=1, int hr=0, int min=0, double sec=0);
 		Time(const time_t time);
