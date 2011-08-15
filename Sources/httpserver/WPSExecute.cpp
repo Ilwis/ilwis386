@@ -16,7 +16,7 @@
 #include "Engine\Base\File\zlib.h"
 #include "Engine\Base\File\unzip.h"
 #include "Engine\Base\DataObjects\URL.h"
-#include "HttpServer\Downloader.h"
+#include "Engine\Base\DataObjects\Downloader.h"
 
 
 

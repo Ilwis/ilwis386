@@ -8,7 +8,7 @@
 #include "Engine\Base\System\module.h"
 #include "Engine\Applications\ModuleMap.h"
 #include "Engine\Base\DataObjects\URL.h"
-#include "HttpServer\Downloader.h"
+#include "Engine\Base\DataObjects\Downloader.h"
 
 
 using namespace ILWIS;

@@ -111,8 +111,8 @@ bool IlwisServer::start(String* cmd) {
 	memset(coptions,0, 40);
 	int index = 0;
 	addOptions(index,coptions, "document_root", pl.fExist("data_folder")? String("-r %S", pl.sGet("data_root")) : getEngine()->sGetCurDir());
-	if ( pl.fExist("ports")) {
-		addOptions(index, coptions,"listening_ports",pl.sGet("ports"));
+	if ( pl.fExist("port")) {
+		addOptions(index, coptions,"listening_ports",pl.sGet("port"));
 	}
 	if ( pl.fExist("threads")) {
 		addOptions(index, coptions,"num_threads",pl.sGet("threads"));

@@ -10,7 +10,7 @@
 #include "Engine\Base\System\commandhandler.h"
 #include "httpserver\UpdateService.h"
 #include "Engine\Base\DataObjects\URL.h"
-#include "HttpServer\Downloader.h"
+#include "Engine\Base\DataObjects\Downloader.h"
 #include "Engine\Base\File\Zipper.h"
 #include <process.h>
 
