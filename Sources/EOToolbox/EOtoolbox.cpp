@@ -183,10 +183,10 @@ String EOToolbox::makeId(const String& path) {
 	Split(path, parts,"\\");
 	if ( parts.size() > 1) {
 		String temp =  parts[parts.size() - 2] + ":" + parts[parts.size() - 1];
-		int index = temp.find_last_of(":");
+		int index = temp.find_last_of(".");
 		if ( index !=  string::npos)
 			temp = temp.substr(0, index);
-		return temp;
+		return temp.toLower();
 	}
 	return "";
 }
@@ -206,7 +206,8 @@ String EOToolbox::pluginDir() const {
 }
 
 FormatInfo EOToolbox::get(const String& id) {
-	return formats[id];
+	String tmp = id;
+	return formats[tmp.toLower()];
 }
 
 
