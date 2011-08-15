@@ -182,8 +182,8 @@ String EOToolbox::makeId(const String& path) {
 	Array<String> parts;
 	Split(path, parts,"\\");
 	if ( parts.size() > 1) {
-		String temp =  parts[parts.size() - 2] + "." + parts[parts.size() - 1];
-		int index = temp.find_last_of(".");
+		String temp =  parts[parts.size() - 2] + ":" + parts[parts.size() - 1];
+		int index = temp.find_last_of(":");
 		if ( index !=  string::npos)
 			temp = temp.substr(0, index);
 		return temp;
