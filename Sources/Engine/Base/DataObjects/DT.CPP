@@ -254,11 +254,11 @@ double ILWIS::Time::get(TimePart part) const{
 	double seconds;
 	julianToGregorian(year,month,day,hour,minutes,seconds);
 	if ( part == tpDATE) {
-		String date("%4d%2d%2d",year,month,day);
+		String date("%4d%02d%02d",year,month,day);
 		return date.iVal();
 	}
 	if ( part == tpDAYTIME) {
-		String date("%4d%2d%d",hour,minutes,(int)seconds);
+		String date("%02d%02d%02d",hour,minutes,(int)seconds);
 		return date.iVal();
 	}
 	if ( part == tpYEAR)
