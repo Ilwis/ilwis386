@@ -462,13 +462,13 @@ void ILWIS::Time::parseDayPart(const String& daypart, int& hours, int& minutes, 
 			hr = daypart.rVal();
 		else{
 			hr = daypart.sSub(0,2).rVal();
-			if ( daypart.size() > 4) {
-				if ( daypart[4] == '.') {
+			if ( daypart.size() >= 3) {
+				if ( daypart[2] == '.') {
 					min = daypart.sSub(2, daypart.size() - 2).rVal();
 				} else {
 					min = daypart.sSub(2,2).rVal();
-					if ( daypart.size() > 4) {
-						sec = daypart.sSub(3, daypart.size() - 3).rVal();
+					if ( daypart.size() >= 5) {
+						sec = daypart.sSub(4, daypart.size() - 3).rVal();
 					}
 				}
 			}
