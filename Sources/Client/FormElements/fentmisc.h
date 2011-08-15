@@ -148,6 +148,7 @@ public:
 	String _export sGetText();
 	void   _export SetTextColor(const Color& clr);
 	void   _export SetBackGroundColor(const Color& clr);
+	void  _export setLabel(const String& s);
 protected:
 	StaticTextSimple *st;           // text before field
 	FieldStringSimple *fld;   // edit field
@@ -252,6 +253,7 @@ public:
 	void SetWidth(short iWidth);
 	void _export Enable();
 	void _export Disable();
+	void _export setLabel(const String& s);
 private:
 	StaticTextSimple *st;           // text before field
 	FieldIntSimple *fld;   // edit field
@@ -302,6 +304,7 @@ public:
 	void _export Disable();
 	void _export setValueRange(const ValueRange& vr) ;
 	void show(int s);
+	void _export setLabel(const String& s);
 
 	String sGetText();
 private:
@@ -344,6 +347,7 @@ public:
 
 	void _export Enable();
 	void _export Disable();
+	void _export setLabel(const String& s);
 
 private:
 	//  void Init(const String& sQuestion, RangeInt rng, const Domain&);
@@ -389,6 +393,7 @@ public:
 
 	void _export Enable();
 	void _export Disable();
+	void _export setLabel(const String& s);
 
 private:
 	//  void Init(const String& sQuestion, RangeReal rng, const Domain&);
@@ -435,6 +440,7 @@ public:
 	{ fiRow->removeNotifyFocusChange(evh);
 	fiCol->removeNotifyFocusChange(evh); }
 	bool _export fIncludesHandle(HANDLE hnd);
+	void _export setLabel(const String& s);
 protected:
 	bool fSpinning;
 	void Init(const String& sQuestion);
@@ -485,6 +491,7 @@ public:
 	frY->removeNotifyFocusChange(evh); 
 	if(is3D && frZ) frZ->removeNotifyFocusChange(evh);}
 	bool _export fIncludesHandle(HANDLE hnd);
+	void _export setLabel(const String& s);
 	void SetStyle(unsigned int iStyle)
 	{
 		frX->SetStyle(iStyle);
@@ -834,6 +841,7 @@ public:
 	{ frDay->removeNotifyFocusChange(evh);
 	frMonth->removeNotifyFocusChange(evh); 
 	frYear->removeNotifyFocusChange(evh);}
+	void setLabel(const String& s);
 private:
 	void Init(const String& sQuestion);
 	int showCalendar(Event *ev);
@@ -852,6 +860,7 @@ public:
 	void show(int state) ;
 	void StoreData();
 	void SetVal(const ILWIS::Time& ti, ILWIS::Time::Mode m);
+	void setLabel(const String& s);
 
 private:
 	int checkFormat(Event *ev);

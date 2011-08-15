@@ -333,6 +333,12 @@ void FieldDataType::SetWidth(short iWidth)
   fld->SetWidth(iWidth);
 }
 
+void FieldDataType::setLabel(const String& lbl) {
+	if ( st) {
+		st->SetVal(lbl);
+	}
+}
+
 String FieldDataType::sGetExtentsions()
 {
 	return fld->sGetExtentsions();

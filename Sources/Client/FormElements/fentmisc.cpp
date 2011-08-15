@@ -279,6 +279,11 @@ void FieldString::SetBackGroundColor(const Color& clr)
 	fld->SetBackGroundColor(clr);
 }
 
+void FieldString::setLabel(const String& s) {
+	if ( st)
+		st->SetVal(s);
+}
+
 //--------------------------------------------------------------------------------------------------------------
 
 FieldStringMulti::FieldStringMulti(FormEntry* p, String *psVal, bool fReadOnly)
@@ -533,6 +538,11 @@ void FieldInt::Disable()
 	fld->Disable();
 }
 
+void FieldInt::setLabel(const String& s) {
+	if ( st)
+		st->SetVal(s);
+}
+
 //--------------------------------------------------------------------------------------------[ FieldReal ]---------------
 FieldReal::FieldReal(FormEntry* p, const String& sQuestion, Parm *prm,
 					 const Domain& dm)
@@ -613,6 +623,12 @@ FieldReal::~FieldReal()
 void FieldReal::setValueRange(const ValueRange& vr) {
 	fld->setValueRange(vr);
 }
+
+void FieldReal::setLabel(const String& s) {
+	if ( st)
+		st->SetVal(s);
+}
+
 String FieldReal::sGetText()
 {
 	if ( !fShow() ) return "";
@@ -699,6 +715,12 @@ void FieldRangeInt::Init(const String& sQuestion, RangeInt rng, const ValueRange
 FieldRangeInt::~FieldRangeInt()
 {
 }
+
+void FieldRangeInt::setLabel(const String& s) {
+	if ( st)
+		st->SetVal(s);
+}
+
 
 void FieldRangeInt::create()
 {
@@ -818,6 +840,11 @@ FieldRangeReal::~FieldRangeReal()
 void FieldRangeReal::create()
 {
 	CreateChildren();
+}
+
+void FieldRangeReal::setLabel(const String& s) {
+	if ( st)
+		st->SetVal(s);
 }
 
 RangeReal FieldRangeReal::rngVal()
@@ -954,6 +981,10 @@ void FieldRowCol::Init(const String& sQuestion)
 	setHelpItem(htpUiRowCol);
 }
 
+void FieldRowCol::setLabel(const String& s) {
+	if ( st)
+		st->SetVal(s);
+}
 
 FieldRowCol::~FieldRowCol()
 {
@@ -1072,6 +1103,11 @@ String FieldCoord::sGetText()
 	//    s1=s1.sSub(0, s1.length()-1);
 	//    s2=s2.sSub(0, s2.length()-1);
 	return String("%S:\t(%S,%S%S)", s3, s1, s2, s4);
+}
+
+void FieldCoord::setLabel(const String& s) {
+	if ( st)
+		st->SetVal(s);
 }
 
 void FieldCoord::create()
@@ -1199,6 +1235,11 @@ int FieldDate::showCalendar(Event *ev) {
 	}
 
 	return 1;
+}
+
+void FieldDate::setLabel(const String& s) {
+	if ( st)
+		st->SetVal(s);
 }
 
 void FieldDate::SetVal(const ILWIS::Time& tim) {
@@ -1395,6 +1436,11 @@ int FieldTime::checkFormat(Event *ev) {
 	return 1;
 }
 
+void FieldTime::setLabel(const String& s) {
+	if ( st)
+		st->SetVal(s);
+}
+
 void FieldTime::create()
 {
 	CreateChildren();
@@ -1424,3 +1470,4 @@ void FieldTime::SetVal(const ILWIS::Time& ti, ILWIS::Time::Mode m) {
 	mode = m;
 	fsTime->SetVal(ti.toString(true, m));
 }
+

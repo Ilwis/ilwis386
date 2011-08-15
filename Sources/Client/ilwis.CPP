@@ -1210,8 +1210,8 @@ void IlwisWinApp::InitImageLists()
 {
 	ilSmall.Create(16,16,TRUE,4,4);
 	ilLarge.Create(32,32,TRUE,4,4);
-	ilSmall.SetImageCount(120);
-	ilLarge.SetImageCount(120);
+	ilSmall.SetImageCount(127);
+	ilLarge.SetImageCount(127);
 
 	int i = 0;
 	InitImage("ilwis", "LogoIcon", i++);
@@ -1256,6 +1256,7 @@ void IlwisWinApp::InitImageLists()
 	InitImage("opendirectory", "OpenDirIcon", i++);
 	InitImage("drive", "DriveIcon", i++);
 	InitImage("column", "ColumnIcon", i++);
+	InitImage(".col", "ColumnIcon", i++);
 
 	InitImage(".grid", "GridIcon", i++);
 	InitImage(".grat", "GratIcon", i++);
@@ -1327,7 +1328,8 @@ void IlwisWinApp::InitImageLists()
 	InitImage("EditMap","EditMap",i++);
 	InitImage("OneFramePlus","OneFramePlus",i++);
 	InitImage("OneFrameMinus","OneFrameMinus",i++);
-	InitImage("GNC", "GNC", i++);	
+	InitImage("GNC", "GNC", i++);
+	InitImage(".GNC", "GNC", i++);
 	InitImage("ESA", "ESA", i++);	
 	InitImage("amesd", "amesd", i++);	
 	InitImage("Setcol", "SETCOLL", i++);	
@@ -1346,7 +1348,11 @@ void IlwisWinApp::InitImageLists()
 	InitImage("AutoClose", "AutoClose", i++);
 	InitImage("Snap", "snap", i++);
 	InitImage("Undefined", "undefined", i++);
-
+	InitImage("integer", "integer", i++);
+	InitImage(".integer", "integer", i++);
+	InitImage("float", "float", i++);
+	InitImage(".float", "float", i++);
+	InitImage(".bool", "boolean", i++);
 }
 
 int IlwisWinApp::iImage(const string& sExt)

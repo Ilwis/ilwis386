@@ -401,14 +401,14 @@ zDimension FormEntry::Dim(const String& s, CFont* fnt)
 }
 
 ///*
-void FormEntry::DoCallBack()
+void FormEntry::DoCallBack(Event *ev)
 {
 	if (!fShow())
 		return;
 	if ((_cb!=NULL) && (_npChanged!=NULL))
 	{
 		try {
-			(_cb->*_npChanged)(0);
+			(_cb->*_npChanged)(ev);
 		}
 		catch (ErrorObject& err)
 		{

@@ -37,11 +37,7 @@
 #include "Engine\Domain\dmgroup.h"
 #include "Client\Forms\RemoveFilesCollector.h"
 #include "Engine\DataExchange\DatabaseCollection.h"
-#include "Headers\Hs\Mainwind.hs"
-#include "Headers\Hs\Sample.hs"
-#include "Headers\Hs\GEOREF3D.hs"
-#include "Headers\Hs\Applications.hs"
-
+#include "Client\Forms\WPSClient.h"
 
 void ResetDir();
 LRESULT Cmdsample(CWnd *p, const String& s);
@@ -76,6 +72,12 @@ LRESULT Cmdimport(CWnd *wndOwner, const String& sPar)
 	import.AskImport(wndOwner, sPar.c_str());
 
 	return -1;
+}
+
+LRESULT CmdWPSClient(CWnd *wndOwner,const String& sN) {
+	new WPSClient(sN);
+
+	return 1;
 }
 
 
@@ -1863,6 +1865,7 @@ LRESULT CmdDirChanged(CWnd *parent,const String& sPar)
 }
 
 void CommandHandlerUI::addExtraCommands() {
+	addCommand(CommandHandlerUI::createCommandInfo("wpsclient","",CmdWPSClient,"","","","",0,"run wps client"));
 	addCommand(CommandHandlerUI::createCommandInfo("simplecalc","",fCmdSimpleCalc,"","","","",0,"run simple calc"));
 	addCommand(CommandHandlerUI::createCommandInfo("dirchanged","",CmdDirChanged,"","","","",0,""));
 	addCommand(CommandHandlerUI::createCommandInfo("run","",Cmdrun,"","","","",0,"Run a script"));

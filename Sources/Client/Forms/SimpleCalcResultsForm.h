@@ -42,7 +42,7 @@ class SimpleCalcResultForm : public FormBaseDialog
 {
 public:
 	SimpleCalcResultForm(CWnd *wPar) :
-		FormBaseDialog(wPar, SMSTitleSimpleCalc, (fbsSHOWALWAYS | fbsNOCANCELBUTTON | fbsHIDEONCLOSE))
+		FormBaseDialog(wPar, TR("Simple Calc"), (fbsSHOWALWAYS | fbsNOCANCELBUTTON | fbsHIDEONCLOSE))
 	{
 		fs = new StringArrayLister(root, dummy);
 		zDimension dim = fs->Dim("gk");
@@ -66,7 +66,7 @@ class SimpleCalcText : public FormWithDest
 {
 public:
 	SimpleCalcText(CWnd *wPar, String *txt) :
-		FormWithDest(wPar, SMSTitleSimpleCalc,false)
+		FormWithDest(wPar, TR("Simple Calc"),false)
 	{
 		fs = new FieldStringMulti(root, txt, true);
 		zDimension dim = fs->Dim("gk");

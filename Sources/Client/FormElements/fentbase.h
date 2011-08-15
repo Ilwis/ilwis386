@@ -103,13 +103,14 @@ public:
   void                    EnableChildren();           // enable all children
   void                    DisableChildren();          // disable all children
   void                    CallCallBacks();
-	void                    DoCallBack();
+	void                    DoCallBack(Event *ev=0);
   void                    SetIndependentPos()
                               { psn->fIndependentPos = true; }
   void                    SetCallBackForAll(NotifyProc np);  // sets call back for form entry and children (if no callback set yet)
   int                     Id()                     // Id of entry
                               { return id; }   
 	void                    SetBevelStyle(BevelStyle bsStyle);
+	virtual void setLabel(const String& s) {}
 
   String              htp();
   FormEntry*              parent() 

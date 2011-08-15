@@ -103,13 +103,13 @@ afx_msg void  ZappEdit::OnChange()
 afx_msg void ZappEdit::OnKillFocus( CWnd* pNewWnd )
 {
 	CEdit::OnKillFocus(pNewWnd);
-  //fProcess(Event(WM_KILLFOCUS));
+  fProcess(Event(WM_KILLFOCUS));
 }
 
 afx_msg void ZappEdit::OnSetFocus( CWnd* pNewWnd )
 {
 	CEdit::OnSetFocus(pNewWnd);
-  //fProcess(Event(WM_SETFOCUS));
+  fProcess(Event(WM_SETFOCUS));
 }
 
 //------------------------------------------------------------------------------------------------------

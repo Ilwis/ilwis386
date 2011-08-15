@@ -88,7 +88,7 @@ bool BaseZapp::fProcess(Event& ev)
 			if ( ev.iMessage != WM_MOUSEMOVE &&
 				   ev.iMessage != WM_PAINT &&
 					 ev.iMessage != WM_DRAWITEM ) 
-			   _fe->DoCallBack();
+			   _fe->DoCallBack(&ev);
     }
     return fRet;  // no functions found
   }

@@ -48,15 +48,16 @@ struct _export FLVColumnInfo {
 	int width;
 };
 
-class _export FLVColumnListCtrl: public CListCtrl {
+class _export FLVColumnListCtrl: public CListCtrl, public BaseZapp {
 public:
-	FLVColumnListCtrl();
+	FLVColumnListCtrl(FormEntry *par);
 	void SetParent(FieldListView *view);
 
 private:
 	FieldListView *parentFormEntry;
 	afx_msg void OnGetDispInfo(NMHDR* pNMHDR, LRESULT* pResult);
 	void OnItemchangedList(NMHDR* pNMHDR, LRESULT* pResult);
+	String tempString;
 
 	DECLARE_MESSAGE_MAP();
 };
@@ -99,7 +100,7 @@ private:
 	String *m_psName;
 	vector<FLVColumnInfo> m_colInfo;
 	vector<vector<String> > data;
-	FLVColumnListCtrl m_clctrl;
+	FLVColumnListCtrl *m_clctrl;
 	long extraStyles;
 };
 

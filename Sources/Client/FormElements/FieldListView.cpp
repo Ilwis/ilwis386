@@ -48,13 +48,13 @@ BEGIN_MESSAGE_MAP(FLVColumnListCtrl, CListCtrl)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-FLVColumnListCtrl::FLVColumnListCtrl()
+FLVColumnListCtrl::FLVColumnListCtrl(FormEntry *par) : BaseZapp(par)
 {
 
 }
 
 void FLVColumnListCtrl::OnItemchangedList(NMHDR* pNMHDR, LRESULT* pResult) {
-	//fProcess(Event(LVN_ITEMCHANGED, GetDlgCtrlID(), (LPARAM)pNMHDR)); 
+	fProcess(Event(LVN_ITEMCHANGED, GetDlgCtrlID(), (LPARAM)pNMHDR)); 
 }
 
 void FLVColumnListCtrl::SetParent(FieldListView *view) {
@@ -75,6 +75,8 @@ void FLVColumnListCtrl::OnGetDispInfo(NMHDR* pNMHDR, LRESULT* pResult)
 			if ( fn.sExt != "") {
 				pDispInfo->item.iImage = IlwWinApp()->iImage(fn.sExt);
 				pDispInfo->item.mask = LVIF_TEXT | LVIF_IMAGE;
+				tempString = fn.sFile;
+				pDispInfo->item.pszText = tempString.sVal();
 			}
 		}
 	}
@@ -84,7 +86,7 @@ void FLVColumnListCtrl::OnGetDispInfo(NMHDR* pNMHDR, LRESULT* pResult)
 
 
 FieldListView::FieldListView(FormEntry* feParent, const vector<FLVColumnInfo> &colInfo, long _extraStyles)
-: FormEntry(feParent, 0, true), extraStyles(_extraStyles)
+: FormEntry(feParent, 0, true), extraStyles(_extraStyles), m_clctrl(0)
 {
 	for(int i = 0; i < colInfo.size(); ++i) {
 		m_colInfo.push_back(colInfo[i]);
@@ -101,6 +103,7 @@ FieldListView::FieldListView(FormEntry* feParent, const vector<FLVColumnInfo> &c
 
 FieldListView::~FieldListView()
 {
+	delete m_clctrl;
 }
 
 int FieldListView::iNrCols()
@@ -117,12 +120,13 @@ void FieldListView::create()
 	DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_BORDER | WS_HSCROLL | LVS_REPORT;
 	dwStyle |= LVS_EDITLABELS | LVS_OWNERDATA | LVS_SHAREIMAGELISTS | LVS_SHOWSELALWAYS;
 	dwStyle &= ~(LVS_SORTASCENDING | LVS_SORTDESCENDING);
-	m_clctrl.Create(dwStyle, rect, frm()->wnd(), Id());
-	m_clctrl.SetImageList(&IlwWinApp()->ilSmall, LVSIL_SMALL);
-	m_clctrl.SetExtendedStyle(LVS_EX_FULLROWSELECT | extraStyles);
-	m_clctrl.SetParent(this);
-	m_clctrl.SetFont(_frm->fnt);
-	m_clctrl.ShowWindow(SW_HIDE);
+	m_clctrl = new FLVColumnListCtrl(this);
+	m_clctrl->Create(dwStyle, rect, frm()->wnd(), Id());
+	m_clctrl->SetImageList(&IlwWinApp()->ilSmall, LVSIL_SMALL);
+	m_clctrl->SetExtendedStyle(LVS_EX_FULLROWSELECT | extraStyles);
+	m_clctrl->SetParent(this);
+	m_clctrl->SetFont(_frm->fnt);
+	m_clctrl->ShowWindow(SW_HIDE);
 
 	BuildColumns();
 
@@ -133,8 +137,8 @@ void FieldListView::create()
 }
 
 void FieldListView::show(int v) {
-	if ( m_clctrl.GetSafeHwnd() != NULL)
-		m_clctrl.ShowWindow(v)  ;
+	if ( m_clctrl && m_clctrl->GetSafeHwnd() != NULL)
+		m_clctrl->ShowWindow(v)  ;
 }
 
 void FieldListView::clear() {
@@ -176,32 +180,32 @@ void FieldListView::BuildColumns()
 	int iCurCol = 0;
 	CString sColName, sDummy;
 	sDummy = CString('x', 15);
-	CSize sz = m_clctrl.GetStringWidth(sDummy);
+	CSize sz = m_clctrl->GetStringWidth(sDummy);
 
 	for(vector<FLVColumnInfo>::const_iterator cur = m_colInfo.begin(); cur < m_colInfo.end(); ++cur) {
-		m_clctrl.InsertColumn(iCurCol++, (*cur).columnName.c_str(), LVCFMT_LEFT, (*cur).width);
+		m_clctrl->InsertColumn(iCurCol++, (*cur).columnName.c_str(), LVCFMT_LEFT, (*cur).width);
 		iTotalWidth += (*cur).width;
 	}
 }
 
 int FieldListView::iRowCount()
 {
-	if (m_clctrl.GetSafeHwnd() != 0)
-		return m_clctrl.GetItemCount();
+	if (m_clctrl->GetSafeHwnd() != 0)
+		return m_clctrl->GetItemCount();
 	else
 		return 0;
 }
 
 void FieldListView::SetRowCount(int iNrItems)
 {
-	if (m_clctrl.GetSafeHwnd() != 0)
-		m_clctrl.SetItemCountEx(iNrItems, LVSICF_NOSCROLL);
+	if (m_clctrl->GetSafeHwnd() != 0)
+		m_clctrl->SetItemCountEx(iNrItems, LVSICF_NOSCROLL);
 
 }
 
 void FieldListView::SetColWidth(int iCol, int iWidth)
 {
-	m_clctrl.SetColumnWidth(iCol, iWidth);
+	m_clctrl->SetColumnWidth(iCol, iWidth);
 }
 
 void FieldListView::Fill()
@@ -216,25 +220,25 @@ void FieldListView::CallChangeCallback()
 }
 
 void FieldListView::update() {
-	m_clctrl.RedrawItems(0, m_clctrl.GetItemCount());
-	m_clctrl.UpdateWindow();
+	m_clctrl->RedrawItems(0, m_clctrl->GetItemCount());
+	m_clctrl->UpdateWindow();
 }
 
 void FieldListView::setSelectedRows(vector<int>& rowNumbers) {
 	for(int i=0; i < rowNumbers.size(); ++i) {
-		m_clctrl.SetItemState(rowNumbers[i], LVIS_SELECTED, LVIS_SELECTED);
+		m_clctrl->SetItemState(rowNumbers[i], LVIS_SELECTED, LVIS_SELECTED);
 	}
 }
 
 void FieldListView::getSelectedRowNumbers(vector<int>& rowNumbers) const{
-	POSITION pos = m_clctrl.GetFirstSelectedItemPosition();
+	POSITION pos = m_clctrl->GetFirstSelectedItemPosition();
 	if (pos == NULL)
 	   return;
 	else
 	{
 	   while (pos)
 	   {
-		  int nItem = m_clctrl.GetNextSelectedItem(pos);
+		  int nItem = m_clctrl->GetNextSelectedItem(pos);
 		  rowNumbers.push_back(nItem);	
 	   }
 }

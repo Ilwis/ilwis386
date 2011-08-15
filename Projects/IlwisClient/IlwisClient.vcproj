@@ -82,7 +82,7 @@
 				Name="VCLinkerTool"
 				AdditionalOptions="/ignore:4099"
 				AdditionalDependencies="ILWISEngine.lib htmlhelp.lib geos.lib opengl32.lib glu32.lib xerces-c_3D.lib ftgl.lib freetype.lib gdiplus.lib"
-				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\Ilwis.exe"
+				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\IlwisClient.exe"
 				Version="3.5"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)libraries\import&quot;;&quot;$(SolutionDir)libraries\$(ConfigurationName)&quot;"
@@ -3048,6 +3048,10 @@
 					RelativePath="..\..\Sources\Client\Forms\ScriptForm.cpp"
 					>
 				</File>
+				<File
+					RelativePath="..\..\Sources\Client\Forms\WPSClient.h"
+					>
+				</File>
 				<Filter
 					Name="headers"
 					Filter=".h"
@@ -5336,6 +5340,26 @@
 				</File>
 			</Filter>
 		</Filter>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\bool.ico"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\float.ico"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\integ.ico"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\valueran.ico"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Sources\Client\Forms\WPSClient.cpp"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
