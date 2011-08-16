@@ -56,7 +56,7 @@ IlwisObjectPtr * createMapTrendSurface(const FileName& fn, IlwisObjectPtr& ptr, 
 static const char * sSurfaceType[] = { "Plane", "Linear2", "Parabolic2", "2", "3", "4", "5", "6", 0 };
 
 String wpsmetadataMapTrendSurface() {
-	WPSMetaData metadata("MapMovingSurface");
+	WPSMetaData metadata("MapTrendSurface");
 	return metadata.toString();
 }
 
