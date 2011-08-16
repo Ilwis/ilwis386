@@ -14,7 +14,7 @@ WPSMetaData::~WPSMetaData() {
 
 String WPSMetaData::toString() {
 	String basePath = getEngine()->getContext()->sIlwDir();
-	FileName fnXML(String("%SResources\\ilwis_describe_process.xml",basePath));
+	FileName fnXML(String("%SResources\\wps_process_descriptions.xml",basePath));
 	ILWIS::XMLDocument doc(fnXML);
 	String xpathq("//wps:ProcessDescription[ows:Identifier=\"%S\"]",id);
 	vector<String> results;
