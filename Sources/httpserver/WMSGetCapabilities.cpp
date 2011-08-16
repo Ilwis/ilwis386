@@ -29,10 +29,10 @@ void WMSGetCapabilities::writeResponse(IlwisServer *server) const{
 	
 	pugi::xml_node ser = doc.addNodeTo(doc,"Service");
 	doc.addNodeTo(ser,"Name", "WMS");
-	doc.addNodeTo(ser,"Title",getConfigValue("WMS:ServiceIdentification:Title"));
-	doc.addNodeTo(ser,"Abstract",getConfigValue("WMS:ServiceIdentification:Abstract"));
+	doc.addNodeTo(ser,"Title",getConfigValue("WMS:ServiceContext:Title"));
+	doc.addNodeTo(ser,"Abstract",getConfigValue("WMS:ServiceContext:Abstract"));
 	pugi::xml_node kw = doc.addNodeTo(ser,"Keywords");
-	String keywords = getConfigValue("WMS:ServiceIdentification:Keywords");
+	String keywords = getConfigValue("WMS:ServiceContext:Keywords");
 	Array<String> words;
 	Split(keywords,words,";");
 	for(int i = 0; i < words.size(); ++i) {
@@ -40,9 +40,9 @@ void WMSGetCapabilities::writeResponse(IlwisServer *server) const{
 	} 
 	pugi::xml_node con = doc.addNodeTo(ser,"ContactInformation");
 	pugi::xml_node conP = doc.addNodeTo(con, "ContactPersonPrimary");
-	doc.addNodeTo(conP,"ContactPerson",getConfigValue("WMS:Provider:ContactName"));
-	doc.addNodeTo(conP,"ContactOrganization",getConfigValue("WMS:Provider:Name"));
-	doc.addNodeTo(conP,"ContactElectronicMailAddress",getConfigValue("WMS:Provider:EMail"));
+	doc.addNodeTo(conP,"ContactPerson",getConfigValue("WMS:ServiceContext:ProviderContactName"));
+	doc.addNodeTo(conP,"ContactOrganization",getConfigValue("WMS:ServiceContext:ProviderName"));
+	doc.addNodeTo(conP,"ContactElectronicMailAddress",getConfigValue("WMS:ServiceContext:ProviderEMail"));
 
 	pugi::xml_node cap = doc.addNodeTo(doc, "Capability");
 	pugi::xml_node req = doc.addNodeTo(cap, "Request");
@@ -54,7 +54,7 @@ void WMSGetCapabilities::writeResponse(IlwisServer *server) const{
 	pugi::xml_node ores = doc.addNodeTo(get,"OnlineResource");
 	ores.append_attribute("xmlns:xlink")="http://www.w3.org/1999/xlink";
 	ores.append_attribute("xlink:type")="simple";
-	ores.append_attribute("xlink:href")=getConfigValue("WMS:OperationMetadata:GetCapabilities").c_str();
+	ores.append_attribute("xlink:href")=getConfigValue("WMS:ServiceContext:GetCapabilities").c_str();
 
 	gcap = doc.addNodeTo(req, "GetMap");
 	doc.addNodeTo(gcap,"Format","image/png");
@@ -64,7 +64,7 @@ void WMSGetCapabilities::writeResponse(IlwisServer *server) const{
 	ores = doc.addNodeTo(get,"OnlineResource");
 	ores.append_attribute("xmlns:xlink")="http://www.w3.org/1999/xlink";
 	ores.append_attribute("xlink:type")="simple";
-	ores.append_attribute("xlink:href")=getConfigValue("WMS:OperationMetadata:GetMap").c_str();
+	ores.append_attribute("xlink:href")=getConfigValue("WMS:ServiceContext:GetMap").c_str();
 
 
 	pugi::xml_node exc = doc.addNodeTo(doc,"Exception");
@@ -72,11 +72,14 @@ void WMSGetCapabilities::writeResponse(IlwisServer *server) const{
 
 	int n = getConfigValue("WMS:ServiceContext:NumberOfCatalogs").iVal();
 	for(int i=0; i < n; ++i) {
-		String catalog("WMS:%S", getConfigValue(String("WMS:ServiceContext:Catalog%d",i)));
+		String catalogDef("WMS:%S", getConfigValue(String("WMS:ServiceContext:Catalog%d",i)));
+		Array<String> parts;
+		Split(catalogDef,parts,";");
+
 		pugi::xml_node layer = doc.addNodeTo(doc,"Layer");
-		String location = getConfigValue(String("%S:Location", catalog));
-		String filter = getConfigValue(String("%S:Filter", catalog));
-		doc.addNodeTo(layer,"Title", getConfigValue(String("%S:Title", catalog)));
+		String location =  parts[1];
+		String filter = parts.size() > 2 ? parts[2] : "*.*";
+		doc.addNodeTo(layer,"Title", parts[0]);
 		list<FileName> files;
 		if ( filter != sUNDEF) {
 			handleFilteredCatalog(location,filter, false, files);

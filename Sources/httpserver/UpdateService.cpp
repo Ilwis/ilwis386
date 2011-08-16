@@ -59,7 +59,7 @@ void UpdateService::toMap(map<String, IlwisFileInfo>& files, const ILWIS::XMLDoc
 }
 
 void UpdateService::getDifferences(const map<String, IlwisFileInfo>& baseFiles, const map<String, IlwisFileInfo>& externalFiles, vector<IlwisFileInfo>& differences) {
-	String baseDir = getConfigValue("ILWIS_UPDATE:Context:BaseFileLocation");
+	String baseDir = getConfigValue("Update:ServiceContext:BaseFileLocation");
 	for(map<String, IlwisFileInfo>::const_iterator iter = baseFiles.begin(); iter != baseFiles.end(); ++iter) {
 		map<String, IlwisFileInfo>::const_iterator loc = externalFiles.find((*iter).second.id());
 		if ( loc == externalFiles.end()) {
@@ -86,8 +86,8 @@ void UpdateService::createUpdateFile() {
 	client_id = doc.first_child().attribute("client_id").value();
 	String temp = doc.first_child().attribute("check").value();
 	check = temp.iVal();
-	String resultDir = getConfigValue("ILWIS_UPDATE:Context:RootDownload");
-	String baseDir = getConfigValue("ILWIS_UPDATE:Context:BaseFileLocation");
+	String resultDir = getConfigValue("Update:ServiceContext:RootDownload");
+	String baseDir = getConfigValue("Update:ServiceContext:BaseFileLocation");
 	CFileFind finder;
 
 	FileName fnStatus(String("%S\\status.xml",baseDir));
@@ -165,7 +165,7 @@ void UpdateService::writeResponse(IlwisServer *server) const{
 	if ( rtype == rtGETUPDATE) {
 		map<String,unsigned long>::const_iterator cur = UpdateService::updateRequests.find(client_id);
 		if ( cur != UpdateService::updateRequests.end()) {
-			String resultDir = getConfigValue("ILWIS_UPDATE:Context:RootDownload");
+			String resultDir = getConfigValue("Update:ServiceContext:RootDownload");
 			unsigned long configId = (*cur).second;
 			FileName fnOut(String("%S\\update_%lu.zip",resultDir, configId));
 			CFileStatus fstat;

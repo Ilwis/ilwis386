@@ -59,7 +59,7 @@ bool WPSExecute::doCommand() {
 
 
 void WPSExecute::createExecutionEnviroment() {
-	String rootDir = getConfigValue("WPS:ExecutionContext:Root");
+	String rootDir = getConfigValue("WPS:ServiceContext:LocalRoot");
 	executionDir = String("%S\\process_%d", rootDir, folder_count);
 	_mkdir(executionDir.c_str());
 	getEngine()->SetCurDir(executionDir);
@@ -411,7 +411,7 @@ void WPSExecute::writeResponse(IlwisServer *server) const{
 				WPSParameter& parm = outputs.at(i);
 				pugi::xml_node op = doc.addNodeTo(outp,"wps:Output");
 				if ( parm.isReference) {
-					String root = getConfigValue("wps:OperationMetaData:ResultServer");
+					String root = getConfigValue("WPS:ServiceContext:ResultServer");
 					root += String("/result_data/process_%d/%S%S",folder_count, fnZip.sFile, fnZip.sExt);
 					pugi::xml_node ref = doc.addNodeTo(op, "wps:Reference");
 					ref.append_attribute("xlink:href") = root.c_str();

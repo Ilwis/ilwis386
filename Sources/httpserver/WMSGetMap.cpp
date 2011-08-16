@@ -67,8 +67,11 @@ void WMSGetMap::init() {
 	Split(layrs, parts, ",");
 	int n = getConfigValue("WMS:ServiceContext:NumberOfCatalogs").iVal();
 	for(int i=0; i < n; ++i) {
-		String catalog("WMS:%S", getConfigValue(String("WMS:ServiceContext:Catalog%d",i)));
-		String location = getConfigValue(String("%S:Location", catalog));
+		String catalogDef("WMS:%S", getConfigValue(String("WMS:ServiceContext:Catalog%d",i)));
+		Array<String> parts2;
+		Split(catalogDef,parts2,";");
+
+		String location = parts2[1];
 		for(int j=0; j < parts.size(); ++j) {
 			FileName fn ( String("%S\\%S", location, parts[j]));
 			if ( fn.fExist()) {

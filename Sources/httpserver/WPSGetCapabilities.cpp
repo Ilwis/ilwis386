@@ -33,30 +33,30 @@ void WPSGetCapabilities::writeResponse(IlwisServer *server) const{
 
 
 	pugi::xml_node si = doc.addNodeTo(capaNode,"ows:ServiceIdentification");
-	doc.addNodeTo(si,"ows:Title", getConfigValue("WPS:ServiceIdentification:Title"));
+	doc.addNodeTo(si,"ows:Title", getConfigValue("WPS:ServiceContext:Title"));
 	pugi::xml_node kw = doc.addNodeTo(si,"ows:Keywords");
 
 	Array<String> words;
-	String keywords = getConfigValue("WPS:ServiceIdentification:Keywords");
+	String keywords = getConfigValue("WPS:ServiceContext:Keywords");
 	Split(keywords,words,";");
 	for(int i = 0; i < words.size(); ++i) {
 		doc.addNodeTo(kw,"ows:Keyword", words[i]);
 	}
 	pugi::xml_node sp = doc.addNodeTo(si,"ServiceProvider"); 
-	doc.addNodeTo(sp, "ows:ProviderName",getConfigValue("WPS:Provider:Site"));
+	doc.addNodeTo(sp, "ows:ProviderName",getConfigValue("WPS:ServiceContext:ProviderSite"));
 	pugi::xml_node contact = doc.addNodeTo(sp,"ows:ServiceContact");
-	doc.addNodeTo(contact,"ows:IndividualName",getConfigValue("WPS:Provider:ContactName"));
-	doc.addNodeTo(contact,"PositionName",getConfigValue("WPS:Provider:Position"));
+	doc.addNodeTo(contact,"ows:IndividualName",getConfigValue("WPS:ServiceContext:ProviderContactName"));
+	doc.addNodeTo(contact,"PositionName",getConfigValue("WPS:ServiceContext:ProviderPosition"));
 	pugi::xml_node cInfo = doc.addNodeTo(contact,"ows:ContactInfo");
 	pugi::xml_node cPhone = doc.addNodeTo(cInfo,"ows:Phone");
-	doc.addNodeTo(cPhone, "ows:Voice",getConfigValue("WPS:Provider:VoicePhone"));
+	doc.addNodeTo(cPhone, "ows:Voice",getConfigValue("WPS:ServiceContext:ProviderVoicePhone"));
 	pugi::xml_node address = doc.addNodeTo(cInfo,"ows:Address");
-	doc.addNodeTo(address,"ows:DeliveryPoint",getConfigValue("WPS:Provider:DeliveryPoint"));
-	doc.addNodeTo(address,"ows:City",getConfigValue("WPS:Provider:City"));
-	doc.addNodeTo(address,"ows:AdministrativeArea",getConfigValue("WPS:Provider:AdministrativeArea"));
-	doc.addNodeTo(address,"ows:PostalCode",getConfigValue("WPS:Provider:PostalCode"));
-	doc.addNodeTo(address,"ows:Country",getConfigValue("WPS:Provider::Country"));
-	doc.addNodeTo(address,"ows:ElectronicMailAddress",getConfigValue("WPS:Provider::EMail"));
+	doc.addNodeTo(address,"ows:DeliveryPoint",getConfigValue("WPS:ServiceContext:ProviderDeliveryPoint"));
+	doc.addNodeTo(address,"ows:City",getConfigValue("WPS:ServiceContext:City"));
+	doc.addNodeTo(address,"ows:AdministrativeArea",getConfigValue("WPS:ServiceContext:ProviderAdministrativeArea"));
+	doc.addNodeTo(address,"ows:PostalCode",getConfigValue("WPS:ServiceContext:ProviderPostalCode"));
+	doc.addNodeTo(address,"ows:Country",getConfigValue("WPS:ServiceContext::ProviderCountry"));
+	doc.addNodeTo(address,"ows:ElectronicMailAddress",getConfigValue("WPS:ServiceContext:ProviderEMail"));
 
 
 	// further needed for later date
@@ -65,21 +65,21 @@ void WPSGetCapabilities::writeResponse(IlwisServer *server) const{
 	oper.append_attribute("name") = "GetCapabilities";
 	pugi::xml_node dcp = doc.addNodeTo(oper, "ows:DCP");
 	pugi::xml_node http = doc.addNodeTo(dcp,"ows:HTTP");
-	String serv = getConfigValue("WPS:OperationMetadata:GetCapabilities") + "?";
+	String serv = getConfigValue("WPS:ServiceContext:GetCapabilities") + "?";
 	doc.addNodeTo(http,"ows:Get").append_attribute("xlink:href") = serv.c_str();
 		
 	oper = doc.addNodeTo(meta,"ows:Operation");
 	oper.append_attribute("name") = "DescribeProcess";
 	dcp = doc.addNodeTo(oper, "ows:DCP");
 	http = doc.addNodeTo(dcp,"ows:HTTP");
-	serv = getConfigValue("WPS:OperationMetadata:DescribeProcess") + "?";
+	serv = getConfigValue("WPS:ServiceContext:DescribeProcess") + "?";
 	doc.addNodeTo(http,"ows:Get").append_attribute("xlink:href") = serv.c_str();
 
 	oper = doc.addNodeTo(meta,"ows:Operation");
 	oper.append_attribute("name") = "ExecuteProcess";
 	dcp = doc.addNodeTo(oper, "ows:DCP");
 	http = doc.addNodeTo(dcp,"ows:HTTP");
-	serv = getConfigValue("WPS:OperationMetadata:ExecuteProcess") + "?";
+	serv = getConfigValue("WPS:ServiceContext:ExecuteProcess") + "?";
 	doc.addNodeTo(http,"ows:Get").append_attribute("xlink:href") = serv.c_str();
 
 	pugi::xml_node offerings = doc.addNodeTo(si, "wps:ProcessOfferings");

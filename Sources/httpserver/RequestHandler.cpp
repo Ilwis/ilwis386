@@ -10,6 +10,7 @@
 #include "httpserver\WPSExecute.h"
 #include "httpserver\WMSGetCapabilities.h"
 #include "httpserver\WMSGetMap.h"
+#include "httpserver\GNCCatalogHandler.h"
 #include "httpserver\SharedDataHandler.h"
 #include "httpserver\UpdateService.h"
 #include "Engine\Base\System\Engine.h"
@@ -75,6 +76,8 @@ RequestHandler *RequestHandler::createHandler(struct mg_connection *c, const str
 		return new WMSGetCapabilities(c, request_info, kvps);
 	if ( serviceValue == "wms" && requestValue == "getmap")
 		return new WMSGetMap(c, request_info, kvps);
+	if ( serviceValue == "gnc" && requestValue == "catalog")
+		return new GNCCatalogHandler(c, request_info, kvps);
 	if ( serviceValue == "ilwisupdate" )
 		return new UpdateService(c, request_info, kvps);
 
