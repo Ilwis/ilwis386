@@ -194,6 +194,11 @@ RadioGroup::~RadioGroup()
 		delete sParmList[i];
 }
 
+void RadioGroup::setLabel(const String& s) {
+	if ( st)
+		st->SetVal(s);
+}
+
 String RadioGroup::sGetText()
 {
 	if ( !fShow() ) 

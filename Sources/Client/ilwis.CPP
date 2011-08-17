@@ -1210,8 +1210,8 @@ void IlwisWinApp::InitImageLists()
 {
 	ilSmall.Create(16,16,TRUE,4,4);
 	ilLarge.Create(32,32,TRUE,4,4);
-	ilSmall.SetImageCount(127);
-	ilLarge.SetImageCount(127);
+	ilSmall.SetImageCount(128);
+	ilLarge.SetImageCount(128);
 
 	int i = 0;
 	InitImage("ilwis", "LogoIcon", i++);
@@ -1286,6 +1286,7 @@ void IlwisWinApp::InitImageLists()
 	InitImage("OverlayInfo", "OvlInfoIcon", i++);
 	InitImage("OverlayUseAs", "OvlUseAs", i++);
 	InitImage("History", "History", i++);
+	InitImage(".history", "HISTORY", i++);
 	InitImage("TabRasMap", "MapTabIcon", i++);
 	InitImage("TabPolMap", "PolTabIcon", i++);
 	InitImage("TabSegMap", "SegTabIcon", i++);
@@ -1318,6 +1319,7 @@ void IlwisWinApp::InitImageLists()
 	InitImage("Slicing","Slicing",i++);
 	InitImage("SelectArea","SelectArea",i++);
 	InitImage("TimeSelection","TimeSelection",i++);
+	InitImage(".TimeSelection","TimeSelection",i++);
 	InitImage("Select","Select",i++);
 	InitImage("SelectAoi","SelectAOI",i++);
 	InitImage("Average","average",i++);

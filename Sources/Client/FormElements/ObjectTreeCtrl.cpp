@@ -396,7 +396,7 @@ void ObjectTreeCtrl::ExpandPath(HTREEITEM hti, const String& sP)
 			bool fIsContainer = FileName::fIsContainerFor(fn, sExt);
 			
 			// only allow extensions from the ObjectLister and appropriate container types
-			if (!fIsContainer && sExt.find(fn.sExt.toLower()) == String.npos)
+			if (!fIsContainer && sExt.find(fn.sExt.toLower()) == string::npos)
 				continue;
 			
 			// Only allow object passed by the ObjectLister and appropriate container types

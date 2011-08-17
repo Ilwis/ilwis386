@@ -96,23 +96,24 @@ public:
 class FieldOneSelectStringSimple: public FieldOneSelect
 {
 public:  
-	_export FieldOneSelectStringSimple(FormEntry* parent, long* value, const vector<string>& vs);
+	_export FieldOneSelectStringSimple(FormEntry* parent, long* value, const vector<String>& vs);
 	_export ~FieldOneSelectStringSimple();
   void create();
   void SetFocus();
 private:
-  const vector<string>& vs;
+  const vector<String>& vs;
 };
 
 class FieldOneSelectString: public FieldGroup
 {
 public:
-  _export FieldOneSelectString(FormEntry* parent, const String& sQuestion, long* value, const vector<string>& vs);
+  _export FieldOneSelectString(FormEntry* parent, const String& sQuestion, long* value, const vector<String>& vs);
 	_export ~FieldOneSelectString();
 	_export void SetComboWidth(short iWidth);
 	_export void SetVal(int iVal);
 	_export void SelectVal(const String& sVal);
 	_export int iVal();
+	_export void resetContent(const vector<String>& vs);
   virtual void _export SetCallBack(NotifyProc np); 
   virtual void _export SetCallBack(NotifyProc np, CallBackHandler* cb);
   virtual void SetFocus() { if ( foss) foss->SetFocus(); }

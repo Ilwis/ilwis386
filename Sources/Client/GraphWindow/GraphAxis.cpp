@@ -830,7 +830,7 @@ bool GraphAxis::fConfig()
     FieldOneSelectString* fosAxisType;
     FieldRangeReal* frr;
     FieldReal* frGridstep;
-    vector<string> vsAxisType;
+    vector<String> vsAxisType;
   };
   String sTitle;
   switch (gap)

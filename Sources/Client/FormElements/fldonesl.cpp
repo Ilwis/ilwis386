@@ -333,7 +333,7 @@ void OneSelectEdit::OnKillFocus(CWnd *old)
 }
 
 // FieldOneSelectStringSimple -------------------------------------------------------------------------
-FieldOneSelectStringSimple::FieldOneSelectStringSimple(FormEntry* parent, long* value, const vector<string>& vstr)
+FieldOneSelectStringSimple::FieldOneSelectStringSimple(FormEntry* parent, long* value, const vector<String>& vstr)
 : FieldOneSelect(parent, value)
 , vs(vstr)
 {
@@ -347,7 +347,7 @@ FieldOneSelectStringSimple::~FieldOneSelectStringSimple()
 void FieldOneSelectStringSimple::create()
 {
   FieldOneSelect::create();
-  vector<string>::const_iterator iter;
+  vector<String>::const_iterator iter;
   for (iter = vs.begin(); iter != vs.end(); ++iter) 
     ose->AddString((*iter).c_str());
 	ose->SetCurSel(*val);
@@ -361,7 +361,7 @@ void FieldOneSelectStringSimple::SetFocus() {
 }
 
 // FieldOneSelectString -------------------------------------------------------------------------------
-FieldOneSelectString::FieldOneSelectString(FormEntry* parent, const String& sQuestion, long* value, const vector<string>& vs)
+FieldOneSelectString::FieldOneSelectString(FormEntry* parent, const String& sQuestion, long* value, const vector<String>& vs)
 : FieldGroup(parent)
 {
   if (sQuestion.length() != 0)
@@ -409,4 +409,13 @@ int FieldOneSelectString::iVal()
 		return foss->ose->GetCurSel();
 	else
 		return -1;
+}
+
+void FieldOneSelectString::resetContent(const vector<String>& vs) {
+	if ( foss && foss->ose) {
+		foss->ose->ResetContent();
+		for(int  i =0; i < vs.size(); ++i) {
+			foss->ose->AddString(vs[i].c_str());
+		}
+	}
 }

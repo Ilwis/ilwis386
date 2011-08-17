@@ -1,5 +1,6 @@
 #include "Client\Headers\formelementspch.h"
 #include "Client\FormElements\fldlist.h"
+#include "Client\FormElements\FldOneSelectTextOnly.h"
 #include "Client\FormElements\FieldStringList.h"
 #include "Engine\Base\DataObjects\URL.h"
 #include "Engine\Base\DataObjects\RemoteXMLObject.h"
@@ -20,7 +21,7 @@ bool ParameterInfo::filetype() {
 }
 
 bool ParameterInfo::stringtype() {
-	return type == "column";
+	return type == "column" || type == "string" || type == "dateTime";
 }
 
 bool ParameterInfo::numerictype() {
@@ -34,7 +35,9 @@ WPSClient::WPSClient(const String& url) :
 	operationIndex(-1),
 	currentParmIndex(iUNDEF),
 	number(0),
-	activeParameterField(0)
+	activeParameterField(0),
+	boolField(0),
+	choiceValue(-1)
 {
 	getEngine()->Execute("startserver");
 
@@ -50,6 +53,7 @@ WPSClient::WPSClient(const String& url) :
 	fg1->Align(fg0, AL_UNDER);
 	fldOperations = new FieldStringList(fg2,&operation,content);
 	FieldGroup *fg3 = new FieldGroup(fg1);
+
 	fldOperations->SetCallBack((NotifyProc) &WPSClient::fetchDescribeProcess);
 	fldOperations->SetHeight(280);
 	fg3->Align(fg2, AL_AFTER);
@@ -59,30 +63,52 @@ WPSClient::WPSClient(const String& url) :
 	fldDescr->SetWidth(150);
 	fldDescr->SetHeight(35);
 	vector<FLVColumnInfo> v;
+
+	vector<String> dummy;
+	fldVariants = new FieldOneSelectString(fg3,TR("Operation variants"),&operationVariant,dummy);
+	fldVariants->SetIndependentPos();
+
 	new StaticText(fg3, TR("Parameters"));
+
 	v.push_back(FLVColumnInfo(TR("Name"), 140));
 	v.push_back(FLVColumnInfo(TR("Value"),180));
+
 	fldParameters = new FieldListView(fg3,v);
 	fldParameters->SetCallBack((NotifyProc)&WPSClient::parameterSelection);
+	
 	fldFileParam = new FieldDataType(fg3,TR("DummyXXXXXXXXXXXXX"),&stringField,new ObjectExtensionLister(0,".mpr"),true);
 	fldFileParam->SetIndependentPos();
 	fldFileParam->SetCallBack((NotifyProc)&WPSClient::parmChange);
+	
 	fldNumericParam = new FieldReal(fg3, TR("DummyXXXXXXXXXXXXXX"), &number); 
 	fldNumericParam->Align(fldParameters, AL_UNDER);
 	fldNumericParam->SetIndependentPos();
+	
 	fldStringParam = new FieldString(fg3, TR("DummyXXXXXXXXXXXXXX"), &stringField); 
 	fldStringParam->Align(fldParameters, AL_UNDER);
 	fldStringParam->SetWidth(90);
 	fldStringParam->SetIndependentPos();
 	fldStringParam->SetCallBack((NotifyProc)&WPSClient::stringChange);
+	
+	rg = new RadioGroup(fg3,TR("DummyXXXXXXXXXXXXXX"),&boolField);
+	new RadioButton(rg,TR("True"));
+	new RadioButton(rg,TR("False"));
+	rg->Align(fldParameters, AL_UNDER);
+
+	fldChoices = new FieldOneSelectString(fg3,TR("Choices"),&choiceValue,currentChoices);
+	fldChoices->Align(fldParameters, AL_UNDER);
+	fldChoices->SetIndependentPos();
+
+
 	FieldGroup *fg4 = new FieldGroup(fg3);
 	new FieldBlank(fg4);
 	PushButton *pb = new PushButton(fg4,TR("Execute"),(NotifyProc)&WPSClient::execute);
+
 	fsOut = new FieldString(fg4, TR("Output name"),&outputName);
 	fsOut->SetWidth(90);
 	fsOut->Align(pb, AL_AFTER);
 	fg4->SetIndependentPos();
-
+	fg4->Align(fldStringParam, AL_UNDER);
 
 	fg3->Align(fg2,AL_AFTER);
 	create();
@@ -115,13 +141,14 @@ int WPSClient::execute(Event *ev) {
 			ILWIS::Zipper zipper(pi.value);
 			FileName fnZip(pi.value, ".zip");
 			zipper.zip(fnZip);
-			url += String("%S=@xlink:href=%S/shared_data/%S", pi.id, server, fnZip.sFile + fnZip.sExt);
+			url += String("%S=@xlink:href=%S/wps:shared_data/%S", pi.id, server, fnZip.sFile + fnZip.sExt);
 			
-		} if ( pi.stringtype()) {
+		} if ( pi.stringtype() || pi.type == "boolean") {
 			url += String("%S=%S", pi.id, pi.value);
-		}
+		} 
 	}
-	url += String("&ResponseDocument=%S&StoreExecuteResponse=true", outputName);
+	if ( outputName != "")
+		url += String("&ResponseDocument=%S&StoreExecuteResponse=true", outputName);
 	RemoteObject xmlObj(url);
 	String response = xmlObj.toString();
 	ILWIS::XMLDocument doc(response);
@@ -150,6 +177,7 @@ void WPSClient::fillListView() {
 	vector<String> record(2);
 	fldParameters->clear();
 	if ( currentParmIndex != iUNDEF) {
+		activeParameterField->StoreData();
 		parameterValues[currentParmIndex].value = stringField;
 	}
 	String sCurDir = getEngine()->sGetCurDir();
@@ -174,24 +202,49 @@ int WPSClient::parameterSelection(Event *ev) {
 			activeParameterField->Hide();
 		}
 		if ( currentParmIndex != iUNDEF) {
-			parameterValues[currentParmIndex].value = stringField;
+			if ( parameterValues[currentParmIndex].numerictype())
+				parameterValues[currentParmIndex].value = String("%f", number);
+			else if ( parameterValues[currentParmIndex].type == "boolean") {
+				parameterValues[currentParmIndex].value	= boolField ? "true" : "false";
+			} else if ( parameterValues[currentParmIndex].type == "choice") {
+				if ( choiceValue >= 0)
+					parameterValues[currentParmIndex].value	= currentChoices[choiceValue];
+			}else
+				parameterValues[currentParmIndex].value = stringField;
 		}
 		currentParmIndex = rowIndexes[0];
 		ParameterInfo pi = parameterValues[currentParmIndex];
 		if ( pi.filetype()) {
 			activeParameterField = fldFileParam;
-		}
-		else {
-			if ( pi.numerictype()) {
+			stringField = pi.value;
+			fldFileParam->SetVal(stringField);
+		} else if ( pi.numerictype()) {
 				activeParameterField = fldNumericParam;
-			} else
+				number = pi.value.rVal();
+				fldNumericParam->SetVal(number);
+		} else if ( pi.type == "boolean") {
+				activeParameterField = rg;
+				boolField = pi.value.fVal() ? 1 : 0;
+				rg->SetVal(boolField);
+		} else if ( pi.type == "choice") {
+				activeParameterField = fldChoices;
+				currentChoices.clear();
+				for(int i=0; i < pi.choices.size(); ++i)
+					currentChoices.push_back(pi.choices[i]);
+				fldChoices->resetContent(currentChoices);
+				fldChoices->SelectVal(pi.value);
+				
+		}else {
 				activeParameterField = fldStringParam;
+				stringField = pi.value;
+				fldStringParam->SetVal(stringField);
 		}
 		if ( activeParameterField) {
 			activeParameterField->Show();
 			activeParameterField->setLabel(pi.name);
 		}
 	}
+	fillListView();
 	return 1;
 }
 int WPSClient::fetchDescribeProcess(Event *ev) {
@@ -221,6 +274,7 @@ int WPSClient::fetchDescribeProcess(Event *ev) {
 			String id;
 			String name;
 			String icon;
+			vector<String> names;
 			for(pugi::xml_node child = resultNodes[i].first_child(); child; child = child.next_sibling()) {
 				String childName(child.name());
 				if ( childName == "ows:Identifier") {
@@ -230,35 +284,24 @@ int WPSClient::fetchDescribeProcess(Event *ev) {
 					name = child.first_child().value();
 				if ( childName == "ows:LiteralData") {
 					pugi::xml_node litNode = child.first_child();
-					pugi::xml_node grandChild = litNode.first_child();
-					type = grandChild.value();
-					if ( type == "rastermap")
-						icon += ".mpr";
-					if ( type == "segmentmap")
-						icon += ".mps";
-					if ( type == "polygonmap")
-						icon += ".mpa";
-					if ( type == "pointmap")
-						icon += ".mpp";
-					if ( type == "table")
-						icon += ".tbt";
-					if ( type == "column")
-						icon += ".col";
-					if ( type == "georeference")
-						icon += ".grf";
-					if ( type == "domain")
-						icon += ".dom";
-					if ( type == "integer")
-						icon += ".Integer";
-					if ( type == "float")
-						icon += ".Float";
-					if ( type == "boolean")
-						icon += ".bool";
+					String nodeName = litNode.name();
+					if ( nodeName == "ows:DataType") {
+						pugi::xml_node grandChild = litNode.first_child();
+						type = grandChild.value();
+						icon += getTypeIcon(type);
+					} else if ( nodeName == "wps:LiteralValueChoice") {
+						doc.executeXPathExpression("//wps:ProcessDescriptions//wps:ProcessDescription/wps:DataInputs/wps:Input/ows:LiteralData/wps:LiteralValueChoice/ows:AllowedValues/ows:Value/child::text()", names);
+						type = "choice";
+					}
 				}
 			}
 			record[0] = name + icon;
-			if ( id != "" && type != "")
-				parameterValues.push_back(ParameterInfo(id, name, type, icon));
+			if ( id != "" && type != "") {
+				ParameterInfo pi(id, name, type, icon);
+				for(int j = 0; j < names.size(); ++j)
+					pi.choices.push_back(names[j]);
+				parameterValues.push_back(pi);
+			}
 
 			fldParameters->AddData(record);
 		}
@@ -268,16 +311,47 @@ int WPSClient::fetchDescribeProcess(Event *ev) {
 	fldFileParam->Hide();
 	fldNumericParam->Hide();
 	fldStringParam->Hide();
+	fldChoices->Hide();
+	rg->Hide();
 	return 1;
+}
+
+String WPSClient::getTypeIcon(const String& type) {
+	if ( type == "rastermap")
+		return ".mpr";
+	if ( type == "segmentmap")
+		return ".mps";
+	if ( type == "polygonmap")
+		return ".mpa";
+	if ( type == "pointmap")
+		return ".mpp";
+	if ( type == "table")
+		return ".tbt";
+	if ( type == "column")
+		return ".col";
+	if ( type == "georeference")
+		return ".grf";
+	if ( type == "domain")
+		return ".dom";
+	if ( type == "integer")
+		return ".Integer";
+	if ( type == "float")
+		return ".Float";
+	if ( type == "boolean")
+		return ".bool";
+	if ( type == "string")
+		return ".atx";
+	if ( type == "dateTime")
+		return ".History";
+	return "";
 }
 
 int WPSClient::fetchGetCapabilities(Event *ev) {
 	fldUrl->StoreData();
 	RemoteObject xmlObj(urlString);
 	MemoryStruct *mem = xmlObj.get();
-	String txt;
-	for(int i = 0; i < mem->size; ++i)
-		txt += mem->memory[i];
+	String txt = xmlObj.toString();
+
 	ILWIS::XMLDocument doc(txt);
 	doc.executeXPathExpression("//wps:ProcessOfferings/wps:Process/ows:Identifier/child::text()", content);
 	for(int i=0; i < content.size(); ++i) {

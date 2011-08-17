@@ -59,7 +59,7 @@ void BaseSelector::create()
   zPoint pntFld = zPoint(psn->iPosX,psn->iPosY);
   zDimension dimFld = zDimension(psn->iWidth,psn->iMinHeight);
   lb = new OwnerDrawListBox(this, LBS_OWNERDRAWFIXED |  LBS_NOTIFY | style |
-		                        LBS_DISABLENOSCROLL | WS_BORDER | WS_TABSTOP,
+		                        LBS_DISABLENOSCROLL | WS_VSCROLL | WS_BORDER | WS_TABSTOP,
                             CRect(pntFld, dimFld), frm()->wnd() , Id());
   lb->SetFont(frm()->fnt);
   CreateChildren();

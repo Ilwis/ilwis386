@@ -632,7 +632,7 @@ void MapCompositionDoc::OnExtPerc()
 		FieldReal* frTop, *frBot, *frLeft, *frRight;
 		FieldOneSelectString *ftemplate;
 		long choice;
-		vector<string> values;
+		vector<String> values;
 		MapCompositionDoc *mdoc;
 	};
 	double rTop, rBottom, rLeft, rRight;

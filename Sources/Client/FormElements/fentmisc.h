@@ -583,6 +583,7 @@ public:
 	void Enable();
 	void Disable();
 	String sGetText();
+	void _export setLabel(const String& s);
 private:
 	int ButtonClicked(void *); // callback for clicking in radio button
 	void AddStrParm(const String& sParm); // adds sParam to the list of possible values

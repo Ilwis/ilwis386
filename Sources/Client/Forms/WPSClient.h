@@ -2,6 +2,7 @@
 
 class FieldStringList;
 class FieldListView;
+class FieldOneSelectTextOnly;
 
 struct ParameterInfo{
 	ParameterInfo(const String& _id, const String& n, const String& s, const String& ex) { id = _id; name = n; type = s; ext=ex; }
@@ -13,6 +14,7 @@ struct ParameterInfo{
 	String value;
 	String ext;
 	String id;
+	vector<String> choices;
 };
 
 class WPSClient  : public FormWithDest {
@@ -27,7 +29,11 @@ private:
 	FieldDataType *fldFileParam;
 	FieldReal *fldNumericParam;
 	FieldString *fldStringParam;
+	FieldOneSelectTextOnly *fldListChoice;
 	FieldString *fsOut;
+	FieldOneSelectString *fldChoices;
+	FieldOneSelectString *fldVariants;
+	RadioGroup *rg;
 	String urlString;
 	String operation;
 	String description;
@@ -37,8 +43,12 @@ private:
 	int operationIndex;
 	int currentParmIndex;
 	String stringField;
+	int boolField;
 	double number;
 	String outputName;
+	long operationVariant;
+	long choiceValue;
+	vector<String> currentChoices;
 	vector<ParameterInfo> parameterValues;
 	FormEntry *activeParameterField;
 
@@ -49,5 +59,6 @@ private:
 	int parmChange(Event *ev);
 	int execute(Event *ev) ;
 	int stringChange(Event *ev);
+	String getTypeIcon(const String& type);
 
 };
