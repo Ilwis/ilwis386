@@ -209,7 +209,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\Sources\httpserver\command.cpp"
+				RelativePath="..\..\Sources\httpserver\IlwisServer.cpp"
 				>
 			</File>
 			<File
@@ -228,34 +228,6 @@
 				RelativePath="..\..\Sources\httpserver\SharedDataHandler.cpp"
 				>
 			</File>
-			<File
-				RelativePath="..\..\Sources\httpserver\UpdateService.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\httpserver\WMSGetCapabilities.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\httpserver\WMSGetMap.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\httpserver\WPSDescribeProcess.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\httpserver\WPSExecute.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\httpserver\WPSGetCapabilities.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\httpserver\WPSHandler.cpp"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -263,7 +235,7 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\..\Sources\httpserver\command.h"
+				RelativePath="..\..\Sources\httpserver\IlwisServer.h"
 				>
 			</File>
 			<File
@@ -280,34 +252,6 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\httpserver\SharedDataHandler.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\httpserver\UpdateService.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\httpserver\WMSGetCapabilities.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\httpserver\WMSGetMap.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\httpserver\WPSDescribeProcess.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\httpserver\WPSExecute.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\httpserver\WPSGetCapabilities.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\httpserver\WPSHandler.h"
 				>
 			</File>
 		</Filter>

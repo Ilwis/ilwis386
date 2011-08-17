@@ -1,7 +1,7 @@
 #include "headers/toolspch.h"
 #include "Engine\Base\DataObjects\ilwisobj.h"
 #include "Engine\Base\System\Engine.h"
-#include "HttpServer\command.h"
+#include "HttpServer\IlwisServer.h"
 #include "HttpServer\mongoose.h"
 #include "httpserver\RequestHandler.h"
 #include "httpserver\SharedDataHandler.h"
@@ -13,24 +13,29 @@
 
 using namespace ILWIS;
 
-SharedDataHandler::SharedDataHandler(struct mg_connection *c, const struct mg_request_info *ri, const map<String, String>& _kvps, const String& ctx)
-: RequestHandler(c,ri,_kvps), context(ctx)
+SharedDataHandler::SharedDataHandler(struct mg_connection *c, const struct mg_request_info *request, const map<String, String>& _kvps, IlwisServer *serv)
+: RequestHandler(c,request,_kvps, serv)
 {
 }
 
 #define MAX_IN_BUF  1000000
 
 void SharedDataHandler::writeResponse(IlwisServer*server) const{
+
+	map<String, String>::const_iterator iter = kvps.find("context");
+	String context = (*iter).second;
+	String path = getConfigValue(String("%S:ServiceContext:SharedData", context));
 	String uri(request_info->uri);
 	int index = uri.find("/process_");
 	String name;
 	if ( index != string::npos) {
-		name = uri.substr(index+1);
-		name = String("%S\\%S", getConfigValue(context), name);
+		int index2 = uri.find("?");
+		name = uri.substr(index+1, uri.size() - index2);
+		name = String("%S\\%S", path, name);
 	} else {
 		index = uri.find_last_of("/");
 		name = name = uri.substr(index+1);
-		name = String("%S\\%S", getConfigValue(context), name);
+		name = String("%S\\%S", path, name);
 	}
 #undef close // huh? wie definieert nou een macro close, das vragen om problemen
 #undef read

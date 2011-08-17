@@ -144,7 +144,7 @@ int mg_modify_passwords_file(const char *passwords_file_name,
                              const char *password);
 
 // Send data to the client.
-int mg_write(struct mg_connection *, const void *buf, size_t len);
+__declspec(dllexport) int mg_write(struct mg_connection *, const void *buf, size_t len);
 
 
 // Send data to the browser using printf() semantics.
@@ -153,11 +153,11 @@ int mg_write(struct mg_connection *, const void *buf, size_t len);
 // Note that mg_printf() uses internal buffer of size IO_BUF_SIZE
 // (8 Kb by default) as temporary message storage for formatting. Do not
 // print data that is bigger than that, otherwise it will be truncated.
-int mg_printf(struct mg_connection *, const char *fmt, ...);
+__declspec(dllexport) int mg_printf(struct mg_connection *, const char *fmt, ...);
 
 
 // Read data from the remote end, return number of bytes read.
-int mg_read(struct mg_connection *, void *buf, size_t len);
+__declspec(dllexport) int mg_read(struct mg_connection *, void *buf, size_t len);
 
 
 // Get the value of particular HTTP header.

@@ -1,7 +1,7 @@
 #include "headers/toolspch.h"
 #include "Engine\Base\DataObjects\ilwisobj.h"
 #include "Engine\Base\System\Engine.h"
-#include "HttpServer\command.h"
+#include "HttpServer\IlwisServer.h"
 #include "HttpServer\mongoose.h"
 #include "Engine\Base\DataObjects\XMLDocument.h"
 #include "httpserver\RequestHandler.h"
@@ -13,8 +13,8 @@
 
 using namespace ILWIS;
 
-OWSHandler::OWSHandler(struct mg_connection *c, const struct mg_request_info *ri, const map<String, String>& kvps) : 
-RequestHandler(c,ri,kvps)
+OWSHandler::OWSHandler(struct mg_connection *c, const struct mg_request_info *ri, const map<String, String>& kvps, IlwisServer *serv) : 
+RequestHandler(c,ri,kvps, serv)
 {
 }
 
