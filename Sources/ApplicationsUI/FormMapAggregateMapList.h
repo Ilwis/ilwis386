@@ -10,6 +10,6 @@ private:
   int exec();
   MapList mpl;
   String mplName;
-  vector<string> methods;
+  vector<String> methods;
   long methodIndex;
 };
