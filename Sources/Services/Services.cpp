@@ -12,7 +12,6 @@
 #include "WPSExecute.h"
 #include "WPSDescribeProcess.h"
 #include "UpdateService.h"
-#include "GNCCatalogHandler.h"
 #include "WMSGetCapabilities.h"
 #include "WMSGetMap.h"
 
@@ -24,10 +23,8 @@ ServiceInfoVec* serviceInfo() {
 	infos->push_back( new ServiceInfo("wps","execute", ILWIS::WPSExecute::createHandler));
 	infos->push_back( new ServiceInfo("wps","describeprocess", ILWIS::WPSDescribeProcess::createHandler));
 	infos->push_back( new ServiceInfo("update","", ILWIS::UpdateService::createHandler));
-	infos->push_back( new ServiceInfo("gnc","catalog", ILWIS::GNCCatalogHandler::createHandler));
 	infos->push_back( new ServiceInfo("wms","getcapabilities", ILWIS::WMSGetCapabilities::createHandler));
 	infos->push_back( new ServiceInfo("wms","getmap", ILWIS::WMSGetMap::createHandler));
-
 
 	return infos;
 

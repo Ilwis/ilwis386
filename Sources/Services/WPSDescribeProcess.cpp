@@ -21,7 +21,7 @@ RequestHandler *WPSDescribeProcess::createHandler(struct mg_connection *c, const
 
 
 WPSDescribeProcess::WPSDescribeProcess(struct mg_connection *c, const struct mg_request_info *ri, const map<String, String>& kvps, IlwisServer *serv)
-: WPSHandler(c,ri,kvps, serv)
+: WPSHandler("WPSDescribeProcessHandler", c,ri,kvps, serv)
 {
 	map<String,String>::const_iterator cur = kvps.find("identifier");
 	if ( cur != kvps.end()) {

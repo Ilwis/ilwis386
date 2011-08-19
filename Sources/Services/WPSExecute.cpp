@@ -30,7 +30,7 @@ RequestHandler *WPSExecute::createHandler(struct mg_connection *c, const struct 
 int WPSExecute::folder_count=0;
 
 WPSExecute::WPSExecute(struct mg_connection *c, const struct mg_request_info *ri, const map<String, String>& _kvps, IlwisServer *serv)
-: WPSHandler(c,ri,_kvps, serv)
+: WPSHandler("WPSExecuteHandler", c,ri,_kvps, serv)
 {
 	String inParameters;
 	if((inParameters = getValue("datainputs")) != sUNDEF) {

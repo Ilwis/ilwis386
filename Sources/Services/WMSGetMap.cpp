@@ -20,7 +20,7 @@ RequestHandler *WMSGetMap::createHandler(struct mg_connection *c, const struct m
 
 
 WMSGetMap::WMSGetMap(struct mg_connection *c, const struct mg_request_info *request_info, const map<String, String>& kvps, IlwisServer *serv) :
-RequestHandler(c,request_info,kvps, serv)
+RequestHandler("WMSGetMapHandler", c,request_info,kvps, serv)
 {
 }
 

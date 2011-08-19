@@ -20,7 +20,7 @@ RequestHandler *WPSGetCapabilities::createHandler(struct mg_connection *c, const
 }
 
 WPSGetCapabilities::WPSGetCapabilities(struct mg_connection *c, const struct mg_request_info *ri, const map<String, String>& kvps, IlwisServer *serv)
-: WPSHandler(c,ri,kvps, serv)
+: WPSHandler("WPSGetCapabilitiesHandler", c,ri,kvps, serv)
 {
 }
 

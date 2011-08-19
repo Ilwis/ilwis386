@@ -25,7 +25,7 @@ RequestHandler *UpdateService::createHandler(struct mg_connection *c, const stru
 
 //----------------------------------------------------
 UpdateService::UpdateService(struct mg_connection *c, const struct mg_request_info *ri, const map<String, String>& _kvps, IlwisServer *serv)
-: RequestHandler(c,ri,_kvps, serv), rtype(rtNONE)
+: RequestHandler("UpdateServiceHandler", c,ri,_kvps, serv), rtype(rtNONE)
 {
 }
 

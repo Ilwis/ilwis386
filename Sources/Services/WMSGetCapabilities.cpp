@@ -18,7 +18,7 @@ RequestHandler *WMSGetCapabilities::createHandler(struct mg_connection *c, const
 }
 
 WMSGetCapabilities::WMSGetCapabilities(struct mg_connection *c, const struct mg_request_info *ri, const map<String, String>& kvps, IlwisServer *serv)
-: RequestHandler(c,ri,kvps, serv)
+: RequestHandler("WMSGetCapabilitiesHandler", c,ri,kvps, serv)
 {
 }
 

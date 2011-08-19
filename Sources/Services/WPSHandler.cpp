@@ -14,8 +14,8 @@
 
 using namespace ILWIS;
 
-WPSHandler::WPSHandler(struct mg_connection *c, const struct mg_request_info *ri, const map<String, String>& kvps, IlwisServer *serv) : 
-OWSHandler(c,ri,kvps, serv)
+WPSHandler::WPSHandler(const String& name,struct mg_connection *c, const struct mg_request_info *ri, const map<String, String>& kvps, IlwisServer *serv) : 
+OWSHandler(name,c,ri,kvps, serv)
 {
 }
 
