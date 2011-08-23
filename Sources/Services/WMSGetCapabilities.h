@@ -10,7 +10,7 @@ namespace ILWIS{
 		void handleFile(pugi::xml_node& layer,ILWIS::XMLDocument& doc, const FileName& fn) const;
 		void handleFilteredCatalog(const String& location,const String& filter, bool recursive, list<FileName>& files) const;
 
-		void writeResponse(IlwisServer*server=0) const;
+		void writeResponse() const;
 		bool needsResponse() const;
 	};
 }

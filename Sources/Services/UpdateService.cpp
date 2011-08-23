@@ -27,6 +27,7 @@ RequestHandler *UpdateService::createHandler(struct mg_connection *c, const stru
 UpdateService::UpdateService(struct mg_connection *c, const struct mg_request_info *ri, const map<String, String>& _kvps, IlwisServer *serv)
 : RequestHandler("UpdateServiceHandler", c,ri,_kvps, serv), rtype(rtNONE)
 {
+	config.add("Services", getId());
 }
 
 bool UpdateService::needsResponse() const{
@@ -157,7 +158,7 @@ void UpdateService::createDescriptionFile(const FileName& fnOut, const map<Strin
 	doc.save_file(fnOut.sFullPath().c_str());
 }
 
-void UpdateService::writeResponse(IlwisServer *server) const{
+void UpdateService::writeResponse() const{
 	if ( rtype == rtSTATUS) {
 		ILWISSingleLock lock(&(const_cast<UpdateService *>(this)->cs));
 		map<String,unsigned long>::const_iterator cur = UpdateService::updateRequests.find(client_id);

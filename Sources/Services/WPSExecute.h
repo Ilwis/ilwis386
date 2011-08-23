@@ -14,7 +14,7 @@ namespace ILWIS{
 
 		WPSExecute(struct mg_connection *c, const struct mg_request_info *request_info, const map<String, String>& kvps, IlwisServer *serv);
 
-		void writeResponse(IlwisServer*server=0) const;
+		void writeResponse() const;
 		bool needsResponse() const;
 		bool doCommand();
 	private:

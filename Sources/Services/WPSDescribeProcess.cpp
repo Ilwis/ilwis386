@@ -30,7 +30,7 @@ WPSDescribeProcess::WPSDescribeProcess(struct mg_connection *c, const struct mg_
 	}
 }
 
-void WPSDescribeProcess::writeResponse(IlwisServer *server) const{
+void WPSDescribeProcess::writeResponse() const{
 	XMLDocument doc;
 	doc.set_name("wps:DescribeProcess");
 	doc.addNodeTo(doc,"wps:DescribeProcess");

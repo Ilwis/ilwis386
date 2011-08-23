@@ -354,7 +354,7 @@ String WPSExecute::resultType(const String& operation) {
 	return ext;
 }
 
-void WPSExecute::writeResponse(IlwisServer *server) const{
+void WPSExecute::writeResponse() const{
 	vector<CommandInfo *> infos;
 	String operation = getValue("identifier");
 	operation.toLower();
@@ -443,7 +443,7 @@ void WPSExecute::writeResponse(IlwisServer *server) const{
 	mg_write(getConnection(), buf, txt.size()+1);
 
 	delete [] buf;
-	server->addTimeOutLocation(executionDir,time(0));
+	ilwisServer->addTimeOutLocation(executionDir,time(0));
 }
 
 String WPSExecute::execute(vector<WPSParameter>& outputs) const{

@@ -22,9 +22,10 @@ RequestHandler *WMSGetMap::createHandler(struct mg_connection *c, const struct m
 WMSGetMap::WMSGetMap(struct mg_connection *c, const struct mg_request_info *request_info, const map<String, String>& kvps, IlwisServer *serv) :
 RequestHandler("WMSGetMapHandler", c,request_info,kvps, serv)
 {
+	config.add("Services", "WMSHandlers");
 }
 
-void WMSGetMap::writeResponse(IlwisServer *server) const {
+void WMSGetMap::writeResponse() const {
 	CWnd wnd;
 	// this will not work, the trhead is a worker thread in. No windows can be created here.
 	BOOL ok = wnd.CreateEx(0,0,"Dummy", WS_VISIBLE | WS_CHILD,CRect(0,0,width,height),0,getNewId());
@@ -44,10 +45,6 @@ void WMSGetMap::writeResponse(IlwisServer *server) const {
 	root->getDrawerContext()->swapBuffers();
 }
 
-void WMSGetMap::setConfig(map<String, String>* _config) {
-	RequestHandler::setConfig(_config);
-	init();
-}
 
 void WMSGetMap::createBaseMapDrawer(RootDrawer *rootDrawer, const BaseMap& bmp, const String& type, const String& subtype) const{
 

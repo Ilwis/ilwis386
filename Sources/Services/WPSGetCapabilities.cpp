@@ -28,7 +28,7 @@ bool WPSGetCapabilities::doCommand() {
 	return true;
 }
 
-void WPSGetCapabilities::writeResponse(IlwisServer *server) const{
+void WPSGetCapabilities::writeResponse() const{
 	ILWIS::XMLDocument doc;
 	doc.set_name("wps:Capabilities");
 	pugi::xml_node capaNode = doc.addNodeTo(doc,"wps:Capabilities");

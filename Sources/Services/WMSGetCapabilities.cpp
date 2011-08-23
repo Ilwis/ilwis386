@@ -20,9 +20,10 @@ RequestHandler *WMSGetCapabilities::createHandler(struct mg_connection *c, const
 WMSGetCapabilities::WMSGetCapabilities(struct mg_connection *c, const struct mg_request_info *ri, const map<String, String>& kvps, IlwisServer *serv)
 : RequestHandler("WMSGetCapabilitiesHandler", c,ri,kvps, serv)
 {
+	config.add("Services", "WMSHandlers");
 }
 
-void WMSGetCapabilities::writeResponse(IlwisServer *server) const{
+void WMSGetCapabilities::writeResponse() const{
 	ILWIS::XMLDocument doc;
 	pugi::xml_node first = doc.addNodeTo(doc,"WMT_MS_Capabilities");
 
