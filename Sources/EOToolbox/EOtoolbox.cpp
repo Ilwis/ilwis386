@@ -8,6 +8,8 @@
 #include "Engine/base/system/engine.h"
 #include "Engine\Base\DataObjects\ilwisobj.h"
 #include "Engine\Base\DataObjects\XMLDocument.h"
+#include "HttpServer\IlwisServer.h"
+#include "EOToolbox\Services.h"
 #include "EOToolbox\EOtoolbox.h"
 
 
@@ -96,6 +98,8 @@ extern "C" _export void moduleInitUI(ILWIS::Module *module) {
 extern "C" _export ILWIS::Module *getModuleInfo(const FileName& fnModule) {
 	ILWIS::Module *module = new ILWIS::Module("EO-Toolbox", fnModule,ILWIS::Module::mi38,"1.0");
 	module->addMethod(ILWIS::Module::ifInit, (void *)moduleInitUI);
+	module->addMethod(ILWIS::Module::ifService, (void *)serviceInfo);  
+
 	String ilwDir = getEngine()->getContext()->sIlwDir();
 	String formType="EO-Toolbox";
 	FileName plugin(ilwDir + "Extensions\\EO-Toolbox\\config.xml");

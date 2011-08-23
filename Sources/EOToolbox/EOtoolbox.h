@@ -9,7 +9,9 @@ struct FormatInfo {
 	String format;
 };
 
-class EOToolbox {
+void executeGNCCommand(const String& cmd);
+
+class _export EOToolbox {
 public:
 	EOToolbox();
 	void ReadConfigFile(FileName fnConfig);
