@@ -13,8 +13,8 @@
 
 using namespace ILWIS;
 
-OWSHandler::OWSHandler(struct mg_connection *c, const struct mg_request_info *ri, const map<String, String>& kvps, IlwisServer *serv) : 
-RequestHandler(c,ri,kvps, serv)
+OWSHandler::OWSHandler(const String& name,struct mg_connection *c, const struct mg_request_info *ri, const map<String, String>& kvps, IlwisServer *serv) : 
+RequestHandler(name, c,ri,kvps, serv)
 {
 }
 

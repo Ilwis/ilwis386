@@ -14,7 +14,7 @@
 using namespace ILWIS;
 
 SharedDataHandler::SharedDataHandler(struct mg_connection *c, const struct mg_request_info *request, const map<String, String>& _kvps, IlwisServer *serv)
-: RequestHandler(c,request,_kvps, serv)
+: RequestHandler("SharedDataHandler", c,request,_kvps, serv)
 {
 }
 

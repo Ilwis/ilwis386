@@ -8,6 +8,7 @@
 #include "httpserver\RequestHandler.h"
 #include "httpserver\SharedDataHandler.h"
 #include "HttpServer\IlwisServer.h"
+#include "ServiceConfiguration.h"
 
 using namespace ILWIS;
 
@@ -63,11 +64,10 @@ IlwisServer::~IlwisServer() {
 
 UINT IlwisServer::executeInThread(LPVOID lp) {
 	String *cmd = (String *)lp;
-	String ilwDir = getEngine()->getContext()->sIlwDir();
+	String ilwDir = getEngine()->getContext()->sIlwDir() + "\\Services\\";
 	if ( server == 0) {
 		IlwisServer *serverTemp = new IlwisServer();
-		String name("%Sconfig.ini",ilwDir);
-		serverTemp->ReadConfigFile(name);
+		serverTemp->loadServices();
 		server = serverTemp;
 	}
 	return 1;
@@ -77,6 +77,22 @@ void IlwisServer::loadServices() {
 	int depth = 0;
 	String path = getEngine()->getContext()->sIlwDir() + "Services";
 	addFolder(path, depth + 1);
+	int index = 0;
+	Module *mod = getEngine()->getModule(index);
+	while(mod) {
+		ServiceInfoFunc handlerFunc = (ServiceInfoFunc)(mod->getMethod(ILWIS::Module::ifService));
+		if ( handlerFunc) {
+			ServiceInfoVec *infos = (*handlerFunc)();
+			if ( infos->size() > 0) {
+				for(int i = 0; i < infos->size(); ++i) {
+					handlers[infos->at(i)->id()] =  infos->at(i);
+				}
+			}
+			delete infos;
+		}
+		mod = getEngine()->getModule(++index);
+	}
+	isValid = true;
 }
 
 void IlwisServer::addFolder(const String& dir, int depth) {
@@ -115,66 +131,29 @@ void IlwisServer::addServices(const FileName& fnModule) {
 				ILWIS::Module::ModuleInterface type = mod->getInterfaceVersion();
 				getEngine()->getVersion()->fSupportsModuleInterfaceVersion(type, mod->getName());
 				getEngine()->addModule(mod);
-				ServiceInfoFunc handlerFunc = (ServiceInfoFunc)(mod->getMethod(ILWIS::Module::ifService));
-				if ( handlerFunc) {
-					ServiceInfoVec *infos = (*handlerFunc)();
-					if ( infos->size() > 0) {
-						for(int i = 0; i < infos->size(); ++i) {
-							handlers[infos->at(i)->id()] =  infos->at(i);
-						}
-					}
-					delete infos;
-				}
-			
 			}
 		} 
 	}catch(ErrorObject& err){
 		err.Show();
 	}
 }
-void IlwisServer::ReadConfigFile(FileName fnConfig) {
-	if ( fnConfig.fExist() == false)
-		return;
-	ifstream configfile(fnConfig.sFullPath().c_str());
-	String line;
-	if ( configfile.is_open()) {
-		String prefix;
-		while(configfile.good()) {
-			string l;
-			getline(configfile,l);
-			line = l;
-			line = line.sTrimSpaces();
-			if (line[0] == '[') {
-				prefix = line.sSub(1, line.size() - 2);
-			} else {
-				if ( line != "") {
-					String key = line.sHead("=");
-					key = key.sTrimSpaces();
-					String value = line.sTail("=");
-					value = value.sTrimSpaces();
-					key = prefix + ":" + key;
-					key.toLower();
-					IlwisServer::config[key] = value;
-				}
-			}
-
-		}
-	}
-	loadServices();
-	isValid = true;
-}
-
-
 bool IlwisServer::start(String* cmd) {
 	ParmList pl(*cmd);
 	delete cmd;
 	String options;
 	char *coptions[40];
 	memset(coptions,0, 40);
+	//FileName fnConfig(String("%Sservices.ini",getEngine()->getContext()->sIlwDir()));
+	ServiceConfiguration config;
+
 	int index = 0;
 	addOptions(index,coptions, "document_root", pl.fExist("data_folder")? String("-r %S", pl.sGet("data_root")) : getEngine()->sGetCurDir());
 	if ( pl.fExist("port")) {
 		addOptions(index, coptions,"listening_ports",pl.sGet("port"));
+	} else {
+		String port = config.get("Server:Context");
+		if ( port != "?")
+			addOptions(index, coptions,"listening_ports",port);
 	}
 	if ( pl.fExist("threads")) {
 		addOptions(index, coptions,"num_threads",pl.sGet("threads"));
@@ -205,14 +184,15 @@ void *IlwisServer::event_handler(enum mg_event ev, struct mg_connection *conn,  
 
 			RequestHandler *rh = server->createHandler(conn, request_info);
 			if ( rh) {
-				rh->setConfig(&IlwisServer::config);
 				bool res = rh->doCommand();
 				if ( res || rh->needsResponse())
-					rh->writeResponse(server);
+					rh->writeResponse();
 				delete rh;
 			}
 		} else {
-			mg_printf(conn,"Ilwis Server  %s\n", ILWIS::Time::now().toString().c_str());
+			ServiceConfiguration configf;
+			String name = configf.get("Server:Context:Name");
+			mg_printf(conn,"%s  %s\n", name.c_str(), ILWIS::Time::now().toString().c_str());
 		}
 
 	}

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "HttpServer\mongoose.h"
+#include "HttpServer/ServiceConfiguration.h"
 
 class IlwisServer;
 
@@ -11,20 +12,21 @@ public:
 
 	struct mg_connection *getConnection() const;
 	String getValue(const String& key) const;
-	virtual void writeResponse(IlwisServer*server=0) const;
+	virtual void writeResponse() const;
 	virtual bool needsResponse() const;
 	virtual bool doCommand();
-	virtual void setConfig(map<String, String>* _config);
 	virtual void writeError(const String& err, const String& code="none") const;
+	String getId() const { return id; }
 protected:
-	RequestHandler(struct mg_connection *c, const struct mg_request_info *request_info, const map<String, String>& kvps, IlwisServer *serv);
+	RequestHandler(const String& name, struct mg_connection *c, const struct mg_request_info *request_info, const map<String, String>& kvps, IlwisServer *serv);
 
 	String getConfigValue(const String& key) const;
 	struct mg_connection *connection;
 	const struct mg_request_info *request_info;
 	map<String, String> kvps;
-	map<String, String> *config;
 	static map<String, bool> activeServices;
 	IlwisServer *ilwisServer;
+	ILWIS::ServiceConfiguration config;
+	String id;
 };
 }

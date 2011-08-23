@@ -24,7 +24,6 @@ class _export IlwisServer {
 public:
 	IlwisServer();
 	~IlwisServer();
-	void ReadConfigFile(FileName fnConfig);
 	bool start(String* cmd);
 	static map<String,String> config;
 	static UINT executeInThread(LPVOID lp);
@@ -32,6 +31,7 @@ public:
 	void addTimeOutLocation(const String& folder, time_t t);
 	void updateTimeOutLocation(const String& folder);
 	bool fValid() { return isValid;}
+	void loadServices();
 
 private:
     struct mg_context *ctx;
@@ -40,7 +40,6 @@ private:
 	static void *IlwisServer::event_handler(enum mg_event event, struct mg_connection *conn,  const struct mg_request_info *request_info);
 	ILWIS::RequestHandler *createHandler(struct mg_connection *c, const struct mg_request_info *request_info) ;
 	void addFolder(const String& dir, int depth);
-	void loadServices();
 	void addServices(const FileName& fnModule);
 
 	map<String,time_t> timeOuts;

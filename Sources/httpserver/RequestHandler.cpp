@@ -4,15 +4,7 @@
 #include "httpserver\RequestHandler.h"
 #include "Engine\Base\DataObjects\XMLDocument.h"
 #include "httpserver\OWSHandler.h"
-//#include "httpserver\WPSHandler.h"
-//#include "httpserver\WPSGetCapabilities.h"
-//#include "httpserver\WPSDescribeProcess.h"
-//#include "httpserver\WPSExecute.h"
-//#include "httpserver\WMSGetCapabilities.h"
-//#include "httpserver\WMSGetMap.h"
-//#include "httpserver\GNCCatalogHandler.h"
 #include "httpserver\SharedDataHandler.h"
-//#include "httpserver\UpdateService.h"
 #include "Engine\Base\System\Engine.h"
 
 
@@ -32,22 +24,18 @@ void RequestHandler::parseQuery(const String& query, map<String, String>& kvps) 
 } 
 
 
-RequestHandler::RequestHandler(struct mg_connection *c, const struct mg_request_info *ri, const map<String, String>& _kvps, IlwisServer *serv) : 
-	connection(c), request_info(ri)
+RequestHandler::RequestHandler(const String& name,struct mg_connection *c, const struct mg_request_info *ri, const map<String, String>& _kvps, IlwisServer *serv) : 
+	connection(c), request_info(ri), id(name)
 {
 	for(map<String, String>::const_iterator iter = _kvps.begin(); iter != _kvps.end(); ++iter)
 		kvps[(*iter).first] = (*iter).second;
 	ilwisServer = serv;
 }
 
-void RequestHandler::setConfig(map<String, String>* _config) {
-	config = _config;
-}
-
 void RequestHandler::writeError(const String& err, const String& code) const{
 }
 
-void RequestHandler::writeResponse(IlwisServer *server) const {
+void RequestHandler::writeResponse() const {
 }
 
 bool RequestHandler::needsResponse() const{
@@ -67,13 +55,7 @@ String RequestHandler::getValue(const String& key) const{
 }
 
 String RequestHandler::getConfigValue(const String& key) const {
-	String tempKey = key;
-	tempKey.toLower();
-	map<String, String>::const_iterator iter;
-	if ( (iter = (*config).find(tempKey)) != (*config).end()) {
-		return (*iter).second;
-	}
-	return sUNDEF;
+	return config.get(key);
 }
 
 
