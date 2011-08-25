@@ -86,9 +86,7 @@ bool LineDrawer::draw( const CoordBounds& cbArea) const{
 	for(int j = 0; j < lines.size(); ++j) {
 		CoordinateSequence *points = lines.at(j);
 		if ( specialOptions & NewDrawer::sdoSELECTED || selectedCoords.size() > 0) {
-			glColor4d(1, 0, 0, 1);
-			drawSelectedFeature(points, cbZoom, is3D);
-			glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(), transp);
+				drawSelectedFeature(points, cbZoom, is3D);
 		}
 		glBegin(GL_LINE_STRIP);
 		for(int i=0; i<points->size(); ++i) {
@@ -123,6 +121,8 @@ bool LineDrawer::draw( const CoordBounds& cbArea) const{
 }
 
 void LineDrawer::drawSelectedFeature(CoordinateSequence *points, const CoordBounds& cbZoom, bool is3D) const{
+	Color clr =  parentDrawer->isSimple() ? Color(1,0,0) : ((ComplexDrawer *)parentDrawer)->getSelectionColor();
+	glColor4d(clr.redP(), clr.greenP(), clr.blueP(), 1);
 	glLineWidth(lproperties.thickness * 1.2 + 3);
 	glBegin(GL_LINE_STRIP);
 	for(int i=0; i<points->size(); ++i) {
@@ -131,8 +131,10 @@ void LineDrawer::drawSelectedFeature(CoordinateSequence *points, const CoordBoun
 		glVertex3d( c.x, c.y, z);
 	}
 	glEnd();
+
 	glLineWidth(lproperties.thickness);
-	double symbolScale = cbZoom.width() / 200;
+	double symbolScale = cbZoom.width() / 250;
+	glColor4d(clr.redP(), clr.greenP(), clr.blueP(), 0.5);
 	for(int i=0; i < selectedCoords.size(); ++i) {
 		Coordinate c = points->getAt(selectedCoords.at(i));
 		double fz = is3D ? c.z : 0;;
@@ -143,6 +145,7 @@ void LineDrawer::drawSelectedFeature(CoordinateSequence *points, const CoordBoun
 			glVertex3f( c.x + symbolScale, c.y - symbolScale,fz);
 		glEnd();
 	}
+	glColor4d(clr.redP(), clr.greenP(), clr.blueP(), 1);
 	for(int i=0; i<points->size(); ++i) {
 		Coordinate c = points->getAt(i);
 		double fz = is3D ? c.z : 0;;
@@ -152,8 +155,27 @@ void LineDrawer::drawSelectedFeature(CoordinateSequence *points, const CoordBoun
 			glVertex3f( c.x + symbolScale, c.y + symbolScale,fz);
 			glVertex3f( c.x + symbolScale, c.y - symbolScale,fz);
 			glVertex3f( c.x - symbolScale, c.y - symbolScale,fz);
+			glVertex3f( c.x + symbolScale, c.y + symbolScale,fz);
+			glVertex3f( c.x + symbolScale, c.y - symbolScale,fz);
+			glVertex3f( c.x - symbolScale, c.y + symbolScale,fz);	
 		glEnd();
 	}
+	glColor4d(0,0,0,1);
+	for(int i=0; i < selectedCoords.size(); ++i) {
+		Coordinate c = points->getAt(selectedCoords.at(i));
+		double fz = is3D ? c.z : 0;;
+		glBegin(GL_LINE_STRIP);						
+			glVertex3f( c.x - symbolScale, c.y - symbolScale,fz);	
+			glVertex3f( c.x - symbolScale, c.y + symbolScale,fz);	
+			glVertex3f( c.x + symbolScale, c.y + symbolScale,fz);
+			glVertex3f( c.x + symbolScale, c.y - symbolScale,fz);
+			glVertex3f( c.x - symbolScale, c.y - symbolScale,fz);
+			glVertex3f( c.x + symbolScale, c.y + symbolScale,fz);
+			glVertex3f( c.x + symbolScale, c.y - symbolScale,fz);
+			glVertex3f( c.x - symbolScale, c.y + symbolScale,fz);	
+		glEnd();
+	}
+	glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(), getTransparency());
 }
 
 void LineDrawer::prepare(PreparationParameters *p){
@@ -194,18 +216,18 @@ GeneralDrawerProperties *LineDrawer::getProperties() {
 
 //----------------------------------------
 String LineProperties::store(const FileName& fnView, const String& parentSection) const{
-	ObjectInfo::WriteElement(parentSection.scVal(),"Thickness",fnView, thickness);
-	ObjectInfo::WriteElement(parentSection.scVal(),"LineStyle",fnView, linestyle);
-	ObjectInfo::WriteElement(parentSection.scVal(),"DrawColor",fnView, drawColor);
-	ObjectInfo::WriteElement(parentSection.scVal(),"IgnoreColor",fnView, ignoreColor);
+	ObjectInfo::WriteElement(parentSection.c_str(),"Thickness",fnView, thickness);
+	ObjectInfo::WriteElement(parentSection.c_str(),"LineStyle",fnView, linestyle);
+	ObjectInfo::WriteElement(parentSection.c_str(),"DrawColor",fnView, drawColor);
+	ObjectInfo::WriteElement(parentSection.c_str(),"IgnoreColor",fnView, ignoreColor);
 	return parentSection;
 }
 
 void LineProperties::load(const FileName& fnView, const String& parentSection){
-	ObjectInfo::ReadElement(parentSection.scVal(),"Thickness",fnView, thickness);
-	ObjectInfo::ReadElement(parentSection.scVal(),"LineStyle",fnView, linestyle);
-	ObjectInfo::ReadElement(parentSection.scVal(),"DrawColor",fnView, drawColor);
-	ObjectInfo::ReadElement(parentSection.scVal(),"IgnoreColor",fnView, ignoreColor);
+	ObjectInfo::ReadElement(parentSection.c_str(),"Thickness",fnView, thickness);
+	ObjectInfo::ReadElement(parentSection.c_str(),"LineStyle",fnView, linestyle);
+	ObjectInfo::ReadElement(parentSection.c_str(),"DrawColor",fnView, drawColor);
+	ObjectInfo::ReadElement(parentSection.c_str(),"IgnoreColor",fnView, ignoreColor);
 }
 
 

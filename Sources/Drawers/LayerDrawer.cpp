@@ -38,13 +38,11 @@ LayerDrawer::~LayerDrawer() {
 }
 
 void LayerDrawer::prepare(PreparationParameters *parm){
-	//delete drawColor; // the drawColor is still in use elsewhere (a local pointer is kept for efficiency). Unless there's a good reason to fully renew it here, I try commenting this out for now.
-	//drawColor = 0;
 	ComplexDrawer::prepare(parm);
+	SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)parentDrawer;
 	if ( parm->type & NewDrawer::ptGEOMETRY ||  parm->type & NewDrawer::ptRESTORE) {
 		if ( parm->csy.fValid() && parm->csy->fUnknown() == false)
 			csy = parm->csy;
-		SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)parentDrawer;
 		Representation rpr = mapDrawer->getRepresentation();
 		//if ( rpr.fValid() && !rpr->prv())
 		if ( rpr.fValid() && !rpr->prv())
@@ -157,7 +155,7 @@ String LayerDrawer::getInfo(const Coord& c) const {
 		return "";
 	Coord crd = c;
 	SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)parentDrawer;
-	BaseMapPtr *bmptr = mapDrawer->getBaseMap();
+	BaseMapPtr *bmptr = mapDrawer->getBaseMap(mapDrawer->getCurrentIndex());
 	if (bmptr->cs() != rootDrawer->getCoordinateSystem())
 	{
 		crd = bmptr->cs()->cConv(rootDrawer->getCoordinateSystem(), c);
@@ -220,35 +218,35 @@ bool LayerDrawer::useAttributeColumn() const{
 
 String LayerDrawer::store(const FileName& fnView, const String& parentSection) const{
 	ComplexDrawer::store(fnView, parentSection);
-	ObjectInfo::WriteElement(parentSection.scVal(),"CoordinateSystem",fnView, csy);
-	ObjectInfo::WriteElement(parentSection.scVal(),"Representation",fnView, rpr);
-	ObjectInfo::WriteElement(parentSection.scVal(),"StretchReal",fnView, rrStretch);
-	ObjectInfo::WriteElement(parentSection.scVal(),"IsStretched",fnView, stretched);
-	ObjectInfo::WriteElement(parentSection.scVal(),"StretchMethod",fnView, stretchMethod);
+	ObjectInfo::WriteElement(parentSection.c_str(),"CoordinateSystem",fnView, csy);
+	ObjectInfo::WriteElement(parentSection.c_str(),"Representation",fnView, rpr);
+	ObjectInfo::WriteElement(parentSection.c_str(),"StretchReal",fnView, rrStretch);
+	ObjectInfo::WriteElement(parentSection.c_str(),"IsStretched",fnView, stretched);
+	ObjectInfo::WriteElement(parentSection.c_str(),"StretchMethod",fnView, stretchMethod);
 	if ( attColumn.fValid())
-		ObjectInfo::WriteElement(parentSection.scVal(),"AttributeColumn",fnView, attColumn->sName());
-	ObjectInfo::WriteElement(parentSection.scVal(),"UseAttributes",fnView, useAttColumn);
-	ObjectInfo::WriteElement(parentSection.scVal(),"ExtrusionTransparency",fnView, extrTransparency);
+		ObjectInfo::WriteElement(parentSection.c_str(),"AttributeColumn",fnView, attColumn->sName());
+	ObjectInfo::WriteElement(parentSection.c_str(),"UseAttributes",fnView, useAttColumn);
+	ObjectInfo::WriteElement(parentSection.c_str(),"ExtrusionTransparency",fnView, extrTransparency);
 
 	return parentSection;
 }
 
 void LayerDrawer::load(const FileName& fnView, const String& parentSection){
 	ComplexDrawer::load(fnView, parentSection);
-	ObjectInfo::ReadElement(parentSection.scVal(),"CoordinateSystem",fnView, csy);
-	ObjectInfo::ReadElement(parentSection.scVal(),"Representation",fnView, rpr);
-	ObjectInfo::ReadElement(parentSection.scVal(),"StretchReal",fnView, rrStretch);
-	ObjectInfo::ReadElement(parentSection.scVal(),"IsStretched",fnView, stretched);
+	ObjectInfo::ReadElement(parentSection.c_str(),"CoordinateSystem",fnView, csy);
+	ObjectInfo::ReadElement(parentSection.c_str(),"Representation",fnView, rpr);
+	ObjectInfo::ReadElement(parentSection.c_str(),"StretchReal",fnView, rrStretch);
+	ObjectInfo::ReadElement(parentSection.c_str(),"IsStretched",fnView, stretched);
 	long method;
-	ObjectInfo::ReadElement(parentSection.scVal(),"StretchMethod",fnView, method);
+	ObjectInfo::ReadElement(parentSection.c_str(),"StretchMethod",fnView, method);
 	stretchMethod = (StretchMethod)method;
 	String colname;
-	ObjectInfo::ReadElement(parentSection.scVal(),"AttributeColumn",fnView, colname);
+	ObjectInfo::ReadElement(parentSection.c_str(),"AttributeColumn",fnView, colname);
 	if ( colname != "") {
 		attColumn = ((SpatialDataDrawer *)getParentDrawer())->getBaseMap()->tblAtt()->col(colname);
 	}
-	ObjectInfo::ReadElement(parentSection.scVal(),"UseAttributes",fnView, useAttColumn);
-	ObjectInfo::ReadElement(parentSection.scVal(),"ExtrusionTransparency",fnView, extrTransparency);
+	ObjectInfo::ReadElement(parentSection.c_str(),"UseAttributes",fnView, useAttColumn);
+	ObjectInfo::ReadElement(parentSection.c_str(),"ExtrusionTransparency",fnView, extrTransparency);
 }
 
 void LayerDrawer::drawLegendItem(CDC *dc, const CRect& rct, double rVal) const{

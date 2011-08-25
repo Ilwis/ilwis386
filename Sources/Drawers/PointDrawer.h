@@ -33,7 +33,6 @@ public:
 		stretchScale = lp->stretchScale;
 		stretchRange = lp->stretchRange;
 		stretchColumn = lp->stretchColumn;
-		directionColumn = lp->directionColumn;
 		scaleMode = lp->scaleMode;
 		useDirection = lp->useDirection;
 		angle = lp->angle;
@@ -53,7 +52,6 @@ public:
 	double stretchScale;
 	RangeReal stretchRange;
 	String stretchColumn;
-	String directionColumn;
 	Scaling scaleMode;
 	bool useDirection;
 	double angle;
@@ -75,12 +73,12 @@ class _export PointDrawer : public SimpleDrawer {
 		PointDrawer(DrawerParameters *parms, const String& name);
 		void calcSize();
 
-		void drawRectangle(const SVGAttributes& attributes, double z) const;
-		void drawEllipse(const SVGAttributes& attributes, double z) const;
-		void drawLine(const SVGAttributes& attributes, double z) const;
-		void drawPolygon(const SVGAttributes& attributes, double z) const;
-		void drawPath(const SVGAttributes& attributes, double z) const;
-		void transform(const SVGAttributes& attributes) const;
+		void drawRectangle(const SVGAttributes* attributes, double z) const;
+		void drawEllipse(const SVGAttributes* attributes, double z) const;
+		void drawLine(const SVGAttributes* attributes, double z) const;
+		void drawPolygon(const SVGAttributes* attributes, double z) const;
+		void drawPath(const SVGAttributes* attributes, double z) const;
+		void transform(const SVGAttributes* attributes) const;
 
 		Coord cNorm;
 		const SVGElement *element;

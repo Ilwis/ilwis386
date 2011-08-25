@@ -9,6 +9,12 @@ namespace ILWIS{
 
 struct PointProperties;
 
+struct SymbolRotationInfo {
+	SymbolRotationInfo() : clockwise(true) {}
+		String rotationColumn;
+		bool clockwise;
+		RangeReal rr;
+};
 
 class _export PointLayerDrawer : public FeatureLayerDrawer {
 	public:
@@ -21,12 +27,10 @@ class _export PointLayerDrawer : public FeatureLayerDrawer {
 		void prepare(PreparationParameters *parms);
 		void getDrawerFor(const Feature* feature,vector<NewDrawer *>& featureDrawers);
 		GeneralDrawerProperties *getProperties();
-		//void setScaleMode(Scaling mode) { scaleMode = mode; }
-		//Scaling getScaleMode() const { return scaleMode; } 
-		//bool usingDirection() const { return useDirection; }
-		//void setUseDirection(bool yesno) { useDirection = yesno; }
+		void setRotationInfo(const SymbolRotationInfo& sC) ;
+		SymbolRotationInfo getRotationInfo() const;
 
-
+	
 	protected:
 		String store(const FileName& fnView, const String& parenSection) const;
 		void load(const FileName& fnView, const String& parenSection);
@@ -34,6 +38,8 @@ class _export PointLayerDrawer : public FeatureLayerDrawer {
 		void setDrawMethod(DrawMethod method=drmINIT);
 		void setSymbolization(CWnd *parent);
 		PointProperties *properties;
+		SymbolRotationInfo rotationInfo;
+
 
 	};
 

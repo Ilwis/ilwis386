@@ -118,7 +118,7 @@ void AnnotationLegendDrawer::prepare(PreparationParameters *pp) {
 			removeDrawer(texts->getId(), true);
 		}
 		texts = new TextLayerDrawer(&dp,"LegendTexts");
-		texts->setFont(new OpenGLText(getRootDrawer(),"arial.ttf",10,true));
+		texts->setFont(new OpenGLText(getRootDrawer(),"arial.ttf",15,true));
 		addPostDrawer(100,texts);
 		LayerDrawer *ldr = dynamic_cast<LayerDrawer *>(getParentDrawer());
 		if ( ldr) {

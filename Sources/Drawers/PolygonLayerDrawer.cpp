@@ -72,7 +72,7 @@ void PolygonLayerDrawer::prepare(PreparationParameters *parms) {
 	FileName fnTriangle((*bmap)->fnObj,".tria#");
 	if ( (parms->type & RootDrawer::ptGEOMETRY) && fnTriangle.fExist()) {
 		if ( triData == 0) { // is already read or not
-			ifstream file(fnTriangle.sFullPath().scVal(), ios::in|ios::binary);
+			ifstream file(fnTriangle.sFullPath().c_str(), ios::in|ios::binary);
 			file.is_open();
 			long size=1234;
 			file.read((char *)(&size), 4);
@@ -89,7 +89,7 @@ void PolygonLayerDrawer::prepare(PreparationParameters *parms) {
 	if ( parms->type & RootDrawer::ptGEOMETRY) {
 		if ( usesTriangleFile && triData == 0) {
 			if ( !fnTriangle.fExist()) {
-				ofstream file(fnTriangle.sFullPath().scVal(), ios::out|ios::binary|ios::ate);
+				ofstream file(fnTriangle.sFullPath().c_str(), ios::out|ios::binary|ios::ate);
 				long cnt = 1;
 				file.write((char *)&cnt,4);
 				for(int i=0; i < getDrawerCount(); ++i) {
@@ -157,9 +157,9 @@ GeneralDrawerProperties *PolygonLayerDrawer::getProperties() {
 String PolygonLayerDrawer::store(const FileName& fnView, const String& parentSection) const{
 	String currentSection = "PolygonLayerDrawer::" + parentSection;
 	FeatureLayerDrawer::store(fnView, currentSection);
-	ObjectInfo::WriteElement(currentSection.scVal(),"ShowAreas",fnView, showAreas);
-	ObjectInfo::WriteElement(currentSection.scVal(),"ShowBoundaries",fnView, showBoundaries);
-	ObjectInfo::WriteElement(currentSection.scVal(),"AreaTransparency",fnView, areaTransparency);
+	ObjectInfo::WriteElement(currentSection.c_str(),"ShowAreas",fnView, showAreas);
+	ObjectInfo::WriteElement(currentSection.c_str(),"ShowBoundaries",fnView, showBoundaries);
+	ObjectInfo::WriteElement(currentSection.c_str(),"AreaTransparency",fnView, areaTransparency);
 	lp.store(fnView, currentSection);
 
 	return currentSection;
@@ -168,9 +168,9 @@ String PolygonLayerDrawer::store(const FileName& fnView, const String& parentSec
 void PolygonLayerDrawer::load(const FileName& fnView, const String& parentSection){
 	String currentSection = parentSection;
 	FeatureLayerDrawer::load(fnView, currentSection);
-	ObjectInfo::ReadElement(currentSection.scVal(),"ShowAreas",fnView, showAreas);
-	ObjectInfo::ReadElement(currentSection.scVal(),"ShowBoundaries",fnView, showBoundaries);
-	ObjectInfo::ReadElement(currentSection.scVal(),"AreaTransparency",fnView, areaTransparency);
+	ObjectInfo::ReadElement(currentSection.c_str(),"ShowAreas",fnView, showAreas);
+	ObjectInfo::ReadElement(currentSection.c_str(),"ShowBoundaries",fnView, showBoundaries);
+	ObjectInfo::ReadElement(currentSection.c_str(),"AreaTransparency",fnView, areaTransparency);
 	lp.load(fnView, currentSection);
 }
 

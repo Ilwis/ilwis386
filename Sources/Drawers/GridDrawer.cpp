@@ -367,20 +367,20 @@ void GridDrawer::prepareChildDrawers(PreparationParameters *parms) {
 
 String GridDrawer::store(const FileName& fnView, const String& parentSection) const{
 	ComplexDrawer::store(fnView, getType());
-	ObjectInfo::WriteElement(getType().scVal(),"Distance",fnView, rDist);
+	ObjectInfo::WriteElement(getType().c_str(),"Distance",fnView, rDist);
 	lproperties.store(fnView,getType());
-	ObjectInfo::WriteElement(getType().scVal(),"ThreeDGrid",fnView, threeDGrid);
-	ObjectInfo::WriteElement(getType().scVal(),"Mode",fnView, mode);
-	ObjectInfo::WriteElement(getType().scVal(),"PlaneColor",fnView, planeColor);
+	ObjectInfo::WriteElement(getType().c_str(),"ThreeDGrid",fnView, threeDGrid);
+	ObjectInfo::WriteElement(getType().c_str(),"Mode",fnView, mode);
+	ObjectInfo::WriteElement(getType().c_str(),"PlaneColor",fnView, planeColor);
 	return getType();
 }
 
 void GridDrawer::load(const FileName& fnView, const String& parenSection){
-	ObjectInfo::ReadElement(getType().scVal(),"Distance",fnView, rDist);
+	ObjectInfo::ReadElement(getType().c_str(),"Distance",fnView, rDist);
 	lproperties.store(fnView,getType());
-	ObjectInfo::ReadElement(getType().scVal(),"ThreeDGrid",fnView, threeDGrid);
-	ObjectInfo::ReadElement(getType().scVal(),"Mode",fnView, mode);
-	ObjectInfo::ReadElement(getType().scVal(),"PlaneColor",fnView, planeColor);
+	ObjectInfo::ReadElement(getType().c_str(),"ThreeDGrid",fnView, threeDGrid);
+	ObjectInfo::ReadElement(getType().c_str(),"Mode",fnView, mode);
+	ObjectInfo::ReadElement(getType().c_str(),"PlaneColor",fnView, planeColor);
 }
 
 

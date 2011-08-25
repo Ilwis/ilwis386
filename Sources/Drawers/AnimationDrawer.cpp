@@ -309,19 +309,19 @@ void AnimationDrawer::setUseTime(bool yesno) {
 void AnimationDrawer::load(const FileName& fnView, const String& parentSection){
 	String currentSection = parentSection;
 	SetDrawer::load(fnView, currentSection);
-	ObjectInfo::ReadElement(currentSection.scVal(),"Interval",fnView, interval);
-	ObjectInfo::ReadElement(currentSection.scVal(),"UseTime",fnView, useTime);
-	ObjectInfo::ReadElement(currentSection.scVal(),"TimeColumn",fnView, colTime);
-	ObjectInfo::ReadElement(currentSection.scVal(),"Offset",fnView, offset);
+	ObjectInfo::ReadElement(currentSection.c_str(),"Interval",fnView, interval);
+	ObjectInfo::ReadElement(currentSection.c_str(),"UseTime",fnView, useTime);
+	ObjectInfo::ReadElement(currentSection.c_str(),"TimeColumn",fnView, colTime);
+	ObjectInfo::ReadElement(currentSection.c_str(),"Offset",fnView, offset);
 }
 
 String AnimationDrawer::store(const FileName& fnView, const String& parentSection) const{
 	String currentSection = "AnimationDrawer::" + parentSection;
 	SetDrawer::store(fnView, currentSection);
-	ObjectInfo::WriteElement(currentSection.scVal(),"Interval",fnView, interval);
-	ObjectInfo::WriteElement(currentSection.scVal(),"UseTime",fnView, useTime);
-	ObjectInfo::WriteElement(currentSection.scVal(),"TimeColumn",fnView, colTime);
-	ObjectInfo::WriteElement(currentSection.scVal(),"Offset",fnView, offset);
+	ObjectInfo::WriteElement(currentSection.c_str(),"Interval",fnView, interval);
+	ObjectInfo::WriteElement(currentSection.c_str(),"UseTime",fnView, useTime);
+	ObjectInfo::WriteElement(currentSection.c_str(),"TimeColumn",fnView, colTime);
+	ObjectInfo::WriteElement(currentSection.c_str(),"Offset",fnView, offset);
 
 	return currentSection;
 }

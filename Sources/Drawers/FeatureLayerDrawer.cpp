@@ -120,13 +120,13 @@ Color FeatureLayerDrawer::getSingleColor() const {
 
 String FeatureLayerDrawer::store(const FileName& fnView, const String& parentSection) const{
 	LayerDrawer::store(fnView, parentSection);
-	ObjectInfo::WriteElement(parentSection.scVal(),"SingleColor",fnView, singleColor);
+	ObjectInfo::WriteElement(parentSection.c_str(),"SingleColor",fnView, singleColor);
 	return parentSection;
 }
 
 void FeatureLayerDrawer::load(const FileName& fnView, const String& parentSection){
 	LayerDrawer::load(fnView, parentSection);
-	ObjectInfo::ReadElement(parentSection.scVal(),"SingleColor",fnView, singleColor);
+	ObjectInfo::ReadElement(parentSection.c_str(),"SingleColor",fnView, singleColor);
 
 }
 

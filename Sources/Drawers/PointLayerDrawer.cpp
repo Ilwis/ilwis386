@@ -3,6 +3,7 @@
 #include "Engine\Map\Point\ilwPoint.h"
 #include "Engine\Drawers\ComplexDrawer.h"
 #include "Engine\Drawers\SimpleDrawer.h" 
+#include "Engine\Domain\dmsort.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Engine\Drawers\RootDrawer.h"
 #include "Engine\Drawers\SpatialDataDrawer.h"
@@ -36,13 +37,45 @@ NewDrawer *PointLayerDrawer::createElementDrawer(PreparationParameters *pp, ILWI
 
 void PointLayerDrawer::prepare(PreparationParameters *parm){
 	FeatureLayerDrawer::prepare(parm);
+	SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)parentDrawer;
+	Table tbl = mapDrawer->getAtttributeTable();
+	DomainSort *dmsrt = 0;
+	Column rotColumn;
+	RangeReal rr;
+	if ( tbl.fValid()) {
+		if ( rotationInfo.rotationColumn != "")
+			rotColumn = tbl->col(rotationInfo.rotationColumn);
+		if ( rotColumn.fValid()) {
+			if ( rotColumn->dm()->pdv() ==0)
+				rotColumn = Column();
+			else {
+				dmsrt = tbl->dm()->pdsrt();
+				rr = rotationInfo.rr.fValid() ? rotationInfo.rr : rotColumn->rrMinMax();
+			}
+		}
+
+	}
+
 	if ( (parm->type & NewDrawer::ptRENDER) != 0) {
 		for(int i=0; i < drawers.size(); ++i) {
-			PointDrawer *ld = (PointDrawer *)drawers.at(i);
+			PointFeatureDrawer *ld = (PointFeatureDrawer *)drawers.at(i);
 			if ( !ld) 
 				continue;
 			PointProperties *props = (PointProperties *)ld->getProperties();
+
 			props->set(properties);
+			if ( rotColumn.fValid() ) {
+				Feature *feature = ld->getFeature();
+				long iRaw = feature->iValue();
+				long iKey = dmsrt->iKey(dmsrt->iOrd(iRaw));
+				double v = rotColumn->rValue(iKey);
+				if ( v != rUNDEF) {
+					double f = rotationInfo.clockwise ? 1.0 : -1.0;
+					double angle = f * 360.0 * ( v - rr.rLo())  / rr.rWidth();
+					props->angle = angle;
+				}
+				
+			}
 			if (!properties->ignoreColor)
 				props->drawColor = properties->drawColor;
 			ld->prepare(parm);
@@ -56,6 +89,9 @@ String PointLayerDrawer::store(const FileName& fnView, const String& parentSecti
 	String currentSection = getType() + "::" + parentSection;
 	FeatureLayerDrawer::store(fnView, currentSection);
 	properties->store(fnView, currentSection);
+	ObjectInfo::WriteElement(currentSection.c_str(),"RotationColumn",fnView, rotationInfo.rotationColumn);
+	ObjectInfo::WriteElement(currentSection.c_str(),"RotationOrientation",fnView, rotationInfo.clockwise);
+	ObjectInfo::WriteElement(currentSection.c_str(),"RotationRange",fnView, rotationInfo.rr);
 
 
 
@@ -66,6 +102,9 @@ void PointLayerDrawer::load(const FileName& fnView, const String& parentSection)
 	String currentSection = getType() + "::" + parentSection;
 	FeatureLayerDrawer::load(fnView, currentSection);
 	properties->load(fnView, currentSection);
+	ObjectInfo::ReadElement(currentSection.c_str(),"RotationColumn",fnView, rotationInfo.rotationColumn);
+	ObjectInfo::ReadElement(currentSection.c_str(),"RotationOrientation",fnView, rotationInfo.clockwise);
+	ObjectInfo::ReadElement(currentSection.c_str(),"RotationRange",fnView, rotationInfo.rr);
 
 }
 
@@ -95,6 +134,16 @@ void PointLayerDrawer::getDrawerFor(const Feature* feature,vector<NewDrawer *>& 
 GeneralDrawerProperties *PointLayerDrawer::getProperties() {
 	return properties;
 }
+
+SymbolRotationInfo PointLayerDrawer::getRotationInfo() const {
+	return rotationInfo;
+}
+
+void PointLayerDrawer::setRotationInfo(const SymbolRotationInfo& sC) {
+	rotationInfo = sC;
+}
+
+
 
 //-----------------------------------------------------------------
 

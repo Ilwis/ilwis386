@@ -183,14 +183,14 @@ void GraticuleDrawer::AddGraticuleLine(const CoordSystem &csy, const LatLon& llB
 
 String GraticuleDrawer::store(const FileName& fnView, const String& parentSection) const{
 	ComplexDrawer::store(fnView, getType());
-	ObjectInfo::WriteElement(getType().scVal(),"Distance",fnView, rDist);
+	ObjectInfo::WriteElement(getType().c_str(),"Distance",fnView, rDist);
 	lproperties.store(fnView,getType());
 	return getType();
 }
 
 void GraticuleDrawer::load(const FileName& fnView, const String& parenSection){
 	ComplexDrawer::load(fnView, getType());
-	ObjectInfo::ReadElement(getType().scVal(),"Distance",fnView, rDist);
+	ObjectInfo::ReadElement(getType().c_str(),"Distance",fnView, rDist);
 	lproperties.load(fnView,getType());
 }
 
