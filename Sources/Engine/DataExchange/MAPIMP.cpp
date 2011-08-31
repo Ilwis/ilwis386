@@ -75,7 +75,6 @@
 #include "Engine\SpatialReference\Grcornrs.h"
 #include "Engine\SpatialReference\Grctppla.h"
 #include "Engine\Base\DataObjects\valrange.h"
-#include "Headers\Hs\map.hs"
 
 struct MpiStruct  // as in version 1.x
 {
