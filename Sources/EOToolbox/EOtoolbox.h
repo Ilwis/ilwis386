@@ -7,6 +7,8 @@ struct FormatInfo {
 	String folderId;
 	String type;
 	String format;
+	String id;
+	String filePattern;
 };
 
 void executeGNCCommand(const String& cmd);
@@ -20,8 +22,8 @@ public:
 	String pluginDir() const;
 	FormatInfo get(const String& id) ;
 private:
-	String makeId(const String& path) ;
-	void build(pugi::xml_node node,  String current, int& count);
+	String makeLocator(const String& path) ;
+	void build(pugi::xml_node node, int& count, const String& idPath);
 	map<String, FormatInfo> formats;
 };
 

@@ -43,12 +43,13 @@ bool GNCCatalogHandler::doCommand() {
 		map<String, String>::const_iterator iter = kvps.find("product");
 		if ( iter != kvps.end()) {
 			String product = (*iter).second;
-			int index = product.find_last_of(":");
-			product = product.substr(index + 1, product.size() - index);
+			//int index = product.find_last_of(":");
+			//product = product.substr(index + 1, product.size() - index);
 			FormatInfo info = eoTool.get(product);
 			String timeformat = info.format;
 			String folderIn = info.fnInput.sPath();
-			addFolder(folderIn,product, timeformat,gncInfo);
+			String regex = makeRegEx(info.filePattern);
+			addFolder(folderIn,regex, timeformat,gncInfo);
 
 		}
 	} else {
@@ -58,7 +59,24 @@ bool GNCCatalogHandler::doCommand() {
 
 }
 
-void GNCCatalogHandler::writeResponse(IlwisServer *server) const{
+String GNCCatalogHandler::makeRegEx(const String& pat) {
+	String result;
+	for(int i = 0; i < pat.size(); ++i) {
+		char c = pat[i];
+		if ( i ==0 && c == '*')
+			result += "^.*";
+		else if ( i == pat.size() - 1 &&c == '*' )
+			result += ".*$";
+		else if ( c == '*')
+			result += "(*)+";
+		else
+			result += c;
+	}
+
+	return result;
+}
+
+void GNCCatalogHandler::writeResponse() const{
 	ILWIS::XMLDocument doc;
 	pugi::xml_node first = doc.addNodeTo(doc,"GNC_Catalog");
 	first.append_attribute("Name") = getConfigValue("Server:Context:Name").c_str();
@@ -107,10 +125,12 @@ void GNCCatalogHandler::addFile(const FileName& fn, const String& nameFrmt, cons
 	String format = nameFrmt;
 	file.toLower();
 	format.toLower();
-
-	//int index = file.find(nameFrmt);
-	//if ( index == string::npos)
-	//	return;
+	regex namePat(format.c_str());
+	match_results<std::string::const_iterator> nameMatches;
+	bool valid = regex_search(file,nameMatches,namePat);
+	if ( !valid)
+		return;
+		
 
 	String exp = timeFormats[timeFormat];
 	//String exp = "^.*(((19|20)\\d\\d(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01]))((([0-1]?[0-9])|([2][0-3]))([0-5]?[0-9]))).*$";
@@ -118,9 +138,10 @@ void GNCCatalogHandler::addFile(const FileName& fn, const String& nameFrmt, cons
 		return;
 	regex pattern(exp.c_str());
 	match_results<std::string::const_iterator> matches;
-	bool valid = regex_search(file,matches,pattern);
+	valid = regex_search(file,matches,pattern);
 	if ( valid) {
-		String p1 = matches[1];
+		int pos = matches.position(0);
+		String p1 = file.substr(pos,timeFormat.size());
 		CFileStatus st;
 		CFile::GetStatus(fn.sFullPath().c_str(), st);
 		GNCFileInfo inf;

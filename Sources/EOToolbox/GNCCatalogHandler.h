@@ -13,13 +13,14 @@ namespace ILWIS{
 		static RequestHandler *createHandler(struct mg_connection *c, const struct mg_request_info *request_info, const map<String, String>& kvps, IlwisServer *serv);
 
 		GNCCatalogHandler(struct mg_connection *c, const struct mg_request_info *request_info, const map<String, String>& kvps, IlwisServer *serv);
-		void writeResponse(IlwisServer*server=0) const;
+		void writeResponse() const;
 		bool needsResponse() const;
 	private:
 		bool doCommand();
 		void collectCatalog(const String& folder, const String& format, vector<GNCFileInfo>& results);
 		void addFolder(const String& folder, const String& format, const String& nameFormat, vector<GNCFileInfo>& results);
 		void addFile(const FileName& fn, const String& nameFrmt, const String& timeFormat, vector<GNCFileInfo>& results);
+		String makeRegEx(const String& pat);
 		map<String, String> timeFormats;
 		vector<GNCFileInfo> gncInfo; 
 

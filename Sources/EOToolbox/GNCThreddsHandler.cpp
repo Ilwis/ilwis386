@@ -5,6 +5,7 @@
 #include "HttpServer\mongoose.h"
 #include "httpserver\RequestHandler.h"
 #include "GNCThreddsHandler.h"
+#include "Engine\Map\Raster\MapList\maplist.h"
 #include "Engine\Base\System\module.h"
 #include "Engine\Applications\ModuleMap.h"
 #include "Engine\Base\DataObjects\URL.h"
@@ -12,6 +13,8 @@
 #include "Engine\Base\DataObjects\RemoteXMLObject.h"
 #include "Engine\Base\DataObjects\XMLDocument.h"
 #include "EOToolbox\EOtoolbox.h"
+#include "netcdf.h"
+#include "IlwisNetCdf.h"
 #include <regex> 
 
 long ILWIS::GNCThreddsHandler::threddsFolderCount = 0;
@@ -26,7 +29,7 @@ RequestHandler *GNCThreddsHandler::createHandler(struct mg_connection *c, const 
 GNCThreddsHandler::GNCThreddsHandler(struct mg_connection *c, const struct mg_request_info *ri, const map<String, String>& _kvps, IlwisServer *serv)
 : RequestHandler("GNCThreddsHandler", c,ri,_kvps, serv)
 {
-	config.add("Extensions\\EO-toolbox", getId());
+	config.add("Extensions\\EO-toolbox", "EORequestHandler");
 }
 
 bool GNCThreddsHandler::doCommand() {
@@ -37,9 +40,10 @@ bool GNCThreddsHandler::doCommand() {
 	FilenameIter itr("*.mpr");
 	while(itr.fValid()) {
 		FileName fn((*itr));
-		FileName fnOut(fn, ".ncd");
-		String expr("!GDAL\\bin\\gdal_translate.exe -of netCDF %S %S", fn.sFullPath(), fnOut.sFullPath());
-		getEngine()->Execute(expr);
+		FileName fnOut(fn, ".nc");
+		IlwisNetCdf ncd;
+		ncd.addMap(Map(fn));
+		ncd.saveToNetCdf(fnOut);
 		++itr;
 	}
 	return true;
@@ -65,7 +69,11 @@ bool GNCThreddsHandler::needsResponse() const {
 
 void GNCThreddsHandler::createExecutionEnviroment() {
 	String rootDir = getConfigValue("GNC:ServiceContext:LocalRoot");
+	if ( rootDir == sUNDEF)
+		throw ErrorObject(TR("Missing entry LocalRoot in server configuration"));
+
 	executionDir = String("%S\\process_%d", rootDir, threddsFolderCount++);
 	_mkdir(executionDir.c_str());
+	//setConfigValue("GNC:Service:Context",String("%d",threddsFolderCount);
 	getEngine()->SetCurDir(executionDir);
 }

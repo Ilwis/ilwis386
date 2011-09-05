@@ -10,6 +10,7 @@
 #include "Engine\Base\DataObjects\XMLDocument.h"
 #include "HttpServer\IlwisServer.h"
 #include "EOToolbox\Services.h"
+#include "Engine\Scripting\Script.h"
 #include "EOToolbox\EOtoolbox.h"
 
 
@@ -34,7 +35,7 @@ String removeBeginEndSlash(const String& str) {
 	if ( str[0] == '\\')
 		tmp = str.substr(1,tmp.size() - 2);
 	if ( tmp[tmp.size() - 1] == '\\') {
-		tmp = tmp.substr(0,tmp.size() - 2);
+		tmp = tmp.substr(0,tmp.size() - 1);
 	}
 	return tmp;
 }
@@ -67,7 +68,8 @@ void executeGNCCommand(const String& cmd) {
 					ilwdir,
 					GNCObject->utilLocation()
 					);
-	getEngine()->Execute(batCmd);
+	//getEngine()->Execute(batCmd);
+	Script::Exec(batCmd);
 
 }
 
@@ -121,7 +123,7 @@ void EOToolbox::ReadConfigFile(FileName fnConfig) {
 
 		int count = 0;
 		for(pugi::xml_node child = doc.first_child(); child; child = child.next_sibling()) {
-			build(child,doc.name(),count); 
+			build(child,count,""); 
 		}
 		String ilwDir = getEngine()->getContext()->sIlwDir();
 		String formType="EO-Toolbox";
@@ -154,35 +156,40 @@ void EOToolbox::ReadConfigFile(FileName fnConfig) {
 	
 }
 
-void EOToolbox::build(pugi::xml_node node,  String current, int& count) {
+void EOToolbox::build(pugi::xml_node node, int& count, const String& idPath) {
 	pugi::xml_node_type type = node.type();
 	if ( type == pugi::node_element) {
 		String nodeName = node.name();
-		String path  = current;
-			FormatInfo info;
-			String name(node.attribute("name").value());
-			if ( name != "")
-				path = current + "|"+ name;
-			if ( nodeName == "Product") {
-				info.folderId= node.attribute("folderid").value();
-				info.command =  node.attribute("script").value();
-				info.format = node.attribute("format").value();
-				info.type = name;
-				String id = makeId(info.command);
-				if ( id != "")
-					formats[id] = info;
+		FormatInfo info;
+		String id;
+		id = idPath == "" ? node.attribute("id").value() : String("%S:%s", idPath, node.attribute("id").value());
+		String name(node.attribute("name").value());
+		if ( nodeName == "Product") {
+			info.folderId= node.attribute("folderid").value();
+			info.command =  node.attribute("script").value();
+			info.format = node.attribute("format").value();
+			info.type = name;
+			info.filePattern = node.attribute("filepattern").value();
+			info.id = id;
 
-				++count;
-			} 
+			//String loc = makeLocator(info.command);
+			if ( id != "") {
+				formats[id] = info;
+			}
 
-		
+			++count;
+		} else {
+				
+		}
+
+
 		for(pugi::xml_node child = node.first_child(); child; child = child.next_sibling()) {
-			build(child,path,count); 
+			build(child,count, id); 
 		}
 	} 
 }
 
-String EOToolbox::makeId(const String& path) {
+String EOToolbox::makeLocator(const String& path) {
 	Array<String> parts;
 	Split(path, parts,"\\");
 	if ( parts.size() > 1) {
