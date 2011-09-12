@@ -15,13 +15,14 @@ namespace ILWIS {
 		long crdIndex;
 		Coord crdClick;
 		bool linePoint;
+		int section;
 	};
 
 	struct UndoItem {
-		UndoItem() : seg(0), seq(0), drawer(0), value(iUNDEF), state(0), created(false) {}
+		UndoItem() : seq(0),  value(iUNDEF), state(0), created(false) {}
 		~UndoItem();
-		Segment *seg;
-		NewDrawer *drawer;
+		String oldFeatureId;
+		String oldDrawerId;
 		long value;
 		CoordinateSequence *seq;
 		int state;
@@ -80,6 +81,7 @@ namespace ILWIS {
 		void storeUndoState(States state, bool created = false);
 		void checkSegments();
 		bool hasSelection() const;
+		void updateUndoAdministration(UndoItem *item, Segment *seg, NewDrawer *drw);
 
 
 		void setMode(LineSetEditor2::States state) ;
@@ -101,7 +103,7 @@ namespace ILWIS {
 		SelectedSegments selectedSegments;
 		Coord crdMouse;
 		PointClickInfo pci;
-		stack<UndoItem *> undoItems;
+		vector<UndoItem *> undoItems;
 		bool useAutoClose;
 
 		DECLARE_MESSAGE_MAP()

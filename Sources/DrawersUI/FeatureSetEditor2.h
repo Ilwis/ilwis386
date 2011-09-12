@@ -23,7 +23,7 @@ namespace ILWIS{
 		void OnLButtonDown(UINT nFlags, CPoint point);
 		void OnLButtonUp(UINT nFlags, CPoint point);
 		void OnMouseMove(UINT nFlags, CPoint point);
-		void OnSetCursor(BaseMapEditor::Mode m=mUNKNOWN);
+		void OnSetCursor(FeatureSetEditor2::States m=msSELECT);
 		void OnContextMenu(CWnd* pWnd, CPoint point);
 		zIcon icon() const { return zIcon(); }
 		String sTitle() const { return "?"; }
@@ -57,7 +57,6 @@ namespace ILWIS{
 		int currentCoordIndex;
 		zCursor curActive;
 		HMENU hmenFile, hmenEdit;
-		int mode;
 		ILWIS::ComplexDrawer *layerDrawer;
 		//PixelInfoDoc *pixdoc;
 		HelpTopic htpTopic;

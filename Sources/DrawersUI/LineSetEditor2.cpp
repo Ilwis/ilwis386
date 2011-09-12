@@ -52,14 +52,14 @@ linePoint(false)
 
 SelectedSegment::~SelectedSegment() {
 }
-//-----------------------------------------------------
 SelectedSegments::~SelectedSegments(){
 	empty();
 }
 
 void SelectedSegments::empty() {
 	for(int i=0; i <  size(); ++i) {
-		at(i)->drawer->setSpecialDrawingOptions(NewDrawer::sdoSELECTED,false);
+		if ( at(i)->drawer)
+			at(i)->drawer->setSpecialDrawingOptions(NewDrawer::sdoSELECTED,false);
 		delete at(i);
 	}
 	clear();
@@ -95,7 +95,7 @@ SelectedSegment *SelectedSegments::add(Segment *seg, NewDrawer *drw, int index, 
 		empty();
 		return 0;
 	}
-	if ( index == iUNDEF && !add) {
+	if ( index == iUNDEF || !add) {
 		empty();
 	}
 	for(int i=0; i <  size(); ++i) {
@@ -127,14 +127,6 @@ BEGIN_MESSAGE_MAP(LineSetEditor2, FeatureSetEditor2)
 	ON_UPDATE_COMMAND_UI(ID_UNDO, OnUpdateUndo)
 	ON_COMMAND(ID_REDO, OnRedo)
 	ON_UPDATE_COMMAND_UI(ID_UNDO, OnUpdateRedo)
-	ON_COMMAND(ID_SELECTMODE, OnSelectMode)
-	ON_UPDATE_COMMAND_UI(ID_SELECTMODE, OnUpdateMode)
-	ON_COMMAND(ID_MOVEMODE, OnMoveMode)
-	ON_UPDATE_COMMAND_UI(ID_MOVEMODE, OnUpdateMode)
-	ON_COMMAND(ID_INSERTMODE, OnInsertMode)
-	ON_UPDATE_COMMAND_UI(ID_INSERTMODE, OnUpdateMode)
-	ON_COMMAND(ID_SPLITMODE, OnSplitMode)
-	ON_UPDATE_COMMAND_UI(ID_SPLITMODE, OnUpdateMode)
 END_MESSAGE_MAP()
 
 //
@@ -165,8 +157,8 @@ insertionPoint(iUNDEF)
 
 LineSetEditor2::~LineSetEditor2(){
 	while( !undoItems.empty()) {
-		delete undoItems.top();
-		undoItems.pop();
+		delete undoItems.back();
+		undoItems.pop_back();
 	}
 }
 
@@ -214,9 +206,9 @@ HTREEITEM LineSetEditor2::configure( HTREEITEM parentItem) {
 	item = new DisplayOptionTreeItem(tree,hitInsert,drawer);
 	item->setCheckAction(this, 0, (DTSetCheckFunc) &LineSetEditor2::checkSnap);
 	insertItem(TR("Enable Snap"),"Snap",item,fAutoSnap);
-	item = new DisplayOptionTreeItem(tree,hitSelect,drawer);
-	item->setCheckAction(this, 0, (DTSetCheckFunc) &LineSetEditor2::checkUndefined);
-	insertItem(TR("Mark Undefined"),"Undefined",item,fAutoSnap);
+	//item = new DisplayOptionTreeItem(tree,hitSelect,drawer);
+	//item->setCheckAction(this, 0, (DTSetCheckFunc) &LineSetEditor2::checkUndefined);
+	//insertItem(TR("Mark Undefined"),"Undefined",item,fAutoSnap);
 
 
 
@@ -227,19 +219,13 @@ HTREEITEM LineSetEditor2::configure( HTREEITEM parentItem) {
 	addmen(ID_UNDO);
 	//addmen(ID_REDO);
 	men.AppendMenu(MF_SEPARATOR);
-	addmen(ID_SELECTMODE);
-	addmen(ID_MOVEMODE);
-	addmen(ID_INSERTMODE);
-	addmen(ID_SPLITMODE);
-	//men.AppendMenu(MF_SEPARATOR);
-	//addmen(ID_FINDUNDEFS);
 	hmenEdit = men.GetSafeHmenu();
 	men.Detach();
 
 	DataWindow* dw = mdoc->mpvGetView()->dwParent();
 	if (dw) {
-		dw->bbDataWindow.LoadButtons("segedit.but");
-		dw->RecalcLayout();
+		//dw->bbDataWindow.LoadButtons("segedit.but");
+		//dw->RecalcLayout();
 		mdoc->mpvGetView()->mwParent()->UpdateMenu(hmenFile, hmenEdit);
 		//mdoc->mpvGetView()->UpdateWindow();
 	}
@@ -277,25 +263,7 @@ bool LineSetEditor2::OnContextMenu(CWnd* pWnd, CPoint point)
 	addmen(ID_ZOOMIN);
 	addmen(ID_ZOOMOUT);
 	addmen(ID_PANAREA);
-	men.AppendMenu(MF_SEPARATOR);
-	switch (mode) {
-		case BaseMapEditor::mSELECT: {
-			addmen(ID_EDIT);
-			addmen(ID_EDIT_COPY);
-			BOOL fEdit = selectedSegments.size() > 0;
-			men.EnableMenuItem(ID_EDIT, fEdit ? MF_ENABLED : MF_GRAYED);
-			addmen(ID_CLEAR);
-			men.EnableMenuItem(ID_CLEAR, fEdit ? MF_ENABLED : MF_GRAYED);
-			men.AppendMenu(MF_SEPARATOR);
-									 }
 
-									 break;
-		case BaseMapEditor::mINSERT:
-			addmen(ID_SETVAL);
-			addmen(ID_EDIT_PASTE);
-			men.AppendMenu(MF_SEPARATOR);
-			break;
-	}
 	addmen(ID_CONFIGURE);
 	addmen(ID_EXITEDITOR);
 	men.TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON, point.x, point.y, pWnd);
@@ -348,18 +316,18 @@ void LineSetEditor2::OnUpdateMode(CCmdUI* pCmdUI)
 	BOOL fCheck, fEnable=true;
 	switch (pCmdUI->m_nID) {
 	   case ID_SELECTMODE:
-		   fCheck = (BaseMapEditor::mSELECT & mode) != 0;
+		   fCheck = (FeatureSetEditor2::msSELECT & editorState) != 0;
 		   break;
 	   case ID_MOVEMODE:
-		   fCheck = (BaseMapEditor::mMOVE & mode) != 0 || (BaseMapEditor::mMOVING & mode) != 0;
+		   fCheck = (FeatureSetEditor2::msMOVE & editorState) != 0 || 
+			   (FeatureSetEditor2::msMOVEINSERTVERTICES & editorState) != 0 ||
+			   (FeatureSetEditor2::msMOVEVERTICES & editorState) != 0;
 		   break;
 	   case ID_INSERTMODE:
-		   fCheck = (BaseMapEditor::mINSERT & mode) != 0;
-		   fEnable = (BaseMapEditor::mMOVING & mode) == 0;
+		   fCheck = (FeatureSetEditor2::msINSERT & editorState) != 0;
 		   break;
 	   case ID_SPLITMODE:
-		   fCheck = BaseMapEditor::mSPLIT == mode;
-		   fEnable = (BaseMapEditor::mMOVING & mode) == 0;
+		   fCheck = FeatureSetEditor2::msSPLIT == editorState;
 		   break;
 	}
 	//if (0 != mdoc->mpvGetView()->tools.size())
@@ -381,7 +349,7 @@ void LineSetEditor2::setMode(FeatureSetEditor2::States state)
 		}
 	}
 	else if ( (editorState & msMOVE) != 0) {
-		curActive = curEdit;
+		curActive = curMove;
 		if ( selectedIndex != 4) {
 			editModeItems->checkItem(4);
 		}
@@ -457,13 +425,15 @@ void LineSetEditor2::fillPointClickInfo(const Coord& crd) {
 		if ( after == iUNDEF)
 			continue;
 		pci.seg = seg;
+		pci.section = after - 1;
 		double d1 = rDist(crd,seg->getCoordinateN(after - 1));
 		double d2 = rDist(crd,seg->getCoordinateN(after));
 		if ( d1 < d2 && after < seg->getNumPoints()) {
-			if ( selectedSegments.size() == 0) // extending existing segment; it will be selected after this operation
-				pci.crdIndex = after -1;
-			else
-				pci.crdIndex = seg->getNumPoints() - 1; // snapping a segment being created. It is selected so we are already busy with it.
+			//if ( selectedSegments.size() == 0 || (editorState & msSELECT) || (editorState & msMOVE)) // extending existing segment; it will be selected after this operation
+			//	pci.crdIndex = after -1;
+			//else
+			//	pci.crdIndex = seg->getNumPoints() - 1; // snapping a segment being created. It is selected so we are already busy with it.
+			pci.crdIndex = after -1;
 		} else {
 			pci.crdIndex = after;
 		}
@@ -521,14 +491,19 @@ void LineSetEditor2::insertVertex(bool endEdit) {
 	pci.seg->getBoundaries(boundaries);
 	CoordBounds cb = pci.drawer->getRootDrawer()->getCoordBoundsZoom();
 	double snap = rSnapDistance * min(cb.width(), cb.height());
+	if ( boundaries.size() == 0 )
+		return;
+
 	CoordinateSequence *seq = boundaries[0];
 	
 	vector<Coordinate> *copyv = new vector<Coordinate>();
+
 	int k = 0;
 	bool added = false;
 	Coord cOld, cCurrent;
 	while(k < seq->size()){
-		if ( (k != pci.crdIndex + 1) || added) {
+		long limit = pci.linePoint ? pci.section : pci.crdIndex;
+		if ( (k != limit + 1) || added) {
 			copyv->push_back(seq->getAt(k++));
 			if ( pci.crdIndex == seq->size() - 1 && k == pci.crdIndex) { // insert beyond the end
 				long snapPoint = 0;
@@ -537,7 +512,7 @@ void LineSetEditor2::insertVertex(bool endEdit) {
 					if ( (snapPoint = noSnap(seq, snap)) == iUNDEF) {
 						copyv->push_back(pci.crdClick);
 					} else {
-						copyv->push_back(copyv->at(0));
+						copyv->push_back(copyv->at(snapPoint));
 					}
 					pci.crdIndex += 1;
 				}
@@ -548,11 +523,19 @@ void LineSetEditor2::insertVertex(bool endEdit) {
 			added = true;
 		}
 	}
-	if ( endEdit && useAutoClose && copyv->at(0) != copyv->back())
-		copyv->at(copyv->size() - 1) = copyv->at(0);
-	pci.seg->PutCoords(new CoordinateArraySequence(copyv));
-	PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER,bmapptr->cs());
-	pci.drawer->prepare(&pp);
+	if ( endEdit) {
+		if ( useAutoClose && copyv->at(0) != copyv->back())
+			copyv->at(copyv->size() - 1) = copyv->at(0);
+		else {
+			if ( copyv->size() > 3 && copyv->back() == copyv->at(copyv->size() - 2)) // due to the way the editor works the last point is alwats double, so remove it before commting it
+				copyv->pop_back();
+		}
+	}
+	if ( copyv->size() > 1) {
+		pci.seg->PutCoords(new CoordinateArraySequence(copyv));
+		PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER,bmapptr->cs());
+		pci.drawer->prepare(&pp);
+	}
 	selectVertex();
 	if ( endEdit) {
 		pci = PointClickInfo(); // end inserting op point(s)
@@ -566,6 +549,7 @@ void LineSetEditor2::selectVertex(bool add) {
 		ss->drawer->setSpecialDrawingOptions(NewDrawer::sdoSELECTED,true,ss->selectedCoords);
 }
 
+// splits a segment into two seperate segments at the clicking point. Both segment will have the same value;
 void LineSetEditor2::split(){
 
 	CoordBounds cbZoom = mdoc->rootDrawer->getCoordBoundsZoom();
@@ -573,7 +557,10 @@ void LineSetEditor2::split(){
 	double d;
 	long after = pci.seg->nearSection(pci.crdClick, delta,d);
 	if ( after == iUNDEF)
-		return;
+		return; 	// nothing there, go back
+
+	// clear any selection as most likely the end result of this operation will invalidate existing drawers (new ones will be created)
+	selectedSegments.empty();
 	bool isRing = pci.seg->isRing();
 	vector<CoordinateSequence*> boundaries;
 	pci.seg->getBoundaries(boundaries);
@@ -583,39 +570,59 @@ void LineSetEditor2::split(){
 	vector<Coordinate> *copyv = copyv1;
 	NewDrawer *prepareDrawer = 0;
 	int k = 0;
+	// copy points into two vectors which will be the data for the one or two new segments
+	// points will be copied until the clikcing point which will also be added to bot vectors
+	// note that it is not simply splitting a segment(though that will be true in most cases). Rings do not become two segment
+	// but are "opened"
 	while(k < seq->size()){
+		// copy to just before the first coord of the next segment in the "old" situation
 		if ( k != after) {
 			copyv->push_back(seq->getAt(k++));
 		}
 		else {
+			// copy points after the clicking point
 			copyv->push_back(pci.crdClick);
 			copyv = copyv2;
 			copyv->push_back(pci.crdClick);
 			after = iUNDEF;
 		}
 	}
-	//addToSelectedFeatures(seg, crd,,);
+
 	PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER,bmapptr->cs());
 	if ( isRing) {
+		// if is a ring values of copyv1 are copied to copv2 vector. endpoints(both) of this new vector is clicking point
 		for(int j = 0; j < copyv1->size(); j++) {
 			copyv2->push_back(copyv1->at(j));
 		}
+		// make copyv == copyv2. this ensures that "old" segments will get the new coordinates but now with new endpoints ( the split point)
 		copyv = copyv2;
 		delete copyv1;
 	} else {
+		// in the other case a new segment is created and the points of copyv2 are assigned to it.
 		ILWIS::Segment *segNew = CSEGMENT(bmapptr->newFeature());
 		CoordinateArraySequence *arseq2 = new CoordinateArraySequence(copyv2);
 		segNew->PutCoords(arseq2);
 		segNew->PutVal(pci.seg->rValue());
 		prepareDrawer = drawer;
+		// make copyv == copyv1, this ensures that the "old" segment will get the same points as the first part of the splitted segment
 		copyv = copyv1;
 	}
 	CoordinateArraySequence *arseq = new CoordinateArraySequence(copyv);
+	// update the "old" segment
 	pci.seg->PutCoords(arseq);
 	if (prepareDrawer == 0)
 		prepareDrawer  = pci.drawer;
 
+	// as there are now new drawers a prepare most be done to generate the new drawerds
 	prepareDrawer->prepare(&pp);
+	vector<NewDrawer *> drws;
+	((ComplexDrawer *)drawer)->getDrawerFor(pci.seg,drws);
+	// the click info needs to be updated with the new drawers;
+	if ( drws.size() > 0) {
+		pci.drawer = drws[0];
+		pci.linePoint = false;
+		pci.crdIndex = 0;
+	}
 
 	return ;
 
@@ -656,17 +663,20 @@ void LineSetEditor2::updatePositions(){
 void LineSetEditor2::deleteVertices() {
 	for(int i =0; i < selectedSegments.size(); ++i) {
 		SelectedSegment *ss = selectedSegments.at(i);
-		bmapptr->removeFeature(ss->seg->getGuid(), ss->selectedCoords);
+		bool isFullyRemoved = bmapptr->removeFeature(ss->seg->getGuid(), ss->selectedCoords);
 		bool removed = false;
-		if ( ss->selectedCoords.size() == 0 || ss->selectedCoords.size() == ss->seg->getNumPoints()) {
+		if ( ss->selectedCoords.size() == 0 || isFullyRemoved) {
 			((ComplexDrawer *)drawer)->removeDrawer(ss->drawer->getId());
+			ss->seg = 0; // has been deleted and is invalid now
+			ss->drawer = 0; // has been deleted and is invalid now
 			removed = true;
 		}
+		PreparationParameters p(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER,bmapptr->cs());
 		if ( !removed) {
-			PreparationParameters p(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER,bmapptr->cs());
 			ss->drawer->prepare(&p);
 		}
 	}
+	mdoc->rootDrawer->getDrawerContext()->doDraw();
 	pci = PointClickInfo();
 	selectedSegments.empty();
 }
@@ -676,88 +686,51 @@ void LineSetEditor2::OnUndo()
 	if ( undoItems.size() == 0)
 		return;
 
-	UndoItem *item = undoItems.top();
-	undoItems.pop();
-	NewDrawer *segdrw = 0;
+	UndoItem *item = undoItems.back();
+	undoItems.pop_back();
+	selectedSegments.empty();
+	layerDrawer->removeDrawer(item->oldDrawerId);
+	bmapptr->removeFeature(item->oldFeatureId);
+	pci = PointClickInfo();
 
-	if ( item->state == msMOVE) {
-		item->seg->PutCoords(item->seq->clone());
-		item->seg->PutVal(item->value);
-		segdrw = item->drawer;
-	} else if ( item->state == msDELETE) {
-		Segment *segment;
-		if ( item->seg == 0) { // recreate feature
-			segment = CSEGMENT(bmapptr->newFeature());
-			ILWIS::DrawerParameters parms(layerDrawer->getRootDrawer(), layerDrawer);
-			segdrw = NewDrawer::getDrawer("LineFeatureDrawer", "ilwis38", &parms);
-			segdrw->addDataSource(CFEATURE(segment));
-		} else {
-			segdrw = item->drawer;
-			segment = item->seg;
-		}
-		segment->PutCoords(item->seq->clone());
-		segment->PutVal(item->value);
-
-	} else if ( item->state == msINSERT) {
-		if ( item->created) {
-			bmapptr->removeFeature(item->seg->getGuid());
-			((ComplexDrawer *)drawer)->removeDrawer(item->drawer->getId());
-		} else {
-			item->seg->PutCoords(item->seq->clone());
-			item->seg->PutVal(item->value);
-			segdrw = item->drawer;
-		}
-
-	}
-	delete item;
-
+	Segment *segment = CSEGMENT(bmapptr->newFeature());
+	ILWIS::DrawerParameters parms(layerDrawer->getRootDrawer(), layerDrawer);
+	segment->PutCoords(item->seq->clone());
+	segment->PutVal(item->value);
+	NewDrawer *segdrw = NewDrawer::getDrawer("LineFeatureDrawer", "ilwis38", &parms);
+	segdrw->addDataSource(CFEATURE(segment));
+	layerDrawer->addDrawer(segdrw);
 	PreparationParameters fp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER,bmapptr->cs());
-	if ( segdrw)
-		segdrw->prepare(&fp);
+	segdrw->prepare(&fp);
 	mdoc->rootDrawer->getDrawerContext()->doDraw();
+	updateUndoAdministration(item, segment, segdrw);
+
+	delete item;
 
 }
 
-void LineSetEditor2::storeUndoState(States state, bool created) {
-	if ( state == msMOVE) {
-		for(int i =0; i < selectedSegments.size(); ++i) {
-			SelectedSegment *ss = selectedSegments.at(i);
-			UndoItem *undoItem = new UndoItem();
-			undoItem->seg = ss->seg;
-			undoItem->seq = ss->seg->getCoordinates();
-			undoItem->value = ss->seg->rValue();
-			undoItem->drawer = ss->drawer;
-			undoItem->state = state;
-			undoItems.push(undoItem);
-
-		}
-	} else if ( state == msDELETE) {
-		for(int i =0; i < selectedSegments.size(); ++i) {
-			SelectedSegment *ss = selectedSegments.at(i);
-			UndoItem *undoItem = new UndoItem();
-			if ( ss->selectedCoords.size() == 0 || ss->selectedCoords.size() == ss->seg->getNumPoints()) {
-				undoItem->seg = 0; // segment has will be removed so any reference to it is pointless
-				undoItem->drawer = 0; // same for drawer
-			} else {
-				undoItem->seg = ss->seg;
-				undoItem->drawer = ss->drawer;
-			}
-			undoItem->seq = ss->seg->getCoordinates();
-			undoItem->state = state;
-			undoItem->value = ss->seg->rValue();
-			
-			undoItems.push(undoItem);
-		}
-	} else if ( state == msINSERT) {
-			UndoItem *undoItem = new UndoItem();
-			undoItem->seg = pci.seg;
-			undoItem->seq = pci.seg->getCoordinates();
-			undoItem->value = pci.seg->rValue();
-			undoItem->drawer = pci.drawer;
-			undoItem->state = state;
-			undoItem->created = created;
-			undoItems.push(undoItem);
+void LineSetEditor2::updateUndoAdministration(UndoItem *item, Segment *seg, NewDrawer *drw) {
+	for(vector<UndoItem *>::iterator cur = undoItems.begin(); cur != undoItems.end(); ++cur) {
+		if ( (*cur)->oldFeatureId == seg->getGuid())
+			(*cur)->oldFeatureId = seg->getGuid();
+		if ( (*cur)->oldDrawerId == drw->getId())
+			(*cur)->oldDrawerId = drw->getId();
 	}
+}
+
+void LineSetEditor2::storeUndoState(States state, bool created) {
+	for(int i =0; i < selectedSegments.size(); ++i) {
+		SelectedSegment *ss = selectedSegments.at(i);
+		UndoItem *undoItem = new UndoItem();
+		undoItem->seq = ss->seg->getCoordinates();
+		undoItem->state = state;
+		undoItem->value = ss->seg->rValue();
+		undoItem->oldFeatureId = ss->seg->getGuid();
+		undoItem->oldDrawerId = ss->drawer->getId();
+		
+		undoItems.push_back(undoItem);
+	}
+
 }
 // state machine for the editor
 void LineSetEditor2::updateState() {
@@ -769,7 +742,7 @@ void LineSetEditor2::updateState() {
 	// clikced somewhere on the map where a feature was present and clicked on a vertex, additional vertex will be created. this
 	// mode is used when extending the ends of the line
 	} else if ( pci.crdIndex != iUNDEF && hasState(msINSERT) &&  hasState(msLMOUSEUP)) {
-		selectedSegments.empty();
+		//selectedSegments.empty();
 		storeUndoState(msINSERT);
 		insertVertex(hasState(msENTER));
 		editorState |= msMOVEVERTICES;
@@ -797,7 +770,7 @@ void LineSetEditor2::updateState() {
 	} else if ( (pci.seg != 0 && pci.linePoint == false) && hasState( msSELECT ) && hasState( msLMOUSEUP)) {
 		selectVertex(hasState(msCTRL));
 
-	} else if ( (pci.seg != 0 && pci.linePoint == false) && hasState( msDELETE )) {
+	} else if ( pci.seg != 0 && hasState( msDELETE )) {
 		storeUndoState(msDELETE);
 		deleteVertices();
 		editorState = editorState & ~ msDELETE;
@@ -812,7 +785,7 @@ void LineSetEditor2::updateState() {
 	} else if ( hasState( msINSERT ) && hasState( msENTER)) {
 		fillPointClickInfo(crdMouse);
 		insertVertex(true);
-		selectedSegments.empty();
+		//selectedSegments.empty();
 		pci = PointClickInfo(); // end inserting op point(s)
 		editorState = editorState & ~ ( msENTER | msMOVEVERTICES);
 
@@ -824,13 +797,16 @@ void LineSetEditor2::updateState() {
 		updatePositions();
 
 		// end movement of point
-	} else if ( hasState( msMOVEVERTICES ) && hasState( msLMOUSEUP)) {
+	} else if ( hasState( msMOVEVERTICES ) && hasState( msLMOUSEUP)  && ! hasState(msCTRL)) {
 		editorState = editorState & ~msMOVEVERTICES;
 		pci = PointClickInfo(); // end the move
 
 	} else if ( pci.seg != 0 && hasState( msMOVEVERTICES ) && hasState( msMOUSEMOVE)) {
 		updatePositions();
 
+	} else if ( pci.seg == 0 && hasState( msMOVE) && hasState(msLMOUSEUP)) {
+		pci = PointClickInfo();
+		selectedSegments.empty();
 	}
 	mdoc->rootDrawer->getDrawerContext()->doDraw();
 }

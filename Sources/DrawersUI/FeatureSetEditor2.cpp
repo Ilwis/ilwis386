@@ -36,14 +36,15 @@ using namespace ILWIS;
 FeatureSetEditor2::FeatureSetEditor2(const String& tp,  ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
 	BaseMapEditor(tp,zv, view, drw),
 	currentCoordIndex(iUNDEF),
-	mode(BaseMapEditor::mUNKNOWN),
 	layerDrawer((ComplexDrawer *)drw),
 	bmapptr(0),
-	curInsert("EditEditCursor"),
-	curEdit("EditPntCursor"),
+	curInsert("EditPntCursor"),
+	curEdit("EditCursor"),
 	curMove("EditPntMoveCursor"), 
 	curMoving("EditPntMovingCursor"),
-	mdoc(0)
+	mdoc(0),
+	curActive(curEdit),
+	editorState(FeatureSetEditor2::msSELECT)
 { 
 	SpatialDataDrawer *amdrw = dynamic_cast<SpatialDataDrawer *>(drw->getParentDrawer());
 	if ( amdrw) {
@@ -157,7 +158,7 @@ void FeatureSetEditor2::setMode(FeatureSetEditor2::States state)
 {
 	int selectedIndex = editModeItems->getState();
 	editorState |= state;
-	if ( (editorState & mSELECT) != 0) {
+	if ( (editorState & msSELECT) != 0) {
 		curActive = curEdit;
 		if ( selectedIndex != 0) {
 			editModeItems->checkItem(0);
@@ -191,7 +192,7 @@ void FeatureSetEditor2::OnMouseMove(UINT nFlags, CPoint point){
 	return ;
 }
 
-void FeatureSetEditor2::OnSetCursor(BaseMapEditor::Mode m) {
+void FeatureSetEditor2::OnSetCursor(FeatureSetEditor2::States m) {
 	bool fSetCursor = (HCURSOR)0 != curActive;
 	if (fSetCursor)
 		SetCursor(curActive);
@@ -250,22 +251,22 @@ bool FeatureSetEditor2::hasSelection() const {
 
 void FeatureSetEditor2::OnInsertMode()
 {
-	setMode(mode == FeatureSetEditor2::msINSERT ? FeatureSetEditor2::msNONE : FeatureSetEditor2::msINSERT);
+	setMode(editorState == FeatureSetEditor2::msINSERT ? FeatureSetEditor2::msNONE : FeatureSetEditor2::msINSERT);
 }
 
 void FeatureSetEditor2::OnMoveMode()
 {
-	setMode(mode == FeatureSetEditor2::msMOVE ? FeatureSetEditor2::msNONE : FeatureSetEditor2::msMOVE);
+	setMode(editorState == FeatureSetEditor2::msMOVE ? FeatureSetEditor2::msNONE : FeatureSetEditor2::msMOVE);
 }
 
 void FeatureSetEditor2::OnSelectMode()
 {
-	setMode(mode == FeatureSetEditor2::msSELECT ? FeatureSetEditor2::msNONE : FeatureSetEditor2::msSELECT);
+	setMode(editorState == FeatureSetEditor2::msSELECT ? FeatureSetEditor2::msNONE : FeatureSetEditor2::msSELECT);
 }
 
 void FeatureSetEditor2::OnSplitMode()
 {
-	setMode(mode == FeatureSetEditor2::msSPLIT ? FeatureSetEditor2::msNONE : FeatureSetEditor2::msSPLIT);
+	setMode(editorState == FeatureSetEditor2::msSPLIT ? FeatureSetEditor2::msNONE : FeatureSetEditor2::msSPLIT);
 }
 
 void FeatureSetEditor2::OnMergeMode()
@@ -283,13 +284,13 @@ void FeatureSetEditor2::OnUpdateMode(CCmdUI* pCmdUI)
 	BOOL fCheck;
 	switch (pCmdUI->m_nID) {
 		case ID_SELECTMODE:
-			fCheck = (BaseMapEditor::mSELECT & mode) != 0;
+			fCheck = (FeatureSetEditor2::msSELECT & editorState) != 0;
 			break;
 		case ID_MOVEMODE:
-			fCheck = (BaseMapEditor::mMOVE & mode) != 0;
+			fCheck = (FeatureSetEditor2::msMOVE & editorState) != 0;
 			break;
 		case ID_INSERTMODE:
-			fCheck = (BaseMapEditor::mINSERT & mode) != 0;
+			fCheck = (FeatureSetEditor2::msINSERT & editorState) != 0;
 			break;
 		//case ID_FINDUNDEFS:
 		//	pCmdUI->SetCheck(fFindUndefs);
