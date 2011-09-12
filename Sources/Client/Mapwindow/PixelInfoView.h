@@ -66,6 +66,7 @@ protected:
 	virtual BOOL OnDrop(COleDataObject* pDataObject, DROPEFFECT dropEffect, CPoint point);
 	void OnFieldPressed(int iCol, long iRow, bool fLeft);
 	int selectedRowIndex;
+	virtual void update();
 
 protected:
 	virtual ~PixelInfoView();

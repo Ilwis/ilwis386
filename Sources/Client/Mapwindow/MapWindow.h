@@ -73,6 +73,7 @@ public:
 	virtual void GetMessageString(UINT nID, CString& rMessage) const;
 	//}}AFX_VIRTUAL
 	CView* vwFirst() { return pFirstView; }
+	bool isFullScreen() const { return fullScreen;}
 	ScaleBar barScale;
 	GeneralBar ltb;
 
@@ -91,6 +92,8 @@ public:
 	afx_msg void OnUpdateOverviewWindow(CCmdUI* pCmdUI);
 	afx_msg void OnScaleControl();
 	afx_msg void OnUpdateScaleControl(CCmdUI* pCmdUI);
+	afx_msg void OnFullScreen();
+	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) ;
 	//}}AFX_MSG
 
 protected:
@@ -102,6 +105,9 @@ protected:
 	HMENU hMenFile, hMenEdit;
 	GeneralBar gbOverview;
 	CView* pFirstView;
+	bool fullScreen;
+	WINDOWPLACEMENT g_wpPrev;
+	DWORD dwStyle;
 
 	DECLARE_DYNCREATE(MapWindow)
 	DECLARE_MESSAGE_MAP()

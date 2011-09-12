@@ -344,8 +344,10 @@ void SimpleMapPaneView::OnUpdateMeasureDist(CCmdUI* pCmdUI)
 
 void SimpleMapPaneView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
-	if (tools.size() > 0 && VK_ESCAPE == nChar) {
-		tools.OnEscape();
+	if ( VK_ESCAPE == nChar) {
+		if (tools.size() > 0)
+			tools.OnEscape();
+		((MapWindow *)getFrameWindow())->OnKeyDown(nChar, nRepCnt, nFlags);
 		return;
 	}
 	if (edit && edit->OnKeyDown(nChar, nRepCnt, nFlags))

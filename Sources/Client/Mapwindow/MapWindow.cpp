@@ -48,6 +48,7 @@
 #include "Headers\Htp\Ilwis.htp"
 #include "Client\TableWindow\BaseTablePaneView.h"
 #include "Client\Mapwindow\MapStatusBar.h"
+#include "Client\Mapwindow\PixelInfoBar.h"
 #include "Client\Mapwindow\OverviewMapPaneView.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Headers\Hs\Mapwind.hs"
@@ -75,16 +76,18 @@ BEGIN_MESSAGE_MAP(MapWindow, DataWindow)
 	ON_COMMAND(ID_LAYERMANAGE, OnLayerManagement)
 	ON_COMMAND(ID_OVERVIEW, OnOverviewWindow)
 	ON_COMMAND(ID_SCALECONTROL, OnScaleControl)
+	ON_COMMAND(ID_FULLSCREEN, OnFullScreen)
 	ON_UPDATE_COMMAND_UI(ID_LAYERMANAGE, OnUpdateLayerManagement)
 	ON_UPDATE_COMMAND_UI(ID_OVERVIEW, OnUpdateOverviewWindow)
 	ON_UPDATE_COMMAND_UI(ID_SCALECONTROL, OnUpdateScaleControl)
+		ON_WM_KEYDOWN()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 const int iMINSIZE = 50;
 
 MapWindow::MapWindow()
-: pFirstView(0)
+: pFirstView(0), fullScreen(false)
 {
   help = "ilwis\\map_window.htm";
 	sHelpKeywords = "Map Window";
@@ -186,6 +189,7 @@ int MapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	add(ID_NORMAL);
   add(ID_ZOOMIN);
   add(ID_ZOOMOUT);
+  add(ID_FULLSCREEN)
 	add(ID_PANAREA);
   add(ID_SCALE1);
   addBreak;
@@ -573,4 +577,66 @@ void MapWindow::GetMessageString(UINT nID, CString& sMessage) const
 	FrameWindow::GetMessageString(nID, sMessage);
 }
 
+void MapWindow::OnFullScreen() {
+	dwStyle = GetWindowLong(m_hWnd, GWL_STYLE);
+	if (dwStyle & WS_OVERLAPPEDWINDOW) {
+		MONITORINFO mi = { sizeof(mi) };
+		if (GetWindowPlacement(&g_wpPrev) &&
+			GetMonitorInfo(MonitorFromWindow(m_hWnd,
+			MONITOR_DEFAULTTOPRIMARY), &mi)) {
+				fullScreen = true;
+				SetMenuBarVisibility(AFX_MBV_DISPLAYONFOCUS | AFX_MBV_DISPLAYONF10);
+				status->ShowWindow(SW_HIDE);
+				if ( barScale.GetSafeHwnd())
+					barScale.ShowWindow(SW_HIDE);
+				if ( bbDataWindow.GetSafeHwnd())
+					bbDataWindow.ShowWindow(SW_HIDE);
+				if ( ltb.GetSafeHwnd())
+					ltb.ShowWindow(SW_HIDE);
+				MapPaneView* mpv = dynamic_cast<MapPaneView*>(pFirstView);
+				if (0 != mpv)  {
+						mpv->getPixInfoBar()->ShowWindow(SW_HIDE);	
+						mpv->GetDocument()->ltvGetView()->ShowWindow(SW_HIDE);
+					
+				}
+				SetWindowLong(m_hWnd, GWL_STYLE,
+					dwStyle & ~WS_OVERLAPPEDWINDOW );
+				::SetWindowPos(m_hWnd, HWND_TOP,
+					mi.rcMonitor.left, mi.rcMonitor.top,
+					mi.rcMonitor.right - mi.rcMonitor.left,
+					mi.rcMonitor.bottom - mi.rcMonitor.top,
+					SWP_NOOWNERZORDER | SWP_FRAMECHANGED);
+		}
+	}
+
+}
+
+void MapWindow::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
+{
+	if (VK_ESCAPE == nChar) {
+		if ( fullScreen) {
+			SetMenuBarVisibility(AFX_MBV_KEEPVISIBLE);
+			status->ShowWindow(SW_SHOW);
+			if ( barScale.GetSafeHwnd())
+				barScale.ShowWindow(SW_SHOW);
+			if ( bbDataWindow.GetSafeHwnd())
+					bbDataWindow.ShowWindow(SW_SHOW);
+			if ( ltb.GetSafeHwnd())
+				ltb.ShowWindow(SW_SHOW);
+			MapPaneView* mpv = dynamic_cast<MapPaneView*>(pFirstView);
+			if (0 != mpv)  {
+				mpv->getPixInfoBar()->ShowWindow(SW_SHOW);
+				mpv->GetDocument()->ltvGetView()->ShowWindow(SW_SHOW);
+			}
+			fullScreen = false;
+			SetWindowLong(m_hWnd, GWL_STYLE,
+				dwStyle | WS_OVERLAPPEDWINDOW);
+			SetWindowPlacement( &g_wpPrev);
+			SetWindowPos(NULL, 0, 0, 0, 0,
+				SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER |
+				SWP_NOOWNERZORDER | SWP_FRAMECHANGED);
+		}
+	}
+	DataWindow::OnKeyDown(nChar, nRepCnt, nFlags);
+}
 //--------------------------------------------------------

@@ -88,6 +88,7 @@ public:
 	void createPixInfoBar();
 	void setBitmapRedraw(bool yesno);
 	ILWIS::ScreenSwapper* getSwapper() { return swapper; }
+	PixelInfoBar *getPixInfoBar() { return pib; }
 
 	InfoLine* info;
 

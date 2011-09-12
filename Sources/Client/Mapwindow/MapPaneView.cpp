@@ -38,6 +38,7 @@ Created on: 2007-02-8
 //
 
 #include "Client\Headers\formelementspch.h"
+#include <winuser.h>
 #include "Client\ilwis.h"
 #include "Engine\Map\Segment\Seg.h"
 #include "engine\map\polygon\POL.H"
@@ -161,6 +162,7 @@ BEGIN_MESSAGE_MAP(MapPaneView, SimpleMapPaneView)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_MAPDBLCLKRECORD, ID_MAPDBLCLKACTION, OnUpdateDoubleClickAction)
 	ON_COMMAND(ID_SHOWRECORDVIEW, OnShowRecordView)
 	ON_UPDATE_COMMAND_UI(ID_SHOWRECORDVIEW, OnUpdateShowRecordView)
+	ON_WM_KEYDOWN()
 END_MESSAGE_MAP()
 
 const int iMINSIZE = 50;
@@ -248,6 +250,7 @@ void MapPaneView::OnDefaultScale()
 {
 	SetDirty();
 }
+
 
 void MapPaneView::OnEntireMap()
 {
@@ -1394,3 +1397,4 @@ void MapPaneView::OnTimer(UINT timerID) {
 	doc->rootDrawer->timedEvent(timerID);
 	doc->ltvGetView()->getRootTool()->timedEvent(timerID);
 }
+

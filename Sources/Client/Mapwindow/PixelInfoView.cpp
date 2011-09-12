@@ -48,6 +48,7 @@ Created on: 2007-02-8
 #include "Client\TableWindow\BaseTblField.h"
 #include "Client\Mapwindow\PixelInfoDoc.h"
 #include "Client\Mapwindow\PixelInfoView.h"
+#include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\MapWindow\Drawers\DrawerTool.h"
 #include "Engine\Domain\dmsort.h"
@@ -72,6 +73,7 @@ IMPLEMENT_DYNCREATE(PixelInfoView, BaseTablePaneView)
 BEGIN_MESSAGE_MAP(PixelInfoView, BaseTablePaneView)
 	ON_WM_CONTEXTMENU()
 	ON_WM_LBUTTONDBLCLK()
+	ON_WM_KILLFOCUS()
 END_MESSAGE_MAP()
 
 
@@ -370,6 +372,21 @@ int PixelInfoView::getSelectedRow() const{
 	return selectedRowIndex;
 }
 
+
+void PixelInfoView::update() {
+	if (tField ) {
+		Invalidate();
+		int iRow = tField->iRow;
+		delete tField;
+		tField = 0;
+		RecItem *rit = GetDocument()->getItem(iRow);
+		DrawerTool *tool = rit->getAssociatedTool();
+		PreparationParameters fp(NewDrawer::ptRENDER);
+		tool->getDrawer()->prepare(&fp);
+	
+	}
+}
+
 //--------------------------------------------------------------------
 PixInfoField::PixInfoField(PixelInfoView* pane, int col, long row)
 : BaseTblField(pane,col,row, pane->GetDocument()->getItem(row)->fnObj())
@@ -416,8 +433,8 @@ PixInfoField::~PixInfoField()
 					return;
 				}
 				if (IDYES == iRet){ 
-					long raw = ds->iAdd(s);
-					doc->getEditFeature()->PutVal(raw);
+					ds->iAdd(s);
+					//doc->getEditFeature()->PutVal(raw);
 				}
 			}
 			else {

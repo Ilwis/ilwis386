@@ -92,11 +92,13 @@ public:
 	void AddCollection(const ObjectCollection& col, RecItem::AddType tp, ILWIS::ComplexDrawer *drw);
 	void Update();
 	bool fMouse, fMouseCont, fDigitizer, fDigitizerCont;
-	DECLARE_MESSAGE_MAP()
 	RecItemCoord riCoord;
 	RecItemArray riArray;
 	Feature *editFeature;
 	MapCompositionDoc *mdoc;
+
+	DECLARE_MESSAGE_MAP()
+
 };
 
 
