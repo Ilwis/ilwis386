@@ -16,7 +16,7 @@ RootDrawer::RootDrawer() : ComplexDrawer(0,"RootDrawer"){
 	ILWIS::PreparationParameters pp(RootDrawer::ptALL,0);
 	backgroundDrawer = NewDrawer::getDrawer("CanvasBackgroundDrawer", &pp, &dp);
 
-	addPostDrawer(900,NewDrawer::getDrawer("MouseClickInfoDrawer", &pp, &dp));
+	//addPostDrawer(900,NewDrawer::getDrawer("MouseClickInfoDrawer", &pp, &dp));
 	addPostDrawer(800,NewDrawer::getDrawer("GridDrawer", &pp, &dp));
 	addPostDrawer(700,NewDrawer::getDrawer("GraticuleDrawer", &pp, &dp));
 
@@ -182,10 +182,10 @@ String RootDrawer::store(const FileName& fnView, const String parenSection) cons
 void RootDrawer::load(const FileName& fnView, const String parenSection){
 	CoordSystem csy;
 	ObjectInfo::ReadElement("RootDrawer","CoordinateSystem",fnView, csy);
-	CoordBounds cbZoom,cbView,cbMap;
-	ObjectInfo::ReadElement("RootDrawer","CoordBoundsZoom",fnView, cbZoom);
-	ObjectInfo::ReadElement("RootDrawer","CoordBoundsView",fnView, cbView);
-	ObjectInfo::ReadElement("RootDrawer","CoordBoundsMap",fnView, cbMap);
+	CoordBounds cbZ,cbV,cbM;
+	ObjectInfo::ReadElement("RootDrawer","CoordBoundsZoom",fnView, cbZ);
+	ObjectInfo::ReadElement("RootDrawer","CoordBoundsView",fnView, cbV);
+	ObjectInfo::ReadElement("RootDrawer","CoordBoundsMap",fnView, cbM);
 	/*double aspect;
 	ObjectInfo::ReadElement("RootDrawer","AspectRatio",fnView, aspect);*/
 	Coord eyePoint,viewPoint;
@@ -196,13 +196,13 @@ void RootDrawer::load(const FileName& fnView, const String parenSection){
 	ObjectInfo::ReadElement("RootDrawer","Is3D",fnView, threeD);
 	setCoordinateSystem(csy, true);
 	setViewPort(viewPort);
-	setCoordBoundsMap(cbMap);
-	setCoordBoundsView(cbView, true);
-	setCoordBoundsZoom(cbZoom);
+	setCoordBoundsMap(cbM);
+	setCoordBoundsView(cbV, true);
+	setCoordBoundsZoom(cbZ);
 
 	ComplexDrawer::load(fnView,"RootDrawer");
 
-	ObjectInfo::ReadElement("RootDrawer","XRotation",fnView, rotX);
+	ObjectInfo::ReadElement("RootDrawer","XRotation",fnView, rotX); 
 	ObjectInfo::ReadElement("RootDrawer","YRotation",fnView, rotY);
 	ObjectInfo::ReadElement("RootDrawer","ZRotation",fnView, rotZ);
 	ObjectInfo::ReadElement("RootDrawer","Zoom3D",fnView, zoom3D);

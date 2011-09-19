@@ -174,7 +174,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="RpcRT4.Lib libcurl.lib xerces-c_3.lib ftgl.lib opengl32.lib zlib.lib geos.lib glu32.lib freetype.lib xqilla22.lib"
+				AdditionalDependencies="RpcRT4.Lib libcurl.lib ftgl.lib opengl32.lib zlib.lib proj4.lib geos.lib glu32.lib freetype.lib"
 				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\$(ProjectName).dll"
 				Version="3.8"
 				LinkIncremental="1"
@@ -1277,6 +1277,14 @@
 				<Filter
 					Name="XML"
 					>
+					<File
+						RelativePath="..\..\Sources\Engine\Base\XML\ObjectDefinition.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Engine\Base\XML\ObjectDefinition.h"
+						>
+					</File>
 					<File
 						RelativePath="..\..\Sources\Engine\Base\XML\pugiconfig.hpp"
 						>
@@ -3918,6 +3926,26 @@
 			<Filter
 				Name="SpatialDB"
 				>
+				<File
+					RelativePath="..\..\Sources\Engine\SpatialDB\iconv.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\SpatialDB\headers\iconv.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\SpatialDB\spatialite.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\SpatialDB\headers\spatialite.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\SpatialDB\sqlite3.cpp"
+					>
+				</File>
 			</Filter>
 		</Filter>
 	</Files>

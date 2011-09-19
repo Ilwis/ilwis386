@@ -147,7 +147,6 @@ SegmentMapStore::SegmentMapStore(const FileName& fn, SegmentMapPtr& p, bool fCre
 					trq.fUpdate(i,tbl.getRowCount()); 
 				}
 				const Envelope *env =  seg->getEnvelopeInternal();
-				spatialIndex->insert(env, seg);
 			}
 			*fDoNotShowError = fOldVal;
 		}
@@ -501,69 +500,7 @@ Feature* SegmentMapStore::newFeature(geos::geom::Geometry *line)        // creat
 	return seg;
 }
 
-//long SegmentMapStore::iNode(Coord crd) const
-//{
-//	Coord crdRes, crdTmp;
-//	double rTmp;
-//	double rDist = HUGE_VAL;
-//	int  segIndex = 0;
-//	for (;segIndex < geometries->size(); ++segIndex) {
-//		ILWIS::Segment *seg = (ILWIS::Segment *)geometries->at(segIndex);
-//		crdTmp = seg->crdBegin();
-//		if (crdTmp.fUndef()) // did never happen in version 2, and should never happen
-//			continue;
-//		rTmp = rDist2(crdTmp, crd);
-//		if (rTmp < rDist) {
-//			rDist = rTmp;
-//			crdRes = crdTmp;
-//		}
-//		crdTmp = seg->crdEnd();
-//		if (crdTmp.fUndef()) // did never happen in version 2, and should never happen
-//			continue;
-//		rTmp = rDist2(crdTmp, crd);
-//		if (rTmp < rDist) {
-//			rDist = rTmp;
-//			crdRes = crdTmp;
-//		}
-//		if (rDist == 0) break;
-//	}
-//	if ( segIndex < geometries->size()   )
-//		return segIndex;
-//	return iUNDEF;
-//}
 
-//Coord SegmentMapStore::crdNode(Coord crd) const
-//{
-//	Coord crdRes, crdTmp;
-//	double rTmp;
-//	double rDist = HUGE_VAL;
-//	int  segIndex = 0;
-//	for (;segIndex < geometries->size(); ++segIndex) {
-//		ILWIS::Segment *seg = (ILWIS::Segment *)geometries->at(segIndex);
-//		if ( !seg->fValid())
-//			continue;
-//		crdTmp = seg->crdBegin();
-//		if (crdTmp.fUndef()) // did never happen in version 2, and should never happen
-//			continue;
-//		rTmp = rDist2(crdTmp, crd);
-//		if (rTmp < rDist) {
-//			rDist = rTmp;
-//			crdRes = crdTmp;
-//		}
-//		crdTmp = seg->crdEnd();
-//		if (crdTmp.fUndef()) // did never happen in version 2, and should never happen
-//			continue;
-//		rTmp = rDist2(crdTmp, crd);
-//		if (rTmp < rDist) {
-//			rDist = rTmp;
-//			crdRes = crdTmp;
-//		}
-//		if (rDist == 0) break;
-//	}
-//	if ( segIndex <= geometries->size())
-//		return crdRes;
-//	return Coord();
-//}
 
 bool fOk(const SegmentMapStore* sm, bool& fFirst, ILWIS::Segment* s)
   {
@@ -800,10 +737,13 @@ void SegmentMapStore::Pack()
   ptr.Updated();
 }
 
+Geometry *SegmentMapStore::getFeatureById(const String& id) const {
+	return BaseMapPtr::getFeatureById(geometries, id);
+}
 
-void SegmentMapStore::removeFeature(const String& id, const vector<int>& selectedCoords) {
+bool SegmentMapStore::removeFeature(const String& id, const vector<int>& selectedCoords) {
 	if ( geometries->size() == 0)
-		return;
+		return true;
 	for(vector<Geometry *>::iterator cur = geometries->begin(); cur != geometries->end(); ++cur) {
 		ILWIS::Segment *seg = CSEGMENT(*cur);
 		if ( seg->getGuid() == id  ) {
@@ -811,7 +751,7 @@ void SegmentMapStore::removeFeature(const String& id, const vector<int>& selecte
 				spatialIndex->remove(seg->getEnvelopeInternal(),seg);
 				delete seg;
 				geometries->erase(cur);
-				break;
+				return true;
 			} else {
 				CoordBuf crdBuf;
 				CoordinateSequence *seq = seg->getCoordinates();
@@ -832,4 +772,5 @@ void SegmentMapStore::removeFeature(const String& id, const vector<int>& selecte
 			}
 		} 
 	}
+	return false;
 }

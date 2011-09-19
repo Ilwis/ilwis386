@@ -790,3 +790,11 @@ bool BaseMapPtr::fDataReadOnly() const
 	return !fDataEditable;
 }
 
+Geometry *BaseMapPtr::getFeatureById(const vector<Geometry *> *geoms, const String& id)  {
+	for(vector<Geometry *>::const_iterator cur = geoms->begin(); cur != geoms->end(); ++cur) {
+		Feature *f = CFEATURE(*cur);
+		if ( f->getGuid() == id)
+			return (*cur);
+	}
+	return NULL;
+}

@@ -96,13 +96,13 @@ String WhatError::sWhat() const
       sTmp &= TR("File is readonly");
       break;
     case errOPEN:
-      sTmp = SDErrFind; break;
+      sTmp = TR("Find error"); break;
     case errREAD:
-      sTmp = SDErrRead; break;
+      sTmp = TR("Read error"); break;
     case errWRITE:
-      sTmp = SDErrWrite; break;
+      sTmp = TR("Write error"); break;
     case errACCESS:
-      sTmp = SDErrAccess; break;
+      sTmp = TR("Access violation error"); break;
     case errCOPYSELF :
       sTmp = TR("Can not copy to self"); break;
     case errNOATTTBL :

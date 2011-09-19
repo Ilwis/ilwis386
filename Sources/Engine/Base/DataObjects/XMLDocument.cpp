@@ -26,7 +26,9 @@ void ILWIS::XMLDocument::executeXPathExpression(const String& xpathexpr, vector<
 		stringstream str;
 		pugi::xpath_node node = *it;
 		node.node().print(str);
-		results.push_back(str.str());
+		String s(str.str());
+		s = s.sTrimSpaces(true);
+		results.push_back(s);
 	}
 }
 
@@ -54,7 +56,8 @@ void ILWIS::XMLDocument::addNameSpace(const String& name, const String& uri) {
 	pugi::xml_node first = first_child();
 	if ( first == 0)
 		return;
-	first.append_attribute(name.c_str()) = uri.c_str();
+	String nsId("xlmns:",name);
+	first.append_attribute(nsId.c_str()) = uri.c_str();
 }
 
 pugi::xml_node ILWIS::XMLDocument::addNodeTo(pugi::xml_node& nodeParent, const String& name, const String& value) {

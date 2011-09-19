@@ -95,7 +95,8 @@ public:
 	bool fValues() const       { return ptr.fValues(); }
 	Feature*				newFeature(geos::geom::Geometry *p=NULL);
 	Geometry				*getTransformedFeature(long iRec, const CoordSystem& csy) const;
-	void removeFeature(const String& id, const vector<int>& selectedCoords=vector<int>());
+	bool removeFeature(const String& id, const vector<int>& selectedCoords=vector<int>());
+	Geometry			*getFeatureById(const String& id) const;
 	void					addPolygon(ILWIS::Polygon *pol);
 	virtual void			Load() {};
 	

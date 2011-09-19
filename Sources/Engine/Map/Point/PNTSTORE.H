@@ -96,7 +96,8 @@ public:
   virtual Geometry *getFeature(long i) const;
   Feature *pntNew(geos::geom::Geometry *pnt=NULL);
   virtual vector<Geometry *> getFeatures(Coord crd, double rPrx=rUNDEF);
-  void removeFeature(const String& id, const vector<int>& selectedCoords=vector<int>());
+  bool removeFeature(const String& id, const vector<int>& selectedCoords=vector<int>());
+  Geometry	*getFeatureById(const String& id) const;
 
 protected:
   const FileName& fnObj; // fnObj from ptr (for convenience)

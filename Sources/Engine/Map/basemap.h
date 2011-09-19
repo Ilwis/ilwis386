@@ -138,10 +138,11 @@ public:
 	bool _export fDataReadOnly() const;
 	virtual long _export iFeatures() const { return iUNDEF; } ;
 	virtual Geometry *getFeature(long i) const { return NULL;}
+	virtual Geometry *getFeatureById(const String& id) const{ return NULL; }
 	virtual vector<Geometry *> getFeatures(Coord crd, double rPrx=rUNDEF) { return vector<Geometry *>(); }
 	Geometry *getTransformedFeature(long iRec, const CoordSystem& csy) const	{ return NULL;}
 	virtual Feature *newFeature(geos::geom::Geometry *pnt=NULL) { return NULL; }
-	virtual void removeFeature(const String& id, const vector<int>& selectedCoords=vector<int>()) {}
+	virtual bool removeFeature(const String& id, const vector<int>& selectedCoords=vector<int>()) { return true;}
 	void _export setHistrogramSize(long n);
 	long _export getHistogramSize() const;
 	
@@ -153,6 +154,7 @@ protected:
 	
 	virtual void         CalcMinMax();
 	virtual RangeReal _export   rrMinMaxSampled() { return rrMinMax(mmmCALCULATE);} // overrule this when sampling makes sense
+	static Geometry *getFeatureById(const vector<Geometry *> *geoms, const String& id) ;
 	
     RangeReal            _rrMinMax;  // for DomainValueReal
     RangeReal            _rrPerc1;
