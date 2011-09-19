@@ -11,21 +11,22 @@ namespace ILWIS {
 	public:
 		PointSetEditor(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw);
 		~PointSetEditor();
-		bool fPasteOk();
 	public:
 		bool insertFeature(UINT nFlags, CPoint point);
 		HTREEITEM configure( HTREEITEM parentItem);
 		bool isToolUseableFor(ILWIS::DrawerTool *tool);
 		String getMenuString() const;
-		//void removeSelectedFeatures();
+		void OnPaste();
+		void OnUpdatePaste(CCmdUI* pCmdUI);
 		void OnCopy();
-		//void OnInsertMode();
+		void OnUpdateCopy(CCmdUI* pCmdUI);
 		void OnUpdateMode(CCmdUI* pCmdUI);
-		//void OnMoveMode();
-		//void OnSelectMode();
 		void OnContextMenu(CWnd* pWnd, CPoint point);
 		void updateFeature(SelectedFeature *f);
 		void OnLButtonDblClk(UINT nFlags, CPoint point);
+		bool fCopyOk();
+		bool fPasteOk();
+		void OnSelectAll();
 
 
 		String sTitle() const;

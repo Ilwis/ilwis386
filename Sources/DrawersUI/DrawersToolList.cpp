@@ -73,6 +73,7 @@
 #include "DrawersUI\AnnotationDrawerTool.h"
 #include "DrawersUI\AnnotationLegendDrawerTool.h"
 #include "DrawersUI\PointDirectionTool.h"
+#include "DrawersUI\HovMollerTool.h"
 #include "InfoTool.h"
 
 
@@ -118,6 +119,7 @@ DrawerToolInfoVector *createDrawerTool() {
 	infos->push_back(new DrawerToolInfo("AnnotationDrawerTool",createAnnotationDrawerTool));
 	infos->push_back(new DrawerToolInfo("PointDirectionTool",createPointDirectionTool));
 	infos->push_back(new DrawerToolInfo("InfoTool",createInfoTool));
+	infos->push_back(new DrawerToolInfo("HovMollerTool",createHovMollerTool));
 
 	return infos;
 }

@@ -9,6 +9,9 @@ class TimeGraphSlider;
 
 #define ID_AnimationBar 67305
 
+class CGLToMovie;
+
+
 namespace ILWIS {
 
 	struct AnimationProperties;
@@ -44,7 +47,7 @@ namespace ILWIS {
 	class AnimationPropertySheet : public CPropertySheet
 	{
 	public:
-		enum Pages{pRun=1, pSynchornization=2, pAttributes=4, pTimedEvent=16, pProgress=32, pAll=32767};
+		enum Pages{pRun=1, pSynchornization=2, pAttributes=4, pTimedEvent=16, pProgress=32, pAVI, pAll=32767};
 		AnimationPropertySheet();
 
 		BOOL OnInitDialog();
@@ -71,12 +74,21 @@ namespace ILWIS {
 	class AnimationRun : public FormBasePropertyPage {
 	public:
 		AnimationRun(AnimationPropertySheet& sheet);
+		~AnimationRun();
 		int changeActive(Event *ev);
+		void timed();
 	private:
+		void stopAvi();
+		void startAvi();
 		FieldOneSelect *foAnimations;
 		FieldRealSliderEx *sliderFps;
+		FieldString *fldAviName;
+		CheckBox *cbAvi;
 		long animIndex;
 		double fps;
+		bool saveToAvi;
+		CGLToMovie *movieRecorder;
+		String fnAvi;
 
 		AnimationPropertySheet	&propsheet;
 		virtual int DataChanged(Event*);
@@ -88,6 +100,7 @@ namespace ILWIS {
 		int pause(Event  *ev);
 		int run(Event  *ev);
 		int stop(Event  *ev);
+		int checkAvi(Event *ev);
 	};
 
 	class AnimationSynchronization : public FormBasePropertyPage {
@@ -105,8 +118,8 @@ namespace ILWIS {
 		bool initial;
 		int year, month, day, hour, minute;
 
-		int DataChanged(Event*);
 		int synchronize(Event*);
+		int DataChanged(Event*ev) ;
 		void setTimerPerIndex(FormEntry *anchor);
 		void setTimerPerTime(FormEntry *anchor);
 	};

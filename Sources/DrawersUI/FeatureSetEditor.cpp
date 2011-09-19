@@ -418,6 +418,7 @@ void FeatureSetEditor::OnMouseMove(UINT nFlags, CPoint point){
 				}
 			}
 		}
+		bmapptr->fChanged = true;
 		mdoc->mpvGetView()->Invalidate();
 	}
 	return ;
@@ -508,6 +509,11 @@ void FeatureSetEditor::OnMergeMode()
 void FeatureSetEditor::setActive(bool yesno) {
 	BaseMapEditor::setActive(yesno);
 	editModeItems->setActive(yesno);
+	LayerDrawer->setSpecialDrawingOptions(NewDrawer::sdoSELECTED | NewDrawer::sdoTOCHILDEREN,false);
+
+	if ( bmapptr->fChanged)
+		bmapptr->Store();
+	mdoc->mpvGetView()->Invalidate();
 }
 
 void FeatureSetEditor::OnUpdateMode(CCmdUI* pCmdUI)
@@ -548,6 +554,7 @@ void FeatureSetEditor::removeSelectedFeatures() {
 			PreparationParameters p(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER,bmapptr->cs());
 			sfeature->drawers[0]->prepare(&p);
 		}
+		bmapptr->fChanged = true;
 
 	}
 	selectedFeatures.clear();

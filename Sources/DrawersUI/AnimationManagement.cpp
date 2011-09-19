@@ -24,8 +24,10 @@
 #include "Client\Base\Framewin.h"
 #include "Client\Mapwindow\MapWindow.h"
 #include "Drawers\SetDrawer.h"
+#include "Drawers\GLToMovie.h"
 #include "Drawers\AnimationDrawer.h"
 #include "AnimationManagement.h"
+
 
 using namespace ILWIS;
 
@@ -70,6 +72,8 @@ LRESULT AnimationPropertySheet::command(WPARAM wp, LPARAM lp) {
 		if ( prop) {
 			prop->animBar->updateTime(prop);
 		}
+		AnimationRun *pageRun = dynamic_cast<AnimationRun *>(GetPage(0));
+		pageRun->timed();
 	}
 	return 0;
 }
@@ -156,10 +160,8 @@ void AnimationPropertySheet::OnSysCommand(UINT nID, LPARAM p) {
 	}
 	CPropertySheet::OnSysCommand(nID, p);
 }
-//------------------------------------
-
-
-AnimationRun::AnimationRun(AnimationPropertySheet& sheet) : FormBasePropertyPage(TR("Run").c_str()), propsheet(sheet), animIndex(0), fps(1)
+//--------------------------------------
+AnimationRun::AnimationRun(AnimationPropertySheet& sheet) : FormBasePropertyPage(TR("Run").c_str()), propsheet(sheet), animIndex(0), fps(1),saveToAvi(false),movieRecorder(0)
 {
 	FieldGroup *fgRest = new FieldGroup(root, true);
 	foAnimations = new FieldOneSelect(fgRest,&animIndex);
@@ -173,7 +175,9 @@ AnimationRun::AnimationRun(AnimationPropertySheet& sheet) : FormBasePropertyPage
 	fb->Align(sliderFps, AL_UNDER);
 	FieldGroup *fg = new FieldGroup(root, true);
 	fg->SetBevelStyle(FormEntry::bsRAISED);
+	FlatIconButton *fiTemp;
 	FlatIconButton *fi1 = new FlatIconButton(fg,"Begin","",(NotifyProc)&AnimationRun::begin, FileName());
+	fiTemp = fi1;
 	FlatIconButton *fi2 = new FlatIconButton(fg,"OneFrameMinus","",(NotifyProc)&AnimationRun::frameMinus, FileName());
 	fi2->Align(fi1, AL_AFTER);
 	fi1 = new FlatIconButton(fg,"Pause","",(NotifyProc)&AnimationRun::pause, FileName());
@@ -186,18 +190,78 @@ AnimationRun::AnimationRun(AnimationPropertySheet& sheet) : FormBasePropertyPage
 	fi2->Align(fi1, AL_AFTER,-10);
 	fi1 = new FlatIconButton(fg,"End","",(NotifyProc)&AnimationRun::end, FileName());
 	fi1->Align(fi2, AL_AFTER,-10);
+	FieldGroup *fgAvi = new FieldGroup(fg);
+	cbAvi = new CheckBox(fgAvi,TR("Save to avi"),&saveToAvi);
+	cbAvi->SetCallBack((NotifyProc)&AnimationRun::checkAvi);
+	fldAviName = new FieldString(fgAvi,TR("Filename"),&fnAvi);
+	fldAviName->Align(cbAvi, AL_AFTER);
+	fgAvi->Align(fiTemp, AL_UNDER);
+	fgAvi->SetIndependentPos();
 	fg->Align(fgRest, AL_UNDER);
 	create();
 }
 
+AnimationRun::~AnimationRun() {
+	if ( movieRecorder) {
+		delete movieRecorder;
+		movieRecorder = 0;
+	}
+}
+void AnimationRun::timed() {
+	if (saveToAvi && movieRecorder && fnAvi != "") {
+		AnimationProperties *prop = propsheet.getActiveAnimation();
+		if ( prop) {
+			prop->mdoc->rootDrawer->getDrawerContext()->TakeContext();
+			movieRecorder->RecordFrame();
+			prop->mdoc->rootDrawer->getDrawerContext()->ReleaseContext();
+		}
+	}
+}
+
 int AnimationRun::changeActive(Event *ev) {
 	foAnimations->StoreData();
+	checkAvi(0);
 	int sel = foAnimations->ose->GetCurSel();
 	if ( sel != -1) {
 		AnimationProperties *prop = propsheet.getAnimation(sel);
 		propsheet.setActiveAnimation(prop->drawer);
 	}
 	return 1;
+}
+
+int AnimationRun::checkAvi(Event *ev) {
+	cbAvi->StoreData();
+	if ( saveToAvi)
+		fldAviName->Show();
+	else
+		fldAviName->Hide();
+	return 1;
+}
+
+void AnimationRun::startAvi() {
+	if ( movieRecorder) {
+		delete movieRecorder;
+		movieRecorder = 0;
+	}
+
+	fldAviName->StoreData();
+	AnimationProperties *prop = propsheet.getActiveAnimation();
+	CRect rct;
+	prop->mdoc->mpvGetView()->GetClientRect(rct);
+	int width = rct.Width();
+	int height = rct.Height();
+
+
+	FileName fn(fnAvi,".avi");
+	movieRecorder = new CGLToMovie(fn.sFullPath().c_str(), width, height, 24, mmioFOURCC('C','V','I','D'),1);
+	//movieRecorder = new CGLToMovie(fn.sFullPath().c_str(), width, height, 24,mmioFOURCC('d','i','v','x'));
+
+}
+
+void AnimationRun::stopAvi() {
+	if (movieRecorder)
+		delete movieRecorder;
+	movieRecorder = 0;
 }
 
 int AnimationRun::speed(Event *ev) {
@@ -257,6 +321,9 @@ int AnimationRun::stop(Event  *ev) {
 	AnimationProperties *props = propsheet.getActiveAnimation();
 	if (!props)
 		return 0;
+	if ( saveToAvi) {
+		stopAvi();
+	}
 	props->mdoc->mpvGetView()->KillTimer(props->drawer->getTimerId());
 	KillTimer(props->drawer->getTimerId());
 	props->drawer->setMapIndex(0);
@@ -301,6 +368,9 @@ int AnimationRun::run(Event  *ev) {
 	} else {
 		props->mdoc->mpvGetView()->SetTimer(props->drawer->getTimerId(),props->drawer->getInterval() * 1000.0,0);
 		SetTimer(props->drawer->getTimerId(),props->drawer->getInterval() * 1000.0,0);
+	}
+	if ( saveToAvi) {
+			startAvi();
 	}
 	props->mdoc->mpvGetView()->Invalidate();
 	return 1;
@@ -830,8 +900,13 @@ void AnimationBar::Create(CWnd* pParent)
 
 void AnimationBar::OnUpdateCmdUI(CFrameWnd* pParent, BOOL)
 {
-	if (fActive)
-		return;
+	MapWindow *mw = dynamic_cast<MapWindow *>(pParent);
+	if ( mw) {
+		if ( mw->isFullScreen())
+			ShowWindow(SW_HIDE);
+		else
+			ShowWindow(SW_SHOW);
+	}
 }
 
 void AnimationBar::OnSetFocus()

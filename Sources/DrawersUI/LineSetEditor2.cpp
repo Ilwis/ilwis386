@@ -13,6 +13,7 @@
 #include "Client\Mapwindow\PixelInfoBar.h"
 #include "Client\Mapwindow\PixelInfoView.h"
 #include "Engine\Drawers\DrawerContext.h"
+#include "Engine\Domain\dmsort.h"
 #include "Client\Mapwindow\IlwisClipboardFormat.h"
 #include "Engine\Drawers\ComplexDrawer.h"
 #include "Engine\Drawers\SimpleDrawer.h"
@@ -29,6 +30,8 @@
 #include "FeatureSetEditor2.h"
 #include "DrawersUI\LayerDrawerTool.h"
 #include "geos/operation/polygonize/Polygonizer.h"
+#include "drawers\linedrawer.h"
+#include "drawers\linefeaturedrawer.h"
 #include "LineSetEditor2.h"
 #include "Headers\constant.h"
 #include "Headers\Hs\Editor.hs"
@@ -127,6 +130,11 @@ BEGIN_MESSAGE_MAP(LineSetEditor2, FeatureSetEditor2)
 	ON_UPDATE_COMMAND_UI(ID_UNDO, OnUpdateUndo)
 	ON_COMMAND(ID_REDO, OnRedo)
 	ON_UPDATE_COMMAND_UI(ID_UNDO, OnUpdateRedo)
+	ON_COMMAND(ID_COPY, OnCopy)
+	ON_UPDATE_COMMAND_UI(ID_COPY, OnUpdateCopy)
+	ON_COMMAND(ID_PASTE, OnPaste)
+	ON_UPDATE_COMMAND_UI(ID_PASTE, OnUpdatePaste)
+	ON_COMMAND(ID_SELALL, OnSelectAll)
 END_MESSAGE_MAP()
 
 //
@@ -217,8 +225,11 @@ HTREEITEM LineSetEditor2::configure( HTREEITEM parentItem) {
 	men.CreateMenu();
 
 	addmen(ID_UNDO);
-	//addmen(ID_REDO);
 	men.AppendMenu(MF_SEPARATOR);
+	addmen(ID_COPY );
+	addmen(ID_PASTE);
+	men.AppendMenu(MF_SEPARATOR);
+	addmen(ID_SELALL);
 	hmenEdit = men.GetSafeHmenu();
 	men.Detach();
 
@@ -495,7 +506,7 @@ void LineSetEditor2::insertVertex(bool endEdit) {
 		return;
 
 	CoordinateSequence *seq = boundaries[0];
-	
+
 	vector<Coordinate> *copyv = new vector<Coordinate>();
 
 	int k = 0;
@@ -727,8 +738,9 @@ void LineSetEditor2::storeUndoState(States state, bool created) {
 		undoItem->value = ss->seg->rValue();
 		undoItem->oldFeatureId = ss->seg->getGuid();
 		undoItem->oldDrawerId = ss->drawer->getId();
-		
+
 		undoItems.push_back(undoItem);
+		bmapptr->fChanged = true;
 	}
 
 }
@@ -739,34 +751,34 @@ void LineSetEditor2::updateState() {
 		createFeature();
 		storeUndoState(msINSERT, true);
 		editorState |= msMOVEVERTICES;
-	// clikced somewhere on the map where a feature was present and clicked on a vertex, additional vertex will be created. this
-	// mode is used when extending the ends of the line
+		// clikced somewhere on the map where a feature was present and clicked on a vertex, additional vertex will be created. this
+		// mode is used when extending the ends of the line
 	} else if ( pci.crdIndex != iUNDEF && hasState(msINSERT) &&  hasState(msLMOUSEUP)) {
 		//selectedSegments.empty();
 		storeUndoState(msINSERT);
 		insertVertex(hasState(msENTER));
 		editorState |= msMOVEVERTICES;
 
-	// cliked somewhere on the map where a feature was present and clicked in the middel of a line. A new vertex will be created at the click point
+		// cliked somewhere on the map where a feature was present and clicked in the middel of a line. A new vertex will be created at the click point
 	} else if ( (pci.seg != 0 && pci.linePoint) &&  hasState( msINSERT ) && hasState( msLMOUSEUP)) {
 		storeUndoState(msINSERT);
 		insertVertex(hasState(msCTRL));
 
 	} else if ( (pci.seg != 0 && pci.linePoint == false ) && hasState( msINSERT ) && hasState( msLMOUSEUP)) {
-			storeUndoState(msINSERT);
-			insertVertex(hasState(msCTRL));
-			editorState |= msMOVEVERTICES;
+		storeUndoState(msINSERT);
+		insertVertex(hasState(msCTRL));
+		editorState |= msMOVEVERTICES;
 
-	// start move state. pivot vertex is chosen we can start moving now
+		// start move state. pivot vertex is chosen we can start moving now
 	} else if ( (pci.seg != 0 && pci.linePoint == false ) &&  hasState( msMOVE ) && hasState( msLMOUSEUP) && !hasState(msMOVEVERTICES)) {
 		selectVertex(hasState(msCTRL));
 		storeUndoState(msMOVE);
 		editorState |= msMOVEVERTICES;
-	// nothing selected (seg ==0), selectVertext will deselect all
+		// nothing selected (seg ==0), selectVertext will deselect all
 	} else if ( (pci.seg == 0 ) && hasState( msSELECT ) && hasState( msLMOUSEUP)) {
 		selectVertex( );
 
-	// segment has been selected but no specific vertext, select whole segment
+		// segment has been selected but no specific vertext, select whole segment
 	} else if ( (pci.seg != 0 && pci.linePoint == false) && hasState( msSELECT ) && hasState( msLMOUSEUP)) {
 		selectVertex(hasState(msCTRL));
 
@@ -810,6 +822,286 @@ void LineSetEditor2::updateState() {
 	}
 	mdoc->rootDrawer->getDrawerContext()->doDraw();
 }
+
+void LineSetEditor2::OnSelectAll()
+{
+	selectedSegments.clear();
+	for(int i=0; i < layerDrawer->getDrawerCount(); ++i) {
+		LineFeatureDrawer *fdr = dynamic_cast<LineFeatureDrawer *>(layerDrawer->getDrawer(i));
+		if (!fdr)
+			continue;
+		ILWIS::Segment *s = CSEGMENT(fdr->getFeature());
+		SelectedSegment *ss = new SelectedSegment();
+		ss->drawer = fdr;
+		ss->seg = s;
+		selectedSegments.push_back(ss);
+		fdr->setSpecialDrawingOptions(NewDrawer::sdoSELECTED,true);
+	}
+	mpv->Invalidate();
+}
+
+bool LineSetEditor2::fCopyOk()
+{
+	return selectedSegments.size() > 0;
+}
+
+bool LineSetEditor2::fPasteOk()
+{
+  return IsClipboardFormatAvailable(iFmtPnt) ? true : false;
+}
+
+void LineSetEditor2::OnUpdateCopy(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(fCopyOk());
+}
+
+void LineSetEditor2::OnUpdatePaste(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(fPasteOk());
+}
+
+
+void LineSetEditor2::OnCopy()
+{
+	if (!fCopyOk())
+		return;
+	CWaitCursor curWait;
+	if (!mpv->OpenClipboard())
+		return;
+	EmptyClipboard();
+
+	long iSize = 1;
+	long iNr;
+	CoordinateSequence *crdBuf;
+	for (int i = 0; i < selectedSegments.size(); ++i) {
+		ILWIS::Segment *seg = selectedSegments[i]->seg;
+		crdBuf = seg->getCoordinates();
+		iSize += crdBuf->size() + 1;
+		delete crdBuf;
+	}
+	IlwisPoint* ip = new IlwisPoint[iSize];
+	if (0 == ip)
+		return;
+	ip[0].c = Coord();
+	ip[0].iRaw = iSize-1;
+	long k = 1;
+	Coord crd;
+	const int iSIZE = 1000000;
+	char* sBuf = new char[iSIZE];
+	char* s = sBuf;
+	String str, sVal;
+	long iTotLen = 0;
+	int iLen;
+
+	for (int i = 0; i < selectedSegments.size(); ++i) {
+		ILWIS::Segment *seg = selectedSegments[i]->seg;
+		crdBuf = seg->getCoordinates();
+		iNr = crdBuf->size();
+		long iRaw = seg->iValue();
+		for (int j = 0; j < iNr; ++j) {
+			ip[k].c = crdBuf->getAt(j);
+			ip[k].iRaw = iRaw;
+			++k;
+		}
+		ip[k].c = Coord();
+		ip[k].iRaw = iUNDEF;
+		++k;
+
+		if (iTotLen > iSIZE) 
+			continue;
+		for (int j = 0; j < iNr; ++j) {
+			crd = crdBuf->getAt(j);
+			if (0 == j)
+				str = String("%g\t%g\t%S\r\n", crd.x, crd.y, seg->sValue(bmapptr->dvrs()));
+			else
+				str = String("%g\t%g\r\n", crd.x, crd.y);
+			iLen = str.length();
+			iTotLen += iLen;
+			if (iTotLen > iSIZE) 
+				continue;
+			strcpy(s, str.sVal());
+			s += iLen;
+		} 
+		delete crdBuf;
+		iTotLen++;
+		*s++ = '\r';
+		*s++ = '\n';
+	}
+
+	iLen = (1+iSize) * sizeof(IlwisPoint);
+	HANDLE hnd = GlobalAlloc(GMEM_MOVEABLE,iLen);
+	void* pv = GlobalLock(hnd);
+	memcpy(pv, ip, iLen);
+	GlobalUnlock(hnd);
+	SetClipboardData(iFmtPnt, hnd);
+
+	// Ilwis Domain Format
+	IlwisDomain* id = new IlwisDomain(bmapptr->dm(), bmapptr->vr());
+	iLen = sizeof(IlwisDomain);
+	hnd = GlobalAlloc(GMEM_MOVEABLE,iLen);
+	pv = GlobalLock(hnd);
+	memcpy(pv, id, iLen);
+	GlobalUnlock(hnd);
+	SetClipboardData(iFmtDom, hnd);
+	delete id;
+
+
+	*s = '\0';
+	hnd = GlobalAlloc(GMEM_FIXED, strlen(sBuf)+2);
+	char* pc = (char*)GlobalLock(hnd);
+	strcpy(pc,sBuf);
+	GlobalUnlock(hnd);
+	SetClipboardData(CF_TEXT,hnd);
+	delete [] ip;
+	delete [] sBuf;
+
+	CloseClipboard();
+}
+
+void LineSetEditor2::OnPaste()
+{
+	if (!fPasteOk()) return;
+	CoordBuf crdBuf(10000);
+	unsigned int iSize;
+
+	CWaitCursor curWait;
+	if (!mpv->OpenClipboard())
+		return;
+
+	bool fConvert = false, fValues = false, fSort = false;
+	Domain dmMap, dmCb;
+	ValueRange vrCb;
+	if (IsClipboardFormatAvailable(iFmtDom)) {
+		dmMap = bmapptr->dm();
+		HANDLE hnd = GetClipboardData(iFmtDom);
+		iSize = (unsigned int)GlobalSize(hnd);
+		IlwisDomain id;
+		if (sizeof(id) < iSize)
+			iSize = sizeof(id);
+		memcpy(&id, (char*)GlobalLock(hnd),iSize);
+		GlobalUnlock(hnd);
+		dmCb = id.dm();
+		if (dmMap->pdv()) {
+			if (0 == dmCb->pdv()) {
+				mpv->MessageBox(TR("No numerical values in clipboard data").c_str(),TR("Segment Editor").c_str(),MB_OK|MB_ICONSTOP);
+				CloseClipboard();
+				return;
+			}
+			ValueRange vrMap = bmapptr->vr();
+			vrCb = id.vr();
+			fValues = true;
+			if (vrMap != vrCb)
+				fConvert = true;
+		}
+		else if (dmMap->pdc()) {
+			if (0 == dmCb->pdc()) {
+				mpv->MessageBox(TR("No Class values in clipboard data").c_str(),TR("Segment Editor").c_str(),MB_OK|MB_ICONSTOP);
+				CloseClipboard();
+				return;
+			}
+			fSort = true;
+			if (dmMap != dmCb)
+				fConvert = true;
+		}
+		else {
+			if (dmMap != dmCb)
+				fConvert = true;
+			if (dmMap->pdsrt())
+				fSort = true;
+		}
+	}
+
+	HANDLE hnd = GetClipboardData(iFmtPnt);
+	iSize = (unsigned int)GlobalSize(hnd);
+	char* cp = new char[iSize];
+	memcpy(cp, (char*)GlobalLock(hnd),iSize);
+	IlwisPoint* ip = (IlwisPoint*) cp;
+	iSize /= sizeof(IlwisPoint);
+	iSize = ip[0].iRaw;
+	unsigned int i;
+	int j = 0;
+	long iRaw = iUNDEF;
+	double rVal = rUNDEF;
+	for (i = 0; i < iSize; ++i) {
+		if (ip[1+i].c.fUndef()) {
+			if (j > 1) {
+				ILWIS::Segment *seg = CSEGMENT(bmapptr->newFeature());
+				seg->PutCoords(j,crdBuf);
+				if (fValues)
+					seg->PutVal(rVal);
+				else
+					seg->PutVal(iRaw);
+				bmapptr->Updated();
+			}  
+			j = 0;
+			continue;
+		}  
+		if (j == 0) {
+			iRaw = ip[1+i].iRaw;
+			if (fConvert) {
+				if (fValues) {
+					if (vrCb.fValid())
+						rVal = vrCb->rValue(iRaw);
+					else
+						rVal = iRaw;
+				}
+				else {
+					String sVal;
+					if (vrCb.fValid())
+						sVal = vrCb->sValueByRaw(dmCb,iRaw, 0);
+					else
+						sVal = dmCb->sValueByRaw(iRaw, 0);
+					if (fSort) {
+						if ("?" == sVal) {
+							iRaw = iUNDEF;
+							continue;
+						}
+						iRaw = dmMap->iRaw(sVal);
+						if (iUNDEF == iRaw) {
+							String sMsg(SEDMsgNotInDomain_SS.sVal(), sVal, dmMap->sName());
+							int iRet = mpv->MessageBox(TR("Value not in domain").c_str(),TR("Segment Editor").c_str(),MB_OK|MB_ICONSTOP);
+							if (IDYES == iRet)
+								try {
+									iRaw = dmMap->pdsrt()->iAdd(sVal);
+							}
+							catch (ErrorObject& err) {
+								err.Show();
+								iRaw = iUNDEF;
+							}
+							else if (IDCANCEL == iRet)
+								break;
+							else
+								continue;
+						}
+					}
+				}
+			}
+		}
+		crdBuf[j++] = ip[1+i].c;
+	}
+	if (j > 1) {
+		ILWIS::Segment *seg = CSEGMENT(bmapptr->newFeature());
+		seg->PutCoords(j,crdBuf);
+		if (fValues)
+			seg->PutVal(rVal);
+		else
+			seg->PutVal(iRaw);
+		bmapptr->Updated();
+	}  
+	CloseClipboard();
+	mpv->Invalidate();
+}
+
+void LineSetEditor2::setActive(bool yesno) {
+	BaseMapEditor::setActive(yesno);
+	editModeItems->setActive(yesno);
+	layerDrawer->setSpecialDrawingOptions(NewDrawer::sdoSELECTED | NewDrawer::sdoTOCHILDEREN,false);
+
+	if ( bmapptr->fChanged)
+		bmapptr->Store();
+	mdoc->mpvGetView()->Invalidate();
+}
+
 
 //--------------------------------------
 CheckSegmentsForm::CheckSegmentsForm(CWnd *par, LayerDrawer *sdr, LineSetEditor2 *edit) : DisplayOptionsForm(sdr,par,TR("Check Segments")){

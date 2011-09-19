@@ -1,5 +1,6 @@
 #include "Client\Headers\formelementspch.h"
 #include "Engine\Map\basemap.h"
+#include "Engine\Domain\dmsort.h"
 #include "Engine\Map\Point\ilwPoint.h"
 #include "Engine\Map\Point\PNT.H"
 #include "Client\ilwis.h"
@@ -22,6 +23,8 @@
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\MapWindow\Drawers\DrawerTool.h"
+#include "drawers\pointdrawer.h"
+#include "drawers\PointFeatureDrawer.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
 #include "DrawersUI\LayerDrawerTool.h"
 #include "FeatureSetEditor.h"
@@ -30,22 +33,22 @@
 
 BEGIN_MESSAGE_MAP(PointSetEditor, BaseMapEditor)
 //	//{{AFX_MSG_MAP(PointEditor)
-//	ON_COMMAND(ID_COPY, OnCopy)
-//	ON_UPDATE_COMMAND_UI(ID_COPY, OnUpdateCopy)
-//	ON_COMMAND(ID_PASTE, OnPaste)
-//	ON_UPDATE_COMMAND_UI(ID_PASTE, OnUpdatePaste)
-//	ON_COMMAND(ID_EDIT, OnEdit)
-//	ON_UPDATE_COMMAND_UI(ID_EDIT, OnUpdateEdit)
-//	ON_COMMAND(ID_CLEAR, OnClear)
-//	ON_UPDATE_COMMAND_UI(ID_CLEAR, OnUpdateCopy)
-//	ON_COMMAND(ID_CUT, OnCut)
-//	ON_UPDATE_COMMAND_UI(ID_CUT, OnUpdateCopy)
-	ON_COMMAND(ID_SELECTMODE, OnSelectMode)
-	ON_UPDATE_COMMAND_UI(ID_SELECTMODE, OnUpdateMode)
-	ON_COMMAND(ID_MOVEMODE, OnMoveMode)
-	ON_UPDATE_COMMAND_UI(ID_MOVEMODE, OnUpdateMode)
-	ON_COMMAND(ID_INSERTMODE, OnInsertMode)
-	ON_UPDATE_COMMAND_UI(ID_INSERTMODE, OnUpdateMode)
+	ON_COMMAND(ID_COPY, OnCopy)
+	ON_UPDATE_COMMAND_UI(ID_COPY, OnUpdateCopy)
+	ON_COMMAND(ID_PASTE, OnPaste)
+	ON_UPDATE_COMMAND_UI(ID_PASTE, OnUpdatePaste)
+	//ON_COMMAND(ID_EDIT, OnEdit)
+	//ON_UPDATE_COMMAND_UI(ID_EDIT, OnUpdateEdit)
+	//ON_COMMAND(ID_CLEAR, OnClear)
+	//ON_UPDATE_COMMAND_UI(ID_CLEAR, OnUpdateCopy)
+	//ON_COMMAND(ID_CUT, OnCut)
+	//ON_UPDATE_COMMAND_UI(ID_CUT, OnUpdateCopy)
+	//ON_COMMAND(ID_SELECTMODE, OnSelectMode)
+	//ON_UPDATE_COMMAND_UI(ID_SELECTMODE, OnUpdateMode)
+	//ON_COMMAND(ID_MOVEMODE, OnMoveMode)
+	//ON_UPDATE_COMMAND_UI(ID_MOVEMODE, OnUpdateMode)
+	//ON_COMMAND(ID_INSERTMODE, OnInsertMode)
+	//ON_UPDATE_COMMAND_UI(ID_INSERTMODE, OnUpdateMode)
 	//ON_WM_INITMENUPOPUP()
 //	ON_COMMAND(ID_FINDUNDEFS, OnFindUndefs)
 //	ON_UPDATE_COMMAND_UI(ID_FINDUNDEFS, OnUpdateMode)
@@ -55,8 +58,8 @@ BEGIN_MESSAGE_MAP(PointSetEditor, BaseMapEditor)
 //	ON_UPDATE_COMMAND_UI(ID_FILE_SAVE, OnUpdateFileSave)
 //	ON_UPDATE_COMMAND_UI(ID_UNDOALL, OnUpdateFileSave)
 //	ON_COMMAND(ID_ADDPOINT, OnAddPoint)
-//	ON_COMMAND(ID_SEGSETBOUNDS, OnSetBoundaries)
-//	ON_COMMAND(ID_SELALL, OnSelectAll)
+	//ON_COMMAND(ID_SEGSETBOUNDS, OnSetBoundaries)
+	ON_COMMAND(ID_SELALL, OnSelectAll)
 //	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 //
@@ -116,41 +119,20 @@ HTREEITEM PointSetEditor::configure( HTREEITEM parentItem) {
 	CMenu menSub;
 	men.CreateMenu();
 
-	//addmen(ID_UNDOALL);
-	//addmen(ID_FILE_SAVE);
-	//addmen(ID_SEGSETBOUNDS);
-	//men.AppendMenu(MF_SEPARATOR);
-	//addmen(ID_CONFIGURE);
-	//menSub.CreateMenu();
-	//addSub(ID_FILE_DIGREF);
-	//addSub(ID_DIGACTIVE);
-	//men.AppendMenu(MF_POPUP, (UINT)menSub.GetSafeHmenu(), sMen(ID_DIG)); 
-	//menSub.Detach();
-	//addmen(ID_EXITEDITOR);
-	//hmenFile = men.GetSafeHmenu();
-	//men.Detach();
 
 	//men.CreateMenu();
 	//addmen(ID_CUT  );
-	//addmen(ID_COPY );
-	//addmen(ID_PASTE);
-	//addmen(ID_CLEAR);
-	//men.AppendMenu(MF_SEPARATOR);
-	//addmen(ID_SELALL);
-	//addmen(ID_EDIT);
-	//addmen(ID_ADDPOINT);
-	//men.AppendMenu(MF_SEPARATOR);
-	addmen(ID_SELECTMODE);
-	addmen(ID_MOVEMODE);
-	addmen(ID_INSERTMODE);
-	//men.AppendMenu(MF_SEPARATOR);
-	//addmen(ID_FINDUNDEFS);
+	addmen(ID_COPY );
+	addmen(ID_PASTE);
+	addmen(ID_CLEAR);
+	men.AppendMenu(MF_SEPARATOR);
+	addmen(ID_SELALL);
 	hmenEdit = men.GetSafeHmenu();
 	men.Detach();
 
 	DataWindow* dw = mdoc->mpvGetView()->dwParent();
 	if (dw) {
-		dw->bbDataWindow.LoadButtons("pntedit.but");
+		//dw->bbDataWindow.LoadButtons("pntedit.but");
 		dw->RecalcLayout();
 		mdoc->mpvGetView()->mwParent()->UpdateMenu(hmenFile, hmenEdit);
 		//mdoc->mpvGetView()->UpdateWindow();
@@ -172,10 +154,10 @@ void PointSetEditor::OnContextMenu(CWnd* pWnd, CPoint point)
 	//men.EnableMenuItem(ID_EDIT, fEditOk() ? MF_ENABLED : MF_GRAYED);
 	men.EnableMenuItem(ID_CLEAR, fCopyOk() ? MF_ENABLED : MF_GRAYED);
 	men.AppendMenu(MF_SEPARATOR);
-	addmen(ID_ADDPOINT);
-	addmen(ID_FINDUNDEFS);
-	men.AppendMenu(MF_SEPARATOR);
-	addmen(ID_CONFIGURE);
+	//addmen(ID_ADDPOINT);
+	//addmen(ID_FINDUNDEFS);
+	//men.AppendMenu(MF_SEPARATOR);
+	//addmen(ID_CONFIGURE);
 	addmen(ID_EXITEDITOR);
 	men.TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON, point.x, point.y, pWnd);
 }
@@ -189,21 +171,6 @@ String PointSetEditor::sTitle() const
 	String s(TR("PointEditor ") + bmapptr->sName());
 	return s;
 }
-
-//void PointSetEditor::OnInsertMode()
-//{
-//	Mode(mode == BaseMapEditor::mINSERT ? BaseMapEditor::mUNKNOWN : BaseMapEditor::mINSERT);
-//}
-//
-//void PointSetEditor::OnMoveMode()
-//{
-//	Mode(mode == BaseMapEditor::mMOVE ? BaseMapEditor::mUNKNOWN : BaseMapEditor::mMOVE);
-//}
-//
-//void PointSetEditor::OnSelectMode()
-//{
-//	Mode(mode == BaseMapEditor::mSELECT ? BaseMapEditor::mUNKNOWN : BaseMapEditor::mSELECT);
-//}
 
 
 
@@ -227,6 +194,154 @@ void PointSetEditor::OnUpdateMode(CCmdUI* pCmdUI)
 	pCmdUI->SetRadio(fCheck);
 }
 
+void PointSetEditor::OnSelectAll()
+{
+	selectedFeatures.clear();
+	for(int i=0; i < LayerDrawer->getDrawerCount(); ++i) {
+		PointFeatureDrawer *fdr = dynamic_cast<PointFeatureDrawer *>(LayerDrawer->getDrawer(i));
+		if (!fdr)
+			continue;
+		ILWIS::Point *pnt = CPOINT(fdr->getFeature());
+		SelectedFeature *sf = new SelectedFeature();
+		sf->drawers.push_back(fdr);
+		sf->feature = pnt;
+		selectedFeatures[pnt->getGuid()] = sf;
+		fdr->setSpecialDrawingOptions(NewDrawer::sdoSELECTED,true);
+	}
+	mpv->Invalidate();
+}
+
+bool PointSetEditor::fPasteOk()
+{
+  return IsClipboardFormatAvailable(iFmtPnt) ? true : false;
+}
+
+void PointSetEditor::OnUpdatePaste(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(fPasteOk());
+}
+
+void PointSetEditor::OnPaste()
+{
+	if (!fPasteOk()) return;
+	unsigned int iSize;
+
+	CWaitCursor curWait;
+	if (!mpv->OpenClipboard())
+		return;
+
+	bool fConvert = false, fValues = false, fSort = false;
+	Domain dmMap, dmCb;
+	ValueRange vrCb;
+	if (IsClipboardFormatAvailable(iFmtDom)) 
+	{
+		dmMap = bmapptr->dm();
+
+		HANDLE hnd = GetClipboardData(iFmtDom);
+		iSize = (unsigned int)GlobalSize(hnd);
+		IlwisDomain id;
+		if (sizeof(id) < iSize)
+			iSize = sizeof(id);
+		memcpy(&id, (char*)GlobalLock(hnd),iSize);
+		GlobalUnlock(hnd);
+		dmCb = id.dm();
+		if (dmMap->pdv()) {
+			if (0 == dmCb->pdv()) {
+				mpv->MessageBox(TR("No numerical values in clipboard data").c_str(),TR("Point Editor").c_str(),MB_OK|MB_ICONSTOP);
+				CloseClipboard();
+				return;
+			}
+			ValueRange vrMap = bmapptr->vr();
+			vrCb = id.vr();
+			fValues = true;
+			if (vrMap != vrCb)
+				fConvert = true;
+		}
+		else if (dmMap->pdc()) {
+			if (0 == dmCb->pdc()) {
+				mpv->MessageBox(TR("No Class values in clipboard data").c_str(),TR("Point Editor").c_str(),MB_OK|MB_ICONSTOP);
+				CloseClipboard();
+				return;
+			}
+			fSort = true;
+			if (dmMap != dmCb)
+				fConvert = true;
+		}
+		else {
+			if (dmMap != dmCb)
+				fConvert = true;
+			if (dmMap->pdsrt())
+				fSort = true;
+		}
+	}
+	HANDLE hnd = GetClipboardData(iFmtPnt);
+	iSize = (unsigned int)GlobalSize(hnd);
+	char* cp = new char[iSize];
+	memcpy(cp, (char*)GlobalLock(hnd),iSize);
+	IlwisPoint* ip = (IlwisPoint*) cp;
+	iSize /= sizeof(IlwisPoint);
+	iSize = ip[0].iRaw;
+
+
+	for (unsigned int j = 0; j < iSize; ++j) {
+		Coord crd = ip[1+j].c;
+		bmapptr->fChanged = true;
+		if (!crd.fUndef()) {
+			ILWIS::Point *pnt = CPOINT(bmapptr->newFeature());
+			pnt->setCoord(crd);
+			long iRaw = ip[1+j].iRaw;
+			if (fConvert) {
+				if (fValues) {
+					double rVal;
+					if (vrCb.fValid())
+						rVal = vrCb->rValue(iRaw);
+					else
+						rVal = iRaw;
+					pnt->PutVal(rVal);
+				}
+				else {
+					String sVal;
+					if (vrCb.fValid())
+						sVal = vrCb->sValueByRaw(dmCb,iRaw, 0);
+					else
+						sVal = dmCb->sValueByRaw(iRaw, 0);
+					if (fSort) {
+						if ("?" == sVal) {
+							pnt->PutVal(iUNDEF);
+							continue;
+						}
+						iRaw = dmMap->iRaw(sVal);
+						if (iUNDEF == iRaw) {
+							String sMsg(TR("Value %S not in domain %S").c_str(), sVal, dmMap->sName());
+							int iRet = mpv->MessageBox(sMsg.sVal(),TR("Point Editor").c_str(),MB_YESNOCANCEL|MB_ICONASTERISK);
+							if (IDYES == iRet)
+								try {
+									iRaw = dmMap->pdsrt()->iAdd(sVal);
+							}
+							catch (ErrorObject& err) {
+								err.Show();
+								iRaw = iUNDEF;
+							}
+							else if (IDCANCEL == iRet)
+								break;
+							else
+								continue;
+						}
+						pnt->PutVal(iRaw);
+					}
+					else
+						if (dmMap->fValid(sVal))
+							pnt->PutVal(bmapptr->dvrs(), sVal);
+				}
+			}
+			else
+				pnt->PutVal(iRaw);
+		}
+		mdoc->mpvGetView()->Invalidate();
+	}
+	CloseClipboard();
+}
+
 void PointSetEditor::OnCopy()
 {
 	if (!fCopyOk())
@@ -236,7 +351,7 @@ void PointSetEditor::OnCopy()
 		return;
 	EmptyClipboard();
 
-	const int iSIZE = 1000000;
+	const int iSIZE = 10000000;
 	char* sBuf = new char[iSIZE];
 	char* s = sBuf;
 	String str, sVal;
@@ -248,27 +363,15 @@ void PointSetEditor::OnCopy()
 
 	IlwisPoint* ip = new IlwisPoint[iSize];
 	int index = 0;
+	int iLen = 0;
 	for(SFMIter cur = selectedFeatures.begin(); cur != selectedFeatures.end(); ++cur) {
 		SelectedFeature *sf = (*cur).second;
-		int crdIndex = sf->selectedCoords[index];
-		Coord crd = *(sf->coords[crdIndex]);
+		ILWIS::Point *pnt = CPOINT(sf->feature);
+		Coord crd = *(pnt->getCoordinate());
 		ip[index].c = crd;
-		ip[index++].iRaw = sf->feature->iValue();
-	}
+		ip[index++].iRaw = pnt->iValue();
+		String sVal = pnt->sValue(bmapptr->dvrs());
 
-	long iLen = (iSize) * sizeof(IlwisPoint);
-	HANDLE hnd = GlobalAlloc(GMEM_MOVEABLE,iLen);
-	void* pv = GlobalLock(hnd);
-	memcpy(pv, ip, iLen);
-	GlobalUnlock(hnd);
-	SetClipboardData(iFmtPnt, hnd);
-
-	iLen = 0;
-	for(SFMIter cur = selectedFeatures.begin(); cur != selectedFeatures.end(); ++cur) {
-		SelectedFeature *sf = (*cur).second;
-		sVal = sf->feature->sValue(bmapptr->dvrs());
-		int crdIndex = sf->selectedCoords[index];
-		Coord crd = *(sf->coords[crdIndex]);
 		str = String("%.3f\t%.3f\t%S\r\n", crd.x, crd.y, sVal);
 		iLen += str.length();
 		if (iLen > iSIZE) 
@@ -277,7 +380,14 @@ void PointSetEditor::OnCopy()
 		s += str.size();
 	}
 
-		// Ilwis Domain Format
+	iLen = (iSize) * sizeof(IlwisPoint);
+	HANDLE hnd = GlobalAlloc(GMEM_MOVEABLE,iLen);
+	void* pv = GlobalLock(hnd);
+	memcpy(pv, ip, iLen);
+	GlobalUnlock(hnd);
+	SetClipboardData(iFmtPnt, hnd);
+
+	// Ilwis Domain Format
 	IlwisDomain* id = new IlwisDomain(bmapptr->dm(), bmapptr->vr());
 	iLen = sizeof(IlwisDomain);
 	hnd = GlobalAlloc(GMEM_MOVEABLE,iLen);
@@ -295,19 +405,12 @@ void PointSetEditor::OnCopy()
 	GlobalUnlock(hnd);
 	SetClipboardData(CF_TEXT,hnd);
 
-	delete ip;
-	delete sBuf;
+	delete [] ip;
+	delete [] sBuf;
 
 	CloseClipboard();
 }
 
-
-
-
-bool PointSetEditor::fPasteOk()
-{
-  return IsClipboardFormatAvailable(iFmtPnt) ? true : false;
-}
 
 bool PointSetEditor::insertFeature(UINT nFlags, CPoint point) {
 	clear();
@@ -377,6 +480,20 @@ void PointSetEditor::OnLButtonDblClk(UINT nFlags, CPoint point){
 		}
 	}
 }
+
+
+bool PointSetEditor::fCopyOk()
+{
+	return selectedFeatures.size() > 0;
+}
+
+
+void PointSetEditor::OnUpdateCopy(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(fCopyOk());
+}
+
+
 //-------------------------------------
 CoordForm::CoordForm(CWnd *wPar, ComplexDrawer *dr, Feature *feature) : 
 DisplayOptionsForm(dr,wPar,TR("Coordinate(s)"),fbsApplyButton | fbsBUTTONSUNDER | fbsOKHASCLOSETEXT | fbsSHOWALWAYS|fbsHIDEONCLOSE){

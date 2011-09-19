@@ -94,6 +94,14 @@ namespace ILWIS {
 		void checkSnap(void *v, HTREEITEM it);
 		String sTitle() const;
 		zIcon icon() const;
+		bool fCopyOk();
+		bool fPasteOk();
+		void OnUpdateCopy(CCmdUI* pCmdUI);
+		void OnUpdatePaste(CCmdUI* pCmdUI);
+		void OnCopy();
+		void OnPaste();
+		void OnSelectAll();
+		void setActive(bool yesno);
 		int iFmtPnt, iFmtDom;
 
 		double rSnapDistance;
