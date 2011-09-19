@@ -1,5 +1,7 @@
 #include "Headers\toolspch.h"
 #include "Engine\Map\basemap.h"
+#include "Engine\Base\System\Engine.h"
+#include "Engine\Base\System\LOGGER.H"
 #include "Engine\Map\Point\ilwPoint.h"
 #include "Engine\Drawers\ComplexDrawer.h"
 #include "Engine\Drawers\SimpleDrawer.h"
@@ -81,11 +83,13 @@ void LineLayerDrawer::prepare(PreparationParameters *parm){
 	if ( (parm->type & NewDrawer::ptRENDER) != 0) {
 		for(int i=0; i < drawers.size(); ++i) {
 			LineDrawer *ld = (LineDrawer *)drawers.at(i);
-			LineProperties *props = (LineProperties *)ld->getProperties();
-			props->linestyle = lproperties.linestyle;
-			props->thickness = lproperties.thickness;
-			if (!lproperties.ignoreColor)
-				props->drawColor = lproperties.drawColor;
+			if ( ld) {
+				LineProperties *props = (LineProperties *)ld->getProperties();
+				if (!lproperties.ignoreColor)
+					props->drawColor = lproperties.drawColor;
+			} else {
+				getEngine()->getLogger()->LogLine(TR("Empty drawer in list"), Logger::lmERROR);
+			}
 		}
 	} else if ( (parm->type & NewDrawer::pt3D) != 0) {
 		prepareChildDrawers(parm);

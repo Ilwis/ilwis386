@@ -28,6 +28,7 @@ LineFeatureDrawer::LineFeatureDrawer(DrawerParameters *parms) :
 	LineDrawer(parms,"LineFeatureDrawer"), feature(0)
 {
 	lproperties.drawColor = Color(0,167,18);
+
 }
 
 LineFeatureDrawer::LineFeatureDrawer(DrawerParameters *parms, const String& name) : 
@@ -44,7 +45,10 @@ bool LineFeatureDrawer::draw( const CoordBounds& cbArea) const {
 
 void LineFeatureDrawer::addDataSource(void *f, int options) {
 	feature = (Feature *)f;
-
+	SpatialDataDrawer *datadrw = dynamic_cast<SpatialDataDrawer *>(getParentDrawer()->getParentDrawer());
+	if ( datadrw) {
+		dmt = datadrw->getBaseMap()->dm()->dmt();
+	}
 }
 
 
@@ -87,6 +91,9 @@ void LineFeatureDrawer::prepare(PreparationParameters *p){
 	if (  p->type & RootDrawer::ptRENDER || p->type & ptRESTORE) {
 		LineProperties *lparent = (LineProperties *)fdr->getProperties();
 		lproperties.linestyle = lparent->linestyle;
+		bool isDmSort = dmt == dmtCLASS || dmt == dmtID || dmt == dmtUNIQUEID;
+		if (( isDmSort && feature->rValue() == 0) || feature->rValue() == rUNDEF) // 0 == undef for classes
+			lproperties.linestyle = 0xF0F0;
 		lproperties.thickness = lparent->thickness;
 		lproperties.drawColor = (fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod()));
 		for(int j =0 ; j < p->filteredRaws.size(); ++j) {
@@ -95,7 +102,8 @@ void LineFeatureDrawer::prepare(PreparationParameters *p){
 				setActive(raw > 0);
 			}
 		}
-		specialOptions = fdr->getSpecialDrawingOption();
+		if ( specialOptions == 0)
+			specialOptions = fdr->getSpecialDrawingOption();
 		double tr = fdr->getTransparency();
 		setTransparency(tr);
 		extrTransparency = fdr->getExtrusionTransparency();

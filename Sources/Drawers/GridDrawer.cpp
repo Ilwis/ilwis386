@@ -136,6 +136,8 @@ void GridDrawer::prepare(PreparationParameters *pp) {
 }
 
 void GridDrawer::prepareVAxis(double rDist,const Coord& cMax, const Coord& cMin) {
+	if ( planeDistances.size() == 0)
+		return;
 	double maxz = planeDistances[planeDistances.size() - 1];
 	Coord c1, c2, oldc2,startc2;
 	c1 = cMin;
@@ -176,6 +178,9 @@ void GridDrawer::prepareVAxis(double rDist,const Coord& cMax, const Coord& cMin)
 }
 void GridDrawer::prepareVerticals(double rDist,const Coord& cMax, const Coord& cMin) {
 	Coord c1, c2;
+	if ( planeDistances.size() == 0)
+		return;
+
 	double maxz = planeDistances[planeDistances.size() - 1];
 	for (double x = ceil(cMin.x / rDist) * rDist; x < cMax.x ; x += rDist)
 	{
@@ -193,6 +198,9 @@ void GridDrawer::prepareVerticals(double rDist,const Coord& cMax, const Coord& c
 }
 
 void GridDrawer::getLayerDistances(vector<double>& dist) {
+	if ( dist.size() == 0)
+		return;
+
 	RootDrawer *rootDrawer = getRootDrawer();
 	int n = rootDrawer->getDrawerCount();
 
@@ -220,6 +228,9 @@ void GridDrawer::preparePlanes(double rDist, const Coord& cMax, const Coord& cMi
 	double z = 	getZMaker()->getZ0(true);
 	planeDistances.clear();
 	getLayerDistances(planeDistances);
+	if ( planeDistances.size() == 0)
+		return;
+
 	int zplanes = threeDGrid ? planeDistances.size() : 0;
 	resizeQuadsVector(zplanes);
 	for(int i=0; i <= zplanes; ++i) {
@@ -238,6 +249,9 @@ void GridDrawer::preparePlanes(double rDist, const Coord& cMax, const Coord& cMi
 
 void GridDrawer::prepareCube(double rDist, const Coord& cMax, const Coord& cMin ) {
 	Coord c1, c2;
+	if ( planeDistances.size() == 0)
+		return;
+
 	double z = 	getZMaker()->getZ0(true);;
 	double maxz = planeDistances[planeDistances.size() - 1];
 
@@ -297,6 +311,9 @@ void GridDrawer::prepareGrid(double rDist, const Coord& cMax, const Coord& cMin 
 	Coord c1, c2;
 	planeDistances.clear();
 	getLayerDistances(planeDistances);
+	if ( planeDistances.size() == 0)
+		return;
+
 	int zplanes = threeDGrid ? planeDistances.size() : 0;
 	resizeQuadsVector(zplanes);
 	int nPlanes = mode & mGRID ? zplanes : 0;

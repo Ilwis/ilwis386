@@ -18,6 +18,7 @@ class _export LineFeatureDrawer : public LineDrawer {
 	protected:
 		LineFeatureDrawer(DrawerParameters *parms, const String& name);
 		Feature *feature;
+		DomainType dmt;
 
 	};
 
