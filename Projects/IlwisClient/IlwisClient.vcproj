@@ -25,7 +25,7 @@
 			IntermediateDirectory="$(SolutionDir)\temp\$(ConfigurationName)\$(ProjectName)\"
 			ConfigurationType="1"
 			UseOfMFC="2"
-			CharacterSet="2"
+			CharacterSet="0"
 			BuildLogFile="$(SolutionDir)\temp\$(ConfigurationName)\$(ProjectName)\BuildLog.htm"
 			>
 			<Tool
@@ -53,7 +53,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)Sources\Geos\headers&quot;;&quot;$(SolutionDir)Sources\Headers&quot;;&quot;$(SolutionDir)Sources&quot;"
-				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;ILWISCLIENT;_WIN32_WINNT=0x0400;_CRTDBG_MAP_ALLOC;_WIN32_IE=0x0400;_HAS_ITERATOR_DEBUGGING=0;_CRT_SECURE_NO_WARNINGS;_SECURE_SCL=0"
+				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;ILWISCLIENT;_WIN32_WINNT=0x0500;_CRTDBG_MAP_ALLOC;_WIN32_IE=0x0400;_HAS_ITERATOR_DEBUGGING=0;_CRT_SECURE_NO_WARNINGS;_SECURE_SCL=0"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -155,7 +155,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)Sources\Geos\headers&quot;;&quot;$(SolutionDir)Sources\Headers&quot;;&quot;$(SolutionDir)Sources&quot;"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;ILWISCLIENT;_WIN32_WINNT=0x0400;_HAS_ITERATOR_DEBUGGING=0;_CRT_SECURE_NO_WARNINGS;_SECURE_SCL=0;_WIN32_IE=0x0400"
+				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;ILWISCLIENT;_WIN32_WINNT=0x0500;_HAS_ITERATOR_DEBUGGING=0;_CRT_SECURE_NO_WARNINGS;_SECURE_SCL=0;_WIN32_IE=0x0400"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="2"
@@ -181,7 +181,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ILWISEngine.lib htmlhelp.lib geos.lib opengl32.lib glu32.lib gdiplus.lib ftgl.lib freetype.lib xerces-c_3.lib"
+				AdditionalDependencies="ILWISEngine.lib geos.lib opengl32.lib glu32.lib gdiplus.lib ftgl.lib freetype.lib"
 				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\Ilwis.exe"
 				Version="3.8"
 				LinkIncremental="1"
@@ -599,11 +599,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\amesd.ico"
+				RelativePath="..\..\Sources\Client\Resources\amesd.ico"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Client\Resources\amesd.ico"
+				RelativePath=".\amesd.ico"
 				>
 			</File>
 			<File
@@ -711,6 +711,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Client\Resources\bool.ico"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Client\Resources\box.ico"
 				>
 			</File>
@@ -740,6 +744,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\checkbox empty.ico"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\choice.ico"
 				>
 			</File>
 			<File
@@ -1063,6 +1071,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Client\Resources\float.ico"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Client\Resources\Floppy.ico"
 				>
 			</File>
@@ -1095,11 +1107,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\GNC.ico"
+				RelativePath="..\..\Sources\Client\Resources\GNC.ico"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Client\Resources\GNC.ico"
+				RelativePath=".\GNC.ico"
 				>
 			</File>
 			<File
@@ -1228,6 +1240,18 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\InsertBand.bmp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\integ.ico"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\integer.ico"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\integer1.ico"
 				>
 			</File>
 			<File
@@ -2877,58 +2901,6 @@
 					</File>
 					<File
 						RelativePath="..\..\Sources\Client\Mapwindow\ZoomableView.h"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="Printing"
-					>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Printing\Mainfrm.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Printing\MAINFRM.H"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Printing\Printing.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Printing\Printing.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Printing\Ruler.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Printing\RULER.H"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Printing\Rulerv.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Printing\RULERV.H"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Printing\Textbmpdoc.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Printing\Textbmpdoc.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Printing\Textbmpview.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Mapwindow\Printing\Textbmpview.h"
 						>
 					</File>
 				</Filter>
@@ -5344,26 +5316,6 @@
 				</File>
 			</Filter>
 		</Filter>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\bool.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\float.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\integ.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\texticon.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\valueran.ico"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

@@ -207,9 +207,7 @@ int DrawerTool::getToolCount() const {
 
 void DrawerTool::setActiveMode(bool yesno) {
 	active = yesno;
-	//for(int i=0; i < tools.size(); ++i) {
-	//	tools[i]->setActiveMode(yesno);
-	//}
+	setActive(active);
 	if ( !yesno) {
 		isConfigured = false; // the configuration becomes invalid at a false
 		tree->DeleteAllItems(htiNode);

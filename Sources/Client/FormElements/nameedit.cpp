@@ -320,6 +320,7 @@ void NameEdit::SetObjLister(ObjectLister* objl)  // deletes old one!
   delete ol;
   ol = objl;
   ol->ne = this;
+  ResetObjectTreeCtrl();
   FillDir();
 }
 

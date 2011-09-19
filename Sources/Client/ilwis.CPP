@@ -224,8 +224,8 @@ $Header: /ILWIS 3.0/Main/ilwis.CPP 329   10-06-05 15:09 Retsios $
 
 IlwisWinApp TheIlwisApp;
 const CLSID CLSID_ILWIS_CommandLine = {0x524BCEF4,0x4370,0x4021,{0x92,0xD3,0xCE,0xC1,0x62,0x57,0x7C,0x08}};
-const String ILWIS::Version::IlwisVersion="3.8 beta - 1";
-const String ILWIS::Version::IlwisShortName="Ilwis38";
+const String ILWIS::Version::IlwisVersion="3.8 beta - 2";
+//const String ILWIS::Version::IlwisShortName="Ilwis38";
 
 BEGIN_MESSAGE_MAP( IlwisWinApp, CWinApp )
 	//{{AFX_MSG_MAP( IlwisWinApp )
@@ -365,6 +365,7 @@ BOOL IlwisWinApp::InitApplication()
 		ipos = sParms.iPos(String("-CR"));
 	} else
 		getEngine()->setStayResident(false);
+
 
 	if ( ipos != shUNDEF){
 		m_sCommand = sParms.substr(ipos + getEngine()->fStayResident() ? 4 : 3);
@@ -1210,8 +1211,8 @@ void IlwisWinApp::InitImageLists()
 {
 	ilSmall.Create(16,16,TRUE,4,4);
 	ilLarge.Create(32,32,TRUE,4,4);
-	ilSmall.SetImageCount(128);
-	ilLarge.SetImageCount(128);
+	ilSmall.SetImageCount(130);
+	ilLarge.SetImageCount(130);
 
 	int i = 0;
 	InitImage("ilwis", "LogoIcon", i++);
@@ -1355,6 +1356,7 @@ void IlwisWinApp::InitImageLists()
 	InitImage("float", "float", i++);
 	InitImage(".float", "float", i++);
 	InitImage(".bool", "boolean", i++);
+	InitImage(".choice", "choice", i++);
 }
 
 int IlwisWinApp::iImage(const string& sExt)

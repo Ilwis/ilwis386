@@ -37,6 +37,7 @@
 #include "Engine\Domain\dmgroup.h"
 #include "Client\Forms\RemoveFilesCollector.h"
 #include "Engine\DataExchange\DatabaseCollection.h"
+#include "Engine\Base\DataObjects\XMLDocument.h"
 #include "Client\Forms\WPSClient.h"
 
 void ResetDir();

@@ -42,6 +42,7 @@ void ScreenSwapper::saveScreenBuffer(const CRect& rct)
 			glReadBuffer(GL_FRONT);
 			glPixelTransferf(GL_MAP_COLOR, false);
 			glReadPixels(rct.left,rct.top,width,height,GL_RGBA,GL_FLOAT,swapBitmap);
+
 		}
 	}
 }
@@ -54,17 +55,8 @@ void ScreenSwapper::bitmapBufferRedraw(MapCompositionDoc *mdoc){
 	mdoc->mpvGetView()->GetClientRect(&rct);
 	saveScreenBuffer(rct);
 	mdoc->rootDrawer->setupDraw();
-	/*glViewport(0,0,pixArea.Col, pixArea.Row);
-	setProjection(cbZoom);
-	glClearColor(1.0,1.0,1.0,0.0);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_BLEND);
-	
-	glMatrixMode(GL_MODELVIEW); */
 	glLoadIdentity();
 	swapBufferToScreen(rct);
-	//if ( selectionDrawer)
-	//	selectionDrawer->draw();
 	glDisable(GL_BLEND);
 }
 

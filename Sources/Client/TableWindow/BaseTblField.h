@@ -64,7 +64,8 @@ public:
   int iCol;
   long iRow;
 	BOOL OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
-	
+  BaseTablePaneView* tbpn;
+
 protected:
   BaseTblField(BaseTablePaneView*, int col, long row);
   BaseTblField(BaseTablePaneView*, int col, long row, bool fReadOnly);
@@ -73,7 +74,6 @@ protected:
   void init(const String&);  // should be called in derived constructor
   String sText();
   BOOL fHasChanged();
-  BaseTablePaneView* tbpn;
   Domain dm;
 private:
   void moveTo(int col, long row);

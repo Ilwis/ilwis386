@@ -37,8 +37,7 @@
 /* DataWindow
 // by Wim Koolhoven
 // (c) Ilwis System Development ITC
-	Last change:  WK   23 Dec 98   10:40 am
-*/
+	Last change:  WK   23 Dec 98   10:40 am */
 #include "Headers\version.h"
 #include "Client\Headers\formelementspch.h"
 #include "Engine\Base\System\RegistrySettings.h"

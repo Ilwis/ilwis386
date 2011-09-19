@@ -1,39 +1,39 @@
 /***************************************************************
- ILWIS integrates image, vector and thematic data in one unique 
- and powerful package on the desktop. ILWIS delivers a wide 
- range of feautures including import/export, digitizing, editing, 
- analysis and display of data as well as production of 
- quality mapsinformation about the sensor mounting platform
- 
- Exclusive rights of use by 52°North Initiative for Geospatial 
- Open Source Software GmbH 2007, Germany
+ILWIS integrates image, vector and thematic data in one unique 
+and powerful package on the desktop. ILWIS delivers a wide 
+range of feautures including import/export, digitizing, editing, 
+analysis and display of data as well as production of 
+quality mapsinformation about the sensor mounting platform
 
- Copyright (C) 2007 by 52°North Initiative for Geospatial
- Open Source Software GmbH
+Exclusive rights of use by 52°North Initiative for Geospatial 
+Open Source Software GmbH 2007, Germany
 
- Author: Jan Hendrikse, Willem Nieuwenhuis,Wim Koolhoven 
- Bas Restsios, Martin Schouwenburg, Lichun Wang, Jelle Wind 
+Copyright (C) 2007 by 52°North Initiative for Geospatial
+Open Source Software GmbH
 
- Contact: Martin Schouwenburg; schouwenburg@itc.nl; 
- tel +31-534874371
+Author: Jan Hendrikse, Willem Nieuwenhuis,Wim Koolhoven 
+Bas Restsios, Martin Schouwenburg, Lichun Wang, Jelle Wind 
 
- This program is free software; you can redistribute it and/or
- modify it under the terms of the GNU General Public License
- version 2 as published by the Free Software Foundation.
+Contact: Martin Schouwenburg; schouwenburg@itc.nl; 
+tel +31-534874371
 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU General Public License for more details.
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+version 2 as published by the Free Software Foundation.
 
- You should have received a copy of the GNU General Public License
- along with this program (see gnu-gpl v2.txt); if not, write to
- the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- Boston, MA 02111-1307, USA or visit the web page of the Free
- Software Foundation, http://www.fsf.org.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
 
- Created on: 2007-02-8
- ***************************************************************/
+You should have received a copy of the GNU General Public License
+along with this program (see gnu-gpl v2.txt); if not, write to
+the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+Boston, MA 02111-1307, USA or visit the web page of the Free
+Software Foundation, http://www.fsf.org.
+
+Created on: 2007-02-8
+***************************************************************/
 #include "Client\Headers\formelementspch.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\ilwis.h"
@@ -80,7 +80,7 @@ BEGIN_MESSAGE_MAP(MapWindow, DataWindow)
 	ON_UPDATE_COMMAND_UI(ID_LAYERMANAGE, OnUpdateLayerManagement)
 	ON_UPDATE_COMMAND_UI(ID_OVERVIEW, OnUpdateOverviewWindow)
 	ON_UPDATE_COMMAND_UI(ID_SCALECONTROL, OnUpdateScaleControl)
-		ON_WM_KEYDOWN()
+	ON_WM_KEYDOWN()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -89,7 +89,7 @@ const int iMINSIZE = 50;
 MapWindow::MapWindow()
 : pFirstView(0), fullScreen(false)
 {
-  help = "ilwis\\map_window.htm";
+	help = "ilwis\\map_window.htm";
 	sHelpKeywords = "Map Window";
 }
 
@@ -115,118 +115,118 @@ int MapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	EnableDocking(CBRS_ALIGN_ANY);
 
-  CMenu men;
+	CMenu men;
 	CMenu menPopup;
 	CMenu menSub;
-  men.CreateMenu();
+	men.CreateMenu();
 
-  menPopup.CreateMenu();
-//  add(ID_FILE_OPEN);
-    menSub.CreateMenu();
-    addSub(ID_CREATEPNTMAP);
-    addSub(ID_CREATESEGMAP);
-    addSub(ID_CREATERASMAP);
-    addSub(ID_CREATESMS);
-    addSub(ID_CREATEGRF);
-    addSub(ID_CREATECSY);
-   // addSub(ID_CREATEANNTEXT);
-		addSub(ID_CREATESUBMAP)
-  addSubMenu(ID_FILE_CREATE);
-  add(ID_SAVEVIEW);
-  add(ID_SAVEVIEWAS);
-	add(ID_CREATE_LAYOUT);
-  addBreak;
+	menPopup.CreateMenu();
+	//  add(ID_FILE_OPEN);
+	menSub.CreateMenu();
+	addSub(ID_CREATEPNTMAP);
+	addSub(ID_CREATESEGMAP);
+	addSub(ID_CREATERASMAP);
+	addSub(ID_CREATESMS);
+	addSub(ID_CREATEGRF);
+	addSub(ID_CREATECSY);
+	// addSub(ID_CREATEANNTEXT);
+	addSub(ID_CREATESUBMAP)
+	addSubMenu(ID_FILE_CREATE);
+	add(ID_SAVEVIEW);
+	add(ID_SAVEVIEWAS);
+	//add(ID_CREATE_LAYOUT);
+	addBreak;
 	menPropLayer.CreateMenu();
-  menPopup.AppendMenu(MF_POPUP, (UINT)menPropLayer.GetSafeHmenu(), sMen(ID_PROPLAYER)); 	
-//  add(ID_OPENGENMAP);
-  add(ID_OPENPIXELINFO);
-  addBreak;
-  add(ID_EXIT);
+	menPopup.AppendMenu(MF_POPUP, (UINT)menPropLayer.GetSafeHmenu(), sMen(ID_PROPLAYER)); 	
+	//  add(ID_OPENGENMAP);
+	add(ID_OPENPIXELINFO);
+	addBreak;
+	add(ID_EXIT);
 	hMenFile = menPopup.GetSafeHmenu();
-  addMenu(ID_MEN_FILE);
+	addMenu(ID_MEN_FILE);
 
-  menPopup.CreateMenu();
-  add(ID_COPY );
-  add(ID_PASTE);
+	menPopup.CreateMenu();
+	add(ID_COPY );
+	add(ID_PASTE);
 	addBreak;
 	menEditLayer.CreateMenu();
-  menPopup.AppendMenu(MF_POPUP, (UINT)menEditLayer.GetSafeHmenu(), sMen(ID_EDITLAYER)); 	
-    menSub.CreateMenu();
-    addSub(ID_PIXELEDIT);
-    addSub(ID_POINTEDIT);
-    addSub(ID_SEGEDIT);
-    addSub(ID_POLEDIT);
-  addSubMenu(ID_EDITOR);
+	menPopup.AppendMenu(MF_POPUP, (UINT)menEditLayer.GetSafeHmenu(), sMen(ID_EDITLAYER)); 	
+	menSub.CreateMenu();
+	addSub(ID_PIXELEDIT);
+	addSub(ID_POINTEDIT);
+	addSub(ID_SEGEDIT);
+	addSub(ID_POLEDIT);
+	addSubMenu(ID_EDITOR);
 	addBreak;
 	menRprLayer.CreateMenu();
-  menPopup.AppendMenu(MF_POPUP, (UINT)menRprLayer.GetSafeHmenu(), sMen(ID_RPRLAYER)); 	
+	menPopup.AppendMenu(MF_POPUP, (UINT)menRprLayer.GetSafeHmenu(), sMen(ID_RPRLAYER)); 	
 	menDomLayer.CreateMenu();
-  menPopup.AppendMenu(MF_POPUP, (UINT)menDomLayer.GetSafeHmenu(), sMen(ID_DOMLAYER)); 	
-  add(ID_EDITGRF);
-  add(ID_EDITCSY);
+	menPopup.AppendMenu(MF_POPUP, (UINT)menDomLayer.GetSafeHmenu(), sMen(ID_DOMLAYER)); 	
+	add(ID_EDITGRF);
+	add(ID_EDITCSY);
 	hMenEdit = menPopup.GetSafeHmenu();
-  addMenu(ID_MEN_EDIT);
-  
-  menPopup.CreateMenu();
+	addMenu(ID_MEN_EDIT);
+
+	menPopup.CreateMenu();
 	add(ID_ADDLAYER);
 	add(ID_ADD_GRID);
 	add(ID_ADD_GRATICULE);
 	add(ID_REMOVELAYER);
 	menDataLayer.CreateMenu();
-  menPopup.AppendMenu(MF_POPUP, (UINT)menDataLayer.GetSafeHmenu(), sMen(ID_LAYEROPTIONS)); 	
+	menPopup.AppendMenu(MF_POPUP, (UINT)menDataLayer.GetSafeHmenu(), sMen(ID_LAYEROPTIONS)); 	
 	addBreak;
-  add(ID_BGCOLOR);
-		menSub.CreateMenu();
-		addSub(ID_MAPDBLCLKRECORD);
-		addSub(ID_MAPDBLCLKRPR);
-		addSub(ID_MAPDBLCLKACTION);
-  addSubMenu(ID_MAPDBLCLK);
+	add(ID_BGCOLOR);
+	menSub.CreateMenu();
+	addSub(ID_MAPDBLCLKRECORD);
+	addSub(ID_MAPDBLCLKRPR);
+	addSub(ID_MAPDBLCLKACTION);
+	addSubMenu(ID_MAPDBLCLK);
 
-  addMenu(ID_MEN_LAYERS);
+	addMenu(ID_MEN_LAYERS);
 
-  menPopup.CreateMenu();
-  add(ID_ENTIREMAP);
+	menPopup.CreateMenu();
+	add(ID_ENTIREMAP);
 	add(ID_NORMAL);
-  add(ID_ZOOMIN);
-  add(ID_ZOOMOUT);
-  add(ID_FULLSCREEN)
-	add(ID_PANAREA);
-  add(ID_SCALE1);
-  addBreak;
-  add(ID_REDRAW);
-  add(ID_SHOWHISTOGRAM);
-  addBreak;
-    menSub.CreateMenu();
-    addSub(ID_EXTPERC);
-    addSub(ID_EXTCOORD);
-  addSubMenu(ID_EXTEND);
-  add(ID_COORDSYSTEM);
-  addBreak;
-  add(ID_ADJUSTSIZE);
-  add(ID_LAYERMANAGE);
-  add(ID_METRIC_COORD);
-  add(ID_SCALECONTROL);
-  add(ID_SHOWRECORDVIEW);
-  add(ID_BUTTONBAR);
-  add(ID_STATUSLINE);
-  addMenu(ID_MEN_OPTIONS);
+	add(ID_ZOOMIN);
+	add(ID_ZOOMOUT);
+	add(ID_FULLSCREEN)
+		add(ID_PANAREA);
+	add(ID_SCALE1);
+	addBreak;
+	add(ID_REDRAW);
+	add(ID_SHOWHISTOGRAM);
+	addBreak;
+	menSub.CreateMenu();
+	addSub(ID_EXTPERC);
+	addSub(ID_EXTCOORD);
+	addSubMenu(ID_EXTEND);
+	add(ID_COORDSYSTEM);
+	addBreak;
+	add(ID_ADJUSTSIZE);
+	add(ID_LAYERMANAGE);
+	add(ID_METRIC_COORD);
+	add(ID_SCALECONTROL);
+	add(ID_SHOWRECORDVIEW);
+	add(ID_BUTTONBAR);
+	add(ID_STATUSLINE);
+	addMenu(ID_MEN_OPTIONS);
 
-  menPopup.CreateMenu();
-  add(ID_HLPKEY);
+	menPopup.CreateMenu();
+	add(ID_HLPKEY);
 	add(ID_HELP_RELATED_TOPICS);
 	addBreak
-  add(ID_HLPCONTENTS);
-  add(ID_HLPINDEX);
-  add(ID_HLPSEARCH);
+		add(ID_HLPCONTENTS);
+	add(ID_HLPINDEX);
+	add(ID_HLPSEARCH);
 	addBreak
-	add(ID_HELP_ILWIS_OBJECTS);
+		add(ID_HELP_ILWIS_OBJECTS);
 	addBreak
-	add(ID_ABOUT)
-  addMenu(ID_MEN_HELP);
+		add(ID_ABOUT)
+		addMenu(ID_MEN_HELP);
 
-  SetMenu(&men);
-  menPopup.Detach();
-  men.Detach();
+	SetMenu(&men);
+	menPopup.Detach();
+	men.Detach();
 
 	SetAcceleratorTable();
 
@@ -244,21 +244,21 @@ int MapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	DockControlBar(&barScale,AFX_IDW_DOCKBAR_TOP,rect);
 
 	ltb.Create(this, 124, CSize(200,200));
-    ltb.SetWindowText(TR("Layer Management").c_str());
+	ltb.SetWindowText(TR("Layer Management").c_str());
 	ltb.EnableDocking(CBRS_ALIGN_LEFT|CBRS_ALIGN_RIGHT);
-    ltb.view = new LayerTreeView;
+	ltb.view = new LayerTreeView;
 	ltb.view->Create(NULL, NULL, AFX_WS_DEFAULT_VIEW|TVS_HASLINES|TVS_LINESATROOT|TVS_HASBUTTONS,
-			CRect(0,0,0,0), &ltb, 100, 0);
+		CRect(0,0,0,0), &ltb, 100, 0);
 
 	if (0 == pFirstView) 
 		pFirstView = dynamic_cast<CView*>(GetDescendantWindow(AFX_IDW_PANE_FIRST, TRUE));
 	pFirstView->GetDocument()->AddView(ltb.view);
 	DockControlBar(&ltb,AFX_IDW_DOCKBAR_LEFT);
 
-	
- 
-  RecalcLayout();
-  ltb.GetWindowRect(&rect);
+
+
+	RecalcLayout();
+	ltb.GetWindowRect(&rect);
 	rect.OffsetRect(0,1);
 	return 0;
 }
@@ -266,14 +266,14 @@ int MapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 BOOL MapWindow::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
 {
 	if (!DataWindow::OnCreateClient(lpcs, pContext))
-	  return FALSE;
-  //wndSplitter.Create(this, 2, 2, CSize(50,50), pContext);
+		return FALSE;
+	//wndSplitter.Create(this, 2, 2, CSize(50,50), pContext);
 	return TRUE;
 }
 
 void MapWindow::OnLarger()
 {
-  MapPaneView* mpv = dynamic_cast<MapPaneView*>(GetActiveView());
+	MapPaneView* mpv = dynamic_cast<MapPaneView*>(GetActiveView());
 	if (mpv)
 		mpv->OnZoomIn();
 	zRect rect;
@@ -285,14 +285,14 @@ void MapWindow::OnLarger()
 	int iScreenHeight = wdc.GetDeviceCaps(VERTRES);
 	if (rect.height() > 0.45 * iScreenHeight)
 		return;
-  rect.right() += rect.width();
-  rect.bottom() += rect.height();
+	rect.right() += rect.width();
+	rect.bottom() += rect.height();
 	MoveWindow(&rect);
 }
 
 void MapWindow::OnSmaller()
 {
-  MINMAXINFO mmi;
+	MINMAXINFO mmi;
 	OnGetMinMaxInfo(&mmi);
 	zRect rect;
 	GetWindowRect(rect);
@@ -300,10 +300,10 @@ void MapWindow::OnSmaller()
 		return;
 	if (rect.height() < mmi.ptMinTrackSize.y)
 		return;
-  rect.right() -= rect.width() / 2;
-  rect.bottom() -= rect.height() / 2;
+	rect.right() -= rect.width() / 2;
+	rect.bottom() -= rect.height() / 2;
 	MoveWindow(&rect);
-  MapPaneView* mpv = dynamic_cast<MapPaneView*>(GetActiveView());
+	MapPaneView* mpv = dynamic_cast<MapPaneView*>(GetActiveView());
 	if (mpv)
 		mpv->OnZoomOut();
 }
@@ -316,76 +316,76 @@ void MapWindow::OnUpdateLarger(CCmdUI* pCmdUI)
 	int iScreenWidth = wdc.GetDeviceCaps(HORZRES);
 	int iScreenHeight = wdc.GetDeviceCaps(VERTRES);
 	BOOL fEnable = (rect.width() < 0.45 * iScreenWidth)
-	            && (rect.height() < 0.45 * iScreenHeight);
+		&& (rect.height() < 0.45 * iScreenHeight);
 	pCmdUI->Enable(fEnable);
 }
 
 void MapWindow::OnUpdateSmaller(CCmdUI* pCmdUI)
 {
-  MINMAXINFO mmi;
+	MINMAXINFO mmi;
 	OnGetMinMaxInfo(&mmi);
 	zRect rect;
 	GetWindowRect(rect);
 	BOOL fEnable = (rect.width() > mmi.ptMinTrackSize.x)
-		          && (rect.height() > mmi.ptMinTrackSize.y);
+		&& (rect.height() > mmi.ptMinTrackSize.y);
 	pCmdUI->Enable(fEnable);
 }
 
 void MapWindow::OnGetMinMaxInfo(MINMAXINFO FAR* lpMMI) 
 {
 	DataWindow::OnGetMinMaxInfo(lpMMI);
-/*
+	/*
 	if (IsZoomed()) { // maximized
-		DataWindow::OnGetMinMaxInfo(lpMMI);
-		return;
+	DataWindow::OnGetMinMaxInfo(lpMMI);
+	return;
 	}
 	CRect rectWindow, rectClient;
 	GetWindowRect(rectWindow);
 	// restore window also calls GetMinmaxInfo - for Win NT
 	if (rectWindow.top == -32000) {
-		DataWindow::OnGetMinMaxInfo(lpMMI);
-		return;
+	DataWindow::OnGetMinMaxInfo(lpMMI);
+	return;
 	}
 	GetClientRect(rectClient);
 	// restore window also calls GetMinmaxInfo - for Win95 
 	if (rectClient.Height() == 0) {
-		DataWindow::OnGetMinMaxInfo(lpMMI);
-		return;
+	DataWindow::OnGetMinMaxInfo(lpMMI);
+	return;
 	}
-  MapPaneView* mpv = dynamic_cast<MapPaneView*>(GetActiveView());
+	MapPaneView* mpv = dynamic_cast<MapPaneView*>(GetActiveView());
 	if (mpv) {
-  	mpv->GetClientRect(rectClient);
-		mpv->GetMinMaxInfo(lpMMI);
-  	lpMMI->ptMinTrackSize.x += rectWindow.Width() - rectClient.right;
-	  lpMMI->ptMinTrackSize.y += rectWindow.Height() - rectClient.bottom;
-  	lpMMI->ptMaxTrackSize.x += rectWindow.Width() - rectClient.right;
-	  lpMMI->ptMaxTrackSize.y += rectWindow.Height() - rectClient.bottom;
-  }
-	else {
-	 	lpMMI->ptMinTrackSize.x = rectWindow.Width() - rectClient.right;
-		lpMMI->ptMinTrackSize.y = rectWindow.Height() - rectClient.bottom;
-		lpMMI->ptMinTrackSize.x += iMINSIZE;
-		lpMMI->ptMinTrackSize.y += iMINSIZE;
+	mpv->GetClientRect(rectClient);
+	mpv->GetMinMaxInfo(lpMMI);
+	lpMMI->ptMinTrackSize.x += rectWindow.Width() - rectClient.right;
+	lpMMI->ptMinTrackSize.y += rectWindow.Height() - rectClient.bottom;
+	lpMMI->ptMaxTrackSize.x += rectWindow.Width() - rectClient.right;
+	lpMMI->ptMaxTrackSize.y += rectWindow.Height() - rectClient.bottom;
 	}
-*/
+	else {
+	lpMMI->ptMinTrackSize.x = rectWindow.Width() - rectClient.right;
+	lpMMI->ptMinTrackSize.y = rectWindow.Height() - rectClient.bottom;
+	lpMMI->ptMinTrackSize.x += iMINSIZE;
+	lpMMI->ptMinTrackSize.y += iMINSIZE;
+	}
+	*/
 }
 
 void MapWindow::OnInitMenu(CMenu* pMenu) 
 {
 	DataWindow::OnInitMenu(pMenu);
-	
-  MapPaneView* mpv = dynamic_cast<MapPaneView*>(pFirstView);
+
+	MapPaneView* mpv = dynamic_cast<MapPaneView*>(pFirstView);
 	if (0 == mpv) 
 		return;
-  MapCompositionDoc* mcd = mpv->GetDocument();  
+	MapCompositionDoc* mcd = mpv->GetDocument();  
 	if (0 == mcd) 
 		return;
-  mcd->menLayers(menDataLayer, ID_LAYFIRST);
-  mcd->menLayers(menEditLayer, ID_EDITLAYER);
-  mcd->menLayers(menPropLayer, ID_PROPLAYER);
-  mcd->menLayers(menRprLayer, ID_RPRLAYER);
-  mcd->menLayers(menDomLayer, ID_DOMLAYER);
-  DrawMenuBar();
+	mcd->menLayers(menDataLayer, ID_LAYFIRST);
+	mcd->menLayers(menEditLayer, ID_EDITLAYER);
+	mcd->menLayers(menPropLayer, ID_PROPLAYER);
+	mcd->menLayers(menRprLayer, ID_RPRLAYER);
+	mcd->menLayers(menDomLayer, ID_DOMLAYER);
+	DrawMenuBar();
 }
 
 BOOL MapWindow::PreTranslateMessage(MSG* pMsg)
@@ -450,7 +450,7 @@ void MapWindow::OnUpdateOverviewWindow(CCmdUI* pCmdUI)
 }
 
 BOOL MapWindow::OnCmdMsg(UINT nID, int nCode, void* pExtra,
-	AFX_CMDHANDLERINFO* pHandlerInfo)
+						 AFX_CMDHANDLERINFO* pHandlerInfo)
 {
 	if (DataWindow::OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
 		return TRUE;
@@ -464,7 +464,7 @@ BOOL MapWindow::OnCmdMsg(UINT nID, int nCode, void* pExtra,
 
 void MapWindow::InitSettings()
 {
-  DataWindow::InitSettings();
+	DataWindow::InitSettings();
 
 	if (!IsZoomed()) 
 	{	 
@@ -480,7 +480,7 @@ void MapWindow::InitSettings()
 			rect.bottom += szPref.cy - rectView.Height();
 			sz.cx = rect.Width();
 			sz.cy = rect.Height();
-		 	MoveWindow(CRect(rect.TopLeft(), sz));
+			MoveWindow(CRect(rect.TopLeft(), sz));
 		}
 	}
 }
@@ -511,15 +511,15 @@ void MapWindow::InitialUpdate(CDocument* pDoc, BOOL bMakeVisible)
 	ptTopLeft.y = settings.iValue("Y0");
 	sz.cx = settings.iValue("XSize0");
 	sz.cy = settings.iValue("YSize0");
-	
+
 	CSize szPref = CSize(0,0);
 	CRect rect;
 	GetWindowRect(&rect);
-	
+
 	CWindowDC wdc(this);
 	const int iScreenWidth = wdc.GetDeviceCaps(HORZRES);
 	const int iScreenHeight = wdc.GetDeviceCaps(VERTRES);
-	
+
 	if (ptTopLeft.x < 0) 
 		ptTopLeft.x = rect.left;
 	if (ptTopLeft.y < 0) 
@@ -532,13 +532,13 @@ void MapWindow::InitialUpdate(CDocument* pDoc, BOOL bMakeVisible)
 		sz.cy = szPref.cy;
 	if (sz.cy < 100)
 		sz.cy = 0.6 * iScreenHeight;
-	
+
 	FrameWindow::InitialUpdate(pDoc, bMakeVisible);
 	CRect rectClient;
 	mpv->GetClientRect(&rectClient);
 	sz.cx += rect.Width() - rectClient.Width();
 	sz.cy += rect.Height() - rectClient.Height();
-	
+
 	CPoint ptTL(iUNDEF, iUNDEF);
 	CSize  szWH(iUNDEF, iUNDEF);
 	IlwWinApp()->GetNextWindowRect(ptTL, szWH);
@@ -556,7 +556,7 @@ void MapWindow::InitialUpdate(CDocument* pDoc, BOOL bMakeVisible)
 
 	rect = CRect(ptTopLeft, sz);
 	MoveWindow(rect);
-	
+
 	mpv->UpdateFrame();
 }
 
@@ -595,9 +595,9 @@ void MapWindow::OnFullScreen() {
 					ltb.ShowWindow(SW_HIDE);
 				MapPaneView* mpv = dynamic_cast<MapPaneView*>(pFirstView);
 				if (0 != mpv)  {
-						mpv->getPixInfoBar()->ShowWindow(SW_HIDE);	
-						mpv->GetDocument()->ltvGetView()->ShowWindow(SW_HIDE);
-					
+					mpv->getPixInfoBar()->ShowWindow(SW_HIDE);	
+					mpv->GetDocument()->ltvGetView()->ShowWindow(SW_HIDE);
+
 				}
 				SetWindowLong(m_hWnd, GWL_STYLE,
 					dwStyle & ~WS_OVERLAPPEDWINDOW );
@@ -620,7 +620,7 @@ void MapWindow::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			if ( barScale.GetSafeHwnd())
 				barScale.ShowWindow(SW_SHOW);
 			if ( bbDataWindow.GetSafeHwnd())
-					bbDataWindow.ShowWindow(SW_SHOW);
+				bbDataWindow.ShowWindow(SW_SHOW);
 			if ( ltb.GetSafeHwnd())
 				ltb.ShowWindow(SW_SHOW);
 			MapPaneView* mpv = dynamic_cast<MapPaneView*>(pFirstView);

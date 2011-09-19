@@ -291,9 +291,10 @@ SYMBOL                  ICON                    "Symbol.ico"
 AUTOCLOSE               ICON                    "AutoClose.ico"
 SNAP                    ICON                    "snap.ico"
 UNDEFINED               ICON                    "undefined.ico"
-integer                 ICON                    "integ.ico"
+integer                 ICON                    "integer.ico"
 float                   ICON                    "float.ico"
 boolean                 ICON                    "bool.ico"
+choice                  ICON                    "choice.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //

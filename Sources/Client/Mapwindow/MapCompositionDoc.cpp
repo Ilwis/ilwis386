@@ -97,7 +97,6 @@ Created on: 2007-02-8
 #include "Client\Mapwindow\ScaleBarSrvItem.h"
 #include "Client\Mapwindow\MapStatusBar.h"
 #include "Engine\SampleSet\SAMPLSET.H"
-#include "Client\Mapwindow\Printing\Printing.h"
 #include "Client\Editors\Editor.h"
 #include "Engine\Drawers\ZValueMaker.h"
 
@@ -468,8 +467,8 @@ BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPathName, OpenType ot)
 
 void MapCompositionDoc::OnCreateLayout()
 {
-	Printing printer;
-	printer.print(this);
+	//Printing printer;
+	//printer.print(this);
 }
 
 void MapCompositionDoc::OnSaveView()
