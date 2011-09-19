@@ -81,7 +81,7 @@ private:
 	FormEntry *CheckData();
 
 	double distance;
-	vector<string> styles;
+	vector<String> styles;
 	long endStyle;
 	String sInMap;
 

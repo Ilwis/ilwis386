@@ -88,7 +88,7 @@ private:
 	long relation;
 	bool negation;
 	String pattern;
-	vector<string> relations;
+	vector<String> relations;
 };
 
 
