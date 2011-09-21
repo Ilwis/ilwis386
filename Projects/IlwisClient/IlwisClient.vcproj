@@ -81,7 +81,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/ignore:4099"
-				AdditionalDependencies="ILWISEngine.lib htmlhelp.lib geos.lib opengl32.lib glu32.lib ftgl.lib freetype.lib gdiplus.lib"
+				AdditionalDependencies="ILWISEngine.lib opengl32.lib glu32.lib ftgl.lib freetype.lib gdiplus.lib ILWISDrawers.lib"
 				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\IlwisClient.exe"
 				Version="3.5"
 				LinkIncremental="2"
@@ -599,11 +599,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Client\Resources\amesd.ico"
+				RelativePath=".\amesd.ico"
 				>
 			</File>
 			<File
-				RelativePath=".\amesd.ico"
+				RelativePath="..\..\Sources\Client\Resources\amesd.ico"
 				>
 			</File>
 			<File
@@ -975,11 +975,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\esa.ico"
+				RelativePath="..\..\Sources\Client\Resources\esa.ico"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Client\Resources\esa.ico"
+				RelativePath=".\esa.ico"
 				>
 			</File>
 			<File
@@ -1107,11 +1107,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Client\Resources\GNC.ico"
+				RelativePath=".\GNC.ico"
 				>
 			</File>
 			<File
-				RelativePath=".\GNC.ico"
+				RelativePath="..\..\Sources\Client\Resources\GNC.ico"
 				>
 			</File>
 			<File

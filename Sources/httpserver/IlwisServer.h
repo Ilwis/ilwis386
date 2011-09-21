@@ -32,6 +32,8 @@ public:
 	void updateTimeOutLocation(const String& folder);
 	bool fValid() { return isValid;}
 	void loadServices();
+	FileName getConfiguration(const String& key) const;
+	void addConfigurationFile(const String& key, const FileName& fn);
 
 private:
     struct mg_context *ctx;
@@ -47,6 +49,7 @@ private:
 	CWinThread *watcherThread;
 	static UINT timeOutChecker(LPVOID data);
 	map<String, ServiceInfo *> handlers;
+	map<String, FileName> configurations;
 	bool isValid;
 };
 

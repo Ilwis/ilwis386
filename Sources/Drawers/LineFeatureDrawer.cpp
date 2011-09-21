@@ -4,7 +4,6 @@
 #include "Engine\Map\Segment\seg.h"
 #include "Engine\Drawers\drawer_n.h"
 #include "Engine\Drawers\SimpleDrawer.h" 
-#include "Engine\Drawers\TextDrawer.h"
 #include "Engine\Spatialreference\gr.h"
 #include "Engine\Map\Raster\Map.h"
 #include "Engine\Base\System\RegistrySettings.h"

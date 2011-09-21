@@ -9,22 +9,33 @@ ServiceConfiguration::ServiceConfiguration(const String& dir, const String& name
 	String generalConfig("%SServices.ini",ilwDir);
 	readConfigFile(generalConfig);
 	add(dir,name);
+	isChanged = false;
 }
 
-void ServiceConfiguration::add(const String& dir, const String& name) {
+void ServiceConfiguration::add(const FileName& fn) {
+	if ( fn.fExist())
+		readConfigFile(fn);
+}
+
+FileName ServiceConfiguration::add(const String& dir, const String& name) {
 	if ( name != "") {
 		String ilwDir = getEngine()->getContext()->sIlwDir();
-		FileName altConfig(String("%S%S", ilwDir, get("Handler:Configurations:"+name)));
-		if ( altConfig.fExist())
-			readConfigFile(altConfig);
-		else
-			readConfigFile(String("%S%S\\%S.ini", ilwDir, dir, name));
+		FileName configFn(String("%S%S", ilwDir, get("Handler:Configurations:"+name)));
+		if ( configFn.fExist())
+			readConfigFile(configFn);
+		else {
+			configFn = FileName(String("%S%S\\%S.ini", ilwDir, dir, name));
+			readConfigFile(configFn);
+		}
+		return configFn;
 	}
+	return FileName();
 }
 
-void ServiceConfiguration::readConfigFile(FileName fnConfig) {
-	if ( fnConfig.fExist() == false)
+void ServiceConfiguration::readConfigFile(FileName fnC) {
+	if ( fnC.fExist() == false)
 		return;
+	fnConfig = fnC;
 	ifstream configfile(fnConfig.sFullPath().c_str());
 	String line;
 	if ( configfile.is_open()) {
@@ -60,4 +71,47 @@ String ServiceConfiguration::get(const String& key) const {
 		return (*iter).second;
 	}
 	return sUNDEF;
+}
+
+void ServiceConfiguration::flush(const FileName& fnC){
+	if ( isChanged == false)
+		return;
+
+	if ( !fnC.fValid() && !fnConfig.fValid())
+		return;
+	FileName fnSave = fnC.fValid() ? fnC : fnConfig;
+
+	ofstream configfile(fnSave.sFullPath().c_str());
+	String line;
+	if ( configfile.is_open()) {
+		String prevSection;
+		for(map<String, String>::const_iterator iter = config.begin(); iter !=  config.end(); ++iter) {
+			String key = (*iter).first;
+			String value = (*iter).second;
+			int index = key.find_last_of(":");
+			String section = key.substr(0, index);
+			String entry = key.substr(index + 1, key.size() - index);
+			if ( prevSection != section) {
+				if ( prevSection != "")
+					configfile << "\n";
+				configfile << String("[%S]\n", section);
+			}
+			configfile << String("%S=%S\n",key, value);
+		}
+		configfile.close();
+	}
+	isChanged = false;
+}
+
+void ServiceConfiguration::set(const String& key, const String& value) {
+	String tempKey = key;
+	tempKey.toLower();
+	map<String, String>::iterator iter;
+	if ( (iter = config.find(tempKey)) != config.end()) {
+		(*iter).second = value;	
+	} else {
+		config[key] = value;
+	}
+	isChanged = true;
+	flush(); // testing
 }

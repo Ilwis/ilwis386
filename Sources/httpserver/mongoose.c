@@ -4089,6 +4089,7 @@ struct mg_context *mg_start(mg_callback_t user_callback, void *user_data,
   // Set default value if needed
   for (i = 0; config_options[i * ENTRIES_PER_CONFIG_OPTION] != NULL; i++) {
     default_value = config_options[i * ENTRIES_PER_CONFIG_OPTION + 2];
+	//MessageBox(0,default_value == 0 ? "null" : default_value,"Location", MB_OK);
     if (ctx->config[i] == NULL && default_value != NULL) {
       ctx->config[i] = mg_strdup(default_value);
       DEBUG_TRACE(("Setting default: [%s] -> [%s]",
@@ -4096,6 +4097,7 @@ struct mg_context *mg_start(mg_callback_t user_callback, void *user_data,
                    default_value));
     }
   }
+ // MessageBox(0,"IlwisServer::mg_start2","Location", MB_OK);
 
   // NOTE(lsm): order is important here. SSL certificates must
   // be initialized before listening ports. UID must be set last.

@@ -13,8 +13,8 @@
 #include "Engine\Base\DataObjects\ObjectCollection.h"
 #include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Engine\Drawers\DrawerContext.h"
-#include "Engine\Drawers\TextDrawer.h"
-#include "Engine\Drawers\MouseClickInfoDrawer.h"
+//#include "Engine\Drawers\TextDrawer.h"
+//#include "Engine\Drawers\MouseClickInfoDrawer.h"
 
 
 using namespace ILWIS;

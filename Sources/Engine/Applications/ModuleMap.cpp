@@ -22,8 +22,6 @@
 #include "Engine\Drawers\SelectionRectangle.h"
 //#include "Client\Editors\Map\BaseMapEditor.h"
 #include "Engine\Drawers\SimpleDrawer.h"
-#include "Engine\Drawers\TextDrawer.h"
-#include "Engine\Drawers\MouseClickInfoDrawer.h" 
 
 using namespace ILWIS;
 
@@ -112,7 +110,6 @@ void ModuleMap::addModule(const FileName& fnModule, bool retry) {
 					}
 					delete infos;
 					NewDrawer::addDrawer("SelectionRectangle","ilwis38", createSelectionRectangle);
-					NewDrawer::addDrawer("MouseClickInfoDrawer","ilwis38",createMouseClickInfoDrawer);
 				}
 
 			}

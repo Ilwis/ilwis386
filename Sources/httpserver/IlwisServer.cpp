@@ -33,7 +33,9 @@ void executehttpcommand(const String& cmd) {
 	if ( server == 0) {
 		AfxBeginThread(IlwisServer::executeInThread, _cmd);	
 	}
-	while(server==0 || !server->fValid());
+	while(server==0 ) {
+		::OutputDebugString("trace\n");
+	}
 	server->start(_cmd);
 }
 
@@ -159,7 +161,6 @@ bool IlwisServer::start(String* cmd) {
 		addOptions(index, coptions,"num_threads",pl.sGet("threads"));
 	}
 
-
 	ctx = mg_start(&event_handler, 0, (const char **)coptions);
 	watcherThread = AfxBeginThread(IlwisServer::timeOutChecker, (void*)this);
 
@@ -176,7 +177,8 @@ void IlwisServer::addOptions(int& index, char *coptions[40], const String& optio
 
 
 void *IlwisServer::event_handler(enum mg_event ev, struct mg_connection *conn,  const struct mg_request_info *request_info) {
-	void *processed = "yes"; 
+	void *processed = "yes";
+	try {
 	if ( ev == MG_NEW_REQUEST) {
 		String uri(request_info->uri);
 
@@ -188,13 +190,16 @@ void *IlwisServer::event_handler(enum mg_event ev, struct mg_connection *conn,  
 				if ( res || rh->needsResponse())
 					rh->writeResponse();
 				delete rh;
-			}
+			} 
 		} else {
 			ServiceConfiguration configf;
 			String name = configf.get("Server:Context:Name");
 			mg_printf(conn,"%s  %s\n", name.c_str(), ILWIS::Time::now().toString().c_str());
 		}
 
+	}
+	} catch (const ErrorObject& err) {
+		mg_printf(conn, "%s\n", err.sShowError().c_str());
 	}
 //	mg_printf(conn,"code %d\n", request_info->remote_port);
 	return processed;
@@ -241,16 +246,6 @@ RequestHandler *IlwisServer::createHandler(struct mg_connection *c, const struct
 	//if ( request_info->query_string == 0)
 	//	return 0;
 
-	/*if ( RequestHandler::activeServices.size() == 0) {
-		int noS = getConfigValue("ActiveServices:NumberOfServices").iVal();
-		if ( nos != iUNDEF) {
-			for(int j = 0; j < nos; ++j) {
-				String serv = getConfigValue(String("ActiveServices:Service%d", j));
-				activeServices[serv.sHead(",")] = serv.sTail(",") == "true";
-			}
-		}
-	}*/
-
 	String uri(request_info->uri);
 	getEngine()->InitThreadLocalVars();
 	getEngine()->getContext()->SetThreadLocalVar(IlwisAppContext::tlvSERVERMODE, new bool(true));
@@ -260,14 +255,21 @@ RequestHandler *IlwisServer::createHandler(struct mg_connection *c, const struct
 		RequestHandler::parseQuery(query, kvps);
 	}
 
-	int index;
-	if ( (index = uri.find("shared_data/")) != string::npos) {
+	int index = uri.find("shared_data/");
+	if ( index == string::npos)
+		index = uri.find("output_data/");
+	if ( index != string::npos) {
 		String context;
 		index = index - 2;
+		if ( index < 8) // "http://
+			throw ErrorObject(TR("Malformed URL in request"));
+
 		char ch = uri[index];
 		do {
 			context = ch + context;
 			ch = uri[--index];
+			if ( index < 0)
+				throw ErrorObject(TR("Malformed URL in request"));
 		} while ( ch != '/');
 		kvps["context"] = context;
 		SharedDataHandler *sdh = new SharedDataHandler(c, request_info, kvps, server);
@@ -289,9 +291,21 @@ RequestHandler *IlwisServer::createHandler(struct mg_connection *c, const struct
 	if ( iter != handlers.end()) {
 		CreateRequestHandler func = (*iter).second->createHandler;
 		return func(c,request_info,kvps,this);
-	}
+	} else
+		throw ErrorObject(String(TR("No handler defined for service %S and request %S").c_str(), serviceValue, requestValue));
 	return 0;
 }
 
+FileName IlwisServer::getConfiguration(const String& key) const{
+	map<String, FileName>::const_iterator iter = configurations.find(key);
+	if ( iter != configurations.end())
+		return (*iter).second;
+	return FileName();
+}
 
-
+void IlwisServer::addConfigurationFile(const String& key, const FileName& fn){
+	if ( key != "" && fn.fValid())
+		configurations[key] = fn;
+	else
+		throw ErrorObject(TR("Illegal entry in configration file"));
+}

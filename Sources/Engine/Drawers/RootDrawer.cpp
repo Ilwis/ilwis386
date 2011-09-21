@@ -15,8 +15,6 @@ RootDrawer::RootDrawer() : ComplexDrawer(0,"RootDrawer"){
 	ILWIS::DrawerParameters dp(this, this);
 	ILWIS::PreparationParameters pp(RootDrawer::ptALL,0);
 	backgroundDrawer = NewDrawer::getDrawer("CanvasBackgroundDrawer", &pp, &dp);
-
-	//addPostDrawer(900,NewDrawer::getDrawer("MouseClickInfoDrawer", &pp, &dp));
 	addPostDrawer(800,NewDrawer::getDrawer("GridDrawer", &pp, &dp));
 	addPostDrawer(700,NewDrawer::getDrawer("GraticuleDrawer", &pp, &dp));
 

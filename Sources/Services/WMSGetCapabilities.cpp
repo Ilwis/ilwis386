@@ -49,7 +49,7 @@ void WMSGetCapabilities::writeResponse() const{
 	doc.addNodeTo(conP,"ContactOrganization",getConfigValue("WMS:ServiceContext:ProviderName"));
 	doc.addNodeTo(conP,"ContactElectronicMailAddress",getConfigValue("WMS:ServiceContext:ProviderEMail"));
 
-	pugi::xml_node cap = doc.addNodeTo(doc, "Capability");
+	pugi::xml_node cap = doc.addNodeTo(ser, "Capability");
 	pugi::xml_node req = doc.addNodeTo(cap, "Request");
 	pugi::xml_node gcap = doc.addNodeTo(req, "GetCapabilities");
 	doc.addNodeTo(gcap,"Format","text/xml");
@@ -72,7 +72,7 @@ void WMSGetCapabilities::writeResponse() const{
 	ores.append_attribute("xlink:href")=getConfigValue("WMS:ServiceContext:GetMap").c_str();
 
 
-	pugi::xml_node exc = doc.addNodeTo(doc,"Exception");
+	pugi::xml_node exc = doc.addNodeTo(ser,"Exception");
 	doc.addNodeTo(exc,"Format","XML");
 
 	int n = getConfigValue("WMS:ServiceContext:NumberOfCatalogs").iVal();
@@ -81,9 +81,10 @@ void WMSGetCapabilities::writeResponse() const{
 		Array<String> parts;
 		Split(catalogDef,parts,";");
 
-		pugi::xml_node layer = doc.addNodeTo(doc,"Layer");
+		pugi::xml_node layer = doc.addNodeTo(ser,"Layer");
 		String location =  parts[1];
-		String filter = parts.size() > 2 ? parts[2] : "*.*";
+		String filter = parts.size() > 2 ? parts[2].sHead(",") : "*.*";
+		bool recursive = parts.size() > 2 ? parts[2].sTail(",").fVal() : false;
 		doc.addNodeTo(layer,"Title", parts[0]);
 		list<FileName> files;
 		if ( filter != sUNDEF) {
@@ -139,7 +140,7 @@ void WMSGetCapabilities::handleFile(pugi::xml_node& layer,ILWIS::XMLDocument& do
 				LatLon llMin = bmp->cs()->llConv(cb.cMin);
 				LatLon llMax = bmp->cs()->llConv(cb.cMax);
 				if ( !(llMin.fUndef() || llMax.fUndef())) {
-					doc.addNodeTo(lyr,"SRS", "EPSG:4326");
+					//doc.addNodeTo(lyr,"SRS", "EPSG:4326");
 					pugi::xml_node bb = doc.addNodeTo(lyr, "LatLonBoundingBox");
 					String latmin("%f",llMin.Lat);
 					String lonmin("%f",llMin.Lon);

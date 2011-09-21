@@ -17,7 +17,8 @@ using namespace ILWIS;
 WPSHandler::WPSHandler(const String& name,struct mg_connection *c, const struct mg_request_info *ri, const map<String, String>& kvps, IlwisServer *serv) : 
 OWSHandler(name,c,ri,kvps, serv)
 {
-	config.add("Services", "WPSHandlers");
+	FileName fnC = config.add("Services", "WPSHandlers");
+	serv->addConfigurationFile("wps", fnC);
 }
 
 void WPSHandler::createHeader(ILWIS::XMLDocument& doc, const String& xsd) const{

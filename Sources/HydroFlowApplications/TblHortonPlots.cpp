@@ -301,7 +301,7 @@ void TableHortonPlots::Init()
   objdep.Add(m_mpDrainage.ptr());
   fNeedFreeze = true;
   sFreezeTitle = "TableHortonPlots";
-  htpFreeze = "ilwisapp\horton_statistics_algorithm.htm";
+  htpFreeze = "ilwisapp\\horton_statistics_algorithm.htm";
 }
 
 void TableHortonPlots::CreateColumns(long iSize)

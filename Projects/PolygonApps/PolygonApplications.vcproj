@@ -73,7 +73,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/ignore:4099"
-				AdditionalDependencies="ILWISEngine.lib htmlhelp.lib geos.lib"
+				AdditionalDependencies="ILWISEngine.lib"
 				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\Extensions\IlwisPoygonApps.dll"
 				Version="3.5"
 				LinkIncremental="2"

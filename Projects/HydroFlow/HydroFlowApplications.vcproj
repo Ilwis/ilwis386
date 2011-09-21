@@ -71,7 +71,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ILWISEngine.lib htmlhelp.lib geos.lib"
+				AdditionalDependencies="ILWISEngine.lib"
 				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\Extensions\IlwisHydroFlowApps.dll"
 				Version="3.5"
 				LinkIncremental="2"

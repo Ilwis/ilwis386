@@ -4,12 +4,15 @@
 #include "Engine\Drawers\ComplexDrawer.h"
 #include "Engine\Drawers\DrawerContext.h"
 #include "Engine\Drawers\RootDrawer.h"
+#include "Headers\version.h"
+#include "Engine\Base\DataObjects\Version.h"
 #include "HttpServer\IlwisServer.h"
 #include "HttpServer\mongoose.h"
 #include "Engine\Base\DataObjects\XMLDocument.h"
 #include "httpserver\RequestHandler.h"
 #include "Services\WMSGetMap.h"
 #include "Engine\Map\basemap.h"
+#include "Headers\messages.h"
 
 using namespace ILWIS;
 long ILWIS::WMSGetMap::idCount = 0;
@@ -23,14 +26,12 @@ WMSGetMap::WMSGetMap(struct mg_connection *c, const struct mg_request_info *requ
 RequestHandler("WMSGetMapHandler", c,request_info,kvps, serv)
 {
 	config.add("Services", "WMSHandlers");
+	init();
 }
 
 void WMSGetMap::writeResponse() const {
-	CWnd wnd;
-	// this will not work, the trhead is a worker thread in. No windows can be created here.
-	BOOL ok = wnd.CreateEx(0,0,"Dummy", WS_VISIBLE | WS_CHILD,CRect(0,0,width,height),0,getNewId());
 	RootDrawer *root = new RootDrawer();
-	PreparationParameters pp(NewDrawer::ptINITOPENGL, wnd.GetDC());
+	PreparationParameters pp(NewDrawer::ptRENDER | NewDrawer::ptGEOMETRY);
 	root->prepare(&pp);
 	for(int i = 0; i < layers.size(); ++i) {
 		BaseMap bmp(layers[i]);
@@ -41,8 +42,15 @@ void WMSGetMap::writeResponse() const {
 				createBaseMapDrawer(root, bmp,"FeatureDataDrawer", "Ilwis38");
 		}
 	}
-	root->draw();
-	root->getDrawerContext()->swapBuffers();
+	char buffer[500];
+	GetTempPath(500, buffer);
+	String tempPath("%s\\ILWIS",buffer);
+	_mkdir(tempPath.c_str());
+	FileName *fn = new FileName(String("%S\\p_%d.mpv",tempPath,idCount));
+	root->store(*fn,""); 
+
+	HWND handle = FindWindow(ILWIS_VERSION_NAME,0);
+	PostMessage(handle, ILWM_CALLBACK,(WPARAM)fn,0); 
 }
 
 
@@ -57,6 +65,7 @@ void WMSGetMap::createBaseMapDrawer(RootDrawer *rootDrawer, const BaseMap& bmp, 
 	drawer->prepare(&pp);
 	pp.type = RootDrawer::ptRENDER;
 	drawer->prepare(&pp);
+	rootDrawer->addDrawer(drawer);
 }
 
 void WMSGetMap::init() {

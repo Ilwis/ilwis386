@@ -71,7 +71,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ILWISEngine.lib htmlhelp.lib IlwisClient.lib geos.lib PolygonApplications.lib"
+				AdditionalDependencies="ILWISEngine.lib IlwisClient.lib PolygonApplications.lib"
 				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\Extensions\PolygonApplicationsUI.dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)libraries\import&quot;;&quot;$(SolutionDir)libraries\$(ConfigurationName)&quot;"

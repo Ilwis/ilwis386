@@ -16,15 +16,18 @@ using namespace ILWIS;
 SharedDataHandler::SharedDataHandler(struct mg_connection *c, const struct mg_request_info *request, const map<String, String>& _kvps, IlwisServer *serv)
 : RequestHandler("SharedDataHandler", c,request,_kvps, serv)
 {
+	map<String, String>::const_iterator iter = kvps.find("context");
+	String context = (*iter).second;
+	config.add(ilwisServer->getConfiguration(context));
+	String uri(request->uri);
+	isOutput = uri.find("output_data/") != string::npos;
 }
 
 #define MAX_IN_BUF  1000000
 
-void SharedDataHandler::writeResponse(IlwisServer*server) const{
+void SharedDataHandler::writeResponse() const{
 
-	map<String, String>::const_iterator iter = kvps.find("context");
-	String context = (*iter).second;
-	String path = getConfigValue(String("%S:ServiceContext:SharedData", context));
+	String path = isOutput ? getConfigValue("WPS:ServiceContext:LocalRoot") : getConfigValue("WPS:ServiceContext:SharedData");
 	String uri(request_info->uri);
 	int index = uri.find("/process_");
 	String name;
@@ -50,7 +53,7 @@ void SharedDataHandler::writeResponse(IlwisServer*server) const{
 			int w = mg_write(connection,buffer,len);
 			if ( len != MAX_IN_BUF)
 				notFinished = false;
-			server->updateTimeOutLocation(name);
+			ilwisServer->updateTimeOutLocation(name);
 		}
 
 		binfile.close();

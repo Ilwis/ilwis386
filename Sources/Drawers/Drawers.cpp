@@ -33,6 +33,7 @@
 #include "drawers\Boxdrawer.h"
 #include "Drawers\CollectionDrawer.h"
 #include "Drawers\AnnotationDrawers.h"
+#include "Drawers\TextDrawer.h"
 
 
 using namespace ILWIS;

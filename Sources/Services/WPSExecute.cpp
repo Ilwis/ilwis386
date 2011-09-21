@@ -417,7 +417,7 @@ void WPSExecute::writeResponse() const{
 				pugi::xml_node op = doc.addNodeTo(outp,"wps:Output");
 				if ( parm.isReference) {
 					String root = getConfigValue("WPS:ServiceContext:ShareServer");
-					root += String("/wps:shared_data/process_%d/%S%S",folder_count, fnZip.sFile, fnZip.sExt);
+					root += String("/wps:output_data/process_%d/%S%S",folder_count, fnZip.sFile, fnZip.sExt);
 					pugi::xml_node ref = doc.addNodeTo(op, "wps:Reference");
 					ref.append_attribute("xlink:href") = root.c_str();
 				}

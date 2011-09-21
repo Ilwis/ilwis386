@@ -21,12 +21,13 @@ protected:
 	RequestHandler(const String& name, struct mg_connection *c, const struct mg_request_info *request_info, const map<String, String>& kvps, IlwisServer *serv);
 
 	String getConfigValue(const String& key) const;
+	void setConfigValue(const String& key, const String& value);
 	struct mg_connection *connection;
 	const struct mg_request_info *request_info;
 	map<String, String> kvps;
 	static map<String, bool> activeServices;
 	IlwisServer *ilwisServer;
-	ILWIS::ServiceConfiguration config;
 	String id;
+	ILWIS::ServiceConfiguration config;
 };
 }

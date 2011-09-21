@@ -58,6 +58,9 @@ String RequestHandler::getConfigValue(const String& key) const {
 	return config.get(key);
 }
 
+void RequestHandler::setConfigValue(const String& key, const String& value) {
+	config.set(key, value);
+}
 
 
 bool RequestHandler::doCommand() {
