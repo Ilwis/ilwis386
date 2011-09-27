@@ -56,7 +56,7 @@ void ILWIS::XMLDocument::addNameSpace(const String& name, const String& uri) {
 	pugi::xml_node first = first_child();
 	if ( first == 0)
 		return;
-	String nsId("xlmns:%S",name);
+	String nsId("xmlns:%S",name);
 	first.append_attribute(nsId.c_str()) = uri.c_str();
 }
 
