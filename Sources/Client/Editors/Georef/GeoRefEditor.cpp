@@ -361,11 +361,11 @@ int GeoRefEditor::draw(volatile bool* fDrawStop)
 {
 	RootDrawer * rootDrawer = mpv->GetDocument()->rootDrawer;
 	ILWIS::DrawerParameters dpLayerDrawer (rootDrawer, 0);
-	ILWIS::TextLayerDrawer textLayerDrawer(&dpLayerDrawer, "TextLayerDrawer");
+	ILWIS::TextLayerDrawer *textLayerDrawer = (ILWIS::TextLayerDrawer *)NewDrawer::getDrawer("TextLayerDrawer", "ilwis38",&dpLayerDrawer);	
+	ILWIS::DrawerParameters dpTextDrawer (rootDrawer, textLayerDrawer);
+	ILWIS::TextDrawer *textDrawer = (ILWIS::TextDrawer *)NewDrawer::getDrawer("TextDrawer","ilwis38",&dpTextDrawer);
 	OpenGLText * font = new OpenGLText (rootDrawer, "arial.ttf", 15, true, 1, -15);
-	textLayerDrawer.setFont(font);
-	ILWIS::DrawerParameters dpTextDrawer (rootDrawer, &textLayerDrawer);
-	ILWIS::TextDrawer textDrawer (&dpTextDrawer, "TextDrawer");
+	textLayerDrawer->setFont(font);
 	for (long r = 1; r <= grc->iNr(); ++r) {
 		Color clr;
 		if (grc->fActive(r))
@@ -403,15 +403,17 @@ int GeoRefEditor::draw(volatile bool* fDrawStop)
 		glBegin(GL_POINTS);
 		glVertex3f(pnt.x, -pnt.y, 0);
 		glEnd();
-		textDrawer.addDataSource(&s);
-		textDrawer.setCoord(Coordinate(pnt.x, -pnt.y, 0));
+		textDrawer->addDataSource(&s);
+		textDrawer->setCoord(Coordinate(pnt.x, -pnt.y, 0));
 		font->setColor(clr);
-		textDrawer.draw();
+		textDrawer->draw();
 	}
 	if (efmf) {
 		efmf->draw();
 		efmf->drawPrincPoint();
 	}
+	delete textLayerDrawer;
+
 	return 0;
 }
 
