@@ -232,8 +232,8 @@ int MainWindow::OnCreate(LPCREATESTRUCT lpc)
 	men.Add(sTop,    0,                 MF_SEPARATOR);	
 	men.Add(sTop,    ID_FILE_PREFERENCES);
 	men.Add(sTop,    0,                 MF_SEPARATOR);
-	men.Add(sTop,    ID_FILE_DIGSETUP);
-	men.Add(sTop,    ID_FILE_DIGREF);
+	//men.Add(sTop,    ID_FILE_DIGSETUP);
+	//men.Add(sTop,    ID_FILE_DIGREF);
 	men.Add(sTop,    0,                 MF_SEPARATOR);
 
 	men.Add(sTop,ID_IMPORT);

@@ -350,7 +350,7 @@ BOOL IlwisWinApp::InitApplication()
 		return FALSE;
 	m_sCommand = "";
 		
-	getEngine()->Init("", m_lpCmdLine);
+	getEngine();
 	ilwapp = getEngine()->getContext();
 
 	String sParms(m_lpCmdLine);
