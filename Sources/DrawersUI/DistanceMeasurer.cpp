@@ -148,10 +148,7 @@ bool DistanceMeasurer::isToolUseableFor(ILWIS::DrawerTool *tool){
 
 HTREEITEM DistanceMeasurer::configure( HTREEITEM parentItem){
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
-	//item->setDoubleCickAction(this,(DTDoubleClickActionFunc)&DistanceMeasurer::displayOptionAttColumn);
 	item->setCheckAction(this,0, (DTSetCheckFunc)&DistanceMeasurer::setcheckTool);
-	LayerDrawer *sdr = (LayerDrawer *)drawer;
-	Column attColumn = sdr->getAtttributeColumn();
 	htiNode = insertItem(TR("Distance Measurer"),"Measurer",item,0);
 	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	item->setCheckAction(this,0, (DTSetCheckFunc)&DistanceMeasurer::setUseEllipse);
