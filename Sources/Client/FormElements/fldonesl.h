@@ -48,7 +48,7 @@ class _export OneSelectEdit: public OwnerDrawCB
 {
 public:
 	OneSelectEdit(FormEntry* fe, FormBase* parent, zPoint pos, int id,
-					long *v, long sort, int iWidth);
+					long *v, long sort, int iWidth, bool edit =false);
 	~OneSelectEdit();              
 	int storeData();
 	void MeasureItem(LPMEASUREITEMSTRUCT );
@@ -71,7 +71,7 @@ public:
 	FieldOneSelect(FormEntry* parent, Parm* parm,
 				   long* value, bool fSort = false);
 	_export FieldOneSelect(FormEntry* parent,
-				   long* value, bool fSort = false);
+				   long* value, bool fSort = false, bool edit=false);
 	_export                ~FieldOneSelect();
 
 	OneSelectEdit          *ose;
@@ -91,12 +91,13 @@ public:
 	ItemDrawer idw;
 	long *val;
 	bool fSort;
+	bool edit;
 };
 
 class FieldOneSelectStringSimple: public FieldOneSelect
 {
 public:  
-	_export FieldOneSelectStringSimple(FormEntry* parent, long* value, const vector<String>& vs);
+	_export FieldOneSelectStringSimple(FormEntry* parent, long* value, const vector<String>& vs, bool edit=false);
 	_export ~FieldOneSelectStringSimple();
   void create();
   void SetFocus();
@@ -107,7 +108,7 @@ private:
 class FieldOneSelectString: public FieldGroup
 {
 public:
-  _export FieldOneSelectString(FormEntry* parent, const String& sQuestion, long* value, const vector<String>& vs);
+  _export FieldOneSelectString(FormEntry* parent, const String& sQuestion, long* value, const vector<String>& vs, bool edit=false);
 	_export ~FieldOneSelectString();
 	_export void SetComboWidth(short iWidth);
 	_export void SetVal(int iVal);

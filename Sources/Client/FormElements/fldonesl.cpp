@@ -143,13 +143,14 @@
 #include "Client\ilwis.h"
 
  
-FieldOneSelect::FieldOneSelect(FormEntry* parent, long* value, bool fSrt)
+FieldOneSelect::FieldOneSelect(FormEntry* parent, long* value, bool fSrt, bool _edit)
 : FormEntry(parent),
   idw(false), ose(NULL)
 {
   val = value;
   psn->iMinWidth = (short)FLDONESELWIDTH;
   fSort = fSrt;
+  edit = _edit;
 }
 
 FieldOneSelect::~FieldOneSelect()
@@ -167,9 +168,9 @@ void FieldOneSelect::create()
 {
 	zPoint pntFld = zPoint(psn->iPosX, psn->iPosY);
 	if (fSort)
-		ose = new OneSelectEdit(this,_frm, pntFld, Id(), val, CBS_SORT, psn->iMinWidth);
+		ose = new OneSelectEdit(this,_frm, pntFld, Id(), val, CBS_SORT, psn->iMinWidth, edit);
 	else
-		ose = new OneSelectEdit(this,_frm, pntFld, Id(), val, 0L, psn->iMinWidth);
+		ose = new OneSelectEdit(this,_frm, pntFld, Id(), val, 0L, psn->iMinWidth, edit);
 	if (_npChanged)
 		ose->setNotify(_cb, _npChanged, Notify(CBN_SELCHANGE));
 	ose->SetFont(frm()->fnt);
@@ -253,10 +254,10 @@ BEGIN_MESSAGE_MAP(OneSelectEdit, OwnerDrawCB)
 END_MESSAGE_MAP()
 
 OneSelectEdit::OneSelectEdit(FormEntry* fe, FormBase* parent, zPoint pos,
-                             int id, long *v, long cbs_sort , int iWidth) 
+                             int id, long *v, long cbs_sort , int iWidth, bool edit) 
 	: OwnerDrawCB(fe, WS_TABSTOP | WS_VSCROLL | WS_GROUP | cbs_sort |
                 CBS_AUTOHSCROLL | CBS_OWNERDRAWFIXED | CBS_HASSTRINGS |
-                CBS_DROPDOWNLIST,
+				(edit ? CBS_DROPDOWN : CBS_DROPDOWNLIST),
                 CRect(pos, zDimension(iWidth, 250)), 
 	              parent->wnd(), id)
 {
@@ -333,8 +334,8 @@ void OneSelectEdit::OnKillFocus(CWnd *old)
 }
 
 // FieldOneSelectStringSimple -------------------------------------------------------------------------
-FieldOneSelectStringSimple::FieldOneSelectStringSimple(FormEntry* parent, long* value, const vector<String>& vstr)
-: FieldOneSelect(parent, value)
+FieldOneSelectStringSimple::FieldOneSelectStringSimple(FormEntry* parent, long* value, const vector<String>& vstr, bool edit)
+: FieldOneSelect(parent, value,false,edit)
 , vs(vstr)
 {
   SetWidth(75);
@@ -361,12 +362,12 @@ void FieldOneSelectStringSimple::SetFocus() {
 }
 
 // FieldOneSelectString -------------------------------------------------------------------------------
-FieldOneSelectString::FieldOneSelectString(FormEntry* parent, const String& sQuestion, long* value, const vector<String>& vs)
+FieldOneSelectString::FieldOneSelectString(FormEntry* parent, const String& sQuestion, long* value, const vector<String>& vs, bool edit)
 : FieldGroup(parent)
 {
   if (sQuestion.length() != 0)
     new StaticTextSimple(this, sQuestion);
-  foss = new FieldOneSelectStringSimple(this, value, vs);
+  foss = new FieldOneSelectStringSimple(this, value, vs, edit);
   if (children.iSize() > 1) // also static text
     children[1]->Align(children[0], AL_AFTER);
 }
