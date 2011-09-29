@@ -15,8 +15,8 @@
 #include "Drawers\LayerDrawer.h"
 #include "Engine\Drawers\ZValueMaker.h"
 #include "drawers\linedrawer.h"
-#include "Drawers\OpenGLText.h"
-#include "Drawers\TextDrawer.h"
+#include "Engine\Drawers\OpenGLText.h"
+#include "Engine\Drawers\TextDrawer.h"
 #include "Drawers\AnnotationDrawers.h"
 #include "Engine\Domain\dmclass.h"
 #include "DrawingColor.h"
@@ -117,7 +117,7 @@ void AnnotationLegendDrawer::prepare(PreparationParameters *pp) {
 		if ( texts != 0) {
 			removeDrawer(texts->getId(), true);
 		}
-		texts = new TextLayerDrawer(&dp,"LegendTexts");
+		texts = (ILWIS::TextLayerDrawer *)NewDrawer::getDrawer("TextLayerDrawer", "ilwis38",&dp);
 		texts->setFont(new OpenGLText(getRootDrawer(),"arial.ttf",15,true));
 		addPostDrawer(100,texts);
 		LayerDrawer *ldr = dynamic_cast<LayerDrawer *>(getParentDrawer());
@@ -133,7 +133,7 @@ void AnnotationLegendDrawer::prepare(PreparationParameters *pp) {
 		DrawerParameters dp(getRootDrawer(), texts);
 		TextDrawer *txtdr = (TextDrawer *)texts->getDrawer(101,ComplexDrawer::dtPOST);
 		if ( !txtdr) {
-			txtdr = new TextDrawer(&dp,"LegendTitleText");
+			txtdr = (ILWIS::TextDrawer *)NewDrawer::getDrawer("TextDrawer","ilwis38",&dp);
 			txtdr->setText(fnName.sFile);
 			texts->addPostDrawer(101,txtdr);
 		}
@@ -284,7 +284,7 @@ void AnnotationClassLegendDrawer::prepare(PreparationParameters *pp) {
 			Color clr =dc.clrRaw(iRaw,NewDrawer::drmRPR);
 			String txt = dm->pdc()->sValueByRaw(iRaw);
 			raws.push_back(RawInfo(iRaw,clr));
-			TextDrawer *txtdr = new TextDrawer(&dp,"LegendText");
+			TextDrawer *txtdr =(ILWIS::TextDrawer *)NewDrawer::getDrawer("TextDrawer","ilwis38",&dp);
 			txtdr->setText(txt);
 			texts->addDrawer(txtdr);
 			double h = txtdr->getHeight() * 0.5;
@@ -381,7 +381,7 @@ void AnnotationValueLegendDrawer::prepare(PreparationParameters *pp) {
 	if ( pp->type & NewDrawer::ptGEOMETRY) {
 		for(int i=0; i < 20 ; ++i) {
 			DrawerParameters dp(getRootDrawer(), texts);
-			TextDrawer *txt = new TextDrawer(&dp,"LegendText");
+			TextDrawer *txt = (ILWIS::TextDrawer *)NewDrawer::getDrawer("TextDrawer","ilwis38",&dp);
 			txt->setActive(false);
 			texts->addDrawer(txt);
 		}

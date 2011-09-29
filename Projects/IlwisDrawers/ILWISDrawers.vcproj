@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="ILWISDrawers"
 	ProjectGUID="{FD4E2ECC-451A-40CD-9391-6806EBEC9BF4}"
 	RootNamespace="ILWISDrawers"
@@ -276,14 +276,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Drawers\OpenGLFont.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\Drawers\OpenGLText.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\Sources\Drawers\PointDrawer.cpp"
 				>
 			</File>
@@ -317,10 +309,6 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Drawers\SetDrawer.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\Drawers\TextDrawer.cpp"
 				>
 			</File>
 			<File
@@ -405,14 +393,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Drawers\OpenGLFont.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\Drawers\OpenGLText.H"
-				>
-			</File>
-			<File
 				RelativePath="..\..\Sources\Drawers\PointDrawer.h"
 				>
 			</File>
@@ -446,10 +426,6 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Drawers\SetDrawer.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\Drawers\TextDrawer.h"
 				>
 			</File>
 			<File

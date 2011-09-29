@@ -33,7 +33,7 @@
 #include "drawers\Boxdrawer.h"
 #include "Drawers\CollectionDrawer.h"
 #include "Drawers\AnnotationDrawers.h"
-#include "Drawers\TextDrawer.h"
+
 
 
 using namespace ILWIS;
@@ -62,6 +62,8 @@ DrawerInfoVector *createDrawer() {
 	infos->push_back(new DrawerInfo("GraticuleDrawer","ilwis38", createGraticuleDrawer));
 	infos->push_back(new DrawerInfo("AnnotationClassLegendDrawer","ilwis38", createAnnotationClassLegendDrawer));
 	infos->push_back(new DrawerInfo("AnnotationValueLegendDrawer","ilwis38", createAnnotationValueLegendDrawer));
+	//infos->push_back(new DrawerInfo("TextLayerDrawer","ilwis38", createTextLayerDrawer));
+	//infos->push_back(new DrawerInfo("TextDrawer","ilwis38", createTextDrawer));
 
 
 	//addSVGDrawers(infos);
