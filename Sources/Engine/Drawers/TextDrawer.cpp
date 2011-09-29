@@ -11,11 +11,14 @@
 
 using namespace ILWIS;
 
+ILWIS::NewDrawer *createTextLayerDrawer(DrawerParameters *parms) {
+	return new TextLayerDrawer(parms);
+}
 
-TextLayerDrawer::TextLayerDrawer(DrawerParameters *parms, const String& type) : 
-	ComplexDrawer(parms,type), 
+TextLayerDrawer::TextLayerDrawer(DrawerParameters *parms) : 
+	ComplexDrawer(parms,"TextLayerDrawer"), 
 	font(0),
-	iFHeight(100 * RepresentationClass::iSIZE_FACTOR),
+	iFHeight(100 * 3),
 	sFaceName("Arial"),
 	iFWeight(FW_BOLD),
 	iFStyle(0),
@@ -104,7 +107,8 @@ void TextLayerDrawer::displayOptionsText(CWnd *parent) {
 
 //---------------------------------------------------
 
-TextDrawer::TextDrawer(DrawerParameters *parms, const String& type) : SimpleDrawer(parms,type){
+ILWIS::NewDrawer *createTextDrawer(DrawerParameters *parms) {
+	return new TextDrawer(parms);
 }
 
 TextDrawer::TextDrawer(DrawerParameters *parms) : SimpleDrawer(parms,"TextDrawer"){

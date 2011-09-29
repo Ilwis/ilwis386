@@ -78,6 +78,7 @@ struct IlwisFileInfo {
 class IMPEXP BaseCommandHandler
 {
 protected:
+
 	BaseCommandHandler();
 	static void ReroutPost(const String& s);
 	static LRESULT ReroutSend(CWnd *owner, String s);
@@ -87,6 +88,7 @@ public:
   	void AddCommand(const String& cmd, CommandFunc cf, MetaDataFunc mdFunc=0);
 	virtual ~BaseCommandHandler();
   void SetOwner(CFrameWnd*);
+  virtual void init();
 private:
   static void CmdExit(const String& s);
   static void CmdHelp(const String& s);
@@ -109,9 +111,9 @@ public:
 	static void _export CopyFiles(const String& sCmd, Tranquilizer* trq);
 	static UINT CmdCopyFileInThread(void *p);
 	static void _export gatherFromFolder(const string& root, const string& folder, vector<IlwisFileInfo>& files);
+	void init();
 	
 protected:
-	void Init();
 	String sDataBaseName(const String& sName);
 	
 private:

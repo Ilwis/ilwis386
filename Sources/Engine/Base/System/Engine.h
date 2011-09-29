@@ -24,9 +24,11 @@ class Logger;
 class IMPEXP Engine 
 {
 public:
+	friend BOOL WINAPI DllMain(__in  HINSTANCE hinstDLL, __in  DWORD fdwReason, __in  LPVOID lpvReserved);
+	friend _export Engine* getEngine();
 	Engine();
 	~Engine();
-	void Init(const String& prog, const String& sCmdLn);
+	void Init();
 	void SetCurDir(const String& sDir);
 	String sGetCurDir() const;
 	void *pGetThreadLocalVar(IlwisAppContext::ThreadLocalVars tvType);
@@ -54,6 +56,7 @@ public:
 	ILWIS::Version *getVersion();
 	static ModuleMap modules;
 	bool fServerMode() const;
+	static HMODULE getModuleHandle() { return engineHandle; }
 
 public:
 	IlwisAppContext *context;
@@ -65,6 +68,8 @@ private:
 	Array<String> debugClasses;
 	Logger *logger;
 	ILWIS::Version *version;
+	static HMODULE engineHandle;
+	static Engine *engine;
 
 };
 

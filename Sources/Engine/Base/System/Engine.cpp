@@ -15,17 +15,38 @@
 #include "Engine\DataExchange\ForeignFormat.h"
 #include "Engine\Base\DataObjects\URL.h"
 #include "Engine\DataExchange\WMSCollection.h"
+#include "Engine\Base\System\commandhandler.h"
 #include <set>
 
 ModuleMap Engine::modules = ModuleMap();
 ForeignFormatMap Engine::formats = ForeignFormatMap();
+HMODULE Engine::engineHandle = 0;
+Engine *Engine::engine = 0;
+
+BOOL WINAPI DllMain(
+  __in  HINSTANCE hinstDLL,
+  __in  DWORD fdwReason,
+  __in  LPVOID lpvReserved
+  ) 
+{
+	if ( fdwReason == DLL_PROCESS_ATTACH) {
+		Engine::engineHandle = hinstDLL;
+	}
+	return TRUE;
+}
 
 // Engine construction
 
-Engine *engine = new Engine();
-
 Engine* getEngine() {
-	return engine;
+	if ( Engine::engine == 0) {
+		Engine::engine = new Engine();
+		Engine::engine->getContext()->ComHandler()->init();
+		Engine::engine->modules.addModules();
+		Engine::engine->formats.AddFormats();
+		Engine::engine->modules.initModules();
+		
+	}
+	return Engine::engine;
 }
 
 Engine::Engine() : stayResident(true),debugMode(false)
@@ -33,6 +54,7 @@ Engine::Engine() : stayResident(true),debugMode(false)
 	context = 0;
 	logger = NULL;
 	version = 0;
+	Init();
 }
 
 Engine::~Engine()
@@ -51,22 +73,21 @@ Engine::~Engine()
 // Engine initialization
 
 
-void Engine::Init(const String& prog, const String& sCmdLn) {
+void Engine::Init() {
+	if (context == 0) {
 
-	context = new IlwisAppContext(prog, sCmdLn);
-	version = new ILWIS::Version();
-//	version->addBinaryVersion(ILWIS::Version::bvFORMAT20);
-	version->addBinaryVersion(ILWIS::Version::bvFORMAT30);
-	version->addBinaryVersion(ILWIS::Version::bvFORMATFOREIGN);
-	version->addBinaryVersion(ILWIS::Version::bvPOLYGONFORMAT37);
-	version->addODFVersion("3.1");
-	version->addModuleInterfaceVersion(ILWIS::Module::mi36);
-	version->addModuleInterfaceVersion(ILWIS::Module::mi37);
-	version->addModuleInterfaceVersion(ILWIS::Module::mi38);
-	String ilwDir = context->sIlwDir();
-	modules.addModules();
-    formats.AddFormats();
-	modules.initModules();
+		context = new IlwisAppContext(getModuleHandle());
+		version = new ILWIS::Version();
+	//	version->addBinaryVersion(ILWIS::Version::bvFORMAT20);
+		version->addBinaryVersion(ILWIS::Version::bvFORMAT30);
+		version->addBinaryVersion(ILWIS::Version::bvFORMATFOREIGN);
+		version->addBinaryVersion(ILWIS::Version::bvPOLYGONFORMAT37);
+		version->addODFVersion("3.1");
+		version->addModuleInterfaceVersion(ILWIS::Module::mi36);
+		version->addModuleInterfaceVersion(ILWIS::Module::mi37);
+		version->addModuleInterfaceVersion(ILWIS::Module::mi38);
+		String ilwDir = context->sIlwDir();
+	}
 
 }
 

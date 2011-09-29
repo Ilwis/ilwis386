@@ -63,7 +63,7 @@ class IlwisAppContext
 {
 public:
 	enum ThreadLocalVars{tlvDONOTSHOWFINDERROR, tlvCURDIR, tlvDONOTLOADGDB, tlvNOUPDATECATALOG, tlvDONOTSHOWANYERROR, tlvSERVERMODE, tlvNONE};
-	_export IlwisAppContext(const String& sProg, const String& sCmdLine);
+	_export IlwisAppContext(HMODULE handle);
 	_export ~IlwisAppContext();
 	void UseYield(bool f) { _fUseYield = f; }
 	bool fUseYield() const { return _fUseYield; }

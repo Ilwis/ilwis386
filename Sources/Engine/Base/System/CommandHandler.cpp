@@ -1,39 +1,39 @@
 /***************************************************************
- ILWIS integrates image, vector and thematic data in one unique 
- and powerful package on the desktop. ILWIS delivers a wide 
- range of feautures including import/export, digitizing, editing, 
- analysis and display of data as well as production of 
- quality mapsinformation about the sensor mounting platform
- 
- Exclusive rights of use by 52°North Initiative for Geospatial 
- Open Source Software GmbH 2007, Germany
+ILWIS integrates image, vector and thematic data in one unique 
+and powerful package on the desktop. ILWIS delivers a wide 
+range of feautures including import/export, digitizing, editing, 
+analysis and display of data as well as production of 
+quality mapsinformation about the sensor mounting platform
 
- Copyright (C) 2007 by 52°North Initiative for Geospatial
- Open Source Software GmbH
+Exclusive rights of use by 52°North Initiative for Geospatial 
+Open Source Software GmbH 2007, Germany
 
- Author: Jan Hendrikse, Willem Nieuwenhuis,Wim Koolhoven 
- Bas Restsios, Martin Schouwenburg, Lichun Wang, Jelle Wind 
+Copyright (C) 2007 by 52°North Initiative for Geospatial
+Open Source Software GmbH
 
- Contact: Martin Schouwenburg; schouwenburg@itc.nl; 
- tel +31-534874371
+Author: Jan Hendrikse, Willem Nieuwenhuis,Wim Koolhoven 
+Bas Restsios, Martin Schouwenburg, Lichun Wang, Jelle Wind 
 
- This program is free software; you can redistribute it and/or
- modify it under the terms of the GNU General Public License
- version 2 as published by the Free Software Foundation.
+Contact: Martin Schouwenburg; schouwenburg@itc.nl; 
+tel +31-534874371
 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU General Public License for more details.
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+version 2 as published by the Free Software Foundation.
 
- You should have received a copy of the GNU General Public License
- along with this program (see gnu-gpl v2.txt); if not, write to
- the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- Boston, MA 02111-1307, USA or visit the web page of the Free
- Software Foundation, http://www.fsf.org.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
 
- Created on: 2007-02-8
- ***************************************************************/
+You should have received a copy of the GNU General Public License
+along with this program (see gnu-gpl v2.txt); if not, write to
+the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+Boston, MA 02111-1307, USA or visit the web page of the Free
+Software Foundation, http://www.fsf.org.
+
+Created on: 2007-02-8
+***************************************************************/
 #pragma warning( disable : 4786 )
 
 #include "Headers\Hs\Mainwind.hs"
@@ -112,13 +112,16 @@ static void UpdateCatalog(FileName *fpn=NULL)
 BaseCommandHandler::BaseCommandHandler() 
 {
 	//commands["exit"] = &BaseCommandHandler::CmdExit;
+} 
+
+void BaseCommandHandler::init() {
 	getEngine()->modules.addCommand("exit", (CommandFunc)&BaseCommandHandler::CmdExit); 
 	getEngine()->modules.addCommand("help",(CommandFunc)&BaseCommandHandler::CmdHelp); 
-} 
+}
 
 BaseCommandHandler::~BaseCommandHandler()
 {
-	
+
 }
 
 void BaseCommandHandler::SetOwner(CFrameWnd* wnd)
@@ -261,7 +264,7 @@ UINT CommandHandler::FreezeObjectInThread(LPVOID lp)
 		err.Show();
 		getEngine()->RemoveThreadLocalVars();
 	}
-	
+
 	return FALSE;
 }
 
@@ -282,7 +285,7 @@ UINT CommandHandler::CalcObjectInThread(LPVOID lp)
 		// Now tell mainwindow to update the catalog
 		FileName* pfn = new FileName(pm.sGet(0));
 		UpdateCatalog(pfn);
-		
+
 		getEngine()->RemoveThreadLocalVars();
 		return TRUE;
 	}
@@ -291,7 +294,7 @@ UINT CommandHandler::CalcObjectInThread(LPVOID lp)
 		err.Show();
 		getEngine()->RemoveThreadLocalVars();
 	}
-	
+
 	return FALSE;
 }
 
@@ -311,7 +314,7 @@ UINT CommandHandler::UpdateObjectInThread(LPVOID lp)
 		// Now tell mainwindow to update the catalog
 		FileName* pfn = new FileName(pm.sGet(0));
 		UpdateCatalog(pfn);
-	
+
 		getEngine()->RemoveThreadLocalVars();
 		return TRUE;
 	}
@@ -320,7 +323,7 @@ UINT CommandHandler::UpdateObjectInThread(LPVOID lp)
 		err.Show();
 		getEngine()->RemoveThreadLocalVars();
 	}
-	
+
 	return FALSE;
 }
 
@@ -405,7 +408,7 @@ UINT CommandHandler::ImportObjectInThread(LPVOID lp)
 		delete fns->sExpr;
 		delete fns->fnObj;
 		delete fns; 
-	//	getEngine()->SetCurDir(fnObj.sPath());
+		//	getEngine()->SetCurDir(fnObj.sPath());
 		bool *fNoUpdate = (bool *)(getEngine()->pGetThreadLocalVar(IlwisAppContext::tlvNOUPDATECATALOG));
 		*fNoUpdate = true;
 		fRet = ImportObject(fnObj, sExpr);
@@ -419,11 +422,12 @@ UINT CommandHandler::ImportObjectInThread(LPVOID lp)
 	return fRet;
 }
 
+
+
 //---[ CommandHandler ]-------------------------------------------------------------------------
 
 CommandHandler::CommandHandler() 
 {
-	Init();
 }
 
 CommandHandler::~CommandHandler()
@@ -431,85 +435,84 @@ CommandHandler::~CommandHandler()
 
 }
 
-void CommandHandler::Init()
+void CommandHandler::init()
 {
-	//datamanagment
-	//AddCommand(const String& sCmd, CommandFunc cf, MetaDataFunc mdFunc)
-AddCommand("cd",(CommandFunc)&CommandHandler::CmdChangeDir);
-AddCommand("opendir",(CommandFunc)&CommandHandler::CmdOpenDir);
-AddCommand("md",(CommandFunc)&CommandHandler::CmdMakeDir);
-AddCommand("mkdir",(CommandFunc)&CommandHandler::CmdMakeDir);
-AddCommand("rd",(CommandFunc)&CommandHandler::CmdRemoveDir);
-AddCommand("rmdir",(CommandFunc)&CommandHandler::CmdRemoveDir);
-AddCommand("create",(CommandFunc)&CommandHandler::CmdCreate);
-AddCommand("del",(CommandFunc)&CommandHandler::CmdDel);
-AddCommand("copy",(CommandFunc)&CommandHandler::Cmdcopy);
+	BaseCommandHandler::init();
+	AddCommand("cd",(CommandFunc)&CommandHandler::CmdChangeDir);
+	AddCommand("opendir",(CommandFunc)&CommandHandler::CmdOpenDir);
+	AddCommand("md",(CommandFunc)&CommandHandler::CmdMakeDir);
+	AddCommand("mkdir",(CommandFunc)&CommandHandler::CmdMakeDir);
+	AddCommand("rd",(CommandFunc)&CommandHandler::CmdRemoveDir);
+	AddCommand("rmdir",(CommandFunc)&CommandHandler::CmdRemoveDir);
+	AddCommand("create",(CommandFunc)&CommandHandler::CmdCreate);
+	AddCommand("del",(CommandFunc)&CommandHandler::CmdDel);
+	AddCommand("copy",(CommandFunc)&CommandHandler::Cmdcopy);
 
-AddCommand("createpyramidlayers",(CommandFunc)&CommandHandler::CmdCreatePyramidFiles);
-AddCommand("deletepyramidlayers",(CommandFunc)&CommandHandler::CmdDeletePyramidFiles);
+	AddCommand("createpyramidlayers",(CommandFunc)&CommandHandler::CmdCreatePyramidFiles);
+	AddCommand("deletepyramidlayers",(CommandFunc)&CommandHandler::CmdDeletePyramidFiles);
 
-AddCommand("calc",(CommandFunc)&CommandHandler::CalcObject);
-AddCommand("calculate",(CommandFunc)&CommandHandler::CalcObject);
-AddCommand("makeuptodate",(CommandFunc)&CommandHandler::UpdateObject);
-AddCommand("update",(CommandFunc)&CommandHandler::UpdateObject);
-AddCommand("breakdep",(CommandFunc)&CommandHandler::BreakDepObject);
-AddCommand("reldiskspace",(CommandFunc)&CommandHandler::RelDiskSpaceObject);
-AddCommand("reldisksp",(CommandFunc)&CommandHandler::RelDiskSpaceObject);
-AddCommand("script",(CommandFunc)&CommandHandler::CmdScript);
-AddCommand("run",(CommandFunc)&CommandHandler::CmdRunScript);
-AddCommand("setdescr",(CommandFunc)&CommandHandler::CmdSetDescr);
+	AddCommand("calc",(CommandFunc)&CommandHandler::CalcObject);
+	AddCommand("calculate",(CommandFunc)&CommandHandler::CalcObject);
+	AddCommand("makeuptodate",(CommandFunc)&CommandHandler::UpdateObject);
+	AddCommand("update",(CommandFunc)&CommandHandler::UpdateObject);
+	AddCommand("breakdep",(CommandFunc)&CommandHandler::BreakDepObject);
+	AddCommand("reldiskspace",(CommandFunc)&CommandHandler::RelDiskSpaceObject);
+	AddCommand("reldisksp",(CommandFunc)&CommandHandler::RelDiskSpaceObject);
+	AddCommand("script",(CommandFunc)&CommandHandler::CmdScript);
+	AddCommand("run",(CommandFunc)&CommandHandler::CmdRunScript);
+	AddCommand("setdescr",(CommandFunc)&CommandHandler::CmdSetDescr);
 
-//AddCommand("mapcalc",(CommandFunc)&CommandHandler::CmdMapCalc);
-//AddCommand("maplistspectra",(CommandFunc)&CommandHandler::CmdSpectra);
+	//AddCommand("mapcalc",(CommandFunc)&CommandHandler::CmdMapCalc);
+	//AddCommand("maplistspectra",(CommandFunc)&CommandHandler::CmdSpectra);
 
-AddCommand("import14",(CommandFunc)&CommandHandler::CmdImport14);
-AddCommand("convert14",(CommandFunc)&CommandHandler::CmdConvert14);
-AddCommand("setreadonly",(CommandFunc)&CommandHandler::CmdSetReadOnly);
-AddCommand("setreadwrite",(CommandFunc)&CommandHandler::CmdSetReadWrite);
-AddCommand("closeall",(CommandFunc)&CommandHandler::CmdCloseAll);
-//AddCommand("rename",(CommandFunc)&CommandHandler::CmdRenameObject);
-AddCommand("delfile",(CommandFunc)&CommandHandler::CmdDelFile);
-AddCommand("delcol",(CommandFunc)&CommandHandler::CmdDelColumn);
-AddCommand("calccol",(CommandFunc)&CommandHandler::CmdCalcColumn);
-AddCommand("updatecol",(CommandFunc)&CommandHandler::CmdUpdateColumn);
-AddCommand("breakdepcol",(CommandFunc)&CommandHandler::CmdBreakDepColumn);
-AddCommand("domidtoclass",(CommandFunc)&CommandHandler::CmdDomIDToClass);
-AddCommand("domclasstoid",(CommandFunc)&CommandHandler::CmdDomClassToID);
-AddCommand("dompictoclass",(CommandFunc)&CommandHandler::CmdDomPicToClass);
+	AddCommand("import14",(CommandFunc)&CommandHandler::CmdImport14);
+	AddCommand("convert14",(CommandFunc)&CommandHandler::CmdConvert14);
+	AddCommand("setreadonly",(CommandFunc)&CommandHandler::CmdSetReadOnly);
+	AddCommand("setreadwrite",(CommandFunc)&CommandHandler::CmdSetReadWrite);
+	AddCommand("closeall",(CommandFunc)&CommandHandler::CmdCloseAll);
+	//AddCommand("rename",(CommandFunc)&CommandHandler::CmdRenameObject);
+	AddCommand("delfile",(CommandFunc)&CommandHandler::CmdDelFile);
+	AddCommand("delcol",(CommandFunc)&CommandHandler::CmdDelColumn);
+	AddCommand("calccol",(CommandFunc)&CommandHandler::CmdCalcColumn);
+	AddCommand("updatecol",(CommandFunc)&CommandHandler::CmdUpdateColumn);
+	AddCommand("breakdepcol",(CommandFunc)&CommandHandler::CmdBreakDepColumn);
+	AddCommand("domidtoclass",(CommandFunc)&CommandHandler::CmdDomIDToClass);
+	AddCommand("domclasstoid",(CommandFunc)&CommandHandler::CmdDomClassToID);
+	AddCommand("dompictoclass",(CommandFunc)&CommandHandler::CmdDomPicToClass);
 
-AddCommand("setgrf",(CommandFunc)&CommandHandler::CmdSetGrf);
-AddCommand("setcsy",(CommandFunc)&CommandHandler::CmdSetCsy);
-AddCommand("setatttable",(CommandFunc)&CommandHandler::CmdSetAttTable);
-AddCommand("setdom",(CommandFunc)&CommandHandler::CmdSetDom);
-AddCommand("setvr",(CommandFunc)&CommandHandler::CmdSetValRange);
-AddCommand("changedom",(CommandFunc)&CommandHandler::CmdChangeDom);
-AddCommand("mergedom",(CommandFunc)&CommandHandler::CmdMergeDom);
-AddCommand("additemtodomain",(CommandFunc)&CommandHandler::CmdAddItemToDomain);
-AddCommand("additemtodomaingroup",(CommandFunc)&CommandHandler::CmdAddItemToDomainGroup);
-AddCommand("showexpressionerror",(CommandFunc)&CommandHandler::CmdShowExpressionError);
+	AddCommand("setgrf",(CommandFunc)&CommandHandler::CmdSetGrf);
+	AddCommand("setcsy",(CommandFunc)&CommandHandler::CmdSetCsy);
+	AddCommand("setatttable",(CommandFunc)&CommandHandler::CmdSetAttTable);
+	AddCommand("setdom",(CommandFunc)&CommandHandler::CmdSetDom);
+	AddCommand("setvr",(CommandFunc)&CommandHandler::CmdSetValRange);
+	AddCommand("changedom",(CommandFunc)&CommandHandler::CmdChangeDom);
+	AddCommand("mergedom",(CommandFunc)&CommandHandler::CmdMergeDom);
+	AddCommand("additemtodomain",(CommandFunc)&CommandHandler::CmdAddItemToDomain);
+	AddCommand("additemtodomaingroup",(CommandFunc)&CommandHandler::CmdAddItemToDomainGroup);
+	AddCommand("showexpressionerror",(CommandFunc)&CommandHandler::CmdShowExpressionError);
 
-AddCommand("cr2dim",(CommandFunc)&CommandHandler::CmdCreate2DimTable);
-AddCommand("crtbl",(CommandFunc)&CommandHandler::CmdCreateTable);
-AddCommand("crmap",(CommandFunc)&CommandHandler::CmdCreateMap);
-AddCommand("crpntmap",(CommandFunc)&CommandHandler::CmdCreatePointMap);
-AddCommand("crsegmap",(CommandFunc)&CommandHandler::CmdCreateSegMap);
-AddCommand("crmaplist",(CommandFunc)&CommandHandler::CmdCrMapList);
-AddCommand("crdom",(CommandFunc)&CommandHandler::CmdCreateDom);
-AddCommand("crgrf",(CommandFunc)&CommandHandler::CmdCreateGrf);
-AddCommand("crrpr",(CommandFunc)&CommandHandler::CmdCreateRpr);
-AddCommand("appmetadata",(CommandFunc)&CommandHandler::CmdAppMetaData);
-AddCommand("send",(CommandFunc) &CommandHandler::CmdSend);
-AddCommand("zip",(CommandFunc) &CommandHandler::CmdZip); 
-AddCommand("updateIlwis",(CommandFunc) &CommandHandler::CmdUpdateIlwis); 
-AddCommand("addtomaplist",(CommandFunc) &CommandHandler::CmdAddToMapList); 
+	AddCommand("cr2dim",(CommandFunc)&CommandHandler::CmdCreate2DimTable);
+	AddCommand("crtbl",(CommandFunc)&CommandHandler::CmdCreateTable);
+	AddCommand("crmap",(CommandFunc)&CommandHandler::CmdCreateMap);
+	AddCommand("crpntmap",(CommandFunc)&CommandHandler::CmdCreatePointMap);
+	AddCommand("crsegmap",(CommandFunc)&CommandHandler::CmdCreateSegMap);
+	AddCommand("crmaplist",(CommandFunc)&CommandHandler::CmdCrMapList);
+	AddCommand("crdom",(CommandFunc)&CommandHandler::CmdCreateDom);
+	AddCommand("crgrf",(CommandFunc)&CommandHandler::CmdCreateGrf);
+	AddCommand("crrpr",(CommandFunc)&CommandHandler::CmdCreateRpr);
+	AddCommand("appmetadata",(CommandFunc)&CommandHandler::CmdAppMetaData);
+	AddCommand("send",(CommandFunc) &CommandHandler::CmdSend);
+	AddCommand("zip",(CommandFunc) &CommandHandler::CmdZip); 
+	AddCommand("updateIlwis",(CommandFunc) &CommandHandler::CmdUpdateIlwis); 
+	AddCommand("addtomaplist",(CommandFunc) &CommandHandler::CmdAddToMapList); 
 
-//commands["testingdbconnection"]=(CommandFunction)&CommandHandler::CmdTestingDBConnection;
+	//commands["testingdbconnection"]=(CommandFunction)&CommandHandler::CmdTestingDBConnection;
 }
 
 class ErrorInvalidCalcCommand
 {
-  public:
-    ErrorInvalidCalcCommand() {}
+public:
+	ErrorInvalidCalcCommand() {}
 };
 
 // main execution function for the command handler.
@@ -542,7 +545,7 @@ LRESULT CommandHandler::fExecute(const String& sCmd)
 			return fExecute("cd " + sComd);
 
 		if (tolower(sComd[0]) == 'c' && tolower(sComd[1]) == 'd' // allow cd without space
-				&& (sComd[2] == '.' || sComd[2] == '\\'))
+			&& (sComd[2] == '.' || sComd[2] == '\\'))
 			return fExecute("cd " + sComd.substr(2));
 
 		if ( sComd[sComd.length()-1] == ';')  // command to the script parser
@@ -621,7 +624,7 @@ void CommandHandler::CmdChangeDir(const String& sDir)
 		String sDirLoc = sDir.sUnQuote();
 		size_t iPos;
 		if ( (iPos = sDirLoc.find("-quiet", sDirLoc.size() - 8)) != string::npos)
-		sDirLoc = sDirLoc.substr(0, iPos)	;		
+			sDirLoc = sDirLoc.substr(0, iPos)	;		
 		SetCurrentDirectory(getEngine()->sGetCurDir().c_str());				
 		Directory dir(sDirLoc);
 		if (!SetCurrentDirectory(dir.sFullPath().c_str())) {
@@ -655,7 +658,7 @@ void CommandHandler::CmdOpenDir(const String& sDir)
 			String sErr(TR("Could not change directory"));
 			throw ErrorObject(sErr);
 		}
-		
+
 		char sPath[MAX_PATH];
 		GetCurrentDirectory(MAX_PATH, sPath);
 		//Directory dir2(String(sPath));
@@ -689,7 +692,7 @@ bool CommandHandler::fCmdExtern(const String& sCmd)
 			sParameter = "\"" + sParameter.sUnQuote() + "\"";
 		sParameters += ((i > 1) ? " " : "") + sParameter;
 	}
-	
+
 	FileName fn(sCommand); // "probe" if it is executable or not
 
 	if ((fn.sExt.length() == 0) || fCIStrEqual(fn.sExt, ".exe") || fCIStrEqual(fn.sExt, ".com") || fCIStrEqual(fn.sExt, ".bat"))
@@ -704,17 +707,17 @@ bool CommandHandler::fCmdExtern(const String& sCmd)
 		int hInst = (int)ShellExecute(0, "open", sCommand.c_str(), NULL, "", SW_SHOWNORMAL);
 		switch(hInst)
 		{
-			case 0:
-				throw ErrorMemAlloc();
-				break;
-			case ERROR_BAD_FORMAT:
-				throw ErrorObject(String(TR("'%S' is not a Win32 program or may be corrupt").c_str() , sCmd));
-				break;
-			case ERROR_FILE_NOT_FOUND:
-				throw ErrorObject(String(TR("No external command '%S' found").c_str(), sCmd));
-				break;
-			case ERROR_PATH_NOT_FOUND:
-				throw ErrorDirNotFound(FileName(sCmd).sPath());
+		case 0:
+			throw ErrorMemAlloc();
+			break;
+		case ERROR_BAD_FORMAT:
+			throw ErrorObject(String(TR("'%S' is not a Win32 program or may be corrupt").c_str() , sCmd));
+			break;
+		case ERROR_FILE_NOT_FOUND:
+			throw ErrorObject(String(TR("No external command '%S' found").c_str(), sCmd));
+			break;
+		case ERROR_PATH_NOT_FOUND:
+			throw ErrorDirNotFound(FileName(sCmd).sPath());
 		}
 	}
 
@@ -865,7 +868,7 @@ void CommandHandler::CmdCreate(const String& s)
 			sMpl = sVal;
 		else if (fn.sExt == ".mpr")
 			sMpr = sVal;
-		}
+	}
 
 	if("map" == sType)
 		CreateMap(sDom, sGrf);
@@ -1023,24 +1026,24 @@ bool CommandHandler::fCmdCalc(const String& sCmd)
 				ApplicationMetadata md = (infos[0]->metadata)(&query);
 				if ( md.returnType != IlwisObject::iotANY) {
 					switch( md.returnType){
-						case IlwisObject::iotPOINTMAP :
-							sType = "pnt"; break;
-						case IlwisObject::iotPOLYGONMAP :
-							sType = "pol"; break;
-						case IlwisObject::iotSEGMENTMAP :
-							sType = "seg"; break;
-						case IlwisObject::iotRASMAP :
-							sType = "map"; break;
-						case IlwisObject::iotMAPLIST :
-							sType = "mpl"; break;
-						case IlwisObject::iotTABLE :
-							sType = "tbl"; break;
-						case IlwisObject::iotMATRIX :
-							sType = "mat"; break;
-						case IlwisObject::iotOBJECTCOLLECTION :
-							sType = "col"; break;
-						case IlwisObject::iotSTEREOPAIR :
-							sType = "stp"; break;
+case IlwisObject::iotPOINTMAP :
+	sType = "pnt"; break;
+case IlwisObject::iotPOLYGONMAP :
+	sType = "pol"; break;
+case IlwisObject::iotSEGMENTMAP :
+	sType = "seg"; break;
+case IlwisObject::iotRASMAP :
+	sType = "map"; break;
+case IlwisObject::iotMAPLIST :
+	sType = "mpl"; break;
+case IlwisObject::iotTABLE :
+	sType = "tbl"; break;
+case IlwisObject::iotMATRIX :
+	sType = "mat"; break;
+case IlwisObject::iotOBJECTCOLLECTION :
+	sType = "col"; break;
+case IlwisObject::iotSTEREOPAIR :
+	sType = "stp"; break;
 					};
 				}
 			}
@@ -1114,7 +1117,7 @@ bool CommandHandler::fCmdCalc(const String& sCmd)
 	else{
 		throw ErrorInvalidCalcCommand();
 	}
-	
+
 	if (!fn.fValid()) {
 		throw ErrorObject( String(TR("Invalid output object: %s").c_str(), sObj.sVal()));
 	}
@@ -1129,7 +1132,7 @@ bool CommandHandler::fCmdCalc(const String& sCmd)
 			DeleteObjects(wndOwner, String("%S -force -quiet", fn.sFullNameQuoted()), &trq);
 		}
 	}
-	
+
 	bool fOk = false;
 	if ("map" == sType) {
 		fn.sExt = ".mpr";
@@ -1151,10 +1154,10 @@ bool CommandHandler::fCmdCalc(const String& sCmd)
 				if (!fQuiet && fShowRasterDef) {
 					String parms("%S,%d,%d", map->fnObj.sFullName(), !fShow, fFreeze);
 					bool fOk = ReroutSend(wndOwner, "showdefform " + parms);
-//					MapDefForm frm(wndOwner, map, !fShow, fFreeze);
-//					//fOk = frm.fOkClicked();
-//					if (!fShow)
-//						fShow = frm.fShow;
+					//					MapDefForm frm(wndOwner, map, !fShow, fFreeze);
+					//					//fOk = frm.fOkClicked();
+					//					if (!fShow)
+					//						fShow = frm.fShow;
 					if (!fOk)
 						map->fErase = true;
 					wndOwner->SetFocus();
@@ -1293,7 +1296,7 @@ void CommandHandler::CmdRunScript(const String& sScript)
 					sExpr = sTail + 1;
 				scr->Exec(sExpr);
 			}
-			
+
 		}
 	}
 }
@@ -1352,7 +1355,7 @@ UINT CommandHandler::DeleteObjectInThread(void * data)
 
 	return 0;
 }
-  
+
 // Read the domain name from the command line, or if it is not present
 // determine it from the input fnDeafult
 // Also read the domain type from the command line and update input/output dmtDefault
@@ -1538,7 +1541,7 @@ void CommandHandler::CmdImport14(const String& sCmd)
 		File::GetFileNames(sInpMask, afn, &asExt);  
 		if (afn.iSize() == 0)  // if there are no .MPD files we are done 
 			return;
-		
+
 		String sOutDir = prml.sGet(1);
 		for (unsigned int i=0; i < afn.iSize(); ++i)
 		{
@@ -1765,8 +1768,8 @@ void CommandHandler::CmdUpdateColumn(const String& sCol)
 
 void CommandHandler::CmdBreakDepColumn(const String& sCol)
 {
-  Column col = Column(sCol);
-  col->BreakDependency();
+	Column col = Column(sCol);
+	col->BreakDependency();
 }
 
 void CommandHandler::CmdDomClassToID(const String& sDom)
@@ -1835,7 +1838,7 @@ UINT CommandHandler::CmdDomPicToClassInThread(void *p)
 	{
 		err.Show();
 	}		
-	
+
 	getEngine()->RemoveThreadLocalVars();
 
 	return 0;
@@ -2174,7 +2177,7 @@ void CommandHandler::CmdRenameObject(const String& s)
 	IlwisObject obj = IlwisObject::obj(fnObject);
 	obj->Rename(fnNew);
 }  
-  
+
 void CommandHandler::CmdCreateTable(const String& s)
 {
 	if ( s == "" ) return;
@@ -2236,7 +2239,7 @@ void CommandHandler::CmdCreatePointMap(const String& s)
 			throw ErrorObject(String(TR("Could not overwrite %S").c_str(), fnMap.sRelative()));
 	Domain dm;
 	CoordSystem csy;
-	
+
 	if (pm.iFixed() < 4)
 	{
 		CoordSystem csy(pm.sGet(1));
@@ -2265,7 +2268,7 @@ void CommandHandler::CmdCreateSegMap(const String& s)
 			throw ErrorObject(String(TR("Could not overwrite %S").c_str(), fnMap.sRelative()));
 	Domain dm;
 	CoordSystem csy;
-	
+
 	if (pm.iFixed() < 4)
 	{
 		CoordSystem csy(pm.sGet(1));
@@ -2304,7 +2307,7 @@ void CommandHandler::CmdCreateDom(const String& s)
 		dmt = dmtVALUE;
 	switch (dmt) 
 	{
-		case dmtVALUE: 
+	case dmtVALUE: 
 		{
 			double rMin = pm.sGet("min").rVal();
 			double rMax = pm.sGet("max").rVal();
@@ -2319,8 +2322,8 @@ void CommandHandler::CmdCreateDom(const String& s)
 			Domain(fnDom, rMin, rMax, rStep);
 		}
 		break;
-		case dmtCLASS: 
-		case dmtID: 
+	case dmtCLASS: 
+	case dmtID: 
 		{
 			String sPrefix;
 			sPrefix = pm.sGet("prefix");
@@ -2337,8 +2340,8 @@ void CommandHandler::CmdCreateDom(const String& s)
 			Domain(fnDom, iNr, dmt, sPrefix);
 		}
 		break;
-		case dmtGROUP: 
-		case dmtPICTURE: 
+	case dmtGROUP: 
+	case dmtPICTURE: 
 		{
 			String s = pm.sGet("items");
 			long iNr = s.iVal();
@@ -2347,8 +2350,8 @@ void CommandHandler::CmdCreateDom(const String& s)
 			Domain(fnDom, iNr, dmt);
 		}
 		break;
-		default :
-			return;
+	default :
+		return;
 	}
 }
 
@@ -2503,7 +2506,7 @@ void CommandHandler::DeleteObjects(CWnd *owner, const String& sCommand, Tranquil
 				FileName fn(*cur);
 				if ( fnUpdate == FileName() ) // used to determine the directory that gets the update message;
 					fnUpdate = fn;
-				
+
 				// Check the existance of the file to remove.
 				// The list of files to delete can contain duplicates
 				if (File::fExist(fn))
@@ -2568,7 +2571,7 @@ void CommandHandler::BreakDepObjects(const String& sCommand, Tranquilizer* trq)
 				if (trq->fText(sCalc))
 					return;
 			}
-			
+
 			if (fCIStrEqual(fn.sExt, ".mpr"))
 				ObjectInfo::WriteElement("Map", "Type", fn, "MapStore");
 			else if (fCIStrEqual(fn.sExt, ".mps"))
@@ -2710,9 +2713,9 @@ UINT CommandHandler::CmdCopyFileInThread(void *p)
 
 	try
 	{
-    Tranquilizer trq;
-    // trq.SetTitle(String(TR("Importing 1.4 raster map '%S'").c_str(), fn.sFile));
-    trq.Start();
+		Tranquilizer trq;
+		// trq.SetTitle(String(TR("Importing 1.4 raster map '%S'").c_str(), fn.sFile));
+		trq.Start();
 		CopyFiles(s, &trq);
 	}
 	catch(ErrorObject& err)
@@ -2745,10 +2748,10 @@ void CommandHandler::CopyObjects(const String& sCommand, Tranquilizer* trq, CWnd
 	vector<FileName> afnFiles(pm.iFixed()-1);
 	for (int iParm = 0; iParm < pm.iFixed()-1; iParm++) 
 		afnFiles[iParm] = FileName(pm.sGet(iParm));
-	
+
 	if ( afnFiles.size() == 0 )
 		throw ErrorObject(TR("No files to be copied"));
-	
+
 	if ( fnTo.sExt == "" && Directory::fIsExistingDir( Directory(sTo)))
 	{
 		ObjectCopier copier(afnFiles, Directory(sTo));
@@ -2852,7 +2855,7 @@ void CommandHandler::CreateFil()
 
 void CommandHandler::CreateIsl()
 {
-		ReroutPost("createisl ");
+	ReroutPost("createisl ");
 }
 
 void CommandHandler::CreateFun()
@@ -2888,7 +2891,7 @@ void CommandHandler::CmdAppMetaData(const String& sN)
 	getEngine()->modules.getCommandInfo(appName, infos);
 	if ( infos.size() == 0) 
 		return;
-   if ( infos[0]->metadata != NULL) {
+	if ( infos[0]->metadata != NULL) {
 		ApplicationQueryData query;
 		query.queryType = "WPSMETADATA";
 		ApplicationMetadata amd = (infos[0]->metadata)(&query);
@@ -2941,7 +2944,7 @@ void CommandHandler::CmdZip(const String& expr) {
 	buf = (void*)malloc(size_buf);
 	if (!buf)
 	{
-	   throw ErrorObject("Could allocate memory for reading zip file");
+		throw ErrorObject("Could allocate memory for reading zip file");
 	}
 
 	String path = fnZip.sRelative();
@@ -2958,7 +2961,7 @@ void CommandHandler::CmdZip(const String& expr) {
 		} else {
 			files.push_back(fnobj.sFullPath());
 		}
-	
+
 		FILE * fin;
 		int size_read;
 
@@ -2981,7 +2984,7 @@ void CommandHandler::CmdZip(const String& expr) {
 			if (err != ZIP_OK)
 			{
 				throw ErrorObject(String("error in opening %S in zipfile\n",curfile));
-	    
+
 			}
 			else
 			{
@@ -3008,7 +3011,7 @@ void CommandHandler::CmdZip(const String& expr) {
 				if (err==ZIP_OK && size_read>0)
 				{
 					err = zipWriteInFileInZip (zf,buf,size_read);
-				   // if (err<0)
+					// if (err<0)
 					//{
 					//    //We could not write the file in the ZIP-File for whatever reason.
 					//    AfxFormatString1(strMessage, AFX_IDP_FAILED_IO_ERROR_WRITE,strZipFile);
@@ -3023,10 +3026,10 @@ void CommandHandler::CmdZip(const String& expr) {
 
 
 			fclose(fin);
-	   }
-   }
-   int errclose = zipClose(zf,NULL);
-   free (buf);
+		}
+	}
+	int errclose = zipClose(zf,NULL);
+	free (buf);
 }
 
 void CommandHandler::gatherFromFolder(const string& root, const string& folder, vector<IlwisFileInfo>& files) {

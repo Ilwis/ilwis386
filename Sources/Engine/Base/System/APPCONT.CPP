@@ -61,19 +61,13 @@ unsigned char VerKey[8] = { 0xD8, 0xE7, 0x1B, 0xF6, 0x57, 0xE2, 0xD0, 0x53 };
 #define HTASK int;
 #endif
 
-IlwisAppContext::IlwisAppContext(const String& sProg, const String& sCmdLine)
+IlwisAppContext::IlwisAppContext(HMODULE handle)
 : winRoot(0)
 {
-  if (sProg.length() == 0)
-  {
-      char sTemp[MAX_PATH];
-      ::GetModuleFileName(NULL, sTemp, MAX_PATH);
+  char sTemp[MAX_PATH];
+  ::GetModuleFileName(handle, sTemp, MAX_PATH);
       _sProg = String(sTemp);
-  }
-  else {
-    _sProg = sProg;
-  }
-//  _obm = new IlwObjectManager();
+ //  _obm = new IlwObjectManager();
   _svl = new SysVarList();
   IlwisSettings settings("DefaultSettings");
   languageExtension = settings.sValue("LanguageExtension",".eng");

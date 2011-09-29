@@ -6,12 +6,14 @@ enum FontStyle { FS_ITALIC    = 0x0001,
                  FS_UNDERLINE	= 0x0002,
                  FS_STRIKEOUT	= 0x0004 };
 class OpenGLText;
+ILWIS::NewDrawer *createTextLayerDrawer(ILWIS::DrawerParameters *parms);
+ILWIS::NewDrawer *createTextDrawer(ILWIS::DrawerParameters *parms);
 
 namespace ILWIS {
 
 class _export TextLayerDrawer : public ComplexDrawer {
 public:
-	TextLayerDrawer(DrawerParameters *parms, const String& type);
+	TextLayerDrawer(DrawerParameters *parms);
 	~TextLayerDrawer();
 	virtual void prepare(PreparationParameters *pp);
 	OpenGLText *getFont() const;
@@ -31,7 +33,6 @@ private:
 
 class _export TextDrawer : public SimpleDrawer {
 public:
-	TextDrawer(DrawerParameters *parms, const String& type);
 	TextDrawer(DrawerParameters *parms);
 	~TextDrawer();
 	virtual void prepare(PreparationParameters *pp);
