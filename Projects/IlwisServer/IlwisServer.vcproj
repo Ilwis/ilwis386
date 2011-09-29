@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="IlwisServer"
 	ProjectGUID="{D98747F1-2435-4C33-B566-DA893DD09646}"
 	RootNamespace="IlwisServer"
@@ -68,7 +68,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ILWISEngine.lib geos.lib"
+				AdditionalDependencies="ILWISEngine.lib"
 				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)libraries\$(ConfigurationName)&quot;;&quot;$(SolutionDir)libraries\import&quot;"

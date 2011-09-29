@@ -50,7 +50,7 @@ BOOL IlwisServerApp::InitApplication()
 	if (!CWinApp::InitApplication())
 		return FALSE;
 
-	getEngine()->Init("", m_lpCmdLine);
+	getEngine();
 
 	String sParms(m_lpCmdLine);
 	short ipos2 = sParms.iPos(String("-D"));
