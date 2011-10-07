@@ -67,7 +67,8 @@ drawer(drw), tree(view), visible(true),parentTool(0),isConfigured(false), type(t
 DrawerTool::~DrawerTool() {
 	MapCompositionDoc *mdoc = tree->GetDocument();
 	MapPaneView *mpv = mdoc->mpvGetView();
-	mpv->noTool(getId());
+	if ( mpv)
+		mpv->noTool(getId());
 }
 
 HTREEITEM DrawerTool::configure( HTREEITEM parentItem){

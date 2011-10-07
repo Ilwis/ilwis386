@@ -303,37 +303,18 @@ int StereoscopeWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 			CRect(0,0,0,0), &ltbRight, 100, 0);
 	docRight->AddView(ltbRight.view);
 	
-  // half of the requested height will be assigned
-	gbOverviewLeft.Create(this, 125, CSize(150,300));
-  gbOverviewLeft.m_szFloat = CSize(150,150);
-	gbOverviewLeft.EnableDocking(CBRS_ALIGN_LEFT);
-  gbOverviewLeft.view = new OverviewMapPaneView;
-  gbOverviewLeft.view->Create(NULL,NULL,AFX_WS_DEFAULT_VIEW,CRect(0,0,0,0),&gbOverviewLeft,100.0);
-  gbOverviewLeft.SetWindowText(TR("Overview window").c_str());
-	docLeft->AddView(gbOverviewLeft.view);
-	gbOverviewRight.Create(this, 125, CSize(150,300));
-  gbOverviewRight.m_szFloat = CSize(150,150);
-	gbOverviewRight.EnableDocking(CBRS_ALIGN_RIGHT);
-  gbOverviewRight.view = new OverviewMapPaneView;
-  gbOverviewRight.view->Create(NULL,NULL,AFX_WS_DEFAULT_VIEW,CRect(0,0,0,0),&gbOverviewRight,100.0);
-  gbOverviewRight.SetWindowText(TR("Overview window").c_str());
-	docRight->AddView(gbOverviewRight.view);
 
 	DockControlBar(&ltbLeft,AFX_IDW_DOCKBAR_LEFT);
   RecalcLayout();
   ltbLeft.GetWindowRect(&rect);
 	rect.OffsetRect(0,1);
-	DockControlBar(&gbOverviewLeft,AFX_IDW_DOCKBAR_LEFT,rect);
 	ShowControlBar(&ltbLeft,FALSE,FALSE);
-	ShowControlBar(&gbOverviewLeft,FALSE,FALSE);
 	// RecalcLayout();
 	DockControlBar(&ltbRight,AFX_IDW_DOCKBAR_RIGHT); 
 	RecalcLayout();
   ltbRight.GetWindowRect(&rect);
 	rect.OffsetRect(0,1);
-	DockControlBar(&gbOverviewRight,AFX_IDW_DOCKBAR_RIGHT,rect);
 	ShowControlBar(&ltbRight,FALSE,FALSE);
-	ShowControlBar(&gbOverviewRight,FALSE,FALSE);
 
 	RecalcLayout();
 
@@ -530,22 +511,10 @@ void StereoscopeWindow::OnUpdateLayerManagement(CCmdUI* pCmdUI)
 
 void StereoscopeWindow::OnOverviewWindow()
 {
-	if (gbOverviewLeft.IsWindowVisible() && gbOverviewRight.IsWindowVisible())
-	{
-		ShowControlBar(&gbOverviewLeft,FALSE,FALSE);
-		ShowControlBar(&gbOverviewRight,FALSE,FALSE);
-	}
-	else
-	{
-		ShowControlBar(&gbOverviewLeft,TRUE,FALSE);
-		ShowControlBar(&gbOverviewRight,TRUE,FALSE);
-	}
 }
 
 void StereoscopeWindow::OnUpdateOverviewWindow(CCmdUI* pCmdUI)
 {
-	bool fCheck = gbOverviewLeft.IsWindowVisible() && gbOverviewRight.IsWindowVisible();
-	pCmdUI->SetCheck(fCheck);
 }
 
 	/*

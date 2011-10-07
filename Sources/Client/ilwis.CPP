@@ -897,6 +897,15 @@ void IlwisWinApp::RegisterDocTemplates()
 		RUNTIME_CLASS(MapPaneView));
 	AddDocTemplate(dtAnimation);
 
+	idt = new IlwisDocTemplate(
+		".mpl", 
+		"MapList", 
+		"Color Composite",
+		RUNTIME_CLASS(MapCompositionDoc),
+		RUNTIME_CLASS(MapWindow),
+		RUNTIME_CLASS(MapPaneView));
+	AddDocTemplate(idt);
+
 	dtObjectCollection = new IlwisMDIDocTemplate(
 		".ioc", 
 		"ObjectCollection", 
@@ -1211,8 +1220,8 @@ void IlwisWinApp::InitImageLists()
 {
 	ilSmall.Create(16,16,TRUE,4,4);
 	ilLarge.Create(32,32,TRUE,4,4);
-	ilSmall.SetImageCount(130);
-	ilLarge.SetImageCount(130);
+	ilSmall.SetImageCount(131);
+	ilLarge.SetImageCount(131);
 
 	int i = 0;
 	InitImage("ilwis", "LogoIcon", i++);
@@ -1357,6 +1366,7 @@ void IlwisWinApp::InitImageLists()
 	InitImage(".float", "float", i++);
 	InitImage(".bool", "boolean", i++);
 	InitImage(".choice", "choice", i++);
+	InitImage("ColorComposite", "ColorComposite", i++);
 }
 
 int IlwisWinApp::iImage(const string& sExt)
@@ -1726,14 +1736,11 @@ CDocument* IlwisWinApp::OpenDocumentFile(LPCTSTR lpszFileName, IlwisDocument::Op
 		// prevent dead lock
 		ml.SetPointer(0);
 		if (fCalculated) {
-			if ( ot == IlwisDocument::otANIMATION) {
-				//((IlwisDocManager *)m_pDocManager)->OpenDocumentAsAnimation(fn.sFullName().c_str());
+			if ( ot == IlwisDocument::otANIMATION || ot == IlwisDocument::otCOLORCOMP) {
 				WinThread *thr = new WinThread(m_pDocManager, pLongFileName, ot);
 				if ( thr)
 					thr->CreateThread(0,0);
-
-			}
-			else
+			} else
 				m_pDocManager->OpenDocumentFile(fn.sFullName().c_str());
 		}
 		else

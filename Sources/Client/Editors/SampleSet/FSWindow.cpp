@@ -65,7 +65,7 @@ BEGIN_MESSAGE_MAP(FeatureSpaceWindow, GraphView)
 END_MESSAGE_MAP()
 
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define add(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 //FSLayer
 
@@ -159,15 +159,15 @@ void FSDrawer::Init(const SampleSet& sms, int b1, int b2)
 {
   grleg->fShow = false;
 	gaxX->Set(Domain("image"));
-	gaxX->SetMinMax(sms->mpl()->map(b1)->rrMinMax(true));
+	gaxX->SetMinMax(sms->mpl()->map(b1)->rrMinMax(BaseMapPtr::mmmCALCULATE));
 	gaxX->dvrsData = DomainValueRangeStruct(Domain("image"));
 	gaxX->sTitle = sms->mpl()->map(b1)->sName();
 	gaxYLeft->Set(Domain("image"));
-	gaxYLeft->SetMinMax(sms->mpl()->map(b2)->rrMinMax(true));
+	gaxYLeft->SetMinMax(sms->mpl()->map(b2)->rrMinMax(BaseMapPtr::mmmCALCULATE));
 	gaxYLeft->dvrsData = DomainValueRangeStruct(Domain("image"));
 	gaxYLeft->sTitle = sms->mpl()->map(b2)->sName();
 	gaxYRight->Set(Domain("image"));
-	gaxYRight->SetMinMax(sms->mpl()->map(b2)->rrMinMax(true));
+	gaxYRight->SetMinMax(sms->mpl()->map(b2)->rrMinMax(BaseMapPtr::mmmCALCULATE));
 	gaxYRight->dvrsData = DomainValueRangeStruct(Domain("image"));
 	gaxYRight->sTitle = sms->mpl()->map(b2)->sName();
 	agl.push_back(new FSLayer(this, sms, b1, b2));
@@ -196,8 +196,8 @@ void FSDrawer::SaveSettings(const FileName& fn, const String& sSection)
 {
 	FSLayer* fsl= dynamic_cast<FSLayer*>(agl[0]);
 	FeatureSpace* fs = fsl->fs;
-	ObjectInfo::WriteElement(sSection.scVal(), "X", fn, fs->iBand1());
-	ObjectInfo::WriteElement(sSection.scVal(), "Y", fn, fs->iBand2());
+	ObjectInfo::WriteElement(sSection.c_str(), "X", fn, fs->iBand1());
+	ObjectInfo::WriteElement(sSection.c_str(), "Y", fn, fs->iBand2());
 	CartesianGraphDrawer::SaveSettings(fn, sSection);
 }
 
@@ -205,8 +205,8 @@ void FSDrawer::LoadSettings(const FileName& fn, const String& sSection)
 {
 	CartesianGraphDrawer::LoadSettings(fn, sSection);
 	int b1, b2;
-	ObjectInfo::ReadElement(sSection.scVal(), "X", fn, b1);
-	ObjectInfo::ReadElement(sSection.scVal(), "Y", fn, b2);
+	ObjectInfo::ReadElement(sSection.c_str(), "X", fn, b1);
+	ObjectInfo::ReadElement(sSection.c_str(), "Y", fn, b2);
 	SampleSet sms(fn);
 	FSLayer* fsl = new FSLayer(this, sms, b1, b2);
 	agl.push_back(fsl);

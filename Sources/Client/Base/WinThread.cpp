@@ -251,6 +251,10 @@ CDocument* WinThread::OpenDocumentFile(CDocManager* pdm, LPCTSTR lpszFileName, I
 			pBestTemplate = pTemplate;
 			break;     
 		}
+		if ( templ && templ->sGetObjectType() == "Color Composite" &&  ot ==  IlwisDocument::otCOLORCOMP) {
+			pBestTemplate = pTemplate;
+			break;     
+		}
 		if ( templ && templ->sGetObjectType() == "ILWIS CollectionLayer" &&  ot ==  IlwisDocument::otCOLLECTION) {
 			pBestTemplate = pTemplate;
 			break;     

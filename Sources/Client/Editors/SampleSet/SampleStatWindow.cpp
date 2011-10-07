@@ -99,10 +99,10 @@ BOOL SampleStatWindow::Create(CWnd* pParent)
 	cdcTmp.CreateCompatibleDC(0);
 	String s(' ', 38);
 	CFont* fntOld = cdcTmp.SelectObject(fnt);
-	CSize siz = cdcTmp.GetTextExtent(s.scVal());
+	CSize siz = cdcTmp.GetTextExtent(s.c_str());
 	cdcTmp.SelectObject(fntOld);
 
-	if (!CSizingControlBar::Create(SSSTitleSampleStatistics.scVal(), pParent, 
+	if (!CSizingControlBar::Create(TR("    Sample Statistics").c_str(), pParent, 
 		   CSize(15+siz.cx, (2*sms->iBands()+6)*siz.cy), TRUE, 1125))
 		return FALSE;
   m_dwSCBStyle |= SCBS_SHOWEDGES;
@@ -113,7 +113,7 @@ BOOL SampleStatWindow::Create(CWnd* pParent)
 	ccb.SetFont(fnt);
 	DomainClass* dc = sms->dc();
   for (int i = 1; i <= dc->iNettoSize(); ++i)
-    ccb.AddString(dc->sValueByRaw(dc->iKey(i),0).scVal());
+    ccb.AddString(dc->sValueByRaw(dc->iKey(i),0).c_str());
   ccb.SetCurSel(0);
 //	st.Create("", WS_CHILD | WS_VISIBLE | SS_LEFTNOWORDWRAP ,CRect(5, 35, siz.cx, (2*sms->iBands()+6)*siz.cy), this);
 	st.Create(ES_MULTILINE | WS_VSCROLL | ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_READONLY  ,CRect(5, 35, siz.cx, (2*sms->iBands()+6)*siz.cy), this, 101);
@@ -135,12 +135,12 @@ void SampleStatWindow::AddUnique(const String& sVal)
 {
   if (sVal == sUNDEF)
     return;
-  if (CB_ERR == ccb.FindStringExact(0, sVal.scVal())) { // not found
+  if (CB_ERR == ccb.FindStringExact(0, sVal.c_str())) { // not found
     ccb.ResetContent();
     for (int i = 1; i <= sms->dc()->iNettoSize(); ++i)
-      ccb.AddString(sms->dc()->sValueByRaw(sms->dc()->iKey(i),0).scVal());
+      ccb.AddString(sms->dc()->sValueByRaw(sms->dc()->iKey(i),0).c_str());
   }  
-  ccb.SelectString(0,sVal.scVal());
+  ccb.SelectString(0,sVal.c_str());
 }
 
 
@@ -149,7 +149,7 @@ void SampleStatWindow::SelChange()
   long iSel = ccb.GetCurSel();
   String sText;
   if (iSel >= 0) {
-		sText = SSSRemSmplStat;
+		sText = TR("Band   \tMean  \tStDev   \tNr \tPred  \tTotal");
     CString sSel;
 		ccb.GetLBText(iSel, sSel);
       long iRaw = sms->dc()->iRaw(sSel);
@@ -164,7 +164,7 @@ void SampleStatWindow::SelChange()
           sText &= String("\r\n%3i:\t%7.1f\t%7.1f\t%5li\t%5i\t%7li", iBand, rMean, rStd, iPredNr, (int)bPred, iTotNr);
       }
   		sText &= "\r\n\r\n";
-      sText &= SSSRemCurrSel;
+      sText &= TR(" Current Selection:");
       for (int band = 0; band < sms->iBands(); ++band) 
       {
           double rMean, rStd;
@@ -176,7 +176,7 @@ void SampleStatWindow::SelChange()
                  iBand, rMean, rStd, iPredNr, (int)bPred, iTotNr);
       }                   
   }
-  st.SetWindowText(sText.scVal());
+  st.SetWindowText(sText.c_str());
 }
 
 void SampleStatWindow::OnSize(UINT nType, int cx, int cy)

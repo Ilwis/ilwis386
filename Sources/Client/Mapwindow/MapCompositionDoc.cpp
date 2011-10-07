@@ -947,7 +947,11 @@ ILWIS::NewDrawer *MapCompositionDoc::createBaseMapDrawer(const BaseMap& bmp, con
 	ILWIS::NewDrawer *drawer = NewDrawer::getDrawer(type, subtype, &parms);
 	drawer->addDataSource((void *)&bmp);
 	rootDrawer->setCoordinateSystem(bmp->cs());
-	rootDrawer->addCoordBounds(bmp->cs(), bmp->cb(), false);
+	CoordBounds cb = bmp->cb();
+	if ( cb.fUndef() && IOTYPE(bmp->fnObj) == IlwisObject::iotRASMAP) {
+		cb = ((MapPtr *)bmp.ptr())->gr()->cb();
+	}
+	rootDrawer->addCoordBounds(bmp->cs(), cb, false);
 	ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY);
 	drawer->prepare(&pp);
 	pp.type = RootDrawer::ptRENDER;
@@ -1037,9 +1041,19 @@ BOOL MapCompositionDoc::OnOpenMapList(const MapList& maplist, OpenType ot)
 		return FALSE;
 	SetTitle(maplist);
 
-	if (ot & otANIMATION) {
+	if (ot == otANIMATION) {
 	ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
 		ILWIS::NewDrawer *drawer = NewDrawer::getDrawer("AnimationDrawer", "Ilwis38", &parms);
+		drawer->addDataSource((void *)&maplist);
+		rootDrawer->setCoordinateSystem(mp->cs());
+		rootDrawer->addCoordBounds(mp->cs(), mp->cb(), false);
+		ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
+		addToPixelInfo(maplist, (ComplexDrawer *)drawer);
+		drawer->prepare(&pp);
+		rootDrawer->addDrawer(drawer);
+	} else 	if (ot == otCOLORCOMP) {
+		ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
+		ILWIS::NewDrawer *drawer = NewDrawer::getDrawer("RasterDataDrawer", "Ilwis38", &parms);
 		drawer->addDataSource((void *)&maplist);
 		rootDrawer->setCoordinateSystem(mp->cs());
 		rootDrawer->addCoordBounds(mp->cs(), mp->cb(), false);

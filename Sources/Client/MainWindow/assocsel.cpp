@@ -160,6 +160,8 @@ AssociationSelector::AssociationSelector(CWnd* w, zPoint p,
 		pmadd(ID_CAT_ASLAYER);
 	if ( IOTYPE(fn) == IlwisObject::iotOBJECTCOLLECTION || IOTYPE(fn) == IlwisObject::iotMAPLIST)
 		pmadd(ID_CAT_ASANIMATION);
+	if (IOTYPE(fn) == IlwisObject::iotMAPLIST)
+		pmadd(ID_CAT_ACOLORCOMPOSITE);
 
 	AppendMenu(MF_SEPARATOR);
 
@@ -260,6 +262,9 @@ void AssociationSelector::ProcessCmd(int iCmd, const FileName& fn)
 			break;
 		case ID_CAT_ASANIMATION:
 			sCmd = String("open %S -animation", fn.sFullPathQuoted());
+			break;
+		case ID_CAT_ACOLORCOMPOSITE:
+			sCmd = String("open %S -colorcomposite", fn.sFullPathQuoted());
 			break;
 		case ID_CAT_SHOWASDOM:
 			sCmd = String("showasdom %S", fn.sFullPathQuoted());

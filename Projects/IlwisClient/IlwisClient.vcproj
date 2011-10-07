@@ -82,7 +82,7 @@
 				Name="VCLinkerTool"
 				AdditionalOptions="/ignore:4099"
 				AdditionalDependencies="ILWISEngine.lib opengl32.lib glu32.lib ftgl.lib freetype.lib gdiplus.lib"
-				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\IlwisClient.exe"
+				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\Ilwis.exe"
 				Version="3.5"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)libraries\import&quot;;&quot;$(SolutionDir)libraries\$(ConfigurationName)&quot;"
@@ -599,11 +599,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\amesd.ico"
+				RelativePath="..\..\Sources\Client\Resources\amesd.ico"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Client\Resources\amesd.ico"
+				RelativePath=".\amesd.ico"
 				>
 			</File>
 			<File
@@ -975,11 +975,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Client\Resources\esa.ico"
+				RelativePath=".\esa.ico"
 				>
 			</File>
 			<File
-				RelativePath=".\esa.ico"
+				RelativePath="..\..\Sources\Client\Resources\esa.ico"
 				>
 			</File>
 			<File
@@ -1107,11 +1107,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\GNC.ico"
+				RelativePath="..\..\Sources\Client\Resources\GNC.ico"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Client\Resources\GNC.ico"
+				RelativePath=".\GNC.ico"
 				>
 			</File>
 			<File
@@ -4969,6 +4969,30 @@
 				<Filter
 					Name="SampleSet"
 					>
+					<File
+						RelativePath="..\..\Sources\Client\Editors\SampleSet\FSWindow.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Editors\SampleSet\FSWindow.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Editors\SampleSet\SampleSetEditor.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Editors\SampleSet\SampleSetEditor.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Editors\SampleSet\SampleStatWindow.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Editors\SampleSet\SampleStatWindow.h"
+						>
+					</File>
 				</Filter>
 			</Filter>
 			<Filter
@@ -5316,6 +5340,14 @@
 				</File>
 			</Filter>
 		</Filter>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\color.ico"
+			>
+		</File>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\colorcomposite.ico"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

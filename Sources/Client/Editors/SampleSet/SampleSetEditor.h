@@ -49,16 +49,16 @@
 
 #ifndef SMPLEDIT_H
 #define SMPLEDIT_H
-#include "Client\Editors\Map\PixelEditor.h"
+//#include "Client\Editors\Map\PixelEditor.h"
 #include "Engine\SampleSet\SAMPLSET.H"
 
 class _export SampleStatWindow;
 class FeatureSpaceWindow;
 
-class _export SampleSetEditor: public PixelEditor
+class _export SampleSetEditor : public DrawerTool
 {
 public:
-  SampleSetEditor(MapPaneView*, const SampleSet&);
+  SampleSetEditor(MapPaneView* zv, LayerTreeView *view, NewDrawer *drw, const SampleSet& smss);
   ~SampleSetEditor();
   virtual int Edit(const Coord&);
   virtual void Paste();
@@ -82,8 +82,13 @@ public:
 private:  
   SampleSet sms;
   SampleStatWindow* wSmplStat;
+  Array<RowCol> rcSelect;
+  HMENU hmenFile, hmenEdit;
+  Representation _rpr;
+  String sValue;
+  bool fOk;
 	vector<GeneralBar*>	vgb;
-	DECLARE_MESSAGE_MAP()
+	//DECLARE_MESSAGE_MAP()
 };
 
 #endif // SMPLEDIT_H

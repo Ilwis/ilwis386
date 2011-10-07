@@ -126,7 +126,6 @@ protected:
 	CMenu menPropLayer, menEditLayer, menDataLayer;
   HMENU hMenFile, hMenEdit;
 	GeneralBar ltbLeft, ltbRight;
-	GeneralBar gbOverviewLeft, gbOverviewRight;
 	//ScaleBar barScale;
 private:
 	StereoPair stp;
