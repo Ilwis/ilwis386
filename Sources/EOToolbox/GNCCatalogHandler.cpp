@@ -48,7 +48,8 @@ bool GNCCatalogHandler::doCommand() {
 			FormatInfo info = eoTool.get(product);
 			String timeformat = info.format;
 			String folderIn = info.fnInput.sPath();
-			String regex = makeRegEx(info.filePattern);
+			folderIn = handlePathStructure(product, folderIn);
+			String regex = info.filePattern ; // makeRegEx(info.filePattern);
 			addFolder(folderIn,regex, timeformat,gncInfo);
 
 		}
@@ -57,6 +58,13 @@ bool GNCCatalogHandler::doCommand() {
 	}
 	return true;
 
+}
+
+String GNCCatalogHandler::handlePathStructure(const String& product, const String& folderIn){
+	if ( product == "mpef") {
+
+	}
+	return folderIn;
 }
 
 String GNCCatalogHandler::makeRegEx(const String& pat) {
@@ -104,7 +112,12 @@ void GNCCatalogHandler::collectCatalog(const String& folder, const String& forma
 
 void GNCCatalogHandler::addFolder(const String& folder, const String& nameFormat,const String& timeFormat, vector<GNCFileInfo>& results) {
 	CFileFind finder;
-	String pattern = folder + "\\*.*";
+	String pattern;
+	String wildCard = nameFormat;
+	if ( folder[folder.size() - 1] != '\\')
+		pattern = folder + "\\" + wildCard;
+	else
+		pattern = folder + wildCard;
 	BOOL fFound = finder.FindFile(pattern.c_str());
 	while(fFound) {
 		fFound = finder.FindNextFile();
@@ -125,11 +138,12 @@ void GNCCatalogHandler::addFile(const FileName& fn, const String& nameFrmt, cons
 	String format = nameFrmt;
 	file.toLower();
 	format.toLower();
-	regex namePat(format.c_str());
+
+	/*regex namePat(format.c_str());
 	match_results<std::string::const_iterator> nameMatches;
 	bool valid = regex_search(file,nameMatches,namePat);
 	if ( !valid)
-		return;
+		return;*/
 		
 
 	String exp = timeFormats[timeFormat];
@@ -138,7 +152,7 @@ void GNCCatalogHandler::addFile(const FileName& fn, const String& nameFrmt, cons
 		return;
 	regex pattern(exp.c_str());
 	match_results<std::string::const_iterator> matches;
-	valid = regex_search(file,matches,pattern);
+	bool valid = regex_search(file,matches,pattern);
 	if ( valid) {
 		int pos = matches.position(0);
 		String p1 = file.substr(pos,timeFormat.size());

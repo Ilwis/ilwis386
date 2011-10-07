@@ -13,6 +13,11 @@
 #include "Engine\Base\DataObjects\RemoteXMLObject.h"
 #include "Engine\Base\DataObjects\XMLDocument.h"
 #include "EOToolbox\EOtoolbox.h"
+#include "Engine\SpatialReference\prj.h"
+#include "Engine\SpatialReference\Csproj.h"
+#include "Engine\SpatialReference\GeoStatSat.h"
+#include "Engine\SpatialReference\Grcornrs.h"
+#include "Engine\Scripting\Script.h"
 #include "netcdf.h"
 #include "IlwisNetCdf.h"
 #include <regex> 
@@ -40,6 +45,10 @@ bool GNCThreddsHandler::doCommand() {
 	FilenameIter itr("*.mpr");
 	while(itr.fValid()) {
 		FileName fn((*itr));
+		Map mp(fn);
+		if ( mp->cs()->pcsProjection() ){
+			fn = resampleToLatLonWGS84(mp);
+		}
 		FileName fnOut(fn, ".nc");
 		IlwisNetCdf ncd;
 		ncd.addMap(Map(fn));
@@ -50,6 +59,24 @@ bool GNCThreddsHandler::doCommand() {
 
 }
 
+FileName GNCThreddsHandler::resampleToLatLonWGS84(const Map& mp) {
+	CoordBounds cb = mp->cb();
+	CoordSystem cs("LatlonWGS84");
+	FileName fnGrf(mp->fnObj, ".grf");
+	LatLon llMiddle = mp->cs()->llConv(cb.middle());
+	LatLon llMax(55.0,min(180.0, llMiddle.Lon + 90.0)) ;
+	LatLon llMin(-55.0,max(-180, llMiddle.Lon - 90.0));
+	GeoRefCorners *grc = new GeoRefCorners(fnGrf, cs, mp->rcSize(), false, Coord(llMin.Lon, llMin.Lat), Coord(llMax.Lon, llMin.Lat));
+	GeoRef grf;
+	grf.SetPointer(grc);
+	grf->Store();
+	FileName fnMap(FileName::fnUnique(mp->fnObj));
+	String expr("%S := MapResample(%S,%S,bicubic);",fnMap.sRelative(), mp->fnObj.sRelative(), fnGrf.sRelative());
+	getEngine()->Execute(expr);
+
+	return fnMap;
+
+}
 void GNCThreddsHandler::writeResponse() const{
 	ILWIS::XMLDocument doc;
 	pugi::xml_node first = doc.addNodeTo(doc,"GNC_Catalog");

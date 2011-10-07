@@ -12,6 +12,7 @@ FNC_put_att_text IlwisNetCdf::fnc_put_att_text=0;
 FNC_put_var_double IlwisNetCdf::fnc_put_var_double=0;
 FNC_put_var_float IlwisNetCdf::fnc_put_var_float=0;
 FNC_put_var_int IlwisNetCdf::fnc_put_var_int=0;
+FNC_put_vara_int IlwisNetCdf::fnc_put_vara_int=0;
 FNC_close IlwisNetCdf::fnc_close=0;
 FNC_enddef IlwisNetCdf::fnc_enddef=0;
 FNC_strerror IlwisNetCdf::fnc_strerror=0;
@@ -35,6 +36,7 @@ IlwisNetCdf::IlwisNetCdf() : ncid(iUNDEF){
 		fnc_close = (FNC_close)GetProcAddress(hh, "nc_close");
 		fnc_enddef = (FNC_enddef)GetProcAddress(hh, "nc_enddef");
 		fnc_strerror = (FNC_strerror)GetProcAddress(hh, "nc_strerror");
+		fnc_put_vara_int = (FNC_put_vara_int)GetProcAddress(hh,"nc_put_vara_int");
 	}
 }
 
@@ -96,7 +98,7 @@ void IlwisNetCdf::makeRasterMapEntry(const IlwisObject &obj) {
 	dimids[1] = y_dimid;
 	dimids[2] = x_dimid;
 
-	handleResult(fnc_def_var(ncid, "value", NC_INT, 1, dimids, &val_varid));
+	handleResult(fnc_def_var(ncid, "value", NC_INT, 3, dimids, &val_varid));
 
 	handleResult(fnc_enddef(ncid));
 
@@ -119,13 +121,14 @@ void IlwisNetCdf::makeRasterMapEntry(const IlwisObject &obj) {
 	handleResult(fnc_put_var_float(ncid, x_varid, crdsX));
 
 
-	//size_t start[3], count[3];
+	size_t start[3], count[3];
 
- //   count[0] = 1;
- //   count[1] = rows;
- //   count[2] = cols;
- //   start[1] = 0;
- //   start[2] = 0;
+    count[0] = 1;
+    count[1] = rows;
+    count[2] = cols;
+	start[0] = 0;
+    start[1] = 0;
+    start[2] = 0;
 
 	if ( mp->dvrs().fUseReals()) {
 
@@ -135,11 +138,11 @@ void IlwisNetCdf::makeRasterMapEntry(const IlwisObject &obj) {
 			LongBuf buf(cols);
 			mp->GetLineVal(y,buf);
 			for( int x = 0; x < cols; ++x) {
-				vals[x + y * rows] = buf[x];
+				vals[x + y * cols] = buf[x];
 			}
 		}
-		//nc_put_vara_int(ncid, val_varid, start, count,vals);
-		handleResult(fnc_put_var_int(ncid, val_varid, vals));
+		handleResult(fnc_put_vara_int(ncid, val_varid, start, count,vals));
+		//handleResult(fnc_put_var_int(ncid, val_varid, vals));
 		delete [] vals;
 	}
 

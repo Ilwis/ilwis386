@@ -10,6 +10,7 @@ typedef int (*FNC_put_var_float)(int ncid, int varid, const float *op);
 typedef int (*FNC_put_var_int)(int ncid, int varid, const int *op);
 typedef int (*FNC_close)(int ncid);
 typedef const char * (*FNC_strerror)(int ncid);
+typedef int (*FNC_put_vara_int)(int ncid, int varid, const size_t start[], const size_t count[], const int *ip);
 
 
 class IlwisNetCdf {
@@ -38,5 +39,6 @@ private:
 	static FNC_close fnc_close;
 	static FNC_enddef fnc_enddef;
 	static FNC_strerror fnc_strerror;
+	static FNC_put_vara_int fnc_put_vara_int;
 
 };

@@ -67,7 +67,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\Ilwis.exe"
+				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\Ilwis.halt"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="2"

@@ -12,6 +12,7 @@ namespace ILWIS{
 	private:
 		bool doCommand();
 		void createExecutionEnviroment();
+		FileName resampleToLatLonWGS84(const Map& mp);
 		String executionDir;
 		static long threddsFolderCount;
 

@@ -88,6 +88,8 @@ BOOL CIlwisStubApp::InitInstance()
 	copyUpdates(pathIlwis,pathUpdate, pathUpdate);
 	string programm("ilwisclient.exe"); 
 	string cmd(m_lpCmdLine);
+	//MessageBox(0,m_lpCmdLine,"test2",MB_OK);
+
 	if ( (index = cmd.find("-server"))!=string::npos) {
 		programm = "ilwisserver.exe";
 		cmd.erase(index, 7);

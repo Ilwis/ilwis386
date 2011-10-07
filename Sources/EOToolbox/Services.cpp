@@ -3,6 +3,7 @@
 #include "httpserver\OWSHandler.h"
 #include "Services\WPSHandler.h"
 #include "Engine/base/system/engine.h"
+#include "Engine\Map\Raster\Map.h"
 #include "HttpServer\IlwisServer.h"
 #include "GNCCatalogHandler.h"
 #include "GNCThreddsHandler.h"
