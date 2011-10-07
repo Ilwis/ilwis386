@@ -75,6 +75,7 @@
 #include "DrawersUI\PointDirectionTool.h"
 #include "DrawersUI\HovMollerTool.h"
 #include "InfoTool.h"
+#include "DrawersUI\ColorCompositeTool.h"
 
 
 using namespace ILWIS;
@@ -120,6 +121,7 @@ DrawerToolInfoVector *createDrawerTool() {
 	infos->push_back(new DrawerToolInfo("PointDirectionTool",createPointDirectionTool));
 	infos->push_back(new DrawerToolInfo("InfoTool",createInfoTool));
 	infos->push_back(new DrawerToolInfo("HovMollerTool",createHovMollerTool));
+	infos->push_back(new DrawerToolInfo("ColorCompositeTool",createColorCompositeTool));
 
 	return infos;
 }

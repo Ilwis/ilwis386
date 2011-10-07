@@ -244,6 +244,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\DrawersUI\ColorCompositeTool.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\DrawersUI\ColorTool.cpp"
 				>
 			</File>
@@ -434,6 +438,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\DrawersUI\CollectionTool.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\ColorCompositeTool.h"
 				>
 			</File>
 			<File
