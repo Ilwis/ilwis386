@@ -16,6 +16,8 @@ namespace ILWIS {
 		RasterSetData() :
 			init(false)
 		{
+			for(int i=0; i < 3; ++i)
+				ccMaps[i] = 2 - i;
 		};
 		~RasterSetData()
 		{
@@ -25,6 +27,7 @@ namespace ILWIS {
 		unsigned long imageWidth, imageHeight; // actual image size
 		unsigned long width, height; // power of 2
 		bool init;
+		int ccMaps[3];
 	};
 
 	class DEMTriangulator;
@@ -42,10 +45,14 @@ namespace ILWIS {
 		void setMinMax(const RangeReal & rrMinMax);
 		Palette * SetPaletteOwner();
 		void SetPalette(Palette * palette);
-		//void addSelectionDrawers(const Representation& rpr);
+		bool isColorComposite() const;
+		int getColorCompositeBand(int index);
+		void setColorCompositeBand(int index, int maplistIndex);
+		MapList getMapList() const;
 		
 	protected:
 		Map rastermap;
+		MapList mpl;
 
 	private:
 

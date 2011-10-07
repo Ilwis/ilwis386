@@ -2,6 +2,7 @@
 #include "Engine\Map\basemap.h"
 #include "Engine\Drawers\ComplexDrawer.h"
 #include "Engine\Map\Raster\Map.h"
+#include "Engine\Map\Raster\MapList\maplist.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Engine\Drawers\RootDrawer.h"
 #include "Drawers\DrawingColor.h" 
@@ -70,7 +71,7 @@ void RasterLayerDrawer::prepare(PreparationParameters *pp){
 		}
 		textureHeap->RepresentationChanged();
 		sameCsy = getRootDrawer()->getCoordinateSystem()->fnObj == csy->fnObj;
-		fGrfLinear = rastermap->gr()->fLinear();
+		fGrfLinear = mpl.fValid() ? mpl[0]->gr()->fLinear() : rastermap->gr()->fLinear();
 	}
 	if ((pp->type & pt3D) || ((pp->type & ptGEOMETRY || pp->type & ptRESTORE) && demTriangulator != 0)) {
 		ZValueMaker * zMaker = getZMaker();
@@ -93,7 +94,10 @@ void RasterLayerDrawer::prepare(PreparationParameters *pp){
 		textureHeapBeforeOffscreen = textureHeap;
 		DrawerContext* drawcontext = getRootDrawer()->getDrawerContext();
 		textureHeap = new TextureHeap();
-		textureHeap->SetData(rastermap, getDrawingColor(), getDrawMethod(), drawcontext->getMaxPaletteSize(), data->width, data->height, rrMinMax, drawcontext);
+		if (rastermap.fValid())
+			textureHeap->SetData(rastermap, getDrawingColor(), getDrawMethod(), drawcontext->getMaxPaletteSize(), data, rrMinMax, drawcontext);
+		else
+			textureHeap->SetData(mpl, getDrawingColor(), getDrawMethod(), drawcontext->getMaxPaletteSize(), data, rrMinMax, drawcontext);
 	}
 	if (pp->type & ptOFFSCREENEND) {
 		isThreaded = isThreadedBeforeOffscreen;
@@ -118,7 +122,8 @@ void RasterLayerDrawer::setDrawMethod(DrawMethod method) {
 				drm = drmBOOL;
 			else if (0 != _dm->pdp())
 				drm = drmRPR;
-		}
+		} if ( mpl.fValid())
+			drm = drmCOLOR;
 	} else
 		drm = method;
 }
@@ -143,7 +148,7 @@ void RasterLayerDrawer::SetPalette(Palette * palette)
 void RasterLayerDrawer::init() const
 {
 	// fetch the image's coordinate bounds
-	if (rastermap.fValid())
+	if (rastermap.fValid() || (mpl.fValid() && mpl->iSize() > 0))
 	{
 		DrawerContext* drawcontext = (getRootDrawer())->getDrawerContext();
 		data->maxTextureSize = drawcontext->getMaxTextureSize();
@@ -153,9 +158,13 @@ void RasterLayerDrawer::init() const
 			data->maxTextureSize = iXScreen;
 		if (iYScreen < data->maxTextureSize)
 			data->maxTextureSize = iYScreen;
-
-		data->imageWidth = rastermap->rcSize().Col;
-		data->imageHeight = rastermap->rcSize().Row;
+		if ( rastermap.fValid()) {
+			data->imageWidth = rastermap->rcSize().Col;
+			data->imageHeight = rastermap->rcSize().Row;
+		} else {
+			data->imageWidth = mpl[0]->rcSize().Col;
+			data->imageHeight = mpl[0]->rcSize().Row;
+		}
 
 		double log2width = log((double)data->imageWidth)/log(2.0);
 		log2width = max(6, ceil(log2width)); // 2^6 = 64 = the minimum texture size that OpenGL/TexImage2D supports
@@ -164,7 +173,11 @@ void RasterLayerDrawer::init() const
 		log2height = max(6, ceil(log2height)); // 2^6 = 64 = the minimum texture size that OpenGL/TexImage2D supports
 		data->height = pow(2, log2height);
 
-		textureHeap->SetData(rastermap, getDrawingColor(), getDrawMethod(), drawcontext->getMaxPaletteSize(), data->width, data->height, rrMinMax, drawcontext);
+		if ( rastermap.fValid()) {
+			textureHeap->SetData(rastermap, getDrawingColor(), getDrawMethod(), drawcontext->getMaxPaletteSize(), data, rrMinMax, drawcontext);
+		} else {
+			textureHeap->SetData(mpl, getDrawingColor(), getDrawMethod(), drawcontext->getMaxPaletteSize(), data, rrMinMax, drawcontext);
+		}
 
 		if (fPaletteOwner && fUsePalette) {
 			palette->SetData(rastermap, this, drawcontext->getMaxPaletteSize(), rrMinMax);
@@ -176,7 +189,12 @@ void RasterLayerDrawer::init() const
 }
 
 void RasterLayerDrawer::addDataSource(void *bmap, int options){
-	rastermap.SetPointer((BaseMapPtr *)bmap);
+	IlwisObject *obj = (IlwisObject *)bmap;
+	if ( IOTYPE((*(obj))->fnObj) == IlwisObject::iotRASMAP)
+		rastermap.SetPointer(obj->pointer());
+	else if (IOTYPE((*(obj))->fnObj) == IlwisObject::iotMAPLIST) {
+		mpl.SetPointer(obj->pointer());
+	}
 }
 
 bool RasterLayerDrawer::draw( const CoordBounds& cbArea) const {
@@ -244,10 +262,11 @@ void RasterLayerDrawer::DisplayImagePortion(unsigned int imageOffsetX, unsigned 
 	glGetIntegerv(GL_VIEWPORT, m_viewport);
 
 	Coord b1, b2, b3, b4;
-	rastermap->gr()->RowCol2Coord(imageOffsetY, imageOffsetX, b1);
-	rastermap->gr()->RowCol2Coord(imageOffsetY, imageOffsetX + imageSizeX, b2);
-	rastermap->gr()->RowCol2Coord(imageOffsetY + imageSizeY, imageOffsetX + imageSizeX, b3);
-	rastermap->gr()->RowCol2Coord(imageOffsetY + imageSizeY, imageOffsetX, b4);
+	Map mp = rastermap.fValid() ? rastermap : mpl[0];
+	mp->gr()->RowCol2Coord(imageOffsetY, imageOffsetX, b1);
+	mp->gr()->RowCol2Coord(imageOffsetY, imageOffsetX + imageSizeX, b2);
+	mp->gr()->RowCol2Coord(imageOffsetY + imageSizeY, imageOffsetX + imageSizeX, b3);
+	mp->gr()->RowCol2Coord(imageOffsetY + imageSizeY, imageOffsetX, b4);
 	Coord c1, c2, c3, c4;
 	glFeedbackBuffer(2, GL_2D, feedbackBuffer);
 	glRenderMode(GL_FEEDBACK);
@@ -352,6 +371,7 @@ void RasterLayerDrawer::DisplayTexture(Coord & c1, Coord & c2, Coord & c3, Coord
 	if (tex != 0)
 	{
 		// make the quad
+		Map mp = rastermap.fValid() ? rastermap : mpl[0];
 		glBegin (GL_QUADS);
 
 		if (sameCsy && fGrfLinear) {
@@ -362,10 +382,10 @@ void RasterLayerDrawer::DisplayTexture(Coord & c1, Coord & c2, Coord & c3, Coord
 			double t2 = min(imageOffsetY + imageSizeY, data->imageHeight) / (double)data->height;
 
 			Coord b1, b2, b3, b4;
-			rastermap->gr()->RowCol2Coord(imageOffsetY, imageOffsetX, b1);
-			rastermap->gr()->RowCol2Coord(imageOffsetY, min(imageOffsetX + imageSizeX, data->imageWidth), b2);
-			rastermap->gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), min(imageOffsetX + imageSizeX, data->imageWidth), b3);
-			rastermap->gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), imageOffsetX, b4);
+			mp->gr()->RowCol2Coord(imageOffsetY, imageOffsetX, b1);
+			mp->gr()->RowCol2Coord(imageOffsetY, min(imageOffsetX + imageSizeX, data->imageWidth), b2);
+			mp->gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), min(imageOffsetX + imageSizeX, data->imageWidth), b3);
+			mp->gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), imageOffsetX, b4);
 
 			glTexCoord2d(s1, t1);
 			glVertex3d(b1.x, b1.y, 0.0);
@@ -390,14 +410,14 @@ void RasterLayerDrawer::DisplayTexture(Coord & c1, Coord & c2, Coord & c3, Coord
 				double t1 = imageOffsetY / (double)data->height;
 
 				Coord b1, b2, b3, b4;
-				rastermap->gr()->RowCol2Coord(imageOffsetY, imageOffsetX + colStep * x, b1);
-				rastermap->gr()->RowCol2Coord(imageOffsetY, imageOffsetX + colStep * (x + 1), b2);
+				mp->gr()->RowCol2Coord(imageOffsetY, imageOffsetX + colStep * x, b1);
+				mp->gr()->RowCol2Coord(imageOffsetY, imageOffsetX + colStep * (x + 1), b2);
 
 				for (int y = 1; y <= iSize ; ++y) {
 					double t2 = t1 + rowStep / (double)data->height;
 		
-					rastermap->gr()->RowCol2Coord(imageOffsetY + rowStep * y, imageOffsetX + colStep * (x + 1), b3);
-					rastermap->gr()->RowCol2Coord(imageOffsetY + rowStep * y, imageOffsetX + colStep * x, b4);
+					mp->gr()->RowCol2Coord(imageOffsetY + rowStep * y, imageOffsetX + colStep * (x + 1), b3);
+					mp->gr()->RowCol2Coord(imageOffsetY + rowStep * y, imageOffsetX + colStep * x, b4);
 
 					glTexCoord2d(s1, t1);
 					glVertex3d(b1.x, b1.y, 0.0);
@@ -429,16 +449,16 @@ void RasterLayerDrawer::DisplayTexture(Coord & c1, Coord & c2, Coord & c3, Coord
 				double t1 = imageOffsetY / (double)data->height;
 
 				Coord b1, b2, b3, b4;
-				rastermap->gr()->RowCol2Coord(imageOffsetY, imageOffsetX + colStep * x, b1);
-				rastermap->gr()->RowCol2Coord(imageOffsetY, imageOffsetX + colStep * (x + 1), b2);
+				mp->gr()->RowCol2Coord(imageOffsetY, imageOffsetX + colStep * x, b1);
+				mp->gr()->RowCol2Coord(imageOffsetY, imageOffsetX + colStep * (x + 1), b2);
 
 				c1 = getRootDrawer()->getCoordinateSystem()->cConv(csy, b1);
 				c2 = getRootDrawer()->getCoordinateSystem()->cConv(csy, b2);
 				for (int y = 1; y <= iSize ; ++y) {
 					double t2 = t1 + rowStep / (double)data->height;
 		
-					rastermap->gr()->RowCol2Coord(imageOffsetY + rowStep * y, imageOffsetX + colStep * (x + 1), b3);
-					rastermap->gr()->RowCol2Coord(imageOffsetY + rowStep * y, imageOffsetX + colStep * x, b4);
+					mp->gr()->RowCol2Coord(imageOffsetY + rowStep * y, imageOffsetX + colStep * (x + 1), b3);
+					mp->gr()->RowCol2Coord(imageOffsetY + rowStep * y, imageOffsetX + colStep * x, b4);
 
 					c3 = getRootDrawer()->getCoordinateSystem()->cConv(csy, b3);
 					c4 = getRootDrawer()->getCoordinateSystem()->cConv(csy, b4);
@@ -474,12 +494,12 @@ void RasterLayerDrawer::DisplayTexture3D(Coord & c1, Coord & c2, Coord & c3, Coo
 	if (tex != 0)
 	{
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
+		Map mp = rastermap.fValid() ? rastermap : mpl[0];
 		Coord b1, b2, b3, b4;
-		rastermap->gr()->RowCol2Coord(imageOffsetY, imageOffsetX, b1);
-		rastermap->gr()->RowCol2Coord(imageOffsetY, min(imageOffsetX + imageSizeX, data->imageWidth), b2);
-		rastermap->gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), min(imageOffsetX + imageSizeX, data->imageWidth), b3);
-		rastermap->gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), imageOffsetX, b4);
+		mp->gr()->RowCol2Coord(imageOffsetY, imageOffsetX, b1);
+		mp->gr()->RowCol2Coord(imageOffsetY, min(imageOffsetX + imageSizeX, data->imageWidth), b2);
+		mp->gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), min(imageOffsetX + imageSizeX, data->imageWidth), b3);
+		mp->gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), imageOffsetX, b4);
 
 		if (sameCsy) {
 			double clip_plane0[]={b3.y - b2.y, b2.x - b3.x, 0.0, b3.x * (b2.y - b3.y) - b3.y * (b2.x - b3.x)}; // x < x2
@@ -535,6 +555,26 @@ void RasterLayerDrawer::setThreaded(bool yesno) {
 	isThreaded = yesno;
 }
 
+bool RasterLayerDrawer::isColorComposite() const {
+	return mpl.fValid();
+}
+
+int RasterLayerDrawer::getColorCompositeBand(int index) {
+	if ( mpl.fValid() && index < 3) {
+		return data->ccMaps[index];
+	}
+	return iUNDEF;
+}
+
+void RasterLayerDrawer::setColorCompositeBand(int index, int maplistIndex) {
+	if ( mpl.fValid() && index < 3 && maplistIndex < mpl->iSize()) {
+		data->ccMaps[index] = maplistIndex;
+	}
+}
+
+MapList RasterLayerDrawer::getMapList() const{
+	return mpl;
+}
 
 
 

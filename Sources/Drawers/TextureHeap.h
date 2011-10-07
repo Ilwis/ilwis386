@@ -19,6 +19,7 @@ namespace ILWIS {
 	class DrawingColor;
 	class DrawerContext;
 	class LayerDrawer;
+	class RasterSetData;
 
 	class Palette
 	{
@@ -46,7 +47,8 @@ namespace ILWIS {
 		TextureHeap();
 		virtual ~TextureHeap();
 
-		void SetData(const Map & _mp, const DrawingColor * drawColor, const NewDrawer::DrawMethod drm, const unsigned int iPaletteSize, const unsigned long imgWidth2, const unsigned long imgHeight2, const RangeReal & rrMinMaxMap, DrawerContext * drawerContext);
+		void SetData(const Map & _mp, const DrawingColor * drawColor, const NewDrawer::DrawMethod drm, const unsigned int iPaletteSize, ILWIS::RasterSetData * data, const RangeReal & rrMinMaxMap, DrawerContext * drawerContext);
+		void SetData(const MapList & _mpl, const DrawingColor * drawColor, const NewDrawer::DrawMethod drm, const unsigned int iPaletteSize, ILWIS::RasterSetData * data, const RangeReal & rrMinMaxMap, DrawerContext * drawerContext);
 		bool fValid();
 		Texture * GetTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, unsigned int zoomFactor, const Palette * palette, bool fInThread);
 		void ClearQueuedTextures();
@@ -61,6 +63,7 @@ namespace ILWIS {
 		static const int BUF_SIZE = 100;
 		Texture * textureRequest [BUF_SIZE];
 		Map mp;
+		MapList mpl;
 		const DrawingColor * drawColor;
 		NewDrawer::DrawMethod drm;
 		unsigned int iPaletteSize;
@@ -75,6 +78,7 @@ namespace ILWIS {
 		DrawerContext * drawerContext;
 		CCriticalSection csChangeTexCreatorList;
 		CCriticalSection csThread;
+		RasterSetData *data;
 	};
 }
 

@@ -3,9 +3,16 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Headers\toolspch.h"
+#include "Engine\Drawers\ComplexDrawer.h"
 #include "Engine\Map\Raster\Map.h"
+#include "Engine\Map\Raster\MapList\maplist.h"
+#include "Engine\Drawers\RootDrawer.h"
+#include "Drawers\DrawingColor.h" 
+#include "Drawers\LayerDrawer.h"
+#include "Drawers\RasterLayerDrawer.h"
 #include "TextureHeap.h"
 #include "Texture.h"
+#include "CCTexture.h"
 #include "Engine\Drawers\DrawerContext.h"
 #include "DrawingColor.h"
 #include "LayerDrawer.h"
@@ -161,17 +168,31 @@ TextureHeap::~TextureHeap()
 			delete textures[i];
 }
 
-void TextureHeap::SetData(const Map & _mp, const DrawingColor * drawColor, const NewDrawer::DrawMethod drm, const unsigned int iPaletteSize, const unsigned long imgWidth2, const unsigned long imgHeight2, const RangeReal & rrMinMaxMap, DrawerContext * drawerContext)
+void TextureHeap::SetData(const Map & _mp, const DrawingColor * drawColor, const NewDrawer::DrawMethod drm, const unsigned int iPaletteSize, RasterSetData *data, const RangeReal & rrMinMaxMap, DrawerContext * drawerContext)
 {
 	this->mp.SetPointer(_mp.pointer());
 	this->drawColor = drawColor;
 	this->drm = drm;
 	this->iPaletteSize = iPaletteSize;
-	this->imgWidth2 = imgWidth2;
-	this->imgHeight2 = imgHeight2;
+	this->imgWidth2 = data->width;
+	this->imgHeight2 = data->height;
 	this->rrMinMaxMap.rLo() = rrMinMaxMap.rLo();
 	this->rrMinMaxMap.rHi() = rrMinMaxMap.rHi();
 	this->drawerContext = drawerContext;
+}
+
+void TextureHeap::SetData(const MapList & _mpl, const DrawingColor * drawColor, const NewDrawer::DrawMethod drm, const unsigned int iPaletteSize, RasterSetData *_data, const RangeReal & rrMinMaxMap, DrawerContext * drawerContext)
+{
+	this->mpl.SetPointer(_mpl.pointer());
+	this->drawColor = drawColor;
+	this->drm = drm;
+	this->iPaletteSize = iPaletteSize;
+	this->imgWidth2 = _data->width;
+	this->imgHeight2 = _data->height;
+	this->rrMinMaxMap.rLo() = rrMinMaxMap.rLo();
+	this->rrMinMaxMap.rHi() = rrMinMaxMap.rHi();
+	this->drawerContext = drawerContext;
+	data = _data;
 }
 
 bool TextureHeap::fValid()
@@ -234,7 +255,10 @@ Texture * TextureHeap::GetTexture(const unsigned int offsetX, const unsigned int
 Texture * TextureHeap::GenerateTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, unsigned int zoomFactor, const Palette * palette, bool fInThread)
 {
 	if (((writepos + 1) % BUF_SIZE) != readpos) {
-		textureRequest[writepos] = new Texture(mp, drawColor, drm, offsetX, offsetY, sizeX, sizeY, imgWidth2, imgHeight2, zoomFactor, iPaletteSize, rrMinMaxMap, palette);
+		if ( mp.fValid())
+			textureRequest[writepos] = new Texture(mp, drawColor, drm, offsetX, offsetY, sizeX, sizeY, imgWidth2, imgHeight2, zoomFactor, iPaletteSize, rrMinMaxMap, palette);
+		else
+			textureRequest[writepos] = new CCTexture(mpl, drawColor, drm, offsetX, offsetY, sizeX, sizeY, data, zoomFactor, rrMinMaxMap);
 		writepos = (writepos + 1) % BUF_SIZE;
 	}
 	if (fInThread) {

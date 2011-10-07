@@ -26,25 +26,24 @@ namespace ILWIS {
 		virtual ~Texture();
 
 		void CreateTexture(DrawerContext * drawerContext, bool fInThread, volatile bool * fDrawStop);
-		void BindMe(DrawerContext * drawerContext); // To be called before glBegin
+		virtual void BindMe(DrawerContext * drawerContext); // To be called before glBegin
 		bool equals(const long offsetX1, const long offsetY1, const long offsetX2, const long offsetY2, unsigned int zoomFactor);
 		bool contains(const long offsetX1, const long offsetY1, const long offsetX2, const long offsetY2);
 		unsigned int getZoomFactor();
 		void RepresentationChanged();
 		bool fValid();
 
-	private:
+	protected:
 		void PutLine(const RealBuf& bufOriginal, const LongBuf& bufColor, const int iLine, const long texSizeX, char * outbuf);
 		void PutLine(const LongBuf& bufOriginal, const LongBuf& bufColor, const int iLine, const long texSizeX, char * outbuf);
 		void ConvLine(const RealBuf& buf, LongBuf& bufColor);
 		void ConvLine(const LongBuf& buf, LongBuf& bufColor);
-		bool DrawTexture(long offsetX, long offsetY, long texSizeX, long texSizeY, unsigned int zoomFactor, char * outbuf, volatile bool* fDrawStop);
+		virtual bool DrawTexture(long offsetX, long offsetY, long texSizeX, long texSizeY, unsigned int zoomFactor, char * outbuf, volatile bool* fDrawStop);
 		void PutLineData(const RealBuf& bufOriginal, const IntBuf& bufData, const int iLine, const long texSizeX, char * outbuf);
 		void PutLineData(const LongBuf& bufOriginal, const IntBuf& bufData, const int iLine, const long texSizeX, char * outbuf);
 		void StretchLine(const RealBuf& buf, IntBuf& bufData);
 		void StretchLine(const LongBuf& buf, IntBuf& bufData);
 		bool DrawTexturePaletted(long offsetX, long offsetY, long texSizeX, long texSizeY, unsigned int zoomFactor, char * outbuf, volatile bool* fDrawStop);
-		const Map mp;
 		GLuint texture;
 		char * texture_data;
 		const unsigned long sizeX, sizeY;
@@ -60,6 +59,8 @@ namespace ILWIS {
 		const Palette * palette;
 		bool fRepresentationChanged;
 		bool valid;
+	private:
+		const Map mp;
 	};
 }
 

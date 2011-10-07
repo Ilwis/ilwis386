@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="ILWISDrawers"
 	ProjectGUID="{FD4E2ECC-451A-40CD-9391-6806EBEC9BF4}"
 	RootNamespace="ILWISDrawers"
@@ -228,6 +228,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Drawers\CCTexture.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Drawers\CollectionDrawer.cpp"
 				>
 			</File>
@@ -342,6 +346,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Drawers\CanvasBackgroundDrawer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\CCTexture.h"
 				>
 			</File>
 			<File

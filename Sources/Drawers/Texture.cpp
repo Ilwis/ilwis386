@@ -4,6 +4,7 @@
 
 #include "Headers\toolspch.h"
 #include "Engine\Map\Raster\Map.h"
+#include "Engine\Map\Raster\MapList\maplist.h"
 #include "Texture.h"
 #include "TextureHeap.h" // for Palette
 #include "Engine\Drawers\DrawerContext.h"

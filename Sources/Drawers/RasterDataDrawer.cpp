@@ -38,8 +38,7 @@ void RasterDataDrawer::prepare(PreparationParameters *pp){
 		RasterLayerDrawer *rsd;
 		ILWIS::DrawerParameters dp(getRootDrawer(), this);
 		IlwisObject::iotIlwisObjectType otype = IlwisObject::iotObjectType(basemap->fnObj);
-		switch ( otype) {
-			case IlwisObject::iotRASMAP:
+		if ( otype == IlwisObject::iotRASMAP) {
 				rsd = (RasterLayerDrawer *)NewDrawer::getDrawer("RasterLayerDrawer", pp, &dp);
 				RangeReal rrMinMax (0, 255);
 				Domain dm = basemap->dm();
@@ -58,7 +57,6 @@ void RasterDataDrawer::prepare(PreparationParameters *pp){
 				rsd->setMinMax(rrMinMax);
 				rsd->SetPaletteOwner(); // this set has the only available palette
 				addLayerDrawer(basemap,pp,rsd);
-				break;
 		}
 	} 
 	if ( pp->type & RootDrawer::ptRENDER || pp->type & RootDrawer::ptRESTORE) {
@@ -79,7 +77,7 @@ void RasterDataDrawer::addLayerDrawer(const BaseMap& basemap,PreparationParamete
 	rsd->setRepresentation(basemap->dm()->rpr()); //  default choice
 	rsd->getZMaker()->setSpatialSource(basemap, getRootDrawer()->getMapCoordBounds());
 	rsd->getZMaker()->setDataSourceMap(basemap);
-	rsd->addDataSource(basemap.ptr());
+	rsd->addDataSource(mpl.fValid() ? (void *)&mpl : (void *)&basemap);  // color composte or normal
 	rsd->prepare(&fp);
 	addDrawer(rsd);
 }
