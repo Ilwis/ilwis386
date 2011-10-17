@@ -107,6 +107,7 @@ public:
 		dosSEG, dosSEGVAL, dosSEGSORT, dosSEGBOOL, dosSEGOTHER,
 		dosPOL, dosPOLVAL, dosPOLSORT, dosPOLBOOL, dosPOLOTHER,
 		dosPNT, dosPNTVAL, dosPNTSORT, dosPNTBOOL, dosPNTOTHER, dosEND };
+	enum OpenState{osNormal=0, osExitOnClose=1,osFullScreen=2};
 	
 	IlwisWinApp();
 	~IlwisWinApp();
