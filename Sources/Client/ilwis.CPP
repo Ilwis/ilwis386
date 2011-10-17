@@ -356,6 +356,7 @@ BOOL IlwisWinApp::InitApplication()
 	String sParms(m_lpCmdLine);
 	short ipos2 = sParms.iPos(String("-D"));
 	short ipos = sParms.iPos(String("-C"));
+
 	if ( ipos2 != shUNDEF) {
 		if ( (ipos2 < ipos && ipos!=shUNDEF) || ipos == shUNDEF)
 		getEngine()->setDebugMode(true);
@@ -422,7 +423,7 @@ BOOL IlwisWinApp::InitInstance()
 		Gdiplus::GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, NULL);
 
 		//ParmList *pl;
-		Context()->InitThreadLocalVars();
+		//Context()->InitThreadLocalVars();
 		//delete pl;
 
 		IlwisSettings ilwregset("", IlwisSettings::pkuUSER);
@@ -509,10 +510,15 @@ BOOL IlwisWinApp::InitInstance()
 		commandUI->initModules();
 
 		if ( m_sCommand != "") {
-			Script::Exec(m_sCommand);
-			if ( getEngine()->fStayResident() == false) {
-				Execute("exit");
-				return FALSE;
+			if ( m_sCommand.sHead(" ") != "open") {
+				Script::Exec(m_sCommand);
+				if ( getEngine()->fStayResident() == false) {
+					Execute("exit");
+					return FALSE;
+				}
+			} else {
+				String command = m_sCommand + " -exitOnClose";
+				getEngine()->Execute(command);
 			}
 		}
 		helpFinder = new ILWIS::HelpFinder();
