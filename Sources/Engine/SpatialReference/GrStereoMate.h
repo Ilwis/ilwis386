@@ -70,6 +70,7 @@ public:
 	void Init();
 	void _export SetRowCol(RowCol rcSize);
 	void GetObjectStructure(ObjectStructure& os);
+	CoordBounds _export cb() const;
 	
 	//int _export Compute();
 	

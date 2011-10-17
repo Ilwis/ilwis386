@@ -47,7 +47,7 @@ double rDisttoCenter;
 double a, e2, b;
 double rLatitudeCorrFactor;
 double rHorizonRadius;// spehre
-double rVisibleHalfArc; // greatcircle arc on sphere
+double rVisibleHalfArc; // greatcircle arc on sphere 
 
 ProjectionGeoStationarySatellite::ProjectionGeoStationarySatellite(const Ellipsoid& ell)
 :ProjectionAzimuthal(ell)

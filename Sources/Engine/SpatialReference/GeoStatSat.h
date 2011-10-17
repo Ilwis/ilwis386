@@ -43,10 +43,10 @@
 #define ILWGEOSTAT_H
 #include "Engine\SpatialReference\AZIMUTHA.H"
 
-class ProjectionGeoStationarySatellite: public ProjectionAzimuthal
+class _export ProjectionGeoStationarySatellite: public ProjectionAzimuthal
 {
 public:
-  ProjectionGeoStationarySatellite(const Ellipsoid&);
+  ProjectionGeoStationarySatellite(const Ellipsoid&); 
   virtual XY xyConv(const PhiLam&) const;
   virtual PhiLam plConv(const XY&) const;
 	virtual void Prepare();

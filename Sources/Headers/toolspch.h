@@ -33,6 +33,7 @@
  ***************************************************************/
 
 #pragma warning( disable : 4244)
+#pragma once
 
 #include "Headers\base.h"
 #include "Engine\Base\DataObjects\Dlist.h"

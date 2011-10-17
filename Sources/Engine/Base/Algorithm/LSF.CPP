@@ -166,14 +166,14 @@ String LeastSquaresFitPolynomial::sFormula() const
   int iTerm = 0;
   double r = cvSolution(0);
   if (abs(r) < EPS10)  r = 0.0;
-  String sPolyn = String("  %.3f", r);
+  String sPolyn = String("  %.6f", r);
   for ( iTerm = 1; iTerm < iNrTerms; iTerm++) {
     r = cvSolution(iTerm);
     if (abs(r) < EPS10)  r = 0.0;
     if (iTerm == 1)
-      sPolyn &= String("  + %.3f * X", r);
+      sPolyn &= String("  + %.6f * X", r);
     else
-      sPolyn &= String("  + %.3f * X^%d", r, iTerm);
+      sPolyn &= String("  + %.6f * X^%d", r, iTerm);
   }
   /*char sBuf[400];
   ostrstream str(sBuf, 200);

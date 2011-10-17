@@ -122,7 +122,7 @@ public:
   virtual String _export sType() const;
   const CoordSystem& cs() const { return _csys; }
   void _export SetCoordSystem(const CoordSystem&); // dangerous function!
-  CoordBounds _export cb() const;
+  virtual CoordBounds _export cb() const;
   RowCol rcSize() const { return _rc; }  // size in lines and columns
   inline bool fInside(const RowCol& rc) const;
   virtual double _export rPixSize() const;

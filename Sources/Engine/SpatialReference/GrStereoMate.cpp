@@ -78,6 +78,16 @@ GeoRefStereoMate::~GeoRefStereoMate()
 {
 }
 
+CoordBounds GeoRefStereoMate::cb() const
+{
+	if ( mapDTM.fValid() ) {
+		return mapDTM->cb();
+	} else if ( grSourceMap.fValid()) {
+		return grSourceMap->cb();
+	}
+	return GeoRefPtr::cb();
+
+}
 void GeoRefStereoMate::Init()
 {
 	if (!mapDTM.fValid())

@@ -87,6 +87,7 @@ void Engine::Init() {
 		version->addModuleInterfaceVersion(ILWIS::Module::mi37);
 		version->addModuleInterfaceVersion(ILWIS::Module::mi38);
 		String ilwDir = context->sIlwDir();
+		context->InitThreadLocalVars();
 	}
 
 }

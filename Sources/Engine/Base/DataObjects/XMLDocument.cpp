@@ -47,6 +47,7 @@ String ILWIS::XMLDocument::toString() {
 	stringstream str;
 	save(str);
 	String endResult(str.str());
+	endResult = endResult.substr(0, endResult.size() - 1);
 
 	return endResult;
 

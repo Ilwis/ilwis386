@@ -359,6 +359,10 @@ Polygon::getArea() const
 		const CoordinateSequence *h=lr->getCoordinatesRO();
         	area-=fabs(algorithm::CGAlgorithms::signedArea(h));
 	}
+	if ( area < 0) {
+		int t=0;
+		++t;
+	}
 	return area;
 }
 

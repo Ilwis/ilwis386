@@ -275,7 +275,7 @@ String String::sTrimSpaces(bool removeCRLF) const {
 		fromEnd = temp.find_last_not_of("\r\n");
 		fromStart = max(0, fromStart);
 		fromEnd = fromEnd == string::npos ? temp.size(): fromEnd;
-		return substr(fromStart, fromEnd - fromStart + 1);
+		return substr(fromStart, fromEnd - fromStart - 1);
 
 	} else
 		return  substr(iFirstNonSpace, iFindLastSpace - iFirstNonSpace + 1);

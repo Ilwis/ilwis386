@@ -52,7 +52,10 @@ String SpatialDataDrawer::description() const {
 
 String SpatialDataDrawer::iconName(const String& subtype) const 
 { 
-	return getBaseMap()->fnObj.sExt;
+	if ( mpl.fValid())
+		return ".mpl";
+	else
+		return getBaseMap()->fnObj.sExt;
 }
 
 BaseMapPtr* SpatialDataDrawer::getBaseMap(int index) const { // we return the pointer to avoid copy constructors

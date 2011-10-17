@@ -34,56 +34,7 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/* $Log: /ILWIS 3.0/SampleSet/SAMPLSET.CPP $
- * 
- * 13    1/11/02 12:53 Willem
- * Changing the sample map is only succesful when both the GeoRef and the
- * Domain match with the properties of the SampleSet.
- * If at least one does not match an ErrorObject is thrown
- * 
- * 12    11/26/01 12:33 Willem
- * Getting the object structure for dependent data of an object is now
- * handled by IlwisObject instead of the individual objects
- * 
- * 11    7/12/01 17:16 Hendrikse
- * added NotFoundError(fn) message in
- * 
- * 10    23-11-00 12:04p Martin
- * added getobjectstructure
- * 
- * 9     5/09/00 4:38p Wind
- * undid a removing of code that didn't compile after port
- * 
- * 8     22-10-99 12:54 Wind
- * thread save access (not yet finished)
- * 
- * 7     9/13/99 11:26a Wind
- * adpated to removal of operator String() in FileName
- * 
- * 6     9/08/99 12:56p Wind
- * 
- * 5     9/08/99 10:25a Wind
- * adpated to use of quoted file names
- * 
- * 4     16-07-99 15:14 Koolhoven
- * removed Yield changes
- * 
- * 3     15-03-99 16:07 Koolhoven
- * 
- * 2     3/11/99 12:17p Martin
- * Added support for Case insesitive 
-// Revision 1.3  1998/09/16 17:24:27  Wim
-// 22beta2
-//
-// Revision 1.2  1997/08/18 17:49:36  Wim
-// Changed some (double) to (long), more efficient calculation
-// Added some byteConv(..)
-//
-/* SampleSetPtr
-   Copyright Ilwis System Development ITC
-   March 1996, by Jelle Wind
-	Last change:  J    21 Oct 99   10:03 am
-*/
+
 
 #include "Engine\SampleSet\SAMPLSET.H"
 #include "Engine\SampleSet\FSPACE.H"
@@ -96,8 +47,7 @@
 #include "Engine\Applications\ModuleMap.h"
 #include "Engine\Base\System\Engine.h"
 #include "Headers\Err\ILWISDAT.ERR"
-#include "Headers\Hs\DAT.hs"
-#include "Headers\Hs\Sample.hs"
+
 
 IlwisObjectPtrList SampleSet::listSmpl;
 
@@ -304,9 +254,9 @@ void SampleSetPtr::SetSampleMap(const Map& smplmp)
 		return;
 
 	if (smplmp->dm() != dm())
-		throw ErrorObject(SSSErrDiffDomsSmsAndMap);
+		throw ErrorObject(TR("Different domain of sampleset and map"));
 	if (smplmp->gr() != mpl()->gr())
-		throw ErrorObject(SSSErrNotSameGeoRefSmp);
+		throw ErrorObject(TR("Different georefs for set and map"));
 
 	smplmap = smplmp;
 	Updated();
@@ -332,7 +282,7 @@ bool SampleSetPtr::fInitStat()
   trq.SetTitle("Sample");
   trq.Start();
   if (!smplmap.fValid()) {
-    trq.SetText(SDATTextInitSampleMap);
+    trq.SetText(TR("Initiate sample set"));
     smplmap = Map(FileName::fnUnique(FileName(fnObj, ".mpr")), mpl()->gr(), mpl()[mpl()->iLower()]->rcSize(),dm());
     objdep.Add(smplmap.ptr());
     fChanged = true;
