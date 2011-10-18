@@ -14,6 +14,9 @@ namespace ILWIS {
 		String getMenuString() const;
 		void clear();
 	protected:
+		void stretchCC1();
+		void stretchCC2();
+		void stretchCC3();
 		void displayOptionCC();
 	};
 
@@ -28,4 +31,22 @@ namespace ILWIS {
 
 	};
 
+	class SetStretchCCForm : public DisplayOptionsForm2 {
+	public:
+		SetStretchCCForm(CWnd *wPar, RasterLayerDrawer *dr,int index);
+		void apply(); 
+	private:
+		FormEntry *CheckData();
+
+		RangeReal rr;
+		FieldRealSliderEx *sliderLow;
+		FieldRealSliderEx *sliderHigh;
+		double low, high;
+		int index;
+
+		int check(Event *);
+
+	};
+
 }
+

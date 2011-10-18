@@ -38,22 +38,6 @@ HTREEITEM StretchTool::configure( HTREEITEM parentItem){
 	if ( isConfigured)
 		return htiNode;
 
-	//LayerDrawer *ldrw = dynamic_cast<LayerDrawer *>(drawer);
-	//SetDrawer *sdrw = dynamic_cast<SetDrawer *>(drawer);
-	//RangeReal rr;
-	//if ( ldrw ) {
-	//	BaseMapPtr *bmp = ((SpatialDataDrawer *)ldrw->getParentDrawer())->getBaseMap();
-	//	rr = bmp->rrMinMax();
-	//} else if ( sdrw) {
-	//	IlwisObject *obj = (IlwisObject *)sdrw->getDataSource();
-	//	if ( IOTYPE((*obj)->fnObj) == IlwisObject::iotMAPLIST) {
-	//		MapList *mpl = (MapList *)obj;
-	//		rr = (*mpl)->getRange();
-	//	}else if ( IOTYPE((*obj)->fnObj) == IlwisObject::iotOBJECTCOLLECTION) {
-	//		ObjectCollection *oc = (ObjectCollection *)obj;
-	//		rr = (*oc)->getRange();
-	//	}
-	//}
 	RangeReal rr = getBaseRange();
 	if(!rr.fValid())
 		return parentItem;
