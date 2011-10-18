@@ -10,7 +10,7 @@
 #include "Drawers\FeatureLayerDrawer.h"
 #include "drawers\linedrawer.h"
 #include "drawers\polygondrawer.h"
-#include "Engine\Base\Algorithm\triangulation\gpc.h"
+#include "Engine\Base\Algorithm\TriangulationAlg\gpc.h"
 #include "Drawers\PolygonFeatureDrawer.h"
 #include "Drawers\PolygonLayerDrawer.h"
 #include "Engine\Drawers\DrawerContext.h"

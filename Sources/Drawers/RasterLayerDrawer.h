@@ -11,13 +11,18 @@ class ValueSlicerSlider;
 
 namespace ILWIS {
 
+	struct BandInfo {
+		int index;
+		RangeReal rr;
+	};
 	class RasterSetData {
 	public:
 		RasterSetData() :
 			init(false)
 		{
 			for(int i=0; i < 3; ++i)
-				ccMaps[i] = 2 - i;
+				ccMaps[i].index = 2 - i;
+			exceptionColor = colorUNDEF;
 		};
 		~RasterSetData()
 		{
@@ -27,7 +32,8 @@ namespace ILWIS {
 		unsigned long imageWidth, imageHeight; // actual image size
 		unsigned long width, height; // power of 2
 		bool init;
-		int ccMaps[3];
+		BandInfo ccMaps[3];
+		Color exceptionColor;
 	};
 
 	class DEMTriangulator;
@@ -48,7 +54,12 @@ namespace ILWIS {
 		bool isColorComposite() const;
 		int getColorCompositeBand(int index);
 		void setColorCompositeBand(int index, int maplistIndex);
+		void setColorCompositeRange(int index, const RangeReal& rr);
+		RangeReal getColorCompositeRange(int index);
+		Color getExceptionColor() const;
+		void setExceptionColor(const Color& clr);
 		MapList getMapList() const;
+		Representation getRepresentation() const;
 		
 	protected:
 		Map rastermap;

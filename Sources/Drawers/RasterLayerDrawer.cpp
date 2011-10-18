@@ -561,19 +561,53 @@ bool RasterLayerDrawer::isColorComposite() const {
 
 int RasterLayerDrawer::getColorCompositeBand(int index) {
 	if ( mpl.fValid() && index < 3) {
-		return data->ccMaps[index];
+		return data->ccMaps[index].index;
 	}
 	return iUNDEF;
 }
 
 void RasterLayerDrawer::setColorCompositeBand(int index, int maplistIndex) {
 	if ( mpl.fValid() && index < 3 && maplistIndex < mpl->iSize()) {
-		data->ccMaps[index] = maplistIndex;
+		data->ccMaps[index].index = maplistIndex;
 	}
 }
 
 MapList RasterLayerDrawer::getMapList() const{
 	return mpl;
+}
+
+void RasterLayerDrawer::setColorCompositeRange(int index, const RangeReal& rr){
+	if ( data && mpl.fValid()) {
+		if ( index < 3)
+			data->ccMaps[index].rr = rr;
+	}
+}
+
+RangeReal RasterLayerDrawer::getColorCompositeRange(int index){
+	if ( data && mpl.fValid()) {
+		if ( index < 3)
+			return data->ccMaps[index].rr;
+	}
+	return RangeReal();
+}
+
+Color RasterLayerDrawer::getExceptionColor() const {
+	if ( data && mpl.fValid()) {
+		return data->exceptionColor;
+	}
+	return colorUNDEF;
+}
+
+void RasterLayerDrawer::setExceptionColor(const Color& clr){
+	if ( data && mpl.fValid()) {
+		data->exceptionColor = clr;
+	}
+}
+
+Representation RasterLayerDrawer::getRepresentation() const { // avoiding copy constructotrs
+	if ( isColorComposite())
+		return Representation();
+	return LayerDrawer::getRepresentation();
 }
 
 

@@ -24,6 +24,8 @@ namespace ILWIS {
 		//virtual bool fValid();
 
 	private:
+		void linearStretch(ByteBuf& buf1, ByteBuf& buf2, ByteBuf& buf3, RangeReal ranges[] );
+		double stretch(double v, const RangeReal& rrFrom, const RangeReal& rrTo);
 		void BindMe(DrawerContext * drawerContext);
 		bool DrawTexture(long offsetX, long offsetY, long texSizeX, long texSizeY, unsigned int zoomFactor, char * outbuf, volatile bool* fDrawStop);
 		const MapList mpl;

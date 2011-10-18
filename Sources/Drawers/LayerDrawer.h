@@ -13,7 +13,7 @@ class _export LayerDrawer : public ComplexDrawer {
 		LayerDrawer(DrawerParameters *parms, const String& name);
 		virtual ~LayerDrawer();
 		virtual void prepare(PreparationParameters *pp);
-		Representation getRepresentation() const;
+		virtual Representation getRepresentation() const;
 		virtual void setRepresentation(const Representation& rp);
 		//bool isLegendUsefull() const;
 		RangeReal getStretchRangeReal(bool useAttrb = false) const;

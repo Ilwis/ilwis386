@@ -59,9 +59,18 @@ bool CCTexture::DrawTexture(long offsetX, long offsetY, long texSizeX, long texS
 			if (*fDrawStop) {
 				return false;
 			}
-			mpl[data->ccMaps[0]]->GetLineRaw(iDataInYPos + offsetY, bufIn1, offsetX, sizeX);
-			mpl[data->ccMaps[1]]->GetLineRaw(iDataInYPos + offsetY, bufIn2, offsetX, sizeX);
-			mpl[data->ccMaps[2]]->GetLineRaw(iDataInYPos + offsetY, bufIn3, offsetX, sizeX);
+			RangeReal ranges[6];
+			ranges[0] = data->ccMaps[0].rr;
+			ranges[1] = mpl[data->ccMaps[0].index]->rrMinMax();
+			ranges[2] = data->ccMaps[1].rr;
+			ranges[3] = mpl[data->ccMaps[1].index]->rrMinMax();
+			ranges[4] = data->ccMaps[2].rr;
+			ranges[5] = mpl[data->ccMaps[2].index]->rrMinMax();
+
+			mpl[data->ccMaps[0].index]->GetLineRaw(iDataInYPos + offsetY, bufIn1, offsetX, sizeX);
+			mpl[data->ccMaps[1].index]->GetLineRaw(iDataInYPos + offsetY, bufIn2, offsetX, sizeX);
+			mpl[data->ccMaps[2].index]->GetLineRaw(iDataInYPos + offsetY, bufIn3, offsetX, sizeX);
+			linearStretch(bufIn1, bufIn2, bufIn3, ranges);
 			for(int i = 0; i < sizeX; ++i)
 				bufComposite[i] = (bufIn1[i]) | (bufIn2[i] << 8) | (bufIn3[i] << 16);
 
@@ -98,16 +107,27 @@ bool CCTexture::DrawTexture(long offsetX, long offsetY, long texSizeX, long texS
 			LongBuf bufIntermediate(xSizeOut), bufComposite(sizeX);
 			long * ptrBufIntermediate = bufIntermediate.buf();
 			LongBuf bufColor(xSizeOut);
+
+			RangeReal ranges[6];
+			ranges[0] = data->ccMaps[0].rr;
+			ranges[1] = mpl[data->ccMaps[0].index]->rrMinMax();
+			ranges[2] = data->ccMaps[1].rr;
+			ranges[3] = mpl[data->ccMaps[1].index]->rrMinMax();
+			ranges[4] = data->ccMaps[2].rr;
+			ranges[5] = mpl[data->ccMaps[2].index]->rrMinMax();
+
 			for (long iDataOutYPos = 0, iDataInYPos = 0; iDataOutYPos < ySizeOut; ++iDataOutYPos, iDataInYPos += zoomFactor)
 			{
 				if (*fDrawStop) {
 					return false;
 				}
-				mpl[data->ccMaps[0]]->GetLineRaw(iDataInYPos + offsetY, bufIn1, offsetX, sizeX,iPyrLayer);
-				mpl[data->ccMaps[1]]->GetLineRaw(iDataInYPos + offsetY, bufIn2, offsetX, sizeX,iPyrLayer);
-				mpl[data->ccMaps[2]]->GetLineRaw(iDataInYPos + offsetY, bufIn3, offsetX, sizeX,iPyrLayer);
-				for(int i = 0; i < sizeX; ++i)
+				mpl[data->ccMaps[0].index]->GetLineRaw(iDataInYPos + offsetY, bufIn1, offsetX, sizeX,iPyrLayer);
+				mpl[data->ccMaps[1].index]->GetLineRaw(iDataInYPos + offsetY, bufIn2, offsetX, sizeX,iPyrLayer);
+				mpl[data->ccMaps[2].index]->GetLineRaw(iDataInYPos + offsetY, bufIn3, offsetX, sizeX,iPyrLayer);
+				linearStretch(bufIn1, bufIn2, bufIn3, ranges);
+				for(int i = 0; i < sizeX; ++i) {
 					bufComposite[i] = (bufIn1[i]) | (bufIn2[i] << 8) | (bufIn3[i] << 16);
+				}
 
 				for (long iDataOutXPos = 0, iDataInXPos = 0; iDataOutXPos < xSizeOut; ++iDataOutXPos, iDataInXPos += zoomFactor)
 					ptrBufIntermediate[iDataOutXPos] = bufComposite[iDataInXPos];
@@ -120,19 +140,40 @@ bool CCTexture::DrawTexture(long offsetX, long offsetY, long texSizeX, long texS
 	return true;
 }
 
+void CCTexture::linearStretch(ByteBuf& buf1, ByteBuf& buf2, ByteBuf& buf3, RangeReal ranges[]  ) {
+	for(int i = 0; i < buf1.iSize(); ++i) { // all bufs have the same size anyway
+		double v1 = buf1[i];
+		double v2 = buf2[i];
+		double v3 = buf3[i];
+		if ( Color(v1,v2,v3) != data->exceptionColor) {
+			buf1[i] = stretch(v1,ranges[1], ranges[0]);
+			buf2[i] = stretch(v2,ranges[3], ranges[2]);
+			buf3[i] = stretch(v3,ranges[5], ranges[4]);
+		}
+	}
+}
+
+double CCTexture::stretch(double v, const RangeReal& rrFrom, const RangeReal& rrTo) {
+	if ( rrFrom.fValid() && rrTo.fValid()) {
+		double rFact = (rrTo.rWidth()) / (rrFrom.rWidth());
+		double rOff = rrTo.rLo();
+		return byteConv(rFact * (v - rrFrom.rLo()) + rOff);
+	}
+	return v;
+}
+
 void CCTexture::BindMe(DrawerContext * drawerContext)
 {
-	bool fDrawStop = false;
-	texture_data = new char [(sizeX / zoomFactor) * (sizeY / zoomFactor) * 4];
-	DrawTexture(offsetX, offsetY, sizeX, sizeY, zoomFactor, texture_data, &fDrawStop);
-
 	glBindTexture(GL_TEXTURE_2D, texture);
 	double s = offsetX / (double)imgWidth2;
 	double t = offsetY / (double)imgHeight2;
 	glLoadIdentity();
 	glScaled(imgWidth2 / (double)sizeX, imgHeight2 / (double)sizeY, 1);
 	glTranslated(-s, -t, 0);
-	if (palette != 0 && fRepresentationChanged) {
+	if (fRepresentationChanged) {
+		bool fDrawStop = false;
+		texture_data = new char [(sizeX / zoomFactor) * (sizeY / zoomFactor) * 4];
+		DrawTexture(offsetX, offsetY, sizeX, sizeY, zoomFactor, texture_data, &fDrawStop);
 		boolean oldVal;
 		glGetBooleanv(GL_MAP_COLOR, &oldVal);
 		glPixelTransferf(GL_MAP_COLOR, false);
