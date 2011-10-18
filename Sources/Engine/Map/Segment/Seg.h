@@ -41,7 +41,7 @@
 #include "Engine\Map\basemap.h"
 #include "Engine\Map\Feature.h"
 #include "Engine\Base\mask.h"
-#include "Geos\Geos.h"
+#include <Geos.h>
 
 struct segtype;
 class SegmentMapStore;

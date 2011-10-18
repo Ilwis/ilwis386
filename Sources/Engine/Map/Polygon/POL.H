@@ -40,7 +40,7 @@
 #include "Engine\Map\Segment\Seg.h"
 #include "Engine\Map\Feature.h"
 #include "Engine\Map\Feature.h"
-#include "Geos\Geos.h"
+#include <Geos.h>
 
 typedef ArrayLarge<Coord>  CoordArrayLarge;
 

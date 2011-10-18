@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Engine\Map\Feature.h"
-#include "Geos\Geos.h"
+#include <Geos.h>
 
 namespace geos {
 	namespace index {

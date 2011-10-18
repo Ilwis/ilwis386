@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Geos\Geos.h"
+#include <Geos.h>
 
 namespace geos {
 	namespace index {
