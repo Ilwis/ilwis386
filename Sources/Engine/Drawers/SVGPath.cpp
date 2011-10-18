@@ -7,8 +7,8 @@
 #include "Engine\Drawers\SimpleDrawer.h"
 #include "Engine\Drawers\ComplexDrawer.h"
 #include "Engine\Drawers\SVGElements.h"
-#include "Engine\Base\Algorithm\triangulation\gpc.h"
-#include "Engine\Base\Algorithm\Triangulation\Triangulator.h"
+#include "Engine\Base\Algorithm\TriangulationAlg\gpc.h"
+#include "Engine\Base\Algorithm\TriangulationAlg\Triangulator.h"
 #include "Engine\Drawers\SVGPath.h"
 
 using namespace ILWIS;

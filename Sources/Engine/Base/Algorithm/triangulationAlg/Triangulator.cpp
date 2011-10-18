@@ -1,8 +1,8 @@
 #include "Headers\toolspch.h"
 #include "Engine\Map\basemap.h"
 #include "Engine\Map\Polygon\POL.h"
-#include "Engine\Base\Algorithm\triangulation\gpc.h"
-#include "Engine\Base\Algorithm\Triangulation\Triangulator.h"
+#include "Engine\Base\Algorithm\triangulationAlg\gpc.h"
+#include "Engine\Base\Algorithm\TriangulationAlg\Triangulator.h"
 
 using namespace ILWIS;
 

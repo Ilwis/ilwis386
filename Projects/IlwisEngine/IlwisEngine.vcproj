@@ -936,6 +936,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\Sources\Engine\Base\DataObjects\URLEncode.cpp"
+						>
+					</File>
+					<File
 						RelativePath="..\..\Sources\Engine\Base\DataObjects\valrange.cpp"
 						>
 					</File>
@@ -1064,6 +1068,10 @@
 							>
 						</File>
 						<File
+							RelativePath="..\..\Sources\Engine\Base\DataObjects\URLEncode.h"
+							>
+						</File>
+						<File
 							RelativePath="..\..\Sources\Engine\Base\DataObjects\valrange.h"
 							>
 						</File>
@@ -1089,11 +1097,11 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\Sources\Engine\Base\Algorithm\Triangulation\gpc.cpp"
+						RelativePath="..\..\Sources\Engine\Base\Algorithm\triangulationAlg\gpc.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\Sources\Engine\Base\Algorithm\Triangulation\gpc.h"
+						RelativePath="..\..\Sources\Engine\Base\Algorithm\triangulationAlg\gpc.h"
 						>
 					</File>
 					<File
@@ -1141,11 +1149,11 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\Sources\Engine\Base\Algorithm\Triangulation\Triangulator.cpp"
+						RelativePath="..\..\Sources\Engine\Base\Algorithm\triangulationAlg\Triangulator.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\Sources\Engine\Base\Algorithm\Triangulation\Triangulator.h"
+						RelativePath="..\..\Sources\Engine\Base\Algorithm\triangulationAlg\Triangulator.h"
 						>
 					</File>
 					<File
