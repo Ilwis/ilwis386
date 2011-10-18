@@ -88,7 +88,7 @@ BOOL RepresentationDoc::OnNewDocument()
 	return TRUE;
 }
 
-BOOL RepresentationDoc::OnOpenDocument(LPCTSTR lpszPathName) 
+BOOL RepresentationDoc::OnOpenDocument(LPCTSTR lpszPathName, int os) 
 {
 	if (!IlwisDocument::OnOpenDocument(lpszPathName))
 		return FALSE;

@@ -50,7 +50,7 @@ public:
 	virtual ~FuncUserDoc();
 
 	virtual BOOL OnNewDocument();
-  virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
+  virtual BOOL OnOpenDocument(LPCTSTR lpszPathName, int os=0);
 	virtual BOOL OnSaveDocument(LPCTSTR lpszPathName );
   virtual IlwisObject obj() const;
   virtual zIcon icon() const;

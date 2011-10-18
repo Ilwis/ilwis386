@@ -61,7 +61,7 @@ CoordSysDoc::~CoordSysDoc()
 {
 }
 
-BOOL CoordSysDoc::OnOpenDocument(LPCTSTR lpszPathName) 
+BOOL CoordSysDoc::OnOpenDocument(LPCTSTR lpszPathName, int os) 
 {
   ISTRUE(fINotEqual, lpszPathName, (LPCTSTR)0);
   ISTRUE(fINotEqual, lpszPathName[0], (char)0);

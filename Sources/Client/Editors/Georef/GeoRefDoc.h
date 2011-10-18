@@ -61,7 +61,7 @@ public:
 #endif
 
 protected:
-	BOOL               OnOpenDocument(LPCTSTR lpszPathName) ;
+	BOOL               OnOpenDocument(LPCTSTR lpszPathName, int os= 0) ;
 
 	GeoRef             m_gr; 
 

@@ -70,7 +70,7 @@ BEGIN_MESSAGE_MAP(MatrixDoc, IlwisDocument)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-BOOL MatrixDoc::OnOpenDocument(LPCTSTR lpszPathName) 
+BOOL MatrixDoc::OnOpenDocument(LPCTSTR lpszPathName, int os) 
 {
 	String sFileExpr(lpszPathName);
 	sFileExpr.toLower();

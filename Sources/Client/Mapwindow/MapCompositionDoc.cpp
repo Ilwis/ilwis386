@@ -42,7 +42,6 @@ Created on: 2007-02-8
 
 #include "Client\Headers\formelementspch.h"
 #include "Engine\Base\System\RegistrySettings.h"
-#include "Client\ilwis.h"
 #include "Client\Base\datawind.h"
 #include "Client\Base\IlwisDocument.h"
 #include "Client\MainWindow\Catalog\CatalogDocument.h"
@@ -163,11 +162,14 @@ MapCompositionDoc::MapCompositionDoc()
 	fnView = FileName("mapview.mpv");
 	selectedDrawer = 0;
 	pixInfoDoc = 0;
+	state = 0;
 }
 
 MapCompositionDoc::~MapCompositionDoc()
 {
 	delete rootDrawer;
+	if ( state & IlwisWinApp::osExitOnClose)
+		AfxGetApp()->PostThreadMessage(WM_QUIT,0,0);
 }
 
 void MapCompositionDoc::DeleteContents()
@@ -285,15 +287,16 @@ NewDrawer *MapCompositionDoc::getDrawerFor(const IlwisObject& ob, const Coord& c
 	return 0;
 }
 
-BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPathName) 
+BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPathName, int os) 
 {
-	return OnOpenDocument(lpszPathName, otNORMAL);
+	return OnOpenDocument(lpszPathName, otNORMAL,os);
 }
 
 BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPath, ParmList& pm) 
 {
 	FileName fn(pm.sGet("output") != "" ? pm.sGet("output") : lpszPath);
 	String sC = pm.sCmd();
+	state = IlwisWinApp::osNormal;
 	if ( fn.fExist() == false && pm.fExist("collection") ) // implicit object
 	{
 		if ( pm.sGet("method") == "") {
@@ -302,24 +305,28 @@ BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPath, ParmList& pm)
 		}
 		ForeignCollection::CreateImplicitObject(fn, pm);
 	}
+	else if ( fn.fExist() && pm.fExist("exitOnClose")) {
+		state |= IlwisWinApp::osExitOnClose;
+
+	}
 	if ( IlwisObject::iotObjectType(fn) > IlwisObject::iotRASMAP && IlwisObject::iotObjectType(fn) < IlwisObject::iotTABLE) 
 	{
 		int ot = pm.sGet("mode").iVal();
 		if ( ot == iUNDEF) ot = 0;
 		if ( IlwisObject::iotObjectType(fn) == IlwisObject::iotPOINTMAP)
-			return OnOpenPointMap(PointMap(fn), (IlwisDocument::OpenType)ot);
+			return OnOpenPointMap(PointMap(fn), (IlwisDocument::OpenType)ot, state);
 		if ( IlwisObject::iotObjectType(fn) == IlwisObject::iotSEGMENTMAP)
-			return OnOpenSegmentMap(SegmentMap(fn), (IlwisDocument::OpenType)ot);
+			return OnOpenSegmentMap(SegmentMap(fn), (IlwisDocument::OpenType)ot, state);
 		if ( IlwisObject::iotObjectType(fn) == IlwisObject::iotPOLYGONMAP)
-			return OnOpenPolygonMap(PolygonMap(fn), (IlwisDocument::OpenType)ot);
+			return OnOpenPolygonMap(PolygonMap(fn), (IlwisDocument::OpenType)ot, state);
 	}	
 	if (!IlwisDocument::OnOpenDocument(fn.sRelative().c_str()))
 		return FALSE;
 	Map map(fn);
-	return OnOpenDocument(lpszPath);
+	return OnOpenDocument(lpszPath, state);
 }
 
-BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPathName, OpenType ot)
+BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPathName, OpenType ot, int os)
 {
 	try {
 		DeleteContents();
@@ -341,7 +348,7 @@ BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPathName, OpenType ot)
 			Map mp(fn);
 			if (!mp.fValid())
 				return FALSE;
-			return OnOpenRasterMap(mp,ot);
+			return OnOpenRasterMap(mp,ot, os);
 		}
 		else if (".grf" == fn.sExt) {
 			GeoRef grf(fn);
@@ -391,19 +398,19 @@ BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPathName, OpenType ot)
 			MapList ml(fn);
 			if (!ml.fValid())
 				return FALSE;
-			return OnOpenMapList(ml, ot);
+			return OnOpenMapList(ml, ot, os);
 		}
 		else if (".ioc" == fn.sExt) {
 			ObjectCollection oc(fn);
 			if (!oc.fValid())
 				return FALSE;
-			return OnOpenObjectCollection(oc, ot);
+			return OnOpenObjectCollection(oc, ot, "ilwis38", os);
 		}
 		else if (".mps" == fn.sExt) {
 			SegmentMap mp(fn);
 			if (!mp.fValid())
 				return FALSE;
-			return OnOpenSegmentMap(mp, ot);
+			return OnOpenSegmentMap(mp, ot, os);
 		}
 		else if (".csy" == fn.sExt) {
 			CoordSystem cs(fn);
@@ -424,19 +431,19 @@ BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPathName, OpenType ot)
 			PolygonMap mp(fn);
 			if (!mp.fValid())
 				return FALSE;
-			return OnOpenPolygonMap(mp, ot);
+			return OnOpenPolygonMap(mp, ot, os);
 		}
 		else if (".mpp" == fn.sExt) {
 			PointMap mp(fn);
 			if (!mp.fValid())
 				return FALSE;
-			return OnOpenPointMap(mp, ot);
+			return OnOpenPointMap(mp, ot, os);
 		}
 		else if (".mpv" == fn.sExt) {
 			MapView mpv(fn);
 			if (!mpv.fValid())
 				return FALSE;
-			return OnOpenMapView(mpv);
+			return OnOpenMapView(mpv, os);
 		}
 		else if (".sms" == fn.sExt) {
 			SampleSet sms(fn);
@@ -941,17 +948,13 @@ void MapCompositionDoc::OnUpdatePropLayer(CCmdUI* pCmdUI)
 
 
 
-ILWIS::NewDrawer *MapCompositionDoc::createBaseMapDrawer(const BaseMap& bmp, const String& type, const String& subtype) {
+ILWIS::NewDrawer *MapCompositionDoc::createBaseMapDrawer(const BaseMap& bmp, const String& type, const String& subtype, int os) {
 
 	ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
 	ILWIS::NewDrawer *drawer = NewDrawer::getDrawer(type, subtype, &parms);
 	drawer->addDataSource((void *)&bmp);
 	rootDrawer->setCoordinateSystem(bmp->cs());
-	CoordBounds cb = bmp->cb();
-	if ( cb.fUndef() && IOTYPE(bmp->fnObj) == IlwisObject::iotRASMAP) {
-		cb = ((MapPtr *)bmp.ptr())->gr()->cb();
-	}
-	rootDrawer->addCoordBounds(bmp->cs(), cb, false);
+	rootDrawer->addCoordBounds(bmp->cs(), bmp->cb(), false);
 	ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY);
 	drawer->prepare(&pp);
 	pp.type = RootDrawer::ptRENDER;
@@ -969,7 +972,7 @@ ILWIS::NewDrawer *MapCompositionDoc::createBaseMapDrawer(const BaseMap& bmp, con
 	return drawer;
 }
 
-BOOL MapCompositionDoc::OnOpenRasterMap(const Map& mp, OpenType ot) 
+BOOL MapCompositionDoc::OnOpenRasterMap(const Map& mp, OpenType ot, int os) 
 {
 	if (!mp.fValid())
 		return FALSE;
@@ -985,7 +988,7 @@ BOOL MapCompositionDoc::OnOpenRasterMap(const Map& mp, OpenType ot)
 
 	SetTitle(mp);
 
-	createBaseMapDrawer(mp, "RasterDataDrawer", "Ilwis38");	
+	createBaseMapDrawer(mp, "RasterDataDrawer", "Ilwis38", os);	
 
 	if (ot & otEDIT) {
 		::AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_EDITLAYER, 0);
@@ -1003,7 +1006,7 @@ String MapCompositionDoc::getForeignType(const Map& mp) {
 
 }
 
-BOOL MapCompositionDoc::OnOpenObjectCollection(const ObjectCollection& list, OpenType ot)
+BOOL MapCompositionDoc::OnOpenObjectCollection(const ObjectCollection& list, OpenType ot, const String& subtype, int os)
 {
 	BaseMap bmp(list->fnObject(0));
 	if (!bmp.fValid())
@@ -1034,15 +1037,15 @@ BOOL MapCompositionDoc::OnOpenObjectCollection(const ObjectCollection& list, Ope
 	return TRUE;
 }
 
-BOOL MapCompositionDoc::OnOpenMapList(const MapList& maplist, OpenType ot)
+BOOL MapCompositionDoc::OnOpenMapList(const MapList& maplist, OpenType ot, int os)
 {
 	Map mp = maplist[maplist->iLower()];
 	if (!mp.fValid())
 		return FALSE;
 	SetTitle(maplist);
 
-	if (ot == otANIMATION) {
-	ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
+	if (ot & otANIMATION) {
+		ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
 		ILWIS::NewDrawer *drawer = NewDrawer::getDrawer("AnimationDrawer", "Ilwis38", &parms);
 		drawer->addDataSource((void *)&maplist);
 		rootDrawer->setCoordinateSystem(mp->cs());
@@ -1051,7 +1054,8 @@ BOOL MapCompositionDoc::OnOpenMapList(const MapList& maplist, OpenType ot)
 		addToPixelInfo(maplist, (ComplexDrawer *)drawer);
 		drawer->prepare(&pp);
 		rootDrawer->addDrawer(drawer);
-	} else 	if (ot == otCOLORCOMP) {
+	}
+	else  if ( ot & otCOLORCOMP ){
 		ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
 		ILWIS::NewDrawer *drawer = NewDrawer::getDrawer("RasterDataDrawer", "Ilwis38", &parms);
 		drawer->addDataSource((void *)&maplist);
@@ -1062,15 +1066,12 @@ BOOL MapCompositionDoc::OnOpenMapList(const MapList& maplist, OpenType ot)
 		drawer->prepare(&pp);
 		rootDrawer->addDrawer(drawer);
 	}
-	else {
-	//	eType = eColorComp;
-	}
 
 	
 	return TRUE;
 }
 
-BOOL MapCompositionDoc::OnOpenSegmentMap(const SegmentMap& sm, OpenType ot) 
+BOOL MapCompositionDoc::OnOpenSegmentMap(const SegmentMap& sm, OpenType ot, int os) 
 {
 	if (!sm.fValid())
 		return FALSE;
@@ -1085,7 +1086,7 @@ BOOL MapCompositionDoc::OnOpenSegmentMap(const SegmentMap& sm, OpenType ot)
 
 	SetTitle(sm);
 
-	createBaseMapDrawer(sm,"FeatureDataDrawer", "Ilwis38");
+	createBaseMapDrawer(sm,"FeatureDataDrawer", "Ilwis38", os);
 	
 	if (ot & otEDIT) {
 		::AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_EDITLAYER, 0);
@@ -1094,7 +1095,7 @@ BOOL MapCompositionDoc::OnOpenSegmentMap(const SegmentMap& sm, OpenType ot)
 	return TRUE;
 }
 
-BOOL MapCompositionDoc::OnOpenPolygonMap(const PolygonMap& pm, OpenType ot) 
+BOOL MapCompositionDoc::OnOpenPolygonMap(const PolygonMap& pm, OpenType ot, int os) 
 {
 	if (!pm.fValid())
 		return FALSE;
@@ -1109,7 +1110,7 @@ BOOL MapCompositionDoc::OnOpenPolygonMap(const PolygonMap& pm, OpenType ot)
 
 	SetTitle(pm);
 
-	createBaseMapDrawer(pm,"FeatureDataDrawer", "Ilwis38");
+	createBaseMapDrawer(pm,"FeatureDataDrawer", "Ilwis38", os);
 	
 	if (ot & otEDIT) {
 		::AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_EDITLAYER, 0);
@@ -1118,7 +1119,7 @@ BOOL MapCompositionDoc::OnOpenPolygonMap(const PolygonMap& pm, OpenType ot)
 	return TRUE;
 }
 
-BOOL MapCompositionDoc::OnOpenPointMap(const PointMap& pm, OpenType ot) 
+BOOL MapCompositionDoc::OnOpenPointMap(const PointMap& pm, OpenType ot,int os) 
 {
 	if (!pm.fValid())
 		return FALSE;
@@ -1133,10 +1134,8 @@ BOOL MapCompositionDoc::OnOpenPointMap(const PointMap& pm, OpenType ot)
 
 	SetTitle(pm);
 
-	//================================================ TEST!!!!!!!
-
-	createBaseMapDrawer(pm,"FeatureDataDrawer", "Ilwis38");
-	//===============================================
+	
+	createBaseMapDrawer(pm,"FeatureDataDrawer", "Ilwis38", os);
 
 	if (ot & otEDIT) {
 		::AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_EDITLAYER, 0);
@@ -1198,7 +1197,7 @@ BOOL MapCompositionDoc::OnOpenStereoPair(const StereoPair& stp, OpenType ot)
 	return TRUE;
 }
 
-BOOL MapCompositionDoc::OnOpenMapView(const MapView& mapview)
+BOOL MapCompositionDoc::OnOpenMapView(const MapView& mapview, int os)
 {
 	try {
 		mpv = mapview;
@@ -1391,7 +1390,7 @@ bool MapCompositionDoc::fAppendable(const FileName& fn)
 	return fOk;
 }
 
-NewDrawer* MapCompositionDoc::drAppend(const FileName& fn, IlwisDocument::OpenType op)
+NewDrawer* MapCompositionDoc::drAppend(const FileName& fn, IlwisDocument::OpenType op, int os)
 {
 	if (!fAppendable(fn))
 	{
@@ -1405,19 +1404,19 @@ NewDrawer* MapCompositionDoc::drAppend(const FileName& fn, IlwisDocument::OpenTy
 	// add layer
 	if (".mps" == fn.sExt || ".mpa" == fn.sExt || ".mpp" == fn.sExt) {
 		BaseMap bm(fn);
-		dr = drAppend(bm);
+		dr = drAppend(bm,op,os);
 	}
 	else if (".mpr" == fn.sExt) {
 		Map mp(fn);
-		dr = drAppend(mp);
+		dr = drAppend(mp, os);
 	}
 	else if (".mpl" == fn.sExt) {
 		MapList ml(fn);
-		dr = drAppend(ml,op);
+		dr = drAppend(ml,op, os);
 	}
 	else if (".ioc" == fn.sExt) {
 		ObjectCollection oc(fn);
-		dr = drAppend(oc,op);
+		dr = drAppend(oc,op, os);
 	}
 	else if (".csy" == fn.sExt) {
 		CoordSystem csy(fn);
@@ -1525,7 +1524,7 @@ void MapCompositionDoc::RemoveDrawer(ILWIS::NewDrawer* drw)
 	ChangeState();
 }
 
-NewDrawer* MapCompositionDoc::drAppend(const Map& rasmap)
+NewDrawer* MapCompositionDoc::drAppend(const Map& rasmap, int os)
 {
 	if (!fGeoRefOk(rasmap))
 	{
@@ -1543,13 +1542,13 @@ NewDrawer* MapCompositionDoc::drAppend(const Map& rasmap)
 	}
 	if (!rasmap->fCalculated() && !rasmap->fDefOnlyPossible())
 		return 0;
-	NewDrawer *dr = createBaseMapDrawer(rasmap,"RasterDataDrawer","Ilwis38");
+	NewDrawer *dr = createBaseMapDrawer(rasmap,"RasterDataDrawer","Ilwis38", os);
 
 	ChangeState();
 	return dr;
 }
 
-NewDrawer* MapCompositionDoc::drAppend(const ObjectCollection& oc, IlwisDocument::OpenType op)
+NewDrawer* MapCompositionDoc::drAppend(const ObjectCollection& oc, IlwisDocument::OpenType op, int os)
 {
 	ILWIS::NewDrawer *drawer = 0;
 	if ( op == IlwisDocument::otANIMATION) {
@@ -1611,7 +1610,7 @@ NewDrawer* MapCompositionDoc::drAppend(const ObjectCollection& oc, IlwisDocument
 	return drawer;
 }
 
-NewDrawer* MapCompositionDoc::drAppend(const MapList& maplist,IlwisDocument::OpenType op)
+NewDrawer* MapCompositionDoc::drAppend(const MapList& maplist,IlwisDocument::OpenType op, int os)
 {
 	if ( op == IlwisDocument::otANIMATION) {
 		ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
@@ -1636,7 +1635,7 @@ NewDrawer* MapCompositionDoc::drAppend(const MapList& maplist,IlwisDocument::Ope
 }
 
 
-NewDrawer* MapCompositionDoc::drAppend(const BaseMap& mp,IlwisDocument::OpenType op)
+NewDrawer* MapCompositionDoc::drAppend(const BaseMap& mp,IlwisDocument::OpenType op, int os)
 {
 	if (fCoordSystemOk(mp)) {
 		if (!mp->fCalculated())
@@ -1657,9 +1656,9 @@ NewDrawer* MapCompositionDoc::drAppend(const BaseMap& mp,IlwisDocument::OpenType
 		}
 		else {
 			if ( IlwisObject::iotObjectType(mp->fnObj) !=  IlwisObject::iotRASMAP)
-				drawer = createBaseMapDrawer(mp, "FeatureDataDrawer", "Ilwis38");
+				drawer = createBaseMapDrawer(mp, "FeatureDataDrawer", "Ilwis38", os);
 			else
-				drawer = createBaseMapDrawer(mp, "RasterDataDrawer", "Ilwis38");
+				drawer = createBaseMapDrawer(mp, "RasterDataDrawer", "Ilwis38", os);
 		}
 		ChangeState();
 		UpdateAllViews(0,3);

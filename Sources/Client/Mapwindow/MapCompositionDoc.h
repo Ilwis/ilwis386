@@ -46,6 +46,7 @@ Created on: 2007-02-8
 
 #include "Engine/Drawers/Drawer_n.h"
 #include "Engine/Drawers/RootDrawer.h"
+#include "Client\ilwis.h"
 
 using namespace ILWIS;
 
@@ -73,8 +74,8 @@ public:
 	ILWIS::RootDrawer *rootDrawer;
 
 	virtual void Serialize(CArchive& ar);   // overridden for document i/o
-	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
-	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName, OpenType ot);
+	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName, int os= IlwisWinApp::osNormal);
+	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName, OpenType ot, int os= IlwisWinApp::osNormal);
 	virtual BOOL OnOpenDocument(LPCTSTR lpszPath, ParmList& pm);
 	virtual COleServerItem* OnGetEmbeddedItem();
 	virtual BOOL OnNewDocument();
@@ -96,11 +97,11 @@ public:
 	bool fCoordSystemOk(const BaseMap& bmap);
 	bool fGeoRefOk(const Map& map) { return true; } // might change
 	bool fAppendable(const FileName&);
-	NewDrawer* drAppend(const FileName&, IlwisDocument::OpenType op=IlwisDocument::otUNKNOWN);
-	NewDrawer* drAppend(const Map&);
-	NewDrawer* drAppend(const MapList&, IlwisDocument::OpenType op=IlwisDocument::otUNKNOWN);
-	NewDrawer* drAppend(const BaseMap&, IlwisDocument::OpenType op=IlwisDocument::otUNKNOWN);
-	NewDrawer* drAppend(const ObjectCollection& oc, IlwisDocument::OpenType op=IlwisDocument::otUNKNOWN);
+	NewDrawer* drAppend(const FileName&, IlwisDocument::OpenType op=IlwisDocument::otUNKNOWN, int os= IlwisWinApp::osNormal);
+	NewDrawer* drAppend(const Map&, int os= IlwisWinApp::osNormal);
+	NewDrawer* drAppend(const MapList&, IlwisDocument::OpenType op=IlwisDocument::otUNKNOWN, int os= IlwisWinApp::osNormal);
+	NewDrawer* drAppend(const BaseMap&, IlwisDocument::OpenType op=IlwisDocument::otUNKNOWN, int os= IlwisWinApp::osNormal);
+	NewDrawer* drAppend(const ObjectCollection& oc, IlwisDocument::OpenType op=IlwisDocument::otUNKNOWN, int os= IlwisWinApp::osNormal);
 	void RemoveDrawer(ILWIS::NewDrawer* dr);
 	void SetCoordSystem(const CoordSystem&);
 	double rPrefScale() const { return rDfltScale; }
@@ -126,16 +127,16 @@ private:
 	void SetTitle(const IlwisObject& obj);
 	void StoreView();
 	String getForeignType(const Map& mp);
-	BOOL OnOpenRasterMap(const Map&, OpenType ot);
-	BOOL OnOpenMapList(const MapList&, OpenType ot);
-	BOOL OnOpenSegmentMap(const SegmentMap&, OpenType ot);
-	BOOL OnOpenPolygonMap(const PolygonMap&, OpenType ot);
-	BOOL OnOpenPointMap(const PointMap&, OpenType ot);
-	BOOL OnOpenMapView(const MapView&);
+	BOOL OnOpenRasterMap(const Map&, OpenType ot, int os= IlwisWinApp::osNormal);
+	BOOL OnOpenMapList(const MapList&, OpenType ot, int os=IlwisWinApp::osNormal);
+	BOOL OnOpenSegmentMap(const SegmentMap&, OpenType ot, int os=IlwisWinApp::osNormal);
+	BOOL OnOpenPolygonMap(const PolygonMap&, OpenType ot, int os=IlwisWinApp::osNormal);
+	BOOL OnOpenPointMap(const PointMap&, OpenType ot, int os=IlwisWinApp::osNormal);
+	BOOL OnOpenMapView(const MapView&, int=IlwisWinApp::osNormal);
 	BOOL OnOpenStereoPair(const StereoPair&, OpenType ot);
 	virtual void DeleteContents();
-	ILWIS::NewDrawer *createBaseMapDrawer(const BaseMap& bmp, const String& type, const String& subtype);
-	BOOL OnOpenObjectCollection(const ObjectCollection& list, OpenType ot);
+	ILWIS::NewDrawer *createBaseMapDrawer(const BaseMap& bmp, const String& type, const String& subtype, int);
+	BOOL OnOpenObjectCollection(const ObjectCollection& list, OpenType ot, const String& subtype="ilwis38", int os=IlwisWinApp::osNormal);
 
 private:
 	afx_msg void OnExtCoord();
@@ -178,6 +179,7 @@ private:
 	bool fInCmdMsg;
 	FileName fnView;
 	NewDrawer *selectedDrawer;
+	int state;
 	DECLARE_DYNCREATE(MapCompositionDoc)
 	DECLARE_MESSAGE_MAP()
 };

@@ -72,7 +72,7 @@ Created on: 2007-02-8
 #include "Engine\Domain\Dmvalue.h"
 #include "Client\TableWindow\BaseTblField.h"
 #include "Engine\Drawers\SimpleDrawer.h" 
-#include "Drawers\TextDrawer.h"
+#include "Engine\Drawers\TextDrawer.h"
 //#include "Engine\Drawers\MouseClickInfoDrawer.h"
 #include "Engine\SpatialReference\Cslatlon.h"
 #include "Engine\Representation\Rprclass.h"

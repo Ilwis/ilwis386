@@ -119,7 +119,7 @@ void IlwisDocument::Dump(CDumpContext& dc) const
 }
 #endif //_DEBUG
 
-BOOL IlwisDocument::OnOpenDocument(LPCTSTR lpszPathName) 
+BOOL IlwisDocument::OnOpenDocument(LPCTSTR lpszPathName, int os) 
 {
 	try
 	{
@@ -195,13 +195,13 @@ void IlwisDocument::OnOpenExpressionDoc(IlwisObject& ob)
 	//SetPathName(ob->fnObj.sFullPath().c_str());	
 
 }
-BOOL IlwisDocument::OnOpenDocument(LPCTSTR lpszPathName, OpenType ot)
+BOOL IlwisDocument::OnOpenDocument(LPCTSTR lpszPathName, OpenType ot, int os)
 {
 	// by default ignore second parameter
 	return OnOpenDocument(lpszPathName);
 }
 
-BOOL IlwisDocument::OnOpenDocument(LPCTSTR lpszPathName, ParmList& pm)
+BOOL IlwisDocument::OnOpenDocument(LPCTSTR lpszPathName, ParmList& pm, int os)
 {
 	// by default ignore second parameter
 	return OnOpenDocument(lpszPathName, pm);

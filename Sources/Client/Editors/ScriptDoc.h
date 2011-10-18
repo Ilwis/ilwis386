@@ -51,7 +51,7 @@ public:
 	virtual	~ScriptDoc();
 
 	virtual BOOL OnNewDocument();
-	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
+	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName, int os= 0);
 	virtual BOOL OnSaveDocument(LPCTSTR lpszPathName);
 	virtual BOOL DoSave(LPCTSTR lpszPathName, BOOL bReplace);
 

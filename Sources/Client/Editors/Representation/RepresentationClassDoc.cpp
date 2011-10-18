@@ -74,7 +74,7 @@ RepresentationClassDoc::RepresentationClassDoc()
 
 }
 
-BOOL RepresentationClassDoc::OnOpenDocument(LPCTSTR lpszPathName) 
+BOOL RepresentationClassDoc::OnOpenDocument(LPCTSTR lpszPathName, int os) 
 {
   ISTRUE(fINotEqual, lpszPathName, (LPCTSTR)0);
   ISTRUE(fINotEqual, lpszPathName[0], (char)0);

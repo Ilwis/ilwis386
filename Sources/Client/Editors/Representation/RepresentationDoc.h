@@ -52,7 +52,7 @@ public:
 	~RepresentationDoc();
 
 	virtual	BOOL OnNewDocument();
-	virtual	BOOL OnOpenDocument(LPCTSTR lpszPathName);
+	virtual	BOOL OnOpenDocument(LPCTSTR lpszPathName, int os= 0);
 	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName, OpenType ot);
 	virtual	IlwisObject obj() const;
 	virtual	zIcon icon() const;
@@ -125,7 +125,7 @@ class IMPEXP RepresentationClassDoc : public RepresentationDoc
 #endif
 		
 	protected:
-		BOOL OnOpenDocument(LPCTSTR lpszPathName) ;
+		BOOL OnOpenDocument(LPCTSTR lpszPathName, int os= 0) ;
 
 	DECLARE_MESSAGE_MAP();
 };

@@ -199,7 +199,7 @@ BOOL TableDoc::OnOpenDocument(LPCTSTR lpszPath, ParmList& pm)
 	return OnOpenDocument(table);
 }
 
-BOOL TableDoc::OnOpenDocument(LPCTSTR lpszOpenString) 
+BOOL TableDoc::OnOpenDocument(LPCTSTR lpszOpenString, int os) 
 {
 	ParmList pm(lpszOpenString);
 	FileName fn = IlwisObjectPtr::fnCheckPath(pm.sGet(0));	

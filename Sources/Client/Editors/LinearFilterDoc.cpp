@@ -70,7 +70,7 @@ LinearFilterDoc::~LinearFilterDoc()
 {
 }
 
-BOOL LinearFilterDoc::OnOpenDocument(LPCTSTR lpszPathName) 
+BOOL LinearFilterDoc::OnOpenDocument(LPCTSTR lpszPathName, int os) 
 {
 	if (!FilterDoc::OnOpenDocument(lpszPathName))
 		return FALSE;

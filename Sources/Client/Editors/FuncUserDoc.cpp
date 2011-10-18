@@ -91,7 +91,7 @@ BOOL FuncUserDoc::OnNewDocument()
 	return TRUE;
 }
 
-BOOL FuncUserDoc::OnOpenDocument(LPCTSTR lpszPathName) 
+BOOL FuncUserDoc::OnOpenDocument(LPCTSTR lpszPathName, int os) 
 {
   ISTRUE(fINotEqual, lpszPathName, (LPCTSTR)0);
   ISTRUE(fINotEqual, lpszPathName[0], (char)0);

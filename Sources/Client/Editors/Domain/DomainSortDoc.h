@@ -70,7 +70,7 @@ enum DomainSortFields { dsfCLASSID, dsfCODE, dsfDESCRIPTION, dsfUPPER };
 class IMPEXP DomainSortDoc : public DomainDoc  
 {
 public:
-	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
+	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName, int os= 0);
 
 	void MoveItem(long iKeyTo, long iKeyFrom);
 	virtual String sMakeClipLine(const ClassItem& cli);
@@ -139,7 +139,7 @@ protected:
 class IMPEXP DomainGroupDoc : public DomainSortDoc  
 {
 public:
-	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
+	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName, int os= 0);
 
 	virtual String sMakeClipLine(const ClassItem& cli);
 	virtual void MakeItemPart(DomainSortFields dsfField, ClassItem& cli, const string& sVal);

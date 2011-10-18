@@ -71,7 +71,7 @@ public:
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(DomainDoc)
 	public:
-	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
+	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName, int os= 0);
 	protected:
 	virtual BOOL OnNewDocument();
 	//}}AFX_VIRTUAL

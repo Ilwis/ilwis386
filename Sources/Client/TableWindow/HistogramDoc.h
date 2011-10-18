@@ -66,7 +66,7 @@ public:
 	HistogramDoc();
 	virtual ~HistogramDoc();
 	virtual zIcon	icon() const;
-	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
+	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName, int os= 0);
   HistogramGraphDoc hgd;
 private:  
 	DECLARE_DYNCREATE(HistogramDoc)

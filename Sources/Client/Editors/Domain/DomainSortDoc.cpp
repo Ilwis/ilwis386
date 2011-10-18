@@ -116,7 +116,7 @@ BOOL DomainSortDoc::OnNewDocument()
 */
 }
 
-BOOL DomainSortDoc::OnOpenDocument(LPCTSTR lpszPathName) 
+BOOL DomainSortDoc::OnOpenDocument(LPCTSTR lpszPathName, int os) 
 {
 	if (!DomainDoc::OnOpenDocument(lpszPathName))
 		return FALSE;
@@ -609,7 +609,7 @@ BOOL DomainGroupDoc::OnNewDocument()
   return FALSE;
 }
 
-BOOL DomainGroupDoc::OnOpenDocument(LPCTSTR lpszPathName) 
+BOOL DomainGroupDoc::OnOpenDocument(LPCTSTR lpszPathName, int os) 
 {
 	if (!DomainSortDoc::OnOpenDocument(lpszPathName))
 		return FALSE;

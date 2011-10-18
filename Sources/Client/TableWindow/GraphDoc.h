@@ -69,7 +69,7 @@ public:
 	GraphDoc();
 	virtual ~GraphDoc();
   void OnFileNew();
-	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
+	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName, int os= 0);
   void OnOpenTable();
 	virtual zIcon	icon() const;
   GraphDrawer* grdrGet() const { return grdr; }

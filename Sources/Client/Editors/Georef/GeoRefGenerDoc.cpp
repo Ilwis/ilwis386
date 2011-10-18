@@ -63,7 +63,7 @@ GeoRefGeneratedDoc::~GeoRefGeneratedDoc()
 {
 }
 
-BOOL GeoRefGeneratedDoc::OnOpenDocument(LPCTSTR lpszPathName) 
+BOOL GeoRefGeneratedDoc::OnOpenDocument(LPCTSTR lpszPathName, int os) 
 {
 	return GeoRefDoc::OnOpenDocument(lpszPathName);
 }

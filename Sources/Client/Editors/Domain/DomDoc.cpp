@@ -113,7 +113,7 @@ BOOL DomainDoc::OnNewDocument()
 */
 }
 
-BOOL DomainDoc::OnOpenDocument(LPCTSTR lpszPathName) 
+BOOL DomainDoc::OnOpenDocument(LPCTSTR lpszPathName, int os) 
 {
 	if (!IlwisDocument::OnOpenDocument(lpszPathName))
 		return FALSE;

@@ -100,7 +100,7 @@ void ScriptDoc::OnRunScript()
 	IlwWinApp()->Execute(sCmd);
 }
 
-BOOL ScriptDoc::OnOpenDocument(LPCTSTR lpszPathName) 
+BOOL ScriptDoc::OnOpenDocument(LPCTSTR lpszPathName, int os) 
 {
 	if (!TextDocument::OnOpenDocument(lpszPathName))
 		return FALSE;

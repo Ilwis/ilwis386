@@ -68,7 +68,7 @@ class IMPEXP LinearFilterDoc : public FilterDoc
 public:
 	LinearFilterDoc();           
 	virtual ~LinearFilterDoc();
-	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
+	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName, int os= 0);
 	const FilterLinear* fltlin() const { return fl; }
 	FilterLinear* fltlin() { return fl; }
 	//{{AFX_VIRTUAL(LinearFilterDoc)

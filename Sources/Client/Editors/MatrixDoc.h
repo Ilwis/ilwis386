@@ -58,7 +58,7 @@ class IMPEXP MatrixDoc: public IlwisDocument
 public:
 	MatrixDoc();
 	virtual ~MatrixDoc();
-	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
+	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName, int os);
 	virtual	IlwisObject obj() const;
 	MatrixObject mat() const;
 	virtual	zIcon icon() const;

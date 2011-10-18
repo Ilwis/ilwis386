@@ -63,17 +63,19 @@ HistogramDoc::~HistogramDoc()
 
 zIcon	HistogramDoc::icon() const
 {
-  String sExt = tbl->fnObj.sExt;
-  if (".hss" == sExt)
-    return zIcon("HistogramSegIcon");
-  if (".hsa" == sExt)
-    return zIcon("HistogramPolIcon");
-  if (".hsp" == sExt)
-    return zIcon("HistogramPntIcon");
-  return zIcon("HistogramIcon");
+	if ( tbl.fValid()) {
+		String sExt = tbl->fnObj.sExt;
+		if (".hss" == sExt)
+			return zIcon("HistogramSegIcon");
+		if (".hsa" == sExt)
+			return zIcon("HistogramPolIcon");
+		if (".hsp" == sExt)
+			return zIcon("HistogramPntIcon");
+	}
+	return zIcon("HistogramIcon");
 }
 
-BOOL HistogramDoc::OnOpenDocument(LPCTSTR lpszPathName)
+BOOL HistogramDoc::OnOpenDocument(LPCTSTR lpszPathName, int os)
 {
   if (!TableDoc::OnOpenDocument(lpszPathName))
     return FALSE;

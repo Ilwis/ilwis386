@@ -93,7 +93,7 @@ public:
 	virtual	IlwisObject	obj() const;
 	virtual zIcon	icon() const;
 	virtual void Serialize(CArchive& ar);   // overridden for document i/o
-	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
+	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName, int os= 0);
 	virtual BOOL OnOpenDocument(LPCTSTR lpszPath, ParmList& pm) ;
 protected:
 	virtual BOOL OnNewDocument();

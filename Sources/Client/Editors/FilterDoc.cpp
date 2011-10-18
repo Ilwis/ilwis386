@@ -71,7 +71,7 @@ FilterDoc::~FilterDoc()
 {
 }
 
-BOOL FilterDoc::OnOpenDocument(LPCTSTR lpszPathName) 
+BOOL FilterDoc::OnOpenDocument(LPCTSTR lpszPathName, int os) 
 {
 	if (!IlwisDocument::OnOpenDocument(lpszPathName))
 		return FALSE;

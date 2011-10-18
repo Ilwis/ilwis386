@@ -64,12 +64,12 @@ protected:
 // Attributes
 public:
 	enum OpenType { otNORMAL=0, otEDIT=1, otNOASK=2, 
-	                otCOLORCOMP, otSLIDESHOW,
-	                otMPR, otMPA, otMPS, otMPP, otANIMATION,  otCOLLECTION, otUNKNOWN };
+	                otCOLORCOMP=4, otSLIDESHOW=8,
+	                otMPR=16, otMPA=32, otMPS=64, otMPP=128, otANIMATION=256,  otCOLLECTION=512, otUNKNOWN=2147483648 };
 	virtual void Serialize(CArchive& ar);   // overridden for document i/o
-	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
-	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName, OpenType ot);
-	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName, ParmList& pm);	
+	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName, int os= 0);
+	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName, OpenType ot, int os= 0);
+	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName, ParmList& pm, int os= 0);	
 	virtual BOOL OnSaveDocument(LPCTSTR lpszPathName);
 	virtual void OnIdle();
 	virtual BOOL SaveModified();

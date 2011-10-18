@@ -137,7 +137,7 @@ IlwisObject Table2Doc::obj() const
   return tbl2;
 }
 
-BOOL Table2Doc::OnOpenDocument(LPCTSTR lpszPathName) 
+BOOL Table2Doc::OnOpenDocument(LPCTSTR lpszPathName, int os) 
 {
 	if (!IlwisDocument::OnOpenDocument(lpszPathName))
 		return FALSE;

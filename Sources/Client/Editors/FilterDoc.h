@@ -61,7 +61,7 @@ class IMPEXP FilterDoc : public IlwisDocument
 public:
 	FilterDoc();    
 	virtual ~FilterDoc();
-	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
+	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName, int os=0);
 	virtual	IlwisObject obj() const;
 	Filter flt() const;
 	virtual	zIcon icon() const;
