@@ -842,6 +842,10 @@
 							>
 						</File>
 						<File
+							RelativePath="..\..\Sources\Engine\Base\File\zip.h"
+							>
+						</File>
+						<File
 							RelativePath="..\..\Sources\Engine\Base\File\Zipper.h"
 							>
 						</File>
