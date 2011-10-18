@@ -83,6 +83,7 @@ bool RepresentationTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 		return false;
 
 	Representation rpr = ldrw->getRepresentation();
+
 	bool isValid = rpr.fValid();
 	if (!isValid)
 		return false;

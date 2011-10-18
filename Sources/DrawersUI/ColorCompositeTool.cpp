@@ -1,5 +1,6 @@
 #include "Client\Headers\formelementspch.h"
 #include "Client\FormElements\FieldRealSlider.h"
+#include "Client\FormElements\fldlist.h"
 #include "Client\FormElements\objlist.h"
 #include "Engine\Drawers\RootDrawer.h"
 #include "Engine\Drawers\ComplexDrawer.h"
@@ -102,41 +103,65 @@ String ColorCompositeTool::getMenuString() const {
 SetBandsForm::SetBandsForm(CWnd *wPar, RasterLayerDrawer *dr) : 
 	DisplayOptionsForm(dr, wPar,TR("Select bands for Color Composite"))
 {
+	exception = false;
 	MapList mpl = dr->getMapList();
-	band1 = mpl[dr->getColorCompositeBand(0)]->fnObj.sFile;
-	band2 = mpl[dr->getColorCompositeBand(1)]->fnObj.sFile;
-	band3 = mpl[dr->getColorCompositeBand(2)]->fnObj.sFile;
+	v1 = dr->getColorCompositeBand(0);
+	v2=  dr->getColorCompositeBand(1);
+	v3 = dr->getColorCompositeBand(2);
+	string band1 = mpl[v1]->fnObj.sFile + ".mpr";
+	string band2 = mpl[v2]->fnObj.sFile + ".mpr";
+	string band3 = mpl[v3]->fnObj.sFile + ".mpr";
+	names.push_back(band1);
+	names.push_back(band2);
+	names.push_back(band3);
 
-//	MapListerDomainAndGeoRef *lister = ;
-	fm1 = new FieldMap(root,TR("Red"),&band1,new MapListerDomainAndGeoRef(mpl->gr()->fnObj,mpl->rcSize(),mpl[0]->dm()->fnObj,false));
-	fm2 = new FieldMap(root,TR("Green"),&band2,new MapListerDomainAndGeoRef(mpl->gr()->fnObj,mpl->rcSize(),mpl[0]->dm()->fnObj,false));
-	fm3 = new FieldMap(root,TR("Blue"),&band3,new MapListerDomainAndGeoRef(mpl->gr()->fnObj,mpl->rcSize(),mpl[0]->dm()->fnObj,false));
+	fm1 = new FieldOneSelectString(root,TR("Red"),&v1,names);
+	fm2 = new FieldOneSelectString(root,TR("Blue"),&v2,names);
+	fm3 = new FieldOneSelectString(root,TR("Green"),&v3, names);
+	FieldGroup *fg = new FieldGroup(root, true);
+	cb = new CheckBox(fg,TR("Exception Color"),&exception);
+	cb->SetCallBack((NotifyProc)&SetBandsForm::setExc);
+	cb->SetIndependentPos();
+	fi1 = new FieldInt(cb,"",&e1);
+	fi1->Align(cb, AL_AFTER);
+	fi2 = new FieldInt(cb,"",&e2);
+	fi2->Align(fi1, AL_AFTER);
+	fi3 = new FieldInt(cb,"",&e3);
+	fi3->Align(fi2, AL_AFTER);
+
 
 	create();
+}
+
+int SetBandsForm::setExc(Event *ev) {
+	cb->StoreData();
+	if ( exception) {
+		RasterLayerDrawer *rdr = (RasterLayerDrawer *)drw;
+		Color clr = rdr->getExceptionColor();
+		if ( clr == colorUNDEF)
+			clr = Color(0,0,0);
+		fi1->SetVal(clr.red());
+		fi2->SetVal(clr.green());
+		fi3->SetVal(clr.blue());
+	}
+	return 1;
 }
 
 void  SetBandsForm::apply() {
 	fm1->StoreData();
 	fm2->StoreData();
 	fm3->StoreData();
+	cb->StoreData();
+	fi1->StoreData();
+	fi2->StoreData();
+	fi3->StoreData();
 	RasterLayerDrawer *rdr = (RasterLayerDrawer *)drw;
-	MapList mpl = rdr->getMapList();
-	for(int i = 0; i < mpl->iSize(); ++i) {
-		String oldBand = mpl[i]->fnObj.sFullPath();
-		if ( oldBand == band1) {
-			rdr->setColorCompositeBand(0,i);
+	rdr->setColorCompositeBand(0,v1);
+	rdr->setColorCompositeBand(1,v2);
+	rdr->setColorCompositeBand(2,v3);
+	if ( exception)
+		rdr->setExceptionColor(Color(e1,e2,e3));
 
-		}
-		if ( oldBand == band2) {
-			rdr->setColorCompositeBand(1,i);
-
-		}
-		if ( oldBand == band3) {
-			rdr->setColorCompositeBand(2,i);
-
-		}
-
-	}
 	PreparationParameters pp(NewDrawer::ptRENDER, 0);
 	rdr->prepareChildDrawers(&pp);
 

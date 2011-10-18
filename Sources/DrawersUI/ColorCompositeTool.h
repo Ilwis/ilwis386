@@ -25,8 +25,15 @@ namespace ILWIS {
 		SetBandsForm(CWnd *wPar, RasterLayerDrawer *drw);
 		void apply();
 	private:
-		FieldMap *fm1, *fm2, *fm3;
-		String band1, band2, band3;
+		FieldOneSelectString *fm1, *fm2, *fm3;
+		FieldInt *fi1, *fi2, *fi3;
+		CheckBox *cb;
+		long v1,v2,v3;
+		int e1,e2,e3;
+		bool exception;
+		vector<String> names;
+
+		int setExc(Event *ev);
 
 
 	};
