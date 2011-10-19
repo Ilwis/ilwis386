@@ -3417,6 +3417,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\Sources\Headers\ft2build.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Sources\Headers\ftgl\ftgl.h"
 					>
 				</File>
@@ -4896,6 +4900,10 @@
 					<Filter
 						Name="geos"
 						>
+						<File
+							RelativePath="..\..\Sources\Geos\headers\geos\export.h"
+							>
+						</File>
 						<File
 							RelativePath="..\..\Sources\Geos\headers\geos\geom.h"
 							>
