@@ -3445,6 +3445,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\Sources\Headers\proj_api.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Sources\Headers\stdafx.h"
 					>
 				</File>
