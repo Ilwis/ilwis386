@@ -126,7 +126,7 @@ bool CCTexture::DrawTexture(long offsetX, long offsetY, long texSizeX, long texS
 			ranges[3] = mpl[data->ccMaps[1].index]->rrMinMax();
 			ranges[4] = data->ccMaps[2].rr;
 			ranges[5] = mpl[data->ccMaps[2].index]->rrMinMax();
-			byte stretchedValues[765];
+			byte stretchedValues[768];
 			for(int i=0; i < 256; ++i) {
 				stretchedValues[i] = stretch(i,ranges[1], ranges[0]);
 				stretchedValues[i + 256] = stretch(i,ranges[3], ranges[2]);
@@ -158,19 +158,6 @@ bool CCTexture::DrawTexture(long offsetX, long offsetY, long texSizeX, long texS
               
 	}
 	return true;
-}
-
-void CCTexture::linearStretch(ByteBuf& buf1, ByteBuf& buf2, ByteBuf& buf3, RangeReal ranges[]  ) {
-	for(int i = 0; i < buf1.iSize(); ++i) { // all bufs have the same size anyway
-		double v1 = buf1[i];
-		double v2 = buf2[i];
-		double v3 = buf3[i];
-		if ( Color(v1,v2,v3) != data->exceptionColor) {
-			buf1[i] = stretch(v1,ranges[1], ranges[0]);
-			buf2[i] = stretch(v2,ranges[3], ranges[2]);
-			buf3[i] = stretch(v3,ranges[5], ranges[4]);
-		}
-	}
 }
 
 double CCTexture::stretch(double v, const RangeReal& rrFrom, const RangeReal& rrTo) {
