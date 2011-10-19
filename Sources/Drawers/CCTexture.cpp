@@ -67,12 +67,23 @@ bool CCTexture::DrawTexture(long offsetX, long offsetY, long texSizeX, long texS
 			ranges[4] = data->ccMaps[2].rr;
 			ranges[5] = mpl[data->ccMaps[2].index]->rrMinMax();
 
+			byte stretchedValues[768];
+			for(int i=0; i < 256; ++i) {
+				stretchedValues[i] = stretch(i,ranges[1], ranges[0]);
+				stretchedValues[i + 256] = stretch(i,ranges[3], ranges[2]);
+				stretchedValues[i + 512] = stretch(i,ranges[5], ranges[4]);
+			}
+
 			mpl[data->ccMaps[0].index]->GetLineRaw(iDataInYPos + offsetY, bufIn1, offsetX, sizeX);
 			mpl[data->ccMaps[1].index]->GetLineRaw(iDataInYPos + offsetY, bufIn2, offsetX, sizeX);
 			mpl[data->ccMaps[2].index]->GetLineRaw(iDataInYPos + offsetY, bufIn3, offsetX, sizeX);
-			linearStretch(bufIn1, bufIn2, bufIn3, ranges);
-			for(int i = 0; i < sizeX; ++i)
-				bufComposite[i] = (bufIn1[i]) | (bufIn2[i] << 8) | (bufIn3[i] << 16);
+
+			for(int i = 0; i < sizeX; ++i) {
+					byte v1 = stretchedValues[bufIn1[i]];
+					byte v2 = stretchedValues[bufIn2[i] + 256];
+					byte v3 = stretchedValues[bufIn3[i] + 512];
+					bufComposite[i] = (v1) | (v2 << 8) | (v3 << 16);
+				}
 
 			ConvLine(bufComposite, bufColor);
 			PutLine(bufComposite, bufColor, iDataInYPos, texSizeX, outbuf);
@@ -115,6 +126,12 @@ bool CCTexture::DrawTexture(long offsetX, long offsetY, long texSizeX, long texS
 			ranges[3] = mpl[data->ccMaps[1].index]->rrMinMax();
 			ranges[4] = data->ccMaps[2].rr;
 			ranges[5] = mpl[data->ccMaps[2].index]->rrMinMax();
+			byte stretchedValues[765];
+			for(int i=0; i < 256; ++i) {
+				stretchedValues[i] = stretch(i,ranges[1], ranges[0]);
+				stretchedValues[i + 256] = stretch(i,ranges[3], ranges[2]);
+				stretchedValues[i + 512] = stretch(i,ranges[5], ranges[4]);
+			}
 
 			for (long iDataOutYPos = 0, iDataInYPos = 0; iDataOutYPos < ySizeOut; ++iDataOutYPos, iDataInYPos += zoomFactor)
 			{
@@ -124,9 +141,12 @@ bool CCTexture::DrawTexture(long offsetX, long offsetY, long texSizeX, long texS
 				mpl[data->ccMaps[0].index]->GetLineRaw(iDataInYPos + offsetY, bufIn1, offsetX, sizeX,iPyrLayer);
 				mpl[data->ccMaps[1].index]->GetLineRaw(iDataInYPos + offsetY, bufIn2, offsetX, sizeX,iPyrLayer);
 				mpl[data->ccMaps[2].index]->GetLineRaw(iDataInYPos + offsetY, bufIn3, offsetX, sizeX,iPyrLayer);
-				linearStretch(bufIn1, bufIn2, bufIn3, ranges);
+				
 				for(int i = 0; i < sizeX; ++i) {
-					bufComposite[i] = (bufIn1[i]) | (bufIn2[i] << 8) | (bufIn3[i] << 16);
+					byte v1 = stretchedValues[bufIn1[i]];
+					byte v2 = stretchedValues[bufIn2[i] + 256];
+					byte v3 = stretchedValues[bufIn3[i] + 512];
+					bufComposite[i] = (v1) | (v2 << 8) | (v3 << 16);
 				}
 
 				for (long iDataOutXPos = 0, iDataInXPos = 0; iDataOutXPos < xSizeOut; ++iDataOutXPos, iDataInXPos += zoomFactor)
