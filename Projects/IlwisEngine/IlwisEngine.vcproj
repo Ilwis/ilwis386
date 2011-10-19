@@ -3954,6 +3954,10 @@
 					RelativePath="..\..\Sources\Engine\SpatialDB\sqlite3.cpp"
 					>
 				</File>
+				<File
+					RelativePath="..\..\Sources\SpatialDB\headers\spatialite\sqlite3.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Geos"
