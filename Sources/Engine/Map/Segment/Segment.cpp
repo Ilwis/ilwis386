@@ -42,7 +42,7 @@
 #include "Engine\Table\Col.h"
 #include "Engine\Domain\Dmvalue.h"
 #include "Engine\Base\DataObjects\valrange.h"
-#include "Geos\headers\geos\algorithm\CGAlgorithms.h"
+#include <geos\algorithm\CGAlgorithms.h>
 #include "Engine\Base\Algorithm\Clipline.h"
 #include "Engine\Table\ColumnCoordBuf.h"
 #include "Engine\Base\mask.h"
