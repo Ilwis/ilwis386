@@ -98,11 +98,22 @@ void RasterLayerDrawer::prepare(PreparationParameters *pp){
 			textureHeap->SetData(rastermap, getDrawingColor(), getDrawMethod(), drawcontext->getMaxPaletteSize(), data, rrMinMax, drawcontext);
 		else
 			textureHeap->SetData(mpl, getDrawingColor(), getDrawMethod(), drawcontext->getMaxPaletteSize(), data, rrMinMax, drawcontext);
+		if (fPaletteOwner && fUsePalette) {
+			palette->SetData(rastermap, this, drawcontext->getMaxPaletteSize(), rrMinMax);
+			palette->Refresh();
+			getRootDrawer()->getDrawerContext()->setActivePalette(0);
+		}
 	}
 	if (pp->type & ptOFFSCREENEND) {
 		isThreaded = isThreadedBeforeOffscreen;
 		delete textureHeap;
 		textureHeap = textureHeapBeforeOffscreen;
+		if (fPaletteOwner && fUsePalette) {
+			DrawerContext* drawcontext = getRootDrawer()->getDrawerContext();
+			palette->SetData(rastermap, this, drawcontext->getMaxPaletteSize(), rrMinMax);
+			palette->Refresh();
+			getRootDrawer()->getDrawerContext()->setActivePalette(0);
+		}
 	}
 }
 

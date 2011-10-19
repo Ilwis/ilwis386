@@ -980,16 +980,16 @@ BOOL MapPaneView::EditCopy(CRect mRect, int nReduceResCount)
 	glFinish();	// Finish all OpenGL commands
 	contextMem->ReleaseContext();
 
+	// Restore original context and viewport
+	GetDocument()->rootDrawer->setDrawerContext(context);
+	GetDocument()->rootDrawer->setViewPort(viewportOld);
+
 	PreparationParameters ppEDITCOPYDONE (ILWIS::NewDrawer::ptOFFSCREENEND);
 	for (vector<ComplexDrawer*>::iterator it = drawerList.begin(); it != drawerList.end(); ++it)
 		(*it)->prepare(&ppEDITCOPYDONE);
 
 	// contextMem is no longer needed
 	delete contextMem;
-
-	// Restore original context and viewport
-	GetDocument()->rootDrawer->setDrawerContext(context);
-	GetDocument()->rootDrawer->setViewPort(viewportOld);
 
 	if (OpenClipboard())
 	{
