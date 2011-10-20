@@ -173,18 +173,17 @@ void  SetBandsForm::apply() {
 //------------------------------------
 SetStretchCCForm::SetStretchCCForm(CWnd *wPar, RasterLayerDrawer *dr,int _index) :
 	index(_index),
-	DisplayOptionsForm2((ComplexDrawer *)dr,wPar,"Set stretch"),
-	rr(dr->getColorCompositeRange(_index))
+	DisplayOptionsForm2((ComplexDrawer *)dr,wPar,"Set stretch")
 {
-	if ( !rr.fValid()) {
-		//rr = RangeReal(0,255);
-		rr = dr->getMapList()[index]->rrMinMax();
+	RangeReal rrAllowedRange = dr->getMapList()[dr->getColorCompositeBand(index)]->rrMinMax();
+	RangeReal rrCurrentLoHi = dr->getColorCompositeRange(index);
+	if (!rrCurrentLoHi.fValid())
+		rrCurrentLoHi = rrAllowedRange;
 
-	}
-	low = rr.rLo();
-	high = rr.rHi();
-	sliderLow = new FieldRealSliderEx(root,"Lower", &low,ValueRange(rr),true);
-	sliderHigh = new FieldRealSliderEx(root,"Upper", &high,ValueRange(rr),true);
+	low = rrCurrentLoHi.rLo();
+	high = rrCurrentLoHi.rHi();
+	sliderLow = new FieldRealSliderEx(root,"Lower", &low,ValueRange(rrAllowedRange),true);
+	sliderHigh = new FieldRealSliderEx(root,"Upper", &high,ValueRange(rrAllowedRange),true);
 	sliderHigh->Align(sliderLow, AL_UNDER);
 	sliderLow->SetCallBack((NotifyProc)&SetStretchCCForm::check);
 	sliderHigh->SetCallBack((NotifyProc)&SetStretchCCForm::check);

@@ -45,7 +45,6 @@ namespace ILWIS {
 	private:
 		FormEntry *CheckData();
 
-		RangeReal rr;
 		FieldRealSliderEx *sliderLow;
 		FieldRealSliderEx *sliderHigh;
 		double low, high;
