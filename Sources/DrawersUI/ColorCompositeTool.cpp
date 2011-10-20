@@ -65,13 +65,15 @@ HTREEITEM ColorCompositeTool::configure( HTREEITEM parentItem) {
 		insertItem(String(TR("Red: %S").c_str(), mp->fnObj.sFile),".mpr", item);
 		item->setDoubleCickAction(this, (DTDoubleClickActionFunc)(DisplayOptionItemFunc)&ColorCompositeTool::stretchCC1);
 
+		item = new DisplayOptionTreeItem(tree, htiNode, drawer);
 		mp = mpl[rdrw->getColorCompositeBand(1)];
 		insertItem(String(TR("Green: %S").c_str(), mp->fnObj.sFile),".mpr", item);
 		item->setDoubleCickAction(this, (DTDoubleClickActionFunc)(DisplayOptionItemFunc)&ColorCompositeTool::stretchCC2);
 
+		item = new DisplayOptionTreeItem(tree, htiNode, drawer);
 		mp = mpl[rdrw->getColorCompositeBand(2)];
 		insertItem(String(TR("Blue: %S").c_str(), mp->fnObj.sFile),".mpr", item);
-		item->setDoubleCickAction(this, (DTDoubleClickActionFunc)(DisplayOptionItemFunc)&ColorCompositeTool::stretchCC2);
+		item->setDoubleCickAction(this, (DTDoubleClickActionFunc)(DisplayOptionItemFunc)&ColorCompositeTool::stretchCC3);
 
 	}
 
