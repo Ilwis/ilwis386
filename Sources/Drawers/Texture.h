@@ -25,13 +25,16 @@ namespace ILWIS {
 		Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDrawer::DrawMethod drm, const long offsetX, const long offsetY, const unsigned long sizeX, const unsigned long sizeY, const unsigned long imgWidth2, const unsigned long imgHeight2, unsigned int zoomFactor, unsigned int iPaletteSize, const RangeReal & rrMinMaxMap, const Palette * palette);
 		virtual ~Texture();
 
-		void CreateTexture(DrawerContext * drawerContext, bool fInThread, volatile bool * fDrawStop);
+		virtual void CreateTexture(DrawerContext * drawerContext, bool fInThread, volatile bool * fDrawStop);
+		virtual void ReCreateTexture(DrawerContext * drawerContext, bool fInThread, volatile bool * fDrawStop);
 		virtual void BindMe(DrawerContext * drawerContext); // To be called before glBegin
 		bool equals(const long offsetX1, const long offsetY1, const long offsetX2, const long offsetY2, unsigned int zoomFactor);
 		bool contains(const long offsetX1, const long offsetY1, const long offsetX2, const long offsetY2);
 		unsigned int getZoomFactor();
 		void RepresentationChanged();
 		bool fValid();
+		void SetDirty();
+		bool fDirty();
 
 	protected:
 		void PutLine(const RealBuf& bufOriginal, const LongBuf& bufColor, const int iLine, const long texSizeX, char * outbuf);
@@ -59,8 +62,8 @@ namespace ILWIS {
 		const Palette * palette;
 		bool fRepresentationChanged;
 		bool valid;
-	private:
 		const Map mp;
+		bool dirty;
 	};
 }
 

@@ -38,6 +38,7 @@ Texture::Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDr
 , rrMinMaxMap(rrMinMaxMap)
 , palette(palette)
 , valid(false)
+, dirty(false)
 {
 }
 
@@ -98,6 +99,44 @@ void Texture::CreateTexture(DrawerContext * drawerContext, bool fInThread, volat
 		drawerContext->ReleaseContext();
 }
 
+void Texture::ReCreateTexture(DrawerContext * drawerContext, bool fInThread, volatile bool * fDrawStop)
+{
+	fValue = 0 != mp->dm()->pdvi() || 0 != mp->dm()->pdvr();
+	fAttTable = false;
+	if (palette) {
+		this->dirty = !DrawTexturePaletted(offsetX, offsetY, sizeX, sizeY, zoomFactor, texture_data, fDrawStop);
+	} else {
+		texture_data = new char [(sizeX / zoomFactor) * (sizeY / zoomFactor) * 4];
+		this->dirty = !DrawTexture(offsetX, offsetY, sizeX, sizeY, zoomFactor, texture_data, fDrawStop);
+	}
+
+	if (dirty)
+		return;
+
+	if (fInThread)
+		drawerContext->TakeContext();
+	glBindTexture( GL_TEXTURE_2D, texture );
+	boolean oldVal;
+	glGetBooleanv(GL_MAP_COLOR, &oldVal);
+	glPixelTransferf(GL_MAP_COLOR, palette != 0);
+	if (palette != 0) {
+		if (!drawerContext->isActivePalette(palette)) {
+			palette->MakeCurrent();
+			drawerContext->setActivePalette(palette);
+		}
+		glTexImage2D( GL_TEXTURE_2D, 0, 4, sizeX / zoomFactor, sizeY / zoomFactor, 0, GL_COLOR_INDEX, GL_UNSIGNED_SHORT, texture_data);
+	}
+	else {
+		glTexImage2D( GL_TEXTURE_2D, 0, 4, sizeX / zoomFactor, sizeY / zoomFactor, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture_data);
+		delete [] texture_data;
+		texture_data = 0;
+	}
+	glPixelTransferf(GL_MAP_COLOR, oldVal);
+	fRepresentationChanged = false;
+	if (fInThread)
+		drawerContext->ReleaseContext();
+}
+
 bool Texture::fValid()
 {
 	return valid;
@@ -128,6 +167,16 @@ void Texture::BindMe(DrawerContext * drawerContext)
 void Texture::RepresentationChanged()
 {
 	fRepresentationChanged = true;
+}
+
+void Texture::SetDirty()
+{
+	dirty = true;
+}
+
+bool Texture::fDirty()
+{
+	return dirty;
 }
 
 bool Texture::equals(const long offsetX1, const long offsetY1, const long offsetX2, const long offsetY2, unsigned int zoomFactor)
