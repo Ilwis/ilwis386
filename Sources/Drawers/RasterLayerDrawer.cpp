@@ -115,26 +115,31 @@ void RasterLayerDrawer::prepare(PreparationParameters *pp){
 			getRootDrawer()->getDrawerContext()->setActivePalette(0);
 		}
 	}
+	if (pp->type & ptREDRAW)
+		textureHeap->ReGenerateAllTextures();
 }
 
 void RasterLayerDrawer::setDrawMethod(DrawMethod method) {
 
 	if ( method == drmINIT) {
-		drm = drmRPR;
-		if (rastermap.fValid() ) {
-			Domain _dm = rastermap->dm();
-			if (0 != _dm->pdi())
-				drm = drmIMAGE;
-			else if (0 != _dm->pdcol())
-				drm = drmCOLOR;
-			else if (0 != _dm->pdid())
-				drm = drmMULTIPLE;
-			else if ((0 != _dm->pdbit()) || (0 != _dm->pdbool()))
-				drm = drmBOOL;
-			else if (0 != _dm->pdp())
-				drm = drmRPR;
-		} if ( mpl.fValid())
+		if (mpl.fValid())
 			drm = drmCOLOR;
+		else {
+			drm = drmRPR;
+			if (rastermap.fValid() ) {
+				Domain _dm = rastermap->dm();
+				if (0 != _dm->pdi())
+					drm = drmIMAGE;
+				else if (0 != _dm->pdcol())
+					drm = drmCOLOR;
+				else if (0 != _dm->pdid())
+					drm = drmMULTIPLE;
+				else if ((0 != _dm->pdbit()) || (0 != _dm->pdbool()))
+					drm = drmBOOL;
+				else if (0 != _dm->pdp())
+					drm = drmRPR;
+			}
+		}
 	} else
 		drm = method;
 }
