@@ -219,12 +219,20 @@ void TextureHeap::RepresentationChanged()
 		textures[i]->RepresentationChanged();	
 }
 
+void TextureHeap::ReGenerateAllTextures()
+{
+	for (int i = 0; i < texturesArraySize; ++i)
+		textures[i]->SetDirty();
+}
+
 Texture * TextureHeap::GetTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, unsigned int zoomFactor, const Palette * palette, bool fInThread)
 {
 	Texture * tex = 0;
 	if (fInThread) { // call Invalidate when done, to redraw the mapwindow
 		for (int i = 0; i < texturesArraySize; ++i) {
 			if (textures[i]->equals(offsetX, offsetY, offsetX + sizeX, offsetY + sizeY, zoomFactor)) {
+				if (textures[i]->fDirty())
+					ReGenerateTexture(textures[i], fInThread);
 				textures[i]->BindMe(drawerContext);
 				return textures[i];
 			} else if (textures[i]->contains(offsetX, offsetY, offsetX + sizeX, offsetY + sizeY)) {
@@ -244,6 +252,8 @@ Texture * TextureHeap::GetTexture(const unsigned int offsetX, const unsigned int
 		}
 		if (0 == tex)
 			tex = GenerateTexture(offsetX, offsetY, sizeX, sizeY, zoomFactor, palette, fInThread);
+		else if (tex->fDirty())
+			ReGenerateTexture(tex, fInThread);
 	}
 
 	if (tex != 0)
@@ -274,6 +284,21 @@ Texture * TextureHeap::GenerateTexture(const unsigned int offsetX, const unsigne
 	return 0;
 }
 
+void TextureHeap::ReGenerateTexture(Texture * texture, bool fInThread)
+{
+	if (((writepos + 1) % BUF_SIZE) != readpos) {
+		textureRequest[writepos] = texture;
+		writepos = (writepos + 1) % BUF_SIZE;
+	}
+	if (fInThread) {
+		if (!textureThread)
+			textureThread = AfxBeginThread(GenerateTexturesInThread, this);
+		else
+			textureThread->ResumeThread();
+	} else
+		GenerateNextTexture(fInThread);
+}
+
 Texture * TextureHeap::GenerateNextTexture(bool fInThread)
 {
 	Texture * tex = 0;
@@ -286,16 +311,22 @@ Texture * TextureHeap::GenerateNextTexture(bool fInThread)
 	csChangeTexCreatorList.Unlock();
 
 	if (tex != 0) {
+		bool fReGenerate = tex->fValid();
 		clock_t start = clock();
-		tex->CreateTexture(drawerContext, fInThread, &fAbortTexGen);
+		if (fReGenerate)
+			tex->ReCreateTexture(drawerContext, fInThread, &fAbortTexGen);
+		else
+			tex->CreateTexture(drawerContext, fInThread, &fAbortTexGen);
 		clock_t end = clock();
 		double duration = 1000.0 * (double)(end - start) / CLOCKS_PER_SEC;
 		//TRACE("Texture generated in %2.2f milliseconds;\n", duration);
-		if (tex->fValid())
-			textures[texturesArraySize++] = tex;
-		else {
-			delete tex;
-			tex = 0;
+		if (!fReGenerate) {
+			if (tex->fValid())
+				textures[texturesArraySize++] = tex;
+			else {
+				delete tex;
+				tex = 0;
+			}
 		}
 	}
 	return tex;

@@ -53,9 +53,11 @@ namespace ILWIS {
 		Texture * GetTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, unsigned int zoomFactor, const Palette * palette, bool fInThread);
 		void ClearQueuedTextures();
 		void RepresentationChanged();
+		void ReGenerateAllTextures();
 
 	private:
 		Texture * GenerateTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, unsigned int zoomFactor, const Palette * palette, bool fInThread);
+		void ReGenerateTexture(Texture * texture, bool fInThread);
 		static UINT GenerateTexturesInThread(LPVOID pParam);
 		Texture * GenerateNextTexture(bool fInThread);
 		//vector<Texture*> textures;
