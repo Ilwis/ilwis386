@@ -20,6 +20,8 @@ namespace ILWIS {
 	public:
 		CCTexture(const MapList & _mpl, const DrawingColor * drawColor, const ComplexDrawer::DrawMethod drm, const long offsetX, const long offsetY, const unsigned long sizeX, const unsigned long sizeY, RasterSetData *_data, unsigned int zoomFactor, const RangeReal & rrMinMaxMap);
 		virtual ~CCTexture();
+		virtual void CreateTexture(DrawerContext * drawerContext, bool fInThread, volatile bool * fDrawStop);
+		virtual void ReCreateTexture(DrawerContext * drawerContext, bool fInThread, volatile bool * fDrawStop);
 
 		//virtual bool fValid();
 
