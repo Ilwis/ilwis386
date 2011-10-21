@@ -164,7 +164,7 @@ void  SetBandsForm::apply() {
 	if ( exception)
 		rdr->setExceptionColor(Color(e1,e2,e3));
 
-	PreparationParameters pp(NewDrawer::ptRENDER, 0);
+	PreparationParameters pp(NewDrawer::ptREDRAW, 0);
 	rdr->prepareChildDrawers(&pp);
 
 	updateMapView();
