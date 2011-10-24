@@ -70,15 +70,16 @@ fnObj(p.fnObj), ptr(p)
 
 	ILWIS::Version::BinaryVersion fvFormatVersion;
 	ptr.ReadElement("PointMapStore", "Format", (int &)fvFormatVersion);
-	if ( fvFormatVersion == shUNDEF)
-		fvFormatVersion = ILWIS::Version::bvFORMAT30;
+	if ( fvFormatVersion == shUNDEF) {
+		fvFormatVersion = ILWIS::Version::bvFORMAT20;
+	}
 	getEngine()->getVersion()->fSupportsBinaryVersion(fvFormatVersion);
     ptr.setVersionBinary(fvFormatVersion);
 	geometries = new vector<Geometry *>();
 
 	// determine the format of the pointmap by means of the Coordinate column
 	// This Column did not exist in version 2.2 and lower
-	bool fFormat20 = false; //!TableInfo::fExistCol(p.fnObj, tbl->sSectionPrefix, "Coordinate");
+	bool fFormat20 = fvFormatVersion == ILWIS::Version::bvFORMAT20;
 	long iNr = tbl.getRowCount();
 
 	if (fFormat20)

@@ -118,6 +118,7 @@
 #define ID_CAT_SHOW_MAPTBL 1065
 #define ID_CAT_SHOW_DATA 1066
 #define ID_CAT_SHOW_ALL 1067
+#define ID_CAT_SHOW_BASEMAPS 1085
 
 // MainWindow import
 #define ID_FILE_IMPORT_MAP        1068
@@ -363,6 +364,7 @@
 #define ID_ADD_GRID    4941
 #define ID_ADD_GRATICULE 4942
 #define ID_REMOVELAYER   4943
+#define ID_ZOOM_TO_LAYER   4945
 #define ID_METRIC_COORD 4944
 #define ID_LAYLAST     4999
 #define ID_EDITLAYER   12000

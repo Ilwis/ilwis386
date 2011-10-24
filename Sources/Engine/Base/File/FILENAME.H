@@ -93,9 +93,9 @@ public:
   _export FileName();
   // empty
   _export FileName(const FileName& fn);  // to prevent inline expansion.
-  _export FileName(const char* sName);   // only name no path or extension
-  _export FileName(const String& sName);
-  _export FileName(const CString& sName);
+  _export FileName(const char* sName, bool includeSystemDir=false);   // only name no path or extension
+  _export FileName(const String& sName, bool includeSystemDir=false);
+  _export FileName(const CString& sName, bool includeSystemDir=false);
   
   _export FileName(const char* sName, const char* sExtension,
            bool fReplaceExtension=true);
@@ -171,7 +171,7 @@ public:
 	String sCol;
 
 private:
-  void init(const char* sName);
+  void init(const char* sName, bool includeSystemDir=false);
   void initExt(const char* sName, const char* sExt, bool fReplaceExtension);
   void initCopyFrom(const FileName& fn);
 };

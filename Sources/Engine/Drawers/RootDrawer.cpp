@@ -87,9 +87,11 @@ String RootDrawer::addDrawer(NewDrawer *drw) {
 }
 
 void RootDrawer::addCoordBounds(const CoordSystem& _cs, const CoordBounds& cb, bool overrule){
-	CoordBounds ncb = cs.fEqual(_cs) ? cb : cs->cbConv(_cs,cb);
-	//ncb += cbMap;
-	cbMap += ncb;
+	if ( overrule || cbMap.fUndef()) {
+		CoordBounds ncb = cs.fEqual(_cs) ? cb : cs->cbConv(_cs,cb);
+		//ncb += cbMap;
+		cbMap += ncb;
+	}
 	setCoordBoundsView(cbMap, overrule);
 }
 
@@ -256,7 +258,10 @@ void RootDrawer::setViewPort(const RowCol& rc) {
 void RootDrawer::setCoordinateSystem(const CoordSystem& _cs, bool overrule){
 	if (overrule || cs->fUnknown()) {
 		if ( overrule) {
-			cbMap = _cs->cbConv(_cs, cbMap);
+			cbMap = _cs->cbConv(cs, cbMap);
+			cbZoom = _cs->cbConv(cs, cbZoom);
+			cbView = _cs->cbConv(cs, cbView);
+			setProjection(cbMap);
 		}
 		cs = _cs;
 	}
@@ -317,7 +322,24 @@ void RootDrawer::setCoordBoundsView(/*const CoordSystem& _cs,*/ const CoordBound
 
 }
 
-void RootDrawer::setCoordBoundsZoom(const CoordBounds& cb) {
+void RootDrawer::setCoordBoundsZoom(const CoordBounds& cbIn) {
+	CoordBounds cb = cbIn;
+	if ( cbZoom.fValid()) {
+	// zooming never changes the shape of the mapwindow so any incomming zoom rectangle must conform to the shape of the existing mapwindow
+		double factCur = cbZoom.width() / cbZoom.height();
+		double factIn = cbIn.width() / cbIn.height();
+		if ( abs(factCur - factIn) > 0.01 ) {
+			if ( factCur < 1.0) {
+				double newHeight = cbIn.width() / factCur;
+				cb = CoordBounds(cbIn.cMin, Coord(cbIn.cMax.x, cbIn.cMin.y + newHeight));
+			} else {
+				double newWidth = cb.height() * factCur;
+				cb = CoordBounds(cbIn.cMin, Coord(cbIn.cMin.x + newWidth, cbIn.cMax.y));
+			}
+		}
+	}
+
+
 	cbZoom = cb;
 	setViewPoint(cbZoom.middle());
 	setEyePoint();

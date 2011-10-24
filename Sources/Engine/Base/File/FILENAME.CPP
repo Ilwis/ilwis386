@@ -187,7 +187,7 @@ FilenameIter& FilenameIter::operator++()
 
 //-----------------------------------------------------------------------------------------------------
 
-void FileName::init(const char* sName)
+void FileName::init(const char* sName, bool includeSystemDir)
 {
 	if (sName == 0)  return;
 
@@ -196,6 +196,22 @@ void FileName::init(const char* sName)
 
 	if ((sDrive.length()==0) && (sDir.length()==0))
 	// set drive and path from current drive an path
+	if (includeSystemDir) {
+		String path = getEngine()->getContext()->sStdDir() + "\\";
+		String name = String(sName);
+		String file = path + name;
+		if ( _access(file.c_str(), 0)==0)
+			Dir(path);
+		else {
+			path += "Basemaps\\";
+			file = path + name;
+			if ( _access(file.c_str(), 0)==0){
+				Dir(path);
+			} else
+				Dir(getEngine()->sGetCurDir());
+		}
+	}
+	else
 		Dir(getEngine()->sGetCurDir());
 	else if (0 != sFile.length())  // complete path to full path
 	{
@@ -233,19 +249,19 @@ FileName::FileName()
 {
 }
 
-FileName::FileName(const char* sName)
+FileName::FileName(const char* sName, bool includeSystemDir)
 {
-	init(sName);
+	init(sName,includeSystemDir);
 }
 
-FileName::FileName(const String& sName)
+FileName::FileName(const String& sName, bool includeSystemDir)
 {
-	init(sName.c_str());
+	init(sName.c_str(),includeSystemDir);
 }
 
-FileName::FileName(const CString& sName)
+FileName::FileName(const CString& sName, bool includeSystemDir)
 {
-	init((LPCTSTR)sName);
+	init((LPCTSTR)sName,includeSystemDir);
 }
 
 // Constructors: name and extension

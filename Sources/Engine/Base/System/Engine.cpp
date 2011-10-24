@@ -78,7 +78,7 @@ void Engine::Init() {
 
 		context = new IlwisAppContext(getModuleHandle());
 		version = new ILWIS::Version();
-	//	version->addBinaryVersion(ILWIS::Version::bvFORMAT20);
+		//version->addBinaryVersion(ILWIS::Version::bvFORMAT20);
 		version->addBinaryVersion(ILWIS::Version::bvFORMAT30);
 		version->addBinaryVersion(ILWIS::Version::bvFORMATFOREIGN);
 		version->addBinaryVersion(ILWIS::Version::bvPOLYGONFORMAT37);

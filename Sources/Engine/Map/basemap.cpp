@@ -489,8 +489,14 @@ void BaseMapPtr::KeepOpen(bool f)
 long BaseMapPtr::iRaw(const Coord& c, double rPrx) const
 {
 	vector<long> values = viRaw(c,rPrx);
-	if ( values.size() > 0)
+	if ( values.size() == 1 )
 		return values.at(0);
+	else if ( values.size() > 1) {
+		for(int i = 0; i < values.size(); ++i) {
+			if ( values.at(i) != iUNDEF)
+				return values.at(i);
+		}
+	}
 	return iUNDEF;
 }
 

@@ -999,7 +999,8 @@ bool ObjectInfo::fSystemObject(const FileName& fn)
 	}
 	String sSystemDir = getEngine()->getContext()->sStdDir();
 	sSystemDir &= "\\";
-	return fCIStrEqual(fn.sPath(), sSystemDir);
+	String sPath = fn.sPath();
+	return fCIStrEqual(sPath, sSystemDir) || fCIStrEqual(sPath, sSystemDir + "Basemaps\\");
 }
 
 bool ObjectInfo::fUpToDate(const FileName& fn, const String& sCol)

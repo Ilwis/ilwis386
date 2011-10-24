@@ -20,7 +20,7 @@
 #include "Engine\Drawers\RootDrawer.h"
 #include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Engine\Drawers\SelectionRectangle.h"
-//#include "Client\Editors\Map\BaseMapEditor.h"
+#include "Engine\Drawers\TextDrawer.h"
 #include "Engine\Drawers\SimpleDrawer.h"
 
 using namespace ILWIS;
@@ -110,6 +110,8 @@ void ModuleMap::addModule(const FileName& fnModule, bool retry) {
 					}
 					delete infos;
 					NewDrawer::addDrawer("SelectionRectangle","ilwis38", createSelectionRectangle);
+					NewDrawer::addDrawer("TextLayerDrawer","ilwis38", createTextLayerDrawer);
+					NewDrawer::addDrawer("TextDrawer","ilwis38", createTextDrawer);
 				}
 
 			}

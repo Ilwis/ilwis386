@@ -290,6 +290,24 @@ void IlwisAppContext::AddSearchPath(const FileName& fn)
 	searchPaths.push_back(fn);
 }
 
+FileName IlwisAppContext::fnGetBasemapPath(unsigned int iIndex)
+{
+	if ( iIndex >= basemapPaths.size()) return FileName();
+	return basemapPaths[iIndex];
+}
+
+void IlwisAppContext::RemoveBasemapPath(const FileName& fn)
+{
+	vector<FileName>::iterator here = find(basemapPaths.begin(), basemapPaths.end(), fn);
+	if ( here != basemapPaths.end() )
+		basemapPaths.erase(here);
+}			
+
+void IlwisAppContext::AddBasemapPath(const FileName& fn)
+{
+	basemapPaths.push_back(fn);
+}
+
 FileName IlwisAppContext::fnGetSearchPath(unsigned int iIndex)
 {
 	if ( iIndex >= searchPaths.size()) return FileName();

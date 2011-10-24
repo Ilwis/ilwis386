@@ -72,6 +72,9 @@ public:
 	_export FileName fnGetSearchPath(unsigned int iIndex);
 	_export void AddSearchPath(const FileName& fn);
 	_export void RemoveSearchPath(const FileName& fn);
+	_export FileName fnGetBasemapPath(unsigned int iIndex);
+	_export void AddBasemapPath(const FileName& fn);
+	_export void RemoveBasemapPath(const FileName& fn);
 	_export String getLanguageExtension() const { return languageExtension;}
 	_export void setLanguageExtension(const String& ext) {languageExtension=ext;}
 	CommandHandler * ComHandler() { return commHandler; }
@@ -109,6 +112,7 @@ private:
 	StringManager *_sm;
 	vector<ThreadVar> ThreadVars;
 	vector<FileName> searchPaths;
+	vector<FileName> basemapPaths;
 	bool _fUseYield;  // flag used in Yield
 	bool fYldActive;
 	long _iProcess;  // place holder for process Id
