@@ -446,7 +446,8 @@ LRESULT Cmdpropobject(CWnd *wndOwner, const String& str)
 		if (!frm.fOkClicked()) 
 			return -1;
 	}
-	FileName fn(sObj);
+	FileName fn(sObj,true);
+
 	ObjectStruct* os = new ObjectStruct(fn);
 	if (os->obj.fValid())
 	{

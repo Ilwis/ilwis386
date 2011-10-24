@@ -154,37 +154,40 @@ void DrawerLayerTreeItem::OnContextMenu(CWnd* w, CPoint p)
 	BaseMapPtr *mptr = mapdrw->getBaseMap();
 	CMenu men;
 	men.CreatePopupMenu();
-	pmadd(ID_LAYEROPTIONS);
-	men.SetDefaultItem(ID_LAYEROPTIONS);
-	/*if (dr->isEditable()) {
-		if (mapdrw->getDrawerCount(types) == 1 && 
-			mapdrw->getDrawer(0)->isEditable()) {
-				pmadd(ID_EDITLAYER);
-		}
-	}*/
-	if (mapdrw)
+	if (mapdrw) {
 		pmadd(ID_PROPLAYER);
+		pmadd(ID_ZOOM_TO_LAYER);
+	}
 	pmadd(ID_REMOVELAYER);
 	int iCmd = men.TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON|TPM_NONOTIFY|TPM_RETURNCMD, p.x, p.y, w);
 	switch (iCmd) 
 	{
-	//case ID_EDITLAYER:
-	//	{
-	//		if( mapdrw->getDrawerCount(types) == 1) {
-	//			ComplexDrawer *drw = (ComplexDrawer *)mapdrw->getDrawer(0);
-	//			mapdrw->setEditMode(true);
-	//			if ( !drw->isSimple()) {
-	//				drw->setEditMode(true);
-	//				ltv->GetDocument()->mpvGetView()->createEditor(drw);
-	//			}
-	//		}
-	//	}
-	//	break;
+		//case ID_EDITLAYER:
+		//	{
+		//		if( mapdrw->getDrawerCount(types) == 1) {
+		//			ComplexDrawer *drw = (ComplexDrawer *)mapdrw->getDrawer(0);
+		//			mapdrw->setEditMode(true);
+		//			if ( !drw->isSimple()) {
+		//				drw->setEditMode(true);
+		//				ltv->GetDocument()->mpvGetView()->createEditor(drw);
+		//			}
+		//		}
+		//	}
+		//	break;
 	case ID_PROPLAYER:
 		IlwWinApp()->Execute(String("prop %S", mptr->fnObj.sFullNameQuoted()));
 		break;
 	case ID_REMOVELAYER:
 		ltv->OnRemoveLayer();
+		break;
+	case ID_ZOOM_TO_LAYER:
+		{
+			CoordBounds cb = mptr->cb();
+			CoordBounds cbConv = mapdrw->getRootDrawer()->getCoordinateSystem()->cbConv(mptr->cs(),cb);
+			mapdrw->getRootDrawer()->setCoordBoundsZoom(cbConv);
+			ltv->GetDocument()->mpvGetView()->Invalidate();
+
+		}
 		break;
 	}
 }

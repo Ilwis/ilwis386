@@ -82,12 +82,14 @@ public:
   void CheckDrawItem(DRAWITEMSTRUCT* dis);
   void DrawItem(Event* ev);
   void SelectExact(const String& sSearch);
+  void useBaseMaps(bool yesno);
+   void Fill();
 
 private:
   String sDir;
+  bool fromBaseMaps;
   Array<String*> asExt;
   String sName, *_psName;              // local storage and destination
-  void Fill();
   void FillDir();
   void FillDrive();
   int DblClkObject(void *);

@@ -58,6 +58,8 @@ Created on: 2007-02-8
 #include "Engine\Map\Segment\Seg.h"
 #include "Engine\Map\Polygon\POL.H"
 #include "Engine\Map\Point\PNT.H"
+#include "Client\Mapwindow\MapPaneViewTool.h"
+#include "Client\Mapwindow\Drawers\DrawerTool.h"
 #include "Client\Mapwindow\Positioner.h"
 #include "Client\FormElements\fldcol.h"
 #include "Client\FormElements\fldrpr.h"
@@ -452,10 +454,11 @@ BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPathName, OpenType ot, int os
 			MapList mpl = sms->mpl();
 			if (!mpl.fValid())
 				return FALSE;
-			if (!OnOpenMapList(mpl,otNORMAL))
+			NewDrawer *drw;
+			if (!( drw = drAppend(mpl,otCOLORCOMP)) != 0)
 				return FALSE;
-			mpvGetView()->EditNamedLayer(fn);
-			//		::AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_EDITSMS, 0);
+			/*ILWIS::DrawerTool *dt = DrawerTool::createTool("SampleSetEditor",mpvGetView(),ltvGetView(),drw);
+			ltvGetView()->getRootTool()->addTool(dt);*/
 			return TRUE;
 		}
 		else if (".stp" == fn.sExt) {
@@ -954,7 +957,8 @@ ILWIS::NewDrawer *MapCompositionDoc::createBaseMapDrawer(const BaseMap& bmp, con
 	ILWIS::NewDrawer *drawer = NewDrawer::getDrawer(type, subtype, &parms);
 	drawer->addDataSource((void *)&bmp);
 	rootDrawer->setCoordinateSystem(bmp->cs());
-	rootDrawer->addCoordBounds(bmp->cs(), bmp->cb(), false);
+	CoordBounds cbZoom = rootDrawer->getCoordBoundsZoom();
+	rootDrawer->addCoordBounds(bmp->cs(), bmp->cb());
 	ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY);
 	drawer->prepare(&pp);
 	pp.type = RootDrawer::ptRENDER;
@@ -968,6 +972,11 @@ ILWIS::NewDrawer *MapCompositionDoc::createBaseMapDrawer(const BaseMap& bmp, con
 			sbar->SetActiveDrawer(drawer);
 		}
 	}
+	String sysFile = bmp->fnObj.sFullName();
+	sysFile.toLower();
+	if ( sysFile.find("ilwis3\\system\\basemaps") != string::npos && cbZoom.fValid())
+		rootDrawer->setCoordBoundsZoom(cbZoom);
+
 
 	return drawer;
 }
@@ -1279,11 +1288,13 @@ class AddLayerForm: public FormWithDest
 {
 public:
 	AddLayerForm(CWnd* parent, String* sName, bool *asAnimation = 0)
-		: FormWithDest(parent, TR("Add Data Layer")), asAnim(asAnimation), cb(0)
+		: FormWithDest(parent, TR("Add Data Layer")), asAnim(asAnimation), cb(0), showBaseMaps(false)
 	{
 		new FieldBlank(root);
 		fdtl = new FieldDataTypeLarge(root, sName, ".mpr.mpl.mps.mpa.mpp.atx");
 		//    new FieldSegmentMap(root, SDUiSegMap, sName);
+		cbBaseMaps = new CheckBox(root,TR("Show Base Maps"),&showBaseMaps);
+		cbBaseMaps->SetCallBack((NotifyProc)&AddLayerForm::baseMaps);
 		if ( asAnimation != 0) {
 			cb = new CheckBox(root,TR("As animation layer"),asAnimation);
 			cb->SetCallBack((NotifyProc)&AddLayerForm::changeFilter);
@@ -1291,9 +1302,23 @@ public:
 		SetMenHelpTopic("ilwismen\\add_layer_to_map_window.htm");
 		create();
 	}
+
+	int baseMaps(Event *) {
+		cbBaseMaps->StoreData();
+		if ( showBaseMaps) {
+			fdtl->useBaseMaps(true);
+
+		} else {
+			fdtl->useBaseMaps(false);
+
+		}
+		fdtl->Fill();
+		return 1;
+	}
 private:
 	bool * asAnim;
-	CheckBox *cb;
+	bool showBaseMaps;
+	CheckBox *cb, *cbBaseMaps;
 	FieldDataTypeLarge * fdtl;
 	int changeFilter(Event *ev) {
 		if ( cb)
@@ -1612,7 +1637,7 @@ NewDrawer* MapCompositionDoc::drAppend(const ObjectCollection& oc, IlwisDocument
 
 NewDrawer* MapCompositionDoc::drAppend(const MapList& maplist,IlwisDocument::OpenType op, int os)
 {
-	if ( op == IlwisDocument::otANIMATION) {
+	if ( op & IlwisDocument::otANIMATION) {
 		ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
 		ILWIS::NewDrawer *drawer = NewDrawer::getDrawer("AnimationDrawer", "Ilwis38", &parms);
 		drawer->addDataSource((void *)&maplist);
@@ -1626,6 +1651,17 @@ NewDrawer* MapCompositionDoc::drAppend(const MapList& maplist,IlwisDocument::Ope
 		UpdateAllViews(0,3);
 		mpvGetView()->Invalidate();
 		return drawer;
+	} else if ( op & otCOLORCOMP ){
+		ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
+		ILWIS::NewDrawer *drawer = NewDrawer::getDrawer("RasterDataDrawer", "Ilwis38", &parms);
+		drawer->addDataSource((void *)&maplist);
+		Map mp = maplist[maplist->iLower()];
+		rootDrawer->setCoordinateSystem(mp->cs());
+		rootDrawer->addCoordBounds(mp->cs(), mp->cb(), false);
+		ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
+		addToPixelInfo(maplist, (ComplexDrawer *)drawer);
+		drawer->prepare(&pp);
+		rootDrawer->addDrawer(drawer);
 	} else {
 		for(int i = 0; i < maplist->iSize(); ++i) {
 			drAppend(maplist[i]->fnObj);
@@ -1661,7 +1697,7 @@ NewDrawer* MapCompositionDoc::drAppend(const BaseMap& mp,IlwisDocument::OpenType
 				drawer = createBaseMapDrawer(mp, "RasterDataDrawer", "Ilwis38", os);
 		}
 		ChangeState();
-		UpdateAllViews(0,3);
+		//UpdateAllViews(0,3);
 		mpvGetView()->Invalidate();
 	}    
 	return 0;
@@ -1792,11 +1828,10 @@ void MapCompositionDoc::SetCoordSystem(const CoordSystem& cs)
 		return; 
 	}
 	rootDrawer->setCoordinateSystem(cs, true);
-	PreparationParameters pp(NewDrawer::ptGEOMETRY);
+	PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER | NewDrawer::ptNEWCSY);
 	rootDrawer->prepare(&pp);
 
-	ChangeState();
-	UpdateAllViews(0,3);
+	mpvGetView()->Invalidate();
 }
 
 void MapCompositionDoc::OnChangeCoordSystem()

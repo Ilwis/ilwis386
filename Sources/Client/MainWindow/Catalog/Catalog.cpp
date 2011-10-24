@@ -125,6 +125,7 @@ BEGIN_MESSAGE_MAP(Catalog, CListView)
 	ON_COMMAND(ID_CAT_SHOW_MAPTBL, OnShowMapTables)
 	ON_COMMAND(ID_CAT_SHOW_DATA, OnShowAllData)
 	ON_COMMAND(ID_CAT_SHOW_ALL, OnShowAllObjects)
+	ON_COMMAND(ID_CAT_SHOW_BASEMAPS, OnShowBaseMaps)
 	ON_UPDATE_COMMAND_UI(ID_CAT_PYRAMIDS, OnUpdatePyramids)
 	ON_COMMAND(ID_CAT_PYRAMIDS, OnPyramids)	
 	//}}AFX_MSG_MAP
@@ -143,7 +144,7 @@ Catalog::Catalog()
 	fSortAscending(false),
 	fShowGrid(false),
 	fShowAll(true),
-	fFilling(false), fFillStop(false)
+	fFilling(false), fFillStop(false),useBasemaps(false)
 {
 	iFmtCopy = RegisterClipboardFormat("IlwisCopy");
 
@@ -1281,6 +1282,7 @@ void Catalog::ShowContextViewMenu(CWnd* pWnd, CPoint point)
 	addsub(ID_CAT_SHOW_MAPTBL);
 	addsub(ID_CAT_SHOW_DATA);
 	addsub(ID_CAT_SHOW_ALL);
+	addsub(ID_CAT_SHOW_BASEMAPS);
 	men.AppendMenu(MF_POPUP, (UINT)menSub.GetSafeHmenu(), sMen(ID_CAT_SHOWMENU)); 
 	menSub.Detach();
 
@@ -2830,6 +2832,12 @@ void Catalog::OnShowAllObjects()
 	for(vector<NameExt>::iterator cur = arr.begin(); cur != arr.end(); ++cur)
 		(*cur).fShow = true;
 	FillCatalog();
+}
+
+void Catalog::OnShowBaseMaps() {
+	useBasemaps = !useBasemaps;
+	FillCatalog();
+
 }
 
 void Catalog::OnUpdateCatalogQueries(CCmdUI* pCmdUI)

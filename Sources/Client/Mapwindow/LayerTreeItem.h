@@ -42,6 +42,8 @@
 
 using namespace ILWIS;
 
+class SetChecks;
+
 namespace ILWIS {
 	class DrawerTool;
 }

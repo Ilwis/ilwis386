@@ -78,8 +78,10 @@ void GraphPaneView::OnInitialUpdate()
 {
   GraphDoc* gd = GetDocument();
   grdrw = gd->grdrGet();
-  grdrw->SetView(this);
-  GraphView::OnInitialUpdate();
+  if ( grdrw) {
+	  grdrw->SetView(this);
+	  GraphView::OnInitialUpdate();
+  }
 }
 
 void GraphPaneView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint) 

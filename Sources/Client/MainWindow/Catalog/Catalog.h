@@ -114,6 +114,7 @@ public:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 	virtual void OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint);
 	virtual bool fIsManualSortAvail();  // for change order by means of drag/drop, eg for maplist
+	bool getUseBaseMaps() const { return useBasemaps; }
 	//}}AFX_VIRTUAL
 
 // Implementation
@@ -142,6 +143,7 @@ protected:
 	afx_msg void OnShowMapTables();
 	afx_msg void OnShowAllData();
 	afx_msg void OnShowAllObjects();
+	afx_msg void OnShowBaseMaps();
 	afx_msg void OnCreateObjectCollection();
 	//}}AFX_MSG
 	afx_msg void OnSelBut(UINT id);
@@ -219,6 +221,7 @@ private:
 	bool volatile fFilling;
 	bool volatile fFillStop;
 	String        sCurrentQuery;
+	bool useBasemaps;
 
 	int iFmtCopy;
 	CCriticalSection csLockColumnStrings;

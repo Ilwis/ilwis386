@@ -39,6 +39,7 @@
 
 #include "Client\Headers\formelementspch.h"
 #include "Client\Base\IlwisDocument.h"
+#include "Engine\Base\System\Engine.h"
 #include "Client\MainWindow\Catalog\CatalogDocument.h"
 #include "Client\Editors\Utils\OwnerHeaderCtrl.h"
 #include "Engine\Base\File\Directory.h"
@@ -226,13 +227,33 @@ void DirectoryDocument::GetFileNames(vector<FileName>& vfn)
 		String sExt = arExtExt[iExt];
 		if ('.' == sExt[0])
 			sMask += String("%S", sExt);
-		else if (sExt.find("*") == -1)		// ?? wim 1/9/00: what is the meaning of this code?
+		else if (sExt.find("*") == -1)		
 			sMask += String (".%S", sExt);
 		else
 			sMask += sExt;
 		
 		
 		GetFileNames(vfn, sMask);
+	}
+	if ( cat->getUseBaseMaps()) {
+		String pathBase = getEngine()->getContext()->sStdDir() + "\\Basemaps\\";
+		String mask = pathBase + "*.*";
+		BOOL fFound = finder.FindFile(mask.c_str());
+		while (fFound) {
+			fFound = finder.FindNextFile();
+			if (finder.IsDirectory())
+				continue;
+			if (finder.IsHidden())
+				continue;
+			if (finder.IsDots())
+				continue;
+			FileName fn  = FileName((const char*)finder.GetFileName());
+			if ( IOTYPEBASEMAP(fn)) {
+				fn = FileName(pathBase + fn.sFile + fn.sExt);
+				vfn.push_back(fn);
+			}
+		} 
+
 	}
 	sort(vfn.begin(), vfn.end(), FnLess());
 }

@@ -607,6 +607,7 @@ void IlwisWinApp::LoadSettings(const String& sSettingName)
 			}
 		}
 	}
+	getEngine()->getContext()->AddBasemapPath(FileName(getEngine()->getContext()->sStdDir() + "\\Basemaps\\"));
 	if ( Context()->fnGetSearchPath(0) == FileName())
 		Context()->AddSearchPath(String("%S\\",getEngine()->getContext()->sStdDir()));
 

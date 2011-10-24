@@ -46,6 +46,7 @@ Created on: 2007-02-8
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\Mapwindow\Drawers\DrawerTool.h"
+#include "Client\Mapwindow\LayerTreeItem.h"
 #include "Headers\Hs\Editor.hs"
 #include "Client\FormElements\syscolor.h"
 #include "Client\Mapwindow\AreaSelector.h"
@@ -63,6 +64,7 @@ Created on: 2007-02-8
 #include "Client\Editors\SampleSet\SampleSetEditor.h"
 #include "Client\Editors\SampleSet\SampleStatWindow.h"
 #include "Client\Editors\SampleSet\FSWindow.h"
+#include "DrawersUI\ColorCompositeTool.h"
 #include "Client\Editors\Utils\GeneralBar.h"
 #include "Client\GraphWindow\GraphView.h"
 //#include "dsp/graphfsp.h"
@@ -84,24 +86,39 @@ Created on: 2007-02-8
 #define addmen(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 
 
-SampleSetEditor::SampleSetEditor(MapPaneView* mp, LayerTreeView *view, NewDrawer *drw, const SampleSet& smss) :
-DrawerTool("SampleSetEditor",mp, view,drw), sms(smss)
-{
-	String s(TR("         Sample Set Editor: %S").c_str(), sms->sName());
-	mp->mwParent()->SetWindowText(s.c_str());
+SampleSetEditor::SampleSetEditor(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : DrawerTool("ColorTool",zv, view, drw){
+
+}
+
+bool SampleSetEditor::isToolUseableFor(ILWIS::DrawerTool *tool){
+	ColorCompositeTool *cct = dynamic_cast<ColorCompositeTool *>(tool);
+	if ( !cct)
+		return false;
+	parentTool = tool;
+	return true;
+}
+
+HTREEITEM SampleSetEditor::configure( HTREEITEM parentItem){
+	RasterLayerDrawer *rdrw = (RasterLayerDrawer *)drawer;
+	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree, parentItem, drawer);
+	//item->setDoubleCickAction(this, (DTDoubleClickActionFunc)(DisplayOptionItemFunc)&ColorCompositeTool::displayOptionCC);
+	htiNode = insertItem(TR("Sample Set Editor"),".sms",item);
+
+	String s(TR("Sample Set Editor: %S").c_str(), sms->sName());
+	mpvGetView()->mwParent()->SetWindowText(s.c_str());
 	fOk = sms->fInitStat();
 	if (!fOk)
-		return;
+		return parentItem;
 	sms->SetSlct(rcSelect);
 	wSmplStat = new SampleStatWindow(sms);
-	wSmplStat->Create(mp->mwParent());
-	mp->mwParent()->EnableDocking(CBRS_ALIGN_ANY);
+	wSmplStat->Create(mpvGetView()->mwParent());
+	mpvGetView()->mwParent()->EnableDocking(CBRS_ALIGN_ANY);
 	// position the statistics window
 	CRect rectWin;
-	mp->mwParent()->GetWindowRect(&rectWin); // this is not yet it's final size
+	mpvGetView()->mwParent()->GetWindowRect(&rectWin); // this is not yet it's final size
 	CPoint pnt(rectWin.left, rectWin.top); // so only can use top left corner
 	pnt += CPoint(100, 100);
-	mp->mwParent()->FloatControlBar(wSmplStat, pnt);
+	mpvGetView()->mwParent()->FloatControlBar(wSmplStat, pnt);
 	CMenu men;
 	men.CreateMenu();
 
@@ -132,7 +149,7 @@ DrawerTool("SampleSetEditor",mp, view,drw), sms(smss)
 	men.Detach();
 
 	//UpdateMenu();
-	DataWindow* dw = mpv->dwParent();
+	DataWindow* dw = mpvGetView()->dwParent();
 	if (dw) {
 		dw->bbDataWindow.LoadButtons("smpledit.but");
 		dw->RecalcLayout();
@@ -153,6 +170,14 @@ DrawerTool("SampleSetEditor",mp, view,drw), sms(smss)
 			iID = dw->iNewBarID();
 		MakeFSWindow(fsw, CPoint(100+50*i,100+50*i), iID);
 	}
+
+	return htiNode;
+}
+
+String SampleSetEditor::getMenuString() const{
+	return TR("Sample set editor");
+
+
 }
 
 SampleSetEditor::~SampleSetEditor()

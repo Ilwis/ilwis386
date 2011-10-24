@@ -36,6 +36,7 @@
  ***************************************************************/
 
 #include "Client\Headers\formelementspch.h"
+#include "Engine\Base\System\engine.h"
 #include "Client\FormElements\flddat.h"
 #include "Client\FormElements\objlist.h"
 #include "Client\ilwis.h"
@@ -53,7 +54,7 @@ FieldDataTypeLarge::FieldDataTypeLarge(FormEntry* par,
                    String *psName, const String& sExt, bool fIcns)
 : FormEntry(par,0,true),
   idw(false), fIcons(fIcns), ol(0),
-  fOnlyEditable(false), fAlsoSystemDir(true)
+  fOnlyEditable(false), fAlsoSystemDir(true), fromBaseMaps(false)
 {
   st = 0;
   lbObject = 0;
@@ -74,7 +75,7 @@ FieldDataTypeLarge::FieldDataTypeLarge(FormEntry* par,
                    String *psName, const String& sExt, ObjectLister* objl, bool fIcns)
 : FormEntry(par,0,true),
   idw(false), fIcons(fIcns), ol(objl),
-  fOnlyEditable(false), fAlsoSystemDir(true)
+  fOnlyEditable(false), fAlsoSystemDir(true), fromBaseMaps(false)
 {
   st = 0;
   lbObject = 0;
@@ -158,6 +159,10 @@ void FieldDataTypeLarge::create()
 		String sNam("%S%S", fn.sFile, fn.sExt);
 		SelectExact(sNam);
 	}
+}
+
+void FieldDataTypeLarge::useBaseMaps(bool yesno){
+	fromBaseMaps = yesno;
 }
 
 // SelectExact will select the object with the filename sSearch (file.ext) by
@@ -246,6 +251,7 @@ void FieldDataTypeLarge::show(int s)
     cbDrive->ShowWindow(s);
 }
 
+
 void FieldDataTypeLarge::Fill()
 {
 	if (0 == lbObject)
@@ -264,35 +270,51 @@ void FieldDataTypeLarge::Fill()
 
 	// Reread the object list
 	lbObject->ResetContent();
+	vector<String> paths;
+	if ( fromBaseMaps) {
+		int count = 0;
+		FileName fnBase = getEngine()->getContext()->fnGetBasemapPath(count);
+		while(fnBase.sDir != "") {
+			String path = fnBase.sPath();
+			path = path.substr(0,path.size() - 1);
+			paths.push_back(path);
+			fnBase = getEngine()->getContext()->fnGetBasemapPath(++count);
+		}
+	} 
+	else
+		paths.push_back(sDir);
 	for (int i=0; i < asExt.iSize(); i++)
 	{
-		String sPath = sDir;
-		String sMaskExt = *asExt[i];
-		sPath &= "\\*";
-		sPath &= sMaskExt;
+		for(int k=0;k < paths.size(); ++k) {
+			String sPath = paths[k];
+			String sMaskExt = *asExt[i];
+			sPath &= "\\*";
+			sPath &= sMaskExt;
 
-		CFileFind finder;
-		bool fWorking = finder.FindFile(sPath.c_str()) != 0;
-		while (fWorking)
-		{
-			fWorking = finder.FindNextFile() != 0;
-			if (!finder.IsDirectory())
+			CFileFind finder;
+			bool fWorking = finder.FindFile(sPath.c_str()) != 0;
+			while (fWorking)
 			{
-				String sFile = finder.GetFileName();
-				FileName fn(sFile);
-				if (sMaskExt != ".*" && !fCIStrEqual(sMaskExt, fn.sExt))
-					continue;
-				fn.Dir(sDir);
-				if (fOnlyEditable)
-					if (access(fn.sFullName().c_str(),2)!=0 || ObjectInfo::fVirtual(fn))
+				fWorking = finder.FindNextFile() != 0;
+				if (!finder.IsDirectory())
+				{
+					String sFile = finder.GetFileName();
+					FileName fn(sFile);
+					if (sMaskExt != ".*" && !fCIStrEqual(sMaskExt, fn.sExt))
 						continue;
-				if (ol)
-					if (!ol->fOK(fn))
-						continue;
-    			lbObject->AddString(sFile.c_str());
+					fn.Dir(sDir);
+					if (fOnlyEditable)
+						if (access(fn.sFullName().c_str(),2)!=0 || ObjectInfo::fVirtual(fn))
+							continue;
+					if (ol)
+						if (!ol->fOK(fn))
+							continue;
+    				lbObject->AddString(sFile.c_str());
+				}
 			}
+			finder.Close();
 		}
-		finder.Close();
+
 	}
 	if (!fOnlyEditable && fAlsoSystemDir)
 	{
@@ -449,7 +471,14 @@ void FieldDataTypeLarge::StoreData()
     lbObject->GetText(id, s);
     fn = String(s);
   }
-  fn.Dir(sDir);
+  if ( !fromBaseMaps)
+	fn.Dir(sDir);
+  else {
+		String sStdDir = IlwWinApp()->Context()->sStdDir() + "\\Basemaps\\";
+		fn.Dir(sStdDir);
+
+  }
+
   sName = fn.sFullPath(true);
   sName.toLower();
   *_psName = sName;

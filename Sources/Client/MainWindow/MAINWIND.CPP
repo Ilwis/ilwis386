@@ -288,6 +288,7 @@ int MainWindow::OnCreate(LPCREATESTRUCT lpc)
 	men.Add(sShow, ID_CAT_SHOW_MAPTBL);
 	men.Add(sShow, ID_CAT_SHOW_DATA);
 	men.Add(sShow, ID_CAT_SHOW_ALL);
+	men.Add(sShow, ID_CAT_SHOW_BASEMAPS);
 
 	String sSort = sTop + "," + sMen(ID_CAT_SORT);
 	men.Add(sSort,  ID_CAT_SORTCOL_START + Catalog::ctNAME); 

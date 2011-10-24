@@ -375,9 +375,11 @@ bool FileFilter::fCheckContains(const FileName& fnObj, SectionEntry *entry, cons
 
 bool FileFilter::fOK(const FileName& fnObj, ParseTree* node)
 {
-	if (!fSystemObjects)
-		if ( ObjectInfo::fSystemObject(fnObj)) 
-			return false;
+	if (!IOTYPEBASEMAP(fnObj)) {
+		if (!fSystemObjects)
+			if ( ObjectInfo::fSystemObject(fnObj)) 
+				return false;
+	}
 
 	if (!fShowCollectionContents)
 		if ( ObjectInfo::fInCollection(fnObj))
