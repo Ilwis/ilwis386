@@ -63,8 +63,15 @@ void CCTexture::CreateTexture(DrawerContext * drawerContext, bool fInThread, vol
 	RangeReal rrFromR = data->ccMaps[0].rr;
 	RangeReal rrToR = mpl[data->ccMaps[0].index]->rrMinMax();
 	if (rrFromR.fValid() && rrToR.fValid()) {
-		float fFactR = (rrToR.rWidth()) / (rrFromR.rWidth());
-		float fOffR = (rrToR.rLo() - rrFromR.rLo()) / rrFromR.rWidth();
+		float fFactR;
+		float fOffR;
+		if (rrFromR.rWidth() > 0) {
+			fFactR = (rrToR.rWidth()) / rrFromR.rWidth();
+			fOffR = (rrToR.rLo() - rrFromR.rLo()) / rrFromR.rWidth();
+		} else {
+			fFactR = (rrToR.rWidth()) * 255.0f;
+			fOffR = (rrToR.rLo() - rrFromR.rLo()) * 255.0f;
+		}
 		glPixelTransferf(GL_RED_SCALE, fFactR);
 		glPixelTransferf(GL_RED_BIAS, fOffR);
 	}
@@ -72,8 +79,15 @@ void CCTexture::CreateTexture(DrawerContext * drawerContext, bool fInThread, vol
 	RangeReal rrFromG = data->ccMaps[1].rr;
 	RangeReal rrToG = mpl[data->ccMaps[1].index]->rrMinMax();
 	if (rrFromG.fValid() && rrToG.fValid()) {
-		float fFactG = (rrToG.rWidth()) / (rrFromG.rWidth());
-		float fOffG = (rrToG.rLo() - rrFromG.rLo()) / rrFromG.rWidth();
+		float fFactG;
+		float fOffG;
+		if (rrFromG.rWidth() > 0) {
+			fFactG = (rrToG.rWidth()) / (rrFromG.rWidth());
+			fOffG = (rrToG.rLo() - rrFromG.rLo()) / rrFromG.rWidth();
+		} else {
+			fFactG = (rrToG.rWidth()) * 255.0f;
+			fOffG = (rrToG.rLo() - rrFromG.rLo()) * 255.0f;
+		}
 		glPixelTransferf(GL_GREEN_SCALE, fFactG);
 		glPixelTransferf(GL_GREEN_BIAS, fOffG);
 	}
@@ -81,8 +95,15 @@ void CCTexture::CreateTexture(DrawerContext * drawerContext, bool fInThread, vol
 	RangeReal rrFromB = data->ccMaps[2].rr;
 	RangeReal rrToB = mpl[data->ccMaps[2].index]->rrMinMax();
 	if (rrFromB.fValid() && rrToB.fValid()) {
-		float fFactB = (rrToB.rWidth()) / (rrFromB.rWidth());
-		float fOffB = (rrToB.rLo() - rrFromB.rLo()) / rrFromB.rWidth();
+		float fFactB;
+		float fOffB;
+		if (rrFromB.rWidth() > 0) {
+			fFactB = (rrToB.rWidth()) / (rrFromB.rWidth());
+			fOffB = (rrToB.rLo() - rrFromB.rLo()) / rrFromB.rWidth();
+		} else {
+			fFactB = (rrToB.rWidth()) * 255.0f;
+			fOffB = (rrToB.rLo() - rrFromB.rLo()) * 255.0f;
+		}
 		glPixelTransferf(GL_BLUE_SCALE, fFactB);
 		glPixelTransferf(GL_BLUE_BIAS, fOffB);
 	}
@@ -120,8 +141,15 @@ void CCTexture::ReCreateTexture(DrawerContext * drawerContext, bool fInThread, v
 	RangeReal rrFromR = data->ccMaps[0].rr;
 	RangeReal rrToR = mpl[data->ccMaps[0].index]->rrMinMax();
 	if (rrFromR.fValid() && rrToR.fValid()) {
-		float fFactR = (rrToR.rWidth()) / (rrFromR.rWidth());
-		float fOffR = (rrToR.rLo() - rrFromR.rLo()) / rrFromR.rWidth();
+		float fFactR;
+		float fOffR;
+		if (rrFromR.rWidth() > 0) {
+			fFactR = (rrToR.rWidth()) / rrFromR.rWidth();
+			fOffR = (rrToR.rLo() - rrFromR.rLo()) / rrFromR.rWidth();
+		} else {
+			fFactR = (rrToR.rWidth()) * 255.0f;
+			fOffR = (rrToR.rLo() - rrFromR.rLo()) * 255.0f;
+		}
 		glPixelTransferf(GL_RED_SCALE, fFactR);
 		glPixelTransferf(GL_RED_BIAS, fOffR);
 	}
@@ -129,8 +157,15 @@ void CCTexture::ReCreateTexture(DrawerContext * drawerContext, bool fInThread, v
 	RangeReal rrFromG = data->ccMaps[1].rr;
 	RangeReal rrToG = mpl[data->ccMaps[1].index]->rrMinMax();
 	if (rrFromG.fValid() && rrToG.fValid()) {
-		float fFactG = (rrToG.rWidth()) / (rrFromG.rWidth());
-		float fOffG = (rrToG.rLo() - rrFromG.rLo()) / rrFromG.rWidth();
+		float fFactG;
+		float fOffG;
+		if (rrFromG.rWidth() > 0) {
+			fFactG = (rrToG.rWidth()) / (rrFromG.rWidth());
+			fOffG = (rrToG.rLo() - rrFromG.rLo()) / rrFromG.rWidth();
+		} else {
+			fFactG = (rrToG.rWidth()) * 255.0f;
+			fOffG = (rrToG.rLo() - rrFromG.rLo()) * 255.0f;
+		}
 		glPixelTransferf(GL_GREEN_SCALE, fFactG);
 		glPixelTransferf(GL_GREEN_BIAS, fOffG);
 	}
@@ -138,8 +173,15 @@ void CCTexture::ReCreateTexture(DrawerContext * drawerContext, bool fInThread, v
 	RangeReal rrFromB = data->ccMaps[2].rr;
 	RangeReal rrToB = mpl[data->ccMaps[2].index]->rrMinMax();
 	if (rrFromB.fValid() && rrToB.fValid()) {
-		float fFactB = (rrToB.rWidth()) / (rrFromB.rWidth());
-		float fOffB = (rrToB.rLo() - rrFromB.rLo()) / rrFromB.rWidth();
+		float fFactB;
+		float fOffB;
+		if (rrFromB.rWidth() > 0) {
+			fFactB = (rrToB.rWidth()) / (rrFromB.rWidth());
+			fOffB = (rrToB.rLo() - rrFromB.rLo()) / rrFromB.rWidth();
+		} else {
+			fFactB = (rrToB.rWidth()) * 255.0f;
+			fOffB = (rrToB.rLo() - rrFromB.rLo()) * 255.0f;
+		}
 		glPixelTransferf(GL_BLUE_SCALE, fFactB);
 		glPixelTransferf(GL_BLUE_BIAS, fOffB);
 	}
@@ -382,8 +424,15 @@ void CCTexture::BindMe(DrawerContext * drawerContext)
 		RangeReal rrFromR = data->ccMaps[0].rr;
 		RangeReal rrToR = mpl[data->ccMaps[0].index]->rrMinMax();
 		if (rrFromR.fValid() && rrToR.fValid()) {
-			float fFactR = (rrToR.rWidth()) / (rrFromR.rWidth());
-			float fOffR = (rrToR.rLo() - rrFromR.rLo()) / rrFromR.rWidth();
+			float fFactR;
+			float fOffR;
+			if (rrFromR.rWidth() > 0) {
+				fFactR = (rrToR.rWidth()) / rrFromR.rWidth();
+				fOffR = (rrToR.rLo() - rrFromR.rLo()) / rrFromR.rWidth();
+			} else {
+				fFactR = (rrToR.rWidth()) * 255.0f;
+				fOffR = (rrToR.rLo() - rrFromR.rLo()) * 255.0f;
+			}
 			glPixelTransferf(GL_RED_SCALE, fFactR);
 			glPixelTransferf(GL_RED_BIAS, fOffR);
 		}
@@ -391,8 +440,15 @@ void CCTexture::BindMe(DrawerContext * drawerContext)
 		RangeReal rrFromG = data->ccMaps[1].rr;
 		RangeReal rrToG = mpl[data->ccMaps[1].index]->rrMinMax();
 		if (rrFromG.fValid() && rrToG.fValid()) {
-			float fFactG = (rrToG.rWidth()) / (rrFromG.rWidth());
-			float fOffG = (rrToG.rLo() - rrFromG.rLo()) / rrFromG.rWidth();
+			float fFactG;
+			float fOffG;
+			if (rrFromG.rWidth() > 0) {
+				fFactG = (rrToG.rWidth()) / (rrFromG.rWidth());
+				fOffG = (rrToG.rLo() - rrFromG.rLo()) / rrFromG.rWidth();
+			} else {
+				fFactG = (rrToG.rWidth()) * 255.0f;
+				fOffG = (rrToG.rLo() - rrFromG.rLo()) * 255.0f;
+			}
 			glPixelTransferf(GL_GREEN_SCALE, fFactG);
 			glPixelTransferf(GL_GREEN_BIAS, fOffG);
 		}
@@ -400,8 +456,15 @@ void CCTexture::BindMe(DrawerContext * drawerContext)
 		RangeReal rrFromB = data->ccMaps[2].rr;
 		RangeReal rrToB = mpl[data->ccMaps[2].index]->rrMinMax();
 		if (rrFromB.fValid() && rrToB.fValid()) {
-			float fFactB = (rrToB.rWidth()) / (rrFromB.rWidth());
-			float fOffB = (rrToB.rLo() - rrFromB.rLo()) / rrFromB.rWidth();
+			float fFactB;
+			float fOffB;
+			if (rrFromB.rWidth() > 0) {
+				fFactB = (rrToB.rWidth()) / (rrFromB.rWidth());
+				fOffB = (rrToB.rLo() - rrFromB.rLo()) / rrFromB.rWidth();
+			} else {
+				fFactB = (rrToB.rWidth()) * 255.0f;
+				fOffB = (rrToB.rLo() - rrFromB.rLo()) * 255.0f;
+			}
 			glPixelTransferf(GL_BLUE_SCALE, fFactB);
 			glPixelTransferf(GL_BLUE_BIAS, fOffB);
 		}
