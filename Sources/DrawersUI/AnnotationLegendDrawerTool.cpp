@@ -192,7 +192,7 @@ LegendAppearance::LegendAppearance(CWnd *wPar, AnnotationLegendDrawer *dr) : Dis
 		StaticText *st = new StaticText(root,TR("Active classes"));
 		cols.push_back(FLVColumnInfo("Name", 150));
 		fview = new FieldListView(root,cols,LVS_EX_GRIDLINES);
-		fview->Align(st, AL_AFTER);		 
+		fview->Align(st, AL_AFTER);
 		for(int i=1; i <= dr->getDomain()->pdc()->iSize(); ++i) {
 			long iRaw = dr->getDomain()->pdc()->iKey(i);
 			if ( iRaw == iUNDEF)

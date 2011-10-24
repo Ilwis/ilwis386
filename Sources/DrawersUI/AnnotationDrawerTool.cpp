@@ -51,7 +51,7 @@ HTREEITEM AnnotationDrawerTool::configure( HTREEITEM parentItem) {
 	DrawerTool *dt = new AnnotationLegendDrawerTool(mpv,tree,drawer);
 	if ( dt) {
 		addTool(dt);
-		dt->configure(htiNode);
+		//dt->configure(htiNode);
 	}
 	DrawerTool::configure(htiNode);
 

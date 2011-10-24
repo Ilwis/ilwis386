@@ -2,6 +2,8 @@
 
 ILWIS::DrawerTool *createColorCompositeTool(ZoomableView* zv, LayerTreeView *view, ILWIS::NewDrawer *drw);
 
+class FieldRealSliderEx;
+
 namespace ILWIS {
 	class RasterLayerDrawer;
 
@@ -13,6 +15,7 @@ namespace ILWIS {
 		virtual ~ColorCompositeTool();
 		String getMenuString() const;
 		void clear();
+		void createBandItems();
 	protected:
 		void stretchCC1();
 		void stretchCC2();
@@ -22,7 +25,7 @@ namespace ILWIS {
 
 	class SetBandsForm : public DisplayOptionsForm {
 	public:
-		SetBandsForm(CWnd *wPar, RasterLayerDrawer *drw);
+		SetBandsForm(CWnd *wPar, RasterLayerDrawer *drw, ColorCompositeTool *_ccTool);
 		void apply();
 	private:
 		FieldOneSelectString *fm1, *fm2, *fm3;
@@ -32,6 +35,7 @@ namespace ILWIS {
 		int e1,e2,e3;
 		bool exception;
 		vector<String> names;
+		ColorCompositeTool *ccTool;
 
 		int setExc(Event *ev);
 
