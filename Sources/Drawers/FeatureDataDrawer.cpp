@@ -65,7 +65,7 @@ void FeatureDataDrawer::prepare(PreparationParameters *pp){
 		for(int i = 0; i < drawers.size(); ++i) {
 			FeatureLayerDrawer *fsd = (FeatureLayerDrawer *)drawers.at(i);
 			fsd->addDataSource(basemap.ptr());
-			PreparationParameters fp((int)pp->type, 0);
+			PreparationParameters fp((int)pp->type & ~NewDrawer::ptGEOMETRY, 0);
 			fp.csy = basemap->cs();
 			fsd->prepare(&fp);
 		}

@@ -84,11 +84,11 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 						RangeReal rr = properties.stretchRange.fValid() ? properties.stretchRange : col->dvrs().rrMinMax();
 						
 						if ( properties.scaleMode == PointProperties::sLINEAR) {
-							double scale = 1.0 + (v - rr.rLo()) / rr.rWidth();
+							double scale = 1.0 + 4.0 * (v - rr.rLo()) / rr.rWidth();
 							properties.stretchScale = scale;
 						}
 						else if (properties.scaleMode == PointProperties::sLOGARITHMIC) {
-							double scale = 1.0 + log(1.0 + (v - rr.rLo()) / rr.rWidth());
+							double scale = 1.0 + 4 * log(1.0 + (v - rr.rLo()) / rr.rWidth());
 							properties.stretchScale = scale;
 
 						}
