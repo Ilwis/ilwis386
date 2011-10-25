@@ -90,6 +90,8 @@ void FeatureDataDrawer::getFeatures(vector<Feature *>& features, int index) cons
 	BaseMapPtr *basemap = getBaseMap(index);
 	features.clear();
 	int numberOfFeatures = basemap->iFeatures();
+	if ( numberOfFeatures == iUNDEF)
+		throw ErrorObject(TR("Corrupt or not supported type of Segment map"));
 	features.resize(numberOfFeatures);
 	for(int i=0; i < basemap->iFeatures(); ++i) {
 		Feature *feature = CFEATURE(basemap->getFeature(i));

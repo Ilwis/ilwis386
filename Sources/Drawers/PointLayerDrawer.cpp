@@ -69,7 +69,7 @@ void PointLayerDrawer::prepare(PreparationParameters *parm){
 					else if ( drawers.size() < 100)
 						properties->scale = 0.6;
 					else
-						properties->scale = 0.3;
+						properties->scale = 0.4;
 			}
 			props->set(properties);
 
