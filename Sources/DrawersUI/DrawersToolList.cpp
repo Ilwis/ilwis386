@@ -76,6 +76,7 @@
 #include "DrawersUI\HovMollerTool.h"
 #include "InfoTool.h"
 #include "DrawersUI\ColorCompositeTool.h"
+#include "CoordSystemTool.h"
 
 
 using namespace ILWIS;
@@ -94,7 +95,6 @@ DrawerToolInfoVector *createDrawerTool() {
 	infos->push_back(new DrawerToolInfo("LineStyleTool",createLineStyleTool));
 	infos->push_back(new DrawerToolInfo("NonRepresentationTool",createNonRepresentationToolTool));
 	infos->push_back(new DrawerToolInfo("AnimationTool",createAnimationTool));
-	
 	infos->push_back(new DrawerToolInfo("AnimationTimeSelectionTool",createAnimationTimeSelectionTool));
 	infos->push_back(new DrawerToolInfo("3DTool",createThreeDTool));
 	infos->push_back(new DrawerToolInfo("GridTool",createGridTool));
@@ -122,6 +122,7 @@ DrawerToolInfoVector *createDrawerTool() {
 	infos->push_back(new DrawerToolInfo("InfoTool",createInfoTool));
 	infos->push_back(new DrawerToolInfo("HovMollerTool",createHovMollerTool));
 	infos->push_back(new DrawerToolInfo("ColorCompositeTool",createColorCompositeTool));
+	infos->push_back(new DrawerToolInfo("CoordSystemTool",createCoordSystemTool));
 
 	return infos;
 }

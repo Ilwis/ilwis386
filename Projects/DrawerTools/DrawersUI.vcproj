@@ -252,6 +252,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\DrawersUI\CoordSystemTool.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\DrawersUI\CrossSectionGraph.cpp"
 				>
 			</File>
@@ -446,6 +450,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\DrawersUI\ColorTool.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\CoordSystemTool.h"
 				>
 			</File>
 			<File
