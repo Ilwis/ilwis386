@@ -36,7 +36,6 @@ public:
 		scaleMode = lp->scaleMode;
 		useDirection = lp->useDirection;
 		angle = lp->angle;
-
 	}
 
 	double scaling() const {

@@ -572,7 +572,7 @@ void RasterLayerDrawer::setThreaded(bool yesno) {
 }
 
 bool RasterLayerDrawer::isColorComposite() const {
-	return mpl.fValid();
+	return mpl.fValid() && mpl->iSize() >= 3;
 }
 
 int RasterLayerDrawer::getColorCompositeBand(int index) {

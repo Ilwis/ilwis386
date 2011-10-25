@@ -24,6 +24,7 @@ PointLayerDrawer::PointLayerDrawer(DrawerParameters *parms) :
 	FeatureLayerDrawer(parms,"PointLayerDrawer")
 {
 	properties = new PointProperties();
+	properties->scale = 0;
 }
 
 PointLayerDrawer::~PointLayerDrawer() {
@@ -62,7 +63,14 @@ void PointLayerDrawer::prepare(PreparationParameters *parm){
 			if ( !ld) 
 				continue;
 			PointProperties *props = (PointProperties *)ld->getProperties();
-
+			if ( properties->scale == 0) {
+					if ( drawers.size() < 25)
+						properties->scale = 1.0;
+					else if ( drawers.size() < 100)
+						properties->scale = 0.6;
+					else
+						properties->scale = 0.3;
+			}
 			props->set(properties);
 			if ( rotColumn.fValid() ) {
 				Feature *feature = ld->getFeature();

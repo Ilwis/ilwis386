@@ -163,13 +163,15 @@ String LayerDrawer::getInfo(const Coord& c) const {
 	vector<String> infos = bmptr->vsValue(crd);
 	String info;
 	DomainValue* dv = bmptr->dm()->pdv();
+	int count = 0;
 	for(int i = 0; i < infos.size(); ++i) {
 		String s = infos[i].sTrimSpaces();
 		if ( s == "?")
 			continue;
 		if (0 != dv && dv->fUnit())
 			s = String("%S %S", s, dv->sUnit());
-		info += i == 0 ? s : ";" + s;
+		info += count == 0 ? s : ";" + s;
+		++count;
 	}
 	return info;
 }
