@@ -184,7 +184,8 @@ void ObjectTreeCtrl::SelectAttribColumn(const FileName& fnMapWithCol)
 	// 2) afn is already filled (e.g. by OnActivate)
 	// This function will expand the attribute table and make sure sCol is selected in the tree
 
-	FileName fnMap(fnMapWithCol); // copy constructor of filename skips sCol (which we thankfully use)
+	FileName fnMap(fnMapWithCol);
+	fnMap.sCol = ""; // fnMap must not have sCol anymore
 
 	// code below is copied from OnActivate() - it "moves" hti in the tree up to the correct path depth
 

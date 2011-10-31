@@ -536,7 +536,8 @@ void NameEdit::SelectAttribColumn(const FileName& fnMapWithCol)
 	if (otc)
 	{
 		// first restore the selection in the NameEdit in case the user cancels
-		FileName fnMap (fnMapWithCol); // remove sCol .. fnAttributeTable can't work with it
+		FileName fnMap (fnMapWithCol);
+		fnMap.sCol = ""; // remove sCol .. fnAttributeTable can't work with it
 		FileName fnAttrib = ObjectInfo::fnAttributeTable(fnMap);
 		String sName ("%S|%S|%S.clm", fnMap.sFullPath(), fnAttrib.sFullPath(false), fnMapWithCol.sCol);
 		SetVal(sName);
