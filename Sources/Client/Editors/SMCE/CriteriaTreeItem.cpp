@@ -3177,7 +3177,8 @@ void MapEffect::RefreshDomain()
 
 		if (vMaps[i].sCol != "")
 		{
-			FileName fnBand = vMaps[i]; // workaround for sCol bug: fnAttributeTable can't use it
+			FileName fnBand = vMaps[i];
+			fnBand.sCol = ""; // remove sCol: fnAttributeTable can't use it
 			FileName fnAttrib = ObjectInfo::fnAttributeTable(fnBand);
 			ObjectInfo::ReadElement(String("Col:%S", vMaps[i].sCol).c_str(), "Domain", fnAttrib, fnDom);
 		}
@@ -3208,7 +3209,8 @@ void MapEffect::RefreshInputType()
 
 		if (vMaps[i].sCol != "")
 		{
-			FileName fnBand = vMaps[i]; // workaround for sCol bug: fnAttributeTable can't use it
+			FileName fnBand = vMaps[i];
+			fnBand.sCol = ""; // remove sCol: fnAttributeTable can't use it
 			FileName fnAttrib = ObjectInfo::fnAttributeTable(fnBand);
 			ObjectInfo::ReadElement(String("Col:%S", vMaps[i].sCol).c_str(), "Domain", fnAttrib, fnDom);
 		}
@@ -3247,11 +3249,6 @@ String MapEffect::sTerm(int iCol)
 			return ptrStandardization()->sStandardize(vMaps[iCol-1].sRelativeQuoted());
 		else
 		{
-			// CalculateAggregateValue cav(*m_pavos);
-			// remove col (if any) coz fExists tries to look for the wrong file
-			// FileName fn (vMaps[iCol-1]); // copy forgets sCol
-			// String sAggregatedMap = cav.sBuildExpression(fn, vMaps[iCol-1].sCol); // WISH!! for performance reasons we have to do the next line instead, i.e. hardcode the aggregated value
-			// String sAggregatedMap = cav.sCalculateAggregateValue(fn, vMaps[iCol-1].sCol);
 			double rVal = rAggregateValue(iCol);
 			String sAggregatedMap ("%lg", rVal);
 			return ptrStandardization()->sStandardize(sAggregatedMap);
@@ -3426,9 +3423,8 @@ bool MapEffect::fDone(int iCol, bool fRecursive)
 
 	if (iCol > 0)
 	{
-		// FileName fExists bug workaround:
-		// remove col (if any) coz fExists tries to look for the wrong file
-		FileName fn (vMaps[iCol-1]); // copy forgets sCol
+		FileName fn (vMaps[iCol-1]);
+		fn.sCol = ""; // FileName fExists bug workaround: remove col (if any) coz fExists tries to look for the wrong file
 		fOK = fn.fExist(); // now check
 	}
 	else
@@ -3459,9 +3455,9 @@ bool MapEffect::fCalculationPossible(int iCol, bool fFirst)
 {
 	if (iCol > 0)
 	{
-		// Same as above - FileName fExists bug workaround:
-		// remove col (if any) coz fExists tries to look for the wrong file
-		FileName fn (vMaps[iCol-1]); // copy forgets sCol
+		
+		FileName fn (vMaps[iCol-1]);
+		fn.sCol = ""; // FileName fExists bug workaround: remove col (if any) coz fExists tries to look for the wrong file
 		return (ptrStandardization() && ptrStandardization()->fStandardized() && fn.fExist());
 	}
 	else
@@ -3472,8 +3468,8 @@ void MapEffect::Show(int iCol, bool* pfInitRpr)
 {
 	if (iCol>0)
 	{
-		// fExists workaround
-		FileName fn (vMaps[iCol-1]); // copy forgets sCol
+		FileName fn (vMaps[iCol-1]);
+		fn.sCol = ""; // FileName fExists bug workaround: remove col (if any) coz fExists tries to look for the wrong file
 		if (fn.fExist())
 		{
 			GetDocument()->ShowMap(fn);
@@ -3501,8 +3497,8 @@ void MapEffect::Properties(int iCol)
 {
 	if (iCol>0)
 	{
-		// fExists workaround
-		FileName fn (vMaps[iCol-1]); // copy forgets sCol
+		FileName fn (vMaps[iCol-1]);
+		fn.sCol = ""; // FileName fExists bug workaround: remove col (if any) coz fExists tries to look for the wrong file
 		if (fn.fExist())
 		{
 			String sExec("prop %S", fn.sFullPathQuoted());
@@ -3516,8 +3512,8 @@ bool MapEffect::fDataExists(int iCol)
 {
 	if (iCol>0)
 	{
-		// fExists workaround
-		FileName fn (vMaps[iCol-1]); // copy forgets sCol
+		FileName fn (vMaps[iCol-1]);
+		fn.sCol = ""; // FileName fExists bug workaround: remove col (if any) coz fExists tries to look for the wrong file
 		return (fn.fExist());
 	}
 	else
@@ -3534,12 +3530,14 @@ void MapEffect::Histogram(int iCol, bool* pfInitRpr)
 {
 	if (iCol>0)
 	{
-		FileName fnHistogram (vMaps[iCol-1], ".his", true);
-		if (vMaps[iCol-1].fExist())
+		FileName fn (vMaps[iCol-1]);
+		fn.sCol = ""; // FileName fExists bug workaround: remove col (if any) coz fExists tries to look for the wrong file
+		if (fn.fExist())
 		{
+			FileName fnHistogram (fn, ".his", true);
 			if (!fnHistogram.fExist())
 			{
-				String sExec("%S=TableHistogram(%S)", fnHistogram.sFullPathQuoted(), vMaps[iCol-1].sFullPathQuoted());
+				String sExec("%S=TableHistogram(%S)", fnHistogram.sFullPathQuoted(), fn.sFullPathQuoted());
 				char* str = sExec.sVal();
 				IlwWinApp()->GetMainWnd()->SendMessage(ILWM_EXECUTE, 0, (LPARAM)str);
 			}
@@ -3612,11 +3610,6 @@ String MapEffect::sInputMinMax(int iCol, bool fMax)
 		}
 		else
 		{
-			// CalculateAggregateValue cav(*m_pavos);
-			// remove col (if any) coz fExists tries to look for the wrong file
-			// FileName fn (vMaps[iCol-1]); // copy forgets sCol
-			// sReturn = cav.sBuildExpression(fn, vMaps[iCol-1].sCol); // WISH!! for performance reasons we have to do the next instead, i.e. hardcode the aggregated value
-			// sReturn = cav.sCalculateAggregateValue(fn, vMaps[iCol-1].sCol);
 			double rVal = rAggregateValue(iCol);
 			sReturn = String("%lg", rVal);
 		}
@@ -3647,7 +3640,8 @@ RangeReal MapEffect::rrMinMax(int iCol)
 				{
 					if (vMaps[iCol-1].sCol != "") // class map
 					{
-						FileName fnMap(vMaps[iCol-1]); // strip-off sCol - fnAttribTbl can't handle it
+						FileName fnMap(vMaps[iCol-1]);
+						fnMap.sCol = ""; // strip-off sCol - fnAttribTbl can't handle it
 						// our goal is to "catch" an attribute table
 						// like the NameEdit, prefer the one of the map, having the one of the domain as a 2nd choice
 						// the following function does this
@@ -3704,10 +3698,6 @@ RangeReal MapEffect::rrMinMax(int iCol)
 				}
 				else // we're aggregating a map
 				{
-					// CalculateAggregateValue cav(*m_pavos);
-					// remove col (if any) coz fExists tries to look for the wrong file
-					// FileName fn (vMaps[iCol-1]); // copy forgets sCol
-					// String sResult = cav.sCalculateAggregateValue(fn, vMaps[iCol-1].sCol);
 					double rResult = rAggregateValue(iCol);
 					rrReturn = RangeReal(rResult, rResult);
 				}
@@ -3802,11 +3792,13 @@ void MapEffect::GetObjectStructure(ObjectStructure& os)
 	int iSize = vMaps.size();
 	for (int i=0; i<iSize; ++i)
 	{
-		os.AddFile(vMaps[i]); // sCol is lost due to FileName design (we want this!)
+		FileName fn (vMaps[i]);
+		fn.sCol = ""; // remove sCol otherwise the ObjectStructure functions have a wrong result
+		os.AddFile(fn); 
 		// Retrieve the files belonging to the map (georef, tables, domains)
-		if (IlwisObject::iotObjectType(vMaps[i]) != IlwisObject::iotANY)
+		if (IlwisObject::iotObjectType(fn) != IlwisObject::iotANY)
 		{
-			IlwisObject obj = IlwisObject::obj(vMaps[i]);
+			IlwisObject obj = IlwisObject::obj(fn);
 			if ( obj.fValid())
 				obj->GetObjectStructure(os);
 		}					
@@ -4151,8 +4143,8 @@ double MapEffect::rAggregateValue(int iCol)
 			try
 			{
 				CalculateAggregateValue cav(*m_pavos);
-				// remove col (if any) coz fExists tries to look for the wrong file
-				FileName fn (vMaps[iCol-1]); // copy forgets sCol
+				FileName fn (vMaps[iCol-1]);
+				fn.sCol = ""; // remove col (if any) coz sCalculateAggregateValue will build a bad expression
 				sResult = cav.sCalculateAggregateValue(fn, vMaps[iCol-1].sCol);
 			}
 			catch(ErrorObject&)
