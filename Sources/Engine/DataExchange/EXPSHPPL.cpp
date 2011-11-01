@@ -160,8 +160,8 @@ void ImpExp::ExpPolToSHP(const FileName& fnObject, const FileName& fnFile) {
 	fileDBF.Seek(iPos);
 	long iPolCnt = 0;
 	try {
-		pol = CPOLYGON(polmap->getFeature(i));
 		int i = 0;
+		pol = CPOLYGON(polmap->getFeature(i));
 		while (pol&& pol->fValid()) {
 			if (pol->rArea() > 0) {
 				shpPol.Update(pol);
