@@ -94,6 +94,7 @@
 #include "Engine\Map\Segment\Seg.h"
 #include "Engine\Map\Polygon\POL.H"
 #include "Engine\DataExchange\SHPFILE.H"
+#include <geos/algorithm/CGAlgorithms.h>
 
 void Shapefile::SwabLong(long& l) {
   _swab((char*)&l, (char*)&l, 4);
@@ -242,7 +243,7 @@ Shapefile_Pol::Shapefile_Pol(const PolygonMap& pm, File& fileSHP)
 	iShapeType = 5;
 	CoordBounds cb = _pm->cbGetCoordBounds();
 	SetFileBounds(cb.cMin, cb.cMax );
-	aiBeginPoint.Resize(1000);
+	//aiBeginPoint.Resize(1000);
 }
 
 void Shapefile_Pol::PolWrite(const vector<Coordinate>& coords, int iNumParts, int iNumPoints)
@@ -263,6 +264,7 @@ void Shapefile_Pol::PolWrite(const vector<Coordinate>& coords, int iNumParts, in
 		const Coord crd = coords[l];
 		fileSHP.Write(16, &crd);
 	}
+
 }
 
 void Shapefile_Pol::Update(const ILWIS::Polygon* pol)
@@ -278,6 +280,7 @@ void Shapefile_Pol::Update(const ILWIS::Polygon* pol)
 	vector<Coordinate> coords;
 	const LineString *extRing = pol->getExteriorRing();
 	const CoordinateSequence * seq = extRing->getCoordinates();
+	bool isCC = geos::algorithm::CGAlgorithms::isCCW(seq);
 	for(int i =0; i < seq->size(); ++i) {
 		coords.push_back(seq->getAt(i));
 	}
@@ -285,6 +288,7 @@ void Shapefile_Pol::Update(const ILWIS::Polygon* pol)
 	for(int hole = 0; hole < pol->getNumInteriorRing(); ++hole) {
 	  	const LineString *intRing = pol->getExteriorRing();
 		const CoordinateSequence * intseq = extRing->getCoordinates();
+		bool isCC = geos::algorithm::CGAlgorithms::isCCW(intseq);
 		for(int i =0; i < intseq->size(); ++i) {
 			coords.push_back(intseq->getAt(i));
 		}
