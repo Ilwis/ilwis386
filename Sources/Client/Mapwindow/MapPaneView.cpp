@@ -347,7 +347,7 @@ void MapPaneView::OnContextMenu(CWnd* pWnd, CPoint point)
 	add(ID_NORMAL);
 	add(ID_ZOOMIN);
 	add(ID_ZOOMOUT);
-	add(ID_PANAREA);
+	//add(ID_PANAREA);
 	add(ID_ENTIREMAP);
 	men.AppendMenu(MF_SEPARATOR);
 	menSub.CreateMenu();
