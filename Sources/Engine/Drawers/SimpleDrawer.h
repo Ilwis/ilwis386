@@ -22,7 +22,7 @@ namespace ILWIS {
 		String getName() const;
 		virtual void setName(const String&);
 		bool isActive() const {return fActive; }
-		void setActive(bool yesno) { fActive=yesno;}
+		void setActive(bool yesno);
 		DrawMethod getDrawMethod() const { return parentDrawer->getDrawMethod(); }
 		void setDrawMethod(DrawMethod method=drmINIT) {};
 		virtual bool isEditable() const;
