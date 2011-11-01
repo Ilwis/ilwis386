@@ -280,6 +280,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\DrawersUI\FSWindow.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\DrawersUI\GlobalTool.cpp"
 				>
 			</File>
@@ -365,6 +369,14 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\DrawersUI\RepresentationTool.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\SampleSetEditor.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\SampleStatWindow.cpp"
 				>
 			</File>
 			<File
@@ -477,6 +489,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\DrawersUI\FSWindow.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\DrawersUI\GlobalTool.h"
 				>
 			</File>
@@ -554,6 +570,14 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\DrawersUI\RepresentationTool.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\SampleSetEditor.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\SampleStatWindow.h"
 				>
 			</File>
 			<File
