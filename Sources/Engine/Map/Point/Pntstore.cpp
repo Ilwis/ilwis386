@@ -73,8 +73,8 @@ fnObj(p.fnObj), ptr(p)
 	if ( fvFormatVersion == shUNDEF) {
 		fvFormatVersion = ILWIS::Version::bvFORMAT20;
 	}
-	getEngine()->getVersion()->fSupportsBinaryVersion(fvFormatVersion);
-    ptr.setVersionBinary(fvFormatVersion);
+	/*getEngine()->getVersion()->fSupportsBinaryVersion(fvFormatVersion);
+    ptr.setVersionBinary(fvFormatVersion);*/
 	geometries = new vector<Geometry *>();
 
 	// determine the format of the pointmap by means of the Coordinate column
