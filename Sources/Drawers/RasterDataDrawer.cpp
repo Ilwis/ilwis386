@@ -39,7 +39,10 @@ void RasterDataDrawer::prepare(PreparationParameters *pp){
 		ILWIS::DrawerParameters dp(getRootDrawer(), this);
 		IlwisObject::iotIlwisObjectType otype = IlwisObject::iotObjectType(basemap->fnObj);
 		if ( otype == IlwisObject::iotRASMAP) {
-				rsd = (RasterLayerDrawer *)NewDrawer::getDrawer("RasterLayerDrawer", pp, &dp);
+				if ( mpl.fValid() )
+					rsd = (RasterLayerDrawer *)NewDrawer::getDrawer("ColorCompositeDrawer", pp, &dp);
+				else
+					rsd = (RasterLayerDrawer *)NewDrawer::getDrawer("RasterLayerDrawer", pp, &dp);
 				RangeReal rrMinMax (0, 255);
 				Domain dm = basemap->dm();
 				if (dm.fValid() && (dm->pdbit() || dm->pdbool()))

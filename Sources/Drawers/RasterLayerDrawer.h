@@ -41,6 +41,7 @@ namespace ILWIS {
 	class _export RasterLayerDrawer : public LayerDrawer {
 	public:
 		RasterLayerDrawer(DrawerParameters *parms);
+		RasterLayerDrawer(DrawerParameters *parms, const String& name);
 		virtual ~RasterLayerDrawer();
 		virtual void prepare(PreparationParameters *pp);
 		virtual void prepareChildDrawers(PreparationParameters *pp);
@@ -51,21 +52,12 @@ namespace ILWIS {
 		void setMinMax(const RangeReal & rrMinMax);
 		Palette * SetPaletteOwner();
 		void SetPalette(Palette * palette);
-		bool isColorComposite() const;
-		int getColorCompositeBand(int index);
-		void setColorCompositeBand(int index, int maplistIndex);
-		void setColorCompositeRange(int index, const RangeReal& rr);
-		RangeReal getColorCompositeRange(int index);
-		Color getExceptionColor() const;
-		void setExceptionColor(const Color& clr);
-		MapList getMapList() const;
 		Representation getRepresentation() const;
 		
 	protected:
+		virtual void setData() const;
+		virtual GeoRef gr() const;
 		Map rastermap;
-		MapList mpl;
-
-	private:
 
 		void DisplayImagePortion(unsigned int imageOffsetX, unsigned int imageOffsetY, unsigned int imageSizeX, unsigned int imageSizeY) const;
 		void DisplayTexture(Coord & c1, Coord & c2, Coord & c3, Coord & c4, unsigned int imageOffsetX, unsigned int imageOffsetY, unsigned int imageSizeX, unsigned int imageSizeY, unsigned int zoomFactor) const;

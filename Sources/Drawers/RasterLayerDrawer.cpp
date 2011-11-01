@@ -32,6 +32,22 @@ LayerDrawer(parms,"RasterLayerDrawer")
 	//drawers.push_back(this); // nasty: i am my own child drawer
 }
 
+RasterLayerDrawer::RasterLayerDrawer(DrawerParameters *parms, const String& name) : LayerDrawer(parms, name), 
+data(new RasterSetData()),
+isThreaded(true), 
+isThreadedBeforeOffscreen(true), 
+sameCsy(true), 
+fGrfLinear(true), 
+fUsePalette(false), 
+fPaletteOwner(false), 
+palette(0), 
+textureHeap(new TextureHeap()), 
+textureHeapBeforeOffscreen(0), 
+demTriangulator(0)
+{
+	setTransparency(1);
+}
+
 RasterLayerDrawer::~RasterLayerDrawer(){
 	delete textureHeap;
 	if (fPaletteOwner)
@@ -71,7 +87,7 @@ void RasterLayerDrawer::prepare(PreparationParameters *pp){
 		}
 		textureHeap->RepresentationChanged();
 		sameCsy = getRootDrawer()->getCoordinateSystem()->fnObj == csy->fnObj;
-		fGrfLinear = mpl.fValid() ? mpl[0]->gr()->fLinear() : rastermap->gr()->fLinear();
+		fGrfLinear = gr()->fLinear();
 	}
 	if ((pp->type & pt3D) || ((pp->type & ptGEOMETRY || pp->type & ptRESTORE) && demTriangulator != 0)) {
 		ZValueMaker * zMaker = getZMaker();
@@ -94,10 +110,7 @@ void RasterLayerDrawer::prepare(PreparationParameters *pp){
 		textureHeapBeforeOffscreen = textureHeap;
 		DrawerContext* drawcontext = getRootDrawer()->getDrawerContext();
 		textureHeap = new TextureHeap();
-		if (rastermap.fValid())
-			textureHeap->SetData(rastermap, getDrawingColor(), getDrawMethod(), drawcontext->getMaxPaletteSize(), data, rrMinMax, drawcontext);
-		else
-			textureHeap->SetData(mpl, getDrawingColor(), getDrawMethod(), drawcontext->getMaxPaletteSize(), data, rrMinMax, drawcontext);
+		setData();
 		if (fPaletteOwner && fUsePalette) {
 			palette->SetData(rastermap, this, drawcontext->getMaxPaletteSize(), rrMinMax);
 			palette->Refresh();
@@ -119,27 +132,31 @@ void RasterLayerDrawer::prepare(PreparationParameters *pp){
 		textureHeap->ReGenerateAllTextures();
 }
 
+void RasterLayerDrawer::setData() const {
+	DrawerContext* drawcontext = getRootDrawer()->getDrawerContext();
+	textureHeap->SetData(rastermap, getDrawingColor(), getDrawMethod(), drawcontext->getMaxPaletteSize(), data, rrMinMax, drawcontext);
+}
+
+GeoRef RasterLayerDrawer::gr() const {
+	return rastermap->gr();
+}
+
+
 void RasterLayerDrawer::setDrawMethod(DrawMethod method) {
 
 	if ( method == drmINIT) {
-		if (mpl.fValid())
+		drm = drmRPR;
+		Domain _dm = rastermap->dm();
+		if (0 != _dm->pdi())
+			drm = drmIMAGE;
+		else if (0 != _dm->pdcol())
 			drm = drmCOLOR;
-		else {
+		else if (0 != _dm->pdid())
+			drm = drmMULTIPLE;
+		else if ((0 != _dm->pdbit()) || (0 != _dm->pdbool()))
+			drm = drmBOOL;
+		else if (0 != _dm->pdp())
 			drm = drmRPR;
-			if (rastermap.fValid() ) {
-				Domain _dm = rastermap->dm();
-				if (0 != _dm->pdi())
-					drm = drmIMAGE;
-				else if (0 != _dm->pdcol())
-					drm = drmCOLOR;
-				else if (0 != _dm->pdid())
-					drm = drmMULTIPLE;
-				else if ((0 != _dm->pdbit()) || (0 != _dm->pdbool()))
-					drm = drmBOOL;
-				else if (0 != _dm->pdp())
-					drm = drmRPR;
-			}
-		}
 	} else
 		drm = method;
 }
@@ -164,42 +181,30 @@ void RasterLayerDrawer::SetPalette(Palette * palette)
 void RasterLayerDrawer::init() const
 {
 	// fetch the image's coordinate bounds
-	if (rastermap.fValid() || (mpl.fValid() && mpl->iSize() > 0))
-	{
-		DrawerContext* drawcontext = (getRootDrawer())->getDrawerContext();
-		data->maxTextureSize = drawcontext->getMaxTextureSize();
-		int iXScreen = GetSystemMetrics(SM_CXFULLSCREEN); // maximum X size of client area (regardless of current viewport)
-		int iYScreen = GetSystemMetrics(SM_CYFULLSCREEN); // maximum Y size of client area
-		if (iXScreen < data->maxTextureSize) // prevent making textures that are larger than the screen, it is totally unnecessary and a big performance and memory hit
-			data->maxTextureSize = iXScreen;
-		if (iYScreen < data->maxTextureSize)
-			data->maxTextureSize = iYScreen;
-		if ( rastermap.fValid()) {
-			data->imageWidth = rastermap->rcSize().Col;
-			data->imageHeight = rastermap->rcSize().Row;
-		} else {
-			data->imageWidth = mpl[0]->rcSize().Col;
-			data->imageHeight = mpl[0]->rcSize().Row;
-		}
+	DrawerContext* drawcontext = (getRootDrawer())->getDrawerContext();
+	data->maxTextureSize = drawcontext->getMaxTextureSize();
+	int iXScreen = GetSystemMetrics(SM_CXFULLSCREEN); // maximum X size of client area (regardless of current viewport)
+	int iYScreen = GetSystemMetrics(SM_CYFULLSCREEN); // maximum Y size of client area
+	if (iXScreen < data->maxTextureSize) // prevent making textures that are larger than the screen, it is totally unnecessary and a big performance and memory hit
+		data->maxTextureSize = iXScreen;
+	if (iYScreen < data->maxTextureSize)
+		data->maxTextureSize = iYScreen;
+	data->imageWidth = gr()->rcSize().Col;
+	data->imageHeight = gr()->rcSize().Row;
 
-		double log2width = log((double)data->imageWidth)/log(2.0);
-		log2width = max(6, ceil(log2width)); // 2^6 = 64 = the minimum texture size that OpenGL/TexImage2D supports
-		data->width = pow(2, log2width);
-		double log2height = log((double)data->imageHeight)/log(2.0);
-		log2height = max(6, ceil(log2height)); // 2^6 = 64 = the minimum texture size that OpenGL/TexImage2D supports
-		data->height = pow(2, log2height);
+	double log2width = log((double)data->imageWidth)/log(2.0);
+	log2width = max(6, ceil(log2width)); // 2^6 = 64 = the minimum texture size that OpenGL/TexImage2D supports
+	data->width = pow(2, log2width);
+	double log2height = log((double)data->imageHeight)/log(2.0);
+	log2height = max(6, ceil(log2height)); // 2^6 = 64 = the minimum texture size that OpenGL/TexImage2D supports
+	data->height = pow(2, log2height);
 
-		if ( rastermap.fValid()) {
-			textureHeap->SetData(rastermap, getDrawingColor(), getDrawMethod(), drawcontext->getMaxPaletteSize(), data, rrMinMax, drawcontext);
-		} else {
-			textureHeap->SetData(mpl, getDrawingColor(), getDrawMethod(), drawcontext->getMaxPaletteSize(), data, rrMinMax, drawcontext);
-		}
+	setData();
 
-		if (fPaletteOwner && fUsePalette) {
-			palette->SetData(rastermap, this, drawcontext->getMaxPaletteSize(), rrMinMax);
-			palette->Refresh();
-			getRootDrawer()->getDrawerContext()->setActivePalette(0);
-		}
+	if (fPaletteOwner && fUsePalette) {
+		palette->SetData(rastermap, this, drawcontext->getMaxPaletteSize(), rrMinMax);
+		palette->Refresh();
+		getRootDrawer()->getDrawerContext()->setActivePalette(0);
 	}
 	data->init = true;
 }
@@ -208,9 +213,6 @@ void RasterLayerDrawer::addDataSource(void *bmap, int options){
 	IlwisObject *obj = (IlwisObject *)bmap;
 	if ( IOTYPE((*(obj))->fnObj) == IlwisObject::iotRASMAP)
 		rastermap.SetPointer(obj->pointer());
-	else if (IOTYPE((*(obj))->fnObj) == IlwisObject::iotMAPLIST) {
-		mpl.SetPointer(obj->pointer());
-	}
 }
 
 bool RasterLayerDrawer::draw( const CoordBounds& cbArea) const {
@@ -278,11 +280,10 @@ void RasterLayerDrawer::DisplayImagePortion(unsigned int imageOffsetX, unsigned 
 	glGetIntegerv(GL_VIEWPORT, m_viewport);
 
 	Coord b1, b2, b3, b4;
-	Map mp = rastermap.fValid() ? rastermap : mpl[0];
-	mp->gr()->RowCol2Coord(imageOffsetY, imageOffsetX, b1);
-	mp->gr()->RowCol2Coord(imageOffsetY, imageOffsetX + imageSizeX, b2);
-	mp->gr()->RowCol2Coord(imageOffsetY + imageSizeY, imageOffsetX + imageSizeX, b3);
-	mp->gr()->RowCol2Coord(imageOffsetY + imageSizeY, imageOffsetX, b4);
+	gr()->RowCol2Coord(imageOffsetY, imageOffsetX, b1);
+	gr()->RowCol2Coord(imageOffsetY, imageOffsetX + imageSizeX, b2);
+	gr()->RowCol2Coord(imageOffsetY + imageSizeY, imageOffsetX + imageSizeX, b3);
+	gr()->RowCol2Coord(imageOffsetY + imageSizeY, imageOffsetX, b4);
 	Coord c1, c2, c3, c4;
 	glFeedbackBuffer(2, GL_2D, feedbackBuffer);
 	glRenderMode(GL_FEEDBACK);
@@ -387,7 +388,6 @@ void RasterLayerDrawer::DisplayTexture(Coord & c1, Coord & c2, Coord & c3, Coord
 	if (tex != 0)
 	{
 		// make the quad
-		Map mp = rastermap.fValid() ? rastermap : mpl[0];
 		glBegin (GL_QUADS);
 
 		if (sameCsy && fGrfLinear) {
@@ -398,10 +398,10 @@ void RasterLayerDrawer::DisplayTexture(Coord & c1, Coord & c2, Coord & c3, Coord
 			double t2 = min(imageOffsetY + imageSizeY, data->imageHeight) / (double)data->height;
 
 			Coord b1, b2, b3, b4;
-			mp->gr()->RowCol2Coord(imageOffsetY, imageOffsetX, b1);
-			mp->gr()->RowCol2Coord(imageOffsetY, min(imageOffsetX + imageSizeX, data->imageWidth), b2);
-			mp->gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), min(imageOffsetX + imageSizeX, data->imageWidth), b3);
-			mp->gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), imageOffsetX, b4);
+			gr()->RowCol2Coord(imageOffsetY, imageOffsetX, b1);
+			gr()->RowCol2Coord(imageOffsetY, min(imageOffsetX + imageSizeX, data->imageWidth), b2);
+			gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), min(imageOffsetX + imageSizeX, data->imageWidth), b3);
+			gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), imageOffsetX, b4);
 
 			glTexCoord2d(s1, t1);
 			glVertex3d(b1.x, b1.y, 0.0);
@@ -426,14 +426,14 @@ void RasterLayerDrawer::DisplayTexture(Coord & c1, Coord & c2, Coord & c3, Coord
 				double t1 = imageOffsetY / (double)data->height;
 
 				Coord b1, b2, b3, b4;
-				mp->gr()->RowCol2Coord(imageOffsetY, imageOffsetX + colStep * x, b1);
-				mp->gr()->RowCol2Coord(imageOffsetY, imageOffsetX + colStep * (x + 1), b2);
+				gr()->RowCol2Coord(imageOffsetY, imageOffsetX + colStep * x, b1);
+				gr()->RowCol2Coord(imageOffsetY, imageOffsetX + colStep * (x + 1), b2);
 
 				for (int y = 1; y <= iSize ; ++y) {
 					double t2 = t1 + rowStep / (double)data->height;
 		
-					mp->gr()->RowCol2Coord(imageOffsetY + rowStep * y, imageOffsetX + colStep * (x + 1), b3);
-					mp->gr()->RowCol2Coord(imageOffsetY + rowStep * y, imageOffsetX + colStep * x, b4);
+					gr()->RowCol2Coord(imageOffsetY + rowStep * y, imageOffsetX + colStep * (x + 1), b3);
+					gr()->RowCol2Coord(imageOffsetY + rowStep * y, imageOffsetX + colStep * x, b4);
 
 					glTexCoord2d(s1, t1);
 					glVertex3d(b1.x, b1.y, 0.0);
@@ -465,16 +465,16 @@ void RasterLayerDrawer::DisplayTexture(Coord & c1, Coord & c2, Coord & c3, Coord
 				double t1 = imageOffsetY / (double)data->height;
 
 				Coord b1, b2, b3, b4;
-				mp->gr()->RowCol2Coord(imageOffsetY, imageOffsetX + colStep * x, b1);
-				mp->gr()->RowCol2Coord(imageOffsetY, imageOffsetX + colStep * (x + 1), b2);
+				gr()->RowCol2Coord(imageOffsetY, imageOffsetX + colStep * x, b1);
+				gr()->RowCol2Coord(imageOffsetY, imageOffsetX + colStep * (x + 1), b2);
 
 				c1 = getRootDrawer()->getCoordinateSystem()->cConv(csy, b1);
 				c2 = getRootDrawer()->getCoordinateSystem()->cConv(csy, b2);
 				for (int y = 1; y <= iSize ; ++y) {
 					double t2 = t1 + rowStep / (double)data->height;
 		
-					mp->gr()->RowCol2Coord(imageOffsetY + rowStep * y, imageOffsetX + colStep * (x + 1), b3);
-					mp->gr()->RowCol2Coord(imageOffsetY + rowStep * y, imageOffsetX + colStep * x, b4);
+					gr()->RowCol2Coord(imageOffsetY + rowStep * y, imageOffsetX + colStep * (x + 1), b3);
+					gr()->RowCol2Coord(imageOffsetY + rowStep * y, imageOffsetX + colStep * x, b4);
 
 					c3 = getRootDrawer()->getCoordinateSystem()->cConv(csy, b3);
 					c4 = getRootDrawer()->getCoordinateSystem()->cConv(csy, b4);
@@ -510,12 +510,11 @@ void RasterLayerDrawer::DisplayTexture3D(Coord & c1, Coord & c2, Coord & c3, Coo
 	if (tex != 0)
 	{
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		Map mp = rastermap.fValid() ? rastermap : mpl[0];
 		Coord b1, b2, b3, b4;
-		mp->gr()->RowCol2Coord(imageOffsetY, imageOffsetX, b1);
-		mp->gr()->RowCol2Coord(imageOffsetY, min(imageOffsetX + imageSizeX, data->imageWidth), b2);
-		mp->gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), min(imageOffsetX + imageSizeX, data->imageWidth), b3);
-		mp->gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), imageOffsetX, b4);
+		gr()->RowCol2Coord(imageOffsetY, imageOffsetX, b1);
+		gr()->RowCol2Coord(imageOffsetY, min(imageOffsetX + imageSizeX, data->imageWidth), b2);
+		gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), min(imageOffsetX + imageSizeX, data->imageWidth), b3);
+		gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), imageOffsetX, b4);
 
 		if (sameCsy) {
 			double clip_plane0[]={b3.y - b2.y, b2.x - b3.x, 0.0, b3.x * (b2.y - b3.y) - b3.y * (b2.x - b3.x)}; // x < x2
@@ -571,58 +570,7 @@ void RasterLayerDrawer::setThreaded(bool yesno) {
 	isThreaded = yesno;
 }
 
-bool RasterLayerDrawer::isColorComposite() const {
-	return mpl.fValid() && mpl->iSize() >= 3;
-}
-
-int RasterLayerDrawer::getColorCompositeBand(int index) {
-	if ( mpl.fValid() && index < 3) {
-		return data->ccMaps[index].index;
-	}
-	return iUNDEF;
-}
-
-void RasterLayerDrawer::setColorCompositeBand(int index, int maplistIndex) {
-	if ( mpl.fValid() && index < 3 && maplistIndex < mpl->iSize()) {
-		data->ccMaps[index].index = maplistIndex;
-	}
-}
-
-MapList RasterLayerDrawer::getMapList() const{
-	return mpl;
-}
-
-void RasterLayerDrawer::setColorCompositeRange(int index, const RangeReal& rr){
-	if ( data && mpl.fValid()) {
-		if ( index < 3)
-			data->ccMaps[index].rr = rr;
-	}
-}
-
-RangeReal RasterLayerDrawer::getColorCompositeRange(int index){
-	if ( data && mpl.fValid()) {
-		if ( index < 3)
-			return data->ccMaps[index].rr;
-	}
-	return RangeReal();
-}
-
-Color RasterLayerDrawer::getExceptionColor() const {
-	if ( data && mpl.fValid()) {
-		return data->exceptionColor;
-	}
-	return colorUNDEF;
-}
-
-void RasterLayerDrawer::setExceptionColor(const Color& clr){
-	if ( data && mpl.fValid()) {
-		data->exceptionColor = clr;
-	}
-}
-
 Representation RasterLayerDrawer::getRepresentation() const { // avoiding copy constructotrs
-	if ( isColorComposite())
-		return Representation();
 	return LayerDrawer::getRepresentation();
 }
 

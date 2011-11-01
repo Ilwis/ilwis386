@@ -236,6 +236,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Drawers\ColorCompositeDrawer.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Drawers\DEMTriangulator.cpp"
 				>
 			</File>
@@ -354,6 +358,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Drawers\CollectionDrawer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\ColorCompositeDrawer.h"
 				>
 			</File>
 			<File

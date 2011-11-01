@@ -25,6 +25,7 @@
 #include "Drawers\CanvasBackgroundDrawer.h"
 #include "Drawers\RasterDataDrawer.h"
 #include "Drawers\RasterLayerDrawer.h"
+#include "Drawers\ColorCompositeDrawer.h"
 #include "Drawers\SetDrawer.h"
 #include "Drawers\AnimationDrawer.h"
 #include "Drawers\GridDrawer.h"
@@ -51,7 +52,6 @@ DrawerInfoVector *createDrawer() {
 	infos->push_back(new DrawerInfo("PolygonLayerDrawer","ilwis38",createPolygonLayerDrawer));
 	infos->push_back(new DrawerInfo("GridDrawer","ilwis38",createGridDrawer));
 	infos->push_back(new DrawerInfo("GridLine","ilwis38",createGridLine));
-	//infos->push_back(new DrawerInfo("FeatureLayerDrawer","ilwis38", createFeatureLayerDrawer));
 	infos->push_back(new DrawerInfo("FeatureDataDrawer","ilwis38", createFeatureDataDrawer));
 	infos->push_back(new DrawerInfo("CanvasBackgroundDrawer","ilwis38", createCanvasBackgroundDrawer));
 	infos->push_back(new DrawerInfo("RasterLayerDrawer","ilwis38", createRasterLayerDrawer));
@@ -62,11 +62,8 @@ DrawerInfoVector *createDrawer() {
 	infos->push_back(new DrawerInfo("GraticuleDrawer","ilwis38", createGraticuleDrawer));
 	infos->push_back(new DrawerInfo("AnnotationClassLegendDrawer","ilwis38", createAnnotationClassLegendDrawer));
 	infos->push_back(new DrawerInfo("AnnotationValueLegendDrawer","ilwis38", createAnnotationValueLegendDrawer));
-	//infos->push_back(new DrawerInfo("TextLayerDrawer","ilwis38", createTextLayerDrawer));
-	//infos->push_back(new DrawerInfo("TextDrawer","ilwis38", createTextDrawer));
+	infos->push_back(new DrawerInfo("ColorCompositeDrawer","ilwis38", createColorCompositeDrawer));
 
-
-	//addSVGDrawers(infos);
 	return infos;
 }
 
