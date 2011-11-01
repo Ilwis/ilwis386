@@ -69,18 +69,18 @@ bool ObjectInfo::WriteElement(const char* sSection, const char* sEntry,
 	if (File::fExist(fn) && _access(fn.sFullPath().c_str(), 2) == -1) // file readonly
 		return false;
 
-	//const ElementContainer* ec = dynamic_cast<const ElementContainer*>(&fn);
-	//if (ec && 0 != ec->em) {
-	//	if (sSection == 0 || *sSection == 0)
-	//		return 0;
-	//	if (sEntry == 0 || *sEntry == 0)
-	//		return 0;
-	//	if (sValue == 0)
-	//		return 0;
-	//	ElementMap& em = const_cast<ElementMap&>(*ec->em);
-	//	em(sSection, sEntry) = const_cast<char*>(sValue); // to call the correct string constructor
-	//	return true;
-	//}
+	const ElementContainer* ec = dynamic_cast<const ElementContainer*>(&fn);
+	if (ec && 0 != ec->em) {
+		if (sSection == 0 || *sSection == 0)
+			return 0;
+		if (sEntry == 0 || *sEntry == 0)
+			return 0;
+		if (sValue == 0)
+			return 0;
+		ElementMap& em = const_cast<ElementMap&>(*ec->em);
+		em(sSection, sEntry) = const_cast<char*>(sValue); // to call the correct string constructor
+		return true;
+	}
 	if (!fn.fValid())
 		return false;
 	String sSec(const_cast<char*>(sSection));
