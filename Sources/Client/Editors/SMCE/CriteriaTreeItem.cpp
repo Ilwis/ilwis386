@@ -3312,7 +3312,7 @@ void MapEffect::ShowStandardized(int iCol, bool* pfInitRpr)
 						if (dm.fValid()) // prevent boom if for some reason this is not found
 							mp->SetDomainValueRangeStruct(dm);
 						if (iGetNrAlternatives() > 1)
-							mp->SetDescription(String("Standardized map for criterion '%S' under alternative '%S'", sName(), GetDocument()->sAlternative(iCol)));
+							mp->SetDescription(String("Standardized map for criterion '%S' under alternative '%s'", sName(), GetDocument()->sAlternative(iCol)));
 						else
 							mp->SetDescription(String("Standardized map for criterion '%S'", sName()));
 						mp->Calc();
