@@ -89,9 +89,9 @@ MapRasterizePoint* MapRasterizePoint::create(const FileName& fn, MapPtr& p, cons
   int offset = as.size() == 4 ? 1 : 0;
   if (fCIStrEqual(sFunc,"MapRasterizePoint"))
     type = ptrsNORM;
-  if (fCIStrEqual(sFunc,"MapRasterizePointCount") || as[1].toLower() == "sum" )
+  else if (fCIStrEqual(sFunc,"MapRasterizePointCount") || as[1].toLower() == "sum" )
     type = ptrsCOUNT; 
-  if (fCIStrEqual(sFunc,"MapRasterizePointSum"),  as[1].toLower() == "count")
+  else if (fCIStrEqual(sFunc,"MapRasterizePointSum"),  as[1].toLower() == "count")
     type = ptrsSUM; 
   else
     AppNameError(sExpr, fn.sFullPath());
@@ -213,7 +213,7 @@ bool MapRasterizePoint::fFreezing()
   bool fTransformCoords = cs() != pmp->cs();
   
   trq.SetText(TR("Rasterize"));
-  for (long p = 1; p <= iPoints; p++) {
+  for (long p = 0; p < iPoints; p++) {
     if (trq.fUpdate(p, iPoints))
       return false;
     crd = pmp->cValue(p);

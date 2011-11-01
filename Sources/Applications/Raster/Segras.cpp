@@ -262,9 +262,6 @@ void MapRasterizeSegment::PutInMapBuffer(void *buf, const vector<RowCol>& result
 					if ( sz.Row >= buffer->size())
 						continue;
 					LongBuf &b = (*buffer)[sz.Row];
-					long t[1000];
-					for(int k =0; k < b.iSize();++k) 
-						t[k] = b[k];
 					b[sz.Col] = seg->iValue();
 				}
 			}
