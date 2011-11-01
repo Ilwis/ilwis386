@@ -457,8 +457,9 @@ Table BaseMapPtr::tblAttLoad()
       }
   }
   catch (const ErrorObject& err) {
-    err.Show(TR("Loading Attribute Table of Map"));
-    tbl = Table();
+    //err.Show(TR("Loading Attribute Table of Map"));
+      tbl = Table();
+	  throw err;
   }
   if (tbl.fValid())
     sAttTable = tbl->sNameQuoted(true, fnObj.sPath());
