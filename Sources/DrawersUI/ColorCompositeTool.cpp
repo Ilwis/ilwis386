@@ -18,6 +18,7 @@
 #include "Drawers\DrawingColor.h" 
 #include "Drawers\LayerDrawer.h"
 #include "Drawers\RasterLayerDrawer.h"
+#include "Drawers\ColorCompositeDrawer.h"
 #include "Engine\Drawers\DrawerContext.h"
 #include "DrawersUI\ColorCompositeTool.h"
 #include "DrawersUI\LayerDrawerTool.h"
@@ -43,8 +44,8 @@ bool ColorCompositeTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	LayerDrawerTool *sdrwt = dynamic_cast<LayerDrawerTool *>(tool);
 	if ( !sdrwt)
 		return false;
-	RasterLayerDrawer *rdrw = 0;
-	if ( (rdrw = dynamic_cast<RasterLayerDrawer *>(tool->getDrawer())) == 0)
+	ColorCompositeDrawer *rdrw = 0;
+	if ( (rdrw = dynamic_cast<ColorCompositeDrawer *>(tool->getDrawer())) == 0)
 		return false;
 	if ( !rdrw->isColorComposite())
 		return false;
@@ -57,15 +58,14 @@ HTREEITEM ColorCompositeTool::configure( HTREEITEM parentItem) {
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree, parentItem, drawer);
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)(DisplayOptionItemFunc)&ColorCompositeTool::displayOptionCC);
 	htiNode = insertItem(TR("Color Composite"),"ColorComposite",item);
-	createBandItems();
-
+	addBands();
 	DrawerTool::configure(htiNode);
 
 	return htiNode;
 }
 
-void ColorCompositeTool::createBandItems() {
-	RasterLayerDrawer *rdrw = (RasterLayerDrawer *)drawer;
+void ColorCompositeTool::addBands() {
+	ColorCompositeDrawer *rdrw = (ColorCompositeDrawer *)drawer;
 	MapList mpl = rdrw->getMapList();
 	if ( mpl.fValid()) {
 		DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree, htiNode, drawer);
@@ -82,23 +82,25 @@ void ColorCompositeTool::createBandItems() {
 		mp = mpl[rdrw->getColorCompositeBand(2)];
 		insertItem(String(TR("Blue: %S").c_str(), mp->fnObj.sFile),".mpr", item);
 		item->setDoubleCickAction(this, (DTDoubleClickActionFunc)(DisplayOptionItemFunc)&ColorCompositeTool::stretchCC3);
+
 	}
+
 }
 
 void ColorCompositeTool::stretchCC1() {
-	new SetStretchCCForm(tree,(RasterLayerDrawer *)getDrawer(),0); 
+	new SetStretchCCForm(tree,(ColorCompositeDrawer *)getDrawer(),0); 
 }
 
 void ColorCompositeTool::stretchCC2() {
-	new SetStretchCCForm(tree,(RasterLayerDrawer *)getDrawer(),1); 
+	new SetStretchCCForm(tree,(ColorCompositeDrawer *)getDrawer(),1); 
 }
 
 void ColorCompositeTool::stretchCC3() {
-	new SetStretchCCForm(tree,(RasterLayerDrawer *)getDrawer(),2); 
+	new SetStretchCCForm(tree,(ColorCompositeDrawer *)getDrawer(),2); 
 }
 
 void ColorCompositeTool::displayOptionCC() {
-	new SetBandsForm(tree,(RasterLayerDrawer *)getDrawer(),this);
+	new SetBandsForm(tree,this);
 }
 
 String ColorCompositeTool::getMenuString() const {
@@ -106,20 +108,26 @@ String ColorCompositeTool::getMenuString() const {
 }
 
 //------------------------------------------------
-SetBandsForm::SetBandsForm(CWnd *wPar, RasterLayerDrawer *dr, ColorCompositeTool *_ccTool) : 
-	DisplayOptionsForm(dr, wPar,TR("Select bands for Color Composite")), ccTool(_ccTool)
+SetBandsForm::SetBandsForm(CWnd *wPar, ColorCompositeTool *_ccTool) : 
+DisplayOptionsForm((ComplexDrawer *)_ccTool->getDrawer(), wPar,TR("Select bands for Color Composite")),
+ccTool(_ccTool)
 {
 	exception = false;
-	MapList mpl = dr->getMapList();
-	v1 = dr->getColorCompositeBand(0);
-	v2=  dr->getColorCompositeBand(1);
-	v3 = dr->getColorCompositeBand(2);
-	string band1 = mpl[v1]->fnObj.sFile + ".mpr";
-	string band2 = mpl[v2]->fnObj.sFile + ".mpr";
-	string band3 = mpl[v3]->fnObj.sFile + ".mpr";
-	names.push_back(band3);
-	names.push_back(band2);
-	names.push_back(band1);
+	ColorCompositeDrawer *ccDrawer = (ColorCompositeDrawer *)ccTool->getDrawer();
+	MapList mpl = ccDrawer->getMapList();
+	v1 = ccDrawer->getColorCompositeBand(0);
+	v2=  ccDrawer->getColorCompositeBand(1);
+	v3 = ccDrawer->getColorCompositeBand(2);
+	for(int i = 0; i < mpl->iSize(); ++i) {
+		string band1 = mpl[i]->fnObj.sFile + ".mpr";
+		names.push_back(band1);
+	}
+	//string band1 = mpl[v1]->fnObj.sFile + ".mpr";
+	//string band2 = mpl[v2]->fnObj.sFile + ".mpr";
+	//string band3 = mpl[v3]->fnObj.sFile + ".mpr";
+	//names.push_back(band1);
+	//names.push_back(band2);
+	//names.push_back(band3);
 
 	fm1 = new FieldOneSelectString(root,TR("Red"),&v1,names);
 	fm2 = new FieldOneSelectString(root,TR("Blue"),&v2,names);
@@ -134,6 +142,7 @@ SetBandsForm::SetBandsForm(CWnd *wPar, RasterLayerDrawer *dr, ColorCompositeTool
 	fi2->Align(fi1, AL_AFTER);
 	fi3 = new FieldInt(cb,"",&e3);
 	fi3->Align(fi2, AL_AFTER);
+	cb->Hide();
 
 
 	create();
@@ -142,7 +151,7 @@ SetBandsForm::SetBandsForm(CWnd *wPar, RasterLayerDrawer *dr, ColorCompositeTool
 int SetBandsForm::setExc(Event *ev) {
 	cb->StoreData();
 	if ( exception) {
-		RasterLayerDrawer *rdr = (RasterLayerDrawer *)drw;
+		ColorCompositeDrawer *rdr = (ColorCompositeDrawer *)drw;
 		Color clr = rdr->getExceptionColor();
 		if ( clr == colorUNDEF)
 			clr = Color(0,0,0);
@@ -161,25 +170,23 @@ void  SetBandsForm::apply() {
 	fi1->StoreData();
 	fi2->StoreData();
 	fi3->StoreData();
-	RasterLayerDrawer *rdr = (RasterLayerDrawer *)drw;
+	ColorCompositeDrawer *rdr = (ColorCompositeDrawer *)drw;
 	rdr->setColorCompositeBand(0,v1);
 	rdr->setColorCompositeBand(1,v2);
 	rdr->setColorCompositeBand(2,v3);
 	if ( exception)
 		rdr->setExceptionColor(Color(e1,e2,e3));
-	view->DeleteAllItems(ccTool->getTreeItem(),true);
-	ccTool->createBandItems();
-
+	view->DeleteAllItems(ccTool->getTreeItem(), true);
+	ccTool->addBands();
 
 	PreparationParameters pp(NewDrawer::ptREDRAW, 0);
-	
 	rdr->prepareChildDrawers(&pp);
 
 	updateMapView();
 }
 
 //------------------------------------
-SetStretchCCForm::SetStretchCCForm(CWnd *wPar, RasterLayerDrawer *dr,int _index) :
+SetStretchCCForm::SetStretchCCForm(CWnd *wPar, ColorCompositeDrawer *dr,int _index) :
 	index(_index),
 	DisplayOptionsForm2((ComplexDrawer *)dr,wPar,"Set stretch")
 {
@@ -201,11 +208,9 @@ SetStretchCCForm::SetStretchCCForm(CWnd *wPar, RasterLayerDrawer *dr,int _index)
 FormEntry *SetStretchCCForm::CheckData() {
 	sliderLow->StoreData();
 	sliderHigh->StoreData();
-	RasterLayerDrawer *dr = (RasterLayerDrawer *)drw;
-	RangeReal rr = dr->getMapList()[dr->getColorCompositeBand(index)]->rrMinMax();
-	if ( low < rr.rLo())
+	if ( low < 0)
 		return sliderLow;
-	if ( high > rr.rHi())
+	if ( high > 255)
 		return sliderHigh;
 	if ( high < low)
 		return sliderHigh;
@@ -227,7 +232,7 @@ int  SetStretchCCForm::check(Event *) {
 		sliderHigh->SetVal(high);
 	}
 	
-	RasterLayerDrawer *setdr = (RasterLayerDrawer *)drw;
+	ColorCompositeDrawer *setdr = (ColorCompositeDrawer *)drw;
 	if ( setdr->isColorComposite()) {
 		setdr->setColorCompositeRange(index, RangeReal(low, high));
 		setdr->setStretchRangeReal(RangeReal(low,high));

@@ -62,21 +62,23 @@
 #include "AnimationManagementTool.h"
 #include "Client\FormElements\FormBasePropertyPage.h"
 #include "AnimationManagement.h"
-#include "DrawersUI\ThreeDStack.h"
+#include "ThreeDStack.h"
 #include "GraticuleTool.h"
 #include "LineSetEditor2.h"
-#include "DrawersUI\GlobalTool.h"
+#include "GlobalTool.h"
 #include "DistanceMeasurer.h"
-#include "DrawersUI\CrossSectionTool.h"
-#include "DrawersUI\TrackProfileTool.h"
-#include "DrawersUI\PointScalingTool.h"
-#include "DrawersUI\AnnotationDrawerTool.h"
-#include "DrawersUI\AnnotationLegendDrawerTool.h"
-#include "DrawersUI\PointDirectionTool.h"
-#include "DrawersUI\HovMollerTool.h"
+#include "CrossSectionTool.h"
+#include "TrackProfileTool.h"
+#include "PointScalingTool.h"
+#include "AnnotationDrawerTool.h"
+#include "AnnotationLegendDrawerTool.h"
+#include "PointDirectionTool.h"
+#include "HovMollerTool.h"
 #include "InfoTool.h"
-#include "DrawersUI\ColorCompositeTool.h"
+#include "ColorCompositeTool.h"
 #include "CoordSystemTool.h"
+#include "ColorCompositeTool.h"
+#include "SampleSetEditor.h"
 
 
 using namespace ILWIS;
@@ -123,6 +125,7 @@ DrawerToolInfoVector *createDrawerTool() {
 	infos->push_back(new DrawerToolInfo("HovMollerTool",createHovMollerTool));
 	infos->push_back(new DrawerToolInfo("ColorCompositeTool",createColorCompositeTool));
 	infos->push_back(new DrawerToolInfo("CoordSystemTool",createCoordSystemTool));
+	infos->push_back(new DrawerToolInfo("SampleSetEditor",createSampleSetEditor));
 
 	return infos;
 }
