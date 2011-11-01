@@ -328,7 +328,7 @@ void NotImplementedError()
 }
 
 ErrorExpression::ErrorExpression(const String& sExpr, const String& sSyntax)
-: ErrorObject(WhatError(String(SDATErrInvalidExprSyntax_SS.sVal(), sExpr, sSyntax), errEXPRESSION), where)
+: ErrorObject(WhatError(String(TR("Invalid expression %S %S").c_str(), sExpr, sSyntax), errEXPRESSION), where)
 {}
 
 void ExpressionError(const String& sExpr, const String& sSyntax)
@@ -337,7 +337,7 @@ void ExpressionError(const String& sExpr, const String& sSyntax)
 }
 
 ErrorAppName::ErrorAppName(const WhereError& where, const String& sAppName)
-: ErrorObject(WhatError(String(SDATErrInvalidApplication_S.sVal(), sAppName), errAPPNAME), where)
+: ErrorObject(WhatError(String(TR("Invalid application: %").c_str(), sAppName), errAPPNAME), where)
 {}
 
 void AppNameError(const FileName& fn, const String& sAppName)
@@ -346,7 +346,7 @@ void AppNameError(const FileName& fn, const String& sAppName)
 }
 
 ErrorDirNotFound::ErrorDirNotFound(const String& sDir)
-: ErrorObject(WhatError(String(SDATErrDirectoryNotFound_S.sVal(), sDir), errOPEN))
+: ErrorObject(WhatError(String(TR("Folder not found %S").c_str(), sDir), errOPEN))
 {
 }
 
@@ -361,7 +361,7 @@ void PercError(double rPerc, const FileName& fn, IlwisError err, double rPercMax
 }
 
 ErrorValueDomain::ErrorValueDomain(const String& sDomain, const WhereError& where, IlwisError err)
-: ErrorObject(WhatError(String(SDATErrDomainValueExpected_S.sVal(), sDomain), err), where)
+: ErrorObject(WhatError(String(TR("Domain value expected %S").c_str(), sDomain), err), where)
 {}
 
 void ValueDomainError(const String& sDomain, const FileName& fn, IlwisError err)
@@ -376,7 +376,7 @@ void ValueDomainError(const String& sDomain, const String& s, IlwisError err)
 
 void ValueOrSortDomainError(const String& sDomain, const String& s, IlwisError err)
 {
-  throw ErrorObject(WhatError(String(SDATErrDomValClassIDGroup_S.sVal(), sDomain), err), s);
+	throw ErrorObject(WhatError(String(TR("Value/Class domain type error %S").c_str(), sDomain), err), s);
 }
 
 ErrorSortDomain::ErrorSortDomain(const String& sDomain, const WhereError& where, IlwisError err)
@@ -399,7 +399,7 @@ ErrorImageDomain::ErrorImageDomain(const String& sDomain, const WhereError& wher
 }
 
 ErrorIdentifierDomain::ErrorIdentifierDomain(const String& sDomain, const WhereError& where, IlwisError err)
-: ErrorObject(WhatError(String(SDATErrDomIDExpected_S.sVal(), sDomain), err), where)
+: ErrorObject(WhatError(String(TR("Domain ID expected %S").c_str(), sDomain), err), where)
 {}
 
 void IdentifierDomainError(const String& sDomain, const FileName& fn, IlwisError err)
@@ -409,21 +409,21 @@ void IdentifierDomainError(const String& sDomain, const FileName& fn, IlwisError
 
 ErrorCoordSystem::ErrorCoordSystem(const String& sCoordS, const WhereError& where, IlwisError err)
 : ErrorObject(WhatError(
-  String(SDATErrWrongCoordSystem_S.sVal(), sCoordS),	err), where)
+			  String(TR("Wrong coordinate system %S").c_str(), sCoordS),	err), where)
 {
 }
 
 ErrorIncompatibleGeorefs::ErrorIncompatibleGeorefs(const String& sGeoRef1, const String& sGeoRef2, const WhereError& where,
 IlwisError err)
 : ErrorObject(WhatError(
-  String(SDATErrIncompatGeoRef_SS.sVal(), sGeoRef1, sGeoRef2), err), where)
+			  String(TR("Incompatible georefs %S %S").c_str(), sGeoRef1, sGeoRef2), err), where)
 {
 }
 
 ErrorIncompatibleDomains::ErrorIncompatibleDomains(const String& sDom1, const String& sDom2, const WhereError& where,
 IlwisError err)
 : ErrorObject(WhatError(
-  String(SDATErrIncompatDomain_SS.sVal(), sDom1, sDom2), err), where)
+			  String(TR("Incompatible domains %S %S").c_str(), sDom1, sDom2), err), where)
 {
 }
 
@@ -440,13 +440,13 @@ void IncompatibleCoordSystemsError(const String& sCsy1, const String& sCsy2, con
 ErrorIncompatibleCoordSystems::ErrorIncompatibleCoordSystems(const String& sCsy1, const String& sCsy2, const WhereError& where,
 IlwisError err)
 : ErrorObject(WhatError(
-  String(SDATErrIncompatCoordSys_SS.sVal(), sCsy1, sCsy2), err), where)
+			  String(TR("Incompatible coordinate systems %S %S").c_str(), sCsy1, sCsy2), err), where)
 {}
 
 ErrorIncompatibleMapSize::ErrorIncompatibleMapSize(const String& sMap1, const String& sMap2, const WhereError& where,
 IlwisError err)
 : ErrorObject(WhatError(
-  String(SDATErrIncompatMapSize_SS.sVal(), sMap1, sMap2), err), where)
+			  String(TR("Incompatible map sizes %S %S").c_str(), sMap1, sMap2), err), where)
 {}
 
 ErrorGeoRefNone::ErrorGeoRefNone(const WhereError& where, IlwisError err)
@@ -498,7 +498,7 @@ void ErrorDummy::Show(const String& ) const
 }
 
 ErrorDiskFull::ErrorDiskFull(const String& sFileName)
-: ErrorObject(WhatError(String(SDATErrDiskFull), errDISKFULL), sFileName)
+: ErrorObject(WhatError(String(TR("Disk full")), errDISKFULL), sFileName)
 {}
 
 void DiskFullError(const String& sFileName)
