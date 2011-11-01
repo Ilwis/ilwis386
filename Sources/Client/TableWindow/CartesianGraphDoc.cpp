@@ -1,39 +1,39 @@
 /***************************************************************
- ILWIS integrates image, vector and thematic data in one unique 
- and powerful package on the desktop. ILWIS delivers a wide 
- range of feautures including import/export, digitizing, editing, 
- analysis and display of data as well as production of 
- quality mapsinformation about the sensor mounting platform
- 
- Exclusive rights of use by 52°North Initiative for Geospatial 
- Open Source Software GmbH 2007, Germany
+ILWIS integrates image, vector and thematic data in one unique 
+and powerful package on the desktop. ILWIS delivers a wide 
+range of feautures including import/export, digitizing, editing, 
+analysis and display of data as well as production of 
+quality mapsinformation about the sensor mounting platform
 
- Copyright (C) 2007 by 52°North Initiative for Geospatial
- Open Source Software GmbH
+Exclusive rights of use by 52°North Initiative for Geospatial 
+Open Source Software GmbH 2007, Germany
 
- Author: Jan Hendrikse, Willem Nieuwenhuis,Wim Koolhoven 
- Bas Restsios, Martin Schouwenburg, Lichun Wang, Jelle Wind 
+Copyright (C) 2007 by 52°North Initiative for Geospatial
+Open Source Software GmbH
 
- Contact: Martin Schouwenburg; schouwenburg@itc.nl; 
- tel +31-534874371
+Author: Jan Hendrikse, Willem Nieuwenhuis,Wim Koolhoven 
+Bas Restsios, Martin Schouwenburg, Lichun Wang, Jelle Wind 
 
- This program is free software; you can redistribute it and/or
- modify it under the terms of the GNU General Public License
- version 2 as published by the Free Software Foundation.
+Contact: Martin Schouwenburg; schouwenburg@itc.nl; 
+tel +31-534874371
 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU General Public License for more details.
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+version 2 as published by the Free Software Foundation.
 
- You should have received a copy of the GNU General Public License
- along with this program (see gnu-gpl v2.txt); if not, write to
- the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- Boston, MA 02111-1307, USA or visit the web page of the Free
- Software Foundation, http://www.fsf.org.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
 
- Created on: 2007-02-8
- ***************************************************************/
+You should have received a copy of the GNU General Public License
+along with this program (see gnu-gpl v2.txt); if not, write to
+the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+Boston, MA 02111-1307, USA or visit the web page of the Free
+Software Foundation, http://www.fsf.org.
+
+Created on: 2007-02-8
+***************************************************************/
 // CartesianGraphDoc.cpp: implementation of the CartesianGraphDoc class.
 //
 //////////////////////////////////////////////////////////////////////
@@ -61,8 +61,8 @@ IMPLEMENT_DYNCREATE(CartesianGraphDoc, GraphDoc)
 
 BEGIN_MESSAGE_MAP(CartesianGraphDoc, GraphDoc)
 	ON_COMMAND(ID_FILE_OPEN, OnFileOpen)
-  ON_COMMAND(ID_GRPH_ADD, OnAddColumnGraph)
-  ON_COMMAND(ID_GRPH_ADD_COLUMN, OnAddColumnGraph)
+	ON_COMMAND(ID_GRPH_ADD, OnAddColumnGraph)
+	ON_COMMAND(ID_GRPH_ADD_COLUMN, OnAddColumnGraph)
 	ON_COMMAND(ID_GRPH_ADD_FORMULA, OnAddFormulaGraph)
 	ON_UPDATE_COMMAND_UI(ID_GRPH_ADD_FORMULA, OnUpdateAddFormulaGraph)
 	ON_COMMAND(ID_GRPH_ADD_LSF, OnAddLsfGraph)
@@ -90,19 +90,19 @@ void CartesianGraphDoc::Serialize(CArchive& ar)
 			en.em = new ElementMap;
 		go->Updated();
 		go->Store();
-    if (0 != cgd)
-    {
-  		ObjectInfo::WriteElement("Graph", "Type", en, "StandardGraph");
-      cgd->SaveSettings(en, "Graph");
-    }
-    ObjectDependency objdep;
-    for (int i = 0; i < iLayers(); ++i)
-    {
-      ColumnGraphLayer* cgl = dynamic_cast<ColumnGraphLayer*>(gl(i));
-      if (0 != cgl) 
-        objdep.Add(cgl->tbl);
-    }      
-    objdep.Store(go.pointer());
+		if (0 != cgd)
+		{
+			ObjectInfo::WriteElement("Graph", "Type", en, "StandardGraph");
+			cgd->SaveSettings(en, "Graph");
+		}
+		ObjectDependency objdep;
+		for (int i = 0; i < iLayers(); ++i)
+		{
+			ColumnGraphLayer* cgl = dynamic_cast<ColumnGraphLayer*>(gl(i));
+			if (0 != cgl) 
+				objdep.Add(cgl->tbl);
+		}      
+		objdep.Store(go.pointer());
 		en.em->Serialize(ar);
 	}
 	else
@@ -110,68 +110,68 @@ void CartesianGraphDoc::Serialize(CArchive& ar)
 		ElementContainer en;
 		en.em = new ElementMap;
 		en.em->Serialize(ar);
-    String sType;
+		String sType;
 		ObjectInfo::ReadElement("Graph", "Type", en, sType);
-    if ("StandardGraph" == sType)
-    {
-      grdr = cgd = new CartesianGraphDrawer(0); 
-      cgd->LoadSettings(en, "Graph");
-      for (int i = 0; i < iLayers(); ++i)
-      {
-        ColumnGraphLayer* cgl = dynamic_cast<ColumnGraphLayer*>(gl(i));
-        if (0 != cgl) 
-        {
-          tbl = cgl->tbl;
-          colX = cgl->colX;
-          break;
-        }
-      }
-    }
+		if ("StandardGraph" == sType)
+		{
+			grdr = cgd = new CartesianGraphDrawer(0); 
+			cgd->LoadSettings(en, "Graph");
+			for (int i = 0; i < iLayers(); ++i)
+			{
+				ColumnGraphLayer* cgl = dynamic_cast<ColumnGraphLayer*>(gl(i));
+				if (0 != cgl) 
+				{
+					tbl = cgl->tbl;
+					colX = cgl->colX;
+					break;
+				}
+			}
+		}
 	}
 }
 
 namespace 
 {
-  class NewGraphForm: public FormWithDest
-  {
+	class NewGraphForm: public FormWithDest
+	{
 	public:
 		NewGraphForm(CWnd* wParent, const Table& table)
-		: FormWithDest(wParent, TR("Create Graph"))
-    , tbl(table)
+			: FormWithDest(wParent, TR("Create Graph"))
+			, tbl(table)
 		{
-      if (tbl.fValid())
-        sTbl = tbl->fnObj.sRelative();
-      ftbl = new FieldTable(root, TR("&Table"), &sTbl);
-      ftbl->SetCallBack((NotifyProc)&NewGraphForm::TableCallBack);
+			if (tbl.fValid())
+				sTbl = tbl->fnObj.sRelative();
+			ftbl = new FieldTable(root, TR("&Table"), &sTbl);
+			ftbl->SetCallBack((NotifyProc)&NewGraphForm::TableCallBack);
 			fColX = true;
 			CheckBox* cb = 0;
 			cb = new CheckBox(root, TR("X-Axis"), &fColX);
 			fcolX = new FieldColumn(cb, "", tbl, &sColX, dmVALUE | dmIMAGE | dmCLASS | dmIDENT);
 			fcolY = new FieldColumn(root, TR("Y-Axis"), tbl, &sColY, dmVALUE | dmIMAGE | dmBOOL);
- 			fcolY->Align(cb, AL_UNDER);
-      SetMenHelpTopic("ilwismen\\create_a_graph.htm");
+			fcolY->Align(cb, AL_UNDER);
+			SetMenHelpTopic("ilwismen\\create_a_graph.htm");
 			create();
 		}
 		bool fColX;
 		String sTbl, sColX, sColY;	
-    Table tbl;
-  private:
-    FieldTable* ftbl;
-    FieldColumn *fcolX, *fcolY;
-    int TableCallBack(Event*)
-    {
-      try {
-        ftbl->StoreData();
-        tbl = Table(sTbl);
-        fcolX->FillWithColumns(tbl.ptr());
-        fcolY->FillWithColumns(tbl.ptr());
-      }
-      catch (ErrorObject&)
-      {
-      }
-      return 0;
-    }
-  };
+		Table tbl;
+	private:
+		FieldTable* ftbl;
+		FieldColumn *fcolX, *fcolY;
+		int TableCallBack(Event*)
+		{
+			try {
+				ftbl->StoreData();
+				tbl = Table(sTbl);
+				fcolX->FillWithColumns(tbl.ptr());
+				fcolY->FillWithColumns(tbl.ptr());
+			}
+			catch (ErrorObject&)
+			{
+			}
+			return 0;
+		}
+	};
 }
 
 void CartesianGraphDoc::OnFileOpen()
@@ -179,52 +179,52 @@ void CartesianGraphDoc::OnFileOpen()
 	if (!SaveModified())
 		return;
 	class OpenForm: public FormWithDest
-  {
-  public:
-    OpenForm(CWnd* parent, String* sName)
-    : FormWithDest(parent, TR("Open Graph"))
-    {
+	{
+	public:
+		OpenForm(CWnd* parent, String* sName)
+			: FormWithDest(parent, TR("Open Graph"))
+		{
 			new FieldDataTypeLarge(root, sName, ".grh", new GraphLister(grhGRAPH));
-      SetMenHelpTopic("ilwismen\\graph_window_open_graph.htm");
-      create();
-    }
-  };
-  String sGraph;
-  OpenForm frm(wndGetActiveView(), &sGraph);
+			SetMenHelpTopic("ilwismen\\graph_window_open_graph.htm");
+			create();
+		}
+	};
+	String sGraph;
+	OpenForm frm(wndGetActiveView(), &sGraph);
 	if (frm.fOkClicked()) {
 		OnOpenDocument(sGraph.c_str());
 		SetModifiedFlag(FALSE);
-  	UpdateAllViews(0);
+		UpdateAllViews(0);
 	}
 }
 
 BOOL CartesianGraphDoc::OnNewDocument()
 {
-  NewGraphForm frm(wndGetActiveView(), tbl);
-  if (!frm.fOkClicked())
-    return FALSE;
+	NewGraphForm frm(wndGetActiveView(), tbl);
+	if (!frm.fOkClicked())
+		return FALSE;
 	DeleteContents();
 	if (!IlwisDocument::OnNewDocument())
 		return FALSE;
 
-  tbl = Table(frm.tbl);
-  colX = Column();
-  Column colY;
-  if (frm.fColX)
-  {
-    colX = tbl->col(frm.sColX);
+	tbl = Table(frm.tbl);
+	colX = Column();
+	Column colY;
+	if (frm.fColX)
+	{
+		colX = tbl->col(frm.sColX);
 		if (!colX.fValid())
 			return FALSE;
-  }    
+	}    
 	colY = tbl->col(frm.sColY);
 	if (!colY.fValid())
 		return false;
 
-  grdr = cgd = new CartesianGraphDrawer(0); 
+	grdr = cgd = new CartesianGraphDrawer(0); 
 	ColumnGraphLayer* gl = new ColumnGraphLayer(cgd, tbl, colX, colY);
-  // X-axis
-  if (colX.fValid())
-  {
+	// X-axis
+	if (colX.fValid())
+	{
 		cgd->gaxX->Set(colX->dvrs());
 		cgd->gaxX->dvrsData = colX->dvrs();
 		if (colX->fValues()) 
@@ -239,13 +239,13 @@ BOOL CartesianGraphDoc::OnNewDocument()
 			cgd->gaxX->SetMinMax(rr);
 		}
 		cgd->gaxX->sTitle = colX->sName();
-  }
+	}
 	else {
 		cgd->gaxX->Set(tbl->dm());
 		if (tbl->dm()->pdnone())
 			cgd->gaxX->SetMinMax(RangeReal(1, tbl->iRecs()));
 	}
-  // Y-axis
+	// Y-axis
 	cgd->gaxYLeft->Set(colY->dvrs());
 	cgd->gaxYLeft->dvrsData = colY->dvrs();
 	cgd->gaxYRight->Set(colY->dvrs());
@@ -262,107 +262,107 @@ BOOL CartesianGraphDoc::OnNewDocument()
 		cgd->gaxYRight->SetMinMax(rr);
 	}
 	cgd->gaxYLeft->sTitle = colY->sName();
-  grdr->sTitle = gl->sTitle;
+	grdr->sTitle = gl->sTitle;
 	gl->fYAxisLeft = true;
-  
+
 	cgd->agl.push_back(gl);
 	//throw ErrorObject(String("TO DO %s %s", __LINE__, __FILE__));
 	gl->smb.col = gl->line.clrLine() = gl->color = Representation::clrPrimary(cgd->agl.iSize());
-  gl->smb.iSize = 5;
+	gl->smb.iSize = 5;
 
-  UpdateAllViews(0);
+	UpdateAllViews(0);
 	SetModifiedFlag();
-  return TRUE;
+	return TRUE;
 }
 
 void CartesianGraphDoc::DeleteContents()
 {
-  cgd = 0;
-  GraphDoc::DeleteContents();
+	cgd = 0;
+	GraphDoc::DeleteContents();
 }
 
 void CartesianGraphDoc::OnAddColumnGraph()
 {
-  class AddGraphForm: public FormWithDest
-  {
+	class AddGraphForm: public FormWithDest
+	{
 	public:
 		AddGraphForm(CWnd* wParent, const Domain& dom, String* sTable, String* sColX, String* sColY)
-		: FormWithDest(wParent, TR("Add Graph from Columns"))
-    , dm(dom)
-    , sTbl(sTable)
+			: FormWithDest(wParent, TR("Add Graph from Columns"))
+			, dm(dom)
+			, sTbl(sTable)
 		{
-      ftbl = new FieldTable(root, TR("&Table"), sTbl, ".tbt.his.hsa.hss.hsp.rpr");
-      ftbl->SetCallBack((NotifyProc)&AddGraphForm::TableCallBack);
+			ftbl = new FieldTable(root, TR("&Table"), sTbl, ".tbt.his.hsa.hss.hsp.rpr");
+			ftbl->SetCallBack((NotifyProc)&AddGraphForm::TableCallBack);
 			fcolX = new FieldColumn(root, TR("X-Axis"), 0, sColX);
 			fcolY = new FieldColumn(root, TR("Y-Axis"), 0, sColY, dmVALUE | dmIMAGE | dmBOOL);
-      SetMenHelpTopic("ilwismen\\graph_window_add_graph_from_columns.htm");
+			SetMenHelpTopic("ilwismen\\graph_window_add_graph_from_columns.htm");
 			create();
 		}
-  private:
-    Domain dm;
-    String* sTbl;
-    FieldTable* ftbl;
-    FieldColumn *fcolX, *fcolY;
-    int TableCallBack(Event*)
-    {
-      try {
-        ftbl->StoreData();
-        FileName fn(*sTbl);
-        fcolX->FillWithColumns(fn,dm);
-        fcolY->FillWithColumns(fn);
-      }
-      catch (ErrorObject&)
-      {
-      }
-      return 0;
-    }
-  };
-  class AddGraphFormColY: public FormWithDest
-  {
+	private:
+		Domain dm;
+		String* sTbl;
+		FieldTable* ftbl;
+		FieldColumn *fcolX, *fcolY;
+		int TableCallBack(Event*)
+		{
+			try {
+				ftbl->StoreData();
+				FileName fn(*sTbl);
+				fcolX->FillWithColumns(fn,dm);
+				fcolY->FillWithColumns(fn);
+			}
+			catch (ErrorObject&)
+			{
+			}
+			return 0;
+		}
+	};
+	class AddGraphFormColY: public FormWithDest
+	{
 	public:
 		AddGraphFormColY(CWnd* wParent, const Table& tbl, String* sColY)
-		: FormWithDest(wParent, TR("Add Graph from Columns"))
+			: FormWithDest(wParent, TR("Add Graph from Columns"))
 		{
 			new FieldColumn(root, TR("Y-Axis"), tbl, sColY, dmVALUE | dmIMAGE | dmBOOL);
-      SetMenHelpTopic("ilwismen\\graph_window_add_graph_from_columns.htm");
+			SetMenHelpTopic("ilwismen\\graph_window_add_graph_from_columns.htm");
 			create();
 		}
-  };    
-  Column colY;
+	};    
+	Column colY;
 
-  if (colX.fValid())
-  {
-    Domain dmCol = colX->dm();
-    String sTable = tbl->sName(true);
-    String sColX = colX->sName();
-    String sColY;
-    AddGraphForm frm(wndGetActiveView(), dmCol, &sTable, &sColX, &sColY);
-    if (!frm.fOkClicked())
-      return;
-    tbl = Table(sTable);
-    colX = tbl->col(sColX);
-    colY = tbl->col(sColY);
-  }
-  else 
-  {
-    String sColY;
-    AddGraphFormColY frm(wndGetActiveView(), tbl, &sColY);
-    if (!frm.fOkClicked())
-      return;
-    colY = tbl->col(sColY);
-  }
-  if (!colY.fValid())
-    return;
+	if (colX.fValid())
+	{
+		Domain dmCol = colX->dm();
+		String sTable = tbl->sName(true);
+		String sColX = colX->sName();
+		String sColY;
+		AddGraphForm frm(wndGetActiveView(), dmCol, &sTable, &sColX, &sColY);
+		if (!frm.fOkClicked())
+			return;
+		tbl = Table(sTable);
+		colX = tbl->col(sColX);
+		colY = tbl->col(sColY);
+	}
+	else 
+	{
+		String sColY;
+		AddGraphFormColY frm(wndGetActiveView(), tbl, &sColY);
+		if (!frm.fOkClicked())
+			return;
+		colY = tbl->col(sColY);
+	}
+	if (!colY.fValid())
+		return;
 	ColumnGraphLayer* gl = new ColumnGraphLayer(cgd, tbl, colX, colY);
-  // updating of axis ??
+	// updating of axis ??
 	gl->fYAxisLeft = true;
 	cgd->agl.push_back(gl);
 	throw ErrorObject(String("TO DO %s %s", __LINE__, __FILE__));
 	//gl->smb.col = gl->line.clrLine() = gl->color	= BaseDrawer::clrPrimary(cgd->agl.iSize());
-  gl->smb.iSize = 5;
-  // config layer ??
+	gl->smb.iSize = 5;
+	// config layer ??
 	SetModifiedFlag();
-  UpdateAllViews(0);
+	UpdateAllViews(0);
 }
 
 void CartesianGraphDoc::OnAddFormulaGraph()
@@ -371,7 +371,7 @@ void CartesianGraphDoc::OnAddFormulaGraph()
 	{
 	public:
 		AddGraphFormulaForm(CWnd *parent, const String& sTitle)
-		: FormWithDest(parent, sTitle)
+			: FormWithDest(parent, sTitle)
 		{
 			new StaticText(root, TR("&Expression"));
 			sExpr = "x";
@@ -385,13 +385,13 @@ void CartesianGraphDoc::OnAddFormulaGraph()
 	};
 	AddGraphFormulaForm frm(wndGetActiveView(), TR("Add Graph from Formula"));
 	if (!frm.fOkClicked())
-    return;
+		return;
 	FormulaGraphLayer* gl = new FormulaGraphLayer(cgd, frm.sExpr);
-  cgd->agl.push_back(gl);
-  throw ErrorObject(String("TO DO %s %s", __LINE__, __FILE__));
+	cgd->agl.push_back(gl);
+	throw ErrorObject(String("TO DO %s %s", __LINE__, __FILE__));
 	//gl->line.clrLine() = gl->color = BaseDrawer::clrPrimary(cgd->agl.iSize());
 	SetModifiedFlag();
-  UpdateAllViews(0);
+	UpdateAllViews(0);
 }
 
 void CartesianGraphDoc::OnAddLsfGraph()
@@ -400,7 +400,7 @@ void CartesianGraphDoc::OnAddLsfGraph()
 	{
 	public:
 		AddLsfForm(CWnd *parent, const String& sTitle, const Table& tbl)
-		: FormWithDest(parent, sTitle)
+			: FormWithDest(parent, sTitle)
 		{
 			if (tbl->iCols() > 0)
 				sColX = tbl->col(0)->sName();
@@ -454,21 +454,20 @@ void CartesianGraphDoc::OnAddLsfGraph()
 	};
 	AddLsfForm frm(wndGetActiveView(), TR("Add Graph Least Squares Fit"), tbl);
 	if (!frm.fOkClicked())
-    return;
+		return;
 
-  Column colX = tbl->col(frm.sColX);
+	Column colX = tbl->col(frm.sColX);
 	if (!colX.fValid())
-  	return;
+		return;
 	Column colY = tbl->col(frm.sColY);
 	if (!colY.fValid())
 		return;
 
 	LsfGraphLayer* gl = new LsfGraphLayer(cgd, tbl, colX, colY, *frm.sFunc, frm.iTerms); 
-  cgd->agl.push_back(gl);
-  throw ErrorObject(String("TO DO %s %s", __LINE__, __FILE__));
-	//gl->line.clrLine() = gl->color = BaseDrawer::clrPrimary(cgd->agl.iSize());
+	cgd->agl.push_back(gl);
+	gl->line.clrLine() = gl->color = Representation::clrPrimary(cgd->agl.iSize());
 	SetModifiedFlag();
-  UpdateAllViews(0);
+	UpdateAllViews(0);
 }
 
 void CartesianGraphDoc::OnAddSvmGraph()
@@ -477,7 +476,7 @@ void CartesianGraphDoc::OnAddSvmGraph()
 	{
 	public:
 		AddSmvForm(CWnd *parent, const String& sTitle)
-		: FormWithDest(parent, sTitle)
+			: FormWithDest(parent, sTitle)
 		{
 			new FieldSemiVariogram(root, TR("&SemiVariogram"), &smv);
 			SetMenHelpTopic("ilwismen\\graph_window_add_semivariogram_model.htm");
@@ -486,46 +485,46 @@ void CartesianGraphDoc::OnAddSvmGraph()
 		SemiVariogram smv;
 	};
 	AddSmvForm frm(wndGetActiveView(), TR("Add Graph Semivariogram Model"));
-  if (!frm.fOkClicked())
-    return;
+	if (!frm.fOkClicked())
+		return;
 
 	SmvGraphLayer* gl = new SmvGraphLayer(cgd, frm.smv); 
-  cgd->agl.push_back(gl);
-  throw ErrorObject(String("TO DO %s %s", __LINE__, __FILE__));
+	cgd->agl.push_back(gl);
+	throw ErrorObject(String("TO DO %s %s", __LINE__, __FILE__));
 	//gl->line.clrLine() = gl->color = BaseDrawer::clrPrimary(cgd->agl.iSize());
 	SetModifiedFlag();
-  UpdateAllViews(0);
+	UpdateAllViews(0);
 }
 
 GraphAxis* CartesianGraphDoc::ga(GraphAxis::GraphAxisPos gp) const
 {
-  if (0 != cgd) 
-  {
-    switch (gp)
-    {
-      case GraphAxis::gapX:
-        return cgd->gaxX;
-      case GraphAxis::gapYLeft:
-        return cgd->gaxYLeft;
-      case GraphAxis::gapYRight:
-        return cgd->gaxYRight;
-      default:
-        return 0;
-    }
-  }  
-  return 0;
+	if (0 != cgd) 
+	{
+		switch (gp)
+		{
+		case GraphAxis::gapX:
+			return cgd->gaxX;
+		case GraphAxis::gapYLeft:
+			return cgd->gaxYLeft;
+		case GraphAxis::gapYRight:
+			return cgd->gaxYRight;
+		default:
+			return 0;
+		}
+	}  
+	return 0;
 }
 
 bool CartesianGraphDoc::fEnableAddFormulaGraph() const
 {
-  bool fEnable = true;
-  if (0 != cgd)
-    fEnable = cgd->gaxX->dvrs.fValues();
-  return fEnable;
+	bool fEnable = true;
+	if (0 != cgd)
+		fEnable = cgd->gaxX->dvrs.fValues();
+	return fEnable;
 }
 
 void CartesianGraphDoc::OnUpdateAddFormulaGraph(CCmdUI* pCmdUI)
 {
-  pCmdUI->Enable(fEnableAddFormulaGraph());
+	pCmdUI->Enable(fEnableAddFormulaGraph());
 }
 
