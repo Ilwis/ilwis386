@@ -139,7 +139,7 @@ int MapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	menPropLayer.CreateMenu();
 	menPopup.AppendMenu(MF_POPUP, (UINT)menPropLayer.GetSafeHmenu(), sMen(ID_PROPLAYER)); 	
 	//  add(ID_OPENGENMAP);
-	add(ID_OPENPIXELINFO);
+	//add(ID_OPENPIXELINFO);
 	addBreak;
 	add(ID_EXIT);
 	hMenFile = menPopup.GetSafeHmenu();
@@ -200,7 +200,6 @@ int MapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	addSub(ID_EXTPERC);
 	addSub(ID_EXTCOORD);
 	addSubMenu(ID_EXTEND);
-	add(ID_COORDSYSTEM);
 	addBreak;
 	add(ID_ADJUSTSIZE);
 	add(ID_LAYERMANAGE);
