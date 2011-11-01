@@ -1,39 +1,39 @@
 /***************************************************************
- ILWIS integrates image, vector and thematic data in one unique 
- and powerful package on the desktop. ILWIS delivers a wide 
- range of feautures including import/export, digitizing, editing, 
- analysis and display of data as well as production of 
- quality mapsinformation about the sensor mounting platform
- 
- Exclusive rights of use by 52°North Initiative for Geospatial 
- Open Source Software GmbH 2007, Germany
+ILWIS integrates image, vector and thematic data in one unique 
+and powerful package on the desktop. ILWIS delivers a wide 
+range of feautures including import/export, digitizing, editing, 
+analysis and display of data as well as production of 
+quality mapsinformation about the sensor mounting platform
 
- Copyright (C) 2007 by 52°North Initiative for Geospatial
- Open Source Software GmbH
+Exclusive rights of use by 52°North Initiative for Geospatial 
+Open Source Software GmbH 2007, Germany
 
- Author: Jan Hendrikse, Willem Nieuwenhuis,Wim Koolhoven 
- Bas Restsios, Martin Schouwenburg, Lichun Wang, Jelle Wind 
+Copyright (C) 2007 by 52°North Initiative for Geospatial
+Open Source Software GmbH
 
- Contact: Martin Schouwenburg; schouwenburg@itc.nl; 
- tel +31-534874371
+Author: Jan Hendrikse, Willem Nieuwenhuis,Wim Koolhoven 
+Bas Restsios, Martin Schouwenburg, Lichun Wang, Jelle Wind 
 
- This program is free software; you can redistribute it and/or
- modify it under the terms of the GNU General Public License
- version 2 as published by the Free Software Foundation.
+Contact: Martin Schouwenburg; schouwenburg@itc.nl; 
+tel +31-534874371
 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU General Public License for more details.
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+version 2 as published by the Free Software Foundation.
 
- You should have received a copy of the GNU General Public License
- along with this program (see gnu-gpl v2.txt); if not, write to
- the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- Boston, MA 02111-1307, USA or visit the web page of the Free
- Software Foundation, http://www.fsf.org.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
 
- Created on: 2007-02-8
- ***************************************************************/
+You should have received a copy of the GNU General Public License
+along with this program (see gnu-gpl v2.txt); if not, write to
+the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+Boston, MA 02111-1307, USA or visit the web page of the Free
+Software Foundation, http://www.fsf.org.
+
+Created on: 2007-02-8
+***************************************************************/
 #include "Client\Base\ilwis30.h"
 #include "Engine\Map\Segment\Seg.h"
 #include "Engine\Map\Polygon\POL.H"
@@ -120,8 +120,8 @@ private:
 //-------------------------------
 // BasicPropertyFormPage member functions
 BasicPropertyFormPage::BasicPropertyFormPage(const IlwisObject& object, const String& sPageTitle)
-	:	FormBasePropertyPage(sPageTitle),
-		m_obj(object)
+:	FormBasePropertyPage(sPageTitle),
+m_obj(object)
 {
 	m_fReadOnly = object->fReadOnly();
 }
@@ -135,18 +135,23 @@ void BasicPropertyFormPage::create()
 
 void BasicPropertyFormPage::BuildPage()
 {
-	int iImage = IlwWinApp()->iImage(m_obj->fnObj.sExt);
-	HICON icon;
-	if (iImage)
-		icon = IlwWinApp()->ilLarge.ExtractIcon(iImage);
+	try {
+		int iImage = IlwWinApp()->iImage(m_obj->fnObj.sExt);
+		HICON icon;
+		if (iImage)
+			icon = IlwWinApp()->ilLarge.ExtractIcon(iImage);
 
-	String s = m_obj->sTypeName();
-	s &= "  ";
+		String s = m_obj->sTypeName();
+		s &= "  ";
 
-	m_fib = new FlatIconButton(root, icon, s, (NotifyProc)&BasicPropertyFormPage::PressButton, m_obj->fnObj, false, FlatIconButton::fbsTITLE);
-	m_fib->SetIndependentPos();
+		m_fib = new FlatIconButton(root, icon, s, (NotifyProc)&BasicPropertyFormPage::PressButton, m_obj->fnObj, false, FlatIconButton::fbsTITLE);
+		m_fib->SetIndependentPos();
 
-	m_fgPageRoot = new FieldGroup(root);
+		m_fgPageRoot = new FieldGroup(root);
+	}
+	catch ( const ErrorObject& err) {
+		err.Show();
+	}
 }
 
 String BasicPropertyFormPage::sObjectDesc(const IlwisObject& obj)
@@ -236,11 +241,11 @@ void SetRangePrecFields(const DomainValue* dv, const ValueRange& vr, FormEntry* 
 {
 	String sRange, sPrecision;
 	BuildVRStrings(vr, sRange, sPrecision);
-	
+
 	StaticText *st = new StaticText(root, TR("Value Range:"));
 	stRange = new StaticText(root, sRange);
 	stRange->Align(st, AL_AFTER);
-	
+
 	StaticText *stPrec = new StaticText(root, TR("Precision:"));
 	stPrec->Align(st, AL_UNDER);
 	stPrec->psn->iBndUp = -5;
@@ -248,7 +253,7 @@ void SetRangePrecFields(const DomainValue* dv, const ValueRange& vr, FormEntry* 
 	stPrecision->Align(stPrec, AL_AFTER);
 
 	FormEntry *feAlignTo = stPrec;
-	
+
 	if (dv->fUnit())
 	{
 		StaticText* stLeft = new StaticText(root, TR("Unit:"));
@@ -266,7 +271,7 @@ void SetRangePrecFields(const DomainValue* dv, const ValueRange& vr, FormEntry* 
 //-------------------------------
 // GeneralPropPage member functions
 GeneralPropPage::GeneralPropPage(const IlwisObject& object)
-	: BasicPropertyFormPage(object, TR("General"))
+: BasicPropertyFormPage(object, TR("General"))
 {
 }
 
@@ -302,7 +307,7 @@ void GeneralPropPage::BuildPage()
 	for ( list<String>::iterator cur = lstFiles.begin(); cur != lstFiles.end(); ++cur)
 	{
 		FileName fn(*cur);
-		
+
 		if (CFile::GetStatus(fn.sFullPath().c_str(), status))
 			iSize += status.m_size;
 	}
@@ -344,7 +349,7 @@ int GeneralPropPage::exec()
 		bool fDescChanged = m_obj->sDescription != ObjectInfo::sDescr(m_obj->fnObj);
 		if (m_obj->fChanged || fDescChanged)
 			m_obj->Store();
-		
+
 		if (m_obj->fChanged || fDescChanged || (fRO != m_fReadOnly))
 		{
 			FileName* pfn = new FileName(m_obj->fnObj);
@@ -368,8 +373,8 @@ int GeneralPropPage::exec()
 //-------------------------------
 // BaseMapPropPage member functions
 BaseMapPropPage::BaseMapPropPage(const IlwisObject& obj, const String& sPageTitle)
-	: BasicPropertyFormPage(obj, sPageTitle)
-	, m_stCSDsc(0)
+: BasicPropertyFormPage(obj, sPageTitle)
+, m_stCSDsc(0)
 {
 	m_bm = BaseMap(m_obj->fnObj);
 	m_fgValues = 0;
@@ -378,16 +383,20 @@ BaseMapPropPage::BaseMapPropPage(const IlwisObject& obj, const String& sPageTitl
 
 void BaseMapPropPage::BuildPage()
 {
-	BasicPropertyFormPage::BuildPage();
+	try{
+		BasicPropertyFormPage::BuildPage();
 
-	SetCoordSystemField();
-	SetDomainValueRangeField();
-	SetAttribTableField();
-	SetMapDetails();
-
+		SetCoordSystemField();
+		SetDomainValueRangeField();
+		SetAttribTableField();
+		SetMapDetails();
+	} catch ( const ErrorObject& err) {
+		err.Show();
+	}
 	String s('X', 50);
 	m_stRemark = new InfoText(m_fgPageRoot, s);
 	m_stRemark->SetVal(String());   // clear remark string
+
 }
 
 // virtual functions
@@ -630,7 +639,7 @@ int BaseMapPropPage::CoordSysChange(Event*)
 			sDsc = sObjectDesc(cs);
 		else
 			sRem = TR("Invalid Coordinate System");
-		
+
 		m_stRemark->SetVal(sRem);
 	}
 
@@ -692,7 +701,7 @@ int BaseMapPropPage::DomainChange(Event*)
 		else
 			sRem = TR("Invalid Domain");
 	}
-	
+
 	m_stRemark->SetVal(sRem);
 	m_stDM->SetVal(s);
 
@@ -703,7 +712,7 @@ int BaseMapPropPage::CallBackAttTableChange(Event*)
 {
 	if ( !fAttrTable ) return 1;
 	DataChanged(0);
-	
+
 	ftAttTable->StoreData();
 	if (sAttrTable.length() == 0)
 	{
@@ -810,7 +819,7 @@ int BaseMapPropPage::exec()
 //-------------------------------
 // MapPropPage member functions
 MapPropPage::MapPropPage(const IlwisObject& obj)
-	: BaseMapPropPage(obj, TR("Raster Map"))
+: BaseMapPropPage(obj, TR("Raster Map"))
 {
 	SetMenHelpTopic("ilwismen\\raster_map_properties.htm");
 	m_fInGRCallBack = false;
@@ -832,11 +841,11 @@ void MapPropPage::SetCoordSystemField()
 	int iBytes = 1;
 	switch (mp->st())
 	{
-		case stINT: iBytes = 2; break;
-		case stLONG: iBytes = 4; break;
-		case stFLOAT: iBytes = 4; break;
-		case stREAL: iBytes = 8; break;
-		case stFOREIGNFORMAT: iBytes = 0; break; // unknown what storetype is used
+	case stINT: iBytes = 2; break;
+	case stLONG: iBytes = 4; break;
+	case stFLOAT: iBytes = 4; break;
+	case stREAL: iBytes = 8; break;
+	case stFOREIGNFORMAT: iBytes = 0; break; // unknown what storetype is used
 	}
 
 	if (fCIStrEqual(mp->fnObj.sExt, ".mpl"))  // is it a map internal to a maplist?
@@ -875,7 +884,7 @@ void MapPropPage::SetCoordSystemField()
 			m_fgr = new FieldGeoRefC(m_fgPageRoot, TR("&GeoReference"), &m_sNewGR, gr, mp, true);
 			m_fgr->SetBounds(m_bm->cs(), cbLoc);
 			m_fgr->SetCallBack((NotifyProc)&MapPropPage::GeoRefChange);
-			
+
 			String sDsc = sObjectDesc(gr);
 			m_stGRDsc = new InfoText(m_fgPageRoot, sDsc);
 			m_stGRDsc->psn->iBndDown = 0;
@@ -938,7 +947,7 @@ void MapPropPage::SetCoordSystemField()
 		fb->Align(st, AL_UNDER);
 	else
 		fb->Align(fex, AL_UNDER);
-	
+
 	// Display storage details
 	if (iBytes > 0)
 	{
@@ -999,7 +1008,7 @@ void MapPropPage::SetDomainValueRangeField()
 		PushButton *pb = new PushButton(m_fgValues, sBut, (NotifyProc)&MapPropPage::DoChangeValueRange);
 		pb->SetIndependentPos();
 		pb->Align(m_fvr, AL_AFTER);
-		
+
 		// Re-assign the callbacks; change item details
 		m_fvr->SetCallBack((NotifyProc)&MapPropPage::ValueRangeCallBack);  // currently only used to set to disabled state
 	}
@@ -1051,14 +1060,14 @@ void MapPropPage::SetMapDetails()
 		{
 			switch (pmp->interpolMethod()) 
 			{
-				case imBILINEAR:
-					if (st) st->psn->SetBound(0,0,0,0);
-					st = new InfoText(m_fgPageRoot, TR("BiLinear Interpolation"));
-					break;
-				case imBICUBIC:
-					if (st) st->psn->SetBound(0,0,0,0);
-					st = new InfoText(m_fgPageRoot, TR("BiCubic Interpolation"));
-					break;
+			case imBILINEAR:
+				if (st) st->psn->SetBound(0,0,0,0);
+				st = new InfoText(m_fgPageRoot, TR("BiLinear Interpolation"));
+				break;
+			case imBICUBIC:
+				if (st) st->psn->SetBound(0,0,0,0);
+				st = new InfoText(m_fgPageRoot, TR("BiCubic Interpolation"));
+				break;
 			}
 			feUnder = st;
 		}
@@ -1066,17 +1075,17 @@ void MapPropPage::SetMapDetails()
 		{
 			switch (pmp->interpolMethod())
 			{
-				case imBILINEAR:
-					m_fInterpol = true;
-					m_iInterPolMethod = 0;
-					break;
-				case imBICUBIC:
-					m_fInterpol = true;
-					m_iInterPolMethod = 1;
-					break;
-				default:
-					m_fInterpol = false;
-					m_iInterPolMethod = 0;
+			case imBILINEAR:
+				m_fInterpol = true;
+				m_iInterPolMethod = 0;
+				break;
+			case imBICUBIC:
+				m_fInterpol = true;
+				m_iInterPolMethod = 1;
+				break;
+			default:
+				m_fInterpol = false;
+				m_iInterPolMethod = 0;
 			}
 			CheckBox* cb = new CheckBox(m_fgPageRoot, TR("&Interpolation"), &m_fInterpol);
 			cb->SetIndependentPos();
@@ -1207,7 +1216,7 @@ int MapPropPage::DoChangeValueRange(Event*)
 	String sTitleIn = TR("Change &Value Range");
 	String sTitle(' ', sTitleIn.length());
 	copy_if(sTitleIn.begin(), sTitleIn.end(), sTitle.begin(), fCheckNoAmpers);
-	
+
 	ValueRangeChangeForm frm(GetParent(), sTitle, m_vr);
 	if (frm.fOkClicked())
 	{
@@ -1254,18 +1263,18 @@ void MapPropPage::StoreTypeInfo(StoreType st) const
 	int iBytes = 1;
 	switch (st)
 	{
-		case stINT:  iBytes = 2; break;
-		case stLONG: iBytes = 4; break;
-		case stREAL: iBytes = 8; break;
+	case stINT:  iBytes = 2; break;
+	case stLONG: iBytes = 4; break;
+	case stREAL: iBytes = 8; break;
 	}
 
-//	String sRemark = String(TR("Map uses %i "), iBytes);
-//	if (1 == iBytes)
-//		sRemark &= TR("byte");
-//	else  
-//		sRemark &= TR("bytes");
-//	sRemark &= TR("per pixel");  
-//	stStoreType->SetVal(sRemark);
+	//	String sRemark = String(TR("Map uses %i "), iBytes);
+	//	if (1 == iBytes)
+	//		sRemark &= TR("byte");
+	//	else  
+	//		sRemark &= TR("bytes");
+	//	sRemark &= TR("per pixel");  
+	//	stStoreType->SetVal(sRemark);
 }
 
 // reload current ValueRange in edit controls
@@ -1314,7 +1323,7 @@ int MapPropPage::exec()
 //-------------------------------
 // SegmentMapPropPage member functions
 SegmentMapPropPage::SegmentMapPropPage(const IlwisObject& obj)
-	: BaseMapPropPage(obj, TR("Segment Map"))
+: BaseMapPropPage(obj, TR("Segment Map"))
 {
 	SetMenHelpTopic("ilwismen\\segment_map_properties.htm");
 }
@@ -1327,15 +1336,15 @@ void SegmentMapPropPage::SetMapDetails()
 
 	StaticText* st;  
 	String s(TR("%li segments").c_str(), psm->iFeatures());
-    if (psm->iSegDeleted() > 0)
-      s &= String(TR(", including %li deleted ones.").c_str(), psm->iSegDeleted());
+	if (psm->iSegDeleted() > 0)
+		s &= String(TR(", including %li deleted ones.").c_str(), psm->iSegDeleted());
 	st = new InfoText(m_fgPageRoot, s);
 }
 
 //-------------------------------
 // PointMapPropPage member functions
 PointMapPropPage::PointMapPropPage(const IlwisObject& obj)
-	: BaseMapPropPage(obj, TR("Point Map"))
+: BaseMapPropPage(obj, TR("Point Map"))
 {
 	SetMenHelpTopic("ilwismen\\point_map_properties.htm");
 }
@@ -1354,7 +1363,7 @@ void PointMapPropPage::SetMapDetails()
 //-------------------------------
 // PolygonMapPropPage member functions
 PolygonMapPropPage::PolygonMapPropPage(const IlwisObject& obj)
-	: BaseMapPropPage(obj, TR("Polygon Map"))
+: BaseMapPropPage(obj, TR("Polygon Map"))
 {
 	SetMenHelpTopic("ilwismen\\polygon_map_properties.htm");
 }
@@ -1380,7 +1389,7 @@ void PolygonMapPropPage::SetMapDetails()
 //-------------------------------
 // AdditionalInfoPage member functions
 AdditionalInfoPage::AdditionalInfoPage(const IlwisObject& obj)
-	: BasicPropertyFormPage(obj, TR("Additional Info"))
+: BasicPropertyFormPage(obj, TR("Additional Info"))
 {
 }
 
@@ -1390,7 +1399,7 @@ void AdditionalInfoPage::BuildPage()
 
 	sInfo = m_obj->sAdditionalInfo();
 	DWORD style = WS_GROUP | WS_TABSTOP | ES_MULTILINE | ES_WANTRETURN|
-					ES_AUTOVSCROLL | WS_VSCROLL | WS_BORDER | ES_READONLY;        
+		ES_AUTOVSCROLL | WS_VSCROLL | WS_BORDER | ES_READONLY;        
 	FieldStringMulti* fsm = new FieldStringMulti(m_fgPageRoot, &sInfo, style);
 	fsm->SetFixedFont();
 	fsm->SetWidth(240);
@@ -1400,7 +1409,7 @@ void AdditionalInfoPage::BuildPage()
 //-------------------------------
 // TablePropPage member functions
 TablePropPage::TablePropPage(const IlwisObject& obj)
-	: BasicPropertyFormPage(obj, TR("Table"))
+: BasicPropertyFormPage(obj, TR("Table"))
 {
 	SetMenHelpTopic("ilwismen\\table_properties.htm");
 }
@@ -1409,41 +1418,45 @@ void TablePropPage::BuildPage()
 {
 	BasicPropertyFormPage::BuildPage();
 
-	Table tbl(m_obj->fnObj);
-	if (tbl->fUseAs()) // Foreign format
-	{
-		FileName fnData;
-		ObjectInfo::ReadElement("ForeignFormat", "Filename", tbl->fnObj, fnData);
-		if (fnData.fValid())
+	try{
+		Table tbl(m_obj->fnObj);
+		if (tbl.fValid() && tbl->fUseAs()) // Foreign format
 		{
-			String sData(TR("Table uses external data file %S").c_str(), fnData.sRelative(true, tbl->fnObj.sPath()));
-			new InfoText(m_fgPageRoot, sData);
+			FileName fnData;
+			ObjectInfo::ReadElement("ForeignFormat", "Filename", tbl->fnObj, fnData);
+			if (fnData.fValid())
+			{
+				String sData(TR("Table uses external data file %S").c_str(), fnData.sRelative(true, tbl->fnObj.sPath()));
+				new InfoText(m_fgPageRoot, sData);
+			}
 		}
-	}
-	
-	if (fCIStrEqual(tbl->dm()->fnObj.sExt, ".dom"))
-		new FieldObjShow(m_fgPageRoot, tbl->dm());
-	else
-		new InfoText(m_fgPageRoot, tbl->dm()->sTypeName());
 
-	StaticText* st;
-	String s(TR("%li records and %i columns.").c_str(), tbl->iRecs(), tbl->iCols());
-	st = new InfoText(m_fgPageRoot, s);
-	DomainSort* ds = tbl->dm()->pdsrt();
-	if (ds && ds->iNettoSize() != tbl->iRecs())
-	{
-		String s(TR("Netto %li records").c_str(), ds->iNettoSize());
-		st->psn->SetBound(0,0,0,0);
+		if (fCIStrEqual(tbl->dm()->fnObj.sExt, ".dom"))
+			new FieldObjShow(m_fgPageRoot, tbl->dm());
+		else
+			new InfoText(m_fgPageRoot, tbl->dm()->sTypeName());
+
+		StaticText* st;
+		String s(TR("%li records and %i columns.").c_str(), tbl->iRecs(), tbl->iCols());
 		st = new InfoText(m_fgPageRoot, s);
-	}
-	if (tbl->fDependent())
-		DisplayDefinition();
-	if ( tbl->getVersionBinary() == ILWIS::Version::bvFORMATFOREIGN) {
-		ObjectInfo::ReadElement("ForeignFormat","Query",tbl->fnObj,query);
-		FieldStringMulti *fsQuery = new FieldStringMulti(m_fgPageRoot, "Query", &query);
-		zDimension dim = fsQuery->Dim("gk");	
-		fsQuery->SetWidth((short)(15 * dim.width()));
-		fsQuery->SetHeight((short)(4 * dim.height()));
+		DomainSort* ds = tbl->dm()->pdsrt();
+		if (ds && ds->iNettoSize() != tbl->iRecs())
+		{
+			String s(TR("Netto %li records").c_str(), ds->iNettoSize());
+			st->psn->SetBound(0,0,0,0);
+			st = new InfoText(m_fgPageRoot, s);
+		}
+		if (tbl->fDependent())
+			DisplayDefinition();
+		if ( tbl->getVersionBinary() == ILWIS::Version::bvFORMATFOREIGN) {
+			ObjectInfo::ReadElement("ForeignFormat","Query",tbl->fnObj,query);
+			FieldStringMulti *fsQuery = new FieldStringMulti(m_fgPageRoot, "Query", &query);
+			zDimension dim = fsQuery->Dim("gk");	
+			fsQuery->SetWidth((short)(15 * dim.width()));
+			fsQuery->SetHeight((short)(4 * dim.height()));
+		}
+	} catch ( const ErrorObject& err) {
+		err.Show();
 	}
 }
 
@@ -1457,67 +1470,75 @@ int TablePropPage::exec()
 //-------------------------------
 // Table2DimPropPage member functions
 Table2DimPropPage::Table2DimPropPage(const IlwisObject& obj)
-	: BasicPropertyFormPage(obj, TR("2-dim Table"))
+: BasicPropertyFormPage(obj, TR("2-dim Table"))
 {
 	SetMenHelpTopic("ilwismen\\two_dimensional_table_properties.htm");
 }
 
 void Table2DimPropPage::BuildPage()
 {
-	BasicPropertyFormPage::BuildPage();
+	try{
+		BasicPropertyFormPage::BuildPage();
 
-	Table2Dim tbl(m_obj->fnObj);
-	StaticText *st1, *st2;
-	FieldObjShow* fos;
+		Table2Dim tbl(m_obj->fnObj);
+		StaticText *st1, *st2;
+		FieldObjShow* fos;
 
-	FieldGroup *fgDomainPrim = new FieldGroup(m_fgPageRoot);
-	st1 = new StaticText(fgDomainPrim, TR("Primary:"));
-	fos = new FieldObjShow(fgDomainPrim, tbl->dm1());  
-	fos->Align(st1, AL_AFTER);
+		FieldGroup *fgDomainPrim = new FieldGroup(m_fgPageRoot);
+		st1 = new StaticText(fgDomainPrim, TR("Primary:"));
+		fos = new FieldObjShow(fgDomainPrim, tbl->dm1());  
+		fos->Align(st1, AL_AFTER);
 
-	FieldGroup *fgDomainSec = new FieldGroup(m_fgPageRoot);
-	fgDomainSec->Align(fgDomainPrim, AL_UNDER);
-	st2 = new StaticText(fgDomainSec, TR("Secondary:"));
-	fos = new FieldObjShow(fgDomainSec, tbl->dm2());
-	fos->Align(st2, AL_AFTER);
+		FieldGroup *fgDomainSec = new FieldGroup(m_fgPageRoot);
+		fgDomainSec->Align(fgDomainPrim, AL_UNDER);
+		st2 = new StaticText(fgDomainSec, TR("Secondary:"));
+		fos = new FieldObjShow(fgDomainSec, tbl->dm2());
+		fos->Align(st2, AL_AFTER);
 
-	if (tbl->iCols() == 1)
-	{
-		Column col = tbl->colValue();
-		Domain dm = col->dm();
-		fos = new FieldObjShow(m_fgPageRoot, dm);
-		fos->Align(fgDomainSec, AL_UNDER);
-		if (col->vr().fValid() && !dm->pdbool() && !dm->pdi() && !dm->pdbit())
+		if (tbl->iCols() == 1)
 		{
-			StaticText *stValues = 0, *stPrecision = 0, *stUnit = 0;  // initialized in SetRangePrecFields
-			SetRangePrecFields(dm->pdv(), col->vr(), m_fgPageRoot, stValues, stPrecision, stUnit);
-		}  
+			Column col = tbl->colValue();
+			Domain dm = col->dm();
+			fos = new FieldObjShow(m_fgPageRoot, dm);
+			fos->Align(fgDomainSec, AL_UNDER);
+			if (col->vr().fValid() && !dm->pdbool() && !dm->pdi() && !dm->pdbit())
+			{
+				StaticText *stValues = 0, *stPrecision = 0, *stUnit = 0;  // initialized in SetRangePrecFields
+				SetRangePrecFields(dm->pdv(), col->vr(), m_fgPageRoot, stValues, stPrecision, stUnit);
+			}  
+		}
+	} catch ( const ErrorObject& err) {
+		err.Show();
 	}
 }
 
 //-------------------------------
 // HistogramPropPage member functions
 HistogramPropPage::HistogramPropPage(const IlwisObject& obj)
-	: BasicPropertyFormPage(obj, TR("Histogram"))
+: BasicPropertyFormPage(obj, TR("Histogram"))
 {
 	SetMenHelpTopic("ilwismen\\histogram_properties.htm");
 }
 
 void HistogramPropPage::BuildPage()
 {
-	BasicPropertyFormPage::BuildPage();
+	try{
+		BasicPropertyFormPage::BuildPage();
 
-	Table tbl(m_obj->fnObj);
-	if (fCIStrEqual(tbl->dm()->fnObj.sExt, ".dom"))
-		new FieldObjShow(m_fgPageRoot, tbl->dm());
-	else
-		new InfoText(m_fgPageRoot, tbl->dm()->sTypeName());
+		Table tbl(m_obj->fnObj);
+		if (fCIStrEqual(tbl->dm()->fnObj.sExt, ".dom"))
+			new FieldObjShow(m_fgPageRoot, tbl->dm());
+		else
+			new InfoText(m_fgPageRoot, tbl->dm()->sTypeName());
+	} catch ( const ErrorObject& err) {
+		err.Show();
+	}
 }
 
 //-------------------------------
 // GeoRefPropPage member functions
 GeoRefPropPage::GeoRefPropPage(const IlwisObject& obj)
-	: BasicPropertyFormPage(obj, TR("GeoReference"))
+: BasicPropertyFormPage(obj, TR("GeoReference"))
 {
 	SetMenHelpTopic("ilwismen\\georeference_properties.htm");
 	m_fm = 0;
@@ -1525,117 +1546,121 @@ GeoRefPropPage::GeoRefPropPage(const IlwisObject& obj)
 
 void GeoRefPropPage::BuildPage()
 {
-	BasicPropertyFormPage::BuildPage();
+	try{
+		BasicPropertyFormPage::BuildPage();
 
-	GeoRef grf(m_obj->fnObj);
+		GeoRef grf(m_obj->fnObj);
 
-	StaticText* st;
-	double rPix = rUNDEF;
-	String s;
-	if (!grf->fGeoRefNone())
-	{
-		RowCol rc = grf->rcSize();
-		s = String(TR("%li lines and %li columns.").c_str(), rc.Row, rc.Col);
-		st = new InfoText(m_fgPageRoot, s);
-		rPix = grf->rPixSize();
-	}
-	CoordSystem cs = grf->cs();
-	if (rUNDEF != rPix)
-	{
-		st->psn->SetBound(0,0,0,0);
-		if ( 0 != cs->pcsLatLon())
+		StaticText* st;
+		double rPix = rUNDEF;
+		String s;
+		if (!grf->fGeoRefNone())
 		{
-			String sDMS = LatLon::sDegree(rPix,15,false);//fShowMinus == false
-			s = String(TR("Pixel Size %S").c_str(),sDMS);		
+			RowCol rc = grf->rcSize();
+			s = String(TR("%li lines and %li columns.").c_str(), rc.Row, rc.Col);
+			st = new InfoText(m_fgPageRoot, s);
+			rPix = grf->rPixSize();
 		}
-		else
-			s = String(TR("Pixel Size %.3g m").c_str(), rPix);
-		st = new InfoText(m_fgPageRoot, s);
-	}
-	if (m_fReadOnly) 
-		new FieldObjShow(m_fgPageRoot, cs);
-	else
-	{
-		m_sNewCS = cs->sName();
-		m_fcs = new FieldCoordSystemC(m_fgPageRoot, TR("&Coordinate System"), &m_sNewCS);
-		m_fcs->SetCallBack((NotifyProc)&GeoRefPropPage::CoordSysChange);
-		
-		String sDsc = sObjectDesc(cs);
-		m_stCSDsc = new InfoText(m_fgPageRoot, sDsc);
-		m_stCSDsc->psn->iBndDown = 0;
-	}
-	s = String('X', 60);
-	m_stCS = new InfoText(m_fgPageRoot, s);
-	m_stCS->SetVal(String());   // clear string, set again in callback: CoordSysChange
-
-	// Display the boundaries of the GeoRef (as opposed to the boundaries of the CoordSys)
-	RowCol rcSize = grf->rcSize();
-	if (rcSize.Row != iUNDEF && rcSize.Col != iUNDEF)
-	{
-		FieldExtent *fex = new FieldExtent(m_fgPageRoot, grf);
-		String sTitle = String("%S of \"%S\"", TR("&Corner of Corner Coordinates"), grf->sName());
-		fex->SetTitle(sTitle);
-		FieldBlank *fb = new FieldBlank(m_fgPageRoot, 0); // Used to force proper alignment
-		fb->Align(fex, AL_UNDER);
-	}
-
-	gctp = grf->pgCTP();
-	if (gctp)
-	{
-		sRefMap = gctp->fnBackgroundMap.sFullNameQuoted();
-		if (m_fReadOnly)
+		CoordSystem cs = grf->cs();
+		if (rUNDEF != rPix)
 		{
-			String s = TR("&Background Map");
-			s &= " ";
-			s &= sRefMap;
+			st->psn->SetBound(0,0,0,0);
+			if ( 0 != cs->pcsLatLon())
+			{
+				String sDMS = LatLon::sDegree(rPix,15,false);//fShowMinus == false
+				s = String(TR("Pixel Size %S").c_str(),sDMS);		
+			}
+			else
+				s = String(TR("Pixel Size %.3g m").c_str(), rPix);
+			st = new InfoText(m_fgPageRoot, s);
+		}
+		if (m_fReadOnly) 
+			new FieldObjShow(m_fgPageRoot, cs);
+		else
+		{
+			m_sNewCS = cs->sName();
+			m_fcs = new FieldCoordSystemC(m_fgPageRoot, TR("&Coordinate System"), &m_sNewCS);
+			m_fcs->SetCallBack((NotifyProc)&GeoRefPropPage::CoordSysChange);
+
+			String sDsc = sObjectDesc(cs);
+			m_stCSDsc = new InfoText(m_fgPageRoot, sDsc);
+			m_stCSDsc->psn->iBndDown = 0;
+		}
+		s = String('X', 60);
+		m_stCS = new InfoText(m_fgPageRoot, s);
+		m_stCS->SetVal(String());   // clear string, set again in callback: CoordSysChange
+
+		// Display the boundaries of the GeoRef (as opposed to the boundaries of the CoordSys)
+		RowCol rcSize = grf->rcSize();
+		if (rcSize.Row != iUNDEF && rcSize.Col != iUNDEF)
+		{
+			FieldExtent *fex = new FieldExtent(m_fgPageRoot, grf);
+			String sTitle = String("%S of \"%S\"", TR("&Corner of Corner Coordinates"), grf->sName());
+			fex->SetTitle(sTitle);
+			FieldBlank *fb = new FieldBlank(m_fgPageRoot, 0); // Used to force proper alignment
+			fb->Align(fex, AL_UNDER);
+		}
+
+		gctp = grf->pgCTP();
+		if (gctp)
+		{
+			sRefMap = gctp->fnBackgroundMap.sFullNameQuoted();
+			if (m_fReadOnly)
+			{
+				String s = TR("&Background Map");
+				s &= " ";
+				s &= sRefMap;
+				new InfoText(m_fgPageRoot, s);
+			}
+			else
+			{
+				m_fm = new FieldDataType(m_fgPageRoot, TR("&Background Map"), &sRefMap, new MapListerGeoRef(grf->fnObj), true);
+				m_fm->SetAllowEmpty(true);
+				m_fm->SetCallBack((NotifyProc)&GeoRefPropPage::RefMapChange);
+			}
+		}
+		Map mapDTM;
+		GeoRef3D* g3d = grf->pg3d();
+		GeoRefOrthoPhoto* gop = grf->pgOrthoPhoto();
+		GeoRefDirectLinear* gdl = grf->pgDirectLinear();
+		GeoRefParallelProjective* gpp = grf->pgParallelProjective();
+		if (g3d)
+			mapDTM = g3d->mapDTM;
+		if (gop)
+			mapDTM = gop->mapDTM;
+		if (gdl)
+			mapDTM = gdl->mapDTM;
+		if (gpp)
+			mapDTM = gpp->mapDTM;
+
+		if (mapDTM.fValid())
+		{
+			FieldGroup* fgDTM = new FieldGroup(m_fgPageRoot);
+			StaticText *stDTM = new InfoText(fgDTM, TR("DTM"));
+			FieldObjShow *fos = new FieldObjShow(fgDTM, mapDTM);
+			fos->Align(stDTM, AL_AFTER);
+
+			RowCol rcDTM = mapDTM->rcSize();
+			String s = String(TR("%li lines and %li columns.").c_str(), rcDTM.Row, rcDTM.Col);
+
+			st = new InfoText(m_fgPageRoot, s);
+			st->psn->SetBound(0,0,0,0);
+			st->Align(fgDTM, AL_UNDER);
+			CoordBounds cbDTM = mapDTM->cb();
+			CoordSystem csDTM = mapDTM->cs();
+			if (csDTM.fValid() && !csDTM->fUnknown() && !csDTM->cb.fUndef())
+				s = String(TR("with boundaries: %S and %S.").c_str(),
+				csDTM->sValue(cbDTM.cMin,0),
+				csDTM->sValue(cbDTM.cMax,0));
 			new InfoText(m_fgPageRoot, s);
 		}
-		else
-		{
-			m_fm = new FieldDataType(m_fgPageRoot, TR("&Background Map"), &sRefMap, new MapListerGeoRef(grf->fnObj), true);
-			m_fm->SetAllowEmpty(true);
-			m_fm->SetCallBack((NotifyProc)&GeoRefPropPage::RefMapChange);
-		}
+
+		s = String('X', 55);
+		m_stRemark = new InfoText(m_fgPageRoot, s);
+		m_stRemark->SetVal(String());   // clear remark string
+	} catch ( const ErrorObject& err) {
+		err.Show();
 	}
-	Map mapDTM;
-	GeoRef3D* g3d = grf->pg3d();
-	GeoRefOrthoPhoto* gop = grf->pgOrthoPhoto();
-	GeoRefDirectLinear* gdl = grf->pgDirectLinear();
-	GeoRefParallelProjective* gpp = grf->pgParallelProjective();
-	if (g3d)
-		mapDTM = g3d->mapDTM;
-	if (gop)
-		mapDTM = gop->mapDTM;
-	if (gdl)
-		mapDTM = gdl->mapDTM;
-	if (gpp)
-		mapDTM = gpp->mapDTM;
-
-	if (mapDTM.fValid())
-	{
-		FieldGroup* fgDTM = new FieldGroup(m_fgPageRoot);
-		StaticText *stDTM = new InfoText(fgDTM, TR("DTM"));
-		FieldObjShow *fos = new FieldObjShow(fgDTM, mapDTM);
-		fos->Align(stDTM, AL_AFTER);
-
-		RowCol rcDTM = mapDTM->rcSize();
-		String s = String(TR("%li lines and %li columns.").c_str(), rcDTM.Row, rcDTM.Col);
-
-		st = new InfoText(m_fgPageRoot, s);
-		st->psn->SetBound(0,0,0,0);
-		st->Align(fgDTM, AL_UNDER);
-		CoordBounds cbDTM = mapDTM->cb();
-		CoordSystem csDTM = mapDTM->cs();
-		if (csDTM.fValid() && !csDTM->fUnknown() && !csDTM->cb.fUndef())
-			s = String(TR("with boundaries: %S and %S.").c_str(),
-								csDTM->sValue(cbDTM.cMin,0),
-								csDTM->sValue(cbDTM.cMax,0));
-		new InfoText(m_fgPageRoot, s);
-	}
-	
-	s = String('X', 55);
-	m_stRemark = new InfoText(m_fgPageRoot, s);
-	m_stRemark->SetVal(String());   // clear remark string
 }
 
 // Callback functions
@@ -1655,8 +1680,8 @@ int GeoRefPropPage::RefMapChange(Event*)
 		}
 		else
 			m_stRemark->SetVal(String());
-		
-	return 0;
+
+		return 0;
 }
 
 int GeoRefPropPage::CoordSysChange(Event*)
@@ -1693,7 +1718,7 @@ int GeoRefPropPage::CoordSysChange(Event*)
 		}
 		else
 			sRem = TR("Invalid Coordinate System");
-		
+
 		m_stRemark->SetVal(sRem);
 	}
 
@@ -1733,150 +1758,158 @@ int GeoRefPropPage::exec()
 //-------------------------------
 // CoordSystemPropPage member functions
 CoordSystemPropPage::CoordSystemPropPage(const IlwisObject& obj)
-	: BasicPropertyFormPage(obj, TR("Coordinate System"))
+: BasicPropertyFormPage(obj, TR("Coordinate System"))
 {
 	SetMenHelpTopic("ilwismen\\coordinate_system_properties.htm");
 }
 
 void CoordSystemPropPage::BuildPage()
 {
-	BasicPropertyFormPage::BuildPage();
+	try{
+		BasicPropertyFormPage::BuildPage();
 
-	CoordSystem cs(m_obj->fnObj);
-	String s;
-	if (cs.fValid() && !cs->fUnknown() && !cs->cb.fUndef())
-		s = String(TR("Boundaries: %S and %S.").c_str(),
-					cs->sValue(cs->cb.cMin,0),
-					cs->sValue(cs->cb.cMax,0));
-	StaticText* st = new InfoText(m_fgPageRoot, s);
+		CoordSystem cs(m_obj->fnObj);
+		String s;
+		if (cs.fValid() && !cs->fUnknown() && !cs->cb.fUndef())
+			s = String(TR("Boundaries: %S and %S.").c_str(),
+			cs->sValue(cs->cb.cMin,0),
+			cs->sValue(cs->cb.cMax,0));
+		StaticText* st = new InfoText(m_fgPageRoot, s);
 
-	CoordSystemDirect* csd = cs->pcsDirect();
-	if (csd)
-	{
-		st->psn->SetBound(0,0,0,0);
-		s = String(TR("Related Coordinate System: %S").c_str(), csd->csOther->sName());
-		st = new InfoText(m_fgPageRoot, s);
-		CoordSystemCTP* csc = cs->pcsCTP();
-		if (csc)
+		CoordSystemDirect* csd = cs->pcsDirect();
+		if (csd)
 		{
-			m_sRefMap = csc->fnBackgroundMap.sRelative();
-			String s = TR("&Background Map");
-			s &= " ";
-			s &= m_sRefMap;
-			new InfoText(m_fgPageRoot, s);
-
-			Map mapDTM;
-			CoordSystemOrthoPhoto *cso = cs->pcsOrthoPhoto();
-			CoordSystemDirectLinear *csd = cs->pcsDirectLinear();
-			if (cso)
-				mapDTM = cso->mapDTM;
-			if (csd)
-				mapDTM = csd->mapDTM;
-
-			if (mapDTM.fValid())
+			st->psn->SetBound(0,0,0,0);
+			s = String(TR("Related Coordinate System: %S").c_str(), csd->csOther->sName());
+			st = new InfoText(m_fgPageRoot, s);
+			CoordSystemCTP* csc = cs->pcsCTP();
+			if (csc)
 			{
-				RowCol rcDTM = mapDTM->rcSize();
-				String s = String("%S \"%S\", %S", TR("DTM"), mapDTM->sName(),
-													String(TR("%li lines and %li columns.").c_str(), rcDTM.Row, rcDTM.Col));
-				st = new InfoText(m_fgPageRoot, s);
-				st->psn->SetBound(0,0,0,0);
-				CoordBounds cbDTM = mapDTM->cb();
-				CoordSystem csDTM = mapDTM->cs();
-				if (csDTM.fValid() && !csDTM->fUnknown() && !csDTM->cb.fUndef())
-					s = String(TR("with boundaries: %S and %S.").c_str(),
-										csDTM->sValue(cbDTM.cMin,0),
-										csDTM->sValue(cbDTM.cMax,0));
+				m_sRefMap = csc->fnBackgroundMap.sRelative();
+				String s = TR("&Background Map");
+				s &= " ";
+				s &= m_sRefMap;
 				new InfoText(m_fgPageRoot, s);
+
+				Map mapDTM;
+				CoordSystemOrthoPhoto *cso = cs->pcsOrthoPhoto();
+				CoordSystemDirectLinear *csd = cs->pcsDirectLinear();
+				if (cso)
+					mapDTM = cso->mapDTM;
+				if (csd)
+					mapDTM = csd->mapDTM;
+
+				if (mapDTM.fValid())
+				{
+					RowCol rcDTM = mapDTM->rcSize();
+					String s = String("%S \"%S\", %S", TR("DTM"), mapDTM->sName(),
+						String(TR("%li lines and %li columns.").c_str(), rcDTM.Row, rcDTM.Col));
+					st = new InfoText(m_fgPageRoot, s);
+					st->psn->SetBound(0,0,0,0);
+					CoordBounds cbDTM = mapDTM->cb();
+					CoordSystem csDTM = mapDTM->cs();
+					if (csDTM.fValid() && !csDTM->fUnknown() && !csDTM->cb.fUndef())
+						s = String(TR("with boundaries: %S and %S.").c_str(),
+						csDTM->sValue(cbDTM.cMin,0),
+						csDTM->sValue(cbDTM.cMax,0));
+					new InfoText(m_fgPageRoot, s);
+				}
 			}
 		}
-	}
-	CoordSystemProjection* csp = cs->pcsProjection();
-	if (csp && csp->prj.fValid())
-	{
-		st->psn->SetBound(0,0,0,0);
-		s = String(TR("Projection: %S").c_str(), csp->prj->sName());
-		st = new InfoText(m_fgPageRoot, s);
-		if (abs(csp->prj->iGetZoneNr()) <= csp->prj->iMaxZoneNr()) {
-			st->psn->SetBound(0,0,0,0);
-			s = String(TR("Zone Number: %li").c_str(),csp->prj->iGetZoneNr());
-			st = new InfoText(m_fgPageRoot, s);
-		}
-		if (csp->prj->sName() == "utm")
-		{
-			if (csp->prj->fGetHemisphereN() == true) 
-				s = String(TR("Hemisphere North"));
-			if (csp->prj->fGetHemisphereN() == false) 
-				s = String(TR("Hemisphere South"));
-			if (s.length()) st = new InfoText(m_fgPageRoot, s);
-		}
-		if (abs(csp->prj->lam0) < M_PI) {
-			st->psn->SetBound(0,0,0,0);
-			s = String(TR("Central Meridian: %.8lf degrees").c_str(),csp->prj->lam0*180/M_PI);
-			st = new InfoText(m_fgPageRoot, s);
-		}
-		if (abs(csp->prj->rGetCentralScaleFactor()) != 1){
-			st->psn->SetBound(0,0,0,0);
-			s = String(TR("Scale Factor at Central Meridian: %.8lf").c_str(),csp->prj->rGetCentralScaleFactor());
-			st = new InfoText(m_fgPageRoot, s);
-		}
-	}
-	CoordSystemViaLatLon* csvll = cs->pcsViaLatLon();
-	if (csvll)
-	{
-		if (csvll->datum)
+		CoordSystemProjection* csp = cs->pcsProjection();
+		if (csp && csp->prj.fValid())
 		{
 			st->psn->SetBound(0,0,0,0);
-			String s= TR("Datum: ");
-			s &= csvll->datum->sName();
+			s = String(TR("Projection: %S").c_str(), csp->prj->sName());
 			st = new InfoText(m_fgPageRoot, s);
-			if (csvll->datum->sArea.length())
-			{
+			if (abs(csp->prj->iGetZoneNr()) <= csp->prj->iMaxZoneNr()) {
 				st->psn->SetBound(0,0,0,0);
-				s = TR("Datum Area: ");
-				s &= csvll->datum->sArea;
+				s = String(TR("Zone Number: %li").c_str(),csp->prj->iGetZoneNr());
+				st = new InfoText(m_fgPageRoot, s);
+			}
+			if (csp->prj->sName() == "utm")
+			{
+				if (csp->prj->fGetHemisphereN() == true) 
+					s = String(TR("Hemisphere North"));
+				if (csp->prj->fGetHemisphereN() == false) 
+					s = String(TR("Hemisphere South"));
+				if (s.length()) st = new InfoText(m_fgPageRoot, s);
+			}
+			if (abs(csp->prj->lam0) < M_PI) {
+				st->psn->SetBound(0,0,0,0);
+				s = String(TR("Central Meridian: %.8lf degrees").c_str(),csp->prj->lam0*180/M_PI);
+				st = new InfoText(m_fgPageRoot, s);
+			}
+			if (abs(csp->prj->rGetCentralScaleFactor()) != 1){
+				st->psn->SetBound(0,0,0,0);
+				s = String(TR("Scale Factor at Central Meridian: %.8lf").c_str(),csp->prj->rGetCentralScaleFactor());
 				st = new InfoText(m_fgPageRoot, s);
 			}
 		}
-		st->psn->SetBound(0,0,0,0);
-		if (csvll->ell.fSpherical())
+		CoordSystemViaLatLon* csvll = cs->pcsViaLatLon();
+		if (csvll)
 		{
-			double rRadius = csvll->ell.a;
-			if (rRadius < 0.001) {
-				Ellipsoid* ell = new Ellipsoid("Sphere");// authalic sphere
-				rRadius = ell->a;//was: 6371007, now: 6371007.1809185;//sphere with equal area as WGS 84
+			if (csvll->datum)
+			{
+				st->psn->SetBound(0,0,0,0);
+				String s= TR("Datum: ");
+				s &= csvll->datum->sName();
+				st = new InfoText(m_fgPageRoot, s);
+				if (csvll->datum->sArea.length())
+				{
+					st->psn->SetBound(0,0,0,0);
+					s = TR("Datum Area: ");
+					s &= csvll->datum->sArea;
+					st = new InfoText(m_fgPageRoot, s);
+				}
 			}
-			String s("%S %.7f", TR("Sphere &Radius (m)"), rRadius);
-			st = new InfoText(m_fgPageRoot, s);
+			st->psn->SetBound(0,0,0,0);
+			if (csvll->ell.fSpherical())
+			{
+				double rRadius = csvll->ell.a;
+				if (rRadius < 0.001) {
+					Ellipsoid* ell = new Ellipsoid("Sphere");// authalic sphere
+					rRadius = ell->a;//was: 6371007, now: 6371007.1809185;//sphere with equal area as WGS 84
+				}
+				String s("%S %.7f", TR("Sphere &Radius (m)"), rRadius);
+				st = new InfoText(m_fgPageRoot, s);
+			}
+			else
+			{
+				String s = TR("Ellipsoid: ");
+				s &= csvll->ell.sName;
+				st = new InfoText(m_fgPageRoot, s);
+			}
 		}
-		else
-		{
-			String s = TR("Ellipsoid: ");
-			s &= csvll->ell.sName;
-			st = new InfoText(m_fgPageRoot, s);
-		}
+	} catch ( const ErrorObject& err) {
+		err.Show();
 	}
 }
 
 //-------------------------------
 // RepresentationPropPage member functions
 RepresentationPropPage::RepresentationPropPage(const IlwisObject& obj)
-	: BasicPropertyFormPage(obj, TR("Representation"))
+: BasicPropertyFormPage(obj, TR("Representation"))
 {
 	SetMenHelpTopic("ilwismen\\representation_properties.htm");
 }
 
 void RepresentationPropPage::BuildPage()
 {
-	BasicPropertyFormPage::BuildPage();
+	try{
+		BasicPropertyFormPage::BuildPage();
 
-	Representation rpr(m_obj->fnObj);
-	new FieldObjShow(m_fgPageRoot, rpr->dm());
+		Representation rpr(m_obj->fnObj);
+		new FieldObjShow(m_fgPageRoot, rpr->dm());
+	} catch ( const ErrorObject& err) {
+		err.Show();
+	}
 }
 
 //-------------------------------
 // DomainPropPage member functions
 DomainPropPage::DomainPropPage(const IlwisObject& obj)
-	: BasicPropertyFormPage(obj, TR("Domain")), m_frc(0), m_ftAttTable(0)
+: BasicPropertyFormPage(obj, TR("Domain")), m_frc(0), m_ftAttTable(0)
 {
 	SetMenHelpTopic("ilwismen\\domain_properties.htm");
 	m_fAttrTable = false;
@@ -1889,119 +1922,123 @@ String DomainPropPage::sDomainConvertCommand()
 
 void DomainPropPage::BuildPage()
 {
-	BasicPropertyFormPage::BuildPage();
+	try{
+		BasicPropertyFormPage::BuildPage();
 
-	Domain dm(m_obj->fnObj);
+		Domain dm(m_obj->fnObj);
 
-	m_iWidth = dm->iWidth();
-	if (m_fReadOnly)
-	{
-		String s("%i", m_iWidth);
-		StaticText *stWidthCaption = new StaticText(m_fgPageRoot, TR("&Width"));
-		StaticText *stWidth = new StaticText(m_fgPageRoot, s);
-		stWidth->Align(stWidthCaption, AL_AFTER);
-		FieldBlank *fb = new FieldBlank(m_fgPageRoot, 0);
-		fb->Align(stWidthCaption, AL_UNDER);
-	}
-	else
-		new FieldInt(m_fgPageRoot, TR("&Width"), &m_iWidth);
-
-	DomainSort* ds = dm->pdsrt();
-	if (ds)
-	{
-		m_fAttrTable = ds->fTblAtt();
-		m_sAttrTable = ds->sName(false);
-		m_sAttrTable &= ".tbt";
-		if (m_fAttrTable)
-		{
-			Table tbl = ds->tblAtt();
-			if (tbl.fValid())
-				m_sAttrTable = tbl->sName(true);
-		}
-		else
-			m_sAttrTable = String();
-
+		m_iWidth = dm->iWidth();
 		if (m_fReadOnly)
 		{
+			String s("%i", m_iWidth);
+			StaticText *stWidthCaption = new StaticText(m_fgPageRoot, TR("&Width"));
+			StaticText *stWidth = new StaticText(m_fgPageRoot, s);
+			stWidth->Align(stWidthCaption, AL_AFTER);
+			FieldBlank *fb = new FieldBlank(m_fgPageRoot, 0);
+			fb->Align(stWidthCaption, AL_UNDER);
+		}
+		else
+			new FieldInt(m_fgPageRoot, TR("&Width"), &m_iWidth);
+
+		DomainSort* ds = dm->pdsrt();
+		if (ds)
+		{
+			m_fAttrTable = ds->fTblAtt();
+			m_sAttrTable = ds->sName(false);
+			m_sAttrTable &= ".tbt";
 			if (m_fAttrTable)
 			{
-				String s = TR("&Attribute Table");
-				s &= " ";
-				s &= m_sAttrTable;
-				new StaticText(m_fgPageRoot, s);
+				Table tbl = ds->tblAtt();
+				if (tbl.fValid())
+					m_sAttrTable = tbl->sName(true);
+			}
+			else
+				m_sAttrTable = String();
+
+			if (m_fReadOnly)
+			{
+				if (m_fAttrTable)
+				{
+					String s = TR("&Attribute Table");
+					s &= " ";
+					s &= m_sAttrTable;
+					new StaticText(m_fgPageRoot, s);
+				}
+			}
+			else
+			{
+				CheckBox* cb = new CheckBox(m_fgPageRoot, TR("&Attribute Table"), &m_fAttrTable);
+				m_ftAttTable = new FieldTableC(cb, "", &m_sAttrTable, dm);
+				m_ftAttTable->SetCallBack((NotifyProc)&DomainPropPage::CallBackAttTableChange); 
+				String s('X', 50);
+				m_stAttTable = new InfoText(cb, s);
+				m_stAttTable->Align(cb, AL_UNDER);
+				m_stAttTable->SetVal(String());   // clear string
+			}
+
+			String s(TR("Domain contains %li items").c_str(), ds->iNettoSize());
+			new InfoText(m_fgPageRoot, s);
+		}
+		else if (dm->pdp())
+		{
+			String s(TR("Domain contains %i colors").c_str(), dm->pdp()->iColors());
+			new InfoText(m_fgPageRoot, s);
+		}
+		if (dm->pdvr() || dm->pdvi() || dm->pdi() || dm->pdp() || dm->pdc())
+		{
+			try
+			{
+				Representation rpr = dm->rpr();
+				if (rpr.fValid())
+					m_sRprName = rpr->sName(true);
+			}
+			catch (ErrorObject& err)
+			{
+				err.Show(TR("Representation Change"));
+			}
+
+			if (m_fReadOnly)
+			{
+				new FieldObjShow(m_fgPageRoot, dm->rpr());  
+
+			}
+			else
+			{
+				m_frc = new FieldRepresentationC(m_fgPageRoot, TR("&Representation"), &m_sRprName, dm);
+				m_frc->SetCallBack((NotifyProc)&DomainPropPage::CallBackRprChange);
+
+				String sFill('x', 55);
+				m_stRpr = new InfoText(m_fgPageRoot, sFill);
+				m_stRpr->SetVal(String());
+			}
+			DomainValue* dv = dm->pdv();
+			if (0 != dv) 
+			{
+				ValueRange vr(dm);
+				StaticText *stValues = 0, *stPrecision = 0, *stUnit = 0;  // Initialized in SetRangePrecFields
+				SetRangePrecFields(dv, vr, m_fgPageRoot, stValues, stPrecision, stUnit);
+				StaticText* st = 0;
+				if (dv->fFixedPrecision() && dv->fFixedRange())
+					st = new StaticText(m_fgPageRoot, TR("Fixed Range and Precision"));
+				else if (dv->fFixedPrecision())  
+					st = new StaticText(m_fgPageRoot, TR("Fixed Precision"));
+				else if (dv->fFixedRange())
+					st = new StaticText(m_fgPageRoot, TR("Fixed Range"));
+				if (st)
+					st->SetIndependentPos();
 			}
 		}
-		else
+		if (!m_fReadOnly)
 		{
-			CheckBox* cb = new CheckBox(m_fgPageRoot, TR("&Attribute Table"), &m_fAttrTable);
-			m_ftAttTable = new FieldTableC(cb, "", &m_sAttrTable, dm);
-			m_ftAttTable->SetCallBack((NotifyProc)&DomainPropPage::CallBackAttTableChange); 
-			String s('X', 50);
-			m_stAttTable = new InfoText(cb, s);
-			m_stAttTable->Align(cb, AL_UNDER);
-			m_stAttTable->SetVal(String());   // clear string
+			if (dm->pdid())
+				(new PushButton(m_fgPageRoot, TR("Convert to classes"), (NotifyProc)&DomainPropPage::ToClasses))->SetIndependentPos();
+			if (dm->pdc())
+				(new PushButton(m_fgPageRoot, TR("Convert to identifiers"), (NotifyProc)&DomainPropPage::ToIds))->SetIndependentPos();
+			if (dm->pdp())
+				(new PushButton(m_fgPageRoot, TR("Convert to classes"), (NotifyProc)&DomainPropPage::PictureToClasses))->SetIndependentPos();
 		}
-
-		String s(TR("Domain contains %li items").c_str(), ds->iNettoSize());
-		new InfoText(m_fgPageRoot, s);
-	}
-	else if (dm->pdp())
-	{
-		String s(TR("Domain contains %i colors").c_str(), dm->pdp()->iColors());
-		new InfoText(m_fgPageRoot, s);
-	}
-	if (dm->pdvr() || dm->pdvi() || dm->pdi() || dm->pdp() || dm->pdc())
-	{
-		try
-		{
-			Representation rpr = dm->rpr();
-			if (rpr.fValid())
-				m_sRprName = rpr->sName(true);
-		}
-		catch (ErrorObject& err)
-		{
-			err.Show(TR("Representation Change"));
-		}
-
-		if (m_fReadOnly)
-		{
-			new FieldObjShow(m_fgPageRoot, dm->rpr());  
-
-		}
-		else
-		{
-			m_frc = new FieldRepresentationC(m_fgPageRoot, TR("&Representation"), &m_sRprName, dm);
-			m_frc->SetCallBack((NotifyProc)&DomainPropPage::CallBackRprChange);
-
-			String sFill('x', 55);
-			m_stRpr = new InfoText(m_fgPageRoot, sFill);
-			m_stRpr->SetVal(String());
-		}
-		DomainValue* dv = dm->pdv();
-		if (0 != dv) 
-		{
-			ValueRange vr(dm);
-			StaticText *stValues = 0, *stPrecision = 0, *stUnit = 0;  // Initialized in SetRangePrecFields
-			SetRangePrecFields(dv, vr, m_fgPageRoot, stValues, stPrecision, stUnit);
-			StaticText* st = 0;
-			if (dv->fFixedPrecision() && dv->fFixedRange())
-				st = new StaticText(m_fgPageRoot, TR("Fixed Range and Precision"));
-			else if (dv->fFixedPrecision())  
-				st = new StaticText(m_fgPageRoot, TR("Fixed Precision"));
-			else if (dv->fFixedRange())
-				st = new StaticText(m_fgPageRoot, TR("Fixed Range"));
-			if (st)
-				st->SetIndependentPos();
-		}
-	}
-	if (!m_fReadOnly)
-	{
-		if (dm->pdid())
-			(new PushButton(m_fgPageRoot, TR("Convert to classes"), (NotifyProc)&DomainPropPage::ToClasses))->SetIndependentPos();
-		if (dm->pdc())
-			(new PushButton(m_fgPageRoot, TR("Convert to identifiers"), (NotifyProc)&DomainPropPage::ToIds))->SetIndependentPos();
-		if (dm->pdp())
-			(new PushButton(m_fgPageRoot, TR("Convert to classes"), (NotifyProc)&DomainPropPage::PictureToClasses))->SetIndependentPos();
+	} catch ( const ErrorObject& err) {
+		err.Show();
 	}
 }
 
@@ -2124,7 +2161,7 @@ int DomainPropPage::exec()
 	DomainSort *ds = dm->pdsrt();
 	if (0 == m_ftAttTable || !ds)
 		return 0;
-	
+
 	Table tbl; 
 	if (m_fAttrTable)
 	{
@@ -2156,7 +2193,7 @@ int DomainPropPage::exec()
 			fNeedChange = (tbl != tblAtt);
 		}
 		if (fNeedChange)  // Only set in case the domain did NOT have an attribute table or
-			              // another table has been specified
+			// another table has been specified
 		{
 			if (ds->fEqual(*tbl->dm().ptr()))
 				ds->SetAttributeTable(tbl);
@@ -2171,61 +2208,64 @@ int DomainPropPage::exec()
 //-------------------------------
 // SampleSetPropPage member functions
 SampleSetPropPage::SampleSetPropPage(const IlwisObject& obj)
-	: BasicPropertyFormPage(obj, TR("Sample Set"))
+: BasicPropertyFormPage(obj, TR("Sample Set"))
 {
 	SetMenHelpTopic("ilwismen\\sample_set_properties.htm");
 }
 
 void SampleSetPropPage::BuildPage()
 {
-	BasicPropertyFormPage::BuildPage();
+	try{
+		BasicPropertyFormPage::BuildPage();
 
-	SampleSet sams(m_obj->fnObj);
-	sms = sams.ptr();
+		SampleSet sams(m_obj->fnObj);
+		sms = sams.ptr();
 
-	new FieldObjShow(m_fgPageRoot, sms->dm());  
-	Map mp = sms->mapBack();
-	if (mp.fValid())
-		sBgMap = mp->fnObj.sFullNameQuoted();
-	MapList mpl = sms->mpl();
-	if (mpl.fValid())
-		sMapList = mpl->fnObj.sFullNameQuoted();
-	Map mpSmp = sms->map();
-	if (mpSmp.fValid())
-		sSmpMap = mpSmp->fnObj.sFullNameQuoted();
+		new FieldObjShow(m_fgPageRoot, sms->dm());  
+		Map mp = sms->mapBack();
+		if (mp.fValid())
+			sBgMap = mp->fnObj.sFullNameQuoted();
+		MapList mpl = sms->mpl();
+		if (mpl.fValid())
+			sMapList = mpl->fnObj.sFullNameQuoted();
+		Map mpSmp = sms->map();
+		if (mpSmp.fValid())
+			sSmpMap = mpSmp->fnObj.sFullNameQuoted();
 
-	CDC *cdc = CWnd::GetDesktopWindow()->GetWindowDC();
-	fPalette = (cdc->GetDeviceCaps(RASTERCAPS) & RC_PALETTE) != 0;
-	if (m_fReadOnly)
-	{
-		String s;
-		s = TR("&Sample map");
-		s &= " ";
-		s &= sSmpMap;
-		new StaticText(m_fgPageRoot, s);
-		s = TR("&Map List");
-		s &= " ";
-		s &= sMapList;
-		new StaticText(m_fgPageRoot, s);
-		if (fPalette)
+		CDC *cdc = CWnd::GetDesktopWindow()->GetWindowDC();
+		fPalette = (cdc->GetDeviceCaps(RASTERCAPS) & RC_PALETTE) != 0;
+		if (m_fReadOnly)
 		{
-			s = TR("&Background");
+			String s;
+			s = TR("&Sample map");
 			s &= " ";
-			s &= sBgMap;
+			s &= sSmpMap;
 			new StaticText(m_fgPageRoot, s);
+			s = TR("&Map List");
+			s &= " ";
+			s &= sMapList;
+			new StaticText(m_fgPageRoot, s);
+			if (fPalette)
+			{
+				s = TR("&Background");
+				s &= " ";
+				s &= sBgMap;
+				new StaticText(m_fgPageRoot, s);
+			}
 		}
-	}
-	else
-	{
-		FieldGroup* fg = new FieldGroup(m_fgPageRoot, true);
+		else
+		{
+			FieldGroup* fg = new FieldGroup(m_fgPageRoot, true);
 
-		MapListerDomainAndGeoRef *ol = new MapListerDomainAndGeoRef(mpl->gr()->fnObj, mpl->rcSize(), sms->dm()->fnObj);
-		m_fldMap = new FieldMap(fg, TR("&Sample map"), &sSmpMap, ol);
-		m_fldMPL = new FieldMapList(fg, TR("&Map List"), &sMapList);
-		m_fldMPL->SetCallBack((NotifyProc)&SampleSetPropPage::MapListChange);
-		if (fPalette)
-			new FieldMap(fg, TR("&Background"), &sBgMap);
-	}  
+			MapListerDomainAndGeoRef *ol = new MapListerDomainAndGeoRef(mpl->gr()->fnObj, mpl->rcSize(), sms->dm()->fnObj);
+			m_fldMap = new FieldMap(fg, TR("&Sample map"), &sSmpMap, ol);
+			m_fldMPL = new FieldMapList(fg, TR("&Map List"), &sMapList);
+			m_fldMPL->SetCallBack((NotifyProc)&SampleSetPropPage::MapListChange);
+			if (fPalette)
+				new FieldMap(fg, TR("&Background"), &sBgMap);
+		} 	} catch ( const ErrorObject& err) {
+			err.Show();
+		} 
 }
 
 int SampleSetPropPage::MapListChange(Event*)
@@ -2286,7 +2326,7 @@ int SampleSetPropPage::exec()
 //-------------------------------
 // MapListPropPage member functions
 MapListPropPage::MapListPropPage(const IlwisObject& obj)
-	: BasicPropertyFormPage(obj, TR("Map List"))
+: BasicPropertyFormPage(obj, TR("Map List"))
 {
 	SetMenHelpTopic("ilwismen\\map_list_properties.htm");
 	m_fInGRCallBack = false;
@@ -2297,87 +2337,90 @@ MapListPropPage::MapListPropPage(const IlwisObject& obj)
 
 void MapListPropPage::BuildPage()
 {
-	BasicPropertyFormPage::BuildPage();
-	
-	
-	if (mpl->fUseAs())
-	{
-		FileName fnData;
-		// First check if foreign format
-		ObjectInfo::ReadElement("ForeignFormat:1", "Filename", mpl->fnObj, fnData);
-		if (!fnData.fValid()) // No foreign format, check native
-			ObjectInfo::ReadElement("MapStore:1", "Data", mpl->fnObj, fnData);
-		String sData(TR("Map list uses external data file %S").c_str(), fnData.sRelative(true, mpl->fnObj.sPath()));
-		new InfoText(m_fgPageRoot, sData);
-	}
-	
-	int iMaps = mpl->iSize();
-	if (iMaps > 0 || ! mpl->fDependent())
-	{
-		String sNrMaps(TR("Map List contains %li Raster Maps").c_str(), iMaps);
-		new InfoText(m_fgPageRoot, sNrMaps);
-	}    
-	
-	if (iMaps > 0)
-	{
-		if (m_fReadOnly || mpl->fDependent())
-			new FieldObjShow(m_fgPageRoot, mpl->gr());
-		else
+	try{
+		BasicPropertyFormPage::BuildPage();
+
+
+		if (mpl->fUseAs())
 		{
-			const Map& mpFirst = mpl[mpl->iLower()];
-			CoordBounds cbLoc = mpFirst->gr()->fGeoRefNone() ? CoordBounds(Coord(), Coord()) : mpFirst->cb();
-			m_sNewGR = mpl->gr()->sName();
-			m_fgr = new FieldGeoRefC(m_fgPageRoot, TR("&GeoReference"), &m_sNewGR, grALL);
-			m_fgr->SetBounds(mpFirst->cs(), cbLoc);
-			m_fgr->SetCallBack((NotifyProc)&MapListPropPage::GeoRefChange);
-			
-			String sDsc = sObjectDesc(mpFirst->gr());
-			StaticText *stGRDsc = new InfoText(m_fgPageRoot, sDsc);
+			FileName fnData;
+			// First check if foreign format
+			ObjectInfo::ReadElement("ForeignFormat:1", "Filename", mpl->fnObj, fnData);
+			if (!fnData.fValid()) // No foreign format, check native
+				ObjectInfo::ReadElement("MapStore:1", "Data", mpl->fnObj, fnData);
+			String sData(TR("Map list uses external data file %S").c_str(), fnData.sRelative(true, mpl->fnObj.sPath()));
+			new InfoText(m_fgPageRoot, sData);
 		}
-		new FieldObjShow(m_fgPageRoot, mpl->gr()->cs());
-		
-		new InfoText(m_fgPageRoot, TR("Domain of maps"));
-		Domain dom1 = mpl[mpl->iLower()]->dm();
-		new FieldObjShow(m_fgPageRoot, dom1);
-	}
-	SetAttribTableField();
-	
-	String s('X', 55);
-	m_stRemark = new InfoText(m_fgPageRoot, s);
-	m_stRemark->SetVal(String());   // clear remark string
-	
-	DisplayDefinition();
-	
-	if (iMaps > 0)
-	{
-		String sRem;
-		if (!fCheckGeoRefConsistent(sRem))
-			m_stRemark->SetVal(sRem);
-		
-		if (!mpl->fDependent() || (mpl->fDependent() && mpl->fCalculated()))
+
+		int iMaps = mpl->iSize();
+		if (iMaps > 0 || ! mpl->fDependent())
 		{
-			String sPyrText, sPyrButton;
-			if (mpl->fHasPyramidFiles())
-			{
-				sPyrText = TR("Pyramid layers available");
-				sPyrButton = TR("Remove");
-			}
+			String sNrMaps(TR("Map List contains %li Raster Maps").c_str(), iMaps);
+			new InfoText(m_fgPageRoot, sNrMaps);
+		}    
+
+		if (iMaps > 0)
+		{
+			if (m_fReadOnly || mpl->fDependent())
+				new FieldObjShow(m_fgPageRoot, mpl->gr());
 			else
 			{
-				sPyrText = TR("No pyramid layers available");
-				sPyrButton = TR("Create");
+				const Map& mpFirst = mpl[mpl->iLower()];
+				CoordBounds cbLoc = mpFirst->gr()->fGeoRefNone() ? CoordBounds(Coord(), Coord()) : mpFirst->cb();
+				m_sNewGR = mpl->gr()->sName();
+				m_fgr = new FieldGeoRefC(m_fgPageRoot, TR("&GeoReference"), &m_sNewGR, grALL);
+				m_fgr->SetBounds(mpFirst->cs(), cbLoc);
+				m_fgr->SetCallBack((NotifyProc)&MapListPropPage::GeoRefChange);
+
+				String sDsc = sObjectDesc(mpFirst->gr());
+				StaticText *stGRDsc = new InfoText(m_fgPageRoot, sDsc);
 			}
-			// Force the width of the statictext to the length of the longest possible string
-			// And after that set the correct text
-			m_stPyramids = new StaticText(m_fgPageRoot, TR("No pyramid layers available"));
-			m_stPyramids->SetVal(sPyrText);
-			if ( !mpl->fReadOnly())
+			new FieldObjShow(m_fgPageRoot, mpl->gr()->cs());
+
+			new InfoText(m_fgPageRoot, TR("Domain of maps"));
+			Domain dom1 = mpl[mpl->iLower()]->dm();
+			new FieldObjShow(m_fgPageRoot, dom1);
+		}
+		SetAttribTableField();
+
+		String s('X', 55);
+		m_stRemark = new InfoText(m_fgPageRoot, s);
+		m_stRemark->SetVal(String());   // clear remark string
+
+		DisplayDefinition();
+
+		if (iMaps > 0)
+		{
+			String sRem;
+			if (!fCheckGeoRefConsistent(sRem))
+				m_stRemark->SetVal(sRem);
+
+			if (!mpl->fDependent() || (mpl->fDependent() && mpl->fCalculated()))
 			{
-				pbPyramids = new PushButton(m_fgPageRoot, sPyrButton, (NotifyProc)&MapListPropPage::CallBackPyramids);
-				pbPyramids->Align(m_stPyramids, AL_AFTER);
-			}
-		}		
-	}    
+				String sPyrText, sPyrButton;
+				if (mpl->fHasPyramidFiles())
+				{
+					sPyrText = TR("Pyramid layers available");
+					sPyrButton = TR("Remove");
+				}
+				else
+				{
+					sPyrText = TR("No pyramid layers available");
+					sPyrButton = TR("Create");
+				}
+				// Force the width of the statictext to the length of the longest possible string
+				// And after that set the correct text
+				m_stPyramids = new StaticText(m_fgPageRoot, TR("No pyramid layers available"));
+				m_stPyramids->SetVal(sPyrText);
+				if ( !mpl->fReadOnly())
+				{
+					pbPyramids = new PushButton(m_fgPageRoot, sPyrButton, (NotifyProc)&MapListPropPage::CallBackPyramids);
+					pbPyramids->Align(m_stPyramids, AL_AFTER);
+				}
+			}		
+		}   	} catch ( const ErrorObject& err) {
+			err.Show();
+		} 
 }
 
 void MapListPropPage::SetAttribTableField()
@@ -2423,7 +2466,7 @@ int MapListPropPage::CallBackAttTableChange(Event*)
 {
 	if ( !fAttrTable ) return 1;
 	DataChanged(0);
-	
+
 	ftAttTable->StoreData();
 	if (sAttrTable.length() == 0)
 	{
@@ -2617,27 +2660,31 @@ int MapListPropPage::exec()
 //-------------------------------
 // MapViewPropPage member functions
 MapViewPropPage::MapViewPropPage(const IlwisObject& obj)
-	: BasicPropertyFormPage(obj, TR("Map View"))
+: BasicPropertyFormPage(obj, TR("Map View"))
 {
 	SetMenHelpTopic("ilwismen\\map_view_properties.htm");
 }
 
 void MapViewPropPage::BuildPage()
 {
-	BasicPropertyFormPage::BuildPage();
+	try{
+		BasicPropertyFormPage::BuildPage();
 
-	MapView mpv(m_obj->fnObj);
+		MapView mpv(m_obj->fnObj);
 
-	GeoRef georef;
-	mpv->ReadElement("MapView", "GeoRef", georef);
-	new FieldObjShow(m_fgPageRoot, georef);
-	CoordSystem cs;
-	mpv->ReadElement("MapView", "CoordSystem", cs);
-	new FieldObjShow(m_fgPageRoot, cs);
+		GeoRef georef;
+		mpv->ReadElement("MapView", "GeoRef", georef);
+		new FieldObjShow(m_fgPageRoot, georef);
+		CoordSystem cs;
+		mpv->ReadElement("MapView", "CoordSystem", cs);
+		new FieldObjShow(m_fgPageRoot, cs);
+	} catch ( const ErrorObject& err) {
+		err.Show();
+	}
 }
 //-------------------------------
 ObjectCollectionPropPage::ObjectCollectionPropPage(const IlwisObject& obj)
-	: BasicPropertyFormPage(obj, TR("Object Collection"))
+: BasicPropertyFormPage(obj, TR("Object Collection"))
 {
 	SetMenHelpTopic("ilwismen\\object_collection_properties.htm");
 	oc.SetPointer(obj.pointer());
@@ -2645,28 +2692,32 @@ ObjectCollectionPropPage::ObjectCollectionPropPage(const IlwisObject& obj)
 
 void ObjectCollectionPropPage::BuildPage()
 {
-	BasicPropertyFormPage::BuildPage();
-	
-	
+	try{
+		BasicPropertyFormPage::BuildPage();
 
-	int iMaps = oc->iNrObjects();
-	if (iMaps > 0 || ! oc->fDependent())
-	{
-		String sNrMaps(TR("Map List contains %li Raster Maps").c_str(), iMaps);
-		new InfoText(m_fgPageRoot, sNrMaps);
-	}    
-	
-	//	new FieldObjShow(m_fgPageRoot, mpl->gr()->cs());
-		
-	
-	SetAttribTableField();
-	
-	String s('X', 55);
-	m_stRemark = new InfoText(m_fgPageRoot, s);
-	m_stRemark->SetVal(String());   // clear remark string
-	
-	DisplayDefinition();
-	
+
+
+		int iMaps = oc->iNrObjects();
+		if (iMaps > 0 || ! oc->fDependent())
+		{
+			String sNrMaps(TR("Map List contains %li Raster Maps").c_str(), iMaps);
+			new InfoText(m_fgPageRoot, sNrMaps);
+		}    
+
+		//	new FieldObjShow(m_fgPageRoot, mpl->gr()->cs());
+
+
+		SetAttribTableField();
+
+		String s('X', 55);
+		m_stRemark = new InfoText(m_fgPageRoot, s);
+		m_stRemark->SetVal(String());   // clear remark string
+
+		DisplayDefinition();
+	} catch ( const ErrorObject& err) {
+		err.Show();
+	}
+
 }
 
 void ObjectCollectionPropPage::SetAttribTableField()
@@ -2712,7 +2763,7 @@ int ObjectCollectionPropPage::CallBackAttTableChange(Event*)
 {
 	if ( !fAttrTable ) return 1;
 	DataChanged(0);
-	
+
 	ftAttTable->StoreData();
 	if (sAttrTable.length() == 0)
 	{
@@ -2765,26 +2816,27 @@ int ObjectCollectionPropPage::exec()
 //-------------------------------
 // DependsOnPropPage member functions
 DependsOnPropPage::DependsOnPropPage(const IlwisObject& obj)
-	: BasicPropertyFormPage(obj, TR("Dependency"))
+: BasicPropertyFormPage(obj, TR("Dependency"))
 {
 }
 
 void DependsOnPropPage::BuildPage()
 {
-	BasicPropertyFormPage::BuildPage();
+	try{
+		BasicPropertyFormPage::BuildPage();
 
-	DisplayDefinition();
-	
-	FormEntry* fe;
-	bool fIsUpToDate = true;
-	if (m_obj->fCalculated())
-	{
-		ObjectTime timNewest = 0;
-		String sObjName;
-		m_obj->GetNewestDependentObject(sObjName, timNewest);
-		fIsUpToDate = timNewest == 0;
-		switch (timNewest)
+		DisplayDefinition();
+
+		FormEntry* fe;
+		bool fIsUpToDate = true;
+		if (m_obj->fCalculated())
 		{
+			ObjectTime timNewest = 0;
+			String sObjName;
+			m_obj->GetNewestDependentObject(sObjName, timNewest);
+			fIsUpToDate = timNewest == 0;
+			switch (timNewest)
+			{
 			case 0:
 				fe = new StaticText(m_fgPageRoot, TR("Object is up-to-date"));
 				break;
@@ -2793,35 +2845,38 @@ void DependsOnPropPage::BuildPage()
 				break;
 			default:
 				fe = new StaticText(m_fgPageRoot, String("%S: %S (%S)", TR("Object is not up-to-date"), sObjName, timNewest.sDateTime()));
+			}
 		}
-	}
-	else
-		fe = new StaticText(m_fgPageRoot, TR("Object is not calculated yet"));
+		else
+			fe = new StaticText(m_fgPageRoot, TR("Object is not calculated yet"));
 
-	StaticText* st = new StaticText(m_fgPageRoot, TR("Depends on"));
-	FieldDependencyTree *fdt = new FieldDependencyTree(m_fgPageRoot, m_obj);
-	fdt->SetIndependentPos();
+		StaticText* st = new StaticText(m_fgPageRoot, TR("Depends on"));
+		FieldDependencyTree *fdt = new FieldDependencyTree(m_fgPageRoot, m_obj);
+		fdt->SetIndependentPos();
 
-	FieldGroup *fgButtons = new FieldGroup(m_fgPageRoot, true);
-	fgButtons->Align(fdt, AL_AFTER);
-	PushButton *pb;
-	if (m_obj->fCalculated())
-	{
-		if (!fIsUpToDate)
-			pb = new PushButton(fgButtons, TR("&Make Up-to-Date"), (NotifyProc)&DependsOnPropPage::CheckUpToDate);
+		FieldGroup *fgButtons = new FieldGroup(m_fgPageRoot, true);
+		fgButtons->Align(fdt, AL_AFTER);
+		PushButton *pb;
+		if (m_obj->fCalculated())
+		{
+			if (!fIsUpToDate)
+				pb = new PushButton(fgButtons, TR("&Make Up-to-Date"), (NotifyProc)&DependsOnPropPage::CheckUpToDate);
+
+			if (!m_fReadOnly)
+				pb = new PushButton(fgButtons, TR("&Release Disk Space"), (NotifyProc)&DependsOnPropPage::MakeSpace);
+		}  
+		else
+			pb = new PushButton(fgButtons, TR("&Calculate"), (NotifyProc)&DependsOnPropPage::Calculate);
 
 		if (!m_fReadOnly)
-			pb = new PushButton(fgButtons, TR("&Release Disk Space"), (NotifyProc)&DependsOnPropPage::MakeSpace);
-	}  
-	else
-		pb = new PushButton(fgButtons, TR("&Calculate"), (NotifyProc)&DependsOnPropPage::Calculate);
-
-	if (!m_fReadOnly)
-	{
-		// For Break depenedency exclude all histogram types
-		String sHisType = m_obj->sType().sLeft(9);
-		if (!fCIStrEqual(sHisType, "Histogram"))
-			pb = new PushButton(fgButtons, TR("&Break Dependency Link"), (NotifyProc)&DependsOnPropPage::BreakLink);
+		{
+			// For Break depenedency exclude all histogram types
+			String sHisType = m_obj->sType().sLeft(9);
+			if (!fCIStrEqual(sHisType, "Histogram"))
+				pb = new PushButton(fgButtons, TR("&Break Dependency Link"), (NotifyProc)&DependsOnPropPage::BreakLink);
+		}
+	} catch ( const ErrorObject& err) {
+		err.Show();
 	}
 }
 
@@ -2885,7 +2940,7 @@ int DependsOnPropPage::BreakLink(Event*)
 //-------------------------------
 // UsedByPropPage member functions
 UsedByPropPage::UsedByPropPage(const IlwisObject& obj)
-	: BasicPropertyFormPage(obj, TR("Used By"))
+: BasicPropertyFormPage(obj, TR("Used By"))
 {
 }
 
@@ -2900,7 +2955,7 @@ void UsedByPropPage::BuildPage()
 //-------------------------------
 // ContainsPropPage member functions
 ContainsPropPage::ContainsPropPage(const IlwisObject& obj)
-	: BasicPropertyFormPage(obj, TR("Contains"))
+: BasicPropertyFormPage(obj, TR("Contains"))
 {
 }
 
@@ -2911,7 +2966,7 @@ void ContainsPropPage::BuildPage()
 	CollectContainedFiles();
 
 	StaticText* st = new StaticText(m_fgPageRoot, TR("&Objects in container:"));
-	
+
 	FilenameLister *sal = new FilenameLister(m_fgPageRoot, m_as, 0);
 
 	sal->SetWidth(120);
@@ -3035,7 +3090,7 @@ void ContainsPropPage::CollectContainedFiles()
 //-------------------------------
 // ContainedByPropPage member functions
 ContainedByPropPage::ContainedByPropPage(const IlwisObject& obj)
-	: BasicPropertyFormPage(obj, TR("Contained By"))
+: BasicPropertyFormPage(obj, TR("Contained By"))
 {
 }
 
@@ -3046,7 +3101,7 @@ void ContainedByPropPage::BuildPage()
 	CollectOwners();
 
 	StaticText* st = new StaticText(m_fgPageRoot, TR("&Contained in:"));
-	
+
 	FilenameLister *sal = new FilenameLister(m_fgPageRoot, m_as, 0);
 
 	sal->SetWidth(120);
@@ -3073,8 +3128,8 @@ void ContainedByPropPage::CollectOwners()
 //-------------------------------
 // HelpPropPage member functions
 HelpPropPage::HelpPropPage(const FileName& fnObj)
-	: FormBasePropertyPage(TR("Info")),
-	m_sExt(fnObj.sExt)
+: FormBasePropertyPage(TR("Info")),
+m_sExt(fnObj.sExt)
 {
 }
 
@@ -3155,18 +3210,18 @@ UINT ShowPropForm(LPVOID lpObjectStruct)
 
 	String sTitle(TR("Properties of %S").c_str(), obj->sTypeName());
 
-// The following lines try to activate an open property form, to avoid opening
-// a second property form for the same object. However, although the proper window gets
-// activated, the window from which this was tried reappears as the top window instead.
-// Needs some research.
-//	CWnd* wnd = CWnd::FindWindow(0, sTitle.c_str());
-//	if (0 != wnd)    // property window already open, activate it
-//	{
-//		wnd->SetWindowPos(&CWnd::wndTop, 0, 0,0,0,SWP_NOMOVE | SWP_SHOWWINDOW | SWP_NOSIZE);
-//
-//		return 0;
-//	}
-//
+	// The following lines try to activate an open property form, to avoid opening
+	// a second property form for the same object. However, although the proper window gets
+	// activated, the window from which this was tried reappears as the top window instead.
+	// Needs some research.
+	//	CWnd* wnd = CWnd::FindWindow(0, sTitle.c_str());
+	//	if (0 != wnd)    // property window already open, activate it
+	//	{
+	//		wnd->SetWindowPos(&CWnd::wndTop, 0, 0,0,0,SWP_NOMOVE | SWP_SHOWWINDOW | SWP_NOSIZE);
+	//
+	//		return 0;
+	//	}
+	//
 	IlwisPropertySheet ps(sTitle);
 
 	// Object type tab follows
@@ -3175,90 +3230,90 @@ UINT ShowPropForm(LPVOID lpObjectStruct)
 	String help;
 	switch (iotObj)
 	{
-		case IlwisObject::iotRASMAP:
-			pgObject = new MapPropPage(obj);
-			break;
-		case IlwisObject::iotPOLYGONMAP:
-			pgObject = new PolygonMapPropPage(obj);
-			break;
-		case IlwisObject::iotSEGMENTMAP:
-			pgObject = new SegmentMapPropPage(obj);
-			break;
-		case IlwisObject::iotPOINTMAP:
-			pgObject = new PointMapPropPage(obj);
-			break;
-		case IlwisObject::iotTABLE:
-			pgObject = new TablePropPage(obj);
-			break;
-		case IlwisObject::iotTABLE2DIM:
-			pgObject = new Table2DimPropPage(obj);
-			break;
-		case IlwisObject::iotHISTRAS:
-			pgObject = new HistogramPropPage(obj);
-			break;
-		case IlwisObject::iotHISTPOL:
-			pgObject = new HistogramPropPage(obj);
-			break;
-		case IlwisObject::iotHISTSEG:
-			pgObject = new HistogramPropPage(obj);
-			break;
-		case IlwisObject::iotHISTPNT:
-			pgObject = new HistogramPropPage(obj);
-			break;
-		case IlwisObject::iotOBJECTCOLLECTION:
-			pgObject = new ObjectCollectionPropPage(obj);
-			help = "ilwismen\\object_collection_properties.htm";
-			break;
-		case IlwisObject::iotMAPLIST:
-			pgObject = new MapListPropPage(obj);
-			break;
-		case IlwisObject::iotMAPVIEW:
-			pgObject = new MapViewPropPage(obj);
-			break;
-		case IlwisObject::iotLAYOUT:
-			help = "ilwismen\\layout_properties.htm";
-			break;
-		case IlwisObject::iotCOORDSYSTEM:
-			pgObject = new CoordSystemPropPage(obj);
-			break;
-		case IlwisObject::iotGEOREF:
-			pgObject = new GeoRefPropPage(obj);
-			break;
-		case IlwisObject::iotDOMAIN:
-			pgObject = new DomainPropPage(obj);
-			break;
-		case IlwisObject::iotREPRESENTATION:
-			pgObject = new RepresentationPropPage(obj);
-			break;
-		case IlwisObject::iotFILTER:
-			help = "ilwismen\\filter_properties.htm";
-			break;
-		case IlwisObject::iotSCRIPT:
-			help = "ilwismen\\script_properties.htm";
-			break;
-		case IlwisObject::iotFUNCTION:
-			help = "ilwismen\\function_properties.htm";
-			break;
-		case IlwisObject::iotMATRIX:
-			help = "ilwismen\\matrix_properties.htm";
-			break;
-		case IlwisObject::iotSAMPLESET:
-			pgObject = new SampleSetPropPage(obj);
-			break;
-		case IlwisObject::iotANNOTATIONTEXT:
-			help = "ilwismen\\annotation_text_properties.htm";
-			break;
-    case IlwisObject::iotGRAPH:      
-			help = "ilwismen\\graph_properties.htm";
-			break;
-    case IlwisObject::iotSTEREOPAIR:      
-			pgObject = new StereoPairPropPage(obj);
-			break;
-    case IlwisObject::iotCRITERIATREE:      
-			help = "ilwismen\\criteria_tree_properties.htm";
-			break;
-		case IlwisObject::iotANY:
-			break;
+	case IlwisObject::iotRASMAP:
+		pgObject = new MapPropPage(obj);
+		break;
+	case IlwisObject::iotPOLYGONMAP:
+		pgObject = new PolygonMapPropPage(obj);
+		break;
+	case IlwisObject::iotSEGMENTMAP:
+		pgObject = new SegmentMapPropPage(obj);
+		break;
+	case IlwisObject::iotPOINTMAP:
+		pgObject = new PointMapPropPage(obj);
+		break;
+	case IlwisObject::iotTABLE:
+		pgObject = new TablePropPage(obj);
+		break;
+	case IlwisObject::iotTABLE2DIM:
+		pgObject = new Table2DimPropPage(obj);
+		break;
+	case IlwisObject::iotHISTRAS:
+		pgObject = new HistogramPropPage(obj);
+		break;
+	case IlwisObject::iotHISTPOL:
+		pgObject = new HistogramPropPage(obj);
+		break;
+	case IlwisObject::iotHISTSEG:
+		pgObject = new HistogramPropPage(obj);
+		break;
+	case IlwisObject::iotHISTPNT:
+		pgObject = new HistogramPropPage(obj);
+		break;
+	case IlwisObject::iotOBJECTCOLLECTION:
+		pgObject = new ObjectCollectionPropPage(obj);
+		help = "ilwismen\\object_collection_properties.htm";
+		break;
+	case IlwisObject::iotMAPLIST:
+		pgObject = new MapListPropPage(obj);
+		break;
+	case IlwisObject::iotMAPVIEW:
+		pgObject = new MapViewPropPage(obj);
+		break;
+	case IlwisObject::iotLAYOUT:
+		help = "ilwismen\\layout_properties.htm";
+		break;
+	case IlwisObject::iotCOORDSYSTEM:
+		pgObject = new CoordSystemPropPage(obj);
+		break;
+	case IlwisObject::iotGEOREF:
+		pgObject = new GeoRefPropPage(obj);
+		break;
+	case IlwisObject::iotDOMAIN:
+		pgObject = new DomainPropPage(obj);
+		break;
+	case IlwisObject::iotREPRESENTATION:
+		pgObject = new RepresentationPropPage(obj);
+		break;
+	case IlwisObject::iotFILTER:
+		help = "ilwismen\\filter_properties.htm";
+		break;
+	case IlwisObject::iotSCRIPT:
+		help = "ilwismen\\script_properties.htm";
+		break;
+	case IlwisObject::iotFUNCTION:
+		help = "ilwismen\\function_properties.htm";
+		break;
+	case IlwisObject::iotMATRIX:
+		help = "ilwismen\\matrix_properties.htm";
+		break;
+	case IlwisObject::iotSAMPLESET:
+		pgObject = new SampleSetPropPage(obj);
+		break;
+	case IlwisObject::iotANNOTATIONTEXT:
+		help = "ilwismen\\annotation_text_properties.htm";
+		break;
+	case IlwisObject::iotGRAPH:      
+		help = "ilwismen\\graph_properties.htm";
+		break;
+	case IlwisObject::iotSTEREOPAIR:      
+		pgObject = new StereoPairPropPage(obj);
+		break;
+	case IlwisObject::iotCRITERIATREE:      
+		help = "ilwismen\\criteria_tree_properties.htm";
+		break;
+	case IlwisObject::iotANY:
+		break;
 	}
 
 	if (pgObject)
@@ -3346,15 +3401,15 @@ UINT ShowPropForm(LPVOID lpObjectStruct)
 
 	switch (os->eRequest)
 	{
-		case ObjectStruct::ePROP:
-			if (pgObject)
-				ps.SetActivePage(pgObject);
-			else
-				ps.SetActivePage(gpp);
-			break;
-		case ObjectStruct::eHELP:
-			ps.SetActivePage(hpp);
-			break;
+	case ObjectStruct::ePROP:
+		if (pgObject)
+			ps.SetActivePage(pgObject);
+		else
+			ps.SetActivePage(gpp);
+		break;
+	case ObjectStruct::eHELP:
+		ps.SetActivePage(hpp);
+		break;
 	}
 	ps.DoModal();
 	if (obj->fChanged)
@@ -3394,7 +3449,7 @@ UINT ShowPropForm(LPVOID lpObjectStruct)
 //-------------------------------
 // StereoPairPropPage member functions
 StereoPairPropPage::StereoPairPropPage(const IlwisObject& obj)
-	: BasicPropertyFormPage(obj, TR("Stereo Pair"))
+: BasicPropertyFormPage(obj, TR("Stereo Pair"))
 {
 	SetMenHelpTopic("ilwismen\\stereopair_properties.htm");
 	m_stPyramids = 0;
@@ -3404,23 +3459,23 @@ StereoPairPropPage::StereoPairPropPage(const IlwisObject& obj)
 void StereoPairPropPage::BuildPage()
 {
 	BasicPropertyFormPage::BuildPage();
-	
+
 	StereoPair stp(m_obj->fnObj);
-	
+
 	if (stp->fCalculated())
 	{
 		new FieldObjShow(m_fgPageRoot, stp->mapLeft->gr()->cs());
-		
+
 		new InfoText(m_fgPageRoot, TR("Domain of maps"));
 		Domain dom1 = stp->mapLeft->dm();
 		new FieldObjShow(m_fgPageRoot, dom1);
 	}
-	
-	
+
+
 	String s('X', 55);
 	m_stRemark = new InfoText(m_fgPageRoot, s);
 	m_stRemark->SetVal(String());   // clear remark string
-	
+
 	iOption = stp->fUseGeorefLeft ? 0 : 1;
 	rg = new RadioGroup(m_fgPageRoot, String(), &iOption, true);
 	RadioButton* rbLeft = new RadioButton(rg, "Use Left Georef");    
@@ -3451,7 +3506,7 @@ void StereoPairPropPage::BuildPage()
 		}
 	}		   
 }
-	
+
 int StereoPairPropPage::CallBackPyramids(Event *)
 {
 	StereoPair stp(m_obj->fnObj);	
@@ -3485,12 +3540,12 @@ int StereoPairPropPage::CallBackPyramids(Event *)
 
 	return 1;	
 }
-	
+
 int StereoPairPropPage::exec()
 {
 	BasicPropertyFormPage::exec();
 	//rg->StoreData();
-	
+
 	StereoPairPtr* stpp = dynamic_cast<StereoPairPtr*>(m_obj.pointer());
 	if (iOption == 0)
 		stpp->fUseGeorefLeft = true;
