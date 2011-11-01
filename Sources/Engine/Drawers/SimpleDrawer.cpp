@@ -135,6 +135,11 @@ void SimpleDrawer::setExtrustionTransparency(double v) {
 	extrTransparency = v;
 }
 
+void SimpleDrawer::setActive(bool yesno) 
+{ 
+	fActive=yesno;
+}
+
 
 
 
