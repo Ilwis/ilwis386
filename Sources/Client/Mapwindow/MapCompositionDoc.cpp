@@ -130,8 +130,6 @@ BEGIN_MESSAGE_MAP(MapCompositionDoc, CatalogDocument)
 	ON_COMMAND(ID_ADDPOLMAP, OnAddPolMap)
 	ON_COMMAND(ID_ADDPOINTS, OnAddPntMap)
 
-	ON_COMMAND(ID_COORDSYSTEM, OnChangeCoordSystem)
-	ON_UPDATE_COMMAND_UI(ID_COORDSYSTEM, OnUpdateChangeCoordSystem)
 	ON_COMMAND(ID_SAVEVIEW, OnSaveView)
 	ON_COMMAND(ID_SAVEVIEWAS, OnSaveViewAs)
 	ON_COMMAND(ID_CREATE_LAYOUT, OnCreateLayout)
@@ -958,7 +956,12 @@ ILWIS::NewDrawer *MapCompositionDoc::createBaseMapDrawer(const BaseMap& bmp, con
 	drawer->addDataSource((void *)&bmp);
 	rootDrawer->setCoordinateSystem(bmp->cs());
 	CoordBounds cbZoom = rootDrawer->getCoordBoundsZoom();
-	rootDrawer->addCoordBounds(bmp->cs(), bmp->cb());
+	CoordBounds cbMap = bmp->cb();
+	if ( !cbMap.fValid() && IOTYPE(bmp->fnObj) == IlwisObject::iotRASMAP) { // for csunknown with no boundaries
+		MapPtr *mptr = (MapPtr *)bmp.pointer();
+		cbMap = CoordBounds(Coord(0,0), Coord(mptr->rcSize().Col, -mptr->rcSize().Row)); // none.grf bounds
+	}
+	rootDrawer->addCoordBounds(bmp->cs(), cbMap);
 	ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY);
 	drawer->prepare(&pp);
 	pp.type = RootDrawer::ptRENDER;
@@ -1834,34 +1837,7 @@ void MapCompositionDoc::SetCoordSystem(const CoordSystem& cs)
 	mpvGetView()->Invalidate();
 }
 
-void MapCompositionDoc::OnChangeCoordSystem()
-{
-	class CCSForm: public FormWithDest
-	{
-	public:
-		CCSForm(CWnd* parent, String* sName)
-			: FormWithDest(parent, TR("Change Coordinate System"))
-		{
-			new FieldDataTypeLarge(root, sName, ".csy");
-			SetMenHelpTopic("ilwismen\\change_coordinate_system_of_a_map_window.htm");
-			create();
-		}
-	};
-	String sNam = rootDrawer->getCoordinateSystem()->fnObj.sShortName();
-	CCSForm form(wndGetActiveView(), &sNam);
-	if (form.fOkClicked()) {
-		FileName fn(sNam);
-		 if (fn.sExt == ".csy") {
-			CoordSystem csy(fn);
-			SetCoordSystem(csy);
-		}
-	}
-}
 
-void MapCompositionDoc::OnUpdateChangeCoordSystem(CCmdUI* pCmdUI)
-{
-	//pCmdUI->Enable(!fRaster);
-}
 
 void MapCompositionDoc::OnShowHistogram()
 {

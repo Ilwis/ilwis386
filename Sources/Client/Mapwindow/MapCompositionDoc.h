@@ -151,8 +151,6 @@ private:
 	afx_msg void OnUpdateAddGrid(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateAddGraticule(CCmdUI* pCmdUI);
 	afx_msg void OnAddAnnText();
-	afx_msg void OnChangeCoordSystem();
-	afx_msg void OnUpdateChangeCoordSystem(CCmdUI* pCmdUI);
 	afx_msg void OnOpen();
 	afx_msg void OnCreateLayout();
 
