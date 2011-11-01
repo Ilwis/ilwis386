@@ -57,25 +57,25 @@ LeastSquaresFit::~LeastSquaresFit()
 
 static void ErrorTooLessPoints()
 {
-  throw ErrorObject(String(SDATErrLSFNotEnoughPoints), 
+  throw ErrorObject(String(TR("Not enough points")), 
                     errLeastSquaresFit + 1);
 }
 
 static void ErrorTooLessTerms()
 {
-  throw ErrorObject(String(SDATErrLSFNotEnoughTerms), 
+  throw ErrorObject(String(TR("Not enough terms")), 
                     errLeastSquaresFit + 2);
 }
 
 static void ErrorMoreTermsThanPoints()
 {
-  throw ErrorObject(String(SDATErrLSFPointsTermsMismatch), 
+  throw ErrorObject(String(TR("Points terms mismatch")), 
                     errLeastSquaresFit + 3);
 }
 
 static void ErrorNoPossibleSolution()
 {
-  throw ErrorObject(String(SDATErrLSFNoSolution), 
+  throw ErrorObject(String(TR("No possible solution")), 
                     errLeastSquaresFit + 4);
 }
 
