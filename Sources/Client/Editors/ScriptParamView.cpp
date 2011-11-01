@@ -1,39 +1,39 @@
 /***************************************************************
- ILWIS integrates image, vector and thematic data in one unique 
- and powerful package on the desktop. ILWIS delivers a wide 
- range of feautures including import/export, digitizing, editing, 
- analysis and display of data as well as production of 
- quality mapsinformation about the sensor mounting platform
- 
- Exclusive rights of use by 52°North Initiative for Geospatial 
- Open Source Software GmbH 2007, Germany
+ILWIS integrates image, vector and thematic data in one unique 
+and powerful package on the desktop. ILWIS delivers a wide 
+range of feautures including import/export, digitizing, editing, 
+analysis and display of data as well as production of 
+quality mapsinformation about the sensor mounting platform
 
- Copyright (C) 2007 by 52°North Initiative for Geospatial
- Open Source Software GmbH
+Exclusive rights of use by 52°North Initiative for Geospatial 
+Open Source Software GmbH 2007, Germany
 
- Author: Jan Hendrikse, Willem Nieuwenhuis,Wim Koolhoven 
- Bas Restsios, Martin Schouwenburg, Lichun Wang, Jelle Wind 
+Copyright (C) 2007 by 52°North Initiative for Geospatial
+Open Source Software GmbH
 
- Contact: Martin Schouwenburg; schouwenburg@itc.nl; 
- tel +31-534874371
+Author: Jan Hendrikse, Willem Nieuwenhuis,Wim Koolhoven 
+Bas Restsios, Martin Schouwenburg, Lichun Wang, Jelle Wind 
 
- This program is free software; you can redistribute it and/or
- modify it under the terms of the GNU General Public License
- version 2 as published by the Free Software Foundation.
+Contact: Martin Schouwenburg; schouwenburg@itc.nl; 
+tel +31-534874371
 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU General Public License for more details.
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+version 2 as published by the Free Software Foundation.
 
- You should have received a copy of the GNU General Public License
- along with this program (see gnu-gpl v2.txt); if not, write to
- the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- Boston, MA 02111-1307, USA or visit the web page of the Free
- Software Foundation, http://www.fsf.org.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
 
- Created on: 2007-02-8
- ***************************************************************/
+You should have received a copy of the GNU General Public License
+along with this program (see gnu-gpl v2.txt); if not, write to
+the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+Boston, MA 02111-1307, USA or visit the web page of the Free
+Software Foundation, http://www.fsf.org.
+
+Created on: 2007-02-8
+***************************************************************/
 // ScriptParamView.cpp: implementation of the ScriptParamView class.
 //
 //////////////////////////////////////////////////////////////////////
@@ -61,7 +61,7 @@ BEGIN_MESSAGE_MAP(ScriptParamView, FormBaseView)
 END_MESSAGE_MAP()
 
 ScriptParamView::ScriptParamView() :
- iParams(iUNDEF)
+iParams(iUNDEF)
 {
 	fbs |= fbsNOOKBUTTON | fbsNOCANCELBUTTON | fbsNOBEVEL;
 	fbs |= fbsNOPARENTRESIZE;
@@ -86,23 +86,26 @@ void ScriptParamView::CreateForm()
 	DWORD iStyle = ES_AUTOHSCROLL|WS_TABSTOP|WS_GROUP|WS_BORDER;
 	if (fReadOnly)
 		iStyle |= ES_READONLY;
-	
-	for (i = 0; i < iParams; ++i) 
-		iParamType[i] = 0;
+
 	for (i = 0; i < iParams; ++i) {
+		iParamType[i] = 0;
+	//for (i = 0; i < iParams; ++i) {
 		sQuestion[i] = scr->sParam(i);
 		iParamType[i] = (long)scr->ptParam(i);
-    fIncExt[i] = scr->fParamIncludeExtension(i);
+		fIncExt[i] = scr->fParamIncludeExtension(i);
 	}
 
-  FormBaseView::CreateForm();
-	fiParam = new FieldInt(root, TR("&Number of Parameters"), &iParams, ValueRange(0,9), true);
+	//::MessageBox(0,"Hier","Ook", MB_OK);
+	FieldGroup *fg1 = new FieldGroup(root);
+	String txt = TR("&Number of Parameters");
+	fiParam = new FieldInt(fg1, txt, &iParams, ValueRange(0,9), true);
+
 	fiParam->SetReadOnly(fReadOnly);
 	fiParam->SetCallBack((NotifyProc)&ScriptParamView::CallBack); 
 	fiParam->SetIndependentPos();
 	FormEntry* feLast = fiParam;
 
-	fgHead = new FieldGroup(root);
+	fgHead = new FieldGroup(fg1);
 	fgHead->Align(feLast, AL_UNDER);
 	feLast = fgHead;
 
@@ -110,10 +113,10 @@ void ScriptParamView::CreateForm()
 	StaticText* st1 = new StaticText(fgHead, TR("Name"));
 	st1->Align(fb, AL_AFTER);
 	st1->SetCallBack((NotifyProc)&ScriptParamView::Init);
-  st1->psn->iBndDown = 0;
+	st1->psn->iBndDown = 0;
 	StaticText* st2 = new StaticText(fgHead, TR("Type"));
 	st2->Align(st1, AL_AFTER);
-  st2->psn->iBndDown = 0;
+	st2->psn->iBndDown = 0;
 
 	for (i = 0; i < 9; ++i) 
 	{
@@ -160,14 +163,14 @@ int ScriptParamView::Init(Event *)
 
 int ScriptParamView::exec()
 {
-  FormBaseView::exec();
+	FormBaseView::exec();
 	Script scr = GetDocument()->scr();
 	if (iParams > 9)
 		iParams = 9;
 	scr->SetParams(iParams);
 	for (int i = 0; i < iParams; ++i) 
 		scr->SetParam(i, (ScriptPtr::ParamType)iParamType[i], sQuestion[i], fIncExt[i]);
-  return 0;
+	return 0;
 }
 
 int ScriptParamView::DataChanged(Event *)
@@ -201,28 +204,28 @@ int ScriptParamView::Changed(Event *)
 String ScriptParamView::sParamType(int i)
 {
 	map<int, String> mpParmNames;
-  mpParmNames[ ScriptPtr::ptRASMAP] =  TR("Raster Map.mpr");
-  mpParmNames[ ScriptPtr::ptSEGMAP] =  TR("Segment Map.mps");
-  mpParmNames[ ScriptPtr::ptPOLMAP] =  TR("Polygon Map.mpa");
-  mpParmNames[ ScriptPtr::ptPNTMAP] =  TR("Point Map.mpp");
-  mpParmNames[ ScriptPtr::ptTABLE] =  TR("Table.tbt");
-  mpParmNames[ ScriptPtr::ptCOLUMN] =  TR("Column.clm");
-  mpParmNames[ ScriptPtr::ptMAPLIST] =  TR("Map List.mpl");
-  mpParmNames[ ScriptPtr::ptMAPVIEW] =  TR("Map View.mpv");
-  mpParmNames[ ScriptPtr::ptCOORDSYS] =  TR("CoordSystem.csy");
-  mpParmNames[ ScriptPtr::ptGEOREF] =  TR("GeoReference.grf");
-  mpParmNames[ ScriptPtr::ptDOMAIN] =  TR("Domain.dom");
-  mpParmNames[ ScriptPtr::ptRPR] =  TR("Representation.rpr");
-  mpParmNames[ ScriptPtr::ptFILTER] =  TR("Filter.fil");
-  mpParmNames[ ScriptPtr::ptSCRIPT] =  TR("Script.isl");
-  mpParmNames[ ScriptPtr::ptFUNCTION] =  TR("Function.fun");
-  mpParmNames[ ScriptPtr::ptMATRIX] =  TR("Matrix.mat");
-  mpParmNames[ ScriptPtr::ptSMS] =  TR("Sample Set.sms");
-  mpParmNames[ ScriptPtr::ptTBL2D] =  TR("2-Dimensional Table.ta2");
-  mpParmNames[ ScriptPtr::ptANNTXT] =  TR("Annotation Text.atx");
-  mpParmNames[ ScriptPtr::ptSTRING ] =  TR("String");
-  mpParmNames[ ScriptPtr::ptVALUE  ] =  TR("Value");
-  mpParmNames[ ScriptPtr::ptFILENAME] =  TR("Filename");
+	mpParmNames[ ScriptPtr::ptRASMAP] =  TR("Raster Map.mpr");
+	mpParmNames[ ScriptPtr::ptSEGMAP] =  TR("Segment Map.mps");
+	mpParmNames[ ScriptPtr::ptPOLMAP] =  TR("Polygon Map.mpa");
+	mpParmNames[ ScriptPtr::ptPNTMAP] =  TR("Point Map.mpp");
+	mpParmNames[ ScriptPtr::ptTABLE] =  TR("Table.tbt");
+	mpParmNames[ ScriptPtr::ptCOLUMN] =  TR("Column.clm");
+	mpParmNames[ ScriptPtr::ptMAPLIST] =  TR("Map List.mpl");
+	mpParmNames[ ScriptPtr::ptMAPVIEW] =  TR("Map View.mpv");
+	mpParmNames[ ScriptPtr::ptCOORDSYS] =  TR("CoordSystem.csy");
+	mpParmNames[ ScriptPtr::ptGEOREF] =  TR("GeoReference.grf");
+	mpParmNames[ ScriptPtr::ptDOMAIN] =  TR("Domain.dom");
+	mpParmNames[ ScriptPtr::ptRPR] =  TR("Representation.rpr");
+	mpParmNames[ ScriptPtr::ptFILTER] =  TR("Filter.fil");
+	mpParmNames[ ScriptPtr::ptSCRIPT] =  TR("Script.isl");
+	mpParmNames[ ScriptPtr::ptFUNCTION] =  TR("Function.fun");
+	mpParmNames[ ScriptPtr::ptMATRIX] =  TR("Matrix.mat");
+	mpParmNames[ ScriptPtr::ptSMS] =  TR("Sample Set.sms");
+	mpParmNames[ ScriptPtr::ptTBL2D] =  TR("2-Dimensional Table.ta2");
+	mpParmNames[ ScriptPtr::ptANNTXT] =  TR("Annotation Text.atx");
+	mpParmNames[ ScriptPtr::ptSTRING ] =  TR("String");
+	mpParmNames[ ScriptPtr::ptVALUE  ] =  TR("Value");
+	mpParmNames[ ScriptPtr::ptFILENAME] =  TR("Filename");
 
 	String sParm =  mpParmNames[ptParam(i)];
 	return sParm.sHead(".");
@@ -261,5 +264,5 @@ String ScriptParamView::sParam(int i)
 
 ScriptPtr::ParamType ScriptParamView::ptParam(int i)
 {
- return (ScriptPtr::ParamType)iParamType[i];
+	return (ScriptPtr::ParamType)iParamType[i];
 }

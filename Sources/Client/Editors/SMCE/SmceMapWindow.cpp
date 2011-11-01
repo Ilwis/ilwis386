@@ -117,7 +117,7 @@ afx_msg int SmceMapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	menPropLayer.CreateMenu();
 	menPopup.AppendMenu(MF_POPUP, (UINT)menPropLayer.GetSafeHmenu(), sMen(ID_PROPLAYER)); 	
 //  add(ID_OPENGENMAP);
-	add(ID_OPENPIXELINFO);
+	//add(ID_OPENPIXELINFO);
 	addBreak;
 	add(ID_EXIT);
 	hMenFile = menPopup.GetSafeHmenu();

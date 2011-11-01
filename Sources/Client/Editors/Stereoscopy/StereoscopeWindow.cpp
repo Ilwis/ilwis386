@@ -207,7 +207,7 @@ int StereoscopeWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	addBreak;
 	menPropLayer.CreateMenu();
   menPopup.AppendMenu(MF_POPUP, (UINT)menPropLayer.GetSafeHmenu(), sMen(ID_PROPLAYER)); 	
-  add(ID_OPENPIXELINFO);
+  //add(ID_OPENPIXELINFO);
   addBreak;
   add(ID_EXITSTEREOSCOPE);
   addMenu(ID_MEN_FILE);

@@ -1418,11 +1418,11 @@ void Catalog::OnContextMenu(CWnd* pWnd, CPoint point)
 		men.CreatePopupMenu();
 		pmadd(ID_CAT_SHOW);
 		men.AppendMenu(MF_SEPARATOR);
-		if ( fToPixInfo)
-		{
-			pmadd(ID_OPENPIXELINFO);
-			men.AppendMenu(MF_SEPARATOR);
-		}
+		//if ( fToPixInfo)
+		//{
+		//	pmadd(ID_OPENPIXELINFO);
+		//	men.AppendMenu(MF_SEPARATOR);
+		//}
 		pmadd(ID_CREATE_OBJECTCOLLECTION);
 		pmadd(ID_EDIT_COPY);
 		pmadd(ID_EDIT_PASTE);

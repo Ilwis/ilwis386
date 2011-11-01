@@ -225,7 +225,7 @@ void MapListDoc::MoveMap(int iNewIndex, const FileName& fn)
 
 void MapListDoc::OnOpenColorComp()
 {
-	String sCmd("colorcomp %S", mpl->fnObj.sFullNameQuoted());
+	String sCmd("open %S -colorcomposite", mpl->fnObj.sFullNameQuoted());
 	IlwWinApp()->Execute(sCmd);
 }
 

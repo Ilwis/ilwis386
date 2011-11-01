@@ -226,7 +226,7 @@ int MainWindow::OnCreate(LPCREATESTRUCT lpc)
 
 	men.Add(sTop,    ID_FILE_OPEN);
 	men.Add(sTop,    ID_FILE_OPENASTBL);
-	men.Add(sTop,    ID_OPENPIXELINFO);
+	//men.Add(sTop,    ID_OPENPIXELINFO);
 	men.Add(sTop,    0,                 MF_SEPARATOR);
 	men.Add(sTop,    ID_CAT_PYRAMIDS);
 	men.Add(sTop,    0,                 MF_SEPARATOR);	

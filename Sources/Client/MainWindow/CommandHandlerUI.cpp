@@ -130,12 +130,12 @@ LRESULT Cmdmplcolorcomp(CWnd *wnd, const String& sCmd)
 		s = fn.sFullNameQuoted();
 		if (pm.fExist("noask")) //  || pm.fExist("quiet")) // quiet is always supplied by script. I leave it up to the user to decide whether to get the form or not.
 		{
-			WinThread* thr = new WinThread(IlwWinApp()->docTemplMapWindow(), s.c_str(), IlwisDocument::otNOASK);
+			WinThread* thr = new WinThread(IlwWinApp()->docTemplMapWindow(), s.c_str(), IlwisDocument::otCOLORCOMP);
 			if (thr) 
 				thr->CreateThread(0, 0);
 		}
 		else
-			IlwWinApp()->OpenDocumentAsMap(s.c_str());
+			IlwWinApp()->OpenDocumentFile(s.c_str(), IlwisDocument::otCOLORCOMP);
 	}
 
 	return -1;
@@ -1925,7 +1925,6 @@ void CommandHandlerUI::addExtraCommands() {
 	addCommand(CommandHandlerUI::createCommandInfo("import -gdal","",Cmdimport,TR("Import/Export..GDAL"),TR("Import Via GDAL"),".mpr","",7006,TR("Use GDAL to import a file from another software format into ILWIS")));
 	addCommand(CommandHandlerUI::createCommandInfo("import -generalraster","",Cmdimport,TR("Import/Export..General Raster"),TR("Import General Raster"),".mpr","",7006,TR("Import a general raster file from another software format into ILWIS")));
 	addCommand(CommandHandlerUI::createCommandInfo("export","",Cmdexport,TR("Import/Export..Export"),TR("Export"),"ExeIcoL",".mpr.mpa.mps.mpp.tbt.mpl.his.hss.hsa.hsp",7008,TR("Export an ILWIS object to another software format")));
-	addCommand(CommandHandlerUI::createCommandInfo("colorcomp","mpl",Cmdmplcolorcomp,TR("Visuali&zation.Show Map &List.as &Color Composite"),TR("Color Composite Interactive"),"DspMap16Ico","",7014,TR("Show a map list as a color composite in a new window")));
 	addCommand(CommandHandlerUI::createCommandInfo("colorcomp","mpl",Cmdmplcolorcomp,TR("Visuali&zation.Show Map &List.as &Color Composite"),TR("Color Composite Interactive"),"DspMap16Ico","",7014,TR("Show a map list as a color composite in a new window")));
 	addCommand(CommandHandlerUI::createCommandInfo("createView","",createView,"","","","",0,""));
 }

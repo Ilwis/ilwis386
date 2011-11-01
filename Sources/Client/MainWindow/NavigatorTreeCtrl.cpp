@@ -394,7 +394,8 @@ void NavigatorTreeCtrl::OnLButtonDown(UINT nFlags, CPoint point)
 		const FileName& fn = afn[abs(iNr)-1];
 		SelectItem(hti);
 		SetFocus();
-		CDocument *doc = IlwWinApp()->OpenDirectory(fn.sFile.c_str());
+		String name = fn.sFile;
+		CDocument *doc = IlwWinApp()->OpenDirectory(name.c_str());
 		if ( doc == NULL )
 			IlwWinApp()->OpenNewDirectory(fn.sFile.c_str());
 	}
