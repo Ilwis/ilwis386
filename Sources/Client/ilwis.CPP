@@ -1406,6 +1406,7 @@ CDocument* IlwisWinApp::OpenDirectory(LPCTSTR lpszFileName)
 	if (0 == dirdoc)
 		return 0;
 	dirdoc->OnOpenDocument(lpszFileName);
+	SetCurDir(lpszFileName);
 	dirdoc->UpdateAllViews(0);
 	return dirdoc;
 }
