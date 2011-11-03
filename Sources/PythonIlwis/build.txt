@@ -1,0 +1,2 @@
+swig -python -c++ -o ilwis_wrap.cpp ilwis.i
+python setup.py build_ext --inplace
