@@ -6,11 +6,13 @@
 #include "Engine\Base\System\ILWSingleLock.h"
 #include "Client\Help\HelpFinder.h"
 
+#define LIMIT_COUNT 650
+
 using namespace ILWIS;
 
-HelpFinder::HelpFinder() {
-	String exc("wait,while,wants,was,were,what,whenever,where,whereas,whether,while,whole,whose,why,why,whishes,whithout,word,wording,words,work,working,works,would,wrapped,wrong,wrongly");
-	exc += "abbreviation,abc,about,above,absolute,absolutely,accept,access";
+HelpFinder::HelpFinder() : indexed(false){
+	String exc("segment,script,semivariogram,stereo,table,tiepoints,undefined");
+	
 	Array<String> parts;
 	Split(exc,parts,",");
 	for(int i=0; i < parts.size(); ++i)
@@ -145,25 +147,34 @@ bool HelpFinder::isWhiteSpace(char c) {
 	return c == ' ' || c == '\t' || c == '\n' || c == '\r';
 }
 
+bool HelpFinder::isAccepted(const map<String, WordInfo>::iterator& cur) const{
+	int sz = (*cur).second.count;
+	if ( sz > 2 && sz < LIMIT_COUNT) 
+		return true;
+	if ( sz >= LIMIT_COUNT) {
+		set<String>::const_iterator fnd = exceptionsWords.find((*cur).first);
+		if ( fnd != exceptionsWords.end())
+				return true;
+	}
+	return false;
+}
+
 void HelpFinder::startIndexing() {
 	ILWISSingleLock sl(&csAccess, TRUE,SOURCE_LOCATION);
 	String folder = getEngine()->getContext()->sIlwDir() + "help";
 	findFolder(folder);
 	for(map<String, WordInfo>::iterator cur = tempIndexedWords.begin(); cur != tempIndexedWords.end(); ++cur) {
-
-		if ( (*cur).second.count > 2 && (*cur).second.count < 30) {
+		
+		if ( isAccepted(cur)) {
 			String word = (*cur).first;
 			word.toLower();
-			//set<String>::const_iterator fnd = exceptionsWords.find(word);
-			//if ( fnd != exceptionsWords.end())
-			//	continue;
-
+	
 			indexedWords[word] = (*cur).second;
 			indexedWords[word].word = word;
-		} else {
-			TRACE(String("%S(%d) >> ",(*cur).first, (*cur).second.count).c_str());
+		} /*else {
+			TRACE(String("%S(%d) >> \n ",(*cur).first, (*cur).second.count).c_str());
 
-		}
+		}*/
 	}
 	char c = 0;
 	for(map<String, WordInfo>::iterator cur = indexedWords.begin(); cur != indexedWords.end(); ++cur) {
@@ -175,10 +186,21 @@ void HelpFinder::startIndexing() {
 		}
 	}
 	tempIndexedWords.clear();
+	indexed = true;
 }
 
 void HelpFinder::find(const String& wrd, vector<WordInfo>& result) {
 	ILWISSingleLock sl(&csAccess, TRUE,SOURCE_LOCATION);
+	if ( !indexed)
+		startIndexing();
+
+	if ( wrd == oldWord) {
+		result.resize(oldContent.size());
+		copy(oldContent.begin(), oldContent.end(), result.begin());
+		return;
+	}
+	oldWord = wrd;
+	oldContent.clear();
 	if ( wrd.size() == 0) {
 		result.resize(indexedWords.size());
 		for(map<String, WordInfo>::const_iterator cur = indexedWords.begin(); cur != indexedWords.end(); ++cur) {
@@ -186,6 +208,10 @@ void HelpFinder::find(const String& wrd, vector<WordInfo>& result) {
 		}
 	} else {
 		char c = wrd[0];
+		if ( startPoints.size() == 0) {
+			return;
+		}
+
 		map<String, WordInfo>::iterator start = startPoints[c];
 		if ( (*start).second.count > 0) {
 			for(map<String, WordInfo>::const_iterator cur = start; cur != indexedWords.end(); ++cur) {
@@ -201,6 +227,8 @@ void HelpFinder::find(const String& wrd, vector<WordInfo>& result) {
 		}
 
 	}
+	oldContent.resize(result.size());
+	copy(result.begin(), result.end(), oldContent.begin());
 }
 
 void HelpFinder::indexHTMLFiles() {

@@ -17,4 +17,6 @@ private:
 	String selectedKey;
 	vector<ILWIS::WordInfo> content;
 	long currentContentIndex;
+	String oldKey;
+	String oldPath;
 };

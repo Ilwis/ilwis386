@@ -32,6 +32,7 @@ public:
 	FileName find(const String& query);
 	void startIndexing();
 	void find(const String& wrd, vector<WordInfo>& result) ;
+	bool isIndexed() const { return indexed; }
 
 private:
 	static UINT startIndexing(LPVOID _hf);
@@ -43,6 +44,7 @@ private:
 	bool isWhiteSpace(char c);
 	bool noSpecialSymbol(char c);
 	String getTitle(int index, const String& s);
+	bool isAccepted(const map<String, WordInfo>::iterator& cur) const;
 
 	map<String, WordInfo> indexedWords;
 	map<String, WordInfo> tempIndexedWords;
@@ -51,5 +53,8 @@ private:
 	set<String> includedWords;
 	set<String> exceptionsFiles;
 	CCriticalSection csAccess;
+	String oldWord;
+	vector<WordInfo> oldContent;
+	bool indexed;
 };
 }

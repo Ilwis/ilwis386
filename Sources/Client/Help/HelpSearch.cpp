@@ -30,7 +30,10 @@ int HelpSearch::openHelp(Event *ev) {
 		for(map<String, ILWIS::WordEntry>::iterator cur = wi.entries.begin(); cur != wi.entries.end(); ++cur, ++n) {
 			if ( sel == n) {
 				String path = (*cur).first;
+				if ( path == oldPath)
+					break;
 				IlwWinApp()->showHelp(path);
+				oldPath = path;
 				break;
 			}
 		}
@@ -44,16 +47,16 @@ int HelpSearch::filterContent(Event *ev) {
 		return 1;
 	content.clear();
 	IlwWinApp()->getHelpFinder()->find(wrd, content);
+	fsSearch->Enable();
 	if ( content.size() == 0)
 		return 0;
 	Array<String> strings;
+	fTopics->resetContent(strings); // will clear it
+	currentContentIndex = iUNDEF;
+
 	strings.resize(content.size());
 	for(int i=0; i < content.size(); ++i) {
-#if _DEBUG
-	strings[i] = String("%S(%d)",content[i].word, content[i].count); 
-#else
-	strings[i] = content[i].word;
-#endif
+		strings[i] = String("%S(%d)",content[i].word, content[i].count);
 	}
 	fsStrings->resetContent(strings);
 
@@ -65,6 +68,9 @@ int HelpSearch::setTopics(Event *ev) {
 	if ( fsStrings->iGetSingleSelection() == -1)
 		return 0;
 	String key = fsStrings->sGetSelectedString();
+	if ( key == oldKey)
+		return 0;
+	oldKey = key;
 	#if _DEBUG
 	key = key.sHead("(");
 	#endif
