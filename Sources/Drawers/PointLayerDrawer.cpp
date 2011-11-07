@@ -73,12 +73,14 @@ void PointLayerDrawer::prepare(PreparationParameters *parm){
 			}
 			props->set(properties);
 
-			if ( tbl.fValid() && properties->stretchColumn != "") {
-				Column col = tbl->col(properties->stretchColumn);
-				if ( col.fValid())
-					props->stretchRange = col->rrMinMax();
-			} else {
-				props->stretchRange = mapDrawer->getStretchRangeReal();
+			if ( !props->stretchRange.fValid()) {
+				if ( tbl.fValid() && properties->stretchColumn != "") {
+					Column col = tbl->col(properties->stretchColumn);
+					if ( col.fValid())
+						props->stretchRange = col->rrMinMax();
+				} else {
+					props->stretchRange = mapDrawer->getStretchRangeReal();
+				}
 			}
 			if ( rotColumn.fValid() ) {
 				Feature *feature = ld->getFeature();

@@ -349,6 +349,7 @@ String PointProperties::store(const FileName& fnView, const String& parentSectio
 	ObjectInfo::WriteElement(parentSection.c_str(),"StretchScale",fnView, stretchScale);
 	ObjectInfo::WriteElement(parentSection.c_str(),"StretchRange",fnView, stretchRange);
 	ObjectInfo::WriteElement(parentSection.c_str(),"StretchColumn",fnView, stretchColumn);
+	ObjectInfo::WriteElement(parentSection.c_str(),"MaxScale",fnView, maxScale);
 	
 
 	return parentSection;
@@ -367,5 +368,6 @@ void PointProperties::load(const FileName& fnView, const String& parentSection){
 	ObjectInfo::ReadElement(parentSection.c_str(),"StretchScale",fnView, stretchScale);
 	ObjectInfo::ReadElement(parentSection.c_str(),"StretchRange",fnView, stretchRange);
 	ObjectInfo::ReadElement(parentSection.c_str(),"StretchColumn",fnView, stretchColumn);
+	ObjectInfo::ReadElement(parentSection.c_str(),"MaxScale",fnView, maxScale);
 	
 }

@@ -25,7 +25,7 @@ ComplexDrawer(parms,"GridDrawer")
 	id = name = "GridDrawer";
 	rDist = rUNDEF;
 	setActive(false);
-	setTransparency(0.4);
+	//setTransparency(0.4);
 	threeDGrid = false;
 	lproperties.thickness = 1;
 	lproperties.drawColor = Color(0,0,0);
@@ -198,8 +198,8 @@ void GridDrawer::prepareVerticals(double rDist,const Coord& cMax, const Coord& c
 }
 
 void GridDrawer::getLayerDistances(vector<double>& dist) {
-	if ( dist.size() == 0)
-		return;
+	//if ( dist.size() == 0)
+	//	return;
 
 	RootDrawer *rootDrawer = getRootDrawer();
 	int n = rootDrawer->getDrawerCount();

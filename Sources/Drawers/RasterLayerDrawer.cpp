@@ -189,8 +189,13 @@ void RasterLayerDrawer::init() const
 		data->maxTextureSize = iXScreen;
 	if (iYScreen < data->maxTextureSize)
 		data->maxTextureSize = iYScreen;
-	data->imageWidth = gr()->rcSize().Col;
-	data->imageHeight = gr()->rcSize().Row;
+	if ( !gr()->rcSize().fUndef()) {
+		data->imageWidth = gr()->rcSize().Col;
+		data->imageHeight = gr()->rcSize().Row;
+	} else if ( rastermap.fValid()) {
+		data->imageWidth = rastermap->rcSize().Col;
+		data->imageHeight = rastermap->rcSize().Row;
+	}
 
 	double log2width = log((double)data->imageWidth)/log(2.0);
 	log2width = max(6, ceil(log2width)); // 2^6 = 64 = the minimum texture size that OpenGL/TexImage2D supports

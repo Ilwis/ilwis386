@@ -37,11 +37,8 @@ namespace ILWIS{
 
 	protected:
 		void AddGridLine(Coord c1, Coord c2);
-		void displayOptionSetLineStyle(CWnd *parent);
 		void gridOptions(CWnd *parent);
 		void displayOptionGrid3D(CWnd *parent);
-		void gridActive(void *value, LayerTreeView *v);
-		void grid3D(void *v, LayerTreeView *tv);
 		void prepareGrid( double rDist, const Coord& cMax, const Coord& cMin );
 		void prepareVerticals( double rDist,const Coord& cMax, const Coord& cMin);
 		String store(const FileName& fnView, const String& parenSection) const;
