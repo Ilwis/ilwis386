@@ -853,3 +853,11 @@ bool PolygonMapPtr::removeFeature(const String& id, const vector<int>& selectedC
 		return pms->removeFeature(id, selectedCoords);
 	return false;
 }
+
+vector<Feature *> PolygonMapPtr::getFeatures(const CoordBounds& cb, bool complete) const {
+	if ( pms) {
+		return pms->getFeatures(cb, complete);
+	}
+	return vector<Feature *>();
+
+}
