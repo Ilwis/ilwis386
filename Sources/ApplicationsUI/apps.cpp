@@ -135,6 +135,7 @@ extern "C" _export InfoUIVector* getCommandInfoUI(ILWIS::Module *module) {
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("tblglue","",Cmdtblglue,TR("&Table Operations..&Glue Tables"),TR("Table Glue "),"ExeTbl16IcoL",".tbt",5082,TR("Glue multiple tables into one table")));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("bursawolf","", Cmdbursawolf,TR("&Spatial Reference Operations.&Coordinates.Bursa-Wolf"),TR("Bursa-Wolf parameters"),".csy",".csy",-1,""));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("maplistgraph","",Cmdmaplistgraph,TR("&Statistics.&MapList.&MapList Graph"),TR("MapList Graph"),".grh",".mpl",0000,TR("Show a z-graph of a map list")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("clmjoin","",Cmdjoin,"","",".grh",".mpl",0000,"Joins column(s) into a table", false));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("clmaggregate","",Cmdclmaggregate,"","",".grh",".mpl",0000,"Calculate the aggregate of a column", false));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("clmsemivariogram","",Cmdclmsemivar,"","",".grh",".mpl",0000,"Calculate the semivariogram of a column", false));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("clmstatistics","",Cmdclmstatistiscs,"","",".grh",".mpl",0000,"Calculate the statistics of a column", false));
