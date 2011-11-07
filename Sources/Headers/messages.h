@@ -32,6 +32,7 @@
 #define ILWM_CMDHANDLERUI     (WM_APP + 11)  // sends commands to the commandhandlerui object
 
 #define ILWM_CALLBACK		  (WM_APP + 12)	
+#define ILWM_OPENMAP		  (WM_APP + 13) // sends a message to the mappane view to open a certain map; the WPARAM is a pointer to the filename(string)
 
 #endif // MESSAGES_H
 
