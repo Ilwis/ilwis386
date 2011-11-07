@@ -256,6 +256,10 @@
 				RelativePath="..\..\Sources\SEBS\MapSMAC.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\..\Sources\SEBS\MapWaterVapour.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -304,6 +308,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\SEBS\MapSMAC.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\SEBS\MapWaterVapour.h"
 				>
 			</File>
 		</Filter>
