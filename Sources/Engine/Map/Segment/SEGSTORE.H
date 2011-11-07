@@ -105,6 +105,7 @@ public:
 	bool fRawAvailable() const { return ptr.fRawAvailable(); }
 	bool fRawIsValue() const   { return ptr.fRawIsValue(); }
 	bool fValues() const       { return ptr.fValues(); }
+    vector<Feature *> getFeatures(const CoordBounds& cb, bool complete=true) const;
 
 	void				DoNotUpdate();	
 	void				Pack();

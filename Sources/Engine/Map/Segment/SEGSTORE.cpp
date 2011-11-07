@@ -774,3 +774,9 @@ bool SegmentMapStore::removeFeature(const String& id, const vector<int>& selecte
 	}
 	return false;
 }
+
+vector<Feature *> SegmentMapStore::getFeatures(const CoordBounds& cb, bool complete) const {
+
+	return vector<Feature *>();
+
+}

@@ -936,3 +936,11 @@ bool SegmentMapPtr::removeFeature(const String& id, const vector<int>& selectedC
 		return pms->removeFeature(id, selectedCoords);
 	return false;
 }
+
+vector<Feature *> SegmentMapPtr::getFeatures(const CoordBounds& cb, bool complete) const {
+	if ( pms) {
+		return pms->getFeatures(cb, complete);
+	}
+	return vector<Feature *>();
+
+}

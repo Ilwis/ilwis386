@@ -194,6 +194,7 @@ public:
 	// next group is moved from SegmentMapStore
 	ILWIS::Segment*  newFeature(long iSegNr);
 	Feature*  newFeature(geos::geom::Geometry *line=NULL);
+    vector<Feature *> getFeatures(const CoordBounds& cb, bool complete=true) const;
 
 	// next group are reimplemented (from IlwisObjectPtr):
 	virtual void    GetDataFiles(Array<FileName>& afnDat, Array<String>* asSection=0, Array<String>* asEntry=0) const;
