@@ -181,7 +181,8 @@ public:
 	void  TopologicalMap(bool fYes=true);
 	void  GetObjectStructure(ObjectStructure& os);
 	void  DoNotUpdate();	
-	 IlwisObjectVirtual *pGetVirtualObject() const;	
+	 IlwisObjectVirtual *pGetVirtualObject() const;
+     vector<Feature *> getFeatures(const CoordBounds& cb, bool complete=true) const;
 	
 protected:
 	PolygonMapPtr(const FileName&, bool fCreate=false);
