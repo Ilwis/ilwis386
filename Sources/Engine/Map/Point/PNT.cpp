@@ -866,3 +866,11 @@ Geometry *PointMapPtr::getFeatureById(const String& id) const {
   }
   return NULL;
 }
+
+vector<Feature *> PointMapPtr::getFeatures(const CoordBounds& cb, bool complete) const {
+	if ( pms) {
+		return pms->getFeatures(cb, complete);
+	}
+	return vector<Feature *>();
+
+}

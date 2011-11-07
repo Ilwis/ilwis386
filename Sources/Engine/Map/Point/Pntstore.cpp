@@ -622,3 +622,28 @@ bool PointMapStore::removeFeature(const String& id, const vector<int>& selectedC
 Geometry *PointMapStore::getFeatureById(const String& id) const {
 	return BaseMapPtr::getFeatureById(geometries, id);
 }
+
+vector<Feature *> PointMapStore::getFeatures(const CoordBounds& cb, bool complete) const {
+	geos::geom::Envelope env(cb.cMin, cb.cMax);
+	vector<void *> v;
+	vector<Feature *> features;
+	spatialIndex->query(&env,v);
+	for(int i=0; i < v.size(); ++i) {
+		Geometry *g = (Geometry *)v[i];
+		CoordinateSequence *seq = g->getCoordinates();
+		bool isIn = true;
+		for( int  j =0; j < seq->size() && isIn; ++j) {
+			if ( !cb.fContains(seq->getAt(j))) {
+				isIn = false;
+			}
+		}
+		delete seq;
+		if ( isIn) {
+			features.push_back(CFEATURE(g));
+		}
+
+	}
+
+	return features;
+
+}
