@@ -89,17 +89,19 @@ bool PointDrawer::draw( const CoordBounds& cbArea) const {
 	double fy = cNorm.y;
 	double fz = is3D ? cNorm.z : z0;
 
-	double symbolScale = cbZoom.width() / 250;
+	double symbolScale = cbZoom.width() / 200;
 	CoordBounds cb(Coord(fx - symbolScale, fy - symbolScale,fz), Coord(fx + symbolScale, fy + symbolScale,fz));
 	CoordBounds localCb = element->getCb();
 	double f = localCb.width() > 0 ? localCb.height() / localCb.width()  : 1.0;
 
 	double xscale = cb.width() / width;
 	double yscale = f * cb.height() / height;
+	double zscale = yscale;
+
 
 	glPushMatrix();
 	glTranslated(fx,fy,fz);
-	glScaled(xscale * properties.scaling(), yscale *  properties.scaling(), 1);
+	glScaled(xscale * properties.scaling(), yscale *  properties.scaling(), zscale * properties.scaling());
 	Coord cMid = localCb.middle();
 	glScaled(1.0,-1.0,1.0); // opengl uses other oriented coordinate system then svg. have to mirror it.
 	//glTranslated(-cMid.x, -cMid.y,0);
