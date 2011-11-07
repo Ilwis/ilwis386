@@ -34,55 +34,7 @@ Software Foundation, http://www.fsf.org.
 
 Created on: 2007-02-8
 ***************************************************************/
-/* $Log: /ILWIS 3.0/Import_Export/EXPSHPPL.cpp $
-* 
-* 6     13-12-05 11:15 Willem
-* Export to shape now also exports coordinate system to .PRJ file
-* 
-* 5     9/01/01 16:31 Willem
-* Changed code to properly display the message "ILWIS::Polygon Map is empty,
-* nothing has been exported"
-* 
-* 4     16/03/00 16:31 Willem
-* - Replaced the obsolete trq.Message() function with MessageBox()
-* function
-* 
-* 3     17-06-99 3:59p Martin
-* // -> /*
-* 
-* 2     17-06-99 2:10p Martin
-* ported files to VS
-// Revision 1.6  1998/09/17 09:13:06  Wim
-// 22beta2
-//
-// Revision 1.5  1997/09/16 17:25:32  janh
-// Avoid Import empty PolMaps and send message
-//
-// Revision 1.4  1997/08/04 17:39:28  Wim
-// Hack which removes any reference to ErrorTooMuchPoints to garantee
-// that the files compile.
-//
-// Revision 1.3  1997/08/01 20:55:51  Willem
-// 1. Changed the buffer handling to be able to handle polygons with
-//    up to 64000 coordinates (the maximum in ArcView)
-// 2. DomainBool (both for the table domain and for attribute domains) is
-//    now handled correctly. The DBF field becomes Logical and the fieldvalues
-//    T (true), F (false) and ? (undefined). The undefined will stay blank
-//    when displayed in ArcView.
-//
-/*
-Export ArcView .shp format
-by Li Fei, March 96
-ILWIS Department ITC
-Last change:  JHE  16 Sep 97    5:59 pm
-*/
 
-/*
-Revision history:
-14/03/97: polygon map with value domain did not export OK; the value was mistaken
-to refer to a polygon instead of to the value itself. As a result many 
-values became UNDEF. Solved.
-*/
 #include "Headers\toolspch.h"
 #include "Engine\DataExchange\Convloc.h"
 #include "Engine\Domain\Dmvalue.h"
