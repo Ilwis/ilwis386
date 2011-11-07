@@ -91,6 +91,7 @@ public:
 protected:
 	void SetDirty();	
   LRESULT OnViewSettings(WPARAM wP, LPARAM lP);
+  LRESULT OnOpenMap(WPARAM wP, LPARAM lp);
 	// Generated message map functions
 	virtual void OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);

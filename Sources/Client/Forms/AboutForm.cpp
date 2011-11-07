@@ -17,7 +17,9 @@ AboutForm::AboutForm(CWnd* parent) : FormWithDest(parent,TR("About ILWIS"),fbsSH
 		modules.push_back(m->getNameAndVersion());
 	}
 	persons.push_back("Community leader : Rob Lemmens");
-	persons.push_back("Main developer : Martin Schouwenburg");
+	persons.push_back("Developers: ");
+	persons.push_back("Martin Schouwenburg (main)");
+	persons.push_back("Base Retsios");
 	persons.push_back("SEBS & Hydroflow : Lichun Wang");
 	persons.push_back(" ");
 	persons.push_back("Past Developers:");
@@ -25,10 +27,14 @@ AboutForm::AboutForm(CWnd* parent) : FormWithDest(parent,TR("About ILWIS"),fbsSH
 	persons.push_back("Jelle Wind");
 	persons.push_back("Willem Nieuwenhuis");
 	persons.push_back("Petra Budde");
-	persons.push_back("Base Retsios");
 	persons.push_back("Jan Hendrikse");
 	persons.push_back("Raymond Nijmeier");
+	persons.push_back(" ");
+	persons.push_back("Translations");
+	persons.push_back("French: Robin Prest");
+	persons.push_back("Spanish: Sandra Patricia");
 	dummy = TR("http://52north.org/ilwis");
+
 
 	FieldGroup *fg1 = new FieldGroup(root,true);
 	FieldPicture * fp1 = new FieldPicture(fg1, NULL,NULL, true);

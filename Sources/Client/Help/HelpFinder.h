@@ -25,6 +25,7 @@ namespace ILWIS {
 		String word;
 	};
 
+
 class HelpFinder {
 public:
 	HelpFinder();
@@ -45,6 +46,7 @@ private:
 	bool noSpecialSymbol(char c);
 	String getTitle(int index, const String& s);
 	bool isAccepted(const map<String, WordInfo>::iterator& cur) const;
+	bool loadIndexFile(const String& folder);
 
 	map<String, WordInfo> indexedWords;
 	map<String, WordInfo> tempIndexedWords;

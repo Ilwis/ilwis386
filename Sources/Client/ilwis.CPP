@@ -522,8 +522,10 @@ BOOL IlwisWinApp::InitInstance()
 			}
 		}
 		helpFinder = new ILWIS::HelpFinder();
-		if ( m_sCommand == "")
+		if ( m_sCommand == "") {
+			//::MessageBox(0,"Start index", "help", MB_OK);
 			helpFinder->indexHTMLFiles();
+		}
 
 		return TRUE;
 	}

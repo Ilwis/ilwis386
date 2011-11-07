@@ -8,6 +8,15 @@
 
 #define LIMIT_COUNT 650
 
+ostream& operator <<(ostream &os, const ILWIS::WordInfo& inf)
+{
+	os << inf.count << "|";
+	for(map<String, ILWIS::WordEntry>::const_iterator cur = inf.entries.begin(); cur != inf.entries.end(); ++cur) {
+		os << (*cur).first << "|" << (*cur).second.count << "|" << (*cur).second.title << "@";  
+	}
+	 return os;
+}
+
 using namespace ILWIS;
 
 HelpFinder::HelpFinder() : indexed(false){
@@ -162,19 +171,24 @@ bool HelpFinder::isAccepted(const map<String, WordInfo>::iterator& cur) const{
 void HelpFinder::startIndexing() {
 	ILWISSingleLock sl(&csAccess, TRUE,SOURCE_LOCATION);
 	String folder = getEngine()->getContext()->sIlwDir() + "help";
-	findFolder(folder);
-	for(map<String, WordInfo>::iterator cur = tempIndexedWords.begin(); cur != tempIndexedWords.end(); ++cur) {
-		
-		if ( isAccepted(cur)) {
-			String word = (*cur).first;
-			word.toLower();
-	
-			indexedWords[word] = (*cur).second;
-			indexedWords[word].word = word;
-		} /*else {
-			TRACE(String("%S(%d) >> \n ",(*cur).first, (*cur).second.count).c_str());
+	if ( !loadIndexFile(folder)) {
+		findFolder(folder);
+		for(map<String, WordInfo>::iterator cur = tempIndexedWords.begin(); cur != tempIndexedWords.end(); ++cur) {
 
-		}*/
+			if ( isAccepted(cur)) {
+				String word = (*cur).first;
+				word.toLower();
+
+				indexedWords[word] = (*cur).second;
+				indexedWords[word].word = word;
+			} 		
+		}
+		tempIndexedWords.clear();
+		ofstream outfile(String("%S\\index_eng.idx", folder).c_str());
+		for(map<String, WordInfo>::const_iterator cur = indexedWords.begin(); cur != indexedWords.end(); ++cur) {
+			outfile << (*cur).first << "|" << (*cur).second << "\n";
+		}
+		outfile.close();
 	}
 	char c = 0;
 	for(map<String, WordInfo>::iterator cur = indexedWords.begin(); cur != indexedWords.end(); ++cur) {
@@ -185,8 +199,48 @@ void HelpFinder::startIndexing() {
 			c = c1;
 		}
 	}
-	tempIndexedWords.clear();
+
 	indexed = true;
+}
+
+bool HelpFinder::loadIndexFile(const String& folder) {
+	FileName fn(String("%S\\index_eng.idx", folder));
+	if ( !fn.fExist())
+		return false;
+
+	ifstream infile(fn.sFullPath().c_str());
+	char cline[100000];
+	while(!infile.bad() && !infile.eof()) {
+		infile.getline(cline,100000);
+		String line(cline);
+		if ( line == "")
+			break;
+		WordInfo inf;
+		inf.word = line.sHead("|");
+		String rest = line.sTail("|");
+		inf.count = rest.sHead("|").iVal();
+		rest = rest.sTail("|");
+		Array<String> parts;
+		Split(rest,parts,"@");
+		for(int i=0; i < parts.size(); ++i) {
+			WordEntry entry;
+			Array<String> eparts;
+			Split(parts[i], eparts,"|");
+			String key = eparts[0];
+			if ( eparts.size() == 3) {
+				entry.title = eparts[2];
+				entry.count = eparts[1].iVal();
+			} else {
+				entry.count = eparts[1].iVal();
+			}
+			inf.entries[key] = entry;
+		}
+		indexedWords[inf.word] = inf;
+
+
+	}
+	return true;
+
 }
 
 void HelpFinder::find(const String& wrd, vector<WordInfo>& result) {

@@ -62,9 +62,11 @@ public:
 protected:    
   afx_msg void OnShow();
   afx_msg void OnDefine();
+  void openMap(const IlwisObject& obj);
 	bool fShow;
   int exec();
-  void OnHelp();                             
+  void OnHelp();
+  HWND hwnd ; // optionale handle to mappane view; used when a message has to be send to pane
   DECLARE_MESSAGE_MAP();
 };
 

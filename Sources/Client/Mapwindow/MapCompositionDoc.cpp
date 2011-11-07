@@ -1471,7 +1471,7 @@ void MapCompositionDoc::OnAddLayer()
 			drAppend(fn,IlwisDocument::otUNKNOWN);
 		}
 		ChangeState();
-		UpdateAllViews(0,2);
+//		UpdateAllViews(0,2);
 	}
 }
 

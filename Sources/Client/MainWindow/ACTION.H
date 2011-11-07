@@ -48,14 +48,14 @@ struct CommandInfoUI;
 #include "Client\Base\Res.h"
 #endif
 
-class Action
+class _export Action
 {
 public:
   Action(CommandInfoUI* info);
   Action(const String&, const String& sObject="", const String& sPathExternCommand="");
 	String sIcon() const { return sIco; }
   bool fExtension(const String&) const;
-  String _export sExec(const FileName&) const;
+  String sExec(const FileName&) const;
   String sAction() const { return sCmd; }
   String sDescription() const { return sDescr; }
   String sDescriptionS() const { return sDescrS; }
@@ -78,7 +78,7 @@ private:
   long iHelpTopic;
 };
 
-class ActionList: public SListP<Action>
+class _export ActionList: public SListP<Action>
 {
 public:
   ActionList();

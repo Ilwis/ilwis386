@@ -33,45 +33,9 @@
  Software Foundation, http://www.fsf.org.
 
  Created on: 2007-02-8
- ***************************************************************/
-/* $Log: /ILWIS 3.0/ApplicationForms/frmsegcr.cpp $
- * 
- * 7     5-07-00 9:36 Koolhoven
- * Application Forms now use Show and Define buttons instead of OK
- * 
- * 6     30-09-99 15:22 Koolhoven
- * Application Forms now use the correct icon
- * 
- * 5     9/13/99 12:35p Wind
- * adapted :exec functions to use of quoted file names when building an
- * expression
- * 
- * 4     24-03-99 11:15 Koolhoven
- * Header comment
- * 
- * 3     3/23/99 9:26a Martin
- * WinExec -> IlwisApp->Execute
- /* 
- * 2     3/22/99 9:17a Martin
- * Some dependecies of .h files had changed. WinExec removed from all
-// Revision 1.4  1998/09/16 17:33:54  Wim
-// 22beta2
-//
-// Revision 1.3  1997/07/30 07:49:47  Wim
-// Put winExec() before mpOut is destructed.
-// Too fast reloading it seem to cause problems in Windows function
-// GetPrivateProfileString or in Ilwis object management.
-//
-// Revision 1.2  1997-07-28 16:32:16+02  Wim
-// call winExec after destructor of mpOut
-//
-/* FormSegmentMapCreate
-   Copyright Ilwis System Development ITC
-   february 1996, by Wim Koolhoven
-	Last change:  WK   30 Jul 97    9:49 am
 */
-
 #include "Client\Headers\AppFormsPCH.h"
+#include "Engine\base\system\engine.h"
 #include "Client\ilwis.h"
 #include "Client\Forms\frmsegcr.h"
 
@@ -131,13 +95,7 @@ void FormSegmentMapCreate::execSegmentMapOut(const String& sExpr)
     if (sDescr[0])
       mpOut->sDescription = sDescr;
     mpOut->Store(); // destructor of mpOut could be called later than opening map
-    // in new ILWIS instance using winExec
-    if (fShow) {
-      String sExec = "show ";
-      sExec &= mpOut->sNameQuoted(true);
-      //winExec(sExec.c_str(), SW_SHOWNORMAL);
-			ILWISAPP->Execute(sExec);
-    }
+	openMap(mpOut);
   }  
   catch (ErrorObject& err) {
     err.Show();

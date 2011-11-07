@@ -96,6 +96,7 @@ LayerTreeView::LayerTreeView()
 	odt = new COleDropTarget;
 	fDragging = false;
 	drwTool = 0;
+	currentItem = 0;
 }
 
 LayerTreeView::~LayerTreeView()
@@ -164,6 +165,7 @@ void LayerTreeView::DeleteAllItems(HTREEITEM hti, bool childerenOnly)
 		}
 		tc.DeleteItem(hti);
 	}
+	currentItem = 0;
 	collectStructure();
 }
 
@@ -411,16 +413,19 @@ void LayerTreeView::OnLButtonDown(UINT nFlags, CPoint point)
 	}
 }
 
+LayerTreeItem *LayerTreeView::getCurrent() const {
+	return currentItem;
+}
+
 void LayerTreeView::OnLButtonDblClk(UINT nFlags, CPoint point) 
 {
 	CTreeCtrl& tc = GetTreeCtrl();
 	UINT uFlags=0;	
 	HTREEITEM hti = tc.HitTest(point,&uFlags);
-	LayerTreeItem* lti = 0;
 	if (hti)
-		lti = (LayerTreeItem*)tc.GetItemData(hti);
-	if (lti)
-		lti->OnLButtonDblClk(nFlags, point);
+		currentItem = (LayerTreeItem*)tc.GetItemData(hti);
+	if (currentItem)
+		currentItem->OnLButtonDblClk(nFlags, point);
 	else
 		CTreeView::OnLButtonDblClk(nFlags, point);
 }

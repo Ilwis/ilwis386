@@ -40,6 +40,7 @@ Created on: 2007-02-8
 #include "Client\Headers\formelementspch.h"
 #include <winuser.h>
 #include "Client\ilwis.h"
+#include "Engine\Base\System\Engine.h"
 #include "Engine\Map\Segment\Seg.h"
 #include "engine\map\polygon\POL.H"
 #include "Client\Base\datawind.h"
@@ -162,6 +163,7 @@ BEGIN_MESSAGE_MAP(MapPaneView, SimpleMapPaneView)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_MAPDBLCLKRECORD, ID_MAPDBLCLKACTION, OnUpdateDoubleClickAction)
 	ON_COMMAND(ID_SHOWRECORDVIEW, OnShowRecordView)
 	ON_UPDATE_COMMAND_UI(ID_SHOWRECORDVIEW, OnUpdateShowRecordView)
+	ON_MESSAGE(ILWM_OPENMAP,OnOpenMap)
 	ON_WM_KEYDOWN()
 END_MESSAGE_MAP()
 
@@ -1324,6 +1326,27 @@ LRESULT MapPaneView::OnViewSettings(WPARAM wP, LPARAM lP)
 		if (0 != edit)
 			edit->PreSaveState();
 	}*/
+	return TRUE;
+}
+
+LRESULT MapPaneView::OnOpenMap(WPARAM wP, LPARAM lp) {
+	String *s = (String *)(void *)wP;
+	String filename(*s);
+	delete s;
+	if ( filename.size() > 0) {
+		FileName fn(filename);
+		getEngine()->getContext()->SetThreadLocalVar(IlwisAppContext::tlvMAPWINDOWAPP, 0);
+		if ( IOTYPEBASEMAP(fn)) {
+			GetDocument()->drAppend(fn);
+		}
+		if ( IOTYPE(fn) == IlwisObject::iotMAPLIST || IOTYPE(fn) == IlwisObject::iotOBJECTCOLLECTION) {
+			if ( ::MessageBox(m_hWnd,TR("Open as Animation").c_str(), TR("Open").c_str(),MB_YESNO) == MB_OK) {
+				GetDocument()->drAppend(fn, IlwisDocument::otANIMATION);
+			} else {
+				GetDocument()->drAppend(fn);
+			}
+		}
+	}
 	return TRUE;
 }
 

@@ -36,6 +36,8 @@
  ***************************************************************/
 
 #include "Client\Headers\formelementspch.h"
+#include "Engine\base\system\engine.h"
+#include "Headers\messages.h"
 #include "Client\FormElements\frmgenap.h"
 #include "Client\ilwis.h"
 #include <afxdisp.h>        // MFC Automation classes
@@ -50,18 +52,39 @@ END_MESSAGE_MAP()
 
 
 FormGeneralApplication::FormGeneralApplication(CWnd* parent, const String& sTitle)
-: FormBaseDialog(parent, sTitle, true, false, true)
+: FormBaseDialog(parent, sTitle, true, false, true),
+hwnd(0)
 {
 	int iImg = IlwWinApp()->iImage("Exe16Ico");
 	HICON hIco = IlwWinApp()->ilSmall.ExtractIcon(iImg);
 	SetIcon(hIco,FALSE);
 
-	fbs	|= fbsBUTTONSUNDER | fbsAPPLIC;
+	if ( getEngine()->getContext()->pGetThreadLocalVar(IlwisAppContext::tlvMAPWINDOWAPP)==0 )
+		fbs	|= fbsBUTTONSUNDER | fbsAPPLIC;
+	else {
+		fbs |= fbsBUTTONSUNDER;
+		long *handle = (long *)getEngine()->getContext()->pGetThreadLocalVar(IlwisAppContext::tlvMAPWINDOWAPP);
+		hwnd = *(HWND *)handle;
+		getEngine()->getContext()->SetThreadLocalVar(IlwisAppContext::tlvMAPWINDOWAPP, 0);
+	}
 }
 
 FormGeneralApplication::~FormGeneralApplication()
 {
 }
+
+void FormGeneralApplication::openMap(const IlwisObject& obj){
+	if (!hwnd) {
+		if (fShow) {
+			String sExec = "show " + obj->sNameQuoted(true);
+			IlwWinApp()->Execute(sExec);
+		}
+	} else {
+		String *filename = new String("%S", obj->fnObj.sRelative());
+		::PostMessage(hwnd,ILWM_OPENMAP,(WPARAM)filename,0);
+	}
+}
+
 
 int FormGeneralApplication::exec()
 {

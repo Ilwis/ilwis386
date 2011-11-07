@@ -42,6 +42,7 @@
 #endif // _MSC_VER > 1000
 
 class MapCompositionDoc;
+class LayerTreeItem;
 
 struct NodeInfo{
 	NodeInfo(HTREEITEM it=0, bool ex = false) : hItem(it), expanded(ex) {}
@@ -104,6 +105,7 @@ public:
 	void collectStructure(HTREEITEM parent=0, const String& name="");
 	void DeleteAllItems(HTREEITEM hti, bool childerenOnly=false);
 	ILWIS::DrawerTool *getRootTool();
+	LayerTreeItem *getCurrent() const;
 	//}}AFX_MSG
 protected:
 	void SwitchCheckBox(HTREEITEM hti);
@@ -121,6 +123,7 @@ private:
 	HTREEITEM hDraggedItem;	
 	CImageList *pDragImageList;
 	ILWIS::DrawerTool *drwTool;
+	LayerTreeItem *currentItem;
 	DECLARE_MESSAGE_MAP()
 public:
 #ifdef _DEBUG
