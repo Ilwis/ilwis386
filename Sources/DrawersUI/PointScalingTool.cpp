@@ -50,10 +50,12 @@ bool PointScalingTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	}
 	if ( bmptr->fTblAtt()) {
 		Table tblAtt = bmptr->tblAtt();
-		for(int i = 0; i < tblAtt->iCols(); ++i) {
-			if ( tblAtt->col(i)->dm()->pdv()) {
-				tbl = tblAtt;
-				return true;
+		if ( tblAtt.fValid()) {
+			for(int i = 0; i < tblAtt->iCols(); ++i) {
+				if ( tblAtt->col(i)->dm()->pdv()) {
+					tbl = tblAtt;
+					return true;
+				}
 			}
 		}
 	}
@@ -97,11 +99,11 @@ DisplayOptionsForm(dr,wPar,TR("Scaling")), tbl(_tbl), fcColumn(0), rrScale(Range
 	}
 
     frr = new FieldRangeReal(root, TR("&Stretch"), &(props->stretchRange));
-
-   // fri = new FieldRangeReal(root, TR("&Size (pt)"), &rrScale, ValueRange(0.1,10));
+	fmscale = new FieldReal(root,TR("Maximum scale"),&(props->maxScale)); 
+   
 
 	RadioGroup* rgLinLog = new RadioGroup(root, "", &stretchModel, true);
-    rgLinLog->Align(frr, AL_UNDER);
+    rgLinLog->Align(fmscale, AL_UNDER);
     rgLinLog->SetIndependentPos();
     new RadioButton(rgLinLog, TR("&Linear"));
     new RadioButton(rgLinLog, TR("Lo&garithmic"));
@@ -118,12 +120,10 @@ int PointScalingForm::ColValCallBack(Event*) {
 	if ( !fcColumn)
 		return -1;
 
-    String sOldCol = sCol;
     fcColumn->StoreData();
-    if (sOldCol != sCol) {
-      Column col = tbl->col(sCol);
-      frr->SetVal(col->rrMinMax());
-    }
+    Column col = tbl->col(props->stretchColumn);
+	if ( col.fValid())
+		frr->SetVal(col->rrMinMax());
     return 1;
   }
 void PointScalingForm::apply(){

@@ -50,10 +50,12 @@ bool PointDirectionTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	}
 	if ( bmptr->fTblAtt()) {
 		Table tblAtt = bmptr->tblAtt();
-		for(int i = 0; i < tblAtt->iCols(); ++i) {
-			if ( tblAtt->col(i)->dm()->pdv()) {
-				tbl = tblAtt;
-				return true;
+		if ( tblAtt.fValid()) {
+			for(int i = 0; i < tblAtt->iCols(); ++i) {
+				if ( tblAtt->col(i)->dm()->pdv()) {
+					tbl = tblAtt;
+					return true;
+				}
 			}
 		}
 	}

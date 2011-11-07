@@ -30,6 +30,7 @@ private:
 	FieldColumn *fcColumn;
 	FieldRangeReal *frr;
 	FieldRangeReal *fri;
+	FieldReal *fmscale;
 
 	int stretchModel;
 	int scaleModel;

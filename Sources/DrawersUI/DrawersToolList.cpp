@@ -79,6 +79,8 @@
 #include "CoordSystemTool.h"
 #include "ColorCompositeTool.h"
 #include "SampleSetEditor.h"
+#include "OperationTool.h"
+#include "GlobalOperationTool.h"
 
 
 using namespace ILWIS;
@@ -126,6 +128,8 @@ DrawerToolInfoVector *createDrawerTool() {
 	infos->push_back(new DrawerToolInfo("ColorCompositeTool",createColorCompositeTool));
 	infos->push_back(new DrawerToolInfo("CoordSystemTool",createCoordSystemTool));
 	infos->push_back(new DrawerToolInfo("SampleSetEditor",createSampleSetEditor));
+	infos->push_back(new DrawerToolInfo("OperationTool",createOperationTool));
+	infos->push_back(new DrawerToolInfo("GlobalOperationTool",createGlobalOperationTool));
 
 	return infos;
 }
