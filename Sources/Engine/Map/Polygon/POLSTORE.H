@@ -99,6 +99,7 @@ public:
 	Geometry			*getFeatureById(const String& id) const;
 	void					addPolygon(ILWIS::Polygon *pol);
 	virtual void			Load() {};
+	 vector<Feature *> getFeatures(const CoordBounds& cb, bool complete=true) const;
 	
 protected:
 	PolygonMapStore(PolygonMapPtr& p,  const FileName& fn);
