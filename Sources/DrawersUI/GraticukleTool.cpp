@@ -65,7 +65,11 @@ void GraticuleTool::graticuleActive(void *v, HTREEITEM) {
 			PreparationParameters pp(NewDrawer::ptGEOMETRY);
 			drw->prepare(&pp);
 		}
-		drw->setActive(value);
+		if ( !drw->isValid()) {
+			drw->setActive(false);
+			setActive(false);
+		} else
+			drw->setActive(value);
 		drw->getRootDrawer()->getDrawerContext()->doDraw();
 	}
 }
