@@ -10,9 +10,13 @@
 
 ostream& operator <<(ostream &os, const ILWIS::WordInfo& inf)
 {
+	String helpDir = getEngine()->getContext()->sIlwDir();
+	helpDir += "help\\eng\\";
+	int sz = helpDir.size();
 	os << inf.count << "|";
 	for(map<String, ILWIS::WordEntry>::const_iterator cur = inf.entries.begin(); cur != inf.entries.end(); ++cur) {
-		os << (*cur).first << "|" << (*cur).second.count << "|" << (*cur).second.title << "@";  
+		String key = (*cur).first.substr(sz,(*cur).first.size() - sz);
+		os << key << "|" << (*cur).second.count << "|" << (*cur).second.title << "@";  
 	}
 	 return os;
 }
@@ -210,6 +214,9 @@ bool HelpFinder::loadIndexFile(const String& folder) {
 
 	ifstream infile(fn.sFullPath().c_str());
 	char cline[100000];
+	String helpDir = getEngine()->getContext()->sIlwDir();
+	helpDir += "help\\eng\\";
+
 	while(!infile.bad() && !infile.eof()) {
 		infile.getline(cline,100000);
 		String line(cline);
@@ -226,7 +233,7 @@ bool HelpFinder::loadIndexFile(const String& folder) {
 			WordEntry entry;
 			Array<String> eparts;
 			Split(parts[i], eparts,"|");
-			String key = eparts[0];
+			String key = helpDir + eparts[0];
 			if ( eparts.size() == 3) {
 				entry.title = eparts[2];
 				entry.count = eparts[1].iVal();
