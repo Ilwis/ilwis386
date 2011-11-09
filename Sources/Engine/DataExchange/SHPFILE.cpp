@@ -34,59 +34,7 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/* $Log: /ILWIS 3.0/Import_Export/SHPFILE.cpp $
- * 
- * 9     22-09-06 15:10 Retsios
- * [bug=6624] Increase buffer that holds the polygon coordinates as much
- * as needed (I leave the 64000 point limit for now because I don't know
- * what that is for - e.g. it could be a shapefile limit)
- * 
- * 8     11-02-04 13:00 Hendrikse
- * The Swab function did not remove sign-extended one bits when shifting
- * 
- * 7     6-03-02 10:31 Willem
- * Prevented export from looping indefinitely. This is because of internal
- * polygon map structure that does not conform to the specification
- * 
- * 6     10/10/01 17:15 Willem
- * Added COM server startup code
- * 
- * 5     22/03/00 17:06 Willem
- * Removed second coordbuf: segments now store the coordinates from the
- * correct coordbuf
- * 
- * 4     10-01-00 4:06p Martin
- * removed vector rowcol and changed them to true coords
- * 
- * 3     17-06-99 3:59p Martin
- * // -> /*
- * 
- * 2     17-06-99 2:12p Martin
- * ported files to VS
-// Revision 1.6  1998/09/17 09:13:06  Wim
-// 22beta2
-//
-// Revision 1.5  1997/09/19 14:04:01  Willem
-// Removed hack in case of ErrorTooMuchPoints; all files are now available and working.
-//
-// Revision 1.4  1997/08/04 17:39:28  Wim
-// Hack which removes any reference to ErrorTooMuchPoints to garantee
-// that the files compile.
-//
-// Revision 1.3  1997/08/01 20:55:51  Willem
-// 1. Changed the buffer handling to be able to handle polygons with
-//    up to 64000 coordinates (the maximum in ArcView)
-// 2. DomainBool (both for the table domain and for attribute domains) is
-//    now handled correctly. The DBF field becomes Logical and the fieldvalues
-//    T (true), F (false) and ? (undefined). The undefined will stay blank
-//    when displayed in ArcView.
-//
-/*
-  shpfile.c, for polygons, segments and points
-  by Li Fei, March 96
-  ILWIS Department ITC
-	Last change:  WN   19 Sep 97   11:00 am
-*/
+
 #include "Headers\toolspch.h"
 #include "Engine\DataExchange\Convloc.h"
 #include "Engine\Domain\Dmvalue.h"
@@ -286,8 +234,8 @@ void Shapefile_Pol::Update(const ILWIS::Polygon* pol)
 	}
 	aiBeginPoint.push_back(seq->size());
 	for(int hole = 0; hole < pol->getNumInteriorRing(); ++hole) {
-	  	const LineString *intRing = pol->getExteriorRing();
-		const CoordinateSequence * intseq = extRing->getCoordinates();
+		const LineString *intRing = pol->getInteriorRingN(hole);
+		const CoordinateSequence * intseq = intRing->getCoordinates();
 		bool isCC = geos::algorithm::CGAlgorithms::isCCW(intseq);
 		for(int i =0; i < intseq->size(); ++i) {
 			coords.push_back(intseq->getAt(i));
