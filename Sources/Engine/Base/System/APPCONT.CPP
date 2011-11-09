@@ -139,11 +139,13 @@ void IlwisAppContext::InitThreadLocalVars()
 	bool *fNoUpdate = new bool(false);
 	bool *fDispNoErr = new bool(false);
 	bool *fServerMode = new bool(false);
+	String *mapAppOut = 0;
 	SetThreadLocalVar(tlvDONOTSHOWFINDERROR, fVar);
 	SetThreadLocalVar(tlvDONOTLOADGDB, fDoNotLoad);
 	SetThreadLocalVar(tlvNOUPDATECATALOG, fNoUpdate);
 	SetThreadLocalVar(tlvDONOTSHOWANYERROR, fDispNoErr);
 	SetThreadLocalVar(tlvSERVERMODE, fServerMode);
+	SetThreadLocalVar(tlvMAPWINDOWAPP, mapAppOut);
 
 	char sDir[MAX_PATH];
 	GetCurrentDirectory(MAX_PATH, sDir);
@@ -166,6 +168,9 @@ void IlwisAppContext::SetThreadLocalVar(ThreadLocalVars tvType, void *Var)
 			{
 				case tlvCURDIR:
 					delete (String *)((*cur).pValue);
+					break;
+				case tlvMAPWINDOWAPP:
+					delete (long *)((*cur).pValue); // windows handle
 					break;
 				case tlvDONOTSHOWFINDERROR:
 				case tlvDONOTLOADGDB:
@@ -211,6 +216,9 @@ void IlwisAppContext::RemoveThreadLocalVars()
 			{
 				case tlvCURDIR:
 					delete (String *)((*cur).pValue);
+					break;
+				case tlvMAPWINDOWAPP:
+					delete (long *)((*cur).pValue); // windows handle
 					break;
 				case tlvDONOTSHOWFINDERROR:
 				case tlvDONOTLOADGDB:

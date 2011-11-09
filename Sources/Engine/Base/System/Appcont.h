@@ -62,7 +62,7 @@ class ModuleMap;
 class IlwisAppContext 
 {
 public:
-	enum ThreadLocalVars{tlvDONOTSHOWFINDERROR, tlvCURDIR, tlvDONOTLOADGDB, tlvNOUPDATECATALOG, tlvDONOTSHOWANYERROR, tlvSERVERMODE, tlvNONE};
+	enum ThreadLocalVars{tlvDONOTSHOWFINDERROR, tlvCURDIR, tlvDONOTLOADGDB, tlvNOUPDATECATALOG, tlvDONOTSHOWANYERROR, tlvSERVERMODE, tlvNONE, tlvMAPWINDOWAPP};
 	_export IlwisAppContext(HMODULE handle);
 	_export ~IlwisAppContext();
 	void UseYield(bool f) { _fUseYield = f; }
