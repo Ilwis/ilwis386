@@ -53,5 +53,6 @@ public:
 	void setQueryValue(const String& key, const String& value);
 	int getPort() const;
 	String getHost() const;
+	String endSegment() const;
 
 };

@@ -140,3 +140,12 @@ String URL::getHost() const{
 		return path.substr(0,portPart);
 	}
 }
+
+String URL::endSegment() const{
+	String path = getPath();
+	int index = path.find_last_of("\\");
+	if ( index != -1) {
+		return path.substr(index + 1,path.size() - index - 1);
+	}
+	return path;
+}
