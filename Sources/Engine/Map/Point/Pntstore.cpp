@@ -590,6 +590,9 @@ Geometry * PointMapStore::getFeature(long i) const {
 
 vector<Geometry *> PointMapStore::getFeatures(Coord crd, double rPrx) {
 	vector<Geometry *> points;
+	if ( crd.fUndef())
+		return points;
+
 	long iRes = iUNDEF;
 	double r2Res = rPrx == rUNDEF ? ptr.rProximity() : rPrx;
 	r2Res *= r2Res;
