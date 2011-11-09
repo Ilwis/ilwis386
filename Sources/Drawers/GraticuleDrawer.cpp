@@ -36,7 +36,7 @@ GraticuleDrawer::~GraticuleDrawer() {
 
 
 bool GraticuleDrawer::draw( const CoordBounds& cbArea) const{
-	if ( !isActive())
+	if ( !isActive() && !isValid())
 		return false;
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
@@ -63,6 +63,10 @@ void GraticuleDrawer::prepare(PreparationParameters *pp) {
 		if ( csy->fLatLon2Coord()) {
 			LatLon llMin = csy->llConv(cbMap.cMin);
 			LatLon llMax = csy->llConv(cbMap.cMax);
+			if ( llMin.fUndef() || llMax.fUndef()) {
+				setValid(false);
+				return;
+			}
 			if ( rDist == rUNDEF)
 				rDist = rRound((llMax.Lat - llMin.Lat) / 7);
 

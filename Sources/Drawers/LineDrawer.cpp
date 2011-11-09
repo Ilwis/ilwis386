@@ -49,7 +49,7 @@ void LineDrawer::addCoords(const vector<Coord>& v,int options) {
 }
 
 bool LineDrawer::draw( const CoordBounds& cbArea) const{
-	if ( !isActive())
+	if ( !isActive() && !isValid())
 		return false;
 
 	if (lines.size() == 0)

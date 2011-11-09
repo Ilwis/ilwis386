@@ -20,7 +20,7 @@ public:
 		stretchScale(1.0), scaleMode(sNONE),
 		useDirection(false),
 		angle(0),
-		maxScale(4.0)
+		exaggeration(10.0)
 		{}
 
 	PointProperties(PointProperties *lp) { set(lp);}
@@ -37,7 +37,7 @@ public:
 		scaleMode = lp->scaleMode;
 		useDirection = lp->useDirection;
 		angle = lp->angle;
-		maxScale = lp->maxScale;
+		exaggeration = lp->exaggeration;
 	}
 
 	double scaling() const {
@@ -47,7 +47,7 @@ public:
 	double thickness;
 	String symbol;
 	double scale;
-	double maxScale; // for stretched point maps
+	double exaggeration; // for stretched point maps
 	Color drawColor;
 	bool ignoreColor;
 	boolean threeDOrientation;

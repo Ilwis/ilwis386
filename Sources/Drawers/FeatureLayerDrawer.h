@@ -29,6 +29,7 @@ namespace ILWIS{
 	protected:
 		String store(const FileName& fnView, const String& parenSection) const;
 		void load(const FileName& fnView, const String& parenSection);
+		String getInfo(const Coord& c) const;
 
 		String mask;
 		bool useMask;

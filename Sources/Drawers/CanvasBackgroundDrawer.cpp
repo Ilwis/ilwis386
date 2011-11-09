@@ -32,7 +32,7 @@ void  CanvasBackgroundDrawer::prepare(PreparationParameters *pp){
 
 bool CanvasBackgroundDrawer::draw( const CoordBounds& cb) const{
 
-	if (!isActive())
+	if (!isActive() && !isValid())
 		return false;
 
 	glClearColor(1.0,1.0,1.0,0.0);

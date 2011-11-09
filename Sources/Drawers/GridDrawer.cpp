@@ -42,7 +42,7 @@ GridDrawer::~GridDrawer() {
 
 
 bool GridDrawer::draw( const CoordBounds& cbArea) const{
-	if ( !isActive())
+	if ( !isActive() && !isValid())
 		return false;
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);

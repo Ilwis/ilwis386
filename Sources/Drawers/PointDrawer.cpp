@@ -66,7 +66,7 @@ void PointDrawer::calcSize() {
 }
 
 bool PointDrawer::draw( const CoordBounds& cbArea) const {
-	if ( !isActive())
+	if ( !isActive() && !isValid())
 		return false;
 
 	if ( cNorm.fUndef())
@@ -108,7 +108,7 @@ bool PointDrawer::draw( const CoordBounds& cbArea) const {
 	glRotated(properties.angle,0,0,100);
 	if ( properties.threeDOrientation){
 		glTranslated(0,0,symbolScale);
-		glRotated(90,100,0,0);
+		glRotated(-90,100,0,0);
 	}
 
 
@@ -206,7 +206,7 @@ void PointDrawer::drawRectangle(const SVGAttributes* attributes, double z) const
 		fcolor = properties.drawColor;
 
 	Coord center = attributes->bounds.middle();
-	if ( fcolor != colorUNDEF) {
+	if ( !fcolor.fEqual(colorUNDEF)) {
 		glColor4d(fcolor.redP(), fcolor.greenP(), fcolor.blueP(), transp);
 		glBegin(GL_QUADS);						
 		glVertex3f( center.x - hw, center.y - hw, z);	
@@ -215,7 +215,7 @@ void PointDrawer::drawRectangle(const SVGAttributes* attributes, double z) const
 		glVertex3f( center.x + hw,  center.y - hw,z);
 		glEnd();
 	}
-	glLineWidth(properties.thickness!= 0 ? properties.thickness : attributes->borderThickness);
+	glLineWidth(properties.thickness!= 0 ? properties.thickness : attributes->strokewidth);
 	glColor4d(attributes->strokeColor.redP(), attributes->strokeColor.greenP(), attributes->strokeColor.blueP(), transp);
 	glBegin(GL_LINE_STRIP);						
 		glVertex3f( center.x - hw, center.y - hw, z);	
@@ -237,7 +237,7 @@ void PointDrawer::drawEllipse(const SVGAttributes* attributes, double z) const{
 	double lcy = attributes->points[0].y;
 	double r = min(rx,ry);
 
-	Color fcolor = attributes->fillColor == colorUSERDEF ? properties.drawColor : attributes->fillColor;
+	Color fcolor = attributes->fillColor.fEqual(colorUSERDEF) ? properties.drawColor : attributes->fillColor;
 	double transp = attributes->opacity * getTransparency();
 
 	int sections = 20; //number of triangles to use to estimate a circle
@@ -257,9 +257,9 @@ void PointDrawer::drawEllipse(const SVGAttributes* attributes, double z) const{
 		glEnd();
 	}
 
-	Color scolor = attributes->strokeColor == colorUNDEF ? properties.drawColor :  attributes->strokeColor;
+	Color scolor = attributes->strokeColor.fEqual(colorUNDEF) ? properties.drawColor :  attributes->strokeColor;
 	glColor4d(scolor.redP(), scolor.greenP(), scolor.blueP(), transp);
-	glLineWidth(properties.thickness!= 0 ? properties.thickness : attributes->borderThickness);
+	glLineWidth(properties.thickness!= 0 ? properties.thickness : attributes->strokewidth);
 	glBegin(GL_LINE_LOOP);
 	for(int i = 0; i <= sections;i++) { // make $section number of circles
 		glVertex3d(lcx + rx * cos(i *  twoPi / sections), 
@@ -269,7 +269,7 @@ void PointDrawer::drawEllipse(const SVGAttributes* attributes, double z) const{
 }
 
 void PointDrawer::drawLine(const SVGAttributes* attributes, double z) const{
-	Color scolor = attributes->strokeColor == colorUNDEF ? properties.drawColor :  attributes->strokeColor;
+	Color scolor = attributes->strokeColor.fEqual(colorUNDEF) ? properties.drawColor :  attributes->strokeColor;
 	double transp = attributes->opacity * getTransparency();
 	glColor4d(scolor.redP(), scolor.greenP(), scolor.blueP(), transp);
 
@@ -286,7 +286,7 @@ void PointDrawer::drawLine(const SVGAttributes* attributes, double z) const{
 
 void PointDrawer::drawPolygon(const SVGAttributes* attributes, double z) const{
 
-	Color fcolor = attributes->fillColor == colorUSERDEF ? properties.drawColor : attributes->fillColor;
+	Color fcolor = attributes->fillColor.fEqual(colorUSERDEF) ? properties.drawColor : attributes->fillColor;
 	double transp = attributes->opacity * getTransparency();
 	if ( fcolor != colorUNDEF) {
 		glColor4f(fcolor.redP(),fcolor.greenP(), fcolor.blueP(), transp);
@@ -299,7 +299,7 @@ void PointDrawer::drawPolygon(const SVGAttributes* attributes, double z) const{
 			glEnd();
 		}
 	}
-	if ( attributes->strokeColor != colorUNDEF) {
+	if ( attributes->strokeColor.fEqual(colorUNDEF)) {
 		Color scolor = attributes->strokeColor;
 		glLineWidth(properties.thickness != 0 ? properties.thickness : attributes->strokewidth);
 		glColor4f(scolor.redP(),scolor.greenP(), scolor.blueP(), transp);
@@ -315,7 +315,10 @@ void PointDrawer::drawPolygon(const SVGAttributes* attributes, double z) const{
 
 void PointDrawer::drawPath(const SVGAttributes* attributes, double z) const{
 
-	Color fcolor = attributes->fillColor == colorUSERDEF ? properties.drawColor : attributes->fillColor;
+	if ( attributes->isPolygon()) {
+		drawPolygon(attributes, z);
+	}
+	Color fcolor = attributes->fillColor.fEqual(colorUSERDEF) ? properties.drawColor : attributes->fillColor;
 	double transp = attributes->opacity * getTransparency();
 	glColor4f(fcolor.redP(),fcolor.greenP(), fcolor.blueP(), transp);
 	const SVGPath& path = (const SVGPath&) attributes;
@@ -351,7 +354,8 @@ String PointProperties::store(const FileName& fnView, const String& parentSectio
 	ObjectInfo::WriteElement(parentSection.c_str(),"StretchScale",fnView, stretchScale);
 	ObjectInfo::WriteElement(parentSection.c_str(),"StretchRange",fnView, stretchRange);
 	ObjectInfo::WriteElement(parentSection.c_str(),"StretchColumn",fnView, stretchColumn);
-	ObjectInfo::WriteElement(parentSection.c_str(),"MaxScale",fnView, maxScale);
+	ObjectInfo::WriteElement(parentSection.c_str(),"Exaggeration",fnView, exaggeration);
+	ObjectInfo::WriteElement(parentSection.c_str(),"Angle",fnView, angle);
 	
 
 	return parentSection;
@@ -370,6 +374,7 @@ void PointProperties::load(const FileName& fnView, const String& parentSection){
 	ObjectInfo::ReadElement(parentSection.c_str(),"StretchScale",fnView, stretchScale);
 	ObjectInfo::ReadElement(parentSection.c_str(),"StretchRange",fnView, stretchRange);
 	ObjectInfo::ReadElement(parentSection.c_str(),"StretchColumn",fnView, stretchColumn);
-	ObjectInfo::ReadElement(parentSection.c_str(),"MaxScale",fnView, maxScale);
+	ObjectInfo::ReadElement(parentSection.c_str(),"Exaggeration",fnView, exaggeration);
+	ObjectInfo::ReadElement(parentSection.c_str(),"Angle",fnView, angle);
 	
 }

@@ -11,6 +11,7 @@
 #include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Drawers\FeatureDataDrawer.h"
 #include "Drawers\LayerDrawer.h"
+#include "Engine\Map\Feature.h"
 #include "Drawers\FeatureLayerDrawer.h"
 #include "Engine\Drawers\ZValueMaker.h"
 #include "Engine\Drawers\DrawerContext.h"
@@ -50,7 +51,7 @@ void FeatureLayerDrawer::getFeatures(vector<Feature *>& features) const {
 }
 
 void FeatureLayerDrawer::prepare(PreparationParameters *parms){
-	/*if ( !isActive())
+	/*if ( !isActive() && !isValid())
 		return;*/
 
 	clock_t start = clock();
@@ -130,3 +131,41 @@ void FeatureLayerDrawer::load(const FileName& fnView, const String& parentSectio
 
 }
 
+String FeatureLayerDrawer::getInfo(const Coord& c) const {
+	if ( !hasInfo() || !isActive())
+		return "";
+	Coord crd = c;
+	SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)parentDrawer;
+	BaseMapPtr *bmptr = mapDrawer->getBaseMap(mapDrawer->getCurrentIndex());
+	if (bmptr->cs() != rootDrawer->getCoordinateSystem())
+	{
+		crd = bmptr->cs()->cConv(rootDrawer->getCoordinateSystem(), c);
+	}
+	vector<String> infos;
+	if (!useAttColumn)
+		infos = bmptr->vsValue(crd);
+	else {
+		vector<Geometry *> geoms = bmptr->getFeatures(crd);
+		for(int i=0; i < geoms.size(); ++i) {
+			Feature *f = CFEATURE(geoms[i]);
+			if ( f) {
+				long raw = f->iValue();
+				if ( getAtttributeColumn().fValid() && raw != iUNDEF) {
+					String v = getAtttributeColumn()->sValue(raw);
+					infos.push_back(v);
+				}
+			}
+		}
+	}
+	String info;
+	DomainValue* dv = bmptr->dm()->pdv();
+	int count = 0;
+	for(int i = 0; i < infos.size(); ++i) {
+		String s = infos[i].sTrimSpaces();
+		if ( s == "?")
+			continue;
+		info += count == 0 ? s : ";" + s;
+		++count;
+	}
+	return info;
+}

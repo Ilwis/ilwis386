@@ -303,7 +303,7 @@ void AnnotationClassLegendDrawer::prepare(PreparationParameters *pp) {
 }
 
 bool AnnotationClassLegendDrawer::draw( const CoordBounds& cbArea) const{
-	if ( !isActive())
+	if ( !isActive() && !isValid())
 		return false;
 
 	if ( !getRootDrawer()->getCoordBoundsZoom().fContains(cbBox))
@@ -390,7 +390,7 @@ void AnnotationValueLegendDrawer::prepare(PreparationParameters *pp) {
 
 bool AnnotationValueLegendDrawer::draw( const CoordBounds& cbArea) const{
 
-	if ( !isActive())
+	if ( !isActive() && !isValid())
 		return false;
 
 	if ( !getRootDrawer()->getCoordBoundsZoom().fContains(cbBox))
