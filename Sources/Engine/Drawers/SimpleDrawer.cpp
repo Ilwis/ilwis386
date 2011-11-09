@@ -41,6 +41,7 @@ void SimpleDrawer::init() {
 	specialOptions = NewDrawer::sdoNone;
 	fActive = true;
 	isSupportingDrawer = false;
+	valid = true;
 }
 
 String SimpleDrawer::getType() const {
@@ -138,6 +139,13 @@ void SimpleDrawer::setExtrustionTransparency(double v) {
 void SimpleDrawer::setActive(bool yesno) 
 { 
 	fActive=yesno;
+}
+
+bool SimpleDrawer::isValid() const{
+	return valid;
+}
+void SimpleDrawer::setValid(bool yesno) {
+	valid = yesno;
 }
 
 

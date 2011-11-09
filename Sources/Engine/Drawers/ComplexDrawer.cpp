@@ -39,6 +39,7 @@ void ComplexDrawer::init() {
 	currentIndex = 0;
 	editmode = false;
 	selectionColor = Color(255,0,0);
+	valid = true;
 }
 
 String ComplexDrawer::getType() const {
@@ -591,6 +592,13 @@ bool ComplexDrawer::inEditMode() const{
 
 void ComplexDrawer::setEditMode(bool yesno){
 	editmode = yesno;
+}
+
+bool ComplexDrawer::isValid() const{
+	return valid;
+}
+void ComplexDrawer::setValid(bool yesno) {
+	valid = yesno;
 }
 //--------------------------------- UI ------------------------------------------------------------------------
 //void ComplexDrawer::setActiveMode(void *v,LayerTreeView *tv) {

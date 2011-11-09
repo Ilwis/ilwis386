@@ -81,6 +81,8 @@ class _export ComplexDrawer : public NewDrawer {
 		virtual bool isSet() const { return false; }
 		Color getSelectionColor() const { return selectionColor; }
 		void setSelectionColor(const Color& clr) { selectionColor = clr; }
+		bool isValid() const;
+		void setValid(bool yesno) ;
 	
 	protected:
 		vector<NewDrawer *> drawers;
@@ -102,6 +104,7 @@ class _export ComplexDrawer : public NewDrawer {
 		bool active;
 		bool editable;
 		bool editmode;
+		bool valid;
 		ZValueMaker *zmaker;
 		int specialOptions;
 		bool dirty;

@@ -76,6 +76,8 @@ namespace ILWIS {
 		virtual bool inEditMode() const = 0;
 		virtual void drawLegendItem(CDC *dc, const CRect& rct, double rVal) const = 0;
 		virtual GeneralDrawerProperties *getProperties() = 0;
+		virtual bool isValid() const = 0;
+		virtual void setValid(bool yesno) = 0;
 
 		static NewDrawer *getDrawer(const String& type, const String& subType, ILWIS::DrawerParameters *parms) ;
 		static NewDrawer *getDrawer(const String& type, PreparationParameters *pp=0, DrawerParameters *parms=0) ;

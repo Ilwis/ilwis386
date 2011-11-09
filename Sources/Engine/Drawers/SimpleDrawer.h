@@ -52,6 +52,8 @@ namespace ILWIS {
 		virtual GeneralDrawerProperties *getProperties() { return 0;}
 		void setSupportingDrawer(bool yesno) { isSupportingDrawer=yesno;};
 		void setExtrustionTransparency(double v);
+		bool isValid() const;
+		void setValid(bool yesno);
 
 		CCriticalSection cs;
 	protected:
@@ -67,6 +69,7 @@ namespace ILWIS {
 		double extrTransparency;
 		int specialOptions;
 		bool isSupportingDrawer;
+		bool valid;
 
 		SimpleDrawer(DrawerParameters *context, const String& ty);
 		SimpleDrawer();
