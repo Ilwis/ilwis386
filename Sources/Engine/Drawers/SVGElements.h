@@ -25,11 +25,12 @@ namespace ILWIS {
 
 		SVGAttributes(ShapeType t=sUNKNOWN) : type(t) {
 			strokewidth = rwidth = rheight = rx = ry = 0;
-			borderThickness = opacity = 1;
+			opacity = 1;
+			strokewidth = 1;
 			fillColor = colorUSERDEF;
 			strokeColor =Color(0,0,0);
 		}
-		int borderThickness;
+		virtual bool isPolygon() const;
 		Color fillColor, strokeColor;
 		double opacity, rx, ry, rwidth, rheight, strokewidth;
 		vector<Coord> points;
@@ -55,6 +56,7 @@ namespace ILWIS {
 		Color getColor(const String& name) const;
 		String getAttributeValue(const pugi::xml_node& node, const String& key) const;
 		String parseStyle(const String& style,SVGAttributes* attributes);
+		void normalizePositions();
 
 
 	private:

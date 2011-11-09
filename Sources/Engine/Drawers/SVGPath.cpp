@@ -32,6 +32,8 @@ void SVGPath::parsePath(const String& p1) {
 	for(int i = 0; i < pathParts.size(); ++i)
 		parsePart(index, pathParts[i]);
 	pathElements.back().end = points.size() - 1;
+	if ( points.size() > 2 && points[0] == points.back())
+		type = SVGAttributes::sPATH;
 
 }
 
@@ -268,9 +270,13 @@ void SVGPath::doHLine(int& index, PathElement::PositionType ptype, const vector<
 }
 
 void SVGPath::addPoint(int& index, const Coord& c) {
+	if ( index == 125) {
+		TRACE("STOP");
+	}
 	points.push_back(c);
 	++index;
 	cPen = c;
+	bounds += c;
 }
 
 void SVGPath::addPart(const PathElement& el) {
@@ -345,10 +351,6 @@ PathElement::ElementType SVGPath::getPathElementType(const String& p,PathElement
 }
 
 void SVGPath::makeArc(int& index, double theta, double rx, double ry, const Coord& c2, bool isLargeArc, bool isSweepArc) {
-	/*	if (rx == 0 || ry == 0) {
-	path.lineTo(x, y);
-	return;
-	}*/
 	// Get the current (x, y) coordinates of the path
 	Coord p2d = cPen;
 	double x0 = p2d.x;
@@ -383,7 +385,9 @@ void SVGPath::makeArc(int& index, double theta, double rx, double ry, const Coor
 	// Step 2 : Compute (cx1, cy1)
 	//
 	double sign = (isLargeArc == isSweepArc) ? -1.0 : 1.0;
-	double coef = (sign * sqrt(((Prx * Pry) - (Prx * Py1) - (Pry * Px1)) / ((Prx * Py1) + (Pry * Px1))));
+	double q = ((Prx * Pry) - (Prx * Py1) - (Pry * Px1)) / ((Prx * Py1) + (Pry * Px1));
+	q = max(0.0, q) ; // q may get 0, but due to rounding this also can be very slightly negative. So make it 0 than
+	double coef = (sign * sqrt(q));
 	double cx1 = coef * ((rx * y1) / ry);
 	double cy1 = coef * -((ry * x1) / rx);
 
@@ -425,10 +429,14 @@ void SVGPath::makeArc(int& index, double theta, double rx, double ry, const Coor
 	int sections = 20;
 
 	for(int i = 0; i <= sections;i++) { // make $section number of circles
-		double angle = angleStart  + i * angleExtent / sections;
+		double angle = angleStart  - i * angleExtent / sections;
 		double x = cx + rx * cos( angle);
 		double y = cy + ry * sin(angle);
 		addPoint(index, Coord(x,y));
 	}
 
+}
+
+bool SVGPath::isPolygon() const {
+	return points.size() > 2 && points[0] == points.back() && fillColor != colorUNDEF;
 }

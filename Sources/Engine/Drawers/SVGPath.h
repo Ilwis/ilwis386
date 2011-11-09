@@ -39,9 +39,7 @@ namespace ILWIS {
 		void linearInterPol(Coord& dest, const Coord& a, const Coord& b, const double t);
 		void cbezier(Coord &dest, const Coord& a, const Coord& b, const Coord& c, const Coord& d, const double t);
 		void qbezier(Coord &dest, const Coord& a, const Coord& b, const Coord& c, const double t);
-
-
-	
+		bool isPolygon() const;
 
 		vector<PathElement> pathElements;
 		Coord cPen;

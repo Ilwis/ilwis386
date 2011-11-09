@@ -81,6 +81,7 @@ void SVGElement::parse(const pugi::xml_node& node) {
 		cb += attributes->bounds;
 		push_back(attributes);
 	}
+	normalizePositions();
 }
 
 void  SVGElement::parseTransform(SVGAttributes* attributes, const String& tranformString) {
@@ -109,10 +110,6 @@ void  SVGElement::parseTransform(SVGAttributes* attributes, const String& tranfo
 		attributes->transformations.push_back(trans);
 	}
 }
-
-
-
-
 
 void SVGElement::parseNode(const pugi::xml_node& node,SVGAttributes* attributes) {
 	if ( node.attributes_begin() == node.attributes_end())
@@ -187,10 +184,6 @@ void SVGElement::parseNode(const pugi::xml_node& node,SVGAttributes* attributes)
 				Coord c ( pnt.sHead(",").rVal(), pnt.sTail(",").rVal());
 				attributes->points.push_back(c);
 			}
-	/*		if ( attributes->type == SVGAttributes::sPOLYGON) {
-				Triangulator tri;
-				tri.getTriangulation(attributes->points, attributes->triangleStrips);
-			}*/
 		}
 
 
@@ -221,10 +214,6 @@ void SVGElement::parseNode(const pugi::xml_node& node,SVGAttributes* attributes)
 			attributes->bounds = CoordBounds(Coord(0,0), Coord(attributes->rwidth,attributes->rheight)); 
 		}
 
-		if ( attributes->type == SVGAttributes::sPOLYGON) { // need tot triangulate
-			Triangulator tri;
-			tri.getTriangulation(attributes->points, attributes->triangleStrips);
-		}
 }
 
 String SVGElement::parseStyle(const String& style,SVGAttributes* attributes) {
@@ -232,12 +221,13 @@ String SVGElement::parseStyle(const String& style,SVGAttributes* attributes) {
 	Split(style, parts,";");
 	for(int i = 0; i < parts.size(); ++i) {
 		String attr = parts[i].sHead(":");
+		attr = attr.sTrimSpaces();
 		String val = parts[i].sTail(":");
 		if ( attr == "fill") {
 			attributes->fillColor = getColor(val);
 		}
 		else if ( attr == "stroke-width") {
-			attributes->borderThickness = val.iVal();
+			attributes->strokewidth = val.iVal();
 		}
 		else if ( attr == "stroke") {
 			attributes->strokeColor = getColor(val);
@@ -258,6 +248,8 @@ String SVGElement::getAttributeValue(const pugi::xml_node& node, const String& k
 		return "";
 	return attr.value();
 }
+
+
 
 void SVGElement::initSvgData() {
 	if ( svgcolors.size() != 0) 
@@ -414,3 +406,22 @@ void SVGElement::initSvgData() {
 	svgcolors["yellowgreen"] = Color(154,205,50);
 }
 
+void SVGElement::normalizePositions() {
+	double shiftx = (cb.cMax.x + cb.cMin.x) / 2.0;
+	double shifty = (cb.cMax.y + cb.cMin.y) / 2.0;
+	for(int j = 0; j < size(); ++j) {
+		SVGAttributes *att = at(j);
+		for(int i = 0; i < att->points.size(); ++i) {
+			att->points[i].x = att->points[i].x - shiftx;
+			att->points[i].y = att->points[i].y - shifty;
+		}
+		if ( att->isPolygon()) { // need tot triangulate
+			Triangulator tri;
+			tri.getTriangulation(att->points, att->triangleStrips);
+		}
+	}
+}
+
+bool SVGAttributes::isPolygon() const {
+	return type == SVGAttributes::sPOLYGON;
+}
