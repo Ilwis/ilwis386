@@ -81,6 +81,8 @@ public:
 	byte yellow()   const { return 255-m_blue; }
 	byte magenta() const { return 255-m_green; }
 	byte cyan()  const { return 255-m_red; }
+	bool fEqual(const Color& c) const 
+	{ return (m_red==c.red()) && (m_green==c.green()) && (m_blue==c.blue() && m_transparency==c.transparency()); }
 	bool operator==(const Color& c)
 	{ return (m_red==c.red()) && (m_green==c.green()) && (m_blue==c.blue() && m_transparency==c.transparency()); }
 	bool operator!=(const Color& c)
