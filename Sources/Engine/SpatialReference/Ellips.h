@@ -89,7 +89,7 @@ public:
 	{ return fEqual(ell); }
 	bool operator != (const Ellipsoid& ell) const
 	{ return !fEqual(ell); }
-	bool fEqual(const Ellipsoid&) const;
+	bool _export fEqual(const Ellipsoid&) const;
 	String sName;
 	double a, b, e, e2, f;
 	virtual String _export getIdentification(bool wkt=false);
