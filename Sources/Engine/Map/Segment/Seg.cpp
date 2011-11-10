@@ -923,6 +923,9 @@ void SegmentMapPtr::SetCoordSystem(const CoordSystem& cs) // dangerous function!
 }
 
 vector<Geometry *> SegmentMapPtr::getFeatures(Coord crd, double rPrx) {
+	if ( crd.fUndef())
+		return vector<Geometry *>();
+
 	ILWIS::Segment *fseg = seg(crd,rPrx);
 	if ( !fseg)
 		return vector<Geometry *>();
