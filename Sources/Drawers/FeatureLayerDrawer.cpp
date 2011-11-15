@@ -33,7 +33,7 @@ FeatureLayerDrawer::~FeatureLayerDrawer() {
 }
 
 void FeatureLayerDrawer::addDataSource(void *bmap,int options) {
-	fbasemap = BaseMap(((BaseMapPtr *)bmap)->fnObj);
+	fbasemap = BaseMap((*(BaseMap *)bmap)->fnObj);
 }
 
 void *FeatureLayerDrawer::getDataSource() const {
@@ -132,7 +132,7 @@ void FeatureLayerDrawer::load(const FileName& fnView, const String& parentSectio
 }
 
 String FeatureLayerDrawer::getInfo(const Coord& c) const {
-	if ( !hasInfo() || !isActive())
+	if ( !hasInfo() || !isActive() || c.fUndef())
 		return "";
 	Coord crd = c;
 	SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)parentDrawer;

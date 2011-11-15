@@ -64,7 +64,7 @@ void FeatureDataDrawer::prepare(PreparationParameters *pp){
 	if ( pp->type & NewDrawer::ptRENDER || pp->type & NewDrawer::ptRESTORE || pp->type & NewDrawer::pt3D ) {
 		for(int i = 0; i < drawers.size(); ++i) {
 			FeatureLayerDrawer *fsd = (FeatureLayerDrawer *)drawers.at(i);
-			fsd->addDataSource(basemap.ptr());
+			fsd->addDataSource(&basemap);
 			PreparationParameters fp((int)pp->type & ~NewDrawer::ptGEOMETRY, 0);
 			fp.csy = basemap->cs();
 			fsd->prepare(&fp);
@@ -81,7 +81,7 @@ void FeatureDataDrawer::addLayerDrawer(const BaseMap& basemap,PreparationParamet
 	fsd->getZMaker()->setSpatialSource(basemap, getRootDrawer()->getMapCoordBounds());
 	fsd->getZMaker()->setDataSourceMap(basemap);
 	BaseMap bmp(basemap);
-	fsd->addDataSource(bmp.ptr());
+	fsd->addDataSource(&bmp);
 	fsd->prepare(&fp);
 	addDrawer(fsd);
 }

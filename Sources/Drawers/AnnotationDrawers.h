@@ -2,9 +2,19 @@
 
 ILWIS::NewDrawer *createAnnotationValueLegendDrawer(ILWIS::DrawerParameters *parms);
 ILWIS::NewDrawer *createAnnotationClassLegendDrawer(ILWIS::DrawerParameters *parms);
+ILWIS::NewDrawer *createAnnotationBorderDrawer(ILWIS::DrawerParameters *parms);
+ILWIS::NewDrawer *createAnnotationDrawers(ILWIS::DrawerParameters *parms);
 
 namespace ILWIS {
 	class TextLayerDrawer;
+	class BoxDrawer;
+	struct LineProperties;
+	class TextDrawer;
+
+class _export AnnotationDrawers : public ComplexDrawer {
+public:
+	AnnotationDrawers(DrawerParameters *parms);
+};
 
 class _export AnnotationDrawer : public ComplexDrawer{
 public:
@@ -92,9 +102,34 @@ protected:
 	int noTicks;
 };
 
-class _export AnnotationClassElementDrawer : public SimpleDrawer {
+class _export AnnotationBorderDrawer : public AnnotationDrawer {
 public:
-	AnnotationClassElementDrawer(DrawerParameters *parms);
-protected:
+	enum Side{sLEFT, sRIGHT, sTOP, sBOTTOM};
+
+	AnnotationBorderDrawer(DrawerParameters *parms);
+	void prepare(PreparationParameters *pp) ;
+	bool hasNeatLine() const;
+	int getStep() const;
+	void setHasNeatLine(bool yesno);
+	void setStep(int st);
+private:
+	bool draw( const CoordBounds& cbArea) const;
+	String store(const FileName& fnView, const String& parenSection) const;
+	void load(const FileName& fnView, const String& parenSection);
+	void calcLocations();
+	TextDrawer *getTextDrawer(int index, AnnotationBorderDrawer::Side side);
+	void setText(double border, AnnotationBorderDrawer::Side side) const;
+
+	double xborder; // percent;
+	double yborder; // percent;
+	vector<double> ypos;
+	vector<double> xpos;
+	vector<bool> hasText;
+	BoxDrawer *borderBox;
+	TextLayerDrawer *texts;
+	bool isLatLon;
+	bool neatLine;
+	int step;
+
 };
 }

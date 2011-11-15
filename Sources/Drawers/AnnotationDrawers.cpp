@@ -19,11 +19,23 @@
 #include "Engine\Drawers\TextDrawer.h"
 #include "Drawers\AnnotationDrawers.h"
 #include "Engine\Domain\dmclass.h"
+#include "Boxdrawer.h"
 #include "DrawingColor.h"
+#include "Drawers\GridDrawer.h"
 #include "Engine\Base\Round.h"
 
 using namespace ILWIS;
 
+
+ILWIS::NewDrawer *createAnnotationDrawers(DrawerParameters *parms) {
+	return new AnnotationDrawers(parms);
+}
+
+AnnotationDrawers::AnnotationDrawers(DrawerParameters *parms) : ComplexDrawer(parms, "AnnotationDrawers"){
+	id = "AnnotationDrawers";
+}
+
+//---------------------------------------------------------
 AnnotationDrawer::AnnotationDrawer(DrawerParameters *parms, const String& name) : ComplexDrawer(parms,name) 
 {
 }
@@ -151,24 +163,27 @@ bool AnnotationLegendDrawer::draw( const CoordBounds& cbArea) const{
 		z0 +=  z0;
 
 	double z = is3D ? z0 : 0;
+	CoordBounds cbFar;
 	if ( includeName) {
 		TextDrawer *txtdr = (TextDrawer *)texts->getDrawer(101,ComplexDrawer::dtPOST);
 		if ( txtdr) {
 			double h = txtdr->getHeight();
 			txtdr->setCoord(Coord(cbBox.MinX(),cbBox.MaxY() + h * 0.8, z));
+			cbFar += txtdr->getTextExtent();
 		}
 	}
-
+	CoordBounds cbBoxed = cbBox;
+	cbBoxed *= 1.05;
 	if ( useBackground) {
 		glColor4d(bgColor.redP(), bgColor.greenP(), bgColor.blueP(), getTransparency());
 		glBegin(GL_POLYGON);
-		Coordinate c(cbBox.MinX(), cbBox.MinY());
+		Coordinate c(cbBoxed.MinX(), cbBoxed.MinY());
 		glVertex3d( c.x, c.y, z);
-		c = Coordinate(cbBox.MinX(), cbBox.MaxY());
+		c = Coordinate(cbBoxed.MinX(), cbBoxed.MaxY());
 		glVertex3d( c.x, c.y, z);
-		c = Coordinate(cbBox.MaxX(), cbBox.MaxY());
+		c = Coordinate(cbBoxed.MaxX(), cbBoxed.MaxY());
 		glVertex3d( c.x, c.y, z);
-		c = Coordinate(cbBox.MaxX(), cbBox.MinY());
+		c = Coordinate(cbBoxed.MaxX(), cbBoxed.MinY());
 		glVertex3d( c.x, c.y, z);
 		glEnd();
 	}
@@ -177,15 +192,15 @@ bool AnnotationLegendDrawer::draw( const CoordBounds& cbArea) const{
 		glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(),getTransparency() );
 		glLineWidth(lproperties.thickness);
 		glBegin(GL_LINE_STRIP);
-		Coordinate c(cbBox.MinX(), cbBox.MinY());
+		Coordinate c(cbBoxed.MinX(), cbBoxed.MinY());
 		glVertex3d( c.x, c.y, z);
-		c = Coordinate(cbBox.MinX(), cbBox.MaxY());
+		c = Coordinate(cbBoxed.MinX(), cbBoxed.MaxY());
 		glVertex3d( c.x, c.y, z);
-		c = Coordinate(cbBox.MaxX(), cbBox.MaxY());
+		c = Coordinate(cbBoxed.MaxX(), cbBoxed.MaxY());
 		glVertex3d( c.x, c.y, z);
-		c = Coordinate(cbBox.MaxX(), cbBox.MinY());
+		c = Coordinate(cbBoxed.MaxX(), cbBoxed.MinY());
 		glVertex3d( c.x, c.y, z);
-		c = Coordinate(cbBox.MinX(), cbBox.MinY());
+		c = Coordinate(cbBoxed.MinX(), cbBoxed.MinY());
 		glVertex3d( c.x, c.y, z);
 		glEnd();
 	}
@@ -390,7 +405,7 @@ void AnnotationValueLegendDrawer::prepare(PreparationParameters *pp) {
 
 bool AnnotationValueLegendDrawer::draw( const CoordBounds& cbArea) const{
 
-	if ( !isActive() && !isValid())
+	if ( !isActive() || !isValid())
 		return false;
 
 	if ( !getRootDrawer()->getCoordBoundsZoom().fContains(cbBox))
@@ -513,7 +528,8 @@ void AnnotationValueLegendDrawer::drawHorizontal(CoordBounds& cbInner, const Ran
 	TextDrawer *txt = (TextDrawer *)texts->getDrawer( values.size()-1);
 	//double h = txt->getHeight() * 0.9;
 	//String s(values[values.size()-1]);
-	setText(values,values.size()-1,Coord(cbInner.MaxX(), cbInner.MaxY( ) - cbInner.height() - cbBox.height() / shifty,z));
+	CoordBounds cbTxt = txt->getTextExtent();
+	setText(values,values.size()-1,Coord(cbInner.MaxX() - cbTxt.width() / 2.0, cbInner.MaxY( ) - cbInner.height() - cbBox.height() / shifty,z));
 }
 
 String AnnotationValueLegendDrawer::store(const FileName& fnView, const String& parentSection) const{
@@ -562,8 +578,204 @@ vector<String> AnnotationValueLegendDrawer::makeRange(LayerDrawer *dr) const{
 void AnnotationValueLegendDrawer::load(const FileName& fnView, const String& parentSection){
 	AnnotationLegendDrawer::load(fnView, parentSection);
 }
+//----------------------------------------------------------
+ILWIS::NewDrawer *createAnnotationBorderDrawer(DrawerParameters *parms) {
+	return new AnnotationBorderDrawer(parms);
+}
 
-//-------------------------------------------------------
-AnnotationClassElementDrawer::AnnotationClassElementDrawer(DrawerParameters *parms) : SimpleDrawer(parms, "AnnotationClassElementDrawer")
-{
+AnnotationBorderDrawer::AnnotationBorderDrawer(DrawerParameters *parms) : 
+AnnotationDrawer(parms, "AnnotationBorderDrawer"),
+borderBox(0), xborder(0.05), yborder(0.03), neatLine(true), step(1){
+	for(int i=0; i < 4; ++i)
+		hasText.push_back(true);
+	id = "AnnotationBorderDrawer";
+}
+
+bool AnnotationBorderDrawer::draw( const CoordBounds& cbArea) const{
+	if ( !isActive() && !isValid())
+		return false;
+
+	glClearColor(1.0,1.0,1.0,0.0);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+
+	CoordBounds cbZoom = getRootDrawer()->getCoordBoundsZoom();
+	CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
+	double xmleft = cbZoom.cMin.x + cbZoom.width() * xborder;
+	if ( cbMap.cMin.x > xmleft)
+		xmleft = cbMap.cMin.x;
+	double xmright = cbZoom.cMax.x - cbZoom.width() * xborder;
+	if ( cbMap.cMax.x < xmright)
+		xmright = cbMap.cMax.x;
+	double ymbottom = cbZoom.cMin.y + cbZoom.height() * yborder;
+	if ( cbMap.cMin.y > ymbottom)
+		ymbottom = cbMap.cMin.y;
+	double ymtop = cbZoom.cMax.y - cbZoom.height() * yborder;
+	if ( cbMap.cMax.y < ymtop)
+		ymtop = cbMap.cMax.y;
+
+	borderBox->setBox(cbZoom, CoordBounds(Coord(xmleft,ymbottom), Coord(xmright, ymtop)));
+
+	if ( hasText[0] ) {
+		setText(xmleft,AnnotationBorderDrawer::sLEFT);
+	}
+	if ( hasText[1] ) {
+		setText(xmright,AnnotationBorderDrawer::sRIGHT);
+	}
+	if ( hasText[2] ) {
+		setText(ymtop,AnnotationBorderDrawer::sTOP);
+	}
+	if ( hasText[3] ) {
+		setText(ymbottom,AnnotationBorderDrawer::sBOTTOM);
+	}
+	AnnotationDrawer::draw(cbArea);
+
+	if ( neatLine) {
+		glBegin(GL_LINE_STRIP);
+		glVertex3d(xmleft, ymbottom,0);
+		glVertex3d(xmleft, ymtop,0);
+		glVertex3d(xmright, ymtop,0);
+		glVertex3d(xmright, ymbottom,0);
+		glVertex3d(xmleft, ymbottom,0);
+		glEnd();
+	}
+
+	glDisable(GL_BLEND);
+
+	return true;
+
+}
+
+void AnnotationBorderDrawer::setText(double border, AnnotationBorderDrawer::Side side) const{
+	CoordBounds cbZoom = getRootDrawer()->getCoordBoundsZoom();
+	if ( side == sLEFT || side == sRIGHT) {
+		for(int i = 0; i < ypos.size(); ++i) {
+			TextDrawer *txtdrw = const_cast<AnnotationBorderDrawer *>(this)->getTextDrawer(i,side);
+			String txt =  isLatLon ? String("%f", ypos[i]) : String("%d", (long)ypos[i]);
+			txtdrw->setText(txt);
+			double offset = cbZoom.width() * 0.01;
+			CoordBounds cb = txtdrw->getTextExtent();
+			if ( side == sLEFT) {
+				offset = - cb.width() - cbZoom.width() * 0.01;
+			}
+			Coord crd(border + offset, ypos[i] - cb.height() / 2,0);
+			txtdrw->setCoord(crd);
+		}
+	} else {
+		if ( side == sTOP || side == sBOTTOM) {
+			for(int i = 0; i < xpos.size(); ++i) {
+				TextDrawer *txtdrw = const_cast<AnnotationBorderDrawer *>(this)->getTextDrawer(i,side);
+				String txt =  isLatLon ? String("%f", xpos[i]) : String("%d", (long)xpos[i]);
+				txtdrw->setText(txt);
+				double offset = cbZoom.height() * 0.01;
+				CoordBounds cb = txtdrw->getTextExtent();
+				if ( side == sBOTTOM) {
+					offset = - cb.height() - cbZoom.height() * 0.01;
+				}
+				Coord crd(xpos[i] - cb.width() / 2, border + offset,0);
+				txtdrw->setCoord(crd);
+			}
+		}
+	}
+}
+
+String AnnotationBorderDrawer::store(const FileName& fnView, const String& parentSection) const{
+	AnnotationDrawer::store(fnView, parentSection);
+	ObjectInfo::WriteElement(getType().c_str(),"Steps",fnView, step);
+	ObjectInfo::WriteElement(getType().c_str(),"Neatline",fnView, neatLine);
+
+	return parentSection;
+}
+
+void AnnotationBorderDrawer::load(const FileName& fnView, const String& parentSection){
+		AnnotationDrawer::load(fnView, parentSection);
+		ObjectInfo::ReadElement(getType().c_str(),"Steps",fnView, step);
+		ObjectInfo::ReadElement(getType().c_str(),"Neatline",fnView, neatLine);
+}
+
+void AnnotationBorderDrawer::prepare(PreparationParameters *pp){
+	AnnotationDrawer::prepare(pp);
+	if (  pp->type & RootDrawer::ptGEOMETRY){
+		calcLocations();
+		isLatLon = getRootDrawer()->getCoordinateSystem()->pcsLatLon() != 0;
+		if ( !borderBox) {
+			DrawerParameters dp(getRootDrawer(),this);
+			borderBox = new BoxDrawer(&dp);
+			borderBox->setTransparency(1);
+			borderBox->setDrawColor(Color(255,255,255));
+			addDrawer(borderBox);
+			texts = (ILWIS::TextLayerDrawer *)NewDrawer::getDrawer("TextLayerDrawer", "ilwis38",&dp);
+			texts->setFont(new OpenGLText(getRootDrawer(),"arial.ttf",10,false));
+			addDrawer(texts);
+		}
+		texts->clear();
+		DrawerParameters dp(getRootDrawer(),texts);
+		for(int i = 0 ; i < xpos.size() * 2; ++i) { 
+			TextDrawer *txtdr =(ILWIS::TextDrawer *)NewDrawer::getDrawer("TextDrawer","ilwis38",&dp);
+			texts->addDrawer(txtdr);
+
+		}
+		for(int i = 0 ; i < ypos.size() * 2; ++i) { 
+			TextDrawer *txtdr =(ILWIS::TextDrawer *)NewDrawer::getDrawer("TextDrawer","ilwis38",&dp);
+			texts->addDrawer(txtdr);
+		}
+
+
+	}
+}
+
+TextDrawer *AnnotationBorderDrawer::getTextDrawer(int index, Side side) {
+	int offset = 0;
+	if ( side == AnnotationBorderDrawer::sRIGHT)
+		offset = ypos.size();
+	if ( side == AnnotationBorderDrawer::sTOP)
+		offset = ypos.size() *2;
+	if ( side == AnnotationBorderDrawer::sBOTTOM)
+		offset = ypos.size() * 2  + xpos.size();
+	if ( offset + index < texts->getDrawerCount())
+		return (TextDrawer *)texts->getDrawer(offset + index);
+	return 0;
+
+}
+
+void AnnotationBorderDrawer::calcLocations() {
+	ypos.clear();
+	xpos.clear();
+	CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
+	Coord cMin = cbMap.cMin;
+	Coord cMax = cbMap.cMax;
+	GridDrawer *gdr = dynamic_cast<GridDrawer *>(getParentDrawer());
+	if ( !gdr)
+		return;
+	double rDistance = gdr->getGridSpacing();
+	if ( rDistance == rUNDEF)
+		rDistance = rRound((cMax.x - cMin.x) / 7);
+	int count = 0;
+	for (double x = ceil(cMin.x / rDistance) * rDistance; x < cMax.x ; x += rDistance, ++count)
+	{
+		if ( count % step == 0)
+			xpos.push_back(x);
+	}
+	count = 0;
+	for (double y = ceil(cMin.y / rDistance) * rDistance; y < cMax.y ; y += rDistance, ++count)
+	{
+		if ( count % step == 0)
+			ypos.push_back(y);
+	}
+
+}
+bool AnnotationBorderDrawer::hasNeatLine() const{
+	return neatLine;
+}
+
+int AnnotationBorderDrawer::getStep() const{
+	return step;
+}
+void AnnotationBorderDrawer::setHasNeatLine(bool yesno){
+	neatLine = yesno;
+}
+
+void AnnotationBorderDrawer::setStep(int st){
+	if ( st > 0)
+		step = st;
 }

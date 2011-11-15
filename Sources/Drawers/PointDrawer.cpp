@@ -85,9 +85,12 @@ bool PointDrawer::draw( const CoordBounds& cbArea) const {
 	bool is3D = getRootDrawer()->is3D();// && zvmkr->getThreeDPossible();
 	double z0 = cdrw->getZMaker()->getZ0(is3D);
 
+	double zscale = zvmkr->getZScale();
+	double zoffset = zvmkr->getOffset();
+
 	double fx = cNorm.x;
 	double fy = cNorm.y;
-	double fz = is3D ? cNorm.z : z0;
+	double fz = is3D ? cNorm.z * zscale : z0;
 
 	double symbolScale = cbZoom.width() / 200;
 	CoordBounds cb(Coord(fx - symbolScale, fy - symbolScale,fz), Coord(fx + symbolScale, fy + symbolScale,fz));
@@ -96,12 +99,12 @@ bool PointDrawer::draw( const CoordBounds& cbArea) const {
 
 	double xscale = cb.width() / width;
 	double yscale = f * cb.height() / height;
-	double zscale = yscale;
+	//double zscale = yscale;
 
 
 	glPushMatrix();
-	glTranslated(fx,fy,fz);
-	glScaled(xscale * properties.scaling(), yscale *  properties.scaling(), zscale * properties.scaling());
+	glTranslated(fx,fy,fz + zoffset);
+	glScaled(xscale * properties.scaling(), yscale *  properties.scaling(), zscale );
 	Coord cMid = localCb.middle();
 	glScaled(1.0,-1.0,1.0); // opengl uses other oriented coordinate system then svg. have to mirror it.
 	//glTranslated(-cMid.x, -cMid.y,0);
@@ -109,7 +112,7 @@ bool PointDrawer::draw( const CoordBounds& cbArea) const {
 	if ( properties.threeDOrientation){
 		glTranslated(0,0,symbolScale);
 		glRotated(-90,100,0,0);
-	}
+	} 
 
 
 	for(vector<SVGAttributes *>::const_iterator cur = element->begin(); cur != element->end(); ++cur) {

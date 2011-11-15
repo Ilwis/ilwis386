@@ -32,6 +32,7 @@ void BoxDrawer::setBox(const CoordBounds& cbOuter, const CoordBounds& cbInner) {
 		boxes.push_back(cbOuter);
 	}
 	else {
+		boxes.clear();
 		CoordBounds cb1(Coord(cbOuter.MinX(), cbOuter.MinY()), Coord(cbInner.MinX(), cbOuter.MaxY()));
 		CoordBounds cb2(Coord(cbInner.MinX(), cbOuter.MaxY()), Coord(cbInner.MaxX(), cbInner.MaxY()));
 		CoordBounds cb3(Coord(cbInner.MaxX(), cbOuter.MaxY()), Coord(cbOuter.MaxX(), cbOuter.MinY()));
