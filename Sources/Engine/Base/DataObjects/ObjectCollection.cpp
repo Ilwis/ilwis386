@@ -266,15 +266,15 @@ void ObjectCollectionPtr::OpenCollectionVirtual()
     return;
   if (!fDependent())
     return;
-  try {
+ // try {
     ocv = ObjectCollectionVirtual::create(fnObj, *this);
     objdep = ObjectDependency(fnObj);
-  }
+ /* }
   catch (const ErrorObject& err) {
     err.Show();
     ocv = 0;
     objdep = ObjectDependency();
-  }
+  }*/
 }
 
 void ObjectCollectionPtr::Calc(bool fMakeUpToDate)
@@ -556,6 +556,9 @@ bool ObjectCollectionPtr::getStatusFor(int query) const {
 	GeoRef grf;
 	CoordSystem csy;
 	for(vector<FileName>::const_iterator cur=arObjects.begin(); cur != arObjects.end(); ++cur)	 {
+		if ( (*cur).sFile == "") 
+			continue;
+
 		if ((allBasemap & allSegMap & allPntMap && allRasMap & allPolMap & sameDomain & sameGeoref) == false)
 			return false;
 		allBasemap &= IOTYPEBASEMAP(*cur);

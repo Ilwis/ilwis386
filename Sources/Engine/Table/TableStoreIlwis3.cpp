@@ -55,6 +55,7 @@ void TableStoreIlwis3::setColumnInfo(const FileName& fnODF, bool& simpleDataType
 void TableStoreIlwis3::readData(char *memblock) {
 	long posFile = 128;
 	long posMem = 0;
+	double c33 ; long t33; double v33;
 	for(long r = 0; r < getRowCount(); ++r) {
 		for(long c = 0; c < getColCount(); ++c) {
 			const ColumnInfo& info = columnInfo.at(c);
@@ -62,14 +63,17 @@ void TableStoreIlwis3::readData(char *memblock) {
 			switch(info.getColumnType()) {
 				case ColumnInfo::ctRAW: 
 					*(long *)p = *(long *)(memblock + posFile);
+					t33 = *(long *)p;
 					posFile += 4;
 					break;
 				case ColumnInfo::ctREAL:
 					*(double *)p = *(double *)(memblock + posFile);
+					v33 = *(double *)p;
 					posFile += 8;
 					break;
 				case ColumnInfo::ctCRD:
 					memcpy(p,memblock + posFile,16);
+					c33= *(double *)p;
 					posFile += 16;
 					break;
 				case ColumnInfo::ctCRD3D:
@@ -168,7 +172,8 @@ void TableStoreIlwis3::get(int row, int column, double& v ) const {
 	char *p = moveTo(row, column, field);
 	switch(field.getColumnType()) {
 		case ColumnInfo::ctRAW:{
-				long raw = *(long *) p;
+				
+			long raw = p != 0 ? *(long *) p : iUNDEF;
 				//if ( raw == 0)
 				//	v = rUNDEF;
 				//double rVal = raw + field.getValueOffset();

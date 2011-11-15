@@ -431,6 +431,21 @@ String FileName::sPath() const
 	return sBuf;
 };
 
+String FileName::sPhysicalPath() const{
+  String sBuf;
+  if (sFile.length()==0) 
+    return String();
+  sBuf = sPath();
+  if (sBuf == "")  {
+		sBuf = getEngine()->sGetCurDir();
+  	if ((sBuf.length() > 0) && (sBuf[sBuf.length() - 1] != '\\'))
+			sBuf &= "\\";
+  }
+  sBuf &= sFile;
+  sBuf &= sExt;
+  return sBuf;
+}
+
 String FileName::sFullPath(bool fExt) const
 {
   String sBuf;
@@ -447,7 +462,6 @@ String FileName::sFullPath(bool fExt) const
 	{
     sBuf &= sExt;
 	}
-//  sBuf.toLower();
 	if ( sCol != "")
 		sBuf &= "." + sCol.sQuote(false);
   return sBuf;

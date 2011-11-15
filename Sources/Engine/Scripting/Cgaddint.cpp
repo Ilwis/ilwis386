@@ -509,6 +509,8 @@ void CodeGenerator::AddInstAggregateValue(const String& sVal)
 	
 	if (!mpInput.fValid())
 		Error(String(TR("Input map %S must be a valid raster map").c_str(), sVal), iCursorLine, iCursorCol);
+	if ( stkCalcVar.iSize() == 0)
+		Error(TR("Illegal instruction"), iCursorLine, iCursorCol);
 	CalcVariable oper = stkCalcVar.pop();
 	String sOper = oper->sValue();
 	if ( !InstAggregateValue::fValidOperation(sOper)) // three parms or not?

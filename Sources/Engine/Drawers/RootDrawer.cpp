@@ -14,9 +14,13 @@ RootDrawer::RootDrawer() : ComplexDrawer(0,"RootDrawer"){
 	drawercontext = new ILWIS::DrawerContext();
 	ILWIS::DrawerParameters dp(this, this);
 	ILWIS::PreparationParameters pp(RootDrawer::ptALL,0);
+	ComplexDrawer *annotationDrawers = (ComplexDrawer *)NewDrawer::getDrawer("AnnotationDrawers", &pp, &dp);
+	if ( annotationDrawers) {
+		addPostDrawer(800, annotationDrawers);
+		annotationDrawers->addPostDrawer(200,NewDrawer::getDrawer("GridDrawer", &pp, &dp));
+		annotationDrawers->addPostDrawer(300,NewDrawer::getDrawer("GraticuleDrawer", &pp, &dp));
+	}
 	backgroundDrawer = NewDrawer::getDrawer("CanvasBackgroundDrawer", &pp, &dp);
-	addPostDrawer(800,NewDrawer::getDrawer("GridDrawer", &pp, &dp));
-	addPostDrawer(700,NewDrawer::getDrawer("GraticuleDrawer", &pp, &dp));
 
 	setTransparency(1.0);
 	setName("RootDrawer");

@@ -152,7 +152,10 @@ StringManager::~StringManager()
 long StringManager::LoadLanguageStrings(const String& sModName)
 {
 	// Locate the language module file
-	FileName fn(sModName, String("%S", getEngine()->getContext()->getLanguageExtension()));
+	//FileName fn(sModName, String("%S", getEngine()->getContext()->getLanguageExtension()));
+	FileName fn(String("%SResources\\Strings\\%S%S",getEngine()->getContext()->sIlwDir(),
+													sModName, 
+													getEngine()->getContext()->getLanguageExtension()));
 	FileName fnLangFile = fnFindLng(fn);
 	
 	if (fnLangFile == FileName()) {

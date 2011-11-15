@@ -40,8 +40,10 @@ public:
 	void addDataSource(void *);
 	void setCoord(const Coord& crd);
 	void setText(const String& txt) { text = txt;}
+	void setText(const Coord& crd, const String& txt);
 	double getHeight() const;
 	String getText() const { return text; }
+	CoordBounds getTextExtent() const;
 private:
 	String text;
 	Coordinate c;

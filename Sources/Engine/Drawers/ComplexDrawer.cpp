@@ -19,6 +19,14 @@ ComplexDrawer::ComplexDrawer(DrawerParameters *parms, const String& ty) : type(t
 	init();
 }
 
+ComplexDrawer::ComplexDrawer(DrawerParameters *parms) : type("Container"), parentDrawer(0){
+	if ( parms) {
+		parentDrawer = parms->parent;
+		rootDrawer = parms->rootDrawer;
+	}
+	init();
+}
+
 void ComplexDrawer::init() {
 	GUID gd;
 	CoCreateGuid(&gd);

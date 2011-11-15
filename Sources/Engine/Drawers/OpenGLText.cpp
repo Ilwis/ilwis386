@@ -6,12 +6,13 @@
 
 #define LIST_SIZE 96
 
-OpenGLText::OpenGLText(ILWIS::RootDrawer *rootdrawer,const String& name, int height, bool fixed, double horShift, double verShift)
+OpenGLText::OpenGLText(ILWIS::RootDrawer *_rd,const String& name, int height, bool fixed, double horShift, double verShift)
 : fontHeight(height)
 , fixedSize(fixed)
 , horizontalShift(horShift)
 , verticalShift(verShift)
 , font(0)
+, rootdrawer(_rd)
 {
 	FileName fn(name);
 	if ( !fn.fExist()){
@@ -24,18 +25,10 @@ OpenGLText::OpenGLText(ILWIS::RootDrawer *rootdrawer,const String& name, int hei
 	font = new FTPolygonFont(fn.sFullPath().c_str());
 	font->FaceSize(fontHeight);
 	color = Color(0,0,0);
-	if (fixedSize) {
-		if (rootdrawer->getCoordBoundsZoom().height() > rootdrawer->getCoordBoundsZoom().width())
-			scale = rootdrawer->getCoordBoundsZoom().height() / (double)rootdrawer->getViewPort().Row; // result is the meters/pixel or the degrees/pixel of the current zoom level
-		else
-			scale = rootdrawer->getCoordBoundsZoom().width() / (double)rootdrawer->getViewPort().Col; // result is the meters/pixel or the degrees/pixel of the current zoom level
-	}
-	else {
-		if (rootdrawer->getMapCoordBounds().height() > rootdrawer->getMapCoordBounds().width())
-			scale = rootdrawer->getMapCoordBounds().height() / (double)rootdrawer->getViewPort().Row; // result is the meters/pixel or the degrees/pixel of the image
-		else
-			scale = rootdrawer->getMapCoordBounds().width() / (double)rootdrawer->getViewPort().Col; // result is the meters/pixel or the degrees/pixel of the image
-	}
+	if (rootdrawer->getCoordBoundsZoom().height() > rootdrawer->getCoordBoundsZoom().width())
+		scale = rootdrawer->getCoordBoundsZoom().height() / (double)rootdrawer->getViewPort().Row; // result is the meters/pixel or the degrees/pixel of the current zoom level
+	else
+		scale = rootdrawer->getCoordBoundsZoom().width() / (double)rootdrawer->getViewPort().Col; // result is the meters/pixel or the degrees/pixel of the current zoom level
 }
 
 OpenGLText::~OpenGLText() {
@@ -44,13 +37,22 @@ OpenGLText::~OpenGLText() {
 
 void OpenGLText::renderText(const Coordinate& c, const String& text) {
 	glPushMatrix();
+	if ( !fixedSize) {
+		if (rootdrawer->getCoordBoundsZoom().height() > rootdrawer->getCoordBoundsZoom().width())
+			scale = rootdrawer->getCoordBoundsZoom().height() / (double)rootdrawer->getViewPort().Row; // result is the meters/pixel or the degrees/pixel of the current zoom level
+		else
+			scale = rootdrawer->getCoordBoundsZoom().width() / (double)rootdrawer->getViewPort().Col; // result is the meters/pixel or the degrees/pixel of the current zoom level
+	}
 	glScaled(scale, scale, 1); // with this the GL space is temporarily expressed in pixels
 	glColor3d(color.redP(), color.greenP(), color.blueP());
-	glEnable (GL_POLYGON_SMOOTH);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
-	glHint (GL_POLYGON_SMOOTH, GL_DONT_CARE);
-	font->Render(text.c_str(),text.size(),FTPoint(horizontalShift + c.x / scale, verticalShift + c.y / scale, c.z));
+	glEnable (GL_POLYGON_SMOOTH);
+	glHint (GL_POLYGON_SMOOTH, GL_NICEST);
+	FTPoint pStart(horizontalShift + c.x / scale, verticalShift + c.y / scale, c.z);
+	FTPoint pEnd =  font->Render(text.c_str(),text.size(), pStart);
+	glDisable(GL_BLEND);
+	glDisable(GL_POLYGON_SMOOTH);
 	glPopMatrix();
 }
 
@@ -62,5 +64,14 @@ double OpenGLText::getHeight() const{
 	if ( fontHeight != iUNDEF)
 		return fontHeight * scale;
 	return 0;
+}
+
+CoordBounds OpenGLText::getTextExtent(const String& txt) const {
+	if ( font) {
+		float x1,x2,y1,y2,z1,z2;
+		font->BBox(txt.c_str(), x1,y1,z1,x2,y2,z2);
+		return CoordBounds(Coord(x1*scale, y1*scale, z1*scale), Coord(x2 * scale, y2 * scale, z2 * scale));
+	}
+	return CoordBounds();
 }
 

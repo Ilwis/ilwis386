@@ -43,19 +43,6 @@ void TextLayerDrawer::setFont(OpenGLText *f) {
 	font = f;
 }
 
-//HTREEITEM TextLayerDrawer::configure(LayerTreeView  *tv, HTREEITEM parent) {
-//	HTREEITEM hti = ComplexDrawer::configure(tv,parent);
-//	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tv,parent,this,(DisplayOptionItemFunc)&TextLayerDrawer::displayOptionsText);
-//	HTREEITEM itemText = InsertItem(String("Text(%S)",sFaceName), "Text",item,-1);
-//	InsertItem(tv,itemText,String("Font : %S",sFaceName),"Text");
-//	InsertItem(tv,itemText,String("Size : %d",iFHeight),"Calculationsingle");
-//	String weightString =  iFWeight >= 500 ? "Bold" : "Normal";
-//	InsertItem(tv,itemText,String("Weight : %S",weightString),"Calculationsingle");
-//
-//
-//	return hti;
-//}
-
 void TextLayerDrawer::displayOptionsText(CWnd *parent) {
 	CWindowDC wdc(parent);
 	LOGFONT lf;
@@ -139,10 +126,25 @@ void TextDrawer::setCoord(const Coord& crd) {
 	c = crd;
 }
 
+void TextDrawer::setText(const Coord& crd, const String& txt) {
+	c = crd;
+	text = txt;
+
+}
+
 double TextDrawer::getHeight() const {
 	TextLayerDrawer *set = (TextLayerDrawer *)parentDrawer;
 	if ( set->getFont()) {
 		return set->getFont()->getHeight();
 	}
 	return 0;
+}
+
+CoordBounds TextDrawer::getTextExtent() const{
+	TextLayerDrawer *set = (TextLayerDrawer *)parentDrawer;
+	if ( set->getFont()) {
+		return set->getFont()->getTextExtent(text);
+	}
+	return CoordBounds();
+
 }

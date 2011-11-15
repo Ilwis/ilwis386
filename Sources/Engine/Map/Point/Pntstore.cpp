@@ -71,7 +71,12 @@ fnObj(p.fnObj), ptr(p)
 	ILWIS::Version::BinaryVersion fvFormatVersion;
 	ptr.ReadElement("PointMapStore", "Format", (int &)fvFormatVersion);
 	if ( fvFormatVersion == shUNDEF) {
-		fvFormatVersion = ILWIS::Version::bvFORMAT20;
+		String name;
+		ptr.ReadElement("Col:Coordinate","StoreType",name);
+		if ( name != "")
+			fvFormatVersion = ILWIS::Version::bvFORMAT30;
+		else
+			fvFormatVersion = ILWIS::Version::bvFORMAT20;
 	}
 	/*getEngine()->getVersion()->fSupportsBinaryVersion(fvFormatVersion);
     ptr.setVersionBinary(fvFormatVersion);*/

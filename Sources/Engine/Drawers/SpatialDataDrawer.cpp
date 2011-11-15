@@ -98,8 +98,13 @@ void SpatialDataDrawer::addDataSource(void *bmap,int options)
 		if ( getName() == "Unknown")
 			setName(obj->sName());
 		if ( bm.fValid() && bm->fTblAtt()) {
-			attTable = bm->tblAtt();
-			//attColumn = attTable->col(0);
+			try {
+				attTable = bm->tblAtt();
+			} catch (ErrorObject& err) {
+				useAttTable = false;
+				bm->SetAttributeTable(Table());
+				err.Show();
+			}
 		}
 		RootDrawer *rootdrawer = getRootDrawer();
 		if ( bm.fValid())

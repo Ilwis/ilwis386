@@ -141,7 +141,7 @@ public:
   static void Copy(const FileName& fnSrc, const FileName& fnDest);
   static bool fCopy(const FileName& fnSrc, const FileName& fnDest, Tranquilizer& trq);
   static bool fExist(const FileName& fn)
-   { return fn.fValid() && _access(fn.sFullPath().c_str(), 0)==0 ; }
+   { return fn.fValid() && _access(fn.sPhysicalPath().c_str(), 0)==0 ; }
   static void SetReadOnly(const String& sFileName, bool f);
   static void GetFileNames(const String& sMask, Array<FileName>& afn, const Array<String>* asExt = 0);
   static bool fIllegalName(const String& sName);

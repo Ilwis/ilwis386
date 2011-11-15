@@ -15,6 +15,7 @@ public:
 	void renderText(const Coordinate& c, const String& text);
 	void setColor(const Color & clr);
 	double getHeight() const;
+	CoordBounds getTextExtent(const String& txt) const;
 private:
 	//void loadFont(const String& name, int height) ;
 	FTFont *font;
@@ -24,6 +25,7 @@ private:
 	double verticalShift;
 	bool fixedSize;
 	double scale;
+	ILWIS::RootDrawer *rootdrawer;
 
 
 };

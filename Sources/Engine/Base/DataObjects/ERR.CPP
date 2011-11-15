@@ -226,27 +226,27 @@ String WhatErrorFloatingPoint::sWhat() const
 {
   switch( err ) {
     case FPE_INVALID:
-      return SDATErrInvalid;
+      return TR("Invalid");
     case FPE_DENORMAL:
-      return SDATErrDeNormal;
+		return TR("Denormal");
     case FPE_ZERODIVIDE:
-      return SDATErrDivideByZero;
+		return TR("Divide by zero");
     case FPE_OVERFLOW:
-      return SDATErrOverflow;
+      return TR("Overflow");
     case FPE_UNDERFLOW:
-      return SDATErrUnderflow;
+      return TR("Underflow");
     case FPE_INEXACT:
-      return SDATErrInexact;
+      return TR("Inexact");
     case FPE_UNEMULATED:
-      return SDATErrUnemulated;
+      return TR("Unemulated");
     case FPE_SQRTNEG:
-      return SDATErrSqrtOfNegativeNumber;
+      return TR("Square root of negative number");
     case FPE_STACKOVERFLOW:
-      return SDATErrStackOverflow;
+      return TR("Stack overflow");
     case FPE_STACKUNDERFLOW:
-      return SDATErrStackUnderflow;
+      return TR("Stack underflow");
     case FPE_EXPLICITGEN:
-      return SDATErrExceptionRaised;
+      return TR("Exception raised");
   }
   return SDATErrUnknown;
 }
@@ -255,13 +255,13 @@ ErrorInvalidType::ErrorInvalidType(const WhereError& where,
                                    const String& sSect,
                                    const String& sType)
 : ErrorObject(WhatError(String("%S '%S': '%S'",
-                        SDATErrInvalidTypeInSection,
+                        TR("Invalid type in section"),
                         sSect, sType), errTYPESECTION), where)
 {}
 
 ErrorNotThisObjectType::ErrorNotThisObjectType(const WhereError& where,
                                    const String& sType)
-: ErrorObject(WhatError(String("%S %S", SDATErrNotA, 
+: ErrorObject(WhatError(String("%S %S", TR("Object is not a"), 
                         sType), errNOTTHISTYPE), where)
 {}
 
@@ -274,7 +274,7 @@ static ErrorMemAlloc errMemAlloc;
 
 void _export MemAllocError()
 {
-  MessageBox(0, SDATErrNoMemoryLeft.sVal(), SDATErrError.sVal(), MB_ICONHAND|MB_SYSTEMMODAL|MB_OK);
+	MessageBox(0, TR("Out of menory").c_str(), TR("Error").c_str(), MB_ICONHAND|MB_SYSTEMMODAL|MB_OK);
   throw errMemAlloc;
 }
 

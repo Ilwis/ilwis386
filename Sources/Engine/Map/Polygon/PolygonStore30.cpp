@@ -95,7 +95,7 @@ bool PolygonMapStoreFormat30::getRings(long startIndex, const Table& tblTopology
 		if ( oldIndex == index && index != startIndex) // this would indicate infintite loop. corrupt data
 			return false;
 		forward = index > 0;
-	} while(abs(index) != abs(startIndex));
+	} while(abs(index) != abs(startIndex) && index != iUNDEF);
 	delete seq;
 
 	return true;
