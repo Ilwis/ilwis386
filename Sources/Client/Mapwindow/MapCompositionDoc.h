@@ -76,7 +76,7 @@ public:
 	virtual void Serialize(CArchive& ar);   // overridden for document i/o
 	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName, int os= IlwisWinApp::osNormal);
 	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName, OpenType ot, int os= IlwisWinApp::osNormal);
-	virtual BOOL OnOpenDocument(LPCTSTR lpszPath, ParmList& pm);
+	virtual BOOL OnOpenDocument(LPCTSTR lpszPath, ParmList& pm, int os=IlwisWinApp::osNormal);
 	virtual COleServerItem* OnGetEmbeddedItem();
 	virtual BOOL OnNewDocument();
 	virtual BOOL SaveModified();

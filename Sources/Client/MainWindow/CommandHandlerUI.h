@@ -138,7 +138,7 @@ private:
 	void CmdStereoPairFromDTM(const String& sCmd);
 	void CmdShiftGrf(const String& s);
 //	void CmdAggregateValueMulti(const String& s);
-//	void CmdAggregateValueSingle(const String& s);
+	void CmdAggregateValueSingle(const String& s);
 	void CmdMaplistGraph(const String& s);
 	//void CmdSpectra(const String& s);	
 	void CmdFindDatumParms(const String& sCmd);

@@ -1885,7 +1885,7 @@ void CommandHandlerUI::addExtraCommands() {
 	addCommand(CommandHandlerUI::createCommandInfo("map","",Cmdmap,"","Open Map","",".mpr",0,"Opens a raster map", false));
 	addCommand(CommandHandlerUI::createCommandInfo("pnt","",Cmdpnt,"","Open Pointmap","",".mpp",0,"Opens a Pointmap", false));
 	addCommand(CommandHandlerUI::createCommandInfo("prop","properties",Cmdpropobject,"","Object Properties","","",0,"Shows the properties of an object",false));
-    addCommand(CommandHandlerUI::createCommandInfo("pixelinfo","",Cmdpixelinfo,"..","Pixel Info","info","",7004,"Open or activate the pixel information window"));
+//    addCommand(CommandHandlerUI::createCommandInfo("pixelinfo","",Cmdpixelinfo,"..","Pixel Info","info","",7004,"Open or activate the pixel information window"));
 	addCommand(CommandHandlerUI::createCommandInfo("showdefform","", Cmdshowdefform,"..","","","",-1,"", false));
 	addCommand(CommandHandlerUI::createCommandInfo("deleteobjects","",Cmddeleteobjects,"","",".",".",0000,"", false));
 
@@ -1894,7 +1894,7 @@ void CommandHandlerUI::addExtraCommands() {
 	addCommand(CommandHandlerUI::createCommandInfo("showastbl","showastable",Cmdshowastable,TR("Visuali&zation..Show as Table"),TR("Show as Table"),".tbt",".tbt",0,TR("Shows table based Ilwisobjects as true tables")));
 	addCommand(CommandHandlerUI::createCommandInfo("display3d","",Cmddisplay3d,TR("Visuali&zation..&Display 3D"),TR("Display 3D"),"DspMap16Ico","",7002,TR("Edit a 3D georeference to display a map in three dimensions")));
 	addCommand(CommandHandlerUI::createCommandInfo("edit","",Cmdedit,TR("..Edit Map"),TR("Edit"),"DspMap16Ico","",7001,TR("Edit a map in a map window")));
-    addCommand(CommandHandlerUI::createCommandInfo("pixelinfo","",Cmdpixelinfo,TR(".."),TR("Pixel Info"),"info","",7004,TR("Open or activate the pixel information window")));
+    //addCommand(CommandHandlerUI::createCommandInfo("pixelinfo","",Cmdpixelinfo,TR(".."),TR("Pixel Info"),"info","",7004,TR("Open or activate the pixel information window")));
 	addCommand(CommandHandlerUI::createCommandInfo("makestereopair","",Cmdmakestereopair,TR("Image &Processing..&Epipolar Stereo Pair"),TR("Epipolar Stereo Pair"),".stp","",7015,TR("Interactively create a stereo pair from two overlapping aerial photographs")));
 	addCommand(CommandHandlerUI::createCommandInfo("sample","",Cmdsample,TR("Image &Processing..S&ample"),TR("Sample Map"),"DspMap16Ico","",7003,TR("Select training pixels in a sample set prior to an image classification")));
 	addCommand(CommandHandlerUI::createCommandInfo("anaglyph","",Cmdanaglyph,TR("Visuali&zation.Show Stereo Pair.as &Anaglyph"),TR("Anaglyph"),".stp",".stp",7017,TR("Show a Stereo Pair as anaglyph in a Map Window")));
@@ -1993,3 +1993,6 @@ void CommandHandlerUI::saveOperationsDefinitions(const FileName& fn) {
 	file.Close();
 }
 
+void CommandHandlerUI::CmdAggregateValueSingle(const String& s){
+
+}

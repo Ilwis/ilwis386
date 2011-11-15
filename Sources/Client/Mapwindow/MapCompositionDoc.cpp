@@ -292,7 +292,7 @@ BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPathName, int os)
 	return OnOpenDocument(lpszPathName, otNORMAL,os);
 }
 
-BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPath, ParmList& pm) 
+BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPath, ParmList& pm, int os) 
 {
 	FileName fn(pm.sGet("output") != "" ? pm.sGet("output") : lpszPath);
 	String sC = pm.sCmd();

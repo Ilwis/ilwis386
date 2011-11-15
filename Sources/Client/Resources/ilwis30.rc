@@ -296,6 +296,7 @@ float                   ICON                    "float.ico"
 boolean                 ICON                    "bool.ico"
 choice                  ICON                    "choice.ico"
 Colors                  ICON                    "color.ico"
+Border                  ICON                    "border.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //

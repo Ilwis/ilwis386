@@ -164,7 +164,7 @@ IlwisObject TableDoc::obj() const
 	return tbl;
 }
 
-BOOL TableDoc::OnOpenDocument(LPCTSTR lpszPath, ParmList& pm) 
+BOOL TableDoc::OnOpenDocument(LPCTSTR lpszPath, ParmList& pm, int os) 
 {
 	String loc = pm.sGet(0);
 	String tableName = loc.sTail("\\");

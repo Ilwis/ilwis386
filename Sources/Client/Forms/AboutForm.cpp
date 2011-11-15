@@ -32,7 +32,7 @@ AboutForm::AboutForm(CWnd* parent) : FormWithDest(parent,TR("About ILWIS"),fbsSH
 	persons.push_back(" ");
 	persons.push_back("Translations");
 	persons.push_back("French: Robin Prest");
-	persons.push_back("Spanish: Sandra Patricia");
+	persons.push_back("Spanish: Sandra Sotomonte");
 	dummy = TR("http://52north.org/ilwis");
 
 

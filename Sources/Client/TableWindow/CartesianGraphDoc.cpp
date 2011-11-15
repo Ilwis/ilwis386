@@ -357,8 +357,7 @@ void CartesianGraphDoc::OnAddColumnGraph()
 	// updating of axis ??
 	gl->fYAxisLeft = true;
 	cgd->agl.push_back(gl);
-	throw ErrorObject(String("TO DO %s %s", __LINE__, __FILE__));
-	//gl->smb.col = gl->line.clrLine() = gl->color	= BaseDrawer::clrPrimary(cgd->agl.iSize());
+	gl->smb.col = gl->line.clrLine() = gl->color	= Representation::clrPrimary(cgd->agl.iSize());
 	gl->smb.iSize = 5;
 	// config layer ??
 	SetModifiedFlag();
