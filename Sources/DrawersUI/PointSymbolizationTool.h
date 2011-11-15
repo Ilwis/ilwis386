@@ -32,7 +32,7 @@ private:
 	FieldDataType *fdSelect;
 	FieldReal *fiThick;
 	CheckBox *f3d;
-	FieldReal *frScale;
+	FieldReal *frScale, *frRot;
 	PointProperties *props;
 
 

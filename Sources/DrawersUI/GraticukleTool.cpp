@@ -27,7 +27,9 @@ DrawerTool *createGraticuleTool(ZoomableView* zv, LayerTreeView *view, NewDrawer
 GraticuleTool::GraticuleTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
 	DrawerTool("GraticuleTool", zv, view, drw), hasGraticule(false)
 {
-	drawer = ((ComplexDrawer *)(drw->getRootDrawer()))->getDrawer(700, ComplexDrawer::dtPOST);
+	ComplexDrawer *annotations = (ComplexDrawer *)(drw->getRootDrawer()->getDrawer("AnnotationDrawers"));
+	if ( annotations)
+		drawer = (ComplexDrawer *)annotations->getDrawer(300, ComplexDrawer::dtPOST);
 }
 
 GraticuleTool::~GraticuleTool() {

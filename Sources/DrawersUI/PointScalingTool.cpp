@@ -99,7 +99,7 @@ DisplayOptionsForm(dr,wPar,TR("Scaling")), tbl(_tbl), fcColumn(0), rrScale(Range
 	}
 
     frr = new FieldRangeReal(root, TR("&Stretch"), &(props->stretchRange));
-	fmscale = new FieldReal(root,TR("Maximum scale"),&(props->maxScale)); 
+	fmscale = new FieldReal(root,TR("Scale Exaggeration"),&(props->exaggeration)); 
    
 
 	RadioGroup* rgLinLog = new RadioGroup(root, "", &stretchModel, true);

@@ -254,6 +254,8 @@ void ZDataScaling::apply() {
 			layerDrawer->getZMaker()->setOffset(zoffset + rr.rLo());
 		}
 	}
+	PreparationParameters pp(NewDrawer::pt3D);
+	drw->prepare(&pp);
 	updateMapView();
 }
 //----------------------------------------------------------------

@@ -42,7 +42,7 @@ bool OperationTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	if ( !sdrwt && !adrwt)
 		return false;
 
-	parentTool = tool;
+	parentTool = tool->getParentTool();;
 	return true;
 }
 
@@ -57,9 +57,15 @@ HTREEITEM OperationTool::configure( HTREEITEM parentItem) {
 
 	htiNode = insertItem(TR("Operations"),"ExeIcoL", item);
 	ActionList *actList = IlwWinApp()->acl();
-
-	BaseMapPtr *bmptr = (((SpatialDataDrawer  *)(drawer->getParentDrawer()))->getBaseMap());
-	addOperationItems(bmptr->fnObj.sExt);
+	String sExt;
+	if ( drawer->getType() == "AnimationDrawer") {
+		sExt = ".mpl";
+	}
+	else {
+		BaseMapPtr *bmptr = (((SpatialDataDrawer  *)(drawer->getParentDrawer()))->getBaseMap());
+		sExt = bmptr->fnObj.sExt;
+	}
+	addOperationItems(sExt);
 	String sTop, sMid, sAction, sLastTop="-", sLastMid;
 	HTREEITEM htiTop = htiNode, htiMid, htiOpt;
 
@@ -99,11 +105,14 @@ void OperationTool::doOperation() {
 	//new OperationForm(tree, (ComplexDrawer *)drawer, htiNode);
 	DisplayOptionTreeItem *item = (DisplayOptionTreeItem *)tree->getCurrent();
 	if ( item) {
-		Action *act = itemActions[(long)item];
-		BaseMapPtr *bmptr = (((SpatialDataDrawer  *)(drawer->getParentDrawer()))->getBaseMap());
-		long *handle = new long((long)(tree->GetDocument()->mpvGetView()->m_hWnd));
-		getEngine()->getContext()->SetThreadLocalVar(IlwisAppContext::tlvMAPWINDOWAPP, handle);
-		IlwWinApp()->ExecuteUI(act->sAction() + " " + bmptr->fnObj.sFile + bmptr->fnObj.sExt, tree);
+		map<long, Action *>::const_iterator iter = itemActions.find((long)item);
+		if ( iter != itemActions.end()) {
+			Action *act = (*iter).second;
+			BaseMapPtr *bmptr = (((SpatialDataDrawer  *)(drawer->getParentDrawer()))->getBaseMap());
+			long *handle = new long((long)(tree->GetDocument()->mpvGetView()->m_hWnd));
+			getEngine()->getContext()->SetThreadLocalVar(IlwisAppContext::tlvMAPWINDOWAPP, handle);
+			IlwWinApp()->ExecuteUI(act->sAction() + " " + bmptr->fnObj.sFile + bmptr->fnObj.sExt, tree);
+		}
 	}
 
 }

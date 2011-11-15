@@ -86,6 +86,7 @@ DisplayOptionsForm(dr,wPar,TR("Symbolization")), selection(0)
 	// fselect = new FieldOneSelectString(root,TR("Symbols"),&selection, names);
 	fiThick = new FieldReal(root,TR("Line thickness"),&(props->thickness));
 	frScale = new FieldReal(root,TR("Symbol scale"),&(props->scale),ValueRange(RangeReal(0.1,100.0),0.1));
+	frRot = new FieldReal(root,TR("Symbol rotation"),&(props->angle),ValueRange(RangeReal(0.0,360.0),0.1));
 	t3dOr = props->threeDOrientation ? 1 : 0;
 	f3d = new CheckBox(root,TR("3D orientation"),&t3dOr);
 	create();
@@ -96,6 +97,7 @@ void PointSymbolizationForm::apply(){
 	fiThick->StoreData();
 	frScale->StoreData();
 	f3d->StoreData();
+	frRot->StoreData();
 
 	SetDrawer *setDrw = dynamic_cast<SetDrawer *>(drw);
 	//String symbol = names[selection];

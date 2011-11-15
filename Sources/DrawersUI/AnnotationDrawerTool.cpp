@@ -17,6 +17,7 @@
 #include "DrawersUI\GlobalTool.h"
 #include "DrawersUI\SetDrawerTool.h"
 #include "DrawersUI\LayerDrawerTool.h"
+//#include "AnnotationBorderTool.h"
 
 using namespace ILWIS;
 
@@ -27,7 +28,7 @@ DrawerTool *createAnnotationDrawerTool(ZoomableView* zv, LayerTreeView *view, Ne
 AnnotationDrawerTool::AnnotationDrawerTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
 	DrawerTool(TR("AnnotationDrawerTool"),zv, view, drw)
 {
-	active= false;
+	active = false;
 }
 
 AnnotationDrawerTool::~AnnotationDrawerTool() {
@@ -51,8 +52,11 @@ HTREEITEM AnnotationDrawerTool::configure( HTREEITEM parentItem) {
 	DrawerTool *dt = new AnnotationLegendDrawerTool(mpv,tree,drawer);
 	if ( dt) {
 		addTool(dt);
-		//dt->configure(htiNode);
 	}
+	//dt = new AnnotationBorderTool(mpv,tree,drawer);
+	//if ( dt) {
+	//	addTool(dt);
+	//}
 	DrawerTool::configure(htiNode);
 
 

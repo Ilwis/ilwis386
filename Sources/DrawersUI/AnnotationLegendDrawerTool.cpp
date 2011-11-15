@@ -35,9 +35,14 @@ AnnotationLegendDrawerTool::AnnotationLegendDrawerTool(ZoomableView* zv, LayerTr
 }
 
 AnnotationLegendDrawerTool::~AnnotationLegendDrawerTool() {
+	clear();
 }
 
 void AnnotationLegendDrawerTool::clear() {
+	ComplexDrawer *annotations = (ComplexDrawer *)(drawer->getRootDrawer()->getDrawer("AnnotationDrawers"));
+	if ( annotations)
+		annotations->removeDrawer(legend->getId());
+
 }
 
 bool AnnotationLegendDrawerTool::isToolUseableFor(ILWIS::DrawerTool *drw) { 
@@ -99,7 +104,9 @@ void AnnotationLegendDrawerTool::makeActive(void *v, HTREEITEM ) {
 			}
 			if ( legend) {
 				legend->prepare(&pp);
-				((ComplexDrawer *)drawer)->addPostDrawer(735, legend);
+				ComplexDrawer *annotations = (ComplexDrawer *)(drawer->getRootDrawer()->getDrawer("AnnotationDrawers"));
+				if ( annotations)
+					annotations->addPostDrawer(400, legend);
 			}
 		}
 	}
@@ -176,7 +183,7 @@ int LegendPosition::setPosition(Event *ev) {
 }
 
 //-------------------------------------------------------------------------------
-LegendAppearance::LegendAppearance(CWnd *wPar, AnnotationLegendDrawer *dr) : DisplayOptionsForm(dr,wPar,TR("Appearance of Legend")) 
+LegendAppearance::LegendAppearance(CWnd *wPar, AnnotationLegendDrawer *dr) : DisplayOptionsForm(dr,wPar,TR("Appearance of Legend")) , fview(0)
 {
 	useBgColor = dr->getUseBackBackground();
 	bgColor = dr->getBackgroundColor();

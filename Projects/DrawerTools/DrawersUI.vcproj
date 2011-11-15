@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="DrawersUI"
 	ProjectGUID="{8DF70E96-104A-4E41-8A67-633B975E6A6D}"
 	RootNamespace="DrawersUI"
@@ -224,6 +224,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\DrawersUI\AnnotationBorderTool.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\DrawersUI\AnnotationDrawerTool.cpp"
 				>
 			</File>
@@ -442,6 +446,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\DrawersUI\AnimationTool.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\AnnotationBorderTool.h"
 				>
 			</File>
 			<File

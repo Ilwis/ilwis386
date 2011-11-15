@@ -17,6 +17,7 @@
 #include "Drawers\GridDrawer.h"
 #include "DrawersUI\GridTool.h"
 #include "DrawersUI\GlobalTool.h"
+#include "AnnotationBorderTool.h"
 
 using namespace std;
 
@@ -27,7 +28,9 @@ DrawerTool *createGridTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw
 GridTool::GridTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
 	DrawerTool("GridTool", zv, view, drw), hasGraticule(false)
 {
-	drawer = ((ComplexDrawer *)(drw->getRootDrawer()))->getDrawer(800, ComplexDrawer::dtPOST);
+	ComplexDrawer *annotations = (ComplexDrawer *)(drw->getRootDrawer()->getDrawer("AnnotationDrawers"));
+	if ( annotations)
+		drawer = (ComplexDrawer *)annotations->getDrawer(200, ComplexDrawer::dtPOST);
 }
 
 GridTool::~GridTool() {
@@ -48,7 +51,11 @@ HTREEITEM GridTool::configure( HTREEITEM parentItem) {
 	DrawerTool *dt = DrawerTool::createTool("LineStyleTool", getDocument()->mpvGetView(),tree,drawer);
 	if ( dt) {
 		addTool(dt);
-		dt->configure(htiNode);
+		//dt->configure(htiNode);
+	}
+	dt = new AnnotationBorderTool(mpv,tree,drawer);
+	if ( dt) {
+		addTool(dt);
 	}
 
 	
@@ -91,5 +98,8 @@ void  GridForm::apply() {
 	grd->setGridSpacing(rDist);
 	PreparationParameters pp(NewDrawer::ptRENDER | NewDrawer::ptGEOMETRY);
 	drw->prepare(&pp);
+	NewDrawer *borderDrw = drw->getRootDrawer()->getDrawer("AnnotationBorderDrawer");
+	if ( borderDrw)
+		borderDrw->prepare(&pp);
 	updateMapView();
 }

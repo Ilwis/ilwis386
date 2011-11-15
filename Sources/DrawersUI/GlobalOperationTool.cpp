@@ -37,7 +37,6 @@ GlobalOperationTool::~GlobalOperationTool() {
 bool GlobalOperationTool::isToolUseableFor(ILWIS::DrawerTool *tool) { 
 
 	return dynamic_cast<GlobalTool *>(tool) != 0;
-	//return false;
 }
 
 HTREEITEM GlobalOperationTool::configure( HTREEITEM parentItem) {
