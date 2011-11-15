@@ -725,6 +725,10 @@
 				Name="MapList"
 				>
 				<File
+					RelativePath="..\..\Sources\Applications\MapList\MapLisExpand.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Sources\Applications\MapList\MapListApplic.cpp"
 					>
 				</File>
@@ -734,6 +738,10 @@
 				</File>
 				<File
 					RelativePath="..\..\Sources\Applications\MapList\MapListChangeDetection.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Applications\MapList\MapListExpand.h"
 					>
 				</File>
 				<File

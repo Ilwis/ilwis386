@@ -63,6 +63,7 @@
 #include "Applications\MapList\MapListChangeDetection.h"
 #include "Applications\Table\TableCreateTimeColumn.h"
 #include "Applications\Table\AUTCSEMV.H"
+#include "Applications\MapList\MapListExpand.h"
 
 //extern "C" _export vector<CommandInfo *>* getCommandInfo());
 
@@ -73,7 +74,7 @@ extern "C" _export void testCommandInfo(CommandInfo* name) {
 InfoVector* getCommandInfo() {
 
 	InfoVector *infos = new InfoVector();
-
+	infos->push_back(CommandMap::newCommandInfo(createMapListExpand,"MapListExpand",metadataMapListExpand));
 	infos->push_back(CommandMap::newCommandInfo(createMapListChangeDetection,"MapListChangeDetection",metadataMapListChangeDetection));
 	infos->push_back(CommandMap::newCommandInfo(createMapAggregateMapList,"MapAggregateMapList"));
 	infos->push_back(CommandMap::newCommandInfo(createMapAttribute,"MapAttribute",metadataMapAtrribute));
