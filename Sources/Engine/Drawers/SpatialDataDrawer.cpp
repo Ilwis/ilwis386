@@ -68,6 +68,16 @@ BaseMapPtr* SpatialDataDrawer::getBaseMap(int index) const { // we return the po
 	return 0;
 }
 
+IlwisObjectPtr *SpatialDataDrawer::getObject() const {
+	if ( bm.fValid())
+		return bm.ptr();
+	else if ( oc.fValid())
+		return oc.pointer();
+	else if ( mpl.fValid())
+		return mpl.pointer();
+	return 0;
+}
+
 void* SpatialDataDrawer::getDataSource() const {
 	if ( bm.fValid())
 		return (void *)&bm;

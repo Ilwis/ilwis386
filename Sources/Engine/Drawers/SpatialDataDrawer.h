@@ -21,6 +21,7 @@ class _export SpatialDataDrawer : public ComplexDrawer {
 		void addDataSource(void *bm, int options=0);
 		void *getDataSource() const;
 		BaseMapPtr *getBaseMap(int index = 0) const;
+		IlwisObjectPtr *SpatialDataDrawer::getObject() const;
 		Representation getRepresentation(int index = 0) const;
 		void setRepresentation(const Representation& rp);
 		Table getAtttributeTable(int index = 0) const;

@@ -1026,26 +1026,26 @@ bool CommandHandler::fCmdCalc(const String& sCmd)
 				ApplicationMetadata md = (infos[0]->metadata)(&query);
 				if ( md.returnType != IlwisObject::iotANY) {
 					switch( md.returnType){
-case IlwisObject::iotPOINTMAP :
-	sType = "pnt"; break;
-case IlwisObject::iotPOLYGONMAP :
-	sType = "pol"; break;
-case IlwisObject::iotSEGMENTMAP :
-	sType = "seg"; break;
-case IlwisObject::iotRASMAP :
-	sType = "map"; break;
-case IlwisObject::iotMAPLIST :
-	sType = "mpl"; break;
-case IlwisObject::iotTABLE :
-	sType = "tbl"; break;
-case IlwisObject::iotMATRIX :
-	sType = "mat"; break;
-case IlwisObject::iotOBJECTCOLLECTION :
-	sType = "col"; break;
-case IlwisObject::iotSTEREOPAIR :
-	sType = "stp"; break;
-					};
-				}
+						case IlwisObject::iotPOINTMAP :
+							sType = "pnt"; break;
+						case IlwisObject::iotPOLYGONMAP :
+							sType = "pol"; break;
+						case IlwisObject::iotSEGMENTMAP :
+							sType = "seg"; break;
+						case IlwisObject::iotRASMAP :
+							sType = "map"; break;
+						case IlwisObject::iotMAPLIST :
+							sType = "mpl"; break;
+						case IlwisObject::iotTABLE :
+							sType = "tbl"; break;
+						case IlwisObject::iotMATRIX :
+							sType = "mat"; break;
+						case IlwisObject::iotOBJECTCOLLECTION :
+							sType = "col"; break;
+						case IlwisObject::iotSTEREOPAIR :
+							sType = "stp"; break;
+											};
+					}
 			}
 			else if (fCIStrEqual(sExpres.sLeft(8) , "MapList(") || fCIStrEqual(sExpres.sLeft(4) , "Map(") ||
 				fCIStrEqual(sExpres.sLeft(6) , "Table("))

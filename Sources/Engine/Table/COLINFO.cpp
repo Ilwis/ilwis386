@@ -192,7 +192,7 @@ void ColumnInfo::Read(const FileName& fnTbl, const String& sColName)
 		_rValueOffset = 0;
 	}
 
-	if ( st() == stLONG || st() == stBYTE)
+	if ( st() == stLONG || st() == stBYTE || st() == stINT)
 		_ct = ctRAW;
 	else if ( st() == stREAL)
 		_ct = ctREAL;
