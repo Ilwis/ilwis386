@@ -169,3 +169,10 @@ String FeatureLayerDrawer::getInfo(const Coord& c) const {
 	}
 	return info;
 }
+
+bool FeatureLayerDrawer::useRaw() const {
+	if ( fbasemap.fValid()) {
+		return !fbasemap->dvrs().fUseReals();
+	}
+	return false;
+}

@@ -94,7 +94,12 @@ void LineFeatureDrawer::prepare(PreparationParameters *p){
 		if (( isDmSort && feature->rValue() == 0) || feature->rValue() == rUNDEF) // 0 == undef for classes
 			lproperties.linestyle = 0xF0F0;
 		lproperties.thickness = lparent->thickness;
-		lproperties.drawColor = (fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod()));
+
+		if ( fdr->useRaw())
+			lproperties.drawColor = (fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod()));
+		else
+			lproperties.drawColor = (fdr->getDrawingColor()->clrVal(feature->rValue()));
+
 		for(int j =0 ; j < p->filteredRaws.size(); ++j) {
 			int raw = p->filteredRaws[j];
 			if ( getFeature()->rValue() == abs(raw)) {
