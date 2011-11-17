@@ -164,10 +164,13 @@ CDocument* BaseDocTemplate::OpenDocumentFile(
 		// open an existing document
 		CWaitCursor wait;
 		IlwisDocument *pdoc = dynamic_cast<IlwisDocument *>(pDocument);
-		if (pdoc && !pdoc->OnOpenDocument(lpszPathName,0))
+		if (pdoc)
 		{
-			pFrame->DestroyWindow();
-			return NULL;
+			if (!pdoc->OnOpenDocument(lpszPathName,0))
+			{
+				pFrame->DestroyWindow();
+				return NULL;
+			}
 		} else {
 			if(!pDocument->OnOpenDocument(lpszPathName)) {
 				pFrame->DestroyWindow();
