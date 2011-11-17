@@ -163,13 +163,18 @@ CDocument* BaseDocTemplate::OpenDocumentFile(
 	{
 		// open an existing document
 		CWaitCursor wait;
-		if (!pDocument->OnOpenDocument(lpszPathName))
+		IlwisDocument *pdoc = dynamic_cast<IlwisDocument *>(pDocument);
+		if (pdoc && !pdoc->OnOpenDocument(lpszPathName,0))
 		{
-			// user has be alerted to what failed in OnOpenDocument
-			TRACE0("CDocument::OnOpenDocument returned FALSE.\n");
 			pFrame->DestroyWindow();
 			return NULL;
+		} else {
+			if(!pDocument->OnOpenDocument(lpszPathName)) {
+				pFrame->DestroyWindow();
+				return NULL;
+			}
 		}
+
 		pDocument->SetModifiedFlag(FALSE);
 	}
 
