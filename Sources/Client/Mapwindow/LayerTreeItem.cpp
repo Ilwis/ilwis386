@@ -683,6 +683,20 @@ void DisplayOptionTree::OnLButtonDblClk(UINT nFlags, CPoint point)
 	}*/
 }
 
+void DisplayOptionTree::addMenuItem(ILWIS::DrawerTool *parentTool, CMenu& men, vector<DrawerTool *>& tools) {
+	for(int i = 0; i < parentTool->getToolCount(); ++i) {
+		DrawerTool *tool = parentTool->getTool(i);
+		String sMenu = tool->getMenuString();
+		if ( sMenu != "") {
+			men.AppendMenu(MF_STRING, tool->getId(),sMenu.c_str());
+			tools.push_back(tool);
+			if (tool->isActive())
+				men.CheckMenuItem(tool->getId(), MF_CHECKED);
+		}
+		addMenuItem(tool,men, tools);
+	}
+}
+
 void DisplayOptionTree::OnContextMenu(CWnd* pWnd, CPoint pos){
 	CPoint pnt = pos;
 	ltv->GetTreeCtrl().ScreenToClient(&pnt);
@@ -692,17 +706,12 @@ void DisplayOptionTree::OnContextMenu(CWnd* pWnd, CPoint pos){
 	DrawerTool *setTool = doTree->getTool();
 	CMenu men;
 	men.CreatePopupMenu();
-	for(int i = 0; i < setTool->getToolCount(); ++i) {
-		DrawerTool *tool = setTool->getTool(i);
-		String sMenu = tool->getMenuString();
-		if ( sMenu != "")
-			men.AppendMenu(MF_STRING, tool->getId(),sMenu.c_str());
-			if (tool->isActive())
-				men.CheckMenuItem(tool->getId(), MF_CHECKED);
-	}
+	vector<DrawerTool *> tools; // tools that are in the context menu;
+	addMenuItem(setTool, men, tools);
+
 	int iCmd = men.TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON|TPM_NONOTIFY|TPM_RETURNCMD, pos.x, pos.y, pWnd);
-	for(int i = 0; i < setTool->getToolCount(); ++i) {
-		DrawerTool *tool = setTool->getTool(i);
+	for(int i = 0; i < tools.size(); ++i) {
+		DrawerTool *tool =tools[i];
 		if ( iCmd == tool->getId()){
 			if ( hti){
 				UINT state = men.GetMenuState(iCmd,MF_BYCOMMAND);

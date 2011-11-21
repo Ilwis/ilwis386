@@ -267,8 +267,12 @@ int GeneralImportForm::Fill(Event*)
 
 	curPage = GetPage(sVal);
 	currentFormat = getFormat(sVal);
-	if ( currentFormat.shortName != "") {
-		fsDriverDetails->SetVal(String("%S:%S",currentDriver.driverName, currentFormat.name));
+	if ( currentFormat.shortName != "" || currentFormat.name != "") {
+		if ( currentFormat.shortName != "" && currentFormat.name != "")
+			fsDriverDetails->SetVal(String("%S:%S",currentDriver.driverName, currentFormat.name));
+		else {
+			fsDriverDetails->SetVal(currentFormat.shortName != "" ? currentFormat.shortName : currentFormat.name);
+		}
 		fsInput->Show();
 		fsOutput->Show();
 	} else {
@@ -368,11 +372,16 @@ int GeneralImportForm::exec() {
 		}
 		else if ( URL::isUrl(sInput)) {
 			openCmd = String("open %S -output=%S -method=%S",sInput, SetExtension(FileName(sOutput)).sFullPathQuoted(), currentFormat.method);
-		}else
-			openCmd = String("open %S -output=%S -method=%S",FileName(sInput).sFullPathQuoted(), SetExtension(FileName(sOutput)).sFullPathQuoted(), currentFormat.method);
+		}else {
+			if ( currentFormat.command == "")
+				openCmd = String("open %S -output=%S -method=%S",FileName(sInput).sFullPathQuoted(), SetExtension(FileName(sOutput)).sFullPathQuoted(), currentFormat.method);
+			else {
+				openCmd = String("%S %S %S %S", currentFormat.command, currentFormat.name.sQuote(),FileName(sInput).sFullPathQuoted(),FileName(sOutput).sFullPathQuoted()); 
+			}
+		}
 	}
 	openCmd += extraOptions;
-	if ( !fUseAs)
+	if ( !fUseAs && currentFormat.command == "")
 		openCmd += " -import";
 
 	getEngine()->Execute(openCmd);

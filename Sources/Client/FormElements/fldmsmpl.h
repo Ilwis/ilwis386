@@ -90,20 +90,24 @@ private:
 class FormCreateSampleSet: public FormWithDest
 {
 public:
-	_export FormCreateSampleSet(CWnd* wPar, String* sMap, const String& sMpr = "", const String& sMpl = "");
+	_export FormCreateSampleSet(CWnd* wPar, String* sMap, const String& sMpr = "", const String& sMpl = "", bool createOnly=true);
 private:    
 	int exec();
 	int CallBackName(Event *);
 	int ChangeMapList(Event*);
+	int showFields(Event *);
 	void SetOKButton();
 	
 	FieldDataTypeCreate* fdss;
 	FieldMapList *m_fml;
 	StaticText* stRemark;
+	CheckBox *cb;
+	FormEntry *entry;
 	String* sMap;
 	String sDescr, sDom, sMapList, sBgMap;
 	String m_sDomErr, m_sNameErr;
 	bool   m_fOkDomain, m_fOkName;
+	bool useExisting;
 };
 
 #endif // FIELDMAPSAMPLE_H

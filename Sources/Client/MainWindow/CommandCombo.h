@@ -70,7 +70,7 @@ class CommandCombo : public CComboBox
 public:
 	CommandCombo();
 	~CommandCombo();
-	enum cbType{cbMain, cbTable};
+	enum cbType{cbMain, cbTable, cbMapWindow};
 
 	_export BOOL Create(CWnd* pParentWnd,
 		         cbType t,

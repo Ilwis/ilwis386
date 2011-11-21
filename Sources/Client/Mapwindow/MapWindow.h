@@ -56,6 +56,7 @@
 #define IMPEXP __declspec(dllimport)
 #endif
 
+class CommandBar;
 	
 class IMPEXP MapWindow: public DataWindow
 {
@@ -94,6 +95,7 @@ public:
 	afx_msg void OnUpdateScaleControl(CCmdUI* pCmdUI);
 	afx_msg void OnFullScreen();
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) ;
+	afx_msg LONG OnExecute(UINT, LONG lParam);
 	//}}AFX_MSG
 
 protected:
@@ -104,6 +106,7 @@ protected:
         menRprLayer, menAttLayer, menDomLayer;
 	HMENU hMenFile, hMenEdit;
 	GeneralBar gbOverview;
+	CommandBar *commBar;
 	CView* pFirstView;
 	bool fullScreen;
 	WINDOWPLACEMENT g_wpPrev;

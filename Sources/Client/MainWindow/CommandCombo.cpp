@@ -131,7 +131,12 @@ BOOL CommandCombo::Create(CWnd* pParentWnd, cbType t, UINT nID, DWORD dwStyle)
 	ISTRUE(fINotEqual, fRet, FALSE);
 	type = t;
 
-	String sEntry = type == cbMain ? "MainComLine" : "TableComLine";
+	String sEntry ;
+	switch ( type) {
+		case cbMain: sEntry = "MainComLine"; break;
+		case cbTable: sEntry = "TableComLine"; break;
+		case cbMapWindow: sEntry = "MapCommandLine"; break;
+	}
 
 	IlwisSettings settings(sEntry);
 	IlwisSettings settings2("DefaultSettings");
@@ -156,7 +161,12 @@ void CommandCombo::OnMouseMove(UINT nFlags, CPoint point)
 
 void CommandCombo::AddToHistory(const CString& str)
 {
-	String sEntry = type == cbMain ? "MainComLine" : "TableComLine";
+	String sEntry ;
+	switch ( type) {
+		case cbMain: sEntry = "MainComLine"; break;
+		case cbTable: sEntry = "TableComLine"; break;
+		case cbMapWindow: sEntry = "MapCommandLine"; break;
+	}
 	IlwisSettings settings(sEntry);
 	InsertString(0,str);
 	int iCount = min(GetCount(), iMaxStored);

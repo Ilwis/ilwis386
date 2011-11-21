@@ -171,6 +171,7 @@ public:
 	virtual void OnContextMenu(CWnd* pWnd, CPoint pos);
 	DrawerTool *getTool() { return tool;}
 private:
+	void addMenuItem(ILWIS::DrawerTool *parentTool, CMenu& men, vector<DrawerTool *>& tools);
 	HTREEITEM htiStart;
 	NewDrawer *drw;
     DrawerTool *tool;

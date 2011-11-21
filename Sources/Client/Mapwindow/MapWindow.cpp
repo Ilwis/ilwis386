@@ -42,6 +42,8 @@ Created on: 2007-02-8
 #include "Client\Base\IlwisDocument.h"
 #include "Client\MainWindow\Catalog\CatalogDocument.h"
 #include "Engine\Map\Mapview.h"
+#include "Client\Editors\Utils\BaseBar.h"
+#include "Client\MainWindow\CommandCombo.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\MapPaneView.h"
 #include "Client\Mapwindow\LayerTreeView.h"
@@ -51,6 +53,11 @@ Created on: 2007-02-8
 #include "Client\Mapwindow\PixelInfoBar.h"
 #include "Client\Mapwindow\OverviewMapPaneView.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
+#include "Client\Mapwindow\Drawers\DrawerTool.h"
+#include "Client\Mapwindow\LayerTreeItem.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
+#include "Engine\Scripting\Script.h"
+#include "Headers\messages.h"
 #include "Headers\Hs\Mapwind.hs"
 
 #ifdef _DEBUG
@@ -69,6 +76,7 @@ BEGIN_MESSAGE_MAP(MapWindow, DataWindow)
 	ON_COMMAND(ID_SMALLER, OnSmaller)
 	ON_UPDATE_COMMAND_UI(ID_LARGER, OnUpdateLarger)
 	ON_UPDATE_COMMAND_UI(ID_SMALLER, OnUpdateSmaller)
+	ON_MESSAGE(ILWM_EXECUTE, OnExecute)
 	ON_WM_GETMINMAXINFO()
 	ON_WM_INITMENU()
 	ON_MESSAGE(ILW_UPDATE, OnUpdate)
@@ -91,10 +99,12 @@ MapWindow::MapWindow()
 {
 	help = "ilwis\\map_window.htm";
 	sHelpKeywords = "Map Window";
+	commBar = 0;
 }
 
 MapWindow::~MapWindow()
 {
+	delete commBar;
 }
 
 #define sMen(ID) ILWSF("men",ID).c_str()
@@ -232,7 +242,6 @@ int MapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	bbDataWindow.Create(this, "map.but", "", 100);
 	// prevent docking right/left because e.g. Tiepointeditors enhance buttonbar
 	bbDataWindow.EnableDocking(CBRS_ALIGN_TOP|CBRS_ALIGN_BOTTOM);
-
 	DockControlBar(&bbDataWindow, AFX_IDW_DOCKBAR_TOP);
 
 	barScale.Create(this);
@@ -253,6 +262,10 @@ int MapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		pFirstView = dynamic_cast<CView*>(GetDescendantWindow(AFX_IDW_PANE_FIRST, TRUE));
 	pFirstView->GetDocument()->AddView(ltb.view);
 	DockControlBar(&ltb,AFX_IDW_DOCKBAR_LEFT);
+
+	commBar = new CommandBar();
+	commBar->Create(this, ID_COMMANDBAR, CommandCombo::cbMain);
+	DockControlBar(commBar);
 
 
 
@@ -637,5 +650,108 @@ void MapWindow::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		}
 	}
 	DataWindow::OnKeyDown(nChar, nRepCnt, nFlags);
+}
+
+LONG MapWindow::OnExecute(UINT, LONG lParam)
+{				 
+	try {
+		string str((char*)(void*)lParam);  // avoid calling String(const char* sFormat..)
+		String comm(str);
+		int index = comm.find("-displayoptions");
+		int index2 = comm.find(")");
+		String displayOptions;
+		if ( index > index2) {
+			int loc = index + String("-displayoptions=\"").size();
+			displayOptions=comm.substr(loc, comm.size() - loc - 1);
+		}
+		comm = comm.substr(0, index);
+		MapPaneView* mpv = dynamic_cast<MapPaneView*>(pFirstView);
+		if (0 == mpv) 
+			return 0;
+		MapCompositionDoc* mcd = mpv->GetDocument();  
+		if (0 == mcd) 
+			return 0;
+		LayerTreeView *ltv = (LayerTreeView *)ltb.view;
+		HTREEITEM hti= ltv->GetTreeCtrl().GetNextItem(TVGN_ROOT, TVGN_CHILD);
+		vector<IlwisObjectPtr *> objects;
+		while ( hti) {
+			LayerTreeItem *data = (LayerTreeItem*)ltv->GetTreeCtrl().GetItemData(hti);
+			if ( data) {
+				DrawerLayerTreeItem *dlti = dynamic_cast<DrawerLayerTreeItem *>(data);
+				if ( dlti) {
+					SpatialDataDrawer *spdrw = dynamic_cast<SpatialDataDrawer *>(dlti->drw());
+					if ( spdrw) {
+						IlwisObjectPtr *obj = spdrw->getObject();
+						objects.push_back(obj);
+					}
+
+				}
+			}
+			hti= ltv->GetTreeCtrl().GetNextItem(hti, TVGN_NEXT);
+		}
+		index = 0;
+		while (index != string::npos) {
+			index = comm.find("%L", index);
+			if ( index != string::npos) {
+				char c = comm[index + 2];
+				if ( c >= '0' && c <= '9') {
+					char c2 = comm[index + 3];
+					if ( c2 == '%') {
+						int loc = c - 48 - 1;
+						if ( loc < objects.size()) {
+							String file = objects[loc]->fnObj.sRelative();
+							comm.replace(index,4,file);
+						}
+					}
+				}
+					
+			}
+		}
+		index = comm.find_first_of("{=:");
+		String name = comm.substr(0,index);
+		FileName out(name);
+		String txt = comm.toLower();
+		String sExt = ".mpr";
+		index = comm.find("(");
+
+		if ((index = txt.find( "polygonmaplist",index, 14))!= string::npos)
+			sExt = ".ioc";
+		else if ((index = txt.find("maplist",index, 7)) != string::npos)
+			sExt = ".mpl";
+		else if ((index = txt.find("segmentmap",index,10)) != string::npos)
+			sExt = ".mpl";
+		else if ((index = txt.find("pointmap",index,8)) != string::npos)
+			sExt = ".mpp";
+		else if ((index = txt.find("polygonmap",index)) != string::npos)
+			sExt = ".mpa";
+		else if ((index = txt.find("map",index,3)) != string::npos)
+			sExt = ".mpr";
+		out.sExt = sExt;
+
+		Script::Exec(comm);
+
+		if ( out.fExist() && IOTYPEBASEMAP(out)) {
+			NewDrawer *ndr;
+			bool asAnimation = displayOptions.find("mode=animation") != string::npos;
+			if ( asAnimation && (IOTYPE(out) == IlwisObject::iotMAPLIST || IOTYPE(out) == IlwisObject::iotOBJECTCOLLECTION))
+				ndr = mcd->drAppend(out,IlwisDocument::otANIMATION);
+			else
+				ndr = mcd->drAppend(out);
+			if ( displayOptions.size() > 0) {
+				PreparationParameters pp(NewDrawer::ptRENDER);
+				pp.displayOptions=displayOptions;
+				((ComplexDrawer *)ndr)->prepareChildDrawers(&pp);
+			}
+		}
+
+
+			
+	
+	}
+	catch (ErrorObject& err)
+	{
+		err.Show();
+	}
+	return 0;
 }
 //--------------------------------------------------------

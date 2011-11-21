@@ -65,28 +65,44 @@ int FieldSampleSetC::CreateSampleSet(void*)
 }
 
 FormCreateSampleSet::FormCreateSampleSet(CWnd* wPar, String* sm,
-                                         const String& sMpr, const String& sMpl)
+                                         const String& sMpr, const String& sMpl, bool createOnly)
 : FormWithDest(wPar, TR("Create Sample Set")),
-  sMap(sm), sBgMap(sMpr), sMapList(sMpl)
+sMap(sm), sBgMap(sMpr), sMapList(sMpl), useExisting(true)
 {
 	iImg = IlwWinApp()->iImage(".sms");
+	if (!createOnly) {
+		cb = new CheckBox(root,TR("Use existing?"),&useExisting);
+		new FieldSampleSet(cb,TR("Sample set"),sMap);
+		cb->SetCallBack((NotifyProc)&FormCreateSampleSet::showFields);
+	}
+	entry = new FieldGroup(root);
+	fdss = new FieldDataTypeCreate(entry, TR("&Sample Set Name"), sMap, ".SMS", false);
+	fdss->SetCallBack((NotifyProc)&FormCreateSampleSet::CallBackName);
+	StaticText* st = new StaticText(entry, TR("&Description:"));
+	st->psn->SetBound(0,0,0,0);
+	FieldString* fs = new FieldString(entry, "", &sDescr);
+	fs->SetWidth(120);
+	fs->SetIndependentPos();
+	new FieldDomainC(entry, TR("&Domain"), &sDom, dmCLASS);
+	m_fml = new FieldMapList(entry, TR("&MapList"), &sMapList);
+	m_fml->SetCallBack((NotifyProc)&FormCreateSampleSet::ChangeMapList);
 
-  fdss = new FieldDataTypeCreate(root, TR("&Sample Set Name"), sMap, ".SMS", false);
-  fdss->SetCallBack((NotifyProc)&FormCreateSampleSet::CallBackName);
-  StaticText* st = new StaticText(root, TR("&Description:"));
-  st->psn->SetBound(0,0,0,0);
-  FieldString* fs = new FieldString(root, "", &sDescr);
-  fs->SetWidth(120);
-  fs->SetIndependentPos();
-  new FieldDomainC(root, TR("&Domain"), &sDom, dmCLASS);
-  m_fml = new FieldMapList(root, TR("&MapList"), &sMapList);
-  m_fml->SetCallBack((NotifyProc)&FormCreateSampleSet::ChangeMapList);
+	String sFill('X', 50);
+	stRemark = new StaticText(entry, sFill);
+	stRemark->SetIndependentPos();
+	SetMenHelpTopic("ilwismen\\create_a_sample_set.htm");
+	create();
+}
 
-  String sFill('X', 50);
-  stRemark = new StaticText(root, sFill);
-  stRemark->SetIndependentPos();
-  SetMenHelpTopic("ilwismen\\create_a_sample_set.htm");
-  create();
+int FormCreateSampleSet::showFields(Event *) {
+	cb->StoreData();
+	
+	if ( useExisting) {
+		entry->Hide();
+	} else {
+		entry->Show();
+	}
+	return 1;
 }
 
 void FormCreateSampleSet::SetOKButton()
@@ -148,12 +164,15 @@ int FormCreateSampleSet::ChangeMapList(Event*)
 int FormCreateSampleSet::exec()
 {
   FormWithDest::exec();
-  FileName fn(*sMap, ".sms");
+  if ( useExisting)
+	  return 1;
+
+  FileName  fnSMS = FileName(*sMap, ".sms");
   try {
     Domain dm(sDom);
     FileName fnML(sMapList);
     MapList ml(fnML);
-    SampleSet ms(fn, ml, dm);
+    SampleSet ms(fnSMS, ml, dm);
     ms->sDescription = sDescr;
     ms->fInitStat();
   }
