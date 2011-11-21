@@ -18,6 +18,7 @@
 #include "AnimationTool.h"
 #include "drawers\linedrawer.h"
 #include "drawers\GridDrawer.h"
+#include "Drawers\LayerDrawer.h"
 #include "GridTool.h"
 #include "drawers\CanvasBackgroundDrawer.h"
 
@@ -26,7 +27,7 @@ DrawerTool *createTransparencyTool(ZoomableView* zv, LayerTreeView *view, NewDra
 }
 
 TransparencyTool::TransparencyTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
-	DrawerTool("TransparencyTool",zv, view, drw)
+	DrawerTool("TransparencyTool",zv, view, drw), isDataLayer(false)
 {
 }
 
@@ -41,6 +42,7 @@ bool TransparencyTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 //	CanvasBackgroundDrawer *cbdr = dynamic_cast<CanvasBackgroundDrawer *>(tool);
 	if ( !sdrwt && !adrwt && !gdrt)
 		return false;
+	isDataLayer = sdrwt || adrwt;
 
 	parentTool = tool;
 	return true;
@@ -58,7 +60,7 @@ HTREEITEM TransparencyTool::configure( HTREEITEM parentItem) {
 }
 
 void TransparencyTool::displayOptionTransparency() {
-	new TransparencyForm(tree, (ComplexDrawer *)drawer, htiNode);
+	new TransparencyForm(tree, (ComplexDrawer *)drawer, htiNode, isDataLayer);
 }
 
 String TransparencyTool::getMenuString() const {
@@ -66,14 +68,25 @@ String TransparencyTool::getMenuString() const {
 }
 
 //---------------------------------------------------
-TransparencyForm::TransparencyForm(CWnd *wPar, ComplexDrawer *dr, HTREEITEM htiTr) : 
+TransparencyForm::TransparencyForm(CWnd *wPar, ComplexDrawer *dr, HTREEITEM htiTr, bool _isDataLayer) : 
 DisplayOptionsForm(dr,wPar,"Transparency"),
 transparency(100 *(1.0-dr->getTransparency())),
-htiTransparent(htiTr)
+htiTransparent(htiTr), fldTranspValue(0), isDataLayer(_isDataLayer),useTV(false)
 {
 	slider = new FieldIntSliderEx(root,"Transparency(0-100)", &transparency,ValueRange(0,100),true);
 	slider->SetCallBack((NotifyProc)&TransparencyForm::setTransparency);
 	slider->setContinuous(true);
+	if ( isDataLayer) {
+		LayerDrawer *ldr = (LayerDrawer *)dr;
+		if (ldr->getRepresentation()->prg() ) {
+			transpValues = ldr->getTransparentValues();
+			if ( transpValues.fValid())
+				useTV = true;
+			new FieldBlank(root);
+			cb = new CheckBox(root,TR("Use transparency range"),&useTV);
+			fldTranspValue = new FieldRangeReal(cb, TR(""), &transpValues);
+		}
+	}
 	create();
 }
 
@@ -85,15 +98,22 @@ int TransparencyForm::setTransparency(Event *ev) {
 void  TransparencyForm::apply() {
 	if ( initial) return;
 	slider->StoreData();
-	//PreparationParameters parm(NewDrawer::ptRENDER, 0);
-	//pdrw->prepare(&parm);
+	if ( fldTranspValue) {
+		fldTranspValue->StoreData();
+		cb->StoreData();
+
+	}
 
 	SetDrawer *animDrw = dynamic_cast<SetDrawer *>(drw);
 	if ( animDrw) {
 		PreparationParameters pp(NewDrawer::ptRENDER, 0);
 		for(int i = 0; i < animDrw->getDrawerCount(); ++i) {
-			ComplexDrawer *cdrw = (ComplexDrawer *)drw;
+			LayerDrawer *cdrw = (LayerDrawer *)drw;
 			cdrw->setTransparency(1.0 - (double)transparency/100.0);
+			if ( !(isDataLayer || useTV == false) ) {
+				transpValues = RangeReal();
+			}
+			cdrw->setTransparentValues(transpValues);
 			cdrw->prepareChildDrawers(&pp);
 		}
 	}
@@ -106,6 +126,20 @@ void  TransparencyForm::apply() {
 
 		strcpy(titem.item.pszText,transp.c_str());
 		view->GetTreeCtrl().SetItem(&titem.item);
+
+		if ( useTV) {
+			if ( !isDataLayer)
+				transpValues = RangeReal();
+		}
+		else
+			transpValues = RangeReal();
+
+		((LayerDrawer *)cdrw)->setTransparentValues(transpValues);
+		if ( oldRange != transpValues) {
+			PreparationParameters pp(NewDrawer::ptRENDER, 0);
+			cdrw->prepare(&pp);
+		}
+		oldRange = transpValues;
 	}
 
 

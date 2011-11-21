@@ -15,13 +15,14 @@ namespace ILWIS {
 		String getMenuString() const;
 	protected:
 		void displayOptionTransparency();
+	bool isDataLayer;
 
 
 	};
 
 class TransparencyForm : public DisplayOptionsForm {
 	public:
-	TransparencyForm(CWnd *wPar, ComplexDrawer *dr,HTREEITEM hti);
+	TransparencyForm(CWnd *wPar, ComplexDrawer *dr,HTREEITEM hti, bool isDataLayer = false);
 	void apply(); 
 private:
 	int setTransparency(Event *ev);
@@ -29,6 +30,12 @@ private:
 	int transparency;
 	FieldIntSliderEx *slider;
 	HTREEITEM htiTransparent;
+	FieldRangeReal *fldTranspValue;
+	CheckBox *cb;
+	bool isDataLayer;
+	RangeReal transpValues;
+	RangeReal oldRange;
+	bool useTV;
 };
 
 }
