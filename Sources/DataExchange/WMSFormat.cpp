@@ -480,7 +480,7 @@ void WMSFormat::GetRasterInfo(LayerInfo& inf, String sLayers) {
 	FileName fnGeo(FileName::fnUnique(FileName(fnBase, ".grf")));
 	inf.fnObj = FileName(fnBase, ".mpr");
 	double ratio = cb.width()/ cb.height();
-	MinMax mm(RowCol(0,0),RowCol(1500, (int)(1500*ratio))); // dummy size
+	MinMax mm(RowCol(0,0),RowCol(1000, (int)(1000*ratio))); // dummy size
 	grf.SetPointer(new GeoRefCornersWMS(fnGeo, csy, mm, true, cb.cMin, cb.cMax)); 
 	inf.grf = grf;
 

@@ -40,6 +40,8 @@
 
 struct GDBLayer_t;
 
+void ogrgdal(const String& cmd);
+
 typedef void(__stdcall *GDALCloseFunc)(GDALDatasetH);
 typedef void(__stdcall *GDALAllRegisterFunc)();
 typedef GDALDriverH (__stdcall *GDALIdentifyDriverFunc)(const char *, char **);
@@ -61,7 +63,43 @@ typedef GDALDriverH (__stdcall *GDALGetDriverFunc)(int driver);
 typedef int (__stdcall *GDALGetDriverCountFunc)(void);
 typedef const char* (__stdcall *GDALGetDriverLongNameFunc)(GDALDriverH dr);
 typedef const char* (__stdcall *GDALGetDriverShortNameFunc)(GDALDriverH dr);
-typedef const char* (__stdcall *GDALGetMetadataItemFunc)(GDALMajorObjectH hObject, const char *pszName, const char *pszDomain); 	
+typedef const char* (__stdcall *GDALGetMetadataItemFunc)(GDALMajorObjectH hObject, const char *pszName, const char *pszDomain); 
+
+typedef  OGRDataSourceH (*OGROpenFunc)(const char *, int, OGRSFDriverH *);
+typedef void (__stdcall *OGRRegisterAllFunc)();
+typedef int (*OGRGetDriverCountFunc)();
+typedef OGRSFDriverH (*OGRGetDriverFunc) (int);
+typedef const char * (*OGRGetDriverNameFunc)(OGRSFDriverH);
+typedef OGRSFDriverH  (*OGRGetDriverByNameFunc) (const char *);
+typedef OGRLayerH (*GetLayerByNameFunc)	(OGRDataSourceH 	hDS, const char * pszLayerName);
+typedef int (*GetLayerCountFunc)(OGRDataSourceH);
+typedef OGRLayerH (*GetLayerFunc) (OGRDataSourceH, int);
+typedef const char * (*GetLayerNameFunc)(OGRLayerH);
+typedef OGRwkbGeometryType (*GetLayerGeometryTypeFunc)(OGRLayerH ) ;
+typedef void (*ResetReadingFunc)(OGRLayerH 	hLayer	 ) 	;
+typedef OGRFeatureH (*GetNextFeatureFunc)(OGRLayerH hLayer ) 	;
+typedef OGRFeatureDefnH (*GetLayerDefnFunc)	(OGRLayerH hLayer );
+typedef int (*GetFieldCountFunc)( OGRFeatureDefnH hDefn ) ;
+typedef OGRFieldDefnH (*GetFieldDefnFunc)(OGRFeatureDefnH,int );
+typedef OGRFieldType (*GetFieldTypeFunc)(OGRFieldDefnH 	hDefn );
+typedef int (*GetFieldAsIntegerFunc)(OGRFeatureH,int);
+typedef double (*GetFieldAsDoubleFunc)(OGRFeatureH,int);
+typedef const char* (*GetFieldAsStringFunc)(OGRFeatureH,int);
+typedef OGRGeometryH (*GetGeometryRefFunc)(OGRFeatureH );
+typedef OGRwkbGeometryType (*GetGeometryTypeFunc)(OGRGeometryH);
+typedef void (*DestroyFeatureFunc)(OGRFeatureH );
+typedef int (*GetPointCountFunc)(OGRGeometryH);
+typedef void (*GetPointsFunc)(OGRGeometryH,int,double *,double *,double *);
+typedef int (*GetSubGeometryCountFunc)(OGRGeometryH); 
+typedef OGRGeometryH (*GetSubGeometryRefFunc)(OGRGeometryH,int);
+typedef OGRSpatialReferenceH (*GetSpatialRefFunc)(OGRLayerH hLayer ) 	;
+typedef OGRErr (__stdcall *ExportToWktFunc)(OGRSpatialReferenceH,char **);
+typedef int (*GetFeatureCountFunc)(OGRLayerH,int);
+typedef OGRErr 	(*GetLayerExtentFunc)(OGRLayerH, OGREnvelope *, int);
+typedef const char * (*GetFieldNameFunc)(OGRFieldDefnH);
+
+
+
 
 struct GDALCFunctions {
 	GDALCloseFunc close;
@@ -88,6 +126,44 @@ struct GDALCFunctions {
 	GDALGetDriverLongNameFunc getDriverLongName;
 	GDALGetDriverShortNameFunc getDriverShortName;
 	GDALGetMetadataItemFunc getMetaDataItem;
+
+	//ogr
+	OGROpenFunc ogrOpen;
+	OGRRegisterAllFunc ogrRegAll;
+	OGRGetDriverCountFunc ogrGetDriverCount;
+	OGRGetDriverFunc ogrGetDriver;
+	OGRGetDriverNameFunc ogrGetDriverName;
+	OGRGetDriverByNameFunc ogrGetDriverByName;
+	GetLayerByNameFunc ogrGetLayerByName;
+	GetLayerCountFunc ogrGetLayerCount;
+	GetLayerFunc ogrGetLayer;
+	GetLayerNameFunc ogrGetLayerName;
+	GetLayerGeometryTypeFunc ogrGetLayerGeometryType;
+	ResetReadingFunc ogrResetReading;
+	GetNextFeatureFunc ogrGetNextFeature;
+	GetLayerDefnFunc ogrGetLayerDefintion;
+	GetFieldCountFunc ogrGetFieldCount;
+	GetFieldDefnFunc ogrGetFieldDefinition;
+	GetFieldTypeFunc ogrGetFieldType;
+	GetFieldAsStringFunc ogrsVal;
+	GetFieldAsDoubleFunc ogrrVal;
+	GetFieldAsIntegerFunc ogriVal;
+	GetGeometryRefFunc ogrGetGeometryRef;
+	GetGeometryTypeFunc ogrGetGeometryType;
+	DestroyFeatureFunc ogrDestroyFeature;
+	GetPointCountFunc ogrGetNumberOfPoints;
+	GetPointsFunc ogrGetPoints;
+	GetSubGeometryCountFunc ogrGetSubGeometryCount;
+	GetSubGeometryRefFunc ogrGetSubGeometry;
+	GetSpatialRefFunc ogrGetSpatialRef;
+	ExportToWktFunc exportToWkt;
+	GetFeatureCountFunc ogrGetFeatureCount;
+	GetLayerExtentFunc ogrGetLayerExtent;
+	GetFieldNameFunc ogrGetFieldName;
+
+
+
+
 
 };
 
@@ -116,6 +192,40 @@ struct FormatInfo
 	bool fCreate;
 	bool fImport;
 	String sExportProperties;
+};
+
+class GeometryFiller {
+public:
+	virtual void fillFeature(OGRGeometryH hGeom, int rec);
+protected:
+	GeometryFiller(GDALCFunctions& _funcs, BaseMap& _bmp) : bmp(_bmp), funcs(_funcs) {}
+	virtual void fillGeometry(OGRGeometryH hGeom, int rec) {};
+	BaseMap& bmp;
+	GDALCFunctions& funcs;
+
+};
+
+class PointFiller : public GeometryFiller {
+public:
+	PointFiller(GDALCFunctions& _funcs, BaseMap& _bmp) : GeometryFiller(_funcs, _bmp) {}
+private:
+	void fillGeometry(OGRGeometryH hGeom, int rec);
+};
+
+class SegmentFiller : public GeometryFiller {
+public:
+	SegmentFiller(GDALCFunctions& _funcs, BaseMap& _bmp) : GeometryFiller(_funcs, _bmp) {}
+
+private:
+	void fillGeometry(OGRGeometryH hGeom, int rec);
+};
+
+class PolygonFiller : public GeometryFiller {
+public:
+	PolygonFiller(GDALCFunctions& _funcs, BaseMap& _bmp) : GeometryFiller(_funcs, _bmp) {}
+	virtual void fillFeature(OGRGeometryH hGeom, int rec);
+private:
+	LinearRing *getRing(OGRGeometryH hGeom);
 };
 
 class GDALFormat : public ForeignFormat
@@ -153,6 +263,7 @@ public:
 	void _export				 getImportFormats(vector<ImportFormat>& formats);
 	void _export				 ReadParameters(const FileName& fnObj, ParmList& pm);
 	void _export				 Store(IlwisObject ob, int iLayerIndex);
+	void						 ogr(const String& name, const String& source, const String& target);
 
 private:
 	void           Init();
@@ -182,6 +293,13 @@ private:
 	void           DetermineOutputType(const FileName& fnMp, int& iBands, GDALDataType& iDataType);
 
 	void		   LoadMethods();
+	Feature::FeatureType getFeatureType(OGRLayerH hLayer) const;
+	CoordSystem	getCoordSystemFrom(OGRSpatialReferenceH handle, char *wkt);
+	FileName	createFileName( const String& name, Feature::FeatureType ftype, int layerCount, int layer);
+	BaseMap     createBaseMap(const FileName& fn, Feature::FeatureType ftype, const Domain& dm, const CoordSystem& csy, const CoordBounds& cb);
+	Table		createTable(const FileName& fn, const Domain& dm,OGRFeatureDefnH hFeatureDef, OGRLayerH hLayer);
+	CoordBounds getLayerCoordBounds(OGRLayerH hLayer);
+	Domain		createSortDomain(const String& name, const vector<String>& values);
 
 	int iLayer;
 	GDALDatasetH dataSet; ; //multiple are only used when exporting (bands)
@@ -203,5 +321,7 @@ private:
 
 		//creation info
 };
+
+;
 
 #endif

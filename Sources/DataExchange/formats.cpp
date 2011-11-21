@@ -1,11 +1,16 @@
 #include "DataExchange\gdalincludes\gdal.h"
 #include "DataExchange\gdalincludes\gdal_frmts.h"
 #include "DataExchange\gdalincludes\cpl_vsi.h"
+#include "DataExchange\gdalincludes\ogr_api.h"
 #include "DataExchange\gdalincludes\ogr_srs_api.h"
 
 #include "Engine\Table\tbl.h"
+#include "Engine\Base\System\Engine.h"
+#include "Engine\Applications\ModuleMap.h"
+#include "Engine\Base\System\commandhandler.h"
 #include "Engine\SpatialReference\prj.h"
 #include "Engine\Base\DataObjects\URL.h"
+#include "Engine\Map\Feature.h"
 #include "Engine\DataExchange\hdfincludes\hdf.h"
 #include "Engine\DataExchange\hdfincludes\vg.h"
 #include "Engine\DataExchange\hdfincludes\mfhdf.h"
@@ -28,7 +33,8 @@ extern "C" _export void getForeignFormatInfo(map<String, ForeignFormatFuncs> *fu
 	(*funcs)["WMS"] = ForeignFormatFuncs(CreateImportObjectWMS, CreateQueryObjectWMS);
 	(*funcs)["GDAL"] = ForeignFormatFuncs(CreateImportObjectGDAL, CreateQueryObjectGDAL);
 	(*funcs)["POSTGRESQL"] = ForeignFormatFuncs(CreateImportObjectPostGres, CreateQueryObjectPostGres);
-//	(*funcs)["POSTGIS"] = ForeignFormatFuncs(CreateImportObjectPostGis, CreateQueryObjectPostGis);
+
+	getEngine()->getContext()->ComHandler()->AddCommand("gdalogrimport",ogrgdal);
 }
 
 extern "C" _export void getImportDriverList(vector<ImportDriver>& drivers) {

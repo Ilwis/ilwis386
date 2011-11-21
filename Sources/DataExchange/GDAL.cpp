@@ -39,7 +39,9 @@
 #include "DataExchange\gdalincludes\gdal.h"
 #include "DataExchange\gdalincludes\gdal_frmts.h"
 #include "DataExchange\gdalincludes\cpl_vsi.h"
+#include "DataExchange\gdalincludes\ogr_api.h"
 #include "DataExchange\gdalincludes\ogr_srs_api.h"
+
 
 #undef DomainInfo
 
@@ -79,6 +81,7 @@
 #include "DataExchange\GDAL.h"
 #include "Headers\Hs\IMPEXP.hs"
 #include "Headers\Htp\Ilwismen.htp"
+#include "Engine\Base\Round.h"
 
 
 map<int, FormatInfo> mapDummy;
@@ -88,6 +91,12 @@ static const int iGDB_NOT_FOUND = -1;
 const String sZCOLUMNNAME("Z_Value");
 
 CCriticalSection GDALFormat::m_CriticalSection;
+
+void ogrgdal(const String& cmd) {
+	GDALFormat frmt;
+	ParmList parms(cmd);
+	frmt.ogr(parms.sGet(0), parms.sGet(1), parms.sGet(2));
+}
 
 class StopConversion : public ErrorObject
 {};   
@@ -118,6 +127,8 @@ GDALFormat::GDALFormat()
 	currentLayer= NULL;
 	LoadMethods();
 	funcs.registerAll();
+	funcs.ogrRegAll();
+	//OGRDataSourceH p = funcs.ogrOpen("d:\\Data\\ILWIS\\data\\shape\\natural.shp",FALSE,0);
 }
 
 ForeignFormat *CreateQueryObjectGDAL() //create query object
@@ -401,6 +412,40 @@ void GDALFormat::LoadMethods() {
 				funcs.getDriverLongName = (GDALGetDriverLongNameFunc)GetProcAddress(hm,"_GDALGetDriverLongName@4");
 				funcs.getDriverShortName = (GDALGetDriverShortNameFunc)GetProcAddress(hm,"_GDALGetDriverShortName@4");
 				funcs.getMetaDataItem = (GDALGetMetadataItemFunc)GetProcAddress(hm,"_GDALGetMetadataItem@12");
+
+				funcs.ogrOpen = (OGROpenFunc)GetProcAddress(hm,"OGROpen");
+				funcs.ogrRegAll = (OGRRegisterAllFunc)GetProcAddress(hm,"OGRRegisterAll");
+				funcs.ogrGetDriverCount = (OGRGetDriverCountFunc)GetProcAddress(hm,"OGRGetDriverCount");
+				funcs.ogrGetDriver = (OGRGetDriverFunc)GetProcAddress(hm,"OGRGetDriver");
+				funcs.ogrGetDriverName = (OGRGetDriverNameFunc)GetProcAddress(hm,"OGR_Dr_GetName");
+				funcs.ogrGetDriverByName = (OGRGetDriverByNameFunc)GetProcAddress(hm,"OGRGetDriverByName");
+				funcs.ogrGetLayerByName = (GetLayerByNameFunc)GetProcAddress(hm,"OGR_DS_GetLayerByName");
+				funcs.ogrGetLayerCount = (GetLayerCountFunc)GetProcAddress(hm,"OGR_DS_GetLayerCount");
+				funcs.ogrGetLayer = (GetLayerFunc)GetProcAddress(hm,"OGR_DS_GetLayer");
+				funcs.ogrGetLayerName = (GetLayerNameFunc)GetProcAddress(hm,"OGR_L_GetName");
+				funcs.ogrGetLayerGeometryType = (GetLayerGeometryTypeFunc)GetProcAddress(hm,"OGR_L_GetGeomType");
+				funcs.ogrResetReading = (ResetReadingFunc)GetProcAddress(hm,"OGR_L_ResetReading");
+				funcs.ogrGetNextFeature = (GetNextFeatureFunc)GetProcAddress(hm,"OGR_L_GetNextFeature");
+				funcs.ogrGetLayerDefintion = (GetLayerDefnFunc)GetProcAddress(hm,"OGR_L_GetLayerDefn");
+				funcs.ogrGetFieldCount = (GetFieldCountFunc)GetProcAddress(hm,"OGR_FD_GetFieldCount");
+				funcs.ogrGetFieldDefinition = (GetFieldDefnFunc)GetProcAddress(hm,"OGR_FD_GetFieldDefn");
+				funcs.ogrGetFieldType = (GetFieldTypeFunc)GetProcAddress(hm,"OGR_Fld_GetType");
+				funcs.ogrsVal = (GetFieldAsStringFunc)GetProcAddress(hm,"OGR_F_GetFieldAsString");
+				funcs.ogrrVal = (GetFieldAsDoubleFunc)GetProcAddress(hm,"OGR_F_GetFieldAsDouble");
+				funcs.ogriVal = (GetFieldAsIntegerFunc)GetProcAddress(hm,"OGR_F_GetFieldAsInteger");
+				funcs.ogrGetGeometryRef = (GetGeometryRefFunc)GetProcAddress(hm,"OGR_F_GetGeometryRef");
+				funcs.ogrGetGeometryType = (GetGeometryTypeFunc)GetProcAddress(hm,"OGR_G_GetGeometryType");
+				funcs.ogrDestroyFeature = (DestroyFeatureFunc)GetProcAddress(hm,"OGR_F_Destroy");
+				funcs.ogrGetNumberOfPoints = (GetPointCountFunc)GetProcAddress(hm,"OGR_G_GetPointCount");
+				funcs.ogrGetPoints = (GetPointsFunc)GetProcAddress(hm,"OGR_G_GetPoint");
+				funcs.ogrGetSubGeometryCount = (GetSubGeometryCountFunc)GetProcAddress(hm,"OGR_G_GetGeometryCount");
+				funcs.ogrGetSubGeometry = (GetSubGeometryRefFunc)GetProcAddress(hm,"OGR_G_GetGeometryRef");
+				funcs.ogrGetSpatialRef = (GetSpatialRefFunc)GetProcAddress(hm,"OGR_L_GetSpatialRef");
+				funcs.exportToWkt = (ExportToWktFunc)GetProcAddress(hm,"_OSRExportToWkt@8");
+				funcs.ogrGetFeatureCount = (GetFeatureCountFunc)GetProcAddress(hm,"OGR_L_GetFeatureCount");
+				funcs.ogrGetLayerExtent = (GetLayerExtentFunc)GetProcAddress(hm,"OGR_L_GetExtent");
+				funcs.ogrGetFieldName = (GetFieldNameFunc)GetProcAddress(hm,"OGR_Fld_GetNameRef");
+
 			} 
 		}
 	}   
@@ -418,6 +463,7 @@ void GDALFormat::Init()
 	LoadMethods();
 	ILWISSingleLock lock(&m_CriticalSection, TRUE, SOURCE_LOCATION);
 	funcs.registerAll();
+
 
 	//GDALAllRegister();
 	
@@ -702,10 +748,13 @@ CoordSystem GDALFormat::GetCoordSystem()
 	strcpy(wkt, cwkt);
 	OGRSpatialReferenceH handle = funcs.newSRS(NULL);
 	OGRErr err = funcs.srsImportFromWkt(handle, &wkt2);
-
-
 	if ( err == OGRERR_UNSUPPORTED_SRS )
 		 	return CoordSystem("unknown");
+	return getCoordSystemFrom(handle, wkt2);
+}
+
+CoordSystem GDALFormat::getCoordSystemFrom(OGRSpatialReferenceH handle, char *wkt) {
+
 
 	String datumName(funcs.getAttr(handle,"Datum",0));
 	//map<String, ProjectionConversionFunctions>::iterator where = mpCsyConvers.find(projectionName);
@@ -734,7 +783,6 @@ CoordSystem GDALFormat::GetCoordSystem()
 	csy.SetPointer(csv);
 
 	return csy;
-
 }
 
 bool GDALFormat::fReUseExisting(const FileName& fn)
@@ -1412,5 +1460,313 @@ void GDALFormat::getImportFormats(vector<ImportFormat>& formats) {
 			formats.push_back(frm);
 		}
 	}
+	for(int i = 0; i < funcs.ogrGetDriverCount(); ++i) {
+		OGRSFDriverH driv = funcs.ogrGetDriver(i);
+		if ( driv) {
+			String name("%s", funcs.ogrGetDriverName(driv));
+			GDALImportFormat frm;
+			frm.name = name;
+			//frm.shortName = shrtName;
+			frm.type = ImportFormat::ifSegment | ImportFormat::ifPoint | ImportFormat::ifPolygon;
+			frm.provider = frm.method = "OGR";
+			frm.useasSuported = false;
+			frm.ui = NULL;
+			frm.ext = "*.*";
+			frm.command = "gdalogrimport";
+			formats.push_back(frm);
+		}
+	}
 	sort(formats.begin(), formats.end());
 }
+
+void GDALFormat::ogr(const String& name, const String& source, const String& target){
+	OGRDataSourceH hDS = funcs.ogrOpen( source.sUnQuote().c_str(), FALSE, NULL );	
+	if ( hDS) {
+		String error;
+		int layerCount = funcs.ogrGetLayerCount(hDS);
+		for(int layer = 0; layer < layerCount ; ++layer) {
+			OGRLayerH hLayer = funcs.ogrGetLayer(hDS, layer);
+			if ( hLayer) {
+				Feature::FeatureType ftype = getFeatureType(hLayer);
+				if ( ftype == Feature::ftUNKNOWN) {
+					error += String("layer %d", layer);
+					continue;
+				}
+				Tranquilizer trq;
+				trq.SetText(String(TR("Importing %S").c_str(), name));
+
+				fnBaseOutputName = createFileName(target,ftype,layerCount, layer);
+
+				OGRSpatialReferenceH hSRS = funcs.ogrGetSpatialRef(hLayer);
+				char wkt[10000];
+				char *wkt2 = (char *)wkt;
+				funcs.exportToWkt(hSRS,&wkt2);
+				CoordSystem csy = getCoordSystemFrom(hSRS, wkt);
+
+				int featureCount = funcs.ogrGetFeatureCount(hLayer,TRUE);
+				Domain dm(fnBaseOutputName, featureCount, dmtUNIQUEID, "feature");
+				CoordBounds cb = getLayerCoordBounds(hLayer);
+				csy->cb = cb;
+				BaseMap bmp = createBaseMap(fnBaseOutputName, ftype, dm, csy, cb);
+				bmp->fErase = true;
+
+				GeometryFiller *filler = 0;
+				if ( ftype ==  Feature::ftPOINT)
+					filler = new PointFiller(funcs, bmp);
+				else if ( ftype == Feature::ftSEGMENT)
+					filler = new SegmentFiller(funcs, bmp);
+				else if ( ftype == Feature::ftPOLYGON)
+					filler = new PolygonFiller(funcs, bmp);
+				
+				if ( bmp.fValid()) {
+					OGRFeatureDefnH hFeatureDef = funcs.ogrGetLayerDefintion(hLayer);
+					if ( hFeatureDef) {
+						Table tbl = createTable(fnBaseOutputName, dm, hFeatureDef, hLayer);
+						tbl->fErase = true;
+						OGRFeatureH hFeature;
+						int rec = 0;
+						funcs.ogrResetReading(hLayer);
+						while( (hFeature = funcs.ogrGetNextFeature(hLayer)) != NULL ){
+								OGRGeometryH hGeometry = funcs.ogrGetGeometryRef(hFeature);
+								filler->fillFeature(hGeometry, ++rec);
+
+								if ( trq.fUpdate(rec, featureCount)) { 
+									delete filler;
+									return;
+								}
+						}
+						if ( tbl.fValid())
+							bmp->SetAttributeTable(tbl);
+						bmp->Store();
+						bmp->fErase = false;
+						tbl->fErase = false;
+					}
+				}
+				delete filler;
+			}
+		}
+		if ( error.size() != 0) {
+			throw ErrorObject(String(TR("Errors in %S").c_str(), error));
+		}
+		
+	}
+
+}
+
+struct ScannedColumn {
+	ScannedColumn() { useClass = true; min=1e308; max=-1e308; }
+	String name;
+	vector<String> strings;
+	vector<double> values;
+	double min;
+	double max;
+	bool useClass;
+	OGRFieldType type;
+
+};
+Table GDALFormat::createTable(const FileName& fn, const Domain& dm,OGRFeatureDefnH hFeatureDef, OGRLayerH hLayer) {
+	Table tbl(FileName(fn, ".tbt"),dm);
+	int columnCount = funcs.ogrGetFieldCount(hFeatureDef);
+	vector<ScannedColumn> columns(columnCount);
+	OGRFeatureH hFeature;
+	funcs.ogrResetReading(hLayer);
+	int size = 0;
+	while( (hFeature = funcs.ogrGetNextFeature(hLayer)) != NULL ){
+		for(int field=0; field < columnCount; ++field) {
+			OGRFieldDefnH hFieldDefn = funcs.ogrGetFieldDefinition(hFeatureDef, field);
+			OGRFieldType type = funcs.ogrGetFieldType(hFieldDefn);
+			String name("%s", funcs.ogrGetFieldName(hFieldDefn));
+			columns[field].name = name;
+			columns[field].type = type;
+
+			if ( type ==  OFTInteger || type ==  OFTReal) {
+				long v = funcs.ogriVal(hFeature, field);
+				columns[field].min = min(v,columns[field].min); 
+				columns[field].max = max(v,columns[field].max); 
+				columns[field].values.push_back(v);
+			} else if ( type ==  OFTString) {
+				String v("%s",funcs.ogrsVal(hFeature, field));
+				columns[field].strings.push_back(v);
+				columns[field].useClass &= v.find(" ") != string::npos;
+			}
+
+		}
+		++size;
+	}
+	tbl->iRecNew(size);
+	for(int column = 0; column < columnCount; ++column) {
+		OGRFieldType type = columns[column].type;
+		Column col;
+		if ( type ==  OFTInteger) {
+			DomainValueRangeStruct dvrs(Domain("value"),ValueRangeInt((long)columns[column].min, (long)columns[column].max));
+			col = tbl->colNew(columns[column].name, dvrs);
+		} else if (type ==  OFTReal) {
+			double rStep = rRound(abs(columns[column].max - columns[column].min) * 0.01);
+			DomainValueRangeStruct dvrs(Domain("value"),ValueRangeReal(columns[column].min, columns[column].max,rStep));
+			col = tbl->colNew(columns[column].name, dvrs);
+		} else if (type ==  OFTString) {
+			Domain dom("String");
+			if ( columns[column].useClass) {
+				dom = createSortDomain(columns[column].name, columns[column].strings);
+			}
+			col = tbl->colNew(columns[column].name, dom);
+		}
+		for(int rec = 0; rec < size; ++rec) {
+			if ( type != OFTString) {
+				col->PutVal(rec,columns[column].values[rec]);
+			} else {
+				col->PutVal(rec, columns[column].strings[rec]);
+			}
+		}
+	}
+	return tbl;
+}
+
+Domain GDALFormat::createSortDomain(const String& name, const vector<String>& values) {
+	set<String> names;
+	Domain dom;
+	for(int i = 0; i < values.size(); ++i) {
+		names.insert(values[i]);
+	}
+	FileName fn(FileName::fnUnique(name),".dom");
+	if ( names.size() < 100) {
+		dom = Domain(fn, names.size());
+	} else {
+		dom = Domain(fn, names.size(), dmtID);
+	}
+	
+	for(set<String>::const_iterator cur = names.begin(); cur != names.end(); ++cur) {
+		dom->pdsrt()->iAdd((*cur), true);
+	}
+
+	return dom;
+}
+
+
+Feature::FeatureType GDALFormat::getFeatureType(OGRLayerH hLayer) const{
+
+	OGRwkbGeometryType type = funcs.ogrGetLayerGeometryType(hLayer);
+	if ( type == wkbPoint || type == wkbMultiPoint || type == wkbPoint25D || type == wkbMultiPoint25D)
+		return Feature::ftPOINT;
+
+	if ( type == wkbPolygon || type == wkbMultiPolygon || type == wkbPolygon25D || type == wkbMultiPolygon25D)
+		return Feature::ftPOLYGON;
+
+	if ( type == wkbLineString || type == wkbMultiLineString || type == wkbLineString25D || type == wkbMultiLineString25D)
+		return Feature::ftSEGMENT;
+
+	return Feature::ftUNKNOWN;
+}
+
+FileName GDALFormat::createFileName( const String& name, Feature::FeatureType ftype, int layerCount, int layer) {
+	FileName fn( name);
+	if ( ftype == Feature::ftPOINT)
+		fn.sExt = ".mpp";
+	if ( ftype == Feature::ftPOLYGON)
+		fn.sExt = ".mpa";
+	if ( ftype == Feature::ftSEGMENT)
+		fn.sExt = ".mps";
+	if ( layerCount == 1)
+		return fn;
+	fn.sFile += String("_%d", layer);
+
+	return fn;
+}
+
+BaseMap GDALFormat::createBaseMap(const FileName& fn, Feature::FeatureType ftype, const Domain& dm, const CoordSystem& csy, const CoordBounds& cb) {
+	if ( ftype == Feature::ftPOINT)
+		return PointMap(fn,csy, cb, DomainValueRangeStruct(dm));
+	if ( ftype == Feature::ftPOLYGON)
+		return PolygonMap(fn,csy, cb, DomainValueRangeStruct(dm));
+	if ( ftype == Feature::ftSEGMENT)
+		return SegmentMap(fn,csy, cb, DomainValueRangeStruct(dm));
+}
+
+CoordBounds GDALFormat::getLayerCoordBounds(OGRLayerH hLayer) {
+	OGREnvelope	envelope;
+	OGRErr err = funcs.ogrGetLayerExtent(hLayer, &envelope, TRUE);
+	if ( err == OGRERR_NONE) {
+		return CoordBounds(Coord(envelope.MinX, envelope.MinY), Coord(envelope.MaxX, envelope.MaxY));
+	}
+
+	return CoordBounds();
+}
+
+//-----------------------------------------------------
+void GeometryFiller::fillFeature(OGRGeometryH hGeometry, int rec) {
+	if ( hGeometry) {
+		fillGeometry(hGeometry, rec);
+		long count = funcs.ogrGetSubGeometryCount(hGeometry);
+		for(int i =0; i < count; ++i) {
+			OGRGeometryH hSubGeometry = funcs.ogrGetSubGeometry(hGeometry, i);
+			if ( hSubGeometry) {
+				fillGeometry(hSubGeometry, rec);
+			}
+		}
+	}
+}
+
+void PointFiller::fillGeometry(OGRGeometryH hGeom, int rec) {
+	ILWIS::Point *p = CPOINT(bmp->newFeature());
+	double x,y,z;
+	funcs.ogrGetPoints(hGeom, 0,&x,&y,&z);
+	p->setCoord(Coord(x,y,x));
+	p->PutVal((long)rec);
+}
+
+
+
+void SegmentFiller::fillGeometry(OGRGeometryH hGeom, int rec) {
+	ILWIS::Segment *s = CSEGMENT(bmp->newFeature());
+	int count = funcs.ogrGetNumberOfPoints(hGeom);
+	CoordinateArraySequence *seq = new CoordinateArraySequence(count);
+	for(int i = 0; i < count; ++i) {
+		double x,y,z;
+		funcs.ogrGetPoints(hGeom, 0,&x,&y,&z);
+		Coord c(x,y,z);
+		seq->setAt(c, i);
+	}
+	s->PutCoords(seq);
+}
+
+void PolygonFiller::fillFeature(OGRGeometryH hGeometry, int rec) {
+	try {
+		if ( hGeometry) {
+			long count = funcs.ogrGetSubGeometryCount(hGeometry);
+			for(int i =0; i < count; ++i) {
+				OGRGeometryH hSubGeometry = funcs.ogrGetSubGeometry(hGeometry, i);
+				if ( hSubGeometry) {
+					LinearRing *ring = getRing(hSubGeometry);
+					if ( ring) {
+						ILWIS::Polygon *p = 0;
+						if ( i == 0) {
+							p = CPOLYGON(bmp->newFeature());
+							p->PutVal((long)rec);
+							p->addBoundary(ring);
+						}
+						else
+							p->addHole(ring);
+					}
+				}
+			}
+		}
+	} catch ( geos::util::IllegalArgumentException& ) {
+		// we ignore errors during import, polygons are skipped
+	}
+}
+
+LinearRing *PolygonFiller::getRing(OGRGeometryH hGeom) {
+	int count = funcs.ogrGetNumberOfPoints(hGeom);
+	CoordinateArraySequence *seq = new CoordinateArraySequence();
+	for(int i = 0; i < count; ++i) {
+		double x,y,z;
+		funcs.ogrGetPoints(hGeom, i,&x,&y,&z);
+		Coord c(x,y,z);
+		seq->add(c,false);
+	}
+	if ( seq->size() < 3 && seq->front() == seq->back())
+		return 0;
+	return new LinearRing(seq, new GeometryFactory());
+}
+
+
