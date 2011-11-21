@@ -29,10 +29,13 @@ public:
 	Color clrRandom(int iRaw) const;
 	static Color clrPrimary(int iNr);
 	void setDataColumn(const Column& c);
+	void setTransparentValues(const RangeReal& rr);
+	RangeReal getTransparentValues() const;
 
 private:
 	void InitClrRandom();
 	RangeReal getStretchRangeReal() const;
+	inline void setTransparency(double v, Color& clr) const;
 
 	LayerDrawer *drw;
 	SetDrawer *setDrawer;
@@ -45,5 +48,6 @@ private:
 	IlwisData dataValues;
 	int index;
 	IlwisObject::iotIlwisObjectType type;
+	RangeReal transpValues;
 };
 }

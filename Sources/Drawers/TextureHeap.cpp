@@ -225,6 +225,13 @@ void TextureHeap::ReGenerateAllTextures()
 		textures[i]->SetDirty();
 }
 
+void TextureHeap::setTransparentValues(double v)
+{
+	for (int i = 0; i < texturesArraySize; ++i)
+		textures[i]->setTransparentValue(v);
+}
+
+
 Texture * TextureHeap::GetTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, unsigned int zoomFactor, const Palette * palette, bool fInThread)
 {
 	Texture * tex = 0;

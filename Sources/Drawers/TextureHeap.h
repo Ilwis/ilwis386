@@ -54,6 +54,7 @@ namespace ILWIS {
 		void ClearQueuedTextures();
 		void RepresentationChanged();
 		void ReGenerateAllTextures();
+		void setTransparentValues(double v);
 
 	private:
 		Texture * GenerateTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, unsigned int zoomFactor, const Palette * palette, bool fInThread);

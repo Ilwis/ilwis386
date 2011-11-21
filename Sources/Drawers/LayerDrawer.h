@@ -37,6 +37,8 @@ class _export LayerDrawer : public ComplexDrawer {
 		void setExtrustionTransparency(double v);
 		virtual void modifyLineStyleItem(LayerTreeView  *tv, bool remove=false) {}
 		void *getDataSource() { return getParentDrawer()->getDataSource(); }
+		RangeReal getTransparentValues() const;
+		void setTransparentValues(const RangeReal& rr);
 			
 	protected:
 		String store(const FileName& fnView, const String& parenSection) const;

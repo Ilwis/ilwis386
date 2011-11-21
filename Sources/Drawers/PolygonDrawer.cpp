@@ -51,7 +51,7 @@ bool PolygonDrawer::draw( const CoordBounds& cbArea) const{
 	if ( is3D) {
 		glPushMatrix();
 		glScaled(1,1,zscale);
-		glTranslated(0,0,zoffset + z0);
+		glTranslated(0,0,zoffset);
 	}
 	double tr = (1.0 - drawColor.transparencyP()) * getTransparency() * areaTransparency;
 	glColor4f(drawColor.redP(),drawColor.greenP(), drawColor.blueP(), tr);

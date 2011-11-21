@@ -44,7 +44,7 @@ double IlwisData::rValByRaw(int raw) const{
 		if ( col->dm()->pdv())
 			return col->rValue(raw);
 		else if ( col->dm()->pdsrt()) {
-		/*	String vv = bmap->dm()->pdsrt()->sValueByRaw(raw);
+			/*	String vv = bmap->dm()->pdsrt()->sValueByRaw(raw);
 			long iRec = bmap->dm()->pdsrt()->iOrd(raw); */
 			String sV = col->sValue(raw);
 			long r = col->dm()->pdsrt()->iRaw(sV);
@@ -92,7 +92,7 @@ Color DrawingColor::clrVal(double rVal) const
 		switch (drw->getStretchMethod())
 		{
 		case LayerDrawer::smLINEAR:
-				cRet = (Color)rpr->clr(rVal, getStretchRangeReal());
+			cRet = (Color)rpr->clr(rVal, getStretchRangeReal());
 			break;
 		case  LayerDrawer::smLOGARITHMIC:
 			{
@@ -110,6 +110,8 @@ Color DrawingColor::clrVal(double rVal) const
 		cRet = (Color)rpr->clr(rVal,RangeReal(0,255));
 	else
 		cRet = (Color)rpr->clr(rVal);
+	setTransparency(rVal, cRet);
+
 	return cRet; //.clrDraw(gamma);
 }
 
@@ -123,12 +125,13 @@ Color DrawingColor::clrRaw(long iRaw, NewDrawer::DrawMethod drm) const
 		{
 			double rVal = dataValues.rValByRaw(iRaw);
 			if (dataValues.dm()->pdv()) {
-				return clrVal(rVal);
+				cRet =  clrVal(rVal);
 			}
 			else {
 				Representation rpr = drw->getRepresentation();
 				cRet = Color(rpr->clrRaw(rVal));
 			}
+			setTransparency(rVal, cRet);
 		}
 		break;
 	case NewDrawer::drmSINGLE:
@@ -166,8 +169,9 @@ Color DrawingColor::clrRaw(long iRaw, NewDrawer::DrawMethod drm) const
 		else if (iRaw > iMax)
 			iRaw = iMax;
 		int iVal = (int)(floor(255 * float(iRaw - iMin) / iDiff));
-		cRet = Color(iVal,iVal,iVal);
-									  } break;
+		cRet = Color(iRaw,iVal,iVal);
+		setTransparency(iRaw, cRet);
+	  } break;
 	case NewDrawer::drmCOLOR:
 		cRet = Color(iRaw);
 		break;
@@ -196,27 +200,50 @@ void DrawingColor::clrVal(const double * buf, long * bufOut, long iLen) const
 		case LayerDrawer::smLINEAR:
 			{
 				RangeReal rr = getStretchRangeReal();
-				for (long i = 0; i < iLen; ++i)
-					bufOut[i] = rpr->clr(buf[i], rr).iVal();
+				for (long i = 0; i < iLen; ++i) {
+					double v = buf[i];
+					Color clr = rpr->clr(v, rr);
+					setTransparency(v, clr);
+					bufOut[i] = clr.iVal();
+				}
 			} break;
 		case LayerDrawer::smLOGARITHMIC:
 			{
 				RangeReal rr = getStretchRangeReal();
 				double rMax = 1 + rr.rHi() - rr.rLo();
 				rr = RangeReal(0, log(rMax));
-				for (long i = 0; i < iLen; ++i)
-					bufOut[i] = rpr->clr(log(buf[i] - rr.rLo()), rr).iVal();
+				for (long i = 0; i < iLen; ++i) {
+					Color clr = rpr->clr(log(buf[i] - rr.rLo()));
+					setTransparency(buf[i], clr);
+					bufOut[i] = clr.iVal();
+				}
 			} break;
 		}
 	}
 	else if (NewDrawer::drmIMAGE == drw->getDrawMethod()) {
 		RangeReal rr = RangeReal(0, 255);
-		for (long i = 0; i < iLen; ++i)
-			bufOut[i] = rpr->clr(buf[i], rr).iVal();
+		for (long i = 0; i < iLen; ++i) {
+			long v = buf[i];
+			Color clr = rpr->clr(buf[i], rr);
+			setTransparency(v, clr);
+			bufOut[i] = clr.iVal();
+		}
 	}
 	else {
-		for (long i = 0; i < iLen; ++i)
-			bufOut[i] = rpr->clr(buf[i]).iVal();
+		for (long i = 0; i < iLen; ++i) {
+			double v = buf[i];
+			Color clr = rpr->clr(v);
+			setTransparency(v, clr);
+			bufOut[i] = clr.iVal();
+		}
+	}
+}
+
+inline void DrawingColor::setTransparency(double v, Color& clr) const{
+	if ( transpValues.fValid()) {
+		if ( transpValues.fContains(v)) {
+			clr.m_transparency = 255;
+		}
 	}
 }
 
@@ -234,35 +261,54 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 					case LayerDrawer::smLINEAR: {
 						RangeReal rr = getStretchRangeReal();
 						DomainValueRangeStruct dvrs = dataValues.dvrs();
-						for (long i = 0; i < iLen; ++i)
-							bufOut[i] = rpr->clr(dvrs.rValue(buf[i]), rr).iVal();
-					} break;
+						for (long i = 0; i < iLen; ++i) {
+							double v = dvrs.rValue(buf[i]);
+							Color clr = rpr->clr(v, rr);
+							setTransparency(v, clr);
+							bufOut[i] = clr.iVal();
+						}
+												} break;
 					case LayerDrawer::smLOGARITHMIC:
 						{
 							RangeReal rr = getStretchRangeReal();
 							double rMax = 1 + rr.rHi() - rr.rLo();
 							rr = RangeReal(0, log(rMax));
 							DomainValueRangeStruct dvrs = dataValues.dvrs();
-							for (long i = 0; i < iLen; ++i)
-								bufOut[i] = rpr->clr(log(dvrs.rValue(buf[i]) - rr.rLo()), rr).iVal();
+							for (long i = 0; i < iLen; ++i){
+								double v = dvrs.rValue(buf[i]);
+								Color clr = rpr->clr(log(dvrs.rValue(v) - rr.rLo()), rr);
+								setTransparency(v, clr); 
+								bufOut[i] = clr.iVal();
+							}
 						} break;
 					}
 				}
 				else if (NewDrawer::drmIMAGE == drw->getDrawMethod()) {
 					RangeReal rr = RangeReal(0, 255);
 					DomainValueRangeStruct dvrs = dataValues.dvrs();
-					for (long i = 0; i < iLen; ++i)
-						bufOut[i] = rpr->clr(dvrs.rValue(buf[i]), rr).iVal();
+					for (long i = 0; i < iLen; ++i){
+						long v = dvrs.rValue(buf[i]);
+						Color clr = rpr->clr(v, rr);
+						setTransparency(v, clr);
+						bufOut[i] = clr.iVal();
+					}
 				}
 				else {
 					DomainValueRangeStruct dvrs = dataValues.dvrs();
-					for (long i = 0; i < iLen; ++i)
-						bufOut[i] = rpr->clr(dvrs.rValue(buf[i])).iVal();
+					for (long i = 0; i < iLen; ++i){
+						double v = dvrs.rValue(buf[i]);
+						Color clr = rpr->clr(v);
+						setTransparency(v, clr);
+						bufOut[i] = clr.iVal();
+					}
 				}
 			}
 			else {
-				for (long i = 0; i < iLen; ++i)
-					bufOut[i] = rpr->clrRaw(buf[i]).iVal();
+				for (long i = 0; i < iLen; ++i) {
+					long v = buf[i];
+					Color clr = rpr->clrRaw(buf[i]).iVal();
+					bufOut[i] = clr.iVal();
+				}
 			}
 		} break;
 	case NewDrawer::drmSINGLE: {
@@ -276,7 +322,7 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 		}
 		for (long i = 0; i < iLen; ++i)
 			bufOut[i] = col.iVal(); // you asked for it (!)
-	} break;
+							   } break;
 	case NewDrawer::drmMULTIPLE: 
 		if (3 == iMultColors) {
 			for (long i = 0; i < iLen; ++i)
@@ -285,32 +331,32 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 		else {
 			int iStep = 7;
 			switch (iMultColors) {
-			case 0: iStep = 7; break;
-			case 1: iStep = 15; break;
-			case 2: iStep = 31; break;
+	case 0: iStep = 7; break;
+	case 1: iStep = 15; break;
+	case 2: iStep = 31; break;
 			}
 			for (long i = 0; i < iLen; ++i)
 				bufOut[i] = clrPrimary(1 + buf[i] % iStep).iVal();
 		}  
 		break;
-	/*case NewDrawer::drmIMAGE: {
+		/*case NewDrawer::drmIMAGE: {
 		RangeInt riStretch = drw->getStretchRangeInt();
-,		int iMin = 0, iMax = 255;
+		,		int iMin = 0, iMax = 255;
 		if (drw->isStretched()) {
-			iMin = riStretch.iLo();
-			iMax = riStretch.iHi();
+		iMin = riStretch.iLo();
+		iMax = riStretch.iHi();
 		}
 		int iDiff = iMax - iMin;
 		for (long i = 0; i < iLen; ++i) {
-			long iRaw = buf[i];
-			if (iRaw < iMin)
-				iRaw = iMin;
-			else if (iRaw > iMax)
-				iRaw = iMax;
-			int iVal = (int)(floor(255 * float(iRaw - iMin) / iDiff));
-			bufOut[i] = Color(iVal,iVal,iVal).iVal();
+		long iRaw = buf[i];
+		if (iRaw < iMin)
+		iRaw = iMin;
+		else if (iRaw > iMax)
+		iRaw = iMax;
+		int iVal = (int)(floor(255 * float(iRaw - iMin) / iDiff));
+		bufOut[i] = Color(iVal,iVal,iVal).iVal();
 		}
-	  } break;*/
+		} break;*/
 	case NewDrawer::drmCOLOR:
 		memcpy(bufOut, buf, iLen * sizeof(long)); // no change !!
 		break;
@@ -319,7 +365,7 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 			long iRaw = buf[i];
 			bufOut[i] = (iRaw == 1)?clr1.iVal():((iRaw == 2)?clr2.iVal():Color(0,0,0).iVal());
 		}
-	break;
+		break;
 	}
 }
 
@@ -354,39 +400,13 @@ void DrawingColor::InitClrRandom()
 Color DrawingColor::clrPrimary(int iNr) 
 {
 	return Representation::clrPrimary(iNr);
-	//switch (iNr%32) {
-	//case  0: return Color(  0,  0,  0);
-	//case  1: return Color(255,  0,  0);
-	//case  2: return Color(255,255,  0);
-	//case  3: return Color(  0,  0,255);
-	//case  4: return Color(255,  0,255);
-	//case  5: return Color(  0,255,255);
-	//case  6: return Color(  0,255,  0);
-	//case  7: return Color(128,128,128);
-	//case  8: return Color(224,224,224);  // was white 255,255,255
-	//case  9: return Color(128,  0,  0);
-	//case 10: return Color(128,128,  0);
-	//case 11: return Color(  0,  0,128);
-	//case 12: return Color(128,  0,128);
-	//case 13: return Color(  0,128,128);
-	//case 14: return Color(  0,128,  0);
-	//case 15: return Color(255,128,  0);
-	//case 16: return Color(191,  0,  0);
-	//case 17: return Color(191,191,  0);
-	//case 18: return Color(  0,  0,191);
-	//case 19: return Color(191,  0,191);
-	//case 20: return Color(  0,191,191);
-	//case 21: return Color(  0,191,  0);
-	//case 22: return Color(191,191,191);
-	//case 23: return Color(192,220,192);
-	//case 24: return Color( 63,  0,  0);
-	//case 25: return Color( 63, 63,  0);
-	//case 26: return Color(  0,  0, 63);
-	//case 27: return Color( 63,  0, 63);
-	//case 28: return Color(  0, 63, 63);
-	//case 29: return Color(  0, 63,  0);
-	//case 30: return Color( 63, 63, 63);
-	//case 31: return Color(127, 63,  0);
-	//}  
-	//return Color();
+
+}
+
+void DrawingColor::setTransparentValues(const RangeReal& rr){
+	transpValues = rr;
+}
+
+RangeReal DrawingColor::getTransparentValues() const{
+	return transpValues;
 }

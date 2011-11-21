@@ -35,6 +35,8 @@ namespace ILWIS {
 		bool fValid();
 		void SetDirty();
 		bool fDirty();
+		double getTransparentValue() const;
+		void setTransparentValue(double v);
 
 	protected:
 		void PutLine(const RealBuf& bufOriginal, const LongBuf& bufColor, const int iLine, const long texSizeX, char * outbuf);
@@ -64,6 +66,7 @@ namespace ILWIS {
 		bool valid;
 		const Map mp;
 		bool dirty;
+		double transpValue;
 	};
 }
 

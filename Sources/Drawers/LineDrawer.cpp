@@ -74,7 +74,7 @@ bool LineDrawer::draw( const CoordBounds& cbArea) const{
 	//double z0 = cdrw->getZMaker()->getZ0(getRootDrawer()->is3D());
 	double z0 = getRootDrawer()->getZMaker()->getZ0(is3D);
 	if ( isSupportingDrawer && is3D) // supporting drawers need to be slightly above the level of the "main" drawer. OpenGL won't draw them correct if they are in the same plane
-		z0 +=  z0;
+		z0 *=  1.05;
 
 	if ( is3D) {
 		zscale = cdrw->getZMaker()->getZScale();

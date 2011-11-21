@@ -585,7 +585,7 @@ ILWIS::NewDrawer *createAnnotationBorderDrawer(DrawerParameters *parms) {
 
 AnnotationBorderDrawer::AnnotationBorderDrawer(DrawerParameters *parms) : 
 AnnotationDrawer(parms, "AnnotationBorderDrawer"),
-borderBox(0), xborder(0.05), yborder(0.03), neatLine(true), step(1){
+borderBox(0), xborder(0.06), yborder(0.03), neatLine(true), step(1){
 	for(int i=0; i < 4; ++i)
 		hasText.push_back(true);
 	id = "AnnotationBorderDrawer";
@@ -705,7 +705,7 @@ void AnnotationBorderDrawer::prepare(PreparationParameters *pp){
 			borderBox->setDrawColor(Color(255,255,255));
 			addDrawer(borderBox);
 			texts = (ILWIS::TextLayerDrawer *)NewDrawer::getDrawer("TextLayerDrawer", "ilwis38",&dp);
-			texts->setFont(new OpenGLText(getRootDrawer(),"arial.ttf",10,false));
+			texts->setFont(new OpenGLText(getRootDrawer(),"arial.ttf",12,false));
 			addDrawer(texts);
 		}
 		texts->clear();

@@ -39,6 +39,7 @@ Texture::Texture(const Map & mp, const DrawingColor * drawColor, const ComplexDr
 , palette(palette)
 , valid(false)
 , dirty(false)
+, transpValue(rUNDEF)
 {
 }
 
@@ -204,10 +205,20 @@ void Texture::PutLine(const RealBuf& bufOriginal, const LongBuf& bufColor, const
 	char *c = &outbuf[iLine * texSizeX * 4];
 	memcpy(c, ptrBufColor, iLen * 4);
 	c += 3; // point to the last byte of the Color struct
-	for (long i = 0; i < iLen; ++i) {
-		(rUNDEF == ptrBufOriginal[i])?*c&=0:*c|=255; // alpha = 0 or alpha = max
-		c += 4;
+	if ( transpValue == rUNDEF) {
+		for (long i = 0; i < iLen; ++i) {
+			(rUNDEF == ptrBufOriginal[i])?*c&=0:*c|=255; // alpha = 0 or alpha = max
+			c += 4;
+		}
 	}
+	else {
+		for (long i = 0; i < iLen; ++i) {
+			double val = ptrBufOriginal[i];
+			(rUNDEF == val || transpValue == val )?*c&=0:*c|=255; // alpha = 0 or alpha = max
+			c += 4;
+		}
+	}
+
 }
 
 void Texture::PutLine(const LongBuf& bufOriginal, const LongBuf& bufColor, const int iLine, const long texSizeX, char * outbuf)
@@ -218,9 +229,17 @@ void Texture::PutLine(const LongBuf& bufOriginal, const LongBuf& bufColor, const
 	char *c = &outbuf[iLine * texSizeX * 4];
 	memcpy(c, ptrBufColor, iLen * 4);
 	c += 3; // point to the last byte of the Color struct
-	for (long i = 0; i < iLen; ++i) {
-		(iUNDEF == ptrBufOriginal[i])?*c&=0:*c|=255; // alpha = 0 or alpha = max
-		c += 4;
+	if ( transpValue == rUNDEF) {
+		for (long i = 0; i < iLen; ++i) {
+			(iUNDEF == ptrBufOriginal[i] )?*c&=0:*c|=255; // alpha = 0 or alpha = max
+			c += 4;
+		}
+	} else {
+		for (long i = 0; i < iLen; ++i) {
+			long val = ptrBufOriginal[i];
+			(iUNDEF == val || transpValue == val )?*c&=0:*c|=255; // alpha = 0 or alpha = max
+			c += 4;
+		}
 	}
 }
 
@@ -381,9 +400,18 @@ void Texture::PutLineData(const RealBuf& bufOriginal, const IntBuf& bufData, con
 	short * ptrBufData = bufData.buf();
 	char *c = &outbuf[iLine * texSizeX * 2];
 	memcpy(c, ptrBufData, iLen * 2);
-	for (long i = 0; i < iLen; ++i) {
-		if (rUNDEF == ptrBufOriginal[i])
-			((short *)c)[i] = iPaletteSize - 1;  // at index iPaletteSize - 1 there is a color with alpha = 0
+	if ( transpValue == rUNDEF) {
+		for (long i = 0; i < iLen; ++i) {
+			if (rUNDEF == ptrBufOriginal[i])
+				((short *)c)[i] = iPaletteSize - 1;  // at index iPaletteSize - 1 there is a color with alpha = 0
+		}
+	} else {
+		for (long i = 0; i < iLen; ++i) {
+			double val =  ptrBufOriginal[i];
+			if (rUNDEF == val || transpValue == val)
+				((short *)c)[i] = iPaletteSize - 1; // at index iPaletteSize - 1 there is a color with alpha = 0
+		}
+
 	}
 }
 
@@ -394,10 +422,18 @@ void Texture::PutLineData(const LongBuf& bufOriginal, const IntBuf& bufData, con
 	short * ptrBufData = bufData.buf();
 	char *c = &outbuf[iLine * texSizeX * 2];
 	memcpy(c, ptrBufData, iLen * 2);
-	for (long i = 0; i < iLen; ++i) {
-		if (iUNDEF == ptrBufOriginal[i])
-			((short *)c)[i] = iPaletteSize - 1; // at index iPaletteSize - 1 there is a color with alpha = 0
-
+	if ( transpValue == rUNDEF) {
+		for (long i = 0; i < iLen; ++i) {
+			if (iUNDEF == ptrBufOriginal[i])
+				((short *)c)[i] = iPaletteSize - 1; // at index iPaletteSize - 1 there is a color with alpha = 0
+		}
+	}
+	else {
+		for (long i = 0; i < iLen; ++i) {
+			long val =  ptrBufOriginal[i];
+			if (iUNDEF == val || transpValue == val)
+				((short *)c)[i] = iPaletteSize - 1; // at index iPaletteSize - 1 there is a color with alpha = 0
+		}
 	}
 }
 
@@ -560,4 +596,12 @@ bool Texture::DrawTexturePaletted(long offsetX, long offsetY, long texSizeX, lon
 	}
 	mp->KeepOpen(false);
 	return true;
+}
+
+double Texture::getTransparentValue() const{
+	return transpValue;
+}
+
+void Texture::setTransparentValue(double v){
+	transpValue = v;
 }

@@ -50,6 +50,32 @@ void LayerDrawer::prepare(PreparationParameters *parm){
 		if (!drawColor)
 			drawColor = new DrawingColor(this, parm->index);
 	}
+	if ( parm->type & NewDrawer::ptRENDER) {
+		if ( parm->displayOptions != "") {
+			Array<String> parts;
+			Split( parm->displayOptions,parts,":");
+			map<String, String> options;
+			for(int i=0; i <parts.size(); ++i) {
+				options[parts[i].sHead("=")] = parts[i].sTail("=");
+			}
+			map<String,String>::const_iterator cur = options.find("tr");
+			if ( cur != options.end() && drawColor) {
+				String values = (*cur).second;
+				String sv1 = values.sHead(",");
+				String sv2 = values.sTail(",");
+				if ( sv2 == "")
+					sv2 = sv1;
+				RangeReal rr(sv1.rVal(), sv2.rVal());
+				drawColor->setTransparentValues(rr);
+			}
+			cur = options.find("rpr");
+			if ( cur != options.end()) {
+				String repr = (*cur).second;
+				FileName fnrpr(repr,".rpr");
+				setRepresentation(Representation(fnrpr));
+			}
+		}
+	}
 	setDrawMethod();
 }
 
@@ -229,7 +255,10 @@ String LayerDrawer::store(const FileName& fnView, const String& parentSection) c
 		ObjectInfo::WriteElement(parentSection.c_str(),"AttributeColumn",fnView, attColumn->sName());
 	ObjectInfo::WriteElement(parentSection.c_str(),"UseAttributes",fnView, useAttColumn);
 	ObjectInfo::WriteElement(parentSection.c_str(),"ExtrusionTransparency",fnView, extrTransparency);
-
+	if ( drawColor) {
+		RangeReal rr;
+		ObjectInfo::WriteElement(parentSection.c_str(),"ExtrusionTransparency",fnView,drawColor->getTransparentValues());
+	}
 	return parentSection;
 }
 
@@ -248,7 +277,11 @@ void LayerDrawer::load(const FileName& fnView, const String& parentSection){
 		attColumn = ((SpatialDataDrawer *)getParentDrawer())->getBaseMap()->tblAtt()->col(colname);
 	}
 	ObjectInfo::ReadElement(parentSection.c_str(),"UseAttributes",fnView, useAttColumn);
-	ObjectInfo::ReadElement(parentSection.c_str(),"ExtrusionTransparency",fnView, extrTransparency);
+	if ( drawColor) {
+		RangeReal r;
+		ObjectInfo::ReadElement(parentSection.c_str(),"ExtrusionTransparency",fnView, r);
+		drawColor->setTransparentValues(r);
+	}
 }
 
 void LayerDrawer::drawLegendItem(CDC *dc, const CRect& rct, double rVal) const{
@@ -278,6 +311,19 @@ void LayerDrawer::drawLegendItem(CDC *dc, const CRect& rct, double rVal) const{
 	CBrush *br = dc->SelectObject(&brushColor);
 	dc->Rectangle(rct);
 	dc->SelectObject(br);
+}
+
+RangeReal LayerDrawer::getTransparentValues() const{
+	if ( drawColor) {
+		return drawColor->getTransparentValues();
+	}
+	return RangeReal();
+}
+
+void LayerDrawer::setTransparentValues(const RangeReal& rr){
+	if ( drawColor) {
+		drawColor->setTransparentValues(rr);
+	}
 }
 
 
