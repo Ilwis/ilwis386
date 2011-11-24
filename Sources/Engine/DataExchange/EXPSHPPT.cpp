@@ -118,7 +118,7 @@ void ImpExp::ExpPntToSHP( const FileName& fnObject, const FileName& fnFile ) {
   fileDBF.Seek(0);
   fileDBF.Write(sizeof(DBF.Header), &DBF.Header);
   fileDBF.Seek(iPos);
-  for (long iPntCnt = 1; iPntCnt <= iNrPnts; iPntCnt++ ) {
+  for (long iPntCnt = 0; iPntCnt < iNrPnts; iPntCnt++ ) {
     shpPoint.Update(pntmap->cValue(iPntCnt));
     fileSHX.Write(sizeof(shpPoint.IndexRecord), &(shpPoint.IndexRecord));
     if (dvs.fUseReals() && dvs.fValues())
