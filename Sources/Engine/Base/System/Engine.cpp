@@ -17,6 +17,7 @@
 #include "Engine\DataExchange\WMSCollection.h"
 #include "Engine\Base\System\commandhandler.h"
 #include <set>
+#include <fstream>
 
 ModuleMap Engine::modules = ModuleMap();
 ForeignFormatMap Engine::formats = ForeignFormatMap();
@@ -68,6 +69,7 @@ Engine::~Engine()
 	logger = NULL;
 	delete version;
 	version = NULL;
+	delete db;
 }
 
 // Engine initialization
@@ -88,8 +90,83 @@ void Engine::Init() {
 		version->addModuleInterfaceVersion(ILWIS::Module::mi38);
 		String ilwDir = context->sIlwDir();
 		context->InitThreadLocalVars();
+		db = ILWIS::Database::create("spatiallite",":memory:","System");
+		String stmt = "create table Datums \
+					  (\
+					  name TEXT,\
+					  code TEXT, \
+					  area TEXT, \
+					  ellipsoid TEXT, \
+					  dx REAL, \
+					  dy REAL, \
+					  dz REAL, \
+					  rx REAL, \
+					  ry REAL, \
+					  rz REAL,\
+					  description TEXT \
+					  )";
+	  db->executeStatement(stmt);
+	  stmt = "create table DatumAliasses \
+					  (\
+					  name TEXT,\
+					  alias TEXT)";
+	  db->executeStatement(stmt);
+	  loadSystemTables(ilwDir);
 	}
 
+}
+
+#define NORM(n) ((parts[n].size() == 0 || parts[n].rVal() == rUNDEF) ? 0 : parts[n].rVal())
+
+void split(const String& in, const char delim, vector<String>& parts) {
+	string current;
+	for(unsigned int i = 0; i < in.size(); ++i) {
+		char c = in[i];
+		if ( c == delim) {
+			parts.push_back(current);
+			current.clear();
+		} else {
+			current += c;
+		}
+	}
+	parts.push_back(current);
+}
+
+void Engine::loadSystemTables(const String& ilwDir) {
+
+	ifstream in(String("%SResources\\def\\datum.csv",ilwDir).c_str());
+	bool skip = true;
+	while(in.is_open() && !in.eof()) {
+		String line;
+		getline(in,line);
+		if ( skip || line.size() == 0) {
+			skip = false; // first line is headers, ignore
+			continue;
+		}
+		vector<String> parts;
+		split(line,',',parts);
+		double dx = NORM(4);
+		double dy = NORM(5);
+		double dz = NORM(6);
+		double rx = NORM(7);
+		double ry = NORM(8);
+		double rz = NORM(9);
+
+		String plist("'%S','%S','%S','%S',%f,%f,%f,%f,%f,%f,'%S'",parts[0],parts[1],parts[2],parts[3],dx,dy,dz,rx,ry,rz,parts[11]);
+		String stmt("INSERT INTO Datums VALUES(%S)", plist);
+		db->executeStatement(stmt);
+		if ( parts[10] != "") {
+			Array<String> aliassen;
+			Split(parts[10],aliassen,";");
+			for(int j = 0; j < aliassen.size(); ++j) {
+				stmt = String("INSERT INTO DatumAliasses Values('%S','%S')",parts[0],aliassen[j]);
+				db->executeStatement(stmt);
+			}
+		}
+
+
+	}
+	in.close();
 }
 
 void Engine::SetCurDir(const String& sDir) {
@@ -236,4 +313,8 @@ bool Engine::fServerMode() const{
 		return true;
 	return false;
 
+}
+
+ILWIS::Database *Engine::pdb() {
+	return db;
 }

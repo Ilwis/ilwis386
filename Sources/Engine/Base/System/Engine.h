@@ -7,6 +7,7 @@
 //#include "Headers\xercesc\util\Platforms\Win32\resource.h"		// main symbols
 #include "Engine\Base\System\module.h"
 #include "Engine\Base\DataObjects\Version.h"
+#include "Engine\Base\System\Database.h"
 
 
 class COMServerHandler;
@@ -20,6 +21,10 @@ class COMServerHandler;
 
 class ForeignFormatMap;
 class Logger;
+
+namespace ILWIS {
+	class Database;
+}
 
 class IMPEXP Engine 
 {
@@ -57,12 +62,14 @@ public:
 	static ModuleMap modules;
 	bool fServerMode() const;
 	static HMODULE getModuleHandle() { return engineHandle; }
+	ILWIS::Database *pdb();
 
 public:
 	IlwisAppContext *context;
 	COMServerHandler *chCOMServerHandler;
 	static ForeignFormatMap formats;
 private:
+	void loadSystemTables(const String& ilwDir);
 	bool stayResident;
 	bool debugMode;
 	Array<String> debugClasses;
@@ -70,7 +77,7 @@ private:
 	ILWIS::Version *version;
 	static HMODULE engineHandle;
 	static Engine *engine;
-
+	ILWIS::Database *db;
 };
 
 _export Engine* getEngine();
