@@ -59,6 +59,7 @@ struct ImportFormat{
 	void *ui; //this pointer must be a deravitave of FieldGroup, but because I don't want to create a link dependency we use a void* pointer
 	String buttonText;
 	bool useasSuported;
+	String command; // alternative for going the document way; just a direct command
 };
 
 struct ImportDriver{
