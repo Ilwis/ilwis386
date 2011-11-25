@@ -92,14 +92,14 @@ void SimpleDrawer::drawExtrusion(const Coord& c1, const Coord& c2, double z, int
 	c3.z = z;
 	c4.z = z;
 	if ( option & NewDrawer::sdoFilled) {
-		glBegin(GL_QUADS); // temporary, should be changed when svg symbols are there						
+		glBegin(GL_QUADS); 			
 			glVertex3f( c1.x, c1.y, c1.z);	
 			glVertex3f( c2.x, c2.y, c2.z);	
 			glVertex3f( c4.x, c4.y, c4.z);
 			glVertex3f( c3.x, c3.y, c3.z);
 		glEnd();
 	} else if ( option & NewDrawer::sdoOpen){
-		glBegin(GL_LINE_STRIP); // temporary, should be changed when svg symbols are there						
+		glBegin(GL_LINE_STRIP); 					
 			glVertex3f( c1.x, c1.y, c1.z);	
 			glVertex3f( c2.x, c2.y, c2.z);	
 			glVertex3f( c4.x, c4.y, c4.z);
