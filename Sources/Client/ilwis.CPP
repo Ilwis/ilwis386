@@ -311,6 +311,7 @@ IlwisWinApp::~IlwisWinApp()
 	delete actList;
 	delete actPairList;
 	delete commandUI;
+	ILWISSingleLock sl(&IlwWinApp()->csHelp, TRUE,SOURCE_LOCATION);
 	delete helpFinder;
 	WEP_Color(); // clean some static allocations
 	if ( fRemoveUserRegistry )

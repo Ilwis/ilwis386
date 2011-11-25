@@ -202,6 +202,7 @@ public:
 	{ return !lhWindows.empty(); }
 	bool fStartedAsCOMServer()  { return m_fEmbedded; }
 	COMServerHandler *GetCOMServerHandler() { return chCOMServerHandler; }
+	CCriticalSection csHelp;
 	
 private:
 	BOOL InitApplication();

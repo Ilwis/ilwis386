@@ -173,7 +173,7 @@ bool HelpFinder::isAccepted(const map<String, WordInfo>::iterator& cur) const{
 }
 
 void HelpFinder::startIndexing() {
-	ILWISSingleLock sl(&csAccess, TRUE,SOURCE_LOCATION);
+	ILWISSingleLock sl(&IlwWinApp()->csHelp, TRUE,SOURCE_LOCATION);
 	String folder = getEngine()->getContext()->sIlwDir() + "help";
 	if ( !loadIndexFile(folder)) {
 		findFolder(folder);
@@ -251,7 +251,6 @@ bool HelpFinder::loadIndexFile(const String& folder) {
 }
 
 void HelpFinder::find(const String& wrd, vector<WordInfo>& result) {
-	ILWISSingleLock sl(&csAccess, TRUE,SOURCE_LOCATION);
 	if ( !indexed)
 		startIndexing();
 

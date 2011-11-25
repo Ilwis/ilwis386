@@ -54,7 +54,6 @@ private:
 	set<String> exceptionsWords;
 	set<String> includedWords;
 	set<String> exceptionsFiles;
-	CCriticalSection csAccess;
 	String oldWord;
 	vector<WordInfo> oldContent;
 	bool indexed;
