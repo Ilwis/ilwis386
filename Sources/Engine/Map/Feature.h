@@ -15,7 +15,7 @@ class DomainValueRangeStruct;
 
 class _export Feature {
 public:
-	enum FeatureType{ftPOINT, ftSEGMENT, ftPOLYGON};
+	enum FeatureType{ftPOINT=1, ftSEGMENT=2, ftPOLYGON=4, ftUNKNOWN=0};
 	Feature(geos::index::quadtree::Quadtree *tree);
 
 
