@@ -633,6 +633,14 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\Sources\Engine\Base\System\Database.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Engine\Base\System\Database.h"
+						>
+					</File>
+					<File
 						RelativePath="..\..\Sources\Engine\Base\System\Engine.cpp"
 						>
 					</File>
