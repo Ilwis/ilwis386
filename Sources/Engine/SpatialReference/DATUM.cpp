@@ -42,6 +42,7 @@ Created on: 2007-02-8
 #include "Engine\Applications\ModuleMap.h"
 #include "Engine\Base\System\Engine.h"
 
+
 map<String,String> Datum::wktToIlwis;
 
 
@@ -161,55 +162,19 @@ String Datum::getIdentification(bool wkt) {
 MolodenskyDatum::MolodenskyDatum(const String& sN, const String& sA)
 : Datum(sN, sA)
 {
-	String sPath = getEngine()->getContext()->sIlwDir();
-	sPath &= "\\Resources\\Def\\datum.def";
-	char sBuf1[1024];
-	char sBuf2[1024];
-	char sDesc[1024];
-	sDesc[0] = 0;
-	String sEll;
-	char* s;
-	dx = dy = dz = 0;
-	Array<String> parts;
+	ILWIS::QueryResults results;
+	String query("Select dx,dy,dz,ellipsoid,description from Datums where name='%S'",sName());
+	getEngine()->pdb()->executeQuery(query, results);
+	if ( results.size() > 0) {
+		dx = results.get("dx",0).rVal();
+		dy = results.get("dy",0).rVal();
+		dz = results.get("dz",0).rVal();
+		ell = Ellipsoid(results.get("ellipsoid",0));
+		sDescription = results.get("description", 0);
 
-	String sShifts = "";
-	if (GetPrivateProfileString("Datums", sName().c_str(), "", sBuf1, 1024, sPath.c_str())) {
-		String line(sBuf1);
-		SplitOn(line, parts, ",");
-		ell = Ellipsoid(parts[0]);
-		if ( parts.iSize() == 2) {
-			sDescription = parts[1];
-		} else if (parts.iSize() == 3) {
-			sDescription = parts[2];
-		} else if (parts.iSize() > 3 ) {
-			dx = parts[1].rVal();
-			dy = parts[2].rVal();
-			dz = parts[3].rVal();
-			sDescription = parts[4];
-		}
-		String id=sDescription.sTail(":");
-		if ( id != "")
-			identification = id;
-	}    
-	if (sArea.length() > 0 && GetPrivateProfileString(sName().c_str(), sArea.c_str(), "", sBuf2, 1024, sPath.c_str())) {
-		for (s = sBuf2; *s; ++s)
-			if (isspace(*s)) *s = '_';
-		sscanf(sBuf2, "%lf,%lf,%lf,%s", &dx, &dy, &dz, sDesc);
-		if (0 != dx || 0 != dy || 0 != dz) 
-			sShifts &= String(" SHIFTS:%.2f,%.2f,%.2f",dx,dy,dz);
-		String desc(sDesc);
-		String id=desc.sTail(":");
-		if ( id != "")
-			identification = id;
-	}
-	else
-		sArea = String("");
-	for (s = sDesc; *s; ++s)
-		if (*s == '_') *s = ' ';
-	sDescription = sDesc; 
-	sDescription &= sShifts;
-	if ("" != sEll)
-		ell = Ellipsoid(sEll);
+	} else
+		throw ErrorObject(String(TR("Datum %S could not not be found in the ILWIS definitions").c_str(),sName()));
+
 }
 
 MolodenskyDatum::MolodenskyDatum(Ellipsoid e, double dX, double dY, double dZ)
