@@ -887,6 +887,24 @@ String TableHistogram::sExpression() const
   return String("TableHistogram(%S)", map->sNameQuoted(true, fnObj.sPath()));
 }
 
+double TableHistogram::getAggregate(AggragationType type) const{
+	switch(type) {
+		case atPRED:
+			return rPred;
+		case atAVERAGE:
+			return rMean;
+		case atSTDEV:
+			return rStd;
+		case atMEDIAN:
+			return rMedian;
+		case atMAX:
+			return _colValue->rrMinMax().rHi();
+		case atMIN:
+			return _colValue->rrMinMax().rLo();
+	}
+	return rUNDEF;
+}
+
 String TableHistogram::sSummary() const
 {
   long iMapSize = map->rcSize().Row * map->rcSize().Col;

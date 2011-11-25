@@ -105,6 +105,7 @@ public:
   virtual void Store();
   virtual void UnFreeze();
 public:
+	enum AggragationType{atSUM, atAVERAGE, atMAX, atMIN, atSTDEV, atMEDIAN, atPRED};
   const Column& colNPix() const { return _colNPix; }
   const Column& colNPixPct() const { return _colNPixPct; }
   const Column& colNPixCum() const { return _colNPixCum; }
@@ -122,6 +123,7 @@ public:
   virtual String sType() const;
 	Map mp() const { return map; }
   static void _export Erase(const FileName& fnMap);
+  double _export getAggregate(AggragationType type) const;
 protected:
   Map map;
   long _iMin, _iMax;
