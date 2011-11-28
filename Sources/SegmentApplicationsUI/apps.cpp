@@ -67,6 +67,7 @@ Last change:  WK   17 Sep 98    2:14 pm
 #include "Client\MainWindow\CommandHandlerUI.h"
 #include "SegmentApplicationsUI\frmSegmentTIN.h"
 #include "SegmentApplicationsUI\SegmentMapFromRasValueBndFrm.h"
+#include "SegmentMapFromPointFrm.h"
 #include "Headers\Hs\Applications.hs"
 
 InfoUIVector* getCommandInfoUI(ILWIS::Module *module) {
@@ -93,13 +94,14 @@ InfoUIVector* getCommandInfoUI(ILWIS::Module *module) {
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("symdiffseg","",Cmdsegmentmapsymetricdifference,TR("&Segment Operations..&Symetric Difference"),TR("Symetric Difference of Segments"),"ExeSeg16IcoL",".mpa.mps",0,TR("Create a new Segment map by the symetric difference of the Segments of two Segment maps")));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("relateseg","",Cmdsegmentmaprelate,TR("&Segment Operations..&Relate"),TR("Spatial Relation"),"ExeSeg16IcoL",".mps",0,TR("Create a segment map out of spatial relation(s) with other feature maps")));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("tin","",Cmdsegmentmaptin,TR("&Segment Operations..&TIN"),TR("Triangulated Irregular Network(TIN)"),"ExeSeg16IcoL",".mps",0,TR("Create a Triangulated Irregular Network from a pointmap")));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("isolines","",Cmdsegmentisoline,TR("&Segment Operations..&Iso Lines"),TR("Iso lines"),"ExeSeg16IcoL",".mps",0,TR("Creates Iso lines from a value raster map")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("isolines","",Cmdsegmentisoline,TR("&Segment Operations..&Iso Lines"),TR("Iso lines"),"ExeSeg16IcoL",".mpr",0,TR("Creates Iso lines from a value raster map")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("pointtosegment","",CmdSegmentMapFromPointFrm,TR("&Segment Operations..&Point to Segment"),TR("Point to segment"),"ExeSeg16IcoL",".mpp",0,TR("Creates a segment map from ordered points")));
 
 return infosui;
 }
 
 extern "C" _export ILWIS::Module *getModuleInfo(const FileName& fnModule) {
-	ILWIS::Module *module = new ILWIS::Module("Segmentmap applications UI", fnModule,ILWIS::Module::mi37,"1.0");
+	ILWIS::Module *module = new ILWIS::Module("Segmentmap applications UI", fnModule,ILWIS::Module::mi37,"1.2");
 	module->addMethod(ILWIS::Module::ifgetCommandInfoUI, (void *)getCommandInfoUI);  
 
 	return module;

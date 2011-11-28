@@ -26,6 +26,7 @@
 #include "SegmentApplications\segVoronoi.H"
 #include "SegmentApplications\segRelate.H"
 #include "SegmentApplications\segTin.h"
+#include "SegmentApplications\SegmentMapFromPoints.H"
 
 InfoVector* getCommandInfo() {
 
@@ -49,6 +50,7 @@ InfoVector* getCommandInfo() {
 	infos->push_back(CommandMap::newCommandInfo(createSegmentMapVoronoi,"SegmentMapVoronoi"));
 	infos->push_back(CommandMap::newCommandInfo(createSegmentMapRelate,"SegmentMapRelate"));
 	infos->push_back(CommandMap::newCommandInfo(createSegmentMapTIN,"SegmentMapTIN"));
+	infos->push_back(CommandMap::newCommandInfo(createSegmentMapFromPoints,"SegmentMapFromPoints"));
 
 	return infos;
 }

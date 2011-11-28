@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="SegmentApplicationsUI"
 	ProjectGUID="{A05EF560-57A0-46C6-A2F7-684AA626388C}"
 	RootNamespace="SegmentApplicationsUI"
@@ -224,6 +224,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\SegmentApplicationsUI\SegmentMapFromPointFrm.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\SegmentApplicationsUI\SegmentMapFromRasValueBndFrm.h"
 				>
 			</File>
@@ -266,6 +270,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\SegmentApplicationsUI\SegmentMapDifference.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\SegmentApplicationsUI\SegmentMapFromPointFrm.cpp"
 				>
 			</File>
 			<File

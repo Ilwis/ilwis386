@@ -255,6 +255,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\SegmentApplications\SegmentMapFromPoints.H"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\SegmentApplications\SEGNUMB.H"
 				>
 			</File>
@@ -345,6 +349,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\SegmentApplications\SEGMASK.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\SegmentApplications\SegmentMapFromPoints.cpp"
 				>
 			</File>
 			<File
