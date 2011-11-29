@@ -65,7 +65,7 @@ void AnnotationBorderTool::makeActive(void *v, HTREEITEM ) {
 				border->prepare(&pp);
 				ComplexDrawer *annotations = (ComplexDrawer *)(drawer->getRootDrawer()->getDrawer("AnnotationDrawers"));
 				if ( annotations)
-					annotations->addPostDrawer(400, border);
+					annotations->addPostDrawer(380, border);
 			}
 		}
 	}
