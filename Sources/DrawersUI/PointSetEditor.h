@@ -27,6 +27,7 @@ namespace ILWIS {
 		bool fCopyOk();
 		bool fPasteOk();
 		void OnSelectAll();
+		void setActive(bool yesno);
 
 
 		String sTitle() const;

@@ -194,6 +194,17 @@ void PointSetEditor::OnUpdateMode(CCmdUI* pCmdUI)
 	pCmdUI->SetRadio(fCheck);
 }
 
+void PointSetEditor::setActive(bool yesno) {
+	BaseMapEditor::setActive(yesno);
+	if (!yesno) {
+		BaseMapPtr *bmp = ((SpatialDataDrawer *)drawer->getParentDrawer())->getBaseMap();
+		if ( bmp) {
+			bmp->Store();
+			mdoc->mpvGetView()->Invalidate();
+		}
+	}
+}
+
 void PointSetEditor::OnSelectAll()
 {
 	selectedFeatures.clear();
