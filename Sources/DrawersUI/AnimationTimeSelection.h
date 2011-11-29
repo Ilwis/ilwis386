@@ -26,11 +26,14 @@ namespace ILWIS {
 		TimeSelection(CWnd *par, AnimationDrawer *gdr);
 		int exec();
 	private:
+		int setStep(Event *ev);
 		void FillData();
 		FieldLister *fl;
+		FieldInt *fiStep;
 		vector<String> data;
 		vector<String> cols;
 		vector<int>& activeMaps;
+		long step;
 	};
 
 }

@@ -57,14 +57,34 @@ String AnimationTimeSelectionTool::getMenuString() const {
 }
 //---------------------------------------------------
 TimeSelection::TimeSelection(CWnd *par, AnimationDrawer *animdrw) 
-: DisplayOptionsForm2(animdrw, par, "Time selection"), activeMaps(animdrw->getActiveMaps())
+: DisplayOptionsForm2(animdrw, par, "Time selection"), activeMaps(animdrw->getActiveMaps()),step(1)
 {
 	FillData();	
 	fl = new FieldLister(root,data, cols);
 	fl->setReadOnly(true);
 	fl->SetWidth(100 + (cols.size() - 2) * 32 );
 	fl->SetHeight(120 + min(160, data.size() * 16));
+	fiStep = new FieldInt(root,TR("Use Step size"),&step,ValueRangeInt(1,100));
+	fiStep->SetCallBack((NotifyProc)&TimeSelection::setStep);
+	fiStep->SetIndependentPos();
   create();
+}
+
+int TimeSelection::setStep(Event *ev) {
+	fiStep->StoreData();
+	vector<int> indexes;
+	if ( step > 0) {
+		IlwisObject *source = (IlwisObject *)((AnimationDrawer *)drw)->getDataSource();
+		MapList mpl((*source)->fnObj);
+		for(int i = 0; i < mpl->iSize(); ++i) {
+			if ( i % step == 0)
+				indexes.push_back(i);
+		}
+		fl->setSelectedIndexes(indexes);
+
+		
+	}
+	return 1;
 }
 
 void TimeSelection::FillData() {
