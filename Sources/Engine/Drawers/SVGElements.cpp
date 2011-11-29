@@ -17,7 +17,7 @@ using namespace ILWIS;
 
 map<String, Color> SVGElement::svgcolors;
 
-SVGElement::SVGElement(const String& _id)  
+SVGElement::SVGElement(const String& _id) : defaultScale(1.0) 
 {
 	if ( svgcolors.size() == 0) {
 		initSvgData();
@@ -28,7 +28,7 @@ SVGElement::SVGElement(const String& _id)
 	id = _id;
 }
 
-SVGElement::SVGElement(SVGAttributes::ShapeType t, const String& _id) : id(_id){
+SVGElement::SVGElement(SVGAttributes::ShapeType t, const String& _id) : id(_id), defaultScale(1.0) {
 	if ( svgcolors.size() == 0) {
 		initSvgData();
 	}
@@ -53,6 +53,12 @@ Color SVGElement::getColor(const String& name) const{
 }
 
 void SVGElement::parse(const pugi::xml_node& node) {
+	for( pugi::xml_attribute attr = node.first_attribute(); attr; attr = attr.next_attribute()) {
+		String name = attr.name();
+		if (  name == "scale") {
+			defaultScale = attr.as_double();
+		}
+	}
 	for(pugi::xml_node child = node.first_child(); child;  child = child.next_sibling()) {
 		if ( child.attributes_begin() == child.attributes_end())
 			continue;

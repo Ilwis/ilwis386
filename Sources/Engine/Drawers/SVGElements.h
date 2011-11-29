@@ -49,6 +49,7 @@ namespace ILWIS {
 		void parse(const pugi::xml_node& node);
 		void parseNode(const pugi::xml_node& node, SVGAttributes* attributes);
 		CoordBounds getCb() const { return cb; }
+		double getDefaultScale() const { return defaultScale; }
 
 	protected:
 		void initSvgData();
@@ -57,8 +58,7 @@ namespace ILWIS {
 		String getAttributeValue(const pugi::xml_node& node, const String& key) const;
 		String parseStyle(const String& style,SVGAttributes* attributes);
 		void normalizePositions();
-
-
+		double defaultScale;
 	private:
 		static map<String, Color> svgcolors;
 		CoordBounds cb;
