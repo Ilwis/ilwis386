@@ -114,6 +114,7 @@ namespace ILWIS {
 		vector<int> filteredRaws;
 		int zOrder;
 		int index;
+		String displayOptions;
 	};
 
 }
