@@ -229,6 +229,25 @@ TableHistogramInfo::TableHistogramInfo(const Map& mp, bool fIgnZero)
   his->OpenTableVirtual();
   if (!his->fCalculated())
     his->Calc();
+
+  String sMean, sPred, sMedian, sTdDev, sLine1,sLine2; 
+
+  his->ReadElement("AdditionalInfo","Line0",sLine1);
+  his->ReadElement("AdditionalInfo","Line1",sLine2);
+  String sHead= sLine1.sHead(" ");
+  String sTail = sLine1.sTail(" ");
+  sHead = sHead.sTrimSpaces();
+  sTail = sTail.sTrimSpaces();
+  rMean = sHead.sTail("=").rVal();
+  rStd = sTail.sTail("=").rVal();
+  sHead= sLine2.sHead(" ");
+  sTail = sLine2.sTail(" ");
+  sHead = sHead.sTrimSpaces();
+  sTail = sTail.sTrimSpaces();
+  rMedian = sHead.sTail("=").rVal();
+  rPred = sTail.sTail("=").sHead(" ").rVal();
+
+
 }
 
 void TableHistogramInfo::operator=(const TableHistogramInfo& inf)
@@ -282,6 +301,25 @@ Column TableHistogramInfo::colNPixCumPct() const
   TableHistogram* hist = static_cast<TableHistogram*>(his->ptv);
   return hist->colNPixCumPct();
 }
+
+double TableHistogramInfo::getAggregate(AggragationType type) const{
+	switch(type) {
+		case atPRED:
+			return rPred;
+		case atAVERAGE:
+			return rMean;
+		case atSTDEV:
+			return rStd;
+		case atMEDIAN:
+			return rMedian;
+		//case atMAX:
+		//	return _colValue->rrMinMax().rHi();
+		//case atMIN:
+		//	return _colValue->rrMinMax().rLo();
+	}
+	return rUNDEF;
+}
+//--------------------------------
 
 Column TableHistogramInfo::colValue() const
 {
@@ -887,23 +925,6 @@ String TableHistogram::sExpression() const
   return String("TableHistogram(%S)", map->sNameQuoted(true, fnObj.sPath()));
 }
 
-double TableHistogram::getAggregate(AggragationType type) const{
-	switch(type) {
-		case atPRED:
-			return rPred;
-		case atAVERAGE:
-			return rMean;
-		case atSTDEV:
-			return rStd;
-		case atMEDIAN:
-			return rMedian;
-		case atMAX:
-			return _colValue->rrMinMax().rHi();
-		case atMIN:
-			return _colValue->rrMinMax().rLo();
-	}
-	return rUNDEF;
-}
 
 String TableHistogram::sSummary() const
 {

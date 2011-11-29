@@ -78,6 +78,7 @@ IlwisObjectPtr * createTableHistogram(const FileName& fn, IlwisObjectPtr& ptr, c
 class TableHistogramInfo
 {
 public:
+	enum AggragationType{atSUM, atAVERAGE, atMAX, atMIN, atSTDEV, atMEDIAN, atPRED};
   _export TableHistogramInfo();
   _export TableHistogramInfo(const Map& mp, bool fIgnZero=false);
   _export void operator=(const TableHistogramInfo& inf);
@@ -90,8 +91,13 @@ public:
   Column _export colValue() const;
   bool _export fValid() const;
 	Table tbl() const { return his; }
+  double _export getAggregate(AggragationType type) const;
 private:
   Table his;
+  double rMean;
+  double rStd;
+  double rMedian;
+  double rPred;
 };
 
 class TableHistogram: public TableVirtual
@@ -105,7 +111,6 @@ public:
   virtual void Store();
   virtual void UnFreeze();
 public:
-	enum AggragationType{atSUM, atAVERAGE, atMAX, atMIN, atSTDEV, atMEDIAN, atPRED};
   const Column& colNPix() const { return _colNPix; }
   const Column& colNPixPct() const { return _colNPixPct; }
   const Column& colNPixCum() const { return _colNPixCum; }
@@ -123,7 +128,6 @@ public:
   virtual String sType() const;
 	Map mp() const { return map; }
   static void _export Erase(const FileName& fnMap);
-  double _export getAggregate(AggragationType type) const;
 protected:
   Map map;
   long _iMin, _iMax;
