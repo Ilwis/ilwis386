@@ -88,6 +88,7 @@ public:
 
 	//}}AFX_MSG
 private:  
+	void setActiveMode(bool yesno);
 	SampleSet sms;
 	SampleStatWindow* wSmplStat;
 	Array<RowCol> rcSelect;

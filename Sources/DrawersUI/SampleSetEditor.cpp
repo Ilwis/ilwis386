@@ -55,6 +55,7 @@ Created on: 2007-02-8
 #include "Client\MainWindow\Catalog\CatalogDocument.h"
 #include "Engine\Map\Mapview.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
+#include "Client\FormElements\fldmsmpl.h"
 #include "Headers\constant.h"
 #include "Engine\Domain\dmsort.h"
 #include "Headers\Htp\Ilwis.htp"
@@ -105,6 +106,9 @@ bool SampleSetEditor::isToolUseableFor(ILWIS::DrawerTool *tool){
 }
 
 HTREEITEM SampleSetEditor::configure( HTREEITEM parentItem){
+	if ( !sms.fValid())
+		return parentItem;
+
 	ColorCompositeDrawer *rdrw = (ColorCompositeDrawer *)drawer;
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree, parentItem, drawer);
 	//item->setDoubleCickAction(this, (DTDoubleClickActionFunc)(DisplayOptionItemFunc)&ColorCompositeTool::displayOptionCC);
@@ -184,6 +188,26 @@ String SampleSetEditor::getMenuString() const{
 	return TR("Sample set editor");
 
 
+}
+
+void SampleSetEditor::setActiveMode(bool yesno) {
+	DrawerTool::setActiveMode(yesno);
+	if ( yesno) {
+		try{
+			if ( !sms.fValid() ) {
+				String sSms, sMpr, sMpl;
+				FormCreateSampleSet frm(tree, &sSms, sMpr, sMpl, false);
+				if (frm.fOkClicked()) {
+					sms = SampleSet(FileName(sSms,".sms"));
+					configure(getParentTool()->getTreeItem());
+				}else
+					return ;
+			}
+		} catch (ErrorObject& err) {
+			err.Show();
+		}
+	}
+	
 }
 
 SampleSetEditor::~SampleSetEditor()
