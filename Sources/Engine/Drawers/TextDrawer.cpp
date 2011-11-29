@@ -16,7 +16,7 @@ ILWIS::NewDrawer *createTextLayerDrawer(DrawerParameters *parms) {
 }
 
 TextLayerDrawer::TextLayerDrawer(DrawerParameters *parms) : 
-	ComplexDrawer(parms,"TextLayerDrawer"), 
+	ComplexDrawer(parms,"TextLayerDrawer"),
 	font(0),
 	iFHeight(100 * 3),
 	sFaceName("Arial"),
@@ -32,6 +32,8 @@ TextLayerDrawer::~TextLayerDrawer() {
 
 void  TextLayerDrawer::prepare(PreparationParameters *pp){ 
 	ComplexDrawer::prepare(pp);
+	if ( font)
+		font->prepare(pp);
 }
 
 OpenGLText *TextLayerDrawer::getFont() const {

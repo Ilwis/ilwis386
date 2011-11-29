@@ -303,7 +303,7 @@ bool SampleSetPtr::fInitStat()
   }  
   long iNrCols     = smplmap->iCols();
   long iNrRows     = smplmap->iLines();
-   trq.SetText(SDATTextInitSampleStatistics);
+   trq.SetText(TR("Init sample set statistics" ));
   ByteBuf            bb(iNrCols);
   ByteBufList        bbl(iNrBands, iNrCols);
   long c, r;
