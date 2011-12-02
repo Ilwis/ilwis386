@@ -353,7 +353,39 @@ void CartesianGraphDoc::OnAddColumnGraph()
 	if (!colY.fValid())
 		return;
 	ColumnGraphLayer* gl = new ColumnGraphLayer(cgd, tbl, colX, colY);
-	// updating of axis ??
+	// updating of axis
+	// X-axis
+	if (colX.fValid())
+	{
+		if (colX->fValues()) 
+		{
+			RangeReal rr = colX->rrMinMax();
+			double rWidth = rr.rWidth();
+			rr.rHi() += rWidth * 0.03;
+			if (rr.rLo() >= 0 && rr.rLo() < rWidth * 0.3)
+				rr.rLo() = 0;
+			else 
+				rr.rLo() -= rWidth * 0.05;
+			cgd->gaxX->ExpandMinMax(rr);
+		}
+	}
+	else {
+		if (tbl->dm()->pdnone())
+			cgd->gaxX->ExpandMinMax(RangeReal(1, tbl->iRecs()));
+	}
+
+	if (colY->fValues()) {
+		RangeReal rr = colY->rrMinMax();
+		double rWidth = rr.rWidth();
+		rr.rHi() += rWidth * 0.03;
+		if (rr.rLo() >= 0 && rr.rLo() < rWidth * 0.3)
+			rr.rLo() = 0;
+		else 
+			rr.rLo() -= rWidth * 0.1;
+		cgd->gaxYLeft->ExpandMinMax(rr);
+		cgd->gaxYRight->ExpandMinMax(rr);
+	}
+
 	gl->fYAxisLeft = true;
 	cgd->agl.push_back(gl);
 	gl->smb.col = gl->line.clrLine() = gl->color	= Representation::clrPrimary(cgd->agl.iSize());

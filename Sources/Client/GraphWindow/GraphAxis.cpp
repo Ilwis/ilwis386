@@ -119,6 +119,29 @@ void GraphAxis::SetMinMax(const RangeReal& rr)
   SetGridStep(vr->rStep());
 }
 
+void GraphAxis::ExpandMinMax(const RangeReal& rr)
+{
+  double rStep = rRound(rr.rWidth()/iDefTicks);
+  if (dvrsData.rStep() == 1 && rStep < 1)
+    rStep = 1;
+  ValueRange vrNew (rr.rLo(), rr.rHi(), rStep);
+  if (gat == gatNORMALPROBABILITY)
+  {
+    if (rr.rHi() < 10) 
+      vrNew = ValueRange(0,1,0.001);
+    else 
+      vrNew = ValueRange(0,100,0.1);
+  }
+  double rLo = min(vr->rrMinMax().rLo(), vrNew->rrMinMax().rLo());
+  double rHi = max(vr->rrMinMax().rHi(), vrNew->rrMinMax().rHi());
+  rStep = min(vr->rStep(), vrNew->rStep());
+  vr = ValueRange(rLo, rHi, rStep);
+  dvrs.SetValueRange(vr);
+  if (rr.rLo() < 1e-10 && gat == gatLOGARITHMIC)
+    gat = gatNORMAL;
+  SetGridStep(vr->rStep());
+}
+
 void GraphAxis::SetGridStep(double r)
 {
   m_rGridStep = r;

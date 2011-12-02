@@ -68,6 +68,7 @@ public:
   virtual bool fConfig();
 	void Set(const DomainValueRangeStruct& dvrs);
 	void SetMinMax(const RangeReal& rr); // and default step
+	void ExpandMinMax(const RangeReal& rr);
 	void SetGridStep(double r);
 	double rMin() const;
 	double rMax() const;
