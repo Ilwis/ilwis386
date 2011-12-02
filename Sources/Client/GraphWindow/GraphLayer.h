@@ -103,6 +103,7 @@ public:
 	virtual bool fConfig();
 	virtual int iNrPoints();
 	virtual double rX(int iRec);
+	void SetType(String sGraphType);
 	CartesianGraphDrawer* cgd;
   virtual void SaveSettings(const FileName& fn, const String& sSection);
 	static CartesianGraphLayer* create(const FileName& fn, const String& sSection, CartesianGraphDrawer* gd);

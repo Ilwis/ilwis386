@@ -198,6 +198,20 @@ namespace {
 	};
 };
 
+void CartesianGraphLayer::SetType(String sGraphType)
+{
+	cgt = cgtContineous;
+	if (fCIStrEqual(sGraphType, "Contineous"))
+		cgt = cgtContineous;
+	else if(fCIStrEqual(sGraphType, "Step"))
+		cgt = cgtStep;
+	else if (fCIStrEqual(sGraphType, "Bar"))
+		cgt = cgtBar;
+	else if (fCIStrEqual(sGraphType, "Needle"))
+		cgt = cgtNeedle; 
+	else if (fCIStrEqual(sGraphType, "Point"))
+		cgt = cgtPoint; 
+}
 
 void CartesianGraphLayer::draw(CDC* cdc)
 {
