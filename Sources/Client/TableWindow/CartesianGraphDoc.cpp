@@ -274,6 +274,71 @@ BOOL CartesianGraphDoc::OnNewDocument()
 	return TRUE;
 }
 
+BOOL CartesianGraphDoc::CreateNewGraph(Table & _tbl, Column & _colX, Column & colY, String sGraphType, Color color)
+{
+	DeleteContents();
+	//if (!IlwisDocument::OnNewDocument())
+	//	return FALSE;
+	tbl = _tbl;
+	colX = _colX;
+	if (!colY.fValid())
+		return FALSE;
+
+	grdr = cgd = new CartesianGraphDrawer(0); 
+	ColumnGraphLayer* gl = new ColumnGraphLayer(cgd, tbl, colX, colY);
+	// X-axis
+	if (colX.fValid())
+	{
+		cgd->gaxX->Set(colX->dvrs());
+		cgd->gaxX->dvrsData = colX->dvrs();
+		if (colX->fValues()) 
+		{
+			RangeReal rr = colX->rrMinMax();
+			double rWidth = rr.rWidth();
+			rr.rHi() += rWidth * 0.03;
+			if (rr.rLo() >= 0 && rr.rLo() < rWidth * 0.3)
+				rr.rLo() = 0;
+			else 
+				rr.rLo() -= rWidth * 0.05;
+			cgd->gaxX->SetMinMax(rr);
+		}
+		cgd->gaxX->sTitle = colX->sName();
+	}
+	else {
+		cgd->gaxX->Set(tbl->dm());
+		if (tbl->dm()->pdnone())
+			cgd->gaxX->SetMinMax(RangeReal(1, tbl->iRecs()));
+	}
+	// Y-axis
+	cgd->gaxYLeft->Set(colY->dvrs());
+	cgd->gaxYLeft->dvrsData = colY->dvrs();
+	cgd->gaxYRight->Set(colY->dvrs());
+	cgd->gaxYRight->dvrsData = colY->dvrs();
+	if (colY->fValues()) {
+		RangeReal rr = colY->rrMinMax();
+		double rWidth = rr.rWidth();
+		rr.rHi() += rWidth * 0.03;
+		if (rr.rLo() >= 0 && rr.rLo() < rWidth * 0.3)
+			rr.rLo() = 0;
+		else 
+			rr.rLo() -= rWidth * 0.1;
+		cgd->gaxYLeft->SetMinMax(rr);
+		cgd->gaxYRight->SetMinMax(rr);
+	}
+	cgd->gaxYLeft->sTitle = colY->sName();
+	grdr->sTitle = gl->sTitle;
+	gl->fYAxisLeft = true;
+
+	cgd->agl.push_back(gl);
+	gl->smb.col = gl->line.clrLine() = gl->color = color;
+	gl->smb.iSize = 5;
+	gl->SetType(sGraphType);
+
+	UpdateAllViews(0);
+	SetModifiedFlag();
+	return TRUE;
+}
+
 void CartesianGraphDoc::DeleteContents()
 {
 	cgd = 0;
@@ -390,6 +455,34 @@ void CartesianGraphDoc::OnAddColumnGraph()
 	cgd->agl.push_back(gl);
 	gl->smb.col = gl->line.clrLine() = gl->color	= Representation::clrPrimary(cgd->agl.iSize());
 	gl->smb.iSize = 5;
+	// config layer ??
+	SetModifiedFlag();
+	UpdateAllViews(0);
+}
+
+void CartesianGraphDoc::AddColumnGraph(Column & colY, String sGraphType, Color color)
+{
+	if (!colY.fValid())
+		return;
+	ColumnGraphLayer* gl = new ColumnGraphLayer(cgd, tbl, colX, colY);
+	// updating of axis
+	if (colY->fValues()) {
+		RangeReal rr = colY->rrMinMax();
+		double rWidth = rr.rWidth();
+		rr.rHi() += rWidth * 0.03;
+		if (rr.rLo() >= 0 && rr.rLo() < rWidth * 0.3)
+			rr.rLo() = 0;
+		else 
+			rr.rLo() -= rWidth * 0.1;
+		cgd->gaxYLeft->ExpandMinMax(rr);
+		cgd->gaxYRight->ExpandMinMax(rr);
+	}
+
+	gl->fYAxisLeft = true;
+	cgd->agl.push_back(gl);
+	gl->smb.col = gl->line.clrLine() = gl->color = color;
+	gl->smb.iSize = 5;
+	gl->SetType(sGraphType);
 	// config layer ??
 	SetModifiedFlag();
 	UpdateAllViews(0);

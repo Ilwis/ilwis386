@@ -64,7 +64,9 @@ public:
 	virtual void Serialize(CArchive& ar);   
   void OnFileOpen();
 	virtual BOOL OnNewDocument();
+	BOOL CreateNewGraph(Table & _tbl, Column & _colX, Column & colY, String sGraphType, Color color);
   void OnAddColumnGraph();
+  void AddColumnGraph(Column & colY, String sGraphType, Color color);
   void OnAddFormulaGraph();
   void OnAddLsfGraph();
   void OnAddSvmGraph();
