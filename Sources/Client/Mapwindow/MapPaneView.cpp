@@ -960,10 +960,17 @@ BOOL MapPaneView::EditCopy(CRect mRect, int nReduceResCount)
 	GetDocument()->rootDrawer->setViewPort(RowCol(nYRes,nXRes));
 
 	PreparationParameters ppEDITCOPY (ILWIS::NewDrawer::ptOFFSCREENSTART);
-	vector<ComplexDrawer*> drawerList;
-	int count = GetDocument()->rootDrawer->getDrawerCount();
+	vector<NewDrawer*> drawerList;
+	vector<NewDrawer *> allDrawers;
+	GetDocument()->rootDrawer->getDrawers(allDrawers);
+	int count = allDrawers.size();
+
+	count = allDrawers.size();
 	for (int i = 0; i < count; ++i)	{
-		ILWIS::ComplexDrawer* spatialDataDrawer = dynamic_cast<ILWIS::ComplexDrawer*>(GetDocument()->rootDrawer->getDrawer(i));
+		ILWIS::NewDrawer *drw = allDrawers[i];
+		if ( !drw)
+			continue;
+		ILWIS::SpatialDataDrawer* spatialDataDrawer = dynamic_cast<ILWIS::SpatialDataDrawer*>(drw);
 		if (spatialDataDrawer != 0)	{
 			int count2 = spatialDataDrawer->getDrawerCount();
 			for (int j = 0; j < count2; ++j) {
@@ -974,6 +981,12 @@ BOOL MapPaneView::EditCopy(CRect mRect, int nReduceResCount)
 				}
 			}
 		}
+		else {
+			if ( drw->getId() != "CanvasBackgroundDrawer") {
+				drawerList.push_back(drw);
+				drw->prepare(&ppEDITCOPY);
+			}
+		} 
 	}
 
 	contextMem->TakeContext();
@@ -987,7 +1000,7 @@ BOOL MapPaneView::EditCopy(CRect mRect, int nReduceResCount)
 	GetDocument()->rootDrawer->setViewPort(viewportOld);
 
 	PreparationParameters ppEDITCOPYDONE (ILWIS::NewDrawer::ptOFFSCREENEND);
-	for (vector<ComplexDrawer*>::iterator it = drawerList.begin(); it != drawerList.end(); ++it)
+	for (vector<NewDrawer*>::iterator it = drawerList.begin(); it != drawerList.end(); ++it)
 		(*it)->prepare(&ppEDITCOPYDONE);
 
 	// contextMem is no longer needed
