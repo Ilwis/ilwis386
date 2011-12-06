@@ -68,6 +68,7 @@ public:
 
 	void SetParentField(FieldLister*);
 	void getSelectedIndex(vector<int>& indexes);
+	void setSelectedIndexes(const vector<int>& indexes);
 	void setReadOnly(bool yesno) { isReadOnly = yesno;}
 	bool readOnly() const { return isReadOnly; }
 

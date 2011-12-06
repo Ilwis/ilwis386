@@ -228,3 +228,19 @@ void ListCtrlList::getSelectedIndex(vector<int>& indexes) {
 		}
 	}
 }
+
+void ListCtrlList::setSelectedIndexes(const vector<int>& indexes) {
+	UINT i, uSelectedCount = GetSelectedCount();
+	int  nItem = -1;
+	long current = 0;
+
+	for (i=0;i < GetItemCount();i++)
+	{
+		if ( i == indexes[current]) {
+			SetItemState(i,LVIS_SELECTED, LVIS_SELECTED);
+			++current;
+		} else
+			SetItemState(i,0, LVIS_SELECTED);
+
+	}
+}
