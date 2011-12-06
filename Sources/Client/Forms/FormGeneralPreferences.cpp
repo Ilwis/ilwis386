@@ -97,26 +97,26 @@ FormGeneralPreferences::FormGeneralPreferences() :
   tree = new TreeSelector(root,1);
 	tree->SetCallBack((NotifyProc)&FormGeneralPreferences::Fill);
 	pages.push_back(FormGeneralPreferences::Page(TR("Main Window"), new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(TR("Main Window|Position & Size"), new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(TR("Main Window|Menu"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Main Window#Position & Size"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Main Window#Menu"), new FieldPage(root)));
 	pages.push_back(FormGeneralPreferences::Page(TR("Map Window"), new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(TR("Map Window|Display"), new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(TR("Map Window|Display|Raster Maps"), new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(TR("Map Window|Display|Segment Maps"), new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(TR("Map Window|Display|Polygon Maps"), new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(TR("Map Window|Display|Point Maps"), new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(TR("Map Window|Default Representations"), new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(TR("Map Window|Position & Size"), new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(TR("Map Window|Editors"), new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(TR("Map Window|Editors|Point Editor"), new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(TR("Map Window|Editors|Segment Editor"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Map Window#Display"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Map Window#Display#Raster Maps"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Map Window#Display#Segment Maps"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Map Window#Display#Polygon Maps"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Map Window#Display#Point Maps"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Map Window#Default Representations"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Map Window#Position & Size"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Map Window#Editors"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Map Window#Editors#Point Editor"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Map Window#Editors#Segment Editor"), new FieldPage(root)));
 	pages.push_back(FormGeneralPreferences::Page(TR("Table Window"), new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(TR("Table Window|Graph Window"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Table Window#Graph Window"), new FieldPage(root)));
 	pages.push_back(FormGeneralPreferences::Page(TR("Font"), new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(TR("Font|General Font"), new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(TR("Font|Dialog Font"), new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(TR("Font|Table Font"), new FieldPage(root)));
-	pages.push_back(FormGeneralPreferences::Page(TR("Font|Graphs Font"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Font#General Font"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Font#Dialog Font"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Font#Table Font"), new FieldPage(root)));
+	pages.push_back(FormGeneralPreferences::Page(TR("Font#Graphs Font"), new FieldPage(root)));
 	pages.push_back(FormGeneralPreferences::Page(TR("General"), new FieldPage(root)));
 	pages.push_back(FormGeneralPreferences::Page(TR("Directories"), new FieldPage(root)));
 	pages.push_back(FormGeneralPreferences::Page(TR("Advanced"), new FieldPage(root)));	
@@ -161,7 +161,7 @@ void FormGeneralPreferences::FontPage(IlwisSettings& settings)
 	FieldPage *page = GetPage(TR("Font"));
 	new StaticText(page, TR("This item contains subentries, please expand. "));
 
-	page = GetPage(TR("Font|General Font"));
+	page = GetPage(TR("Font#General Font"));
 	FieldGroup *grp = new FieldGroup(page);
 	new StaticText(grp, TR("General Font"), true);
 	StaticText* st = new StaticText(grp, TR("The font that is used in the Main Window, in Catalogs"));
@@ -176,7 +176,7 @@ void FormGeneralPreferences::FontPage(IlwisSettings& settings)
 	FieldLogFont *fl = new FieldLogFont(page, &lfGeneral);
 	fl->SetIndependentPos();
 
-	page = GetPage(TR("Font|Dialog Font"));
+	page = GetPage(TR("Font#Dialog Font"));
 	grp = new FieldGroup(page);
 	new StaticText(grp,TR("Dialog Font"), true);
 	st = new StaticText(grp, TR("The font that is used in all dialog boxes"));
@@ -191,7 +191,7 @@ void FormGeneralPreferences::FontPage(IlwisSettings& settings)
   fl = new FieldLogFont(page, &lfForm, FieldLogFont::faVECTOR);
 	fl->SetIndependentPos();
 
-	page = GetPage(TR("Font|Table Font"));
+	page = GetPage(TR("Font#Table Font"));
 
 	grp = new FieldGroup(page);
 	new StaticText(grp, TR("Table Font"), true);
@@ -204,7 +204,7 @@ void FormGeneralPreferences::FontPage(IlwisSettings& settings)
   fl = new FieldLogFont(page, &lfTable, FieldLogFont::faFIXED);
 	fl->SetIndependentPos();
 
-	page = GetPage(TR("Font|Graphs Font"));
+	page = GetPage(TR("Font#Graphs Font"));
 
 	grp = new FieldGroup(page);
 	new StaticText(grp, TR("Graph Font"), true);
@@ -257,7 +257,7 @@ void FormGeneralPreferences::MainWindowPage(IlwisSettings& settings)
 	ftoStp = new FieldOneSelectTextOnly(page, &sStpAction);
 	ftoStp->Align(st, AL_AFTER);
 
-	page = GetPage(TR("Main Window|Position & Size"));
+	page = GetPage(TR("Main Window#Position & Size"));
 	st = new StaticText(page, TR("Default position and size of Main Window"), true);
 	st->SetIndependentPos();
 	MWX = new FieldInt(page, TR("&X Position"), &(mapPos[mpMAIN].rcMin.Col), ValueRange(1, 2000), false, true);
@@ -267,7 +267,7 @@ void FormGeneralPreferences::MainWindowPage(IlwisSettings& settings)
 
 	new PushButton(page, TR("&Reset"), (NotifyProc)&FormGeneralPreferences::ResetButtonMW);
 
-	page = GetPage(TR("Main Window|Menu"));
+	page = GetPage(TR("Main Window#Menu"));
 	useAltLayout = settings.fValue("OperationsMenu",false);
 	st = new StaticText(page,"Operations Menu structure", true);
 	st->SetIndependentPos();
@@ -325,7 +325,7 @@ int FormGeneralPreferences::ResetButtonTW(Event *)
 
 void FormGeneralPreferences::GraphWindowPage(IlwisSettings& settings)
 {
-	FieldPage *page = GetPage(TR("Table Window|Graph Window"));
+	FieldPage *page = GetPage(TR("Table Window#Graph Window"));
 
 	StaticText* st = new StaticText(page, TR("Default position and size of Graph Window"), true);
 	st->SetIndependentPos();
@@ -353,7 +353,7 @@ void FormGeneralPreferences::MapWindowPage(IlwisSettings& settings)
 	FieldPage *pg = GetPage(TR("Map Window"));
 	new StaticText(pg, TR("This item contains subentries, please expand. "));
 
-	FieldPage *page = GetPage(TR("Map Window|Position & Size"));
+	FieldPage *page = GetPage(TR("Map Window#Position & Size"));
 
 	StaticText* st = new StaticText(page, TR("Default position and size of Map Window"), true);
 	st->SetIndependentPos();
@@ -366,7 +366,7 @@ void FormGeneralPreferences::MapWindowPage(IlwisSettings& settings)
 
 	DefaultRprPage(settings);
 
-	pg = GetPage(TR("Map Window|Editors"));
+	pg = GetPage(TR("Map Window#Editors"));
 	new StaticText(pg, TR("This item contains subentries, please expand. "));
 	SegmentEdMapPage();
 
@@ -388,7 +388,7 @@ int FormGeneralPreferences::ResetButtonMpW(Event *)
 void FormGeneralPreferences::PointEdMapPage()
 {
 	IlwisSettings settings("Map Window\\Point Editor");
-	FieldPage *page = GetPage(TR("Map Window|Editors|Point Editor"));
+	FieldPage *page = GetPage(TR("Map Window#Editors#Point Editor"));
 	// to ensure that on show time the fill color field is only shoen when needed
   page->SetCallBack((NotifyProc)&FormGeneralPreferences::FieldSymbolCallBack);
 	StaticText* st = new StaticText(page, TR("Point Editor"), true);
@@ -503,7 +503,7 @@ void FormGeneralPreferences::SegmentEdMapPage()
   colFindUndef = Color(255,0,0); // red
 	colFindUndef = settings.clrValue("Find Undef Color", colFindUndef);
 
-	FieldPage *page = GetPage(TR("Map Window|Editors|Segment Editor"));
+	FieldPage *page = GetPage(TR("Map Window#Editors#Segment Editor"));
 	StaticText* st = new StaticText(page, TR("Segment Editor"), true);
 	st->SetIndependentPos();
   new FieldColor(page, TR("&Color Digitizer Cursor"), &colDig);
@@ -549,7 +549,7 @@ void FormGeneralPreferences::GetSystemRpr(IlwisSettings& settings)
 
 void FormGeneralPreferences::DefaultRprPage(IlwisSettings& settings)
 {
-	FieldPage *page = GetPage(TR("Map Window|Default Representations"));
+	FieldPage *page = GetPage(TR("Map Window#Default Representations"));
 	GetSystemRpr(settings);
 	rprList = new FieldRprListView(page, defRpr);
 }
@@ -628,7 +628,7 @@ void FormGeneralPreferences::DisplayOptionsPages(IlwisSettings& settings)
 	}
 	dispChecks.resize(dispOptions.size());
 
-	FieldPage *page = GetPage(TR("Map Window|Display"));
+	FieldPage *page = GetPage(TR("Map Window#Display"));
 	dispOptions[IlwisWinApp::dosALL] = false;
 //	dispChecks[IlwisWinApp::dosALL] = new CheckBox(page, TR("&Show display options when opening a map"), &dispOptions[IlwisWinApp::dosALL]);
 
@@ -643,7 +643,7 @@ void FormGeneralPreferences::DisplayOptionsPages(IlwisSettings& settings)
 	new FieldColor(fg, TR("&False"), &clrNo);
 	fg->SetIndependentPos();
 
-	page = GetPage(TR("Map Window|Display|Raster Maps"));
+	page = GetPage(TR("Map Window#Display#Raster Maps"));
 	new StaticText(page, TR("Show Display Options dialog box for:"), true);
 	dispChecks[IlwisWinApp::dosRAS]			= new CheckBox(page, TR("&All Raster maps"), &dispOptions[IlwisWinApp::dosRAS]);
 	dispChecks[IlwisWinApp::dosRASIMG]		= new CheckBox(page, TR("using domain &Image"), &dispOptions[IlwisWinApp::dosRASIMG]);
@@ -662,7 +662,7 @@ void FormGeneralPreferences::DisplayOptionsPages(IlwisSettings& settings)
 	fPyrCreateFirstDisplay = settings.fValue("CreatePyrWhenFirstDisplayed", false);
 	new CheckBox(page, TR("Create Pyramid Layers by default"), &fPyrCreateFirstDisplay);	
 
-	page = GetPage(TR("Map Window|Display|Segment Maps"));
+	page = GetPage(TR("Map Window#Display#Segment Maps"));
 	new StaticText(page, TR("Show Display Options dialog box for:"), true);
 	dispChecks[IlwisWinApp::dosSEG] = new CheckBox(page, TR("&All Segment maps"), &dispOptions[IlwisWinApp::dosSEG]);
 	dispChecks[IlwisWinApp::dosSEGVAL]		= new CheckBox(page, TR("using domain &Value"), &dispOptions[IlwisWinApp::dosSEGVAL]);
@@ -672,7 +672,7 @@ void FormGeneralPreferences::DisplayOptionsPages(IlwisSettings& settings)
 	dispChecks[IlwisWinApp::dosSEGOTHER] = new CheckBox(page, TR("using &other domains"), &dispOptions[IlwisWinApp::dosSEGOTHER]);
 
 
-	page = GetPage(TR("Map Window|Display|Polygon Maps"));
+	page = GetPage(TR("Map Window#Display#Polygon Maps"));
 	new StaticText(page, TR("Show Display Options dialog box for:"), true);
 	dispChecks[IlwisWinApp::dosPOL] = new CheckBox(page, TR("&All Polygon maps"), &dispOptions[IlwisWinApp::dosPOL]);
 	dispChecks[IlwisWinApp::dosPOLVAL]		= new CheckBox(page, TR("using domain &Value"), &dispOptions[IlwisWinApp::dosPOLVAL]);
@@ -681,7 +681,7 @@ void FormGeneralPreferences::DisplayOptionsPages(IlwisSettings& settings)
 	dispChecks[IlwisWinApp::dosPOLBOOL]	= new CheckBox(page, TR("using domain &Bool"), &dispOptions[IlwisWinApp::dosPOLBOOL]);
 	dispChecks[IlwisWinApp::dosPOLOTHER] = new CheckBox(page, TR("using &other domains"), &dispOptions[IlwisWinApp::dosPOLOTHER]);
 
-	page = GetPage(TR("Map Window|Display|Point Maps"));
+	page = GetPage(TR("Map Window#Display#Point Maps"));
 	new StaticText(page, TR("Show Display Options dialog box for:"), true);
 	dispChecks[IlwisWinApp::dosPNT] = new CheckBox(page, TR("&All Point maps"), &dispOptions[IlwisWinApp::dosPNT]);
 	dispChecks[IlwisWinApp::dosPNTVAL]		= new CheckBox(page, TR("using domain &Value"), &dispOptions[IlwisWinApp::dosPNTVAL]);

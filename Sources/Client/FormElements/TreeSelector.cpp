@@ -141,8 +141,8 @@ void TreeSelector::Add(const String& sValue, HTREEITEM hti, DWORD data, bool fLe
 {
 	if ( !tree || sValue == "") return;
 	HTREEITEM it = tree->GetNextItem(hti, TVGN_CHILD);
-	String sCurTxt = sValue.sHead("|");
-	fLeaf = sValue.sTail("|")=="";
+	String sCurTxt = sValue.sHead("#");
+	fLeaf = sValue.sTail("#")=="";
 	while(it != NULL)
 	{
 		String s = String(tree->GetItemText(it));
@@ -157,7 +157,7 @@ void TreeSelector::Add(const String& sValue, HTREEITEM hti, DWORD data, bool fLe
 				tvi.cChildren = 1;
 				tree->SetItem(&tvi);
 			}
-			Add(sValue.sTail("|"), it, data, fLeaf, depth + 1);
+			Add(sValue.sTail("#"), it, data, fLeaf, depth + 1);
 			return;
 		}				
 		it = tree->GetNextItem(it, TVGN_NEXT);
@@ -169,9 +169,9 @@ void TreeSelector::Add(const String& sValue, HTREEITEM hti, DWORD data, bool fLe
 	//tvi.cChildren = fDynamic && !fLeaf ? 1 : 0;
 	tvi.cChildren = !fLeaf ? 1 : 0;
 
-	tvi.hItem = it = tree->InsertItem(sValue.sHead("|").c_str(), -1,-1, hti);
+	tvi.hItem = it = tree->InsertItem(sValue.sHead("#").c_str(), -1,-1, hti);
 	tree->SetItemData(it, (DWORD) data);
-	Add(sValue.sTail("|"), it, data, fLeaf, depth + 1);
+	Add(sValue.sTail("#"), it, data, fLeaf, depth + 1);
 	/*if ( maxExpansionDepth != 0) {
 	 if ( expandAll) {
 		HTREEITEM hItem;
@@ -192,7 +192,7 @@ String TreeSelector::sBranchValue(HTREEITEM _it)
 	HTREEITEM it = _it == 0 ? tree->GetSelectedItem() : _it;
 	while( it != NULL)
 	{
-		sValue = String(tree->GetItemText(it)) + (sValue!= "" ? "|" + sValue : "");
+		sValue = String(tree->GetItemText(it)) + (sValue!= "" ? "#" + sValue : "");
 		 it = tree->GetNextItem(it, TVGN_PARENT);
 	}
 	return sValue;
@@ -220,7 +220,7 @@ DWORD  TreeSelector::GetData(HTREEITEM hti) {
 void TreeSelector::SelectNode(const String& path,HTREEITEM hti){
 	if ( !tree || path == "") return;
 	HTREEITEM it = tree->GetNextItem(hti, TVGN_CHILD);
-	String sCurTxt = path.sHead("|");
+	String sCurTxt = path.sHead("#");
 	while(it != NULL)
 	{
 		String s = String(tree->GetItemText(it));
@@ -229,7 +229,7 @@ void TreeSelector::SelectNode(const String& path,HTREEITEM hti){
 			tree->SelectItem(it);
 			return;
 		}
-		SelectNode(path.sTail("|"), it);
+		SelectNode(path.sTail("#"), it);
 		it = tree->GetNextItem(it, TVGN_NEXT);
 	}
 

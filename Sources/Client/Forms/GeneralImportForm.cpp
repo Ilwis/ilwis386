@@ -113,11 +113,11 @@ GeneralImportForm::GeneralImportForm(CWnd* parent)
 			String leaf;
 			int type = (*cur2).type;
 			if ( type == ImportFormat::ifRaster)
-				leaf = driverName + "|raster|" + (*cur2).name;
+				leaf = driverName + "#raster#" + (*cur2).name;
 			else if ( type > 2 && type < ImportFormat::ifUnknown)
-				leaf = driverName + "|vector|" + (*cur2).name;
+				leaf = driverName + "#vector#" + (*cur2).name;
 			else if ( type == ImportFormat::ifTable)
-				leaf = driverName + "|table|" + (*cur2).name;
+				leaf = driverName + "#table#" + (*cur2).name;
 
 			pages.push_back(GeneralImportForm::Page(leaf,new FieldImportPage(root)));
 		}

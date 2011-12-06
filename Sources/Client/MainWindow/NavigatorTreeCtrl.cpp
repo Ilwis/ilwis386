@@ -105,6 +105,8 @@ END_MESSAGE_MAP()
 
 NavigatorTreeCtrl::NavigatorTreeCtrl(CWnd* wParent)
 {
+	htiWMS = 0;
+	htiHistory = 0;
 	CRect rect(0,0,0,0);
 	VERIFY(AfxDeferRegisterClass(AFX_WNDCOMMCTL_TREEVIEW_REG));
 
@@ -405,6 +407,9 @@ void NavigatorTreeCtrl::OnLButtonDown(UINT nFlags, CPoint point)
 
 void NavigatorTreeCtrl::AddToHistoryNode(const String& sFn)
 {
+	if ( htiHistory ==0)
+		return;
+
 	int iImgDir = IlwWinApp()->iImage("directory");
 	TVITEM tvi;
 	tvi.hItem = InsertItem(sFn.c_str(), iImgDir, iImgDir, htiHistory, TVI_FIRST);
@@ -417,6 +422,8 @@ void NavigatorTreeCtrl::AddToHistoryNode(const String& sFn)
 
 void NavigatorTreeCtrl::AddToWMSNode(const String& sUrl)
 {
+	if ( htiWMS == 0)
+		return;
 	for(vector<FileName>::iterator cur = afn.begin(); cur != afn.end(); ++cur) {
 		if ( fCIStrEqual((*cur).sFile,sUrl))
 			return;
