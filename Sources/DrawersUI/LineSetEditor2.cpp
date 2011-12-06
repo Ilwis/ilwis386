@@ -153,7 +153,8 @@ FeatureSetEditor2("LineSetEditor2",zv, view, drw),
 curSegSplit("EditSplitCursor"),
 curSegSplitting("EditSplittingCursor"),
 rSnapDistance(0.02),
-insertionPoint(iUNDEF)
+insertionPoint(iUNDEF),
+allNodes(false)
 {
 	iFmtPnt = RegisterClipboardFormat("IlwisPoints");
 	iFmtDom = RegisterClipboardFormat("IlwisDomain");
@@ -427,6 +428,7 @@ void LineSetEditor2::fillPointClickInfo(const Coord& crd) {
 	CoordBounds cbZoom = mdoc->rootDrawer->getCoordBoundsZoom();
 	double delta = max(cbZoom.height(), cbZoom.width()) / 50.0;
 	vector<Geometry *> geoms = bmapptr->getFeatures(crd, delta);
+
 	pci = PointClickInfo();
 	pci.crdClick = crd;
 	for(int i = 0; i < geoms.size(); ++i) {
@@ -440,10 +442,6 @@ void LineSetEditor2::fillPointClickInfo(const Coord& crd) {
 		double d1 = rDist(crd,seg->getCoordinateN(after - 1));
 		double d2 = rDist(crd,seg->getCoordinateN(after));
 		if ( d1 < d2 && after < seg->getNumPoints()) {
-			//if ( selectedSegments.size() == 0 || (editorState & msSELECT) || (editorState & msMOVE)) // extending existing segment; it will be selected after this operation
-			//	pci.crdIndex = after -1;
-			//else
-			//	pci.crdIndex = seg->getNumPoints() - 1; // snapping a segment being created. It is selected so we are already busy with it.
 			pci.crdIndex = after -1;
 		} else {
 			pci.crdIndex = after;
@@ -455,6 +453,34 @@ void LineSetEditor2::fillPointClickInfo(const Coord& crd) {
 		mdoc->rootDrawer->getDrawerFor(seg,drws);
 		if ( drws.size() > 0) {
 			pci.drawer = drws[0];
+		}
+	}
+	if ( hasState(msINSERT) && selectedSegments.size() > 0) {
+		// figure out which point is closest; can be used for outsnapping
+		double rD = rSnapDistance * max(cbZoom.width(), cbZoom.height());
+		CoordBounds cb(Coord(crd.x -rD, crd.y - rD), Coord(crd.x + rD, crd.y + rD));
+		vector<Feature *> features = bmapptr->getFeatures(cb, false);
+		Segment *segSelected = selectedSegments.at(0)->seg;
+		for(int i = 0; i < features.size() && segSelected; ++i) {
+			Segment *seg = CSEGMENT(features.at(i));
+			if ( !seg)
+				continue;
+			if ( seg->getGuid() == segSelected->getGuid())
+				continue;
+			CoordinateSequence *seq = seg->getCoordinates();
+			for(int j = 0; j < seq->size(); ++j) {
+				Coord c = seq->getAt(j);
+				if ( cb.fContains(c)) {
+					pci.snapPoint = c;
+					break;
+				}
+			}
+			delete seq;
+			if ( !pci.snapPoint.fUndef())
+				break;
+
+
+
 		}
 	}
 }
@@ -504,6 +530,11 @@ void LineSetEditor2::insertVertex(bool endEdit) {
 	double snap = rSnapDistance * min(cb.width(), cb.height());
 	if ( boundaries.size() == 0 )
 		return;
+	CoordBounds cbSnap;
+	if ( !pci.snapPoint.fUndef()) {
+		Coord crd = pci.snapPoint;
+		cbSnap = CoordBounds(Coord(crd.x -snap, crd.y - snap), Coord(crd.x + snap, crd.y + snap));
+	}
 
 	CoordinateSequence *seq = boundaries[0];
 
@@ -515,7 +546,13 @@ void LineSetEditor2::insertVertex(bool endEdit) {
 	while(k < seq->size()){
 		long limit = pci.linePoint ? pci.section : pci.crdIndex;
 		if ( (k != limit + 1) || added) {
-			copyv->push_back(seq->getAt(k++));
+			Coord c = seq->getAt(k++);
+			if ( cbSnap.fValid() && cbSnap.fContains(c) && !pci.snapPoint.fUndef()) {
+				c = pci.snapPoint;
+				copyv->back() = c; // last point during an edit are always douvble as the mouse moves one of the points away from this location
+				pci.snapPoint = Coord(); // it has played its role invalidate it
+			}
+			copyv->push_back(c);
 			if ( pci.crdIndex == seq->size() - 1 && k == pci.crdIndex) { // insert beyond the end
 				long snapPoint = 0;
 				if ( !pci.crdClick.fNear(copyv->back(), snap / 10.0)) { // dont insert double points;
@@ -641,6 +678,7 @@ void LineSetEditor2::split(){
 
 
 void LineSetEditor2::updatePositions(){
+
 	if ( selectedSegments.size() > 0 ) {
 		Coord cPivot;
 		for(int i =0; i < selectedSegments.size(); ++i) {
@@ -666,6 +704,7 @@ void LineSetEditor2::updatePositions(){
 			ss->seg->PutCoords(seq);
 			PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER,bmapptr->cs());
 			ss->drawer->prepare(&pp);
+			//delete seq;
 		}
 	}
 	return ;
@@ -1104,70 +1143,26 @@ void LineSetEditor2::setActive(bool yesno) {
 
 
 //--------------------------------------
-CheckSegmentsForm::CheckSegmentsForm(CWnd *par, LayerDrawer *sdr, LineSetEditor2 *edit) : DisplayOptionsForm(sdr,par,TR("Check Segments")){
-	new PushButton(root, TR("Check Dead ends"), (NotifyProc)&CheckSegmentsForm::deadEnds);
-	new PushButton(root, TR("Check Intersections"), 0);
-	new PushButton(root, TR("Check Self overlap"), 0);
-	new PushButton(root, TR("Check all"), 0);
+CheckSegmentsForm::CheckSegmentsForm(CWnd *par, LayerDrawer *sdr, LineSetEditor2 *edit) : DisplayOptionsForm(sdr,par,TR("Check Segments")), editor(edit){
+	nodes = 1;
+	snap = edit->getSnapDistance() * 100;
+	rgNodes = new RadioGroup(root,TR("Vertices display"),&nodes);
+	new RadioButton(rgNodes,TR("Show vertices of selected segment"));
+	new RadioButton(rgNodes,TR("Show vertices of selected all segments"));
+	frSnap = new FieldInt(root,TR("Snap distance(%)"),&snap,ValueRangeInt(0,100),true);
+
+
 	create();
 }
 
-struct Dangle{
-	Segment *seg;
-	NewDrawer *drw;
-	vector<int> selCoords;
-};
-
-int CheckSegmentsForm::deadEnds(Event *ev) {
-	//SpatialDataDrawer *abdrw = (SpatialDataDrawer *)(drw->getParentDrawer());
-	//BaseMapPtr *bmp = abdrw->getBaseMap();
-	//geos::operation::polygonize::Polygonizer polygonizer;
-	//for (long i=0; i < bmp->iFeatures(); ++i) {
-	//	const ILWIS::Segment *seg = CSEGMENT(bmp->getFeature(i));
-	//	if ( !seg || !seg->fValid())
-	//		continue;
-	//	polygonizer.add((Geometry *)seg);
-	//}
-	//vector<const LineString *> *v = polygonizer.getDangles();
-	//map<String, Dangle> foundSegs;
-	//if ( v->size() > 0) {
-	//	for(int i=0; i < v->size(); ++i) {
-	//		const LineString *ls = v->at(i);
-	//		for(int  j=0; j < ls->getNumPoints(); ++j) {
-	//			Coord c = ls->getCoordinateN(j);
-	//			vector<Geometry *> geoms = bmp->getFeatures(c);
-	//			if ( geoms.size() == 0)
-	//				continue;
-	//			Segment *seg = CSEGMENT(geoms[0]);
-	//			double d;
-	//			int index = seg->nearSection(c, 0, d);
-	//			map<String, Dangle>::iterator cur = foundSegs.find(seg->getGuid());
-	//			if ( cur == foundSegs.end()) {
-	//				vector<NewDrawer *> drawers;
-	//				drw->getDrawerFor(seg, drawers);
-	//				if ( drawers.size() == 0)
-	//					continue;
-	//				Dangle dangle;
-	//				dangle.drw = drawers[0];
-	//				dangle.seg = seg;
-	//				foundSegs[seg->getGuid()] = dangle;
-	//				foundSegs[seg->getGuid()].selCoords.push_back(index);
-	//			} else {
-	//				(*cur).second.selCoords.push_back(index);
-	//			}
-
-	//		}
-	//	}
-	//	for(map<String, Dangle>::iterator cur = foundSegs.begin(); cur != foundSegs.end(); ++cur) {
-	//		int opt = (*cur).second.drw->getSpecialDrawingOption();
-	//		(*cur).second.drw->setSpecialDrawingOptions(opt, true, (*cur).second.selCoords);
-	//	}
-	//}
-	//updateMapView();
-	return 1;
-
-}
 
 void CheckSegmentsForm::apply() {
+	rgNodes->StoreData();
+	frSnap->StoreData();
+	editor->setSnapDistance((double)snap / 100.0);
+	drw->setSpecialDrawingOptions(NewDrawer::sdoSymbolLineNode, nodes != 0 );
+	PreparationParameters pp(NewDrawer::ptRENDER);
+	drw->prepare(&pp);
+	updateMapView();
 
 }

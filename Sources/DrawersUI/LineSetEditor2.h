@@ -14,6 +14,7 @@ namespace ILWIS {
 		NewDrawer *drawer;
 		long crdIndex;
 		Coord crdClick;
+		Coord snapPoint;
 		bool linePoint;
 		int section;
 	};
@@ -56,6 +57,8 @@ namespace ILWIS {
 		//bool fPasteOk();
 		bool isToolUseableFor(ILWIS::DrawerTool *tool);
 		void select(const CoordinateSequence *seq);
+		double getSnapDistance() const { return rSnapDistance; }
+		void setSnapDistance(double s) { rSnapDistance = s; }
 	private:
 		String getMenuString() const;
 		void getSettings();
@@ -113,6 +116,7 @@ namespace ILWIS {
 		PointClickInfo pci;
 		vector<UndoItem *> undoItems;
 		bool useAutoClose;
+		bool allNodes;
 
 		DECLARE_MESSAGE_MAP()
 	};
@@ -123,8 +127,11 @@ namespace ILWIS {
 		CheckSegmentsForm(CWnd *par, LayerDrawer *sdr, LineSetEditor2* ed);
 	private:
 		LineSetEditor2 *editor;
+		RadioGroup *rgNodes;
+		FieldInt *frSnap;
+		int nodes;
+		int snap;
 
-		int deadEnds(Event *ev);
 		void apply();
 	};
 }
