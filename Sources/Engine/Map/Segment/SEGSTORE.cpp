@@ -776,7 +776,29 @@ bool SegmentMapStore::removeFeature(const String& id, const vector<int>& selecte
 }
 
 vector<Feature *> SegmentMapStore::getFeatures(const CoordBounds& cb, bool complete) const {
+	vector<void *> segs;
+	vector<Feature *> features;
 
-	return vector<Feature *>();
+	geos::geom::Envelope env(cb.MinX(), cb.MinY(), cb.MaxX(), cb.MaxY());
+	spatialIndex->query(&env,segs);
+	for(int i = 0; i < segs.size(); ++i) {
+		ILWIS::Segment *s = (ILWIS::Segment *)segs.at(i);
+		if ( s && s->fValid()) {
+			CoordinateSequence *seq = s->getCoordinates();
+			bool inSide = false;
+			for(int j = 0; j < s->getNumPoints(); ++j) {
+				Coord c = s->getCoordinateN(j);
+				inSide = cb.fContains(c);
+				if ( complete && !inSide)
+					break;
+				if ( !complete && inSide)
+					break;
+			}
+			if ( inSide)
+				features.push_back(s);
+		}
+	}
+
+	return features;
 
 }
