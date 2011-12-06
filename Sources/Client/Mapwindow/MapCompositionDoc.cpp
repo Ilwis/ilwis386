@@ -1570,6 +1570,7 @@ NewDrawer* MapCompositionDoc::drAppend(const Map& rasmap, int os)
 	}
 	if (!rasmap->fCalculated() && !rasmap->fDefOnlyPossible())
 		return 0;
+	TableHistogramInfo thi(rasmap);
 	NewDrawer *dr = createBaseMapDrawer(rasmap,"RasterDataDrawer","Ilwis38", os);
 
 	ChangeState();
