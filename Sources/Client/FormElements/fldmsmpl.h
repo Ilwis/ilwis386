@@ -97,9 +97,11 @@ private:
 	int ChangeMapList(Event*);
 	int showFields(Event *);
 	void SetOKButton();
+	int checkSMS(Event *);
 	
 	FieldDataTypeCreate* fdss;
 	FieldMapList *m_fml;
+	FieldSampleSet *fss;
 	StaticText* stRemark;
 	CheckBox *cb;
 	FormEntry *entry;

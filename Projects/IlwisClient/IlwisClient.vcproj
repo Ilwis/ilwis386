@@ -58,6 +58,7 @@
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				StructMemberAlignment="4"
+				OpenMP="true"
 				UsePrecompiledHeader="0"
 				ObjectFile="$(SolutionDir)\temp\$(ConfigurationName)\$(ProjectName)\"
 				ProgramDataBaseFileName="$(SolutionDir)\temp\$(ConfigurationName)\$(ProjectName)\vc80.pdb"
@@ -159,6 +160,7 @@
 				MinimalRebuild="false"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="2"
+				OpenMP="true"
 				UsePrecompiledHeader="0"
 				ObjectFile="$(SolutionDir)\temp\$(ConfigurationName)\$(ProjectName)\"
 				ProgramDataBaseFileName="$(SolutionDir)\temp\$(ConfigurationName)\$(ProjectName)\vc80.pdb"
@@ -599,11 +601,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\amesd.ico"
+				RelativePath="..\..\Sources\Client\Resources\amesd.ico"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Client\Resources\amesd.ico"
+				RelativePath=".\amesd.ico"
 				>
 			</File>
 			<File
@@ -975,11 +977,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Client\Resources\esa.ico"
+				RelativePath=".\esa.ico"
 				>
 			</File>
 			<File
-				RelativePath=".\esa.ico"
+				RelativePath="..\..\Sources\Client\Resources\esa.ico"
 				>
 			</File>
 			<File
@@ -1107,11 +1109,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\GNC.ico"
+				RelativePath="..\..\Sources\Client\Resources\GNC.ico"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Client\Resources\GNC.ico"
+				RelativePath=".\GNC.ico"
 				>
 			</File>
 			<File

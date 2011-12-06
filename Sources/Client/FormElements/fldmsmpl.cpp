@@ -67,12 +67,13 @@ int FieldSampleSetC::CreateSampleSet(void*)
 FormCreateSampleSet::FormCreateSampleSet(CWnd* wPar, String* sm,
                                          const String& sMpr, const String& sMpl, bool createOnly)
 : FormWithDest(wPar, TR("Create Sample Set")),
-sMap(sm), sBgMap(sMpr), sMapList(sMpl), useExisting(true)
+sMap(sm), sBgMap(sMpr), sMapList(sMpl), useExisting(true), fss(0)
 {
 	iImg = IlwWinApp()->iImage(".sms");
 	if (!createOnly) {
 		cb = new CheckBox(root,TR("Use existing?"),&useExisting);
-		new FieldSampleSet(cb,TR("Sample set"),sMap);
+		fss = new FieldSampleSet(cb,TR("Sample set"),sMap);
+		fss->SetCallBack((NotifyProc)&FormCreateSampleSet::checkSMS);
 		cb->SetCallBack((NotifyProc)&FormCreateSampleSet::showFields);
 	}
 	entry = new FieldGroup(root);
@@ -94,6 +95,16 @@ sMap(sm), sBgMap(sMpr), sMapList(sMpl), useExisting(true)
 	create();
 }
 
+int FormCreateSampleSet::checkSMS(Event *) {
+	if ( fss) {
+		fss->StoreData();
+		if ( *sMap != "")
+			EnableOK();
+		else
+			DisableOK();
+	}
+	return 1;
+}
 int FormCreateSampleSet::showFields(Event *) {
 	cb->StoreData();
 	
@@ -163,11 +174,14 @@ int FormCreateSampleSet::ChangeMapList(Event*)
 
 int FormCreateSampleSet::exec()
 {
-  FormWithDest::exec();
-  if ( useExisting)
-	  return 1;
-
   FileName  fnSMS = FileName(*sMap, ".sms");
+  FormWithDest::exec();
+  if ( useExisting) {
+	/*  SampleSet ms(fnSMS);
+	  ms->fInitStat();*/
+	  return 1;
+  }
+
   try {
     Domain dm(sDom);
     FileName fnML(sMapList);
@@ -175,6 +189,7 @@ int FormCreateSampleSet::exec()
     SampleSet ms(fnSMS, ml, dm);
     ms->sDescription = sDescr;
     ms->fInitStat();
+	ms->Store();
   }
   catch (ErrorObject& err) {
     err.Show(TR("Create Sample Set"));
