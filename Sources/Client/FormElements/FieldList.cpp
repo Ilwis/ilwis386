@@ -179,3 +179,7 @@ void FieldLister::show(int sw)
 void FieldLister::getSelectedIndexes(vector<int>& indexes) {
 	m_clctrl.getSelectedIndex(indexes);
 }
+
+void FieldLister::setSelectedIndexes(const vector<int>& indexes) {
+	m_clctrl.setSelectedIndexes(indexes);
+}

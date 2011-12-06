@@ -80,6 +80,7 @@ public:
 	void CallChangeCallback();
 	void show(int sw);
 	void getSelectedIndexes(vector<int>& indexes);
+	void setSelectedIndexes(const vector<int>& indexes);
 	void setReadOnly(bool yesno) { m_clctrl.setReadOnly(yesno); }
 
 protected:
