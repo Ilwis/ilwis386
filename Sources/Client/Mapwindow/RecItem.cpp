@@ -413,7 +413,17 @@ const String& RecItemMap::sValue(int iWidth)   // meaning
 	}
 	if (!fStrValid) {
 		fStrValid = true;
-		sVal = map()->sValue(cwcs,iWidth);
+		int count = 0;
+		sVal="";
+		vector<String> values = map()->vsValue(cwcs,iWidth);
+		for(int i = 0; i < values.size(); ++i) {
+			String s = values[i].sTrimSpaces();
+			if ( s == "?")
+				continue;
+			sVal += count == 0 ? s : ";" + s;
+			++count;
+		}
+		//sVal = map()->sValue(cwcs,iWidth);
 		DomainValue* dv = map()->dm()->pdv();
 		if (dv && dv->fUnit())
 			sVal = String("%S %S", sVal, dv->sUnit());
