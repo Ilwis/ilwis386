@@ -74,6 +74,7 @@ public:
   void _export Remove(int index);
   void _export Clear();
   virtual String _export sName(int id);
+   _export void AddStrings(const Array<String>& as);
 private:  
    int OnKeyUp( Event* ev);	
 	virtual void _export DrawItem(Event* ev);

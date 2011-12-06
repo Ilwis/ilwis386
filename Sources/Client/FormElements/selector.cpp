@@ -172,6 +172,13 @@ void StringArrayLister:: resetContent(const Array<String>& arr){
   }
 }
 
+void StringArrayLister::AddStrings(const Array<String>& as)
+{
+	Clear();
+	for (int i = 0; i < as.iSize(); ++i)
+		lb->AddString(as[i].c_str());
+}
+
 void StringArrayLister::AddString(const String& s, int iWhere)
 {
 	if ( iWhere != iUNDEF)
