@@ -80,7 +80,7 @@ int ObjectInfo::ReadElement(const char* sSection, const char* sEntry,
 		return 0;
 	if ( IlwisObject::iotObjectType( filename) == IlwisObject::iotANY )
 		return 0;
-	String s = filename.sFullName();
+	String s = filename.sPhysicalPath();
 	const char* sFileName = s.c_str();
 	int iRet;
 	if (filename.sSectionPostFix.length() == 0)
