@@ -95,6 +95,21 @@ bool LineDrawer::draw( const CoordBounds& cbArea) const{
 			glVertex3d( c.x, c.y, z);
 		}
 		glEnd();
+		if ( specialOptions & NewDrawer::sdoSymbolLineNode) {
+			double symbolScale = cbZoom.width() / 250;
+			for(int i=0; i<points->size(); ++i) {
+				Coordinate c = points->getAt(i);
+				double z = is3D && is3DPossible ? c.z : z0;
+				glBegin(GL_LINE_STRIP);						
+				glVertex3f( c.x - symbolScale, c.y - symbolScale,z);	
+				glVertex3f( c.x - symbolScale, c.y + symbolScale,z);	
+				glVertex3f( c.x + symbolScale, c.y + symbolScale,z);
+				glVertex3f( c.x + symbolScale, c.y - symbolScale,z);
+				glVertex3f( c.x - symbolScale, c.y - symbolScale,z);
+				glEnd();
+			}
+
+		}
 		if ( is3D) {
 			if ( (specialOptions & NewDrawer::sdoExtrusion) != 0) {
 				glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(), transp);

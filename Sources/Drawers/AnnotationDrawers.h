@@ -14,6 +14,7 @@ namespace ILWIS {
 class _export AnnotationDrawers : public ComplexDrawer {
 public:
 	AnnotationDrawers(DrawerParameters *parms);
+	void prepare(PreparationParameters *pp);
 };
 
 class _export AnnotationDrawer : public ComplexDrawer{

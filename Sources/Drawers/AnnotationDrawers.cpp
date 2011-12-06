@@ -35,6 +35,16 @@ AnnotationDrawers::AnnotationDrawers(DrawerParameters *parms) : ComplexDrawer(pa
 	id = "AnnotationDrawers";
 }
 
+void AnnotationDrawers::prepare(PreparationParameters *pp) {
+	vector<NewDrawer *> allDrawers;
+	getDrawers(allDrawers);
+	for(int i = 0; i < allDrawers.size(); ++i) {
+		if ( allDrawers[i]) {
+			allDrawers[i]->prepare(pp);
+		}
+	}
+}
+
 //---------------------------------------------------------
 AnnotationDrawer::AnnotationDrawer(DrawerParameters *parms, const String& name) : ComplexDrawer(parms,name) 
 {
@@ -49,6 +59,8 @@ String AnnotationDrawer::store(const FileName& fnView, const String& parentSecti
 void AnnotationDrawer::load(const FileName& fnView, const String& parentSection){
 	ComplexDrawer::load(fnView, parentSection);
 }
+
+
 
 //-------------------------------------------------------
 AnnotationLegendDrawer::AnnotationLegendDrawer(DrawerParameters *parms, const String& name) : 
@@ -401,6 +413,9 @@ void AnnotationValueLegendDrawer::prepare(PreparationParameters *pp) {
 			texts->addDrawer(txt);
 		}
 	}
+	if ( pp->type & NewDrawer::ptOFFSCREENSTART || pp->type & NewDrawer::ptOFFSCREENEND) {
+		texts->prepare(pp);
+	}
 }
 
 bool AnnotationValueLegendDrawer::draw( const CoordBounds& cbArea) const{
@@ -721,6 +736,9 @@ void AnnotationBorderDrawer::prepare(PreparationParameters *pp){
 		}
 
 
+	}
+	if ( pp->type & NewDrawer::ptOFFSCREENSTART || pp->type & NewDrawer::ptOFFSCREENEND) {
+		texts->prepare(pp);
 	}
 }
 

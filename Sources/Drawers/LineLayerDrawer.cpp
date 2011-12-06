@@ -84,6 +84,8 @@ void LineLayerDrawer::prepare(PreparationParameters *parm){
 		for(int i=0; i < drawers.size(); ++i) {
 			LineDrawer *ld = (LineDrawer *)drawers.at(i);
 			if ( ld) {
+				bool setBoxes = (specialOptions & NewDrawer::sdoSymbolLineNode) != 0;
+				ld->setSpecialDrawingOptions(NewDrawer::sdoSymbolLineNode, setBoxes );
 				LineProperties *props = (LineProperties *)ld->getProperties();
 				if (!lproperties.ignoreColor)
 					props->drawColor = lproperties.drawColor;
