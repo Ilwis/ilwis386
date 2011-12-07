@@ -35,6 +35,7 @@ class _export SpatialDataDrawer : public ComplexDrawer {
 		virtual String description() const;
 		virtual String iconName(const String& subtype="?") const;
 		virtual CoordBounds cb();
+		IlwisObjectPtr *getSourceSupportObject(IlwisObject::iotIlwisObjectType type);
 
 	protected:
 		Table attTable;
