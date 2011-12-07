@@ -260,7 +260,7 @@ void PointDrawer::drawEllipse(const SVGAttributes* attributes, double z) const{
 		glEnd();
 	}
 
-	Color scolor = attributes->strokeColor.fEqual(colorUNDEF) ? properties.drawColor :  attributes->strokeColor;
+	Color scolor = attributes->strokeColor.fEqual(colorUSERDEF) ? properties.drawColor :  attributes->strokeColor;
 	glColor4d(scolor.redP(), scolor.greenP(), scolor.blueP(), transp);
 	glLineWidth(properties.thickness!= 0 ? properties.thickness : attributes->strokewidth);
 	glBegin(GL_LINE_LOOP);
@@ -272,7 +272,7 @@ void PointDrawer::drawEllipse(const SVGAttributes* attributes, double z) const{
 }
 
 void PointDrawer::drawLine(const SVGAttributes* attributes, double z) const{
-	Color scolor = attributes->strokeColor.fEqual(colorUNDEF) ? properties.drawColor :  attributes->strokeColor;
+	Color scolor = attributes->strokeColor.fEqual(colorUSERDEF) ? properties.drawColor :  attributes->strokeColor;
 	double transp = attributes->opacity * getTransparency();
 	glColor4d(scolor.redP(), scolor.greenP(), scolor.blueP(), transp);
 
