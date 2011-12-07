@@ -28,8 +28,8 @@
 using namespace ILWIS;
 
 //------------------------------------------------------
-TrackMarker::TrackMarker(DrawerParameters *parms) : 
-PointDrawer(parms,"TrackMarker")
+TrackMarker::TrackMarker(DrawerParameters *parms,TrackLine *_line) : 
+PointDrawer(parms,"TrackMarker"), line(_line)
 {
 }
 
@@ -38,9 +38,18 @@ TrackMarker::~TrackMarker() {
 
 
 bool TrackMarker::draw( const CoordBounds& cbArea) const{
+	if (!isActive())
+		return false;
+
 	glClearColor(1.0,1.0,1.0,0.0);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
+	PointProperties *pprops = (PointProperties *)( const_cast<TrackMarker *>(this)->getProperties());
+	if ( pprops && line) {
+		LineProperties *lprops = (LineProperties *)line->getProperties();
+		if ( lprops)
+			pprops->drawColor = lprops->drawColor;
+	}
 	PointDrawer::draw(cbArea);
 	glDisable(GL_BLEND);
 
@@ -49,6 +58,7 @@ bool TrackMarker::draw( const CoordBounds& cbArea) const{
 
 void TrackMarker::prepare(PreparationParameters *p){
 	properties.symbol = "crosshair";
+	properties.scale = 1.5;
 	setSpecialDrawingOptions(NewDrawer::sdoExtrusion, true);
 	PointDrawer::prepare(p);
 }
@@ -113,21 +123,37 @@ bool TrackProfileTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	SetDrawerTool *setDrawerTool = dynamic_cast<SetDrawerTool *>(tool);
 	if (!layerDrawerTool && !setDrawerTool)
 		return false;
-	//LayerDrawer *ldrw = dynamic_cast<LayerDrawer *>(layerDrawerTool->getDrawer());
-	//if ( !ldrw)
-	//	return false;
+
+	NewDrawer *nddr = setDrawerTool ? setDrawerTool->getDrawer() : layerDrawerTool->getDrawer()->getParentDrawer();
+	SpatialDataDrawer *sddr = dynamic_cast<SpatialDataDrawer *>(nddr);
+	if(!sddr)
+		return false;
+
+	Domain dm;
+	dm.SetPointer(sddr->getSourceSupportObject(IlwisObject::iotDOMAIN));
+	if (!dm.fValid() )
+		return false;
+
+	bool usable= dm->pdv() || dm->pdc() || dm->pdi() || dm->pdbool();
+	if (!usable)
+		return false;
+
 	parentTool = tool;
 	return true;
 }
 
 HTREEITEM TrackProfileTool::configure( HTREEITEM parentItem) {
 	DrawerParameters dp(drawer->getRootDrawer(), drawer);
+	if ( line)
+		delete line;
 	line = new TrackLine(&dp);
 	line->setActive(false);
 	drawer->getRootDrawer()->addPostDrawer(730,line);
 
 	DrawerParameters dp2(drawer->getRootDrawer(), drawer);
-	point = new TrackMarker(&dp2);
+	if ( point)
+		delete point;
+	point = new TrackMarker(&dp2, line);
 	point->setActive(false);
 	PreparationParameters pp(NewDrawer::ptRENDER);
 	point->prepare(&pp);

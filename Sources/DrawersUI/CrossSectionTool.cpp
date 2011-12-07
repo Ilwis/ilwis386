@@ -83,12 +83,26 @@ bool CrossSectionTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	LayerDrawer *ldrw = dynamic_cast<LayerDrawer *>(layerDrawerTool->getDrawer());
 	if ( !ldrw)
 		return false;
+
+	SpatialDataDrawer *sddr = dynamic_cast<SpatialDataDrawer *>(ldrw->getParentDrawer());
+	if ( !sddr)
+		return false;
+	Domain dm;
+	dm.SetPointer(sddr->getSourceSupportObject(IlwisObject::iotDOMAIN));
+	if (!dm.fValid() )
+		return false;
+
+	bool usable= dm->pdv() || dm->pdi() || dm->pdbool();
+	if (!usable)
+		return false;
 	parentTool = tool;
 	return true;
 }
 
 HTREEITEM CrossSectionTool::configure( HTREEITEM parentItem) {
 	DrawerParameters dp(drawer->getRootDrawer(), drawer);
+	if ( markers)
+		delete markers;
 	markers = new ProbeMarkers(&dp);
 	markers->setActive(false);
 	drawer->getRootDrawer()->addPostDrawer(732,markers);

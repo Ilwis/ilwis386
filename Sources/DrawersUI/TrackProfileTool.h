@@ -55,6 +55,16 @@ private:
 		bool fDown;
 	};
 
+	class TrackMarker : public PointDrawer {
+	public:
+		TrackMarker(ILWIS::DrawerParameters *parms,TrackLine *_line);
+		~TrackMarker();
+		virtual bool draw( const CoordBounds& cbArea=CoordBounds()) const;
+		void prepare(PreparationParameters *);
+		private:
+			TrackLine *line;
+	};
+
 	class TrackLine : public LineDrawer {
 	public:
 		TrackLine(ILWIS::DrawerParameters *parms);
@@ -64,14 +74,7 @@ private:
 	private:
 	};
 
-	class TrackMarker : public PointDrawer {
-	public:
-		TrackMarker(ILWIS::DrawerParameters *parms);
-		~TrackMarker();
-		virtual bool draw( const CoordBounds& cbArea=CoordBounds()) const;
-		void prepare(PreparationParameters *);
-		private:
-	};
+
 
 
 	class ChooseTrackProfileForm : public DisplayOptionsForm2 {
