@@ -195,7 +195,7 @@ void SimpleMapPaneView::OnInitialUpdate()
 
 Coord SimpleMapPaneView::crdPnt(zPoint pnt)
 {
-	throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
+	//throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
 	//Coord crd;
 	//double rRow, rCol;
 	//Pnt2RowCol(pnt, rRow, rCol);
@@ -205,7 +205,7 @@ Coord SimpleMapPaneView::crdPnt(zPoint pnt)
 	//catch (...) {
 	//	crd = Coord();
 	//}  
-	//return crd;
+	return Coord();
 }
 
 zPoint SimpleMapPaneView::pntPos(Coord crd)
@@ -424,7 +424,12 @@ void SimpleMapPaneView::OnMouseMove(UINT nFlags, CPoint point)
 				msb->ShowRowCol(rc);
 				msb->ShowCoord(csy->sValue(Coord(0.5 + c.x, 0.5 - c.y))); // subpixel precision version
 			} else {
-				String v = useMetricCoords ? String("%f, %f", c.y, c.x) : csy->sValue(c); 
+				String v;
+				if ( csy->pcsLatLon())
+					v =  useMetricCoords ? String("%f, %f", c.y, c.x) : csy->sValue(c); 
+				else
+					v = csy->sValue(c);
+
 				msb->ShowCoord(v);
 				if (csy->pcsDirect()) {
 					CoordSystemDirect *pcsd = csy->pcsDirect();
