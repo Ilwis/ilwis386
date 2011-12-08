@@ -244,12 +244,12 @@ int MapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	bbDataWindow.EnableDocking(CBRS_ALIGN_TOP|CBRS_ALIGN_BOTTOM);
 	DockControlBar(&bbDataWindow, AFX_IDW_DOCKBAR_TOP);
 
-	barScale.Create(this);
-	RecalcLayout();
+	//barScale.Create(this);
+	//RecalcLayout();
 	CRect rect;
-	bbDataWindow.GetWindowRect(&rect);
-	rect.OffsetRect(1,0);
-	DockControlBar(&barScale,AFX_IDW_DOCKBAR_TOP,rect);
+	//bbDataWindow.GetWindowRect(&rect);
+	//rect.OffsetRect(1,0);
+	//DockControlBar(&barScale,AFX_IDW_DOCKBAR_TOP,rect);
 
 	ltb.Create(this, 124, CSize(200,200));
 	ltb.SetWindowText(TR("Layer Management").c_str());
@@ -499,16 +499,16 @@ void MapWindow::InitSettings()
 
 void MapWindow::OnScaleControl()
 {
-	if (barScale.IsWindowVisible())
-		ShowControlBar(&barScale,FALSE,FALSE);
-	else
-		ShowControlBar(&barScale,TRUE,FALSE);
+	//if (barScale.IsWindowVisible())
+	//	ShowControlBar(&barScale,FALSE,FALSE);
+	//else
+	//	ShowControlBar(&barScale,TRUE,FALSE);
 }
 
 void MapWindow::OnUpdateScaleControl(CCmdUI* pCmdUI)
 {
-	bool fCheck = barScale.IsWindowVisible() != 0;
-	pCmdUI->SetCheck(fCheck);
+	//bool fCheck = barScale.IsWindowVisible() != 0;
+	//pCmdUI->SetCheck(fCheck);
 }
 
 void MapWindow::InitialUpdate(CDocument* pDoc, BOOL bMakeVisible)
@@ -599,8 +599,8 @@ void MapWindow::OnFullScreen() {
 				fullScreen = true;
 				SetMenuBarVisibility(AFX_MBV_DISPLAYONFOCUS | AFX_MBV_DISPLAYONF10);
 				status->ShowWindow(SW_HIDE);
-				if ( barScale.GetSafeHwnd())
-					barScale.ShowWindow(SW_HIDE);
+				//if ( barScale.GetSafeHwnd())
+				//	barScale.ShowWindow(SW_HIDE);
 				if ( bbDataWindow.GetSafeHwnd())
 					bbDataWindow.ShowWindow(SW_HIDE);
 				if ( ltb.GetSafeHwnd())
@@ -629,8 +629,8 @@ void MapWindow::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		if ( fullScreen) {
 			SetMenuBarVisibility(AFX_MBV_KEEPVISIBLE);
 			status->ShowWindow(SW_SHOW);
-			if ( barScale.GetSafeHwnd())
-				barScale.ShowWindow(SW_SHOW);
+			//if ( barScale.GetSafeHwnd())
+			//	barScale.ShowWindow(SW_SHOW);
 			if ( bbDataWindow.GetSafeHwnd())
 				bbDataWindow.ShowWindow(SW_SHOW);
 			if ( ltb.GetSafeHwnd())

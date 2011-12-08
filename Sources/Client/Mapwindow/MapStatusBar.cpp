@@ -117,13 +117,13 @@ void MapStatusBar::Init(StatusBarItem sbi)
 		int iWidth = dcScreen.GetTextExtent("9999,9999").cx;
 		SetPaneInfo(iRowCol, 0, SBPS_NORMAL, iWidth);
 	}
-	int iWidth = dcScreen.GetTextExtent("(123456789.12,123456789.12)").cx;
+	int iWidth = dcScreen.GetTextExtent("(000123456789.12,000123456789.12)").cx;
 	if (iCoord > 0) 
 		SetPaneInfo(iCoord, 0, SBPS_NORMAL, iWidth);
 	if (iRelCoord > 0) 
 		SetPaneInfo(iRelCoord, 0, SBPS_NORMAL, iWidth);
 	if (iLatLon > 0) {
-		int iWidth = dcScreen.GetTextExtent("12°34'56.78\" N,123°45'67.89\" E").cx;
+		int iWidth = dcScreen.GetTextExtent("12°34'56.780\" N,123°45'67.890\" E").cx;
 		SetPaneInfo(iLatLon, 0, SBPS_NORMAL, iWidth);
 	}
 	if (hOldFont != NULL)
