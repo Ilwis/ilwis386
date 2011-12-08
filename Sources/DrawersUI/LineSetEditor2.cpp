@@ -126,6 +126,7 @@ SelectedSegment *SelectedSegments::add(Segment *seg, NewDrawer *drw, int index, 
 }
 
 BEGIN_MESSAGE_MAP(LineSetEditor2, FeatureSetEditor2)
+	ON_COMMAND(ID_SEGPOLYGONIZE, OnPologonize)
 	ON_COMMAND(ID_UNDO, OnUndo)
 	ON_UPDATE_COMMAND_UI(ID_UNDO, OnUpdateUndo)
 	ON_COMMAND(ID_REDO, OnRedo)
@@ -142,6 +143,7 @@ END_MESSAGE_MAP()
 
 #define sMen(ID) ILWSF("men",ID).c_str()
 #define addmen(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
+#define addMenu(ID) men.AppendMenu(MF_POPUP, (UINT)men.GetSafeHmenu(), sMen(ID)); men.Detach();
 #define addSub(ID) menSub.AppendMenu(MF_STRING, ID, sMen(ID)); 
 
 DrawerTool *createLineSetEditor2(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) {
@@ -215,11 +217,6 @@ HTREEITEM LineSetEditor2::configure( HTREEITEM parentItem) {
 	item = new DisplayOptionTreeItem(tree,hitInsert,drawer);
 	item->setCheckAction(this, 0, (DTSetCheckFunc) &LineSetEditor2::checkSnap);
 	insertItem(TR("Enable Snap"),"Snap",item,fAutoSnap);
-	//item = new DisplayOptionTreeItem(tree,hitSelect,drawer);
-	//item->setCheckAction(this, 0, (DTSetCheckFunc) &LineSetEditor2::checkUndefined);
-	//insertItem(TR("Mark Undefined"),"Undefined",item,fAutoSnap);
-
-
 
 	CMenu men;
 	CMenu menSub;
@@ -236,10 +233,7 @@ HTREEITEM LineSetEditor2::configure( HTREEITEM parentItem) {
 
 	DataWindow* dw = mdoc->mpvGetView()->dwParent();
 	if (dw) {
-		//dw->bbDataWindow.LoadButtons("segedit.but");
-		//dw->RecalcLayout();
 		mdoc->mpvGetView()->mwParent()->UpdateMenu(hmenFile, hmenEdit);
-		//mdoc->mpvGetView()->UpdateWindow();
 	}
 	return htiNode;
 }
@@ -1139,6 +1133,11 @@ void LineSetEditor2::setActive(bool yesno) {
 	if ( bmapptr->fChanged)
 		bmapptr->Store();
 	mdoc->mpvGetView()->Invalidate();
+}
+
+void LineSetEditor2::OnPologonize() {
+	IlwWinApp()->Execute("segpol " + bmapptr->fnObj.sRelative(true));
+
 }
 
 
