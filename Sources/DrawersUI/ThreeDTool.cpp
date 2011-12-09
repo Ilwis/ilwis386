@@ -116,17 +116,16 @@ DisplayOptionsForm(dr,wPar,TR("3D Options")), sourceIndex(0)
 	if ( bmp->fTblAtt())
 		attTable = bmp->tblAtt();
 	mapName = bmp->fnObj.sRelative();
+	sourceIndex = (int)layerDrawer->getZMaker()->getSourceType();
 	rg = new RadioGroup(root,TR("Data Source"),&sourceIndex);
-	new RadioButton(rg,"Self");
+	new RadioButton(rg,TR("None"));
+	new RadioButton(rg,TR("Self"));
 	RadioButton *rbMap = new RadioButton(rg,TR("Raster Map"));
 	fmap = new FieldMap(rbMap,"",&mapName, new MapListerDomainType(dmVALUE|dmIMAGE));
 	rbMaplist = new RadioButton(rg,TR("Maplist"));
 	fmaplist = new FieldMapList(rbMaplist, "", &mapName,new MapListerDomainType(dmVALUE|dmIMAGE)); 
-	//if ( attTable.fValid()) {
-		rbTable = new RadioButton(rg,TR("Attribute column"));
-		FieldColumn *fcol = new FieldColumn(rbTable,"",attTable,&colName,dmVALUE | dmIMAGE);
-	//}
-
+	rbTable = new RadioButton(rg,TR("Attribute column"));
+	FieldColumn *fcol = new FieldColumn(rbTable,"",attTable,&colName,dmVALUE | dmIMAGE);
 
 	rg->SetIndependentPos();
 
@@ -152,29 +151,26 @@ void DisplayZDataSourceForm::apply() {
 	rg->StoreData();
 
 	ILWIS::LayerDrawer *layerDrawer = dynamic_cast<ILWIS::LayerDrawer *>(drw);
+	
+	layerDrawer->getZMaker()->setSourceType((ZValueMaker::SourceType)sourceIndex);
+
+
 	SetDrawer *setDrawer = dynamic_cast<SetDrawer *>(drw);
 	if ( setDrawer) {
 		setDrawer->getZMaker()->setRange(setDrawer->getStretchRangeReal());
 		for(int i = 0 ; i < setDrawer->getDrawerCount(); ++i) {
 			RasterLayerDrawer *layerDrawer = (RasterLayerDrawer *)setDrawer->getDrawer(i);
 			MapList mpl;
-			if ( sourceIndex == 0) {
+			if ( sourceIndex == 1) {
 				mpl = *((MapList *)(setDrawer->getDataSource())); 
-			} else if ( sourceIndex == 1){
+			} else if ( sourceIndex == 2){
 				updateDrawer(layerDrawer, BaseMap(FileName(mapName)));
 				continue;
-			} else if ( sourceIndex == 2){
+			} else if ( sourceIndex == 3){
 				mpl = MapList(FileName(mapName));
 			}
 			Map mp = mpl[i];
 			updateDrawer(layerDrawer, mp);
-			/*RangeReal tempRange = mp->dvrs().rrMinMax();
-			if ( tempRange.fValid()) {
-				RangeReal rr = adrw->getZMaker()->getRange();
-				rr += tempRange.rLo();
-				rr += tempRange.rHi();
-				adrw->getZMaker()->setRange(rr);
-			}*/
 		}
 	} else {
 		updateDrawer( layerDrawer, BaseMap(mapName));
@@ -184,11 +180,11 @@ void DisplayZDataSourceForm::apply() {
 }
 
 void DisplayZDataSourceForm::updateDrawer(LayerDrawer *layerDrawer, const BaseMap& basemap) {
-	if ( mapName != "" && sourceIndex < 3) {
+	if ( mapName != "" && sourceIndex < 4) {
 		layerDrawer->getZMaker()->setDataSourceMap(basemap);
 		PreparationParameters pp(NewDrawer::pt3D);
 		layerDrawer->prepare(&pp);
-	} else if ( colName != "" && sourceIndex == 3) {
+	} else if ( colName != "" && sourceIndex == 4) {
 		layerDrawer->getZMaker()->setTable(attTable,colName);
 		PreparationParameters pp(NewDrawer::pt3D);
 		layerDrawer->prepare(&pp);
