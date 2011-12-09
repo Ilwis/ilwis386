@@ -49,7 +49,7 @@ DEMTriangulator::DEMTriangulator(ZValueMaker * zMaker, BaseMapPtr * drapeMapPtr,
 		iSizeY = mp->rcSize().Row;
 
 		if (fSelfDrape) {
-			width = pow(2, max(6, ceil(log((double)iSizeX)/log(2.0))));
+			width = pow(2, max(6, ceil(log((double)iSizeX)/log(2.0)))); // use same formula as the one for texture size; this width/height is for determining texture coordinates
 			height = pow(2, max(6, ceil(log((double)iSizeY)/log(2.0))));
 		} else {
 			RowCol rc = drapemp->rcSize();
@@ -937,8 +937,8 @@ void DEMTriangulator::AddVertex(int x, int y, double rHeight)
 	mp->gr()->RowCol2Coord(0.5 + y, 0.5 + x, c);
 	double s, t;
 	if (fSelfDrape) {
-		s = x / (double)width;
-		t = y / (double)height;
+		s = (0.5 + x) / (double)width;
+		t = (0.5 + y) / (double)height;
 	} else {
 		Coord c1 = csyDrape->cConv(csyMap, c);
 		double row;
