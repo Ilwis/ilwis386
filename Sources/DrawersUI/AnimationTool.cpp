@@ -60,7 +60,7 @@ HTREEITEM AnimationTool::configure( HTREEITEM parentItem) {
 			MapWindow *parent = (MapWindow *)props.mdoc->mpvGetView()->GetParent();
 			props.animBar->Create(parent);
 			CRect rect;
-			parent->barScale.GetWindowRect(&rect);
+			parent->bbDataWindow.GetWindowRect(&rect);
 			rect.OffsetRect(1,0);
 			parent->DockControlBar(props.animBar,AFX_IDW_DOCKBAR_TOP, rect);
 		}
