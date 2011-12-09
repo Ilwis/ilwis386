@@ -12,8 +12,9 @@ using namespace ILWIS;
 
 #define DEFAULT_SCALE 1.0
 
-ZValueMaker::ZValueMaker(NewDrawer *drw)  : scalingType(zvsNONE), self(true),threeDPossible(false),offset(0), zscale(DEFAULT_SCALE), zOrder(0), fakeZ(0), isSameCsy(true), associatedDrawer(drw){
+ZValueMaker::ZValueMaker(NewDrawer *drw)  : scalingType(zvsNONE),threeDPossible(false),offset(0), zscale(DEFAULT_SCALE), zOrder(0), fakeZ(0), isSameCsy(true), associatedDrawer(drw){
 	isSetDrawer = false;
+	sourceType = styNONE;
 	NewDrawer *parentDrw = associatedDrawer->getParentDrawer();
 	if (parentDrw && !associatedDrawer->isSimple() && ((ComplexDrawer *)parentDrw)->isSet())
 		isSetDrawer = true;
@@ -24,13 +25,17 @@ void ZValueMaker::setDataSourceMap(const BaseMap& mp){
 	addRange(mp);
 	table = Table();
 	type = IlwisObject::iotObjectType(datasourcemap->fnObj);
-	self =  spatialsourcemap == datasourcemap;
+	if ( sourceType == styNONE) // first set the source type before being able to make changes here
+		sourceType = spatialsourcemap == datasourcemap ? stySELF : styMAP;
 	offset = 0;
 	isSameCsy = spatialsourcemap->cs() == datasourcemap->cs();
 	zscale = DEFAULT_SCALE;
 }
 
 void ZValueMaker::addRange(const BaseMap& mp) {
+	if ( !mp.fValid())
+		return;
+
 	RangeReal tempRange = mp->rrMinMax(BaseMapPtr::mmmCALCULATE);
 	if ( !tempRange.fValid() && cbLimits.fValid()) {
 		range = RangeReal(0,min(cbLimits.width(), cbLimits.height()));
@@ -60,6 +65,7 @@ void ZValueMaker::setTable(const Table& tbl, const String& colName) {
 	type = IlwisObject::iotObjectType(table->fnObj);
 	offset = 0;
 	zscale = DEFAULT_SCALE;
+	sourceType = styTABLE;
 }
 
 void ZValueMaker::store(const FileName& fnView, const String& section) {
@@ -73,7 +79,7 @@ void ZValueMaker::store(const FileName& fnView, const String& section) {
 		ObjectInfo::WriteElement(section.c_str(),"Datasourcemap",fnView, datasourcemap);
 	if ( range.fValid())
 		ObjectInfo::WriteElement(section.c_str(),"Range",fnView, range);
-	ObjectInfo::WriteElement(section.c_str(),"Self",fnView, self);
+	ObjectInfo::WriteElement(section.c_str(),"SourceType",fnView, sourceType);
 	ObjectInfo::WriteElement(section.c_str(),"Zscale",fnView, zscale);
 	ObjectInfo::WriteElement(section.c_str(),"Offset",fnView, offset);
 }
@@ -97,16 +103,23 @@ void ZValueMaker::load(const FileName& fnView, const String& section) {
 		setDataSourceMap(BaseMap(fn));
 	}
 	ObjectInfo::ReadElement(section.c_str(),"Range",fnView, range);
-	ObjectInfo::ReadElement(section.c_str(),"Self",fnView, self);
+	long ty = (long)sourceType;
+	ObjectInfo::ReadElement(section.c_str(),"SourceType",fnView, ty );
 	ObjectInfo::ReadElement(section.c_str(),"Zscale",fnView, zscale);
 	ObjectInfo::ReadElement(section.c_str(),"Offset",fnView, offset);
 }
 
 void ZValueMaker::setTable(const Table& tbl, const vector<String>& names) {
 	table = tbl;
+	if ( !tbl.fValid())
+		return;
+
 	columns.clear();
 	for(int i = 0; i < names.size(); ++i) {
 		Column column = tbl->col(names[i]);
+		if ( !column.fValid())
+			continue;
+
 		columns.push_back(column);
 		threeDPossible = column->dm()->dmt() != dmtVALUE ? false : true;
 		datasourcemap = BaseMap();
@@ -133,33 +146,37 @@ void ZValueMaker::setRange(const RangeReal& rr) {
 }
 
 double ZValueMaker::getValue(const Coord& crd, Feature *f ){
+	if ( sourceType == styNONE)
+		return offset; 
 
-	if (!threeDPossible)
+	if (!threeDPossible && spatialsourcemap.fValid())
 		return spatialsourcemap->cb().width() * 0.01;
 	double value = 0;
-	if (self && f && type != IlwisObject::iotRASMAP) {
+	if (sourceType == stySELF && f && type != IlwisObject::iotRASMAP) {
 		//if (!datasourcemap->dvrs().fRawAvailable())
 			value =  f->rValue();
 		//else
 		//	value = datasourcemap->dvrs().rValue(f->rValue());
 	}
-	if (self && type == IlwisObject::iotRASMAP){
+	if (sourceType == stySELF && type == IlwisObject::iotRASMAP){
 		value = spatialsourcemap->rValue(crd);
 	}
-	if ( type == IlwisObject::iotRASMAP) {
+	if ( type == IlwisObject::iotRASMAP && datasourcemap.fValid()) {
 		Coord c = crd;
 		if (!isSameCsy) {
 			c = datasourcemap->cs()->cConv( spatialsourcemap->cs(), c);
 		}
 		value = datasourcemap->rValue(c);
 	}
-	if (table.fValid()) {
+	if (table.fValid() && columns[0].fValid()) {
 		value =  columns[0]->rValue(f->iValue());
 	}
 	return scaleValue(value);
 }
 
 double ZValueMaker::scaleValue(double value) {
+	if ( styNONE)
+		return offset;
 	if ( value == rUNDEF)
 		return 0;
 	RangeReal scaleRange = getRange();
@@ -171,7 +188,7 @@ double ZValueMaker::scaleValue(double value) {
 
 BaseMapPtr * ZValueMaker::getSourceRasterMap() const { // we return the pointer to avoid copy constructors
 	if (type == IlwisObject::iotRASMAP) {
-		if (self) {
+		if (sourceType == stySELF) {
 			if (spatialsourcemap.fValid())
 				return spatialsourcemap.ptr();
 			else
@@ -241,4 +258,22 @@ double ZValueMaker::getZ0(bool is3D) const{
 
 void ZValueMaker::setBounds(const CoordBounds& bnd) {
 	cbLimits = bnd;
+}
+
+ZValueMaker::SourceType ZValueMaker::getSourceType() const{
+	return sourceType;
+}
+
+void ZValueMaker::setSourceType(SourceType s){
+	sourceType = s;
+}
+
+String 	ZValueMaker::getColumnName(int index) {
+	if ( index < columns.size())
+		return columns[index]->sName();
+	return sUNDEF;
+}
+
+BaseMap ZValueMaker::getSpatialSourceMap() const{
+	return spatialsourcemap;
 }

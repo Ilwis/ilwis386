@@ -7,6 +7,7 @@ namespace ILWIS {
 class _export ZValueMaker {
 public:
 	enum ZValueTypeScaling{zvsNONE, zvsLINEAR, zvsLOGARITHMIC};
+	enum SourceType{styNONE,stySELF,styMAP,styMAPLIST, styTABLE};
 	ZValueMaker(NewDrawer *drw);
 	void setSpatialSource(const BaseMap& mp, const CoordBounds& cb);
 	void setDataSourceMap(const BaseMap& mp);
@@ -30,7 +31,11 @@ public:
 	double getZ0(bool is3D) const;
 	void setBounds(const CoordBounds& bnd);
 	BaseMapPtr * getSourceRasterMap() const;
+	BaseMap getSpatialSourceMap() const;
 	void addRange(const BaseMap& mp);
+	SourceType getSourceType() const;
+	void setSourceType(SourceType s);
+	String getColumnName(int index);
 
 private:
 	BaseMap spatialsourcemap;
@@ -42,7 +47,6 @@ private:
 	double offset;
 	RangeReal range;
 	IlwisObject::iotIlwisObjectType type;
-	bool self;
 	bool threeDPossible;
 	double zscale;
 	CoordBounds cbLimits;
@@ -50,6 +54,7 @@ private:
 	double fakeZ; // the faze z value for objects at heigh 0 for the user of this z-maker
 	NewDrawer *associatedDrawer;
 	bool isSetDrawer;
+	SourceType sourceType;
 
 };
 }
