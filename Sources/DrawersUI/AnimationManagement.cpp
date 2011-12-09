@@ -482,7 +482,7 @@ int AnimationSynchronization::DataChanged(Event*ev) {
 				++index;
 			}
 			String name = props->drawer->getName();
-			String v = TR("Master animation %%S");
+			String v = TR("Master animation %S");
 			stMaster->SetVal(String(v.c_str(),name));
 			initial = false;
 		}
@@ -585,7 +585,7 @@ int AnimationProgress::DataChanged(Event*ev) {
 			graphSlider->setTimeInterval(TimeInterval());
 		}
 		String name = props->drawer->getName();
-		String v = TR("Selected Animation: %%S");
+		String v = TR("Selected Animation: %S");
 		stMaster->SetVal(String(v.c_str(),name));
 	}
 	if ( tbl.fValid()) {
@@ -691,7 +691,7 @@ int RealTimePage::DataChanged(Event*ev) {
 			fgTime->Hide();*/
 
 		String name = props->drawer->getName();
-		String v = TR("Selected Animation: %%S");
+		String v = TR("Selected Animation: %S");
 		stMaster->SetVal(String(v.c_str(),name));
 	}
 	
