@@ -22,9 +22,20 @@ DEMTriangulator::DEMTriangulator(ZValueMaker * zMaker, BaseMapPtr * drapeMapPtr,
 , valid(false)
 , fSelfDrape(true)
 {
-	if (zMaker != 0 && zMaker->getSourceRasterMap() != 0)
+	ZValueMaker::SourceType sourceType = zMaker->getSourceType();
+	if (zMaker != 0 && !( sourceType == ZValueMaker::styNONE || sourceType == ZValueMaker::styMAPLIST))
 	{
-		mp.SetPointer(zMaker->getSourceRasterMap());
+		if ( sourceType == ZValueMaker::styTABLE) {
+			String name = zMaker->getColumnName(0);
+			if ( name != sUNDEF)
+				mp = Map(String("%S.%S", zMaker->getSpatialSourceMap()->fnObj.sFile, zMaker->getColumnName(0)));
+			return;
+		}
+		else
+			mp.SetPointer(zMaker->getSourceRasterMap());
+		if ( !mp.fValid())
+			return;
+
 		if (drapeMapPtr != 0) {
 			drapemp.SetPointer(drapeMapPtr);
 			if (drapemp->fnObj != mp->fnObj) {

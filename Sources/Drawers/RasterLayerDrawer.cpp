@@ -146,7 +146,7 @@ void RasterLayerDrawer::setDrawMethod(DrawMethod method) {
 
 	if ( method == drmINIT) {
 		drm = drmRPR;
-		Domain _dm = rastermap->dm();
+		Domain _dm = useAttributeColumn() && attColumn.fValid() ? attColumn->dm() : rastermap->dm();
 		if (0 != _dm->pdi())
 			drm = drmIMAGE;
 		else if (0 != _dm->pdcol())

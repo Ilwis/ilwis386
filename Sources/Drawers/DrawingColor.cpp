@@ -262,7 +262,7 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 						RangeReal rr = getStretchRangeReal();
 						DomainValueRangeStruct dvrs = dataValues.dvrs();
 						for (long i = 0; i < iLen; ++i) {
-							double v = dvrs.rValue(buf[i]);
+							double v = dataValues.rValByRaw(buf[i]);
 							Color clr = rpr->clr(v, rr);
 							setTransparency(v, clr);
 							bufOut[i] = clr.iVal();
@@ -275,7 +275,7 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 							rr = RangeReal(0, log(rMax));
 							DomainValueRangeStruct dvrs = dataValues.dvrs();
 							for (long i = 0; i < iLen; ++i){
-								double v = dvrs.rValue(buf[i]);
+								double v = dataValues.rValByRaw(buf[i]);
 								Color clr = rpr->clr(log(dvrs.rValue(v) - rr.rLo()), rr);
 								setTransparency(v, clr); 
 								bufOut[i] = clr.iVal();
@@ -296,7 +296,7 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 				else {
 					DomainValueRangeStruct dvrs = dataValues.dvrs();
 					for (long i = 0; i < iLen; ++i){
-						double v = dvrs.rValue(buf[i]);
+						double v = dataValues.rValByRaw(buf[i]);
 						Color clr = rpr->clr(v);
 						setTransparency(v, clr);
 						bufOut[i] = clr.iVal();
