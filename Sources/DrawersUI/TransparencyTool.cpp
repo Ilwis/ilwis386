@@ -134,7 +134,11 @@ void  TransparencyForm::apply() {
 		else
 			transpValues = RangeReal();
 
-		((LayerDrawer *)cdrw)->setTransparentValues(transpValues);
+
+		LayerDrawer *ldr = dynamic_cast<LayerDrawer *>(cdrw);
+		if ( ldr)
+			ldr->setTransparentValues(transpValues);
+
 		if ( oldRange != transpValues) {
 			PreparationParameters pp(NewDrawer::ptRENDER, 0);
 			cdrw->prepare(&pp);
