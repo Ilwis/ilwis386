@@ -203,10 +203,17 @@ sliderOffset(0) {
 
 	if (dr->getZMaker()->getRange().fValid()) { 
 		range = dr->getZMaker()->getRange();
+		zoffset = dr->getZMaker()->getOffset();
 		double rMin = min(-range.rHi(), range.rHi() * 2);
 		double rMax = max(-range.rHi(), range.rHi() * 2);
 		ValueRangeReal vr( rMin,rMax,range.rWidth()/20);
-		zoffset -= abs(range.rLo());
+		if ( zoffset == rUNDEF) {
+			zoffset -= abs(range.rLo());
+		} else {
+			CoordBounds cbLimits = dr->getZMaker()->getBounds();
+			double zMaxSizeEstimate = (cbLimits.width() + cbLimits.height())/ 2.0;
+			zoffset = zoffset * range.rWidth() / ( 0.25 * zMaxSizeEstimate);
+		}
 		frr = new FieldRangeReal(root, TR("Detected Value range"), &range);
 		frr->SetCallBack((NotifyProc)&ZDataScaling::updateOffset);
 		sliderOffset = new FieldRealSliderEx(root,"Z Offset", &zoffset,vr,true);
@@ -218,9 +225,9 @@ sliderOffset(0) {
 
 int ZDataScaling::updateOffset(Event *ev) {
 	frr->StoreData();
-	double rMin = min(-range.rHi(), range.rHi() * 2);
-	double rMax = max(-range.rHi(), range.rHi() * 2);
-	ValueRangeReal vr( rMin,rMax,range.rWidth()/20);
+	double rMin = min(-range.rHi(), range.rHi() * 2.0);
+	double rMax = max(-range.rHi(), range.rHi() * 2.0);
+	ValueRangeReal vr( rMin,rMax,range.rWidth()/20.0);
 	zoffset -= abs(range.rLo());
 	sliderOffset->setValueRange(vr); 
 	drw->getZMaker()->setRange(range);
