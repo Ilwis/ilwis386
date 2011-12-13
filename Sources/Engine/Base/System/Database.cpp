@@ -77,12 +77,13 @@ SpatialLite::SpatialLite(const String& _location, const String& _id) : Database(
 bool SpatialLite::executeQuery(const String& query, QueryResults& results, vector<String>& errors){
 	if (!isValid())
 		return false;
+	results.clear();
 
 	char* db_err = 0;
 
 	sqlite3_exec(db, query.c_str(), callback, &results, &db_err);
 
-	return false;
+	return  results.size() > 0;
 }
 
 bool SpatialLite::executeStatement(const String& statement){
