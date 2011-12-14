@@ -96,8 +96,9 @@ BOOL SampleStatWindow::Create(CWnd* pParent)
 	CSize siz = cdcTmp.GetTextExtent(s.c_str());
 	cdcTmp.SelectObject(fntOld);
 
+	long ysize = min(550, (2*sms->iBands()+6)*siz.cy);
 	if (!CSizingControlBar::Create(TR("    Sample Statistics").c_str(), pParent, 
-		CSize(15+siz.cx, (2*sms->iBands()+6)*siz.cy), TRUE, 1125))
+		CSize(15+siz.cx, ysize), TRUE, 1125))
 		return FALSE;
 	m_dwSCBStyle |= SCBS_SHOWEDGES;
 	SetBarStyle(GetBarStyle() | CBRS_SIZE_DYNAMIC);
@@ -110,7 +111,7 @@ BOOL SampleStatWindow::Create(CWnd* pParent)
 		ccb.AddString(dc->sValueByRaw(dc->iKey(i),0).c_str());
 	ccb.SetCurSel(0);
 	//	st.Create("", WS_CHILD | WS_VISIBLE | SS_LEFTNOWORDWRAP ,CRect(5, 35, siz.cx, (2*sms->iBands()+6)*siz.cy), this);
-	st.Create(ES_MULTILINE | WS_VSCROLL | ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_READONLY  ,CRect(5, 35, siz.cx, (2*sms->iBands()+6)*siz.cy), this, 101);
+	st.Create(ES_MULTILINE | WS_VSCROLL | ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_READONLY  ,CRect(5, 35, siz.cx, ysize), this, 101);
 	fnt = IlwWinApp()->GetFont(IlwisWinApp::sfTABLE);
 	st.SetFont(fnt);
 	st.SetTabStops(1); // tab space is one dialog unit (so that tabs can be used just for copy to clipboard)

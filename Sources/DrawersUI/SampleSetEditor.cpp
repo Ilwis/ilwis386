@@ -43,6 +43,7 @@ Created on: 2007-02-8
 #include "Client\Mapwindow\Positioner.h"
 #include "Client\Base\ButtonBar.h"
 #include "Client\ilwis.h"
+#include "Client\Base\datawind.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\Mapwindow\Drawers\DrawerTool.h"
@@ -62,6 +63,12 @@ Created on: 2007-02-8
 #include "Client\Mapwindow\MapWindow.h"
 #include "Client\FormElements\fldclass.h"
 #include "DrawersUI\ColorCompositeTool.h"
+#include "DrawersUI\LayerDrawerTool.h"
+#include "DrawersUI\SetDrawerTool.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
+#include "Drawers\LayerDrawer.h"
+#include "Drawers\SetDrawer.h"
+#include "Drawers\RasterLayerDrawer.h"
 #include "Headers\Hs\Sample.hs"
 #include "SampleSetEditor.h"
 #include "SampleStatWindow.h"
@@ -92,17 +99,33 @@ DrawerTool *createSampleSetEditor(ZoomableView* zv, LayerTreeView *view, NewDraw
 
 SampleSetEditor::SampleSetEditor(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
 DrawerTool("SampleSetEditor",zv, view, drw),
-wSmplStat(0)
+wSmplStat(0),
+editMode(true),
+drag(false),
+selectState(0)
 {
 	active = false;
 }
 
 bool SampleSetEditor::isToolUseableFor(ILWIS::DrawerTool *tool){
-	ColorCompositeTool *cct = dynamic_cast<ColorCompositeTool *>(tool);
-	if ( !cct)
+	LayerDrawerTool *layerDrawerTool = dynamic_cast<LayerDrawerTool *>(tool);
+	SetDrawerTool *setDrawerTool = dynamic_cast<SetDrawerTool *>(tool);
+	if ( !layerDrawerTool && !setDrawerTool)
 		return false;
-	parentTool = tool;
-	return true;
+	RasterLayerDrawer *sdrw = dynamic_cast<RasterLayerDrawer *>(tool->getDrawer());
+	if ( !sdrw)
+		return false;
+	SetDrawer *adrw = dynamic_cast<SetDrawer *>(tool->getDrawer());
+	RangeReal rr = adrw ? adrw->getStretchRangeReal() : sdrw->getStretchRangeReal();
+	if ( rr.fValid())
+		parentTool = tool;
+	return rr.fValid();
+}
+
+void SampleSetEditor::setcheckSelectMode(void *value, HTREEITEM item) {
+	if ( value == 0)
+		return;
+	selectState = selectStateCheck->getState();
 }
 
 HTREEITEM SampleSetEditor::configure( HTREEITEM parentItem){
@@ -111,10 +134,29 @@ HTREEITEM SampleSetEditor::configure( HTREEITEM parentItem){
 
 	ColorCompositeDrawer *rdrw = (ColorCompositeDrawer *)drawer;
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree, parentItem, drawer);
-	//item->setDoubleCickAction(this, (DTDoubleClickActionFunc)(DisplayOptionItemFunc)&ColorCompositeTool::displayOptionCC);
 	htiNode = insertItem(TR("Sample Set Editor"),".sms",item);
 
+	selectStateCheck = new SetChecks(tree,this,(DTSetCheckFunc)&SampleSetEditor::setcheckSelectMode);
+	DisplayOptionRadioButtonItem *ritem = new DisplayOptionRadioButtonItem(TR("None"), tree,htiNode,drawer);
+	ritem->setState(true);
+	ritem->setCheckAction(this,selectStateCheck,(DTSetCheckFunc)&SampleSetEditor::setcheckSelectMode);
+	insertItem(TR("Select"),"Bitmap", ritem);
+
+	ritem = new DisplayOptionRadioButtonItem(TR("Select Area"), tree,htiNode,drawer);
+	ritem->setState(false);
+	ritem->setCheckAction(this,selectStateCheck,(DTSetCheckFunc)&SampleSetEditor::setcheckSelectMode);
+	insertItem(TR("Select"),"Bitmap", ritem);
+
+	ritem = new DisplayOptionRadioButtonItem(TR("Select Pixels"), tree,htiNode,drawer);
+	ritem->setState(false);
+	ritem->setCheckAction(this,selectStateCheck,(DTSetCheckFunc)&SampleSetEditor::setcheckSelectMode);
+	insertItem(TR("Select"),"Bitmap", ritem);
+
 	String s(TR("Sample Set Editor: %S").c_str(), sms->sName());
+
+
+
+
 	mpvGetView()->mwParent()->SetWindowText(s.c_str());
 	fOk = sms->fInitStat();
 	if (!fOk)
@@ -470,3 +512,33 @@ String SampleSetEditor::sTitle() const
 	return s;
 }
 
+
+void SampleSetEditor::prepare() {
+	if ( editMode) { // toggle
+		tree->GetDocument()->mpvGetView()->addTool(this, getId());
+	}
+	else {
+		tree->GetDocument()->mpvGetView()->noTool(getId());
+	}
+	getDrawer()->setEditable(!getDrawer()->isEditable());
+	((ComplexDrawer *)getDrawer())->setEditMode(!editMode);
+}
+
+void SampleSetEditor::areaOfInterest(CRect rect) {
+}
+
+void SampleSetEditor::OnLButtonDown(UINT nFlags, CPoint point){
+	if ( selectState == 1) {
+	/*	WPARAM wParam = 1102; 
+		LPARAM lParam = (LPARAM)MAKELONG(false,0);
+		CWnd *wnd = tree->GetDocument()->mpvGetView()->GetParent();
+		DataWindow *dw = (DataWindow *)wnd;
+		dw->bbDataWindow.SendMessage(TB_CHECKBUTTON, wParam, lParam);*/
+		tree->GetDocument()->mpvGetView()->selectArea(this,
+			(NotifyRectProc)&SampleSetEditor::areaOfInterest,"DRAGOK",Color(0,255,0,0.2),false); 
+	} else {
+		//tree->GetDocument()->mpvGetView()->OnSelectArea();
+		::SetCursor(zCursor(Arrow));
+	}
+	return ;
+}
