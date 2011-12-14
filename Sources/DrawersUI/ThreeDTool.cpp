@@ -195,9 +195,8 @@ void DisplayZDataSourceForm::updateDrawer(LayerDrawer *layerDrawer, const BaseMa
 ZDataScaling::ZDataScaling(CWnd *wPar, ComplexDrawer *dr) : 
 DisplayOptionsForm(dr,wPar,"Scaling and offset"),
 zscale(dr->getZMaker()->getZScale() * 100),
-zoffset(dr->getZMaker()->getOffset()), old(rUNDEF),
+zoffset(dr->getZMaker()->getOffset()),
 sliderOffset(0) {
-	old = zscale;
 	sliderScale = new FieldRealSliderEx(root,"Z Scaling", &zscale,ValueRange(0,1000),true);
 	sliderScale->SetCallBack((NotifyProc)&ZDataScaling::settransforms);
 	sliderScale->setContinuous(true);
@@ -243,27 +242,24 @@ int ZDataScaling::settransforms(Event *) {
 
 void ZDataScaling::apply() {
 	sliderScale->StoreData();
-	if ( old != zscale) {
-		if ( sliderOffset)
-			sliderOffset->StoreData();
-		drw->getZMaker()->setZScale(zscale/100.0);
-		RangeReal rr = drw->getZMaker()->getRange();
-		drw->getZMaker()->setOffset(zoffset + rr.rLo());
-		SetDrawer *adrw = dynamic_cast<SetDrawer *>(drw);
-		if ( adrw) {
-			rr = adrw->getZMaker()->getRange();
-			for(int i = 0 ; i < adrw->getDrawerCount(); ++i) {
-				LayerDrawer *layerDrawer = (LayerDrawer *)adrw->getDrawer(i);
-				layerDrawer->getZMaker()->setRange(rr);
-				layerDrawer->getZMaker()->setZScale(zscale/100.0);
-				layerDrawer->getZMaker()->setOffset(zoffset + rr.rLo());
-			}
+	if ( sliderOffset)
+		sliderOffset->StoreData();
+	drw->getZMaker()->setZScale(zscale/100.0);
+	RangeReal rr = drw->getZMaker()->getRange();
+	drw->getZMaker()->setOffset(zoffset + rr.rLo());
+	SetDrawer *adrw = dynamic_cast<SetDrawer *>(drw);
+	if ( adrw) {
+		rr = adrw->getZMaker()->getRange();
+		for(int i = 0 ; i < adrw->getDrawerCount(); ++i) {
+			LayerDrawer *layerDrawer = (LayerDrawer *)adrw->getDrawer(i);
+			layerDrawer->getZMaker()->setRange(rr);
+			layerDrawer->getZMaker()->setZScale(zscale/100.0);
+			layerDrawer->getZMaker()->setOffset(zoffset + rr.rLo());
 		}
-		PreparationParameters pp(NewDrawer::pt3D);
-		drw->prepare(&pp);
-		updateMapView();
 	}
-	old = zscale;
+	// Do not call prepare pt3D here, because the xyz OpenGL coordinates do not need recalculation.
+	// A simple redraw is sufficient and much faster
+	updateMapView();
 }
 //----------------------------------------------------------------
 ExtrusionOptions::ExtrusionOptions(CWnd *p, ComplexDrawer *drw) :
