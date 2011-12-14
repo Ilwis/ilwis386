@@ -88,7 +88,11 @@ public:
 
 	//}}AFX_MSG
 private:  
+	void OnLButtonDown(UINT nFlags, CPoint point);
 	void setActiveMode(bool yesno);
+	void areaOfInterest(CRect rect);
+	void setcheckSelectMode(void *value, HTREEITEM ) ;
+	void prepare();
 	SampleSet sms;
 	SampleStatWindow* wSmplStat;
 	Array<RowCol> rcSelect;
@@ -97,6 +101,10 @@ private:
 	String sValue;
 	bool fOk;
 	vector<GeneralBar*>	vgb;
+	bool editMode;
+	bool drag;
+	SetChecks *selectStateCheck;
+	int selectState;
 	//DECLARE_MESSAGE_MAP()
 };
 
