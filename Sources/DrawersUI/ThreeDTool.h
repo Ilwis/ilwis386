@@ -58,6 +58,7 @@ private:
 	double zoffset;
 	double zscale;
 	RangeReal range;
+	double old;
 };
 
 class ExtrusionOptions : public DisplayOptionsForm {
