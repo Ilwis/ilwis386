@@ -96,7 +96,7 @@ void RasterLayerDrawer::prepare(PreparationParameters *pp){
 			delete demTriangulator;
 			demTriangulator = 0;
 		}
-		if (is3DPossible && (pp->type & ptGEOMETRY || pp->type & ptRESTORE)) {
+		if (is3DPossible) {
 			demTriangulator = new DEMTriangulator(zMaker, rastermap.ptr(), getRootDrawer()->getCoordinateSystem(), false);
 			if (!demTriangulator->fValid()) {
 				delete demTriangulator;
