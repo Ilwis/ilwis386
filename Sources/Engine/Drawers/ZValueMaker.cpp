@@ -174,6 +174,10 @@ double ZValueMaker::getValue(const Coord& crd, Feature *f ){
 	return scaleValue(value);
 }
 
+CoordBounds ZValueMaker::getBounds() const{
+	return cbLimits;
+}
+
 double ZValueMaker::scaleValue(double value) {
 	if ( styNONE)
 		return offset;
@@ -269,7 +273,7 @@ void ZValueMaker::setSourceType(SourceType s){
 }
 
 String 	ZValueMaker::getColumnName(int index) {
-	if ( index < columns.size())
+	if ( index < columns.size() && columns[index].fValid())
 		return columns[index]->sName();
 	return sUNDEF;
 }

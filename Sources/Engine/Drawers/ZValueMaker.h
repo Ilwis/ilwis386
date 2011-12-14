@@ -36,6 +36,7 @@ public:
 	SourceType getSourceType() const;
 	void setSourceType(SourceType s);
 	String getColumnName(int index);
+	CoordBounds getBounds() const;
 
 private:
 	BaseMap spatialsourcemap;
