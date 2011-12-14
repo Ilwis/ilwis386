@@ -27,9 +27,10 @@ DEMTriangulator::DEMTriangulator(ZValueMaker * zMaker, BaseMapPtr * drapeMapPtr,
 	{
 		if ( sourceType == ZValueMaker::styTABLE) {
 			String name = zMaker->getColumnName(0);
-			if ( name != sUNDEF)
+			if ( name != sUNDEF){
 				mp = Map(String("%S.%S", zMaker->getSpatialSourceMap()->fnObj.sFile, zMaker->getColumnName(0)));
-			return;
+			} else
+				return;
 		}
 		else
 			mp.SetPointer(zMaker->getSourceRasterMap());
