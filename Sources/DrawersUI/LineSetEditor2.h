@@ -61,6 +61,7 @@ namespace ILWIS {
 		void setSnapDistance(double s) { rSnapDistance = s; }
 	private:
 		String getMenuString() const;
+		void OnPologonize();
 		void getSettings();
 		HTREEITEM configure( HTREEITEM parentItem);
 		void OnUpdateMode(CCmdUI* pCmdUI);
