@@ -1733,19 +1733,22 @@ void PolygonFiller::fillFeature(OGRGeometryH hGeometry, int rec) {
 	try {
 		if ( hGeometry) {
 			long count = funcs.ogrGetSubGeometryCount(hGeometry);
+			bool first = true;
 			for(int i =0; i < count; ++i) {
 				OGRGeometryH hSubGeometry = funcs.ogrGetSubGeometry(hGeometry, i);
 				if ( hSubGeometry) {
 					LinearRing *ring = getRing(hSubGeometry);
 					if ( ring) {
 						ILWIS::Polygon *p = 0;
-						if ( i == 0) {
+						if ( first) {
 							p = CPOLYGON(bmp->newFeature());
 							p->PutVal((long)rec);
 							p->addBoundary(ring);
+							first = false;
 						}
 						else
-							p->addHole(ring);
+							if ( p)
+								p->addHole(ring);
 					}
 				}
 			}
@@ -1764,7 +1767,7 @@ LinearRing *PolygonFiller::getRing(OGRGeometryH hGeom) {
 		Coord c(x,y,z);
 		seq->add(c,false);
 	}
-	if ( seq->size() < 3 && seq->front() == seq->back())
+	if ( seq->size() < 3 || seq->front() != seq->back())
 		return 0;
 	return new LinearRing(seq, new GeometryFactory());
 }
