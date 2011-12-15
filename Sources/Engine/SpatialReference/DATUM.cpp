@@ -76,47 +76,63 @@ void Datum::Store(const FileName& fnCsy)
 }
 
 String Datum::WKTToILWISName(const String& wkt) {
-	if (wktToIlwis.size() == 0 ) {
-		char line[1024];
-		String sPath = getEngine()->getContext()->sIlwDir();
-		sPath &= "\\Resources\\Def\\datum.def";
-		FILE* fp = fopen(sPath.c_str(),"r");
-		while (fgets(line,1024,fp)){
-			if (*line == 0) break;
-			String sLine(line);
-			String sWKTName = "";
-			String ilwisName = sLine.sHead("=");
-			Array<String> parts;
-			SplitOn(sLine.sTail("="), parts, ",");
-			if ( parts.iSize() == 1 ) {
-				sWKTName = parts[0];
-			}
-			else if (parts.iSize() == 3) {
-				sWKTName = parts[2];
-			} else if ( parts.iSize() == 6) {
-				sWKTName = parts[5];
-			}
 
-			if ( sWKTName != "") {
-				sWKTName = sWKTName.sLeft(sWKTName.length() - 1);
-				wktToIlwis[sWKTName] = ilwisName;
-			}
+	ILWIS::QueryResults results;
 
-			if ( ilwisName == "Zanderij" )
-				break;
-		}
-		fclose(fp);
+	String query("Select Ilwis_Name from Datums where Ilwis_name='%S'", wkt);
+	getEngine()->pdb()->executeQuery(query, results);
+	if ( results.size() > 0) {
+		return wkt; // name == ilwis name
 	}
 
-
-	String s = wktToIlwis[wkt];
-	if ( wktToIlwis.find(wkt) != wktToIlwis.end())
-		return wktToIlwis[wkt];
-
-
-
-	return "";
+	query = String("Select name from DatumAliasses where alias='%S'",wkt);
+	getEngine()->pdb()->executeQuery(query, results);
+	if ( results.size() > 0) {
+		return results.get("name",0);
+	}
+	return sUNDEF;
 }
+//	if (wktToIlwis.size() == 0 ) {
+//		char line[1024];
+//		String sPath = getEngine()->getContext()->sIlwDir();
+//		sPath &= "\\Resources\\Def\\datum.def";
+//		FILE* fp = fopen(sPath.c_str(),"r");
+//		while (fgets(line,1024,fp)){
+//			if (*line == 0) break;
+//			String sLine(line);
+//			String sWKTName = "";
+//			String ilwisName = sLine.sHead("=");
+//			Array<String> parts;
+//			SplitOn(sLine.sTail("="), parts, ",");
+//			if ( parts.iSize() == 1 ) {
+//				sWKTName = parts[0];
+//			}
+//			else if (parts.iSize() == 3) {
+//				sWKTName = parts[2];
+//			} else if ( parts.iSize() == 6) {
+//				sWKTName = parts[5];
+//			}
+//
+//			if ( sWKTName != "") {
+//				sWKTName = sWKTName.sLeft(sWKTName.length() - 1);
+//				wktToIlwis[sWKTName] = ilwisName;
+//			}
+//
+//			if ( ilwisName == "Zanderij" )
+//				break;
+//		}
+//		fclose(fp);
+//	}
+//
+//
+//	String s = wktToIlwis[wkt];
+//	if ( wktToIlwis.find(wkt) != wktToIlwis.end())
+//		return wktToIlwis[wkt];
+//
+//
+//
+//	return "";
+//}
 
 
 bool Datum::fEqual(const Datum* datum) const
