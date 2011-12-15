@@ -44,6 +44,7 @@ Created on: 2007-02-8
 #include "Engine\Map\Mapview.h"
 #include "Client\Editors\Utils\BaseBar.h"
 #include "Client\MainWindow\CommandCombo.h"
+#include "Client\Base\datawind.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\MapPaneView.h"
 #include "Client\Mapwindow\LayerTreeView.h"
