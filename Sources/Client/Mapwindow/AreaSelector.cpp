@@ -180,3 +180,7 @@ void AreaSelector::DrawRect()
 		mpv->Invalidate();
 	}
 }
+
+void AreaSelector::setKeepDimensions(bool yesno) {
+	fKeepDimensions = yesno;
+}

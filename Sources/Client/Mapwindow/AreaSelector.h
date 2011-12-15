@@ -65,6 +65,7 @@ public:
 	void OnMouseMove(UINT nFlags, CPoint point);
 	void OnLButtonDown(UINT nFlags, CPoint point);
 	void OnLButtonUp(UINT nFlags, CPoint point);
+	void setKeepDimensions(bool yesno);
 protected:
 	virtual ~AreaSelector();
   CRect rect() const;
