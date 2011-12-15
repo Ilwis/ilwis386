@@ -238,6 +238,9 @@ void WPSClient::fillListView() {
 				parameterValues[operationVariant][currentParmIndex].value = stringField;
 		}
 	}
+	if ( parameterValues.size() == 0)
+		return;
+
 	String sCurDir = getEngine()->sGetCurDir();
 	for(int i = 0; i < parameterValues[operationVariant].size(); ++i) {
 		record[0] = parameterValues[operationVariant][i].name + parameterValues[operationVariant][i].ext;
