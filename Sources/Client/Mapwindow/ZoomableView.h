@@ -158,7 +158,7 @@ public:
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg void OnReDraw();
 	afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
-	void selectArea(CCmdTarget* target, NotifyRectProc proc, const String& cursor, const Color& clr);
+	void selectArea(CCmdTarget* target, NotifyRectProc proc, const String& cursor, const Color& clr, bool keepDimensions=true);
 	//}}AFX_MSG
 	void ZoomInPnt(zPoint);
 	void ZoomOutPnt(zPoint);

@@ -884,7 +884,7 @@ void ZoomableView::OnSelectArea()
 	iActiveTool = ID_ZOOMIN;
 }
 
-void ZoomableView::selectArea(CCmdTarget *target, NotifyRectProc proc, const String& cursor, const Color& clr)
+void ZoomableView::selectArea(CCmdTarget *target, NotifyRectProc proc, const String& cursor, const Color& clr, bool keepDimensions)
 {
 	noTool(ID_ZOOMIN);
 	AreaSelector *as;
@@ -892,6 +892,7 @@ void ZoomableView::selectArea(CCmdTarget *target, NotifyRectProc proc, const Str
 		as = new AreaSelector(this, target, proc, clr);
 	else 
 		as = new AreaSelector(this, target, proc, dim, clr);
+	as->setKeepDimensions(keepDimensions);
 	tools[ID_ZOOMIN] = as;
 	as->SetCursor(zCursor(cursor.c_str()));
 	as->setActive(true);
