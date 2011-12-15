@@ -959,7 +959,7 @@ void TablePaneView::OnSortOnAscending()
 		if (cv.fValid())
 			sCol = cv->sName().sQuote();
 	}
-	String sCmd("sorton %S -sortorder=ascending", sCol);
+	String sCmd("clmsort %S -sortorder=ascending", sCol);
 	twParent()->fExecute(sCmd);
 }
 
@@ -975,7 +975,7 @@ void TablePaneView::OnSortOnDescending()
 		if (cv.fValid())
 			sCol = cv->sName().sQuote();
 	}
-	String sCmd("sorton %S -sortorder=descending", sCol);
+	String sCmd("clmsort %S -sortorder=descending", sCol);
 	twParent()->fExecute(sCmd);
 }
 
