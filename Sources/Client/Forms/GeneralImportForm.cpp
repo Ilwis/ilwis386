@@ -393,7 +393,7 @@ ImportFormat GeneralImportForm::getFormat(const String& sVal) {
 		return ImportFormat();
 
 	Array<String> parts;
-	Split(sVal,parts,"|");
+	Split(sVal,parts,"#");
 	String provider = parts[0];
 	String fname = parts[parts.size() - 1];
 	String stype = parts.size() > 1 ? parts[1] : "";
