@@ -23,6 +23,7 @@ InfoUIVector* getCommandInfoUI(ILWIS::Module *module) {
 	(*infosui).push_back(CommandHandlerUI::createCommandInfo("brightnesstemperature","",Cmdbrightnesstemperature,TR("&SEBS Tools.Pre-processing.&Brightness Temperature Computation"),TR("Compute brightness temperature"),"ExeMap16IcoL",".mpr",5062,TR("Compute brightness temperature")));
 	(*infosui).push_back(CommandHandlerUI::createCommandInfo("et0","",Cmdmapeto,TR("&SEBS Tools..&Reference ETo"),TR("FAO reference ETo calculation"),"ExeMap16IcoL",".tbt",4792,TR("FAO reference ETo estimation")));
 	(*infosui).push_back(CommandHandlerUI::createCommandInfo("radiance2reflectance","",Cmdmapradiance2reflectance,TR("&SEBS Tools.Pre-processing.&Radiances to reflectance (ASTER)"),TR("Convert radiances to reflectance"),"ExeMap16IcoL",".mpr",5052,TR("Convert radiance to reflectance")));
+	//(*infosui).push_back(CommandHandlerUI::createCommandInfo("watervapour","",Cmdwatervapour,"&SEBS Tools.Pre-processing.&Brightness Temperature Computation","Compute water vapour","ExeMap16IcoL",".mpr",5062,"Compute water vapour"));
 
 	return infosui;
 }

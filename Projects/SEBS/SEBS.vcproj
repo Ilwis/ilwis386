@@ -72,7 +72,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="ILWISEngine.lib"
-				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\Extensions\IlwisSEBS.dll"
+				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\Extensions\SEBS\IlwisSEBS.dll"
 				Version="3.5"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)libraries\import&quot;;&quot;$(SolutionDir)libraries\$(ConfigurationName)&quot;"
@@ -164,7 +164,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="ILWISEngine.lib"
-				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\Extensions\IlwisSEBS.dll"
+				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\Extensions\SEBS\IlwisSEBS.dll"
 				Version="3.8"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)libraries\import&quot;;&quot;$(SolutionDir)libraries\$(ConfigurationName)&quot;"

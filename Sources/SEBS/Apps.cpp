@@ -10,6 +10,7 @@
 #include "SEBS\MapRadiance2Reflectance.h"
 #include "SEBS\MapBrightnessTemperature.h"
 #include "SEBS\MapETo.h"
+#include "SEBS\MapWaterVapour.h"
 #include "Client\ilwis.h"
 
 InfoVector* getCommandInfo() {
@@ -24,6 +25,7 @@ InfoVector* getCommandInfo() {
 	(*infos).push_back(CommandMap::newCommandInfo(createMapETo,"MapETo"));
 	(*infos).push_back(CommandMap::newCommandInfo(createMapRadiance2Reflectance,"MapRadiance2Reflectance"));
 	(*infos).push_back(CommandMap::newCommandInfo(createMapBrightnessTemperature,"MapBrightnessTemperature"));
+	//(*infos).push_back(CommandMap::newCommandInfo(createMapWaterVapour,"MapWaterVapour"));
 
 	return infos;
 
