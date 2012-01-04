@@ -221,11 +221,13 @@ size_t File::ReadLnAscii(String& s)
     char c = cReadChar();  // Read character
     if (c == '\r') {       // carriage return
       iSkip++;             // the CR will be skipped
-      c = cReadChar();     // read ahead one char
-      if (c != '\n')
-        Seek(iLoc() - 1);  // not a LF, back up one char
-      else
-        iSkip++;           // skip the char: it is a LF
+      if (!fEof()) {       // test again for EOF before reading another char, to prevent infinite loop: some ASCII files end in CR without LF
+          c = cReadChar();     // read ahead one char
+          if (c != '\n')
+            Seek(iLoc() - 1);  // not a LF, back up one char
+          else
+            iSkip++;           // skip the char: it is a LF
+      }
       return s.length() + iSkip; // return the correct number of chars read from file
     }
     else if (c == '\n')
