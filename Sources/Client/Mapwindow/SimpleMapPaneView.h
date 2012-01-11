@@ -89,6 +89,7 @@ public:
 	void setBitmapRedraw(bool yesno);
 	ILWIS::ScreenSwapper* getSwapper() { return swapper; }
 	PixelInfoBar *getPixInfoBar() { return pib; }
+	void ResetStatusBar();
 
 	InfoLine* info;
 
@@ -105,6 +106,7 @@ protected:
 	void OnUpdateMeasureDist(CCmdUI* pCmdUI);
 	afx_msg void OnWindowPosChanging( WINDOWPOS* lpwndpos );
 	BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
+	virtual void RequestRedraw();
 	bool volatile fDirty;
 	bool volatile fRedrawing;
 	bool volatile fDrawStop;
@@ -119,7 +121,6 @@ private:
 	void RedrawInThread();
 	static UINT RedrawPaneInThread(LPVOID);
 	void Draw();
-	void RequestRedraw();
 	CWinThread * drawThread;
 	bool fDrawRequest;
 	bool fStopDrawThread;

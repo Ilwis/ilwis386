@@ -385,6 +385,16 @@ void SimpleMapPaneView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	ZoomableView::OnKeyDown(nChar, nRepCnt, nFlags);
 }
 
+void SimpleMapPaneView::ResetStatusBar()
+{
+	MapStatusBar* msb = 0;
+	if (fwPar) {
+		msb = dynamic_cast<MapStatusBar*>(fwPar->status);
+		if (msb)
+			msb->Reset();
+	}
+}
+
 void SimpleMapPaneView::OnMouseMove(UINT nFlags, CPoint point) 
 {
 	//throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
@@ -408,6 +418,11 @@ void SimpleMapPaneView::OnMouseMove(UINT nFlags, CPoint point)
 			//RowCol rc((long)floor(1+rRow), (long)floor(1+rCol));
 			//msb->ShowRowCol(rc);
 		//}
+		Coord cRowCol (mcd->rootDrawer->screenToOpenGL(RowCol(point.y,point.x)));
+		if (cRowCol != c) {
+			RowCol rc ((long)floor(1-cRowCol.y), (long)floor(1+cRowCol.x));
+			msb->ShowRowCol(rc);
+		}
 		if (c.fUndef())
 			fValid = false; // fNone = true;  
 		//if (fNone) {
@@ -419,31 +434,24 @@ void SimpleMapPaneView::OnMouseMove(UINT nFlags, CPoint point)
 		//	msb->ShowLatLon(LatLon());
 		//}
 		else {
-			if (edit) {
-				RowCol rc (1 + c.x, 1 - c.y);
-				msb->ShowRowCol(rc);
-				msb->ShowCoord(csy->sValue(Coord(0.5 + c.x, 0.5 - c.y))); // subpixel precision version
-			} else {
-				String v;
-				if ( csy->pcsLatLon())
-					v =  useMetricCoords ? String("%f, %f", c.y, c.x) : csy->sValue(c); 
-				else
-					v = csy->sValue(c);
-
-				msb->ShowCoord(v);
-				if (csy->pcsDirect()) {
-					CoordSystemDirect *pcsd = csy->pcsDirect();
-					CoordSystemPtr * pcs = pcsd->csOther.ptr();
-					Coord crd = pcsd->cInverseConv(pcs,c);
-					msb->ShowRelCoord(pcsd->csOther->sValue(crd));
-				}
-				if (csy->fCoord2LatLon()) {
-					LatLon ll = csy->llConv(c);
-					msb->ShowLatLon(ll);
-				}
-				else
-					msb->ShowLatLon(LatLon());
+			String v;
+			if ( csy->pcsLatLon())
+				v =  useMetricCoords ? String("%f, %f", c.y, c.x) : csy->sValue(c); 
+			else
+				v = csy->sValue(c);
+			msb->ShowCoord(v);
+			if (csy->pcsDirect()) {
+				CoordSystemDirect *pcsd = csy->pcsDirect();
+				CoordSystemPtr * pcs = pcsd->csOther.ptr();
+				Coord crd = pcsd->cInverseConv(pcs,c);
+				msb->ShowRelCoord(pcsd->csOther->sValue(crd));
 			}
+			if (csy->fCoord2LatLon()) {
+				LatLon ll = csy->llConv(c);
+				msb->ShowLatLon(ll);
+			}
+			else
+				msb->ShowLatLon(LatLon());
 		}  
 	}
 
