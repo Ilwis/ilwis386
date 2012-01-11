@@ -47,6 +47,7 @@
 //#include "AnimationControlTool.h"
 #include "AnimationTimeSelection.h"
 #include "ThreeDTool.h"
+#include "GeometryTool.h"
 #include "GridTool.h"
 #include "ThreeDGlobalTool.h"
 #include "AttributeTool.h"
@@ -77,6 +78,7 @@
 #include "InfoTool.h"
 #include "ColorCompositeTool.h"
 #include "CoordSystemTool.h"
+#include "GeoreferenceTool.h"
 #include "ColorCompositeTool.h"
 #include "SampleSetEditor.h"
 #include "OperationTool.h"
@@ -101,6 +103,7 @@ DrawerToolInfoVector *createDrawerTool() {
 	infos->push_back(new DrawerToolInfo("AnimationTool",createAnimationTool));
 	infos->push_back(new DrawerToolInfo("AnimationTimeSelectionTool",createAnimationTimeSelectionTool));
 	infos->push_back(new DrawerToolInfo("3DTool",createThreeDTool));
+	infos->push_back(new DrawerToolInfo("GeometryTool",createGeometryTool));
 	infos->push_back(new DrawerToolInfo("GridTool",createGridTool));
 	infos->push_back(new DrawerToolInfo("3DGlobal",createThreeDGlobalTool));
 	infos->push_back(new DrawerToolInfo("AttributeTool",createAttributeTool));
@@ -127,6 +130,7 @@ DrawerToolInfoVector *createDrawerTool() {
 	infos->push_back(new DrawerToolInfo("HovMollerTool",createHovMollerTool));
 	infos->push_back(new DrawerToolInfo("ColorCompositeTool",createColorCompositeTool));
 	infos->push_back(new DrawerToolInfo("CoordSystemTool",createCoordSystemTool));
+	infos->push_back(new DrawerToolInfo("GeoReferenceTool",createGeoReferenceTool));
 	infos->push_back(new DrawerToolInfo("SampleSetEditor",createSampleSetEditor));
 	infos->push_back(new DrawerToolInfo("OperationTool",createOperationTool));
 	infos->push_back(new DrawerToolInfo("GlobalOperationTool",createGlobalOperationTool));
