@@ -314,6 +314,7 @@ void RootDrawer::setGeoreference(const GeoRef& _gr, bool overruleMapBounds) {
 			gr->Coord2RowCol(cbMap.cMax, rRow, rCol);
 			cb += Coord(rCol, -rRow);
 			cbMap = cb;
+			cbMap += CoordBounds(Coord(0,0), Coord(gr->rcSize().Col, -gr->rcSize().Row));
 
 			cb = CoordBounds();
 			gr->Coord2RowCol(cbZoom.cMin, rRow, rCol);
