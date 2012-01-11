@@ -177,13 +177,15 @@ void DistanceMeasurer::drawLine()
 	cdc.LineTo(pEnd);
 	cdc.SelectObject(pn);
 	cdc.SetROP2(iROP);*/
+	Coord pStart = mpv->GetDocument()->rootDrawer->glConv(cStart);
+	Coord pEnd = mpv->GetDocument()->rootDrawer->glConv(cEnd);
 	glClearColor(1.0,1.0,1.0,0.0);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 	glColor3d(1,1,1);
 	glBegin(GL_LINE_STRIP);
-	glVertex3d( cStart.x, cStart.y, 0); // mpv->GetDocument()->rootDrawer->getFakeZ());
-	glVertex3d( cEnd.x, cEnd.y, 0);
+	glVertex3d( pStart.x, pStart.y, 0); // mpv->GetDocument()->rootDrawer->getFakeZ());
+	glVertex3d( pEnd.x, pEnd.y, 0);
 	glEnd();
 	glDisable(GL_BLEND);
 
