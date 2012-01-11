@@ -75,6 +75,12 @@ int MapStatusBar::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	return 0;
 }
 
+void MapStatusBar::Reset()
+{
+	sbiCur = sbiNONE;
+	Init(sbiNONE);
+}
+
 void MapStatusBar::Init(StatusBarItem sbi)
 {
 	sbiCur |= sbi;

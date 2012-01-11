@@ -56,6 +56,7 @@ public:
 	void ShowCoord(const String&);
 	void ShowRelCoord(const String&);
 	void ShowLatLon(LatLon);
+	void Reset();
 	void SetActiveDrawer(ILWIS::NewDrawer* drw);
 	virtual void OnUpdateCmdUI(CFrameWnd*, BOOL);
 	//{{AFX_VIRTUAL(MapStatusBar)
