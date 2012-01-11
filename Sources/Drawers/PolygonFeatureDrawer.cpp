@@ -77,19 +77,16 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 		if ( !polygon)
 			return;
 		cb = polygon->cbBounds();
-		bool coordNeedsConversion = getRootDrawer()->getCoordinateSystem()->fnObj != csy->fnObj;
-		if ( coordNeedsConversion) {
-			Coord c1 = getRootDrawer()->getCoordinateSystem()->cConv(csy,cb.cMin);
-			Coord c2 = getRootDrawer()->getCoordinateSystem()->cConv(csy,cb.cMax);
-			cb = CoordBounds(c1,c2);
-		}
+		Coord c1 = getRootDrawer()->glConv(csy,cb.cMin);
+		Coord c2 = getRootDrawer()->glConv(csy,cb.cMax);
+		cb = CoordBounds(c1,c2);
 		cb.getArea(); // initializes the area
 		long *data;
 		long *count;
 		bool firstTime = polygonLayer->getTriangleData(&data, &count);
 		if ( data) {
 			if ( firstTime)
-				tri->getTriangulation(data, count, csy, getRootDrawer()->getCoordinateSystem(),triangleStrips);
+				tri->getTriangulation(data, count, csy, getRootDrawer(),triangleStrips);
 		} else {
 			tri->getTriangulation(polygon,triangleStrips);
 		}

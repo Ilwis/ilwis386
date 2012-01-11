@@ -658,7 +658,119 @@ bool AnnotationBorderDrawer::draw( const CoordBounds& cbArea) const{
 	glDisable(GL_BLEND);
 
 	return true;
+}
 
+struct ValFinder
+{
+	ValFinder(const RootDrawer* _rootDrawer, const Coord& coord, bool fXcoord, bool fRow, double rGoalVal) 
+		: rootDrawer(_rootDrawer), crd(coord), fX(fXcoord), fFindRow(fRow), rGoal(rGoalVal)
+		{}
+	virtual double operator()(double rX)
+	{
+		if (fX)
+			crd.x = rX;
+		else
+			crd.y = rX;
+		return rCalc();
+	}
+	double rCalc() 
+	{
+		Coord crdRowCol (rootDrawer->glConv(crd));
+		if (fFindRow) {
+			rVal = crdRowCol.y;
+			return crdRowCol.x - rGoal;
+		}
+		else {
+			rVal = crdRowCol.x;
+			return crdRowCol.y - rGoal;
+		}
+	}
+	double rValue() const 
+		{ return rVal; }
+protected:
+	bool fX, fFindRow;
+	Coord crd;
+	const RootDrawer * rootDrawer;
+	double rGoal;
+	double rVal;
+};
+
+// this iterative function can probably be optimized
+double rFindNull(ValFinder& vf, double rDflt)
+{
+	double rX = rDflt;
+	double rStep = 1e100;
+	int iIters = 0;
+	while (true) {
+		double rY1 = vf(rX+1);
+		double rY = vf(rX);
+		double rDY = (rY1 - rY);
+		if (abs(rDY) < 1e-100) // y does not depend on x ???
+			return rUNDEF;
+		double rDX = rY / rDY;
+		if (abs(rDX) < 1e-6 || ++iIters > 10)
+			return vf.rValue();
+		if (abs(rDX) > abs(rStep) * 0.6) {
+			rDX = sign(rDX) * abs(rStep) / 2;
+			rStep *= 0.9;
+		}
+		else {
+			rStep = rDX;
+		}
+		rX -= rDX;
+	}
+}
+
+Coordinate ptBorderX(RootDrawer * rootDrawer, AnnotationBorderDrawer::Side side, double rX)
+{
+	CoordBounds cb (rootDrawer->getMapCoordBounds());
+	double centerX = cb.MinX() + cb.width() / 2.0;
+	double centerY = cb.MinY() + cb.height() / 2.0;
+	Coord crdCenter = rootDrawer->glToWorld(Coord(centerX, centerY));
+	crdCenter.x = rX;
+	double r;
+
+	switch (side)
+	{
+		case AnnotationBorderDrawer::sTOP: 
+			r = rFindNull(ValFinder(rootDrawer,crdCenter,false,false,cb.MinY()), crdCenter.y);
+			return Coordinate(r, cb.MinY());
+		case AnnotationBorderDrawer::sBOTTOM:
+			r = rFindNull(ValFinder(rootDrawer,crdCenter,false,false,cb.MaxY()), crdCenter.y);
+			return Coordinate(r, cb.MaxY());
+		case AnnotationBorderDrawer::sLEFT:
+			r = rFindNull(ValFinder(rootDrawer,crdCenter,false,true,cb.MinX()), crdCenter.y);
+			return Coordinate(cb.MinX(), r);
+		case AnnotationBorderDrawer::sRIGHT:
+			r = rFindNull(ValFinder(rootDrawer,crdCenter,false,true,cb.MaxX()), crdCenter.y);
+			return Coordinate(cb.MaxX(), r);
+	}
+}
+
+Coordinate ptBorderY(RootDrawer * rootDrawer, AnnotationBorderDrawer::Side side, double rY)
+{
+	CoordBounds cb (rootDrawer->getMapCoordBounds());
+	double centerX = cb.MinX() + cb.width() / 2.0;
+	double centerY = cb.MinY() + cb.height() / 2.0;
+	Coord crdCenter = rootDrawer->glToWorld(Coord(centerX, centerY));
+	crdCenter.y = rY;
+	double r;
+
+	switch (side)
+	{
+		case AnnotationBorderDrawer::sTOP: 
+			r = rFindNull(ValFinder(rootDrawer,crdCenter,true,false,cb.MinY()), crdCenter.x);
+			return Coordinate(r, cb.MinY());
+		case AnnotationBorderDrawer::sBOTTOM:
+			r = rFindNull(ValFinder(rootDrawer,crdCenter,true,false,cb.MaxY()), crdCenter.x);
+			return Coordinate(r, cb.MaxY());
+		case AnnotationBorderDrawer::sLEFT:
+			r = rFindNull(ValFinder(rootDrawer,crdCenter,true,true,cb.MinX()), crdCenter.x);
+			return Coordinate(cb.MinX(), r);
+		case AnnotationBorderDrawer::sRIGHT:
+			r = rFindNull(ValFinder(rootDrawer,crdCenter,true,true,cb.MaxX()), crdCenter.x);
+			return Coordinate(cb.MaxX(), r);
+	}
 }
 
 void AnnotationBorderDrawer::setText(double border, AnnotationBorderDrawer::Side side) const{
@@ -673,7 +785,7 @@ void AnnotationBorderDrawer::setText(double border, AnnotationBorderDrawer::Side
 			if ( side == sLEFT) {
 				offset = - cb.width() - cbZoom.width() * 0.01;
 			}
-			Coord crd(border + offset, ypos[i] - cb.height() / 2,0);
+			Coord crd(border + offset, ptBorderY(getRootDrawer(), side, ypos[i]).y - cb.height() / 2, 0);			
 			txtdrw->setCoord(crd);
 		}
 	} else {
@@ -687,7 +799,7 @@ void AnnotationBorderDrawer::setText(double border, AnnotationBorderDrawer::Side
 				if ( side == sBOTTOM) {
 					offset = - cb.height() - cbZoom.height() * 0.01;
 				}
-				Coord crd(xpos[i] - cb.width() / 2, border + offset,0);
+				Coord crd(ptBorderX(getRootDrawer(), side, xpos[i]).x - cb.width() / 2, border + offset, 0);
 				txtdrw->setCoord(crd);
 			}
 		}
@@ -760,8 +872,8 @@ void AnnotationBorderDrawer::calcLocations() {
 	ypos.clear();
 	xpos.clear();
 	CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
-	Coord cMin = cbMap.cMin;
-	Coord cMax = cbMap.cMax;
+	Coord cMin = getRootDrawer()->glToWorld(cbMap.cMin);
+	Coord cMax = getRootDrawer()->glToWorld(cbMap.cMax);
 	GridDrawer *gdr = dynamic_cast<GridDrawer *>(getParentDrawer());
 	if ( !gdr)
 		return;

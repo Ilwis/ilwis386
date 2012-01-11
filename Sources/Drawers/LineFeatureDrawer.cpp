@@ -59,16 +59,12 @@ void LineFeatureDrawer::prepare(PreparationParameters *p){
 		clear();
 		cb = feature->cbBounds();
 		feature->getBoundaries(lines);
-		bool sameCsy = getRootDrawer()->getCoordinateSystem()->fEqual(*(csy.ptr()));
-		if ( !sameCsy ) {
+		if (getRootDrawer()->fConvNeeded(csy)) {
 			cb = CoordBounds();
 			for(int j = 0; j < lines.size(); ++j) {
-				CoordinateSequence *seq = lines.at(j);
-		
+				CoordinateSequence *seq = lines.at(j);	
 				for(int  i = 0; i < seq->size(); ++i) {
-					Coord cOld = seq->getAt(i);
-					Coord c = getRootDrawer()->getCoordinateSystem()->cConv( csy, cOld);
-					c.z = cOld.z;
+					Coord c = getRootDrawer()->glConv( csy, seq->getAt(i));
 					cb += c;
 					seq->setAt(c,i);
 				}

@@ -103,9 +103,19 @@ void GridDrawer::prepare(PreparationParameters *pp) {
 	/*	getZMaker()->setThreeDPossible(true);
 		getZMaker()->setZOrder(100, getZMaker()->getZ0(true));*/
 		CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
-		cMin = cbMap.cMin;
-		cMax = cbMap.cMax;
-		if ( rDist == rUNDEF)
+		cMin = getRootDrawer()->glToWorld(cbMap.cMin);
+		cMax = getRootDrawer()->glToWorld(cbMap.cMax);
+		if (cMin.x > cMax.x) { // swap
+			double x = cMin.x;
+			cMin.x = cMax.x;
+			cMax.x = x;
+		}
+		if (cMin.y > cMax.y) { // swap
+			double y = cMin.y;
+			cMin.y = cMax.y;
+			cMax.y = y;
+		}
+		if ((rDist == rUNDEF) || (pp->type & NewDrawer::ptNEWCSY))
 			rDist = rRound((cMax.x - cMin.x) / 7);
 
 		Coord c1, c2;
@@ -237,10 +247,10 @@ void GridDrawer::preparePlanes(double rDist, const Coord& cMax, const Coord& cMi
 		c1.z = c2.z = z;
 		c1.y = cMin.y;
 		c2.y = cMax.y;
-		planeQuads[i][0] = Coord(cMin.x,cMin.y,z);
-		planeQuads[i][1] = Coord(cMin.x,cMax.y,z);
-		planeQuads[i][2] = Coord(cMax.x,cMax.y,z);
-		planeQuads[i][3] = Coord(cMax.x,cMin.y,z);
+		planeQuads[i][0] = getRootDrawer()->glConv(Coord(cMin.x,cMin.y,z));
+		planeQuads[i][1] = getRootDrawer()->glConv(Coord(cMin.x,cMax.y,z));
+		planeQuads[i][2] = getRootDrawer()->glConv(Coord(cMax.x,cMax.y,z));
+		planeQuads[i][3] = getRootDrawer()->glConv(Coord(cMax.x,cMin.y,z));
 	
 		z  = planeDistances[i];
 	}
@@ -363,6 +373,8 @@ void GridDrawer::AddGridLine(Coord c1, Coord c2)
 	ILWIS::DrawerParameters dp(getRootDrawer(), this);
 	PreparationParameters pp(NewDrawer::ptGEOMETRY);
 	GridLine *line = (GridLine *)NewDrawer::getDrawer("GridLine", &pp, &dp);
+	c1 = getRootDrawer()->glConv(c1);
+	c2 = getRootDrawer()->glConv(c2);
 	line->addDataSource(&c1);
 	line->addDataSource(&c2);
 	((LineProperties *)line->getProperties())->drawColor = lproperties.drawColor;

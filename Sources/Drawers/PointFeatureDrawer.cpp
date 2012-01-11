@@ -44,13 +44,7 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 	    CoordSystem csy = fdr->getCoordSystem();
 		ILWIS::Point *point = (ILWIS::Point *)feature;
 		Coord c = *(point->getCoordinate());
-		FileName fn = getRootDrawer()->getCoordinateSystem()->fnObj;
-		if ( getRootDrawer()->getCoordinateSystem()->fnObj == csy->fnObj) {
-			cNorm = c;
-		}
-		else {
-			cNorm = getRootDrawer()->getCoordinateSystem()->cConv(csy, c);
-		}
+		cNorm = getRootDrawer()->glConv(csy, c);
 		cb += cNorm;
 	}
 	if ( fdr->getRootDrawer()->is3D() && p->type & NewDrawer::pt3D) {

@@ -25,7 +25,7 @@ ILWIS::NewDrawer *createRasterLayerDrawer(DrawerParameters *parms) {
 
 RasterLayerDrawer::RasterLayerDrawer(DrawerParameters *parms) : 
 LayerDrawer(parms,"RasterLayerDrawer")
-, data(new RasterSetData()), isThreaded(true), isThreadedBeforeOffscreen(true), sameCsy(true), fGrfLinear(true), fUsePalette(false), fPaletteOwner(false), palette(0), textureHeap(new TextureHeap()), textureHeapBeforeOffscreen(0), demTriangulator(0)
+, data(new RasterSetData()), isThreaded(true), isThreadedBeforeOffscreen(true), fGrfLinear(true), fUsePalette(false), fPaletteOwner(false), palette(0), textureHeap(new TextureHeap()), textureHeapBeforeOffscreen(0), demTriangulator(0)
 {
 	setTransparency(1); // default, opaque
 	//	setDrawMethod(drmNOTSET); // default
@@ -36,7 +36,6 @@ RasterLayerDrawer::RasterLayerDrawer(DrawerParameters *parms, const String& name
 data(new RasterSetData()),
 isThreaded(true), 
 isThreadedBeforeOffscreen(true), 
-sameCsy(true), 
 fGrfLinear(true), 
 fUsePalette(false), 
 fPaletteOwner(false), 
@@ -86,7 +85,6 @@ void RasterLayerDrawer::prepare(PreparationParameters *pp){
 			getRootDrawer()->getDrawerContext()->setActivePalette(0);
 		}
 		textureHeap->RepresentationChanged();
-		sameCsy = getRootDrawer()->getCoordinateSystem()->fnObj == csy->fnObj;
 		fGrfLinear = gr()->fLinear();
 	}
 	if ((pp->type & pt3D) || ((pp->type & ptGEOMETRY || pp->type & ptRESTORE) && demTriangulator != 0)) {
@@ -97,7 +95,7 @@ void RasterLayerDrawer::prepare(PreparationParameters *pp){
 			demTriangulator = 0;
 		}
 		if (is3DPossible) {
-			demTriangulator = new DEMTriangulator(zMaker, rastermap.ptr(), getRootDrawer()->getCoordinateSystem(), false);
+			demTriangulator = new DEMTriangulator(zMaker, rastermap.ptr(), getRootDrawer(), false);
 			if (!demTriangulator->fValid()) {
 				delete demTriangulator;
 				demTriangulator = 0;
@@ -293,21 +291,14 @@ void RasterLayerDrawer::DisplayImagePortion(unsigned int imageOffsetX, unsigned 
 	glFeedbackBuffer(2, GL_2D, feedbackBuffer);
 	glRenderMode(GL_FEEDBACK);
 	glBegin (GL_QUADS);
-	if (sameCsy) {
-		glVertex3d(b1.x, b1.y, 0.0);
-		glVertex3d(b2.x, b2.y, 0.0);
-		glVertex3d(b3.x, b3.y, 0.0);
-		glVertex3d(b4.x, b4.y, 0.0);
-	} else {
-		c1 = getRootDrawer()->getCoordinateSystem()->cConv(csy, b1);
-		c2 = getRootDrawer()->getCoordinateSystem()->cConv(csy, b2);
-		c3 = getRootDrawer()->getCoordinateSystem()->cConv(csy, b3);
-		c4 = getRootDrawer()->getCoordinateSystem()->cConv(csy, b4);
-		glVertex3d(c1.x, c1.y, 0.0);
-		glVertex3d(c2.x, c2.y, 0.0);
-		glVertex3d(c3.x, c3.y, 0.0);
-		glVertex3d(c4.x, c4.y, 0.0);
-	}
+	c1 = getRootDrawer()->glConv(csy, b1);
+	c2 = getRootDrawer()->glConv(csy, b2);
+	c3 = getRootDrawer()->glConv(csy, b3);
+	c4 = getRootDrawer()->glConv(csy, b4);
+	glVertex3d(c1.x, c1.y, 0.0);
+	glVertex3d(c2.x, c2.y, 0.0);
+	glVertex3d(c3.x, c3.y, 0.0);
+	glVertex3d(c4.x, c4.y, 0.0);
 	glEnd();
 	if (0 == glRenderMode(GL_RENDER))
 		return;
@@ -319,17 +310,10 @@ void RasterLayerDrawer::DisplayImagePortion(unsigned int imageOffsetX, unsigned 
 	GLdouble m_winz[4];
 
 	// project the patch to 2D
-	if (sameCsy) {
-		gluProject(b1.x, b1.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[0], &m_winy[0], &m_winz[0]);
-		gluProject(b2.x, b2.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[1], &m_winy[1], &m_winz[1]);
-		gluProject(b3.x, b3.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[2], &m_winy[2], &m_winz[2]);
-		gluProject(b4.x, b4.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[3], &m_winy[3], &m_winz[3]);
-	} else {
-		gluProject(c1.x, c1.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[0], &m_winy[0], &m_winz[0]);
-		gluProject(c2.x, c2.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[1], &m_winy[1], &m_winz[1]);
-		gluProject(c3.x, c3.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[2], &m_winy[2], &m_winz[2]);
-		gluProject(c4.x, c4.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[3], &m_winy[3], &m_winz[3]);
-	}
+	gluProject(c1.x, c1.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[0], &m_winy[0], &m_winz[0]);
+	gluProject(c2.x, c2.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[1], &m_winy[1], &m_winz[1]);
+	gluProject(c3.x, c3.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[2], &m_winy[2], &m_winz[2]);
+	gluProject(c4.x, c4.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[3], &m_winy[3], &m_winz[3]);
 
 	double zoom = getMinZoom(imageSizeX, imageSizeY, m_winx, m_winy); // the minimum zoomout-factor, indicating that it is necessary to plot the patch more accurately
 
@@ -395,7 +379,7 @@ void RasterLayerDrawer::DisplayTexture(Coord & c1, Coord & c2, Coord & c3, Coord
 		// make the quad
 		glBegin (GL_QUADS);
 
-		if (sameCsy && fGrfLinear) {
+		if (fGrfLinear) {
 			// texture bounds
 			double s1 = imageOffsetX / (double)data->width;
 			double t1 = imageOffsetY / (double)data->height;
@@ -407,57 +391,22 @@ void RasterLayerDrawer::DisplayTexture(Coord & c1, Coord & c2, Coord & c3, Coord
 			gr()->RowCol2Coord(imageOffsetY, min(imageOffsetX + imageSizeX, data->imageWidth), b2);
 			gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), min(imageOffsetX + imageSizeX, data->imageWidth), b3);
 			gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), imageOffsetX, b4);
+			c1 = getRootDrawer()->glConv(csy, b1);
+			c2 = getRootDrawer()->glConv(csy, b2);
+			c3 = getRootDrawer()->glConv(csy, b3);
+			c4 = getRootDrawer()->glConv(csy, b4);
 
 			glTexCoord2d(s1, t1);
-			glVertex3d(b1.x, b1.y, 0.0);
+			glVertex3d(c1.x, c1.y, 0.0);
 
 			glTexCoord2d(s2, t1);
-			glVertex3d(b2.x, b2.y, 0.0);
+			glVertex3d(c2.x, c2.y, 0.0);
 
 			glTexCoord2d(s2, t2);
-			glVertex3d(b3.x, b3.y, 0.0);
+			glVertex3d(c3.x, c3.y, 0.0);
 
 			glTexCoord2d(s1, t2);
-			glVertex3d(b4.x, b4.y, 0.0);
-		} else if (sameCsy) {
-			const unsigned int iSize = 10; // this makes 100 quads, thus 200 triangles per texture
-			// avoid plotting the "added" portion of the map that was there to make the texture size a power of 2
-			double colStep = min(imageSizeX, data->imageWidth - imageOffsetX) / (double)iSize;
-			double rowStep = min(imageSizeY, data->imageHeight - imageOffsetY) / (double)iSize;
-
-			double s1 = imageOffsetX / (double)data->width;
-			for (int x = 0; x < iSize; ++x) {
-				double s2 = s1 + colStep / (double)data->width;
-				double t1 = imageOffsetY / (double)data->height;
-
-				Coord b1, b2, b3, b4;
-				gr()->RowCol2Coord(imageOffsetY, imageOffsetX + colStep * x, b1);
-				gr()->RowCol2Coord(imageOffsetY, imageOffsetX + colStep * (x + 1), b2);
-
-				for (int y = 1; y <= iSize ; ++y) {
-					double t2 = t1 + rowStep / (double)data->height;
-		
-					gr()->RowCol2Coord(imageOffsetY + rowStep * y, imageOffsetX + colStep * (x + 1), b3);
-					gr()->RowCol2Coord(imageOffsetY + rowStep * y, imageOffsetX + colStep * x, b4);
-
-					glTexCoord2d(s1, t1);
-					glVertex3d(b1.x, b1.y, 0.0);
-
-					glTexCoord2d(s2, t1);
-					glVertex3d(b2.x, b2.y, 0.0);
-
-					glTexCoord2d(s2, t2);
-					glVertex3d(b3.x, b3.y, 0.0);
-
-					glTexCoord2d(s1, t2);
-					glVertex3d(b4.x, b4.y, 0.0);
-
-					t1 = t2;
-					b1 = b4;
-					b2 = b3;
-				}
-				s1 = s2;
-			}
+			glVertex3d(c4.x, c4.y, 0.0);
 		} else {
 			const unsigned int iSize = 10; // this makes 100 quads, thus 200 triangles per texture
 			// avoid plotting the "added" portion of the map that was there to make the texture size a power of 2
@@ -473,16 +422,16 @@ void RasterLayerDrawer::DisplayTexture(Coord & c1, Coord & c2, Coord & c3, Coord
 				gr()->RowCol2Coord(imageOffsetY, imageOffsetX + colStep * x, b1);
 				gr()->RowCol2Coord(imageOffsetY, imageOffsetX + colStep * (x + 1), b2);
 
-				c1 = getRootDrawer()->getCoordinateSystem()->cConv(csy, b1);
-				c2 = getRootDrawer()->getCoordinateSystem()->cConv(csy, b2);
+				c1 = getRootDrawer()->glConv(csy, b1);
+				c2 = getRootDrawer()->glConv(csy, b2);
 				for (int y = 1; y <= iSize ; ++y) {
 					double t2 = t1 + rowStep / (double)data->height;
 		
 					gr()->RowCol2Coord(imageOffsetY + rowStep * y, imageOffsetX + colStep * (x + 1), b3);
 					gr()->RowCol2Coord(imageOffsetY + rowStep * y, imageOffsetX + colStep * x, b4);
 
-					c3 = getRootDrawer()->getCoordinateSystem()->cConv(csy, b3);
-					c4 = getRootDrawer()->getCoordinateSystem()->cConv(csy, b4);
+					c3 = getRootDrawer()->glConv(csy, b3);
+					c4 = getRootDrawer()->glConv(csy, b4);
 
 					glTexCoord2d(s1, t1);
 					glVertex3d(c1.x, c1.y, 0.0);
@@ -521,34 +470,22 @@ void RasterLayerDrawer::DisplayTexture3D(Coord & c1, Coord & c2, Coord & c3, Coo
 		gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), min(imageOffsetX + imageSizeX, data->imageWidth), b3);
 		gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), imageOffsetX, b4);
 
-		if (sameCsy) {
-			double clip_plane0[]={b3.y - b2.y, b2.x - b3.x, 0.0, b3.x * (b2.y - b3.y) - b3.y * (b2.x - b3.x)}; // x < x2
-			double clip_plane1[]={b1.y - b4.y, b4.x - b1.x, 0.0, b1.x * (b4.y - b1.y) - b1.y * (b4.x - b1.x)}; // x > x1
-			double clip_plane2[]={b4.y - b3.y, b3.x - b4.x, 0.0, b4.x * (b3.y - b4.y) - b4.y * (b3.x - b4.x)}; // y > y1
-			double clip_plane3[]={b2.y - b1.y, b1.x - b2.x, 0.0, b2.x * (b1.y - b2.y) - b2.y * (b1.x - b2.x)}; // y < y2
-			glClipPlane(GL_CLIP_PLANE0,clip_plane0);
-			glClipPlane(GL_CLIP_PLANE1,clip_plane1);
-			glClipPlane(GL_CLIP_PLANE2,clip_plane2);
-			glClipPlane(GL_CLIP_PLANE3,clip_plane3);
-
-		} else {
-			c1 = getRootDrawer()->getCoordinateSystem()->cConv(csy, b1);
-			c2 = getRootDrawer()->getCoordinateSystem()->cConv(csy, b2);
-			c3 = getRootDrawer()->getCoordinateSystem()->cConv(csy, b3);
-			c4 = getRootDrawer()->getCoordinateSystem()->cConv(csy, b4);
-			//double clip_plane0[]={c3.y - c2.y, c2.x - c3.x, 0.0, c2.x * (c2.y - c3.y) - c2.y * (c2.x - c3.x)}; // x < x2
-			//double clip_plane1[]={c1.y - c4.y, c4.x - c1.x, 0.0, c4.x * (c4.y - c1.y) - c4.y * (c4.x - c1.x)}; // x > x1
-			//double clip_plane2[]={c2.y - c1.y, c1.x - c2.x, 0.0, c1.x * (c1.y - c2.y) - c1.y * (c1.x - c2.x)}; // y > y1
-			//double clip_plane3[]={c4.y - c3.y, c3.x - c4.x, 0.0, c3.x * (c3.y - c4.y) - c3.y * (c3.x - c4.x)}; // y < y2
-			double clip_plane0[]={c3.y - c2.y, c2.x - c3.x, 0.0, c3.x * (c2.y - c3.y) - c3.y * (c2.x - c3.x)}; // x < x2
-			double clip_plane1[]={c1.y - c4.y, c4.x - c1.x, 0.0, c1.x * (c4.y - c1.y) - c1.y * (c4.x - c1.x)}; // x > x1
-			double clip_plane2[]={c4.y - c3.y, c3.x - c4.x, 0.0, c4.x * (c3.y - c4.y) - c4.y * (c3.x - c4.x)}; // y > y1
-			double clip_plane3[]={c2.y - c1.y, c1.x - c2.x, 0.0, c2.x * (c1.y - c2.y) - c2.y * (c1.x - c2.x)}; // y < y2
-			glClipPlane(GL_CLIP_PLANE0,clip_plane0);
-			glClipPlane(GL_CLIP_PLANE1,clip_plane1);
-			glClipPlane(GL_CLIP_PLANE2,clip_plane2);
-			glClipPlane(GL_CLIP_PLANE3,clip_plane3);
-		}
+		c1 = getRootDrawer()->glConv(csy, b1);
+		c2 = getRootDrawer()->glConv(csy, b2);
+		c3 = getRootDrawer()->glConv(csy, b3);
+		c4 = getRootDrawer()->glConv(csy, b4);
+		//double clip_plane0[]={c3.y - c2.y, c2.x - c3.x, 0.0, c2.x * (c2.y - c3.y) - c2.y * (c2.x - c3.x)}; // x < x2
+		//double clip_plane1[]={c1.y - c4.y, c4.x - c1.x, 0.0, c4.x * (c4.y - c1.y) - c4.y * (c4.x - c1.x)}; // x > x1
+		//double clip_plane2[]={c2.y - c1.y, c1.x - c2.x, 0.0, c1.x * (c1.y - c2.y) - c1.y * (c1.x - c2.x)}; // y > y1
+		//double clip_plane3[]={c4.y - c3.y, c3.x - c4.x, 0.0, c3.x * (c3.y - c4.y) - c3.y * (c3.x - c4.x)}; // y < y2
+		double clip_plane0[]={c3.y - c2.y, c2.x - c3.x, 0.0, c3.x * (c2.y - c3.y) - c3.y * (c2.x - c3.x)}; // x < x2
+		double clip_plane1[]={c1.y - c4.y, c4.x - c1.x, 0.0, c1.x * (c4.y - c1.y) - c1.y * (c4.x - c1.x)}; // x > x1
+		double clip_plane2[]={c4.y - c3.y, c3.x - c4.x, 0.0, c4.x * (c3.y - c4.y) - c4.y * (c3.x - c4.x)}; // y > y1
+		double clip_plane3[]={c2.y - c1.y, c1.x - c2.x, 0.0, c2.x * (c1.y - c2.y) - c2.y * (c1.x - c2.x)}; // y < y2
+		glClipPlane(GL_CLIP_PLANE0,clip_plane0);
+		glClipPlane(GL_CLIP_PLANE1,clip_plane1);
+		glClipPlane(GL_CLIP_PLANE2,clip_plane2);
+		glClipPlane(GL_CLIP_PLANE3,clip_plane3);
 		glEnable(GL_CLIP_PLANE0);
 		glEnable(GL_CLIP_PLANE1);
 		glEnable(GL_CLIP_PLANE2);

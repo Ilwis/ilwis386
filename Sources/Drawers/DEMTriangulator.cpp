@@ -3,6 +3,7 @@
 #include "DEMTriangulator.h"
 #include "Texture.h"
 #include "Engine\Drawers\ZValueMaker.h"
+#include "Engine\Drawers\RootDrawer.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -12,12 +13,12 @@ static char THIS_FILE[]=__FILE__;
 
 using namespace ILWIS;
 
-DEMTriangulator::DEMTriangulator(ZValueMaker * zMaker, BaseMapPtr * drapeMapPtr, CoordSystem & csyDest, bool fSmooth)
+DEMTriangulator::DEMTriangulator(ZValueMaker * zMaker, BaseMapPtr * drapeMapPtr, RootDrawer * rootDrawer, bool fSmooth)
 : iNrVerticalSteps(10) // the higher the more vertices
 , fSmooth(fSmooth)
 , iNrVertices(0)
 , zMaker(zMaker)
-, csyDest(csyDest)
+, rootDrawer(rootDrawer)
 , iVertexArrayIncrement(1024 * 1024)
 , valid(false)
 , fSelfDrape(true)
@@ -45,7 +46,7 @@ DEMTriangulator::DEMTriangulator(ZValueMaker * zMaker, BaseMapPtr * drapeMapPtr,
 			}
 		}
 		csyMap = mp->cs();
-		fSameCsy = csyDest->fnObj == csyMap->fnObj;
+		fNeedsConv = rootDrawer->fConvNeeded(csyMap);
 		iSizeX = mp->rcSize().Col;
 		iSizeY = mp->rcSize().Row;
 
@@ -948,8 +949,8 @@ void DEMTriangulator::AddVertex(int x, int y, double rHeight)
 		s = col / (double)width;
 		t = row / (double)height;
 	}
-	if (!fSameCsy)
-		c = csyDest->cConv(csyMap, c);
+	if (fNeedsConv)
+		c = rootDrawer->glConv(csyMap, c);
 	vertices[iNrVertices++] = Vertex(s, t, c.x, c.y, zMaker->scaleValue(rHeight));
 }
 

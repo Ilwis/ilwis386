@@ -25,11 +25,12 @@ namespace ILWIS {
 	
 	class Texture;
 	class ZValueMaker;
+	class RootDrawer;
 
 	class DEMTriangulator
 	{
 	public:
-		DEMTriangulator(ZValueMaker * zMaker, BaseMapPtr * drapeMapPtr, CoordSystem & csyDest, bool fSmooth);
+		DEMTriangulator(ZValueMaker * zMaker, BaseMapPtr * drapeMapPtr, RootDrawer * rootDrawer, bool fSmooth);
 		~DEMTriangulator(void);
 		void PlotTriangles();
 		bool fValid();
@@ -71,11 +72,11 @@ namespace ILWIS {
 		double rHeightAccuracy;
 		const bool fSmooth;
 		bool valid;
-		bool fSameCsy;
+		bool fNeedsConv;
 		bool fSelfDrape;
 		CoordSystem csyMap;
 		CoordSystem csyDrape;
-		CoordSystem csyDest;
+		RootDrawer * rootDrawer;
 	};
 }
 
