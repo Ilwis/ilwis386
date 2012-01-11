@@ -128,14 +128,7 @@ GeoRefEditor::GeoRefEditor(MapPaneView* mpvw, GeoRef georef)
 		}  
 	}
 
-	SpatialDataDrawer *absndrw = CMAPDRW(mcd->rootDrawer, 0);;
-	MapPtr *mptr = (MapPtr *)(absndrw->getBaseMap());
-	mptr->SetGeoRef(GeoRef(FileName("none.grf")));
-	mptr->DoNotStore(true);
-	mcd->rootDrawer->setCoordinateSystem(CoordSystem());
-	CoordBounds cbNone (Coord(0,0), Coord(mptr->rcSize().Col, -mptr->rcSize().Row)); // none.grf bounds
-	mcd->rootDrawer->setCoordBoundsMap(cbNone);
-	mcd->rootDrawer->setCoordBoundsView(cbNone, true);
+	mcd->rootDrawer->setGeoreference(grf, true);
 
 	GeoRefDirectLinear* grdl = grc->pgDirectLinear();
 	if (grdl) 
@@ -297,14 +290,9 @@ GeoRefEditor::GeoRefEditor(MapPaneView* mpvw, GeoRef georef)
 GeoRefEditor::~GeoRefEditor()
 {
 	grc->Store();
-	MapCompositionDoc* mcd = mpv->GetDocument();
-	SpatialDataDrawer *absndrw = CMAPDRW(mcd->rootDrawer, 0);;
-	MapPtr *mptr = (MapPtr*)(absndrw->getBaseMap());
-	mptr->SetGeoRef(grf);
-	mptr->DoNotStore(false);
-	mcd->rootDrawer->setCoordinateSystem(grf->cs());
-	mcd->rootDrawer->setCoordBoundsMap(grf->cb());
-	mcd->rootDrawer->setCoordBoundsView(grf->cb(), true);
+
+	//MapCompositionDoc* mcd = mpv->GetDocument();
+	//mcd->rootDrawer->clearGeoreference();
 
 	/*
 	CReBar& rebar = mpv->mwParent()->rebar;
@@ -793,7 +781,7 @@ bool GeoRefEditor::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	mpv->SetFocus();
 	// RowCol rc = mpv->rcPos(point);
-	Coord c = mpv->GetDocument()->rootDrawer->screenToWorld(RowCol(point.y,point.x));
+	Coord c = mpv->GetDocument()->rootDrawer->screenToOpenGL(RowCol(point.y,point.x));
 	RowCol rc (-c.y, c.x);
 	rc.Row += 1;
 	rc.Col += 1;
