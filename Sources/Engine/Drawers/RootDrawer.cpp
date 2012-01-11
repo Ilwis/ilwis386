@@ -7,10 +7,12 @@
 #include "Engine\Drawers\SelectionRectangle.h"
 #include "Engine\Drawers\ZValueMaker.h"
 
-
 using namespace ILWIS;
 
-RootDrawer::RootDrawer() : ComplexDrawer(0,"RootDrawer"){
+RootDrawer::RootDrawer()
+: ComplexDrawer(0,"RootDrawer")
+, fUseGeoRef(false)
+{
 	drawercontext = new ILWIS::DrawerContext();
 	ILWIS::DrawerParameters dp(this, this);
 	ILWIS::PreparationParameters pp(RootDrawer::ptALL,0);
@@ -78,9 +80,18 @@ void  RootDrawer::prepare(PreparationParameters *pp){
 String RootDrawer::addDrawer(NewDrawer *drw) {
 	SpatialDataDrawer *mapdrw = dynamic_cast<SpatialDataDrawer *>(drw);
 	if ( mapdrw && mapdrw->getBaseMap() != 0) {
-		CoordBounds ncb = mapdrw->cb();
-		//addCoordBounds(mapdrw->getBaseMap()->cs(), cb);
+		CoordSystem _cs = mapdrw->getBaseMap()->cs();
+		CoordBounds ncb = (!cs.fValid() || !_cs.fValid() || cs.fEqual(_cs) || cs->fUnknown() || _cs->fUnknown()) ? mapdrw->cb() : cs->cbConv(_cs, mapdrw->cb());
+		//addCoordBounds(mapdrw->getBaseMap()->cs(), cb); // don't call addCoordBounds, as this extends cbMap and we only want to extend cbView here.
 		//cb += ncb;
+		if (fUseGeoRef) {
+			double rRow;
+			double rCol;
+			gr->Coord2RowCol(ncb.cMin, rRow, rCol);
+			ncb.cMin = Coord(rCol, -rRow);
+			gr->Coord2RowCol(ncb.cMax, rRow, rCol);
+			ncb.cMax = Coord(rCol, -rRow);
+		}
 		CoordBounds cb = cbView;
 		cb += ncb;
 		if ( ! (cb == cbView))
@@ -92,7 +103,15 @@ String RootDrawer::addDrawer(NewDrawer *drw) {
 
 void RootDrawer::addCoordBounds(const CoordSystem& _cs, const CoordBounds& cb, bool overrule){
 	if ( overrule || cbMap.fUndef()) {
-		CoordBounds ncb = cs.fEqual(_cs) ? cb : cs->cbConv(_cs,cb);
+		CoordBounds ncb = (!cs.fValid() || !_cs.fValid() || cs.fEqual(_cs) || cs->fUnknown() || _cs->fUnknown()) ? cb : cs->cbConv(_cs, cb);
+		if (fUseGeoRef) {
+			double rRow;
+			double rCol;
+			gr->Coord2RowCol(ncb.cMin, rRow, rCol);
+			ncb.cMin = Coord(rCol, -rRow);
+			gr->Coord2RowCol(ncb.cMax, rRow, rCol);
+			ncb.cMax = Coord(rCol, -rRow);
+		}
 		//ncb += cbMap;
 		cbMap += ncb;
 	}
@@ -261,6 +280,8 @@ void RootDrawer::setViewPort(const RowCol& rc) {
 
 void RootDrawer::setCoordinateSystem(const CoordSystem& _cs, bool overrule){
 	if (overrule || cs->fUnknown()) {
+		if (fUseGeoRef)
+			clearGeoreference();
 		if ( overrule) {
 			cbMap = _cs->cbConv(cs, cbMap);
 			cbZoom = _cs->cbConv(cs, cbZoom);
@@ -269,6 +290,201 @@ void RootDrawer::setCoordinateSystem(const CoordSystem& _cs, bool overrule){
 		}
 		cs = _cs;
 	}
+}
+
+void RootDrawer::setGeoreference(const GeoRef& _gr, bool overruleMapBounds) {
+	if (_gr.fValid() && !_gr->rcSize().fUndef()) {
+		gr = _gr;
+		cs = gr->cs();
+		fUseGeoRef = true;
+		if (overruleMapBounds) {
+			cbMap = CoordBounds(Coord(0,0), Coord(gr->rcSize().Col, -gr->rcSize().Row));
+			cbZoom = cbMap;
+			cbView = cbMap;
+		} else {
+			CoordBounds cb;
+			double rRow;
+			double rCol;
+			gr->Coord2RowCol(cbMap.cMin, rRow, rCol);
+			cb += Coord(rCol, -rRow);
+			gr->Coord2RowCol(Coord(cbMap.cMin.x, cbMap.cMax.y), rRow, rCol);
+			cb += Coord(rCol, -rRow);
+			gr->Coord2RowCol(Coord(cbMap.cMax.x, cbMap.cMin.y), rRow, rCol);
+			cb += Coord(rCol, -rRow);
+			gr->Coord2RowCol(cbMap.cMax, rRow, rCol);
+			cb += Coord(rCol, -rRow);
+			cbMap = cb;
+
+			cb = CoordBounds();
+			gr->Coord2RowCol(cbZoom.cMin, rRow, rCol);
+			cb += Coord(rCol, -rRow);
+			gr->Coord2RowCol(Coord(cbZoom.cMin.x, cbZoom.cMax.y), rRow, rCol);
+			cb += Coord(rCol, -rRow);
+			gr->Coord2RowCol(Coord(cbZoom.cMax.x, cbZoom.cMin.y), rRow, rCol);
+			cb += Coord(rCol, -rRow);
+			gr->Coord2RowCol(cbZoom.cMax, rRow, rCol);
+			cb += Coord(rCol, -rRow);
+			cbZoom = cb;
+
+			cb = CoordBounds();
+			gr->Coord2RowCol(cbView.cMin, rRow, rCol);
+			cb += Coord(rCol, -rRow);
+			gr->Coord2RowCol(Coord(cbView.cMin.x, cbView.cMax.y), rRow, rCol);
+			cb += Coord(rCol, -rRow);
+			gr->Coord2RowCol(Coord(cbView.cMax.x, cbView.cMin.y), rRow, rCol);
+			cb += Coord(rCol, -rRow);
+			gr->Coord2RowCol(cbView.cMax, rRow, rCol);
+			cb += Coord(rCol, -rRow);
+			cbView = cb;
+		}
+		setProjection(cbMap);
+		setCoordBoundsView(cbMap, true);
+	}
+}
+
+void RootDrawer::clearGeoreference() {
+	if (fUseGeoRef) {
+
+		CoordBounds cb;
+		Coord crd;
+		gr->RowCol2Coord(-cbMap.cMin.y, cbMap.cMin.x,crd);
+		cb += crd;
+		gr->RowCol2Coord(-cbMap.cMin.y, cbMap.cMax.x,crd);
+		cb += crd;
+		gr->RowCol2Coord(-cbMap.cMax.y, cbMap.cMin.x,crd);
+		cb += crd;
+		gr->RowCol2Coord(-cbMap.cMax.y, cbMap.cMax.x,crd);
+		cb += crd;
+		cbMap = cb;
+
+		cb = CoordBounds();
+		gr->RowCol2Coord(-cbZoom.cMin.y, cbZoom.cMin.x,crd);
+		cb += crd;
+		gr->RowCol2Coord(-cbZoom.cMin.y, cbZoom.cMax.x,crd);
+		cb += crd;
+		gr->RowCol2Coord(-cbZoom.cMax.y, cbZoom.cMin.x,crd);
+		cb += crd;
+		gr->RowCol2Coord(-cbZoom.cMax.y, cbZoom.cMax.x,crd);
+		cb += crd;
+		cbZoom = cb;
+
+		cb = CoordBounds();
+		gr->RowCol2Coord(-cbView.cMin.y, cbView.cMin.x,crd);
+		cb += crd;
+		gr->RowCol2Coord(-cbView.cMin.y, cbView.cMax.x,crd);
+		cb += crd;
+		gr->RowCol2Coord(-cbView.cMax.y, cbView.cMin.x,crd);
+		cb += crd;
+		gr->RowCol2Coord(-cbView.cMax.y, cbView.cMax.x,crd);
+		cb += crd;
+		cbView = cb;
+
+		fUseGeoRef = false;
+
+		setProjection(cbMap);
+	}
+}
+
+bool RootDrawer::fConvNeeded(const CoordSystem& _cs) const {
+	return (fUseGeoRef || (cs.fValid() && _cs.fValid() && !cs.fEqual(_cs) && !cs->fUnknown() && !_cs->fUnknown()));
+}
+
+Coord RootDrawer::glConv(const CoordSystem& _cs, const Coord& _crd) const {
+	Coord crdRet(_crd);
+	if (cs.fValid() && _cs.fValid() && !cs.fEqual(_cs) && !cs->fUnknown() && !_cs->fUnknown()) {
+		crdRet = cs->cConv(_cs, _crd);
+		crdRet.z = _crd.z;
+	}
+	if (fUseGeoRef) {
+		double rRow;
+		double rCol;
+		gr->Coord2RowCol(crdRet, rRow, rCol);
+		crdRet = Coord(rCol, -rRow, _crd.z);
+	}
+	return crdRet;
+}
+
+Coord RootDrawer::glConv(const Coord& _crd) const {
+	Coord crdRet (_crd);
+	if (fUseGeoRef) {
+		double rRow;
+		double rCol;
+		gr->Coord2RowCol(crdRet, rRow, rCol);
+		crdRet = Coord(rCol, -rRow, _crd.z);
+	}
+	return crdRet;
+}
+
+vector<Coord> RootDrawer::glConv(const CoordSystem& _cs, const vector<Coord> & _crds) const {
+	if (!cs.fValid() || !_cs.fValid() || cs.fEqual(_cs) || cs->fUnknown() || _cs->fUnknown()) {
+		if (fUseGeoRef) {
+			vector<Coord> crdsRet;
+			double rRow;
+			double rCol;
+			for (int i = 0; i < _crds.size(); ++i) {
+				Coord crd (_crds.at(i));
+				gr->Coord2RowCol(crd, rRow, rCol);
+				crdsRet.push_back(Coord(rCol, -rRow, crd.z));
+			}
+			return crdsRet;
+		} else
+			return _crds;
+	} else {
+		if (fUseGeoRef) {
+			vector<Coord> crdsRet;
+			double rRow;
+			double rCol;
+			for (int i = 0; i < _crds.size(); ++i) {
+				Coord crd (_crds.at(i));
+				gr->Coord2RowCol(cs->cConv(_cs, crd), rRow, rCol);
+				crdsRet.push_back(Coord(rCol, -rRow, crd.z));
+			}
+			return crdsRet;
+		} else {
+			vector<Coord> crdsRet;
+			for (int i = 0; i < _crds.size(); ++i) {
+				Coord crd (_crds.at(i));
+				Coord crdR (cs->cConv(_cs, crd));
+				crdR.z = crd.z;
+				crdsRet.push_back(crdR);
+			}
+			return crdsRet;
+		}
+	}
+}
+
+vector<Coord> RootDrawer::glConv(const vector<Coord> & _crds) const {
+	if (fUseGeoRef) {
+		vector<Coord> crdsRet;
+		double rRow;
+		double rCol;
+		for (int i = 0; i < _crds.size(); ++i) {
+			Coord crd (_crds.at(i));
+			gr->Coord2RowCol(crd, rRow, rCol);
+			crdsRet.push_back(Coord(rCol, -rRow, crd.z));
+		}
+		return crdsRet;
+	} else
+		return _crds;
+}
+
+Coord RootDrawer::glToWorld(const CoordSystem& _cs, const Coord& _crd) const {
+	Coord crdRet (_crd);
+	if (fUseGeoRef)
+		gr->RowCol2Coord(-crdRet.y, crdRet.x, crdRet);
+	if (cs.fValid() && _cs.fValid() && !cs.fEqual(_cs) && !cs->fUnknown() && !_cs->fUnknown())
+		crdRet = _cs->cConv(cs, crdRet);
+	crdRet.z = _crd.z;
+	return crdRet;
+}
+
+Coord RootDrawer::glToWorld(const Coord& _crd) const {
+	Coord crdRet = _crd;
+	if (fUseGeoRef) {
+		gr->RowCol2Coord(-crdRet.y, crdRet.x, crdRet);
+		crdRet.z = _crd.z;
+	}
+	return crdRet;
 }
 
 void RootDrawer::setCoordBoundsView(/*const CoordSystem& _cs,*/ const CoordBounds& cb, bool overrule){
@@ -366,7 +582,7 @@ double RootDrawer::getAspectRatio() const {
 	return aspectRatio;
 }
 
-Coord RootDrawer::screenToWorld(const RowCol& rc) {
+Coord RootDrawer::screenToOpenGL(const RowCol& rc) {
 
 	GLint viewport[4];
 	double modelview[16];
@@ -394,10 +610,14 @@ Coord RootDrawer::screenToWorld(const RowCol& rc) {
 		z = abs(posZ) < fakeZ ? fakeZ : posZ;
 	}
 	return Coord(posX, posY, z ); 
-
 }
 
-RowCol RootDrawer::worldToScreen(const Coord& crd){
+Coord RootDrawer::screenToWorld(const RowCol& rc) {
+	Coord crdRet (glToWorld(screenToOpenGL(rc)));
+	return crdRet;
+}
+
+RowCol RootDrawer::OpenGLToScreen(const Coord& crd){
 	drawercontext->TakeContext();
 
 	GLint viewport[4];
@@ -409,17 +629,22 @@ RowCol RootDrawer::worldToScreen(const Coord& crd){
 	glGetDoublev( GL_PROJECTION_MATRIX, projection );
 	glGetIntegerv( GL_VIEWPORT, viewport );
 
-	int pppp = gluProject(crd.x, crd.y, 1,modelview, projection, viewport,&posX,&posY, &posZ);
+	gluProject(crd.x, crd.y, 1,modelview, projection, viewport,&posX,&posY, &posZ);
 
 	drawercontext->ReleaseContext();
 	return RowCol(posY, posX);
 
 }
 
+RowCol RootDrawer::WorldToScreen(const Coord& crd){
+	Coord crdGL = glConv(crd);
+	return OpenGLToScreen(crdGL);
+}
+
 void RootDrawer::setZoom(const CRect& rect) {
 	Coord c1,c2;
 	if ( rect.Width() == 0 || rect.Height() == 0) { // case of clicking on the map in zoom mode
-		Coord c = screenToWorld(RowCol(rect.top, rect.left));
+		Coord c = screenToOpenGL(RowCol(rect.top, rect.left));
 		CoordBounds cb = cbZoom; // == cbView ? cbMap : cbZoom;
 		double w = cb.width() / (2.0 * 1.41);
 		double h = cb.height() / (2.0 * 1.41);
@@ -430,8 +655,8 @@ void RootDrawer::setZoom(const CRect& rect) {
 
 	}
 	else {
-		c1 = screenToWorld(RowCol(rect.top, rect.left));
-		c2 = screenToWorld(RowCol(rect.bottom, rect.right));
+		c1 = screenToOpenGL(RowCol(rect.top, rect.left));
+		c2 = screenToOpenGL(RowCol(rect.bottom, rect.right));
 	}
 	c1.z = c2.z = 0;
 	CoordBounds cb(c1,c2);
