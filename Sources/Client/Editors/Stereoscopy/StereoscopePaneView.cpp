@@ -84,17 +84,18 @@ void StereoscopePaneView::SetSiblingPane(StereoscopePaneView * spv)
 void StereoscopePaneView::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
 	fCoupledScroll = swParent->fXoffsetLocked();
-	MinMax mmBefore (mmVisibleMapArea()); // sample the position before scroll
+	MapCompositionDoc* mcd = GetDocument();
+	CoordBounds cbBefore (mcd->rootDrawer->getCoordBoundsZoom()); // sample the position before scroll
 	MapPaneView::OnHScroll(nSBCode, nPos, pScrollBar);
-	MinMax mmAfter (mmVisibleMapArea()); // sample the position after scroll
+	CoordBounds cbAfter (mcd->rootDrawer->getCoordBoundsZoom()); // sample the position after scroll
 	// The difference should give the "delta" of the XoffsetDelta.
 	// "photos move away from eachother" results in an increase of the minmax when left, and
 	// a decrease of the minmax in the right pane. Record it as such.
 	if (!fCoupledScroll && swParent)
 		if (fLeft) // we're in left pane
-			swParent->SetXoffsetDelta(swParent->iXoffsetDelta() + mmAfter.rcMin.Col - mmBefore.rcMin.Col);
+			swParent->SetXoffsetDelta(swParent->rXoffsetDelta() + cbAfter.cMin.x - cbBefore.cMin.x);
 		else // we're in right pane
-			swParent->SetXoffsetDelta(swParent->iXoffsetDelta() + mmBefore.rcMin.Col - mmAfter.rcMin.Col);
+			swParent->SetXoffsetDelta(swParent->rXoffsetDelta() + cbBefore.cMin.x - cbAfter.cMin.x);
 	
 	fCoupledScroll = true;
 }
@@ -110,9 +111,9 @@ void StereoscopePaneView::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScroll
 	fCoupledScroll = true;
 }
 
-void StereoscopePaneView::SetDirty()
+void StereoscopePaneView::RequestRedraw()
 {
-	MapPaneView::SetDirty(); // call parent implementation
+	MapPaneView::RequestRedraw(); // call parent implementation
 
 	if (swParent)
 	{
@@ -122,14 +123,19 @@ void StereoscopePaneView::SetDirty()
 			// Check on fCoupledScroll: don't pass "ShowAreaInSlave" when scrolling uncoupled
 			// This would not give a wrong iXoffsetDelta, but would result in incorrect display
 			// Also check for rUNDEF scale to avoid calling ShowArea in the slave when this would be nonsense
-			if (fCoupledScroll && spvSiblingPane && spvSiblingPane->rScale()!=rUNDEF)
+			if (fCoupledScroll && spvSiblingPane)// && spvSiblingPane->rScale()!=rUNDEF)
 			{
-				long iXposDelta = 0;
+				double rXposDelta = 0;
 				if (fLeft) // we're in left pane
-					iXposDelta = -swParent->iXoffsetDelta();
+					rXposDelta = -swParent->rXoffsetDelta();
 				else // we're in right pane
-					iXposDelta = +swParent->iXoffsetDelta();
-				spvSiblingPane->ShowArea(_rScale, iXpos + iXposDelta, iYpos);
+					rXposDelta = +swParent->rXoffsetDelta();
+				CoordBounds cb (GetDocument()->rootDrawer->getCoordBoundsZoom());
+				cb.cMin += Coord(rXposDelta, 0);
+				cb.cMax += Coord(rXposDelta, 0);
+				spvSiblingPane->GetDocument()->rootDrawer->setCoordBoundsZoom(cb);
+				spvSiblingPane->setScrollBars();
+				spvSiblingPane->RequestRedraw();
 			}
 			swParent->ReleaseMasterLock();
 		}

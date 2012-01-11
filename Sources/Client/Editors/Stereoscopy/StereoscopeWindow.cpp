@@ -93,7 +93,7 @@ END_MESSAGE_MAP()
 
 StereoscopeWindow::StereoscopeWindow()
 : vwLeft(0), vwRight(0), docLeft(0), docRight(0)
-, _fXoffsetLocked(true), _iXoffsetDelta(0), iWindowMiddle(0)
+, _fXoffsetLocked(true), _rXoffsetDelta(0), iWindowMiddle(0)
 , fMasterLocked(false)
 {
 	fStoreToolBars = false; // overrule FrameWindow default: we dont want our toolbars to be remembered
@@ -128,7 +128,7 @@ StereoscopeWindow::StereoscopeWindow()
 			{
 				InitialUpdate(0,TRUE); // window will appear
 				if (stp->mapLeft.fValid() && stp->mapRight.fValid()) // for fDependent()=false
-					RefreshMaps(stp->mapLeft->fnObj.sFullName(), stp->mapRight->fnObj.sFullName());
+					RefreshMaps(stp->mapLeft, stp->mapRight);
 			}
 			else
 				PostMessage(WM_CLOSE, 0, 0); // window will not appear; resources will be cleaned up
@@ -372,7 +372,7 @@ void StereoscopeWindow::OnOpenStereoPair()
 			}
 			if (stp->fCalculated())
 				if (stp->mapLeft.fValid() && stp->mapRight.fValid()) // for fDependent()=false
-					RefreshMaps(stp->mapLeft->fnObj.sFullName(), stp->mapRight->fnObj.sFullName());
+					RefreshMaps(stp->mapLeft, stp->mapRight);
 		}
 		StereoPairUpdated();
 	}
@@ -398,10 +398,12 @@ void StereoscopeWindow::OnUpdateActiveRightView(CCmdUI* pCmdUI)
 	pCmdUI->SetRadio(GetActiveView() == vwRight);
 }
 
-void StereoscopeWindow::RefreshMaps(const String& sLeftMap, const String& sRightMap)
+void StereoscopeWindow::RefreshMaps(const Map& mpLeftMap, const Map& mpRightMap)
 {
-  docLeft->OnOpenDocument(sLeftMap.c_str(), IlwisDocument::otNOASK);
-  docRight->OnOpenDocument(sRightMap.c_str(), IlwisDocument::otNOASK);
+	docLeft->OnOpenDocument(mpLeftMap->fnObj.sFullName().c_str(), IlwisDocument::otNOASK);
+	docRight->OnOpenDocument(mpRightMap->fnObj.sFullName().c_str(), IlwisDocument::otNOASK);
+	docLeft->rootDrawer->setGeoreference(mpLeftMap->gr(), true);
+	docRight->rootDrawer->setGeoreference(mpRightMap->gr(), true);
 	docLeft->UpdateAllViews(0,3); // entiremap to left views
 	docRight->UpdateAllViews(0,3); // entiremap to right views
 }
@@ -475,15 +477,15 @@ bool StereoscopeWindow::fXoffsetLocked()
 	return _fXoffsetLocked;
 }
 
-int StereoscopeWindow::iXoffsetDelta()
+double StereoscopeWindow::rXoffsetDelta()
 {
-	return _iXoffsetDelta;
+	return _rXoffsetDelta;
 }
 
-void StereoscopeWindow::SetXoffsetDelta(int i)
+void StereoscopeWindow::SetXoffsetDelta(double delta)
 {
 	if (!_fXoffsetLocked) // if it is locked, don't set anything
-		_iXoffsetDelta = i;
+		_rXoffsetDelta = delta;
 }
 
 void StereoscopeWindow::OnLayerManagement()
