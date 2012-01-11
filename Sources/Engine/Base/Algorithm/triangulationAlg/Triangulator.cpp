@@ -3,6 +3,7 @@
 #include "Engine\Map\Polygon\POL.h"
 #include "Engine\Base\Algorithm\triangulationAlg\gpc.h"
 #include "Engine\Base\Algorithm\TriangulationAlg\Triangulator.h"
+#include "Engine\Drawers\RootDrawer.h"
 
 using namespace ILWIS;
 
@@ -156,7 +157,7 @@ long MapPolygonTriangulator::writeTriangleData(ofstream& file) {
 	return trianglePol[0];
 }
 
-void MapPolygonTriangulator::getTriangulation(long *buffer, long* count, const CoordSystem& csData, const CoordSystem& csView, vector<vector<Coord> >& triangleStrips) {
+void MapPolygonTriangulator::getTriangulation(long *buffer, long* count, const CoordSystem& csData, const RootDrawer* rootDrawer, vector<vector<Coord> >& triangleStrips) {
 	long number;
 	number = buffer[*count];
 	trianglePol = new long[number];
@@ -164,7 +165,7 @@ void MapPolygonTriangulator::getTriangulation(long *buffer, long* count, const C
 	memcpy(trianglePol,buffer + *count,number * 4);
 	long current = 2;
 	triangleStrips.resize(trianglePol[1]);
-	bool coordNeedsConversion = csData->fnObj != csView->fnObj;
+	bool coordNeedsConversion = rootDrawer->fConvNeeded(csData);
 	for(int i = 0; i < trianglePol[1]; ++i) {
 		int n = trianglePol[current++];
 		triangleStrips[i].resize(n);
@@ -172,12 +173,10 @@ void MapPolygonTriangulator::getTriangulation(long *buffer, long* count, const C
 			double x = ((double *)(trianglePol + current))[j*3];
 			double y = ((double *)(trianglePol + current))[j*3 + 1];
 			double z = ((double *)(trianglePol + current))[j*3 + 2];
-			Coord c(x,y,z);
-			if ( coordNeedsConversion)
-				c = csView->cConv(csData,c);
-			
-			triangleStrips.at(i)[j] = c;
+			triangleStrips.at(i)[j] = Coord(x,y,z);
 		}
+		if (coordNeedsConversion)
+			triangleStrips.at(i) = rootDrawer->glConv(csData, triangleStrips.at(i));
 		current += n * 2 *3;
 	}
 	*count += number;
