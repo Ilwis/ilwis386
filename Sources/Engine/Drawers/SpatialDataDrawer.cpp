@@ -120,14 +120,9 @@ void SpatialDataDrawer::addDataSource(void *bmap,int options)
 		if ( bm.fValid())
 			cbBounds = bm->cb();
 		if ( oc.fValid())
-			cbBounds = oc->cb();
-		if ( bm.fValid() && bm->cs() != rootdrawer->getCoordinateSystem()) {
-			cbBounds.cMin = rootdrawer->getCoordinateSystem()->cConv(bm->cs(),cbBounds.cMin);
-			cbBounds.cMax = rootdrawer->getCoordinateSystem()->cConv(bm->cs(),cbBounds.cMax);
-		}
-		CoordBounds cbMap = rootdrawer->getMapCoordBounds();
-		cbMap += cbBounds;
-		rootdrawer->setCoordBoundsMap(cbMap);
+			cbBounds = oc->cb(); // cbBounds for an ObjectCollection are the bounds that enclose all basemaps, in the CoordinateSystem of the first basemap
+		if (bm.fValid())
+			rootDrawer->addCoordBounds(bm->cs(), cbBounds);
 		if ( bm.fValid() && bm->fnObj == bm->dm()->fnObj)
 			internalDomain = true;
 		//MouseClickInfoDrawer *mid = (MouseClickInfoDrawer *)(rootdrawer)->getDrawer("MouseClickInfoDrawer");

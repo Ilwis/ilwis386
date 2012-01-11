@@ -50,8 +50,8 @@ bool SelectionRectangle::draw( const CoordBounds& cb) const{
 }
 
 void SelectionRectangle::calcWorldCoordinates(const CRect & rctZoom) {
-	c1 = getRootDrawer()->screenToWorld(RowCol(rctZoom.top,rctZoom.left));
-	c2 = getRootDrawer()->screenToWorld(RowCol(rctZoom.bottom,rctZoom.right));
+	c1 = getRootDrawer()->screenToOpenGL(RowCol(rctZoom.top,rctZoom.left));
+	c2 = getRootDrawer()->screenToOpenGL(RowCol(rctZoom.bottom,rctZoom.right));
 }
 
 void SelectionRectangle::prepare(PreparationType t,CDC *dc){
