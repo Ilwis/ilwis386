@@ -953,9 +953,9 @@ ILWIS::NewDrawer *MapCompositionDoc::createBaseMapDrawer(const BaseMap& bmp, con
 
 	ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
 	ILWIS::NewDrawer *drawer = NewDrawer::getDrawer(type, subtype, &parms);
+	CoordBounds cbZoom = rootDrawer->getCoordBoundsZoom(); // backup cbZoom
 	drawer->addDataSource((void *)&bmp);
 	rootDrawer->setCoordinateSystem(bmp->cs());
-	CoordBounds cbZoom = rootDrawer->getCoordBoundsZoom();
 	CoordBounds cbMap = bmp->cb();
 	if ( !cbMap.fValid() && IOTYPE(bmp->fnObj) == IlwisObject::iotRASMAP) { // for csunknown with no boundaries
 		MapPtr *mptr = (MapPtr *)bmp.pointer();
@@ -977,7 +977,7 @@ ILWIS::NewDrawer *MapCompositionDoc::createBaseMapDrawer(const BaseMap& bmp, con
 	}
 	String sysFile = bmp->fnObj.sFullName();
 	sysFile.toLower();
-	if ( sysFile.find("ilwis3\\system\\basemaps") != string::npos && cbZoom.fValid())
+	if ( sysFile.find("ilwis3\\system\\basemaps") != string::npos && cbZoom.fValid()) // restore cbZoom if we added a system background map
 		rootDrawer->setCoordBoundsZoom(cbZoom);
 
 
