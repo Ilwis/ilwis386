@@ -288,6 +288,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\DrawersUI\GeometryTool.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\GeoreferenceTool.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\DrawersUI\GlobalOperationTool.cpp"
 				>
 			</File>
@@ -506,6 +514,14 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\DrawersUI\FSWindow.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\GeometryTool.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\GeoreferenceTool.h"
 				>
 			</File>
 			<File
