@@ -14,8 +14,10 @@
 #include "Engine\Drawers\DrawerContext.h"
 #include "CoordSystemTool.h"
 #include "LayerDrawerTool.h"
-#include "DrawersUI\GlobalTool.h"
-
+#include "Client\Mapwindow\MapCompositionDoc.h"
+#include "Client\Mapwindow\SimpleMapPaneView.h"
+#include "Client\Mapwindow\MapPaneView.h"
+#include "DrawersUI\GeometryTool.h"
 
 
 DrawerTool *createCoordSystemTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) {
@@ -31,11 +33,7 @@ CoordSystemTool::~CoordSystemTool() {
 }
 
 bool CoordSystemTool::isToolUseableFor(ILWIS::DrawerTool *tool) { 
-
-	bool ok = dynamic_cast<GlobalTool *>(tool) != 0;
-	if (ok)
-		return true;
-	return false;
+	return dynamic_cast<GeometryTool *>(tool) != 0;
 }
 
 HTREEITEM CoordSystemTool::configure( HTREEITEM parentItem) {
@@ -92,6 +90,7 @@ void  CoordSystemForm::apply() {
 		PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER | NewDrawer::ptNEWCSY);
 		drw->getRootDrawer()->prepare(&pp);
 
+		view->GetDocument()->mpvGetView()->ResetStatusBar(); // let the statusbar grow from scratch, to show whatever is needed (eliminate the rowcol)
 
 	}
 

@@ -103,10 +103,10 @@ bool MeasurerLine::draw( const CoordBounds& cbArea) const{
 		z0 += z0; // supprting drawer, lies on top of the actual layerdrawer
 		glBegin(GL_LINE_LOOP);
 		for(int i = 0; i <= sections;i++) { // make $section number of circles
-			glVertex3d(lcx + rx * cos(i *  twoPi / sections), 
-				lcy + ry* sin(i * twoPi / sections), z0);
+			Coord crd = rootDrawer->glConv(Coord(lcx + rx * cos(i *  twoPi / sections), lcy + ry* sin(i * twoPi / sections)));
+			glVertex3d(crd.x, crd.y, z0);
 		}
-	glEnd();
+		glEnd();
 	}
 
 	return true;
@@ -318,7 +318,7 @@ cdc.LineTo(p2);
 */
 
 void DistanceMeasurer::setCoords() {
-	line->addCoords(coords, 1);
+	line->addCoords(tree->GetDocument()->rootDrawer->glConv(coords), 1);
 	line->setDistance(rDistance());
 	line->setCenter(cStart());
 	line->useEllipse = useEllipse;

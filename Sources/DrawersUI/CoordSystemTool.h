@@ -4,8 +4,6 @@ ILWIS::DrawerTool *createCoordSystemTool(ZoomableView* zv, LayerTreeView *view, 
 
 namespace ILWIS {
 
-	class AnimationDrawer;
-
 	class CoordSystemTool : public DrawerTool {
 	public:
 		CoordSystemTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw);
