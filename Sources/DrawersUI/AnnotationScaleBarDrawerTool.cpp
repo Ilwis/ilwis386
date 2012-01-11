@@ -1,0 +1,172 @@
+#include "Client\Headers\formelementspch.h"
+#include "Client\FormElements\fldcolor.h"
+#include "Client\FormElements\FieldListView.h"
+#include "Client\FormElements\FieldIntSlider.h"
+#include "Engine\Drawers\RootDrawer.h"
+#include "Engine\Drawers\ComplexDrawer.h"
+#include "Engine\Drawers\SimpleDrawer.h" 
+#include "Engine\Drawers\SpatialDataDrawer.h"
+#include "Client\Mapwindow\MapPaneView.h"
+#include "Client\Mapwindow\MapPaneViewTool.h"
+#include "Client\MapWindow\Drawers\DrawerTool.h"
+#include "Drawers\SetDrawer.h"
+#include "Engine\Domain\dmclass.h"
+#include "Client\Ilwis.h"
+#include "Client\Mapwindow\MapCompositionDoc.h"
+#include "Client\Mapwindow\LayerTreeView.h"
+#include "Client\Mapwindow\MapPaneViewTool.h"
+#include "Client\MapWindow\Drawers\DrawerTool.h"
+#include "Client\Mapwindow\LayerTreeItem.h" 
+#include "Engine\Drawers\DrawerContext.h"
+#include "drawers\linedrawer.h"
+#include "Drawers\LayerDrawer.h"
+#include "Drawers\AnnotationDrawers.h"
+#include "DrawersUI\AnnotationScaleBarDrawerTool.h"
+#include "DrawersUI\GlobalAnnotationTool.h"
+
+using namespace ILWIS;
+
+DrawerTool *createAnnotationScaleBarDrawerTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) {
+	return new AnnotationScaleBarDrawerTool(zv, view, drw);
+}
+
+AnnotationScaleBarDrawerTool::AnnotationScaleBarDrawerTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
+	DrawerTool(TR("AnnotationScaleBarDrawerTool"), zv, view, drw), scaleDrawer(0)
+{
+}
+
+AnnotationScaleBarDrawerTool::~AnnotationScaleBarDrawerTool() {
+	clear();
+}
+
+void AnnotationScaleBarDrawerTool::clear() {
+	ComplexDrawer *annotations = (ComplexDrawer *)(drawer->getRootDrawer()->getDrawer("AnnotationDrawers"));
+	if ( annotations && scaleDrawer)
+		annotations->removeDrawer(scaleDrawer->getId());
+
+}
+
+bool AnnotationScaleBarDrawerTool::isToolUseableFor(ILWIS::DrawerTool *tl) { 
+
+	bool ok = dynamic_cast<GlobalAnnotationTool *>(tl) != 0;
+	if (ok)
+		return true;
+	return false;
+}
+
+HTREEITEM AnnotationScaleBarDrawerTool::configure( HTREEITEM parentItem) {
+	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree, parentItem, drawer);
+	item->setCheckAction(this, 0,(DTSetCheckFunc)&AnnotationScaleBarDrawerTool::makeActive);
+	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&AnnotationScaleBarDrawerTool::setPosition);
+	htiNode = insertItem(TR("ScaleBar"),"ScaleBar",item, scaleDrawer && scaleDrawer->isActive());
+	//item = new DisplayOptionTreeItem(tree, htiNode, drawer);
+	//item->setDoubleCickAction(this,(DTDoubleClickActionFunc)&AnnotationScaleBarDrawerTool::setPosition);
+	//insertItem(TR("Size & Position"),"Position",item);
+	//item = new DisplayOptionTreeItem(tree, htiNode, drawer);
+	//item->setDoubleCickAction(this,(DTDoubleClickActionFunc)&AnnotationScaleBarDrawerTool::setAppearance);
+	//insertItem(TR("Appearance"),"Appearance",item);
+
+	DrawerTool::configure(htiNode);
+	return htiNode;
+}
+
+String AnnotationScaleBarDrawerTool::getMenuString() const {
+	return "ScaleBar Annotation";
+}
+
+void AnnotationScaleBarDrawerTool::setPosition() {
+	if ( scaleDrawer)
+		new ScaleBarPosition(tree,scaleDrawer);
+}
+
+void AnnotationScaleBarDrawerTool::setAppearance() {
+	if ( scaleDrawer)
+		new ScaleBarAppearance(tree, scaleDrawer);
+}
+
+
+void AnnotationScaleBarDrawerTool::makeActive(void *v, HTREEITEM ) {
+	bool act = *(bool *)v;
+	if ( scaleDrawer) {
+		scaleDrawer->setActive(act);
+		PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER);
+		scaleDrawer->prepare(&pp);
+	}
+	else {
+		if ( act) {
+			PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER);
+			ILWIS::DrawerParameters dp((RootDrawer *)drawer, drawer);
+			scaleDrawer = (AnnotationScaleBarDrawer *)NewDrawer::getDrawer("AnnotationScaleBarDrawer","ilwis38",&dp);
+			if ( scaleDrawer) {
+				scaleDrawer->prepare(&pp);
+				ComplexDrawer *annotations = (ComplexDrawer *)(drawer->getRootDrawer()->getDrawer("AnnotationDrawers"));
+				if ( annotations)
+					annotations->addPostDrawer(405, scaleDrawer);
+			}
+		}
+	}
+	mpvGetView()->Invalidate();
+}
+
+//--------------------------------------------------------
+ScaleBarPosition::ScaleBarPosition(CWnd *wPar, AnnotationScaleBarDrawer *dr) : 
+	DisplayOptionsForm(dr,wPar,TR("Properties of the ScaleBar"))
+{
+	//orientation = dr->getOrientation() ? 1 : 0;
+	CoordBounds cbZoom = drw->getRootDrawer()->getCoordBoundsZoom();
+	Coord begin = dr->getBegin();
+	unit = dr->getUnit();
+	ticks = dr->getTicks();
+	sz = dr->getSize();
+	x = 100 * ( begin.x - cbZoom.MinX() ) / cbZoom.width();
+	y = 100 * ( begin.y - cbZoom.MinY()) / cbZoom.height();
+	sliderH = new FieldIntSliderEx(root,TR("X position"), &x,ValueRange(0,100),true);
+	sliderV = new FieldIntSliderEx(root,TR("Y position"), &y,ValueRange(0,100),true);
+	sliderV->Align(sliderH, AL_UNDER);
+	sliderH->SetCallBack((NotifyProc)&ScaleBarPosition::setPosition);
+	sliderH->setContinuous(true);
+	sliderV->SetCallBack((NotifyProc)&ScaleBarPosition::setPosition);
+	sliderV->setContinuous(true);
+	fldSize = new FieldReal(root, TR("Tick Size"),&sz);
+	fldTicks = new FieldInt(root, TR("Number of ticks"),&ticks);
+	fldUnit = new FieldString(root, TR("Unit"),&unit);
+	create();
+}
+
+int ScaleBarPosition::setPosition(Event *ev) {
+	sliderV->StoreData();
+	sliderH->StoreData();
+	AnnotationScaleBarDrawer *scaleDrw = (AnnotationScaleBarDrawer *)drw;
+	Coord begin = scaleDrw->getBegin();
+	CoordBounds cbZoom = drw->getRootDrawer()->getCoordBoundsZoom();
+	double newx = cbZoom.width() * x / 100.0 + cbZoom.MinX();
+	double newy = cbZoom.height() * y / 100.0 + cbZoom.MinY();
+	scaleDrw->setBegin(Coord(newx,newy));
+	updateMapView();
+
+	return 1;
+}
+
+void ScaleBarPosition::apply() {
+	fldUnit->StoreData();
+	fldSize->StoreData();
+	fldTicks->StoreData();
+	AnnotationScaleBarDrawer *scaleDrw = (AnnotationScaleBarDrawer *)drw;
+	scaleDrw->setUnit(unit);
+	scaleDrw->setSize(sz);
+	scaleDrw->setTicks(ticks);
+	PreparationParameters pp(NewDrawer::ptGEOMETRY);
+	scaleDrw->prepare(&pp);
+	updateMapView();
+}
+
+//-------------------------------------------------------------------------------
+ScaleBarAppearance::ScaleBarAppearance(CWnd *wPar, AnnotationScaleBarDrawer *dr) : DisplayOptionsForm(dr,wPar,TR("Appearance of ScaleBar"))
+{
+}
+
+void ScaleBarAppearance::apply() {
+	updateMapView();
+
+}
+
