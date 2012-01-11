@@ -83,6 +83,8 @@
 #include "SampleSetEditor.h"
 #include "OperationTool.h"
 #include "GlobalOperationTool.h"
+#include "DrawersUI\GlobalAnnotationTool.h"
+#include "DrawersUI\AnnotationScaleBarDrawerTool.h"
 
 
 using namespace ILWIS;
@@ -134,6 +136,8 @@ DrawerToolInfoVector *createDrawerTool() {
 	infos->push_back(new DrawerToolInfo("SampleSetEditor",createSampleSetEditor));
 	infos->push_back(new DrawerToolInfo("OperationTool",createOperationTool));
 	infos->push_back(new DrawerToolInfo("GlobalOperationTool",createGlobalOperationTool));
+	infos->push_back(new DrawerToolInfo("GlobalAnnotationTool",createGlobalAnnotationTool));
+	infos->push_back(new DrawerToolInfo("AnnotationScaleBarDrawerTool",createAnnotationScaleBarDrawerTool));
 
 	return infos;
 }
