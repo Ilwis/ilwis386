@@ -404,10 +404,10 @@ void SimpleMapPaneView::OnMouseMove(UINT nFlags, CPoint point)
 
 	bool fOutside = false; //!rctBounds.PtInRect(point);
 
-	Coord c;
 	//Pnt2RowCol(point, rRow, rCol);
 	bool fValid = true;
-	c = mcd->rootDrawer->screenToWorld(RowCol(point.y,point.x));
+	Coord cRowCol (mcd->rootDrawer->screenToOpenGL(RowCol(point.y,point.x)));
+	Coord c (mcd->rootDrawer->glToWorld(cRowCol));
 	MapStatusBar* msb = 0;
 	CoordSystem csy = mcd->rootDrawer->getCoordinateSystem();
 	if (fwPar) 
@@ -418,7 +418,6 @@ void SimpleMapPaneView::OnMouseMove(UINT nFlags, CPoint point)
 			//RowCol rc((long)floor(1+rRow), (long)floor(1+rCol));
 			//msb->ShowRowCol(rc);
 		//}
-		Coord cRowCol (mcd->rootDrawer->screenToOpenGL(RowCol(point.y,point.x)));
 		if (cRowCol != c) {
 			RowCol rc ((long)floor(1-cRowCol.y), (long)floor(1+cRowCol.x));
 			msb->ShowRowCol(rc);
