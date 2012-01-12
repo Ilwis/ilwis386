@@ -198,7 +198,9 @@ BOOL ZoomableView::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT*
 			if (wParam & MK_CONTROL) moveViewPoint(point, message);
 			break;
 		case WM_RBUTTONUP:
-			if (tools.size() > 0) tools.OnRButtonUp(wParam, point);
+			if (tools.size() > 0)
+				tools.OnRButtonUp(wParam, point);
+			if (wParam & MK_CONTROL) moveViewPoint(point, message);
 			break;
 	}
 	return CView::OnWndMsg(message, wParam, lParam, pResult);
@@ -223,7 +225,6 @@ void ZoomableView::moveViewPoint(const CPoint& pnt, UINT message) {
 	} else if (message == WM_MOUSEMOVE && beginMovePoint.x != iUNDEF) {
 		CRect rct;
 		GetClientRect(rct);
-		Coord viewPoint = doc->rootDrawer->getViewPoint();
 		double deltax = beginMovePoint.x - pnt.x;
 		double deltay = beginMovePoint.y - pnt.y;
 		if ( deltax == 0 && deltay == 0)
@@ -233,9 +234,23 @@ void ZoomableView::moveViewPoint(const CPoint& pnt, UINT message) {
 		CoordBounds cb = doc->rootDrawer->getCoordBoundsZoom();
 		double shiftx = cb.width() * deltax;
 		double shifty = cb.height() * deltay;
+		/*
+		Coord eyePoint = doc->rootDrawer->getEyePoint();
+		eyePoint.x += shiftx;
+		eyePoint.z += shifty;
+		doc->rootDrawer->setEyePoint(eyePoint);
+		Coord viewPoint = doc->rootDrawer->getViewPoint();
 		viewPoint.x += shiftx;
-		viewPoint.y += shifty;
+		viewPoint.z += shifty;
 		doc->rootDrawer->setViewPoint(viewPoint);
+		*/
+		double tx,ty,tz;
+		doc->rootDrawer->getTranslate(tx,ty,tz);
+		tx -= shiftx;
+		ty += shifty;
+		tz += shifty; // intentionally use shifty twice, the resulting interactvity "feels" more natural
+		doc->rootDrawer->setTranslate(tx,ty,tz);
+
 		
 		beginMovePoint = pnt;
 		Invalidate();
