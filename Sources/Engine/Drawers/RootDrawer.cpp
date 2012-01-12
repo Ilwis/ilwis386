@@ -30,6 +30,7 @@ RootDrawer::RootDrawer()
 	aspectRatio = 0;
 	selectionDrawer = 0;
 	rotX = rotY = rotZ = 0;
+	translateX = translateY = translateZ = 0;
 	zoom3D = 1.0;
 	rootDrawer = this;
 	initRestore = false;
@@ -147,10 +148,23 @@ bool RootDrawer::draw( const CoordBounds& cb) const{
 		if (is3D()) {
 			gluLookAt(eyePoint.x, eyePoint.y, eyePoint.z, viewPoint.x, viewPoint.y, viewPoint.z, 0, 1.0, 0 );
 			//glPushMatrix();	
+			glTranslatef(translateX, translateY, translateZ);
+			//glTranslatef(translateX, translateY, translateZ);
 			glTranslatef(viewPoint.x,viewPoint.y, 0);
+			//glTranslatef(-translateX, -translateY, -translateZ);
 			glRotatef(rotY,-1,0,0);				// Rotate on y
 			glRotatef(rotX,0,0,-1);				// Rotate on x
 			glTranslatef(-viewPoint.x,-viewPoint.y, 0);
+			//glTranslatef(-translateX, -translateY, -translateZ);
+			//glTranslatef(translateX, translateY, translateZ);
+			//glTranslatef(translateX, translateY, translateZ);
+			//glRotatef(-rotX,0,0,-1);				// Rotate on x
+			//glRotatef(-rotY,-1,0,0);				// Rotate on y
+			//glTranslatef(translateX, translateY, translateZ);
+			//glRotatef(rotY,-1,0,0);				// Rotate on y
+			//glRotatef(rotX,0,0,-1);				// Rotate on x
+
+
 		}
 		// due to the way how transparency works in opengl the backgroundrawer has to be drawn at different moments depending on the view93d or not) 
 		if (! is3D())
@@ -533,6 +547,7 @@ void RootDrawer::setCoordBoundsView(/*const CoordSystem& _cs,*/ const CoordBound
 		if (is3D()) {
 			if ( !initRestore) { // restore set rotX, etc. But the OnEntireMap would destroy these false; so for once  the init of values is skipped
 				rotX= rotY = 0;
+				translateX = translateY = translateZ = 0;
 				zoom3D = 1.0;
 			} else 
 				initRestore = false;
@@ -678,7 +693,7 @@ void RootDrawer::setProjection(const CoordBounds& cb) const {
 	if ( threeD) {
 		double zBase = max(abs(eyePoint.x - viewPoint.x), abs(eyePoint.y - viewPoint.y));
 		double w = max(cbZoom.width(), cbZoom.height());
-		gluPerspective(40*zoom3D, aspectRatio,zBase/2.0, w * 4);
+		gluPerspective(40*zoom3D, 1.0 / aspectRatio,zBase/2.0, w * 4);
 	} else {
 		glOrtho(cb.cMin.x,cb.cMax.x,cb.cMin.y,cb.cMax.y,-1,1);
 	}
@@ -744,6 +759,17 @@ void RootDrawer::getRotationAngles(double& rx, double& ry, double& rz){
 	rx = rotX;
 	ry = rotY;
 	rz = rotZ;
+}
+
+void RootDrawer::setTranslate(double tx, double ty, double tz){
+	translateX = tx;
+	translateY = ty;
+	translateZ = tz;
+}
+void RootDrawer::getTranslate(double& tx, double& ty, double& tz){
+	tx = translateX;
+	ty = translateY;
+	tz = translateZ;
 }
 
 double RootDrawer::getZoom3D() const{

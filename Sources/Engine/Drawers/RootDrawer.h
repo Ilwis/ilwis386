@@ -67,6 +67,8 @@ namespace ILWIS {
 		void setBitmapRedraw(bool yesno);
 		void setRotationAngles(double rx, double ry, double rz);
 		void getRotationAngles(double& rx, double& ry, double& rz);
+		void setTranslate(double tx, double ty, double tz);
+		void getTranslate(double& tx, double& ty, double& tz);
 		double getZoom3D() const;
 		void setZoom3D(double v);
 
@@ -97,6 +99,7 @@ namespace ILWIS {
 		double fakeZ;
 		double aspectRatio;
 		double rotX, rotY, rotZ;
+		double translateX, translateY, translateZ;
 		double zoom3D;
 		SelectionRectangle *selectionDrawer;
 		ILWIS::DrawerContext *drawercontext;
