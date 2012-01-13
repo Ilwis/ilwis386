@@ -693,7 +693,7 @@ void RootDrawer::setProjection(const CoordBounds& cb) const {
 	if ( threeD) {
 		double zBase = max(abs(eyePoint.x - viewPoint.x), abs(eyePoint.y - viewPoint.y));
 		double w = max(cbZoom.width(), cbZoom.height());
-		gluPerspective(40*zoom3D, 1.0 / aspectRatio,zBase/2.0, w * 4);
+		gluPerspective(40*zoom3D, (aspectRatio>1.0)?aspectRatio:(1.0 / aspectRatio),zBase/2.0, w * 4); // weird aspect ratio behaviour, temporary workaround
 	} else {
 		glOrtho(cb.cMin.x,cb.cMax.x,cb.cMin.y,cb.cMax.y,-1,1);
 	}
