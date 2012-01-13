@@ -4,6 +4,7 @@
 #include "Texture.h"
 #include "Engine\Drawers\ZValueMaker.h"
 #include "Engine\Drawers\RootDrawer.h"
+#include "Engine\Base\System\SysInfo.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -19,7 +20,7 @@ DEMTriangulator::DEMTriangulator(ZValueMaker * zMaker, BaseMapPtr * drapeMapPtr,
 , iNrVertices(0)
 , zMaker(zMaker)
 , rootDrawer(rootDrawer)
-, iVertexArrayIncrement(1024 * 1024)
+, iVertexArrayIncrement(1024 * 1024 )
 , valid(false)
 , fSelfDrape(true)
 {
@@ -85,8 +86,6 @@ DEMTriangulator::DEMTriangulator(ZValueMaker * zMaker, BaseMapPtr * drapeMapPtr,
 
 DEMTriangulator::~DEMTriangulator(void)
 {
-	if (vertices)
-		free(vertices);
 }
 
 bool DEMTriangulator::fDoTriangulate()
@@ -105,13 +104,11 @@ bool DEMTriangulator::fDoTriangulate()
 	//TRACE("Map read in %2.2f milliseconds;\n", duration);
 	rHeightAccuracy = rrMinMax.rWidth() / (double)iNrVerticalSteps;
 	iTrqVal = iSizeY;
+	CSysInfo sysInfo;
 	while (!fSuccess) {
 		TRACE("Trying with rHeightAccuracy = %f\n", rHeightAccuracy);
 		iNrVertices = 0;
 		iVerticesArraySize = iVertexArrayIncrement;
-		vertices = (Vertex*)malloc(iVerticesArraySize * sizeof(Vertex));
-		if (!vertices) // out of memory
-			break;
 		// --- set initial D2-Values -----------
 		if (!fCalcD2ErrorMatrix(trq))
 			break;
@@ -125,9 +122,7 @@ bool DEMTriangulator::fDoTriangulate()
 		if (trq.fAborted()) // fSuccess will be false; fRenderMesh returns false for two reasons (out of memory, or user stopped)
 			break;
 		if (!fSuccess) {
-			free(vertices);
 			rHeightAccuracy *= 10.0;
-			TRACE("realloc failed, requested %d megabytes of memory ... retrying\n", iVerticesArraySize * sizeof(Vertex) / (1024 * 1024));
 			// if (smooth) then re-read heights
 			if (fSmooth) {
 				trq.fUpdate(0, iTrqMax);
@@ -139,18 +134,7 @@ bool DEMTriangulator::fDoTriangulate()
 		}
 	}
 	trq.fUpdate(iTrqMax, iTrqMax);
-	fSuccess = fSuccess && (iNrVertices > 0);
-	if (fSuccess) {
-		Vertex* newVertices = (Vertex*)realloc(vertices, iNrVertices * sizeof(Vertex));
-		if (newVertices) {
-			vertices = newVertices;
-			TRACE("Success!! memory = %d megabytes, NrVertices = %d\n", iNrVertices * sizeof(Vertex) / (1024 * 1024), iNrVertices);
-		}
-		else {
-			fSuccess = false; // weird out of memory case, since in realloc we request reallocation to less memory
-			TRACE("Realloc failed, could not downsize array from %d to %d megabytes, NrVertices = %d\n", iVerticesArraySize * sizeof(Vertex) / (1024 * 1024), iNrVertices * sizeof(Vertex) / (1024 * 1024), iNrVertices);
-		}
-	}
+	fSuccess = fSuccess && (vertices.size() > 0);
 	return fSuccess;
 }
 
@@ -685,6 +669,7 @@ bool DEMTriangulator::fCreateFanAround1(int x, int y, int iSize,
 	if ((x - iSize >= 0) && (rFactors[x - iSize + iSize2u * y] == rUNDEF))
 		corners[W] = false;
 
+	/*
 	if (iNrVertices + 24 >= iVerticesArraySize) {
 		iVerticesArraySize += iVertexArrayIncrement;
 		Vertex* newVertices = (Vertex*)realloc(vertices, iVerticesArraySize * sizeof(Vertex));
@@ -693,6 +678,7 @@ bool DEMTriangulator::fCreateFanAround1(int x, int y, int iSize,
 		else
 			vertices = newVertices;
 	}
+	*/
 
 	// TRIANGLE_ARRAY, thus every 3 vertices form 1 triangle
 
@@ -951,13 +937,13 @@ void DEMTriangulator::AddVertex(int x, int y, double rHeight)
 	}
 	if (fNeedsConv)
 		c = rootDrawer->glConv(csyMap, c);
-	vertices[iNrVertices++] = Vertex(s, t, c.x, c.y, zMaker->scaleValue(rHeight));
+	vertices.push_back(Vertex(s, t, c.x, c.y, zMaker->scaleValue(rHeight)));
 }
 
 void DEMTriangulator::PlotTriangles()
 {
-	glInterleavedArrays(GL_T2F_V3F, sizeof(Vertex), vertices);
-	glDrawArrays(GL_TRIANGLES, 0, iNrVertices);
+	glInterleavedArrays(GL_T2F_V3F, sizeof(Vertex), (void *) &(vertices[0]));
+	glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 }
 
 bool DEMTriangulator::fValid()

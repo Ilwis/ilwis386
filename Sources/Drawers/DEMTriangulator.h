@@ -56,7 +56,7 @@ namespace ILWIS {
 		ZValueMaker * zMaker;
 		double* rHeights; // the DEM rastermap's values
 		double* rFactors; // represents quad tree (and contains heights)
-		Vertex* vertices;
+		vector<Vertex> vertices;
 		unsigned long iVerticesArraySize;
 		unsigned long iNrVertices;
 		const unsigned long iVertexArrayIncrement;
