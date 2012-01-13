@@ -69,7 +69,7 @@ namespace ILWIS {
 		RangeReal rrMinMax;
 		bool isThreaded;
 		bool isThreadedBeforeOffscreen;
-		bool fGrfLinear;
+		bool fLinear;
 		bool fUsePalette;
 		bool fPaletteOwner; // for maplist animation: all have same palette, just use the one of the first band
 		Palette * palette;

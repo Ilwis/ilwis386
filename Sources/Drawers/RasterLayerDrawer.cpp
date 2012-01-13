@@ -25,7 +25,7 @@ ILWIS::NewDrawer *createRasterLayerDrawer(DrawerParameters *parms) {
 
 RasterLayerDrawer::RasterLayerDrawer(DrawerParameters *parms) : 
 LayerDrawer(parms,"RasterLayerDrawer")
-, data(new RasterSetData()), isThreaded(true), isThreadedBeforeOffscreen(true), fGrfLinear(true), fUsePalette(false), fPaletteOwner(false), palette(0), textureHeap(new TextureHeap()), textureHeapBeforeOffscreen(0), demTriangulator(0)
+, data(new RasterSetData()), isThreaded(true), isThreadedBeforeOffscreen(true), fLinear(true), fUsePalette(false), fPaletteOwner(false), palette(0), textureHeap(new TextureHeap()), textureHeapBeforeOffscreen(0), demTriangulator(0)
 {
 	setTransparency(1); // default, opaque
 	//	setDrawMethod(drmNOTSET); // default
@@ -36,7 +36,7 @@ RasterLayerDrawer::RasterLayerDrawer(DrawerParameters *parms, const String& name
 data(new RasterSetData()),
 isThreaded(true), 
 isThreadedBeforeOffscreen(true), 
-fGrfLinear(true), 
+fLinear(true), 
 fUsePalette(false), 
 fPaletteOwner(false), 
 palette(0), 
@@ -85,7 +85,7 @@ void RasterLayerDrawer::prepare(PreparationParameters *pp){
 			getRootDrawer()->getDrawerContext()->setActivePalette(0);
 		}
 		textureHeap->RepresentationChanged();
-		fGrfLinear = gr()->fLinear();
+		fLinear = getRootDrawer()->fConvNeeded(csy) && gr()->fLinear();
 	}
 	if ((pp->type & pt3D) || ((pp->type & ptGEOMETRY || pp->type & ptRESTORE) && demTriangulator != 0)) {
 		ZValueMaker * zMaker = getZMaker();
@@ -379,7 +379,7 @@ void RasterLayerDrawer::DisplayTexture(Coord & c1, Coord & c2, Coord & c3, Coord
 		// make the quad
 		glBegin (GL_QUADS);
 
-		if (fGrfLinear) {
+		if (fLinear) {
 			// texture bounds
 			double s1 = imageOffsetX / (double)data->width;
 			double t1 = imageOffsetY / (double)data->height;
