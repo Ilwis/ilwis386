@@ -17,6 +17,7 @@
 #include "drawers\AnnotationDrawers.h"
 #include "Drawers\LayerDrawer.h"
 #include "AnnotationBorderTool.h"
+#include "DrawersUI\GlobalAnnotationTool.h"
 #include "DrawersUI\SetDrawerTool.h"
 
 
@@ -35,6 +36,14 @@ AnnotationBorderTool::~AnnotationBorderTool() {
 
 bool AnnotationBorderTool::isToolUseableFor(ILWIS::DrawerTool *tool) { 
 
+	bool ok = dynamic_cast<GlobalAnnotationTool *>(tool) != 0;
+	if (ok) {
+		ComplexDrawer *annotationDrawers = (ComplexDrawer *)drawer->getRootDrawer()->getDrawer("AnnotationDrawers");
+		if ( annotationDrawers) {
+			drawer = annotationDrawers->getDrawer("GridDrawer");
+		}
+		return true;
+	}
 	return false;
 }
 
@@ -58,6 +67,7 @@ void AnnotationBorderTool::makeActive(void *v, HTREEITEM ) {
 	}
 	else {
 		if ( act) {
+
 			PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER);
 			ILWIS::DrawerParameters dp(drawer->getRootDrawer(), drawer);
 			border = (AnnotationBorderDrawer *)NewDrawer::getDrawer("AnnotationBorderDrawer","ilwis38",&dp);
