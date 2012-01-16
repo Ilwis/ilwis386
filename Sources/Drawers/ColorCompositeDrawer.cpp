@@ -35,8 +35,43 @@ void ColorCompositeDrawer::prepareChildDrawers(PreparationParameters *pp){
 }
 
 void ColorCompositeDrawer::prepare(PreparationParameters *pp){
-	RasterLayerDrawer::prepare(pp);
+	LayerDrawer::prepare(pp);
 
+	if ( pp->type & NewDrawer::ptRENDER || pp->type & RootDrawer::ptRESTORE) {
+		fUsePalette = false;
+		textureHeap->RepresentationChanged();
+		fLinear = (!getRootDrawer()->fConvNeeded(csy)) && gr()->fLinear();
+	}
+	if ((pp->type & pt3D) || ((pp->type & ptGEOMETRY || pp->type & ptRESTORE) && demTriangulator != 0)) {
+		ZValueMaker * zMaker = getZMaker();
+		bool is3DPossible = zMaker->getThreeDPossible();
+		if (demTriangulator != 0) {
+			delete demTriangulator;
+			demTriangulator = 0;
+		}
+		if (is3DPossible) {
+			demTriangulator = new DEMTriangulator(zMaker, mpl[0].ptr(), getRootDrawer(), false);
+			if (!demTriangulator->fValid()) {
+				delete demTriangulator;
+				demTriangulator = 0;
+			}
+		}
+	}
+	if (pp->type & ptOFFSCREENSTART) {
+		isThreadedBeforeOffscreen = isThreaded;
+		isThreaded = false;
+		textureHeapBeforeOffscreen = textureHeap;
+		DrawerContext* drawcontext = getRootDrawer()->getDrawerContext();
+		textureHeap = new TextureHeap();
+		setData();
+	}
+	if (pp->type & ptOFFSCREENEND) {
+		isThreaded = isThreadedBeforeOffscreen;
+		delete textureHeap;
+		textureHeap = textureHeapBeforeOffscreen;
+	}
+	if (pp->type & ptREDRAW)
+		textureHeap->ReGenerateAllTextures();
 }
 
 void ColorCompositeDrawer::setData() const{
