@@ -1,4 +1,5 @@
 #include "Client\Headers\formelementspch.h"
+#include "Headers\messages.h"
 #include "Client\FormElements\selector.h"
 #include "Client\FormElements\fldonesl.h"
 #include "Client\FormElements\fldcol.h"
@@ -75,6 +76,10 @@ LRESULT AnimationPropertySheet::command(WPARAM wp, LPARAM lp) {
 		AnimationRun *pageRun = dynamic_cast<AnimationRun *>(GetPage(0));
 		pageRun->timed();
 	}
+	if ( (int)wp == pRemove) {
+		AnimationDrawer *adrw = (AnimationDrawer *) (void *)lp;
+		removeAnimation(adrw);
+	}
 	return 0;
 }
 
@@ -94,6 +99,7 @@ void AnimationPropertySheet::addAnimation(const AnimationProperties& props) {
 			return;
 	}
 	animations.push_back(props);
+	props.drawer->manager = this;
 	PostMessage(ILWM_UPDATE_ANIM,pAll);
 }
 
@@ -105,6 +111,7 @@ void AnimationPropertySheet::removeAnimation(AnimationDrawer * drw) {
 				activeIndex--;
 			if ( i == activeIndex)
 				activeIndex = -1;
+			animations[i].drawer->manager = 0;
 			animations.erase(animations.begin() + i);
 		}
 	}
@@ -459,10 +466,10 @@ BOOL AnimationSynchronization::OnInitDialog()
 int AnimationSynchronization::DataChanged(Event*ev) {
 	int code = (int)ev;
 	if ( GetSafeHwnd() &&( initial || code == 1)) {
-		AnimationProperties *props =0;
+		AnimationProperties *prop = propsheet.getActiveAnimation();;
 		int index = 0;
 		choiceMaster = propsheet.getActiveIndex();
-		AnimationProperties *prop =  propsheet.getActiveAnimation();
+		AnimationProperties *props =  prop;
 		if ( props) {
 			bool useMasterTime = props->drawer->getUseTime();
 			if ( useMasterTime) {
@@ -481,7 +488,7 @@ int AnimationSynchronization::DataChanged(Event*ev) {
 				}
 				++index;
 			}
-			String name = props->drawer->getName();
+			String name = prop->drawer->getName();
 			String v = TR("Master animation %S");
 			stMaster->SetVal(String(v.c_str(),name));
 			initial = false;
@@ -930,10 +937,12 @@ void AnimationBar::updateTime(const AnimationProperties* props) // called by Ani
 {
 	if ( props->drawer->getUseTime()) {
 		String tmstring = setTimeString(props);
-		ed.SetWindowText(String("%S",tmstring).c_str());
+		if ( ed.GetSafeHwnd())
+			ed.SetWindowText(String("%S",tmstring).c_str());
 	}
 	else {
-		ed.SetWindowText(String("index : %d",props->drawer->getMapIndex()).c_str());
+		if ( ed.GetSafeHwnd())
+			ed.SetWindowText(String("index : %d",props->drawer->getMapIndex()).c_str());
 	}
 }
 

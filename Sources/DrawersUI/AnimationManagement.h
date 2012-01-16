@@ -1,7 +1,5 @@
 #pragma once
 
-#define ILWM_UPDATE_ANIM (WM_APP+232)
-
 class MapCompositionDoc;
 class FieldOneSelect;
 class FieldRealSliderEx;
@@ -47,7 +45,7 @@ namespace ILWIS {
 	class AnimationPropertySheet : public CPropertySheet
 	{
 	public:
-		enum Pages{pRun=1, pSynchornization=2, pAttributes=4, pTimedEvent=16, pProgress=32, pAVI, pAll=32767};
+		enum Pages{pRun=1, pSynchornization=2, pAttributes=4, pTimedEvent=16, pProgress=32, pAVI=64, pRemove=128,  pAll=32767};
 		AnimationPropertySheet();
 
 		BOOL OnInitDialog();
