@@ -83,6 +83,7 @@
 #include "SampleSetEditor.h"
 #include "OperationTool.h"
 #include "GlobalOperationTool.h"
+#include "AnnotationBorderTool.h"
 #include "DrawersUI\GlobalAnnotationTool.h"
 #include "DrawersUI\AnnotationScaleBarDrawerTool.h"
 
@@ -138,6 +139,7 @@ DrawerToolInfoVector *createDrawerTool() {
 	infos->push_back(new DrawerToolInfo("GlobalOperationTool",createGlobalOperationTool));
 	infos->push_back(new DrawerToolInfo("GlobalAnnotationTool",createGlobalAnnotationTool));
 	infos->push_back(new DrawerToolInfo("AnnotationScaleBarDrawerTool",createAnnotationScaleBarDrawerTool));
+	infos->push_back(new DrawerToolInfo("AnnotationBorderTool",createAnnotationBorderTool));
 
 	return infos;
 }
