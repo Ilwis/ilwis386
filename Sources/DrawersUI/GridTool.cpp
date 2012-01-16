@@ -17,7 +17,7 @@
 #include "Drawers\GridDrawer.h"
 #include "DrawersUI\GridTool.h"
 #include "DrawersUI\GlobalTool.h"
-#include "AnnotationBorderTool.h"
+
 
 using namespace std;
 
@@ -53,11 +53,6 @@ HTREEITEM GridTool::configure( HTREEITEM parentItem) {
 		addTool(dt);
 		//dt->configure(htiNode);
 	}
-	dt = new AnnotationBorderTool(mpv,tree,drawer);
-	if ( dt) {
-		addTool(dt);
-	}
-
 	
 	DrawerTool::configure(htiNode);
 	tree->GetTreeCtrl().Expand(htiNode,TVE_COLLAPSE);
