@@ -118,7 +118,8 @@ SetStretchValueForm::SetStretchValueForm(CWnd *wPar, NewDrawer *dr, const RangeR
 	DisplayOptionsForm2((ComplexDrawer *)dr,wPar,"Set stretch"),
 	rr(_baserr),
 	low(_currentrr.rLo()),
-	high(_currentrr.rHi())
+	high(_currentrr.rHi()),
+	inRace(false)
 {
 	sliderLow = new FieldRealSliderEx(root,"Lower", &low,ValueRange(rr,rStep),true);
 	sliderHigh = new FieldRealSliderEx(root,"Upper", &high,ValueRange(rr,rStep),true);
@@ -135,12 +136,14 @@ int  SetStretchValueForm::check(Event *) {
 	if ( low == rUNDEF || high == rUNDEF)
 		return 1;
 
-	if ( low > high){
+	if ( low > high && !inRace){
 		low = high;
+		inRace = true;
 		sliderLow->SetVal(low);
 	}
-	if ( high < low){
+	if ( high < low && !inRace){
 		high = low;
+		inRace = true;
 		sliderHigh->SetVal(high);
 	}
 	
@@ -155,6 +158,7 @@ int  SetStretchValueForm::check(Event *) {
 		setdr->prepareChildDrawers(&pp);
 	}
 	updateMapView();
+	inRace = false;
 	return 1;
 }
 

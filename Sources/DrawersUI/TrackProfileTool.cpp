@@ -315,10 +315,10 @@ void TrackProfileTool::timedEvent(UINT timerid) {
 		IlwisObject *obj = (IlwisObject *)cdrw->getDataSource();
 		FileName fnDrw = (*obj)->fnObj;
 		for(int j = 0; j < sources.size(); ++j) {
-			FileName fn = sources[i]->getSource()->fnObj;
-			if ( fn == fnDrw) {
-				sources[i]->updateIndex(cdrw->getCurrentIndex());
-			}
+			FileName fn = sources[j]->getSource()->fnObj;
+			//if ( fn == fnDrw) {
+				sources[j]->updateIndex(cdrw->getCurrentIndex());
+			//}
 		}
 		if ( graphForm)
 			graphForm->update();
@@ -381,7 +381,7 @@ ChooseTrackProfileForm::ChooseTrackProfileForm(CWnd *wPar, LayerDrawer *dr, Trac
 	DisplayOptionsForm2(dr,wPar,TR("Add data source"),fbsBUTTONSUNDER | fbsSHOWALWAYS | fbsNOCANCELBUTTON | fbsOKHASCLOSETEXT),
 	tool(t)
 {
-	fm = new FieldDataType(root,TR("Data source"),&name, ".mpr.mps.mpa.mpp",true);
+	fm = new FieldDataType(root,TR("Data source"),&name, ".mpr.mps.mpa.mpp.mpl",true);
 	new PushButton(root, TR("Add"),(NotifyProc) &ChooseTrackProfileForm::addSource);
 	create();
 }

@@ -77,14 +77,26 @@ htiTransparent(htiTr), fldTranspValue(0), isDataLayer(_isDataLayer),useTV(false)
 	slider->SetCallBack((NotifyProc)&TransparencyForm::setTransparency);
 	slider->setContinuous(true);
 	if ( isDataLayer) {
-		LayerDrawer *ldr = (LayerDrawer *)dr;
-		if (ldr->getRepresentation()->prg() ) {
+		LayerDrawer *ldr = dynamic_cast<LayerDrawer *>(dr);
+		if (ldr && ldr->getRepresentation()->prg() ) {
 			transpValues = ldr->getTransparentValues();
 			if ( transpValues.fValid())
 				useTV = true;
 			new FieldBlank(root);
 			cb = new CheckBox(root,TR("Use transparency range"),&useTV);
 			fldTranspValue = new FieldRangeReal(cb, TR(""), &transpValues);
+		} else {
+			SetDrawer *animDrw = dynamic_cast<SetDrawer *>(drw);
+			if ( animDrw) {
+				LayerDrawer *ldr = dynamic_cast<LayerDrawer *>(animDrw->getDrawer(0));
+				if ( ldr && ldr->getRepresentation()->prg()) {
+					if ( transpValues.fValid())
+						useTV = true;
+					new FieldBlank(root);
+					cb = new CheckBox(root,TR("Use transparency range"),&useTV);
+					fldTranspValue = new FieldRangeReal(cb, TR(""), &transpValues);
+				}
+			}
 		}
 	}
 	create();
@@ -108,14 +120,14 @@ void  TransparencyForm::apply() {
 	if ( animDrw) {
 		PreparationParameters pp(NewDrawer::ptRENDER, 0);
 		for(int i = 0; i < animDrw->getDrawerCount(); ++i) {
-			LayerDrawer *cdrw = (LayerDrawer *)drw;
+			LayerDrawer *cdrw = (LayerDrawer *)animDrw->getDrawer(i);
 			cdrw->setTransparency(1.0 - (double)transparency/100.0);
 			if ( !(isDataLayer || useTV == false) ) {
 				transpValues = RangeReal();
 			}
 			cdrw->setTransparentValues(transpValues);
-			cdrw->prepareChildDrawers(&pp);
 		}
+		animDrw->prepareChildDrawers(&pp);
 	}
 	else {
 		ComplexDrawer *cdrw = (ComplexDrawer *)drw;

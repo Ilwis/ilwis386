@@ -125,7 +125,16 @@ bool SampleSetEditor::isToolUseableFor(ILWIS::DrawerTool *tool){
 void SampleSetEditor::setcheckSelectMode(void *value, HTREEITEM item) {
 	if ( value == 0)
 		return;
-	selectState = selectStateCheck->getState();
+	int newState = selectStateCheck->getState();
+	bool changed = selectState != newState ;
+	selectState = newState;
+	if ( selectState == 0) {
+		//tree->GetDocument()->mpvGetView()->
+	}
+	if ( selectState == 1 && changed) {
+		tree->GetDocument()->mpvGetView()->selectArea(this,
+		(NotifyRectProc)&SampleSetEditor::areaOfInterest,"DRAGOK",Color(0,255,0,0.2),false); 
+	}
 }
 
 HTREEITEM SampleSetEditor::configure( HTREEITEM parentItem){
@@ -534,8 +543,8 @@ void SampleSetEditor::OnLButtonDown(UINT nFlags, CPoint point){
 		CWnd *wnd = tree->GetDocument()->mpvGetView()->GetParent();
 		DataWindow *dw = (DataWindow *)wnd;
 		dw->bbDataWindow.SendMessage(TB_CHECKBUTTON, wParam, lParam);*/
-		tree->GetDocument()->mpvGetView()->selectArea(this,
-			(NotifyRectProc)&SampleSetEditor::areaOfInterest,"DRAGOK",Color(0,255,0,0.2),false); 
+		//tree->GetDocument()->mpvGetView()->selectArea(this,
+		//	(NotifyRectProc)&SampleSetEditor::areaOfInterest,"DRAGOK",Color(0,255,0,0.2),false); 
 	} else {
 		//tree->GetDocument()->mpvGetView()->OnSelectArea();
 		::SetCursor(zCursor(Arrow));

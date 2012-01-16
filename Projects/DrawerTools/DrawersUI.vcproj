@@ -236,6 +236,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\DrawersUI\AnnotationScaleBarDrawerTool.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\DrawersUI\AttributeTool.cpp"
 				>
 			</File>
@@ -285,6 +289,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\DrawersUI\FSWindow.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\GlobalAnnotationTool.cpp"
 				>
 			</File>
 			<File
@@ -469,6 +477,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\DrawersUI\AnnotationScaleBarDrawerTool.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\DrawersUI\AttributeTool.h"
 				>
 			</File>
@@ -514,6 +526,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\DrawersUI\FSWindow.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\GlobalAnnotationTool.h"
 				>
 			</File>
 			<File

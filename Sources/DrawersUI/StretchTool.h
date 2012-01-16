@@ -25,6 +25,7 @@ private:
 	FieldRealSliderEx *sliderLow;
 	FieldRealSliderEx *sliderHigh;
 	double low, high;
+	bool inRace;
 
 	int check(Event *);
 
