@@ -1,4 +1,5 @@
 #include "Client\Headers\formelementspch.h"
+#include "Headers\messages.h"
 #include "Engine\Drawers\RootDrawer.h"
 #include "Engine\Drawers\ComplexDrawer.h"
 #include "Engine\Drawers\SpatialDataDrawer.h"
