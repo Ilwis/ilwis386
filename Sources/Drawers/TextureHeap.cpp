@@ -207,7 +207,8 @@ void TextureHeap::ClearQueuedTextures()
 	fAbortTexGen = false;
 	while (readpos != writepos)
 	{
-		delete textureRequest[readpos];
+		if (!textureRequest[readpos]->fValid())
+			delete textureRequest[readpos];
 		readpos = (readpos + 1) % BUF_SIZE;
 	}
 	csChangeTexCreatorList.Unlock();
