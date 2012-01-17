@@ -62,6 +62,7 @@ DrawerInfoVector *createDrawer() {
 	infos->push_back(new DrawerInfo("GraticuleDrawer","ilwis38", createGraticuleDrawer));
 	infos->push_back(new DrawerInfo("AnnotationClassLegendDrawer","ilwis38", createAnnotationClassLegendDrawer));
 	infos->push_back(new DrawerInfo("AnnotationValueLegendDrawer","ilwis38", createAnnotationValueLegendDrawer));
+	infos->push_back(new DrawerInfo("AnnotationScaleBarDrawer","ilwis38", createAnnotationScaleBarDrawer));
 	infos->push_back(new DrawerInfo("AnnotationBorderDrawer","ilwis38", createAnnotationBorderDrawer));
 	infos->push_back(new DrawerInfo("ColorCompositeDrawer","ilwis38", createColorCompositeDrawer));
 	infos->push_back(new DrawerInfo("AnnotationDrawers","ilwis38", createAnnotationDrawers));

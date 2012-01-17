@@ -46,7 +46,7 @@ void AnnotationDrawers::prepare(PreparationParameters *pp) {
 }
 
 //---------------------------------------------------------
-AnnotationDrawer::AnnotationDrawer(DrawerParameters *parms, const String& name) : ComplexDrawer(parms,name) 
+AnnotationDrawer::AnnotationDrawer(DrawerParameters *parms, const String& name) : ComplexDrawer(parms,name), scale(1.0) 
 {
 }
 
@@ -60,6 +60,21 @@ void AnnotationDrawer::load(const FileName& fnView, const String& parentSection)
 	ComplexDrawer::load(fnView, parentSection);
 }
 
+double AnnotationDrawer::getScale() const {
+	return scale;
+}
+
+void AnnotationDrawer::setScale(double s) {
+	scale= s;
+}
+
+void AnnotationDrawer::setTitle(const String& t){
+	title = t;
+}
+
+String AnnotationDrawer::getTitle() const{
+	return title;
+}
 
 
 //-------------------------------------------------------
@@ -148,6 +163,7 @@ void AnnotationLegendDrawer::prepare(PreparationParameters *pp) {
 		if ( ldr) {
 			SpatialDataDrawer *spdr = (SpatialDataDrawer *)(getParentDrawer()->getParentDrawer());
 			BaseMapPtr *bmp = spdr->getBaseMap();
+			objType = IOTYPE(bmp->fnObj);
 
 			dm = ldr->useAttributeColumn() ? ldr->getAtttributeColumn()->dm() :  bmp->dm();
 			fnName = bmp->fnObj;
@@ -158,15 +174,16 @@ void AnnotationLegendDrawer::prepare(PreparationParameters *pp) {
 		TextDrawer *txtdr = (TextDrawer *)texts->getDrawer(101,ComplexDrawer::dtPOST);
 		if ( !txtdr) {
 			txtdr = (ILWIS::TextDrawer *)NewDrawer::getDrawer("TextDrawer","ilwis38",&dp);
-			txtdr->setText(fnName.sFile);
 			texts->addPostDrawer(101,txtdr);
 		}
-		txtdr->setText(fnName.sFile);
+		if ( title == "")
+			title = fnName.sFile;
+		txtdr->setText(title);
 	}
 
 }
 
-bool AnnotationLegendDrawer::draw( const CoordBounds& cbArea) const{
+bool AnnotationLegendDrawer::draw( const CoordBounds& cbInner) const{
 	bool is3D = getRootDrawer()->is3D(); 
 
 	//double z0 = cdrw->getZMaker()->getZ0(getRootDrawer()->is3D());
@@ -180,11 +197,11 @@ bool AnnotationLegendDrawer::draw( const CoordBounds& cbArea) const{
 		TextDrawer *txtdr = (TextDrawer *)texts->getDrawer(101,ComplexDrawer::dtPOST);
 		if ( txtdr) {
 			double h = txtdr->getHeight();
-			txtdr->setCoord(Coord(cbBox.MinX(),cbBox.MaxY() + h * 0.8, z));
+			txtdr->setCoord(Coord(cbInner.MinX(),cbInner.MaxY() + h * 0.8, z));
 			cbFar += txtdr->getTextExtent();
 		}
 	}
-	CoordBounds cbBoxed = cbBox;
+	CoordBounds cbBoxed = cbInner;
 	cbBoxed *= 1.05;
 	if ( useBackground) {
 		glColor4d(bgColor.redP(), bgColor.greenP(), bgColor.blueP(), getTransparency());
@@ -270,6 +287,7 @@ AnnotationClassLegendDrawer::AnnotationClassLegendDrawer(DrawerParameters *parms
 {
 }
 
+
 void AnnotationClassLegendDrawer::setActiveClasses(const vector<int>& rws) {
 	raws.clear();
 	DrawingColor dc((LayerDrawer *)getParentDrawer());
@@ -277,7 +295,7 @@ void AnnotationClassLegendDrawer::setActiveClasses(const vector<int>& rws) {
 		texts->getDrawer(i)->setActive(false);
 	}
 	for(int i = 0; i < rws.size(); ++i) {
-		long iRaw = dm->pdc()->iKey(i+1);
+		long iRaw = rws[i]; //dm->pdc()->iKey(i+1);
 		if ( iRaw == iUNDEF)
 			continue;
 		Color clr =dc.clrRaw(iRaw,NewDrawer::drmRPR);
@@ -295,6 +313,7 @@ void AnnotationClassLegendDrawer::getActiveClasses(vector<int>& rws) const {
 	}
 }
 
+
 void AnnotationClassLegendDrawer::prepare(PreparationParameters *pp) {
 	AnnotationLegendDrawer::prepare(pp);
 	if ( pp->type & NewDrawer::ptGEOMETRY) {
@@ -304,7 +323,7 @@ void AnnotationClassLegendDrawer::prepare(PreparationParameters *pp) {
 		DrawingColor dc((LayerDrawer *)getParentDrawer());
 		DrawerParameters dp(getRootDrawer(), texts);
 		raws.clear();
-		for(int i =  dm->pdc()->iSize(); i >= 0 ; --i) {
+		for(int i = 0 ; i < dm->pdc()->iSize() ; ++i) {
 			long iRaw = dm->pdc()->iKey(i+1);
 			if ( iRaw == iUNDEF)
 				continue;
@@ -317,6 +336,7 @@ void AnnotationClassLegendDrawer::prepare(PreparationParameters *pp) {
 			double h = txtdr->getHeight() * 0.5;
 			maxw = max(maxw, h * txt.size());
 		}
+
 		cellWidth = cbBox.width() / 3;
 	}
 	if ( pp->type & NewDrawer::ptRENDER) {
@@ -324,6 +344,7 @@ void AnnotationClassLegendDrawer::prepare(PreparationParameters *pp) {
 		cbBox = CoordBounds(cbBox.cMin, 
 			Coord(cbBox.MinX() +  (cellWidth + maxw) * columns, 
 				   cbBox.MinY() + raws.size() * cb.height() / (40 * columns)));
+
 	}
 
 	//}
@@ -333,26 +354,47 @@ bool AnnotationClassLegendDrawer::draw( const CoordBounds& cbArea) const{
 	if ( !isActive() && !isValid())
 		return false;
 
-	if ( !getRootDrawer()->getCoordBoundsZoom().fContains(cbBox))
-		return false;
+	bool is3D = getRootDrawer()->is3D(); 
+	double z0 = getRootDrawer()->getZMaker()->getZ0(is3D);
+	if (is3D) // supporting drawers need to be slightly above the level of the "main" drawer. OpenGL won't draw them correct if they are in the same plane
+		z0 +=  z0;
+
+	double z = is3D ? z0 : 0;
+
+	glPushMatrix();
+	glTranslated(cbBox.MinX(), cbBox.MinY(), z);
+	glScaled(scale, scale, 1);
 
 	AnnotationLegendDrawer::draw(cbArea);
 	drawPreDrawers(cbArea);
 	double yy = cbBox.height() / (raws.size() * 1.1);
 	double hh = cbBox.height();
 	yy *= (double)columns;
-	CoordBounds cbCell(Coord(cbBox.MinX(),cbBox.MinY()),Coord(cbBox.MinX() + cellWidth, cbBox.MinY() + yy));
-	double z = 0;
+	CoordBounds cbCell(Coord(0,0),Coord(cellWidth, yy));
 	double shifty = columns * cbBox.height() / raws.size();
-	glPushMatrix();
 	int split = raws.size() / columns;
-	for(int i=0 ; i < raws.size(); ++i) {
+	for(int i=raws.size() - 1 ; i>=0; --i) {
 		glColor3d(raws[i].clr.redP(), raws[i].clr.greenP(), raws[i].clr.blueP());
-		glBegin(GL_POLYGON);
-		glVertex3d(cbCell.MinX(), cbCell.MinY(), z);
-		glVertex3d(cbCell.MinX(), cbCell.MaxY(), z);
-		glVertex3d(cbCell.MaxX(), cbCell.MaxY(), z);
-		glVertex3d(cbCell.MaxX(), cbCell.MinY(), z);
+		if ( objType == IlwisObject::iotRASMAP || objType == IlwisObject::iotPOLYGONMAP) {
+			glBegin(GL_POLYGON);
+			glVertex3d(cbCell.MinX(), cbCell.MinY(), z);
+			glVertex3d(cbCell.MinX(), cbCell.MaxY(), z);
+			glVertex3d(cbCell.MaxX(), cbCell.MaxY(), z);
+			glVertex3d(cbCell.MaxX(), cbCell.MinY(), z);
+		} else if ( objType == IlwisObject::iotSEGMENTMAP) {
+			glBegin(GL_LINES);
+			glVertex3d(cbCell.MinX(), cbCell.MinY(), z);
+			glVertex3d(cbCell.MaxX(), cbCell.MaxY(), z);
+		} else {
+			glBegin(GL_POLYGON);
+			double delta = cbCell.width() / 4;
+			glVertex3d(cbCell.MinX() + delta, cbCell.MinY() + delta, z);
+			glVertex3d(cbCell.MinX() + delta, cbCell.MaxY() - delta, z);
+			glVertex3d(cbCell.MaxX() - delta, cbCell.MaxY() - delta, z);
+			glVertex3d(cbCell.MaxX() - delta, cbCell.MinY() + delta, z);
+
+		}
+
 		TextDrawer *txtdr = (TextDrawer *)texts->getDrawer(i);
 		//txtdr->setCoord(Coord(cbBox.MinX() + cbBox.width() / 4.8, cbCell.MinY() + cbCell.height() / 3.0,z));
 		txtdr->setCoord(Coord(cbCell.MinX() + cellWidth * 1.1, cbCell.MinY() + cbCell.height() / 3.0,z));
@@ -368,16 +410,18 @@ bool AnnotationClassLegendDrawer::draw( const CoordBounds& cbArea) const{
 		glEnd();
 		cbCell.MinY() += shifty;
 		cbCell.MaxY() += shifty;
-		if ( (i + 1) % split == 0) {
-			cbCell.MinY() = cbBox.MinY();
-			cbCell.MaxY() = cbBox.MinY() + yy;
-			cbCell.MinX() += cellWidth + maxw;
-			cbCell.MaxX() += cellWidth + maxw;
-		}
+		//if ( (i + 1) % split == 0) {
+		//	cbCell.MinY() = cbBox.MinY();
+		//	cbCell.MaxY() = cbBox.MinY() + yy;
+		//	cbCell.MinX() += cellWidth + maxw;
+		//	cbCell.MaxX() += cellWidth + maxw;
+		//}
 	}
-	
+
 
 	drawPostDrawers(cbArea);
+
+	glPopMatrix();
 
 	return true;
 }
@@ -426,23 +470,29 @@ bool AnnotationValueLegendDrawer::draw( const CoordBounds& cbArea) const{
 	if ( !getRootDrawer()->getCoordBoundsZoom().fContains(cbBox))
 		return false;
 
-	AnnotationLegendDrawer::draw(cbArea);
-	drawPreDrawers(cbArea);
-
 	bool is3D = getRootDrawer()->is3D(); 
-	double transp = getTransparency();
-
-	//double z0 = cdrw->getZMaker()->getZ0(getRootDrawer()->is3D());
 	double z0 = getRootDrawer()->getZMaker()->getZ0(is3D);
 	if (is3D) // supporting drawers need to be slightly above the level of the "main" drawer. OpenGL won't draw them correct if they are in the same plane
 		z0 +=  z0;
 
 	double z = is3D ? z0 : 0;
 
+	glPushMatrix();
+	glTranslated(cbBox.MinX(), cbBox.MinY(), z);
+	glScaled(scale, scale, 1);
+	CoordBounds cbInner = CoordBounds(Coord(0,0), Coord(cbBox.width(), cbBox.height()));
+
+	AnnotationLegendDrawer::draw(cbInner);
+	drawPreDrawers(cbArea);
+
+	double transp = getTransparency();
+
+	//double z0 = cdrw->getZMaker()->getZ0(getRootDrawer()->is3D());
+
+
 	double noOfRect = 100.0;
 	vector<String> values = makeRange((LayerDrawer *)getParentDrawer());
 	RangeReal rr(values[0].rVal(), values[values.size()- 1].rVal());
-	CoordBounds cbInner = cbBox;
 	if ( vertical) {
 		drawVertical(cbInner, rr, z, values);
 	} else {
@@ -466,6 +516,9 @@ bool AnnotationValueLegendDrawer::draw( const CoordBounds& cbArea) const{
 
 	drawPostDrawers(cbArea);
 
+
+	glPopMatrix();
+
 	return true;
 
 }
@@ -473,7 +526,7 @@ bool AnnotationValueLegendDrawer::draw( const CoordBounds& cbArea) const{
 void AnnotationValueLegendDrawer::drawVertical(CoordBounds& cbInner, const RangeReal& rr, double z, const vector<String>& values) const{
 	int count = 1;
 	DrawingColor dc((LayerDrawer *)getParentDrawer());
-	cbInner.MaxX() = cbInner.MinX() + cbBox.width() / 3;
+	cbInner.MaxX() = cbInner.MinX() + cbInner.width() / 3;
 	double startx = cbInner.MinX();
 	double starty = cbInner.MinY();
 	double endx = startx + cbInner.width();
@@ -491,11 +544,11 @@ void AnnotationValueLegendDrawer::drawVertical(CoordBounds& cbInner, const Range
 		glVertex3d(endx,starty,z);
 		glEnd();
 		if ( count < values.size()  && values[count].rVal() <= rV) { 
-			setText(values, count, Coord(endx + cbBox.width() / 15.0, starty,z));
+			setText(values, count, Coord(endx + cbInner.width() / 15.0, starty,z));
 			glColor4f(0,0, 0, getTransparency() );
 			glBegin(GL_LINE_STRIP);
 			glVertex3d(endx,endy,z);
-			glVertex3d(endx + cbBox.width() / 20.0,endy,z);
+			glVertex3d(endx + cbInner.width() / 20.0,endy,z);
 			glEnd();
 			++count;
 		}
@@ -504,7 +557,7 @@ void AnnotationValueLegendDrawer::drawVertical(CoordBounds& cbInner, const Range
 	}
 	TextDrawer *txt = (TextDrawer *)texts->getDrawer( values.size()-1);
 	double h = txt->getHeight() * 0.9;
-	setText(values,values.size()-1,Coord(cbInner.MinX() + cbInner.width() + cbBox.width() / 15.0, cbBox.MaxY() - h,z));
+	setText(values,values.size()-1,Coord(cbInner.MinX() + cbInner.width() + cbInner.width() / 15.0, cbInner.height () - h,z));
 }
 
 void AnnotationValueLegendDrawer::drawHorizontal(CoordBounds& cbInner, const RangeReal& rr, double z, const vector<String>& values) const{
@@ -614,48 +667,59 @@ bool AnnotationBorderDrawer::draw( const CoordBounds& cbArea) const{
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 
+	bool is3D = getRootDrawer()->is3D();// && zvmkr->getThreeDPossible();
+	double z0 = getRootDrawer()->getZMaker()->getZ0(is3D);
+
+	
 	CoordBounds cbZoom = getRootDrawer()->getCoordBoundsZoom();
 	CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
-	double xmleft = cbZoom.cMin.x + cbZoom.width() * xborder;
-	if ( cbMap.cMin.x > xmleft)
-		xmleft = cbMap.cMin.x;
-	double xmright = cbZoom.cMax.x - cbZoom.width() * xborder;
-	if ( cbMap.cMax.x < xmright)
-		xmright = cbMap.cMax.x;
-	double ymbottom = cbZoom.cMin.y + cbZoom.height() * yborder;
-	if ( cbMap.cMin.y > ymbottom)
-		ymbottom = cbMap.cMin.y;
-	double ymtop = cbZoom.cMax.y - cbZoom.height() * yborder;
-	if ( cbMap.cMax.y < ymtop)
-		ymtop = cbMap.cMax.y;
+	CoordBounds cbTemp = cbCorner;
+	cbTemp.cMin.x = cbZoom.cMin.x + cbZoom.width() * xborder;
+	if ( cbMap.cMin.x > cbTemp.cMin.x)
+		cbTemp.cMin.x = cbMap.cMin.x;
+	cbTemp.cMax.x = cbZoom.cMax.x - cbZoom.width() * xborder;
+	if ( cbMap.cMax.x < cbTemp.cMax.x)
+		cbTemp.cMax.x = cbMap.cMax.x;
+	cbTemp.cMin.y = cbZoom.cMin.y + cbZoom.height() * yborder;
+	if ( cbMap.cMin.y > cbTemp.cMin.y)
+		cbTemp.cMin.y = cbMap.cMin.y;
+	cbTemp.cMax.y = cbZoom.cMax.y - cbZoom.height() * yborder;
+	if ( cbMap.cMax.y < cbTemp.cMax.y )
+		cbTemp.cMax.y = cbMap.cMax.y;
+	const_cast<AnnotationBorderDrawer *>(this)->cbCorner = cbTemp;
 
-	borderBox->setBox(cbZoom, CoordBounds(Coord(xmleft,ymbottom), Coord(xmright, ymtop)));
+	borderBox->setBox(cbZoom, CoordBounds(cbCorner.cMin, cbCorner.cMax));
 
 	if ( hasText[0] ) {
-		setText(xmleft,AnnotationBorderDrawer::sLEFT);
+		setText(cbCorner.cMin.x,AnnotationBorderDrawer::sLEFT, z0);
 	}
 	if ( hasText[1] ) {
-		setText(xmright,AnnotationBorderDrawer::sRIGHT);
+		setText(cbCorner.cMax.x,AnnotationBorderDrawer::sRIGHT, z0);
 	}
 	if ( hasText[2] ) {
-		setText(ymtop,AnnotationBorderDrawer::sTOP);
+		setText(cbCorner.cMax.y,AnnotationBorderDrawer::sTOP, z0);
 	}
 	if ( hasText[3] ) {
-		setText(ymbottom,AnnotationBorderDrawer::sBOTTOM);
+		setText(cbCorner.cMin.y,AnnotationBorderDrawer::sBOTTOM, z0);
 	}
 	AnnotationDrawer::draw(cbArea);
 
 	if ( neatLine) {
 		glBegin(GL_LINE_STRIP);
-		glVertex3d(xmleft, ymbottom,0);
-		glVertex3d(xmleft, ymtop,0);
-		glVertex3d(xmright, ymtop,0);
-		glVertex3d(xmright, ymbottom,0);
-		glVertex3d(xmleft, ymbottom,0);
+		glVertex3d(cbCorner.MinX(), cbCorner.MinY(),z0);
+		glVertex3d(cbCorner.MinX(), cbCorner.MaxY(),z0);
+		glVertex3d(cbCorner.MaxX(), cbCorner.MaxY(),z0);
+		glVertex3d(cbCorner.MaxX(), cbCorner.MinY(),z0);
+		glVertex3d(cbCorner.MinX(), cbCorner.MinY(),z0);
 		glEnd();
 	}
 
 	glDisable(GL_BLEND);
+
+	GridDrawer *gdr = (GridDrawer *)getRootDrawer()->getDrawer("GridDrawer");
+	if ( gdr) {
+		gdr->setBounds(cbCorner);
+	}
 
 	return true;
 }
@@ -773,7 +837,7 @@ Coordinate ptBorderY(RootDrawer * rootDrawer, AnnotationBorderDrawer::Side side,
 	}
 }
 
-void AnnotationBorderDrawer::setText(double border, AnnotationBorderDrawer::Side side) const{
+void AnnotationBorderDrawer::setText(double border, AnnotationBorderDrawer::Side side, double z) const{
 	CoordBounds cbZoom = getRootDrawer()->getCoordBoundsZoom();
 	if ( side == sLEFT || side == sRIGHT) {
 		for(int i = 0; i < ypos.size(); ++i) {
@@ -785,7 +849,7 @@ void AnnotationBorderDrawer::setText(double border, AnnotationBorderDrawer::Side
 			if ( side == sLEFT) {
 				offset = - cb.width() - cbZoom.width() * 0.01;
 			}
-			Coord crd(border + offset, ptBorderY(getRootDrawer(), side, ypos[i]).y - cb.height() / 2, 0);			
+			Coord crd(border + offset, ptBorderY(getRootDrawer(), side, ypos[i]).y - cb.height() / 2, z);			
 			txtdrw->setCoord(crd);
 		}
 	} else {
@@ -799,7 +863,7 @@ void AnnotationBorderDrawer::setText(double border, AnnotationBorderDrawer::Side
 				if ( side == sBOTTOM) {
 					offset = - cb.height() - cbZoom.height() * 0.01;
 				}
-				Coord crd(ptBorderX(getRootDrawer(), side, xpos[i]).x - cb.width() / 2, border + offset, 0);
+				Coord crd(ptBorderX(getRootDrawer(), side, xpos[i]).x - cb.width() / 2, border + offset, z);
 				txtdrw->setCoord(crd);
 			}
 		}
@@ -908,4 +972,145 @@ void AnnotationBorderDrawer::setHasNeatLine(bool yesno){
 void AnnotationBorderDrawer::setStep(int st){
 	if ( st > 0)
 		step = st;
+}
+//------------------------------------------------
+ILWIS::NewDrawer *createAnnotationScaleBarDrawer(DrawerParameters *parms) {
+	return new AnnotationScaleBarDrawer(parms);
+}
+
+AnnotationScaleBarDrawer::AnnotationScaleBarDrawer(DrawerParameters *parms) : 
+AnnotationDrawer(parms, "AnnotationScaleBarDrawer"),
+size(rUNDEF), ticks(3), texts(0),unit("meters")
+{
+	CoordBounds cb = getRootDrawer()->getCoordBoundsZoom();
+	size = rRound(cb.width() * 0.2 / ticks);
+	double totSize = size * ticks;
+	height = cb.height() * 0.01;
+	Coord middle = cb.middle();
+	middle.y = cb.MaxY() - cb.height() / 20.0;
+	begin = middle;
+	begin.x = middle.x - totSize / 2.0;
+}
+
+void AnnotationScaleBarDrawer::prepare(PreparationParameters *pp){
+	AnnotationDrawer::prepare(pp);
+	if (  pp->type & RootDrawer::ptGEOMETRY){
+		if (!texts) {
+			DrawerParameters dp(getRootDrawer(),this);
+			texts = (ILWIS::TextLayerDrawer *)NewDrawer::getDrawer("TextLayerDrawer", "ilwis38",&dp);
+			texts->setFont(new OpenGLText(getRootDrawer(),"arial.ttf",12,false));
+			addPostDrawer(100,texts);
+		}
+		texts->clear();
+		for(int i=0; i <= ticks; ++i) {
+			DrawerParameters dp(getRootDrawer(),texts);
+			TextDrawer *txtdr =(ILWIS::TextDrawer *)NewDrawer::getDrawer("TextDrawer","ilwis38",&dp);
+			texts->addDrawer(txtdr);
+		}
+	}
+	if ( pp->type & NewDrawer::ptOFFSCREENSTART || pp->type & NewDrawer::ptOFFSCREENEND) {
+		texts->prepare(pp);
+	}
+}
+
+bool AnnotationScaleBarDrawer::draw( const CoordBounds& cbArea) const{
+	if ( !isActive() && !isValid())
+		return false;
+
+	bool is3D = getRootDrawer()->is3D(); 
+	double z0 = getRootDrawer()->getZMaker()->getZ0(is3D);
+	if (is3D)
+		z0 +=  z0;
+
+	double z = is3D ? z0 : 0;
+	glColor3d(0,0, 0);
+	double start = 0;
+	double totSize = ticks * size;
+
+	glPushMatrix();
+	glTranslated(begin.x, begin.y, z);
+
+	drawPreDrawers(cbArea);
+
+
+	glBegin(GL_LINES);
+		glVertex3d(0, 0, z);
+		glVertex3d(totSize, 0, z);
+		for(int i = 0; i <= ticks; ++i) {
+			glVertex3d(start,0, z);
+			glVertex3d(start, -height,z);
+			start += size;
+			TextDrawer *txtdr = (TextDrawer *)texts->getDrawer(i);
+			if ( txtdr) {
+				String s = String("%d",(long)size * i);
+				txtdr->setText(s);
+				double h = txtdr->getHeight();
+				h += height;
+				double xShift = h * s.size() / 6.0;
+				double x = i * size - xShift;
+				if ( i == ticks)
+					s += " " + unit;
+				txtdr->setText(s);
+				txtdr->setCoord(Coord(x, -h,0));
+			}
+
+		}
+	glEnd();
+
+	drawPostDrawers(cbArea);
+
+	glPopMatrix();
+
+	return true;
+}
+
+Coord AnnotationScaleBarDrawer::getBegin(){
+	return begin;
+}
+void AnnotationScaleBarDrawer::setBegin(const Coord& b){
+	begin = b;
+}
+double AnnotationScaleBarDrawer::getSize() const{
+	return size;
+}
+void AnnotationScaleBarDrawer::setSize(double w){
+	size = w;
+}
+
+String AnnotationScaleBarDrawer::store(const FileName& fnView, const String& parentSection) const{
+	AnnotationDrawer::store(fnView, parentSection);
+	ObjectInfo::WriteElement(getType().c_str(),"Size",fnView, size);
+	ObjectInfo::WriteElement(getType().c_str(),"Begin",fnView, begin);
+	ObjectInfo::WriteElement(getType().c_str(),"Height",fnView, height);
+	ObjectInfo::WriteElement(getType().c_str(),"Ticks",fnView, ticks);
+	ObjectInfo::WriteElement(getType().c_str(),"Unit",fnView, unit);
+
+	return parentSection;
+}
+
+void AnnotationScaleBarDrawer::load(const FileName& fnView, const String& parentSection){
+		AnnotationDrawer::load(fnView, parentSection);
+		ObjectInfo::ReadElement(getType().c_str(),"Size",fnView, size);
+		ObjectInfo::ReadElement(getType().c_str(),"Begin",fnView, begin);
+		ObjectInfo::ReadElement(getType().c_str(),"Height",fnView, height);
+		ObjectInfo::ReadElement(getType().c_str(),"Ticks",fnView, ticks);
+		ObjectInfo::ReadElement(getType().c_str(),"Unit",fnView, unit);
+}
+
+String AnnotationScaleBarDrawer::getUnit() const{
+	return unit;
+}
+
+void AnnotationScaleBarDrawer::setUnit(const String& _unit){
+	unit = _unit;
+}
+
+int AnnotationScaleBarDrawer::getTicks() const{
+	return ticks;
+}
+
+void AnnotationScaleBarDrawer::setTicks(int t){
+	if ( t > 1) {
+		ticks = t;
+	}
 }

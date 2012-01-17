@@ -4,6 +4,7 @@ ILWIS::NewDrawer *createAnnotationValueLegendDrawer(ILWIS::DrawerParameters *par
 ILWIS::NewDrawer *createAnnotationClassLegendDrawer(ILWIS::DrawerParameters *parms);
 ILWIS::NewDrawer *createAnnotationBorderDrawer(ILWIS::DrawerParameters *parms);
 ILWIS::NewDrawer *createAnnotationDrawers(ILWIS::DrawerParameters *parms);
+ILWIS::NewDrawer *createAnnotationScaleBarDrawer(ILWIS::DrawerParameters *parms);
 
 namespace ILWIS {
 	class TextLayerDrawer;
@@ -15,14 +16,23 @@ class _export AnnotationDrawers : public ComplexDrawer {
 public:
 	AnnotationDrawers(DrawerParameters *parms);
 	void prepare(PreparationParameters *pp);
+
+protected:
+
 };
 
 class _export AnnotationDrawer : public ComplexDrawer{
 public:
 	AnnotationDrawer(DrawerParameters *parms, const String& name);
+	double getScale() const;
+	void setScale(double s);
+	void setTitle(const String& t);
+	String getTitle() const;
 protected:
 	String store(const FileName& fnView, const String& parenSection) const;
 	void load(const FileName& fnView, const String& parenSection);
+	double scale;
+	String title;
 };
 
 class _export AnnotationLegendDrawer : public AnnotationDrawer{
@@ -59,10 +69,10 @@ protected:
 	bool useBackground;
 	Color bgColor;
 	Domain dm;
+	IlwisObject::iotIlwisObjectType objType;
 	int columns;
 	bool includeName;
 	FileName fnName;
-
 };
 
 struct RawInfo {
@@ -119,7 +129,7 @@ private:
 	void load(const FileName& fnView, const String& parenSection);
 	void calcLocations();
 	TextDrawer *getTextDrawer(int index, AnnotationBorderDrawer::Side side);
-	void setText(double border, AnnotationBorderDrawer::Side side) const;
+	void setText(double border, AnnotationBorderDrawer::Side side, double z) const;
 
 	double xborder; // percent;
 	double yborder; // percent;
@@ -127,10 +137,37 @@ private:
 	vector<double> xpos;
 	vector<bool> hasText;
 	BoxDrawer *borderBox;
+	CoordBounds cbCorner;
 	TextLayerDrawer *texts;
 	bool isLatLon;
 	bool neatLine;
 	int step;
 
+};
+
+class _export AnnotationScaleBarDrawer : public AnnotationDrawer {
+public:
+	AnnotationScaleBarDrawer(DrawerParameters *parms);
+	void prepare(PreparationParameters *pp) ;
+	Coord getBegin();
+	void setBegin(const Coord& begin);
+	double getSize() const;
+	void setSize(double w);
+	String getUnit() const;
+	void setUnit(const String& unit);
+	int getTicks() const;
+	void setTicks(int t);
+
+private:
+	bool draw( const CoordBounds& cbArea) const;
+	String store(const FileName& fnView, const String& parenSection) const;
+	void load(const FileName& fnView, const String& parenSection);
+
+	double size;
+	double height;
+	Coord begin;
+	int ticks;
+	TextLayerDrawer *texts;
+	String unit;
 };
 }
