@@ -1,5 +1,6 @@
 #include "Headers\toolspch.h"
 #include "Engine\Map\Raster\Map.h" // for Map in Texture.h, otherwise Texture.h can't compile (Texture.h can't be used standalone yet)
+#include "Engine\Map\Raster\grid.h"
 #include "DEMTriangulator.h"
 #include "Texture.h"
 #include "Engine\Drawers\ZValueMaker.h"
