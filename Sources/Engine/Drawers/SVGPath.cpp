@@ -270,9 +270,6 @@ void SVGPath::doHLine(int& index, PathElement::PositionType ptype, const vector<
 }
 
 void SVGPath::addPoint(int& index, const Coord& c) {
-	if ( index == 125) {
-		TRACE("STOP");
-	}
 	points.push_back(c);
 	++index;
 	cPen = c;
