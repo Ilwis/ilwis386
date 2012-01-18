@@ -89,8 +89,17 @@ double OpenGLText::getHeight() const{
 
 CoordBounds OpenGLText::getTextExtent(const String& txt) const {
 	if ( font) {
-		float x1,x2,y1,y2,z1,z2;
-		font->BBox(txt.c_str(), x1,y1,z1,x2,y2,z2);
+		//float x1,x2,y1,y2,z1,z2;
+		//font->BBox(txt.c_str(), x1,y1,z1,x2,y2,z2);
+		FTBBox box = font->BBox(txt.c_str());
+		double x1 = box.Lower().X();
+		double x2 = box.Upper().X();
+		double y1 = box.Lower().Y();
+		double y2 = box.Upper().Y();
+		double z1 = box.Lower().Z();
+		double z2 = box.Upper().Z();
+
+
 		return CoordBounds(Coord(x1*scale, y1*scale, z1*scale), Coord(x2 * scale, y2 * scale, z2 * scale));
 	}
 	return CoordBounds();
