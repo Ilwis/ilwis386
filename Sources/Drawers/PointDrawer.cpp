@@ -66,7 +66,7 @@ void PointDrawer::calcSize() {
 }
 
 bool PointDrawer::draw( const CoordBounds& cbArea) const {
-	if ( !isActive() && !isValid())
+	if ( !isActive() || !isValid())
 		return false;
 
 	if ( cNorm.fUndef())
