@@ -350,8 +350,10 @@ void LayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 		} 
 	}
 	DrawerTool *dt = DrawerTool::createTool("BackgroundTool",mcd->mpvGetView(),this,mcd->rootDrawer);
-	drwTool->addTool(dt);
-	dt->configure(item);
+	if ( dt) {
+		drwTool->addTool(dt);
+		dt->configure(item);
+	}
 	resetState();
 	GetTreeCtrl().Expand(GetTreeCtrl().GetFirstVisibleItem(),TVE_COLLAPSE);
 	tc.SetRedraw(TRUE);
