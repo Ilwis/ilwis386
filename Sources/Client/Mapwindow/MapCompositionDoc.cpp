@@ -1418,7 +1418,7 @@ bool MapCompositionDoc::fAppendable(const FileName& fn)
 	return fOk;
 }
 
-NewDrawer* MapCompositionDoc::drAppend(const FileName& fn, IlwisDocument::OpenType op, int os)
+NewDrawer* MapCompositionDoc::drAppend(const FileName& fn, IlwisDocument::OpenType op, int os, const String& subtype)
 {
 	if (!fAppendable(fn))
 	{
@@ -1432,19 +1432,19 @@ NewDrawer* MapCompositionDoc::drAppend(const FileName& fn, IlwisDocument::OpenTy
 	// add layer
 	if (".mps" == fn.sExt || ".mpa" == fn.sExt || ".mpp" == fn.sExt) {
 		BaseMap bm(fn);
-		dr = drAppend(bm,op,os);
+		dr = drAppend(bm,op,os, subtype);
 	}
 	else if (".mpr" == fn.sExt) {
 		Map mp(fn);
-		dr = drAppend(mp, os);
+		dr = drAppend(mp, op, os, subtype);
 	}
 	else if (".mpl" == fn.sExt) {
 		MapList ml(fn);
-		dr = drAppend(ml,op, os);
+		dr = drAppend(ml,op, os, subtype);
 	}
 	else if (".ioc" == fn.sExt) {
 		ObjectCollection oc(fn);
-		dr = drAppend(oc,op, os);
+		dr = drAppend(oc,op, os, subtype);
 	}
 	else if (".csy" == fn.sExt) {
 		CoordSystem csy(fn);
@@ -1577,12 +1577,12 @@ NewDrawer* MapCompositionDoc::drAppend(const Map& rasmap, int os)
 	return dr;
 }
 
-NewDrawer* MapCompositionDoc::drAppend(const ObjectCollection& oc, IlwisDocument::OpenType op, int os)
+NewDrawer* MapCompositionDoc::drAppend(const ObjectCollection& oc, IlwisDocument::OpenType op, int os, const String& subtype)
 {
 	ILWIS::NewDrawer *drawer = 0;
 	if ( op == IlwisDocument::otANIMATION) {
 		ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
-		drawer = NewDrawer::getDrawer("AnimationDrawer", "Ilwis38", &parms);
+		drawer = NewDrawer::getDrawer("AnimationDrawer", subtype, &parms);
 		drawer->addDataSource((void *)&oc);
 		for(int i=0; i < oc->iNrObjects(); ++i) {
 			FileName fn = oc->fnObject(i);
@@ -1639,11 +1639,11 @@ NewDrawer* MapCompositionDoc::drAppend(const ObjectCollection& oc, IlwisDocument
 	return drawer;
 }
 
-NewDrawer* MapCompositionDoc::drAppend(const MapList& maplist,IlwisDocument::OpenType op, int os)
+NewDrawer* MapCompositionDoc::drAppend(const MapList& maplist,IlwisDocument::OpenType op, int os, const String& subtype)
 {
 	if ( op & IlwisDocument::otANIMATION) {
 		ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
-		ILWIS::NewDrawer *drawer = NewDrawer::getDrawer("AnimationDrawer", "Ilwis38", &parms);
+		ILWIS::NewDrawer *drawer = NewDrawer::getDrawer("AnimationDrawer", subtype, &parms);
 		drawer->addDataSource((void *)&maplist);
 		Map mp = maplist[maplist->iLower()];
 		rootDrawer->setCoordinateSystem(mp->cs());
@@ -1657,7 +1657,7 @@ NewDrawer* MapCompositionDoc::drAppend(const MapList& maplist,IlwisDocument::Ope
 		return drawer;
 	} else if ( op & otCOLORCOMP ){
 		ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
-		ILWIS::NewDrawer *drawer = NewDrawer::getDrawer("RasterDataDrawer", "Ilwis38", &parms);
+		ILWIS::NewDrawer *drawer = NewDrawer::getDrawer("RasterDataDrawer", subtype, &parms);
 		drawer->addDataSource((void *)&maplist);
 		Map mp = maplist[maplist->iLower()];
 		rootDrawer->setCoordinateSystem(mp->cs());
@@ -1675,7 +1675,7 @@ NewDrawer* MapCompositionDoc::drAppend(const MapList& maplist,IlwisDocument::Ope
 }
 
 
-NewDrawer* MapCompositionDoc::drAppend(const BaseMap& mp,IlwisDocument::OpenType op, int os)
+NewDrawer* MapCompositionDoc::drAppend(const BaseMap& mp,IlwisDocument::OpenType op, int os, const String& subtype)
 {
 	if (fCoordSystemOk(mp)) {
 		if (!mp->fCalculated())
@@ -1692,13 +1692,13 @@ NewDrawer* MapCompositionDoc::drAppend(const BaseMap& mp,IlwisDocument::OpenType
 		ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
 		ILWIS::NewDrawer *drawer;
 		if ( op == IlwisDocument::otANIMATION) {
-			drawer = NewDrawer::getDrawer("AnimationDrawer", "Ilwis38", &parms);
+			drawer = NewDrawer::getDrawer("AnimationDrawer", subtype, &parms);
 		}
 		else {
 			if ( IlwisObject::iotObjectType(mp->fnObj) !=  IlwisObject::iotRASMAP)
-				drawer = createBaseMapDrawer(mp, "FeatureDataDrawer", "Ilwis38", os);
+				drawer = createBaseMapDrawer(mp, "FeatureDataDrawer", subtype, os);
 			else
-				drawer = createBaseMapDrawer(mp, "RasterDataDrawer", "Ilwis38", os);
+				drawer = createBaseMapDrawer(mp, "RasterDataDrawer", subtype, os);
 		}
 		ChangeState();
 		//UpdateAllViews(0,3);

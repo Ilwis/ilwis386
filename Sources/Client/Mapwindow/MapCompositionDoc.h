@@ -97,11 +97,11 @@ public:
 	bool fCoordSystemOk(const BaseMap& bmap);
 	bool fGeoRefOk(const Map& map) { return true; } // might change
 	bool fAppendable(const FileName&);
-	NewDrawer* drAppend(const FileName&, IlwisDocument::OpenType op=IlwisDocument::otUNKNOWN, int os= IlwisWinApp::osNormal);
+	NewDrawer* drAppend(const FileName&, IlwisDocument::OpenType op=IlwisDocument::otUNKNOWN, int os= IlwisWinApp::osNormal, const String& subtype="ilws38");
 	NewDrawer* drAppend(const Map&, int os= IlwisWinApp::osNormal);
-	NewDrawer* drAppend(const MapList&, IlwisDocument::OpenType op=IlwisDocument::otUNKNOWN, int os= IlwisWinApp::osNormal);
-	NewDrawer* drAppend(const BaseMap&, IlwisDocument::OpenType op=IlwisDocument::otUNKNOWN, int os= IlwisWinApp::osNormal);
-	NewDrawer* drAppend(const ObjectCollection& oc, IlwisDocument::OpenType op=IlwisDocument::otUNKNOWN, int os= IlwisWinApp::osNormal);
+	NewDrawer* drAppend(const MapList&, IlwisDocument::OpenType op=IlwisDocument::otUNKNOWN, int os= IlwisWinApp::osNormal, const String& subtype="ilws38");
+	NewDrawer* drAppend(const BaseMap&, IlwisDocument::OpenType op=IlwisDocument::otUNKNOWN, int os= IlwisWinApp::osNormal, const String& subtype="ilws38");
+	NewDrawer* drAppend(const ObjectCollection& oc, IlwisDocument::OpenType op=IlwisDocument::otUNKNOWN, int os= IlwisWinApp::osNormal, const String& subtype="ilws38");
 	void RemoveDrawer(ILWIS::NewDrawer* dr);
 	void SetCoordSystem(const CoordSystem&);
 	double rPrefScale() const { return rDfltScale; }
