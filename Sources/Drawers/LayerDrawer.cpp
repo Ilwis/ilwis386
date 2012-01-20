@@ -76,7 +76,7 @@ void LayerDrawer::prepare(PreparationParameters *parm){
 			}
 		}
 	}
-	setDrawMethod();
+	setDrawMethod(drm);
 }
 
 bool LayerDrawer::draw( const CoordBounds& cbArea) const{
@@ -256,8 +256,7 @@ String LayerDrawer::store(const FileName& fnView, const String& parentSection) c
 	ObjectInfo::WriteElement(parentSection.c_str(),"UseAttributes",fnView, useAttColumn);
 	ObjectInfo::WriteElement(parentSection.c_str(),"ExtrusionTransparency",fnView, extrTransparency);
 	if ( drawColor) {
-		RangeReal rr;
-		ObjectInfo::WriteElement(parentSection.c_str(),"ExtrusionTransparency",fnView,drawColor->getTransparentValues());
+		drawColor->store(fnView, parentSection);
 	}
 	return parentSection;
 }
@@ -278,9 +277,7 @@ void LayerDrawer::load(const FileName& fnView, const String& parentSection){
 	}
 	ObjectInfo::ReadElement(parentSection.c_str(),"UseAttributes",fnView, useAttColumn);
 	if ( drawColor) {
-		RangeReal r;
-		ObjectInfo::ReadElement(parentSection.c_str(),"ExtrusionTransparency",fnView, r);
-		drawColor->setTransparentValues(r);
+		drawColor->load(fnView, parentSection);
 	}
 }
 
