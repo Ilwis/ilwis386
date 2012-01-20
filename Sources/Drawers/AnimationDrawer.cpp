@@ -1,4 +1,5 @@
 #include "Headers\toolspch.h"
+#include "Headers\messages.h"
 #include "Engine\Table\tbl.h"
 #include "Engine\Map\Raster\MapList\maplist.h"
 #include "Engine\Base\DataObjects\ObjectCollection.h"
@@ -39,13 +40,17 @@ AnimationDrawer::AnimationDrawer(DrawerParameters *parms) :
 	index(0),
 	useTime(false),
 	mapIndex(0),
-	offset(0)
+	offset(0),
+	manager(0)
 {
 	setTransparency(1);
 	last = 0;
 }
 
 AnimationDrawer::~AnimationDrawer(){
+	if ( manager) {
+		manager->SendMessage(ILWM_UPDATE_ANIM,128,(long)this);
+	}
 }
 
 String AnimationDrawer::description() const {

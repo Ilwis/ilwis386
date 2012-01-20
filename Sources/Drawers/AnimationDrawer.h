@@ -50,6 +50,8 @@ namespace ILWIS{
 		void setOffset(int off);
 
 		static int timerIdCounter;
+		CWnd *manager; // basically a UI element, but is sufficiently abstract in thios form to be acceptable; no outisde linage needed.
+		// a message needs to be send to this window else dangling pointers result;
 
 	protected:
 		String store(const FileName& fnView, const String& parenSection) const;
