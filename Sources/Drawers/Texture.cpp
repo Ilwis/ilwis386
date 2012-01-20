@@ -56,10 +56,25 @@ void Texture::CreateTexture(DrawerContext * drawerContext, bool fInThread, volat
 	fValue = 0 != mp->dm()->pdvi() || 0 != mp->dm()->pdvr();
 	fAttTable = false;
 	if (palette) {
+	try {
 		texture_data = new char [(sizeX / zoomFactor) * (sizeY / zoomFactor) * 2];
+	} catch (CMemoryException * err) {
+		char msg[512];
+		err->GetErrorMessage(msg, sizeof(msg));
+		err->Delete();
+		throw ErrorObject(String("%s", msg));
+	}
 		this->valid = DrawTexturePaletted(offsetX, offsetY, sizeX, sizeY, zoomFactor, texture_data, fDrawStop);
 	} else {
+	try {
 		texture_data = new char [(sizeX / zoomFactor) * (sizeY / zoomFactor) * 4];
+	} catch (CMemoryException * err) {
+		char msg[512];
+		err->GetErrorMessage(msg, sizeof(msg));
+		err->Delete();
+		throw ErrorObject(String("%s", msg));
+
+	}
 		this->valid = DrawTexture(offsetX, offsetY, sizeX, sizeY, zoomFactor, texture_data, fDrawStop);
 	}
 
