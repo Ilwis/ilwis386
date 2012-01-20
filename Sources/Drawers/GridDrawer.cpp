@@ -46,6 +46,12 @@ bool GridDrawer::draw( const CoordBounds& cbArea) const{
 		return false;
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
+
+	if ( bounds.fValid()) {
+		//double clipPlane[] = { bounds.MinX(), bounds.MinY(), bounds.MaxX(), bounds.MaxY
+		//glClipPlane(GL_CLIP_PLANE0,
+	}
+
 	if ( getRootDrawer()->is3D()) {
 		glPushMatrix();
 		double z0 = getRootDrawer()->getZMaker()->getZ0(true);
@@ -95,7 +101,7 @@ bool GridDrawer::drawPlane(const CoordBounds& cbArea) const{
 }
 
 void GridDrawer::prepare(PreparationParameters *pp) {
-	if (  pp->type & RootDrawer::ptGEOMETRY){ 
+	if (  (pp->type & RootDrawer::ptGEOMETRY) || (pp->type & NewDrawer::ptRESTORE)){ 
 		String sVal;
 		Coord c, cMin, cMax;
 		Color clr;
@@ -208,8 +214,7 @@ void GridDrawer::prepareVerticals(double rDist,const Coord& cMax, const Coord& c
 }
 
 void GridDrawer::getLayerDistances(vector<double>& dist) {
-	//if ( dist.size() == 0)
-	//	return;
+
 
 	RootDrawer *rootDrawer = getRootDrawer();
 	int n = rootDrawer->getDrawerCount();
@@ -227,9 +232,11 @@ void GridDrawer::getLayerDistances(vector<double>& dist) {
 			dist.push_back(offset);
 		}
 	}
-	double minOffset = dist[dist.size() - 1] * 0.02;
-	for(int i = 0; i < dist.size(); ++i) {
-		dist[i] += minOffset;
+	if ( dist.size() != 0) {
+		double minOffset = dist[dist.size() - 1] * 0.02;
+		for(int i = 0; i < dist.size(); ++i) {
+			dist[i] += minOffset;
+		}
 	}
 }
 
@@ -405,6 +412,7 @@ String GridDrawer::store(const FileName& fnView, const String& parentSection) co
 }
 
 void GridDrawer::load(const FileName& fnView, const String& parenSection){
+	ComplexDrawer::load(fnView, parenSection);
 	ObjectInfo::ReadElement(getType().c_str(),"Distance",fnView, rDist);
 	lproperties.store(fnView,getType());
 	ObjectInfo::ReadElement(getType().c_str(),"ThreeDGrid",fnView, threeDGrid);
@@ -443,6 +451,9 @@ void GridDrawer::set3DGrid(bool yesno){
 	threeDGrid = yesno;
 }
 
+void GridDrawer::setBounds(const CoordBounds& bb){
+	bounds = bb;
+}
 //---------------------------------------------
 ILWIS::NewDrawer *createGridLine(DrawerParameters *parms) {
 	return new GridLine(parms);
@@ -472,6 +483,8 @@ void GridLine::addDataSource(void *crd, int options) {
 		lines.push_back(new CoordinateArraySequence());
 	lines.at(0)->add(c);
 }
+
+
 
 
 

@@ -33,6 +33,7 @@ namespace ILWIS{
 		int getNumberOfPlanes() const;
 		void setTransparencyPlane( double v);
 		double getTransparencyPlane() const;
+		void setBounds(const CoordBounds&);
 
 
 	protected:
@@ -59,6 +60,7 @@ namespace ILWIS{
 		int				noOfPlanes;
 		vector< Coord * >   planeQuads;
 		vector<double> planeDistances;
+		CoordBounds bounds;
 	};
 
 	class GridLine: public LineDrawer {
@@ -71,16 +73,5 @@ namespace ILWIS{
 	private:
 	};
 
-	//class GridLineStyleForm: public DisplayOptionsForm
-	//{
-	//public:
-	//	GridLineStyleForm(CWnd *par, GridDrawer *gdr);
-	//	void apply();
-	//private:
-	//	FieldReal *fi;
-	//	FieldLineType *flt;
-	//	FieldColor *fc;
-	//};
 
-	
 }
