@@ -9,7 +9,7 @@ BEGIN_MESSAGE_MAP(TimeGraph, CStatic)
 	ON_NOTIFY(TTN_NEEDTEXTA, 0, OnToolTipNotify)
 END_MESSAGE_MAP()
 
-TimeGraph::TimeGraph(TimeGraphSlider *f, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID) : BaseZapp(f) 
+TimeGraph::TimeGraph(TimeGraphSlider *f, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID) : BaseZapp(f),threshold(rUNDEF), toBeNotified(0), isAbove(true)
 {
 	fldGraph = f;
 	if (!CStatic::Create(0,dwStyle | SS_OWNERDRAW | SS_NOTIFY, rect, pParentWnd, nID))
@@ -94,9 +94,15 @@ void TimeGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	double y0 = rr.rWidth() * yscale;
 	double xscale = (double)rct.Width() / fldGraph->recordRange.iWidth();
 	CPoint *pts = new CPoint[fldGraph->recordRange.iWidth() + 3];
+	marked.clear();
 	double rx = 0;
 	for(int i = fldGraph->recordRange.iLo(); i <= fldGraph->recordRange.iHi(); ++i) {
 		double v = !useDefault ?  col->rValue(i) : (double)i / fldGraph->recordRange.iWidth();
+		if ( threshold != rUNDEF) {
+			if ( toBeNotified ) {
+				marked.push_back(isAbove ? threshold < v : threshold >= v);
+			} 
+		}
 		int y = y0 - ( v - rr.rLo()) * yscale;
 		pts[!useDefault ? i-1 : i] = CPoint(rx,y);
 		rx += xscale;
@@ -112,6 +118,7 @@ void TimeGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	pts[fldGraph->recordRange.iWidth() + 2] = CPoint(0, rct.Height());
 
 
+
 	CPen bpen(PS_SOLID, 1, RGB(0, 0, 200));
 	SelectObject(lpDIS->hDC, bpen);
 
@@ -119,6 +126,13 @@ void TimeGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	CBrush brush(RGB(50, 150, 50));
 	oldBrush = SelectObject(lpDIS->hDC, brush);
 	::Polygon(lpDIS->hDC,pts,fldGraph->recordRange.iWidth() + 3);
+	if ( threshold != rUNDEF) {
+		int y = y0 - ( threshold - rr.rLo()) * yscale;
+		CPen redPen(PS_SOLID,2, RGB(0,0,255));
+		dc->SelectObject(redPen);
+		dc->MoveTo(0, y);
+		dc->LineTo(rct.Width(), y);
+	}
 
 	if ( timePoint.x != 100000) {
 		CPen redPen(PS_SOLID,2, RGB(255,0,0));
@@ -144,6 +158,10 @@ void TimeGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	SelectObject(lpDIS->hDC, fntOld);
 	fnt->DeleteObject();
 	delete fnt;
+}
+
+void TimeGraph::setLinkedWindow(CWnd *wnd){
+	toBeNotified = wnd;
 }
 
 void TimeGraph::OnLButtonUp(UINT nFlags, CPoint point) {	
@@ -175,7 +193,14 @@ void TimeGraph::setIndex(int index) {
 	GetClientRect(rct);
 	double xscale = (double)rct.Width() / fldGraph->recordRange.iWidth();
 	timePoint = CPoint(xscale * index, (rct.bottom + rct.top)/2.0); // y doesnt matter but anyway
+	if ( threshold != rUNDEF) {
+		if ( toBeNotified ) {
+			if ( index < marked.size())
+				toBeNotified->SendMessage(ID_NOTIFY_ME,marked[index]);
+		}
+	}
 	Invalidate();
+
 
 }
 
@@ -184,6 +209,15 @@ void TimeGraph::PreSubclassWindow()
 	EnableToolTips();
 	
 	CStatic::PreSubclassWindow();
+}
+
+void TimeGraph::setThreshold(double v, bool above){
+	threshold = v;
+	isAbove = above;
+}
+
+double TimeGraph::getThreshold() const{
+	return threshold;
 }
 //----------------------------------------------------
 TimeGraphSlider::TimeGraphSlider(FormEntry* par, RangeInt defaultRange) :
@@ -236,4 +270,16 @@ void TimeGraphSlider::setTimeInterval(ILWIS::TimeInterval in) {
 
 void TimeGraphSlider::setTimes(const Column& col) {
 	timeCol = col;
+}
+
+void TimeGraphSlider::setThreshold(double v, bool above){
+	timegraph->setThreshold(v, above);
+}
+
+double TimeGraphSlider::getThreshold() const{
+	return timegraph->getThreshold();
+}
+
+void TimeGraphSlider::setLinkedWindow(CWnd *wnd){
+	timegraph->setLinkedWindow(wnd);
 }
