@@ -111,7 +111,7 @@ void PolygonLayerDrawer::prepare(PreparationParameters *parms) {
 }
 
 void PolygonLayerDrawer::setDrawMethod(DrawMethod method) {
-	if ( method == drmINIT) {
+	if ( method == drmINIT || method == drmNOTSET) {
 		if ( useInternalDomain() || !rpr.fValid())
 			setDrawMethod(drmMULTIPLE);
 		else 
