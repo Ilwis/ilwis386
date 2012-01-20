@@ -184,7 +184,7 @@ void ErrorObject::Show(const String& sTitl) const
 		if (sErr.length() == 0)
 			return;
 		bool *fServerMode = (bool*)getEngine()->getContext()->pGetThreadLocalVar(IlwisAppContext::tlvSERVERMODE);
-		if ( *fServerMode == false) {
+		if ( fServerMode && *fServerMode == false) {
 			MessageBeep(MB_ICONHAND);
 			MessageBox(0,sErr.sVal(), sTtl.sVal(), MB_ICONHAND|MB_OK|MB_TASKMODAL|MB_TOPMOST);
 		}
