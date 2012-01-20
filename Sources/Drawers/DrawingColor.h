@@ -31,6 +31,8 @@ public:
 	void setDataColumn(const Column& c);
 	void setTransparentValues(const RangeReal& rr);
 	RangeReal getTransparentValues() const;
+	String store(const FileName& fnView, const String& parenSection) const;
+	void load(const FileName& fnView, const String& parenSection);
 
 private:
 	void InitClrRandom();

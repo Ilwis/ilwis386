@@ -410,3 +410,12 @@ void DrawingColor::setTransparentValues(const RangeReal& rr){
 RangeReal DrawingColor::getTransparentValues() const{
 	return transpValues;
 }
+
+String DrawingColor::store(const FileName& fnView, const String& parentSection) const{
+	ObjectInfo::WriteElement(parentSection.c_str(),"TransparencyValues",fnView, transpValues);
+	return parentSection;
+}
+
+void DrawingColor::load(const FileName& fnView, const String& parentSection){
+	ObjectInfo::ReadElement(parentSection.c_str(),"TransparencyValues",fnView, transpValues);
+}
