@@ -3539,6 +3539,10 @@
 					Name="Raster"
 					>
 					<File
+						RelativePath="..\..\Sources\Engine\Map\Raster\Grid.h"
+						>
+					</File>
+					<File
 						RelativePath="..\..\Sources\Engine\Map\Raster\Map.cpp"
 						>
 					</File>

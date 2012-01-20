@@ -114,7 +114,9 @@ String Directory::sDriveName() const
 
 bool Directory::fExist() const
 {
-	return FileName::fExist();
+	
+	String dir = sDrive + sDir;
+	return _access(dir.c_str(), 0)==0;
 }
 
 bool Directory::operator==(const Directory& dir) const

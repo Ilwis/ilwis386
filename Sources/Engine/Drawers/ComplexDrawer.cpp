@@ -462,9 +462,9 @@ String ComplexDrawer::store(const FileName& fnView, const String& parentSection)
 
 	int count = 0;
 	for(DrawerIter_C cur = preDrawers.begin(); cur != preDrawers.end(); ++cur) {
-		String currentSection("%S%03d",parentSection,count);
-		NewDrawer *drw = (*cur).second;
 		String order = String("%03d", (*cur).first.sHead("|").iVal());
+		String currentSection("%S%03d",parentSection,order);
+		NewDrawer *drw = (*cur).second;
 		if ( !drw->isSimple() ) {
 			String section = drw->store(fnView, currentSection);
 			ObjectInfo::WriteElement(section.c_str(),"Order",fnView, order);
@@ -486,8 +486,8 @@ String ComplexDrawer::store(const FileName& fnView, const String& parentSection)
 	ObjectInfo::WriteElement(parentSection.c_str(),"DrawerCount",fnView, count);
 	count = 0;
 	for(DrawerIter_C cur = postDrawers.begin(); cur != postDrawers.end(); ++cur) {
-		String currentSection("%S%03d",parentSection,count);
 		String order = String("%03d", (*cur).first.sHead("|").iVal());
+		String currentSection("%S%03d",parentSection,order);
 		NewDrawer *drw = (*cur).second;
 		if ( !drw->isSimple() ) {
 			String section = drw->store(fnView, currentSection);
@@ -521,8 +521,8 @@ void ComplexDrawer::load(const FileName& fnView, const String& parentSection){
 	String drawerSection;
 	ObjectInfo::ReadElement(parentSection.c_str(),"PreDrawerCount",fnView, count);
 	for(int i = 0; i < count ; ++i) {
-		ObjectInfo::ReadElement(parentSection.c_str(),String("PreDrawer%03d",i).c_str(),fnView, drawerSection);
 		ObjectInfo::ReadElement(drawerSection.c_str(),"Order",fnView, order);
+		ObjectInfo::ReadElement(parentSection.c_str(),String("PreDrawer%03d",order).c_str(),fnView, drawerSection);
 		addPreDrawer(order,loadDrawer(fnView, drawerSection ));
 	}
 
@@ -534,8 +534,8 @@ void ComplexDrawer::load(const FileName& fnView, const String& parentSection){
 
 	ObjectInfo::ReadElement(parentSection.c_str(),"PostDrawerCount",fnView, count);
 	for(int i = 0; i < count ; ++i) {
-		ObjectInfo::ReadElement(parentSection.c_str(),String("PostDrawer%03d",i).c_str(),fnView, drawerSection);
 		ObjectInfo::ReadElement(drawerSection.c_str(),"Order",fnView, order);
+		ObjectInfo::ReadElement(parentSection.c_str(),String("PostDrawer%03d",order).c_str(),fnView, drawerSection);
 		addPostDrawer(order,loadDrawer(fnView, drawerSection));
 	}
 

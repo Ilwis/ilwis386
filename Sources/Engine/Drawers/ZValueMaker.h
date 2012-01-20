@@ -56,6 +56,8 @@ private:
 	NewDrawer *associatedDrawer;
 	bool isSetDrawer;
 	SourceType sourceType;
+	bool spatialSource;
+
 
 };
 }

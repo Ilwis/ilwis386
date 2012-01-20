@@ -16,6 +16,7 @@ ZValueMaker::ZValueMaker(NewDrawer *drw)  : scalingType(zvsNONE),threeDPossible(
 	isSetDrawer = false;
 	sourceType = styNONE;
 	NewDrawer *parentDrw = associatedDrawer->getParentDrawer();
+	spatialSource = true;
 	if (parentDrw && !associatedDrawer->isSimple() && ((ComplexDrawer *)parentDrw)->isSet())
 		isSetDrawer = true;
 }
@@ -39,8 +40,14 @@ void ZValueMaker::addRange(const BaseMap& mp) {
 	RangeReal tempRange = mp->rrMinMax(BaseMapPtr::mmmCALCULATE);
 	if ( !tempRange.fValid() && cbLimits.fValid()) {
 		range = RangeReal(0,min(cbLimits.width(), cbLimits.height()));
+		spatialSource = true;
 	} else {
-		range += tempRange;
+		if ( spatialSource) {
+			range = tempRange;
+			spatialSource = false;
+		}
+		else
+			range += tempRange;
 	}
 	if ( isSetDrawer ) {
 		NewDrawer *parentDrw = associatedDrawer->getParentDrawer();
