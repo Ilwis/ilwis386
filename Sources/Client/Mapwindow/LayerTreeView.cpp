@@ -484,6 +484,10 @@ void LayerTreeView::OnExpanding(NMHDR *pNMHDR, LRESULT *pResult)
 		nodes[nodeName].expanded = false;
 	}
 
+	LayerTreeItem *item = (LayerTreeItem*)GetTreeCtrl().GetItemData(hItem);
+	if ( item)
+		item->expand();
+
 	*pResult = 0;
 }
 

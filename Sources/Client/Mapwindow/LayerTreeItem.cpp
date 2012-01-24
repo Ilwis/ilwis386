@@ -609,7 +609,8 @@ parent(_parent),
 dbctool(0),
 chctool(0),
 dbcAction(0),
-dtSetCheckFunc(0)
+dtSetCheckFunc(0),
+tool(0)
 {
 }
 
@@ -655,6 +656,15 @@ void DisplayOptionTreeItem::SwitchCheckBox(bool fOn) {
 
 void DisplayOptionTreeItem::OnContextMenu(CWnd* pWnd, CPoint pos)
 {
+}
+
+void DisplayOptionTreeItem::expand(){
+	if ( tool)
+		tool->doAction();
+}
+
+void DisplayOptionTreeItem::setTool(DrawerTool *t){
+	tool = t;
 }
 
 //----------------------------------

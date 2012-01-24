@@ -59,6 +59,7 @@ public:
 	virtual void OnContextMenu(CWnd* pWnd, CPoint pos);
 	virtual void OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult);
 	LayerTreeView *getTreeView() { return ltv; }
+	virtual void expand() {}
 protected:
 	LayerTreeView* ltv;
 	HTREEITEM htiStart;
@@ -190,6 +191,8 @@ public:
 	void setDoubleCickAction(ILWIS::DrawerTool *tool, DTDoubleClickActionFunc f);
 	void setCheckAction(ILWIS::DrawerTool *tool, SetChecks *checks, DTSetCheckFunc cf);
 	SetChecks *getChecks() { return checks; }
+	void expand();
+	void setTool(DrawerTool *t);
 	
 protected:
 	DTDoubleClickActionFunc dbcAction;
@@ -199,6 +202,7 @@ protected:
 	ILWIS::NewDrawer *altHandler;
 	ILWIS::DrawerTool *dbctool;
 	ILWIS::DrawerTool *chctool;
+	ILWIS::DrawerTool *tool;
 	SetChecks *checks;
 	HTREEITEM hti;
 	HTREEITEM parent;
