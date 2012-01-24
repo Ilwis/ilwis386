@@ -110,7 +110,7 @@ namespace ILWIS {
 		CDC *dc;
 		int contextMode;
 		CoordSystem csy;
-		map<String,String> typeMapping;
+		String subType;
 		vector<int> filteredRaws;
 		int zOrder;
 		int index;

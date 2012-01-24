@@ -19,6 +19,11 @@ ILWIS::NewDrawer *NewDrawer::getDrawer(const String& type, const String& subtype
 		map<String, DrawerCreate>::const_iterator item = NewDrawer::drawers.find(fullType);
 		if ( item != drawers.end())
 			return ((*item).second)(c);
+		else {
+			item = NewDrawer::drawers.find(type + "|ilwis38");
+			if ( item != drawers.end())
+				return ((*item).second)(c);
+		}
 	}
 
 	map<String, ILWIS::SVGElement *>::iterator svgItem = getSvgLoader()->find(fullType);
@@ -31,11 +36,9 @@ ILWIS::NewDrawer *NewDrawer::getDrawer(const String& type, ILWIS::PreparationPar
 	if ( type == "")
 		return 0;
 
-	if ( parms == 0 || parms->typeMapping.size() == 0)
+	if ( parms == 0 || parms->subType.size() == 0)
 		return getDrawer(type,"Ilwis38",c);
-	map<String,String>::iterator item = parms->typeMapping.find(type);
-	String subType =  item == parms->typeMapping.end() ? "Ilwis38" : (*item).second;
-	return getDrawer(type,subType,c);
+	return getDrawer(type,parms->subType,c);
 }
 
 void NewDrawer::addDrawer(const String& type, const String& subtype, DrawerCreate func) {
