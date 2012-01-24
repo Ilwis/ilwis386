@@ -27,7 +27,7 @@ DrawerTool *createGlobalOperationTool(ZoomableView* zv, LayerTreeView *view, New
 }
 
 GlobalOperationTool::GlobalOperationTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
-	DrawerTool("GlobalOperationTool",zv, view, drw)
+	DrawerTool("GlobalOperationTool",zv, view, drw), first(true)
 {
 }
 
@@ -46,9 +46,24 @@ HTREEITEM GlobalOperationTool::configure( HTREEITEM parentItem) {
 	actions.clear();
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&GlobalOperationTool::doOperation);
+	item->setTool(this);
 
 	htiNode = insertItem(TR("Operations"),"ExeIcoL", item);
+	htiDummy = insertItem(htiNode, "dummy", ".exe");
+
+
+
+	return htiNode;
+}
+
+void GlobalOperationTool::doAction(int option) {
+
+	if ( !first)
+		return;
+
 	ActionList *actList = IlwWinApp()->acl();
+
+	tree->GetTreeCtrl().DeleteItem(htiDummy);
 
 	addGlobalOperationItems();
 	String sTop, sMid, sAction, sLastTop="-", sLastMid;
@@ -82,10 +97,8 @@ HTREEITEM GlobalOperationTool::configure( HTREEITEM parentItem) {
 		htiOpt = insertItem(sAction.c_str(), sIcon, item);
 
 	}
+	first = false;
 
-
-
-	return htiNode;
 }
 
 void GlobalOperationTool::doOperation() {

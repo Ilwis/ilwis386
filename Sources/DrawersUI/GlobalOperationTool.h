@@ -13,12 +13,15 @@ namespace ILWIS {
 		HTREEITEM configure( HTREEITEM parentItem);
 		virtual ~GlobalOperationTool();
 		String getMenuString() const;
+		void doAction(int options=0);
 	protected:
 		void doOperation();
 		void addGlobalOperationItems();
 
 		vector<Action *> actions;
 		map<long, Action *> itemActions;
+		HTREEITEM htiDummy;
+		bool first;
 	};
 
 }
