@@ -963,6 +963,7 @@ ILWIS::NewDrawer *MapCompositionDoc::createBaseMapDrawer(const BaseMap& bmp, con
 	}
 	rootDrawer->addCoordBounds(bmp->cs(), cbMap);
 	ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY);
+	pp.subType = subtype;
 	drawer->prepare(&pp);
 	pp.type = RootDrawer::ptRENDER;
 	drawer->prepare(&pp);
