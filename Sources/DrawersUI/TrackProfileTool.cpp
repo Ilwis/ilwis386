@@ -267,6 +267,7 @@ void TrackProfileTool::OnLButtonDown(UINT nFlags, CPoint pnt) {
 			point->setActive(false);
 			mpvGetView()->Invalidate();
 		}
+		tree->GetTreeCtrl().SetCheck(htiNode);
 	}
 }
 
