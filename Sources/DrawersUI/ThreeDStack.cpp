@@ -223,7 +223,7 @@ void ThreeDStack::setthreeDStack(void *v, HTREEITEM) {
 void ThreeDStack::setIndividualStatckItem(void *v, HTREEITEM it) {
 	bool useStack = *(bool *)v;
 	for(int i=0; i < stackStatus.size(); ++i) {
-		if ( stackStatus[i].item = it) {
+		if ( stackStatus[i].item == it) {
 			stackStatus[i].status = useStack;
 			break;
 		}
