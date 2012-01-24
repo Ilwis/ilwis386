@@ -535,8 +535,9 @@ void ComplexDrawer::load(const FileName& fnView, const String& parentSection){
 	ObjectInfo::ReadElement(parentSection.c_str(),"PostDrawerCount",fnView, count);
 	for(int i = 0; i < count ; ++i) {
 		ObjectInfo::ReadElement(drawerSection.c_str(),"Order",fnView, order);
-		ObjectInfo::ReadElement(parentSection.c_str(),String("PostDrawer%03d",order).c_str(),fnView, drawerSection);
-		addPostDrawer(order,loadDrawer(fnView, drawerSection));
+		String section("PostDrawer%03d",order);
+		ObjectInfo::ReadElement(parentSection.c_str(),section.c_str(),fnView, drawerSection);
+		addPostDrawer(order,loadDrawer(fnView, section));
 	}
 
 	zmaker->load(fnView, parentSection);
