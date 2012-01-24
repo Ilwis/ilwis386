@@ -92,6 +92,7 @@ private:
 	long m_iMaxBand;
 	long m_iOffset;
 	int m_iNrMpl;
+	bool keepOriginal;
 	vector <String> m_sml;
 	vector <FieldMapList*> m_vfml;
 	const int iMAX;

@@ -375,6 +375,7 @@ FormMapListCalc::FormMapListCalc(CWnd* mw, const char* sPar)
 , m_iStart(iUNDEF)
 , m_iEnd(iUNDEF)
 , iMAX(4)
+, keepOriginal(false)
 {
   if (sPar) {
 		TextInput ip(sPar);
@@ -437,10 +438,12 @@ FormMapListCalc::FormMapListCalc(CWnd* mw, const char* sPar)
 			m_vfml[i]->SetCallBack((NotifyProc)&FormMapListCalc::MapListChangeCallback);
 		}
 	}
+	CheckBox *cb = new CheckBox(root,TR("Relate names to first map list names"),&keepOriginal);
+	cb->SetIndependentPos();
 
 	fOutMapList = true; // not Output Raster Map but Output MapList
   initMapOut(false, false); // fAskGeoref, fAskDomain
-	fmc->Align(m_vfml[iMAX-1], AL_UNDER);
+	fmc->Align(cb, AL_UNDER);
 
   create();
 }                    
@@ -500,7 +503,7 @@ int FormMapListCalc::exec()
     if (sExpr[i] == '\n' || sExpr[i] == '\r')
       sExpr[i] = ' ';
 
-	String sMapListExpr ("maplistcalculate(\"%S\",%d,%d", sExpr, m_iStart + m_iOffset, m_iEnd + m_iOffset);
+	String sMapListExpr ("maplistcalculate(\"%S\",%d, %d,%d", sExpr, m_iStart + m_iOffset, m_iEnd + m_iOffset, keepOriginal);
 	for (int i = 0; i < m_iNrMpl; ++i)
 		sMapListExpr += String (",%S", FileName(m_sml[i]).sRelativeQuoted());
 	sMapListExpr += ")";
