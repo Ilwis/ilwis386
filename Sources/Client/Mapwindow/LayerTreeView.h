@@ -106,6 +106,7 @@ public:
 	void DeleteAllItems(HTREEITEM hti, bool childerenOnly=false);
 	ILWIS::DrawerTool *getRootTool();
 	LayerTreeItem *getCurrent() const;
+	HTREEITEM addMapItem(ILWIS::SpatialDataDrawer *mapDrawer, HTREEITEM after, int lastTool);
 	//}}AFX_MSG
 protected:
 	void SwitchCheckBox(HTREEITEM hti);
@@ -114,7 +115,6 @@ protected:
 //	void AddPropItems(HTREEITEM hti, int iImg, const IlwisObject& obj);
 	CImageList ilStates;
 private:
-	HTREEITEM addMapItem(ILWIS::SpatialDataDrawer *mapDrawer, HTREEITEM after, int lastTool);
 	void NextNode(HTREEITEM hItem, const String& name);
 	void resetState();
 	map<String, NodeInfo> nodes;
