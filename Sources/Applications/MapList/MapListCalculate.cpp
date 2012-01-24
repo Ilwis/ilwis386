@@ -48,7 +48,7 @@
 namespace {
   const char* sSyntax() 
   {
-    return "MapListCalculate(mapapplicationstring,first_band,last_band,maplist,maplist...)";
+    return "MapListCalculate(mapapplicationstring,first_band,last_band,namingConvention,maplist,maplist...)";
   }
 }
 
@@ -65,6 +65,7 @@ MapListCalculate::MapListCalculate(const FileName& fn, MapListPtr& ptr)
   ReadElement("MapListCalculate", "CalculateExpression", sCalcExpr);
 	ReadElement("MapListCalculate", "FirstBand", m_iFirstBand);
 	ReadElement("MapListCalculate", "LastBand", m_iLastBand);
+	ReadElement("MapListCalculate", "OriginalNames", keepOriginalNames);
 	int iNr;
 	ReadElement("MapListCalculate", "NrMaplists", iNr);
 	for (int i = 0; i < iNr; ++i)
@@ -82,12 +83,13 @@ MapListCalculate::MapListCalculate(const FileName& fn, MapListPtr& ptr, const St
 {
   Array<String> as;
   short iParms = IlwisObjectPtr::iParseParm(sExpr, as);
-  if (iParms < 4)
+  if (iParms < 5)
     ExpressionError(sExpr, sSyntax());  
   sCalcExpr = as[0];
 	m_iFirstBand = as[1].iVal();
 	m_iLastBand = as[2].iVal();
-	for (int i = 3; i < iParms; ++i)
+	keepOriginalNames = as[3].fVal();
+	for (int i = 4; i < iParms; ++i)
 		m_vml.push_back(MapList(FileName(as[i])));
 
 	CheckExpression();
@@ -106,6 +108,7 @@ void MapListCalculate::Store()
   WriteElement("MapListCalculate", "CalculateExpression", sCalcExpr);
 	WriteElement("MapListCalculate", "FirstBand", m_iFirstBand);
 	WriteElement("MapListCalculate", "LastBand", m_iLastBand);
+	WriteElement("MapListCalculate", "OriginalNames", keepOriginalNames);
 	WriteElement("MapListCalculate", "NrMaplists", (int)(m_vml.size()));
 	for (int i = 0; i < m_vml.size(); ++i)
 	{
@@ -121,7 +124,7 @@ void MapListCalculate::Init()
 
 String MapListCalculate::sExpression() const
 {
-	String sExpr ("MapListCalculate(%S,%d,%d", sCalcExpr, m_iFirstBand, m_iLastBand);
+	String sExpr ("MapListCalculate(%S,%d,%d,%d", sCalcExpr, m_iFirstBand, m_iLastBand, keepOriginalNames);
 	for (int i = 0; i < m_vml.size(); ++i)
 		sExpr += String (",%S", m_vml[i]->sName());
 	sExpr += ")";
@@ -190,6 +193,40 @@ bool MapListCalculate::fFreezing()
 				String sMap = m_vml[j]->map(i+m_iFirstBand)->sName();
 				for (;;)
 				{
+					String sPattern ("[", j + 1); // ranges from @1 to @...
+					int ind1 = sExpr.find("[");
+					if (ind1 == String::npos)
+						break;
+					int ind2 = sExpr.find("]", ind1);
+					if ( ind2 == string::npos)
+						break;
+					if ( ind1 - ind2 > 3)
+						throw ErrorObject(TR("Syntax error in expression"));
+					String n = sExpr.substr(ind1 + 1,ind2 - ind1 - 1);
+					n = n.sTrimSpaces();
+					int val = n.iVal();
+					String sLeft, sRight;
+					String sM;
+					if ( val == iUNDEF || val > 0) {
+						throw ErrorObject(TR("Syntax error in expression"));
+					}
+					else {
+						sLeft = sExpr.sLeft(ind1);
+						sRight = &sExpr[ind2 + 1];
+						int indMap = i + m_iFirstBand + val;
+						sM = String("%S_%i", keepOriginalNames ? fnObj.sFile + "_" + sMap : fnObj.sFile, indMap + 1);
+						if ( indMap < 0) {
+							int ind = sRight.find_first_of("+-/*");
+							if ( ind != string::npos)
+								sExpr = sRight.substr(ind + 1);
+						} else {
+							sExpr = String("%S%S%S", sLeft, sM, sRight);
+						}
+					}
+					
+				}
+				for (;;)
+				{
 					String sPattern ("@%d", j + 1); // ranges from @1 to @...
 					int iPos = sExpr.find(sPattern);
 					if (iPos == String::npos)
@@ -199,7 +236,7 @@ bool MapListCalculate::fFreezing()
 					sExpr = String("%S%S%S", sLeft, sMap, sRight);
 				}
 			}
-			String sMapName("%S_%i", fnObj.sFile, i+1);
+			String sMapName("%S_%i", keepOriginalNames ? fnObj.sFile + "_" + m_vml[0]->map(i)->sName()  : fnObj.sFile, i+1);
 			FileName fnMap(sMapName);
 			map(i) = Map(fnMap,sExpr);
 
@@ -239,3 +276,6 @@ bool MapListCalculate::fFreezing()
   }
   return true;
 }
+
+
+

@@ -71,6 +71,7 @@ private:
   String sCalcExpr;
 	long m_iFirstBand;
 	long m_iLastBand;
+	bool keepOriginalNames;
 };
 
 #endif // !defined(AFX_MAPLISTCALCULATE_H__CF63F05C_1DD5_4D10_9577_AC9B5D7EE441__INCLUDED_)
