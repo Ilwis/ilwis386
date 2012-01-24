@@ -118,16 +118,19 @@ void  TransparencyForm::apply() {
 
 	SetDrawer *animDrw = dynamic_cast<SetDrawer *>(drw);
 	if ( animDrw) {
-		PreparationParameters pp(NewDrawer::ptRENDER, 0);
+		if ( !(isDataLayer || useTV == false) ) {
+			transpValues = RangeReal();
+		}
 		for(int i = 0; i < animDrw->getDrawerCount(); ++i) {
 			LayerDrawer *cdrw = (LayerDrawer *)animDrw->getDrawer(i);
 			cdrw->setTransparency(1.0 - (double)transparency/100.0);
-			if ( !(isDataLayer || useTV == false) ) {
-				transpValues = RangeReal();
-			}
 			cdrw->setTransparentValues(transpValues);
 		}
-		animDrw->prepareChildDrawers(&pp);
+		if ( oldRange != transpValues) {
+			PreparationParameters pp(NewDrawer::ptRENDER, 0);
+			animDrw->prepareChildDrawers(&pp);
+			oldRange = transpValues;
+		}
 	}
 	else {
 		ComplexDrawer *cdrw = (ComplexDrawer *)drw;
