@@ -23,6 +23,9 @@ namespace ILWIS {
 		void Create(CWnd* pParent); 
 		void updateTime(const AnimationProperties* props );
 		String setTimeString(const AnimationProperties* props);
+		HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
+		void setMarked(bool yesno);
+		LRESULT OnChangeColor(WPARAM wp, LPARAM lp) ;
 	protected:
 		afx_msg void OnSetFocus();
 		afx_msg void OnKillFocus();
@@ -30,6 +33,8 @@ namespace ILWIS {
 		CEdit ed;
 		CFont fnt;
 		bool fActive;
+		bool isMarked;
+		CBrush red;
 
 		DECLARE_MESSAGE_MAP()
 	};
@@ -135,6 +140,7 @@ namespace ILWIS {
 			FieldGroup *fgMaster;
 			FieldColumn *fcol;
 			StaticText *stMaster;
+			int graphProperties(Event *ev);
 
 			String colName;
 			Table tbl;
@@ -166,6 +172,25 @@ namespace ILWIS {
 		void setTimeElements(FormEntry *entry);
 		double calcNiceStep(Duration time);
 		void changeTimer(bool isRealTime, AnimationProperties *props);
+
+	};
+
+	class GraphPropertyForm : public DisplayOptionsForm {
+	public:
+		GraphPropertyForm(CWnd *wPar,TimeGraphSlider *slider, const Column& col, AnimationProperties *adr);
+	private:
+		void apply();
+		FormEntry *CheckData();
+		void calcMad(const Column& col);
+
+		FieldReal *frr;
+		Column col;
+		TimeGraphSlider *graph;
+		AnimationProperties *props;
+		int type;
+		double gtThreshold, ltThreshold;
+		double mad1;
+		double mad2;
 
 	};
 }

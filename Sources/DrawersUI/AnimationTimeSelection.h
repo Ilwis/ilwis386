@@ -30,10 +30,12 @@ namespace ILWIS {
 		void FillData();
 		FieldLister *fl;
 		FieldInt *fiStep;
+		FieldInt *fiStart;
 		vector<String> data;
 		vector<String> cols;
 		vector<int>& activeMaps;
 		long step;
+		long start;
 	};
 
 }

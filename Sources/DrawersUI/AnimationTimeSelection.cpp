@@ -57,27 +57,32 @@ String AnimationTimeSelectionTool::getMenuString() const {
 }
 //---------------------------------------------------
 TimeSelection::TimeSelection(CWnd *par, AnimationDrawer *animdrw) 
-: DisplayOptionsForm2(animdrw, par, "Time selection"), activeMaps(animdrw->getActiveMaps()),step(1)
+: DisplayOptionsForm2(animdrw, par, "Time selection"), activeMaps(animdrw->getActiveMaps()),step(1),start(0)
 {
 	FillData();	
 	fl = new FieldLister(root,data, cols);
 	fl->setReadOnly(true);
 	fl->SetWidth(100 + (cols.size() - 2) * 32 );
 	fl->SetHeight(120 + min(160, data.size() * 16));
-	fiStep = new FieldInt(root,TR("Use Step size"),&step,ValueRangeInt(1,100));
+	fiStart = new FieldInt(root,TR("Use Steps (start/step size)"),&start,ValueRangeInt(0,100));
+	fiStart->SetIndependentPos();
+	fiStart->SetCallBack((NotifyProc)&TimeSelection::setStep);
+	fiStep = new FieldInt(root,"",&step,ValueRangeInt(1,100));
+	fiStep->Align(fiStart, AL_AFTER);
 	fiStep->SetCallBack((NotifyProc)&TimeSelection::setStep);
 	fiStep->SetIndependentPos();
   create();
 }
 
 int TimeSelection::setStep(Event *ev) {
-	fiStep->StoreData();
+	root->StoreData();
 	vector<int> indexes;
 	if ( step > 0) {
 		IlwisObject *source = (IlwisObject *)((AnimationDrawer *)drw)->getDataSource();
 		MapList mpl((*source)->fnObj);
-		for(int i = 0; i < mpl->iSize(); ++i) {
-			if ( i % step == 0)
+		for(int i = start; i < mpl->iSize(); ++i) {
+			int index =  i - start;
+			if ( index % step == 0 )
 				indexes.push_back(i);
 		}
 		fl->setSelectedIndexes(indexes);

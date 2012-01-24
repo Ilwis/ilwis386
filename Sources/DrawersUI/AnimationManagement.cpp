@@ -21,6 +21,8 @@
 #include "Engine\Drawers\ComplexDrawer.h"
 #include "Engine\Spatialreference\gr.h"
 #include "Engine\Drawers\RootDrawer.h"
+#include "Client\Mapwindow\MapPaneViewTool.h"
+#include "client\mapwindow\drawers\DrawerTool.h"
 #include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Client\Base\Framewin.h"
 #include "Client\Mapwindow\MapWindow.h"
@@ -533,10 +535,15 @@ AnimationProgress::AnimationProgress(AnimationPropertySheet& sheet) : FormBasePr
 	fcol = new FieldColumn(fgMaster,TR("Reference Attribute"),0,&colName,dmVALUE);
 	fcol->SetCallBack((NotifyProc)&AnimationProgress::changeColumn);
 	fcol->Hide();
+	PushButton *pb = new PushButton(fgMaster,TR("Graph Treshold"),(NotifyProc)&AnimationProgress::graphProperties);
+	pb->Align(fcol, AL_AFTER);
 
 	RangeInt setRange = RangeInt(0, 100);
 	graphSlider = new TimeGraphSlider(fgMaster, setRange);
 	graphSlider->SetWidth(180);
+	graphSlider->SetHeight(110);
+	graphSlider->Align(fcol, AL_UNDER);
+
 
 	//useTimeAttribute =  adr->getUseTime();
 
@@ -544,6 +551,13 @@ AnimationProgress::AnimationProgress(AnimationPropertySheet& sheet) : FormBasePr
 	create();
 }
 
+int AnimationProgress::graphProperties(Event *ev){
+	fcol->StoreData();
+	AnimationProperties *props = propsheet.getActiveAnimation();
+	if ( props)
+		new GraphPropertyForm(this,graphSlider, tbl->col(colName),props);
+	return 1;
+}
 
 LRESULT AnimationProgress::OnTimeTick( WPARAM wParam, LPARAM lParam ) {
 	AnimationProperties *props = propsheet.getActiveAnimation();
@@ -622,6 +636,79 @@ int AnimationProgress::changeColumn(Event *) {
 	}
 	return 1;
 
+}
+//---------------------------------------------
+GraphPropertyForm::GraphPropertyForm(CWnd *wPar,TimeGraphSlider *slider, const Column& _col, AnimationProperties *_props) : 
+DisplayOptionsForm(_props->drawer, wPar, TR("Thresholds")), col(_col), graph(slider), gtThreshold(0), ltThreshold(0), type(0), props(_props),mad1(rUNDEF), mad2(rUNDEF) {
+	calcMad(col);
+	RadioGroup *rg = new RadioGroup(root, TR("Threshold type"),&type);
+	RadioButton *rb = new RadioButton(rg,TR("Above threshold"));
+	FieldReal * frr = new FieldReal(rb, "",&gtThreshold);
+	frr->Align(rb, AL_AFTER);
+	rb = new RadioButton(rg,TR("Below threshold"));
+	frr = new FieldReal(rb, "",&ltThreshold);
+	frr->Align(rb, AL_AFTER);
+	if ( mad1 != rUNDEF) {
+		rb = new RadioButton(rg,String(TR("above MAD : %f").c_str(), mad2));
+		rb = new RadioButton(rg,String(TR("below MAD : %f").c_str(), mad1));
+	}
+	slider->setLinkedWindow(props->animBar);
+
+	create();
+
+}
+
+void GraphPropertyForm::calcMad(const Column& col) {
+	if ( col->dm()->pdv()) {
+		set<double> vals;
+		double sum = 0;
+		for(int i = 1; i <= col->iRecs(); ++i) {
+			double v = col->rValue(i);
+			if ( v != rUNDEF) {
+				vals.insert(v);
+				sum += v;
+			}
+		}
+		if ( vals.size() == 0)
+			return;
+
+		double average =  sum / vals.size();
+		set<double>::iterator iter = vals.begin();
+		advance(iter,vals.size() / 2);
+		double median = *iter;
+		set<double> vals2;
+		double stdv2 = 0;
+		for(set<double>::iterator cur = vals.begin(); cur != vals.end(); ++cur) {
+			double v = *cur;
+			vals2.insert(abs(v - median));
+			stdv2 += ( v - average) * ( v - average);
+
+		}
+		double stdev = sqrt( stdv2 / vals.size());
+		iter = vals2.begin();
+		advance(iter, vals2.size() / 2);
+		double med = *iter;
+		mad1 = median - med;
+		mad2 = median + med;
+		gtThreshold = average + stdev;
+		ltThreshold = average - stdev;
+
+	}
+}
+
+FormEntry *GraphPropertyForm::CheckData() {
+	return 0;
+}
+void GraphPropertyForm::apply() {
+	root->StoreData();
+	if ( type == 0)
+		graph->setThreshold(gtThreshold);
+	if ( type == 1)
+		graph->setThreshold(ltThreshold);
+	if ( type == 2)
+		graph->setThreshold(mad2);
+	if ( type == 3)
+		graph->setThreshold(mad1, false);
 }
 
 //---------------------------------------------
@@ -854,11 +941,15 @@ int RealTimePage::setTimingMode(Event *ev) {
 BEGIN_MESSAGE_MAP(AnimationBar, CToolBar)
 	ON_EN_SETFOCUS(ID_AnimationBar,OnSetFocus)
 	ON_EN_KILLFOCUS(ID_AnimationBar,OnKillFocus)
+	ON_WM_CTLCOLOR()
+	ON_MESSAGE(ID_NOTIFY_ME, OnChangeColor)
 END_MESSAGE_MAP()
 
-AnimationBar::AnimationBar()
+AnimationBar::AnimationBar() 
 {
 	fActive = false;
+	isMarked = false;
+	red.CreateSolidBrush(RGB(255,0,0)); 
 
 	LOGFONT logFont;
 	memset(&logFont, 0, sizeof(logFont));
@@ -868,6 +959,27 @@ AnimationBar::AnimationBar()
 	logFont.lfPitchAndFamily = VARIABLE_PITCH | FF_SWISS;
 	lstrcpy(logFont.lfFaceName, "MS Sans Serif");
 	fnt.CreateFontIndirect(&logFont);
+}
+
+LRESULT AnimationBar::OnChangeColor(WPARAM wp, LPARAM lp) {
+	isMarked = wp;
+	ed.Invalidate();
+
+	return 1;
+}
+
+HBRUSH AnimationBar::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor) 
+{
+	HBRUSH hbr = CToolBar::OnCtlColor(pDC, pWnd, nCtlColor);
+
+	if (nCtlColor == CTLCOLOR_STATIC) {
+		if (pWnd->GetDlgCtrlID() == ID_AnimationBar && isMarked)
+		{
+			 pDC->SetBkColor(RGB(255,0,0));
+			 hbr = (HBRUSH)red;
+		}
+	}
+	return hbr;
 }
 
 AnimationBar::~AnimationBar()
@@ -942,7 +1054,7 @@ void AnimationBar::updateTime(const AnimationProperties* props) // called by Ani
 	}
 	else {
 		if ( ed.GetSafeHwnd())
-			ed.SetWindowText(String("index : %d",props->drawer->getMapIndex()).c_str());
+			ed.SetWindowText(String("index : %d",props->drawer->getCurrentIndex()).c_str());
 	}
 }
 
