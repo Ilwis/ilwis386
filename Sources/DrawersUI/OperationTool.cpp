@@ -28,7 +28,7 @@ DrawerTool *createOperationTool(ZoomableView* zv, LayerTreeView *view, NewDrawer
 }
 
 OperationTool::OperationTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
-	DrawerTool("OperationTool",zv, view, drw)
+	DrawerTool("OperationTool",zv, view, drw), first(true)
 {
 }
 
@@ -53,9 +53,22 @@ HTREEITEM OperationTool::configure( HTREEITEM parentItem) {
 	actions.clear();
 	HTREEITEM  hti = tree->GetTreeCtrl().GetParentItem(parentItem);
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,hti,drawer);
+	item->setTool(this);
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&OperationTool::doOperation);
 
 	htiNode = insertItem(TR("Operations"),"ExeIcoL", item);
+	htiDummy = insertItem(htiNode, "dummy", ".exe");
+
+
+	return htiNode;
+}
+
+void OperationTool::doAction(int options) {
+	if ( !first)
+		return;
+
+	tree->GetTreeCtrl().DeleteItem(htiDummy);
+
 	ActionList *actList = IlwWinApp()->acl();
 	String sExt;
 	if ( drawer->getType() == "AnimationDrawer") {
@@ -95,10 +108,7 @@ HTREEITEM OperationTool::configure( HTREEITEM parentItem) {
 		htiOpt = insertItem(sAction.c_str(), sIcon, item);
 
 	}
-
-
-
-	return htiNode;
+	first = false;
 }
 
 void OperationTool::doOperation() {

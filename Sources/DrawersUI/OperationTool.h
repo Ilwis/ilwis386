@@ -15,10 +15,13 @@ namespace ILWIS {
 		String getMenuString() const;
 	protected:
 		void doOperation();
+		void doAction(int options=0);
 		void addOperationItems(const String& sExt);
 
 		vector<Action *> actions;
 		map<long, Action *> itemActions;
+		bool first;
+		HTREEITEM htiDummy;
 	};
 
 }
