@@ -516,7 +516,7 @@ void ILWIS::Time::parseIsoString(const String& isostring, int& year, int& month,
 		parseDayPart(isostring.sSub(8,6),hours, minutes, seconds);
 	} else{
 		String yearpart = isostring.sHead("T");
-		String daypart = isostring.sTail("T");
+		String daypart = isostring.sTail("T").sHead("Z");
 		if ( yearpart != "")
 			parseYearPart(yearpart,year, month,day);
 		if ( daypart != "")
