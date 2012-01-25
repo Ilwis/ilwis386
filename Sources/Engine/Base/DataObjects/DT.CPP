@@ -214,7 +214,7 @@ time_t ILWIS::Time::toTime_t() const{
 	time.tm_mday = day;
 	time.tm_hour = hour;
 	time.tm_min = minutes;
-	time.tm_sec = seconds;
+	time.tm_sec = round(seconds);
 	return mktime(&time);
 }
 
@@ -686,7 +686,7 @@ String ILWIS::Time::toString(bool local, ILWIS::Time::Mode mode) const{
 	time.tm_mday = day;
 	time.tm_hour = hour;
 	time.tm_min = minutes;
-	time.tm_sec = seconds;
+	time.tm_sec = round(seconds);
 	time_t t = mktime(&time);
 	if ( local) {
 		struct tm timeinfo;
