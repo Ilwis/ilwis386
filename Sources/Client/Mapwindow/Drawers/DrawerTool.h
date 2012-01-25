@@ -47,6 +47,7 @@ public:
 	virtual void clear();
 	virtual void timedEvent(UINT timerid);
 	virtual void setActiveMode(bool yesno);
+	virtual void doAction(int options=0) {}
 
 protected:
 	HTREEITEM insertItem(const String& name,const String& icon, DisplayOptionTreeItem *item=0, int checkstatus = -1, HTREEITEM after=TVI_LAST);
