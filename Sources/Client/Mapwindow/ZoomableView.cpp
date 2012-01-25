@@ -271,8 +271,8 @@ void ZoomableView::moveEyePoint(const CPoint& pnt, UINT message) {
 		double deltay = beginMovePoint.y - pnt.y;
 		if ( deltax == 0 && deltay == 0)
 			return;
-		double roll = deltax/2;
-		double yaw = deltay/2;
+		double roll = deltax/10.0;
+		double yaw = deltay/10.0;
 		double rx,ry,rz;
 		doc->rootDrawer->getRotationAngles(rx,ry,rz);
 		rx += roll;
