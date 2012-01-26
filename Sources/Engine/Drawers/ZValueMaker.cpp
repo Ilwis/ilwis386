@@ -21,7 +21,7 @@ ZValueMaker::ZValueMaker(NewDrawer *drw)  : scalingType(zvsNONE),threeDPossible(
 		isSetDrawer = true;
 }
 void ZValueMaker::setDataSourceMap(const BaseMap& mp){
-	threeDPossible =  mp->dm()->dmt() == dmtVALUE || mp->dm()->dmt() == dmtIMAGE;
+	threeDPossible =  mp->dm()->pdv() || mp->dm()->pdi();
 	datasourcemap = mp;
 	addRange(mp);
 	table = Table();
@@ -66,7 +66,7 @@ void ZValueMaker::setTable(const Table& tbl, const String& colName) {
 	columns.clear();
 	Column column = tbl->col(colName);
 	columns.push_back(tbl->col(colName));
-	threeDPossible = column->dm()->dmt() != dmtVALUE ? false : true;
+	threeDPossible = column->dm()->pdv();
 	datasourcemap = BaseMap();
 	range = column->rrMinMax();
 	type = IlwisObject::iotObjectType(table->fnObj);
@@ -128,7 +128,7 @@ void ZValueMaker::setTable(const Table& tbl, const vector<String>& names) {
 			continue;
 
 		columns.push_back(column);
-		threeDPossible = column->dm()->dmt() != dmtVALUE ? false : true;
+		threeDPossible = column->dm()->pdv();
 		datasourcemap = BaseMap();
 		range += column->rrMinMax();
 	}
@@ -233,10 +233,10 @@ double ZValueMaker::getOffset() const {
 
 void ZValueMaker::setThreeDPossible(bool v) {
 	if ( datasourcemap.fValid()) {
-		threeDPossible = v && (datasourcemap->dm()->dmt() == dmtVALUE || datasourcemap->dm()->dmt() == dmtIMAGE);
+		threeDPossible = v && (datasourcemap->dm()->pdv() || datasourcemap->dm()->pdi());
 	}
 	else if ( columns.size() > 0) {
-		threeDPossible = v && (columns[0]->dm()->dmt() != dmtVALUE ? false : true); 
+		threeDPossible = v && columns[0]->dm()->pdv();
 	}
 	else
 		threeDPossible = v;
