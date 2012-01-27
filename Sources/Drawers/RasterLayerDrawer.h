@@ -64,6 +64,8 @@ namespace ILWIS {
 		void DisplayTexture3D(Coord & c1, Coord & c2, Coord & c3, Coord & c4, unsigned int imageOffsetX, unsigned int imageOffsetY, unsigned int imageSizeX, unsigned int imageSizeY, unsigned int zoomFactor) const;
 		double getMinZoom(unsigned int imageSizeX, unsigned int imageSizeY, GLdouble * m_winx, GLdouble * m_winy) const;
 		void init() const;
+		String store(const FileName& fnView, const String& parentSection) const;
+		void load(const FileName& fnView, const String& parentSection);
 		
 		RasterSetData * data;
 		RangeReal rrMinMax;
