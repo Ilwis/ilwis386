@@ -291,6 +291,7 @@ MapResample::~MapResample()
 
 bool MapResample::fFreezing()
 {
+	clock_t start = clock();
   bool fColorDomain = false;
 	bool fUseReal = (rm != rmNEARNEIGHB) || (st() == stREAL);
   // color maps behave different
@@ -432,6 +433,10 @@ bool MapResample::fFreezing()
     } break;
 	}
 	mpInpMap.SetPointer(0);
+	clock_t end = clock();
+	double total = (double)(end - start) / CLOCKS_PER_SEC;
+	String s("calc old in %2.2f seconds;\n", total);
+	TRACE(s.c_str());
 	return true;
 }
 

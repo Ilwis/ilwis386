@@ -2,6 +2,7 @@
 #include "Engine\Applications\ModuleMap.h"
 #include "Engine\Applications\PNTVIRT.H"
 #include "Engine\Map\Raster\Map.h"
+#include "Engine\Map\Raster\Grid.h"
 #include "Applications\Raster\MAPFILTR.H"
 #include "Applications\Raster\MAPCLASS.H"
 #include "Applications\Raster\MAPCOLSP.H"
@@ -64,6 +65,8 @@
 #include "Applications\Table\TableCreateTimeColumn.h"
 #include "Applications\Table\AUTCSEMV.H"
 #include "Applications\MapList\MapListExpand.h"
+#include "Applications\Raster\Mapresmp2.h"
+#include "Applications\Table\COLumntotime.H"
 
 //extern "C" _export vector<CommandInfo *>* getCommandInfo());
 
@@ -74,6 +77,8 @@ extern "C" _export void testCommandInfo(CommandInfo* name) {
 InfoVector* getCommandInfo() {
 
 	InfoVector *infos = new InfoVector();
+		infos->push_back(CommandMap::newCommandInfo(createMapResample2,"MapResample2"));
+
 	infos->push_back(CommandMap::newCommandInfo(createMapListExpand,"MapListExpand",metadataMapListExpand));
 	infos->push_back(CommandMap::newCommandInfo(createMapListChangeDetection,"MapListChangeDetection",metadataMapListChangeDetection));
 	infos->push_back(CommandMap::newCommandInfo(createMapAggregateMapList,"MapAggregateMapList"));
@@ -125,6 +130,7 @@ InfoVector* getCommandInfo() {
 	infos->push_back(CommandMap::newCommandInfo(createColumnCalculate,"ColumnCalculate"));
 	infos->push_back(CommandMap::newCommandInfo(createColumnAggregate,"ColumnAggregate___"));
 	infos->push_back(CommandMap::newCommandInfo(createColumnAggregate,"agg___"));
+	infos->push_back(CommandMap::newCommandInfo(createColumnToTime,"ColumnToTime"));
 	infos->push_back(CommandMap::newCommandInfo(createColumnSemiVariogram,"ColumnSemiVariogram"));
 	infos->push_back(CommandMap::newCommandInfo(createColumnCumulative,"ColumnCumulative"));
 	infos->push_back(CommandMap::newCommandInfo(createColumnLeastSquaresFit,"ColumnLeastSquaresFit"));

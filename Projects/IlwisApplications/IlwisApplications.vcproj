@@ -587,6 +587,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\Sources\Applications\Table\ColumnToTime.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Applications\Raster\Mapresmp2.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Sources\Applications\Table\Neighpol.cpp"
 					>
 				</File>
@@ -670,7 +678,15 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\Sources\Applications\Table\ColumnToTime.h"
+						>
+					</File>
+					<File
 						RelativePath="..\..\Sources\Applications\Table\LINANAL.H"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Applications\Raster\Mapresmp2.h"
 						>
 					</File>
 					<File
