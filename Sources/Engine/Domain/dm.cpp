@@ -313,6 +313,9 @@ Domain::Domain(const FileName& fn, long iNr, DomainType dmt)
 		case dmtUNIQUEID:
 			SetPointer(new DomainUniqueID(fn, "", iNr));
 			break;
+		case dmtTIME:
+			SetPointer(new DomainTime(fn, ILWIS::TimeInterval()));
+			break;
 		default:
 			assert(0 == 1); // no other types allowed
 	}
