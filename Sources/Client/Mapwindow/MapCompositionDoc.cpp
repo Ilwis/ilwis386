@@ -41,6 +41,7 @@ Created on: 2007-02-8
 #pragma warning( disable : 4503 )
 
 #include "Client\Headers\formelementspch.h"
+#include "Client\FormElements\FldOneSelectTextOnly.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\Base\datawind.h"
 #include "Client\Base\IlwisDocument.h"
@@ -1291,50 +1292,55 @@ NewDrawer* MapCompositionDoc::drDrawer(const MapView& view, const char* sSection
 class AddLayerForm: public FormWithDest
 {
 public:
-	AddLayerForm(CWnd* parent, String* sName, bool *asAnimation = 0)
-		: FormWithDest(parent, TR("Add Data Layer")), asAnim(asAnimation), cb(0), showBaseMaps(false)
+	AddLayerForm(CWnd* parent, String* sName, long *c) 
+		: FormWithDest(parent, TR("Add Data Layer")),  choice(c)
 	{
+		types.push_back("all");
+		types.push_back("Raster maps.mpr");
+		types.push_back("Polygon maps.mpa");
+		types.push_back("Segment maps.mps");
+		types.push_back("Point maps.mpp");
+		types.push_back("Animations.Animation");
+		types.push_back("Color composite.ColorComposite");
+		types.push_back("Base maps.AllLayers");
 		new FieldBlank(root);
-		fdtl = new FieldDataTypeLarge(root, sName, ".mpr.mpl.mps.mpa.mpp.atx");
-		//    new FieldSegmentMap(root, SDUiSegMap, sName);
-		cbBaseMaps = new CheckBox(root,TR("Show Base Maps"),&showBaseMaps);
-		cbBaseMaps->SetCallBack((NotifyProc)&AddLayerForm::baseMaps);
-		if ( asAnimation != 0) {
-			cb = new CheckBox(root,TR("As animation layer"),asAnimation);
-			cb->SetCallBack((NotifyProc)&AddLayerForm::changeFilter);
-		}
+		fdtl = new FieldDataTypeLarge(root, sName, "ioc.mpr.mpl.mps.mpa.mpp");
+	
+		fos = new FieldOneSelectString(root,TR("Filter"),choice,types);
+		fos->SetIndependentPos();
+		fos->SetCallBack((NotifyProc)&AddLayerForm::filter);
 		SetMenHelpTopic("ilwismen\\add_layer_to_map_window.htm");
 		create();
 	}
 
-	int baseMaps(Event *) {
-		cbBaseMaps->StoreData();
-		if ( showBaseMaps) {
+	int filter(Event *) { 
+		fos->StoreData();
+		String flt = ".ioc.mpr.mpl.mps.mpa.mpp";
+		fdtl->useBaseMaps(false);
+		if ( *choice == 1)
+			flt = ".mpr";
+		if ( *choice == 2)
+			flt = ".mpa";
+		if ( *choice == 3)
+			flt = ".mps";
+		if ( *choice == 4)
+			flt = ".mpp";
+		if ( *choice == 5)
+			flt = ".mpl.ioc";
+		if ( *choice == 6)
+			flt = ".mpl";
+		if ( *choice == 7) {
 			fdtl->useBaseMaps(true);
-
-		} else {
-			fdtl->useBaseMaps(false);
-
 		}
-		fdtl->Fill();
+		
+			fdtl->SetExt(flt);
 		return 1;
 	}
 private:
-	bool * asAnim;
-	bool showBaseMaps;
-	CheckBox *cb, *cbBaseMaps;
+	long *choice;
+	vector<String> types;
+	FieldOneSelectString *fos;
 	FieldDataTypeLarge * fdtl;
-	int changeFilter(Event *ev) {
-		if ( cb)
-			cb->StoreData();
-
-		if ( *asAnim) {
-			fdtl->SetExt(".mpl.ioc");
-		} else {
-			fdtl->SetExt(".ioc.mpr.mpl.mps.mpa.mpp.atx");
-		}
-		return 1;
-	}
 };
 
 class AddRasForm: public FormWithDest
@@ -1421,52 +1427,62 @@ bool MapCompositionDoc::fAppendable(const FileName& fn)
 
 NewDrawer* MapCompositionDoc::drAppend(const FileName& fn, IlwisDocument::OpenType op, int os, const String& subtype)
 {
-	if (!fAppendable(fn))
-	{
-		String sErr(TR("%S cannot be added as a layer").c_str(), fn.sShortName());
-		AfxGetMainWnd()->MessageBox(sErr.c_str(), TR("Add data layer").c_str(), MB_OK|MB_ICONEXCLAMATION);
-		return 0;
+	try{
+		if (!fAppendable(fn))
+		{
+			String sErr(TR("%S cannot be added as a layer").c_str(), fn.sShortName());
+			AfxGetMainWnd()->MessageBox(sErr.c_str(), TR("Add data layer").c_str(), MB_OK|MB_ICONEXCLAMATION);
+			return 0;
 
-		return 0;
-	}    
-	NewDrawer* dr = 0;
-	// add layer
-	if (".mps" == fn.sExt || ".mpa" == fn.sExt || ".mpp" == fn.sExt) {
-		BaseMap bm(fn);
-		dr = drAppend(bm,op,os, subtype);
+			return 0;
+		}    
+		NewDrawer* dr = 0;
+		// add layer
+		if (".mps" == fn.sExt || ".mpa" == fn.sExt || ".mpp" == fn.sExt) {
+			BaseMap bm(fn);
+			dr = drAppend(bm,op,os, subtype);
+		}
+		else if (".mpr" == fn.sExt) {
+			Map mp(fn);
+			dr = drAppend(mp, op, os, subtype);
+		}
+		else if (".mpl" == fn.sExt) {
+			MapList ml(fn);
+			dr = drAppend(ml,op, os, subtype);
+		}
+		else if (".ioc" == fn.sExt) {
+			ObjectCollection oc(fn);
+			dr = drAppend(oc,op, os, subtype);
+		}
+		else if (".csy" == fn.sExt) {
+			CoordSystem csy(fn);
+			SetCoordSystem(csy);
+		}
+		UpdateAllViews(0);
+		return dr;
+	}catch (ErrorObject& err) {
+		err.Show();
 	}
-	else if (".mpr" == fn.sExt) {
-		Map mp(fn);
-		dr = drAppend(mp, op, os, subtype);
-	}
-	else if (".mpl" == fn.sExt) {
-		MapList ml(fn);
-		dr = drAppend(ml,op, os, subtype);
-	}
-	else if (".ioc" == fn.sExt) {
-		ObjectCollection oc(fn);
-		dr = drAppend(oc,op, os, subtype);
-	}
-	else if (".csy" == fn.sExt) {
-		CoordSystem csy(fn);
-		SetCoordSystem(csy);
-	}
-	UpdateAllViews(0);
-	return dr;
+	return 0;
 }
 
 void MapCompositionDoc::OnAddLayer()
 {
 	String sName;
-	bool asAnimation = false;
-	AddLayerForm frm(wndGetActiveView(), &sName, &asAnimation);
+	long choice = 0;
+	AddLayerForm frm(wndGetActiveView(), &sName, &choice);
 	bool fOk = frm.fOkClicked();
 	if (fOk) {
 		FileName fn(sName);
+		IlwisDocument::OpenType ot =  otUNKNOWN;;
+		if ( choice == 5)
+			ot = otANIMATION;
+		if ( choice == 6)
+			ot = otCOLORCOMP;
 		if ( IOTYPE(fn) == IlwisObject::iotOBJECTCOLLECTION)
-			drAppend(fn, asAnimation ? IlwisDocument::otANIMATION : IlwisDocument::otCOLLECTION);
+			drAppend(fn, ot == otUNKNOWN ? IlwisDocument::otCOLLECTION : ot);
 		else if ( IOTYPE(fn) == IlwisObject::iotMAPLIST) {
-			drAppend(fn, asAnimation ? IlwisDocument::otANIMATION : IlwisDocument::otUNKNOWN);
+			drAppend(fn, ot);
 		}
 		else{
 			drAppend(fn,IlwisDocument::otUNKNOWN);
