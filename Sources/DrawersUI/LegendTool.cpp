@@ -53,8 +53,6 @@ void LegendTool::insertLegendItemsValue(const Representation& rpr, const DomainV
 		tree->DeleteAllItems(htiNode, true);
 	}
 	tree->GetTreeCtrl().SetItemData(htiNode, (DWORD_PTR)new ObjectLayerTreeItem(tree, rpr.pointer()));
-	int iItems = 5;
-	double rStep = dvs.rStep();
 	RangeReal rr;
 	LayerDrawer *ldrw = dynamic_cast<LayerDrawer *>(drawer);
 	SetDrawer *sdrw = dynamic_cast<SetDrawer *>(drawer);
@@ -64,25 +62,19 @@ void LegendTool::insertLegendItemsValue(const Representation& rpr, const DomainV
 		rr = ldrw->getStretchRangeReal(true);
 	}
 
-	if (rStep > 1e-6) {
-		int iSteps = 1 + round(rr.rWidth() / rStep);
-		if (iSteps < 2)
-			iSteps = 2;
-		if (iSteps <= 11)
-			iItems = iSteps;
-	}
-	RangeReal rmd = roundRange(rr.rLo(), rr.rHi());
-	double rVal = rRound(rmd.rWidth()/ iItems);
-	double rStart = rRound(rmd.rLo());
-	double rHi = rmd.rHi() + rVal;
-	if (dvs.rValue(rHi) == rUNDEF)
-		rHi = rmd.rHi();
+	double rStep = 1.0;
+	RangeReal rmd;
 	bool fImage = dvs.dm()->pdi();
+	if ( fImage) {
+		rmd = RangeReal(0,255);
+		rStep = 30;
+	} else
+		rmd = roundRange(rr.rLo(), rr.rHi(), rStep);
 
-	for (double v = rStart; v <= rHi; v += rVal) {
+	for (double v = rmd.rLo(); v <= rmd.rHi(); v += rStep) {
 		String sName = dvs.sValue(v);
 		HTREEITEM hti = tree->GetTreeCtrl().InsertItem(sName.c_str(), htiNode);
-		if ( fImage && v + rVal > 255) {
+		if ( fImage && v + rStep > 255) {
 			v = 255;
 		}
 		tree->GetTreeCtrl().SetItemData(hti, (DWORD_PTR)new LegendValueLayerTreeItem(tree, drawer, dvs, v));		
