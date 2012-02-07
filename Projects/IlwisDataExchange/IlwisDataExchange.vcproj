@@ -229,22 +229,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\DataExchange\PostGisMaps.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\DataExchange\PostgresBlobber.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\DataExchange\PostgreSQL.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\DataExchange\PostgreSQLTables.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\Sources\DataExchange\WMSFormat.cpp"
 				>
 			</File>
@@ -272,22 +256,6 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\DataExchange\GeoGateway.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\DataExchange\PostGisMaps.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\DataExchange\PostGresBlobber.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\DataExchange\PostgreSQL.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\DataExchange\PostgreSQLTables.h"
 				>
 			</File>
 			<File
