@@ -109,18 +109,27 @@ double niceOne(double v) {
 	return v;
 }
 
-RangeReal roundRange(double rmin, double rmax) {
+RangeReal roundRange(double rmin, double rmax, double& step) {
 //	double  minpow = rmin == 0 ? 0 : (int)log10(rmin);
 //	double maxpow = rmax == 0 ? 0 : (int)log10(rmax);
-	double d = rmax - rmin;
-	long pw = log10(d);
-	double f = pow(10,(double)pw);
-	int vd = rmin / f;
-	double v1 = vd * f;
-	vd = (rmax + f)/f;
-	double v2 = vd * f;
+	double tickLimits []  = {0,0.1,0.2,0.25,0.3,0.4,0.5,0.6,0.7,0.75,0.8,0.9,1.0};
+	double range = rmax - rmin;
+	long d =  abs(log10(range)) + 1;
+	step = range / pow(10.0,d);
+	int i = 0;
+	while(i < 13) {
+		if ( step < tickLimits[i]) {
+			step = tickLimits[i];
+			break;
+		}
+		++i;
+	}
+	step = step * pow(10.0,d - 1);
+	double lower = step * round(rmin / step);
+	double upper = step * round(1 + rmax / step);
+	return RangeReal(lower, upper);
 
-	return RangeReal(v1, v2);
+
 }
 
 

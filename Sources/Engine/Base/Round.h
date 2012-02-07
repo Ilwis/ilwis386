@@ -47,7 +47,7 @@ double _export rRound(double rDflt);
 
 double _export rRoundDMS(double rDflt);
 
-RangeReal _export roundRange(double rmin, double rmax);
+RangeReal _export roundRange(double rmin, double rmax, double& step);
 
 #endif // ILWROUND_H
 
