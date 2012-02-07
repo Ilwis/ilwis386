@@ -600,6 +600,7 @@ void MapWindow::OnFullScreen() {
 				fullScreen = true;
 				SetMenuBarVisibility(AFX_MBV_DISPLAYONFOCUS | AFX_MBV_DISPLAYONF10);
 				status->ShowWindow(SW_HIDE);
+				commBar->ShowWindow(SW_HIDE);
 				//if ( barScale.GetSafeHwnd())
 				//	barScale.ShowWindow(SW_HIDE);
 				if ( bbDataWindow.GetSafeHwnd())
@@ -626,12 +627,11 @@ void MapWindow::OnFullScreen() {
 
 void MapWindow::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
-	if (VK_ESCAPE == nChar) {
+	if (VK_ESCAPE == nChar || VK_F11 == nChar) {
 		if ( fullScreen) {
 			SetMenuBarVisibility(AFX_MBV_KEEPVISIBLE);
 			status->ShowWindow(SW_SHOW);
-			//if ( barScale.GetSafeHwnd())
-			//	barScale.ShowWindow(SW_SHOW);
+			commBar->ShowWindow(SW_SHOW);
 			if ( bbDataWindow.GetSafeHwnd())
 				bbDataWindow.ShowWindow(SW_SHOW);
 			if ( ltb.GetSafeHwnd())
@@ -648,6 +648,8 @@ void MapWindow::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			SetWindowPos(NULL, 0, 0, 0, 0,
 				SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER |
 				SWP_NOOWNERZORDER | SWP_FRAMECHANGED);
+		} else if ( VK_F11 == nChar) {
+			OnFullScreen();
 		}
 	}
 	DataWindow::OnKeyDown(nChar, nRepCnt, nFlags);
