@@ -83,7 +83,7 @@ htiTransparent(htiTr), fldTranspValue(0), isDataLayer(_isDataLayer),useTV(false)
 			if ( transpValues.fValid())
 				useTV = true;
 			new FieldBlank(root);
-			cb = new CheckBox(root,TR("Use transparency range"),&useTV);
+			cb = new CheckBox(root,TR("Exclude range(full transparent)"),&useTV);
 			fldTranspValue = new FieldRangeReal(cb, TR(""), &transpValues);
 		} else {
 			SetDrawer *animDrw = dynamic_cast<SetDrawer *>(drw);
@@ -93,7 +93,7 @@ htiTransparent(htiTr), fldTranspValue(0), isDataLayer(_isDataLayer),useTV(false)
 					if ( transpValues.fValid())
 						useTV = true;
 					new FieldBlank(root);
-					cb = new CheckBox(root,TR("Use transparency range"),&useTV);
+					cb = new CheckBox(root,TR("Exclude range(full transparent)"),&useTV);
 					fldTranspValue = new FieldRangeReal(cb, TR(""), &transpValues);
 				}
 			}
