@@ -274,23 +274,8 @@ void MapPaneView::OnUpdateEntireMap(CCmdUI* pCmdUI)
 
 void MapPaneView::ZoomInOn(Coord crd, double rDist)
 {
-	throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
+	//throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
 	OnEntireMap();
-	//if (crd.fUndef()) 
-	//	return;
-	//Coord crd1 = crd;
-	//crd1.x += rDist;
-	//crd1.y += rDist;
-	//Coord crd2 = crd;
-	//crd2.x -= rDist;
-	//crd2.y -= rDist;
-	//MinMax mm(rcConv(crd1), rcConv(crd2));
-	//mm.MinRow() -= 1;
-	//mm.MinCol() -= 1;
-	//mm.MaxRow() += 1;
-	//mm.MaxCol() += 1;
-	//zRect rct = rctPos(mm);
-	//AreaSelected(rct);	
 }
 
 void MapPaneView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint) 
@@ -391,55 +376,6 @@ void MapPaneView::ShowRecord(const Ilwis::Record& rec)
 
 void MapPaneView::OnLButtonDblClk(UINT nFlags, CPoint point) 
 {
-	//if (edit && edit->OnLButtonDblClk(nFlags, point)) 
-	//	return;
-
-	//Coord c = crdPnt(point);
-	//MapCompositionDoc* mcd = GetDocument();
-	//for (int i = 0; i < mcd->rootDrawer->getDrawerCount(); ++i) 
-	//{
-	//	NewDrawer* dr = rootDrawer->getDrawer(i);
-	//	Coord crd = c;
-	//	if (dr->isSelectable() && dr->isActive()) 
-	//	{
-	//	SpatialDataDrawer* bmd = dynamic_cast<SpatialDataDrawer*>(dr);
-	//	if ( !bmd)
-	//		continue;
-	//	BaseMapPtr *bmpPtr = bmd->getBaseMap();
-	//	if (bmpPtr->cs() != mcd->georef->cs())
-	//	{
-	//		crd = bmd->basemap()->cs()->cConv(mcd->rootDrawer->getCoordinateSystem(), c);
-	//	}
-	//	switch (dca) 
-	//	{
-	//		case dcaRECORD:
-	//		{
-	//			Ilwis::Record rec = dr->rec(crd);
-	//			if (rec.fValid()) {
-	//				ShowRecord(rec);
-	//				return;
-	//			}
-	//		} break;
-	//		case dcaRPR:
-	//		{
-	//			FormBaseDialog* frm = dr->wEditRpr(this, crd);
-	//			if (0 == frm)
-	//				continue;
-	//			else {
-	//				if (frm->fOkClicked())
-	//					SetDirty();
-	//				delete frm;
-	//				SetFocus();
-	//				return;
-	//			}
-	//		}	break;
-	//		case dcaACTION:
-	//			dr->ExecuteAction(crd);
-	//			return;
-	//	}
-	//}
-	//}
-	::MessageBox(0,"To Be implemented again", "!!!", MB_OK);
 	CView::OnLButtonDblClk(nFlags, point);
 }
 
@@ -451,38 +387,7 @@ void MapPaneView::EditNamedLayer(const FileName& fn)
 	}
 	delete edit;
 	edit = 0;
-	//if (".sms" == fn.sExt) {
-	//	SampleSet smp(fn);
-	//	if (smp->fInitStat())
-	//		edit = new SampleSetEditor(this, smp);
-	//}
-	//else if (".mpr" == fn.sExt) {
-	//	Map mp(fn);
-	//	edit = new PixelEditor(this, mp);
-	//}
-	//else if (".mpp" == fn.sExt) {
-	//	PointMap mp(fn);
-	//	edit = new PointEditor(this, mp);
-	//}
-	//else if (".mps" == fn.sExt) {
-	//	SegmentMap mp(fn);
-	//	edit = new SegmentEditor(this, mp);
-	//}
-	//else if (".mpa" == fn.sExt) {
-	//	PolygonMap mp(fn);
-	//	edit = new PolygonEditor(this, mp);
-	//}
-	//if (edit && !edit->fOk) {
-	//	delete edit;
-	//	edit = 0;
-	//}
-	//if (edit)	{
-	//	SetDirty();
-	//}
-	//UpdateFrame();
-	//MapWindow* mw = mwParent();
-	//if (mw)
-	//	mw->SetAcceleratorTable();
+
 }
 
 void MapPaneView::UpdateFrame()
@@ -734,47 +639,7 @@ void MapPaneView::OnUpdateAdjustSize(CCmdUI* pCmdUI)
 
 void MapPaneView::UseScale(double rScale)
 {
-	throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
-	//double rOldScale = rScaleShow();
 
-	//MapCompositionDoc* mcd = GetDocument();
-	//double rPixSize = mcd->georef->rPixSize();
-	//if (rUNDEF == rPixSize)
-	//	return;
-	//CoordSystemLatLon* csll = mcd->georef->cs()->pcsLatLon();
-	//if (0 != csll)
-	//	rPixSize *= M_PI / 180 * csll->ell.a;
-
-	//CClientDC dc(this);
-	//int iPixPerInchY = dc.GetDeviceCaps(LOGPIXELSY);
-	//double rPixPermm = iPixPerInchY / 25.4;         // (pixel per mm)
-	//rPixSize *= rPixPermm;
-	//rPixSize *= 1000; // 1000 mm per m
-
-	//iXpos -= scale(dim.width()) / 2;
-	//iYpos -= scale(dim.height()) / 2;
-
-	//rScale /= rPixSize;
-	//if (rScale < 1)
-	//	_rScale = 1/rScale;
-	//else
-	//	_rScale = -rScale;
-
-	//bool fTooSmall = scale(dim.width()) < 2 || scale(dim.height()) < 2;
-	//if (fTooSmall) {
-	//	if (rOldScale > rScale) {
-	//		MessageBeep(MB_ICONASTERISK);
-	//		UseScale(rOldScale);
-	//		return;
-	//	}
-	//}
-
-	//iXpos += scale(dim.width()) / 2;
-	//iYpos += scale(dim.height()) / 2;
-	//CalcFalseOffsets();
-	//CalcMax();
-	//setScrollBars();
-	//SetDirty();
 }
 
 void MapPaneView::OnSetDoubleClickAction(UINT nID)
@@ -1240,7 +1105,7 @@ void MapPaneView::OnCreateRasMap()
 
 void MapPaneView::OnCreateGeoRef()
 {
-	throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
+	//throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
 	//String sGrf;
 	//bool fOk;
 	//MapCompositionDoc* mcd = GetDocument();
