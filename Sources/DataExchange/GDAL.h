@@ -41,6 +41,7 @@
 struct GDBLayer_t;
 
 void ogrgdal(const String& cmd);
+void rastergdal(const String& cmd);
 
 typedef void(__stdcall *GDALCloseFunc)(GDALDatasetH);
 typedef void(__stdcall *GDALAllRegisterFunc)();
@@ -53,6 +54,8 @@ typedef GDALDataType (__stdcall *GDALGetRasterDataTypeFunc) (GDALRasterBandH);
 typedef const char* (__stdcall *GDALGetProjectionRefFunc)(GDALDatasetH);
 typedef OGRSpatialReferenceH (__stdcall *OSRNewSpatialReferenceFunc)( const char *);
 typedef OGRErr (*OSRImportFromWktFunc)( OGRSpatialReferenceH, char ** );
+typedef OGRErr (*OSRSetWellKnownGeogCSFunc)( OGRSpatialReferenceH, char * );
+//typedef OGRErr (*OSRImportFromEPSGFunc)(OGRSpatialReferenceH,int);
 typedef int (*OSRIsProjectedFunc)( OGRSpatialReferenceH );
 typedef CPLErr 	(__stdcall *GDALGetGeoTransformFunc)(GDALDatasetH, double *);
 typedef CPLErr 	(__stdcall *GDALRasterIOFunc)(GDALRasterBandH hRBand, GDALRWFlag eRWFlag, int nDSXOff, int nDSYOff, int nDSXSize, int nDSYSize, void *pBuffer, int nBXSize, int nBYSize, GDALDataType eBDataType, int nLineSpace, int nBandSpace);
@@ -126,6 +129,8 @@ struct GDALCFunctions {
 	GDALGetDriverLongNameFunc getDriverLongName;
 	GDALGetDriverShortNameFunc getDriverShortName;
 	GDALGetMetadataItemFunc getMetaDataItem;
+	OSRSetWellKnownGeogCSFunc fromCode;
+	OSRImportFromEPSGFunc fromEPSG;
 
 	//ogr
 	OGROpenFunc ogrOpen;

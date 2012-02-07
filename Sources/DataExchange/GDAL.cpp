@@ -72,12 +72,14 @@
 #include "Engine\Base\File\Directory.h"
 #include "Engine\Map\Raster\Map.h"
 #include "Engine\Map\Raster\MapList\maplist.h"
-#include "Client\ilwis.h"
+//#include "Client\ilwis.h"
 #include "Engine\Base\DataObjects\Tranq.h"
 //#include "Engine\Applications\ModuleMap.h"
 #include "Engine\Base\System\Engine.h"
 #include "Headers\constant.h"
 #include "Headers\messages.h"
+#include "Engine\Base\DataObjects\URL.h"
+#include "DataExchange\WMSFormat.h"
 #include "DataExchange\GDAL.h"
 #include "Headers\Hs\IMPEXP.hs"
 #include "Headers\Htp\Ilwismen.htp"
@@ -96,6 +98,19 @@ void ogrgdal(const String& cmd) {
 	GDALFormat frmt;
 	ParmList parms(cmd);
 	frmt.ogr(parms.sGet(0), parms.sGet(1), parms.sGet(2));
+}
+
+void rastergdal(const String& cmd) {
+	ParmList pmInput(cmd);
+	ParmList pm;
+	pm.Add(new Parm("import", true));
+	pm.Add(new Parm("method",String("GDAL")));
+	pm.Add(new Parm("input",pmInput.sGet(0)));
+	pm.Add(new Parm("output", pmInput.sGet(1)));
+	ForeignCollection col(pmInput.sGet(0), pm);
+	pm.Add(new Parm("threading",false));
+	col->Create(pm);
+
 }
 
 class StopConversion : public ErrorObject
@@ -152,6 +167,7 @@ ForeignFormat *CreateImportObjectGDAL(const FileName& fnObj, ParmList& pm) //cre
 
 	return new GDALFormat(fnObj, pm);
 }
+
 
 GDALFormat::GDALFormat(const FileName& fn, ParmList& pm, ForeignFormat::mtMapType _mtType) :
 	ForeignFormat(pm.sGet("input"), _mtType),
@@ -400,6 +416,8 @@ void GDALFormat::LoadMethods() {
 				funcs.getProjectionRef = (GDALGetProjectionRefFunc)GetProcAddress(hm, "_GDALGetProjectionRef@4" );
 				funcs.getDataType = (GDALGetRasterDataTypeFunc)GetProcAddress(hm, "_GDALGetRasterDataType@4");
 				funcs.newSRS = (OSRNewSpatialReferenceFunc)GetProcAddress(hm, "_OSRNewSpatialReference@4");
+				funcs.fromCode = (OSRSetWellKnownGeogCSFunc)GetProcAddress(hm, "OSRSetWellKnownGeogCS");
+				funcs.fromEPSG = (OSRImportFromEPSGFunc)GetProcAddress(hm,"_OSRImportFromEPSG@8");
 				funcs.srsImportFromWkt = (OSRImportFromWktFunc)GetProcAddress(hm,"OSRImportFromWkt");
 				funcs.isProjected = (OSRIsProjectedFunc)GetProcAddress(hm,"OSRIsProjected");
 				funcs.geotransform = (GDALGetGeoTransformFunc)GetProcAddress(hm,"_GDALGetGeoTransform@8");
@@ -490,13 +508,14 @@ void GDALFormat::Init()
 
 struct GGThreadData
 {
-	GGThreadData() : gg(NULL), fptr(NULL) {}
+	GGThreadData() : gg(NULL), fptr(NULL), fThreading(true) {}
 	GDALFormat *gg;
 	ForeignCollection* fptr;
 	Directory dir;
+	bool fThreading;
 };
 
-void GDALFormat::PutDataInCollection(ForeignCollectionPtr* col, ParmList&)
+void GDALFormat::PutDataInCollection(ForeignCollectionPtr* col, ParmList& pm)
 {
 	bool *fDoNotLoadGDB = (bool *)(getEngine()->pGetThreadLocalVar(IlwisAppContext::tlvDONOTLOADGDB));	
 	if ( *fDoNotLoadGDB == true )	
@@ -508,7 +527,16 @@ void GDALFormat::PutDataInCollection(ForeignCollectionPtr* col, ParmList&)
 	                                                  // needed to keep pointer in memory when passing it to thread
 	data->dir = Directory(getEngine()->sGetCurDir());
 
-	::AfxBeginThread(PutDataInThread, (VOID *)data);
+	bool fUseThreading = true;
+	if ( pm.fExist("threading")) {
+		fUseThreading = pm.fGet("threading");
+	}
+	if ( fUseThreading)
+		::AfxBeginThread(PutDataInThread, (VOID *)data);
+	else {
+		data->fThreading = false;
+		PutDataInThread((VOID *)data);
+	}
 }
 
 UINT GDALFormat::PutDataInThread(LPVOID lp)
@@ -519,13 +547,19 @@ UINT GDALFormat::PutDataInThread(LPVOID lp)
 	{
 		data = (GGThreadData *)lp;
 		fnCol = (*(data->fptr))->fnObj;
-		getEngine()->InitThreadLocalVars();
+		if ( !data->fThreading)
+			data->gg->fShowCollection = false; // scripting situation
+
+		if ( data->fThreading)
+			getEngine()->InitThreadLocalVars();
 		getEngine()->SetCurDir(data->dir.sFullPath());
 		
 		data->gg->ReadForeignFormat(data->fptr->ptr());
 
-		getEngine()->RemoveThreadLocalVars();
-		delete data->fptr;  // remove the foreign collection (because passed as pointer)
+		if ( data->fThreading)
+			getEngine()->RemoveThreadLocalVars();
+		if ( data->fThreading)
+			delete data->fptr;  // remove the foreign collection (because passed as pointer)
 		delete data;
 		data = 0;
 	}
@@ -552,7 +586,7 @@ void GDALFormat::ReadForeignFormat(ForeignCollectionPtr* col)
 {
 	try
 	{
-		AfxGetApp()->GetMainWnd()->SendMessage(ILW_READCATALOG, WP_STOPREADING, 0);
+		AfxGetApp()->GetMainWnd()->PostMessage(ILW_READCATALOG, WP_STOPREADING, 0);
 
 		collection = col;
 		Init();
@@ -570,7 +604,7 @@ void GDALFormat::ReadForeignFormat(ForeignCollectionPtr* col)
 		if ( collection->iNrObjects() == 0 )
 			throw ErrorObject(TR("No layer recognized (not supported ?)"));
 	
-		AfxGetApp()->GetMainWnd()->SendMessage(ILW_READCATALOG, WP_RESUMEREADING, 0);
+		AfxGetApp()->GetMainWnd()->PostMessage(ILW_READCATALOG, WP_RESUMEREADING, 0);
 		collection->Store();
 		AfxGetApp()->GetMainWnd()->PostMessage(ILW_READCATALOG, 0, 0);
 		String sCommand("*open %S", col->fnObj.sRelativeQuoted());
@@ -747,6 +781,9 @@ CoordSystem GDALFormat::GetCoordSystem()
 	char *wkt2 = (char *)wkt;
 	strcpy(wkt, cwkt);
 	OGRSpatialReferenceH handle = funcs.newSRS(NULL);
+
+	//OGRErr err = funcs.fromEPSG(handle, 4326);
+
 	OGRErr err = funcs.srsImportFromWkt(handle, &wkt2);
 	if ( err == OGRERR_UNSUPPORTED_SRS )
 		 	return CoordSystem("unknown");
@@ -773,6 +810,9 @@ CoordSystem GDALFormat::getCoordSystemFrom(OGRSpatialReferenceH handle, char *wk
 		} else {
 			csp->datum = new MolodenskyDatum(dn,"");
 		}
+		String projName(funcs.getAttr(handle, "Projection",0));
+		replace(projName.begin(), projName.end(),'_',' ');
+		csp->prj = Projection(projName);
 		csv = csp;
 	} else {
 		csv = new CoordSystemLatLon(fnCsy, 1);
@@ -1722,11 +1762,12 @@ void SegmentFiller::fillGeometry(OGRGeometryH hGeom, int rec) {
 	CoordinateArraySequence *seq = new CoordinateArraySequence(count);
 	for(int i = 0; i < count; ++i) {
 		double x,y,z;
-		funcs.ogrGetPoints(hGeom, 0,&x,&y,&z);
+		funcs.ogrGetPoints(hGeom, i,&x,&y,&z);
 		Coord c(x,y,z);
 		seq->setAt(c, i);
 	}
 	s->PutCoords(seq);
+	s->PutVal((long)rec);
 }
 
 void PolygonFiller::fillFeature(OGRGeometryH hGeometry, int rec) {
