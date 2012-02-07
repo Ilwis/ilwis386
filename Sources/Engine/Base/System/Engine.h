@@ -21,6 +21,7 @@ class COMServerHandler;
 
 class ForeignFormatMap;
 class Logger;
+class GdalProxy;
 
 namespace ILWIS {
 	class Database;
@@ -63,6 +64,7 @@ public:
 	bool fServerMode() const;
 	static HMODULE getModuleHandle() { return engineHandle; }
 	ILWIS::Database *pdb();
+	GdalProxy *gdal;
 
 public:
 	IlwisAppContext *context;

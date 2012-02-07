@@ -16,6 +16,7 @@
 #include "Engine\Base\DataObjects\URL.h"
 #include "Engine\DataExchange\WMSCollection.h"
 #include "Engine\Base\System\commandhandler.h"
+#include "Engine\DataExchange\gdalproxy.h"
 #include <set>
 #include <fstream>
 
@@ -70,6 +71,7 @@ Engine::~Engine()
 	delete version;
 	version = NULL;
 	delete db;
+	delete gdal;
 }
 
 // Engine initialization
@@ -112,6 +114,8 @@ void Engine::Init() {
 					  alias TEXT)";
 	  db->executeStatement(stmt);
 	  loadSystemTables(ilwDir);
+	  gdal = new GdalProxy();
+	  gdal->loadMethods(ilwDir);
 	}
 
 }
@@ -167,6 +171,15 @@ void Engine::loadSystemTables(const String& ilwDir) {
 
 	}
 	in.close();
+	ifstream epsgFile(String("%SResources\\def\\epsg-sqlite.sql",ilwDir).c_str());
+	String stmt;
+    getline(in,stmt);  // Get the frist line from the file, if any.
+    while ( epsgFile ) {
+		String str;
+        getline(epsgFile,str); 
+		stmt += str;
+    }
+	db->executeStatement(stmt);
 }
 
 void Engine::SetCurDir(const String& sDir) {
