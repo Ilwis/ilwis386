@@ -98,7 +98,7 @@ void UpdateService::createUpdateFile() {
 	FileName fnStatus(String("%S\\status.xml",baseDir));
 	ILWIS::XMLDocument docStatus;
 	ILWIS::XMLDocument docExtern;
-	FileName fnConfig(String("\\update_%lu.zip",check));
+	FileName fnConfig(String("\\update_%lu.zip",check)); 
 	if ( !fnConfig.fExist()) {
 		if ( !fnStatus.fExist()) {
 			vector<IlwisFileInfo> files;

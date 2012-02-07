@@ -34,6 +34,11 @@ void WPSGetCapabilities::writeResponse() const{
 	pugi::xml_node capaNode = doc.addNodeTo(doc,"wps:Capabilities");
 	createHeader(doc, "http://www.opengis.net/wps/1.0.0 ../wpsGetCapabilities_response.xsd"); 
 
+	pugi::xml_node lan = doc.addNodeTo(doc,"wps:Language");
+	pugi::xml_node def = doc.addNodeTo(lan,"wps:Default");
+	doc.addNodeTo(def,"ows:Language","en-US");
+	pugi::xml_node sup = doc.addNodeTo(lan,"wps:Supported");
+	doc.addNodeTo(sup,"ows:Language","en-US");
 
 	pugi::xml_node si = doc.addNodeTo(capaNode,"ows:ServiceIdentification");
 	doc.addNodeTo(si,"ows:Title", getConfigValue("WPS:ServiceContext:Title"));
@@ -45,11 +50,13 @@ void WPSGetCapabilities::writeResponse() const{
 	for(int i = 0; i < words.size(); ++i) {
 		doc.addNodeTo(kw,"ows:Keyword", words[i]);
 	}
-	pugi::xml_node sp = doc.addNodeTo(si,"ServiceProvider"); 
+	doc.addNodeTo(si,"ows:ServiceType","WPS");
+	doc.addNodeTo(si,"ows:ServiceTypeVersion","1.0");
+	pugi::xml_node sp = doc.addNodeTo(si,"ows:ServiceProvider"); 
 	doc.addNodeTo(sp, "ows:ProviderName",getConfigValue("WPS:ServiceContext:ProviderSite"));
 	pugi::xml_node contact = doc.addNodeTo(sp,"ows:ServiceContact");
 	doc.addNodeTo(contact,"ows:IndividualName",getConfigValue("WPS:ServiceContext:ProviderContactName"));
-	doc.addNodeTo(contact,"PositionName",getConfigValue("WPS:ServiceContext:ProviderPosition"));
+	doc.addNodeTo(contact,"ows:PositionName",getConfigValue("WPS:ServiceContext:ProviderPosition"));
 	pugi::xml_node cInfo = doc.addNodeTo(contact,"ows:ContactInfo");
 	pugi::xml_node cPhone = doc.addNodeTo(cInfo,"ows:Phone");
 	doc.addNodeTo(cPhone, "ows:Voice",getConfigValue("WPS:ServiceContext:ProviderVoicePhone"));
@@ -97,7 +104,7 @@ void WPSGetCapabilities::writeResponse() const{
 			ApplicationMetadata amd = (info->metadata)(&query);
 			if ( amd.wpsxml != "") {
 				pugi::xml_node process = doc.addNodeTo(offerings,"wps:Process");
-
+				doc.addNodeTo(process,"wps:ProcessVersion","1.0.0");
 
 				String xml = amd.wpsxml;
 				vector<String> results;
@@ -112,7 +119,7 @@ void WPSGetCapabilities::writeResponse() const{
 				results.clear();
 				xmldoc.executeXPathExpression("//wps:ProcessDescription/ows:Title/text()",results);
 				if ( results.size() > 0) {
-					doc.addNodeTo(process,"ows:Ttile",results[0]);
+					doc.addNodeTo(process,"ows:Title",results[0]);
 				}
 				results.clear();
 				xmldoc.executeXPathExpression("//wps:ProcessDescription/ows:Abstract/text()",results);
@@ -126,7 +133,7 @@ void WPSGetCapabilities::writeResponse() const{
 	char *buf = new char[txt.size() + 1];
 	memset(buf,0,txt.size() + 1);
 	memcpy(buf,txt.c_str(), txt.size());
-	mg_write(getConnection(), buf, txt.size()+1);
+	mg_write(getConnection(), buf, txt.size());
 	delete [] buf;
 }
 
