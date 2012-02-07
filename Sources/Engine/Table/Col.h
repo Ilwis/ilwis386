@@ -110,7 +110,7 @@ public:
 	void _export         AppendRec(long iRecs = 1);
 	void _export         Fill();
 	void                 SetMinMax(const RangeInt& ri);
-	void                 SetMinMax(const RangeReal& rr);
+	void _export         SetMinMax(const RangeReal& rr);
 	void                 StoreTime(); // stores object time in obj def. file section for column
 	void _export         GetVal(long iKey, BinMemBlock&) const;
 	void _export         PutVal(long iKey, const BinMemBlock&);

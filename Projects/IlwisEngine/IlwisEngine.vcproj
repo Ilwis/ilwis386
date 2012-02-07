@@ -2514,6 +2514,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\Sources\Engine\DataExchange\GdalProxy.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Sources\Engine\SpatialReference\Genpersp.cpp"
 					>
 				</File>
@@ -2923,6 +2927,10 @@
 					</File>
 					<File
 						RelativePath="..\..\Sources\Engine\SpatialReference\gauBoaga.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Engine\DataExchange\GdalProxy.h"
 						>
 					</File>
 					<File

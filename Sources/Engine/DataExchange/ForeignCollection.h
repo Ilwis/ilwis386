@@ -69,7 +69,6 @@ protected:
 private:
 	void                    CreateLayer(int iLayer);
 	void                    CreateRasterLayer(int iChannel);
-	void                    LoadLayers();
 
 	FileName fnForeign;
 	ForeignFormat *ff;

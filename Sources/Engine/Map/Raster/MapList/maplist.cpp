@@ -343,8 +343,13 @@ MapListPtr::MapListPtr(const FileName& fn)
 	if (0 == ReadElement("Ilwis", "UseAs", fUseAs))
 		fUseAs = false;
 	SetUseAs(fUseAs);
-	ReadElement("MapList", "AttributeTable", attTable);
-	ReadElement("MapList","Rnage", range);
+	try{
+		ReadElement("MapList", "AttributeTable", attTable);
+	} catch(ErrorObject& err) {
+		SetAttributeTable(Table());
+		err.Show();
+	}
+	ReadElement("MapList","Range", range);
 	int iMaps = iReadElement("MapList", "Maps");
     // Corrupted ODF can have no key for the number of maps, so check
     if (iMaps == iUNDEF)

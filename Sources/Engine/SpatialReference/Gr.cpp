@@ -143,6 +143,7 @@
 #include "Engine\SpatialReference\GrScaleRotate.h"
 #include "Engine\Base\DataObjects\ObjectStructure.h"
 #include "Engine\SpatialReference\GrcWMS.h"
+#include "Engine\DataExchange\gdalproxy.h"
 #include "Engine\Applications\objvirt.h"
 #include "Engine\Applications\ModuleMap.h"
 #include "Engine\Base\System\Engine.h"
@@ -221,32 +222,42 @@ GeoRef::GeoRef(const String& sExpression)
   SetPointer(grf.ptr());
 }
 
-GeoRef::GeoRef(const String& sExpression, const String& sPath)
+GeoRef::GeoRef(const String& sExpression, const String& sPath, const String& baseName)
 : IlwisObject(listGrf)
 {
 	int iPos = sExpression.find('(');
 	String sGeoRef = sExpression.sLeft(iPos);
-  if (fCIStrEqual(sGeoRef, "GeoRefSmpl"))
-    SetPointer(GeoRefPtr::create(FileName(), sExpression));
-  else if (fCIStrEqual(sGeoRef, "GeoRefDifferential"))
-    SetPointer(GeoRefDifferential::create(FileName(), sExpression));
+	if (fCIStrEqual(sGeoRef, "GeoRefSmpl"))
+		SetPointer(GeoRefPtr::create(FileName(), sExpression));
+	else if (fCIStrEqual(sGeoRef, "GeoRefDifferential"))
+		SetPointer(GeoRefDifferential::create(FileName(), sExpression));
 	else if (fCIStrEqual(sGeoRef, "GeoRefEpipolar"))
-    SetPointer(GeoRefEpipolar::create(FileName(), sExpression));
+		SetPointer(GeoRefEpipolar::create(FileName(), sExpression));
 	else if (fCIStrEqual(sGeoRef, "GeoRefStereoMate"))
-    SetPointer(GeoRefStereoMate::create(FileName(), sExpression));
-  else
-  {
-    // FileName fn(sExpression, ".grf", true);
-    // if (0 == sExpression.strchrQuoted(':')) // no path set
-    //   fn.Dir(sPath);
-		// 3 lines above don't work with quoted path names (the ':' is inbetween the quotes
-		// and therefore never found), but the following 1 line does!
+		SetPointer(GeoRefStereoMate::create(FileName(), sExpression));
+	else if ( fCIStrEqual(sGeoRef,"geometry")) {
+		iPos = sExpression.find_first_of(",");
+		String name = sExpression.substr(9, iPos - 9);
+		String expr = "geometry(" + sExpression.substr(iPos + 1, sExpression.size());
+		FileName fn = String("%S%S", sPath, name);
+		fn.sExt = ".grf";
+		iPos = expr.find_last_of(",");
+		String sEpsg = expr.substr(iPos + 1, expr.size() - iPos - 2);
+		int epsg = sEpsg.iVal();
+		expr =expr.substr(0, iPos) + ")"; // remove epsg part; grd corners doesnt understand it
+		SetPointer(GeoRefCorners::create(fn, expr));
+		ptr()->Store();
+		CoordSystem cs = getEngine()->gdal->getCoordSystem(fn,epsg);
+		ptr()->SetCoordSystem(cs);
+	}
+	else
+	{
 		FileName fn(FileName(sExpression, FileName(sPath)), ".grf", true);
-    GeoRef grf(fn);
-    SetPointer(grf.ptr());
-  }  
-  if (ptr()->sDescription == "")
-    ptr()->sDescription = ptr()->sTypeName();
+		GeoRef grf(fn);
+		SetPointer(grf.ptr());
+	}  
+	if (ptr()->sDescription == "")
+		ptr()->sDescription = ptr()->sTypeName();
 }
 
 GeoRefPtr* GeoRef::pGet(const FileName& fn)

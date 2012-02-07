@@ -346,7 +346,10 @@ void FileName::Split(const char* sFileName)
 	bool fIsDir = s[s.length()] == '\\';
 
 	char *pcExt = s.strrchrQuoted('.');
-	char *pcSlash = s.strrchrQuoted('\\');
+	char slash = '\\';
+	if ( s.find('/') != string::npos)
+		slash = '/';
+	char *pcSlash = s.strrchrQuoted(slash);
 	if (pcSlash != 0 && pcSlash > pcExt)
 		pcExt = 0;  // the dot belongs to the path!
 
@@ -403,7 +406,7 @@ void FileName::Split(const char* sFileName)
 		}
 	}
 	sDir = "";
-	pcExt = strrchr(s.sVal(),'\\');
+	pcExt = strrchr(s.sVal(),slash);
 	if (pcExt != 0)
 	{
 		int len = pcExt - &s[0] + 1;

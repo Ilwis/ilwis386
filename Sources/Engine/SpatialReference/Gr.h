@@ -181,7 +181,7 @@ public:
   _export GeoRef(const FileName& fn);
   GeoRef(const FileName& fn, const String& sExpression);
   _export GeoRef(const String& sExpression);
-  _export GeoRef(const String& sExpression, const String& sPath);
+  _export GeoRef(const String& sExpression, const String& sPath, const String& baseName="");
   _export GeoRef(const GeoRef& gr);
   void operator = (const GeoRef& gr) { SetPointer(gr.pointer()); }
   GeoRefPtr* ptr() const { return static_cast<GeoRefPtr*>(pointer()); }

@@ -2919,7 +2919,16 @@ void CommandHandler::CmdSend(const String& sN) {
 	String txt;
 	for(int i = 0; i < mem->size; ++i)
 		txt += mem->memory[i];
-	ReroutPost(String("simplecalc Text %S",txt));
+	String result;
+
+	for(int i = 0; i < txt.size(); ++i) {
+		char c = txt[i];
+		if ( c != '\n')
+			result += c;
+		else
+			result += "\r\n";
+	}
+	ReroutPost(String("simplecalc Text %S",result));
 }
 
 #define WRITEBUFFERSIZE (16384)
@@ -2958,6 +2967,11 @@ void CommandHandler::CmdZip(const String& expr) {
 			ObjectStructure ostruct;
 			object->GetObjectStructure(ostruct);
 			ostruct.GetUsedFiles(files, false);
+		} else if ( fnobj.sExt == ".shp") {
+			files.push_back(fnobj.sPhysicalPath());
+			files.push_back(FileName(fnobj,".shx").sPhysicalPath());
+			files.push_back(FileName(fnobj,".prj").sPhysicalPath());
+			files.push_back(FileName(fnobj,".dbf").sPhysicalPath());
 		} else {
 			files.push_back(fnobj.sFullPath());
 		}

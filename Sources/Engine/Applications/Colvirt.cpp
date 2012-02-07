@@ -77,10 +77,10 @@ ColumnVirtual* ColumnVirtual::create(const Table& tbl, const String& sColName, C
 
 
 
-  /*if (fCIStrEqual(sFunc.sLeft(3),"agg")  || fCIStrEqual(sFunc.sLeft(15),"ColumnAggregate") ||
+  /*if (fCIStrEqual(sFunc.sLeft(3),"agg")  || fCIStrEqual(sFunc.sLeft(15),"ColumnToTime") ||
       fCIStrEqual(sFunc.sLeft(4),"join") || fCIStrEqual(sFunc.sLeft(10),"ColumnJoin")) {
-    if (ColumnAggregate::fValidFunc(sFunc))
-      return new ColumnAggregate(tbl, sColName, p);
+    if (ColumnToTime::fValidFunc(sFunc))
+      return new ColumnToTime(tbl, sColName, p);
   }  
   if (fCIStrEqual(sFunc.sLeft(3),"cum") || fCIStrEqual(sFunc, "ColumnCumulative"))
     return new ColumnCumulative(tbl, sColName, p);
@@ -122,7 +122,7 @@ ColumnVirtual* ColumnVirtual::create(const Table& tbl, const String& sColName, C
   //  String sStrippedExpr = sExpression.sSub(16, sExpression.length()-17);
   //  return ColumnCalculate::create(tbl, sColName, p, sStrippedExpr, dvs);
   //}
-  //if (fCIStrEqual(sFunc.sLeft(3), "agg")  || fCIStrEqual(sFunc.sLeft(15), "ColumnAggregate") ||
+  //if (fCIStrEqual(sFunc.sLeft(3), "agg")  || fCIStrEqual(sFunc.sLeft(15), "ColumnToTime") ||
   //  if (fCIStrEqual(sFunc.sLeft(4), "join") || fCIStrEqual(sFunc.sLeft(10), "ColumnJoin")) {
   //    AggregateFunction* agf = AggregateFunction::create(sFunc);
   //    if (0 == agf) {
@@ -138,8 +138,8 @@ ColumnVirtual* ColumnVirtual::create(const Table& tbl, const String& sColName, C
   //      return ColumnCalculate::create(tbl, sColName, p, sExpr, dvs);
   //    }
   //  }
-  //  if (ColumnAggregate::fValidFunc(sFunc))
-  //    return ColumnAggregate::create(tbl, sColName, p, sExpression, dvs);
+  //  if (ColumnToTime::fValidFunc(sFunc))
+  //    return ColumnToTime::create(tbl, sColName, p, sExpression, dvs);
   //}  
   //if (fCIStrEqual(sFunc.sLeft(3), "cum") || fCIStrEqual(sFunc, "ColumnCumulative"))
   //  return ColumnCumulative::create(tbl, sColName, p, sExpression, dvs);

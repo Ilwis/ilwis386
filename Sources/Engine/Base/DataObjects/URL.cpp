@@ -78,6 +78,21 @@ String URL::getProtocol() const {
 	return sUrl.sHead("://");
 }
 
+FileName URL::toFileName2() const {
+	if ( getProtocol() == "file") {
+		String tail = sUrl.sTail("://");
+		if ( tail.substr(0,9) == "localhost") {
+			tail = tail.sTail("localhost/");
+		}
+		String drive = tail[1];
+		String rest = tail.substr(3,tail.size() - 2);
+		String name("%S:%S", drive, rest);
+		FileName fn(name);
+		return fn;
+	}
+	return FileName();
+}
+
 FileName URL::toFileName(bool root) const {
 	String tail = sUrl.sTail("://");
 	String head = tail.sHead("?");
