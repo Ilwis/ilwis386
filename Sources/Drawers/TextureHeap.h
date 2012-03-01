@@ -26,7 +26,7 @@ namespace ILWIS {
 	public:
 		Palette();
 		virtual ~Palette();
-		void SetData(const Map & mp, const LayerDrawer * rsd, const unsigned int iPaletteSize, const RangeReal & rrMinMaxMap);
+		void SetData(const BaseMap & mp, const LayerDrawer * rsd, const unsigned int iPaletteSize, const RangeReal & rrMinMaxMap);
 		bool fValid();
 		void MakeCurrent() const;
 		void Refresh();

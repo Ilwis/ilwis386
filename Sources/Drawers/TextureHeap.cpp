@@ -52,7 +52,7 @@ Palette::~Palette()
 		delete [] palette_alphas;
 }
 
-void Palette::SetData(const Map & mp, const LayerDrawer * rsd, const unsigned int iPaletteSize, const RangeReal & rrMinMaxMap)
+void Palette::SetData(const BaseMap & mp, const LayerDrawer * rsd, const unsigned int iPaletteSize, const RangeReal & rrMinMaxMap)
 {
 	ValueRange vr = mp->vr();
 	if (mp->dm()->pdbool())
