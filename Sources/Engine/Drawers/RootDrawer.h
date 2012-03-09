@@ -73,7 +73,6 @@ namespace ILWIS {
 		void setZoom3D(double v);
 
 	private:
-		void setProjection(const CoordBounds& cb) const;
 		void setEyePoint();
 		void modifyCBZoomView(double dv, double dz, double f);
 		void calcCanvas();
@@ -97,7 +96,8 @@ namespace ILWIS {
 		Coordinate eyePoint;
 		Coordinate viewPoint;
 		double fakeZ;
-		double aspectRatio;
+		double windowAspectRatio;
+		double mapAspectRatio;
 		double rotX, rotY, rotZ;
 		double translateX, translateY, translateZ;
 		double zoom3D;

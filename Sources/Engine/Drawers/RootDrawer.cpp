@@ -27,7 +27,8 @@ RootDrawer::RootDrawer()
 	setTransparency(1.0);
 	setName("RootDrawer");
 	threeD = false;
-	aspectRatio = 0;
+	windowAspectRatio = 0;
+	mapAspectRatio = 0;
 	selectionDrawer = 0;
 	rotX = rotY = rotZ = 0;
 	translateX = translateY = translateZ = 0;
@@ -119,62 +120,67 @@ void RootDrawer::addCoordBounds(const CoordSystem& _cs, const CoordBounds& cb, b
 	setCoordBoundsView(cbMap, overrule);
 }
 
+		// Experimental ::draw code for moving the center of rotation
+		//glTranslatef(translateX, translateY, translateZ);
+		//glTranslatef(viewPoint.x,viewPoint.y, 0);
+		//glTranslatef(-translateX, -translateY, -translateZ);
+		//glRotatef(rotY,-1,0,0);				// Rotate on y
+		//glRotatef(rotX,0,0,-1);				// Rotate on x
+		//glTranslatef(-viewPoint.x,-viewPoint.y, 0);
+		//glTranslatef(-translateX, -translateY, -translateZ);
+		//glTranslatef(translateX, translateY, translateZ);
+		//glTranslatef(translateX, translateY, translateZ);
+		//glRotatef(-rotX,0,0,-1);				// Rotate on x
+		//glRotatef(-rotY,-1,0,0);				// Rotate on y
+		//glTranslatef(translateX, translateY, translateZ);
+		//glRotatef(rotY,-1,0,0);				// Rotate on y
+		//glRotatef(rotX,0,0,-1);				// Rotate on x
+
 /*
 Note: calls to RootDrawer::draw are meaningless without an OpenGL context in the current thread.
 Therefore all calls to RootDrawer::draw must be preceded by a call to DrawerContext::TakeContext and followed by a call to ReleaseContext
 */
-
-void RootDrawer::setupDraw() const{
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		// Clear The Screen And The Depth Buffer
-	if (threeD)
-		glEnable(GL_DEPTH_TEST);
-	else
-		glDisable(GL_DEPTH_TEST);
-
-	glViewport(0,0,pixArea.Col, pixArea.Row);
-	setProjection(cbZoom);
-
-	glMatrixMode(GL_MODELVIEW);
-}
 
 bool RootDrawer::draw( const CoordBounds& cb) const{
 	if ( selectionDrawer) {
 		selectionDrawer->draw();
 	}
 	else {
-		const_cast<RootDrawer *>(this)->setZIndex(0);
-		setupDraw();
+		// Setup
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		// Clear The Screen And The Depth Buffer
+		if (threeD)
+			glEnable(GL_DEPTH_TEST);
+		else
+			glDisable(GL_DEPTH_TEST);
+		glViewport(0,0,pixArea.Col, pixArea.Row);
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		if ( threeD) {
+			double zNear = max(abs(eyePoint.x - viewPoint.x), abs(eyePoint.y - viewPoint.y)) / 2.0;
+			double zFar = max(cbZoom.width(), cbZoom.height()) * 4.0;
+			gluPerspective(40*zoom3D, windowAspectRatio, zNear, zFar);
+		} else {
+			glOrtho(cbZoom.cMin.x,cbZoom.cMax.x,cbZoom.cMin.y,cbZoom.cMax.y,-1,1);
+		}
+		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		if (is3D()) {
 			gluLookAt(eyePoint.x, eyePoint.y, eyePoint.z, viewPoint.x, viewPoint.y, viewPoint.z, 0, 1.0, 0 );
-			//glPushMatrix();	
 			glTranslatef(translateX, translateY, translateZ);
-			//glTranslatef(translateX, translateY, translateZ);
 			glTranslatef(viewPoint.x,viewPoint.y, 0);
-			//glTranslatef(-translateX, -translateY, -translateZ);
 			glRotatef(rotY,-1,0,0);				// Rotate on y
 			glRotatef(rotX,0,0,-1);				// Rotate on x
 			glTranslatef(-viewPoint.x,-viewPoint.y, 0);
-			//glTranslatef(-translateX, -translateY, -translateZ);
-			//glTranslatef(translateX, translateY, translateZ);
-			//glTranslatef(translateX, translateY, translateZ);
-			//glRotatef(-rotX,0,0,-1);				// Rotate on x
-			//glRotatef(-rotY,-1,0,0);				// Rotate on y
-			//glTranslatef(translateX, translateY, translateZ);
-			//glRotatef(rotY,-1,0,0);				// Rotate on y
-			//glRotatef(rotX,0,0,-1);				// Rotate on x
-
-
 		}
-		// due to the way how transparency works in opengl the backgroundrawer has to be drawn at different moments depending on the view93d or not) 
-		if (! is3D())
+
+		// Draw
+		const_cast<RootDrawer *>(this)->setZIndex(0);
+		// due to the way how transparency works in opengl the backgroundrawer has to be drawn at different moments depending on is3D or not)
+		if (!is3D())
 			backgroundDrawer->draw(cb);
 		ComplexDrawer::draw( cb);
 		if (is3D())
 			backgroundDrawer->draw(cb);
-
-		//if ( is3D())
-		//	glPopMatrix();
 	}
 	return true;
 
@@ -254,7 +260,7 @@ void RootDrawer::modifyCBZoomView(double dv, double dz, double f) {
 	double deltaview = dv * f;
 	double deltazoom = dz * f;
 	Coord cMiddle = cbZoom.middle();
-	if ( aspectRatio <= 1.0) {
+	if ( mapAspectRatio <= 1.0) {
 		cbView.cMin.x = cMiddle.x - deltaview / 2.0;
 		cbView.cMax.x = cMiddle.x + deltaview / 2.0;
 		cbZoom.cMin.x = cMiddle.x - deltazoom / 2.0;
@@ -268,9 +274,10 @@ void RootDrawer::modifyCBZoomView(double dv, double dz, double f) {
 }
 
 void RootDrawer::setViewPort(const RowCol& rc) {
-	if (  aspectRatio  != 0.0 && pixArea.Col != iUNDEF) {
+	windowAspectRatio = (double)(rc.Col) / (double)(rc.Row);
+	if (  mapAspectRatio  != 0.0 && pixArea.Col != iUNDEF) {
 		// this code adapts the cbZoom if the window size changes
-		if ( aspectRatio <= 1.0) { // y > x
+		if ( mapAspectRatio <= 1.0) { // y > x
 			if ( rc.Col != pixArea.Col){ // make sure the zoomsize is changed if the cols changes
 				modifyCBZoomView(cbView.width(), cbZoom.width(),(double)rc.Col / pixArea.Col); 
 			}
@@ -300,7 +307,6 @@ void RootDrawer::setCoordinateSystem(const CoordSystem& _cs, bool overrule){
 			cbMap = _cs->cbConv(cs, cbMap);
 			cbZoom = _cs->cbConv(cs, cbZoom);
 			cbView = _cs->cbConv(cs, cbView);
-			setProjection(cbMap);
 		}
 		cs = _cs;
 	}
@@ -352,7 +358,6 @@ void RootDrawer::setGeoreference(const GeoRef& _gr, bool overruleMapBounds) {
 			cb += Coord(rCol, -rRow);
 			cbView = cb;
 		}
-		setProjection(cbMap);
 		setCoordBoundsView(cbMap, true);
 	}
 }
@@ -395,8 +400,6 @@ void RootDrawer::clearGeoreference() {
 		cbView = cb;
 
 		fUseGeoRef = false;
-
-		setProjection(cbMap);
 	}
 }
 
@@ -506,12 +509,12 @@ void RootDrawer::setCoordBoundsView(/*const CoordSystem& _cs,*/ const CoordBound
 	//CoordBounds cb = cs.fEqual(_cs) ? _cb : cs->cbConv(_cs,_cb);
 	if ( overrule || cbView.fUndef()) {
 		//cbMap = cb;
-		aspectRatio = cbMap.width()/ cbMap.height();
+		mapAspectRatio = cbMap.width() / cbMap.height();
 		double w = cb.width();
 		double h = cb.height();
 		double delta = 0;
-		if ( aspectRatio <= 1.0) {
-			double pixwidth = (double)pixArea.Row * aspectRatio;
+		if ( mapAspectRatio <= 1.0) {
+			double pixwidth = (double)pixArea.Row * mapAspectRatio;
 			double deltay = 0;
 			if ( pixwidth > pixArea.Col) {
 				deltay = cb.height() * ( pixwidth / pixArea.Col - 1.0);
@@ -523,7 +526,7 @@ void RootDrawer::setCoordBoundsView(/*const CoordSystem& _cs,*/ const CoordBound
 			cbView =  CoordBounds(Coord(cb.MinX() - delta,cb.MinY() - deltay /2.0,0), 
 				Coord(cb.MaxX() + delta,cb.MaxY() + deltay/ 2.0,0));
 		} else {
-			double pixheight = (double)pixArea.Col / aspectRatio;
+			double pixheight = (double)pixArea.Col / mapAspectRatio;
 			double deltax = 0;
 			if ( pixheight > pixArea.Row) {
 				deltax = cb.width() * ( pixheight / pixArea.Row - 1.0);
@@ -541,21 +544,15 @@ void RootDrawer::setCoordBoundsView(/*const CoordSystem& _cs,*/ const CoordBound
 		setEyePoint();
 	} 
 	fakeZ = cbView.width() * 0.0005;
-	glMatrixMode(GL_MODELVIEW);
 	if ( is3D()) {
-		glLoadIdentity();
-		if (is3D()) {
-			if ( !initRestore) { // restore set rotX, etc. But the OnEntireMap would destroy these false; so for once  the init of values is skipped
-				rotX= rotY = 0;
-				translateX = translateY = translateZ = 0;
-				zoom3D = 1.0;
-			} else 
-				initRestore = false;
-			setCoordBoundsZoom(cbView);
-			gluLookAt(eyePoint.x, eyePoint.y, eyePoint.z, viewPoint.x, viewPoint.y, viewPoint.z, 0, 1.0, 0 );
-		}
+		if ( !initRestore) { // restore set rotX, etc. But the OnEntireMap would destroy these false; so for once  the init of values is skipped
+			rotX= rotY = 0;
+			translateX = translateY = translateZ = 0;
+			zoom3D = 1.0;
+		} else 
+			initRestore = false;
+		setCoordBoundsZoom(cbView);
 	}
-
 }
 
 void RootDrawer::setCoordBoundsZoom(const CoordBounds& cbIn) {
@@ -595,7 +592,7 @@ CoordBounds RootDrawer::getMapCoordBounds() const{
 }
 
 double RootDrawer::getAspectRatio() const {
-	return aspectRatio;
+	return mapAspectRatio;
 }
 
 Coord RootDrawer::screenToOpenGL(const RowCol& rc) {
@@ -683,28 +680,10 @@ CoordBounds RootDrawer::getCoordBoundsZoom() const  {
 	return cbZoom;
 }
 
-/*
-Note: calls to RootDrawer::setProjection are meaningless without an OpenGL context in the current thread.
-Therefore all calls to RootDrawer::setProjection must be preceded by a call to DrawerContext::TakeContext and followed by a call to ReleaseContext
-*/
-void RootDrawer::setProjection(const CoordBounds& cb) const {
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	if ( threeD) {
-		double zBase = max(abs(eyePoint.x - viewPoint.x), abs(eyePoint.y - viewPoint.y));
-		double w = max(cbZoom.width(), cbZoom.height());
-		gluPerspective(40*zoom3D, (aspectRatio>1.0)?aspectRatio:(1.0 / aspectRatio),zBase/2.0, w * 4); // weird aspect ratio behaviour, temporary workaround
-	} else {
-		glOrtho(cb.cMin.x,cb.cMax.x,cb.cMin.y,cb.cMax.y,-1,1);
-	}
-
-}
-
 void RootDrawer::set3D(bool yesno) {
 	if ( yesno != threeD) {
 		threeD = yesno;
 		setEyePoint();
-	//	initLight();
 	}
 }
 bool RootDrawer::is3D() const {
