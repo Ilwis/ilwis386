@@ -54,8 +54,6 @@ void ScreenSwapper::bitmapBufferRedraw(MapCompositionDoc *mdoc){
 	CRect rct;
 	mdoc->mpvGetView()->GetClientRect(&rct);
 	saveScreenBuffer(rct);
-	mdoc->rootDrawer->setupDraw();
-	glLoadIdentity();
 	swapBufferToScreen(rct);
 	glDisable(GL_BLEND);
 }
