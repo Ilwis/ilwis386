@@ -167,10 +167,10 @@ bool RootDrawer::draw( const CoordBounds& cb) const{
 		if (is3D()) {
 			gluLookAt(eyePoint.x, eyePoint.y, eyePoint.z, viewPoint.x, viewPoint.y, viewPoint.z, 0, 1.0, 0 );
 			glTranslatef(translateX, translateY, translateZ);
-			glTranslatef(viewPoint.x,viewPoint.y, 0);
+			glTranslatef(viewPoint.x,viewPoint.y, viewPoint.z);
 			glRotatef(rotY,-1,0,0);				// Rotate on y
 			glRotatef(rotX,0,0,-1);				// Rotate on x
-			glTranslatef(-viewPoint.x,-viewPoint.y, 0);
+			glTranslatef(-viewPoint.x,-viewPoint.y, -viewPoint.z);
 		}
 
 		// Draw
