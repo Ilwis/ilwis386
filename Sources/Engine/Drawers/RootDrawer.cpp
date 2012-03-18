@@ -158,18 +158,19 @@ bool RootDrawer::draw( const CoordBounds& cb) const{
 		if ( threeD) {
 			double zNear = max(abs(eyePoint.x - viewPoint.x), abs(eyePoint.y - viewPoint.y)) / 2.0;
 			double zFar = max(cbZoom.width(), cbZoom.height()) * 4.0;
-			gluPerspective(40*zoom3D, windowAspectRatio, zNear, zFar);
+			gluPerspective(30.0, windowAspectRatio, zNear, zFar);
 		} else {
 			glOrtho(cbZoom.cMin.x,cbZoom.cMax.x,cbZoom.cMin.y,cbZoom.cMax.y,-1,1);
 		}
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		if (is3D()) {
+		if (threeD) {
 			gluLookAt(eyePoint.x, eyePoint.y, eyePoint.z, viewPoint.x, viewPoint.y, viewPoint.z, 0, 1.0, 0 );
 			glTranslatef(translateX, translateY, translateZ);
 			glTranslatef(viewPoint.x,viewPoint.y, viewPoint.z);
 			glRotatef(rotY,-1,0,0);				// Rotate on y
 			glRotatef(rotX,0,0,-1);				// Rotate on x
+			glScalef(1.0 / zoom3D, 1.0 / zoom3D, 1.0 / zoom3D);
 			glTranslatef(-viewPoint.x,-viewPoint.y, -viewPoint.z);
 		}
 
