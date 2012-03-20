@@ -69,6 +69,8 @@ private:
 	vector<String> currentChoices;
 	vector< vector<ParameterInfo> > parameterValues;
 	FormEntry *activeParameterField;
+	String xmlGetCapabilities, xmlDescribeProcess, xmlExecute;
+	String txtCapabilitiesRequest, txtDescribeRequest, txtExecuteRequest;
 
 	int fetchDescribeProcess(Event *ev);
 	int fetchGetCapabilities(Event *ev);
@@ -78,6 +80,12 @@ private:
 	int parmChange(Event *ev);
 	int execute(Event *ev) ;
 	int stringChange(Event *ev);
+	int showXMLFormCap(Event *ev);
+	int showXMLFormDesc(Event *ev);
+	int showXMLFormExe(Event *ev);
+	int showXMLFormCapR(Event *ev);
+	int showXMLFormExeR(Event *ev);
+	int showXMLFormDescR(Event *ev);
 	String getTypeIcon(const String& type);
 	void parseParameters(const ILWIS::XMLDocument& doc);
 	void parseSimpleParameter(const ILWIS::XMLDocument& doc, const pugi::xml_node& node, list<ExpressionToken>& tokens);
@@ -87,4 +95,10 @@ private:
 	int exec();
 	void initVars();
 
+};
+
+class XMLForm : public FormWithDest {
+public:
+	XMLForm(CWnd *par, const String& txt);
+	String text;
 };

@@ -138,9 +138,57 @@ WPSClient::WPSClient(const String& url) :
 	fg4->Align(fldStringParam, AL_UNDER);
 
 	fg3->Align(fg2,AL_AFTER);
+
+	FieldGroup *fg5 = new FieldGroup(root);
+	PushButton *pb1, *pb2, *pb3, *pb4, *pb5, *pb6;
+
+	pb1 = new PushButton(fg5,TR("XML Last Capabilities"),(NotifyProc)&WPSClient::showXMLFormCap);
+	pb2 =new PushButton(fg5,TR("XML Last Describe"),(NotifyProc)&WPSClient::showXMLFormDesc);
+	pb3 =new PushButton(fg5,TR("XML Last Execute"),(NotifyProc)&WPSClient::showXMLFormExe);
+	pb4 =new PushButton(fg5,TR("Last Capabilities Request"),(NotifyProc)&WPSClient::showXMLFormCapR);
+	pb5 =new PushButton(fg5,TR("Last Describe Request"),(NotifyProc)&WPSClient::showXMLFormDescR);
+	pb6 =new PushButton(fg5,TR("Last Execute request"),(NotifyProc)&WPSClient::showXMLFormExeR);
+	int w = 65;
+	pb1->SetWidth(w);
+	pb2->SetWidth(w);
+	pb3->SetWidth(w);
+	pb4->SetWidth(w);
+	pb5->SetWidth(w);
+	pb6->SetWidth(w);
+
+	fg5->Align(fg3, AL_AFTER,-100);
 	create();
 }
 
+int WPSClient::showXMLFormCap(Event *ev) {
+	new XMLForm(this, xmlGetCapabilities);
+	return 1;
+}
+
+int WPSClient::showXMLFormDesc(Event *ev) {
+	new XMLForm(this, xmlDescribeProcess);
+	return 1;
+}
+
+int WPSClient::showXMLFormExe(Event *ev) {
+	new XMLForm(this, xmlExecute);
+	return 1;
+}
+
+int WPSClient::showXMLFormCapR(Event *ev) {
+	new XMLForm(this, txtCapabilitiesRequest);
+	return 1;
+}
+
+int WPSClient::showXMLFormDescR(Event *ev) {
+	new XMLForm(this, txtDescribeRequest);
+	return 1;
+}
+
+int WPSClient::showXMLFormExeR(Event *ev) {
+	new XMLForm(this, txtExecuteRequest);
+	return 1;
+}
 int WPSClient::setParmListView(Event *ev) {
 	int res = fldVariants->iVal();
 	if ( res != -1) {
@@ -190,9 +238,10 @@ int WPSClient::execute(Event *ev) {
 	}
 	if ( outputName != "")
 		url += String("&ResponseDocument=%S&StoreExecuteResponse=true", outputName);
+	txtExecuteRequest = url;
 	RemoteObject xmlObj(url);
-	String response = xmlObj.toString();
-	ILWIS::XMLDocument doc(response);
+	xmlExecute = xmlObj.toString();
+	ILWIS::XMLDocument doc(xmlExecute);
 	vector<pugi::xml_node> results;
 	doc.executeXPathExpression("//wps:ProcessOutputs/wps:Output/wps:Reference[@xlink:href]", results);
 	if ( results.size() > 0) {
@@ -327,12 +376,14 @@ int WPSClient::fetchDescribeProcess(Event *ev) {
 		String icon = content[index].sTail(".");
 		operation = operation.sTrimSpaces(true);
 		String url = describeProcessURL + "Service=WPS&Request=DescribeProcess&Version=1.0.0&Identifier=" + operation;
+		txtDescribeRequest = url;
 		RemoteObject xmlObj(url);
 		MemoryStruct *mem = xmlObj.get();
 		String txt;
 		for(int i = 0; i < mem->size; ++i)
 			txt += mem->memory[i];
-		ILWIS::XMLDocument doc(txt);
+		xmlDescribeProcess = txt;
+		ILWIS::XMLDocument doc(xmlDescribeProcess);
 		vector<String> results;
 		doc.executeXPathExpression("//wps:ProcessDescriptions//wps:ProcessDescription/ows:Abstract/child::text()", results);
 		if ( results.size() > 0) {
@@ -542,11 +593,12 @@ String WPSClient::getTypeIcon(const String& type) {
 
 int WPSClient::fetchGetCapabilities(Event *ev) {
 	fldUrl->StoreData();
+	txtCapabilitiesRequest = urlString;
 	RemoteObject xmlObj(urlString);
 	MemoryStruct *mem = xmlObj.get();
-	String txt = xmlObj.toString();
+	xmlGetCapabilities = xmlObj.toString();
 
-	ILWIS::XMLDocument doc(txt);
+	ILWIS::XMLDocument doc(xmlGetCapabilities);
 	doc.executeXPathExpression("//wps:ProcessOfferings/wps:Process/ows:Identifier/child::text()", content);
 	for(int i=0; i < content.size(); ++i) {
 		if ( content[i].substr(0,3) == "Map")
@@ -580,4 +632,20 @@ int WPSClient::fetchGetCapabilities(Event *ev) {
 		executeProcessURL = p;
 	}
 	return 1;
+}
+//-----------------------
+XMLForm::XMLForm(CWnd *par, const String& txt)  : FormWithDest(par,"XML",true){
+	for(int i = 0; i < txt.size(); ++i) {
+		char c = txt[i];
+		if ( c != '\n')
+			text += c;
+		else
+			text += "\r\n";
+	}
+	FieldStringMulti *fs = new FieldStringMulti(root,&text,true);
+	fs->SetHeight(350);
+	fs->SetWidth(400);
+
+	create();
+
 }
