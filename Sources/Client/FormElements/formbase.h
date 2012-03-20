@@ -204,6 +204,7 @@ protected:
 	afx_msg void OnSetFocus( CWnd* pOldWnd );
 	afx_msg void OnSysCommand( UINT nID, LPARAM lParam );
 	virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
+	virtual void apply();
 	int iImg; // set in derived class to set icon
 private:
 	struct dlgt 

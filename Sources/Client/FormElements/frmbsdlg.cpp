@@ -47,11 +47,14 @@ Created on: 2007-02-8
 #include <afxpriv.h>
 #include "Client\ilwis.h"
 
+const UINT id_apply = 8503;
+
 BEGIN_MESSAGE_MAP(FormBaseDialog, CDialog)
 	ON_WM_DRAWITEM()
 	ON_WM_SYSCOMMAND()
 	ON_WM_MEASUREITEM()
 	ON_COMMAND(IDHELP, OnHelp)
+	ON_COMMAND(id_apply, apply)
 	ON_COMMAND(ID_HELP, OnHelp)
 	ON_MESSAGE(WM_COMMANDHELP, OnCommandHelp)
 END_MESSAGE_MAP()    
@@ -450,7 +453,8 @@ void FormBaseDialog::CreateDefaultPositions()
 		if (0 == (fbs & fbsNOCANCELBUTTON)) {
 			if (butCancel.GetSafeHwnd() == NULL){
 				String txt = fbs & fbsApplyButton ? TR("Apply") : TR("Cancel");
-				butCancel.Create(txt.sVal(), BS_PUSHBUTTON|WS_TABSTOP, CRect(pntButton, dimButton), this, IDCANCEL); 
+				UINT id = fbs & fbsApplyButton ? id_apply : IDCANCEL;
+				butCancel.Create(txt.sVal(), BS_PUSHBUTTON|WS_TABSTOP, CRect(pntButton, dimButton), this, id); 
 			}
 			butCancel.ShowWindow(SW_SHOW);
 			butCancel.SetFont(fnt);
@@ -584,4 +588,7 @@ LRESULT FormBaseDialog::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 		err->Delete();
 	}
 	return DefWindowProc(message, wParam, lParam);
+}
+
+void FormBaseDialog::apply() {
 }
