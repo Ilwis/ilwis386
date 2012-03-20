@@ -83,6 +83,7 @@ using namespace ILWIS;
 LayerTreeItem::LayerTreeItem(LayerTreeView* ltview) 
 {
 	ltv = ltview;
+	htiStart = 0;
 }
 
 LayerTreeItem::~LayerTreeItem()
@@ -127,14 +128,23 @@ DrawerLayerTreeItem::~DrawerLayerTreeItem()
 
 void DrawerLayerTreeItem::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
-	//HTREEITEM hItem = htiStart;
-	//HTREEITEM hStop= ltv->GetTreeCtrl().GetNextItem(hItem, TVGN_CHILD);
-
-	//while (hItem != NULL && hItem != hStop)
-	//{
-	//	ltv->GetTreeCtrl().Expand(hItem,TVE_EXPAND);
-	//	hItem= ltv->GetTreeCtrl().GetNextItem(hItem, TVGN_NEXTVISIBLE);
-	//}
+	HTREEITEM hItem = ltv->GetTreeCtrl().HitTest(point);
+	HTREEITEM hStop= ltv->GetTreeCtrl().GetNextItem(hItem, TVGN_NEXTVISIBLE);
+	CString txt = ltv->GetTreeCtrl().GetItemText(hStop);
+	ltv->GetTreeCtrl().Expand(hItem,TVE_TOGGLE);
+	vector<HTREEITEM> items;
+	while (hItem != NULL)
+	{
+		hItem = ltv->GetTreeCtrl().GetNextItem(hItem, TVGN_NEXTVISIBLE);
+		if ( hItem == hStop)
+			break;
+		CString txt = ltv->GetTreeCtrl().GetItemText(hItem);
+		if ( String(txt) == TR("Operations") )
+			continue;
+		items.push_back(hItem);
+	}
+	for(int i = 0; i < items.size(); ++i)
+		ltv->GetTreeCtrl().Expand(items[i], TVE_EXPAND);
 }
 
 void DrawerLayerTreeItem::SwitchCheckBox(bool fOn)
@@ -682,15 +692,15 @@ DisplayOptionTree::~DisplayOptionTree()
 
 void DisplayOptionTree::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
-	//HTREEITEM hItem = htiStart;
-	//HTREEITEM hStop= ltv->GetTreeCtrl().GetNextItem(hItem, TVGN_NEXTVISIBLE);
+	HTREEITEM hItem = htiStart;
+	HTREEITEM hStop= ltv->GetTreeCtrl().GetNextItem(hItem, TVGN_NEXTVISIBLE);
 	HTREEITEM hti = ltv->GetTreeCtrl().HitTest(point);
 	ltv->GetTreeCtrl().Expand(hti,TVE_TOGGLE);
-	/*while (hItem != NULL && hItem != hStop)
+	while (hItem != NULL && hItem != hStop)
 	{
 		ltv->GetTreeCtrl().Expand(hItem,TVE_EXPAND);
 		hItem= ltv->GetTreeCtrl().GetNextItem(hItem, TVGN_NEXTVISIBLE);
-	}*/
+	}
 }
 
 void DisplayOptionTree::addMenuItem(ILWIS::DrawerTool *parentTool, CMenu& men, vector<DrawerTool *>& tools) {
