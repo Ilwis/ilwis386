@@ -21,7 +21,7 @@ class _export DrawerTool : public MapPaneViewTool {
 public:
 	DrawerTool(const String& tp,  ZoomableView* zv, LayerTreeView *view, NewDrawer *drw);
 	virtual ~DrawerTool();
-	bool addTool(DrawerTool *tool, int proposedIndex=iUNDEF);
+	virtual bool addTool(DrawerTool *tool, int proposedIndex=iUNDEF);
 	virtual HTREEITEM configure( HTREEITEM parentItem);
 	void removeTool(DrawerTool *tool);
 	bool isVisible() const;
@@ -79,7 +79,7 @@ struct DrawerToolInfo {
 class _export DisplayOptionsForm : public FormBaseDialog {
 public:
 	DisplayOptionsForm(ComplexDrawer *dr,CWnd *par, const String& title, int style=fbsApplyButton | fbsBUTTONSUNDER | fbsOKHASCLOSETEXT | fbsSHOWALWAYS);
-	afx_msg virtual void OnCancel();
+	//afx_msg virtual void OnCancel();
 	int exec();
 	virtual void apply();
 protected:

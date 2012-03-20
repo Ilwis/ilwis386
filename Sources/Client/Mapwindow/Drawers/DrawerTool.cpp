@@ -244,10 +244,6 @@ initial(true)
 {
 }
 
-void DisplayOptionsForm::OnCancel() {
-	apply();
-}
-
 int DisplayOptionsForm::exec() {
 	return 1;
 }
