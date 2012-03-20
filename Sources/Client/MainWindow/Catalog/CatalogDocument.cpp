@@ -212,3 +212,6 @@ void CatalogDocument::RemoveObject(const FileName& fn)
   ASSERT(0==1);
 }
 
+BOOL CatalogDocument::OnOpenDocument(LPCTSTR lpszPathName) {
+	return IlwisDocument::OnOpenDocument(lpszPathName);
+}

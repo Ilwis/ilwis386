@@ -79,6 +79,7 @@ public:
   
 	void SetFilter(const String& sF);
 	void SetRegistryName(const String& sN);
+	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
 	String sRegName();
 
 protected:
