@@ -30,6 +30,10 @@ public:
 	static Color clrPrimary(int iNr);
 	void setDataColumn(const Column& c);
 	void setTransparentValues(const RangeReal& rr);
+	Color getTresholdColor() const;
+	void setTresholdColor(const Color&clr);
+	RangeReal getTresholdRange() const;
+	void setTresholdRange(const RangeReal& tr);
 	RangeReal getTransparentValues() const;
 	String store(const FileName& fnView, const String& parenSection) const;
 	void load(const FileName& fnView, const String& parenSection);
@@ -38,6 +42,7 @@ private:
 	void InitClrRandom();
 	RangeReal getStretchRangeReal() const;
 	inline void setTransparency(double v, Color& clr) const;
+	inline void setTresholdColors(double v, Color& clr) const;
 
 	LayerDrawer *drw;
 	SetDrawer *setDrawer;
@@ -51,5 +56,7 @@ private:
 	int index;
 	IlwisObject::iotIlwisObjectType type;
 	RangeReal transpValues;
+	RangeReal tresholdValues;
+	Color tresholdColor;
 };
 }

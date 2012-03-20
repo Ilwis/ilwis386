@@ -64,7 +64,8 @@ clr2(0,176,20), // True
 iMultColors(0),
 gamma(0),
 mcd(0),
-index(ind)
+index(ind),
+tresholdColor(Color(255,0,0))
 {
 	SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)drw->getParentDrawer();
 	setDrawer = dynamic_cast<SetDrawer *>(mapDrawer);
@@ -110,7 +111,9 @@ Color DrawingColor::clrVal(double rVal) const
 		cRet = (Color)rpr->clr(rVal,RangeReal(0,255));
 	else
 		cRet = (Color)rpr->clr(rVal);
+
 	setTransparency(rVal, cRet);
+	setTresholdColors(rVal, cRet);
 
 	return cRet; //.clrDraw(gamma);
 }
@@ -132,6 +135,7 @@ Color DrawingColor::clrRaw(long iRaw, NewDrawer::DrawMethod drm) const
 				cRet = Color(rpr->clrRaw(rVal));
 			}
 			setTransparency(rVal, cRet);
+			setTresholdColors(rVal, cRet);
 		}
 		break;
 	case NewDrawer::drmSINGLE:
@@ -171,6 +175,7 @@ Color DrawingColor::clrRaw(long iRaw, NewDrawer::DrawMethod drm) const
 		int iVal = (int)(floor(255 * float(iRaw - iMin) / iDiff));
 		cRet = Color(iRaw,iVal,iVal);
 		setTransparency(iRaw, cRet);
+		setTresholdColors(iRaw, cRet);
 	  } break;
 	case NewDrawer::drmCOLOR:
 		cRet = Color(iRaw);
@@ -204,6 +209,7 @@ void DrawingColor::clrVal(const double * buf, long * bufOut, long iLen) const
 					double v = buf[i];
 					Color clr = rpr->clr(v, rr);
 					setTransparency(v, clr);
+					setTresholdColors(v, clr);
 					bufOut[i] = clr.iVal();
 				}
 			} break;
@@ -215,6 +221,7 @@ void DrawingColor::clrVal(const double * buf, long * bufOut, long iLen) const
 				for (long i = 0; i < iLen; ++i) {
 					Color clr = rpr->clr(log(buf[i] - rr.rLo()));
 					setTransparency(buf[i], clr);
+					setTresholdColors(buf[i], clr);
 					bufOut[i] = clr.iVal();
 				}
 			} break;
@@ -226,6 +233,7 @@ void DrawingColor::clrVal(const double * buf, long * bufOut, long iLen) const
 			long v = buf[i];
 			Color clr = rpr->clr(buf[i], rr);
 			setTransparency(v, clr);
+			setTresholdColors(v, clr);
 			bufOut[i] = clr.iVal();
 		}
 	}
@@ -234,6 +242,7 @@ void DrawingColor::clrVal(const double * buf, long * bufOut, long iLen) const
 			double v = buf[i];
 			Color clr = rpr->clr(v);
 			setTransparency(v, clr);
+			setTresholdColors(v, clr);
 			bufOut[i] = clr.iVal();
 		}
 	}
@@ -246,6 +255,15 @@ inline void DrawingColor::setTransparency(double v, Color& clr) const{
 		}
 	}
 }
+
+inline void DrawingColor::setTresholdColors(double v, Color& clr) const{
+	if ( tresholdValues.fValid()) {
+		if ( tresholdValues.fContains(v)) {
+			clr = tresholdColor;
+		}
+	}
+}
+
 
 void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer::DrawMethod drm) const
 {
@@ -265,6 +283,7 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 							double v = dataValues.rValByRaw(buf[i]);
 							Color clr = rpr->clr(v, rr);
 							setTransparency(v, clr);
+							setTresholdColors(v, clr);
 							bufOut[i] = clr.iVal();
 						}
 												} break;
@@ -277,7 +296,8 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 							for (long i = 0; i < iLen; ++i){
 								double v = dataValues.rValByRaw(buf[i]);
 								Color clr = rpr->clr(log(dvrs.rValue(v) - rr.rLo()), rr);
-								setTransparency(v, clr); 
+								setTransparency(v, clr);
+								setTresholdColors(v, clr);
 								bufOut[i] = clr.iVal();
 							}
 						} break;
@@ -290,6 +310,7 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 						long v = dvrs.rValue(buf[i]);
 						Color clr = rpr->clr(v, rr);
 						setTransparency(v, clr);
+						setTresholdColors(v, clr);
 						bufOut[i] = clr.iVal();
 					}
 				}
@@ -299,6 +320,7 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 						double v = dataValues.rValByRaw(buf[i]);
 						Color clr = rpr->clr(v);
 						setTransparency(v, clr);
+						setTresholdColors(v, clr);
 						bufOut[i] = clr.iVal();
 					}
 				}
@@ -409,6 +431,22 @@ void DrawingColor::setTransparentValues(const RangeReal& rr){
 
 RangeReal DrawingColor::getTransparentValues() const{
 	return transpValues;
+}
+
+Color DrawingColor::getTresholdColor() const{
+	return tresholdColor;
+}
+
+void DrawingColor::setTresholdColor(const Color&clr){
+	tresholdColor = clr;
+}
+
+RangeReal DrawingColor::getTresholdRange() const{
+	return tresholdValues;
+}
+
+void DrawingColor::setTresholdRange(const RangeReal& rr){
+	tresholdValues = rr;
 }
 
 String DrawingColor::store(const FileName& fnView, const String& parentSection) const{
