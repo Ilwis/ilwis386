@@ -191,6 +191,11 @@ void StringArrayLister::Clear() {
 	lb->ResetContent();
 }
 
+void StringArrayLister::SetSel(int index, bool select) {
+	if (lb)
+		lb->SetCurSel(index);
+}
+
 int StringArrayLister::OnKeyUp( Event* ev) 
 {
 	int nKey = ev->wParm;

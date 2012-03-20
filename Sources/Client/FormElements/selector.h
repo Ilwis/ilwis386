@@ -75,6 +75,7 @@ public:
   void _export Clear();
   virtual String _export sName(int id);
    _export void AddStrings(const Array<String>& as);
+   _export void SetSel(int index, bool select=true);
 private:  
    int OnKeyUp( Event* ev);	
 	virtual void _export DrawItem(Event* ev);
