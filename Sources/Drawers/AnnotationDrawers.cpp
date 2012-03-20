@@ -612,29 +612,24 @@ vector<String> AnnotationValueLegendDrawer::makeRange(LayerDrawer *dr) const{
 
 	DomainValueRangeStruct dvs = mapDrawer->getBaseMap()->dvrs();
 
-	//SetDrawer *adrw = dynamic_cast<SetDrawer *>(drawer);
-	//if ( adrw) {
-	//	sdrw = (LayerDrawer *)adrw->getDrawer(0);
-	//}
-
 	if ( dr->useAttributeColumn() && dr->getAtttributeColumn().fValid()) {
 		dvs = dr->getAtttributeColumn()->dvrs();
 	}
 
 	RangeReal rr = dr->getStretchRangeReal(true);
-	RangeReal rmd = roundRange(rr.rLo(), rr.rHi());
-	double rVal = rRound(rmd.rWidth()/ noTicks);
-	double rStart = rmd.rLo();
-	if ( dvs.rValue(rStart) == rUNDEF)
-		rStart = rr.rLo();
-	double rHi = rmd.rHi();
-	if (dvs.rValue(rHi) == rUNDEF)
-		rHi = rr.rHi();
-	bool fImage = dvs.dm()->pdi() != 0;
+	double rStep = 1.0;
+	RangeReal rmd;
+	bool fImage = dvs.dm()->pdi();
+	if ( fImage) {
+		rmd = RangeReal(0,255);
+		rStep = 30;
+	} else
+		rmd = roundRange(rr.rLo(), rr.rHi(), rStep);
 
-	for (double v = rStart; v <= rHi; v += rVal) {
+
+	for (double v = rmd.rLo(); v <= rmd.rLo(); v += rStep) {
 		String sName = dvs.sValue(v);
-		if ( fImage && v + rVal > 255) {
+		if ( fImage && v + rStep > 255) {
 			sName = "255";
 		}
 		values.push_back(sName);
