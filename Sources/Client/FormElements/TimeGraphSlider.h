@@ -4,6 +4,7 @@ class TimeGraphSlider;
 
 #define ID_TIME_TICK WM_USER+345
 #define ID_NOTIFY_ME WM_USER+346
+#define ID_CLEAN_FORM WM_USER+347
 
 class TimeGraph : public CStatic, public BaseZapp {
 public:

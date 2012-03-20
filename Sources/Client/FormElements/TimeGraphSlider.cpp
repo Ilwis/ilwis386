@@ -71,7 +71,7 @@ void TimeGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 
 	CRect rct = CRect(crct.left, crct.top,crct.right, crct.bottom-20 );
 	Color bkColor = GetBkColor(lpDIS->hDC);
-	CBrush bbrushBk(RGB(0, 50, 100));
+	CBrush bbrushBk(GetSysColor(COLOR_3DFACE));
 	SelectObject(lpDIS->hDC, bbrushBk);
 	::Rectangle(lpDIS->hDC, rct.left,rct.top, rct.right, rct.bottom);
 	SelectObject(lpDIS->hDC, oldBrush);
@@ -114,8 +114,8 @@ void TimeGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	}
 	CSize szTxt = dc->GetTextExtent(s.c_str());
 	::TextOut(lpDIS->hDC,crct.right - szTxt.cx, crct.bottom - 16, s.c_str(),s.size());
-	pts[fldGraph->recordRange.iWidth() + 1] = CPoint(rct.Width(), rct.Height());
-	pts[fldGraph->recordRange.iWidth() + 2] = CPoint(0, rct.Height());
+	//pts[fldGraph->recordRange.iWidth() + 1] = CPoint(rct.Width(), rct.Height());
+	//pts[fldGraph->recordRange.iWidth() + 2] = CPoint(0, rct.Height());
 
 
 
@@ -123,9 +123,9 @@ void TimeGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	SelectObject(lpDIS->hDC, bpen);
 
 	// and a solid red brush
-	CBrush brush(RGB(50, 150, 50));
+	CBrush brush(RGB(0, 0, 0));
 	oldBrush = SelectObject(lpDIS->hDC, brush);
-	::Polygon(lpDIS->hDC,pts,fldGraph->recordRange.iWidth() + 3);
+	::Polyline(lpDIS->hDC,pts,fldGraph->recordRange.iWidth());
 	if ( threshold != rUNDEF) {
 		int y = y0 - ( threshold - rr.rLo()) * yscale;
 		CPen redPen(PS_SOLID,2, RGB(0,0,255));
@@ -242,7 +242,10 @@ void TimeGraphSlider::create()
 
 void TimeGraphSlider::setSourceTable(const Table& tbl) {
 	sourceTable = tbl;
-	recordRange = RangeInt(1,tbl->iRecs());
+	if ( tbl.fValid())
+		recordRange = RangeInt(1,tbl->iRecs());
+	else
+		recordRange = RangeInt();
 	if ( timegraph)
 		timegraph->Invalidate();
 }
