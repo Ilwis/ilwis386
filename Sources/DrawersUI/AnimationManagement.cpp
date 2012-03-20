@@ -1,4 +1,5 @@
 #include "Client\Headers\formelementspch.h"
+#include "Client\FormElements\fldcolor.h"
 #include "Headers\messages.h"
 #include "Client\FormElements\selector.h"
 #include "Client\FormElements\fldonesl.h"
@@ -24,11 +25,13 @@
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "client\mapwindow\drawers\DrawerTool.h"
 #include "Engine\Drawers\SpatialDataDrawer.h"
+#include "Drawers\LayerDrawer.h"
 #include "Client\Base\Framewin.h"
 #include "Client\Mapwindow\MapWindow.h"
 #include "Drawers\SetDrawer.h"
 #include "Drawers\GLToMovie.h"
 #include "Drawers\AnimationDrawer.h"
+#include "Drawers\DrawingColor.h" 
 #include "AnimationManagement.h"
 
 
@@ -113,8 +116,12 @@ void AnimationPropertySheet::removeAnimation(AnimationDrawer * drw) {
 				activeIndex--;
 			if ( i == activeIndex)
 				activeIndex = -1;
+			FormBasePropertyPage *page = (FormBasePropertyPage *)GetPage(2);
+			page->DataChanged((Event *)3);
 			animations[i].drawer->manager = 0;
 			animations.erase(animations.begin() + i);
+			page = (FormBasePropertyPage *)GetPage(0);
+			page->DataChanged((Event *)3);
 		}
 	}
 	PostMessage(ILWM_UPDATE_ANIM,pAll);
@@ -288,7 +295,7 @@ int AnimationRun::speed(Event *ev) {
 
 int AnimationRun::DataChanged(Event* ev) {
 	int code = (int)ev;
-	if ( GetSafeHwnd() && code == 1) {
+	if ( GetSafeHwnd() && ( code == 1 || code == 3)) {
 		AnimationProperties *props =0;
 		int index = 0;
 		animIndex = propsheet.getActiveIndex();
@@ -298,6 +305,10 @@ int AnimationRun::DataChanged(Event* ev) {
 		}
 		if ( animIndex >= 0)
 			foAnimations->ose->SetCurSel(animIndex);
+		else {
+			foAnimations->ose->SetCurSel(0);
+			animIndex = 0;
+		}
 	}
 	return 1;
 }
@@ -309,6 +320,8 @@ int AnimationRun::frameMinus(Event *ev) {
 		return 0;
 	int index = props->drawer->getMapIndex();
 	--index;
+	if ( index < 0)
+		index = props->drawer->getActiveMaps().size() - 1;
 	props->drawer->setMapIndex(index);
 	props->mdoc->mpvGetView()->Invalidate();
 	return 1;
@@ -321,6 +334,8 @@ int AnimationRun::framePlus(Event *ev) {
 		return 0;
 	int index = props->drawer->getMapIndex();
 	++index;
+	if ( index == props->drawer->getActiveMaps().size())
+		index = 0;
 	props->drawer->setMapIndex(index);
 	props->mdoc->mpvGetView()->Invalidate();
 	return 1;
@@ -453,7 +468,11 @@ void AnimationSynchronization::setTimerPerTime(FormEntry *anchor) {
 BOOL AnimationSynchronization::OnInitDialog()
 {
 	BOOL v = FormBasePropertyPage::OnInitDialog();
-	bool useMasterTime = propsheet.getActiveAnimation()->drawer->getUseTime();
+	AnimationProperties *prop = propsheet.getActiveAnimation();
+	if (!prop)
+		return v;
+
+	bool useMasterTime = prop->drawer->getUseTime();
 	if ( useMasterTime) {
 		fgSlaveTime->Show();
 		fgSlaveIndex->Hide();
@@ -523,9 +542,10 @@ int AnimationSynchronization::synchronize(Event*) {
 //---------------------------------------------------
 BEGIN_MESSAGE_MAP(AnimationProgress, FormBasePropertyPage)
 	ON_MESSAGE(ID_TIME_TICK, OnTimeTick)
+	ON_MESSAGE(ID_CLEAN_FORM, OnCleanForm)
 END_MESSAGE_MAP()
 
-AnimationProgress::AnimationProgress(AnimationPropertySheet& sheet) : FormBasePropertyPage(TR("Progress Control").c_str()), propsheet(sheet)
+AnimationProgress::AnimationProgress(AnimationPropertySheet& sheet) : FormBasePropertyPage(TR("Progress Control").c_str()), propsheet(sheet), form(0)
 {
 	fgMaster = new FieldGroup(root, true);
 
@@ -554,11 +574,16 @@ AnimationProgress::AnimationProgress(AnimationPropertySheet& sheet) : FormBasePr
 int AnimationProgress::graphProperties(Event *ev){
 	fcol->StoreData();
 	AnimationProperties *props = propsheet.getActiveAnimation();
-	if ( props)
-		new GraphPropertyForm(this,graphSlider, tbl->col(colName),props);
+	if ( props && tbl.fValid())
+		form = new GraphPropertyForm(this,graphSlider, tbl->col(colName),props);
 	return 1;
 }
 
+LRESULT AnimationProgress::OnCleanForm( WPARAM wParam, LPARAM lParam ) {
+	form = 0;
+
+	return 11;
+}
 LRESULT AnimationProgress::OnTimeTick( WPARAM wParam, LPARAM lParam ) {
 	AnimationProperties *props = propsheet.getActiveAnimation();
 	if ( !props)
@@ -571,6 +596,14 @@ LRESULT AnimationProgress::OnTimeTick( WPARAM wParam, LPARAM lParam ) {
 
 int AnimationProgress::DataChanged(Event*ev) {
 	int code = (int)ev;
+	if ( code == 3) {
+		fcol->FillWithColumns((TablePtr *)0);
+		tbl = Table();
+		if ( form)
+			form->PostMessage(WM_CLOSE);
+		form = 0;
+		graphSlider->setSourceTable(tbl);
+	}
 	if ( GetSafeHwnd() || code == 1) {
 		AnimationProperties *props = propsheet.getActiveAnimation();
 		if ( !props)
@@ -638,24 +671,36 @@ int AnimationProgress::changeColumn(Event *) {
 
 }
 //---------------------------------------------
+BEGIN_MESSAGE_MAP(GraphPropertyForm, DisplayOptionsForm)
+	ON_WM_CLOSE()
+END_MESSAGE_MAP()
+
 GraphPropertyForm::GraphPropertyForm(CWnd *wPar,TimeGraphSlider *slider, const Column& _col, AnimationProperties *_props) : 
-DisplayOptionsForm(_props->drawer, wPar, TR("Thresholds")), col(_col), graph(slider), gtThreshold(0), ltThreshold(0), type(0), props(_props),mad1(rUNDEF), mad2(rUNDEF) {
+DisplayOptionsForm(_props->drawer, wPar, TR("Thresholds")), col(_col), graph(slider), gtThreshold(0), ltThreshold(0), type(0), props(_props) {
 	calcMad(col);
+	view = props->mdoc->ltvGetView();
+	color = ((LayerDrawer *)props->drawer->getDrawer(0))->getDrawingColor()->getTresholdColor();
 	RadioGroup *rg = new RadioGroup(root, TR("Threshold type"),&type);
 	RadioButton *rb = new RadioButton(rg,TR("Above threshold"));
-	FieldReal * frr = new FieldReal(rb, "",&gtThreshold);
+	frr = new FieldReal(rb, "",&gtThreshold);
 	frr->Align(rb, AL_AFTER);
 	rb = new RadioButton(rg,TR("Below threshold"));
 	frr = new FieldReal(rb, "",&ltThreshold);
 	frr->Align(rb, AL_AFTER);
-	if ( mad1 != rUNDEF) {
-		rb = new RadioButton(rg,String(TR("above MAD : %f").c_str(), mad2));
-		rb = new RadioButton(rg,String(TR("below MAD : %f").c_str(), mad1));
-	}
+	fc = new FieldColor(root,TR("Treshold color"),&color);
+	fc->SetCallBack((NotifyProc)&GraphPropertyForm::changeColor);
 	slider->setLinkedWindow(props->animBar);
 
 	create();
 
+}
+
+int GraphPropertyForm::changeColor(Event *ev) {
+	fc->StoreData();
+	oldRange = RangeReal();
+	apply();
+
+	return 1;
 }
 
 void GraphPropertyForm::calcMad(const Column& col) {
@@ -673,25 +718,16 @@ void GraphPropertyForm::calcMad(const Column& col) {
 			return;
 
 		double average =  sum / vals.size();
-		set<double>::iterator iter = vals.begin();
-		advance(iter,vals.size() / 2);
-		double median = *iter;
 		set<double> vals2;
 		double stdv2 = 0;
 		for(set<double>::iterator cur = vals.begin(); cur != vals.end(); ++cur) {
 			double v = *cur;
-			vals2.insert(abs(v - median));
 			stdv2 += ( v - average) * ( v - average);
 
 		}
 		double stdev = sqrt( stdv2 / vals.size());
-		iter = vals2.begin();
-		advance(iter, vals2.size() / 2);
-		double med = *iter;
-		mad1 = median - med;
-		mad2 = median + med;
-		gtThreshold = average + stdev;
-		ltThreshold = average - stdev;
+		gtThreshold = average;
+		ltThreshold = average ;
 
 	}
 }
@@ -705,10 +741,32 @@ void GraphPropertyForm::apply() {
 		graph->setThreshold(gtThreshold);
 	if ( type == 1)
 		graph->setThreshold(ltThreshold);
-	if ( type == 2)
-		graph->setThreshold(mad2);
-	if ( type == 3)
-		graph->setThreshold(mad1, false);
+	if ( props ) {
+		RangeReal rr;
+		if ( type == 0) {
+			rr = RangeReal(gtThreshold, 1e307);
+		} else {
+			rr = RangeReal(-1e307,ltThreshold); 
+		}
+	//	if ( rr != oldRange) {
+			for(int i=0; i < props->drawer->getDrawerCount(); ++i) {
+				LayerDrawer *ldr = (LayerDrawer *)props->drawer->getDrawer(i);
+				ldr->getDrawingColor()->setTresholdColor(color);
+				ldr->getDrawingColor()->setTresholdRange(rr);
+			}
+			PreparationParameters pp(NewDrawer::ptRENDER, 0);
+			props->drawer->prepareChildDrawers(&pp);
+		//	oldRange = rr;
+			updateMapView();
+	//	}
+	}
+}
+
+void GraphPropertyForm::OnClose() {
+	GetParent()->PostMessage(ID_CLEAN_FORM);
+
+	shutdown();
+
 }
 
 //---------------------------------------------

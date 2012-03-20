@@ -4,6 +4,7 @@ class MapCompositionDoc;
 class FieldOneSelect;
 class FieldRealSliderEx;
 class TimeGraphSlider;
+class FieldColor;
 
 #define ID_AnimationBar 67305
 
@@ -126,6 +127,7 @@ namespace ILWIS {
 		void setTimerPerIndex(FormEntry *anchor);
 		void setTimerPerTime(FormEntry *anchor);
 	};
+	class GraphPropertyForm;
 
 	class AnimationProgress : public FormBasePropertyPage {
 		public:
@@ -135,12 +137,14 @@ namespace ILWIS {
 			int DataChanged(Event*ev);
 			int changeColumn(Event *ev);
 			LRESULT OnTimeTick( WPARAM wParam, LPARAM lParam );
+			LRESULT OnCleanForm( WPARAM wParam, LPARAM lParam );
 			AnimationPropertySheet	&propsheet;
 			TimeGraphSlider *graphSlider;
 			FieldGroup *fgMaster;
 			FieldColumn *fcol;
 			StaticText *stMaster;
 			int graphProperties(Event *ev);
+			GraphPropertyForm *form;
 
 			String colName;
 			Table tbl;
@@ -180,6 +184,7 @@ namespace ILWIS {
 		GraphPropertyForm(CWnd *wPar,TimeGraphSlider *slider, const Column& col, AnimationProperties *adr);
 	private:
 		void apply();
+		void OnClose();
 		FormEntry *CheckData();
 		void calcMad(const Column& col);
 
@@ -189,8 +194,12 @@ namespace ILWIS {
 		AnimationProperties *props;
 		int type;
 		double gtThreshold, ltThreshold;
-		double mad1;
-		double mad2;
+		Color color;
+		RangeReal oldRange;
+		int changeColor(Event *ev);
+		FieldColor *fc;
+
+				DECLARE_MESSAGE_MAP();
 
 	};
 }
