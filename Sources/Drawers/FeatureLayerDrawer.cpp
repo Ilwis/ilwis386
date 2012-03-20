@@ -25,7 +25,7 @@ FeatureLayerDrawer::FeatureLayerDrawer(DrawerParameters *parms, const String& na
 	useMask(false)
 {
 	setDrawMethod(drmNOTSET); // default
-	setInfo(false);
+	setInfo(true);
 }
 
 FeatureLayerDrawer::~FeatureLayerDrawer() {
