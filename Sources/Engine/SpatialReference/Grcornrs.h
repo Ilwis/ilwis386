@@ -67,6 +67,7 @@ public:
   virtual void _export Store();
   virtual void _export Rotate(bool fSwapRows, bool fSwapCols, bool fRotate);
   virtual bool _export fNorthOriented() const;
+  bool _export isEqual(const GeoRef& grf) const ;
 protected:
   GeoRefCorners(const FileName&);
 //  virtual void Enlarge(double rEnlFac);

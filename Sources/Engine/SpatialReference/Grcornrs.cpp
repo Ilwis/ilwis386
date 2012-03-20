@@ -147,6 +147,12 @@ bool GeoRefCorners::fNorthOriented() const
   return true;
 }
 
+bool GeoRefCorners::isEqual(const GeoRef& grf) const {
+
+	return cb() == grf->cb() && rcSize() == grf->rcSize();
+
+}
+
 
 
 
