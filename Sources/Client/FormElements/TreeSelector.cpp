@@ -224,13 +224,16 @@ void TreeSelector::SelectNode(const String& path,HTREEITEM hti){
 	while(it != NULL)
 	{
 		String s = String(tree->GetItemText(it));
-		if ( sCurTxt == s )
+		if ( sCurTxt == s && sCurTxt.size() == path.size())
 		{
 			tree->SelectItem(it);
 			return;
+		} if ( sCurTxt == s) {
+			SelectNode(path.sTail("#"), it);
+			break;
 		}
-		SelectNode(path.sTail("#"), it);
-		it = tree->GetNextItem(it, TVGN_NEXT);
+		else
+			it = tree->GetNextItem(it, TVGN_NEXT);
 	}
 
 }
