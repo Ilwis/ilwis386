@@ -14,6 +14,7 @@ OpenGLText::OpenGLText(ILWIS::RootDrawer *_rd,const String& _name, int height, b
 , font(0)
 , rootdrawer(_rd)
 , name(_name)
+, tempFont(0)
 {
 	createFont();
 	calcScale();
