@@ -292,15 +292,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\DrawersUI\GlobalAnnotationTool.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\Sources\DrawersUI\GeometryTool.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\Sources\DrawersUI\GeoreferenceTool.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\GlobalAnnotationTool.cpp"
 				>
 			</File>
 			<File
@@ -529,15 +529,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\DrawersUI\GlobalAnnotationTool.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\Sources\DrawersUI\GeometryTool.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\Sources\DrawersUI\GeoreferenceTool.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\GlobalAnnotationTool.h"
 				>
 			</File>
 			<File
