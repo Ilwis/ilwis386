@@ -488,7 +488,7 @@ String ComplexDrawer::store(const FileName& fnView, const String& parentSection)
 	count = 0;
 	for(DrawerIter_C cur = postDrawers.begin(); cur != postDrawers.end(); ++cur) {
 		String order = String("%03d", (*cur).first.sHead("|").iVal());
-		String currentSection("%S%03d",parentSection,order);
+		String currentSection("%S%S",parentSection,order);
 		NewDrawer *drw = (*cur).second;
 		if ( !drw->isSimple() ) {
 			String section = drw->store(fnView, currentSection);
@@ -535,10 +535,10 @@ void ComplexDrawer::load(const FileName& fnView, const String& parentSection){
 
 	ObjectInfo::ReadElement(parentSection.c_str(),"PostDrawerCount",fnView, count);
 	for(int i = 0; i < count ; ++i) {
-		ObjectInfo::ReadElement(drawerSection.c_str(),"Order",fnView, order);
-		String section("PostDrawer%03d",order);
+		String section("PostDrawer%03d",i);
 		ObjectInfo::ReadElement(parentSection.c_str(),section.c_str(),fnView, drawerSection);
-		addPostDrawer(order,loadDrawer(fnView, section));
+		ObjectInfo::ReadElement(drawerSection.c_str(),"Order",fnView, order);
+		addPostDrawer(order,loadDrawer(fnView, drawerSection));
 	}
 
 	zmaker->load(fnView, parentSection);
