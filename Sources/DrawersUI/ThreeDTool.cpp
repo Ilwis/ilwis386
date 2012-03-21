@@ -150,16 +150,12 @@ int DisplayZDataSourceForm::initForm(Event *ev) {
 void DisplayZDataSourceForm::apply() {
 	rg->StoreData();
 
-	ILWIS::LayerDrawer *layerDrawer = dynamic_cast<ILWIS::LayerDrawer *>(drw);
-	
-	layerDrawer->getZMaker()->setSourceType((ZValueMaker::SourceType)sourceIndex);
-
-
 	SetDrawer *setDrawer = dynamic_cast<SetDrawer *>(drw);
 	if ( setDrawer) {
 		setDrawer->getZMaker()->setRange(setDrawer->getStretchRangeReal());
 		for(int i = 0 ; i < setDrawer->getDrawerCount(); ++i) {
 			RasterLayerDrawer *layerDrawer = (RasterLayerDrawer *)setDrawer->getDrawer(i);
+			layerDrawer->getZMaker()->setSourceType((ZValueMaker::SourceType)sourceIndex);
 			MapList mpl;
 			if ( sourceIndex == 1) {
 				mpl = *((MapList *)(setDrawer->getDataSource())); 
@@ -173,15 +169,17 @@ void DisplayZDataSourceForm::apply() {
 			updateDrawer(layerDrawer, mp);
 		}
 	} else {
-		updateDrawer( layerDrawer, BaseMap(mapName));
+		updateDrawer( dynamic_cast<ILWIS::LayerDrawer *>(drw), BaseMap(mapName));
 	}
 
 	updateMapView();
 }
 
 void DisplayZDataSourceForm::updateDrawer(LayerDrawer *layerDrawer, const BaseMap& basemap) {
+	layerDrawer->getZMaker()->setSourceType((ZValueMaker::SourceType)sourceIndex);
 	if ( mapName != "" && sourceIndex < 4) {
 		layerDrawer->getZMaker()->setDataSourceMap(basemap);
+		layerDrawer->getZMaker()->setSourceType((ZValueMaker::SourceType)sourceIndex);
 		PreparationParameters pp(NewDrawer::pt3D | NewDrawer::ptGEOMETRY);
 		layerDrawer->prepare(&pp);
 	} else if ( colName != "" && sourceIndex == 4) {
