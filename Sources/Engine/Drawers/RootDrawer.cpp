@@ -35,6 +35,7 @@ RootDrawer::RootDrawer()
 	zoom3D = 1.0;
 	rootDrawer = this;
 	initRestore = false;
+	info = true;
 
 }
 
