@@ -25,7 +25,7 @@ namespace ILWIS {
 	class LegendPosition : public DisplayOptionsForm2 {
 		public:
 		LegendPosition(CWnd *wPar, AnnotationLegendDrawer *dr);
-		void apply(); 
+		//void apply(); 
 	private:
 		int setPosition(Event *ev) ;
 		int setOrientation(Event *ev);
