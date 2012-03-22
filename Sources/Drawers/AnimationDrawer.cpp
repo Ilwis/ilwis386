@@ -82,11 +82,13 @@ void AnimationDrawer::addDataSource(void *data, int options){
 			 sourceType = sotFEATURE;
 		}
 		else if ( sourceType == sotFEATURE) {
+			activeMaps.clear();
 			for(int i = 0; i < oc->iNrObjects(); ++i) {
 				activeMaps.push_back(i);
 			}
 		}
 		if ( sourceType == sotMAPLIST) {
+			activeMaps.clear();
 			for(int i = 0; i < mpl->iSize(); ++i) {
 				activeMaps.push_back(i);
 			}
@@ -140,25 +142,12 @@ void AnimationDrawer::timedEvent(UINT _timerid) {
 }
 
 bool AnimationDrawer::timerPerIndex() {
-	if ( sourceType == sotFEATURE){
-		if ( oc->iNrObjects() > 0 && mapIndex < activeMaps.size() - 1) {
-			getDrawer(activeMaps[mapIndex])->setActive(false);
-			getDrawer(activeMaps[++mapIndex])->setActive(true);
-		} else {
-			if (loop) {
-				getDrawer(activeMaps[mapIndex])->setActive(false);
-				mapIndex = 0;
-				getDrawer(activeMaps[0])->setActive(true);
-			}
-		}
-	}
-	if ( sourceType == sotMAPLIST) {
-		int nmaps = activeMaps.size();
-		getDrawer(activeMaps[(mapIndex) % nmaps])->setActive(false);
-		getDrawer(activeMaps[(mapIndex + 1) % nmaps])->setActive(true);
-		mapIndex = (mapIndex+1)  % nmaps;
-	
-	}
+	int nmaps = getDrawerCount();
+	int cindex = min(nmaps - 1, mapIndex % nmaps); // some safeguards for corrupt data.
+	int nindex = min(nmaps - 1,(mapIndex + 1) % nmaps);
+	getDrawer(activeMaps[cindex])->setActive(false);
+	getDrawer(activeMaps[nindex])->setActive(true);
+	mapIndex = nindex;
 	for(int i=0; i < slaves.size(); ++i) {
 		SlaveProperties& props = slaves.at(i);
 		if ( props.threshold > 1.0){
