@@ -57,20 +57,17 @@ typedef void (CCmdTarget::*NotifyMoveProc)(CPoint);
 class PanTool: public MapPaneViewTool 
 {
 public:
-	_export PanTool(ZoomableView*, CCmdTarget*, NotifyMoveProc, CRect);           
+	_export PanTool(ZoomableView*, CCmdTarget*, NotifyMoveProc);           
 	virtual ~PanTool();
 
 	void OnMouseMove(UINT nFlags, CPoint point);
 	void OnLButtonDown(UINT nFlags, CPoint point);
 	void OnLButtonUp(UINT nFlags, CPoint point);
 protected:
-	void DrawMove();
 	CCmdTarget* cmt;
 	NotifyMoveProc np;
-	CRect rect, rectBG;
-	CPoint pStart, pMove;
+	CPoint pStart;
 	bool fDown;
-	CDC dcMove;
 };
 
 #endif // !defined(AFX_PANTOOL_H__326CB0A4_1044_11D4_B897_00A0C9D5342F__INCLUDED_)

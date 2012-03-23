@@ -54,83 +54,30 @@ static char THIS_FILE[]=__FILE__;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-PanTool::PanTool(ZoomableView* zv, CCmdTarget* target, NotifyMoveProc proc, CRect rct)
+PanTool::PanTool(ZoomableView* zv, CCmdTarget* target, NotifyMoveProc proc)
 	: MapPaneViewTool(zv)
 	, cmt(target)
 	, np(proc)
-	, rect(rct)
 	, fDown(false)
 {
 	SetCursor(zCursor("HandCursor"));
-
-	CRect rectView;
-	zv->GetClientRect(&rectView);
-	if (rect.top < rectView.top) 
-		rect.top = rectView.top;
-	if (rect.bottom > rectView.bottom) 
-		rect.bottom = rectView.bottom;
-	if (rect.left < rectView.left)
-		rect.left = rectView.left;
-	if (rect.right > rectView.right)
-		rect.right = rectView.right;
-
-	int iWidth = rect.Width();
-	int iHeight = rect.Height();
-	CClientDC cdc(zv);
-	CBitmap bm;
-	bm.CreateCompatibleBitmap(&cdc,iWidth,iHeight);
-	dcMove.CreateCompatibleDC(&cdc);
-	dcMove.SelectObject(&bm);
-	dcMove.BitBlt(0,0,iWidth,iHeight,&cdc,rect.left,rect.top,SRCCOPY);
-
-	bm.Detach();
-	rectBG = rect;
 }
 
 PanTool::~PanTool()
 {
 }
 
-void PanTool::DrawMove()
-{
-	CClientDC cdc(mpv);
-	CRgn rgn;
-	rgn.CreateRectRgnIndirect(&rect);
-	cdc.SelectClipRgn(&rgn);
-	CGdiObject* penOld = cdc.SelectStockObject(WHITE_PEN);
-	CGdiObject* brOld = cdc.SelectStockObject(WHITE_BRUSH);
-	cdc.Rectangle(&rect);
-	rectBG = rect;
-	rectBG += pMove;
-//	dcBG.BitBlt(0,0,rectBG.Width(),rectBG.Height(),&cdc,rectBG.left,rectBG.top,SRCCOPY);
-	cdc.BitBlt(rectBG.left,rectBG.top,rectBG.Width(),rectBG.Height(),&dcMove,0,0,SRCCOPY);
-	cdc.SelectObject(penOld);
-	cdc.SelectObject(brOld);
-	cdc.SelectClipRgn(0);
-}
-
 void PanTool::OnMouseMove(UINT nFlags, CPoint point)
 {
 	if (fDown) {
-		pMove = point;
-		pMove -= pStart;
-		DrawMove();
+		(cmt->*np)(point - pStart);
+		pStart = point;
 	}
 }
 
 void PanTool::OnLButtonDown(UINT nFlags, CPoint point)
 {
-	if (!rect.PtInRect(point)) {
-		MessageBeep(-1);
-		Stop();
-		return;
-	}
 	pStart = point;
-	pMove = CPoint(0,0);
-	rectBG = rect;
-	CClientDC cdc(mpv);
-
-	dcMove.BitBlt(0,0,rectBG.Width(),rectBG.Height(),&cdc,rectBG.left,rectBG.top,SRCCOPY);
 	fDown = true;	
 	mpv->SetCapture();
 }
@@ -138,9 +85,8 @@ void PanTool::OnLButtonDown(UINT nFlags, CPoint point)
 void PanTool::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	if (fDown) {
-		OnMouseMove(nFlags, point);
+		(cmt->*np)(point - pStart);
 		fDown = false;
-		(cmt->*np)(pMove);
 		ReleaseCapture();
 	}
 }
