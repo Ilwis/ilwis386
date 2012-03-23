@@ -409,9 +409,74 @@ void ZoomableView::AreaSelected(CRect rect)
 {
 	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(GetDocument());
 	if ( mcd) {
-		mcd->rootDrawer->setZoom(rect);
+		CoordBounds cbZoom = mcd->rootDrawer->getCoordBoundsZoom();
+		CRect rectWindow;
+		GetClientRect(&rectWindow);
+		Coord c1,c2;
+		if ( rect.Width() == 0 || rect.Height() == 0) { // case of clicking on the map in zoom mode
+			double posx = cbZoom.cMin.x + cbZoom.width() * rect.left / (double)rectWindow.Width(); // determine click point
+			double posy = cbZoom.cMax.y - cbZoom.height() * rect.top / (double)rectWindow.Height();
+			CoordBounds cb = cbZoom; // == cbView ? cbMap : cbZoom;
+			double w = cb.width() / (2.0 * 1.41); // determine new window size
+			double h = cb.height() / (2.0 * 1.41);
+			c1.x = posx - w; // determine new bounds
+			c1.y = posy - h;
+			c2.x = posx + w;
+			c2.y = posy + h;
+		} else {
+			c1.x = cbZoom.cMin.x + cbZoom.width() * rect.left / (double)rectWindow.Width(); // determine zoom rectangle in GL coordinates
+			c1.y = cbZoom.cMax.y - cbZoom.height() * rect.top / (double)rectWindow.Height();
+			c2.x = cbZoom.cMin.x + cbZoom.width() * rect.right / (double)rectWindow.Width();
+			c2.y = cbZoom.cMax.y - cbZoom.height() * rect.bottom / (double)rectWindow.Height();
+		}
+		c1.z = c2.z = 0;
+
+		cbZoom = CoordBounds (c1,c2);
+		CoordBounds cbMap = mcd->rootDrawer->getMapCoordBounds();
+		RecenterZoomHorz(cbZoom, cbMap);
+		RecenterZoomVert(cbZoom, cbMap);
+		mcd->rootDrawer->setCoordBoundsZoom(cbZoom);
+
 		setScrollBars();
 		OnDraw(0);
+	}
+}
+
+void ZoomableView::RecenterZoomHorz(CoordBounds & cbZoom, const CoordBounds & cbMap)
+{
+	double zwidth = cbZoom.width();
+	if (zwidth > cbMap.width()) {
+		double delta = (zwidth - cbMap.width()) / 2.0;
+		cbZoom.cMin.x = cbMap.cMin.x - delta;
+		cbZoom.cMax.x = cbMap.cMax.x + delta;
+	} else {
+		if ( cbZoom.cMax.x > cbMap.cMax.x) {
+			cbZoom.cMax.x = cbMap.cMax.x;
+			cbZoom.cMin.x = cbZoom.cMax.x - zwidth;
+		}
+		if ( cbZoom.cMin.x < cbMap.cMin.x) {
+			cbZoom.cMin.x = cbMap.cMin.x;
+			cbZoom.cMax.x = cbZoom.cMin.x + zwidth;
+		}
+	}
+}
+
+void ZoomableView::RecenterZoomVert(CoordBounds & cbZoom, const CoordBounds & cbMap)
+{
+	double zheight = cbZoom.height();
+	if (zheight > cbMap.height()) {
+		double delta = (zheight - cbMap.height()) / 2.0;
+		cbZoom.cMin.y = cbMap.cMin.y - delta;
+		cbZoom.cMax.y = cbMap.cMax.y + delta;
+	} else {
+		if ( cbZoom.cMax.y > cbMap.cMax.y) {
+			cbZoom.cMax.y = cbMap.cMax.y;
+			cbZoom.cMin.y = cbZoom.cMax.y - zheight;
+		}
+		if ( cbZoom.cMin.y < cbMap.cMin.y) {
+			cbZoom.cMin.y = cbMap.cMin.y;
+			cbZoom.cMax.y = cbZoom.cMin.y + zheight;
+		}
 	}
 }
 
@@ -600,18 +665,10 @@ int ZoomableView::vertPixMove(long iDiff, bool fPreScroll)
 	if ( mcd) {
 		CoordBounds cbZoom = mcd->rootDrawer->getCoordBoundsZoom();
 		CoordBounds cbMap = mcd->rootDrawer->getMapCoordBounds();
-		double zheight = cbZoom.height();
 		double deltay = cbMap.height() * iDiff / SCROLL_SIZE;
 		cbZoom.cMin.y += deltay;
 		cbZoom.cMax.y += deltay;
-		if ( cbZoom.cMax.y > cbMap.cMax.y) {
-			cbZoom.cMax.y = cbMap.cMax.y;
-			cbZoom.cMin.y = cbZoom.cMax.y - zheight;
-		}
-		if ( cbZoom.cMin.y < cbMap.cMin.y) {
-			cbZoom.cMin.y = cbMap.cMin.y;
-			cbZoom.cMax.y = cbZoom.cMin.y + zheight;
-		}
+		RecenterZoomVert(cbZoom, cbMap);
 		mcd->rootDrawer->setCoordBoundsZoom(cbZoom);
 		setScrollBars();
 		OnDraw(0);
@@ -627,17 +684,9 @@ int ZoomableView::horzPixMove(long iDiff, bool fPreScroll)
 		CoordBounds cbZoom = mcd->rootDrawer->getCoordBoundsZoom();
 		CoordBounds cbMap = mcd->rootDrawer->getMapCoordBounds();
 		double deltax = cbMap.width() * iDiff / SCROLL_SIZE;
-		double zwidth = cbZoom.width();
 		cbZoom.cMin.x += deltax;
 		cbZoom.cMax.x += deltax;
-		if ( cbZoom.cMax.x > cbMap.cMax.x) {
-			cbZoom.cMax.x = cbMap.cMax.x;
-			cbZoom.cMin.x = cbZoom.cMax.x - zwidth;
-		}
-		if ( cbZoom.cMin.x < cbMap.cMin.x) {
-			cbZoom.cMin.x = cbMap.cMin.x;
-			cbZoom.cMax.x = cbZoom.cMin.x + zwidth;
-		}
+		RecenterZoomHorz(cbZoom, cbMap);
 		mcd->rootDrawer->setCoordBoundsZoom(cbZoom);
 		setScrollBars();
 		OnDraw(0);
@@ -800,13 +849,15 @@ void ZoomableView::OnUpdateZoomIn(CCmdUI* pCmdUI)
 
 void ZoomableView::OnNoTool()
 {
-	noTool(ID_ZOOMIN);
-	noTool(ID_ZOOMOUT);
+	//noTool(ID_ZOOMIN);
+	//noTool(ID_ZOOMOUT);
+	noTool();
 }
 
 void ZoomableView::noTool(int iTool, bool force) {
 	if ( iTool == 0) {
 		iActiveTool = 0;
+		::SetCursor(LoadCursor(0,IDC_ARROW));
 		tools.reset(force);
 	} else {
 		map<int, MapPaneViewTool *>::iterator cur = tools.find(iTool);
@@ -837,7 +888,7 @@ void ZoomableView::OnZoomIn()
 		noTool(ID_ZOOMIN);
 		return;
 	}
-	noTool(ID_ZOOMIN);
+	noTool();
 	if (HIWORD(AfxGetThreadState()->m_lastSentMsg.wParam) == 1)
 	{
 		zPoint p(dim.width()/2,dim.height()/2);
@@ -855,9 +906,13 @@ void ZoomableView::OnZoomOut()
 		return;
 	}
 	MapCompositionDoc *mcd = (MapCompositionDoc *)GetDocument();
-	CoordBounds cb = mcd->rootDrawer->getCoordBoundsZoom();
-	cb *= 1.41;
-	mcd->rootDrawer->setCoordBoundsZoom(cb);
+	CoordBounds cbZoom = mcd->rootDrawer->getCoordBoundsZoom();
+	CoordBounds cbMap = mcd->rootDrawer->getMapCoordBounds();
+	double rFactor = min(1.41, max(cbMap.width() / cbZoom.width(), cbMap.height() / cbZoom.height()));
+	cbZoom *= rFactor;
+	RecenterZoomHorz(cbZoom, cbMap);
+	RecenterZoomVert(cbZoom, cbMap);
+	mcd->rootDrawer->setCoordBoundsZoom(cbZoom);
 	setScrollBars();
 	OnDraw(0);
 	
@@ -920,30 +975,46 @@ void ZoomableView::OnPanArea()
 		noTool(ID_PANAREA);
 		return;
 	}
-	noTool(ID_PANAREA);
-	CRect rect;
-	GetClientRect(&rect);
-	tools[ID_PANAREA ] = new PanTool(this, this, (NotifyMoveProc)&ZoomableView::PanMove, rect);
+	//noTool(ID_PANAREA);
+	noTool();
+	tools[ID_PANAREA ] = new PanTool(this, this, (NotifyMoveProc)&ZoomableView::PanMove);
 	iActiveTool = ID_PANAREA;
 }
 
 void ZoomableView::PanMove(CPoint pt)
 {
-	horzPixMove(-scale(pt.x),false);
-	vertPixMove(-scale(pt.y),false);
-	SetDirty();
+	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(GetDocument());
+	if ( mcd) {
+		CoordBounds cbZoom = mcd->rootDrawer->getCoordBoundsZoom();
+		CoordBounds cbMap = mcd->rootDrawer->getMapCoordBounds();
+		CRect rect;
+		GetClientRect(&rect);
+		double deltax = -cbZoom.width() * pt.x / (double)rect.Width();
+		double deltay = cbZoom.height() * pt.y / (double)rect.Height();
+		cbZoom.cMin.x += deltax;
+		cbZoom.cMax.x += deltax;
+		cbZoom.cMin.y += deltay;
+		cbZoom.cMax.y += deltay;
+		RecenterZoomHorz(cbZoom, cbMap);
+		RecenterZoomVert(cbZoom, cbMap);
+		mcd->rootDrawer->setCoordBoundsZoom(cbZoom);
+		setScrollBars();
+		OnDraw(0);
+	}
 }
 
 void ZoomableView::OnUpdatePanArea(CCmdUI* pCmdUI)
 {
 	bool fMapOpen = false;
-	IlwisDocument *doc = (IlwisDocument *)GetDocument();
-	if ( !doc->fIsEmpty())			
+	MapCompositionDoc *mcd = (MapCompositionDoc *)GetDocument();
+	if ( !mcd->fIsEmpty())			
 		fMapOpen = true;
-	bool fPanPossible = iXpage < iXsize || iYpage < iYsize;
-	pCmdUI->Enable(fMapOpen && fPanPossible);
-	//if (tools.size())
-	//	iActiveTool = 0;
+	bool zoomedIn = (mcd->rootDrawer->getMapCoordBounds().width() > mcd->rootDrawer->getCoordBoundsZoom().width()) || 
+			     (mcd->rootDrawer->getMapCoordBounds().height() > mcd->rootDrawer->getCoordBoundsZoom().height());
+	pCmdUI->Enable(fMapOpen && zoomedIn && !mcd->rootDrawer->is3D());
+	if (tools.size() == 0)
+		iActiveTool = 0;
+
 	pCmdUI->SetRadio(ID_PANAREA == iActiveTool);
 }
 

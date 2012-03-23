@@ -182,6 +182,10 @@ public:
 
 	long xOld,yOld;
 
+protected:
+	void RecenterZoomHorz(CoordBounds & cbZoom, const CoordBounds & cbMap);
+	void RecenterZoomVert(CoordBounds & cbZoom, const CoordBounds & cbMap);
+
 	DECLARE_DYNCREATE(ZoomableView)
 	DECLARE_MESSAGE_MAP()
 };
