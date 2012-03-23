@@ -176,7 +176,9 @@ CRect AreaSelector::rect() const
 void AreaSelector::DrawRect()
 {
 	if ( selectionDrawer) {
-		selectionDrawer->calcWorldCoordinates(rect());
+		CRect rectWindow;
+		mpv->GetClientRect(&rectWindow);
+		selectionDrawer->calcWorldCoordinates(rectWindow, rect());
 		mpv->Invalidate();
 	}
 }

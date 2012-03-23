@@ -49,9 +49,12 @@ bool SelectionRectangle::draw( const CoordBounds& cb) const{
 	return true;
 }
 
-void SelectionRectangle::calcWorldCoordinates(const CRect & rctZoom) {
-	c1 = getRootDrawer()->screenToOpenGL(RowCol(rctZoom.top,rctZoom.left));
-	c2 = getRootDrawer()->screenToOpenGL(RowCol(rctZoom.bottom,rctZoom.right));
+void SelectionRectangle::calcWorldCoordinates(const CRect & rctWindow, const CRect & rctZoom) {
+	CoordBounds cbZoom = getRootDrawer()->getCoordBoundsZoom();
+	c1.x = cbZoom.cMin.x + cbZoom.width() * rctZoom.left / (double)rctWindow.Width(); // determine zoom rectangle in GL coordinates
+	c1.y = cbZoom.cMax.y - cbZoom.height() * rctZoom.top / (double)rctWindow.Height();
+	c2.x = cbZoom.cMin.x + cbZoom.width() * rctZoom.right / (double)rctWindow.Width();
+	c2.y = cbZoom.cMax.y - cbZoom.height() * rctZoom.bottom / (double)rctWindow.Height();
 }
 
 void SelectionRectangle::prepare(PreparationType t,CDC *dc){

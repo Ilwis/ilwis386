@@ -15,7 +15,7 @@ namespace ILWIS {
 		virtual ~SelectionRectangle();
 		virtual bool draw( const CoordBounds& cbArea=CoordBounds()) const;
 		virtual void prepare(PreparationType t=ptALL,CDC *dc = 0);
-		void calcWorldCoordinates(const CRect & rctZoom);
+		void calcWorldCoordinates(const CRect & rctWindow, const CRect & rctZoom);
 		CoordBounds getWorldCoordinates() const;
 		void setColor(const Color& clr);
 	protected:
