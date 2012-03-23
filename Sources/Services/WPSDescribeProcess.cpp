@@ -33,9 +33,9 @@ WPSDescribeProcess::WPSDescribeProcess(struct mg_connection *c, const struct mg_
 void WPSDescribeProcess::writeResponse() const{
 	XMLDocument doc;
 	doc.set_name("wps:DescribeProcess");
-	doc.addNodeTo(doc,"wps:DescribeProcess");
-	createHeader(doc, "wpsDescribeProcess_response.xsd");
-	pugi::xml_node descriptions = doc.addNodeTo(doc.first_child(),"wps:ProcessDescriptions");
+	pugi::xml_node descriptions = doc.addNodeTo(doc,"wps:ProcessDescriptions");
+	createHeader(doc, "http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsDescribeProcess_response.xsd");
+	//pugi::xml_node descriptions = doc.addNodeTo(doc.first_child(),"wps:ProcessDescriptions");
 
 	for(int i =0; i < processIDs.size(); ++i) {
 		vector<CommandInfo *> infos;
@@ -58,7 +58,8 @@ void WPSDescribeProcess::writeResponse() const{
 	char *buf = new char[txt.size() + 1];
 	memset(buf,0,txt.size() + 1);
 	memcpy(buf,txt.c_str(), txt.size());
-	mg_write(getConnection(), buf, txt.size()+1);
+	writeHeaders("text/xml", txt.size());
+	mg_write(getConnection(), buf, txt.size());
 	delete [] buf;
 
 }

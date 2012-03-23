@@ -38,7 +38,7 @@ void WPSHandler::createHeader(ILWIS::XMLDocument& doc, const String& xsd) const{
 	first.append_attribute("version") = "1.0.0";
 	first.append_attribute("xml:lang") = "en-US";
 	first.append_attribute("xsi:schemaLocation") = xsd.c_str();
-	first.append_attribute("wps:processVersion") = "1";
+	//first.append_attribute("wps:processVersion") = "1";
 
 }
 

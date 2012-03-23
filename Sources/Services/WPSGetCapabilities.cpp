@@ -12,7 +12,6 @@
 #include "Services\WPSGetCapabilities.h"
 
 
-
 using namespace ILWIS;
 
 RequestHandler *WPSGetCapabilities::createHandler(struct mg_connection *c, const struct mg_request_info *request_info, const map<String, String>& kvps, IlwisServer *serv) {
@@ -32,13 +31,7 @@ void WPSGetCapabilities::writeResponse() const{
 	ILWIS::XMLDocument doc;
 	doc.set_name("wps:Capabilities");
 	pugi::xml_node capaNode = doc.addNodeTo(doc,"wps:Capabilities");
-	createHeader(doc, "http://www.opengis.net/wps/1.0.0 ../wpsGetCapabilities_response.xsd"); 
-
-	pugi::xml_node lan = doc.addNodeTo(doc,"wps:Language");
-	pugi::xml_node def = doc.addNodeTo(lan,"wps:Default");
-	doc.addNodeTo(def,"ows:Language","en-US");
-	pugi::xml_node sup = doc.addNodeTo(lan,"wps:Supported");
-	doc.addNodeTo(sup,"ows:Language","en-US");
+	createHeader(doc, "http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsGetCapabilities_response.xsd"); 
 
 	pugi::xml_node si = doc.addNodeTo(capaNode,"ows:ServiceIdentification");
 	doc.addNodeTo(si,"ows:Title", getConfigValue("WPS:ServiceContext:Title"));
@@ -51,8 +44,8 @@ void WPSGetCapabilities::writeResponse() const{
 		doc.addNodeTo(kw,"ows:Keyword", words[i]);
 	}
 	doc.addNodeTo(si,"ows:ServiceType","WPS");
-	doc.addNodeTo(si,"ows:ServiceTypeVersion","1.0");
-	pugi::xml_node sp = doc.addNodeTo(si,"ows:ServiceProvider"); 
+	doc.addNodeTo(si,"ows:ServiceTypeVersion","1.0.0");
+	pugi::xml_node sp = doc.addNodeTo(capaNode,"ows:ServiceProvider"); 
 	doc.addNodeTo(sp, "ows:ProviderName",getConfigValue("WPS:ServiceContext:ProviderSite"));
 	pugi::xml_node contact = doc.addNodeTo(sp,"ows:ServiceContact");
 	doc.addNodeTo(contact,"ows:IndividualName",getConfigValue("WPS:ServiceContext:ProviderContactName"));
@@ -70,7 +63,7 @@ void WPSGetCapabilities::writeResponse() const{
 
 
 	// further needed for later date
-	pugi::xml_node meta = doc.addNodeTo(si,"ows:OperationsMetadata");
+	pugi::xml_node meta = doc.addNodeTo(capaNode,"ows:OperationsMetadata");
 	pugi::xml_node oper = doc.addNodeTo(meta,"ows:Operation");
 	oper.append_attribute("name") = "GetCapabilities";
 	pugi::xml_node dcp = doc.addNodeTo(oper, "ows:DCP");
@@ -92,7 +85,7 @@ void WPSGetCapabilities::writeResponse() const{
 	serv = getConfigValue("WPS:ServiceContext:ExecuteProcess") + "?";
 	doc.addNodeTo(http,"ows:Get").append_attribute("xlink:href") = serv.c_str();
 
-	pugi::xml_node offerings = doc.addNodeTo(si, "wps:ProcessOfferings");
+	pugi::xml_node offerings = doc.addNodeTo(capaNode, "wps:ProcessOfferings");
 
 	vector<CommandInfo *> infos;
 	Engine::modules.getCommandInfo("*", infos);
@@ -104,7 +97,8 @@ void WPSGetCapabilities::writeResponse() const{
 			ApplicationMetadata amd = (info->metadata)(&query);
 			if ( amd.wpsxml != "") {
 				pugi::xml_node process = doc.addNodeTo(offerings,"wps:Process");
-				doc.addNodeTo(process,"wps:ProcessVersion","1.0.0");
+				//doc.addNodeTo(process,"wps:ProcessVersion","1.0.0");
+				process.append_attribute("wps:processVersion") = "1.0.0";
 
 				String xml = amd.wpsxml;
 				vector<String> results;
@@ -112,27 +106,35 @@ void WPSGetCapabilities::writeResponse() const{
 				xmldoc.addNameSpace("ows","http://www.opengis.net/ows/1.1");
 				xmldoc.addNameSpace("wps","http://www.opengis.net/wps/1.0.0");
 				String tx = xmldoc.toString();
-				xmldoc.executeXPathExpression("//wps:ProcessDescription/ows:Identifier/text()",results);
+				xmldoc.executeXPathExpression("//ProcessDescription/ows:Identifier/text()",results);
 				if ( results.size() > 0) {
 					doc.addNodeTo(process,"ows:Identifier",results[0]);
 				}
 				results.clear();
-				xmldoc.executeXPathExpression("//wps:ProcessDescription/ows:Title/text()",results);
+				xmldoc.executeXPathExpression("//ProcessDescription/ows:Title/text()",results);
 				if ( results.size() > 0) {
 					doc.addNodeTo(process,"ows:Title",results[0]);
 				}
 				results.clear();
-				xmldoc.executeXPathExpression("//wps:ProcessDescription/ows:Abstract/text()",results);
+				xmldoc.executeXPathExpression("//ProcessDescription/ows:Abstract/text()",results);
 				if ( results.size() > 0) {
 					doc.addNodeTo(process,"ows:Abstract",results[0]);
 				}
 			}
 		}
 	}
+
+	pugi::xml_node lan = doc.addNodeTo(capaNode,"wps:Languages");
+	pugi::xml_node def = doc.addNodeTo(lan,"wps:Default");
+	doc.addNodeTo(def,"ows:Language","en-US");
+	pugi::xml_node sup = doc.addNodeTo(lan,"wps:Supported");
+	doc.addNodeTo(sup,"ows:Language","en-US");
+
 	String txt = doc.toString();
 	char *buf = new char[txt.size() + 1];
 	memset(buf,0,txt.size() + 1);
 	memcpy(buf,txt.c_str(), txt.size());
+	writeHeaders("text/xml", txt.size());
 	mg_write(getConnection(), buf, txt.size());
 	delete [] buf;
 }

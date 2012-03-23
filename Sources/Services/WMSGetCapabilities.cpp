@@ -98,7 +98,8 @@ void WMSGetCapabilities::writeResponse() const{
 	char *buf = new char[txt.size() + 1];
 	memset(buf,0,txt.size() + 1);
 	memcpy(buf,txt.c_str(), txt.size());
-	mg_write(getConnection(), buf, txt.size()+1);
+	writeHeaders("text/xml", txt.size());
+	mg_write(getConnection(), buf, txt.size());
 	delete [] buf;
 }
 

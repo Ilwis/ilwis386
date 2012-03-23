@@ -43,7 +43,9 @@ WPSExecute::WPSExecute(struct mg_connection *c, const struct mg_request_info *ri
 			WPSParameter inputParm;
 			inputParm.id = parm.sHead("=");
 			inputParm.value = parm.sTail("=");
-			inputParm.isReference = inputParm.value.find("href") != string::npos ? true : false;
+			if (inputParm.value.find("href") == string::npos)
+				inputParm.value = inputParm.value.sHead("@");
+			inputParm.isReference = inputParm.value.find("href") != string::npos;
 			inputs.push_back(inputParm);
 		}
 	}
@@ -74,10 +76,45 @@ void WPSExecute::createExecutionEnviroment() {
 	getEngine()->SetCurDir(executionDir);
 }
 
+// URL-decode input buffer into destination buffer.
+// 0-terminate the destination buffer. Return the length of decoded data.
+// form-url-encoded data differs from URI encoding in a way that it
+// uses '+' as character for space, see RFC 1866 section 8.2.1
+// http://ftp.ics.uci.edu/pub/ietf/html/rfc1866.txt
+static size_t url_decode(const char *src, size_t src_len, char *dst,
+						 size_t dst_len, int is_form_url_encoded) {
+							 size_t i, j;
+							 int a, b;
+#define HEXTOI(x) (isdigit(x) ? x - '0' : x - 'W')
+
+							 for (i = j = 0; i < src_len && j < dst_len - 1; i++, j++) {
+								 if (src[i] == '%' &&
+									 isxdigit(* (const unsigned char *) (src + i + 1)) &&
+									 isxdigit(* (const unsigned char *) (src + i + 2))) {
+										 a = tolower(* (const unsigned char *) (src + i + 1));
+										 b = tolower(* (const unsigned char *) (src + i + 2));
+										 dst[j] = (char) ((HEXTOI(a) << 4) | HEXTOI(b));
+										 i += 2;
+								 } else if (is_form_url_encoded && src[i] == '+') {
+									 dst[j] = ' ';
+								 } else {
+									 dst[j] = src[i];
+								 }
+							 }
+
+							 dst[j] = '\0'; /* Null-terminate the destination */
+
+							 return j;
+}
+
 void WPSExecute::downloadReferencedData() {
 	for(int i=0; i < inputs.size(); ++i) {
 		if ( inputs[i].isReference) {
-			URL url(inputs[i].value.sTail("="));
+			String sUrl = inputs[i].value.sTail("=");
+			char urlDecoded [2048];
+			url_decode(sUrl.c_str(), (size_t)sUrl.length(), urlDecoded, 2048, 0);
+			URL url(urlDecoded);
+			FileName fnDest;
 			if ( url.getProtocol() == "http") {
 				Downloader loader(url);
 				loader.download(executionDir);
@@ -87,34 +124,33 @@ void WPSExecute::downloadReferencedData() {
 					name =  url.sVal().substr(index+1);
 				}
 				name = executionDir + "\\" + name;
-				unzip(FileName(name));
+				fnDest = FileName(name);
+				unzip(fnDest);
 			} else if ( url.getProtocol() == "file")  {// local
 				FileName fnOrg = url.toFileName2();
 				String dest = executionDir + "\\" + fnOrg.sFile + fnOrg.sExt;
 				CopyFile(fnOrg.sPhysicalPath().c_str(),dest.c_str(),false);
-				FileName fnDest(dest);
+				fnDest = FileName(dest);
 				if ( fnDest.sExt == ".zip")
 					unzip(fnDest);
-				FileName fnTiff(fnDest,".tiff");
-				bool fExist = fnTiff.fExist();
-				if ( !fExist) {
-					fnTiff.sExt = ".tif";
-					fExist = fnTiff.fExist();
-				}
-				if ( fExist ) {
-					FileName fnILWIS(fnTiff,".mpr");
-					String expr("gdalrasterimport %S %S false", fnTiff.sPhysicalPath(), fnILWIS.sPhysicalPath());
-					//getEngine()->Execute(expr);
+			}
+			FileName fnTiff(fnDest,".tiff");
+			bool fExist = fnTiff.fExist();
+			if ( !fExist) {
+				fnTiff.sExt = ".tif";
+				fExist = fnTiff.fExist();
+			}
+			if ( fExist ) {
+				FileName fnILWIS(fnTiff,".mpr");
+				String expr("gdalrasterimport %S %S false", fnTiff.sPhysicalPath(), fnILWIS.sPhysicalPath());
+				//getEngine()->Execute(expr);
+				Script::Exec(expr);
+			} else {
+				FileName fnShp(fnDest,".shp");
+				if ( fnShp.fExist()) {
+					String expr("gdalogrimport shape %S %S", fnShp.sPhysicalPath(), fnShp.sPhysicalPath());	
 					Script::Exec(expr);
-				} else {
-					FileName fnShp(fnDest,".shp");
-					if ( fnShp.fExist()) {
-						String expr("gdalogrimport shape %S %S", fnShp.sPhysicalPath(), fnShp.sPhysicalPath());	
-						Script::Exec(expr);
-					}
-
 				}
-
 			}
 		}
 	}
@@ -154,6 +190,9 @@ String WPSExecute::makeApplicationExpression(const String& expr, const map<Strin
 			expression += ",";
 		if ( par.isReference) {
 			String url = par.value.sTail("=");
+			char urlDecoded [2048];
+			url_decode(url.c_str(), (size_t)url.length(), urlDecoded, 2048, 0);
+			url = String(urlDecoded);
 			int index = url.find_last_of("/");
 			String name="";
 			if ( index != string::npos) {
@@ -227,12 +266,11 @@ void WPSExecute::executeOperation() {
 	}
 
 
-
 	getEngine()->SetCurDir(executionDir);
 
 	if ( outputName != sUNDEF ) {
 		if ( isApp)
-			expression = "*" + outputName + ":=" + expression;
+			expression = "*" + FileName(outputName).sShortNameQuoted() + ":=" + expression;
 		else {
 			expression = expression + " " + outputName;
 		}
@@ -309,11 +347,13 @@ void WPSExecute::adaptPathsToLocal(const map<String, FileName>& files) {
 			}
 			if (IOTYPE(fnObj) == IlwisObject::iotRASMAP) {
 				Map mp(fnObj);
-				if ( mp->gr()->fnObj.sPath() != localPath && !mp->gr()->fSystemObject()) {
+				bool fSystem = mp->gr()->fSystemObject();
+				bool fLocal = mp->gr()->fnObj.sPath() != localPath ;
+				if ( fLocal && !fSystem) {
 					FileName fn( mp->gr()->fnObj);
 					GeoRef grf(FileName(fn.sFile + fn.sExt));
 					mp->SetGeoRef(grf);
-				}	
+				}
 			}
 			bmp->Store();
 		}
@@ -324,17 +364,19 @@ void WPSExecute::moveToLocal(const map<String, FileName>& files) {
 	for(map<String, FileName>::const_iterator cur = files.begin(); cur != files.end(); ++cur) {
 		String entry = (*cur).first;
 		FileName fnObj((*cur).second);
+		FileName fnHere(fnObj.sFile + fnObj.sExt);
 
 		if ( IOTYPE(fnObj) != IlwisObject::iotANY) {
 			IlwisObject obj = IlwisObject::obj(fnObj);
 			if ( obj.fValid()) {
-				if ( obj->fSystemObject()) 
+				if ( obj->fSystemObject()) {
 					continue;
+				}
 			}
 		}
-		FileName fnHere(fnObj.sFile + fnObj.sExt);
-		if ( fnHere.fExist())
+		if ( fnHere.fExist()) {
 			continue;
+		}
 		CopyFile(fnObj.sFullPath().c_str(), fnHere.sFullPath().c_str(),true);
 	}
 
@@ -452,8 +494,8 @@ void WPSExecute::writeResponse() const{
 
 	XMLDocument doc;
 	doc.set_name("ExecuteResponse");
-	pugi::xml_node erp = doc.addNodeTo(doc,"ExecuteResponse");
-	createHeader(doc, "WPSExecute_response.xsd");
+	pugi::xml_node erp = doc.addNodeTo(doc,"wps:ExecuteResponse");
+	createHeader(doc, "http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsExecute_response.xsd"); 
 
 	CommandInfo *info = infos[0];
 	if ( info->metadata != NULL) {
@@ -477,30 +519,33 @@ void WPSExecute::writeResponse() const{
 
 			pugi::xml_node first = doc.first_child();
 
-			first.append_attribute("service") = "WPS";
-			first.append_attribute("version") = "1.0.0";
-			first.append_attribute("xml:lang") = "en-US";
-			first.append_attribute("xsi:schemaLocation") = "http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsDescribeProcess_response.xsd";
-			first.append_attribute("wps:processVersion") = "1";
+			//first.append_attribute("service") = "WPS";
+			//first.append_attribute("version") = "1.0.0";
+			//first.append_attribute("xml:lang") = "en-US";
+			//first.append_attribute("xsi:schemaLocation") = "http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsDescribeProcess_response.xsd";
+			//first.append_attribute("wps:processVersion") = "1";
+			first.append_attribute("serviceInstance") = "ILWIS";
 
-			pugi::xml_node proces = doc.addNodeTo(erp,"Process");
-			doc.addNodeTo(proces, "Identifier", getValue("identifier"));
+			pugi::xml_node process = doc.addNodeTo(erp,"wps:Process");
+			process.append_attribute("wps:processVersion") = "1.0.0";
+			doc.addNodeTo(process, "ows:Identifier", getValue("identifier"));
 
-			xmldoc.executeXPathExpression("//ProcessDescription/Title/text()", results);
+			xmldoc.executeXPathExpression("//ProcessDescription/ows:Title/text()", results);
 			if ( results.size() == 1) {
-				doc.addNodeTo(proces, "Title", results[0]);
+				doc.addNodeTo(process, "ows:Title", results[0]);
 			}
 
-			xmldoc.executeXPathExpression("//ProcessDescription/Abstract/text()", results);
+			xmldoc.executeXPathExpression("//ProcessDescription/ows:Abstract/text()", results);
 			if ( results.size() == 1) {
-				doc.addNodeTo(proces, "Abstract", results[0]);
+				doc.addNodeTo(process, "ows:Abstract", results[0]);
 			}
 
-			pugi::xml_node st = doc.addNodeTo(erp,"Status");
+			pugi::xml_node st = doc.addNodeTo(erp,"wps:Status");
 			st.append_attribute("creationTime") = ILWIS::Time::now().toString().c_str();
-			doc.addNodeTo(st,"ProcessSucceeded");
+			doc.addNodeTo(st,"wps:ProcessSucceeded");
 
 			//pugi::xml_node inp = doc.addNodeTo(doc.first_child(), "DataInputs");
+			/*
 			xmldoc.executeXPathExpression("//ProcessDescription/DataInputs", results);
 			for(int j = 0; j < results.size(); ++j) {
 				String res = processDescribeString(j, results[j]);
@@ -513,29 +558,31 @@ void WPSExecute::writeResponse() const{
 					XMLDocument xmldoc(results[j]);
 					doc.addNodeTo(outd, xmldoc);
 			}
-			pugi::xml_node outp = doc.addNodeTo(erp,"ProcessOutputs");
+			*/
+			pugi::xml_node outp = doc.addNodeTo(erp,"wps:ProcessOutputs");
 			for(int i=0; i < outputs.size(); ++i) {
 				WPSParameter& parm = outputs.at(i);
-				pugi::xml_node op = doc.addNodeTo(outp,"Output");
+				pugi::xml_node op = doc.addNodeTo(outp,"wps:Output");
+
+				doc.addNodeTo(op,"ows:Identifier", parm.value.sHead("@"));
+				String xpathq ("//Output[ows:Identifier=\"%S\"]/ows:Title/child::text()",parm.value.sHead("@"));
+				xmldoc.executeXPathExpression(xpathq,results);
+				if ( results.size() == 1) {
+					doc.addNodeTo(op,"ows:Title", results[0]);
+				}
+				xpathq = String("//Output[ows:Identifier=\"%S\"]/ows:Abstract/child::text()",parm.value.sHead("@"));
+				xmldoc.executeXPathExpression(xpathq,results);
+				if ( results.size() == 1) {
+					doc.addNodeTo(op,"ows:Abstract", results[0]);
+				}
 
 				if ( parm.isReference) {
 					String root = getConfigValue("wps:ServiceContext:ShareServer");
 					root += String("/output_data/process_%d/%S%S",local_folder_count, fnZip.sFile, fnZip.sExt);
-					pugi::xml_node ref = doc.addNodeTo(op, "Reference");
-					ref.append_attribute("xlink:href") = root.c_str();
-				}
-				String xpathq("//Output/Title[../Identifier=\"%S\"]",parm.value);
-				xmldoc.executeXPathExpression(xpathq,results);
-				if ( results.size() == 1) {
-					doc.addNodeTo(outp,"Title", results[0]);
-				}
-				xpathq = String("//Output/Abstract[../Identifier=\"%S\"]",parm.value);
-				xmldoc.executeXPathExpression(xpathq,results);
-				if ( results.size() == 1) {
-					doc.addNodeTo(outp,"Abstract", results[0]);
+					pugi::xml_node ref = doc.addNodeTo(op, "wps:Reference");
+					ref.append_attribute("href") = root.c_str();
 				}
 			}
-
 		}
 	}
 
@@ -543,7 +590,8 @@ void WPSExecute::writeResponse() const{
 	char *buf = new char[txt.size() + 1];
 	memset(buf,0,txt.size() + 1);
 	memcpy(buf,txt.c_str(), txt.size());
-	mg_write(getConnection(), buf, txt.size()+1);
+	writeHeaders("text/xml", txt.size());
+	mg_write(getConnection(), buf, txt.size());
 
 	delete [] buf;
 	ilwisServer->addTimeOutLocation(executionDir,time(0));
