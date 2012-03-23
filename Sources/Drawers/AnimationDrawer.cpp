@@ -48,7 +48,7 @@ AnimationDrawer::AnimationDrawer(DrawerParameters *parms) :
 }
 
 AnimationDrawer::~AnimationDrawer(){
-	if ( manager) {
+	if ( manager && manager->GetSafeHwnd() != 0) {
 		manager->SendMessage(ILWM_UPDATE_ANIM,128,(long)this);
 	}
 }
