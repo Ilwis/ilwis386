@@ -936,8 +936,7 @@ void MapLayoutItem::OnPanRect(ZoomableView* zvw)
 	if (0 == zv)
 		return;
 	zv->OnNoTool();
-	CRect rect = zv->rctPos(mmPosition());
-	zv->tools[ID_PANAREA] = new PanTool(zv, this, (NotifyMoveProc)&MapLayoutItem::PanMove, rect);
+	zv->tools[ID_PANAREA] = new PanTool(zv, this, (NotifyMoveProc)&MapLayoutItem::PanMove);
 }
 
 void MapLayoutItem::PanMove(CPoint pt)
