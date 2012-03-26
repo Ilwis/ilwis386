@@ -180,8 +180,8 @@ int MapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	menPopup.CreateMenu();
 	add(ID_ADDLAYER);
-	add(ID_ADD_GRID);
-	add(ID_ADD_GRATICULE);
+	//add(ID_ADD_GRID);
+	//add(ID_ADD_GRATICULE);
 	add(ID_REMOVELAYER);
 	menDataLayer.CreateMenu();
 	menPopup.AppendMenu(MF_POPUP, (UINT)menDataLayer.GetSafeHmenu(), sMen(ID_LAYEROPTIONS)); 	
