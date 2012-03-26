@@ -19,16 +19,22 @@ ScreenSwapper::ScreenSwapper() : swapBitmap(0), useBitmapRedraw(false){
 }
 
 ScreenSwapper::~ScreenSwapper() {
-	if ( swapBitmap)
+	csBitmap.Lock();
+	if ( swapBitmap) {
 		delete [] swapBitmap;
+		swapBitmap = 0;
+	}
+	csBitmap.Unlock();
 }
 
-void ScreenSwapper::swapBufferToScreen(const CRect& rct) const{
+void ScreenSwapper::swapBufferToScreen(const CRect& rct){
+	csBitmap.Lock();
 	if (swapBitmap!=NULL) {
 		glPixelTransferf(GL_MAP_COLOR, false);
 		glDrawPixels(rct.Width(), rct.Height(),GL_RGBA,GL_FLOAT, swapBitmap);
 		GLenum ret =  glGetError();
 	}
+	csBitmap.Unlock();
 }
 
 void ScreenSwapper::saveScreenBuffer(const CRect& rct)
@@ -60,8 +66,10 @@ void ScreenSwapper::bitmapBufferRedraw(MapCompositionDoc *mdoc){
 
 void ScreenSwapper::setBitmapRedraw(bool yesno) {
 	useBitmapRedraw = yesno;
-	if ( yesno==false && swapBitmap) {
+	if ( !yesno && swapBitmap) {
+		csBitmap.Lock();
 		delete [] swapBitmap;
 		swapBitmap = 0;
+		csBitmap.Unlock();
 	}
 }

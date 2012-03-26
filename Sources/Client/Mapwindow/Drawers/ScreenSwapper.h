@@ -5,7 +5,7 @@ namespace ILWIS {
 	public:
 		ScreenSwapper();
 		~ScreenSwapper();
-		void swapBufferToScreen(const CRect& rct) const;
+		void swapBufferToScreen(const CRect& rct);
 		void saveScreenBuffer(const CRect& rct);
 		void bitmapBufferRedraw(MapCompositionDoc *mdoc);
 		void setBitmapRedraw(bool yesno);
@@ -13,7 +13,7 @@ namespace ILWIS {
 	private:
 		float * swapBitmap;
 		bool useBitmapRedraw;
-
+		CCriticalSection csBitmap;
 
 	};
 }
