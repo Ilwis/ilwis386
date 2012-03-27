@@ -132,12 +132,19 @@ bool ColumnToTime::fFreezing()
 {
 	if ( !colSource.fValid())
 		return false;
-
+	RangeReal range;
+	Buf<double> buf(colSource->iRecs());;
 	for(int i=1; i < colSource->iRecs(); ++i) {
 		String v = colSource->sValue(i);
 		ILWIS::Time tim(v);
-		ptr.PutVal(i, tim);
+		double tv = tim;
+		range += (double)tv;
+		buf[i] = tv;
+//		ptr.PutVal(i, tv);
 	}
+	//ValueRange vr(range,0.000011574);
+	ptr.SetMinMax(range);
+	ptr.PutBufVal(buf);
 	ptr.Store();
 	return true;
 }
