@@ -131,6 +131,12 @@ AnimationProperties *AnimationPropertySheet::getActiveAnimation(){
 	ILWISSingleLock lock(&cs, TRUE, SOURCE_LOCATION);
 	if ( activeIndex >= 0)
 		return &(animations[activeIndex]);
+	else {
+		if ( animations.size() > 0) {
+			activeIndex = 0;
+			return &(animations[activeIndex]);
+		}
+	}
 	return 0;
 }
 
