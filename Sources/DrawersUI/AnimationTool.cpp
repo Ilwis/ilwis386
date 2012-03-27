@@ -72,9 +72,9 @@ HTREEITEM AnimationTool::configure( HTREEITEM parentItem) {
 	htiNode = insertItem(parentItem, TR("Display Tools"), ".mpv",(LayerTreeItem *)item);
 
 	//htiNode = insertItem(parentItem, TR("Display Tools"), ".mpv");
-	DisplayOptionTreeItem *item2 = new DisplayOptionTreeItem(tree,htiNode,drawer);
-	item2->setDoubleCickAction(this, (DTDoubleClickActionFunc) &AnimationTool::animationDefaultView);
-	HTREEITEM hti = insertItem(TR("Restore default view"),".isl",item2);
+	//DisplayOptionTreeItem *item2 = new DisplayOptionTreeItem(tree,htiNode,drawer);
+	//item2->setDoubleCickAction(this, (DTDoubleClickActionFunc) &AnimationTool::animationDefaultView);
+	//HTREEITEM hti = insertItem(TR("Restore default view"),".isl",item2);
 
 
 	DrawerTool::configure(htiNode);
