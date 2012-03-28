@@ -1,4 +1,5 @@
 #include "Client\Headers\formelementspch.h"
+#include "Client\FormElements\fldclass.cpp"
 #include "Engine\Drawers\RootDrawer.h"
 #include "Engine\Drawers\ComplexDrawer.h"
 #include "Client\Ilwis.h"
@@ -60,19 +61,20 @@ bool LineSetTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 HTREEITEM LineSetTool::configure( HTREEITEM parentItem) {
 	if ( !active)
 		return parentItem;
-	DrawerTool *dt = DrawerTool::createTool("LineStyleTool", getDocument()->mpvGetView(),tree,drawer);
-	if ( dt) {
-		addTool(dt);
-		htiNode = dt->configure(parentItem);
-	}
-	DrawerTool::configure(htiNode);
+
+	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
+	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&LineSetTool::displayOptionRprLine);
+	htiNode = insertItem(TR("Segment Representation"),".mps", item); 	
 
 	return htiNode;
+}
+
+void LineSetTool::displayOptionRprLine() {
+
 }
 
 String LineSetTool::getMenuString() const {
 	return TR("Segment tool");
 }
 
-//---------------------------------------------------
 

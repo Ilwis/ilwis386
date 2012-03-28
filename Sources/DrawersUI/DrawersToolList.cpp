@@ -33,6 +33,8 @@
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\Mapwindow\Drawers\DrawerTool.h"
 #include "LayerDrawerTool.h"
+#include "Client\Editors\Utils\line.h"
+#include "Client\Editors\Utils\Pattern.h"
 #include "RepresentationTool.h"
 #include "LegendTool.h"
 #include "ColorTool.h"

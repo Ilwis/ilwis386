@@ -3,6 +3,7 @@
 ILWIS::DrawerTool *createLineSetTool(ZoomableView* zv, LayerTreeView *view, ILWIS::NewDrawer *drw);
 
 namespace ILWIS {
+	class LineLayerDrawer;
 
 	class AnimationDrawer;
 
@@ -14,8 +15,11 @@ namespace ILWIS {
 		virtual ~LineSetTool();
 		String getMenuString() const;
 	protected:
+		void displayOptionRprLine();
 
 
 	};
+
+
 
 }

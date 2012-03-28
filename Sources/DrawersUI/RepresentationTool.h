@@ -20,6 +20,7 @@ public:
 	RepresentationToolForm(CWnd *wPar, ILWIS::LayerDrawer *dr, SetDrawer *adr, DrawerTool *t);
 	void apply(); 
 private:
+	int editRpr(Event *ev);
 	String rpr;
 	FieldRepresentation *fldRpr;
 	LayerDrawer *layerDrawer;

@@ -16,6 +16,8 @@
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Drawers\LayerDrawer.h"
 #include "Drawers\SetDrawer.h"
+#include "Client\Editors\Utils\line.h"
+#include "Client\Editors\Utils\Pattern.h"
 #include "DrawersUI\RepresentationTool.h"
 #include "DrawersUI\ColorTool.h"
 #include "DrawersUI\LegendTool.h"

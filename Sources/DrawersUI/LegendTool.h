@@ -1,8 +1,11 @@
 #pragma once
 
 ILWIS::DrawerTool *createLegendTool(ZoomableView* zv, LayerTreeView *view, ILWIS::NewDrawer *drw);
+class ColorSelector;
 
 namespace ILWIS {
+
+class LineLayerDrawer;
 
 class LegendTool : public DrawerTool {
 public:
@@ -15,6 +18,21 @@ public:
 private:
 	void insertLegendItemsValue(const Representation& rpr, const DomainValueRangeStruct& dvs);
 	void insertLegendItemsClass(const Representation& rpr);
+	void displayOptionRpr();
 	HTREEITEM htiLeg;
+};
+
+class LineRprForm : public DisplayOptionsForm {
+	public:
+	LineRprForm(CWnd *wPar, LayerDrawer *dr, RepresentationClass* rc, long raw);
+	void apply(); 
+private:
+  RepresentationClass* rcl;  
+  ColorSelector* cs;
+  int CustomColor(Event *);
+  long iRaw;
+  Color col;
+  Line line;
+
 };
 }

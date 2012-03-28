@@ -19,9 +19,12 @@
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Drawers\LayerDrawer.h"
 #include "Drawers\SetDrawer.h"
+#include "Client\Editors\Utils\line.h"
+#include "Client\Editors\Utils\Pattern.h"
 #include "DrawersUI\RepresentationTool.h"
 #include "DrawersUI\LegendTool.h"
 #include "Engine\Domain\dmclass.h"
+#include "Engine\Representation\Rprclass.h"
 #include "Headers\Hs\Drwforms.hs"
 
 
@@ -73,11 +76,13 @@ void LegendTool::insertLegendItemsValue(const Representation& rpr, const DomainV
 
 	for (double v = rmd.rLo(); v <= rmd.rHi(); v += rStep) {
 		String sName = dvs.sValue(v);
-		HTREEITEM hti = tree->GetTreeCtrl().InsertItem(sName.c_str(), htiNode);
+		//HTREEITEM hti = tree->GetTreeCtrl().InsertItem(sName.c_str(), htiNode);
 		if ( fImage && v + rStep > 255) {
 			v = 255;
 		}
-		tree->GetTreeCtrl().SetItemData(hti, (DWORD_PTR)new LegendValueLayerTreeItem(tree, drawer, dvs, v));		
+		LegendValueLayerTreeItem *it = new LegendValueLayerTreeItem(tree, htiNode, drawer, dvs, v);
+		insertItem(sName,"",it);
+		//tree->GetTreeCtrl().SetItemData(hti, (DWORD_PTR));		
 	}
 }
 
@@ -94,13 +99,21 @@ void LegendTool::insertLegendItemsClass(const Representation& rpr){
 	for (int i = 1; i <= iItems; ++i) {
 		int iRaw = dc->iKey(i);
 		String sName = dc->sValueByRaw(iRaw, 0);
-		HTREEITEM hti = tree->GetTreeCtrl().InsertItem(sName.c_str(), htiNode);
-		tree->GetTreeCtrl().SetCheck(hti);
+		//HTREEITEM hti = tree->GetTreeCtrl().InsertItem(sName.c_str(), htiNode);
+		//tree->GetTreeCtrl().SetCheck(hti);
 		Column col;
 		if ( layerDrawer->useAttributeColumn() && layerDrawer->getAtttributeColumn().fValid())
 			col = layerDrawer->getAtttributeColumn();
-		tree->GetTreeCtrl().SetItemData(hti, (DWORD_PTR)new LegendClassLayerTreeItem(tree, drawer, rpr->dm(), iRaw, col));		
+		LegendClassLayerTreeItem *it = new LegendClassLayerTreeItem(tree, htiNode, drawer, rpr->dm(), iRaw, col);
+		it->setDoubleCickAction(this,(DTDoubleClickActionFunc)&LegendTool::displayOptionRpr);
+		insertItem(sName,"",it,1);
 	}
+}
+
+void LegendTool::displayOptionRpr() {
+	LayerDrawer *ldr = dynamic_cast<LayerDrawer *>(drawer);
+	LegendClassLayerTreeItem *it = (LegendClassLayerTreeItem *)tree->getCurrent();
+	new LineRprForm(tree, ldr,ldr->getRepresentation()->prc(),it->raw());
 }
 
 void LegendTool::update() {
@@ -136,4 +149,49 @@ bool LegendTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 
 String LegendTool::getMenuString() const {
 	return TR("Legend");
+}
+
+//---------------------------------------------------
+LineRprForm::LineRprForm(CWnd *wPar, LayerDrawer *dr, RepresentationClass* rc, long raw) : 
+DisplayOptionsForm(dr,wPar,TR("Line Representation")),rcl(rc), iRaw(raw), line(rc, raw)
+{
+   String sText;
+  if (rcl->dm()->pdp())
+    sText = String("%i", raw);
+  else  
+    sText = rcl->dm()->sValueByRaw(raw,0);
+  col = rcl->clrRaw(iRaw);
+
+  StaticText* st = new StaticText(root, sText);
+  st->SetIndependentPos();
+  cs = new ColorSelector(root, &col);
+  cs->SetIndependentPos();
+  PushButton* pb = new PushButton(root, TR("&Custom Color..."), 
+    (NotifyProc)&LineRprForm::CustomColor);
+  pb->Align(cs, AL_UNDER);  
+  pb->SetIndependentPos();
+
+  new FieldBlank(root, 0.3);
+	line.ResizeSymbol(1.0/3.0);
+  new FieldLine(root, &line);
+
+  SetMenHelpTopic("ilwismen\\representation_class_editor_edit_item_segment.htm");
+  create();
+}
+
+int LineRprForm::CustomColor(Event*)
+{
+  cs->CustomColor(0);
+  return 0;
+}
+
+void  LineRprForm::apply() {
+  root->StoreData();
+  line.ResizeSymbol(3.0);
+  line.clrLine() = col;
+  line.Store(rcl, iRaw);
+  PreparationParameters pp(NewDrawer::ptRENDER, 0);
+  drw->prepare(&pp);
+
+  updateMapView();
 }

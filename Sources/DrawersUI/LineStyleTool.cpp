@@ -87,37 +87,7 @@ String LineStyleTool::getMenuString() const {
 	return TR("Line properties");
 }
 
-int LineStyleTool::openGLLineStyle(int linestyle, double sz){
-	switch(linestyle) {
-		case ldtDot:
-			return 0xAAAA;
-		case ldtDash:
-			return 0xF0F0;
-		case ldtDashDot:
-			return 0x6B5A;
-		case ldtDashDotDot:
-			return 0x56B5;
-		default:
-			return 0xFFFF;
-	}
-	return 0xFFFF;
-}
 
-int LineStyleTool::ilwisLineStyle(int linestyle, double sz){
-	switch(linestyle) {
-		case 0xAAAA:
-			return ldtDot;
-		case 0xF0F0:
-			return ldtDash;
-		case 0x6B5A:
-			return ldtDashDot;
-		case 0x56B5:
-			return ldtDashDotDot;
-		default:
-			return ldtSingle;
-	}
-	return 0xFFFF;
-}
 
 //-----------------------------------------------
 LineStyleForm::LineStyleForm(CWnd *par, LineDrawer *ldr) 
@@ -126,7 +96,7 @@ LineStyleForm::LineStyleForm(CWnd *par, LineDrawer *ldr)
 {
 
 	lprops = (LineProperties *)ldr->getProperties();
-	style = (LineDspType)LineStyleTool::ilwisLineStyle(lprops->linestyle);
+	style = (ILWIS::NewDrawer::LineDspType)LineDrawer::ilwisLineStyle(lprops->linestyle);
 	fi = new FieldReal(root, "Line thickness", &lprops->thickness, ValueRange(1.0,100.0));
 	flt = new FieldLineType(root, TR("Line Style"), &style);
 	if ( !lprops->ignoreColor)
@@ -155,7 +125,7 @@ LineStyleForm::LineStyleForm(CWnd *par, ComplexDrawer *ldr,ComplexDrawer::Drawer
 	{
 		lprops = (LineProperties *)ldr->getProperties();
 	}
-	style = (LineDspType)LineStyleTool::ilwisLineStyle(lprops->linestyle);
+	style = (ILWIS::NewDrawer::LineDspType)LineDrawer::ilwisLineStyle(lprops->linestyle);
 	fi = new FieldReal(root, "Line thickness", &lprops->thickness, ValueRange(1.0,100.0));
 	flt = new FieldLineType(root, TR("Line Style"), &style);
 	if ( !lprops->ignoreColor)
@@ -179,18 +149,18 @@ void  LineStyleForm::apply() {
 					continue;
 				LineProperties *oldprops = (LineProperties *)ndr->getProperties();
 				oldprops->drawColor = lprops->drawColor;
-				oldprops->linestyle = LineStyleTool::openGLLineStyle(style);
+				oldprops->linestyle = LineDrawer::openGLLineStyle(style);
 				oldprops->thickness = lprops->thickness;
 				ndr->prepareChildDrawers(&pp);
 			}
 		} else {
 			if ( !lprops->ignoreColor)
 				fc->StoreData();
-			lprops->linestyle = LineStyleTool::openGLLineStyle(style);
+			lprops->linestyle = LineDrawer::openGLLineStyle(style);
 			drw->prepareChildDrawers(&pp);
 		}
 	} else {
-		lprops->linestyle = LineStyleTool::openGLLineStyle(style);
+		lprops->linestyle = LineDrawer::openGLLineStyle(style);
 		drw->prepare(&pp);
 	}
 	updateMapView();
