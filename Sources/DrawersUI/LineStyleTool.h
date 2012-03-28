@@ -13,11 +13,9 @@ public:
 	HTREEITEM configure( HTREEITEM parentItem);
 	virtual ~LineStyleTool();
 	String getMenuString() const;
-	static int openGLLineStyle(int linestyle, double sz=1.0);
-	static int ilwisLineStyle(int linestyle, double sz=1.0);
 protected:
 	void displayOptionSetLineStyle();
-	LineDspType linestyle;
+	ILWIS::NewDrawer::LineDspType linestyle;
 	double linethickness;
 };
 
@@ -33,7 +31,7 @@ private:
 	FieldColor *fc;
 	LineProperties *lprops;
 	LineDrawer *line;
-	LineDspType style;
+	ILWIS::NewDrawer::LineDspType style;
 	ComplexDrawer::DrawerType drawerType;
 };
 }
