@@ -541,15 +541,18 @@ void LayerTreeView::OnRButtonDown(UINT nFlags, CPoint point)
 
 void LayerTreeView::EditNamedLayer(const FileName& fn)
 {
-	CFrameWnd* fw = GetTopLevelFrame();
-	MapWindow* mw = dynamic_cast<MapWindow*>(fw);
-	if (0 == mw)
-		return;
-	CView* vw = mw->vwFirst();
-	MapPaneView* mv = dynamic_cast<MapPaneView*>(vw);
-	if (0 == mv)
-		return;
-	mv->EditNamedLayer(fn);
+	if ( fn.fExist() && drwTool) {
+		for(int i=0; i < drwTool->getToolCount(); ++i) {
+			DrawerTool *tool = drwTool->getTool(i);
+			if ( tool->getType() == "LayerDrawerTool") {
+				SpatialDataDrawer *sdr = (SpatialDataDrawer *)tool->getDrawer();
+				if (sdr->getBaseMap()->fnObj == fn) {
+					sdr->setEditMode(true);
+				}
+
+			}
+		}
+	}
 }
 
 DROPEFFECT LayerTreeView::OnDragEnter(COleDataObject* pDataObject, DWORD dwKeyState, CPoint point) 

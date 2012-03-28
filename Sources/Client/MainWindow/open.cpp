@@ -152,11 +152,11 @@ LRESULT OpenIlwisMaps(CWnd *parent, const String& sCmd) {
 	else if (fnFile.sExt == ".ioc" && pm.fExist("layer"))
 		IlwWinApp()->OpenDocumentFile(fnFile.sFullNameQuoted().c_str(), IlwisDocument::otCOLLECTION);
 	else {
-		int sz = pm.iFlags();
-		if ( sz == 0)
-			IlwWinApp()->OpenDocumentFile(fnFile.sFullNameQuoted().c_str());
+		bool options = pm.iFlags() != 0 || pm.iOptions() != 0 ;
+		if ( options)
+			IlwWinApp()->OpenDocumentFile(fnFile.sFullNameQuoted().c_str(), pm);
 		else {
-			IlwWinApp()->OpenDocumentFile(fnFile.sFullNameQuoted().c_str(),pm);
+			IlwWinApp()->OpenDocumentFile(fnFile.sFullNameQuoted().c_str());
 		}
 	}
 

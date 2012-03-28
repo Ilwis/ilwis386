@@ -134,35 +134,6 @@ private:
 	ChooseColumnComboBox* cccb;
 };
 
-class _export LegendClassLayerTreeItem: public LayerTreeItem
-{
-public:
-	LegendClassLayerTreeItem(LayerTreeView*, ILWIS::NewDrawer*, Domain _dm, int iRaw, const Column& col);
-	virtual ~LegendClassLayerTreeItem();
-	virtual void OnLButtonDblClk(UINT nFlags, CPoint point);
-	virtual void OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult); 
-	virtual void SwitchCheckBox(bool fOn);
-private:
-	Domain dm;
-	int iRaw;
-	Column attCol;
-
-	ILWIS::NewDrawer *dr;
-
-};
-
-class _export LegendValueLayerTreeItem: public LayerTreeItem
-{
-public:
-	LegendValueLayerTreeItem(LayerTreeView*, NewDrawer*, DomainValueRangeStruct _dvrs, double rValue);
-	virtual ~LegendValueLayerTreeItem();
-	virtual void OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult);
-private:
-	DomainValueRangeStruct dvrs;
-	double rVal;
-	NewDrawer *dr;
-};
-
 class _export DisplayOptionTree: public LayerTreeItem
 {
 public:
@@ -206,6 +177,34 @@ protected:
 	SetChecks *checks;
 	HTREEITEM hti;
 	HTREEITEM parent;
+};
+
+
+class _export LegendValueLayerTreeItem: public DisplayOptionTreeItem
+{
+public:
+	LegendValueLayerTreeItem(LayerTreeView*, HTREEITEM parent, NewDrawer*, DomainValueRangeStruct _dvrs, double rValue);
+	virtual ~LegendValueLayerTreeItem();
+	virtual void OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult);
+private:
+	DomainValueRangeStruct dvrs;
+	double rVal;
+};
+
+class _export LegendClassLayerTreeItem: public DisplayOptionTreeItem
+{
+public:
+	LegendClassLayerTreeItem(LayerTreeView*, HTREEITEM parent, ILWIS::NewDrawer*, Domain _dm, int iRaw, const Column& col);
+	virtual ~LegendClassLayerTreeItem();
+	//virtual void OnLButtonDblClk(UINT nFlags, CPoint point);
+	virtual void OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult); 
+	virtual void SwitchCheckBox(bool fOn);
+	long raw() { return iRaw; }
+private:
+	Domain dm;
+	int iRaw;
+	Column attCol;
+
 };
 
 class _export DisplayOptionColorItem: public DisplayOptionTreeItem

@@ -160,7 +160,7 @@ int MapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	add(ID_COPY );
 	add(ID_PASTE);
 	addBreak;
-	menEditLayer.CreateMenu();
+	/*menEditLayer.CreateMenu();
 	menPopup.AppendMenu(MF_POPUP, (UINT)menEditLayer.GetSafeHmenu(), sMen(ID_EDITLAYER)); 	
 	menSub.CreateMenu();
 	addSub(ID_PIXELEDIT);
@@ -168,30 +168,30 @@ int MapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	addSub(ID_SEGEDIT);
 	addSub(ID_POLEDIT);
 	addSubMenu(ID_EDITOR);
-	addBreak;
-	menRprLayer.CreateMenu();
-	menPopup.AppendMenu(MF_POPUP, (UINT)menRprLayer.GetSafeHmenu(), sMen(ID_RPRLAYER)); 	
-	menDomLayer.CreateMenu();
-	menPopup.AppendMenu(MF_POPUP, (UINT)menDomLayer.GetSafeHmenu(), sMen(ID_DOMLAYER)); 	
-	add(ID_EDITGRF);
-	add(ID_EDITCSY);
-	hMenEdit = menPopup.GetSafeHmenu();
-	addMenu(ID_MEN_EDIT);
+	addBreak;*/
+	//menRprLayer.CreateMenu();
+	//menPopup.AppendMenu(MF_POPUP, (UINT)menRprLayer.GetSafeHmenu(), sMen(ID_RPRLAYER)); 	
+	//menDomLayer.CreateMenu();
+	//menPopup.AppendMenu(MF_POPUP, (UINT)menDomLayer.GetSafeHmenu(), sMen(ID_DOMLAYER)); 	
+	//add(ID_EDITGRF);
+	//add(ID_EDITCSY);
+	//hMenEdit = menPopup.GetSafeHmenu();
+	//addMenu(ID_MEN_EDIT);
 
-	menPopup.CreateMenu();
+	//menPopup.CreateMenu();
 	add(ID_ADDLAYER);
 	//add(ID_ADD_GRID);
 	//add(ID_ADD_GRATICULE);
 	add(ID_REMOVELAYER);
-	menDataLayer.CreateMenu();
-	menPopup.AppendMenu(MF_POPUP, (UINT)menDataLayer.GetSafeHmenu(), sMen(ID_LAYEROPTIONS)); 	
+	//menDataLayer.CreateMenu();
+	//menPopup.AppendMenu(MF_POPUP, (UINT)menDataLayer.GetSafeHmenu(), sMen(ID_LAYEROPTIONS)); 	
 	addBreak;
-	add(ID_BGCOLOR);
-	menSub.CreateMenu();
-	addSub(ID_MAPDBLCLKRECORD);
-	addSub(ID_MAPDBLCLKRPR);
-	addSub(ID_MAPDBLCLKACTION);
-	addSubMenu(ID_MAPDBLCLK);
+	//add(ID_BGCOLOR);
+	//menSub.CreateMenu();
+	//addSub(ID_MAPDBLCLKRECORD);
+	//addSub(ID_MAPDBLCLKRPR);
+	//addSub(ID_MAPDBLCLKACTION);
+	//addSubMenu(ID_MAPDBLCLK);
 
 	addMenu(ID_MEN_LAYERS);
 
@@ -393,11 +393,11 @@ void MapWindow::OnInitMenu(CMenu* pMenu)
 	MapCompositionDoc* mcd = mpv->GetDocument();  
 	if (0 == mcd) 
 		return;
-	mcd->menLayers(menDataLayer, ID_LAYFIRST);
-	mcd->menLayers(menEditLayer, ID_EDITLAYER);
-	mcd->menLayers(menPropLayer, ID_PROPLAYER);
-	mcd->menLayers(menRprLayer, ID_RPRLAYER);
-	mcd->menLayers(menDomLayer, ID_DOMLAYER);
+	//mcd->menLayers(menDataLayer, ID_LAYFIRST);
+	//mcd->menLayers(menEditLayer, ID_EDITLAYER);
+	//mcd->menLayers(menPropLayer, ID_PROPLAYER);
+	//mcd->menLayers(menRprLayer, ID_RPRLAYER);
+	//mcd->menLayers(menDomLayer, ID_DOMLAYER);
 	DrawMenuBar();
 }
 

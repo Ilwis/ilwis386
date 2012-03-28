@@ -96,12 +96,6 @@
 
 
 
-enum LineDspType { ldtNone,
-                   ldtSingle, ldtDouble, ldtTriple,
-                   ldtDot, ldtDash, ldtDashDot, ldtDashDotDot,
-                   ldtBlocked, ldtSymbol
-                 };
-
 /*
    None: no line
      - optional symbols (smb, rDist)
@@ -133,6 +127,7 @@ enum LineDspType { ldtNone,
 class _export Line;
 class _export FieldLine;
 
+#include "Engine\Drawers\Drawer_n.h"
 
 class _export Line
 {
@@ -142,8 +137,8 @@ class _export Line
 public:
   Line(const Representation& rpr, long iRaw);
   Line(const RepresentationPtr* rpr, long iRaw);
-  Line(Color color=Color(0,0,0), double rWidth=0, LineDspType typ=ldtSingle);
-  Line(LineDspType, Color, Color clrFill);
+  Line(Color color=Color(0,0,0), double rWidth=0, ILWIS::NewDrawer::LineDspType typ=ILWIS::NewDrawer::ldtSingle);
+  Line(ILWIS::NewDrawer::LineDspType, Color, Color clrFill);
   Line(const ExtendedSymbol&, double rDist);
   Line(const Line&);
   ~Line();
@@ -158,10 +153,10 @@ public:
 	void Write(const char* sSection, const char* sPrefix, const FileName& filename);
   Color& clrLine() { return clr; }
   Color& clrLineFill() { return clrFill; }
-  static String sConv(LineDspType ldt);
-  static LineDspType ldtConv(const String&);
-  static int psConv(LineDspType); // PenStyle is a zApp enum
-  bool fSymbolType() const { return ldtSymbol == ldt; }
+  static String sConv(ILWIS::NewDrawer::LineDspType ldt);
+  static ILWIS::NewDrawer::LineDspType ldtConv(const String&);
+  static int psConv(ILWIS::NewDrawer::LineDspType); // PenStyle is a zApp enum
+  bool fSymbolType() const { return ILWIS::NewDrawer::ldtSymbol == ldt; }
 	void Resize(double rFactor);
 	void ResizeSymbol(double rFactor);
 private:
@@ -185,7 +180,7 @@ private:
                       zPoint& p1r, zPoint& p2r,
                       zPoint& p1l, zPoint& p2l);
   static bool fCross(zPoint pA0, zPoint pA1, zPoint pB0, zPoint pB1, zPoint& pC);
-  LineDspType ldt;
+  ILWIS::NewDrawer::LineDspType ldt;
   double rWidth, rDist; // in mm
   Color clr, clrFill;
   bool fSupportLine;
@@ -197,13 +192,13 @@ private:
 class _export FieldLineTypeSimple: public FieldOneSelect
 {
 public:
-  FieldLineTypeSimple(FormEntry* parent, LineDspType* ldt, bool fOnlySimple=false);
+	FieldLineTypeSimple(FormEntry* parent, ILWIS::NewDrawer::LineDspType* ldt, bool fOnlySimple=false);
   void StoreData();
 protected:
   void create();
   void DrawItem(Event *ev);
 private:
-  LineDspType* ldt;
+	ILWIS::NewDrawer::LineDspType* ldt;
   long iLdt;
   bool fOnlySimple;
 };
@@ -212,7 +207,7 @@ class _export FieldLineType: public FormEntry
 {
 public:
   FieldLineType(FormEntry* parent, const String& sQuestion,
-                LineDspType* ldt, bool fOnlySimple=true);
+	  ILWIS::NewDrawer::LineDspType* ldt, bool fOnlySimple=true);
   void SetCallBack(NotifyProc np)
 	{ FormEntry::SetCallBack(np);
 		fld->SetCallBack(np); 
@@ -234,7 +229,7 @@ private:
 class _export FieldLine: public FieldGroup
 {
 public:
-  FieldLine(FormEntry* parent, Line*, bool fAskColor=false);
+  FieldLine(FormEntry* parent, Line*, bool fAskColor=false, bool noSupport=true);
   void StoreData();
   virtual void show(int sw);           
 private:
@@ -250,6 +245,7 @@ private:
   PushButton* pbSymbol;
   Line line;
   Line* pLine;
+  bool noSupport;
 };
 
 #endif // LINE_H

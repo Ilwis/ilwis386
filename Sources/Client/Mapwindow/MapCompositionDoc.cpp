@@ -739,38 +739,38 @@ void MapCompositionDoc::menLayers(CMenu& men, int iBaseId)
 		men.AppendMenu(MF_STRING, id, s);
 		UINT iFlag;
 		switch (iBaseId) {
-	  case ID_LAYFIRST:
-		  iFlag = mapdrawer->isActive() 
-			  ? MF_CHECKED : MF_UNCHECKED;
-		  men.CheckMenuItem(id, MF_BYCOMMAND | iFlag);
-		  break;
+	  //case ID_LAYFIRST:
+		 // iFlag = mapdrawer->isActive() 
+			//  ? MF_CHECKED : MF_UNCHECKED;
+		 // men.CheckMenuItem(id, MF_BYCOMMAND | iFlag);
+		 // break;
 	  //case ID_ATTLAYER:  
 		 // iFlag = !mapdrawer->isActive() || !mapdrawer->getAtttributeTable().fValid()
 			//  ? MF_GRAYED : MF_ENABLED;
 		 // men.EnableMenuItem(id, MF_BYCOMMAND | iFlag);
 		 // break;
-	  case ID_RPRLAYER:  
-		  iFlag = !mapdrawer->isActive() || ! mapdrawer->getBaseMap()->dm()->rpr().fValid()
-			  ? MF_GRAYED : MF_ENABLED;
-		  men.EnableMenuItem(id, MF_BYCOMMAND | iFlag);
-		  break;
-	  case ID_EDITLAYER:  
-		  iFlag = !mapdrawer->isEditable()
-			  ? MF_GRAYED : MF_ENABLED;
-		  men.EnableMenuItem(id, MF_BYCOMMAND | iFlag);
-		  break;
+	  //case ID_RPRLAYER:  
+		 // iFlag = !mapdrawer->isActive() || ! mapdrawer->getBaseMap()->dm()->rpr().fValid()
+			//  ? MF_GRAYED : MF_ENABLED;
+		 // men.EnableMenuItem(id, MF_BYCOMMAND | iFlag);
+		 // break;
+	  //case ID_EDITLAYER:  
+		 // iFlag = !mapdrawer->isEditable()
+			//  ? MF_GRAYED : MF_ENABLED;
+		 // men.EnableMenuItem(id, MF_BYCOMMAND | iFlag);
+		 // break;
 	  case ID_PROPLAYER:  
 		  iFlag = MF_ENABLED;
 		  men.EnableMenuItem(id, MF_BYCOMMAND | iFlag);
 		  break;
-	  case ID_DOMLAYER:
-		  {  
-			  BaseMap bm;
-			  bm.SetPointer(mapdrawer->getBaseMap());
-			  iFlag = !fDomainEditable(bm) ? MF_GRAYED : MF_ENABLED;
-			  men.EnableMenuItem(id, MF_BYCOMMAND | iFlag);
-		  }
-		  break;
+	 // case ID_DOMLAYER:
+		//  {  
+		//	  BaseMap bm;
+		//	  bm.SetPointer(mapdrawer->getBaseMap());
+		//	  iFlag = !fDomainEditable(bm) ? MF_GRAYED : MF_ENABLED;
+		//	  men.EnableMenuItem(id, MF_BYCOMMAND | iFlag);
+		//  }
+		//  break;
 		}    
 	}
 }
@@ -1149,10 +1149,10 @@ BOOL MapCompositionDoc::OnOpenPointMap(const PointMap& pm, OpenType ot,int os)
 	SetTitle(pm);
 
 	
-	createBaseMapDrawer(pm,"FeatureDataDrawer", "Ilwis38", os);
+	SpatialDataDrawer *drw = (SpatialDataDrawer *)createBaseMapDrawer(pm,"FeatureDataDrawer", "Ilwis38", os);
 
 	if (ot & otEDIT) {
-		::AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_EDITLAYER, 0);
+		drw->setEditMode(true);
 	}
 	return TRUE;
 }

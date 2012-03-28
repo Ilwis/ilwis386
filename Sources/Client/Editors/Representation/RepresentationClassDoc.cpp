@@ -98,6 +98,30 @@ BOOL RepresentationClassDoc::OnOpenDocument(LPCTSTR lpszPathName, int os)
   return TRUE;
 }
 
+BOOL RepresentationClassDoc::OnOpenDocument(LPCTSTR lpszPathName, ParmList& pm, int os) 
+{
+  ISTRUE(fINotEqual, lpszPathName, (LPCTSTR)0);
+  ISTRUE(fINotEqual, lpszPathName[0], (char)0);
+
+	if (!RepresentationDoc::OnOpenDocument(lpszPathName))
+		return FALSE;
+
+	try
+	{
+		FileName fn(lpszPathName);
+		Representation rprClass(fn);
+		DomainSort *pds = rprClass->dm()->pdsrt();
+		DomainPicture *pdp = rprClass->dm()->pdp();
+	}		
+	catch (const ErrorObject& err)
+	{
+		err.Show();
+		return FALSE;
+	}		
+
+  return TRUE;
+}
+
 RepresentationClassDoc::~RepresentationClassDoc()
 {
 }

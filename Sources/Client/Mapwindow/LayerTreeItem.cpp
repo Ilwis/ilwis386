@@ -429,28 +429,13 @@ void ColumnLayerTreeItem::FinishColumnField()
 // LegendClassLayerTreeItem
 //////////////////////////////////////////////////////////////////////
 
-LegendClassLayerTreeItem::LegendClassLayerTreeItem(LayerTreeView* ltv, NewDrawer* _dr, Domain _dm, int iR, const Column& col)
-: LayerTreeItem(ltv), dr(_dr), iRaw(iR), dm(_dm), attCol(col)
+LegendClassLayerTreeItem::LegendClassLayerTreeItem(LayerTreeView* ltv, HTREEITEM parent, NewDrawer* dr, Domain _dm, int iR, const Column& col)
+: DisplayOptionTreeItem(ltv,parent, dr), iRaw(iR), dm(_dm), attCol(col)
 {
 }
 
 LegendClassLayerTreeItem::~LegendClassLayerTreeItem()
 {
-}
-
-void LegendClassLayerTreeItem::OnLButtonDblClk(UINT nFlags, CPoint point)
-{
-	//FormBaseDialog* frm = dr->wEditRpr(ltv, iRaw);
-	//if (0 == frm)
-	//	return;
-	//if (frm->fOkClicked()) {
-	//	MapCompositionDoc* doc = ltv->GetDocument();
-	//	doc->ChangeState();
-	//	doc->UpdateAllViews(ltv, 0);
-	//	ltv->Invalidate();
-	//}
-	//delete frm;
-	//ltv->SetFocus();
 }
 
 void LegendClassLayerTreeItem::SwitchCheckBox(bool fOn)
@@ -467,7 +452,7 @@ void LegendClassLayerTreeItem::SwitchCheckBox(bool fOn)
 	}
 	else
 		pp.filteredRaws.push_back(fOn ? iRaw : -iRaw);
-	dr->prepare(&pp);
+	drw->prepare(&pp);
 	MapCompositionDoc* doc = ltv->GetDocument();
 	doc->mpvGetView()->Invalidate();
 
@@ -511,7 +496,7 @@ void LegendClassLayerTreeItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 			CRgn rgn;
 			rgn.CreateRectRgnIndirect(&rect);
 			cdc.SelectClipRgn(&rgn);
-			dr->drawLegendItem(&cdc, rect, iRaw);
+			((ComplexDrawer *)drw)->drawLegendItem(&cdc, rect, iRaw);
 			cdc.SelectClipRgn(0);
 
 			String sText = dm->sValueByRaw(iRaw,0);
@@ -537,8 +522,8 @@ void LegendClassLayerTreeItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 }
 
 
-LegendValueLayerTreeItem::LegendValueLayerTreeItem(LayerTreeView* ltv, NewDrawer* _dr, DomainValueRangeStruct _dvrs, double rValue)
-: LayerTreeItem(ltv), dr(_dr), rVal(rValue), dvrs(_dvrs)
+LegendValueLayerTreeItem::LegendValueLayerTreeItem(LayerTreeView* ltv, HTREEITEM parent, NewDrawer* dr, DomainValueRangeStruct _dvrs, double rValue)
+: DisplayOptionTreeItem(ltv,parent, dr), rVal(rValue), dvrs(_dvrs)
 {
 }
 
@@ -582,7 +567,7 @@ void LegendValueLayerTreeItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 			int iHeight = rect.Height();
 			int iWidth = 1.5 * iHeight;
 			rect.right = rect.left + iWidth;
-			dr->drawLegendItem(&cdc, rect, rVal);
+			((ComplexDrawer *)drw)->drawLegendItem(&cdc, rect, rVal);
 			String sText = dvrs.sValue(rVal,0);
 			DomainValue* dv = dvrs.dm()->pdv();
 			if (dv->fUnit())

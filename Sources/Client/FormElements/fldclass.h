@@ -43,12 +43,12 @@
 #define FIELDCLASS_H
 #include "Engine\Domain\dmsort.h"
 
-class FieldClassSimple: public FieldOneSelect
+class _export FieldClassSimple: public FieldOneSelect
 {
 public:
-  _export FieldClassSimple(FormEntry* parent, long* iClass, DomainSort* ds);
-  _export ~FieldClassSimple();
-  void _export SetVal(long iClass);
+  FieldClassSimple(FormEntry* parent, long* iClass, DomainSort* ds);
+  ~FieldClassSimple();
+  void SetVal(long iClass);
   void StoreData();	
 	void DrawItem(Event* dis);
 protected:
