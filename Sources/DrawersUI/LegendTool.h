@@ -18,8 +18,9 @@ public:
 private:
 	void insertLegendItemsValue(const Representation& rpr, const DomainValueRangeStruct& dvs);
 	void insertLegendItemsClass(const Representation& rpr);
-	void displayOptionRpr();
+	void displayOptionRprClass();
 	HTREEITEM htiLeg;
+	IlwisObject::iotIlwisObjectType mapType;
 };
 
 class LineRprForm : public DisplayOptionsForm {
@@ -33,6 +34,20 @@ private:
   long iRaw;
   Color col;
   Line line;
+  double transparency;
+
+};
+
+class PolRprForm : public DisplayOptionsForm {
+	public:
+	PolRprForm(CWnd *wPar, LayerDrawer *dr, RepresentationClass* rc, long raw);
+	void apply(); 
+private:
+	int setTransparency(Event *ev);
+  RepresentationClass* rcl;  
+  long iRaw;
+  Color col;
+  int transparency;
 
 };
 }

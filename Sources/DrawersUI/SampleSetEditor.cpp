@@ -108,18 +108,19 @@ selectState(0)
 }
 
 bool SampleSetEditor::isToolUseableFor(ILWIS::DrawerTool *tool){
-	LayerDrawerTool *layerDrawerTool = dynamic_cast<LayerDrawerTool *>(tool);
-	SetDrawerTool *setDrawerTool = dynamic_cast<SetDrawerTool *>(tool);
-	if ( !layerDrawerTool && !setDrawerTool)
-		return false;
-	RasterLayerDrawer *sdrw = dynamic_cast<RasterLayerDrawer *>(tool->getDrawer());
-	if ( !sdrw)
-		return false;
-	SetDrawer *adrw = dynamic_cast<SetDrawer *>(tool->getDrawer());
-	RangeReal rr = adrw ? adrw->getStretchRangeReal() : sdrw->getStretchRangeReal();
-	if ( rr.fValid())
-		parentTool = tool;
-	return rr.fValid();
+	return false;
+	//LayerDrawerTool *layerDrawerTool = dynamic_cast<LayerDrawerTool *>(tool);
+	//SetDrawerTool *setDrawerTool = dynamic_cast<SetDrawerTool *>(tool);
+	//if ( !layerDrawerTool && !setDrawerTool)
+	//	return false;
+	//RasterLayerDrawer *sdrw = dynamic_cast<RasterLayerDrawer *>(tool->getDrawer());
+	//if ( !sdrw)
+	//	return false;
+	//SetDrawer *adrw = dynamic_cast<SetDrawer *>(tool->getDrawer());
+	//RangeReal rr = adrw ? adrw->getStretchRangeReal() : sdrw->getStretchRangeReal();
+	//if ( rr.fValid())
+	//	parentTool = tool;
+	//return rr.fValid();
 }
 
 void SampleSetEditor::setcheckSelectMode(void *value, HTREEITEM item) {

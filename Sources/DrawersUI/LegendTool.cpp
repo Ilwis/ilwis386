@@ -1,4 +1,5 @@
 #include "Client\Headers\formelementspch.h"
+#include "Client\FormElements\FieldIntSlider.h"
 #include "Engine\Base\Round.h"
 #include "Client\FormElements\fldcol.h"
 #include "client\formelements\fldrpr.h"
@@ -99,21 +100,24 @@ void LegendTool::insertLegendItemsClass(const Representation& rpr){
 	for (int i = 1; i <= iItems; ++i) {
 		int iRaw = dc->iKey(i);
 		String sName = dc->sValueByRaw(iRaw, 0);
-		//HTREEITEM hti = tree->GetTreeCtrl().InsertItem(sName.c_str(), htiNode);
-		//tree->GetTreeCtrl().SetCheck(hti);
 		Column col;
 		if ( layerDrawer->useAttributeColumn() && layerDrawer->getAtttributeColumn().fValid())
 			col = layerDrawer->getAtttributeColumn();
 		LegendClassLayerTreeItem *it = new LegendClassLayerTreeItem(tree, htiNode, drawer, rpr->dm(), iRaw, col);
-		it->setDoubleCickAction(this,(DTDoubleClickActionFunc)&LegendTool::displayOptionRpr);
+		it->setDoubleCickAction(this,(DTDoubleClickActionFunc)&LegendTool::displayOptionRprClass);
 		insertItem(sName,"",it,1);
 	}
 }
 
-void LegendTool::displayOptionRpr() {
+void LegendTool::displayOptionRprClass() {
 	LayerDrawer *ldr = dynamic_cast<LayerDrawer *>(drawer);
 	LegendClassLayerTreeItem *it = (LegendClassLayerTreeItem *)tree->getCurrent();
-	new LineRprForm(tree, ldr,ldr->getRepresentation()->prc(),it->raw());
+	if ( mapType == IlwisObject::iotSEGMENTMAP)
+		new LineRprForm(tree, ldr,ldr->getRepresentation()->prc(),it->raw());
+	else if ( mapType == IlwisObject::iotPOLYGONMAP) {
+		new PolRprForm(tree,ldr,ldr->getRepresentation()->prc(),it->raw());
+	} else if ( mapType == IlwisObject::iotPOINTMAP) {
+	}
 }
 
 void LegendTool::update() {
@@ -122,7 +126,7 @@ void LegendTool::update() {
 		mapDrawer = dynamic_cast<SpatialDataDrawer *>(drawer->getParentDrawer());
 
 	DomainValueRangeStruct dvs = mapDrawer->getBaseMap()->dvrs();
-
+	mapType = IOTYPE(mapDrawer->getBaseMap()->fnObj);
 	LayerDrawer *layerDrawer = dynamic_cast<LayerDrawer *>(drawer);
 	SetDrawer *adrw = dynamic_cast<SetDrawer *>(drawer);
 	if ( adrw) {
@@ -164,15 +168,9 @@ DisplayOptionsForm(dr,wPar,TR("Line Representation")),rcl(rc), iRaw(raw), line(r
 
   StaticText* st = new StaticText(root, sText);
   st->SetIndependentPos();
-  cs = new ColorSelector(root, &col);
-  cs->SetIndependentPos();
-  PushButton* pb = new PushButton(root, TR("&Custom Color..."), 
-    (NotifyProc)&LineRprForm::CustomColor);
-  pb->Align(cs, AL_UNDER);  
-  pb->SetIndependentPos();
-
+  new FieldColor(root,"Line Color",&col);
   new FieldBlank(root, 0.3);
-	line.ResizeSymbol(1.0/3.0);
+  line.ResizeSymbol(1.0/3.0);
   new FieldLine(root, &line);
 
   SetMenHelpTopic("ilwismen\\representation_class_editor_edit_item_segment.htm");
@@ -181,7 +179,7 @@ DisplayOptionsForm(dr,wPar,TR("Line Representation")),rcl(rc), iRaw(raw), line(r
 
 int LineRprForm::CustomColor(Event*)
 {
-  cs->CustomColor(0);
+  //cs->CustomColor(0);
   return 0;
 }
 
@@ -193,5 +191,44 @@ void  LineRprForm::apply() {
   PreparationParameters pp(NewDrawer::ptRENDER, 0);
   drw->prepare(&pp);
 
+  updateMapView();
+}
+
+
+//---------------------------------------------------
+PolRprForm::PolRprForm(CWnd *wPar, LayerDrawer *dr, RepresentationClass* rc, long raw) : 
+DisplayOptionsForm(dr,wPar,TR("Polygon Representation")),rcl(rc), iRaw(raw)
+{
+   String sText;
+  if (rcl->dm()->pdp())
+    sText = String("%i", raw);
+  else  
+    sText = rcl->dm()->sValueByRaw(raw,0);
+  col = rcl->clrRaw(iRaw);
+
+  StaticText* st = new StaticText(root, sText);
+  st->SetIndependentPos();
+  new FieldColor(root,"Area Color",&col);
+
+  FieldIntSliderEx *slider = new FieldIntSliderEx(root,"Transparency(0-100)", &transparency,ValueRange(0,100),true);
+  slider->SetCallBack((NotifyProc)&PolRprForm::setTransparency);
+  slider->setContinuous(true);
+
+  SetMenHelpTopic("ilwismen\\representation_class_editor_edit_item_polygon.htm");
+  create();
+}
+
+int PolRprForm::setTransparency(Event *ev) {
+	apply();
+	return 1;
+}
+
+void  PolRprForm::apply() {
+  root->StoreData();
+  rcl->PutColor(iRaw, col);
+  rcl->PutTransparency(iRaw,1.0 - transparency/ 100.0);
+  PreparationParameters pp(NewDrawer::ptRENDER, 0);
+  drw->prepare(&pp);
+  view->Invalidate();
   updateMapView();
 }
