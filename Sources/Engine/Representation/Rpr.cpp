@@ -46,9 +46,15 @@
 #include "Engine\Applications\objvirt.h"
 #include "Engine\Applications\ModuleMap.h"
 #include "Engine\Base\System\Engine.h"
+#include "Engine\Drawers\Drawer_n.h"
 
 IlwisObjectPtrList Representation::listRpr;
 
+RepresentationProperties::RepresentationProperties() {
+	linewidth = rUNDEF;
+	lineType = ILWIS::NewDrawer::ldtSingle;
+	itemTransparency = 1.0;
+}
 Representation::Representation()
 : IlwisObject(listRpr)
 {}
@@ -477,6 +483,9 @@ void RepresentationPtr::GetObjectStructure(ObjectStructure& os)
 	os.AddFile(fnObj, "TableStore", "Data");
 	if ( os.fGetAssociatedFiles() )
 		os.AddFile(fnObj, "Representation", "Domain", ".dom");
+}
+
+void RepresentationPtr::getProperties(long iRaw, RepresentationProperties *props) {
 }
 
 Color Representation::clrPrimary(int iNr) 

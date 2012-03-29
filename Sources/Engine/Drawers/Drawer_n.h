@@ -21,6 +21,8 @@ namespace ILWIS {
 
 typedef ILWIS::NewDrawer* (*DrawerCreate)(ILWIS::DrawerParameters *parms); 
 
+struct RepresentationProperties;
+
 namespace ILWIS {
 	class RootDrawer;
 	struct PreparationParameters;
@@ -37,6 +39,11 @@ namespace ILWIS {
 		enum DataSourceMergeOptions{dsmEXTENDCB=1};
 		enum UICode{ucNONE=0, ucNOREPRESENTATION=2, ucNOINFO=4, ucNOMASK=8, ucNOMULTICOLOR=16,ucNOTRANSPARENCY=32, ucALL=4294967295};
 		enum SpecialDrawingOptions{sdoNone=0, sdoExtrusion=1, sdoSymbolLineNode=2, sdoYMarker=4, sdoFilled=8, sdoSELECTED=16, sdoTOCHILDEREN=32, sdoFootPrint=64, sdoOpen=128};
+		enum LineDspType { ldtNone,
+                   ldtSingle, ldtDouble, ldtTriple,
+                   ldtDot, ldtDash, ldtDashDot, ldtDashDotDot,
+                   ldtBlocked, ldtSymbol
+                 };
 
 		virtual ~NewDrawer() {}
 		virtual bool draw( const CoordBounds& cb=CoordBounds()) const = 0;
@@ -103,9 +110,10 @@ namespace ILWIS {
 			{
 				filteredRaws.resize(parms->filteredRaws.size());
 				copy(parms->filteredRaws.begin(), parms->filteredRaws.end(),filteredRaws.begin());
+				props = parms->props;
 			}
-		PreparationParameters(int t=1,CDC *_dc = 0,int m=10) : type(t),dc(_dc)/*,rootDrawer(0),parentDrawer(0)*/, zOrder(-1),index(0),contextMode(m) {} 
-		PreparationParameters(int t, const CoordSystem& cs) : type(t), csy(cs),dc(0)/*,rootDrawer(0),parentDrawer(0)*/,zOrder(-1),index(0),contextMode(10)  {}
+		PreparationParameters(int t=1,CDC *_dc = 0,int m=10) : type(t),dc(_dc)/*,rootDrawer(0),parentDrawer(0)*/, zOrder(-1),index(0),contextMode(m),props(0) {} 
+		PreparationParameters(int t, const CoordSystem& cs) : type(t), csy(cs),dc(0)/*,rootDrawer(0),parentDrawer(0)*/,zOrder(-1),index(0),contextMode(10), props(0)  {}
 		int type;
 		CDC *dc;
 		int contextMode;
@@ -115,6 +123,7 @@ namespace ILWIS {
 		int zOrder;
 		int index;
 		String displayOptions;
+		RepresentationProperties *props;
 	};
 
 }

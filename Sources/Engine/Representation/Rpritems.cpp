@@ -229,6 +229,17 @@ double RepresentationItems::rSymbolRotation(long iRaw) const
   return 0;
 }
 
+double RepresentationItems::rTransparencyItem(long iRaw) const{
+  if (iUNDEF == iRaw)
+    return 0;
+  else if (colTransparency.fValid()) {
+    double rT = colTransparency->rValue(iRaw);
+    if (rT != rUNDEF)
+      return rT;
+  }
+  return 1.0;
+}
+
 byte RepresentationItems::iColor(double rValue) const  // 0..1 
 {
   if (!colColor.fValid())
@@ -282,6 +293,12 @@ double RepresentationItems::rLineDist(long iRaw) const
   else if (colLineDist.fValid())
     return colLineDist->rValue(iRaw);
   return 5;
+}
+
+void RepresentationItems::getProperties(long iRaw, RepresentationProperties *props) {
+	props->linewidth = rLineWidth(iRaw);
+	props->lineType = iLine(iRaw); 
+	props->itemTransparency = rTransparencyItem(iRaw);
 }
 
 

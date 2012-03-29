@@ -949,8 +949,9 @@ void MapPtr::Store()
       WriteElement("Map", "InterpolMethod", (char*)0);
       break;
   }
-  if (0 != pms)
+  if (0 != pms) {
     pms->Store();
+  }
   else 
     MapStore::UnStore(fnObj);
   if (fDep)

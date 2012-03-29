@@ -68,16 +68,18 @@ public:
 	Color clrSymbolFill(long iRaw) const;
 	String sSymbolFont(long iRaw) const;
 	double rSymbolRotation(long iRaw) const;
+	double rTransparencyItem(long iRaw) const;
 	short iLine(long iRaw) const;
 	Color clrLineFill(long iRaw) const;
 	double rLineWidth(long iRaw) const;
 	double rLineDist(long iRaw) const;
 	static const double rDefaultLineWidth;
+	void getProperties(long iRaw, RepresentationProperties *props);
 protected:
 	Column colColor, colPattern,
 		colSmbType, colSmbSize, colSmbWidth, colSmbClr, colSmbFC,
 		colPatternData, colSmbFont, colSmbRot, colSecondClr,
-		colLineType, colLineClrFill, colLineWidth, colLineDist;
+		colLineType, colLineClrFill, colLineWidth, colLineDist, colTransparency;
 	static Color clrDefault[16];       
 };
 

@@ -60,6 +60,9 @@ RepresentationClass::RepresentationClass(const FileName& fn)
 	colSecondClr = tbl->col("SecondColor");
 	if (colSecondClr.fValid())
 		colSecondClr->SetOwnedByTable(true);
+	colTransparency = tbl->col("Transparency");
+	if ( colTransparency.fValid())
+		colTransparency->SetOwnedByTable(true);
 	Column colWidth = tbl->col("Width");
 	if (colWidth.fValid()) {
 		colLineWidth = tbl->colNew("LineWidth", DomainValueRangeStruct(0,100,0.1));
@@ -231,6 +234,8 @@ void RepresentationClass::PutPattern(long iRaw, short iPattern)
 	Updated();
 }
 
+
+
 void RepresentationClass::PutPatternData(long iRaw, const short* ptr)
 {
 	if (ptr == 0)
@@ -276,6 +281,19 @@ void RepresentationClass::PutSymbolSize(long iRaw, short iSize)
 			colSmbSize->PutVal(i, (long)(5L * RepresentationClass::iSIZE_FACTOR));
 	}
 	colSmbSize->PutVal(iRaw, (long)iSize);
+	Updated();
+}
+
+void RepresentationClass::PutTransparency(long iRaw, double transp){
+	if ( !colTransparency.fValid()) {
+		colTransparency = tbl->colNew("Transparency",DomainValueRangeStruct(0.0,1.0,0.01));
+		colTransparency->SetOwnedByTable(true);
+		colTransparency->SetDescription("Transparency of items");
+		long iMax = tbl->iRecs()+tbl->iOffset()-1;
+		for (long i = tbl->iOffset(); i <= iMax; ++i)
+			colTransparency->PutVal(i, 1.0);
+	}
+	colTransparency->PutVal(iRaw, transp);
 	Updated();
 }
 

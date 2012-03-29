@@ -46,6 +46,13 @@ class RepresentationClass;
 class RepresentationGradual;
 class RepresentationValue;
 
+struct _export RepresentationProperties {
+	RepresentationProperties();
+	double linewidth;
+	int lineType;
+	double itemTransparency;
+};
+
 class RepresentationPtr: public IlwisObjectPtr
 {
 friend class Representation;
@@ -99,6 +106,7 @@ public:
   RepresentationGradual _export *prg() const;
   RepresentationValue _export   *prv() const;
 	void									GetObjectStructure(ObjectStructure& os);
+	virtual void getProperties(long iRaw, RepresentationProperties *props);
 
 protected:
   _export RepresentationPtr(const FileName&);

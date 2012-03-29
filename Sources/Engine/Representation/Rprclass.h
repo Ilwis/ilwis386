@@ -33,37 +33,8 @@
  Software Foundation, http://www.fsf.org.
 
  Created on: 2007-02-8
- ***************************************************************/
-/* $Log: /ILWIS 3.0/Representation/Rprclass.h $
- * 
- * 7     10/30/01 16:59 Willem
- * Added the GetObjectStructure function now to be able to add the domain
- * reference for the [table] ODF section
- * 
- * 6     8/24/01 13:03 Willem
- * Removed the SetReadOnly() function. This is now handled by
- * IlwisObjectPtr::SetReadOnly() for all ilwis objects
- * 
- * 5     8/01/01 2:56p Martin
- * record is now in the Ilwis namepsace
- * 
- * 4     13-09-00 4:40p Martin
- * added _Export
- * 
- * 3     5/27/99 4:39p Martin
- * //->/*
- * 
- * 2     5/27/99 4:37p Martin
- * added some exports
-// Revision 1.2  1998/09/16 17:25:53  Wim
-// 22beta2
-//
-/* RepresentationClass
-   by Wim Koolhoven
-  (c) Ilwis System Development ITC
-	Last change:  WK   11 Mar 98    9:24 am
-*/
 
+*/
 #ifndef ILWRPRCLASS_H
 #define ILWRPRCLASS_H
 #include "Engine\Representation\Rpritems.h"
@@ -115,6 +86,7 @@ public:
 	void _export PutLineFillColor(long iRaw, Color);
 	void _export PutLineWidth(long iRaw, double rWidth);
 	void _export PutLineDist(long iRaw, double rDist);
+	void _export PutTransparency(long iRaw, double transp);
 	_export static const int iSIZE_FACTOR;
 private:
 	Table tbl;
