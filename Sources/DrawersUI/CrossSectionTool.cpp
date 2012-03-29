@@ -42,9 +42,13 @@ void ProbeMarkers::prepare(PreparationParameters *p){
 
 void ProbeMarkers::addMarker(const Coord& crd) {
 	DrawerParameters dp(this->getRootDrawer(), this);
+	int currentNr = getDrawerCount();
+	Color clr = Representation::clrPrimary(currentNr< 2 ? currentNr + 1 : currentNr + 2);
+
 	PointDrawer *pdrw = new PointDrawer(&dp);
 	PointProperties *prop = (PointProperties *)pdrw->getProperties();
-	prop->symbol = "crosshair";
+	prop->symbol = "filled-crosshair";
+	prop->drawColor = clr;
 	pdrw->setCoord(crd);
 	PreparationParameters pp(NewDrawer::ptRENDER);
 	pdrw->prepare(&pp);

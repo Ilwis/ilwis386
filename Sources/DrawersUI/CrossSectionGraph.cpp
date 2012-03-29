@@ -58,10 +58,7 @@ public:
 };
 
 void CrossSectionGraph::saveAsTbl() {
-	//char strFilter[] = { "ILWIS Table (*.tbt)|All Files (*.*)|*.*||"};
-	//CFileDialog saveForm(FALSE,"tbt",0,0,strFilter);
 	String fname("CrossSection");
-	//TableNameForm frm(this, &fname);
 	if ( TableNameForm(this, &fname).DoModal() == IDOK) {
 		int maxNo = values[0][0].size();
 		FileName fnTable = FileName::fnUnique(FileName(fname,".tbt"));
@@ -77,14 +74,15 @@ void CrossSectionGraph::saveAsTbl() {
 		colCrd->SetOwnedByTable();
 		MapList mpl;
 		ObjectCollection oc;
-		int count = 0;
 		for(int m =0; m < fldGraph->sources.size(); ++m) {
+			int count = 0;
 			Column colValue;
 			IlwisObject obj = fldGraph->sources[m];
 			String name =  String("%S", obj->fnObj.sFile);
 			for(int i = 0; i < fldGraph->crdSelect.size(); ++i) {
 				int noMaps = getNumberOfMaps(m);
-				tbl->iRecNew(noMaps);
+				if ( noMaps != tbl->iRecs())
+					tbl->iRecNew(noMaps);
 				for(long j = 0; j < noMaps; ++j) {
 					FileName fn = obj->fnObj;
 					if ( IOTYPE(fn) == IlwisObject::iotMAPLIST) {
@@ -114,10 +112,10 @@ void CrossSectionGraph::saveAsTbl() {
 						if ( bmp->cs() != fldGraph->csy)
 							crd = bmp->cs()->cConv(fldGraph->csy, crd);
 						String v = bmp->sValue(crd);
-						colIndex->PutVal(count,j);
-						colMap->PutVal(count,bmp->fnObj.sFile );
-						colValue->PutVal(count, v);
-						colMap->PutVal(count, bmp->fnObj.sFile + bmp->fnObj.sExt);
+						colIndex->PutVal(count+1,j);
+						colMap->PutVal(count+1,bmp->fnObj.sFile );
+						colValue->PutVal(count + 1, v);
+						colMap->PutVal(count+1, bmp->fnObj.sFile + bmp->fnObj.sExt);
 					}
 					++count;
 				}
