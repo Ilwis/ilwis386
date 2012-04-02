@@ -353,10 +353,10 @@ int PointMapRprEditForm::exec() {
   root->StoreData();
 	smb.Resize(RepresentationClass::iSIZE_FACTOR);
   if (smb.smType == ExtendedSymbol::smSIMPLE) {
-    rcl->PutSymbolType(iRaw,(short)smb.smb);
+    //rcl->PutSymbolType(iRaw,(short)smb.smb);
   }
   else {
-    rcl->PutSymbolType(iRaw,-(short)smb.cSmb);
+    //rcl->PutSymbolType(iRaw,-(short)smb.cSmb);
     rcl->PutSymbolFont(iRaw,smb.sFaceName);
   }
   rcl->PutSymbolSize(iRaw,smb.iSize);

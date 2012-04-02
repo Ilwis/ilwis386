@@ -662,6 +662,10 @@ void DisplayOptionTreeItem::setTool(DrawerTool *t){
 	tool = t;
 }
 
+void DisplayOptionTreeItem::setImage(int im){
+	image = im;
+}
+
 //----------------------------------
 DisplayOptionTree::DisplayOptionTree(LayerTreeView* ltv, HTREEITEM hti, NewDrawer *draw, DrawerTool *t)
 : LayerTreeItem(ltv),
@@ -879,8 +883,13 @@ void DisplayOptionRadioButtonItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 			} 
 
 			CPoint pt;
-			pt.x = rect.left + 1.5 * iHeight + 2;
+			pt.x = rect.left + iHeight + 2;
 			pt.y = rect.top;
+			if ( tool && image != iUNDEF) {
+				IlwWinApp()->ilSmall.Draw(&cdc, image, pt, ILD_NORMAL); 
+				pt.x = pt.x + 18;
+			} else
+
 			if (ltv->GetTreeCtrl().GetItemState(hti, TVIS_SELECTED)) {
 				cdc.SetTextColor(clrTextSel);
 				cdc.SetBkColor(clrSel);
@@ -1039,8 +1048,18 @@ void SetChecks::setActive(bool yesno) {
 	}
 }
 
+void SetChecks::clear() {
+	checkedItems.clear();
+}
+
 void SetChecks::checkItem(HTREEITEM hti) {
 	CTreeCtrl& tree = tv->GetTreeCtrl();
+	/*TV_ITEM treeItem;
+	treeItem.mask = TVIF_STATE;
+	treeItem.hItem = hti;
+	BOOL valid = tree.GetItem(&treeItem);
+	if (!valid)
+		return;*/
 	DisplayOptionRadioButtonItem *item = dynamic_cast<DisplayOptionRadioButtonItem * >((LayerTreeItem *)(tree.GetItemData(hti)));
 	if ( item) {
 		bool currentState = item->getState();
@@ -1071,3 +1090,11 @@ void SetChecks::checkItem(int index) {
 		checkItem(hti);
 	}
 }
+
+HTREEITEM SetChecks::getHTI(int index){
+	if ( index < checkedItems.size())
+		return checkedItems[index];
+
+	return 0;
+}
+

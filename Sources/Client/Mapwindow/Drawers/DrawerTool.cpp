@@ -139,32 +139,41 @@ bool DrawerTool::addTool(DrawerTool *tool, int proposedIndex) {
 }
 
 void DrawerTool::removeTool(DrawerTool *tool) {
-	for(vector<DrawerTool *>::iterator cur=tools.begin(); cur != tools.end(); ++cur) {
-		if ( (*cur)->getId() == tool->getId()) {
-				DrawerTool *dt = (*cur);
-				tools.erase(cur);
-				delete dt;
-				break;
+	if ( tool == 0) { // all
+		for(vector<DrawerTool *>::iterator cur=tools.begin(); cur != tools.end(); ++cur)
+			delete (*cur);
+		tools.clear();
+	} else {
+		for(vector<DrawerTool *>::iterator cur=tools.begin(); cur != tools.end(); ++cur) {
+			if ( tool == 0 || (*cur)->getId() == tool->getId()) { 
+					DrawerTool *dt = (*cur);
+					tools.erase(cur);
+					delete dt;
+					break;
+			}
 		}
 	}
 }
 
 HTREEITEM DrawerTool::insertItem(const String& name,const String& icon, DisplayOptionTreeItem *item, int checkstatus , HTREEITEM after) {
-	int iImg = IlwWinApp()->iImage(icon);
-	HTREEITEM htiDisplayOptions = tree->GetTreeCtrl().InsertItem(name.c_str(), iImg, iImg, item->getParent(), after);
+	int iconImg = IlwWinApp()->iImage(icon);
+	HTREEITEM htiDisplayOptions = tree->GetTreeCtrl().InsertItem(name.c_str(), iconImg, iconImg, item->getParent(), after);
 	item->setTreeItem(htiDisplayOptions);
 	if ( checkstatus >=0) {
 		tree->GetTreeCtrl().SetCheck(htiDisplayOptions, checkstatus );
 	}
 	tree->GetTreeCtrl().SetItemData(htiDisplayOptions, (DWORD_PTR)item);
+	item->setTool(this);
+	item->setImage(iconImg);
 
 	return htiDisplayOptions;
 }
 
 HTREEITEM DrawerTool::insertItem(HTREEITEM parent, const String& name,const String& icon, LayerTreeItem *item) {
-	int iImg = IlwWinApp()->iImage(icon);
-	HTREEITEM htiDisplayOptions = tree->GetTreeCtrl().InsertItem(name.c_str(), iImg, iImg, parent);
+	int iconImg = IlwWinApp()->iImage(icon);
+	HTREEITEM htiDisplayOptions = tree->GetTreeCtrl().InsertItem(name.c_str(), iconImg, iconImg, parent);
 	tree->GetTreeCtrl().SetItemData(htiDisplayOptions, (DWORD_PTR)item);
+
 	return htiDisplayOptions; 
 }
 
@@ -182,6 +191,23 @@ HTREEITEM DrawerTool::findTreeItemByName(HTREEITEM parent, const String& name) c
 		if ( name == item.pszText )
 			return item.hItem;
 		currentItem =tree->GetTreeCtrl().GetNextItem(currentItem, TVGN_NEXT);
+	}
+	return 0;
+}
+
+DrawerTool *DrawerTool::findChildToolByType(const String& name, bool recursive) {
+	for(int i = 0; i < tools.size(); ++i) {
+		if ( tools[i]->getType() == name)
+			return tools[i];
+		else {
+			if ( recursive) {
+				DrawerTool *ctool = tools[i]->findChildToolByType(name, recursive);
+				if ( ctool)
+					return ctool;
+			}
+		}
+
+
 	}
 	return 0;
 }

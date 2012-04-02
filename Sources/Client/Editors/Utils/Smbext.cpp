@@ -193,11 +193,11 @@ void ExtendedSymbol::Store(RepresentationClass* rcl, long iRaw)
 {
   if (smType == smSIMPLE) 
 	{
-    rcl->PutSymbolType(iRaw,(short)smb);
+    //rcl->PutSymbolType(iRaw,(short)smb);
   }
   else 
 	{
-    rcl->PutSymbolType(iRaw,-(short)cSmb);
+    //rcl->PutSymbolType(iRaw,-(short)cSmb);
     rcl->PutSymbolFont(iRaw,sFaceName);
   }
   rcl->PutSymbolSize(iRaw,iSize);

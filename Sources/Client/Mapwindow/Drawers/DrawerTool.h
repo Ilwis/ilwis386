@@ -48,6 +48,8 @@ public:
 	virtual void timedEvent(UINT timerid);
 	virtual void setActiveMode(bool yesno);
 	virtual void doAction(int options=0) {}
+	int getIcon() const;
+	DrawerTool *findChildToolByType(const String& name, bool recursive = false);
 
 protected:
 	HTREEITEM insertItem(const String& name,const String& icon, DisplayOptionTreeItem *item=0, int checkstatus = -1, HTREEITEM after=TVI_LAST);

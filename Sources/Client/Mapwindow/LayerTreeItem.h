@@ -164,6 +164,8 @@ public:
 	SetChecks *getChecks() { return checks; }
 	void expand();
 	void setTool(DrawerTool *t);
+	void setImage(int im);
+
 	
 protected:
 	DTDoubleClickActionFunc dbcAction;
@@ -177,6 +179,7 @@ protected:
 	SetChecks *checks;
 	HTREEITEM hti;
 	HTREEITEM parent;
+	int image;
 };
 
 
@@ -256,9 +259,11 @@ public:
 	void addItem(HTREEITEM hti);
 	void checkItem(HTREEITEM hti);
 	void checkItem(int index);
+	void clear();
 
 	int getState() const { return state; }
 	void setActive(bool yesno);
+	HTREEITEM getHTI(int index);
 private:
 	vector<HTREEITEM> checkedItems;
 	LayerTreeView *tv;
