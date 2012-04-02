@@ -44,6 +44,7 @@ Created on: 2007-02-8
 #include "Engine\Base\DataObjects\ObjectStructure.h"
 #include "Engine\Table\Rec.h"
 #include "Engine\Table\Colbinar.h"
+#include "Engine\Drawers\Drawer_n.h"
 
 const int RepresentationClass::iSIZE_FACTOR=3;
 
@@ -85,9 +86,9 @@ RepresentationClass::RepresentationClass(const FileName& fn)
 	colPatternData = tbl->col("PatternData");
 	if (colPatternData.fValid())
 		colPatternData->SetOwnedByTable(true);
-	colSmbType = tbl->col("SymbolType");
-	if (colSmbType.fValid())
-		colSmbType->SetOwnedByTable(true);
+	colSmbType2 = tbl->col("SymbolTypeNew");
+	if (colSmbType2.fValid())
+		colSmbType2->SetOwnedByTable(true);
 	colSmbSize = tbl->col("SymbolSize");
 	if (colSmbSize.fValid())
 		colSmbSize->SetOwnedByTable(true);
@@ -254,18 +255,18 @@ void RepresentationClass::PutPatternData(long iRaw, const short* ptr)
 	Updated();
 }
 
-void RepresentationClass::PutSymbolType(long iRaw, short iSmb)
+void RepresentationClass::PutSymbolType(long iRaw, const String& symbName)
 {
-	if (!colSmbType.fValid()) {
+	if (!colSmbType2.fValid()) {
 		//    Domain dmInt("int");
-		colSmbType = tbl->colNew("SymbolType", DomainValueRangeStruct(-256,256));
-		colSmbType->SetOwnedByTable(true);
-		colSmbType->SetDescription("Symbol type");
+		colSmbType2 = tbl->colNew("SymbolTypeNew", DomainValueRangeStruct(Domain("String")));
+		colSmbType2->SetOwnedByTable(true);
+		colSmbType2->SetDescription("Symbol type");
 		long iMax = tbl->iRecs()+tbl->iOffset()-1;
 		for (long i = tbl->iOffset(); i <= iMax; ++i)
-			colSmbType->PutRaw(i, 0);
+			colSmbType2->PutVal(i, DEFAULT_POINT_SYMBOL_TYPE);
 	}
-	colSmbType->PutRaw(iRaw, iSmb);
+	colSmbType2->PutVal(iRaw, symbName);
 	Updated();
 }
 
@@ -278,7 +279,7 @@ void RepresentationClass::PutSymbolSize(long iRaw, short iSize)
 		colSmbSize->SetDescription("Symbol size");
 		long iMax = tbl->iRecs()+tbl->iOffset()-1;
 		for (long i = tbl->iOffset(); i <= iMax; ++i)
-			colSmbSize->PutVal(i, (long)(5L * RepresentationClass::iSIZE_FACTOR));
+			colSmbSize->PutVal(i, (long)100);
 	}
 	colSmbSize->PutVal(iRaw, (long)iSize);
 	Updated();

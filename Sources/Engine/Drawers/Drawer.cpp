@@ -10,6 +10,7 @@ map<String, DrawerCreate> NewDrawer::drawers;
 ILWIS::SVGLoader *ILWIS::NewDrawer::svgContainer=0;//  = new ILWIS::SVGLoader();
 
 
+
 ILWIS::NewDrawer *NewDrawer::getDrawer(const String& type, const String& subtype, ILWIS::DrawerParameters *c)  {
 	if ( type == "")
 		return 0;

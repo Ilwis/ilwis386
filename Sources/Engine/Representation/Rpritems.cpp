@@ -44,6 +44,7 @@
 #include "Engine\Table\Rec.h"
 #include "Engine\Table\Colbinar.h"
 #include "Engine\Representation\Rprclass.h"
+#include "Engine\Drawers\Drawer_n.h"
 
 const double RepresentationItems::rDefaultLineWidth = 0.2;
 
@@ -154,23 +155,24 @@ void RepresentationItems::GetPattern(long iRaw, short aPat[8]) const
   memcpy(aPat, bmb.ptr(), 16);
 }
 
-short RepresentationItems::iSymbolType(long iRaw) const
+String RepresentationItems::sSymbolType(long iRaw) const
 {
-  if (iUNDEF == iRaw || !colSmbType.fValid())
-    return 0;
-  short iVal = shortConv(colSmbType->iValue(iRaw));
-  if (iVal != shUNDEF)
-    return iVal;
-  return 0;
+  if (iUNDEF == iRaw || !colSmbType2.fValid())
+    return DEFAULT_POINT_SYMBOL_TYPE;
+  String sVal = colSmbType2->sValue(iRaw);
+  sVal = sVal.sTrimSpaces();
+  if (sVal != sUNDEF)
+    return sVal;
+  return DEFAULT_POINT_SYMBOL_TYPE;
 }
 
 short RepresentationItems::iSymbolSize(long iRaw) const
 {
   if (iUNDEF == iRaw || !colSmbSize.fValid())
-    return 5 * RepresentationClass::iSIZE_FACTOR;
+    return 100;
   short iVal = shortConv(colSmbSize->iValue(iRaw));
   if (iVal < 0)
-    return 5 * RepresentationClass::iSIZE_FACTOR;
+    return 100;
   return iVal;  
 }
 
@@ -299,6 +301,8 @@ void RepresentationItems::getProperties(long iRaw, RepresentationProperties *pro
 	props->linewidth = rLineWidth(iRaw);
 	props->lineType = iLine(iRaw); 
 	props->itemTransparency = rTransparencyItem(iRaw);
+	props->symbolSize = iSymbolSize(iRaw);
+	props->symbolType = sSymbolType(iRaw);
 }
 
 

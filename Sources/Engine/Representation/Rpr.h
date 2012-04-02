@@ -51,6 +51,8 @@ struct _export RepresentationProperties {
 	double linewidth;
 	int lineType;
 	double itemTransparency;
+	String symbolType;
+	double symbolSize;
 };
 
 class RepresentationPtr: public IlwisObjectPtr

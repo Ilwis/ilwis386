@@ -45,7 +45,7 @@
 #include "Engine\Domain\dm.h"
 #include "Engine\Table\Col.h"
 
-class DATEXPORT RepresentationItems: public RepresentationPtr
+class _export RepresentationItems: public RepresentationPtr
 {
 protected:  
 	RepresentationItems(const FileName&);
@@ -61,7 +61,7 @@ public:
 	byte iColor(double rValue) const;  // 0..1 
 	short iPattern(long iRaw) const;
 	void GetPattern(long iRaw, short aPat[8]) const;
-	short iSymbolType(long iRaw) const;
+	String sSymbolType(long iRaw) const;
 	short iSymbolSize(long iRaw) const;
 	short iSymbolWidth(long iRaw) const;
 	Color clrSymbol(long iRaw) const;
@@ -79,7 +79,7 @@ protected:
 	Column colColor, colPattern,
 		colSmbType, colSmbSize, colSmbWidth, colSmbClr, colSmbFC,
 		colPatternData, colSmbFont, colSmbRot, colSecondClr,
-		colLineType, colLineClrFill, colLineWidth, colLineDist, colTransparency;
+		colLineType, colLineClrFill, colLineWidth, colLineDist, colTransparency, colSmbType2;
 	static Color clrDefault[16];       
 };
 

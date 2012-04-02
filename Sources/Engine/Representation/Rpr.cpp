@@ -54,6 +54,9 @@ RepresentationProperties::RepresentationProperties() {
 	linewidth = rUNDEF;
 	lineType = ILWIS::NewDrawer::ldtSingle;
 	itemTransparency = 1.0;
+	symbolType = DEFAULT_POINT_SYMBOL_TYPE;
+	symbolSize = 100.0;
+
 }
 Representation::Representation()
 : IlwisObject(listRpr)

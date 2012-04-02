@@ -75,7 +75,11 @@ File::File(const FileName& fn, FileAccess fac) :
  fErase(false)
 {
 	CFileStatus fs;
-  GetStatus(fs);
+	TRY {
+		GetStatus(fs);
+	} CATCH (COleException,ex) {
+	}
+	END_CATCH
 	iFileSize = (long)fs.m_size;
 }
 
@@ -85,7 +89,11 @@ iMode(fac),
 fErase(false)
 {
 	CFileStatus fs;
-  GetStatus(fs);
+	TRY {
+		GetStatus(fs);
+	} CATCH (COleException,ex) {
+	}
+	END_CATCH
 	iFileSize = (long)fs.m_size;		
 }
 
@@ -95,7 +103,11 @@ File::File(const char* s, FileAccess fac) :
   fErase(false)	
 {
 	CFileStatus fs;
+	TRY{
   GetStatus(fs);
+	}CATCH(COleException,ex) {
+	}
+	END_CATCH
 	iFileSize = (long)fs.m_size;		
 }
 
@@ -262,7 +274,12 @@ ObjectTime File::filetime()
 {
   ILWISSingleLock sl(&csAccess, TRUE,SOURCE_LOCATION);
 	CFileStatus fs;
-  GetStatus(fs);
+	
+	TRY {
+		GetStatus(fs);
+	} CATCH (COleException,ex) {
+	}
+	END_CATCH
 	return (long)fs.m_atime.GetTime();
 }
 

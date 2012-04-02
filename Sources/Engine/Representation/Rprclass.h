@@ -75,7 +75,7 @@ public:
 	
 	void _export PutPattern(long iRaw, short iPattern);
 	void _export PutPatternData(long iRaw, const short*);
-	void _export PutSymbolType(long iRaw, short iSmb);
+	void _export PutSymbolType(long iRaw, const String& symbName);
 	void _export PutSymbolSize(long iRaw, short iSize);
 	void _export PutSymbolWidth(long iRaw, short iWidth);
 	void _export PutSymbolColor(long iRaw, Color);

@@ -12,6 +12,8 @@ class LayerTreeItem;
 class SetChecks;
 class DisplayOptionTreeItem;
 
+#define DEFAULT_POINT_SYMBOL_TYPE "open-rectangle"
+
 namespace ILWIS {
 	class RootDrawer;
 	struct PreparationParameters;
@@ -90,6 +92,7 @@ namespace ILWIS {
 		static NewDrawer *getDrawer(const String& type, PreparationParameters *pp=0, DrawerParameters *parms=0) ;
 		static void  addDrawer(const String& type, const String& subtype, DrawerCreate);
 		static SVGLoader* getSvgLoader()  ;
+
 	private:
 		static map<String, DrawerCreate> drawers;
 		static SVGLoader		*svgContainer;
