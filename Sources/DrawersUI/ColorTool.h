@@ -13,6 +13,7 @@ public:
 	void setcheckRpr(void *value, HTREEITEM item);
 	SetChecks *getColorCheck() { return colorCheck;}
 	String getMenuString() const;
+	void clear();
 protected:
 	SetChecks *colorCheck;
 

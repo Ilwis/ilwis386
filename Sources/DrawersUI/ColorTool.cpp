@@ -30,6 +30,10 @@ ColorTool::ColorTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : Dr
 ColorTool::~ColorTool() {
 }
 
+void ColorTool::clear() {
+	colorCheck->clear();
+}
+
 bool ColorTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	LayerDrawerTool *sdrwt = dynamic_cast<LayerDrawerTool *>(tool);
 	SetDrawerTool *adrwt = dynamic_cast<SetDrawerTool *>(tool);
@@ -41,7 +45,7 @@ bool ColorTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 }
 
 HTREEITEM ColorTool::configure( HTREEITEM parentItem) {
-	htiNode = insertItem(parentItem, TR("Colors"), "Colors");
+	htiNode = insertItem(parentItem, TR("Portrayal"), "Colors");
 	colorCheck = new SetChecks(tree,this,(DTSetCheckFunc)&ColorTool::setcheckRpr);
 	DrawerTool::configure(htiNode);
 
@@ -92,7 +96,7 @@ void ColorTool::setcheckRpr(void *value, HTREEITEM item) {
 }
 
 String ColorTool::getMenuString() const {
-	return TR("Color");
+	return TR("Portrayal");
 }
 
 //---------------------------------------------------

@@ -16,7 +16,10 @@ public:
 	void update();
 protected:
 	void setcheckAttributeTable(void *w, HTREEITEM );
+	void setcheckattr(void *value, HTREEITEM item);
 	void displayOptionAttColumn();
+
+	SetChecks *attrCheck;
 };
 
 	class ChooseAttributeColumnForm : public DisplayOptionsForm {

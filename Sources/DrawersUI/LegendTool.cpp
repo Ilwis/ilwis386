@@ -26,6 +26,7 @@
 #include "DrawersUI\LegendTool.h"
 #include "Engine\Domain\dmclass.h"
 #include "Engine\Representation\Rprclass.h"
+#include "Engine\Base\System\Engine.h"
 #include "Headers\Hs\Drwforms.hs"
 
 
@@ -117,6 +118,7 @@ void LegendTool::displayOptionRprClass() {
 	else if ( mapType == IlwisObject::iotPOLYGONMAP) {
 		new PolRprForm(tree,ldr,ldr->getRepresentation()->prc(),it->raw());
 	} else if ( mapType == IlwisObject::iotPOINTMAP) {
+		new PointRprForm(tree,ldr,ldr->getRepresentation()->prc(),it->raw());
 	}
 }
 
@@ -227,6 +229,45 @@ void  PolRprForm::apply() {
   root->StoreData();
   rcl->PutColor(iRaw, col);
   rcl->PutTransparency(iRaw,1.0 - transparency/ 100.0);
+  PreparationParameters pp(NewDrawer::ptRENDER, 0);
+  drw->prepare(&pp);
+  view->Invalidate();
+  updateMapView();
+}
+
+//---------------------------------------------------
+PointRprForm::PointRprForm(CWnd *wPar, LayerDrawer *dr, RepresentationClass* rc, long raw) : 
+DisplayOptionsForm(dr,wPar,TR("Pointygon Representation")),rcl(rc), iRaw(raw)
+{
+   String sText;
+  if (rcl->dm()->pdp())
+    sText = String("%i", raw);
+  else  
+    sText = rcl->dm()->sValueByRaw(raw,0);
+  col = rcl->clrRaw(iRaw);
+
+    symbol = rc->sSymbolType(raw);
+    scale = rc->iSymbolSize(raw) / 100.0;
+	col = rc->clrSymbol(raw);
+    StaticText* st = new StaticText(root, sText);
+    st->SetIndependentPos();
+	String base = getEngine()->getContext()->sIlwDir();
+	base += "Resources\\Symbols\\";
+	new FieldDataType(root,TR("Symbols"),&symbol,".ivg",false,0,FileName(base),false);
+	new FieldColor(root,TR("Symbol Color"),&col);
+	new FieldReal(root,TR("Symbol scale"),&scale,ValueRange(RangeReal(0.1,100.0),0.1));
+
+  SetMenHelpTopic("ilwismen\\representation_class_editor_edit_item_Pointygon.htm");
+  create();
+}
+
+void  PointRprForm::apply() {
+  root->StoreData();
+  rcl->PutColor(iRaw, col);
+  rcl->PutSymbolColor(iRaw, col);
+  rcl->PutSymbolSize(iRaw,scale * 100);
+  FileName fn(symbol);
+  rcl->PutSymbolType(iRaw, fn.sFile);
   PreparationParameters pp(NewDrawer::ptRENDER, 0);
   drw->prepare(&pp);
   view->Invalidate();

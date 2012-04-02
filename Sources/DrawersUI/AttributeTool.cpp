@@ -52,30 +52,99 @@ bool AttributeTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 
 HTREEITEM AttributeTool::configure( HTREEITEM parentItem) {
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
-	item->setDoubleCickAction(this,(DTDoubleClickActionFunc)&AttributeTool::displayOptionAttColumn);
-	item->setCheckAction(this,0, (DTSetCheckFunc)&AttributeTool::setcheckAttributeTable);
+	//item->setDoubleCickAction(this,(DTDoubleClickActionFunc)&AttributeTool::displayOptionAttColumn);
+	//item->setCheckAction(this,0, (DTSetCheckFunc)&AttributeTool::setcheckAttributeTable);
 	LayerDrawer *sdr = (LayerDrawer *)drawer;
 	Column attColumn = sdr->getAtttributeColumn();
-	htiNode = insertItem(TR("Attribute table"),".tbt",item,sdr->useAttributeColumn());
-	if ( sdr->useAttributeColumn() && attColumn.fValid())
-		insertItem(htiNode,String("Column : %S",attColumn->sName()),"column");
+	htiNode = insertItem(TR("Display Attribute"),".tbt",item);
+	BaseMap bmp (((SpatialDataDrawer *)drawer->getParentDrawer())->getBaseMap()->fnObj);
+	Table attTable = bmp->tblAtt();
+	if ( attTable.fValid()) {
+		attrCheck = new SetChecks(tree,this,(DTSetCheckFunc)&AttributeTool::setcheckattr);
+		DisplayOptionRadioButtonItem *ritem = new DisplayOptionRadioButtonItem(bmp->sName(),tree, htiNode,drawer);
+		ritem->setCheckAction(this,attrCheck, (DTSetCheckFunc)&AttributeTool::setcheckattr);
+		ritem->setState(true);
+		insertItem(bmp->sName(),bmp->fnObj.sExt,ritem);
+
+		for(int i=0; i < attTable->iCols(); ++i) {
+			Column col = attTable->col(i);
+			if ( col->dm()->pdsrt() || col->dm()->pdv()) {
+				ritem = new DisplayOptionRadioButtonItem(col->sName(),tree, htiNode,drawer);
+				ritem->setCheckAction(this,attrCheck, (DTSetCheckFunc)&AttributeTool::setcheckattr);
+				if ( col->dm()->pdv())
+					insertItem(col->sName(),"integer",ritem);
+				if ( col->dm()->pdsrt())
+					insertItem(col->sName(),"Set",ritem);
+			}
+		}
+	}
 	return htiNode;
+}
+
+void AttributeTool::setcheckattr(void *value, HTREEITEM item) {
+	if ( value == 0)
+		return;
+	int colNr = attrCheck->getState();
+	BaseMap bmp (((SpatialDataDrawer *)drawer->getParentDrawer())->getBaseMap()->fnObj);
+	Table attTable = bmp->tblAtt();
+	HTREEITEM hit = attrCheck->getHTI(colNr);
+	CString txt= tree->GetTreeCtrl().GetItemText(hit);
+	DisplayOptionButtonItem *data = (DisplayOptionButtonItem  *)(tree->GetTreeCtrl().GetItemData(hit));
+	data->setState(true);
+	Column attColumn = attTable->col(String(txt));
+	LayerDrawer *layerDrawer = (LayerDrawer *)drawer;
+	layerDrawer->setAttributeColumn(attColumn);
+	int n = 0;
+	DrawerTool *parentTool = getParentTool();
+	DrawerTool *colorTool = parentTool->findChildToolByType("ColorTool");
+	if ( attColumn.fValid()) {
+		layerDrawer->setUseAttributeColumn(true);
+		layerDrawer->setUseAttributeColumn(true);
+		layerDrawer->setAttributeColumn(attColumn);
+		layerDrawer->setRepresentation(attColumn->dm()->rpr());
+		layerDrawer->getDrawingColor()->setDataColumn(attColumn);
+		
+
+
+	} else {
+		layerDrawer->setUseAttributeColumn(false);
+		layerDrawer->getDrawingColor()->setDataColumn(Column());
+		layerDrawer->setRepresentation(bmp->dm()->rpr());
+	}
+	PreparationParameters pp(NewDrawer::ptRENDER, 0);
+	((LayerDrawer *)drawer)->prepareChildDrawers(&pp);
+
+	if ( colorTool) {
+		colorTool->removeTool(0); // all
+		colorTool->clear();
+		tree->DeleteAllItems(colorTool->getTreeItem(),true);
+		parentTool->addChildTools(colorTool);
+		DrawerTool *childTool = 0;
+		int count = 0;
+		while((childTool = colorTool->getTool(count++))) {
+			childTool->configure(colorTool->getTreeItem());
+		}
+	}
+
+	tree->Invalidate();
+
+	drawer->getRootDrawer()->getDrawerContext()->doDraw();
 }
 
 void AttributeTool::setcheckAttributeTable(void *w, HTREEITEM ) {
 	bool yesno = *(bool *)w;
-	LayerDrawer *sdr = (LayerDrawer *)drawer;
-	sdr->setUseAttributeColumn(yesno);
+	LayerDrawer *layerDrawer = (LayerDrawer *)drawer;
+	layerDrawer->setUseAttributeColumn(yesno);
 	if ( !yesno){
-		sdr->getDrawingColor()->setDataColumn(Column());
+		layerDrawer->getDrawingColor()->setDataColumn(Column());
 		BaseMapPtr *bmp = ((SpatialDataDrawer *)drawer->getParentDrawer())->getBaseMap();
-		sdr->setRepresentation(bmp->dm()->rpr());
+		layerDrawer->setRepresentation(bmp->dm()->rpr());
 	}
 	update();
 
 	PreparationParameters pp(NewDrawer::ptRENDER, 0);
-	sdr->prepareChildDrawers(&pp);
-	sdr->getRootDrawer()->getDrawerContext()->doDraw();
+	layerDrawer->prepareChildDrawers(&pp);
+	layerDrawer->getRootDrawer()->getDrawerContext()->doDraw();
 }
 
 void AttributeTool::update() {
@@ -111,7 +180,7 @@ void AttributeTool::displayOptionAttColumn() {
 }
 
 String AttributeTool::getMenuString() const {
-	return TR("Attribute selection");
+	return TR("Display attribute");
 }
 
 //-------------------------------------

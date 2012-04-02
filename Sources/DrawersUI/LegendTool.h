@@ -50,4 +50,17 @@ private:
   int transparency;
 
 };
+
+class PointRprForm : public DisplayOptionsForm {
+	public:
+	PointRprForm(CWnd *wPar, LayerDrawer *dr, RepresentationClass* rc, long raw);
+	void apply(); 
+private:
+  RepresentationClass* rcl;  
+  long iRaw;
+  Color col;
+  String symbol;
+  double scale;
+
+};
 }
