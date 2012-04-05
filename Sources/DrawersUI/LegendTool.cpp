@@ -67,7 +67,7 @@ void LegendTool::insertLegendItemsValue(const Representation& rpr, const DomainV
 		rr = ldrw->getStretchRangeReal(true);
 	}
 
-	double rStep = 1.0;
+	double rStep = dvs.rStep();
 	RangeReal rmd;
 	bool fImage = dvs.dm()->pdi();
 	if ( fImage) {
