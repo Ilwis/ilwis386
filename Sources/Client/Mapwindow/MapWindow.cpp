@@ -700,14 +700,14 @@ LONG MapWindow::OnExecute(UINT, LONG lParam)
 				if ( c >= '0' && c <= '9') {
 					char c2 = comm[index + 3];
 					if ( c2 == '%') {
-						int loc = c - 48 - 1;
+						int loc = c - 48;
 						if ( loc < objects.size()) {
 							String file = objects[loc]->fnObj.sRelative();
 							comm.replace(index,4,file);
 						}
-					}
+					} 
 				}
-					
+				index++;		
 			}
 		}
 		index = comm.find_first_of("{=:");
