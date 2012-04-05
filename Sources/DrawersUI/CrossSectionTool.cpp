@@ -43,7 +43,7 @@ void ProbeMarkers::prepare(PreparationParameters *p){
 void ProbeMarkers::addMarker(const Coord& crd) {
 	DrawerParameters dp(this->getRootDrawer(), this);
 	int currentNr = getDrawerCount();
-	Color clr = Representation::clrPrimary(currentNr< 2 ? currentNr + 1 : currentNr + 2);
+	Color clr = Representation::clrPrimary(currentNr == 0 ? 1 : currentNr + 3);
 
 	PointDrawer *pdrw = new PointDrawer(&dp);
 	PointProperties *prop = (PointProperties *)pdrw->getProperties();

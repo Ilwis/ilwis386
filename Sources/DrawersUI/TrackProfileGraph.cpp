@@ -381,7 +381,7 @@ void TrackProfileGraph::saveAsCsv() {
 				String name = bmp->sName();
 				for(int i=0; i < values[m].size(); ++i) {
 					GraphInfo info= values[m][i];
-					String v = bmp->sValue(info.crd);
+					String v = bmp->sValue(info.crd,0);
 					out << name.c_str() << "," << info.index <<"," << info.crd.x << "," << info.crd.y << "," << v.c_str() << "\n";
 				}
 			}
@@ -424,7 +424,7 @@ void TrackProfileGraph::saveAsTbl() {
 			colValue->SetOwnedByTable();
 			for(int i=0; i < values[m].size(); ++i) {
 				GraphInfo info= values[m][i];
-				String v = bmp->sValue(info.crd);
+				String v = bmp->sValue(info.crd,0);
 				colIndex->PutVal(i,info.index);
 				colCrd->PutVal(i, info.crd);
 				colValue->PutVal(i, v);
@@ -481,10 +481,10 @@ void TrackProfileGraphEntry::setIndex(int sourceIndex, double value, const Coord
 		v.push_back(String("%S", bmp->dm()->sName()));
 		ILWIS::LayerDrawer *ldr = (ILWIS::LayerDrawer *)tool->getDrawer();
 		if ( ldr->useAttributeColumn()) {
-			v.push_back(ldr->getAtttributeColumn()->sValue(value));
+			v.push_back(ldr->getAtttributeColumn()->sValue(value,0));
 		}
 		else
-			v.push_back(bmp->dm()->sValueByRaw(value));
+			v.push_back(bmp->dm()->sValueByRaw(value,0));
 	}
 	listview->setData(sourceIndex, v);
 	tool->setMarker(crd);

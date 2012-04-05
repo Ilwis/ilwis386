@@ -117,7 +117,7 @@ void TimeSelection::FillData() {
 			if ( tbl.fValid()) {
 				for(int c=0; c < tbl->iCols(); ++c) {
 					if ( tbl->col(c)->dm()->pdtime()) {
-						d += ";" + tbl->col(c)->sValue(i+1);
+						d += ";" + tbl->col(c)->sValue(i+1,0);
 					}
 				}
 			}

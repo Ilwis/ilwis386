@@ -66,40 +66,43 @@ void CrossSectionGraph::saveAsTbl() {
 		DomainValueRangeStruct dvInt(0 , maxNo);
 		Column colIndex = tbl->colNew("Index",dvInt);
 		colIndex->SetOwnedByTable();
-		Column colMap = tbl->colNew("BaseMap",Domain("String"));
-		colMap->SetOwnedByTable();
-		Domain dmcrd;
-		dmcrd.SetPointer(new DomainCoord(fldGraph->csy->fnObj));
-		Column colCrd = tbl->colNew("Coordinate", dmcrd, ValueRange());
-		colCrd->SetOwnedByTable();
+		//Column colMap = tbl->colNew("BaseMap",Domain("String"));
+		//colMap->SetOwnedByTable();
 		MapList mpl;
 		ObjectCollection oc;
-		for(int m =0; m < fldGraph->sources.size(); ++m) {
-			int count = 0;
-			Column colValue;
-			IlwisObject obj = fldGraph->sources[m];
-			String name =  String("%S", obj->fnObj.sFile);
-			for(int i = 0; i < fldGraph->crdSelect.size(); ++i) {
-				int noMaps = getNumberOfMaps(m);
-				if ( noMaps != tbl->iRecs())
-					tbl->iRecNew(noMaps);
-				for(long j = 0; j < noMaps; ++j) {
-					FileName fn = obj->fnObj;
-					if ( IOTYPE(fn) == IlwisObject::iotMAPLIST) {
-						mpl.SetPointer(obj.pointer());
-						RangeReal rr = mpl->getRange();
-						ValueRange vr( rr,0);
-						colValue = tbl->colNew(name.sQuote(), Domain("value"),vr );
-					} else if ( IOTYPE(fn) == IlwisObject::iotOBJECTCOLLECTION) {
-						oc.SetPointer(obj.pointer());
-						RangeReal rr = oc->getRange();
-						ValueRange vr( rr,0);
-						colValue = tbl->colNew(name.sQuote(), Domain("value"),vr );
-					}
+		int nMaps = 0;
+		for(int i = 0; i < fldGraph->crdSelect.size(); ++i) {
+			int maxmaps = 0;
+			for(int m =0; m < fldGraph->sources.size(); ++m) {
+				maxmaps = max(getNumberOfMaps(m), maxmaps);
+			}
+			nMaps = maxmaps;
+		}
+		tbl->iRecNew(nMaps);
+		int shift = 0;
+		for(int i = 0; i < fldGraph->crdSelect.size(); ++i) {
+				for(int m =0; m < fldGraph->sources.size(); ++m) {
+				int count = 0;
+				Column colValue;
+				IlwisObject obj = fldGraph->sources[m];
+				String name =  String("%S", obj->fnObj.sFile);
+				FileName fn = obj->fnObj;
+				if ( IOTYPE(fn) == IlwisObject::iotMAPLIST) {
+					mpl.SetPointer(obj.pointer());
+					RangeReal rr = mpl->getRange();
+					ValueRange vr( rr,0);
+					colValue = tbl->colNew(String("%S_%d", name,i), Domain("value"),vr );
+				} else if ( IOTYPE(fn) == IlwisObject::iotOBJECTCOLLECTION) {
+					oc.SetPointer(obj.pointer());
+					RangeReal rr = oc->getRange();
+					ValueRange vr( rr,0);
+					colValue = tbl->colNew(String("%S_%d", name,i), Domain("value"),vr );
+				}
 
-					colValue->SetOwnedByTable();
+				colValue->SetOwnedByTable();
+				int noMaps = getNumberOfMaps(m);
+				for(long j = 0; j < noMaps; ++j) {
 					BaseMap bmp;
-					colCrd->PutVal(count,fldGraph->crdSelect[i]); 
 					if ( mpl.fValid()) {
 						bmp = mpl[j];
 					} else if ( oc.fValid()) {
@@ -111,11 +114,10 @@ void CrossSectionGraph::saveAsTbl() {
 						Coord crd = fldGraph->crdSelect[i];
 						if ( bmp->cs() != fldGraph->csy)
 							crd = bmp->cs()->cConv(fldGraph->csy, crd);
-						String v = bmp->sValue(crd);
+						String v = bmp->sValue(crd,0);
 						colIndex->PutVal(count+1,j);
-						colMap->PutVal(count+1,bmp->fnObj.sFile );
 						colValue->PutVal(count + 1, v);
-						colMap->PutVal(count+1, bmp->fnObj.sFile + bmp->fnObj.sExt);
+						//colMap->PutVal(count+1, bmp->fnObj.sFile + bmp->fnObj.sExt);
 					}
 					++count;
 				}
@@ -203,7 +205,7 @@ void CrossSectionGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 		double rx = 0;
 		int f = 20;
 		for(int p=0; p < fldGraph->crdSelect.size(); ++p) {
-			Color clr = Representation::clrPrimary(p< 2 ? p + 1 : p + 2);
+			Color clr = Representation::clrPrimary(p == 0 ? 1 : p + 3);
 			CPen bpen(penStyle, 1, clr);
 			SelectObject(lpDIS->hDC, bpen);
 			rx = 0;
