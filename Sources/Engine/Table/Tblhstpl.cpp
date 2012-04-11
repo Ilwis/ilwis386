@@ -274,6 +274,8 @@ bool TableHistogramPol::fCount()
 		double rVal = pol->rValue();
 		if (rVal == rUNDEF)
 			continue;
+		if ( map->dvrs().fRawAvailable())
+			rVal = map->dvrs().rValue(rVal);
 		HistItemPolLengthArea hipla(rVal);
 		HistItemPolLengthArea& hiplaHash = htpla.get(hipla);
 		if (hiplaHash.iCount == 0) { // not found

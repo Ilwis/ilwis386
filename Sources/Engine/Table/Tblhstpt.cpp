@@ -242,7 +242,9 @@ bool TableHistogramPnt::fCount()
       double rVal = map->rValue(i);
       if (rVal == rUNDEF)
         continue;
-      HistItemPnt hip(rVal);
+	  if ( map->dvrs().fRawAvailable())
+ 		rVal = map->dvrs().rValue(rVal);
+	  HistItemPnt hip(rVal);
       HistItemPnt& hipHash = htp.get(hip);
       if (hipHash.iCount == 0) { // not found
         ++iItem;
