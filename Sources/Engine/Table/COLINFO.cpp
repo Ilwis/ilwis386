@@ -144,8 +144,14 @@ void ColumnInfo::Read(const FileName& fnTbl, const String& sColName)
 		ObjectInfo::ReadElement(sSection.c_str(), "Domain", _fnTbl, dom);
 		_dminf = DomainInfo(dom);
 	}
-	if (_dminf.fValues())
+	if (_dminf.fValues()) {
 		ObjectInfo::ReadElement(sSection.c_str(), "Range", _fnTbl, _vr);
+		if ( _vr->vrr() )
+			_rValueOffset = _vr->vrr()->rRaw0();
+		if ( _vr->vri())
+			_rValueOffset = _vr->vri()->iRaw0();
+
+	}
 	ObjectInfo::ReadElement(sSection.c_str(), "Time", _fnTbl, _objtime);
 
 	_fReadOnly =  true;
@@ -186,7 +192,6 @@ void ColumnInfo::Read(const FileName& fnTbl, const String& sColName)
 
 	if ( pdv) {
 		_rStep = _dvrs.rStep();
-		_rValueOffset = _dvrs.vr()->getOffset();
 	} else {
 		_rStep = 1;
 		_rValueOffset = 0;
