@@ -696,7 +696,10 @@ double ILWIS::RSegment::rValue() const
 
 String ILWIS::RSegment::sValue(const DomainValueRangeStruct& dvs, short iWidth, short iDec) const
 {
-  return String("%f",value);
+	if ( dvs.fUseReals())
+		return String("%f",value);
+	else
+		return dvs.sValueByRaw(value, iWidth, iDec);
 }
 
 void ILWIS::RSegment::segSplit(long iAfter, Coord crdAt, ILWIS::Segment **seg)
