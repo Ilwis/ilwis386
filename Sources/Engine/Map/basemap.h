@@ -53,7 +53,7 @@
 class Column;
 class Feature;
 
-class BaseMapPtr: public IlwisObjectPtr
+class _export BaseMapPtr: public IlwisObjectPtr
 {
 friend class BaseMap;
 friend class BaseMapVirtual;
@@ -68,9 +68,9 @@ friend class ObjectDependency;
 
 public:
 	enum MinMaxMethod{mmmNOCALCULATE,mmmCALCULATE, mmmSAMPLED};
-    virtual _export           ~BaseMapPtr();
+    virtual            ~BaseMapPtr();
 	
-    virtual void _export Updated();
+    virtual void  Updated();
     const                CoordSystem& cs() const 
 							{ return _csys; }
     const                CoordBounds& cb() const 
@@ -85,21 +85,21 @@ public:
     virtual double				rValue(const Coord&, double rPrx=rUNDEF) const;
     virtual vector<String>   	vsValue(const Coord&, short iWidth=-1, short iDec=-1, double rPrx=rUNDEF) const;
     virtual String			 	sValue(const Coord&, short iWidth=-1, short iDec=-1, double rPrx=rUNDEF) const;
-    virtual void _export 		Store();
+    virtual void  		Store();
     virtual String       		sType() const;
-    virtual void _export 		SetDomainValueRangeStruct(const DomainValueRangeStruct&);
-    virtual void _export 		SetValueRange(const ValueRange&); // dangerous function!
-    virtual void _export 		SetCoordSystem(const CoordSystem&); // dangerous function!
-    void _export         		SetCoordBounds(const CoordBounds&); // dangerous function!
-    virtual void _export 		KeepOpen(bool f =true);
-    virtual bool _export 		fConvertTo(const DomainValueRangeStruct& dvrs);
-    virtual bool _export 		fConvertTo(const Column& col);
+    virtual void  		SetDomainValueRangeStruct(const DomainValueRangeStruct&);
+    virtual void  		SetValueRange(const ValueRange&); // dangerous function!
+    virtual void  		SetCoordSystem(const CoordSystem&); // dangerous function!
+    void          		SetCoordBounds(const CoordBounds&); // dangerous function!
+    virtual void  		KeepOpen(bool f =true);
+    virtual bool  		fConvertTo(const DomainValueRangeStruct& dvrs);
+    virtual bool  		fConvertTo(const Column& col);
     virtual bool         		fConvertTo(const DomainValueRangeStruct& dvrs, const Column& col);
-    Table _export        		tblAtt();
-    void _export         		SetAttributeTable(const Table& tbl);
-    void _export         		SetNoAttributeTable();
-    String _export       		sTblAtt() const;
-    bool _export         		fTblAtt();
+    Table         		tblAtt();
+    void          		SetAttributeTable(const Table& tbl);
+    void          		SetNoAttributeTable();
+    String        		sTblAtt() const;
+    bool          		fTblAtt();
     bool                 		fTblAttSelf() 
 								{ return _fAttTable; }
     virtual StoreType    		st() const
@@ -114,29 +114,29 @@ public:
 								{ return dvs.fRawIsValue(); }
     bool                 		fValues() const       
 								{ return dvs.fValues(); }
-	RangeInt _export     		riMinMax(MinMaxMethod m=mmmNOCALCULATE);
-    RangeReal _export    		rrMinMax(MinMaxMethod m=mmmNOCALCULATE);
-    RangeInt  _export    		riPerc1(bool fForce=false);
-    RangeReal _export    		rrPerc1(bool fForce=false);
-    void _export         		SetMinMax(const RangeInt& ri);
-    void _export         		SetPerc1(const RangeInt& ri);
-    void _export         		SetMinMax(const RangeReal& rr);
-    void _export         		SetPerc1(const RangeReal& rr);
-    virtual void _export GetDataFiles(Array<FileName>& afnDat, Array<String>* asSection, Array<String>* asEntry) const;
+	RangeInt      		riMinMax(MinMaxMethod m=mmmNOCALCULATE);
+    RangeReal     		rrMinMax(MinMaxMethod m=mmmNOCALCULATE);
+    RangeInt      		riPerc1(bool fForce=false);
+    RangeReal     		rrPerc1(bool fForce=false);
+    void          		SetMinMax(const RangeInt& ri);
+    void          		SetPerc1(const RangeInt& ri);
+    void          		SetMinMax(const RangeReal& rr);
+    void          		SetPerc1(const RangeReal& rr);
+    virtual void  GetDataFiles(Array<FileName>& afnDat, Array<String>* asSection, Array<String>* asEntry) const;
     const DomainValueRangeStruct& dvrs() const 
 									{ return dvs; }
-    const ValueRange _export      &vr()  
+    const ValueRange       &vr()  
 									{ return dvs.vr(); }
-    virtual DomainInfo _export    dminf() const;
-	CoordBounds _export  cbGetCoordBounds() const;
+    virtual DomainInfo     dminf() const;
+	CoordBounds   cbGetCoordBounds() const;
     bool fErrorMap() const          { return fnErrMap.fValid(); }
     FileName fnErrorMap() const     { return fnErrMap; }
     void SetErrorMap(const FileName& fnErrorMap) { fnErrMap = fnErrorMap; }
     double rProximity() const       { return rProx; }
     void SetProximity(double rPrx)  { rProx = rPrx; }
-	void _export GetObjectStructure(ObjectStructure& os);
-	bool _export fDataReadOnly() const;
-	virtual long _export iFeatures() const { return iUNDEF; } ;
+	void  GetObjectStructure(ObjectStructure& os);
+	bool  fDataReadOnly() const;
+	virtual long  iFeatures() const { return iUNDEF; } ;
 	virtual Geometry *getFeature(long i) const { return NULL;}
 	virtual Geometry *getFeatureById(const String& id) const{ return NULL; }
 	virtual vector<Geometry *> getFeatures(Coord crd, double rPrx=rUNDEF) { return vector<Geometry *>(); }
@@ -144,17 +144,17 @@ public:
 	Geometry *getTransformedFeature(long iRec, const CoordSystem& csy) const	{ return NULL;}
 	virtual Feature *newFeature(geos::geom::Geometry *pnt=NULL) { return NULL; }
 	virtual bool removeFeature(const String& id, const vector<int>& selectedCoords=vector<int>()) { return true;}
-	void _export setHistrogramSize(long n);
-	long _export getHistogramSize() const;
+	void  setHistrogramSize(long n);
+	long  getHistogramSize() const;
 	
 protected:
-    _export BaseMapPtr();
-    _export BaseMapPtr(const FileName&, bool fCreate);
-    _export BaseMapPtr(const FileName& fn, const CoordSystem& cs, const CoordBounds& cb, 
+     BaseMapPtr();
+     BaseMapPtr(const FileName&, bool fCreate);
+     BaseMapPtr(const FileName& fn, const CoordSystem& cs, const CoordBounds& cb, 
 						const DomainValueRangeStruct& dvs);
 	
 	virtual void         CalcMinMax();
-	virtual RangeReal _export   rrMinMaxSampled() { return rrMinMax(mmmCALCULATE);} // overrule this when sampling makes sense
+	virtual RangeReal    rrMinMaxSampled() { return rrMinMax(mmmCALCULATE);} // overrule this when sampling makes sense
 	static Geometry *getFeatureById(const vector<Geometry *> *geoms, const String& id) ;
 	
     RangeReal            _rrMinMax;  // for DomainValueReal
@@ -180,12 +180,12 @@ private:
     double rProx;
 };
 
-class BaseMap: public IlwisObject
+class _export BaseMap: public IlwisObject
 {
     public:
-        _export BaseMap();
-        _export BaseMap(const FileName& filename);
-        _export BaseMap(const BaseMap& mp);
+         BaseMap();
+         BaseMap(const FileName& filename);
+         BaseMap(const BaseMap& mp);
 
         void                         operator=(const BaseMap& mp) 
                                        { SetPointer(mp.pointer()); }
@@ -194,13 +194,13 @@ class BaseMap: public IlwisObject
         BaseMapPtr*                  operator->() const 
                                        { return ptr(); }
         static BaseMapPtr*           pGet(const FileName& fn);
-        static SegmentMapPtr _export *pGetSegMap(const FileName& fn);
-        static PolygonMapPtr _export *pGetPolMap(const FileName& fn);
-        static PointMapPtr _export   *pGetPntMap(const FileName& fn);
-        static MapPtr _export        *pGetRasMap(const FileName& fn);
+        static SegmentMapPtr  *pGetSegMap(const FileName& fn);
+        static PolygonMapPtr  *pGetPolMap(const FileName& fn);
+        static PointMapPtr    *pGetPntMap(const FileName& fn);
+        static MapPtr         *pGetRasMap(const FileName& fn);
 
     protected:
-        _export BaseMap(IlwisObjectPtr* ptr);
+         BaseMap(IlwisObjectPtr* ptr);
 
     private:
         static IlwisObjectPtrList    listMap;
