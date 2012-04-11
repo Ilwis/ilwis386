@@ -71,7 +71,7 @@ public:
 	_export virtual CoordinateSequence* getCoordinates() const;
 
 	/// Returns a read-only pointer to internal CoordinateSequence
-	const CoordinateSequence* getCoordinatesRO() const;
+	_export const CoordinateSequence* getCoordinatesRO() const;
 
 	_export virtual const Coordinate& getCoordinateN(int n) const;
 
