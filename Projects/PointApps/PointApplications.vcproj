@@ -277,6 +277,10 @@
 				RelativePath="..\..\Sources\PointApplications\PointInSegment.H"
 				>
 			</File>
+			<File
+				RelativePath="..\..\Sources\PointApplications\PointMapFromSeg.H"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Source Files"
@@ -348,6 +352,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\PointApplications\PointInSegment.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\PointApplications\PointMapFromSeg.cpp"
 				>
 			</File>
 		</Filter>
