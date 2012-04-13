@@ -1174,7 +1174,7 @@ long GDALFormat::iRaw(RowCol rc) const
 		(const_cast<GDALFormat *>(this))->CreateLineBuffer(1);
 	}
 	funcs.rasterIO(currentLayer, GF_Read, rc.Col, rc.Row, 1,1, (unsigned char *)buffer, 1, 1, GDT_Int32, 0,0);								
-	switch (funcs.getDataType(dataSet))
+	switch (funcs.getDataType(currentLayer))
 	{
 		case GDT_Byte:
 				return buffer[0];
