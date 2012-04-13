@@ -505,6 +505,7 @@ void CommandHandler::init()
 	AddCommand("zip",(CommandFunc) &CommandHandler::CmdZip); 
 	AddCommand("updateIlwis",(CommandFunc) &CommandHandler::CmdUpdateIlwis); 
 	AddCommand("addtomaplist",(CommandFunc) &CommandHandler::CmdAddToMapList); 
+	AddCommand("addtomaplist",(CommandFunc) &CommandHandler::CmdAddToMapList); 
 
 	//commands["testingdbconnection"]=(CommandFunction)&CommandHandler::CmdTestingDBConnection;
 }
@@ -2374,6 +2375,25 @@ void CommandHandler::CmdCreateGrf(const String& s)
 		if (!DeleteFile(fnGrf.sFullPath().c_str()))
 			throw ErrorObject(String(TR("Could not overwrite %S").c_str(), fnGrf.sRelative()));
 	GeoRef gr;
+	String name = pm.sGet("csyfrom");
+	if ( name != "") { // variant 2
+		FileName fn(name);
+		if ( !fn.fExist())
+			throw ErrorObject(TR("Unknow basemap used for bounds"));
+		BaseMap bmp(fn);
+		CoordSystem cs = bmp->cs();
+		CoordBounds cb = bmp->cb();
+		String s = pm.sGet("pixsize");;
+		double pixsz = s.rVal();
+		if ( pixsz == rUNDEF)
+			throw ErrorObject(TR("Invalid pixel size used when creating georef"));
+		long cols = cb.width() / pixsz;
+		long rows = cb.height() / pixsz;
+		gr.SetPointer(new GeoRefCorners(fnGrf, cs, RowCol(rows, cols), true, cb.cMin, cb.cMax));		
+		return ;
+	}
+	//variant 1
+	
 	RowCol rc;
 	rc.Row = pm.sGet(1).iVal();
 	rc.Col = pm.sGet(2).iVal();
