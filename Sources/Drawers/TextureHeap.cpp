@@ -140,15 +140,11 @@ void Palette::Refresh()
 //////////////////////////////////////////////////////////////////////
 
 TextureHeap::TextureHeap()
-: texturesArraySize(0)
-, readpos(0)
-, writepos(0)
-, textureThread(0)
+: textureThread(0)
 , fAbortTexGen(false)
 , fStopThread(false)
+, workingTexture(0)
 {
-	for (int i = 0; i < 10000; ++i)
-		textures[i] = 0;
 }
 
 TextureHeap::~TextureHeap()
@@ -163,7 +159,7 @@ TextureHeap::~TextureHeap()
 
 	ClearQueuedTextures();
 
-	for (int i = 0; i < texturesArraySize; ++i)
+	for (int i = 0; i < textures.size(); ++i)
 		if (textures[i] != 0)
 			delete textures[i];
 }
@@ -204,31 +200,30 @@ void TextureHeap::ClearQueuedTextures()
 {
 	fAbortTexGen = true;
 	csChangeTexCreatorList.Lock(); // wait for TexGen thread to stop
-	fAbortTexGen = false;
-	while (readpos != writepos)
-	{
-		if (!textureRequest[readpos]->fValid())
-			delete textureRequest[readpos];
-		readpos = (readpos + 1) % BUF_SIZE;
+	for (int i = 0; i < textureRequest.size(); ++i) {
+		Texture * tex = textureRequest[i];
+			if (tex && !tex->fValid())
+				delete tex;
 	}
+	textureRequest.clear();
 	csChangeTexCreatorList.Unlock();
 }
 
 void TextureHeap::RepresentationChanged()
 {
-	for (int i = 0; i < texturesArraySize; ++i)
+	for (int i = 0; i < textures.size(); ++i)
 		textures[i]->RepresentationChanged();	
 }
 
 void TextureHeap::ReGenerateAllTextures()
 {
-	for (int i = 0; i < texturesArraySize; ++i)
+	for (int i = 0; i < textures.size(); ++i)
 		textures[i]->SetDirty();
 }
 
 void TextureHeap::setTransparentValues(double v)
 {
-	for (int i = 0; i < texturesArraySize; ++i)
+	for (int i = 0; i < textures.size(); ++i)
 		textures[i]->setTransparentValue(v);
 }
 
@@ -237,7 +232,7 @@ Texture * TextureHeap::GetTexture(const unsigned int offsetX, const unsigned int
 {
 	Texture * tex = 0;
 	if (fInThread) { // call Invalidate when done, to redraw the mapwindow
-		for (int i = 0; i < texturesArraySize; ++i) {
+		for (int i = 0; i < textures.size(); ++i) {
 			if (textures[i]->equals(offsetX, offsetY, offsetX + sizeX, offsetY + sizeY, zoomFactor)) {
 				if (textures[i]->fDirty())
 					ReGenerateTexture(textures[i], fInThread);
@@ -251,10 +246,18 @@ Texture * TextureHeap::GetTexture(const unsigned int offsetX, const unsigned int
 					tex = textures[i];
 			}
 		}
-
-		GenerateTexture(offsetX, offsetY, sizeX, sizeY, zoomFactor, palette, fInThread);
+		// if it is queued already, don't add it again, just be patient as it will come
+		bool fQueued = workingTexture && workingTexture->equals(offsetX, offsetY, offsetX + sizeX, offsetY + sizeY, zoomFactor);
+		if (!fQueued) {
+			csChangeTexCreatorList.Lock();
+			for (vector<Texture*>::iterator it = textureRequest.begin(); it != textureRequest.end() && !fQueued; ++it)
+				fQueued = (*it)->equals(offsetX, offsetY, offsetX + sizeX, offsetY + sizeY, zoomFactor);
+			csChangeTexCreatorList.Unlock();
+		}
+		if (!fQueued)
+			GenerateTexture(offsetX, offsetY, sizeX, sizeY, zoomFactor, palette, fInThread);
 	} else { // caller is waiting for the Texture*
-		for (int i = 0; i < texturesArraySize; ++i) {
+		for (int i = 0; i < textures.size(); ++i) {
 			if (textures[i]->equals(offsetX, offsetY, offsetX + sizeX, offsetY + sizeY, zoomFactor))
 				tex = textures[i];
 		}
@@ -272,13 +275,13 @@ Texture * TextureHeap::GetTexture(const unsigned int offsetX, const unsigned int
 
 Texture * TextureHeap::GenerateTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, unsigned int zoomFactor, const Palette * palette, bool fInThread)
 {
-	if (((writepos + 1) % BUF_SIZE) != readpos) {
-		if ( mp.fValid())
-			textureRequest[writepos] = new Texture(mp, drawColor, drm, offsetX, offsetY, sizeX, sizeY, imgWidth2, imgHeight2, zoomFactor, iPaletteSize, rrMinMaxMap, palette);
-		else
-			textureRequest[writepos] = new CCTexture(mpl, drawColor, drm, offsetX, offsetY, sizeX, sizeY, data, zoomFactor, rrMinMaxMap);
-		writepos = (writepos + 1) % BUF_SIZE;
-	}
+	csChangeTexCreatorList.Lock();
+	if ( mp.fValid())
+		textureRequest.push_back(new Texture(mp, drawColor, drm, offsetX, offsetY, sizeX, sizeY, imgWidth2, imgHeight2, zoomFactor, iPaletteSize, rrMinMaxMap, palette));
+	else
+		textureRequest.push_back(new CCTexture(mpl, drawColor, drm, offsetX, offsetY, sizeX, sizeY, data, zoomFactor, rrMinMaxMap));
+	csChangeTexCreatorList.Unlock();
+	fAbortTexGen = false;
 	if (fInThread) {
 		if (!textureThread)
 			textureThread = AfxBeginThread(GenerateTexturesInThread, this);
@@ -294,10 +297,10 @@ Texture * TextureHeap::GenerateTexture(const unsigned int offsetX, const unsigne
 
 void TextureHeap::ReGenerateTexture(Texture * texture, bool fInThread)
 {
-	if (((writepos + 1) % BUF_SIZE) != readpos) {
-		textureRequest[writepos] = texture;
-		writepos = (writepos + 1) % BUF_SIZE;
-	}
+	csChangeTexCreatorList.Lock();
+	textureRequest.push_back(texture);
+	csChangeTexCreatorList.Unlock();
+	fAbortTexGen = false;
 	if (fInThread) {
 		if (!textureThread)
 			textureThread = AfxBeginThread(GenerateTexturesInThread, this);
@@ -311,10 +314,10 @@ Texture * TextureHeap::GenerateNextTexture(bool fInThread)
 {
 	Texture * tex = 0;
 	csChangeTexCreatorList.Lock();
-	if (!fAbortTexGen && !fStopThread && readpos != writepos) {
-		tex = textureRequest[readpos];
-		textureRequest[readpos] = 0;
-		readpos = (readpos + 1) % BUF_SIZE;
+	if (!fAbortTexGen && !fStopThread && textureRequest.size() > 0) {
+		tex = textureRequest.back();
+		textureRequest.pop_back();
+		workingTexture = tex;
 	}
 	csChangeTexCreatorList.Unlock();
 
@@ -330,12 +333,13 @@ Texture * TextureHeap::GenerateNextTexture(bool fInThread)
 		//TRACE("Texture generated in %2.2f milliseconds;\n", duration);
 		if (!fReGenerate) {
 			if (tex->fValid())
-				textures[texturesArraySize++] = tex;
+				textures.push_back(tex);
 			else {
 				delete tex;
 				tex = 0;
 			}
 		}
+		workingTexture = 0;
 	}
 	return tex;
 }
@@ -345,7 +349,6 @@ UINT TextureHeap::GenerateTexturesInThread(LPVOID pParam)
 	TextureHeap * pObject = (TextureHeap*)pParam;
 	if (pObject == NULL)
 	{
-		pObject->textureThread = 0;
 		return 1;
 	}
 
@@ -353,9 +356,17 @@ UINT TextureHeap::GenerateTexturesInThread(LPVOID pParam)
 
 	while (!pObject->fStopThread)
 	{
+		clock_t start = clock();
 		Texture * tex = pObject->GenerateNextTexture(true);
-		while (tex != 0)
+		while (tex != 0) {
+			clock_t end = clock();
+			long duration = (end - start) * 1000 / CLOCKS_PER_SEC; // we want this in millisec
+			if (duration >= 1000) { // approximately 1 sec between intermediate screen updates
+				pObject->drawerContext->doDraw();
+				start = end;
+			}
 			tex = pObject->GenerateNextTexture(true);
+		}
 		if (!pObject->fAbortTexGen && !pObject->fStopThread)
 			pObject->drawerContext->doDraw();
 		if (!pObject->fStopThread)

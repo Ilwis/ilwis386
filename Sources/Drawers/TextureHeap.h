@@ -56,15 +56,13 @@ namespace ILWIS {
 		void ReGenerateAllTextures();
 		void setTransparentValues(double v);
 
-	private:
+	protected:
 		Texture * GenerateTexture(const unsigned int offsetX, const unsigned int offsetY, const unsigned int sizeX, const unsigned int sizeY, unsigned int zoomFactor, const Palette * palette, bool fInThread);
 		void ReGenerateTexture(Texture * texture, bool fInThread);
 		static UINT GenerateTexturesInThread(LPVOID pParam);
 		Texture * GenerateNextTexture(bool fInThread);
-		//vector<Texture*> textures;
-		Texture* textures [10000];
-		static const int BUF_SIZE = 100;
-		Texture * textureRequest [BUF_SIZE];
+		vector<Texture*> textures;
+		vector<Texture*> textureRequest;
 		Map mp;
 		MapList mpl;
 		const DrawingColor * drawColor;
@@ -72,9 +70,6 @@ namespace ILWIS {
 		unsigned int iPaletteSize;
 		unsigned long imgWidth2, imgHeight2;
 		RangeReal rrMinMaxMap;
-		int texturesArraySize;
-		int readpos;
-		int writepos;
 		bool fAbortTexGen;
 		CWinThread * textureThread;
 		bool fStopThread;
@@ -82,6 +77,7 @@ namespace ILWIS {
 		CCriticalSection csChangeTexCreatorList;
 		CCriticalSection csThread;
 		RasterSetData *data;
+		Texture * workingTexture;
 	};
 }
 
