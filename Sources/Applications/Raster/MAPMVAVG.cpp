@@ -63,7 +63,7 @@ IlwisObjectPtr * createMapMovingAverage(const FileName& fn, IlwisObjectPtr& ptr,
 static const char * sWeightFunc[] = { "InvDist", "Linear", 0 };
 
 String wpsmetadataMovingAverage() {
-	WPSMetaData metadata("MovingAverage");
+	WPSMetaData metadata("MapMovingAverage");
 	return metadata.toString();
 }
 

@@ -138,39 +138,41 @@ MapMovingSurface* MapMovingSurface::create(const FileName& fn, MapPtr& p, const 
 	Array<String> as;
 	short iParms = IlwisObjectPtr::iParseParm(sExpr, as);
 	//if (!IlwisObjectPtr::fParseParm(sExpr, as))
-	if (iParms > 7 || iParms < 1)
+	if (iParms > 8 || iParms < 1)
 		ExpressionError(sExpr, sSyntax());
-	PointMap pmp(as[0], fn.sPath());
-	GeoRef gr(as[1], fn.sPath());
-	SurfaceType sft = (SurfaceType)iFind(as[2], sSurfaceType);
-	if (sft == shUNDEF)
-		SurfaceError(as[2], fn);
-	double rLimD;
-	double rWeightExp ;
+	PointMap pmp(iParms != 8 || as[1] == "" ? as[0] : as[0] + "." + as[1], fn.sPath());
 	int offset = 0;
+	if ( iParms == 8)
+		offset += 1;
+	GeoRef gr(as[1 + offset], fn.sPath());
+	SurfaceType sft = (SurfaceType)iFind(as[2 + offset], sSurfaceType);
+	if (sft == shUNDEF)
+		SurfaceError(as[2 + offset], fn);
+	double rLimD = rUNDEF;
+	double rWeightExp = rUNDEF;
 	WeightFuncType wft;
 	String sWeightFnc;
 	if ( iParms <= 5) { // oldform
 		String sWeightFnc;
 		sWeightFnc = IlwisObjectPtr::sParseFunc(as[3]);
-		WeightFuncType wft = (WeightFuncType)iFind(sWeightFnc, sWeightFunc);
+		wft = (WeightFuncType)iFind(sWeightFnc, sWeightFunc);
 		if (wft == shUNDEF)
 			WeightFuncError(sWeightFnc, fn);
 		Array<String> asd(2);
 		if (!IlwisObjectPtr::fParseParm(as[3], asd))
 			WeightFuncExprError(as[3], sWeightFnc);
-		double rWeightExp = asd[0].rVal();
+		rWeightExp = asd[0].rVal();
 		if (rWeightExp == rUNDEF)
 			WeightFuncExprError(as[3], sWeightFnc);
-		double rLimD = asd[1].rVal();
+		rLimD = asd[1].rVal();
 	} else { // newform
 		wft = wfEXACT;
-		sWeightFnc = as[2];
+		sWeightFnc = as[3 + offset];
 		if ( sWeightFnc.toLower() != "invdist")
 			wft = wfNOTEXACT;
-		rWeightExp = as[3].rVal();
-		rLimD = as[4].rVal();
-		offset = 2;
+		rWeightExp = as[4 + offset].rVal();
+		rLimD = as[5 + offset].rVal();
+		offset += 3;
 	}
 	if (rLimD == rUNDEF || rLimD < EPS10)
 		WeightFuncExprError(as[3 + offset], sWeightFnc);

@@ -109,6 +109,7 @@
 #include "Engine\Base\DataObjects\valrange.h"
 #include "Engine\Base\DataObjects\WPSMetaData.h"
 #include "Engine\Base\DataObjects\Patch.h"
+#include "Engine\Base\System\engine.h"
 #include "Headers\Htp\Ilwisapp.htp"
 #include "Headers\Err\Ilwisapp.err"
 #include "Headers\Hs\map.hs"
@@ -189,7 +190,6 @@ MapResample* MapResample::create(const FileName& fn, MapPtr& p, const String& sE
 	char *pCh = sInputMapName.strrchrQuoted('.');
 	if ((pCh != 0) && (0 != _strcmpi(pCh, ".mpr")))  // attrib map
 		throw ErrorObject(WhatError(String(TR("Use of attribute maps is not possible: '%S'").c_str(), as[0]), errMapResample), fn);
-	
 	Map mp(as[0], fn.sPath());
 	GeoRef gr = GeoRef(as[1], fn.sPath());
 	GeoRefPtr* pgr = gr.ptr();
