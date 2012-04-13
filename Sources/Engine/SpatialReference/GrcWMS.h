@@ -44,6 +44,8 @@
 #define ILWGRCORNERSWMS_H
 #include "Engine\SpatialReference\Grsmpl.h"
 
+typedef void (ForeignFormat::*RetrieveImageProc)() const;
+
 class _export GeoRefCornersWMS: public GeoRefCorners
 {
   friend class GeoRef;
@@ -69,14 +71,25 @@ public:
   void reset();
   bool hasChanged();
   void resetChanged();
+
   CoordBounds getInitialCoordBounds();
   CoordBounds calcNewCB(MinMax mx, MinMax zoom, MinMax oldBounds);
+
+  CoordBounds cbWMSRequest() const;
+  RowCol rcWMSRequest() const;
+  void SetRCWMSRequest(RowCol rc);
+  void SetCBWMSRequest(const CoordBounds & cb);
+  void SetWMSHandler(ForeignFormat* context, RetrieveImageProc proc);
+  void retrieveImage();
  protected:
   GeoRefCornersWMS(const FileName&);
   bool fInitial;
   Coord crdMinInit;
   Coord crdMaxInit;
-
+  CoordBounds m_cbWMSRequest;
+  RowCol m_rcWMSRequest;
+  ForeignFormat* wmsFormat;
+  RetrieveImageProc retrieveImageProc;
 };
 
 

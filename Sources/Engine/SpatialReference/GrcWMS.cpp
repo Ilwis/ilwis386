@@ -42,6 +42,8 @@
 #include "Engine\SpatialReference\Gr.h"
 #include "Engine\SpatialReference\Grsmpl.h"
 #include "Engine\SpatialReference\Grcornrs.h"
+#include "Engine\Table\tbl.h"
+#include "Engine\DataExchange\ForeignFormat.h"
 #include "Engine\SpatialReference\GrcWMS.h"
 
 const char* GeoRefCornersWMS::sSyntax()
@@ -51,6 +53,8 @@ const char* GeoRefCornersWMS::sSyntax()
 
 GeoRefCornersWMS::GeoRefCornersWMS(const FileName& fn)
 : GeoRefCorners(fn)
+, wmsFormat (0)
+, retrieveImageProc(0)
 {
 	fChanged = false;
 	crdMinInit = crdMin;
@@ -143,11 +147,27 @@ CoordBounds GeoRefCornersWMS::getInitialCoordBounds() {
 	return CoordBounds(crdMinInit, crdMaxInit);
 }
 
+CoordBounds GeoRefCornersWMS::cbWMSRequest() const {
+	return m_cbWMSRequest;
+}
 
+RowCol GeoRefCornersWMS::rcWMSRequest() const {
+	return m_rcWMSRequest;
+}
 
+void GeoRefCornersWMS::SetRCWMSRequest(RowCol rc) {
+	m_rcWMSRequest = rc;
+}
 
+void GeoRefCornersWMS::SetCBWMSRequest(const CoordBounds & cb) {
+	m_cbWMSRequest = cb;
+}
 
+void GeoRefCornersWMS::SetWMSHandler(ForeignFormat* context, RetrieveImageProc proc) {
+	wmsFormat = context;
+	retrieveImageProc = proc;
+}
 
-
-
-
+void GeoRefCornersWMS::retrieveImage() {
+	(wmsFormat->*retrieveImageProc)();
+}
