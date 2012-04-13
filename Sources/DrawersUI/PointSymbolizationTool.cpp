@@ -122,6 +122,10 @@ void PointSymbolizationForm::apply(){
 		props->symbol = fn.sFile;
 		props->threeDOrientation = t3dOr != 0;
 		PreparationParameters pp(NewDrawer::ptRENDER, 0);
+		RepresentationProperties rprop;
+		rprop.symbolSize = props->scale * 100;
+		rprop.symbolType = props->symbol;
+		pp.props = &rprop;
 		drw->prepare(&pp);
 	}
 
