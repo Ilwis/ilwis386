@@ -108,6 +108,7 @@ WMSFormat::WMSFormat(const FileName& fn, ParmList& pm) : urlWMS("") {
 	if ( pm.fExist("georef")) {
 		grf = GeoRef(FileName(pm.sGet("georef")));
 		grfWMS = grf->pgWMS();
+		grfWMS->SetWMSHandler(this, (RetrieveImageProc)&WMSFormat::retrieveImage);
 	}
 	if ( pm.fExist("url"))
 		urlWMS = URL(pm.sGet("url"));
@@ -528,8 +529,8 @@ void WMSFormat::Store(IlwisObject obj) {
 }
 
 void WMSFormat::retrieveImage() const {
-	CoordBounds cb2 = grf->cb();
-	String sExpr = getMapRequest(cb2, layers, srsName, grf->rcSize());
+	CoordBounds cb2 = grfWMS->cbWMSRequest();
+	String sExpr = getMapRequest(cb2, layers, srsName, grfWMS->rcWMSRequest());
 	RemoteObject rxo(sExpr);
 	MemoryStruct *image;
 	image = rxo.get();
@@ -565,9 +566,6 @@ void WMSFormat::GetLineRaw(long iLine, IntBuf&,  long iFrom, long iNum) const {
 }
 
 void WMSFormat::GetLineRaw(long iLine, LongBuf& buf, long iFrom, long iNum) const {
-	if ( grfWMS->hasChanged() || gdalDataSet == NULL)
-		retrieveImage();
-
 	unsigned char *data1 = new unsigned char[iNum];
 	unsigned char *data2 = new unsigned char[iNum];
 	unsigned char *data3 = new unsigned char[iNum];
@@ -585,10 +583,9 @@ void WMSFormat::GetLineRaw(long iLine, LongBuf& buf, long iFrom, long iNum) cons
 		buf[j] = (data1[j]) | (data2[j] << 8) | (data3[j] << 16);
 	}
 
-	delete data1;
-	delete data2;
-	delete data3;
-
+	delete [] data1;
+	delete [] data2;
+	delete [] data3;
 }
 
 void WMSFormat::GetLineVal(long iLine, LongBuf&, long iFrom, long iNum) const {
