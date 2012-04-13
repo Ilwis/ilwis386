@@ -510,7 +510,7 @@ void GeneralImportForm::AddOldStyleIlwisImports() {
 		frm.ext = frm.ext.sHead(".") + (frm.ext.size() > 3 ? "/" + frm.ext.sTail(".") : "");
 		if ( item.sCmd == "gdal")
 			continue;
-		if ( item.sCmd == "e00" || item.sCmd == "lin" || item.sCmd=="shape" || item.sCmd=="smt" || item.sCmd=="dxf" || item.sCmd=="bna") {
+		if ( item.sCmd == "e00" || item.sCmd == "lin" || item.sCmd=="smt" || item.sCmd=="dxf" || item.sCmd=="bna") {
 			frm.type = (int)ImportFormat::ifPoint + (int)ImportFormat::ifSegment + (int)ImportFormat::ifPolygon;
 		} else
 			frm.type = ImportFormat::ifRaster;
