@@ -711,29 +711,11 @@ int GraphPropertyForm::changeColor(Event *ev) {
 
 void GraphPropertyForm::calcMad(const Column& col) {
 	if ( col->dm()->pdv()) {
-		set<double> vals;
-		double sum = 0;
-		for(int i = 1; i <= col->iRecs(); ++i) {
-			double v = col->rValue(i);
-			if ( v != rUNDEF) {
-				vals.insert(v);
-				sum += v;
-			}
-		}
-		if ( vals.size() == 0)
-			return;
-
-		double average =  sum / vals.size();
-		set<double> vals2;
-		double stdv2 = 0;
-		for(set<double>::iterator cur = vals.begin(); cur != vals.end(); ++cur) {
-			double v = *cur;
-			stdv2 += ( v - average) * ( v - average);
-
-		}
-		double stdev = sqrt( stdv2 / vals.size());
-		gtThreshold = average;
-		ltThreshold = average ;
+	
+		RangeReal mm = col->rrMinMax();
+		double tr = mm.rLo() + mm.rWidth() * 0.8;
+		gtThreshold = tr;
+		ltThreshold = tr ;
 
 	}
 }
