@@ -36,7 +36,7 @@
  ***************************************************************/
 #include "Engine\DataExchange\ForeignStore.h"
 
-class SegmentMapStoreForeign : public SegmentMapStore
+class _export SegmentMapStoreForeign : public SegmentMapStore
 {
 	public:
 		SegmentMapStoreForeign(const FileName& fnPM, SegmentMapPtr& p, LayerInfo li);
