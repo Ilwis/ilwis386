@@ -59,16 +59,16 @@ static void TooManySegments(const FileName& fnObj)
 }
 
 const char* SegmentMapFromRasValueBnd::sSyntax() {
-	return "SegmentMapFromRasValueBnd(rasmap,startval,endval,stepval,8|4,smooth|nosmooth)";
+	return "SegmentMapFromRasValueBnd(rasmap,startval,endval,stepval,8|4,smooth|nosmooth, removeSlivers)";
 }
 
 SegmentMapFromRasValueBnd* SegmentMapFromRasValueBnd::create(const FileName& fn, SegmentMapPtr& p, const String& sExpr)
 {
 	Array<String> as;
 	int iParms = IlwisObjectPtr::iParseParm(sExpr, as);
-	if (iParms != 6 && iParms != 4)
+	if (iParms != 7 && iParms != 5)
 		ExpressionError(sExpr, sSyntax());
-	if ( iParms == 6) {
+	if ( iParms == 7) {
 		Map map(as[0], fn.sPath());
 		double rIsoStartVal = as[1].rVal();
 		double rIsoEndVal = as[2].rVal();
@@ -86,8 +86,9 @@ SegmentMapFromRasValueBnd* SegmentMapFromRasValueBnd::create(const FileName& fn,
 			ExpressionError(sExpr, sSyntax());
 		else
 			fSmooth = fCIStrEqual(sSmooth, "smooth");
+		double fragmentsz = as[6].fVal();
 
-		return new SegmentMapFromRasValueBnd(fn, p, map, rIsoStartVal, rIsoEndVal, rIsoStepVal, f8Con, fSmooth);
+		return new SegmentMapFromRasValueBnd(fn, p, map, rIsoStartVal, rIsoEndVal, rIsoStepVal, f8Con,fSmooth, fragmentsz);
 	} else if ( iParms == 4) {
 		Map map(as[0], fn.sPath());
 		set<double> sequence;
@@ -105,7 +106,8 @@ SegmentMapFromRasValueBnd* SegmentMapFromRasValueBnd::create(const FileName& fn,
 			ExpressionError(sExpr, sSyntax());
 		else
 			fSmooth = fCIStrEqual(sSmooth, "smooth");
-		return new SegmentMapFromRasValueBnd(fn, p, map, sequence, f8Con, fSmooth);
+		double fragmentsz = as[4].fVal();
+		return new SegmentMapFromRasValueBnd(fn, p, map, sequence, f8Con, fSmooth, fragmentsz);
 
 	}
 	return 0;
@@ -128,6 +130,7 @@ SegmentMapFromRasValueBnd::SegmentMapFromRasValueBnd(const FileName& fn, Segment
 	ReadElement("SegmentMapFromRasValueBnd", "IsoStepValue", m_rIsoStepVal);
 	ReadElement("SegmentMapFromRasValueBnd", "EightCon", fEightCon);
 	ReadElement("SegmentMapFromRasValueBnd", "Smoothing", fSmooth);
+	ReadElement("SegmentMapFromRasValueBnd", "FragmentSize", fragmentSize);
 	String sSequence;
 	ReadElement("SegmentMapFromRasValueBnd", "Sequence", sSequence);
 	parseSequence(sSequence, intervals);
@@ -137,9 +140,9 @@ SegmentMapFromRasValueBnd::SegmentMapFromRasValueBnd(const FileName& fn, Segment
 }
 
 SegmentMapFromRasValueBnd::SegmentMapFromRasValueBnd(const FileName& fn, SegmentMapPtr& p, const Map& mp, 
-													 double rStartVal, double rEndVal, double rIsoStepVal, bool f8Con, bool fSmth)
+													 double rStartVal, double rEndVal, double rIsoStepVal, bool f8Con, bool fSmth, double frags)
 													 : SegmentMapVirtual(fn, p, mp->cs(),mp->cb(),mp->dvrs()),
-													 map(mp), m_rIsoStartVal(rStartVal), m_rIsoEndVal(rEndVal), m_rIsoStepVal(rIsoStepVal), fEightCon(f8Con), fSmooth(fSmth)
+													 map(mp), m_rIsoStartVal(rStartVal), m_rIsoEndVal(rEndVal), m_rIsoStepVal(rIsoStepVal), fEightCon(f8Con), fSmooth(fSmth), fragmentSize(frags)
 {
 	if (map->gr()->fGeoRefNone())
 		throw ErrorGeoRefNone(map->gr()->fnObj, errSegmentMapFromRasAreaBnd+1);
@@ -155,9 +158,9 @@ SegmentMapFromRasValueBnd::SegmentMapFromRasValueBnd(const FileName& fn, Segment
 }
 
 SegmentMapFromRasValueBnd::SegmentMapFromRasValueBnd(const FileName& fn, SegmentMapPtr& p, const Map& mp, 
-													 const set<double>& seq, bool f8Con, bool fSmth)
+													 const set<double>& seq, bool f8Con, bool fSmth, double frags)
 													 : SegmentMapVirtual(fn, p, mp->cs(),mp->cb(),mp->dvrs()),
-													 map(mp), m_rIsoStartVal(rUNDEF), m_rIsoEndVal(rUNDEF), m_rIsoStepVal(rUNDEF), fEightCon(f8Con), fSmooth(fSmth)
+													 map(mp), m_rIsoStartVal(rUNDEF), m_rIsoEndVal(rUNDEF), m_rIsoStepVal(rUNDEF), fEightCon(f8Con), fSmooth(fSmth), fragmentSize(frags)
 {
 	if (map->gr()->fGeoRefNone())
 		throw ErrorGeoRefNone(map->gr()->fnObj, errSegmentMapFromRasAreaBnd+1);
@@ -195,6 +198,7 @@ void SegmentMapFromRasValueBnd::Store()
 	WriteElement("SegmentMapFromRasValueBnd", "IsoStepValue", m_rIsoStepVal);
 	WriteElement("SegmentMapFromRasValueBnd", "EightCon", fEightCon);
 	WriteElement("SegmentMapFromRasValueBnd", "Smoothing", fSmooth);
+	WriteElement("SegmentMapFromRasValueBnd", "FragmentSize", fragmentSize);
 	String seq;
 	for(set<double>::iterator cur = intervals.begin(); cur != intervals.end(); ++cur) {
 		if ( cur == intervals.begin()) {
@@ -224,10 +228,10 @@ String SegmentMapFromRasValueBnd::sExpression() const
 	else
 		sSmooth = "NoSmooth";
 	if ( intervals.size() == 0) {
-		return String("SegmentMapFromRasValueBnd(%S,%lg,%lg,%lg,%S,%S)",
+		return String("SegmentMapFromRasValueBnd(%S,%lg,%lg,%lg,%S,%S, %f)",
 			map->sNameQuoted(false, fnObj.sPath()),
 			m_rIsoStartVal, m_rIsoEndVal, m_rIsoStepVal,
-			s8Con, sSmooth);
+			s8Con, sSmooth, fragmentSize);
 	} else {
 		String seq;
 		for(set<double>::const_iterator cur = intervals.begin(); cur != intervals.end(); ++cur) {
@@ -238,9 +242,9 @@ String SegmentMapFromRasValueBnd::sExpression() const
 				seq += String(",%f", (*cur));
 			}
 		}
-		return String("SegmentMapFromRasValueBnd(%S,%S,%S,%S)",
+		return String("SegmentMapFromRasValueBnd(%S,%S,%S,%S, %f)",
 			map->sNameQuoted(false, fnObj.sPath()),
-			seq,s8Con, sSmooth);
+			seq,s8Con, sSmooth, fragmentSize);
 	}
 }
 
@@ -1000,6 +1004,15 @@ void SegmentMapFromRasValueBnd::StoreSegm(CoordBuf& cBuf, long& iCrd, double& rV
 
 	ILWIS::Segment *seg = CSEGMENT(pms->newFeature());
 	seg->PutCoords(iCrd, cBuf);
+	double b = seg->getLength();
+	Coord c1 = cBuf.front();
+	Coord c2 = cBuf.back();
+	if ( fragmentSize > 0) {
+		if ( b < fragmentSize && c1 == c2) {
+			seg->Delete(true);
+			return ;
+		}
+	}
 	if ( dvrs().fUseReals())
 		seg->PutVal(rVal);
 	else

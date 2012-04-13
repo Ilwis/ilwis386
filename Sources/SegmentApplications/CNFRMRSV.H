@@ -51,8 +51,8 @@ class DATEXPORT SegmentMapFromRasValueBnd: public SegmentMapVirtual
   friend class SegmentMapVirtual;
 public:
   SegmentMapFromRasValueBnd(const FileName&, SegmentMapPtr& p);
-  SegmentMapFromRasValueBnd(const FileName& fn, SegmentMapPtr& p, const Map& mp, double rStartVal, double rEndVal, double rStepVal, bool f8Con, bool fSmooth);
-  SegmentMapFromRasValueBnd(const FileName& fn, SegmentMapPtr& p, const Map& mp, const set<double>& seq, bool f8Con, bool fSmth);
+  SegmentMapFromRasValueBnd(const FileName& fn, SegmentMapPtr& p, const Map& mp, double rStartVal, double rEndVal, double rStepVal, bool f8Con, bool fSmooth, double frags);
+  SegmentMapFromRasValueBnd(const FileName& fn, SegmentMapPtr& p, const Map& mp, const set<double>& seq, bool f8Con, bool fSmth, double frags);
   ~SegmentMapFromRasValueBnd();
   static const char* sSyntax();
   virtual String sExpression() const;
@@ -85,6 +85,7 @@ private:
   BufExt<SegBound*> *sbHoriz, *sbVert;  // rasvec 1.4 vars: segline[RIGHT] and segline[DOWN]
 	Table tblAtt;
 	Column col1, col2, colLength;
+	double fragmentSize;
 	double m_rIsoStartVal;
 	double m_rIsoEndVal;
 	double m_rIsoStepVal;
