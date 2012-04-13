@@ -34,6 +34,7 @@
 #include "drawers\Boxdrawer.h"
 #include "Drawers\CollectionDrawer.h"
 #include "Drawers\AnnotationDrawers.h"
+#include "Drawers\WMSDrawer.h"
 
 
 
@@ -66,6 +67,7 @@ DrawerInfoVector *createDrawer() {
 	infos->push_back(new DrawerInfo("AnnotationBorderDrawer","ilwis38", createAnnotationBorderDrawer));
 	infos->push_back(new DrawerInfo("ColorCompositeDrawer","ilwis38", createColorCompositeDrawer));
 	infos->push_back(new DrawerInfo("AnnotationDrawers","ilwis38", createAnnotationDrawers));
+	infos->push_back(new DrawerInfo("WMSDrawer","ilwis38", createWMSDrawer));
 
 	return infos;
 }
