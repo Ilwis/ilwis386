@@ -63,6 +63,7 @@ public:
 	void OnMouseMove(UINT nFlags, CPoint point);
 	void OnLButtonDown(UINT nFlags, CPoint point);
 	void OnLButtonUp(UINT nFlags, CPoint point);
+	const bool panning() const { return fDown; };
 protected:
 	CCmdTarget* cmt;
 	NotifyMoveProc np;
