@@ -494,10 +494,6 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\Sources\Applications\Raster\MapSEBS.h"
-						>
-					</File>
-					<File
 						RelativePath="..\..\Sources\Applications\Raster\MAPSLICE.H"
 						>
 					</File>
