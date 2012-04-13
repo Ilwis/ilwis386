@@ -23,26 +23,36 @@ ILWIS::NewDrawer *createRasterLayerDrawer(DrawerParameters *parms) {
 	return new RasterLayerDrawer(parms);
 }
 
-RasterLayerDrawer::RasterLayerDrawer(DrawerParameters *parms) : 
-LayerDrawer(parms,"RasterLayerDrawer")
-, data(new RasterSetData()), isThreaded(true), isThreadedBeforeOffscreen(true), fLinear(true), fUsePalette(false), fPaletteOwner(false), palette(0), textureHeap(new TextureHeap()), textureHeapBeforeOffscreen(0), demTriangulator(0)
+RasterLayerDrawer::RasterLayerDrawer(DrawerParameters *parms)
+: LayerDrawer(parms,"RasterLayerDrawer")
+, data(new RasterSetData())
+, isThreaded(true)
+, isThreadedBeforeOffscreen(true)
+, fLinear(true)
+, fUsePalette(false)
+, fPaletteOwner(false)
+, palette(0)
+, textureHeap(0)
+, textureHeapBeforeOffscreen(0)
+, demTriangulator(0)
+, fSetupDone(false)
 {
 	setTransparency(1); // default, opaque
-	//	setDrawMethod(drmNOTSET); // default
-	//drawers.push_back(this); // nasty: i am my own child drawer
 }
 
-RasterLayerDrawer::RasterLayerDrawer(DrawerParameters *parms, const String& name) : LayerDrawer(parms, name), 
-data(new RasterSetData()),
-isThreaded(true), 
-isThreadedBeforeOffscreen(true), 
-fLinear(true), 
-fUsePalette(false), 
-fPaletteOwner(false), 
-palette(0), 
-textureHeap(new TextureHeap()), 
-textureHeapBeforeOffscreen(0), 
-demTriangulator(0)
+RasterLayerDrawer::RasterLayerDrawer(DrawerParameters *parms, const String& name)
+: LayerDrawer(parms, name)
+, data(new RasterSetData())
+, isThreaded(true)
+, isThreadedBeforeOffscreen(true)
+, fLinear(true)
+, fUsePalette(false)
+, fPaletteOwner(false)
+, palette(0)
+, textureHeap(0)
+, textureHeapBeforeOffscreen(0)
+, demTriangulator(0)
+, fSetupDone(false)
 {
 	setTransparency(1);
 }
@@ -56,6 +66,10 @@ RasterLayerDrawer::~RasterLayerDrawer(){
 		delete demTriangulator;
 }
 
+void RasterLayerDrawer::setup() {
+	textureHeap = new TextureHeap();
+}
+
 void RasterLayerDrawer::setMinMax(const RangeReal & rrMinMax)
 {
 	this->rrMinMax = rrMinMax;
@@ -67,6 +81,11 @@ void RasterLayerDrawer::prepareChildDrawers(PreparationParameters *pp){
 
 void RasterLayerDrawer::prepare(PreparationParameters *pp){
 	LayerDrawer::prepare(pp);
+
+	if (!fSetupDone) {
+		setup();
+		fSetupDone = true;
+	}
 
 	if ( pp->type & NewDrawer::ptRENDER || pp->type & RootDrawer::ptRESTORE) {
 		fUsePalette = drm != drmCOLOR;
