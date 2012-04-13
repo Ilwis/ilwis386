@@ -41,6 +41,7 @@
 #include "DataExchange\gdalincludes\cpl_vsi.h"
 #include "DataExchange\gdalincludes\ogr_api.h"
 #include "DataExchange\gdalincludes\ogr_srs_api.h"
+#include <geos/algorithm/CGAlgorithms.h>
 
 
 #undef DomainInfo
@@ -94,10 +95,18 @@ const String sZCOLUMNNAME("Z_Value");
 
 CCriticalSection GDALFormat::m_CriticalSection;
 
-void ogrgdal(const String& cmd) {
+UINT OgrInThread(void * cmd) {
 	GDALFormat frmt;
-	ParmList parms(cmd);
+	ParmList parms(*(String *)cmd);
 	frmt.ogr(parms.sGet(0), parms.sGet(1), parms.sGet(2));
+	delete cmd;
+
+	return 1;
+}
+
+void ogrgdal(const String& cmd) {
+	String *pCmd = new String(cmd);
+	AfxBeginThread(OgrInThread, (LPVOID)pCmd);
 }
 
 void rastergdal(const String& cmd) {
@@ -800,20 +809,24 @@ CoordSystem GDALFormat::getCoordSystemFrom(OGRSpatialReferenceH handle, char *wk
 
 	CoordSystemViaLatLon *csv=NULL;
 	if ( funcs.isProjected(handle)) {
-		CoordSystemProjection *csp =  new CoordSystemProjection(fnCsy, 1);
-		String dn = Datum::WKTToILWISName(datumName);
-		if ( dn == "") {
-			Projection proj = ProjectionPtr::WKTToILWISName(wkt);
-			if ( proj.fValid() == false)
-				throw ErrorObject("Datum can't be transformed to an ILWIS known datum");
-			csp->prj = proj;
-		} else {
-			csp->datum = new MolodenskyDatum(dn,"");
+		try{
+			CoordSystemProjection *csp =  new CoordSystemProjection(fnCsy, 1);
+			String dn = Datum::WKTToILWISName(datumName);
+			if ( dn == "") {
+				Projection proj = ProjectionPtr::WKTToILWISName(wkt);
+				if ( proj.fValid() == false)
+					throw ErrorObject("Datum can't be transformed to an ILWIS known datum");
+				csp->prj = proj;
+			} else {
+				csp->datum = new MolodenskyDatum(dn,"");
+			}
+			String projName(funcs.getAttr(handle, "Projection",0));
+			replace(projName.begin(), projName.end(),'_',' ');
+			csp->prj = Projection(projName);
+			csv = csp;
+		} catch ( ErrorObject& err) {
+			return CoordSystem("unknown");
 		}
-		String projName(funcs.getAttr(handle, "Projection",0));
-		replace(projName.begin(), projName.end(),'_',' ');
-		csp->prj = Projection(projName);
-		csv = csp;
 	} else {
 		csv = new CoordSystemLatLon(fnCsy, 1);
 		csv->datum = new MolodenskyDatum("WGS 1984","");
@@ -1561,25 +1574,26 @@ void GDALFormat::ogr(const String& name, const String& source, const String& tar
 				if ( bmp.fValid()) {
 					OGRFeatureDefnH hFeatureDef = funcs.ogrGetLayerDefintion(hLayer);
 					if ( hFeatureDef) {
-						Table tbl = createTable(fnBaseOutputName, dm, hFeatureDef, hLayer);
-						tbl->fErase = true;
+						Table tbl;
+						createTable(fnBaseOutputName, dm, hFeatureDef, hLayer, tbl);
+						if ( tbl.fValid()) {
+							bmp->SetAttributeTable(tbl);
+						}
 						OGRFeatureH hFeature;
 						int rec = 0;
 						funcs.ogrResetReading(hLayer);
+						trq.Start();
 						while( (hFeature = funcs.ogrGetNextFeature(hLayer)) != NULL ){
 								OGRGeometryH hGeometry = funcs.ogrGetGeometryRef(hFeature);
-								filler->fillFeature(hGeometry, ++rec);
+								filler->fillFeature(hGeometry, rec);
 
 								if ( trq.fUpdate(rec, featureCount)) { 
 									delete filler;
 									return;
 								}
 						}
-						if ( tbl.fValid())
-							bmp->SetAttributeTable(tbl);
 						bmp->Store();
 						bmp->fErase = false;
-						tbl->fErase = false;
 					}
 				}
 				delete filler;
@@ -1604,14 +1618,23 @@ struct ScannedColumn {
 	OGRFieldType type;
 
 };
-Table GDALFormat::createTable(const FileName& fn, const Domain& dm,OGRFeatureDefnH hFeatureDef, OGRLayerH hLayer) {
-	Table tbl(FileName(fn, ".tbt"),dm);
+void GDALFormat::createTable(const FileName& fn, const Domain& dm,OGRFeatureDefnH hFeatureDef, OGRLayerH hLayer, Table& tbl) {
+	tbl = Table(FileName(fn, ".tbt"),dm);
 	int columnCount = funcs.ogrGetFieldCount(hFeatureDef);
 	vector<ScannedColumn> columns(columnCount);
 	OGRFeatureH hFeature;
 	funcs.ogrResetReading(hLayer);
 	int size = 0;
+	Tranquilizer trq;
+	int sz = dm->pdsrt()->iSize();
+	trq.SetText(String(TR("Importing table %S").c_str(), fn.sFile));
+	trq.Start();
 	while( (hFeature = funcs.ogrGetNextFeature(hLayer)) != NULL ){
+		if ( trq.fUpdate(size, sz)) {
+			tbl = Table();
+			return ;
+		}
+
 		for(int field=0; field < columnCount; ++field) {
 			OGRFieldDefnH hFieldDefn = funcs.ogrGetFieldDefinition(hFeatureDef, field);
 			OGRFieldType type = funcs.ogrGetFieldType(hFieldDefn);
@@ -1659,7 +1682,6 @@ Table GDALFormat::createTable(const FileName& fn, const Domain& dm,OGRFeatureDef
 			}
 		}
 	}
-	return tbl;
 }
 
 Domain GDALFormat::createSortDomain(const String& name, const vector<String>& values) {
@@ -1733,7 +1755,7 @@ CoordBounds GDALFormat::getLayerCoordBounds(OGRLayerH hLayer) {
 }
 
 //-----------------------------------------------------
-void GeometryFiller::fillFeature(OGRGeometryH hGeometry, int rec) {
+void GeometryFiller::fillFeature(OGRGeometryH hGeometry, int& rec) {
 	if ( hGeometry) {
 		fillGeometry(hGeometry, rec);
 		long count = funcs.ogrGetSubGeometryCount(hGeometry);
@@ -1770,7 +1792,7 @@ void SegmentFiller::fillGeometry(OGRGeometryH hGeom, int rec) {
 	s->PutVal((long)rec);
 }
 
-void PolygonFiller::fillFeature(OGRGeometryH hGeometry, int rec) {
+void PolygonFiller::fillFeature(OGRGeometryH hGeometry, int& rec) {
 	try {
 		if ( hGeometry) {
 			long count = funcs.ogrGetSubGeometryCount(hGeometry);
@@ -1780,10 +1802,13 @@ void PolygonFiller::fillFeature(OGRGeometryH hGeometry, int rec) {
 				if ( hSubGeometry) {
 					LinearRing *ring = getRing(hSubGeometry);
 					if ( ring) {
+						const CoordinateSequence * seq = ring->getCoordinates();
+						bool isCC = geos::algorithm::CGAlgorithms::isCCW(seq);
+						delete seq;
 						ILWIS::Polygon *p = 0;
-						if ( first) {
+						if ( !isCC || first) {
 							p = CPOLYGON(bmp->newFeature());
-							p->PutVal((long)rec);
+							p->PutVal((long)rec++);
 							p->addBoundary(ring);
 							first = false;
 						}
@@ -1801,6 +1826,8 @@ void PolygonFiller::fillFeature(OGRGeometryH hGeometry, int rec) {
 
 LinearRing *PolygonFiller::getRing(OGRGeometryH hGeom) {
 	int count = funcs.ogrGetNumberOfPoints(hGeom);
+	if ( count == 0)
+		return  0;
 	CoordinateArraySequence *seq = new CoordinateArraySequence();
 	for(int i = 0; i < count; ++i) {
 		double x,y,z;
