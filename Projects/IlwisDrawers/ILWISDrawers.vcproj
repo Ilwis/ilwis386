@@ -327,6 +327,18 @@
 				RelativePath="..\..\Sources\Drawers\TextureHeap.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\WMSDrawer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\WMSTexture.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\WMSTextureHeap.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -450,6 +462,18 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Drawers\TextureHeap.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\WMSDrawer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\WMSTexture.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\WMSTextureHeap.h"
 				>
 			</File>
 		</Filter>
