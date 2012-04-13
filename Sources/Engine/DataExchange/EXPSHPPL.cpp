@@ -79,7 +79,7 @@ void ImpExp::ExpPolToSHP(const FileName& fnObject, const FileName& fnFile) {
 	iNrPols = 0;
 	ILWIS::Polygon *pol = (ILWIS::Polygon *) polmap->polFirst();
 	while (pol && pol->fValid()) {
-		if (pol->rArea() > 0)
+		if (pol->rArea() > 0 && pol->rValue() != rUNDEF)
 			iNrPols++;
 		pol = (ILWIS::Polygon *)polmap->getFeature(++i);
 	}
@@ -115,7 +115,7 @@ void ImpExp::ExpPolToSHP(const FileName& fnObject, const FileName& fnFile) {
 		int i = 0;
 		pol = CPOLYGON(polmap->getFeature(i));
 		while (pol&& pol->fValid()) {
-			if (pol->rArea() > 0) {
+			if (pol->rArea() > 0 && pol->rValue() != rUNDEF) {
 				shpPol.Update(pol);
 				fileSHX.Write(sizeof(shpPol.IndexRecord), &(shpPol.IndexRecord));
 				if (dvs.fUseReals() && dvs.fValues())
