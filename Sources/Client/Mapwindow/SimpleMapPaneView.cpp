@@ -79,6 +79,7 @@ Created on: 2007-02-8
 #include "Client\Mapwindow\MapPaneView.h"
 #include "Engine\Drawers\DrawerContext.h"
 #include "Client\Mapwindow\OverviewMapPaneView.h"
+#include "Client\Mapwindow\PanTool.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -397,6 +398,11 @@ void SimpleMapPaneView::ResetStatusBar()
 
 void SimpleMapPaneView::OnMouseMove(UINT nFlags, CPoint point) 
 {
+	if (mode != cNone)
+		return;
+	PanTool * panTool = (tools.find(ID_PANAREA) != tools.end()) ? (PanTool*)tools[ID_PANAREA] : 0;
+	if (panTool && panTool->panning())
+		return;
 	//throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
 	if (edit && edit->OnMouseMove(nFlags, point)) 
 		return;
@@ -505,11 +511,17 @@ void SimpleMapPaneView::OnMouseMove(UINT nFlags, CPoint point)
 			state |= cmZOOMIN;
 		IlwWinApp()->SendUpdateCoordMessages(state, &cwcs);
 	}
+
 	CView::OnMouseMove(nFlags, point);
 }
 
 void SimpleMapPaneView::OnLButtonDown(UINT nFlags, CPoint point) 
 {
+	if (mode != cNone)
+		return;
+	PanTool * panTool = (tools.find(ID_PANAREA) != tools.end()) ? (PanTool*)tools[ID_PANAREA] : 0;
+	if (panTool && panTool->panning())
+		return;
 	MapCompositionDoc* mcd = GetDocument();
 	RowCol rc(point.y, point.x);
 	CPoint pnt(rc.Col, rc.Row);
@@ -538,6 +550,11 @@ void SimpleMapPaneView::OnLButtonDown(UINT nFlags, CPoint point)
 
 void SimpleMapPaneView::OnLButtonUp(UINT nFlags, CPoint point) 
 {
+	if (mode != cNone)
+		return;
+	PanTool * panTool = (tools.find(ID_PANAREA) != tools.end()) ? (PanTool*)tools[ID_PANAREA] : 0;
+	if (panTool && panTool->panning())
+		return;
 	MapCompositionDoc* mcd = GetDocument();
 	info->ShowWindow(SW_HIDE);
 	ReleaseCapture();
