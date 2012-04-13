@@ -325,9 +325,11 @@ MapStore::MapStore(const FileName& fn, MapPtr& p)
 		else if ( fCIStrEqual(sType , "foreignformat"))
 		{
 			ParmList pm;
-			ForeignFormat *ff = ForeignFormat::Create(fn, pm);
-			if ( ff )
+			ForeignFormat *ff = ForeignFormat::Create(fn, pm); // This is only a "probe" to check if we can read this format; a 2nd and final "Create" call is triggered by the next call to one of the MapStoreForeignFormat member functions (iRaw, GetLineRaw etc).
+			if ( ff ) {
+				delete ff; // clean-up the probe-object
 				mpsb = new MapStoreForeignFormat(*this); 
+			}
 			else
 				throw ErrorObject(TR("This fileformat is in its native form nnot supported by ILWIS"));
 		}
