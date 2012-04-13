@@ -36,6 +36,7 @@ Created on: 2007-02-8
 ***************************************************************/
 
 class SAXParser;
+typedef void CURL;
 
 class _export RemoteObject {
 public:
@@ -54,8 +55,8 @@ protected:
    void parse();
    MemoryStruct chunk;
    ofstream *file;
-
-
+   CURL *curl_handle;
+   static unsigned int iRef;
 };
 
 

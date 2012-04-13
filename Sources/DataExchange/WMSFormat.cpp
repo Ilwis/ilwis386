@@ -86,13 +86,18 @@
 #include "DataExchange\WMSFormat.h"
 
 
-WMSFormat::WMSFormat() : urlWMS("") {
+WMSFormat::WMSFormat()
+: urlWMS("")
+, rxo(0)
+{
 	gdalDataSet = NULL;
 	grfWMS = NULL;
 }
 
-WMSFormat::WMSFormat(const FileName& fn, ParmList& pm) : urlWMS("") {
-
+WMSFormat::WMSFormat(const FileName& fn, ParmList& pm)
+: urlWMS("")
+, rxo(0)
+{
 	String sC = pm.sGet("collection");
 	FileName fnCollection(sC);
 	WMSCollection wms(fnCollection);
@@ -153,6 +158,8 @@ WMSFormat::WMSFormat(const FileName& fn, ParmList& pm) : urlWMS("") {
 
 WMSFormat::~WMSFormat() {
 	//delete image;
+	if (rxo != 0)
+		delete rxo;
 	if ( gdalDataSet != NULL)
 		funcs.close(gdalDataSet);
 	if ( trq )
@@ -528,12 +535,14 @@ void WMSFormat::Store(IlwisObject obj) {
 		obj->WriteElement("ForeignFormat","URL", urlWMS.sVal());
 }
 
-void WMSFormat::retrieveImage() const {
+void WMSFormat::retrieveImage() {
 	CoordBounds cb2 = grfWMS->cbWMSRequest();
 	String sExpr = getMapRequest(cb2, layers, srsName, grfWMS->rcWMSRequest());
-	RemoteObject rxo(sExpr);
+	if (rxo == 0)
+		rxo = new RemoteObject();
+	rxo->getRequest(sExpr);
 	MemoryStruct *image;
-	image = rxo.get();
+	image = rxo->get();
 	if(image->memory[0] == '<' && image->memory[1] == '?' && image->memory[2] == 'x' && image->memory[3]== 'm') {
 		String error(image->memory);
 		HandleError(error);

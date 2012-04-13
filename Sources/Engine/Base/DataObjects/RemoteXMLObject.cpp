@@ -36,16 +36,32 @@ Created on: 2007-02-8
 ***************************************************************/
 
 #include "Headers\toolspch.h"
+#include "Engine\Base\DataObjects\URL.h"
+#include "Engine\Base\DataObjects\RemoteXMLObject.h"
 #include "Engine\DataExchange\curlIncludes\curl.h"
 #include "Engine\DataExchange\curlIncludes\easy.h"
 
-#include "Engine\Base\DataObjects\URL.h"
-#include "Engine\Base\DataObjects\RemoteXMLObject.h"
+unsigned int RemoteObject::iRef = 0;
 
-RemoteObject::RemoteObject() : file(0) {
+RemoteObject::RemoteObject()
+: file(0)
+{
+	if (iRef == 0)
+		curl_global_init(CURL_GLOBAL_ALL);
+	++iRef;
+
+	curl_handle = curl_easy_init();
 }
 
-RemoteObject::RemoteObject(const URL& url) : file(0) {
+RemoteObject::RemoteObject(const URL& url)
+: file(0)
+{
+	if (iRef == 0)
+		curl_global_init(CURL_GLOBAL_ALL);
+	++iRef;
+
+	curl_handle = curl_easy_init();
+
 	getRequest(url.sVal());
 }
 
@@ -74,7 +90,11 @@ size_t RemoteObject::WriteMemoryCallback(void *ptr, size_t size, size_t nmemb, v
 
 RemoteObject::~RemoteObject() {
     if(chunk.memory)
-      free(chunk.memory);
+		free(chunk.memory);
+	curl_easy_cleanup(curl_handle);
+	--iRef;
+	if (iRef == 0)
+		curl_global_cleanup();
 }
 
 void *RemoteObject::myrealloc(void *ptr, size_t size)
@@ -98,25 +118,16 @@ MemoryStruct *RemoteObject::get() {
 }
 
 void RemoteObject::getRequest(const String& url) {
-	CURL *curl_handle;
-  
-
     chunk.memory=NULL; /* we expect realloc(NULL, size) to work */
     chunk.size = 0;    /* no data at this point */
   
-    curl_global_init(CURL_GLOBAL_ALL);
-    curl_handle = curl_easy_init();
 	curl_easy_setopt(curl_handle, CURLOPT_URL, url.c_str());
     curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
     curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)this);
     curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
     CURLcode result = curl_easy_perform(curl_handle);
 	if ( result != 0)
-		throw ErrorObject(curl_easy_strerror(result));
-    curl_easy_cleanup(curl_handle);
-  
-  
-    curl_global_cleanup();
+		throw ErrorObject(curl_easy_strerror(result)); // can we remove this "throw"?
 }
 
 void RemoteObject::parse() {

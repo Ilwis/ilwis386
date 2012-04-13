@@ -44,7 +44,7 @@
 #define ILWGRCORNERSWMS_H
 #include "Engine\SpatialReference\Grsmpl.h"
 
-typedef void (ForeignFormat::*RetrieveImageProc)() const;
+typedef void (ForeignFormat::*RetrieveImageProc)();
 
 class _export GeoRefCornersWMS: public GeoRefCorners
 {

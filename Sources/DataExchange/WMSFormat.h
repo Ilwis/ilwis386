@@ -85,6 +85,8 @@ struct ProjectionConversionFunctions
 	ProjectionConversionFunctions(const String& sName="", SetProjectionParm func=NULL) : sProjectionName(sName), parmfunc(func){}
 };
 
+class RemoteObject;
+
 class _export WMSFormat : public ForeignFormat {
 public:
 
@@ -105,7 +107,7 @@ public:
 	virtual long          iRaw(RowCol) const;
 	virtual long          iValue(RowCol) const;
 	virtual double        rValue(RowCol) const;
-	void retrieveImage() const;
+	void retrieveImage();
 	FileName createCollectionName(const String& name,ParmList& pm);
 
 private:
@@ -132,5 +134,6 @@ private:
 	map<String, ProjectionConversionFunctions> mpCsyConvers; // coordsystem conversion functions
 	map<String, String> ellipseMapping;
 	WMSGDALCFunctions funcs;
+	RemoteObject * rxo;
 };
 
