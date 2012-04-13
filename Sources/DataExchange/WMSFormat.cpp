@@ -389,7 +389,7 @@ CoordSystem WMSFormat::getCoordSystem(const FileName& fnBase, const String& srsN
 	String path = getEngine()->getContext()->sIlwDir();
 	path += "Resources\\gdal_data";
 //	OGRSpatialReference oSRS;
-	//funcs.finderLoc(path.c_str());
+	funcs.finderLoc(path.c_str());
 
 	OGRSpatialReferenceH handle = funcs.newSRS(NULL);
 	OGRErr err = funcs.srsImportFromEPSG( handle, srsName.sTail(":").iVal());
@@ -397,6 +397,7 @@ CoordSystem WMSFormat::getCoordSystem(const FileName& fnBase, const String& srsN
 		throw ErrorObject(String("The SRS %S is not supported", srsName));
 
 	String datumName(funcs.getAttribute(handle, "Datum",0));
+	String projName(funcs.getAttribute(handle,"Projection", 0));
 	//map<String, ProjectionConversionFunctions>::iterator where = mpCsyConvers.find(projectionName);
 
 	FileName fnCsy(FileName::fnUnique(FileName(fnBase, ".csy")));
