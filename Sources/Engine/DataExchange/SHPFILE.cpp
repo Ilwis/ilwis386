@@ -202,12 +202,12 @@ void Shapefile_Pol::PolWrite(const vector<Coordinate>& coords, int iNumParts, in
 	fileSHP.Write(4, &iNumParts);
 	fileSHP.Write(4, &iNumPoints);
 	long iBeginPoint;
-	for (long l = iNumParts - 1; l >= 0; l--)
+	for (long l = 0; l < iNumParts; ++l)
 	{
-		iBeginPoint = iNumPoints - aiBeginPoint[l];
+		iBeginPoint = aiBeginPoint[l];
 		fileSHP.Write(4, &iBeginPoint);
 	}
-	for (long l = iNumPoints - 1; l >= 0; l--)
+	for (long l = 0; l < iNumPoints; ++l)
 	{
 		const Coord crd = coords[l];
 		fileSHP.Write(16, &crd);
@@ -226,24 +226,31 @@ void Shapefile_Pol::Update(const ILWIS::Polygon* pol)
 	rBox[3] = crd.y;
 	long iNrPointSeg = 0;
 	vector<Coordinate> coords;
+	aiBeginPoint.resize(0);
 	const LineString *extRing = pol->getExteriorRing();
-	const CoordinateSequence * seq = extRing->getCoordinates();
-	bool isCC = geos::algorithm::CGAlgorithms::isCCW(seq);
+	CoordinateSequence * seq = extRing->getCoordinates();
+	bool isCC1 = geos::algorithm::CGAlgorithms::isCCW(seq);
+	if (isCC1)
+		CoordinateSequence::reverse(seq);
+	aiBeginPoint.push_back(0);
 	for(int i =0; i < seq->size(); ++i) {
 		coords.push_back(seq->getAt(i));
 	}
-	aiBeginPoint.push_back(seq->size());
 	for(int hole = 0; hole < pol->getNumInteriorRing(); ++hole) {
+		aiBeginPoint.push_back(coords.size());
 		const LineString *intRing = pol->getInteriorRingN(hole);
-		const CoordinateSequence * intseq = intRing->getCoordinates();
-		bool isCC = geos::algorithm::CGAlgorithms::isCCW(intseq);
+		CoordinateSequence * intseq = intRing->getCoordinates();
+		bool isCC2 = geos::algorithm::CGAlgorithms::isCCW(intseq);
+		if (!isCC2)
+			CoordinateSequence::reverse(intseq);
 		for(int i =0; i < intseq->size(); ++i) {
 			coords.push_back(intseq->getAt(i));
 		}
-		aiBeginPoint.push_back(aiBeginPoint[hole] + intseq->size());
 		delete intseq;
 	}
+	//reverse(coords.begin(), coords.end());
 	delete seq;
+
 	
 	//iNumPoints = 0;
 	//iNumParts = 0;
@@ -287,7 +294,7 @@ void Shapefile_Pol::Update(const ILWIS::Polygon* pol)
 	//	aiBeginPoint[iNumParts++] = iNumPoints;
 	//}
 	//while (topStart.iCurr() != topCur.iCurr());
-	long iConLen = (44 + 4 * aiBeginPoint.size() + 16 * aiBeginPoint[aiBeginPoint.size() - 1]) / 2;
+	long iConLen = (44 + 4 * aiBeginPoint.size() + 16 * coords.size()) / 2;
 	SetContentLength(iConLen);
-	PolWrite(coords,aiBeginPoint.size(),aiBeginPoint[aiBeginPoint.size() - 1]);
+	PolWrite(coords,aiBeginPoint.size(),coords.size());
 }
