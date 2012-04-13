@@ -55,6 +55,8 @@ Last change:  WK   24 Jul 97    1:03 pm
 #include "Client\Mapwindow\Drawers\DrawerTool.h"
 #include "Client\Editors\Map\BaseMapEditor.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
+#include "Engine\Map\Segment\Seg.h"
+#include "Engine\Map\Polygon\POL.H"
 #include <stdlib.h>
 #include "Headers\Hs\PIXINFO.hs"
 #include "Engine\Domain\Dmvalue.h"
@@ -295,6 +297,11 @@ int RecItem::Configure(CWnd* win)
 RecItemMap::RecItemMap(RecItem* parent, BaseMap map)
 : RecItem(parent), _map(map)
 {
+	IlwisObject::iotIlwisObjectType type = IOTYPE(map->fnObj);
+	if ( type == IlwisObject::iotSEGMENTMAP || type == IlwisObject::iotPOLYGONMAP) {
+		RecItemExtra* ri = new RecItemExtra(this,map);
+		children.append(ri);
+	}
 	Table tbl = _map->tblAtt();
 	if (tbl.fValid()) {
 		RecItemTable* rit = AddTable(tbl);
@@ -732,6 +739,72 @@ void RecItemColumn::SetValue(const char* s)
 	//  Changed();
 }
 
+//----------------------------------------------------
+//----------------------------------------------------------------------
+RecItemExtra::RecItemExtra(RecItem* parent, const BaseMap& mp) : RecItem(parent), bmp(mp)
+
+{
+	type = IOTYPE(bmp->fnObj);
+	cwcs = bmp->cs();
+}
+
+
+int RecItemExtra::Configure(CWnd* win)
+{
+	return RecItem::Configure(win);
+}
+
+String RecItemExtra::sName() 
+{
+	String s = type == IlwisObject::iotSEGMENTMAP ? "Length" : "Area";
+	return s + ".MEASURE";
+}
+
+void RecItemExtra::setAssociatedDrawerTool(ILWIS::DrawerTool *drawr, const String& targetName) {
+	String reason = targetName;
+	if ( reason == ADDED_PARENT_CHILD) {
+		associatedDrawerTool = drawr;
+		reason = ADDED_PARENT_CHILD;
+	}
+	for (SLIterP<RecItem> iter(&children); iter.fValid(); ++iter) {
+		iter()->setAssociatedDrawerTool(drawr, reason);
+	}
+}
+
+FileName RecItemExtra::fnObj()  {
+	return bmp->fnObj;
+}
+
+const String& RecItemExtra::sValue(int iWidth)
+{
+	int count = 0;
+	sVal="";
+	CoordWithCoordSystem cPar = riParent->crdValue();
+	cwcs = cwcs->cConv(cPar, cPar);
+	vector<Geometry *> features = bmp->getFeatures(cwcs.c());
+	for(int i = 0; i < features.size(); ++i) {
+		Feature *feature = CFEATURE(features[i]);
+		if ( !feature || !feature->fValid())
+			continue;
+		String s;
+		if ( feature->getType() == Feature::ftSEGMENT) {
+			s = String("%f", CSEGMENT(feature)->getLength());
+				
+		} else {
+			s = String("%f", CPOLYGON(feature)->getArea());
+		}
+		if ( s == "?")
+			continue;
+		sVal += count == 0 ? s : ";" + s;
+		++count;
+	}
+	return sVal;
+}
+
+const CoordWithCoordSystem& RecItemExtra::crdValue()
+{
+	return cwcs;
+}
 
 RecItemInt::RecItemInt(long i)
 : RecItem(NULL)

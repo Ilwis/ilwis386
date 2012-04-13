@@ -207,6 +207,22 @@ private:
   Table _tbl;  
 };
 
+class _export RecItemExtra: public RecItem
+{
+public:
+  RecItemExtra(RecItem* parent, const BaseMap& mp);
+  virtual int Configure(CWnd*);
+  virtual String sName() ;
+  virtual const String& sValue(int iWidth = 0);
+  virtual const CoordWithCoordSystem& crdValue();
+  virtual FileName fnObj() ;
+  void setAssociatedDrawerTool(ILWIS::DrawerTool *drawr, const String& targetName);
+protected:
+ private:
+  BaseMap bmp;
+  IlwisObject::iotIlwisObjectType type;
+};
+
 class _export RecItemColumn: public RecItem
 {
 public:
