@@ -18,6 +18,7 @@
 #include "PointApplications\PointInSegment.H"
 #include "PointApplications\pntIntersect.H"
 #include "PointApplications\pntRelate.H"
+#include "PointApplications\PointMapFromSeg.H"
 
 
 //extern "C" _export vector<CommandInfo *>* getCommandInfo());
@@ -44,6 +45,7 @@ InfoVector* getCommandInfo() {
 	infos->push_back(CommandMap::newCommandInfo(createPointMapSymetricDifference,"PointMapSymetricDifference"));
 	infos->push_back(CommandMap::newCommandInfo(createPointMapPointInSegment,"PointMapPointInSegment"));
 	infos->push_back(CommandMap::newCommandInfo(createPointMapRelate,"PointMapRelate"));
+	infos->push_back(CommandMap::newCommandInfo(createPointMapFromSeg,"PointMapFromSeg"));
 
 	return infos;
 }
