@@ -64,7 +64,7 @@ namespace ILWIS {
 		const Palette * palette;
 		bool fRepresentationChanged;
 		bool valid;
-		const Map mp;
+		const Map & mp;
 		bool dirty;
 		double transpValue;
 	};
