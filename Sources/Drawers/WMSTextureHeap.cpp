@@ -87,7 +87,6 @@ Texture * WMSTextureHeap::GenerateTexture(const CoordBounds & cb, bool fInThread
 	textureRequest.push_back(newTexture);
 	csChangeTexCreatorList.Unlock();
 
-	fAbortTexGen = false;
 	if (fInThread) {
 		if (!textureThread)
 			textureThread = AfxBeginThread(GenerateTexturesInThread, this);

@@ -200,6 +200,7 @@ void TextureHeap::ClearQueuedTextures()
 {
 	fAbortTexGen = true;
 	csChangeTexCreatorList.Lock(); // wait for TexGen thread to stop
+	fAbortTexGen = false;
 	for (int i = 0; i < textureRequest.size(); ++i) {
 		Texture * tex = textureRequest[i];
 			if (tex && !tex->fValid())
@@ -281,7 +282,6 @@ Texture * TextureHeap::GenerateTexture(const unsigned int offsetX, const unsigne
 	else
 		textureRequest.push_back(new CCTexture(mpl, drawColor, drm, offsetX, offsetY, sizeX, sizeY, data, zoomFactor, rrMinMaxMap));
 	csChangeTexCreatorList.Unlock();
-	fAbortTexGen = false;
 	if (fInThread) {
 		if (!textureThread)
 			textureThread = AfxBeginThread(GenerateTexturesInThread, this);
@@ -300,7 +300,6 @@ void TextureHeap::ReGenerateTexture(Texture * texture, bool fInThread)
 	csChangeTexCreatorList.Lock();
 	textureRequest.push_back(texture);
 	csChangeTexCreatorList.Unlock();
-	fAbortTexGen = false;
 	if (fInThread) {
 		if (!textureThread)
 			textureThread = AfxBeginThread(GenerateTexturesInThread, this);
