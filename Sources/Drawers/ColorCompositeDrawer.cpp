@@ -36,6 +36,11 @@ void ColorCompositeDrawer::prepareChildDrawers(PreparationParameters *pp){
 
 void ColorCompositeDrawer::prepare(PreparationParameters *pp){
 	LayerDrawer::prepare(pp);
+	
+	if (!fSetupDone) {
+		setup();
+		fSetupDone = true;
+	}
 
 	if ( pp->type & NewDrawer::ptRENDER || pp->type & RootDrawer::ptRESTORE) {
 		fUsePalette = false;
