@@ -111,7 +111,6 @@ void MapPaneViewTool::Stop()
 {
 	//mpv->as = 0;
 	//delete this;
-	active = false;
 }
 
 bool MapPaneViewTool::OnSetCursor() // called by MapPaneView::OnSetCursor
