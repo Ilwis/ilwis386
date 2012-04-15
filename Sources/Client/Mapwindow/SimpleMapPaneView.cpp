@@ -478,12 +478,12 @@ void SimpleMapPaneView::OnMouseMove(UINT nFlags, CPoint point)
 				xInc = -1;
 			}
 			if (point.y < rect.top()) {
-				int iDiff = point.y - rect.top();
+				int iDiff = rect.top() - point.y;
 				vertPixMove(iDiff);
 				yInc = 1;
 			}
 			if (point.y > rect.bottom()) {
-				int iDiff = point.y - rect.bottom();
+				int iDiff = rect.bottom() - point.y;
 				vertPixMove(iDiff);
 				yInc = -1;
 			}
