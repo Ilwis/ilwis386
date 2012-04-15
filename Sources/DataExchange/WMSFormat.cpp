@@ -162,12 +162,6 @@ WMSFormat::~WMSFormat() {
 		delete rxo;
 	if ( gdalDataSet != NULL)
 		funcs.close(gdalDataSet);
-	if ( trq )
-	{
-		trq->Stop();
-		delete trq;
-		trq = NULL;
-	}
 }
 
 ForeignFormat* CreateQueryObjectWMS()
@@ -205,12 +199,6 @@ void WMSFormat::Init() {
 			} 
 		}
 	}
-	if (0 == trq)
-		trq = new Tranquilizer();
-	trq->SetDelayShow(false);
-	trq->SetNoStopButton(true);
-	trq->SetTitle(TR("Opening WMS"));
-	trq->fText(TR("Opening WMS"));
 }
 
 void WMSFormat::ReadParameters(const FileName& fnObj, ParmList& pm) 
