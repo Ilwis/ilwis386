@@ -66,6 +66,7 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 			BaseMapPtr *bmpptr = ((SpatialDataDrawer *)fdr->getParentDrawer())->getBaseMap();
 			if ( bmpptr->fTblAtt()) {
 				Table tbl = bmpptr->tblAtt();
+				properties.exaggeration = properties.exaggeration * p->props->symbolSize / 100.0;
 				if ( properties.stretchColumn != "") {
 					Column col = tbl->col(properties.stretchColumn);
 					if ( col.fValid() && col->dm()->pdv()) {

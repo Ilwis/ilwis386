@@ -186,7 +186,7 @@ String LayerDrawer::getInfo(const Coord& c) const {
 	{
 		crd = bmptr->cs()->cConv(rootDrawer->getCoordinateSystem(), c);
 	}
-	vector<String> infos = bmptr->vsValue(crd);
+	vector<String> infos = bmptr->vsValue(crd,0);
 	String info;
 	DomainValue* dv = bmptr->dm()->pdv();
 	int count = 0;

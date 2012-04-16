@@ -114,12 +114,11 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 			LineProperties *lp = (LineProperties *)polygonLayer->getProperties();
 			boundariesActive(polygonLayer->getShowBoundaries());
 			areasActive(polygonLayer->getShowAreas());
-			setTransparencyArea(polygonLayer->getTransparencyArea());
+			double rprTrans =  p->props ? p->props->itemTransparency : 1;
+			setTransparencyArea(polygonLayer->getTransparencyArea() * rprTrans);
 			((LineProperties *)boundary->getProperties())->linestyle = lp->linestyle;
 			((LineProperties *)boundary->getProperties())->thickness = lp->thickness;
 			double fvalue =  getFeature()->rValue();
-		/*	if ( polygonLayer->useAttributeColumn() && polygonLayer->getAtttributeColumn().fValid())
-				fvalue = polygonLayer->getAtttributeColumn()->iRe*/
 			for(int j =0 ; j < p->filteredRaws.size(); ++j) {
 				int raw = p->filteredRaws[j];
 				if ( fvalue == abs(raw)) {

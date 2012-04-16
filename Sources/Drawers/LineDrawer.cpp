@@ -229,6 +229,38 @@ GeneralDrawerProperties *LineDrawer::getProperties() {
 	return &lproperties;
 }
 
+int LineDrawer::openGLLineStyle(int linestyle, double sz){
+	switch(linestyle) {
+		case ldtDot:
+			return 0xAAAA;
+		case ldtDash:
+			return 0xF0F0;
+		case ldtDashDot:
+			return 0x6B5A;
+		case ldtDashDotDot:
+			return 0x56B5;
+		default:
+			return 0xFFFF;
+	}
+	return 0xFFFF;
+}
+
+int LineDrawer::ilwisLineStyle(int linestyle, double sz){
+	switch(linestyle) {
+		case 0xAAAA:
+			return ldtDot;
+		case 0xF0F0:
+			return ldtDash;
+		case 0x6B5A:
+			return ldtDashDot;
+		case 0x56B5:
+			return ldtDashDotDot;
+		default:
+			return ldtSingle;
+	}
+	return 0xFFFF;
+}
+
 //----------------------------------------
 String LineProperties::store(const FileName& fnView, const String& parentSection) const{
 	ObjectInfo::WriteElement(parentSection.c_str(),"Thickness",fnView, thickness);

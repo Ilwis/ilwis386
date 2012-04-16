@@ -14,19 +14,17 @@
 
 using namespace ILWIS;
 
-String PointProperties::defaultSymbol="open-rectangle";
-
 
 ILWIS::NewDrawer *createPointDrawer(DrawerParameters *parms) {
 	return new PointDrawer(parms);
 }
 
 PointDrawer::PointDrawer(DrawerParameters *parms) : SimpleDrawer(parms,"PointDrawer"), element(0){
-	properties.symbol = PointProperties::defaultSymbol;
+	properties.symbol = DEFAULT_POINT_SYMBOL_TYPE;
 }
 
 PointDrawer::PointDrawer(DrawerParameters *parms, const String& name) : SimpleDrawer(parms,name), element(0){
-	properties.symbol = PointProperties::defaultSymbol;
+	properties.symbol = DEFAULT_POINT_SYMBOL_TYPE;
 }
 
 PointDrawer::~PointDrawer() {
@@ -34,14 +32,20 @@ PointDrawer::~PointDrawer() {
 
 void PointDrawer::prepare(PreparationParameters *p){
 	SimpleDrawer::prepare(p);
-	if ( p->type & NewDrawer::ptRENDER && properties.symbol != "") {
-		const SVGLoader *loader = NewDrawer::getSvgLoader();
-		SVGLoader::const_iterator cur = loader->find(properties.symbol);
-		if ( cur == loader->end())
-			return;
+	if ( p->type & NewDrawer::ptRENDER ) {
+		if ( p && p->props ) {
+			properties.symbol = p->props->symbolType;
+			properties.scale = p->props->symbolSize / 100.0;
+		}
+		if ( properties.symbol != ""){
+			const SVGLoader *loader = NewDrawer::getSvgLoader();
+			SVGLoader::const_iterator cur = loader->find(properties.symbol);
+			if ( cur == loader->end())
+				return;
 
-		element = (*cur).second;
-		calcSize();
+			element = (*cur).second;
+			calcSize();
+		}
 	}
 }
 

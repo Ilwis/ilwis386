@@ -11,7 +11,6 @@ class SVGElement;
 struct _export PointProperties : public GeneralDrawerProperties {
 public:
 	enum Scaling{sNONE, sLOGARITHMIC, sLINEAR};
-	static String defaultSymbol;
 
 	PointProperties(double t=0, const String& sym = "open-rectangle", Color clr=colorUNDEF) : 
 		thickness(t),drawColor(clr), 
@@ -29,7 +28,6 @@ public:
 		symbol=lp->symbol;
 		drawColor=lp->drawColor;
 		ignoreColor=lp->ignoreColor; 
-		scale = lp->scale;
 		threeDOrientation = lp->threeDOrientation;
 		stretchScale = lp->stretchScale;
 		stretchRange = lp->stretchRange;

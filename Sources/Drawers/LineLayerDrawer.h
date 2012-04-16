@@ -5,7 +5,6 @@ ILWIS::NewDrawer *createLineLayerDrawer(ILWIS::DrawerParameters *parms);
 
 class FieldColor;
 class FieldLineType;
-enum LineDspType;
 
 namespace ILWIS{
 
