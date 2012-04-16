@@ -172,35 +172,60 @@ DataWindow* ZoomableView::dwParent()
 BOOL ZoomableView::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 {
 	CPoint point((DWORD)lParam);
+	MapCompositionDoc *mcd = (MapCompositionDoc *)GetDocument();
 	switch (message) {
 		case WM_MOUSEMOVE:
-			if (tools.size() > 0) 
-				tools.OnMouseMove(wParam, point);
-			if (wParam & MK_CONTROL) movePoint(point, message);
+			if (mcd->rootDrawer->is3D()) {
+				if ((wParam & MK_CONTROL) || (iActiveTool == ID_PANAREA))
+					movePoint(point, message);
+			} else {
+				if (tools.size() > 0) 
+					tools.OnMouseMove(wParam, point);
+			}
 			break;
 		case WM_LBUTTONDBLCLK:
 			if (tools.size() > 0) tools.OnLButtonDblClk(wParam, point);
 			break;
 		case WM_LBUTTONDOWN:
-			if (tools.size() > 0) tools.OnLButtonDown(wParam, point);
-			if (wParam & MK_CONTROL) moveEyePoint(point,message);
+			if (mcd->rootDrawer->is3D()) {
+				if ((wParam & MK_CONTROL) || (iActiveTool == ID_PANAREA))
+					moveEyePoint(point,message);
+			} else {
+				if (tools.size() > 0)
+					tools.OnLButtonDown(wParam, point);
+			}
 			break;
 		case WM_LBUTTONUP:
-			if (tools.size() > 0) tools.OnLButtonUp(wParam, point);
-			if (wParam & MK_CONTROL) moveEyePoint(point,message);
+			if (mcd->rootDrawer->is3D()) {
+				if ((wParam & MK_CONTROL) || (iActiveTool == ID_PANAREA))
+					moveEyePoint(point,message);
+			} else {
+				if (tools.size() > 0)
+					tools.OnLButtonUp(wParam, point);
+			}
 			break;
 		case WM_RBUTTONDBLCLK:
 			if (tools.size() > 0) tools.OnRButtonDblClk(wParam, point);
 			break;
 		case WM_RBUTTONDOWN:
-			if (tools.size() > 0) 
-				tools.OnRButtonDown(wParam, point);
-			if (wParam & MK_CONTROL) moveViewPoint(point, message);
+			if (mcd->rootDrawer->is3D()) {
+				if ((wParam & MK_CONTROL) || (iActiveTool == ID_PANAREA))
+					moveViewPoint(point, message);
+			} else {
+				if (tools.size() > 0) 
+					tools.OnRButtonDown(wParam, point);
+			}
 			break;
 		case WM_RBUTTONUP:
-			if (tools.size() > 0)
-				tools.OnRButtonUp(wParam, point);
-			if (wParam & MK_CONTROL) moveViewPoint(point, message);
+			if (mcd->rootDrawer->is3D()) {
+				if ((wParam & MK_CONTROL) || (iActiveTool == ID_PANAREA)) {
+					moveViewPoint(point, message);
+					return TRUE; // prevent context-menu !!
+				}
+			} else {
+				if (tools.size() > 0)
+					tools.OnRButtonUp(wParam, point);
+			}
 			break;
 	}
 	return CView::OnWndMsg(message, wParam, lParam, pResult);
@@ -581,6 +606,8 @@ BOOL ZoomableView::OnMouseWheel(UINT nFlags, short zDelta, CPoint point)
 {
 	bool fControl = nFlags & MK_CONTROL ? true : false;
 	bool fShift = nFlags & MK_SHIFT ? true : false;
+	MapCompositionDoc *mcd = (MapCompositionDoc *)GetDocument();
+	fControl = fControl || (mcd->rootDrawer->is3D() && iActiveTool == ID_PANAREA);
 	
 	if (!fControl)
 		if (!fShift)
@@ -1015,7 +1042,7 @@ void ZoomableView::OnUpdatePanArea(CCmdUI* pCmdUI)
 		fMapOpen = true;
 	bool zoomedIn = (mcd->rootDrawer->getMapCoordBounds().width() > mcd->rootDrawer->getCoordBoundsZoom().width()) || 
 			     (mcd->rootDrawer->getMapCoordBounds().height() > mcd->rootDrawer->getCoordBoundsZoom().height());
-	pCmdUI->Enable(fMapOpen && zoomedIn && !mcd->rootDrawer->is3D());
+	pCmdUI->Enable(fMapOpen && (zoomedIn || mcd->rootDrawer->is3D()));
 	if (tools.size() == 0)
 		iActiveTool = 0;
 
