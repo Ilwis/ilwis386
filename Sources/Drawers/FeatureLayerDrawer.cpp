@@ -57,8 +57,9 @@ void FeatureLayerDrawer::prepare(PreparationParameters *parms){
 	clock_t start = clock();
 	LayerDrawer::prepare(parms);
 	FeatureDataDrawer *mapDrawer = (FeatureDataDrawer *)parentDrawer;
+	BaseMapPtr *bmp = mapDrawer->getBaseMap();
 	if ( getName() == "Unknown")
-		setName(mapDrawer->getBaseMap()->sName());
+		setName(bmp->sName());
 	vector<Feature *> features;
 	if ( parms->type & RootDrawer::ptGEOMETRY || parms->type & NewDrawer::ptRESTORE){
 		bool isAnimation = mapDrawer->getType() == "AnimationDrawer";
@@ -82,6 +83,7 @@ void FeatureLayerDrawer::prepare(PreparationParameters *parms){
 				pdrw->addDataSource(feature);
 				PreparationParameters fp((int)parms->type, mapDrawer->getBaseMap()->cs());
 				pdrw->prepare(&fp);
+				
 				if ( feature->rValue() == rUNDEF)
 					pdrw->setActive(false);
 				setDrawer(i, pdrw);
@@ -100,6 +102,32 @@ void FeatureLayerDrawer::prepare(PreparationParameters *parms){
 	clock_t end = clock();
 	double duration = 1000.0 * (double)(end - start) / CLOCKS_PER_SEC;
 	TRACE("Prepared in %2.2f seconds;\n", duration/1000);
+}
+
+void FeatureLayerDrawer::prepareChildDrawers(PreparationParameters *parms) {
+	FeatureDataDrawer *mapDrawer = (FeatureDataDrawer *)parentDrawer;
+	BaseMapPtr *bmp = mapDrawer->getBaseMap();
+	vector<Feature *> features;
+	bool isAnimation = mapDrawer->getType() == "AnimationDrawer";
+	if ( isAnimation ) {
+		getFeatures(features);
+	} else {
+		mapDrawer->getFeatures(features, parms->index);
+	}
+	for(int i = 0; i < drawers.size(); ++i) {
+		NewDrawer *pdrw = drawers.at(i);
+		RepresentationProperties props;
+		if ( pdrw) {
+			if ( bmp && bmp->dm().fValid() && bmp->dm()->rpr().fValid()) {
+				parms->props = &props;
+				Feature *feature = features.at(i);
+				if ( feature && feature->fValid() ){
+					bmp->dm()->rpr()->getProperties(feature->rValue(), parms->props);
+				}
+			}
+			pdrw->prepare(parms);
+		}
+	}
 }
 
 String FeatureLayerDrawer::getMask() const{

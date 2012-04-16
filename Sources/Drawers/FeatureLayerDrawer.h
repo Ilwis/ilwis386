@@ -26,6 +26,7 @@ namespace ILWIS{
 		virtual void addDataSource(void *,int options=0);
 		void *getDataSource() const;
 		bool useRaw() const;
+		virtual void prepareChildDrawers(PreparationParameters *parms);
 
 	protected:
 		String store(const FileName& fnView, const String& parenSection) const;
