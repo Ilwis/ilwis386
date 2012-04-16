@@ -218,10 +218,12 @@ void ZoomableView::moveViewPoint(const CPoint& pnt, UINT message) {
 	if ( message == WM_RBUTTONDOWN) {
 		beginMovePoint = pnt;
 		mode = cPan;
+		SetCapture();
 	}
 	else if ( message == WM_RBUTTONUP){
 		beginMovePoint = CPoint(iUNDEF,iUNDEF);
 		mode = cNone;
+		ReleaseCapture();
 	} else if (message == WM_MOUSEMOVE && beginMovePoint.x != iUNDEF) {
 		CRect rct;
 		GetClientRect(rct);
@@ -262,10 +264,12 @@ void ZoomableView::moveEyePoint(const CPoint& pnt, UINT message) {
 	if ( message == WM_LBUTTONDOWN) {
 		beginMovePoint = pnt;
 		mode = cZoom;
+		SetCapture();
 	}
 	else if ( message == WM_LBUTTONUP){
 		beginMovePoint = CPoint(iUNDEF,iUNDEF);
 		mode =  cNone;
+		ReleaseCapture();
 	} else if (message == WM_MOUSEMOVE && beginMovePoint.x != iUNDEF) {
 		double deltax = beginMovePoint.x - pnt.x;
 		double deltay = beginMovePoint.y - pnt.y;
