@@ -404,6 +404,12 @@ CoordSystem WMSFormat::getCoordSystem(const FileName& fnBase, const String& srsN
 		replace(projName.begin(), projName.end(),'_',' ');
 		//char *wkt = new char[5000];
 		//getEngine()->gdal->wktPretty(handle,&wkt,FALSE);
+
+		String spheroid = getEngine()->gdal->getAttribute(handle,"SPHEROID",0);
+		Ellipsoid ell(spheroid);
+		csp->ell = ell;
+
+
 		double easting  = getEngine()->gdal->getProjParam(handle, "false_easting",rUNDEF,&err);
 		double northing = getEngine()->gdal->getProjParam(handle, "false_northing",rUNDEF,&err);
 		double scale = getEngine()->gdal->getProjParam(handle, "scale_factor",rUNDEF,&err);
@@ -411,7 +417,7 @@ CoordSystem WMSFormat::getCoordSystem(const FileName& fnBase, const String& srsN
 		double lattOfOrigin = getEngine()->gdal->getProjParam(handle, "latitude_of_origin",rUNDEF,&err);
 		double stParal1 = getEngine()->gdal->getProjParam(handle, "standard_parallel_1",rUNDEF,&err);
 		double stParal2 = getEngine()->gdal->getProjParam(handle, "standard_parallel_2",rUNDEF,&err);
-		csp->prj = Projection(projName);
+		csp->prj = Projection(projName,csp->ell);
 		if ( easting != rUNDEF)
 			csp->prj->Param(pvX0,easting);
 		if ( northing != rUNDEF)
@@ -436,6 +442,7 @@ CoordSystem WMSFormat::getCoordSystem(const FileName& fnBase, const String& srsN
 
 	CoordSystem csy;
 	csy.SetPointer(csv);
+	csy->Store();
 
 	return csy;
 }
