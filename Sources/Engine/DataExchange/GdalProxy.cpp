@@ -46,6 +46,8 @@ void GdalProxy::loadMethods(const String& ilwDir) {
 				getDriverShortName = (GDALGetDriverShortNameFunc)GetProcAddress(hm,"_GDALGetDriverShortName@4");
 				getMetaDataItem = (GDALGetMetadataItemFunc)GetProcAddress(hm,"_GDALGetMetadataItem@12");
 				getAttribute = (OSRGetAttrValueFunc)GetProcAddress(hm,"_OSRGetAttrValue@12");
+				wktPretty = (OSRExportToPrettyWktFunc)GetProcAddress(hm,"_OSRExportToPrettyWkt@12");
+				getProjParam = (OSRGetProjParmFunc)GetProcAddress(hm,"OSRGetProjParm");
 
 				ogrOpen = (OGROpenFunc)GetProcAddress(hm,"OGROpen");
 				ogrRegAll = (OGRRegisterAllFunc)GetProcAddress(hm,"OGRRegisterAll");

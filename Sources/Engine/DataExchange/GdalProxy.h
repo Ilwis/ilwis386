@@ -31,6 +31,8 @@ typedef const char* (__stdcall *GDALGetDriverLongNameFunc)(GDALDriverH dr);
 typedef const char* (__stdcall *GDALGetDriverShortNameFunc)(GDALDriverH dr);
 typedef const char* (__stdcall *GDALGetMetadataItemFunc)(GDALMajorObjectH hObject, const char *pszName, const char *pszDomain); 
 typedef OGRErr (__stdcall *OSRImportFromEPSGFunc)( OGRSpatialReferenceH, int );
+typedef OGRErr (__stdcall *OSRExportToPrettyWktFunc)(OGRSpatialReferenceH ,char **ppszReturn,int);
+typedef double (*OSRGetProjParmFunc)(OGRSpatialReferenceH,const char *pszName,double dfDefaultValue,OGRErr * 	pnErr);
 
 typedef  OGRDataSourceH (*OGROpenFunc)(const char *, int, OGRSFDriverH *);
 typedef void (__stdcall *OGRRegisterAllFunc)();
@@ -68,6 +70,7 @@ typedef const char * (__stdcall *OSRGetAttrValueFunc)( OGRSpatialReferenceH hSRS
 typedef void (*CPLPushFinderLocationFunc)( const char * );
 
 
+
 class _export GdalProxy {
 public:
 	void loadMethods(const String& ilwDir);
@@ -101,6 +104,8 @@ public:
 	OSRImportFromEPSGFunc fromEPSG;
 	OSRGetAttrValueFunc getAttribute;
 	CPLPushFinderLocationFunc finderLoc;
+	OSRExportToPrettyWktFunc wktPretty;
+	OSRGetProjParmFunc getProjParam;
 
 	//ogr
 	OGROpenFunc ogrOpen;
