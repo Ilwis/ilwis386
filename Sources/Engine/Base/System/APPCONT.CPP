@@ -45,6 +45,7 @@
 #include "Engine\Applications\ModuleMap.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Engine\Base\System\commandhandler.h"
+#include "Engine\Base\DataObjects\URL.h"
 //#include "Headers\stdafx.h"
 
 
@@ -251,6 +252,8 @@ String IlwisAppContext::sGetCurDir() const
 
 void IlwisAppContext::SetCurDir(const String& sDir)
 {
+	if ( URL::isUrl(sDir))
+		return;
 	String *s = (String *)(pGetThreadLocalVar(tlvCURDIR));
 	if ( s )
 	{
