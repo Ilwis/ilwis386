@@ -197,7 +197,7 @@ BOOL ZoomableView::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT*
 			break;
 		case WM_LBUTTONUP:
 			if (mcd->rootDrawer->is3D()) {
-				if ((wParam & MK_CONTROL) || (iActiveTool == ID_PANAREA))
+				if ((mode != cNone) || (iActiveTool == ID_PANAREA))
 					moveEyePoint(point,message);
 			} else {
 				if (tools.size() > 0)
@@ -218,7 +218,7 @@ BOOL ZoomableView::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT*
 			break;
 		case WM_RBUTTONUP:
 			if (mcd->rootDrawer->is3D()) {
-				if ((wParam & MK_CONTROL) || (iActiveTool == ID_PANAREA)) {
+				if ((mode != cNone) || (iActiveTool == ID_PANAREA)) {
 					moveViewPoint(point, message);
 					return TRUE; // prevent context-menu !!
 				}
