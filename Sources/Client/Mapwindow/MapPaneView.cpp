@@ -325,22 +325,15 @@ void MapPaneView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 #define add(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 void MapPaneView::OnContextMenu(CWnd* pWnd, CPoint point) 
 {
-	if (tools.size() == 0)
-		return;
 	if (edit && edit->OnContextMenu(pWnd, point))
 		return;
-	CMenu men, menSub;
+	CMenu men;
 	men.CreatePopupMenu();
 	add(ID_NORMAL);
 	add(ID_ZOOMIN);
 	add(ID_ZOOMOUT);
-	//add(ID_PANAREA);
+	add(ID_PANAREA);
 	add(ID_ENTIREMAP);
-	men.AppendMenu(MF_SEPARATOR);
-	menSub.CreateMenu();
-	GetDocument()->menLayers(menSub, ID_LAYFIRST);
-	men.AppendMenu(MF_POPUP, (UINT)menSub.GetSafeHmenu(), sMen(ID_LAYEROPTIONS)); 
-	menSub.Detach();    
 
 	// grey out options if not available without coding anything anew
 	CCmdUI cmdUIstate;
