@@ -201,7 +201,7 @@ struct FormatInfo
 
 class GeometryFiller {
 public:
-	virtual void fillFeature(OGRGeometryH hGeom, int rec);
+	virtual void fillFeature(OGRGeometryH hGeom, int& rec);
 protected:
 	GeometryFiller(GDALCFunctions& _funcs, BaseMap& _bmp) : bmp(_bmp), funcs(_funcs) {}
 	virtual void fillGeometry(OGRGeometryH hGeom, int rec) {};
@@ -228,7 +228,7 @@ private:
 class PolygonFiller : public GeometryFiller {
 public:
 	PolygonFiller(GDALCFunctions& _funcs, BaseMap& _bmp) : GeometryFiller(_funcs, _bmp) {}
-	virtual void fillFeature(OGRGeometryH hGeom, int rec);
+	virtual void fillFeature(OGRGeometryH hGeom, int& rec);
 private:
 	LinearRing *getRing(OGRGeometryH hGeom);
 };
@@ -302,7 +302,7 @@ private:
 	CoordSystem	getCoordSystemFrom(OGRSpatialReferenceH handle, char *wkt);
 	FileName	createFileName( const String& name, Feature::FeatureType ftype, int layerCount, int layer);
 	BaseMap     createBaseMap(const FileName& fn, Feature::FeatureType ftype, const Domain& dm, const CoordSystem& csy, const CoordBounds& cb);
-	Table		createTable(const FileName& fn, const Domain& dm,OGRFeatureDefnH hFeatureDef, OGRLayerH hLayer);
+	void		createTable(const FileName& fn, const Domain& dm,OGRFeatureDefnH hFeatureDef, OGRLayerH hLayer, Table& tbl);
 	CoordBounds getLayerCoordBounds(OGRLayerH hLayer);
 	Domain		createSortDomain(const String& name, const vector<String>& values);
 

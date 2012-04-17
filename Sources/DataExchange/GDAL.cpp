@@ -82,6 +82,7 @@
 #include "Engine\Base\DataObjects\URL.h"
 #include "DataExchange\WMSFormat.h"
 #include "DataExchange\GDAL.h"
+#include "Engine\DataExchange\GdalProxy.h"
 #include "Headers\Hs\IMPEXP.hs"
 #include "Headers\Htp\Ilwismen.htp"
 #include "Engine\Base\Round.h"
@@ -821,8 +822,21 @@ CoordSystem GDALFormat::getCoordSystemFrom(OGRSpatialReferenceH handle, char *wk
 				csp->datum = new MolodenskyDatum(dn,"");
 			}
 			String projName(funcs.getAttr(handle, "Projection",0));
+			if ( projName == "Oblique_Stereographic")
+				projName = "Stereographic";
 			replace(projName.begin(), projName.end(),'_',' ');
+			OGRErr err;
+			double easting  = getEngine()->gdal->getProjParam(handle, "false_easting",0,&err);
+			double northing = getEngine()->gdal->getProjParam(handle, "false_northing",0,&err);
+			double scale = getEngine()->gdal->getProjParam(handle, "scale_factor",0,&err);
+			double centralMeridian = getEngine()->gdal->getProjParam(handle, "central_meridian",0,&err);
+			double lattOfOrigin = getEngine()->gdal->getProjParam(handle, "latitude_of_origin",0,&err);
 			csp->prj = Projection(projName);
+			csp->prj->Param(pvX0,easting);
+			csp->prj->Param(pvY0,northing);
+			csp->prj->Param(pvK0, scale);
+			csp->prj->Param(pvLON0, centralMeridian);
+			csp->prj->Param(pvLAT0, lattOfOrigin);
 			csv = csp;
 		} catch ( ErrorObject& err) {
 			return CoordSystem("unknown");
@@ -1676,9 +1690,9 @@ void GDALFormat::createTable(const FileName& fn, const Domain& dm,OGRFeatureDefn
 		}
 		for(int rec = 0; rec < size; ++rec) {
 			if ( type != OFTString) {
-				col->PutVal(rec,columns[column].values[rec]);
+				col->PutVal(rec + 1,columns[column].values[rec]);
 			} else {
-				col->PutVal(rec, columns[column].strings[rec]);
+				col->PutVal(rec + 1, columns[column].strings[rec]);
 			}
 		}
 	}
@@ -1824,8 +1838,15 @@ void PolygonFiller::fillFeature(OGRGeometryH hGeometry, int& rec) {
 	}
 }
 
-LinearRing *PolygonFiller::getRing(OGRGeometryH hGeom) {
+LinearRing *PolygonFiller::getRing(OGRGeometryH hSubGeometry) {
+	OGRGeometryH hGeom = hSubGeometry;
 	int count = funcs.ogrGetNumberOfPoints(hGeom);
+	if ( count == 0) {
+		hGeom = funcs.ogrGetSubGeometry(hGeom, 0);
+		if ( hGeom == 0)
+			return 0;
+		count = funcs.ogrGetNumberOfPoints(hGeom);
+	}
 	if ( count == 0)
 		return  0;
 	CoordinateArraySequence *seq = new CoordinateArraySequence();

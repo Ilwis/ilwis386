@@ -75,7 +75,7 @@
 #include "Engine\Base\DataObjects\RemoteXMLObject.h"
 #include "DataExchange\WMSGetCapabilities.h"
 #include "DataExchange\gdalincludes\gdal.h"
-//#include "Engine\DataExchange\gdalincludes\gdal_frmts.h"
+#include "Engine\DataExchange\GdalProxy.h"
 
 #include "DataExchange\gdalincludes\gdal.h"
 #include "DataExchange\gdalincludes\gdal_frmts.h"
@@ -385,7 +385,6 @@ CoordSystem WMSFormat::getCoordSystem(const FileName& fnBase, const String& srsN
 		throw ErrorObject(String("The SRS %S is not supported", srsName));
 
 	String datumName(funcs.getAttribute(handle, "Datum",0));
-	String projName(funcs.getAttribute(handle,"Projection", 0));
 	//map<String, ProjectionConversionFunctions>::iterator where = mpCsyConvers.find(projectionName);
 
 	FileName fnCsy(FileName::fnUnique(FileName(fnBase, ".csy")));
@@ -397,11 +396,39 @@ CoordSystem WMSFormat::getCoordSystem(const FileName& fnBase, const String& srsN
 		if ( dn == "")
 			throw ErrorObject("Datum can't be transformed to an ILWIS known datum");
 		csp->datum = new MolodenskyDatum(dn,"");
-		//SetProjectionParm func = (*where).second.parmfunc;
-		//String sIlwProj = (*where).second.sProjectionName;
-		//(func)(csp->prj, (void *)(&oSRS));
-
+		String projName(funcs.getAttribute(handle, "Projection",0));
+		if ( projName == "Oblique_Stereographic")
+			projName = "Stereographic";
+		if ( projName == "Lambert_Conformal_Conic_2SP")
+			projName = "Lambert Conformal Conic";
+		replace(projName.begin(), projName.end(),'_',' ');
+		//char *wkt = new char[5000];
+		//getEngine()->gdal->wktPretty(handle,&wkt,FALSE);
+		double easting  = getEngine()->gdal->getProjParam(handle, "false_easting",rUNDEF,&err);
+		double northing = getEngine()->gdal->getProjParam(handle, "false_northing",rUNDEF,&err);
+		double scale = getEngine()->gdal->getProjParam(handle, "scale_factor",rUNDEF,&err);
+		double centralMeridian = getEngine()->gdal->getProjParam(handle, "central_meridian",rUNDEF,&err);
+		double lattOfOrigin = getEngine()->gdal->getProjParam(handle, "latitude_of_origin",rUNDEF,&err);
+		double stParal1 = getEngine()->gdal->getProjParam(handle, "standard_parallel_1",rUNDEF,&err);
+		double stParal2 = getEngine()->gdal->getProjParam(handle, "standard_parallel_2",rUNDEF,&err);
+		csp->prj = Projection(projName);
+		if ( easting != rUNDEF)
+			csp->prj->Param(pvX0,easting);
+		if ( northing != rUNDEF)
+			csp->prj->Param(pvY0,northing);
+		if ( scale != rUNDEF)
+			csp->prj->Param(pvK0, scale);
+		if ( centralMeridian != rUNDEF)
+			csp->prj->Param(pvLON0, centralMeridian);
+		if ( lattOfOrigin != rUNDEF)
+			csp->prj->Param(pvLAT0, lattOfOrigin);
+		if ( stParal1 != rUNDEF)
+			csp->prj->Param(pvLAT1, min(stParal2, stParal1));
+		if ( stParal2 != rUNDEF)
+			csp->prj->Param(pvLAT2, max(stParal2, stParal1));
 		csv = csp;
+		//delete [] wkt;
+
 	} else {
 		csv = new CoordSystemLatLon(fnCsy, 1);
 		csv->datum = new MolodenskyDatum("WGS 1984","");
