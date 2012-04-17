@@ -432,6 +432,7 @@ CoordSystem WMSFormat::getCoordSystem(const FileName& fnBase, const String& srsN
 			csp->prj->Param(pvLAT1, min(stParal2, stParal1));
 		if ( stParal2 != rUNDEF)
 			csp->prj->Param(pvLAT2, max(stParal2, stParal1));
+		csp->prj->Prepare();
 		csv = csp;
 		//delete [] wkt;
 
