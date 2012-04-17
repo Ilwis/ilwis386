@@ -67,10 +67,15 @@ void DrawerContext::doDraw()
 		m_wnd->Invalidate(FALSE);
 }
 
-void DrawerContext::TakeContext()
+bool DrawerContext::TakeContext()
 {
 	csOpenglContext.Lock();
+	if ( m_hdc == 0) {
+		csOpenglContext.Unlock();
+		return false;
+	}
 	wglMakeCurrent(m_hdc, m_hrc);
+	return true;
 }
 
 void DrawerContext::ReleaseContext()

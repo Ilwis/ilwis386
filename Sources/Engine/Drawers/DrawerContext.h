@@ -15,7 +15,7 @@ namespace ILWIS {
 		GLint getMaxTextureSize() const { return maxTextureSize; };
 		GLint getMaxPaletteSize() const { return maxPaletteSize; };
 
-		void TakeContext();
+		bool TakeContext();
 		void ReleaseContext();
 		void doDraw();
 		void swapBuffers() const;
