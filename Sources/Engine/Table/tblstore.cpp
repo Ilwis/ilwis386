@@ -696,8 +696,13 @@ void TableStore::LoadBinary()
 	String sVal;
 	long iRaw;
 	double rVal;
-	for (long r = 0; r < iRecs(); r++)
+	Tranquilizer trq;
+	trq.SetTitle(TR("Loading table"));
+	long irecs = iRecs();
+	for (long r = 0; r < irecs ; r++)
 	{
+		if( trq.fUpdate(r, irecs))
+			return;
 		long rec = r + iOffset();
 		for (c = 0; c < iValidCols; c++)
 		{
