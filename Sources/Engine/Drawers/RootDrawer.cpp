@@ -606,7 +606,8 @@ Coord RootDrawer::screenToOpenGL(const RowCol& rc) {
 	double posX, posY, posZ;
 	float winZ;
 
-	drawercontext->TakeContext();
+	if (!drawercontext->TakeContext())
+		return Coord();
 
 	glGetDoublev( GL_MODELVIEW_MATRIX, modelview );
 	glGetDoublev( GL_PROJECTION_MATRIX, projection );
