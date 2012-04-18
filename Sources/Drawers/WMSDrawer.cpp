@@ -95,7 +95,15 @@ bool WMSDrawer::draw( const CoordBounds& cbArea) const {
 		glEnable(GL_TEXTURE_2D);
 		glMatrixMode(GL_TEXTURE);
 		glPushMatrix();
-		DisplayImagePortion(wmsData->cbFullExtent);
+		CoordBounds cb (wmsData->cbFullExtent);
+		if (cb.width() > cb.height()) {
+			double deltay = cb.width() - cb.height();
+			cb.cMax.y = cb.cMax.y + deltay;
+		} else {
+			double deltax = cb.height() - cb.width();
+			cb.cMax.x = cb.cMax.x + deltax;
+		}
+		DisplayImagePortion(cb);
 		glPopMatrix();
 		glMatrixMode(GL_MODELVIEW);
 		glDisable(GL_TEXTURE_2D);
@@ -203,14 +211,14 @@ void WMSDrawer::DisplayTexture(CoordBounds & cb) const
 		if (fLinear) {
 			// texture bounds
 			double s1 = (cb.cMin.x - cbImage.cMin.x) / cbImage.width();
-			double t1 = (cbImage.cMax.y - cb.cMax.y) / cbImage.height();
-			double s2 = (cb.cMax.x - cbImage.cMin.x) / cbImage.width();
-			double t2 = (cbImage.cMax.y - cb.cMin.y) / cbImage.height();
+			double t1 = max(0.0, (cbImage.cMax.y - cb.cMax.y) / cbImage.height());
+			double s2 = min(1.0, (cb.cMax.x - cbImage.cMin.x) / cbImage.width());
+			double t2 = min(1.0, (cbImage.cMax.y - cb.cMin.y) / cbImage.height());
 
 			Coord b4 (cb.cMin);
-			Coord b3 (cb.cMax.x, cb.cMin.y);
-			Coord b2 (cb.cMax);
-			Coord b1 (cb.cMin.x, cb.cMax.y);
+			Coord b3 (min(cb.cMax.x, cbImage.cMax.x), cb.cMin.y);
+			Coord b2 (min(cb.cMax.x, cbImage.cMax.x), min(cb.cMax.y, cbImage.cMax.y));
+			Coord b1 (cb.cMin.x, min(cb.cMax.y, cbImage.cMax.y));
 			Coord c1 = getRootDrawer()->glConv(csy, b1);
 			Coord c2 = getRootDrawer()->glConv(csy, b2);
 			Coord c3 = getRootDrawer()->glConv(csy, b3);
@@ -230,32 +238,23 @@ void WMSDrawer::DisplayTexture(CoordBounds & cb) const
 		} else {
 			const unsigned int iSize = 10; // this makes 100 quads, thus 200 triangles per texture
 			// avoid plotting the "added" portion of the map that was there to make the texture size a power of 2
-			double colStep = cb.width() / (double)iSize;
-			double rowStep = cb.height() / (double)iSize;
+			double colStep = min(cb.width(), cbImage.cMax.x - cb.cMin.x) / (double)iSize;
+			double rowStep = min(cb.height(), cbImage.cMax.y - cb.cMin.y) / (double)iSize;
 
 			double s1 = (cb.cMin.x - cbImage.cMin.x) / cbImage.width();
 			for (int x = 0; x < iSize; ++x) {
 				double s2 = s1 + colStep / cbImage.width();
-				double t1 = (cbImage.cMax.y - cb.cMax.y) / cbImage.height();
+				double t1 = max(0.0, (cbImage.cMax.y - cb.cMax.y) / cbImage.height());
 
-				Coord b1 (cb.cMin.x + colStep * x, cb.cMax.y);
-				Coord b2 (cb.cMin.x + colStep * (x + 1), cb.cMax.y);
-
-
-
-
-				//gr()->RowCol2Coord(imageOffsetY, imageOffsetX + colStep * x, b1);
-				//gr()->RowCol2Coord(imageOffsetY, imageOffsetX + colStep * (x + 1), b2);
+				Coord b1 (cb.cMin.x + colStep * x, min(cb.cMax.y, cbImage.cMax.y));
+				Coord b2 (cb.cMin.x + colStep * (x + 1), min(cb.cMax.y, cbImage.cMax.y));
 
 				Coord c1 = getRootDrawer()->glConv(csy, b1);
 				Coord c2 = getRootDrawer()->glConv(csy, b2);
 				for (int y = 1; y <= iSize ; ++y) {
 					double t2 = t1 + rowStep / cbImage.height();
-					Coord b3 (cb.cMin.x + colStep * (x + 1), cb.cMax.y - rowStep * y);
-					Coord b4 (cb.cMin.x + colStep * x, cb.cMax.y - rowStep * y);
-		
-					//gr()->RowCol2Coord(imageOffsetY + rowStep * y, imageOffsetX + colStep * (x + 1), b3);
-					//gr()->RowCol2Coord(imageOffsetY + rowStep * y, imageOffsetX + colStep * x, b4);
+					Coord b3 (cb.cMin.x + colStep * (x + 1), min(cb.cMax.y, cbImage.cMax.y) - rowStep * y);
+					Coord b4 (cb.cMin.x + colStep * x, min(cb.cMax.y, cbImage.cMax.y) - rowStep * y);
 
 					Coord c3 = getRootDrawer()->glConv(csy, b3);
 					Coord c4 = getRootDrawer()->glConv(csy, b4);
@@ -292,10 +291,12 @@ void WMSDrawer::DisplayTexture3D(CoordBounds & cb) const
 	{
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+		CoordBounds cbImage = wmsData->cbFullExtent;
+
 		Coord b4 (cb.cMin);
-		Coord b3 (cb.cMax.x, cb.cMin.y);
-		Coord b2 (cb.cMax);
-		Coord b1 (cb.cMin.x, cb.cMax.y);
+		Coord b3 (min(cb.cMax.x, cbImage.cMax.x), cb.cMin.y);
+		Coord b2 (min(cb.cMax.x, cbImage.cMax.x), min(cb.cMax.y, cbImage.cMax.y));
+		Coord b1 (cb.cMin.x, min(cb.cMax.y, cbImage.cMax.y));
 
 		Coord c1 = getRootDrawer()->glConv(csy, b1);
 		Coord c2 = getRootDrawer()->glConv(csy, b2);
