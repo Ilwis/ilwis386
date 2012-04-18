@@ -57,8 +57,13 @@ DEMTriangulator::DEMTriangulator(ZValueMaker * zMaker, BaseMapPtr * drapeMapPtr,
 			height = pow(2, max(6, ceil(log((double)iSizeY)/log(2.0))));
 		} else {
 			RowCol rc = drapemp->rcSize();
-			width = (pow(2, max(6, ceil(log((double)rc.Col)/log(2.0)))));
-			height = (pow(2, max(6, ceil(log((double)rc.Row)/log(2.0)))));
+			if (drapemp->gr()->pgWMS()) {
+				width = rc.Col;
+				height = rc.Row;
+			} else {
+				width = (pow(2, max(6, ceil(log((double)rc.Col)/log(2.0)))));
+				height = (pow(2, max(6, ceil(log((double)rc.Row)/log(2.0)))));
+			}
 		}
 
 		if (iSizeX < iSizeY) {
