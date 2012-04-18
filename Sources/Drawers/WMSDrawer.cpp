@@ -250,7 +250,7 @@ void WMSDrawer::DisplayTexture(CoordBounds & cb) const
 				Coord c1 = getRootDrawer()->glConv(csy, b1);
 				Coord c2 = getRootDrawer()->glConv(csy, b2);
 				for (int y = 1; y <= iSize ; ++y) {
-					double t2 = t1 - rowStep / (double)data->height;
+					double t2 = t1 + rowStep / cbImage.height();
 					Coord b3 (cb.cMin.x + colStep * (x + 1), cb.cMax.y - rowStep * y);
 					Coord b4 (cb.cMin.x + colStep * x, cb.cMax.y - rowStep * y);
 		
