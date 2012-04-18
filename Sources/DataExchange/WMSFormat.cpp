@@ -393,21 +393,33 @@ CoordSystem WMSFormat::getCoordSystem(const FileName& fnBase, const String& srsN
 	if ( funcs.isProjected(handle)) {
 		CoordSystemProjection *csp =  new CoordSystemProjection(fnCsy, 1);
 		String dn = Datum::WKTToILWISName(datumName);
-		if ( dn == "")
-			throw ErrorObject("Datum can't be transformed to an ILWIS known datum");
-		csp->datum = new MolodenskyDatum(dn,"");
+		char *wkt = new char[5000];
+		getEngine()->gdal->wktPretty(handle,&wkt,FALSE);
+		if ( dn != "" && dn != sUNDEF)
+			csp->datum = new MolodenskyDatum(dn,"");
 		String projName(funcs.getAttribute(handle, "Projection",0));
 		if ( projName == "Oblique_Stereographic")
 			projName = "Stereographic";
 		if ( projName == "Lambert_Conformal_Conic_2SP")
 			projName = "Lambert Conformal Conic";
 		replace(projName.begin(), projName.end(),'_',' ');
-		//char *wkt = new char[5000];
-		//getEngine()->gdal->wktPretty(handle,&wkt,FALSE);
 
 		String spheroid = getEngine()->gdal->getAttribute(handle,"SPHEROID",0);
+		try{
 		Ellipsoid ell(spheroid);
 		csp->ell = ell;
+		} catch (ErrorObject& ) {
+			String majoraxis = getEngine()->gdal->getAttribute(handle,"SPHEROID",1);
+			String invFlattening = getEngine()->gdal->getAttribute(handle,"SPHEROID",2);
+			double ma = majoraxis.rVal();
+			double ifl = invFlattening.rVal();
+			if ( ma == rUNDEF || ifl == rUNDEF)
+				throw ErrorObject(String(TR("Ellipsoid %S could not be found").c_str(),spheroid));
+			csp->ell = Ellipsoid(ma, ifl);
+			csp->ell.sName = spheroid;
+
+
+		} 
 
 
 		double easting  = getEngine()->gdal->getProjParam(handle, "false_easting",rUNDEF,&err);
