@@ -127,7 +127,8 @@ void RemoteObject::getRequest(const String& url) {
     curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
     CURLcode result = curl_easy_perform(curl_handle);
 	if ( result != 0)
-		throw ErrorObject(curl_easy_strerror(result)); // can we remove this "throw"?
+		TRACE("Curl error: %s", curl_easy_strerror(result)); // most of the time it is CURLE_PARTIAL_FILE ... do we retry?
+		//throw ErrorObject(curl_easy_strerror(result)); // can we remove this "throw"?
 }
 
 void RemoteObject::parse() {
