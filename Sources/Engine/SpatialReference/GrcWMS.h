@@ -75,6 +75,8 @@ public:
   CoordBounds getInitialCoordBounds();
   CoordBounds calcNewCB(MinMax mx, MinMax zoom, MinMax oldBounds);
 
+  void Lock();
+  void Unlock();
   CoordBounds cbWMSRequest() const;
   RowCol rcWMSRequest() const;
   void SetRCWMSRequest(RowCol rc);
@@ -90,6 +92,7 @@ public:
   RowCol m_rcWMSRequest;
   ForeignFormat* wmsFormat;
   RetrieveImageProc retrieveImageProc;
+  CCriticalSection csHandleRequest;
 };
 
 

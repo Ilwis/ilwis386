@@ -112,6 +112,7 @@ bool WMSTexture::DrawTexture(int textureSize, char * outbuf, volatile bool* fDra
 	// 1:1 a pixel is a rastel; expected in outbuf: sizeX * sizeY * 4 bytes (for RGBA colors)
 	// set georef->rcSize to texureSize x textureSize and georef->cb to cb
 	GeoRefCornersWMS *grcWMS = mp->gr()->pgWMS();
+	grcWMS->Lock();
 	grcWMS->SetCBWMSRequest(cbBounds);
 	grcWMS->SetRCWMSRequest(RowCol(textureSize, textureSize));
 	grcWMS->retrieveImage();
@@ -127,6 +128,7 @@ bool WMSTexture::DrawTexture(int textureSize, char * outbuf, volatile bool* fDra
 		ConvLine(bufIn, bufColor);
 		PutLine(bufIn, bufColor, iDataInYPos, textureSize, outbuf);
 	}
+	grcWMS->Unlock();
 	mp->KeepOpen(false);
 	return true;
 }

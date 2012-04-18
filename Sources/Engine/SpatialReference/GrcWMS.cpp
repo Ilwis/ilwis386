@@ -147,6 +147,14 @@ CoordBounds GeoRefCornersWMS::getInitialCoordBounds() {
 	return CoordBounds(crdMinInit, crdMaxInit);
 }
 
+void GeoRefCornersWMS::Lock() {
+	csHandleRequest.Lock();
+}
+
+void GeoRefCornersWMS::Unlock() {
+	csHandleRequest.Unlock();
+}
+
 CoordBounds GeoRefCornersWMS::cbWMSRequest() const {
 	return m_cbWMSRequest;
 }
