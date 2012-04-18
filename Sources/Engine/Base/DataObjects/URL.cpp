@@ -100,9 +100,10 @@ FileName URL::toFileName(bool root) const {
 		head = head.sSub(2,head.length() - 2).sHead("/");
 	String result = "";
 	for(string::const_iterator p=head.begin() ; p != head.end(); ++p) {
-		if ( *p == '/') result += "_";
-		else if ( *p == '.') result += "_";
-		else result += *p;
+		if ( *p == '/' || *p == ':' || *p == '.' || *p == '\\' )
+			result += "_";
+		else
+			result += *p;
 	}
 	if ( result.sHead("_").iVal() != iUNDEF)
 		result = "IP_"+ result;
