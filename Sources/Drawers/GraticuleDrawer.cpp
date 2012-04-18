@@ -29,6 +29,7 @@ ComplexDrawer(parms,"GraticuleDrawer")
 	lproperties.thickness = 1;
 	lproperties.drawColor = Color(0,0,0);
 	lproperties.linestyle = 0xFFFF;
+	setValid(true);
 }
 
 GraticuleDrawer::~GraticuleDrawer() {
@@ -36,7 +37,7 @@ GraticuleDrawer::~GraticuleDrawer() {
 
 
 bool GraticuleDrawer::draw( const CoordBounds& cbArea) const{
-	if ( !isActive() && !isValid())
+	if ( !isActive() || !isValid())
 		return false;
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
@@ -61,10 +62,9 @@ void GraticuleDrawer::prepare(PreparationParameters *pp) {
 		CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
 		CoordSystem csy =  getRootDrawer()->getCoordinateSystem();
 		if ( csy->fLatLon2Coord()) {
-			Coord cMin = getRootDrawer()->glToWorld(cbMap.cMin);
-			Coord cMax = getRootDrawer()->glToWorld(cbMap.cMax);
-			LatLon llMin = csy->llConv(cMin);
-			LatLon llMax = csy->llConv(cMax);
+
+			LatLon llMin, llMax;
+			calcBounds(cbMap, csy,llMin, llMax);
 			if ( llMin.fUndef() || llMax.fUndef()) {
 				setValid(false);
 				return;
@@ -125,7 +125,34 @@ void GraticuleDrawer::prepareGrid(const CoordSystem &csy, double rDist, const La
 	}
 }
 
+#define STEP  25
 
+void GraticuleDrawer::calcBounds(const CoordBounds& cbMap, const CoordSystem& cs,  LatLon& llMin, LatLon& llMax)
+{
+  Coord cMin = getRootDrawer()->glToWorld(cbMap.cMin);
+  Coord cMax = getRootDrawer()->glToWorld(cbMap.cMax);
+  llMin = LatLon(100,200);
+  llMax = LatLon(-100,-200);
+  int i, j;	
+  Coord c;
+  double rDX = (cMax.x - cMin.x) / STEP;
+  double rDY = (cMax.y - cMin.y) / STEP;
+  for (i = 0, c.y = cMin.y; i <= STEP; c.y += rDY, ++i) {
+	  for (j = 0, c.x = cMin.x; j <= STEP; c.x += rDX, ++j) {
+      LatLon ll = cs->llConv(c);
+      if (ll.fUndef())
+        continue;
+      if (ll.Lat < llMin.Lat)
+        llMin.Lat = ll.Lat;
+      if (ll.Lon < llMin.Lon)
+        llMin.Lon = ll.Lon;
+      if (ll.Lat > llMax.Lat)
+        llMax.Lat = ll.Lat;
+      if (ll.Lon > llMax.Lon)
+        llMax.Lon = ll.Lon;
+    }  
+  }  
+}
 void GraticuleDrawer::AddGraticuleLine(const CoordSystem &csy, const LatLon& llBoundary1, const LatLon& llBoundary2)
 {
 	ILWIS::DrawerParameters dp(getRootDrawer(), this);

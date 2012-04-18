@@ -32,6 +32,7 @@ namespace ILWIS{
 		String store(const FileName& fnView, const String& parenSection) const;
 		void load(const FileName& fnView, const String& parenSection);
 		void prepareChildDrawers(PreparationParameters *parms);
+		void calcBounds(const CoordBounds& cbMap, const CoordSystem& cs,  LatLon& llMin, LatLon& llMax);
 
 
 		double          rDist;
