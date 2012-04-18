@@ -339,6 +339,10 @@ void GridDrawer::prepareGrid(double rDist, const Coord& cMax, const Coord& cMin 
 		c1.z = c2.z = z;
 		c1.y = cMin.y;
 		c2.y = cMax.y;
+		double d = abs(cMin.x - cMax.x);
+		if ( d / rDist > 100) {
+			rDist = d / 100;
+		}
 		for (double x = ceil(cMin.x / rDist) * rDist; x < cMax.x ; x += rDist)
 		{
 			c1.x = c2.x = x;
@@ -347,6 +351,10 @@ void GridDrawer::prepareGrid(double rDist, const Coord& cMax, const Coord& cMin 
 
 		c1.x = cMin.x;
 		c2.x = cMax.x;
+		d = abs(cMin.y - cMax.y);
+		if ( d / rDist > 100) {
+			rDist = d / 100;
+		}
 		for (double y = ceil(cMin.y / rDist) * rDist; y < cMax.y ; y += rDist)
 		{
 			c1.y = c2.y = y;
