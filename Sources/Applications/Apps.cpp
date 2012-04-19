@@ -153,7 +153,7 @@ InfoVector* getCommandInfo() {
 }
 
 extern "C" _export ILWIS::Module *getModuleInfo(const FileName& fnModule) {
-	ILWIS::Module *module = new ILWIS::Module("Rastermap and Table Applications", fnModule,ILWIS::Module::mi38,"1.2");
+	ILWIS::Module *module = new ILWIS::Module("Rastermap and Table Applications", fnModule,ILWIS::Module::mi38,"1.3");
 	module->addMethod(ILWIS::Module::ifgetCommandInfo, (void *)getCommandInfo);  
 
 	return module;

@@ -158,7 +158,7 @@ return infosui;
 }
 
 extern "C" _export ILWIS::Module *getModuleInfo(const FileName& fnModule) {
-	ILWIS::Module *module = new ILWIS::Module("Rastermap and table applications UI", fnModule,ILWIS::Module::mi37,"1.0");
+	ILWIS::Module *module = new ILWIS::Module("Rastermap and table applications UI", fnModule,ILWIS::Module::mi37,"1.3");
 	module->addMethod(ILWIS::Module::ifgetCommandInfoUI, (void *)getCommandInfoUI);  
 
 	return module;
