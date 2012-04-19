@@ -17,6 +17,8 @@
 #include "DrawersUI\SetDrawerTool.h"
 #include "AnimationTool.h"
 #include "drawers\linedrawer.h"
+#include "Drawers\GraticuleDrawer.h"
+#include "DrawersUI\GraticuleTool.h"
 #include "drawers\GridDrawer.h"
 #include "Drawers\LayerDrawer.h"
 #include "GridTool.h"
@@ -39,8 +41,9 @@ bool TransparencyTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	LayerDrawerTool *sdrwt = dynamic_cast<LayerDrawerTool *>(tool);
 	AnimationTool *adrwt = dynamic_cast<AnimationTool *>(tool);
 	GridTool *gdrt = dynamic_cast<GridTool *>(tool);
+	GraticuleTool *grdrt = dynamic_cast<GraticuleTool *>(tool);
 //	CanvasBackgroundDrawer *cbdr = dynamic_cast<CanvasBackgroundDrawer *>(tool);
-	if ( !sdrwt && !adrwt && !gdrt)
+	if ( !sdrwt && !adrwt && !gdrt && !grdrt)
 		return false;
 	isDataLayer = sdrwt || adrwt;
 
