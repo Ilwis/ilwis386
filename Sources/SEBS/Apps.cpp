@@ -32,7 +32,7 @@ InfoVector* getCommandInfo() {
 }
 
 extern "C" _export ILWIS::Module *getModuleInfo(const FileName& fnModule) {
-	ILWIS::Module *module = new ILWIS::Module("SEBS", fnModule,ILWIS::Module::mi37,"1.0");
+	ILWIS::Module *module = new ILWIS::Module("SEBS", fnModule,ILWIS::Module::mi37,"1.2");
 	module->addMethod(ILWIS::Module::ifgetCommandInfo, (void *)getCommandInfo);  
 
 	return module;

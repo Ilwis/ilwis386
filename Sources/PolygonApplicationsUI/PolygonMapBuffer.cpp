@@ -34,49 +34,7 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/*
-// $Log: /ILWIS 3.0/ApplicationForms/frmPolygonMapBuffer.cpp $
- * 
- * 8     16/02/01 17:23 Willem
- * - Removed a lot of old commented code
- * - Added quoting to the input filename if needed
- * 
- * 7     8-11-00 17:25 Koolhoven
- * use sFullNameQuoted() on input data to ensure selection in forms
- * 
- * 6     16-06-00 12:11 Koolhoven
- * No longer ask for new domain..
- * Always a DomainPolygonMapBuffer will be used
- * 
- * 5     11/11/99 15:37 Willem
- * Added a callback in the from to disallow ':' (colon) as legal character
- * in the domain prefix
- * 
- * 4     4/11/99 17:01 Willem
- * Added a field to enter the domain prefix for PolygonMapBuffer operations for
- * pointmap, segmentmap and polygonmap
- * 
- * 3     9/13/99 1:05p Wind
- * comments
- * 
- * 2     9/13/99 12:36p Wind
- * adapted :exec functions to use of quoted file names when building an
- * expression
-*/
-// Revision 1.4  1998/09/16 17:33:54  Wim
-// 22beta2
-//
-// Revision 1.3  1997/09/11 09:32:16  Wim
-// Strip new domain name of the path.
-//
-// Revision 1.2  1997-08-26 14:55:00+02  Wim
-// Added sNewDom with AreaNumbering and PolygonMapBuffer
-//
-/* FormGeneralMapApplications
-   Copyright Ilwis System Development ITC
-   march 1997, by Wim Koolhoven
-	Last change:  WK   11 Sep 97   11:29 am
-*/
+
 #include "Client\Headers\AppFormsPCH.h"
 #include "PolygonApplicationsUI\PolygonMapBuffer.h"
 #include "Headers\Hs\DOMAIN.hs"
@@ -88,7 +46,7 @@ LRESULT Cmdpolygonmapbuffer(CWnd *wnd, const String& s)
 }
 
 FormPolygonMapBuffer::FormPolygonMapBuffer(CWnd* mw, const char* sPar)
-: FormPolygonMapCreate(mw, TR("Create a Buffer Map")), distance(0)
+: FormPolygonMapCreate(mw, TR("Create a Buffer Map")), distance(0), endStyle(0)
 {
 	if (sPar)
 	{

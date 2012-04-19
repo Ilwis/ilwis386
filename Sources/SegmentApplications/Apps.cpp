@@ -56,7 +56,7 @@ InfoVector* getCommandInfo() {
 }
 
 extern "C" _export ILWIS::Module *getModuleInfo(const FileName& fnModule) {
-	ILWIS::Module *module = new ILWIS::Module("Segmentmap applications", fnModule,ILWIS::Module::mi37,"1.0");
+	ILWIS::Module *module = new ILWIS::Module("Segmentmap applications", fnModule,ILWIS::Module::mi37,"1.1");
 	module->addMethod(ILWIS::Module::ifgetCommandInfo, (void *)getCommandInfo);  
 
 	return module;
