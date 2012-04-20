@@ -17,6 +17,7 @@
 #include "Drawers\DrawingColor.h"
 #include "TrackProfileGraph.h"
 #include "Drawers\CollectionDrawer.h"
+#include "Engine\Domain\DmValue.h"
 #include "Engine\Base\Round.h"
 
 

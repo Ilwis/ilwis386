@@ -340,10 +340,13 @@ void TrackDataSource::addSource(const IlwisObject& obj) {
 	currentIndex = 0;
 	if ( IOTYPEBASEMAP(obj->fnObj)) {
 		bmp = BaseMap(obj->fnObj);
+		dm = bmp->dm();
 	} else if ( IOTYPE(obj->fnObj) == IlwisObject::iotMAPLIST) {
 		mpl = MapList(obj->fnObj);
-	} else if ( IOTYPE(obj->fnObj) == IlwisObject::iotOBJECTCOLLECTION) {
+		dm = mpl[0]->dm();
+	} else if ( IOTYPE(obj->fnObj) == IlwisObject::iotOBJECTCOLLECTION ) {
 		oc = ObjectCollection(obj->fnObj);
+		dm = oc->ioObj(0)->dminf().dm();
 	}
 }
 
@@ -375,6 +378,10 @@ IlwisObject TrackDataSource::getSource() const{
 
 void TrackDataSource::updateIndex(long ind){
 	currentIndex = ind;
+}
+
+Domain TrackDataSource::domain() const {
+	return dm;
 }
 
 //-------------------------------------------------------------------

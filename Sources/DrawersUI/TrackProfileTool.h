@@ -16,11 +16,13 @@ public:
 	BaseMap getMap(const Coord& crd=Coord()) const;
 	IlwisObject getSource() const;
 	void updateIndex(long ind);
+	Domain domain() const;
 private:
 	long currentIndex;
 	BaseMap bmp;
 	MapList mpl;
 	ObjectCollection oc;
+	Domain dm;
 	IlwisObject::iotIlwisObjectType type;
 };
 

@@ -2,6 +2,7 @@
 #include "Client\ilwis.h"
 #include "Engine\Base\DataObjects\ObjectCollection.h"
 #include "Client\FormElements\FieldListView.h"
+#include "Engine\Domain\DmValue.h"
 #include "Engine\Domain\dmcoord.h"
 #include "CrossSectionGraph.h"
 
@@ -417,7 +418,16 @@ RangeReal CrossSectionGraphEntry::getRange(long i) {
 	if ( IOTYPE(obj->fnObj) == IlwisObject::iotMAPLIST) {
 		if ( ranges.size() <= i) {
 			MapList mpl(obj->fnObj);
-			ranges.push_back(mpl->getRange());
+			RangeReal rr = mpl->getRange();
+			DomainValue *pdv =  mpl[i]->dm()->pdv();
+			if ( pdv ) {
+				if ( !pdv->fSystemObject()) {
+					RangeReal rr1 = pdv->rrMinMax();
+					if ( rr.rWidth() < 1e8)
+						rr = rr1;
+				}
+			}
+			ranges.push_back(rr);
 		}
 
 	}

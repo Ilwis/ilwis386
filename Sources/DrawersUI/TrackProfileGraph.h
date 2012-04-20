@@ -69,6 +69,7 @@ public:
 	ILWIS::TrackProfileTool *tool;
 	void update();
 
+
 private:
 	FieldListView *listview;
 	int currentIndex;
