@@ -241,6 +241,7 @@ PhiLam ProjectionStereoGraphic::plConv(const XY& _xy) const
         halfe = -.5 * e;
         break;
     }
+	phi_l = pl.Phi;
     for (i = NITER; i--; phi_l = pl.Phi) {
          sinphi = e * sin(phi_l);
       pl.Phi = 2. * atan(tp * pow((1.+sinphi)/(1.-sinphi),
