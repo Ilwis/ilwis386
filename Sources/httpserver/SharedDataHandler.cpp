@@ -43,8 +43,11 @@ void SharedDataHandler::writeResponse() const{
 #undef close // huh? wie definieert nou een macro close, das vragen om problemen
 #undef read
 
+	File file(name);
+	long iFileLength = file.iSize();
 	fstream binfile(name.c_str(), ios::in | ios::binary);
 	if ( binfile.is_open()) {
+		writeHeaders("application/x-zip-compressed", iFileLength);
 		char buffer[MAX_IN_BUF];
 		bool notFinished = true;
 		while(notFinished) {

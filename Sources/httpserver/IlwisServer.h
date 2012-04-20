@@ -38,7 +38,7 @@ public:
 private:
     struct mg_context *ctx;
 	void parseQuery(const String& query, map<String, String>& kvps);
-	void addOptions(int& index, char *coptions[40], const String& option, const String& value);
+	void addOptions(char options[40][100], int& index, const String& option, const String& value);
 	static void *IlwisServer::event_handler(enum mg_event event, struct mg_connection *conn,  const struct mg_request_info *request_info);
 	ILWIS::RequestHandler *createHandler(struct mg_connection *c, const struct mg_request_info *request_info) ;
 	void addFolder(const String& dir, int depth);

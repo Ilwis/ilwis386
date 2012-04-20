@@ -100,7 +100,7 @@ typedef void * (*mg_callback_t)(enum mg_event event,
 // Return:
 //   web server context, or NULL on error.
 struct mg_context *mg_start(mg_callback_t callback, void *user_data,
-                            const char **options);
+                            const char[40][100]);
 
 
 // Stop the web server.

@@ -22,6 +22,7 @@ protected:
 
 	String getConfigValue(const String& key) const;
 	void setConfigValue(const String& key, const String& value);
+	void writeHeaders(const char* contentType, long contentLength) const;
 	struct mg_connection *connection;
 	const struct mg_request_info *request_info;
 	map<String, String> kvps;

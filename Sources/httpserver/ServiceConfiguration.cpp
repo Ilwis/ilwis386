@@ -8,6 +8,7 @@ ServiceConfiguration::ServiceConfiguration(const String& dir, const String& name
 	String ilwDir = getEngine()->getContext()->sIlwDir();
 	String generalConfig("%SServices.ini",ilwDir);
 	readConfigFile(generalConfig);
+
 	add(dir,name);
 	isChanged = false;
 }
@@ -18,9 +19,12 @@ void ServiceConfiguration::add(const FileName& fn) {
 }
 
 FileName ServiceConfiguration::add(const String& dir, const String& name) {
-	if ( name != "") {
+	if ( name.size() > 0) {
+	//String txt("%S", name);
 		String ilwDir = getEngine()->getContext()->sIlwDir();
-		FileName configFn(String("%S%S", ilwDir, get("Handler:Configurations:"+name)));
+		String key("Handler:Configurations:%S",name);
+		FileName configFn(String("%S%S", ilwDir, get(key)));
+
 		if ( configFn.fExist())
 			readConfigFile(configFn);
 		else {

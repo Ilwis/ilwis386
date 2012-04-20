@@ -34,8 +34,9 @@ void executehttpcommand(const String& cmd) {
 		AfxBeginThread(IlwisServer::executeInThread, _cmd);	
 	}
 	while(server==0 ) {
-		::OutputDebugString("trace\n");
+		::OutputDebugString(".");
 	}
+	::OutputDebugString("\n");
 	server->start(_cmd);
 }
 
@@ -65,7 +66,6 @@ IlwisServer::~IlwisServer() {
 }
 
 UINT IlwisServer::executeInThread(LPVOID lp) {
-	String *cmd = (String *)lp;
 	String ilwDir = getEngine()->getContext()->sIlwDir() + "\\Services\\";
 	if ( server == 0) {
 		IlwisServer *serverTemp = new IlwisServer();
@@ -140,38 +140,49 @@ void IlwisServer::addServices(const FileName& fnModule) {
 	}
 }
 bool IlwisServer::start(String* cmd) {
+
 	ParmList pl(*cmd);
 	delete cmd;
 	String options;
-	char *coptions[40];
-	memset(coptions,0, 40);
+	char coptions[40][100];
+	//memset(coptions,0, 40);
 	//FileName fnConfig(String("%Sservices.ini",getEngine()->getContext()->sIlwDir()));
+
 	ServiceConfiguration config;
 
 	int index = 0;
-	addOptions(index,coptions, "document_root", pl.fExist("data_folder")? String("-r %S", pl.sGet("data_root")) : getEngine()->sGetCurDir());
+
+	addOptions(coptions, index,"document_root", pl.fExist("data_folder")? String("-r %S", pl.sGet("data_root")) : getEngine()->sGetCurDir());
 	if ( pl.fExist("port")) {
-		addOptions(index, coptions,"listening_ports",pl.sGet("port"));
+		addOptions(coptions,index, "listening_ports",pl.sGet("port"));
 	} else {
-		String port = config.get("Server:Context");
+		String port = config.get("Server:Context:Port");
 		if ( port != "?")
-			addOptions(index, coptions,"listening_ports",port);
+			addOptions(coptions, index, "listening_ports",port);
 	}
 	if ( pl.fExist("threads")) {
-		addOptions(index, coptions,"num_threads",pl.sGet("threads"));
+		addOptions(coptions,index, "num_threads",pl.sGet("threads"));
 	}
+	coptions[index][0] = 0;
 
-	ctx = mg_start(&event_handler, 0, (const char **)coptions);
+	ctx = mg_start(&event_handler, 0, coptions);
+	if ( ctx == 0) {
+		throw ErrorObject("Couldnt start server");
+	}
 	watcherThread = AfxBeginThread(IlwisServer::timeOutChecker, (void*)this);
 
 	return true;
 }
 
-void IlwisServer::addOptions(int& index, char *coptions[40], const String& option, const String& value) {
-	coptions[index] = new char(option.size() + 1);
-	strcpy_s(coptions[index++],option.size() + 1,  option.c_str());
-	coptions[index] = new char(value.size() + 1);
-	strcpy_s(coptions[index++], value.size() + 1, value.c_str());
+void IlwisServer::addOptions(char coptions[40][100],int& index, const String& option, const String& value) {
+	//coptions[index] = new char(option.size() + 1);
+	strcpy_s(coptions[index],option.size() + 1,  option.c_str());
+	++index;
+
+	//coptions[index] = new char(value.size() + 1);
+	strcpy_s(coptions[index], value.size() + 1, value.c_str());
+	++index;
+
 }
 
 

@@ -68,3 +68,10 @@ bool RequestHandler::doCommand() {
 
 }
 
+void RequestHandler::writeHeaders(const char* contentType, long contentLength) const {
+	mg_printf(connection, "HTTP/1.1 200 OK\r\n");
+	mg_printf(connection, "Content-Type: %s\r\n", contentType);
+	mg_printf(connection, "Content-Length: %d\r\n", contentLength);
+	mg_printf(connection, "\r\n");
+}
+

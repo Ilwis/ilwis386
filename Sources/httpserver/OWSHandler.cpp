@@ -18,17 +18,15 @@ RequestHandler(name, c,ri,kvps, serv)
 {
 }
 
-void OWSHandler::writeError(const String& err, const String& code) const{
-
-
+void OWSHandler::writeError(const String& err, const String& code) const {
 	ILWIS::XMLDocument doc;
-	doc.addNodeTo(doc,"ExceptionReport");
-	doc.addNameSpace("xmlns:ows","http://www.opengis.net/ows/1.1");
-	doc.addNameSpace("xmlns:xsi","http://www.w3.org/2001/XMLSchema-instance");
+	pugi::xml_node report = doc.addNodeTo(doc,"ExceptionReport");
+	doc.addNameSpace("ows","http://www.opengis.net/ows/1.1");
+	doc.addNameSpace("xsi","http://www.w3.org/2001/XMLSchema-instance");
 	doc.append_attribute("xsi:schemaLocation") = "http://www.opengis.net/ows/1.1 ../../../ows/1.1.0/owsExceptionReport.xsd";
 	doc.append_attribute("xml:lang") = "en-CA";
 
-	pugi::xml_node exc = doc.addNodeTo(doc,"ows:Exception");
+	pugi::xml_node exc = doc.addNodeTo(report,"ows:Exception");
 	exc.append_attribute("exceptionCode") = code.c_str();
 	doc.addNodeTo(exc,"ows:ExceptionText",err);
 
@@ -37,6 +35,7 @@ void OWSHandler::writeError(const String& err, const String& code) const{
 	char *buf = new char[txt.size() + 1];
 	memset(buf,0,txt.size() + 1);
 	memcpy(buf,txt.c_str(), txt.size());
-	mg_write(getConnection(), buf, txt.size()+1);
+	writeHeaders("text/xml", txt.size());
+	mg_write(getConnection(), buf, txt.size());
 	delete [] buf;
 }
