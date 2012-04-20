@@ -413,6 +413,8 @@ void SimpleMapPaneView::OnMouseMove(UINT nFlags, CPoint point)
 	//Pnt2RowCol(point, rRow, rCol);
 	bool fValid = true;
 	Coord cRowCol (mcd->rootDrawer->screenToOpenGL(RowCol(point.y,point.x)));
+	if ( cRowCol.fUndef())
+		return ;
 	Coord c (mcd->rootDrawer->glToWorld(cRowCol));
 	MapStatusBar* msb = 0;
 	CoordSystem csy = mcd->rootDrawer->getCoordinateSystem();

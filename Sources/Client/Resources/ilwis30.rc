@@ -297,6 +297,9 @@ boolean                 ICON                    "bool.ico"
 choice                  ICON                    "choice.ico"
 Colors                  ICON                    "color.ico"
 Border                  ICON                    "border.ico"
+Earth                   ICON                    "earth.ico"
+Ethiopia                ICON                    "ethiopia.ico"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
