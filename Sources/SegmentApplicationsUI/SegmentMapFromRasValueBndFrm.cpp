@@ -12,7 +12,7 @@ LRESULT Cmdsegmentisoline(CWnd *wnd, const String& s)
 }
 
 SegmentMapFromRasValueBndFrm::SegmentMapFromRasValueBndFrm(CWnd* mw, const char* sPar)
-: FormSegmentMapCreate(mw, TR("Iso lines")),intervalType(0),vr(ValueRange(0,1000,100))
+: FormSegmentMapCreate(mw, TR("Iso lines")),intervalType(0),vr(ValueRange(0,1000,100)), frags(0)
 {
 	if (sPar)
 	{
@@ -45,6 +45,7 @@ SegmentMapFromRasValueBndFrm::SegmentMapFromRasValueBndFrm(CWnd* mw, const char*
 
 	FieldBlank *fb = new FieldBlank(root);
 	fb->Align(rb2, AL_UNDER);
+	new FieldReal(root,"Minimum Fragment size",&frags);
 			
     initSegmentMapOut(false);
 	create();
@@ -72,9 +73,9 @@ int SegmentMapFromRasValueBndFrm::exec()
 	FileName fnMap1(sInMap1);
 	String sExpr;
 	if ( intervalType == 0)
-		sExpr = String("SegmentMapFromRasValueBnd(%S,%f,%f,%f,8,smooth)", fnMap1.sRelative(),vr->rrMinMax().rLo(), vr->rrMinMax().rHi(), vr->rStep());
+		sExpr = String("SegmentMapFromRasValueBnd(%S,%f,%f,%f,8,smooth,%f)", fnMap1.sRelative(),vr->rrMinMax().rLo(), vr->rrMinMax().rHi(), vr->rStep(),frags);
 	else
-		sExpr = String("SegmentMapFromRasValueBnd(%S,\"%S\",8,smooth)", fnMap1.sRelative(),sequence);
+		sExpr = String("SegmentMapFromRasValueBnd(%S,\"%S\",8,smooth,%f)", fnMap1.sRelative(),sequence,frags);
 
 	execSegmentMapOut(sExpr);
 

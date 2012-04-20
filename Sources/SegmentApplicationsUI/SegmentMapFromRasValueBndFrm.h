@@ -57,6 +57,7 @@ private:
 	ValueRange vr;
 	int intervalType;
 	String sequence;
+	double frags;
 };
 
 
