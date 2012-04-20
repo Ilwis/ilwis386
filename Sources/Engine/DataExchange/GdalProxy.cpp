@@ -96,6 +96,7 @@ CoordSystem GdalProxy::getCoordSystem(const FileName& fnBase, int epsg) {
 
 	OGRSpatialReferenceH handle = newSRS(NULL);
 	OGRErr err = fromEPSG( handle, epsg);
+
 	if ( err == OGRERR_UNSUPPORTED_SRS )
 		throw ErrorObject(String("The epsg %d is not supported", epsg));
 
@@ -108,18 +109,61 @@ CoordSystem GdalProxy::getCoordSystem(const FileName& fnBase, int epsg) {
 	if ( isProjected(handle)) {
 		CoordSystemProjection *csp =  new CoordSystemProjection(fnCsy, 1);
 		String dn = Datum::WKTToILWISName(datumName);
-		if ( dn == "")
-			throw ErrorObject("Datum can't be transformed to an ILWIS known datum");
-		csp->datum = new MolodenskyDatum(dn,"");
+		//char *wkt = new char[5000];
+		//getEngine()->gdal->wktPretty(handle,&wkt,FALSE);
+		if ( dn != "" && dn != sUNDEF)
+			csp->datum = new MolodenskyDatum(dn,"");
 		String projName(getAttribute(handle, "Projection",0));
+		if ( projName == "Oblique_Stereographic")
+			projName = "Stereographic";
+		if ( projName == "Lambert_Conformal_Conic_2SP")
+			projName = "Lambert Conformal Conic";
 		replace(projName.begin(), projName.end(),'_',' ');
-		csp->prj = Projection(projName);
 
-		//SetProjectionParm func = (*where).second.parmfunc;
-		//String sIlwProj = (*where).second.sProjectionName;
-		//(func)(csp->prj, (void *)(&oSRS));
+		String spheroid = getEngine()->gdal->getAttribute(handle,"SPHEROID",0);
+		try{
+		Ellipsoid ell(spheroid);
+		csp->ell = ell;
+		} catch (ErrorObject& ) {
+			String majoraxis = getEngine()->gdal->getAttribute(handle,"SPHEROID",1);
+			String invFlattening = getEngine()->gdal->getAttribute(handle,"SPHEROID",2);
+			double ma = majoraxis.rVal();
+			double ifl = invFlattening.rVal();
+			if ( ma == rUNDEF || ifl == rUNDEF)
+				throw ErrorObject(String(TR("Ellipsoid %S could not be found").c_str(),spheroid));
+			csp->ell = Ellipsoid(ma, ifl);
+			csp->ell.sName = spheroid;
 
+
+		} 
+
+
+		double easting  = getEngine()->gdal->getProjParam(handle, "false_easting",rUNDEF,&err);
+		double northing = getEngine()->gdal->getProjParam(handle, "false_northing",rUNDEF,&err);
+		double scale = getEngine()->gdal->getProjParam(handle, "scale_factor",rUNDEF,&err);
+		double centralMeridian = getEngine()->gdal->getProjParam(handle, "central_meridian",rUNDEF,&err);
+		double lattOfOrigin = getEngine()->gdal->getProjParam(handle, "latitude_of_origin",rUNDEF,&err);
+		double stParal1 = getEngine()->gdal->getProjParam(handle, "standard_parallel_1",rUNDEF,&err);
+		double stParal2 = getEngine()->gdal->getProjParam(handle, "standard_parallel_2",rUNDEF,&err);
+		csp->prj = Projection(projName,csp->ell);
+		if ( easting != rUNDEF)
+			csp->prj->Param(pvX0,easting);
+		if ( northing != rUNDEF)
+			csp->prj->Param(pvY0,northing);
+		if ( scale != rUNDEF)
+			csp->prj->Param(pvK0, scale);
+		if ( centralMeridian != rUNDEF)
+			csp->prj->Param(pvLON0, centralMeridian);
+		if ( lattOfOrigin != rUNDEF)
+			csp->prj->Param(pvLAT0, lattOfOrigin);
+		if ( stParal1 != rUNDEF)
+			csp->prj->Param(pvLAT1, min(stParal2, stParal1));
+		if ( stParal2 != rUNDEF)
+			csp->prj->Param(pvLAT2, max(stParal2, stParal1));
+		csp->prj->Prepare();
 		csv = csp;
+		//delete [] wkt;
+
 	} else {
 		csv = new CoordSystemLatLon(fnCsy, 1);
 		csv->datum = new MolodenskyDatum("WGS 1984","");
@@ -127,6 +171,7 @@ CoordSystem GdalProxy::getCoordSystem(const FileName& fnBase, int epsg) {
 
 	CoordSystem csy;
 	csy.SetPointer(csv);
+	csy->Store();
 
 	return csy;
 }
