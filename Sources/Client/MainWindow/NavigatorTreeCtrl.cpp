@@ -397,6 +397,9 @@ void NavigatorTreeCtrl::OnLButtonDown(UINT nFlags, CPoint point)
 		SelectItem(hti);
 		SetFocus();
 		String name = fn.sFile;
+		if (URL::isUrl(name))
+			return;
+
 		CDocument *doc = IlwWinApp()->OpenDirectory(name.c_str());
 		if ( doc == NULL )
 			IlwWinApp()->OpenNewDirectory(fn.sFile.c_str());
