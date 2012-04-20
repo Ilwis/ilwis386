@@ -48,6 +48,7 @@
 #include "Client\MainWindow\mainwind.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\MainWindow\DirectoryDocument.h"
+#include "Engine\Base\DataObjects\URL.h"
 #include "Headers\Hs\Mainwind.hs"
 #include "Client\ilwis.h"
 #include "Headers\constant.h"
@@ -100,6 +101,9 @@ BOOL DirectoryDocument::OnOpenDocument(LPCTSTR lpszPathName)
     SetCurrentDirectory(dir.sFullPath().c_str());
 	}
   GetCurrentDirectory(_MAX_PATH, sBuf);
+  if ( URL::isUrl(sBuf))
+	  return false;
+
   IlwWinApp()->SetCurDir(sBuf);
 	IlwWinApp()->AddToCatalogHistory(sBuf);
   SetPathName(sBuf,FALSE);	
