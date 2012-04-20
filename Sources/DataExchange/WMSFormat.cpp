@@ -393,8 +393,8 @@ CoordSystem WMSFormat::getCoordSystem(const FileName& fnBase, const String& srsN
 	if ( funcs.isProjected(handle)) {
 		CoordSystemProjection *csp =  new CoordSystemProjection(fnCsy, 1);
 		String dn = Datum::WKTToILWISName(datumName);
-		char *wkt = new char[5000];
-		getEngine()->gdal->wktPretty(handle,&wkt,FALSE);
+		//char *wkt = new char[5000];
+		//getEngine()->gdal->wktPretty(handle,&wkt,FALSE);
 		if ( dn != "" && dn != sUNDEF)
 			csp->datum = new MolodenskyDatum(dn,"");
 		String projName(funcs.getAttribute(handle, "Projection",0));

@@ -816,7 +816,7 @@ CoordSystem GDALFormat::getCoordSystemFrom(OGRSpatialReferenceH handle, char *wk
 			if ( dn == "") {
 				Projection proj = ProjectionPtr::WKTToILWISName(wkt);
 				if ( proj.fValid() == false)
-					throw ErrorObject("Datum can't be transformed to an ILWIS known datum");
+					throw ErrorObject("Projection can't be transformed to an ILWIS known datum");
 				csp->prj = proj;
 			} else {
 				csp->datum = new MolodenskyDatum(dn,"");
@@ -824,8 +824,29 @@ CoordSystem GDALFormat::getCoordSystemFrom(OGRSpatialReferenceH handle, char *wk
 			String projName(funcs.getAttr(handle, "Projection",0));
 			if ( projName == "Oblique_Stereographic")
 				projName = "Stereographic";
+			if ( projName == "Lambert_Conformal_Conic_2SP")
+				projName = "Lambert Conformal Conic";
 			replace(projName.begin(), projName.end(),'_',' ');
 			OGRErr err;
+
+			String spheroid = getEngine()->gdal->getAttribute(handle,"SPHEROID",0);
+			try{
+			Ellipsoid ell(spheroid);
+			csp->ell = ell;
+			} catch (ErrorObject& ) {
+				String majoraxis = getEngine()->gdal->getAttribute(handle,"SPHEROID",1);
+				String invFlattening = getEngine()->gdal->getAttribute(handle,"SPHEROID",2);
+				double ma = majoraxis.rVal();
+				double ifl = invFlattening.rVal();
+				if ( ma == rUNDEF || ifl == rUNDEF)
+					throw ErrorObject(String(TR("Ellipsoid %S could not be found").c_str(),spheroid));
+				csp->ell = Ellipsoid(ma, ifl);
+				csp->ell.sName = spheroid;
+
+
+			} 
+
+
 			double easting  = getEngine()->gdal->getProjParam(handle, "false_easting",0,&err);
 			double northing = getEngine()->gdal->getProjParam(handle, "false_northing",0,&err);
 			double scale = getEngine()->gdal->getProjParam(handle, "scale_factor",0,&err);
@@ -1565,10 +1586,14 @@ void GDALFormat::ogr(const String& name, const String& source, const String& tar
 				fnBaseOutputName = createFileName(target,ftype,layerCount, layer);
 
 				OGRSpatialReferenceH hSRS = funcs.ogrGetSpatialRef(hLayer);
-				char wkt[10000];
-				char *wkt2 = (char *)wkt;
-				funcs.exportToWkt(hSRS,&wkt2);
-				CoordSystem csy = getCoordSystemFrom(hSRS, wkt);
+				CoordSystem csy;
+				if ( hSRS != 0) {
+					char * wkt[30000];
+					char *wkt2 = (char *)wkt;
+					funcs.exportToWkt(hSRS,&wkt2);
+					csy = getCoordSystemFrom(hSRS, wkt2);
+					} else
+					csy = CoordSystem("unknown");
 
 				int featureCount = funcs.ogrGetFeatureCount(hLayer,TRUE);
 				Domain dm(fnBaseOutputName, featureCount, dmtUNIQUEID, "feature");
@@ -1683,9 +1708,10 @@ void GDALFormat::createTable(const FileName& fn, const Domain& dm,OGRFeatureDefn
 			col = tbl->colNew(columns[column].name, dvrs);
 		} else if (type ==  OFTString) {
 			Domain dom("String");
-			if ( columns[column].useClass) {
-				dom = createSortDomain(columns[column].name, columns[column].strings);
-			}
+	/*		if ( columns[column].useClass) {
+				Domain dom2 = createSortDomain(columns[column].name, columns[column].strings);
+				dom2->Store();
+			}*/
 			col = tbl->colNew(columns[column].name, dom);
 		}
 		for(int rec = 0; rec < size; ++rec) {
@@ -1706,7 +1732,7 @@ Domain GDALFormat::createSortDomain(const String& name, const vector<String>& va
 	}
 	FileName fn(FileName::fnUnique(name),".dom");
 	if ( names.size() < 100) {
-		dom = Domain(fn, names.size());
+		dom = Domain(fn, names.size(),dmtCLASS);
 	} else {
 		dom = Domain(fn, names.size(), dmtID);
 	}
