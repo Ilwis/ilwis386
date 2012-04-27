@@ -6,6 +6,7 @@
 
 namespace ILWIS {
 	class RootDrawer;
+	struct PreparationParameters;
 }
 
 class _export OpenGLText {
@@ -15,15 +16,21 @@ public:
 	void renderText(const Coordinate& c, const String& text);
 	void setColor(const Color & clr);
 	double getHeight() const;
+	CoordBounds getTextExtent(const String& txt) const;
+	void createFont();
+	void prepare(ILWIS::PreparationParameters *pp);
 private:
-	//void loadFont(const String& name, int height) ;
+	void calcScale();
 	FTFont *font;
+	FTFont *tempFont;
 	Color color;
 	int fontHeight;
 	double horizontalShift;
 	double verticalShift;
 	bool fixedSize;
 	double scale;
+	String name;
+	ILWIS::RootDrawer *rootdrawer;
 
 
 };
