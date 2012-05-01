@@ -170,7 +170,7 @@ int GeneralImportForm::SetDefaultOutputName(Event *dv) {
 		String transformedName;
 		for(int i=0; i< name.size(); ++i) {
 			char lastChar = name[i];
-			if ( lastChar == '.' || lastChar==':' || lastChar == '/' || lastChar == '\\' || lastChar ==' ')
+			if ( lastChar == '.' || lastChar==':' || lastChar == '/' || lastChar == '\\' || lastChar ==' ' || lastChar=='-')
 				transformedName += '_';
 			else
 				transformedName += lastChar;

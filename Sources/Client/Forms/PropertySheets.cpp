@@ -81,15 +81,24 @@ Created on: 2007-02-8
 class ValueRangeChangeForm: public FormWithDest
 {
 public:
-	ValueRangeChangeForm(CWnd* wPar, const String& sTitle, const ValueRange& vr)
-		: FormWithDest(wPar, sTitle), m_vr(vr)
+	ValueRangeChangeForm(CWnd* wPar, const String& sTitle, const ValueRange& vr, bool intern=true)
+		: FormWithDest(wPar, sTitle), m_vr(vr), m_rg(0)
 	{
 		m_fvr = new FieldValueRange(root, TR("Value &Range"), &m_vr, 0);
 
-		m_rg = new RadioGroup(root, String(), &m_iOption);
-		m_rg->SetIndependentPos();
-		new RadioButton(m_rg, TR("&Calculate values (change internal representation)"));   // So convert raw values
-		new RadioButton(m_rg, TR("&Reinterpret values (no change in internal representation)"));  // So leave raw values as-is
+		if ( intern) {
+			m_rg = new RadioGroup(root, String(), &m_iOption);
+			m_rg->SetIndependentPos();
+			new RadioButton(m_rg, TR("&Calculate values (change internal representation)"));   // So convert raw values
+			new RadioButton(m_rg, TR("&Reinterpret values (no change in internal representation)"));  // So leave raw values as-is
+		} else {
+			new FieldBlank(root);
+			StaticText * st = new StaticText(root,TR("This changes the valuerange of all the maps of the maplist"));
+			st->SetIndependentPos();
+			st = new StaticText(root, TR("Warning: Might invalidate your data with large changes"));
+			st->SetIndependentPos();
+			
+		}
 
 		create();
 	}
@@ -104,7 +113,8 @@ public:
 	int exec()
 	{
 		m_fvr->StoreData();
-		m_rg->StoreData();
+		if ( m_rg)
+			m_rg->StoreData();
 
 		return 0;
 	}
@@ -237,7 +247,7 @@ void BuildVRStrings(const ValueRange& vr, String& sRange, String& sPrecision)
 // Build display Value range fields (R/O case), they are displayed as
 // ValueRange:   <lo> to <high>
 // Precision:    <step>
-void SetRangePrecFields(const DomainValue* dv, const ValueRange& vr, FormEntry* root, StaticText *stRange, StaticText *stPrecision, StaticText *stUnit)
+FormEntry *SetRangePrecFields(const DomainValue* dv, const ValueRange& vr, FormEntry* root, StaticText *stRange, StaticText *stPrecision, StaticText *stUnit)
 {
 	String sRange, sPrecision;
 	BuildVRStrings(vr, sRange, sPrecision);
@@ -266,6 +276,7 @@ void SetRangePrecFields(const DomainValue* dv, const ValueRange& vr, FormEntry* 
 
 	FieldBlank *fb = new FieldBlank(root, 0);
 	fb->Align(feAlignTo, AL_UNDER);
+	return stPrec;
 }
 
 //-------------------------------
@@ -496,6 +507,37 @@ void CheckSetValidValueRange(const BaseMap& bm, ValueRange& vr)
 			else
 			{
 				rr = bm->rrMinMax();
+				fValidVR = log(rr.rLo()) < 100 && log(rr.rHi()) < 100;
+				if (fValidVR)
+					vr = ValueRange(rr, rStep);
+				else
+					vr = ValueRange(-9999999.9, 9999999.9, 0.1); // make sure FieldValueRange will display minmax values
+			}
+		}
+	}
+}
+
+void CheckSetValidValueRange(const Domain& dm, const ValueRange& vrOld, ValueRange& vr)
+{
+	vr = vrOld;
+	// Only try it for DomainValue
+	if (vr.fValid())
+	{
+		RangeReal rrVR = vr->rrMinMax();
+		double rStep = vr->rStep();
+		bool fValidVR = log(rrVR.rLo()) < 100 && log(rrVR.rHi()) < 100;
+		if (!fValidVR)
+		{
+			DomainValue *pdv = dm->pdv();
+			RangeReal rr;
+			if (pdv)
+				rr = pdv->rrMinMax();
+			fValidVR = rr.fValid() && log(rr.rLo()) < 100 && log(rr.rHi()) < 100;
+			if (fValidVR)
+				vr = ValueRange(rr, rStep);
+			else
+			{
+				rr = vrOld->rrMinMax();
 				fValidVR = log(rr.rLo()) < 100 && log(rr.rHi()) < 100;
 				if (fValidVR)
 					vr = ValueRange(rr, rStep);
@@ -2332,14 +2374,130 @@ MapListPropPage::MapListPropPage(const IlwisObject& obj)
 	m_fInGRCallBack = false;
 	m_stPyramids = 0;
 	pbPyramids = 0;
+	m_stPrecision = 0;
 	mpl.SetPointer(obj.pointer());
 }
 
+int MapListPropPage::ValueRangeCallBack(Event*)
+{
+	DataChanged(0);
+	m_fvr->Disable();
+
+	return 0;
+}
+
+int MapListPropPage::DoChangeValueRange(Event*)
+{
+	String sTitleIn = TR("Change &Value Range");
+	String sTitle(' ', sTitleIn.length());
+	copy_if(sTitleIn.begin(), sTitleIn.end(), sTitle.begin(), fCheckNoAmpers);
+
+	ValueRangeChangeForm frm(GetParent(), sTitle, m_vr,false);
+	if (frm.fOkClicked())
+	{
+
+		//FileName fnDM(m_sNewDM);
+		//Domain dm;
+		//try
+		//{
+		//	dm = Domain(fnDM);
+		//}
+		//catch (ErrorObject& err)
+		//{
+		//	err.Show(TR("Domain Change"));
+		//}
+		Domain dm = mpl->dm();
+		if (dm.fValid())
+		{
+			DomainValueRangeStruct dvs(dm, m_vr);
+			for(int i = 0; i < mpl->iSize(); ++i) {
+				Map mp = mpl->map(i);
+				if ( !mp.fValid())
+					continue;
+				mp->SetDomainValueRangeStruct(dvs);
+			}
+			if (m_fvr && m_vr.fValid())
+				m_fvr->SetVal(m_vr);
+		}
+
+	}
+
+	return 0;
+}
+
+void MapListPropPage::valueRangeField() {
+	FormEntry *entry = 0;
+	if (!mpl->fDependent() && !mpl->fDependent() && mpl->getRange().fValid())
+	{
+		Domain dm = mpl->dm();
+		m_vr = ValueRange(mpl->getRange(), mpl->getStep());
+		ValueRange vr;
+		CheckSetValidValueRange(dm, m_vr, vr);
+		m_vr = vr;
+
+		String s('X', 50);
+		if (mpl->fDependent() || mpl->fReadOnly())
+		{
+			if (dm.fValid())
+			{
+				StaticText *st = 0;
+				if (dm->fValidDomain())
+				{
+					if (dm->fnObj == mpl->fnObj)    // internal domain
+						st = new InfoText(m_fgPageRoot, dm->sTypeName());
+					else
+						new FieldObjShow(m_fgPageRoot, dm);
+				}
+				else
+					st = new InfoText(m_fgPageRoot, TR("Map has an invalid domain!"));
+
+				if (dm->pdv() && !dm->pdi() && !dm->pdbool() && !dm->pdbit())
+					entry = SetRangePrecFields(dm->pdv(), m_vr, m_fgPageRoot, m_stValues, m_stPrecision, m_stUnit);
+			}
+		}
+		else
+		{
+
+			if (dm->pdv() && !dm->pdi() && !dm->pdbool() && !dm->pdbit())
+			{
+				m_fgValues = new FieldGroup(m_fgPageRoot);
+				FieldBlank *fb = new FieldBlank(m_fgValues, 0);
+
+				entry = m_fvr = new FieldValueRange(m_fgValues, TR("Value &Range"), &m_vr, 0);
+				m_fvr->Align(fb, AL_UNDER);
+				m_feAlignUnder = m_fvr;
+
+				DomainValue *dv = dm->pdv();
+				if (dv->fUnit())
+				{
+					StaticText* stLeft = new StaticText(m_fgPageRoot, TR("Unit:"));
+					StaticText* stUnit = new StaticText(m_fgPageRoot, dv->sUnit());
+					stUnit->Align(stLeft, AL_AFTER);
+					FieldBlank *fb = new FieldBlank(m_fgPageRoot, 0);
+					fb->Align(stLeft, AL_UNDER);
+					m_feAlignUnder = fb;
+				}
+			}
+		}
+
+
+		String sBut = String("%S ...", TR("Change &Value Range"));
+		PushButton *pb = new PushButton(m_fgValues, sBut, (NotifyProc)&MapListPropPage::DoChangeValueRange);
+		pb->SetIndependentPos();
+		pb->Align(m_fvr, AL_AFTER);
+
+		// Re-assign the callbacks; change item details
+		m_fvr->SetCallBack((NotifyProc)&MapListPropPage::ValueRangeCallBack);  // currently only used to set to disabled state
+		if ( entry) {
+			FieldBlank *fb3 = new FieldBlank(m_fgPageRoot);
+			fb3->Align(entry, AL_UNDER);
+		}
+	}
+}
 void MapListPropPage::BuildPage()
 {
 	try{
 		BasicPropertyFormPage::BuildPage();
-
 
 		if (mpl->fUseAs())
 		{
@@ -2380,6 +2538,7 @@ void MapListPropPage::BuildPage()
 			new InfoText(m_fgPageRoot, TR("Domain of maps"));
 			Domain dom1 = mpl[mpl->iLower()]->dm();
 			new FieldObjShow(m_fgPageRoot, dom1);
+			valueRangeField();
 		}
 		SetAttribTableField();
 
@@ -2422,6 +2581,24 @@ void MapListPropPage::BuildPage()
 			err.Show();
 		} 
 }
+
+
+
+//void MapListPropPage::SetDomainValueRangeField()
+//{
+//	BaseMapPropPage::SetDomainValueRangeField();
+//
+//	if (!m_bm->fDependent() && !m_fReadOnly && m_fgValues)
+//	{
+//		String sBut = String("%S ...", TR("Change &Value Range"));
+//		PushButton *pb = new PushButton(m_fgValues, sBut, (NotifyProc)&MapPropPage::DoChangeValueRange);
+//		pb->SetIndependentPos();
+//		pb->Align(m_fvr, AL_AFTER);
+//
+//		// Re-assign the callbacks; change item details
+//		m_fvr->SetCallBack((NotifyProc)&MapPropPage::ValueRangeCallBack);  // currently only used to set to disabled state
+//	}
+//}
 
 void MapListPropPage::SetAttribTableField()
 {

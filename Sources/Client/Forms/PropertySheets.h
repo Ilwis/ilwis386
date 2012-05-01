@@ -146,7 +146,7 @@ protected:
 	int DoChangeValueRange(Event*);
 	int GeoRefChange(Event*);
 	int EditDefinition(Event*);
-	int CallBackPyramids(Event*);	
+	int CallBackPyramids(Event*);
 
 	int    m_iInterPolMethod;
 	bool   m_fInterpol;
@@ -318,15 +318,27 @@ public:
 	virtual void BuildPage();
 
 private:
+	int ValueRangeCallBack(Event*);
+	void valueRangeField();
+
 	StaticText   *m_stRemark;
 	FieldGeoRefC *m_fgr;
 	StaticText   *m_stPyramids;
 	PushButton   *pbPyramids;
 	FieldTableC       *ftAttTable;
 	StaticText        *stAttTable;
+	//FieldDomainC      *m_fdm;
+	FieldGroup        *m_fgValues;
+	StaticText *m_stValues;
+	StaticText *m_stPrecision;
+	StaticText *m_stUnit;
+	FieldValueRange   *m_fvr;
+	FormEntry         *m_feAlignUnder; 
+	String m_sNewDM;
 	
 	bool       m_fInGRCallBack;
 	String     m_sNewGR;
+	ValueRange  m_vr;
 	MapList	   mpl;
 	bool  fAttrTable;
 	String sAttrTable;
@@ -335,6 +347,8 @@ private:
 	int CallBackPyramids(Event *)	;	
 	int CallBackAttTableChange(Event*);
 	void SetAttribTableField();
+	void SetDomainValueRangeField();
+	int DoChangeValueRange(Event*);
 
 	bool fCheckGeoRefConsistent(String& sRemark);
 	
