@@ -21,11 +21,14 @@ class SetStretchValueForm : public DisplayOptionsForm2 {
 	SetStretchValueForm(CWnd *wPar, NewDrawer *dr, const RangeReal& _baserr, const RangeReal& _currentrr, double rStep);
 	void apply(); 
 private:
+	int logStretching(Event *);
 	RangeReal rr;
 	FieldRealSliderEx *sliderLow;
 	FieldRealSliderEx *sliderHigh;
+	CheckBox *cb;
 	double low, high;
 	bool inRace;
+	bool logStretch;
 
 	int check(Event *);
 

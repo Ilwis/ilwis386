@@ -121,17 +121,50 @@ SetStretchValueForm::SetStretchValueForm(CWnd *wPar, NewDrawer *dr, const RangeR
 	high(_currentrr.rHi()),
 	inRace(false)
 {
+	LayerDrawer *ldrw = (LayerDrawer *)dr; // needs not be a valid cast
+	SetDrawer *setdrw = dynamic_cast<SetDrawer *>(drw);
+	if ( setdrw) {
+		ldrw = (LayerDrawer *)setdrw->getDrawer(0);
+	} 
+	LayerDrawer::StretchMethod method = ldrw->getStretchMethod();
+	logStretch = method ==LayerDrawer::smLINEAR ? false : true;
 	sliderLow = new FieldRealSliderEx(root,"Lower", &low,ValueRange(rr,rStep),true);
 	sliderHigh = new FieldRealSliderEx(root,"Upper", &high,ValueRange(rr,rStep),true);
 	sliderHigh->Align(sliderLow, AL_UNDER);
+	cb  = new CheckBox(root,TR("Logarithmic stretching"),&logStretch);
+	cb->SetCallBack((NotifyProc)&SetStretchValueForm::logStretching);
+
 	sliderLow->SetCallBack((NotifyProc)&SetStretchValueForm::check);
 	sliderHigh->SetCallBack((NotifyProc)&SetStretchValueForm::check);
 	create();
 }
+int SetStretchValueForm::logStretching(Event *) {
+	cb->StoreData();
+	SetDrawer *setdrw = dynamic_cast<SetDrawer *>(drw);
+	LayerDrawer::StretchMethod method = logStretch ? LayerDrawer::smLOGARITHMIC : LayerDrawer::smLINEAR;
+	PreparationParameters pp(NewDrawer::ptRENDER, 0);
+	if ( setdrw) {
+		for(int i=0; i < setdrw->getDrawerCount(); ++i) {
+			LayerDrawer *ldrw = dynamic_cast<LayerDrawer *>(setdrw->getDrawer(i));
+			if ( ldrw) {
+				ldrw->setStretchMethod(method);
+			}
+		}
+		setdrw->prepareChildDrawers(&pp);
+	}
+	else {
+		LayerDrawer *ldrw = (LayerDrawer *)drw;
+		ldrw->setStretchMethod(method);
+		ldrw->prepare(&pp);
+	}
+	updateMapView();
 
+	return 1;
+}
 int  SetStretchValueForm::check(Event *) {
 	sliderLow->StoreData();
 	sliderHigh->StoreData();
+	cb->StoreData();
 
 	if ( low == rUNDEF || high == rUNDEF)
 		return 1;
