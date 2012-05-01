@@ -30,7 +30,8 @@ RootDrawer::RootDrawer()
 	windowAspectRatio = 0;
 	mapAspectRatio = 0;
 	selectionDrawer = 0;
-	rotX = rotY = rotZ = 0;
+	rotX = rotZ = 0;
+	rotY = 45.0;
 	translateX = translateY = translateZ = 0;
 	zoom3D = 1.0;
 	rootDrawer = this;
@@ -166,7 +167,7 @@ bool RootDrawer::draw( const CoordBounds& cb) const{
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		if (threeD) {
-			gluLookAt(eyePoint.x, eyePoint.y, eyePoint.z, viewPoint.x, viewPoint.y, viewPoint.z, 0, 1.0, 0 );
+			gluLookAt(viewPoint.x, viewPoint.y, cbZoom.width() * 1.5, viewPoint.x, viewPoint.y, viewPoint.z, 0, 1.0, 0 );
 			glTranslatef(translateX, translateY, translateZ);
 			glTranslatef(viewPoint.x,viewPoint.y, viewPoint.z);
 			glRotatef(rotY,-1,0,0);				// Rotate on y
@@ -548,7 +549,8 @@ void RootDrawer::setCoordBoundsView(/*const CoordSystem& _cs,*/ const CoordBound
 	fakeZ = cbView.width() * 0.0005;
 	if ( is3D()) {
 		if ( !initRestore) { // restore set rotX, etc. But the OnEntireMap would destroy these false; so for once  the init of values is skipped
-			rotX= rotY = 0;
+			rotX = 0;
+			rotY = 45.0;
 			translateX = translateY = translateZ = 0;
 			zoom3D = 1.0;
 		} else 
