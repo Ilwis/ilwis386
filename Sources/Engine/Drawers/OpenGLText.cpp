@@ -6,11 +6,12 @@
 
 #define LIST_SIZE 96
 
-OpenGLText::OpenGLText(ILWIS::RootDrawer *_rd,const String& _name, int height, bool fixed, double horShift, double verShift)
+OpenGLText::OpenGLText(ILWIS::RootDrawer *_rd,const String& _name, int height, bool fixed, double horShift, double verShift, bool orientedToUser)
 : fontHeight(height)
 , fixedSize(fixed)
 , horizontalShift(horShift)
 , verticalShift(verShift)
+, faceUser(orientedToUser)
 , font(0)
 , rootdrawer(_rd)
 , name(_name)
@@ -65,14 +66,24 @@ void OpenGLText::renderText(const Coordinate& c, const String& text) {
 	if ( !fixedSize && tempFont == 0) { // tempfont == 0 means we are copying, don't mess with font scaling now. it's ok
 		calcScale();
 	}
-	glScaled(scale, scale, 1); // with this the GL space is temporarily expressed in pixels
+	glScaled(scale, scale, scale); // with this the GL space is temporarily expressed in pixels
 	glColor3d(color.redP(), color.greenP(), color.blueP());
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 	glEnable (GL_POLYGON_SMOOTH);
 	glHint (GL_POLYGON_SMOOTH, GL_NICEST);
-	FTPoint pStart(horizontalShift + c.x / scale, verticalShift + c.y / scale, c.z);
-	FTPoint pEnd =  font->Render(text.c_str(),text.size(), pStart);
+	if (faceUser && rootdrawer->is3D()) {
+		glTranslated(horizontalShift + c.x / scale, verticalShift + c.y / scale, c.z);
+		double rotX, rotY, rotZ;
+		rootdrawer->getRotationAngles(rotX, rotY, rotZ);
+		glRotatef(rotX,0,0,1); // Undo the rotation of RootDrawer
+		glRotatef(rotY,1,0,0);
+		FTPoint pStart(0, 0, 0);
+		FTPoint pEnd =  font->Render(text.c_str(),text.size(), pStart);
+	} else {
+		FTPoint pStart(horizontalShift + c.x / scale, verticalShift + c.y / scale, c.z);
+		FTPoint pEnd =  font->Render(text.c_str(),text.size(), pStart);
+	}
 	glDisable(GL_BLEND);
 	glDisable(GL_POLYGON_SMOOTH);
 	glPopMatrix();
