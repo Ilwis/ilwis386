@@ -204,7 +204,7 @@ public:
 	virtual void fillFeature(OGRGeometryH hGeom, int& rec);
 protected:
 	GeometryFiller(GDALCFunctions& _funcs, BaseMap& _bmp) : bmp(_bmp), funcs(_funcs) {}
-	virtual void fillGeometry(OGRGeometryH hGeom, int rec) {};
+	virtual void fillGeometry(OGRGeometryH hGeom, int& rec) {};
 	BaseMap& bmp;
 	GDALCFunctions& funcs;
 
@@ -214,7 +214,7 @@ class PointFiller : public GeometryFiller {
 public:
 	PointFiller(GDALCFunctions& _funcs, BaseMap& _bmp) : GeometryFiller(_funcs, _bmp) {}
 private:
-	void fillGeometry(OGRGeometryH hGeom, int rec);
+	void fillGeometry(OGRGeometryH hGeom, int& rec);
 };
 
 class SegmentFiller : public GeometryFiller {
@@ -222,7 +222,7 @@ public:
 	SegmentFiller(GDALCFunctions& _funcs, BaseMap& _bmp) : GeometryFiller(_funcs, _bmp) {}
 
 private:
-	void fillGeometry(OGRGeometryH hGeom, int rec);
+	void fillGeometry(OGRGeometryH hGeom, int& rec);
 };
 
 class PolygonFiller : public GeometryFiller {

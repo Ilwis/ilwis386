@@ -96,18 +96,37 @@ const String sZCOLUMNNAME("Z_Value");
 
 CCriticalSection GDALFormat::m_CriticalSection;
 
-UINT OgrInThread(void * cmd) {
+struct gdaldata{
+	String cmd;
+	String dir;
+};
+
+UINT OgrInThread(void * data) {
+	gdaldata *d = (gdaldata *)data;
+	getEngine()->InitThreadLocalVars();
 	GDALFormat frmt;
-	ParmList parms(*(String *)cmd);
+	ParmList parms(d->cmd);
+	getEngine()->SetCurDir(d->dir);
 	frmt.ogr(parms.sGet(0), parms.sGet(1), parms.sGet(2));
-	delete cmd;
+	delete d;
+	getEngine()->RemoveThreadLocalVars();
 
 	return 1;
 }
 
+
 void ogrgdal(const String& cmd) {
-	String *pCmd = new String(cmd);
-	AfxBeginThread(OgrInThread, (LPVOID)pCmd);
+	ParmList parms(cmd);
+	if ( !parms.fExist("quiet")) {
+		gdaldata *d = new gdaldata();
+		d->cmd = cmd;
+		d->dir = getEngine()->sGetCurDir();
+		AfxBeginThread(OgrInThread, (LPVOID)d);
+	} else {
+		GDALFormat frmt;
+		frmt.ogr(parms.sGet(0), parms.sGet(1), parms.sGet(2));
+	}
+
 }
 
 void rastergdal(const String& cmd) {
@@ -1708,17 +1727,19 @@ void GDALFormat::createTable(const FileName& fn, const Domain& dm,OGRFeatureDefn
 			col = tbl->colNew(columns[column].name, dvrs);
 		} else if (type ==  OFTString) {
 			Domain dom("String");
-	/*		if ( columns[column].useClass) {
+			if ( columns[column].useClass) {
 				Domain dom2 = createSortDomain(columns[column].name, columns[column].strings);
 				dom2->Store();
-			}*/
+			}
 			col = tbl->colNew(columns[column].name, dom);
 		}
-		for(int rec = 0; rec < size; ++rec) {
-			if ( type != OFTString) {
-				col->PutVal(rec + 1,columns[column].values[rec]);
-			} else {
-				col->PutVal(rec + 1, columns[column].strings[rec]);
+		if ( col.fValid()) {
+			for(int rec = 0; rec < size; ++rec) {
+				if ( type != OFTString) {
+					col->PutVal(rec + 1,columns[column].values[rec]);
+				} else {
+					col->PutVal(rec + 1, columns[column].strings[rec]);
+				}
 			}
 		}
 	}
@@ -1761,6 +1782,16 @@ Feature::FeatureType GDALFormat::getFeatureType(OGRLayerH hLayer) const{
 }
 
 FileName GDALFormat::createFileName( const String& name, Feature::FeatureType ftype, int layerCount, int layer) {
+	//String transformedName;
+	//FileName fnTemp(name);
+	//String nameTemp = fnTemp.
+	//for(int i=0; i< name.size(); ++i) {
+	//	char lastChar = name[i];
+	//	if ( lastChar == '.' || lastChar==':' || lastChar == '/' || lastChar == '\\' || lastChar ==' ' || lastChar=='-')
+	//		transformedName += '_';
+	//	else
+	//		transformedName += lastChar;
+	//}
 	FileName fn( name);
 	if ( ftype == Feature::ftPOINT)
 		fn.sExt = ".mpp";
@@ -1808,17 +1839,17 @@ void GeometryFiller::fillFeature(OGRGeometryH hGeometry, int& rec) {
 	}
 }
 
-void PointFiller::fillGeometry(OGRGeometryH hGeom, int rec) {
+void PointFiller::fillGeometry(OGRGeometryH hGeom, int& rec) {
 	ILWIS::Point *p = CPOINT(bmp->newFeature());
 	double x,y,z;
 	funcs.ogrGetPoints(hGeom, 0,&x,&y,&z);
 	p->setCoord(Coord(x,y,x));
-	p->PutVal((long)rec);
+	p->PutVal((long)++rec);
 }
 
 
 
-void SegmentFiller::fillGeometry(OGRGeometryH hGeom, int rec) {
+void SegmentFiller::fillGeometry(OGRGeometryH hGeom, int& rec) {
 	ILWIS::Segment *s = CSEGMENT(bmp->newFeature());
 	int count = funcs.ogrGetNumberOfPoints(hGeom);
 	CoordinateArraySequence *seq = new CoordinateArraySequence(count);
@@ -1829,7 +1860,7 @@ void SegmentFiller::fillGeometry(OGRGeometryH hGeom, int rec) {
 		seq->setAt(c, i);
 	}
 	s->PutCoords(seq);
-	s->PutVal((long)rec);
+	s->PutVal((long)++rec);
 }
 
 void PolygonFiller::fillFeature(OGRGeometryH hGeometry, int& rec) {
