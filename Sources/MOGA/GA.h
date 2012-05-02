@@ -11,7 +11,7 @@ class LandAllocation;
 class GA
 {
 public:
-	enum Selection { Mix, Random, Tournment };
+	enum Selection { Mix, Random, Tournment, Probability };
 
 	GA(LandAllocation * _context);
 	virtual ~GA();
@@ -35,6 +35,7 @@ private:
 	int RandomSelection();
 	int RouletteSelection();
 	int TournamentSelection();
+	int ProbabilitySelection();
 	void SetSelectionType(Selection value);
 	Selection GetSelectionType();
 	double GetMutation();

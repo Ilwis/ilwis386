@@ -135,6 +135,9 @@ void GA::CreateNextGeneration()
 				iDadParent = RandomSelection();
 				iMumParent = RandomSelection();
 				break;
+			case Probability:
+				iDadParent = ProbabilitySelection();
+				iMumParent = ProbabilitySelection();
 		}
 							
 		GAChromosome Dad = m_thisGeneration[iDadParent];
@@ -239,6 +242,27 @@ int GA::TournamentSelection()
 		}
 	}
 	return finalindex;	
+}
+
+int GA::ProbabilitySelection()
+{
+	double rFitnessMin = m_thisGeneration[0].rGetFitness();
+	for (int i = 1; i < m_usPopSize; ++i)
+		rFitnessMin = min(rFitnessMin, m_thisGeneration[i].rGetFitness());
+	double rSumDeltaFitness = 0;
+	for (int i = 0; i < m_usPopSize; ++i)
+		rSumDeltaFitness += m_thisGeneration[i].rGetFitness() - rFitnessMin;
+	std::vector<double> cumulativeProbabilities;
+	cumulativeProbabilities.push_back((m_thisGeneration[0].rGetFitness() - rFitnessMin) / rSumDeltaFitness);
+	for (int i = 1; i < m_usPopSize; ++i) {
+		double rProbability = (m_thisGeneration[i].rGetFitness() - rFitnessMin) / rSumDeltaFitness;
+		cumulativeProbabilities.push_back(cumulativeProbabilities[i - 1] + rProbability);
+	}
+	double rndValue = random() * cumulativeProbabilities[m_usPopSize - 1];
+	int i = 0;
+	while ((cumulativeProbabilities[i] < rndValue) && (i < m_usPopSize - 1))
+		++i;
+	return i;
 }
 
 bool GA::IsDone()
