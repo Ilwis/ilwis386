@@ -22,8 +22,9 @@ public:
   static LandAllocation* create(const FileName&, PointMapPtr&, const String& sExpression);
   void Init();
   void Fitness(GAChromosome & chromosome, LandAllocation * context, ScoreFunc scoreFunc);
-  double rStdDistanceFunc(int demandIndex, int facilityIndex);
-  double rStdDistancePreferenceFunc(int demandIndex, int facilityIndex);
+  double rStdDistanceFunc(int demandIndex, int facilityIndex, double w1, double w2);
+  double rStdPreferenceFunc(int demandIndex, int facilityIndex, double w1, double w2);
+  double rStdDistancePreferenceFunc(int demandIndex, int facilityIndex, double w1, double w2);
   void ChromosomeMutator(GAChromosome & chromosome);
   void Initializer(GAChromosome & chromosome);
   void CrossOver(GAChromosome & Dad, GAChromosome & Mum, GAChromosome & child1, GAChromosome & child2);

@@ -416,22 +416,25 @@ bool LandAllocation::fFreezing()
   return true;
 }
 
-double LandAllocation::rStdDistanceFunc(int demandIndex, int facilityIndex)
+double LandAllocation::rStdDistanceFunc(int demandIndex, int facilityIndex, double w1, double w2)
 {
 	double distanceFacilityDemand = rDistanceOD[demandIndex][facilityIndex];
 	//double rScore = 1 - distanceFacilityDemand / rMaxDistance + rMinDistance / rMaxDistance; // MAXIMUM
-	//double rScore = 1 / distanceFacilityDemand; // ORIGINAL FORMULA
+	//double rScore = 1 / distanceFacilityDemand; // ORIGINAL FORMULA (not standardized to [0..1])
 	double rScore = 1 - (distanceFacilityDemand - rMinDistance) / (rMaxDistance - rMinDistance); // INTERVAL
 	return rScore;
 }
 
-double LandAllocation::rStdDistancePreferenceFunc(int demandIndex, int facilityIndex)
+double LandAllocation::rStdPreferenceFunc(int demandIndex, int facilityIndex, double w1, double w2)
+{
+	return rPreferenceMatrix[demandIndex][facilityIndex];
+}
+
+double LandAllocation::rStdDistancePreferenceFunc(int demandIndex, int facilityIndex, double w1, double w2)
 {
 	double distanceFacilityDemand = rDistanceOD[demandIndex][facilityIndex];
 	double rScoreDistance = 1 - (distanceFacilityDemand - rMinDistance) / (rMaxDistance - rMinDistance); // INTERVAL
 	double rScorePreference = rPreferenceMatrix[demandIndex][facilityIndex];
-	double w1 = 0.5;
-	double w2 = 1 - w1;
 	return w1 * rScoreDistance + w2 * rScorePreference;
 }
 
@@ -457,7 +460,7 @@ void LandAllocation::Fitness(GAChromosome & chromosome, LandAllocation * context
 			{
 				int facilityIndex = chromosome[chromosomeIndex];
 
-				double rScore = (context->*scoreFunc)(demandIndex, facilityIndex);
+				double rScore = (context->*scoreFunc)(demandIndex, facilityIndex, chromosome.w1(), chromosome.w2());
 
 				if ((!fCapacitated) || (Allocation[facilityIndex] < ((rCapacity != 0) ? rCapacity[facilityIndex] : 1.0))) // If a capacity attribute is indicated, respect the maximum capacity of the facility
 				{
@@ -512,7 +515,7 @@ long LandAllocation::AddConnections(SegmentMap & segMap, Domain & dm, vector<int
 			{
 				int facilityIndex = chromosome[chromosomeIndex];
 
-				double rScore = (context->*scoreFunc)(demandIndex, facilityIndex);
+				double rScore = (context->*scoreFunc)(demandIndex, facilityIndex, chromosome.w1(), chromosome.w2());
 
 				if ((!fCapacitated) || (Allocation[facilityIndex] < ((rCapacity != 0) ? rCapacity[facilityIndex] : 1.0))) // If a capacity attribute is indicated, respect the maximum capacity of the facility
 				{
