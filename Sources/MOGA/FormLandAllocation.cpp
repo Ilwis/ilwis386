@@ -18,25 +18,6 @@ FormLandAllocation::FormLandAllocation(CWnd* mw, const char* sPar)
 	iPopulationSize = 10;
 	rMutationPercent = 20;
 	rCrossoverPercent = 98;
-	/*
-	if (sPar) {
-		TextInput inp(sPar);
-		TokenizerBase tokenizer(&inp);
-		String sVal;
-		for (;;) {
-			Token tok = tokenizer.tokGet();
-			sVal = tok.sVal();
-			if (sVal == "")
-				break;
-			FileName fn(sVal);
-			if (fn.sExt == "" || fn.sExt == ".mpp")
-				if (sPointMap == "")
-					sPointMap = fn.sFullNameQuoted(false);
-				else  
-					sOutMap = fn.sFullName(false);
-		}
-	}
-	*/
 
 	RadioGroup * rgMethod = new RadioGroup(root, TR("Method:"), &iMethod);
 	RadioButton* rbSingle = new RadioButton(rgMethod, TR("&Single Objective"));
