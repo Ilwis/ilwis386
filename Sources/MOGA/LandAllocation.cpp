@@ -197,7 +197,7 @@ bool LandAllocation::fFreezing()
 	if (iPopulationSize < 1)
 		throw ErrorObject(TR("Bad population size"));
 
-	GA GAAlgorithm(this);
+	GA GAAlgorithm(this, (FitnessFunc)&LandAllocation::Fitness);
 	GAAlgorithm.SetStoppingCriteria(iStoppingCriteria);
 	GAAlgorithm.SetGenerations(iGenerations);
 	GAAlgorithm.SetPopulationSize(iPopulationSize);
