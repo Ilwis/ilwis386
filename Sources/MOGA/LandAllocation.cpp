@@ -215,7 +215,9 @@ bool LandAllocation::fFreezing()
 	if (iPopulationSize < 1)
 		throw ErrorObject(TR("Bad population size"));
 
-	GA GAAlgorithm(this, (FitnessFunc)&LandAllocation::Fitness);
+	ScoreFunc scoreFunc = (ScoreFunc)&LandAllocation::rStdDistanceFunc;
+
+	GA GAAlgorithm(this, (FitnessFunc)&LandAllocation::Fitness, scoreFunc);
 	GAAlgorithm.SetStoppingCriteria(iStoppingCriteria);
 	GAAlgorithm.SetGenerations(iGenerations);
 	GAAlgorithm.SetPopulationSize(iPopulationSize);
@@ -320,7 +322,7 @@ bool LandAllocation::fFreezing()
 		vector<int> source;
 		vector<int> destination;
 		vector<double> allocations;
-		unsigned long iNrSegments = AddConnections(segMap, dmConnections, source, destination, allocations, *chromosome);
+		unsigned long iNrSegments = AddConnections(segMap, dmConnections, source, destination, allocations, *chromosome, this, scoreFunc);
 		LongBuf lbSource (iNrSegments);
 		LongBuf lbDestination (iNrSegments);
 		RealBuf rbAllocations (iNrSegments);
@@ -347,9 +349,17 @@ bool LandAllocation::fFreezing()
 
   _iPoints = pms->iPnt();
   return true;
-}  
+}
 
-void LandAllocation::Fitness(GAChromosome & chromosome)
+double LandAllocation::rStdDistanceFunc(int demandIndex, int facilityIndex)
+{
+	double distanceFacilityDemand = rDistanceOD[demandIndex][facilityIndex];
+	double rScore = 1 - distanceFacilityDemand / rMaxDistance + rMinDistance / rMaxDistance;
+	return rScore;
+}
+
+
+void LandAllocation::Fitness(GAChromosome & chromosome, LandAllocation * context, ScoreFunc scoreFunc)
 {
     if (chromosome.size() == 0)
         return;
@@ -358,6 +368,7 @@ void LandAllocation::Fitness(GAChromosome & chromosome)
 	for (int i = 0; i < iNrFacilities; ++i)
 		Allocation[i] = 0;
     double totalScore = 0;
+	double totalAllocation = 0;
 	int iNrDemandPoints = pmDemands->iFeatures();
     for (int demandIndex = 0; demandIndex < iNrDemandPoints; demandIndex++)
     {
@@ -369,8 +380,8 @@ void LandAllocation::Fitness(GAChromosome & chromosome)
 			for (int chromosomeIndex = 0; chromosomeIndex < iOptimalFacilities; chromosomeIndex++)
 			{
 				int facilityIndex = chromosome[chromosomeIndex];
-				double distanceFacilityDemand = rDistanceOD[demandIndex][facilityIndex];
-				double rScore = 1 / distanceFacilityDemand;
+
+				double rScore = (context->*scoreFunc)(demandIndex, facilityIndex);
 
 				if ((!fCapacitated) || (Allocation[facilityIndex] < ((rCapacity != 0) ? rCapacity[facilityIndex] : 1.0))) // If a capacity attribute is indicated, respect the maximum capacity of the facility
 				{
@@ -386,6 +397,7 @@ void LandAllocation::Fitness(GAChromosome & chromosome)
 				double allocated = fCapacitated ? min(((rCapacity != 0) ? rCapacity[selectedFacilityIndex] : 1.0) - Allocation[selectedFacilityIndex], rDemandCount) : rDemandCount;
 				Allocation[selectedFacilityIndex] += allocated;
 				totalScore += rBestScore * allocated;
+				totalAllocation += allocated;
 				rDemandCount -= allocated; // The leftover demands will have to be served by another facility
 			}
 			else
@@ -397,12 +409,12 @@ void LandAllocation::Fitness(GAChromosome & chromosome)
 		}
     }
 
-	chromosome.SetFitness(totalScore / iNrDemandPoints);
+	chromosome.SetFitness(totalScore / totalAllocation);
 
 	delete [] Allocation;
 }
 
-long LandAllocation::AddConnections(SegmentMap & segMap, Domain & dm, vector<int> & source, vector<int> & destination, vector<double> & allocations, GAChromosome & chromosome)
+long LandAllocation::AddConnections(SegmentMap & segMap, Domain & dm, vector<int> & source, vector<int> & destination, vector<double> & allocations, GAChromosome & chromosome, LandAllocation * context, ScoreFunc scoreFunc)
 {
     if (chromosome.size() == 0)
         return 0;
@@ -423,8 +435,8 @@ long LandAllocation::AddConnections(SegmentMap & segMap, Domain & dm, vector<int
 			for (int chromosomeIndex = 0; chromosomeIndex < iOptimalFacilities; chromosomeIndex++)
 			{
 				int facilityIndex = chromosome[chromosomeIndex];
-				double distanceFacilityDemand = rDistanceOD[demandIndex][facilityIndex];
-				double rScore = 1 / distanceFacilityDemand;
+
+				double rScore = (context->*scoreFunc)(demandIndex, facilityIndex);
 
 				if ((!fCapacitated) || (Allocation[facilityIndex] < ((rCapacity != 0) ? rCapacity[facilityIndex] : 1.0))) // If a capacity attribute is indicated, respect the maximum capacity of the facility
 				{

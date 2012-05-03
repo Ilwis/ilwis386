@@ -8,12 +8,12 @@ GAChromosome::GAChromosome()
 {
 }
 
-GAChromosome::GAChromosome(LandAllocation * context, FitnessFunc fitnessFunc, bool fInitialize)
+GAChromosome::GAChromosome(LandAllocation * context, FitnessFunc fitnessFunc, ScoreFunc scoreFunc, bool fInitialize)
 : m_dFitness(0)
 {
 	if (fInitialize)
 		context->Initializer(*this); //will set the genes of each chromosome
-	(context->*fitnessFunc)(*this);
+	(context->*fitnessFunc)(*this, context, scoreFunc);
 }
 
 GAChromosome::~GAChromosome()

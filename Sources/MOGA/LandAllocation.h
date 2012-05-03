@@ -21,14 +21,15 @@ public:
   virtual bool fDomainChangeable() const;
   static LandAllocation* create(const FileName&, PointMapPtr&, const String& sExpression);
   void Init();
-  void Fitness(GAChromosome & chromosome);
+  void Fitness(GAChromosome & chromosome, LandAllocation * context, ScoreFunc scoreFunc);
+  double rStdDistanceFunc(int demandIndex, int facilityIndex);
   void ChromosomeMutator(GAChromosome & chromosome);
   void Initializer(GAChromosome & chromosome);
   void CrossOver(GAChromosome & Dad, GAChromosome & Mum, GAChromosome & child1, GAChromosome & child2);
   void GreedyCrossOver(GAChromosome & Dad, GAChromosome & Mum, GAChromosome & child);
 
 private:
-  long AddConnections(SegmentMap & segMap, Domain & dm, vector<int> & source, vector<int> & destination, vector<double> & allocations, GAChromosome & chromosome);
+  long AddConnections(SegmentMap & segMap, Domain & dm, vector<int> & source, vector<int> & destination, vector<double> & allocations, GAChromosome & chromosome, LandAllocation * context, ScoreFunc scoreFunc);
   static FileName fnGetSourceFile(const PointMap & pm, const FileName & fnObj);
   PointMap pmFacilities;
   PointMap pmFacilitiesNoAttribute; // The original pointmap, before applying MapAttribute

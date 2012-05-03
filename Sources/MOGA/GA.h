@@ -13,7 +13,7 @@ class GA
 public:
 	enum Selection { Mix, Random, Tournment, Probability };
 
-	GA(LandAllocation * _context, FitnessFunc _fitnessFunc);
+	GA(LandAllocation * _context, FitnessFunc _fitnessFunc, ScoreFunc _scoreFunc);
 	virtual ~GA();
 	void Initialize();
 	bool IsDone();
@@ -69,6 +69,7 @@ private:
 
 	LandAllocation * context;
 	FitnessFunc fitnessFunc;
+	ScoreFunc scoreFunc;
 };
 
 #endif // GA_H

@@ -4,9 +4,10 @@
 #include "Engine\Base\Algorithm\Random.h"
 #include <algorithm> // std::sort
 		
-GA::GA(LandAllocation * _context, FitnessFunc _fitnessFunc)
+GA::GA(LandAllocation * _context, FitnessFunc _fitnessFunc, ScoreFunc _scoreFunc)
 : context(_context)
 , fitnessFunc(_fitnessFunc)
+, scoreFunc(_scoreFunc)
 , m_dMutation(0)
 , m_lGenerations(0)
 , m_dCrossOver(0)
@@ -50,7 +51,7 @@ void GA::Initialize()
 	{
 		for (int i = 0; i < m_usPopSize; ++i)
 		{
-			GAChromosome newParent (context, fitnessFunc, true);
+			GAChromosome newParent (context, fitnessFunc, scoreFunc, true);
 			m_thisGeneration.push_back(newParent);
 		}
 
@@ -144,8 +145,8 @@ void GA::CreateNextGeneration()
 		GAChromosome Dad = m_thisGeneration[iDadParent];
 		GAChromosome Mum = m_thisGeneration[iMumParent];
 
-		GAChromosome child1 (context, fitnessFunc, false);
-		GAChromosome child2 (context, fitnessFunc, false);
+		GAChromosome child1 (context, fitnessFunc, scoreFunc, false);
+		GAChromosome child2 (context, fitnessFunc, scoreFunc, false);
 			
 		//Step 2  Cross Over		
 		if (random() < m_dCrossOver)
@@ -164,8 +165,8 @@ void GA::CreateNextGeneration()
 		}
 		
 		//Calculate the new fitness
-		(context->*fitnessFunc)(child1);
-		(context->*fitnessFunc)(child2);
+		(context->*fitnessFunc)(child1, context, scoreFunc);
+		(context->*fitnessFunc)(child2, context, scoreFunc);
 
 		m_NextGeneration.push_back(child1);
 		m_NextGeneration.push_back(child2);
