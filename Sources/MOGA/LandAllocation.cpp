@@ -282,6 +282,7 @@ bool LandAllocation::fFreezing()
 	ScoreFunc scoreFunc = fMultiObjective ? (ScoreFunc)&LandAllocation::rStdDistancePreferenceFunc : (ScoreFunc)&LandAllocation::rStdDistanceFunc;
 
 	GA GAAlgorithm(this, (FitnessFunc)&LandAllocation::Fitness, scoreFunc);
+	GAAlgorithm.SetSelectionType(fMultiObjective ? GA::Probability : GA::Tournament);
 	GAAlgorithm.SetStoppingCriteria(iStoppingCriteria);
 	GAAlgorithm.SetGenerations(iGenerations);
 	GAAlgorithm.SetPopulationSize(iPopulationSize);

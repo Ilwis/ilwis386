@@ -15,7 +15,7 @@ GA::GA(LandAllocation * _context, FitnessFunc _fitnessFunc, ScoreFunc _scoreFunc
 , m_dTotalFitness(0)
 , m_bApplyElitism(true)
 , m_usGen(0)	 
-, m_SelType(Tournment)
+, m_SelType(Tournament)
 , StoppingCriteria(0)
 , TopFitness(0)
 , temp_best(0)
@@ -129,7 +129,7 @@ void GA::CreateNextGeneration()
 				iDadParent = TournamentSelection();
 				iMumParent = RandomSelection();
 				break;
-			case Tournment: 
+			case Tournament: 
 				iDadParent = TournamentSelection();
 				iMumParent = TournamentSelection();
 				break;

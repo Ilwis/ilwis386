@@ -11,7 +11,7 @@ class LandAllocation;
 class GA
 {
 public:
-	enum Selection { Mix, Random, Tournment, Probability };
+	enum Selection { Mix, Random, Tournament, Probability };
 
 	GA(LandAllocation * _context, FitnessFunc _fitnessFunc, ScoreFunc _scoreFunc);
 	virtual ~GA();
@@ -20,6 +20,7 @@ public:
 	void CreateNextGeneration();
 	long GetGenerations();
 	GAChromosome * GetBestChromosome();
+	void SetSelectionType(Selection value);
 	void SetGenerations(long value);
 	void SetPopulationSize(unsigned int value);
 	void SetMutation(double value);
@@ -36,7 +37,6 @@ private:
 	int RouletteSelection();
 	int TournamentSelection();
 	int ProbabilitySelection();
-	void SetSelectionType(Selection value);
 	Selection GetSelectionType();
 	double GetMutation();
 	double GetCrossover();
