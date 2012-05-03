@@ -223,7 +223,8 @@ void PointDrawer::drawRectangle(const SVGAttributes* attributes, double z) const
 		glEnd();
 	}
 	glLineWidth(properties.thickness!= 0 ? properties.thickness : attributes->strokewidth);
-	glColor4d(attributes->strokeColor.redP(), attributes->strokeColor.greenP(), attributes->strokeColor.blueP(), transp);
+	Color scolor = attributes->strokeColor.fEqual(colorUSERDEF) ? properties.drawColor :  attributes->strokeColor;
+	glColor4d(scolor.redP(), scolor.greenP(), scolor.blueP(), transp);
 	glBegin(GL_LINE_STRIP);						
 		glVertex3f( center.x - hw, center.y - hw, z);	
 		glVertex3f( center.x - hw,  center.y + hw,z);	
