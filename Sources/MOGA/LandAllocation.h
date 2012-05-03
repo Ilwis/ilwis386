@@ -39,6 +39,8 @@ private:
   double * rDemand;
   double * rCapacity;
   vector<vector<double>> rDistanceOD;
+  double rMinDistance;
+  double rMaxDistance;
   // Algorithm parameters
   int iOptimalFacilities;
   bool fCapacitated;

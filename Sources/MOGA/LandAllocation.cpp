@@ -40,6 +40,8 @@ LandAllocation::LandAllocation(const FileName& fn, PointMapPtr& p)
 , cDemands(0)
 , rDemand(0)
 , rCapacity(0)
+, rMinDistance(rUNDEF)
+, rMaxDistance(rUNDEF)
 {
   fNeedFreeze = true;
   String sColName;
@@ -81,6 +83,8 @@ LandAllocation::LandAllocation(const FileName& fn, PointMapPtr& p, const PointMa
 , cDemands(0)
 , rDemand(0)
 , rCapacity(0)
+, rMinDistance(rUNDEF)
+, rMaxDistance(rUNDEF)
 {
   fNeedFreeze = true;
   Init();
@@ -172,8 +176,17 @@ void LandAllocation::Init()
   rDistanceOD.resize(iNrDemandPoints);
   for (int demandIndex = 0; demandIndex < iNrDemandPoints; ++demandIndex) {
 	  rDistanceOD[demandIndex].resize(iNrFacilities);
-	  for (int facilityIndex = 0; facilityIndex < iNrFacilities; ++facilityIndex)
-		  rDistanceOD[demandIndex][facilityIndex] = rDist(cFacilities[facilityIndex], cDemands[demandIndex]);
+	  for (int facilityIndex = 0; facilityIndex < iNrFacilities; ++facilityIndex) {
+		  double rDistance = rDist(cFacilities[facilityIndex], cDemands[demandIndex]);
+		  rDistanceOD[demandIndex][facilityIndex] = rDistance;
+		  if (rMinDistance == rUNDEF) {
+			  rMinDistance = rDistance;
+			  rMaxDistance = rDistance;
+		  } else {
+			  rMinDistance = min(rMinDistance, rDistance);
+			  rMaxDistance = max(rMaxDistance, rDistance);
+		  }
+	  }
   }
 
   if (pmDemands->dvrs().fValues())
