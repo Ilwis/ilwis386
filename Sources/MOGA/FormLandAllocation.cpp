@@ -19,9 +19,9 @@ FormLandAllocation::FormLandAllocation(CWnd* mw, const char* sPar)
 	rMutationPercent = 20;
 	rCrossoverPercent = 98;
 
-	RadioGroup * rgMethod = new RadioGroup(root, TR("Method:"), &iMethod);
-	RadioButton* rbSingle = new RadioButton(rgMethod, TR("&Single Objective"));
-	RadioButton* rbMulti = new RadioButton(rgMethod, TR("&Multi Objective"));
+	RadioGroup * rgMethod = new RadioGroup(root, TR("Objectives:"), &iMethod);
+	RadioButton* rbSingle = new RadioButton(rgMethod, TR("&Distance"));
+	RadioButton* rbMulti = new RadioButton(rgMethod, TR("&Distance + Preference"));
 
 	plpm = new FieldPointMap(root, TR("&Potential Locations Point Map"), &sPointMapFacilities, new MapListerDomainType(".mpp", 0, true));
 	plpm->SetCallBack((NotifyProc)&FormLandAllocation::FacilitiesCallBack);
