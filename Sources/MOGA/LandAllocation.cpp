@@ -13,25 +13,47 @@ IlwisObjectPtr * createLandAllocation(const FileName& fn, IlwisObjectPtr& ptr, c
 }
 
 const char* LandAllocation::sSyntax() {
-  return "PointMapLandAllocation(PotentialLocationPoints,DemandPoints,OptimalFacilities,capacitated|plain,StoppingCriteria,Generations,PopulationSize,MutationPercent,CrossoverPercent)";
+  return "PointMapLandAllocation(PotentialLocationPoints[,PotentialLocationTypes],DemandPoints[,DemandPreference],OptimalFacilities,capacitated|plain,StoppingCriteria,Generations,PopulationSize,MutationPercent,CrossoverPercent)";
 }
 
 LandAllocation* LandAllocation::create(const FileName& fn, PointMapPtr& p, const String& sExpr)
 {
-  Array<String> as(9);
-  if (!IlwisObjectPtr::fParseParm(sExpr, as) || ((as[3].compare("plain") != 0) && (as[3].compare("capacitated") != 0)))
-    throw ErrorExpression(sExpr, sSyntax());
-  PointMap pmFacilities(as[0], fn.sPath());
-  PointMap pmDemands(as[1], fn.sPath());
-  int iOptimalFacilities(atoi(as[2].c_str()));
-  bool fCapacitated (as[3].compare("capacitated") == 0);
-  int iStoppingCriteria(atoi(as[4].c_str()));
-  long iGenerations(atoi(as[5].c_str()));
-  int iPopulationSize(atoi(as[6].c_str()));
-  double rMutationPercent(atof(as[7].c_str()));
-  double rCrossoverPercent(atof(as[8].c_str()));
-  PointMap pmFacilitiesNoAttribute(fnGetSourceFile(pmFacilities, fn));
-  return new LandAllocation(fn, p, pmFacilities, pmFacilitiesNoAttribute, pmDemands, iOptimalFacilities, fCapacitated, iStoppingCriteria, iGenerations, iPopulationSize, rMutationPercent, rCrossoverPercent);
+  Array<String> as;
+  short iParms = IlwisObjectPtr::iParseParm(sExpr, as);
+  if (iParms != 9 && iParms != 11)
+	throw ErrorExpression(sExpr, sSyntax());
+  bool fMultiObjective = (iParms == 11);
+  if (fMultiObjective) {
+	  if ((as[5].compare("plain") != 0) && (as[5].compare("capacitated") != 0))
+		throw ErrorExpression(sExpr, sSyntax());
+	  PointMap pmFacilities(as[0], fn.sPath());
+	  String sColFacilitiesType(as[1]);
+	  PointMap pmDemands(as[2], fn.sPath());
+	  String sColDemandsPreference(as[3]);
+	  int iOptimalFacilities(atoi(as[4].c_str()));
+	  bool fCapacitated (as[5].compare("capacitated") == 0);
+	  int iStoppingCriteria(atoi(as[6].c_str()));
+	  long iGenerations(atoi(as[7].c_str()));
+	  int iPopulationSize(atoi(as[8].c_str()));
+	  double rMutationPercent(atof(as[9].c_str()));
+	  double rCrossoverPercent(atof(as[10].c_str()));
+	  PointMap pmFacilitiesNoAttribute(fnGetSourceFile(pmFacilities, fn));
+	  return new LandAllocation(fn, p, pmFacilities, pmFacilitiesNoAttribute, sColFacilitiesType, pmDemands, sColDemandsPreference, iOptimalFacilities, fCapacitated, iStoppingCriteria, iGenerations, iPopulationSize, rMutationPercent, rCrossoverPercent);
+  } else {
+	  if ((as[3].compare("plain") != 0) && (as[3].compare("capacitated") != 0))
+		throw ErrorExpression(sExpr, sSyntax());
+	  PointMap pmFacilities(as[0], fn.sPath());
+	  PointMap pmDemands(as[1], fn.sPath());
+	  int iOptimalFacilities(atoi(as[2].c_str()));
+	  bool fCapacitated (as[3].compare("capacitated") == 0);
+	  int iStoppingCriteria(atoi(as[4].c_str()));
+	  long iGenerations(atoi(as[5].c_str()));
+	  int iPopulationSize(atoi(as[6].c_str()));
+	  double rMutationPercent(atof(as[7].c_str()));
+	  double rCrossoverPercent(atof(as[8].c_str()));
+	  PointMap pmFacilitiesNoAttribute(fnGetSourceFile(pmFacilities, fn));
+	  return new LandAllocation(fn, p, pmFacilities, pmFacilitiesNoAttribute, "", pmDemands, "", iOptimalFacilities, fCapacitated, iStoppingCriteria, iGenerations, iPopulationSize, rMutationPercent, rCrossoverPercent);
+  }
 }
 
 LandAllocation::LandAllocation(const FileName& fn, PointMapPtr& p)
@@ -47,7 +69,9 @@ LandAllocation::LandAllocation(const FileName& fn, PointMapPtr& p)
   String sColName;
   try {
     ReadElement("LandAllocation", "PointMapFacilities", pmFacilities);
+    ReadElement("LandAllocation", "FacilitiesType", sColFacilitiesType);
 	ReadElement("LandAllocation", "PointMapDemands", pmDemands);
+	ReadElement("LandAllocation", "DemandsPreference", sColDemandsPreference);
 	ReadElement("LandAllocation", "OptimalFacilities", iOptimalFacilities);
 	ReadElement("LandAllocation", "Capacitated", fCapacitated);
 	ReadElement("LandAllocation", "StoppingCriteria", iStoppingCriteria);
@@ -61,17 +85,20 @@ LandAllocation::LandAllocation(const FileName& fn, PointMapPtr& p)
     err.Show();
     return;
   }
+  fMultiObjective = (sColFacilitiesType.length() > 0) && (sColDemandsPreference.length() > 0);
   Init();
   objdep.Add(pmFacilities.ptr());
   objdep.Add(pmDemands.ptr());
 }
 
-LandAllocation::LandAllocation(const FileName& fn, PointMapPtr& p, const PointMap& _pmFacilities, const PointMap& _pmFacilitiesNoAttribute, const PointMap& _pmDemands,
+LandAllocation::LandAllocation(const FileName& fn, PointMapPtr& p, const PointMap& _pmFacilities, const PointMap& _pmFacilitiesNoAttribute, const String& _sColFacilitiesType, const PointMap& _pmDemands, const String& _sColDemandsPreference,
 							   int _iOptimalFacilities, bool _fCapacitated, int _iStoppingCriteria, long _iGenerations, int _iPopulationSize, double _rMutationPercent, double _rCrossoverPercent)
 : PointMapVirtual(fn, p, _pmFacilitiesNoAttribute->cs(),_pmFacilitiesNoAttribute->cb(),_pmFacilitiesNoAttribute->dvrs())
 , pmFacilities(_pmFacilities)
 , pmFacilitiesNoAttribute(_pmFacilitiesNoAttribute)
+, sColFacilitiesType(_sColFacilitiesType)
 , pmDemands(_pmDemands)
+, sColDemandsPreference(_sColDemandsPreference)
 , iOptimalFacilities(_iOptimalFacilities)
 , fCapacitated(_fCapacitated)
 , iStoppingCriteria(_iStoppingCriteria)
@@ -87,6 +114,7 @@ LandAllocation::LandAllocation(const FileName& fn, PointMapPtr& p, const PointMa
 , rMaxDistance(rUNDEF)
 {
   fNeedFreeze = true;
+  fMultiObjective = (sColFacilitiesType.length() > 0) && (sColDemandsPreference.length() > 0);
   Init();
   objdep.Add(pmFacilities.ptr());
   objdep.Add(pmDemands.ptr());
@@ -101,7 +129,9 @@ void LandAllocation::Store()
   PointMapVirtual::Store();
   WriteElement("PointMapVirtual", "Type", "PointMapLandAllocation");
   WriteElement("LandAllocation", "PointMapFacilities", pmFacilities);
+  WriteElement("LandAllocation", "FacilitiesType", fMultiObjective ? sColFacilitiesType : "");
   WriteElement("LandAllocation", "PointMapDemands", pmDemands);
+  WriteElement("LandAllocation", "DemandsPreference", fMultiObjective ? sColDemandsPreference : "");
   WriteElement("LandAllocation", "OptimalFacilities", iOptimalFacilities);
   WriteElement("LandAllocation", "Capacitated", fCapacitated);
   WriteElement("LandAllocation", "StoppingCriteria", iStoppingCriteria);
@@ -125,7 +155,10 @@ LandAllocation::~LandAllocation()
 
 String LandAllocation::sExpression() const
 {
-	return String("PointMapLandAllocation(%S,%S,%d,%s,%d,%d,%d,%f,%f)", pmFacilities->sNameQuoted(false, fnObj.sPath()), pmDemands->sNameQuoted(false, fnObj.sPath()), iOptimalFacilities, fCapacitated ? "capacitated" : "plain", iStoppingCriteria, iGenerations, iPopulationSize, rMutationPercent, rCrossoverPercent);
+	if (fMultiObjective)
+		return String("PointMapLandAllocation(%S,%S,%S,%S,%d,%s,%d,%d,%d,%f,%f)", pmFacilities->sNameQuoted(false, fnObj.sPath()), sColFacilitiesType, pmDemands->sNameQuoted(false, fnObj.sPath()), sColDemandsPreference, iOptimalFacilities, fCapacitated ? "capacitated" : "plain", iStoppingCriteria, iGenerations, iPopulationSize, rMutationPercent, rCrossoverPercent);
+	else
+		return String("PointMapLandAllocation(%S,%S,%d,%s,%d,%d,%d,%f,%f)", pmFacilities->sNameQuoted(false, fnObj.sPath()), pmDemands->sNameQuoted(false, fnObj.sPath()), iOptimalFacilities, fCapacitated ? "capacitated" : "plain", iStoppingCriteria, iGenerations, iPopulationSize, rMutationPercent, rCrossoverPercent);
 }
 
 bool LandAllocation::fDomainChangeable() const
@@ -189,6 +222,37 @@ void LandAllocation::Init()
 	  }
   }
 
+  if (fMultiObjective) {
+	  FileName fnDemandsPreference (fnGetSourceFile(pmDemands, fnObj));
+	  FileName fnFacilitiesType (fnGetSourceFile(pmFacilities, fnObj));
+	  PointMap pmDemandsPreference (fnDemandsPreference);
+	  PointMap pmFacilitiesType (fnFacilitiesType);
+
+	  vector<String> sDemandsPreference;
+	  sDemandsPreference.resize(iNrDemandPoints);
+	  if (pmDemandsPreference.fValid() && pmDemandsPreference->fTblAtt()) {
+		  Table tbl = pmDemandsPreference->tblAtt();
+		  Column col = tbl->col(sColDemandsPreference);
+		  for (int i = 0; i < iNrDemandPoints; ++i)
+			  sDemandsPreference[i] = col->sValue(pmDemandsPreference->iRaw(i), 0);
+	  }
+	  vector <String> sFacilitiesType;
+	  sFacilitiesType.resize(iNrFacilities);
+	  if (pmFacilitiesType.fValid() && pmFacilitiesType->fTblAtt()) {
+		  Table tbl = pmFacilitiesType->tblAtt();
+		  Column col = tbl->col(sColFacilitiesType);
+		  for (int i = 0; i < iNrFacilities; ++i)
+			  sFacilitiesType[i] = col->sValue(pmFacilitiesType->iRaw(i), 0);
+	  }
+
+	  rPreferenceMatrix.resize(iNrDemandPoints);
+	  for (int demandIndex = 0; demandIndex < iNrDemandPoints; ++demandIndex) {
+		  rPreferenceMatrix[demandIndex].resize(iNrFacilities);
+		  for (int facilityIndex = 0; facilityIndex < iNrFacilities; ++facilityIndex)
+			  rPreferenceMatrix[demandIndex][facilityIndex] = (sDemandsPreference[demandIndex] == sFacilitiesType[facilityIndex]) ? 1.0 : 0.0;
+	  }
+  }
+
   if (pmDemands->dvrs().fValues())
   {
 	  rDemand = new double [iNrDemandPoints];
@@ -215,7 +279,7 @@ bool LandAllocation::fFreezing()
 	if (iPopulationSize < 1)
 		throw ErrorObject(TR("Bad population size"));
 
-	ScoreFunc scoreFunc = (ScoreFunc)&LandAllocation::rStdDistanceFunc;
+	ScoreFunc scoreFunc = fMultiObjective ? (ScoreFunc)&LandAllocation::rStdDistancePreferenceFunc : (ScoreFunc)&LandAllocation::rStdDistanceFunc;
 
 	GA GAAlgorithm(this, (FitnessFunc)&LandAllocation::Fitness, scoreFunc);
 	GAAlgorithm.SetStoppingCriteria(iStoppingCriteria);
@@ -354,10 +418,21 @@ bool LandAllocation::fFreezing()
 double LandAllocation::rStdDistanceFunc(int demandIndex, int facilityIndex)
 {
 	double distanceFacilityDemand = rDistanceOD[demandIndex][facilityIndex];
-	double rScore = 1 - distanceFacilityDemand / rMaxDistance + rMinDistance / rMaxDistance;
+	//double rScore = 1 - distanceFacilityDemand / rMaxDistance + rMinDistance / rMaxDistance; // MAXIMUM
+	//double rScore = 1 / distanceFacilityDemand; // ORIGINAL FORMULA
+	double rScore = 1 - (distanceFacilityDemand - rMinDistance) / (rMaxDistance - rMinDistance); // INTERVAL
 	return rScore;
 }
 
+double LandAllocation::rStdDistancePreferenceFunc(int demandIndex, int facilityIndex)
+{
+	double distanceFacilityDemand = rDistanceOD[demandIndex][facilityIndex];
+	double rScoreDistance = 1 - (distanceFacilityDemand - rMinDistance) / (rMaxDistance - rMinDistance); // INTERVAL
+	double rScorePreference = rPreferenceMatrix[demandIndex][facilityIndex];
+	double w1 = 0.5;
+	double w2 = 1 - w1;
+	return w1 * rScoreDistance + w2 * rScorePreference;
+}
 
 void LandAllocation::Fitness(GAChromosome & chromosome, LandAllocation * context, ScoreFunc scoreFunc)
 {

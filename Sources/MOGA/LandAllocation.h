@@ -12,7 +12,7 @@ class DATEXPORT LandAllocation: public PointMapVirtual
   friend class PointMapVirtual;
 public:
   LandAllocation(const FileName&, PointMapPtr&);
-  LandAllocation(const FileName& fn, PointMapPtr&, const PointMap& _pmFacilities, const PointMap& _pmFacilitiesNoAttribute, const PointMap& _pmDemands, int _iOptimalFacilities, bool _fCapacitated, int _iStoppingCriteria, long _iGenerations, int _iPopulationSize, double _rMutationPercent, double _rCrossoverPercent);
+  LandAllocation(const FileName& fn, PointMapPtr&, const PointMap& _pmFacilities, const PointMap& _pmFacilitiesNoAttribute, const String& _sColFacilitiesType, const PointMap& _pmDemands, const String& _sColDemandsPreference, int _iOptimalFacilities, bool _fCapacitated, int _iStoppingCriteria, long _iGenerations, int _iPopulationSize, double _rMutationPercent, double _rCrossoverPercent);
   ~LandAllocation();
   static const char* sSyntax();
   virtual String sExpression() const;
@@ -23,6 +23,7 @@ public:
   void Init();
   void Fitness(GAChromosome & chromosome, LandAllocation * context, ScoreFunc scoreFunc);
   double rStdDistanceFunc(int demandIndex, int facilityIndex);
+  double rStdDistancePreferenceFunc(int demandIndex, int facilityIndex);
   void ChromosomeMutator(GAChromosome & chromosome);
   void Initializer(GAChromosome & chromosome);
   void CrossOver(GAChromosome & Dad, GAChromosome & Mum, GAChromosome & child1, GAChromosome & child2);
@@ -34,12 +35,15 @@ private:
   PointMap pmFacilities;
   PointMap pmFacilitiesNoAttribute; // The original pointmap, before applying MapAttribute
   PointMap pmDemands;
+  String sColFacilitiesType;
+  String sColDemandsPreference;
   // Buffers
   Coord * cFacilities;
   Coord * cDemands;
   double * rDemand;
   double * rCapacity;
   vector<vector<double>> rDistanceOD;
+  vector<vector<double>> rPreferenceMatrix;
   double rMinDistance;
   double rMaxDistance;
   // Algorithm parameters
@@ -51,6 +55,7 @@ private:
   int iPopulationSize;
   double rMutationPercent;
   double rCrossoverPercent;
+  bool fMultiObjective;
 };
 
 

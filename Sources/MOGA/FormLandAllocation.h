@@ -4,6 +4,8 @@
 
 LRESULT CmdLandAllocation(CWnd *wnd, const String& s);
 
+class FieldColumn;
+
 class _export FormLandAllocation: public FormPointMapCreate
 {
 public:
@@ -18,6 +20,8 @@ private:
   FieldString * fsTotalDemands;
   String sTotalDemands;
   FieldInt * fiOptimalFacilities;
+  FieldColumn * fcFacilitiesType;
+  FieldColumn * fcDemandsPreference;
   int exec();
   String sPointMapFacilities;
   String sPointMapDemands;
@@ -28,6 +32,9 @@ private:
   int iPopulationSize;
   double rMutationPercent;
   double rCrossoverPercent;
+  int iMethod;
+  String sColFacilitiesType;
+  String sColDemandsPreference;
 };
 
 #endif // FORMLANDALLOCATION_H

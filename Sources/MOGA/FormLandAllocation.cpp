@@ -1,6 +1,6 @@
 #include "Client\Headers\AppFormsPCH.h"
 #include "FormLandAllocation.h"
-
+#include "Client\FormElements\fldcol.h"
 
 LRESULT CmdLandAllocation(CWnd *wnd, const String& s)
 {
@@ -11,6 +11,7 @@ LRESULT CmdLandAllocation(CWnd *wnd, const String& s)
 FormLandAllocation::FormLandAllocation(CWnd* mw, const char* sPar)
 : FormPointMapCreate(mw, TR("Land Allocation of Point Map"))
 {
+	iMethod = 0;
 	fCapacitated = false;
 	iStoppingCriteria = 0;
 	iGenerations = 60;
@@ -37,13 +38,20 @@ FormLandAllocation::FormLandAllocation(CWnd* mw, const char* sPar)
 	}
 	*/
 
+	RadioGroup * rgMethod = new RadioGroup(root, TR("Method:"), &iMethod);
+	RadioButton* rbSingle = new RadioButton(rgMethod, TR("&Single Objective"));
+	RadioButton* rbMulti = new RadioButton(rgMethod, TR("&Multi Objective"));
 
 	plpm = new FieldPointMap(root, TR("&Potential Locations Point Map"), &sPointMapFacilities, new MapListerDomainType(".mpp", 0, true));
 	plpm->SetCallBack((NotifyProc)&FormLandAllocation::FacilitiesCallBack);
 	fsTotalFacilities = new FieldString(root, TR("Total Capacity"), &sTotalFacilities);
+	fcFacilitiesType = new FieldColumn(rbMulti, TR("Facility Type"), Table(), &sColFacilitiesType);
+	fcFacilitiesType->Align(fsTotalFacilities, AL_UNDER);
 	dpm = new FieldPointMap(root, TR("&Demands Point Map"), &sPointMapDemands, new MapListerDomainType(".mpp", 0, true));
 	dpm->SetCallBack((NotifyProc)&FormLandAllocation::DemandsCallBack);
 	fsTotalDemands = new FieldString(root, TR("Total Demands"), &sTotalDemands);
+	fcDemandsPreference = new FieldColumn(rbMulti, TR("Demands Preference"), Table(), &sColDemandsPreference);
+	fcDemandsPreference->Align(fsTotalDemands, AL_UNDER);
 	fiOptimalFacilities = new FieldInt(root, TR("Nr &Optimal Facilities"), &iOptimalFacilities, ValueRange(1, 32767), true);
 	new CheckBox(root, TR("&Capacitated"), &fCapacitated);
 	new FieldInt(root, TR("&Stack Threshold"), &iStoppingCriteria, ValueRange(0, 32767), true);
@@ -80,9 +88,16 @@ int FormLandAllocation::FacilitiesCallBack(Event*)
 			rNrFacilities = iNrFacilities;
 		sTotalFacilities = String("%d", (int)(rNrFacilities));
 		fsTotalFacilities->SetVal(sTotalFacilities);
+		FileName fnPointMapFacilities(sPointMapFacilities);
+		fnPointMapFacilities.sCol = "";
+		pmFacilities = PointMap(fnPointMapFacilities);
+		if (!pmFacilities->fTblAtt()) {
+			fcFacilitiesType->FillWithColumns((TablePtr*)0);
+		} else {
+			Table tbl = pmFacilities->tblAtt();
+			fcFacilitiesType->FillWithColumns(&tbl);
+		}
 	}
-
-		//EnableOK();
 	return 0; 
 }
 
@@ -103,6 +118,15 @@ int FormLandAllocation::DemandsCallBack(Event*)
 			rNrDemands = iNrDemands;
 		sTotalDemands = String("%d", (int)(rNrDemands));
 		fsTotalDemands->SetVal(sTotalDemands);
+		FileName fnPointMapDemands(sPointMapDemands);
+		fnPointMapDemands.sCol = "";
+		pmDemands = PointMap(fnPointMapDemands);
+		if (!pmDemands->fTblAtt()) {
+			fcDemandsPreference->FillWithColumns((TablePtr*)0);
+		} else {
+			Table tbl = pmDemands->tblAtt();
+			fcDemandsPreference->FillWithColumns(&tbl);
+		}
 	}
 	return 0; 
 }
@@ -116,7 +140,10 @@ int FormLandAllocation::exec()
 	sPointMapFacilities = fnPointMapFacilities.sRelativeQuoted(false,fn.sPath());
 	FileName fnPointMapDemands(sPointMapDemands);
 	sPointMapDemands = fnPointMapDemands.sRelativeQuoted(false,fn.sPath());
-	sExpr = String("PointMapLandAllocation(%S,%S,%d,%s,%d,%d,%d,%f,%f)", sPointMapFacilities, sPointMapDemands, iOptimalFacilities, fCapacitated ? "capacitated" : "plain", iStoppingCriteria, iGenerations, iPopulationSize, rMutationPercent / 100.0, rCrossoverPercent / 100.0);
+	if (iMethod == 0)
+		sExpr = String("PointMapLandAllocation(%S,%S,%d,%s,%d,%d,%d,%f,%f)", sPointMapFacilities, sPointMapDemands, iOptimalFacilities, fCapacitated ? "capacitated" : "plain", iStoppingCriteria, iGenerations, iPopulationSize, rMutationPercent / 100.0, rCrossoverPercent / 100.0);
+	else // iMethod == 1
+		sExpr = String("PointMapLandAllocation(%S,%S,%S,%S,%d,%s,%d,%d,%d,%f,%f)", sPointMapFacilities, sColFacilitiesType, sPointMapDemands, sColDemandsPreference, iOptimalFacilities, fCapacitated ? "capacitated" : "plain", iStoppingCriteria, iGenerations, iPopulationSize, rMutationPercent / 100.0, rCrossoverPercent / 100.0);
 	execPointMapOut(sExpr);  
 	return 0;
 }
