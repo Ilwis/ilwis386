@@ -40,7 +40,6 @@ LandAllocation::LandAllocation(const FileName& fn, PointMapPtr& p)
 , cDemands(0)
 , rDemand(0)
 , rCapacity(0)
-, rDistanceOD(0)
 {
   fNeedFreeze = true;
   String sColName;
@@ -82,7 +81,6 @@ LandAllocation::LandAllocation(const FileName& fn, PointMapPtr& p, const PointMa
 , cDemands(0)
 , rDemand(0)
 , rCapacity(0)
-, rDistanceOD(0)
 {
   fNeedFreeze = true;
   Init();
@@ -170,6 +168,13 @@ void LandAllocation::Init()
   cFacilities = new Coord [iNrFacilities];
   for (int i = 0; i < iNrFacilities; ++i)
 	  cFacilities[i] = pmFacilities->cValue(i);
+  
+  rDistanceOD.resize(iNrDemandPoints);
+  for (int demandIndex = 0; demandIndex < iNrDemandPoints; ++demandIndex) {
+	  rDistanceOD[demandIndex].resize(iNrFacilities);
+	  for (int facilityIndex = 0; facilityIndex < iNrFacilities; ++facilityIndex)
+		  rDistanceOD[demandIndex][facilityIndex] = rDist(cFacilities[facilityIndex], cDemands[demandIndex]);
+  }
 
   if (pmDemands->dvrs().fValues())
   {
@@ -351,11 +356,7 @@ void LandAllocation::Fitness(GAChromosome & chromosome)
 			for (int chromosomeIndex = 0; chromosomeIndex < iOptimalFacilities; chromosomeIndex++)
 			{
 				int facilityIndex = chromosome[chromosomeIndex];
-				double distanceFacilityDemand;
-				if (rDistanceOD != 0) // Use network distance
-					distanceFacilityDemand = rDistanceOD[demandIndex, facilityIndex];
-				else // Use euclidean distance
-					distanceFacilityDemand = rDist(cFacilities[facilityIndex], cDemands[demandIndex]);
+				double distanceFacilityDemand = rDistanceOD[demandIndex][facilityIndex];
 
 				if ((!fCapacitated) || (Allocation[facilityIndex] < ((rCapacity != 0) ? rCapacity[facilityIndex] : 1.0))) // If a capacity attribute is indicated, respect the maximum capacity of the facility
 				{
@@ -412,11 +413,7 @@ long LandAllocation::AddConnections(SegmentMap & segMap, Domain & dm, vector<int
 			for (int chromosomeIndex = 0; chromosomeIndex < iOptimalFacilities; chromosomeIndex++)
 			{
 				int facilityIndex = chromosome[chromosomeIndex];
-				double distanceFacilityDemand;
-				if (rDistanceOD != 0) // Use network distance
-					distanceFacilityDemand = rDistanceOD[demandIndex, facilityIndex];
-				else // Use euclidean distance
-					distanceFacilityDemand = rDist(cFacilities[facilityIndex], cDemands[demandIndex]);
+				double distanceFacilityDemand = rDistanceOD[demandIndex][facilityIndex];
 
 				if ((!fCapacitated) || (Allocation[facilityIndex] < ((rCapacity != 0) ? rCapacity[facilityIndex] : 1.0))) // If a capacity attribute is indicated, respect the maximum capacity of the facility
 				{

@@ -38,7 +38,7 @@ private:
   Coord * cDemands;
   double * rDemand;
   double * rCapacity;
-  double * rDistanceOD;
+  vector<vector<double>> rDistanceOD;
   // Algorithm parameters
   int iOptimalFacilities;
   bool fCapacitated;
