@@ -357,25 +357,26 @@ void LandAllocation::Fitness(GAChromosome & chromosome)
     double * Allocation = new double [iNrFacilities]; // keep track of the allocation while we're in the loop
 	for (int i = 0; i < iNrFacilities; ++i)
 		Allocation[i] = 0;
-    double totalDistance = 0;
+    double totalScore = 0;
 	int iNrDemandPoints = pmDemands->iFeatures();
     for (int demandIndex = 0; demandIndex < iNrDemandPoints; demandIndex++)
     {
 		double rDemandCount = (rDemand != 0) ? rDemand[demandIndex] : 1.0; //when an attribute is used to denote how many demands are at that location
 		while (rDemandCount > 0)
 		{
-			double distanceNearestPossibleFacility = -1;
+			double rBestScore = -1;
 			int selectedFacilityIndex = -1;
 			for (int chromosomeIndex = 0; chromosomeIndex < iOptimalFacilities; chromosomeIndex++)
 			{
 				int facilityIndex = chromosome[chromosomeIndex];
 				double distanceFacilityDemand = rDistanceOD[demandIndex][facilityIndex];
+				double rScore = 1 / distanceFacilityDemand;
 
 				if ((!fCapacitated) || (Allocation[facilityIndex] < ((rCapacity != 0) ? rCapacity[facilityIndex] : 1.0))) // If a capacity attribute is indicated, respect the maximum capacity of the facility
 				{
-					if ((selectedFacilityIndex == -1) || (distanceFacilityDemand < distanceNearestPossibleFacility))
+					if ((selectedFacilityIndex == -1) || (rScore > rBestScore))
 					{
-						distanceNearestPossibleFacility = distanceFacilityDemand;
+						rBestScore = rScore;
 						selectedFacilityIndex = facilityIndex;
 					}
 				}
@@ -384,24 +385,20 @@ void LandAllocation::Fitness(GAChromosome & chromosome)
 			{
 				double allocated = fCapacitated ? min(((rCapacity != 0) ? rCapacity[selectedFacilityIndex] : 1.0) - Allocation[selectedFacilityIndex], rDemandCount) : rDemandCount;
 				Allocation[selectedFacilityIndex] += allocated;
-				totalDistance += distanceNearestPossibleFacility * allocated;
+				totalScore += rBestScore * allocated;
 				rDemandCount -= allocated; // The leftover demands will have to be served by another facility
 			}
 			else
 			{
-				totalDistance = 0; // abandon this chromosome, as it did not reach to a solution
+				totalScore = 0; // abandon this chromosome, as it did not reach to a solution
 				demandIndex = iNrDemandPoints;
 				break;
 			}
 		}
     }
 
-	if (totalDistance > 0)
-		chromosome.SetFitness(1.0 / totalDistance);
-	else
-		chromosome.SetFitness(0);
+	chromosome.SetFitness(totalScore / iNrDemandPoints);
 
-    // totalDistance is a "cost" for Fitness
 	delete [] Allocation;
 }
 
@@ -421,18 +418,19 @@ long LandAllocation::AddConnections(SegmentMap & segMap, Domain & dm, vector<int
 		double rDemandCount = (rDemand != 0) ? rDemand[demandIndex] : 1.0; //when an attribute is used to denote how many demands are at that location
 		while (rDemandCount > 0)
 		{
-			double distanceNearestPossibleFacility = -1;
+			double rBestScore = -1;
 			int selectedFacilityIndex = -1;
 			for (int chromosomeIndex = 0; chromosomeIndex < iOptimalFacilities; chromosomeIndex++)
 			{
 				int facilityIndex = chromosome[chromosomeIndex];
 				double distanceFacilityDemand = rDistanceOD[demandIndex][facilityIndex];
+				double rScore = 1 / distanceFacilityDemand;
 
 				if ((!fCapacitated) || (Allocation[facilityIndex] < ((rCapacity != 0) ? rCapacity[facilityIndex] : 1.0))) // If a capacity attribute is indicated, respect the maximum capacity of the facility
 				{
-					if ((selectedFacilityIndex == -1) || (distanceFacilityDemand < distanceNearestPossibleFacility))
+					if ((selectedFacilityIndex == -1) || (rScore > rBestScore))
 					{
-						distanceNearestPossibleFacility = distanceFacilityDemand;
+						rBestScore = rScore;
 						selectedFacilityIndex = facilityIndex;
 					}
 				}
