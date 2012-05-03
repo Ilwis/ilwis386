@@ -7,7 +7,7 @@
 class GAChromosome;
 class LandAllocation;
 
-typedef double (IlwisObjectVirtual::*ScoreFunc)(int demandIndex, int facilityIndex, double w1, double w2);
+typedef double (IlwisObjectVirtual::*ScoreFunc)(int demandIndex, int facilityIndex, GAChromosome & chromosome);
 typedef void (IlwisObjectVirtual::*FitnessFunc)(GAChromosome & chromosome, LandAllocation * context, ScoreFunc scoreFunc);
 
 class GAChromosome : public std::vector<unsigned int>
