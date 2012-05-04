@@ -62,7 +62,6 @@ private:
 	GAChromosome * tempBest_m_chro;
 
 	std::vector<GAChromosome> m_thisGeneration;
-	std::vector<GAChromosome> m_NextGeneration;
 	std::stack<double> m_stack;
 	double * m_bestValue;
 	double * m_totalValue;

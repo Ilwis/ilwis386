@@ -107,7 +107,7 @@ void GA::RankPopulation()
 
 void GA::CreateNextGeneration()
 {
-	m_NextGeneration.clear();
+	std::vector<GAChromosome> m_NextGeneration;
 
 	// Best Chromosome always exists in the new generation	
 	GAChromosome * bestChromo = 0;
