@@ -28,6 +28,7 @@ public:
 	void SetStoppingCriteria(int value);
 	double rGetBestValue(unsigned int generation);
 	double rGetAverageValue(unsigned int generation);
+	std::vector<GAChromosome> & GetCurrentGeneration();
 
 private:
 	void push(double value);

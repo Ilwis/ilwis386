@@ -394,3 +394,8 @@ double GA::rGetAverageValue(unsigned int generation)
 {
 	return m_totalValue[generation] / (double)m_usPopSize;
 }
+
+std::vector<GAChromosome> & GA::GetCurrentGeneration()
+{
+	return m_thisGeneration;
+}
