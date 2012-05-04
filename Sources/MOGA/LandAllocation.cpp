@@ -279,9 +279,10 @@ bool LandAllocation::fFreezing()
 	if (iPopulationSize < 1)
 		throw ErrorObject(TR("Bad population size"));
 
-	ScoreFunc scoreFunc = fMultiObjective ? (ScoreFunc)&LandAllocation::rStdDistancePreferenceFunc : (ScoreFunc)&LandAllocation::rStdDistanceFunc;
+	ScoreFunc scoreFunc1 = (ScoreFunc)&LandAllocation::rStdDistanceFunc;
+	ScoreFunc scoreFunc2 = (ScoreFunc)&LandAllocation::rStdPreferenceFunc;
 
-	GA GAAlgorithm(this, (FitnessFunc)&LandAllocation::Fitness, scoreFunc);
+	GA GAAlgorithm(this, fMultiObjective ? (FitnessFunc)&LandAllocation::FitnessMO : (FitnessFunc)&LandAllocation::FitnessSO, scoreFunc1, scoreFunc2);
 	GAAlgorithm.SetSelectionType(fMultiObjective ? GA::Probability : GA::Tournament);
 	GAAlgorithm.SetStoppingCriteria(iStoppingCriteria);
 	GAAlgorithm.SetGenerations(iGenerations);
@@ -387,7 +388,7 @@ bool LandAllocation::fFreezing()
 		vector<int> source;
 		vector<int> destination;
 		vector<double> allocations;
-		unsigned long iNrSegments = AddConnections(segMap, dmConnections, source, destination, allocations, *chromosome, this, scoreFunc);
+		unsigned long iNrSegments = AddConnections(segMap, dmConnections, source, destination, allocations, *chromosome, this, scoreFunc1, scoreFunc2);
 		LongBuf lbSource (iNrSegments);
 		LongBuf lbDestination (iNrSegments);
 		RealBuf rbAllocations (iNrSegments);
@@ -416,7 +417,7 @@ bool LandAllocation::fFreezing()
   return true;
 }
 
-double LandAllocation::rStdDistanceFunc(int demandIndex, int facilityIndex, GAChromosome & chromosome)
+double LandAllocation::rStdDistanceFunc(int demandIndex, int facilityIndex)
 {
 	double distanceFacilityDemand = rDistanceOD[demandIndex][facilityIndex];
 	//double rScore = 1 - distanceFacilityDemand / rMaxDistance + rMinDistance / rMaxDistance; // MAXIMUM
@@ -425,20 +426,12 @@ double LandAllocation::rStdDistanceFunc(int demandIndex, int facilityIndex, GACh
 	return rScore;
 }
 
-double LandAllocation::rStdPreferenceFunc(int demandIndex, int facilityIndex, GAChromosome & chromosome)
+double LandAllocation::rStdPreferenceFunc(int demandIndex, int facilityIndex)
 {
 	return rPreferenceMatrix[demandIndex][facilityIndex];
 }
 
-double LandAllocation::rStdDistancePreferenceFunc(int demandIndex, int facilityIndex, GAChromosome & chromosome)
-{
-	double distanceFacilityDemand = rDistanceOD[demandIndex][facilityIndex];
-	double rScoreDistance = 1 - (distanceFacilityDemand - rMinDistance) / (rMaxDistance - rMinDistance); // INTERVAL
-	double rScorePreference = rPreferenceMatrix[demandIndex][facilityIndex];
-	return chromosome.w1() * rScoreDistance + chromosome.w2() * rScorePreference;
-}
-
-void LandAllocation::Fitness(GAChromosome & chromosome, LandAllocation * context, ScoreFunc scoreFunc)
+void LandAllocation::FitnessSO(GAChromosome & chromosome, LandAllocation * context, ScoreFunc scoreFunc1, ScoreFunc scoreFunc2)
 {
     if (chromosome.size() == 0)
         return;
@@ -460,7 +453,7 @@ void LandAllocation::Fitness(GAChromosome & chromosome, LandAllocation * context
 			{
 				int facilityIndex = chromosome[chromosomeIndex];
 
-				double rScore = (context->*scoreFunc)(demandIndex, facilityIndex, chromosome);
+				double rScore = (context->*scoreFunc1)(demandIndex, facilityIndex);
 
 				if ((!fCapacitated) || (Allocation[facilityIndex] < ((rCapacity != 0) ? rCapacity[facilityIndex] : 1.0))) // If a capacity attribute is indicated, respect the maximum capacity of the facility
 				{
@@ -493,7 +486,75 @@ void LandAllocation::Fitness(GAChromosome & chromosome, LandAllocation * context
 	delete [] Allocation;
 }
 
-long LandAllocation::AddConnections(SegmentMap & segMap, Domain & dm, vector<int> & source, vector<int> & destination, vector<double> & allocations, GAChromosome & chromosome, LandAllocation * context, ScoreFunc scoreFunc)
+void LandAllocation::FitnessMO(GAChromosome & chromosome, LandAllocation * context, ScoreFunc scoreFunc1, ScoreFunc scoreFunc2)
+{
+    if (chromosome.size() == 0)
+        return;
+	int iNrFacilities = pmFacilities->iFeatures();
+    double * Allocation = new double [iNrFacilities]; // keep track of the allocation while we're in the loop
+	for (int i = 0; i < iNrFacilities; ++i)
+		Allocation[i] = 0;
+    double totalScore = 0;
+	double totalPartialScore1 = 0;
+	double totalPartialScore2 = 0;
+	double totalAllocation = 0;
+	int iNrDemandPoints = pmDemands->iFeatures();
+    for (int demandIndex = 0; demandIndex < iNrDemandPoints; demandIndex++)
+    {
+		double rDemandCount = (rDemand != 0) ? rDemand[demandIndex] : 1.0; //when an attribute is used to denote how many demands are at that location
+		while (rDemandCount > 0)
+		{
+			double rBestScore = -1;
+			double rBestPartialScore1 = 0;
+			double rBestPartialScore2 = 0;
+			int selectedFacilityIndex = -1;
+			for (int chromosomeIndex = 0; chromosomeIndex < iOptimalFacilities; chromosomeIndex++)
+			{
+				int facilityIndex = chromosome[chromosomeIndex];
+
+				double rPartialScore1 = (context->*scoreFunc1)(demandIndex, facilityIndex);
+				double rPartialScore2 = (context->*scoreFunc2)(demandIndex, facilityIndex);
+				double rScore = chromosome.w1() * rPartialScore1 + chromosome.w2() * rPartialScore2;
+
+				if ((!fCapacitated) || (Allocation[facilityIndex] < ((rCapacity != 0) ? rCapacity[facilityIndex] : 1.0))) // If a capacity attribute is indicated, respect the maximum capacity of the facility
+				{
+					if ((selectedFacilityIndex == -1) || (rScore > rBestScore))
+					{
+						rBestScore = rScore;
+						rBestPartialScore1 = rPartialScore1;
+						rBestPartialScore2 = rPartialScore2;
+						selectedFacilityIndex = facilityIndex;
+					}
+				}
+			}
+			if (selectedFacilityIndex != -1)
+			{
+				double allocated = fCapacitated ? min(((rCapacity != 0) ? rCapacity[selectedFacilityIndex] : 1.0) - Allocation[selectedFacilityIndex], rDemandCount) : rDemandCount;
+				Allocation[selectedFacilityIndex] += allocated;
+				totalScore += rBestScore * allocated;
+				totalPartialScore1 += rBestPartialScore1 * allocated;
+				totalPartialScore2 += rBestPartialScore2 * allocated;
+				totalAllocation += allocated;
+				rDemandCount -= allocated; // The leftover demands will have to be served by another facility
+			}
+			else
+			{
+				totalScore = 0; // abandon this chromosome, as it did not reach to a solution
+				totalPartialScore1 = 0;
+				totalPartialScore2 = 0;
+				demandIndex = iNrDemandPoints;
+				break;
+			}
+		}
+    }
+
+	chromosome.SetFitness(totalScore / totalAllocation);
+	chromosome.SetPartialFitness(totalPartialScore1 / totalAllocation, totalPartialScore2 / totalAllocation);
+
+	delete [] Allocation;
+}
+
+long LandAllocation::AddConnections(SegmentMap & segMap, Domain & dm, vector<int> & source, vector<int> & destination, vector<double> & allocations, GAChromosome & chromosome, LandAllocation * context, ScoreFunc scoreFunc1, ScoreFunc scoreFunc2)
 {
     if (chromosome.size() == 0)
         return 0;
@@ -515,7 +576,9 @@ long LandAllocation::AddConnections(SegmentMap & segMap, Domain & dm, vector<int
 			{
 				int facilityIndex = chromosome[chromosomeIndex];
 
-				double rScore = (context->*scoreFunc)(demandIndex, facilityIndex, chromosome);
+				double rScore = (context->*scoreFunc1)(demandIndex, facilityIndex);
+				if (fMultiObjective)
+					rScore = chromosome.w1() * rScore + chromosome.w2() * (context->*scoreFunc2)(demandIndex, facilityIndex);
 
 				if ((!fCapacitated) || (Allocation[facilityIndex] < ((rCapacity != 0) ? rCapacity[facilityIndex] : 1.0))) // If a capacity attribute is indicated, respect the maximum capacity of the facility
 				{

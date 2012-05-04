@@ -21,17 +21,17 @@ public:
   virtual bool fDomainChangeable() const;
   static LandAllocation* create(const FileName&, PointMapPtr&, const String& sExpression);
   void Init();
-  void Fitness(GAChromosome & chromosome, LandAllocation * context, ScoreFunc scoreFunc);
-  double rStdDistanceFunc(int demandIndex, int facilityIndex, GAChromosome & chromosome);
-  double rStdPreferenceFunc(int demandIndex, int facilityIndex, GAChromosome & chromosome);
-  double rStdDistancePreferenceFunc(int demandIndex, int facilityIndex, GAChromosome & chromosome);
+  void FitnessSO(GAChromosome & chromosome, LandAllocation * context, ScoreFunc scoreFunc1, ScoreFunc scoreFunc2);
+  void FitnessMO(GAChromosome & chromosome, LandAllocation * context, ScoreFunc scoreFunc1, ScoreFunc scoreFunc2);
+  double rStdDistanceFunc(int demandIndex, int facilityIndex);
+  double rStdPreferenceFunc(int demandIndex, int facilityIndex);
   void ChromosomeMutator(GAChromosome & chromosome);
   void Initializer(GAChromosome & chromosome);
   void CrossOver(GAChromosome & Dad, GAChromosome & Mum, GAChromosome & child1, GAChromosome & child2);
   void GreedyCrossOver(GAChromosome & Dad, GAChromosome & Mum, GAChromosome & child);
 
 private:
-  long AddConnections(SegmentMap & segMap, Domain & dm, vector<int> & source, vector<int> & destination, vector<double> & allocations, GAChromosome & chromosome, LandAllocation * context, ScoreFunc scoreFunc);
+  long AddConnections(SegmentMap & segMap, Domain & dm, vector<int> & source, vector<int> & destination, vector<double> & allocations, GAChromosome & chromosome, LandAllocation * context, ScoreFunc scoreFunc1, ScoreFunc scoreFunc2);
   static FileName fnGetSourceFile(const PointMap & pm, const FileName & fnObj);
   PointMap pmFacilities;
   PointMap pmFacilitiesNoAttribute; // The original pointmap, before applying MapAttribute
