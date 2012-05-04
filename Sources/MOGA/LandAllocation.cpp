@@ -13,16 +13,16 @@ IlwisObjectPtr * createLandAllocation(const FileName& fn, IlwisObjectPtr& ptr, c
 }
 
 const char* LandAllocation::sSyntax() {
-  return "PointMapLandAllocation(PotentialLocationPoints[,PotentialLocationTypes],DemandPoints[,DemandPreference],OptimalFacilities,capacitated|plain,StoppingCriteria,Generations,PopulationSize,MutationPercent,CrossoverPercent)";
+  return "PointMapLandAllocation(PotentialLocationPoints[,PotentialLocationTypes],DemandPoints[,DemandPreference],OptimalFacilities,capacitated|plain,StoppingCriteria,Generations,PopulationSize[,Nelite,Npareto],MutationPercent,CrossoverPercent)";
 }
 
 LandAllocation* LandAllocation::create(const FileName& fn, PointMapPtr& p, const String& sExpr)
 {
   Array<String> as;
   short iParms = IlwisObjectPtr::iParseParm(sExpr, as);
-  if (iParms != 9 && iParms != 11)
+  if (iParms != 9 && iParms != 13)
 	throw ErrorExpression(sExpr, sSyntax());
-  bool fMultiObjective = (iParms == 11);
+  bool fMultiObjective = (iParms == 13);
   if (fMultiObjective) {
 	  if ((as[5].compare("plain") != 0) && (as[5].compare("capacitated") != 0))
 		throw ErrorExpression(sExpr, sSyntax());
@@ -35,10 +35,12 @@ LandAllocation* LandAllocation::create(const FileName& fn, PointMapPtr& p, const
 	  int iStoppingCriteria(atoi(as[6].c_str()));
 	  long iGenerations(atoi(as[7].c_str()));
 	  int iPopulationSize(atoi(as[8].c_str()));
-	  double rMutationPercent(atof(as[9].c_str()));
-	  double rCrossoverPercent(atof(as[10].c_str()));
+	  int iNelite(atoi(as[9].c_str()));
+	  int iNpareto(atoi(as[10].c_str()));
+	  double rMutationPercent(atof(as[11].c_str()));
+	  double rCrossoverPercent(atof(as[12].c_str()));
 	  PointMap pmFacilitiesNoAttribute(fnGetSourceFile(pmFacilities, fn));
-	  return new LandAllocation(fn, p, pmFacilities, pmFacilitiesNoAttribute, sColFacilitiesType, pmDemands, sColDemandsPreference, iOptimalFacilities, fCapacitated, iStoppingCriteria, iGenerations, iPopulationSize, rMutationPercent, rCrossoverPercent);
+	  return new LandAllocation(fn, p, pmFacilities, pmFacilitiesNoAttribute, sColFacilitiesType, pmDemands, sColDemandsPreference, iOptimalFacilities, fCapacitated, iStoppingCriteria, iGenerations, iPopulationSize, iNelite, iNpareto, rMutationPercent, rCrossoverPercent);
   } else {
 	  if ((as[3].compare("plain") != 0) && (as[3].compare("capacitated") != 0))
 		throw ErrorExpression(sExpr, sSyntax());
@@ -52,7 +54,7 @@ LandAllocation* LandAllocation::create(const FileName& fn, PointMapPtr& p, const
 	  double rMutationPercent(atof(as[7].c_str()));
 	  double rCrossoverPercent(atof(as[8].c_str()));
 	  PointMap pmFacilitiesNoAttribute(fnGetSourceFile(pmFacilities, fn));
-	  return new LandAllocation(fn, p, pmFacilities, pmFacilitiesNoAttribute, "", pmDemands, "", iOptimalFacilities, fCapacitated, iStoppingCriteria, iGenerations, iPopulationSize, rMutationPercent, rCrossoverPercent);
+	  return new LandAllocation(fn, p, pmFacilities, pmFacilitiesNoAttribute, "", pmDemands, "", iOptimalFacilities, fCapacitated, iStoppingCriteria, iGenerations, iPopulationSize, 0, 0, rMutationPercent, rCrossoverPercent);
   }
 }
 
@@ -77,6 +79,8 @@ LandAllocation::LandAllocation(const FileName& fn, PointMapPtr& p)
 	ReadElement("LandAllocation", "StoppingCriteria", iStoppingCriteria);
 	ReadElement("LandAllocation", "Generations", iGenerations);
 	ReadElement("LandAllocation", "PopulationSize", iPopulationSize);
+	ReadElement("LandAllocation", "Nelite", iNelite);
+	ReadElement("LandAllocation", "Npareto", iNpareto);
 	ReadElement("LandAllocation", "MutationPercent", rMutationPercent);
 	ReadElement("LandAllocation", "CrossoverPercent", rCrossoverPercent);
 	pmFacilitiesNoAttribute = PointMap(fnGetSourceFile(pmFacilities, fn));
@@ -92,7 +96,7 @@ LandAllocation::LandAllocation(const FileName& fn, PointMapPtr& p)
 }
 
 LandAllocation::LandAllocation(const FileName& fn, PointMapPtr& p, const PointMap& _pmFacilities, const PointMap& _pmFacilitiesNoAttribute, const String& _sColFacilitiesType, const PointMap& _pmDemands, const String& _sColDemandsPreference,
-							   int _iOptimalFacilities, bool _fCapacitated, int _iStoppingCriteria, long _iGenerations, int _iPopulationSize, double _rMutationPercent, double _rCrossoverPercent)
+							   int _iOptimalFacilities, bool _fCapacitated, int _iStoppingCriteria, long _iGenerations, int _iPopulationSize, int _iNelite, int _iNpareto, double _rMutationPercent, double _rCrossoverPercent)
 : PointMapVirtual(fn, p, _pmFacilitiesNoAttribute->cs(),_pmFacilitiesNoAttribute->cb(),_pmFacilitiesNoAttribute->dvrs())
 , pmFacilities(_pmFacilities)
 , pmFacilitiesNoAttribute(_pmFacilitiesNoAttribute)
@@ -104,6 +108,8 @@ LandAllocation::LandAllocation(const FileName& fn, PointMapPtr& p, const PointMa
 , iStoppingCriteria(_iStoppingCriteria)
 , iGenerations(_iGenerations)
 , iPopulationSize(_iPopulationSize)
+, iNelite(_iNelite)
+, iNpareto(_iNpareto)
 , rMutationPercent(_rMutationPercent)
 , rCrossoverPercent(_rCrossoverPercent)
 , cFacilities(0)
@@ -137,6 +143,8 @@ void LandAllocation::Store()
   WriteElement("LandAllocation", "StoppingCriteria", iStoppingCriteria);
   WriteElement("LandAllocation", "Generations", iGenerations);
   WriteElement("LandAllocation", "PopulationSize", iPopulationSize);
+  WriteElement("LandAllocation", "Nelite", iNelite);
+  WriteElement("LandAllocation", "Npareto", iNpareto);
   WriteElement("LandAllocation", "MutationPercent", rMutationPercent);
   WriteElement("LandAllocation", "CrossoverPercent", rCrossoverPercent);
 }
@@ -156,7 +164,7 @@ LandAllocation::~LandAllocation()
 String LandAllocation::sExpression() const
 {
 	if (fMultiObjective)
-		return String("PointMapLandAllocation(%S,%S,%S,%S,%d,%s,%d,%d,%d,%f,%f)", pmFacilities->sNameQuoted(false, fnObj.sPath()), sColFacilitiesType, pmDemands->sNameQuoted(false, fnObj.sPath()), sColDemandsPreference, iOptimalFacilities, fCapacitated ? "capacitated" : "plain", iStoppingCriteria, iGenerations, iPopulationSize, rMutationPercent, rCrossoverPercent);
+		return String("PointMapLandAllocation(%S,%S,%S,%S,%d,%s,%d,%d,%d,%d,%d,%f,%f)", pmFacilities->sNameQuoted(false, fnObj.sPath()), sColFacilitiesType, pmDemands->sNameQuoted(false, fnObj.sPath()), sColDemandsPreference, iOptimalFacilities, fCapacitated ? "capacitated" : "plain", iStoppingCriteria, iGenerations, iPopulationSize, iNelite, iNpareto, rMutationPercent, rCrossoverPercent);
 	else
 		return String("PointMapLandAllocation(%S,%S,%d,%s,%d,%d,%d,%f,%f)", pmFacilities->sNameQuoted(false, fnObj.sPath()), pmDemands->sNameQuoted(false, fnObj.sPath()), iOptimalFacilities, fCapacitated ? "capacitated" : "plain", iStoppingCriteria, iGenerations, iPopulationSize, rMutationPercent, rCrossoverPercent);
 }
@@ -265,6 +273,61 @@ void LandAllocation::Init()
 	  for (int i = 0; i < iNrFacilities; ++i)
 		  rCapacity[i] = pmFacilities->rValue(i);
   }
+}
+
+void LandAllocation::UpdatePareto(std::vector<GAChromosome> & solutions, std::vector<GAChromosome> & pareto)
+{
+	for (std::vector<GAChromosome>::iterator it = solutions.begin(); it != solutions.end(); ++it)
+		pareto.push_back(*it); // append the chromosomes from solutions to the existing pareto
+	std::sort(pareto.begin(), pareto.end()); // sort by fitness (largest fitness at the beginning)
+	if (pareto.size() > iNpareto)
+		pareto.resize(iNpareto); // crop pareto array
+}
+
+void LandAllocation::KeepElite(std::vector<GAChromosome> & solutions, std::vector<GAChromosome> pareto)
+{
+	for (int i = 0; i < iNelite; ++i)
+		solutions.erase(solutions.begin() + random(solutions.size()) - 1); // remove Nelite elements randomly
+	for (int i = 0; i < iNelite; ++i) { // add Nelite distinct elements from pareto to solutions
+		int index = random(pareto.size()) - 1; // select a random index into the pareto array
+		GAChromosome chromosome = pareto[index]; // get the corresponding chromosome
+		pareto.erase(pareto.begin() + index); // remove it from the (local!) pareto array
+		solutions.push_back(chromosome); // add it to the solutions
+	}
+	std::sort(solutions.begin(), solutions.end()); // sort by fitness (largest fitness at the beginning)
+}
+
+std::vector<GAChromosome> LandAllocation::GenerateParetoArray()
+{
+	seedrand(clock());
+
+	ScoreFunc scoreFunc1 = (ScoreFunc)&LandAllocation::rStdDistanceFunc;
+	ScoreFunc scoreFunc2 = (ScoreFunc)&LandAllocation::rStdPreferenceFunc;
+
+	GA GAAlgorithm(this, fMultiObjective ? (FitnessFunc)&LandAllocation::FitnessMO : (FitnessFunc)&LandAllocation::FitnessSO, scoreFunc1, scoreFunc2);
+	GAAlgorithm.SetSelectionType(fMultiObjective ? GA::Probability : GA::Tournament);
+	GAAlgorithm.SetStoppingCriteria(iStoppingCriteria);
+	GAAlgorithm.SetGenerations(iGenerations);
+	GAAlgorithm.SetPopulationSize(iPopulationSize);
+	GAAlgorithm.SetMutation(rMutationPercent);
+	GAAlgorithm.SetCrossover(rCrossoverPercent);
+	GAAlgorithm.Initialize();
+	std::vector<GAChromosome> pareto;
+	int iGenerationNr = 0;
+	std::vector<GAChromosome> & solutions = GAAlgorithm.GetCurrentGeneration();
+	UpdatePareto(solutions, pareto);
+	while (!GAAlgorithm.IsDone())
+	{
+        GAAlgorithm.CreateNextGeneration();
+		solutions = GAAlgorithm.GetCurrentGeneration();
+		KeepElite(solutions, pareto);
+		UpdatePareto(solutions, pareto);
+	    if (trq.fUpdate(iGenerationNr, GAAlgorithm.GetGenerations()))
+			return pareto;
+        ++iGenerationNr;
+	}
+	trq.fUpdate(GAAlgorithm.GetGenerations(), GAAlgorithm.GetGenerations());
+	return pareto;
 }
 
 bool LandAllocation::fFreezing()

@@ -12,7 +12,7 @@ class DATEXPORT LandAllocation: public PointMapVirtual
   friend class PointMapVirtual;
 public:
   LandAllocation(const FileName&, PointMapPtr&);
-  LandAllocation(const FileName& fn, PointMapPtr&, const PointMap& _pmFacilities, const PointMap& _pmFacilitiesNoAttribute, const String& _sColFacilitiesType, const PointMap& _pmDemands, const String& _sColDemandsPreference, int _iOptimalFacilities, bool _fCapacitated, int _iStoppingCriteria, long _iGenerations, int _iPopulationSize, double _rMutationPercent, double _rCrossoverPercent);
+  LandAllocation(const FileName& fn, PointMapPtr&, const PointMap& _pmFacilities, const PointMap& _pmFacilitiesNoAttribute, const String& _sColFacilitiesType, const PointMap& _pmDemands, const String& _sColDemandsPreference, int _iOptimalFacilities, bool _fCapacitated, int _iStoppingCriteria, long _iGenerations, int _iPopulationSize, int _iNelite, int _iNpareto, double _rMutationPercent, double _rCrossoverPercent);
   ~LandAllocation();
   static const char* sSyntax();
   virtual String sExpression() const;
@@ -20,6 +20,7 @@ public:
   virtual bool fFreezing();
   virtual bool fDomainChangeable() const;
   static LandAllocation* create(const FileName&, PointMapPtr&, const String& sExpression);
+  std::vector<GAChromosome> GenerateParetoArray();
   void Init();
   void FitnessSO(GAChromosome & chromosome, LandAllocation * context, ScoreFunc scoreFunc1, ScoreFunc scoreFunc2);
   void FitnessMO(GAChromosome & chromosome, LandAllocation * context, ScoreFunc scoreFunc1, ScoreFunc scoreFunc2);
@@ -32,6 +33,8 @@ public:
 
 private:
   long AddConnections(SegmentMap & segMap, Domain & dm, vector<int> & source, vector<int> & destination, vector<double> & allocations, GAChromosome & chromosome, LandAllocation * context, ScoreFunc scoreFunc1, ScoreFunc scoreFunc2);
+  void UpdatePareto(std::vector<GAChromosome> & solutions, std::vector<GAChromosome> & pareto);
+  void KeepElite(std::vector<GAChromosome> & solutions, std::vector<GAChromosome> pareto);
   static FileName fnGetSourceFile(const PointMap & pm, const FileName & fnObj);
   PointMap pmFacilities;
   PointMap pmFacilitiesNoAttribute; // The original pointmap, before applying MapAttribute
@@ -54,6 +57,8 @@ private:
   int iStoppingCriteria;
   long iGenerations;
   int iPopulationSize;
+  int iNelite;
+  int iNpareto;
   double rMutationPercent;
   double rCrossoverPercent;
   bool fMultiObjective;
