@@ -1701,7 +1701,7 @@ void GDALFormat::createTable(const FileName& fn, const Domain& dm,OGRFeatureDefn
 			columns[field].type = type;
 
 			if ( type ==  OFTInteger || type ==  OFTReal) {
-				long v = funcs.ogriVal(hFeature, field);
+				double v = funcs.ogrrVal(hFeature, field);
 				columns[field].min = min(v,columns[field].min); 
 				columns[field].max = max(v,columns[field].max); 
 				columns[field].values.push_back(v);
@@ -1722,7 +1722,7 @@ void GDALFormat::createTable(const FileName& fn, const Domain& dm,OGRFeatureDefn
 			DomainValueRangeStruct dvrs(Domain("value"),ValueRangeInt((long)columns[column].min, (long)columns[column].max));
 			col = tbl->colNew(columns[column].name, dvrs);
 		} else if (type ==  OFTReal) {
-			double rStep = rRound(abs(columns[column].max - columns[column].min) * 0.01);
+			double rStep = rRound(abs(columns[column].max - columns[column].min) * 0.0001);
 			DomainValueRangeStruct dvrs(Domain("value"),ValueRangeReal(columns[column].min, columns[column].max,rStep));
 			col = tbl->colNew(columns[column].name, dvrs);
 		} else if (type ==  OFTString) {
