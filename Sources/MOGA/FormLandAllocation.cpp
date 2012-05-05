@@ -1,6 +1,10 @@
 #include "Client\Headers\AppFormsPCH.h"
 #include "FormLandAllocation.h"
 #include "Client\FormElements\fldcol.h"
+#include "Client\FormElements\FieldGraph.h"
+#include "LandAllocation.h"
+#include "PointMapLandAllocation.h"
+#include "ParetoGraphFunction.h"
 
 LRESULT CmdLandAllocation(CWnd *wnd, const String& s)
 {
@@ -10,48 +14,80 @@ LRESULT CmdLandAllocation(CWnd *wnd, const String& s)
 
 FormLandAllocation::FormLandAllocation(CWnd* mw, const char* sPar)
 : FormPointMapCreate(mw, TR("Land Allocation of Point Map"))
+, m_function(0)
 {
 	iMethod = 0;
 	fCapacitated = false;
 	iStoppingCriteria = 0;
 	iGenerations = 60;
 	iPopulationSize = 10;
+	iNelite = 8;
+	iNpareto = 10;
 	rMutationPercent = 20;
 	rCrossoverPercent = 98;
-
-	RadioGroup * rgMethod = new RadioGroup(root, TR("Objectives:"), &iMethod);
+	
+	FieldGroup* fgLeft = new FieldGroup(root);
+	RadioGroup * rgMethod = new RadioGroup(fgLeft, TR("Objectives:"), &iMethod);
 	RadioButton* rbSingle = new RadioButton(rgMethod, TR("&Distance"));
 	RadioButton* rbMulti = new RadioButton(rgMethod, TR("&Distance + Preference"));
-
-	plpm = new FieldPointMap(root, TR("&Potential Locations Point Map"), &sPointMapFacilities, new MapListerDomainType(".mpp", 0, true));
-	plpm->SetCallBack((NotifyProc)&FormLandAllocation::FacilitiesCallBack);
-	fsTotalFacilities = new FieldString(root, TR("Total Capacity"), &sTotalFacilities);
+	fpmFacilities = new FieldPointMap(fgLeft, TR("&Potential Locations Point Map"), &sPointMapFacilities, new MapListerDomainType(".mpp", 0, true));
+	fpmFacilities->SetCallBack((NotifyProc)&FormLandAllocation::FacilitiesCallBack);
+	fpmFacilities->Align(rbMulti, AL_UNDER);
+	fsTotalFacilities = new FieldString(fgLeft, TR("Total Capacity"), &sTotalFacilities);
 	fcFacilitiesType = new FieldColumn(rbMulti, TR("Facility Type"), Table(), &sColFacilitiesType);
 	fcFacilitiesType->Align(fsTotalFacilities, AL_UNDER);
-	dpm = new FieldPointMap(root, TR("&Demands Point Map"), &sPointMapDemands, new MapListerDomainType(".mpp", 0, true));
-	dpm->SetCallBack((NotifyProc)&FormLandAllocation::DemandsCallBack);
-	fsTotalDemands = new FieldString(root, TR("Total Demands"), &sTotalDemands);
+	fpmDemands = new FieldPointMap(fgLeft, TR("&Demands Point Map"), &sPointMapDemands, new MapListerDomainType(".mpp", 0, true));
+	fpmDemands->SetCallBack((NotifyProc)&FormLandAllocation::DemandsCallBack);
+	fsTotalDemands = new FieldString(fgLeft, TR("Total Demands"), &sTotalDemands);
 	fcDemandsPreference = new FieldColumn(rbMulti, TR("Demands Preference"), Table(), &sColDemandsPreference);
 	fcDemandsPreference->Align(fsTotalDemands, AL_UNDER);
-	fiOptimalFacilities = new FieldInt(root, TR("Nr &Optimal Facilities"), &iOptimalFacilities, ValueRange(1, 32767), true);
-	new CheckBox(root, TR("&Capacitated"), &fCapacitated);
-	new FieldInt(root, TR("&Stack Threshold"), &iStoppingCriteria, ValueRange(0, 32767), true);
-	new FieldInt(root, TR("&Generations"), &iGenerations, ValueRange(0, 2147483647), true);
-	new FieldInt(root, TR("P&opulation Size"), &iPopulationSize, ValueRange(0, 32767), true);
-	new FieldReal(root, TR("&Mutation Percent"), &rMutationPercent, ValueRange(0, 100, 0.1));
-	new FieldReal(root, TR("C&rossover Percent"), &rCrossoverPercent, ValueRange(0, 100, 0.1));
+	fiOptimalFacilities = new FieldInt(fgLeft, TR("Nr &Optimal Facilities"), &iOptimalFacilities, ValueRange(1, 32767), true);
+	new CheckBox(fgLeft, TR("&Capacitated"), &fCapacitated);
+	new FieldInt(fgLeft, TR("&Stack Threshold"), &iStoppingCriteria, ValueRange(0, 32767), true);
+	new FieldInt(fgLeft, TR("&Generations"), &iGenerations, ValueRange(0, 2147483647), true);
+	fiPopulation = new FieldInt(fgLeft, TR("P&opulation Size"), &iPopulationSize, ValueRange(0, 32767), true);
+	fiElite = new FieldInt(rbMulti, TR("Nelite"), &iNelite, ValueRange(0, 32767), true);
+	fiElite->Align(fiPopulation, AL_UNDER);
+	fiPareto = new FieldInt(rbMulti, TR("Npareto"), &iNpareto, ValueRange(0, 32767), true);
+	fiPareto->Align(fiElite, AL_UNDER);
+	fiPopulation->SetCallBack((NotifyProc)&FormLandAllocation::AdjustEliteCallBack);
+	fiPareto->SetCallBack((NotifyProc)&FormLandAllocation::AdjustEliteCallBack);
+	new FieldReal(fgLeft, TR("&Mutation Percent"), &rMutationPercent, ValueRange(0, 100, 0.1));
+	FieldReal * frCrossover = new FieldReal(fgLeft, TR("C&rossover Percent"), &rCrossoverPercent, ValueRange(0, 100, 0.1));
+
+	FieldGroup* fgRight = new FieldGroup(rbMulti);
+	fgRight->Align(fgLeft, AL_AFTER);
+
+	fgFunctionGraph = new FieldGraph(fgRight);
+	fgFunctionGraph->SetWidth(200);
+	fgFunctionGraph->SetHeight(300);
+	fgFunctionGraph->SetIndependentPos();
+	fgFunctionGraph->SetFunction(0);
+	pbCalculatePareto = new PushButton(fgRight, TR("Calculate Pareto"), (NotifyProc)&FormLandAllocation::GenerateParetoGraph);
+	pbCalculatePareto->Align(fgFunctionGraph, AL_UNDER);
 
 	initPointMapOut(false);
+	fmc->Align(frCrossover, AL_UNDER);
 	SetHelpItem("ilwisapp\\mask_points_dialog_box.htm");
 	create();
+
+	fgFunctionGraph->Replot();
+	m_function = new ParetoGraphFunction();
 
 	fsTotalFacilities->SetReadOnly(true);
 	fsTotalDemands->SetReadOnly(true);
 }
 
+FormLandAllocation::~FormLandAllocation()
+{
+	fgFunctionGraph->SetFunction(0);
+	if (m_function)
+		delete m_function;
+}
+
 int FormLandAllocation::FacilitiesCallBack(Event*)
 {
-	plpm->StoreData();
+	fpmFacilities->StoreData();
 	if (sPointMapFacilities.length() > 0)
 	{
 		PointMap pmFacilities (sPointMapFacilities);
@@ -84,7 +120,7 @@ int FormLandAllocation::FacilitiesCallBack(Event*)
 
 int FormLandAllocation::DemandsCallBack(Event*)
 {
-	dpm->StoreData();
+	fpmDemands->StoreData();
 	if (sPointMapDemands.length() > 0)
 	{
 		PointMap pmDemands (sPointMapDemands);
@@ -112,6 +148,75 @@ int FormLandAllocation::DemandsCallBack(Event*)
 	return 0; 
 }
 
+int FormLandAllocation::AdjustEliteCallBack(Event*)
+{
+	fiPopulation->StoreData();
+	fiPareto->StoreData();
+	fiElite->StoreData();
+	fiElite->SetvalueRange(ValueRange(0, min(iPopulationSize,iNpareto)));
+	return 0; 
+}
+
+int FormLandAllocation::GenerateParetoGraph(Event*)
+{
+	FormEntry *pfe = CheckData();
+	if (pfe) 
+	{
+		MessageBeep(MB_ICONEXCLAMATION);
+		pfe->SetFocus();
+		return 0;
+	}
+
+	root->StoreData();
+	pbCalculatePareto->Disable();
+	AfxBeginThread(GenerateParetoGraphInThread, this);
+	return 0;
+}
+
+UINT FormLandAllocation::GenerateParetoGraphInThread(LPVOID pParam)
+{
+	FormLandAllocation * pObject = (FormLandAllocation*)pParam;
+	if (pObject == NULL)
+	{
+		return 1;
+	}
+
+	FileName fn(pObject->sOutMap);
+	PointMap pmFacilities(pObject->sPointMapFacilities, fn.sPath());
+	PointMap pmDemands(pObject->sPointMapDemands, fn.sPath());
+	PointMap pmFacilitiesNoAttribute(PointMapLandAllocation::fnGetSourceFile(pmFacilities, fn));
+	PointMap pmDemandsNoAttribute(PointMapLandAllocation::fnGetSourceFile(pmDemands, fn));
+	LandAllocation la (pmFacilities, pmFacilitiesNoAttribute, pObject->sColFacilitiesType, pmDemands, pmDemandsNoAttribute, pObject->sColDemandsPreference,
+							   pObject->iOptimalFacilities, pObject->fCapacitated, pObject->iStoppingCriteria, pObject->iGenerations, pObject->iPopulationSize, pObject->iNelite, pObject->iNpareto, pObject->rMutationPercent, pObject->rCrossoverPercent);
+
+	Tranquilizer trq;
+	std::vector<GAChromosome> pareto = la.GenerateParetoArray(trq);
+
+	struct sort_pred { 
+		bool operator()(const GAChromosome & left, const GAChromosome & right) { 
+			return (left.rGetPartialScore1() < right.rGetPartialScore1());
+		} 
+	};
+	std::sort(pareto.begin(), pareto.end(), sort_pred());
+	std::vector<double> scoresX;
+	std::vector<double> scoresY;
+
+	for (int i = 0; i < pareto.size(); ++i) {
+		scoresX.push_back(pareto[i].rGetPartialScore1());
+		scoresY.push_back(pareto[i].rGetPartialScore2());
+	}
+
+	if (pObject->m_function)
+	{
+		pObject->m_function->SetData(scoresX, scoresY);
+		pObject->fgFunctionGraph->SetFunction(pObject->m_function); // arranges that the XY-axes are re-set and plots the graph
+	}
+	else
+		pObject->fgFunctionGraph->Replot();
+	pObject->pbCalculatePareto->Enable();
+	return 0;
+}
+
 int FormLandAllocation::exec() 
 {
 	FormPointMapCreate::exec();
@@ -124,7 +229,7 @@ int FormLandAllocation::exec()
 	if (iMethod == 0)
 		sExpr = String("PointMapLandAllocation(%S,%S,%d,%s,%d,%d,%d,%f,%f)", sPointMapFacilities, sPointMapDemands, iOptimalFacilities, fCapacitated ? "capacitated" : "plain", iStoppingCriteria, iGenerations, iPopulationSize, rMutationPercent / 100.0, rCrossoverPercent / 100.0);
 	else // iMethod == 1
-		sExpr = String("PointMapLandAllocation(%S,%S,%S,%S,%d,%s,%d,%d,%d,%f,%f)", sPointMapFacilities, sColFacilitiesType, sPointMapDemands, sColDemandsPreference, iOptimalFacilities, fCapacitated ? "capacitated" : "plain", iStoppingCriteria, iGenerations, iPopulationSize, rMutationPercent / 100.0, rCrossoverPercent / 100.0);
+		sExpr = String("PointMapLandAllocation(%S,%S,%S,%S,%d,%s,%d,%d,%d,%d,%d,%f,%f)", sPointMapFacilities, sColFacilitiesType, sPointMapDemands, sColDemandsPreference, iOptimalFacilities, fCapacitated ? "capacitated" : "plain", iStoppingCriteria, iGenerations, iPopulationSize, iNelite, iNpareto, rMutationPercent / 100.0, rCrossoverPercent / 100.0);
 	execPointMapOut(sExpr);  
 	return 0;
 }
