@@ -1,107 +1,17 @@
 #include "LandAllocation.h"
 #include "GA.h"
-#include "Engine\Map\Point\PNTSTORE.H"
 #include "Engine\Base\Algorithm\Random.h"
 #include "Engine\Domain\DomainUniqueID.h"
 #include "Client\TableWindow\CartesianGraphDoc.h"
 
-IlwisObjectPtr * createLandAllocation(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms ) {
-	if ( sExpr != "")
-		return (IlwisObjectPtr *)LandAllocation::create(fn, (PointMapPtr &)ptr, sExpr);
-	else
-		return (IlwisObjectPtr *)new LandAllocation(fn, (PointMapPtr &)ptr);
-}
 
-const char* LandAllocation::sSyntax() {
-  return "PointMapLandAllocation(PotentialLocationPoints[,PotentialLocationTypes],DemandPoints[,DemandPreference],OptimalFacilities,capacitated|plain,StoppingCriteria,Generations,PopulationSize[,Nelite,Npareto],MutationPercent,CrossoverPercent)";
-}
-
-LandAllocation* LandAllocation::create(const FileName& fn, PointMapPtr& p, const String& sExpr)
-{
-  Array<String> as;
-  short iParms = IlwisObjectPtr::iParseParm(sExpr, as);
-  if (iParms != 9 && iParms != 13)
-	throw ErrorExpression(sExpr, sSyntax());
-  bool fMultiObjective = (iParms == 13);
-  if (fMultiObjective) {
-	  if ((as[5].compare("plain") != 0) && (as[5].compare("capacitated") != 0))
-		throw ErrorExpression(sExpr, sSyntax());
-	  PointMap pmFacilities(as[0], fn.sPath());
-	  String sColFacilitiesType(as[1]);
-	  PointMap pmDemands(as[2], fn.sPath());
-	  String sColDemandsPreference(as[3]);
-	  int iOptimalFacilities(atoi(as[4].c_str()));
-	  bool fCapacitated (as[5].compare("capacitated") == 0);
-	  int iStoppingCriteria(atoi(as[6].c_str()));
-	  long iGenerations(atoi(as[7].c_str()));
-	  int iPopulationSize(atoi(as[8].c_str()));
-	  int iNelite(atoi(as[9].c_str()));
-	  int iNpareto(atoi(as[10].c_str()));
-	  double rMutationPercent(atof(as[11].c_str()));
-	  double rCrossoverPercent(atof(as[12].c_str()));
-	  PointMap pmFacilitiesNoAttribute(fnGetSourceFile(pmFacilities, fn));
-	  return new LandAllocation(fn, p, pmFacilities, pmFacilitiesNoAttribute, sColFacilitiesType, pmDemands, sColDemandsPreference, iOptimalFacilities, fCapacitated, iStoppingCriteria, iGenerations, iPopulationSize, iNelite, iNpareto, rMutationPercent, rCrossoverPercent);
-  } else {
-	  if ((as[3].compare("plain") != 0) && (as[3].compare("capacitated") != 0))
-		throw ErrorExpression(sExpr, sSyntax());
-	  PointMap pmFacilities(as[0], fn.sPath());
-	  PointMap pmDemands(as[1], fn.sPath());
-	  int iOptimalFacilities(atoi(as[2].c_str()));
-	  bool fCapacitated (as[3].compare("capacitated") == 0);
-	  int iStoppingCriteria(atoi(as[4].c_str()));
-	  long iGenerations(atoi(as[5].c_str()));
-	  int iPopulationSize(atoi(as[6].c_str()));
-	  double rMutationPercent(atof(as[7].c_str()));
-	  double rCrossoverPercent(atof(as[8].c_str()));
-	  PointMap pmFacilitiesNoAttribute(fnGetSourceFile(pmFacilities, fn));
-	  return new LandAllocation(fn, p, pmFacilities, pmFacilitiesNoAttribute, "", pmDemands, "", iOptimalFacilities, fCapacitated, iStoppingCriteria, iGenerations, iPopulationSize, 0, 0, rMutationPercent, rCrossoverPercent);
-  }
-}
-
-LandAllocation::LandAllocation(const FileName& fn, PointMapPtr& p)
-: PointMapVirtual(fn, p)
-, cFacilities(0)
-, cDemands(0)
-, rDemand(0)
-, rCapacity(0)
-, rMinDistance(rUNDEF)
-, rMaxDistance(rUNDEF)
-{
-  fNeedFreeze = true;
-  String sColName;
-  try {
-    ReadElement("LandAllocation", "PointMapFacilities", pmFacilities);
-    ReadElement("LandAllocation", "FacilitiesType", sColFacilitiesType);
-	ReadElement("LandAllocation", "PointMapDemands", pmDemands);
-	ReadElement("LandAllocation", "DemandsPreference", sColDemandsPreference);
-	ReadElement("LandAllocation", "OptimalFacilities", iOptimalFacilities);
-	ReadElement("LandAllocation", "Capacitated", fCapacitated);
-	ReadElement("LandAllocation", "StoppingCriteria", iStoppingCriteria);
-	ReadElement("LandAllocation", "Generations", iGenerations);
-	ReadElement("LandAllocation", "PopulationSize", iPopulationSize);
-	ReadElement("LandAllocation", "Nelite", iNelite);
-	ReadElement("LandAllocation", "Npareto", iNpareto);
-	ReadElement("LandAllocation", "MutationPercent", rMutationPercent);
-	ReadElement("LandAllocation", "CrossoverPercent", rCrossoverPercent);
-	pmFacilitiesNoAttribute = PointMap(fnGetSourceFile(pmFacilities, fn));
-  }
-  catch (const ErrorObject& err) {  // catch to prevent invalid object
-    err.Show();
-    return;
-  }
-  fMultiObjective = (sColFacilitiesType.length() > 0) && (sColDemandsPreference.length() > 0);
-  Init();
-  objdep.Add(pmFacilities.ptr());
-  objdep.Add(pmDemands.ptr());
-}
-
-LandAllocation::LandAllocation(const FileName& fn, PointMapPtr& p, const PointMap& _pmFacilities, const PointMap& _pmFacilitiesNoAttribute, const String& _sColFacilitiesType, const PointMap& _pmDemands, const String& _sColDemandsPreference,
+LandAllocation::LandAllocation(const PointMap& _pmFacilities, const PointMap& _pmFacilitiesNoAttribute, const String& _sColFacilitiesType, const PointMap& _pmDemands, const PointMap& _pmDemandsNoAttribute, const String& _sColDemandsPreference,
 							   int _iOptimalFacilities, bool _fCapacitated, int _iStoppingCriteria, long _iGenerations, int _iPopulationSize, int _iNelite, int _iNpareto, double _rMutationPercent, double _rCrossoverPercent)
-: PointMapVirtual(fn, p, _pmFacilitiesNoAttribute->cs(),_pmFacilitiesNoAttribute->cb(),_pmFacilitiesNoAttribute->dvrs())
-, pmFacilities(_pmFacilities)
+: pmFacilities(_pmFacilities)
 , pmFacilitiesNoAttribute(_pmFacilitiesNoAttribute)
 , sColFacilitiesType(_sColFacilitiesType)
 , pmDemands(_pmDemands)
+, pmDemandsNoAttribute(_pmDemandsNoAttribute)
 , sColDemandsPreference(_sColDemandsPreference)
 , iOptimalFacilities(_iOptimalFacilities)
 , fCapacitated(_fCapacitated)
@@ -119,34 +29,11 @@ LandAllocation::LandAllocation(const FileName& fn, PointMapPtr& p, const PointMa
 , rMinDistance(rUNDEF)
 , rMaxDistance(rUNDEF)
 {
-  fNeedFreeze = true;
   fMultiObjective = (sColFacilitiesType.length() > 0) && (sColDemandsPreference.length() > 0);
   Init();
-  objdep.Add(pmFacilities.ptr());
-  objdep.Add(pmDemands.ptr());
-  if (!fnObj.fValid()) // 'inline' object
-    objtime = objdep.tmNewest();
-  if (pmFacilitiesNoAttribute->fTblAttSelf())
-    SetAttributeTable(pmFacilitiesNoAttribute->tblAtt());
-}
-
-void LandAllocation::Store()
-{
-  PointMapVirtual::Store();
-  WriteElement("PointMapVirtual", "Type", "PointMapLandAllocation");
-  WriteElement("LandAllocation", "PointMapFacilities", pmFacilities);
-  WriteElement("LandAllocation", "FacilitiesType", fMultiObjective ? sColFacilitiesType : "");
-  WriteElement("LandAllocation", "PointMapDemands", pmDemands);
-  WriteElement("LandAllocation", "DemandsPreference", fMultiObjective ? sColDemandsPreference : "");
-  WriteElement("LandAllocation", "OptimalFacilities", iOptimalFacilities);
-  WriteElement("LandAllocation", "Capacitated", fCapacitated);
-  WriteElement("LandAllocation", "StoppingCriteria", iStoppingCriteria);
-  WriteElement("LandAllocation", "Generations", iGenerations);
-  WriteElement("LandAllocation", "PopulationSize", iPopulationSize);
-  WriteElement("LandAllocation", "Nelite", iNelite);
-  WriteElement("LandAllocation", "Npareto", iNpareto);
-  WriteElement("LandAllocation", "MutationPercent", rMutationPercent);
-  WriteElement("LandAllocation", "CrossoverPercent", rCrossoverPercent);
+  ScoreFunc scoreFunc1 = (ScoreFunc)&LandAllocation::rStdDistanceFunc;
+  ScoreFunc scoreFunc2 = (ScoreFunc)&LandAllocation::rStdPreferenceFunc;
+  GAAlgorithm = new GA(this, fMultiObjective ? (FitnessFunc)&LandAllocation::FitnessMO : (FitnessFunc)&LandAllocation::FitnessSO, scoreFunc1, scoreFunc2);
 }
 
 LandAllocation::~LandAllocation()
@@ -159,51 +46,12 @@ LandAllocation::~LandAllocation()
 		delete [] rDemand;
 	if (rCapacity)
 		delete [] rCapacity;
-}
-
-String LandAllocation::sExpression() const
-{
-	if (fMultiObjective)
-		return String("PointMapLandAllocation(%S,%S,%S,%S,%d,%s,%d,%d,%d,%d,%d,%f,%f)", pmFacilities->sNameQuoted(false, fnObj.sPath()), sColFacilitiesType, pmDemands->sNameQuoted(false, fnObj.sPath()), sColDemandsPreference, iOptimalFacilities, fCapacitated ? "capacitated" : "plain", iStoppingCriteria, iGenerations, iPopulationSize, iNelite, iNpareto, rMutationPercent, rCrossoverPercent);
-	else
-		return String("PointMapLandAllocation(%S,%S,%d,%s,%d,%d,%d,%f,%f)", pmFacilities->sNameQuoted(false, fnObj.sPath()), pmDemands->sNameQuoted(false, fnObj.sPath()), iOptimalFacilities, fCapacitated ? "capacitated" : "plain", iStoppingCriteria, iGenerations, iPopulationSize, rMutationPercent, rCrossoverPercent);
-}
-
-bool LandAllocation::fDomainChangeable() const
-{
-  return false;
-}
-
-FileName LandAllocation::fnGetSourceFile(const PointMap & pm, const FileName & fnObj)
-{
-	if (pm->fnObj.fValid())
-		return pm->fnObj;
-	else
-	{
-		String sExpr =  pm->sExpression();
-		char *p = sExpr.strrchrQuoted('.');
-		// *p is not necessarily an extension's dot
-		char *pMax = (sExpr.length() > 0) ? (const_cast<char*>(&(sExpr)[sExpr.length() - 1])) : 0; // last valid char in sExpr
-		char *q = sExpr.strrchrQuoted('\\');
-		// *p is definitely not an extension's dot if p<q
-		if (p<q || p>=pMax)
-			p = 0;
-		// Now we're (only) sure that p points to the last dot in the filename
-		if (p)
-			*p = 0;
-		const String sFile = sExpr.c_str();
-		FileName fn(sFile, ".mpp", true);
-		if (0 == strchr(sFile.c_str(), ':')) // no path set
-			fn.Dir(fnObj.sPath()); 
-		return fn;
-	}
+	if (GAAlgorithm)
+		delete GAAlgorithm;
 }
 
 void LandAllocation::Init()
 {
-  htpFreeze = "ilwisapp\\mask_points_algorithm.htm";
-  sFreezeTitle = "PointMapLandAllocation";
-
   int iNrDemandPoints = pmDemands->iFeatures();
   int iNrFacilities = pmFacilities->iFeatures();
 
@@ -231,26 +79,21 @@ void LandAllocation::Init()
   }
 
   if (fMultiObjective) {
-	  FileName fnDemandsPreference (fnGetSourceFile(pmDemands, fnObj));
-	  FileName fnFacilitiesType (fnGetSourceFile(pmFacilities, fnObj));
-	  PointMap pmDemandsPreference (fnDemandsPreference);
-	  PointMap pmFacilitiesType (fnFacilitiesType);
-
 	  vector<String> sDemandsPreference;
 	  sDemandsPreference.resize(iNrDemandPoints);
-	  if (pmDemandsPreference.fValid() && pmDemandsPreference->fTblAtt()) {
-		  Table tbl = pmDemandsPreference->tblAtt();
+	  if (pmDemandsNoAttribute.fValid() && pmDemandsNoAttribute->fTblAtt()) {
+		  Table tbl = pmDemandsNoAttribute->tblAtt();
 		  Column col = tbl->col(sColDemandsPreference);
 		  for (int i = 0; i < iNrDemandPoints; ++i)
-			  sDemandsPreference[i] = col->sValue(pmDemandsPreference->iRaw(i), 0);
+			  sDemandsPreference[i] = col->sValue(pmDemandsNoAttribute->iRaw(i), 0);
 	  }
 	  vector <String> sFacilitiesType;
 	  sFacilitiesType.resize(iNrFacilities);
-	  if (pmFacilitiesType.fValid() && pmFacilitiesType->fTblAtt()) {
-		  Table tbl = pmFacilitiesType->tblAtt();
+	  if (pmFacilitiesNoAttribute.fValid() && pmFacilitiesNoAttribute->fTblAtt()) {
+		  Table tbl = pmFacilitiesNoAttribute->tblAtt();
 		  Column col = tbl->col(sColFacilitiesType);
 		  for (int i = 0; i < iNrFacilities; ++i)
-			  sFacilitiesType[i] = col->sValue(pmFacilitiesType->iRaw(i), 0);
+			  sFacilitiesType[i] = col->sValue(pmFacilitiesNoAttribute->iRaw(i), 0);
 	  }
 
 	  rPreferenceMatrix.resize(iNrDemandPoints);
@@ -297,43 +140,42 @@ void LandAllocation::KeepElite(std::vector<GAChromosome> & solutions, std::vecto
 	std::sort(solutions.begin(), solutions.end()); // sort by fitness (largest fitness at the beginning)
 }
 
-std::vector<GAChromosome> LandAllocation::GenerateParetoArray()
+std::vector<GAChromosome> LandAllocation::GenerateParetoArray(Tranquilizer & trq)
 {
 	seedrand(clock());
 
-	ScoreFunc scoreFunc1 = (ScoreFunc)&LandAllocation::rStdDistanceFunc;
-	ScoreFunc scoreFunc2 = (ScoreFunc)&LandAllocation::rStdPreferenceFunc;
+	trq.SetTitle(String(TR("Finding Pareto Solutions in '%S'").c_str(), pmFacilities->sName()));
 
-	GA GAAlgorithm(this, fMultiObjective ? (FitnessFunc)&LandAllocation::FitnessMO : (FitnessFunc)&LandAllocation::FitnessSO, scoreFunc1, scoreFunc2);
-	GAAlgorithm.SetSelectionType(fMultiObjective ? GA::Probability : GA::Tournament);
-	GAAlgorithm.SetStoppingCriteria(iStoppingCriteria);
-	GAAlgorithm.SetGenerations(iGenerations);
-	GAAlgorithm.SetPopulationSize(iPopulationSize);
-	GAAlgorithm.SetMutation(rMutationPercent);
-	GAAlgorithm.SetCrossover(rCrossoverPercent);
-	GAAlgorithm.Initialize();
+	GAAlgorithm->SetSelectionType(fMultiObjective ? GA::Probability : GA::Tournament);
+	GAAlgorithm->SetStoppingCriteria(iStoppingCriteria);
+	GAAlgorithm->SetGenerations(iGenerations);
+	GAAlgorithm->SetPopulationSize(iPopulationSize);
+	GAAlgorithm->SetMutation(rMutationPercent);
+	GAAlgorithm->SetCrossover(rCrossoverPercent);
+	GAAlgorithm->Initialize();
 	std::vector<GAChromosome> pareto;
 	int iGenerationNr = 0;
-	std::vector<GAChromosome> & solutions = GAAlgorithm.GetCurrentGeneration();
+	std::vector<GAChromosome> & solutions = GAAlgorithm->GetCurrentGeneration();
 	UpdatePareto(solutions, pareto);
-	while (!GAAlgorithm.IsDone())
+	while (!GAAlgorithm->IsDone())
 	{
-        GAAlgorithm.CreateNextGeneration();
-		solutions = GAAlgorithm.GetCurrentGeneration();
+        GAAlgorithm->CreateNextGeneration();
+		solutions = GAAlgorithm->GetCurrentGeneration();
 		KeepElite(solutions, pareto);
 		UpdatePareto(solutions, pareto);
-	    if (trq.fUpdate(iGenerationNr, GAAlgorithm.GetGenerations()))
+	    if (trq.fUpdate(iGenerationNr, GAAlgorithm->GetGenerations()))
 			return pareto;
         ++iGenerationNr;
 	}
-	trq.fUpdate(GAAlgorithm.GetGenerations(), GAAlgorithm.GetGenerations());
+	trq.fUpdate(GAAlgorithm->GetGenerations(), GAAlgorithm->GetGenerations());
 	return pareto;
 }
 
-bool LandAllocation::fFreezing()
+GAChromosome * LandAllocation::PerformLandAllocation(Tranquilizer & trq)
 {
 	seedrand(clock());
 	trq.SetText(String(TR("Finding optimal locations in '%S'").c_str(), pmFacilities->sName()));
+
 	long iPoints = pmFacilities->iFeatures();
 	if (iPoints < 2)
 		throw ErrorObject(TR("Not enough potential locations"));
@@ -342,142 +184,34 @@ bool LandAllocation::fFreezing()
 	if (iPopulationSize < 1)
 		throw ErrorObject(TR("Bad population size"));
 
-	ScoreFunc scoreFunc1 = (ScoreFunc)&LandAllocation::rStdDistanceFunc;
-	ScoreFunc scoreFunc2 = (ScoreFunc)&LandAllocation::rStdPreferenceFunc;
-
-	GA GAAlgorithm(this, fMultiObjective ? (FitnessFunc)&LandAllocation::FitnessMO : (FitnessFunc)&LandAllocation::FitnessSO, scoreFunc1, scoreFunc2);
-	GAAlgorithm.SetSelectionType(fMultiObjective ? GA::Probability : GA::Tournament);
-	GAAlgorithm.SetStoppingCriteria(iStoppingCriteria);
-	GAAlgorithm.SetGenerations(iGenerations);
-	GAAlgorithm.SetPopulationSize(iPopulationSize);
-	GAAlgorithm.SetMutation(rMutationPercent);
-	GAAlgorithm.SetCrossover(rCrossoverPercent);
-	GAAlgorithm.Initialize();
-	RealBuf vrFitnessList (iGenerations);
-	RealBuf vrPopulationAvgList (iGenerations);
+	GAAlgorithm->SetSelectionType(fMultiObjective ? GA::Probability : GA::Tournament);
+	GAAlgorithm->SetStoppingCriteria(iStoppingCriteria);
+	GAAlgorithm->SetGenerations(iGenerations);
+	GAAlgorithm->SetPopulationSize(iPopulationSize);
+	GAAlgorithm->SetMutation(rMutationPercent);
+	GAAlgorithm->SetCrossover(rCrossoverPercent);
+	GAAlgorithm->Initialize();
+	vrFitnessList.Size(iGenerations);
+	vrPopulationAvgList.Size(iGenerations);
 	int iGenerationNr = 0;
-	while (!GAAlgorithm.IsDone())
+	while (!GAAlgorithm->IsDone())
 	{
-		vrFitnessList[iGenerationNr] = GAAlgorithm.rGetBestValue(iGenerationNr);
-		vrPopulationAvgList[iGenerationNr] = (GAAlgorithm.rGetAverageValue(iGenerationNr));
-        GAAlgorithm.CreateNextGeneration();
-	    if (trq.fUpdate(iGenerationNr, GAAlgorithm.GetGenerations()))
-			return false;
+		vrFitnessList[iGenerationNr] = GAAlgorithm->rGetBestValue(iGenerationNr);
+		vrPopulationAvgList[iGenerationNr] = (GAAlgorithm->rGetAverageValue(iGenerationNr));
+        GAAlgorithm->CreateNextGeneration();
+	    if (trq.fUpdate(iGenerationNr, GAAlgorithm->GetGenerations()))
+			return 0 ;
         ++iGenerationNr;
 	}
-	trq.fUpdate(GAAlgorithm.GetGenerations(), GAAlgorithm.GetGenerations());
-	double rBestFitness = vrFitnessList[GAAlgorithm.GetGenerations() - 1];
-	for (int iGenerationNr = 0; iGenerationNr < GAAlgorithm.GetGenerations(); ++iGenerationNr)
+	trq.fUpdate(GAAlgorithm->GetGenerations(), GAAlgorithm->GetGenerations());
+	double rBestFitness = vrFitnessList[GAAlgorithm->GetGenerations() - 1];
+	for (int iGenerationNr = 0; iGenerationNr < GAAlgorithm->GetGenerations(); ++iGenerationNr)
 	{
 		vrFitnessList[iGenerationNr] /= rBestFitness;
 		vrPopulationAvgList[iGenerationNr] /= rBestFitness;
 	}
-    GAChromosome * chromosome = GAAlgorithm.GetBestChromosome();
-	if (chromosome != 0)
-	{
-		for (int i = 0; i < iOptimalFacilities; i++)
-		{
-			unsigned int facilityIndex = chromosome->at(i);
-			String sValue = pmFacilitiesNoAttribute->sValue(facilityIndex,0);
-			pms->iAddVal(pmFacilities->cValue(facilityIndex), sValue);
-		}
-	}
-
-	// Create Fitness Table
-
-	FileName fnFitness (fnObj, ".tbt", true);
-	fnFitness.sFile += "_fitness";
-	Domain fitnessDom (FileName(fnFitness, ".dom", true), iGenerations, dmtUNIQUEID);
-	Table fitnessTbl (fnFitness, fitnessDom);
-	Column colBestFitness (fitnessTbl, "BestFitness", DomainValueRangeStruct(0, 1, 0));
-	Column colAvgFitness (fitnessTbl, "AvgFitness", DomainValueRangeStruct(0, 1, 0));
-	colBestFitness->PutBufVal(vrFitnessList, 1);
-	colAvgFitness->PutBufVal(vrPopulationAvgList, 1);
-
-	// Create Fitness Graph
-
-	CartesianGraphDoc cgd;
-	cgd.CreateNewGraph(fitnessTbl, Column(), colBestFitness, "Contineous", Color(0, 255, 0));
-	cgd.AddColumnGraph(colAvgFitness, "Contineous", Color(255, 0, 255));
-	// Save the Fitness Graph
-	FileName fnFitnessGraph(fnFitness, ".grh", true);
-	String sFile = fnFitnessGraph.sFullPath();
-	const char * lpszPathName = sFile.c_str();
-	CFileException fe;
-	CFile* pFile = cgd.GetFile(lpszPathName, CFile::modeCreate | CFile::modeReadWrite | CFile::shareExclusive, &fe);
-	if (pFile == NULL)
-	{
-		cgd.ReportSaveLoadException(lpszPathName, &fe, TRUE, AFX_IDP_INVALID_FILENAME);
-	}
-	else
-	{
-		CArchive saveArchive(pFile, CArchive::store | CArchive::bNoFlushOnDelete);
-		saveArchive.m_pDocument = &cgd;
-		saveArchive.m_bForceFlat = FALSE;
-		TRY
-		{
-			CWaitCursor wait;
-			cgd.Serialize(saveArchive);
-			saveArchive.Close();
-			cgd.ReleaseFile(pFile, FALSE);
-		}
-		CATCH_ALL(e)
-		{
-			cgd.ReleaseFile(pFile, TRUE);
-
-			TRY
-			{
-				cgd.ReportSaveLoadException(lpszPathName, e, TRUE, AFX_IDP_FAILED_TO_SAVE_DOC);
-			}
-			END_TRY
-			e->Delete(); //DELETE_EXCEPTION(e);
-			return FALSE;
-		}
-		END_CATCH_ALL
-	}
-
-	// Create Connections Segment Map
-	if (chromosome != 0)
-	{
-		FileName fnConnections (fnObj, ".mps", true);
-		fnConnections.sFile += "_connections";
-		Domain dmConnections (FileName(fnConnections, ".dom", true), 0, dmtUNIQUEID);
-		DomainIdentifier* dmIdentifierPtr = dmConnections->pdid();
-
-		CoordSystem csyDest (pmFacilities->cs());
-		CoordBounds cbMap (pmDemands->cb());
-		cbMap += pmFacilities->cb();
-		SegmentMap segMap(fnConnections, csyDest, cbMap, dmConnections);
-		vector<int> source;
-		vector<int> destination;
-		vector<double> allocations;
-		unsigned long iNrSegments = AddConnections(segMap, dmConnections, source, destination, allocations, *chromosome, this, scoreFunc1, scoreFunc2);
-		LongBuf lbSource (iNrSegments);
-		LongBuf lbDestination (iNrSegments);
-		RealBuf rbAllocations (iNrSegments);
-		for (unsigned long i = 0; i < iNrSegments; ++i)
-		{
-			lbSource[i] = source[i];
-			lbDestination[i] = destination[i];
-			rbAllocations[i] = allocations[i];
-		}
-
-		// Create the Attribute Table
-		Table connectionTbl = Table(FileName(fnConnections, ".tbt", true), dmConnections);
-
-		PointMap pmDemandsNoAttribute (fnGetSourceFile(pmDemands, fnObj));
-		Column colSource (connectionTbl, "DemandID", pmDemandsNoAttribute->dm());
-		colSource->PutBufRaw(lbSource, 1);
-		Column colDestination (connectionTbl, "FacilityID", pmFacilitiesNoAttribute->dm());
-		colDestination->PutBufRaw(lbDestination, 1);
-		Column colAllocations (connectionTbl, "Allocated", DomainValueRangeStruct(0, 10000, 0));
-		colAllocations->PutBufVal(rbAllocations, 1);
-
-		segMap->SetAttributeTable(connectionTbl);
-	}
-
-  _iPoints = pms->iPnt();
-  return true;
+    GAChromosome * chromosome = GAAlgorithm->GetBestChromosome();
+	return chromosome;
 }
 
 double LandAllocation::rStdDistanceFunc(int demandIndex, int facilityIndex)
@@ -615,69 +349,6 @@ void LandAllocation::FitnessMO(GAChromosome & chromosome, LandAllocation * conte
 	chromosome.SetPartialFitness(totalPartialScore1 / totalAllocation, totalPartialScore2 / totalAllocation);
 
 	delete [] Allocation;
-}
-
-long LandAllocation::AddConnections(SegmentMap & segMap, Domain & dm, vector<int> & source, vector<int> & destination, vector<double> & allocations, GAChromosome & chromosome, LandAllocation * context, ScoreFunc scoreFunc1, ScoreFunc scoreFunc2)
-{
-    if (chromosome.size() == 0)
-        return 0;
-	DomainUniqueID * pdUid = dm->pdUniqueID();
-	long iSegRecord = 0; // increase before adding first segment; segment count starts at 1
-	int iNrFacilities = pmFacilities->iFeatures();
-    double * Allocation = new double [iNrFacilities]; // keep track of the allocation while we're in the loop
-	for (int i = 0; i < iNrFacilities; ++i)
-		Allocation[i] = 0;
-	int iNrDemandPoints = pmDemands->iFeatures();
-    for (int demandIndex = 0; demandIndex < iNrDemandPoints; demandIndex++)
-    {
-		double rDemandCount = (rDemand != 0) ? rDemand[demandIndex] : 1.0; //when an attribute is used to denote how many demands are at that location
-		while (rDemandCount > 0)
-		{
-			double rBestScore = -1;
-			int selectedFacilityIndex = -1;
-			for (int chromosomeIndex = 0; chromosomeIndex < iOptimalFacilities; chromosomeIndex++)
-			{
-				int facilityIndex = chromosome[chromosomeIndex];
-
-				double rScore = (context->*scoreFunc1)(demandIndex, facilityIndex);
-				if (fMultiObjective)
-					rScore = chromosome.w1() * rScore + chromosome.w2() * (context->*scoreFunc2)(demandIndex, facilityIndex);
-
-				if ((!fCapacitated) || (Allocation[facilityIndex] < ((rCapacity != 0) ? rCapacity[facilityIndex] : 1.0))) // If a capacity attribute is indicated, respect the maximum capacity of the facility
-				{
-					if ((selectedFacilityIndex == -1) || (rScore > rBestScore))
-					{
-						rBestScore = rScore;
-						selectedFacilityIndex = facilityIndex;
-					}
-				}
-			}
-			if (selectedFacilityIndex != -1)
-			{
-				double allocated = fCapacitated ? min(((rCapacity != 0) ? rCapacity[selectedFacilityIndex] : 1.0) - Allocation[selectedFacilityIndex], rDemandCount) : rDemandCount;
-				Allocation[selectedFacilityIndex] += allocated;
-				rDemandCount -= allocated; // The leftover demands will have to be served by another facility
-				pdUid->iAdd();
-				source.push_back(demandIndex + 1);
-				destination.push_back(selectedFacilityIndex + 1);
-				allocations.push_back(allocated);
-				CoordBuf cBuf(2);
-				ILWIS::Segment *segCur = CSEGMENT(segMap->newFeature());
-				cBuf[0] = cDemands[demandIndex];
-				cBuf[1] = cFacilities[selectedFacilityIndex];
-				segCur->PutCoords(2, cBuf);
-				segCur->PutVal(++iSegRecord);
-			}
-			else
-			{
-				demandIndex = iNrDemandPoints;
-				break;
-			}
-		}
-    }
-
-	delete [] Allocation;
-	return iSegRecord;
 }
 
 void LandAllocation::ChromosomeMutator(GAChromosome & chromosome)
