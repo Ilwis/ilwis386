@@ -43,7 +43,7 @@ Last change:  WK   17 Sep 98    2:14 pm
 #include "Client\Headers\AppFormsPCH.h"
 #include "Client\Base\BaseCommandHandlerUI.h"
 #include "Client\MainWindow\CommandHandlerUI.h"
-#include "LandAllocation.h"
+#include "PointMapLandAllocation.h"
 #include "FormLandAllocation.h"
 
 extern "C" _export InfoUIVector* getCommandInfoUI(ILWIS::Module *module) {
@@ -54,7 +54,7 @@ extern "C" _export InfoUIVector* getCommandInfoUI(ILWIS::Module *module) {
 
 InfoVector* getCommandInfo() {
 	InfoVector *infos = new InfoVector();
-	infos->push_back(CommandMap::newCommandInfo(createLandAllocation,"PointMapLandAllocation"));
+	infos->push_back(CommandMap::newCommandInfo(createPointMapLandAllocation,"PointMapLandAllocation"));
 	return infos;
 }
 
