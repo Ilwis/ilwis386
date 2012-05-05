@@ -3,12 +3,13 @@
 
 #include "Engine\Applications\objvirt.h"
 #include <vector>
+#include "FunctionProvider.h"
 
 class GAChromosome;
 class LandAllocation;
 
-typedef double (IlwisObjectVirtual::*ScoreFunc)(int demandIndex, int facilityIndex);
-typedef void (IlwisObjectVirtual::*FitnessFunc)(GAChromosome & chromosome, LandAllocation * context, ScoreFunc scoreFunc1, ScoreFunc scoreFunc2);
+typedef double (FunctionProvider::*ScoreFunc)(int demandIndex, int facilityIndex);
+typedef void (FunctionProvider::*FitnessFunc)(GAChromosome & chromosome, LandAllocation * context, ScoreFunc scoreFunc1, ScoreFunc scoreFunc2);
 
 class GAChromosome : public std::vector<unsigned int>
 {
@@ -18,9 +19,9 @@ public:
 	virtual ~GAChromosome();
 	void CopyChromosome(GAChromosome & chromosome); 
 	int HasThisGene(unsigned int Gene);
-	double rGetFitness();
-	double rGetPartialScore1();
-	double rGetPartialScore2();
+	double rGetFitness() const;
+	double rGetPartialScore1() const;
+	double rGetPartialScore2() const;
 	const double w1() {return m_w1;};
 	const double w2() {return m_w2;};
 	void SetFitness(double value);
