@@ -6,6 +6,8 @@
 
 GAChromosome::GAChromosome()
 : m_dFitness(0)
+, m_score1(0)
+, m_score2(0)
 , m_w1(random())
 , m_w2(1.0 - m_w1)
 {
@@ -13,6 +15,8 @@ GAChromosome::GAChromosome()
 
 GAChromosome::GAChromosome(LandAllocation * context, FitnessFunc fitnessFunc, ScoreFunc scoreFunc1, ScoreFunc scoreFunc2, bool fInitialize)
 : m_dFitness(0)
+, m_score1(0)
+, m_score2(0)
 , m_w1(random())
 , m_w2(1.0 - m_w1)
 {
@@ -32,6 +36,8 @@ void GAChromosome::operator = (const GAChromosome& chromosome)
 	for(int i = 0; i < iLength; ++i)
 		push_back(chromosome[i]);
 	m_dFitness = chromosome.m_dFitness;
+	m_score1 = chromosome.m_score1;
+	m_score2 = chromosome.m_score2;
 }
 
 void GAChromosome::CopyChromosome(GAChromosome & chromosome)
@@ -41,6 +47,8 @@ void GAChromosome::CopyChromosome(GAChromosome & chromosome)
 	for(int i = 0; i < iLength; ++i)
 		push_back(chromosome[i]);
 	m_dFitness = chromosome.m_dFitness;
+	m_score1 = chromosome.m_score1;
+	m_score2 = chromosome.m_score2;
 }
     
 int GAChromosome::HasThisGene(unsigned int Gene)
@@ -62,7 +70,7 @@ int GAChromosome::HasThisGene(unsigned int Gene)
 	return index;
 }
 
-double GAChromosome::rGetFitness()
+double GAChromosome::rGetFitness() const
 {
 	return m_dFitness;
 }
@@ -78,12 +86,12 @@ void GAChromosome::SetPartialFitness(double value1, double value2)
 	m_score2 = value2;
 }
 
-double GAChromosome::rGetPartialScore1()
+double GAChromosome::rGetPartialScore1() const
 {
 	return m_score1;
 }
 
-double GAChromosome::rGetPartialScore2()
+double GAChromosome::rGetPartialScore2() const
 {
 	return m_score2;
 }
