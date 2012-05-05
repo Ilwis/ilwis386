@@ -228,6 +228,14 @@
 				RelativePath="..\..\Sources\MOGA\LandAllocation.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\..\Sources\MOGA\ParetoGraphFunction.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\MOGA\PointMapLandAllocation.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -236,6 +244,10 @@
 			>
 			<File
 				RelativePath="..\..\Sources\MOGA\FormLandAllocation.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\MOGA\FunctionProvider.h"
 				>
 			</File>
 			<File
@@ -248,6 +260,14 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\MOGA\LandAllocation.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\MOGA\ParetoGraphFunction.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\MOGA\PointMapLandAllocation.h"
 				>
 			</File>
 		</Filter>
