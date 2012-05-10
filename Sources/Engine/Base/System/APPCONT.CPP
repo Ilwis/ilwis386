@@ -117,7 +117,14 @@ String IlwisAppContext::sStdDir()
   { return svl()->sGet("IlwStdDir"); }
 
 String IlwisAppContext::sIlwDir()
-  { return svl()->sGet("IlwDir"); }
+{ 
+	String s = svl()->sGet("IlwDir");
+	// for unknown reasons it appears that in secondary process calls the application dir
+	// that windows returns contains not the ending '\' marker so we add it
+	if ( s[ s.size() - 1] != '\\')
+		s += '\\';
+	return s; 
+}
 
 FileName IlwisAppContext::fnUserINI()
 {
