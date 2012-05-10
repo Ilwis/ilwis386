@@ -527,7 +527,6 @@ BOOL IlwisWinApp::InitInstance()
 			//::MessageBox(0,"Start index", "help", MB_OK);
 			helpFinder->indexHTMLFiles();
 		}
-
 		return TRUE;
 	}
 	catch (ErrorObject& err)
@@ -1096,6 +1095,15 @@ void IlwisWinApp::RegisterDocTemplates()
 		RUNTIME_CLASS(MatrixView));
 	AddDocTemplate(idt);
 
+	//idt = new IlwisDocTemplate(
+	//	".mpr", 
+	//	"Foreign Object",
+	//	"Openstreetmap",
+	//	RUNTIME_CLASS(MapCompositionDoc),
+	//	RUNTIME_CLASS(MapWindow),
+	//	RUNTIME_CLASS(MapPaneView));
+	//AddDocTemplate(idt);
+
 	idt = new IlwisExpressionDocTemplate(
 		"Matrix",
 		RUNTIME_CLASS(MatrixDoc),
@@ -1231,8 +1239,8 @@ void IlwisWinApp::InitImageLists()
 {
 	ilSmall.Create(16,16,TRUE,4,4);
 	ilLarge.Create(32,32,TRUE,4,4);
-	ilSmall.SetImageCount(132);
-	ilLarge.SetImageCount(132);
+	ilSmall.SetImageCount(133);
+	ilLarge.SetImageCount(133);
 
 	int i = 0;
 	InitImage("ilwis", "LogoIcon", i++);
@@ -1379,6 +1387,7 @@ void IlwisWinApp::InitImageLists()
 	InitImage(".choice", "choice", i++);
 	InitImage("ColorComposite", "ColorComposite", i++);
 	InitImage("Border", "Border", i++);
+	InitImage("Openstreemap","Openstreetmap", i++);
 }
 
 int IlwisWinApp::iImage(const string& sExt)
