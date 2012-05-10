@@ -79,7 +79,7 @@ String Datum::WKTToILWISName(const String& wkt) {
 
 	ILWIS::QueryResults results;
 
-	String query("Select Ilwis_Name from Datums where Ilwis_name='%S'", wkt);
+	String query("Select name from Datums where name='%S'", wkt);
 	getEngine()->pdb()->executeQuery(query, results);
 	if ( results.size() > 0) {
 		return wkt; // name == ilwis name
@@ -181,7 +181,7 @@ MolodenskyDatum::MolodenskyDatum(const String& sN, const String& sA)
 	ILWIS::QueryResults results;
 	String query("Select dx,dy,dz,ellipsoid,description from Datums where name='%S'",sName());
 	getEngine()->pdb()->executeQuery(query, results);
-	if ( results.size() > 0) {
+    if ( results.size() > 0) {
 		dx = results.get("dx",0).rVal();
 		dy = results.get("dy",0).rVal();
 		dz = results.get("dz",0).rVal();
