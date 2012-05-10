@@ -35,6 +35,10 @@ String QueryResults::get(const String& colName, int rec) {
 Database::Database(const String& _location, const String& _id) : location(_location), id(_id) {
 }
 
+Database::~Database() {
+	close_connection();
+}
+
 String Database::getId() const {
 	return id;
 }
@@ -70,10 +74,17 @@ int callback(void *retData, int noOfColumns, char **argv, char **azColName){
 }
 
 SpatialLite::SpatialLite(const String& _location, const String& _id) : Database(_location, _id) {
-	valid = sqlite3_open(getLocation().c_str(), &db) == SQLITE_OK;
-
+	open_connection();
 }
 
+bool SpatialLite::open_connection() {
+	return sqlite3_open_v2(getLocation().c_str(), &db,SQLITE_OPEN_FULLMUTEX,0) == SQLITE_OK;
+}
+
+bool SpatialLite::close_connection() {
+	return sqlite3_close(db) == SQLITE_OK;
+
+}
 bool SpatialLite::executeQuery(const String& query, QueryResults& results, vector<String>& errors){
 	if (!isValid())
 		return false;
@@ -81,9 +92,14 @@ bool SpatialLite::executeQuery(const String& query, QueryResults& results, vecto
 
 	char* db_err = 0;
 
-	sqlite3_exec(db, query.c_str(), callback, &results, &db_err);
+	bool isOK = sqlite3_exec(db, query.c_str(), callback, &results, &db_err) == SQLITE_OK;
+	if ( db_err) {
+		String err(db_err);
+		MessageBox(0,err.c_str(), "Bah", MB_OK);
+		sqlite3_free(db_err);
+	}
 
-	return  results.size() > 0;
+	return  isOK;
 }
 
 bool SpatialLite::executeStatement(const String& statement){
