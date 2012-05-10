@@ -103,6 +103,8 @@ public:
    Table _export        		tblAtt() const;
    void _export         		SetAttributeTable(const Table& tbl);
    RangeReal _export			getRange();
+   double _export getStep() const;
+   Domain _export					dm() const;
 
 protected:
   _export MapListPtr(const FileName& fn);

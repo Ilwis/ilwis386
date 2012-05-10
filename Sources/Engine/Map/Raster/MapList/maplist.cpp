@@ -1302,3 +1302,15 @@ RangeReal MapListPtr::getRange() {
 	}
 	return range;
 }
+
+Domain MapListPtr::dm() const {
+	if ( ma.size() > 0)
+		return ma[0]->dm();
+	return Domain();
+}
+
+double MapListPtr::getStep() const{
+	if ( ma.size() > 0)
+		return ma[0]->dvrs().rStep();
+	return 1;
+}
