@@ -33,6 +33,8 @@ typedef const char* (__stdcall *GDALGetMetadataItemFunc)(GDALMajorObjectH hObjec
 typedef OGRErr (__stdcall *OSRImportFromEPSGFunc)( OGRSpatialReferenceH, int );
 typedef OGRErr (__stdcall *OSRExportToPrettyWktFunc)(OGRSpatialReferenceH ,char **ppszReturn,int);
 typedef double (*OSRGetProjParmFunc)(OGRSpatialReferenceH,const char *pszName,double dfDefaultValue,OGRErr * 	pnErr);
+typedef int (*VSIFCloseLFunc)( FILE * );
+typedef FILE* (*VSIFileFromMemBufferFunc)( const char *, GByte *, vsi_l_offset ,int  );
 
 typedef  OGRDataSourceH (*OGROpenFunc)(const char *, int, OGRSFDriverH *);
 typedef void (__stdcall *OGRRegisterAllFunc)();
@@ -106,6 +108,8 @@ public:
 	CPLPushFinderLocationFunc finderLoc;
 	OSRExportToPrettyWktFunc wktPretty;
 	OSRGetProjParmFunc getProjParam;
+	VSIFCloseLFunc vsiClose;
+	VSIFileFromMemBufferFunc vsiFileFromMem;
 
 	//ogr
 	OGROpenFunc ogrOpen;
