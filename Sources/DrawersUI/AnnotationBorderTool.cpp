@@ -95,8 +95,10 @@ AnnotationBorderForm::AnnotationBorderForm(CWnd *wPar, AnnotationBorderDrawer *d
 DisplayOptionsForm(dr,wPar,"Borders")
 {
 	step = dr->getStep();
+	num = dr->getNumberOfDigits();
 	neatline = dr->hasNeatLine();
 	new FieldInt(root,TR("Step"),&step);
+	new FieldInt(root,TR("Significant numbers"), &num);
 	new CheckBox(root, TR("Neat line"),&neatline);
 	create();
 }
@@ -107,6 +109,7 @@ void  AnnotationBorderForm::apply() {
 	AnnotationBorderDrawer *borderDrw = (AnnotationBorderDrawer *)drw;
 	borderDrw->setHasNeatLine(neatline);
 	borderDrw->setStep(step);
+	borderDrw->setNumberOfDigits(num);
 	
 	PreparationParameters pp(NewDrawer::ptRENDER | NewDrawer::ptGEOMETRY);
 	borderDrw->prepare(&pp);

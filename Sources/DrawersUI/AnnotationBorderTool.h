@@ -29,6 +29,7 @@ class AnnotationBorderForm : public DisplayOptionsForm {
 	void apply(); 
 private:
 	int step;
+	int num;
 	bool neatline;
 	
 	
