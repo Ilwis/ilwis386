@@ -648,7 +648,7 @@ ILWIS::NewDrawer *createAnnotationBorderDrawer(DrawerParameters *parms) {
 
 AnnotationBorderDrawer::AnnotationBorderDrawer(DrawerParameters *parms) : 
 AnnotationDrawer(parms, "AnnotationBorderDrawer"),
-borderBox(0), xborder(0.06), yborder(0.03), neatLine(true), step(1){
+borderBox(0), xborder(0.06), yborder(0.03), neatLine(true), step(1), numDigits(2){
 	for(int i=0; i < 4; ++i)
 		hasText.push_back(true);
 	id = "AnnotationBorderDrawer";
@@ -837,7 +837,7 @@ void AnnotationBorderDrawer::setText(double border, AnnotationBorderDrawer::Side
 	if ( side == sLEFT || side == sRIGHT) {
 		for(int i = 0; i < ypos.size(); ++i) {
 			TextDrawer *txtdrw = const_cast<AnnotationBorderDrawer *>(this)->getTextDrawer(i,side);
-			String txt =  isLatLon ? String("%f", ypos[i]) : String("%d", (long)ypos[i]);
+			String txt =  isLatLon ? String("%.*f",numDigits, ypos[i]) : String("%d", (long)ypos[i]);
 			txtdrw->setText(txt);
 			double offset = cbZoom.width() * 0.01;
 			CoordBounds cb = txtdrw->getTextExtent();
@@ -851,7 +851,7 @@ void AnnotationBorderDrawer::setText(double border, AnnotationBorderDrawer::Side
 		if ( side == sTOP || side == sBOTTOM) {
 			for(int i = 0; i < xpos.size(); ++i) {
 				TextDrawer *txtdrw = const_cast<AnnotationBorderDrawer *>(this)->getTextDrawer(i,side);
-				String txt =  isLatLon ? String("%f", xpos[i]) : String("%d", (long)xpos[i]);
+				String txt =  isLatLon ? String("%.*f",numDigits, xpos[i]) : String("%d", (long)xpos[i]);
 				txtdrw->setText(txt);
 				double offset = cbZoom.height() * 0.01;
 				CoordBounds cb = txtdrw->getTextExtent();
@@ -864,11 +864,18 @@ void AnnotationBorderDrawer::setText(double border, AnnotationBorderDrawer::Side
 		}
 	}
 }
+int AnnotationBorderDrawer::getNumberOfDigits() const{
+	return numDigits;
+}
+void AnnotationBorderDrawer::setNumberOfDigits(int num){
+	numDigits = num;
+}
 
 String AnnotationBorderDrawer::store(const FileName& fnView, const String& parentSection) const{
 	AnnotationDrawer::store(fnView, parentSection);
 	ObjectInfo::WriteElement(getType().c_str(),"Steps",fnView, step);
 	ObjectInfo::WriteElement(getType().c_str(),"Neatline",fnView, neatLine);
+	ObjectInfo::WriteElement(getType().c_str(),"digits",fnView, numDigits);
 
 	return parentSection;
 }
@@ -877,6 +884,7 @@ void AnnotationBorderDrawer::load(const FileName& fnView, const String& parentSe
 		AnnotationDrawer::load(fnView, parentSection);
 		ObjectInfo::ReadElement(getType().c_str(),"Steps",fnView, step);
 		ObjectInfo::ReadElement(getType().c_str(),"Neatline",fnView, neatLine);
+		ObjectInfo::ReadElement(getType().c_str(),"digits",fnView, numDigits);	
 }
 
 void AnnotationBorderDrawer::prepare(PreparationParameters *pp){

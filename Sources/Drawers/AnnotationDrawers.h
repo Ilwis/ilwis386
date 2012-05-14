@@ -123,6 +123,8 @@ public:
 	int getStep() const;
 	void setHasNeatLine(bool yesno);
 	void setStep(int st);
+	int getNumberOfDigits() const;
+	void setNumberOfDigits(int num);
 private:
 	bool draw( const CoordBounds& cbArea) const;
 	String store(const FileName& fnView, const String& parenSection) const;
@@ -142,6 +144,7 @@ private:
 	bool isLatLon;
 	bool neatLine;
 	int step;
+	int numDigits;
 
 };
 
