@@ -1,16 +1,4 @@
 #include "Client\Headers\formelementspch.h"
-#include "Engine\Drawers\RootDrawer.h"
-#include "Engine\Drawers\ComplexDrawer.h"
-//#include "Engine\Drawers\SimpleDrawer.h" 
-
-//#include "Engine\Drawers\ZValueMaker.h"
-#include "Engine\Drawers\SpatialDataDrawer.h"
-#include "Drawers\FeatureDataDrawer.h"
-//#include "Drawers\SetDrawer.h"
-#include "Client\Mapwindow\LayerTreeView.h"
-#include "Client\Mapwindow\MapPaneViewTool.h"
-#include "Client\MapWindow\Drawers\DrawerTool.h"
-#include "TimePositionBar.h"
 #include "SpaceTimeCubeTool.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
 #include "Client\Mapwindow\MapPaneView.h"
@@ -19,6 +7,7 @@
 #include "DrawersUI\SetDrawerTool.h"
 #include "Engine\Drawers\DrawerContext.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
+#include "TimePositionBar.h"
 #include "TemporalDrawer.h"
 #include "SizableDrawer.h"
 #include "PreTimeOffsetDrawer.h"
@@ -35,7 +24,7 @@
 #include "Client\Base\datawind.h"
 
 LayerData::LayerData(NewDrawer *drw)
-: drawer(drw)
+: drawerId(drw->getId())
 , plotOption(false)
 , sizeOption(false)
 , fSelfTime(false)
@@ -44,7 +33,7 @@ LayerData::LayerData(NewDrawer *drw)
 , fPointMap(false)
 {
 	if ( drw->getType() == "FeatureDataDrawer") {
-		BaseMapPtr *bmp = ((FeatureDataDrawer *)drawer)->getBaseMap();
+		BaseMapPtr *bmp = ((FeatureDataDrawer *)drw)->getBaseMap();
 		fnBaseMap = bmp->fnObj;
 		fFeatureMap = IOTYPEFEATUREMAP(fnBaseMap);
 		fPointMap = IOTYPE(fnBaseMap) == IlwisObject::iotPOINTMAP;
@@ -104,64 +93,61 @@ void LayerData::setSizeColumn(String sColName) {
 	m_rrSizeMinMax = sizeColumn->rrMinMax();
 }
 
-DrawerTool *createSpaceTimeCubeTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) {
-	return new SpaceTimeCubeTool(zv, view, drw);
+//------------------------------------------------------
+
+map<ZoomableView*, SpaceTimeCube*> SpaceTimeCube::spaceTimeCubes;
+
+SpaceTimeCube * SpaceTimeCube::getSpaceTimeCube(ZoomableView* mpv, LayerTreeView * tree, NewDrawer *drw)
+{
+	map<ZoomableView*, SpaceTimeCube*>::iterator it = spaceTimeCubes.find(mpv);
+	if (it != spaceTimeCubes.end())
+		return (*it).second;
+	else {
+		SpaceTimeCube* stc = new SpaceTimeCube(mpv, tree, drw);
+		spaceTimeCubes[mpv] = stc;
+		return stc;
+	}
 }
 
-SpaceTimeCubeTool::SpaceTimeCubeTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw)
-: DrawerTool("SpaceTimeCubeTool",zv, view, drw)
-, timeBounds(new TimeBounds())
+void SpaceTimeCube::deleteSpaceTimeCube(ZoomableView* mpv)
+{
+	map<ZoomableView*, SpaceTimeCube*>::iterator it = spaceTimeCubes.find(mpv);
+	if (it != spaceTimeCubes.end()) {
+		SpaceTimeCube * stc = (*it).second;
+		spaceTimeCubes.erase(it);
+		delete stc;
+	}
+}
+
+SpaceTimeCube::SpaceTimeCube(ZoomableView * _mpv, LayerTreeView * _tree, NewDrawer *drw)
+: mpv(_mpv)
+, tree(_tree)
+, rootDrawer((RootDrawer*)(drw->getRootDrawer()))
 , useSpaceTimeCube(false)
-, preTimeOffset(0)
-, postTimeOffset(0)
 , timePosBar(0)
 , layerOptionsForm(0)
+, timeBounds(new TimeBounds())
+, timeOffset(0)
 {
 }
 
-SpaceTimeCubeTool::~SpaceTimeCubeTool() {
-	if (useSpaceTimeCube) {
-		if (timePosBar)
-			delete timePosBar;
-		if (IsWindow(tree->GetTreeCtrl().m_hWnd)) { // No need to do this if the user closed the mapwindow.
-			mpv->dwParent()->RecalcLayout();
-			useSpaceTimeCube = false;
-			refreshDrawerList();
-		}
+SpaceTimeCube::~SpaceTimeCube()
+{
+	if (timePosBar) {
+		delete timePosBar;
+		timePosBar = 0;
 	}
-	if (layerOptionsForm)
+	if (layerOptionsForm) {
 		delete layerOptionsForm;
-	if (timeBounds)
+		layerOptionsForm = 0;
+	}
+	if (timeBounds) {
 		delete timeBounds;
+		timeBounds = 0;
+	}
 }
 
-bool SpaceTimeCubeTool::isToolUseableFor(ILWIS::DrawerTool *tool) { 
-	bool ok =  dynamic_cast<ThreeDGlobalTool *>(tool) != 0;
-	if ( ok)
-		parentTool = tool;
-	return ok;
-}
-
-HTREEITEM SpaceTimeCubeTool::configure( HTREEITEM parentItem) {
-	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
-	item->setCheckAction(this, 0,(DTSetCheckFunc)&SpaceTimeCubeTool::setSpaceTimeCube);
-	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&SpaceTimeCubeTool::startLayerOptionsForm);
-	htiNode =  insertItem(TR("SpaceTimeCube"),"SpaceTimeCube",item,0);
-	DrawerTool::configure(htiNode);
-	return htiNode;
-}
-
-void SpaceTimeCubeTool::makeActive(void *v, HTREEITEM) {
-	bool yesno = *(bool*)v;
-}
-
-String SpaceTimeCubeTool::getMenuString() const {
-	return TR("SpaceTimeCube");
-}
-
-void SpaceTimeCubeTool::update() {
-
-	ComplexDrawer *rootDrawer = (ComplexDrawer *)drawer->getRootDrawer();
+void SpaceTimeCube::update() {
 	vector<LayerData> newLayerList;
 	for(int i = 0 ; i < rootDrawer->getDrawerCount(); ++i) {
 		NewDrawer *drw = rootDrawer->getDrawer(i);
@@ -169,7 +155,7 @@ void SpaceTimeCubeTool::update() {
 			int j = 0;
 			// if it is in the old list, copy it
 			for (; j < layerList.size(); ++j) {
-				if (layerList[j].getDrawer()->getId() == drw->getId()) {
+				if (layerList[j].getDrawerId() == drw->getId()) {
 					newLayerList.push_back(layerList[j]);
 					break;
 				}
@@ -185,13 +171,12 @@ void SpaceTimeCubeTool::update() {
 	layerList = newLayerList;
 }
 
-void SpaceTimeCubeTool::setSpaceTimeCube(void *v, HTREEITEM) {
-	useSpaceTimeCube = *(bool *)v;
+void SpaceTimeCube::setUseSpaceTimeCube(bool yesno) {
+	useSpaceTimeCube = yesno;
 	if (useSpaceTimeCube) {
 		timePosBar = new TimePositionBar();
 		timePosBar->Create(mpv->dwParent());
-		if (preTimeOffset != 0)
-			timePosBar->SetPreTimeOffsetDrawer(preTimeOffset);
+		timePosBar->SetSpaceTimeCube(this);
 		mpv->GetParentFrame()->DockControlBar(timePosBar, AFX_IDW_DOCKBAR_LEFT);
 		refreshDrawerList();
 	}
@@ -201,140 +186,86 @@ void SpaceTimeCubeTool::setSpaceTimeCube(void *v, HTREEITEM) {
 		timePosBar = 0;
 		mpv->dwParent()->RecalcLayout();
 	}
-	//drawer->getRootDrawer()->getDrawerContext()->doDraw();
 }
 
-void SpaceTimeCubeTool::refreshDrawerList() {
-	RootDrawer *rootDrawer = drawer->getRootDrawer();
+bool SpaceTimeCube::fUseSpaceTimeCube()
+{
+	return useSpaceTimeCube;
+}
+
+MapCompositionDoc *SpaceTimeCube::getDocument() const {
+	return (MapCompositionDoc *)mpv->GetDocument();
+}
+
+void SpaceTimeCube::refreshDrawerList() {
 	CoordBounds cbZoom = rootDrawer->getCoordBoundsZoom(); // backup values
 	double rotX, rotY, rotZ, transX, transY, transZ;
 	rootDrawer->getRotationAngles(rotX, rotY, rotZ);
 	rootDrawer->getTranslate(transX, transY, transZ);
 	double zoom3D = rootDrawer->getZoom3D();
 
-
-	for (int i = 0; i < ownDrawerIDs.size(); ++i)
+	for (int i = 0; i < ownDrawerIDs.size(); ++i) {
 		rootDrawer->removeDrawer(ownDrawerIDs[i]);
+		for(int j = 0 ; j < rootDrawer->getDrawerCount(); ++j) {
+			ComplexDrawer *drw = dynamic_cast<ComplexDrawer*>(rootDrawer->getDrawer(j));
+			if (drw != 0) {
+				drw->removeDrawer(ownDrawerIDs[i]);
+			}
+		}
+	}
+
 	ownDrawerIDs.clear();
 
-	if (preTimeOffset != 0 && postTimeOffset != 0) {
-		for(int i = 0 ; i < rootDrawer->getDrawerCount(); ++i) {
-			ComplexDrawer *drw = dynamic_cast<ComplexDrawer*>(rootDrawer->getDrawer(i));
-			if (drw != 0) {
-				drw->removeDrawer(preTimeOffset->getId(), false);
-				drw->removeDrawer(postTimeOffset->getId(), false);
-			}
-		}
-	}
-
 	update();		
-
-	int n = rootDrawer->getDrawerCount();
-
-	/*
-	for(int i = 0 ; i < n; ++i) {
-		if ( spaceTimePathList.size() > 0) {
-			if ( !spaceTimePathList[i].status)
-				continue;
-		}
-
-		SpatialDataDrawer *drw = dynamic_cast<SpatialDataDrawer *>(rootDrawer->getDrawer(i));
-		if ( !drw)
-			continue;
-		for(int j = 0 ; j < drw->getDrawerCount(); ++j) {
-			ComplexDrawer *cdrw = (ComplexDrawer *)drw->getDrawer(j);
-		}
-	}
-
-	for (int i = 0; i < spaceTimePathList.size(); ++i) {
-		if (spaceTimePathList[i].status) { // change drawer to SpaceTimePathDrawer
-			TreeItem titem;
-			if ( tree->getItem(spaceTimePathList[i].item, TVIF_TEXT | TVIF_HANDLE, titem)) {
-				String layerPath ("|%s", titem.item.pszText);
-				HTREEITEM layerItem = tree->getItemHandle(layerPath);
-				tree->DeleteAllItems(layerItem, true);
-			}
-		} else { // restore PointMapDrawer
-		}
-	}
-	*/
 
 	timeBounds->Reset();
 	sizeStretch = RangeReal();
 
 	for (int i = 0; i < layerList.size(); ++i) {
-		//TreeItem titem;
-		//if ( tree->getItem(spaceTimePathList[i].item, TVIF_TEXT | TVIF_HANDLE, titem)) {
-			//String layerPath ("|%s", titem.item.pszText);
-			//HTREEITEM layerItem = tree->getItemHandle(layerPath);
-			HTREEITEM layerItem = getLayerHandle(layerList[i].getDrawer());
-
-			if (layerItem != 0) { // change drawer depending on status
-				SpatialDataDrawer * oldDrw = (SpatialDataDrawer*)(layerList[i].getDrawer());
-				IlwisObjectPtr * object = oldDrw->getObject();
-				//const String& type="FeatureDataDrawer";
-				//const String& subtype="ilwis38";
-				const String& subtype = (useSpaceTimeCube && layerList[i].getPlotOption()) ? "Cube" : "ilwis38";
-				//DrawerParameters parms(rootDrawer, rootDrawer);
-				//NewDrawer *newDrw = NewDrawer::getDrawer(type, subtype, &parms);
-				BaseMap bm(object->fnObj);
-				getDocument()->drAppend(bm, IlwisDocument::otUNKNOWN, IlwisWinApp::osNormal, subtype);
-				int index = rootDrawer->getDrawerCount() - 1;
-				NewDrawer * newDrw = rootDrawer->getDrawer(index);
-				rootDrawer->removeDrawer(newDrw->getId(), false); // immediately remove it, because we don't intend to append it to the end
-				HTREEITEM previous = tree->GetTreeCtrl().GetNextItem(layerItem, TVGN_PREVIOUS);
-				tree->DeleteAllItems(layerItem, false);
-				index = rootDrawer->getDrawerIndex(oldDrw);
-				replaceDrawer(oldDrw, newDrw);
-				if (rootDrawer->is3D()) {
-					PreparationParameters pp(NewDrawer::pt3D);
-					newDrw->prepare(&pp);
-				}
-				tree->addMapItem((SpatialDataDrawer*)newDrw, previous, index);
-				layerList[i].setDrawer(newDrw);
-				TemporalDrawer * temporalDrawer = dynamic_cast<TemporalDrawer*>(((ComplexDrawer*)newDrw)->getDrawer(0));
-				if (temporalDrawer) {
-					temporalDrawer->SetTimeBounds(timeBounds);
-					RangeReal rrMinMax (layerList[i].rrTimeMinMax());
-					timeBounds->AddMinMax(Time(rrMinMax.rLo()), Time(rrMinMax.rHi()));
-					if (layerList[i].isSelfTime())
-						temporalDrawer->SetSelfTime();
-					else
-						temporalDrawer->SetTimeAttribute(layerList[i].getTimeColumn());
-				}
-				SizableDrawer * sizableDrawer = dynamic_cast<SizableDrawer*>(((ComplexDrawer*)newDrw)->getDrawer(0));
-				if (sizableDrawer) {
-					sizableDrawer->SetSizeStretch(&sizeStretch);
-					RangeReal rrMinMax (layerList[i].rrSizeMinMax());
-					sizeStretch += rrMinMax;
-					if (layerList[i].isSelfSize())
-						sizableDrawer->SetSelfSize();
-					else
-						sizableDrawer->SetSizeAttribute(layerList[i].getSizeColumn());
-				}
-			}
-		//}
+		SpatialDataDrawer * oldDrw = (SpatialDataDrawer*)(rootDrawer->getDrawer(layerList[i].getDrawerId()));
+		if (oldDrw == 0)
+			continue; // skip it .. drawer was probably removed from the layers
+		IlwisObjectPtr * object = oldDrw->getObject();
+		const String& subtype = (useSpaceTimeCube && layerList[i].getPlotOption()) ? "Cube" : "ilwis38";
+		BaseMap bm(object->fnObj);
+		getDocument()->drAppend(bm, IlwisDocument::otUNKNOWN, IlwisWinApp::osNormal, subtype);
+		int index = rootDrawer->getDrawerCount() - 1;
+		NewDrawer * newDrw = rootDrawer->getDrawer(index);
+		rootDrawer->removeDrawer(newDrw->getId(), false); // remove it, because we don't intend to append it to the end
+		index = rootDrawer->getDrawerIndex(oldDrw);
+		replaceTreeItem(oldDrw, (SpatialDataDrawer*)newDrw, index);
+		replaceDrawer(oldDrw, newDrw);
+		layerList[i].setDrawerId(newDrw->getId());
+		if (rootDrawer->is3D()) {
+			PreparationParameters pp(NewDrawer::pt3D);
+			newDrw->prepare(&pp);
+		}
+		TemporalDrawer * temporalDrawer = dynamic_cast<TemporalDrawer*>(((ComplexDrawer*)newDrw)->getDrawer(0));
+		if (temporalDrawer) {
+			temporalDrawer->SetTimeBounds(timeBounds);
+			RangeReal rrMinMax (layerList[i].rrTimeMinMax());
+			timeBounds->AddMinMax(Time(rrMinMax.rLo()), Time(rrMinMax.rHi()));
+			if (layerList[i].isSelfTime())
+				temporalDrawer->SetSelfTime();
+			else
+				temporalDrawer->SetTimeAttribute(layerList[i].getTimeColumn());
+		}
+		SizableDrawer * sizableDrawer = dynamic_cast<SizableDrawer*>(((ComplexDrawer*)newDrw)->getDrawer(0));
+		if (sizableDrawer) {
+			sizableDrawer->SetSizeStretch(&sizeStretch);
+			RangeReal rrMinMax (layerList[i].rrSizeMinMax());
+			sizeStretch += rrMinMax;
+			if (layerList[i].isSelfSize())
+				sizableDrawer->SetSelfSize();
+			else
+				sizableDrawer->SetSizeAttribute(layerList[i].getSizeColumn());
+		}
 	}
-	//getDocument()->UpdateAllViews(0);
+
 	if (useSpaceTimeCube) {
 
 		DrawerParameters dp(rootDrawer, rootDrawer);
 		PreparationParameters pp(NewDrawer::ptALL);
-		if (preTimeOffset == 0) {
-			preTimeOffset = dynamic_cast<PreTimeOffsetDrawer*>(NewDrawer::getDrawer("PreTimeOffsetDrawer", "Cube", &dp));
-			timePosBar->SetPreTimeOffsetDrawer(preTimeOffset);
-		}
-		//rootDrawer->insertDrawer(0, timeOffset);
-		//ownDrawerIDs.push_back(timeOffset->getId());
-		TemporalDrawer * temporalDrawer = dynamic_cast<TemporalDrawer*>(preTimeOffset);
-		temporalDrawer->SetTimeBounds(timeBounds);
-		preTimeOffset->prepare(&pp);
-		if (postTimeOffset == 0)
-			postTimeOffset = dynamic_cast<PostTimeOffsetDrawer*>(NewDrawer::getDrawer("PostTimeOffsetDrawer", "Cube", &dp));
-		//ownDrawerIDs.push_back(timeOffset->getId());
-		temporalDrawer = dynamic_cast<TemporalDrawer*>(postTimeOffset);
-		temporalDrawer->SetTimeBounds(timeBounds);
-		postTimeOffset->prepare(&pp);
 
 		for(int i = 0 ; i < rootDrawer->getDrawerCount(); ++i) {
 			ComplexDrawer *drw = dynamic_cast<ComplexDrawer*>(rootDrawer->getDrawer(i));
@@ -343,7 +274,7 @@ void SpaceTimeCubeTool::refreshDrawerList() {
 					int j = 0;
 					// if it is in the layerList, and it uses time, leave it
 					for (; j < layerList.size(); ++j) {
-						if (layerList[j].getDrawer()->getId() == drw->getId()) {
+						if (layerList[j].getDrawerId() == drw->getId()) {
 							if (!layerList[j].getPlotOption())
 								j = layerList.size();
 							else
@@ -352,6 +283,17 @@ void SpaceTimeCubeTool::refreshDrawerList() {
 					}
 					// if not found in the layerList, or it does not use time, handle it
 					if (j >= layerList.size()) {
+						PreTimeOffsetDrawer* preTimeOffset = dynamic_cast<PreTimeOffsetDrawer*>(NewDrawer::getDrawer("PreTimeOffsetDrawer", "Cube", &dp));
+						ownDrawerIDs.push_back(preTimeOffset->getId());
+						TemporalDrawer * temporalDrawer = dynamic_cast<TemporalDrawer*>(preTimeOffset);
+						temporalDrawer->SetTimeBounds(timeBounds);
+						preTimeOffset->prepare(&pp);
+						preTimeOffset->SetTimeOffsetVariable(&timeOffset);
+						PostTimeOffsetDrawer* postTimeOffset = dynamic_cast<PostTimeOffsetDrawer*>(NewDrawer::getDrawer("PostTimeOffsetDrawer", "Cube", &dp));
+						ownDrawerIDs.push_back(postTimeOffset->getId());
+						temporalDrawer = dynamic_cast<TemporalDrawer*>(postTimeOffset);
+						temporalDrawer->SetTimeBounds(timeBounds);
+						postTimeOffset->prepare(&pp);
 						drw->addPreDrawer(0, preTimeOffset);
 						drw->addPostDrawer(999, postTimeOffset);
 					}
@@ -362,7 +304,7 @@ void SpaceTimeCubeTool::refreshDrawerList() {
 		NewDrawer * cube = NewDrawer::getDrawer("CubeDrawer", "Cube", &dp);
 		rootDrawer->insertDrawer(0, cube);
 		ownDrawerIDs.push_back(cube->getId());
-		temporalDrawer = dynamic_cast<TemporalDrawer*>(cube);
+		TemporalDrawer * temporalDrawer = dynamic_cast<TemporalDrawer*>(cube);
 		temporalDrawer->SetTimeBounds(timeBounds);
 		cube->prepare(&pp);
 	}
@@ -375,7 +317,30 @@ void SpaceTimeCubeTool::refreshDrawerList() {
 	mpv->Invalidate();
 }
 
-HTREEITEM SpaceTimeCubeTool::getLayerHandle(NewDrawer* drwFind)
+void SpaceTimeCube::replaceDrawer(NewDrawer * oldDrw, NewDrawer * newDrw)
+{
+	oldDrw->setActive(false);
+	int index = rootDrawer->getDrawerIndex(oldDrw);
+	if (iUNDEF != index) {
+		rootDrawer->removeDrawer(oldDrw->getId(), true);
+		rootDrawer->insertDrawer(index, newDrw);
+		newDrw->setActive(true);
+	}
+}
+
+bool SpaceTimeCube::replaceTreeItem(NewDrawer * oldDrw, SpatialDataDrawer * newDrw, int index)
+{
+	HTREEITEM layerItem = findTreeItem(oldDrw);
+	if (layerItem != 0) { // change drawer depending on status
+		HTREEITEM previous = tree->GetTreeCtrl().GetNextItem(layerItem, TVGN_PREVIOUS);
+		tree->DeleteAllItems(layerItem, false);
+		tree->addMapItem(newDrw, previous, index);
+		return true;
+	} else
+		return false;
+}
+
+HTREEITEM SpaceTimeCube::findTreeItem(NewDrawer* drwFind)
 {
 	HTREEITEM hti= tree->GetTreeCtrl().GetNextItem(TVGN_ROOT, TVGN_CHILD);
 	while ( hti) {
@@ -386,12 +351,6 @@ HTREEITEM SpaceTimeCubeTool::getLayerHandle(NewDrawer* drwFind)
 				SpatialDataDrawer *spdrw = dynamic_cast<SpatialDataDrawer *>(dlti->drw());
 				if (spdrw == drwFind)
 					return hti;
-				/*
-				if ( spdrw) {
-					IlwisObjectPtr *obj = spdrw->getObject();
-					objects.push_back(obj);
-				}
-				*/
 			}
 		}
 		hti= tree->GetTreeCtrl().GetNextItem(hti, TVGN_NEXT);
@@ -399,36 +358,33 @@ HTREEITEM SpaceTimeCubeTool::getLayerHandle(NewDrawer* drwFind)
 	return 0;
 }
 
-void SpaceTimeCubeTool::replaceDrawer(NewDrawer * oldDrw, NewDrawer * newDrw)
-{
-	ComplexDrawer * rootDrawer = drawer->getRootDrawer();
-	oldDrw->setActive(false);
-	int index = rootDrawer->getDrawerIndex(oldDrw);
-	if (iUNDEF != index) {
-		//rootDrawer->removeDrawer(oldDrw->getId(), false);
-		rootDrawer->removeDrawer(oldDrw->getId(), true);
-		rootDrawer->insertDrawer(index, newDrw);
-		newDrw->setActive(true);
-	}
-}
-
-void SpaceTimeCubeTool::startLayerOptionsForm()
+void SpaceTimeCube::startLayerOptionsForm()
 {
 	update();
 	if (layerOptionsForm)
 		delete layerOptionsForm;
-	layerOptionsForm = new LayerOptionsForm ((ComplexDrawer*)drawer, tree, *this, layerList);
+	layerOptionsForm = new LayerOptionsForm(tree, *this, layerList);
 }
 
-void SpaceTimeCubeTool::setFormAutoDeleted()
+void SpaceTimeCube::setFormAutoDeleted()
 {
 	layerOptionsForm = 0;
 }
 
+void SpaceTimeCube::SetTime(double time) {
+	timeOffset = time;
+	mpv->Invalidate();
+}
+
+double SpaceTimeCube::GetTime() {
+	return timeOffset;
+}
+
 //------------------------------------------------------
-LayerOptionsForm::LayerOptionsForm(ComplexDrawer * drawer, CWnd *wPar, SpaceTimeCubeTool & _spaceTimeCubeTool, vector<LayerData> & layerList)
-: DisplayOptionsForm(drawer, wPar, TR("Select Layer Options"))
-, spaceTimeCubeTool(_spaceTimeCubeTool)
+
+LayerOptionsForm::LayerOptionsForm(CWnd *wPar, SpaceTimeCube & _spaceTimeCube, vector<LayerData> & layerList)
+: DisplayOptionsForm(0, wPar, TR("Select Layer Options"))
+, spaceTimeCube(_spaceTimeCube)
 , m_layerList(layerList)
 , fFirstTime(true)
 {
@@ -510,7 +466,7 @@ void LayerOptionsForm::apply() {
 		layerData.setPlotOption(vsPlotMethod[i] != "<regular>");
 	}
 
-	spaceTimeCubeTool.refreshDrawerList();
+	spaceTimeCube.refreshDrawerList();
 
 	//PreparationParameters pp(NewDrawer::ptGEOMETRY, 0);
 	//drw->prepareChildDrawers(&pp);
@@ -523,6 +479,58 @@ void LayerOptionsForm::apply() {
 }
 
 int LayerOptionsForm::exec() {
-	spaceTimeCubeTool.setFormAutoDeleted();
+	spaceTimeCube.setFormAutoDeleted();
 	return DisplayOptionsForm::exec();
 }
+
+//------------------------------------------------------
+
+DrawerTool *createSpaceTimeCubeTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) {
+	return new SpaceTimeCubeTool(zv, view, drw);
+}
+
+SpaceTimeCubeTool::SpaceTimeCubeTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw)
+: DrawerTool("SpaceTimeCubeTool",zv, view, drw)
+, stc(SpaceTimeCube::getSpaceTimeCube(zv, view, drw))
+{
+}
+
+SpaceTimeCubeTool::~SpaceTimeCubeTool() {
+	if (!IsWindow(tree->GetTreeCtrl().m_hWnd)) { // Clean-up if the user closed the mapwindow.
+		SpaceTimeCube::deleteSpaceTimeCube(mpv);
+	}
+}
+
+bool SpaceTimeCubeTool::isToolUseableFor(ILWIS::DrawerTool *tool) { 
+	bool ok =  dynamic_cast<ThreeDGlobalTool *>(tool) != 0;
+	if ( ok)
+		parentTool = tool;
+	return ok;
+}
+
+HTREEITEM SpaceTimeCubeTool::configure( HTREEITEM parentItem) {
+	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
+	item->setCheckAction(this, 0,(DTSetCheckFunc)&SpaceTimeCubeTool::setUseSpaceTimeCube);
+	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&SpaceTimeCubeTool::startLayerOptionsForm);
+	htiNode =  insertItem(TR("SpaceTimeCube"),"SpaceTimeCube",item,stc->fUseSpaceTimeCube());
+	DrawerTool::configure(htiNode);
+	return htiNode;
+}
+
+void SpaceTimeCubeTool::makeActive(void *v, HTREEITEM) {
+	bool yesno = *(bool*)v;
+}
+
+String SpaceTimeCubeTool::getMenuString() const {
+	return TR("SpaceTimeCube");
+}
+
+void SpaceTimeCubeTool::startLayerOptionsForm() {
+	stc->startLayerOptionsForm();
+}
+
+void SpaceTimeCubeTool::setUseSpaceTimeCube(void *v, HTREEITEM) {
+	bool useSpaceTimeCube = *(bool *)v;
+	stc->setUseSpaceTimeCube(useSpaceTimeCube);
+}
+
