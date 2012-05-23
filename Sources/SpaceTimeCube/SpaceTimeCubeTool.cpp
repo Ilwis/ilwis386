@@ -361,14 +361,26 @@ HTREEITEM SpaceTimeCube::findTreeItem(NewDrawer* drwFind)
 void SpaceTimeCube::startLayerOptionsForm()
 {
 	update();
-	if (layerOptionsForm)
+	CRect rect;
+	bool fRestorePosition = false;
+	if (layerOptionsForm) {
+		fRestorePosition = true;
+		layerOptionsForm->GetWindowRect(&rect);
 		delete layerOptionsForm;
+	}
 	layerOptionsForm = new LayerOptionsForm(tree, *this, layerList);
+	if (fRestorePosition)
+		layerOptionsForm->SetWindowPos(tree, rect.left, rect.top, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOREPOSITION);
 }
 
 void SpaceTimeCube::setFormAutoDeleted()
 {
 	layerOptionsForm = 0;
+}
+
+bool SpaceTimeCube::showingLayerOptionsForm()
+{
+	return layerOptionsForm != 0;
 }
 
 void SpaceTimeCube::SetTime(double time) {
@@ -514,6 +526,9 @@ HTREEITEM SpaceTimeCubeTool::configure( HTREEITEM parentItem) {
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&SpaceTimeCubeTool::startLayerOptionsForm);
 	htiNode =  insertItem(TR("SpaceTimeCube"),"SpaceTimeCube",item,stc->fUseSpaceTimeCube());
 	DrawerTool::configure(htiNode);
+	stc->refreshDrawerList();
+	if (stc->showingLayerOptionsForm())
+		stc->startLayerOptionsForm();
 	return htiNode;
 }
 

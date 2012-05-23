@@ -66,16 +66,17 @@ namespace ILWIS {
 		static void deleteSpaceTimeCube(ZoomableView* mpv);
 		SpaceTimeCube(ZoomableView* mpv, LayerTreeView * _tree, NewDrawer *drw);
 		virtual ~SpaceTimeCube();
-		void update();
 		void setUseSpaceTimeCube(bool yesno);
 		bool fUseSpaceTimeCube();
 		void refreshDrawerList();
 		void setFormAutoDeleted();
 		void startLayerOptionsForm();
+		bool showingLayerOptionsForm();
 		void SetTime(double time);
 		double GetTime();
 	private:
 		static map<ZoomableView*, SpaceTimeCube*> spaceTimeCubes;
+		void update();
 		void replaceDrawer(NewDrawer * oldDrw, NewDrawer * newDrw);
 		bool replaceTreeItem(NewDrawer * oldDrw, SpatialDataDrawer * newDrw, int index);
 		MapCompositionDoc * getDocument() const;
