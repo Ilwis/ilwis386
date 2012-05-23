@@ -113,7 +113,8 @@ namespace ILWIS {
 	public:
 		LayerOptionsForm(CWnd *wPar, SpaceTimeCube & _spaceTimeCube, vector<LayerData> & layerList);
 		virtual void apply();
-		virtual int exec();
+		virtual void OnOK();
+		virtual void OnCancel();
 	private:
 		int ComboCallBackFunc(Event*);
 		bool fFirstTime;

@@ -490,9 +490,14 @@ void LayerOptionsForm::apply() {
 	//updateMapView();
 }
 
-int LayerOptionsForm::exec() {
+void LayerOptionsForm::OnOK() {
 	spaceTimeCube.setFormAutoDeleted();
-	return DisplayOptionsForm::exec();
+	DisplayOptionsForm::OnOK();
+}
+
+void LayerOptionsForm::OnCancel() {
+	spaceTimeCube.setFormAutoDeleted();
+	DisplayOptionsForm::OnCancel();
 }
 
 //------------------------------------------------------
