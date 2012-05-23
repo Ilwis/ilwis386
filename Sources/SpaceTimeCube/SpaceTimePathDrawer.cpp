@@ -25,7 +25,6 @@ ILWIS::NewDrawer *createSpaceTimePathDrawer(DrawerParameters *parms) {
 
 SpaceTimePathDrawer::SpaceTimePathDrawer(DrawerParameters *parms)
 : FeatureLayerDrawer(parms,"SpaceTimePathDrawer")
-, fPrepared(false)
 , prevUseAttColumn(false)
 {
 	properties = new PointProperties();
@@ -60,7 +59,6 @@ void SpaceTimePathDrawer::prepareChildDrawers(PreparationParameters *pp){
 void SpaceTimePathDrawer::prepare(PreparationParameters *parms){
 	if (!isActive())
 		return;
-	fPrepared = true;
 	clock_t start = clock();
 	LayerDrawer::prepare(parms);
 	//FeatureLayerDrawer *fdr = dynamic_cast<FeatureLayerDrawer *>(parentDrawer);
@@ -99,14 +97,6 @@ void SpaceTimePathDrawer::prepare(PreparationParameters *parms){
 	if ( (parms->type & NewDrawer::ptRENDER) != 0) {
 	} else if ( (parms->type & NewDrawer::pt3D) != 0) {
 	}
-}
-
-bool SpaceTimePathDrawer::fIsPrepared() const {
-	return fPrepared;
-}
-
-void SpaceTimePathDrawer::unPrepare() {
-	fPrepared = false;
 }
 
 String SpaceTimePathDrawer::store(const FileName& fnView, const String& parentSection) const{

@@ -26,7 +26,6 @@ using namespace ILWIS;
 DrawerToolInfoVector *createDrawerTool() {
 	DrawerToolInfoVector *infos = new DrawerToolInfoVector();
 	infos->push_back(new DrawerToolInfo("SpaceTimeCubeTool",createSpaceTimeCubeTool));
-	infos->push_back(new DrawerToolInfo("CubeTool",createCubeTool));
 	infos->push_back(new DrawerToolInfo("PathScalingTool",createPathScalingTool));
 	return infos;
 }

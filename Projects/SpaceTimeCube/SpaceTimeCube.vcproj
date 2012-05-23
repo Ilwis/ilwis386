@@ -211,10 +211,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\SpaceTimeCube\CubeTool.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\Sources\SpaceTimeCube\PathScalingTool.h"
 				>
 			</File>
@@ -256,10 +252,6 @@
 			>
 			<File
 				RelativePath="..\..\Sources\SpaceTimeCube\CubeDrawer.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\SpaceTimeCube\CubeTool.cpp"
 				>
 			</File>
 			<File

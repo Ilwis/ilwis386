@@ -29,8 +29,6 @@ class _export SpaceTimePathDrawer : public FeatureLayerDrawer, public TemporalDr
 		//Scaling getScaleMode() const { return scaleMode; } 
 		//bool usingDirection() const { return useDirection; }
 		//void setUseDirection(bool yesno) { useDirection = yesno; }
-		bool fIsPrepared() const;
-		void unPrepare();
 
 	protected:
 		String store(const FileName& fnView, const String& parenSection) const;
@@ -50,7 +48,6 @@ class _export SpaceTimePathDrawer : public FeatureLayerDrawer, public TemporalDr
 		BaseMapPtr *basemap;
 		bool fRealMap;
 	private:
-		bool fPrepared;
 		Column prevAttColumn;
 		bool prevUseAttColumn;
 	};
