@@ -52,16 +52,16 @@ namespace ILWIS {
 	static const unsigned int ID_STC_TIMEPOSITIONSLIDER=15940;
 	static const unsigned int sliderRange = 1000;
 
-	class PreTimeOffsetDrawer;
+	class SpaceTimeCube;
 
 	class _export TimeSliderCtrl : public CSliderCtrl
 	{
 	public:
 		TimeSliderCtrl();
 		afx_msg void VScroll(UINT nSBCode, UINT nPos);
-		void SetPreTimeOffsetDrawer(PreTimeOffsetDrawer * _preTimeOffset);
+		void SetSpaceTimeCube(SpaceTimeCube * _spaceTimeCube);
 	private:
-		PreTimeOffsetDrawer * preTimeOffset;
+		SpaceTimeCube * spaceTimeCube;
 
 		DECLARE_MESSAGE_MAP();
 	};
@@ -76,7 +76,7 @@ namespace ILWIS {
 		//{{AFX_MSG(TimePositionBar)
 		void OnSize(UINT nType, int cx, int cy);
 		//}}AFX_MSG
-		void SetPreTimeOffsetDrawer(PreTimeOffsetDrawer * _preTimeOffset);
+		void SetSpaceTimeCube(SpaceTimeCube * _spaceTimeCube);
 	protected:
 		TimeSliderCtrl slider;
 

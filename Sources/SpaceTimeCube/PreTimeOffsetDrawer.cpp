@@ -36,16 +36,15 @@ void PreTimeOffsetDrawer::prepare(PreparationParameters *pp) {
 	}
 }
 
-void PreTimeOffsetDrawer::SetTime(double time) {
-	timeOffset = time;
-	getRootDrawer()->getDrawerContext()->doDraw();
+void PreTimeOffsetDrawer::SetTimeOffsetVariable(double * _timeOffset) {
+	timeOffset = _timeOffset;
 }
 
 bool PreTimeOffsetDrawer::draw(const CoordBounds& cbArea) const{
-	if ( !isActive() || !isValid())
+	if ( !isActive() || !isValid() || timeOffset == 0)
 		return false;
 	glPushMatrix();
-	glTranslatef(0, 0, cube.altitude() * timeOffset);
+	glTranslatef(0, 0, cube.altitude() * *timeOffset);
 
 	return true;
 }

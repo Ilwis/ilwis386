@@ -15,9 +15,9 @@ namespace ILWIS {
 		virtual ~PreTimeOffsetDrawer();
 		bool draw( const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *pp);
-		void SetTime(double time);
+		void SetTimeOffsetVariable(double * _timeOffset);
 	protected:
-		double timeOffset;
+		double * timeOffset;
 		CoordBounds cube;
 	};
 

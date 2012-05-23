@@ -40,7 +40,7 @@
 
 #include "Client\Headers\formelementspch.h"
 #include "TimePositionBar.h"
-#include "PreTimeOffsetDrawer.h"
+#include "SpaceTimeCubeTool.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -56,19 +56,20 @@ END_MESSAGE_MAP()
 
 TimeSliderCtrl::TimeSliderCtrl()
 : CSliderCtrl()
-, preTimeOffset(0)
+, spaceTimeCube(0)
 {
 }
 
-void TimeSliderCtrl::SetPreTimeOffsetDrawer(PreTimeOffsetDrawer * _preTimeOffset)
+void TimeSliderCtrl::SetSpaceTimeCube(SpaceTimeCube * _spaceTimeCube)
 {
-	preTimeOffset = _preTimeOffset;
+	spaceTimeCube = _spaceTimeCube;
+	SetPos(sliderRange - spaceTimeCube->GetTime() * sliderRange);
 }
 
 void TimeSliderCtrl::VScroll(UINT nSBCode, UINT nPos)
 {
-	if (preTimeOffset != 0 && nSBCode == TB_THUMBTRACK)
-		preTimeOffset->SetTime((sliderRange - nPos) / (double)sliderRange);
+	if (spaceTimeCube != 0 && nSBCode == TB_THUMBTRACK)
+		spaceTimeCube->SetTime((sliderRange - nPos) / (double)sliderRange);
 }
 
 BEGIN_MESSAGE_MAP( TimePositionBar, CSizingControlBar )
@@ -84,7 +85,6 @@ TimePositionBar::TimePositionBar()
 TimePositionBar::~TimePositionBar()
 {
 }
-
 
 BOOL TimePositionBar::Create(CWnd* pParent)
 {
@@ -119,9 +119,9 @@ void TimePositionBar::OnSize(UINT nType, int cx, int cy)
 		slider.MoveWindow(0, 0, cx, cy);
 }
 
-void TimePositionBar::SetPreTimeOffsetDrawer(PreTimeOffsetDrawer * _preTimeOffset)
+void TimePositionBar::SetSpaceTimeCube(SpaceTimeCube * _spaceTimeCube)
 {
-	slider.SetPreTimeOffsetDrawer(_preTimeOffset);
+	slider.SetSpaceTimeCube(_spaceTimeCube);
 }
 
 
