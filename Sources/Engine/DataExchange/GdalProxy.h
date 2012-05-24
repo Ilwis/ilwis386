@@ -55,6 +55,7 @@ typedef OGRFieldDefnH (*GetFieldDefnFunc)(OGRFeatureDefnH,int );
 typedef OGRFieldType (*GetFieldTypeFunc)(OGRFieldDefnH 	hDefn );
 typedef int (*GetFieldAsIntegerFunc)(OGRFeatureH,int);
 typedef double (*GetFieldAsDoubleFunc)(OGRFeatureH,int);
+typedef int (*GetFieldAsDateTimeFunc)(OGRFeatureH,int , int *pnYear,int *pnMonth,int *pnDay,int * pnHour,int *pnMinute,int *pnSecond,int *pnTZFlag);
 typedef const char* (*GetFieldAsStringFunc)(OGRFeatureH,int);
 typedef OGRGeometryH (*GetGeometryRefFunc)(OGRFeatureH );
 typedef OGRwkbGeometryType (*GetGeometryTypeFunc)(OGRGeometryH);
@@ -80,6 +81,8 @@ public:
 
 	GDALCloseFunc close;
 	GDALAllRegisterFunc registerAll;
+	GDALAllRegisterFunc registerJPEG;
+	GDALAllRegisterFunc registerPNG;
 	GDALIdentifyDriverFunc identifyDriver;
 	GDALOpenFunc open;
 	GDALGetNumbersDataSet xSize;
@@ -132,6 +135,7 @@ public:
 	GetFieldAsStringFunc ogrsVal;
 	GetFieldAsDoubleFunc ogrrVal;
 	GetFieldAsIntegerFunc ogriVal;
+	GetFieldAsDateTimeFunc ogrtVal;
 	GetGeometryRefFunc ogrGetGeometryRef;
 	GetGeometryTypeFunc ogrGetGeometryType;
 	DestroyFeatureFunc ogrDestroyFeature;

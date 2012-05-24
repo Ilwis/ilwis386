@@ -21,6 +21,8 @@ void GdalProxy::loadMethods(const String& ilwDir) {
 
 				close = (GDALCloseFunc)GetProcAddress(hm, "_GDALClose@4");
 				registerAll = (GDALAllRegisterFunc)GetProcAddress(hm,"_GDALAllRegister@0");
+				registerJPEG = (GDALAllRegisterFunc)GetProcAddress(hm,"GDALRegister_JPEG");
+				registerPNG = (GDALAllRegisterFunc)GetProcAddress(hm,"GDALRegister_PNG");
 				identifyDriver = (GDALIdentifyDriverFunc)GetProcAddress(hm,"_GDALIdentifyDriver@8");
 				open = (GDALOpenFunc)GetProcAddress(hm,"_GDALOpen@8");
 				xSize = (GDALGetNumbersDataSet)GetProcAddress(hm,"_GDALGetRasterXSize@4");
@@ -48,6 +50,8 @@ void GdalProxy::loadMethods(const String& ilwDir) {
 				getAttribute = (OSRGetAttrValueFunc)GetProcAddress(hm,"_OSRGetAttrValue@12");
 				wktPretty = (OSRExportToPrettyWktFunc)GetProcAddress(hm,"_OSRExportToPrettyWkt@12");
 				getProjParam = (OSRGetProjParmFunc)GetProcAddress(hm,"OSRGetProjParm");
+				vsiClose = (VSIFCloseLFunc)GetProcAddress(hm,"VSIFCloseL");
+				vsiFileFromMem = (VSIFileFromMemBufferFunc)GetProcAddress(hm,"VSIFileFromMemBuffer");
 
 				ogrOpen = (OGROpenFunc)GetProcAddress(hm,"OGROpen");
 				ogrRegAll = (OGRRegisterAllFunc)GetProcAddress(hm,"OGRRegisterAll");
@@ -69,6 +73,7 @@ void GdalProxy::loadMethods(const String& ilwDir) {
 				ogrsVal = (GetFieldAsStringFunc)GetProcAddress(hm,"OGR_F_GetFieldAsString");
 				ogrrVal = (GetFieldAsDoubleFunc)GetProcAddress(hm,"OGR_F_GetFieldAsDouble");
 				ogriVal = (GetFieldAsIntegerFunc)GetProcAddress(hm,"OGR_F_GetFieldAsInteger");
+				ogrtVal = (GetFieldAsDateTimeFunc)GetProcAddress(hm,"OGR_F_GetFieldAsDateTime");
 				ogrGetGeometryRef = (GetGeometryRefFunc)GetProcAddress(hm,"OGR_F_GetGeometryRef");
 				ogrGetGeometryType = (GetGeometryTypeFunc)GetProcAddress(hm,"OGR_G_GetGeometryType");
 				ogrDestroyFeature = (DestroyFeatureFunc)GetProcAddress(hm,"OGR_F_Destroy");
