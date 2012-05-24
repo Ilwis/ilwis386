@@ -1749,8 +1749,12 @@ void GDALFormat::createTable(const FileName& fn, const Domain& dm,OGRFeatureDefn
 		if ( col.fValid()) {
 			for(int rec = 0; rec < size; ++rec) {
 				if ( type != OFTString) {
+					if ( columns[column].values.size() == 0)
+						continue;
 					col->PutVal(rec + 1,columns[column].values[rec]);
 				} else {
+					if ( columns[column].strings.size() == 0)
+						continue;
 					col->PutVal(rec + 1, columns[column].strings[rec]);
 				}
 			}
