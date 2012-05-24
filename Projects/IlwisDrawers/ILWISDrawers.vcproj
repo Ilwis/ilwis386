@@ -284,6 +284,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Drawers\OpenstreetmapDrawer.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Drawers\PointDrawer.cpp"
 				>
 			</File>
@@ -418,6 +422,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Drawers\LineLayerDrawer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Drawers\OpenstreetmapDrawer.h"
 				>
 			</File>
 			<File

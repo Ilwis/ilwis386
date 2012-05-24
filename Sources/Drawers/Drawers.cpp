@@ -35,6 +35,7 @@
 #include "Drawers\CollectionDrawer.h"
 #include "Drawers\AnnotationDrawers.h"
 #include "Drawers\WMSDrawer.h"
+#include "Drawers\OpenstreetmapDrawer.h"
 
 
 
@@ -68,6 +69,7 @@ DrawerInfoVector *createDrawer() {
 	infos->push_back(new DrawerInfo("ColorCompositeDrawer","ilwis38", createColorCompositeDrawer));
 	infos->push_back(new DrawerInfo("AnnotationDrawers","ilwis38", createAnnotationDrawers));
 	infos->push_back(new DrawerInfo("WMSDrawer","ilwis38", createWMSDrawer));
+	infos->push_back(new DrawerInfo("OpenstreetmapDrawer","ilwis38", createOpenstreetmapDrawer));
 
 	return infos;
 }
