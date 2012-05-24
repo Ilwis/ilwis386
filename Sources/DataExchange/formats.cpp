@@ -25,6 +25,7 @@
 #include "DataExchange\PostgreSQLTables.h"
 #include "DataExchange\PostGisMaps.h"
 #include "Engine\DataExchange\ForeignFormatMap.h"
+#include "DataExchange\OpenStreetMapFormat.h"
 
 
 extern "C" _export void getForeignFormatInfo(map<String, ForeignFormatFuncs> *funcs) {
@@ -32,6 +33,7 @@ extern "C" _export void getForeignFormatInfo(map<String, ForeignFormatFuncs> *fu
 	(*funcs)["ASTER"] = ForeignFormatFuncs(CreateImportObjectAster, CreateQueryObjectAster);
 	(*funcs)["WMS"] = ForeignFormatFuncs(CreateImportObjectWMS, CreateQueryObjectWMS);
 	(*funcs)["GDAL"] = ForeignFormatFuncs(CreateImportObjectGDAL, CreateQueryObjectGDAL);
+	(*funcs)["Openstreetmap"] = ForeignFormatFuncs(CreateImportObjectOpenStreetMap, CreateQueryObjectOpenStreetMap);
 	//(*funcs)["POSTGRESQL"] = ForeignFormatFuncs(CreateImportObjectPostGres, CreateQueryObjectPostGres);
 
 	getEngine()->getContext()->ComHandler()->AddCommand("gdalogrimport",ogrgdal);
