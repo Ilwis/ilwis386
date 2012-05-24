@@ -63,6 +63,7 @@ public:
 	static ModuleMap modules;
 	bool fServerMode() const;
 	static HMODULE getModuleHandle() { return engineHandle; }
+	void getServicesFor(const String& serviceType, map<String,String>& services, bool getUrl) const;
 	ILWIS::Database *pdb();
 	GdalProxy *gdal;
 
@@ -72,9 +73,11 @@ public:
 	static ForeignFormatMap formats;
 private:
 	void loadSystemTables(const String& ilwDir);
+	void loadServiceLocations(const String& dir);
 	bool stayResident;
 	bool debugMode;
 	Array<String> debugClasses;
+	map<String, String> serviceLocations;
 	Logger *logger;
 	ILWIS::Version *version;
 	static HMODULE engineHandle;

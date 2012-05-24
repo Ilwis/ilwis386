@@ -46,7 +46,7 @@ Engine* getEngine() {
 		Engine::engine->modules.addModules();
 		Engine::engine->formats.AddFormats();
 		Engine::engine->modules.initModules();
-		
+
 	}
 	return Engine::engine;
 }
@@ -92,6 +92,7 @@ void Engine::Init() {
 		version->addModuleInterfaceVersion(ILWIS::Module::mi38);
 		String ilwDir = context->sIlwDir();
 		context->InitThreadLocalVars();
+
 		db = ILWIS::Database::create("spatiallite",":memory:","System");
 		String stmt = "create table Datums \
 					  (\
@@ -114,10 +115,66 @@ void Engine::Init() {
 					  alias TEXT)";
 	  db->executeStatement(stmt);
 	  loadSystemTables(ilwDir);
+	  loadServiceLocations(ilwDir);
+
 	  gdal = new GdalProxy();
 	  gdal->loadMethods(ilwDir);
 	}
 
+}
+
+void Engine::loadServiceLocations(const String& dir) {
+	String iniFile = dir + "services.ini";
+	char buffer[5000];
+	UINT n = GetPrivateProfileInt("Services","count",0,iniFile.c_str());
+	for(int i = 0; i < n; ++i) {
+		String name("service%d",i);
+		GetPrivateProfileString("Services", name.c_str(),"",buffer,5000,iniFile.c_str());
+		if ( buffer[0] == 0) 
+			continue;
+		String serviceType(buffer);
+		String section(buffer);
+		DWORD nchars = GetPrivateProfileSection(section.c_str(),buffer,5000,iniFile.c_str());
+		String key, value;
+		bool iskey = true;
+		for(int j=0; j < nchars; ++j) {
+			char c = buffer[j];
+			if ( c == '=' && iskey) {
+				iskey = false;
+			} else if ( c == 0 ) {
+				if (key.size() != 0 && value.size() != 0) {
+					serviceLocations[serviceType + "::" + key] = value;
+				}else {
+					continue;
+					iskey = true;
+				}
+
+			} else if ( c== '\r' || c == '\n') {
+				iskey = true;
+				continue;
+			}
+			if ( iskey) {
+				key += c;
+
+			} else {
+				value += c;
+			}
+
+		}
+	}
+}
+
+void Engine::getServicesFor(const String& serviceType, map<String,String>& services, bool getUrl) const{
+	for(map<String,String>::const_iterator cur = serviceLocations.begin(); cur != serviceLocations.end(); ++cur) {
+		String key = (*cur).first;
+		if ( key.find(serviceType + "::") !=  string::npos) {
+			if ( getUrl)
+				services[serviceType.sTail("::")] = (*cur).second;
+			else
+				services[serviceType.sTail("::")] = (*cur).first;
+
+		}
+	}
 }
 
 #define NORM(n) ((parts[n].size() == 0 || parts[n].rVal() == rUNDEF) ? 0 : parts[n].rVal())
@@ -140,6 +197,7 @@ void Engine::loadSystemTables(const String& ilwDir) {
 
 	ifstream in(String("%SResources\\def\\datum.csv",ilwDir).c_str());
 	bool skip = true;
+	String pp("is open %d, eof %d", (int)in.is_open(), (int)in.eof());
 	while(in.is_open() && !in.eof()) {
 		String line;
 		getline(in,line);
@@ -158,28 +216,31 @@ void Engine::loadSystemTables(const String& ilwDir) {
 
 		String plist("'%S','%S','%S','%S',%f,%f,%f,%f,%f,%f,'%S'",parts[0],parts[1],parts[2],parts[3],dx,dy,dz,rx,ry,rz,parts[11]);
 		String stmt("INSERT INTO Datums VALUES(%S)", plist);
-		db->executeStatement(stmt);
+		bool res = db->executeStatement(stmt);
 		if ( parts[10] != "") {
 			Array<String> aliassen;
 			Split(parts[10],aliassen,";");
 			for(int j = 0; j < aliassen.size(); ++j) {
 				stmt = String("INSERT INTO DatumAliasses Values('%S','%S')",parts[0],aliassen[j]);
-				db->executeStatement(stmt);
 			}
+			
 		}
 
 
 	}
 	in.close();
+
 	ifstream epsgFile(String("%SResources\\def\\epsg-sqlite.sql",ilwDir).c_str());
 	String stmt;
-    getline(in,stmt);  // Get the frist line from the file, if any.
+   // getline(in,stmt);  // Get the frist line from the file, if any.
     while ( epsgFile ) {
 		String str;
         getline(epsgFile,str); 
 		stmt += str;
     }
 	db->executeStatement(stmt);
+
+	epsgFile.close();
 }
 
 void Engine::SetCurDir(const String& sDir) {
