@@ -83,7 +83,7 @@ public:
 class IMPEXP ZoomableView : public CView
 {
 public:
-	enum Case{cNone, cEntire, cZoomIn, cZoomOut, cPan, cResize, cZoom};
+	enum Case{cNone, cEntire, cZoomIn, cZoomOut, cTranslate, cResize, cRotate, cZoom};
 	ZoomableView();           // protected constructor used by dynamic creation
 	virtual ~ZoomableView();
 	FrameWindow* fwParent();
@@ -162,8 +162,9 @@ public:
 	//}}AFX_MSG
 	void ZoomInPnt(zPoint);
 	void ZoomOutPnt(zPoint);
-	void moveEyePoint(const CPoint& pnt, UINT message);
-	void moveViewPoint(const CPoint& pnt, UINT message);
+	void viewRotate(const CPoint& pnt, UINT message);
+	void viewTranslate(const CPoint& pnt, UINT message);
+	void viewZoom(const CPoint& pnt, UINT message);
 	void movePoint(const CPoint& pnt, UINT message);
 	void PanMove(CPoint pt);
 

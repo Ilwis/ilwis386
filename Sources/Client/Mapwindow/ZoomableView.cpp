@@ -189,7 +189,7 @@ BOOL ZoomableView::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT*
 		case WM_LBUTTONDOWN:
 			if (mcd->rootDrawer->is3D()) {
 				if ((wParam & MK_CONTROL) || (iActiveTool == ID_PANAREA))
-					moveEyePoint(point,message);
+					viewRotate(point,message);
 			} else {
 				if (tools.size() > 0)
 					tools.OnLButtonDown(wParam, point);
@@ -198,7 +198,7 @@ BOOL ZoomableView::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT*
 		case WM_LBUTTONUP:
 			if (mcd->rootDrawer->is3D()) {
 				if ((mode != cNone) || (iActiveTool == ID_PANAREA))
-					moveEyePoint(point,message);
+					viewRotate(point,message);
 			} else {
 				if (tools.size() > 0)
 					tools.OnLButtonUp(wParam, point);
@@ -210,7 +210,7 @@ BOOL ZoomableView::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT*
 		case WM_RBUTTONDOWN:
 			if (mcd->rootDrawer->is3D()) {
 				if ((wParam & MK_CONTROL) || (iActiveTool == ID_PANAREA))
-					moveViewPoint(point, message);
+					viewTranslate(point, message);
 			} else {
 				if (tools.size() > 0) 
 					tools.OnRButtonDown(wParam, point);
@@ -219,7 +219,7 @@ BOOL ZoomableView::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT*
 		case WM_RBUTTONUP:
 			if (mcd->rootDrawer->is3D()) {
 				if ((mode != cNone) || (iActiveTool == ID_PANAREA)) {
-					moveViewPoint(point, message);
+					viewTranslate(point, message);
 					return TRUE; // prevent context-menu !!
 				}
 			} else {
@@ -227,68 +227,38 @@ BOOL ZoomableView::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT*
 					tools.OnRButtonUp(wParam, point);
 			}
 			break;
+		case WM_MBUTTONDOWN:
+			if (mcd->rootDrawer->is3D()) {
+				if ((wParam & MK_CONTROL) || (iActiveTool == ID_PANAREA))
+					viewZoom(point, message);
+			}
+			break;
+		case WM_MBUTTONUP:
+			if (mcd->rootDrawer->is3D()) {
+				if ((mode != cNone) || (iActiveTool == ID_PANAREA)) {
+					viewZoom(point, message);
+					return TRUE; // prevent context-menu !!
+				}
+			}
+			break;
 	}
 	return CView::OnWndMsg(message, wParam, lParam, pResult);
 }
 
 void ZoomableView::movePoint(const CPoint& pnt, UINT message) {
-	if ( mode == cPan)
-		moveViewPoint(pnt, message);
-	if ( mode == cZoom)
-		moveEyePoint(pnt, message);
-
-}
-void ZoomableView::moveViewPoint(const CPoint& pnt, UINT message) {
-	MapCompositionDoc *doc = (MapCompositionDoc *)GetDocument();
-	if ( message == WM_RBUTTONDOWN) {
-		beginMovePoint = pnt;
-		mode = cPan;
-		SetCapture();
-	}
-	else if ( message == WM_RBUTTONUP){
-		beginMovePoint = CPoint(iUNDEF,iUNDEF);
-		mode = cNone;
-		ReleaseCapture();
-	} else if (message == WM_MOUSEMOVE && beginMovePoint.x != iUNDEF) {
-		CRect rct;
-		GetClientRect(rct);
-		double deltax = beginMovePoint.x - pnt.x;
-		double deltay = beginMovePoint.y - pnt.y;
-		if ( deltax == 0 && deltay == 0)
-			return;
-		deltax = deltax / rct.Width();
-		deltay = deltay / rct.Height();
-		CoordBounds cb = doc->rootDrawer->getCoordBoundsZoom();
-		double shiftx = cb.width() * deltax;
-		double shifty = cb.height() * deltay;
-		/*
-		Coord eyePoint = doc->rootDrawer->getEyePoint();
-		eyePoint.x += shiftx;
-		eyePoint.z += shifty;
-		doc->rootDrawer->setEyePoint(eyePoint);
-		Coord viewPoint = doc->rootDrawer->getViewPoint();
-		viewPoint.x += shiftx;
-		viewPoint.z += shifty;
-		doc->rootDrawer->setViewPoint(viewPoint);
-		*/
-		double tx,ty,tz;
-		doc->rootDrawer->getTranslate(tx,ty,tz);
-		tx -= shiftx;
-		ty += shifty;
-		tz += shifty; // intentionally use shifty twice, the resulting interactvity "feels" more natural
-		doc->rootDrawer->setTranslate(tx,ty,tz);
-
-		
-		beginMovePoint = pnt;
-		Invalidate();
-	}
+	if ( mode == cTranslate)
+		viewTranslate(pnt, message);
+	if ( mode == cRotate)
+		viewRotate(pnt, message);
+	if (mode == cZoom)
+		viewZoom(pnt, message);
 }
 
-void ZoomableView::moveEyePoint(const CPoint& pnt, UINT message) {
+void ZoomableView::viewRotate(const CPoint& pnt, UINT message) {
 	MapCompositionDoc *doc = (MapCompositionDoc *)GetDocument();
 	if ( message == WM_LBUTTONDOWN) {
 		beginMovePoint = pnt;
-		mode = cZoom;
+		mode = cRotate;
 		SetCapture();
 	}
 	else if ( message == WM_LBUTTONUP){
@@ -313,6 +283,68 @@ void ZoomableView::moveEyePoint(const CPoint& pnt, UINT message) {
 	}
 }
 
+void ZoomableView::viewTranslate(const CPoint& pnt, UINT message) {
+	MapCompositionDoc *doc = (MapCompositionDoc *)GetDocument();
+	if ( message == WM_RBUTTONDOWN) {
+		beginMovePoint = pnt;
+		mode = cTranslate;
+		SetCapture();
+	}
+	else if ( message == WM_RBUTTONUP){
+		beginMovePoint = CPoint(iUNDEF,iUNDEF);
+		mode = cNone;
+		ReleaseCapture();
+	} else if (message == WM_MOUSEMOVE && beginMovePoint.x != iUNDEF) {
+		CRect rct;
+		GetClientRect(rct);
+		double deltax = beginMovePoint.x - pnt.x;
+		double deltay = beginMovePoint.y - pnt.y;
+		if ( deltax == 0 && deltay == 0)
+			return;
+		deltax = deltax / rct.Width();
+		deltay = deltay / rct.Height();
+		CoordBounds cb = doc->rootDrawer->getCoordBoundsZoom();
+		double shiftx = cb.width() * deltax;
+		double shifty = cb.height() * deltay;
+		double tx,ty,tz;
+		doc->rootDrawer->getTranslate(tx,ty,tz);
+		tx -= shiftx;
+		ty += shifty;
+		tz += shifty; // intentionally use shifty twice, the resulting interactvity "feels" more natural
+		doc->rootDrawer->setTranslate(tx,ty,tz);
+		
+		beginMovePoint = pnt;
+		Invalidate();
+	}
+}
+
+void ZoomableView::viewZoom(const CPoint& pnt, UINT message) {
+	MapCompositionDoc *doc = (MapCompositionDoc *)GetDocument();
+	if ( message == WM_MBUTTONDOWN) {
+		beginMovePoint = pnt;
+		mode = cZoom;
+		SetCapture();
+	}
+	else if ( message == WM_MBUTTONUP){
+		beginMovePoint = CPoint(iUNDEF,iUNDEF);
+		mode =  cNone;
+		ReleaseCapture();
+	} else if (message == WM_MOUSEMOVE && beginMovePoint.x != iUNDEF) {
+		double deltay = beginMovePoint.y - pnt.y;
+		if ( deltay == 0)
+			return;
+
+		double zoom3D = doc->rootDrawer->getZoom3D();
+		if (deltay > 0)
+			zoom3D *= (1.0 + deltay / 100.0);
+		else
+			zoom3D /= (1.0 - deltay / 100.0);
+		doc->rootDrawer->setZoom3D(zoom3D);
+
+		beginMovePoint = pnt;
+		Invalidate();
+	}
+}
 
 MinMax ZoomableView::mmRect(zRect r)   // Windows coordinates -> internal RowCol
 {
