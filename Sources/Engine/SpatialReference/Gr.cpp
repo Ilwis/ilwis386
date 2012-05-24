@@ -143,6 +143,7 @@
 #include "Engine\SpatialReference\GrScaleRotate.h"
 #include "Engine\Base\DataObjects\ObjectStructure.h"
 #include "Engine\SpatialReference\GrcWMS.h"
+#include "Engine\SpatialReference\GrcOSM.h"
 #include "Engine\DataExchange\gdalproxy.h"
 #include "Engine\Applications\objvirt.h"
 #include "Engine\Applications\ModuleMap.h"
@@ -351,6 +352,8 @@ GeoRefPtr* GeoRefPtr::create(const FileName& fn)
     return new GeoRefCorners(filnam);
   if (fCIStrEqual("GeoRefCornersWMS" , sType))
     return new GeoRefCornersWMS(filnam);
+  if (fCIStrEqual("GeoRefOSM" , sType))
+    return new GeoRefOSM(filnam);
   if (fCIStrEqual("GeoRefCTP" , sType))
     return new GeoRefCTPplanar(filnam);
   if (fCIStrEqual("GeoRefOrthoPhoto" , sType))
@@ -561,6 +564,11 @@ GeoRefScaleRotate* GeoRefPtr::pgScalRot() const
 GeoRefCornersWMS* GeoRefPtr::pgWMS() const
 {
 	return dynamic_cast<GeoRefCornersWMS*>(const_cast<GeoRefPtr*>(this));
+}
+
+GeoRefOSM* GeoRefPtr::pgOSM() const
+{
+	return dynamic_cast<GeoRefOSM*>(const_cast<GeoRefPtr*>(this));
 }
 
 void GeoRefPtr::GetObjectDependencies(Array<FileName>& afnObjDep)

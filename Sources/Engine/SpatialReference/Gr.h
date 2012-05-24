@@ -105,6 +105,7 @@ class GeoRefEpipolar;
 class GeoRefScaleRotate;
 class GeoRefStereoMate;
 class GeoRefCornersWMS;
+class GeoRefOSM;
 
 class GeoRefPtr: public IlwisObjectPtr
 {
@@ -153,6 +154,7 @@ public:
 	GeoRefStereoMate _export *pgStereoMate() const;
 	GeoRefScaleRotate _export *pgScalRot() const;
 	GeoRefCornersWMS _export *pgWMS() const;
+	GeoRefOSM _export *pgOSM() const;
   virtual void _export Rename(const FileName& fnNew);
   virtual bool _export fLinear() const;
   virtual String _export sObjectSection() const;
