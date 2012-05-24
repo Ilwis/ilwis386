@@ -229,6 +229,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\DataExchange\OpenStreetMapFormat.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\DataExchange\WMSFormat.cpp"
 				>
 			</File>
@@ -256,6 +260,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\DataExchange\GeoGateway.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DataExchange\OpenStreetMapFormat.h"
 				>
 			</File>
 			<File
