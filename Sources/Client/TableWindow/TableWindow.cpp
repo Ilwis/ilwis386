@@ -95,6 +95,7 @@ BEGIN_MESSAGE_MAP(TableWindow, DataWindow)
 	ON_COMMAND(ID_LEASTSQUARES, OnLeastSquares)
 	ON_COMMAND(ID_CUMULATIVE, OnCumulative)
 	ON_COMMAND(ID_SEMIVARIOGRAM, OnSemiVariogram)
+	ON_COMMAND(ID_TIMECOLUMN, OnTimeColumn)
 	ON_COMMAND(ID_COLSLICING, OnSlicing)
 	ON_COMMAND(ID_COMMANDLINE, OnCommandLine)
 	ON_COMMAND(ID_SHOWADDINFO, OnAdditionalInfo)
@@ -204,6 +205,7 @@ int TableWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
   add(ID_LEASTSQUARES);
   add(ID_SEMIVARIOGRAM);
   add(ID_COLSLICING);
+  add(ID_TIMECOLUMN)
   addMenu(ID_MEN_COLUMNS);
 
   menPopup.CreateMenu();
@@ -318,6 +320,10 @@ void TableWindow::OnSemiVariogram()
 void TableWindow::OnSlicing()
 {
 	OnExecute(1, (LPARAM)"clmslicing");
+}
+
+void TableWindow::OnTimeColumn() {
+	OnExecute(1, (LPARAM)"timefromcolumns");
 }
 
 void TableWindow::OnCommandLine()

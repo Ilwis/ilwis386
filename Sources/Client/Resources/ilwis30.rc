@@ -84,7 +84,7 @@ ILOICON                 ICON                    "ilo.ico"
 LAYOUTICON              ICON                    "ilo.ico"
 DIRICON                 ICON                    "clsdfold.ico"
 DRIVEICON               ICON                    "drive.ico"
-ColumnIcon              ICON                    "column.ico"
+COLUMNICON              ICON                    "column.ico"
 GRIDICON                ICON                    "grid.ico"
 GRATICON                ICON                    "grat.ico"
 INFOICON                ICON                    "info.ico"
@@ -243,7 +243,7 @@ ILWIS32REMOVE           ICON                    "ilwisRemove.ico"
 A                       ICON                    "ilwis33.ico"
 TRANSPARENT             ICON                    "transparent.ico"
 VALUERANGE              ICON                    "valuerange.ico"
-ColorComposite          ICON                    "colorcomposite.ico"
+COLORCOMPOSITE          ICON                    "colorcomposite.ico"
 SINGLECOLOR             ICON                    "singlecolor.ico"
 MULTIPLECOLORS          ICON                    "multiplecolors.ico"
 MASK                    ICON                    "mask.ico"
@@ -291,15 +291,15 @@ SYMBOL                  ICON                    "Symbol.ico"
 AUTOCLOSE               ICON                    "AutoClose.ico"
 SNAP                    ICON                    "snap.ico"
 UNDEFINED               ICON                    "undefined.ico"
-integer                 ICON                    "integer.ico"
-float                   ICON                    "float.ico"
-boolean                 ICON                    "bool.ico"
-choice                  ICON                    "choice.ico"
-Colors                  ICON                    "color.ico"
-Border                  ICON                    "border.ico"
-Earth                   ICON                    "earth.ico"
-Ethiopia                ICON                    "ethiopia.ico"
-
+INTEGER                 ICON                    "integer.ico"
+FLOAT                   ICON                    "float.ico"
+BOOLEAN                 ICON                    "bool.ico"
+CHOICE                  ICON                    "choice.ico"
+COLORS                  ICON                    "color.ico"
+BORDER                  ICON                    "border.ico"
+EARTH                   ICON                    "earth.ico"
+ETHIOPIA                ICON                    "ethiopia.ico"
+Openstreetmap           ICON                    "openstreetmap.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -528,7 +528,7 @@ BEGIN
     DEFPUSHBUTTON   "OK",IDOK,67,94,45,15
     CTEXT           "ILWIS Open",-1,30,10,115,10
     CTEXT           "© 52 North, March 2009",-1,32,20,115,10
-    LTEXT           "Version 3.7",-1,10,35,160,8
+    LTEXT           "Version 3.8",-1,10,35,160,8
     LTEXT           "Credits:",-1,10,50,160,8
     LTEXT           "Wim Koolhoven, Jan Hendrikse, Willem Nieuwenhuis,",-1,10,60,170,8
     LTEXT           "Bas Retsios, Martin Schouwenburg, Lichun Wang,",-1,10,68,170,8

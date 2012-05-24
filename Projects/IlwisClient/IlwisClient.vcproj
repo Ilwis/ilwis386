@@ -601,11 +601,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Client\Resources\amesd.ico"
+				RelativePath=".\amesd.ico"
 				>
 			</File>
 			<File
-				RelativePath=".\amesd.ico"
+				RelativePath="..\..\Sources\Client\Resources\amesd.ico"
 				>
 			</File>
 			<File
@@ -717,6 +717,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Client\Resources\border.ico"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Client\Resources\box.ico"
 				>
 			</File>
@@ -758,6 +762,14 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\CLSDFOLD.ICO"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\color.ico"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\colorcomposite.ico"
 				>
 			</File>
 			<File
@@ -909,6 +921,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Client\Resources\earth.ico"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Client\Resources\EDIT.CUR"
 				>
 			</File>
@@ -982,6 +998,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\esa.ico"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\ethiopia.ico"
 				>
 			</File>
 			<File
@@ -1446,6 +1466,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\openfold.ico"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\openstreetmap.ico"
 				>
 			</File>
 			<File
@@ -5314,18 +5338,6 @@
 				</File>
 			</Filter>
 		</Filter>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\border.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\color.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\colorcomposite.ico"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

@@ -105,6 +105,7 @@ protected:
 	afx_msg void OnSemiVariogram();
 	afx_msg void OnSlicing();
 	afx_msg void OnFileProp();
+	afx_msg void OnTimeColumn();
 afx_msg LONG OnCommandUI(UINT, LONG lParam);
   afx_msg void OnAddRecord();
 	afx_msg void OnUpdateAddRecord(CCmdUI* pCmdUI);
