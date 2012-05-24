@@ -67,6 +67,7 @@
 #include "Applications\MapList\MapListExpand.h"
 #include "Applications\Raster\Mapresmp2.h"
 #include "Applications\Table\COLumntotime.H"
+#include "Applications\Table\coltimefromcolumns.h"
 
 //extern "C" _export vector<CommandInfo *>* getCommandInfo());
 
@@ -147,6 +148,8 @@ InfoVector* getCommandInfo() {
 	infos->push_back(CommandMap::newCommandInfo(createTableTranspose,"TableTranspose"));
 	infos->push_back(CommandMap::newCommandInfo(createTableAutoCorrSemiVar,"TableAutoCorrSemiVar"));
 	infos->push_back(CommandMap::newCommandInfo(createTableCreateTimeColumn,"TableCreateTimeColumn"));
+	infos->push_back(CommandMap::newCommandInfo(createColumnTimeFromColumns,"ColumnTimeFromColumns"));
+	
 
 	return infos;
 

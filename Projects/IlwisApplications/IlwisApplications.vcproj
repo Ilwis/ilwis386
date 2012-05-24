@@ -583,6 +583,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\Sources\Applications\Table\coltimefromcolumns.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Applications\Table\coltimefromcolumns.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Sources\Applications\Table\ColumnToTime.cpp"
 					>
 				</File>
