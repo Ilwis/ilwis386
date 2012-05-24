@@ -2558,6 +2558,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\Sources\Engine\SpatialReference\GrcOSM.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\SpatialReference\GrcOSM.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Sources\Engine\SpatialReference\Grctp.cpp"
 					>
 				</File>
