@@ -109,6 +109,9 @@ void *RemoteObject::myrealloc(void *ptr, size_t size)
 }
 
 MemoryStruct *RemoteObject::get() {
+	if ( chunk.size == 0)
+		return 0;
+
 	MemoryStruct *mem = new MemoryStruct();
 	mem->size = chunk.size;
 	mem->memory = new unsigned char[mem->size];
