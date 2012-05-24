@@ -41,6 +41,8 @@ void RasterDataDrawer::prepare(PreparationParameters *pp){
 		if ( otype == IlwisObject::iotRASMAP) {
 				if ( mpl.fValid() )
 					rsd = (RasterLayerDrawer *)NewDrawer::getDrawer("ColorCompositeDrawer", pp, &dp);
+				else if ( ((MapPtr*)basemap.ptr())->gr()->pgOSM())
+					rsd = (RasterLayerDrawer *)NewDrawer::getDrawer("OpenstreetmapDrawer", pp, &dp);
 				else if ( ((MapPtr*)basemap.ptr())->gr()->pgWMS())
 					rsd = (RasterLayerDrawer *)NewDrawer::getDrawer("WMSDrawer", pp, &dp);
 				else
