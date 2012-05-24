@@ -113,7 +113,7 @@ WMSFormat::WMSFormat(const FileName& fn, ParmList& pm)
 	if ( pm.fExist("georef")) {
 		grf = GeoRef(FileName(pm.sGet("georef")));
 		grfWMS = grf->pgWMS();
-		grfWMS->SetWMSHandler(this, (RetrieveImageProc)&WMSFormat::retrieveImage);
+		grfWMS->SetRetrieveProc(this, (RetrieveImageProc)&WMSFormat::retrieveImage);
 	}
 	if ( pm.fExist("url"))
 		urlWMS = URL(pm.sGet("url"));
@@ -571,7 +571,7 @@ void WMSFormat::Store(IlwisObject obj) {
 		obj->WriteElement("ForeignFormat","URL", urlWMS.sVal());
 }
 
-void WMSFormat::retrieveImage() {
+bool WMSFormat::retrieveImage() {
 	CoordBounds cb2 = grfWMS->cbWMSRequest();
 	String sExpr = getMapRequest(cb2, layers, srsName, grfWMS->rcWMSRequest());
 	if (rxo == 0)
@@ -602,6 +602,8 @@ void WMSFormat::retrieveImage() {
 	}
 
 	const_cast<GDALDatasetH>(gdalDataSet) = hDS;
+
+	return true;
 }
 
 void WMSFormat::GetLineRaw(long iLine, ByteBuf&, long iFrom, long iNum) const {

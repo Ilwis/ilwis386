@@ -107,7 +107,7 @@ public:
 	virtual long          iRaw(RowCol) const;
 	virtual long          iValue(RowCol) const;
 	virtual double        rValue(RowCol) const;
-	void retrieveImage();
+	bool retrieveImage();
 	FileName createCollectionName(const String& name,ParmList& pm);
 
 private:
