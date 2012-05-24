@@ -32,6 +32,8 @@ WMSTexture::WMSTexture(const Map & mp, const DrawingColor * drawColor, const Com
 void WMSTexture::CreateTexture(DrawerContext * drawerContext, bool fInThread, volatile bool * fDrawStop)
 {
 	int textureSize = drawerContext->getMaxTextureSize();
+	if ( mp->gr()->pgOSM())
+		textureSize = 256;
 	try {
 		texture_data = new char [textureSize * textureSize * 4];
 	} catch (CMemoryException * err) {
@@ -115,20 +117,23 @@ bool WMSTexture::DrawTexture(int textureSize, char * outbuf, volatile bool* fDra
 	grcWMS->Lock();
 	grcWMS->SetCBWMSRequest(cbBounds);
 	grcWMS->SetRCWMSRequest(RowCol(textureSize, textureSize));
-	grcWMS->retrieveImage();
-	LongBuf bufIn(textureSize);
-	LongBuf bufColor(textureSize);
-	for (long iDataInYPos = 0; iDataInYPos < textureSize; ++iDataInYPos) 
-	{
-		//if (*fDrawStop) {
-		//	(*mp)->KeepOpen(false);
-		//	return false;
-		//}
-		mp->GetLineRaw(iDataInYPos, bufIn, 0, textureSize);
-		ConvLine(bufIn, bufColor);
-		PutLine(bufIn, bufColor, iDataInYPos, textureSize, outbuf);
+	bool valid = grcWMS->retrieveImage();
+	if( valid ) {
+		LongBuf bufIn(textureSize);
+		LongBuf bufColor(textureSize);
+		for (long iDataInYPos = 0; iDataInYPos < textureSize; ++iDataInYPos) 
+		{
+			//if (*fDrawStop) {
+			//	(*mp)->KeepOpen(false);
+			//	return false;
+			//}
+			mp->GetLineRaw(iDataInYPos, bufIn, 0, textureSize);
+			ConvLine(bufIn, bufColor);
+			PutLine(bufIn, bufColor, iDataInYPos, textureSize, outbuf);
+		}
 	}
+	
 	grcWMS->Unlock();
 	mp->KeepOpen(false);
-	return true;
+	return valid;
 }
