@@ -171,11 +171,11 @@ void GeoRefCornersWMS::SetCBWMSRequest(const CoordBounds & cb) {
 	m_cbWMSRequest = cb;
 }
 
-void GeoRefCornersWMS::SetWMSHandler(ForeignFormat* context, RetrieveImageProc proc) {
+void GeoRefCornersWMS::SetRetrieveProc(ForeignFormat* context, RetrieveImageProc proc) {
 	wmsFormat = context;
 	retrieveImageProc = proc;
 }
 
-void GeoRefCornersWMS::retrieveImage() {
-	(wmsFormat->*retrieveImageProc)();
+bool GeoRefCornersWMS::retrieveImage() {
+	return (wmsFormat->*retrieveImageProc)();
 }
