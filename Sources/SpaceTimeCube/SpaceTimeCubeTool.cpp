@@ -531,7 +531,8 @@ HTREEITEM SpaceTimeCubeTool::configure( HTREEITEM parentItem) {
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&SpaceTimeCubeTool::startLayerOptionsForm);
 	htiNode =  insertItem(TR("SpaceTimeCube"),"SpaceTimeCube",item,stc->fUseSpaceTimeCube());
 	DrawerTool::configure(htiNode);
-	stc->refreshDrawerList();
+	if (stc->fUseSpaceTimeCube())
+		stc->refreshDrawerList();
 	if (stc->showingLayerOptionsForm())
 		stc->startLayerOptionsForm();
 	return htiNode;
