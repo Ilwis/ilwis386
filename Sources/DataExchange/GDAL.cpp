@@ -480,6 +480,7 @@ void GDALFormat::LoadMethods() {
 				funcs.ogrsVal = (GetFieldAsStringFunc)GetProcAddress(hm,"OGR_F_GetFieldAsString");
 				funcs.ogrrVal = (GetFieldAsDoubleFunc)GetProcAddress(hm,"OGR_F_GetFieldAsDouble");
 				funcs.ogriVal = (GetFieldAsIntegerFunc)GetProcAddress(hm,"OGR_F_GetFieldAsInteger");
+				funcs.ogrtVal = (GetFieldAsDateTimeFunc)GetProcAddress(hm,"OGR_F_GetFieldAsDateTime");
 				funcs.ogrGetGeometryRef = (GetGeometryRefFunc)GetProcAddress(hm,"OGR_F_GetGeometryRef");
 				funcs.ogrGetGeometryType = (GetGeometryTypeFunc)GetProcAddress(hm,"OGR_G_GetGeometryType");
 				funcs.ogrDestroyFeature = (DestroyFeatureFunc)GetProcAddress(hm,"OGR_F_Destroy");
@@ -1709,6 +1710,15 @@ void GDALFormat::createTable(const FileName& fn, const Domain& dm,OGRFeatureDefn
 				String v("%s",funcs.ogrsVal(hFeature, field));
 				columns[field].strings.push_back(v);
 				columns[field].useClass &= v.find(" ") != string::npos;
+			} else if ( type == OFTDate || type == OFTDateTime) {
+				int year, month, day,hour,minute, second;
+					int r = funcs.ogrtVal(hFeature, field,&year, &month, &day, &hour,&minute, &second,0);
+					if ( r == 1) {
+						ILWIS::Time t(year, month, day, hour, minute, second);
+						columns[field].min = min((double)t,columns[field].min); 
+						columns[field].max = max((double)t,columns[field].max);
+						columns[field].values.push_back((double)t);
+					}
 			}
 
 		}
@@ -1732,6 +1742,9 @@ void GDALFormat::createTable(const FileName& fn, const Domain& dm,OGRFeatureDefn
 				dom2->Store();
 			}
 			col = tbl->colNew(columns[column].name, dom);
+		} else if ( type == OFTDate || type == OFTDateTime) {
+			DomainValueRangeStruct dvrs(Domain("time"),ValueRangeReal(columns[column].min, columns[column].max,0));
+			col = tbl->colNew(columns[column].name, dvrs);
 		}
 		if ( col.fValid()) {
 			for(int rec = 0; rec < size; ++rec) {
@@ -1850,8 +1863,12 @@ void PointFiller::fillGeometry(OGRGeometryH hGeom, int& rec) {
 
 
 void SegmentFiller::fillGeometry(OGRGeometryH hGeom, int& rec) {
-	ILWIS::Segment *s = CSEGMENT(bmp->newFeature());
 	int count = funcs.ogrGetNumberOfPoints(hGeom);
+	if ( count == 0)
+		return;
+
+	ILWIS::Segment *s = CSEGMENT(bmp->newFeature());
+
 	CoordinateArraySequence *seq = new CoordinateArraySequence(count);
 	for(int i = 0; i < count; ++i) {
 		double x,y,z;
