@@ -173,6 +173,7 @@
 // TableWindow
 #define ID_SEMIVARIOGRAM 1190
 #define ID_SHOWRECORDVIEW 1191
+#define ID_TIMECOLUMN 1192
 
 // Too much, need to be split up!
 #define ID_OPENMAP     1200
