@@ -121,6 +121,7 @@ LRESULT Cmdclmfind7parameters(CWnd *parent, const String& dummy);
 LRESULT Cmdclmmoledensky(CWnd *parent, const String& dummy);
 LRESULT Cmdclmhelmert7parms(CWnd *parent, const String& dummy);
 LRESULT Cmdclmfindazimuthdistance(CWnd *parent, const String& dummy);
+LRESULT Cmdtimefromcolumns(CWnd *parent, const String& dummy);
 
 LRESULT CmdUpdateAllColumns(CWnd *parent, const String& s);
 
@@ -397,6 +398,32 @@ private:
 	String sCrdCol1, sCrdCol2, sActiveCol;	
   int exec();
 	TableView* view;
+};
+
+class TimeColumnFromOtherColsForm : public TableForm {
+public:
+	TimeColumnFromOtherColsForm(CWnd *);
+	int exec();
+private:
+	FormEntry *CheckData();
+
+	int source;
+	String year;
+	bool useYear;
+	String month;
+	bool useMonth;
+	String day;
+	bool useDay;
+	String hour;
+	bool useHour;
+	String minutes;
+	bool useMinutes;
+	String seconds;
+	bool useSeconds;
+	String stringColumn;
+	bool useStringColumn;
+	String output;
+
 };
 
 #endif // TBLFORMS_H

@@ -36,6 +36,7 @@ Software Foundation, http://www.fsf.org.
 #include "Client\Headers\formelementspch.h"
 #include "Client\ilwis.h"
 #include "Engine\Applications\COLVIRT.H"
+#include "Engine\Base\System\Engine.h"
 //#include "Engine\Table\COLCALC.H"
 #include "Client\FormElements\fldtbl.h"
 #include "Client\FormElements\fldcol.h"
@@ -2700,3 +2701,91 @@ int FindAzimuthAndDistanceForm::exec()
 	ResultForm frm(wnd(),sOutputString);
 	return 0;
 }
+
+//------------------------------
+LRESULT Cmdtimefromcolumns(CWnd *parent, const String& dummy){
+	new TimeColumnFromOtherColsForm(parent);
+
+	return 1;
+}
+
+TimeColumnFromOtherColsForm::TimeColumnFromOtherColsForm(CWnd *parent) : TableForm(parent, "Create time column")
+{
+	useYear = useMonth = useDay = useHour = useMonth = useMinutes = useSeconds = false;
+	view = getView(parent);
+
+	CheckBox *cb1 = new CheckBox(root,TR("Year"),&useYear);
+	FieldColumn *fc = new FieldColumn(cb1,"",view, &year,dmVALUE);
+	fc->Align(cb1, AL_AFTER);
+	CheckBox *cb2 = new CheckBox(root,TR("Month"),&useMonth);
+	cb2->Align(cb1, AL_UNDER);
+	fc = new FieldColumn(cb2,"",view, &month,dmVALUE);
+	fc->Align(cb2, AL_AFTER);
+	CheckBox *cb3 = new CheckBox(root,TR("Day"),&useDay);
+	cb3->Align(cb2, AL_UNDER);
+	fc = new FieldColumn(cb3,"",view, &day,dmVALUE);
+	fc->Align(cb3, AL_AFTER);
+	CheckBox *cb4 = new CheckBox(root,TR("Hours"),&useHour);
+	cb4->Align(cb3, AL_UNDER);
+	fc = new FieldColumn(cb4,"",view, &hour,dmVALUE);
+	fc->Align(cb4, AL_AFTER);
+	CheckBox *cb5 = new CheckBox(root,TR("Minutes"),&useMinutes);
+	cb5->Align(cb4, AL_UNDER);
+	fc = new FieldColumn(cb5,"",view, &minutes,dmVALUE);
+	fc->Align(cb5, AL_AFTER);
+	CheckBox *cb6 = new CheckBox(root,TR("Seconds"),&useSeconds);
+	cb6->Align(cb5, AL_UNDER);
+	fc = new FieldColumn(cb6,"",view, &seconds,dmVALUE);
+	fc->Align(cb6, AL_AFTER);
+	CheckBox *cb7 = new CheckBox(root,TR("String(time) column"),&useStringColumn);
+	cb7->Align(cb6, AL_UNDER);
+	fc = new FieldColumn(cb7,"",view, &stringColumn,dmSTRING);
+	fc->Align(cb7, AL_AFTER);
+
+
+	new FieldString(root, TR("&Output Column"), &output, Domain("time"), false);
+	create();
+}
+
+FormEntry *TimeColumnFromOtherColsForm::CheckData() {
+	return 0;
+}
+int TimeColumnFromOtherColsForm::exec() {
+	FormWithDest::exec();
+
+	String expr("%S = ColumnTimeFromColumns(",output);
+	if ( !useStringColumn) {
+		if ( useYear) {
+			expr += year;
+		}
+		expr += ",";
+		if ( useMonth) {
+			expr += month;
+		}
+		expr += ",";
+		if ( useDay) {
+			expr += day;
+		}
+		expr += ",";
+		if ( useHour) {
+			expr += hour;
+		}
+		expr += ",";
+		if ( useMinutes) {
+			expr += minutes;
+		}
+		expr += ",";
+		if ( useSeconds) {
+			expr += seconds;
+		}
+	} else {
+		expr += stringColumn;
+	}
+	expr += ")";
+
+		char* str = expr.sVal();
+		GetOwner()->SendMessage(ILWM_EXECUTE, 1, (LPARAM)str);
+
+	return true;
+}
+
