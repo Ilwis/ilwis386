@@ -32,7 +32,7 @@ PointDrawer::~PointDrawer() {
 
 void PointDrawer::prepare(PreparationParameters *p){
 	SimpleDrawer::prepare(p);
-	if ( p->type & NewDrawer::ptRENDER ) {
+	if ( p->type & NewDrawer::ptRENDER || p->type & NewDrawer::ptRESTORE) {
 		if ( p && p->props ) {
 			properties.symbol = p->props->symbolType;
 			properties.scale = p->props->symbolSize / 100.0;

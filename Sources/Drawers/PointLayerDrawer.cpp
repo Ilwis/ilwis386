@@ -117,7 +117,7 @@ String PointLayerDrawer::store(const FileName& fnView, const String& parentSecti
 }
 
 void PointLayerDrawer::load(const FileName& fnView, const String& parentSection){
-	String currentSection = getType() + "::" + parentSection;
+	String currentSection = parentSection;
 	FeatureLayerDrawer::load(fnView, currentSection);
 	properties->load(fnView, currentSection);
 	ObjectInfo::ReadElement(currentSection.c_str(),"RotationColumn",fnView, rotationInfo.rotationColumn);
