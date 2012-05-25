@@ -47,6 +47,7 @@ Last change:  JEL  15 May 97    4:00 pm
 #include "Engine\Base\DataObjects\valrange.h"
 #include "Headers\Err\Ilwisapp.err"
 #include "Applications\Table\coltimefromcolumns.h"
+#include "Engine\Domain\DomainTime.h"
 
 
 const char* ColumnTimeFromColumns::sSyntax() { return "ColumnCum(col)\ncum(col)\nlumnCum(col,sortcol)\ncum(col,sortcol)"; }
@@ -66,13 +67,26 @@ IlwisObjectPtr * createColumnTimeFromColumns(const FileName& fn, IlwisObjectPtr&
 ColumnTimeFromColumns::ColumnTimeFromColumns(const Table& tbl, const String& sColName, ColumnPtr& ptr)
 : ColumnVirtual(tbl, sColName, ptr)
 {
-	ReadElement(sSection().c_str(), "Year", year);
-	ReadElement(sSection().c_str(), "Month", month);
-	ReadElement(sSection().c_str(), "Day", day);
-	ReadElement(sSection().c_str(), "Hour", hour);
-	ReadElement(sSection().c_str(), "Minutes", minutes);
-	ReadElement(sSection().c_str(), "Seconds", seconds);
+	ReadElement(sSection().c_str(), "String", stringColumn);
+	if ( stringColumn == "") {
+		ReadElement(sSection().c_str(), "Year", year);
+		ReadElement(sSection().c_str(), "Month", month);
+		ReadElement(sSection().c_str(), "Day", day);
+		ReadElement(sSection().c_str(), "Hour", hour);
+		ReadElement(sSection().c_str(), "Minutes", minutes);
+		ReadElement(sSection().c_str(), "Seconds", seconds);
+	}
 	fNeedFreeze = true;
+}
+
+ColumnTimeFromColumns::ColumnTimeFromColumns(const Table& tbl, const String& sColName, ColumnPtr& ptr,const String& stCol) :
+ColumnVirtual(tbl, sColName, ptr, DomainValueRangeStruct(Domain("time")), Table()), 
+stringColumn(stCol) 
+{
+	if (!fnObj.fValid())
+		objtime = objdep.tmNewest();
+	fNeedFreeze = true;
+	ColumnVirtual::Replace(sExpression());
 }
 
 ColumnTimeFromColumns::ColumnTimeFromColumns(const Table& tbl, const String& sColName, ColumnPtr& ptr, 
@@ -102,29 +116,41 @@ ColumnTimeFromColumns* ColumnTimeFromColumns::create(const Table& tbl, const Str
 	}  
 	Array<String> as;
 	IlwisObjectPtr::iParseParm(sExpr, as);
-	String year = as[0];
-	String month = as[1];
-	String day = as[2];
-	String hours = as[3];
-	String minutes = as[4];
-	String seconds = as[5];
-	return new ColumnTimeFromColumns(tbl, sColName, ptr, year, month, day, hours, minutes, seconds);
+	if ( as.size() > 1) {
+		String year = as[0];
+		String month = as[1];
+		String day = as[2];
+		String hours = as[3];
+		String minutes = as[4];
+		String seconds = as[5];
+		return new ColumnTimeFromColumns(tbl, sColName, ptr, year, month, day, hours, minutes, seconds);
+	} else {
+		return new ColumnTimeFromColumns(tbl, sColName, ptr,as[0]);
+	}
 }
 
 String ColumnTimeFromColumns::sExpression() const
 {
-	return String("ColumnTimeFromColumns=(%S,%S,%S,%S,%S,%S)",year, month, day, hour, minutes, seconds);
+	if ( stringColumn.size() == 0)
+		return String("ColumnTimeFromColumns=(%S,%S,%S,%S,%S,%S)",year, month, day, hour, minutes, seconds);
+	return String("ColumnTimeFromColumns=(%S)",stringColumn);
+
 }
 
 void ColumnTimeFromColumns::Store()
 {
 	ColumnVirtual::Store();
-	WriteElement(sSection().c_str(), "Year", year);
-	WriteElement(sSection().c_str(), "Month", month);
-	WriteElement(sSection().c_str(), "Day", day);
-	WriteElement(sSection().c_str(), "Hour", hour);
-	WriteElement(sSection().c_str(), "Minutes", minutes);
-	WriteElement(sSection().c_str(), "Seconds", seconds);
+	if ( stringColumn.size() == 0) {
+		WriteElement(sSection().c_str(), "Year", year);
+		WriteElement(sSection().c_str(), "Month", month);
+		WriteElement(sSection().c_str(), "Day", day);
+		WriteElement(sSection().c_str(), "Hour", hour);
+		WriteElement(sSection().c_str(), "Minutes", minutes);
+		WriteElement(sSection().c_str(), "Seconds", seconds);
+	} 
+	else {
+		WriteElement(sSection().c_str(), "String", stringColumn);
+	}
 }
 
 void ColumnTimeFromColumns::Replace(const String& sExpr)
@@ -137,38 +163,75 @@ void ColumnTimeFromColumns::Replace(const String& sExpr)
 
 bool ColumnTimeFromColumns::fFreezing()
 {
-	Column colYear, colMonth, colDays, colHours, colMinutes, colSeconds;
 	Table tbl(ptr.fnTbl);
-	if ( year != "")
-		colYear = tbl->col(year);
-	if ( month != "")
-		colMonth = tbl->col(month);
-	if ( day != "")
-		colDays = tbl->col(day);
-	if ( hour != "")
-		colHours = tbl->col(hour);
-	if ( minutes != "")
-		colMinutes = tbl->col(minutes);
-	if ( seconds != "")
-		colSeconds = tbl->col(seconds);
-	for(int i=1; i < iRecs(); ++i) {
-		int tyear = -4713, tmonth=1, tday=1,thours=0, tminutes=0;
-		double tseconds=0;
-		if ( colYear.fValid())
-			tyear = colYear->rValue(i);
-		if ( colMonth.fValid())
-			tmonth = colMonth->rValue(i);
-		if ( colDays.fValid())
-			tday = colDays->rValue(i);
-		if ( colHours.fValid())
-			thours = colHours->rValue(i);
-		if ( colMinutes.fValid())
-			tminutes = colMinutes->rValue(i);
-		if ( colSeconds.fValid())
-			tseconds = colSeconds->rValue(i);
-		ILWIS::Time ti(tyear, tmonth,tday, thours, tminutes, tseconds);
-		pcs->PutVal(i, ti);
+	vector<ILWIS::Time> times;
+	double step = 0;
+	double rmax=-1e100, rmin=1e100;
+	if ( stringColumn.size() != 0) {
+		Column col = tbl->col(stringColumn);
+		for(int i=1; i < iRecs(); ++i) {		
+			String val = col->sValue(i);
+			ILWIS::Time ti(val);
+			if ( ti.isValid()) {
+				times.push_back(ti);
+				step = 0;
+			} else {
+				times.push_back(tUNDEF);
+			}
+			rmax = max((double)ti,rmax);
+			if ( ti != tUNDEF)
+				rmin = min((double)ti, rmin);
+		}
+	}else {
+		Column colYear, colMonth, colDays, colHours, colMinutes, colSeconds;
+		if ( year != "")
+			colYear = tbl->col(year);
+		if ( month != "")
+			colMonth = tbl->col(month);
+		if ( day != "")
+			colDays = tbl->col(day);
+		if ( hour != "")
+			colHours = tbl->col(hour);
+		if ( minutes != "")
+			colMinutes = tbl->col(minutes);
+		if ( seconds != "")
+			colSeconds = tbl->col(seconds);
 
+		for(int i=1; i < iRecs(); ++i) {
+			int tyear = -4713, tmonth=1, tday=1,thours=0, tminutes=0;
+			double tseconds=0;
+			if ( colYear.fValid())
+				tyear = colYear->rValue(i);
+			if ( colMonth.fValid())
+				tmonth = colMonth->rValue(i);
+			if ( colDays.fValid())
+				tday = colDays->rValue(i);
+			if ( colHours.fValid())
+				thours = colHours->rValue(i);
+			if ( colMinutes.fValid())
+				tminutes = colMinutes->rValue(i);
+			if ( colSeconds.fValid())
+				tseconds = colSeconds->rValue(i);
+			if ( tmonth > 12 || tday > 31 || thours > 23){
+				throw ErrorObject(TR("Invalid values in data columns"));
+			}
+			ILWIS::Time ti(tyear, tmonth,tday, thours, tminutes, tseconds);
+			times.push_back(ti);
+			rmax = max((double)ti,rmax);
+			if ( (double)ti != rUNDEF)
+				rmin = min((double)ti, rmin);
+
+		}
+		step = 1;
+		if ( colMinutes.fValid() || colSeconds.fValid() || colHours.fValid())
+			step = 0;
+	}
+	Domain dm;
+	dm.SetPointer( new DomainTime(FileName(ptr.sNam,".dom"),ILWIS::TimeInterval(rmin, rmax),step == 0 ? ILWIS::Time::mDATETIME : ILWIS::Time::mDATE));
+	ptr.SetDomainValueRangeStruct(dm);
+	CreateColumnStore();
+	for(int i=1; i < iRecs(); ++i) {
+		pcs->PutVal(i, times[i-1]);
 	}
 	return true;
 }
