@@ -213,13 +213,15 @@ ColumnPropForm::ColumnPropForm(CWnd* parent, ColumnView& cv,
 		}
 	}
 	// ColumnView Info
-	if (*iPos > 0)
-		new FieldInt(root, TR("&Position"), iPos, ValueRange(1L,10000L));
-	new FieldInt(root, TR("&Width"), &cv.iWidth, ValueRange(1L,100L));
-	if (cv->dm()->pdv() && !cv->dm()->pdbool()) {
-		if (fNew)
-			cv.iDec = vr->iDec();
-		fiDec = new FieldInt(root, TR("&Decimals"), &cv.iDec, ValueRange(0L,50L));
+	if (!cv->dm()->pdtime()) {
+		if (*iPos > 0)
+			new FieldInt(root, TR("&Position"), iPos, ValueRange(1L,10000L));
+		new FieldInt(root, TR("&Width"), &cv.iWidth, ValueRange(1L,100L));
+		if (cv->dm()->pdv() && !cv->dm()->pdbool()) {
+			if (fNew)
+				cv.iDec = vr->iDec();
+			fiDec = new FieldInt(root, TR("&Decimals"), &cv.iDec, ValueRange(0L,50L));
+		}
 	}
 	// Description
 	st = new StaticText(root,TR("&Description:"));
