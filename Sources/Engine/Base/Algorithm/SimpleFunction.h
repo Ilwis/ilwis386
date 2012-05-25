@@ -113,11 +113,11 @@ public:
 	vector <DoublePoint> vAnchors() const;
 protected:
 	virtual void SolveParams() = 0;
+	double rUnitDist2(DoublePoint & p1, DoublePoint & p2);
 	vector <DoublePoint> m_Anchors;
 	DoubleRect m_Domain;
 private:
 	void SeparateAnchorPoints();
-	double rUnitDist2(DoublePoint & p1, DoublePoint & p2);
 };
 
 #endif // !defined(AFX_FUNCTION_H__CE61C846_E09A_4BD6_937F_889978879B56__INCLUDED_)
