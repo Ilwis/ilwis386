@@ -28,6 +28,7 @@ void CubeDrawer::prepare(PreparationParameters *pp) {
 		if (font == 0)
 			font = new OpenGLText(rootDrawer, "arial.ttf", 28, true, 0, 0, true);
 		cube = rootDrawer->getMapCoordBounds();
+		CoordBounds cbMap = cube;
 		if (cube.width() > cube.height()) {
 			double deltay = cube.width() - cube.height();
 			cube.cMin.y = cube.cMin.y - deltay / 2.0;
@@ -41,6 +42,9 @@ void CubeDrawer::prepare(PreparationParameters *pp) {
 			cube.cMin.z = 0;
 			cube.cMax.z = cube.height();
 		}
+		cbMap.MaxZ() = cube.cMax.z;
+		cbMap.MinZ() = cube.cMin.z;
+		rootDrawer->setCoordBoundsMap(cube);
 		CoordSystem csy = rootDrawer->getCoordinateSystem();
 		String sMin = csy->sValue(cube.cMin, 0);
 		String sMax = csy->sValue(cube.cMax, 0);
@@ -61,6 +65,8 @@ void CubeDrawer::prepare(PreparationParameters *pp) {
 			stMin = timeBounds->tMin().toString();
 			stMax = timeBounds->tMax().toString();
 		}
+		NewDrawer *ndrw = getRootDrawer()->getBackgroundDrawer();
+		ndrw->setTransparency(0.85);
 	}
 }
 
