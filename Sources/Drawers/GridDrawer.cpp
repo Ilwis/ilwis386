@@ -238,6 +238,17 @@ void GridDrawer::getLayerDistances(vector<double>& dist) {
 			dist[i] += minOffset;
 		}
 	}
+	if ( dist.size() == 1) {
+		CoordBounds cbMap = rootDrawer->getMapCoordBounds();
+		double dz = abs(cbMap.MaxZ() - cbMap.MinZ());
+		if ( dz > 0) {
+			double z = 0;
+			for(int i = 0; i < 4; ++i) {
+				z += dz / 4;
+				dist.push_back(z);
+			}
+		}
+	}
 }
 
 void GridDrawer::preparePlanes(double rDist, const Coord& cMax, const Coord& cMin ) {
