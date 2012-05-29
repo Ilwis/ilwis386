@@ -62,7 +62,7 @@ public:
                                    const String& colYear,const String& colMonth,const String& colDay,
 								   const String& colHours,const String& colMinutes, const String& colSeconds);
 	ColumnTimeFromColumns(const Table& tbl, const String& sColName, ColumnPtr& ptr);
-	ColumnTimeFromColumns(const Table& tbl, const String& sColName, ColumnPtr& ptr,const String& stCol);
+	ColumnTimeFromColumns(const Table& tbl, const String& sColName, ColumnPtr& ptr,const String& stCol, const String& templ);
 private:
   ColumnTimeFromColumns(const Table& tbl, const String& sColName, ColumnPtr& p, const DomainValueRangeStruct& dvs,
                    const Column& colInp, const Column& colSort = Column());
@@ -75,6 +75,7 @@ private:
 	String seconds;
 	String output;
 	String stringColumn;
+	String formatTemplate;
 };
 
 

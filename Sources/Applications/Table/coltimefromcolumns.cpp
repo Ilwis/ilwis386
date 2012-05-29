@@ -68,6 +68,7 @@ ColumnTimeFromColumns::ColumnTimeFromColumns(const Table& tbl, const String& sCo
 : ColumnVirtual(tbl, sColName, ptr)
 {
 	ReadElement(sSection().c_str(), "String", stringColumn);
+	ReadElement(sSection().c_str(), "Template", formatTemplate);
 	if ( stringColumn == "") {
 		ReadElement(sSection().c_str(), "Year", year);
 		ReadElement(sSection().c_str(), "Month", month);
@@ -79,9 +80,10 @@ ColumnTimeFromColumns::ColumnTimeFromColumns(const Table& tbl, const String& sCo
 	fNeedFreeze = true;
 }
 
-ColumnTimeFromColumns::ColumnTimeFromColumns(const Table& tbl, const String& sColName, ColumnPtr& ptr,const String& stCol) :
+ColumnTimeFromColumns::ColumnTimeFromColumns(const Table& tbl, const String& sColName, ColumnPtr& ptr,const String& stCol, const String& templa) :
 ColumnVirtual(tbl, sColName, ptr, DomainValueRangeStruct(Domain("time")), Table()), 
-stringColumn(stCol) 
+stringColumn(stCol), 
+formatTemplate(templa)
 {
 	if (!fnObj.fValid())
 		objtime = objdep.tmNewest();
@@ -116,7 +118,7 @@ ColumnTimeFromColumns* ColumnTimeFromColumns::create(const Table& tbl, const Str
 	}  
 	Array<String> as;
 	IlwisObjectPtr::iParseParm(sExpr, as);
-	if ( as.size() > 1) {
+	if ( as.size() > 2) {
 		String year = as[0];
 		String month = as[1];
 		String day = as[2];
@@ -125,7 +127,7 @@ ColumnTimeFromColumns* ColumnTimeFromColumns::create(const Table& tbl, const Str
 		String seconds = as[5];
 		return new ColumnTimeFromColumns(tbl, sColName, ptr, year, month, day, hours, minutes, seconds);
 	} else {
-		return new ColumnTimeFromColumns(tbl, sColName, ptr,as[0]);
+		return new ColumnTimeFromColumns(tbl, sColName, ptr,as[0], as[1]);
 	}
 }
 
@@ -133,7 +135,7 @@ String ColumnTimeFromColumns::sExpression() const
 {
 	if ( stringColumn.size() == 0)
 		return String("ColumnTimeFromColumns=(%S,%S,%S,%S,%S,%S)",year, month, day, hour, minutes, seconds);
-	return String("ColumnTimeFromColumns=(%S)",stringColumn);
+	return String("ColumnTimeFromColumns=(%S,%S)",stringColumn, formatTemplate);
 
 }
 
@@ -150,6 +152,8 @@ void ColumnTimeFromColumns::Store()
 	} 
 	else {
 		WriteElement(sSection().c_str(), "String", stringColumn);
+		WriteElement(sSection().c_str(), "Template", formatTemplate);
+
 	}
 }
 
@@ -171,7 +175,7 @@ bool ColumnTimeFromColumns::fFreezing()
 		Column col = tbl->col(stringColumn);
 		for(int i=1; i < iRecs(); ++i) {		
 			String val = col->sValue(i);
-			ILWIS::Time ti(val);
+			ILWIS::Time ti(val, formatTemplate.sUnQuote());
 			if ( ti.isValid()) {
 				times.push_back(ti);
 				step = 0;
