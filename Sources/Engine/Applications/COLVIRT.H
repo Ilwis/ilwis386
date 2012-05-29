@@ -63,11 +63,11 @@ public:
     virtual String _export   sType() const;
     virtual void _export  Store();
     virtual bool          fDomainChangeable() const;
-    virtual bool          fValueRangeChangeable() const;
+    virtual bool _export      fValueRangeChangeable() const;
     virtual void _export  SetDomainValueRangeStruct(const DomainValueRangeStruct&);
     virtual DomainValueRangeStruct _export dvrsDefault(const String& sExpression) const;
     virtual bool _export         fMergeDomainForCalc(Domain& dm, const String& sExpr);
-    void                  CreateColumnStore();
+    void   _export               CreateColumnStore();
     //  void DependencyNames(Array<String>& asNames) const;
     //  virtual void GetObjectDependencies(Array<FileName>& afnObjDep);
     virtual void _export  Replace(const String& sExpression);
