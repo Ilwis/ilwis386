@@ -5,6 +5,7 @@
 using namespace ILWIS;
 
 TemporalDrawer::TemporalDrawer()
+: fTimeAttribute(false)
 {
 }
 
