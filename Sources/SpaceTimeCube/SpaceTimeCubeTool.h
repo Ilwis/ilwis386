@@ -18,37 +18,52 @@ namespace ILWIS {
 	public:
 		LayerData(NewDrawer *drw);
 		bool getPlotOption();
-		bool getSizeOption();
+		bool fUseSort();
+		bool fUseGroup();
+		bool fUseSize();
 		void setPlotOption(bool _plotOption) {plotOption = _plotOption;};
-		void setSizeOption(bool _sizeOption) {sizeOption = _sizeOption;};
+		void setUseSort(bool _fSort) {fSort = _fSort;};
+		void setUseGroup(bool _fGroup) {fGroup = _fGroup;};
+		void setUseSize(bool _fSize) {fSize = _fSize;};
 		void setDrawerId(String _drawerId) {drawerId = _drawerId;};
 		String getDrawerId() {return drawerId;};
 		bool hasTime();
+		bool hasSort();
+		bool hasGroup();
+		bool hasSize();
 		bool isFeatureMap() {return fFeatureMap;};
 		bool isPointMap() {return fPointMap;};
 		FileName fnObj() {return fnBaseMap;};
 		Table & getAttTable() {return attTable;};
 		void setTimeColumn(String sColName);
+		void setSortColumn(String sColName);
+		void setGroupColumn(String sColName);
 		void setSizeColumn(String sColName);
 		RangeReal rrTimeMinMax() {return m_rrTimeMinMax;};
 		RangeReal rrSizeMinMax() {return m_rrSizeMinMax;};
 		bool isSelfTime() {return fSelfTime;};
-		bool isSelfSize() {return fSelfSize;};
 		Column & getTimeColumn() {return temporalColumn;};
+		Column & getSortColumn() {return sortColumn;};
+		Column & getGroupColumn() {return groupColumn;};
 		Column & getSizeColumn() {return sizeColumn;};
 	private:
 		String drawerId;
 		bool plotOption;
-		bool sizeOption;
+		bool fSort;
+		bool fGroup;
+		bool fSize;
 		bool fSelfTime;
-		bool fSelfSize;
 		bool fFeatureMap;
 		bool fPointMap;
 		FileName fnBaseMap;
 		Table attTable;
 		vector<Column> temporalColumns;
+		vector<Column> sortColumns;
+		vector<Column> groupColumns;
 		vector<Column> sizeColumns;
 		Column temporalColumn;
+		Column sortColumn;
+		Column groupColumn;
 		Column sizeColumn;
 		RangeReal m_rrTimeMinMax;
 		RangeReal m_rrSizeMinMax;
@@ -112,6 +127,7 @@ namespace ILWIS {
 	class LayerOptionsForm : public DisplayOptionsForm {
 	public:
 		LayerOptionsForm(CWnd *wPar, SpaceTimeCube & _spaceTimeCube, vector<LayerData> & layerList);
+		~LayerOptionsForm();
 		virtual void apply();
 		virtual void OnOK();
 		virtual void OnCancel();
@@ -122,9 +138,19 @@ namespace ILWIS {
 		vector<FieldOneSelectTextOnly*> fosPlotMethod;
 		vector<String> vsPlotMethod;
 		vector<FieldColumn*> fcTimeColumn;
+		vector<FieldColumn*> fcSortColumn;
+		vector<FieldColumn*> fcGroupColumn;
 		vector<FieldColumn*> fcSizeColumn;
+		vector<CheckBox*> cbSort;
+		vector<CheckBox*> cbGroup;
+		vector<CheckBox*> cbSize;
 		vector<String> vsTimeColumnNames;
+		vector<String> vsSortColumnNames;
+		vector<String> vsGroupColumnNames;
 		vector<String> vsSizeColumnNames;
+		vector<bool*> vbSort;
+		vector<bool*> vbGroup;
+		vector<bool*> vbSize;
 		vector<LayerData> & m_layerList;
 	};
 }

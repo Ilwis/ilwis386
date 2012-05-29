@@ -15,6 +15,7 @@
 #include "CubeTool.h"
 #include "TimePositionBar.h"
 #include "SpaceTimeCubeTool.h"
+#include "SpaceTimePathTool.h"
 #include "SpaceTimePathDrawer.h"
 #include "PathScalingTool.h"
 #include "CubeDrawer.h"
@@ -27,6 +28,7 @@ DrawerToolInfoVector *createDrawerTool() {
 	DrawerToolInfoVector *infos = new DrawerToolInfoVector();
 	infos->push_back(new DrawerToolInfo("SpaceTimeCubeTool",createSpaceTimeCubeTool));
 	infos->push_back(new DrawerToolInfo("PathScalingTool",createPathScalingTool));
+	infos->push_back(new DrawerToolInfo("SpaceTimePathTool",createSpaceTimePathTool));
 	return infos;
 }
 

@@ -9,6 +9,8 @@
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "TimePositionBar.h"
 #include "TemporalDrawer.h"
+#include "SortableDrawer.h"
+#include "GroupableDrawer.h"
 #include "SizableDrawer.h"
 #include "PreTimeOffsetDrawer.h"
 #include "PostTimeOffsetDrawer.h"
@@ -26,9 +28,10 @@
 LayerData::LayerData(NewDrawer *drw)
 : drawerId(drw->getId())
 , plotOption(false)
-, sizeOption(false)
+, fSort(false)
+, fGroup(false)
+, fSize(false)
 , fSelfTime(false)
-, fSelfSize(false)
 , fFeatureMap(false)
 , fPointMap(false)
 {
@@ -38,7 +41,6 @@ LayerData::LayerData(NewDrawer *drw)
 		fFeatureMap = IOTYPEFEATUREMAP(fnBaseMap);
 		fPointMap = IOTYPE(fnBaseMap) == IlwisObject::iotPOINTMAP;
 		fSelfTime = bmp->dm()->pdtime() != 0;
-		fSelfSize = bmp->dm()->pdv() != 0;
 		if (fSelfTime)
 			m_rrTimeMinMax = bmp->rrMinMax();
 		else if (bmp->fTblAtt()) {
@@ -53,16 +55,18 @@ LayerData::LayerData(NewDrawer *drw)
 				m_rrTimeMinMax = temporalColumn->rrMinMax();
 			}
 		}
-		if (fSelfSize)
-			m_rrSizeMinMax = bmp->rrMinMax();
-		else if (bmp->fTblAtt()) {
+		if (bmp->fTblAtt()) {
 			attTable = bmp->tblAtt();
 			for (int i = 0; i < attTable->iCols(); ++i) {
 				Column col = attTable->col(i);
+				if (col->dm()->pdv()) // || col->dm()->pds())
+					sortColumns.push_back(col);
+				if (col->dm()->pdv() || col->dm()->pds() || col->dm()->pdc())
+					groupColumns.push_back(col);
 				if (col->dm()->pdv())
 					sizeColumns.push_back(col);
 			}
-			if (sizeColumns.size() == 1) {
+			if (sizeColumns.size() > 0) {
 				sizeColumn = sizeColumns[0];
 				m_rrSizeMinMax = sizeColumn->rrMinMax();
 			}
@@ -75,17 +79,45 @@ bool LayerData::hasTime() {
 	return fFeatureMap && (fSelfTime || (temporalColumns.size() > 0));
 }
 
+bool LayerData::hasSort() {
+	return fFeatureMap && (sortColumns.size() > 0);
+}
+
+bool LayerData::hasGroup() {
+	return fFeatureMap && (groupColumns.size() > 0);
+}
+
+bool LayerData::hasSize() {
+	return fFeatureMap && (sizeColumns.size() > 0);
+}
+
 bool LayerData::getPlotOption() {
 	return plotOption && (fSelfTime || temporalColumn.fValid());
 }
 
-bool LayerData::getSizeOption() {
-	return sizeOption && (fSelfSize || sizeColumn.fValid());
+bool LayerData::fUseSort() {
+	return fSort && sortColumn.fValid();
+}
+
+bool LayerData::fUseGroup() {
+	return fGroup && groupColumn.fValid();
+}
+
+bool LayerData::fUseSize() {
+	return fSize && sizeColumn.fValid();
 }
 
 void LayerData::setTimeColumn(String sColName) {
 	temporalColumn = attTable->col(sColName);
 	m_rrTimeMinMax = temporalColumn->rrMinMax();
+}
+
+void LayerData::setSortColumn(String sColName) {
+	sortColumn = attTable->col(sColName);
+}
+
+void LayerData::setGroupColumn(String sColName) {
+	groupColumn = attTable->col(sColName);
 }
 
 void LayerData::setSizeColumn(String sColName) {
@@ -236,10 +268,6 @@ void SpaceTimeCube::refreshDrawerList() {
 		replaceTreeItem(oldDrw, (SpatialDataDrawer*)newDrw, index);
 		replaceDrawer(oldDrw, newDrw);
 		layerList[i].setDrawerId(newDrw->getId());
-		if (rootDrawer->is3D()) {
-			PreparationParameters pp(NewDrawer::pt3D);
-			newDrw->prepare(&pp);
-		}
 		TemporalDrawer * temporalDrawer = dynamic_cast<TemporalDrawer*>(((ComplexDrawer*)newDrw)->getDrawer(0));
 		if (temporalDrawer) {
 			temporalDrawer->SetTimeBounds(timeBounds);
@@ -250,15 +278,33 @@ void SpaceTimeCube::refreshDrawerList() {
 			else
 				temporalDrawer->SetTimeAttribute(layerList[i].getTimeColumn());
 		}
+		SortableDrawer * sortableDrawer = dynamic_cast<SortableDrawer*>(((ComplexDrawer*)newDrw)->getDrawer(0));
+		if (sortableDrawer) {
+			if (layerList[i].fUseSort())
+				sortableDrawer->SetSortAttribute(layerList[i].getSortColumn());
+			else
+				sortableDrawer->SetNoSort();
+		}
+		GroupableDrawer * groupableDrawer = dynamic_cast<GroupableDrawer*>(((ComplexDrawer*)newDrw)->getDrawer(0));
+		if (groupableDrawer) {
+			if (layerList[i].fUseGroup())
+				groupableDrawer->SetGroupAttribute(layerList[i].getGroupColumn());
+			else
+				groupableDrawer->SetNoGroup();
+		}
 		SizableDrawer * sizableDrawer = dynamic_cast<SizableDrawer*>(((ComplexDrawer*)newDrw)->getDrawer(0));
 		if (sizableDrawer) {
 			sizableDrawer->SetSizeStretch(&sizeStretch);
 			RangeReal rrMinMax (layerList[i].rrSizeMinMax());
 			sizeStretch += rrMinMax;
-			if (layerList[i].isSelfSize())
-				sizableDrawer->SetSelfSize();
-			else
+			if (layerList[i].fUseSize())
 				sizableDrawer->SetSizeAttribute(layerList[i].getSizeColumn());
+			else
+				sizableDrawer->SetNoSize();
+		}
+		if (rootDrawer->is3D()) {
+			PreparationParameters pp(NewDrawer::pt3D);
+			newDrw->prepare(&pp);
 		}
 	}
 
@@ -414,7 +460,15 @@ LayerOptionsForm::LayerOptionsForm(CWnd *wPar, SpaceTimeCube & _spaceTimeCube, v
 		fosPM->Align(stLayerName, AL_AFTER);
 		fosPlotMethod.push_back(fosPM);
 		vsTimeColumnNames.push_back("");
+		vsSortColumnNames.push_back("");
+		vsGroupColumnNames.push_back("");
 		vsSizeColumnNames.push_back("");
+		vbSort.push_back(new bool);
+		vbGroup.push_back(new bool);
+		vbSize.push_back(new bool);
+		*vbSort[vbSort.size() - 1] = false;
+		*vbGroup[vbGroup.size() - 1] = false;
+		*vbSize[vbSize.size() - 1] = false;
 		FormEntry * feTime;
 		if (layerData.isSelfTime()) {
 			StaticText *stDummy = new StaticText(root, "");
@@ -427,21 +481,74 @@ LayerOptionsForm::LayerOptionsForm(CWnd *wPar, SpaceTimeCube & _spaceTimeCube, v
 			feTime = fcol;
 		}
 		feTime->Align(fosPM, AL_AFTER);
-		FormEntry * feSize;
-		if (layerData.isSelfSize()) {
-			StaticText *stDummy = new StaticText(root, "");
-			feSize = stDummy;
+		FormEntry * feSort1;
+		FormEntry * feSort2;
+		if (!layerData.hasSort()) {
+			feSort1 = new StaticText(root, "");
+			feSort2 = new StaticText(root, "");
+			feSort2->Align(feSort1, AL_AFTER);
+			cbSort.push_back(0);
+			fcSortColumn.push_back(0);
+		} else {
+			CheckBox * cbsort = new CheckBox(root, "", vbSort[vbSort.size() - 1]);
+			cbSort.push_back(cbsort);
+			FieldColumn * fcol = new FieldColumn(cbsort, "", layerData.getAttTable(), &vsSortColumnNames[vsSortColumnNames.size() - 1], dmVALUE | dmCLASS | dmIDENT);
+			fcSortColumn.push_back(fcol);
+			fcol->Align(cbsort, AL_AFTER);
+			feSort1 = cbsort;
+			feSort2 = fcol;
+		}
+		feSort1->Align(feTime, AL_AFTER);
+		FormEntry * feGroup1;
+		FormEntry * feGroup2;
+		if (!layerData.hasGroup()) {
+			feGroup1 = new StaticText(root, "");
+			feGroup2 = new StaticText(root, "");
+			feGroup2->Align(feGroup1, AL_AFTER);
+			cbGroup.push_back(0);
+			fcGroupColumn.push_back(0);
+		} else {
+			CheckBox * cbgroup = new CheckBox(root, "", vbGroup[vbGroup.size() - 1]);
+			cbGroup.push_back(cbgroup);
+			FieldColumn * fcol = new FieldColumn(cbgroup, "", layerData.getAttTable(), &vsGroupColumnNames[vsGroupColumnNames.size() - 1], dmVALUE | dmCLASS | dmSTRING);
+			fcGroupColumn.push_back(fcol);
+			fcol->Align(cbgroup, AL_AFTER);
+			feGroup1 = cbgroup;
+			feGroup2 = fcol;
+		}
+		feGroup1->Align(feSort2, AL_AFTER);
+		FormEntry * feSize1;
+		FormEntry * feSize2;
+		if (!layerData.hasSize()) {
+			feSize1 = new StaticText(root, "");
+			feSize2 = new StaticText(root, "");
+			feSize2->Align(feSize1, AL_AFTER);
+			cbSize.push_back(0);
 			fcSizeColumn.push_back(0);
 		}
 		else {
-			FieldColumn *fcol = new FieldColumn(root, "", layerData.getAttTable(), &vsSizeColumnNames[vsSizeColumnNames.size() - 1], dmVALUE);
+			CheckBox * cbsize = new CheckBox(root, "", vbSize[vbSize.size() - 1]);
+			cbSize.push_back(cbsize);
+			FieldColumn *fcol = new FieldColumn(cbsize, "", layerData.getAttTable(), &vsSizeColumnNames[vsSizeColumnNames.size() - 1], dmVALUE);
 			fcSizeColumn.push_back(fcol);
-			feSize = fcol;
+			fcol->Align(cbsize, AL_AFTER);
+			feSize1 = cbsize;
+			feSize2 = fcol;
 		}
-		feSize->Align(feTime, AL_AFTER);
+		feSize1->Align(feGroup2, AL_AFTER);
 	}
 
 	create();
+}
+
+LayerOptionsForm::~LayerOptionsForm()
+{
+	for (int i = 0; i < vbSort.size(); ++i)
+		delete vbSort[i];
+	for (int i = 0; i < vbGroup.size(); ++i)
+		delete vbGroup[i];
+	for (int i = 0; i < vbSize.size(); ++i)
+		delete vbSize[i];
 }
 
 int LayerOptionsForm::ComboCallBackFunc(Event*)
@@ -470,7 +577,21 @@ void LayerOptionsForm::apply() {
 			fcTimeColumn[i]->StoreData();
 			layerData.setTimeColumn(vsTimeColumnNames[i]);
 		}
-		if (!layerData.isSelfSize()) {
+		cbSort[i]->StoreData();
+		layerData.setUseSort(*vbSort[i]);
+		if (*vbSort[i]) {
+			fcSortColumn[i]->StoreData();
+			layerData.setSortColumn(vsSortColumnNames[i]);
+		}
+		cbGroup[i]->StoreData();
+		layerData.setUseGroup(*vbGroup[i]);
+		if (*vbGroup[i]) {
+			fcGroupColumn[i]->StoreData();
+			layerData.setGroupColumn(vsGroupColumnNames[i]);
+		}
+		cbSize[i]->StoreData();
+		layerData.setUseSize(*vbSize[i]);
+		if (*vbSize[i]) {
 			fcSizeColumn[i]->StoreData();
 			layerData.setSizeColumn(vsSizeColumnNames[i]);
 		}

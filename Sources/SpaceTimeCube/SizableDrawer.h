@@ -10,12 +10,12 @@ public:
 	virtual ~SizableDrawer();
 	void SetSizeStretch(RangeReal * _sizeStretch) {sizeStretch = _sizeStretch;};
 	void SetSizeAttribute(const Column & col);
-	void SetSelfSize();
+	void SetNoSize();
 	const double getSizeValue(Feature * f) const;
 
 protected:
 	RangeReal * sizeStretch;
-	bool fSizeAttribute;
+	bool fUseSize;
 	Column colSize;
 };
 

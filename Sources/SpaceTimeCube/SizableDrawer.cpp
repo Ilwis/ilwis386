@@ -5,6 +5,7 @@
 using namespace ILWIS;
 
 SizableDrawer::SizableDrawer()
+: fUseSize(false)
 {
 }
 
@@ -14,23 +15,20 @@ SizableDrawer::~SizableDrawer()
 
 void SizableDrawer::SetSizeAttribute(const Column & col)
 {
-	fSizeAttribute = col.fValid();
-	if (fSizeAttribute)
+	fUseSize = col.fValid();
+	if (fUseSize)
 		colSize = col;
 }
 
-void SizableDrawer::SetSelfSize()
+void SizableDrawer::SetNoSize()
 {
-	fSizeAttribute = false;
+	fUseSize = false;
 }
 
 const double SizableDrawer::getSizeValue(Feature * f) const
 {
-	if (f) {
-		if (fSizeAttribute)
-			return colSize->rValue(f->iValue()) - sizeStretch->rLo();
-		else
-			return f->rValue() - sizeStretch->rLo();
-	} else
+	if (f && fUseSize)
+		return colSize->rValue(f->iValue()) - sizeStretch->rLo();
+	else
 		return 0;
 }
