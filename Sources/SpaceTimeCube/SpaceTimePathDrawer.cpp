@@ -92,7 +92,7 @@ void SpaceTimePathDrawer::prepare(PreparationParameters *parms){
 					if ( feature && feature->fValid() && feature->rValue() != rUNDEF)
 						sortedFeatures.push_back(std::pair<double, Feature*>(getSortValue(feature), feature));
 				}
-				std::sort(sortedFeatures.begin(), sortedFeatures.end());
+				std::stable_sort(sortedFeatures.begin(), sortedFeatures.end());
 				for(vector<std::pair<double, Feature*>>::const_iterator it = sortedFeatures.begin(); it != sortedFeatures.end(); ++it)
 					features.push_back((*it).second);
 			} else {
