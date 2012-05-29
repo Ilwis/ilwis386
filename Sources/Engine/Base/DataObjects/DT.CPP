@@ -169,10 +169,10 @@ ILWIS::Time::Time(const time_t tmt){
 	julianday = gregorianToJulian(year, month, day,hour,minutes,seconds);
 }
 
-ILWIS::Time::Time(const String& isostring) {
+ILWIS::Time::Time(const String& isostring, const String& formatTemplate) {
 	valid = true;
 	julianday = rUNDEF;
-	setValue(isostring);
+	setValue(isostring, formatTemplate);
 }
 
 ILWIS::Time::Time(const CTime& time){
@@ -390,7 +390,7 @@ void ILWIS::Time::julianToGregorian(int& year, int& month, int& day, int& hour, 
 }
 
 
-void ILWIS::Time::setValue(const String& isostring) {
+void ILWIS::Time::setValue(const String& isostring, const String& formatTemplate) {
 	if ( isostring == "?") {
 		julianday = rUNDEF;
 		return;
@@ -408,7 +408,7 @@ void ILWIS::Time::setValue(const String& isostring) {
 	YYYY[MM[DD[Thh[:mm[:s[Z]]]]]*/
 	int year=-4713, month=1, day=1, hour=0, minutes=0;
 	double seconds = 0;
-	parseIsoString(isostring, year, month, day, hour, minutes,seconds);
+	parseIsoString(isostring, formatTemplate, year, month, day, hour, minutes,seconds);
 
 	if ( !valid )
 		return;
@@ -495,7 +495,59 @@ void ILWIS::Time::parseDayPart(const String& daypart, int& hours, int& minutes, 
 	seconds = sec;
 }
 
-void ILWIS::Time::parseIsoString(const String& isostring, int& year, int& month, int& day, int& hours, int& minutes, double& seconds) {
+void ILWIS::Time::parseWithTemplate(const String& isostring, const String& formatTemplate, int& year, int& month, int& day, int& hours, int& minutes, double& seconds) {
+	int yrIndex = formatTemplate.find("YY");
+	int monthIndex = formatTemplate.find("M");
+	int dayIndex = formatTemplate.find("D");
+	int hourIndex = formatTemplate.find("h");
+	int minuteIndex = formatTemplate.find("m");
+	int secIndex = formatTemplate.find("s");
+	int offset = 0;
+	if ( yrIndex != -1) {
+		int sz = formatTemplate.find("YYYY") != -1 ? 4 : 2;
+		year = isostring.sSub(yrIndex,sz).iVal();
+	}
+	if ( monthIndex != -1) {
+		int sz = formatTemplate.find("MM") != -1 ? 2 : 1;
+		month = isostring.sSub(monthIndex,sz).iVal();
+		if ( sz == 1 && month == iUNDEF) {
+			month = isostring.sSub(monthIndex,2).iVal();
+			offset += 1;
+		}
+	}
+	if ( dayIndex != -1) {
+		int sz = formatTemplate.find("DD") != -1 ? 2 : 1;
+		day = isostring.sSub(dayIndex + offset,sz).iVal();
+		if ( sz == 1 && day == iUNDEF) {
+			day = isostring.sSub(dayIndex + offset,2).iVal();
+			offset +=1;
+		}
+	}
+	if ( hourIndex != -1) {
+		int sz = formatTemplate.find("hh") != -1 ? 2 : 1;
+		hours = isostring.sSub(hourIndex + offset,sz).iVal();
+		if ( sz == 1 && hours == iUNDEF) {
+			hours = isostring.sSub(hourIndex + offset,2).iVal();
+			offset += 1;
+		}
+	}
+	if ( minuteIndex != -1) {
+		int sz = formatTemplate.find("mm") != -1 ? 2 : 1;
+		minutes = isostring.sSub(minuteIndex + offset,sz).iVal();
+		if ( sz == 1 && minutes == iUNDEF) {
+			minutes = isostring.sSub(minuteIndex + offset,2).iVal();
+			offset +=1;
+		}
+	}
+	if ( secIndex != -1) {
+		int last = formatTemplate.find_last_of("s");
+		seconds = isostring.sSub(secIndex + offset,last - secIndex).rVal();
+	}
+
+
+}
+
+void ILWIS::Time::parseIsoString(const String& isostring, const String& formatTemplate, int& year, int& month, int& day, int& hours, int& minutes, double& seconds) {
 	year=-4713, month=1, day=1, hours=0, minutes=0;
 	seconds = 0;
 	if ( isostring == "?") {
@@ -507,20 +559,24 @@ void ILWIS::Time::parseIsoString(const String& isostring, int& year, int& month,
 	if ( isostring == "-*")
 		julianday = -BIGTIME;
 	// special form YYYYMMDDHHMM without the T marker for time, often used in sattelite orbit times
-	if ( isostring.size() == 12 && isostring.find("T") == string::npos && 
-		isostring.find("-") == string::npos && 
-		isostring.find(":") == string::npos && 
-		isostring.find(".") == string::npos) 
-	{
-		parseYearPart(isostring.sSub(0,8), year, month, day);
-		parseDayPart(isostring.sSub(8,6),hours, minutes, seconds);
-	} else{
-		String yearpart = isostring.sHead("T");
-		String daypart = isostring.sTail("T").sHead("Z");
-		if ( yearpart != "")
-			parseYearPart(yearpart,year, month,day);
-		if ( daypart != "")
-			parseDayPart(daypart, hours, minutes, seconds);
+	if ( formatTemplate != "") {
+		parseWithTemplate(isostring, formatTemplate, year, month, day, hours,minutes,seconds);
+	} else {
+		if ( isostring.size() == 12 && isostring.find("T") == string::npos && 
+			isostring.find("-") == string::npos && 
+			isostring.find(":") == string::npos && 
+			isostring.find(".") == string::npos) 
+		{
+			parseYearPart(isostring.sSub(0,8), year, month, day);
+			parseDayPart(isostring.sSub(8,6),hours, minutes, seconds);
+		} else{
+			String yearpart = isostring.sHead("T");
+			String daypart = isostring.sTail("T").sHead("Z");
+			if ( yearpart != "")
+				parseYearPart(yearpart,year, month,day);
+			if ( daypart != "")
+				parseDayPart(daypart, hours, minutes, seconds);
+		}
 	}
 }
 
