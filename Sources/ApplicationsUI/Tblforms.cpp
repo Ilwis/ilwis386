@@ -2711,39 +2711,46 @@ LRESULT Cmdtimefromcolumns(CWnd *parent, const String& dummy){
 
 TimeColumnFromOtherColsForm::TimeColumnFromOtherColsForm(CWnd *parent) : TableForm(parent, "Create time column")
 {
-	useYear = useMonth = useDay = useHour = useMonth = useMinutes = useSeconds = false;
+	useYear = useMonth = useDay = useHour = useMonth = useMinutes = useSeconds = useStringColumn = false;
 	view = getView(parent);
+	templ = "YYYY/MM/DD hh/mm/ss";
 
-	CheckBox *cb1 = new CheckBox(root,TR("Year"),&useYear);
+	FieldGroup *fg = new FieldGroup(root);
+	CheckBox *cb1 = new CheckBox(fg,TR("Year"),&useYear);
 	FieldColumn *fc = new FieldColumn(cb1,"",view, &year,dmVALUE);
 	fc->Align(cb1, AL_AFTER);
-	CheckBox *cb2 = new CheckBox(root,TR("Month"),&useMonth);
+	CheckBox *cb2 = new CheckBox(fg,TR("Month"),&useMonth);
 	cb2->Align(cb1, AL_UNDER);
 	fc = new FieldColumn(cb2,"",view, &month,dmVALUE);
 	fc->Align(cb2, AL_AFTER);
-	CheckBox *cb3 = new CheckBox(root,TR("Day"),&useDay);
+	CheckBox *cb3 = new CheckBox(fg,TR("Day"),&useDay);
 	cb3->Align(cb2, AL_UNDER);
 	fc = new FieldColumn(cb3,"",view, &day,dmVALUE);
 	fc->Align(cb3, AL_AFTER);
-	CheckBox *cb4 = new CheckBox(root,TR("Hours"),&useHour);
+	CheckBox *cb4 = new CheckBox(fg,TR("Hours"),&useHour);
 	cb4->Align(cb3, AL_UNDER);
 	fc = new FieldColumn(cb4,"",view, &hour,dmVALUE);
 	fc->Align(cb4, AL_AFTER);
-	CheckBox *cb5 = new CheckBox(root,TR("Minutes"),&useMinutes);
+	CheckBox *cb5 = new CheckBox(fg,TR("Minutes"),&useMinutes);
 	cb5->Align(cb4, AL_UNDER);
 	fc = new FieldColumn(cb5,"",view, &minutes,dmVALUE);
 	fc->Align(cb5, AL_AFTER);
-	CheckBox *cb6 = new CheckBox(root,TR("Seconds"),&useSeconds);
+	CheckBox *cb6 = new CheckBox(fg,TR("Seconds"),&useSeconds);
 	cb6->Align(cb5, AL_UNDER);
 	fc = new FieldColumn(cb6,"",view, &seconds,dmVALUE);
 	fc->Align(cb6, AL_AFTER);
-	CheckBox *cb7 = new CheckBox(root,TR("String(time) column"),&useStringColumn);
+	CheckBox *cb7 = new CheckBox(fg,TR("String(time) column"),&useStringColumn);
 	cb7->Align(cb6, AL_UNDER);
 	fc = new FieldColumn(cb7,"",view, &stringColumn,dmSTRING);
 	fc->Align(cb7, AL_AFTER);
+	FieldString *fs = new FieldString(cb7,"Template",&templ);
+	fs->SetWidth(100);
+	fs->Align(cb7, AL_UNDER,10);
+	fg->SetIndependentPos();
 
+	fs =  new FieldString(root, TR("&Output Column"), &output, Domain("time"), false);
+	fs->Align(fg, AL_UNDER);
 
-	new FieldString(root, TR("&Output Column"), &output, Domain("time"), false);
 	create();
 }
 
@@ -2779,7 +2786,7 @@ int TimeColumnFromOtherColsForm::exec() {
 			expr += seconds;
 		}
 	} else {
-		expr += stringColumn;
+		expr += stringColumn + "," + templ.sQuote(true);
 	}
 	expr += ")";
 

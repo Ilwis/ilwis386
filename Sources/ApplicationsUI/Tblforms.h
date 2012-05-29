@@ -423,6 +423,7 @@ private:
 	String stringColumn;
 	bool useStringColumn;
 	String output;
+	String templ;
 
 };
 
