@@ -58,7 +58,7 @@ String SpaceTimePathTool::getMenuString() const {
 
 //---------------------------------------------------
 EdgesForm::EdgesForm(CWnd *wPar, ComplexDrawer *dr, HTREEITEM hti) : 
-DisplayOptionsForm(dr,wPar,"Nr Edges"),
+DisplayOptionsForm(dr,wPar,"Space Time Path Properties"),
 nrEdges(((SpaceTimePathDrawer*)dr)->iNrSteps()),
 htiNrEdges(hti), fldNrEdges(0)
 {
