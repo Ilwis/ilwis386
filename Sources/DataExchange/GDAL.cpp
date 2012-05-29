@@ -1709,7 +1709,10 @@ void GDALFormat::createTable(const FileName& fn, const Domain& dm,OGRFeatureDefn
 			} else if ( type ==  OFTString) {
 				String v("%s",funcs.ogrsVal(hFeature, field));
 				columns[field].strings.push_back(v);
-				columns[field].useClass &= v.find(" ") != string::npos;
+
+				columns[field].useClass &= v.find(" ") != string::npos ;
+				if ( v.size() > 0)
+					columns[field].useClass &= !isdigit(v[0]) ;
 			} else if ( type == OFTDate || type == OFTDateTime) {
 				int year, month, day,hour,minute, second;
 					int r = funcs.ogrtVal(hFeature, field,&year, &month, &day, &hour,&minute, &second,0);
