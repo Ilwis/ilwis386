@@ -173,7 +173,7 @@ bool ColumnTimeFromColumns::fFreezing()
 	double rmax=-1e100, rmin=1e100;
 	if ( stringColumn.size() != 0) {
 		Column col = tbl->col(stringColumn);
-		for(int i=1; i < iRecs(); ++i) {		
+		for(int i=1; i <= iRecs(); ++i) {		
 			String val = col->sValue(i);
 			ILWIS::Time ti(val, formatTemplate.sUnQuote());
 			if ( ti.isValid()) {
@@ -201,7 +201,7 @@ bool ColumnTimeFromColumns::fFreezing()
 		if ( seconds != "")
 			colSeconds = tbl->col(seconds);
 
-		for(int i=1; i < iRecs(); ++i) {
+		for(int i=1; i <= iRecs(); ++i) {
 			int tyear = -4713, tmonth=1, tday=1,thours=0, tminutes=0;
 			double tseconds=0;
 			if ( colYear.fValid())
@@ -234,7 +234,7 @@ bool ColumnTimeFromColumns::fFreezing()
 	dm.SetPointer( new DomainTime(FileName(ptr.sNam,".dom"),ILWIS::TimeInterval(rmin, rmax),step == 0 ? ILWIS::Time::mDATETIME : ILWIS::Time::mDATE));
 	ptr.SetDomainValueRangeStruct(dm);
 	CreateColumnStore();
-	for(int i=1; i < iRecs(); ++i) {
+	for(int i=1; i <= iRecs(); ++i) {
 		pcs->PutVal(i, times[i-1]);
 	}
 	return true;
