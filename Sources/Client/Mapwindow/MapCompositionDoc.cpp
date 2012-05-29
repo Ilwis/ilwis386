@@ -955,6 +955,9 @@ ILWIS::NewDrawer *MapCompositionDoc::createBaseMapDrawer(const BaseMap& bmp, con
 	ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
 	ILWIS::NewDrawer *drawer = NewDrawer::getDrawer(type, subtype, &parms);
 	CoordBounds cbZoom = rootDrawer->getCoordBoundsZoom(); // backup cbZoom
+	if (!drawer)
+		return 0;
+
 	drawer->addDataSource((void *)&bmp);
 	rootDrawer->setCoordinateSystem(bmp->cs());
 	CoordBounds cbMap = bmp->cb();
