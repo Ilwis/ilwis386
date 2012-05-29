@@ -1727,7 +1727,6 @@ void GDALFormat::createTable(const FileName& fn, const Domain& dm,OGRFeatureDefn
 		}
 		++size;
 	}
-	tbl->iRecNew(size);
 	for(int column = 0; column < columnCount; ++column) {
 		OGRFieldType type = columns[column].type;
 		Column col;
