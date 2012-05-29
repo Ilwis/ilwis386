@@ -211,6 +211,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\SpaceTimeCube\GroupableDrawer.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\SpaceTimeCube\PathScalingTool.h"
 				>
 			</File>
@@ -227,11 +231,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\SpaceTimeCube\SortableDrawer.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\SpaceTimeCube\SpaceTimeCubeTool.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\Sources\SpaceTimeCube\SpaceTimePathDrawer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\SpaceTimeCube\SpaceTimePathTool.h"
 				>
 			</File>
 			<File
@@ -259,6 +271,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\SpaceTimeCube\GroupableDrawer.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\SpaceTimeCube\PathScalingTool.cpp"
 				>
 			</File>
@@ -275,11 +291,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\SpaceTimeCube\SortableDrawer.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\SpaceTimeCube\SpaceTimeCubeTool.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\Sources\SpaceTimeCube\SpaceTimePathDrawer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\SpaceTimeCube\SpaceTimePathTool.cpp"
 				>
 			</File>
 			<File
