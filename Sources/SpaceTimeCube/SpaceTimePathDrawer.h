@@ -2,6 +2,8 @@
 
 #include "TemporalDrawer.h"
 #include "SizableDrawer.h"
+#include "SortableDrawer.h"
+#include "GroupableDrawer.h"
 
 ILWIS::NewDrawer *createSpaceTimePathDrawer(ILWIS::DrawerParameters *parms);
 
@@ -11,7 +13,7 @@ namespace ILWIS{
 
 struct PointProperties;
 
-class _export SpaceTimePathDrawer : public FeatureLayerDrawer, public TemporalDrawer, public SizableDrawer {
+class _export SpaceTimePathDrawer : public FeatureLayerDrawer, public TemporalDrawer, public SizableDrawer, public SortableDrawer, public GroupableDrawer {
 	public:
 		enum Scaling{sNONE, sLOGARITHMIC, sLINEAR};
 		ILWIS::NewDrawer *createSpaceTimePathDrawer(DrawerParameters *parms);
@@ -29,6 +31,8 @@ class _export SpaceTimePathDrawer : public FeatureLayerDrawer, public TemporalDr
 		//Scaling getScaleMode() const { return scaleMode; } 
 		//bool usingDirection() const { return useDirection; }
 		//void setUseDirection(bool yesno) { useDirection = yesno; }
+		void SetNrSteps(int steps);
+		int iNrSteps();
 
 	protected:
 		String store(const FileName& fnView, const String& parenSection) const;
@@ -47,8 +51,10 @@ class _export SpaceTimePathDrawer : public FeatureLayerDrawer, public TemporalDr
 		bool * fRefreshTexture;
 		BaseMapPtr *basemap;
 		bool fRealMap;
+		vector<Feature *> features;
 	private:
 		Column prevAttColumn;
 		bool prevUseAttColumn;
+		int nrSteps;
 	};
 }

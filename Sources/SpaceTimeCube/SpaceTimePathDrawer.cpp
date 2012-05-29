@@ -26,6 +26,7 @@ ILWIS::NewDrawer *createSpaceTimePathDrawer(DrawerParameters *parms) {
 SpaceTimePathDrawer::SpaceTimePathDrawer(DrawerParameters *parms)
 : FeatureLayerDrawer(parms,"SpaceTimePathDrawer")
 , prevUseAttColumn(false)
+, nrSteps(1)
 {
 	properties = new PointProperties();
 	properties->exaggeration = 1.0;
@@ -66,7 +67,6 @@ void SpaceTimePathDrawer::prepare(PreparationParameters *parms){
 	//if ( getName() == "Unknown")
 	//	setName(mapDrawer->getBaseMap()->sName());
 	if ( (parms->type & RootDrawer::ptGEOMETRY) || (parms->type & NewDrawer::pt3D)) {
-		vector<Feature *> features;
 		bool isAnimation = mapDrawer->getType() == "AnimationDrawer";
 		if ( isAnimation ) {
 			basemap = fbasemap.ptr();
@@ -81,6 +81,28 @@ void SpaceTimePathDrawer::prepare(PreparationParameters *parms){
 			fRealMap = (vr->rStep() < 1) || (vr->stUsed() == stREAL);
 		else
 			fRealMap = false;
+
+		features.clear();
+		long numberOfFeatures = basemap->iFeatures();
+		if (numberOfFeatures != iUNDEF) {
+			if (fUseSort) {
+				vector<std::pair<double, Feature*>> sortedFeatures;
+				for(long i = 0; i < numberOfFeatures; ++i) {
+					Feature *feature = CFEATURE(basemap->getFeature(i));
+					if ( feature && feature->fValid() && feature->rValue() != rUNDEF)
+						sortedFeatures.push_back(std::pair<double, Feature*>(getSortValue(feature), feature));
+				}
+				std::sort(sortedFeatures.begin(), sortedFeatures.end());
+				for(vector<std::pair<double, Feature*>>::const_iterator it = sortedFeatures.begin(); it != sortedFeatures.end(); ++it)
+					features.push_back((*it).second);
+			} else {
+				for(long i = 0; i < numberOfFeatures; ++i) {
+					Feature *feature = CFEATURE(basemap->getFeature(i));
+					if ( feature && feature->fValid() && feature->rValue() != rUNDEF)
+						features.push_back(feature);
+				}
+			}
+		}
 
 		//Tranquilizer trq(TR("preparing data"));
 		*fRefreshDisplayList = true;
@@ -201,6 +223,16 @@ void testError() {
 		ExitProcess(dw);
 	}
 
+}
+
+void SpaceTimePathDrawer::SetNrSteps(int steps)
+{
+	nrSteps = steps;
+}
+
+int SpaceTimePathDrawer::iNrSteps()
+{
+	return nrSteps;
 }
 
 bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
@@ -361,7 +393,11 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 		RangeReal rrMinMax = getValueRange(attributeColumnColors);
 		double width = rrMinMax.rWidth();
 		double minMapVal = rrMinMax.rLo();
-		const int steps = 24;
+		int steps = nrSteps;
+		if (steps == 2 || steps < 1)
+			steps = 1;
+		else if (steps > 25)
+			steps = 25;
 		//const int steps = 1;
 		const double angleStep = 2.0 * M_PI / steps;
 		Column attributeColumn;
@@ -377,24 +413,26 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 		if (steps == 1)
 		{
 			glBegin(GL_LINE_STRIP);
-			long numberOfFeatures = basemap->iFeatures();
-			if (numberOfFeatures != iUNDEF) {
-				for(long i = 0; i < numberOfFeatures; ++i) {
-					Feature *feature = CFEATURE(basemap->getFeature(i));
-					if ( feature && feature->fValid() && feature->rValue() != rUNDEF) {
-						if (fUseAttributeColumn)
-							glTexCoord2f((attributeColumn->rValue(feature->iValue()) - minMapVal) / width, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
-						else
-							glTexCoord2f((feature->rValue() - minMapVal) / width, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
-						ILWIS::Point *point = (ILWIS::Point *)feature;
-						Coord crd = *(point->getCoordinate());
-						crd = getRootDrawer()->glConv(csy, crd);
-						crd.z = getTimeValue(feature);
-						glVertex3f(crd.x, crd.y, crd.z);
-						if ( i % 100 == 0)
-							trq.fUpdate(i, numberOfFeatures); 
-					}
+			long numberOfFeatures = features.size();
+			String sLastGroupValue = fUseGroup && (numberOfFeatures > 0) ? getGroupValue(features[0]) : "";
+			for(long i = 0; i < numberOfFeatures; ++i) {
+				Feature *feature = features[i];
+				if (fUseGroup && sLastGroupValue != getGroupValue(feature)) {
+					sLastGroupValue = getGroupValue(feature);
+					glEnd();
+					glBegin(GL_LINE_STRIP);
 				}
+				if (fUseAttributeColumn)
+					glTexCoord2f((attributeColumn->rValue(feature->iValue()) - minMapVal) / width, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
+				else
+					glTexCoord2f((feature->rValue() - minMapVal) / width, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
+				ILWIS::Point *point = (ILWIS::Point *)feature;
+				Coord crd = *(point->getCoordinate());
+				crd = getRootDrawer()->glConv(csy, crd);
+				crd.z = getTimeValue(feature);
+				glVertex3f(crd.x, crd.y, crd.z);
+				if ( i % 100 == 0)
+					trq.fUpdate(i, numberOfFeatures); 
 			}
 			glEnd();
 		}
@@ -402,114 +440,115 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 		{
 			const CoordBounds& cbMap = getRootDrawer()->getMapCoordBounds();
 			double pathScale = cbMap.width() / 50;
-			long numberOfFeatures = basemap->iFeatures();
-			if (numberOfFeatures != iUNDEF) {
-				Feature *feature = 0;
-				long start = 0;
-				while ((feature == 0 || !feature->fValid() || feature->rValue() == rUNDEF) && start < numberOfFeatures) {
-					feature = CFEATURE(basemap->getFeature(start));
-					++start;
-				}
-				if (start < numberOfFeatures) {
-					Coord headPrevious;
-					Coord tailPrevious;
-					Column stretchCol;
-					RangeReal rrStretch = getValueRange(stretchCol); // intentional call with fValid = false, so that we get the rrStretch for a value map
-					if (basemap->fTblAtt()) {
-						Table tbl = basemap->tblAtt();
-						if (properties->stretchColumn != "") {
-							Column col = tbl->col(properties->stretchColumn);
-							if (col.fValid() && col->dm()->pdv()) {
-								stretchCol = col;
-								rrStretch = properties->stretchRange.fValid() ? properties->stretchRange : col->dvrs().rrMinMax();
-							}
+			long numberOfFeatures = features.size();
+			if (numberOfFeatures > 1) {
+				Coord headPrevious;
+				Coord tailPrevious;
+				Column stretchCol;
+				RangeReal rrStretch = getValueRange(stretchCol); // intentional call with fValid = false, so that we get the rrStretch for a value map
+				if (basemap->fTblAtt()) {
+					Table tbl = basemap->tblAtt();
+					if (properties->stretchColumn != "") {
+						Column col = tbl->col(properties->stretchColumn);
+						if (col.fValid() && col->dm()->pdv()) {
+							stretchCol = col;
+							rrStretch = properties->stretchRange.fValid() ? properties->stretchRange : col->dvrs().rrMinMax();
 						}
 					}
+				}
+				Feature * feature = features[0];
+				String sLastGroupValue = fUseGroup ? getGroupValue(feature) : "";
+				ILWIS::Point *point = (ILWIS::Point *)feature;
+				Coord head = *(point->getCoordinate());
+				head = getRootDrawer()->glConv(csy, head);
+				head.z = getTimeValue(feature);
+				float rsHead = fUseAttributeColumn ? ((attributeColumn->rValue(feature->iValue()) - minMapVal) / width) : ((feature->rValue() - minMapVal) / width);
+				//double rHead = pathScale * scaleThickness(feature->rValue(), stretchCol, rrStretch) / rrStretch.rWidth();
+				double rHead = fUseSize ? pathScale * getSizeValue(feature) / (sizeStretch->rHi() - sizeStretch->rLo()) : pathScale / 2.0;
+				for (long i = 1; i < numberOfFeatures; ++i)
+				{
+					feature = features[i];
 					ILWIS::Point *point = (ILWIS::Point *)feature;
-					Coord head = *(point->getCoordinate());
-					head = getRootDrawer()->glConv(csy, head);
-					head.z = getTimeValue(feature);
-					float rsHead = fUseAttributeColumn ? ((attributeColumn->rValue(feature->iValue()) - minMapVal) / width) : ((feature->rValue() - minMapVal) / width);
-					//double rHead = pathScale * scaleThickness(feature->rValue(), stretchCol, rrStretch) / rrStretch.rWidth();
-					double rHead = pathScale * getSizeValue(feature) / (sizeStretch->rHi() - sizeStretch->rLo());
-					for (long i = start; i < numberOfFeatures; ++i)
+					Coord tail = *(point->getCoordinate());
+					tail = getRootDrawer()->glConv(csy, tail);
+					tail.z = getTimeValue(feature);
+					float rsTail = fUseAttributeColumn ? ((attributeColumn->rValue(feature->iValue()) - minMapVal) / width) : ((feature->rValue() - minMapVal) / width);
+					//double rTail = pathScale * scaleThickness(feature->rValue(), stretchCol, rrStretch) / rrStretch.rWidth();
+					double rTail = fUseSize ? pathScale * getSizeValue(feature) / (sizeStretch->rHi() - sizeStretch->rLo()) : pathScale / 2.0;
+
+					bool fCutPath = false;
+					if (fUseGroup && sLastGroupValue != getGroupValue(feature)) {
+						sLastGroupValue = getGroupValue(feature);
+						fCutPath = true;
+					}
+
+					if (!fCutPath)
 					{
-						feature = CFEATURE(basemap->getFeature(i));
-						if (feature && feature->fValid() && feature->rValue() != rUNDEF) {
-							ILWIS::Point *point = (ILWIS::Point *)feature;
-							Coord tail = *(point->getCoordinate());
-							tail = getRootDrawer()->glConv(csy, tail);
-							tail.z = getTimeValue(feature);
-							float rsTail = fUseAttributeColumn ? ((attributeColumn->rValue(feature->iValue()) - minMapVal) / width) : ((feature->rValue() - minMapVal) / width);
-							//double rTail = pathScale * scaleThickness(feature->rValue(), stretchCol, rrStretch) / rrStretch.rWidth();
-							double rTail = pathScale * getSizeValue(feature) / (sizeStretch->rHi() - sizeStretch->rLo());
-
-							if (!headPrevious.fUndef())
-							{
-								// connectionCoords
-								glBegin(GL_TRIANGLE_STRIP);
-								Coord ABprevious = tailPrevious;
-								ABprevious -= headPrevious;
-								Coord AB = tail;
-								AB -= head;
-
-								double f = 0;
-								for (int step = 0; step < (1 + steps); ++step)
-								{
-									if (step == steps)
-										f = 0; // close the cylinder, choose exactly the same angle as the fist time
-									glTexCoord2f(rsHead, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
-									Coord normCircle = projectOnCircle(ABprevious, rHead, f);
-									Coord normal = normalize(normCircle);
-									glNormal3f(normal.x, normal.y, normal.z);
-									normCircle += tailPrevious;
-									glVertex3f(normCircle.x, normCircle.y, normCircle.z);
-									glTexCoord2f(rsHead, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
-									normCircle = projectOnCircle(AB, rHead, f);
-									normal = normalize(normCircle);
-									glNormal3f(normal.x, normal.y, normal.z);
-									normCircle += head;
-									glVertex3f(normCircle.x, normCircle.y, normCircle.z);
-									f += angleStep;
-								}
-								glEnd();
-							}
-							// cylinderCoords
+						if (!headPrevious.fUndef())
+						{
+							// connectionCoords
 							glBegin(GL_TRIANGLE_STRIP);
+							Coord ABprevious = tailPrevious;
+							ABprevious -= headPrevious;
 							Coord AB = tail;
 							AB -= head;
-		
+
 							double f = 0;
 							for (int step = 0; step < (1 + steps); ++step)
 							{
 								if (step == steps)
 									f = 0; // close the cylinder, choose exactly the same angle as the fist time
 								glTexCoord2f(rsHead, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
-								Coord normCircle = projectOnCircle(AB, rHead, f);
+								Coord normCircle = projectOnCircle(ABprevious, rHead, f);
 								Coord normal = normalize(normCircle);
+								glNormal3f(normal.x, normal.y, normal.z);
+								normCircle += tailPrevious;
+								glVertex3f(normCircle.x, normCircle.y, normCircle.z);
+								glTexCoord2f(rsHead, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
+								normCircle = projectOnCircle(AB, rHead, f);
+								normal = normalize(normCircle);
 								glNormal3f(normal.x, normal.y, normal.z);
 								normCircle += head;
 								glVertex3f(normCircle.x, normCircle.y, normCircle.z);
-								glTexCoord2f(rsTail, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
-								normCircle = projectOnCircle(AB, rTail, f);
-								normal = normalize(normCircle);
-								glNormal3f(normal.x, normal.y, normal.z);
-								normCircle += tail;
-								glVertex3f(normCircle.x, normCircle.y, normCircle.z);
 								f += angleStep;
 							}
-
 							glEnd();
-							// continue
-							headPrevious = head;
-							tailPrevious = tail;
-							head = tail;
-							rsHead = rsTail;
-							rHead = rTail;
-							if ( i % 100 == 0)
-								trq.fUpdate(i, numberOfFeatures); 
 						}
+						// cylinderCoords
+						glBegin(GL_TRIANGLE_STRIP);
+						Coord AB = tail;
+						AB -= head;
+
+						double f = 0;
+						for (int step = 0; step < (1 + steps); ++step)
+						{
+							if (step == steps)
+								f = 0; // close the cylinder, choose exactly the same angle as the fist time
+							glTexCoord2f(rsHead, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
+							Coord normCircle = projectOnCircle(AB, rHead, f);
+							Coord normal = normalize(normCircle);
+							glNormal3f(normal.x, normal.y, normal.z);
+							normCircle += head;
+							glVertex3f(normCircle.x, normCircle.y, normCircle.z);
+							glTexCoord2f(rsTail, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
+							normCircle = projectOnCircle(AB, rTail, f);
+							normal = normalize(normCircle);
+							glNormal3f(normal.x, normal.y, normal.z);
+							normCircle += tail;
+							glVertex3f(normCircle.x, normCircle.y, normCircle.z);
+							f += angleStep;
+						}
+
+						glEnd();
 					}
+					// continue
+					headPrevious = head;
+					tailPrevious = tail;
+					head = tail;
+					rsHead = rsTail;
+					rHead = rTail;
+					if ( i % 100 == 0)
+						trq.fUpdate(i, numberOfFeatures); 
 				}
 			}
 		}
