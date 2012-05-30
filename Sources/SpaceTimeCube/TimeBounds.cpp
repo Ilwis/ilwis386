@@ -9,6 +9,12 @@ TimeBounds::TimeBounds()
 {
 }
 
+TimeBounds::TimeBounds(ILWIS::Time & tMin, ILWIS::Time & tMax)
+: m_tMin(tMin)
+, m_tMax(tMax)
+{
+}
+
 TimeBounds::~TimeBounds()
 {
 }
@@ -18,10 +24,14 @@ void TimeBounds::Reset() {
 	m_tMax = rUNDEF;
 }
 
-void TimeBounds::AddMinMax(Time & _tMin, Time & _tMax)
+bool TimeBounds::fUndef() const {
+	return !(m_tMin.isValid() && m_tMax.isValid());
+}
+
+void TimeBounds::AddMinMax(Time & tMin, Time & tMax)
 {
-	if (!m_tMin.isValid() || m_tMin > _tMin)
-		m_tMin = _tMin;
-	if (!m_tMax.isValid() || m_tMax < _tMax)
-		m_tMax = _tMax;
+	if (!m_tMin.isValid() || m_tMin > tMin)
+		m_tMin = tMin;
+	if (!m_tMax.isValid() || m_tMax < tMax)
+		m_tMax = tMax;
 }
