@@ -42,7 +42,7 @@ HTREEITEM SpaceTimePathTool::configure( HTREEITEM parentItem) {
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&SpaceTimePathTool::displayOptionEdges);
 	SpaceTimePathDrawer *pdrw = dynamic_cast<SpaceTimePathDrawer *>(drawer);
 	String transp("Edges (%d)", pdrw->iNrSteps());
-	htiNode = insertItem(transp,"Edges", item);
+	htiNode = insertItem(transp,"Circle", item);
 
 	return htiNode;
 }
