@@ -159,7 +159,8 @@ SpaceTimeCube::SpaceTimeCube(ZoomableView * _mpv, LayerTreeView * _tree, NewDraw
 , useSpaceTimeCube(false)
 , timePosBar(0)
 , layerOptionsForm(0)
-, timeBounds(new TimeBounds())
+, timeBoundsZoom(new TimeBounds())
+, timeBoundsFullExtent(new TimeBounds())
 , timeOffset(0)
 {
 }
@@ -174,9 +175,13 @@ SpaceTimeCube::~SpaceTimeCube()
 		delete layerOptionsForm;
 		layerOptionsForm = 0;
 	}
-	if (timeBounds) {
-		delete timeBounds;
-		timeBounds = 0;
+	if (timeBoundsZoom) {
+		delete timeBoundsZoom;
+		timeBoundsZoom = 0;
+	}
+	if (timeBoundsFullExtent) {
+		delete timeBoundsFullExtent;
+		timeBoundsFullExtent = 0;
 	}
 }
 
@@ -251,7 +256,7 @@ void SpaceTimeCube::refreshDrawerList() {
 
 	update();		
 
-	timeBounds->Reset();
+	timeBoundsFullExtent->Reset();
 	sizeStretch = RangeReal();
 
 	for (int i = 0; i < layerList.size(); ++i) {
@@ -271,9 +276,9 @@ void SpaceTimeCube::refreshDrawerList() {
 		layerList[i].setDrawerId(newDrw->getId());
 		TemporalDrawer * temporalDrawer = dynamic_cast<TemporalDrawer*>(((ComplexDrawer*)newDrw)->getDrawer(0));
 		if (temporalDrawer) {
-			temporalDrawer->SetTimeBounds(timeBounds);
+			temporalDrawer->SetTimeBounds(timeBoundsZoom);
 			RangeReal rrMinMax (layerList[i].rrTimeMinMax());
-			timeBounds->AddMinMax(Time(rrMinMax.rLo()), Time(rrMinMax.rHi()));
+			timeBoundsFullExtent->AddMinMax(Time(rrMinMax.rLo()), Time(rrMinMax.rHi()));
 			if (layerList[i].isSelfTime())
 				temporalDrawer->SetSelfTime();
 			else
@@ -333,13 +338,13 @@ void SpaceTimeCube::refreshDrawerList() {
 						PreTimeOffsetDrawer* preTimeOffset = dynamic_cast<PreTimeOffsetDrawer*>(NewDrawer::getDrawer("PreTimeOffsetDrawer", "Cube", &dp));
 						ownDrawerIDs.push_back(preTimeOffset->getId());
 						TemporalDrawer * temporalDrawer = dynamic_cast<TemporalDrawer*>(preTimeOffset);
-						temporalDrawer->SetTimeBounds(timeBounds);
+						temporalDrawer->SetTimeBounds(timeBoundsZoom);
 						preTimeOffset->prepare(&pp);
 						preTimeOffset->SetTimeOffsetVariable(&timeOffset);
 						PostTimeOffsetDrawer* postTimeOffset = dynamic_cast<PostTimeOffsetDrawer*>(NewDrawer::getDrawer("PostTimeOffsetDrawer", "Cube", &dp));
 						ownDrawerIDs.push_back(postTimeOffset->getId());
 						temporalDrawer = dynamic_cast<TemporalDrawer*>(postTimeOffset);
-						temporalDrawer->SetTimeBounds(timeBounds);
+						temporalDrawer->SetTimeBounds(timeBoundsZoom);
 						postTimeOffset->prepare(&pp);
 						drw->addPreDrawer(0, preTimeOffset);
 						drw->addPostDrawer(999, postTimeOffset);
@@ -348,11 +353,13 @@ void SpaceTimeCube::refreshDrawerList() {
 			}
 		}
 
+		*timeBoundsZoom = *timeBoundsFullExtent;
+
 		NewDrawer * cube = NewDrawer::getDrawer("CubeDrawer", "Cube", &dp);
 		rootDrawer->insertDrawer(0, cube);
 		ownDrawerIDs.push_back(cube->getId());
 		TemporalDrawer * temporalDrawer = dynamic_cast<TemporalDrawer*>(cube);
-		temporalDrawer->SetTimeBounds(timeBounds);
+		temporalDrawer->SetTimeBounds(timeBoundsZoom);
 		cube->prepare(&pp);
 	}
 	// restore (because the drAppend changed it all)
@@ -360,7 +367,7 @@ void SpaceTimeCube::refreshDrawerList() {
 	rootDrawer->setRotationAngles(rotX, rotY, rotZ);
 	rootDrawer->setTranslate(transX, transY, transZ);
 	rootDrawer->setZoom3D(zoom3D);
-	
+
 	mpv->Invalidate();
 }
 
@@ -433,6 +440,16 @@ bool SpaceTimeCube::showingLayerOptionsForm()
 void SpaceTimeCube::SetTime(double time) {
 	timeOffset = time;
 	mpv->Invalidate();
+}
+
+TimeBounds * SpaceTimeCube::getTimeBoundsZoom() const
+{
+	return timeBoundsZoom;
+}
+
+const TimeBounds * SpaceTimeCube::getTimeBoundsFullExtent() const
+{
+	return timeBoundsFullExtent;
 }
 
 double SpaceTimeCube::GetTime() {
@@ -645,6 +662,11 @@ bool SpaceTimeCubeTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	if ( ok)
 		parentTool = tool;
 	return ok;
+}
+
+SpaceTimeCube * SpaceTimeCubeTool::getSpaceTimeCube() const
+{
+	return stc;
 }
 
 HTREEITEM SpaceTimeCubeTool::configure( HTREEITEM parentItem) {

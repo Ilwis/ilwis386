@@ -89,6 +89,8 @@ namespace ILWIS {
 		bool showingLayerOptionsForm();
 		void SetTime(double time);
 		double GetTime();
+		TimeBounds * getTimeBoundsZoom() const;
+		const TimeBounds * getTimeBoundsFullExtent() const;
 	private:
 		static map<ZoomableView*, SpaceTimeCube*> spaceTimeCubes;
 		void update();
@@ -99,7 +101,8 @@ namespace ILWIS {
 		TimePositionBar * timePosBar;
 		vector<LayerData> layerList;
 		vector<String> ownDrawerIDs;
-		TimeBounds * timeBounds;
+		TimeBounds * timeBoundsZoom;
+		TimeBounds * timeBoundsFullExtent;
 		RangeReal sizeStretch;
 		bool useSpaceTimeCube;
 		double timeOffset;
@@ -116,6 +119,7 @@ namespace ILWIS {
 		HTREEITEM configure( HTREEITEM parentItem);
 		virtual ~SpaceTimeCubeTool();
 		String getMenuString() const;
+		SpaceTimeCube * getSpaceTimeCube() const;
 	protected:
 		void makeActive(void *v, HTREEITEM);
 	private:
