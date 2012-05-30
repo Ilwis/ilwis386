@@ -141,7 +141,7 @@ ILWIS::TimeParser::TimeParser(const String & pattern)
 	for (int i = 0; i < iTotal; ++i) {
 		iPosition[i] = sortedPositions[i].second;
 		if (i < iTotal - 1) {
-			iOffset[i] = iIndex[i + 1] - iLastIndex[i] - 1;
+			iOffset[i] = sortedPositions[i + 1].first - sortedPositions[i].first - 1;
 			valid = valid && (iOffset[i] > 0); // strict in this version .. in the future we could accomodate for iOffset[i] == 0, e.g. YYMMDDhhmmss
 		}
 	}
