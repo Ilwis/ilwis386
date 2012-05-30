@@ -211,11 +211,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\SpaceTimeCube\GroupableDrawer.h"
+				RelativePath="..\..\Sources\SpaceTimeCube\CubeElementsTool.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\SpaceTimeCube\PathScalingTool.h"
+				RelativePath="..\..\Sources\SpaceTimeCube\GroupableDrawer.h"
 				>
 			</File>
 			<File
@@ -258,6 +258,10 @@
 				RelativePath="..\..\Sources\SpaceTimeCube\TimePositionBar.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\Sources\SpaceTimeCube\TimeZoomTool.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Source Files"
@@ -267,15 +271,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\SpaceTimeCube\CubeElementsTool.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\SpaceTimeCube\DllMain.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\Sources\SpaceTimeCube\GroupableDrawer.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\Sources\SpaceTimeCube\PathScalingTool.cpp"
 				>
 			</File>
 			<File
@@ -316,6 +320,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\SpaceTimeCube\TimePositionBar.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\SpaceTimeCube\TimeZoomTool.cpp"
 				>
 			</File>
 		</Filter>
