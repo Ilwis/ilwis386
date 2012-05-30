@@ -192,6 +192,8 @@ void CubeDrawer::drawLabels() const {
 }
 
 void CubeDrawer::drawCoords() const {
+	if ( !properties["coordinates"].visible)
+		return;
 	Color clr = properties["coordinates"].color;
 	clr.m_transparency = properties["coordinates"].transparency * 255;
 	mediumFont->setColor(clr);

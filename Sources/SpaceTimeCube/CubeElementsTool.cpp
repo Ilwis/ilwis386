@@ -88,7 +88,7 @@ void CubeElementsTool::setLabelVisibility(void *value, HTREEITEM) {
 		return;
 
 	bool v = *(bool *)value;
-	setVisibility("label",v);
+	setVisibility("labels",v);
 }
 
 
