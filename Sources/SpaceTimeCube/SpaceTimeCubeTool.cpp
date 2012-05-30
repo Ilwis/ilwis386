@@ -23,6 +23,7 @@
 #include "Client\FormElements\FldOneSelectTextOnly.h"
 #include "Client\FormElements\objlist.h"
 #include "Client\FormElements\FieldIntSlider.h"
+#include "CubeElementsTool.h"
 #include "Client\Base\datawind.h"
 
 LayerData::LayerData(NewDrawer *drw)
@@ -674,5 +675,10 @@ void SpaceTimeCubeTool::startLayerOptionsForm() {
 void SpaceTimeCubeTool::setUseSpaceTimeCube(void *v, HTREEITEM) {
 	bool useSpaceTimeCube = *(bool *)v;
 	stc->setUseSpaceTimeCube(useSpaceTimeCube);
+	NewDrawer *drw = drawer->getRootDrawer()->getDrawer("CubeDrawer");
+	drawer = drw;
+	CubeElementsTool *ceTool = new CubeElementsTool(mpvGetView(), getDocument()->ltvGetView(),drawer);
+	addTool(ceTool);
+	ceTool->configure(htiNode);
 }
 
