@@ -71,6 +71,19 @@ private:
 };
 
 namespace ILWIS {
+	class _export TimeParser {
+	public:
+		TimeParser();
+		TimeParser(const String & pattern);
+		void parse(const String& string, int& year, int& month, int& day, int& hours, int& minutes, double& seconds) const;
+		bool fValid() const;
+	private:
+		int iPosition[6];
+		int iOffset[6];
+		int iTotal;
+		bool valid;
+	};
+
 	class _export Time {
 	public:
 		enum TimePart{tpYEAR, tpMONTH, tpDAYOFMONTH, tpJULIANDAY, tpDAYOFTHEWEEK, tpHOUR, tpMINUTE, tpSECOND, tpDATE, tpDAYTIME};
@@ -78,7 +91,7 @@ namespace ILWIS {
 		Time(int yr=-4713, int mnth=1, int dy=1, int hr=0, int min=0, double sec=0);
 		Time(const time_t time);
 		Time(const CTime& time);
-		Time(const String& isostring, const String& formatTemplate="");
+		Time(const String& isostring, const TimeParser& timeParser=TimeParser());
 		Time(double secondssince0);
 		operator CTime() const;
 		operator double() const;
@@ -92,7 +105,7 @@ namespace ILWIS {
 		bool operator >(const Time& time) const;
 		bool operator ==(const Time& time) const;
 		bool operator !=(const Time& time) const;
-		void setValue(const String& isostring, const String& formatTemplate="");
+		void setValue(const String& isostring, const TimeParser& timeParser=TimeParser());
 		void setYear(int year);
 		void setMonth(int Mnt);
 		void setDay(int dy);
@@ -112,8 +125,7 @@ namespace ILWIS {
 		void parseOrdinalDate(int ordinal, int year, int& month, int& day);
 		void parseYearPart(const String& yearpart, int& year, int& month, int& day) ;
 		void parseDayPart(const String& dayPart, int& hours, int& minutes, double& seconds);
-		void parseIsoString(const String& isostring, const String& formatTemplate, int& year, int& month, int& day, int& hours, int& minutes, double& seconds);
-		void parseWithTemplate(const String& isostring, const String& formatTemplate, int& year, int& month, int& day, int& hours, int& minutes, double& seconds);
+		void parseIsoString(const String& isostring, const TimeParser& timeParser, int& year, int& month, int& day, int& hours, int& minutes, double& seconds);
 
 		double julianday;
 		bool valid;

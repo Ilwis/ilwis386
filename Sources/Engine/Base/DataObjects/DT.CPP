@@ -97,6 +97,108 @@ String ObjectTime::sTime() const
 }
 
 //----------------------------------
+
+ILWIS::TimeParser::TimeParser()
+: valid(false)
+{
+}
+
+bool ILWIS::TimeParser::fValid() const
+{
+	return valid;
+}
+
+ILWIS::TimeParser::TimeParser(const String & pattern)
+{
+	int iIndex [6]; // the plain indices
+	int iLastIndex [6]; // their end
+	iIndex[0] = pattern.find("Y");
+	iIndex[1] = pattern.find("M");
+	iIndex[2] = pattern.find("D");
+	iIndex[3] = pattern.find("h");
+	iIndex[4] = pattern.find("m");
+	iIndex[5] = pattern.find("s");
+	iLastIndex[0] = pattern.rfind("Y");
+	iLastIndex[1] = pattern.rfind("M");
+	iLastIndex[2] = pattern.rfind("D");
+	iLastIndex[3] = pattern.rfind("h");
+	iLastIndex[4] = pattern.rfind("m");
+	iLastIndex[5] = pattern.rfind("s");
+
+	vector<std::pair<int, int>> sortedPositions;
+	iTotal = 0;
+	for(int i = 0; i < 6; ++i) {
+		if (iIndex[i] >= 0) {
+			sortedPositions.push_back(std::pair<int, int>(iIndex[i], i));
+			++iTotal;
+		}
+	}
+	
+	std::sort(sortedPositions.begin(), sortedPositions.end());
+
+	valid = (iTotal > 0);
+
+	for (int i = 0; i < iTotal; ++i) {
+		iPosition[i] = sortedPositions[i].second;
+		if (i < iTotal - 1) {
+			iOffset[i] = iIndex[i + 1] - iLastIndex[i] - 1;
+			valid = valid && (iOffset[i] > 0); // strict in this version .. in the future we could accomodate for iOffset[i] == 0, e.g. YYMMDDhhmmss
+		}
+	}
+}
+
+void ILWIS::TimeParser::parse(const String& string, int& year, int& month, int& day, int& hours, int& minutes, double& seconds) const
+{
+	char *begin = const_cast<char*>(string.c_str());// const_cast<char*>(s);
+	char *endptr;
+	for (int i = 0; i < iTotal; ++i) {
+		// skip leading spaces; strtol will return 0 on a string with only spaces which is not what we want
+		//while (isspace(*begin)) ++begin;
+		//if (strlen(begin) == 0)
+		//	break;
+		errno = 0;
+		long l;
+		double r;
+		switch(iPosition[i]) {
+			case 0:
+				l = strtol(begin, &endptr, 10);
+				if (errno == 0)
+					year = l;
+				break;
+			case 1:
+				l = strtol(begin, &endptr, 10);
+				if (errno == 0)
+					month = l;
+				break;
+			case 2:
+				l = strtol(begin, &endptr, 10);
+				if (errno == 0)
+					day = l;
+				break;
+			case 3:
+				l = strtol(begin, &endptr, 10);
+				if (errno == 0)
+					hours = l;
+				break;
+			case 4:
+				l = strtol(begin, &endptr, 10);
+				if (errno == 0)
+					minutes = l;
+				break;
+			case 5:
+				// r = strtodILW(begin, &endptr); // checked, does not work well, fails too much
+				r = strtod(begin, &endptr);
+				if (errno == 0)
+					seconds = r;
+				break;
+		}
+		begin = endptr; // first non-digit
+		begin += iOffset[i]; // jump over the delimiter
+	}
+}
+
+//----------------------------------
+
 ILWIS::Time::Time(int yr, int mnth, int dy, int hr, int min, double sec)
 {
 	valid = true;
@@ -169,10 +271,10 @@ ILWIS::Time::Time(const time_t tmt){
 	julianday = gregorianToJulian(year, month, day,hour,minutes,seconds);
 }
 
-ILWIS::Time::Time(const String& isostring, const String& formatTemplate) {
+ILWIS::Time::Time(const String& isostring, const TimeParser& parser) {
 	valid = true;
 	julianday = rUNDEF;
-	setValue(isostring, formatTemplate);
+	setValue(isostring, parser);
 }
 
 ILWIS::Time::Time(const CTime& time){
@@ -390,7 +492,7 @@ void ILWIS::Time::julianToGregorian(int& year, int& month, int& day, int& hour, 
 }
 
 
-void ILWIS::Time::setValue(const String& isostring, const String& formatTemplate) {
+void ILWIS::Time::setValue(const String& isostring, const TimeParser& parser) {
 	if ( isostring == "?") {
 		julianday = rUNDEF;
 		return;
@@ -408,7 +510,7 @@ void ILWIS::Time::setValue(const String& isostring, const String& formatTemplate
 	YYYY[MM[DD[Thh[:mm[:s[Z]]]]]*/
 	int year=-4713, month=1, day=1, hour=0, minutes=0;
 	double seconds = 0;
-	parseIsoString(isostring, formatTemplate, year, month, day, hour, minutes,seconds);
+	parseIsoString(isostring, parser, year, month, day, hour, minutes,seconds);
 
 	if ( !valid )
 		return;
@@ -495,59 +597,7 @@ void ILWIS::Time::parseDayPart(const String& daypart, int& hours, int& minutes, 
 	seconds = sec;
 }
 
-void ILWIS::Time::parseWithTemplate(const String& isostring, const String& formatTemplate, int& year, int& month, int& day, int& hours, int& minutes, double& seconds) {
-	int yrIndex = formatTemplate.find("YY");
-	int monthIndex = formatTemplate.find("M");
-	int dayIndex = formatTemplate.find("D");
-	int hourIndex = formatTemplate.find("h");
-	int minuteIndex = formatTemplate.find("m");
-	int secIndex = formatTemplate.find("s");
-	int offset = 0;
-	if ( yrIndex != -1) {
-		int sz = formatTemplate.find("YYYY") != -1 ? 4 : 2;
-		year = isostring.sSub(yrIndex,sz).iVal();
-	}
-	if ( monthIndex != -1) {
-		int sz = formatTemplate.find("MM") != -1 ? 2 : 1;
-		month = isostring.sSub(monthIndex,sz).iVal();
-		if ( sz == 1 && month == iUNDEF) {
-			month = isostring.sSub(monthIndex,2).iVal();
-			offset += 1;
-		}
-	}
-	if ( dayIndex != -1) {
-		int sz = formatTemplate.find("DD") != -1 ? 2 : 1;
-		day = isostring.sSub(dayIndex + offset,sz).iVal();
-		if ( sz == 1 && day == iUNDEF) {
-			day = isostring.sSub(dayIndex + offset,2).iVal();
-			offset +=1;
-		}
-	}
-	if ( hourIndex != -1) {
-		int sz = formatTemplate.find("hh") != -1 ? 2 : 1;
-		hours = isostring.sSub(hourIndex + offset,sz).iVal();
-		if ( sz == 1 && hours == iUNDEF) {
-			hours = isostring.sSub(hourIndex + offset,2).iVal();
-			offset += 1;
-		}
-	}
-	if ( minuteIndex != -1) {
-		int sz = formatTemplate.find("mm") != -1 ? 2 : 1;
-		minutes = isostring.sSub(minuteIndex + offset,sz).iVal();
-		if ( sz == 1 && minutes == iUNDEF) {
-			minutes = isostring.sSub(minuteIndex + offset,2).iVal();
-			offset +=1;
-		}
-	}
-	if ( secIndex != -1) {
-		int last = formatTemplate.find_last_of("s");
-		seconds = isostring.sSub(secIndex + offset,last - secIndex).rVal();
-	}
-
-
-}
-
-void ILWIS::Time::parseIsoString(const String& isostring, const String& formatTemplate, int& year, int& month, int& day, int& hours, int& minutes, double& seconds) {
+void ILWIS::Time::parseIsoString(const String& isostring, const TimeParser& parser, int& year, int& month, int& day, int& hours, int& minutes, double& seconds) {
 	year=-4713, month=1, day=1, hours=0, minutes=0;
 	seconds = 0;
 	if ( isostring == "?") {
@@ -559,8 +609,8 @@ void ILWIS::Time::parseIsoString(const String& isostring, const String& formatTe
 	if ( isostring == "-*")
 		julianday = -BIGTIME;
 	// special form YYYYMMDDHHMM without the T marker for time, often used in sattelite orbit times
-	if ( formatTemplate != "") {
-		parseWithTemplate(isostring, formatTemplate, year, month, day, hours,minutes,seconds);
+	if ( parser.fValid()) {
+		parser.parse(isostring, year, month, day, hours, minutes, seconds);
 	} else {
 		if ( isostring.size() == 12 && isostring.find("T") == string::npos && 
 			isostring.find("-") == string::npos && 
@@ -586,12 +636,14 @@ bool ILWIS::Time::operator <(const Time& time) const{
 
 	return julianday < (double)time;
 }
+
 bool ILWIS::Time::operator >(const Time& time) const{
 	if ( julianday == rUNDEF)
 		return false;
 
 	return julianday > (double)time;
 }
+
 bool ILWIS::Time::operator ==(const Time& time) const{
 	if ( julianday == rUNDEF)
 		return false;
