@@ -52,6 +52,7 @@ class _export SpaceTimePathDrawer : public FeatureLayerDrawer, public TemporalDr
 		BaseMapPtr *basemap;
 		bool fRealMap;
 		vector<Feature *> features;
+		CoordBounds cube;
 	private:
 		Column prevAttColumn;
 		bool prevUseAttColumn;

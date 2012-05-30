@@ -82,6 +82,21 @@ void SpaceTimePathDrawer::prepare(PreparationParameters *parms){
 		else
 			fRealMap = false;
 
+		cube = rootDrawer->getMapCoordBounds();
+		if (cube.width() > cube.height()) {
+			double deltay = cube.width() - cube.height();
+			cube.cMin.y = cube.cMin.y - deltay / 2.0;
+			cube.cMax.y = cube.cMax.y + deltay / 2.0;
+			cube.cMin.z = 0;
+			cube.cMax.z = cube.width();
+		} else {
+			double deltax = cube.height() - cube.width();
+			cube.cMin.x = cube.cMin.x - deltax / 2.0;
+			cube.cMax.x = cube.cMax.x + deltax / 2.0;
+			cube.cMin.z = 0;
+			cube.cMax.z = cube.height();
+		}
+
 		features.clear();
 		long numberOfFeatures = basemap->iFeatures();
 		if (numberOfFeatures != iUNDEF) {
@@ -274,27 +289,13 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 			glTranslated(0,0,z0);
 		}
 		*/
-		CoordBounds cube = rootDrawer->getMapCoordBounds();
-		if (cube.width() > cube.height()) {
-			double deltay = cube.width() - cube.height();
-			cube.cMin.y = cube.cMin.y - deltay / 2.0;
-			cube.cMax.y = cube.cMax.y + deltay / 2.0;
-			cube.cMin.z = 0;
-			cube.cMax.z = cube.width();
-		} else {
-			double deltax = cube.height() - cube.width();
-			cube.cMin.x = cube.cMin.x - deltax / 2.0;
-			cube.cMax.x = cube.cMax.x + deltax / 2.0;
-			cube.cMin.z = 0;
-			cube.cMax.z = cube.height();
-		}
 
 		//glTranslated(cube.cMin.x + cube.width() / 2.0, cube.cMin.y + cube.height() / 2.0, cube.cMin.z + cube.altitude() / 2.0);
 		//glScaled(cube.width() / 2.0, cube.height() / 2.0, cube.altitude() / 2.0);
 
 
 		//glTranslated(0, 0, cube.cMin.z);
-		glScaled(1, 1, cube.altitude() / (timeBounds->tMax() - timeBounds->tMin()));
+		//glScaled(1, 1, cube.altitude() / (timeBounds->tMax() - timeBounds->tMin()));
 		//glTranslated(0, 0, -timeBounds->tMin());
 		//glScaled(1,1,1);
 	}
@@ -410,10 +411,12 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 		//double endvalue = ((zmaker->getBounds().width() + zmaker->getBounds().height()) / 2.0);// * 0.20;
 		//double zfactor = max(getRootDrawer()->getMapCoordBounds().width(), getRootDrawer()->getMapCoordBounds().height()) / endvalue;
 
+		long numberOfFeatures = features.size();
+		double cubeBottom = 0;
+		double cubeTop = timeBounds->tMax() - timeBounds->tMin();
 		if (steps == 1)
 		{
 			glBegin(GL_LINE_STRIP);
-			long numberOfFeatures = features.size();
 			String sLastGroupValue = fUseGroup && (numberOfFeatures > 0) ? getGroupValue(features[0]) : "";
 			for(long i = 0; i < numberOfFeatures; ++i) {
 				Feature *feature = features[i];
@@ -422,15 +425,18 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 					glEnd();
 					glBegin(GL_LINE_STRIP);
 				}
-				if (fUseAttributeColumn)
-					glTexCoord2f((attributeColumn->rValue(feature->iValue()) - minMapVal) / width, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
-				else
-					glTexCoord2f((feature->rValue() - minMapVal) / width, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
 				ILWIS::Point *point = (ILWIS::Point *)feature;
-				Coord crd = *(point->getCoordinate());
-				crd = getRootDrawer()->glConv(csy, crd);
-				crd.z = getTimeValue(feature);
-				glVertex3f(crd.x, crd.y, crd.z);
+				double z = getTimeValue(feature);
+				if (z >= cubeBottom && z <= cubeTop) {
+					Coord crd = *(point->getCoordinate());
+					crd.z = z * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
+					crd = getRootDrawer()->glConv(csy, crd);
+					if (fUseAttributeColumn)
+						glTexCoord2f((attributeColumn->rValue(feature->iValue()) - minMapVal) / width, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
+					else
+						glTexCoord2f((feature->rValue() - minMapVal) / width, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
+					glVertex3f(crd.x, crd.y, crd.z);
+				}
 				if ( i % 100 == 0)
 					trq.fUpdate(i, numberOfFeatures); 
 			}
@@ -440,7 +446,6 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 		{
 			const CoordBounds& cbMap = getRootDrawer()->getMapCoordBounds();
 			double pathScale = cbMap.width() / 50;
-			long numberOfFeatures = features.size();
 			if (numberOfFeatures > 1) {
 				Coord headPrevious;
 				Coord tailPrevious;
@@ -456,40 +461,76 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 						}
 					}
 				}
-				Feature * feature = features[0];
-				String sLastGroupValue = fUseGroup ? getGroupValue(feature) : "";
+				long start = 0;
+				double z;
+				Feature * feature;
+				do {
+					feature = features[start];
+					z = getTimeValue(feature);
+					++start;
+				} while ((z < cubeBottom || z > cubeTop) && start < numberOfFeatures);
 				ILWIS::Point *point = (ILWIS::Point *)feature;
 				Coord head = *(point->getCoordinate());
+				head.z = z * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
 				head = getRootDrawer()->glConv(csy, head);
-				head.z = getTimeValue(feature);
+				String sLastGroupValue = fUseGroup ? getGroupValue(feature) : "";
 				float rsHead = fUseAttributeColumn ? ((attributeColumn->rValue(feature->iValue()) - minMapVal) / width) : ((feature->rValue() - minMapVal) / width);
 				//double rHead = pathScale * scaleThickness(feature->rValue(), stretchCol, rrStretch) / rrStretch.rWidth();
 				double rHead = fUseSize ? pathScale * getSizeValue(feature) / (sizeStretch->rHi() - sizeStretch->rLo()) : pathScale / 2.0;
-				for (long i = 1; i < numberOfFeatures; ++i)
+				for (long i = start; i < numberOfFeatures; ++i)
 				{
 					feature = features[i];
-					ILWIS::Point *point = (ILWIS::Point *)feature;
-					Coord tail = *(point->getCoordinate());
-					tail = getRootDrawer()->glConv(csy, tail);
-					tail.z = getTimeValue(feature);
-					float rsTail = fUseAttributeColumn ? ((attributeColumn->rValue(feature->iValue()) - minMapVal) / width) : ((feature->rValue() - minMapVal) / width);
-					//double rTail = pathScale * scaleThickness(feature->rValue(), stretchCol, rrStretch) / rrStretch.rWidth();
-					double rTail = fUseSize ? pathScale * getSizeValue(feature) / (sizeStretch->rHi() - sizeStretch->rLo()) : pathScale / 2.0;
-
-					bool fCutPath = false;
-					if (fUseGroup && sLastGroupValue != getGroupValue(feature)) {
-						sLastGroupValue = getGroupValue(feature);
-						fCutPath = true;
-					}
-
-					if (!fCutPath)
+					z = getTimeValue(feature);
+					if (z >= cubeBottom && z <= cubeTop)
 					{
-						if (!headPrevious.fUndef())
+						ILWIS::Point *point = (ILWIS::Point *)feature;
+						Coord tail = *(point->getCoordinate());
+						tail = getRootDrawer()->glConv(csy, tail);
+						tail.z = z * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
+						float rsTail = fUseAttributeColumn ? ((attributeColumn->rValue(feature->iValue()) - minMapVal) / width) : ((feature->rValue() - minMapVal) / width);
+						//double rTail = pathScale * scaleThickness(feature->rValue(), stretchCol, rrStretch) / rrStretch.rWidth();
+						double rTail = fUseSize ? pathScale * getSizeValue(feature) / (sizeStretch->rHi() - sizeStretch->rLo()) : pathScale / 2.0;
+
+						bool fCutPath = false;
+						if (fUseGroup && sLastGroupValue != getGroupValue(feature)) {
+							sLastGroupValue = getGroupValue(feature);
+							fCutPath = true;
+						}
+
+						if (!fCutPath)
 						{
-							// connectionCoords
+							if (!headPrevious.fUndef())
+							{
+								// connectionCoords
+								glBegin(GL_TRIANGLE_STRIP);
+								Coord ABprevious = tailPrevious;
+								ABprevious -= headPrevious;
+								Coord AB = tail;
+								AB -= head;
+
+								double f = 0;
+								for (int step = 0; step < (1 + steps); ++step)
+								{
+									if (step == steps)
+										f = 0; // close the cylinder, choose exactly the same angle as the fist time
+									glTexCoord2f(rsHead, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
+									Coord normCircle = projectOnCircle(ABprevious, rHead, f);
+									Coord normal = normalize(normCircle);
+									glNormal3f(normal.x, normal.y, normal.z);
+									normCircle += tailPrevious;
+									glVertex3f(normCircle.x, normCircle.y, normCircle.z);
+									glTexCoord2f(rsHead, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
+									normCircle = projectOnCircle(AB, rHead, f);
+									normal = normalize(normCircle);
+									glNormal3f(normal.x, normal.y, normal.z);
+									normCircle += head;
+									glVertex3f(normCircle.x, normCircle.y, normCircle.z);
+									f += angleStep;
+								}
+								glEnd();
+							}
+							// cylinderCoords
 							glBegin(GL_TRIANGLE_STRIP);
-							Coord ABprevious = tailPrevious;
-							ABprevious -= headPrevious;
 							Coord AB = tail;
 							AB -= head;
 
@@ -499,54 +540,29 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 								if (step == steps)
 									f = 0; // close the cylinder, choose exactly the same angle as the fist time
 								glTexCoord2f(rsHead, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
-								Coord normCircle = projectOnCircle(ABprevious, rHead, f);
+								Coord normCircle = projectOnCircle(AB, rHead, f);
 								Coord normal = normalize(normCircle);
-								glNormal3f(normal.x, normal.y, normal.z);
-								normCircle += tailPrevious;
-								glVertex3f(normCircle.x, normCircle.y, normCircle.z);
-								glTexCoord2f(rsHead, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
-								normCircle = projectOnCircle(AB, rHead, f);
-								normal = normalize(normCircle);
 								glNormal3f(normal.x, normal.y, normal.z);
 								normCircle += head;
 								glVertex3f(normCircle.x, normCircle.y, normCircle.z);
+								glTexCoord2f(rsTail, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
+								normCircle = projectOnCircle(AB, rTail, f);
+								normal = normalize(normCircle);
+								glNormal3f(normal.x, normal.y, normal.z);
+								normCircle += tail;
+								glVertex3f(normCircle.x, normCircle.y, normCircle.z);
 								f += angleStep;
 							}
+
 							glEnd();
 						}
-						// cylinderCoords
-						glBegin(GL_TRIANGLE_STRIP);
-						Coord AB = tail;
-						AB -= head;
-
-						double f = 0;
-						for (int step = 0; step < (1 + steps); ++step)
-						{
-							if (step == steps)
-								f = 0; // close the cylinder, choose exactly the same angle as the fist time
-							glTexCoord2f(rsHead, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
-							Coord normCircle = projectOnCircle(AB, rHead, f);
-							Coord normal = normalize(normCircle);
-							glNormal3f(normal.x, normal.y, normal.z);
-							normCircle += head;
-							glVertex3f(normCircle.x, normCircle.y, normCircle.z);
-							glTexCoord2f(rsTail, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
-							normCircle = projectOnCircle(AB, rTail, f);
-							normal = normalize(normCircle);
-							glNormal3f(normal.x, normal.y, normal.z);
-							normCircle += tail;
-							glVertex3f(normCircle.x, normCircle.y, normCircle.z);
-							f += angleStep;
-						}
-
-						glEnd();
+						// continue
+						headPrevious = head;
+						tailPrevious = tail;
+						head = tail;
+						rsHead = rsTail;
+						rHead = rTail;
 					}
-					// continue
-					headPrevious = head;
-					tailPrevious = tail;
-					head = tail;
-					rsHead = rsTail;
-					rHead = rTail;
 					if ( i % 100 == 0)
 						trq.fUpdate(i, numberOfFeatures); 
 				}
