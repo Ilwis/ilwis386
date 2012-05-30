@@ -7,6 +7,8 @@
 
 using namespace ILWIS;
 
+CubeElement CubeElement::undefElement = CubeElement(sUNDEF, colorUNDEF,rUNDEF,false);
+
 ILWIS::NewDrawer *createCubeDrawer(DrawerParameters *parms) {
 	return new CubeDrawer(parms);
 }
@@ -14,19 +16,25 @@ ILWIS::NewDrawer *createCubeDrawer(DrawerParameters *parms) {
 CubeDrawer::CubeDrawer(DrawerParameters *parms)
 : ComplexDrawer(parms,"CubeDrawer")
 , font(0)
+, mediumFont(0)
 {
+	id = name = "CubeDrawer";
 	setTransparency(1); // opaque
 }
 
 CubeDrawer::~CubeDrawer() {
-	if (font)
+	if (font) {
 		delete font;
+		delete mediumFont;
+	}
 }
 
 void CubeDrawer::prepare(PreparationParameters *pp) {
 	if ((pp->type & RootDrawer::ptGEOMETRY) || (pp->type & NewDrawer::ptRESTORE)) { 
-		if (font == 0)
+		if (font == 0) {
 			font = new OpenGLText(rootDrawer, "arial.ttf", 28, true, 0, 0, true);
+			mediumFont = new OpenGLText(rootDrawer, "arial.ttf", 15, true, 0, 0, true);
+		}
 		cube = rootDrawer->getMapCoordBounds();
 		CoordBounds cbMap = cube;
 		if (cube.width() > cube.height()) {
@@ -79,7 +87,9 @@ bool CubeDrawer::draw(const CoordBounds& cbArea) const{
 	glTranslated(cube.cMin.x + cube.width() / 2.0, cube.cMin.y + cube.height() / 2.0, cube.cMin.z + cube.altitude() / 2.0);
 	glScaled(cube.width() / 2.0, cube.height() / 2.0, cube.altitude() / 2.0);
 
-	glColor4f(0, 1, 0, transparency);
+	Color clr = properties["axis"].color;
+	clr.m_transparency = properties["axis"].transparency * 255;
+	glColor4f(clr.redP(), clr.greenP(), clr.blueP(), clr.transparencyP());
 	drawCube();
 	drawTicMarks();
 	drawLabels();
@@ -91,6 +101,9 @@ bool CubeDrawer::draw(const CoordBounds& cbArea) const{
 }
 
 void CubeDrawer::drawCube() const {	
+	if ( !properties["axis"].visible)
+		return;
+
 	// Front Face
 	glBegin(GL_LINE_STRIP);
 	glVertex3d(-1.0, -1.0, +1.0);
@@ -168,35 +181,69 @@ void CubeDrawer::drawTicMarks() const {
 }
 
 void CubeDrawer::drawLabels() const {
-	Color color (255, 0, 0);
-	font->setColor(color);
-	renderText(Coordinate(0.0, -1.1, -1.1), "X");
-	renderText(Coordinate(-1.1, 0.0, -1.1), "Y");
-	renderText(Coordinate(-1.1, -1.1, 0.0), "T");
+	if ( !properties["labels"].visible)
+		return;
+	Color clr = properties["labels"].color;
+	clr.m_transparency = properties["labels"].transparency * 255;
+	font->setColor(clr);
+	renderText(font,Coordinate(0.0, -1.1, -1.1), "X");
+	renderText(font,Coordinate(-1.1, 0.0, -1.1), "Y");
+	renderText(font,Coordinate(-1.1, -1.1, 0.0), "T");
 }
 
 void CubeDrawer::drawCoords() const {
-	Color color (0, 0, 255);
-	font->setColor(color);
-	// minmax X
-	renderText(Coordinate(-0.9, -1.1, -1.1), sxMin);
-	renderText(Coordinate(0.9, -1.1, -1.1), sxMax);
-	// minmax Y
-	renderText(Coordinate(-1.1, -0.9, -1.1), syMin);
-	renderText(Coordinate(-1.1, 0.9, -1.1), syMax);
+	Color clr = properties["coordinates"].color;
+	clr.m_transparency = properties["coordinates"].transparency * 255;
+	mediumFont->setColor(clr);
+	renderText(mediumFont,Coordinate(-0.9, -1.1, -1.1), sxMin);
+	renderText(mediumFont,Coordinate(0.9, -1.1, -1.1), sxMax);
+	renderText(mediumFont,Coordinate(-1.1, -0.9, -1.1), syMin);
+	renderText(mediumFont,Coordinate(-1.1, 0.9, -1.1), syMax);
+
+	//provisional code for alternative coordinate visualization
+	//renderText(mediumFont,Coordinate(-1.0,-1.0,-1.05), String("(%S, %S)", syMin, sxMin));
+	//renderText(mediumFont,Coordinate(1.0,-1.0,-1.05), String("(%S, %S)", syMax, sxMin));
+	//renderText(mediumFont,Coordinate(1.0,1.0,-1.05), String("(%S, %S)", syMax, sxMax));
+	//renderText(mediumFont,Coordinate(-1.0,1.0,-1.05), String("(%S, %S)", syMin, sxMax));
 }
 
 void CubeDrawer::drawTimes() const {
-	Color color (0, 0, 255);
-	font->setColor(color);
-	renderText(Coordinate(-1.1, -1.1, -0.9), stMin);
-	renderText(Coordinate(-1.1, -1.1, 0.9), stMax);
+	Color clr = properties["labels"].color;
+	clr.m_transparency = properties["labels"].transparency * 255;
+	font->setColor(clr);
+	renderText(font,Coordinate(-1.1, -1.1, -0.9), stMin);
+	renderText(font,Coordinate(-1.1, -1.0, 0.9), stMax);
 }
 
-void CubeDrawer::renderText(const Coordinate & c, const String & text) const {
+void CubeDrawer::renderText(OpenGLText *fnt,const Coordinate & c, const String & text, bool center) const {
 	glPushMatrix();
 	glTranslated(c.x, c.y, c.z);
 	glScaled(2.0 / cube.width(), 2.0 / cube.height(), 2.0 / cube.altitude());
-	font->renderText(Coordinate(0, 0, 0), text);
+	fnt->renderText(Coordinate(0, 0, 0), text);
 	glPopMatrix();
+}
+
+GeneralDrawerProperties *CubeDrawer::getProperties(){
+	return &properties;
+}
+//---------------------------------------
+CubeProperties::CubeProperties() : GeneralDrawerProperties() {
+	elements["axis"] = CubeElement("Axis", Color(0,255,0),1.0, true);
+	elements["coordinates"] = CubeElement("Coordinates", Color(0,0,0),1.0, true);
+	elements["labels"] = CubeElement("Labels", Color(255,0,0),1.0, true);
+}
+
+CubeProperties::CubeProperties(CubeProperties *lp){
+	for(map<String, CubeElement>::const_iterator cur = lp->elements.begin(); cur != lp->elements.end(); ++cur){
+		(*this)[(*cur).first] = (*cur).second;
+	}
+
+}
+
+CubeElement& CubeProperties::operator[](const String& key) const {
+	map<String, CubeElement>::iterator cur = const_cast<CubeProperties *>(this)->elements.find(key) ;
+	if ( cur != elements.end())
+		return (*cur).second;
+	return CubeElement::undefElement;
+
 }
