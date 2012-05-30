@@ -172,10 +172,11 @@ bool ColumnTimeFromColumns::fFreezing()
 	double step = 0;
 	double rmax=-1e100, rmin=1e100;
 	if ( stringColumn.size() != 0) {
+		ILWIS::TimeParser parser (formatTemplate.sUnQuote());
 		Column col = tbl->col(stringColumn);
 		for(int i=1; i <= iRecs(); ++i) {		
 			String val = col->sValue(i);
-			ILWIS::Time ti(val, formatTemplate.sUnQuote());
+			ILWIS::Time ti(val, parser);
 			if ( ti.isValid()) {
 				times.push_back(ti);
 				step = 0;
