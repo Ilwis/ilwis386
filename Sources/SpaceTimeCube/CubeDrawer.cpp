@@ -69,9 +69,11 @@ void CubeDrawer::prepare(PreparationParameters *pp) {
 			syMax = sxMax.sTail(",").sHead(")").sTrimSpaces();
 			sxMax = sxMax.sHead(",").sTrimSpaces();
 		}
+	}
+	if (pp->type & NewDrawer::pt3D) {
 		if (timeBounds != 0) {
-			stMin = timeBounds->tMin().toString();
-			stMax = timeBounds->tMax().toString();
+			stMin = timeBounds->tMin().isValid() ? timeBounds->tMin().toString() : "";
+			stMax = timeBounds->tMax().isValid() ? timeBounds->tMax().toString() : "";
 		}
 		NewDrawer *ndrw = getRootDrawer()->getBackgroundDrawer();
 		ndrw->setTransparency(0.85);
