@@ -12,7 +12,6 @@
 
 #include "Drawers\FeatureLayerDrawer.h"
 
-//#include "CubeTool.h"
 #include "TimePositionBar.h"
 #include "SpaceTimeCubeTool.h"
 #include "SpaceTimePathTool.h"
@@ -20,6 +19,7 @@
 #include "CubeDrawer.h"
 #include "PreTimeOffsetDrawer.h"
 #include "PostTimeOffsetDrawer.h"
+#include "TimeZoomTool.h"
 #include "CubeElementsTool.h"
 
 using namespace ILWIS;
@@ -29,6 +29,7 @@ DrawerToolInfoVector *createDrawerTool() {
 	infos->push_back(new DrawerToolInfo("SpaceTimeCubeTool",createSpaceTimeCubeTool));
 	infos->push_back(new DrawerToolInfo("CubeElementsTool",createCubeElementsTool));
 	infos->push_back(new DrawerToolInfo("SpaceTimePathTool",createSpaceTimePathTool));
+	infos->push_back(new DrawerToolInfo("TimeZoomTool",createTimeZoomTool));
 	return infos;
 }
 
