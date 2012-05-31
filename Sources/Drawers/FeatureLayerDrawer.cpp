@@ -125,6 +125,10 @@ void FeatureLayerDrawer::prepareChildDrawers(PreparationParameters *parms) {
 					bmp->dm()->rpr()->getProperties(feature->rValue(), parms->props);
 				}
 			}
+			RepresentationProperties rprop;
+			if ( parms->props == 0) {
+				parms->props = &rprop;
+			}
 			pdrw->prepare(parms);
 		}
 	}
