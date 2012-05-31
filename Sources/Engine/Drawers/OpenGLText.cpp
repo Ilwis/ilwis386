@@ -67,7 +67,7 @@ void OpenGLText::renderText(const Coordinate& c, const String& text) {
 		calcScale();
 	}
 	glScaled(scale, scale, scale); // with this the GL space is temporarily expressed in pixels
-	glColor3d(color.redP(), color.greenP(), color.blueP());
+	glColor4d(color.redP(), color.greenP(), color.blueP(), color.alphaP());
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 	glEnable (GL_POLYGON_SMOOTH);
