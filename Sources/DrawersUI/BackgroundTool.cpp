@@ -39,7 +39,7 @@ HTREEITEM BackgroundTool::configure( HTREEITEM parentItem) {
 
 	//htiNode = insertItem(TVI_ROOT,"","MapPane");
 	DisplayOptionColorItem *item = new DisplayOptionColorItem(TR("Background"), tree,TVI_ROOT,drawer);
-	htiNode = insertItem(TR("Background Area"),"MaPane",item,1);
+	htiNode = insertItem(TR("Background Area"),"MapPane",item,1);
 	item->setCheckAction(this,0,(DTSetCheckFunc )&BackgroundTool::makeActive);
 	bool is3D = drawer->getRootDrawer()->is3D();
 	CanvasBackgroundDrawer *cbdr = (CanvasBackgroundDrawer *)drawer;
