@@ -102,6 +102,7 @@
 #include "Engine\SpatialReference\Winkel1.H"
 #include "Engine\SpatialReference\Winkel2.H"
 #include "Engine\SpatialReference\Winkel3.H"
+#include "Engine\SpatialReference\PseudoMercator.h"
 
 #include "Headers\Hs\proj.hs"
 
@@ -280,6 +281,8 @@ ProjectionPtr* ProjectionPtr::create(const String& sName, const Ellipsoid& ell)
     ptr = new ProjectionWinkel2();
 	else if (_stricmp("Winkel Triple", sName.c_str()) == 0)
     ptr = new ProjectionWinkel3();
+	else if (_stricmp("Pseudo Mercator", sName.c_str()) == 0)
+    ptr = new ProjectionPseudoMercator(ell);
   else  
     InvalidTypeError(FileName(), "Projection", sName.c_str());
   ptr->_sName = sName; 

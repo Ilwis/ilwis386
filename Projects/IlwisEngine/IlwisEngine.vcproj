@@ -2718,6 +2718,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\Sources\Engine\SpatialReference\PseudoMercator.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\SpatialReference\PseudoMercator.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Sources\Engine\SpatialReference\ROBINSON.cpp"
 					>
 				</File>
