@@ -89,10 +89,13 @@ bool CubeDrawer::draw(const CoordBounds& cbArea) const{
 	glTranslated(cube.cMin.x + cube.width() / 2.0, cube.cMin.y + cube.height() / 2.0, cube.cMin.z + cube.altitude() / 2.0);
 	glScaled(cube.width() / 2.0, cube.height() / 2.0, cube.altitude() / 2.0);
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA); 
+
 	if (properties["axis"].visible) {
 		Color clr = properties["axis"].color;
 		clr.m_transparency = properties["axis"].transparency * 255;
-		glColor4f(clr.redP(), clr.greenP(), clr.blueP(), clr.transparencyP());
+		glColor4f(clr.redP(), clr.greenP(), clr.blueP(), clr.alphaP());
 		drawCube();
 		drawTicMarks();
 	}
@@ -211,11 +214,11 @@ void CubeDrawer::drawCoords() const {
 }
 
 void CubeDrawer::drawTimes() const {
-	Color clr = properties["labels"].color;
-	clr.m_transparency = properties["labels"].transparency * 255;
-	font->setColor(clr);
-	renderText(font,Coordinate(-1.1, -1.1, -0.9), stMin);
-	renderText(font,Coordinate(-1.1, -1.0, 0.9), stMax);
+	Color clr = properties["coordinates"].color;
+	clr.m_transparency = properties["coordinates"].transparency * 255;
+	mediumFont->setColor(clr);
+	renderText(mediumFont,Coordinate(-1.1, -1.1, -0.9), stMin);
+	renderText(mediumFont,Coordinate(-1.1, -1.0, 0.9), stMax);
 }
 
 void CubeDrawer::renderText(OpenGLText *fnt,const Coordinate & c, const String & text, bool center) const {
@@ -231,9 +234,9 @@ GeneralDrawerProperties *CubeDrawer::getProperties(){
 }
 //---------------------------------------
 CubeProperties::CubeProperties() : GeneralDrawerProperties() {
-	elements["axis"] = CubeElement("Axis", Color(0,255,0),1.0, true);
-	elements["coordinates"] = CubeElement("Coordinates", Color(0,0,0),1.0, true);
-	elements["labels"] = CubeElement("Labels", Color(255,0,0),1.0, true);
+	elements["axis"] = CubeElement("Axis", Color(0,255,0),0.0, true);
+	elements["coordinates"] = CubeElement("Coordinates", Color(0,0,0),0.0, true);
+	elements["labels"] = CubeElement("Labels", Color(0,0,0),0.0, true);
 }
 
 CubeProperties::CubeProperties(CubeProperties *lp){

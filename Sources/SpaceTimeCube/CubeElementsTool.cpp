@@ -140,7 +140,7 @@ int CubeElementsForm::setTransparency(Event *ev) {
 void  CubeElementsForm::apply() {
 	if ( slider) {
 		slider->StoreData();
-		element.transparency = 1.0 - (double)transparency/100.0;
+		element.transparency = (double)transparency/100.0;
 	}
 	if ( fc)
 		fc->StoreData();
