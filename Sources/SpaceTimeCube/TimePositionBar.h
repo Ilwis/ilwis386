@@ -47,6 +47,8 @@
 
 #include "Client\Editors\Utils\sizecbar.h"
 
+class InfoLine;
+
 namespace ILWIS {
 
 	static const unsigned int ID_STC_TIMEPOSITIONSLIDER=15940;
@@ -58,10 +60,21 @@ namespace ILWIS {
 	{
 	public:
 		TimeSliderCtrl();
+		virtual ~TimeSliderCtrl();
+		virtual BOOL Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID);
 		afx_msg void VScroll(UINT nSBCode, UINT nPos);
+		void OnMouseMove(UINT nFlags, CPoint point);
+		void OnLButtonDown(UINT nFlags, CPoint point);
+		void OnLButtonUp(UINT nFlags, CPoint point);
 		void SetSpaceTimeCube(SpaceTimeCube * _spaceTimeCube);
+		void SetTimeOffsetText(String * _sTimeOffsetText);
 	private:
+		void ShowInfoText();
+		void HideInfoText();
 		SpaceTimeCube * spaceTimeCube;
+		InfoLine* info;
+		bool fDragging;
+		String * sTimeOffsetText;
 
 		DECLARE_MESSAGE_MAP();
 	};
@@ -77,6 +90,7 @@ namespace ILWIS {
 		void OnSize(UINT nType, int cx, int cy);
 		//}}AFX_MSG
 		void SetSpaceTimeCube(SpaceTimeCube * _spaceTimeCube);
+		void SetTimeOffsetText(String * _sTimeOffsetText);
 	protected:
 		TimeSliderCtrl slider;
 

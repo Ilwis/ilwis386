@@ -216,6 +216,7 @@ void SpaceTimeCube::setUseSpaceTimeCube(bool yesno) {
 		timePosBar = new TimePositionBar();
 		timePosBar->Create(mpv->dwParent());
 		timePosBar->SetSpaceTimeCube(this);
+		timePosBar->SetTimeOffsetText(&sTimeOffsetText);
 		mpv->GetParentFrame()->DockControlBar(timePosBar, AFX_IDW_DOCKBAR_LEFT);
 		refreshDrawerList();
 	}

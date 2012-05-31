@@ -41,6 +41,7 @@
 #include "Client\Headers\formelementspch.h"
 #include "TimePositionBar.h"
 #include "SpaceTimeCubeTool.h"
+#include "Client\Mapwindow\InfoLine.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -51,13 +52,30 @@ static char THIS_FILE[]=__FILE__;
 using namespace ILWIS;
 
 BEGIN_MESSAGE_MAP(TimeSliderCtrl, CSliderCtrl)
+	ON_WM_MOUSEMOVE()
+	ON_WM_LBUTTONDOWN()
+	ON_WM_LBUTTONUP()
 	ON_WM_VSCROLL_REFLECT()
 END_MESSAGE_MAP()
 
 TimeSliderCtrl::TimeSliderCtrl()
 : CSliderCtrl()
 , spaceTimeCube(0)
+, info(0)
+, fDragging(false)
+, sTimeOffsetText(0)
 {
+}
+
+TimeSliderCtrl::~TimeSliderCtrl()
+{
+	delete info;
+}
+
+BOOL TimeSliderCtrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID)
+{
+	info = new InfoLine(this);
+	return CSliderCtrl::Create(dwStyle, rect, pParentWnd, nID);
 }
 
 void TimeSliderCtrl::SetSpaceTimeCube(SpaceTimeCube * _spaceTimeCube)
@@ -66,10 +84,53 @@ void TimeSliderCtrl::SetSpaceTimeCube(SpaceTimeCube * _spaceTimeCube)
 	SetPos(sliderRange - spaceTimeCube->GetTime() * sliderRange);
 }
 
+void TimeSliderCtrl::SetTimeOffsetText(String * _sTimeOffsetText)
+{
+	sTimeOffsetText = _sTimeOffsetText;
+}
+
 void TimeSliderCtrl::VScroll(UINT nSBCode, UINT nPos)
 {
 	if (spaceTimeCube != 0 && nSBCode == TB_THUMBTRACK)
 		spaceTimeCube->SetTime((sliderRange - nPos) / (double)sliderRange);
+}
+
+void TimeSliderCtrl::ShowInfoText()
+{
+	CRect rect;
+	GetThumbRect(rect);
+	if (sTimeOffsetText != 0)
+		info->text(rect.BottomRight(), *sTimeOffsetText);
+	else
+		info->text(rect.BottomRight(), "");
+}
+
+void TimeSliderCtrl::HideInfoText()
+{
+	CRect rect;
+	GetThumbRect(rect);
+	info->text(rect.BottomRight(), "");
+}
+
+void TimeSliderCtrl::OnMouseMove(UINT nFlags, CPoint point) 
+{
+	if (fDragging)
+		ShowInfoText();
+	CSliderCtrl::OnMouseMove(nFlags, point);
+}
+
+void TimeSliderCtrl::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	fDragging = true;
+	ShowInfoText();
+	CSliderCtrl::OnLButtonDown(nFlags, point);
+}
+
+void TimeSliderCtrl::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	fDragging = false;
+	HideInfoText();
+	CSliderCtrl::OnLButtonUp(nFlags, point);
 }
 
 BEGIN_MESSAGE_MAP( TimePositionBar, CSizingControlBar )
@@ -122,6 +183,11 @@ void TimePositionBar::OnSize(UINT nType, int cx, int cy)
 void TimePositionBar::SetSpaceTimeCube(SpaceTimeCube * _spaceTimeCube)
 {
 	slider.SetSpaceTimeCube(_spaceTimeCube);
+}
+
+void TimePositionBar::SetTimeOffsetText(String * _sTimeOffsetText)
+{
+	slider.SetTimeOffsetText(_sTimeOffsetText);
 }
 
 
