@@ -268,6 +268,8 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 		*fRefreshTexture = false;
 	}
 
+	drawPreDrawers(cbArea);
+
 	// Following 3 lines needed for transparency to work
 	glClearColor(1.0,1.0,1.0,0.0);
 	glEnable(GL_BLEND);
@@ -583,6 +585,8 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 	}
 
 	glPopMatrix();
+
+	drawPostDrawers(cbArea);
 
 	return true;
 }

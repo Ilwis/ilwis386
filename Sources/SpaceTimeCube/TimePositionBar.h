@@ -67,14 +67,15 @@ namespace ILWIS {
 		void OnLButtonDown(UINT nFlags, CPoint point);
 		void OnLButtonUp(UINT nFlags, CPoint point);
 		void SetSpaceTimeCube(SpaceTimeCube * _spaceTimeCube);
-		void SetTimeOffsetText(String * _sTimeOffsetText);
+		void SetTimePosText(String * _sTimePosText);
 	private:
 		void ShowInfoText();
 		void HideInfoText();
 		SpaceTimeCube * spaceTimeCube;
 		InfoLine* info;
 		bool fDragging;
-		String * sTimeOffsetText;
+		bool fShift;
+		String * sTimePosText;
 
 		DECLARE_MESSAGE_MAP();
 	};
@@ -90,7 +91,7 @@ namespace ILWIS {
 		void OnSize(UINT nType, int cx, int cy);
 		//}}AFX_MSG
 		void SetSpaceTimeCube(SpaceTimeCube * _spaceTimeCube);
-		void SetTimeOffsetText(String * _sTimeOffsetText);
+		void SetTimePosText(String * _sTimePosText);
 	protected:
 		TimeSliderCtrl slider;
 

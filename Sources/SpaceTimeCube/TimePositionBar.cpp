@@ -63,7 +63,8 @@ TimeSliderCtrl::TimeSliderCtrl()
 , spaceTimeCube(0)
 , info(0)
 , fDragging(false)
-, sTimeOffsetText(0)
+, fShift(false)
+, sTimePosText(0)
 {
 }
 
@@ -84,23 +85,23 @@ void TimeSliderCtrl::SetSpaceTimeCube(SpaceTimeCube * _spaceTimeCube)
 	SetPos(sliderRange - spaceTimeCube->GetTime() * sliderRange);
 }
 
-void TimeSliderCtrl::SetTimeOffsetText(String * _sTimeOffsetText)
+void TimeSliderCtrl::SetTimePosText(String * _sTimePosText)
 {
-	sTimeOffsetText = _sTimeOffsetText;
+	sTimePosText = _sTimePosText;
 }
 
 void TimeSliderCtrl::VScroll(UINT nSBCode, UINT nPos)
 {
 	if (spaceTimeCube != 0 && nSBCode == TB_THUMBTRACK)
-		spaceTimeCube->SetTime((sliderRange - nPos) / (double)sliderRange);
+		spaceTimeCube->SetTime((sliderRange - nPos) / (double)sliderRange, fShift);
 }
 
 void TimeSliderCtrl::ShowInfoText()
 {
 	CRect rect;
 	GetThumbRect(rect);
-	if (sTimeOffsetText != 0)
-		info->text(rect.BottomRight(), *sTimeOffsetText);
+	if (sTimePosText != 0)
+		info->text(rect.BottomRight(), *sTimePosText);
 	else
 		info->text(rect.BottomRight(), "");
 }
@@ -116,6 +117,7 @@ void TimeSliderCtrl::OnMouseMove(UINT nFlags, CPoint point)
 {
 	if (fDragging)
 		ShowInfoText();
+	fShift = (nFlags & MK_SHIFT);
 	CSliderCtrl::OnMouseMove(nFlags, point);
 }
 
@@ -123,6 +125,7 @@ void TimeSliderCtrl::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	fDragging = true;
 	ShowInfoText();
+	fShift = (nFlags & MK_SHIFT);
 	CSliderCtrl::OnLButtonDown(nFlags, point);
 }
 
@@ -130,6 +133,7 @@ void TimeSliderCtrl::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	fDragging = false;
 	HideInfoText();
+	fShift = (nFlags & MK_SHIFT);
 	CSliderCtrl::OnLButtonUp(nFlags, point);
 }
 
@@ -185,9 +189,9 @@ void TimePositionBar::SetSpaceTimeCube(SpaceTimeCube * _spaceTimeCube)
 	slider.SetSpaceTimeCube(_spaceTimeCube);
 }
 
-void TimePositionBar::SetTimeOffsetText(String * _sTimeOffsetText)
+void TimePositionBar::SetTimePosText(String * _sTimePosText)
 {
-	slider.SetTimeOffsetText(_sTimeOffsetText);
+	slider.SetTimePosText(_sTimePosText);
 }
 
 

@@ -87,7 +87,7 @@ namespace ILWIS {
 		void setFormAutoDeleted();
 		void startLayerOptionsForm();
 		bool showingLayerOptionsForm();
-		void SetTime(double time);
+		void SetTime(double time, bool fShiftDown);
 		double GetTime();
 		TimeBounds * getTimeBoundsZoom() const;
 		const TimeBounds * getTimeBoundsFullExtent() const;
@@ -96,6 +96,7 @@ namespace ILWIS {
 		void update();
 		void replaceDrawer(NewDrawer * oldDrw, NewDrawer * newDrw);
 		bool replaceTreeItem(NewDrawer * oldDrw, SpatialDataDrawer * newDrw, int index);
+		void AddTimeOffsetDrawers(ComplexDrawer * drw, double * timeOffsetVariable, DrawerParameters & dp, PreparationParameters & pp);
 		MapCompositionDoc * getDocument() const;
 		HTREEITEM findTreeItem(NewDrawer* drwFind);
 		TimePositionBar * timePosBar;
@@ -105,8 +106,10 @@ namespace ILWIS {
 		TimeBounds * timeBoundsFullExtent;
 		RangeReal sizeStretch;
 		bool useSpaceTimeCube;
+		double timePos;
 		double timeOffset;
-		String sTimeOffsetText;
+		double timeShift;
+		String sTimePosText;
 		LayerOptionsForm * layerOptionsForm;
 		ZoomableView* mpv;
 		RootDrawer* rootDrawer;

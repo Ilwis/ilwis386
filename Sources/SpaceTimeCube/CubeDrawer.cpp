@@ -15,8 +15,8 @@ ILWIS::NewDrawer *createCubeDrawer(DrawerParameters *parms) {
 
 CubeDrawer::CubeDrawer(DrawerParameters *parms)
 : ComplexDrawer(parms,"CubeDrawer")
-, timeOffset(0)
-, sTimeOffsetText(0)
+, timePos(0)
+, sTimePosText(0)
 , font(0)
 , mediumFont(0)
 {
@@ -77,25 +77,27 @@ void CubeDrawer::prepare(PreparationParameters *pp) {
 			stMin = timeBounds->tMin().isValid() ? timeBounds->tMin().toString() : "";
 			stMax = timeBounds->tMax().isValid() ? timeBounds->tMax().toString() : "";
 
-			if (timeOffset != 0 && sTimeOffsetText != 0) {
+			if (timePos != 0 && sTimePosText != 0) {
 				if (timeBounds->tMin().isValid() && timeBounds->tMax().isValid()) {
-					Time tPos (timeBounds->tMin() + (Time)((timeBounds->tMax() - timeBounds->tMin()) * *timeOffset));
-					*sTimeOffsetText = tPos.toString();
+					Time tPos (timeBounds->tMin() + (Time)((timeBounds->tMax() - timeBounds->tMin()) * *timePos));
+					*sTimePosText = tPos.toString();
 				} else
-					*sTimeOffsetText = "";
+					*sTimePosText = "";
 			}
 		}
 	}
 }
 
-void CubeDrawer::SetTimeOffsetVariables(double * _timeOffset, String * _sTimeOffsetText) {
-	timeOffset = _timeOffset;
-	sTimeOffsetText = _sTimeOffsetText;
+void CubeDrawer::SetTimePosVariables(double * _timePos, String * _sTimePosText) {
+	timePos = _timePos;
+	sTimePosText = _sTimePosText;
 }
 
 bool CubeDrawer::draw(const CoordBounds& cbArea) const{
 	if ( !isActive() || !isValid())
 		return false;
+
+	drawPreDrawers(cbArea);
 
 	glPushMatrix();
 	glTranslated(cube.cMin.x + cube.width() / 2.0, cube.cMin.y + cube.height() / 2.0, cube.cMin.z + cube.altitude() / 2.0);
@@ -119,6 +121,8 @@ bool CubeDrawer::draw(const CoordBounds& cbArea) const{
 	}
 
 	glPopMatrix();
+
+	drawPostDrawers(cbArea);
 	return true;
 }
 
@@ -232,8 +236,8 @@ void CubeDrawer::drawTimes() const {
 	renderText(mediumFont,Coordinate(-1.1, -1.1, -0.9), stMin);
 	renderText(mediumFont,Coordinate(-1.1, -1.1, 0.9), stMax);
 
-	if (timeOffset != 0 && sTimeOffsetText != 0)
-		renderText(mediumFont, Coordinate(-1.1, -1.1, -0.9 + 1.8 * *timeOffset), *sTimeOffsetText);
+	if (timePos != 0 && sTimePosText != 0)
+		renderText(mediumFont, Coordinate(-1.1, -1.1, -0.9 + 1.8 * *timePos), *sTimePosText);
 }
 
 void CubeDrawer::renderText(OpenGLText *fnt,const Coordinate & c, const String & text, bool center) const {

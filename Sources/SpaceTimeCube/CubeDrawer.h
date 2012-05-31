@@ -54,7 +54,7 @@ namespace ILWIS {
 		bool draw( const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *pp);
 		GeneralDrawerProperties *getProperties();
-		void SetTimeOffsetVariables(double * _timeOffset, String * _sTimeOffsetText);
+		void SetTimePosVariables(double * _timePos, String * _sTimePosText);
 	protected:
 		void drawCube() const;
 		void drawTicMarks() const;
@@ -64,8 +64,8 @@ namespace ILWIS {
 		void renderText(OpenGLText *font, const Coordinate & c, const String & text, bool center=false) const;
 		String sxMin, sxMax, syMin, syMax, stMin, stMax;
 		CoordBounds cube;
-		double * timeOffset;
-		String * sTimeOffsetText;
+		double * timePos;
+		String * sTimePosText;
 		OpenGLText * font;
 		OpenGLText * mediumFont;
 		CubeProperties properties;

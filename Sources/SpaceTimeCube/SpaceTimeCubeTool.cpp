@@ -162,7 +162,9 @@ SpaceTimeCube::SpaceTimeCube(ZoomableView * _mpv, LayerTreeView * _tree, NewDraw
 , layerOptionsForm(0)
 , timeBoundsZoom(new TimeBounds())
 , timeBoundsFullExtent(new TimeBounds())
+, timePos(0)
 , timeOffset(0)
+, timeShift(0)
 {
 }
 
@@ -216,7 +218,7 @@ void SpaceTimeCube::setUseSpaceTimeCube(bool yesno) {
 		timePosBar = new TimePositionBar();
 		timePosBar->Create(mpv->dwParent());
 		timePosBar->SetSpaceTimeCube(this);
-		timePosBar->SetTimeOffsetText(&sTimeOffsetText);
+		timePosBar->SetTimePosText(&sTimePosText);
 		mpv->GetParentFrame()->DockControlBar(timePosBar, AFX_IDW_DOCKBAR_LEFT);
 		refreshDrawerList();
 	}
@@ -285,6 +287,9 @@ void SpaceTimeCube::refreshDrawerList() {
 				temporalDrawer->SetSelfTime();
 			else
 				temporalDrawer->SetTimeAttribute(layerList[i].getTimeColumn());
+			DrawerParameters dp(rootDrawer, rootDrawer);
+			PreparationParameters pp(NewDrawer::ptALL);
+			AddTimeOffsetDrawers((ComplexDrawer*)newDrw, &timeShift, dp, pp);
 		}
 		SortableDrawer * sortableDrawer = dynamic_cast<SortableDrawer*>(((ComplexDrawer*)newDrw)->getDrawer(0));
 		if (sortableDrawer) {
@@ -336,21 +341,8 @@ void SpaceTimeCube::refreshDrawerList() {
 						}
 					}
 					// if not found in the layerList, or it does not use time, handle it
-					if (j >= layerList.size()) {
-						PreTimeOffsetDrawer* preTimeOffset = dynamic_cast<PreTimeOffsetDrawer*>(NewDrawer::getDrawer("PreTimeOffsetDrawer", "Cube", &dp));
-						ownDrawerIDs.push_back(preTimeOffset->getId());
-						TemporalDrawer * temporalDrawer = dynamic_cast<TemporalDrawer*>(preTimeOffset);
-						temporalDrawer->SetTimeBounds(timeBoundsZoom);
-						preTimeOffset->prepare(&pp);
-						preTimeOffset->SetTimeOffsetVariable(&timeOffset);
-						PostTimeOffsetDrawer* postTimeOffset = dynamic_cast<PostTimeOffsetDrawer*>(NewDrawer::getDrawer("PostTimeOffsetDrawer", "Cube", &dp));
-						ownDrawerIDs.push_back(postTimeOffset->getId());
-						temporalDrawer = dynamic_cast<TemporalDrawer*>(postTimeOffset);
-						temporalDrawer->SetTimeBounds(timeBoundsZoom);
-						postTimeOffset->prepare(&pp);
-						drw->addPreDrawer(0, preTimeOffset);
-						drw->addPostDrawer(999, postTimeOffset);
-					}
+					if (j >= layerList.size())
+						AddTimeOffsetDrawers(drw, &timeOffset, dp, pp);
 				}
 			}
 		}
@@ -362,8 +354,9 @@ void SpaceTimeCube::refreshDrawerList() {
 		ownDrawerIDs.push_back(cube->getId());
 		TemporalDrawer * temporalDrawer = dynamic_cast<TemporalDrawer*>(cube);
 		temporalDrawer->SetTimeBounds(timeBoundsZoom);
-		cube->SetTimeOffsetVariables(&timeOffset, &sTimeOffsetText); // before prepare!! (so that "prepare" can take care of these variables as well)
+		cube->SetTimePosVariables(&timePos, &sTimePosText); // before prepare!! (so that "prepare" can take care of these variables as well)
 		cube->prepare(&pp);
+		AddTimeOffsetDrawers(cube, &timeShift, dp, pp);
 	}
 
 	// disable the background drawer in Space Time Cube mode
@@ -382,6 +375,23 @@ void SpaceTimeCube::refreshDrawerList() {
 	rootDrawer->setZoom3D(zoom3D);
 
 	mpv->Invalidate();
+}
+
+void SpaceTimeCube::AddTimeOffsetDrawers(ComplexDrawer * drw, double * timeOffsetVariable, DrawerParameters & dp, PreparationParameters & pp)
+{
+	PreTimeOffsetDrawer* preTimeOffset = dynamic_cast<PreTimeOffsetDrawer*>(NewDrawer::getDrawer("PreTimeOffsetDrawer", "Cube", &dp));
+	ownDrawerIDs.push_back(preTimeOffset->getId());
+	TemporalDrawer * temporalDrawer = dynamic_cast<TemporalDrawer*>(preTimeOffset);
+	temporalDrawer->SetTimeBounds(timeBoundsZoom);
+	preTimeOffset->prepare(&pp);
+	preTimeOffset->SetTimeOffsetVariable(timeOffsetVariable);
+	PostTimeOffsetDrawer* postTimeOffset = dynamic_cast<PostTimeOffsetDrawer*>(NewDrawer::getDrawer("PostTimeOffsetDrawer", "Cube", &dp));
+	ownDrawerIDs.push_back(postTimeOffset->getId());
+	temporalDrawer = dynamic_cast<TemporalDrawer*>(postTimeOffset);
+	temporalDrawer->SetTimeBounds(timeBoundsZoom);
+	postTimeOffset->prepare(&pp);
+	drw->addPreDrawer(0, preTimeOffset);
+	drw->addPostDrawer(999, postTimeOffset);
 }
 
 void SpaceTimeCube::replaceDrawer(NewDrawer * oldDrw, NewDrawer * newDrw)
@@ -455,13 +465,17 @@ bool SpaceTimeCube::showingLayerOptionsForm()
 	return layerOptionsForm != 0;
 }
 
-void SpaceTimeCube::SetTime(double time) {
-	timeOffset = time;
+void SpaceTimeCube::SetTime(double time, bool fShiftDown) {
+	if (fShiftDown)
+		timeShift += timePos - time;
+	else 
+		timeOffset += time - timePos;
+	timePos = time;
 	if (timeBoundsZoom->tMin().isValid() && timeBoundsZoom->tMax().isValid()) {
-		Time tPos (timeBoundsZoom->tMin() + (Time)((timeBoundsZoom->tMax() - timeBoundsZoom->tMin()) * timeOffset));
-		sTimeOffsetText = tPos.toString();
+		Time tPos (timeBoundsZoom->tMin() + (Time)((timeBoundsZoom->tMax() - timeBoundsZoom->tMin()) * timePos));
+		sTimePosText = tPos.toString();
 	} else
-		sTimeOffsetText = "";
+		sTimePosText = "";
 
 	mpv->Invalidate();
 }
@@ -477,7 +491,7 @@ const TimeBounds * SpaceTimeCube::getTimeBoundsFullExtent() const
 }
 
 double SpaceTimeCube::GetTime() {
-	return timeOffset;
+	return timePos;
 }
 
 //------------------------------------------------------
