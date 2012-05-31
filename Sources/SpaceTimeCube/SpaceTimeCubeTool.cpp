@@ -362,6 +362,16 @@ void SpaceTimeCube::refreshDrawerList() {
 		temporalDrawer->SetTimeBounds(timeBoundsZoom);
 		cube->prepare(&pp);
 	}
+
+	// disable the background drawer in Space Time Cube mode
+	NewDrawer * backgroundDrawer = rootDrawer->getBackgroundDrawer();
+	if (backgroundDrawer) {
+		HTREEITEM hItemBackground = findTreeItem(backgroundDrawer);
+		if (hItemBackground)
+			tree->GetTreeCtrl().SetCheck(hItemBackground, !useSpaceTimeCube );
+		backgroundDrawer->setActive(!useSpaceTimeCube);
+	}
+	
 	// restore (because the drAppend changed it all)
 	rootDrawer->setCoordBoundsZoom(cbZoom);
 	rootDrawer->setRotationAngles(rotX, rotY, rotZ);
@@ -401,10 +411,15 @@ HTREEITEM SpaceTimeCube::findTreeItem(NewDrawer* drwFind)
 		LayerTreeItem *data = (LayerTreeItem*)tree->GetTreeCtrl().GetItemData(hti);
 		if ( data) {
 			DrawerLayerTreeItem *dlti = dynamic_cast<DrawerLayerTreeItem *>(data);
-			if ( dlti) {
-				SpatialDataDrawer *spdrw = dynamic_cast<SpatialDataDrawer *>(dlti->drw());
-				if (spdrw == drwFind)
+			if (dlti) {
+				if (dlti->drw() == drwFind)
 					return hti;
+			} else {
+				DisplayOptionTreeItem *doti = dynamic_cast<DisplayOptionTreeItem *>(data);
+				if (doti) {
+					if ( doti->drw() == drwFind)
+						return hti;
+				}
 			}
 		}
 		hti= tree->GetTreeCtrl().GetNextItem(hti, TVGN_NEXT);
