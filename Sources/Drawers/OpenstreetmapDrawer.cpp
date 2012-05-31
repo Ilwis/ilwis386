@@ -91,12 +91,14 @@ bool OpenstreetmapDrawer::draw( const CoordBounds& cbArea) const {
 		glEnable(GL_TEXTURE_2D);
 		glMatrixMode(GL_TEXTURE);
 		glPushMatrix();
-		//CoordBounds cb2 (Coord(-45,-45), Coord(45, 45));
-		//CoordSystem pm("d:\\Projects\\Ilwis\\Ilwis38\\Debug\\Ilwis3\\system\\basemaps\\PM2.csy");
-		//CoordSystem pm2("LatLonWgs84.csy");
-		CoordBounds cb(Coord(-20037508.34, -20037508.34), Coord(20037508.34, 20037508.34));
-
-		DisplayImagePortion(cb);
+		CoordBounds cb1(Coord(-20037508.34, -20037508.34), Coord(0, 0));
+		CoordBounds cb2(Coord(0, 0), Coord(20037508.34, 20037508.34));
+		CoordBounds cb3(Coord(-20037508.34, 0), Coord(0, 20037508.34));
+		CoordBounds cb4(Coord(0, -20037508.34), Coord(20037508.34, 0));
+		DisplayImagePortion(cb1);
+		DisplayImagePortion(cb2);
+		DisplayImagePortion(cb3);
+		DisplayImagePortion(cb4);
 		glPopMatrix();
 		glMatrixMode(GL_MODELVIEW);
 		glDisable(GL_TEXTURE_2D);
@@ -136,13 +138,46 @@ void OpenstreetmapDrawer::DisplayImagePortion(CoordBounds& cb) const {
 	Coord c2 (getRootDrawer()->glConv(csy, b2));
 	Coord c3 (getRootDrawer()->glConv(csy, b3));
 	Coord c4 (getRootDrawer()->glConv(csy, b4));
+	/*
+	if (abs(c1.x - c2.x) < 0.01)
+		c1.x = - c1.x;
+	if (abs (c3.x - c4.x) < 0.01)
+		c4.x = -c4.x;
+	*/
 	glVertex3d(c1.x, c1.y, 0.0);
 	glVertex3d(c2.x, c2.y, 0.0);
 	glVertex3d(c3.x, c3.y, 0.0);
 	glVertex3d(c4.x, c4.y, 0.0);
 	glEnd();
-	if (0 == glRenderMode(GL_RENDER))
+	if (0 == glRenderMode(GL_RENDER)) {
+		CoordBounds cbViewport = getRootDrawer()->getCoordBoundsZoom();
+		Coord c4 (cbViewport.cMin);
+		Coord c3 (cbViewport.cMax.x, cbViewport.cMin.y);
+		Coord c2 (cbViewport.cMax);
+		Coord c1 (cbViewport.cMin.x, cbViewport.cMax.y);
+		Coord b1 (getRootDrawer()->glToWorld(csy, c1));
+		Coord b2 (getRootDrawer()->glToWorld(csy, c2));
+		Coord b3 (getRootDrawer()->glToWorld(csy, c3));
+		Coord b4 (getRootDrawer()->glToWorld(csy, c4));
+		CoordBounds cbView (b1, b2);
+		cbView += b3;
+		cbView += b4;
+		if (cb.fContains(cbView)) {
+			double sizeX2 = cb.width() / 2.0;
+			double sizeY2 = cb.height() / 2.0;
+			if (sizeX2 > 1000000 && sizeY2 > 1000000) { // if we haven't found it within 1000 km, then it is a really weird projection
+				// Q1
+				DisplayImagePortion(CoordBounds(cb.cMin, Coord(cb.cMin.x + sizeX2, cb.cMin.y + sizeY2)));
+				// Q2
+				DisplayImagePortion(CoordBounds(Coord(cb.cMin.x + sizeX2, cb.cMin.y), Coord(cb.cMax.x, cb.cMin.y + sizeY2)));
+				// Q3
+				DisplayImagePortion(CoordBounds(Coord(cb.cMin.x + sizeX2, cb.cMin.y + sizeY2), cb.cMax));
+				// Q4
+				DisplayImagePortion(CoordBounds(Coord(cb.cMin.x, cb.cMin.y + sizeY2), Coord(cb.cMin.x + sizeX2, cb.cMax.y)));
+			}
+		}
 		return;
+	}
 
 	// 4 x 3 doubles to project onto xy screen coordinates
 	GLdouble m_winx[4];
