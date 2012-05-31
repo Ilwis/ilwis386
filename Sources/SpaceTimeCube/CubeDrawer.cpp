@@ -75,8 +75,6 @@ void CubeDrawer::prepare(PreparationParameters *pp) {
 			stMin = timeBounds->tMin().isValid() ? timeBounds->tMin().toString() : "";
 			stMax = timeBounds->tMax().isValid() ? timeBounds->tMax().toString() : "";
 		}
-		NewDrawer *ndrw = getRootDrawer()->getBackgroundDrawer();
-		ndrw->setTransparency(0.85);
 	}
 }
 
