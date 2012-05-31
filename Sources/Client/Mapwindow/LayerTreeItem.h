@@ -152,7 +152,7 @@ private:
 class _export DisplayOptionTreeItem: public LayerTreeItem
 {
 public:
-	DisplayOptionTreeItem(LayerTreeView*, HTREEITEM parent, ILWIS::NewDrawer *dr);
+	DisplayOptionTreeItem(LayerTreeView*, HTREEITEM parent, ILWIS::NewDrawer *drw);
 	virtual ~DisplayOptionTreeItem();
 	virtual void OnLButtonDblClk(UINT nFlags, CPoint point);
 	void SwitchCheckBox(bool fOn);
@@ -165,13 +165,13 @@ public:
 	void expand();
 	void setTool(DrawerTool *t);
 	void setImage(int im);
-
+	ILWIS::NewDrawer* drw() const { return dr; }
 	
 protected:
 	DTDoubleClickActionFunc dbcAction;
 	DTSetCheckFunc dtSetCheckFunc;
 
-	ILWIS::NewDrawer *drw;
+	ILWIS::NewDrawer *dr;
 	ILWIS::NewDrawer *altHandler;
 	ILWIS::DrawerTool *dbctool;
 	ILWIS::DrawerTool *chctool;
