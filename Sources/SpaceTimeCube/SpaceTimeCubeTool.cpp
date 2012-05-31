@@ -25,6 +25,7 @@
 #include "Client\FormElements\FieldIntSlider.h"
 #include "CubeElementsTool.h"
 #include "Client\Base\datawind.h"
+#include "CubeDrawer.h"
 
 LayerData::LayerData(NewDrawer *drw)
 : drawerId(drw->getId())
@@ -355,11 +356,12 @@ void SpaceTimeCube::refreshDrawerList() {
 
 		*timeBoundsZoom = *timeBoundsFullExtent;
 
-		NewDrawer * cube = NewDrawer::getDrawer("CubeDrawer", "Cube", &dp);
+		CubeDrawer * cube = dynamic_cast<CubeDrawer*>(NewDrawer::getDrawer("CubeDrawer", "Cube", &dp));
 		rootDrawer->insertDrawer(0, cube);
 		ownDrawerIDs.push_back(cube->getId());
 		TemporalDrawer * temporalDrawer = dynamic_cast<TemporalDrawer*>(cube);
 		temporalDrawer->SetTimeBounds(timeBoundsZoom);
+		cube->SetTimeOffsetVariables(&timeOffset, &sTimeOffsetText); // before prepare!! (so that "prepare" can take care of these variables as well)
 		cube->prepare(&pp);
 	}
 
@@ -454,6 +456,12 @@ bool SpaceTimeCube::showingLayerOptionsForm()
 
 void SpaceTimeCube::SetTime(double time) {
 	timeOffset = time;
+	if (timeBoundsZoom->tMin().isValid() && timeBoundsZoom->tMax().isValid()) {
+		Time tPos (timeBoundsZoom->tMin() + (Time)((timeBoundsZoom->tMax() - timeBoundsZoom->tMin()) * timeOffset));
+		sTimeOffsetText = tPos.toString();
+	} else
+		sTimeOffsetText = "";
+
 	mpv->Invalidate();
 }
 

@@ -106,6 +106,7 @@ namespace ILWIS {
 		RangeReal sizeStretch;
 		bool useSpaceTimeCube;
 		double timeOffset;
+		String sTimeOffsetText;
 		LayerOptionsForm * layerOptionsForm;
 		ZoomableView* mpv;
 		RootDrawer* rootDrawer;

@@ -15,6 +15,8 @@ ILWIS::NewDrawer *createCubeDrawer(DrawerParameters *parms) {
 
 CubeDrawer::CubeDrawer(DrawerParameters *parms)
 : ComplexDrawer(parms,"CubeDrawer")
+, timeOffset(0)
+, sTimeOffsetText(0)
 , font(0)
 , mediumFont(0)
 {
@@ -74,10 +76,22 @@ void CubeDrawer::prepare(PreparationParameters *pp) {
 		if (timeBounds != 0) {
 			stMin = timeBounds->tMin().isValid() ? timeBounds->tMin().toString() : "";
 			stMax = timeBounds->tMax().isValid() ? timeBounds->tMax().toString() : "";
+
+			if (timeOffset != 0 && sTimeOffsetText != 0) {
+				if (timeBounds->tMin().isValid() && timeBounds->tMax().isValid()) {
+					Time tPos (timeBounds->tMin() + (Time)((timeBounds->tMax() - timeBounds->tMin()) * *timeOffset));
+					*sTimeOffsetText = tPos.toString();
+				} else
+					*sTimeOffsetText = "";
+			}
 		}
 	}
 }
 
+void CubeDrawer::SetTimeOffsetVariables(double * _timeOffset, String * _sTimeOffsetText) {
+	timeOffset = _timeOffset;
+	sTimeOffsetText = _sTimeOffsetText;
+}
 
 bool CubeDrawer::draw(const CoordBounds& cbArea) const{
 	if ( !isActive() || !isValid())
@@ -216,7 +230,10 @@ void CubeDrawer::drawTimes() const {
 	clr.m_transparency = properties["coordinates"].transparency * 255;
 	mediumFont->setColor(clr);
 	renderText(mediumFont,Coordinate(-1.1, -1.1, -0.9), stMin);
-	renderText(mediumFont,Coordinate(-1.1, -1.0, 0.9), stMax);
+	renderText(mediumFont,Coordinate(-1.1, -1.1, 0.9), stMax);
+
+	if (timeOffset != 0 && sTimeOffsetText != 0)
+		renderText(mediumFont, Coordinate(-1.1, -1.1, -0.9 + 1.8 * *timeOffset), *sTimeOffsetText);
 }
 
 void CubeDrawer::renderText(OpenGLText *fnt,const Coordinate & c, const String & text, bool center) const {
