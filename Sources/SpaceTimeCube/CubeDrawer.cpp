@@ -89,22 +89,25 @@ bool CubeDrawer::draw(const CoordBounds& cbArea) const{
 	glTranslated(cube.cMin.x + cube.width() / 2.0, cube.cMin.y + cube.height() / 2.0, cube.cMin.z + cube.altitude() / 2.0);
 	glScaled(cube.width() / 2.0, cube.height() / 2.0, cube.altitude() / 2.0);
 
-	Color clr = properties["axis"].color;
-	clr.m_transparency = properties["axis"].transparency * 255;
-	glColor4f(clr.redP(), clr.greenP(), clr.blueP(), clr.transparencyP());
-	drawCube();
-	drawTicMarks();
-	drawLabels();
-	drawCoords();
-	drawTimes();
+	if (properties["axis"].visible) {
+		Color clr = properties["axis"].color;
+		clr.m_transparency = properties["axis"].transparency * 255;
+		glColor4f(clr.redP(), clr.greenP(), clr.blueP(), clr.transparencyP());
+		drawCube();
+		drawTicMarks();
+	}
+	if (properties["labels"].visible)
+		drawLabels();
+	if (properties["coordinates"].visible) {
+		drawCoords();
+		drawTimes();
+	}
 
 	glPopMatrix();
 	return true;
 }
 
 void CubeDrawer::drawCube() const {	
-	if ( !properties["axis"].visible)
-		return;
 
 	// Front Face
 	glBegin(GL_LINE_STRIP);
@@ -183,8 +186,6 @@ void CubeDrawer::drawTicMarks() const {
 }
 
 void CubeDrawer::drawLabels() const {
-	if ( !properties["labels"].visible)
-		return;
 	Color clr = properties["labels"].color;
 	clr.m_transparency = properties["labels"].transparency * 255;
 	font->setColor(clr);
@@ -194,8 +195,6 @@ void CubeDrawer::drawLabels() const {
 }
 
 void CubeDrawer::drawCoords() const {
-	if ( !properties["coordinates"].visible)
-		return;
 	Color clr = properties["coordinates"].color;
 	clr.m_transparency = properties["coordinates"].transparency * 255;
 	mediumFont->setColor(clr);
