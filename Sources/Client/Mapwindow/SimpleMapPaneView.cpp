@@ -287,6 +287,7 @@ UINT SimpleMapPaneView::DrawInThread(LPVOID lp)
 	}
 	catch(ErrorObject& err)
 	{
+		mcd->rootDrawer->getDrawerContext()->ReleaseContext();
 		err.Show();
 	}
 	mpv->fStopDrawThread = false;
