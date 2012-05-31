@@ -135,6 +135,9 @@ void PointScalingForm::apply(){
 	else
 		props->scaleMode = PointProperties::sNONE;
 	PreparationParameters pp(NewDrawer::ptRENDER, 0);
+	//FileName fn(name);
+	RepresentationProperties rprop;
+	pp.props = &rprop;
 	drw->prepare(&pp);
 
 	updateMapView();
