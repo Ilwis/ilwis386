@@ -130,6 +130,7 @@ namespace ILWIS {
 		void setUseSpaceTimeCube(void *v, HTREEITEM);
 		void startLayerOptionsForm();
 		SpaceTimeCube * stc;
+		vector<HTREEITEM> htiElements;
 	};
 
 	class LayerOptionsForm : public DisplayOptionsForm {

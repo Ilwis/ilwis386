@@ -23,6 +23,7 @@
 #include "Client\FormElements\FldOneSelectTextOnly.h"
 #include "Client\FormElements\objlist.h"
 #include "Client\FormElements\FieldIntSlider.h"
+#include "TimeZoomTool.h"
 #include "CubeElementsTool.h"
 #include "Client\Base\datawind.h"
 #include "CubeDrawer.h"
@@ -686,6 +687,7 @@ DrawerTool *createSpaceTimeCubeTool(ZoomableView* zv, LayerTreeView *view, NewDr
 SpaceTimeCubeTool::SpaceTimeCubeTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw)
 : DrawerTool("SpaceTimeCubeTool",zv, view, drw)
 , stc(SpaceTimeCube::getSpaceTimeCube(zv, view, drw))
+, htiElements(0)
 {
 }
 
@@ -735,10 +737,20 @@ void SpaceTimeCubeTool::startLayerOptionsForm() {
 void SpaceTimeCubeTool::setUseSpaceTimeCube(void *v, HTREEITEM) {
 	bool useSpaceTimeCube = *(bool *)v;
 	stc->setUseSpaceTimeCube(useSpaceTimeCube);
-	NewDrawer *drw = drawer->getRootDrawer()->getDrawer("CubeDrawer");
-	drawer = drw;
-	CubeElementsTool *ceTool = new CubeElementsTool(mpvGetView(), getDocument()->ltvGetView(),drawer);
-	addTool(ceTool);
-	ceTool->configure(htiNode);
+	if (useSpaceTimeCube) {
+		// NewDrawer *drw = drawer->getRootDrawer()->getDrawer("CubeDrawer");
+		// drawer = drw; // NO!! drawer must be RootDrawer. Those tools outlive the CubeDrawer. Inside the tools, RootDrawer is used to find the applicable drawer
+		TimeZoomTool * tzTool = new TimeZoomTool(mpvGetView(), getDocument()->ltvGetView(), drawer);
+		addTool(tzTool);
+		htiElements.push_back(tzTool->configure(htiNode));
+		CubeElementsTool * ceTool = new CubeElementsTool(mpvGetView(), getDocument()->ltvGetView(), drawer);
+		addTool(ceTool);
+		htiElements.push_back(ceTool->configure(htiNode));
+	} else {
+		for (vector<HTREEITEM>::iterator it = htiElements.begin(); it != htiElements.end(); ++it)
+			tree->GetTreeCtrl().DeleteItem(*it);
+		htiElements.clear();
+		removeTool(0);
+	}
 }
 
