@@ -129,6 +129,8 @@ namespace ILWIS {
 	private:
 		void setUseSpaceTimeCube(void *v, HTREEITEM);
 		void startLayerOptionsForm();
+		void addTools();
+		void removeTools();
 		SpaceTimeCube * stc;
 		vector<HTREEITEM> htiElements;
 	};
