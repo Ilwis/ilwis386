@@ -291,6 +291,7 @@ ILWIS::Time::Time(const CTime& time){
 
 ILWIS::Time::Time(double juliand) {
 	julianday = juliand;
+	valid = (juliand != rUNDEF);
 }
 
 ILWIS::Time::operator CTime() const{
