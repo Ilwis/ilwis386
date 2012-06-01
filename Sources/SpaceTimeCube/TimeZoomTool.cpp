@@ -60,7 +60,7 @@ void TimeZoomTool::displayOptionTimeZoom() {
 		delete timeZoomForm;
 		timeZoomForm = 0;
 	}
-	if (stc->fUseSpaceTimeCube() && !stc->getTimeBoundsFullExtent()->fUndef()) {
+	if (stc->fUseSpaceTimeCube() && stc->getTimeBoundsFullExtent()->fValid()) {
 		timeZoomForm = new TimeZoomForm(tree, (ComplexDrawer *)drawer, htiNode, stc, *this);
 		if (fRestorePosition)
 			timeZoomForm->SetWindowPos(tree, rect.left, rect.top, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOREPOSITION);
