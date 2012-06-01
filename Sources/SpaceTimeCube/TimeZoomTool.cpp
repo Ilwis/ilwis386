@@ -29,17 +29,17 @@ TimeZoomTool::~TimeZoomTool() {
 }
 
 bool TimeZoomTool::isToolUseableFor(ILWIS::DrawerTool *tool) { 
-	SpaceTimeCubeTool *stct = dynamic_cast<SpaceTimeCubeTool *>(tool);
-	if ( !stct )
-		return false;
-	parentTool = tool;
-	stc = stct->getSpaceTimeCube();
-	return true;
+	return false;
 }
 
 HTREEITEM TimeZoomTool::configure( HTREEITEM parentItem) {
 	if ( !active)
 		return parentItem;
+
+	SpaceTimeCubeTool *stct = dynamic_cast<SpaceTimeCubeTool *>(parentTool);
+	if ( stct )
+		stc = stct->getSpaceTimeCube();
+
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&TimeZoomTool::displayOptionTimeZoom);
 	//ILWIS::Time tMin = stc->getTimeBoundsZoom()->tMin();
