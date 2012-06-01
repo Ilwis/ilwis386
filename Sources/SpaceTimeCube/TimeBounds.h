@@ -9,7 +9,7 @@ public:
 	virtual ~TimeBounds();
 	void AddMinMax(Time & tMin, Time & tMax);
 	void Reset();
-	bool fUndef() const;
+	bool fValid() const;
 	const Time & tMin() const {return m_tMin;};
 	const Time & tMax() const {return m_tMax;};
 protected:

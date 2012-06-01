@@ -24,8 +24,8 @@ void TimeBounds::Reset() {
 	m_tMax = rUNDEF;
 }
 
-bool TimeBounds::fUndef() const {
-	return !(m_tMin.isValid() && m_tMax.isValid());
+bool TimeBounds::fValid() const {
+	return m_tMin.isValid() && m_tMax.isValid();
 }
 
 void TimeBounds::AddMinMax(Time & tMin, Time & tMax)
