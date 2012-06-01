@@ -61,7 +61,7 @@ HTREEITEM CubeElementsTool::configure( HTREEITEM parentItem) {
 }
 
 void CubeElementsTool::setVisibility(const String& element, bool value) {
-	CubeProperties *prop = (CubeProperties *)((CubeDrawer *)drawer)->getProperties();
+	CubeProperties *prop = (CubeProperties *)((CubeDrawer *)(drawer->getRootDrawer()->getDrawer("CubeDrawer")))->getProperties();
 	if (prop) {
 		(*prop)[element].visible = value;
 		
@@ -70,7 +70,7 @@ void CubeElementsTool::setVisibility(const String& element, bool value) {
 }
 
 void CubeElementsTool::elementForm(const String& element) {
-	CubeProperties *prop = (CubeProperties *)((CubeDrawer *)drawer)->getProperties();
+	CubeProperties *prop = (CubeProperties *)((CubeDrawer *)(drawer->getRootDrawer()->getDrawer("CubeDrawer")))->getProperties();
 	if ( prop)
 		new CubeElementsForm(tree,(ComplexDrawer *)drawer, htiNode,prop->elements[element]);
 }
