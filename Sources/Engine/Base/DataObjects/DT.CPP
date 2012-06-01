@@ -304,6 +304,7 @@ ILWIS::Time::operator CTime() const{
 }
 time_t ILWIS::Time::toTime_t() const{
 	struct tm time;
+	memset(&time, 0, sizeof(tm));
 	if ( abs(julianday) > NOTIME) {
 		return (__int64) iUNDEF;
 	}
@@ -789,6 +790,7 @@ String ILWIS::Time::toString(bool local, ILWIS::Time::Mode mode) const{
 	if ( year == -4172 && mode != mTIME )
 		return "?";
 	struct tm time;
+	memset(&time, 0, sizeof(tm));
 	time.tm_year = isLeapYear() ? 96 : 97;
 	time.tm_mon  = month - 1 ; // 0 based
 	time.tm_mday = day;
@@ -811,9 +813,9 @@ String ILWIS::Time::toString(bool local, ILWIS::Time::Mode mode) const{
 		if ( mode == mDATE)
 			return String("%d-%d-%d", year, month, day);
 		else if ( mode == mDATETIME)
-			return String("%04d-%02d-%02dT%02d:%02d:%02d", year, month, day, hour, minutes, seconds);
+			return String("%04d-%02d-%02dT%02d:%02d:%02.02f", year, month, day, hour, minutes, seconds);
 		else if ( mode == mTIME)
-			return String("T%02d:%02d:%02d", hour, minutes, seconds);
+			return String("T%02d:%02d:%02.02f", hour, minutes, seconds);
 	}
 	return "?";
 }
