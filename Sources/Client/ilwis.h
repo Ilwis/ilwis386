@@ -86,7 +86,7 @@ class MapCompositionDoc;
 class BaseMap;
 
 namespace ILWIS {
-	class SVGElement;
+	class IVGElement;
 	class SVGLoader;
 	class BaseMapEditor;
 	class BaseMapEditor;
