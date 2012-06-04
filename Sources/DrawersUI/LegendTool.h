@@ -48,6 +48,7 @@ private:
   long iRaw;
   Color col;
   int transparency;
+  String hatching;
 
 };
 

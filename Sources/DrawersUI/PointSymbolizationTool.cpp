@@ -73,7 +73,7 @@ PointSymbolizationForm::PointSymbolizationForm(CWnd *wPar, PointLayerDrawer *dr)
 DisplayOptionsForm(dr,wPar,TR("Symbolization")), selection(0)
 {
 	ILWIS::SVGLoader *loader = NewDrawer::getSvgLoader();
-	for(map<String, SVGElement *>::iterator cur = loader->begin(); cur != loader->end(); ++cur) {
+	for(map<String, IVGElement *>::iterator cur = loader->begin(); cur != loader->end(); ++cur) {
 		String name = (*cur).first;
 		name = name.sHead("|");
 		names.push_back(name);

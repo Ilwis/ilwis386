@@ -208,9 +208,15 @@ DisplayOptionsForm(dr,wPar,TR("Polygon Representation")),rcl(rc), iRaw(raw)
     sText = rcl->dm()->sValueByRaw(raw,0);
   col = rcl->clrRaw(iRaw);
 
+  String base = getEngine()->getContext()->sIlwDir();
+  base += "Resources\\Symbols\\";
   StaticText* st = new StaticText(root, sText);
   st->SetIndependentPos();
   new FieldColor(root,"Area Color",&col);
+  hatching = rcl->sHatch(raw);
+  if ( hatching == sUNDEF)
+	  hatching = "none";
+  new FieldDataType(root,TR("Hatching"),&hatching,".ivh",false,0,FileName(base),false);
 
   FieldIntSliderEx *slider = new FieldIntSliderEx(root,"Transparency(0-100)", &transparency,ValueRange(0,100),true);
   slider->SetCallBack((NotifyProc)&PolRprForm::setTransparency);
@@ -229,6 +235,12 @@ void  PolRprForm::apply() {
   root->StoreData();
   rcl->PutColor(iRaw, col);
   rcl->PutTransparency(iRaw,1.0 - transparency/ 100.0);
+  if ( hatching != ""){
+	  hatching = hatching.sTrimSpaces();
+	  FileName fn(hatching);
+	rcl->PutHatchingName(iRaw, fn.sFile);
+	rcl->Updated();
+  }
   PreparationParameters pp(NewDrawer::ptRENDER, 0);
   drw->prepare(&pp);
   view->Invalidate();

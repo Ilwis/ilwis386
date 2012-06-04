@@ -9,6 +9,7 @@
 #include "Engine\Drawers\SimpleDrawer.h" 
 #include "Engine\Drawers\SpatialDataDrawer.h"
 #include "drawers\linedrawer.h"
+#include "drawers\polygondrawer.h"
 #include "Drawers\LayerDrawer.h"
 #include "Drawers\FeatureLayerDrawer.h"
 #include "Drawers\PolygonLayerDrawer.h"
