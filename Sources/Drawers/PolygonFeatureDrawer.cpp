@@ -10,16 +10,20 @@
 #include "Drawers\featuredatadrawer.h"
 #include "Drawers\LayerDrawer.h"
 #include "Drawers\LineDrawer.h"
+#include "drawers\linedrawer.h"
+#include "drawers\polygondrawer.h"
 #include "Drawers\FeatureLayerDrawer.h"
 #include "Drawers\PolygonLayerDrawer.h"
 #include "geos\algorithm\CGAlgorithms.h"
 #include "Drawers\DrawingColor.h" 
 #include "Engine\Base\Algorithm\TriangulationAlg\gpc.h"
 #include "Engine\Base\Algorithm\TriangulationAlg\Triangulator.h"
-#include "drawers\linedrawer.h"
-#include "drawers\polygondrawer.h"
 #include "Drawers\PolygonFeatureDrawer.h"
 #include "Engine\Drawers\ZValueMaker.h"
+#include "Engine\Drawers\SVGLoader.h"
+#include "Engine\Drawers\SVGElements.h"
+#include "Engine\Representation\Rprclass.h"
+#include "Engine\Drawers\SVGPath.h"
 
 
 using namespace ILWIS;
@@ -119,6 +123,27 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 			((LineProperties *)boundary->getProperties())->linestyle = lp->linestyle;
 			((LineProperties *)boundary->getProperties())->thickness = lp->thickness;
 			double fvalue =  getFeature()->rValue();
+			Representation rpr = polygonLayer->getRepresentation();
+			if ( rpr.fValid() && rpr->dm()->dmt() == dmtCLASS) {
+				String hatchName = rpr->prc()->sHatch(fvalue);
+				if ( hatchName != sUNDEF) {
+					const SVGLoader *loader = NewDrawer::getSvgLoader();
+					SVGLoader::const_iterator cur = loader->find(p->props->hatchName);
+					if ( cur == loader->end() || (*cur).second->getType() == IVGElement::ivgPOINT)
+						return;
+
+					hatch = (*cur).second->getHatch();
+				}
+			}
+			//if ( p->props && p->props->hatchName != sUNDEF) {
+			//	const SVGLoader *loader = NewDrawer::getSvgLoader();
+			//	SVGLoader::const_iterator cur = loader->find(p->props->hatchName);
+			//	if ( cur == loader->end() || (*cur).second->getType() == IVGElement::ivgPOINT)
+			//		return;
+
+			//	hatch = (*cur).second->getHatch();
+			//} 
+
 			for(int j =0 ; j < p->filteredRaws.size(); ++j) {
 				int raw = p->filteredRaws[j];
 				if ( fvalue == abs(raw)) {
@@ -127,6 +152,7 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 			}
 			boundary->prepare(p);
 			boundary->setSupportingDrawer(true);
+
 			((LineProperties *)boundary->getProperties())->drawColor = lp->drawColor;
 		}
 	}

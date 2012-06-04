@@ -6,7 +6,7 @@ ILWIS::NewDrawer *createPointDrawer(ILWIS::DrawerParameters *parms);
 
 namespace ILWIS{
 
-class SVGElement;
+class IVGElement;
 
 struct _export PointProperties : public GeneralDrawerProperties {
 public:
@@ -73,15 +73,15 @@ class _export PointDrawer : public SimpleDrawer {
 		PointDrawer(DrawerParameters *parms, const String& name);
 		void calcSize();
 
-		void drawRectangle(const SVGAttributes* attributes, double z) const;
-		void drawEllipse(const SVGAttributes* attributes, double z) const;
-		void drawLine(const SVGAttributes* attributes, double z) const;
-		void drawPolygon(const SVGAttributes* attributes, double z) const;
-		void drawPath(const SVGAttributes* attributes, double z) const;
-		void transform(const SVGAttributes* attributes) const;
+		void drawRectangle(const IVGAttributes* attributes, double z) const;
+		void drawEllipse(const IVGAttributes* attributes, double z) const;
+		void drawLine(const IVGAttributes* attributes, double z) const;
+		void drawPolygon(const IVGAttributes* attributes, double z) const;
+		void drawPath(const IVGAttributes* attributes, double z) const;
+		void transform(const IVGAttributes* attributes) const;
 
 		Coord cNorm;
-		const SVGElement *element;
+		const IVGElement *element;
 		double width, height;
 		PointProperties properties;
 	};

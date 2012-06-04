@@ -40,7 +40,7 @@ void PointDrawer::prepare(PreparationParameters *p){
 		if ( properties.symbol != ""){
 			const SVGLoader *loader = NewDrawer::getSvgLoader();
 			SVGLoader::const_iterator cur = loader->find(properties.symbol);
-			if ( cur == loader->end())
+			if ( cur == loader->end() || (*cur).second->getType() == IVGElement::ivgHATCH)
 				return;
 
 			element = (*cur).second;
@@ -55,11 +55,11 @@ void PointDrawer::setCoord(const Coord& crd) {
 
 void PointDrawer::calcSize() {
 	width = 0;
-	for(vector<SVGAttributes *>::const_iterator cur = element->begin(); cur != element->end(); ++cur) {
+	for(vector<IVGAttributes *>::const_iterator cur = element->begin(); cur != element->end(); ++cur) {
 		width = max(width, (*cur)->rwidth);	
 	}
 	height = 0;
-	for(vector<SVGAttributes *>::const_iterator cur = element->begin(); cur != element->end(); ++cur) {
+	for(vector<IVGAttributes *>::const_iterator cur = element->begin(); cur != element->end(); ++cur) {
 		height = max(height, (*cur)->rheight);	
 	}
 	CoordBounds cbZoom = getRootDrawer()->getCoordBoundsZoom();
@@ -119,23 +119,23 @@ bool PointDrawer::draw( const CoordBounds& cbArea) const {
 	} 
 
 
-	for(vector<SVGAttributes *>::const_iterator cur = element->begin(); cur != element->end(); ++cur) {
+	for(vector<IVGAttributes *>::const_iterator cur = element->begin(); cur != element->end(); ++cur) {
 		switch((*cur)->type) {
-			case SVGAttributes::sCIRCLE:
-			case SVGAttributes::sELLIPSE:
+			case IVGAttributes::sCIRCLE:
+			case IVGAttributes::sELLIPSE:
 				drawEllipse((*cur), 0);
 				break;
-			case SVGAttributes::sRECTANGLE:
+			case IVGAttributes::sRECTANGLE:
 				drawRectangle((*cur), 0);
 				break;
-			case SVGAttributes::sPOLYGON:
+			case IVGAttributes::sPOLYGON:
 				drawPolygon((*cur), 0);
 				break;
-			case SVGAttributes::sLINE:
-			case SVGAttributes::sPOLYLINE:
+			case IVGAttributes::sLINE:
+			case IVGAttributes::sPOLYLINE:
 				drawLine((*cur), 0);
 				break;
-			case SVGAttributes::sPATH:
+			case IVGAttributes::sPATH:
 				drawPath((*cur),0);
 				break;			
 		};
@@ -171,7 +171,7 @@ bool PointDrawer::draw( const CoordBounds& cbArea) const {
 	return true;
 }
 
-void PointDrawer::transform(const SVGAttributes* attributes) const{
+void PointDrawer::transform(const IVGAttributes* attributes) const{
 	for(int i=0; i < attributes->transformations.size(); ++i) {
 		const Transform& tr = attributes->transformations.at(i);
 		if ( tr.type == Transform::tROTATE) {
@@ -195,7 +195,7 @@ void PointDrawer::transform(const SVGAttributes* attributes) const{
 	}
 }
 
-void PointDrawer::drawRectangle(const SVGAttributes* attributes, double z) const {
+void PointDrawer::drawRectangle(const IVGAttributes* attributes, double z) const {
 
 	double hw = attributes->rwidth != 0 ? attributes->rwidth : width;
 	double hh = attributes->rheight != 0 ? attributes->rheight : height;
@@ -238,7 +238,7 @@ void PointDrawer::drawRectangle(const SVGAttributes* attributes, double z) const
 	}
 }
 
-void PointDrawer::drawEllipse(const SVGAttributes* attributes, double z) const{
+void PointDrawer::drawEllipse(const IVGAttributes* attributes, double z) const{
 	double rx = attributes->rx > 0 ? attributes->rx : width / 2;
 	double ry = attributes->ry >0 ? attributes->ry : height / 2;
 	double lcx = attributes->points[0].x;
@@ -251,7 +251,7 @@ void PointDrawer::drawEllipse(const SVGAttributes* attributes, double z) const{
 	int sections = 20; //number of triangles to use to estimate a circle
 	// (a higher number yields a more perfect circle)
 	double twoPi =  2.0 * M_PI;
-	if ( attributes->type == SVGAttributes::sCIRCLE)
+	if ( attributes->type == IVGAttributes::sCIRCLE)
 		rx = ry = r;
 	
 	if ( fcolor != colorUNDEF) {
@@ -276,7 +276,7 @@ void PointDrawer::drawEllipse(const SVGAttributes* attributes, double z) const{
 	glEnd();
 }
 
-void PointDrawer::drawLine(const SVGAttributes* attributes, double z) const{
+void PointDrawer::drawLine(const IVGAttributes* attributes, double z) const{
 	Color scolor = attributes->strokeColor.fEqual(colorUSERDEF) ? properties.drawColor :  attributes->strokeColor;
 	double transp = attributes->opacity * getTransparency();
 	glColor4d(scolor.redP(), scolor.greenP(), scolor.blueP(), transp);
@@ -292,7 +292,7 @@ void PointDrawer::drawLine(const SVGAttributes* attributes, double z) const{
 
 }
 
-void PointDrawer::drawPolygon(const SVGAttributes* attributes, double z) const{
+void PointDrawer::drawPolygon(const IVGAttributes* attributes, double z) const{
 
 	Color fcolor = attributes->fillColor.fEqual(colorUSERDEF) ? properties.drawColor : attributes->fillColor;
 	double transp = attributes->opacity * getTransparency();
@@ -321,7 +321,7 @@ void PointDrawer::drawPolygon(const SVGAttributes* attributes, double z) const{
 
 }
 
-void PointDrawer::drawPath(const SVGAttributes* attributes, double z) const{
+void PointDrawer::drawPath(const IVGAttributes* attributes, double z) const{
 
 	if ( attributes->isPolygon()) {
 		drawPolygon(attributes, z);

@@ -11,6 +11,7 @@
 #include "drawers\pointdrawer.h"
 #include "drawers\linedrawer.h"
 #include "Drawers\LayerDrawer.h"
+#include "drawers\polygondrawer.h"
 #include "Drawers\FeatureLayerDrawer.h"
 #include "Drawers\PolygonLayerDrawer.h"
 #include "Drawers\LineLayerDrawer.h"

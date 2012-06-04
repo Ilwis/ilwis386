@@ -4,6 +4,15 @@ ILWIS::NewDrawer *createPolygonDrawer(ILWIS::DrawerParameters *parms);
 
 namespace ILWIS{
 
+struct _export PolygonProperties : public LineProperties {
+	PolygonProperties();
+	PolygonProperties(PolygonProperties *);
+	String store(const FileName& fnView, const String& parenSection) const;
+	void load(const FileName& fnView, const String& parenSection);
+
+	String hatchName;
+};
+
 class _export PolygonDrawer : public SimpleDrawer {
 	//class LineDrawer;
 
@@ -20,6 +29,7 @@ class _export PolygonDrawer : public SimpleDrawer {
 		void setlineStyle(int st);
 		void setlineThickness(double th);
 		void setLineColor(const Color& clr);
+		GeneralDrawerProperties *getProperties();
 
 	protected:
 		virtual void setSpecialDrawingOptions(int option, bool add, const vector<int>& coords=vector<int>()) ;
@@ -33,5 +43,7 @@ class _export PolygonDrawer : public SimpleDrawer {
 		bool showArea;
 		bool showBoundary;
 		double areaTransparency;
+		PolygonProperties properties;
+		const byte *hatch;
 	};
 }

@@ -102,11 +102,19 @@ void PolygonLayerDrawer::prepare(PreparationParameters *parms) {
 		}
 	}
 
-	//if ( triData != 0) {
-	//	delete [] triData;
-	//	triData = 0;
-	//	currentLoc = 0;
-	//}
+	if (  parms->type & RootDrawer::ptRENDER || parms->type & ptRESTORE) {
+		for(int i=0; i < drawers.size(); ++i) {
+			PolygonDrawer *pd = (PolygonDrawer *)drawers.at(i);
+			if ( !pd) 
+				continue;
+			PolygonProperties *props = (PolygonProperties *)pd->getProperties();
+			props->drawColor = properties.drawColor;
+			props->hatchName = properties.hatchName;
+			props->ignoreColor = properties.ignoreColor;
+			props->linestyle = properties.linestyle;
+			props->thickness = properties.thickness;
+		}
+	}
 
 }
 
@@ -145,12 +153,20 @@ void PolygonLayerDrawer::setLineThickness(double thick) {
 	lp.thickness = thick;
 }
 
+void PolygonLayerDrawer::setHatch(const String& name) {
+	lp.hatchName = name;
+}
+
 void PolygonLayerDrawer::setLineColor(const Color& clr) {
 	lp.drawColor = clr;
 }
 
 GeneralDrawerProperties *PolygonLayerDrawer::getProperties() {
 	return &lp;
+}
+
+String PolygonLayerDrawer::getHatchName() const {
+	return lp.hatchName;
 }
 
 
@@ -173,6 +189,8 @@ void PolygonLayerDrawer::load(const FileName& fnView, const String& parentSectio
 	ObjectInfo::ReadElement(currentSection.c_str(),"AreaTransparency",fnView, areaTransparency);
 	lp.load(fnView, currentSection);
 }
+
+
 
 
 
