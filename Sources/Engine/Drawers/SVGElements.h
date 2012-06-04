@@ -19,11 +19,11 @@ namespace ILWIS {
 	//	double cy;
 	//};
 
-	class SVGAttributes {
+	class IVGAttributes {
 	public:
 		enum ShapeType{sRECTANGLE, sCIRCLE,sELLIPSE,sLINE,sPOLYLINE,sPOLYGON,sPATH, sCOMPOUND, sUNKNOWN};
 
-		SVGAttributes(ShapeType t=sUNKNOWN) : type(t) {
+		IVGAttributes(ShapeType t=sUNKNOWN) : type(t) {
 			strokewidth = rwidth = rheight = rx = ry = 0;
 			opacity = 1;
 			strokewidth = 1;
@@ -41,27 +41,35 @@ namespace ILWIS {
 
 	};
 
-	class _export SVGElement : public vector<SVGAttributes *> {
+	class _export IVGElement : public vector<IVGAttributes *> {
 	public:
-		SVGElement(const String& _id);
-		SVGElement(SVGAttributes::ShapeType t, const String& _id);
+		enum Type{ivgPOINT, ivgHATCH};
+
+		IVGElement(const String& _id);
+		IVGElement(IVGAttributes::ShapeType t, const String& _id);
+		~IVGElement();
 		bool draw( const CoordBounds& cbArea) const { return true;}
 		void parse(const pugi::xml_node& node);
-		void parseNode(const pugi::xml_node& node, SVGAttributes* attributes);
+		void parseNode(const pugi::xml_node& node, IVGAttributes* attributes);
 		CoordBounds getCb() const { return cb; }
 		double getDefaultScale() const { return defaultScale; }
+		IVGElement::Type getType() const { return type;}
+		const byte * getHatch() const;
 
 	protected:
 		void initSvgData();
-		void parseTransform(SVGAttributes* attributes, const String& tranform);
+		void parseTransform(IVGAttributes* attributes, const String& tranform);
 		Color getColor(const String& name) const;
 		String getAttributeValue(const pugi::xml_node& node, const String& key) const;
-		String parseStyle(const String& style,SVGAttributes* attributes);
+		String parseStyle(const String& style,IVGAttributes* attributes);
+		void parseHatch(const pugi::xml_node& node);
 		void normalizePositions();
 		double defaultScale;
 	private:
 		static map<String, Color> svgcolors;
 		CoordBounds cb;
 		String id;
+		IVGElement::Type type;
+		byte *hatch;
 	};
 }

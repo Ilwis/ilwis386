@@ -13,11 +13,11 @@ using namespace ILWIS;
 
 //-----------------------------
 SVGLoader::SVGLoader() {
-	SVGElement *element = new SVGElement(SVGAttributes::sRECTANGLE,"rectangle");
+	IVGElement *element = new IVGElement(IVGAttributes::sRECTANGLE,"rectangle");
 	(*this)["rectangle"] = element;
-	element = new SVGElement(SVGAttributes::sELLIPSE,"ellipse");
+	element = new IVGElement(IVGAttributes::sELLIPSE,"ellipse");
 	(*this)["ellipse"] = element;
-	element = new SVGElement(SVGAttributes::sCIRCLE,"circle");
+	element = new IVGElement(IVGAttributes::sCIRCLE,"circle");
 	(*this)["circle"] = element;
 
 }
@@ -44,20 +44,20 @@ void SVGLoader::load(const String& folder) {
 		else {
 			FileName fnSvg(finder.GetFilePath());
 			String ext = fnSvg.sExt;
-			if ( ext.toLower() == ".ivg")
+			if ( ext.toLower() == ".ivg" || ext.toLower() == ".ivh")
 				parseFile(fnSvg);
 		}
 	}
 }
 
-SVGElement *SVGLoader::parseFile(const FileName& fn) {
+IVGElement *SVGLoader::parseFile(const FileName& fn) {
 	if ( !fn.fExist())
 		return 0;
 
 	ILWIS::XMLDocument doc(fn);
 
 	String id = fn.sFile;
-	SVGElement *element = new SVGElement(id);
+	IVGElement *element = new IVGElement(id);
 	element->parse(doc.first_child());
 	(*this)[id] = element;
 
@@ -73,10 +73,10 @@ String SVGLoader::getAttributeValue(const pugi::xml_node& node, const String& ke
 	return attr.value();
 }
 
-SVGElement *SVGLoader::getSVGSymbol(const String& name) {
+IVGElement *SVGLoader::getSVGSymbol(const String& name) {
 	FileName fn(name);
 	String shortName = fn.sFile;
-	map<String, SVGElement *>::const_iterator iter = find(shortName);
+	map<String, IVGElement *>::const_iterator iter = find(shortName);
 	if ( iter != end())
 		return (*iter).second;
 	if ( name.sHead("\\") == "" && name.sHead("/") == "") {
@@ -86,7 +86,7 @@ SVGElement *SVGLoader::getSVGSymbol(const String& name) {
 	} else {
 		fn = FileName(name, ".ivg");
 	}
-	SVGElement *el =  parseFile(fn);
+	IVGElement *el =  parseFile(fn);
 	if ( el != 0)
 		(*this)[shortName] = el;
 	return el;

@@ -13,7 +13,7 @@ namespace ILWIS {
 		int end;
 	};
 
-	class SVGPath : public SVGAttributes {
+	class SVGPath : public IVGAttributes {
 	public:
 		void parsePath(const String& pathElements);
 		int noOfElements() const{return pathElements.size();}

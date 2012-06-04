@@ -3,13 +3,13 @@
 
 namespace ILWIS {
 
-	class SVGElement {
+	class IVGElement {
 	public:
-		SVGElement(const FileName& fn) ;
+		IVGElement(const FileName& fn) ;
 		
 	};
 
-	class SVGContainer : public map<String, SVGElement *> {
+	class SVGContainer : public map<String, IVGElement *> {
 	public:
 		SVGContainer();
 		~SVGContainer();

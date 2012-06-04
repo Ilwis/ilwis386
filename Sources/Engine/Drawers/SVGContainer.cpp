@@ -7,7 +7,7 @@
 using namespace ILWIS;
 
 
-SVGElement::SVGElement(const FileName& fn) {
+IVGElement::IVGElement(const FileName& fn) {
 
 }
 

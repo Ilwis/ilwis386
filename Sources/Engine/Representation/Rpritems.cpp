@@ -231,6 +231,18 @@ double RepresentationItems::rSymbolRotation(long iRaw) const
   return 0;
 }
 
+String RepresentationItems::sHatch(long iRaw) const {
+  if (iUNDEF == iRaw)
+    return sUNDEF;
+  else if (colHatching.fValid()) {
+    String sH = colHatching->sValue(iRaw);
+	sH = sH.sTrimSpaces();
+    if (sH != sUNDEF)
+      return sH;
+  }
+  return sUNDEF;
+}
+
 double RepresentationItems::rTransparencyItem(long iRaw) const{
   if (iUNDEF == iRaw)
     return 0;
@@ -303,6 +315,7 @@ void RepresentationItems::getProperties(long iRaw, RepresentationProperties *pro
 	props->itemTransparency = rTransparencyItem(iRaw);
 	props->symbolSize = iSymbolSize(iRaw);
 	props->symbolType = sSymbolType(iRaw);
+	props->hatchName = sHatch(iRaw);
 }
 
 

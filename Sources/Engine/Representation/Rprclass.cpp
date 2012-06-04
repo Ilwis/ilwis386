@@ -119,6 +119,10 @@ RepresentationClass::RepresentationClass(const FileName& fn)
 	colLineDist = tbl->col("LineDist");
 	if (colLineDist.fValid())
 		colLineDist->SetOwnedByTable(true);
+	colHatching = tbl->col("Hatching");
+	if ( colHatching.fValid()) {
+		colHatching->SetOwnedByTable(true);
+	}
 	tbl->DoNotStore(false);
 	tbl->DoNotUpdate();				
 }
@@ -295,6 +299,20 @@ void RepresentationClass::PutTransparency(long iRaw, double transp){
 			colTransparency->PutVal(i, 1.0);
 	}
 	colTransparency->PutVal(iRaw, transp);
+	Updated();
+}
+
+void RepresentationClass::PutHatchingName(long iRaw, const String& hatch){
+	if ( !colHatching.fValid()) {
+		colHatching = tbl->colNew("Hatching", Domain("String"));
+		colHatching->SetOwnedByTable(true);
+		colHatching->SetDescription(TR("Hatching patterns for polygons"));
+		long iMax = tbl->iRecs()+tbl->iOffset()-1;
+		for (long i = tbl->iOffset(); i <= iMax; ++i)
+			colHatching->PutVal(i, sUNDEF);
+
+	}
+	colHatching->PutVal(iRaw, hatch);
 	Updated();
 }
 

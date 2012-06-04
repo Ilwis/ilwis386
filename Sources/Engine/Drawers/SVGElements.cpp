@@ -10,14 +10,16 @@
 #include "Engine\Base\Algorithm\TriangulationAlg\gpc.h"
 #include "Engine\Base\Algorithm\TriangulationAlg\Triangulator.h"
 #include "Engine\Drawers\SVGPath.h"
+#include <bitset>
+#include <limits>
 
 
 
 using namespace ILWIS;
 
-map<String, Color> SVGElement::svgcolors;
+map<String, Color> IVGElement::svgcolors;
 
-SVGElement::SVGElement(const String& _id) : defaultScale(1.0) 
+IVGElement::IVGElement(const String& _id) : defaultScale(1.0), hatch(0) 
 {
 	if ( svgcolors.size() == 0) {
 		initSvgData();
@@ -28,16 +30,21 @@ SVGElement::SVGElement(const String& _id) : defaultScale(1.0)
 	id = _id;
 }
 
-SVGElement::SVGElement(SVGAttributes::ShapeType t, const String& _id) : id(_id), defaultScale(1.0) {
+IVGElement::IVGElement(IVGAttributes::ShapeType t, const String& _id) : id(_id), defaultScale(1.0), hatch(0) {
 	if ( svgcolors.size() == 0) {
 		initSvgData();
 	}
-	if ( t != SVGAttributes::sUNKNOWN) {
-		push_back(new SVGAttributes(t));
+	if ( t != IVGAttributes::sUNKNOWN) {
+		push_back(new IVGAttributes(t));
 	}
 }
 
-Color SVGElement::getColor(const String& name) const{
+IVGElement::~IVGElement() {
+	if ( hatch)
+		delete [] hatch;
+}
+
+Color IVGElement::getColor(const String& name) const{
 	map<String, Color>::const_iterator cur;
 	if (( cur = svgcolors.find(name)) != svgcolors.end()) {
 		return (*cur).second;
@@ -52,45 +59,72 @@ Color SVGElement::getColor(const String& name) const{
 	return Color(0,0,0);
 }
 
-void SVGElement::parse(const pugi::xml_node& node) {
+void IVGElement::parse(const pugi::xml_node& node) {
 	for( pugi::xml_attribute attr = node.first_attribute(); attr; attr = attr.next_attribute()) {
 		String name = attr.name();
 		if (  name == "scale") {
 			defaultScale = attr.as_double();
 		}
+		if ( name == "use") {
+			String typ(attr.value());
+			if ( typ == "Point")
+				type = IVGElement::ivgPOINT;
+			if ( typ == "Hatch")
+				type = IVGElement::ivgHATCH;
+		}
 	}
-	for(pugi::xml_node child = node.first_child(); child;  child = child.next_sibling()) {
-		if ( child.attributes_begin() == child.attributes_end())
-			continue;
+	if ( type == IVGElement::ivgPOINT) {
+		for(pugi::xml_node child = node.first_child(); child;  child = child.next_sibling()) {
+			if ( child.attributes_begin() == child.attributes_end())
+				continue;
 
-		String nodeName = child.name();
-		SVGAttributes *attributes;
-		SVGAttributes::ShapeType type = SVGAttributes::sUNKNOWN;
-		if ( nodeName == "path")
-			type = SVGAttributes::sPATH;
-		if ( nodeName == "rect")
-			type = SVGAttributes::sRECTANGLE;
-		if ( nodeName == "circle")
-			type = SVGAttributes::sCIRCLE;
-		if ( nodeName == "line")
-			type = SVGAttributes::sLINE;
-		if ( nodeName == "polyline")
-			type = SVGAttributes::sPOLYLINE;
-		if ( nodeName == "polygon")
-			type = SVGAttributes::sPOLYGON;
-		if ( nodeName == "path") {
-			attributes = new SVGPath();
-			type = SVGAttributes::sPATH;
-		} else
-			attributes = new SVGAttributes(type);
-		parseNode(child, attributes);
-		cb += attributes->bounds;
-		push_back(attributes);
+			String nodeName = child.name();
+			IVGAttributes *attributes;
+			IVGAttributes::ShapeType type = IVGAttributes::sUNKNOWN;
+			if ( nodeName == "path")
+				type = IVGAttributes::sPATH;
+			if ( nodeName == "rect")
+				type = IVGAttributes::sRECTANGLE;
+			if ( nodeName == "circle")
+				type = IVGAttributes::sCIRCLE;
+			if ( nodeName == "line")
+				type = IVGAttributes::sLINE;
+			if ( nodeName == "polyline")
+				type = IVGAttributes::sPOLYLINE;
+			if ( nodeName == "polygon")
+				type = IVGAttributes::sPOLYGON;
+
+			if ( nodeName == "path") {
+				attributes = new SVGPath();
+				type = IVGAttributes::sPATH;
+			} else
+				attributes = new IVGAttributes(type);
+			parseNode(child, attributes);
+			cb += attributes->bounds;
+			push_back(attributes);
+		}
+		normalizePositions();
+	} else if ( type == IVGElement::ivgHATCH) {
+		parseHatch(node);
 	}
-	normalizePositions();
 }
 
-void  SVGElement::parseTransform(SVGAttributes* attributes, const String& tranformString) {
+void  IVGElement::parseHatch(const pugi::xml_node& node) {
+	hatch = new byte[128];
+	int cnt = 0;
+	for(pugi::xml_node child = node.first_child(); child;  child = child.next_sibling()) {
+		String line = child.child_value();
+		unsigned long n = 0;
+		for(int i=0; i < 4; ++i) {
+			String s = line.substr(i * 8, 8);
+			byte b = bitset<numeric_limits<byte>::digits>(s).to_ulong();
+			hatch[cnt] = b;
+			++cnt;
+		}
+	}
+}
+
+void  IVGElement::parseTransform(IVGAttributes* attributes, const String& tranformString) {
 	Array<String> parts;
 	Split(tranformString, parts,")");
 	for(int i=0; i < parts.size(); ++i) {
@@ -117,7 +151,7 @@ void  SVGElement::parseTransform(SVGAttributes* attributes, const String& tranfo
 	}
 }
 
-void SVGElement::parseNode(const pugi::xml_node& node,SVGAttributes* attributes) {
+void IVGElement::parseNode(const pugi::xml_node& node,IVGAttributes* attributes) {
 	if ( node.attributes_begin() == node.attributes_end())
 			return;
 		String idv = getAttributeValue(node,"id");
@@ -164,7 +198,7 @@ void SVGElement::parseNode(const pugi::xml_node& node,SVGAttributes* attributes)
 		String sradiusy = getAttributeValue(node, "ry");
 		if ( sradiusy != "")
 			attributes->ry= sradiusy.rVal();
-		if ( attributes->type == SVGAttributes::sCIRCLE || attributes->type == SVGAttributes::sELLIPSE) {
+		if ( attributes->type == IVGAttributes::sCIRCLE || attributes->type == IVGAttributes::sELLIPSE) {
 			String scx = getAttributeValue(node, "cx");
 			String scy = getAttributeValue(node, "cy");
 			Coord center(0,0);
@@ -222,7 +256,7 @@ void SVGElement::parseNode(const pugi::xml_node& node,SVGAttributes* attributes)
 
 }
 
-String SVGElement::parseStyle(const String& style,SVGAttributes* attributes) {
+String IVGElement::parseStyle(const String& style,IVGAttributes* attributes) {
 	Array<String> parts;
 	Split(style, parts,";");
 	for(int i = 0; i < parts.size(); ++i) {
@@ -246,7 +280,7 @@ String SVGElement::parseStyle(const String& style,SVGAttributes* attributes) {
 	return ""; 
 }
 
-String SVGElement::getAttributeValue(const pugi::xml_node& node, const String& key) const{
+String IVGElement::getAttributeValue(const pugi::xml_node& node, const String& key) const{
 	if ( node.attributes_begin() == node.attributes_end())
 		return "";
 	pugi:: xml_attribute attr = node.attribute(key.c_str());
@@ -257,7 +291,7 @@ String SVGElement::getAttributeValue(const pugi::xml_node& node, const String& k
 
 
 
-void SVGElement::initSvgData() {
+void IVGElement::initSvgData() {
 	if ( svgcolors.size() != 0) 
 		return;
 	int k = svgcolors.max_size();
@@ -412,11 +446,11 @@ void SVGElement::initSvgData() {
 	svgcolors["yellowgreen"] = Color(154,205,50);
 }
 
-void SVGElement::normalizePositions() {
+void IVGElement::normalizePositions() {
 	double shiftx = (cb.cMax.x + cb.cMin.x) / 2.0;
 	double shifty = (cb.cMax.y + cb.cMin.y) / 2.0;
 	for(int j = 0; j < size(); ++j) {
-		SVGAttributes *att = at(j);
+		IVGAttributes *att = at(j);
 		for(int i = 0; i < att->points.size(); ++i) {
 			att->points[i].x = att->points[i].x - shiftx;
 			att->points[i].y = att->points[i].y - shifty;
@@ -428,6 +462,10 @@ void SVGElement::normalizePositions() {
 	}
 }
 
-bool SVGAttributes::isPolygon() const {
-	return type == SVGAttributes::sPOLYGON;
+bool IVGAttributes::isPolygon() const {
+	return type == IVGAttributes::sPOLYGON;
+}
+
+const byte * IVGElement::getHatch() const{
+	return (const byte *) hatch;
 }

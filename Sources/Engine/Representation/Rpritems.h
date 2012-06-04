@@ -69,6 +69,7 @@ public:
 	String sSymbolFont(long iRaw) const;
 	double rSymbolRotation(long iRaw) const;
 	double rTransparencyItem(long iRaw) const;
+	String sHatch(long iRaw) const;
 	short iLine(long iRaw) const;
 	Color clrLineFill(long iRaw) const;
 	double rLineWidth(long iRaw) const;
@@ -79,7 +80,7 @@ protected:
 	Column colColor, colPattern,
 		colSmbType, colSmbSize, colSmbWidth, colSmbClr, colSmbFC,
 		colPatternData, colSmbFont, colSmbRot, colSecondClr,
-		colLineType, colLineClrFill, colLineWidth, colLineDist, colTransparency, colSmbType2;
+		colLineType, colLineClrFill, colLineWidth, colLineDist, colTransparency, colSmbType2, colHatching;
 	static Color clrDefault[16];       
 };
 

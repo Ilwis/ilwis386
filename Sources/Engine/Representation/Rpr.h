@@ -53,6 +53,7 @@ struct _export RepresentationProperties {
 	double itemTransparency;
 	String symbolType;
 	double symbolSize;
+	String hatchName;
 };
 
 class RepresentationPtr: public IlwisObjectPtr

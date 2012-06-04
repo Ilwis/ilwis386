@@ -87,6 +87,7 @@ public:
 	void _export PutLineWidth(long iRaw, double rWidth);
 	void _export PutLineDist(long iRaw, double rDist);
 	void _export PutTransparency(long iRaw, double transp);
+	void _export PutHatchingName(long iRaw, const String& hatch);
 	_export static const int iSIZE_FACTOR;
 private:
 	Table tbl;

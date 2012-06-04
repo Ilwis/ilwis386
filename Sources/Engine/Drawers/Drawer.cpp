@@ -27,7 +27,7 @@ ILWIS::NewDrawer *NewDrawer::getDrawer(const String& type, const String& subtype
 		}
 	}
 
-	map<String, ILWIS::SVGElement *>::iterator svgItem = getSvgLoader()->find(fullType);
+	map<String, ILWIS::IVGElement *>::iterator svgItem = getSvgLoader()->find(fullType);
 	if ( svgItem != getSvgLoader()->end())
 		return (ILWIS::NewDrawer *)(*svgItem).second;
 	return NULL;

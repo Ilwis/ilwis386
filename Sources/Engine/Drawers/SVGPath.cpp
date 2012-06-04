@@ -17,7 +17,7 @@ void SVGPath::parsePath(const String& p1) {
 	String p2 = preprocess(p1);
 	Array<String> parts;
 	Split(p2, parts," ");
-	type = SVGAttributes::sLINE;
+	type = IVGAttributes::sLINE;
 	vector<vector<String>> pathParts;
 	for(int i = 0 ; i < parts.size(); ++i) {
 		String part = parts[i];
@@ -33,7 +33,7 @@ void SVGPath::parsePath(const String& p1) {
 		parsePart(index, pathParts[i]);
 	pathElements.back().end = points.size() - 1;
 	if ( points.size() > 2 && points[0] == points.back())
-		type = SVGAttributes::sPATH;
+		type = IVGAttributes::sPATH;
 
 }
 
@@ -125,7 +125,7 @@ void SVGPath::doExtQBezier(int& index, PathElement::PositionType ptype, const ve
 void SVGPath::doClose(int& index, PathElement::PositionType ptype, const vector<String>& commands) {
 	Coord c = lastMove;
 	addPoint(index, c);
-	type = SVGAttributes::sPOLYGON; // if no fill color is defined, polygon will anyhow be drawn as a line drawing
+	type = IVGAttributes::sPOLYGON; // if no fill color is defined, polygon will anyhow be drawn as a line drawing
 }
 
 void SVGPath::doCBezier(int& index, PathElement::PositionType ptype, const vector<String>& commands) {
