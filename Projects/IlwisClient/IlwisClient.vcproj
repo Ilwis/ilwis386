@@ -601,11 +601,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Client\Resources\amesd.ico"
+				RelativePath=".\amesd.ico"
 				>
 			</File>
 			<File
-				RelativePath=".\amesd.ico"
+				RelativePath="..\..\Sources\Client\Resources\amesd.ico"
 				>
 			</File>
 			<File
@@ -1129,11 +1129,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\GNC.ico"
+				RelativePath="..\..\Sources\Client\Resources\GNC.ico"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Client\Resources\GNC.ico"
+				RelativePath=".\GNC.ico"
 				>
 			</File>
 			<File
@@ -5338,6 +5338,10 @@
 				</File>
 			</Filter>
 		</Filter>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\hatch.ico"
+			>
+		</File>
 		<File
 			RelativePath="..\..\Sources\Client\Resources\spacetimecube.ico"
 			>
