@@ -50,7 +50,7 @@ class _export SpaceTimePathDrawer : public FeatureLayerDrawer, public TemporalDr
 		GLuint * texture;
 		bool * fRefreshTexture;
 		BaseMapPtr *basemap;
-		bool fRealMap;
+		bool fValueMap;
 		vector<Feature *> features;
 		CoordBounds cube;
 		vector<int> disabledRaws;

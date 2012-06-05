@@ -78,13 +78,10 @@ void SpaceTimePathDrawer::prepare(PreparationParameters *parms){
 		if (basemap->rProximity() < rMinProximity)
 			basemap->SetProximity(rMinProximity); // do a serious effort to search for the pixelinfo-coordinate over the whole width of the space time path.. could this accidentally be saved back in the ODF?
 
-		ValueRange vr = basemap->vr();
-		if (basemap->dm()->pdbool())
-			vr = ValueRange();
-		if (vr.fValid()) // when integers are not good enough to represent the map treat it as a real map
-			fRealMap = (vr->rStep() < 1) || (vr->stUsed() == stREAL);
+		if (useAttColumn && attColumn.fValid())
+			fValueMap = attColumn->dm()->pdv() != 0;
 		else
-			fRealMap = false;
+			fValueMap = basemap->dm()->pdv() != 0;
 
 		cube = rootDrawer->getMapCoordBounds();
 		if (cube.width() > cube.height()) {
@@ -193,23 +190,10 @@ void SpaceTimePathDrawer::setRepresentation(const Representation& rp) {
 		prevAttColumn = attColumn;
 		disabledRaws.clear();
 
-		if (useAttColumn && attColumn.fValid()) {
-			ValueRange vr = attColumn->vr();
-			if (attColumn->dm()->pdbool())
-				vr = ValueRange();
-			if (vr.fValid()) // when integers are not good enough to represent the map treat it as a real map
-				fRealMap = (vr->rStep() < 1) || (vr->stUsed() == stREAL);
-			else
-				fRealMap = false;
-		} else {
-			ValueRange vr = basemap->vr();
-			if (basemap->dm()->pdbool())
-				vr = ValueRange();
-			if (vr.fValid()) // when integers are not good enough to represent the map treat it as a real map
-				fRealMap = (vr->rStep() < 1) || (vr->stUsed() == stREAL);
-			else
-				fRealMap = false;
-		}
+		if (useAttColumn && attColumn.fValid())
+			fValueMap = attColumn->dm()->pdv() != 0;
+		else
+			fValueMap = basemap->dm()->pdv() != 0;
 	}
 }
 
@@ -275,7 +259,12 @@ void testError() {
 
 void SpaceTimePathDrawer::SetNrSteps(int steps)
 {
-	nrSteps = steps;
+	if (steps == 2 || steps < 1)
+		nrSteps = 1;
+	else if (steps > 25)
+		nrSteps = 25;
+	else
+		nrSteps = steps;
 }
 
 int SpaceTimePathDrawer::iNrSteps()
@@ -344,7 +333,9 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 	//if (drm == drmSINGLE)
 	//	glColor4d(singleColor.redP(), singleColor.greenP(), singleColor.blueP(), transparency);
 	glColor4f(1, 1, 1, transparency);
-	if (is3D) {
+	const int steps = nrSteps;
+	const bool fUseLight = is3D && steps > 1;
+	if (fUseLight) {
 		glEnable(GL_LIGHTING);
 		//float g_lightPos[4] = { 10, 10, -100, 1 };  // Position of light
 		//glLightfv(GL_LIGHT0, GL_POSITION, g_lightPos);
@@ -357,8 +348,8 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 		glGenTextures(1, texture);
 		glBindTexture(GL_TEXTURE_2D, *texture);
 		glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, fRealMap ? GL_LINEAR : GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, fRealMap ? GL_LINEAR : GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, fValueMap ? GL_LINEAR : GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, fValueMap ? GL_LINEAR : GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
@@ -397,7 +388,7 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 			double minMapVal = rrMinMax.rLo();
 			const DrawingColor * drawColor = getDrawingColor();
 
-			if (fRealMap) {
+			if (fValueMap) {
 				double * buf = new double [iTextureSize];
 				for (int i = 0; i < iTextureSize; ++i)
 					buf[i] = minMapVal + i * width / iTextureSize;
@@ -448,13 +439,6 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 		RangeReal rrMinMax = getValueRange(attributeColumnColors);
 		double width = rrMinMax.rWidth();
 		double minMapVal = rrMinMax.rLo();
-		int steps = nrSteps;
-		if (steps == 2 || steps < 1)
-			steps = 1;
-		else if (steps > 25)
-			steps = 25;
-		//const int steps = 1;
-		const double angleStep = 2.0 * M_PI / steps;
 		Column attributeColumn;
 		bool fUseAttributeColumn = useAttributeColumn();
 		if (fUseAttributeColumn) {
@@ -486,7 +470,7 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 					crd.z = z * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
 					crd = getRootDrawer()->glConv(csy, crd);
 					if (fUseAttributeColumn)
-						glTexCoord2f(((fRealMap ? attributeColumn->rValue(feature->iValue()) : attributeColumn->iRaw(feature->iValue())) - minMapVal) / width, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
+						glTexCoord2f(((fValueMap ? attributeColumn->rValue(feature->iValue()) : attributeColumn->iRaw(feature->iValue())) - minMapVal) / width, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
 					else
 						glTexCoord2f((feature->rValue() - minMapVal) / width, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
 					glVertex3f(crd.x, crd.y, crd.z);
@@ -498,6 +482,7 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 		}
 		else
 		{
+			const double angleStep = 2.0 * M_PI / steps;
 			const CoordBounds& cbMap = getRootDrawer()->getMapCoordBounds();
 			double pathScale = cbMap.width() / 50;
 			if (numberOfFeatures > 1) {
@@ -528,7 +513,7 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 				head.z = z * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
 				head = getRootDrawer()->glConv(csy, head);
 				String sLastGroupValue = fUseGroup ? getGroupValue(feature) : "";
-				float rsHead = fUseAttributeColumn ? (((fRealMap ? attributeColumn->rValue(feature->iValue()) : attributeColumn->iRaw(feature->iValue())) - minMapVal) / width) : ((feature->rValue() - minMapVal) / width);
+				float rsHead = fUseAttributeColumn ? (((fValueMap ? attributeColumn->rValue(feature->iValue()) : attributeColumn->iRaw(feature->iValue())) - minMapVal) / width) : ((feature->rValue() - minMapVal) / width);
 				//double rHead = pathScale * scaleThickness(feature->rValue(), stretchCol, rrStretch) / rrStretch.rWidth();
 				double rHead = fUseSize ? pathScale * getSizeValue(feature) / (sizeStretch->rHi() - sizeStretch->rLo()) : pathScale / 2.0;
 				for (long i = start; i < numberOfFeatures; ++i)
@@ -541,7 +526,7 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 						Coord tail = *(point->getCoordinate());
 						tail = getRootDrawer()->glConv(csy, tail);
 						tail.z = z * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
-						float rsTail = fUseAttributeColumn ? (((fRealMap ? attributeColumn->rValue(feature->iValue()) : attributeColumn->iRaw(feature->iValue())) - minMapVal) / width) : ((feature->rValue() - minMapVal) / width);
+						float rsTail = fUseAttributeColumn ? (((fValueMap ? attributeColumn->rValue(feature->iValue()) : attributeColumn->iRaw(feature->iValue())) - minMapVal) / width) : ((feature->rValue() - minMapVal) / width);
 						//double rTail = pathScale * scaleThickness(feature->rValue(), stretchCol, rrStretch) / rrStretch.rWidth();
 						double rTail = fUseSize ? pathScale * getSizeValue(feature) / (sizeStretch->rHi() - sizeStretch->rLo()) : pathScale / 2.0;
 
@@ -630,7 +615,7 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 	glMatrixMode(GL_MODELVIEW);
 	glDisable(GL_TEXTURE_2D);
 
-	if (is3D) {
+	if (fUseLight) {
 		glDisable(GL_COLOR_MATERIAL);
 		glDisable(GL_LIGHT0);
 		glDisable(GL_LIGHTING);
