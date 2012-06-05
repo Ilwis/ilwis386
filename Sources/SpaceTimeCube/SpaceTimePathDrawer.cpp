@@ -26,7 +26,7 @@ ILWIS::NewDrawer *createSpaceTimePathDrawer(DrawerParameters *parms) {
 SpaceTimePathDrawer::SpaceTimePathDrawer(DrawerParameters *parms)
 : FeatureLayerDrawer(parms,"SpaceTimePathDrawer")
 , prevUseAttColumn(false)
-, nrSteps(1)
+, nrSteps(-1)
 {
 	properties = new PointProperties();
 	properties->exaggeration = 1.0;
@@ -100,6 +100,11 @@ void SpaceTimePathDrawer::prepare(PreparationParameters *parms){
 
 		features.clear();
 		long numberOfFeatures = basemap->iFeatures();
+		if (nrSteps < 1) {
+			nrSteps = max(1, min(25, (5.0 - log10((double)numberOfFeatures)) * 15.0));
+			if (nrSteps == 2)
+				nrSteps = 1;
+		}
 		if (numberOfFeatures != iUNDEF) {
 			if (fUseSort) {
 				vector<std::pair<double, Feature*>> sortedFeatures;
