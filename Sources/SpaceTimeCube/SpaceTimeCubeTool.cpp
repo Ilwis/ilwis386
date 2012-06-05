@@ -504,28 +504,32 @@ LayerOptionsForm::LayerOptionsForm(CWnd *wPar, SpaceTimeCube & _spaceTimeCube, v
 , fFirstTime(true)
 {
 	StaticText * stPrevious;
-	for(int i=0; i < layerList.size(); ++i) {
+	int nrLayers = layerList.size();
+	vsPlotMethod.resize(nrLayers);
+	vsTimeColumnNames.resize(nrLayers);
+	vsSortColumnNames.resize(nrLayers);
+	vsGroupColumnNames.resize(nrLayers);
+	vsSizeColumnNames.resize(nrLayers);
+	vbSort.resize(nrLayers);
+	vbGroup.resize(nrLayers);
+	vbSize.resize(nrLayers);
+	for(int i=0; i < nrLayers; ++i) {
 		LayerData & layerData = layerList[i];
 		StaticText * stLayerName = new StaticText(root, layerData.fnObj().sFile);
 		if (i > 0)
 			stLayerName->Align(stPrevious, AL_UNDER);
 		stPrevious = stLayerName;
-		vsPlotMethod.push_back("");
-		FieldOneSelectTextOnly* fosPM = new FieldOneSelectTextOnly(root, &vsPlotMethod[vsPlotMethod.size() - 1]);
+		FieldOneSelectTextOnly* fosPM = new FieldOneSelectTextOnly(root, &vsPlotMethod[i]);
 		//fosPM->SetWidth(100);
 		fosPM->SetCallBack((NotifyProc)&LayerOptionsForm::ComboCallBackFunc);
 		fosPM->Align(stLayerName, AL_AFTER);
 		fosPlotMethod.push_back(fosPM);
-		vsTimeColumnNames.push_back("");
-		vsSortColumnNames.push_back("");
-		vsGroupColumnNames.push_back("");
-		vsSizeColumnNames.push_back("");
-		vbSort.push_back(new bool);
-		vbGroup.push_back(new bool);
-		vbSize.push_back(new bool);
-		*vbSort[vbSort.size() - 1] = false;
-		*vbGroup[vbGroup.size() - 1] = false;
-		*vbSize[vbSize.size() - 1] = false;
+		vbSort[i] = new bool;
+		vbGroup[i] = new bool;
+		vbSize[i] = new bool;
+		*vbSort[i] = false;
+		*vbGroup[i] = false;
+		*vbSize[i] = false;
 		FormEntry * feTime;
 		if (layerData.isSelfTime()) {
 			StaticText *stDummy = new StaticText(root, "");
@@ -533,7 +537,7 @@ LayerOptionsForm::LayerOptionsForm(CWnd *wPar, SpaceTimeCube & _spaceTimeCube, v
 			fcTimeColumn.push_back(0);
 		}
 		else {
-			FieldColumn *fcol = new FieldColumn(root, "", layerData.getAttTable(), &vsTimeColumnNames[vsTimeColumnNames.size() - 1], dmTIME);
+			FieldColumn *fcol = new FieldColumn(root, "", layerData.getAttTable(), &vsTimeColumnNames[i], dmTIME);
 			fcTimeColumn.push_back(fcol);
 			feTime = fcol;
 		}
@@ -547,9 +551,9 @@ LayerOptionsForm::LayerOptionsForm(CWnd *wPar, SpaceTimeCube & _spaceTimeCube, v
 			cbSort.push_back(0);
 			fcSortColumn.push_back(0);
 		} else {
-			CheckBox * cbsort = new CheckBox(root, "", vbSort[vbSort.size() - 1]);
+			CheckBox * cbsort = new CheckBox(root, "", vbSort[i]);
 			cbSort.push_back(cbsort);
-			FieldColumn * fcol = new FieldColumn(cbsort, "", layerData.getAttTable(), &vsSortColumnNames[vsSortColumnNames.size() - 1], dmVALUE | dmCLASS | dmIDENT);
+			FieldColumn * fcol = new FieldColumn(cbsort, "", layerData.getAttTable(), &vsSortColumnNames[i], dmVALUE | dmCLASS | dmIDENT);
 			fcSortColumn.push_back(fcol);
 			fcol->Align(cbsort, AL_AFTER);
 			feSort1 = cbsort;
@@ -565,9 +569,9 @@ LayerOptionsForm::LayerOptionsForm(CWnd *wPar, SpaceTimeCube & _spaceTimeCube, v
 			cbGroup.push_back(0);
 			fcGroupColumn.push_back(0);
 		} else {
-			CheckBox * cbgroup = new CheckBox(root, "", vbGroup[vbGroup.size() - 1]);
+			CheckBox * cbgroup = new CheckBox(root, "", vbGroup[i]);
 			cbGroup.push_back(cbgroup);
-			FieldColumn * fcol = new FieldColumn(cbgroup, "", layerData.getAttTable(), &vsGroupColumnNames[vsGroupColumnNames.size() - 1], dmVALUE | dmCLASS | dmSTRING);
+			FieldColumn * fcol = new FieldColumn(cbgroup, "", layerData.getAttTable(), &vsGroupColumnNames[i], dmVALUE | dmCLASS | dmSTRING);
 			fcGroupColumn.push_back(fcol);
 			fcol->Align(cbgroup, AL_AFTER);
 			feGroup1 = cbgroup;
@@ -584,9 +588,9 @@ LayerOptionsForm::LayerOptionsForm(CWnd *wPar, SpaceTimeCube & _spaceTimeCube, v
 			fcSizeColumn.push_back(0);
 		}
 		else {
-			CheckBox * cbsize = new CheckBox(root, "", vbSize[vbSize.size() - 1]);
+			CheckBox * cbsize = new CheckBox(root, "", vbSize[i]);
 			cbSize.push_back(cbsize);
-			FieldColumn *fcol = new FieldColumn(cbsize, "", layerData.getAttTable(), &vsSizeColumnNames[vsSizeColumnNames.size() - 1], dmVALUE);
+			FieldColumn *fcol = new FieldColumn(cbsize, "", layerData.getAttTable(), &vsSizeColumnNames[i], dmVALUE);
 			fcSizeColumn.push_back(fcol);
 			fcol->Align(cbsize, AL_AFTER);
 			feSize1 = cbsize;
