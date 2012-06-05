@@ -1712,7 +1712,7 @@ void GDALFormat::createTable(const FileName& fn, const Domain& dm,OGRFeatureDefn
 
 				columns[field].useClass &= v.find(" ") != string::npos ;
 				if ( v.size() > 0)
-					columns[field].useClass &= !isdigit(v[0]) ;
+					columns[field].useClass &= !isdigit((unsigned char)(v[0])) ;
 			} else if ( type == OFTDate || type == OFTDateTime) {
 				int year, month, day,hour,minute, second;
 					int r = funcs.ogrtVal(hFeature, field,&year, &month, &day, &hour,&minute, &second,0);
@@ -1734,14 +1734,14 @@ void GDALFormat::createTable(const FileName& fn, const Domain& dm,OGRFeatureDefn
 			DomainValueRangeStruct dvrs(Domain("value"),ValueRangeInt((long)columns[column].min, (long)columns[column].max));
 			col = tbl->colNew(columns[column].name, dvrs);
 		} else if (type ==  OFTReal) {
-			double rStep = rRound(abs(columns[column].max - columns[column].min) * 0.0001);
+			double rStep = 0; // = rRound(abs(columns[column].max - columns[column].min) * 0.0001); // rounds too much, e.g. when min = 100, max = 100000000
 			DomainValueRangeStruct dvrs(Domain("value"),ValueRangeReal(columns[column].min, columns[column].max,rStep));
 			col = tbl->colNew(columns[column].name, dvrs);
 		} else if (type ==  OFTString) {
 			Domain dom("String");
 			if ( columns[column].useClass) {
-				Domain dom2 = createSortDomain(columns[column].name, columns[column].strings);
-				dom2->Store();
+				dom = createSortDomain(columns[column].name, columns[column].strings);
+				dom->Store();
 			}
 			col = tbl->colNew(columns[column].name, dom);
 		} else if ( type == OFTDate || type == OFTDateTime) {
