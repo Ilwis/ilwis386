@@ -993,11 +993,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\esa.ico"
+				RelativePath="..\..\Sources\Client\Resources\esa.ico"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Client\Resources\esa.ico"
+				RelativePath=".\esa.ico"
 				>
 			</File>
 			<File
@@ -1129,11 +1129,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Client\Resources\GNC.ico"
+				RelativePath=".\GNC.ico"
 				>
 			</File>
 			<File
-				RelativePath=".\GNC.ico"
+				RelativePath="..\..\Sources\Client\Resources\GNC.ico"
 				>
 			</File>
 			<File
@@ -1166,6 +1166,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\HAND.CUR"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\hatch.ico"
 				>
 			</File>
 			<File
@@ -1906,6 +1910,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\Sortnum.bmp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\spacetimecube.ico"
 				>
 			</File>
 			<File
@@ -5338,14 +5346,6 @@
 				</File>
 			</Filter>
 		</Filter>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\hatch.ico"
-			>
-		</File>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\spacetimecube.ico"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>
