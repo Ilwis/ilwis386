@@ -232,13 +232,13 @@ GeneralDrawerProperties *LineDrawer::getProperties() {
 int LineDrawer::openGLLineStyle(int linestyle, double sz){
 	switch(linestyle) {
 		case ldtDot:
-			return 0xAAAA;
+			return 0xC0C0;
 		case ldtDash:
-			return 0xF0F0;
+			return 0xFF00;
 		case ldtDashDot:
-			return 0x6B5A;
+			return 0xFF18;
 		case ldtDashDotDot:
-			return 0x56B5;
+			return 0xFCCC;
 		default:
 			return 0xFFFF;
 	}
@@ -247,13 +247,13 @@ int LineDrawer::openGLLineStyle(int linestyle, double sz){
 
 int LineDrawer::ilwisLineStyle(int linestyle, double sz){
 	switch(linestyle) {
-		case 0xAAAA:
+		case 0xC0C0:
 			return ldtDot;
-		case 0xF0F0:
+		case 0xFF00:
 			return ldtDash;
-		case 0x6B5A:
+		case 0xFF18:
 			return ldtDashDot;
-		case 0x56B5:
+		case 0xFCCC:
 			return ldtDashDotDot;
 		default:
 			return ldtSingle;
