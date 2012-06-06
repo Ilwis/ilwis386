@@ -98,6 +98,13 @@ DisplayOptionsForm(dr,wPar,TR("Scaling")), tbl(_tbl), fcColumn(0), rrScale(Range
 		fcColumn->SetCallBack((NotifyProc)&PointScalingForm::ColValCallBack);
 	}
 
+	if (props->scaleMode == PointProperties::sLINEAR)
+		stretchModel = 0;
+	else if (props->scaleMode == PointProperties::sLOGARITHMIC)
+		stretchModel = 1;
+	else
+		stretchModel = 2;
+
     frr = new FieldRangeReal(root, TR("&Stretch"), &(props->stretchRange));
 	fmscale = new FieldReal(root,TR("Scale Exaggeration"),&(props->exaggeration)); 
    
