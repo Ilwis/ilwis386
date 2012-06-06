@@ -318,6 +318,14 @@ int ColumnPropForm::CallBackDomainChange(Event*)
 		stRemark->SetVal(dm->sDescription);
 		if ( fvr)
 			fvr->DomainCallBack(0);
+		else {
+			if ( ft1 && ft2) {
+				ILWIS::TimeInterval interv = dm->pdtime()->getInterval();
+				ILWIS::Time::Mode m = dm->pdtime()->getMode();
+				ft1->SetVal(interv.getBegin(),m);
+				ft2->SetVal(interv.getEnd(), m);
+			}
+		}
 	}
 	return 0;
 }
