@@ -72,7 +72,7 @@ HTREEITEM PointScalingTool::configure( HTREEITEM parentItem) {
 }
 
 void PointScalingTool::setScaling() {
-	new PointScalingForm(tree, (PointLayerDrawer *)drawer, tbl);
+	new PointScalingForm(tree, (FeatureLayerDrawer *)drawer, tbl);
 }
 
 String PointScalingTool::getMenuString() const {
@@ -80,7 +80,7 @@ String PointScalingTool::getMenuString() const {
 }
 
 //---------------------------------------------------
-PointScalingForm::PointScalingForm(CWnd *wPar, PointLayerDrawer *dr, const Table& _tbl):
+PointScalingForm::PointScalingForm(CWnd *wPar, FeatureLayerDrawer *dr, const Table& _tbl):
 DisplayOptionsForm(dr,wPar,TR("Scaling")), tbl(_tbl), fcColumn(0), rrScale(RangeReal(0.1,10)), scaleModel(0), stretchModel(0)
 {
 	props = (PointProperties *)dr->getProperties();

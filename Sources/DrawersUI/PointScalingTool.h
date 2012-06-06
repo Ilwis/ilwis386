@@ -4,9 +4,7 @@ ILWIS::DrawerTool *createPointScalingTool(ZoomableView* zv, LayerTreeView *view,
 
 namespace ILWIS {
 
-class AnimationDrawer;
-
-class PointScalingTool : public DrawerTool {
+class _export PointScalingTool : public DrawerTool {
 public:
 	PointScalingTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw);
 	bool isToolUseableFor(ILWIS::DrawerTool *drw);
@@ -22,7 +20,7 @@ protected:
 
 class PointScalingForm : public DisplayOptionsForm {
 	public:
-	PointScalingForm(CWnd *wPar, PointLayerDrawer *dr, const Table& tbl);
+	PointScalingForm(CWnd *wPar, FeatureLayerDrawer *dr, const Table& tbl);
 	void apply(); 
 private:
 	int ColValCallBack(Event*);
