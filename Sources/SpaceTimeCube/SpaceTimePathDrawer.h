@@ -25,10 +25,6 @@ class _export SpaceTimePathDrawer : public FeatureLayerDrawer, public TemporalDr
 		GeneralDrawerProperties *getProperties();
 		bool draw( const CoordBounds& cbArea) const;
 		virtual void setRepresentation(const Representation& rp);
-		//void setScaleMode(Scaling mode) { scaleMode = mode; }
-		//Scaling getScaleMode() const { return scaleMode; } 
-		//bool usingDirection() const { return useDirection; }
-		//void setUseDirection(bool yesno) { useDirection = yesno; }
 		void SetNrSteps(int steps);
 		int iNrSteps();
 
@@ -38,7 +34,6 @@ class _export SpaceTimePathDrawer : public FeatureLayerDrawer, public TemporalDr
 		virtual NewDrawer *createElementDrawer(PreparationParameters *pp, ILWIS::DrawerParameters* parms) const;
 		void setDrawMethod(DrawMethod method=drmINIT);
 		RangeReal getValueRange(Column attributeColumn) const;
-		double scaleThickness(double v, Column & col, RangeReal & rr) const;
 		Coord projectOnCircle(Coord AB, double r, double f) const;
 		Coord normalize(Coord c) const;
 		Coord cross(Coord c1, Coord c2) const;

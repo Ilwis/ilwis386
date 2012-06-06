@@ -56,10 +56,7 @@ void SpaceTimePathDrawer::prepare(PreparationParameters *parms){
 		return;
 	clock_t start = clock();
 	LayerDrawer::prepare(parms);
-	//FeatureLayerDrawer *fdr = dynamic_cast<FeatureLayerDrawer *>(parentDrawer);
 	FeatureDataDrawer *mapDrawer = (FeatureDataDrawer *)parentDrawer;
-	//if ( getName() == "Unknown")
-	//	setName(mapDrawer->getBaseMap()->sName());
 	if ( (parms->type & RootDrawer::ptGEOMETRY) || (parms->type & NewDrawer::pt3D)) {
 		bool isAnimation = mapDrawer->getType() == "AnimationDrawer";
 		if ( isAnimation ) {
@@ -314,18 +311,6 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 	//double z0 = getRootDrawer()->getZMaker()->getZ0(is3D);
 	//ZValueMaker *zmaker = getZMaker();
 	if (is3D) {
-		/*
-		if (zmaker->getThreeDPossible()) {
-			double zscale = zmaker->getZScale();
-			double zoffset = zmaker->getOffset();
-			glScaled(1,1,zscale);
-			glTranslated(0,0,zoffset + z0);
-		} else {
-			glScaled(1,1,0);
-			glTranslated(0,0,z0);
-		}
-		*/
-
 		//glTranslated(cube.cMin.x + cube.width() / 2.0, cube.cMin.y + cube.height() / 2.0, cube.cMin.z + cube.altitude() / 2.0);
 		//glScaled(cube.width() / 2.0, cube.height() / 2.0, cube.altitude() / 2.0);
 
@@ -370,21 +355,6 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 
 		boolean oldVal;
 		glGetBooleanv(GL_MAP_COLOR, &oldVal);
-		/*
-		glPixelTransferf(GL_MAP_COLOR, palette != 0);
-		if (palette != 0) {
-			if (!drawerContext->isActivePalette(palette)) {
-				palette->MakeCurrent();
-				drawerContext->setActivePalette(palette);
-			}
-			glTexImage2D( GL_TEXTURE_2D, 0, 4, sizeX / zoomFactor, sizeY / zoomFactor, 0, GL_COLOR_INDEX, GL_UNSIGNED_SHORT, texture_data);
-		}
-		else {
-			glTexImage2D( GL_TEXTURE_2D, 0, 4, sizeX / zoomFactor, sizeY / zoomFactor, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture_data);
-			delete [] texture_data;
-			texture_data = 0;
-		}
-		*/
 		glPixelTransferf(GL_MAP_COLOR, false);
 		const int iTextureSize = 256;
 		long texture_data [iTextureSize * 2];
@@ -461,8 +431,6 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 			if (!attributeColumn.fValid())
 				fUseAttributeColumn = false;
 		}
-		//double endvalue = ((zmaker->getBounds().width() + zmaker->getBounds().height()) / 2.0);// * 0.20;
-		//double zfactor = max(getRootDrawer()->getMapCoordBounds().width(), getRootDrawer()->getMapCoordBounds().height()) / endvalue;
 
 		long numberOfFeatures = features.size();
 		double cubeBottom = 0;
@@ -503,18 +471,6 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 			if (numberOfFeatures > 1) {
 				Coord headPrevious;
 				Coord tailPrevious;
-				Column stretchCol;
-				RangeReal rrStretch = getValueRange(stretchCol); // intentional call with fValid = false, so that we get the rrStretch for a value map
-				if (basemap->fTblAtt()) {
-					Table tbl = basemap->tblAtt();
-					if (properties->stretchColumn != "") {
-						Column col = tbl->col(properties->stretchColumn);
-						if (col.fValid() && col->dm()->pdv()) {
-							stretchCol = col;
-							rrStretch = properties->stretchRange.fValid() ? properties->stretchRange : col->dvrs().rrMinMax();
-						}
-					}
-				}
 				long start = 0;
 				double z;
 				Feature * feature;
@@ -642,22 +598,6 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 	drawPostDrawers(cbArea);
 
 	return true;
-}
-
-double SpaceTimePathDrawer::scaleThickness(double v, Column & col, RangeReal & rr) const {
-	if ( properties->scaleMode != PointProperties::sNONE) {
-		if (col.fValid()) {
-			v = col->rValue(v);
-		}
-		if ( properties->scaleMode == PointProperties::sLINEAR) {
-			double scale = max(1.0, 1.0 + properties->exaggeration * (v - rr.rLo()) / rr.rWidth());
-			v *= scale;
-		} else if (properties->scaleMode == PointProperties::sLOGARITHMIC) {
-			double scale = max(1.0,1.0 + properties->exaggeration * log(1.0 + (v - rr.rLo()) / rr.rWidth()));
-			v *= scale;
-		}
-	}
-	return v;
 }
 
 Coord SpaceTimePathDrawer::projectOnCircle(Coord AB, double r, double f) const
