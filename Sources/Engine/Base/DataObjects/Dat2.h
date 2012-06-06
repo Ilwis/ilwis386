@@ -148,6 +148,7 @@ public:
       {}
   Coord(double x, double y, double z=rUNDEF) : Coordinate(x,y,z) {}
   Coord(const Coordinate& crd) : Coordinate(crd) {}
+  _export Coord(const String& crd);
   //double X, Y;
   bool _export operator == (const Coord& crd) const;
   bool _export operator != (const Coord& crd) const
@@ -285,6 +286,7 @@ inline bool Coord::fInside(const Coord& a, const Coord& b) const
   else
     return false;
 }
+
 
 #endif
 

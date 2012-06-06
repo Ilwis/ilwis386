@@ -124,6 +124,28 @@ MinMax& MinMax::operator += (const MinMax& mm) // change this so that mm is insi
 bool Coord::operator == (const Coord& crd) const
 { return fabs(x - crd.x) < 1e-10 && fabs(y - crd.y) < 1e-10 && fabs(z - crd.z) < 1e-10; }
 
+Coord::Coord(const String& crd){
+	int index = crd.find_first_of(", ;/");
+	if ( index != string::npos) {
+		String sx = crd.substr(0,index);
+		sx = sx.sTrimSpaces();
+		String sy = crd.substr(index + 1, crd.size() - index);
+		sy = sy.sTrimSpaces();
+		if(!isdigit(sx[0])) {
+			index = sx.find_first_of("-+.0123456789e");
+			if ( index != string::npos)
+				sx = sx.substr(index, sx.size() - index);
+		}
+		if(!isdigit(sy[sy.size() - 1])) {
+			index = sy.find_last_of("-+.0123456789e");
+			if ( index != string::npos)
+				sy = sy.substr(0, index);
+		}
+		x = sx.rVal();
+		y = sy.rVal();
+	}
+}
+
 CoordBounds::CoordBounds(const CoordBuf& cBuf)
 {
 	area=rUNDEF;
