@@ -64,6 +64,7 @@ public:
 	FileName fn(int) const;
 	virtual void Serialize(CArchive& ar);   // overridden for document i/o
 	virtual BOOL OnOpenDocument(LPCTSTR lpszPathNamee, MapCompositionDoc *doc, ILWIS::ComplexDrawer *drw=0);
+	void remove(const FileName& fn);
 	bool fRowEditable(int rowIndex) const;
 	RecItem * getItem(int rowIndex);
 	void setEditFeature(Feature *f);

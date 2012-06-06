@@ -100,6 +100,7 @@ public:
   void AllowEdit(bool fEdit) ;
   virtual void setAssociatedDrawerTool(ILWIS::DrawerTool *drawr, const String& targetName);
   ILWIS::DrawerTool *getAssociatedTool() const { return associatedDrawerTool; }
+  virtual void remove(const FileName& fn);
 protected:
   void updateView(const IlwisObject& obj);
   CoordWithCoordSystem cwcs;

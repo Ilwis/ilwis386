@@ -1568,6 +1568,14 @@ bool MapCompositionDoc::fCoordSystemOk(const BaseMap& bmap)
 void MapCompositionDoc::RemoveDrawer(ILWIS::NewDrawer* drw)
 {
 	ChangeState();
+	SpatialDataDrawer *spdrw = dynamic_cast<SpatialDataDrawer *>(drw);
+	if ( spdrw) {
+		BaseMapPtr *bmptr = spdrw->getBaseMap();
+		if ( bmptr) {
+			FileName fnObj = bmptr->fnObj;
+			pixInfoDoc->remove(fnObj);
+		}
+	}
 	rootDrawer->removeDrawer(drw->getId());
 	ChangeState();
 }

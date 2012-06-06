@@ -293,6 +293,19 @@ int RecItem::Configure(CWnd* win)
 	*/  
 }
 
+void RecItem::remove(const FileName& fn){
+	for (SLIterP<RecItem> iter(&children); iter.fValid(); ++iter) {
+		if ( iter()->fnObj() != fn) {
+			RecItem *p = iter.remove();
+			delete p;
+			break;
+		} else {
+			iter()->remove(fn);
+		}
+			
+	}
+}
+
 //-------------------------------------------------------------------------------
 RecItemMap::RecItemMap(RecItem* parent, BaseMap map)
 : RecItem(parent), _map(map)
@@ -320,6 +333,7 @@ void RecItemMap::setAssociatedDrawerTool(DrawerTool *drawr, const String& target
 		iter()->setAssociatedDrawerTool(drawr, reason);
 	}
 }
+
 
 String RecItemMap::sName() 
 {

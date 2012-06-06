@@ -767,7 +767,7 @@ void LayerTreeView::OnRemoveLayer()
 	int iRet = MessageBox(s.c_str(), TR("Remove Layer").c_str(), MB_YESNO|MB_ICONQUESTION);
 	if (IDYES == iRet) {
 		MapCompositionDoc* mcd = GetDocument();	 
-		mcd->rootDrawer->removeDrawer(drw->getId());
+		mcd->RemoveDrawer(drw);
 		mcd->UpdateAllViews(0);
 	}  
 }

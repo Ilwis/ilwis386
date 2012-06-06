@@ -309,6 +309,11 @@ void PixelInfoDoc::OnAddGrf()
 	}
 }
 
+void PixelInfoDoc::remove(const FileName& fn){
+	riCoord.remove(fn);
+	Update();
+}
+
 void PixelInfoDoc::AddMap(const BaseMap& mp)
 {
 	if (IOTYPE(mp->fnObj) == IlwisObject::iotRASMAP) {
