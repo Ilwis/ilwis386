@@ -372,6 +372,8 @@ BOOL IlwisWinApp::InitApplication()
 	if ( ipos != shUNDEF){
 		m_sCommand = sParms.substr(ipos + getEngine()->fStayResident() ? 4 : 3);
 		sParms = " -NoLogo " + sParms;
+		// -C mode will not give messageboxes anymore
+		getEngine()->getContext()->SetThreadLocalVar(IlwisAppContext::tlvSERVERMODE, new bool(true));
 	}
 	else
 		plInitParms.Fill(sParms);
