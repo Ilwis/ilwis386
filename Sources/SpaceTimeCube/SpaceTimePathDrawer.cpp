@@ -6,7 +6,6 @@
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Engine\Drawers\RootDrawer.h"
 #include "Engine\Drawers\SpatialDataDrawer.h"
-//#include "Engine\Drawers\ZValueMaker.h"
 #include "Drawers\LayerDrawer.h"
 #include "Drawers\featuredatadrawer.h"
 #include "Drawers\FeatureLayerDrawer.h"
@@ -14,8 +13,6 @@
 #include "SpaceTimePathDrawer.h"
 #include "Drawers\PointDrawer.h"
 #include "Drawers\PointFeatureDrawer.h"
-#include "Headers\Hs\Drwforms.hs"
-#include "Drawers\TextureHeap.h"
 
 using namespace ILWIS;
 
@@ -28,8 +25,6 @@ SpaceTimePathDrawer::SpaceTimePathDrawer(DrawerParameters *parms)
 , prevUseAttColumn(false)
 , nrSteps(-1)
 {
-	properties = new PointProperties();
-	properties->exaggeration = 1.0;
 	displayList = new GLuint;
 	*displayList = 0;
 	fRefreshDisplayList = new bool;
@@ -45,7 +40,6 @@ SpaceTimePathDrawer::~SpaceTimePathDrawer() {
 		glDeleteLists(*displayList, 1);
 	if (*texture != 0)
 		glDeleteTextures(1, texture);
-	delete properties;
 }
 
 NewDrawer *SpaceTimePathDrawer::createElementDrawer(PreparationParameters *pp, ILWIS::DrawerParameters* parms) const{
@@ -142,6 +136,19 @@ void SpaceTimePathDrawer::prepare(PreparationParameters *parms){
 		}
 
 		*fRefreshTexture = true;
+
+		if ( parms && parms->props ) {
+			if ( properties->scaleMode != PointProperties::sNONE && properties->stretchColumn != "" && basemap->fTblAtt()) {
+				Table attTable = basemap->tblAtt();
+				Column col = attTable->col(properties->stretchColumn);
+				if ( col.fValid() && col->dm()->pdv()) {
+					SetSizeAttribute(col);
+					SetSizeStretch(&(properties->stretchRange));
+				}
+			} else
+				SetNoSize();
+			*fRefreshDisplayList = true;
+		}
 	}
 	clock_t end = clock();
 	double duration = 1000.0 * (double)(end - start) / CLOCKS_PER_SEC;
@@ -349,6 +356,9 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 		glEnable(GL_COLOR_MATERIAL);
 	}
 
+	if (steps == 1)
+		glLineWidth(properties->exaggeration);
+
 	if (*texture == 0) {
 		glGenTextures(1, texture);
 		glBindTexture(GL_TEXTURE_2D, *texture);
@@ -519,8 +529,7 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 				head = getRootDrawer()->glConv(csy, head);
 				String sLastGroupValue = fUseGroup ? getGroupValue(feature) : "";
 				float rsHead = fUseAttributeColumn ? (((fValueMap ? attributeColumn->rValue(feature->iValue()) : attributeColumn->iRaw(feature->iValue())) - minMapVal) / width) : ((feature->rValue() - minMapVal) / width);
-				//double rHead = pathScale * scaleThickness(feature->rValue(), stretchCol, rrStretch) / rrStretch.rWidth();
-				double rHead = fUseSize ? pathScale * getSizeValue(feature) / (sizeStretch->rHi() - sizeStretch->rLo()) : pathScale / 2.0;
+				double rHead = pathScale * getSizeValue(feature);
 				for (long i = start; i < numberOfFeatures; ++i)
 				{
 					feature = features[i];
@@ -532,8 +541,7 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 						tail = getRootDrawer()->glConv(csy, tail);
 						tail.z = z * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
 						float rsTail = fUseAttributeColumn ? (((fValueMap ? attributeColumn->rValue(feature->iValue()) : attributeColumn->iRaw(feature->iValue())) - minMapVal) / width) : ((feature->rValue() - minMapVal) / width);
-						//double rTail = pathScale * scaleThickness(feature->rValue(), stretchCol, rrStretch) / rrStretch.rWidth();
-						double rTail = fUseSize ? pathScale * getSizeValue(feature) / (sizeStretch->rHi() - sizeStretch->rLo()) : pathScale / 2.0;
+						double rTail = pathScale * getSizeValue(feature);
 
 						bool fCutPath = false;
 						if (fUseGroup && sLastGroupValue != getGroupValue(feature)) {
@@ -619,6 +627,9 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
 	glDisable(GL_TEXTURE_2D);
+
+	if (steps == 1)
+		glLineWidth(1);
 
 	if (fUseLight) {
 		glDisable(GL_COLOR_MATERIAL);

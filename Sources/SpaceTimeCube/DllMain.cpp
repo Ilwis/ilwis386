@@ -21,6 +21,7 @@
 #include "PostTimeOffsetDrawer.h"
 #include "TimeZoomTool.h"
 #include "CubeElementsTool.h"
+#include "PathScalingTool.h"
 
 using namespace ILWIS;
 
@@ -30,6 +31,7 @@ DrawerToolInfoVector *createDrawerTool() {
 	infos->push_back(new DrawerToolInfo("CubeElementsTool",createCubeElementsTool));
 	infos->push_back(new DrawerToolInfo("SpaceTimePathTool",createSpaceTimePathTool));
 	infos->push_back(new DrawerToolInfo("TimeZoomTool",createTimeZoomTool));
+	infos->push_back(new DrawerToolInfo("PathScalingTool",createPathScalingTool));
 	return infos;
 }
 

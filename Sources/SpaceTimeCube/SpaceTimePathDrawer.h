@@ -11,8 +11,6 @@ class FieldColor;
 
 namespace ILWIS{
 
-struct PointProperties;
-
 class _export SpaceTimePathDrawer : public FeatureLayerDrawer, public TemporalDrawer, public SizableDrawer, public SortableDrawer, public GroupableDrawer {
 	public:
 		enum Scaling{sNONE, sLOGARITHMIC, sLINEAR};
@@ -44,7 +42,6 @@ class _export SpaceTimePathDrawer : public FeatureLayerDrawer, public TemporalDr
 		Coord projectOnCircle(Coord AB, double r, double f) const;
 		Coord normalize(Coord c) const;
 		Coord cross(Coord c1, Coord c2) const;
-		PointProperties *properties;
 		GLuint * displayList;
 		bool * fRefreshDisplayList;
 		GLuint * texture;
