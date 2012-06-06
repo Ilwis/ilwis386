@@ -43,7 +43,14 @@ void DomainTime::Store()
 }
 
 bool DomainTime::fEqual(const IlwisObjectPtr& ptr) const {
-	return  0 != dynamic_cast<const DomainTime*>(&ptr);;
+	const DomainTime *dt = dynamic_cast<const DomainTime*>(&ptr);
+	if ( !dt)
+		return false;
+	ILWIS::TimeInterval interv1 = dt->getInterval();
+	ILWIS::TimeInterval interv2 = getInterval();
+	return interv1 == interv2;
+
+	
 }
 StoreType DomainTime::stNeeded() const {
 	return stREAL;
