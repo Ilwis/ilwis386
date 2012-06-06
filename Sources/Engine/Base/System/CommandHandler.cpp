@@ -2381,8 +2381,19 @@ void CommandHandler::CmdCreateGrf(const String& s)
 		if ( !fn.fExist())
 			throw ErrorObject(TR("Unknow basemap used for bounds"));
 		BaseMap bmp(fn);
+		CoordBounds cb;
 		CoordSystem cs = bmp->cs();
-		CoordBounds cb = bmp->cb();
+		if ( pm.fExist("boundingbox") ) {
+			String bb = pm.sGet("boundingbox");
+			bb = bb.sUnQuote() ;
+			Array<String> parts;
+			Split(bb, parts, ",");
+
+			cb = CoordBounds(Coord(parts[0].rVal(), parts[1].rVal()), Coord(parts[2].rVal(), parts[3].rVal()));
+
+
+		} else
+			cb = bmp->cb();
 		String s = pm.sGet("pixsize");;
 		double pixsz = s.rVal();
 		if ( pixsz == rUNDEF)
