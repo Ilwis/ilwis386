@@ -162,7 +162,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ILWISEngine.lib htmlhelp.lib IlwisClient.lib opengl32.lib ILWISDrawers.lib glu32.lib gdiplus.lib"
+				AdditionalDependencies="ILWISEngine.lib htmlhelp.lib IlwisClient.lib opengl32.lib ILWISDrawers.lib DrawersUI.lib glu32.lib gdiplus.lib"
 				OutputFile="$(SolutionDir)$(ConfigurationName)\Ilwis3\Extensions\SpaceTimeCube.dll"
 				Version="3.8"
 				LinkIncremental="1"
