@@ -45,7 +45,13 @@ static const char*  gMemBufId = "prodInfo";
 
 using namespace ILWIS;
 
-WMSGetCapabilities::WMSGetCapabilities(const URL& url) : RemoteObject(url) {
+WMSGetCapabilities::WMSGetCapabilities(const URL& url) : RemoteObject() {
+	URL localUrl = url;
+	if ( localUrl.getQueryValue("REQUEST") == "") {
+		localUrl.setQueryValue("REQUEST","GetCapabilities");
+	}
+	getRequest(localUrl.sVal());
+
 }
 
 vector<WMSLayerInfo *> WMSGetCapabilities::getLayerInfo() {

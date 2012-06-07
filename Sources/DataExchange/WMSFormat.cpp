@@ -374,6 +374,7 @@ WMSLayerInfo* WMSFormat::find(vector<WMSLayerInfo *> layers, const String& sName
 }
 
 CoordSystem WMSFormat::getCoordSystem(const FileName& fnBase, const String& srsName) {
+	try{
 	String path = getEngine()->getContext()->sIlwDir();
 	path += "Resources\\gdal_data";
 //	OGRSpatialReference oSRS;
@@ -382,7 +383,7 @@ CoordSystem WMSFormat::getCoordSystem(const FileName& fnBase, const String& srsN
 	OGRSpatialReferenceH handle = funcs.newSRS(NULL);
 	OGRErr err = funcs.srsImportFromEPSG( handle, srsName.sTail(":").iVal());
 	if ( err == OGRERR_UNSUPPORTED_SRS )
-		throw ErrorObject(String("The SRS %S is not supported", srsName));
+		throw ErrorObject(String("The SRS %S is not supported, Unknown will be used", srsName));
 
 	String datumName(funcs.getAttribute(handle, "Datum",0));
 	//map<String, ProjectionConversionFunctions>::iterator where = mpCsyConvers.find(projectionName);
@@ -458,6 +459,11 @@ CoordSystem WMSFormat::getCoordSystem(const FileName& fnBase, const String& srsN
 	csy->Store();
 
 	return csy;
+
+	} catch (const ErrorObject& err) {
+		err.Show();
+		return CoordSystem("Unknown");
+	}
 }
 
 String WMSFormat::getMapRequest(const CoordBounds& cb, const String& layers, const String& srsName, const RowCol rc) const{
