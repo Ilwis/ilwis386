@@ -91,6 +91,21 @@ bool OpenstreetmapDrawer::draw( const CoordBounds& cbArea) const {
 		glEnable(GL_TEXTURE_2D);
 		glMatrixMode(GL_TEXTURE);
 		glPushMatrix();
+
+		CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
+
+		Coord c1 (cbMap.cMin);
+		Coord c2 (cbMap.cMax.x, cbMap.cMin.y);
+		Coord c3 (cbMap.cMax);
+		Coord c4 (cbMap.cMin.x, cbMap.cMax.y);
+		double clip_plane0[]={-1.0, 0.0, 0.0, cbMap.cMax.x};
+		double clip_plane1[]={1.0, 0.0, 0.0, -cbMap.cMin.x};
+		double clip_plane2[]={0.0, -1.0, 0.0, cbMap.cMax.y};
+		double clip_plane3[]={0.0, 1.0, 0.0, -cbMap.cMin.y};
+		glClipPlane(GL_CLIP_PLANE0,clip_plane0);
+		glClipPlane(GL_CLIP_PLANE1,clip_plane1);
+		glClipPlane(GL_CLIP_PLANE2,clip_plane2);
+		glClipPlane(GL_CLIP_PLANE3,clip_plane3);
 		CoordBounds cb1(Coord(-20037508.34, -20037508.34), Coord(0, 0));
 		CoordBounds cb2(Coord(0, 0), Coord(20037508.34, 20037508.34));
 		CoordBounds cb3(Coord(-20037508.34, 0), Coord(0, 20037508.34));
@@ -219,10 +234,13 @@ void OpenstreetmapDrawer::DisplayImagePortion(CoordBounds& cb) const {
 	}
 	else
 	{
-		if (getRootDrawer()->is3D() && demTriangulator)
-			DisplayTexture3D(cb);
-		else {
-			DisplayTexture(cb);
+		CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
+		if (cbMap.fContains(c1) || cbMap.fContains(c2) || cbMap.fContains(c3) || cbMap.fContains(c4)) {
+			if (getRootDrawer()->is3D() && demTriangulator)
+				DisplayTexture3D(cb);
+			else {
+				DisplayTexture(cb);
+			}
 		}
 	}
 }
@@ -233,6 +251,11 @@ void OpenstreetmapDrawer::DisplayTexture(CoordBounds & cb) const
 
 	if (tex != 0)
 	{
+		glEnable(GL_CLIP_PLANE0);
+		glEnable(GL_CLIP_PLANE1);
+		glEnable(GL_CLIP_PLANE2);
+		glEnable(GL_CLIP_PLANE3);
+
 		CoordBounds cbImage = openstreetmapData->cbFullExtent;
 		// make the quad
 		glBegin (GL_QUADS);
@@ -309,6 +332,11 @@ void OpenstreetmapDrawer::DisplayTexture(CoordBounds & cb) const
 		}
 	
 		glEnd();
+
+		glDisable(GL_CLIP_PLANE0);
+		glDisable(GL_CLIP_PLANE1);
+		glDisable(GL_CLIP_PLANE2);
+		glDisable(GL_CLIP_PLANE3);
 	}
 }
 
