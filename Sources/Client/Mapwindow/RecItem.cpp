@@ -295,7 +295,7 @@ int RecItem::Configure(CWnd* win)
 
 void RecItem::remove(const FileName& fn){
 	for (SLIterP<RecItem> iter(&children); iter.fValid(); ++iter) {
-		if ( iter()->fnObj() != fn) {
+		if ( iter()->fnObj() == fn) {
 			RecItem *p = iter.remove();
 			delete p;
 			break;
