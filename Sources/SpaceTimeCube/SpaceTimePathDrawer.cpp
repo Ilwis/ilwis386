@@ -13,6 +13,7 @@
 #include "SpaceTimePathDrawer.h"
 #include "Drawers\PointDrawer.h"
 #include "Drawers\PointFeatureDrawer.h"
+#include "Engine\Representation\Rprclass.h"
 
 using namespace ILWIS;
 
@@ -219,16 +220,6 @@ void SpaceTimePathDrawer::setDrawMethod(DrawMethod method) {
 		drm = method; 
 }
 
-void SpaceTimePathDrawer::getDrawerFor(const Feature* feature,vector<NewDrawer *>& featureDrawers) {
-	for(int i=0; i< getDrawerCount(); ++i) {
-		PointFeatureDrawer *pfdrw = dynamic_cast<PointFeatureDrawer *>(getDrawer(i));
-		if ( pfdrw) {
-			if ( feature->getGuid() == pfdrw->getFeature()->getGuid())
-				featureDrawers.push_back(pfdrw);
-		}
-	}
-}
-
 GeneralDrawerProperties *SpaceTimePathDrawer::getProperties() {
 	return properties;
 }
@@ -279,6 +270,22 @@ void SpaceTimePathDrawer::SetNrSteps(int steps)
 int SpaceTimePathDrawer::iNrSteps()
 {
 	return nrSteps;
+}
+
+void SpaceTimePathDrawer::getHatch(RepresentationClass * prc, long iRaw, const byte* &hatch, const byte* &hatchInverse, Color & backgroundColor) const {
+	String hatchName = prc->sHatch(iRaw);
+	if ( hatchName != sUNDEF) {
+		const SVGLoader *loader = NewDrawer::getSvgLoader();
+		SVGLoader::const_iterator cur = loader->find(hatchName);
+		if ( cur != loader->end() && (*cur).second->getType() == IVGElement::ivgHATCH) {
+			hatch = (*cur).second->getHatch();
+			hatchInverse = (*cur).second->getHatchInverse();
+			backgroundColor = prc->clrSecondRaw(iRaw);
+			long transparent = Color(-2); // in the old days this was the transparent value
+			if (backgroundColor.iVal() == transparent) 
+				backgroundColor = colorUNDEF;
+		}
+	}
 }
 
 bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
@@ -334,8 +341,6 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 	const bool fUseLight = is3D && steps > 1;
 	if (fUseLight) {
 		glEnable(GL_LIGHTING);
-		//float g_lightPos[4] = { 10, 10, -100, 1 };  // Position of light
-		//glLightfv(GL_LIGHT0, GL_POSITION, g_lightPos);
 		glEnable(GL_LIGHT0);
 		glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 		glEnable(GL_COLOR_MATERIAL);
@@ -418,12 +423,6 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 		*displayList = glGenLists(1);
 		glNewList(*displayList, GL_COMPILE_AND_EXECUTE);
 
-		Column attributeColumnColors;
-		if (useAttributeColumn())
-			attributeColumnColors = getAtttributeColumn();
-		RangeReal rrMinMax = getValueRange(attributeColumnColors);
-		double width = rrMinMax.rWidth();
-		double minMapVal = rrMinMax.rLo();
 		Column attributeColumn;
 		bool fUseAttributeColumn = useAttributeColumn();
 		if (fUseAttributeColumn) {
@@ -431,7 +430,9 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 			if (!attributeColumn.fValid())
 				fUseAttributeColumn = false;
 		}
-
+		RangeReal rrMinMax = getValueRange(attributeColumn);
+		double width = rrMinMax.rWidth();
+		double minMapVal = rrMinMax.rLo();
 		long numberOfFeatures = features.size();
 		double cubeBottom = 0;
 		double cubeTop = timeBounds->tMax() - timeBounds->tMin();
@@ -486,6 +487,17 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 				String sLastGroupValue = fUseGroup ? getGroupValue(feature) : "";
 				float rsHead = fUseAttributeColumn ? (((fValueMap ? attributeColumn->rValue(feature->iValue()) : attributeColumn->iRaw(feature->iValue())) - minMapVal) / width) : ((feature->rValue() - minMapVal) / width);
 				double rHead = pathScale * getSizeValue(feature);
+				const byte * hatch = 0;
+				const byte * hatchInverse;
+				Color backgroundColor;
+				RepresentationClass * prc = 0;
+				if (fUseAttributeColumn) {
+					Representation rpr = attributeColumn->dm()->rpr();
+					if ( rpr.fValid() && rpr->dm()->pdc())
+						prc = rpr->prc();
+				}
+				if (prc)
+					getHatch(prc, attributeColumn->iRaw(feature->iValue()), hatch, hatchInverse, backgroundColor);
 				for (long i = start; i < numberOfFeatures; ++i)
 				{
 					feature = features[i];
@@ -537,6 +549,13 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 								}
 								glEnd();
 							}
+
+							if (hatch) {
+								glEnable(GL_POLYGON_STIPPLE);
+								glPolygonStipple(hatch);
+							} else
+								glDisable(GL_POLYGON_STIPPLE);
+
 							// cylinderCoords
 							glBegin(GL_TRIANGLE_STRIP);
 							Coord AB = tail;
@@ -570,10 +589,16 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 						head = tail;
 						rsHead = rsTail;
 						rHead = rTail;
+						if (prc) {
+							hatch = 0;
+							getHatch(prc, attributeColumn->iRaw(feature->iValue()), hatch, hatchInverse, backgroundColor);
+						}
 					}
 					if ( i % 100 == 0)
 						trq.fUpdate(i, numberOfFeatures); 
 				}
+				if ( hatch)
+					glDisable(GL_POLYGON_STIPPLE);
 			}
 		}
 

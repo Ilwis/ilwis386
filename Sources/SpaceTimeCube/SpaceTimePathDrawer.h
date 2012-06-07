@@ -21,7 +21,6 @@ class _export SpaceTimePathDrawer : public FeatureLayerDrawer, public TemporalDr
 		HTREEITEM  configure(LayerTreeView  *tv, HTREEITEM parent);
 		void prepare(PreparationParameters *parms);
 		virtual void prepareChildDrawers(PreparationParameters *pp);
-		void getDrawerFor(const Feature* feature,vector<NewDrawer *>& featureDrawers);
 		GeneralDrawerProperties *getProperties();
 		bool draw( const CoordBounds& cbArea) const;
 		virtual void setRepresentation(const Representation& rp);
@@ -34,6 +33,7 @@ class _export SpaceTimePathDrawer : public FeatureLayerDrawer, public TemporalDr
 		virtual NewDrawer *createElementDrawer(PreparationParameters *pp, ILWIS::DrawerParameters* parms) const;
 		void setDrawMethod(DrawMethod method=drmINIT);
 		RangeReal getValueRange(Column attributeColumn) const;
+		void getHatch(RepresentationClass * prc, long iRaw, const byte* &hatch, const byte* &hatchInverse, Color & backgroundColor) const;
 		Coord projectOnCircle(Coord AB, double r, double f) const;
 		Coord normalize(Coord c) const;
 		Coord cross(Coord c1, Coord c2) const;
