@@ -39,11 +39,13 @@ class _export PolygonDrawer : public SimpleDrawer {
 
 		vector<vector<Coord> > triangleStrips;
 		Color drawColor;
+		Color backgroundColor; // for hatching background
 		CoordBounds cb;
 		bool showArea;
 		bool showBoundary;
 		double areaTransparency;
 		PolygonProperties properties;
 		const byte *hatch;
+		const byte *hatchInverse;
 	};
 }

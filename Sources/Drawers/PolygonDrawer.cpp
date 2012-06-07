@@ -15,13 +15,14 @@ ILWIS::NewDrawer *createPolygonDrawer(DrawerParameters *parms) {
 	return new PolygonDrawer(parms);
 }
 
-PolygonDrawer::PolygonDrawer(DrawerParameters *parms) : SimpleDrawer(parms,"PolygonDrawer"), boundary(0), showArea(0), hatch(0) {
+PolygonDrawer::PolygonDrawer(DrawerParameters *parms) : SimpleDrawer(parms,"PolygonDrawer"), boundary(0), showArea(0), hatch(0), hatchInverse(0) {
 	setDrawMethod(NewDrawer::drmRPR);
 	drawColor = Color(100,200,255);
+	backgroundColor = colorUNDEF;
 	areaTransparency = 1;
 }
 
-PolygonDrawer::PolygonDrawer(DrawerParameters *parms, const String& name) : SimpleDrawer(parms,name), boundary(0), showArea(true), hatch(0) {
+PolygonDrawer::PolygonDrawer(DrawerParameters *parms, const String& name) : SimpleDrawer(parms,name), boundary(0), showArea(true), hatch(0), hatchInverse(0) {
 	setDrawMethod(NewDrawer::drmRPR);
 	areaTransparency = 1;
 }
@@ -77,6 +78,29 @@ bool PolygonDrawer::draw( const CoordBounds& cbArea) const{
 				glVertex3d(c.x,c.y,z);
 			}
 			glEnd();
+		}
+	}
+ 	if ( hatch && backgroundColor != colorUNDEF ) {
+		glPolygonStipple(hatchInverse); 
+		glColor4f(backgroundColor.redP(),backgroundColor.greenP(), backgroundColor.blueP(), tr);
+		if ( asQuad && showArea) {
+			glBegin(GL_QUADS);
+			glVertex3d(cb.cMin.x, cb.cMin.y, 0);
+			glVertex3d(cb.cMin.x, cb.cMax.y, 0);
+			glVertex3d(cb.cMax.x, cb.cMax.y, 0);
+			glVertex3d(cb.cMax.x, cb.cMin.y, 0);
+			glEnd();
+		} else {
+		for(int i=0; i < triangleStrips.size() && showArea; ++i){
+				glBegin(GL_TRIANGLE_STRIP);
+				//glBegin(GL_LINE_STRIP);
+				for(int j=0; j < triangleStrips.at(i).size(); ++j) {
+					Coord c = triangleStrips.at(i).at(j);
+					double z = cdrw->getZMaker()->getThreeDPossible() & is3D ? c.z : z0;
+					glVertex3d(c.x,c.y,z);
+				}
+				glEnd();
+			}
 		}
 	}
 	if ( is3D) {

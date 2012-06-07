@@ -19,7 +19,7 @@ using namespace ILWIS;
 
 map<String, Color> IVGElement::svgcolors;
 
-IVGElement::IVGElement(const String& _id) : defaultScale(1.0), hatch(0) 
+IVGElement::IVGElement(const String& _id) : defaultScale(1.0), hatch(0), hatchInverse(0)
 {
 	if ( svgcolors.size() == 0) {
 		initSvgData();
@@ -30,7 +30,7 @@ IVGElement::IVGElement(const String& _id) : defaultScale(1.0), hatch(0)
 	id = _id;
 }
 
-IVGElement::IVGElement(IVGAttributes::ShapeType t, const String& _id) : id(_id), defaultScale(1.0), hatch(0) {
+IVGElement::IVGElement(IVGAttributes::ShapeType t, const String& _id) : id(_id), defaultScale(1.0), hatch(0), hatchInverse(0) {
 	if ( svgcolors.size() == 0) {
 		initSvgData();
 	}
@@ -42,6 +42,8 @@ IVGElement::IVGElement(IVGAttributes::ShapeType t, const String& _id) : id(_id),
 IVGElement::~IVGElement() {
 	if ( hatch)
 		delete [] hatch;
+	if ( hatchInverse)
+		delete [] hatchInverse;
 }
 
 Color IVGElement::getColor(const String& name) const{
@@ -111,6 +113,7 @@ void IVGElement::parse(const pugi::xml_node& node) {
 
 void  IVGElement::parseHatch(const pugi::xml_node& node) {
 	hatch = new byte[128];
+	hatchInverse = new byte[128];
 	int cnt = 0;
 	for(pugi::xml_node child = node.first_child(); child;  child = child.next_sibling()) {
 		String line = child.child_value();
@@ -119,6 +122,7 @@ void  IVGElement::parseHatch(const pugi::xml_node& node) {
 			String s = line.substr(i * 8, 8);
 			byte b = bitset<numeric_limits<byte>::digits>(s).to_ulong();
 			hatch[cnt] = b;
+			hatchInverse[cnt] = 0xff ^ b;
 			++cnt;
 		}
 	}
@@ -468,4 +472,8 @@ bool IVGAttributes::isPolygon() const {
 
 const byte * IVGElement::getHatch() const{
 	return (const byte *) hatch;
+}
+
+const byte * IVGElement::getHatchInverse() const{
+	return (const byte *) hatchInverse;
 }

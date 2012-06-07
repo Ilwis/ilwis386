@@ -133,6 +133,11 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 						return;
 
 					hatch = (*cur).second->getHatch();
+					hatchInverse = (*cur).second->getHatchInverse();
+					backgroundColor = rpr->prc()->clrSecondRaw(fvalue);
+					long transparent = Color(-2); // in the old days this was the transparent value
+					if (backgroundColor.iVal() == transparent) 
+						backgroundColor = colorUNDEF;
 				}
 			}
 			//if ( p->props && p->props->hatchName != sUNDEF) {

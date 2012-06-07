@@ -55,6 +55,7 @@ namespace ILWIS {
 		double getDefaultScale() const { return defaultScale; }
 		IVGElement::Type getType() const { return type;}
 		const byte * getHatch() const;
+		const byte * getHatchInverse() const;
 
 	protected:
 		void initSvgData();
@@ -71,5 +72,6 @@ namespace ILWIS {
 		String id;
 		IVGElement::Type type;
 		byte *hatch;
+		byte *hatchInverse;
 	};
 }

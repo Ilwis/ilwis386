@@ -116,7 +116,7 @@ Color RepresentationItems::clrSecondRaw(long iRaw) const
 
   long iColor = colSecondClr->iRaw(iRaw);
   if (iUNDEF == iColor) 
-    return Color(255,255,255);
+    return colorUNDEF;
   else
     return Color(iColor);
 }
