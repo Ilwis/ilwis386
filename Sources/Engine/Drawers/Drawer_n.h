@@ -46,6 +46,7 @@ namespace ILWIS {
                    ldtDot, ldtDash, ldtDashDot, ldtDashDotDot,
                    ldtBlocked, ldtSymbol
                  };
+		enum DataSourceOption{dsoNONE=0, dsoEXTENDBOUNDS=1};
 
 		virtual ~NewDrawer() {}
 		virtual bool draw( const CoordBounds& cb=CoordBounds()) const = 0;

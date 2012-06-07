@@ -950,7 +950,7 @@ void MapCompositionDoc::OnUpdatePropLayer(CCmdUI* pCmdUI)
 
 
 
-ILWIS::NewDrawer *MapCompositionDoc::createBaseMapDrawer(const BaseMap& bmp, const String& type, const String& subtype, int os) {
+ILWIS::NewDrawer *MapCompositionDoc::createBaseMapDrawer(const BaseMap& bmp, const String& type, const String& subtype, OpenType ot, int os) {
 
 	ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
 	ILWIS::NewDrawer *drawer = NewDrawer::getDrawer(type, subtype, &parms);
@@ -958,20 +958,21 @@ ILWIS::NewDrawer *MapCompositionDoc::createBaseMapDrawer(const BaseMap& bmp, con
 	if (!drawer)
 		return 0;
 
-	drawer->addDataSource((void *)&bmp);
+	bool fOverruleBounds = !(ot & otKEEPBOUNDS);
+	drawer->addDataSource((void *)&bmp, fOverruleBounds ? NewDrawer::dsoEXTENDBOUNDS : NewDrawer::dsoNONE);
 	rootDrawer->setCoordinateSystem(bmp->cs());
 	CoordBounds cbMap = bmp->cb();
 	if ( !cbMap.fValid() && IOTYPE(bmp->fnObj) == IlwisObject::iotRASMAP) { // for csunknown with no boundaries
 		MapPtr *mptr = (MapPtr *)bmp.pointer();
 		cbMap = CoordBounds(Coord(0,0), Coord(mptr->rcSize().Col, -mptr->rcSize().Row)); // none.grf bounds
 	}
-	rootDrawer->addCoordBounds(bmp->cs(), cbMap);
+	rootDrawer->addCoordBounds(bmp->cs(), cbMap, fOverruleBounds);
 	ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY);
 	pp.subType = subtype;
 	drawer->prepare(&pp);
 	pp.type = RootDrawer::ptRENDER;
 	drawer->prepare(&pp);
-	rootDrawer->addDrawer(drawer);
+	rootDrawer->addDrawer(drawer, fOverruleBounds);
 	addToPixelInfo(bmp, (ComplexDrawer *)drawer);
 	FrameWindow * frame = mpvGetView()->getFrameWindow();
 	if ( frame) {
@@ -982,7 +983,7 @@ ILWIS::NewDrawer *MapCompositionDoc::createBaseMapDrawer(const BaseMap& bmp, con
 	}
 	String sysFile = bmp->fnObj.sFullName();
 	sysFile.toLower();
-	if ( sysFile.find("ilwis3\\system\\basemaps") != string::npos && cbZoom.fValid()) // restore cbZoom if we added a system background map
+	if ( fOverruleBounds && cbZoom.fValid() && (sysFile.find("ilwis3\\system\\basemaps") != string::npos)) // restore cbZoom if we added a system background map
 		rootDrawer->setCoordBoundsZoom(cbZoom);
 
 
@@ -1005,7 +1006,7 @@ BOOL MapCompositionDoc::OnOpenRasterMap(const Map& mp, OpenType ot, int os)
 
 	SetTitle(mp);
 
-	createBaseMapDrawer(mp, "RasterDataDrawer", "Ilwis38", os);	
+	createBaseMapDrawer(mp, "RasterDataDrawer", "Ilwis38", ot, os);	
 
 	if (ot & otEDIT) {
 		::AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_EDITLAYER, 0);
@@ -1030,12 +1031,12 @@ BOOL MapCompositionDoc::OnOpenObjectCollection(const ObjectCollection& list, Ope
 		return FALSE;
 	SetTitle(bmp);
 	ComplexDrawer *drawer=0;
-	if (ot == otANIMATION) {
+	if (ot & otANIMATION) {
 		ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
 		drawer = (ComplexDrawer *)NewDrawer::getDrawer("AnimationDrawer", "Ilwis38", &parms);
 
 	}
-	else if (ot == otCOLLECTION)  {
+	else if (ot & otCOLLECTION)  {
 		ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
 		drawer = (ComplexDrawer *)NewDrawer::getDrawer("CollectionDrawer", "Ilwis38", &parms);
 	}
@@ -1103,7 +1104,7 @@ BOOL MapCompositionDoc::OnOpenSegmentMap(const SegmentMap& sm, OpenType ot, int 
 
 	SetTitle(sm);
 
-	createBaseMapDrawer(sm,"FeatureDataDrawer", "Ilwis38", os);
+	createBaseMapDrawer(sm,"FeatureDataDrawer", "Ilwis38", ot, os);
 	
 	if (ot & otEDIT) {
 		::AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_EDITLAYER, 0);
@@ -1127,7 +1128,7 @@ BOOL MapCompositionDoc::OnOpenPolygonMap(const PolygonMap& pm, OpenType ot, int 
 
 	SetTitle(pm);
 
-	createBaseMapDrawer(pm,"FeatureDataDrawer", "Ilwis38", os);
+	createBaseMapDrawer(pm,"FeatureDataDrawer", "Ilwis38", ot, os);
 	
 	if (ot & otEDIT) {
 		::AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_EDITLAYER, 0);
@@ -1152,7 +1153,7 @@ BOOL MapCompositionDoc::OnOpenPointMap(const PointMap& pm, OpenType ot,int os)
 	SetTitle(pm);
 
 	
-	SpatialDataDrawer *drw = (SpatialDataDrawer *)createBaseMapDrawer(pm,"FeatureDataDrawer", "Ilwis38", os);
+	SpatialDataDrawer *drw = (SpatialDataDrawer *)createBaseMapDrawer(pm,"FeatureDataDrawer", "Ilwis38", ot, os);
 
 	if (ot & otEDIT) {
 		drw->setEditMode(true);
@@ -1295,8 +1296,8 @@ NewDrawer* MapCompositionDoc::drDrawer(const MapView& view, const char* sSection
 class AddLayerForm: public FormWithDest
 {
 public:
-	AddLayerForm(CWnd* parent, String* sName, long *c) 
-		: FormWithDest(parent, TR("Add Data Layer")),  choice(c)
+	AddLayerForm(CWnd* parent, String* sName, long *c, bool *e) 
+		: FormWithDest(parent, TR("Add Data Layer")), choice(c), extendBounds(e)
 	{
 		types.push_back("all");
 		types.push_back("Raster maps.mpr");
@@ -1312,6 +1313,7 @@ public:
 		fos = new FieldOneSelectString(root,TR("Filter"),choice,types);
 		fos->SetIndependentPos();
 		fos->SetCallBack((NotifyProc)&AddLayerForm::filter);
+		new CheckBox(root, TR("Extend Map Boundaries"), extendBounds);
 		SetMenHelpTopic("ilwismen\\add_layer_to_map_window.htm");
 		create();
 	}
@@ -1341,6 +1343,7 @@ public:
 	}
 private:
 	long *choice;
+	bool *extendBounds;
 	vector<String> types;
 	FieldOneSelectString *fos;
 	FieldDataTypeLarge * fdtl;
@@ -1473,22 +1476,26 @@ void MapCompositionDoc::OnAddLayer()
 {
 	String sName;
 	long choice = 0;
-	AddLayerForm frm(wndGetActiveView(), &sName, &choice);
+	bool extendBounds = true;
+	AddLayerForm frm(wndGetActiveView(), &sName, &choice, &extendBounds);
 	bool fOk = frm.fOkClicked();
 	if (fOk) {
 		FileName fn(sName);
-		IlwisDocument::OpenType ot =  otUNKNOWN;;
+		IlwisDocument::OpenType ot = otUNKNOWN;
 		if ( choice == 5)
 			ot = otANIMATION;
 		if ( choice == 6)
 			ot = otCOLORCOMP;
+		if (!extendBounds)
+			ot = (IlwisDocument::OpenType)(ot | otKEEPBOUNDS);
 		if ( IOTYPE(fn) == IlwisObject::iotOBJECTCOLLECTION)
 			drAppend(fn, ot == otUNKNOWN ? IlwisDocument::otCOLLECTION : ot);
 		else if ( IOTYPE(fn) == IlwisObject::iotMAPLIST) {
 			drAppend(fn, ot);
 		}
 		else{
-			drAppend(fn,IlwisDocument::otUNKNOWN);
+			IlwisDocument::OpenType ot = (IlwisDocument::OpenType)(IlwisDocument::otUNKNOWN | (extendBounds ? 0 : otKEEPBOUNDS));
+			drAppend(fn, ot);
 		}
 		ChangeState();
 //		UpdateAllViews(0,2);
@@ -1599,7 +1606,7 @@ NewDrawer* MapCompositionDoc::drAppend(const Map& rasmap, int os)
 	if (!rasmap->fCalculated() && !rasmap->fDefOnlyPossible())
 		return 0;
 	TableHistogramInfo thi(rasmap);
-	NewDrawer *dr = createBaseMapDrawer(rasmap,"RasterDataDrawer","Ilwis38", os);
+	NewDrawer *dr = createBaseMapDrawer(rasmap,"RasterDataDrawer","Ilwis38", otUNKNOWN, os);
 
 	ChangeState();
 	return dr;
@@ -1608,7 +1615,7 @@ NewDrawer* MapCompositionDoc::drAppend(const Map& rasmap, int os)
 NewDrawer* MapCompositionDoc::drAppend(const ObjectCollection& oc, IlwisDocument::OpenType op, int os, const String& subtype)
 {
 	ILWIS::NewDrawer *drawer = 0;
-	if ( op == IlwisDocument::otANIMATION) {
+	if ( op & IlwisDocument::otANIMATION) {
 		ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
 		drawer = NewDrawer::getDrawer("AnimationDrawer", subtype, &parms);
 		drawer->addDataSource((void *)&oc);
@@ -1627,7 +1634,7 @@ NewDrawer* MapCompositionDoc::drAppend(const ObjectCollection& oc, IlwisDocument
 		ChangeState();
 		UpdateAllViews(0,3);
 		mpvGetView()->Invalidate();
-	} else if( op == IlwisDocument::otCOLLECTION) {
+	} else if( op & IlwisDocument::otCOLLECTION) {
 		OnOpenObjectCollection(oc, op);
 
 	} else {
@@ -1719,14 +1726,14 @@ NewDrawer* MapCompositionDoc::drAppend(const BaseMap& mp,IlwisDocument::OpenType
 
 		ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
 		ILWIS::NewDrawer *drawer;
-		if ( op == IlwisDocument::otANIMATION) {
+		if ( op & IlwisDocument::otANIMATION) {
 			drawer = NewDrawer::getDrawer("AnimationDrawer", subtype, &parms);
 		}
 		else {
 			if ( IlwisObject::iotObjectType(mp->fnObj) !=  IlwisObject::iotRASMAP)
-				drawer = createBaseMapDrawer(mp, "FeatureDataDrawer", subtype, os);
+				drawer = createBaseMapDrawer(mp, "FeatureDataDrawer", subtype, op, os);
 			else
-				drawer = createBaseMapDrawer(mp, "RasterDataDrawer", subtype, os);
+				drawer = createBaseMapDrawer(mp, "RasterDataDrawer", subtype, op, os);
 		}
 		ChangeState();
 		//UpdateAllViews(0,3);

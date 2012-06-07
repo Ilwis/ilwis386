@@ -135,7 +135,7 @@ private:
 	BOOL OnOpenMapView(const MapView&, int=IlwisWinApp::osNormal);
 	BOOL OnOpenStereoPair(const StereoPair&, OpenType ot);
 	virtual void DeleteContents();
-	ILWIS::NewDrawer *createBaseMapDrawer(const BaseMap& bmp, const String& type, const String& subtype, int);
+	ILWIS::NewDrawer *createBaseMapDrawer(const BaseMap& bmp, const String& type, const String& subtype, OpenType ot, int);
 	BOOL OnOpenObjectCollection(const ObjectCollection& list, OpenType ot, const String& subtype="ilwis38", int os=IlwisWinApp::osNormal);
 
 private:

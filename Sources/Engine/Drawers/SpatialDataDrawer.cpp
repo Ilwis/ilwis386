@@ -122,7 +122,7 @@ void SpatialDataDrawer::addDataSource(void *bmap,int options)
 		if ( oc.fValid())
 			cbBounds = oc->cb(); // cbBounds for an ObjectCollection are the bounds that enclose all basemaps, in the CoordinateSystem of the first basemap
 		if (bm.fValid())
-			rootDrawer->addCoordBounds(bm->cs(), cbBounds);
+			rootDrawer->addCoordBounds(bm->cs(), cbBounds, options & dsoEXTENDBOUNDS);
 		if ( bm.fValid() && bm->fnObj == bm->dm()->fnObj)
 			internalDomain = true;
 		//MouseClickInfoDrawer *mid = (MouseClickInfoDrawer *)(rootdrawer)->getDrawer("MouseClickInfoDrawer");

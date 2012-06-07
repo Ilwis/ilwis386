@@ -15,7 +15,7 @@ namespace ILWIS {
 		RootDrawer();
 		~RootDrawer();
 		virtual void prepare(PreparationParameters *pp);
-		String addDrawer(NewDrawer *drw);
+		String addDrawer(NewDrawer *drw, bool overrule=true);
 		void addCoordBounds(const CoordSystem& _cs, const CoordBounds& cb, bool overrule=true);
 		bool draw( const CoordBounds& cb=CoordBounds()) const;
 		void timedEvent(UINT timerID);

@@ -81,9 +81,9 @@ void  RootDrawer::prepare(PreparationParameters *pp){
 
 }
 
-String RootDrawer::addDrawer(NewDrawer *drw) {
+String RootDrawer::addDrawer(NewDrawer *drw, bool overrule) {
 	SpatialDataDrawer *mapdrw = dynamic_cast<SpatialDataDrawer *>(drw);
-	if ( mapdrw && mapdrw->getBaseMap() != 0) {
+	if ( overrule && mapdrw && mapdrw->getBaseMap() != 0) {
 		CoordSystem _cs = mapdrw->getBaseMap()->cs();
 		CoordBounds ncb = (!cs.fValid() || !_cs.fValid() || cs.fEqual(_cs) || cs->fUnknown() || _cs->fUnknown()) ? mapdrw->cb() : cs->cbConv(_cs, mapdrw->cb());
 		//addCoordBounds(mapdrw->getBaseMap()->cs(), cb); // don't call addCoordBounds, as this extends cbMap and we only want to extend cbView here.
@@ -99,7 +99,7 @@ String RootDrawer::addDrawer(NewDrawer *drw) {
 		CoordBounds cb = cbView;
 		cb += ncb;
 		if ( ! (cb == cbView))
-			setCoordBoundsView(cb,true);
+			setCoordBoundsView(cb, true);
 
 	}
 	return ComplexDrawer::addDrawer(drw);
