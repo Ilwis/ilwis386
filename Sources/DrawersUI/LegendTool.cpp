@@ -249,7 +249,7 @@ void  PolRprForm::apply() {
 
 //---------------------------------------------------
 PointRprForm::PointRprForm(CWnd *wPar, LayerDrawer *dr, RepresentationClass* rc, long raw) : 
-DisplayOptionsForm(dr,wPar,TR("Pointygon Representation")),rcl(rc), iRaw(raw)
+DisplayOptionsForm(dr,wPar,TR("Point Representation")),rcl(rc), iRaw(raw)
 {
    String sText;
   if (rcl->dm()->pdp())
@@ -268,6 +268,10 @@ DisplayOptionsForm(dr,wPar,TR("Pointygon Representation")),rcl(rc), iRaw(raw)
 	new FieldDataType(root,TR("Symbols"),&symbol,".ivg",false,0,FileName(base),false);
 	new FieldColor(root,TR("Symbol Color"),&col);
 	new FieldReal(root,TR("Symbol scale"),&scale,ValueRange(RangeReal(0.1,100.0),0.1));
+	hatching = rcl->sHatch(raw);
+	if ( hatching == sUNDEF)
+		hatching = "none";
+	new FieldDataType(root,TR("Hatching"),&hatching,".ivh",false,0,FileName(base),false);
 
   SetMenHelpTopic("ilwismen\\representation_class_editor_edit_item_Pointygon.htm");
   create();
@@ -280,6 +284,12 @@ void  PointRprForm::apply() {
   rcl->PutSymbolSize(iRaw,scale * 100);
   FileName fn(symbol);
   rcl->PutSymbolType(iRaw, fn.sFile);
+  if ( hatching != ""){
+    hatching = hatching.sTrimSpaces();
+    FileName fn(hatching);
+    rcl->PutHatchingName(iRaw, fn.sFile);
+    rcl->Updated();
+  }
   PreparationParameters pp(NewDrawer::ptRENDER, 0);
   drw->prepare(&pp);
   view->Invalidate();

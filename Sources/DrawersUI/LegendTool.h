@@ -62,6 +62,7 @@ private:
   Color col;
   String symbol;
   double scale;
+  String hatching;
 
 };
 }
