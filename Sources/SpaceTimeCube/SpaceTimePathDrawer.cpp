@@ -30,17 +30,27 @@ SpaceTimePathDrawer::SpaceTimePathDrawer(DrawerParameters *parms)
 	*displayList = 0;
 	fRefreshDisplayList = new bool;
 	*fRefreshDisplayList = false;
-	texture = new GLuint;
-	*texture = 0;
+	texture = new GLuint [2];
+	texture[0] = 0;
 	fRefreshTexture = new bool;
 	*fRefreshTexture = false;
+	fHatching = new bool;
+	*fHatching = false;
+	csDraw = new CCriticalSection ();
 }
 
 SpaceTimePathDrawer::~SpaceTimePathDrawer() {
+	csDraw->Lock(); // wait here til drawing finishes
+	csDraw->Unlock();
+	delete csDraw;
 	if (*displayList != 0)
-		glDeleteLists(*displayList, 1);
-	if (*texture != 0)
-		glDeleteTextures(1, texture);
+		glDeleteLists(*displayList, 2);
+	delete displayList;
+	if (texture[0] != 0)
+		glDeleteTextures(2, texture);
+	delete [] texture;
+	delete fRefreshTexture;
+	delete fHatching;
 }
 
 NewDrawer *SpaceTimePathDrawer::createElementDrawer(PreparationParameters *pp, ILWIS::DrawerParameters* parms) const{
@@ -272,36 +282,41 @@ int SpaceTimePathDrawer::iNrSteps()
 	return nrSteps;
 }
 
-void SpaceTimePathDrawer::getHatch(RepresentationClass * prc, long iRaw, const byte* &hatch, const byte* &hatchInverse, Color & backgroundColor) const {
+void SpaceTimePathDrawer::getHatch(RepresentationClass * prc, long iRaw, const byte* &hatch) const {
 	String hatchName = prc->sHatch(iRaw);
 	if ( hatchName != sUNDEF) {
 		const SVGLoader *loader = NewDrawer::getSvgLoader();
 		SVGLoader::const_iterator cur = loader->find(hatchName);
-		if ( cur != loader->end() && (*cur).second->getType() == IVGElement::ivgHATCH) {
+		if ( cur != loader->end() && (*cur).second->getType() == IVGElement::ivgHATCH)
 			hatch = (*cur).second->getHatch();
+	}
+}
+
+void SpaceTimePathDrawer::getHatchInverse(RepresentationClass * prc, long iRaw, const byte* &hatchInverse) const {
+	String hatchName = prc->sHatch(iRaw);
+	if ( hatchName != sUNDEF) {
+		const SVGLoader *loader = NewDrawer::getSvgLoader();
+		SVGLoader::const_iterator cur = loader->find(hatchName);
+		if ( cur != loader->end() && (*cur).second->getType() == IVGElement::ivgHATCH)
 			hatchInverse = (*cur).second->getHatchInverse();
-			backgroundColor = prc->clrSecondRaw(iRaw);
-			long transparent = Color(-2); // in the old days this was the transparent value
-			if (backgroundColor.iVal() == transparent) 
-				backgroundColor = colorUNDEF;
-		}
 	}
 }
 
 bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 
+	csDraw->Lock(); // apparently this draw became so "heavy" that we need a lock to prevent the destructor from kicking in while drawing
 	if (*fRefreshDisplayList) {
 		if (*displayList != 0) {
-			glDeleteLists(*displayList, 1);
+			glDeleteLists(*displayList, 2);
 			*displayList = 0;
 		}
 		*fRefreshDisplayList = false;
 	}
 
 	if (*fRefreshTexture) {
-		if (*texture != 0) {
-			glDeleteTextures(1, texture);
-			*texture = 0;
+		if (texture[0] != 0) {
+			glDeleteTextures(2, texture);
+			texture[0] = 0;
 		}
 		*fRefreshTexture = false;
 	}
@@ -348,10 +363,10 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 
 	if (steps == 1)
 		glLineWidth(properties->exaggeration);
-
-	if (*texture == 0) {
-		glGenTextures(1, texture);
-		glBindTexture(GL_TEXTURE_2D, *texture);
+	
+	if (texture[0] == 0) {
+		glGenTextures(2, texture);
+		glBindTexture(GL_TEXTURE_2D, texture[0]);
 		glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, fValueMap ? GL_LINEAR : GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, fValueMap ? GL_LINEAR : GL_NEAREST);
@@ -411,198 +426,75 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 			}
 		}
 		glTexImage2D( GL_TEXTURE_2D, 0, 4, iTextureSize, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, &texture_data);
+		if (!fValueMap && useAttributeColumn() && getAtttributeColumn()->dm()->rpr()->prc()) { // 2nd texture for class maps, just in case uses hatching with background color
+			glBindTexture(GL_TEXTURE_2D, texture[1]);
+			glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, fValueMap ? GL_LINEAR : GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, fValueMap ? GL_LINEAR : GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+			Column attributeColumnColors;
+			if (useAttributeColumn())
+				attributeColumnColors = getAtttributeColumn();
+			RangeReal rrMinMax = getValueRange(attributeColumnColors);
+			double width = rrMinMax.rWidth();
+			double minMapVal = rrMinMax.rLo();
+			RepresentationClass * prc = attributeColumnColors->dm()->rpr()->prc();
+			const long transparent = Color(-2); // in the old days this was the transparent value
+			long * buf = new long [iTextureSize];
+			for (int i = 0; i < iTextureSize; ++i)
+				buf[i] = minMapVal + round(i * width / iTextureSize);
+			for (int i = 0; i < iTextureSize; ++i) {
+				long iRaw = buf[i];
+				Color backgroundColor = prc->clrSecondRaw(iRaw);
+				if (backgroundColor.iVal() == transparent) 
+					backgroundColor = colorUNDEF;
+				texture_data[i] = backgroundColor;
+			}
+			if (disabledRaws.size() > 0) {
+				for (int i = 0; i < iTextureSize; ++i) {
+					if (find(disabledRaws.begin(), disabledRaws.end(), buf[i]) != disabledRaws.end())
+						texture_data[i] &= (0 << 24);
+					else
+						texture_data[i] |= (255 << 24);
+					texture_data[i + iTextureSize] = texture_data[i];
+				}
+			} else {
+				for (int i = 0; i < iTextureSize; ++i) {
+					texture_data[i] |= (255 << 24);
+					texture_data[i + iTextureSize] = texture_data[i];
+				}
+			}
+			delete [] buf;
+
+			glTexImage2D( GL_TEXTURE_2D, 0, 4, iTextureSize, 2, 0, GL_RGBA, GL_UNSIGNED_BYTE, &texture_data);
+			glBindTexture(GL_TEXTURE_2D, texture[0]);
+		}
 		glPixelTransferf(GL_MAP_COLOR, oldVal);
 	} else
-		glBindTexture(GL_TEXTURE_2D, *texture);
+		glBindTexture(GL_TEXTURE_2D, texture[0]);
 
-	if (*displayList != 0)
+	if (*displayList != 0) {
 		glCallList(*displayList);
+		if (*fHatching) {
+			glBindTexture(GL_TEXTURE_2D, texture[1]);
+			glCallList(*displayList + 1);
+		}
+	}
 	else
 	{
-		Tranquilizer trq(TR("computing triangles"));
-		*displayList = glGenLists(1);
+		*displayList = glGenLists(2);
+
 		glNewList(*displayList, GL_COMPILE_AND_EXECUTE);
-
-		Column attributeColumn;
-		bool fUseAttributeColumn = useAttributeColumn();
-		if (fUseAttributeColumn) {
-			attributeColumn = getAtttributeColumn();
-			if (!attributeColumn.fValid())
-				fUseAttributeColumn = false;
-		}
-		RangeReal rrMinMax = getValueRange(attributeColumn);
-		double width = rrMinMax.rWidth();
-		double minMapVal = rrMinMax.rLo();
-		long numberOfFeatures = features.size();
-		double cubeBottom = 0;
-		double cubeTop = timeBounds->tMax() - timeBounds->tMin();
-		if (steps == 1)
-		{
-			glBegin(GL_LINE_STRIP);
-			String sLastGroupValue = fUseGroup && (numberOfFeatures > 0) ? getGroupValue(features[0]) : "";
-			for(long i = 0; i < numberOfFeatures; ++i) {
-				Feature *feature = features[i];
-				if (fUseGroup && sLastGroupValue != getGroupValue(feature)) {
-					sLastGroupValue = getGroupValue(feature);
-					glEnd();
-					glBegin(GL_LINE_STRIP);
-				}
-				ILWIS::Point *point = (ILWIS::Point *)feature;
-				double z = getTimeValue(feature);
-				if (z >= cubeBottom && z <= cubeTop) {
-					Coord crd = *(point->getCoordinate());
-					crd.z = z * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
-					crd = getRootDrawer()->glConv(csy, crd);
-					if (fUseAttributeColumn)
-						glTexCoord2f(((fValueMap ? attributeColumn->rValue(feature->iValue()) : attributeColumn->iRaw(feature->iValue())) - minMapVal) / width, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
-					else
-						glTexCoord2f((feature->rValue() - minMapVal) / width, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
-					glVertex3f(crd.x, crd.y, crd.z);
-				}
-				if ( i % 100 == 0)
-					trq.fUpdate(i, numberOfFeatures); 
-			}
-			glEnd();
-		}
-		else
-		{
-			const double angleStep = 2.0 * M_PI / steps;
-			const CoordBounds& cbMap = getRootDrawer()->getMapCoordBounds();
-			double pathScale = cbMap.width() / 50;
-			if (numberOfFeatures > 1) {
-				Coord headPrevious;
-				Coord tailPrevious;
-				long start = 0;
-				double z;
-				Feature * feature;
-				do {
-					feature = features[start];
-					z = getTimeValue(feature);
-					++start;
-				} while ((z < cubeBottom || z > cubeTop) && start < numberOfFeatures);
-				ILWIS::Point *point = (ILWIS::Point *)feature;
-				Coord head = *(point->getCoordinate());
-				head.z = z * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
-				head = getRootDrawer()->glConv(csy, head);
-				String sLastGroupValue = fUseGroup ? getGroupValue(feature) : "";
-				float rsHead = fUseAttributeColumn ? (((fValueMap ? attributeColumn->rValue(feature->iValue()) : attributeColumn->iRaw(feature->iValue())) - minMapVal) / width) : ((feature->rValue() - minMapVal) / width);
-				double rHead = pathScale * getSizeValue(feature);
-				const byte * hatch = 0;
-				const byte * hatchInverse;
-				Color backgroundColor;
-				RepresentationClass * prc = 0;
-				if (fUseAttributeColumn) {
-					Representation rpr = attributeColumn->dm()->rpr();
-					if ( rpr.fValid() && rpr->dm()->pdc())
-						prc = rpr->prc();
-				}
-				if (prc)
-					getHatch(prc, attributeColumn->iRaw(feature->iValue()), hatch, hatchInverse, backgroundColor);
-				for (long i = start; i < numberOfFeatures; ++i)
-				{
-					feature = features[i];
-					z = getTimeValue(feature);
-					if (z >= cubeBottom && z <= cubeTop)
-					{
-						ILWIS::Point *point = (ILWIS::Point *)feature;
-						Coord tail = *(point->getCoordinate());
-						tail = getRootDrawer()->glConv(csy, tail);
-						tail.z = z * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
-						float rsTail = fUseAttributeColumn ? (((fValueMap ? attributeColumn->rValue(feature->iValue()) : attributeColumn->iRaw(feature->iValue())) - minMapVal) / width) : ((feature->rValue() - minMapVal) / width);
-						double rTail = pathScale * getSizeValue(feature);
-
-						bool fCutPath = false;
-						if (fUseGroup && sLastGroupValue != getGroupValue(feature)) {
-							sLastGroupValue = getGroupValue(feature);
-							fCutPath = true;
-						}
-
-						if (!fCutPath)
-						{
-							if (!headPrevious.fUndef())
-							{
-								// connectionCoords
-								glBegin(GL_TRIANGLE_STRIP);
-								Coord ABprevious = tailPrevious;
-								ABprevious -= headPrevious;
-								Coord AB = tail;
-								AB -= head;
-
-								double f = 0;
-								for (int step = 0; step < (1 + steps); ++step)
-								{
-									if (step == steps)
-										f = 0; // close the cylinder, choose exactly the same angle as the fist time
-									glTexCoord2f(rsHead, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
-									Coord normCircle = projectOnCircle(ABprevious, rHead, f);
-									Coord normal = normalize(normCircle);
-									glNormal3f(normal.x, normal.y, normal.z);
-									normCircle += tailPrevious;
-									glVertex3f(normCircle.x, normCircle.y, normCircle.z);
-									glTexCoord2f(rsHead, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
-									normCircle = projectOnCircle(AB, rHead, f);
-									normal = normalize(normCircle);
-									glNormal3f(normal.x, normal.y, normal.z);
-									normCircle += head;
-									glVertex3f(normCircle.x, normCircle.y, normCircle.z);
-									f += angleStep;
-								}
-								glEnd();
-							}
-
-							if (hatch) {
-								glEnable(GL_POLYGON_STIPPLE);
-								glPolygonStipple(hatch);
-							} else
-								glDisable(GL_POLYGON_STIPPLE);
-
-							// cylinderCoords
-							glBegin(GL_TRIANGLE_STRIP);
-							Coord AB = tail;
-							AB -= head;
-
-							double f = 0;
-							for (int step = 0; step < (1 + steps); ++step)
-							{
-								if (step == steps)
-									f = 0; // close the cylinder, choose exactly the same angle as the fist time
-								glTexCoord2f(rsHead, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
-								Coord normCircle = projectOnCircle(AB, rHead, f);
-								Coord normal = normalize(normCircle);
-								glNormal3f(normal.x, normal.y, normal.z);
-								normCircle += head;
-								glVertex3f(normCircle.x, normCircle.y, normCircle.z);
-								glTexCoord2f(rsTail, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
-								normCircle = projectOnCircle(AB, rTail, f);
-								normal = normalize(normCircle);
-								glNormal3f(normal.x, normal.y, normal.z);
-								normCircle += tail;
-								glVertex3f(normCircle.x, normCircle.y, normCircle.z);
-								f += angleStep;
-							}
-
-							glEnd();
-						}
-						// continue
-						headPrevious = head;
-						tailPrevious = tail;
-						head = tail;
-						rsHead = rsTail;
-						rHead = rTail;
-						if (prc) {
-							hatch = 0;
-							getHatch(prc, attributeColumn->iRaw(feature->iValue()), hatch, hatchInverse, backgroundColor);
-						}
-					}
-					if ( i % 100 == 0)
-						trq.fUpdate(i, numberOfFeatures); 
-				}
-				if ( hatch)
-					glDisable(GL_POLYGON_STIPPLE);
-			}
-		}
-
+		drawObjects(steps, (GetHatchFunc)&SpaceTimePathDrawer::getHatch);
 		glEndList();
+
+		if (*fHatching) {
+			glBindTexture(GL_TEXTURE_2D, texture[1]);
+			glNewList(*displayList + 1, GL_COMPILE_AND_EXECUTE);
+			drawObjects(steps, (GetHatchFunc)&SpaceTimePathDrawer::getHatchInverse);
+			glEndList();
+		}
 	}
 
 	glPopMatrix();
@@ -622,7 +514,192 @@ bool SpaceTimePathDrawer::draw( const CoordBounds& cbArea) const {
 
 	drawPostDrawers(cbArea);
 
+	csDraw->Unlock();
+
 	return true;
+}
+
+void SpaceTimePathDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc) const
+{
+	Tranquilizer trq(TR("computing triangles"));
+	Column attributeColumn;
+	bool fUseAttributeColumn = useAttributeColumn();
+	if (fUseAttributeColumn) {
+		attributeColumn = getAtttributeColumn();
+		if (!attributeColumn.fValid())
+			fUseAttributeColumn = false;
+	}
+	RangeReal rrMinMax = getValueRange(attributeColumn);
+	double width = rrMinMax.rWidth();
+	double minMapVal = rrMinMax.rLo();
+	long numberOfFeatures = features.size();
+	double cubeBottom = 0;
+	double cubeTop = timeBounds->tMax() - timeBounds->tMin();
+	*fHatching = false; // in case of a classmap, if any of the attributes uses hatching, we set fHatching to true
+	if (steps == 1)
+	{
+		glBegin(GL_LINE_STRIP);
+		String sLastGroupValue = fUseGroup && (numberOfFeatures > 0) ? getGroupValue(features[0]) : "";
+		for(long i = 0; i < numberOfFeatures; ++i) {
+			Feature *feature = features[i];
+			if (fUseGroup && sLastGroupValue != getGroupValue(feature)) {
+				sLastGroupValue = getGroupValue(feature);
+				glEnd();
+				glBegin(GL_LINE_STRIP);
+			}
+			ILWIS::Point *point = (ILWIS::Point *)feature;
+			double z = getTimeValue(feature);
+			if (z >= cubeBottom && z <= cubeTop) {
+				Coord crd = *(point->getCoordinate());
+				crd.z = z * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
+				crd = getRootDrawer()->glConv(csy, crd);
+				if (fUseAttributeColumn)
+					glTexCoord2f(((fValueMap ? attributeColumn->rValue(feature->iValue()) : attributeColumn->iRaw(feature->iValue())) - minMapVal) / width, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
+				else
+					glTexCoord2f((feature->rValue() - minMapVal) / width, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
+				glVertex3f(crd.x, crd.y, crd.z);
+			}
+			if ( i % 100 == 0)
+				trq.fUpdate(i, numberOfFeatures); 
+		}
+		glEnd();
+	}
+	else
+	{
+		const double angleStep = 2.0 * M_PI / steps;
+		const CoordBounds& cbMap = getRootDrawer()->getMapCoordBounds();
+		double pathScale = cbMap.width() / 50;
+		if (numberOfFeatures > 1) {
+			Coord headPrevious;
+			Coord tailPrevious;
+			long start = 0;
+			double z;
+			Feature * feature;
+			do {
+				feature = features[start];
+				z = getTimeValue(feature);
+				++start;
+			} while ((z < cubeBottom || z > cubeTop) && start < numberOfFeatures);
+			ILWIS::Point *point = (ILWIS::Point *)feature;
+			Coord head = *(point->getCoordinate());
+			head.z = z * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
+			head = getRootDrawer()->glConv(csy, head);
+			String sLastGroupValue = fUseGroup ? getGroupValue(feature) : "";
+			float rsHead = fUseAttributeColumn ? (((fValueMap ? attributeColumn->rValue(feature->iValue()) : attributeColumn->iRaw(feature->iValue())) - minMapVal) / width) : ((feature->rValue() - minMapVal) / width);
+			double rHead = pathScale * getSizeValue(feature);
+			const byte * hatch = 0;
+			RepresentationClass * prc = 0;
+			if (fUseAttributeColumn) {
+				Representation rpr = attributeColumn->dm()->rpr();
+				if ( rpr.fValid() && rpr->dm()->pdc())
+					prc = rpr->prc();
+			}
+			if (prc)
+				(this->*getHatchFunc)(prc, attributeColumn->iRaw(feature->iValue()), hatch);
+			for (long i = start; i < numberOfFeatures; ++i)
+			{
+				feature = features[i];
+				z = getTimeValue(feature);
+				if (z >= cubeBottom && z <= cubeTop)
+				{
+					ILWIS::Point *point = (ILWIS::Point *)feature;
+					Coord tail = *(point->getCoordinate());
+					tail = getRootDrawer()->glConv(csy, tail);
+					tail.z = z * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
+					float rsTail = fUseAttributeColumn ? (((fValueMap ? attributeColumn->rValue(feature->iValue()) : attributeColumn->iRaw(feature->iValue())) - minMapVal) / width) : ((feature->rValue() - minMapVal) / width);
+					double rTail = pathScale * getSizeValue(feature);
+
+					bool fCutPath = false;
+					if (fUseGroup && sLastGroupValue != getGroupValue(feature)) {
+						sLastGroupValue = getGroupValue(feature);
+						fCutPath = true;
+					}
+
+					if (!fCutPath)
+					{
+						if (!headPrevious.fUndef())
+						{
+							// connectionCoords
+							glBegin(GL_TRIANGLE_STRIP);
+							Coord ABprevious = tailPrevious;
+							ABprevious -= headPrevious;
+							Coord AB = tail;
+							AB -= head;
+
+							double f = 0;
+							for (int step = 0; step < (1 + steps); ++step)
+							{
+								if (step == steps)
+									f = 0; // close the cylinder, choose exactly the same angle as the fist time
+								glTexCoord2f(rsHead, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
+								Coord normCircle = projectOnCircle(ABprevious, rHead, f);
+								Coord normal = normalize(normCircle);
+								glNormal3f(normal.x, normal.y, normal.z);
+								normCircle += tailPrevious;
+								glVertex3f(normCircle.x, normCircle.y, normCircle.z);
+								glTexCoord2f(rsHead, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
+								normCircle = projectOnCircle(AB, rHead, f);
+								normal = normalize(normCircle);
+								glNormal3f(normal.x, normal.y, normal.z);
+								normCircle += head;
+								glVertex3f(normCircle.x, normCircle.y, normCircle.z);
+								f += angleStep;
+							}
+							glEnd();
+						}
+
+						if (hatch) {
+							*fHatching = true;
+							glEnable(GL_POLYGON_STIPPLE);
+							glPolygonStipple(hatch);
+						} else
+							glDisable(GL_POLYGON_STIPPLE);
+
+						// cylinderCoords
+						glBegin(GL_TRIANGLE_STRIP);
+						Coord AB = tail;
+						AB -= head;
+
+						double f = 0;
+						for (int step = 0; step < (1 + steps); ++step)
+						{
+							if (step == steps)
+								f = 0; // close the cylinder, choose exactly the same angle as the fist time
+							glTexCoord2f(rsHead, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
+							Coord normCircle = projectOnCircle(AB, rHead, f);
+							Coord normal = normalize(normCircle);
+							glNormal3f(normal.x, normal.y, normal.z);
+							normCircle += head;
+							glVertex3f(normCircle.x, normCircle.y, normCircle.z);
+							glTexCoord2f(rsTail, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
+							normCircle = projectOnCircle(AB, rTail, f);
+							normal = normalize(normCircle);
+							glNormal3f(normal.x, normal.y, normal.z);
+							normCircle += tail;
+							glVertex3f(normCircle.x, normCircle.y, normCircle.z);
+							f += angleStep;
+						}
+
+						glEnd();
+					}
+					// continue
+					headPrevious = head;
+					tailPrevious = tail;
+					head = tail;
+					rsHead = rsTail;
+					rHead = rTail;
+					if (prc) {
+						hatch = 0;
+						(this->*getHatchFunc)(prc, attributeColumn->iRaw(feature->iValue()), hatch);
+					}
+				}
+				if ( i % 100 == 0)
+					trq.fUpdate(i, numberOfFeatures); 
+			}
+			if ( hatch)
+				glDisable(GL_POLYGON_STIPPLE);
+		}
+	}
 }
 
 Coord SpaceTimePathDrawer::projectOnCircle(Coord AB, double r, double f) const
