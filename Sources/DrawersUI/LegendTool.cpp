@@ -7,6 +7,7 @@
 #include "Client\FormElements\fldcolor.h"
 #include "Engine\Drawers\RootDrawer.h"
 #include "Engine\Drawers\ComplexDrawer.h"
+#include "Engine\Drawers\SimpleDrawer.h"
 #include "Client\Ilwis.h"
 #include "Engine\Representation\Rpr.h"
 #include "Engine\Domain\Dmvalue.h"
@@ -18,7 +19,14 @@
 #include "Client\Mapwindow\LayerTreeItem.h" 
 #include "Engine\Drawers\DrawerContext.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
+#include "Drawers\LineDrawer.h"
+#include "Drawers\PolygonDrawer.h"
+#include "Drawers\PointDrawer.h"
 #include "Drawers\LayerDrawer.h"
+#include "Drawers\FeatureLayerDrawer.h"
+#include "Drawers\PointLayerDrawer.h"
+#include "Drawers\LineLayerDrawer.h"
+#include "Drawers\PolygonLayerDrawer.h"
 #include "Drawers\SetDrawer.h"
 #include "Client\Editors\Utils\line.h"
 #include "Client\Editors\Utils\Pattern.h"
@@ -76,9 +84,8 @@ void LegendTool::insertLegendItemsValue(const Representation& rpr, const DomainV
 	} else
 		rmd = roundRange(rr.rLo(), rr.rHi(), rStep);
 
-	for (double v = rmd.rLo(); v <= rmd.rHi(); v += rStep) {
+	for (double v = rmd.rHi(); v >= rmd.rLo(); v -= rStep) {
 		String sName = dvs.sValue(v);
-		//HTREEITEM hti = tree->GetTreeCtrl().InsertItem(sName.c_str(), htiNode);
 		if ( fImage && v + rStep > 255) {
 			v = 255;
 		}
@@ -113,11 +120,11 @@ void LegendTool::insertLegendItemsClass(const Representation& rpr){
 void LegendTool::displayOptionRprClass() {
 	LayerDrawer *ldr = dynamic_cast<LayerDrawer *>(drawer);
 	LegendClassLayerTreeItem *it = (LegendClassLayerTreeItem *)tree->getCurrent();
-	if ( mapType == IlwisObject::iotSEGMENTMAP)
+	if ( drawerType == dtSEGMENT)
 		new LineRprForm(tree, ldr,ldr->getRepresentation()->prc(),it->raw());
-	else if ( mapType == IlwisObject::iotPOLYGONMAP) {
+	else if ( drawerType == dtPOLYGON) {
 		new PolRprForm(tree,ldr,ldr->getRepresentation()->prc(),it->raw());
-	} else if ( mapType == IlwisObject::iotPOINTMAP) {
+	} else if ( drawerType == dtPOINT) {
 		new PointRprForm(tree,ldr,ldr->getRepresentation()->prc(),it->raw());
 	}
 }
@@ -128,11 +135,17 @@ void LegendTool::update() {
 		mapDrawer = dynamic_cast<SpatialDataDrawer *>(drawer->getParentDrawer());
 
 	DomainValueRangeStruct dvs = mapDrawer->getBaseMap()->dvrs();
-	mapType = IOTYPE(mapDrawer->getBaseMap()->fnObj);
 	LayerDrawer *layerDrawer = dynamic_cast<LayerDrawer *>(drawer);
 	SetDrawer *adrw = dynamic_cast<SetDrawer *>(drawer);
 	if ( adrw) {
 		layerDrawer = (LayerDrawer *)adrw->getDrawer(0);
+	}
+	if ( dynamic_cast<PointLayerDrawer *>(layerDrawer)) {
+		drawerType = dtPOINT;
+	} else if (dynamic_cast<LineLayerDrawer *>(layerDrawer)){
+		drawerType = dtSEGMENT;
+	} else if ( dynamic_cast<PolygonLayerDrawer *>(layerDrawer)) {
+		drawerType = dtPOLYGON;
 	}
 
 	if ( layerDrawer->useAttributeColumn() && layerDrawer->getAtttributeColumn().fValid()) {
