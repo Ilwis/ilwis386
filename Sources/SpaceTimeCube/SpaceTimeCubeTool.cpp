@@ -265,21 +265,15 @@ void SpaceTimeCube::refreshDrawerList() {
 	sizeStretch = RangeReal();
 
 	for (int i = 0; i < layerList.size(); ++i) {
-		SpatialDataDrawer * oldDrw = (SpatialDataDrawer*)(rootDrawer->getDrawer(layerList[i].getDrawerId()));
-		if (oldDrw == 0)
+		SpatialDataDrawer * drawer = (SpatialDataDrawer*)(rootDrawer->getDrawer(layerList[i].getDrawerId()));
+		if (drawer == 0)
 			continue; // skip it .. drawer was probably removed from the layers
-		IlwisObjectPtr * object = oldDrw->getObject();
-		const String& subtype = (useSpaceTimeCube && layerList[i].getPlotOption()) ? "Cube" : "ilwis38";
-		BaseMap bm(object->fnObj);
-		getDocument()->drAppend(bm, IlwisDocument::otUNKNOWN, IlwisWinApp::osNormal, subtype);
-		int index = rootDrawer->getDrawerCount() - 1;
-		NewDrawer * newDrw = rootDrawer->getDrawer(index);
-		rootDrawer->removeDrawer(newDrw->getId(), false); // remove it, because we don't intend to append it to the end
-		index = rootDrawer->getDrawerIndex(oldDrw);
-		replaceTreeItem(oldDrw, (SpatialDataDrawer*)newDrw, index);
-		replaceDrawer(oldDrw, newDrw);
-		layerList[i].setDrawerId(newDrw->getId());
-		TemporalDrawer * temporalDrawer = dynamic_cast<TemporalDrawer*>(((ComplexDrawer*)newDrw)->getDrawer(0));
+		drawer->removeDrawer(drawer->getDrawer(0)->getId()); // remove the old drawer
+		PreparationParameters pp(NewDrawer::ptALL);
+		pp.subType = (useSpaceTimeCube && layerList[i].getPlotOption()) ? "Cube" : "ilwis38";
+		drawer->prepare(&pp);
+		replaceTreeItem(drawer, (SpatialDataDrawer*)drawer, rootDrawer->getDrawerIndex(drawer));
+		TemporalDrawer * temporalDrawer = dynamic_cast<TemporalDrawer*>(((ComplexDrawer*)drawer)->getDrawer(0));
 		if (temporalDrawer) {
 			temporalDrawer->SetTimeBounds(timeBoundsZoom);
 			RangeReal rrMinMax (layerList[i].rrTimeMinMax());
@@ -290,23 +284,23 @@ void SpaceTimeCube::refreshDrawerList() {
 				temporalDrawer->SetTimeAttribute(layerList[i].getTimeColumn());
 			DrawerParameters dp(rootDrawer, rootDrawer);
 			PreparationParameters pp(NewDrawer::ptALL);
-			AddTimeOffsetDrawers((ComplexDrawer*)newDrw, &timeShift, dp, pp);
+			AddTimeOffsetDrawers((ComplexDrawer*)drawer, &timeShift, dp, pp);
 		}
-		SortableDrawer * sortableDrawer = dynamic_cast<SortableDrawer*>(((ComplexDrawer*)newDrw)->getDrawer(0));
+		SortableDrawer * sortableDrawer = dynamic_cast<SortableDrawer*>(((ComplexDrawer*)drawer)->getDrawer(0));
 		if (sortableDrawer) {
 			if (layerList[i].fUseSort())
 				sortableDrawer->SetSortAttribute(layerList[i].getSortColumn());
 			else
 				sortableDrawer->SetNoSort();
 		}
-		GroupableDrawer * groupableDrawer = dynamic_cast<GroupableDrawer*>(((ComplexDrawer*)newDrw)->getDrawer(0));
+		GroupableDrawer * groupableDrawer = dynamic_cast<GroupableDrawer*>(((ComplexDrawer*)drawer)->getDrawer(0));
 		if (groupableDrawer) {
 			if (layerList[i].fUseGroup())
 				groupableDrawer->SetGroupAttribute(layerList[i].getGroupColumn());
 			else
 				groupableDrawer->SetNoGroup();
 		}
-		SizableDrawer * sizableDrawer = dynamic_cast<SizableDrawer*>(((ComplexDrawer*)newDrw)->getDrawer(0));
+		SizableDrawer * sizableDrawer = dynamic_cast<SizableDrawer*>(((ComplexDrawer*)drawer)->getDrawer(0));
 		if (sizableDrawer) {
 			sizableDrawer->SetSizeStretch(&sizeStretch);
 			RangeReal rrMinMax (layerList[i].rrSizeMinMax());
@@ -315,10 +309,6 @@ void SpaceTimeCube::refreshDrawerList() {
 				sizableDrawer->SetSizeAttribute(layerList[i].getSizeColumn());
 			else
 				sizableDrawer->SetNoSize();
-		}
-		if (rootDrawer->is3D()) {
-			PreparationParameters pp(NewDrawer::pt3D);
-			newDrw->prepare(&pp);
 		}
 	}
 
