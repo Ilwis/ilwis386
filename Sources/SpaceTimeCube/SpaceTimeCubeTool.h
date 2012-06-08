@@ -21,7 +21,9 @@ namespace ILWIS {
 		bool fUseSort();
 		bool fUseGroup();
 		bool fUseSize();
+		bool fUseTime2();
 		void setPlotOption(String _plotOption) {plotOption = _plotOption;};
+		void setUseTime2(bool _fTime2);
 		void setUseSort(bool _fSort) {fSort = _fSort;};
 		void setUseGroup(bool _fGroup) {fGroup = _fGroup;};
 		void setUseSize(bool _fSize) {fSize = _fSize;};
@@ -36,6 +38,7 @@ namespace ILWIS {
 		FileName fnObj() {return fnBaseMap;};
 		Table & getAttTable() {return attTable;};
 		void setTimeColumn(String sColName);
+		void setTimeColumn2(String sColName);
 		void setSortColumn(String sColName);
 		void setGroupColumn(String sColName);
 		void setSizeColumn(String sColName);
@@ -43,6 +46,7 @@ namespace ILWIS {
 		RangeReal rrSizeMinMax() {return m_rrSizeMinMax;};
 		bool isSelfTime() {return fSelfTime;};
 		Column & getTimeColumn() {return temporalColumn;};
+		Column & getTimeColumn2() {return temporalColumn2;};
 		Column & getSortColumn() {return sortColumn;};
 		Column & getGroupColumn() {return groupColumn;};
 		Column & getSizeColumn() {return sizeColumn;};
@@ -53,6 +57,7 @@ namespace ILWIS {
 		bool fGroup;
 		bool fSize;
 		bool fSelfTime;
+		bool fTime2;
 		bool fFeatureMap;
 		bool fPointMap;
 		FileName fnBaseMap;
@@ -62,6 +67,7 @@ namespace ILWIS {
 		vector<Column> groupColumns;
 		vector<Column> sizeColumns;
 		Column temporalColumn;
+		Column temporalColumn2;
 		Column sortColumn;
 		Column groupColumn;
 		Column sizeColumn;
@@ -149,16 +155,20 @@ namespace ILWIS {
 		vector<FieldOneSelectTextOnly*> fosPlotMethod;
 		vector<String> vsPlotMethod;
 		vector<FieldColumn*> fcTimeColumn;
+		vector<FieldColumn*> fcTimeColumn2;
 		vector<FieldColumn*> fcSortColumn;
 		vector<FieldColumn*> fcGroupColumn;
 		vector<FieldColumn*> fcSizeColumn;
+		vector<CheckBox*> cbTime2;
 		vector<CheckBox*> cbSort;
 		vector<CheckBox*> cbGroup;
 		vector<CheckBox*> cbSize;
 		vector<String> vsTimeColumnNames;
+		vector<String> vsTime2ColumnNames;
 		vector<String> vsSortColumnNames;
 		vector<String> vsGroupColumnNames;
 		vector<String> vsSizeColumnNames;
+		vector<bool*> vbTime2;
 		vector<bool*> vbSort;
 		vector<bool*> vbGroup;
 		vector<bool*> vbSize;

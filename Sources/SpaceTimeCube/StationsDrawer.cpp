@@ -64,8 +64,14 @@ void StationsDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc) con
 						glTexCoord2f(((fValueMap ? attributeColumn->rValue(feature->iValue()) : attributeColumn->iRaw(feature->iValue())) - minMapVal) / width, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
 					else
 						glTexCoord2f((feature->rValue() - minMapVal) / width, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
-					glVertex3f(crd.x, crd.y, crd.z - delta);
-					glVertex3f(crd.x, crd.y, crd.z + delta);
+					if (fTimeAttribute2) {
+						glVertex3f(crd.x, crd.y, crd.z);
+						double z2 = getTimeValue2(feature) * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
+						glVertex3f(crd.x, crd.y, z2);
+					} else {
+						glVertex3f(crd.x, crd.y, crd.z - delta);
+						glVertex3f(crd.x, crd.y, crd.z + delta);
+					}
 				}
 			}
 			if ( i % 100 == 0)
@@ -96,7 +102,14 @@ void StationsDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc) con
 						ILWIS::Point *point = (ILWIS::Point *)feature;
 						Coord pnt = *(point->getCoordinate());
 						pnt = getRootDrawer()->glConv(csy, pnt);
-						pnt.z = z * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
+						double z1 = z * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
+						double z2;
+						if (fTimeAttribute2) {
+							z2 = getTimeValue2(feature) * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
+						} else {
+							z2 = z1 + delta;
+							z1 -= delta;
+						}
 						float rsPnt = fUseAttributeColumn ? (((fValueMap ? attributeColumn->rValue(feature->iValue()) : attributeColumn->iRaw(feature->iValue())) - minMapVal) / width) : ((feature->rValue() - minMapVal) / width);
 						double rPnt = pathScale * getSizeValue(feature);
 
@@ -122,8 +135,8 @@ void StationsDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc) con
 							Coord normCircle = Coord(rPnt * cos(f), rPnt * sin(f), 0);
 							Coord normal = normalize(normCircle);
 							glNormal3f(normal.x, normal.y, normal.z);
-							glVertex3f(pnt.x + normCircle.x, pnt.y + normCircle.y, pnt.z - delta);
-							glVertex3f(pnt.x + normCircle.x, pnt.y + normCircle.y, pnt.z + delta);
+							glVertex3f(pnt.x + normCircle.x, pnt.y + normCircle.y, z1);
+							glVertex3f(pnt.x + normCircle.x, pnt.y + normCircle.y, z2);
 							f += angleStep;
 						}
 

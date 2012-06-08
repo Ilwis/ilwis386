@@ -35,6 +35,7 @@ LayerData::LayerData(NewDrawer *drw)
 , fGroup(false)
 , fSize(false)
 , fSelfTime(false)
+, fTime2(false)
 , fFeatureMap(false)
 , fPointMap(false)
 {
@@ -106,13 +107,34 @@ bool LayerData::fUseGroup() {
 	return fGroup && groupColumn.fValid();
 }
 
+void LayerData::setUseTime2(bool _fTime2)
+{
+	fTime2 = _fTime2;
+	m_rrTimeMinMax = temporalColumn->rrMinMax();
+	if (fTime2 && temporalColumn2.fValid())
+		m_rrTimeMinMax += temporalColumn2->rrMinMax();
+}
+
 bool LayerData::fUseSize() {
 	return fSize && sizeColumn.fValid();
+}
+
+bool LayerData::fUseTime2() {
+	return fTime2 && temporalColumn2.fValid();
 }
 
 void LayerData::setTimeColumn(String sColName) {
 	temporalColumn = attTable->col(sColName);
 	m_rrTimeMinMax = temporalColumn->rrMinMax();
+	if (fTime2 && temporalColumn2.fValid())
+		m_rrTimeMinMax += temporalColumn2->rrMinMax();
+}
+
+void LayerData::setTimeColumn2(String sColName) {
+	temporalColumn2 = attTable->col(sColName);
+	m_rrTimeMinMax = temporalColumn->rrMinMax();
+	if (fTime2 && temporalColumn2.fValid())
+		m_rrTimeMinMax += temporalColumn2->rrMinMax();
 }
 
 void LayerData::setSortColumn(String sColName) {
@@ -284,8 +306,10 @@ void SpaceTimeCube::refreshDrawerList() {
 			timeBoundsFullExtent->AddMinMax(Time(rrMinMax.rLo()), Time(rrMinMax.rHi()));
 			if (layerList[i].isSelfTime())
 				temporalDrawer->SetSelfTime();
-			else
+			else {
 				temporalDrawer->SetTimeAttribute(layerList[i].getTimeColumn());
+				temporalDrawer->SetTimeAttribute2(layerList[i].getTimeColumn2());
+			}
 			DrawerParameters dp(rootDrawer, rootDrawer);
 			PreparationParameters pp(NewDrawer::ptALL);
 			AddTimeOffsetDrawers((ComplexDrawer*)drawer, &timeShift, dp, pp);
@@ -501,9 +525,11 @@ LayerOptionsForm::LayerOptionsForm(CWnd *wPar, SpaceTimeCube & _spaceTimeCube, v
 	int nrLayers = layerList.size();
 	vsPlotMethod.resize(nrLayers);
 	vsTimeColumnNames.resize(nrLayers);
+	vsTime2ColumnNames.resize(nrLayers);
 	vsSortColumnNames.resize(nrLayers);
 	vsGroupColumnNames.resize(nrLayers);
 	vsSizeColumnNames.resize(nrLayers);
+	vbTime2.resize(nrLayers);
 	vbSort.resize(nrLayers);
 	vbGroup.resize(nrLayers);
 	vbSize.resize(nrLayers);
@@ -519,9 +545,11 @@ LayerOptionsForm::LayerOptionsForm(CWnd *wPar, SpaceTimeCube & _spaceTimeCube, v
 		fosPM->SetCallBack((NotifyProc)&LayerOptionsForm::ComboCallBackFunc);
 		fosPM->Align(stLayerName, AL_AFTER);
 		fosPlotMethod.push_back(fosPM);
+		vbTime2[i] = new bool;
 		vbSort[i] = new bool;
 		vbGroup[i] = new bool;
 		vbSize[i] = new bool;
+		*vbTime2[i] = layerData.fUseTime2();
 		*vbSort[i] = layerData.fUseSort();
 		*vbGroup[i] = layerData.fUseGroup();
 		*vbSize[i] = layerData.fUseSize();
@@ -539,6 +567,26 @@ LayerOptionsForm::LayerOptionsForm(CWnd *wPar, SpaceTimeCube & _spaceTimeCube, v
 			feTime = fcol;
 		}
 		feTime->Align(fosPM, AL_AFTER);
+		FormEntry * feTime21;
+		FormEntry * feTime22;
+		if (layerData.isSelfTime()) {
+			feTime21 = new StaticText(root, "");
+			feTime22 = new StaticText(root, "");
+			feTime22->Align(feTime21, AL_AFTER);
+			cbTime2.push_back(0);
+			fcTimeColumn2.push_back(0);
+		} else {
+			CheckBox * cbtime2 = new CheckBox(root, "end time", vbTime2[i]);
+			cbTime2.push_back(cbtime2);
+			if (layerData.getTimeColumn2().fValid())
+				vsTime2ColumnNames[i] = layerData.getTimeColumn2()->sName();
+			FieldColumn * fcol = new FieldColumn(cbtime2, "", layerData.getAttTable(), &vsTime2ColumnNames[i], dmTIME);
+			fcTimeColumn2.push_back(fcol);
+			fcol->Align(cbtime2, AL_AFTER);
+			feTime21 = cbtime2;
+			feTime22 = fcol;
+		}
+		feTime21->Align(feTime, AL_AFTER);
 		FormEntry * feSort1;
 		FormEntry * feSort2;
 		if (!layerData.hasSort()) {
@@ -613,6 +661,8 @@ LayerOptionsForm::~LayerOptionsForm()
 		delete vbGroup[i];
 	for (int i = 0; i < vbSize.size(); ++i)
 		delete vbSize[i];
+	for (int i = 0; i < vbTime2.size(); ++i)
+		delete vbTime2[i];
 }
 
 int LayerOptionsForm::ComboCallBackFunc(Event*)
@@ -631,7 +681,28 @@ int LayerOptionsForm::ComboCallBackFunc(Event*)
 		}
 	}
 
-	//fisRelation->SetVal(fosRelation->ose->GetCurSel());
+	for (int i=0; i < m_layerList.size(); ++i) {
+		if (fosPlotMethod[i]->sGetText() == "<regular>") {
+			if (fcTimeColumn[i]) fcTimeColumn[i]->Hide();
+			if (cbTime2[i]) cbTime2[i]->Hide();
+			if (cbSort[i]) cbSort[i]->Hide();
+			if (cbGroup[i]) cbGroup[i]->Hide();
+			if (cbSize[i]) cbSize[i]->Hide();
+		} else if (fosPlotMethod[i]->sGetText() == "<stp>") {
+			if (fcTimeColumn[i]) fcTimeColumn[i]->Show();
+			if (cbTime2[i]) cbTime2[i]->Hide();
+			if (cbSort[i]) cbSort[i]->Show();
+			if (cbGroup[i]) cbGroup[i]->Show();
+			if (cbSize[i]) cbSize[i]->Show();
+		} else if (fosPlotMethod[i]->sGetText() == "<stations>") {
+			if (fcTimeColumn[i]) fcTimeColumn[i]->Show();
+			if (cbTime2[i]) cbTime2[i]->Show();
+			if (cbSort[i]) cbSort[i]->Hide();
+			if (cbGroup[i]) cbGroup[i]->Hide();
+			if (cbSize[i]) cbSize[i]->Hide();
+		}
+	}
+
 	return 0;
 }
 
@@ -639,27 +710,41 @@ void LayerOptionsForm::apply() {
 
 	for(int i=0; i < m_layerList.size(); ++i) {
 		LayerData & layerData = m_layerList[i];
-		if (!layerData.isSelfTime()) {
+		if (fcTimeColumn[i] && !layerData.isSelfTime()) {
 			fcTimeColumn[i]->StoreData();
 			layerData.setTimeColumn(vsTimeColumnNames[i]);
 		}
-		cbSort[i]->StoreData();
-		layerData.setUseSort(*vbSort[i]);
-		if (*vbSort[i]) {
-			fcSortColumn[i]->StoreData();
-			layerData.setSortColumn(vsSortColumnNames[i]);
+		if (cbTime2[i]) {
+			cbTime2[i]->StoreData();
+			layerData.setUseTime2(*vbTime2[i]);
+			if (*vbTime2[i]) {
+				fcTimeColumn2[i]->StoreData();
+				layerData.setTimeColumn2(vsTime2ColumnNames[i]);
+			}
 		}
-		cbGroup[i]->StoreData();
-		layerData.setUseGroup(*vbGroup[i]);
-		if (*vbGroup[i]) {
-			fcGroupColumn[i]->StoreData();
-			layerData.setGroupColumn(vsGroupColumnNames[i]);
+		if (cbSort[i]) {
+			cbSort[i]->StoreData();
+			layerData.setUseSort(*vbSort[i]);
+			if (*vbSort[i]) {
+				fcSortColumn[i]->StoreData();
+				layerData.setSortColumn(vsSortColumnNames[i]);
+			}
 		}
-		cbSize[i]->StoreData();
-		layerData.setUseSize(*vbSize[i]);
-		if (*vbSize[i]) {
-			fcSizeColumn[i]->StoreData();
-			layerData.setSizeColumn(vsSizeColumnNames[i]);
+		if (cbGroup[i]) {
+			cbGroup[i]->StoreData();
+			layerData.setUseGroup(*vbGroup[i]);
+			if (*vbGroup[i]) {
+				fcGroupColumn[i]->StoreData();
+				layerData.setGroupColumn(vsGroupColumnNames[i]);
+			}
+		}
+		if (cbSize[i]) {
+			cbSize[i]->StoreData();
+			layerData.setUseSize(*vbSize[i]);
+			if (*vbSize[i]) {
+				fcSizeColumn[i]->StoreData();
+				layerData.setSizeColumn(vsSizeColumnNames[i]);
+			}
 		}
 		fosPlotMethod[i]->StoreData();
 		layerData.setPlotOption(vsPlotMethod[i]);
