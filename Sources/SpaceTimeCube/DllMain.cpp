@@ -16,6 +16,7 @@
 #include "SpaceTimeCubeTool.h"
 #include "SpaceTimePathTool.h"
 #include "SpaceTimePathDrawer.h"
+#include "StationsDrawer.h"
 #include "CubeDrawer.h"
 #include "PreTimeOffsetDrawer.h"
 #include "PostTimeOffsetDrawer.h"
@@ -37,7 +38,8 @@ DrawerToolInfoVector *createDrawerTool() {
 
 DrawerInfoVector *createDrawer() {
 	DrawerInfoVector *infos = new DrawerInfoVector();
-	infos->push_back(new DrawerInfo("PointLayerDrawer","Cube",createSpaceTimePathDrawer));
+	infos->push_back(new DrawerInfo("PointLayerDrawer","Cube:<stp>",createSpaceTimePathDrawer));
+	infos->push_back(new DrawerInfo("PointLayerDrawer","Cube:<stations>",createStationsDrawer));
 	infos->push_back(new DrawerInfo("CubeDrawer","Cube",createCubeDrawer));
 	infos->push_back(new DrawerInfo("PreTimeOffsetDrawer","Cube",createPreTimeOffsetDrawer));
 	infos->push_back(new DrawerInfo("PostTimeOffsetDrawer","Cube",createPostTimeOffsetDrawer));

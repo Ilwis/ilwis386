@@ -12,7 +12,7 @@
 #include "PathScalingTool.h"
 #include "DrawersUI\LayerDrawerTool.h"
 #include "DrawersUI\PointSymbolizationTool.h"
-#include "SpaceTimePathDrawer.h"
+#include "SpaceTimeDrawer.h"
 
 DrawerTool *createPathScalingTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) {
 	return new PathScalingTool(zv, view, drw);
@@ -29,7 +29,7 @@ bool PathScalingTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	LayerDrawerTool *ldrwt = dynamic_cast<LayerDrawerTool *>(tool);
 	if ( !ldrwt )
 		return false;
-	SpaceTimePathDrawer *pdrw = dynamic_cast<SpaceTimePathDrawer *>(drawer);
+	SpaceTimeDrawer *pdrw = dynamic_cast<SpaceTimeDrawer *>(drawer);
 	if ( !pdrw)
 		return false;
 

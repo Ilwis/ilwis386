@@ -9,7 +9,7 @@
 #include "DrawersUI\LayerDrawerTool.h"
 #include "Drawers\LayerDrawer.h"
 #include "Drawers\FeatureLayerDrawer.h"
-#include "SpaceTimePathDrawer.h"
+#include "SpaceTimeDrawer.h"
 
 
 DrawerTool *createSpaceTimePathTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) {
@@ -28,7 +28,7 @@ bool SpaceTimePathTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	LayerDrawerTool *ldrwt = dynamic_cast<LayerDrawerTool *>(tool);
 	if ( !ldrwt )
 		return false;
-	SpaceTimePathDrawer *pdrw = dynamic_cast<SpaceTimePathDrawer *>(drawer);
+	SpaceTimeDrawer *pdrw = dynamic_cast<SpaceTimeDrawer *>(drawer);
 	if ( !pdrw)
 		return false;
 	parentTool = tool;
@@ -40,7 +40,7 @@ HTREEITEM SpaceTimePathTool::configure( HTREEITEM parentItem) {
 		return parentItem;
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&SpaceTimePathTool::displayOptionEdges);
-	SpaceTimePathDrawer *pdrw = dynamic_cast<SpaceTimePathDrawer *>(drawer);
+	SpaceTimeDrawer *pdrw = dynamic_cast<SpaceTimeDrawer *>(drawer);
 	String transp("Edges (%d)", pdrw->iNrSteps());
 	htiNode = insertItem(transp,"Circle", item);
 
@@ -59,7 +59,7 @@ String SpaceTimePathTool::getMenuString() const {
 //---------------------------------------------------
 EdgesForm::EdgesForm(CWnd *wPar, ComplexDrawer *dr, HTREEITEM hti) : 
 DisplayOptionsForm(dr,wPar,"Space Time Path Properties"),
-nrEdges(((SpaceTimePathDrawer*)dr)->iNrSteps()),
+nrEdges(((SpaceTimeDrawer*)dr)->iNrSteps()),
 htiNrEdges(hti), fldNrEdges(0)
 {
 	slider = new FieldIntSliderEx(root,"Edges(1-25)", &nrEdges,ValueRange(1,25),true);
@@ -80,7 +80,7 @@ void  EdgesForm::apply() {
 		fldNrEdges->StoreData();
 	}
 
-	SpaceTimePathDrawer *cdrw = (SpaceTimePathDrawer*)drw;
+	SpaceTimeDrawer *cdrw = (SpaceTimeDrawer*)drw;
 	cdrw->SetNrSteps(nrEdges);
 	String transp("Edges (%d)",nrEdges);
 	TreeItem titem;

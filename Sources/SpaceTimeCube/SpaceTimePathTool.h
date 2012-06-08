@@ -4,8 +4,6 @@ ILWIS::DrawerTool *createSpaceTimePathTool(ZoomableView* zv, LayerTreeView *view
 
 namespace ILWIS {
 
-	class SpaceTimePathDrawer;
-
 	class SpaceTimePathTool : public DrawerTool {
 	public:
 		SpaceTimePathTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw);

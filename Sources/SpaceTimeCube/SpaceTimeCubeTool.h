@@ -17,11 +17,11 @@ namespace ILWIS {
 	class LayerData {
 	public:
 		LayerData(NewDrawer *drw);
-		bool getPlotOption();
+		String sPlotOption();
 		bool fUseSort();
 		bool fUseGroup();
 		bool fUseSize();
-		void setPlotOption(bool _plotOption) {plotOption = _plotOption;};
+		void setPlotOption(String _plotOption) {plotOption = _plotOption;};
 		void setUseSort(bool _fSort) {fSort = _fSort;};
 		void setUseGroup(bool _fGroup) {fGroup = _fGroup;};
 		void setUseSize(bool _fSize) {fSize = _fSize;};
@@ -48,7 +48,7 @@ namespace ILWIS {
 		Column & getSizeColumn() {return sizeColumn;};
 	private:
 		String drawerId;
-		bool plotOption;
+		String plotOption;
 		bool fSort;
 		bool fGroup;
 		bool fSize;

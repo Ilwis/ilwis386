@@ -30,7 +30,7 @@
 
 LayerData::LayerData(NewDrawer *drw)
 : drawerId(drw->getId())
-, plotOption(false)
+, plotOption("<regular>")
 , fSort(false)
 , fGroup(false)
 , fSize(false)
@@ -94,8 +94,8 @@ bool LayerData::hasSize() {
 	return fFeatureMap && (sizeColumns.size() > 0);
 }
 
-bool LayerData::getPlotOption() {
-	return plotOption && (fSelfTime || temporalColumn.fValid());
+String LayerData::sPlotOption() {
+	return (fSelfTime || temporalColumn.fValid()) ? plotOption : "<regular>";
 }
 
 bool LayerData::fUseSort() {
@@ -270,7 +270,11 @@ void SpaceTimeCube::refreshDrawerList() {
 			continue; // skip it .. drawer was probably removed from the layers
 		drawer->removeDrawer(drawer->getDrawer(0)->getId()); // remove the old drawer
 		PreparationParameters pp(NewDrawer::ptALL);
-		pp.subType = (useSpaceTimeCube && layerList[i].getPlotOption()) ? "Cube" : "ilwis38";
+		String sPlotOption = layerList[i].sPlotOption();
+		if (useSpaceTimeCube && sPlotOption != "<regular>")
+			pp.subType = "Cube:" + sPlotOption;
+		else
+			pp.subType = "ilwis38";
 		drawer->prepare(&pp);
 		replaceTreeItem(drawer, (SpatialDataDrawer*)drawer, rootDrawer->getDrawerIndex(drawer));
 		TemporalDrawer * temporalDrawer = dynamic_cast<TemporalDrawer*>(((ComplexDrawer*)drawer)->getDrawer(0));
@@ -325,7 +329,7 @@ void SpaceTimeCube::refreshDrawerList() {
 					// if it is in the layerList, and it uses time, leave it
 					for (; j < layerList.size(); ++j) {
 						if (layerList[j].getDrawerId() == drw->getId()) {
-							if (!layerList[j].getPlotOption())
+							if (layerList[j].sPlotOption() == "<regular>")
 								j = layerList.size();
 							else
 								break; // keep j same
@@ -509,7 +513,7 @@ LayerOptionsForm::LayerOptionsForm(CWnd *wPar, SpaceTimeCube & _spaceTimeCube, v
 		if (i > 0)
 			stLayerName->Align(stPrevious, AL_UNDER);
 		stPrevious = stLayerName;
-		vsPlotMethod[i] = layerData.getPlotOption() ? "<stp>" : "<regular>";
+		vsPlotMethod[i] = layerData.sPlotOption();
 		FieldOneSelectTextOnly* fosPM = new FieldOneSelectTextOnly(root, &vsPlotMethod[i], false);
 		//fosPM->SetWidth(100);
 		fosPM->SetCallBack((NotifyProc)&LayerOptionsForm::ComboCallBackFunc);
@@ -619,8 +623,10 @@ int LayerOptionsForm::ComboCallBackFunc(Event*)
 		for(int i=0; i < m_layerList.size(); ++i) {
 			LayerData & layerData = m_layerList[i];
 			fosPlotMethod[i]->AddString("<regular>");
-			if (layerData.isPointMap())
+			if (layerData.isPointMap()) {
 				fosPlotMethod[i]->AddString("<stp>");
+				fosPlotMethod[i]->AddString("<stations>");
+			}
 			fosPlotMethod[i]->SelectItem(vsPlotMethod[i]);
 		}
 	}
@@ -656,7 +662,7 @@ void LayerOptionsForm::apply() {
 			layerData.setSizeColumn(vsSizeColumnNames[i]);
 		}
 		fosPlotMethod[i]->StoreData();
-		layerData.setPlotOption(vsPlotMethod[i] != "<regular>");
+		layerData.setPlotOption(vsPlotMethod[i]);
 	}
 
 	spaceTimeCube.refreshDrawerList();

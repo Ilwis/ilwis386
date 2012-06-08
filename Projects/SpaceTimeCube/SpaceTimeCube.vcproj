@@ -243,11 +243,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\SpaceTimeCube\SpaceTimeDrawer.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\SpaceTimeCube\SpaceTimePathDrawer.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\Sources\SpaceTimeCube\SpaceTimePathTool.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\SpaceTimeCube\StationsDrawer.h"
 				>
 			</File>
 			<File
@@ -311,11 +319,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\SpaceTimeCube\SpaceTimeDrawer.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\SpaceTimeCube\SpaceTimePathDrawer.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\Sources\SpaceTimeCube\SpaceTimePathTool.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\SpaceTimeCube\StationsDrawer.cpp"
 				>
 			</File>
 			<File
