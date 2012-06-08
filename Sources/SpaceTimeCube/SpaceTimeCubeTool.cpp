@@ -519,7 +519,8 @@ LayerOptionsForm::LayerOptionsForm(CWnd *wPar, SpaceTimeCube & _spaceTimeCube, v
 		if (i > 0)
 			stLayerName->Align(stPrevious, AL_UNDER);
 		stPrevious = stLayerName;
-		FieldOneSelectTextOnly* fosPM = new FieldOneSelectTextOnly(root, &vsPlotMethod[i]);
+		vsPlotMethod[i] = layerData.getPlotOption() ? "<stp>" : "<regular>";
+		FieldOneSelectTextOnly* fosPM = new FieldOneSelectTextOnly(root, &vsPlotMethod[i], false);
 		//fosPM->SetWidth(100);
 		fosPM->SetCallBack((NotifyProc)&LayerOptionsForm::ComboCallBackFunc);
 		fosPM->Align(stLayerName, AL_AFTER);
@@ -527,9 +528,9 @@ LayerOptionsForm::LayerOptionsForm(CWnd *wPar, SpaceTimeCube & _spaceTimeCube, v
 		vbSort[i] = new bool;
 		vbGroup[i] = new bool;
 		vbSize[i] = new bool;
-		*vbSort[i] = false;
-		*vbGroup[i] = false;
-		*vbSize[i] = false;
+		*vbSort[i] = layerData.fUseSort();
+		*vbGroup[i] = layerData.fUseGroup();
+		*vbSize[i] = layerData.fUseSize();
 		FormEntry * feTime;
 		if (layerData.isSelfTime()) {
 			StaticText *stDummy = new StaticText(root, "");
@@ -537,7 +538,9 @@ LayerOptionsForm::LayerOptionsForm(CWnd *wPar, SpaceTimeCube & _spaceTimeCube, v
 			fcTimeColumn.push_back(0);
 		}
 		else {
-			FieldColumn *fcol = new FieldColumn(root, "", layerData.getAttTable(), &vsTimeColumnNames[i], dmTIME);
+			if (layerData.getTimeColumn().fValid())
+				vsTimeColumnNames[i] = layerData.getTimeColumn()->sName();
+			FieldColumn *fcol = new FieldColumn(root, "time", layerData.getAttTable(), &vsTimeColumnNames[i], dmTIME);
 			fcTimeColumn.push_back(fcol);
 			feTime = fcol;
 		}
@@ -551,8 +554,10 @@ LayerOptionsForm::LayerOptionsForm(CWnd *wPar, SpaceTimeCube & _spaceTimeCube, v
 			cbSort.push_back(0);
 			fcSortColumn.push_back(0);
 		} else {
-			CheckBox * cbsort = new CheckBox(root, "", vbSort[i]);
+			CheckBox * cbsort = new CheckBox(root, "sort by", vbSort[i]);
 			cbSort.push_back(cbsort);
+			if (layerData.getSortColumn().fValid())
+				vsSortColumnNames[i] = layerData.getSortColumn()->sName();
 			FieldColumn * fcol = new FieldColumn(cbsort, "", layerData.getAttTable(), &vsSortColumnNames[i], dmVALUE | dmCLASS | dmIDENT);
 			fcSortColumn.push_back(fcol);
 			fcol->Align(cbsort, AL_AFTER);
@@ -569,8 +574,10 @@ LayerOptionsForm::LayerOptionsForm(CWnd *wPar, SpaceTimeCube & _spaceTimeCube, v
 			cbGroup.push_back(0);
 			fcGroupColumn.push_back(0);
 		} else {
-			CheckBox * cbgroup = new CheckBox(root, "", vbGroup[i]);
+			CheckBox * cbgroup = new CheckBox(root, "group by", vbGroup[i]);
 			cbGroup.push_back(cbgroup);
+			if (layerData.getGroupColumn().fValid())
+				vsGroupColumnNames[i] = layerData.getGroupColumn()->sName();
 			FieldColumn * fcol = new FieldColumn(cbgroup, "", layerData.getAttTable(), &vsGroupColumnNames[i], dmVALUE | dmCLASS | dmSTRING);
 			fcGroupColumn.push_back(fcol);
 			fcol->Align(cbgroup, AL_AFTER);
@@ -588,8 +595,10 @@ LayerOptionsForm::LayerOptionsForm(CWnd *wPar, SpaceTimeCube & _spaceTimeCube, v
 			fcSizeColumn.push_back(0);
 		}
 		else {
-			CheckBox * cbsize = new CheckBox(root, "", vbSize[i]);
+			CheckBox * cbsize = new CheckBox(root, "size", vbSize[i]);
 			cbSize.push_back(cbsize);
+			if (layerData.getSizeColumn().fValid())
+				vsSizeColumnNames[i] = layerData.getSizeColumn()->sName();
 			FieldColumn *fcol = new FieldColumn(cbsize, "", layerData.getAttTable(), &vsSizeColumnNames[i], dmVALUE);
 			fcSizeColumn.push_back(fcol);
 			fcol->Align(cbsize, AL_AFTER);
@@ -620,9 +629,9 @@ int LayerOptionsForm::ComboCallBackFunc(Event*)
 		for(int i=0; i < m_layerList.size(); ++i) {
 			LayerData & layerData = m_layerList[i];
 			fosPlotMethod[i]->AddString("<regular>");
-			fosPlotMethod[i]->ose->SetCurSel(0);
 			if (layerData.isPointMap())
 				fosPlotMethod[i]->AddString("<stp>");
+			fosPlotMethod[i]->SelectItem(vsPlotMethod[i]);
 		}
 	}
 
