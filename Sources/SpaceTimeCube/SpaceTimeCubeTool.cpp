@@ -338,6 +338,8 @@ void SpaceTimeCube::refreshDrawerList() {
 			else
 				sizableDrawer->SetNoSize();
 		}
+		pp = PreparationParameters (NewDrawer::pt3D); // re-prepare otherwise sort/nosort etc has no effect
+		drawer->prepare(&pp);
 	}
 
 	if (useSpaceTimeCube) {
