@@ -110,10 +110,10 @@ bool OpenstreetmapDrawer::draw( const CoordBounds& cbArea) const {
 		CoordBounds cb2(Coord(0, 0), Coord(20037508.34, 20037508.34));
 		CoordBounds cb3(Coord(-20037508.34, 0), Coord(0, 20037508.34));
 		CoordBounds cb4(Coord(0, -20037508.34), Coord(20037508.34, 0));
-		DisplayImagePortion(cb1);
-		DisplayImagePortion(cb2);
-		DisplayImagePortion(cb3);
-		DisplayImagePortion(cb4);
+		DisplayImagePortion(cb1, 1);
+		DisplayImagePortion(cb2, 1);
+		DisplayImagePortion(cb3, 1);
+		DisplayImagePortion(cb4, 1);
 		glPopMatrix();
 		glMatrixMode(GL_MODELVIEW);
 		glDisable(GL_TEXTURE_2D);
@@ -127,7 +127,7 @@ bool OpenstreetmapDrawer::draw( const CoordBounds& cbArea) const {
 	return true;
 }
 
-void OpenstreetmapDrawer::DisplayImagePortion(CoordBounds& cb) const {
+void OpenstreetmapDrawer::DisplayImagePortion(CoordBounds& cb, unsigned int zoomLevel) const {
 	// if patch describes the "added" portion of the map, do not display
 	if (cb.cMin.x > openstreetmapData->cbFullExtent.cMax.x || cb.cMin.y > openstreetmapData->cbFullExtent.cMax.y)
 		return;
@@ -164,7 +164,7 @@ void OpenstreetmapDrawer::DisplayImagePortion(CoordBounds& cb) const {
 	glVertex3d(c3.x, c3.y, 0.0);
 	glVertex3d(c4.x, c4.y, 0.0);
 	glEnd();
-	if (0 == glRenderMode(GL_RENDER)) {
+	if (0 == glRenderMode(GL_RENDER) && zoomLevel < 18) {
 		CoordBounds cbViewport = getRootDrawer()->getCoordBoundsZoom();
 		Coord c4 (cbViewport.cMin);
 		Coord c3 (cbViewport.cMax.x, cbViewport.cMin.y);
@@ -181,14 +181,15 @@ void OpenstreetmapDrawer::DisplayImagePortion(CoordBounds& cb) const {
 			double sizeX2 = cb.width() / 2.0;
 			double sizeY2 = cb.height() / 2.0;
 			if (sizeX2 > 1000000 && sizeY2 > 1000000) { // if we haven't found it within 1000 km, then it is a really weird projection
+				unsigned int nextZoomLevel = zoomLevel + 1;
 				// Q1
-				DisplayImagePortion(CoordBounds(cb.cMin, Coord(cb.cMin.x + sizeX2, cb.cMin.y + sizeY2)));
+				DisplayImagePortion(CoordBounds(cb.cMin, Coord(cb.cMin.x + sizeX2, cb.cMin.y + sizeY2)), nextZoomLevel);
 				// Q2
-				DisplayImagePortion(CoordBounds(Coord(cb.cMin.x + sizeX2, cb.cMin.y), Coord(cb.cMax.x, cb.cMin.y + sizeY2)));
+				DisplayImagePortion(CoordBounds(Coord(cb.cMin.x + sizeX2, cb.cMin.y), Coord(cb.cMax.x, cb.cMin.y + sizeY2)), nextZoomLevel);
 				// Q3
-				DisplayImagePortion(CoordBounds(Coord(cb.cMin.x + sizeX2, cb.cMin.y + sizeY2), cb.cMax));
+				DisplayImagePortion(CoordBounds(Coord(cb.cMin.x + sizeX2, cb.cMin.y + sizeY2), cb.cMax), nextZoomLevel);
 				// Q4
-				DisplayImagePortion(CoordBounds(Coord(cb.cMin.x, cb.cMin.y + sizeY2), Coord(cb.cMin.x + sizeX2, cb.cMax.y)));
+				DisplayImagePortion(CoordBounds(Coord(cb.cMin.x, cb.cMin.y + sizeY2), Coord(cb.cMin.x + sizeX2, cb.cMax.y)), nextZoomLevel);
 			}
 		}
 		return;
@@ -213,24 +214,25 @@ void OpenstreetmapDrawer::DisplayImagePortion(CoordBounds& cb) const {
 	// split the visible portion of the image into a number of patches, depending on the accuracy needed
 
 	boolean split = false;
-	if (max(screenPixelsX1, screenPixelsX2) > data->maxTextureSize) {
+	if (max(screenPixelsX1, screenPixelsX2) > data->maxTextureSize)
 		split = true;
-	}
-	if (max(screenPixelsY1, screenPixelsY2) > data->maxTextureSize) {
+	if (max(screenPixelsY1, screenPixelsY2) > data->maxTextureSize)
 		split = true;
-	}
+	if (zoomLevel >= 18)
+		split = false;
 	if (split)
 	{
 		double sizeX2 = cb.width() / 2.0;
 		double sizeY2 = cb.height() / 2.0;
+		unsigned int nextZoomLevel = zoomLevel + 1;
 		// Q1
-		DisplayImagePortion(CoordBounds(cb.cMin, Coord(cb.cMin.x + sizeX2, cb.cMin.y + sizeY2)));
+		DisplayImagePortion(CoordBounds(cb.cMin, Coord(cb.cMin.x + sizeX2, cb.cMin.y + sizeY2)), nextZoomLevel);
 		// Q2
-		DisplayImagePortion(CoordBounds(Coord(cb.cMin.x + sizeX2, cb.cMin.y), Coord(cb.cMax.x, cb.cMin.y + sizeY2)));
+		DisplayImagePortion(CoordBounds(Coord(cb.cMin.x + sizeX2, cb.cMin.y), Coord(cb.cMax.x, cb.cMin.y + sizeY2)), nextZoomLevel);
 		// Q3
-		DisplayImagePortion(CoordBounds(Coord(cb.cMin.x + sizeX2, cb.cMin.y + sizeY2), cb.cMax));
+		DisplayImagePortion(CoordBounds(Coord(cb.cMin.x + sizeX2, cb.cMin.y + sizeY2), cb.cMax), nextZoomLevel);
 		// Q4
-		DisplayImagePortion(CoordBounds(Coord(cb.cMin.x, cb.cMin.y + sizeY2), Coord(cb.cMin.x + sizeX2, cb.cMax.y)));
+		DisplayImagePortion(CoordBounds(Coord(cb.cMin.x, cb.cMin.y + sizeY2), Coord(cb.cMin.x + sizeX2, cb.cMax.y)), nextZoomLevel);
 	}
 	else
 	{
