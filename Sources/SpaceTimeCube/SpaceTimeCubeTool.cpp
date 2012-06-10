@@ -523,133 +523,137 @@ LayerOptionsForm::LayerOptionsForm(CWnd *wPar, SpaceTimeCube & _spaceTimeCube, v
 , m_layerList(layerList)
 , fFirstTime(true)
 {
-	StaticText * stPrevious;
-	int nrLayers = layerList.size();
-	vsPlotMethod.resize(nrLayers);
-	vsTimeColumnNames.resize(nrLayers);
-	vsTime2ColumnNames.resize(nrLayers);
-	vsSortColumnNames.resize(nrLayers);
-	vsGroupColumnNames.resize(nrLayers);
-	vsSizeColumnNames.resize(nrLayers);
-	vbTime2.resize(nrLayers);
-	vbSort.resize(nrLayers);
-	vbGroup.resize(nrLayers);
-	vbSize.resize(nrLayers);
-	for(int i=0; i < nrLayers; ++i) {
-		LayerData & layerData = layerList[i];
-		StaticText * stLayerName = new StaticText(root, layerData.fnObj().sFile);
-		if (i > 0)
-			stLayerName->Align(stPrevious, AL_UNDER);
-		stPrevious = stLayerName;
-		vsPlotMethod[i] = layerData.sPlotOption();
-		FieldOneSelectTextOnly* fosPM = new FieldOneSelectTextOnly(root, &vsPlotMethod[i], false);
-		//fosPM->SetWidth(100);
-		fosPM->SetCallBack((NotifyProc)&LayerOptionsForm::ComboCallBackFunc);
-		fosPM->Align(stLayerName, AL_AFTER);
-		fosPlotMethod.push_back(fosPM);
-		vbTime2[i] = new bool;
-		vbSort[i] = new bool;
-		vbGroup[i] = new bool;
-		vbSize[i] = new bool;
-		*vbTime2[i] = layerData.fUseTime2();
-		*vbSort[i] = layerData.fUseSort();
-		*vbGroup[i] = layerData.fUseGroup();
-		*vbSize[i] = layerData.fUseSize();
-		FormEntry * feTime;
-		if (layerData.isSelfTime()) {
-			StaticText *stDummy = new StaticText(root, "");
-			feTime = stDummy;
-			fcTimeColumn.push_back(0);
+	if (layerList.size() == 0) {
+		new StaticText(root, "None of the opened layers has a Time attribute");
+	} else {
+		StaticText * stPrevious;
+		int nrLayers = layerList.size();
+		vsPlotMethod.resize(nrLayers);
+		vsTimeColumnNames.resize(nrLayers);
+		vsTime2ColumnNames.resize(nrLayers);
+		vsSortColumnNames.resize(nrLayers);
+		vsGroupColumnNames.resize(nrLayers);
+		vsSizeColumnNames.resize(nrLayers);
+		vbTime2.resize(nrLayers);
+		vbSort.resize(nrLayers);
+		vbGroup.resize(nrLayers);
+		vbSize.resize(nrLayers);
+		for(int i=0; i < nrLayers; ++i) {
+			LayerData & layerData = layerList[i];
+			StaticText * stLayerName = new StaticText(root, layerData.fnObj().sFile);
+			if (i > 0)
+				stLayerName->Align(stPrevious, AL_UNDER);
+			stPrevious = stLayerName;
+			vsPlotMethod[i] = layerData.sPlotOption();
+			FieldOneSelectTextOnly* fosPM = new FieldOneSelectTextOnly(root, &vsPlotMethod[i], false);
+			//fosPM->SetWidth(100);
+			fosPM->SetCallBack((NotifyProc)&LayerOptionsForm::ComboCallBackFunc);
+			fosPM->Align(stLayerName, AL_AFTER);
+			fosPlotMethod.push_back(fosPM);
+			vbTime2[i] = new bool;
+			vbSort[i] = new bool;
+			vbGroup[i] = new bool;
+			vbSize[i] = new bool;
+			*vbTime2[i] = layerData.fUseTime2();
+			*vbSort[i] = layerData.fUseSort();
+			*vbGroup[i] = layerData.fUseGroup();
+			*vbSize[i] = layerData.fUseSize();
+			FormEntry * feTime;
+			if (layerData.isSelfTime()) {
+				StaticText *stDummy = new StaticText(root, "");
+				feTime = stDummy;
+				fcTimeColumn.push_back(0);
+			}
+			else {
+				if (layerData.getTimeColumn().fValid())
+					vsTimeColumnNames[i] = layerData.getTimeColumn()->sName();
+				FieldColumn *fcol = new FieldColumn(root, "time", layerData.getAttTable(), &vsTimeColumnNames[i], dmTIME);
+				fcTimeColumn.push_back(fcol);
+				feTime = fcol;
+			}
+			feTime->Align(fosPM, AL_AFTER);
+			FormEntry * feTime21;
+			FormEntry * feTime22;
+			if (layerData.isSelfTime()) {
+				feTime21 = new StaticText(root, "");
+				feTime22 = new StaticText(root, "");
+				feTime22->Align(feTime21, AL_AFTER);
+				cbTime2.push_back(0);
+				fcTimeColumn2.push_back(0);
+			} else {
+				CheckBox * cbtime2 = new CheckBox(root, "end time", vbTime2[i]);
+				cbTime2.push_back(cbtime2);
+				if (layerData.getTimeColumn2().fValid())
+					vsTime2ColumnNames[i] = layerData.getTimeColumn2()->sName();
+				FieldColumn * fcol = new FieldColumn(cbtime2, "", layerData.getAttTable(), &vsTime2ColumnNames[i], dmTIME);
+				fcTimeColumn2.push_back(fcol);
+				fcol->Align(cbtime2, AL_AFTER);
+				feTime21 = cbtime2;
+				feTime22 = fcol;
+			}
+			feTime21->Align(feTime, AL_AFTER);
+			FormEntry * feSort1;
+			FormEntry * feSort2;
+			if (!layerData.hasSort()) {
+				feSort1 = new StaticText(root, "");
+				feSort2 = new StaticText(root, "");
+				feSort2->Align(feSort1, AL_AFTER);
+				cbSort.push_back(0);
+				fcSortColumn.push_back(0);
+			} else {
+				CheckBox * cbsort = new CheckBox(root, "sort by", vbSort[i]);
+				cbSort.push_back(cbsort);
+				if (layerData.getSortColumn().fValid())
+					vsSortColumnNames[i] = layerData.getSortColumn()->sName();
+				FieldColumn * fcol = new FieldColumn(cbsort, "", layerData.getAttTable(), &vsSortColumnNames[i], dmVALUE | dmCLASS | dmIDENT);
+				fcSortColumn.push_back(fcol);
+				fcol->Align(cbsort, AL_AFTER);
+				feSort1 = cbsort;
+				feSort2 = fcol;
+			}
+			feSort1->Align(feTime, AL_AFTER);
+			FormEntry * feGroup1;
+			FormEntry * feGroup2;
+			if (!layerData.hasGroup()) {
+				feGroup1 = new StaticText(root, "");
+				feGroup2 = new StaticText(root, "");
+				feGroup2->Align(feGroup1, AL_AFTER);
+				cbGroup.push_back(0);
+				fcGroupColumn.push_back(0);
+			} else {
+				CheckBox * cbgroup = new CheckBox(root, "group by", vbGroup[i]);
+				cbGroup.push_back(cbgroup);
+				if (layerData.getGroupColumn().fValid())
+					vsGroupColumnNames[i] = layerData.getGroupColumn()->sName();
+				FieldColumn * fcol = new FieldColumn(cbgroup, "", layerData.getAttTable(), &vsGroupColumnNames[i], dmVALUE | dmCLASS | dmSTRING);
+				fcGroupColumn.push_back(fcol);
+				fcol->Align(cbgroup, AL_AFTER);
+				feGroup1 = cbgroup;
+				feGroup2 = fcol;
+			}
+			feGroup1->Align(feSort2, AL_AFTER);
+			FormEntry * feSize1;
+			FormEntry * feSize2;
+			if (!layerData.hasSize()) {
+				feSize1 = new StaticText(root, "");
+				feSize2 = new StaticText(root, "");
+				feSize2->Align(feSize1, AL_AFTER);
+				cbSize.push_back(0);
+				fcSizeColumn.push_back(0);
+			}
+			else {
+				CheckBox * cbsize = new CheckBox(root, "size", vbSize[i]);
+				cbSize.push_back(cbsize);
+				if (layerData.getSizeColumn().fValid())
+					vsSizeColumnNames[i] = layerData.getSizeColumn()->sName();
+				FieldColumn *fcol = new FieldColumn(cbsize, "", layerData.getAttTable(), &vsSizeColumnNames[i], dmVALUE);
+				fcSizeColumn.push_back(fcol);
+				fcol->Align(cbsize, AL_AFTER);
+				feSize1 = cbsize;
+				feSize2 = fcol;
+			}
+			feSize1->Align(feGroup2, AL_AFTER);
 		}
-		else {
-			if (layerData.getTimeColumn().fValid())
-				vsTimeColumnNames[i] = layerData.getTimeColumn()->sName();
-			FieldColumn *fcol = new FieldColumn(root, "time", layerData.getAttTable(), &vsTimeColumnNames[i], dmTIME);
-			fcTimeColumn.push_back(fcol);
-			feTime = fcol;
-		}
-		feTime->Align(fosPM, AL_AFTER);
-		FormEntry * feTime21;
-		FormEntry * feTime22;
-		if (layerData.isSelfTime()) {
-			feTime21 = new StaticText(root, "");
-			feTime22 = new StaticText(root, "");
-			feTime22->Align(feTime21, AL_AFTER);
-			cbTime2.push_back(0);
-			fcTimeColumn2.push_back(0);
-		} else {
-			CheckBox * cbtime2 = new CheckBox(root, "end time", vbTime2[i]);
-			cbTime2.push_back(cbtime2);
-			if (layerData.getTimeColumn2().fValid())
-				vsTime2ColumnNames[i] = layerData.getTimeColumn2()->sName();
-			FieldColumn * fcol = new FieldColumn(cbtime2, "", layerData.getAttTable(), &vsTime2ColumnNames[i], dmTIME);
-			fcTimeColumn2.push_back(fcol);
-			fcol->Align(cbtime2, AL_AFTER);
-			feTime21 = cbtime2;
-			feTime22 = fcol;
-		}
-		feTime21->Align(feTime, AL_AFTER);
-		FormEntry * feSort1;
-		FormEntry * feSort2;
-		if (!layerData.hasSort()) {
-			feSort1 = new StaticText(root, "");
-			feSort2 = new StaticText(root, "");
-			feSort2->Align(feSort1, AL_AFTER);
-			cbSort.push_back(0);
-			fcSortColumn.push_back(0);
-		} else {
-			CheckBox * cbsort = new CheckBox(root, "sort by", vbSort[i]);
-			cbSort.push_back(cbsort);
-			if (layerData.getSortColumn().fValid())
-				vsSortColumnNames[i] = layerData.getSortColumn()->sName();
-			FieldColumn * fcol = new FieldColumn(cbsort, "", layerData.getAttTable(), &vsSortColumnNames[i], dmVALUE | dmCLASS | dmIDENT);
-			fcSortColumn.push_back(fcol);
-			fcol->Align(cbsort, AL_AFTER);
-			feSort1 = cbsort;
-			feSort2 = fcol;
-		}
-		feSort1->Align(feTime, AL_AFTER);
-		FormEntry * feGroup1;
-		FormEntry * feGroup2;
-		if (!layerData.hasGroup()) {
-			feGroup1 = new StaticText(root, "");
-			feGroup2 = new StaticText(root, "");
-			feGroup2->Align(feGroup1, AL_AFTER);
-			cbGroup.push_back(0);
-			fcGroupColumn.push_back(0);
-		} else {
-			CheckBox * cbgroup = new CheckBox(root, "group by", vbGroup[i]);
-			cbGroup.push_back(cbgroup);
-			if (layerData.getGroupColumn().fValid())
-				vsGroupColumnNames[i] = layerData.getGroupColumn()->sName();
-			FieldColumn * fcol = new FieldColumn(cbgroup, "", layerData.getAttTable(), &vsGroupColumnNames[i], dmVALUE | dmCLASS | dmSTRING);
-			fcGroupColumn.push_back(fcol);
-			fcol->Align(cbgroup, AL_AFTER);
-			feGroup1 = cbgroup;
-			feGroup2 = fcol;
-		}
-		feGroup1->Align(feSort2, AL_AFTER);
-		FormEntry * feSize1;
-		FormEntry * feSize2;
-		if (!layerData.hasSize()) {
-			feSize1 = new StaticText(root, "");
-			feSize2 = new StaticText(root, "");
-			feSize2->Align(feSize1, AL_AFTER);
-			cbSize.push_back(0);
-			fcSizeColumn.push_back(0);
-		}
-		else {
-			CheckBox * cbsize = new CheckBox(root, "size", vbSize[i]);
-			cbSize.push_back(cbsize);
-			if (layerData.getSizeColumn().fValid())
-				vsSizeColumnNames[i] = layerData.getSizeColumn()->sName();
-			FieldColumn *fcol = new FieldColumn(cbsize, "", layerData.getAttTable(), &vsSizeColumnNames[i], dmVALUE);
-			fcSizeColumn.push_back(fcol);
-			fcol->Align(cbsize, AL_AFTER);
-			feSize1 = cbsize;
-			feSize2 = fcol;
-		}
-		feSize1->Align(feGroup2, AL_AFTER);
 	}
 
 	create();
