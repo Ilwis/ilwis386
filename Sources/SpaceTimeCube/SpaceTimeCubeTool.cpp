@@ -705,7 +705,7 @@ int LayerOptionsForm::ComboCallBackFunc(Event*)
 			if (cbTime2[i]) cbTime2[i]->Show();
 			if (cbSort[i]) cbSort[i]->Hide();
 			if (cbGroup[i]) cbGroup[i]->Hide();
-			if (cbSize[i]) cbSize[i]->Hide();
+			if (cbSize[i]) cbSize[i]->Show();
 		}
 	}
 
