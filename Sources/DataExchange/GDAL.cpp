@@ -483,6 +483,7 @@ void GDALFormat::LoadMethods() {
 				funcs.ogrtVal = (GetFieldAsDateTimeFunc)GetProcAddress(hm,"OGR_F_GetFieldAsDateTime");
 				funcs.ogrGetGeometryRef = (GetGeometryRefFunc)GetProcAddress(hm,"OGR_F_GetGeometryRef");
 				funcs.ogrGetGeometryType = (GetGeometryTypeFunc)GetProcAddress(hm,"OGR_G_GetGeometryType");
+				funcs.ogrGetGeometryCount = (GetGeometryCountFunc)GetProcAddress(hm,"OGR_G_GetGeometryCount");
 				funcs.ogrDestroyFeature = (DestroyFeatureFunc)GetProcAddress(hm,"OGR_F_Destroy");
 				funcs.ogrGetNumberOfPoints = (GetPointCountFunc)GetProcAddress(hm,"OGR_G_GetPointCount");
 				funcs.ogrGetPoints = (GetPointsFunc)GetProcAddress(hm,"OGR_G_GetPoint");
@@ -1574,12 +1575,13 @@ void GDALFormat::getImportFormats(vector<ImportFormat>& formats) {
 			String name("%s", funcs.ogrGetDriverName(driv));
 			GDALImportFormat frm;
 			frm.name = name;
-			//frm.shortName = shrtName;
 			frm.type = ImportFormat::ifSegment | ImportFormat::ifPoint | ImportFormat::ifPolygon;
 			frm.provider = frm.method = "OGR";
 			frm.useasSuported = false;
 			frm.ui = NULL;
 			frm.ext = "*.*";
+			if ( name == "ESRI Shapefile")
+				frm.ext = "shp";
 			frm.command = "gdalogrimport";
 			formats.push_back(frm);
 		}
@@ -1616,7 +1618,7 @@ void GDALFormat::ogr(const String& name, const String& source, const String& tar
 					csy = CoordSystem("unknown");
 
 				int featureCount = funcs.ogrGetFeatureCount(hLayer,TRUE);
-				Domain dm(fnBaseOutputName, featureCount, dmtUNIQUEID, "feature");
+				Domain dm(fnBaseOutputName, featureCount, dmtID, "feature");
 				CoordBounds cb = getLayerCoordBounds(hLayer);
 				csy->cb = cb;
 				BaseMap bmp = createBaseMap(fnBaseOutputName, ftype, dm, csy, cb);
@@ -1890,31 +1892,49 @@ void PolygonFiller::fillFeature(OGRGeometryH hGeometry, int& rec) {
 	try {
 		if ( hGeometry) {
 			long count = funcs.ogrGetSubGeometryCount(hGeometry);
-			bool first = true;
-			for(int i =0; i < count; ++i) {
-				OGRGeometryH hSubGeometry = funcs.ogrGetSubGeometry(hGeometry, i);
-				if ( hSubGeometry) {
-					LinearRing *ring = getRing(hSubGeometry);
-					if ( ring) {
-						const CoordinateSequence * seq = ring->getCoordinates();
-						bool isCC = geos::algorithm::CGAlgorithms::isCCW(seq);
-						delete seq;
-						ILWIS::Polygon *p = 0;
-						if ( !isCC || first) {
-							p = CPOLYGON(bmp->newFeature());
-							p->PutVal((long)rec++);
-							p->addBoundary(ring);
-							first = false;
-						}
-						else
-							if ( p)
-								p->addHole(ring);
-					}
+			OGRwkbGeometryType tp = funcs.ogrGetGeometryType(hGeometry);
+			if ( tp == wkbPolygon){
+				fillPolygon(count, rec, hGeometry);
+				++rec;
+			}
+			else {
+				for(int i = 0; i < count; ++i) {
+					OGRGeometryH hSubGeometry = funcs.ogrGetSubGeometry(hGeometry, i);
+					fillFeature(hSubGeometry, rec);
 				}
 			}
 		}
 	} catch ( geos::util::IllegalArgumentException& ) {
 		// we ignore errors during import, polygons are skipped
+	}
+}
+
+void PolygonFiller::fillPolygon(int count, int rec, OGRGeometryH hGeometry) {
+	ILWIS::Polygon *p = 0;
+	bool first = true;
+	for(int i =0; i < count; ++i) {
+		if ( i == 44) {
+			TRACE("Stop\n");
+		}
+		OGRGeometryH hSubGeometry = funcs.ogrGetSubGeometry(hGeometry, i);
+		if ( hSubGeometry) {
+			LinearRing *ring = getRing(hSubGeometry);
+			if ( ring) {
+				const CoordinateSequence * seq = ring->getCoordinates();
+				bool isCC = geos::algorithm::CGAlgorithms::isCCW(seq);
+				delete seq;
+				//if ( !isCC || first) {
+				if ( first) {
+					p = CPOLYGON(bmp->newFeature());
+					p->PutVal((long)rec);
+					p->addBoundary(ring);
+					first = false;
+				}
+				else
+					if ( p)
+						p->addHole(ring);
+			}
+		}
 	}
 }
 
@@ -1926,6 +1946,12 @@ LinearRing *PolygonFiller::getRing(OGRGeometryH hSubGeometry) {
 		if ( hGeom == 0)
 			return 0;
 		count = funcs.ogrGetNumberOfPoints(hGeom);
+		OGRGeometryH hGeom2 = funcs.ogrGetSubGeometry(hGeom, 0);
+		if ( hGeom2) {
+			int count2 = funcs.ogrGetNumberOfPoints(hGeom2);
+			++count;
+
+		}
 	}
 	if ( count == 0)
 		return  0;

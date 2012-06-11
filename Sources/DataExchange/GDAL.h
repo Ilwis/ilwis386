@@ -94,7 +94,8 @@ typedef OGRwkbGeometryType (*GetGeometryTypeFunc)(OGRGeometryH);
 typedef void (*DestroyFeatureFunc)(OGRFeatureH );
 typedef int (*GetPointCountFunc)(OGRGeometryH);
 typedef void (*GetPointsFunc)(OGRGeometryH,int,double *,double *,double *);
-typedef int (*GetSubGeometryCountFunc)(OGRGeometryH); 
+typedef int (*GetSubGeometryCountFunc)(OGRGeometryH);
+typedef int (*GetGeometryCountFunc)(OGRGeometryH);
 typedef OGRGeometryH (*GetSubGeometryRefFunc)(OGRGeometryH,int);
 typedef OGRSpatialReferenceH (*GetSpatialRefFunc)(OGRLayerH hLayer ) 	;
 typedef OGRErr (__stdcall *ExportToWktFunc)(OGRSpatialReferenceH,char **);
@@ -161,6 +162,7 @@ struct GDALCFunctions {
 	GetPointCountFunc ogrGetNumberOfPoints;
 	GetPointsFunc ogrGetPoints;
 	GetSubGeometryCountFunc ogrGetSubGeometryCount;
+	GetGeometryCountFunc ogrGetGeometryCount;
 	GetSubGeometryRefFunc ogrGetSubGeometry;
 	GetSpatialRefFunc ogrGetSpatialRef;
 	ExportToWktFunc exportToWkt;
@@ -232,6 +234,7 @@ public:
 	PolygonFiller(GDALCFunctions& _funcs, BaseMap& _bmp) : GeometryFiller(_funcs, _bmp) {}
 	virtual void fillFeature(OGRGeometryH hGeom, int& rec);
 private:
+	void fillPolygon(int count, int rec, OGRGeometryH hGeometry);
 	LinearRing *getRing(OGRGeometryH hGeom);
 };
 
