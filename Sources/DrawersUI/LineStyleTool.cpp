@@ -20,6 +20,7 @@
 #include "DrawersUI\LineStyleTool.h"
 #include "Drawers\PolygonLayerDrawer.h"
 #include "DrawersUI\PolygonSetTool.h"
+#include "DrawersUI\LineSetTool.h"
 #include "DrawersUI\SetDrawerTool.h"
 
 //#include "drawers\linedrawer.h"
@@ -48,9 +49,13 @@ bool LineStyleTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 		if (!ldrw)
 			return false;
 	}
+	LineSetTool *lst = dynamic_cast<LineSetTool *>(tool);
+	if ( !lst)
+		return false;
+
 	parentTool = tool;
 
-	return false;
+	return true;
 
 }
 

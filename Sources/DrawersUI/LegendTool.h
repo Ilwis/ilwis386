@@ -9,6 +9,7 @@ class LineLayerDrawer;
 
 class LegendTool : public DrawerTool {
 public:
+	enum DrawerType{dtPOLYGON, dtPOINT, dtSEGMENT};
 	LegendTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw);
 	~LegendTool();
 	HTREEITEM configure( HTREEITEM parentItem);
@@ -20,7 +21,7 @@ private:
 	void insertLegendItemsClass(const Representation& rpr);
 	void displayOptionRprClass();
 	HTREEITEM htiLeg;
-	IlwisObject::iotIlwisObjectType mapType;
+	DrawerType  drawerType;
 };
 
 class LineRprForm : public DisplayOptionsForm {

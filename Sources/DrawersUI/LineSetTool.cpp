@@ -64,7 +64,10 @@ HTREEITEM LineSetTool::configure( HTREEITEM parentItem) {
 
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&LineSetTool::displayOptionRprLine);
-	htiNode = insertItem(TR("Segment Representation"),".mps", item); 	
+	htiNode = insertItem(TR("Segment Representation"),".mps", item); 
+
+	DrawerTool::configure(htiNode);
+
 
 	return htiNode;
 }
