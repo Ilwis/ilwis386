@@ -6,6 +6,7 @@ using namespace ILWIS;
 
 SortableDrawer::SortableDrawer()
 : fUseSort(false)
+, fSortValues(false)
 {
 }
 
@@ -16,8 +17,10 @@ SortableDrawer::~SortableDrawer()
 void SortableDrawer::SetSortAttribute(const Column & col)
 {
 	fUseSort = col.fValid();
-	if (fUseSort)
+	if (fUseSort) {
 		colSort = col;
+		fSortValues = col->fValues();
+	}
 }
 
 void SortableDrawer::SetNoSort()
@@ -31,4 +34,12 @@ const double SortableDrawer::getSortValue(Feature * f) const
 		return colSort->rValue(f->iValue());
 	else
 		return 0;
+}
+
+const String SortableDrawer::getSortString(Feature * f) const
+{
+	if (f && fUseSort)
+		return colSort->sValue(f->iValue());
+	else
+		return "?";
 }
