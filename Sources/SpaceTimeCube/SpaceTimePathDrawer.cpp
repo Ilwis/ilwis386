@@ -29,6 +29,18 @@ SpaceTimePathDrawer::SpaceTimePathDrawer(DrawerParameters *parms)
 SpaceTimePathDrawer::~SpaceTimePathDrawer() {
 }
 
+struct sort_pair_first_value { 
+    bool operator()(const std::pair<double, Feature*> &left, const std::pair<double, Feature*> &right) { 
+        return left.first < right.first;
+    } 
+}; 
+
+struct sort_pair_first_string { 
+    bool operator()(const std::pair<String, Feature*> &left, const std::pair<String, Feature*> &right) { 
+        return left.first < right.first;
+    } 
+}; 
+
 void SpaceTimePathDrawer::prepare(PreparationParameters *parms){
 	if (!isActive())
 		return;
@@ -39,15 +51,27 @@ void SpaceTimePathDrawer::prepare(PreparationParameters *parms){
 		long numberOfFeatures = basemap->iFeatures();
 		if (numberOfFeatures != iUNDEF) {
 			if (fUseSort) {
-				vector<std::pair<double, Feature*>> sortedFeatures;
-				for(long i = 0; i < numberOfFeatures; ++i) {
-					Feature *feature = CFEATURE(basemap->getFeature(i));
-					if ( feature && feature->fValid() && feature->rValue() != rUNDEF)
-						sortedFeatures.push_back(std::pair<double, Feature*>(getSortValue(feature), feature));
+				if (fSortValues) {
+					vector<std::pair<double, Feature*>> sortedFeatures;
+					for(long i = 0; i < numberOfFeatures; ++i) {
+						Feature *feature = CFEATURE(basemap->getFeature(i));
+						if ( feature && feature->fValid())
+							sortedFeatures.push_back(std::pair<double, Feature*>(getSortValue(feature), feature));
+					}
+					std::stable_sort(sortedFeatures.begin(), sortedFeatures.end(), sort_pair_first_value());
+					for(vector<std::pair<double, Feature*>>::const_iterator it = sortedFeatures.begin(); it != sortedFeatures.end(); ++it)
+						features.push_back((*it).second);
+				} else { // sort by String
+					vector<std::pair<String, Feature*>> sortedFeatures;
+					for(long i = 0; i < numberOfFeatures; ++i) {
+						Feature *feature = CFEATURE(basemap->getFeature(i));
+						if ( feature && feature->fValid())
+							sortedFeatures.push_back(std::pair<String, Feature*>(getSortString(feature), feature));
+					}
+					std::stable_sort(sortedFeatures.begin(), sortedFeatures.end(), sort_pair_first_string());
+					for(vector<std::pair<String, Feature*>>::const_iterator it = sortedFeatures.begin(); it != sortedFeatures.end(); ++it)
+						features.push_back((*it).second);
 				}
-				std::stable_sort(sortedFeatures.begin(), sortedFeatures.end());
-				for(vector<std::pair<double, Feature*>>::const_iterator it = sortedFeatures.begin(); it != sortedFeatures.end(); ++it)
-					features.push_back((*it).second);
 			} else {
 				for(long i = 0; i < numberOfFeatures; ++i) {
 					Feature *feature = CFEATURE(basemap->getFeature(i));
