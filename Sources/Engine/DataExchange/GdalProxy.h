@@ -63,6 +63,7 @@ typedef void (*DestroyFeatureFunc)(OGRFeatureH );
 typedef int (*GetPointCountFunc)(OGRGeometryH);
 typedef void (*GetPointsFunc)(OGRGeometryH,int,double *,double *,double *);
 typedef int (*GetSubGeometryCountFunc)(OGRGeometryH); 
+typedef int (*GetGeometryCountFunc)(OGRGeometryH);
 typedef OGRGeometryH (*GetSubGeometryRefFunc)(OGRGeometryH,int);
 typedef OGRSpatialReferenceH (*GetSpatialRefFunc)(OGRLayerH hLayer ) 	;
 typedef OGRErr (__stdcall *ExportToWktFunc)(OGRSpatialReferenceH,char **);
@@ -142,6 +143,7 @@ public:
 	GetPointCountFunc ogrGetNumberOfPoints;
 	GetPointsFunc ogrGetPoints;
 	GetSubGeometryCountFunc ogrGetSubGeometryCount;
+	GetGeometryCountFunc ogrGetGeometryCount;
 	GetSubGeometryRefFunc ogrGetSubGeometry;
 	GetSpatialRefFunc ogrGetSpatialRef;
 	ExportToWktFunc exportToWkt;

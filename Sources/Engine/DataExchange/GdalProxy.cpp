@@ -80,6 +80,7 @@ void GdalProxy::loadMethods(const String& ilwDir) {
 				ogrGetNumberOfPoints = (GetPointCountFunc)GetProcAddress(hm,"OGR_G_GetPointCount");
 				ogrGetPoints = (GetPointsFunc)GetProcAddress(hm,"OGR_G_GetPoint");
 				ogrGetSubGeometryCount = (GetSubGeometryCountFunc)GetProcAddress(hm,"OGR_G_GetGeometryCount");
+				ogrGetGeometryCount = (GetGeometryCountFunc)GetProcAddress(hm,"OGR_G_GetGeometryCount");
 				ogrGetSubGeometry = (GetSubGeometryRefFunc)GetProcAddress(hm,"OGR_G_GetGeometryRef");
 				ogrGetSpatialRef = (GetSpatialRefFunc)GetProcAddress(hm,"OGR_L_GetSpatialRef");
 				exportToWkt = (ExportToWktFunc)GetProcAddress(hm,"_OSRExportToWkt@8");
