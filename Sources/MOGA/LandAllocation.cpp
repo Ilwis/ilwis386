@@ -353,22 +353,13 @@ void LandAllocation::FitnessMO(GAChromosome & chromosome, LandAllocation * conte
 
 void LandAllocation::ChromosomeMutator(GAChromosome & chromosome)
 {
-    GAChromosome newChromosome;
-    // copy chromosome into newChromosome
-	long Count = pmFacilities->iFeatures();
-    for (int i = 0; i < Count; ++i)
-        newChromosome.push_back(chromosome[i]);
-
-    int firstRandomIndex = random(iOptimalFacilities) - 1;
-    int secondRandomIndex = random(Count) - 1;
+    int firstRandomIndex = random(iOptimalFacilities) - 1; // random index within the optimal facilities
+	int secondRandomIndex = random(chromosome.size()) - 1; // random index within the whole chromosome
     
     // swap the genes at the two indexes
-    unsigned int tempGene = newChromosome[firstRandomIndex];
-    newChromosome[firstRandomIndex] = newChromosome[secondRandomIndex];
-    newChromosome[secondRandomIndex] = tempGene;
-
-    // copy the result back into chromosome
-    chromosome.CopyChromosome(newChromosome);
+    unsigned int tempGene = chromosome[firstRandomIndex];
+    chromosome[firstRandomIndex] = chromosome[secondRandomIndex];
+    chromosome[secondRandomIndex] = tempGene;
 }
 
 void LandAllocation::Initializer(GAChromosome & chromosome)
@@ -434,5 +425,5 @@ void LandAllocation::GreedyCrossOver(GAChromosome & Dad, GAChromosome & Mum, GAC
 	std::random_shuffle(remainingGenes.begin(), remainingGenes.end());
 	for (int i = 0; i < remainingGenes.size(); ++i)
 		child.push_back(remainingGenes[i]);
-	assert(child.size() != length);
+	assert(child.size() == length);
 }
