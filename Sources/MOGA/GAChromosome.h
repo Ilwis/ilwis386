@@ -18,7 +18,6 @@ public:
 	GAChromosome(LandAllocation * context, FitnessFunc fitnessFunc, ScoreFunc scoreFunc1, ScoreFunc scoreFunc2, bool fInitialize);
 	virtual ~GAChromosome();
 	void CopyChromosome(GAChromosome & chromosome); 
-	int HasThisGene(unsigned int Gene);
 	double rGetFitness() const;
 	double rGetPartialScore1() const;
 	double rGetPartialScore2() const;

@@ -51,25 +51,6 @@ void GAChromosome::CopyChromosome(GAChromosome & chromosome)
 	m_score2 = chromosome.m_score2;
 }
     
-int GAChromosome::HasThisGene(unsigned int Gene)
-{
-	bool fFound = false;
-	int length = size();
-	int index = 0;
-	while(index < length)
-	{
-		if(Gene == at(index))
-		{
-			fFound = true;
-			break;
-		}
-		++index;
-	}
-	if(!fFound)
-		return -1;
-	return index;
-}
-
 double GAChromosome::rGetFitness() const
 {
 	return m_dFitness;
