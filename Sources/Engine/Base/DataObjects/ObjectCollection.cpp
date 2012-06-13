@@ -361,7 +361,8 @@ void ObjectCollectionPtr::GetDataFiles(Array<FileName>& afnDat, Array<String>* a
 
 void ObjectCollectionPtr::Add(const IlwisObject& obj)
 {
-	objects[obj->fnObj.sFullPath()] = obj;
+	//objects[obj->fnObj.sFullPath()] = obj;
+	objects.insert(pair<String, IlwisObject>(obj->fnObj.sFullPath(), obj));
 	Add(obj->fnObj);
 }
 
