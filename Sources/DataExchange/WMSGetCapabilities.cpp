@@ -72,6 +72,18 @@ void WMSGetCapabilities::parse() {
 
 	String txt((const char*)chunk.memory);
 	ILWIS::XMLDocument doc(txt);
+	vector<pugi::xml_node> results;
+	doc.executeXPathExpression("//Capability/Request/GetMap/DCPType/HTTP/Get/OnlineResource", results);
+	if ( results.size() > 0) {
+		for(pugi::xml_attribute att = results[0].first_attribute(); att; att = att.next_attribute()) {
+			String attname = att.name();
+			if ( attname == "xlink:href") {
+				getMapUrl = URL(att.value());
+				break;
+			}
+		}
+	}
+
 	parseLayer(doc, "//Capability/Layer", layers);
 	for(int i=0; i < layers.size(); ++i)
 		postprocess(layers[i]);
@@ -146,6 +158,9 @@ void WMSGetCapabilities::parseLayer(const ILWIS::XMLDocument& doc, const String&
 	}
 }
 
+URL WMSGetCapabilities::getGetMapUrl() const {
+	return getMapUrl;
+}
 
 //-------------------------
 WMSLayerInfo::~WMSLayerInfo() {

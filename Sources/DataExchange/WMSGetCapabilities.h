@@ -53,17 +53,19 @@ public:
 	WMSLayerInfo *prevLayer;
 	vector<WMSLayerInfo *> layers;
 	CoordBounds bbLatLon;
-
+	
 };
 
 class WMSGetCapabilities : public RemoteObject {
 	vector<WMSLayerInfo *> layers;
 	void parse();
 	void propagateSRSInfo(WMSLayerInfo *prevlyr);
+	URL getMapUrl;
 public:
 	WMSGetCapabilities(const URL& url);
 	~WMSGetCapabilities();
 	vector<WMSLayerInfo *> getLayerInfo();
+	URL getGetMapUrl() const;
 	void parseLayer(const ILWIS::XMLDocument& doc, const String& base, vector<WMSLayerInfo *>& parent );
 	CoordBounds parseBoundingBox(const pugi::xml_node& node, String& srs );
 	void postprocess(WMSLayerInfo *info);

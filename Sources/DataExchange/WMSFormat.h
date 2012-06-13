@@ -112,7 +112,7 @@ public:
 
 private:
 	void Init();
-	static void PutData(vector<WMSLayerInfo *> layers, WMSCollectionPtr* col, ParmList& pm);
+	static void PutData(vector<WMSLayerInfo *> layers, WMSCollectionPtr* coll, ParmList& pm);
 	static UINT PutDataInThread(LPVOID lp);
 	CoordSystem getCoordSystem(const FileName& fnBase, const String& srsName);
 	WMSLayerInfo* find(vector<WMSLayerInfo *> layers, const String& sName);
@@ -123,6 +123,7 @@ private:
 	WMSLayerInfo *findRelevantSrsLayer(vector<WMSLayerInfo *> layers, WMSLayerInfo *targetlayer, WMSLayerInfo *srsLayer);
 
 	URL	urlWMS;
+	URL urlGetMap;
 
 	String layers;
 	CoordBounds cb;

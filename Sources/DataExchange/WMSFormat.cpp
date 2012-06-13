@@ -104,9 +104,12 @@ WMSFormat::WMSFormat(const FileName& fn, ParmList& pm)
 
 	if ( wms.fValid() && !pm.fExist("getcapabilities"))
 		pm.Add(new Parm("url", wms->getCapabilities().sVal()));
+	if ( wms.fValid() && !pm.fExist("getmap"))
+		pm.Add(new Parm("getmap", wms->getMap().sVal()));
 
 	URL url(pm.sGet("url"));
 	urlWMS = url;
+	urlGetMap = URL(pm.sGet("getmap"));
 	gdalDataSet = NULL;
 	if ( pm.fExist("layer"))
 		layers = pm.sGet("layer");
@@ -217,6 +220,9 @@ void WMSFormat::ReadParameters(const FileName& fnObj, ParmList& pm)
 	ObjectInfo::ReadElement("ForeignFormat","URL",fnObj,sV);
 	urlWMS = URL(sV);
 	pm.Add(new Parm("url", urlWMS.sVal()));
+	ObjectInfo::ReadElement("ForeignFormat","GetMap",fnObj,sV);
+	urlGetMap = URL(sV);
+	pm.Add(new Parm("getmap", sV));
 }
 
 ForeignFormat *CreateImportObjectWMS(const FileName& fnFO, ParmList& pm) {
@@ -288,6 +294,7 @@ UINT WMSFormat::PutDataInThread(LPVOID lp) {
 
 		WMSGetCapabilities capabilities(data->url);
 		vector<WMSLayerInfo *> layers = capabilities.getLayerInfo();
+		data->pm.Add(new Parm("getmap",capabilities.getGetMapUrl().sVal()));
 		PutData(layers, data->fptr->ptr(), data->pm);
 		
 		if ( data->fIsThreaded )
@@ -324,6 +331,9 @@ void WMSFormat::PutData(vector<WMSLayerInfo *> layers, WMSCollectionPtr* col, Pa
 	trq.SetNoStopButton(true);
 	trq.SetTitle(TR("Opening WMS"));
 	trq.SetText(TR("Filling Catalog"));
+	if ( col && pm.fExist("getmap"))
+		col->setGetMap(pm.sGet("getmap"));
+
 	long count = 0;
 	for(vector<WMSLayerInfo *>::iterator cur = layers.begin(); cur != layers.end(); ++cur,++count) {
 		trq.fUpdate(count, layers.size());
@@ -341,6 +351,7 @@ void WMSFormat::PutData(vector<WMSLayerInfo *> layers, WMSCollectionPtr* col, Pa
 					col->Add(fnObj, makeCompatible(info->name));
 					fnObj = FileName(makeCompatible(info->name), ".mpr");
 					col->Add(fnObj, info->name);
+					col2->Store();
 				}
 				
 		}
@@ -468,9 +479,12 @@ CoordSystem WMSFormat::getCoordSystem(const FileName& fnBase, const String& srsN
 
 String WMSFormat::getMapRequest(const CoordBounds& cb, const String& layers, const String& srsName, const RowCol rc) const{
 	double ratio = cb.width()/ cb.height();
-	String mapRequest = "http://" + urlWMS.getPath();
+	String mapRequest = urlGetMap.sVal();
+	if ( mapRequest == "") {
+		mapRequest = "http://" + urlWMS.getPath();
+		mapRequest += "?";
+	}
 	String mp = urlWMS.getQueryValue("map");
-	mapRequest += "?";
 	if(mp != "")
 		mapRequest += "map=" + mp + "&";
 	String version = urlWMS.getQueryValue("version");
@@ -575,6 +589,9 @@ void WMSFormat::Store(IlwisObject obj) {
 		obj->WriteElement("ForeignFormat","SRS",srsName);
 	if ( urlWMS.sVal() != "" )
 		obj->WriteElement("ForeignFormat","URL", urlWMS.sVal());
+	if ( urlGetMap.sVal() != "") {
+		obj->WriteElement("ForeignFormat","GetMap", urlGetMap.sVal());
+	}
 }
 
 bool WMSFormat::retrieveImage() {
