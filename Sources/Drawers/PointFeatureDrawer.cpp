@@ -13,6 +13,7 @@
 #include "Drawers\FeatureLayerDrawer.h"
 #include "drawers\pointdrawer.h"
 #include "drawers\PointFeatureDrawer.h"
+#include "Engine\Representation\Rprclass.h"
 #include "Engine\Drawers\ZValueMaker.h"
 
 using namespace ILWIS;
@@ -53,6 +54,10 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 		cNorm.z = zv;
 	}
 	if (  p->type & ptRENDER || p->type & ptRESTORE) {
+		PointProperties *prop = (PointProperties *)fdr->getProperties();
+		if ( prop) {
+			properties.set(prop);
+		}
 		properties.drawColor = fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod());
 		extrTransparency = fdr->getExtrusionTransparency();
 		for(int j =0 ; j < p->filteredRaws.size(); ++j) {
@@ -62,6 +67,10 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 			}
 		}
 		double v = feature->rValue();
+		Representation rpr = fdr->getRepresentation();
+		if ( rpr->prc()) {
+			properties.scale = rpr->prc()->iSymbolSize(feature->iValue()) / 100;
+		}
 		if ( properties.scaleMode != PointProperties::sNONE && v != rUNDEF ) {
 			BaseMapPtr *bmpptr = ((SpatialDataDrawer *)fdr->getParentDrawer())->getBaseMap();
 			if ( bmpptr->fTblAtt()) {
