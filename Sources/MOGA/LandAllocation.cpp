@@ -374,28 +374,9 @@ void LandAllocation::ChromosomeMutator(GAChromosome & chromosome)
 void LandAllocation::Initializer(GAChromosome & chromosome)
 {
 	long Count = pmFacilities->iFeatures();
-    bool * PointSel = new bool [Count];
 	for (int i = 0; i < Count; ++i)
-		PointSel[i] = false;
-    bool bStop = false;
-    do
-    {
-        //THIS  algorithm is taking all genes in the chromosome wheareas in your case p number gene out of all genes will create chromosome
-        unsigned int iSel = random(Count) - 1;
-        if (!PointSel[iSel])
-        {
-            PointSel[iSel] = true;
-            chromosome.push_back(iSel);
-        }
-		for (int i = 0; i < Count; i++)
-        {
-            if (!PointSel[i])
-                break;
-			if (i == Count - 1)
-                bStop = true;
-        }
-    } while (!bStop);
-	delete [] PointSel;
+		chromosome.push_back(i);
+	std::random_shuffle(chromosome.begin(), chromosome.end());
 }
 
 void LandAllocation::CrossOver(GAChromosome & Dad, GAChromosome & Mum, GAChromosome & child1, GAChromosome & child2)
@@ -407,73 +388,51 @@ void LandAllocation::CrossOver(GAChromosome & Dad, GAChromosome & Mum, GAChromos
 void LandAllocation::GreedyCrossOver(GAChromosome & Dad, GAChromosome & Mum, GAChromosome & child)
 {
     int length = Dad.size();
-    int MumIndex = -1;
-    int DadIndex = -1;
-    unsigned int DadGene;
-    bool fFound = false;
-    //Take random value from dadindex until it also found in mum
-    do
-    {
-        DadIndex = random(length) - 1;
-        DadGene = Dad[DadIndex];
-        MumIndex = Mum.HasThisGene(DadGene);
-        if (MumIndex >= 0)
-            fFound = true;
-    } while (!fFound);
-    if (MumIndex < 0)
-        throw new ErrorObject("Gene not found in mum");
-	child.push_back(DadGene);
+
+	GAChromosome remainingGenes;
+	for (int i = 0; i < length; ++i)
+		remainingGenes.push_back(i);
+    // Take random gene from first iOptimalFacilities from dad
+	GAChromosome::iterator dadIterator = Dad.begin() + random(iOptimalFacilities) - 1;
+	// Locate the gene in mom .. by definition it should be there
+	GAChromosome::iterator mumIterator = find(Mum.begin(), Mum.end(), *dadIterator);
+	assert (mumIterator != Mum.end());
+	// This gene becomes the first element of child
+	child.push_back(*dadIterator);
+	remainingGenes.erase(find(remainingGenes.begin(), remainingGenes.end(), *dadIterator));
     bool bDadAdded = true;
     bool bMumAdded = true;
     do
     {
-        //As long as I can add from dad
-        unsigned int obMumGene;
-        unsigned int obDadGene;
-        if (bDadAdded)
-        {
-            if (DadIndex > 0)
-                DadIndex = DadIndex - 1;
-            else
-                DadIndex = length - 1;
-            obDadGene = Dad[DadIndex];
-        }
-        //As long as I can add from mum
-        if (bMumAdded)
-        {
-            if (MumIndex < length - 1)
-                MumIndex = MumIndex + 1;
-            else
-                MumIndex = 0;
-            obMumGene = Mum[MumIndex];
-        }
-        if (bDadAdded && child.HasThisGene(obDadGene) < 0)
-        {
-            //Add to head Dad gene
-            child.insert(child.begin(), obDadGene);
-        }
-        else
-            bDadAdded = false;
-        if (bMumAdded && child.HasThisGene(obMumGene) < 0)
-        {
-            //Add to Tail Mum gene
-            child.push_back(obMumGene);
-        }
-        else
-            bMumAdded = false;
+		if (bDadAdded) { // Add from dad as long as possible
+			if (dadIterator != Dad.begin())
+				--dadIterator;
+			else
+				dadIterator = Dad.end() - 1;
+
+			GAChromosome::iterator it = find(remainingGenes.begin(), remainingGenes.end(), *dadIterator);
+			if (it != remainingGenes.end()) {
+				child.insert(child.begin(), *dadIterator); //Add to head Dad gene
+				remainingGenes.erase(it);
+			} else
+				bDadAdded = false;
+		}
+		if (bMumAdded) { // Add from mum as long as possible
+			++mumIterator;
+			if (mumIterator == Mum.end())
+				mumIterator = Mum.begin();
+
+			GAChromosome::iterator it = find(remainingGenes.begin(), remainingGenes.end(), *mumIterator);
+			if (it != remainingGenes.end()) {
+				child.push_back(*mumIterator); //Add to Tail Mum gene
+				remainingGenes.erase(it);
+			} else
+				bMumAdded = false;
+		}
     } while (bDadAdded || bMumAdded);
     // Add rest of genes by Random Selection
-    while (child.size() < length)
-    {
-        bool bDone = false;
-        do
-        {
-            unsigned int candidateGene = random(length) - 1;
-            if (child.HasThisGene(candidateGene) < 0)
-            {
-				child.push_back(candidateGene);
-                bDone = true;
-            }
-        } while (!bDone);
-    }
+	std::random_shuffle(remainingGenes.begin(), remainingGenes.end());
+	for (int i = 0; i < remainingGenes.size(); ++i)
+		child.push_back(remainingGenes[i]);
+	assert(child.size() != length);
 }
