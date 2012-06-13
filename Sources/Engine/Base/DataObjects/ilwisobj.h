@@ -392,8 +392,7 @@ public:
 
 	//The operator is probably not correct as the list is not assigned. 
 	// It seems to work OK (as far as we know). In the future a proper solution must be found
-	void                operator=(const IlwisObject& obj)
-                            { SetPointer(obj.pointer()); }
+	void                operator=(const IlwisObject& obj);
 protected:
 	IlwisObject(IlwisObjectPtrList& lst);
 	IlwisObject(IlwisObjectPtrList&, const FileName&);

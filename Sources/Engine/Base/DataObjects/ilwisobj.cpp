@@ -106,8 +106,13 @@ static void UpdateCatalog(const FileName& fn)
 //-------------------------------------------------------------------------------------
 IlwisObject::IlwisObject() : ptr(0), list(dummyIOPL)
 {}
-    
-    
+
+inline void IlwisObject::operator=(const IlwisObject& obj)
+{ 
+	//IlwisObject::list = obj.list; 
+	SetPointer(obj.pointer()); 
+}
+
 bool IlwisObject::fEqual(const IlwisObject& obj) const
 {
 	if (fValid() && obj.fValid()) {
@@ -711,11 +716,12 @@ void IlwisObjectPtrList::Add(IlwisObjectPtr* ptr)
 {
 	ILWISSingleLock sl(&csAccess, TRUE,SOURCE_LOCATION); 
 	// check if already there
-	for (DLIterP<IlwisObjectPtr> iter(this); iter.fValid(); ++iter)
-		if (iter() == ptr) 
+	for (DLIterP<IlwisObjectPtr> iter(this); iter.fValid(); ++iter) {
+		if (iter() == ptr){ 
 			return;
-		// else insert
-		insert(ptr);
+		}
+	}
+	insert(ptr);
 }
 
 
