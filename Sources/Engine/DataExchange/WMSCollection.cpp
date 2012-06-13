@@ -91,6 +91,7 @@ void WMSCollectionPtr::Store()
 	ObjectCollectionPtr::Store();
 	WriteElement("Ilwis", "Type", "ObjectCollection");	
 	WriteElement("WMSCollection", "GetCapabilities", urlGetCapabilities.sVal());
+	WriteElement("WMSCollection", "GetMap", urlGetMap.sVal());
 	WriteElement("WMSCollection", "Method", "WMS");
 	int count = 0;
 	for(map<String, String>::iterator cur = layers.begin(); cur != layers.end(); ++cur) {
@@ -119,7 +120,8 @@ WMSCollectionPtr::WMSCollectionPtr(const FileName& fn, ParmList& pm) :
 	ForeignCollectionPtr(fn, pm), urlGetCapabilities(URL(""))
 {
 	String sMethod = pm.sGet("method");
-	//sDataBaseName = pm.sGet("WMS");
+	String getmap;
+	ReadElement("WMSCollection", "GetMap", getmap);
 	if ( sMethod == "" ) {
 		String temp;
 		ReadElement("WMSCollection", "GetCapabilities", temp);
@@ -134,8 +136,16 @@ WMSCollectionPtr::WMSCollectionPtr(const FileName& fn, ParmList& pm) :
 
 		}
 		urlGetCapabilities = URL(temp);
-	} else
+		if (getmap != "")
+			urlGetMap = URL(getmap);
+	} else {
 		urlGetCapabilities = URL(pm.sGet(0));
+		if ( getmap == "") {
+			getmap = pm.sGet("getmap");
+		}
+		urlGetMap = URL(getmap);
+
+	}
 }
 
 void WMSCollectionPtr::Add(const ilwFileName &fn, const String &layerName) {
@@ -156,7 +166,13 @@ String WMSCollectionPtr::getLayerName(const FileName& fn) {
 	return layers[n];
 }
 
-Map	WMSCollection::CreateImplicitObject(const FileName& fnObject, ParmList& pm) {
+void WMSCollectionPtr::addAdditionalParameters(ParmList& pm){
+	if ( !pm.fExist("getcapabilities"))
+		pm.Add(new Parm("url", getCapabilities().sVal()));
+	if ( !pm.fExist("getmap"))
+		pm.Add(new Parm("getmap", getMap().sVal()));
+}
+void WMSCollection::CreateImplicitObject(const FileName& fnObject, ParmList& pm) {
 	Map map;
 	String sC = pm.sGet("collection");
 	FileName fnCollection(sC);
@@ -168,6 +184,8 @@ Map	WMSCollection::CreateImplicitObject(const FileName& fnObject, ParmList& pm) 
 		pm.Add(new Parm("method", wms->sGetMethod()));
 	if ( !pm.fExist("getcapabilities"))
 		pm.Add(new Parm("url", wms->getCapabilities().sVal()));
+	if ( !pm.fExist("getmap"))
+		pm.Add(new Parm("getmap", wms->getMap().sVal()));
 	String output = pm.sGet("output");
 	FileName fn(output != "" ? output : fnObject.sFullPathQuoted());
 	ForeignFormat *ff = ForeignFormat::Create(fn, pm);
@@ -207,5 +225,4 @@ Map	WMSCollection::CreateImplicitObject(const FileName& fnObject, ParmList& pm) 
 		delete ff;				
 
 	}
-	return map;
 }

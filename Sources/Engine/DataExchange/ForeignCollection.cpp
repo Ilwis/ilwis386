@@ -125,6 +125,7 @@ void ForeignCollection::CreateImplicitObject(const FileName& fnObject, ParmList&
 	
 	if ( !pm.fExist("method"))
 		pm.Add(new Parm("method", fc->sGetMethod()));
+	fc->addAdditionalParameters(pm);
 	String output = pm.sGet("output");
 	FileName fn(output != "" ? output : fnObject.sFullPathQuoted());
 	ForeignFormat *ff = ForeignFormat::Create(fn, pm);

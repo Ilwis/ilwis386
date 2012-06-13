@@ -46,12 +46,16 @@ public:
 	WMSCollectionPtr(const FileName& fn, ParmList& pm);
 	static ObjectCollectionPtr *Create(const FileName& fn, ParmList& pm);
 	URL getCapabilities() { return urlGetCapabilities; }
+	URL getMap() const { return urlGetMap; }
+	void setGetMap(const String& getmap) { urlGetMap = getmap;}
 	String getLayerName(const FileName& fn);
 	void Add(const FileName& f, const String& layerName);
 	void Add(const IlwisObject &obj);
+	void addAdditionalParameters(ParmList& parms);
 private:
 
 	URL urlGetCapabilities;
+	URL urlGetMap;
 	map<String, String> layers;
 
 };
@@ -71,7 +75,7 @@ public:
 	{ return static_cast<WMSCollectionPtr*>(pointer()); }
 	WMSCollectionPtr* operator -> () const 
 	{ return ptr(); }
-  	 static Map CreateImplicitObject(const FileName& fnObject, ParmList& pm);
+  	 void CreateImplicitObject(const FileName& fnObject, ParmList& pm);
 private:
 
 	static IlwisObjectPtrList listWMSCollection;

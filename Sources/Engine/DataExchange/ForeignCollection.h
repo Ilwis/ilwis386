@@ -61,6 +61,7 @@ public:
 	_export String					sGetMethod();
 	_export virtual String			sContainer();
 	_export virtual String			sGetExpression();
+	virtual void _export addAdditionalParameters(ParmList& parms) {}
 protected:
 	_export ForeignCollectionPtr(const FileName&, ParmList& pm);
 	String sMethod;
@@ -84,7 +85,7 @@ public:
 	_export ForeignCollection(const ForeignCollection& mv);
 	_export ~ForeignCollection();
 
-	_export static void CreateImplicitObject(const FileName& fnObject, ParmList& pm); //maybe virtual later		
+	_export static void CreateImplicitObject(const FileName& fnObject, ParmList& pm); //maybe virtual later	
 	static bool _export     GetTime(const FileName& fnForeign, CTime& LastWrite);
 	static bool _export     fForeignFileTimeChanged(const FileName& fnForeign, const FileName& fnObj);
 	void operator = (const ForeignCollection& mv) 
