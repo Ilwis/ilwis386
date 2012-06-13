@@ -39,8 +39,6 @@ private:
 	int TournamentSelection();
 	int ProbabilitySelection();
 	Selection GetSelectionType();
-	double GetMutation();
-	double GetCrossover();
 	unsigned int GetPopulationSize();
 	void SetApplyElitism(bool value);
 	bool GetApplyElitism();

@@ -316,22 +316,12 @@ GA::Selection GA::GetSelectionType()
 
 void GA::SetMutation(double value)
 {
-	m_dMutation = value;
-}
-
-double GA::GetMutation()
-{
-	return m_dMutation;
+	m_dMutation = value / 100.0;
 }
 
 void GA::SetCrossover(double value)
 {
-	m_dCrossOver = value;
-}
-
-double GA::GetCrossover()
-{
-	return m_dCrossOver;
+	m_dCrossOver = value / 100.0;
 }
 
 void GA::SetGenerations(long value)
