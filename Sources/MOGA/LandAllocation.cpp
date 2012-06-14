@@ -127,14 +127,14 @@ void LandAllocation::UpdatePareto(std::vector<GAChromosome> & solutions, std::ve
 		pareto.resize(iNpareto); // crop pareto array
 }
 
-void LandAllocation::KeepElite(std::vector<GAChromosome> & solutions, std::vector<GAChromosome> pareto)
+void LandAllocation::KeepElite(std::vector<GAChromosome> & solutions, std::vector<GAChromosome> & pareto)
 {
 	for (int i = 0; i < iNelite; ++i)
 		solutions.erase(solutions.begin() + random(solutions.size()) - 1); // remove Nelite elements randomly
 	for (int i = 0; i < iNelite; ++i) { // add Nelite distinct elements from pareto to solutions
 		int index = random(pareto.size()) - 1; // select a random index into the pareto array
 		GAChromosome chromosome = pareto[index]; // get the corresponding chromosome
-		pareto.erase(pareto.begin() + index); // remove it from the (local!) pareto array
+		pareto.erase(pareto.begin() + index); // remove it from the pareto array
 		solutions.push_back(chromosome); // add it to the solutions
 	}
 	std::sort(solutions.begin(), solutions.end()); // sort by fitness (largest fitness at the beginning)
@@ -151,7 +151,8 @@ std::vector<GAChromosome> LandAllocation::GenerateParetoArray(Tranquilizer & trq
 	GAAlgorithm->SetGenerations(iGenerations);
 	GAAlgorithm->SetPopulationSize(iPopulationSize);
 	GAAlgorithm->SetMutation(rMutationPercent);
-	GAAlgorithm->SetCrossover(rCrossoverPercent);
+	GAAlgorithm->SetCrossover(100); // 100% crossover: make every new generation be different than the current one (having this < 100 causes duplicates to appear in the solutions array)
+	GAAlgorithm->SetApplyElitism(false); // we have our own elitism here (having this "true" causes duplicates to appear in the solutions array)
 	GAAlgorithm->Initialize();
 	std::vector<GAChromosome> pareto;
 	int iGenerationNr = 0;

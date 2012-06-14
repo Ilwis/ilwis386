@@ -33,7 +33,7 @@ public:
 private:
   //long AddConnections(SegmentMap & segMap, Domain & dm, vector<int> & source, vector<int> & destination, vector<double> & allocations, GAChromosome & chromosome, LandAllocation * context, ScoreFunc scoreFunc1, ScoreFunc scoreFunc2);
   void UpdatePareto(std::vector<GAChromosome> & solutions, std::vector<GAChromosome> & pareto);
-  void KeepElite(std::vector<GAChromosome> & solutions, std::vector<GAChromosome> pareto);
+  void KeepElite(std::vector<GAChromosome> & solutions, std::vector<GAChromosome> & pareto);
   PointMap pmFacilities;
   PointMap pmFacilitiesNoAttribute; // The original pointmap, before applying MapAttribute
   PointMap pmDemands;
