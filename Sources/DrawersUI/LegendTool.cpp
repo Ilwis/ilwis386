@@ -220,6 +220,7 @@ DisplayOptionsForm(dr,wPar,TR("Polygon Representation")),rcl(rc), iRaw(raw)
   else  
     sText = rcl->dm()->sValueByRaw(raw,0);
   col = rcl->clrRaw(iRaw);
+  col2 = rcl->clrSecondRaw(iRaw);
 
   String base = getEngine()->getContext()->sIlwDir();
   base += "Resources\\Symbols\\";
@@ -230,6 +231,7 @@ DisplayOptionsForm(dr,wPar,TR("Polygon Representation")),rcl(rc), iRaw(raw)
   if ( hatching == sUNDEF)
 	  hatching = "none";
   new FieldDataType(root,TR("Hatching"),&hatching,".ivh",false,0,FileName(base),false);
+  new FieldColor(root,"Hatching Background Color",&col2);
 
   FieldIntSliderEx *slider = new FieldIntSliderEx(root,"Transparency(0-100)", &transparency,ValueRange(0,100),true);
   slider->SetCallBack((NotifyProc)&PolRprForm::setTransparency);
@@ -247,6 +249,7 @@ int PolRprForm::setTransparency(Event *ev) {
 void  PolRprForm::apply() {
   root->StoreData();
   rcl->PutColor(iRaw, col);
+  rcl->PutSecondColor(iRaw, col2);
   rcl->PutTransparency(iRaw,1.0 - transparency/ 100.0);
   if ( hatching != ""){
 	  hatching = hatching.sTrimSpaces();
@@ -255,6 +258,8 @@ void  PolRprForm::apply() {
 	rcl->Updated();
   }
   PreparationParameters pp(NewDrawer::ptRENDER, 0);
+  RepresentationProperties props;
+  pp.props = &props;
   drw->prepare(&pp);
   view->Invalidate();
   updateMapView();
@@ -281,10 +286,6 @@ DisplayOptionsForm(dr,wPar,TR("Point Representation")),rcl(rc), iRaw(raw)
 	new FieldDataType(root,TR("Symbols"),&symbol,".ivg",false,0,FileName(base),false);
 	new FieldColor(root,TR("Symbol Color"),&col);
 	new FieldReal(root,TR("Symbol scale"),&scale,ValueRange(RangeReal(0.1,100.0),0.1));
-	hatching = rcl->sHatch(raw);
-	if ( hatching == sUNDEF)
-		hatching = "none";
-	new FieldDataType(root,TR("Hatching"),&hatching,".ivh",false,0,FileName(base),false);
 
   SetMenHelpTopic("ilwismen\\representation_class_editor_edit_item_Pointygon.htm");
   create();
@@ -297,12 +298,6 @@ void  PointRprForm::apply() {
   rcl->PutSymbolSize(iRaw,scale * 100);
   FileName fn(symbol);
   rcl->PutSymbolType(iRaw, fn.sFile);
-  if ( hatching != ""){
-    hatching = hatching.sTrimSpaces();
-    FileName fn(hatching);
-    rcl->PutHatchingName(iRaw, fn.sFile);
-    rcl->Updated();
-  }
   PreparationParameters pp(NewDrawer::ptRENDER, 0);
   drw->prepare(&pp);
   view->Invalidate();

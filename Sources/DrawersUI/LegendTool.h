@@ -48,6 +48,7 @@ private:
   RepresentationClass* rcl;  
   long iRaw;
   Color col;
+  Color col2;
   int transparency;
   String hatching;
 
@@ -63,7 +64,5 @@ private:
   Color col;
   String symbol;
   double scale;
-  String hatching;
-
 };
 }
