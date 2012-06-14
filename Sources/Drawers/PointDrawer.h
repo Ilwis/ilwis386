@@ -36,6 +36,7 @@ public:
 		useDirection = lp->useDirection;
 		angle = lp->angle;
 		exaggeration = lp->exaggeration;
+		scale = lp->scale;
 	}
 
 	double scaling() const {
