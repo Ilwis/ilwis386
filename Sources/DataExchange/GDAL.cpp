@@ -1641,7 +1641,7 @@ void GDALFormat::ogr(const String& name, const String& source, const String& tar
 							bmp->SetAttributeTable(tbl);
 						}
 						OGRFeatureH hFeature;
-						int rec = 0;
+						int rec = 1;
 						funcs.ogrResetReading(hLayer);
 						trq.Start();
 						while( (hFeature = funcs.ogrGetNextFeature(hLayer)) != NULL ){
