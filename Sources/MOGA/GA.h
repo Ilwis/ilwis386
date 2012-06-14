@@ -28,6 +28,7 @@ public:
 	void SetStoppingCriteria(int value);
 	double rGetBestValue(unsigned int generation);
 	double rGetAverageValue(unsigned int generation);
+	void SetApplyElitism(bool value);
 	std::vector<GAChromosome> & GetCurrentGeneration();
 
 private:
@@ -40,7 +41,6 @@ private:
 	int ProbabilitySelection();
 	Selection GetSelectionType();
 	unsigned int GetPopulationSize();
-	void SetApplyElitism(bool value);
 	bool GetApplyElitism();
 	void SetGenerationNum(unsigned int value);
 	unsigned int GetGenerationNum();
