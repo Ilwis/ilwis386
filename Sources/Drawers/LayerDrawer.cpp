@@ -135,7 +135,8 @@ void LayerDrawer::setRepresentation( const Representation& rp){
 		bmp.SetPointer(mapDrawer->getBaseMap());
 		Domain dm = bmp->dm();
 		if ( dm->pdid()) {
-			setDrawMethod(NewDrawer::drmMULTIPLE);
+			bool fUseMultiple = (getType() == "PolygonLayerDrawer" || getType() == "RasterLayerDrawer");
+			setDrawMethod(fUseMultiple ? NewDrawer::drmMULTIPLE : NewDrawer::drmSINGLE);
 		}
 		return;
 	}
