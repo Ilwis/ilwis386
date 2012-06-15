@@ -3,6 +3,7 @@
 
 ParetoGraphFunction::ParetoGraphFunction()
 : SimpleFunction(0, DoubleRect(0, 0, 1, 1))
+, iSelectedAnchorNr(0)
 {
 	m_rDataX.resize(0);
 	m_rDataY.resize(0);
@@ -61,3 +62,22 @@ void ParetoGraphFunction::SolveParams()
 {
 	// nothing to solve
 }
+
+void ParetoGraphFunction::SetAnchor(DoublePoint pAnchor)
+{
+	if (m_Anchors.size() > 0)
+	{
+		iSelectedAnchorNr = 0;
+		for (int i = 1; i < m_Anchors.size(); ++i)
+		{
+			if (rUnitDist2(pAnchor, m_Anchors[i]) < rUnitDist2(pAnchor, m_Anchors[iSelectedAnchorNr]))
+				iSelectedAnchorNr = i;
+		}
+	}
+}
+
+int ParetoGraphFunction::iGetAnchorNr()
+{
+	return iSelectedAnchorNr;
+}
+
