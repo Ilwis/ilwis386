@@ -51,7 +51,7 @@
 
 class SimpleFunction;
 
-class SimpleGraphWindowWrapper : public SimpleGraphWindow, public BaseZapp
+class _export SimpleGraphWindowWrapper : public SimpleGraphWindow, public BaseZapp
 {
 public:
 	SimpleGraphWindowWrapper(FormEntry *f);
@@ -74,7 +74,7 @@ public:
 	void Replot();
 	void SetBorderThickness(int l, int t, int r, int b);
 
-private:
+protected:
 	SimpleGraphWindow *sgw;
 };
 
