@@ -50,6 +50,7 @@ void ParetoGraphFunction::SetData(vector<double> dataX, vector<double> dataY)
 	m_Anchors.clear();
 	for (int i = 0; i < dataX.size(); ++i)
 		m_Anchors.push_back(DoublePoint(dataX[i], dataY[i]));
+	iSelectedAnchorNr = -1;
 }
 
 void ParetoGraphFunction::SetDefaultAnchors()
