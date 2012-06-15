@@ -67,8 +67,12 @@ FormLandAllocation::FormLandAllocation(CWnd* mw, const char* sPar)
 	fgFunctionGraph->SetCallBack((NotifyProc)&FormLandAllocation::CallBackAnchorChangedInGraph);
 	pbCalculatePareto = new PushButton(fgRight, TR("Calculate Pareto"), (NotifyProc)&FormLandAllocation::GenerateParetoGraph);
 	pbCalculatePareto->Align(fgFunctionGraph, AL_UNDER);
+	fsSelectedChromosome = new FieldString(fgRight, TR("Selected Chromosome"), &sSelectedChromosome);
+	fsSelectedChromosome->SetWidth(142); // should be 200, but part occupied by "Selected Chromosome"
+	fsSelectedChromosome->SetIndependentPos();
+	fsSelectedChromosome->Align(pbCalculatePareto, AL_UNDER);
 	pbStoreSelectedChromosome = new PushButton(fgRight, TR("Store Selected Chromosome"), (NotifyProc)&FormLandAllocation::StoreSelectedChromosome);
-	pbStoreSelectedChromosome->Align(pbCalculatePareto, AL_UNDER);
+	pbStoreSelectedChromosome->Align(fsSelectedChromosome, AL_UNDER);
 
 	initPointMapOut(false);
 	fmc->Align(frCrossover, AL_UNDER);
@@ -80,6 +84,7 @@ FormLandAllocation::FormLandAllocation(CWnd* mw, const char* sPar)
 
 	fsTotalFacilities->SetReadOnly(true);
 	fsTotalDemands->SetReadOnly(true);
+	fsSelectedChromosome->SetReadOnly(true);
 }
 
 FormLandAllocation::~FormLandAllocation()
@@ -230,28 +235,41 @@ UINT FormLandAllocation::GenerateParetoGraphInThread(LPVOID pParam)
 
 int FormLandAllocation::CallBackAnchorChangedInGraph(Event*)
 {
+	if (m_function) {
+		int index = m_function->iGetAnchorNr();
+		if (index >= 0 && index < m_pareto.size()) {
+			GAChromosome * chromosome = &m_pareto[index];
+			sSelectedChromosome = String("%d", index);
+			fsSelectedChromosome->SetVal(sSelectedChromosome);
+		} else {
+			sSelectedChromosome = "No chromosome selected";
+			fsSelectedChromosome->SetVal(sSelectedChromosome);
+		}
+	}
 	return 0;
 }
 
 int FormLandAllocation::StoreSelectedChromosome(Event*)
 {
 	int index = m_function->iGetAnchorNr();
-	GAChromosome * chromosome = &m_pareto[index];
-	FileName fn(sOutMap);
-	PointMap pmFacilities(sPointMapFacilities, fn.sPath());
-	PointMap pmDemands(sPointMapDemands, fn.sPath());
-	PointMap pmFacilitiesNoAttribute(PointMapLandAllocation::fnGetSourceFile(pmFacilities, fn));
-	PointMap pmDemandsNoAttribute(PointMapLandAllocation::fnGetSourceFile(pmDemands, fn));
-	FileName fnOut (fn, ".mpp", true);
-	fnOut.sFile += "_pareto";
-	//Domain dmOut (FileName(fnOut, ".dom", true), 0, dmtUNIQUEID);
-	//DomainIdentifier* dmIdentifierPtr = dmOut->pdid();
+	if (index >= 0 && index < m_pareto.size()) {
+		GAChromosome * chromosome = &m_pareto[index];
+		FileName fn(sOutMap);
+		PointMap pmFacilities(sPointMapFacilities, fn.sPath());
+		PointMap pmDemands(sPointMapDemands, fn.sPath());
+		PointMap pmFacilitiesNoAttribute(PointMapLandAllocation::fnGetSourceFile(pmFacilities, fn));
+		PointMap pmDemandsNoAttribute(PointMapLandAllocation::fnGetSourceFile(pmDemands, fn));
+		FileName fnOut (fn, ".mpp", true);
+		fnOut.sFile += "_pareto";
+		//Domain dmOut (FileName(fnOut, ".dom", true), 0, dmtUNIQUEID);
+		//DomainIdentifier* dmIdentifierPtr = dmOut->pdid();
 
-	CoordSystem csyDest (pmFacilities->cs());
-	CoordBounds cbMap (pmDemands->cb());
-	cbMap += pmFacilities->cb();
-	PointMap pntMap(fnOut, csyDest, cbMap, pmFacilitiesNoAttribute->dm());
-	m_la->StoreChromosome(chromosome, pntMap.ptr());
+		CoordSystem csyDest (pmFacilities->cs());
+		CoordBounds cbMap (pmDemands->cb());
+		cbMap += pmFacilities->cb();
+		PointMap pntMap(fnOut, csyDest, cbMap, pmFacilitiesNoAttribute->dm());
+		m_la->StoreChromosome(chromosome, pntMap.ptr());
+	}
 
 	return 0;
 }

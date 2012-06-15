@@ -36,6 +36,8 @@ private:
   FieldGraph * fgFunctionGraph;
   PushButton* pbCalculatePareto;
   PushButton* pbStoreSelectedChromosome;
+  String sSelectedChromosome;
+  FieldString* fsSelectedChromosome;
   int exec();
   String sPointMapFacilities;
   String sPointMapDemands;
