@@ -285,7 +285,10 @@ int FormLandAllocation::StoreSelectedChromosome(Event*)
 		PointMap pntMap(fnOut, csyDest, cbMap, pmFacilitiesNoAttribute->dm());
 		m_la->StoreChromosome(chromosome, pntMap.ptr());
 		pntMap->SetDescription(sSelectedChromosome);
-	}
+	} else if (m_pareto.size() == 0)
+		MessageBox("Please calculate pareto first");
+	else
+		MessageBox("Please select a chromosome to store");
 
 	return 0;
 }
