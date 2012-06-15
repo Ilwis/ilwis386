@@ -43,6 +43,8 @@
 // SimpleGraphWindow.h : header file
 //
 
+#include "Headers\base.h" // for _export
+
 #include "Engine\Base\Algorithm\SimpleFunction.h"
 
 #include <afxwin.h> // CWnd
@@ -50,7 +52,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // SimpleGraphWindow window
 
-class SimpleGraphWindow : public CWnd
+class _export SimpleGraphWindow : public CWnd
 {
 // Construction
 public:
@@ -78,6 +80,9 @@ public:
 	// Generated message map functions
 
 protected:
+	virtual void DrawFunction(CDC* pDC, const SimpleFunction * pFunc);
+	const int iXToScreen(const double rX) const;
+	const int iYToScreen(const double rY) const;
 	//{{AFX_MSG(SimpleGraphWindow)
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
@@ -91,12 +96,9 @@ protected:
 
 private:
 	void DrawFunction(const SimpleFunction * pFunc);
-	void DrawFunction(CDC* pDC, const SimpleFunction * pFunc);
 	void DrawAxes(CDC* pDC);
 	const double rXToCFactor() const;
 	const double rYToRFactor() const;
-	const int iXToScreen(const double rX) const;
-	const int iYToScreen(const double rY) const;
 	const double rScreenToX(int iScreenX) const;
 	const double rScreenToY(int iScreenY) const;
 	CRect GetFunctionPlotRect() const;
