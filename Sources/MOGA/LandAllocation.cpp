@@ -3,6 +3,8 @@
 #include "Engine\Base\Algorithm\Random.h"
 #include "Engine\Domain\DomainUniqueID.h"
 #include "Client\TableWindow\CartesianGraphDoc.h"
+#include "Engine\Applications\SEGVIRT.H"
+#include "PointMapLandAllocation.h"
 
 
 LandAllocation::LandAllocation(const PointMap& _pmFacilities, const PointMap& _pmFacilitiesNoAttribute, const String& _sColFacilitiesType, const PointMap& _pmDemands, const PointMap& _pmDemandsNoAttribute, const String& _sColDemandsPreference,
@@ -427,4 +429,175 @@ void LandAllocation::GreedyCrossOver(GAChromosome & Dad, GAChromosome & Mum, GAC
 	for (int i = 0; i < remainingGenes.size(); ++i)
 		child.push_back(remainingGenes[i]);
 	assert(child.size() == length);
+}
+
+void LandAllocation::StoreChromosome(GAChromosome * chromosome, PointMapPtr * pntMapPtr)
+{	
+	if (chromosome != 0)
+	{
+		for (int i = 0; i < iOptimalFacilities; i++)
+		{
+			unsigned int facilityIndex = chromosome->at(i);
+			String sValue = pmFacilitiesNoAttribute->sValue(facilityIndex,0);
+			pntMapPtr->iAddVal(pmFacilities->cValue(facilityIndex), sValue);
+		}
+	}
+
+	// Create Fitness Table
+
+	FileName fnFitness (pntMapPtr->fnObj, ".tbt", true);
+	fnFitness.sFile += "_fitness";
+	Domain fitnessDom (FileName(fnFitness, ".dom", true), iGenerations, dmtUNIQUEID);
+	Table fitnessTbl (fnFitness, fitnessDom);
+	Column colBestFitness (fitnessTbl, "BestFitness", DomainValueRangeStruct(0, 1, 0));
+	Column colAvgFitness (fitnessTbl, "AvgFitness", DomainValueRangeStruct(0, 1, 0));
+	colBestFitness->PutBufVal(vrFitnessList, 1);
+	colAvgFitness->PutBufVal(vrPopulationAvgList, 1);
+
+	// Create Fitness Graph
+
+	CartesianGraphDoc cgd;
+	cgd.CreateNewGraph(fitnessTbl, Column(), colBestFitness, "Contineous", Color(0, 255, 0));
+	cgd.AddColumnGraph(colAvgFitness, "Contineous", Color(255, 0, 255));
+	// Save the Fitness Graph
+	FileName fnFitnessGraph(fnFitness, ".grh", true);
+	String sFile = fnFitnessGraph.sFullPath();
+	const char * lpszPathName = sFile.c_str();
+	CFileException fe;
+	CFile* pFile = cgd.GetFile(lpszPathName, CFile::modeCreate | CFile::modeReadWrite | CFile::shareExclusive, &fe);
+	if (pFile == NULL)
+	{
+		cgd.ReportSaveLoadException(lpszPathName, &fe, TRUE, AFX_IDP_INVALID_FILENAME);
+	}
+	else
+	{
+		CArchive saveArchive(pFile, CArchive::store | CArchive::bNoFlushOnDelete);
+		saveArchive.m_pDocument = &cgd;
+		saveArchive.m_bForceFlat = FALSE;
+		TRY
+		{
+			CWaitCursor wait;
+			cgd.Serialize(saveArchive);
+			saveArchive.Close();
+			cgd.ReleaseFile(pFile, FALSE);
+		}
+		CATCH_ALL(e)
+		{
+			cgd.ReleaseFile(pFile, TRUE);
+
+			TRY
+			{
+				cgd.ReportSaveLoadException(lpszPathName, e, TRUE, AFX_IDP_FAILED_TO_SAVE_DOC);
+			}
+			END_TRY
+			e->Delete(); //DELETE_EXCEPTION(e);
+			return;
+		}
+		END_CATCH_ALL
+	}
+
+	// Create Connections Segment Map
+	if (chromosome != 0)
+	{
+		FileName fnConnections (pntMapPtr->fnObj, ".mps", true);
+		fnConnections.sFile += "_connections";
+		Domain dmConnections (FileName(fnConnections, ".dom", true), 0, dmtUNIQUEID);
+		DomainIdentifier* dmIdentifierPtr = dmConnections->pdid();
+
+		CoordSystem csyDest (pmFacilities->cs());
+		CoordBounds cbMap (pmDemands->cb());
+		cbMap += pmFacilities->cb();
+		SegmentMap segMap(fnConnections, csyDest, cbMap, dmConnections);
+		vector<int> source;
+		vector<int> destination;
+		vector<double> allocations;
+		ScoreFunc scoreFunc1 = (ScoreFunc)&LandAllocation::rStdDistanceFunc;
+		ScoreFunc scoreFunc2 = (ScoreFunc)&LandAllocation::rStdPreferenceFunc;
+		unsigned long iNrSegments = AddConnections(pmFacilities, pmDemands, iOptimalFacilities, fMultiObjective, fCapacitated, segMap, dmConnections, source, destination, allocations, *chromosome, scoreFunc1, scoreFunc2);
+		LongBuf lbSource (iNrSegments);
+		LongBuf lbDestination (iNrSegments);
+		RealBuf rbAllocations (iNrSegments);
+		for (unsigned long i = 0; i < iNrSegments; ++i)
+		{
+			lbSource[i] = source[i];
+			lbDestination[i] = destination[i];
+			rbAllocations[i] = allocations[i];
+		}
+
+		// Create the Attribute Table
+		Table connectionTbl = Table(FileName(fnConnections, ".tbt", true), dmConnections);
+
+		PointMap pmDemandsNoAttribute (PointMapLandAllocation::fnGetSourceFile(pmDemands, pntMapPtr->fnObj));
+		Column colSource (connectionTbl, "DemandID", pmDemandsNoAttribute->dm());
+		colSource->PutBufRaw(lbSource, 1);
+		Column colDestination (connectionTbl, "FacilityID", pmFacilitiesNoAttribute->dm());
+		colDestination->PutBufRaw(lbDestination, 1);
+		Column colAllocations (connectionTbl, "Allocated", DomainValueRangeStruct(0, 10000, 0));
+		colAllocations->PutBufVal(rbAllocations, 1);
+
+		segMap->SetAttributeTable(connectionTbl);
+	}
+}
+
+long LandAllocation::AddConnections(PointMap & pmFacilities, PointMap & pmDemands, int iOptimalFacilities, bool fMultiObjective, bool fCapacitated, SegmentMap & segMap, Domain & dm, vector<int> & source, vector<int> & destination, vector<double> & allocations, GAChromosome & chromosome, ScoreFunc scoreFunc1, ScoreFunc scoreFunc2)
+{
+    if (chromosome.size() == 0)
+        return 0;
+	DomainUniqueID * pdUid = dm->pdUniqueID();
+	long iSegRecord = 0; // increase before adding first segment; segment count starts at 1
+	int iNrFacilities = pmFacilities->iFeatures();
+    double * Allocation = new double [iNrFacilities]; // keep track of the allocation while we're in the loop
+	for (int i = 0; i < iNrFacilities; ++i)
+		Allocation[i] = 0;
+	int iNrDemandPoints = pmDemands->iFeatures();
+    for (int demandIndex = 0; demandIndex < iNrDemandPoints; demandIndex++)
+    {
+		double rDemandCount = (rDemand != 0) ? rDemand[demandIndex] : 1.0; //when an attribute is used to denote how many demands are at that location
+		while (rDemandCount > 0)
+		{
+			double rBestScore = -1;
+			int selectedFacilityIndex = -1;
+			for (int chromosomeIndex = 0; chromosomeIndex < iOptimalFacilities; chromosomeIndex++)
+			{
+				int facilityIndex = chromosome[chromosomeIndex];
+
+				double rScore = (this->*scoreFunc1)(demandIndex, facilityIndex);
+				if (fMultiObjective)
+					rScore = chromosome.w1() * rScore + chromosome.w2() * (this->*scoreFunc2)(demandIndex, facilityIndex);
+
+				if ((!fCapacitated) || (Allocation[facilityIndex] < ((rCapacity != 0) ? rCapacity[facilityIndex] : 1.0))) // If a capacity attribute is indicated, respect the maximum capacity of the facility
+				{
+					if ((selectedFacilityIndex == -1) || (rScore > rBestScore))
+					{
+						rBestScore = rScore;
+						selectedFacilityIndex = facilityIndex;
+					}
+				}
+			}
+			if (selectedFacilityIndex != -1)
+			{
+				double allocated = fCapacitated ? min(((rCapacity != 0) ? rCapacity[selectedFacilityIndex] : 1.0) - Allocation[selectedFacilityIndex], rDemandCount) : rDemandCount;
+				Allocation[selectedFacilityIndex] += allocated;
+				rDemandCount -= allocated; // The leftover demands will have to be served by another facility
+				pdUid->iAdd();
+				source.push_back(demandIndex + 1);
+				destination.push_back(selectedFacilityIndex + 1);
+				allocations.push_back(allocated);
+				CoordBuf cBuf(2);
+				ILWIS::Segment *segCur = CSEGMENT(segMap->newFeature());
+				cBuf[0] = cDemands[demandIndex];
+				cBuf[1] = cFacilities[selectedFacilityIndex];
+				segCur->PutCoords(2, cBuf);
+				segCur->PutVal(++iSegRecord);
+			}
+			else
+			{
+				demandIndex = iNrDemandPoints;
+				break;
+			}
+		}
+    }
+
+	delete [] Allocation;
+	return iSegRecord;
 }

@@ -23,17 +23,13 @@ public:
   void Initializer(GAChromosome & chromosome);
   void CrossOver(GAChromosome & Dad, GAChromosome & Mum, GAChromosome & child1, GAChromosome & child2);
   void GreedyCrossOver(GAChromosome & Dad, GAChromosome & Mum, GAChromosome & child);
-  RealBuf vrFitnessList;
-  RealBuf vrPopulationAvgList;
-  double * rDemand;
-  double * rCapacity;
-  Coord * cFacilities;
-  Coord * cDemands;
+  void StoreChromosome (GAChromosome * chromosome, PointMapPtr * pntMapPtr);
 
 private:
   //long AddConnections(SegmentMap & segMap, Domain & dm, vector<int> & source, vector<int> & destination, vector<double> & allocations, GAChromosome & chromosome, LandAllocation * context, ScoreFunc scoreFunc1, ScoreFunc scoreFunc2);
   void UpdatePareto(std::vector<GAChromosome> & solutions, std::vector<GAChromosome> & pareto);
   void KeepElite(std::vector<GAChromosome> & solutions, std::vector<GAChromosome> & pareto);
+  long AddConnections(PointMap & pmFacilities, PointMap & pmDemands, int iOptimalFacilities, bool fMultiObjective, bool fCapacitated, SegmentMap & segMap, Domain & dm, vector<int> & source, vector<int> & destination, vector<double> & allocations, GAChromosome & chromosome, ScoreFunc scoreFunc1, ScoreFunc scoreFunc2);
   PointMap pmFacilities;
   PointMap pmFacilitiesNoAttribute; // The original pointmap, before applying MapAttribute
   PointMap pmDemands;
@@ -58,6 +54,13 @@ private:
   double rCrossoverPercent;
   bool fMultiObjective;
   GA * GAAlgorithm;
+  RealBuf vrFitnessList;
+  RealBuf vrPopulationAvgList;
+  double * rDemand;
+  double * rCapacity;
+  Coord * cFacilities;
+  Coord * cDemands;
+
 };
 
 
