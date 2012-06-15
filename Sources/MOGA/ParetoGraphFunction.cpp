@@ -3,7 +3,7 @@
 
 ParetoGraphFunction::ParetoGraphFunction()
 : SimpleFunction(0, DoubleRect(0, 0, 1, 1))
-, iSelectedAnchorNr(0)
+, iSelectedAnchorNr(-1)
 {
 	m_rDataX.resize(0);
 	m_rDataY.resize(0);
