@@ -627,6 +627,8 @@ bool WMSFormat::retrieveImage() {
 	const_cast<GDALDatasetH>(gdalDataSet) = hDS;
 
 	return true;
+
+
 }
 
 void WMSFormat::GetLineRaw(long iLine, ByteBuf&, long iFrom, long iNum) const {

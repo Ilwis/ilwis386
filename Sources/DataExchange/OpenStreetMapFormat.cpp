@@ -89,6 +89,7 @@
 OpenStreetMapFormat::OpenStreetMapFormat()
 : urlOpenStreetMap("")
 , rxo(0)
+,grfOpenStreetMap(0)
 {
 	gdalDataSet = NULL;
 	grfOpenStreetMap = NULL;
@@ -97,6 +98,7 @@ OpenStreetMapFormat::OpenStreetMapFormat()
 OpenStreetMapFormat::OpenStreetMapFormat(const FileName& fn, ParmList& pm)
 : urlOpenStreetMap("")
 , rxo(0)
+,grfOpenStreetMap(0)
 {
 
 	URL url(pm.sGet("url"));
@@ -284,6 +286,11 @@ int OpenStreetMapFormat::lat2tiley(double lat, int z) const
 }
 
 bool OpenStreetMapFormat::retrieveImage() {
+	if(!grfOpenStreetMap){
+		throw ErrorObject(TR("Georeference not correctly set"));
+		return false;
+	}
+
 	CoordBounds cb2 = grfOpenStreetMap->cbWMSRequest();
 
 	String sExpr = getMapRequest(cb2, grfOpenStreetMap->rcWMSRequest());
