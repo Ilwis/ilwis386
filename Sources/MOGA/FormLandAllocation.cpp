@@ -2,7 +2,7 @@
 #include "LandAllocation.h"
 #include "FormLandAllocation.h"
 #include "Client\FormElements\fldcol.h"
-#include "Client\FormElements\FieldGraph.h"
+#include "ParetoFieldGraph.h"
 #include "PointMapLandAllocation.h"
 #include "ParetoGraphFunction.h"
 
@@ -59,7 +59,7 @@ FormLandAllocation::FormLandAllocation(CWnd* mw, const char* sPar)
 	FieldGroup* fgRight = new FieldGroup(rbMulti);
 	fgRight->Align(fgLeft, AL_AFTER);
 
-	fgFunctionGraph = new FieldGraph(fgRight);
+	fgFunctionGraph = new ParetoFieldGraph(fgRight);
 	fgFunctionGraph->SetWidth(200);
 	fgFunctionGraph->SetHeight(300);
 	fgFunctionGraph->SetIndependentPos();
