@@ -28,7 +28,8 @@ FormLandAllocation::FormLandAllocation(CWnd* mw, const char* sPar)
 	rCrossoverPercent = 98;
 	
 	FieldGroup* fgLeft = new FieldGroup(root);
-	RadioGroup * rgMethod = new RadioGroup(fgLeft, TR("Objectives:"), &iMethod);
+	rgMethod = new RadioGroup(fgLeft, TR("Objectives:"), &iMethod);
+	rgMethod->SetCallBack((NotifyProc)&FormLandAllocation::MethodCallBack);
 	RadioButton* rbSingle = new RadioButton(rgMethod, TR("&Distance"));
 	RadioButton* rbMulti = new RadioButton(rgMethod, TR("&Distance + Preference"));
 	fpmFacilities = new FieldPointMap(fgLeft, TR("&Potential Locations Point Map"), &sPointMapFacilities, new MapListerDomainType(".mpp", 0, true));
@@ -94,6 +95,19 @@ FormLandAllocation::~FormLandAllocation()
 		delete m_function;
 	if (m_la)
 		delete m_la;
+}
+
+int FormLandAllocation::MethodCallBack(Event*)
+{
+	rgMethod->StoreData();
+	if (iMethod == 0) {
+		butShow.ShowWindow(SW_SHOW);
+		butDefine.ShowWindow(SW_SHOW);
+	} else {
+		butShow.ShowWindow(SW_HIDE);
+		butDefine.ShowWindow(SW_HIDE);
+	}
+	return 0; 
 }
 
 int FormLandAllocation::FacilitiesCallBack(Event*)
@@ -239,7 +253,7 @@ int FormLandAllocation::CallBackAnchorChangedInGraph(Event*)
 		int index = m_function->iGetAnchorNr();
 		if (index >= 0 && index < m_pareto.size()) {
 			GAChromosome * chromosome = &m_pareto[index];
-			sSelectedChromosome = String("%d", index);
+			sSelectedChromosome = String("%d: s=%.02f", index+1, chromosome->rGetFitness());
 			fsSelectedChromosome->SetVal(sSelectedChromosome);
 		} else {
 			sSelectedChromosome = "No chromosome selected";
@@ -259,14 +273,12 @@ int FormLandAllocation::StoreSelectedChromosome(Event*)
 		PointMap pmDemands(sPointMapDemands, fn.sPath());
 		PointMap pmFacilitiesNoAttribute(PointMapLandAllocation::fnGetSourceFile(pmFacilities, fn));
 		PointMap pmDemandsNoAttribute(PointMapLandAllocation::fnGetSourceFile(pmDemands, fn));
-		FileName fnOut (fn, ".mpp", true);
-		fnOut.sFile += "_pareto";
-		//Domain dmOut (FileName(fnOut, ".dom", true), 0, dmtUNIQUEID);
-		//DomainIdentifier* dmIdentifierPtr = dmOut->pdid();
-
 		CoordSystem csyDest (pmFacilities->cs());
 		CoordBounds cbMap (pmDemands->cb());
 		cbMap += pmFacilities->cb();
+		FileName fnOut (fn, ".mpp", true);
+		fnOut.sFile += "_pareto";
+		fnOut = FileName::fnUnique(fnOut);
 		PointMap pntMap(fnOut, csyDest, cbMap, pmFacilitiesNoAttribute->dm());
 		m_la->StoreChromosome(chromosome, pntMap.ptr());
 	}

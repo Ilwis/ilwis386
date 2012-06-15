@@ -14,6 +14,7 @@ public:
   FormLandAllocation(CWnd* mw, const char* sPar);
   virtual ~FormLandAllocation();
 private:
+  int MethodCallBack(Event*);
   int FacilitiesCallBack(Event*);
   int DemandsCallBack(Event*);
   int AdjustEliteCallBack(Event*);
@@ -21,6 +22,7 @@ private:
   int StoreSelectedChromosome(Event*);
   int CallBackAnchorChangedInGraph(Event*);
   static UINT GenerateParetoGraphInThread(LPVOID pParam);
+  RadioGroup * rgMethod;
   FieldPointMap * fpmFacilities;
   FieldString * fsTotalFacilities;
   String sTotalFacilities;
