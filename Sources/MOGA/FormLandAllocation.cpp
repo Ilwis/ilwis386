@@ -242,6 +242,8 @@ UINT FormLandAllocation::GenerateParetoGraphInThread(LPVOID pParam)
 
 	pObject->m_pareto = pareto;
 
+	pObject->CallBackAnchorChangedInGraph(0);
+
 	pObject->pbCalculatePareto->Enable();
 	pObject->pbStoreSelectedChromosome->Enable();
 	return 0;
