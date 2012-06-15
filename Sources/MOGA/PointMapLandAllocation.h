@@ -3,7 +3,6 @@
 
 #include "GAChromosome.h"
 #include "Engine\Applications\PNTVIRT.H"
-#include "Engine\Applications\SEGVIRT.H"
 
 IlwisObjectPtr * createPointMapLandAllocation(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
 
@@ -24,7 +23,6 @@ public:
   static FileName fnGetSourceFile(const PointMap & pm, const FileName & fnObj);
 
 private:
-  long AddConnections(SegmentMap & segMap, Domain & dm, vector<int> & source, vector<int> & destination, vector<double> & allocations, GAChromosome & chromosome, LandAllocation * context, ScoreFunc scoreFunc1, ScoreFunc scoreFunc2);
   PointMap pmFacilities;
   PointMap pmFacilitiesNoAttribute; // The original pointmap, before applying MapAttribute
   PointMap pmDemands;
