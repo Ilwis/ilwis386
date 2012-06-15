@@ -18,6 +18,8 @@ private:
   int DemandsCallBack(Event*);
   int AdjustEliteCallBack(Event*);
   int GenerateParetoGraph(Event*);
+  int StoreSelectedChromosome(Event*);
+  int CallBackAnchorChangedInGraph(Event*);
   static UINT GenerateParetoGraphInThread(LPVOID pParam);
   FieldPointMap * fpmFacilities;
   FieldString * fsTotalFacilities;
@@ -33,6 +35,7 @@ private:
   FieldColumn * fcDemandsPreference;
   FieldGraph * fgFunctionGraph;
   PushButton* pbCalculatePareto;
+  PushButton* pbStoreSelectedChromosome;
   int exec();
   String sPointMapFacilities;
   String sPointMapDemands;
@@ -49,6 +52,9 @@ private:
   String sColFacilitiesType;
   String sColDemandsPreference;
   ParetoGraphFunction * m_function;
+
+  LandAllocation * m_la;
+  std::vector<GAChromosome> m_pareto;
 };
 
 #endif // FORMLANDALLOCATION_H

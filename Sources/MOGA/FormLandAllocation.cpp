@@ -1,8 +1,8 @@
 #include "Client\Headers\AppFormsPCH.h"
+#include "LandAllocation.h"
 #include "FormLandAllocation.h"
 #include "Client\FormElements\fldcol.h"
 #include "Client\FormElements\FieldGraph.h"
-#include "LandAllocation.h"
 #include "PointMapLandAllocation.h"
 #include "ParetoGraphFunction.h"
 
@@ -15,6 +15,7 @@ LRESULT CmdLandAllocation(CWnd *wnd, const String& s)
 FormLandAllocation::FormLandAllocation(CWnd* mw, const char* sPar)
 : FormPointMapCreate(mw, TR("Land Allocation of Point Map"))
 , m_function(0)
+, m_la(0)
 {
 	iMethod = 0;
 	fCapacitated = false;
@@ -63,8 +64,11 @@ FormLandAllocation::FormLandAllocation(CWnd* mw, const char* sPar)
 	fgFunctionGraph->SetHeight(300);
 	fgFunctionGraph->SetIndependentPos();
 	fgFunctionGraph->SetFunction(0);
+	fgFunctionGraph->SetCallBack((NotifyProc)&FormLandAllocation::CallBackAnchorChangedInGraph);
 	pbCalculatePareto = new PushButton(fgRight, TR("Calculate Pareto"), (NotifyProc)&FormLandAllocation::GenerateParetoGraph);
 	pbCalculatePareto->Align(fgFunctionGraph, AL_UNDER);
+	pbStoreSelectedChromosome = new PushButton(fgRight, TR("Store Selected Chromosome"), (NotifyProc)&FormLandAllocation::StoreSelectedChromosome);
+	pbStoreSelectedChromosome->Align(pbCalculatePareto, AL_UNDER);
 
 	initPointMapOut(false);
 	fmc->Align(frCrossover, AL_UNDER);
@@ -83,6 +87,8 @@ FormLandAllocation::~FormLandAllocation()
 	fgFunctionGraph->SetFunction(0);
 	if (m_function)
 		delete m_function;
+	if (m_la)
+		delete m_la;
 }
 
 int FormLandAllocation::FacilitiesCallBack(Event*)
@@ -169,6 +175,7 @@ int FormLandAllocation::GenerateParetoGraph(Event*)
 
 	root->StoreData();
 	pbCalculatePareto->Disable();
+	pbStoreSelectedChromosome->Disable();
 	AfxBeginThread(GenerateParetoGraphInThread, this);
 	return 0;
 }
@@ -186,11 +193,11 @@ UINT FormLandAllocation::GenerateParetoGraphInThread(LPVOID pParam)
 	PointMap pmDemands(pObject->sPointMapDemands, fn.sPath());
 	PointMap pmFacilitiesNoAttribute(PointMapLandAllocation::fnGetSourceFile(pmFacilities, fn));
 	PointMap pmDemandsNoAttribute(PointMapLandAllocation::fnGetSourceFile(pmDemands, fn));
-	LandAllocation la (pmFacilities, pmFacilitiesNoAttribute, pObject->sColFacilitiesType, pmDemands, pmDemandsNoAttribute, pObject->sColDemandsPreference,
+	pObject->m_la = new LandAllocation(pmFacilities, pmFacilitiesNoAttribute, pObject->sColFacilitiesType, pmDemands, pmDemandsNoAttribute, pObject->sColDemandsPreference,
 							   pObject->iOptimalFacilities, pObject->fCapacitated, pObject->iStoppingCriteria, pObject->iGenerations, pObject->iPopulationSize, pObject->iNelite, pObject->iNpareto, pObject->rMutationPercent, pObject->rCrossoverPercent);
 
 	Tranquilizer trq;
-	std::vector<GAChromosome> pareto = la.GenerateParetoArray(trq);
+	std::vector<GAChromosome> pareto = pObject->m_la->GenerateParetoArray(trq);
 
 	struct sort_pred { 
 		bool operator()(const GAChromosome & left, const GAChromosome & right) { 
@@ -213,7 +220,39 @@ UINT FormLandAllocation::GenerateParetoGraphInThread(LPVOID pParam)
 	}
 	else
 		pObject->fgFunctionGraph->Replot();
+
+	pObject->m_pareto = pareto;
+
 	pObject->pbCalculatePareto->Enable();
+	pObject->pbStoreSelectedChromosome->Enable();
+	return 0;
+}
+
+int FormLandAllocation::CallBackAnchorChangedInGraph(Event*)
+{
+	return 0;
+}
+
+int FormLandAllocation::StoreSelectedChromosome(Event*)
+{
+	int index = m_function->iGetAnchorNr();
+	GAChromosome * chromosome = &m_pareto[index];
+	FileName fn(sOutMap);
+	PointMap pmFacilities(sPointMapFacilities, fn.sPath());
+	PointMap pmDemands(sPointMapDemands, fn.sPath());
+	PointMap pmFacilitiesNoAttribute(PointMapLandAllocation::fnGetSourceFile(pmFacilities, fn));
+	PointMap pmDemandsNoAttribute(PointMapLandAllocation::fnGetSourceFile(pmDemands, fn));
+	FileName fnOut (fn, ".mpp", true);
+	fnOut.sFile += "_pareto";
+	//Domain dmOut (FileName(fnOut, ".dom", true), 0, dmtUNIQUEID);
+	//DomainIdentifier* dmIdentifierPtr = dmOut->pdid();
+
+	CoordSystem csyDest (pmFacilities->cs());
+	CoordBounds cbMap (pmDemands->cb());
+	cbMap += pmFacilities->cb();
+	PointMap pntMap(fnOut, csyDest, cbMap, pmFacilitiesNoAttribute->dm());
+	m_la->StoreChromosome(chromosome, pntMap.ptr());
+
 	return 0;
 }
 
