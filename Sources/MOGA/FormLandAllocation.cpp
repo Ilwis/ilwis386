@@ -45,7 +45,7 @@ FormLandAllocation::FormLandAllocation(CWnd* mw, const char* sPar)
 	fcDemandsPreference->Align(fsTotalDemands, AL_UNDER);
 	fiOptimalFacilities = new FieldInt(fgLeft, TR("Nr &Optimal Facilities"), &iOptimalFacilities, ValueRange(1, 32767), true);
 	new CheckBox(fgLeft, TR("&Capacitated"), &fCapacitated);
-	new FieldInt(fgLeft, TR("&Stack Threshold"), &iStoppingCriteria, ValueRange(0, 32767), true);
+	//new FieldInt(fgLeft, TR("&Stack Threshold"), &iStoppingCriteria, ValueRange(0, 32767), true);
 	new FieldInt(fgLeft, TR("&Generations"), &iGenerations, ValueRange(0, 2147483647), true);
 	fiPopulation = new FieldInt(fgLeft, TR("P&opulation Size"), &iPopulationSize, ValueRange(0, 32767), true);
 	fiElite = new FieldInt(rbMulti, TR("Nelite"), &iNelite, ValueRange(0, 32767), true);
@@ -54,8 +54,9 @@ FormLandAllocation::FormLandAllocation(CWnd* mw, const char* sPar)
 	fiPareto->Align(fiElite, AL_UNDER);
 	fiPopulation->SetCallBack((NotifyProc)&FormLandAllocation::AdjustEliteCallBack);
 	fiPareto->SetCallBack((NotifyProc)&FormLandAllocation::AdjustEliteCallBack);
-	new FieldReal(fgLeft, TR("&Mutation Percent"), &rMutationPercent, ValueRange(0, 100, 0.1));
-	FieldReal * frCrossover = new FieldReal(fgLeft, TR("C&rossover Percent"), &rCrossoverPercent, ValueRange(0, 100, 0.1));
+	FieldReal * frMutation = new FieldReal(fgLeft, TR("&Mutation Percent"), &rMutationPercent, ValueRange(0, 100, 0.1));
+	FieldReal * frCrossover = new FieldReal(rbSingle, TR("C&rossover Percent"), &rCrossoverPercent, ValueRange(0, 100, 0.1));
+	frCrossover->Align(frMutation, AL_UNDER);
 
 	FieldGroup* fgRight = new FieldGroup(rbMulti);
 	fgRight->Align(fgLeft, AL_AFTER);
