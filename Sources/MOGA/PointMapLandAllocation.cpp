@@ -118,8 +118,6 @@ PointMapLandAllocation::PointMapLandAllocation(const FileName& fn, PointMapPtr& 
   objdep.Add(pmDemands.ptr());
   if (!fnObj.fValid()) // 'inline' object
     objtime = objdep.tmNewest();
-  if (pmFacilitiesNoAttribute->fTblAttSelf())
-    SetAttributeTable(pmFacilitiesNoAttribute->tblAtt());
 }
 
 void PointMapLandAllocation::Store()
