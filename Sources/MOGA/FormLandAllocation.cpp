@@ -213,6 +213,8 @@ UINT FormLandAllocation::GenerateParetoGraphInThread(LPVOID pParam)
 	PointMap pmDemands(pObject->sPointMapDemands, fn.sPath());
 	PointMap pmFacilitiesNoAttribute(PointMapLandAllocation::fnGetSourceFile(pmFacilities, fn));
 	PointMap pmDemandsNoAttribute(PointMapLandAllocation::fnGetSourceFile(pmDemands, fn));
+	if (pObject->m_la)
+		delete pObject->m_la;
 	pObject->m_la = new LandAllocation(pmFacilities, pmFacilitiesNoAttribute, pObject->sColFacilitiesType, pmDemands, pmDemandsNoAttribute, pObject->sColDemandsPreference,
 							   pObject->iOptimalFacilities, pObject->fCapacitated, pObject->iStoppingCriteria, pObject->iGenerations, pObject->iPopulationSize, pObject->iNelite, pObject->iNpareto, pObject->rMutationPercent, pObject->rCrossoverPercent);
 

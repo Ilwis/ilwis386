@@ -37,6 +37,10 @@ GA::~GA()
 
 void GA::Initialize()
 {
+	if (m_bestValue != 0)
+		delete [] m_bestValue;
+	if (m_totalValue != 0)
+		delete [] m_totalValue;
 	m_bestValue = new double[m_lGenerations];
 	m_totalValue = new double[m_lGenerations];
 
