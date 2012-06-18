@@ -514,6 +514,8 @@ void LandAllocation::StoreChromosome(GAChromosome * chromosome, PointMapPtr * pn
 		ScoreFunc scoreFunc1 = (ScoreFunc)&LandAllocation::rStdDistanceFunc;
 		ScoreFunc scoreFunc2 = (ScoreFunc)&LandAllocation::rStdPreferenceFunc;
 		unsigned long iNrSegments = AddConnections(pmFacilities, pmDemands, iOptimalFacilities, fMultiObjective, fCapacitated, segMap, dmConnections, source, destination, allocations, *chromosome, scoreFunc1, scoreFunc2);
+
+		// Create the Attribute Table for the Segment Map
 		LongBuf lbSource (iNrSegments);
 		LongBuf lbDestination (iNrSegments);
 		RealBuf rbAllocations (iNrSegments);
@@ -524,7 +526,6 @@ void LandAllocation::StoreChromosome(GAChromosome * chromosome, PointMapPtr * pn
 			rbAllocations[i] = allocations[i];
 		}
 
-		// Create the Attribute Table
 		Table connectionTbl = Table(FileName(fnConnections, ".tbt", true), dmConnections);
 
 		PointMap pmDemandsNoAttribute (PointMapLandAllocation::fnGetSourceFile(pmDemands, pntMapPtr->fnObj));
@@ -532,10 +533,46 @@ void LandAllocation::StoreChromosome(GAChromosome * chromosome, PointMapPtr * pn
 		colSource->PutBufRaw(lbSource, 1);
 		Column colDestination (connectionTbl, "FacilityID", pmFacilitiesNoAttribute->dm());
 		colDestination->PutBufRaw(lbDestination, 1);
-		Column colAllocations (connectionTbl, "Allocated", DomainValueRangeStruct(0, 10000, 0));
+		Column colAllocations (connectionTbl, "Allocated", DomainValueRangeStruct(0, 99999999, 0));
 		colAllocations->PutBufVal(rbAllocations, 1);
 
 		segMap->SetAttributeTable(connectionTbl);
+
+		// Create the Attribute Table for the current chromosome's Point Map
+
+		int iNrFacilities = pmFacilities->iFeatures();
+		Table pntMapTbl = Table(FileName(pntMapPtr->fnObj, ".tbt", true), pmFacilitiesNoAttribute->dm());
+
+		if (fCapacitated) {
+			RealBuf rbCapacity (iNrFacilities);
+			for (unsigned long i = 0; i < iNrFacilities; ++i)
+				rbCapacity[i] = pmFacilities->rValue(i);
+			Column colCapacity (pntMapTbl, "Capacity", pmFacilities->dm());
+			colCapacity->PutBufVal(rbCapacity, 1);
+		}
+
+		RealBuf rbAllocationsGrouped (iNrFacilities);
+		for (unsigned long i = 0; i < iNrFacilities; ++i) {
+			rbAllocationsGrouped[i] = 0;
+			for (unsigned long j = 0; j < iNrSegments; ++j) {
+				if (destination[j] == pmFacilitiesNoAttribute->iRaw(i)) // find all occurrences of the "facility" in the allocations array
+					rbAllocationsGrouped[i] += allocations[j];
+			}
+		}
+		Column colAllocationsGrouped (pntMapTbl, "Allocated", DomainValueRangeStruct(0, 99999999, 0));
+		colAllocationsGrouped->PutBufVal(rbAllocationsGrouped, 1);
+
+		if (fMultiObjective && pmFacilitiesNoAttribute.fValid() && pmFacilitiesNoAttribute->fTblAtt()) {
+			Table tbl = pmFacilitiesNoAttribute->tblAtt();
+			Column col = tbl->col(sColFacilitiesType);
+			Column colFacilitiesType (pntMapTbl, col->sName(), col->dvrs());
+			for (unsigned long i = 0; i < iNrFacilities; ++i) {
+				long iKey = pmFacilitiesNoAttribute->iRaw(i);
+				colFacilitiesType->PutVal(iKey, col->sValue(iKey, 0));
+			}
+		}
+
+		pntMapPtr->SetAttributeTable(pntMapTbl);
 	}
 }
 
