@@ -14,19 +14,18 @@ public:
   ~LandAllocation();
   GAChromosome * PerformLandAllocation(Tranquilizer & trq);
   std::vector<GAChromosome> GenerateParetoArray(Tranquilizer & trq);
+  void ChromosomeMutator(GAChromosome & chromosome);
+  void Initializer(GAChromosome & chromosome);
+  void CrossOver(GAChromosome & Dad, GAChromosome & Mum, GAChromosome & child1, GAChromosome & child2);
+  void StoreChromosome (GAChromosome * chromosome, PointMapPtr * pntMapPtr);
+
+private:
   void Init();
   void FitnessSO(GAChromosome & chromosome, LandAllocation * context, ScoreFunc scoreFunc1, ScoreFunc scoreFunc2);
   void FitnessMO(GAChromosome & chromosome, LandAllocation * context, ScoreFunc scoreFunc1, ScoreFunc scoreFunc2);
   double rStdDistanceFunc(int demandIndex, int facilityIndex);
   double rStdPreferenceFunc(int demandIndex, int facilityIndex);
-  void ChromosomeMutator(GAChromosome & chromosome);
-  void Initializer(GAChromosome & chromosome);
-  void CrossOver(GAChromosome & Dad, GAChromosome & Mum, GAChromosome & child1, GAChromosome & child2);
   void GreedyCrossOver(GAChromosome & Dad, GAChromosome & Mum, GAChromosome & child);
-  void StoreChromosome (GAChromosome * chromosome, PointMapPtr * pntMapPtr);
-
-private:
-  //long AddConnections(SegmentMap & segMap, Domain & dm, vector<int> & source, vector<int> & destination, vector<double> & allocations, GAChromosome & chromosome, LandAllocation * context, ScoreFunc scoreFunc1, ScoreFunc scoreFunc2);
   void UpdatePareto(std::vector<GAChromosome> & solutions, std::vector<GAChromosome> & pareto);
   void KeepElite(std::vector<GAChromosome> & solutions, std::vector<GAChromosome> & pareto);
   long AddConnections(PointMap & pmFacilities, PointMap & pmDemands, int iOptimalFacilities, bool fMultiObjective, bool fCapacitated, SegmentMap & segMap, Domain & dm, vector<int> & source, vector<int> & destination, vector<double> & allocations, GAChromosome & chromosome, ScoreFunc scoreFunc1, ScoreFunc scoreFunc2);
