@@ -443,57 +443,59 @@ void LandAllocation::StoreChromosome(GAChromosome * chromosome, PointMapPtr * pn
 		}
 	}
 
-	// Create Fitness Table
+	if (!fMultiObjective) {
+		// Create Fitness Table
 
-	FileName fnFitness (pntMapPtr->fnObj, ".tbt", true);
-	fnFitness.sFile += "_fitness";
-	Domain fitnessDom (FileName(fnFitness, ".dom", true), iGenerations, dmtUNIQUEID);
-	Table fitnessTbl (fnFitness, fitnessDom);
-	Column colBestFitness (fitnessTbl, "BestFitness", DomainValueRangeStruct(0, 1, 0));
-	Column colAvgFitness (fitnessTbl, "AvgFitness", DomainValueRangeStruct(0, 1, 0));
-	colBestFitness->PutBufVal(vrFitnessList, 1);
-	colAvgFitness->PutBufVal(vrPopulationAvgList, 1);
+		FileName fnFitness (pntMapPtr->fnObj, ".tbt", true);
+		fnFitness.sFile += "_fitness";
+		Domain fitnessDom (FileName(fnFitness, ".dom", true), iGenerations, dmtUNIQUEID);
+		Table fitnessTbl (fnFitness, fitnessDom);
+		Column colBestFitness (fitnessTbl, "BestFitness", DomainValueRangeStruct(0, 1, 0));
+		Column colAvgFitness (fitnessTbl, "AvgFitness", DomainValueRangeStruct(0, 1, 0));
+		colBestFitness->PutBufVal(vrFitnessList, 1);
+		colAvgFitness->PutBufVal(vrPopulationAvgList, 1);
 
-	// Create Fitness Graph
+		// Create Fitness Graph
 
-	CartesianGraphDoc cgd;
-	cgd.CreateNewGraph(fitnessTbl, Column(), colBestFitness, "Contineous", Color(0, 255, 0));
-	cgd.AddColumnGraph(colAvgFitness, "Contineous", Color(255, 0, 255));
-	// Save the Fitness Graph
-	FileName fnFitnessGraph(fnFitness, ".grh", true);
-	String sFile = fnFitnessGraph.sFullPath();
-	const char * lpszPathName = sFile.c_str();
-	CFileException fe;
-	CFile* pFile = cgd.GetFile(lpszPathName, CFile::modeCreate | CFile::modeReadWrite | CFile::shareExclusive, &fe);
-	if (pFile == NULL)
-	{
-		cgd.ReportSaveLoadException(lpszPathName, &fe, TRUE, AFX_IDP_INVALID_FILENAME);
-	}
-	else
-	{
-		CArchive saveArchive(pFile, CArchive::store | CArchive::bNoFlushOnDelete);
-		saveArchive.m_pDocument = &cgd;
-		saveArchive.m_bForceFlat = FALSE;
-		TRY
+		CartesianGraphDoc cgd;
+		cgd.CreateNewGraph(fitnessTbl, Column(), colBestFitness, "Contineous", Color(0, 255, 0));
+		cgd.AddColumnGraph(colAvgFitness, "Contineous", Color(255, 0, 255));
+		// Save the Fitness Graph
+		FileName fnFitnessGraph(fnFitness, ".grh", true);
+		String sFile = fnFitnessGraph.sFullPath();
+		const char * lpszPathName = sFile.c_str();
+		CFileException fe;
+		CFile* pFile = cgd.GetFile(lpszPathName, CFile::modeCreate | CFile::modeReadWrite | CFile::shareExclusive, &fe);
+		if (pFile == NULL)
 		{
-			CWaitCursor wait;
-			cgd.Serialize(saveArchive);
-			saveArchive.Close();
-			cgd.ReleaseFile(pFile, FALSE);
+			cgd.ReportSaveLoadException(lpszPathName, &fe, TRUE, AFX_IDP_INVALID_FILENAME);
 		}
-		CATCH_ALL(e)
+		else
 		{
-			cgd.ReleaseFile(pFile, TRUE);
-
+			CArchive saveArchive(pFile, CArchive::store | CArchive::bNoFlushOnDelete);
+			saveArchive.m_pDocument = &cgd;
+			saveArchive.m_bForceFlat = FALSE;
 			TRY
 			{
-				cgd.ReportSaveLoadException(lpszPathName, e, TRUE, AFX_IDP_FAILED_TO_SAVE_DOC);
+				CWaitCursor wait;
+				cgd.Serialize(saveArchive);
+				saveArchive.Close();
+				cgd.ReleaseFile(pFile, FALSE);
 			}
-			END_TRY
-			e->Delete(); //DELETE_EXCEPTION(e);
-			return;
+			CATCH_ALL(e)
+			{
+				cgd.ReleaseFile(pFile, TRUE);
+
+				TRY
+				{
+					cgd.ReportSaveLoadException(lpszPathName, e, TRUE, AFX_IDP_FAILED_TO_SAVE_DOC);
+				}
+				END_TRY
+				e->Delete(); //DELETE_EXCEPTION(e);
+				return;
+			}
+			END_CATCH_ALL
 		}
-		END_CATCH_ALL
 	}
 
 	// Create Connections Segment Map
