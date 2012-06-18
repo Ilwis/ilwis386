@@ -533,7 +533,7 @@ void LandAllocation::StoreChromosome(GAChromosome * chromosome, PointMapPtr * pn
 		colSource->PutBufRaw(lbSource, 1);
 		Column colDestination (connectionTbl, "FacilityID", pmFacilitiesNoAttribute->dm());
 		colDestination->PutBufRaw(lbDestination, 1);
-		Column colAllocations (connectionTbl, "Allocated", DomainValueRangeStruct(0, 99999999, 0));
+		Column colAllocations (connectionTbl, "Allocated", DomainValueRangeStruct(0, DBL_MAX, 0));
 		colAllocations->PutBufVal(rbAllocations, 1);
 
 		segMap->SetAttributeTable(connectionTbl);
@@ -552,15 +552,19 @@ void LandAllocation::StoreChromosome(GAChromosome * chromosome, PointMapPtr * pn
 		}
 
 		RealBuf rbAllocationsGrouped (iNrFacilities);
+		RealBuf rbDistancesGrouped (iNrFacilities);
 		for (unsigned long i = 0; i < iNrFacilities; ++i) {
 			rbAllocationsGrouped[i] = 0;
-			for (unsigned long j = 0; j < iNrSegments; ++j) {
-				if (destination[j] == pmFacilitiesNoAttribute->iRaw(i)) // find all occurrences of the "facility" in the allocations array
-					rbAllocationsGrouped[i] += allocations[j];
-			}
+			rbDistancesGrouped[i] = 0;
 		}
-		Column colAllocationsGrouped (pntMapTbl, "Allocated", DomainValueRangeStruct(0, 99999999, 0));
+		for (unsigned long i = 0; i < iNrSegments; ++i) {
+			rbAllocationsGrouped[destination[i] - 1] += allocations[i];
+			rbDistancesGrouped[destination[i] - 1] += allocations[i] * rDistanceOD[source[i] - 1][destination[i] - 1];
+		}
+		Column colAllocationsGrouped (pntMapTbl, "Allocated", DomainValueRangeStruct(0, DBL_MAX, 0));
 		colAllocationsGrouped->PutBufVal(rbAllocationsGrouped, 1);
+		Column colDistancesGrouped (pntMapTbl, "TotalDistance", DomainValueRangeStruct(0, DBL_MAX, 0));
+		colDistancesGrouped->PutBufVal(rbDistancesGrouped, 1);
 
 		if (fMultiObjective && pmFacilitiesNoAttribute.fValid() && pmFacilitiesNoAttribute->fTblAtt()) {
 			Table tbl = pmFacilitiesNoAttribute->tblAtt();
