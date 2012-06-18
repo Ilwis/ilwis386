@@ -258,7 +258,7 @@ int FormLandAllocation::CallBackAnchorChangedInGraph(Event*)
 		int index = m_function->iGetAnchorNr();
 		if (index >= 0 && index < m_pareto.size()) {
 			GAChromosome * chromosome = &m_pareto[index];
-			sSelectedChromosome = String("%d: F=%.03f d=%.03f p=%.03f", index+1, chromosome->rGetFitness(), chromosome->rGetPartialScore1(), chromosome->rGetPartialScore2());
+			sSelectedChromosome = String("%d: F=%.03f d=%.03f p=%.03f w1=%.03f w2=%.03f", index+1, chromosome->rGetFitness(), chromosome->rGetPartialScore1(), chromosome->rGetPartialScore2(), chromosome->w1(), chromosome->w2());
 			fsSelectedChromosome->SetVal(sSelectedChromosome);
 		} else {
 			sSelectedChromosome = "No chromosome selected";
