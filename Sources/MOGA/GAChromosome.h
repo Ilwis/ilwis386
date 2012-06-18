@@ -17,20 +17,19 @@ public:
 	GAChromosome();
 	GAChromosome(LandAllocation * context, FitnessFunc fitnessFunc, ScoreFunc scoreFunc1, ScoreFunc scoreFunc2, bool fInitialize);
 	virtual ~GAChromosome();
-	void CopyChromosome(GAChromosome & chromosome); 
-	double rGetFitness() const;
-	double rGetPartialScore1() const;
-	double rGetPartialScore2() const;
-	const double w1() {return m_w1;};
-	const double w2() {return m_w2;};
+	const double rGetFitness() const;
+	const double rGetPartialScore1() const;
+	const double rGetPartialScore2() const;
+	const double w1() const {return m_w1;};
+	const double w2() const {return m_w2;};
 	void SetFitness(double value);
 	void SetPartialFitness(double value1, double value2);
 	bool operator < (const GAChromosome& chromosome) const;
 	void operator = (const GAChromosome& chromosome);
 
 private:
-	const double m_w1;
-	const double m_w2;
+	double m_w1;
+	double m_w2;
 	double m_dFitness;
 	double m_score1;
 	double m_score2;

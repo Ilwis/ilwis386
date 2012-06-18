@@ -31,27 +31,15 @@ GAChromosome::~GAChromosome()
 
 void GAChromosome::operator = (const GAChromosome& chromosome)
 {
-	clear();
-	int iLength = chromosome.size();
-	for(int i = 0; i < iLength; ++i)
-		push_back(chromosome[i]);
+	* static_cast<std::vector<unsigned int> *>(this) = chromosome;
 	m_dFitness = chromosome.m_dFitness;
 	m_score1 = chromosome.m_score1;
 	m_score2 = chromosome.m_score2;
+	m_w1 = chromosome.m_w1;
+	m_w2 = chromosome.m_w2;
 }
 
-void GAChromosome::CopyChromosome(GAChromosome & chromosome)
-{
-	clear();
-	int iLength = chromosome.size();
-	for(int i = 0; i < iLength; ++i)
-		push_back(chromosome[i]);
-	m_dFitness = chromosome.m_dFitness;
-	m_score1 = chromosome.m_score1;
-	m_score2 = chromosome.m_score2;
-}
-    
-double GAChromosome::rGetFitness() const
+const double GAChromosome::rGetFitness() const
 {
 	return m_dFitness;
 }
@@ -67,12 +55,12 @@ void GAChromosome::SetPartialFitness(double value1, double value2)
 	m_score2 = value2;
 }
 
-double GAChromosome::rGetPartialScore1() const
+const double GAChromosome::rGetPartialScore1() const
 {
 	return m_score1;
 }
 
-double GAChromosome::rGetPartialScore2() const
+const double GAChromosome::rGetPartialScore2() const
 {
 	return m_score2;
 }
