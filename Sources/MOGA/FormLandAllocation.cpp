@@ -283,7 +283,7 @@ int FormLandAllocation::StoreSelectedChromosome(Event*)
 		cbMap += pmFacilities->cb();
 		FileName fnOut (fn, ".mpp", true);
 		fnOut.sFile += "_pareto";
-		fnOut = FileName::fnUnique(fnOut);
+		fnOut = FileName::fnUniqueWithIndex(fnOut);
 		PointMap pntMap(fnOut, csyDest, cbMap, pmFacilitiesNoAttribute->dm());
 		m_la->StoreChromosome(chromosome, pntMap.ptr());
 		pntMap->SetDescription(sSelectedChromosome);
