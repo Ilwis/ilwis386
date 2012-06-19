@@ -290,7 +290,7 @@ void OpenstreetmapDrawer::DisplayTexture(CoordBounds & cb) const
 			glTexCoord2d(s1, t2);
 			glVertex3d(c4.x, c4.y, 0.0);
 		} else {
-			const unsigned int iSize = 10; // this makes 100 quads, thus 200 triangles per texture
+			const unsigned int iSize = 4; // this makes 16 quads, thus 32 triangles per texture
 			// avoid plotting the "added" portion of the map that was there to make the texture size a power of 2
 			double colStep = min(cb.width(), cbImage.cMax.x - cb.cMin.x) / (double)iSize;
 			double rowStep = min(cb.height(), cbImage.cMax.y - cb.cMin.y) / (double)iSize;
