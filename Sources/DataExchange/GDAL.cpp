@@ -1865,7 +1865,7 @@ void PointFiller::fillGeometry(OGRGeometryH hGeom, int& rec) {
 	double x,y,z;
 	funcs.ogrGetPoints(hGeom, 0,&x,&y,&z);
 	p->setCoord(Coord(x,y,x));
-	p->PutVal((long)++rec);
+	p->PutVal((long)rec++);
 }
 
 
@@ -1885,7 +1885,7 @@ void SegmentFiller::fillGeometry(OGRGeometryH hGeom, int& rec) {
 		seq->setAt(c, i);
 	}
 	s->PutCoords(seq);
-	s->PutVal((long)++rec);
+	s->PutVal((long)rec++);
 }
 
 void PolygonFiller::fillFeature(OGRGeometryH hGeometry, int& rec) {
