@@ -224,7 +224,7 @@ $Header: /ILWIS 3.0/Main/ilwis.CPP 329   10-06-05 15:09 Retsios $
 
 IlwisWinApp TheIlwisApp;
 const CLSID CLSID_ILWIS_CommandLine = {0x524BCEF4,0x4370,0x4021,{0x92,0xD3,0xCE,0xC1,0x62,0x57,0x7C,0x08}};
-const String ILWIS::Version::IlwisVersion="3.8.0.0";
+const String ILWIS::Version::IlwisVersion="3.8.0.1";
 //const String ILWIS::Version::IlwisShortName="Ilwis38";
 
 BEGIN_MESSAGE_MAP( IlwisWinApp, CWinApp )
@@ -1241,8 +1241,8 @@ void IlwisWinApp::InitImageLists()
 {
 	ilSmall.Create(16,16,TRUE,4,4);
 	ilLarge.Create(32,32,TRUE,4,4);
-	ilSmall.SetImageCount(135);
-	ilLarge.SetImageCount(135);
+	ilSmall.SetImageCount(137);
+	ilLarge.SetImageCount(137);
 
 	int i = 0;
 	InitImage("ilwis", "LogoIcon", i++);
@@ -1392,6 +1392,8 @@ void IlwisWinApp::InitImageLists()
 	InitImage("Openstreemap","Openstreetmap", i++);
 	InitImage("SpaceTimeCube","SpaceTimeCube", i++);
 	InitImage(".ivh","Hatch",i++);
+	InitImage("earth", "earth", i++);	
+	InitImage("ethiopia", "ethiopia", i++);	
 }
 
 int IlwisWinApp::iImage(const string& sExt)
@@ -2545,3 +2547,11 @@ void IlwisWinApp::showHelp(const String& helpfile) {
 		throw ErrorObject(String("Help file %S.%S doenst exist",fn1.sFile, fn1.sExt));
 }
 
+void IlwisWinApp::SendUpdateTableSelection(const vector<long>& raws, const FileName& fnObj){
+	for(list<HWND>::const_iterator cur = lhWindows.begin(); cur != lhWindows.end(); ++cur) {
+		RowSelectInfo inf;
+		inf.fn = fnObj;
+		inf.raws = raws;
+		SendMessage((*cur), MESSAGE_SELECT_ROW,(WPARAM)&inf, 0);
+	}
+}

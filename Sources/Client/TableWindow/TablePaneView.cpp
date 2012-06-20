@@ -434,6 +434,9 @@ void TablePaneView::OnRowButtonPressed(long iRow)
 	tw->CreateRecordBar();
 	tw->recBar->view->SetRecord(rec, tvw());
 	tw->ShowControlBar(tw->recBar,TRUE,FALSE);
+	vector<long> raws;
+	raws.push_back(rec.iRec());
+	IlwWinApp()->SendUpdateTableSelection(raws, GetDocument()->obj()->fnObj);
 }
 
 void TablePaneView::OnColButtonPressed(int iCol)

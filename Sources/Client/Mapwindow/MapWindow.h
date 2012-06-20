@@ -96,6 +96,7 @@ public:
 	afx_msg void OnFullScreen();
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) ;
 	afx_msg LONG OnExecute(UINT, LONG lParam);
+	afx_msg LONG OnSelectFeatures(UINT, LONG lParam);
 	//}}AFX_MSG
 
 protected:

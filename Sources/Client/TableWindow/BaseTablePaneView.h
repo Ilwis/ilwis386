@@ -55,6 +55,7 @@ Created on: 2007-02-8
 
 class FrameWindow;
 
+
 class BaseTblField;
 
 class IMPEXP BaseTablePaneView : public CView

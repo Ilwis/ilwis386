@@ -43,7 +43,7 @@ namespace ILWIS {
 	class NewDrawer;
 }
 
-class IMPEXP MapStatusBar: public CStatusBar  
+class _export MapStatusBar: public CStatusBar  
 {
 public:
 	enum StatusBarItem { sbiNONE=0, sbiROWCOL=1, sbiCOORD=2, sbiRELCOORD=4, sbiLATLON=8 };

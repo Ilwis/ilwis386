@@ -78,6 +78,7 @@ BEGIN_MESSAGE_MAP(MapWindow, DataWindow)
 	ON_UPDATE_COMMAND_UI(ID_LARGER, OnUpdateLarger)
 	ON_UPDATE_COMMAND_UI(ID_SMALLER, OnUpdateSmaller)
 	ON_MESSAGE(ILWM_EXECUTE, OnExecute)
+	ON_MESSAGE(MESSAGE_SELECT_ROW,OnSelectFeatures)
 	ON_WM_GETMINMAXINFO()
 	ON_WM_INITMENU()
 	ON_MESSAGE(ILW_UPDATE, OnUpdate)
@@ -654,7 +655,16 @@ void MapWindow::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	}
 	DataWindow::OnKeyDown(nChar, nRepCnt, nFlags);
 }
+LONG MapWindow::OnSelectFeatures(UINT wParam, LONG lParam)
+{
+	RowSelectInfo inf = *(RowSelectInfo *)wParam;
+	MapCompositionDoc *doc = dynamic_cast<MapCompositionDoc *>(pFirstView->GetDocument());
+	if ( doc) {
+		doc->selectFeatures(inf);
+	}
 
+	return 1;
+}
 LONG MapWindow::OnExecute(UINT, LONG lParam)
 {				 
 	try {

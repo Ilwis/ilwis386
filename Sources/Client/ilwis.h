@@ -65,7 +65,6 @@ class Action;
 class URL;
 class MapPaneViewTool;
 
-
 enum CoordMessage {
 					cmMOUSEMOVE = 1, 
 					cmMOUSECLICK = 2,
@@ -170,6 +169,7 @@ public:
 	void getDocumentList(list<CDocument *>& opendocs);
 	void _export showHelp(const String& helpfile);
 	 _export  ILWIS::HelpFinder *getHelpFinder() { return helpFinder; }
+	 _export void SendUpdateTableSelection(const vector<long>& raws, const FileName& fnObj);
 	
 	//{{AFX_MSG(IlwisWinApp)
 	afx_msg void OnAbout();

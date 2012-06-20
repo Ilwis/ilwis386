@@ -43,6 +43,7 @@
 
 
 #include "Client\Headers\formelementspch.h"
+#include "Engine\Base\System\Engine.h"
 #include "Client\Base\IlwisDocument.h"
 #include "Client\MainWindow\Catalog\CatalogDocument.h"
 #include "Client\MainWindow\DirectoryDocument.h"
