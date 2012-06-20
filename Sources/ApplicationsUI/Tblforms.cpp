@@ -271,7 +271,7 @@ CumulativeForm::CumulativeForm(CWnd* parent)
 	fSortBy = false;
 	new FieldColumn(root, TR("&Column"), view, &sCol, dmVALUE);
 	CheckBox* cb = new CheckBox(root, TR("&Sort by column"), &fSortBy);
-	new FieldColumn(cb, "", view, &sColSortBy, dmCLASS|dmIDENT|dmIMAGE|dmBOOL|dmBIT|dmVALUE|dmGROUP);
+	new FieldColumn(cb, "", view, &sColSortBy, dmCLASS|dmIDENT|dmUNIQUEID|dmIMAGE|dmBOOL|dmBIT|dmVALUE|dmGROUP);
 	FieldString* fs = new FieldString(root, TR("&Output Column"), &sOutCol, Domain(), false);
 	fs->Align(cb, AL_UNDER);
 
@@ -876,7 +876,7 @@ public:
 		st9->Align(st5, AL_UNDER);
 		st10 = new StaticText(fg1, sDummy);  
 		st10->Align(st9, AL_AFTER);
-		jw->fcKeyCol = new FieldColumn(fg1, "", jw->view, &jw->sKeyCol, dmCLASS|dmIDENT|dmIMAGE|dmBOOL|dmBIT);
+		jw->fcKeyCol = new FieldColumn(fg1, "", jw->view, &jw->sKeyCol, dmCLASS|dmIDENT|dmUNIQUEID|dmIMAGE|dmBOOL|dmBIT);
 		jw->fcKeyCol->SetCallBack((NotifyProc)&JoinWizard::KeyColCallBack, jw);
 		jw->fcKeyCol->Align(st9, AL_AFTER);
 
@@ -895,7 +895,7 @@ public:
 		st11->Align(st7, AL_UNDER);
 		st12 = new StaticText(fg2, sDummy);  
 		st12->Align(st11, AL_AFTER);
-		jw->fcViaKey = new FieldColumn(fg2, "", Table(), &jw->sViaKey, dmCLASS|dmIDENT|dmIMAGE|dmBOOL|dmBIT);
+		jw->fcViaKey = new FieldColumn(fg2, "", Table(), &jw->sViaKey, dmCLASS|dmIDENT|dmUNIQUEID|dmIMAGE|dmBOOL|dmBIT);
 		jw->fcViaKey->SetCallBack((NotifyProc)&JoinWizard::ViaKeyCallBack, jw);
 		jw->fcViaKey->Align(st11, AL_AFTER);
 
