@@ -23,6 +23,11 @@ class ForeignFormatMap;
 class Logger;
 class GdalProxy;
 
+struct RowSelectInfo {
+	FileName fn; // table;
+	vector<long> raws; // selected rows;
+};
+
 namespace ILWIS {
 	class Database;
 }
