@@ -70,7 +70,10 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 		double v = feature->rValue();
 		BaseMapPtr *bmpptr = ((SpatialDataDrawer *)fdr->getParentDrawer())->getBaseMap();
 		setSpecialDrawingOptions(NewDrawer::sdoSELECTED,false);
-		if ( p->rowSelect.raws.size() > 0) {
+		if ( bmpptr->fTblAtt()) {
+			setTableSelection(bmpptr->tblAtt()->fnObj,v, p);
+		}
+	/*	if ( p->rowSelect.raws.size() > 0) {
 			if ( bmpptr->fTblAtt()) {
 
 				if ( bmpptr->tblAtt()->fnObj == p->rowSelect.fn) {
@@ -79,7 +82,7 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 					}
 				}
 			}
-		}
+		}*/
 		Representation rpr = fdr->getRepresentation();
 		if ( rpr->prc()) {
 			properties.scale = rpr->prc()->iSymbolSize(feature->iValue()) / 100;

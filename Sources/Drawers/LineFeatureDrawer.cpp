@@ -100,6 +100,11 @@ void LineFeatureDrawer::prepare(PreparationParameters *p){
 		else
 			lproperties.drawColor = (fdr->getDrawingColor()->clrVal(feature->rValue()));
 
+		BaseMapPtr *bmpptr = ((SpatialDataDrawer *)fdr->getParentDrawer())->getBaseMap();
+		if ( bmpptr->fTblAtt()) {
+			setTableSelection(bmpptr->tblAtt()->fnObj,feature->iValue(), p);
+		}
+
 		for(int j =0 ; j < p->filteredRaws.size(); ++j) {
 			int raw = p->filteredRaws[j];
 			if ( getFeature()->rValue() == abs(raw)) {

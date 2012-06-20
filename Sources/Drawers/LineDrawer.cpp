@@ -150,15 +150,17 @@ void LineDrawer::drawSelectedFeature(CoordinateSequence *points, const CoordBoun
 	glLineWidth(lproperties.thickness);
 	double symbolScale = cbZoom.width() / 250;
 	glColor4d(clr.redP(), clr.greenP(), clr.blueP(), 0.5);
-	for(int i=0; i < selectedCoords.size(); ++i) {
-		Coordinate c = points->getAt(selectedCoords.at(i));
-		double fz = is3D ? c.z : 0;;
-		glBegin(GL_QUADS);						
-			glVertex3f( c.x - symbolScale, c.y - symbolScale,fz);	
-			glVertex3f( c.x - symbolScale, c.y + symbolScale,fz);	
-			glVertex3f( c.x + symbolScale, c.y + symbolScale,fz);
-			glVertex3f( c.x + symbolScale, c.y - symbolScale,fz);
-		glEnd();
+	if (parentDrawer->inEditMode()) {
+		for(int i=0; i < selectedCoords.size(); ++i) {
+			Coordinate c = points->getAt(selectedCoords.at(i));
+			double fz = is3D ? c.z : 0;;
+			glBegin(GL_QUADS);						
+				glVertex3f( c.x - symbolScale, c.y - symbolScale,fz);	
+				glVertex3f( c.x - symbolScale, c.y + symbolScale,fz);	
+				glVertex3f( c.x + symbolScale, c.y + symbolScale,fz);
+				glVertex3f( c.x + symbolScale, c.y - symbolScale,fz);
+			glEnd();
+		}
 	}
 	glColor4d(clr.redP(), clr.greenP(), clr.blueP(), 1);
 	for(int i=0; i<points->size(); ++i) {

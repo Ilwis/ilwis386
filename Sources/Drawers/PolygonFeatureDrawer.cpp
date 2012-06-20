@@ -112,6 +112,7 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 		}
 	}
 	if (  p->type & ptRESTORE || p->type & RootDrawer::ptRENDER) {
+		BaseMapPtr *bmpptr = ((SpatialDataDrawer *)polygonLayer->getParentDrawer())->getBaseMap();
 		extrTransparency = polygonLayer->getExtrusionTransparency();
 		drawColor = polygonLayer->getDrawingColor()->clrRaw(feature->iValue(), polygonLayer->getDrawMethod());
 		if ( boundary) {
@@ -159,6 +160,9 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 			boundary->setSupportingDrawer(true);
 
 			((LineProperties *)boundary->getProperties())->drawColor = lp->drawColor;
+		}
+		if ( bmpptr->fTblAtt()) {
+			setTableSelection(bmpptr->tblAtt()->fnObj,feature->iValue(), p);
 		}
 	}
 }
