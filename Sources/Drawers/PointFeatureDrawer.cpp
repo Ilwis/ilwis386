@@ -1,5 +1,6 @@
 #include "Headers\toolspch.h"
-#include "Engine\Drawers\SimpleDrawer.h" 
+#include "Engine\Base\System\Engine.h"
+#include "Engine\Drawers\SimpleDrawer.h"
 #include "Engine\Drawers\RootDrawer.h"
 #include "Engine\Map\Point\ilwPoint.h"
 #include "Engine\Spatialreference\gr.h"
@@ -67,12 +68,23 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 			}
 		}
 		double v = feature->rValue();
+		BaseMapPtr *bmpptr = ((SpatialDataDrawer *)fdr->getParentDrawer())->getBaseMap();
+		setSpecialDrawingOptions(NewDrawer::sdoSELECTED,false);
+		if ( p->rowSelect.raws.size() > 0) {
+			if ( bmpptr->fTblAtt()) {
+
+				if ( bmpptr->tblAtt()->fnObj == p->rowSelect.fn) {
+					if ( find(p->rowSelect.raws.begin(), p->rowSelect.raws.end(), (long)v) != p->rowSelect.raws.end()) {
+						setSpecialDrawingOptions(NewDrawer::sdoSELECTED,true);
+					}
+				}
+			}
+		}
 		Representation rpr = fdr->getRepresentation();
 		if ( rpr->prc()) {
 			properties.scale = rpr->prc()->iSymbolSize(feature->iValue()) / 100;
 		}
 		if ( properties.scaleMode != PointProperties::sNONE && v != rUNDEF ) {
-			BaseMapPtr *bmpptr = ((SpatialDataDrawer *)fdr->getParentDrawer())->getBaseMap();
 			if ( bmpptr->fTblAtt()) {
 				Table tbl = bmpptr->tblAtt();
 				properties.exaggeration = properties.exaggeration * p->props->symbolSize / 100.0;

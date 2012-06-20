@@ -352,29 +352,36 @@ UINT TextureHeap::GenerateTexturesInThread(LPVOID pParam)
 	}
 
 	pObject->csThread.Lock();
+	try{
 
-	while (!pObject->fStopThread)
-	{
-		clock_t start = clock();
-		Texture * tex = pObject->GenerateNextTexture(true);
-		while (tex != 0) {
-			clock_t end = clock();
-			long duration = (end - start) * 1000 / CLOCKS_PER_SEC; // we want this in millisec
-			if (duration >= 1000) { // approximately 1 sec between intermediate screen updates
-				pObject->drawerContext->doDraw();
-				start = end;
+		while (!pObject->fStopThread)
+		{
+			clock_t start = clock();
+			Texture * tex = pObject->GenerateNextTexture(true);
+			while (tex != 0) {
+				clock_t end = clock();
+				long duration = (end - start) * 1000 / CLOCKS_PER_SEC; // we want this in millisec
+				if (duration >= 1000) { // approximately 1 sec between intermediate screen updates
+					pObject->drawerContext->doDraw();
+					start = end;
+				}
+				tex = pObject->GenerateNextTexture(true);
 			}
-			tex = pObject->GenerateNextTexture(true);
+			if (!pObject->fAbortTexGen && !pObject->fStopThread)
+				pObject->drawerContext->doDraw();
+			if (!pObject->fStopThread)
+				pObject->textureThread->SuspendThread(); // wait here, and dont consume CPU time either
 		}
-		if (!pObject->fAbortTexGen && !pObject->fStopThread)
-			pObject->drawerContext->doDraw();
-		if (!pObject->fStopThread)
-			pObject->textureThread->SuspendThread(); // wait here, and dont consume CPU time either
+	} catch (ErrorObject& err) {
+		err.Show();
+		return 0;
 	}
 
 	pObject->fStopThread = false;
 	pObject->csThread.Unlock();
 
 	return 0;
+
+
 }
 

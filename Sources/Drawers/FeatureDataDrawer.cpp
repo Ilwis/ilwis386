@@ -68,6 +68,7 @@ void FeatureDataDrawer::prepare(PreparationParameters *pp){
 			fsd->addDataSource(&basemap);
 			PreparationParameters fp((int)pp->type & ~NewDrawer::ptGEOMETRY, 0);
 			fp.csy = basemap->cs();
+			fp.rowSelect = pp->rowSelect;
 			fsd->prepare(&fp);
 		}
 	}

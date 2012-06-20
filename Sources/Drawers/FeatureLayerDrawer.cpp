@@ -81,6 +81,9 @@ void FeatureLayerDrawer::prepare(PreparationParameters *parms){
 				ILWIS::DrawerParameters dp(getRootDrawer(), this);
 				pdrw = createElementDrawer(parms, &dp);
 				pdrw->addDataSource(feature);
+				if ( i == 5932) {
+					TRACE(String("%d\n", i).c_str());
+				}
 				PreparationParameters fp((int)parms->type, mapDrawer->getBaseMap()->cs());
 				pdrw->prepare(&fp);
 				
