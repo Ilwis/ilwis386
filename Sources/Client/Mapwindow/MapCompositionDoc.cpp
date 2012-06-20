@@ -43,6 +43,7 @@ Created on: 2007-02-8
 #include "Client\Headers\formelementspch.h"
 #include "Client\FormElements\FldOneSelectTextOnly.h"
 #include "Engine\Base\System\RegistrySettings.h"
+#include "Engine\Base\System\Engine.h"
 #include "Client\Base\datawind.h"
 #include "Client\Base\IlwisDocument.h"
 #include "Client\MainWindow\Catalog\CatalogDocument.h"
@@ -2128,6 +2129,14 @@ void MapCompositionDoc::setViewName(const FileName& fn) {
 
 FileName MapCompositionDoc::getViewName() const{
 	return fnView;
+}
+
+void MapCompositionDoc::selectFeatures(const RowSelectInfo& inf) {
+	PreparationParameters pp(NewDrawer::ptRENDER);
+	pp.rowSelect = inf;
+	rootDrawer->prepare(&pp);
+	mpvGetView()->Invalidate();
+	
 }
 
 
