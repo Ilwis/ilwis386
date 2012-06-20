@@ -58,11 +58,12 @@ class MapPaneView;
 class StereoPair;
 class PixelInfoDoc;
 class ObjectCollection;
+struct RowSelectInfo;
 
 /////////////////////////////////////////////////////////////////////////////
 // MapCompositionDoc document
 
-class IMPEXP MapCompositionDoc : public CatalogDocument
+class _export MapCompositionDoc : public CatalogDocument
 {
 public:
 	static const CLSID clsid;
@@ -91,6 +92,7 @@ public:
 	{ return (MapCompositionSrvItem*)CatalogDocument::GetEmbeddedItem(); }
 	MapPaneView* mpvGetView() const;
 	LayerTreeView* ltvGetView() const;
+	void selectFeatures(const RowSelectInfo& inf);
 
 	BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo); 
 	void initBounds(MinMax mm);
