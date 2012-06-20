@@ -75,6 +75,7 @@ namespace ILWIS {
 		SimpleDrawer();
 		virtual ~SimpleDrawer();
 		void drawExtrusion(const Coord& c1, const Coord& c2, double z, int option) const;
+		void setTableSelection(const FileName& fn, long v,PreparationParameters* p);
 	private:
 		void init();
 	} ;

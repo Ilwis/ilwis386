@@ -148,6 +148,17 @@ void SimpleDrawer::setValid(bool yesno) {
 	valid = yesno;
 }
 
+void SimpleDrawer::setTableSelection(const FileName& fn, long v, PreparationParameters* p) {
+	setSpecialDrawingOptions(NewDrawer::sdoSELECTED,false);
+	if ( p->rowSelect.raws.size() > 0) {
+		if ( fn == p->rowSelect.fn) {
+			if ( find(p->rowSelect.raws.begin(), p->rowSelect.raws.end(), v) != p->rowSelect.raws.end()) {
+				setSpecialDrawingOptions(NewDrawer::sdoSELECTED,true);
+			}
+		}
+	}
+}
+
 
 
 
