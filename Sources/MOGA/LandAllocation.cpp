@@ -436,11 +436,7 @@ void LandAllocation::StoreChromosome(GAChromosome * chromosome, PointMapPtr * pn
 	if (chromosome != 0)
 	{
 		for (int i = 0; i < iOptimalFacilities; i++)
-		{
-			unsigned int facilityIndex = chromosome->at(i);
-			String sValue = pmFacilitiesNoAttribute->sValue(facilityIndex,0);
-			pntMapPtr->iAddVal(pmFacilities->cValue(facilityIndex), sValue);
-		}
+			pntMapPtr->iAddRaw(pmFacilities->cValue(chromosome->at(i)), i + 1); // chromosome array values are 0-based, pm->cValue() is 0-based
 	}
 
 	if (!fMultiObjective) {
@@ -458,8 +454,8 @@ void LandAllocation::StoreChromosome(GAChromosome * chromosome, PointMapPtr * pn
 		// Create Fitness Graph
 
 		CartesianGraphDoc cgd;
-		cgd.CreateNewGraph(fitnessTbl, Column(), colBestFitness, "Contineous", Color(0, 255, 0));
-		cgd.AddColumnGraph(colAvgFitness, "Contineous", Color(255, 0, 255));
+		cgd.CreateNewGraph(fitnessTbl, Column(), colBestFitness, "Continuous", Color(0, 255, 0));
+		cgd.AddColumnGraph(colAvgFitness, "Continuous", Color(255, 0, 255));
 		// Save the Fitness Graph
 		FileName fnFitnessGraph(fnFitness, ".grh", true);
 		String sFile = fnFitnessGraph.sFullPath();
@@ -510,7 +506,7 @@ void LandAllocation::StoreChromosome(GAChromosome * chromosome, PointMapPtr * pn
 		CoordBounds cbMap (pmDemands->cb());
 		cbMap += pmFacilities->cb();
 		SegmentMap segMap(fnConnections, csyDest, cbMap, dmConnections);
-		vector<int> source;
+		vector<int> source; // source and destination array values are 0-based
 		vector<int> destination;
 		vector<double> allocations;
 		ScoreFunc scoreFunc1 = (ScoreFunc)&LandAllocation::rStdDistanceFunc;
@@ -523,8 +519,8 @@ void LandAllocation::StoreChromosome(GAChromosome * chromosome, PointMapPtr * pn
 		RealBuf rbAllocations (iNrSegments);
 		for (unsigned long i = 0; i < iNrSegments; ++i)
 		{
-			lbSource[i] = source[i];
-			lbDestination[i] = destination[i];
+			lbSource[i] = source[i] + 1; // lbSource and lbDestination are 1-based (containing iRaw's)
+			lbDestination[i] = destination[i] + 1;
 			rbAllocations[i] = allocations[i];
 		}
 
@@ -542,26 +538,39 @@ void LandAllocation::StoreChromosome(GAChromosome * chromosome, PointMapPtr * pn
 
 		// Create the Attribute Table for the current chromosome's Point Map
 
-		int iNrFacilities = pmFacilities->iFeatures();
-		Table pntMapTbl = Table(FileName(pntMapPtr->fnObj, ".tbt", true), pmFacilitiesNoAttribute->dm());
+		Table pntMapTbl = Table(FileName(pntMapPtr->fnObj, ".tbt", true), pntMapPtr->dm());
+
+		Column colOriginalFeature (pntMapTbl, "FacilityID", pmFacilitiesNoAttribute->dm());
+		for (unsigned long i = 0; i < iOptimalFacilities; ++i)
+			colOriginalFeature->PutVal(i + 1, pmFacilitiesNoAttribute->sValue(chromosome->at(i), 0)); // pm->sValue() is 0-based
 
 		if (fCapacitated) {
-			RealBuf rbCapacity (iNrFacilities);
-			for (unsigned long i = 0; i < iNrFacilities; ++i)
-				rbCapacity[i] = pmFacilities->rValue(i);
+			RealBuf rbCapacity (iOptimalFacilities);
+			for (unsigned long i = 0; i < iOptimalFacilities; ++i)
+				rbCapacity[i] = pmFacilities->rValue(chromosome->at(i));
 			Column colCapacity (pntMapTbl, "Capacity", pmFacilities->dm());
 			colCapacity->PutBufVal(rbCapacity, 1);
 		}
 
-		RealBuf rbAllocationsGrouped (iNrFacilities);
-		RealBuf rbDistancesGrouped (iNrFacilities);
+		int iNrFacilities = pmFacilities->iFeatures();
+		vector<double> allocationsGrouped;
+		vector<double> distancesGrouped;
+		allocationsGrouped.resize(iNrFacilities);
+		distancesGrouped.resize(iNrFacilities);
 		for (unsigned long i = 0; i < iNrFacilities; ++i) {
-			rbAllocationsGrouped[i] = 0;
-			rbDistancesGrouped[i] = 0;
+			allocationsGrouped[i] = 0;
+			distancesGrouped[i] = 0;
 		}
 		for (unsigned long i = 0; i < iNrSegments; ++i) {
-			rbAllocationsGrouped[destination[i] - 1] += allocations[i];
-			rbDistancesGrouped[destination[i] - 1] += allocations[i] * rDistanceOD[source[i] - 1][destination[i] - 1];
+			allocationsGrouped[destination[i]] += allocations[i];
+			distancesGrouped[destination[i]] += allocations[i] * rDistanceOD[source[i]][destination[i]];
+		}
+
+		RealBuf rbAllocationsGrouped (iOptimalFacilities);
+		RealBuf rbDistancesGrouped (iOptimalFacilities);
+		for (unsigned long i = 0; i < iOptimalFacilities; ++i) {
+			rbAllocationsGrouped[i] = allocationsGrouped[chromosome->at(i)];
+			rbDistancesGrouped[i] = distancesGrouped[chromosome->at(i)];
 		}
 		Column colAllocationsGrouped (pntMapTbl, "Allocated", DomainValueRangeStruct(0, DBL_MAX, 0));
 		colAllocationsGrouped->PutBufVal(rbAllocationsGrouped, 1);
@@ -572,10 +581,8 @@ void LandAllocation::StoreChromosome(GAChromosome * chromosome, PointMapPtr * pn
 			Table tbl = pmFacilitiesNoAttribute->tblAtt();
 			Column col = tbl->col(sColFacilitiesType);
 			Column colFacilitiesType (pntMapTbl, col->sName(), col->dvrs());
-			for (unsigned long i = 0; i < iNrFacilities; ++i) {
-				long iKey = pmFacilitiesNoAttribute->iRaw(i);
-				colFacilitiesType->PutVal(iKey, col->sValue(iKey, 0));
-			}
+			for (unsigned long i = 0; i < iOptimalFacilities; ++i)
+				colFacilitiesType->PutVal(i + 1, col->sValue(chromosome->at(i) + 1, 0)); // col->sValue() and col->PutVal() are 1-based
 		}
 
 		pntMapPtr->SetAttributeTable(pntMapTbl);
@@ -623,8 +630,8 @@ long LandAllocation::AddConnections(PointMap & pmFacilities, PointMap & pmDemand
 				Allocation[selectedFacilityIndex] += allocated;
 				rDemandCount -= allocated; // The leftover demands will have to be served by another facility
 				pdUid->iAdd();
-				source.push_back(demandIndex + 1);
-				destination.push_back(selectedFacilityIndex + 1);
+				source.push_back(demandIndex);
+				destination.push_back(selectedFacilityIndex);
 				allocations.push_back(allocated);
 				CoordBuf cBuf(2);
 				ILWIS::Segment *segCur = CSEGMENT(segMap->newFeature());

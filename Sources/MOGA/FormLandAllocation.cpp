@@ -284,7 +284,7 @@ int FormLandAllocation::StoreSelectedChromosome(Event*)
 		FileName fnOut (fn, ".mpp", true);
 		fnOut.sFile += "_pareto";
 		fnOut = FileName::fnUniqueWithIndex(fnOut);
-		PointMap pntMap(fnOut, csyDest, cbMap, pmFacilitiesNoAttribute->dm());
+		PointMap pntMap(fnOut, csyDest, cbMap, Domain(fnOut, iOptimalFacilities, dmtUNIQUEID, "feature"));
 		m_la->StoreChromosome(chromosome, pntMap.ptr());
 		pntMap->SetDescription(sSelectedChromosome);
 	} else if (m_pareto.size() == 0)

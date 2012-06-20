@@ -94,7 +94,7 @@ PointMapLandAllocation::PointMapLandAllocation(const FileName& fn, PointMapPtr& 
 
 PointMapLandAllocation::PointMapLandAllocation(const FileName& fn, PointMapPtr& p, const PointMap& _pmFacilities, const PointMap& _pmFacilitiesNoAttribute, const String& _sColFacilitiesType, const PointMap& _pmDemands, const PointMap& _pmDemandsNoAttribute, const String& _sColDemandsPreference,
 							   int _iOptimalFacilities, bool _fCapacitated, int _iStoppingCriteria, long _iGenerations, int _iPopulationSize, int _iNelite, int _iNpareto, double _rMutationPercent, double _rCrossoverPercent)
-: PointMapVirtual(fn, p, _pmFacilitiesNoAttribute->cs(),_pmFacilitiesNoAttribute->cb(),_pmFacilitiesNoAttribute->dvrs())
+: PointMapVirtual(fn, p, _pmFacilitiesNoAttribute->cs(),_pmFacilitiesNoAttribute->cb(),Domain(fn, _iOptimalFacilities, dmtUNIQUEID, "feature"))
 , pmFacilities(_pmFacilities)
 , pmFacilitiesNoAttribute(_pmFacilitiesNoAttribute)
 , sColFacilitiesType(_sColFacilitiesType)
