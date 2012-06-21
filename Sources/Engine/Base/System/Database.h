@@ -11,7 +11,7 @@ namespace ILWIS {
 	typedef vector<QValue> ResultRow;
 	//typedef vector<ResultRow> QueryResults; 
 
-	class QueryResults : public vector<ResultRow> 
+	class _export QueryResults : public vector<ResultRow> 
 	{
 		public:
 			int column(const String& name);
