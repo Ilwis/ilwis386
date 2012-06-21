@@ -2947,6 +2947,9 @@ void CommandHandler::CmdSend(const String& sN) {
 	CURLEncode encode;
 	RemoteObject xmlObj(sN);
 	MemoryStruct *mem = xmlObj.get();
+	if (!mem)
+		return;
+
 	String txt;
 	for(int i = 0; i < mem->size; ++i)
 		txt += mem->memory[i];
