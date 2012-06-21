@@ -20,6 +20,7 @@ ILWIS::XMLDocument::~XMLDocument() {
 
 void ILWIS::XMLDocument::executeXPathExpression(const String& xpathexpr, vector<String>& results) const {
 	results.clear();
+	try{
 	pugi::xpath_node_set tools = select_nodes(xpathexpr.c_str());
 	for (pugi::xpath_node_set::const_iterator it = tools.begin(); it != tools.end(); ++it)
 	{
@@ -29,6 +30,11 @@ void ILWIS::XMLDocument::executeXPathExpression(const String& xpathexpr, vector<
 		String s(str.str());
 		s = s.sTrimSpaces(true);
 		results.push_back(s);
+	}
+	} catch(const pugi::xpath_exception& exc) {
+		ErrorObject obj(exc.what());
+		obj.Show();
+
 	}
 }
 
