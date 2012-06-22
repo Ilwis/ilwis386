@@ -196,6 +196,9 @@ void split(const String& in, const char delim, vector<String>& parts) {
 void Engine::loadSystemTables(const String& ilwDir) {
 
 	ifstream in(String("%SResources\\def\\datum.csv",ilwDir).c_str());
+	if (!in.is_open()) {
+		throw ErrorObject(TR(String("Cann't open datum.csv %S")).c_str(),ilwDir);
+	}
 	bool skip = true;
 	String pp("is open %d, eof %d", (int)in.is_open(), (int)in.eof());
 	while(in.is_open() && !in.eof()) {

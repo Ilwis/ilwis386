@@ -32,7 +32,7 @@ String QueryResults::get(const String& colName, int rec) {
 
 }
 //-------------------------------------------
-Database::Database(const String& _location, const String& _id) : location(_location), id(_id) {
+Database::Database(const String& _location, const String& _id) : location(_location), id(_id),valid(false) {
 }
 
 Database::~Database() {
@@ -74,7 +74,7 @@ int callback(void *retData, int noOfColumns, char **argv, char **azColName){
 }
 
 SpatialLite::SpatialLite(const String& _location, const String& _id) : Database(_location, _id) {
-	open_connection();
+	valid = open_connection();
 }
 
 bool SpatialLite::open_connection() {
