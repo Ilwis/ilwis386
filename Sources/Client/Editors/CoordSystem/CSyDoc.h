@@ -63,6 +63,7 @@ public:
 
 protected:
 	BOOL               OnOpenDocument(LPCTSTR lpszPathName, int os= 0) ;
+	BOOL               OnOpenDocument(LPCTSTR lpszPathName, ParmList& pm, int os= 0) ;
 
 private:
 	CoordSystem        csy; 

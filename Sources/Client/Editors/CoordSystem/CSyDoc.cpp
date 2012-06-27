@@ -61,6 +61,21 @@ CoordSysDoc::~CoordSysDoc()
 {
 }
 
+BOOL CoordSysDoc::OnOpenDocument(LPCTSTR lpszPathName, ParmList& pm, int os){
+  ISTRUE(fINotEqual, lpszPathName, (LPCTSTR)0);
+  ISTRUE(fINotEqual, lpszPathName[0], (char)0);
+
+	if (!IlwisDocument::OnOpenDocument(lpszPathName))
+		return FALSE;
+
+  FileName fn(lpszPathName);
+  csy = CoordSystem(fn);
+  if (!csy.fValid())
+    return FALSE;
+
+  return TRUE;
+}
+
 BOOL CoordSysDoc::OnOpenDocument(LPCTSTR lpszPathName, int os) 
 {
   ISTRUE(fINotEqual, lpszPathName, (LPCTSTR)0);
