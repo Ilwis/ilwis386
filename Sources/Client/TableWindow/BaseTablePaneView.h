@@ -96,6 +96,7 @@ public:
 	void SetScrollBars();
 	virtual bool fAllowMoveCol() const;
 	virtual void update() {}
+	virtual void updateSelection() {}
 protected:
 	int iCharWidth;
 	int iButtonWidth;  // nr of chars in the row button, to be set by derived class

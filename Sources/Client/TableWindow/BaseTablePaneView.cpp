@@ -676,8 +676,7 @@ void BaseTablePaneView::OnColButtonPressed(int)
 
 void BaseTablePaneView::OnRowButtonPressed(long)
 {
-	//  MessageBeep(MB_ICONASTERISK);
-	//  zMessage msg(this,"Not yet implemented","Row Button");
+ //IlwWinApp()->Send
 }
 
 void BaseTablePaneView::OnFieldPressed(int, long, bool)
@@ -1414,6 +1413,7 @@ void BaseTablePaneView::OnLButtonUp(UINT nFlags, CPoint point)
 	else if (fSelecting) {
 		fSelecting = false;
 	}
+	updateSelection();
 }
 
 void BaseTablePaneView::deleteField()

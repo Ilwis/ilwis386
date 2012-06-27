@@ -100,6 +100,7 @@ public:
   virtual void MoveCol(int iFrom, int iTo);
 	virtual void OnDraw(CDC* pDC);      // overridden to draw this view
 	virtual void OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint);
+	virtual void updateSelection();
 	//}}AFX_VIRTUAL
 
 // Implementation
