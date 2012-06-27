@@ -172,7 +172,7 @@ MapMovingSurface* MapMovingSurface::create(const FileName& fn, MapPtr& p, const 
 			wft = wfNOTEXACT;
 		rWeightExp = as[4 + offset].rVal();
 		rLimD = as[5 + offset].rVal();
-		offset += 3;
+		offset += 2;
 	}
 	if (rLimD == rUNDEF || rLimD < EPS10)
 		WeightFuncExprError(as[3 + offset], sWeightFnc);
