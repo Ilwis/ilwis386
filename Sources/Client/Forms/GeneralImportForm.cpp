@@ -53,6 +53,7 @@
 #include "Client\Forms\IMPRAS.H"
 #include "client\forms\ImportAsciiTableWizard.h"
 #include "Engine\Base\System\Engine.h"
+#include "Engine\Scripting\Script.h"
 #include "Client\FormElements\FieldBrowseDir.h"
 
 FieldImportPage::FieldImportPage(FormEntry *entry) :
@@ -69,7 +70,7 @@ void FieldImportPage::create()
 }
 
 GeneralImportForm::GeneralImportForm(CWnd* parent)
-		: curPage(NULL), fInitial(true), fUseAs(true), FormWithDest(parent, "Import")
+		: curPage(NULL), fInitial(true), fUseAs(false), FormWithDest(parent, "Import"), fMatch(true)
 {
 	addModules();
 	FieldGroup *fg = new FieldGroup(root);
@@ -102,9 +103,15 @@ GeneralImportForm::GeneralImportForm(CWnd* parent)
 	fsOutput->Align(pbMoreOptions, AL_UNDER);
 	fsOutput->SetWidth(100);
 	fsOutput->Hide();
+	cbMatch = new CheckBox(fg2,"Output name matches input",&fMatch);
+	cbMatch->Align(fsOutput,AL_UNDER);
+	cbMatch->SetCallBack((NotifyProc)&GeneralImportForm::similarNames);
+	cbMatch->Hide();
+
 	cb = new CheckBox(fg2,"Use as",&fUseAs);
-	cb->Align(fsOutput,AL_UNDER);
+	cb->Align(cbMatch, AL_UNDER);
 	cb->Hide();
+
 	fg2->Align(fg,AL_AFTER);
 
 	for(vector<ImportDriver>::iterator cur=drivers.begin();cur != drivers.end();++cur) {
@@ -127,6 +134,19 @@ GeneralImportForm::GeneralImportForm(CWnd* parent)
 
 	create();
 }
+
+int GeneralImportForm::similarNames(Event *ev) {
+	cbMatch->StoreData();
+	if ( fMatch) {
+		sOutput = "[Output name matches input]";
+	} else {
+		sOutput = "";
+	}
+	fsOutput->SetVal(sOutput);
+
+	return 1;
+}
+
 int GeneralImportForm::OutputSelection(Event *ev) {
 	FileName fnO = FileName(fsOutput->sVal());
 	fnO = SetExtension(fnO);
@@ -151,6 +171,8 @@ int GeneralImportForm::OutputSelection(Event *ev) {
 
 int GeneralImportForm::SetDefaultOutputName(Event *dv) {
 
+	cbMatch->StoreData();
+
 	String name = fsInput->sVal();
 	if (URL::isUrl(name)){
 		URL url(name);
@@ -159,25 +181,28 @@ int GeneralImportForm::SetDefaultOutputName(Event *dv) {
 		Split(path,parts,"/");
 		if ( path.size() > 0)
 			name = parts[parts.size() - 1];
-	} else {
+	} /*else {
 		int index = name.find_last_of(".");
 		if ( index !=  string::npos) {
 			name = name.substr(0, index);
 		}
-	}
+	}*/
 	pbMoreOptions->Hide();
 	if ( name != ""){
-		String transformedName;
-		for(int i=0; i< name.size(); ++i) {
-			char lastChar = name[i];
-			if ( lastChar == '.' || lastChar==':' || lastChar == '/' || lastChar == '\\' || lastChar ==' ' || lastChar=='-')
-				transformedName += '_';
-			else
-				transformedName += lastChar;
+		if ( fMatch == false) {
+			String transformedName;
+			for(int i=0; i< name.size(); ++i) {
+				char lastChar = name[i];
+				if ( lastChar == '.' || lastChar==':' || lastChar == '/' || lastChar == '\\' || lastChar ==' ' || lastChar=='-')
+					transformedName += '_';
+				else
+					transformedName += lastChar;
+			}
+			FileName fnO(transformedName);
+			fnO = SetExtension(FileName(fnO.sFile + fnO.sExt));
+			fsOutput->SetVal(fnO.sRelative());
 		}
-		FileName fnO(transformedName);
-		fnO = SetExtension(FileName(fnO.sFile + fnO.sExt));
-		fsOutput->SetVal(fnO.sRelative());
+
 		pbMoreOptions->SetText("Options...");
 		if ( currentFormat.ui != NULL) {
 			if ( currentFormat.buttonText != "")
@@ -186,10 +211,8 @@ int GeneralImportForm::SetDefaultOutputName(Event *dv) {
 		} else {
 			extraOptions = "";
 		}
+		cbMatch->Show();
 	}
-
-
-
 
 	return -1;
 }
@@ -351,40 +374,61 @@ int GeneralImportForm::exec() {
 	if ( currentDriver.driverName== "" || sInput == "" || sOutput == "")
 		return 0;
 
-	if ( currentDriver.driverName == "ILWIS") {
-		if ( currentFormat.method=="IlwisTable")
-				openCmd  = FileName(sOutput,".tbt").sRelativeQuoted();	
-		else if ( currentFormat.method !=  "GeneralRaster")
-			openCmd = String("import %S(%S, %S)", currentFormat.method, FileName(sInput).sFullPathQuoted(), FileName(sOutput).sFullPathQuoted());
-		else {
-			openCmd = FileName(sOutput).sRelativeQuoted();
-			String head = extraOptions.sHead("(");
-			String tail = extraOptions.sTail("(");
-			openCmd += head + "(" + sInput.sQuote() + tail;
-			getEngine()->Execute(openCmd);
-			return 0;
+	bool containsWildcards = sInput.find_first_of("*?") != -1;
+	CFileFind finder;
+	int count = 0;
+	BOOL b = finder.FindFile(sInput.c_str());
+	while(b) {
+		b = finder.FindNextFile();
+		String inFile = finder.GetFileName();
+		String outFile = sOutput;
+		if ( outFile == "[Output name matches input]") {
+			FileName fnOut(inFile);
+			outFile = SetExtension(fnOut).sRelative();
+		} else {
+			if ( containsWildcards)
+				outFile = String("%S_%d", outFile, count++);
 		}
-	} else {
-		if ( currentDriver.driverName == "ActiveX Data Objects(ADO)") {
-			openCmd = String("open %S -output=%S -method=%S", extraOptions, SetExtension(FileName(sOutput)).sFullPathQuoted(), currentFormat.method);
-			getEngine()->Execute(openCmd);
-			return 0;
-		}
-		else if ( URL::isUrl(sInput)) {
-			openCmd = String("open %S -output=%S -method=%S",sInput, SetExtension(FileName(sOutput)).sFullPathQuoted(), currentFormat.method);
-		}else {
-			if ( currentFormat.command == "")
-				openCmd = String("open %S -output=%S -method=%S",FileName(sInput).sFullPathQuoted(), SetExtension(FileName(sOutput)).sFullPathQuoted(), currentFormat.method);
+
+		if ( currentDriver.driverName == "ILWIS") {
+			if ( currentFormat.method=="IlwisTable")
+					openCmd  = FileName(outFile,".tbt").sRelativeQuoted();	
+			else if ( currentFormat.method !=  "GeneralRaster")
+				openCmd = String("import %S(%S, %S)", currentFormat.method, FileName(inFile).sFullPathQuoted(), FileName(outFile).sFullPathQuoted());
 			else {
-				openCmd = String("%S %S %S %S", currentFormat.command, currentFormat.name.sQuote(),FileName(sInput).sFullPathQuoted(),FileName(sOutput).sFullPathQuoted()); 
+				openCmd = FileName(outFile).sRelativeQuoted();
+				String head = extraOptions.sHead("(");
+				String tail = extraOptions.sTail("(");
+				openCmd += head + "(" + inFile.sQuote() + tail;
+				getEngine()->Execute(openCmd);
+				return 0;
+			}
+		} else {
+			if ( currentDriver.driverName == "ActiveX Data Objects(ADO)") {
+				openCmd = String("open %S -output=%S -method=%S", extraOptions, SetExtension(FileName(outFile)).sFullPathQuoted(), currentFormat.method);
+				getEngine()->Execute(openCmd);
+				return 0;
+			}
+			else if ( URL::isUrl(inFile)) {
+				openCmd = String("open %S -output=%S -method=%S",inFile, SetExtension(FileName(outFile)).sFullPathQuoted(), currentFormat.method);
+			}else {
+				if ( currentFormat.command == "")
+					openCmd = String("open %S -output=%S -method=%S",FileName(inFile).sFullPathQuoted(), SetExtension(FileName(outFile)).sFullPathQuoted(), currentFormat.method);
+				else {
+					openCmd = String("%S %S %S %S", currentFormat.command, currentFormat.name.sQuote(),FileName(inFile).sFullPathQuoted(),FileName(outFile).sFullPathQuoted()); 
+				}
 			}
 		}
-	}
-	openCmd += extraOptions;
-	if ( !fUseAs && currentFormat.command == "")
-		openCmd += " -import";
+		openCmd += extraOptions;
+		if ( !fUseAs && currentFormat.command == "")
+			openCmd += " -import";
+		
+		//if ( !containsWildcards)
+			getEngine()->Execute(openCmd);
+		//else
+			//Script::Exec(openCmd);
 
-	getEngine()->Execute(openCmd);
+	}
 	return 0;
 }
 

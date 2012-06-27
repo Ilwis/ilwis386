@@ -78,6 +78,7 @@ private:
 	bool fInitial;
 	String sInput,sOutput;
 	bool fUseAs;
+	bool fMatch;
 	Array<ImportItem> oldStyleImports;
 	String extraOptions;
 
@@ -85,6 +86,7 @@ private:
 	FieldString *fsOutput;
 	FieldString *fsDriverDetails;
 	CheckBox *cb;
+	CheckBox *cbMatch;
 	PushButton *pbMoreOptions;
 	String driverMessage;
 
@@ -104,6 +106,7 @@ private:
 	int SetDefaultOutputName(Event *dv);
 	int exec();
 	FileName SetExtension(const FileName& fn);
+	int similarNames(Event *ev);
 };
 
 
