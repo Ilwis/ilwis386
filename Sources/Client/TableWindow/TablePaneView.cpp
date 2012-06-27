@@ -436,6 +436,23 @@ void TablePaneView::OnRowButtonPressed(long iRow)
 	tw->ShowControlBar(tw->recBar,TRUE,FALSE);
 	vector<long> raws;
 	raws.push_back(rec.iRec());
+	//IlwWinApp()->SendUpdateTableSelection(raws, GetDocument()->obj()->fnObj);
+}
+
+void TablePaneView::updateSelection()
+{
+	TableWindow* tw = twParent();
+	if (0 == tw)
+		return;
+	vector<long> raws;
+	for(int r = mmSelect.MinRow(); r <= mmSelect.MaxRow(); ++r) {
+		long iRec = tvw()->iRec(r);
+		if (iRec > tvw()->iRecs())
+			continue;
+		Ilwis::Record rec = tvw()->rec(iRec);
+		raws.push_back(rec.iRec());
+	}
+
 	IlwWinApp()->SendUpdateTableSelection(raws, GetDocument()->obj()->fnObj);
 }
 
