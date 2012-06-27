@@ -601,8 +601,8 @@ void NavigatorTreeCtrl::handleWMSMenu(CPoint point) {
 
 URL NavigatorTreeCtrl::completeWMSUrl(const String& txt) {
 	URL u(txt);
-	if ( u.getQueryValue("VERSION") == "")
-		u.setQueryValue("VERSION","1.1.1");
+	//if ( u.getQueryValue("VERSION") == "")
+	//	u.setQueryValue("VERSION","1.1.1");
 	if (u.getQueryValue("SERVICE")=="")
 		u.setQueryValue("Service","WMS");
 	return u;
