@@ -157,17 +157,19 @@ FieldDatum::FieldDatum(FormEntry* parent, String *psName)
 void FieldDatum::create()
 {
   FieldItem::create();
-  int iSize = 16000;
-  char* sBuf = new char[iSize];
-  String sPath = getEngine()->getContext()->sIlwDir();
-  sPath &= "\\Resources\\Def\\datum.def";
-  GetPrivateProfileString("Datums", NULL, "", sBuf, iSize, sPath.c_str());
+  //int iSize = 16000;
+  //char* sBuf = new char[iSize];
+  //String sPath = getEngine()->getContext()->sIlwDir();
+  //sPath &= "\\Resources\\Def\\datum.def";
+  //GetPrivateProfileString("Datums", NULL, "", sBuf, iSize, sPath.c_str());
+	ILWIS::QueryResults results;
+
+  String query("Select distinct name from Datums");
+  getEngine()->pdb()->executeQuery(query, results);
   lbObject->AddString("Not Specified");
-  for (char* s = sBuf; *s; ++s) {
-    lbObject->AddString(s);
-    for (; *s; ++s);
+  for(int i = 0; i < results.size(); ++i) {
+	  lbObject->AddString(results.get("name", i).c_str());
   }
-  delete sBuf;
   lbObject->SelectString(-1, (*sName).c_str());
 }
 
@@ -179,32 +181,28 @@ FieldDatumArea::FieldDatumArea(FormEntry* parent, String *psName)
 
 bool FieldDatumArea::fInit(const String& sDatum)
 {
-  lbObject->ResetContent();
-  if ("" == sDatum) {
-    Hide();
-    return false;
-  }
-  int iSize = 16000;
-  char* sBuf = new char[iSize];
-  String sPath = getEngine()->getContext()->sIlwDir();
-  sPath &= "\\Resources\\Def\\datum.def";
-  if (0 != GetPrivateProfileString(sDatum.c_str(), NULL, "", sBuf, iSize, sPath.c_str())) {
-    for (char* s = sBuf; *s; ++s) {
-      lbObject->AddString(s);
-      for (; *s; ++s);
-    }
-		if ( lbObject->SelectString(-1, (*sName).c_str()) == -1)
-			lbObject->SetCurSel(0);
+	lbObject->ResetContent();
+	if ("" == sDatum) {
+		Hide();
+		return false;
+	}
+	ILWIS::QueryResults results;
+	String query("Select area from Datums where name='%S'", sDatum);
+	getEngine()->pdb()->executeQuery(query, results);
+	if ( results.size() == 0) {
+		Hide();
+		return false;
+	}
 
-    delete sBuf;
-    Show();
-    return true;
-  }
-  else { 
-    delete sBuf;
-    Hide();
-    return false;
-  }  
+	for(int i = 0; i < results.size(); ++i) {
+	  lbObject->AddString(results.get("area", i).c_str());
+	}
+
+	if ( lbObject->SelectString(-1, (*sName).c_str()) == -1)
+		lbObject->SetCurSel(0);
+
+	Show();
+	return true;
 }
 
 
