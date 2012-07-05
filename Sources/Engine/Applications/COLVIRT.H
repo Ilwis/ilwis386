@@ -54,6 +54,7 @@ class ColumnVirtual: public IlwisObjectVirtual
 friend ColumnPtr;
 friend ColumnStore;
 friend TableStore;
+friend class NewColumn;
 
 public:
     virtual void _export  Freeze();
