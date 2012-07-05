@@ -206,11 +206,10 @@ bool MapListChangeDetection::fFreezing()
 bool MapListChangeDetection::oneMapList() {
 
 	RangeReal rrList;
-	for(int i=0; i< mpl1->iSize(); ++i) {
-		RangeReal rrSampled = mpl1[0]->rrMinMaxSampled();
-		rrList += rrSampled.rHi();
-		rrList += rrSampled.rLo();
-	}
+	RangeReal rrSampled = mpl1->getRange();
+	rrList += rrSampled.rHi();
+	rrList += rrSampled.rLo();
+
 	double rStep = mpl1[0]->dvrs().rStep();
 	ValueRangeReal range(rrList.rLo() - rrList.rHi(), rrList.rHi() + rrList.rHi(),rStep);
 	DomainValueRangeStruct dvrs(Domain("value"), range);
@@ -262,11 +261,11 @@ bool MapListChangeDetection::withBaseMap() {
 
 	RangeReal rrMap = mapBaseLine->rrMinMaxSampled();
 	RangeReal rrList;
-	for(int i=0; i< mpl1->iSize(); ++i) {
-		RangeReal rrSampled = mpl1[0]->rrMinMaxSampled();
-		rrList += rrSampled.rHi();
-		rrList += rrSampled.rLo();
-	}
+	RangeReal rrSampled = mpl1->getRange();
+
+	rrList += rrSampled.rHi();
+	rrList += rrSampled.rLo();
+
 	double rStep = min(mapBaseLine->dvrs().rStep(), mpl1[0]->dvrs().rStep());
 	ValueRangeReal range(rrMap.rLo() - rrList.rHi(), rrMap.rHi() + rrList.rHi(),rStep);
 	DomainValueRangeStruct dvrs(Domain("value"), range);
@@ -315,19 +314,17 @@ bool MapListChangeDetection::withBaseMap() {
 
 bool MapListChangeDetection::twoMapLists() {
 	RangeReal rrList1;
-	for(int i=0; i< mpl1->iSize(); ++i) {
-		RangeReal rrSampled = mpl1[0]->rrMinMaxSampled();
-		rrList1 += rrSampled.rHi();
-		rrList1 += rrSampled.rLo();
-	}
+	RangeReal rrSampled = mpl1->getRange();
+	rrList1 += rrSampled.rHi();
+	rrList1 += rrSampled.rLo();
+
 	RangeReal rrList2;
-	for(int i=0; i< mpl2->iSize(); ++i) {
-		RangeReal rrSampled = mpl2[0]->rrMinMaxSampled();
-		rrList2 += rrSampled.rHi();
-		rrList2 += rrSampled.rLo();
-	}
+	rrSampled = mpl2->getRange();
+	rrList2 += rrSampled.rHi();
+	rrList2 += rrSampled.rLo();
+
 	double rStep = min(mpl2[0]->dvrs().rStep(), mpl1[0]->dvrs().rStep());
-	ValueRangeReal range(rrList1.rLo() - rrList2.rHi(), rrList1.rHi() + rrList2.rHi(),rStep);
+	ValueRangeReal range(rrList1.rLo() - rrList2.rHi(), rrList1.rHi() - rrList2.rLo(),rStep);
 	DomainValueRangeStruct dvrs(Domain("value"), range);
 	for(int i=0; i< mpl1->iSize(); ++i) {
 		FileName fn(String("delta_%S_%d.mpr",ptr.fnObj.sFile, i));

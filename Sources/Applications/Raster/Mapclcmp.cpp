@@ -76,8 +76,10 @@ const char* MapColorComp::sSyntax()
 MapColorComp* MapColorComp::create(const FileName& fn, MapPtr& p, const String& sExpr)
 {
   String sFunc = IlwisObjectPtr::sParseFunc(sExpr);
-  Array<String> as;
-  int  iParms = IlwisObjectPtr::fParseParm(sExpr, as);
+  //Array<String> as(4);
+ // int  iParms = IlwisObjectPtr::fParseParm(sExpr, as);
+   Array<String> as;
+  int  iParms = IlwisObjectPtr::iParseParm(sExpr, as);
   bool f24Bit = false;
   bool fLinear = false;
   bool fHSI = false;
