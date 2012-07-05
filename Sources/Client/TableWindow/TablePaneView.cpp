@@ -445,15 +445,17 @@ void TablePaneView::updateSelection()
 	if (0 == tw)
 		return;
 	vector<long> raws;
-	for(int r = mmSelect.MinRow(); r <= mmSelect.MaxRow(); ++r) {
-		long iRec = tvw()->iRec(r);
-		if (iRec > tvw()->iRecs())
-			continue;
-		Ilwis::Record rec = tvw()->rec(iRec);
-		raws.push_back(rec.iRec());
-	}
+	if ( !mmSelect.fUndef() ) {
+		for(int r = mmSelect.MinRow(); r <= mmSelect.MaxRow(); ++r) {
+			long iRec = tvw()->iRec(r);
+			if (iRec > tvw()->iRecs())
+				continue;
+			Ilwis::Record rec = tvw()->rec(iRec);
+			raws.push_back(rec.iRec());
+		}
 
-	IlwWinApp()->SendUpdateTableSelection(raws, GetDocument()->obj()->fnObj);
+		IlwWinApp()->SendUpdateTableSelection(raws, GetDocument()->obj()->fnObj);
+	}
 }
 
 void TablePaneView::OnColButtonPressed(int iCol)
