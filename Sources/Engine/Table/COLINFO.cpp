@@ -93,8 +93,9 @@ void ColumnInfo::Init(const ColumnInfo& colinf)
 	_index = colinf.getIndex();
 	_ct = colinf.getColumnType();
 	_valueIsShared = false;
-	//  _fDataReadOnly = colinf.fDataReadOnly();
-	//  _fPropReadOnly = colinf.fPropReadOnly();
+	_fieldSize = 0;
+	_deleted = false;
+	_newIndex = iUNDEF;
 }
 
 bool ColumnInfo::fValid() const
@@ -347,6 +348,29 @@ void ColumnInfo::sharedValue(bool yesno) {
 bool ColumnInfo::isSharedValue() const {
 	return _valueIsShared;
 }
+
+bool ColumnInfo::isDeleted() const{
+	return _deleted;
+}
+void ColumnInfo::setDeleted(bool yesno){
+	_deleted = yesno;
+}
+
+int	ColumnInfo::fieldSize() const {
+	return _fieldSize;
+}
+
+void ColumnInfo::setFieldSize(int sz){
+	_fieldSize = sz;
+}
+
+void ColumnInfo::setNewIndex(int ind){
+	_newIndex = ind;
+}
+int	ColumnInfo::getNewIndex() const{
+	return _newIndex;
+}
+
 
 
 

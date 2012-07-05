@@ -279,11 +279,11 @@ ColumnStore::ColumnStore(const Table& tbl, const String& sColName, ColumnPtr& p)
 : ptr(p), csb(0), fLoaded(false)
 {
 //  ReadElement(sSection(), "DataReadOnly", _fDataReadOnly);
-  csb = ColumnStoreBase::create(tbl, sColName, *this);
-  csb->_iOffset = tbl->iOffset();
-  csb->_iRecs = tbl->iRecs();
-	if (0 != p.dm()->pdp())
-		rpr = p.dm()->rpr();
+ // csb = ColumnStoreBase::create(tbl, sColName, *this);
+ // csb->_iOffset = tbl->iOffset();
+ // csb->_iRecs = tbl->iRecs();
+	//if (0 != p.dm()->pdp())
+	//	rpr = p.dm()->rpr();
 }
 
 ColumnStore::ColumnStore(const Table& tbl, const String& sColName, ColumnPtr& p, const DomainValueRangeStruct& dvs)
@@ -429,8 +429,10 @@ void ColumnStore::Store()
   }  
 //  ColumnPtr::Store();
 //ptr.WriteEntry("Type", "ColumnStore");
-  ptr.WriteEntry("StoreType", csb->sType());
-  ptr.WriteEntry("Stored", true);
+  if ( csb) {
+	  ptr.WriteEntry("StoreType", csb->sType());
+	  ptr.WriteEntry("Stored", true);
+  }
 //ptr.WriteEntry("NrDepObjects", 0L);
 }
 

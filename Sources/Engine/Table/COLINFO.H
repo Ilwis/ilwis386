@@ -90,6 +90,12 @@ public:
 	double					getValueOffset() const;
 	bool					isSharedValue() const;
 	void				    sharedValue(bool yesno);
+	bool					isDeleted() const;
+	void					setDeleted(bool yesno);
+	int						fieldSize() const;
+	void					setFieldSize(int sz);
+	void					setNewIndex(int ind);
+	int						getNewIndex() const;
 
 private:
     void                    Init(const ColumnInfo& colinf);
@@ -114,6 +120,9 @@ private:
 	double					_rStep;
 	double					_rValueOffset;
 	bool					_valueIsShared;
+	bool					_deleted;
+	int						_fieldSize;
+	int						_newIndex ; // this is an index in the inmemory block; only columns read from disk have such an in index; else iUNDEF
 };
 
 #endif // ILWCOLINFO_H
