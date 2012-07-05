@@ -34,205 +34,7 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/* $Log: /ILWIS 3.0/BasicDataStructures/tblstore.cpp $
- * 
- * 46    22-04-04 10:22 Willem
- * [Bug=6471]
- * Added protection to avoid access outside the boundaries of the column
- * array "ac"
- * 
- * 45    3-11-03 18:14 Retsios
- * colNew now really returns an undef column if needed (instead of an
- * invalid column that goes out of scope)
- * 
- * 44    27-05-03 9:29 Willem
- * [Bug=6430]
- * - Added: Function to store active column names and their number in the
- * ODF; this is combined in the RemoveCol function, which used to remove
- * only the [col:<name>] section of the ODF without adjusting the rest of
- * the ODF. The result after RemoveCol is a consistent ODF.
- * 
- * 43    22-04-03 15:05 Willem
- * - Added: Boolean property (member plus accessor functions) to indicate
- * that a TableStore has already been loaded from disk.
- * - Changed: Removed code that changed the number of Columns in a
- * TableStore, when reading from disk. This is not allowed, because newly
- * calculated Columns just added in memory are wrongfully deleted this
- * way.
- * - Changed: Some code cleanup
- * 
- * 42    9-01-03 16:56 Willem
- * - Changed: The readonly status of a TableStore is now determined by the
- * R/O status of an existing datafile, not by its presence
- * 
- * 41    10/30/01 8:30a Martin
- * useas file should not try to write a datafile member to the odf
- * 
- * 40    9/24/01 9:58a Martin
- * LoadBinary has become virtual. Derivatives of TableStore (e.g.
- * TableBinary) may now overrule this function and load in their own way
- * 
- * 39    8/24/01 13:03 Willem
- * Removed the SetReadOnly() function. This is now handled by
- * IlwisObjectPtr::SetReadOnly() for all ilwis objects
- * 
- * 38    9-08-01 12:19 Koolhoven
- * TableStore::Store() fUseAs() is a function, do not store the pointer
- * but the return value
- * 
- * 37    8/07/01 12:06p Martin
- * writes and read now properly the useas flag to the odf and added
- * functions for putting data in foreign objects
- * 
- * 36    16-03-01 17:55 Koolhoven
- * protected TableStore::LoadBinary() against not all columns valid
- * 
- * 35    8-03-01 2:03p Martin
- * column section is also removed if the column is deleted from the table
- * 
- * 34    5-03-01 17:10 Koolhoven
- * protected RemoveCol() against invalid columns in the array
- * 
- * 33    2-03-01 19:02 Koolhoven
- * protect RemoveCol() against invalid columns, should not be needed
- * 
- * 32    23/02/01 14:59 Willem
- * colNew() functions now only return a valid column in case the domain is
- * valid.
- * 
- * 31    12-02-01 9:22a Martin
- * made the error of tablestore somewhat more clear (i hope)
- * 
- * 30    21-12-00 14:50 Koolhoven
- * colNew() functions adapted:
- * - assert on empty name
- * -  set loaded flag on
- * 
- * 29    8-12-00 11:46 Koolhoven
- * TableStore::colNew() replaces dots with underscores to prevent illegal
- * names
- * 
- * 28    28/11/00 9:54 Willem
- * The check whether the data file of a table exists now first checks if
- * the data file name is valid.
- * 
- * 27    17/11/00 12:23 Willem
- * Added checking for the limitations for Ilwis 1.4 tables: maximum nr of
- * records and columns
- * 
- * 26    16/11/00 12:38 Willem
- * Export table to Ilwis 1.4 now trims spaces of strings and truncates the
- * strings to 20 characters
- * 
- * 25    10/11/00 11:02 Willem
- * TableStore now throws an error when the data file is not found
- * 
- * 24    2-11-00 15:08 Hendrikse
- * placed check on  fLoaded flags earlier, to prevent repeated call of
- * LoadBinary() in PutRaw() 
- * 
- * 23    11/01/00 2:00p Martin
- * removed superflous GetObjectStructure. They are all handled in the
- * relevant ilwisobject
- * 
- * 22    30-10-00 19:34 Koolhoven
- * protected LoadBinary() against invalid value (undef or zero) of iNrCols
- * 
- * 21    11-10-00 2:14p Martin
- * section prefix added when reading the actual number of columns in the
- * binary file
- * 
- * 20    5-10-00 10:43a Martin
- * tblstore will on loadtime not use the number of columns in the tableptr
- * but the number of columns that the ODF has. This may differ as
- * temporary columns may have been created
- * 
- * 19    9/26/00 11:35a Martin
- * in removecol prevented the store of the column. This will modify the
- * file. Tables should only store themselves (and their columns) when
- * explicitely told to do it.
- * 
- * 18    22/09/00 9:41 Willem
- * TableStore now checks if there are columns before traversing all
- * records.
- * 
- * 17    9/19/00 9:05a Martin
- * improved DoNoStore function for tables. It will now also protect the
- * columns
- * 
- * 16    9/18/00 9:37a Martin
- * the table loads itself (abd puts its state on loaded) only if
- * explicitly requested.
- * 
- * 15    12-09-00 9:13a Martin
- * added guards to prevent a store to ODF when not wanted
- * 
- * 14    11-09-00 10:06a Martin
- * changed the structure of ObjectStructure object to include odf entry
- * information
- * 
- * 13    8-09-00 3:21p Martin
- * added function to set the fChanged member of all the 'members of an
- * object.
- * added function to retrieve the 'structure' of an object (filenames)
- * 
- * 12    5/17/00 5:11p Wind
- * removed a very strange 'improvement' which caused that new virtual
- * tables never stored their data in a binary file
- * 
- * 11    21-02-00 4:35p Martin
- * Added a function to quickly add a whole set of values (AddValues)
- * 
- * 10    18-01-00 12:16 Wind
- * made Load and StoreBinary more efficient
- * 
- * 9     21-12-99 12:58p Martin
- * added a domain and column Coordbuf based on domain binary to be able to
- * read and store dynamically coordbufs in a table
- * 
- * 8     29-10-99 12:59 Wind
- * case sensitive stuff
- * 
- * 7     22-10-99 12:56 Wind
- * thread save access (not yet finished)
- * 
- * 6     9/29/99 5:47p Wind
- * debugged quoted column names
- * 
- * 5     9/27/99 11:13a Wind
- * changed calls to static ObjectInfo::ReadElement and WriteElement to
- * member function calls
- * 
- * 4     9/08/99 9:01a Wind
- * added support  for quoted column names
- * 
- * 3     15-03-99 10:08 Koolhoven
- * Header comments
- * 
- * 2     3/12/99 12:03p Martin
- * Case insensitive support added
-// Revision 1.8  1998/10/19 12:13:31  Wim
-// In DeleteRec() check of not to delete too much records take care of offset
-// to allow to delete the last record
-//
-// Revision 1.7  1998-10-09 13:03:21+01  Wim
-// In DeleteRec() never delete more records when there are.
-//
-// Revision 1.6  1998-09-16 18:25:30+01  Wim
-// 22beta2
-//
-// Revision 1.5  1997/09/18 17:06:34  Wim
-// Take care of special extensions for histograms
-//
-// Revision 1.4  1997-08-21 19:32:22+02  Wim
-// When adding records append all columns not only nonvirtual ones
-//
-// Revision 1.3  1997-08-14 14:38:41+02  Wim
-// Do not store in a filename which is empty
-//
-// Revision 1.2  1997-08-12 18:11:22+02  Wim
-// Do not store table during colNew()
-//
+
 /* TableStore
    Copyright Ilwis System Development ITC
    march 1995, by Wim Koolhoven
@@ -253,9 +55,14 @@
 
 static Column colUNDEF;
 
+TableStore:: TableStore() : fLoaded(false),
+fErase(false) , loaderOnly(false), ptr(*tblDummy.ptr())
+{
+}
+
 TableStore::TableStore(const FileName& fn, TablePtr& p)
 	: ac(p.iCols()), fLoaded(false),
-	ptr(p), fErase(false)
+	ptr(p), fErase(false) , loaderOnly(false)
 {
 	String sEntry, sColName;
 	int c;
@@ -300,7 +107,7 @@ TableStore::TableStore(const FileName& fn, TablePtr& p)
 }
 
 TableStore::TableStore(const FileName& fnFil, TablePtr& p, const FileName& _fnDat)
-: ac(p.iCols()), ptr(p), fErase(false), fLoaded(false)
+: ac(p.iCols()), ptr(p), fErase(false), fLoaded(false) , loaderOnly(false)
 {
 	// Jelle: next line appeared mysteriously between ssv 10 and 11, and is completely wrong:
 	//if ( _fnDat.sFullPath() == "") return; // in memory object no data files needed
@@ -324,6 +131,9 @@ TableStore::TableStore(const FileName& fnFil, TablePtr& p, const FileName& _fnDa
 
 TableStore::~TableStore()
 {
+	if ( loaderOnly)
+		return;
+
   if (ptr.fErase || fErase) {
     _unlink(ptr.fnDat.sFullName().c_str());
     ptr.WriteElement(ptr.sSection("TableStore").c_str(), (char*)0, (char*)0);
@@ -366,6 +176,7 @@ void TableStore::StoreColNames()
 
 void TableStore::Store()
 {
+
 	if (ptr.fnObj.sFile.length() == 0)  // empty file name
 		return;
 	long iOldNrCol = iCols();

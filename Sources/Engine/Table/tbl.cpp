@@ -39,6 +39,7 @@
 #include "Engine\Base\DataObjects\valrange.h"
 #include "Engine\SpatialReference\Coordsys.h"
 #include "Engine\Table\Col.h"
+#include "Engine\Base\System\MemoryManager.h"
 #include "Engine\Table\tbl.h"
 #include "Engine\Domain\dmclass.h"
 #include "Engine\Domain\Dmvalue.h"
@@ -62,6 +63,7 @@
 #include "Engine\DataExchange\ForeignFormat.h"
 #include "Engine\DataExchange\TableForeign.h"
 #include "Engine\Base\DataObjects\URL.h"
+#include "Engine\Table\TableStoreIlwis3.h"
 //#include "Client\ilwis.h"
 #include "Engine\Base\System\mutex.h"
 
@@ -398,7 +400,8 @@ void TablePtr::Load()
 	MutexFileName mut(fnObj);
 	if (0 != ReadElement(sSection("TableStore").c_str(), "Type", s)) {
 		if (fCIStrEqual("TableBinary" , s))
-			pts = new TableBinary(fnObj, *this);
+			//pts = new TableBinary(fnObj, *this);
+			pts = new TableStoreIlwis3(fnObj, *this);
 		else if (fCIStrEqual("TableTBL" , s))
 			pts = new TableTBL(fnObj, *this);
 		else if (fCIStrEqual("TableDelimited" , s))

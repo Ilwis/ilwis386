@@ -158,6 +158,7 @@ class TablePtr: public IlwisObjectPtr
   friend class TableStore;
   friend class ObjectDependency;
   friend class ColumnPtr;
+  friend class NewColumn;
 	friend class SegmentMapStore;
   friend class TableHistogramInfo;
   static TablePtr* create(const FileName&, const String&, bool& fLoadColumns);
