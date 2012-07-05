@@ -95,7 +95,7 @@ class IMPEXP ErrorMatrix : public ErrorObject {
 public:
   ErrorMatrix(int e)
    : ErrorObject(WhatErrorMatrix(e))
-   { where.SetTitle(SDATTitleMatrixError); }
+   { where.SetTitle(TR("Error Matrix")); }
 };
 
 RealMatrix::RealMatrix()
