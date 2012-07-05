@@ -163,8 +163,9 @@ long StringManager::LoadLanguageStrings(const String& sModName)
 			fn.sExt = ".eng";
 			fnLangFile = fnFindLng(fn);
 		}
-		if (fnLangFile == FileName())
-			throw LanguageStringError(String("Fatal: Language module not found"));
+		if (fnLangFile == FileName()) {
+			//throw LanguageStringError(String("Fatal: Language module not found"));
+		}
 	}
 
 	try
