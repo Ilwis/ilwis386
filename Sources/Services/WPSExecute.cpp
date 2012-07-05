@@ -200,8 +200,13 @@ String WPSExecute::makeApplicationExpression(const String& expr, const map<Strin
 			}
 			name = FileName(name).sFile;
 
+
 			expression += name;
-		} else {
+		} else if ( IOTYPE(par.value) != IlwisObject::iotANY) {
+			String sharedDir = getConfigValue("wps:ServiceContext:SharedData");
+			expression += sharedDir + "\\" + par.value;
+		}
+		else {
 			String parm = par.value;
 			if ( parm.find("geometry(") != string::npos) {
 				FileName fnout(outputname);
@@ -578,7 +583,7 @@ void WPSExecute::writeResponse() const{
 
 				if ( parm.isReference) {
 					String root = getConfigValue("wps:ServiceContext:ShareServer");
-					root += String("/output_data/process_%d/%S%S",local_folder_count, fnZip.sFile, fnZip.sExt);
+					root += String("/output_data/WPS/process_%d/%S%S",local_folder_count, fnZip.sFile, fnZip.sExt);
 					pugi::xml_node ref = doc.addNodeTo(op, "wps:Reference");
 					ref.append_attribute("href") = root.c_str();
 				}
