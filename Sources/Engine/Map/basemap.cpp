@@ -155,7 +155,7 @@ MapPtr*  BaseMap::pGetRasMap(const FileName& fn)
 BaseMapPtr::BaseMapPtr()
 : IlwisObjectPtr(), 
   rProx(rUNDEF), 
-	dvs(DomainValueRangeStruct(Domain("none"))),histogramSize(0)
+	dvs(DomainValueRangeStruct(Domain("none"))),histogramSize(0),threeDCoordinates(false)
 {
   _fAttTable = false;
   fKeepOpen = false;
@@ -222,7 +222,7 @@ BaseMapPtr* BaseMapPtr::create(const FileName& fn)
 }
 
 BaseMapPtr::BaseMapPtr(const FileName& fn, bool fCreate)
-: IlwisObjectPtr(fn, fCreate), _fAttTable(false), rProx(rUNDEF),histogramSize(0)
+: IlwisObjectPtr(fn, fCreate), _fAttTable(false), rProx(rUNDEF),histogramSize(0),threeDCoordinates(false)
 {
   if (fCreate) 
     return;
@@ -275,6 +275,7 @@ BaseMapPtr::BaseMapPtr(const FileName& fn, bool fCreate)
   }
   ReadElement("BaseMap", "ErrorMap", fnErrMap);
   ReadElement("BaseMap", "Proximity", rProx);
+  ReadElement("BaseMap", "ThreeDCoordinates", threeDCoordinates);
   if (rProx == rUNDEF)
     rProx = rProxDefault();
   fChanged = false;  // SetDomain sets it on true
@@ -283,7 +284,7 @@ BaseMapPtr::BaseMapPtr(const FileName& fn, bool fCreate)
 
 BaseMapPtr::BaseMapPtr(const FileName& fn, const CoordSystem& cs,
                        const CoordBounds& cb, const DomainValueRangeStruct& _dvs)
-: IlwisObjectPtr(fn, true, fn.sExt.c_str())
+: IlwisObjectPtr(fn, true, fn.sExt.c_str()),threeDCoordinates(false)
 {
   _csys = cs;
   cbOuter = cb;
@@ -310,6 +311,7 @@ void BaseMapPtr::Store()
     return;
   WriteElement("BaseMap", "Domain", dm());
   WriteElement("BaseMap", "Range", vr());
+  WriteElement("BaseMap", "ThreeDCoordinates", threeDCoordinates);
   WriteElement("BaseMap", "HistogramSize", histogramSize);
   if (!_fAttTable || sAttTable.length() == 0)
     WriteElement("BaseMap", "AttributeTable", (const char*)0);
@@ -804,4 +806,11 @@ Geometry *BaseMapPtr::getFeatureById(const vector<Geometry *> *geoms, const Stri
 			return (*cur);
 	}
 	return NULL;
+}
+
+bool BaseMapPtr::use3DCoordinates() const{
+	return threeDCoordinates;
+}
+void BaseMapPtr::set3DCoordinates(bool yesno){
+	threeDCoordinates = yesno;
 }

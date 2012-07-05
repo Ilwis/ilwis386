@@ -146,6 +146,8 @@ public:
 	virtual bool removeFeature(const String& id, const vector<int>& selectedCoords=vector<int>()) { return true;}
 	void  setHistrogramSize(long n);
 	long  getHistogramSize() const;
+	bool use3DCoordinates() const;
+	void set3DCoordinates(bool yesno);
 	
 protected:
      BaseMapPtr();
@@ -178,6 +180,7 @@ private:
     double rProxDefault() const;
     FileName fnErrMap;
     double rProx;
+	bool threeDCoordinates;
 };
 
 class _export BaseMap: public IlwisObject
