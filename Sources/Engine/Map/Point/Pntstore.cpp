@@ -36,6 +36,7 @@
  ***************************************************************/
 #include "Headers\toolspch.h"
 #include "Engine\Base\DataObjects\valrange.h"
+#include "Engine\Base\System\MemoryManager.h"
 #include "Engine\Map\Point\ilwPoint.h"
 #include "Engine\Map\Point\PNTSTORE.H"
 #include "Engine\Table\tblstore.h"
