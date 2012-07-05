@@ -570,8 +570,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 3,7,0,0
- PRODUCTVERSION 3,7,0,0
+ FILEVERSION 3,8,1,0
+ PRODUCTVERSION 3,8,1,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -587,13 +587,13 @@ BEGIN
         BLOCK "000004b0"
         BEGIN
             VALUE "CompanyName", "52N"
-            VALUE "FileDescription", "Ilwis37"
-            VALUE "FileVersion", "3, 7, 0, 1"
+            VALUE "FileDescription", "Ilwis38"
+            VALUE "FileVersion", "3, 8, 1, 0"
             VALUE "InternalName", "Ilwis37"
             VALUE "LegalCopyright", "Copyright © 2007 52N"
             VALUE "OriginalFilename", "Ilwis.exe"
             VALUE "ProductName", "52N Ilwis37"
-            VALUE "ProductVersion", "3, 7"
+            VALUE "ProductVersion", "3, 8, 1, 0"
         END
     END
     BLOCK "VarFileInfo"
