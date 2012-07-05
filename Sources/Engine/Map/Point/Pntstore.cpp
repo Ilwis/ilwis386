@@ -161,6 +161,7 @@ void PointMapStore::Store()
 	tbl->fUpdateCatalog = false; // was set by constructor
 	Domain dmcrd;
 	dmcrd.SetPointer(new DomainCoord(ptr.cs()->fnObj));
+	dmcrd->pdcrd()->set3D(ptr.use3DCoordinates());
 	Column colCoord = tbl->colNew("Coordinate", dmcrd, ValueRange());
 	
 	DomainValueRangeStruct dvrs = ptr.dvrs();
