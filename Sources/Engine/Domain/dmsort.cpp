@@ -849,7 +849,7 @@ void DomainSort::CalcIndex(bool fUpdateRequired)
 		colInd->PutRaw(i, iUNDEF);
 	for (i = 1; i <= iMax; ++i) {
 		long raw = iOrd(i);
-		if (raw > iUNDEF)
+		if (raw >= 0)
 			colInd->PutRaw(raw,i);
 	}
 
