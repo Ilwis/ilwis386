@@ -43,7 +43,6 @@
 #include "Engine\DataExchange\CONV.H"
 #include "Engine\Base\Algorithm\Qsort.h"
 #include "Engine\Base\System\mutex.h"
-#include "Engine\Base\DataObjects\ObjectStructure.h"
 #include "Headers\Err\Ilwisapp.err"
 #include "Headers\Hs\maplist.hs"
 #include "Headers\Hs\CONV.hs"
