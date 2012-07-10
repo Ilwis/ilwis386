@@ -93,9 +93,8 @@ void ColumnInfo::Init(const ColumnInfo& colinf)
 	_index = colinf.getIndex();
 	_ct = colinf.getColumnType();
 	_valueIsShared = false;
-	_fieldSize = 0;
-	_deleted = false;
-	_newIndex = iUNDEF;
+	//  _fDataReadOnly = colinf.fDataReadOnly();
+	//  _fPropReadOnly = colinf.fPropReadOnly();
 }
 
 bool ColumnInfo::fValid() const
@@ -121,23 +120,24 @@ DomainValueRangeStruct ColumnInfo::dvrs() const
 	return _dvrs;
 }
 
-void ColumnInfo::Read(const FileName& fnTbl, long iCol) {
+void ColumnInfo::Read(const FileName& fnTbl, long iCol, const String& prefix) {
 	String sColName;
-	if (0 == ObjectInfo::ReadElement("TableStore", String("Col%li", iCol).c_str(), fnTbl, sColName))
+	String section = prefix + "TableStore";
+	if (0 == ObjectInfo::ReadElement(section.c_str(), String("Col%li", iCol).c_str(), fnTbl, sColName))
 		return;
-	Read(fnTbl, sColName);
+	Read(fnTbl, sColName, prefix);
 }
 
-void ColumnInfo::Read(const FileName& fnTbl, const String& sColName)
+void ColumnInfo::Read(const FileName& fnTbl, const String& sColName, const String& prefix)
 {
-	String sSection("Col:%S", sColName.sQuote());
+	String sSection("%SCol:%S", prefix, sColName.sQuote());
 	String s;
 	ObjectInfo::ReadElement(sSection.c_str(), (char*)0, fnTbl, s);
 	if (s.length() == 0)
 		return;
 	_sName = sColName;
 	_fnTbl = fnTbl;
-	ObjectInfo::ReadElement("Table", "Records", _fnTbl, _iRecs);
+	ObjectInfo::ReadElement(String(prefix + "Table").c_str(), "Records", _fnTbl, _iRecs);
 	ObjectInfo::ReadElement(sSection.c_str(), "Description", _fnTbl, _sDescription);
 	_dminf = DomainInfo(fnTbl, sSection.c_str());
 	if (!_dminf.fnDom().fValid()) {
@@ -348,29 +348,6 @@ void ColumnInfo::sharedValue(bool yesno) {
 bool ColumnInfo::isSharedValue() const {
 	return _valueIsShared;
 }
-
-bool ColumnInfo::isDeleted() const{
-	return _deleted;
-}
-void ColumnInfo::setDeleted(bool yesno){
-	_deleted = yesno;
-}
-
-int	ColumnInfo::fieldSize() const {
-	return _fieldSize;
-}
-
-void ColumnInfo::setFieldSize(int sz){
-	_fieldSize = sz;
-}
-
-void ColumnInfo::setNewIndex(int ind){
-	_newIndex = ind;
-}
-int	ColumnInfo::getNewIndex() const{
-	return _newIndex;
-}
-
 
 
 

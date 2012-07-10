@@ -34,6 +34,269 @@
 
  Created on: 2007-02-8
  ***************************************************************/
+/* $Log: /ILWIS 3.0/Column/Col.cpp $
+ * 
+ * 59    22-04-04 10:17 Willem
+ * [Bug=6471]
+ * - Changed: the call to GetNewestDependentObject now needs an array.
+ * This array is used to keep track of all files that already have been
+ * checked. Because of the recursive nature of the function indefinite
+ * loops are a danger. This is now prevented by first checking the array
+ * of checked objects
+ * 
+ * 58    27-05-03 9:22 Willem
+ * [Bug=6430]
+ * - Added: new Column::pGet() function to retrieve a column already in
+ * use by a table. This makes it possible to reuse columns that are
+ * already in memory. It also prevents administrative problems when
+ * overwriting existing columns
+ * - Changed: all column constructors and fInitForConstructor functions
+ * now use the new pGet function
+ * - Remove: unused ColumnPtr::pcolfind()
+ * 
+ * 57    22-04-03 15:02 Willem
+ * - changed: Before trying to open a Column, make sure that it really is
+ * an existing Column; This prevents loading of Columns that are still in
+ * the ODF, but are not referenced anymore
+ * 
+ * 56    21-03-03 14:30 Willem
+ * - Changed: Removed inappropriate and unnecessary scVal(); In the
+ * release version this caused a crash
+ * 
+ * 55    14-03-02 11:57 Koolhoven
+ * in ColumnPtr::create() removed the !TableInfo::fExistCol() check which
+ * is superfluous and takes (for tables with many columns) a long time
+ * 
+ * 54    1-03-02 18:15 Retsios
+ * CalcMinMax now correctly takes care of columns belonging to tables with
+ * deleted records.
+ * 
+ * 53    2/22/02 10:18a Martin
+ * added new constructor (and supporting functions) to accept columns with
+ * an expression and a dvrs. Needed for changing precission in a column
+ * definition form
+ * 
+ * 52    12/06/01 9:45a Martin
+ * added try catch to catch errors fro foreign format at an appropriate
+ * place
+ * 
+ * 51    10/30/01 10:05a Martin
+ * during loading of foreigndata no data may be written back to the column
+ * 
+ * 50    17-10-01 18:37 Koolhoven
+ * in CalcMinMax() set _rStdDev on 0 when we would get the sqrt from a
+ * negative number
+ * 
+ * 49    8/09/01 11:52 Hendrikse
+ * corrected PutLongInForeign etc in PutRaw() and PutVal() (3 X)
+ * 
+ * 48    8/07/01 2:25p Martin
+ * added putting data in foreign files to the column  put functions
+ * 
+ * 47    5/04/01 11:26 Willem
+ * - In fInitForConstructor(): Before adding the new column, first load
+ * the original table. This is needed to avoid column number mismatch
+ * between the table in memory and on disk
+ * - Removed comments and unused code
+ * 
+ * 46    15-03-01 8:40a Martin
+ * back to the original unclear situation were value drop out if they fall
+ * outside a recalculated column valluerange. Seems to be intended (??)
+ * 
+ * 45    8-03-01 2:02p Martin
+ * the char * name of a table is first put into a FileName to parse it
+ * correctly (in initforcounstructor)
+ * 
+ * 44    6-03-01 2:21p Martin
+ * misplaced bracket caused columns with the same name to beadded as new
+ * columns
+ * 
+ * 43    1-03-01 12:31p Martin
+ * added quoting for tables with names like 'I am a table.tab'.tbt
+ * 
+ * 42    12-02-01 4:04p Martin
+ * misunderstood why independent columns could not be deleted if they are
+ * tabelowned. It will now give an error if such a thing is tried
+ * 
+ * 41    16-01-01 10:24a Martin
+ * recalculated independent columns are fully recalculated again to
+ * prevent problems with valuerange that do not fit in the original column
+ * 
+ * 40    16-01-01 8:43a Martin
+ * wrong solution to the tableref problem when loading tables. Removed,
+ * must be locally solved
+ * 
+ * 39    15-01-01 2:14p Martin
+ * iRef is for the owning table is increased as the owning table may
+ * not(!!) leave until the column leaves. Else loading will go wrong
+ * 
+ * 38    21-12-00 10:10a Martin
+ * added the pGetVirtualObject() function to access the virtual object
+ * embedded in the object. 
+ * 
+ * 37    18-12-00 11:47a Martin
+ * the -quiet parm was passed onto the splitColumnAndTable functions. It
+ * did not understand this. Any extra parms are split off on that level
+ * 
+ * 36    21-11-00 10:03a Martin
+ * GetObjectDependencies and GetObjectStructure implemented for columns
+ * 
+ * 35    17-11-00 15:27 Koolhoven
+ * made Column::fInitForConstructor() a little bit more readable
+ * 
+ * 34    11/02/00 10:10a Martin
+ * changed the oldgetobjectstructure to a new form (old was from weeks
+ * back)
+ * 
+ * 33    5-10-00 1:02p Martin
+ * LoadData before a column is saved Saving unloaded tables is not a good
+ * idea.
+ * 
+ * 32    9/19/00 9:08a Martin
+ * removed superflous store protection. Is now arranged at a higher level
+ * 
+ * 31    9/18/00 9:38a Martin
+ * function to check the load state of a column and the to set it
+ * 
+ * 30    12-09-00 9:13a Martin
+ * added guards to prevent a store to ODF when not wanted
+ * 
+ * 29    11-09-00 10:12a Martin
+ * changed the objectstructure function
+ * 
+ * 28    8-09-00 3:31p Martin
+ * added function for fChanged correctly setting and for retrieving
+ * ObjectStructure
+ * 
+ * 27    18/08/00 11:43 Willem
+ * - The dmFromStrings() function now does not add sUNDEF to the domain
+ * anymore
+ * - removed a lot of commented code
+ * 
+ * 26    8/15/00 5:17p Wind
+ * quotes in SplitTableAndColumn
+ * 
+ * 25    7/11/00 1:01p Wind
+ * added function to check for unique values in column (used in
+ * JoinWizard)
+ * 
+ * 24    16-06-00 20:50 Koolhoven
+ * removed const qualifier in function pcBuf()
+ * 
+ * 23    13-06-00 3:42p Martin
+ * added init of three vars (_rSum etc)
+ * 
+ * 22    4/05/00 3:51p Wind
+ * bug when deleting records for virtual column
+ * 
+ * 21    3/21/00 2:47p Wind
+ * new implementation of dmFromStrings()
+ * 
+ * 20    3/21/00 12:32p Wind
+ * minmax for booelan columns
+ * 
+ * 19    15-03-00 16:49 Wind
+ * min max for bool column
+ * set sum to undefined if all records undefined
+ * 
+ * 18    13-03-00 15:17 Wind
+ * added mean, stddev and sum per column for display in tablewindow
+ * statistics pane
+ * 
+ * 17    1-03-00 10:50 Wind
+ * tried to improve dmFromStrings(), but it crashes; code is between
+ * comments
+ * 
+ * 16    15-02-00 16:12 Wind
+ * check for cyclic definition when changing expression
+ * 
+ * 15    15-02-00 11:20 Wind
+ * wrong error message 'column not found'
+ * 
+ * 14    14-02-00 16:12 Wind
+ * solved bug 682
+ * 
+ * 13    17-01-00 8:14a Martin
+ * columns check now if they exist including their prefix
+ * 
+ * 12    10-01-00 8:28a Martin
+ * GetValue(... CoordBuf..) now return thr number of records actually used
+ * 
+ * 11    21-12-99 12:58p Martin
+ * added a domain and column Coordbuf based on domain binary to be able to
+ * read and store dynamically coordbufs in a table
+ * 
+ * 10    7-12-99 11:22 Wind
+ * added/improved locks
+ * 
+ * 9     18-11-99 11:02a Martin
+ * Added missed function name  from 2.23 port
+ * 
+ * 8     29-10-99 12:57 Wind
+ * case sensitive stuff 
+ * thread safe stuff
+ * 
+ * 7     25-10-99 13:14 Wind
+ * making thread save (2); not yet finished
+ * 
+ * 6     22-10-99 12:56 Wind
+ * thread save access (not yet finished)
+ * 
+ * 5     9/29/99 10:04a Wind
+ * added case insensitive string comparison
+ * 
+ * 4     9/27/99 11:18a Wind
+ * changed calls to static funcs ObjectInfo::ReadElement and WriteElement
+ * to member function calls
+ * 
+ * 3     9/08/99 10:13a Wind
+ * adpated for quoted column  names
+ * 
+ * 2     3/11/99 12:15p Martin
+ * Added support for Case insesitive 
+// Revision 1.13  1998/09/16 17:22:46  Wim
+// 22beta2
+//
+// Revision 1.12  1997/09/27 13:20:26  Wim
+// ColumnPtr::fConvertTo() if dependent column set and recalculate.
+//
+// Revision 1.11  1997-09-26 19:38:08+02  Wim
+// Simplified dmFromStrings()
+//
+// Revision 1.10  1997-09-11 20:40:41+02  Wim
+// Allow to break dependencies even when source objects are gone
+//
+// Revision 1.9  1997-08-28 11:42:00+02  Wim
+// SetValueRange() also unfreezes pcv now just like SetDomainValueRangeStruct
+//
+// Revision 1.8  1997-08-25 11:15:26+02  Wim
+// PutBufVal(LongBuf ...) was calling pcs->PutBufRaw()
+//
+// Revision 1.7  1997-08-21 14:43:44+02  Wim
+// sExpression() now gets expression of column, not of table
+//
+// Revision 1.6  1997-08-14 14:38:41+02  Wim
+// Do not store in a filename which is empty
+//
+// Revision 1.5  1997-08-13 08:56:09+02  Wim
+// SetDomainValueRangeStruct better check on same dm
+//
+// Revision 1.4  1997-08-11 11:21:31+02  martin
+// The InitForConstructor function is now a boolean function. In some cases the function does all
+// the work. In that cases any code outside the function must know that no further processing is needed
+// ( e.g Aggregate to another table). The function returns a boolean to indicate this.
+//
+// Revision 1.3  1997/08/06 16:59:26  Wim
+// Additional Info load and store implemented
+//
+// Revision 1.2  1997-08-01 13:56:10+02  Wim
+// pcs and pcv were never destructed
+//
+/* Column, ColumnPtr
+   Copyright Ilwis System Development ITC
+   march 1995, by Wim Koolhoven
+	Last change:  WK    1 Jul 98   10:03 am
+*/
 #define COL_C
 
 #pragma warning( disable : 4786 )
@@ -53,7 +316,6 @@
 #include "Engine\Scripting\Script.h"
 #include "Engine\Base\Tokbase.h"
 #include "Engine\Base\DataObjects\ObjectStructure.h"
-#include "Engine\Table\NewColumn.h"
 #include "Headers\Hs\tbl.hs"
 #include "Headers\Hs\map.hs"
 
@@ -418,7 +680,7 @@ ColumnPtr* ColumnPtr::create(const Table& tbl, const String& sColName)
 	Column col = tbl->col(sColName);
 	if (col.fValid())
 		return col.ptr();
-	return new NewColumn(tbl, sColName);
+	return new ColumnPtr(tbl, sColName);
 }
 
 ColumnPtr* ColumnPtr::create(const Table& tbl, const String& sColName,
@@ -596,7 +858,6 @@ ColumnPtr::ColumnPtr(const Table& t, const String& sColName, const DomainValueRa
 : IlwisObjectPtr(t->fnObj), pcs(0), pcv(0),
   sNam(sColName), dvs(_dvs),fLoadingForeignData(false)
 {
-	t->fChanged = true;
   _rStdDev = _rMean = _rSum = rUNDEF;
   sSectionPrefix = t->sSectionPrefix;
   SetDescription("");

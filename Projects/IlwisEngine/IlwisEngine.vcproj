@@ -416,11 +416,11 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\Sources\Engine\Table\NewColumn.cpp"
+					RelativePath="..\..\Sources\Engine\Table\NewTableStore.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\Sources\Engine\Table\NewColumn.h"
+					RelativePath="..\..\Sources\Engine\Table\NewTableStore.h"
 					>
 				</File>
 				<File

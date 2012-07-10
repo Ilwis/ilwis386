@@ -74,46 +74,46 @@ public:
 	virtual String       sType() const;
 	long                 iOffset() const 
 	                           { return _iOffset; }
-	virtual long                 iRecs() const 
+	long                 iRecs() const 
 	                           { return _iRecs; }
 	const Domain&        dm() const 
 	                           { return dvs.dm(); }
 	const Domain&        dmKey() const 
 	                           { return _dmKey; }
-	virtual long _export         iRaw(long iKey) const;
-	virtual long _export         iValue(long iKey) const;
-	virtual double _export       rValue(long iKey) const;
-	virtual String _export       sValue(long iKey, short iWidth=-1, short iDec=-1) const;
-	virtual Coord _export        cValue(long iKey) const;
-	virtual CoordinateSequence  _export         *iGetValue(long iRec, bool fResize = false) const;
-	virtual void _export         GetBufRaw(ByteBuf&, long iKey=0, long iNr=0) const;
-	virtual void _export         GetBufRaw(IntBuf& , long iKey=0, long iNr=0) const;
-	virtual void _export         GetBufRaw(LongBuf&, long iKey=0, long iNr=0) const;
-	virtual void _export         GetBufVal(LongBuf&, long iKey=0, long iNr=0) const;
-	virtual void _export         GetBufVal(RealBuf&, long iKey=0, long iNr=0) const;
-	virtual void _export         GetBufVal(StringBuf&, long iKey=0, long iNr=0, short iWid=0, short iDec=-1) const;
-	virtual void _export         GetBufVal(CoordBuf&, long iKey, long iNr) const;
-	virtual void _export         PutRaw(long iKey, long iRaw);
-	virtual void _export         PutVal(long iKey, long iVal);
-	virtual void _export         PutVal(long iKey, double rVal);
-	virtual void _export         PutVal(long iKey, const Coord& cVal);
-	virtual void _export         PutVal(long iKey, const String& sVal);
-	virtual void _export         PutVal(long iKey, const CoordBuf& crdBuf, long iSz);
-	virtual void _export         PutBufRaw(const ByteBuf&, long iKey=0, long iNr=0);
-	virtual void _export         PutBufRaw(const IntBuf& , long iKey=0, long iNr=0);
-	virtual void _export         PutBufRaw(const LongBuf&, long iKey=0, long iNr=0);
-	virtual void _export         PutBufVal(const LongBuf&, long iKey=0, long iNr=0);
-	virtual void _export         PutBufVal(const RealBuf&, long iKey=0, long iNr=0);
-	virtual void _export         PutBufVal(const StringBuf&, long iKey=0, long iNr=0);
-	virtual void _export         PutBufVal(const CoordBuf&, long iKey, long iNr);
-	virtual void _export         DeleteRec(long iStartRec, long iRecs = 1);
-	virtual void _export         AppendRec(long iRecs = 1);
-	virtual void _export         Fill();
+	long _export         iRaw(long iKey) const;
+	long _export         iValue(long iKey) const;
+	double _export       rValue(long iKey) const;
+	String _export       sValue(long iKey, short iWidth=-1, short iDec=-1) const;
+	Coord _export        cValue(long iKey) const;
+	CoordinateSequence  _export         *iGetValue(long iRec, bool fResize = false) const;
+	void _export         GetBufRaw(ByteBuf&, long iKey=0, long iNr=0) const;
+	void _export         GetBufRaw(IntBuf& , long iKey=0, long iNr=0) const;
+	void _export         GetBufRaw(LongBuf&, long iKey=0, long iNr=0) const;
+	void _export         GetBufVal(LongBuf&, long iKey=0, long iNr=0) const;
+	void _export         GetBufVal(RealBuf&, long iKey=0, long iNr=0) const;
+	void _export         GetBufVal(StringBuf&, long iKey=0, long iNr=0, short iWid=0, short iDec=-1) const;
+	void _export         GetBufVal(CoordBuf&, long iKey, long iNr) const;
+	void _export         PutRaw(long iKey, long iRaw);
+	void _export         PutVal(long iKey, long iVal);
+	void _export         PutVal(long iKey, double rVal);
+	void _export         PutVal(long iKey, const Coord& cVal);
+	void _export         PutVal(long iKey, const String& sVal);
+	void _export         PutVal(long iKey, const CoordBuf& crdBuf, long iSz);
+	void _export         PutBufRaw(const ByteBuf&, long iKey=0, long iNr=0);
+	void _export         PutBufRaw(const IntBuf& , long iKey=0, long iNr=0);
+	void _export         PutBufRaw(const LongBuf&, long iKey=0, long iNr=0);
+	void _export         PutBufVal(const LongBuf&, long iKey=0, long iNr=0);
+	void _export         PutBufVal(const RealBuf&, long iKey=0, long iNr=0);
+	void _export         PutBufVal(const StringBuf&, long iKey=0, long iNr=0);
+	void _export         PutBufVal(const CoordBuf&, long iKey, long iNr);
+	void _export         DeleteRec(long iStartRec, long iRecs = 1);
+	void _export         AppendRec(long iRecs = 1);
+	void _export         Fill();
 	void                 SetMinMax(const RangeInt& ri);
 	void _export         SetMinMax(const RangeReal& rr);
 	void                 StoreTime(); // stores object time in obj def. file section for column
-	virtual void _export         GetVal(long iKey, BinMemBlock&) const;
-	virtual void _export         PutVal(long iKey, const BinMemBlock&);
+	void _export         GetVal(long iKey, BinMemBlock&) const;
+	void _export         PutVal(long iKey, const BinMemBlock&);
 	void _export         CalcMinMax();
 	void _export Replace(const String& sExpression);
 	void _export         BreakDependency(); // only keeps calculated result, if nothing has been calculated it calculates first
@@ -205,6 +205,8 @@ protected:
 	bool                 _fOwnedByTable;
 	DomainValueRangeStruct  dvs;
 	double               _rMean, _rStdDev, _rSum;
+
+private:
 	static ColumnPtr*      create(const Table& tbl, const String& sColName);
 	static ColumnPtr*      create(const Table& tbl, const String& sColName,
 	                           const String& sExpression, const DomainValueRangeStruct& dvs);

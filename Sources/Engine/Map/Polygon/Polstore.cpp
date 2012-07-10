@@ -39,7 +39,6 @@
 #include "Engine\Map\Polygon\POLSTORE.H"
 #include "Engine\Map\Polygon\POL14.H"
 #include "Engine\Map\Feature.h"
-#include "Engine\Base\System\MemoryManager.h"
 #include "Engine\Map\Segment\SEGSTORE.H"
 #include "Engine\Table\Col.h"
 #include "Engine\Domain\dmsort.h"

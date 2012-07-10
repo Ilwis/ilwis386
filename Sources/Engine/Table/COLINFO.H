@@ -56,8 +56,8 @@ public:
      ColumnInfo(const ColumnInfo& colinf);
 
     void             operator = (const ColumnInfo& colinf);
-    void             Read(const FileName& fnTbl, const String& sColName);
-	void			 Read(const FileName& fnTbl, long col);
+    void             Read(const FileName& fnTbl, const String& sColName, const String& prefix="");
+	void			 Read(const FileName& fnTbl, long col, const String& prefix="");
     bool             fValid() const;
     Domain           dm() const; // opens domain
     DomainValueRangeStruct   dvrs() const; // opens domain

@@ -659,6 +659,7 @@ void TableView::RemoveCol(short iCol)
   _iCols -= 1;
   Updated();
   tbl->Updated();
+  tbl->Store(); // to force writing of info in object definition file
 }
 
 long TableView::iRow(const String& sVal) const

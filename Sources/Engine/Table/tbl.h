@@ -158,7 +158,6 @@ class TablePtr: public IlwisObjectPtr
   friend class TableStore;
   friend class ObjectDependency;
   friend class ColumnPtr;
-  friend class NewColumn;
 	friend class SegmentMapStore;
   friend class TableHistogramInfo;
   static TablePtr* create(const FileName&, const String&, bool& fLoadColumns);
@@ -243,7 +242,8 @@ class TablePtr: public IlwisObjectPtr
 	void _export PutLongInForeign(const String& sCol, long iRec, long iV);	
 	void _export PutRealInForeign(const String& sCol, long iRec, double rV);		
 	void _export PutBoolInForeign(const String& sCol, long iRec, bool fV);			
-	void _export PutCoordInForeign(const String& sCol, long iRec, Coord cV);			
+	void _export PutCoordInForeign(const String& sCol, long iRec, Coord cV);
+	void sharedValue(int column, bool yesno);
 protected:
   int _iCols;
   long _iOffset;

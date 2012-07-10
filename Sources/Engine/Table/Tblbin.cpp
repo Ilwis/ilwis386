@@ -52,8 +52,7 @@
 TableBinary::TableBinary(const FileName& fn, TablePtr& p)
 : TableStore(fn, p)
 {
-	if ( fn.fValid())
-		LoadBinary(); // contents should be moved to here!
+  LoadBinary(); // contents should be moved to here!
 }
 
 TableBinary::TableBinary(const FileName& fnFil, TablePtr& p,

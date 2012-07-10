@@ -37,7 +37,6 @@
 #include "Engine\Map\Segment\SEGSTORE.H"
 #include "Engine\Map\Segment\SEG14.H"
 #include "Engine\Table\Col.h"
-#include "Engine\Base\System\MemoryManager.h"
 #include "Engine\Domain\dmcoord.h"
 #include "Engine\Domain\dmcoordbuf.h"
 #include "Engine\Domain\dmsort.h"
