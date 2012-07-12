@@ -21,13 +21,16 @@ SharedDataHandler::SharedDataHandler(struct mg_connection *c, const struct mg_re
 	config.add(ilwisServer->getConfiguration(context));
 	String uri(request->uri);
 	isOutput = uri.find("output_data/") != string::npos;
+	service = getValue("service");
+	if ( service != sUNDEF)
+		config.add(service);
 }
 
 #define MAX_IN_BUF  1000000
 
 void SharedDataHandler::writeResponse() const{
 
-	String path = isOutput ? getConfigValue("WPS:ServiceContext:LocalRoot") : getConfigValue("WPS:ServiceContext:SharedData");
+	String path = isOutput ? getConfigValue(service + ":ServiceContext:LocalRoot") : getConfigValue(service + ":ServiceContext:SharedData");
 	String uri(request_info->uri);
 	int index = uri.find("/process_");
 	String name;

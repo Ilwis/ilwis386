@@ -9,6 +9,7 @@ namespace ILWIS{
 		bool needsResponse() const;
 	private:
 		bool isOutput;
+		String service;
 
 	};
 }

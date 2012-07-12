@@ -32,6 +32,12 @@ FileName ServiceConfiguration::add(const String& dir, const String& name) {
 			readConfigFile(configFn);
 		}
 		return configFn;
+	} else {
+		String ilwDir = getEngine()->getContext()->sIlwDir();		
+		String rest = get(String("%S:configuration",dir));
+		if ( rest != sUNDEF) {
+			add(FileName(ilwDir + rest));
+		}
 	}
 	return FileName();
 }
@@ -57,6 +63,12 @@ void ServiceConfiguration::readConfigFile(FileName fnC) {
 					key = key.sTrimSpaces();
 					String value = line.sTail("=");
 					value = value.sTrimSpaces();
+					if ( value.find("[") != -1) {
+						String otherconfig = value.sHead("[");
+						ServiceConfiguration cfgOther("Services", otherconfig);
+						String otherKey = value.sTail("[").sHead("]");
+						value = cfgOther.get(otherKey);
+					}
 					key = prefix + ":" + key;
 					key.toLower();
 					config[key] = value;
