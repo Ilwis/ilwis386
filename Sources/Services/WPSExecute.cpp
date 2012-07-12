@@ -583,7 +583,7 @@ void WPSExecute::writeResponse() const{
 
 				if ( parm.isReference) {
 					String root = getConfigValue("wps:ServiceContext:ShareServer");
-					root += String("/output_data/WPS/process_%d/%S%S",local_folder_count, fnZip.sFile, fnZip.sExt);
+					root += String("/output_data/process_%d/%S%S?service=wps",local_folder_count, fnZip.sFile, fnZip.sExt);
 					pugi::xml_node ref = doc.addNodeTo(op, "wps:Reference");
 					ref.append_attribute("href") = root.c_str();
 				}

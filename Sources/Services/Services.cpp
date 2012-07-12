@@ -14,6 +14,7 @@
 #include "UpdateService.h"
 #include "WMSGetCapabilities.h"
 #include "WMSGetMap.h"
+#include "IlwisCatalogHandler.h"
 
 ServiceInfoVec* serviceInfo() {
 
@@ -25,6 +26,7 @@ ServiceInfoVec* serviceInfo() {
 	infos->push_back( new ServiceInfo("ilwisupdate","", ILWIS::UpdateService::createHandler));
 	infos->push_back( new ServiceInfo("wms","getcapabilities", ILWIS::WMSGetCapabilities::createHandler));
 	infos->push_back( new ServiceInfo("wms","getmap", ILWIS::WMSGetMap::createHandler));
+	infos->push_back( new ServiceInfo("ilwis","catalog", ILWIS::IlwisCatalogHandler::createHandler));
 
 	return infos;
 
