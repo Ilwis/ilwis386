@@ -601,11 +601,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\amesd.ico"
+				RelativePath="..\..\Sources\Client\Resources\amesd.ico"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Client\Resources\amesd.ico"
+				RelativePath=".\amesd.ico"
 				>
 			</File>
 			<File
@@ -3481,6 +3481,14 @@
 				</File>
 				<File
 					RelativePath="..\..\Sources\Client\FormElements\odlb&amp;cb.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Client\FormElements\RemoteLister.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Client\FormElements\RemoteLister.h"
 					>
 				</File>
 				<File

@@ -88,7 +88,7 @@ public:
   ObjectLister(NameEdit* nameedit=0): ne(nameedit) {}
   virtual ~ObjectLister() {}
   void FillDir();
-  virtual bool fOK(const FileName&, const String& sExtra="")=0;
+  virtual bool fOK(const FileName&, const String& sExtra="") { return false;}
   virtual void AddObjects()=0;
 	virtual String sFileExt();
 	virtual String sDefaultSelectedValue(const FileName& fn);
