@@ -7,20 +7,23 @@
 #include "Engine\Base\DataObjects\XMLDocument.h"
 #include "Client\FormElements\FieldListView.h"
 #include "client\formelements\objlist.h"
+#include "Client\FormElements\RemoteLister.h"
 #include "Client\Forms\WPSClient.h"
 #include "Engine\Base\System\Engine.h"
 #include "Engine\Base\File\Zipper.h"
 #include "Engine\Base\DataObjects\Downloader.h"
 #include "Client\FormElements\DatFileLister.h"
+#include "Engine\Base\System\RegistrySettings.h"
 #include "Client\ilwis.h"
 #include "Headers\constant.h"
 
 bool ParameterInfo::filetype() {
-	return  type == "rastermap" || type == "polygonmap" || 
+	bool result =  type == "rastermap" || type == "polygonmap" || 
 			type == "pointmap" || type == "segmentmap" ||
 			type == "georeference" || type == "maplist" ||
 			type == "table" || type == "domain" || 
-			type == "sampleset" || type == "matrix";
+			type == "sampleset" || type == "matrix" || type == "image/ilwisraster";
+	return result;
 }
 
 bool ParameterInfo::stringtype() {
@@ -52,9 +55,15 @@ WPSClient::WPSClient(const String& url) :
 	boolField(0),
 	choiceValue(-1),
 	operationVariant(iUNDEF),
-	fShow(true)
+	fShow(true),
+	remoteCatalog(false)
+
 {
 	getEngine()->Execute("startserver");
+
+	IlwisSettings settings("IlwisWPS");
+	urlString = settings.sValue("GetCapabilities");
+	urlCatalog = settings.sValue("RemoteCatalog");
 
 	FieldGroup *fg0 = new FieldGroup(root);
 	fldUrl = new FieldString(fg0,TR("WPS server"),&urlString);
@@ -62,6 +71,11 @@ WPSClient::WPSClient(const String& url) :
 	PushButton *fldSend = new PushButton(fg0,TR("Send"), (NotifyProc) &WPSClient::fetchGetCapabilities);
 	fldSend->Align(fldUrl, AL_AFTER);
 	fldSend->SetHeight(fldUrl->psn->iHeight);
+	cbCatalog = new CheckBox(fg0, TR("Use remote Catalog"), &remoteCatalog);
+	cbCatalog->Align(fldUrl, AL_UNDER);
+	fldCatalog = new FieldString(cbCatalog,"",&urlCatalog);
+	fldCatalog->SetWidth(200);
+	fldCatalog->Align(cbCatalog, AL_AFTER);
 	fg0->SetIndependentPos();
 	FieldGroup *fg1 = new FieldGroup(root);
 	FieldGroup *fg2 = new FieldGroup(fg1);
@@ -100,21 +114,26 @@ WPSClient::WPSClient(const String& url) :
 	fldParmInfo->SetWidth(160);
 	fldParmInfo->SetHeight(20); 
 	
-	fldFileParam = new FieldDataType(fg3,TR("DummyXXXXXXXXXXXXX"),&stringField,new ObjectExtensionLister(0,".mpr"),true);
+	fldFileParam = new FieldDataType(fg3,TR("Local files"),&stringField,new ObjectExtensionLister(0,".mpr"),true);
 	fldFileParam->SetIndependentPos();
 	fldFileParam->SetCallBack((NotifyProc)&WPSClient::parmChange);
+
+	fldRemoteParam = new FieldOneSelectString(fg3,TR("Remote files"),&remoteIndex,remoteFiles);
+	fldRemoteParam->Align(fldParmInfo, AL_UNDER);
+	fldRemoteParam->SetIndependentPos();
+	fldRemoteParam->SetCallBack((NotifyProc)&WPSClient::parmChange);
 	
-	fldNumericParam = new FieldReal(fg3, TR("DummyXXXXXXXXXXXXXX"), &number); 
+	fldNumericParam = new FieldReal(fg3, TR("Numeric value"), &number); 
 	fldNumericParam->Align(fldParmInfo, AL_UNDER);
 	fldNumericParam->SetIndependentPos();
 	
-	fldStringParam = new FieldString(fg3, TR("DummyXXXXXXXXXXXXXX"), &stringField); 
+	fldStringParam = new FieldString(fg3, TR("String value"), &stringField); 
 	fldStringParam->Align(fldParmInfo, AL_UNDER);
 	fldStringParam->SetWidth(90);
 	fldStringParam->SetIndependentPos();
 	fldStringParam->SetCallBack((NotifyProc)&WPSClient::stringChange);
 	
-	rg = new RadioGroup(fg3,TR("DummyXXXXXXXXXXXXXX"),&boolField,true);
+	rg = new RadioGroup(fg3,TR("Boolean choice"),&boolField,true);
 	new RadioButton(rg,TR("True"));
 	new RadioButton(rg,TR("False"));
 	rg->Align(fldParmInfo, AL_UNDER);
@@ -158,6 +177,12 @@ WPSClient::WPSClient(const String& url) :
 
 	fg5->Align(fg3, AL_AFTER,-100);
 	create();
+}
+
+WPSClient::~WPSClient() {
+	IlwisSettings settings("IlwisWPS");
+	settings.SetValue("GetCapabilities",urlString);
+	settings.SetValue("RemoteCatalog", urlCatalog);
 }
 
 int WPSClient::showXMLFormCap(Event *ev) {
@@ -227,10 +252,19 @@ int WPSClient::execute(Event *ev) {
 
 		ParameterInfo pi = parameterValues[operationVariant][i];
 		if ( pi.filetype()) {
-			ILWIS::Zipper zipper(pi.value);
-			FileName fnZip(pi.value, ".zip");
-			zipper.zip(fnZip);
-			url += String("%S=@xlink:href=%S/wps:shared_data/%S", pi.id, server, fnZip.sFile + fnZip.sExt);
+			if ( remoteCatalog) {
+				long index = fldRemoteParam->iVal();
+				if ( index == -1)
+					throw ErrorObject(TR("No input file selected"));
+				String file = remoteFiles[index];
+				url += String("%S=%S", pi.id, file);
+
+			} else {
+				ILWIS::Zipper zipper(pi.value);
+				FileName fnZip(pi.value, ".zip");
+				zipper.zip(fnZip);
+				url += String("%S=@xlink:href=%S/wps:shared_data/%S", pi.id, server, fnZip.sFile + fnZip.sExt);
+			}
 			
 		} else {
 				url += String("%S=%S", pi.id, pi.value);
@@ -243,11 +277,13 @@ int WPSClient::execute(Event *ev) {
 	xmlExecute = xmlObj.toString();
 	ILWIS::XMLDocument doc(xmlExecute);
 	vector<pugi::xml_node> results;
-	doc.executeXPathExpression("//wps:ProcessOutputs/wps:Output/wps:Reference[@xlink:href]", results);
+	doc.executeXPathExpression("//wps:ProcessOutputs/wps:Output/wps:Reference", results);
 	if ( results.size() > 0) {
 		String url = results[0].first_attribute().value() ;
 		int index = url.find_last_of("/");
 		String file = getEngine()->sGetCurDir() + url.substr(index + 1);
+		if ( file.find("?") != string::npos)
+			file = file.sHead("?");
 		Downloader dl(url);
 		dl.download(getEngine()->sGetCurDir());
 		ILWIS::Zipper zip;
@@ -327,8 +363,21 @@ int WPSClient::parameterSelection(Event *ev) {
 		if ( pi.filetype()) {
 			activeParameterField = fldFileParam;
 			stringField = pi.value;
-			fldFileParam->SetVal(stringField);
-			fldFileParam->SetObjLister(new DatFileLister(pi.ext));
+			cbCatalog->StoreData();
+			if ( !remoteCatalog) {
+				fldFileParam->SetVal(stringField);
+				fldFileParam->SetObjLister(new DatFileLister(pi.ext));
+			}
+			else {
+				fldCatalog->StoreData();
+				remoteFiles.clear();
+				String url = urlCatalog + "?request=catalog&service=ilwis&version=1.0&filter=raster&catalog=";
+				RemoteLister rm(url);
+				rm.getFiles(remoteFiles);
+
+				fldRemoteParam->resetContent(remoteFiles);
+				activeParameterField = fldRemoteParam;
+			}
 		} else if ( pi.numerictype()) {
 				activeParameterField = fldNumericParam;
 				number = pi.value.rVal();
@@ -385,7 +434,7 @@ int WPSClient::fetchDescribeProcess(Event *ev) {
 		xmlDescribeProcess = txt;
 		ILWIS::XMLDocument doc(xmlDescribeProcess);
 		vector<String> results;
-		doc.executeXPathExpression("//wps:ProcessDescriptions//wps:ProcessDescription/ows:Abstract/child::text()", results);
+		doc.executeXPathExpression("//wps:ProcessDescriptions//ProcessDescription/ows:Abstract/child::text()", results);
 		if ( results.size() > 0) {
 			fldDescr->SetVal(results[0]);
 		}
@@ -417,6 +466,7 @@ int WPSClient::fetchDescribeProcess(Event *ev) {
 	fldNumericParam->Hide();
 	fldStringParam->Hide();
 	fldChoices->Hide();
+	fldRemoteParam->Hide();
 	rg->Hide();
 	fillListView();
 	return 1;
@@ -425,7 +475,7 @@ int WPSClient::fetchDescribeProcess(Event *ev) {
 void WPSClient::parseParameters(const ILWIS::XMLDocument& doc) {
 	vector<pugi::xml_node> resultNodes;
 
-	doc.executeXPathExpression("//wps:ProcessDescriptions//wps:ProcessDescription/wps:DataInputs", resultNodes);
+	doc.executeXPathExpression("//wps:ProcessDescriptions//ProcessDescription/DataInputs", resultNodes);
 	if ( resultNodes.size() == 0) // expression without input parameters
 		return;
 	list<ExpressionToken> tokens;
@@ -462,6 +512,8 @@ void WPSClient::makeParameterLists(list<ExpressionToken>& tokens, int index) {
 
 void WPSClient::parseSimpleParameter(const ILWIS::XMLDocument& doc, const pugi::xml_node& node, list<ExpressionToken>& tokens) {
 	ParameterInfo pi = parseInputNode(doc, node);
+	if ( pi.name == "")
+		return;
 	ExpressionToken ep;
 	ep.pi = pi;
 	tokens.push_back(ep);
@@ -471,7 +523,7 @@ void WPSClient::parseParameter(const ILWIS::XMLDocument& doc, const pugi::xml_no
 
 	for(pugi::xml_node child = node.first_child(); child; child = child.next_sibling()) {
 		String childName(child.name());
-		if ( childName == "wps:Input") {
+		if ( childName == "Input") {
 			String minOcc = child.attribute("minOcc").value();
 			String maxOcc = child.attribute("maxOcc").value();
 			parseSimpleParameter(doc, child, tokens);
@@ -518,13 +570,13 @@ ParameterInfo WPSClient::parseInputNode(const ILWIS::XMLDocument& doc, const pug
 			name = child.first_child().value();
 		if ( childName == "ows:Abstract")
 			info = child.first_child().value();
-		if ( childName == "ows:LiteralData") {
+		if ( childName == "LiteralData") {
 			pugi::xml_node litNode = child.first_child();
 			String nodeName = litNode.name();
 			if ( nodeName == "ows:DataType") {
 				pugi::xml_node grandChild = litNode.first_child();
 				type = grandChild.value();
-			} else if ( nodeName == "wps:LiteralValueChoice") {
+			} else if ( nodeName == "LiteralValueChoice") {
 				pugi::xml_node n0 = child.first_child();
 				for(pugi::xml_node n1 = n0.first_child(); n1 ; n1 = n1.next_sibling()) {
 					String n1Name = n1.name();
@@ -542,6 +594,21 @@ ParameterInfo WPSClient::parseInputNode(const ILWIS::XMLDocument& doc, const pug
 			}
 			icon += getTypeIcon(type);
 		}
+		if ( childName == "ComplexData") {
+			pugi::xml_node compNode = child.first_child();
+			String name = compNode.name();
+			if (  name == "Default") {
+				pugi::xml_node formatNode = compNode.first_child();
+				name = formatNode.name();
+				if ( name == "Format") {
+					pugi::xml_node vnode = formatNode.first_child();
+					name = vnode.child_value();
+					type = String(name);
+					icon += getTypeIcon(type);
+
+				}
+			}
+		}
 	}
 	if ( id != "" && type != "") {
 		ParameterInfo pi(id, name, type, icon);
@@ -554,15 +621,15 @@ ParameterInfo WPSClient::parseInputNode(const ILWIS::XMLDocument& doc, const pug
 }
 
 String WPSClient::getTypeIcon(const String& type) {
-	if ( type == "rastermap")
+	if ( type == "rastermap" || type == "image/ilwisraster")
 		return ".mpr";
-	if ( type == "segmentmap")
+	if ( type == "segmentmap" || type == "image/ilwisline")
 		return ".mps";
-	if ( type == "polygonmap")
+	if ( type == "polygonmap" || type == "image/ilwispolygon")
 		return ".mpa";
-	if ( type == "pointmap")
+	if ( type == "pointmap" || type == "image/ilwispoint")
 		return ".mpp";
-	if ( type == "table")
+	if ( type == "table" || type == "image/ilwistype")
 		return ".tbt";
 	if ( type == "column")
 		return ".col";

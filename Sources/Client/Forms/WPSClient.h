@@ -34,9 +34,11 @@ struct ExpressionToken {
 class WPSClient  : public FormBaseDialog {
 public:
 	WPSClient(const String& url="");
+	~WPSClient();
 
 private:
 	FieldString *fldUrl;
+	FieldString *fldCatalog;
 	FieldStringList *fldOperations;
 	FieldListView *fldParameters;
 	FieldStringMulti *fldDescr;
@@ -48,6 +50,8 @@ private:
 	FieldOneSelectString *fldChoices;
 	FieldOneSelectString *fldVariants;
 	FieldStringMulti *fldParmInfo;
+	FieldOneSelectString *fldRemoteParam;
+	CheckBox *cbCatalog;
 	RadioGroup *rg;
 	CheckBox *cbShow;
 	String urlString;
@@ -55,6 +59,7 @@ private:
 	String description;
 	String describeProcessURL;
 	String executeProcessURL;
+	String urlCatalog;
 	vector<String> content;
 	int operationIndex;
 	int currentParmIndex;
@@ -65,6 +70,9 @@ private:
 	long operationVariant;
 	long choiceValue;
 	bool fShow;
+	bool remoteCatalog;
+	long remoteIndex;
+	vector<String> remoteFiles;
 	String parmDescr;
 	vector<String> currentChoices;
 	vector< vector<ParameterInfo> > parameterValues;
