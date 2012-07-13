@@ -34,7 +34,7 @@ void executehttpcommand(const String& cmd) {
 		AfxBeginThread(IlwisServer::executeInThread, _cmd);	
 	}
 	while(server==0 ) {
-		::OutputDebugString(".");
+		//::OutputDebugString(".");
 	}
 	::OutputDebugString("\n");
 	server->start(_cmd);
