@@ -428,6 +428,8 @@ int WPSClient::fetchDescribeProcess(Event *ev) {
 		txtDescribeRequest = url;
 		RemoteObject xmlObj(url);
 		MemoryStruct *mem = xmlObj.get();
+		if ( mem == 0)
+			return 1;
 		String txt;
 		for(int i = 0; i < mem->size; ++i)
 			txt += mem->memory[i];
