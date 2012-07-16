@@ -57,19 +57,21 @@ String IlwisCatalogHandler::makeExtensionList(const String& ext) {
 	for(int i = 0; i < parts.size(); ++i) {
 		if ( i > 0)
 			result += ",";
-		if( parts[i] == "raster")
+		if( parts[i] == "rastermap" || parts[i] == "image/ilwisraster")
 			result += "*.mpr";
-		if( parts[i] == "polygon")
+		if( parts[i] == "maplist" || parts[i] == "image/ilwismaplist")
+			result += "*.mpl";
+		if( parts[i] == "polygonmap" || parts[i] == "image/ilwispolygon")
 			result += "*.mpa";
-		if( parts[i] == "segment")
+		if( parts[i] == "segmentmap" || parts[i] == "image/ilwisline")
 			result += "*.mps";
-		if( parts[i] == "point")
+		if( parts[i] == "pointmap" || parts[i] == "image/ilwispoint")
 			result += "*.mpp";
 		if( parts[i] == "coordinatesystem")
 			result += "*.csy";
 		if( parts[i] == "georef")
 			result += "*.grf";
-		if( parts[i] == "table")
+		if( parts[i] == "table" || parts[i] == "binary/ilwistable")
 			result += "*.tbl";
 		if( parts[i] == "domain")
 			result += "*.dom";
