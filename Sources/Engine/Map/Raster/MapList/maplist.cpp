@@ -317,9 +317,11 @@ MapListPtr* MapListPtr::create(const FileName& fn, const String& sExpression)
 		return new MapListPtr(fn, sExpression);
 	else
 	{
-		fnMpl.Dir(fn.sPath());
-		if (fnMpl.sPath().length() == 0)
-			fnMpl.Dir(getEngine()->sGetCurDir());
+		if ( (sExpression.find("/") == -1 && sExpression.find("\\") == -1)) {
+			fnMpl.Dir(fn.sPath());
+			if (fnMpl.sPath().length() == 0)
+				fnMpl.Dir(getEngine()->sGetCurDir());
+		}
 		fnMpl.sExt = ".mpl";
 
 		return MapListPtr::create(fnMpl);
