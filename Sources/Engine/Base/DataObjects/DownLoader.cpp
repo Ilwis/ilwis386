@@ -33,8 +33,9 @@ FileName Downloader::download(const String& executionDir) {
 	int index = url.sVal().find_last_of("/");
 	if ( index == string::npos) 
 		return FileName();
-
 	String name = url.sVal().substr(index+1);
+	if ( name.find("?") != string::npos)
+		name = name.sHead("?");
 
 	trq.SetTitle("Downloading: " + name);
 	trq.SetText("Receiving data");
