@@ -177,7 +177,7 @@ void PointMapStore::Store()
 		if (!point)
 			continue;
      	const Coordinate *c =  point->getCoordinate();
-		Coord crd(c->x,c->y);
+		Coord crd(*c);
 		colCoord->PutVal(i+1,crd);
 		if (ptr.dvrs().fRawAvailable() ) {
 			long v = point->iValue();

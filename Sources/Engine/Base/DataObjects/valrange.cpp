@@ -1267,7 +1267,7 @@ bool DomainValueRangeStruct::fRawAvailable() const
 	if (!dm().fValid())
 		return false;
 
-	return (st() != stREAL) && (st() != stSTRING) && (st() != stCRD) && (st() != stBINARY) && (st() != stCOORDBUF);
+	return (st() != stREAL) && (st() != stSTRING) && (st() != stCRD) && (st() != stCRD3D) && (st() != stBINARY) && (st() != stCOORDBUF) ;
 }
 
 bool DomainValueRangeStruct::fRawIsValue() const

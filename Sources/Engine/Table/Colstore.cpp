@@ -160,6 +160,7 @@ ColumnStoreBase* ColumnStoreBase::create(long iRecs, long iOffset, ColumnStore& 
       pcs = new ColumnBinary(iRecs, iOffset, p, true);
       break;
     case stCRD:
+	case stCRD3D:
       pcs = new ColumnCoord(iRecs, iOffset, p, true);
       break;
     case stCOORDBUF:

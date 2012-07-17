@@ -1244,9 +1244,9 @@ StoreType Domain::st(const String& sStoreType)
     return stREAL;
   if (sStoreType == "coord")
     return stCRD;
-  if (sStoreType == "coord3D")
+  if (sStoreType == "coord3d")
     return stCRD3D;
-  if (sStoreType == "coordbuf3D")
+  if (sStoreType == "coordbuf3d")
     return stCOORDBUF3D;
   if (sStoreType == "coordbuf")
     return stCOORDBUF;

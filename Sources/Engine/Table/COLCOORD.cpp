@@ -61,7 +61,7 @@ ColumnCoord::~ColumnCoord()
 
 String ColumnCoord::sType() const
 {
-  return "Coord";
+	return domCrd->f3D() ? "Coord3D" :  "Coord";
 }
 
 Coord ColumnCoord::cValue(long iKey) const
