@@ -148,7 +148,7 @@ public:
 	long  getHistogramSize() const;
 	bool use3DCoordinates() const;
 	void set3DCoordinates(bool yesno);
-	
+	virtual RangeReal getZRange(bool force=false) ;	
 protected:
      BaseMapPtr();
      BaseMapPtr(const FileName&, bool fCreate);
@@ -169,6 +169,7 @@ protected:
     CoordBounds          cbOuter;
     DomainValueRangeStruct      dvs;
 	long histogramSize;
+	RangeReal zCoordinateRange;
 	
 private:
     static BaseMapPtr* create(const FileName&);

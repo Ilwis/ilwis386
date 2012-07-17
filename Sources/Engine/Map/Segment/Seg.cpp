@@ -947,3 +947,21 @@ vector<Feature *> SegmentMapPtr::getFeatures(const CoordBounds& cb, bool complet
 	return vector<Feature *>();
 
 }
+
+RangeReal SegmentMapPtr::getZRange(bool force)  {
+	if ( force || (use3DCoordinates() && !zCoordinateRange.fValid())) {
+		for(int i = 0; i < iFeatures(); ++i) {
+			geos::geom::Geometry *seg = getFeature(i);
+			if (!seg)
+				continue;
+			geos::geom::CoordinateSequence *seq = seg->getCoordinates();
+			for(int i = 0; i < seq->size(); ++i) {
+				Coord c = seq->getAt(i);
+				if ( c.z != rUNDEF)
+					zCoordinateRange += c.z;
+			}
+			delete seq;
+		}
+	}
+	return zCoordinateRange;
+}

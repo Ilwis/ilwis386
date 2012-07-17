@@ -183,6 +183,7 @@ public:
 	void  DoNotUpdate();	
 	 IlwisObjectVirtual *pGetVirtualObject() const;
      vector<Feature *> getFeatures(const CoordBounds& cb, bool complete=true) const;
+	 virtual RangeReal getZRange(bool force=false) ;	
 	
 protected:
 	PolygonMapPtr(const FileName&, bool fCreate=false);

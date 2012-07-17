@@ -333,9 +333,7 @@ Coord PointMapStore::cValue(long iRec) const
 {
 	if ( iRec  < geometries->size() && geometries->at(iRec) != NULL)	{
 		ILWIS::Point *pnt = (ILWIS::Point *)geometries->at(iRec);
-		const CoordinateSequence *p = pnt->getCoordinates();
-		Coord c(p->getX(0),p->getY(0));
-		delete p;
+		Coord c = *(pnt->getCoordinate());
 		return c;
 	}
 	return Coord();

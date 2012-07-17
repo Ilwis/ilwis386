@@ -129,6 +129,7 @@ public:
 	bool removeFeature(const String& id, const vector<int>& selectedCoords=vector<int>());
 	Geometry *getFeatureById(const String& id) const;
 	vector<Feature *> getFeatures(const CoordBounds& cb, bool complete=true) const;
+	RangeReal getZRange(bool force=false) ;
 private:  
 	void OpenPointMapVirtual(); // load PointMapVirtual and set member pmv
 	PointMapStore* pms;

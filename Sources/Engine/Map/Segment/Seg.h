@@ -177,6 +177,7 @@ public:
 	bool            fSatisfyCondition(const ILWIS::Segment& seg) const;
 	
 	void     SetAlfa(const CoordBounds& cb);
+	virtual RangeReal getZRange(bool force=false) ;	
 	
 	//long            iNode(Coord) const; //3.0
 	//Coord    crdNode(Coord) const; // 3.0

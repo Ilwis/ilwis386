@@ -864,3 +864,29 @@ vector<Feature *> PolygonMapPtr::getFeatures(const CoordBounds& cb, bool complet
 	return vector<Feature *>();
 
 }
+
+RangeReal PolygonMapPtr::getZRange(bool force) {
+	if ( force || (use3DCoordinates() && !zCoordinateRange.fValid())) {
+		for(int i = 0; i < iFeatures(); ++i) {
+			ILWIS::Polygon *pol = (ILWIS::Polygon *)getFeature(i);
+			if (!pol)
+				continue;
+			vector<CoordinateSequence*> boundaries;
+			pol->getBoundaries(boundaries);
+			for(int b = 0; b < boundaries.size(); ++i) {
+				CoordinateSequence *bound = boundaries[b];
+				if (!bound)
+					continue;
+				for(int i = 0; i < bound->size(); ++i) {
+					Coord c = bound->getAt(i);
+					if ( c.z != rUNDEF)
+						zCoordinateRange += c.z;
+				}
+				delete bound; // can be discarded now
+				boundaries[b] = 0;
+			}
+		}
+	}
+	return zCoordinateRange;
+}
+

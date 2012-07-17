@@ -874,3 +874,14 @@ vector<Feature *> PointMapPtr::getFeatures(const CoordBounds& cb, bool complete)
 	return vector<Feature *>();
 
 }
+
+RangeReal PointMapPtr::getZRange(bool force) {
+	if ( force || (use3DCoordinates() && !zCoordinateRange.fValid())) {
+		for(int i = 0; i < iFeatures(); ++i){
+			Coord c = cValue(i);
+			if ( !c.fUndef() && c.z != rUNDEF)
+				zCoordinateRange += c.z;
+		}
+	}
+	return zCoordinateRange;
+}

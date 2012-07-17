@@ -814,3 +814,7 @@ bool BaseMapPtr::use3DCoordinates() const{
 void BaseMapPtr::set3DCoordinates(bool yesno){
 	threeDCoordinates = yesno;
 }
+
+RangeReal BaseMapPtr::getZRange(bool force) {
+	return zCoordinateRange;
+}
