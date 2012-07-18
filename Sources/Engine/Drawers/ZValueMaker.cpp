@@ -25,7 +25,13 @@ void ZValueMaker::setDataSourceMap(const BaseMap& mp){
 	datasourcemap = mp;
 	addRange(mp);
 	table = Table();
+
 	type = IlwisObject::iotObjectType(datasourcemap->fnObj);
+	if ( mp->use3DCoordinates()){
+		sourceType = styZCoord;
+		range = mp->getZRange();
+	}
+
 	if ( sourceType == styNONE) // first set the source type before being able to make changes here
 		sourceType = spatialsourcemap == datasourcemap ? stySELF : styMAP;
 	offset = 0;
@@ -165,6 +171,10 @@ double ZValueMaker::getValue(const Coord& crd, Feature *f ){
 		//else
 		//	value = datasourcemap->dvrs().rValue(f->rValue());
 	}
+	if (sourceType == styZCoord && f && type != IlwisObject::iotRASMAP) {
+			value =  crd.z;
+	}
+
 	if (sourceType == stySELF && type == IlwisObject::iotRASMAP){
 		value = spatialsourcemap->rValue(crd);
 	}
