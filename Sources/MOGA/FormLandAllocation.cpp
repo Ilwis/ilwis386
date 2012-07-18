@@ -75,6 +75,8 @@ FormLandAllocation::FormLandAllocation(CWnd* mw, const char* sPar)
 	fsSelectedChromosome->Align(pbCalculatePareto, AL_UNDER);
 	pbStoreSelectedChromosome = new PushButton(fgRight, TR("Store Selected Chromosome"), (NotifyProc)&FormLandAllocation::StoreSelectedChromosome);
 	pbStoreSelectedChromosome->Align(fsSelectedChromosome, AL_UNDER);
+	pbStoreParetoAsTable = new PushButton(fgRight, TR("Store Pareto in Table"), (NotifyProc)&FormLandAllocation::StoreParetoAsTable);
+	pbStoreParetoAsTable->Align(pbStoreSelectedChromosome, AL_UNDER);
 
 	initPointMapOut(false);
 	fmc->Align(frCrossover, AL_UNDER);
@@ -196,6 +198,7 @@ int FormLandAllocation::GenerateParetoGraph(Event*)
 	root->StoreData();
 	pbCalculatePareto->Disable();
 	pbStoreSelectedChromosome->Disable();
+	pbStoreParetoAsTable->Disable();
 	AfxBeginThread(GenerateParetoGraphInThread, this);
 	return 0;
 }
@@ -249,6 +252,7 @@ UINT FormLandAllocation::GenerateParetoGraphInThread(LPVOID pParam)
 
 	pObject->pbCalculatePareto->Enable();
 	pObject->pbStoreSelectedChromosome->Enable();
+	pObject->pbStoreParetoAsTable->Enable();
 	return 0;
 }
 
@@ -258,7 +262,7 @@ int FormLandAllocation::CallBackAnchorChangedInGraph(Event*)
 		int index = m_function->iGetAnchorNr();
 		if (index >= 0 && index < m_pareto.size()) {
 			GAChromosome * chromosome = &m_pareto[index];
-			sSelectedChromosome = String("%d: F=%.03f d=%.03f p=%.03f w1=%.03f w2=%.03f", index+1, chromosome->rGetFitness(), chromosome->rGetPartialScore1(), chromosome->rGetPartialScore2(), chromosome->w1(), chromosome->w2());
+			sSelectedChromosome = String("%d: F=%.03f f1=%.03f f2=%.03f w1=%.03f w2=%.03f", index+1, chromosome->rGetFitness(), chromosome->rGetPartialScore1(), chromosome->rGetPartialScore2(), chromosome->w1(), chromosome->w2());
 			fsSelectedChromosome->SetVal(sSelectedChromosome);
 		} else {
 			sSelectedChromosome = "No chromosome selected";
@@ -292,6 +296,19 @@ int FormLandAllocation::StoreSelectedChromosome(Event*)
 	else
 		MessageBox("Please select a chromosome to store");
 
+	return 0;
+}
+
+int FormLandAllocation::StoreParetoAsTable(Event*)
+{
+	if (m_pareto.size() > 0) {
+		FileName fn(sOutMap);
+		FileName fnOut(fn, ".tbt", true);
+		fnOut.sFile += "_ParetoTable";
+		fnOut = FileName::fnUnique(fnOut);
+		m_la->StoreParetoInTable(m_pareto, fnOut);
+	} else
+		MessageBox("Please calculate pareto first");
 	return 0;
 }
 

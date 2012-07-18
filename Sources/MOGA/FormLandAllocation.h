@@ -20,6 +20,7 @@ private:
   int AdjustEliteCallBack(Event*);
   int GenerateParetoGraph(Event*);
   int StoreSelectedChromosome(Event*);
+  int StoreParetoAsTable(Event*);
   int CallBackAnchorChangedInGraph(Event*);
   static UINT GenerateParetoGraphInThread(LPVOID pParam);
   RadioGroup * rgMethod;
@@ -38,6 +39,7 @@ private:
   FieldGraph * fgFunctionGraph;
   PushButton* pbCalculatePareto;
   PushButton* pbStoreSelectedChromosome;
+  PushButton* pbStoreParetoAsTable;
   String sSelectedChromosome;
   FieldString* fsSelectedChromosome;
   int exec();

@@ -18,6 +18,7 @@ public:
   void Initializer(GAChromosome & chromosome);
   void CrossOver(GAChromosome & Dad, GAChromosome & Mum, GAChromosome & child1, GAChromosome & child2);
   void StoreChromosome (GAChromosome * chromosome, PointMapPtr * pntMapPtr);
+  void StoreParetoInTable(std::vector<GAChromosome> & pareto, FileName & fnParetoTable);
 
 private:
   void Init();

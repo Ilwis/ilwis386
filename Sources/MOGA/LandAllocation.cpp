@@ -431,6 +431,40 @@ void LandAllocation::GreedyCrossOver(GAChromosome & Dad, GAChromosome & Mum, GAC
 	assert(child.size() == length);
 }
 
+void LandAllocation::StoreParetoInTable(std::vector<GAChromosome> & pareto, FileName & fnParetoTable)
+{
+	Domain paretoDom (FileName(fnParetoTable, ".dom", true), pareto.size(), dmtUNIQUEID);
+	Table paretoTbl (fnParetoTable, paretoDom);
+	Column colFacilities (paretoTbl, "Facilities", Domain("String"));
+	Column colF (paretoTbl, "F", DomainValueRangeStruct(0, 1, 0));
+	Column colF1 (paretoTbl, "f1", DomainValueRangeStruct(0, 1, 0));
+	Column colF2 (paretoTbl, "f2", DomainValueRangeStruct(0, 1, 0));
+	Column colW1 (paretoTbl, "w1", DomainValueRangeStruct(0, 1, 0));
+	Column colW2 (paretoTbl, "w2", DomainValueRangeStruct(0, 1, 0));
+
+	int prefixSize = 0;
+	if (pmFacilitiesNoAttribute->dm().fValid()) {
+		DomainSort * pds = pmFacilitiesNoAttribute->dm()->pdsrt();
+		if (pds) {
+			String sPrefix = pds->sGetPrefix();
+			prefixSize = sPrefix.size() + 1;
+		}
+	}
+
+	for (int i = 0; i < pareto.size(); ++i) {
+		GAChromosome chromosome = pareto[i];
+		String sFacilities = pmFacilitiesNoAttribute->sValue(chromosome[0], 0).substr(prefixSize);
+		for (int j = 1; j < iOptimalFacilities; ++j)
+			sFacilities = sFacilities + "," + pmFacilitiesNoAttribute->sValue(chromosome[j], 0).substr(prefixSize);
+		colFacilities->PutVal(i + 1, sFacilities);
+		colF->PutVal(i + 1, chromosome.rGetFitness());
+		colF1->PutVal(i + 1, chromosome.rGetPartialScore1());
+		colF2->PutVal(i + 1, chromosome.rGetPartialScore2());
+		colW1->PutVal(i + 1, chromosome.w1());
+		colW2->PutVal(i + 1, chromosome.w2());
+	}
+}
+
 void LandAllocation::StoreChromosome(GAChromosome * chromosome, PointMapPtr * pntMapPtr)
 {	
 	if (chromosome != 0)
