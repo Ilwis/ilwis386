@@ -460,6 +460,8 @@ void GDALFormat::LoadMethods() {
 				funcs.getDriverShortName = (GDALGetDriverShortNameFunc)GetProcAddress(hm,"_GDALGetDriverShortName@4");
 				funcs.getMetaDataItem = (GDALGetMetadataItemFunc)GetProcAddress(hm,"_GDALGetMetadataItem@12");
 
+				funcs.errorMsg = (CPLGetLastErrorFunc)GetProcAddress(hm, "_CPLGetLastErrorMsg@0");
+
 				funcs.ogrOpen = (OGROpenFunc)GetProcAddress(hm,"OGROpen");
 				funcs.ogrRegAll = (OGRRegisterAllFunc)GetProcAddress(hm,"OGRRegisterAll");
 				funcs.ogrGetDriverCount = (OGRGetDriverCountFunc)GetProcAddress(hm,"OGRGetDriverCount");
@@ -533,8 +535,13 @@ void GDALFormat::Init()
 		delete trq;
 		trq = 0;
 	}
-	else
-		throw ErrorObject(TR("File format is not recognized by GDAL"));
+	else {
+		const char *txt = funcs.errorMsg();
+		if ( txt) {
+			throw ErrorObject(String(txt));
+		}else
+			throw ErrorObject(TR("File format is not recognized by GDAL"));
+	}
 }
 
 struct GGThreadData
@@ -1066,6 +1073,8 @@ void GDALFormat::GetGeoRef(GeoRef& grf)
 	else
 	{
 		grf = GeoRef(rcSize);
+		CoordSystem cs = GetCoordSystem();
+		grf->SetCoordSystem(cs);
 	}
 	grf->Store();
 	//AddedFiles.insert(grf->fnObj.sFullPathQuoted());
@@ -1913,9 +1922,6 @@ void PolygonFiller::fillPolygon(int count, int rec, OGRGeometryH hGeometry) {
 	ILWIS::Polygon *p = 0;
 	bool first = true;
 	for(int i =0; i < count; ++i) {
-		if ( i == 44) {
-			TRACE("Stop\n");
-		}
 		OGRGeometryH hSubGeometry = funcs.ogrGetSubGeometry(hGeometry, i);
 		if ( hSubGeometry) {
 			LinearRing *ring = getRing(hSubGeometry);
@@ -1946,12 +1952,12 @@ LinearRing *PolygonFiller::getRing(OGRGeometryH hSubGeometry) {
 		if ( hGeom == 0)
 			return 0;
 		count = funcs.ogrGetNumberOfPoints(hGeom);
-		OGRGeometryH hGeom2 = funcs.ogrGetSubGeometry(hGeom, 0);
-		if ( hGeom2) {
-			int count2 = funcs.ogrGetNumberOfPoints(hGeom2);
-			++count;
+		//OGRGeometryH hGeom2 = funcs.ogrGetSubGeometry(hGeom, 0);
+		//if ( hGeom2) {
+		//	int count2 = funcs.ogrGetNumberOfPoints(hGeom2);
+		//	++count;
 
-		}
+		//}
 	}
 	if ( count == 0)
 		return  0;

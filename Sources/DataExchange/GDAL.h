@@ -68,6 +68,8 @@ typedef const char* (__stdcall *GDALGetDriverLongNameFunc)(GDALDriverH dr);
 typedef const char* (__stdcall *GDALGetDriverShortNameFunc)(GDALDriverH dr);
 typedef const char* (__stdcall *GDALGetMetadataItemFunc)(GDALMajorObjectH hObject, const char *pszName, const char *pszDomain); 
 
+typedef const char* (__stdcall *CPLGetLastErrorFunc)(void);
+
 typedef  OGRDataSourceH (*OGROpenFunc)(const char *, int, OGRSFDriverH *);
 typedef void (__stdcall *OGRRegisterAllFunc)();
 typedef int (*OGRGetDriverCountFunc)();
@@ -133,6 +135,8 @@ struct GDALCFunctions {
 	GDALGetMetadataItemFunc getMetaDataItem;
 	OSRSetWellKnownGeogCSFunc fromCode;
 	OSRImportFromEPSGFunc fromEPSG;
+
+	CPLGetLastErrorFunc errorMsg;
 
 	//ogr
 	OGROpenFunc ogrOpen;
