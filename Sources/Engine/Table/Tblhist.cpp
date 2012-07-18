@@ -253,6 +253,11 @@ TableHistogramInfo::TableHistogramInfo(const Map& mp, bool fIgnZero)
 void TableHistogramInfo::operator=(const TableHistogramInfo& inf)
 {
   his = inf.his;
+  rMean = inf.rMean;
+  rMedian = inf.rMedian;
+  rPred = inf.rPred;
+  rStd = inf.rStd;
+
 }
 
 bool TableHistogramInfo::fValid() const
