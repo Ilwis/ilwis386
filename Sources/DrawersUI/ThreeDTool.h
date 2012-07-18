@@ -36,6 +36,7 @@ private:
 	FieldMapList *fmaplist;
 	RadioButton *rbTable;
 	RadioButton *rbMaplist;
+	RadioButton *zCoord;
 
 	String colName;
 	Table  attTable;

@@ -119,7 +119,8 @@ DisplayOptionsForm(dr,wPar,TR("3D Options")), sourceIndex(0)
 	sourceIndex = (int)layerDrawer->getZMaker()->getSourceType();
 	rg = new RadioGroup(root,TR("Data Source"),&sourceIndex);
 	new RadioButton(rg,TR("None"));
-	new RadioButton(rg,TR("Self"));
+	new RadioButton(rg,TR("Feature value"));
+	RadioButton *zCoord = new RadioButton(rg,TR("Z coordinate"));
 	RadioButton *rbMap = new RadioButton(rg,TR("Raster Map"));
 	fmap = new FieldMap(rbMap,"",&mapName, new MapListerDomainType(dmVALUE|dmIMAGE));
 	rbMaplist = new RadioButton(rg,TR("Maplist"));
@@ -136,6 +137,7 @@ DisplayOptionsForm(dr,wPar,TR("3D Options")), sourceIndex(0)
 
 int DisplayZDataSourceForm::initForm(Event *ev) {
 	if ( GetSafeHwnd()) {
+		zCoord->Disable();
 		if ( !attTable.fValid())
 			rbTable->Disable();
 		LayerDrawer *layerDrawer = dynamic_cast<LayerDrawer *>(drw);
@@ -143,6 +145,8 @@ int DisplayZDataSourceForm::initForm(Event *ev) {
 		if ( !adrw) {
 			rbMaplist->Disable();
 		}
+		if ( bmp.fValid() && bmp->use3DCoordinates())
+			zCoord->Enable();
 	}
 	return 1;
 }
@@ -162,7 +166,7 @@ void DisplayZDataSourceForm::apply() {
 			} else if ( sourceIndex == 2){
 				updateDrawer(layerDrawer, BaseMap(FileName(mapName)));
 				continue;
-			} else if ( sourceIndex == 3){
+			} else if ( sourceIndex == 4){
 				mpl = MapList(FileName(mapName));
 			}
 			Map mp = mpl[i];
@@ -182,7 +186,7 @@ void DisplayZDataSourceForm::updateDrawer(LayerDrawer *layerDrawer, const BaseMa
 		layerDrawer->getZMaker()->setSourceType((ZValueMaker::SourceType)sourceIndex);
 		PreparationParameters pp(NewDrawer::pt3D | NewDrawer::ptGEOMETRY);
 		layerDrawer->prepare(&pp);
-	} else if ( colName != "" && sourceIndex == 4) {
+	} else if ( colName != "" && sourceIndex == 5) {
 		layerDrawer->getZMaker()->setTable(attTable,colName);
 		PreparationParameters pp(NewDrawer::pt3D);
 		layerDrawer->prepare(&pp);
