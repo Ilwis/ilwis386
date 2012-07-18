@@ -25,7 +25,7 @@ InfoVector* getCommandInfo() {
 	(*infos).push_back(CommandMap::newCommandInfo(createMapETo,"MapETo"));
 	(*infos).push_back(CommandMap::newCommandInfo(createMapRadiance2Reflectance,"MapRadiance2Reflectance"));
 	(*infos).push_back(CommandMap::newCommandInfo(createMapBrightnessTemperature,"MapBrightnessTemperature"));
-	//(*infos).push_back(CommandMap::newCommandInfo(createMapWaterVapour,"MapWaterVapour"));
+	(*infos).push_back(CommandMap::newCommandInfo(createMapWaterVapour,"MapWaterVapour"));
 
 	return infos;
 
