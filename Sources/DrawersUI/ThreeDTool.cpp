@@ -120,7 +120,7 @@ DisplayOptionsForm(dr,wPar,TR("3D Options")), sourceIndex(0)
 	rg = new RadioGroup(root,TR("Data Source"),&sourceIndex);
 	new RadioButton(rg,TR("None"));
 	new RadioButton(rg,TR("Feature value"));
-	RadioButton *zCoord = new RadioButton(rg,TR("Z coordinate"));
+	zCoord = new RadioButton(rg,TR("Z coordinate"));
 	RadioButton *rbMap = new RadioButton(rg,TR("Raster Map"));
 	fmap = new FieldMap(rbMap,"",&mapName, new MapListerDomainType(dmVALUE|dmIMAGE));
 	rbMaplist = new RadioButton(rg,TR("Maplist"));
