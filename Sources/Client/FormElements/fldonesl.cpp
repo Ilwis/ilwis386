@@ -234,7 +234,14 @@ void OneSelectEdit::OnKillFocus(CWnd *old)
 // FieldOneSelectStringSimple -------------------------------------------------------------------------
 FieldOneSelectStringSimple::FieldOneSelectStringSimple(FormEntry* parent, long* value, const vector<String>& vstr, bool edit)
 : FieldOneSelect(parent, value,false,edit)
-, vs(vstr)
+, vs(vstr), localIndex(-1), txt(0)
+{
+  SetWidth(75);
+}
+
+FieldOneSelectStringSimple::FieldOneSelectStringSimple(FormEntry* parent, String* text, const vector<String>& vstr, bool edit)
+: FieldOneSelect(parent, &localIndex,false,edit)
+, vs(vstr), txt(text)
 {
   SetWidth(75);
 }
@@ -259,8 +266,25 @@ void FieldOneSelectStringSimple::SetFocus() {
 	}
 }
 
+void FieldOneSelectStringSimple::StoreData() {
+	ose->storeData();
+	if (txt && localIndex >= 0) {
+		*txt = vs[localIndex];
+	}
+}
+
 // FieldOneSelectString -------------------------------------------------------------------------------
 FieldOneSelectString::FieldOneSelectString(FormEntry* parent, const String& sQuestion, long* value, const vector<String>& vs, bool edit)
+: FieldGroup(parent)
+{
+  if (sQuestion.length() != 0)
+    new StaticTextSimple(this, sQuestion);
+  foss = new FieldOneSelectStringSimple(this, value, vs, edit);
+  if (children.iSize() > 1) // also static text
+    children[1]->Align(children[0], AL_AFTER);
+}
+
+FieldOneSelectString::FieldOneSelectString(FormEntry* parent, const String& sQuestion, String* value, const vector<String>& vs, bool edit)
 : FieldGroup(parent)
 {
   if (sQuestion.length() != 0)
@@ -318,3 +342,5 @@ void FieldOneSelectString::resetContent(const vector<String>& vs) {
 		}
 	}
 }
+
+

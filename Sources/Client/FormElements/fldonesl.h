@@ -98,17 +98,22 @@ class FieldOneSelectStringSimple: public FieldOneSelect
 {
 public:  
 	_export FieldOneSelectStringSimple(FormEntry* parent, long* value, const vector<String>& vs, bool edit=false);
+	_export FieldOneSelectStringSimple(FormEntry* parent, String* text, const vector<String>& vstr, bool edit);
 	_export ~FieldOneSelectStringSimple();
   void create();
   void SetFocus();
+  void StoreData();
 private:
   const vector<String>& vs;
+  long localIndex;
+  String *txt;
 };
 
 class FieldOneSelectString: public FieldGroup
 {
 public:
   _export FieldOneSelectString(FormEntry* parent, const String& sQuestion, long* value, const vector<String>& vs, bool edit=false);
+	_export FieldOneSelectString(FormEntry* parent, const String& sQuestion, String* value, const vector<String>& vs, bool edit);
 	_export ~FieldOneSelectString();
 	_export void SetComboWidth(short iWidth);
 	_export void SetVal(int iVal);
