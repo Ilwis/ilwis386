@@ -1,5 +1,6 @@
 #include "Headers\toolspch.h"
 #include "Engine\Map\basemap.h"
+#include "Engine\Map\Point\pnt.h"
 #include "Engine\Map\Point\ilwPoint.h"
 #include "Engine\Drawers\ComplexDrawer.h"
 #include "Engine\Drawers\SimpleDrawer.h" 
