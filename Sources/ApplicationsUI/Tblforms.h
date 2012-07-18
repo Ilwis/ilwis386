@@ -122,6 +122,7 @@ LRESULT Cmdclmmoledensky(CWnd *parent, const String& dummy);
 LRESULT Cmdclmhelmert7parms(CWnd *parent, const String& dummy);
 LRESULT Cmdclmfindazimuthdistance(CWnd *parent, const String& dummy);
 LRESULT Cmdtimefromcolumns(CWnd *parent, const String& dummy);
+LRESULT Cmdaddrecord(CWnd *parent, const String& command);
 
 LRESULT CmdUpdateAllColumns(CWnd *parent, const String& s);
 

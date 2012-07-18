@@ -89,6 +89,38 @@ void TableForm::setView(CWnd *parent) {
 
 
 
+LRESULT Cmdaddrecord(CWnd *parent, const String& command)
+{
+	CFrameWnd *frame = (CFrameWnd *)parent;
+	CDocument* doc = frame->GetActiveDocument();
+	if (doc) {
+		TableDoc *tbldoc = dynamic_cast<TableDoc*>(doc);
+		try {
+			TableView *view =  const_cast<TableView *>(tbldoc->view());
+			if (view->fReadOnly())
+				throw ErrorObject(TR("Table is read-only"));
+			if (view->dm()->pdnone() == 0)
+				throw ErrorObject(TR("Add records only possible for tables with domain 'none'"));
+			// only allow add record for real tables
+			if (".tbt" != tbldoc->obj()->fnObj.sExt)
+				throw ErrorObject(TR("Add records only possible for tables with domain 'none'"));
+			int iNewRecs;
+			if ("" == command)
+				iNewRecs = 1;
+			else
+				iNewRecs = command.iVal();
+			if (iNewRecs <= 0) 
+				throw ErrorObject(String("%S : %S", TR("Invalid parameter"), command));
+			view->iRecNew(iNewRecs);
+			tbldoc->UpdateAllViews(0);
+		}
+		catch (const ErrorObject& err) {
+			err.Show();
+		}
+	}
+
+	return -1;
+}
 
 LRESULT Cmdclmaggregate(CWnd *parent, const String& dummy)
 {

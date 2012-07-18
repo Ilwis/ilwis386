@@ -143,6 +143,7 @@ extern "C" _export InfoUIVector* getCommandInfoUI(ILWIS::Module *module) {
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("confmat","",Cmdclmconfusionmatrix,"","",".grh",".mpl",0000,"", false));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("clmleastsquares","",Cmdclmleastsquares,"","",".grh",".mpl",0000,"", false));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("clmsort","",Cmdclmsort,"","",".grh",".mpl",0000,"", false));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("addrecord","",Cmdaddrecord,"","",".grh",".mpl",0000,"", false));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("clmslicing","",Cmdclmslicing,"","",".grh",".mpl",0000,"", false));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("clminvmoldensky","",Cmdclminvmoldensky,"","",".grh",".mpl",0000,"", false));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("clmfindmoldensky","",Cmdclmfindmoldensky,"","",".grh",".mpl",0000,"", false));
