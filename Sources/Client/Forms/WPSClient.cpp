@@ -118,7 +118,7 @@ WPSClient::WPSClient(const String& url) :
 	fldFileParam->SetIndependentPos();
 	fldFileParam->SetCallBack((NotifyProc)&WPSClient::parmChange);
 
-	fldRemoteParam = new FieldOneSelectString(fg3,TR("Remote files"),&remoteIndex,remoteFiles);
+	fldRemoteParam = new FieldOneSelectString(fg3,TR("Remote files"),&stringField,remoteFiles,false);
 	fldRemoteParam->Align(fldParmInfo, AL_UNDER);
 	fldRemoteParam->SetIndependentPos();
 	fldRemoteParam->SetCallBack((NotifyProc)&WPSClient::parmChange);
@@ -247,19 +247,25 @@ int WPSClient::execute(Event *ev) {
 	for(int i=0; i < parameterValues[operationVariant].size(); ++i) {
 		if ( i == 0)
 			url += "&DataInputs=";
-		else
-			url += ";";
+		else {
+			if (url[url.size() - 1] != ';') // else optional params would generate multiple ';'
+				url += ";";
+		}
 
 		ParameterInfo pi = parameterValues[operationVariant][i];
 		if ( pi.filetype()) {
 			if ( remoteCatalog) {
-				long index = fldRemoteParam->iVal();
+			/*	long index = fldRemoteParam->iVal();
 				if ( index == -1)
 					throw ErrorObject(TR("No input file selected"));
-				String file = remoteFiles[index];
-				url += String("%S=%S", pi.id, file);
+				String file = remoteFiles[index];*/
+				if ( pi.value == "" && pi.optional)
+					continue;
+				url += String("%S=%S", pi.id, pi.value);
 
 			} else {
+				if ( pi.value == "" && pi.optional)
+					continue;
 				ILWIS::Zipper zipper(pi.value);
 				FileName fnZip(pi.value, ".zip");
 				zipper.zip(fnZip);
@@ -267,7 +273,9 @@ int WPSClient::execute(Event *ev) {
 			}
 			
 		} else {
-				url += String("%S=%S", pi.id, pi.value);
+			if ( pi.optional && ( pi.value.rVal() == rUNDEF || pi.value == sUNDEF))
+				continue;
+			url += String("%S=%S", pi.id, pi.value);
 		} 
 	}
 	if ( outputName != "")
@@ -318,10 +326,15 @@ void WPSClient::fillListView() {
 		if ( currentParmIndex < parameterValues[operationVariant].size()) {
 			ParameterInfo pi = parameterValues[operationVariant][currentParmIndex];
 			if ( pi.numerictype() ) {
-				parameterValues[operationVariant][currentParmIndex].value = String("%f",number);
+				if ( number != rUNDEF)
+					parameterValues[operationVariant][currentParmIndex].value = String("%f",number);
+				else
+					parameterValues[operationVariant][currentParmIndex].value = sUNDEF;
 			} else
 				parameterValues[operationVariant][currentParmIndex].value = stringField;
 		}
+		stringField = "";
+
 	}
 	if ( parameterValues.size() == 0)
 		return;
@@ -348,8 +361,12 @@ int WPSClient::parameterSelection(Event *ev) {
 			activeParameterField->Hide();
 		}
 		if ( currentParmIndex != iUNDEF) {
-			if ( parameterValues[operationVariant][currentParmIndex].numerictype())
-				parameterValues[operationVariant][currentParmIndex].value = String("%f", number);
+			if ( parameterValues[operationVariant][currentParmIndex].numerictype()){
+				if ( number != rUNDEF)
+					parameterValues[operationVariant][currentParmIndex].value = String("%f", number);
+				else
+					parameterValues[operationVariant][currentParmIndex].value = sUNDEF;
+			}
 			else if ( parameterValues[operationVariant][currentParmIndex].type == "boolean") {
 				parameterValues[operationVariant][currentParmIndex].value	= boolField ? "true" : "false";
 			} else if ( parameterValues[operationVariant][currentParmIndex].type == "choice") {
@@ -371,7 +388,7 @@ int WPSClient::parameterSelection(Event *ev) {
 			else {
 				fldCatalog->StoreData();
 				remoteFiles.clear();
-				String url = urlCatalog + "?request=catalog&service=ilwis&version=1.0&filter=raster&catalog=";
+				String url = urlCatalog + "?request=catalog&service=ilwis&version=1.0&filter=" + pi.type +"&catalog=";
 				RemoteLister rm(url);
 				rm.getFiles(remoteFiles);
 
@@ -526,8 +543,8 @@ void WPSClient::parseParameter(const ILWIS::XMLDocument& doc, const pugi::xml_no
 	for(pugi::xml_node child = node.first_child(); child; child = child.next_sibling()) {
 		String childName(child.name());
 		if ( childName == "Input") {
-			String minOcc = child.attribute("minOcc").value();
-			String maxOcc = child.attribute("maxOcc").value();
+			String minOcc = child.attribute("minOccurs").value();
+			String maxOcc = child.attribute("maxOccurs").value();
 			parseSimpleParameter(doc, child, tokens);
 			if ( minOcc == "0" && maxOcc == "1")
 				tokens.back().pi.optional = true;
@@ -631,7 +648,7 @@ String WPSClient::getTypeIcon(const String& type) {
 		return ".mpa";
 	if ( type == "pointmap" || type == "image/ilwispoint")
 		return ".mpp";
-	if ( type == "table" || type == "image/ilwistype")
+	if ( type == "table" || type == "binary/ilwistable")
 		return ".tbt";
 	if ( type == "column")
 		return ".col";
