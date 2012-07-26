@@ -13,6 +13,8 @@ public:
 	const String getGroupValue(Feature * f) const;
 
 protected:
+	String storeGroupable(const FileName& fnView, const String& parentSection) const;
+	void loadGroupable(const FileName& fnView, const String& currentSection);
 	bool fUseGroup;
 	Column colGroup;
 };
