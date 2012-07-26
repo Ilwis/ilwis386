@@ -41,9 +41,14 @@ HTREEITEM CubeElementsTool::configure( HTREEITEM parentItem) {
 	htiNode = insertItem(parentItem, TR("Elements"),"Transparent");
 
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,htiNode,drawer);
-	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&CubeElementsTool::changeAxis);
-	item->setCheckAction(this,0,(DTSetCheckFunc)&CubeElementsTool::setAxisVisibility);
-	insertItem(TR("Axis"),"Axis",item,1);
+	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&CubeElementsTool::changeCube);
+	item->setCheckAction(this,0,(DTSetCheckFunc)&CubeElementsTool::setCubeVisibility);
+	insertItem(TR("Cube"),"SpaceTimeCube",item,1);
+
+	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
+	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&CubeElementsTool::changeTicks);
+	item->setCheckAction(this,0,(DTSetCheckFunc)&CubeElementsTool::setTicksVisibility);
+	insertItem(TR("Tic Marks"),"Axis",item,1);
 
 	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&CubeElementsTool::changeCoordinates);
@@ -92,16 +97,28 @@ void CubeElementsTool::setLabelVisibility(void *value, HTREEITEM) {
 }
 
 
-void CubeElementsTool::setAxisVisibility(void *value, HTREEITEM) {
+void CubeElementsTool::setCubeVisibility(void *value, HTREEITEM) {
 	if (!value)
 		return;
 
 	bool v = *(bool *)value;
-	setVisibility("axis",v);
+	setVisibility("cube",v);
 }
 
-void CubeElementsTool::changeAxis() {
-	elementForm("axis");
+void CubeElementsTool::setTicksVisibility(void *value, HTREEITEM) {
+	if (!value)
+		return;
+
+	bool v = *(bool *)value;
+	setVisibility("ticks",v);
+}
+
+void CubeElementsTool::changeCube() {
+	elementForm("cube");
+}
+
+void CubeElementsTool::changeTicks() {
+	elementForm("ticks");
 }
 
 void CubeElementsTool::changeCoordinates() {

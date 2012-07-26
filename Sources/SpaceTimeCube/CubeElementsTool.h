@@ -15,10 +15,12 @@ namespace ILWIS {
 		virtual ~CubeElementsTool();
 		String getMenuString() const;
 	protected:
-		void changeAxis();
+		void changeCube();
+		void changeTicks();
 		void changeCoordinates();
 		void changeLabels();
-		void setAxisVisibility(void *value, HTREEITEM);
+		void setCubeVisibility(void *value, HTREEITEM);
+		void setTicksVisibility(void *value, HTREEITEM);
 		void setVisibility(const String& element, bool value);
 		void elementForm(const String& element);
 		void setCoordVisibility(void *value, HTREEITEM);
