@@ -29,6 +29,18 @@ StationsDrawer::StationsDrawer(DrawerParameters *parms)
 StationsDrawer::~StationsDrawer() {
 }
 
+String StationsDrawer::store(const FileName& fnView, const String& parentSection) const
+{
+	String currentSection = parentSection + "::" + getType();
+	SpaceTimeDrawer::store(fnView, currentSection);
+	return currentSection;
+}
+
+void StationsDrawer::load(const FileName& fnView, const String& currentSection)
+{
+	SpaceTimeDrawer::load(fnView, currentSection);
+}
+
 void StationsDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc) const
 {
 	Tranquilizer trq(TR("computing triangles"));

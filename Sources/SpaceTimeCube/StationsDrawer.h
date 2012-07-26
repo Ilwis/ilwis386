@@ -14,6 +14,8 @@ class _export StationsDrawer : public SpaceTimeDrawer {
 		virtual ~StationsDrawer();
 
 	protected:
+		String store(const FileName& fnView, const String& parentSection) const;
+		void load(const FileName& fnView, const String& currentSection);
 		virtual void drawObjects(const int steps, GetHatchFunc getHatchFunc) const;
 	private:
 	};
