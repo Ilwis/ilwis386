@@ -53,3 +53,29 @@ const double SizableDrawer::getSizeValue(Feature * f) const
 	else
 		return properties->exaggeration;
 }
+
+String SizableDrawer::storeSizable(const FileName& fnView, const String& parentSection) const
+{
+	properties->store(fnView, parentSection);
+	if (colSize.fValid()) {
+		ObjectInfo::WriteElement(parentSection.c_str(), "SizeTable", fnView, colSize->fnTbl.sRelativeQuoted());
+		ObjectInfo::WriteElement(parentSection.c_str(), "SizeColumn", fnView, colSize);
+	}
+	return parentSection;
+}
+
+void SizableDrawer::loadSizable(const FileName& fnView, const String& currentSection)
+{
+	properties->load(fnView, currentSection);
+	Table tbl;
+	ObjectInfo::ReadElement(currentSection.c_str(), "SizeTable", fnView, tbl);
+	if (tbl.fValid()) {
+		String sCol;
+		ObjectInfo::ReadElement(currentSection.c_str(), "SizeColumn", fnView, sCol);
+		if (sCol.length() > 0)
+			colSize = tbl->col(sCol);
+		else
+			SetNoSize();
+	} else
+		SetNoSize();
+}

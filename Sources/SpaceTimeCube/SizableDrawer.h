@@ -16,6 +16,8 @@ public:
 	const double getSizeValue(Feature * f) const;
 
 protected:
+	String storeSizable(const FileName& fnView, const String& parentSection) const;
+	void loadSizable(const FileName& fnView, const String& currentSection);
 	PointProperties *properties;
 	RangeReal * sizeStretch;
 	Column colSize;
