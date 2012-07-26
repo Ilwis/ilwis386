@@ -24,8 +24,8 @@ class _export SpaceTimeDrawer : public FeatureLayerDrawer, public TemporalDrawer
 		int iNrSteps();
 
 	protected:
-		String store(const FileName& fnView, const String& parenSection) const;
-		void load(const FileName& fnView, const String& parenSection);
+		String store(const FileName& fnView, const String& parentSection) const;
+		void load(const FileName& fnView, const String& currentSection);
 		virtual NewDrawer *createElementDrawer(PreparationParameters *pp, ILWIS::DrawerParameters* parms) const;
 		void setDrawMethod(DrawMethod method=drmINIT);
 		RangeReal getValueRange(Column attributeColumn) const;

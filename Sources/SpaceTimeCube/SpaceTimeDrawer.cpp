@@ -140,17 +140,18 @@ void SpaceTimeDrawer::prepare(PreparationParameters *parms){
 }
 
 String SpaceTimeDrawer::store(const FileName& fnView, const String& parentSection) const{
-	String currentSection = getType() + "::" + parentSection;
-	FeatureLayerDrawer::store(fnView, currentSection);
-	//properties->store(fnView, currentSection);
-	return currentSection;
+	FeatureLayerDrawer::store(fnView, parentSection);
+	ObjectInfo::WriteElement(parentSection.c_str(), "NrEdges", fnView, nrSteps);
+	storeTemporal(fnView, parentSection);
+	storeSizable(fnView, parentSection);
+	return parentSection;
 }
 
-void SpaceTimeDrawer::load(const FileName& fnView, const String& parentSection){
-	String currentSection = getType() + "::" + parentSection;
+void SpaceTimeDrawer::load(const FileName& fnView, const String& currentSection){
 	FeatureLayerDrawer::load(fnView, currentSection);
-	//properties->load(fnView, currentSection);
-
+	ObjectInfo::ReadElement(currentSection.c_str(), "NrEdges", fnView, nrSteps);
+	loadTemporal(fnView, currentSection);
+	loadSizable(fnView, currentSection);
 }
 
 RangeReal SpaceTimeDrawer::getValueRange(Column attributeColumn) const {
@@ -329,8 +330,15 @@ bool SpaceTimeDrawer::draw( const CoordBounds& cbArea) const {
 	if (fUseLight) {
 		glEnable(GL_LIGHTING);
 		glEnable(GL_LIGHT0);
-		glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 		glEnable(GL_COLOR_MATERIAL);
+		glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+		GLfloat ambient [4] = {0.1f, 0.1f, 0.1f, 1.0f};
+		GLfloat diffuse [4] = {1.0f, 1.0f, 1.0f, 1.0f};
+		GLfloat specular [4] = {1.0f, 1.0f, 1.0f, 1.0f};
+		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, (GLfloat*)&ambient);
+		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, (GLfloat*)&diffuse);
+		glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, (GLfloat*)&specular);
+		glMateriali(GL_FRONT_AND_BACK, GL_SHININESS, 64);
 	}
 
 	if (steps == 1)
