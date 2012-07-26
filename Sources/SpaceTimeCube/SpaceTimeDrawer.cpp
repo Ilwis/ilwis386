@@ -328,6 +328,7 @@ bool SpaceTimeDrawer::draw( const CoordBounds& cbArea) const {
 	const int steps = nrSteps;
 	const bool fUseLight = is3D && steps > 1;
 	if (fUseLight) {
+		glEnable(GL_NORMALIZE); // otherwise light intensity changes, gets darker when objects are nearer (zoom-in), which is totally illogical
 		glEnable(GL_LIGHTING);
 		glEnable(GL_LIGHT0);
 		glEnable(GL_COLOR_MATERIAL);
@@ -488,6 +489,7 @@ bool SpaceTimeDrawer::draw( const CoordBounds& cbArea) const {
 		glDisable(GL_COLOR_MATERIAL);
 		glDisable(GL_LIGHT0);
 		glDisable(GL_LIGHTING);
+		glDisable(GL_NORMALIZE);
 	}
 
 	glPopMatrix();
