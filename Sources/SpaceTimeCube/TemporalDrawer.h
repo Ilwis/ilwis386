@@ -17,6 +17,8 @@ public:
 	const double getTimeValue2(Feature * f) const;
 
 protected:
+	String storeTemporal(const FileName& fnView, const String& parentSection) const;
+	void loadTemporal(const FileName& fnView, const String& currentSection);
 	TimeBounds * timeBounds;
 	bool fTimeAttribute;
 	bool fTimeAttribute2;

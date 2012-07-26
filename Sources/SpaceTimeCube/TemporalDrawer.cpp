@@ -51,3 +51,41 @@ const double TemporalDrawer::getTimeValue2(Feature * f) const
 	else
 		return getTimeValue(f);
 }
+
+String TemporalDrawer::storeTemporal(const FileName& fnView, const String& parentSection) const
+{
+	ObjectInfo::WriteElement(parentSection.c_str(), "UseTime", fnView, fTimeAttribute);
+	ObjectInfo::WriteElement(parentSection.c_str(), "UseTime2", fnView, fTimeAttribute2);
+	if (colTime.fValid()) {
+		ObjectInfo::WriteElement(parentSection.c_str(), "TimeTable", fnView, colTime->fnTbl.sRelativeQuoted());
+		ObjectInfo::WriteElement(parentSection.c_str(), "TimeColumn", fnView, colTime);
+		if (colTime2.fValid())
+			ObjectInfo::WriteElement(parentSection.c_str(), "TimeColumn2", fnView, colTime2);
+	}
+	return parentSection;
+}
+
+void TemporalDrawer::loadTemporal(const FileName& fnView, const String& currentSection)
+{
+	ObjectInfo::ReadElement(currentSection.c_str(), "UseTime", fnView, fTimeAttribute);
+	ObjectInfo::ReadElement(currentSection.c_str(), "UseTime2", fnView, fTimeAttribute2);
+	Table tbl;
+	ObjectInfo::ReadElement(currentSection.c_str(), "TimeTable", fnView, tbl);
+	if (tbl.fValid()) {
+		String sCol;
+		ObjectInfo::ReadElement(currentSection.c_str(), "TimeColumn", fnView, sCol);
+		if (sCol.length() > 0)
+			colTime = tbl->col(sCol);
+		else
+			fTimeAttribute = false;
+		sCol = "";
+		ObjectInfo::ReadElement(currentSection.c_str(), "TimeColumn2", fnView, sCol);
+		if (sCol.length() > 0)
+			colTime2 = tbl->col(sCol);
+		else
+			fTimeAttribute2 = false;
+	} else {
+		fTimeAttribute = false;
+		fTimeAttribute2 = false;
+	}
+}
