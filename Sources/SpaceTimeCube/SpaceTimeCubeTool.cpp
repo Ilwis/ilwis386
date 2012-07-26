@@ -290,7 +290,9 @@ void SpaceTimeCube::refreshDrawerList() {
 		SpatialDataDrawer * drawer = (SpatialDataDrawer*)(rootDrawer->getDrawer(layerList[i].getDrawerId()));
 		if (drawer == 0)
 			continue; // skip it .. drawer was probably removed from the layers
-		drawer->removeDrawer(drawer->getDrawer(0)->getId()); // remove the old drawer
+		NewDrawer * childDrawer = drawer->getDrawer(0);
+		if (childDrawer != 0)
+			drawer->removeDrawer(childDrawer->getId()); // remove the old drawer
 		PreparationParameters pp(NewDrawer::ptALL);
 		String sPlotOption = layerList[i].sPlotOption();
 		if (useSpaceTimeCube && sPlotOption != "<regular>")
