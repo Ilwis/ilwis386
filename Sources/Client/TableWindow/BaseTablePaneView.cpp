@@ -1320,7 +1320,7 @@ void BaseTablePaneView::OnLButtonDown(UINT nFlags, CPoint point)
 				mmSelect.MinCol() = iColMoving;
 				mmSelect.MaxCol() = iColMoving;
 				mmSelect.MinRow() = -1;
-				mmSelect.MaxRow() = LONG_MAX;
+				mmSelect.MaxRow() = iRows();
 				iRowMoving = -1;
 				s = TR("Select a block of columns");
 			}
