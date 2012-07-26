@@ -14,6 +14,8 @@ public:
 	const String getSortString(Feature * f) const;
 
 protected:
+	String storeSortable(const FileName& fnView, const String& parentSection) const;
+	void loadSortable(const FileName& fnView, const String& currentSection);
 	bool fUseSort;
 	bool fSortValues;
 	Column colSort;
