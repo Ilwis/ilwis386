@@ -27,6 +27,8 @@ namespace ILWIS {
 			return color == colorUNDEF && transparency == rUNDEF && visible == false;
 		}
 		static CubeElement undefElement;
+		String store(const FileName& fnView, const String& parentSection) const;
+		void load(const FileName& fnView, const String& parentSection);
 
 		Color color;
 		double transparency;
@@ -41,8 +43,8 @@ namespace ILWIS {
 		map<String, CubeElement> elements;
 		CubeElement& operator[](const String& key) const;
 
-		String store(const FileName& fnView, const String& parenSection) const;
-		void load(const FileName& fnView, const String& parenSection);
+		String store(const FileName& fnView, const String& parentSection) const;
+		void load(const FileName& fnView, const String& parentSection);
 	};
 
 	class _export CubeDrawer : public ComplexDrawer, public TemporalDrawer {
@@ -62,6 +64,8 @@ namespace ILWIS {
 		void drawCoords() const;
 		void drawTimes() const;
 		void renderText(OpenGLText *font, const Coordinate & c, const String & text, bool center=false) const;
+		String store(const FileName& fnView, const String& parentSection) const;
+		void load(const FileName& fnView, const String& currentSection);
 		String sxMin, sxMax, syMin, syMax, stMin, stMax;
 		CoordBounds cube;
 		double * timePos;

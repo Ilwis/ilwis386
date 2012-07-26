@@ -106,11 +106,16 @@ bool CubeDrawer::draw(const CoordBounds& cbArea) const{
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA); 
 
-	if (properties["axis"].visible) {
-		Color clr = properties["axis"].color;
-		clr.m_transparency = properties["axis"].transparency * 255;
+	if (properties["cube"].visible) {
+		Color clr = properties["cube"].color;
+		clr.m_transparency = properties["cube"].transparency * 255;
 		glColor4f(clr.redP(), clr.greenP(), clr.blueP(), clr.alphaP());
 		drawCube();
+	}
+	if (properties["ticks"].visible) {
+		Color clr = properties["ticks"].color;
+		clr.m_transparency = properties["ticks"].transparency * 255;
+		glColor4f(clr.redP(), clr.greenP(), clr.blueP(), clr.alphaP());
 		drawTicMarks();
 	}
 	if (properties["labels"].visible)
@@ -251,9 +256,23 @@ void CubeDrawer::renderText(OpenGLText *fnt,const Coordinate & c, const String &
 GeneralDrawerProperties *CubeDrawer::getProperties(){
 	return &properties;
 }
+
+String CubeDrawer::store(const FileName& fnView, const String& parentSection) const {
+	String currentSection = parentSection + "::" + getType();
+	ComplexDrawer::store(fnView, currentSection);
+	properties.store(fnView, currentSection);
+	return currentSection;
+}
+
+void CubeDrawer::load(const FileName& fnView, const String& currentSection){
+	ComplexDrawer::load(fnView, currentSection);
+	properties.load(fnView, currentSection);
+}
+
 //---------------------------------------
 CubeProperties::CubeProperties() : GeneralDrawerProperties() {
-	elements["axis"] = CubeElement("Axis", Color(0,255,0),0.0, true);
+	elements["cube"] = CubeElement("Cube", Color(0,255,0),0.0, true);
+	elements["ticks"] = CubeElement("Ticks", Color(0,255,0),0.0, true);
 	elements["coordinates"] = CubeElement("Coordinates", Color(0,0,0),0.0, true);
 	elements["labels"] = CubeElement("Labels", Color(0,0,0),0.0, true);
 }
@@ -271,4 +290,46 @@ CubeElement& CubeProperties::operator[](const String& key) const {
 		return (*cur).second;
 	return CubeElement::undefElement;
 
+}
+
+String CubeProperties::store(const FileName& fnView, const String& parentSection) const {
+	ObjectInfo::WriteElement(parentSection.c_str(), "NrCubeElements", fnView, (int)(elements.size()));
+	int index = 0;
+	for (map<String, CubeElement>::const_iterator cur = elements.begin(); cur != elements.end(); ++cur) {
+		String elementName = cur->first;
+		CubeElement element = cur->second;
+		String elementSection ("%S::CubeElement%d", parentSection, index++);
+		ObjectInfo::WriteElement(elementSection.c_str(), "Name", fnView, elementName);
+		element.store(fnView, elementSection);
+	}
+	return parentSection;
+}
+
+void CubeProperties::load(const FileName& fnView, const String& parentSection) {
+	int nrElements;
+	if (!ObjectInfo::ReadElement(parentSection.c_str(), "NrCubeElements", fnView, nrElements))
+		nrElements = 0;
+	for (int index = 0; index < nrElements; ++index) {
+		String elementName;
+		String elementSection ("%S::CubeElement%d", parentSection, index);
+		ObjectInfo::ReadElement(elementSection.c_str(), "Name", fnView, elementName);
+		CubeElement element;
+		element.load(fnView, elementSection);
+		elements[elementName] = element;
+	}
+}
+
+String CubeElement::store(const FileName& fnView, const String& parentSection) const {
+	ObjectInfo::WriteElement(parentSection.c_str(), "Color", fnView, color);
+	ObjectInfo::WriteElement(parentSection.c_str(), "Transparency", fnView, transparency);
+	ObjectInfo::WriteElement(parentSection.c_str(), "Visible", fnView, visible);
+	ObjectInfo::WriteElement(parentSection.c_str(), "Label", fnView, label);
+	return parentSection;
+}
+
+void CubeElement::load(const FileName& fnView, const String& parentSection) {
+	ObjectInfo::ReadElement(parentSection.c_str(), "Color", fnView, color);
+	ObjectInfo::ReadElement(parentSection.c_str(), "Transparency", fnView, transparency);
+	ObjectInfo::ReadElement(parentSection.c_str(), "Visible", fnView, visible);
+	ObjectInfo::ReadElement(parentSection.c_str(), "Label", fnView, label);
 }
