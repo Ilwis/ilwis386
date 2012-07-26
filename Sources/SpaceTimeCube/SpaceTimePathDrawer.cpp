@@ -29,6 +29,22 @@ SpaceTimePathDrawer::SpaceTimePathDrawer(DrawerParameters *parms)
 SpaceTimePathDrawer::~SpaceTimePathDrawer() {
 }
 
+String SpaceTimePathDrawer::store(const FileName& fnView, const String& parentSection) const
+{
+	String currentSection = parentSection + "::" + getType();
+	SpaceTimeDrawer::store(fnView, currentSection);
+	storeSortable(fnView, currentSection);
+	storeGroupable(fnView, currentSection);
+	return currentSection;
+}
+
+void SpaceTimePathDrawer::load(const FileName& fnView, const String& currentSection)
+{
+	SpaceTimeDrawer::load(fnView, currentSection);
+	loadSortable(fnView, currentSection);
+	loadGroupable(fnView, currentSection);
+}
+
 struct sort_pair_first_value { 
     bool operator()(const std::pair<double, Feature*> &left, const std::pair<double, Feature*> &right) { 
         return left.first < right.first;
