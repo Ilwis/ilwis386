@@ -13,6 +13,8 @@ namespace ILWIS {
 	class _export SimpleDrawer : public NewDrawer {
 	public:
 		String getType() const;
+		virtual String getSubType() const;
+		virtual void setSubType(const String & sSubType);
 		bool draw( const CoordBounds& cb=CoordBounds()) const = 0;
 		void prepare(PreparationParameters *);
 		virtual void addDataSource(void *,int options=0) {};
@@ -61,6 +63,7 @@ namespace ILWIS {
 		NewDrawer *parentDrawer;
 		RootDrawer *rootDrawer;
 		String type;
+		String subType;
 		String id;
 		String name;
 		bool info;

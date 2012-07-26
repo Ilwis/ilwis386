@@ -54,6 +54,14 @@ String ComplexDrawer::getType() const {
 	return type;
 }
 
+String ComplexDrawer::getSubType() const {
+	return subType;
+}
+
+void ComplexDrawer::setSubType(const String & sSubType) {
+	subType = sSubType;
+}
+
 ComplexDrawer::~ComplexDrawer() {
 	delete zmaker;
 	clear();
@@ -455,6 +463,8 @@ String ComplexDrawer::store(const FileName& fnView, const String& parentSection)
 	ObjectInfo::WriteElement(parentSection.c_str(),"DrawMethod",fnView, drm);
 	ObjectInfo::WriteElement(parentSection.c_str(),"Transparency",fnView, transparency);
 	ObjectInfo::WriteElement(parentSection.c_str(),"Type",fnView, type);
+	if (subType != "" && subType != "ilwis38")
+		ObjectInfo::WriteElement(parentSection.c_str(),"SubType",fnView, subType);
 	ObjectInfo::WriteElement(parentSection.c_str(),"IsActive",fnView, active);
 	ObjectInfo::WriteElement(parentSection.c_str(),"editable",fnView, editable);
 	ObjectInfo::WriteElement(parentSection.c_str(),"HasInfo",fnView, info);
@@ -546,10 +556,12 @@ void ComplexDrawer::load(const FileName& fnView, const String& parentSection){
 }
 
 NewDrawer *ComplexDrawer::loadDrawer(const FileName& fnView, const String& drawerSection) {
-	String sType;
+	String sType, sSubType;
 	ObjectInfo::ReadElement(drawerSection.c_str(),"Type",fnView, sType);
+	if (!ObjectInfo::ReadElement(drawerSection.c_str(),"SubType",fnView, sSubType))
+		sSubType = "Ilwis38";
 	ILWIS::DrawerParameters dp(rootDrawer, this);
-	ILWIS::NewDrawer *drawer = NewDrawer::getDrawer(sType, "Ilwis38", &dp);
+	ILWIS::NewDrawer *drawer = NewDrawer::getDrawer(sType, sSubType, &dp);
 	if (drawer) {
 		drawer->load(fnView,drawerSection);
 	}

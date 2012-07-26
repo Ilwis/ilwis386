@@ -21,6 +21,8 @@ class _export ComplexDrawer : public NewDrawer {
 		ComplexDrawer(DrawerParameters *context);
 		enum DrawerType{dtDONTCARE=0, dtPOST=1, dtPRE=2, dtMAIN=4, dtPOLYGONLAYER=8, dtSEGMENTLAYER=16,dtPOINTLAYER=32,dtRASTERLAYER=64};
 		String getType() const;
+		virtual String getSubType() const;
+		virtual void setSubType(const String & sSubType);
 		RootDrawer *getRootDrawer();
 		RootDrawer *getRootDrawer() const;
 		bool draw( const CoordBounds& cb=CoordBounds()) const;
@@ -100,6 +102,7 @@ class _export ComplexDrawer : public NewDrawer {
 		RootDrawer *rootDrawer;
 		NewDrawer *parentDrawer;
 		String type;
+		String subType;
 		String id;
 		String name;
 		bool active;

@@ -18,18 +18,27 @@ ILWIS::NewDrawer *NewDrawer::getDrawer(const String& type, const String& subtype
 	String fullType = type + "|" + subtype;
 	if ( c != 0) {
 		map<String, DrawerCreate>::const_iterator item = NewDrawer::drawers.find(fullType);
-		if ( item != drawers.end())
-			return ((*item).second)(c);
+		if ( item != drawers.end()) {
+			NewDrawer * drw = ((*item).second)(c);
+			drw->setSubType(subtype);
+			return drw;
+		}
 		else {
 			item = NewDrawer::drawers.find(type + "|ilwis38");
-			if ( item != drawers.end())
-				return ((*item).second)(c);
+			if ( item != drawers.end()) {
+				NewDrawer * drw = ((*item).second)(c);
+				drw->setSubType(subtype);
+				return drw;
+			}
 		}
 	}
 
 	map<String, ILWIS::IVGElement *>::iterator svgItem = getSvgLoader()->find(fullType);
-	if ( svgItem != getSvgLoader()->end())
-		return (ILWIS::NewDrawer *)(*svgItem).second;
+	if ( svgItem != getSvgLoader()->end()) {
+		NewDrawer * drw = (ILWIS::NewDrawer *)(*svgItem).second;
+		drw->setSubType(subtype);
+		return drw;
+	}
 	return NULL;
 }
 

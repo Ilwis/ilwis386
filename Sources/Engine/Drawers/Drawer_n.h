@@ -53,6 +53,8 @@ namespace ILWIS {
 		virtual bool draw( const CoordBounds& cb=CoordBounds()) const = 0;
 		virtual void prepare(PreparationParameters *) =0;
 		virtual String getType() const =0;
+		virtual String getSubType() const =0;
+		virtual void setSubType(const String & sSubType) = 0;
 		virtual void addDataSource(void *, int options=0) = 0;
 		virtual void removeDataSource(void *) = 0;
 		virtual void* getDataSource() const = 0;

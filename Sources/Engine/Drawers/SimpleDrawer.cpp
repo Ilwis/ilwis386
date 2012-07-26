@@ -48,6 +48,14 @@ String SimpleDrawer::getType() const {
 	return type;
 }
 
+String SimpleDrawer::getSubType() const {
+	return subType;
+}
+
+void SimpleDrawer::setSubType(const String & sSubType) {
+	subType = sSubType;
+}
+
 String SimpleDrawer::getId() const{
 	return id;
 }
