@@ -647,11 +647,10 @@ RowCol RootDrawer::OpenGLToScreen(const Coord& crd){
 	glGetDoublev( GL_PROJECTION_MATRIX, projection );
 	glGetIntegerv( GL_VIEWPORT, viewport );
 
-	gluProject(crd.x, crd.y, 1,modelview, projection, viewport,&posX,&posY, &posZ);
+	gluProject(crd.x, crd.y, crd.z, modelview, projection, viewport,&posX,&posY, &posZ);
 
 	drawercontext->ReleaseContext();
-	return RowCol(posY, posX);
-
+	return RowCol(round(posY), round(posX));
 }
 
 RowCol RootDrawer::WorldToScreen(const Coord& crd){
