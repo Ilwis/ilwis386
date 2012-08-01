@@ -20,6 +20,8 @@ class _export SpaceTimePathDrawer : public SpaceTimeDrawer, public SortableDrawe
 		String store(const FileName& fnView, const String& parentSection) const;
 		void load(const FileName& fnView, const String& currentSection);
 		virtual void drawObjects(const int steps, GetHatchFunc getHatchFunc) const;
+		virtual String getInfo(const Coord& c) const;
 		vector<Feature *> features;
+		vector<long> *objectStartIndexes;
 	};
 }

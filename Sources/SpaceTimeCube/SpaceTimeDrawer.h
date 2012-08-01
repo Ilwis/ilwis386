@@ -26,6 +26,7 @@ class _export SpaceTimeDrawer : public FeatureLayerDrawer, public TemporalDrawer
 	protected:
 		String store(const FileName& fnView, const String& parentSection) const;
 		void load(const FileName& fnView, const String& currentSection);
+		GLuint getSelectedObjectID(const Coord& c) const;
 		virtual NewDrawer *createElementDrawer(PreparationParameters *pp, ILWIS::DrawerParameters* parms) const;
 		void setDrawMethod(DrawMethod method=drmINIT);
 		RangeReal getValueRange(Column attributeColumn) const;

@@ -14,6 +14,7 @@
 #include "Drawers\PointDrawer.h"
 #include "Drawers\PointFeatureDrawer.h"
 #include "Engine\Representation\Rprclass.h"
+#include "Client\ilwis.h"
 
 using namespace ILWIS;
 
@@ -23,10 +24,12 @@ ILWIS::NewDrawer *createSpaceTimePathDrawer(DrawerParameters *parms) {
 
 SpaceTimePathDrawer::SpaceTimePathDrawer(DrawerParameters *parms)
 : SpaceTimeDrawer(parms,"SpaceTimePathDrawer")
+, objectStartIndexes(new vector<long>())
 {
 }
 
 SpaceTimePathDrawer::~SpaceTimePathDrawer() {
+	delete objectStartIndexes;
 }
 
 String SpaceTimePathDrawer::store(const FileName& fnView, const String& parentSection) const
@@ -99,6 +102,53 @@ void SpaceTimePathDrawer::prepare(PreparationParameters *parms){
 	}
 }
 
+String SpaceTimePathDrawer::getInfo(const Coord& c) const
+{
+	if ( !hasInfo() || !isActive() )
+		return "";
+	String info;
+	vector<long> raws;
+	GLuint objectID = getSelectedObjectID(c);
+	if (objectID != UINT_MAX) {
+		long first = objectID > 0 ? (*objectStartIndexes)[objectID - 1] : 0;
+		long last = objectID < objectStartIndexes->size() ? (*objectStartIndexes)[objectID] : features.size();
+
+		// construct info
+		Feature * feature = features[first];
+		if (feature != 0) {
+			if (!useAttColumn) {
+				SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)parentDrawer;
+				BaseMapPtr *bmptr = mapDrawer->getBaseMap(mapDrawer->getCurrentIndex());
+				if (bmptr->dvrs().fRawAvailable()) {
+					long raw = feature->iValue();
+					info = bmptr->dvrs().sValueByRaw(raw);
+				} else {
+					double val = feature->rValue();
+					info = bmptr->dvrs().sValue(val);
+				}
+			} else if (getAtttributeColumn().fValid()) {
+				long raw = feature->iValue();
+				if (raw != iUNDEF)
+					info = getAtttributeColumn()->sValue(raw);
+				else
+					info = "?";
+			} else
+				info = "?";
+		} else
+			info = "?";
+
+		// construct raws array
+		for (long i = first; i < last; ++i) {
+			Feature *feature = features[i];
+			if (feature != 0)
+				raws.push_back(feature->iValue());
+		}
+	}
+	// send raws array
+	IlwWinApp()->SendUpdateTableSelection(raws, ((SpatialDataDrawer *)getParentDrawer())->getBaseMap()->tblAtt()->fnObj);
+	return info;
+}
+
 void SpaceTimePathDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc) const
 {
 	Tranquilizer trq(TR("computing triangles"));
@@ -116,6 +166,10 @@ void SpaceTimePathDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc
 	double cubeBottom = 0;
 	double cubeTop = timeBounds->tMax() - timeBounds->tMin();
 	*fHatching = false; // in case of a classmap, if any of the attributes uses hatching, we set fHatching to true
+	GLuint objectID = 0;
+	objectStartIndexes->clear();
+	glInitNames();
+	glPushName(objectID);
 	if (steps == 1)
 	{
 		glBegin(GL_LINE_STRIP);
@@ -125,6 +179,8 @@ void SpaceTimePathDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc
 			if (fUseGroup && sLastGroupValue != getGroupValue(feature)) {
 				sLastGroupValue = getGroupValue(feature);
 				glEnd();
+				objectStartIndexes->push_back(i);
+				glLoadName(++objectID);
 				glBegin(GL_LINE_STRIP);
 			}
 			ILWIS::Point *point = (ILWIS::Point *)feature;
@@ -261,6 +317,9 @@ void SpaceTimePathDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc
 						}
 
 						glEnd();
+					} else {
+						objectStartIndexes->push_back(i);
+						glLoadName(++objectID);
 					}
 					// continue
 					headPrevious = head;
@@ -280,6 +339,7 @@ void SpaceTimePathDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc
 				glDisable(GL_POLYGON_STIPPLE);
 		}
 	}
+	glPopName();
 }
 
 //-----------------------------------------------------------------

@@ -14,6 +14,7 @@
 #include "Drawers\PointDrawer.h"
 #include "Drawers\PointFeatureDrawer.h"
 #include "Engine\Representation\Rprclass.h"
+#include "Client\ilwis.h"
 
 using namespace ILWIS;
 
@@ -41,6 +42,45 @@ void StationsDrawer::load(const FileName& fnView, const String& currentSection)
 	SpaceTimeDrawer::load(fnView, currentSection);
 }
 
+String StationsDrawer::getInfo(const Coord& c) const
+{
+	if ( !hasInfo() || !isActive() )
+		return "";
+	String info;
+	vector<long> raws;
+	GLuint objectID = getSelectedObjectID(c);
+	if (objectID != UINT_MAX) {
+		// construct info
+		Feature * feature = CFEATURE(basemap->getFeature(objectID));
+		if (feature != 0) {
+			if (!useAttColumn) {
+				SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)parentDrawer;
+				BaseMapPtr *bmptr = mapDrawer->getBaseMap(mapDrawer->getCurrentIndex());
+				if (bmptr->dvrs().fRawAvailable()) {
+					long raw = feature->iValue();
+					info = bmptr->dvrs().sValueByRaw(raw);
+				} else {
+					double val = feature->rValue();
+					info = bmptr->dvrs().sValue(val);
+				}
+			} else if (getAtttributeColumn().fValid()) {
+				long raw = feature->iValue();
+				if (raw != iUNDEF)
+					info = getAtttributeColumn()->sValue(raw);
+				else
+					info = "?";
+			} else
+				info = "?";
+			// construct raws array (for stations the array has just one element)
+			raws.push_back(feature->iValue());
+		} else
+			info = "?";
+	}
+	// send raws array
+	IlwWinApp()->SendUpdateTableSelection(raws, ((SpatialDataDrawer *)getParentDrawer())->getBaseMap()->tblAtt()->fnObj);
+	return info;
+}
+
 void StationsDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc) const
 {
 	Tranquilizer trq(TR("computing triangles"));
@@ -59,6 +99,8 @@ void StationsDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc) con
 	double cubeTop = timeBounds->tMax() - timeBounds->tMin();
 	*fHatching = false; // in case of a classmap, if any of the attributes uses hatching, we set fHatching to true
 	double delta = cube.altitude() / 200;
+	glInitNames();
+	glPushName(0);
 	if (steps == 1)
 	{
 		for(long i = 0; i < numberOfFeatures; ++i) {
@@ -67,6 +109,7 @@ void StationsDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc) con
 				ILWIS::Point *point = (ILWIS::Point *)feature;
 				double z = getTimeValue(feature);
 				if (z >= cubeBottom && z <= cubeTop) {
+					glLoadName(i);
 					glBegin(GL_LINE_STRIP);
 					Coord crd = *(point->getCoordinate());
 					crd.z = z * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
@@ -135,6 +178,7 @@ void StationsDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc) con
 						} else
 							glDisable(GL_POLYGON_STIPPLE);
 
+						glLoadName(i);
 						// cylinderCoords
 						glBegin(GL_TRIANGLE_STRIP);
 						double f = 0;
@@ -161,6 +205,7 @@ void StationsDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc) con
 				glDisable(GL_POLYGON_STIPPLE);
 		}
 	}
+	glPopName();
 }
 
 

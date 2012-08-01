@@ -14,6 +14,7 @@
 #include "Drawers\PointDrawer.h"
 #include "Drawers\PointFeatureDrawer.h"
 #include "Engine\Representation\Rprclass.h"
+#include "Engine\Drawers\DrawerContext.h"
 
 using namespace ILWIS;
 
@@ -253,6 +254,60 @@ void SpaceTimeDrawer::SetNrSteps(int steps)
 int SpaceTimeDrawer::iNrSteps()
 {
 	return nrSteps;
+}
+
+GLuint SpaceTimeDrawer::getSelectedObjectID(const Coord& c) const
+{
+	if ( c.fUndef() )
+		return UINT_MAX;
+	RowCol rc = rootDrawer->WorldToScreen(c);
+	if (!rootDrawer->getDrawerContext()->TakeContext())
+		return UINT_MAX;
+	GLuint objectID = UINT_MAX;
+	if (*displayList != 0) {
+		const unsigned int SELECT_BUF_SIZE = 2048;
+		GLuint selectBuf [SELECT_BUF_SIZE];
+		GLint viewport[4];
+		glGetIntegerv(GL_VIEWPORT, viewport);
+		glSelectBuffer(SELECT_BUF_SIZE, selectBuf);
+		glRenderMode(GL_SELECT);
+		glMatrixMode(GL_PROJECTION);
+		glPushMatrix();
+		glLoadIdentity();
+		gluPickMatrix(rc.Col, rc.Row, 1.0, 1.0, viewport);
+		CoordBounds cbZoom = rootDrawer->getCoordBoundsZoom();
+		if (rootDrawer->is3D()) {
+			Coord eyePoint = rootDrawer->getEyePoint();
+			Coord viewPoint = rootDrawer->getViewPoint();
+			double windowAspectRatio = (double)viewport[2] / (double)viewport[3]; // (double)(rc.Col) / (double)(rc.Row)
+			double zNear = max(abs(eyePoint.x - viewPoint.x), abs(eyePoint.y - viewPoint.y)) / 2.0;
+			double zFar = max(cbZoom.width(), cbZoom.height()) * 4.0;
+			gluPerspective(30.0, windowAspectRatio, zNear, zFar);
+		} else {
+			glOrtho(cbZoom.cMin.x,cbZoom.cMax.x,cbZoom.cMin.y,cbZoom.cMax.y,-1,1);
+		}
+		glMatrixMode(GL_MODELVIEW);
+		glCallList(*displayList);
+		glMatrixMode(GL_PROJECTION);
+		glPopMatrix();
+		glMatrixMode(GL_MODELVIEW);
+		int nrObjects = glRenderMode(GL_RENDER);
+		if (nrObjects > 0) {
+			GLuint minZ = selectBuf[1];
+			objectID = selectBuf[3];
+			for (int i = 1; i < nrObjects; ++i) {
+				//int nrHits = selectBuf[i * 4];
+	 			GLuint minz = selectBuf[i * 4 + 1];
+ 				//int maxZ = selectBuf[i * 4 + 2];
+				if (minz < minZ) {
+					minZ = minz;
+					objectID = selectBuf[i * 4 + 3];
+				}
+			}
+		}
+	}
+	rootDrawer->getDrawerContext()->ReleaseContext();
+	return objectID;
 }
 
 void SpaceTimeDrawer::getHatch(RepresentationClass * prc, long iRaw, const byte* &hatch) const {
