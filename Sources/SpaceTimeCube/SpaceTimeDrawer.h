@@ -42,7 +42,7 @@ class _export SpaceTimeDrawer : public FeatureLayerDrawer, public TemporalDrawer
 		BaseMapPtr *basemap;
 		bool fValueMap;
 		CoordBounds cube;
-		vector<int> disabledRaws;
+		vector<long> disabledRaws;
 		bool *fHatching;
 	private:
 		Column prevAttColumn;
