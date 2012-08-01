@@ -314,7 +314,7 @@ void SpaceTimeCube::refreshDrawerList() {
 			}
 			DrawerParameters dp(rootDrawer, rootDrawer);
 			PreparationParameters pp(NewDrawer::ptALL);
-			AddTimeOffsetDrawers((ComplexDrawer*)drawer, &timeShift, dp, pp);
+			AddTimeOffsetDrawers((ComplexDrawer*)drawer->getDrawer(0), &timeShift, dp, pp);
 		}
 		SortableDrawer * sortableDrawer = dynamic_cast<SortableDrawer*>(((ComplexDrawer*)drawer)->getDrawer(0));
 		if (sortableDrawer) {
