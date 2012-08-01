@@ -61,7 +61,6 @@ void StationsDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc) con
 	double delta = cube.altitude() / 200;
 	if (steps == 1)
 	{
-		glBegin(GL_LINES);
 		for(long i = 0; i < numberOfFeatures; ++i) {
 			Feature *feature = CFEATURE(basemap->getFeature(i));
 			if ( feature && feature->fValid() && feature->rValue() != rUNDEF) {
@@ -84,12 +83,12 @@ void StationsDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc) con
 						glVertex3f(crd.x, crd.y, crd.z - delta);
 						glVertex3f(crd.x, crd.y, crd.z + delta);
 					}
+					glEnd();
 				}
 			}
 			if ( i % 100 == 0)
 				trq.fUpdate(i, numberOfFeatures); 
 		}
-		glEnd();
 	}
 	else
 	{
