@@ -217,7 +217,7 @@ bool PointMapTransform::fFreezing()
 		LatLonHeight llhOut;
 		LatLon llTmp;
 		Coord cTmp = crd; //input {both formats, XY and LL)
-		for (long i=1; i <= pmp->iFeatures(); ++i ) 
+		for (long i=0; i < pmp->iFeatures(); ++i ) 
 		{
 			if (trq.fUpdate(i, pmp->iFeatures()))
 				return false; 
@@ -254,7 +254,7 @@ bool PointMapTransform::fFreezing()
 	}
 	else
 	{
-		for (long i=1; i <= pmp->iFeatures(); ++i ) 
+		for (long i=0; i < pmp->iFeatures(); ++i ) 
 		{
 			if (trq.fUpdate(i, pmp->iFeatures()))
 				return false; 
