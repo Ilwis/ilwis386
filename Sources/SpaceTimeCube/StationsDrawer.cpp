@@ -48,8 +48,26 @@ String StationsDrawer::getInfo(const Coord& c) const
 		return "";
 	String info;
 	vector<long> raws;
-	GLuint objectID = getSelectedObjectID(c);
-	if (objectID != UINT_MAX) {
+	vector<GLuint> objectIDs = getSelectedObjectIDs(c);
+	int i = 0;
+	if (useAttColumn && getAtttributeColumn().fValid()) {
+		while (i < objectIDs.size()) {
+			GLuint objectID = objectIDs[i];
+			Feature * feature = CFEATURE(basemap->getFeature(objectID));
+			if (feature != 0) {
+				long raw = feature->iValue();
+				if (raw != iUNDEF) {
+					raw = getAtttributeColumn()->iRaw(raw);
+					if (find(disabledRaws.begin(), disabledRaws.end(), raw) == disabledRaws.end())
+						break;
+				}
+			}
+			++i;
+		}
+	}
+
+	if (i < objectIDs.size()) {
+		GLuint objectID = objectIDs[i];
 		// construct info
 		Feature * feature = CFEATURE(basemap->getFeature(objectID));
 		if (feature != 0) {
