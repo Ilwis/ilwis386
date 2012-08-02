@@ -1793,7 +1793,7 @@ LRESULT BaseTablePaneView::OnGotoField(WPARAM wParam, LPARAM lParam)
 
 int BaseTablePaneView::iSelectedColumn() const
 {
-	if (mmSelect.MinRow() != -1 || mmSelect.MaxRow() != LONG_MAX)
+	if (mmSelect.MinRow() != -1 || mmSelect.MaxRow() != iRows())
 		return iUNDEF;
 	if (mmSelect.MinCol() != mmSelect.MaxCol())
 		return iUNDEF;
