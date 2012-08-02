@@ -437,7 +437,7 @@ void PointMapStore::Delete(long iRec)
 
 long PointMapStore::iAdd(long iRecs)
 {
-	for(int i=geometries->size() - 1; i < iRecs; ++i){
+	for(int i=0; i < iRecs; ++i){
 		pntNew();
 	}
 
