@@ -81,8 +81,12 @@ public:
 
 protected:
 	virtual void DrawFunction(CDC* pDC, const SimpleFunction * pFunc);
+	virtual void DrawAxes(CDC* pDC);
 	const int iXToScreen(const double rX) const;
 	const int iYToScreen(const double rY) const;
+	CRect GetFunctionPlotRect() const;
+	const double rScreenToX(int iScreenX) const;
+	const double rScreenToY(int iScreenY) const;
 	//{{AFX_MSG(SimpleGraphWindow)
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
@@ -93,15 +97,15 @@ protected:
 
 	bool m_fDragging;
 	SimpleFunction * m_pFunc;
+	DoubleRect m_XYFunctionDomain; // function bounds
+	bool m_fRedraw;
+	bool m_fAbortPaintThread;
+	CFont * m_fnt;
 
 private:
 	void DrawFunction(const SimpleFunction * pFunc);
-	void DrawAxes(CDC* pDC);
 	const double rXToCFactor() const;
 	const double rYToRFactor() const;
-	const double rScreenToX(int iScreenX) const;
-	const double rScreenToY(int iScreenY) const;
-	CRect GetFunctionPlotRect() const;
 	static UINT PaintInThread(LPVOID pParam);
 	void SetDirty(bool fRedraw = false);
 	void StartDrag(CPoint point);
@@ -110,12 +114,9 @@ private:
 	void CloseThreads();
 	void ProcessMessages();
 
-	DoubleRect m_XYFunctionDomain; // function bounds
 	CPoint m_pointStartDragPosition; // in plain screen coordinates
 	bool m_fBusyInPaintThread;
 	bool m_fDirty;
-	bool m_fRedraw;
-	bool m_fAbortPaintThread;
  	CBitmap* m_bmMemory;
 	CBitmap* m_bmOldBitmap;
 	CDC* m_dcMemory;
@@ -124,7 +125,6 @@ private:
 	int m_iTopBorderThickness;
 	int m_iRightBorderThickness;
 	int m_iBottomBorderThickness;
-	CFont * m_fnt;
 
 	DECLARE_MESSAGE_MAP()
 };
