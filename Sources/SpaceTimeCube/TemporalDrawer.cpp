@@ -52,6 +52,11 @@ const double TemporalDrawer::getTimeValue2(Feature * f) const
 		return getTimeValue(f);
 }
 
+const TimeBounds * TemporalDrawer::getTimeBounds() const
+{
+	return timeBounds;
+}
+
 String TemporalDrawer::storeTemporal(const FileName& fnView, const String& parentSection) const
 {
 	ObjectInfo::WriteElement(parentSection.c_str(), "UseTime", fnView, fTimeAttribute);

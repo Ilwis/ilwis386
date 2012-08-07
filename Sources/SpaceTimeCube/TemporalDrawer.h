@@ -15,6 +15,7 @@ public:
 	void SetSelfTime();
 	const double getTimeValue(Feature * f) const;
 	const double getTimeValue2(Feature * f) const;
+	const TimeBounds * getTimeBounds() const;
 
 protected:
 	String storeTemporal(const FileName& fnView, const String& parentSection) const;
