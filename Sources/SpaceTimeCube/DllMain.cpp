@@ -23,6 +23,7 @@
 #include "TimeZoomTool.h"
 #include "CubeElementsTool.h"
 #include "PathScalingTool.h"
+#include "TimeProfileTool.h"
 
 using namespace ILWIS;
 
@@ -33,6 +34,7 @@ DrawerToolInfoVector *createDrawerTool() {
 	infos->push_back(new DrawerToolInfo("SpaceTimePathTool",createSpaceTimePathTool));
 	infos->push_back(new DrawerToolInfo("TimeZoomTool",createTimeZoomTool));
 	infos->push_back(new DrawerToolInfo("PathScalingTool",createPathScalingTool));
+	infos->push_back(new DrawerToolInfo("TimeProfileTool",createTimeProfileTool));
 	return infos;
 }
 
