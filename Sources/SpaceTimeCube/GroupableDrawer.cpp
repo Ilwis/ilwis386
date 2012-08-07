@@ -33,6 +33,11 @@ const String GroupableDrawer::getGroupValue(Feature * f) const
 		return "?";
 }
 
+const bool GroupableDrawer::fGetUseGroup() const
+{
+	return fUseGroup;
+}
+
 String GroupableDrawer::storeGroupable(const FileName& fnView, const String& parentSection) const
 {
 	ObjectInfo::WriteElement(parentSection.c_str(), "UseGroup", fnView, fUseGroup);

@@ -11,6 +11,7 @@ public:
 	void SetGroupAttribute(const Column & col);
 	void SetNoGroup();
 	const String getGroupValue(Feature * f) const;
+	const bool fGetUseGroup() const;
 
 protected:
 	String storeGroupable(const FileName& fnView, const String& parentSection) const;
