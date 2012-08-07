@@ -15,6 +15,7 @@ class _export SpaceTimePathDrawer : public SpaceTimeDrawer, public SortableDrawe
 		SpaceTimePathDrawer(DrawerParameters *parms);
 		virtual ~SpaceTimePathDrawer();
 		virtual void prepare(PreparationParameters *parms);
+		const vector<Feature *> & getFeatures() const;
 
 	protected:
 		String store(const FileName& fnView, const String& parentSection) const;

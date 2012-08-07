@@ -102,6 +102,11 @@ void SpaceTimePathDrawer::prepare(PreparationParameters *parms){
 	}
 }
 
+const vector<Feature *> & SpaceTimePathDrawer::getFeatures() const
+{
+	return features;
+}
+
 String SpaceTimePathDrawer::getInfo(const Coord& c) const
 {
 	if ( !hasInfo() || !isActive() )
