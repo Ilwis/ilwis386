@@ -69,7 +69,7 @@ namespace linemerge { // geos::operation::linemerge
  * but will not form polygons from incorrected noded edges.
  *
  */
-class GEOS_DLL LineMerger {
+class _export LineMerger {
 
 private:
 
