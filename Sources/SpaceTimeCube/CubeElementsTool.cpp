@@ -16,7 +16,6 @@
 #include "Engine\Drawers\DrawerContext.h"
 #include "SpaceTimeCubeTool.h"
 #include "CubeElementsTool.h"
-#include "drawers\CanvasBackgroundDrawer.h"
 
 DrawerTool *createCubeElementsTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) {
 	return new CubeElementsTool(zv, view, drw);
