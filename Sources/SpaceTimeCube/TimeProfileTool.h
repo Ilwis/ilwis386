@@ -25,9 +25,15 @@ namespace ILWIS {
 	public:
 		ProfileGraphWindow(FormEntry *f);
 		void SetFunctions(SimpleFunction * funPtr, int _iNrFunctions);
+		void SetGridNodes(vector<double> & gridXNodes, vector<double> & gridYNodes);
+		void SetGrid(bool gridX, bool gridY);
 	protected:
 		virtual void DrawFunction(CDC* pDC, const SimpleFunction * pFunc);
 		virtual void DrawAxes(CDC* pDC);
+		vector<double> m_gridXNodes;
+		vector<double> m_gridYNodes;
+		bool m_gridX;
+		bool m_gridY;
 		int iNrFunctions;
 	};
 
@@ -37,6 +43,8 @@ namespace ILWIS {
 		ProfileFieldGraph(FormEntry* parent);
 		void create();             // overriden
 		void SetFunctions(SimpleFunction * funPtr, int iNrFunctions);
+		void SetGridNodes(vector<double> & gridXNodes, vector<double> & gridYNodes);
+		void SetGrid(bool gridX, bool gridY);
 	};
 
 	class ProfileGraphFunction : public SimpleFunction
@@ -72,11 +80,17 @@ namespace ILWIS {
 		void ComputeGraphs();
 		int CallBackAnchorChangedInGraph(Event*);
 		int CallBackSegmentMapChanged(Event*);
+		int CallBackXGrid(Event*);
+		int CallBackYGrid(Event*);
 		String sSegmentMapProfile;
 		FieldSegmentMap * fsm;
 		ProfileFieldGraph * fgFunctionGraph;
 		ProfileGraphFunction * m_functions;
 		SpaceTimePathDrawer *stpdrw;
+		CheckBox * cbXgrid;
+		CheckBox * cbYgrid;
+		bool m_gridX;
+		bool m_gridY;
 	};
 }
 

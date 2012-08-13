@@ -66,6 +66,8 @@ void TimeProfileTool::startTimeProfileForm()
 
 ProfileGraphWindow::ProfileGraphWindow(FormEntry *f)
 : SimpleGraphWindowWrapper(f)
+, m_gridX(false)
+, m_gridY(false)
 {
 }
 
@@ -75,6 +77,18 @@ void ProfileGraphWindow::SetFunctions(SimpleFunction * funPtr, int _iNrFunctions
 	SetFunction(funPtr);
 }
 
+void ProfileGraphWindow::SetGridNodes(vector<double> & gridXNodes, vector<double> & gridYNodes)
+{
+	m_gridXNodes = gridXNodes;
+	m_gridYNodes = gridYNodes;
+}
+
+void ProfileGraphWindow::SetGrid(bool gridX, bool gridY)
+{
+	m_gridX = gridX;
+	m_gridY = gridY;
+	Replot();
+}
 
 void ProfileGraphWindow::DrawFunction(CDC* pDC, const SimpleFunction * pFunc)
 {
@@ -136,13 +150,26 @@ void ProfileGraphWindow::DrawFunction(CDC* pDC, const SimpleFunction * pFunc)
 void ProfileGraphWindow::DrawAxes(CDC* pDC)
 {
 	// draw the axes with a thin black pen
-	CPen penGray(PS_SOLID, 0, RGB(0, 0, 0));
+	CPen penBlack(PS_SOLID, 0, RGB(0, 0, 0));
+	CPen penGray(PS_SOLID, 0, RGB(200, 200, 200));
 	CPen* pOldPen = pDC->SelectObject(&penGray);
 
 	if (!m_fRedraw && !m_fAbortPaintThread)
 	{
-		// draw the axes
 		CRect functionPlotRect (GetFunctionPlotRect());
+		// draw the grid
+		if (m_gridX)
+			for (int i = 0; i < m_gridXNodes.size(); ++i) {
+				pDC->MoveTo(iXToScreen(m_gridXNodes[i]), functionPlotRect.top);
+				pDC->LineTo(iXToScreen(m_gridXNodes[i]), functionPlotRect.bottom);
+			}
+		if (m_gridY)
+			for (int i = 0; i < m_gridYNodes.size(); ++i) {
+				pDC->MoveTo(functionPlotRect.left, iYToScreen(m_gridYNodes[i]));
+				pDC->LineTo(functionPlotRect.right, iYToScreen(m_gridYNodes[i]));
+			}
+		pDC->SelectObject(&penBlack);
+		// draw the axes
 		pDC->MoveTo(functionPlotRect.left, functionPlotRect.top);
 		pDC->LineTo(functionPlotRect.left, functionPlotRect.bottom);
 		pDC->LineTo(functionPlotRect.right, functionPlotRect.bottom);
@@ -213,8 +240,17 @@ void ProfileFieldGraph::create()
 
 void ProfileFieldGraph::SetFunctions(SimpleFunction * funPtr, int iNrFunctions)
 {
-	if (sgw) ((ProfileGraphWindow*)sgw)->SetFunctions(funPtr, iNrFunctions);
-		
+	if (sgw) ((ProfileGraphWindow*)sgw)->SetFunctions(funPtr, iNrFunctions);	
+}
+
+void ProfileFieldGraph::SetGridNodes(vector<double> & gridXNodes, vector<double> & gridYNodes)
+{
+	if (sgw) ((ProfileGraphWindow*)sgw)->SetGridNodes(gridXNodes, gridYNodes);
+}
+
+void ProfileFieldGraph::SetGrid(bool gridX, bool gridY)
+{
+	if (sgw) ((ProfileGraphWindow*)sgw)->SetGrid(gridX, gridY);
 }
 
 ProfileGraphFunction::ProfileGraphFunction()
@@ -358,6 +394,8 @@ TimeProfileForm::TimeProfileForm(CWnd* mw, SpaceTimePathDrawer *stp)
 : FormWithDest(mw, TR("Time Profile of Point Map"), fbsSHOWALWAYS|fbsBUTTONSUNDER|fbsNOCANCELBUTTON|fbsOKHASCLOSETEXT, WS_MINIMIZEBOX)
 , stpdrw(stp)
 , m_functions(0)
+, m_gridX(false)
+, m_gridY(false)
 {
 	fsm = new FieldSegmentMap(root, TR("Profile Segment Map"), &sSegmentMapProfile);
 	fsm->SetCallBack((NotifyProc)&TimeProfileForm::CallBackSegmentMapChanged);
@@ -367,6 +405,11 @@ TimeProfileForm::TimeProfileForm(CWnd* mw, SpaceTimePathDrawer *stp)
 	fgFunctionGraph->SetIndependentPos();
 	fgFunctionGraph->SetFunctions(0, 0);
 	fgFunctionGraph->SetCallBack((NotifyProc)&TimeProfileForm::CallBackAnchorChangedInGraph);
+	cbXgrid = new CheckBox(root, TR("X-Grid"), &m_gridX);
+	cbXgrid->SetCallBack((NotifyProc)&TimeProfileForm::CallBackXGrid);
+	cbYgrid = new CheckBox(root, TR("Y-Grid"), &m_gridY);
+	cbYgrid->SetCallBack((NotifyProc)&TimeProfileForm::CallBackYGrid);
+	cbYgrid->Align(cbXgrid, AL_AFTER);
 
 	create();
 	
@@ -395,6 +438,49 @@ int TimeProfileForm::CallBackSegmentMapChanged(Event*)
 	if (sSegmentMapProfile.length() > 0)
 		ComputeGraphs();
 	return 0;
+}
+
+int TimeProfileForm::CallBackXGrid(Event*)
+{
+	cbXgrid->StoreData();
+	fgFunctionGraph->SetGrid(m_gridX, m_gridY);
+	return 0;
+}
+
+int TimeProfileForm::CallBackYGrid(Event*)
+{
+	cbYgrid->StoreData();
+	fgFunctionGraph->SetGrid(m_gridX, m_gridY);
+	return 0;
+}
+
+vector<double> getTimeTicks(const TimeBounds * timeBounds)
+{
+	vector<double> timeTicks;
+	double tMin = timeBounds->tMin();
+	double tMax = timeBounds->tMax();
+	double range = tMax - tMin;
+	double step = 1;
+	if (range < 20.0 / (24.0 * 60.0)) // 20 minutes
+		step = 1 / (24.0 * 60.0); // step is 1 minute
+	else if (range > 20.0 / (24.0 * 60.0) && range < 2.0 / 24.0) // 2 hours
+		step = 10.0 / (24.0 * 60.0); // step is 10 minutes
+	else if (range >= 2.0 / 24.0 && range < 2) // 2 days
+		step = 1.0 / 24.0; // step is 1 hour
+	else if (range >= 2 && range < 15) // 2 weeks
+		step = 1; // step is 1 day
+	else if (range >= 15 && range < 90) // 3 months
+		step = 7; // step is 1 week
+	else if (range >= 90 && range < 700) // 2 years
+		step = 30; // step is 1 month
+	else if (range >= 700)
+		step = 365; // step is 1 year
+	double tick = tMin + step;
+	while (tick < tMax) {
+		timeTicks.push_back(tick);
+		tick += step;
+	}
+	return timeTicks;
 }
 
 void TimeProfileForm::ComputeGraphs()
@@ -449,6 +535,12 @@ void TimeProfileForm::ComputeGraphs()
 
 		if (projectedFeatures.size() > 0)
 			projectedFeaturesList.push_back(projectedFeatures);
+		const CoordinateSequence* streetNodes = ls->getCoordinatesRO();
+		vector<double> projectedStreetNodes;
+		for (int i = 0; i < streetNodes->size(); ++i) {
+			double length = line.indexOf(streetNodes->getAt(i));
+			projectedStreetNodes.push_back(length);
+		}
 
 		if (m_functions) {
 			fgFunctionGraph->SetFunctions(0, 0);
@@ -497,7 +589,9 @@ void TimeProfileForm::ComputeGraphs()
 			m_functions[i].SetColors(colors);
 		}
 		for (int i = 0; i < projectedFeaturesList.size(); ++i)
-			m_functions[i].SetDomain(minDataX, timeBounds->tMax(), maxDataX, timeBounds->tMin()); // the function domains will have the times on the Y axis and the lengths on the X axis
+			m_functions[i].SetDomain(projectedStreetNodes[0], timeBounds->tMax(), projectedStreetNodes[projectedStreetNodes.size() - 1], timeBounds->tMin()); // the function domains will have the times on the Y axis and the lengths on the X axis
 		fgFunctionGraph->SetFunctions(m_functions, projectedFeaturesList.size());
+		vector<double> timeNodes = getTimeTicks(timeBounds);
+		fgFunctionGraph->SetGridNodes(projectedStreetNodes, timeNodes);
 	}
 }
