@@ -168,16 +168,18 @@ void ProfileGraphWindow::DrawAxes(CDC* pDC)
 		UINT iPreviousAlignment = pDC->SetTextAlign(TA_CENTER | TA_TOP);
 		COLORREF clrPreviousColor = pDC->SetTextColor(RGB(0, 0, 0)); // black text
 		CString sVal;
-		sVal.Format("%g", m_XYFunctionDomain.left);
-		pDC->TextOut(functionPlotRect.left, functionPlotRect.bottom + iTickThickness, sVal);
-		sVal.Format("%g", m_XYFunctionDomain.right);
-		pDC->TextOut(functionPlotRect.right, functionPlotRect.bottom + iTickThickness, sVal);
+		if (m_XYFunctionDomain.fValid()) {
+			sVal.Format("%.02f", m_XYFunctionDomain.left);
+			pDC->TextOut(functionPlotRect.left, functionPlotRect.bottom + iTickThickness, sVal);
+			sVal.Format("%.02f", m_XYFunctionDomain.right);
+			pDC->TextOut(functionPlotRect.right, functionPlotRect.bottom + iTickThickness, sVal);
 		// y-axis values
-		pDC->SetTextAlign(TA_RIGHT | TA_BASELINE);
-		sVal = ILWIS::Time(m_XYFunctionDomain.top).toString().c_str();
-		pDC->TextOut(functionPlotRect.left - iTickThickness, functionPlotRect.top, sVal);
-		sVal = ILWIS::Time(m_XYFunctionDomain.bottom).toString().c_str();
-		pDC->TextOut(functionPlotRect.left - iTickThickness, functionPlotRect.bottom, sVal);
+			pDC->SetTextAlign(TA_RIGHT | TA_BASELINE);
+			sVal = ILWIS::Time(m_XYFunctionDomain.top).toString().c_str();
+			pDC->TextOut(functionPlotRect.left - iTickThickness, functionPlotRect.top, sVal);
+			sVal = ILWIS::Time(m_XYFunctionDomain.bottom).toString().c_str();
+			pDC->TextOut(functionPlotRect.left - iTickThickness, functionPlotRect.bottom, sVal);
+		}
 
 		pDC->SetTextColor(clrPreviousColor);
 		pDC->SetTextAlign(iPreviousAlignment);
@@ -362,13 +364,13 @@ TimeProfileForm::TimeProfileForm(CWnd* mw, SpaceTimePathDrawer *stp)
 	fgFunctionGraph = new ProfileFieldGraph(root);
 	fgFunctionGraph->SetWidth(500);
 	fgFunctionGraph->SetHeight(500);
-	fgFunctionGraph->SetBorderThickness(50, 20, 20, 20);
 	fgFunctionGraph->SetIndependentPos();
 	fgFunctionGraph->SetFunctions(0, 0);
 	fgFunctionGraph->SetCallBack((NotifyProc)&TimeProfileForm::CallBackAnchorChangedInGraph);
 
 	create();
-
+	
+	fgFunctionGraph->SetBorderThickness(130, 20, 30, 20);
 	fgFunctionGraph->Replot();
 }
 
