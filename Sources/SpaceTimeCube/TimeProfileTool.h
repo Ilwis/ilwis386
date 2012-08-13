@@ -101,8 +101,12 @@ namespace ILWIS {
 		SpaceTimePathDrawer *stpdrw;
 		CheckBox * cbXgrid;
 		CheckBox * cbYgrid;
+		CheckBox * cbRadiusThreshold;
+		FieldReal * frRadiusThreshold;
 		bool m_gridX;
 		bool m_gridY;
+		bool m_fUseRadiusThreshold;
+		double m_radiusThreshold;
 	};
 }
 

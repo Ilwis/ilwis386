@@ -441,6 +441,8 @@ TimeProfileForm::TimeProfileForm(CWnd* mw, SpaceTimePathDrawer *stp)
 , m_functions(0)
 , m_gridX(false)
 , m_gridY(false)
+, m_fUseRadiusThreshold(false)
+, m_radiusThreshold(50)
 {
 	fsm = new FieldSegmentMap(root, TR("Profile Segment Map"), &sSegmentMapProfile);
 	fsm->SetCallBack((NotifyProc)&TimeProfileForm::CallBackSegmentMapChanged);
@@ -455,6 +457,12 @@ TimeProfileForm::TimeProfileForm(CWnd* mw, SpaceTimePathDrawer *stp)
 	cbYgrid = new CheckBox(root, TR("Y-Grid"), &m_gridY);
 	cbYgrid->SetCallBack((NotifyProc)&TimeProfileForm::CallBackYGrid);
 	cbYgrid->Align(cbXgrid, AL_AFTER);
+	cbRadiusThreshold = new CheckBox(root, TR("Radius Threshold"), &m_fUseRadiusThreshold);
+	cbRadiusThreshold->Align(cbXgrid, AL_UNDER);
+	cbRadiusThreshold->SetCallBack((NotifyProc)&TimeProfileForm::CallBackSegmentMapChanged);
+	frRadiusThreshold = new FieldReal(cbRadiusThreshold, "", &m_radiusThreshold, ValueRange(0, 100000, 0.01));
+	frRadiusThreshold->Align(cbRadiusThreshold, AL_AFTER);
+	frRadiusThreshold->SetCallBack((NotifyProc)&TimeProfileForm::CallBackSegmentMapChanged);
 
 	create();
 	
@@ -480,6 +488,8 @@ int TimeProfileForm::CallBackAnchorChangedInGraph(Event*)
 int TimeProfileForm::CallBackSegmentMapChanged(Event*)
 {
 	fsm->StoreData();
+	cbRadiusThreshold->StoreData();
+	frRadiusThreshold->StoreData();
 	if (sSegmentMapProfile.length() > 0)
 		ComputeGraphs();
 	return 0;
@@ -573,6 +583,8 @@ void TimeProfileForm::ComputeGraphs()
 
 				geos::algorithm::distance::PointPairDistance ptDist;
 				geos::algorithm::distance::DistanceToPoint::computeDistance(*ls, crd, ptDist);
+				if (m_fUseRadiusThreshold && ptDist.getDistance() > m_radiusThreshold)
+					continue;
 				double length = line.indexOf(ptDist.getCoordinate(0));
 				projectedFeatures.push_back(std::pair<double, Feature*>(length, feature));
 			}
