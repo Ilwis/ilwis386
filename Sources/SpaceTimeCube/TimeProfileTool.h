@@ -6,6 +6,8 @@ ILWIS::DrawerTool *createTimeProfileTool(ZoomableView* zv, LayerTreeView *view, 
 #include "Client\FormElements\FieldGraph.h"
 #include "Engine\Base\Algorithm\SimpleFunction.h"
 
+class InfoLine;
+
 namespace ILWIS {
 
 	class TimeProfileTool : public DrawerTool {
@@ -24,17 +26,27 @@ namespace ILWIS {
 	{
 	public:
 		ProfileGraphWindow(FormEntry *f);
+		virtual ~ProfileGraphWindow();
 		void SetFunctions(SimpleFunction * funPtr, int _iNrFunctions);
 		void SetGridNodes(vector<double> & gridXNodes, vector<double> & gridYNodes);
 		void SetGrid(bool gridX, bool gridY);
+		virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
+
 	protected:
 		virtual void DrawFunction(CDC* pDC, const SimpleFunction * pFunc);
 		virtual void DrawAxes(CDC* pDC);
+		String getInfo(CPoint point);
+		afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+		afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+		afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 		vector<double> m_gridXNodes;
 		vector<double> m_gridYNodes;
 		bool m_gridX;
 		bool m_gridY;
 		int iNrFunctions;
+		InfoLine* info;
+
+		DECLARE_MESSAGE_MAP()
 	};
 
 	class ProfileFieldGraph : public FieldGraph  

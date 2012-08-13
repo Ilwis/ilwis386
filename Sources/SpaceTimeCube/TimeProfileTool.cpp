@@ -12,6 +12,7 @@
 #include "TimeProfileTool.h"
 #include "Engine\Map\Segment\Seg.h"
 #include "Drawers\DrawingColor.h"
+#include "Client\Mapwindow\InfoLine.h"
 #include "geos\headers\geos\algorithm\distance\DistanceToPoint.h"
 #include "geos\headers\geos\algorithm\distance\PointPairDistance.h"
 #include "geos\headers\geos\linearref\LengthIndexedLine.h"
@@ -64,11 +65,53 @@ void TimeProfileTool::startTimeProfileForm()
 	new TimeProfileForm(tree, stpdrw);
 }
 
+BEGIN_MESSAGE_MAP(ProfileGraphWindow, SimpleGraphWindowWrapper)
+	//{{AFX_MSG_MAP(ProfileGraphWindow)
+	ON_WM_LBUTTONDOWN()
+	ON_WM_LBUTTONUP()
+	ON_WM_MOUSEMOVE()
+//}}AFX_MSG_MAP
+END_MESSAGE_MAP()
+
 ProfileGraphWindow::ProfileGraphWindow(FormEntry *f)
 : SimpleGraphWindowWrapper(f)
 , m_gridX(false)
 , m_gridY(false)
+, info(0)
 {
+}
+
+ProfileGraphWindow::~ProfileGraphWindow()
+{
+	delete info;
+}
+
+BOOL ProfileGraphWindow::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext)
+{
+	info = new InfoLine(this);
+	return SimpleGraphWindowWrapper::Create(lpszClassName, lpszWindowName, dwStyle, rect, pParentWnd, nID, pContext);
+}
+
+void ProfileGraphWindow::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	SimpleGraphWindowWrapper::OnLButtonDown(nFlags, point);
+	String txt = getInfo(point);
+	info->text(point, txt);
+}
+
+void ProfileGraphWindow::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	info->text(point, "");
+	SimpleGraphWindowWrapper::OnLButtonUp(nFlags, point);
+}
+
+void ProfileGraphWindow::OnMouseMove(UINT nFlags, CPoint point)
+{
+	SimpleGraphWindowWrapper::OnMouseMove(nFlags, point);
+	if (m_fDragging) {
+		String txt = getInfo(point);
+		info->text(point, txt);
+	}
 }
 
 void ProfileGraphWindow::SetFunctions(SimpleFunction * funPtr, int _iNrFunctions)
@@ -88,6 +131,20 @@ void ProfileGraphWindow::SetGrid(bool gridX, bool gridY)
 	m_gridX = gridX;
 	m_gridY = gridY;
 	Replot();
+}
+
+String ProfileGraphWindow::getInfo(CPoint point)
+{
+	int iX = point.x;
+	int iY = point.y;
+	double rX = rScreenToX(iX);
+	double rY = rScreenToY(iY);
+
+	CString sVal;
+	sVal.Format("%.02f", rX);
+	sVal = sVal + ", " + ILWIS::Time(rY).toString().c_str();
+
+	return sVal;
 }
 
 void ProfileGraphWindow::DrawFunction(CDC* pDC, const SimpleFunction * pFunc)
@@ -233,7 +290,7 @@ void ProfileFieldGraph::create()
   zDimension dimFld = zDimension(psn->iMinWidth, psn->iMinHeight);
 
 	sgw = new ProfileGraphWindow(this);
-	sgw->Create(NULL,	"Graph", WS_CHILD | WS_VISIBLE, CRect(pntFld, dimFld), _frm->wnd(), Id());
+	sgw->Create(NULL, "Graph", WS_CHILD | WS_VISIBLE, CRect(pntFld, dimFld), _frm->wnd(), Id());
 
   CreateChildren();
 }
@@ -350,9 +407,6 @@ void ProfileGraphFunction::SetData(vector<double> dataX, vector<double> dataY)
 {
 	m_rDataX = dataX;
 	m_rDataY = dataY;
-	m_Anchors.clear();
-	for (int i = 0; i < dataX.size(); ++i)
-		m_Anchors.push_back(DoublePoint(dataX[i], dataY[i]));
 	iSelectedAnchorNr = -1;
 }
 
@@ -374,15 +428,6 @@ void ProfileGraphFunction::SolveParams()
 
 void ProfileGraphFunction::SetAnchor(DoublePoint pAnchor)
 {
-	if (m_Anchors.size() > 0)
-	{
-		iSelectedAnchorNr = 0;
-		for (int i = 1; i < m_Anchors.size(); ++i)
-		{
-			if (rUnitDist2(pAnchor, m_Anchors[i]) < rUnitDist2(pAnchor, m_Anchors[iSelectedAnchorNr]))
-				iSelectedAnchorNr = i;
-		}
-	}
 }
 
 int ProfileGraphFunction::iGetAnchorNr()
