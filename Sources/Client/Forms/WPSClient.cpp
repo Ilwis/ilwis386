@@ -59,7 +59,7 @@ WPSClient::WPSClient(const String& url) :
 	remoteCatalog(false)
 
 {
-	getEngine()->Execute("startserver");
+	//getEngine()->Execute("startserver");
 
 	IlwisSettings settings("IlwisWPS");
 	urlString = settings.sValue("GetCapabilities");
@@ -148,6 +148,7 @@ WPSClient::WPSClient(const String& url) :
 	PushButton *pb = new PushButton(fg4,TR("Execute"),(NotifyProc)&WPSClient::execute);
 
 	fsOut = new FieldString(fg4, TR("Output name"),&outputName);
+	fsOut->SetCallBack((NotifyProc)&WPSClient::stringChange2);
 	fsOut->SetWidth(70);
 	fsOut->Align(pb, AL_AFTER);
 	cbShow = new CheckBox(fg4,TR("Show"),&fShow);
@@ -185,6 +186,14 @@ WPSClient::~WPSClient() {
 	settings.SetValue("RemoteCatalog", urlCatalog);
 }
 
+int WPSClient::stringChange2(Event *ev) {
+	if ( ev && ev->message() == WM_SETFOCUS) { 
+		if ( activeParameterField) {
+			parameterSelection(0);
+		}
+	}
+	return 1;
+}
 int WPSClient::showXMLFormCap(Event *ev) {
 	new XMLForm(this, xmlGetCapabilities);
 	return 1;
@@ -261,7 +270,7 @@ int WPSClient::execute(Event *ev) {
 				String file = remoteFiles[index];*/
 				if ( pi.value == "" && pi.optional)
 					continue;
-				url += String("%S=%S", pi.id, pi.value);
+				url += String("%S=%S", pi.id, pi.value.sTrimSpaces());
 
 			} else {
 				if ( pi.value == "" && pi.optional)
@@ -275,7 +284,7 @@ int WPSClient::execute(Event *ev) {
 		} else {
 			if ( pi.optional && ( pi.value.rVal() == rUNDEF || pi.value == sUNDEF))
 				continue;
-			url += String("%S=%S", pi.id, pi.value);
+			url += String("%S=%S", pi.id, pi.value.sTrimSpaces());
 		} 
 	}
 	if ( outputName != "")
@@ -302,6 +311,7 @@ int WPSClient::execute(Event *ev) {
 		index = fn.sFile.find_last_of("_");
 		String ext = fn.sFile.substr(index + 1,fn.sFile.size() - index - 1);
 		file = fn.sFile.substr(0, index);
+		//MessageBox(String("%S%S",file, ext).c_str(), 0, MB_OK);
 		getEngine()->Execute("open " + file + "." + ext);
 	}
 	
@@ -330,7 +340,10 @@ void WPSClient::fillListView() {
 					parameterValues[operationVariant][currentParmIndex].value = String("%f",number);
 				else
 					parameterValues[operationVariant][currentParmIndex].value = sUNDEF;
-			} else
+			} else if ( parameterValues[operationVariant][currentParmIndex].type == "choice") {
+				if ( choiceValue >= 0)
+					parameterValues[operationVariant][currentParmIndex].value	= currentChoices[choiceValue];
+			}else
 				parameterValues[operationVariant][currentParmIndex].value = stringField;
 		}
 		stringField = "";

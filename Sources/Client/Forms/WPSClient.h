@@ -87,6 +87,7 @@ private:
 	int parmChange(Event *ev);
 	int execute(Event *ev) ;
 	int stringChange(Event *ev);
+	int stringChange2(Event *ev);
 	int showXMLFormCap(Event *ev);
 	int showXMLFormDesc(Event *ev);
 	int showXMLFormExe(Event *ev);
