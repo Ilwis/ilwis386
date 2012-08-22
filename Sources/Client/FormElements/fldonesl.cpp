@@ -244,6 +244,12 @@ FieldOneSelectStringSimple::FieldOneSelectStringSimple(FormEntry* parent, String
 , vs(vstr), txt(text)
 {
   SetWidth(75);
+  for(int i = 0; i < vstr.size(); ++i) {
+	  if ( *text == vstr[i]) {
+		  *val = i;
+		  break;
+	  }
+  }
 }
 
 FieldOneSelectStringSimple::~FieldOneSelectStringSimple()
