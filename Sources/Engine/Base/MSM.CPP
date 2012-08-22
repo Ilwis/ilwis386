@@ -178,7 +178,7 @@ long StringManager::LoadLanguageStrings(const String& sModName)
 	}
 	catch (const FileErrorObject&)
 	{
-		throw LanguageStringError(String("Fatal: Language module could not be opened"));
+		//throw LanguageStringError(String("Fatal: Language module could not be opened"));
 	}
 	// Add module name/number value in associative array
 	long iMod = (long)m_mpModules.size();
@@ -191,8 +191,9 @@ long StringManager::LoadLanguageStrings(const String& sModName)
 // in the list then return an empty string
 String StringManager::sFormatted(const String& sModName, const long iID)
 {
-	if (sModName.length() == 0)
-		throw LanguageStringError(String("Fatal: No language module name specified"));
+	if (sModName.length() == 0) {
+		//throw LanguageStringError(String("Fatal: No language module name specified"));
+	}
 
 	ILWISSingleLock sl(&m_cs, TRUE);
 
@@ -299,8 +300,8 @@ void StringManager::ReadText(const String& sFil,map<long, String>& messages)
 		{
 			// Something went wrong in the language file, so possibly no
 			// strings are available, therefore the english
-			String sErr("Language file %S corrupt at ID %S!", sFil, sMesID);
-			throw LanguageStringError(sErr);
+			//String sErr("Language file %S corrupt at ID %S!", sFil, sMesID);
+			//throw LanguageStringError(sErr);
 		}
 		m_cs.Lock();
 		messages[id] = s;
