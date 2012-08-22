@@ -180,6 +180,9 @@ IlwisObject::~IlwisObject()
 	}
 	catch (CException* err)
 	{
+		if ( dynamic_cast<COleException *>(err))
+			return;
+
 		MessageBeep(MB_ICONHAND);
 		err->ReportError(MB_OK|MB_ICONHAND|MB_TOPMOST);
 		err->Delete();
