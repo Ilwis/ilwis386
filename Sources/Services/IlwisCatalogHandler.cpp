@@ -69,7 +69,7 @@ String IlwisCatalogHandler::makeExtensionList(const String& ext) {
 			result += "*.mpp";
 		if( parts[i] == "coordinatesystem")
 			result += "*.csy";
-		if( parts[i] == "georef")
+		if( parts[i] == "georeference")
 			result += "*.grf";
 		if( parts[i] == "table" || parts[i] == "binary/ilwistable")
 			result += "*.tbl";
