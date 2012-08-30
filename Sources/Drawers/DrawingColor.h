@@ -21,7 +21,7 @@ namespace ILWIS {
 	};
 class _export DrawingColor {
 public:
-	DrawingColor(LayerDrawer *dr, int _index=0);
+	DrawingColor(ComplexDrawer *dr, int _index=0);
 	Color clrVal(double rVal) const;
 	Color clrRaw(long iRaw, NewDrawer::DrawMethod drm) const;
 	void clrVal(const double * buf, long * bufOut, long iLen) const;

@@ -104,7 +104,7 @@ public:
 protected:
 	bool draw( const CoordBounds& cbArea) const;
 	void prepare(PreparationParameters *pp);
-	vector<String> makeRange(LayerDrawer *dr) const;
+	vector<String> makeRange(ComplexDrawer *dr) const;
 	void drawVertical(CoordBounds& cbInner, const RangeReal& rr, double z, const vector<String>& values) const;
 	void drawHorizontal(CoordBounds& cbInner, const RangeReal& rr, double z, const vector<String>& values) const;
 	String store(const FileName& fnView, const String& parenSection) const;

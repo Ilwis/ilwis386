@@ -491,7 +491,7 @@ bool AnnotationValueLegendDrawer::draw( const CoordBounds& cbArea) const{
 
 
 	double noOfRect = 100.0;
-	vector<String> values = makeRange((LayerDrawer *)getParentDrawer());
+	vector<String> values = makeRange((ComplexDrawer *)getParentDrawer());
 	RangeReal rr(values[0].rVal(), values[values.size()- 1].rVal());
 	if ( vertical) {
 		drawVertical(cbInner, rr, z, values);
@@ -525,14 +525,14 @@ bool AnnotationValueLegendDrawer::draw( const CoordBounds& cbArea) const{
 
 void AnnotationValueLegendDrawer::drawVertical(CoordBounds& cbInner, const RangeReal& rr, double z, const vector<String>& values) const{
 	int count = 1;
-	DrawingColor dc((LayerDrawer *)getParentDrawer());
+	DrawingColor dc((ComplexDrawer *)getParentDrawer());
 	cbInner.MaxX() = cbInner.MinX() + cbInner.width() / 3;
 	double startx = cbInner.MinX();
 	double starty = cbInner.MinY();
 	double endx = startx + cbInner.width();
 	double rStep = rr.rWidth() / 100.0;
 	double rV = rr.rLo() + 0.5 * rStep;
-	setText(values,0,Coord(endx + cbBox.width() / 15.0, starty + cbInner.height() / 100.0,z));
+	setText(values,0,Coord(endx + cbBox.width() / 15.0, starty  + cbInner.height() / 100.0,z));
 	for(int i=0; i < 100; ++i) {
 		Color clr = dc.clrVal(rV);
 		glColor4f(clr.redP(),clr.greenP(), clr.blueP(), getTransparency() );
@@ -544,7 +544,7 @@ void AnnotationValueLegendDrawer::drawVertical(CoordBounds& cbInner, const Range
 		glVertex3d(endx,starty,z);
 		glEnd();
 		if ( count < values.size()  && values[count].rVal() <= rV) { 
-			setText(values, count, Coord(endx + cbInner.width() / 15.0, starty,z));
+			setText(values, count, Coord(endx * 1.15 + cbInner.width() / 15.0, starty,z));
 			glColor4f(0,0, 0, getTransparency() );
 			glBegin(GL_LINE_STRIP);
 			glVertex3d(endx,endy,z);
@@ -557,7 +557,7 @@ void AnnotationValueLegendDrawer::drawVertical(CoordBounds& cbInner, const Range
 	}
 	TextDrawer *txt = (TextDrawer *)texts->getDrawer( values.size()-1);
 	double h = txt->getHeight() * 0.9;
-	setText(values,values.size()-1,Coord(cbInner.MinX() + cbInner.width() + cbInner.width() / 15.0, cbInner.height () - h,z));
+	setText(values,values.size()-1,Coord(cbInner.MinX() + cbInner.width() + cbInner.width() / 15.0, cbInner.height () - h/2.0,z));
 }
 
 void AnnotationValueLegendDrawer::drawHorizontal(CoordBounds& cbInner, const RangeReal& rr, double z, const vector<String>& values) const{
@@ -606,17 +606,24 @@ String AnnotationValueLegendDrawer::store(const FileName& fnView, const String& 
 	return parentSection;
 }
 
-vector<String> AnnotationValueLegendDrawer::makeRange(LayerDrawer *dr) const{
+vector<String> AnnotationValueLegendDrawer::makeRange(ComplexDrawer *dr) const{
 	vector<String> values;
+	DomainValueRangeStruct dvs;
 	SpatialDataDrawer *mapDrawer = dynamic_cast<SpatialDataDrawer *>(dr->getParentDrawer()); // case animation drawer
-
-	DomainValueRangeStruct dvs = mapDrawer->getBaseMap()->dvrs();
-
-	if ( dr->useAttributeColumn() && dr->getAtttributeColumn().fValid()) {
-		dvs = dr->getAtttributeColumn()->dvrs();
+	if (mapDrawer){
+		LayerDrawer *ldr = (LayerDrawer *)(dr);
+		dvs = mapDrawer->getBaseMap()->dvrs();
+		if ( ldr->useAttributeColumn() && ldr->getAtttributeColumn().fValid()) {
+			dvs = ldr->getAtttributeColumn()->dvrs();
+		}
+	}else{
+		mapDrawer = dynamic_cast<SpatialDataDrawer *>(dr);
+		dvs = mapDrawer->getBaseMap()->dvrs();
+		if ( mapDrawer->useAttributeTable() && mapDrawer->getAtttributeColumn().fValid()) {
+			dvs = mapDrawer->getAtttributeColumn()->dvrs();
+		}
 	}
-
-	RangeReal rr = dr->getStretchRangeReal(true);
+	RangeReal rr = mapDrawer->getStretchRangeReal(true);
 	double rStep = 1.0;
 	RangeReal rmd;
 	bool fImage = dvs.dm()->pdi();
@@ -627,7 +634,7 @@ vector<String> AnnotationValueLegendDrawer::makeRange(LayerDrawer *dr) const{
 		rmd = roundRange(rr.rLo(), rr.rHi(), rStep);
 
 
-	for (double v = rmd.rLo(); v <= rmd.rLo(); v += rStep) {
+	for (double v = rmd.rLo(); v <= rmd.rHi(); v += rStep) {
 		String sName = dvs.sValue(v);
 		if ( fImage && v + rStep > 255) {
 			sName = "255";

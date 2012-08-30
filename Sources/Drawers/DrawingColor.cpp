@@ -57,8 +57,7 @@ double IlwisData::rValByRaw(int raw) const{
 	return bmap->dvrs().rValue(raw);
 }
 
-DrawingColor::DrawingColor(LayerDrawer *dr, int ind) : 
-drw(dr),
+DrawingColor::DrawingColor(ComplexDrawer *dr, int ind) : 
 clr1(168,168,168), // False
 clr2(0,176,20), // True
 iMultColors(0),
@@ -67,10 +66,19 @@ mcd(0),
 index(ind),
 tresholdColor(Color(255,0,0))
 {
-	SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)drw->getParentDrawer();
-	setDrawer = dynamic_cast<SetDrawer *>(mapDrawer);
 	BaseMap bmap;
-	bmap.SetPointer(mapDrawer->getBaseMap(index));
+	if ( dr->isSet()) {
+		setDrawer = (SetDrawer *)dr;
+		bmap.SetPointer(setDrawer->getBaseMap(index));
+		drw = (LayerDrawer *)setDrawer->getDrawer(ind);
+
+	} else {
+		drw = (LayerDrawer *)dr;
+		SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)drw->getParentDrawer();
+		setDrawer = dynamic_cast<SetDrawer *>(mapDrawer);
+		bmap.SetPointer(mapDrawer->getBaseMap(index));
+	}
+
 	dataValues.setBaseMap(bmap);
 	type = IlwisObject::iotObjectType(bmap->fnObj);
 }
