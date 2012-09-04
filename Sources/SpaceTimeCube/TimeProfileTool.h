@@ -28,8 +28,8 @@ namespace ILWIS {
 		ProfileGraphWindow(FormEntry *f);
 		virtual ~ProfileGraphWindow();
 		void SetFunctions(SimpleFunction * funPtr, int _iNrFunctions);
-		void SetGridNodes(vector<double> & gridXNodes, vector<double> & gridYNodes);
-		void SetGrid(bool gridX, bool gridY);
+		void SetGridTicks(vector<double> & gridXNodes, vector<double> & gridXTicks, vector<double> & gridYTicks);
+		void SetGrid(bool gridXN, bool gridXT, bool gridYT);
 		virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
 
 	protected:
@@ -40,9 +40,11 @@ namespace ILWIS {
 		afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 		afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 		vector<double> m_gridXNodes;
-		vector<double> m_gridYNodes;
-		bool m_gridX;
-		bool m_gridY;
+		vector<double> m_gridXTicks;
+		vector<double> m_gridYTicks;
+		bool m_gridXN;
+		bool m_gridXT;
+		bool m_gridYT;
 		int iNrFunctions;
 		InfoLine* info;
 
@@ -55,8 +57,8 @@ namespace ILWIS {
 		ProfileFieldGraph(FormEntry* parent);
 		void create();             // overriden
 		void SetFunctions(SimpleFunction * funPtr, int iNrFunctions);
-		void SetGridNodes(vector<double> & gridXNodes, vector<double> & gridYNodes);
-		void SetGrid(bool gridX, bool gridY);
+		void SetGridTicks(vector<double> & gridXNodes, vector<double> & gridXTicks, vector<double> & gridYTicks);
+		void SetGrid(bool gridXN, bool gridXT, bool gridYT);
 	};
 
 	class ProfileGraphFunction : public SimpleFunction
@@ -92,19 +94,22 @@ namespace ILWIS {
 		void ComputeGraphs();
 		int CallBackAnchorChangedInGraph(Event*);
 		int CallBackSegmentMapChanged(Event*);
-		int CallBackXGrid(Event*);
-		int CallBackYGrid(Event*);
+		int CallBackXNGrid(Event*);
+		int CallBackXTGrid(Event*);
+		int CallBackYTGrid(Event*);
 		String sSegmentMapProfile;
 		FieldSegmentMap * fsm;
 		ProfileFieldGraph * fgFunctionGraph;
 		ProfileGraphFunction * m_functions;
 		SpaceTimePathDrawer *stpdrw;
-		CheckBox * cbXgrid;
-		CheckBox * cbYgrid;
+		CheckBox * cbXNgrid;
+		CheckBox * cbXTgrid;
+		CheckBox * cbYTgrid;
 		CheckBox * cbRadiusThreshold;
 		FieldReal * frRadiusThreshold;
-		bool m_gridX;
-		bool m_gridY;
+		bool m_gridXN;
+		bool m_gridXT;
+		bool m_gridYT;
 		bool m_fUseRadiusThreshold;
 		double m_radiusThreshold;
 	};
