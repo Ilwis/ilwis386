@@ -284,7 +284,7 @@ private:
 	bool           fReUseExisting(const FileName& fn);
 	void           CreateLayer(vector<LayerInfo> &li);
 
-	GDALRasterBandH  OpenLayer();
+	GDALRasterBandH  OpenLayer(int iChannel);
 	void           CreateLineBuffer(long iSize);
 	void		   CreateRasterLayer(int iMaxChannels, bool fBitMap);
 	void           ImportRasterMap(const FileName& fnRasMap, Map& mp ,LayerInfo& li, int iChannel);

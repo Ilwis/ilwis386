@@ -798,15 +798,15 @@ void GDALFormat::ImportRasterMap(const FileName& fnRasMap, Map& mp ,LayerInfo& l
 	}
 }
 
-GDALRasterBandH GDALFormat::OpenLayer()
+GDALRasterBandH GDALFormat::OpenLayer(int iChannel)
 {
 	Init();
 
 	ILWISSingleLock lock(&m_CriticalSection, TRUE, SOURCE_LOCATION);	 				
-	if ( iLayer == iUNDEF )
+	if ( iChannel == iUNDEF )
 		throw ErrorObject(TR("Opening an undefined GDAL layer"));
 
-	GDALRasterBandH  gdalRasterBand = funcs.getBand( dataSet, iLayer);
+	GDALRasterBandH  gdalRasterBand = funcs.getBand( dataSet, iChannel);
 	dataType = funcs.getDataType(gdalRasterBand);
 
 	return gdalRasterBand;
@@ -1000,7 +1000,7 @@ FileName GDALFormat::fnCreateFileName(const FileName& fnBase)
 void GDALFormat::GetRasterInfo(LayerInfo& inf, int iChannel, bool fBitMap)
 {
 	if (!currentLayer )
-		currentLayer = OpenLayer();
+		currentLayer = OpenLayer(iChannel);
 
 
 	GetGeoRef(inf.grf);
@@ -1224,7 +1224,7 @@ void GDALFormat::GetLineVal(long iLine, LongBuf& buf, long iFrom, long iNum) con
 void GDALFormat::CreateLineBuffer(long iSize)
 {
 	if(!currentLayer)
-		currentLayer = OpenLayer();
+		currentLayer = OpenLayer(iLayer);
 	int iDataSize = funcs.dataSize(dataType);
 	buffer = new unsigned char [ iSize * iDataSize/8 ];
 	memset(buffer, 0, iSize * iDataSize/8);
