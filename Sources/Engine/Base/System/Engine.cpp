@@ -220,11 +220,15 @@ void Engine::loadSystemTables(const String& ilwDir) {
 		String plist("'%S','%S','%S','%S',%f,%f,%f,%f,%f,%f,'%S'",parts[0],parts[1],parts[2],parts[3],dx,dy,dz,rx,ry,rz,parts[11]);
 		String stmt("INSERT INTO Datums VALUES(%S)", plist);
 		bool res = db->executeStatement(stmt);
+		if ( parts[0] == "WGS 1984") {
+			TRACE("STOP");
+		}
 		if ( parts[10] != "") {
 			Array<String> aliassen;
 			Split(parts[10],aliassen,";");
 			for(int j = 0; j < aliassen.size(); ++j) {
 				stmt = String("INSERT INTO DatumAliasses Values('%S','%S')",parts[0],aliassen[j]);
+				db->executeStatement(stmt);
 			}
 			
 		}
