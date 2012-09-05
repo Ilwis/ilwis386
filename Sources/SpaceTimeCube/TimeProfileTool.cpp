@@ -242,16 +242,14 @@ void ProfileGraphWindow::DrawAxes(CDC* pDC)
 		pDC->LineTo(functionPlotRect.right, functionPlotRect.bottom);
 
 		// draw ticks on the axes		
-		int iTicks = 5;
 		int iTickThickness = 3; // nr of pixels for drawing a tick
-		double rTickXSize = (double)(functionPlotRect.Width()) / (double)(iTicks - 1);
-		double rTickYSize = (double)(functionPlotRect.Height()) / (double)(iTicks - 1);
-		for (int i = 0; i < iTicks; ++i)
-		{
-			pDC->MoveTo(functionPlotRect.left, functionPlotRect.top + rTickYSize * i);
-			pDC->LineTo(functionPlotRect.left - iTickThickness, functionPlotRect.top + rTickYSize * i);
-			pDC->MoveTo(functionPlotRect.left + rTickXSize * i, functionPlotRect.bottom);
-			pDC->LineTo(functionPlotRect.left + rTickXSize * i, functionPlotRect.bottom + iTickThickness);
+		for (int i = 0; i < m_gridXTicks.size(); ++i) {
+			pDC->MoveTo(iXToScreen(m_gridXTicks[i]), functionPlotRect.bottom);
+			pDC->LineTo(iXToScreen(m_gridXTicks[i]), functionPlotRect.bottom + iTickThickness);
+		}
+		for (int i = 0; i < m_gridYTicks.size(); ++i) {
+			pDC->MoveTo(functionPlotRect.left, iYToScreen(m_gridYTicks[i]));
+			pDC->LineTo(functionPlotRect.left - iTickThickness, iYToScreen(m_gridYTicks[i]));
 		}
 
 		// draw axis values
