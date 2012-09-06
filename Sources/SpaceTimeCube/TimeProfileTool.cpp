@@ -70,6 +70,7 @@ BEGIN_MESSAGE_MAP(ProfileGraphWindow, SimpleGraphWindowWrapper)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
 	ON_WM_MOUSEMOVE()
+	ON_WM_DESTROY()
 //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -79,6 +80,10 @@ ProfileGraphWindow::ProfileGraphWindow(FormEntry *f)
 , m_gridXT(false)
 , m_gridYT(false)
 , info(0)
+, mousePos(CPoint(-1, -1))
+, m_bmMemoryGraph(0)
+, m_dcMemoryGraph(0)
+, fDrawAxes(false)
 {
 }
 
@@ -87,22 +92,66 @@ ProfileGraphWindow::~ProfileGraphWindow()
 	delete info;
 }
 
+void ProfileGraphWindow::OnDestroy() 
+{
+	CloseThreads();
+	if (m_dcMemory)
+	{
+		// m_dcMemory->SelectObject(m_bmOldBitmap); // this crashes
+		m_dcMemory->DeleteDC();
+		delete m_dcMemory;
+		delete m_bmMemory;
+		m_dcMemoryGraph->DeleteDC();
+		delete m_dcMemoryGraph;
+		delete m_bmMemoryGraph;
+	}
+	CWnd::OnDestroy();
+}
+
 BOOL ProfileGraphWindow::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext)
 {
 	info = new InfoLine(this);
 	return SimpleGraphWindowWrapper::Create(lpszClassName, lpszWindowName, dwStyle, rect, pParentWnd, nID, pContext);
 }
 
+void ProfileGraphWindow::StartDrag(CPoint point)
+{
+	m_fDragging = true;
+	mousePos = point;
+	fDrawAxes = true;
+	SetDirty();
+}
+
+void ProfileGraphWindow::Drag(CPoint point)
+{
+	if (m_fDragging)
+	{
+		mousePos = point;
+		fDrawAxes = true;
+		SetDirty();
+	}
+}
+
+void ProfileGraphWindow::EndDrag(CPoint point)
+{
+	if (m_fDragging) {
+		mousePos = point;
+		fDrawAxes = true;
+		SetDirty();
+		m_fDragging = false;
+	}
+}
+
 void ProfileGraphWindow::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	SimpleGraphWindowWrapper::OnLButtonDown(nFlags, point);
-	String txt = getInfo(point);
-	info->text(point, txt);
+	//String txt = getInfo(point);
+	//info->text(point, txt);
 }
 
 void ProfileGraphWindow::OnLButtonUp(UINT nFlags, CPoint point)
 {
-	info->text(point, "");
+	//info->text(point, "");
 	SimpleGraphWindowWrapper::OnLButtonUp(nFlags, point);
 }
 
@@ -110,8 +159,8 @@ void ProfileGraphWindow::OnMouseMove(UINT nFlags, CPoint point)
 {
 	SimpleGraphWindowWrapper::OnMouseMove(nFlags, point);
 	if (m_fDragging) {
-		String txt = getInfo(point);
-		info->text(point, txt);
+		//String txt = getInfo(point);
+		//info->text(point, txt);
 	}
 }
 
@@ -133,7 +182,8 @@ void ProfileGraphWindow::SetGrid(bool gridXN, bool gridXT, bool gridYT)
 	m_gridXN = gridXN;
 	m_gridXT = gridXT;
 	m_gridYT = gridYT;
-	Replot();
+	fDrawAxes = true;
+	SetDirty();
 }
 
 String ProfileGraphWindow::getInfo(CPoint point)
@@ -148,6 +198,23 @@ String ProfileGraphWindow::getInfo(CPoint point)
 	sVal = sVal + ", " + ILWIS::Time(rY).toString().c_str();
 
 	return sVal;
+}
+
+void ProfileGraphWindow::SetDirty(bool fRedraw)
+{
+	// fRedraw will replot the functions and the axex
+	// fRedraw = false, but fDrawAxes will redraw the axes
+	// fRedraw = false and fDrawAxes = false will only do BitBlt
+
+	if (!m_fAbortPaintThread)
+	{
+		m_fDirty = true;
+		m_fRedraw = m_fRedraw || fRedraw;
+		if (!m_paintThread)
+			m_paintThread = AfxBeginThread(PaintInThread, this);
+		else
+			m_paintThread->ResumeThread();
+	}
 }
 
 void ProfileGraphWindow::DrawFunction(CDC* pDC, const SimpleFunction * pFunc)
@@ -215,45 +282,88 @@ void ProfileGraphWindow::DrawAxes(CDC* pDC)
 	CPen penDarkGray(PS_SOLID, 0, RGB(140, 140, 140));
 	CPen* pOldPen = pDC->SelectObject(&penGray);
 
-	if (!m_fRedraw && !m_fAbortPaintThread)
-	{
-		CRect functionPlotRect (GetFunctionPlotRect());
-		// draw the grid
-		if (m_gridXT)
-			for (int i = 0; i < m_gridXTicks.size(); ++i) {
-				pDC->MoveTo(iXToScreen(m_gridXTicks[i]), functionPlotRect.top);
-				pDC->LineTo(iXToScreen(m_gridXTicks[i]), functionPlotRect.bottom);
-			}
-		if (m_gridYT)
-			for (int i = 0; i < m_gridYTicks.size(); ++i) {
-				pDC->MoveTo(functionPlotRect.left, iYToScreen(m_gridYTicks[i]));
-				pDC->LineTo(functionPlotRect.right, iYToScreen(m_gridYTicks[i]));
-			}
-		pDC->SelectObject(&penDarkGray);
-		if (m_gridXN)
-			for (int i = 0; i < m_gridXNodes.size(); ++i) {
-				pDC->MoveTo(iXToScreen(m_gridXNodes[i]), functionPlotRect.top);
-				pDC->LineTo(iXToScreen(m_gridXNodes[i]), functionPlotRect.bottom);
-			}
-		// draw the axes
-		pDC->SelectObject(&penBlack);
-		pDC->MoveTo(functionPlotRect.left, functionPlotRect.top);
-		pDC->LineTo(functionPlotRect.left, functionPlotRect.bottom);
-		pDC->LineTo(functionPlotRect.right, functionPlotRect.bottom);
-
-		// draw ticks on the axes		
-		int iTickThickness = 3; // nr of pixels for drawing a tick
+	CRect functionPlotRect (GetFunctionPlotRect());
+	// draw the grid
+	if (m_gridXT)
 		for (int i = 0; i < m_gridXTicks.size(); ++i) {
-			pDC->MoveTo(iXToScreen(m_gridXTicks[i]), functionPlotRect.bottom);
-			pDC->LineTo(iXToScreen(m_gridXTicks[i]), functionPlotRect.bottom + iTickThickness);
+			pDC->MoveTo(iXToScreen(m_gridXTicks[i]), functionPlotRect.top);
+			pDC->LineTo(iXToScreen(m_gridXTicks[i]), functionPlotRect.bottom);
 		}
+	if (m_gridYT)
 		for (int i = 0; i < m_gridYTicks.size(); ++i) {
 			pDC->MoveTo(functionPlotRect.left, iYToScreen(m_gridYTicks[i]));
-			pDC->LineTo(functionPlotRect.left - iTickThickness, iYToScreen(m_gridYTicks[i]));
+			pDC->LineTo(functionPlotRect.right, iYToScreen(m_gridYTicks[i]));
 		}
+	pDC->SelectObject(&penDarkGray);
+	if (m_gridXN)
+		for (int i = 0; i < m_gridXNodes.size(); ++i) {
+			pDC->MoveTo(iXToScreen(m_gridXNodes[i]), functionPlotRect.top);
+			pDC->LineTo(iXToScreen(m_gridXNodes[i]), functionPlotRect.bottom);
+		}
+	// draw the axes
+	pDC->SelectObject(&penBlack);
+	pDC->MoveTo(functionPlotRect.left, functionPlotRect.top);
+	pDC->LineTo(functionPlotRect.left, functionPlotRect.bottom);
+	pDC->LineTo(functionPlotRect.right, functionPlotRect.bottom);
+
+	// draw ticks on the axes		
+	int iTickThickness = 3; // nr of pixels for drawing a tick
+	for (int i = 0; i < m_gridXTicks.size(); ++i) {
+		pDC->MoveTo(iXToScreen(m_gridXTicks[i]), functionPlotRect.bottom);
+		pDC->LineTo(iXToScreen(m_gridXTicks[i]), functionPlotRect.bottom + iTickThickness);
+	}
+	for (int i = 0; i < m_gridYTicks.size(); ++i) {
+		pDC->MoveTo(functionPlotRect.left, iYToScreen(m_gridYTicks[i]));
+		pDC->LineTo(functionPlotRect.left - iTickThickness, iYToScreen(m_gridYTicks[i]));
+	}
+
+	// draw axis values
+	// x-axis values
+	CFont * oldFont = 0;
+	if (m_fnt)
+		oldFont = pDC->SelectObject(m_fnt);
+	UINT iPreviousAlignment = pDC->SetTextAlign(TA_CENTER | TA_TOP);
+	COLORREF clrPreviousColor = pDC->SetTextColor(RGB(0, 0, 0)); // black text
+	CString sVal;
+	if (m_XYFunctionDomain.fValid()) {
+		sVal.Format("%.02f", m_XYFunctionDomain.left);
+		pDC->TextOut(functionPlotRect.left, functionPlotRect.bottom + iTickThickness, sVal);
+		sVal.Format("%.02f", m_XYFunctionDomain.right);
+		pDC->TextOut(functionPlotRect.right, functionPlotRect.bottom + iTickThickness, sVal);
+	// y-axis values
+		pDC->SetTextAlign(TA_RIGHT | TA_BASELINE);
+		sVal = ILWIS::Time(m_XYFunctionDomain.top).toString().c_str();
+		pDC->TextOut(functionPlotRect.left - iTickThickness, functionPlotRect.top, sVal);
+		sVal = ILWIS::Time(m_XYFunctionDomain.bottom).toString().c_str();
+		pDC->TextOut(functionPlotRect.left - iTickThickness, functionPlotRect.bottom, sVal);
+	}
+
+	pDC->SetTextColor(clrPreviousColor);
+	pDC->SetTextAlign(iPreviousAlignment);
+	if (m_fnt) // take care not to change this: m_fnt determines whether SelectObject should be called or not (in order to "release" m_fnt)
+		pDC->SelectObject(oldFont);
+	
+	// Put back the old objects.
+	pDC->SelectObject(pOldPen);
+}
+
+void ProfileGraphWindow::DrawMouse(CDC* pDC)
+{
+	CRect functionPlotRect (GetFunctionPlotRect());
+	if (functionPlotRect.PtInRect(mousePos))
+	{
+		CPen penLightBlue(PS_SOLID, 0, RGB(180, 180, 255));
+		CPen* pOldPen = pDC->SelectObject(&penLightBlue);
+
+		// draw the cross
+		pDC->MoveTo(mousePos.x, functionPlotRect.top);
+		pDC->LineTo(mousePos.x, functionPlotRect.bottom);
+		pDC->MoveTo(functionPlotRect.left, mousePos.y);
+		pDC->LineTo(functionPlotRect.right, mousePos.y);
 
 		// draw axis values
 		// x-axis values
+		int iTickThickness = 3; // nr of pixels for drawing a tick
 		CFont * oldFont = 0;
 		if (m_fnt)
 			oldFont = pDC->SelectObject(m_fnt);
@@ -261,26 +371,89 @@ void ProfileGraphWindow::DrawAxes(CDC* pDC)
 		COLORREF clrPreviousColor = pDC->SetTextColor(RGB(0, 0, 0)); // black text
 		CString sVal;
 		if (m_XYFunctionDomain.fValid()) {
-			sVal.Format("%.02f", m_XYFunctionDomain.left);
-			pDC->TextOut(functionPlotRect.left, functionPlotRect.bottom + iTickThickness, sVal);
-			sVal.Format("%.02f", m_XYFunctionDomain.right);
-			pDC->TextOut(functionPlotRect.right, functionPlotRect.bottom + iTickThickness, sVal);
+			sVal.Format("%.02f", rScreenToX(mousePos.x));
+			pDC->TextOut(mousePos.x, functionPlotRect.bottom + iTickThickness, sVal);
 		// y-axis values
 			pDC->SetTextAlign(TA_RIGHT | TA_BASELINE);
-			sVal = ILWIS::Time(m_XYFunctionDomain.top).toString().c_str();
-			pDC->TextOut(functionPlotRect.left - iTickThickness, functionPlotRect.top, sVal);
-			sVal = ILWIS::Time(m_XYFunctionDomain.bottom).toString().c_str();
-			pDC->TextOut(functionPlotRect.left - iTickThickness, functionPlotRect.bottom, sVal);
+			sVal = ILWIS::Time(rScreenToY(mousePos.y)).toString().c_str();
+			pDC->TextOut(functionPlotRect.left - iTickThickness, mousePos.y, sVal);
 		}
 
 		pDC->SetTextColor(clrPreviousColor);
 		pDC->SetTextAlign(iPreviousAlignment);
 		if (m_fnt) // take care not to change this: m_fnt determines whether SelectObject should be called or not (in order to "release" m_fnt)
-			pDC->SelectObject(oldFont);
+			pDC->SelectObject(oldFont); // Put back the old objects.
+			pDC->SelectObject(pOldPen);
 	}
-	
-	// Put back the old objects.
-	pDC->SelectObject(pOldPen);
+}
+
+UINT ProfileGraphWindow::PaintInThread(LPVOID pParam)
+{
+	ProfileGraphWindow * pObject = (ProfileGraphWindow*)pParam;
+	if (pObject == NULL)
+		return 1;
+
+	pObject->csThread.Lock();
+
+	CDC* pDC = pObject->GetDC();
+
+	CRect rectClient;
+	pObject->GetClientRect(rectClient);
+	if (!pObject->m_dcMemory)
+	{
+		pObject->m_bmMemory = new CBitmap();
+		pObject->m_bmMemory->CreateCompatibleBitmap(pDC, rectClient.Width(),rectClient.Height());
+		pObject->m_bmMemoryGraph = new CBitmap();
+		pObject->m_bmMemoryGraph->CreateCompatibleBitmap(pDC, rectClient.Width(),rectClient.Height());
+
+		pObject->m_dcMemory = new CDC();
+		pObject->m_dcMemory->CreateCompatibleDC(pDC);
+		pObject->m_dcMemoryGraph = new CDC();
+		pObject->m_dcMemoryGraph->CreateCompatibleDC(pDC);
+
+		pObject->m_bmOldBitmap = (CBitmap*)(pObject->m_dcMemory)->SelectObject(pObject->m_bmMemory);
+		pObject->m_bmOldBitmapGraph = (CBitmap*)(pObject->m_dcMemoryGraph)->SelectObject(pObject->m_bmMemoryGraph);
+
+		CRgn bounds;
+		bounds.CreateRectRgnIndirect(rectClient);
+
+		pObject->m_dcMemory->SelectClipRgn(&bounds, RGN_AND);
+		pObject->m_dcMemoryGraph->SelectClipRgn(&bounds, RGN_AND);
+	}
+
+	while (!pObject->m_fAbortPaintThread)
+	{
+		while (pObject->m_fDirty)
+		{
+			pObject->m_fDirty = false;
+
+			while (!pObject->m_fAbortPaintThread && pObject->m_fRedraw)
+			{
+				pObject->m_fRedraw = false;
+				pObject->m_dcMemoryGraph->FillSolidRect(rectClient, RGB(255, 255, 255)); // white background
+				pObject->DrawFunction(pObject->m_dcMemoryGraph, pObject->m_pFunc);
+				pObject->fDrawAxes = true;
+			}
+
+			while (!pObject->m_fAbortPaintThread && !pObject->m_fDirty && pObject->fDrawAxes)
+			{
+				pObject->fDrawAxes = false;
+				pObject->m_dcMemory->BitBlt(rectClient.left, rectClient.top, rectClient.Width(), rectClient.Height(), pObject->m_dcMemoryGraph, 0, 0, SRCCOPY);
+				pObject->DrawAxes(pObject->m_dcMemory);
+				pObject->DrawMouse(pObject->m_dcMemory);
+			}
+		}
+		if (!pObject->m_fAbortPaintThread)
+		{
+			pDC->BitBlt(rectClient.left, rectClient.top, rectClient.Width(), rectClient.Height(), pObject->m_dcMemory, 0, 0, SRCCOPY);
+			pObject->m_paintThread->SuspendThread(); // wait here, and dont consume CPU time either
+		}
+	}
+
+	pObject->ReleaseDC(pDC);
+	pObject->m_fAbortPaintThread = false;
+	pObject->csThread.Unlock();
+	return 0;
 }
 
 //////////////////////////////////////////////////////////////////////

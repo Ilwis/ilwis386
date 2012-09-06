@@ -35,10 +35,16 @@ namespace ILWIS {
 	protected:
 		virtual void DrawFunction(CDC* pDC, const SimpleFunction * pFunc);
 		virtual void DrawAxes(CDC* pDC);
+		virtual void DrawMouse(CDC* pDC);
+		virtual void SetDirty(bool fRedraw = false);
+		virtual void StartDrag(CPoint point);
+		virtual void Drag(CPoint point);
+		virtual void EndDrag(CPoint point);
 		String getInfo(CPoint point);
 		afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 		afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 		afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+		afx_msg void OnDestroy();
 		vector<double> m_gridXNodes;
 		vector<double> m_gridXTicks;
 		vector<double> m_gridYTicks;
@@ -47,6 +53,14 @@ namespace ILWIS {
 		bool m_gridYT;
 		int iNrFunctions;
 		InfoLine* info;
+		CPoint mousePos;
+	 	CBitmap* m_bmMemoryGraph;
+		CBitmap* m_bmOldBitmapGraph;
+		CDC* m_dcMemoryGraph;
+		bool fDrawAxes;
+
+	private:
+		static UINT PaintInThread(LPVOID pParam);
 
 		DECLARE_MESSAGE_MAP()
 	};
