@@ -52,7 +52,6 @@ static char THIS_FILE[] = __FILE__;
 
 SimpleGraphWindow::SimpleGraphWindow()
 : m_fDragging(false)
-, m_fBusyInPaintThread(false)
 , m_fDirty(false)
 , m_fRedraw(false)
 , m_fAbortPaintThread(false)
@@ -64,6 +63,7 @@ SimpleGraphWindow::SimpleGraphWindow()
 , m_iTopBorderThickness(20)
 , m_iRightBorderThickness(20)
 , m_iBottomBorderThickness(20)
+, m_paintThread(0)
 {
 
 }
@@ -181,11 +181,10 @@ void SimpleGraphWindow::SetDirty(bool fRedraw)
 	{
 		m_fDirty = true;
 		m_fRedraw = m_fRedraw || fRedraw;
-		if (!m_fBusyInPaintThread)
-		{
-			m_fBusyInPaintThread = true;
-			AfxBeginThread(PaintInThread, this);
-		}
+		if (!m_paintThread)
+			m_paintThread = AfxBeginThread(PaintInThread, this);
+		else
+			m_paintThread->ResumeThread();
 	}
 }
 
@@ -194,6 +193,8 @@ UINT SimpleGraphWindow::PaintInThread(LPVOID pParam)
 	SimpleGraphWindow * pObject = (SimpleGraphWindow*)pParam;
 	if (pObject == NULL)
 		return 1;
+
+	pObject->csThread.Lock();
 
 	CDC* pDC = pObject->GetDC();
 
@@ -215,26 +216,30 @@ UINT SimpleGraphWindow::PaintInThread(LPVOID pParam)
 		pObject->m_dcMemory->SelectClipRgn(&bounds, RGN_AND);
 	}
 
-	while (!pObject->m_fAbortPaintThread && pObject->m_fDirty)
+	while (!pObject->m_fAbortPaintThread)
 	{
-		pObject->m_fDirty = false;
-
-		while (!pObject->m_fAbortPaintThread && pObject->m_fRedraw)
+		while (pObject->m_fDirty)
 		{
-			pObject->m_fRedraw = false;
-			pObject->m_dcMemory->FillSolidRect(rectClient, RGB(255, 255, 255)); // white background
-			pObject->DrawAxes(pObject->m_dcMemory);
-			pObject->DrawFunction(pObject->m_dcMemory, pObject->m_pFunc);
-		}
+			pObject->m_fDirty = false;
 
-		if (!pObject->m_fAbortPaintThread && !pObject->m_fDirty) // do not bother refreshing the window if the area is already invalid or if the window is closing
+			while (!pObject->m_fAbortPaintThread && pObject->m_fRedraw)
+			{
+				pObject->m_fRedraw = false;
+				pObject->m_dcMemory->FillSolidRect(rectClient, RGB(255, 255, 255)); // white background
+				pObject->DrawAxes(pObject->m_dcMemory);
+				pObject->DrawFunction(pObject->m_dcMemory, pObject->m_pFunc);
+			}
+		}
+		if (!pObject->m_fAbortPaintThread)
+		{
 			pDC->BitBlt(rectClient.left, rectClient.top, rectClient.Width(), rectClient.Height(), pObject->m_dcMemory, 0, 0, SRCCOPY);
+			pObject->m_paintThread->SuspendThread(); // wait here, and dont consume CPU time either
+		}
 	}
 
 	pObject->ReleaseDC(pDC);
-
-	pObject->m_fBusyInPaintThread = false;
-
+	pObject->m_fAbortPaintThread = false;
+	pObject->csThread.Unlock();
 	return 0;
 }
 
@@ -424,22 +429,14 @@ const double SimpleGraphWindow::rScreenToY(int iScreenY) const
 	return m_XYFunctionDomain.top - (iScreenY - m_iTopBorderThickness) / rYFactor;
 }
 
-void SimpleGraphWindow::ProcessMessages()
-{
-   MSG msg;
-   while (::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-		 ::DispatchMessage(&msg);
-}
-
 void SimpleGraphWindow::CloseThreads()
 {
-	m_fAbortPaintThread = true;
-	int iLoopCount = 0;
-	while (m_fBusyInPaintThread && iLoopCount < 50) // give it 5 sec
+	if (m_paintThread)
 	{
-		Sleep(100);
-		ProcessMessages();
-		++iLoopCount;
+		m_fAbortPaintThread = true;
+		m_paintThread->ResumeThread();
+		csThread.Lock(); // wait here til thread exits
+		csThread.Unlock();
 	}
 }
 
