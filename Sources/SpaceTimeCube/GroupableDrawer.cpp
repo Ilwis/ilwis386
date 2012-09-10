@@ -33,6 +33,14 @@ const String GroupableDrawer::getGroupValue(Feature * f) const
 		return "?";
 }
 
+const String GroupableDrawer::getGroupValue(long iRaw) const
+{
+	if (fUseGroup)
+		return colGroup->sValue(iRaw);
+	else
+		return "?";
+}
+
 const bool GroupableDrawer::fGetUseGroup() const
 {
 	return fUseGroup;
