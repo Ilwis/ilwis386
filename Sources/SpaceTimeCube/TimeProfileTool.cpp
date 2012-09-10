@@ -13,6 +13,8 @@
 #include "Engine\Map\Segment\Seg.h"
 #include "Drawers\DrawingColor.h"
 #include "Client\Mapwindow\InfoLine.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
+#include "Client\ilwis.h"
 #include "geos\headers\geos\algorithm\distance\DistanceToPoint.h"
 #include "geos\headers\geos\algorithm\distance\PointPairDistance.h"
 #include "geos\headers\geos\linearref\LengthIndexedLine.h"
@@ -74,7 +76,7 @@ BEGIN_MESSAGE_MAP(ProfileGraphWindow, SimpleGraphWindowWrapper)
 //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-ProfileGraphWindow::ProfileGraphWindow(FormEntry *f)
+ProfileGraphWindow::ProfileGraphWindow(FormEntry *f, SpaceTimePathDrawer *_stpdrw)
 : SimpleGraphWindowWrapper(f)
 , m_gridXN(false)
 , m_gridXT(false)
@@ -84,11 +86,23 @@ ProfileGraphWindow::ProfileGraphWindow(FormEntry *f)
 , m_bmMemoryGraph(0)
 , m_dcMemoryGraph(0)
 , fDrawAxes(false)
+, stpdrw(_stpdrw)
+, m_fSelectionChanged(false)
+, m_fAbortSelectionThread(false)
+, m_selectionThread(0)
 {
 }
 
 ProfileGraphWindow::~ProfileGraphWindow()
 {
+	if (m_selectionThread)
+	{
+		m_fAbortSelectionThread = true;
+		m_selectionThread->ResumeThread();
+		csSelectionThread.Lock(); // wait here til thread exits
+		csSelectionThread.Unlock();
+	}
+
 	delete info;
 }
 
@@ -118,6 +132,7 @@ void ProfileGraphWindow::StartDrag(CPoint point)
 {
 	m_fDragging = true;
 	mousePos = point;
+	SelectionChanged();
 	fDrawAxes = true;
 	SetDirty();
 }
@@ -127,6 +142,7 @@ void ProfileGraphWindow::Drag(CPoint point)
 	if (m_fDragging)
 	{
 		mousePos = point;
+		SelectionChanged();
 		fDrawAxes = true;
 		SetDirty();
 	}
@@ -136,22 +152,123 @@ void ProfileGraphWindow::EndDrag(CPoint point)
 {
 	if (m_fDragging) {
 		mousePos = point;
+		SelectionChanged();
 		fDrawAxes = true;
 		SetDirty();
 		m_fDragging = false;
 	}
 }
 
+// Test if point(c) is on line (a,b)
+bool ProfileGraphWindow::fPointOnLine(CPoint c, int ax, int ay, int bx, int by)
+{
+	int crossproduct = (c.y - ay) * (bx - ax) - (c.x - ax) * (by - ay) ;
+	if (abs(crossproduct) > 1000)
+		return false;
+
+	/*
+	int dotproduct = (c.x - ax) * (bx - ax) + (c.y - ay) * (by - ay); 
+	if (dotproduct < 0)
+		return false;
+
+	int squaredlengthba = (bx - ax) * (bx - ax) + (by - ay) * (by - ay);
+	if (dotproduct > squaredlengthba)
+		return false;
+	*/
+	return ((ax <= c.x && c.x <= bx) || (bx <= c.x && c.x <= ax)) && ((ay <= c.y && c.y <= by) || (by <= c.y && c.y <= ay));
+}
+
+void ProfileGraphWindow::SelectionChanged()
+{
+
+	if (!m_fAbortSelectionThread)
+	{
+		m_fSelectionChanged = true;
+		if (!m_selectionThread)
+			m_selectionThread = AfxBeginThread(SelectionChangedInThread, this);
+		else
+			m_selectionThread->ResumeThread();
+	}
+}
+
+UINT ProfileGraphWindow::SelectionChangedInThread(LPVOID pParam)
+{
+	ProfileGraphWindow * pObject = (ProfileGraphWindow*)pParam;
+	if (pObject == NULL)
+		return 1;
+
+	pObject->csSelectionThread.Lock();
+
+	while (!pObject->m_fAbortSelectionThread)
+	{
+		while (!pObject->m_fAbortSelectionThread && pObject->m_fSelectionChanged)
+		{
+			pObject->m_fSelectionChanged = false;
+
+			vector<long> iRaws;
+			pObject->sInfo = "";
+
+			if (pObject->m_pFunc)
+			{
+				int startX, startY;
+				for (int i = 0; i < pObject->iNrFunctions; ++i)
+				{
+					ProfileGraphFunction * pFunction = &((ProfileGraphFunction*)pObject->m_pFunc)[i];
+					pFunction->SetSelected(false); // reset selection
+					CRect functionPlotRect (pObject->GetFunctionPlotRect());
+					int iY = functionPlotRect.top;
+					double rY = pObject->rScreenToY(iY);
+					double rX = pFunction->rGetFx(rY);
+					int iX = pObject->iXToScreen(rX);
+					startX = iX;
+					startY = iY;
+					for (iY = functionPlotRect.top + 1; !pFunction->fSelected() && iY <= functionPlotRect.bottom; ++iY)
+					{
+						rY = pObject->rScreenToY(iY);
+						rX = pFunction->rGetFx(rY);
+						iX = pObject->iXToScreen(rX);
+						if (rY > pFunction->rFirstX() && rY < pFunction->rLastX() && fPointOnLine(pObject->mousePos, startX, startY, iX, iY))
+							pFunction->SetSelected(true);
+						startX = iX;
+						startY = iY;
+					}
+					if (!pFunction->fSelected() && rY >= pFunction->rFirstX() && rY <= pFunction->rLastX() && fPointOnLine(pObject->mousePos, startX, startY, iX, iY)) // include the last point in the plot
+						pFunction->SetSelected(true);
+					if (pFunction->fSelected()) {
+						iRaws.insert(iRaws.end(), pFunction->iRaws().begin(), pFunction->iRaws().end());
+						pObject->sInfo += (pObject->stpdrw->fGetUseGroup() && pFunction->iRaws().size() > 0) ? (((pObject->sInfo.size() > 0) ? "," : "") + pObject->stpdrw->getGroupValue(pFunction->iRaws()[0]).sTrimSpaces()) : "";
+					}
+				}
+			}
+
+			if (pObject->m_fDragging)
+				pObject->info->text(pObject->mousePos, pObject->sInfo);
+
+			// send raws array
+
+			IlwWinApp()->SendUpdateTableSelection(iRaws, ((SpatialDataDrawer *)(pObject->stpdrw->getParentDrawer()))->getBaseMap()->tblAtt()->fnObj);
+		}
+		if (!pObject->m_fAbortSelectionThread)
+		{
+			pObject->m_selectionThread->SuspendThread(); // wait here, and dont consume CPU time either
+		}
+	}
+
+	pObject->m_fAbortSelectionThread = false;
+	pObject->csSelectionThread.Unlock();
+	return 0;
+}
+
 void ProfileGraphWindow::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	SimpleGraphWindowWrapper::OnLButtonDown(nFlags, point);
 	//String txt = getInfo(point);
-	//info->text(point, txt);
+	//info->text(point, sInfo);
 }
 
 void ProfileGraphWindow::OnLButtonUp(UINT nFlags, CPoint point)
 {
-	//info->text(point, "");
+	info->text(point, "");
 	SimpleGraphWindowWrapper::OnLButtonUp(nFlags, point);
 }
 
@@ -160,7 +277,7 @@ void ProfileGraphWindow::OnMouseMove(UINT nFlags, CPoint point)
 	SimpleGraphWindowWrapper::OnMouseMove(nFlags, point);
 	if (m_fDragging) {
 		//String txt = getInfo(point);
-		//info->text(point, txt);
+		//info->text(point, sInfo);
 	}
 }
 
@@ -266,6 +383,66 @@ void ProfileGraphWindow::DrawFunction(CDC* pDC, const SimpleFunction * pFunc)
 			}
 			if (rY >= pFunction->rFirstX() && rY <= pFunction->rLastX())
 				pDC->LineTo(iX, iY); // include the last point in the plot
+		}
+	}
+
+	// put back the old objects
+
+	pDC->SelectObject(pOldPen);
+}
+
+void ProfileGraphWindow::DrawSelectedFunctions(CDC* pDC, const SimpleFunction * pFunc)
+{
+	Color currentColor(0, 0, 255);
+
+	// create and select a thin, blue pen
+	CPen penTemp;
+	penTemp.CreatePen(PS_SOLID, 4, RGB(currentColor.red(), currentColor.green(), currentColor.blue()));
+	CPen* pOldPen = pDC->SelectObject(&penTemp);
+
+	// Draw the functions here
+	if (pFunc)
+	{
+		for (int i = 0; i < iNrFunctions; ++i)
+		{
+			ProfileGraphFunction * pFunction = &((ProfileGraphFunction*)pFunc)[i];
+			if (pFunction->fSelected())
+			{
+				CRect functionPlotRect (GetFunctionPlotRect());
+				int iY = functionPlotRect.top;
+				double rY = rScreenToY(iY);
+				double rX = pFunction->rGetFx(rY);
+				Color color = pFunction->GetColor(rY);
+				if (color != currentColor) {
+					currentColor = color;
+					pDC->SelectObject(pOldPen);
+					penTemp.DeleteObject();
+					penTemp.CreatePen(PS_SOLID, 4, RGB(currentColor.red(), currentColor.green(), currentColor.blue()));
+					CPen* pOldPen = pDC->SelectObject(&penTemp);
+				}
+				int iX = iXToScreen(rX);
+				pDC->MoveTo(iX, iY);
+				for (iY = functionPlotRect.top + 1; iY <= functionPlotRect.bottom; ++iY)
+				{
+					rY = rScreenToY(iY);
+					rX = pFunction->rGetFx(rY);
+					color = pFunction->GetColor(rY);
+					if (color != currentColor) {
+						currentColor = color;
+						pDC->SelectObject(pOldPen);
+						penTemp.DeleteObject();
+						penTemp.CreatePen(PS_SOLID, 4, RGB(currentColor.red(), currentColor.green(), currentColor.blue()));
+						CPen* pOldPen = pDC->SelectObject(&penTemp);
+					}
+					iX = iXToScreen(rX);
+					if (rY < pFunction->rFirstX() || rY > pFunction->rLastX())
+						pDC->MoveTo(iX, iY);
+					else
+						pDC->LineTo(iX, iY);
+				}
+				if (rY >= pFunction->rFirstX() && rY <= pFunction->rLastX())
+					pDC->LineTo(iX, iY); // include the last point in the plot
+			}
 		}
 	}
 
@@ -439,6 +616,7 @@ UINT ProfileGraphWindow::PaintInThread(LPVOID pParam)
 			{
 				pObject->fDrawAxes = false;
 				pObject->m_dcMemory->BitBlt(rectClient.left, rectClient.top, rectClient.Width(), rectClient.Height(), pObject->m_dcMemoryGraph, 0, 0, SRCCOPY);
+				pObject->DrawSelectedFunctions(pObject->m_dcMemory, pObject->m_pFunc);
 				pObject->DrawAxes(pObject->m_dcMemory);
 				pObject->DrawMouse(pObject->m_dcMemory);
 			}
@@ -460,8 +638,9 @@ UINT ProfileGraphWindow::PaintInThread(LPVOID pParam)
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-ProfileFieldGraph::ProfileFieldGraph(FormEntry* parent)
+ProfileFieldGraph::ProfileFieldGraph(FormEntry* parent, SpaceTimePathDrawer* _stpdrw)
 : FieldGraph(parent)
+, stpdrw(_stpdrw)
 {
 }
 
@@ -470,7 +649,7 @@ void ProfileFieldGraph::create()
   zPoint pntFld = zPoint(psn->iPosX, psn->iPosY);
   zDimension dimFld = zDimension(psn->iMinWidth, psn->iMinHeight);
 
-	sgw = new ProfileGraphWindow(this);
+	sgw = new ProfileGraphWindow(this, stpdrw);
 	sgw->Create(NULL, "Graph", WS_CHILD | WS_VISIBLE, CRect(pntFld, dimFld), _frm->wnd(), Id());
 
   CreateChildren();
@@ -493,7 +672,7 @@ void ProfileFieldGraph::SetGrid(bool gridXN, bool gridXT, bool gridYT)
 
 ProfileGraphFunction::ProfileGraphFunction()
 : SimpleFunction(0, DoubleRect(0, 0, 1, 1))
-, iSelectedAnchorNr(-1)
+, m_fSelected(false)
 {
 	m_rDataX.resize(0);
 	m_rDataY.resize(0);
@@ -584,17 +763,37 @@ Color ProfileGraphFunction::GetColor(double x) const
 		return Color(0, 0, 255);
 }
 
-void ProfileGraphFunction::SetData(vector<double> dataX, vector<double> dataY)
+void ProfileGraphFunction::SetData(vector<double> & dataX, vector<double> & dataY)
 {
 	m_rDataX = dataX;
 	m_rDataY = dataY;
-	iSelectedAnchorNr = -1;
 }
 
-void ProfileGraphFunction::SetColors(vector<Color> colors)
+void ProfileGraphFunction::SetColors(vector<Color> & colors)
 {
 	m_colors = colors;
 }
+
+void ProfileGraphFunction::SetRaws(vector<long> & iRaws)
+{
+	m_iRaws = iRaws;
+}
+
+vector<long> & ProfileGraphFunction::iRaws()
+{
+	return m_iRaws;
+}
+
+void ProfileGraphFunction::SetSelected(bool fSelected)
+{
+	m_fSelected = fSelected;
+}
+
+bool ProfileGraphFunction::fSelected()
+{
+	return m_fSelected;
+}
+
 
 void ProfileGraphFunction::SetDefaultAnchors()
 {
@@ -611,11 +810,6 @@ void ProfileGraphFunction::SetAnchor(DoublePoint pAnchor)
 {
 }
 
-int ProfileGraphFunction::iGetAnchorNr()
-{
-	return iSelectedAnchorNr;
-}
-
 TimeProfileForm::TimeProfileForm(CWnd* mw, SpaceTimePathDrawer *stp)
 : FormWithDest(mw, TR("Time Profile of Point Map"), fbsSHOWALWAYS|fbsBUTTONSUNDER|fbsNOCANCELBUTTON|fbsOKHASCLOSETEXT, WS_MINIMIZEBOX)
 , stpdrw(stp)
@@ -628,7 +822,7 @@ TimeProfileForm::TimeProfileForm(CWnd* mw, SpaceTimePathDrawer *stp)
 {
 	fsm = new FieldSegmentMap(root, TR("Profile Segment Map"), &sSegmentMapProfile);
 	fsm->SetCallBack((NotifyProc)&TimeProfileForm::CallBackSegmentMapChanged);
-	fgFunctionGraph = new ProfileFieldGraph(root);
+	fgFunctionGraph = new ProfileFieldGraph(root, stp);
 	fgFunctionGraph->SetWidth(500);
 	fgFunctionGraph->SetHeight(500);
 	fgFunctionGraph->SetIndependentPos();
@@ -836,6 +1030,7 @@ void TimeProfileForm::ComputeGraphs()
 			vector<double> dataX;
 			vector<double> dataY;
 			vector<Color> colors;
+			vector<long> iRaws;
 			for (int j = 0; j < projectedFeatures.size(); ++j) {
 				double X = projectedFeatures[j].first;
 				dataX.push_back(X);
@@ -858,12 +1053,15 @@ void TimeProfileForm::ComputeGraphs()
 					else if (time > maxDataY)
 						maxDataY = time;
 				}
-				Color color (drawingColor->clrRaw(feature->iValue(), drawMethod));
+				long iRaw = feature->iValue();
+				Color color (drawingColor->clrRaw(iRaw, drawMethod));
 				colors.push_back(color);
+				iRaws.push_back(iRaw);
 			}
 
 			m_functions[i].SetData(dataY, dataX); // let the function internally have the times on the X axis and the lengths on the Y axis
 			m_functions[i].SetColors(colors);
+			m_functions[i].SetRaws(iRaws);
 		}
 		for (int i = 0; i < projectedFeaturesList.size(); ++i)
 			m_functions[i].SetDomain(projectedStreetNodes[0], timeBounds->tMax(), projectedStreetNodes[projectedStreetNodes.size() - 1], timeBounds->tMin()); // the function domains will have the times on the Y axis and the lengths on the X axis
