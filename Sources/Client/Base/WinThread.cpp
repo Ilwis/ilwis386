@@ -164,7 +164,6 @@ BOOL WinThread::InitInstance()
 	m_pMainWnd = NULL;
 	IlwWinApp()->Context()->InitThreadLocalVars();
 
-
 	// make UI-threads more responsive - removed 23/11/00 by Wim, because too general
 	//	SetThreadPriority(THREAD_PRIORITY_ABOVE_NORMAL);
 	::OleInitialize(NULL);

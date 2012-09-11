@@ -961,34 +961,6 @@ void BaseTablePaneView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		else
 			horzPageMove(1);
 		return;
-		// movemoent of field
-		// mouse movement
-		/*
-		case VK_LEFT:
-		if (fCtrl)
-		MoveMouse(-10, 0);
-		else  
-		MoveMouse(-1, 0);
-		return;
-		case VK_UP:
-		if (fCtrl)
-		MoveMouse(0, -10);
-		else  
-		MoveMouse(0, -1);
-		return;
-		case VK_RIGHT:
-		if (fCtrl)
-		MoveMouse(10, 0);
-		else  
-		MoveMouse(1, 0);
-		return;
-		case VK_DOWN:
-		if (fCtrl)
-		MoveMouse(0, 10);
-		else  
-		MoveMouse(0, 1);
-		return;
-		*/
 	}
 
 	CView::OnKeyDown(nChar, nRepCnt, nFlags);

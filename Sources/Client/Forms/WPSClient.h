@@ -71,6 +71,7 @@ private:
 	long choiceValue;
 	bool fShow;
 	bool remoteCatalog;
+	long stringChoice;
 	vector<String> remoteFiles;
 	String parmDescr;
 	vector<String> currentChoices;

@@ -22,7 +22,9 @@ bool ParameterInfo::filetype() {
 			type == "pointmap" || type == "segmentmap" ||
 			type == "georeference" || type == "maplist" ||
 			type == "table" || type == "domain" || 
-			type == "sampleset" || type == "matrix" || type == "image/ilwisraster";
+			type == "sampleset" || type == "matrix" || type == "image/ilwisraster" ||
+			type == "application/x-zipped-ilwis-point" || type == "application/x-zipped-ilwis-segment" || 
+			type == "application/x-zipped-ilwis-polygon";
 	return result;
 }
 
@@ -56,7 +58,8 @@ WPSClient::WPSClient(const String& url) :
 	choiceValue(-1),
 	operationVariant(iUNDEF),
 	fShow(true),
-	remoteCatalog(false)
+	remoteCatalog(false),
+	stringChoice(0)
 
 {
 	//getEngine()->Execute("startserver");
@@ -114,11 +117,12 @@ WPSClient::WPSClient(const String& url) :
 	fldParmInfo->SetWidth(160);
 	fldParmInfo->SetHeight(20); 
 	
-	fldFileParam = new FieldDataType(fg3,TR("Local files"),&stringField,new ObjectExtensionLister(0,".mpr"),true);
+	fldFileParam = new FieldDataType(fg3,TR("Local files"),&stringField,new ObjectExtensionLister(0,".mpr.mpa.mpp.mps.tbt"),true);
 	fldFileParam->SetIndependentPos();
 	fldFileParam->SetCallBack((NotifyProc)&WPSClient::parmChange);
 
-	fldRemoteParam = new FieldOneSelectString(fg3,TR("Remote files"),&stringField,remoteFiles,false);
+	//fldRemoteParam = new FieldOneSelectString(fg3,TR("Remote files"),&stringField,remoteFiles,false);
+	fldRemoteParam = new FieldOneSelectString(fg3,TR("Remote files"),&stringChoice,remoteFiles);
 	fldRemoteParam->Align(fldParmInfo, AL_UNDER);
 	fldRemoteParam->SetIndependentPos();
 	fldRemoteParam->SetCallBack((NotifyProc)&WPSClient::parmChange);
@@ -264,13 +268,11 @@ int WPSClient::execute(Event *ev) {
 		ParameterInfo pi = parameterValues[operationVariant][i];
 		if ( pi.filetype()) {
 			if ( remoteCatalog) {
-			/*	long index = fldRemoteParam->iVal();
-				if ( index == -1)
-					throw ErrorObject(TR("No input file selected"));
-				String file = remoteFiles[index];*/
 				if ( pi.value == "" && pi.optional)
 					continue;
-				url += String("%S=%S", pi.id, pi.value.sTrimSpaces());
+				String remoteFileServer  = "file://" + executeProcessURL.sTail("//");
+				remoteFileServer = remoteFileServer.sHead("?");
+				url += String("%S=@xlink:href=%S/%S", pi.id, remoteFileServer, pi.value.sTrimSpaces());
 
 			} else {
 				if ( pi.value == "" && pi.optional)
@@ -321,6 +323,10 @@ int WPSClient::execute(Event *ev) {
 int WPSClient::parmChange(Event *ev) {
 	if ( activeParameterField) {
 		activeParameterField->StoreData();
+		if ( activeParameterField == fldRemoteParam) {
+			if ( stringChoice < remoteFiles.size())
+				stringField = remoteFiles[stringChoice];
+		}
 		fillListView();
 	}
 	return 1;
@@ -365,12 +371,16 @@ void WPSClient::fillListView() {
 }
 
 int WPSClient::parameterSelection(Event *ev) {
-	vector<int> rowIndexes;
+	vector<int> rowIndexes;		
 	initVars();
 	fldParameters->getSelectedRowNumbers(rowIndexes);
 	if ( rowIndexes.size() == 1 && operationVariant >= 0) {
 		if ( activeParameterField) {
 			activeParameterField->StoreData();
+			if ( activeParameterField == fldRemoteParam) {
+				if ( stringChoice < remoteFiles.size())
+					stringField = remoteFiles[stringChoice];
+			}
 			activeParameterField->Hide();
 		}
 		if ( currentParmIndex != iUNDEF) {
@@ -406,7 +416,9 @@ int WPSClient::parameterSelection(Event *ev) {
 				rm.getFiles(remoteFiles);
 
 				fldRemoteParam->resetContent(remoteFiles);
+				fldRemoteParam->SetVal(stringField);
 				activeParameterField = fldRemoteParam;
+				activeParameterField->Show();
 			}
 		} else if ( pi.numerictype()) {
 				activeParameterField = fldNumericParam;
@@ -435,7 +447,7 @@ int WPSClient::parameterSelection(Event *ev) {
 			activeParameterField->setLabel(pi.name);
 		}
 	}
-	fillListView();
+	//fillListView();
 	return 1;
 }
 
@@ -655,11 +667,11 @@ ParameterInfo WPSClient::parseInputNode(const ILWIS::XMLDocument& doc, const pug
 String WPSClient::getTypeIcon(const String& type) {
 	if ( type == "rastermap" || type == "image/ilwisraster")
 		return ".mpr";
-	if ( type == "segmentmap" || type == "image/ilwisline")
+	if ( type == "segmentmap" || type == "application/x-zipped-ilwis-segment")
 		return ".mps";
-	if ( type == "polygonmap" || type == "image/ilwispolygon")
+	if ( type == "polygonmap" || type == "application/x-zipped-ilwis-polygon")
 		return ".mpa";
-	if ( type == "pointmap" || type == "image/ilwispoint")
+	if ( type == "pointmap" || type == "application/x-zipped-ilwis-point")
 		return ".mpp";
 	if ( type == "table" || type == "binary/ilwistable")
 		return ".tbt";
