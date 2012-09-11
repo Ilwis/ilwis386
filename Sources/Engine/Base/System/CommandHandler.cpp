@@ -2999,6 +2999,7 @@ void CommandHandler::CmdZip(const String& expr) {
 		IlwisObject object = IlwisObject::obj(fnobj);
 		if ( object.fValid()) {
 			ObjectStructure ostruct;
+			ostruct.SetCommandAction(ObjectStructure::caCOPY);
 			object->GetObjectStructure(ostruct);
 			ostruct.GetUsedFiles(files, false);
 		} else if ( fnobj.sExt == ".shp") {
