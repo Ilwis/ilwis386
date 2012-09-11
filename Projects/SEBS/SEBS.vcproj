@@ -213,6 +213,18 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\SEBS\ascat.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\SEBS\ascat_l2.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\SEBS\ascat_l2_v1.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\SEBS\EnergyBalance.cpp"
 				>
 			</File>
@@ -257,6 +269,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\SEBS\MapSoilMoistureFromAscat.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\SEBS\MapSoilMoistureFromAscat_L2.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\SEBS\MapWaterVapour.cpp"
 				>
 			</File>
@@ -266,6 +286,18 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath="..\..\Sources\SEBS\ascat.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\SEBS\ascat_l2.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\SEBS\ascat_l2_v1.h"
+				>
+			</File>
 			<File
 				RelativePath="..\..\Sources\SEBS\EnergyBalance.h"
 				>
@@ -308,6 +340,14 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\SEBS\MapSMAC.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\SEBS\MapSoilMoistureFromAscat.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\SEBS\MapSoilMoistureFromAscat_L2.h"
 				>
 			</File>
 			<File
