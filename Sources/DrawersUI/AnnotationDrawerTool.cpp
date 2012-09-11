@@ -41,7 +41,7 @@ bool AnnotationDrawerTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 
 	LayerDrawerTool *layerDrawerTool = dynamic_cast<LayerDrawerTool *>(tool);
 	SetDrawerTool *setDrawerTool = dynamic_cast<SetDrawerTool *>(tool);
-	if (!layerDrawerTool)
+	if (!layerDrawerTool && !setDrawerTool)
 		return false;
 	parentTool = tool;
 	return true;
