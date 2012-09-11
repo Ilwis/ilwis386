@@ -141,30 +141,30 @@ void GeoRefMirrorRotate::Coord2RowCol
   (const Coord& c, double& rRow, double& rCol) const
 {
   gr->Coord2RowCol(c, rRow, rCol);
-  if (fSwapRows) {
-    if (fRotate)
-      rRow = rcSize().Col - rRow;
-    else
-      rRow = rcSize().Row - rRow;
-  }  
-  if (fSwapCols) {
-    if (fRotate)
-      rCol = rcSize().Row - rCol;
-    else
-      rCol = rcSize().Col - rCol;
-  }  
-  if (fRotate) {
-    double rTmp = rRow;
-    rRow = rCol;
-    rCol = rTmp;
-  }  
+  //if (fSwapRows) {
+  //  if (fRotate)
+  //    rRow = rcSize().Col - rRow;
+  //  else
+  //    rRow = rcSize().Row - rRow;
+  //}  
+  //if (fSwapCols) {
+  //  if (fRotate)
+  //    rCol = rcSize().Row - rCol;
+  //  else
+  //    rCol = rcSize().Col - rCol;
+  //}  
+  //if (fRotate) {
+  //  double rTmp = rRow;
+  //  rRow = rCol;
+  //  rCol = rTmp;
+  //}  
 }
 
 void GeoRefMirrorRotate::RowCol2Coord
   (double rRow, double rCol, Coord& c) const
 {
   
-  if (fRotate) {
+ /* if (fRotate) {
     double rTmp = rRow;
     rRow = rCol;
     rCol = rTmp;
@@ -180,7 +180,7 @@ void GeoRefMirrorRotate::RowCol2Coord
       rCol = rcSize().Row - rCol;
     else
       rCol = rcSize().Col - rCol;
-  }  
+  }  */
   gr->RowCol2Coord(rRow, rCol, c);
 }
 
