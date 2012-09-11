@@ -15,6 +15,7 @@
 #include "Client\Mapwindow\InfoLine.h"
 #include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Client\ilwis.h"
+#include "Headers\constant.h"
 #include "geos\headers\geos\algorithm\distance\DistanceToPoint.h"
 #include "geos\headers\geos\algorithm\distance\PointPairDistance.h"
 #include "geos\headers\geos\linearref\LengthIndexedLine.h"
@@ -103,7 +104,8 @@ ProfileGraphWindow::~ProfileGraphWindow()
 		csSelectionThread.Unlock();
 	}
 
-	delete info;
+	if (info)
+		delete info;
 }
 
 void ProfileGraphWindow::OnDestroy() 
@@ -124,8 +126,11 @@ void ProfileGraphWindow::OnDestroy()
 
 BOOL ProfileGraphWindow::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext)
 {
-	info = new InfoLine(this);
-	return SimpleGraphWindowWrapper::Create(lpszClassName, lpszWindowName, dwStyle, rect, pParentWnd, nID, pContext);
+	if (SimpleGraphWindowWrapper::Create(lpszClassName, lpszWindowName, dwStyle, rect, pParentWnd, nID, pContext)) {
+		info = new InfoLine(this);
+		return TRUE;
+	} else
+		return FALSE;
 }
 
 void ProfileGraphWindow::StartDrag(CPoint point)
@@ -257,6 +262,30 @@ UINT ProfileGraphWindow::SelectionChangedInThread(LPVOID pParam)
 	pObject->m_fAbortSelectionThread = false;
 	pObject->csSelectionThread.Unlock();
 	return 0;
+}
+
+void ProfileGraphWindow::SelectFeatures(RowSelectInfo & inf)
+{
+	if (m_pFunc && ((SpatialDataDrawer *)(stpdrw->getParentDrawer()))->getBaseMap()->tblAtt()->fnObj == inf.fn)
+	{
+		const vector<long> & raws = inf.raws;
+		for (int i = 0; i < iNrFunctions; ++i)
+		{
+			ProfileGraphFunction * pFunction = &((ProfileGraphFunction*)m_pFunc)[i];
+			pFunction->SetSelected(false); // reset selection
+			const vector<long> & function_raws = pFunction->iRaws();
+			for (int j = 0; j < raws.size(); ++j)
+			{
+				if (find(function_raws.begin(), function_raws.end(), raws[j]) != function_raws.end())
+				{
+					pFunction->SetSelected(true);
+					break;
+				}
+			}
+		}
+		fDrawAxes = true; // replots selected functions (and axes)
+		SetDirty();
+	}
 }
 
 void ProfileGraphWindow::OnLButtonDown(UINT nFlags, CPoint point)
@@ -670,6 +699,11 @@ void ProfileFieldGraph::SetGrid(bool gridXN, bool gridXT, bool gridYT)
 	if (sgw) ((ProfileGraphWindow*)sgw)->SetGrid(gridXN, gridXT, gridYT);
 }
 
+void ProfileFieldGraph::SelectFeatures(RowSelectInfo & inf)
+{
+	if (sgw) ((ProfileGraphWindow*)sgw)->SelectFeatures(inf);
+}
+
 ProfileGraphFunction::ProfileGraphFunction()
 : SimpleFunction(0, DoubleRect(0, 0, 1, 1))
 , m_fSelected(false)
@@ -810,6 +844,12 @@ void ProfileGraphFunction::SetAnchor(DoublePoint pAnchor)
 {
 }
 
+BEGIN_MESSAGE_MAP(TimeProfileForm, FormWithDest)
+	//{{AFX_MSG_MAP(TimeProfileForm)
+	ON_MESSAGE(MESSAGE_SELECT_ROW, OnSelectFeatures)
+	//}}AFX_MSG_MAP
+END_MESSAGE_MAP()
+
 TimeProfileForm::TimeProfileForm(CWnd* mw, SpaceTimePathDrawer *stp)
 : FormWithDest(mw, TR("Time Profile of Point Map"), fbsSHOWALWAYS|fbsBUTTONSUNDER|fbsNOCANCELBUTTON|fbsOKHASCLOSETEXT, WS_MINIMIZEBOX)
 , stpdrw(stp)
@@ -847,6 +887,14 @@ TimeProfileForm::TimeProfileForm(CWnd* mw, SpaceTimePathDrawer *stp)
 	
 	fgFunctionGraph->SetBorderThickness(130, 20, 30, 20);
 	fgFunctionGraph->Replot();
+
+	AfxGetApp()->PostThreadMessage(ILW_ADDDATAWINDOW, (WPARAM)m_hWnd, 0);
+}
+
+void TimeProfileForm::shutdown(int iReturn) 
+{
+	AfxGetApp()->PostThreadMessage(ILW_REMOVEDATAWINDOW, (WPARAM)m_hWnd, 0);
+	FormWithDest::shutdown(iReturn);
 }
 
 TimeProfileForm::~TimeProfileForm()
@@ -893,6 +941,14 @@ int TimeProfileForm::CallBackYTGrid(Event*)
 	cbYTgrid->StoreData();
 	fgFunctionGraph->SetGrid(m_gridXN, m_gridXT, m_gridYT);
 	return 0;
+}
+
+LONG TimeProfileForm::OnSelectFeatures(UINT wParam, LONG lParam)
+{
+	RowSelectInfo inf = *(RowSelectInfo *)wParam;
+	fgFunctionGraph->SelectFeatures(inf);
+
+	return 1;
 }
 
 vector<double> getTimeTicks(const TimeBounds * timeBounds)

@@ -30,6 +30,7 @@ namespace ILWIS {
 		void SetFunctions(SimpleFunction * funPtr, int _iNrFunctions);
 		void SetGridTicks(vector<double> & gridXNodes, vector<double> & gridXTicks, vector<double> & gridYTicks);
 		void SetGrid(bool gridXN, bool gridXT, bool gridYT);
+		void SelectFeatures(RowSelectInfo & inf);
 		virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
 
 	protected:
@@ -83,6 +84,7 @@ namespace ILWIS {
 		void SetFunctions(SimpleFunction * funPtr, int iNrFunctions);
 		void SetGridTicks(vector<double> & gridXNodes, vector<double> & gridXTicks, vector<double> & gridYTicks);
 		void SetGrid(bool gridXN, bool gridXT, bool gridYT);
+		void SelectFeatures(RowSelectInfo & inf);
 	private:
 		SpaceTimePathDrawer* stpdrw;
 	};
@@ -120,6 +122,9 @@ namespace ILWIS {
 	public:
 	  TimeProfileForm(CWnd* mw, SpaceTimePathDrawer * stp);
 	  virtual ~TimeProfileForm();
+	protected:
+		afx_msg LONG OnSelectFeatures(UINT, LONG lParam);
+		virtual void shutdown(int iReturn=IDCANCEL);
 	private:
 		void ComputeGraphs();
 		int CallBackAnchorChangedInGraph(Event*);
@@ -142,6 +147,8 @@ namespace ILWIS {
 		bool m_gridYT;
 		bool m_fUseRadiusThreshold;
 		double m_radiusThreshold;
+
+		DECLARE_MESSAGE_MAP()
 	};
 }
 
