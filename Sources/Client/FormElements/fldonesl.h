@@ -103,6 +103,7 @@ public:
   void create();
   void SetFocus();
   void StoreData();
+  void SetVal(const String& sVal);
 private:
   const vector<String>& vs;
   long localIndex;
@@ -118,6 +119,7 @@ public:
 	_export void SetComboWidth(short iWidth);
 	_export void SetVal(int iVal);
 	_export void SelectVal(const String& sVal);
+	_export void SetVal(const String& sVal);
 	_export int iVal();
 	_export void resetContent(const vector<String>& vs);
   virtual void _export SetCallBack(NotifyProc np); 

@@ -273,9 +273,18 @@ void FieldOneSelectStringSimple::SetFocus() {
 }
 
 void FieldOneSelectStringSimple::StoreData() {
-	ose->storeData();
-	if (txt && localIndex >= 0) {
-		*txt = vs[localIndex];
+	if ( ose) {
+		int sel = ose->GetCurSel();
+		if ( sel >= 0)
+			*val = sel;
+	}
+}
+
+void FieldOneSelectStringSimple::SetVal(const String& sVal) {
+	for(int i = 0; i < vs.size(); ++i) {
+		if ( vs[i] == sVal) {
+			ose->SetCurSel(i);
+		}
 	}
 }
 
@@ -332,6 +341,12 @@ void FieldOneSelectString::SetVal(int iVal)
 		foss->ose->SetCurSel(iVal);
 }
 
+void FieldOneSelectString::SetVal(const String& sVal)
+{
+	if (foss->ose)
+		foss->SetVal(sVal);
+}
+
 int FieldOneSelectString::iVal()
 {
 	if (foss->ose)
@@ -348,5 +363,7 @@ void FieldOneSelectString::resetContent(const vector<String>& vs) {
 		}
 	}
 }
+
+
 
 
