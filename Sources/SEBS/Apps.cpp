@@ -11,6 +11,8 @@
 #include "SEBS\MapBrightnessTemperature.h"
 #include "SEBS\MapETo.h"
 #include "SEBS\MapWaterVapour.h"
+#include "SEBS\MapSoilMoistureFromAscat.h"
+#include "SEBS\MapSoilMoistureFromAscat_l2.h"
 #include "Client\ilwis.h"
 
 InfoVector* getCommandInfo() {
@@ -26,13 +28,14 @@ InfoVector* getCommandInfo() {
 	(*infos).push_back(CommandMap::newCommandInfo(createMapRadiance2Reflectance,"MapRadiance2Reflectance"));
 	(*infos).push_back(CommandMap::newCommandInfo(createMapBrightnessTemperature,"MapBrightnessTemperature"));
 	(*infos).push_back(CommandMap::newCommandInfo(createMapWaterVapour,"MapWaterVapour"));
-
-	return infos;
+	(*infos).push_back(CommandMap::newCommandInfo(createMapSoilMoistureFromAscat,"MapSoilMoistureFromAscat"));
+	(*infos).push_back(CommandMap::newCommandInfo(createMapSoilMoistureFromAscat_l2,"MapSoilMoistureFromAscat_l2"));
+    return infos;
 
 }
 
 extern "C" _export ILWIS::Module *getModuleInfo(const FileName& fnModule) {
-	ILWIS::Module *module = new ILWIS::Module("SEBS", fnModule,ILWIS::Module::mi37,"1.2");
+	ILWIS::Module *module = new ILWIS::Module("SEBS", fnModule,ILWIS::Module::mi37,"1.0");
 	module->addMethod(ILWIS::Module::ifgetCommandInfo, (void *)getCommandInfo);  
 
 	return module;

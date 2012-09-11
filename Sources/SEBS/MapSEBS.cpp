@@ -967,6 +967,7 @@ bool MapSEBS::fFreezing()
 
 				double emis_air; //emissivity of the atmosphere
 				double LWd; //downward longwave radiation
+				
 				if (m_T_ref != rUNDEF){
 					emis_air = 9.2 * pow(10.0,-6) * pow((m_T_ref + 273.15),2);
 					LWd = emis_air * sigma * pow(m_T_ref+273.15,4); 
@@ -976,8 +977,6 @@ bool MapSEBS::fFreezing()
 					LWd = rUNDEF;
 				}
 				
-				//sigma = 5.678 * 1.0e-8; //Stefen-Boltzman's constant
-
 				//eccentricity (sun earth distance)
 				double _day_angle = 2*m_PI *(_julianday-1)/365;
 				double e0 = 1.00011+0.034221*cos(_day_angle)+0.00128*sin(_day_angle);
