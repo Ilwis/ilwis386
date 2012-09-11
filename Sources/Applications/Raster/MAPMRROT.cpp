@@ -43,6 +43,9 @@
 #include "Engine\Base\DataObjects\WPSMetaData.h"
 #include "Applications\Raster\MAPMRROT.H"
 #include "Engine\Map\Raster\Map.h"
+#include "Engine\SpatialReference\Gr.h"
+#include "Engine\SpatialReference\Grsmpl.h"
+#include "Engine\SpatialReference\Grcornrs.h"
 #include "Headers\Htp\Ilwisapp.htp"
 #include "Headers\Err\Ilwisapp.err"
 #include "Headers\Hs\map.hs"
@@ -314,134 +317,25 @@ RealBuf undef(const RealBuf&)
 
 bool MapMirrorRotate::fFreezing()
 {
-  if (!fRotate)
-    return MapVirtual::fFreezing();
-  return fCompute(mp.ptr(), &ptr, MirrorRotateType(iMethod), &trq);
-/*
-  long iCols = iInpCols;
-  long iLines = iInpLines;
+	bool ok;
+	if (!fRotate)
+		ok =  MapVirtual::fFreezing();
+	else
+		ok = fCompute(mp.ptr(), &ptr, MirrorRotateType(iMethod), &trq);
 
-  trq.SetText("Rotating");
-  switch (st()) {
-    case stREAL : {
-      int iNrBufCol = (32767>>2) / iLines > iCols ? iCols : 32767/iLines;
-      RealBuf bufIn(iNrBufCol);
-      Array<RealBuf> aBufOut(iNrBufCol);
-      for (int kk = 0; kk < iNrBufCol; kk++)
-        aBufOut[kk].Size(iLines);
-      int iNrPass = (iCols - 1) / iNrBufCol + 1;
-      int iNrColOver = iCols - (iNrPass - 1) * iNrBufCol;
-      for (int i=0; i < iNrPass; i++) {
-        int iOpt = i==iNrPass-1 ? iNrColOver : iNrBufCol;
-        int iFrom = !fSwapCols ? i * iNrBufCol : (i==iNrPass-1 ? 0 : iCols - (i+1)*iNrBufCol);
-//        int iFrom = !fSwapCols ? i * iNrBufCol : (i == iNrPass-1 ? 0 : iCols - i*iNrBufCol);
-        for (int j=0; j<iLines; j++) {
-          int iL = fSwapRows ? iLines - j - 1 : j;
-          mp->GetLineVal(iL, bufIn, iFrom, iOpt);
-          if (fSwapCols)
-            for (int k = 0; k < iOpt; k++)
-              aBufOut[k][j ]= bufIn[iOpt-k-1];
-          else
-            for (int k=0; k < iOpt; k++)
-              aBufOut[k][j] = bufIn[k];
-        }
-        for (j=0; j<iOpt; j++)
-          pms->PutLineVal(i * iNrBufCol + j, aBufOut[j]);
-        if (trq.fUpdate(i * iNrBufCol + iOpt, iCols))
-          return false;
-      }
-    }
-    break;
-    case stLONG: {
-      int iNrBufCol = (32767>>1) / iLines > iCols ? iCols : 32767/iLines;
-      LongBuf bufIn(iNrBufCol);
-      Array<LongBuf> aBufOut(iNrBufCol);
-      for (int kk = 0; kk < iNrBufCol; kk++)
-        aBufOut[kk].Size(iLines);
-      int iNrPass = (iCols - 1) / iNrBufCol + 1;
-      int iNrColOver = iCols - (iNrPass - 1) * iNrBufCol;
-      for (int i=0; i < iNrPass; i++) {
-        int iOpt = i==iNrPass-1 ? iNrColOver : iNrBufCol;
-        int iFrom = !fSwapCols ? i * iNrBufCol : (i==iNrPass-1 ? 0 : iCols - (i+1)*iNrBufCol);
-//        int iFrom = !fSwapCols ? i * iNrBufCol : (i==iNrPass-1 ? 0 : iCols - i*iNrBufCol);
-        for (int j=0; j<iLines; j++) {
-          int iL = fSwapRows ? iLines - j - 1 : j;
-          mp->GetLineRaw(iL, bufIn, iFrom, iOpt);
-          if (fSwapCols)
-            for (int k = 0; k < iOpt; k++)
-              aBufOut[k][j]=bufIn[iOpt-k-1];
-          else
-            for (int k=0; k < iOpt; k++)
-              aBufOut[k][j] = bufIn[k];
-        }
-        for (j=0; j<iOpt; j++)
-          pms->PutLineRaw(i * iNrBufCol + j, aBufOut[j]);
-        if (trq.fUpdate(i * iNrBufCol + iOpt, iCols))
-          return false;
-      }
-    }
-    break;
-    case stINT : {
-      int iNrBufCol = 32767 / iLines > iCols ? iCols : 32767/iLines;
-      IntBuf bufIn(iNrBufCol);
-      Array<IntBuf> aBufOut(iNrBufCol);
-      for (int kk = 0; kk < iNrBufCol; kk++)
-        aBufOut[kk].Size(iLines);
-      int iNrPass = (iCols - 1) / iNrBufCol + 1;
-      int iNrColOver = iCols - (iNrPass - 1) * iNrBufCol;
-      for (int i=0; i < iNrPass; i++) {
-        int iOpt = i==iNrPass-1 ? iNrColOver : iNrBufCol;
-        int iFrom = !fSwapCols ? i * iNrBufCol : (i==iNrPass-1 ? 0 : iCols - (i+1)*iNrBufCol);
-//        int iFrom = !fSwapCols ? i * iNrBufCol : (i==iNrPass-1 ? 0 : iCols - i*iNrBufCol);
-        for (int j=0; j<iLines; j++) {
-          int iL = fSwapRows ? iLines - j - 1 : j;
-          mp->GetLineRaw(iL, bufIn, iFrom, iOpt);
-          if (fSwapCols)
-            for (int k = 0; k < iOpt; k++)
-              aBufOut[k][j]=bufIn[iOpt-k-1];
-          else
-            for (int k=0; k < iOpt; k++)
-              aBufOut[k][j] = bufIn[k];
-        }
-        for (j=0; j<iOpt; j++)
-          pms->PutLineRaw(i * iNrBufCol + j, aBufOut[j]);
-        if (trq.fUpdate(i * iNrBufCol + iOpt, iCols))
-          return false;
-      }
-    }
-    break;
-    case stBYTE:
-    case stNIBBLE:
-    case stDUET:
-    case stBIT: {
-      int iNrBufCol = 32767 / iLines > iCols ? iCols : 32767/iLines;
-      ByteBuf bufIn(iNrBufCol);
-      Array<ByteBuf> aBufOut(iNrBufCol);
-      for (int kk = 0; kk < iNrBufCol; kk++)
-        aBufOut[kk].Size(iLines);
-      int iNrPass = (iCols - 1) / iNrBufCol + 1;
-      int iNrColOver = iCols - (iNrPass - 1) * iNrBufCol;
-      for (int i=0; i < iNrPass; i++) {
-        int iOpt = i==iNrPass-1 ? iNrColOver : iNrBufCol;
-        int iFrom = !fSwapCols ? i * iNrBufCol : (i==iNrPass-1 ? 0 : iCols - (i+1)*iNrBufCol);
-        for (int j=0; j<iLines; j++) {
-          int iL = fSwapRows ? iLines - j - 1 : j;
-          mp->GetLineRaw(iL, bufIn, iFrom, iOpt);
-          if (fSwapCols)
-            for (int k = 0; k < iOpt; k++)
-              aBufOut[k][j]=bufIn[iOpt-k-1];
-          else
-            for (int k=0; k < iOpt; k++)
-              aBufOut[k][j] = bufIn[k];
-        }
-        for (int k=0; k<iOpt; k++)
-          pms->PutLineRaw(i * iNrBufCol + k, aBufOut[k]);
-        if (trq.fUpdate(i * iNrBufCol + iOpt, iCols))
-          return false;
-      }
-    }
-  }
-  return true;*/
+	unsigned int rot90s = mrR90 | mrR270 | mrTRANS;
+	if ( iMethod != mrR90 && iMethod != mrR270 && iMethod != mrTRANS) {
+		ptr.SetGeoRef(mp->gr());
+	} else {
+		if ( mp->gr()->pgc()) {
+			GeoRefCorners *smp = mp->gr()->pgc();
+			RowCol rc(mp->rcSize().Col, mp->rcSize().Row);
+			GeoRef grf(smp->cs(), rc, smp->a11, smp->a12, smp->a21, smp->a22, smp->b1, smp->b2);
+			ptr.SetGeoRef(grf);
+		}
+	}
+	return ok;
+
 }
 
 String MapMirrorRotate::sExpression() const
