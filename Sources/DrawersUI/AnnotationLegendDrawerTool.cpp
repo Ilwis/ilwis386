@@ -92,15 +92,19 @@ void AnnotationLegendDrawerTool::makeActive(void *v, HTREEITEM ) {
 		if ( act) {
 			PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER);
 			LayerDrawer *ldr = dynamic_cast<LayerDrawer *>(drawer);
+			SetDrawer *sdr = dynamic_cast<SetDrawer *>(drawer);
+			Domain dm;
 			if ( ldr) {
 				SpatialDataDrawer *spdr = (SpatialDataDrawer *)(drawer->getParentDrawer());
-				Domain dm = ldr->useAttributeColumn() ? ldr->getAtttributeColumn()->dm() : spdr->getBaseMap()->dm();
-				ILWIS::DrawerParameters dp(drawer->getRootDrawer(), drawer);
-				if (  dm->pdv())
-					legend = (AnnotationLegendDrawer *)NewDrawer::getDrawer("AnnotationValueLegendDrawer","ilwis38",&dp);
-				else if (  dm->pdc()) {
-					legend = (AnnotationLegendDrawer *)NewDrawer::getDrawer("AnnotationClassLegendDrawer","ilwis38",&dp);
-				}
+				dm = ldr->useAttributeColumn() ? ldr->getAtttributeColumn()->dm() : spdr->getBaseMap()->dm();
+			} else if ( sdr) {
+				dm = sdr->useAttributeTable() ? sdr->getAtttributeColumn()->dm() :   sdr->getBaseMap()->dm();
+			}
+			ILWIS::DrawerParameters dp(drawer->getRootDrawer(), drawer);
+			if (  dm->pdv())
+				legend = (AnnotationLegendDrawer *)NewDrawer::getDrawer("AnnotationValueLegendDrawer","ilwis38",&dp);
+			else if (  dm->pdc()) {
+				legend = (AnnotationLegendDrawer *)NewDrawer::getDrawer("AnnotationClassLegendDrawer","ilwis38",&dp);
 			}
 			if ( legend) {
 				legend->prepare(&pp);
