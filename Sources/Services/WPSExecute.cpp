@@ -127,12 +127,31 @@ void WPSExecute::downloadReferencedData() {
 				fnDest = FileName(name);
 				unzip(fnDest);
 			} else if ( url.getProtocol() == "file")  {// local
-				FileName fnOrg = url.toFileName2();
-				String dest = executionDir + "\\" + fnOrg.sFile + fnOrg.sExt;
+				String sharedServer = getConfigValue("wps:ServiceContext:ShareServer");
+				String sharedDir = getConfigValue("wps:ServiceContext:SharedData");
+				FileName fnOrg = url.toFileName2(sharedServer, sharedDir);
+				IlwisObject object = IlwisObject::obj(fnOrg);
+				if ( object.fValid()) {
+					list<String> files;
+					ObjectStructure ostruct;
+					ostruct.SetCommandAction(ObjectStructure::caCOPY);
+					object->GetObjectStructure(ostruct);
+					ostruct.GetUsedFiles(files, false);
+					for(list<String>::const_iterator iter = files.begin(); iter != files.end(); ++iter) {
+						FileName fn((*iter));
+						String dest = executionDir + "\\" + fn.sFile + fn.sExt;
+						CopyFile((*iter).c_str(),dest.c_str(),false);
+					}
+				}
+
+			/*	String dest = executionDir + "\\" + fnOrg.sFile + ".zip";
+				String cmd("zip %S %S", fnOrg.sPhysicalPath(), dest);
+				getEngine()->Execute(cmd);
+
 				CopyFile(fnOrg.sPhysicalPath().c_str(),dest.c_str(),false);
 				fnDest = FileName(dest);
 				if ( fnDest.sExt == ".zip")
-					unzip(fnDest);
+					unzip(fnDest);*/
 			}
 			FileName fnTiff(fnDest,".tiff");
 			bool fExist = fnTiff.fExist();
@@ -328,8 +347,12 @@ void WPSExecute::executeOperation() {
 		outputName = fnOut.sFile + ".shp";
 	}
 	fnOut = FileName(executionDir + "\\" + outputName);
-	getEngine()->Execute(String("zip %S",fnOut.sFullNameQuoted()));
-	fnZip = FileName(String("%S_%S.zip",fnOut.sFile, fnOut.sExt.sTail(".")));
+	if ( fnOut.fExist()) {
+		getEngine()->Execute(String("zip %S",fnOut.sFullNameQuoted()));
+		fnZip = FileName(String("%S_%S.zip",fnOut.sFile, fnOut.sExt.sTail(".")));
+	} else {
+		throw ErrorObject(String("No output produced for %S", expression));
+	}
 
 }
 
@@ -395,6 +418,7 @@ void WPSExecute::gatherFiles(ifstream& ifs, map<String, FileName>& files) {
 		if ( IOTYPEBASEMAP(fn.sFullPath())) {
 			BaseMap bmp(fn);
 			ObjectStructure ostruct;
+			ostruct.SetCommandAction(ObjectStructure::caCOPY);
 			bmp->GetObjectStructure(ostruct);
 			list<String> usedFiles;
 			ostruct.GetUsedFiles(usedFiles, false);

@@ -61,11 +61,11 @@ String IlwisCatalogHandler::makeExtensionList(const String& ext) {
 			result += "*.mpr";
 		if( parts[i] == "maplist" || parts[i] == "image/ilwismaplist")
 			result += "*.mpl";
-		if( parts[i] == "polygonmap" || parts[i] == "image/ilwispolygon")
+		if( parts[i] == "polygonmap" || parts[i] == "application/x-zipped-ilwis-polygon")
 			result += "*.mpa";
-		if( parts[i] == "segmentmap" || parts[i] == "image/ilwisline")
+		if( parts[i] == "segmentmap" || parts[i] == "application/x-zipped-ilwis-segment")
 			result += "*.mps";
-		if( parts[i] == "pointmap" || parts[i] == "image/ilwispoint")
+		if( parts[i] == "pointmap" || parts[i] == "application/x-zipped-ilwis-point")
 			result += "*.mpp";
 		if( parts[i] == "coordinatesystem")
 			result += "*.csy";
