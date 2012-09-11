@@ -70,13 +70,17 @@ TimeSliderCtrl::TimeSliderCtrl()
 
 TimeSliderCtrl::~TimeSliderCtrl()
 {
-	delete info;
+	if (info)
+		delete info;
 }
 
 BOOL TimeSliderCtrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID)
 {
-	info = new InfoLine(this);
-	return CSliderCtrl::Create(dwStyle, rect, pParentWnd, nID);
+	if (CSliderCtrl::Create(dwStyle, rect, pParentWnd, nID)) {
+		info = new InfoLine(this);
+		return TRUE;
+	} else
+		return FALSE;
 }
 
 void TimeSliderCtrl::SetSpaceTimeCube(SpaceTimeCube * _spaceTimeCube)
