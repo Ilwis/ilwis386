@@ -83,25 +83,37 @@ String PointDirectionTool::getMenuString() const {
 PointDirectionForm::PointDirectionForm(CWnd *wPar, PointLayerDrawer *dr, const Table& _tbl):
 DisplayOptionsForm(dr,wPar,TR("Scaling")), tbl(_tbl), fcColumn(0), clockwise(true)
 {
+	SpatialDataDrawer *spdrw = (SpatialDataDrawer *)(dr->getParentDrawer());
+	BaseMapPtr *bmptr = spdrw->getBaseMap();
 	props = (PointProperties *)dr->getProperties();
-	if ( tbl.fValid()) {
+	if ( tbl.fValid() || bmptr->dm()->pdv()) {
 		if ( !props->stretchRange.fValid()) {
-			for(int i=0 ; i < tbl->iCols(); ++i) {
-				if ( tbl->col(i)->dm()->pdv()) {
-					props->stretchColumn = tbl->col(i)->sName();
-					props->stretchRange = tbl->col(i)->dvrs().rrMinMax();
-					break;
+			if ( tbl.fValid()) {
+				if ( props->stretchColumn == "") {
+					for(int i=0 ; i < tbl->iCols(); ++i) {
+						if ( tbl->col(i)->dm()->pdv()) {
+							props->stretchColumn = tbl->col(i)->sName();
+							props->stretchRange = tbl->col(i)->dvrs().rrMinMax();
+							break;
+						}
+					}
+				} else {
+					Column  col = tbl->col(props->stretchColumn);
+					props->stretchRange = col->rrMinMax();
+
 				}
-			}
+			}else
+				props->stretchRange = bmptr->rrMinMax();
 		}
 		inf = dr->getRotationInfo();
-		fcColumn = new FieldColumn(root, TR("Attribute Column"), tbl, &(inf.rotationColumn), dmVALUE);
-		fcColumn->SetCallBack((NotifyProc)&PointDirectionForm::ColValCallBack);
+		if ( tbl.fValid()) {
+			fcColumn = new FieldColumn(root, TR("Attribute Column"), tbl, &(inf.rotationColumn), dmVALUE);
+			fcColumn->SetCallBack((NotifyProc)&PointDirectionForm::ColValCallBack);
+		}
+		inf.rr = props->stretchRange;
 
-		Column  col = tbl->col(props->stretchColumn);
 		new FieldBlank(root);
-		if ( !inf.rr.fValid())
-			inf.rr = col->rrMinMax();
+
 		frr = new FieldRangeReal(root, TR("Rotation range"), &(inf.rr));
 		cbClockwise = new CheckBox(root,TR("Clockwise"),&(inf.clockwise));
 	

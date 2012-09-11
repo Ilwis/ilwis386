@@ -135,6 +135,7 @@ int PointScalingForm::ColValCallBack(Event*) {
   }
 void PointScalingForm::apply(){
 	root->StoreData();
+	fmscale->StoreData();
 	if ( stretchModel == 0) {
 		props->scaleMode = PointProperties::sLINEAR;
 	} else if (stretchModel == 1)
