@@ -230,6 +230,7 @@ void SpaceTimePathDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc
 		const CoordBounds& cbMap = getRootDrawer()->getMapCoordBounds();
 		double pathScale = cbMap.width() / 50;
 		if (numberOfFeatures > 1) {
+			String sLastGroupValue = fUseGroup ? getGroupValue(features[0]) : "";
 			Coord headPrevious;
 			Coord tailPrevious;
 			long start = 0;
@@ -237,6 +238,11 @@ void SpaceTimePathDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc
 			Feature * feature;
 			do {
 				feature = features[start];
+				if (fUseGroup && sLastGroupValue != getGroupValue(feature)) {
+					sLastGroupValue = getGroupValue(feature);
+					objectStartIndexes->push_back(start);
+					glLoadName(++objectID);
+				}
 				z = getTimeValue(feature);
 				++start;
 			} while ((z < cubeBottom || z > cubeTop) && start < numberOfFeatures);
@@ -244,7 +250,6 @@ void SpaceTimePathDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc
 			Coord head = *(point->getCoordinate());
 			head.z = z * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
 			head = getRootDrawer()->glConv(csy, head);
-			String sLastGroupValue = fUseGroup ? getGroupValue(feature) : "";
 			float rsHead = fUseAttributeColumn ? (((fValueMap ? attributeColumn->rValue(feature->iValue()) : attributeColumn->iRaw(feature->iValue())) - minMapVal) / width) : ((feature->rValue() - minMapVal) / width);
 			double rHead = pathScale * getSizeValue(feature);
 			const byte * hatch = 0;
@@ -256,9 +261,16 @@ void SpaceTimePathDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc
 			}
 			if (prc)
 				(this->*getHatchFunc)(prc, attributeColumn->iRaw(feature->iValue()), hatch);
+			bool fCutPath = false;
 			for (long i = start; i < numberOfFeatures; ++i)
 			{
 				feature = features[i];
+				if (fUseGroup && sLastGroupValue != getGroupValue(feature)) {
+					sLastGroupValue = getGroupValue(feature);
+					objectStartIndexes->push_back(i);
+					glLoadName(++objectID);
+					fCutPath = true;
+				}
 				z = getTimeValue(feature);
 				if (z >= cubeBottom && z <= cubeTop)
 				{
@@ -269,13 +281,9 @@ void SpaceTimePathDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc
 					float rsTail = fUseAttributeColumn ? (((fValueMap ? attributeColumn->rValue(feature->iValue()) : attributeColumn->iRaw(feature->iValue())) - minMapVal) / width) : ((feature->rValue() - minMapVal) / width);
 					double rTail = pathScale * getSizeValue(feature);
 
-					bool fCutPath = false;
-					if (fUseGroup && sLastGroupValue != getGroupValue(feature)) {
-						sLastGroupValue = getGroupValue(feature);
-						fCutPath = true;
-					}
-
-					if (!fCutPath)
+					if (fCutPath)
+						fCutPath = false;
+					else
 					{
 						if (!headPrevious.fUndef())
 						{
@@ -341,9 +349,6 @@ void SpaceTimePathDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc
 						}
 
 						glEnd();
-					} else {
-						objectStartIndexes->push_back(i);
-						glLoadName(++objectID);
 					}
 					// continue
 					headPrevious = head;
