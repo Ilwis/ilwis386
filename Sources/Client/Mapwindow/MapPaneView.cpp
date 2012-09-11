@@ -437,8 +437,8 @@ void MapPaneView::OnNoneEdit()
 		mw->SetAcceleratorTable();
 		mw->bbDataWindow.LoadButtons("map.but");
 		mw->RecalcLayout();
-		mw->ShowControlBar(&mw->barScale,TRUE,FALSE);
-		mw->RecalcLayout();
+		//mw->ShowControlBar(&mw->barScale,TRUE,FALSE);
+		//mw->RecalcLayout();
 	}
 	UpdateFrame();
 	GetParentFrame()->RecalcLayout();

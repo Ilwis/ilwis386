@@ -75,7 +75,7 @@ public:
 	//}}AFX_VIRTUAL
 	CView* vwFirst() { return pFirstView; }
 	bool isFullScreen() const { return fullScreen;}
-	ScaleBar barScale;
+	//ScaleBar barScale;
 	GeneralBar ltb;
 
 	//{{AFX_MSG(MapWindow)
