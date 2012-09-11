@@ -267,8 +267,8 @@ GeoRefEditor::GeoRefEditor(MapPaneView* mpvw, GeoRef georef)
 	edTxt.SetFont(&fnt);
 
 	// hide scale bar
-	if (mw)
-		mw->ShowControlBar(&mw->barScale,FALSE,FALSE);
+	//if (mw)
+	//	mw->ShowControlBar(&mw->barScale,FALSE,FALSE);
 
 	dw->RecalcLayout();
 	dw->bbDataWindow.GetWindowRect(&rect);

@@ -214,12 +214,12 @@ afx_msg int SmceMapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	DockControlBar(&bbDataWindow, AFX_IDW_DOCKBAR_TOP);
 
-	barScale.Create(this);
+	//barScale.Create(this);
 	RecalcLayout();
 	CRect rect;
 	bbDataWindow.GetWindowRect(&rect);
 	rect.OffsetRect(1,0);
-	DockControlBar(&barScale,AFX_IDW_DOCKBAR_TOP,rect);
+	//DockControlBar(&barScale,AFX_IDW_DOCKBAR_TOP,rect);
 
 	ltb.Create(this, 124, CSize(150,200));
 	ltb.SetWindowText(TR("Layer Management").c_str());
