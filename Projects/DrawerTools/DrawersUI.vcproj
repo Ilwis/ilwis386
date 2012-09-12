@@ -408,6 +408,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\DrawersUI\SelectableTool.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\DrawersUI\SetDrawerTool.cpp"
 				>
 			</File>
@@ -634,6 +638,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\DrawersUI\SampleStatWindow.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\SelectableTool.h"
 				>
 			</File>
 			<File
