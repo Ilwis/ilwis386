@@ -507,6 +507,7 @@ SMCESHOWSTANDARDIZED    BITMAP                  "SMCEShowStandardized.bmp"
 START                   BITMAP                  "Ilwis_startup.bmp"
 IDB_BITMAP1             BITMAP                  "bitmap1.bmp"
 N52                     BITMAP                  "n52.bmp"
+SELECTAREA              BITMAP                  "SelectArea.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

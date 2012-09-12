@@ -62,6 +62,7 @@ public:
 	virtual void OnRButtonDown(UINT nFlags, CPoint point);
 	virtual void OnRButtonUp(UINT nFlags, CPoint point);
 	virtual bool OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	virtual bool OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
 	virtual void OnEscape();
 	bool OnSetCursor(); // called by MapPaneView::OnSetCursor
 	void SetCursor(const zCursor& cur);

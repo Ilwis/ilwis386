@@ -73,6 +73,7 @@ public:
 	void OnRButtonDown(UINT nFlags, CPoint point, int state=0);
 	void OnRButtonUp(UINT nFlags, CPoint point, int state=0);
 	bool OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	bool OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
 	BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
 
 

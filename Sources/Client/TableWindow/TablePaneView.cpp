@@ -453,8 +453,8 @@ void TablePaneView::updateSelection()
 			Ilwis::Record rec = tvw()->rec(iRec);
 			raws.push_back(rec.iRec());
 		}
-
-		IlwWinApp()->SendUpdateTableSelection(raws, GetDocument()->obj()->fnObj);
+		Table tbl( GetDocument()->obj()->fnObj);
+		IlwWinApp()->SendUpdateTableSelection(raws, tbl->dm()->fnObj);
 	}
 }
 

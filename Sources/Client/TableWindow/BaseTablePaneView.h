@@ -55,6 +55,8 @@ Created on: 2007-02-8
 
 class FrameWindow;
 
+struct RowSelectInfo;
+
 
 class BaseTblField;
 
@@ -97,6 +99,7 @@ public:
 	virtual bool fAllowMoveCol() const;
 	virtual void update() {}
 	virtual void updateSelection() {}
+	void selectFeatures(const RowSelectInfo& inf);
 protected:
 	int iCharWidth;
 	int iButtonWidth;  // nr of chars in the row button, to be set by derived class

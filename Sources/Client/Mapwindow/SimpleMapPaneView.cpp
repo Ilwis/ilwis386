@@ -95,6 +95,7 @@ IMPLEMENT_DYNCREATE(SimpleMapPaneView, ZoomableView)
 BEGIN_MESSAGE_MAP(SimpleMapPaneView, ZoomableView)
 	ON_WM_ERASEBKGND()
 	ON_WM_KEYDOWN()
+	ON_WM_KEYUP()
 	ON_WM_MOUSEMOVE()
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
@@ -342,6 +343,12 @@ void SimpleMapPaneView::OnUpdateMeasureDist(CCmdUI* pCmdUI)
 	//if (0 == as)
 	//	iActiveTool = 0;
 	//pCmdUI->SetRadio(ID_MEASUREDIST == iActiveTool);
+}
+
+void SimpleMapPaneView::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
+	if (tools.OnKeyUp(nChar, nRepCnt, nFlags))
+		return;
+	ZoomableView::OnKeyDown(nChar, nRepCnt, nFlags);
 }
 
 void SimpleMapPaneView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 

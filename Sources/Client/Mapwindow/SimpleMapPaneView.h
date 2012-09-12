@@ -90,6 +90,7 @@ public:
 	ILWIS::ScreenSwapper* getSwapper() { return swapper; }
 	PixelInfoBar *getPixInfoBar() { return pib; }
 	void ResetStatusBar();
+	void OnLButtonUp(UINT nFlags, CPoint point);
 
 	InfoLine* info;
 
@@ -99,9 +100,9 @@ protected:
 	void SetDirty();	
 	void SetDirtySilent();
 	void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
 	void OnMouseMove(UINT nFlags, CPoint point);
 	void OnLButtonDown(UINT nFlags, CPoint point);
-	void OnLButtonUp(UINT nFlags, CPoint point);
 	void OnMeasureDist();
 	void OnUpdateMeasureDist(CCmdUI* pCmdUI);
 	afx_msg void OnWindowPosChanging( WINDOWPOS* lpwndpos );

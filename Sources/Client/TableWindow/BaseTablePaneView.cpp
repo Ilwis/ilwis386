@@ -2063,3 +2063,6 @@ void BaseTablePaneView::OnSetFocus(CWnd* pNewWnd)
 		InvalidateRect(rect);
 }
 
+void BaseTablePaneView::selectFeatures(const RowSelectInfo& inf) {
+	
+}

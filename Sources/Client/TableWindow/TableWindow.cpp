@@ -40,6 +40,7 @@
 #include "Client\Headers\formelementspch.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\ilwis.h"
+#include "Engine\Base\system\engine.h"
 #include "Client\Base\datawind.h"
 #include "Client\Editors\Utils\BaseBar.h"
 #include "Client\MainWindow\CommandCombo.h"
@@ -118,7 +119,8 @@ BEGIN_MESSAGE_MAP(TableWindow, DataWindow)
 	ON_COMMAND(ID_GOTORECORDNEXT, OnGotoRecordNext)
 	ON_COMMAND(ID_GOTORECORDFIRST, OnGotoRecordFirst)
 	ON_COMMAND(ID_GOTORECORDLAST, OnGotoRecordLast)
-	ON_WM_ACTIVATE()		
+	ON_WM_ACTIVATE()
+	ON_MESSAGE(MESSAGE_SELECT_ROW,OnSelectFeatures)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -822,4 +824,12 @@ void TableWindow::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
 	DataWindow::OnActivate(nState, pWndOther, bMinimized);
 	if (WA_ACTIVE == nState)
 		commBar.Activate();
+}
+
+LONG TableWindow::OnSelectFeatures(UINT wParam, LONG lParam)
+{
+	RowSelectInfo inf = *(RowSelectInfo *)wParam;
+	tpv->selectFeatures(inf);
+
+	return 1;
 }

@@ -102,6 +102,10 @@ bool MapPaneViewTool::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags){
 	return false;
 }
 
+bool MapPaneViewTool::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags){
+	return false;
+}
+
 void MapPaneViewTool::OnEscape()
 {
 	Stop();

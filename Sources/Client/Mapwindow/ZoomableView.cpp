@@ -1017,6 +1017,7 @@ void ZoomableView::OnSelectArea()
 	iActiveTool = ID_ZOOMIN;
 }
 
+
 void ZoomableView::selectArea(CCmdTarget *target, NotifyRectProc proc, const String& cursor, const Color& clr, bool keepDimensions)
 {
 	noTool(ID_ZOOMIN);
@@ -1235,6 +1236,15 @@ bool MapTools::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags){
 	for(map<int, MapPaneViewTool *>::iterator cur = begin(); cur != end(); ++cur) {
 		if ( (*cur).second->isActive())
 			result |= (*cur).second->OnKeyDown(nChar, nRepCnt, nFlags);
+	}
+	return result;
+}
+
+bool MapTools::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags){
+	bool result = false;
+	for(map<int, MapPaneViewTool *>::iterator cur = begin(); cur != end(); ++cur) {
+		if ( (*cur).second->isActive())
+			result |= (*cur).second->OnKeyUp(nChar, nRepCnt, nFlags);
 	}
 	return result;
 }
