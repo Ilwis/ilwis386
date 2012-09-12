@@ -48,6 +48,7 @@ void ComplexDrawer::init() {
 	editmode = false;
 	selectionColor = Color(255,0,0);
 	valid = true;
+	selectable = false;
 }
 
 String ComplexDrawer::getType() const {
@@ -621,6 +622,14 @@ bool ComplexDrawer::isValid() const{
 }
 void ComplexDrawer::setValid(bool yesno) {
 	valid = yesno;
+}
+
+void ComplexDrawer::select(const CoordBounds& cbSelect) {
+	for(int index = 0; index < getDrawerCount(); ++index) {
+		NewDrawer *dr = getDrawer(index);
+		dr->select(cbSelect);
+
+	}
 }
 //--------------------------------- UI ------------------------------------------------------------------------
 //void ComplexDrawer::setActiveMode(void *v,LayerTreeView *tv) {

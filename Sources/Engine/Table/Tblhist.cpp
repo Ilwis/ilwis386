@@ -546,7 +546,7 @@ bool TableHistogram::fCount()
         map->GetLineVal(l, line);
         for (c = 0; c < iMapCols; c++) {
           double r = line[c];
-          if (r != rUNDEF) {
+          if (r != rUNDEF && !ISNAN(r)) {
             htabr::iterator iter = htr.Find(r);
             if (iter == htr.end()) { // not yet in hash table,
               htr.Insert(hitemr(r, 1)); //insert with frequency 1

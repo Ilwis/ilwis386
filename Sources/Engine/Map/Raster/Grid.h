@@ -15,7 +15,7 @@ public:
 		RowCol rc = mp->rcSize();
 		setSize(rc.Row, rc.Col);
 		FileName fnData(mp->fnObj,".mp#");
-		ifstream infile(fnData.sPhysicalPath().c_str());
+		ifstream infile(fnData.sPhysicalPath().c_str(),ifstream::in | ifstream::binary);
 		unsigned long blockSize = linesPerBlock * rc.Col * elementSize;
 		int count = 0;
 		unsigned long szLeft = sz;
@@ -36,6 +36,23 @@ public:
 		clear();
 	}
 
+	void store(const FileName& fnObj) {
+		FileName fnData fnObj.sExt != ".mp#" ? FileName(fnObj,".mp#") : fnObj;
+		ofstream outfile(fnData.sPhysicalPath(), ios::out | ios::binary);
+		unsigned long blockSize = sz / noOfBlocks;
+		unsigned long szLeft = sz;
+		if ( outfile.is_open()) {
+			for(int i = 0; i < noOfBlocks; ++i) {
+				if ( i == noOfBlocks - 1) {
+					outfile.write((char *)values[i], szLeft);
+				} else {
+					otfile.write((char *)values[count],blockSize);
+				}
+				szLeft -= blockSize;
+			}
+		}
+
+	}
 	void setSize(int y, int x) {
 		sz = y * x * elementSize;
 		lineSize = x;

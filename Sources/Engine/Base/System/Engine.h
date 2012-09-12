@@ -24,7 +24,7 @@ class Logger;
 class GdalProxy;
 
 struct RowSelectInfo {
-	FileName fn; // table;
+	FileName fn; // domain;
 	vector<long> raws; // selected rows;
 };
 

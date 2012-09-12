@@ -55,6 +55,7 @@ namespace ILWIS {
 		void setZIndex(int);
 		void setupDraw() const;
 		NewDrawer *getBackgroundDrawer() const { return backgroundDrawer; }
+		
 
 		//void clear();
 		void set3D(bool yeno);
