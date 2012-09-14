@@ -98,6 +98,10 @@ void SelectableTool::FeatureAreaSelected(CRect rect)
 {
 	if ( fCtrl)
 		return;
+	else {
+		selectedRaws.clear();
+		getDrawer()->select(CoordBounds());
+	}
 	if ( rect.Height() == 0 || rect.Width() == 0) {
 		selectedRaws.clear();
 		return;
@@ -137,8 +141,8 @@ void SelectableTool::FeatureAreaSelected(CRect rect)
 			if (!f || f->fValid() == false)
 				continue;
 			selectedRaws.push_back(f->iValue());
-			IlwWinApp()->SendUpdateTableSelection(selectedRaws, bmapptr->dm()->fnObj);
 		}
+		IlwWinApp()->SendUpdateTableSelection(selectedRaws, bmapptr->dm()->fnObj);
 		view->Invalidate();
 	}
 }
