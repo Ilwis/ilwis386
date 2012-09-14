@@ -40,11 +40,12 @@ NewDrawer *PointLayerDrawer::createElementDrawer(PreparationParameters *pp, ILWI
 void PointLayerDrawer::prepare(PreparationParameters *parm){
 	FeatureLayerDrawer::prepare(parm);
 	SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)parentDrawer;
+	BaseMapPtr *bmptr = mapDrawer->getBaseMap();
 	Table tbl = mapDrawer->getAtttributeTable();
 	DomainSort *dmsrt = 0;
 	Column rotColumn;
 	RangeReal rr;
-	if ( tbl.fValid()) {
+	if ( tbl.fValid() || bmptr->dm()->pdv()) {
 		if ( rotationInfo.rotationColumn != "")
 			rotColumn = tbl->col(rotationInfo.rotationColumn);
 		if ( rotColumn.fValid()) {
@@ -54,7 +55,8 @@ void PointLayerDrawer::prepare(PreparationParameters *parm){
 				dmsrt = tbl->dm()->pdsrt();
 				rr = rotationInfo.rr.fValid() ? rotationInfo.rr : rotColumn->rrMinMax();
 			}
-		}
+		} else
+			rr = rotationInfo.rr;
 
 	}
 
@@ -78,16 +80,21 @@ void PointLayerDrawer::prepare(PreparationParameters *parm){
 				if ( tbl.fValid() && properties->stretchColumn != "") {
 					Column col = tbl->col(properties->stretchColumn);
 					if ( col.fValid())
-						props->stretchRange = col->rrMinMax();
+						props->stretchRange = properties->stretchRange = col->rrMinMax();
 				} else {
-					props->stretchRange = mapDrawer->getStretchRangeReal();
+					props->stretchRange = properties->stretchRange = mapDrawer->getStretchRangeReal();
 				}
 			}
-			if ( rotColumn.fValid() ) {
+			if ( rotationInfo.rr.fValid() ) {
 				Feature *feature = ld->getFeature();
 				long iRaw = feature->iValue();
-				long iKey = dmsrt->iKey(dmsrt->iOrd(iRaw));
-				double v = rotColumn->rValue(iKey);
+				double v;
+				if ( rotColumn.fValid()) {
+					long iKey = dmsrt->iKey(dmsrt->iOrd(iRaw));
+					double v = rotColumn->rValue(iKey);
+				} else
+					v =  bmptr->dvrs().rValue(iRaw);
+
 				if ( v != rUNDEF) {
 					double f = rotationInfo.clockwise ? 1.0 : -1.0;
 					double angle = f * 360.0 * ( v - rr.rLo())  / rr.rWidth();
@@ -160,6 +167,7 @@ SymbolRotationInfo PointLayerDrawer::getRotationInfo() const {
 
 void PointLayerDrawer::setRotationInfo(const SymbolRotationInfo& sC) {
 	rotationInfo = sC;
+	properties->useDirection = true;
 }
 
 

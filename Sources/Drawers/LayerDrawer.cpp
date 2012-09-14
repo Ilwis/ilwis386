@@ -324,6 +324,22 @@ void LayerDrawer::setTransparentValues(const RangeReal& rr){
 	}
 }
 
+bool LayerDrawer::isSelectable() const { 
+	return selectable;
+}
+void LayerDrawer::setSelectable(bool yesno ){
+	selectable = yesno;
+}
+
+void LayerDrawer::select(const CoordBounds& cbSelect) {
+	CoordBounds cb = selectable ? cbSelect : CoordBounds();
+	for(int index = 0; index < getDrawerCount(); ++index) {
+		NewDrawer *dr = getDrawer(index);
+		dr->select(cb);
+
+	}
+}
+
 
 
 

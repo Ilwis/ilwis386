@@ -49,6 +49,14 @@ void PointDrawer::prepare(PreparationParameters *p){
 	}
 }
 
+void PointDrawer::select(const CoordBounds& cbSelect) {
+	if ( cbSelect.fContains(cNorm)) {
+		specialOptions |= NewDrawer::sdoSELECTED;
+	} else {
+		specialOptions &= ~NewDrawer::sdoSELECTED;
+	}
+}
+
 void PointDrawer::setCoord(const Coord& crd) {
 	cNorm = crd;
 }
