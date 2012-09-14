@@ -42,6 +42,7 @@ bool PointFeatureDrawer::draw( const CoordBounds& cbArea) const{
 void PointFeatureDrawer::prepare(PreparationParameters *p){
 	PointDrawer::prepare(p);
 	FeatureLayerDrawer *fdr = dynamic_cast<FeatureLayerDrawer *>(parentDrawer);
+	BaseMapPtr *bmpptr = ((SpatialDataDrawer *)fdr->getParentDrawer())->getBaseMap();
 	if ( p->type & ptGEOMETRY | p->type & ptRESTORE) {
 	    CoordSystem csy = fdr->getCoordSystem();
 		ILWIS::Point *point = (ILWIS::Point *)feature;
@@ -68,10 +69,9 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 			}
 		}
 		double v = feature->rValue();
-		BaseMapPtr *bmpptr = ((SpatialDataDrawer *)fdr->getParentDrawer())->getBaseMap();
 		setSpecialDrawingOptions(NewDrawer::sdoSELECTED,false);
 		if ( bmpptr->fTblAtt()) {
-			setTableSelection(bmpptr->tblAtt()->fnObj,v, p);
+			setTableSelection(bmpptr->tblAtt()->dm()->fnObj,v, p);
 		}
 	/*	if ( p->rowSelect.raws.size() > 0) {
 			if ( bmpptr->fTblAtt()) {
@@ -88,30 +88,34 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 			properties.scale = rpr->prc()->iSymbolSize(feature->iValue()) / 100;
 		}
 		if ( properties.scaleMode != PointProperties::sNONE && v != rUNDEF ) {
-			if ( bmpptr->fTblAtt()) {
-				Table tbl = bmpptr->tblAtt();
+			if ( bmpptr->fTblAtt() || bmpptr->dm()->pdv()) {
 				properties.exaggeration = properties.exaggeration * p->props->symbolSize / 100.0;
+				RangeReal rr = properties.stretchRange;
 				if ( properties.stretchColumn != "") {
+					Table tbl = bmpptr->tblAtt();
 					Column col = tbl->col(properties.stretchColumn);
 					if ( col.fValid() && col->dm()->pdv()) {
 						v = col->rValue(v);
-						if ( properties.stretchRange.fValid()) {
-							setActive(properties.stretchRange.fContains(v));
-						} else {
-							setActive(true);
-						}
-						RangeReal rr = properties.stretchRange.fValid() ? properties.stretchRange : col->dvrs().rrMinMax();
-						
-						if ( properties.scaleMode == PointProperties::sLINEAR) {
-							double scale = max(1.0, 1.0 + properties.exaggeration * (v - rr.rLo()) / rr.rWidth());
-							properties.stretchScale = scale;
-						}
-						else if (properties.scaleMode == PointProperties::sLOGARITHMIC) {
-							double scale = max(1.0,1.0 + properties.exaggeration * log(1.0 + (v - rr.rLo()) / rr.rWidth()));
-							properties.stretchScale = scale;
-
-						}
 					}
+					if ( !rr.fValid())
+						rr = col->dvrs().rrMinMax();
+				} else {
+					v = bmpptr->dvrs().rValue(feature->rValue());
+				}
+				if ( properties.stretchRange.fValid()) {
+					setActive(properties.stretchRange.fContains(v));
+				} else {
+					setActive(true);
+				}
+
+				if ( properties.scaleMode == PointProperties::sLINEAR) {
+					double scale = max(1.0, 1.0 + properties.exaggeration * (v - rr.rLo()) / rr.rWidth());
+					properties.stretchScale = scale;
+				}
+				else if (properties.scaleMode == PointProperties::sLOGARITHMIC) {
+					double scale = max(1.0,1.0 + properties.exaggeration * log(1.0 + (v - rr.rLo()) / rr.rWidth()));
+					properties.stretchScale = scale;
+
 				}
 			}
 		}

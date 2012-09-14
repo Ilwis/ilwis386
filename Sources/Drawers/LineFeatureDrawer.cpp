@@ -102,7 +102,7 @@ void LineFeatureDrawer::prepare(PreparationParameters *p){
 
 		BaseMapPtr *bmpptr = ((SpatialDataDrawer *)fdr->getParentDrawer())->getBaseMap();
 		if ( bmpptr->fTblAtt()) {
-			setTableSelection(bmpptr->tblAtt()->fnObj,feature->iValue(), p);
+			setTableSelection(bmpptr->tblAtt()->dm()->fnObj,feature->iValue(), p);
 		}
 
 		for(int j =0 ; j < p->filteredRaws.size(); ++j) {

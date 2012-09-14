@@ -162,7 +162,7 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 			((LineProperties *)boundary->getProperties())->drawColor = lp->drawColor;
 		}
 		if ( bmpptr->fTblAtt()) {
-			setTableSelection(bmpptr->tblAtt()->fnObj,feature->iValue(), p);
+			setTableSelection(bmpptr->tblAtt()->dm()->fnObj,feature->iValue(), p);
 		}
 	}
 }
