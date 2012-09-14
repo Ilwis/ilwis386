@@ -39,6 +39,9 @@ class _export LayerDrawer : public ComplexDrawer {
 		void *getDataSource() { return getParentDrawer()->getDataSource(); }
 		RangeReal getTransparentValues() const;
 		void setTransparentValues(const RangeReal& rr);
+		virtual bool isSelectable() const;
+		virtual void setSelectable(bool yesno );
+		void select(const CoordBounds& cbSelect);
 			
 	protected:
 		String store(const FileName& fnView, const String& parenSection) const;

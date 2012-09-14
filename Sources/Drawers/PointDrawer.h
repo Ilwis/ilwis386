@@ -34,7 +34,7 @@ public:
 		stretchColumn = lp->stretchColumn;
 		scaleMode = lp->scaleMode;
 		useDirection = lp->useDirection;
-		angle = lp->angle;
+		angle = (angle != 0 && lp->useDirection) ? angle : lp->angle;
 		exaggeration = lp->exaggeration;
 		scale = lp->scale;
 	}
@@ -70,6 +70,7 @@ class _export PointDrawer : public SimpleDrawer {
 		void shareVertices(vector<Coord *>& coords);
 		void setCoord(const Coord& crd);
 		GeneralDrawerProperties *getProperties();
+		void select(const CoordBounds& cbSelect) ;
 	protected:
 		PointDrawer(DrawerParameters *parms, const String& name);
 		void calcSize();
