@@ -15,6 +15,8 @@ ILWIS::Point::Point(geos::index::quadtree::Quadtree *tree, const geos::geom::Poi
 		crd->x = pnt->getCoordinate()->x;
 		crd->y = pnt->getCoordinate()->y;
 		crd->z = pnt->getCoordinate()->z;
+		envelope = computeEnvelopeInternal();
+		spatialIndex->insert(getEnvelopeInternal(), this);
 	}
 }
 
@@ -23,12 +25,16 @@ ILWIS::Point::~Point() {
 
 ILWIS::Point::Point(geos::index::quadtree::Quadtree *tree,const Coord& c)  : geos::geom::Point( ILWIS::Point::create(c), new GeometryFactory(new PrecisionModel())), Feature(tree)
 {
+	envelope = computeEnvelopeInternal();
+	spatialIndex->insert(getEnvelopeInternal(), this);
 }
 
 ILWIS::Point::Point(geos::index::quadtree::Quadtree *tree, CoordinateSequence *seq) : 
 geos::geom::Point(seq,new GeometryFactory(new PrecisionModel())),
 Feature(tree)
 {
+	envelope = computeEnvelopeInternal();
+	spatialIndex->insert(getEnvelopeInternal(), this);
 }
 
 CoordinateSequence* ILWIS::Point::create(const Coord& c) {
