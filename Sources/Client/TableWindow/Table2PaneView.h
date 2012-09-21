@@ -71,7 +71,7 @@ public:
 	//{{AFX_VIRTUAL(TablePaneView)
 	public:
 	virtual void InitColPix(CDC* cdc);
-  virtual int iCols() const;
+  virtual long iCols() const;
   virtual long iRows() const;
   virtual String sColButton(int iCol) const;
   virtual String sRowButton(long iRow) const;

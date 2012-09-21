@@ -2132,6 +2132,9 @@ FileName MapCompositionDoc::getViewName() const{
 }
 
 void MapCompositionDoc::selectFeatures(const RowSelectInfo& inf) {
+	if ( inf.sender == (long)mpvGetView())
+		return;
+
 	PreparationParameters pp(NewDrawer::ptRENDER);
 	pp.rowSelect = inf;
 	rootDrawer->prepare(&pp);

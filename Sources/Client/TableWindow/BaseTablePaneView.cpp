@@ -38,8 +38,10 @@ Created on: 2007-02-8
 //
 
 #include "Client\Headers\formelementspch.h"
+#include "Engine\Base\System\engine.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\ilwis.h"
+#include "TableSelection.h"
 #include "Client\TableWindow\BaseTablePaneView.h"
 #include "Client\FormElements\syscolor.h"
 #include "Client\FormElements\fldfontn.h"
@@ -136,6 +138,8 @@ FrameWindow* BaseTablePaneView::fwParent()
 
 void BaseTablePaneView::InitColPix(CDC* cdc)
 {
+	selection.setSize(RowCol(iRows(), iCols()));
+
 	if (0 != cdc) {
 		TEXTMETRIC tm;
 		cdc->GetTextMetrics(&tm);
@@ -194,14 +198,14 @@ void BaseTablePaneView::OnDraw(CDC* cdc)
 	cdc->SelectObject(penOld);
 	penOld = cdc->SelectObject(&penNull);
 	cdc->SelectObject(brOld);
-	brOld = cdc->SelectObject(&brHL);
+	/*brOld = cdc->SelectObject(&brHL);
 	zRect rectSel = rectSelect();
 	if (!rectSel.IsRectEmpty()) {
 		if (rectSel.right() < 32767)
 			rectSel.right() += 1;
 		rectSel.top() += 1;
 		cdc->Rectangle(rectSel);
-	}
+	}*/
 
 	if (fShowHeading) 
 	{
@@ -396,9 +400,9 @@ void BaseTablePaneView::OnDraw(CDC* cdc)
 					p.y -= iHeight();
 				for (long r = iFirstVisibleRow(); r <= iRows(); ++r) 
 				{
-					if (mmSelect.fContains(RowCol(r,(long)c))) {
+					if (selection.fContains(RowCol(r,(long)c))) {
 						if (fHasFocus) {
-							cdc->SetTextColor(SysColor(COLOR_HIGHLIGHTTEXT));
+							cdc->SetTextColor(SysColor(COLOR_WINDOWTEXT));
 							cdc->SetBkColor(colHighLight);
 						}
 						else {
@@ -561,39 +565,35 @@ zRect BaseTablePaneView::rectField(int iCol, long iRec) const
 
 void BaseTablePaneView::OnSelectAll()
 {
-	mmSelect.MinCol() = -1;
-	mmSelect.MinRow() = 0;
-	mmSelect.MaxCol() = iCols();
-	mmSelect.MaxRow() = iRows();
+	selection.selectBlock(RowCol(1L,0L),RowCol(iRows(), iCols() - 1));
 	Invalidate();
 }
 
-zRect BaseTablePaneView::rectBlock(const MinMax& mm) const
+zRect BaseTablePaneView::rectBlock(const TableSelection& sel) const
 {
 	zRect rect;
 	rect.SetRectEmpty();
-	if (mm.MinCol() > mm.MaxCol() ||
-		mm.MinRow() > mm.MaxRow()) return rect;
-	if (mm.MinCol() > iLastVisibleColumn()  ||
-		mm.MaxCol() < iFirstVisibleColumn() ||
-		mm.MinRow() > iLastVisibleRow()	  ||
-		mm.MaxRow() < iFirstVisibleRow()) return rect;
+	if ( !sel.fValid()) return rect;
+	if (sel.minCol() > iLastVisibleColumn()  ||
+		sel.maxCol() < iFirstVisibleColumn() ||
+		sel.minRow() > iLastVisibleRow()	  ||
+		sel.maxRow() < iFirstVisibleRow()) return rect;
 
-	int iCol = mm.MinCol();
+	int iCol = sel.minCol();
 	if (iCol < iFirstVisibleColumn())
 		iCol = 0;
 	rect.left() = iColPix[iCol];
-	iCol = mm.MaxCol();
+	iCol = sel.maxCol();
 	if (iCol > iCols())
 		iCol = iCols();
 	rect.right() = iColPix[iCol+1];
-	long iRow = 1 + mm.MinRow() - iFirstVisibleRow();
+	long iRow = 1 + sel.minRow() - iFirstVisibleRow();
 	if (iRow < 1)
 		iRow = 1;
 	if (!fShowHeading)
 		iRow--;
 	rect.top() = iRow * iHeight() - 1;
-	iRow = mm.MaxRow() - iFirstVisibleRow();
+	iRow = sel.maxRow() - iFirstVisibleRow();
 	if (iRow > 1e6)
 		rect.bottom() = 5000;
 	else {
@@ -607,10 +607,10 @@ zRect BaseTablePaneView::rectBlock(const MinMax& mm) const
 
 zRect BaseTablePaneView::rectSelect() const
 {
-	return rectBlock(mmSelect);
+	return rectBlock(selection);
 }
 
-int BaseTablePaneView::iCols() const
+long BaseTablePaneView::iCols() const
 {
 	return 0;
 }
@@ -932,7 +932,7 @@ void BaseTablePaneView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		// ESC = remove selection
 	case VK_ESCAPE: {
 		zRect rect = rectSelect();
-		mmSelect = MinMax();
+		selection.reset();
 		if (!rect.IsRectEmpty())
 			InvalidateRect(&rect);
 					} return;
@@ -1047,87 +1047,91 @@ void BaseTablePaneView::OnMouseMove(UINT nFlags, CPoint point)
 				}
 			}
 			long iRec = iRow + iFirstVisibleRow() - 1;
-			MinMax mmNew = mmSelect;
+			TableSelection selNew = selection;
 			fChange = false;
 			if (iRowMoving >= 0) {
+
 				if (iRec >= iRowMoving) {
-					if (mmNew.MinRow() != iRowMoving) {
+					if (selNew.minRow() != iRowMoving) {
 						fChange = true;
-						mmNew.MinRow() = iRowMoving;
+						selNew.setMinRow(iRowMoving);
 					}
-					if (mmNew.MaxRow() != iRec) {
+					if (selNew.maxRow() != iRec) {
 						fChange = true;
-						mmNew.MaxRow() = iRec;
+						selNew.setMaxRow(iRec);
 					}
 				}
 				else {
-					if (mmNew.MaxRow() != iRowMoving) {
+					if (selNew.maxRow() != iRowMoving) {
 						fChange = true;
-						mmNew.MaxRow() = iRowMoving;
+						selNew.setMaxRow(iRowMoving);
 					}
-					if (mmNew.MinRow() != iRec) {
+					if (selNew.minRow() != iRec) {
 						fChange = true;
-						mmNew.MinRow() = iRec;
+						selNew.setMinRow(iRec);
 					}
 				}
 			}
 			if (iColMoving >= 0) {
 				if (iCol >= iColMoving) {
-					if (mmNew.MinCol() != iColMoving) {
+					if (selNew.minCol() != iColMoving) {
 						fChange = true;
-						mmNew.MinCol() = iColMoving;
+						selNew.setMinCol(iColMoving);
 					}
-					if (mmNew.MaxCol() != iCol) {
+					if (selNew.maxCol() != iCol) {
 						fChange = true;
-						mmNew.MaxCol() = iCol;
+						selNew.setMaxCol(iCol);
 					}
 				}
 				else {
-					if (mmNew.MaxCol() != iColMoving) {
+					if (selNew.maxCol() != iColMoving) {
 						fChange = true;
-						mmNew.MaxCol() = iColMoving;
+						selNew.setMaxCol(iColMoving);
 					}
-					if (mmNew.MinCol() != iCol) {
+					if (selNew.minCol() != iCol) {
 						fChange = true;
-						mmNew.MinCol() = iCol;
+						selNew.setMinCol(iCol);
 					}
 				}
 			}
 			if (fChange) {
-				MinMax mmMax;
-				MinMax mmDiff;
+				TableSelection selMax;
+				TableSelection selDiff;
 				zRect rDiff;
-				mmMax = mmSelect;
-				mmMax += mmNew;
-				if (mmNew.MinCol() != mmSelect.MinCol()) {
-					mmDiff = mmMax;
-					mmDiff.MinCol() = min(mmNew.MinCol(), mmSelect.MinCol());
-					mmDiff.MaxCol() = max(mmNew.MinCol(), mmSelect.MinCol()) - 1;
-					rDiff = rectBlock(mmDiff);
+				selMax = selection;
+				selMax += selNew;
+				if (selNew.minCol() != selection.minCol()) {
+					selDiff = selMax;
+					selDiff.setMinCol(min(selNew.minCol(), selection.minCol()));
+					selDiff.setMaxCol(max(selNew.minCol(), selection.minCol()) - 1);
+					rDiff = rectBlock(selDiff);
 					InvalidateRect(&rDiff);
 				}
-				if (mmNew.MaxCol() != mmSelect.MaxCol()) {
-					mmDiff = mmMax;
-					mmDiff.MaxCol() = max(mmNew.MaxCol(), mmSelect.MaxCol());
-					mmDiff.MinCol() = min(mmNew.MaxCol(), mmSelect.MaxCol()) + 1;
-					rDiff = rectBlock(mmDiff);
+				if (selNew.maxCol() != selection.maxCol()) {
+					selDiff = selMax;
+					selDiff.setMaxCol(max(selNew.maxCol(), selection.maxCol()));
+					selDiff.setMinCol(min(selNew.maxCol(), selection.maxCol()) + 1);
+					rDiff = rectBlock(selDiff);
 					InvalidateRect(&rDiff);
 				}
-				if (mmNew.MinRow() != mmSelect.MinRow()) {
-					mmDiff = mmMax;
-					mmDiff.MinRow() = min(mmNew.MinRow(), mmSelect.MinRow());
-					mmDiff.MaxRow() = max(mmNew.MinRow(), mmSelect.MinRow()) - 1;
-					rDiff = rectBlock(mmDiff);
+				if (selNew.minRow() != selection.minRow()) {
+					selDiff = selMax;
+					selDiff.setMinRow(min(selNew.minRow(), selection.minRow()));
+					selDiff.setMaxRow(max(selNew.minRow(), selection.minRow()) - 1);
+					rDiff = rectBlock(selDiff);
 					InvalidateRect(&rDiff);
 				}
-				if (mmNew.MaxRow() != mmSelect.MaxRow()) {
-					mmDiff = mmMax;
-					mmDiff.MaxRow() = max(mmNew.MaxRow(), mmSelect.MaxRow());
-					mmDiff.MinRow() = min(mmNew.MaxRow(), mmSelect.MaxRow()); // + 1
-					rDiff = rectBlock(mmDiff);
+				if (selNew.maxRow() != selection.maxRow()) {
+					selDiff = selMax;
+					selDiff.setMaxRow(max(selNew.maxRow(), selection.maxRow()));
+					selDiff.setMinRow(min(selNew.maxRow(), selection.maxRow())); // + 1
+					rDiff = rectBlock(selDiff);
 					InvalidateRect(&rDiff);
 				}
-				mmSelect = mmNew;
+				if (iRec == 2 && iCol == 2) {
+					TRACE("STOP");
+				}
+				selection = selNew;
 			}
 		} // fSelecting
 	}
@@ -1262,14 +1266,14 @@ void BaseTablePaneView::OnLButtonDown(UINT nFlags, CPoint point)
 	}  
 	if (fShift) {
 		pSelectStart.x = -100;
-		if (iRow >= mmSelect.MinRow())
-			iRowMoving = mmSelect.MinRow();
+		if (iRow >= selection.minRow())
+			iRowMoving = selection.minRow();
 		else
-			iRowMoving = mmSelect.MaxRow();
-		if (iCol > mmSelect.MinCol()) 
-			iColMoving = mmSelect.MinCol();
+			iRowMoving = selection.maxRow();
+		if (iCol > selection.minCol()) 
+			iColMoving = selection.minCol();
 		else 
-			iColMoving = mmSelect.MaxCol();
+			iColMoving = selection.maxCol();
 
 		MoveMouse(1,0);
 	}
@@ -1280,37 +1284,25 @@ void BaseTablePaneView::OnLButtonDown(UINT nFlags, CPoint point)
 		String s;
 		if (iRow <= 0) {
 			if (iCol < 0) {
-				mmSelect.MinCol() = 0;
-				mmSelect.MinRow() = 1;
-				mmSelect.MaxCol() = iCol - 1;
-				mmSelect.MaxRow() = iRowMoving - 1;
+				selection.selectBlock(RowCol(1L,0L), RowCol(iRowMoving - 1L, iCol - 1L));
 				iRowMoving = 0;
 				iColMoving = 0;
 				s = TR("Select a block");
 			}
 			else {
-				mmSelect.MinCol() = iColMoving;
-				mmSelect.MaxCol() = iColMoving;
-				mmSelect.MinRow() = -1;
-				mmSelect.MaxRow() = iRows();
+				selection.selectBlock(RowCol(1L,iColMoving), RowCol(iRows(), iColMoving)); 
 				iRowMoving = -1;
 				s = TR("Select a block of columns");
 			}
 		}
 		else {
 			if (iCol < 0) {
-				mmSelect.MinCol() = -1;
-				mmSelect.MaxCol() = iCols();
-				mmSelect.MinRow() = iRowMoving;
-				mmSelect.MaxRow() = iRowMoving;
+				selection.selectBlock(RowCol(iRowMoving,0L), RowCol(iRowMoving, iCols() - 1));
 				iColMoving = -1;
 				s = TR("Select a block of records");
 			}
 			else {
-				mmSelect.MinCol() = iColMoving;
-				mmSelect.MaxCol() = iColMoving;
-				mmSelect.MinRow() = iRowMoving;
-				mmSelect.MaxRow() = iRowMoving;
+				selection.selectBlock(RowCol(iRowMoving, iColMoving), RowCol(iRowMoving, iColMoving));
 				s = TR("Select a block");
 			}
 		}
@@ -1583,10 +1575,10 @@ void BaseTablePaneView::OnUpdateEditPaste(CCmdUI* pCmdUI)
 
 bool BaseTablePaneView::fValidSelection() const
 {
-	return mmSelect.MinRow() <= mmSelect.MaxRow() &&
-		mmSelect.MinCol() <= mmSelect.MaxCol() && 
-		mmSelect.MinRow() <= iRows() + (int)fShowHeading - 1 &&
-		mmSelect.MinCol() < iCols();
+	return selection.minRow() <= selection.maxRow() &&
+		selection.minCol() <= selection.maxCol() && 
+		selection.minRow() <= iRows() + (int)fShowHeading - 1 &&
+		selection.minCol() < iCols();
 }
 
 bool BaseTablePaneView::fAllowCopy() const
@@ -1619,13 +1611,13 @@ void BaseTablePaneView::OnEditCopy()
 	String str;
 	long r, rMax;
 	int c, cMax;
-	r = mmSelect.MinRow();
-	rMax = min(mmSelect.MaxRow(), iRows());
-	cMax = min((int)mmSelect.MaxCol(), iCols() - 1);
+	r = selection.minRow();
+	rMax = min(selection.maxRow(), iRows());
+	cMax = min((int)selection.maxCol(), iCols() - 1);
 	if (r <= 0) {
 		fColHeader = true;
 		r = 1;
-		c = mmSelect.MinCol();
+		c = selection.minCol();
 		if (c < 0) {
 			c = 0;
 			str = sULButton();
@@ -1646,7 +1638,7 @@ void BaseTablePaneView::OnEditCopy()
 	}
 	for (; r <= rMax; ++r)
 	{
-		c = mmSelect.MinCol();
+		c = selection.minCol();
 		if (c < 0) {
 			fRowHeader = true;
 			c = 0;
@@ -1707,10 +1699,7 @@ void BaseTablePaneView::OnEditCopy()
 		mdc.SetWindowExt(sz);
 		mdc.SetWindowOrg(rect.TopLeft());
 
-		MinMax mmTmp = mmSelect;
-		mmSelect = MinMax();
 		OnDraw(&mdc);
-		mmSelect = mmTmp;
 		HMETAFILE hMF = mdc.Close();
 
 		HANDLE hnd = GlobalAlloc(GMEM_MOVEABLE|GMEM_ZEROINIT,sizeof(METAFILEPICT)+1);
@@ -1729,7 +1718,7 @@ void BaseTablePaneView::OnEditCopy()
 void BaseTablePaneView::OnEditClear()
 {
 	zRect rect = rectSelect();
-	mmSelect = MinMax();
+	selection.reset();
 	InvalidateRect(&rect);
 }
 
@@ -1765,20 +1754,20 @@ LRESULT BaseTablePaneView::OnGotoField(WPARAM wParam, LPARAM lParam)
 
 int BaseTablePaneView::iSelectedColumn() const
 {
-	if (mmSelect.MinRow() != -1 || mmSelect.MaxRow() != iRows())
+	if (selection.minRow() != -1 || selection.maxRow() != iRows())
 		return iUNDEF;
-	if (mmSelect.MinCol() != mmSelect.MaxCol())
+	if (selection.minCol() != selection.maxCol())
 		return iUNDEF;
-	return mmSelect.MinCol() < 0 ? iUNDEF : mmSelect.MinCol();
+	return selection.minCol() < 0 ? iUNDEF : selection.minCol();
 }
 
 int BaseTablePaneView::iSelectedRow() const
 {
-	if (mmSelect.MinCol() != -1 || mmSelect.MaxCol() != iCols())
+	if (selection.minCol() != -1 || selection.maxCol() != iCols())
 		return iUNDEF;
-	if (mmSelect.MinRow() != mmSelect.MaxRow())
+	if (selection.minRow() != selection.maxRow())
 		return iUNDEF;
-	return mmSelect.MinRow() < 0 ? iUNDEF : mmSelect.MinRow();
+	return selection.minRow() < 0 ? iUNDEF : selection.minRow();
 }
 
 //////////////////////////////////////
@@ -1847,8 +1836,8 @@ BOOL BaseTablePaneView::OnPreparePrinting(CPrintInfo* pInfo)
 				create();
 			}
 		};
-		int iSelection = mmSelect.fUndef() ? 0 : 1; // 0 is all ; 1 is selection
-		if (mmSelect.width() == 0 && mmSelect.height() == 0)
+		int iSelection = selection.fValid() ? 0 : 1; // 0 is all ; 1 is selection
+		if (selection.mm().width() == 0 && selection.mm().height() == 0)
 			iSelection = 0;
 
 		int iUnits = dcPrinter.GetDeviceCaps(LOGPIXELSY);
@@ -1864,7 +1853,7 @@ BOOL BaseTablePaneView::OnPreparePrinting(CPrintInfo* pInfo)
 		m_PrintFont->GetLogFont(&logFont);
 		logFont.lfHeight = ::MulDiv(logFont.lfHeight, 72, iUnits);
 
-		FormPrintOptions frm(this, &iSelection, &fHeaderOnAllPages, &fLeftMostColOnAllPages, !mmSelect.fUndef(), &logFont, dcPrinter.m_hDC);
+		FormPrintOptions frm(this, &iSelection, &fHeaderOnAllPages, &fLeftMostColOnAllPages, !selection.fValid(), &logFont, dcPrinter.m_hDC);
 		if (!frm.fOkClicked())
 			return FALSE;
 
@@ -1892,15 +1881,15 @@ BOOL BaseTablePaneView::OnPreparePrinting(CPrintInfo* pInfo)
 		dcPrinter.DeleteDC();
 
 		int iPages = 1;
-		int iFirstCol = max(0, mmSelect.MinCol());
-		int iLastCol = min(mmSelect.MaxCol(), iCols()-1);
+		int iFirstCol = max(0, selection.minCol());
+		int iLastCol = min(selection.maxCol(), iCols()-1);
 		int iLeftMostColWidth = iCharW * (iButWidth() + 1);
 		int iTblWidth = 0;
 		for (int i=iFirstCol; i <= iLastCol; i++)
 			iTblWidth += iCharW * (iColWidth[i] + 1);
 		int iHorzPages = iCalcHorzPages(iLeftMostColWidth, fLeftMostColOnAllPages, iCharW, iPageW);
 
-		int iTableRows = mmSelect.fUndef() ? iRows() : mmSelect.MaxRow() - mmSelect.MinRow()+1;
+		int iTableRows = selection.fValid() ? iRows() : selection.maxRow() - selection.minRow()+1;
 
 		iPages = ((iTableRows + 4 /*header*/)* iCharH + (iPageH - 1)) / iPageH;
 
@@ -1949,15 +1938,15 @@ void BaseTablePaneView::OnPrint(CDC* pDC, CPrintInfo* pInfo)
 	int iColPage = (pInfo->m_nCurPage - 1) % iHorzPages;
 	int iRowPage = (pInfo->m_nCurPage - 1) / iHorzPages;
 	int iRowOffset = iRowPage * iRowsPerPage;
-	if (mmSelect.fUndef()) {
+	if (selection.fValid()) {
 		iFirstRow = 1 + iRowOffset; iFirstCol = 0; 
 		iLastRow = min(iFirstRow + iRowsPerPage - 1, iRows()); iLastCol = iCols()-1;
 	}
 	else {
-		iFirstRow = max(1, mmSelect.MinRow()) + iRowOffset;
-		iLastRow = min(iFirstRow + iRowsPerPage - 1, min(mmSelect.MaxRow(), iRows()));
-		iFirstCol = max(0, mmSelect.MinCol());
-		iLastCol = min(mmSelect.MaxCol(), iCols()-1);
+		iFirstRow = max(1, selection.minRow()) + iRowOffset;
+		iLastRow = min(iFirstRow + iRowsPerPage - 1, min(selection.maxRow(), iRows()));
+		iFirstCol = max(0, selection.minCol());
+		iLastCol = min(selection.maxCol(), iCols()-1);
 	}
 	CalcColsForColumnPages(iColPage, iFirstCol, iLastCol, iLeftMostColWidth, fLeftMostColOnAllPages, iCharW, rectP.Width());
 	String s;
@@ -2064,5 +2053,27 @@ void BaseTablePaneView::OnSetFocus(CWnd* pNewWnd)
 }
 
 void BaseTablePaneView::selectFeatures(const RowSelectInfo& inf) {
-	
+	if ( inf.sender == (long) this)
+		return;
+
+	selection.reset();
+	vector<long> rows;
+	for(int i=0; i < inf.raws.size(); ++i) {
+		long row = inf.raws[i];
+		if ( row > 0)
+			rows.push_back(row - 1); 
+	}
+	selection.selectRows(rows);
+	Invalidate();
+
 }
+
+const TableSelection& BaseTablePaneView::sel() const{
+	return selection;
+}
+
+void BaseTablePaneView::setSelection(const MinMax& mm){
+	selection.selectBlock(mm.rcMin, mm.rcMax);
+}
+
+

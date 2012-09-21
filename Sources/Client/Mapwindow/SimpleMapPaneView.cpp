@@ -542,7 +542,7 @@ void SimpleMapPaneView::OnLButtonDown(UINT nFlags, CPoint point)
 		return;
 	}
 	if (c.fUndef()) return;
-	if ( tools.size() == 0) {
+	if ( tools.size() == 0 || iActiveTool == ID_SELECTFEATURES) {
 		SetCapture();
 		String s = mcd->rootDrawer->getInfo(c);
 		if (s != "") {

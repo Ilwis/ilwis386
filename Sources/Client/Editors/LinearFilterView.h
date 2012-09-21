@@ -59,7 +59,7 @@ public:
 	LinearFilterView();           // protected constructor used by dynamic creation
 	virtual ~LinearFilterView();
 	virtual void InitColPix(CDC* cdc);
-  virtual int iCols() const;
+  virtual long iCols() const;
   virtual long iRows() const;
   virtual String sColButton(int iCol) const;
   virtual String sRowButton(long iRow) const;

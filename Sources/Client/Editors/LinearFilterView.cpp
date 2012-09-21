@@ -183,7 +183,7 @@ void LinearFilterView::InitColPix(CDC* cdc)
   iColPix[iCols()+1] = 32000;
 }
 
-int LinearFilterView::iCols() const
+long LinearFilterView::iCols() const
 {
 	const LinearFilterDoc* fd = GetDocument();
 	if (0 == fd || !fd->flt().fValid())
@@ -317,16 +317,16 @@ void LinearFilterView::OnEditPaste()
 	}
 
   str = sTextBegin;
-  r = mmSelect.MinRow();
+  r = selection.minRow();
   if (r < 0)
     r = 0;
 	if (fColHeader)
 		++r;
 	bool fResortAfterPaste = false;
-  for (; r <= mmSelect.MaxRow(); ++r) {
+  for (; r <= selection.maxRow(); ++r) {
     fLine = false;
 		bool fRowHeaderSkipped = !fRowHeader;
-    for (c = mmSelect.MinCol(); c <= mmSelect.MaxCol(); ++c) {
+    for (c = selection.minCol(); c <= selection.maxCol(); ++c) {
 			s = str;
 			while (*s && *s != '\t' && *s != '\n' && *s != '\r') ++s;
 			if (*s == '\r') 
@@ -335,7 +335,7 @@ void LinearFilterView::OnEditPaste()
 			fNull = *s == '\0';
 			fBreak = *s != '\t';
 			*s = '\0';
-			if (c == mmSelect.MinCol() && !fRowHeaderSkipped) {
+			if (c == selection.minCol() && !fRowHeaderSkipped) {
 				fRowHeaderSkipped = true;
 			  str = s + 1;
 				continue;
@@ -391,16 +391,16 @@ void LinearFilterView::OnEdit()
 	if (0 == fd)
 		return;
 	FilterLinear* fl = fd->fltlin();
-	int iMinRow = mmSelect.MinRow();
+	int iMinRow = selection.minRow();
 	if (iMinRow < 0) 
 		iMinRow = 0;
-  int iMaxRow = mmSelect.MaxRow();
+  int iMaxRow = selection.maxRow();
 	if (iMaxRow > fl->iRows())
 		iMaxRow = fl->iRows();
-  int iMinCol = mmSelect.MinCol();
+  int iMinCol = selection.minCol();
 	if (iMinCol < 0) 
 		iMinCol = 0;
-  int iMaxCol = mmSelect.MaxCol();
+  int iMaxCol = selection.maxCol();
 	if (iMaxCol > fl->iCols())
 		iMaxCol = fl->iCols();
 
@@ -429,8 +429,8 @@ void LinearFilterView::OnContextMenu(CWnd* pWnd, CPoint point)
   add(ID_EDIT_PASTE);
 	men.EnableMenuItem(ID_EDIT_PASTE, fAllowPaste() ? MF_ENABLED : MF_GRAYED);
   add(ID_EDIT);
-  int iMinCol = mmSelect.MinCol();
-  int iMaxCol = mmSelect.MaxCol();
+  int iMinCol = selection.minCol();
+  int iMaxCol = selection.maxCol();
 	men.EnableMenuItem(ID_EDIT, iMaxCol >= iMinCol ? MF_ENABLED : MF_GRAYED);
   men.TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON, point.x, point.y, pWnd);
 }

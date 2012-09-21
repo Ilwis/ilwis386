@@ -5121,6 +5121,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\Sources\Client\TableWindow\TableSelection.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Client\TableWindow\TableSelection.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Sources\Client\TableWindow\TableSummaryPaneView.cpp"
 					>
 				</File>

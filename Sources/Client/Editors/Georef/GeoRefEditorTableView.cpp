@@ -153,14 +153,14 @@ LRESULT GeoRefEditorTableView::OnUpdate(WPARAM wParam, LPARAM lParam)
 void GeoRefEditorTableView::OnEditClear()
 {
 	gre->SelectPoint(0);	
-  if (mmSelect.MinCol() < 0) {
+  if (selection.minCol() < 0) {
     int iRet = MessageBox(TR("Delete selected tiepoints").c_str(), TR("Delete tiepoints").c_str(),
 			MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2);
     if (IDYES == iRet) 
 		{
-      long iMin = mmSelect.MinRow();
+      long iMin = selection.minRow();
       if (iMin < 0) iMin = 0;
-      long iMax = mmSelect.MaxRow();
+      long iMax = selection.maxRow();
       long iNr = iMax - iMin + 1;
       if (iNr > 0) 
 				gre->DelPoints(iMin, iNr);

@@ -159,7 +159,7 @@ const Table2Doc* Table2PaneView::GetDocument() const
   return (const Table2Doc*)m_pDocument;
 }
 
-int Table2PaneView::iCols() const
+long Table2PaneView::iCols() const
 {
 	const Table2Doc* td = GetDocument();
 	if (0 == td)
@@ -313,8 +313,8 @@ void Table2PaneView::OnContextMenu(CWnd* pWnd, CPoint point)
   add(ID_CLEAR);
 	men.EnableMenuItem(ID_CLEAR, fAllowClear() ? MF_ENABLED : MF_GRAYED);
   add(ID_EDIT);
-  int iMinCol = mmSelect.MinCol();
-  int iMaxCol = mmSelect.MaxCol();
+  int iMinCol = selection.minCol();
+  int iMaxCol = selection.maxCol();
 	men.EnableMenuItem(ID_EDIT, iMaxCol >= iMinCol ? MF_ENABLED : MF_GRAYED);
   men.TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON, point.x, point.y, pWnd);
 }
@@ -343,16 +343,16 @@ void Table2PaneView::OnEdit()
 {
 	Table2Doc* td = GetDocument();
 	Table2Dim tbl2 = td->table2();
-  int iMinRow = mmSelect.MinRow();
+  int iMinRow = selection.minRow();
 	if (iMinRow < 0) 
 		iMinRow = 0;
-  int iMaxRow = mmSelect.MaxRow();
+  int iMaxRow = selection.maxRow();
 	if (iMaxRow > tbl2->iMatrixRows())
 		iMaxRow = tbl2->iMatrixRows();
-  int iMinCol = mmSelect.MinCol();
+  int iMinCol = selection.minCol();
 	if (iMinCol < 0) 
 		iMinCol = 0;
-  int iMaxCol = mmSelect.MaxCol();
+  int iMaxCol = selection.maxCol();
 	if (iMaxCol > tbl2->iMatrixCols())
 		iMaxCol = tbl2->iMatrixCols();
 
@@ -372,8 +372,8 @@ void Table2PaneView::OnEditClear()
 	if (0 == td)
 		return;
 	Table2Dim tbl2 = td->table2();
-  long iMinCol = mmSelect.MinCol();
-  long iMaxCol = mmSelect.MaxCol();
+  long iMinCol = selection.minCol();
+  long iMaxCol = selection.maxCol();
   iMaxCol = min(iMaxCol, td->table2()->iMatrixCols()-1);
   if (iMinCol > iMaxCol)
     return;
@@ -381,9 +381,9 @@ void Table2PaneView::OnEditClear()
 	    MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2);
   if (IDYES == iRet) {
 		CWaitCursor cur;
-    long iMaxRow = mmSelect.MaxRow();
+    long iMaxRow = selection.maxRow();
     for (long c = iMinCol; c <= iMaxCol; ++c) 
-      for (long r = mmSelect.MinRow(); r <= iMaxRow; ++r)
+      for (long r = selection.minRow(); r <= iMaxRow; ++r)
         tbl2->PutVal(tbl2->ds1()->iKey(r), tbl2->ds2()->iKey(1+c), sUNDEF);
     tbl2->Updated();
 		td->UpdateAllViews(0);
@@ -431,16 +431,16 @@ void Table2PaneView::OnEditPaste()
 	}
 
   str = sTextBegin;
-  r = mmSelect.MinRow();
+  r = selection.minRow();
   if (r < 0)
     r = 0;
 	if (fColHeader)
 		++r;
 	bool fResortAfterPaste = false;
-  for (; r <= mmSelect.MaxRow(); ++r) {
+  for (; r <= selection.maxRow(); ++r) {
     fLine = false;
 		bool fRowHeaderSkipped = !fRowHeader;
-    for (c = mmSelect.MinCol(); c <= mmSelect.MaxCol(); ++c) {
+    for (c = selection.minCol(); c <= selection.maxCol(); ++c) {
 			s = str;
 			while (*s && *s != '\t' && *s != '\n' && *s != '\r') ++s;
 			if (*s == '\r') 
@@ -449,7 +449,7 @@ void Table2PaneView::OnEditPaste()
 			fNull = *s == '\0';
 			fBreak = *s != '\t';
 			*s = '\0';
-			if (c == mmSelect.MinCol() && !fRowHeaderSkipped) {
+			if (c == selection.minCol() && !fRowHeaderSkipped) {
 				fRowHeaderSkipped = true;
 			  str = s + 1;
 				continue;

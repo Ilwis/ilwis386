@@ -129,7 +129,7 @@ void MatrixView::InitColPix(CDC* cdc)
   iColPix[iCols()+1] = 32000;
 }
 
-int MatrixView::iCols() const
+long MatrixView::iCols() const
 {
 	const MatrixDoc* md = GetDocument();
 	if (0 == md || !md->mat().fValid())

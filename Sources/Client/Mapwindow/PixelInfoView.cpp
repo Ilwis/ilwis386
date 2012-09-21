@@ -131,7 +131,7 @@ const PixelInfoDoc* PixelInfoView::GetDocument() const
 	return (const PixelInfoDoc*)m_pDocument;
 }
 
-int PixelInfoView::iCols() const
+long PixelInfoView::iCols() const
 {
 	return 1;
 }

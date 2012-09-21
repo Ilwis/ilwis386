@@ -720,7 +720,7 @@ void TableWindow::GotoRecord(long iRec)
 	mmSelect.MinCol() = -1;
 	mmSelect.MaxCol() = tvw()->iCols();
 	mmSelect.MinRow() = mmSelect.MaxRow() = iRowInTable;
-	tpv->SetSelect(mmSelect);
+	tpv->setSelection(mmSelect);
   rect = tpv->rectSelect();
 	if (!rect.IsRectEmpty())
   	tpv->InvalidateRect(&rect);
@@ -755,7 +755,7 @@ void TableWindow::OnGotoRecordLast()
 
 void TableWindow::OnGotoRecordPrev()
 {
-	long iRec = tvw()->iRec(tpv->mmSel().MinRow()-1);
+	long iRec = tvw()->iRec(tpv->sel().mm().MinRow()-1);
 	long iRecs = tvw()->iRecs();
   if (iRec <= 0 || iRec > iRecs)
 			return;
@@ -764,7 +764,7 @@ void TableWindow::OnGotoRecordPrev()
 
 void TableWindow::OnGotoRecordNext()
 {
-	long iRec = tvw()->iRec(tpv->mmSel().MinRow()+1);
+	long iRec = tvw()->iRec(tpv->sel().mm().MinRow()+1);
 	long iRecs = tvw()->iRecs();
 	if (iRec <= 0 || iRec > iRecs)
 		return;

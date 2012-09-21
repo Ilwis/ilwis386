@@ -164,7 +164,7 @@ void RecordView::InitColPix(CDC* cdc)
   iColWidth[0] = iWidth / iCharWidth;
 }
 
-int RecordView::iCols() const
+long RecordView::iCols() const
 {
 	return 1;
 }
@@ -242,7 +242,7 @@ bool RecordView::fAllowPaste() const
 {
 	if (0 == tvw)
 		return false;
-  return !tvw->fReadOnly() && !mmSelect.fUndef() && fValidSelection();
+  return !tvw->fReadOnly() && selection.fValid() && fValidSelection();
 }
 #define sMen(ID) ILWSF("men",ID).c_str()
 #define add(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 

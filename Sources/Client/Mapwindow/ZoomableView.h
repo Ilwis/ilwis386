@@ -47,6 +47,7 @@ class FrameWindow;
 class MapPaneViewTool;
 class DataWindow;
 class WMSMapDrawer;
+class AreaSelector;
 
 #undef IMPEXP
 #ifdef ILWISCLIENT
@@ -104,7 +105,7 @@ public:
 	void Pnt2RowCol(zPoint p, double& rRow, double &rCol);
 	MinMax mmVisibleMapArea() const;
 
-	//MapPaneViewTool* as;   // eg. AreaSelector
+	//AreaSelector* as;   // eg. AreaSelector
 	MapTools tools;
 	//{{AFX_VIRTUAL(ZoomableView)
 	virtual void OnInitialUpdate();     // first time after construct

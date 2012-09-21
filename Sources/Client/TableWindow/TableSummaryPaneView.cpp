@@ -84,7 +84,7 @@ const TableDoc* TableSummaryPaneView::GetDocument() const
   return (const TableDoc*)m_pDocument;
 }
 
-int TableSummaryPaneView::iCols() const
+long TableSummaryPaneView::iCols() const
 {
 	const TableDoc* td = GetDocument();
 	if (0 == td)

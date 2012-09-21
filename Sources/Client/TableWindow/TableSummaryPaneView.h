@@ -55,7 +55,7 @@ public:
 	virtual void OnInitialUpdate();
 	virtual void OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint);
 	virtual void InitColPix(CDC* cdc);
-  virtual int iCols() const;
+  virtual long iCols() const;
   virtual long iRows() const;
   virtual String sRowButton(long iRow) const;
   virtual String sDescrRowButton(long iRow) const;

@@ -985,6 +985,7 @@ bool ZoomableView::addTool(MapPaneViewTool *tool, int id) {
 	map<int, MapPaneViewTool *>::iterator cur = tools.find(id);
 	if ( cur == tools.end()){
 		tools[id] = tool;
+		iActiveTool= id;
 		return true;
 	}
 	return false;
@@ -1027,10 +1028,10 @@ void ZoomableView::selectArea(CCmdTarget *target, NotifyRectProc proc, const Str
 	else 
 		as = new AreaSelector(this, target, proc, dim, clr);
 	as->setKeepDimensions(keepDimensions);
-	tools[ID_ZOOMIN] = as;
+	tools[iActiveTool] = as;
 	as->SetCursor(zCursor(cursor.c_str()));
 	as->setActive(true);
-	iActiveTool = ID_ZOOMIN;
+	//iActiveTool = ID_ZOOMIN;
 }
 
 void ZoomableView::OnPanArea()

@@ -169,7 +169,7 @@ public:
 	void getDocumentList(list<CDocument *>& opendocs);
 	void _export showHelp(const String& helpfile);
 	 _export  ILWIS::HelpFinder *getHelpFinder() { return helpFinder; }
-	 _export void SendUpdateTableSelection(const vector<long>& raws, const FileName& fnObj);
+	 _export void SendUpdateTableSelection(const vector<long>& raws, const FileName& fnObj, long self);
 	
 	//{{AFX_MSG(IlwisWinApp)
 	afx_msg void OnAbout();

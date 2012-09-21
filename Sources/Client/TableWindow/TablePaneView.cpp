@@ -46,6 +46,7 @@ Created on: 2007-02-8
 #include "Headers\constant.h"
 #include "Client\Base\IlwisDocument.h"
 #include "Client\TableWindow\TableDoc.h"
+#include "TableSelection.h"
 #include "Client\TableWindow\BaseTablePaneView.h"
 #include "Client\TableWindow\TablePaneView.h"
 #include "Engine\Table\tblview.h"
@@ -201,7 +202,7 @@ const TableDoc* TablePaneView::GetDocument() const
 	return (const TableDoc*)m_pDocument;
 }
 
-int TablePaneView::iCols() const
+long TablePaneView::iCols() const
 {
 	const TableDoc* td = GetDocument();
 	if (0 == td)
@@ -445,8 +446,8 @@ void TablePaneView::updateSelection()
 	if (0 == tw)
 		return;
 	vector<long> raws;
-	if ( !mmSelect.fUndef() ) {
-		for(int r = mmSelect.MinRow(); r <= mmSelect.MaxRow(); ++r) {
+	if ( selection.fValid() ) {
+		for(int r = selection.minRow(); r <= selection.maxRow(); ++r) {
 			long iRec = tvw()->iRec(r);
 			if (iRec > tvw()->iRecs())
 				continue;
@@ -454,7 +455,7 @@ void TablePaneView::updateSelection()
 			raws.push_back(rec.iRec());
 		}
 		Table tbl( GetDocument()->obj()->fnObj);
-		IlwWinApp()->SendUpdateTableSelection(raws, tbl->dm()->fnObj);
+		IlwWinApp()->SendUpdateTableSelection(raws, tbl->dm()->fnObj, long(this));
 	}
 }
 
@@ -521,23 +522,23 @@ void TablePaneView::OnEditClear()
 	TableDoc* td = GetDocument();
 	if (0 == td)
 		return;
-	if (mmSelect.MinRow() < 0) {
-		long cMin = mmSelect.MinCol();
+	if (selection.minRow() < 0) {
+		long cMin = selection.minCol();
 		if (cMin < 0) cMin = 0;
-		for (long c = mmSelect.MaxCol(); c >= cMin; --c)
+		for (long c = selection.maxCol(); c >= cMin; --c)
 			if (!td->fDelColumn(c))
 				break;
 		td->UpdateAllViews(0);
 		td->tvw->Updated();
 	}
-	else if (0 != td->tvw->dm()->pdnone() && mmSelect.MinCol() < 0) {
+	else if (0 != td->tvw->dm()->pdnone() && selection.minCol() < 0) {
 		int iRet = MessageBox(TR("Delete selected rows").c_str(), TR("Delete Rows").c_str(),
 			MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2);
 		if (IDYES == iRet) 
 		{
-			long iMin = mmSelect.MinRow();
+			long iMin = selection.minRow();
 			if (iMin < 0) iMin = 0;
-			long iMax = mmSelect.MaxRow();
+			long iMax = selection.maxRow();
 			long iNr = iMax - iMin + 1;
 			if (iNr > 0) {
 				CWaitCursor cur;
@@ -548,8 +549,8 @@ void TablePaneView::OnEditClear()
 		}
 	}
 	else {
-		long iMinCol = mmSelect.MinCol();
-		long iMaxCol = mmSelect.MaxCol();
+		long iMinCol = selection.minCol();
+		long iMaxCol = selection.maxCol();
 		iMaxCol = min(iMaxCol, td->tvw->iCols()-1);
 		if (iMinCol > iMaxCol)
 			return;
@@ -557,11 +558,11 @@ void TablePaneView::OnEditClear()
 			MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2);
 		if (IDYES == iRet) {
 			CWaitCursor cur;
-			long iMaxRow = mmSelect.MaxRow();
+			long iMaxRow = selection.maxRow();
 			for (long c = iMinCol; c <= iMaxCol; ++c) {
 				Column col = td->tvw->cv(c);
 				if (col.fValid() && !col->fDataReadOnly()) {
-					for (long r = mmSelect.MinRow(); r <= iMaxRow; ++r)
+					for (long r = selection.minRow(); r <= iMaxRow; ++r)
 						td->tvw->PutVal((short)c,r,sUNDEF);
 					col->Updated();
 				}
@@ -612,10 +613,7 @@ void TablePaneView::OnEditPaste()
 		}
 	}
 
-	if (td->tvw->dm()->pdnone() && mmSelect.fUndef()) {
-		mmSelect.MinCol() = -1;
-		mmSelect.MaxCol() = iCols();
-		mmSelect.MinRow() = iRows() + td->tvw->iOffset();
+	if (td->tvw->dm()->pdnone() && selection.fValid()) {
 		s = sTextBegin;
 		long iAdd = 0;
 		while (s) {
@@ -626,19 +624,19 @@ void TablePaneView::OnEditPaste()
 			}
 		}
 		td->tvw->iRecNew(iAdd);
-		mmSelect.MaxRow() = iRows() - 1 + td->tvw->iOffset();;
+		selection.selectBlock(RowCol(iRows() + td->tvw->iOffset(), 0L), RowCol(iRows() - 1L + td->tvw->iOffset(), iCols()));
 	}
 	str = sTextBegin;
-	r = mmSelect.MinRow();
+	r = selection.minRow();
 	if (r < td->tvw->iOffset())
 		r = td->tvw->iOffset();
 	//	if (fColHeader)
 	//		++r;
 	bool fResortAfterPaste = false;
-	for (; r <= mmSelect.MaxRow(); ++r) {
+	for (; r <= selection.maxRow(); ++r) {
 		fLine = false;
 		bool fRowHeaderSkipped = !fRowHeader;
-		for (c = mmSelect.MinCol(); c <= mmSelect.MaxCol(); ++c) {
+		for (c = selection.minCol(); c <= selection.maxCol(); ++c) {
 			s = str;
 			while (*s && *s != '\t' && *s != '\n' && *s != '\r') ++s;
 			if (*s == '\r') 
@@ -647,7 +645,7 @@ void TablePaneView::OnEditPaste()
 			fNull = *s == '\0';
 			fBreak = *s != '\t';
 			*s = '\0';
-			if (c == mmSelect.MinCol() && !fRowHeaderSkipped) {
+			if (c == selection.minCol() && !fRowHeaderSkipped) {
 				fRowHeaderSkipped = true;
 				str = s + 1;
 				continue;
@@ -871,10 +869,10 @@ private:
 void TablePaneView::OnEdit()
 {
 	deleteField();
-	int iMinRow = mmSelect.MinRow();
-	int iMaxRow = mmSelect.MaxRow();
-	int iMinCol = mmSelect.MinCol();
-	int iMaxCol = mmSelect.MaxCol();
+	int iMinRow = selection.minRow();
+	int iMaxRow = selection.maxRow();
+	int iMinCol = selection.minCol();
+	int iMaxCol = selection.maxCol();
 	TableView* tv = tvw();
 	TableDoc* td = GetDocument();
 	if (iMaxCol >= tv->iCols())
@@ -916,8 +914,8 @@ void TablePaneView::OnEdit()
 
 void TablePaneView::OnUpdateEdit(CCmdUI* pCmdUI)
 {
-	int iMinCol = mmSelect.MinCol();
-	int iMaxCol = mmSelect.MaxCol();
+	int iMinCol = selection.minCol();
+	int iMaxCol = selection.maxCol();
 	bool fEdit = iMaxCol >= iMinCol;
 	pCmdUI->Enable(fEdit);
 }
@@ -946,8 +944,8 @@ void TablePaneView::OnContextMenu(CWnd* pWnd, CPoint point)
 	add(ID_CLEAR);
 	men.EnableMenuItem(ID_CLEAR, fAllowClear() ? MF_ENABLED : MF_GRAYED);
 	add(ID_EDIT);
-	int iMinCol = mmSelect.MinCol();
-	int iMaxCol = mmSelect.MaxCol();
+	int iMinCol = selection.minCol();
+	int iMaxCol = selection.maxCol();
 	men.EnableMenuItem(ID_EDIT, iMaxCol >= iMinCol ? MF_ENABLED : MF_GRAYED);
 
 	if ((iSelectedColumn() >= 0) && 0 != twParent() /* not for histograms at the moment*/ ) { 
@@ -1026,8 +1024,8 @@ void TablePaneView::OnProp()
 
 int TablePaneView::iCurrRec() const
 {
-	if (mmSelect.MinRow() == mmSelect.MaxRow())
-		return mmSelect.MinRow();
+	if (selection.minRow() == selection.maxRow())
+		return selection.minRow();
 	return iUNDEF;
 }
 
@@ -1049,7 +1047,7 @@ bool TablePaneView::fAllowPaste() const
 		return false;
 	if (fValidSelection())
 		return true;
-	if (tvw()->dm()->pdnone() && mmSelect.fUndef()) 
+	if (tvw()->dm()->pdnone() && selection.fValid()) 
 		return true;
 	return false;
 }

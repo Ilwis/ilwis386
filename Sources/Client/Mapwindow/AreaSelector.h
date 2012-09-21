@@ -61,13 +61,13 @@ class AreaSelector : public MapPaneViewTool
 public:
 	_export AreaSelector(ZoomableView*, CCmdTarget*, NotifyRectProc, const Color& clr=Color(0,120,255));           
 	_export AreaSelector(ZoomableView*, CCmdTarget*, NotifyRectProc, zDimension, const Color& clr=Color(0,120,255));           
+	_export virtual ~AreaSelector();
 
 	void OnMouseMove(UINT nFlags, CPoint point);
 	void OnLButtonDown(UINT nFlags, CPoint point);
 	void OnLButtonUp(UINT nFlags, CPoint point);
 	void setKeepDimensions(bool yesno);
 protected:
-	virtual ~AreaSelector();
   CRect rect() const;
 	void DrawRect();
 	CCmdTarget* cmt;

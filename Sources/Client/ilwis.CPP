@@ -2547,11 +2547,12 @@ void IlwisWinApp::showHelp(const String& helpfile) {
 		throw ErrorObject(String("Help file %S.%S doenst exist",fn1.sFile, fn1.sExt));
 }
 
-void IlwisWinApp::SendUpdateTableSelection(const vector<long>& raws, const FileName& fnObj){
+void IlwisWinApp::SendUpdateTableSelection(const vector<long>& raws, const FileName& fnObj, long self){
 	for(list<HWND>::const_iterator cur = lhWindows.begin(); cur != lhWindows.end(); ++cur) {
 		RowSelectInfo inf;
 		inf.fn = fnObj;
 		inf.raws = raws;
+		inf.sender = self;
 		SendMessage((*cur), MESSAGE_SELECT_ROW,(WPARAM)&inf, 0);
 	}
 }

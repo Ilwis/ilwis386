@@ -64,7 +64,7 @@ public:
   void SetRecord(Ilwis::Record, TableView*);
   String sRec() const { return rec.sKey(); }
 	virtual void InitColPix(CDC* cdc);
-  virtual int iCols() const;
+  virtual long iCols() const;
   virtual long iRows() const;
 	Ilwis::Record GetRecord() const { return rec; }
 	TableDoc* GetDocument();

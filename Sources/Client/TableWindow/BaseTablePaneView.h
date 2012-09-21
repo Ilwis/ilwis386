@@ -46,6 +46,8 @@ Created on: 2007-02-8
 /////////////////////////////////////////////////////////////////////////////
 // BaseTablePaneView view
 
+#include "TableSelection.h"
+
 #undef IMPEXP
 #ifdef ILWISCLIENT
 #define IMPEXP __declspec(dllexport)
@@ -56,7 +58,6 @@ Created on: 2007-02-8
 class FrameWindow;
 
 struct RowSelectInfo;
-
 
 class BaseTblField;
 
@@ -89,10 +90,8 @@ protected:
 public:
 	zPoint pntField(int iCol, long iRec) const;
 	zRect rectField(int iCol, long iRec) const;
-	zRect rectBlock(const MinMax&) const;
+	zRect rectBlock(const TableSelection& sel) const;
 	zRect rectSelect() const;
-	void SetSelect(const MinMax& mm) { mmSelect = mm; }
-	MinMax mmSel() const { return mmSelect; }
 	int iColumnPix(int iCol) const { return iColPix[iCol]; }
 	bool fValidSelection() const;
 	void SetScrollBars();
@@ -100,6 +99,8 @@ public:
 	virtual void update() {}
 	virtual void updateSelection() {}
 	void selectFeatures(const RowSelectInfo& inf);
+	const TableSelection& sel() const;
+	void setSelection(const MinMax& mm);
 protected:
 	int iCharWidth;
 	int iButtonWidth;  // nr of chars in the row button, to be set by derived class
@@ -132,7 +133,7 @@ private:
 	void ReleaseRowButton();
 	void MoveMouse(short xInc, short yInc) ;
 protected:  
-	MinMax mmSelect;
+	TableSelection selection;
 	CFont *m_PrintFont, *m_PrintFontBold;
 	bool fHeaderOnAllPages, fLeftMostColOnAllPages;
 	int iMaxPages;
@@ -146,14 +147,14 @@ private:
 	bool fColMove, fColMoving;
 	bool fULButtonDown, fColButtonDown, fRowButtonDown;
 	bool fFieldDown, fSelecting;    
-	int iColPixMoving, iColMoving;
+	long iColPixMoving, iColMoving;
 	long iRowMoving;
 	zCursor curArrow, curSplitCol, curColumn;
 	zPoint pSelectStart;
 
 public:
 	virtual void InitColPix(CDC* cdc);
-	virtual int iCols() const;
+	virtual long iCols() const;
 	virtual long iRows() const;
 	virtual String sULButton() const; // upper left button
 	virtual String sColButton(int iCol) const;
@@ -189,6 +190,7 @@ protected:
 	virtual bool fAllowCopy() const;
 	virtual bool fAllowClear() const;
 	virtual bool fAllowPaste() const;
+	//bool fSelectionsContains(const RowCol& rc) const;
 	bool fHasFocus;
 	// Generated message map functions
 protected:
