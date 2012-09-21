@@ -376,11 +376,11 @@ void RepresentationClassLB::DrawItem(LPDRAWITEMSTRUCT dis)
 		case opRAS:
 			{
 				Color clr = _rpr->clrRaw(iRaw);
-				if ((long)clr != -2)
+				if (clr.iVal() != -2)
 				{
-					if ((long)clr == -1)
+					if (clr.iVal() == -1)
 						clr = ::GetSysColor(COLOR_WINDOWTEXT); 
-					else if ((long)clr == -2)  
+					else if (clr.iVal() == -2)  
 						clr = ::GetSysColor(COLOR_WINDOW);
 					dcLoc.FillSolidRect(rectItem.left + 5, rectItem.top + info->height() + iYShift,
 										rectItem.right - rectItem.left - 10,

@@ -168,7 +168,7 @@ void FieldColorSimple::create()
   int iCol = -1;
   Color c = *(Color*)val;
   Color cText = GetSysColor(COLOR_WINDOWTEXT);
-  if ((long)c == -1)
+  if (c.iVal() == -1)
     c = cText;
 
   int i = 0;
@@ -372,9 +372,9 @@ void ColorSelector::create()
   int iCol = -1;
   Color c = *clr;
   Color cText = GetSysColor(COLOR_WINDOWTEXT);
-  if ((long)c == -1)
+  if (c.iVal() == -1)
     c = cText;
-  else if ((long)c == -2)
+  else if (c.iVal() == -2)
     iCol = 0;  
   if (fTrans) {  
     String s = TR("Transparent");

@@ -216,7 +216,7 @@ void Line::init(const RepresentationPtr* rpr, long iRaw)
 	smb = new ExtendedSymbol(rpr, iRaw);
 	clr = rpr->clrRaw(iRaw);
 	clrFill = (Color)rpr->clrLineFill(iRaw);
-	if (-1 == (long)clrFill) {
+	if (-1 == clrFill.iVal()) {
 		fSupportLine = false;
 		clrFill = Color(255,255,255);
 	}

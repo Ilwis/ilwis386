@@ -241,7 +241,7 @@ bool ObjectInfo::WriteElement(const char* sSection, const char* sEntry,
 bool ObjectInfo::WriteElement(const char* sSection, const char* sEntry, 
 							  const FileName& fnObj, Color col)
 {
-	String sValue("%lx", (long)col);
+	String sValue("%lx", col.iVal());
 	return WriteElement(sSection, sEntry, fnObj, sValue.c_str());
 }
 

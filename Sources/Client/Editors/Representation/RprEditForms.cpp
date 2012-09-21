@@ -314,7 +314,7 @@ int PolygonMapRprEditForm::exec() {
         Color clr2 = col2;
         rcl->PutSecondColor(iRaw,clr2);
       }
-      else if ((long)colHBG != -2) {
+      else if (colHBG.iVal() != -2) {
         iHatch |= 0x10;
         Color clr2 = colHBG;
         rcl->PutSecondColor(iRaw,clr2);

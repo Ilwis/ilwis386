@@ -147,7 +147,7 @@ Color DrawingColor::clrRaw(long iRaw, NewDrawer::DrawMethod drm) const
 		}
 		break;
 	case NewDrawer::drmSINGLE:
-		if ((long)clr2 == -1)
+		if (clr2.iVal() == -1)
 			cRet = GetSysColor(COLOR_WINDOWTEXT);
 		else {
 			FeatureLayerDrawer *fdr = dynamic_cast<FeatureLayerDrawer *>(drw);
@@ -196,7 +196,7 @@ Color DrawingColor::clrRaw(long iRaw, NewDrawer::DrawMethod drm) const
 		}
 		break;
 	}
-	if ((long)cRet < 0)
+	if (cRet.iVal() < 0)
 		return Color(0,0,0);
 	else
 		return cRet;//.clrDraw(gamma);
@@ -343,7 +343,7 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 		} break;
 	case NewDrawer::drmSINGLE: {
 		Color col;
-		if ((long)clr2 == -1)
+		if (clr2.iVal() == -1)
 			col = GetSysColor(COLOR_WINDOWTEXT);
 		else {
 			FeatureLayerDrawer *fdr = dynamic_cast<FeatureLayerDrawer *>(drw);

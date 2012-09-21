@@ -205,7 +205,7 @@ void RepresentationClass::PutSecondColor(long iRaw, Color clr)
 		for (long i = 1; i <= iMax; ++i)
 			colSecondClr->PutRaw(i, Color(255,255,255));
 	}
-	colSecondClr->PutRaw(iRaw, clr);
+	colSecondClr->PutRaw(iRaw, clr.iVal());
 	Updated();
 }
 /*
@@ -341,10 +341,10 @@ void RepresentationClass::PutSymbolColor(long iRaw, Color clr)
 		long iMax = tbl->iRecs()+tbl->iOffset()-1;
 		for (long i = tbl->iOffset(); i <= iMax; ++i) {
 			Color c = clrRaw(i);
-			colSmbClr->PutRaw(i, c);
+			colSmbClr->PutRaw(i, c.iVal());
 		}  
 	}
-	colSmbClr->PutRaw(iRaw, clr);
+	colSmbClr->PutRaw(iRaw, clr.iVal());
 	Updated();
 }
 
@@ -358,10 +358,10 @@ void RepresentationClass::PutSymbolFill(long iRaw, Color clr)
 		long iMax = tbl->iRecs()+tbl->iOffset()-1;
 		for (long i = tbl->iOffset(); i <= iMax; ++i) {
 			Color c = clrRaw(i);
-			colSmbFC->PutRaw(i, c);
+			colSmbFC->PutRaw(i, c.iVal());
 		}  
 	}
-	colSmbFC->PutRaw(iRaw, clr);
+	colSmbFC->PutRaw(iRaw, clr.iVal());
 	Updated();
 }
 
@@ -436,10 +436,10 @@ void RepresentationClass::PutLineFillColor(long iRaw, Color clr)
 		long iMax = tbl->iRecs()+tbl->iOffset()-1;
 		Color clrDflt(-1);
 		for (long i = tbl->iOffset(); i <= iMax; ++i) {
-			colLineClrFill->PutRaw(i, clrDflt);
+			colLineClrFill->PutRaw(i, clrDflt.iVal());
 		}
 	}
-	colLineClrFill->PutRaw(iRaw, clr);
+	colLineClrFill->PutRaw(iRaw, clr.iVal());
 	Updated();
 }
 

@@ -80,7 +80,7 @@ void Symbol::drawSmb(CDC* cdc, HPALETTE hPal, zPoint pnt) const
 	const double rPixPerPnt = 1.0; //254.0 / 72;
   int iPixSize = iSize * rPixPerPnt;
   Color c, fc;
-  if ((long)col == -1)
+  if (col.iVal() == -1)
     c = ::GetSysColor(COLOR_WINDOWTEXT);
   else 
 	{
@@ -96,7 +96,7 @@ void Symbol::drawSmb(CDC* cdc, HPALETTE hPal, zPoint pnt) const
 	CPen *penOld = cdc->SelectObject(&pen);
 	CBrush br;
 	CBrush* brOld;
-  if ((long)fillCol == -2)
+  if (fillCol.iVal() == -2)
 	{
 		LOGBRUSH lb;
 		lb.lbStyle=BS_NULL;

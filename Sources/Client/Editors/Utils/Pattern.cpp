@@ -124,7 +124,7 @@ Pattern::Pattern(const Representation& rpr, long iRaw, DrawColors drc)
   Color clr = rpr->clrRaw(iRaw);
   Color clr2 = rpr->clrSecondRaw(iRaw);
   if (0 == iType) {
-		if ((long)clr == -2) // transparent
+		if (clr.iVal() == -2) // transparent
 			return;
     br = new CBrush(clr.clrDraw(drc));
     return;
@@ -186,8 +186,6 @@ Pattern::~Pattern()
 
 void Pattern::drawPolygon(CDC *dc, vector<Array<zPoint>>& p)
 {
-	LOGBRUSH lb;
-	br->GetLogBrush(&lb);
   Color clrText = dc->SetTextColor(clrFG);
   Color clrBack = dc->SetBkColor(clrBG);
   if (fTransparent)

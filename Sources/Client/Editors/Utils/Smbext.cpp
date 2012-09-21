@@ -314,7 +314,7 @@ void ExtendedSymbol::drawSmb(CDC* cdc, HPALETTE hPal, zPoint pnt)
     case smSIMPLE: 
     {
       Color c, fc;
-      if ((long)col == -1)
+      if (col.iVal() == -1)
         c = ::GetSysColor(COLOR_WINDOWTEXT);
       else {
         if (hPal == 0)
@@ -328,7 +328,7 @@ void ExtendedSymbol::drawSmb(CDC* cdc, HPALETTE hPal, zPoint pnt)
 			CPen *penOld = cdc->SelectObject(&pen);
 			CBrush br;
 			CBrush* brOld;
-      if ((long)fillCol == -2)
+      if (fillCol.iVal() == -2)
 			{
 				LOGBRUSH lb;
 				lb.lbStyle=BS_NULL;

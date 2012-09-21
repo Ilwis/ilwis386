@@ -405,7 +405,7 @@ void AnnotationTextPtr::CreateColumnColor()
   ValueRange vr(1,10000,0.1);
   colColor = tbl->colNew("Color", dmColor);
   for (long i = 1; i <= iMax; ++i)
-    colColor->PutRaw(i, (long)color);
+    colColor->PutRaw(i, color.iVal());
 }
 
 void AnnotationTextPtr::CreateColumnTransparent()
