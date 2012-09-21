@@ -88,6 +88,9 @@ public:
   bool fRprColor;
 	Representation rpr;
   bool fShow;
+protected:
+	virtual Color colColor(int iRec);
+
 };
 
 enum CartesianGraphType {cgtContineous=0, cgtStep, cgtBar, cgtNeedle, cgtPoint, cgtUnknownType };
@@ -109,12 +112,14 @@ public:
 	static CartesianGraphLayer* create(const FileName& fn, const String& sSection, CartesianGraphDrawer* gd);
 	bool fYAxisLeft;
   CartesianGraphType cgt;
+protected:
+  	bool fRprSymbolColor;
 };
 
 class IMPEXP ColumnGraphLayer : public CartesianGraphLayer
 {
 public:
-	ColumnGraphLayer(CartesianGraphDrawer* cgd,const Table& tbl, const Column& colX, const Column& colY);
+	ColumnGraphLayer(CartesianGraphDrawer* cgd,const Table& tbl, const Column& colX, const Column& colY, bool fRprSymbolColor = false, const Column& colZ = colUNDEF, const Representation& rprSymbolColor = Representation());
 	ColumnGraphLayer(CartesianGraphDrawer* cgd, const FileName& fnObj, const String& sSection);
 	virtual ~ColumnGraphLayer();
 	virtual GraphLayerOptionsForm* frmOptions();
@@ -129,6 +134,11 @@ public:
 	virtual double rY(int iRec);
 	Table tbl;
 	Column colX, colY;
+protected:
+	virtual Color colColor(int iRec);
+	Column colZ;
+	bool colZpdv;
+	Representation rprSymbolColor;
 };
 
 class Instructions;

@@ -43,6 +43,9 @@
 #include "Headers\constant.h"
 #include "Client\FormElements\syscolor.h"
 #include "Client\FormElements\fldcolor.h"
+#include "Client\FormElements\objlist.h"
+#include "Client\FormElements\fldcol.h"
+#include "Client\FormElements\fldrpr.h"
 #include "Client\FormElements\fldaggr.h"
 #include "Client\FormElements\fldsmv.h"
 #include "Engine\Table\tblview.h"
@@ -63,6 +66,8 @@
 static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
+
+Column colUNDEF;
 
 //// GraphLayer
 
@@ -93,7 +98,7 @@ void GraphLayer::SaveSettings(const FileName& fn, const String& sSection)
   line.Write(sSection.c_str(), "Line", fn);
 	ObjectInfo::WriteElement(sSection.c_str(), "Color", fn, color);
 	ObjectInfo::WriteElement(sSection.c_str(), "RprColor", fn, fRprColor);
-	String sSymbolDescr("%i %i %i %i %i", smb.iSize, smb.iWidth, (int)smb.col, (int)smb.fillCol, smb.smb);
+	String sSymbolDescr("%i %i %i %i %i", smb.iSize, smb.iWidth, smb.col.iVal(), smb.fillCol.iVal(), smb.smb);
 	ObjectInfo::WriteElement(sSection.c_str(), "Symbol", fn, sSymbolDescr);
 }
 
@@ -122,6 +127,11 @@ double GraphLayer::rY(int i)
 	return rUNDEF;
 }
 
+Color GraphLayer::colColor(int i)
+{
+	return colorUNDEF;
+}
+
 String GraphLayer::sName()
 {
 	return sUNDEF;
@@ -135,12 +145,12 @@ GraphLayerOptionsForm* GraphLayer::frmOptions()
 /// CartesianGraphlayer
 
 CartesianGraphLayer::CartesianGraphLayer(CartesianGraphDrawer* gd)
-: GraphLayer(gd), cgd(gd), fYAxisLeft(true), cgt(cgtContineous) 
+: GraphLayer(gd), cgd(gd), fYAxisLeft(true), cgt(cgtContineous), fRprSymbolColor(false)
 {
 }
 
 CartesianGraphLayer::CartesianGraphLayer(CartesianGraphDrawer* gd, const FileName& fn, const String& sSection)
-: GraphLayer(gd, fn, sSection), cgd(gd), fYAxisLeft(true), cgt(cgtContineous)
+: GraphLayer(gd, fn, sSection), cgd(gd), fYAxisLeft(true), cgt(cgtContineous), fRprSymbolColor(false)
 {
 	ObjectInfo::ReadElement(sSection.c_str(), "YAxisLeft", fn, fYAxisLeft);
 	String sGraphType;
@@ -314,16 +324,18 @@ void CartesianGraphLayer::draw(CDC* cdc)
 					double rx = rX(i);
 					if (rx == rUNDEF)
 						continue;
-          if (rx < rMinX || rx > rMaxX)
-            continue;
-  				x = gaxisX->rConv(rx + gaxisX->rShift());
+					if (rx < rMinX || rx > rMaxX)
+						continue;
+  					x = gaxisX->rConv(rx + gaxisX->rShift());
 					double r = rY(i);
 					if (r == rUNDEF)
 						continue;
-          if (r < rMinY || r > rMaxY)
-            continue;
+					if (r < rMinY || r > rMaxY)
+						continue;
 					y = gaxisY->rConv(r);
-  				CPoint p = cgd->ptPos(y, x);
+  					CPoint p = cgd->ptPos(y, x);
+					if (fRprSymbolColor)
+						smb.col = colColor(i);
 					smb.drawSmb(cdc, 0, p);
 				}
 			}
@@ -468,9 +480,12 @@ CartesianGraphLayer* CartesianGraphLayer::create(const FileName& fn, const Strin
 
 
 //// ColumnGraphLayer
-ColumnGraphLayer::ColumnGraphLayer(CartesianGraphDrawer* cgd, const Table& t, const Column& cX, const Column& cY)
-: CartesianGraphLayer(cgd), tbl(t), colX(cX), colY(cY)
+ColumnGraphLayer::ColumnGraphLayer(CartesianGraphDrawer* cgd, const Table& t, const Column& cX, const Column& cY, bool fSymbolColor, const Column& cZ, const Representation& symbolColor)
+: CartesianGraphLayer(cgd), tbl(t), colX(cX), colY(cY), colZ(cZ), rprSymbolColor(symbolColor), colZpdv(false)
 {
+	fRprSymbolColor = fSymbolColor && colZ.fValid() && rprSymbolColor.fValid();
+	if (fRprSymbolColor)
+		colZpdv = colZ->dm()->pdv();
 	Domain dm;
 	if (cX.fValid())
 		dm = cX->dm();
@@ -488,7 +503,7 @@ ColumnGraphLayer::ColumnGraphLayer(CartesianGraphDrawer* cgd, const Table& t, co
 }
 
 ColumnGraphLayer::ColumnGraphLayer(CartesianGraphDrawer* cgd, const FileName& fn, const String& sSection)
-: CartesianGraphLayer(cgd, fn, sSection)
+: CartesianGraphLayer(cgd, fn, sSection), colZpdv(false)
 {
 	ObjectInfo::ReadElement(sSection.c_str(), "Table", fn, tbl);
   if (!tbl.fValid())
@@ -496,11 +511,22 @@ ColumnGraphLayer::ColumnGraphLayer(CartesianGraphDrawer* cgd, const FileName& fn
 	String sCol;
   ObjectInfo::ReadElement(sSection.c_str(), "ColumnX", fn, sCol);
 	if (sCol.length() > 0)
-	  colX = tbl->col(sCol);
+		colX = tbl->col(sCol);
 	sCol = "";
 	ObjectInfo::ReadElement(sSection.c_str(), "ColumnY", fn, sCol);
 	if (sCol.length() > 0)
-  	colY = tbl->col(sCol);
+  		colY = tbl->col(sCol);
+	sCol = "";
+	ObjectInfo::ReadElement(sSection.c_str(), "ColumnZ", fn, sCol);
+	if (sCol.length() > 0)
+  		colZ = tbl->col(sCol);
+	String sRpr;
+	ObjectInfo::ReadElement(sSection.c_str(), "RepresentationSymbolColor", fn, sRpr);
+	if (sRpr.length() > 0)
+		rprSymbolColor = sRpr;
+	fRprSymbolColor = colZ.fValid() && rprSymbolColor.fValid();
+	if (fRprSymbolColor)
+		colZpdv = colZ->dm()->pdv();
 
 	Domain dm;
 	if (colX.fValid())
@@ -526,6 +552,10 @@ void ColumnGraphLayer::SaveSettings(const FileName& fn, const String& sSection)
 	  ObjectInfo::WriteElement(sSection.c_str(), "ColumnX", fn, colX);
 	if (colY.fValid())
 	  ObjectInfo::WriteElement(sSection.c_str(), "ColumnY", fn, colY);
+	if (fRprSymbolColor && colZ.fValid() && rprSymbolColor.fValid()) {
+		ObjectInfo::WriteElement(sSection.c_str(), "ColumnZ", fn, colZ);
+		ObjectInfo::WriteElement(sSection.c_str(), "RepresentationSymbolColor", fn, rprSymbolColor);
+	}
 }
 
 int ColumnGraphLayer::iNrPoints() 
@@ -555,6 +585,20 @@ double ColumnGraphLayer::rY(int iRec)
   return 0;
 }
 
+Color ColumnGraphLayer::colColor(int iRec)
+{
+	GraphAxis* gaxisX = cgd->gaxX;		 
+	if (!colX.fValid() && 0 != gaxisX->ds)
+		iRec = gaxisX->ds->iKey(iRec);
+	if (colZ.fValid()) {
+		if (colZpdv)
+			return rprSymbolColor->clr(colZ->rValue(iRec), colZ->rrMinMax());
+		else
+			return rprSymbolColor->clrRaw(colZ->iRaw(iRec));
+	}
+  return colorUNDEF;
+}
+
 void ColumnGraphLayer::draw(CDC* cdc)
 {
 	CartesianGraphLayer::draw(cdc);
@@ -578,13 +622,14 @@ bool ColumnGraphLayer::fConfig()
   public:
     ConfigForm(ColumnGraphLayer* cgl)
     : FormWithDest(0, TR("Graph Options - Graph from Columns"))
+	, m_cgl(cgl)
     {
       iImg = IlwWinApp()->iImage("Graph");
 //      new CheckBox(root, TR("&Show"), &cgl->fShow);
       FieldString* fs = new FieldString(root, TR("&Name"), &cgl->sTitle);
       fs->SetWidth(120);
-      RadioGroup* rgType;
-  		rgType = new RadioGroup(root, "", (int*)&cgl->cgt);
+	  FieldGroup* radios = new FieldGroup(root);
+      RadioGroup* rgType = new RadioGroup(radios, "", (int*)&cgl->cgt);
       RadioButton* rbLine = new RadioButton(rgType, TR("&Line"));
       RadioButton* rbStep = new RadioButton(rgType, TR("&Step"));
     	RadioButton* rbBar = new RadioButton(rgType, TR("&Bar"));
@@ -623,15 +668,38 @@ bool ColumnGraphLayer::fConfig()
     	fsmb = new FieldSymbol(fg, TR("Symbol &Type"), (long*)&smb->smb, &smb->hIcon);
     	fsmb->SetCallBack((NotifyProc)&ConfigForm::FieldSymbolCallBack);
     	new FieldInt(fg, TR("&Size"), &smb->iSize, ValueRangeInt(1L,250L));
-    	ffc = new FieldFillColor(fg, TR("&Color"), &smb->fillCol);
+    	ffc = new FieldFillColor(fg, TR("Fill &Color"), &smb->fillCol);
     	new FieldInt(fg, TR("Line &Width"), &smb->iWidth, ValueRangeInt(1L,100L));
-    	new FieldColor(fg, TR("Line &Color"), &smb->col);
+		iColorOption = cgl->fRprSymbolColor ? 1 : 0;
+		RadioGroup * rgColor = new RadioGroup(fg, "", &iColorOption);
+		RadioButton *rbSingle = new RadioButton(rgColor, TR("&Single Line Color"));
+		RadioButton *rbRpr = new RadioButton(rgColor, TR("&Color by Attribute"));
+    	new FieldColor(rbSingle, "", &smb->col);
+		if (cgl->colZ.fValid()) {
+			sColZ = cgl->colZ->sName();
+			dmUse = cgl->colZ->dm();
+		} else if (cgl->colY.fValid()) {
+			sColZ = cgl->colY->sName();
+			dmUse = cgl->colY->dm();
+		}
+		fcColorCol = new FieldColumn(rbRpr, TR(""), cgl->tbl, &sColZ, 0);
+		fcColorCol->SetCallBack((NotifyProc)&ConfigForm::FieldAttributeCallBack);
+		fcColorCol->Align(rbRpr, AL_AFTER);
+		if (dmUse.fValid()) {
+			RepresentationLister rl (dmUse);
+			if (cgl->rprSymbolColor.fValid() && rl.fOK(cgl->rprSymbolColor->fnObj))
+				sRpr = cgl->rprSymbolColor->sName(true);
+			else if (dmUse->rpr().fValid())
+				sRpr = dmUse->rpr()->sName(true);
+		}
+		frpr = new FieldRepresentationC(rbRpr, "&Representation", &sRpr, dmUse);
+		frpr->Align(rbRpr, AL_UNDER);
       
     	RadioGroup* rgax = 0;
       if (0 != cgl) {
       	iYAxis = !cgl->fYAxisLeft;
     		rgax = new RadioGroup(root, TR("Use Y-Axis"), &iYAxis, true);
-    		rgax->Align(rgType , AL_UNDER);
+    		rgax->Align(radios, AL_UNDER);
     		new RadioButton(rgax, TR("&Left"));
     		new RadioButton(rgax, TR("&Right"));
     		rgax->SetIndependentPos();
@@ -640,6 +708,8 @@ bool ColumnGraphLayer::fConfig()
       create();
     }
   	int iColor, iYAxis;
+	int iColorOption;
+	String sColZ, sRpr;
   private:    
     int FieldSymbolCallBack(Event*)
     {
@@ -660,9 +730,26 @@ bool ColumnGraphLayer::fConfig()
       }
       return 0;
     }
+    int FieldAttributeCallBack(Event*)
+    {
+      fcColorCol->StoreData();
+	  Column cZ = m_cgl->tbl->col(sColZ);
+	  if (cZ.fValid() && cZ->dm() != dmUse) {
+		  dmUse = cZ->dm();
+		  frpr->SetDomain(dmUse);
+		  if (dmUse.fValid() && dmUse->rpr().fValid())
+			frpr->SetVal(dmUse->rpr()->sName(true));
+
+	  }
+      return 0;
+    }
   	FieldFillColor* ffc;
     FieldSymbol* fsmb;
+	FieldColumn* fcColorCol;
+	FieldRepresentationC * frpr;
   	Symbol* smb;
+	Domain dmUse;
+	ColumnGraphLayer * m_cgl;
   };
   ConfigForm frm(this);
   if (!frm.fOkClicked())
@@ -682,6 +769,11 @@ bool ColumnGraphLayer::fConfig()
 		if (dm.fValid()) 
 			rpr = dm->rpr();
 	}
+  colZ = tbl->col(frm.sColZ);
+  rprSymbolColor = frm.sRpr;
+  fRprSymbolColor = frm.iColorOption != 0 && colZ.fValid() && rprSymbolColor.fValid();
+  if (fRprSymbolColor)
+	colZpdv = colZ->dm()->pdv();
   return true;
 }
 
