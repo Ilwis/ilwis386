@@ -65,10 +65,10 @@ String TimeProfileTool::getMenuString() const
 
 void TimeProfileTool::startTimeProfileForm()
 {
-	new TimeProfileForm(tree, stpdrw);
+	TimeProfileWindow * tpw = new TimeProfileWindow(stpdrw);
 }
 
-BEGIN_MESSAGE_MAP(ProfileGraphWindow, SimpleGraphWindowWrapper)
+BEGIN_MESSAGE_MAP(ProfileGraphWindow, SimpleGraphWindow)
 	//{{AFX_MSG_MAP(ProfileGraphWindow)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
@@ -77,8 +77,8 @@ BEGIN_MESSAGE_MAP(ProfileGraphWindow, SimpleGraphWindowWrapper)
 //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-ProfileGraphWindow::ProfileGraphWindow(FormEntry *f, SpaceTimePathDrawer *_stpdrw)
-: SimpleGraphWindowWrapper(f)
+ProfileGraphWindow::ProfileGraphWindow(SpaceTimePathDrawer *_stpdrw)
+: SimpleGraphWindow()
 , m_gridXN(false)
 , m_gridXT(false)
 , m_gridYT(false)
@@ -126,7 +126,7 @@ void ProfileGraphWindow::OnDestroy()
 
 BOOL ProfileGraphWindow::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext)
 {
-	if (SimpleGraphWindowWrapper::Create(lpszClassName, lpszWindowName, dwStyle, rect, pParentWnd, nID, pContext)) {
+	if (SimpleGraphWindow::Create(lpszClassName, lpszWindowName, dwStyle, rect, pParentWnd, nID, pContext)) {
 		info = new InfoLine(this);
 		return TRUE;
 	} else
@@ -251,7 +251,7 @@ UINT ProfileGraphWindow::SelectionChangedInThread(LPVOID pParam)
 
 			// send raws array
 
-			IlwWinApp()->SendUpdateTableSelection(iRaws, ((SpatialDataDrawer *)(pObject->stpdrw->getParentDrawer()))->getBaseMap()->tblAtt()->fnObj);
+			IlwWinApp()->SendUpdateTableSelection(iRaws, ((SpatialDataDrawer *)(pObject->stpdrw->getParentDrawer()))->getBaseMap()->dm()->fnObj, long(pObject));
 		}
 		if (!pObject->m_fAbortSelectionThread)
 		{
@@ -266,7 +266,9 @@ UINT ProfileGraphWindow::SelectionChangedInThread(LPVOID pParam)
 
 void ProfileGraphWindow::SelectFeatures(RowSelectInfo & inf)
 {
-	if (m_pFunc && ((SpatialDataDrawer *)(stpdrw->getParentDrawer()))->getBaseMap()->tblAtt()->fnObj == inf.fn)
+	if (inf.sender == (long) this)
+		return;
+	if (m_pFunc && ((SpatialDataDrawer *)(stpdrw->getParentDrawer()))->getBaseMap()->dm()->fnObj == inf.fn)
 	{
 		const vector<long> & raws = inf.raws;
 		for (int i = 0; i < iNrFunctions; ++i)
@@ -290,7 +292,7 @@ void ProfileGraphWindow::SelectFeatures(RowSelectInfo & inf)
 
 void ProfileGraphWindow::OnLButtonDown(UINT nFlags, CPoint point)
 {
-	SimpleGraphWindowWrapper::OnLButtonDown(nFlags, point);
+	SimpleGraphWindow::OnLButtonDown(nFlags, point);
 	//String txt = getInfo(point);
 	//info->text(point, sInfo);
 }
@@ -298,12 +300,12 @@ void ProfileGraphWindow::OnLButtonDown(UINT nFlags, CPoint point)
 void ProfileGraphWindow::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	info->text(point, "");
-	SimpleGraphWindowWrapper::OnLButtonUp(nFlags, point);
+	SimpleGraphWindow::OnLButtonUp(nFlags, point);
 }
 
 void ProfileGraphWindow::OnMouseMove(UINT nFlags, CPoint point)
 {
-	SimpleGraphWindowWrapper::OnMouseMove(nFlags, point);
+	SimpleGraphWindow::OnMouseMove(nFlags, point);
 	if (m_fDragging) {
 		//String txt = getInfo(point);
 		//info->text(point, sInfo);
@@ -312,8 +314,10 @@ void ProfileGraphWindow::OnMouseMove(UINT nFlags, CPoint point)
 
 void ProfileGraphWindow::SetFunctions(SimpleFunction * funPtr, int _iNrFunctions)
 {
+	csFunctions.Lock();
 	iNrFunctions = _iNrFunctions;
 	SetFunction(funPtr);
+	csFunctions.Unlock();
 }
 
 void ProfileGraphWindow::SetGridTicks(vector<double> & gridXNodes, vector<double> & gridXTicks, vector<double> & gridYTicks)
@@ -633,6 +637,41 @@ UINT ProfileGraphWindow::PaintInThread(LPVOID pParam)
 		{
 			pObject->m_fDirty = false;
 
+			// resize bitmaps
+
+			CRect rectClientNew;
+			pObject->GetClientRect(rectClientNew);
+			while (!pObject->m_fAbortPaintThread && rectClientNew != rectClient)
+			{
+				rectClient = rectClientNew;
+
+				pObject->m_dcMemory->SelectObject(pObject->m_bmOldBitmap);
+				pObject->m_dcMemoryGraph->SelectObject(pObject->m_bmOldBitmapGraph);
+				delete pObject->m_bmMemory;
+				delete pObject->m_bmMemoryGraph;
+
+				pObject->m_bmMemory = new CBitmap();
+				pObject->m_bmMemory->CreateCompatibleBitmap(pDC, rectClient.Width(),rectClient.Height());
+				pObject->m_bmMemoryGraph = new CBitmap();
+				pObject->m_bmMemoryGraph->CreateCompatibleBitmap(pDC, rectClient.Width(),rectClient.Height());
+
+				pObject->m_bmOldBitmap = (CBitmap*)(pObject->m_dcMemory)->SelectObject(pObject->m_bmMemory);
+				pObject->m_bmOldBitmapGraph = (CBitmap*)(pObject->m_dcMemoryGraph)->SelectObject(pObject->m_bmMemoryGraph);
+
+				CRgn bounds;
+				bounds.CreateRectRgnIndirect(rectClient);
+
+				pObject->m_dcMemory->SelectClipRgn(&bounds, RGN_COPY);
+				pObject->m_dcMemoryGraph->SelectClipRgn(&bounds, RGN_COPY);
+				
+				pObject->GetClientRect(rectClientNew);
+				pObject->m_fRedraw = true;
+			}
+
+			// redraw functions
+
+			pObject->csFunctions.Lock();
+
 			while (!pObject->m_fAbortPaintThread && pObject->m_fRedraw)
 			{
 				pObject->m_fRedraw = false;
@@ -640,6 +679,8 @@ UINT ProfileGraphWindow::PaintInThread(LPVOID pParam)
 				pObject->DrawFunction(pObject->m_dcMemoryGraph, pObject->m_pFunc);
 				pObject->fDrawAxes = true;
 			}
+
+			// redraw axes
 
 			while (!pObject->m_fAbortPaintThread && !pObject->m_fDirty && pObject->fDrawAxes)
 			{
@@ -649,6 +690,8 @@ UINT ProfileGraphWindow::PaintInThread(LPVOID pParam)
 				pObject->DrawAxes(pObject->m_dcMemory);
 				pObject->DrawMouse(pObject->m_dcMemory);
 			}
+
+			pObject->csFunctions.Unlock();
 		}
 		if (!pObject->m_fAbortPaintThread)
 		{
@@ -666,43 +709,6 @@ UINT ProfileGraphWindow::PaintInThread(LPVOID pParam)
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
-
-ProfileFieldGraph::ProfileFieldGraph(FormEntry* parent, SpaceTimePathDrawer* _stpdrw)
-: FieldGraph(parent)
-, stpdrw(_stpdrw)
-{
-}
-
-void ProfileFieldGraph::create()
-{
-  zPoint pntFld = zPoint(psn->iPosX, psn->iPosY);
-  zDimension dimFld = zDimension(psn->iMinWidth, psn->iMinHeight);
-
-	sgw = new ProfileGraphWindow(this, stpdrw);
-	sgw->Create(NULL, "Graph", WS_CHILD | WS_VISIBLE, CRect(pntFld, dimFld), _frm->wnd(), Id());
-
-  CreateChildren();
-}
-
-void ProfileFieldGraph::SetFunctions(SimpleFunction * funPtr, int iNrFunctions)
-{
-	if (sgw) ((ProfileGraphWindow*)sgw)->SetFunctions(funPtr, iNrFunctions);	
-}
-
-void ProfileFieldGraph::SetGridTicks(vector<double> & gridXNodes, vector<double> & gridXTicks, vector<double> & gridYTicks)
-{
-	if (sgw) ((ProfileGraphWindow*)sgw)->SetGridTicks(gridXNodes, gridXTicks, gridYTicks);
-}
-
-void ProfileFieldGraph::SetGrid(bool gridXN, bool gridXT, bool gridYT)
-{
-	if (sgw) ((ProfileGraphWindow*)sgw)->SetGrid(gridXN, gridXT, gridYT);
-}
-
-void ProfileFieldGraph::SelectFeatures(RowSelectInfo & inf)
-{
-	if (sgw) ((ProfileGraphWindow*)sgw)->SelectFeatures(inf);
-}
 
 ProfileGraphFunction::ProfileGraphFunction()
 : SimpleFunction(0, DoubleRect(0, 0, 1, 1))
@@ -844,15 +850,16 @@ void ProfileGraphFunction::SetAnchor(DoublePoint pAnchor)
 {
 }
 
-BEGIN_MESSAGE_MAP(TimeProfileForm, FormWithDest)
+BEGIN_MESSAGE_MAP(TimeProfileForm, FormBaseWnd)
 	//{{AFX_MSG_MAP(TimeProfileForm)
 	ON_MESSAGE(MESSAGE_SELECT_ROW, OnSelectFeatures)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-TimeProfileForm::TimeProfileForm(CWnd* mw, SpaceTimePathDrawer *stp)
-: FormWithDest(mw, TR("Time Profile of Point Map"), fbsSHOWALWAYS|fbsBUTTONSUNDER|fbsNOCANCELBUTTON|fbsOKHASCLOSETEXT, WS_MINIMIZEBOX)
+TimeProfileForm::TimeProfileForm(CWnd* mw, SpaceTimePathDrawer *stp, ProfileGraphWindow * _pgw)
+: FormBaseWnd(mw, TR("Time Profile of Point Map"), fbsSHOWALWAYS|fbsBUTTONSUNDER|fbsNOCANCELBUTTON|fbsNOOKBUTTON|fbsOKHASCLOSETEXT, WS_CHILD|DS_3DLOOK)
 , stpdrw(stp)
+, pgw(_pgw)
 , m_functions(0)
 , m_gridXN(false)
 , m_gridXT(false)
@@ -862,12 +869,9 @@ TimeProfileForm::TimeProfileForm(CWnd* mw, SpaceTimePathDrawer *stp)
 {
 	fsm = new FieldSegmentMap(root, TR("Profile Segment Map"), &sSegmentMapProfile);
 	fsm->SetCallBack((NotifyProc)&TimeProfileForm::CallBackSegmentMapChanged);
-	fgFunctionGraph = new ProfileFieldGraph(root, stp);
-	fgFunctionGraph->SetWidth(500);
-	fgFunctionGraph->SetHeight(500);
-	fgFunctionGraph->SetIndependentPos();
-	fgFunctionGraph->SetFunctions(0, 0);
-	fgFunctionGraph->SetCallBack((NotifyProc)&TimeProfileForm::CallBackAnchorChangedInGraph);
+	CFont * fnt = IlwWinApp()->GetFont(IlwisWinApp::sfGRAPH);
+	pgw->SetAxisFont(fnt);
+	pgw->SetFunctions(0, 0);
 	cbXNgrid = new CheckBox(root, TR("X-Nodes"), &m_gridXN);
 	cbXNgrid->SetCallBack((NotifyProc)&TimeProfileForm::CallBackXNGrid);
 	cbXTgrid = new CheckBox(root, TR("X-Grid"), &m_gridXT);
@@ -885,8 +889,8 @@ TimeProfileForm::TimeProfileForm(CWnd* mw, SpaceTimePathDrawer *stp)
 
 	create();
 	
-	fgFunctionGraph->SetBorderThickness(130, 20, 30, 20);
-	fgFunctionGraph->Replot();
+	pgw->SetBorderThickness(130, 20, 30, 20);
+	pgw->Replot();
 
 	AfxGetApp()->PostThreadMessage(ILW_ADDDATAWINDOW, (WPARAM)m_hWnd, 0);
 }
@@ -894,12 +898,12 @@ TimeProfileForm::TimeProfileForm(CWnd* mw, SpaceTimePathDrawer *stp)
 void TimeProfileForm::shutdown(int iReturn) 
 {
 	AfxGetApp()->PostThreadMessage(ILW_REMOVEDATAWINDOW, (WPARAM)m_hWnd, 0);
-	FormWithDest::shutdown(iReturn);
+	FormBaseWnd::shutdown(iReturn);
 }
 
 TimeProfileForm::~TimeProfileForm()
 {
-	fgFunctionGraph->SetFunctions(0, 0);
+	pgw->SetFunctions(0, 0);
 	if (m_functions)
 		delete [] m_functions;
 }
@@ -925,28 +929,28 @@ int TimeProfileForm::CallBackSegmentMapChanged(Event*)
 int TimeProfileForm::CallBackXNGrid(Event*)
 {
 	cbXNgrid->StoreData();
-	fgFunctionGraph->SetGrid(m_gridXN, m_gridXT, m_gridYT);
+	pgw->SetGrid(m_gridXN, m_gridXT, m_gridYT);
 	return 0;
 }
 
 int TimeProfileForm::CallBackXTGrid(Event*)
 {
 	cbXTgrid->StoreData();
-	fgFunctionGraph->SetGrid(m_gridXN, m_gridXT, m_gridYT);
+	pgw->SetGrid(m_gridXN, m_gridXT, m_gridYT);
 	return 0;
 }
 
 int TimeProfileForm::CallBackYTGrid(Event*)
 {
 	cbYTgrid->StoreData();
-	fgFunctionGraph->SetGrid(m_gridXN, m_gridXT, m_gridYT);
+	pgw->SetGrid(m_gridXN, m_gridXT, m_gridYT);
 	return 0;
 }
 
 LONG TimeProfileForm::OnSelectFeatures(UINT wParam, LONG lParam)
 {
 	RowSelectInfo inf = *(RowSelectInfo *)wParam;
-	fgFunctionGraph->SelectFeatures(inf);
+	pgw->SelectFeatures(inf);
 
 	return 1;
 }
@@ -1070,7 +1074,7 @@ void TimeProfileForm::ComputeGraphs()
 		}
 
 		if (m_functions) {
-			fgFunctionGraph->SetFunctions(0, 0);
+			pgw->SetFunctions(0, 0);
 			delete [] m_functions;
 		}
 		DrawingColor * drawingColor = stpdrw->getDrawingColor();
@@ -1121,9 +1125,66 @@ void TimeProfileForm::ComputeGraphs()
 		}
 		for (int i = 0; i < projectedFeaturesList.size(); ++i)
 			m_functions[i].SetDomain(projectedStreetNodes[0], timeBounds->tMax(), projectedStreetNodes[projectedStreetNodes.size() - 1], timeBounds->tMin()); // the function domains will have the times on the Y axis and the lengths on the X axis
-		fgFunctionGraph->SetFunctions(m_functions, projectedFeaturesList.size());
+		pgw->SetFunctions(m_functions, projectedFeaturesList.size());
 		vector<double> timeTicks = getTimeTicks(timeBounds);
 		vector<double> distanceTicks = getDistanceTicks(projectedStreetNodes[0], projectedStreetNodes[projectedStreetNodes.size() - 1]);
-		fgFunctionGraph->SetGridTicks(projectedStreetNodes, distanceTicks, timeTicks);
+		pgw->SetGridTicks(projectedStreetNodes, distanceTicks, timeTicks);
 	}
+}
+
+BEGIN_MESSAGE_MAP(TimeProfileWindow, CWnd)
+//{{AFX_MSG_MAP(TimeProfileWindow)
+ON_WM_SIZE()
+ON_WM_CLOSE()
+//}}AFX_MSG_MAP
+END_MESSAGE_MAP()
+
+TimeProfileWindow::TimeProfileWindow(SpaceTimePathDrawer * stpdrw)
+: sgw(0)
+, tpf(0)
+{
+
+	// take two third of screen as default size
+	int iWidth = GetSystemMetrics(SM_CXSCREEN) * 2 / 3;
+	int iHeight = GetSystemMetrics(SM_CYSCREEN) * 2 / 3;
+
+	DWORD dwStyle = WS_VISIBLE|WS_POPUP|WS_BORDER|WS_CAPTION|WS_MAXIMIZEBOX|WS_MINIMIZEBOX|WS_OVERLAPPEDWINDOW|WS_POPUPWINDOW|WS_SIZEBOX|WS_SYSMENU|WS_THICKFRAME|DS_3DLOOK;
+	DWORD dwExStyle = 0;
+	CreateEx(dwExStyle, "IlwisView", "Time Profile of Point Map", dwStyle, CRect(0, 0, iWidth, iHeight), 0, 0);
+	sgw = new ProfileGraphWindow(stpdrw);
+	sgw->Create(NULL, "Graph", WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), this, 0);
+	tpf = new TimeProfileForm(this, stpdrw, sgw);
+	OnSize(0, 0, 0);
+}
+
+void TimeProfileWindow::OnSize(UINT nType, int cx, int cy)
+{
+	if (tpf) {
+		CRect rectWindow;
+		GetClientRect(rectWindow);
+		CRect rectForm;
+		tpf->GetClientRect(rectForm);
+		int newX = 0;
+		int newY = rectWindow.Height() - rectForm.Height();
+		rectForm.OffsetRect(newX - rectForm.TopLeft().x, newY - rectForm.TopLeft().y);
+		tpf->MoveWindow(rectForm);
+		CRect rectGraph;
+		sgw->GetClientRect(rectGraph);
+		CPoint pt1 (rectWindow.TopLeft());
+		CPoint pt2 (rectWindow.Width(), newY);
+		pt2 += rectWindow.TopLeft();
+		rectGraph.SetRect(pt1.x, pt1.y, pt2.x, pt2.y);
+		sgw->MoveWindow(rectGraph);
+		//sgw->OnSize(nType, rectGraph.Width(), rectGraph.Height());
+		sgw->Replot();
+	}
+}
+
+void TimeProfileWindow::OnClose()
+{
+	if (tpf)
+		delete tpf;
+	if (sgw)
+		delete sgw;
+	delete this;
 }

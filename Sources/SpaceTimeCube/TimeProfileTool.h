@@ -5,6 +5,7 @@ ILWIS::DrawerTool *createTimeProfileTool(ZoomableView* zv, LayerTreeView *view, 
 
 #include "Client\FormElements\FieldGraph.h"
 #include "Engine\Base\Algorithm\SimpleFunction.h"
+#include "Client\FormElements\FormBaseWnd.h"
 
 class InfoLine;
 
@@ -22,10 +23,10 @@ namespace ILWIS {
 		SpaceTimePathDrawer *stpdrw;
 	};
 
-	class ProfileGraphWindow : public SimpleGraphWindowWrapper
+	class ProfileGraphWindow : public SimpleGraphWindow
 	{
 	public:
-		ProfileGraphWindow(FormEntry *f, SpaceTimePathDrawer *_stpdrw);
+		ProfileGraphWindow(SpaceTimePathDrawer *_stpdrw);
 		virtual ~ProfileGraphWindow();
 		void SetFunctions(SimpleFunction * funPtr, int _iNrFunctions);
 		void SetGridTicks(vector<double> & gridXNodes, vector<double> & gridXTicks, vector<double> & gridYTicks);
@@ -66,6 +67,7 @@ namespace ILWIS {
 		bool m_fAbortSelectionThread;
 		CWinThread * m_selectionThread;
 		CCriticalSection csSelectionThread;
+		CCriticalSection csFunctions;
 
 	private:
 		SpaceTimePathDrawer *stpdrw;
@@ -74,19 +76,6 @@ namespace ILWIS {
 		static UINT SelectionChangedInThread(LPVOID pParam);
 
 		DECLARE_MESSAGE_MAP()
-	};
-
-	class ProfileFieldGraph : public FieldGraph  
-	{
-	public:
-		ProfileFieldGraph(FormEntry* parent, SpaceTimePathDrawer* _stpdrw);
-		void create();             // overriden
-		void SetFunctions(SimpleFunction * funPtr, int iNrFunctions);
-		void SetGridTicks(vector<double> & gridXNodes, vector<double> & gridXTicks, vector<double> & gridYTicks);
-		void SetGrid(bool gridXN, bool gridXT, bool gridYT);
-		void SelectFeatures(RowSelectInfo & inf);
-	private:
-		SpaceTimePathDrawer* stpdrw;
 	};
 
 	class ProfileGraphFunction : public SimpleFunction
@@ -117,10 +106,10 @@ namespace ILWIS {
 		bool m_fSelected;
 	};
 
-	class _export TimeProfileForm: public FormWithDest
+	class TimeProfileForm: public FormBaseWnd
 	{
 	public:
-	  TimeProfileForm(CWnd* mw, SpaceTimePathDrawer * stp);
+	  TimeProfileForm(CWnd* mw, SpaceTimePathDrawer * stp, ProfileGraphWindow * _pgw);
 	  virtual ~TimeProfileForm();
 	protected:
 		afx_msg LONG OnSelectFeatures(UINT, LONG lParam);
@@ -134,7 +123,7 @@ namespace ILWIS {
 		int CallBackYTGrid(Event*);
 		String sSegmentMapProfile;
 		FieldSegmentMap * fsm;
-		ProfileFieldGraph * fgFunctionGraph;
+		ProfileGraphWindow * pgw;
 		ProfileGraphFunction * m_functions;
 		SpaceTimePathDrawer *stpdrw;
 		CheckBox * cbXNgrid;
@@ -147,6 +136,19 @@ namespace ILWIS {
 		bool m_gridYT;
 		bool m_fUseRadiusThreshold;
 		double m_radiusThreshold;
+
+		DECLARE_MESSAGE_MAP()
+	};
+
+	class TimeProfileWindow: public CWnd
+	{
+	public:
+		TimeProfileWindow(SpaceTimePathDrawer * stpdrw);
+	protected:
+		afx_msg void OnSize(UINT nType, int cx, int cy);
+		afx_msg void OnClose();
+		ProfileGraphWindow * sgw;
+		TimeProfileForm * tpf;
 
 		DECLARE_MESSAGE_MAP()
 	};
