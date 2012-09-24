@@ -39,6 +39,7 @@ Created on: 2007-02-8
 
 #include "Client\Headers\formelementspch.h"
 #include "Engine\Base\System\RegistrySettings.h"
+#include "Engine\Base\System\engine.h"
 #include "Client\ilwis.h"
 #include "Client\Base\datawind.h"
 #include "Client\Editors\Utils\BaseBar.h"
@@ -102,7 +103,9 @@ BEGIN_MESSAGE_MAP(TablePaneView, BaseTablePaneView)
 	ON_COMMAND(ID_SORT_DESCENDING, OnSortOnDescending)
 	ON_COMMAND(ID_UPDATEALLCOLS, OnUpdateAllColumns)
 	ON_COMMAND(ID_PROP, OnProp)
+	//ON_COMMAND(ID_SAVE_SELECTION, OnSaveSelection)
 	ON_UPDATE_COMMAND_UI(ID_PROP, OnUpdateProp)
+	ON_COMMAND(ID_SELECTFEATURES_BYCOLUMN, OnSelectFeaturesByColumn)
 
 	// NOTE - the ClassWizard will add and remove mapping macros here.
 	//}}AFX_MSG_MAP
@@ -1052,3 +1055,26 @@ bool TablePaneView::fAllowPaste() const
 	return false;
 }
 
+
+void TablePaneView::OnSelectFeaturesByColumn() {
+	class SelectionColumnForm : public FormWithDest{
+	public:
+		SelectionColumnForm(CWnd *parent, const Table& tbl,String* colName) : FormWithDest(parent, TR("Column Selection")) {
+			new FieldColumn(root,TR("Boolean selection column"),tbl, colName, dmBOOL);
+			create();
+		}
+
+
+	};
+	String colName;
+	SelectionColumnForm frm(this,GetDocument()->table(),&colName);
+	if (frm.fOkClicked()) {
+		Column col = GetDocument()->table()->col(colName);
+		vector<long> raws;
+		for(int i=1; i < iRows(); ++i) {
+			if (col->iValue(i) != 0)
+				raws.push_back(i);
+		}
+		IlwWinApp()->SendUpdateTableSelection(raws,GetDocument()->table()->dm()->fnObj, 0);
+	}
+}

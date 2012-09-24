@@ -129,6 +129,7 @@ protected:
 	afx_msg void OnSortOnDescending();
 	afx_msg void OnUpdateAllColumns();
 	afx_msg void OnProp();
+	afx_msg void OnSelectFeaturesByColumn();
 	afx_msg void OnUpdateProp(CCmdUI* pCmdUI);
 
 	//}}AFX_MSG
