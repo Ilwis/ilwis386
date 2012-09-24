@@ -1,4 +1,5 @@
 #include "Client\Headers\formelementspch.h"
+#include "Headers\constant.h"
 #include "Client\FormElements\FieldIntSlider.h"
 #include "Engine\Drawers\RootDrawer.h"
 #include "Engine\Drawers\ComplexDrawer.h"
@@ -65,7 +66,7 @@ void SelectableTool::setSelectable(void *v, HTREEITEM) {
 	bool use = *(bool *)v;
 	getDrawer()->setSelectable(use);
 	if ( use) {
-		tree->GetDocument()->mpvGetView()->addTool(this, getId());
+		tree->GetDocument()->mpvGetView()->addTool(this, ID_SELECTFEATURES);
 		MapPaneView *view = tree->GetDocument()->mpvGetView();
 
 		view->selectArea(this,
@@ -94,23 +95,33 @@ bool SelectableTool::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags){
 	return fCtrl;
 }
 
+void SelectableTool::OnEscape() {
+	getDrawer()->select(CoordBounds()); // deselect all points
+	selectedRaws.clear();
+	IlwWinApp()->SendUpdateTableSelection(selectedRaws, bmapptr->dm()->fnObj, (long)mpvGetView());
+	mpvGetView()->Invalidate();
+}
+
 void SelectableTool::FeatureAreaSelected(CRect rect)
 {
-	if ( fCtrl)
+	if ( fCtrl || isActive() == false)
 		return;
 	else {
 		selectedRaws.clear();
 		getDrawer()->select(CoordBounds());
 	}
-	if ( rect.Height() == 0 || rect.Width() == 0) {
-		selectedRaws.clear();
-		return;
-	}
-
-
 	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(tree->GetDocument());
 	if ( mcd) {
 		MapPaneView *view = mcd->mpvGetView();
+		if ( rect.Height() == 0 || rect.Width() == 0) {
+			selectedRaws.clear();
+			IlwWinApp()->SendUpdateTableSelection(selectedRaws, bmapptr->dm()->fnObj, (long)view);
+			view->Invalidate();
+			return;
+		}
+
+
+
 		CoordBounds cbZoom = mcd->rootDrawer->getCoordBoundsZoom();
 		CRect rectWindow;
 		view->GetClientRect(&rectWindow);
@@ -142,7 +153,7 @@ void SelectableTool::FeatureAreaSelected(CRect rect)
 				continue;
 			selectedRaws.push_back(f->iValue());
 		}
-		IlwWinApp()->SendUpdateTableSelection(selectedRaws, bmapptr->dm()->fnObj);
+		IlwWinApp()->SendUpdateTableSelection(selectedRaws, bmapptr->dm()->fnObj, (long)view);
 		view->Invalidate();
 	}
 }
