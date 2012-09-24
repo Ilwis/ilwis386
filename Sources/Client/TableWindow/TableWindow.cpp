@@ -38,6 +38,7 @@
 //
 
 #include "Client\Headers\formelementspch.h"
+#include "Client\FormElements\fldcol.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\ilwis.h"
 #include "Engine\Base\system\engine.h"
@@ -175,7 +176,7 @@ int TableWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
     addSub(ID_GRAPH);
 	  addSub(ID_ROSE);
   addSubMenu(ID_FILE_CREATE);
-	add(ID_FILE_SAVE_AS);	
+	add(ID_FILE_SAVE_AS);
   add(ID_FILE_PRINT);
   addBreak;
   add(ID_FILE_PROP);
@@ -191,6 +192,7 @@ int TableWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
   addBreak;
   add(ID_SELALL);
   add(ID_ADDRECORD);
+  add(ID_SELECTFEATURES_BYCOLUMN);
   addMenu(ID_MEN_EDIT);
 
   menPopup.CreateMenu();
@@ -833,3 +835,5 @@ LONG TableWindow::OnSelectFeatures(UINT wParam, LONG lParam)
 
 	return 1;
 }
+
+

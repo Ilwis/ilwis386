@@ -134,6 +134,7 @@ afx_msg LONG OnCommandUI(UINT, LONG lParam);
 	afx_msg void OnConfusionMatrix();
 	afx_msg void OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized);
 	afx_msg LONG OnSelectFeatures(UINT wParam, LONG lParam);
+	
 	//}}AFX_MSG
 protected:
   CommandBar commBar;
