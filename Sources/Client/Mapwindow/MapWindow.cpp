@@ -146,6 +146,8 @@ int MapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	addSubMenu(ID_FILE_CREATE);
 	add(ID_SAVEVIEW);
 	add(ID_SAVEVIEWAS);
+
+	add(ID_SAVE_SELECTION)
 	//add(ID_CREATE_LAYOUT);
 	addBreak;
 	menPropLayer.CreateMenu();
@@ -161,38 +163,9 @@ int MapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	add(ID_COPY );
 	add(ID_PASTE);
 	addBreak;
-	/*menEditLayer.CreateMenu();
-	menPopup.AppendMenu(MF_POPUP, (UINT)menEditLayer.GetSafeHmenu(), sMen(ID_EDITLAYER)); 	
-	menSub.CreateMenu();
-	addSub(ID_PIXELEDIT);
-	addSub(ID_POINTEDIT);
-	addSub(ID_SEGEDIT);
-	addSub(ID_POLEDIT);
-	addSubMenu(ID_EDITOR);
-	addBreak;*/
-	//menRprLayer.CreateMenu();
-	//menPopup.AppendMenu(MF_POPUP, (UINT)menRprLayer.GetSafeHmenu(), sMen(ID_RPRLAYER)); 	
-	//menDomLayer.CreateMenu();
-	//menPopup.AppendMenu(MF_POPUP, (UINT)menDomLayer.GetSafeHmenu(), sMen(ID_DOMLAYER)); 	
-	//add(ID_EDITGRF);
-	//add(ID_EDITCSY);
-	//hMenEdit = menPopup.GetSafeHmenu();
-	//addMenu(ID_MEN_EDIT);
-
-	//menPopup.CreateMenu();
 	add(ID_ADDLAYER);
-	//add(ID_ADD_GRID);
-	//add(ID_ADD_GRATICULE);
 	add(ID_REMOVELAYER);
-	//menDataLayer.CreateMenu();
-	//menPopup.AppendMenu(MF_POPUP, (UINT)menDataLayer.GetSafeHmenu(), sMen(ID_LAYEROPTIONS)); 	
 	addBreak;
-	//add(ID_BGCOLOR);
-	//menSub.CreateMenu();
-	//addSub(ID_MAPDBLCLKRECORD);
-	//addSub(ID_MAPDBLCLKRPR);
-	//addSub(ID_MAPDBLCLKACTION);
-	//addSubMenu(ID_MAPDBLCLK);
 
 	addMenu(ID_MEN_LAYERS);
 
