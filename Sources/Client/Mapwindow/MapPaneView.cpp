@@ -163,6 +163,8 @@ BEGIN_MESSAGE_MAP(MapPaneView, SimpleMapPaneView)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_MAPDBLCLKRECORD, ID_MAPDBLCLKACTION, OnUpdateDoubleClickAction)
 	ON_COMMAND(ID_SHOWRECORDVIEW, OnShowRecordView)
 	ON_UPDATE_COMMAND_UI(ID_SHOWRECORDVIEW, OnUpdateShowRecordView)
+	ON_COMMAND(ID_SAVE_SELECTION, OnSaveSelection)
+	ON_UPDATE_COMMAND_UI(ID_SAVE_SELECTION, OnUpdateSaveSelection)
 	ON_MESSAGE(ILWM_OPENMAP,OnOpenMap)
 	ON_WM_KEYDOWN()
 END_MESSAGE_MAP()
@@ -1221,6 +1223,113 @@ LRESULT MapPaneView::OnOpenMap(WPARAM wP, LPARAM lp) {
 	return TRUE;
 }
 
+void MapPaneView::OnUpdateSaveSelection(CCmdUI* pCmdUI) {
+}
+
+
+void MapPaneView::OnSaveSelection() {
+	class SaveSelectionForm : public FormWithDest {
+	public:
+		SaveSelectionForm(CWnd *parent, RootDrawer *rootdrw, set<Feature*>& feat, String& selectedF, String& out ) :
+			FormWithDest(parent, TR("Save Layer selection")), 
+				features(feat),
+				outname(out),
+				selectedFile(selectedF)
+			{
+			vector<String> names;
+			selected=0;
+			for(int i = 0; i < rootdrw->getDrawerCount(); ++i) {
+				SpatialDataDrawer *dataDrw = dynamic_cast<SpatialDataDrawer *>(rootdrw->getDrawer(i));
+				if ( !dataDrw)
+					continue;
+				IlwisObjectPtr *ptr = dataDrw->getObject();
+				if ( IOTYPEFEATUREMAP(ptr->fnObj))
+					if ( names.size() == 0) {
+						String input = ptr->fnObj.sFile + ptr->fnObj.sExt;
+						FileName fn = FileName::fnUnique(FileName(input));
+						outname = fn.sFile + fn.sExt;
+					}
+					names.push_back(ptr->fnObj.sFile + ptr->fnObj.sExt);
+					drawers.push_back(dataDrw);
+			}
+			new FieldOneSelectString(root,TR("Layers"),&selected, names);
+			FieldString *fs = new FieldString(root, TR("Output map"),&outname);
+			fs->SetWidth(80);
+			create();
+		}
+
+		int exec() {
+			FormWithDest::exec();
+			if ( selected >= 0) {
+				features = drawers[selected]->getSelectedFeatures();
+				IlwisObjectPtr *ptr = drawers[selected]->getObject();
+				selectedFile = ptr->fnObj.sPhysicalPath();
+			}
+			return 1;
+		}
+
+	private:
+		vector<SpatialDataDrawer *> drawers;
+		long selected;
+		String &outname;
+		String &selectedFile;
+		set<Feature *> &features;
+
+	};
+
+	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(GetDocument());
+	if ( mcd) {
+		set<Feature *> features;
+		String outname;
+		String selectedFile;
+		SaveSelectionForm frm(this,mcd->rootDrawer, features, selectedFile, outname);
+		if ( frm.fOkClicked()) {
+			if ( features.size() > 0) {
+				SaveFeatures(features, selectedFile, outname);
+			}
+		}
+	}
+}
+
+void MapPaneView::SaveFeatures(const set<Feature *>& features, const String& inFile, const String& outFile) const{
+	FileName fnIn(inFile);
+	FileName fnOut(outFile);
+	CoordBounds bnds;
+	for(set<Feature *>::const_iterator iter = features.begin(); iter != features.end(); ++iter) {
+		bnds += (*iter)->cbBounds();
+	}
+	bnds *= 1.1;
+	if ( IOTYPE(fnIn) == IlwisObject::iotPOINTMAP) {
+		PointMap pmIn(fnIn);
+		PointMap pmFnOut(fnOut,pmIn->cs(), bnds, pmIn->dvrs());
+		for(set<Feature *>::const_iterator iter = features.begin(); iter != features.end(); ++iter) {
+			ILWIS::Point *point = CPOINT(*iter);
+			Feature *f = pmFnOut->newFeature(point);
+			f->PutVal(point->rValue());
+		}
+		pmFnOut->Store();
+	}
+	if ( IOTYPE(fnIn) == IlwisObject::iotSEGMENTMAP) {
+		SegmentMap smIn(fnIn);
+		SegmentMap smFnOut(fnOut,smIn->cs(), bnds, smIn->dvrs());
+		for(set<Feature *>::const_iterator iter = features.begin(); iter != features.end(); ++iter) {
+			ILWIS::Segment *seg = CSEGMENT(*iter);
+			Feature *f = smFnOut->newFeature(seg);
+			f->PutVal(seg->rValue());
+		}
+		smFnOut->Store();
+	}
+	if ( IOTYPE(fnIn) == IlwisObject::iotPOLYGONMAP) {
+		PolygonMap pmIn(fnIn);
+		PolygonMap pmFnOut(fnOut,pmIn->cs(), bnds, pmIn->dvrs());
+		for(set<Feature *>::const_iterator iter = features.begin(); iter != features.end(); ++iter) {
+			ILWIS::Polygon *pol = CPOLYGON(*iter);
+			Feature *f = pmFnOut->newFeature(pol);
+			f->PutVal(pol->rValue());
+		}
+		pmFnOut->Store();
+	}
+}
 
 void MapPaneView::OnCreateSubMap()
 {

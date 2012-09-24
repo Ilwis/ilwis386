@@ -59,6 +59,7 @@ class MapPaneViewTool;
 class RecordBar;
 class COleDropTarget;
 class PixelInfoBar;
+class Feature;
 
 /////////////////////////////////////////////////////////////////////////////
 // MapPaneView view
@@ -128,10 +129,15 @@ protected:
 	afx_msg void OnMetricCoord() ;
 	afx_msg void OnUpdateMetricCoord(CCmdUI* pCmdUI);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg void OnUpdateSaveSelection(CCmdUI* pCmdUI);
+	afx_msg void OnSaveSelection();
+	afx_msg 
 	void OnShowRecordView();
 	void OnUpdateShowRecordView(CCmdUI* pCmdUI);
 
 private:
+	void SaveFeatures(const set<Feature *>& features, const String& inFile, const String& outFile) const;
+
 	enum DoubleClickAction { dcaRECORD, dcaRPR, dcaACTION };
 	DoubleClickAction dca;
 	BOOL EditCopy(CRect mRect, int nReduceResCount);
