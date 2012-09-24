@@ -198,14 +198,7 @@ void BaseTablePaneView::OnDraw(CDC* cdc)
 	cdc->SelectObject(penOld);
 	penOld = cdc->SelectObject(&penNull);
 	cdc->SelectObject(brOld);
-	/*brOld = cdc->SelectObject(&brHL);
-	zRect rectSel = rectSelect();
-	if (!rectSel.IsRectEmpty()) {
-		if (rectSel.right() < 32767)
-			rectSel.right() += 1;
-		rectSel.top() += 1;
-		cdc->Rectangle(rectSel);
-	}*/
+	brOld = cdc->SelectObject(&brHL);
 
 	if (fShowHeading) 
 	{
@@ -400,21 +393,24 @@ void BaseTablePaneView::OnDraw(CDC* cdc)
 					p.y -= iHeight();
 				for (long r = iFirstVisibleRow(); r <= iRows(); ++r) 
 				{
+					p.y += iHeight();
 					if (selection.fContains(RowCol(r,(long)c))) {
 						if (fHasFocus) {
-							cdc->SetTextColor(SysColor(COLOR_WINDOWTEXT));
+							cdc->SetTextColor(SysColor(COLOR_HIGHLIGHTTEXT));
 							cdc->SetBkColor(colHighLight);
 						}
 						else {
 							cdc->SetTextColor(SysColor(COLOR_WINDOWTEXT));
 							cdc->SetBkColor(colHighLight);
 						}
+						zRectRegion regTmp(p.x, p.y, p.x+iW, p.y+iHeight());
+						cdc->SelectClipRgn(&regTmp);
+						cdc->Rectangle(p.x, p.y, p.x+iW+1, p.y+iHeight()+1);
 					}
 					else {
 						cdc->SetTextColor(SysColor(COLOR_WINDOWTEXT));
 						cdc->SetBkColor(SysColor(COLOR_WINDOW));
 					}
-					p.y += iHeight();
 					String s = sField(c,r);
 					zPoint pnt = p;
 					pnt.x += 3;
