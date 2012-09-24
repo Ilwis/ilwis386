@@ -169,7 +169,7 @@ String SpaceTimePathDrawer::getInfo(const Coord& c) const
 		}
 	}
 	// send raws array
-	IlwWinApp()->SendUpdateTableSelection(raws, ((SpatialDataDrawer *)getParentDrawer())->getBaseMap()->tblAtt()->fnObj);
+	IlwWinApp()->SendUpdateTableSelection(raws, ((SpatialDataDrawer *)getParentDrawer())->getBaseMap()->dm()->fnObj, long(this));
 	return info;
 }
 
