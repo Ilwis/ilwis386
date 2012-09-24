@@ -87,7 +87,7 @@ void GraphDoc::DeleteContents()
 	UpdateAllViews(0);
 }
 
-int GraphDoc::OnOpenDocument(LPCTSTR lpszPathName)
+int GraphDoc::OnOpenDocument(LPCTSTR lpszPathName, int os)
 {
 	try {
 		DeleteContents();

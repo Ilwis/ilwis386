@@ -192,7 +192,7 @@ void CartesianGraphDoc::OnFileOpen()
 	String sGraph;
 	OpenForm frm(wndGetActiveView(), &sGraph);
 	if (frm.fOkClicked()) {
-		OnOpenDocument(sGraph.c_str());
+		OnOpenDocument(sGraph.c_str(), 0);
 		SetModifiedFlag(FALSE);
 		UpdateAllViews(0);
 	}
