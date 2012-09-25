@@ -15,6 +15,7 @@ class _export LineFeatureDrawer : public LineDrawer {
 		void setDataSource(void *f);
 		void addDataSource(void *f,int options=0);
 		Feature *getFeature() const;
+		void* getDataSource() const;
 	protected:
 		LineFeatureDrawer(DrawerParameters *parms, const String& name);
 		Feature *feature;

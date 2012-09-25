@@ -122,3 +122,7 @@ void LineFeatureDrawer::prepare(PreparationParameters *p){
 Feature *LineFeatureDrawer::getFeature() const {
 	return feature;
 }
+
+void* LineFeatureDrawer::getDataSource() const{
+	return (void *) feature;
+}

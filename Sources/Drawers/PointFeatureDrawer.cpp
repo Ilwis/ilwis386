@@ -125,3 +125,7 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 Feature *PointFeatureDrawer::getFeature() const {
 	return feature;
 }
+
+void* PointFeatureDrawer::getDataSource() const{
+	return (void *) feature;
+}

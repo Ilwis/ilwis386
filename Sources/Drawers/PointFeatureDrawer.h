@@ -11,6 +11,7 @@ class _export PointFeatureDrawer : public PointDrawer {
 		void prepare(PreparationParameters *);
 		void addDataSource(void *f,int options=0);
 		Feature *getFeature() const;
+		void* getDataSource() const;
 	protected:
 		PointFeatureDrawer(DrawerParameters *parms, const String& name);
 		Feature *feature;
