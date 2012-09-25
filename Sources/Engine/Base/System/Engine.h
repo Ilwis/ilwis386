@@ -26,6 +26,7 @@ class GdalProxy;
 struct RowSelectInfo {
 	FileName fn; // domain;
 	vector<long> raws; // selected rows;
+	long sender; // long cast of pointer; to be able to recognize self messages
 };
 
 namespace ILWIS {
