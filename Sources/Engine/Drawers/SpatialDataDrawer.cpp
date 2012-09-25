@@ -316,3 +316,22 @@ IlwisObjectPtr *SpatialDataDrawer::getSourceSupportObject(IlwisObject::iotIlwisO
 	}
 	return 0;
 }
+
+set<Feature *> SpatialDataDrawer::getSelectedFeatures() const {
+	set<Feature *> features;
+	for(int i = 0; i < getDrawerCount(); ++i) {
+		NewDrawer *drw = getDrawer(i, dtPOLYGONLAYER | dtSEGMENTLAYER | dtPOINTLAYER);
+		ComplexDrawer *cdrw = (ComplexDrawer *)drw;
+		for(int j = 0; j < cdrw->getDrawerCount(); ++j) {
+			SimpleDrawer *sdrw = (SimpleDrawer *)cdrw->getDrawer(j);
+			if ( !sdrw) 
+				continue;
+			if ( sdrw->getSpecialDrawingOption() & sdoSELECTED) {
+				Feature *f = (Feature *)sdrw->getDataSource();
+				features.insert(f);
+			}
+
+		}
+	}
+	return features;
+}
