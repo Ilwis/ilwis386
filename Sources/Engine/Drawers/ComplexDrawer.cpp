@@ -254,34 +254,34 @@ int ComplexDrawer::getDrawerCount(int types) const{
 	return count;
 }
 
-NewDrawer * ComplexDrawer::getDrawer(int index, int type){
+NewDrawer * ComplexDrawer::getDrawer(int index, int type) const{
 	if ( type == dtMAIN) {
 		if ( index < drawers.size()) {
 			return drawers.at(index);
 		}
-	} else  if ( type == dtPRE) {
+	}  else if ( type == dtPRE) {
 		String name("%3d", index);
-		map<String, NewDrawer *>::iterator here = preDrawers.find(name);
+		map<String, NewDrawer *>::const_iterator here = preDrawers.find(name);
 		if (  here != preDrawers.end())
 			return (*here).second;
-	} else  if ( type == dtPOST ){
+	} if ( type == dtPOST ){
 		String name("%3d", index);
-		map<String, NewDrawer *>::iterator here = postDrawers.find(name);
+		map<String, NewDrawer *>::const_iterator here = postDrawers.find(name);
 		if (  here != postDrawers.end())
 			return (*here).second;
-	} else if (type & dtPOLYGONLAYER) {
+	} if (type & dtPOLYGONLAYER) {
 		NewDrawer *drw = drawers.at(index);
 		if ( drw->getType() == "PolygonLayerDrawer")
 			return drw;
-	} else if (type & dtSEGMENTLAYER) {
+	} if (type & dtSEGMENTLAYER) {
 		NewDrawer *drw = drawers.at(index);
 		if ( drw->getType() == "LineLayerDrawer")
 			return drw;
-	} else if (type & dtPOINTLAYER) {
+	} if (type & dtPOINTLAYER) {
 		NewDrawer *drw = drawers.at(index);
 		if ( drw->getType() == "PointLayerDrawer")
 			return drw;
-	} else if (type & dtRASTERLAYER) {
+	} if (type & dtRASTERLAYER) {
 		NewDrawer *drw = drawers.at(index);
 		if ( drw->getType() == "RasterLayerDrawer")
 			return drw;

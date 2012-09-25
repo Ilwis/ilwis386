@@ -29,7 +29,7 @@ class _export ComplexDrawer : public NewDrawer {
 		void prepare(PreparationParameters *);
 		virtual void prepareChildDrawers(PreparationParameters *);
 		int getDrawerCount(int types=dtMAIN) const;
-		NewDrawer * getDrawer(int index, int type=dtMAIN);
+		NewDrawer * getDrawer(int index, int type=dtMAIN) const;
 		NewDrawer *getDrawer(const String& did);
 		virtual String addDrawer(NewDrawer *drw);
 		virtual void setDrawer(int index, NewDrawer *drw);
