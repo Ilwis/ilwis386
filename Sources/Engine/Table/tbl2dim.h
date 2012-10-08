@@ -53,11 +53,14 @@ class DATEXPORT Table2DimPtr: public TablePtr
   friend class DATEXPORT Table2Dim;
   friend class DATEXPORT TablePtr;
   static Table2DimPtr* create(const FileName&);
+  static Table2DimPtr* create(const FileName&, const String&, bool& fLoadColumns);
 protected:
   Table2DimPtr(const FileName&);
   Table2DimPtr(const FileName& fn, const DomainValueRangeStruct& dvrs1,
                const DomainValueRangeStruct& dvrs2, 
                const DomainValueRangeStruct& dvs);
+  Table2DimPtr(const FileName&, const String& sSecPrf, bool fCreate=false);
+
 public:
   virtual ~Table2DimPtr();
   virtual void Store();
@@ -98,6 +101,10 @@ public:
   void PutVal(long iRaw1, long iRaw2, const Coord& cValue);
   DomainValueRangeStruct _export dvrsVal() const;
   Column colValue() { return colVal; }
+  void _export SetAxisDomains(const DomainValueRangeStruct& dvrs1, const DomainValueRangeStruct& dvrs2);
+  void _export SetDataDomain(const DomainValueRangeStruct& dvs);
+  virtual bool fDependent() const; // returns true if it's dependent table
+  virtual void BreakDependency();
   void AdjustForDomainChange();
 	void GetObjectStructure(ObjectStructure& os);
 private:
@@ -116,6 +123,7 @@ public:
   _export Table2Dim(const FileName& fn, const DomainValueRangeStruct& dvrs1,
             const DomainValueRangeStruct& dvrs2,
             const DomainValueRangeStruct& dvs);
+  _export Table2Dim(const FileName& fn, const String& sExpression);
   void operator = (const Table2Dim& tbl2) { SetPointer(tbl2.pointer()); }
   Table2DimPtr* ptr() const { return static_cast<Table2DimPtr*>(pointer()); }
   Table2DimPtr* operator -> () const { return ptr(); }
