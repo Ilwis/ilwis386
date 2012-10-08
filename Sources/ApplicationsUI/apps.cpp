@@ -62,6 +62,7 @@ Last change:  WK   17 Sep 98    2:14 pm
 #include "Client\Base\BaseCommandHandlerUI.h"
 #include "Client\MainWindow\CommandHandlerUI.h"
 #include "ApplicationsUI\TableCreateTimeColumn.h"
+#include "ApplicationsUI\FormNetworkDistance.h"
 #include "Client\ilwis.h"
 #include "Headers\Hs\Applications.hs"
 
@@ -153,7 +154,7 @@ extern "C" _export InfoUIVector* getCommandInfoUI(ILWIS::Module *module) {
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("clmfindazimuthdistance","",Cmdclmfindazimuthdistance,"","Find Azimuth Distance",".grh",".mpl",0000,"Find Azimuth Distance", false));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("timecolumn","",Cmdtimecolumn,TR("&Table Operations..&Create time column"),TR("Create time column from otther columns"),"ExeTbl16IcoL",".col",0,TR("Create time column from otther columns")));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("timefromcolumns","",Cmdtimefromcolumns,"","",".grh",".mpl",0,TR("Create time column from maplist name information")));
-
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("frmnetworkdistance","",CmdNetworkDistance,TR("&Table Operations..&Network Distance"),TR("Network Distance of Point Maps"),"ExeTbl16IcoL",".ta2",4702,TR("Compute Network Distance of two point maps")));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("updateallcolumns","",CmdUpdateAllColumns,"","",".grh",".mpl",0000,"", false));
 
 return infosui;

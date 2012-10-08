@@ -623,6 +623,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\Sources\Applications\Table\TableNetworkDistance.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Sources\Applications\Table\TblBursaWolf.cpp"
 					>
 				</File>
@@ -707,6 +711,10 @@
 					</File>
 					<File
 						RelativePath="..\..\Sources\Applications\Table\Spatcorr.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Applications\Table\TableNetworkDistance.h"
 						>
 					</File>
 					<File

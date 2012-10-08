@@ -68,6 +68,8 @@
 #include "Applications\Raster\Mapresmp2.h"
 #include "Applications\Table\COLumntotime.H"
 #include "Applications\Table\coltimefromcolumns.h"
+#include "Applications\Table\TableNetworkDistance.h"
+
 
 //extern "C" _export vector<CommandInfo *>* getCommandInfo());
 
@@ -148,6 +150,7 @@ InfoVector* getCommandInfo() {
 	infos->push_back(CommandMap::newCommandInfo(createTableTranspose,"TableTranspose"));
 	infos->push_back(CommandMap::newCommandInfo(createTableAutoCorrSemiVar,"TableAutoCorrSemiVar"));
 	infos->push_back(CommandMap::newCommandInfo(createTableCreateTimeColumn,"TableCreateTimeColumn"));
+	infos->push_back(CommandMap::newCommandInfo(createTableNetworkDistance,"Table2DimNetworkDistance"));
 	infos->push_back(CommandMap::newCommandInfo(createColumnTimeFromColumns,"ColumnTimeFromColumns"));
 	
 

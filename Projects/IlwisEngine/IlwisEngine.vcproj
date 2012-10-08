@@ -1147,6 +1147,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\Sources\Engine\Base\Algorithm\NetworkDistance.cpp"
+						>
+					</File>
+					<File
 						RelativePath="..\..\Sources\Engine\Base\Algorithm\QSORT.CPP"
 						>
 					</File>
@@ -1216,6 +1220,10 @@
 						</File>
 						<File
 							RelativePath="..\..\Sources\Engine\Base\Algorithm\MaplistGraphFunction.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\Sources\Engine\Base\Algorithm\NetworkDistance.h"
 							>
 						</File>
 						<File

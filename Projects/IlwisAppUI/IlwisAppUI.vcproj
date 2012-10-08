@@ -225,6 +225,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\ApplicationsUI\FormNetworkDistance.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\ApplicationsUI\frmappia.cpp"
 				>
 			</File>
@@ -298,6 +302,10 @@
 				</File>
 				<File
 					RelativePath="..\..\Sources\ApplicationsUI\FormMaplistGraph.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\ApplicationsUI\FormNetworkDistance.h"
 					>
 				</File>
 				<File
