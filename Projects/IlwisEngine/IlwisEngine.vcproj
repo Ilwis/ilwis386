@@ -288,6 +288,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\Sources\Engine\Applications\Tbl2DimVirt.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Sources\Engine\Applications\Tblvirt.cpp"
 					>
 				</File>
@@ -356,6 +360,10 @@
 					</File>
 					<File
 						RelativePath="..\..\Sources\Engine\Applications\SEGVIRT.H"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Engine\Applications\Tbl2DimVirt.h"
 						>
 					</File>
 					<File
