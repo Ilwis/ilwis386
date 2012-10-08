@@ -294,7 +294,9 @@ bool ObjectInfo::fDependent(const FileName& fn)
 	String s;
 	ReadElement(sType.c_str(), "Type", fn, s);
 	if (fCIStrEqual(sType , "Matrix"))
-    return !fCIStrEqual(s, "RealMatrix");
+		return !fCIStrEqual(s, "RealMatrix");
+	else if (fCIStrEqual(s, "Table2Dim"))
+		ReadElement("Table2Dim", "Type", fn, s);
 	sType &= "Virtual";
 	return fCIStrEqual(s, sType);
 }
