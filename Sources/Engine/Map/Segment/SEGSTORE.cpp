@@ -520,7 +520,7 @@ Coord SegmentMapStore::crdCoord(Coord crd, ILWIS::Segment** seg, long& iNr) cons
 	double minDist = -1.0;
 	ILWIS::Segment *closestSeg = NULL;
 	vector<void *> segs;
-	geos::geom::Envelope env(crd.x - ptr.rProximity(), crd.y - ptr.rProximity(), crd.x + ptr.rProximity(), crd.y + ptr.rProximity());
+	geos::geom::Envelope env(crd.x - ptr.rProximity(), crd.x + ptr.rProximity(), crd.y - ptr.rProximity(), crd.y + ptr.rProximity());
 	spatialIndex->query(&env,segs);
 	for(int i = 0; i < segs.size(); ++i) {
 		ILWIS::Segment *s = (ILWIS::Segment *)segs.at(i);
@@ -568,7 +568,7 @@ Coord SegmentMapStore::crdPoint(Coord crd, ILWIS::Segment** seg, long& iNr,
 	vector<void *> segs;
 	if ( rPrx == rUNDEF)
 		rPrx = ptr.rProximity();
-	geos::geom::Envelope env(crd.x - rPrx, crd.y - rPrx, crd.x + rPrx, crd.y + rPrx);
+	geos::geom::Envelope env(crd.x - rPrx, crd.x + rPrx, crd.y - rPrx, crd.y + rPrx);
 	spatialIndex->query(&env,segs);
 	for(int i = 0; i < segs.size(); ++i) {
 		ILWIS::Segment *s = (ILWIS::Segment *)segs.at(i);
@@ -779,7 +779,7 @@ vector<Feature *> SegmentMapStore::getFeatures(const CoordBounds& cb, bool compl
 	vector<void *> segs;
 	vector<Feature *> features;
 
-	geos::geom::Envelope env(cb.MinX(), cb.MinY(), cb.MaxX(), cb.MaxY());
+	geos::geom::Envelope env(cb.MinX(), cb.MaxX(), cb.MinY(), cb.MaxY());
 	spatialIndex->query(&env,segs);
 	for(int i = 0; i < segs.size(); ++i) {
 		ILWIS::Segment *s = (ILWIS::Segment *)segs.at(i);
