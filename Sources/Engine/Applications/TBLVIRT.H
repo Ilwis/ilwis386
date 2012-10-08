@@ -48,6 +48,7 @@
 class _export TableVirtual : public IlwisObjectVirtual
 {
   friend class TablePtr;
+  friend class Table2DimPtr;
   friend class ObjectDependency;
 protected:
   TableVirtual(const FileName&, TablePtr&, bool fCreate=false);
