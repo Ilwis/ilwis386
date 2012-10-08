@@ -993,6 +993,8 @@ bool CommandHandler::fCmdCalc(const String& sCmd)
 		sType = "mpl";
 	else if (fn.sExt == ".tbt")
 		sType = "tbl";
+	else if (fn.sExt == ".ta2")
+		sType = "ta2";
 	else if (fn.sExt == ".mps")
 		sType = "seg";
 	else if (fn.sExt == ".mpa")
@@ -1039,6 +1041,8 @@ bool CommandHandler::fCmdCalc(const String& sCmd)
 							sType = "mpl"; break;
 						case IlwisObject::iotTABLE :
 							sType = "tbl"; break;
+						case IlwisObject::iotTABLE2DIM:
+							sType = "ta2"; break;
 						case IlwisObject::iotMATRIX :
 							sType = "mat"; break;
 						case IlwisObject::iotOBJECTCOLLECTION :
@@ -1070,9 +1074,13 @@ bool CommandHandler::fCmdCalc(const String& sCmd)
 				sType = "map";
 			else if (fCIStrEqual(sExpres.sLeft(5) , "Table")) 
 			{
-				sType = "tbl";
-				if (fCIStrEqual(sExpres.sLeft(14) , "TableHistogram"))
-					fAskOverwrite = false;
+				if (fCIStrEqual(sExpres.sLeft(9) , "Table2Dim"))
+					sType = "ta2";
+				else {
+					sType = "tbl";
+					if (fCIStrEqual(sExpres.sLeft(14) , "TableHistogram"))
+						fAskOverwrite = false;
+				}
 			}
 			else if (fCIStrEqual(sExpres.sLeft(10) , "SegmentMap"))
 				sType = "seg";
@@ -1103,6 +1111,8 @@ bool CommandHandler::fCmdCalc(const String& sCmd)
 		else if (fCIStrEqual(sExpres.sLeft(14) , "TableHistogram"))
 			fn.sExt = ".his";
 	}
+	else if ("ta2" == sType)
+		fn.sExt = ".ta2";
 	else if ("seg" == sType)
 		fn.sExt = ".mps";
 	else if ("pol" == sType)
@@ -1172,6 +1182,10 @@ bool CommandHandler::fCmdCalc(const String& sCmd)
 	}
 	else if ("tbl" == sType) {
 		Table tbl(fn, sExpres);
+		fOk = tbl.fValid();
+	}
+	else if ("ta2" == sType) {
+		Table2Dim tbl(fn, sExpres);
 		fOk = tbl.fValid();
 	}
 	else if ("seg" == sType) {
@@ -2475,7 +2489,7 @@ void CommandHandler::CalcObjects(const String& sCommand, Tranquilizer* trq)
 	Array<FileName> afn;
 	Array<String> asExt;
 	asExt &= ".mpr"; asExt &= ".mpp"; asExt &= ".mpa"; asExt &= ".mps"; asExt &= ".tbt";
-	asExt &= ".his"; asExt &= ".hsp"; asExt &= ".hss"; asExt &= ".hsa";
+	asExt &= ".his"; asExt &= ".hsp"; asExt &= ".hss"; asExt &= ".hsa"; asExt &= ".ta2";
 	asExt &= ".mpl"; asExt &= ".mat"; asExt &= ".stp";
 	File::GetFileNames(sFileMask, afn, &asExt);
 	for (unsigned int i=0; i < afn.iSize(); ++i) 
@@ -2588,7 +2602,7 @@ void CommandHandler::BreakDepObjects(const String& sCommand, Tranquilizer* trq)
 	Array<FileName> afn;
 	Array<String> asExt;
 	asExt &= ".mpr"; asExt &= ".mpp"; asExt &= ".mpa"; asExt &= ".mps"; asExt &= ".tbt";
-	asExt &= ".mat"; asExt &= ".mpl"; asExt &= ".stp"; asExt&=".ioc";
+	asExt &= ".mat"; asExt &= ".mpl"; asExt &= ".stp"; asExt&=".ioc"; asExt &= ".ta2";
 	File::GetFileNames(sFileMask, afn, &asExt);
 	if (fForce)
 	{
