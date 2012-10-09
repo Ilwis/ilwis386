@@ -18,6 +18,7 @@ FormLandAllocation::FormLandAllocation(CWnd* mw, const char* sPar)
 , m_la(0)
 {
 	iMethod = 0;
+	iDistance = 0;
 	fCapacitated = false;
 	iStoppingCriteria = 0;
 	iGenerations = 60;
@@ -43,7 +44,12 @@ FormLandAllocation::FormLandAllocation(CWnd* mw, const char* sPar)
 	fsTotalDemands = new FieldString(fgLeft, TR("Total Demands"), &sTotalDemands);
 	fcDemandsPreference = new FieldColumn(rbMulti, TR("Demands Preference"), Table(), &sColDemandsPreference);
 	fcDemandsPreference->Align(fsTotalDemands, AL_UNDER);
+	RadioGroup* rgDistance = new RadioGroup(fgLeft, "", &iDistance);
+	RadioButton* rbEuclidean = new RadioButton(rgDistance, TR("&Euclidean Distance"));
+	RadioButton* rbODMatrix = new RadioButton(rgDistance, TR("OD-Matrix"));
+	ftbODMatrix = new Field2DimTable(rbODMatrix, "", &sODMatrix);
 	fiOptimalFacilities = new FieldInt(fgLeft, TR("Nr &Optimal Facilities"), &iOptimalFacilities, ValueRange(1, 32767), true);
+	fiOptimalFacilities->Align(rbODMatrix, AL_UNDER);
 	new CheckBox(fgLeft, TR("&Capacitated"), &fCapacitated);
 	//new FieldInt(fgLeft, TR("&Stack Threshold"), &iStoppingCriteria, ValueRange(0, 32767), true);
 	new FieldInt(fgLeft, TR("&Generations"), &iGenerations, ValueRange(0, 2147483647), true);
@@ -142,6 +148,8 @@ int FormLandAllocation::FacilitiesCallBack(Event*)
 			Table tbl = pmFacilities->tblAtt();
 			fcFacilitiesType->FillWithColumns(&tbl);
 		}
+		ftbODMatrix->SetDomain1(pmFacilities->dm());
+		ftbODMatrix->SetVal("");
 	}
 	return 0; 
 }
@@ -172,6 +180,8 @@ int FormLandAllocation::DemandsCallBack(Event*)
 			Table tbl = pmDemands->tblAtt();
 			fcDemandsPreference->FillWithColumns(&tbl);
 		}
+		ftbODMatrix->SetDomain2(pmDemands->dm());
+		ftbODMatrix->SetVal("");
 	}
 	return 0; 
 }
@@ -218,7 +228,7 @@ UINT FormLandAllocation::GenerateParetoGraphInThread(LPVOID pParam)
 	PointMap pmDemandsNoAttribute(PointMapLandAllocation::fnGetSourceFile(pmDemands, fn));
 	if (pObject->m_la)
 		delete pObject->m_la;
-	pObject->m_la = new LandAllocation(pmFacilities, pmFacilitiesNoAttribute, pObject->sColFacilitiesType, pmDemands, pmDemandsNoAttribute, pObject->sColDemandsPreference,
+	pObject->m_la = new LandAllocation(pmFacilities, pmFacilitiesNoAttribute, pObject->sColFacilitiesType, pmDemands, pmDemandsNoAttribute, pObject->sColDemandsPreference, pObject->sODMatrix,
 							   pObject->iOptimalFacilities, pObject->fCapacitated, pObject->iStoppingCriteria, pObject->iGenerations, pObject->iPopulationSize, pObject->iNelite, pObject->iNpareto, pObject->rMutationPercent, pObject->rCrossoverPercent);
 
 	Tranquilizer trq;
@@ -321,10 +331,12 @@ int FormLandAllocation::exec()
 	sPointMapFacilities = fnPointMapFacilities.sRelativeQuoted(false,fn.sPath());
 	FileName fnPointMapDemands(sPointMapDemands);
 	sPointMapDemands = fnPointMapDemands.sRelativeQuoted(false,fn.sPath());
+	FileName fnODMatrix(sODMatrix);
+	sODMatrix = fnODMatrix.sRelativeQuoted(false,fn.sPath());
 	if (iMethod == 0)
-		sExpr = String("PointMapLandAllocation(%S,%S,%d,%s,%d,%d,%d,%f,%f)", sPointMapFacilities, sPointMapDemands, iOptimalFacilities, fCapacitated ? "capacitated" : "plain", iStoppingCriteria, iGenerations, iPopulationSize, rMutationPercent / 100.0, rCrossoverPercent / 100.0);
+		sExpr = String("PointMapLandAllocation(%S,%S,%s,%d,%s,%d,%d,%d,%f,%f)", sPointMapFacilities, sPointMapDemands, (iDistance>0)?sODMatrix.c_str():"", iOptimalFacilities, fCapacitated ? "capacitated" : "plain", iStoppingCriteria, iGenerations, iPopulationSize, rMutationPercent / 100.0, rCrossoverPercent / 100.0);
 	else // iMethod == 1
-		sExpr = String("PointMapLandAllocation(%S,%S,%S,%S,%d,%s,%d,%d,%d,%d,%d,%f,%f)", sPointMapFacilities, sColFacilitiesType, sPointMapDemands, sColDemandsPreference, iOptimalFacilities, fCapacitated ? "capacitated" : "plain", iStoppingCriteria, iGenerations, iPopulationSize, iNelite, iNpareto, rMutationPercent / 100.0, rCrossoverPercent / 100.0);
+		sExpr = String("PointMapLandAllocation(%S,%S,%S,%S,%s,%d,%s,%d,%d,%d,%d,%d,%f,%f)", sPointMapFacilities, sColFacilitiesType, sPointMapDemands, sColDemandsPreference, (iDistance>0)?sODMatrix.c_str():"", iOptimalFacilities, fCapacitated ? "capacitated" : "plain", iStoppingCriteria, iGenerations, iPopulationSize, iNelite, iNpareto, rMutationPercent / 100.0, rCrossoverPercent / 100.0);
 	execPointMapOut(sExpr);  
 	return 0;
 }

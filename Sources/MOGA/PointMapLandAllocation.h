@@ -11,7 +11,7 @@ class DATEXPORT PointMapLandAllocation: public PointMapVirtual
   friend class PointMapVirtual;
 public:
   PointMapLandAllocation(const FileName&, PointMapPtr&);
-  PointMapLandAllocation(const FileName& fn, PointMapPtr&, const PointMap& _pmFacilities, const PointMap& _pmFacilitiesNoAttribute, const String& _sColFacilitiesType, const PointMap& _pmDemands, const PointMap& _pmDemandsNoAttribute, const String& _sColDemandsPreference, int _iOptimalFacilities, bool _fCapacitated, int _iStoppingCriteria, long _iGenerations, int _iPopulationSize, int _iNelite, int _iNpareto, double _rMutationPercent, double _rCrossoverPercent);
+  PointMapLandAllocation(const FileName& fn, PointMapPtr&, const PointMap& _pmFacilities, const PointMap& _pmFacilitiesNoAttribute, const String& _sColFacilitiesType, const PointMap& _pmDemands, const PointMap& _pmDemandsNoAttribute, const String& _sColDemandsPreference, const String& _sODMatrix, int _iOptimalFacilities, bool _fCapacitated, int _iStoppingCriteria, long _iGenerations, int _iPopulationSize, int _iNelite, int _iNpareto, double _rMutationPercent, double _rCrossoverPercent);
   ~PointMapLandAllocation();
   static const char* sSyntax();
   virtual String sExpression() const;
@@ -29,6 +29,7 @@ private:
   PointMap pmDemandsNoAttribute; // The original pointmap, before applying MapAttribute
   String sColFacilitiesType;
   String sColDemandsPreference;
+  String sODMatrix;
   // Algorithm parameters
   int iOptimalFacilities;
   bool fCapacitated;

@@ -5,9 +5,10 @@
 #include "Client\TableWindow\CartesianGraphDoc.h"
 #include "Engine\Applications\SEGVIRT.H"
 #include "PointMapLandAllocation.h"
+#include "Engine\Table\tbl2dim.h"
 
 
-LandAllocation::LandAllocation(const PointMap& _pmFacilities, const PointMap& _pmFacilitiesNoAttribute, const String& _sColFacilitiesType, const PointMap& _pmDemands, const PointMap& _pmDemandsNoAttribute, const String& _sColDemandsPreference,
+LandAllocation::LandAllocation(const PointMap& _pmFacilities, const PointMap& _pmFacilitiesNoAttribute, const String& _sColFacilitiesType, const PointMap& _pmDemands, const PointMap& _pmDemandsNoAttribute, const String& _sColDemandsPreference, const String& _sODMatrix,
 							   int _iOptimalFacilities, bool _fCapacitated, int _iStoppingCriteria, long _iGenerations, int _iPopulationSize, int _iNelite, int _iNpareto, double _rMutationPercent, double _rCrossoverPercent)
 : pmFacilities(_pmFacilities)
 , pmFacilitiesNoAttribute(_pmFacilitiesNoAttribute)
@@ -15,6 +16,7 @@ LandAllocation::LandAllocation(const PointMap& _pmFacilities, const PointMap& _p
 , pmDemands(_pmDemands)
 , pmDemandsNoAttribute(_pmDemandsNoAttribute)
 , sColDemandsPreference(_sColDemandsPreference)
+, sODMatrix(_sODMatrix)
 , iOptimalFacilities(_iOptimalFacilities)
 , fCapacitated(_fCapacitated)
 , iStoppingCriteria(_iStoppingCriteria)
@@ -65,17 +67,61 @@ void LandAllocation::Init()
 	  cFacilities[i] = pmFacilities->cValue(i);
   
   rDistanceOD.resize(iNrDemandPoints);
-  for (int demandIndex = 0; demandIndex < iNrDemandPoints; ++demandIndex) {
-	  rDistanceOD[demandIndex].resize(iNrFacilities);
-	  for (int facilityIndex = 0; facilityIndex < iNrFacilities; ++facilityIndex) {
-		  double rDistance = rDist(cFacilities[facilityIndex], cDemands[demandIndex]);
-		  rDistanceOD[demandIndex][facilityIndex] = rDistance;
-		  if (rMinDistance == rUNDEF) {
-			  rMinDistance = rDistance;
-			  rMaxDistance = rDistance;
-		  } else {
-			  rMinDistance = min(rMinDistance, rDistance);
-			  rMaxDistance = max(rMaxDistance, rDistance);
+  if (sODMatrix != "") {
+	  Table2Dim table (sODMatrix);
+	  if (table->dm1() == pmDemandsNoAttribute->dm() && table->dm2() == pmFacilitiesNoAttribute->dm()) {
+		  for (int demandIndex = 0; demandIndex < iNrDemandPoints; ++demandIndex) {
+			  rDistanceOD[demandIndex].resize(iNrFacilities);
+			  for (int facilityIndex = 0; facilityIndex < iNrFacilities; ++facilityIndex) {
+				  double rDistance = table->rValue(demandIndex + 1, facilityIndex + 1);
+				  rDistanceOD[demandIndex][facilityIndex] = rDistance;
+				  if (rMinDistance == rUNDEF) {
+					  rMinDistance = rDistance;
+					  rMaxDistance = rDistance;
+				  } else {
+					  rMinDistance = min(rMinDistance, rDistance);
+					  rMaxDistance = max(rMaxDistance, rDistance);
+				  }
+			  }
+		  }
+	  } else if (table->dm2() == pmDemandsNoAttribute->dm() && table->dm1() == pmFacilitiesNoAttribute->dm()) {
+		  for (int demandIndex = 0; demandIndex < iNrDemandPoints; ++demandIndex) {
+			  rDistanceOD[demandIndex].resize(iNrFacilities);
+			  for (int facilityIndex = 0; facilityIndex < iNrFacilities; ++facilityIndex) {
+				  double rDistance = table->rValue(facilityIndex + 1, demandIndex + 1);
+				  rDistanceOD[demandIndex][facilityIndex] = rDistance;
+				  if (rMinDistance == rUNDEF) {
+					  rMinDistance = rDistance;
+					  rMaxDistance = rDistance;
+				  } else {
+					  rMinDistance = min(rMinDistance, rDistance);
+					  rMaxDistance = max(rMaxDistance, rDistance);
+				  }
+			  }
+		  }
+	  } else { // should never happen!! (OD matrix does not "fit" the selected pointmaps)
+		  for (int demandIndex = 0; demandIndex < iNrDemandPoints; ++demandIndex) {
+			  rDistanceOD[demandIndex].resize(iNrFacilities);
+			  for (int facilityIndex = 0; facilityIndex < iNrFacilities; ++facilityIndex) {
+				  rDistanceOD[demandIndex][facilityIndex] = rUNDEF;
+			  }
+		  }
+		  rMinDistance = rUNDEF;
+		  rMaxDistance = rUNDEF;
+	  }
+  } else {
+	  for (int demandIndex = 0; demandIndex < iNrDemandPoints; ++demandIndex) {
+		  rDistanceOD[demandIndex].resize(iNrFacilities);
+		  for (int facilityIndex = 0; facilityIndex < iNrFacilities; ++facilityIndex) {
+			  double rDistance = rDist(cFacilities[facilityIndex], cDemands[demandIndex]);
+			  rDistanceOD[demandIndex][facilityIndex] = rDistance;
+			  if (rMinDistance == rUNDEF) {
+				  rMinDistance = rDistance;
+				  rMaxDistance = rDistance;
+			  } else {
+				  rMinDistance = min(rMinDistance, rDistance);
+				  rMaxDistance = max(rMaxDistance, rDistance);
+			  }
 		  }
 	  }
   }
