@@ -75,12 +75,14 @@ void LandAllocation::Init()
 			  for (int facilityIndex = 0; facilityIndex < iNrFacilities; ++facilityIndex) {
 				  double rDistance = table->rValue(demandIndex + 1, facilityIndex + 1);
 				  rDistanceOD[demandIndex][facilityIndex] = rDistance;
-				  if (rMinDistance == rUNDEF) {
-					  rMinDistance = rDistance;
-					  rMaxDistance = rDistance;
-				  } else {
-					  rMinDistance = min(rMinDistance, rDistance);
-					  rMaxDistance = max(rMaxDistance, rDistance);
+				  if (rDistance != rUNDEF) {
+					  if (rMinDistance == rUNDEF) {
+						  rMinDistance = rDistance;
+						  rMaxDistance = rDistance;
+					  } else {
+						  rMinDistance = min(rMinDistance, rDistance);
+						  rMaxDistance = max(rMaxDistance, rDistance);
+					  }
 				  }
 			  }
 		  }
@@ -90,12 +92,14 @@ void LandAllocation::Init()
 			  for (int facilityIndex = 0; facilityIndex < iNrFacilities; ++facilityIndex) {
 				  double rDistance = table->rValue(facilityIndex + 1, demandIndex + 1);
 				  rDistanceOD[demandIndex][facilityIndex] = rDistance;
-				  if (rMinDistance == rUNDEF) {
-					  rMinDistance = rDistance;
-					  rMaxDistance = rDistance;
-				  } else {
-					  rMinDistance = min(rMinDistance, rDistance);
-					  rMaxDistance = max(rMaxDistance, rDistance);
+				  if (rDistance != rUNDEF) {
+					  if (rMinDistance == rUNDEF) {
+						  rMinDistance = rDistance;
+						  rMaxDistance = rDistance;
+					  } else {
+						  rMinDistance = min(rMinDistance, rDistance);
+						  rMaxDistance = max(rMaxDistance, rDistance);
+					  }
 				  }
 			  }
 		  }
@@ -266,10 +270,13 @@ GAChromosome * LandAllocation::PerformLandAllocation(Tranquilizer & trq)
 double LandAllocation::rStdDistanceFunc(int demandIndex, int facilityIndex)
 {
 	double distanceFacilityDemand = rDistanceOD[demandIndex][facilityIndex];
-	//double rScore = 1 - distanceFacilityDemand / rMaxDistance + rMinDistance / rMaxDistance; // MAXIMUM
-	//double rScore = 1 / distanceFacilityDemand; // ORIGINAL FORMULA (not standardized to [0..1])
-	double rScore = 1 - (distanceFacilityDemand - rMinDistance) / (rMaxDistance - rMinDistance); // INTERVAL
-	return rScore;
+	if (distanceFacilityDemand != rUNDEF) {
+		//double rScore = 1 - distanceFacilityDemand / rMaxDistance + rMinDistance / rMaxDistance; // MAXIMUM
+		//double rScore = 1 / distanceFacilityDemand; // ORIGINAL FORMULA (not standardized to [0..1])
+		double rScore = 1 - (distanceFacilityDemand - rMinDistance) / (rMaxDistance - rMinDistance); // INTERVAL
+		return rScore;
+	} else
+		return 0; // rUNDEF distance scores "0" for the std-distance (it should actually be "worse" than rMaxDistance, but this implicates that constraints must be introduced).
 }
 
 double LandAllocation::rStdPreferenceFunc(int demandIndex, int facilityIndex)
@@ -643,7 +650,10 @@ void LandAllocation::StoreChromosome(GAChromosome * chromosome, PointMapPtr * pn
 		}
 		for (unsigned long i = 0; i < iNrSegments; ++i) {
 			allocationsGrouped[destination[i]] += allocations[i];
-			distancesGrouped[destination[i]] += allocations[i] * rDistanceOD[source[i]][destination[i]];
+			double rDistance = rDistanceOD[source[i]][destination[i]];
+			if (rDistance == rUNDEF)
+				rDistance = rMaxDistance; // anyway this is how distance=rUNDEF was "standardized" (see rStdDistanceFunc)
+			distancesGrouped[destination[i]] += allocations[i] * rDistance;
 		}
 
 		RealBuf rbAllocationsGrouped (iOptimalFacilities);
