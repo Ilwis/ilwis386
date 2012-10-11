@@ -630,11 +630,12 @@ void MapWindow::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 }
 LONG MapWindow::OnSelectFeatures(UINT wParam, LONG lParam)
 {
-	RowSelectInfo inf = *(RowSelectInfo *)wParam;
+	RowSelectInfo * inf = (RowSelectInfo *)wParam;
 	MapCompositionDoc *doc = dynamic_cast<MapCompositionDoc *>(pFirstView->GetDocument());
-	if ( doc) {
+	if ( doc)
 		doc->selectFeatures(inf);
-	}
+	else
+		delete inf;
 
 	return 1;
 }

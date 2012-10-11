@@ -830,8 +830,9 @@ void TableWindow::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
 
 LONG TableWindow::OnSelectFeatures(UINT wParam, LONG lParam)
 {
-	RowSelectInfo inf = *(RowSelectInfo *)wParam;
-	tpv->selectFeatures(inf);
+	RowSelectInfo * inf = (RowSelectInfo *)wParam;
+	tpv->selectFeatures(*inf);
+	delete inf;
 
 	return 1;
 }

@@ -92,7 +92,7 @@ public:
 	{ return (MapCompositionSrvItem*)CatalogDocument::GetEmbeddedItem(); }
 	MapPaneView* mpvGetView() const;
 	LayerTreeView* ltvGetView() const;
-	void selectFeatures(const RowSelectInfo& inf);
+	void selectFeatures(const RowSelectInfo * inf);
 
 	BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo); 
 	void initBounds(MinMax mm);
@@ -139,6 +139,7 @@ private:
 	virtual void DeleteContents();
 	ILWIS::NewDrawer *createBaseMapDrawer(const BaseMap& bmp, const String& type, const String& subtype, OpenType ot, int);
 	BOOL OnOpenObjectCollection(const ObjectCollection& list, OpenType ot, const String& subtype="ilwis38", int os=IlwisWinApp::osNormal);
+	static UINT selectFeaturesInThread(LPVOID pParam);
 
 private:
 	afx_msg void OnExtCoord();
@@ -180,6 +181,11 @@ private:
 	FileName fnView;
 	NewDrawer *selectedDrawer;
 	int state;
+	vector<const RowSelectInfo*> m_selectionQueue;
+	bool m_fAbortSelectionThread;
+	CWinThread * m_selectionThread;
+	CCriticalSection csSelectionThread;
+	CCriticalSection csSelectionQueue;
 	DECLARE_DYNCREATE(MapCompositionDoc)
 	DECLARE_MESSAGE_MAP()
 };

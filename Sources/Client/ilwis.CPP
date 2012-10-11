@@ -2549,10 +2549,10 @@ void IlwisWinApp::showHelp(const String& helpfile) {
 
 void IlwisWinApp::SendUpdateTableSelection(const vector<long>& raws, const FileName& fnObj, long self){
 	for(list<HWND>::const_iterator cur = lhWindows.begin(); cur != lhWindows.end(); ++cur) {
-		RowSelectInfo inf;
-		inf.fn = fnObj;
-		inf.raws = raws;
-		inf.sender = self;
-		SendMessage((*cur), MESSAGE_SELECT_ROW,(WPARAM)&inf, 0);
+		RowSelectInfo * inf = new RowSelectInfo();
+		inf->fn = fnObj;
+		inf->raws = raws;
+		inf->sender = self;
+		SendMessage((*cur), MESSAGE_SELECT_ROW,(WPARAM)inf, 0);
 	}
 }

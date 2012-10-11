@@ -156,6 +156,8 @@ END_MESSAGE_MAP()
 
 MapCompositionDoc::MapCompositionDoc()
 : gbHist(0)
+, m_fAbortSelectionThread(false)
+, m_selectionThread(0)
 {
 	iListState = 0;
 	fInCmdMsg = false;
@@ -169,6 +171,13 @@ MapCompositionDoc::MapCompositionDoc()
 
 MapCompositionDoc::~MapCompositionDoc()
 {
+	if (m_selectionThread) {
+		m_fAbortSelectionThread = true;
+		m_selectionThread->ResumeThread();
+		csSelectionThread.Lock(); // wait here til thread exits
+		csSelectionThread.Unlock();
+	}
+
 	delete rootDrawer;
 	if ( state & IlwisWinApp::osExitOnClose)
 		AfxGetApp()->PostThreadMessage(WM_QUIT,0,0);
@@ -2131,15 +2140,51 @@ FileName MapCompositionDoc::getViewName() const{
 	return fnView;
 }
 
-void MapCompositionDoc::selectFeatures(const RowSelectInfo& inf) {
-	if ( inf.sender == (long)mpvGetView())
-		return;
+UINT MapCompositionDoc::selectFeaturesInThread(LPVOID pParam) {
+	MapCompositionDoc * doc = (MapCompositionDoc*)pParam;
+	if (doc == NULL)
+		return 1;
 
-	PreparationParameters pp(NewDrawer::ptRENDER);
-	pp.rowSelect = inf;
-	rootDrawer->prepare(&pp);
-	mpvGetView()->Invalidate();
+	doc->csSelectionThread.Lock();
+
+	while (!doc->m_fAbortSelectionThread)
+	{
+		while(doc->m_selectionQueue.size() > 0) {
+			doc->csSelectionQueue.Lock();
+			const RowSelectInfo * inf = doc->m_selectionQueue[doc->m_selectionQueue.size() - 1];
+			doc->m_selectionQueue.pop_back();
+			while(doc->m_selectionQueue.size() > 0) { // delete all older queued selection messages; only the last one counts
+				const RowSelectInfo * inf = doc->m_selectionQueue[doc->m_selectionQueue.size() - 1];
+				doc->m_selectionQueue.pop_back();
+				delete inf;
+			}		
+			doc->csSelectionQueue.Unlock();
+
+			if ( !doc->m_fAbortSelectionThread && inf->sender != (long)doc->mpvGetView()) {
+				PreparationParameters pp(NewDrawer::ptRENDER);
+				pp.rowSelect = *inf;
+				doc->rootDrawer->prepare(&pp); // do we need a semaphore on "prepare"? can prepare be called simultaneously from another thread?
+				doc->mpvGetView()->Invalidate();
+			}
+			delete inf;
+		}
+		if (!doc->m_fAbortSelectionThread)
+			doc->m_selectionThread->SuspendThread(); // wait here, and dont consume CPU time either
+	}
 	
+	doc->m_fAbortSelectionThread = false;
+	doc->csSelectionThread.Unlock();
+	return 0;
+}
+
+void MapCompositionDoc::selectFeatures(const RowSelectInfo * inf) {
+	csSelectionQueue.Lock();
+	m_selectionQueue.push_back(inf);
+	csSelectionQueue.Unlock();
+	if (!m_selectionThread)
+		m_selectionThread = AfxBeginThread(selectFeaturesInThread, this);
+	else
+		m_selectionThread->ResumeThread();
 }
 
 
