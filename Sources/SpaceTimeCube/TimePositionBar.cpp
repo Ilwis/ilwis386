@@ -40,7 +40,6 @@
 
 #include "Client\Headers\formelementspch.h"
 #include "TimePositionBar.h"
-#include "SpaceTimeCubeTool.h"
 #include "Client\Mapwindow\InfoLine.h"
 
 #ifdef _DEBUG
@@ -60,7 +59,6 @@ END_MESSAGE_MAP()
 
 TimeSliderCtrl::TimeSliderCtrl()
 : CSliderCtrl()
-, spaceTimeCube(0)
 , info(0)
 , fDragging(false)
 , fShift(false)
@@ -83,12 +81,6 @@ BOOL TimeSliderCtrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, U
 		return FALSE;
 }
 
-void TimeSliderCtrl::SetSpaceTimeCube(SpaceTimeCube * _spaceTimeCube)
-{
-	spaceTimeCube = _spaceTimeCube;
-	SetPos(sliderRange - spaceTimeCube->GetTime() * sliderRange);
-}
-
 void TimeSliderCtrl::SetTimePosText(String * _sTimePosText)
 {
 	sTimePosText = _sTimePosText;
@@ -96,8 +88,15 @@ void TimeSliderCtrl::SetTimePosText(String * _sTimePosText)
 
 void TimeSliderCtrl::VScroll(UINT nSBCode, UINT nPos)
 {
-	if (spaceTimeCube != 0 && nSBCode == TB_THUMBTRACK)
-		spaceTimeCube->SetTime((sliderRange - nPos) / (double)sliderRange, fShift);
+	if (nSBCode == TB_THUMBTRACK)
+		SendTimeMessage((sliderRange - nPos) / (double)sliderRange, fShift, long(this));
+}
+
+void TimeSliderCtrl::SetTime(double timePerc, bool fShiftDown, long sender)
+{
+	if (sender == (long) this)
+		return;
+	SetPos(sliderRange - timePerc * sliderRange);
 }
 
 void TimeSliderCtrl::ShowInfoText()
@@ -188,9 +187,9 @@ void TimePositionBar::OnSize(UINT nType, int cx, int cy)
 		slider.MoveWindow(0, 0, cx, cy);
 }
 
-void TimePositionBar::SetSpaceTimeCube(SpaceTimeCube * _spaceTimeCube)
+void TimePositionBar::SetTime(double timePerc)
 {
-	slider.SetSpaceTimeCube(_spaceTimeCube);
+	slider.SetTime(timePerc, false, 0);
 }
 
 void TimePositionBar::SetTimePosText(String * _sTimePosText)
