@@ -267,6 +267,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\SpaceTimeCube\TimeMessages.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\SpaceTimeCube\TimePositionBar.h"
 				>
 			</File>
@@ -344,6 +348,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\SpaceTimeCube\TimeBounds.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\SpaceTimeCube\TimeMessages.cpp"
 				>
 			</File>
 			<File
