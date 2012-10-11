@@ -6,10 +6,13 @@ ILWIS::DrawerTool *createTimeProfileTool(ZoomableView* zv, LayerTreeView *view, 
 #include "Client\FormElements\FieldGraph.h"
 #include "Engine\Base\Algorithm\SimpleFunction.h"
 #include "Client\FormElements\FormBaseWnd.h"
+#include "TimeMessages.h"
 
 class InfoLine;
 
 namespace ILWIS {
+
+	class TimeProfileWindow;
 
 	class TimeProfileTool : public DrawerTool {
 	public:
@@ -18,12 +21,14 @@ namespace ILWIS {
 		bool isToolUseableFor(ILWIS::DrawerTool *tool);
 		HTREEITEM configure( HTREEITEM parentItem);
 		String getMenuString() const;
+		void closeTimeProfileWindow();
 	private:
 		void startTimeProfileForm();
 		SpaceTimePathDrawer *stpdrw;
+		TimeProfileWindow * tpw;
 	};
 
-	class ProfileGraphWindow : public SimpleGraphWindow
+	class ProfileGraphWindow : public SimpleGraphWindow, public TimeListener, public TimeProvider
 	{
 	public:
 		ProfileGraphWindow(SpaceTimePathDrawer *_stpdrw);
@@ -33,6 +38,7 @@ namespace ILWIS {
 		void SetGrid(bool gridXN, bool gridXT, bool gridYT);
 		void SelectFeatures(RowSelectInfo & inf);
 		virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
+		virtual void SetTime(double timePerc, bool fShiftDown, long sender);
 
 	protected:
 		virtual void DrawFunction(CDC* pDC, const SimpleFunction * pFunc);
@@ -143,12 +149,14 @@ namespace ILWIS {
 	class TimeProfileWindow: public CWnd
 	{
 	public:
-		TimeProfileWindow(SpaceTimePathDrawer * stpdrw);
+		TimeProfileWindow(SpaceTimePathDrawer * stpdrw, TimeProfileTool * _tpt);
+		~TimeProfileWindow();
 	protected:
 		afx_msg void OnSize(UINT nType, int cx, int cy);
 		afx_msg void OnClose();
 		ProfileGraphWindow * sgw;
 		TimeProfileForm * tpf;
+		TimeProfileTool * tpt;
 
 		DECLARE_MESSAGE_MAP()
 	};

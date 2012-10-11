@@ -30,11 +30,13 @@ DrawerTool *createTimeProfileTool(ZoomableView* zv, LayerTreeView *view, NewDraw
 TimeProfileTool::TimeProfileTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw)
 : DrawerTool("TimeProfileTool",zv, view, drw)
 , stpdrw(0)
+, tpw(0)
 {
 }
 
 TimeProfileTool::~TimeProfileTool()
 {
+	closeTimeProfileWindow();
 }
 
 bool TimeProfileTool::isToolUseableFor(ILWIS::DrawerTool *tool) { 
@@ -65,7 +67,15 @@ String TimeProfileTool::getMenuString() const
 
 void TimeProfileTool::startTimeProfileForm()
 {
-	TimeProfileWindow * tpw = new TimeProfileWindow(stpdrw);
+	closeTimeProfileWindow();
+	tpw = new TimeProfileWindow(stpdrw, this);
+}
+
+void TimeProfileTool::closeTimeProfileWindow()
+{
+	if (tpw)
+		delete tpw;
+	tpw = 0;
 }
 
 BEGIN_MESSAGE_MAP(ProfileGraphWindow, SimpleGraphWindow)
@@ -147,10 +157,24 @@ void ProfileGraphWindow::Drag(CPoint point)
 	if (m_fDragging)
 	{
 		mousePos = point;
+		CRect functionPlotRect (GetFunctionPlotRect());
+		if (mousePos.y >= functionPlotRect.top && mousePos.y <= functionPlotRect.bottom)
+			SendTimeMessage((functionPlotRect.bottom - mousePos.y) / (double)functionPlotRect.Height(), false, long(this));
 		SelectionChanged();
 		fDrawAxes = true;
 		SetDirty();
 	}
+}
+
+void ProfileGraphWindow::SetTime(double timePerc, bool fShiftDown, long sender)
+{
+	if (sender == (long) this)
+		return;
+	CRect functionPlotRect (GetFunctionPlotRect());
+	mousePos.y = functionPlotRect.bottom - functionPlotRect.Height() * timePerc;
+	SelectionChanged(); // for now we allow this to influence the selections too; solve if users find this too much of a side-effect
+	fDrawAxes = true;
+	SetDirty();
 }
 
 void ProfileGraphWindow::EndDrag(CPoint point)
@@ -949,8 +973,9 @@ int TimeProfileForm::CallBackYTGrid(Event*)
 
 LONG TimeProfileForm::OnSelectFeatures(UINT wParam, LONG lParam)
 {
-	RowSelectInfo inf = *(RowSelectInfo *)wParam;
-	pgw->SelectFeatures(inf);
+	RowSelectInfo * inf = (RowSelectInfo *)wParam;
+	pgw->SelectFeatures(*inf);
+	delete inf;
 
 	return 1;
 }
@@ -1139,9 +1164,10 @@ ON_WM_CLOSE()
 //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-TimeProfileWindow::TimeProfileWindow(SpaceTimePathDrawer * stpdrw)
+TimeProfileWindow::TimeProfileWindow(SpaceTimePathDrawer * stpdrw, TimeProfileTool * _tpt)
 : sgw(0)
 , tpf(0)
+, tpt(_tpt)
 {
 
 	// take two third of screen as default size
@@ -1182,9 +1208,16 @@ void TimeProfileWindow::OnSize(UINT nType, int cx, int cy)
 
 void TimeProfileWindow::OnClose()
 {
+	if (tpt)
+		tpt->closeTimeProfileWindow();
+	else
+		delete this;
+}
+
+TimeProfileWindow::~TimeProfileWindow()
+{
 	if (tpf)
 		delete tpf;
 	if (sgw)
 		delete sgw;
-	delete this;
 }
