@@ -94,17 +94,18 @@ void InfoLine::text(zPoint pnt, const String &s)
   rect.right() = rect.left() + siz.cx + 4;
 	wParent->ClientToScreen(&rect);
 	GetWindowRect(&rectOld);
-  if (rect != rectOld) {
-    ShowWindow(SW_HIDE);
+  if (rect != rectOld)
     MoveWindow(rect);
-  }  
   if (sText != s) {
+	if (s == "")
+		ShowWindow(SW_HIDE);
+	else {
+		if (s != "")
+			SetWindowText(s.c_str());
+		if (sText == "")
+			ShowWindow(SW_SHOWNA);
+			// if (sText == "") UpdateWindow(); // to my opinion obsolete, though put it back if you observe any side-effects (Bas)
+	}
     sText = s;
-    if (sText != "")
-      SetWindowText(sText.c_str());
-  }
-  if (sText != "") {
-    ShowWindow(SW_SHOWNA);
-    UpdateWindow();
   }
 }
