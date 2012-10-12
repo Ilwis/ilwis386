@@ -240,7 +240,7 @@ void SpaceTimeCube::setUseSpaceTimeCube(bool yesno) {
 	if (useSpaceTimeCube) {
 		timePosBar = new TimePositionBar();
 		timePosBar->Create(mpv->dwParent());
-		timePosBar->SetSpaceTimeCube(this);
+		timePosBar->SetTime(timePos);
 		timePosBar->SetTimePosText(&sTimePosText);
 		mpv->GetParentFrame()->DockControlBar(timePosBar, AFX_IDW_DOCKBAR_LEFT);
 		refreshDrawerList();
@@ -488,12 +488,12 @@ bool SpaceTimeCube::showingLayerOptionsForm()
 	return layerOptionsForm != 0;
 }
 
-void SpaceTimeCube::SetTime(double time, bool fShiftDown) {
+void SpaceTimeCube::SetTime(double timePerc, bool fShiftDown, long sender) {
 	if (fShiftDown)
-		timeShift += timePos - time;
+		timeShift += timePos - timePerc;
 	else 
-		timeOffset += time - timePos;
-	timePos = time;
+		timeOffset += timePerc - timePos;
+	timePos = timePerc;
 	if (timeBoundsZoom->tMin().isValid() && timeBoundsZoom->tMax().isValid()) {
 		Time tPos (timeBoundsZoom->tMin() + (Time)((timeBoundsZoom->tMax() - timeBoundsZoom->tMin()) * timePos));
 		sTimePosText = tPos.toString();
@@ -511,10 +511,6 @@ TimeBounds * SpaceTimeCube::getTimeBoundsZoom() const
 const TimeBounds * SpaceTimeCube::getTimeBoundsFullExtent() const
 {
 	return timeBoundsFullExtent;
-}
-
-double SpaceTimeCube::GetTime() {
-	return timePos;
 }
 
 //------------------------------------------------------

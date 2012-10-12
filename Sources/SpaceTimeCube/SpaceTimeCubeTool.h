@@ -7,6 +7,7 @@
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\MapWindow\Drawers\DrawerTool.h"
+#include "TimeMessages.h"
 
 ILWIS::DrawerTool *createSpaceTimeCubeTool(ZoomableView* zv, LayerTreeView *view, ILWIS::NewDrawer *drw);
 
@@ -81,7 +82,7 @@ namespace ILWIS {
 	class LayerOptionsForm;
 	class TimePositionBar;
 
-	class SpaceTimeCube {
+	class SpaceTimeCube : public TimeListener {
 	public:
 		static SpaceTimeCube * getSpaceTimeCube(ZoomableView* mpv, LayerTreeView * tree, NewDrawer *drw);
 		static void deleteSpaceTimeCube(ZoomableView* mpv);
@@ -93,8 +94,7 @@ namespace ILWIS {
 		void setFormAutoDeleted();
 		void startLayerOptionsForm();
 		bool showingLayerOptionsForm();
-		void SetTime(double time, bool fShiftDown);
-		double GetTime();
+		virtual void SetTime(double timePerc, bool fShiftDown, long sender);
 		TimeBounds * getTimeBoundsZoom() const;
 		const TimeBounds * getTimeBoundsFullExtent() const;
 	private:
