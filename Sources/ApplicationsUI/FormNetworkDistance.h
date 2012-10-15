@@ -15,6 +15,7 @@ private:
   String sPointMapDestinations;
   String sSegmentMapNetwork;
   bool fProject;
+  bool fOutputMap;
 };
 
 #endif // FORMNETWORKDISTANCE_H

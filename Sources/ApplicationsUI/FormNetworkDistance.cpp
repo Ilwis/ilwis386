@@ -13,10 +13,12 @@ FormNetworkDistance::FormNetworkDistance(CWnd* mw, const char* sPar)
 : FormTableCreate(mw, TR("Network Distance of two Point Maps"))
 {
 	fProject = true;
+	fOutputMap = false;
 	new FieldPointMap(root, TR("&Origins Point Map"), &sPointMapOrigins, new MapListerDomainType(".mpp", 0, true));
 	new FieldPointMap(root, TR("&Destinations Point Map"), &sPointMapDestinations, new MapListerDomainType(".mpp", 0, true));
 	new FieldPointMap(root, TR("&Network Segment Map"), &sSegmentMapNetwork, new MapListerDomainType(".mps", 0, true));
 	new CheckBox(root, TR("&Project points onto segments"), &fProject);
+	new CheckBox(root, TR("&Generate Shortest Path Map"), &fOutputMap);
 
 	initTableOut(false);
 	SetHelpItem("ilwisapp\\mask_points_dialog_box.htm");
@@ -39,7 +41,11 @@ int FormNetworkDistance::exec()
 	sPointMapDestinations = fnPointMapDestinations.sRelativeQuoted(false,fn.sPath());
 	FileName fnSegmentMapNetwork(sSegmentMapNetwork);
 	sSegmentMapNetwork = fnSegmentMapNetwork.sRelativeQuoted(false,fn.sPath());
-	String sExpr = String("Table2DimNetworkDistance(%S,%S,%S,%s)", sPointMapOrigins, sPointMapDestinations, sSegmentMapNetwork, fProject?"project":"noproject");
+	String sExpr;
+	if (fOutputMap)
+		sExpr = String("Table2DimNetworkDistance(%S,%S,%S,%s,outputmap)", sPointMapOrigins, sPointMapDestinations, sSegmentMapNetwork, fProject?"project":"noproject");
+	else
+		sExpr = String("Table2DimNetworkDistance(%S,%S,%S,%s)", sPointMapOrigins, sPointMapDestinations, sSegmentMapNetwork, fProject?"project":"noproject");
 
 	if (fn.fExist()) {
 		String sErr(TR("File %S already exists.\nOverwrite?").c_str(), fn.sFullPath(true));
