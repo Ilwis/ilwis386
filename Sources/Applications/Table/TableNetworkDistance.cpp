@@ -10,14 +10,14 @@ IlwisObjectPtr * createTableNetworkDistance(const FileName& fn, IlwisObjectPtr& 
 }
 
 const char* TableNetworkDistance::sSyntax() {
-  return "Table2DimNetworkDistance(OriginPoints,DestinationPoints,NetworkMap,project|noproject)";
+  return "Table2DimNetworkDistance(OriginPoints,DestinationPoints,NetworkMap,project|noproject[,outputmap])";
 }
 
 TableNetworkDistance* TableNetworkDistance::create(const FileName& fn, TablePtr& p, const String& sExpr)
 {
   Array<String> as;
   short iParms = IlwisObjectPtr::iParseParm(sExpr, as);
-  if (iParms != 4)
+  if (iParms != 4 && iParms != 5)
 	throw ErrorExpression(sExpr, sSyntax());
 
   if ((as[3].compare("project") != 0) && (as[3].compare("noproject") != 0))
@@ -26,7 +26,10 @@ TableNetworkDistance* TableNetworkDistance::create(const FileName& fn, TablePtr&
   PointMap pmDestinations(as[1], fn.sPath());
   SegmentMap smNetwork(as[2], fn.sPath());
   bool fProject(as[3].compare("project") == 0);
-  return new TableNetworkDistance(fn, p, pmOrigins, pmDestinations, smNetwork, fProject);
+  bool fOutputMap = false;
+  if (iParms == 5)
+	  fOutputMap = (as[4].compare("outputmap") == 0);
+  return new TableNetworkDistance(fn, p, pmOrigins, pmDestinations, smNetwork, fProject, fOutputMap);
 }
 
 TableNetworkDistance::TableNetworkDistance(const FileName& fn, TablePtr& p)
@@ -38,6 +41,7 @@ TableNetworkDistance::TableNetworkDistance(const FileName& fn, TablePtr& p)
     ReadElement("Table2DimNetworkDistance", "PointMapDestinations", pmDestinations);
 	ReadElement("Table2DimNetworkDistance", "SegmentMapNetwork", smNetwork);
 	ReadElement("Table2DimNetworkDistance", "Project", fProject);
+	ReadElement("Table2DimNetworkDistance", "OutputMap", fOutputMap);
   }
   catch (const ErrorObject& err) {  // catch to prevent invalid object
     err.Show();
@@ -49,12 +53,13 @@ TableNetworkDistance::TableNetworkDistance(const FileName& fn, TablePtr& p)
   objdep.Add(smNetwork.ptr());
 }
 
-TableNetworkDistance::TableNetworkDistance(const FileName& fn, TablePtr& p, const PointMap& _pmOrigins, const PointMap& _pmDestinations, const SegmentMap& _smNetwork, const bool _fProject)
+TableNetworkDistance::TableNetworkDistance(const FileName& fn, TablePtr& p, const PointMap& _pmOrigins, const PointMap& _pmDestinations, const SegmentMap& _smNetwork, const bool _fProject, const bool _fOutputMap)
 : Table2DimVirtual(fn, p, true)
 , pmOrigins(_pmOrigins)
 , pmDestinations(_pmDestinations)
 , smNetwork(_smNetwork)
 , fProject(_fProject)
+, fOutputMap(_fOutputMap)
 {
   fNeedFreeze = true;
   Init();
@@ -77,6 +82,7 @@ void TableNetworkDistance::Store()
   WriteElement("Table2DimNetworkDistance", "PointMapDestinations", pmDestinations);
   WriteElement("Table2DimNetworkDistance", "SegmentMapNetwork", smNetwork);
   WriteElement("Table2DimNetworkDistance", "Project", fProject);
+  WriteElement("Table2DimNetworkDistance", "OutputMap", fOutputMap);
 }
 
 TableNetworkDistance::~TableNetworkDistance()
@@ -85,7 +91,10 @@ TableNetworkDistance::~TableNetworkDistance()
 
 String TableNetworkDistance::sExpression() const
 {
-	return String("Table2DimNetworkDistance(%S,%S,%S,%s)", pmOrigins->sNameQuoted(false, fnObj.sPath()), pmDestinations->sNameQuoted(false, fnObj.sPath()), smNetwork->sNameQuoted(false, fnObj.sPath()), fProject?"project":"noproject");
+	if (fOutputMap)
+		return String("Table2DimNetworkDistance(%S,%S,%S,%s,outputmap)", pmOrigins->sNameQuoted(false, fnObj.sPath()), pmDestinations->sNameQuoted(false, fnObj.sPath()), smNetwork->sNameQuoted(false, fnObj.sPath()), fProject?"project":"noproject");
+	else
+		return String("Table2DimNetworkDistance(%S,%S,%S,%s)", pmOrigins->sNameQuoted(false, fnObj.sPath()), pmDestinations->sNameQuoted(false, fnObj.sPath()), smNetwork->sNameQuoted(false, fnObj.sPath()), fProject?"project":"noproject");
 }
 
 bool TableNetworkDistance::fDomainChangeable() const
@@ -108,8 +117,15 @@ bool TableNetworkDistance::fFreezing()
 	((Table2DimPtr*)(&ptr))->SetAxisDomains(dm1, dm2); // re-do, because this was reset in UnFreeze()
 	Domain dm("distance.dom");
 	((Table2DimPtr*)(&ptr))->SetDataDomain(dm);
-	NetworkDistance nd (pmOrigins, pmDestinations, smNetwork, fProject, trq);
-	nd.CopyToTable2Dim(*(Table2DimPtr*)(&ptr));
+	if (fOutputMap) {
+		FileName fnSegmentMap(fnObj, ".mps", true);
+		fnSegmentMap.sFile += "_shortest_paths";
+		Domain dmSegmentMap (FileName(fnSegmentMap, ".dom", true), 0, dmtUNIQUEID);
+		SegmentMap segMap(fnSegmentMap, smNetwork->cs(), smNetwork->cb(), dmSegmentMap);
+		NetworkDistance nd (pmOrigins, pmDestinations, smNetwork, fProject, *(Table2DimPtr*)(&ptr), segMap, dmSegmentMap, trq);
+	} else {
+		NetworkDistance nd (pmOrigins, pmDestinations, smNetwork, fProject, *(Table2DimPtr*)(&ptr), trq);
+	}
 	ptr.sDescription = String("Distance from %S to %S via the segments in %S", pmOrigins->sName(), pmDestinations->sName(), smNetwork->sName());
 	ptr.Store();
 	return true;

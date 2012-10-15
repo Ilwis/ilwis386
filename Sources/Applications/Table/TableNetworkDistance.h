@@ -12,7 +12,7 @@ class DATEXPORT TableNetworkDistance: public Table2DimVirtual
   friend class Table2DimVirtual;
 public:
   TableNetworkDistance(const FileName&, TablePtr&);
-  TableNetworkDistance(const FileName& fn, TablePtr&, const PointMap& _pmOrigins, const PointMap& _pmDestinations, const SegmentMap& _smNetwork, const bool _fProject);
+  TableNetworkDistance(const FileName& fn, TablePtr&, const PointMap& _pmOrigins, const PointMap& _pmDestinations, const SegmentMap& _smNetwork, const bool _fProject, const bool _fOutputMap);
   ~TableNetworkDistance();
   static const char* sSyntax();
   virtual String sExpression() const;
@@ -27,6 +27,7 @@ private:
   PointMap pmDestinations;
   SegmentMap smNetwork;
   bool fProject;
+  bool fOutputMap;
 };
 
 
