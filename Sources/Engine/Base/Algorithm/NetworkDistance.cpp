@@ -1,10 +1,11 @@
 #include "NetworkDistance.h"
 #include "Engine\Table\tbl2dim.h"
+#include "Engine\Domain\DomainUniqueID.h"
 #include "geos\headers\geos\algorithm\distance\DistanceToPoint.h"
 #include "geos\headers\geos\algorithm\distance\PointPairDistance.h"
 #include "geos\headers\geos\linearref\LengthIndexedLine.h"
 
-NetworkDistance::NetworkDistance(const PointMap& _pmFrom, const PointMap& _pmTo, const SegmentMap& _smVia, const bool fProject, Tranquilizer & trq)
+NetworkDistance::NetworkDistance(const PointMap& _pmFrom, const PointMap& _pmTo, const SegmentMap& _smVia, const bool fProject, Table2DimPtr & ptr, Tranquilizer & trq)
 : pmFrom(_pmFrom)
 , pmTo(_pmTo)
 , smVia(_smVia)
@@ -28,7 +29,59 @@ NetworkDistance::NetworkDistance(const PointMap& _pmFrom, const PointMap& _pmTo,
 		trq.fUpdate(step++, iterations);
 	}
 
-	rDistanceOD.resize(iFromFeatures);
+	vector<LineString*> * vlsVia = (vector<LineString*> *)spatialIndex.queryAll();
+	Dijkstra dijkstra (*vlsVia);
+	delete vlsVia;
+
+	if (iFromFeatures < iToFeatures) {
+		for(long i = 0; i < iFromFeatures; ++i) {
+			const Geometry * geomFrom = pmFrom->getFeature(i);
+			dijkstra.init(geomFrom);
+			for(long j = 0; j < iToFeatures; ++j) {
+				const Geometry * geomTo = pmTo->getFeature(j);
+				ptr.PutVal(i+1, j+1, dijkstra.getNetworkDistance(geomTo));
+			}
+			trq.fUpdate(step++, iterations);
+		}
+	} else {
+		for(long j = 0; j < iToFeatures; ++j) {
+			const Geometry * geomTo = pmTo->getFeature(j);
+			dijkstra.init(geomTo);
+			for(long i = 0; i < iFromFeatures; ++i) {
+				const Geometry * geomFrom = pmFrom->getFeature(i);
+				ptr.PutVal(i+1, j+1, dijkstra.getNetworkDistance(geomFrom));
+			}
+			trq.fUpdate(step++, iterations);
+		}
+	}
+}
+
+NetworkDistance::NetworkDistance(const PointMap& _pmFrom, const PointMap& _pmTo, const SegmentMap& _smVia, const bool fProject, Table2DimPtr & ptr, SegmentMap & segMap, Domain & dm, Tranquilizer & trq)
+: pmFrom(_pmFrom)
+, pmTo(_pmTo)
+, smVia(_smVia)
+{
+	geos::index::quadtree::Quadtree spatialIndex;
+	for (int i=0; i<smVia->iFeatures(); ++i) {
+		Geometry * geom = smVia->getFeature(i);
+		spatialIndex.insert(geom->getEnvelopeInternal(), geom);
+	}
+
+	const long iFromFeatures = pmFrom->iFeatures();
+	const long iToFeatures = pmTo->iFeatures();
+	const long iterations = min(iFromFeatures, iToFeatures) + (fProject ? 1 : 0);
+	long step = 0;
+
+	trq.fUpdate(step++, iterations);
+
+	if (fProject) {
+		double rInitialSearchRadius = sqrt(smVia->cb().width() * smVia->cb().width() + smVia->cb().height() * smVia->cb().height()) / 100.0 / sqrt(2.0);
+		projectOnNetwork(pmFrom, pmTo, spatialIndex, rInitialSearchRadius);
+		trq.fUpdate(step++, iterations);
+	}
+
+	DomainUniqueID * pdUid = dm->pdUniqueID();
+	long iSegRecord = 0; // increase before adding first segment; segment count starts at 1
 
 	vector<LineString*> * vlsVia = (vector<LineString*> *)spatialIndex.queryAll();
 	Dijkstra dijkstra (*vlsVia);
@@ -37,23 +90,34 @@ NetworkDistance::NetworkDistance(const PointMap& _pmFrom, const PointMap& _pmTo,
 	if (iFromFeatures < iToFeatures) {
 		for(long i = 0; i < iFromFeatures; ++i) {
 			const Geometry * geomFrom = pmFrom->getFeature(i);
-			rDistanceOD[i].resize(iToFeatures);
 			dijkstra.init(geomFrom);
 			for(long j = 0; j < iToFeatures; ++j) {
 				const Geometry * geomTo = pmTo->getFeature(j);
-				rDistanceOD[i][j] = dijkstra.getNetworkDistance(geomTo);
+				ptr.PutVal(i+1, j+1, dijkstra.getNetworkDistance(geomTo));
+				CoordinateArraySequence * coordinates = dijkstra.getShortestPath(geomTo);
+				if (coordinates != 0) {
+					pdUid->iAdd();
+					ILWIS::Segment *segCur = CSEGMENT(segMap->newFeature());
+					segCur->PutCoords(coordinates); // segCur becomes the "owner" of coordinates
+					segCur->PutVal(++iSegRecord);
+				}
 			}
 			trq.fUpdate(step++, iterations);
 		}
 	} else {
-		for(long i = 0; i < iFromFeatures; ++i)
-			rDistanceOD[i].resize(iToFeatures);
 		for(long j = 0; j < iToFeatures; ++j) {
 			const Geometry * geomTo = pmTo->getFeature(j);
 			dijkstra.init(geomTo);
 			for(long i = 0; i < iFromFeatures; ++i) {
 				const Geometry * geomFrom = pmFrom->getFeature(i);
-				rDistanceOD[i][j] = dijkstra.getNetworkDistance(geomFrom);
+				ptr.PutVal(i+1, j+1, dijkstra.getNetworkDistance(geomFrom));
+				CoordinateArraySequence * coordinates = dijkstra.getShortestPath(geomFrom);
+				if (coordinates != 0) {
+					pdUid->iAdd();
+					ILWIS::Segment *segCur = CSEGMENT(segMap->newFeature());
+					segCur->PutCoords(coordinates); // segCur becomes the "owner" of coordinates
+					segCur->PutVal(++iSegRecord);
+				}
 			}
 			trq.fUpdate(step++, iterations);
 		}
@@ -62,13 +126,6 @@ NetworkDistance::NetworkDistance(const PointMap& _pmFrom, const PointMap& _pmTo,
 
 NetworkDistance::~NetworkDistance()
 {
-}
-
-void NetworkDistance::CopyToTable2Dim(Table2DimPtr & ptr)
-{
-	for (long i = 0; i < pmFrom->iFeatures(); ++i)
-		for (long j = 0; j < pmTo->iFeatures(); ++j)
-			ptr.PutVal(i+1, j+1, rDistanceOD[i][j]);
 }
 
 LineString * NetworkDistance::computeProjection(const Geometry * pointNotOnNetworkNode, geos::index::quadtree::Quadtree & spatialIndex, double rInitialSearchRadius)
@@ -181,6 +238,7 @@ Dijkstra::Dijkstra(vector<LineString*> & vlsVia)
 			if (it == nodeNames.end()) {
 				nodeTo = nodes++;
 				nodeNames[crdTo] = nodeTo;
+				coordinateList.push_back(crdTo);
 			} else
 				nodeTo = it->second;
 			if (j > 0 && nodeFrom != nodeTo) { // if we wanted to walk from A to A, the distance covered is 0 .. for now i'd say that if this occurs, it is an error in the segment-map with the road-network
@@ -257,16 +315,16 @@ void Dijkstra::init(const Geometry *pointFrom)
 		A.resize(nodes);
 		for (long i = 0; i < nodes; ++i) {
 			A[i] = false;
-			final_distances[i] = rUNDEF;
+			final_distances[i] = pair<double, long>(rUNDEF, -1);
 		}
 
 		long startpoint = nodeFrom->second;
 
-		final_distances[startpoint] = 0;
+		final_distances[startpoint] = pair<double, long>(0, -1);
 		A[startpoint] = true;
 		pair<multimap<long, pair<long, double>>::iterator, multimap<long, pair<long, double>>::iterator> range = graph.equal_range(startpoint);
 		for (multimap<long, pair<long, double>>::iterator it = range.first; it != range.second; ++it) {
-			final_distances[it->second.first] = it->second.second;
+			final_distances[it->second.first] = pair<double, long>(it->second.second, startpoint);
 			X.push_back(it->second.first);
 		}
 
@@ -282,9 +340,9 @@ void Dijkstra::init(const Geometry *pointFrom)
 				if (!A[it->second.first]) {
 					if (find(X.begin(), X.end(), it->second.first) == X.end()) {
 						X.push_back(it->second.first);
-						final_distances[it->second.first] = final_distances[y] + it->second.second;
-					} else
-						final_distances[it->second.first] = min(final_distances[it->second.first], final_distances[y] + it->second.second);
+						final_distances[it->second.first] = pair<double, long>(final_distances[y].first + it->second.second, y);
+					} else if (final_distances[it->second.first].first > final_distances[y].first + it->second.second)
+						final_distances[it->second.first] = pair<double, long>(final_distances[y].first + it->second.second, y);
 				}
 			}
 		}
@@ -302,9 +360,32 @@ double Dijkstra::getNetworkDistance(const Geometry *pointTo)
 	if (fValid) {
 		map<Coordinate, long, SortCoordinates>::iterator nodeTo = nodeNames.find(*(pointTo->getCoordinate()));
 		if (nodeTo != nodeNames.end())
-			return final_distances[(*nodeTo).second];
+			return final_distances[(*nodeTo).second].first;
 		else
 			return rUNDEF;
 	} else
 		return rUNDEF;
+}
+
+CoordinateArraySequence * Dijkstra::getShortestPath(const Geometry *pointTo)
+{
+	if (fValid) {
+		map<Coordinate, long, SortCoordinates>::iterator nodeTo = nodeNames.find(*(pointTo->getCoordinate()));
+		if (nodeTo != nodeNames.end()) {
+			vector<Coordinate> * path = new vector<Coordinate>();
+			long currentNode = (*nodeTo).second;
+			while (currentNode != -1) {
+				path->insert(path->begin(), coordinateList[currentNode]);
+				currentNode = final_distances[currentNode].second;
+			}
+			if (path->size() > 1) // minimum 2 points for a segment; when path = 1 point, then pointTo was the same as pointFrom
+				return new CoordinateArraySequence(path); // CoordinateArraySequence will be the owner, and will delete it at destruction
+			else {
+				delete path;
+				return 0;
+			}
+		} else
+			return 0;
+	} else
+		return 0;
 }
