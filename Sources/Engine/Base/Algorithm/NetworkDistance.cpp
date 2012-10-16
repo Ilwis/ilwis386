@@ -160,19 +160,24 @@ LineString * NetworkDistance::computeProjection(const Geometry * pointNotOnNetwo
 		rSearchRadius *= 2;
 	}
 
+	vector<Coordinate> ptsProjectionLine;
+	ptsProjectionLine.push_back(crd);
 	geos::linearref::LengthIndexedLine lineNearest (lsNearest); // index it
 	double projectedPos = lineNearest.indexOf(ptDistNearest.getCoordinate(0));
-
-	if (projectedPos != lineNearest.getStartIndex() && projectedPos != lineNearest.getEndIndex()) {
+	if (projectedPos == lineNearest.getStartIndex())
+		ptsProjectionLine.push_back(*(lsNearest->getCoordinate()));
+	else if (projectedPos == lineNearest.getEndIndex())
+		ptsProjectionLine.push_back(lsNearest->getCoordinateN(lsNearest->getNumPoints() - 1));
+	else {
 		LineString * AP = (LineString*)lineNearest.extractLine(lineNearest.getStartIndex(), projectedPos);
 		LineString * PB = (LineString*)lineNearest.extractLine(projectedPos, lineNearest.getEndIndex());
 		spatialIndex.remove(lsNearest->getEnvelopeInternal(), lsNearest); // remove the large segment
 		spatialIndex.insert(AP->getEnvelopeInternal(), AP); // add the first split part
 		spatialIndex.insert(PB->getEnvelopeInternal(), PB); // add the second split part
+		ptsProjectionLine.push_back(*(PB->getCoordinate())); // add the first point of the second split part to PP
 	}
 	LineString * PP = 0;
 	if (rDistNearest != rUNDEF && rDistNearest != 0) {
-		vector<Coordinate> ptsProjectionLine = ptDistNearest.getCoordinates();
 		CoordinateSequence * csProjectionLine = lsNearest->getFactory()->getCoordinateSequenceFactory()->create(&ptsProjectionLine);
 		PP = lsNearest->getFactory()->createLineString(csProjectionLine->clone());
 	}
