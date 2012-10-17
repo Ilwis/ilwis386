@@ -201,8 +201,11 @@ bool PointMapLandAllocation::fFreezing()
 		throw ErrorObject(TR("Nr requested facilities is larger than the nr of available facilities"));
 	if (iPopulationSize < 1)
 		throw ErrorObject(TR("Bad population size"));
+	Table2Dim talbeODmatrix;
+	if (sODMatrix != "")
+		talbeODmatrix = Table2Dim (sODMatrix);
 
-	LandAllocation la (pmFacilities, pmFacilitiesNoAttribute, sColFacilitiesType, pmDemands, pmDemandsNoAttribute, sColDemandsPreference, sODMatrix,
+	LandAllocation la (pmFacilities, pmFacilitiesNoAttribute, sColFacilitiesType, pmDemands, pmDemandsNoAttribute, sColDemandsPreference, talbeODmatrix,
 							   iOptimalFacilities, fCapacitated, iStoppingCriteria, iGenerations, iPopulationSize, iNelite, iNpareto, rMutationPercent, rCrossoverPercent);
 	GAChromosome * chromosome = la.PerformLandAllocation(trq);
 	la.StoreChromosome(chromosome, &ptr);
