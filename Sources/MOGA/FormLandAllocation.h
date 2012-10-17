@@ -2,6 +2,7 @@
 #define FORMLANDALLOCATION_H
 #include "Client\Forms\frmpntcr.h"
 #include "Client\ilwis.h"
+#include "Engine\Table\tbl2dim.h"
 
 LRESULT CmdLandAllocation(CWnd *wnd, const String& s);
 
@@ -129,6 +130,7 @@ private:
   String sColFacilitiesType;
   String sColDemandsPreference;
   String sODMatrix;
+  Table2Dim tableODmatrix;
   ParetoGraphFunction * m_function;
 
   LandAllocation * m_la;

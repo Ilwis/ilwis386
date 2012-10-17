@@ -228,7 +228,14 @@ UINT FormLandAllocation::GenerateParetoGraphInThread(LPVOID pParam)
 	PointMap pmDemandsNoAttribute(PointMapLandAllocation::fnGetSourceFile(pmDemands, fn));
 	if (pObject->m_la)
 		delete pObject->m_la;
-	pObject->m_la = new LandAllocation(pmFacilities, pmFacilitiesNoAttribute, pObject->sColFacilitiesType, pmDemands, pmDemandsNoAttribute, pObject->sColDemandsPreference, pObject->sODMatrix,
+	if (pObject->sODMatrix != "") {
+		FileName fnODMatrix(pObject->sODMatrix);
+		if (!pObject->tableODmatrix.fValid() || !(pObject->tableODmatrix->fnObj == fnODMatrix))
+			pObject->tableODmatrix = Table2Dim(fnODMatrix);
+	}
+	else
+		pObject->tableODmatrix = Table2Dim();
+	pObject->m_la = new LandAllocation(pmFacilities, pmFacilitiesNoAttribute, pObject->sColFacilitiesType, pmDemands, pmDemandsNoAttribute, pObject->sColDemandsPreference, pObject->tableODmatrix,
 							   pObject->iOptimalFacilities, pObject->fCapacitated, pObject->iStoppingCriteria, pObject->iGenerations, pObject->iPopulationSize, pObject->iNelite, pObject->iNpareto, pObject->rMutationPercent, pObject->rCrossoverPercent);
 
 	Tranquilizer trq;
