@@ -5,10 +5,8 @@
 #include "Client\TableWindow\CartesianGraphDoc.h"
 #include "Engine\Applications\SEGVIRT.H"
 #include "PointMapLandAllocation.h"
-#include "Engine\Table\tbl2dim.h"
 
-
-LandAllocation::LandAllocation(const PointMap& _pmFacilities, const PointMap& _pmFacilitiesNoAttribute, const String& _sColFacilitiesType, const PointMap& _pmDemands, const PointMap& _pmDemandsNoAttribute, const String& _sColDemandsPreference, const String& _sODMatrix,
+LandAllocation::LandAllocation(const PointMap& _pmFacilities, const PointMap& _pmFacilitiesNoAttribute, const String& _sColFacilitiesType, const PointMap& _pmDemands, const PointMap& _pmDemandsNoAttribute, const String& _sColDemandsPreference, const Table2Dim& talbeODmatrix,
 							   int _iOptimalFacilities, bool _fCapacitated, int _iStoppingCriteria, long _iGenerations, int _iPopulationSize, int _iNelite, int _iNpareto, double _rMutationPercent, double _rCrossoverPercent)
 : pmFacilities(_pmFacilities)
 , pmFacilitiesNoAttribute(_pmFacilitiesNoAttribute)
@@ -16,7 +14,6 @@ LandAllocation::LandAllocation(const PointMap& _pmFacilities, const PointMap& _p
 , pmDemands(_pmDemands)
 , pmDemandsNoAttribute(_pmDemandsNoAttribute)
 , sColDemandsPreference(_sColDemandsPreference)
-, sODMatrix(_sODMatrix)
 , iOptimalFacilities(_iOptimalFacilities)
 , fCapacitated(_fCapacitated)
 , iStoppingCriteria(_iStoppingCriteria)
@@ -34,7 +31,7 @@ LandAllocation::LandAllocation(const PointMap& _pmFacilities, const PointMap& _p
 , rMaxDistance(rUNDEF)
 {
   fMultiObjective = (sColFacilitiesType.length() > 0) && (sColDemandsPreference.length() > 0);
-  Init();
+  Init(talbeODmatrix);
   ScoreFunc scoreFunc1 = (ScoreFunc)&LandAllocation::rStdDistanceFunc;
   ScoreFunc scoreFunc2 = (ScoreFunc)&LandAllocation::rStdPreferenceFunc;
   GAAlgorithm = new GA(this, fMultiObjective ? (FitnessFunc)&LandAllocation::FitnessMO : (FitnessFunc)&LandAllocation::FitnessSO, scoreFunc1, scoreFunc2);
@@ -54,7 +51,7 @@ LandAllocation::~LandAllocation()
 		delete GAAlgorithm;
 }
 
-void LandAllocation::Init()
+void LandAllocation::Init(const Table2Dim & talbeODmatrix)
 {
   int iNrDemandPoints = pmDemands->iFeatures();
   int iNrFacilities = pmFacilities->iFeatures();
@@ -67,13 +64,12 @@ void LandAllocation::Init()
 	  cFacilities[i] = pmFacilities->cValue(i);
   
   rDistanceOD.resize(iNrDemandPoints);
-  if (sODMatrix != "") {
-	  Table2Dim table (sODMatrix);
-	  if (table->dm1() == pmDemandsNoAttribute->dm() && table->dm2() == pmFacilitiesNoAttribute->dm()) {
+  if (talbeODmatrix.fValid()) {
+	  if (talbeODmatrix->dm1() == pmDemandsNoAttribute->dm() && talbeODmatrix->dm2() == pmFacilitiesNoAttribute->dm()) {
 		  for (int demandIndex = 0; demandIndex < iNrDemandPoints; ++demandIndex) {
 			  rDistanceOD[demandIndex].resize(iNrFacilities);
 			  for (int facilityIndex = 0; facilityIndex < iNrFacilities; ++facilityIndex) {
-				  double rDistance = table->rValue(demandIndex + 1, facilityIndex + 1);
+				  double rDistance = talbeODmatrix->rValue(demandIndex + 1, facilityIndex + 1);
 				  rDistanceOD[demandIndex][facilityIndex] = rDistance;
 				  if (rDistance != rUNDEF) {
 					  if (rMinDistance == rUNDEF) {
@@ -86,11 +82,11 @@ void LandAllocation::Init()
 				  }
 			  }
 		  }
-	  } else if (table->dm2() == pmDemandsNoAttribute->dm() && table->dm1() == pmFacilitiesNoAttribute->dm()) {
+	  } else if (talbeODmatrix->dm2() == pmDemandsNoAttribute->dm() && talbeODmatrix->dm1() == pmFacilitiesNoAttribute->dm()) {
 		  for (int demandIndex = 0; demandIndex < iNrDemandPoints; ++demandIndex) {
 			  rDistanceOD[demandIndex].resize(iNrFacilities);
 			  for (int facilityIndex = 0; facilityIndex < iNrFacilities; ++facilityIndex) {
-				  double rDistance = table->rValue(facilityIndex + 1, demandIndex + 1);
+				  double rDistance = talbeODmatrix->rValue(facilityIndex + 1, demandIndex + 1);
 				  rDistanceOD[demandIndex][facilityIndex] = rDistance;
 				  if (rDistance != rUNDEF) {
 					  if (rMinDistance == rUNDEF) {
