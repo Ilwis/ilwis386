@@ -97,15 +97,13 @@ void InfoLine::text(zPoint pnt, const String &s)
   if (rect != rectOld)
     MoveWindow(rect);
   if (sText != s) {
-	if (s == "")
-		ShowWindow(SW_HIDE);
-	else {
-		if (s != "")
-			SetWindowText(s.c_str());
-		if (sText == "")
-			ShowWindow(SW_SHOWNA);
-			// if (sText == "") UpdateWindow(); // to my opinion obsolete, though put it back if you observe any side-effects (Bas)
-	}
     sText = s;
+	if (sText != "")
+		SetWindowText(s.c_str());
+	else
+		ShowWindow(SW_HIDE);
   }
+  if (sText != "")
+	  ShowWindow(SW_SHOWNA);
+	  // UpdateWindow(); // to my opinion obsolete, though put it back if you observe any side-effects (Bas)
 }
