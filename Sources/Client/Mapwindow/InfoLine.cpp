@@ -103,7 +103,8 @@ void InfoLine::text(zPoint pnt, const String &s)
 	else
 		ShowWindow(SW_HIDE);
   }
-  if (sText != "")
+  if (sText != "") {
 	  ShowWindow(SW_SHOWNA);
-	  // UpdateWindow(); // to my opinion obsolete, though put it back if you observe any side-effects (Bas)
+	  UpdateWindow();
+  }
 }
