@@ -13,6 +13,7 @@
 #include "Client\MapWindow\Drawers\DrawerTool.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
 #include "Client\Mapwindow\MapPaneView.h" 
+#include "Client\Mapwindow\AreaSelector.h"
 #include "Engine\Drawers\DrawerContext.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Drawers\LayerDrawer.h"
@@ -30,11 +31,13 @@ DrawerTool *createSelectableTool(ZoomableView* zv, LayerTreeView *view, NewDrawe
 }
 
 SelectableTool::SelectableTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
-DrawerTool("SelectableTool",zv, view, drw), fCtrl(false)
+DrawerTool("SelectableTool",zv, view, drw), fCtrl(false), fShift(false), as(0)
 {
 }
 
 SelectableTool::~SelectableTool() {
+	MapPaneView *view = tree->GetDocument()->mpvGetView();
+	view->changeStateTool(ID_SELECTFEATURES, false);
 }
 
 bool SelectableTool::isToolUseableFor(ILWIS::DrawerTool *tool) { 
@@ -65,38 +68,85 @@ HTREEITEM SelectableTool::configure( HTREEITEM parentItem) {
 void SelectableTool::setSelectable(void *v, HTREEITEM) {
 	bool use = *(bool *)v;
 	getDrawer()->setSelectable(use);
+	MapPaneView *view = tree->GetDocument()->mpvGetView();
 	if ( use) {
-		tree->GetDocument()->mpvGetView()->addTool(this, ID_SELECTFEATURES);
-		MapPaneView *view = tree->GetDocument()->mpvGetView();
+		view->noTool();
+		if (!view->addTool(this, ID_SELECTFEATURES)) // addTool(this, getId());
+			view->changeStateTool(ID_SELECTFEATURES, true);		
 
-		view->selectArea(this,
-			(NotifyRectProc)&SelectableTool::FeatureAreaSelected,"Edit",Color(0,255,0,0.2)); 
-	}
-	if (!use) {
-		tree->GetDocument()->mpvGetView()->noTool(getId());
-		getDrawer()->select(CoordBounds()); // deselect all points
+		if (view->fAdjustSize)
+			as = new AreaSelector(view, this, (NotifyRectProc)&SelectableTool::FeatureAreaSelected, Color(0,255,0,0.2));
+		else 
+			as = new AreaSelector(view, this, (NotifyRectProc)&SelectableTool::FeatureAreaSelected, view->dim, Color(0,255,0,0.2));
+		as->SetCursor(zCursor("Edit"));
+		as->setActive(true);
+	} else {
+		view->changeStateTool(ID_SELECTFEATURES, false);
+		if (as) {
+			as->Stop();
+			if ( as->stayResident() == false) {
+				delete as;
+				as = 0;
+			}
+		}
+
+		getDrawer()->select(false); // deselect all points
 		selectedRaws.clear();
 		mpvGetView()->Invalidate();
 	}
 }
 
+void SelectableTool::Stop()
+{
+	getDrawer()->setSelectable(false);
+	if (as) {
+		as->Stop();
+		if (!as->stayResident()) {
+			delete as;
+			as = 0;
+		}
+	}
+	if (tree->m_hWnd)
+		tree->GetTreeCtrl().SetCheck(htiNode, false);
+}
 
 String SelectableTool::getMenuString() const {
 	return TR("Features selectable");
 }
 
+
+void SelectableTool::OnMouseMove(UINT nFlags, CPoint point)
+{
+	if (as)
+		as->OnMouseMove(nFlags, point);
+}
+
+void SelectableTool::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	if (as)
+		as->OnLButtonDown(nFlags, point);
+}
+
+void SelectableTool::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	if (as)
+		as->OnLButtonUp(nFlags, point);
+}
+
 bool SelectableTool::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags){
 	fCtrl = GetKeyState(VK_CONTROL) & 0x8000 ? true : false;
-	return fCtrl;
+	fShift = GetKeyState(VK_SHIFT) & 0x8000 ? true : false;
+	return fCtrl || fShift;
 }
 
 bool SelectableTool::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags){
 	fCtrl = GetKeyState(VK_CONTROL) & 0x8000 ? true : false;
-	return fCtrl;
+	fShift = GetKeyState(VK_SHIFT) & 0x8000 ? true : false;
+	return fCtrl || fShift;
 }
 
 void SelectableTool::OnEscape() {
-	getDrawer()->select(CoordBounds()); // deselect all points
+	getDrawer()->select(false); // deselect all points
 	selectedRaws.clear();
 	IlwWinApp()->SendUpdateTableSelection(selectedRaws, bmapptr->dm()->fnObj, (long)mpvGetView());
 	mpvGetView()->Invalidate();
@@ -104,88 +154,29 @@ void SelectableTool::OnEscape() {
 
 void SelectableTool::FeatureAreaSelected(CRect rect)
 {
-	if ( fCtrl || isActive() == false)
+	LayerDrawer *layerDrawer = dynamic_cast<LayerDrawer *>(getDrawer());
+	if (!layerDrawer)
 		return;
-	else {
-		selectedRaws.clear();
-		getDrawer()->select(CoordBounds());
-	}
+	if (!isActive())
+		return;
 	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(tree->GetDocument());
 	if ( mcd) {
 		MapPaneView *view = mcd->mpvGetView();
-		if ( rect.Height() == 0 || rect.Width() == 0) {
-			selectedRaws.clear();
-			IlwWinApp()->SendUpdateTableSelection(selectedRaws, bmapptr->dm()->fnObj, (long)view);
-			view->Invalidate();
-			return;
-		}
-
-
 
 		CoordBounds cbZoom = mcd->rootDrawer->getCoordBoundsZoom();
 		CRect rectWindow;
 		view->GetClientRect(&rectWindow);
 		Coord c1,c2;
-		if ( rect.Width() == 0 || rect.Height() == 0) { // case of clicking on the map in zoom mode
-			double posx = cbZoom.cMin.x + cbZoom.width() * rect.left / (double)rectWindow.Width(); // determine click point
-			double posy = cbZoom.cMax.y - cbZoom.height() * rect.top / (double)rectWindow.Height();
-			CoordBounds cb = cbZoom; // == cbView ? cbMap : cbZoom;
-			double w = cb.width() / (2.0 * 1.41); // determine new window size
-			double h = cb.height() / (2.0 * 1.41);
-			c1.x = posx - w; // determine new bounds
-			c1.y = posy - h;
-			c2.x = posx + w;
-			c2.y = posy + h;
-		} else {
-			c1.x = cbZoom.cMin.x + cbZoom.width() * rect.left / (double)rectWindow.Width(); // determine zoom rectangle in GL coordinates
-			c1.y = cbZoom.cMax.y - cbZoom.height() * rect.top / (double)rectWindow.Height();
-			c2.x = cbZoom.cMin.x + cbZoom.width() * rect.right / (double)rectWindow.Width();
-			c2.y = cbZoom.cMax.y - cbZoom.height() * rect.bottom / (double)rectWindow.Height();
-		}
+		c1.x = cbZoom.cMin.x + cbZoom.width() * rect.left / (double)rectWindow.Width(); // determine zoom rectangle in GL coordinates
+		c1.y = cbZoom.cMax.y - cbZoom.height() * rect.top / (double)rectWindow.Height();
+		c2.x = cbZoom.cMin.x + cbZoom.width() * rect.right / (double)rectWindow.Width();
+		c2.y = cbZoom.cMax.y - cbZoom.height() * rect.bottom / (double)rectWindow.Height();
 		c1.z = c2.z = 0;
 
 		cbZoom = CoordBounds (c1,c2);
-		mcd->rootDrawer->select(cbZoom);
-		vector<Feature *> features = bmapptr->getFeatures(cbZoom);
-		for(int i = 0; i < features.size(); ++i) {
-			Feature *f = features[i];
-			if (!f || f->fValid() == false)
-				continue;
-			selectedRaws.push_back(f->iValue());
-		}
+		layerDrawer->select(cbZoom, selectedRaws, fCtrl ? LayerDrawer::SELECTION_ADD : (fShift ? LayerDrawer::SELECTION_REMOVE : LayerDrawer::SELECTION_NEW));
+
 		IlwWinApp()->SendUpdateTableSelection(selectedRaws, bmapptr->dm()->fnObj, (long)view);
 		view->Invalidate();
 	}
 }
-void SelectableTool::OnLButtonUp(UINT nFlags, CPoint point) {
-	if ( !fCtrl){
-		tree->GetDocument()->mpvGetView()->OnLButtonUp(nFlags, point);
-		return;
-	}
-
-	if ( !getDrawer()->isSelectable())
-		return;
-	LayerDrawer *layerDrawer = dynamic_cast<LayerDrawer *>(getDrawer());
-	if (!layerDrawer)
-		return;
-
-	Coord crd = layerDrawer->getRootDrawer()->screenToWorld(RowCol(point.y, point.x));
-	vector<Geometry *> geometries = bmapptr->getFeatures(crd);
-	if ( geometries.size() > 0) {
-		for(int i = 0; i < geometries.size(); ++i) {
-			Feature *f = CFEATURE(geometries[i]);
-			if (!f || f->fValid() == false)
-				continue;
-			selectedRaws.push_back(f->iValue());
-			vector<NewDrawer *> drawers;
-			layerDrawer->getDrawerFor(f,drawers);
-			for(int j = 0; j< drawers.size(); ++j) {
-				drawers[j]->setSpecialDrawingOptions(NewDrawer::sdoSELECTED, true);
-			}
-		}
-	} else {
-		getDrawer()->select(CoordBounds());
-		selectedRaws.clear();
-	}
-}
-
