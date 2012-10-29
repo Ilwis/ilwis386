@@ -13,7 +13,7 @@ class _export PolygonFeatureDrawer : public PolygonDrawer {
 		virtual bool draw( const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *);
 		void addDataSource(void *f,int options=0);
-		Feature *getFeature() const;
+		virtual Feature *getFeature() const;
 		void* getDataSource() const;
 		long writeTriangleData(ofstream& file);
 		//void readTriangleData(long* data, long* count, bool coordConversion, const CoordSystem& csy);

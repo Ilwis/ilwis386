@@ -10,7 +10,7 @@ class _export PointFeatureDrawer : public PointDrawer {
 		virtual bool draw( const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *);
 		void addDataSource(void *f,int options=0);
-		Feature *getFeature() const;
+		virtual Feature *getFeature() const;
 		void* getDataSource() const;
 	protected:
 		PointFeatureDrawer(DrawerParameters *parms, const String& name);
