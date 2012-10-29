@@ -86,8 +86,8 @@ class _export ComplexDrawer : public NewDrawer {
 		void setSelectionColor(const Color& clr) { selectionColor = clr; }
 		bool isValid() const;
 		void setValid(bool yesno) ;
-		virtual void select(const CoordBounds& cbSelect);
-	
+		virtual void select(bool yesno);
+
 	protected:
 		vector<NewDrawer *> drawers;
 		DrawerMap postDrawers;

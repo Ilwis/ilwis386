@@ -624,13 +624,13 @@ void ComplexDrawer::setValid(bool yesno) {
 	valid = yesno;
 }
 
-void ComplexDrawer::select(const CoordBounds& cbSelect) {
+void ComplexDrawer::select(bool yesno) {
 	for(int index = 0; index < getDrawerCount(); ++index) {
 		NewDrawer *dr = getDrawer(index);
-		dr->select(cbSelect);
-
+		dr->select(yesno);
 	}
 }
+
 //--------------------------------- UI ------------------------------------------------------------------------
 //void ComplexDrawer::setActiveMode(void *v,LayerTreeView *tv) {
 //	bool value = *(bool *)v;

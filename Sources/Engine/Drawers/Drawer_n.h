@@ -93,7 +93,7 @@ namespace ILWIS {
 		virtual void setValid(bool yesno) = 0;
 		virtual bool isSelectable() const { return false;}
 		virtual void setSelectable(bool yesno ) {}
-		virtual void select(const CoordBounds& cbSelect) {};
+		virtual void select(bool yesno) {};
 
 		static NewDrawer *getDrawer(const String& type, const String& subType, ILWIS::DrawerParameters *parms) ;
 		static NewDrawer *getDrawer(const String& type, PreparationParameters *pp=0, DrawerParameters *parms=0) ;
