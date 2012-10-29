@@ -70,7 +70,7 @@ class _export PointDrawer : public SimpleDrawer {
 		void shareVertices(vector<Coord *>& coords);
 		void setCoord(const Coord& crd);
 		GeneralDrawerProperties *getProperties();
-		void select(const CoordBounds& cbSelect) ;
+		virtual void select(bool yesno);
 	protected:
 		PointDrawer(DrawerParameters *parms, const String& name);
 		void calcSize();

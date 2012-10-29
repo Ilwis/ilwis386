@@ -29,6 +29,7 @@ class _export PolygonDrawer : public SimpleDrawer {
 		void setlineStyle(int st);
 		void setlineThickness(double th);
 		void setLineColor(const Color& clr);
+		virtual void select(bool yesno);
 		GeneralDrawerProperties *getProperties();
 
 	protected:

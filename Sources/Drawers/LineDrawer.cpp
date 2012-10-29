@@ -35,6 +35,13 @@ void LineDrawer::clear() {
 	cb = CoordBounds();
 }
 
+void LineDrawer::select(bool yesno) {
+	if (yesno)
+		specialOptions |= NewDrawer::sdoSELECTED;
+	else
+		specialOptions &= ~NewDrawer::sdoSELECTED;
+}
+
 void LineDrawer::addCoords(const vector<Coord>& v,int options) {
 	if ( options == 1){
 		clear();

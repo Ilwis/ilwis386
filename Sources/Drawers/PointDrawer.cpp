@@ -49,12 +49,11 @@ void PointDrawer::prepare(PreparationParameters *p){
 	}
 }
 
-void PointDrawer::select(const CoordBounds& cbSelect) {
-	if ( cbSelect.fContains(cNorm)) {
+void PointDrawer::select(bool yesno) {
+	if (yesno)
 		specialOptions |= NewDrawer::sdoSELECTED;
-	} else {
+	else
 		specialOptions &= ~NewDrawer::sdoSELECTED;
-	}
 }
 
 void PointDrawer::setCoord(const Coord& crd) {

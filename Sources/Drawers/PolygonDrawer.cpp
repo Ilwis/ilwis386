@@ -184,6 +184,13 @@ GeneralDrawerProperties *PolygonDrawer::getProperties(){
 	return &properties;
 }
 
+void PolygonDrawer::select(bool yesno) {
+	if (yesno)
+		specialOptions |= NewDrawer::sdoSELECTED;
+	else
+		specialOptions &= ~NewDrawer::sdoSELECTED;
+}
+
 //----------------------------------------
 PolygonProperties::PolygonProperties() : hatchName(sUNDEF) {
 }
