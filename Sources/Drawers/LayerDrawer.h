@@ -8,6 +8,7 @@ class DrawingColor;
 class _export LayerDrawer : public ComplexDrawer {
 	public:
 		enum StretchMethod { smLINEAR, smLOGARITHMIC };
+		enum SelectionMode { SELECTION_NEW, SELECTION_ADD, SELECTION_REMOVE };
 		ILWIS::NewDrawer *createLayerDrawer(DrawerParameters *parms);
 
 		LayerDrawer(DrawerParameters *parms, const String& name);
@@ -41,7 +42,7 @@ class _export LayerDrawer : public ComplexDrawer {
 		void setTransparentValues(const RangeReal& rr);
 		virtual bool isSelectable() const;
 		virtual void setSelectable(bool yesno );
-		void select(const CoordBounds& cbSelect);
+		virtual void select(const CoordBounds& cbSelect, vector<long> & selectedRaws, SelectionMode selectionMode) {};
 			
 	protected:
 		String store(const FileName& fnView, const String& parenSection) const;

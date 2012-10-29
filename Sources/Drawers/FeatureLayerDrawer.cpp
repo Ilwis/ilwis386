@@ -74,6 +74,7 @@ void FeatureLayerDrawer::prepare(PreparationParameters *parms){
 			drawers.at(i) = 0;
 		int count = 0;
 		Tranquilizer trq(TR("preparing data"));
+		featureMap.clear();
 		for(int i=0; i < features.size(); ++i) {
 			Feature *feature = features.at(i);
 			NewDrawer *pdrw;
@@ -207,4 +208,59 @@ bool FeatureLayerDrawer::useRaw() const {
 		return !fbasemap->dvrs().fUseReals();
 	}
 	return false;
+}
+
+void FeatureLayerDrawer::select(const CoordBounds& cbSelect, vector<long> & selectedRaws, SelectionMode selectionMode) {
+
+	if (featureMap.size() != getDrawerCount()) { // we have postponed this to the first time the user "selects" .. move to "prepare" if needed
+		featureMap.clear();
+		for(int index = 0; index < getDrawerCount(); ++index) {
+			SimpleDrawer *dr = (SimpleDrawer*)getDrawer(index);
+			featureMap[dr->getFeature()->iValue()] = dr;
+		}
+	}
+
+	SpatialDataDrawer *datadrw = dynamic_cast<SpatialDataDrawer *>(getParentDrawer());
+	if ( datadrw) {
+		vector<Feature *> features = datadrw->getBaseMap()->getFeatures(cbSelect, false); // the "complete" parameter forces the user to make the selection box too big, causing inaccurate selection (complete is only applicable to segments and polygons)
+		if (selectionMode == SELECTION_NEW) {
+			selectedRaws.clear();
+			ComplexDrawer::select(false); // all child drawers
+			for(int i = 0; i < features.size(); ++i) {
+				Feature *f = features[i];
+				if (!f || f->fValid() == false)
+					continue;
+				selectedRaws.push_back(f->iValue());
+				featureMap[f->iValue()]->select(true);
+			}
+		} else if (selectionMode == SELECTION_ADD) {
+			vector<long> newlySelectedRaws;
+			for(int i = 0; i < features.size(); ++i) {
+				Feature *f = features[i];
+				if (!f || f->fValid() == false)
+					continue;
+				newlySelectedRaws.push_back(f->iValue());
+				featureMap[f->iValue()]->select(true);
+			}
+			sort(selectedRaws.begin(), selectedRaws.end());
+			sort(newlySelectedRaws.begin(), newlySelectedRaws.end());
+			vector<long> tmp;
+			set_union(selectedRaws.begin(), selectedRaws.end(), newlySelectedRaws.begin(), newlySelectedRaws.end(), back_inserter(tmp));
+			selectedRaws.swap(tmp);
+		} else if (selectionMode == SELECTION_REMOVE) {
+			vector<long> newlySelectedRaws;
+			for(int i = 0; i < features.size(); ++i) {
+				Feature *f = features[i];
+				if (!f || f->fValid() == false)
+					continue;
+				newlySelectedRaws.push_back(f->iValue());
+				featureMap[f->iValue()]->select(false);
+			}
+			sort(selectedRaws.begin(), selectedRaws.end());
+			sort(newlySelectedRaws.begin(), newlySelectedRaws.end());
+			vector<long> tmp;
+			set_difference(selectedRaws.begin(), selectedRaws.end(), newlySelectedRaws.begin(), newlySelectedRaws.end(), back_inserter(tmp));
+			selectedRaws.swap(tmp);
+		}
+	}
 }

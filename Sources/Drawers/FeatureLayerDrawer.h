@@ -7,7 +7,7 @@ class FieldColor;
 class DisplayOptionColorItem;
 
 namespace ILWIS{
-
+	class SimpleDrawer;
 	class _export FeatureLayerDrawer : public ILWIS::LayerDrawer {
 	friend class SetSingleColorForm;
 
@@ -27,6 +27,7 @@ namespace ILWIS{
 		void *getDataSource() const;
 		bool useRaw() const;
 		virtual void prepareChildDrawers(PreparationParameters *parms);
+		virtual void select(const CoordBounds& cbSelect, vector<long> & selectedRaws, SelectionMode selectionMode);
 
 	protected:
 		String store(const FileName& fnView, const String& parenSection) const;
@@ -37,6 +38,7 @@ namespace ILWIS{
 		bool useMask;
 		Color singleColor;
 		BaseMap fbasemap;
+		map<long, SimpleDrawer*> featureMap;
 	
 	};
 }
