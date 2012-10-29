@@ -68,7 +68,7 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 				setActive(raw > 0);
 			}
 		}
-		double v = feature->rValue();
+		long v = feature->iValue();
 		setSpecialDrawingOptions(NewDrawer::sdoSELECTED,false);
 		if ( bmpptr->fTblAtt()) {
 			setTableSelection(bmpptr->tblAtt()->dm()->fnObj,v, p);
