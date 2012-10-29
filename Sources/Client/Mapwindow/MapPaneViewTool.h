@@ -66,7 +66,7 @@ public:
 	virtual void OnEscape();
 	bool OnSetCursor(); // called by MapPaneView::OnSetCursor
 	void SetCursor(const zCursor& cur);
-	void Stop();
+	virtual void Stop();
 	virtual void insertTool(LayerTreeView  *tv, ILWIS::DrawerParameters *) {};
 	virtual bool isToolUseableFor(ILWIS::NewDrawer *drw) { return false;}
 	virtual ~MapPaneViewTool();
