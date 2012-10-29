@@ -128,18 +128,16 @@ DistanceMeasurer::DistanceMeasurer(ZoomableView* zv, LayerTreeView *view, NewDra
 {
 	csy = view->GetDocument()->rootDrawer->getCoordinateSystem();
 	fDown = FALSE;
-	active = true;
 	line = 0;
 	useEllipse = false;
 	stay = true;
+	needsMouseFocus = true;
 }
 
 DistanceMeasurer::~DistanceMeasurer()
 {
-	//tree->GetDocument()->mpvGetView()->info->text(CPoint(0,0),"");
-	if ( line)
-		drawer->getRootDrawer()->removeDrawer(line->getId());
-	line = 0;
+	MapPaneView *view = tree->GetDocument()->mpvGetView();
+	view->changeStateTool(getId(), false);
 }
 
 bool DistanceMeasurer::isToolUseableFor(ILWIS::DrawerTool *tool){
@@ -165,17 +163,33 @@ void DistanceMeasurer::setUseEllipse(void *w, HTREEITEM ) {
 
 void DistanceMeasurer::setcheckTool(void *w, HTREEITEM ) {
 	bool yesno = *(bool *)w;
+	setActive(yesno); // noone else will set us active/inactive
+	MapPaneView *view = tree->GetDocument()->mpvGetView();
 	if ( yesno) {
+		view->noTool();
 		line  = 0;
-		tree->GetDocument()->mpvGetView()->addTool(this, getId());
+		if (!view->addTool(this, getId()))
+			view->changeStateTool(getId(), true);
+		SetCursor(zCursor("MeasureCursor"));
 	}
 	else {
-		SetCursor(zCursor(Arrow));
-		if ( line)
+		if ( line) {
 			drawer->getRootDrawer()->removeDrawer(line->getId(), true);
-		line = 0;
-		tree->GetDocument()->mpvGetView()->noTool(getId());
+			line = 0;
+		}
+		view->changeStateTool(getId(), false);
 	}
+}
+
+void DistanceMeasurer::Stop()
+{
+	if ( line) {
+		drawer->getRootDrawer()->removeDrawer(line->getId(), true);
+		line = 0;
+	}
+
+	if (tree->m_hWnd)
+		tree->GetTreeCtrl().SetCheck(htiNode, false);
 }
 
 String DistanceMeasurer::getMenuString() const{
@@ -330,7 +344,6 @@ void DistanceMeasurer::OnMouseMove(UINT nFlags, CPoint point)
 		return;
 
 	if (fDown) {
-		SetCursor(zCursor("MeasureCursor"));
 		tree->GetDocument()->mpvGetView()->info->ShowWindow(SW_HIDE);
 		drawLine();
 		Coord c1 = tree->GetDocument()->rootDrawer->screenToWorld(RowCol(point.y, point.x));
@@ -341,7 +354,7 @@ void DistanceMeasurer::OnMouseMove(UINT nFlags, CPoint point)
 	}
 }
 
-void DistanceMeasurer::OnLButtonUp(UINT nFlags, CPoint point)
+void DistanceMeasurer::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	if ( !line) {
 		DrawerParameters dp(drawer->getRootDrawer(), drawer);
@@ -354,7 +367,13 @@ void DistanceMeasurer::OnLButtonUp(UINT nFlags, CPoint point)
 		tree->GetDocument()->mpvGetView()->setBitmapRedraw(true);
 		fDown = true;
 		setCoords();
-	} else {
+	}
+	drawLine();
+}
+
+void DistanceMeasurer::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	if ( line) {
 		tree->GetDocument()->mpvGetView()->info->text(point,"");
 
 		short state = ::GetKeyState(VK_CONTROL);

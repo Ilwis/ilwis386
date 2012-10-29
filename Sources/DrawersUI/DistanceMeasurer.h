@@ -48,11 +48,13 @@ namespace ILWIS {
 		DistanceMeasurer(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw);           
 
 		void OnMouseMove(UINT nFlags, CPoint point);
-		void OnLButtonUp(UINT nFlags, CPoint point);
+		void OnLButtonDown(UINT nFlags, CPoint point);
+		void OnLButtonUp(UINT nFlags, CPoint point);		
 		bool isToolUseableFor(ILWIS::DrawerTool *drw);
 		HTREEITEM configure( HTREEITEM parentItem);
 		virtual ~DistanceMeasurer();
 		String getMenuString() const;
+		virtual void Stop();
 	protected:
 
 	private:
