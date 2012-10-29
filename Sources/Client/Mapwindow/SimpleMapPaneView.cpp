@@ -348,7 +348,7 @@ void SimpleMapPaneView::OnUpdateMeasureDist(CCmdUI* pCmdUI)
 void SimpleMapPaneView::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
 	if (tools.OnKeyUp(nChar, nRepCnt, nFlags))
 		return;
-	ZoomableView::OnKeyDown(nChar, nRepCnt, nFlags);
+	ZoomableView::OnKeyUp(nChar, nRepCnt, nFlags);
 }
 
 void SimpleMapPaneView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
@@ -504,10 +504,7 @@ void SimpleMapPaneView::OnMouseMove(UINT nFlags, CPoint point)
 			bool fHide = true;
 			if (fValid && !fOutside && mode == cNone){
 				String s = mcd->rootDrawer->getInfo(c);
-				if (s != "") {
-					info->text(point,s);
-					info->ShowWindow(SW_SHOW);
-				}
+				info->text(point,s);
 			}
 			else
 				info->ShowWindow(SW_HIDE);
@@ -542,7 +539,7 @@ void SimpleMapPaneView::OnLButtonDown(UINT nFlags, CPoint point)
 		return;
 	}
 	if (c.fUndef()) return;
-	if ( tools.size() == 0 || iActiveTool == ID_SELECTFEATURES) {
+	if ( tools.size() == 0) {
 		SetCapture();
 		String s = mcd->rootDrawer->getInfo(c);
 		if (s != "") {
