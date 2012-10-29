@@ -5,6 +5,7 @@
 class LayerTreeView;
 class LayerTreeItem;
 class SetChecks;
+class Feature;
 
 namespace ILWIS {
 	class DrawerContext;
@@ -56,6 +57,7 @@ namespace ILWIS {
 		void setExtrustionTransparency(double v);
 		bool isValid() const;
 		void setValid(bool yesno);
+		virtual Feature *getFeature() const {return 0;};
 
 		CCriticalSection cs;
 	protected:
