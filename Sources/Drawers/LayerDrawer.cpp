@@ -331,13 +331,7 @@ void LayerDrawer::setSelectable(bool yesno ){
 	selectable = yesno;
 }
 
-
-
-
-
-
-
-
-
-
-
+vector<long> * LayerDrawer::getSelectedRaws()
+{
+	return &selectedRaws;
+}
