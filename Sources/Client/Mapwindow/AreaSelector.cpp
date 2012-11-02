@@ -168,17 +168,13 @@ CRect AreaSelector::rect() const
   if (abs(y1-y2) < 3) y2 = y1;
   CRect rect(x1,y1,x2,y2);
   rect.NormalizeRect();
-
- 
   return rect;
 }
 
 void AreaSelector::DrawRect()
 {
 	if ( selectionDrawer) {
-		CRect rectWindow;
-		mpv->GetClientRect(&rectWindow);
-		selectionDrawer->calcWorldCoordinates(rectWindow, rect());
+		selectionDrawer->setRectangle(rect());
 		mpv->Invalidate();
 	}
 }
