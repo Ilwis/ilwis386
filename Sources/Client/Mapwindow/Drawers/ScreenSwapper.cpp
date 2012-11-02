@@ -39,18 +39,16 @@ void ScreenSwapper::swapBufferToScreen(const CRect& rct){
 
 void ScreenSwapper::saveScreenBuffer(const CRect& rct)
 {
+	csBitmap.Lock();
 	if ( swapBitmap == 0) {
-		int width,height;
-		width = rct.Width();
-		height = rct.Height();
-		if (swapBitmap==NULL) {
-			swapBitmap = new float[width * height  * 4];
-			glReadBuffer(GL_FRONT);
-			glPixelTransferf(GL_MAP_COLOR, false);
-			glReadPixels(rct.left,rct.top,width,height,GL_RGBA,GL_FLOAT,swapBitmap);
-
-		}
+		int width = rct.Width();
+		int height = rct.Height();
+		swapBitmap = new float[width * height  * 4];
+		glReadBuffer(GL_FRONT);
+		glPixelTransferf(GL_MAP_COLOR, false);
+		glReadPixels(rct.left,rct.top,width,height,GL_RGBA,GL_FLOAT,swapBitmap);
 	}
+	csBitmap.Unlock();
 }
 
 void ScreenSwapper::bitmapBufferRedraw(MapCompositionDoc *mdoc){
