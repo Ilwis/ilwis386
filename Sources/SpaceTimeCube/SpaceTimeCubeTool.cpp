@@ -211,6 +211,31 @@ SpaceTimeCube::~SpaceTimeCube()
 	}
 }
 
+vector<String> gatherOwnIDs(ComplexDrawer * drw) {
+	vector<String> result;
+	PreTimeOffsetDrawer *predrw = dynamic_cast<PreTimeOffsetDrawer*>(drw->getDrawer(0, ComplexDrawer::dtPRE));
+	if (predrw != 0)
+		result.push_back(predrw->getId());
+	PostTimeOffsetDrawer *postdrw = dynamic_cast<PostTimeOffsetDrawer*>(drw->getDrawer(999, ComplexDrawer::dtPOST));
+	if (postdrw != 0)
+		result.push_back(postdrw->getId());
+	for (int i = 0; i < drw->getDrawerCount(); ++i) {
+		ComplexDrawer *childDrw = dynamic_cast<ComplexDrawer*>(drw->getDrawer(i));
+		if (childDrw != 0) {
+			vector<String> subResult = gatherOwnIDs(childDrw);
+			for (vector<String>::iterator s = subResult.begin(); s != subResult.end(); ++s)
+				result.push_back(*s);
+		}
+	}
+	return result;
+}
+
+void SpaceTimeCube::loadMapview() {
+	useSpaceTimeCube = true;
+	ownDrawerIDs = gatherOwnIDs(rootDrawer);
+	ownDrawerIDs.push_back("CubeDrawer");
+}
+
 void SpaceTimeCube::update() {
 	vector<LayerData> newLayerList;
 	for(int i = 0 ; i < rootDrawer->getDrawerCount(); ++i) {
@@ -286,6 +311,7 @@ void SpaceTimeCube::refreshDrawerList() {
 	timeBoundsFullExtent->Reset();
 	sizeStretch = RangeReal();
 
+	mpv->noTool(0); // ensure the mapview has no tools
 	for (int i = 0; i < layerList.size(); ++i) {
 		SpatialDataDrawer * drawer = (SpatialDataDrawer*)(rootDrawer->getDrawer(layerList[i].getDrawerId()));
 		if (drawer == 0)
@@ -797,8 +823,15 @@ SpaceTimeCubeTool::~SpaceTimeCubeTool() {
 
 bool SpaceTimeCubeTool::isToolUseableFor(ILWIS::DrawerTool *tool) { 
 	bool ok =  dynamic_cast<ThreeDGlobalTool *>(tool) != 0;
-	if ( ok)
+	if ( ok) {
 		parentTool = tool;
+		bool fUseSpaceTimeCube = 0 != drawer->getRootDrawer()->getDrawer("CubeDrawer");
+		if (fUseSpaceTimeCube) {
+			stc->loadMapview();
+			if (!stc->fUseSpaceTimeCube())
+				stc->setUseSpaceTimeCube(true);
+		}
+	}
 	return ok;
 }
 

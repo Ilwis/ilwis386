@@ -97,6 +97,7 @@ namespace ILWIS {
 		virtual void SetTime(double timePerc, bool fShiftDown, long sender);
 		TimeBounds * getTimeBoundsZoom() const;
 		const TimeBounds * getTimeBoundsFullExtent() const;
+		void loadMapview();
 	private:
 		static map<ZoomableView*, SpaceTimeCube*> spaceTimeCubes;
 		void update();
