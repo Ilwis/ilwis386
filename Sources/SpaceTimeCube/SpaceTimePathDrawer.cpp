@@ -14,7 +14,6 @@
 #include "Drawers\PointDrawer.h"
 #include "Drawers\PointFeatureDrawer.h"
 #include "Engine\Representation\Rprclass.h"
-#include "Client\ilwis.h"
 
 using namespace ILWIS;
 
@@ -107,14 +106,27 @@ const vector<Feature *> & SpaceTimePathDrawer::getFeatures() const
 	return features;
 }
 
-String SpaceTimePathDrawer::getInfo(const Coord& c) const
+vector<GLuint> SpaceTimePathDrawer::getObjectIDs(vector<long> & iRaws) const
 {
-	if ( !hasInfo() || !isActive() )
-		return "";
-	String info;
-	vector<long> raws;
-	vector<GLuint> objectIDs = getSelectedObjectIDs(c);
-	int i = 0;
+	vector<GLuint> objectIDs;
+	for (GLuint objectID = 0; objectID <= objectStartIndexes->size(); ++objectID) {
+		long first = (objectID > 0) ? (*objectStartIndexes)[objectID - 1] : 0;
+		long last = (objectID < objectStartIndexes->size()) ? (*objectStartIndexes)[objectID] : features.size();
+		for (long i = first; i < last; ++i) {
+			Feature *feature = features[i];
+			if (feature != 0)
+				if (find(iRaws.begin(), iRaws.end(), feature->iValue()) != iRaws.end()) {
+					objectIDs.push_back(objectID);
+					break;
+				}
+		}
+	}
+	return objectIDs;
+}
+
+int SpaceTimePathDrawer::getNearestEnabledObjectIDIndex(vector<GLuint> & objectIDs) const
+{
+	int i = 0; // objectIDs are already sorted from near to far, so we only need to check for disabled iRaws
 	if (useAttColumn && getAtttributeColumn().fValid()) {
 		while (i < objectIDs.size()) {
 			GLuint objectID = objectIDs[i];
@@ -132,45 +144,48 @@ String SpaceTimePathDrawer::getInfo(const Coord& c) const
 		}
 	}
 
-	if (i < objectIDs.size()) {
-		GLuint objectID = objectIDs[i];
-		long first = objectID > 0 ? (*objectStartIndexes)[objectID - 1] : 0;
-		long last = objectID < objectStartIndexes->size() ? (*objectStartIndexes)[objectID] : features.size();
+	return i;
+}
 
-		// construct info
-		Feature * feature = features[first];
-		if (feature != 0) {
-			if (!useAttColumn) {
-				SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)parentDrawer;
-				BaseMapPtr *bmptr = mapDrawer->getBaseMap(mapDrawer->getCurrentIndex());
-				if (bmptr->dvrs().fRawAvailable()) {
-					long raw = feature->iValue();
-					info = bmptr->dvrs().sValueByRaw(raw);
-				} else {
-					double val = feature->rValue();
-					info = bmptr->dvrs().sValue(val);
-				}
-			} else if (getAtttributeColumn().fValid()) {
+vector<GLuint> SpaceTimePathDrawer::getEnabledObjectIDs(vector<GLuint> & objectIDs) const
+{
+	if (useAttColumn && getAtttributeColumn().fValid()) {
+		vector<GLuint> newObjectIDs;
+		for (int i = 0; i < objectIDs.size(); ++i) {
+			GLuint objectID = objectIDs[i];
+			long first = objectID > 0 ? (*objectStartIndexes)[objectID - 1] : 0;
+			Feature * feature = features[first];
+			if (feature != 0) {
 				long raw = feature->iValue();
-				if (raw != iUNDEF)
-					info = getAtttributeColumn()->sValue(raw);
-				else
-					info = "?";
-			} else
-				info = "?";
-		} else
-			info = "?";
-
-		// construct raws array
-		for (long i = first; i < last; ++i) {
-			Feature *feature = features[i];
-			if (feature != 0)
-				raws.push_back(feature->iValue());
+				if (raw != iUNDEF) {
+					raw = getAtttributeColumn()->iRaw(raw);
+					if (find(disabledRaws.begin(), disabledRaws.end(), raw) != disabledRaws.end())
+						break;
+				}
+			}
+			newObjectIDs.push_back(objectID);
 		}
+		return newObjectIDs;
+	} else
+		return objectIDs;
+}
+
+Feature * SpaceTimePathDrawer::getFeature(GLuint objectID) const
+{
+	long first = objectID > 0 ? (*objectStartIndexes)[objectID - 1] : 0;
+	return features[first];
+}
+
+void SpaceTimePathDrawer::getRaws(GLuint objectID, vector<long> & raws) const
+{
+	// construct raws array
+	long first = objectID > 0 ? (*objectStartIndexes)[objectID - 1] : 0;
+	long last = objectID < objectStartIndexes->size() ? (*objectStartIndexes)[objectID] : features.size();
+	for (long i = first; i < last; ++i) {
+		Feature *feature = features[i];
+		if (feature != 0)
+			raws.push_back(feature->iValue());
 	}
-	// send raws array
-	IlwWinApp()->SendUpdateTableSelection(raws, ((SpatialDataDrawer *)getParentDrawer())->getBaseMap()->dm()->fnObj, long(this));
-	return info;
 }
 
 void SpaceTimePathDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc) const
@@ -194,6 +209,12 @@ void SpaceTimePathDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc
 	objectStartIndexes->clear();
 	glInitNames();
 	glPushName(objectID);
+	map<long, GLuint>::iterator mapEntry = subDisplayLists->find(objectID);
+	if (mapEntry == subDisplayLists->end()) {
+		GLuint listID = glGenLists(1); // not compiled in the display list, but executed immediately
+		(*subDisplayLists)[objectID] = listID;
+	}
+	glCallList((*subDisplayLists)[objectID]);
 	if (steps == 1)
 	{
 		glBegin(GL_LINE_STRIP);
@@ -205,6 +226,12 @@ void SpaceTimePathDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc
 				glEnd();
 				objectStartIndexes->push_back(i);
 				glLoadName(++objectID);
+				map<long, GLuint>::iterator mapEntry = subDisplayLists->find(objectID);
+				if (mapEntry == subDisplayLists->end()) {
+					GLuint listID = glGenLists(1); // not compiled in the display list, but executed immediately
+					(*subDisplayLists)[objectID] = listID;
+				}
+				glCallList((*subDisplayLists)[objectID]);
 				glBegin(GL_LINE_STRIP);
 			}
 			ILWIS::Point *point = (ILWIS::Point *)feature;
@@ -269,6 +296,12 @@ void SpaceTimePathDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc
 					sLastGroupValue = getGroupValue(feature);
 					objectStartIndexes->push_back(i);
 					glLoadName(++objectID);
+					map<long, GLuint>::iterator mapEntry = subDisplayLists->find(objectID);
+					if (mapEntry == subDisplayLists->end()) {
+						GLuint listID = glGenLists(1); // not compiled in the display list, but executed immediately
+						(*subDisplayLists)[objectID] = listID;
+					}
+					glCallList((*subDisplayLists)[objectID]);
 					fCutPath = true;
 				}
 				z = getTimeValue(feature);

@@ -26,7 +26,14 @@ class _export SpaceTimeDrawer : public FeatureLayerDrawer, public TemporalDrawer
 	protected:
 		String store(const FileName& fnView, const String& parentSection) const;
 		void load(const FileName& fnView, const String& currentSection);
-		vector<GLuint> getSelectedObjectIDs(const Coord& c) const;
+		vector<GLuint> getSelectedObjectIDs(const CRect& rect) const;
+		virtual vector<GLuint> getObjectIDs(vector<long> & iRaws) const = 0;
+		virtual int getNearestEnabledObjectIDIndex(vector<GLuint> & objectIDs) const = 0;
+		virtual vector<GLuint> getEnabledObjectIDs(vector<GLuint> & objectIDs) const = 0;
+		virtual Feature * getFeature(GLuint objectID) const = 0;
+		virtual void getRaws(GLuint objectID, vector<long> & raws) const = 0;
+		virtual String getInfo(const Coord& c) const;
+		virtual void select(const CRect& rect, vector<long> & selectedRaws, SelectionMode selectionMode);
 		virtual NewDrawer *createElementDrawer(PreparationParameters *pp, ILWIS::DrawerParameters* parms) const;
 		void setDrawMethod(DrawMethod method=drmINIT);
 		RangeReal getValueRange(Column attributeColumn) const;
@@ -44,6 +51,8 @@ class _export SpaceTimeDrawer : public FeatureLayerDrawer, public TemporalDrawer
 		bool fValueMap;
 		CoordBounds cube;
 		vector<long> disabledRaws;
+		vector<GLuint> selectedObjectIDs;
+		map<long, GLuint> *subDisplayLists;
 		bool *fHatching;
 	private:
 		Column prevAttColumn;

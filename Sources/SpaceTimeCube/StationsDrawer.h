@@ -17,7 +17,11 @@ class _export StationsDrawer : public SpaceTimeDrawer {
 		String store(const FileName& fnView, const String& parentSection) const;
 		void load(const FileName& fnView, const String& currentSection);
 		virtual void drawObjects(const int steps, GetHatchFunc getHatchFunc) const;
-		String getInfo(const Coord& c) const;
+		virtual vector<GLuint> getObjectIDs(vector<long> & iRaws) const;
+		virtual int getNearestEnabledObjectIDIndex(vector<GLuint> & objectIDs) const;
+		virtual vector<GLuint> getEnabledObjectIDs(vector<GLuint> & objectIDs) const;
+		virtual Feature * getFeature(GLuint objectID) const;
+		virtual void getRaws(GLuint objectID, vector<long> & raws) const;
 	private:
 	};
 }

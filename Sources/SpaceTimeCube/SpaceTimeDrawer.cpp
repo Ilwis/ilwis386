@@ -21,6 +21,7 @@ using namespace ILWIS;
 SpaceTimeDrawer::SpaceTimeDrawer(DrawerParameters *parms, const String& name)
 : FeatureLayerDrawer(parms, name)
 , prevUseAttColumn(false)
+, subDisplayLists(new map<long, GLuint>())
 , nrSteps(-1)
 {
 	displayList = new GLuint;
@@ -40,7 +41,10 @@ SpaceTimeDrawer::~SpaceTimeDrawer() {
 	csDraw->Lock(); // wait here til drawing finishes
 	csDraw->Unlock();
 	delete csDraw;
-	if (*displayList != 0)
+	for (map<long, GLuint>::iterator mapEntry = subDisplayLists->begin(); mapEntry != subDisplayLists->end(); ++mapEntry)
+			glDeleteLists(mapEntry->second, 1); // which OpenGL context?
+	delete subDisplayLists;
+	if (*displayList != 0) // which OpenGL context?
 		glDeleteLists(*displayList, 2);
 	delete displayList;
 	if (texture[0] != 0)
@@ -120,6 +124,27 @@ void SpaceTimeDrawer::prepare(PreparationParameters *parms){
 				disabledRaws.push_back(iRaw);
 		}
 
+		if (selectedRaws != parms->rowSelect.raws) {
+			selectedRaws = parms->rowSelect.raws;
+			selectedObjectIDs = getObjectIDs(selectedRaws);
+			// highlight selected items
+			if (rootDrawer->getDrawerContext()->TakeContext()) {
+				long numberOfFeatures = basemap->iFeatures();
+				bool fPrevSelected = false;
+				for (map<long, GLuint>::iterator mapEntry = subDisplayLists->begin(); mapEntry != subDisplayLists->end(); ++mapEntry) {
+					bool fSelected = find(selectedObjectIDs.begin(), selectedObjectIDs.end(), mapEntry->first) != selectedObjectIDs.end();
+					glNewList(mapEntry->second, GL_COMPILE);
+					if (fSelected && !fPrevSelected)
+						glTranslated(0, 0.5, 0);
+					else if (fPrevSelected && !fSelected)
+						glTranslated(0, -0.5, 0);
+					glEndList();
+					fPrevSelected = fSelected;
+				}
+				rootDrawer->getDrawerContext()->ReleaseContext();
+			}
+		}
+
 		*fRefreshTexture = true;
 
 		if ( parms && parms->props ) {
@@ -137,7 +162,7 @@ void SpaceTimeDrawer::prepare(PreparationParameters *parms){
 	}
 	clock_t end = clock();
 	double duration = 1000.0 * (double)(end - start) / CLOCKS_PER_SEC;
-	TRACE("Prepared in %2.2f seconds;\n", duration/1000);
+	TRACE("Space Time Drawer Prepared in %2.2f seconds;\n", duration/1000);
 }
 
 String SpaceTimeDrawer::store(const FileName& fnView, const String& parentSection) const{
@@ -262,60 +287,169 @@ struct sort_pair_first_value {
     } 
 }; 
 
-vector<GLuint> SpaceTimeDrawer::getSelectedObjectIDs(const Coord& c) const
+vector<GLuint> SpaceTimeDrawer::getSelectedObjectIDs(const CRect& rect) const
 {
 	vector<GLuint> selectedObjectIDs;
-	if (!c.fUndef())
+	if (rootDrawer->getDrawerContext()->TakeContext())
 	{
-		RowCol rc = rootDrawer->WorldToScreen(c);
-		if (rootDrawer->getDrawerContext()->TakeContext())
+		if (*displayList != 0)
 		{
-			if (*displayList != 0)
-			{
-				const unsigned int SELECT_BUF_SIZE = 2048;
-				GLuint selectBuf [SELECT_BUF_SIZE];
-				GLint viewport[4];
-				glGetIntegerv(GL_VIEWPORT, viewport);
-				glSelectBuffer(SELECT_BUF_SIZE, selectBuf);
-				glRenderMode(GL_SELECT);
-				glMatrixMode(GL_PROJECTION);
-				glPushMatrix();
-				glLoadIdentity();
-				gluPickMatrix(rc.Col, rc.Row, 1.0, 1.0, viewport);
-				CoordBounds cbZoom = rootDrawer->getCoordBoundsZoom();
-				if (rootDrawer->is3D()) {
-					Coord eyePoint = rootDrawer->getEyePoint();
-					Coord viewPoint = rootDrawer->getViewPoint();
-					double windowAspectRatio = (double)viewport[2] / (double)viewport[3]; // (double)(rc.Col) / (double)(rc.Row)
-					double zNear = max(abs(eyePoint.x - viewPoint.x), abs(eyePoint.y - viewPoint.y)) / 2.0;
-					double zFar = max(cbZoom.width(), cbZoom.height()) * 4.0;
-					gluPerspective(30.0, windowAspectRatio, zNear, zFar);
-				} else {
-					glOrtho(cbZoom.cMin.x,cbZoom.cMax.x,cbZoom.cMin.y,cbZoom.cMax.y,-1,1);
-				}
-				glMatrixMode(GL_MODELVIEW);
-				CoordBounds cbArea;
-				drawPreDrawers(cbArea);
-				glCallList(*displayList);
-				glMatrixMode(GL_PROJECTION);
-				glPopMatrix();
-				glMatrixMode(GL_MODELVIEW);
-				drawPostDrawers(cbArea);
-				int nrObjects = glRenderMode(GL_RENDER);
-				vector<std::pair<GLuint, GLuint>> sortedObjectIDs;
-				for (int i = 0; i < nrObjects; ++i) {
-					GLuint minZ = selectBuf[i * 4 + 1];
-					GLuint objectID = selectBuf[i * 4 + 3];
-					sortedObjectIDs.push_back(std::pair<GLuint, GLuint>(minZ, objectID));
-				}
-				std::stable_sort(sortedObjectIDs.begin(), sortedObjectIDs.end(), sort_pair_first_value());
-				for(vector<std::pair<GLuint, GLuint>>::const_iterator it = sortedObjectIDs.begin(); it != sortedObjectIDs.end(); ++it)
-					selectedObjectIDs.push_back((*it).second);
+			const unsigned int SELECT_BUF_SIZE = 2048;
+			GLuint selectBuf [SELECT_BUF_SIZE];
+			GLint viewport[4];
+			glGetIntegerv(GL_VIEWPORT, viewport);
+			glSelectBuffer(SELECT_BUF_SIZE, selectBuf);
+			glRenderMode(GL_SELECT);
+			glMatrixMode(GL_PROJECTION);
+			glPushMatrix();
+			glLoadIdentity();
+			gluPickMatrix(rect.CenterPoint().x, rect.CenterPoint().y, max(1, rect.Width()), max(1, rect.Height()), viewport);
+			CoordBounds cbZoom = rootDrawer->getCoordBoundsZoom();
+			if (rootDrawer->is3D()) {
+				Coord eyePoint = rootDrawer->getEyePoint();
+				Coord viewPoint = rootDrawer->getViewPoint();
+				double windowAspectRatio = (double)viewport[2] / (double)viewport[3]; // (double)(rc.Col) / (double)(rc.Row)
+				double zNear = max(abs(eyePoint.x - viewPoint.x), abs(eyePoint.y - viewPoint.y)) / 2.0;
+				double zFar = max(cbZoom.width(), cbZoom.height()) * 4.0;
+				gluPerspective(30.0, windowAspectRatio, zNear, zFar);
+			} else {
+				glOrtho(cbZoom.cMin.x,cbZoom.cMax.x,cbZoom.cMin.y,cbZoom.cMax.y,-1,1);
 			}
-			rootDrawer->getDrawerContext()->ReleaseContext();
+			glMatrixMode(GL_MODELVIEW);
+			CoordBounds cbArea;
+			drawPreDrawers(cbArea);
+			glPushMatrix();
+			if (!rootDrawer->is3D())
+				glScaled(1,1,0);
+			glMatrixMode(GL_TEXTURE);
+			glPushMatrix();
+			glCallList(*displayList);
+			glPopMatrix();
+			glMatrixMode(GL_MODELVIEW);
+			glPopMatrix();
+			glMatrixMode(GL_PROJECTION);
+			glPopMatrix();
+			glMatrixMode(GL_MODELVIEW);
+			drawPostDrawers(cbArea);
+			int nrObjects = glRenderMode(GL_RENDER);
+			vector<std::pair<GLuint, GLuint>> sortedObjectIDs;
+			for (int i = 0; i < nrObjects; ++i) {
+				GLuint minZ = selectBuf[i * 4 + 1];
+				GLuint objectID = selectBuf[i * 4 + 3];
+				sortedObjectIDs.push_back(std::pair<GLuint, GLuint>(minZ, objectID));
+			}
+			std::stable_sort(sortedObjectIDs.begin(), sortedObjectIDs.end(), sort_pair_first_value());
+			for(vector<std::pair<GLuint, GLuint>>::const_iterator it = sortedObjectIDs.begin(); it != sortedObjectIDs.end(); ++it)
+				selectedObjectIDs.push_back((*it).second);
 		}
+		rootDrawer->getDrawerContext()->ReleaseContext();
 	}
 	return selectedObjectIDs;
+}
+
+String SpaceTimeDrawer::getInfo(const Coord& c) const
+{
+	if ( !hasInfo() || !isActive() )
+		return "";
+	String info;
+	RowCol rc = rootDrawer->WorldToScreen(c);
+	CRect rect (rc.Col, rc.Row, rc.Col + 1, rc.Row + 1);
+	vector<GLuint> objectIDs = getSelectedObjectIDs(rect);
+	int i = getNearestEnabledObjectIDIndex(objectIDs);
+	if (i < objectIDs.size()) {
+		GLuint objectID = objectIDs[i];
+		// construct info
+		Feature * feature = getFeature(objectID);
+		if (feature != 0) {
+			if (!useAttColumn) {
+				SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)parentDrawer;
+				BaseMapPtr *bmptr = mapDrawer->getBaseMap(mapDrawer->getCurrentIndex());
+				if (bmptr->dvrs().fRawAvailable()) {
+					long raw = feature->iValue();
+					info = bmptr->dvrs().sValueByRaw(raw);
+				} else {
+					double val = feature->rValue();
+					info = bmptr->dvrs().sValue(val);
+				}
+			} else if (getAtttributeColumn().fValid()) {
+				long raw = feature->iValue();
+				if (raw != iUNDEF)
+					info = getAtttributeColumn()->sValue(raw);
+				else
+					info = "?";
+			} else
+				info = "?";
+		} else
+			info = "?";
+	}
+	return info;
+}
+
+void SpaceTimeDrawer::select(const CRect& rect, vector<long> & selectedRaws, SelectionMode selectionMode)
+{
+	//vector<long> raws;
+	RowCol viewPort = rootDrawer->getViewPort();
+	CRect rectGL (rect.left, viewPort.Row - rect.bottom, rect.right, viewPort.Row - rect.top);
+	vector<GLuint> newlySelectedObjectIDs = getSelectedObjectIDs(rectGL);
+	newlySelectedObjectIDs = getEnabledObjectIDs(newlySelectedObjectIDs);
+	if (selectionMode == SELECTION_NEW) {
+		selectedRaws.clear();
+		for (int i = 0; i < newlySelectedObjectIDs.size(); ++i) {
+			GLuint objectID = newlySelectedObjectIDs[i];
+			getRaws(objectID, selectedRaws);
+		}
+		selectedObjectIDs = newlySelectedObjectIDs;
+	} else if (selectionMode == SELECTION_ADD) {
+		vector<long> newlySelectedRaws;
+		for (int i = 0; i < newlySelectedObjectIDs.size(); ++i) {
+			GLuint objectID = newlySelectedObjectIDs[i];
+			getRaws(objectID, newlySelectedRaws);
+		}
+		sort(selectedRaws.begin(), selectedRaws.end());
+		sort(newlySelectedRaws.begin(), newlySelectedRaws.end());
+		vector<long> tmpRaws;
+		set_union(selectedRaws.begin(), selectedRaws.end(), newlySelectedRaws.begin(), newlySelectedRaws.end(), back_inserter(tmpRaws));
+		selectedRaws.swap(tmpRaws);
+		sort(selectedObjectIDs.begin(), selectedObjectIDs.end());
+		sort(newlySelectedObjectIDs.begin(), newlySelectedObjectIDs.end());
+		vector<GLuint> tmpIDs;
+		set_union(selectedObjectIDs.begin(), selectedObjectIDs.end(), newlySelectedObjectIDs.begin(), newlySelectedObjectIDs.end(), back_inserter(tmpIDs));
+		selectedObjectIDs.swap(tmpIDs);
+	} else if (selectionMode == SELECTION_REMOVE) {
+		vector<long> newlySelectedRaws;
+		for (int i = 0; i < newlySelectedObjectIDs.size(); ++i) {
+			GLuint objectID = newlySelectedObjectIDs[i];
+			getRaws(objectID, newlySelectedRaws);
+		}
+		sort(selectedRaws.begin(), selectedRaws.end());
+		sort(newlySelectedRaws.begin(), newlySelectedRaws.end());
+		vector<long> tmpRaws;
+		set_difference(selectedRaws.begin(), selectedRaws.end(), newlySelectedRaws.begin(), newlySelectedRaws.end(), back_inserter(tmpRaws));
+		selectedRaws.swap(tmpRaws);
+		sort(selectedObjectIDs.begin(), selectedObjectIDs.end());
+		sort(newlySelectedObjectIDs.begin(), newlySelectedObjectIDs.end());
+		vector<GLuint> tmpIDs;
+		set_difference(selectedObjectIDs.begin(), selectedObjectIDs.end(), newlySelectedObjectIDs.begin(), newlySelectedObjectIDs.end(), back_inserter(tmpIDs));
+		selectedObjectIDs.swap(tmpIDs);
+	}
+
+	// highlight selected item
+
+	if (rootDrawer->getDrawerContext()->TakeContext()) {
+		long numberOfFeatures = basemap->iFeatures();
+		bool fPrevSelected = false;
+		for (map<long, GLuint>::iterator mapEntry = subDisplayLists->begin(); mapEntry != subDisplayLists->end(); ++mapEntry) {
+			bool fSelected = (find(selectedObjectIDs.begin(), selectedObjectIDs.end(), mapEntry->first) != selectedObjectIDs.end());
+			glNewList(mapEntry->second, GL_COMPILE);
+			if (fSelected && !fPrevSelected)
+				glTranslated(0, 0.5, 0);
+			else if (fPrevSelected && !fSelected)
+				glTranslated(0, -0.5, 0);
+			glEndList();
+			fPrevSelected = fSelected;
+		}
+		rootDrawer->getDrawerContext()->ReleaseContext();
+	}
 }
 
 void SpaceTimeDrawer::getHatch(RepresentationClass * prc, long iRaw, const byte* &hatch) const {
@@ -361,8 +495,8 @@ bool SpaceTimeDrawer::draw( const CoordBounds& cbArea) const {
 
 	// Following 3 lines needed for transparency to work
 	glClearColor(1.0,1.0,1.0,0.0);
-	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
 	glAlphaFunc(GL_GREATER, 0);
 	glEnable(GL_ALPHA_TEST);
 
@@ -370,6 +504,7 @@ bool SpaceTimeDrawer::draw( const CoordBounds& cbArea) const {
 	bool is3D = getRootDrawer()->is3D(); 
 	//double z0 = getRootDrawer()->getZMaker()->getZ0(is3D);
 	//ZValueMaker *zmaker = getZMaker();
+
 	if (is3D) {
 		//glTranslated(cube.cMin.x + cube.width() / 2.0, cube.cMin.y + cube.height() / 2.0, cube.cMin.z + cube.altitude() / 2.0);
 		//glScaled(cube.width() / 2.0, cube.height() / 2.0, cube.altitude() / 2.0);
@@ -428,7 +563,9 @@ bool SpaceTimeDrawer::draw( const CoordBounds& cbArea) const {
 			for (int i = 0; i < iTextureSize; ++i) {
 				texture_data[i] = singleColor;
 				texture_data[i] |= (255 << 24);
-				texture_data[i + iTextureSize] = texture_data[i];
+				Color clr (texture_data[i]);
+				clr.SetHSI(clr.hue(), clr.sat(), min(255, (clr.intens() * 2)));
+				texture_data[i + iTextureSize] = clr.iVal();
 			}
 		} else {
 			Column attributeColumnColors;
@@ -446,7 +583,9 @@ bool SpaceTimeDrawer::draw( const CoordBounds& cbArea) const {
 				drawColor->clrVal(buf, texture_data, iTextureSize);
 				for (int i = 0; i < iTextureSize; ++i) {
 					texture_data[i] |= (255 << 24);
-					texture_data[i + iTextureSize] = texture_data[i];
+					Color clr (texture_data[i]);
+					clr.SetHSI(clr.hue(), clr.sat(), min(255, (clr.intens() * 2)));
+					texture_data[i + iTextureSize] = clr.iVal();
 				}
 				delete [] buf;
 			} else {
@@ -460,12 +599,16 @@ bool SpaceTimeDrawer::draw( const CoordBounds& cbArea) const {
 							texture_data[i] &= (0 << 24);
 						else
 							texture_data[i] |= (255 << 24);
-						texture_data[i + iTextureSize] = texture_data[i];
+						Color clr (texture_data[i]);
+						clr.SetHSI(clr.hue(), clr.sat(), min(255, (clr.intens() * 2)));
+						texture_data[i + iTextureSize] = clr.iVal();
 					}
 				} else {
 					for (int i = 0; i < iTextureSize; ++i) {
 						texture_data[i] |= (255 << 24);
-						texture_data[i + iTextureSize] = texture_data[i];
+						Color clr (texture_data[i]);
+						clr.SetHSI(clr.hue(), clr.sat(), min(255, (clr.intens() * 2)));
+						texture_data[i + iTextureSize] = clr.iVal();
 					}
 				}
 				delete [] buf;
@@ -543,10 +686,6 @@ bool SpaceTimeDrawer::draw( const CoordBounds& cbArea) const {
 		}
 	}
 
-	glPopMatrix();
-	glMatrixMode(GL_MODELVIEW);
-	glDisable(GL_TEXTURE_2D);
-
 	if (steps == 1)
 		glLineWidth(1);
 
@@ -557,9 +696,15 @@ bool SpaceTimeDrawer::draw( const CoordBounds& cbArea) const {
 		glDisable(GL_NORMALIZE);
 	}
 
+
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glDisable(GL_TEXTURE_2D);
+
 	glPopMatrix();
 
 	glDisable(GL_ALPHA_TEST);
+	glDisable(GL_BLEND);
 
 	drawPostDrawers(cbArea);
 

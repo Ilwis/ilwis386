@@ -14,7 +14,6 @@
 #include "Drawers\PointDrawer.h"
 #include "Drawers\PointFeatureDrawer.h"
 #include "Engine\Representation\Rprclass.h"
-#include "Client\ilwis.h"
 
 using namespace ILWIS;
 
@@ -42,14 +41,23 @@ void StationsDrawer::load(const FileName& fnView, const String& currentSection)
 	SpaceTimeDrawer::load(fnView, currentSection);
 }
 
-String StationsDrawer::getInfo(const Coord& c) const
+vector<GLuint> StationsDrawer::getObjectIDs(vector<long> & iRaws) const
 {
-	if ( !hasInfo() || !isActive() )
-		return "";
-	String info;
-	vector<long> raws;
-	vector<GLuint> objectIDs = getSelectedObjectIDs(c);
-	int i = 0;
+	vector<GLuint> objectIDs;
+	long numberOfFeatures = basemap->iFeatures();
+	for (GLuint objectID = 0; objectID < numberOfFeatures; ++objectID) {
+		Feature * feature = CFEATURE(basemap->getFeature(objectID));
+		if (feature != 0) {
+			if (find(iRaws.begin(), iRaws.end(), feature->iValue()) != iRaws.end())
+				objectIDs.push_back(objectID);
+		}
+	}
+	return objectIDs;
+}
+
+int StationsDrawer::getNearestEnabledObjectIDIndex(vector<GLuint> & objectIDs) const
+{
+	int i = 0; // objectIDs are already sorted from near to far, so we only need to check for disabled iRaws
 	if (useAttColumn && getAtttributeColumn().fValid()) {
 		while (i < objectIDs.size()) {
 			GLuint objectID = objectIDs[i];
@@ -66,37 +74,42 @@ String StationsDrawer::getInfo(const Coord& c) const
 		}
 	}
 
-	if (i < objectIDs.size()) {
-		GLuint objectID = objectIDs[i];
-		// construct info
-		Feature * feature = CFEATURE(basemap->getFeature(objectID));
-		if (feature != 0) {
-			if (!useAttColumn) {
-				SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)parentDrawer;
-				BaseMapPtr *bmptr = mapDrawer->getBaseMap(mapDrawer->getCurrentIndex());
-				if (bmptr->dvrs().fRawAvailable()) {
-					long raw = feature->iValue();
-					info = bmptr->dvrs().sValueByRaw(raw);
-				} else {
-					double val = feature->rValue();
-					info = bmptr->dvrs().sValue(val);
-				}
-			} else if (getAtttributeColumn().fValid()) {
+	return i;
+}
+
+vector<GLuint> StationsDrawer::getEnabledObjectIDs(vector<GLuint> & objectIDs) const
+{
+	if (useAttColumn && getAtttributeColumn().fValid()) {
+		vector<GLuint> newObjectIDs;
+		for (int i = 0; i < objectIDs.size(); ++i) {
+			GLuint objectID = objectIDs[i];
+			Feature * feature = CFEATURE(basemap->getFeature(objectID));
+			if (feature != 0) {
 				long raw = feature->iValue();
-				if (raw != iUNDEF)
-					info = getAtttributeColumn()->sValue(raw);
-				else
-					info = "?";
-			} else
-				info = "?";
-			// construct raws array (for stations the array has just one element)
-			raws.push_back(feature->iValue());
-		} else
-			info = "?";
-	}
-	// send raws array
-	IlwWinApp()->SendUpdateTableSelection(raws, ((SpatialDataDrawer *)getParentDrawer())->getBaseMap()->dm()->fnObj, long(this));
-	return info;
+				if (raw != iUNDEF) {
+					raw = getAtttributeColumn()->iRaw(raw);
+					if (find(disabledRaws.begin(), disabledRaws.end(), raw) == disabledRaws.end())
+						break;
+				}
+			}
+			newObjectIDs.push_back(objectID);
+		}
+		return newObjectIDs;
+	} else
+		return objectIDs;
+}
+
+Feature * StationsDrawer::getFeature(GLuint objectID) const
+{
+	return CFEATURE(basemap->getFeature(objectID));
+}
+
+void StationsDrawer::getRaws(GLuint objectID, vector<long> & raws) const
+{
+	// construct raws array (for stations the array has just one element)
+	Feature * feature = CFEATURE(basemap->getFeature(objectID));
+	if (feature != 0)
+		raws.push_back(feature->iValue());
 }
 
 void StationsDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc) const
@@ -128,6 +141,12 @@ void StationsDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc) con
 				double z = getTimeValue(feature);
 				if (z >= cubeBottom && z <= cubeTop) {
 					glLoadName(i);
+					map<long, GLuint>::iterator mapEntry = subDisplayLists->find(i);
+					if (mapEntry == subDisplayLists->end()) {
+						GLuint listID = glGenLists(1); // not compiled in the display list, but executed immediately
+						(*subDisplayLists)[i] = listID;
+					}
+					glCallList((*subDisplayLists)[i]);
 					glBegin(GL_LINE_STRIP);
 					Coord crd = *(point->getCoordinate());
 					crd.z = z * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
@@ -197,6 +216,12 @@ void StationsDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc) con
 							glDisable(GL_POLYGON_STIPPLE);
 
 						glLoadName(i);
+						map<long, GLuint>::iterator mapEntry = subDisplayLists->find(i);
+						if (mapEntry == subDisplayLists->end()) {
+							GLuint listID = glGenLists(1); // not compiled in the display list, but executed immediately
+							(*subDisplayLists)[i] = listID;
+						}
+						glCallList((*subDisplayLists)[i]);
 						// cylinderCoords
 						glBegin(GL_TRIANGLE_STRIP);
 						double f = 0;
