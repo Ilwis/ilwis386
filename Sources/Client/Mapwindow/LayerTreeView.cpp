@@ -727,7 +727,7 @@ void LayerTreeView::OnLButtonUp(UINT nFlags, CPoint point)
 		switch (eType) 
 		{
 		case eBEGIN:
-			mcd->rootDrawer->addDrawer(drDrag); // the first drawer in the layer-tree is the last drawer in the drawer-list
+			mcd->rootDrawer->addDrawer(drDrag, false); // the first drawer in the layer-tree is the last drawer in the drawer-list
 			break;
 		case eEND:
 			mcd->rootDrawer->insertDrawer(0,drDrag); // the last drawer in the layer-tree is the first drawer in the drawer-list
