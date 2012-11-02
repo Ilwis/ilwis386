@@ -27,7 +27,7 @@ namespace ILWIS{
 		void *getDataSource() const;
 		bool useRaw() const;
 		virtual void prepareChildDrawers(PreparationParameters *parms);
-		virtual void select(const CoordBounds& cbSelect, vector<long> & selectedRaws, SelectionMode selectionMode);
+		virtual void select(const CRect& rect, vector<long> & selectedRaws, SelectionMode selectionMode);
 
 	protected:
 		String store(const FileName& fnView, const String& parenSection) const;

@@ -98,6 +98,7 @@ void FeatureLayerDrawer::prepare(PreparationParameters *parms){
 	} if ( parms->type & NewDrawer::ptRENDER || parms->type & NewDrawer::pt3D || parms->type & NewDrawer::ptRESTORE) {
 			PreparationParameters pp(parms);
 			pp.type = pp.type & ~NewDrawer::ptGEOMETRY;
+			selectedRaws = parms->rowSelect.raws;
 			prepareChildDrawers(&pp);
 	}
 	clock_t end = clock();
@@ -210,7 +211,7 @@ bool FeatureLayerDrawer::useRaw() const {
 	return false;
 }
 
-void FeatureLayerDrawer::select(const CoordBounds& cbSelect, vector<long> & selectedRaws, SelectionMode selectionMode) {
+void FeatureLayerDrawer::select(const CRect& rect, vector<long> & selectedRaws, SelectionMode selectionMode) {
 
 	if (featureMap.size() != getDrawerCount()) { // we have postponed this to the first time the user "selects" .. move to "prepare" if needed
 		featureMap.clear();
@@ -222,6 +223,17 @@ void FeatureLayerDrawer::select(const CoordBounds& cbSelect, vector<long> & sele
 
 	SpatialDataDrawer *datadrw = dynamic_cast<SpatialDataDrawer *>(getParentDrawer());
 	if ( datadrw) {
+		CoordBounds cbSelect = rootDrawer->getCoordBoundsZoom();
+		RowCol rectWindow = rootDrawer->getViewPort();
+		Coord c1,c2;
+		c1.x = cbSelect.cMin.x + cbSelect.width() * rect.left / (double)rectWindow.Col; // determine zoom rectangle in GL coordinates
+		c1.y = cbSelect.cMax.y - cbSelect.height() * rect.top / (double)rectWindow.Row;
+		c2.x = cbSelect.cMin.x + cbSelect.width() * rect.right / (double)rectWindow.Col;
+		c2.y = cbSelect.cMax.y - cbSelect.height() * rect.bottom / (double)rectWindow.Row;
+		c1.z = c2.z = 0;
+
+		cbSelect = CoordBounds (c1,c2);
+
 		vector<Feature *> features = datadrw->getBaseMap()->getFeatures(cbSelect, false); // the "complete" parameter forces the user to make the selection box too big, causing inaccurate selection (complete is only applicable to segments and polygons)
 		if (selectionMode == SELECTION_NEW) {
 			selectedRaws.clear();
