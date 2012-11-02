@@ -212,6 +212,8 @@ bool FeatureLayerDrawer::useRaw() const {
 }
 
 void FeatureLayerDrawer::select(const CRect& rect, vector<long> & selectedRaws, SelectionMode selectionMode) {
+	if (rootDrawer->is3D())
+		return;
 
 	if (featureMap.size() != getDrawerCount()) { // we have postponed this to the first time the user "selects" .. move to "prepare" if needed
 		featureMap.clear();
