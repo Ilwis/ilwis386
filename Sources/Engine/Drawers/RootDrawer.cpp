@@ -145,7 +145,18 @@ Therefore all calls to RootDrawer::draw must be preceded by a call to DrawerCont
 
 bool RootDrawer::draw( const CoordBounds& cb) const{
 	if ( selectionDrawer) {
+		glPushMatrix(); // GL_MODELVIEW
+		glMatrixMode(GL_PROJECTION);
+		glPushMatrix();
+		glLoadIdentity();
+		glOrtho(0,pixArea.Col,pixArea.Row,0,-1,1);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
 		selectionDrawer->draw();
+		glMatrixMode(GL_PROJECTION);
+		glPopMatrix(); // maintain the original state for incidental gluUnProject calls
+		glMatrixMode(GL_MODELVIEW);
+		glPopMatrix();
 	}
 	else {
 		// Setup
