@@ -176,7 +176,9 @@ BOOL ZoomableView::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT*
 	switch (message) {
 		case WM_MOUSEMOVE:
 			if (mcd->rootDrawer->is3D()) {
-				if ((wParam & MK_CONTROL) || (iActiveTool == ID_PANAREA))
+				if (iActiveTool == ID_SELECTFEATURES)
+					tools.OnMouseMove(wParam, point);
+				else if ((wParam & MK_CONTROL) || (iActiveTool == ID_PANAREA))
 					movePoint(point, message);
 			} else {
 				if (tools.size() > 0) 
@@ -188,7 +190,9 @@ BOOL ZoomableView::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT*
 			break;
 		case WM_LBUTTONDOWN:
 			if (mcd->rootDrawer->is3D()) {
-				if ((wParam & MK_CONTROL) || (iActiveTool == ID_PANAREA))
+				if (iActiveTool == ID_SELECTFEATURES)
+					tools.OnLButtonDown(wParam, point);
+				else if ((wParam & MK_CONTROL) || (iActiveTool == ID_PANAREA))
 					viewRotate(point,message);
 			} else {
 				if (tools.size() > 0)
@@ -197,7 +201,9 @@ BOOL ZoomableView::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT*
 			break;
 		case WM_LBUTTONUP:
 			if (mcd->rootDrawer->is3D()) {
-				if ((mode != cNone) || (iActiveTool == ID_PANAREA))
+				if (iActiveTool == ID_SELECTFEATURES)
+					tools.OnLButtonUp(wParam, point);
+				else if ((mode != cNone) || (iActiveTool == ID_PANAREA))
 					viewRotate(point,message);
 			} else {
 				if (tools.size() > 0)
