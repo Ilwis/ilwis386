@@ -28,7 +28,7 @@ namespace ILWIS {
 		bool fCtrl;
 		bool fShift;
 		BaseMapPtr *bmapptr;
-		vector<long> selectedRaws;
+		vector<long> * selectedRaws;
 		AreaSelector *as;
 
 	};

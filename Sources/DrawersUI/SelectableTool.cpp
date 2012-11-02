@@ -31,7 +31,7 @@ DrawerTool *createSelectableTool(ZoomableView* zv, LayerTreeView *view, NewDrawe
 }
 
 SelectableTool::SelectableTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
-DrawerTool("SelectableTool",zv, view, drw), fCtrl(false), fShift(false), as(0)
+DrawerTool("SelectableTool",zv, view, drw), fCtrl(false), fShift(false), as(0), selectedRaws(0)
 {
 }
 
@@ -52,6 +52,7 @@ bool SelectableTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	}
 	parentTool = tool;
 	stay = true;
+	selectedRaws = layerDrawer->getSelectedRaws();
 	return true;
 }
 
@@ -91,7 +92,7 @@ void SelectableTool::setSelectable(void *v, HTREEITEM) {
 		}
 
 		getDrawer()->select(false); // deselect all points
-		selectedRaws.clear();
+		selectedRaws->clear();
 		mpvGetView()->Invalidate();
 	}
 }
@@ -147,8 +148,8 @@ bool SelectableTool::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags){
 
 void SelectableTool::OnEscape() {
 	getDrawer()->select(false); // deselect all points
-	selectedRaws.clear();
-	IlwWinApp()->SendUpdateTableSelection(selectedRaws, bmapptr->dm()->fnObj, (long)mpvGetView());
+	selectedRaws->clear();
+	IlwWinApp()->SendUpdateTableSelection(*selectedRaws, bmapptr->dm()->fnObj, (long)mpvGetView());
 	mpvGetView()->Invalidate();
 }
 
@@ -162,21 +163,8 @@ void SelectableTool::FeatureAreaSelected(CRect rect)
 	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(tree->GetDocument());
 	if ( mcd) {
 		MapPaneView *view = mcd->mpvGetView();
-
-		CoordBounds cbZoom = mcd->rootDrawer->getCoordBoundsZoom();
-		CRect rectWindow;
-		view->GetClientRect(&rectWindow);
-		Coord c1,c2;
-		c1.x = cbZoom.cMin.x + cbZoom.width() * rect.left / (double)rectWindow.Width(); // determine zoom rectangle in GL coordinates
-		c1.y = cbZoom.cMax.y - cbZoom.height() * rect.top / (double)rectWindow.Height();
-		c2.x = cbZoom.cMin.x + cbZoom.width() * rect.right / (double)rectWindow.Width();
-		c2.y = cbZoom.cMax.y - cbZoom.height() * rect.bottom / (double)rectWindow.Height();
-		c1.z = c2.z = 0;
-
-		cbZoom = CoordBounds (c1,c2);
-		layerDrawer->select(cbZoom, selectedRaws, fCtrl ? LayerDrawer::SELECTION_ADD : (fShift ? LayerDrawer::SELECTION_REMOVE : LayerDrawer::SELECTION_NEW));
-
-		IlwWinApp()->SendUpdateTableSelection(selectedRaws, bmapptr->dm()->fnObj, (long)view);
+		layerDrawer->select(rect, *selectedRaws, fCtrl ? LayerDrawer::SELECTION_ADD : (fShift ? LayerDrawer::SELECTION_REMOVE : LayerDrawer::SELECTION_NEW));
+		IlwWinApp()->SendUpdateTableSelection(*selectedRaws, bmapptr->dm()->fnObj, (long)view);
 		view->Invalidate();
 	}
 }
