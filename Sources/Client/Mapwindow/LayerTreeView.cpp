@@ -704,8 +704,13 @@ void LayerTreeView::OnLButtonUp(UINT nFlags, CPoint point)
 					hti = tree.GetParentItem(hti);
 					if (hti == TVI_ROOT)
 						return;
-					if (0 == hti)
-						return;
+					if (0 == hti) {
+						if (0 != dynamic_cast<DisplayOptionColorItem*>(lti))
+							eType = eEND;
+						else
+							eType = eBEGIN;
+						break;
+					}
 				}
 			}
 			if (hti == hDraggedItem)
@@ -722,10 +727,10 @@ void LayerTreeView::OnLButtonUp(UINT nFlags, CPoint point)
 		switch (eType) 
 		{
 		case eBEGIN:
-			//mcd->dl.push_back(drDrag);
+			mcd->rootDrawer->addDrawer(drDrag); // the first drawer in the layer-tree is the last drawer in the drawer-list
 			break;
 		case eEND:
-			//mcd->dl.push_front(drDrag);
+			mcd->rootDrawer->insertDrawer(0,drDrag); // the last drawer in the layer-tree is the first drawer in the drawer-list
 			break;
 		case eITEM:
 			{
@@ -766,7 +771,9 @@ void LayerTreeView::OnRemoveLayer()
 	String s(TR("Remove %S\nAre you sure?").c_str(), str);
 	int iRet = MessageBox(s.c_str(), TR("Remove Layer").c_str(), MB_YESNO|MB_ICONQUESTION);
 	if (IDYES == iRet) {
-		MapCompositionDoc* mcd = GetDocument();	 
+		delete drwTool; // remove all tools from the mapview before removing the drawer
+		drwTool = 0;
+		MapCompositionDoc* mcd = GetDocument();
 		mcd->RemoveDrawer(drw);
 		mcd->UpdateAllViews(0);
 	}  
