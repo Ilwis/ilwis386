@@ -15,18 +15,11 @@ namespace ILWIS {
 		virtual ~SelectionRectangle();
 		virtual bool draw( const CoordBounds& cbArea=CoordBounds()) const;
 		virtual void prepare(PreparationType t=ptALL,CDC *dc = 0);
-		void calcWorldCoordinates(const CRect & rctWindow, const CRect & rctZoom);
-		CoordBounds getWorldCoordinates() const;
+		void setRectangle(const CRect & rct);
 		void setColor(const Color& clr);
 	protected:
 		virtual HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent) { return 0;}
-		Coord c1,c2;
+		CRect rectangle;
 		Color clr;
 	};
-
-	//struct SelectionParameters : public DrawerParameters {
-	//	CCmdTarget* cmt;
-	//	NotifyRectProc np;
-	//	ZoomableView* mappaneview;
-	//};
 }

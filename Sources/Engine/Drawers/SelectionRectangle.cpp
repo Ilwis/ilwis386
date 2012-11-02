@@ -23,46 +23,36 @@ SelectionRectangle::~SelectionRectangle() {
 bool SelectionRectangle::draw( const CoordBounds& cb) const{
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
-	bool is3D = getRootDrawer()->is3D();
-	double fakeZ = getRootDrawer()->getZMaker()->getZ0(is3D);
-	fakeZ += fakeZ;
-	double z = is3D ? fakeZ : 0;
+	double z = 0;
+	glDisable(GL_DEPTH_TEST);
 	glColor4d(clr.redP(),clr.greenP(),clr.blueP(),clr.alphaP());
 	glBegin(GL_LINE_STRIP);
-	glVertex3d(c1.x, c1.y,z);
-	glVertex3d(c1.x, c2.y,z);
-	glVertex3d(c2.x, c2.y,z);
-	glVertex3d(c2.x, c1.y,z);
-	glVertex3d(c1.x, c1.y,z);
+	glVertex3d(rectangle.left, rectangle.top, z);
+	glVertex3d(rectangle.left, rectangle.bottom, z);
+	glVertex3d(rectangle.right, rectangle.bottom, z);
+	glVertex3d(rectangle.right, rectangle.top, z);
+	glVertex3d(rectangle.left, rectangle.top, z);
 	glEnd();
 
 	glColor4d(clr.redP() / 4.0,clr.greenP() / 4.0,clr.blueP() / 4.0,clr.alphaP() * 0.1);
 	glBegin(GL_QUADS);
-	glVertex3d(c1.x, c1.y,z);
-	glVertex3d(c1.x, c2.y,z);
-	glVertex3d(c2.x, c2.y,z);
-	glVertex3d(c2.x, c1.y,z);
-	glVertex3d(c1.x, c1.y,z);
+	glVertex3d(rectangle.left, rectangle.top, z);
+	glVertex3d(rectangle.left, rectangle.bottom, z);
+	glVertex3d(rectangle.right, rectangle.bottom, z);
+	glVertex3d(rectangle.right, rectangle.top, z);
+	glVertex3d(rectangle.left, rectangle.top, z);
 	glEnd();
 	glDisable(GL_BLEND);
 
 	return true;
 }
 
-void SelectionRectangle::calcWorldCoordinates(const CRect & rctWindow, const CRect & rctZoom) {
-	CoordBounds cbZoom = getRootDrawer()->getCoordBoundsZoom();
-	c1.x = cbZoom.cMin.x + cbZoom.width() * rctZoom.left / (double)rctWindow.Width(); // determine zoom rectangle in GL coordinates
-	c1.y = cbZoom.cMax.y - cbZoom.height() * rctZoom.top / (double)rctWindow.Height();
-	c2.x = cbZoom.cMin.x + cbZoom.width() * rctZoom.right / (double)rctWindow.Width();
-	c2.y = cbZoom.cMax.y - cbZoom.height() * rctZoom.bottom / (double)rctWindow.Height();
+void SelectionRectangle::setRectangle(const CRect & rct) {
+	rectangle = rct;
 }
 
 void SelectionRectangle::prepare(PreparationType t,CDC *dc){
 
-}
-
-CoordBounds SelectionRectangle::getWorldCoordinates() const {
-	return CoordBounds(c1,c2);
 }
 
 void SelectionRectangle::setColor(const Color& _clr) {
