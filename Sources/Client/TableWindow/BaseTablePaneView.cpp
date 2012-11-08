@@ -1750,8 +1750,6 @@ LRESULT BaseTablePaneView::OnGotoField(WPARAM wParam, LPARAM lParam)
 
 int BaseTablePaneView::iSelectedColumn() const
 {
-	if (selection.minRow() != -1 || selection.maxRow() != iRows())
-		return iUNDEF;
 	if (selection.minCol() != selection.maxCol())
 		return iUNDEF;
 	return selection.minCol() < 0 ? iUNDEF : selection.minCol();
