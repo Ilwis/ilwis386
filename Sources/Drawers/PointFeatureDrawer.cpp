@@ -21,7 +21,17 @@ using namespace ILWIS;
 
 
 ILWIS::NewDrawer *createPointFeatureDrawer(ILWIS::DrawerParameters *parms) {
+	if ( parms->managed) {
+		if ( parms->parent && parms->parent->getType() == "PointLayerDrawer") {
+			PointFeatureDrawer *pfdr =  ((FeatureLayerDrawer *)parms->parent)->allocator<PointFeatureDrawer>()->allocate();
+			pfdr->setDrawerParameters(parms);
+			return pfdr;
+		}
+	}
 	return new PointFeatureDrawer(parms);
+}
+
+PointFeatureDrawer::PointFeatureDrawer() : PointDrawer(0,"PointFeatureDrawer") {
 }
 
 PointFeatureDrawer::PointFeatureDrawer(DrawerParameters *parms) : PointDrawer(parms,"PointFeatureDrawer") {

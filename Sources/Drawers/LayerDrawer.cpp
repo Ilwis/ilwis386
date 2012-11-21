@@ -2,7 +2,7 @@
 #include "Engine\Map\basemap.h"
 #include "Engine\Map\Point\ilwPoint.h"
 #include "Engine\Drawers\ComplexDrawer.h"
-#include "Engine\Drawers\SimpleDrawer.h" 
+#include "Engine\Drawers\SimpleDrawer.h"
 #include "Engine\Representation\Rpr.h"
 #include "Engine\Spatialreference\gr.h"
 #include "Engine\Domain\Dmvalue.h"
@@ -28,6 +28,7 @@ LayerDrawer::LayerDrawer(DrawerParameters *parms, const String& name) :
 	drawColor(0),
 	extrTransparency(0.2),
 	useAttColumn(false)
+	
 {
 	setInfo(true);
 	setTransparency(1);

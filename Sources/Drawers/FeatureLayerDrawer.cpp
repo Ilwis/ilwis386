@@ -2,7 +2,9 @@
 #include "Engine\Map\basemap.h"
 #include "Engine\Map\Point\ilwPoint.h"
 #include "Engine\Drawers\ComplexDrawer.h"
-#include "Engine\Drawers\SimpleDrawer.h" 
+#include "Engine\Drawers\SimpleDrawer.h"
+#include "Drawers\PointDrawer.h"
+#include "Drawers\PointFeatureDrawer.h"
 #include "Engine\Spatialreference\gr.h"
 #include "Engine\Map\Raster\Map.h"
 #include "Engine\Base\System\RegistrySettings.h"
@@ -22,13 +24,15 @@ using namespace ILWIS;
 FeatureLayerDrawer::FeatureLayerDrawer(DrawerParameters *parms, const String& name) : 
 	LayerDrawer(parms,name),
 	singleColor(Color(0,176,20)),
-	useMask(false)
+	useMask(false),
+	managedDrawers(0)
 {
 	setDrawMethod(drmNOTSET); // default
 	setInfo(true);
 }
 
 FeatureLayerDrawer::~FeatureLayerDrawer() {
+	delete managedDrawers;
 
 }
 
@@ -79,7 +83,7 @@ void FeatureLayerDrawer::prepare(PreparationParameters *parms){
 			Feature *feature = features.at(i);
 			NewDrawer *pdrw;
 			if ( feature && feature->fValid() ){
-				ILWIS::DrawerParameters dp(getRootDrawer(), this);
+				ILWIS::DrawerParameters dp(getRootDrawer(), this, true);
 				pdrw = createElementDrawer(parms, &dp);
 				pdrw->addDataSource(feature);
 				PreparationParameters fp((int)parms->type, mapDrawer->getBaseMap()->cs());
@@ -278,3 +282,5 @@ void FeatureLayerDrawer::select(const CRect& rect, vector<long> & selectedRaws, 
 		}
 	}
 }
+
+

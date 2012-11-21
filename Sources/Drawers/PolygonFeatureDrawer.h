@@ -9,6 +9,7 @@ namespace ILWIS{
 class _export PolygonFeatureDrawer : public PolygonDrawer {
 	public:
 		PolygonFeatureDrawer(ILWIS::DrawerParameters *parms);
+		PolygonFeatureDrawer();
 		~PolygonFeatureDrawer();
 		virtual bool draw( const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *);
@@ -16,14 +17,10 @@ class _export PolygonFeatureDrawer : public PolygonDrawer {
 		virtual Feature *getFeature() const;
 		void* getDataSource() const;
 		long writeTriangleData(ofstream& file);
-		//void readTriangleData(long* data, long* count, bool coordConversion, const CoordSystem& csy);
 	protected:
 		PolygonFeatureDrawer(DrawerParameters *parms, const String& name);
-		//void prepareList(gpc_vertex_list& exteriorBoundary, vector<gpc_vertex_list>& holes);
-		//gpc_vertex *makeVertexList(const LineString* ring) const;
 
 		Feature *feature;
-//		long *trianglePol;
 		MapPolygonTriangulator *tri;
 
 	};

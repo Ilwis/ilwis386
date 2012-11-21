@@ -9,6 +9,7 @@ namespace ILWIS{
 class _export LineFeatureDrawer : public LineDrawer {
 	public:
 		LineFeatureDrawer(ILWIS::DrawerParameters *parms);
+		LineFeatureDrawer();
 		~LineFeatureDrawer();
 		virtual bool draw( const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *);

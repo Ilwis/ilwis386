@@ -7,6 +7,7 @@ class FieldColor;
 class DisplayOptionColorItem;
 
 namespace ILWIS{
+	class PointFeatureDrawer;
 	class SimpleDrawer;
 	class _export FeatureLayerDrawer : public ILWIS::LayerDrawer {
 	friend class SetSingleColorForm;
@@ -28,6 +29,11 @@ namespace ILWIS{
 		bool useRaw() const;
 		virtual void prepareChildDrawers(PreparationParameters *parms);
 		virtual void select(const CRect& rect, vector<long> & selectedRaws, SelectionMode selectionMode);
+		template<class T> MemoryManager<T> *allocator() {
+			if ( managedDrawers == 0)
+				managedDrawers = new MemoryManager<T>();
+			return (MemoryManager<T> *)managedDrawers;
+		}
 
 	protected:
 		String store(const FileName& fnView, const String& parenSection) const;
@@ -39,6 +45,7 @@ namespace ILWIS{
 		Color singleColor;
 		BaseMap fbasemap;
 		map<long, SimpleDrawer*> featureMap;
+		void *managedDrawers;
 	
 	};
 }

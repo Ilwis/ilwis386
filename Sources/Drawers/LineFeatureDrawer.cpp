@@ -20,7 +20,17 @@
 using namespace ILWIS;
 
 ILWIS::NewDrawer *createLineFeatureDrawer(DrawerParameters *parms) {
+	if ( parms->managed) {
+		if ( parms->parent && parms->parent->getType() == "LineFeatureDrawer") {
+			LineFeatureDrawer *pfdr =  ((FeatureLayerDrawer *)parms->parent)->allocator<LineFeatureDrawer>()->allocate();
+			pfdr->setDrawerParameters(parms);
+			return pfdr;
+		}
+	}
 	return new LineFeatureDrawer(parms);
+}
+
+LineFeatureDrawer::LineFeatureDrawer() : LineDrawer(0,"LineFeatureDrawer"), feature(0) {
 }
 
 LineFeatureDrawer::LineFeatureDrawer(DrawerParameters *parms) : 

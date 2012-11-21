@@ -29,7 +29,17 @@
 using namespace ILWIS;
 
 ILWIS::NewDrawer *createPolygonFeatureDrawer(DrawerParameters *parms) {
+	if ( parms->managed) {
+		if ( parms->parent && parms->parent->getType() == "PolygonFeatureDrawer") {
+			PolygonFeatureDrawer *pfdr =  ((FeatureLayerDrawer *)parms->parent)->allocator<PolygonFeatureDrawer>()->allocate();
+			pfdr->setDrawerParameters(parms);
+			return pfdr;
+		}
+	}
 	return new PolygonFeatureDrawer(parms);
+}
+
+PolygonFeatureDrawer::PolygonFeatureDrawer() : PolygonDrawer(0,"PolygonFeatureDrawer") {
 }
 
 PolygonFeatureDrawer::PolygonFeatureDrawer(DrawerParameters *parms) : PolygonDrawer(parms,"PolygonFeatureDrawer") {
