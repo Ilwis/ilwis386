@@ -2477,17 +2477,19 @@ void MapListPropPage::valueRangeField() {
 					fb->Align(stLeft, AL_UNDER);
 					m_feAlignUnder = fb;
 				}
+				String sBut = String("%S ...", TR("Change &Value Range"));
+				PushButton *pb = new PushButton(m_fgValues, sBut, (NotifyProc)&MapListPropPage::DoChangeValueRange);
+				pb->SetIndependentPos();
+				pb->Align(m_fvr, AL_AFTER);
+
+				// Re-assign the callbacks; change item details
+				m_fvr->SetCallBack((NotifyProc)&MapListPropPage::ValueRangeCallBack);  // currently only used to set to disabled state
 			}
+
 		}
 
 
-		String sBut = String("%S ...", TR("Change &Value Range"));
-		PushButton *pb = new PushButton(m_fgValues, sBut, (NotifyProc)&MapListPropPage::DoChangeValueRange);
-		pb->SetIndependentPos();
-		pb->Align(m_fvr, AL_AFTER);
 
-		// Re-assign the callbacks; change item details
-		m_fvr->SetCallBack((NotifyProc)&MapListPropPage::ValueRangeCallBack);  // currently only used to set to disabled state
 		if ( entry) {
 			FieldBlank *fb3 = new FieldBlank(m_fgPageRoot);
 			fb3->Align(entry, AL_UNDER);
