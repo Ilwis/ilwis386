@@ -252,9 +252,12 @@ zIcon MapCompositionDoc::icon() const
 	if (rootDrawer->getDrawerCount() != 1)
 		return zIcon("MapViewIcon");
 	else {
-		String name = rootDrawer->getDrawer(0)->iconName();
-		return zIcon();
+		if ( rootDrawer->getDrawerCount() > 0) {
+			String name = rootDrawer->getDrawer(0)->iconName();
+			return zIcon(name.c_str());
+		}
 	}
+	return zIcon();
 }
 
 bool MapCompositionDoc::usesObject(const IlwisObject& ob) const {
