@@ -52,7 +52,7 @@ namespace ILWIS {
 	class _export Segment : public geos::geom::LineString, public Feature
 {
 public:
-	Segment(geos::index::quadtree::Quadtree *tree, geos::geom::LineString *seg=NULL);
+	Segment(QuadTree *tree, geos::geom::LineString *seg=NULL);
 	virtual ~Segment();
 	//CoordBounds		crdBounds() const; // new 3.0
 	long			iBegin() const;   // begin node  - id in node table
@@ -99,7 +99,7 @@ protected:
 
 	class LSegment : public ILWIS::Segment {
 public:
-	LSegment(geos::index::quadtree::Quadtree *tree, geos::geom::LineString *seg=NULL);
+	LSegment(QuadTree *tree, geos::geom::LineString *seg=NULL);
 	virtual long	iValue()const;
 	virtual double	rValue() const;
 	virtual String	sValue(const DomainValueRangeStruct& dvs, short iWidth=0, short iDec=0) const;
@@ -114,7 +114,7 @@ private:
 
 class RSegment : public ILWIS::Segment {
 public:
-	RSegment(geos::index::quadtree::Quadtree *tree, geos::geom::LineString *seg=NULL);
+	RSegment(QuadTree *tree, geos::geom::LineString *seg=NULL);
 	virtual long	iValue()const;
 	virtual double	rValue() const;
 	virtual String	sValue(const DomainValueRangeStruct& dvs, short iWidth=0, short iDec=0) const;

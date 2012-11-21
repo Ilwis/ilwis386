@@ -5,8 +5,8 @@
 
 namespace geos {
 	namespace index {
-		namespace quadtree{
-		class Quadtree;
+		namespace QuadTree{
+		class QuadTree;
 		}
 	}
 }
@@ -16,9 +16,9 @@ namespace ILWIS {
 
 	class _export Point : public geos::geom::Point, public Feature {
 public:
-	Point(geos::index::quadtree::Quadtree *tree,const geos::geom::Point *pnt=NULL);
-	Point(geos::index::quadtree::Quadtree *tree, const Coord& crd);
-	Point(geos::index::quadtree::Quadtree *tree, CoordinateSequence *seq);
+	Point(QuadTree *tree,const geos::geom::Point *pnt=NULL);
+	Point(QuadTree *tree, const Coord& crd);
+	Point(QuadTree *tree, CoordinateSequence *seq);
 	~Point();
 	static CoordinateSequence* create(const Coord& c);
 	void setCoord(const Coord& c);
@@ -30,9 +30,9 @@ public:
 
 class _export LPoint : public Point {
 public:
-	LPoint(geos::index::quadtree::Quadtree *tree, geos::geom::Point *pnt=NULL);
-	LPoint(geos::index::quadtree::Quadtree *tree, const Coord& crd, long v);
-	LPoint(geos::index::quadtree::Quadtree *tree, CoordinateSequence *seq, long v);
+	LPoint(QuadTree *tree, geos::geom::Point *pnt=NULL);
+	LPoint(QuadTree *tree, const Coord& crd, long v);
+	LPoint(QuadTree *tree, CoordinateSequence *seq, long v);
 	~LPoint();
 	String sValue(const DomainValueRangeStruct& dvs, short iWidth=-1, short iDec=-1) const;
 	long iValue() const;
@@ -49,8 +49,8 @@ public:
 
 class _export RPoint : public Point {
 public:
-	RPoint(geos::index::quadtree::Quadtree *tree, geos::geom::Point *pnt=NULL);
-	RPoint(geos::index::quadtree::Quadtree *tree, const Coord& crd, double v);
+	RPoint(QuadTree *tree, geos::geom::Point *pnt=NULL);
+	RPoint(QuadTree *tree, const Coord& crd, double v);
 	~RPoint();
 	String sValue(const DomainValueRangeStruct& dvs, short iWidth=-1, short iDec=-1) const;
 	double rValue() const;

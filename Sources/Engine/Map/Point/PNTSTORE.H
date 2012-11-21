@@ -109,7 +109,7 @@ protected:
   void SetCoordSystem(const CoordSystem& cs);
   void SetPoint(const Coord& crd, double v, bool usesReal);
   bool fErase;
-  geos::index::quadtree::Quadtree *spatialIndex;
+  QuadTree *spatialIndex;
 };
 
 #endif
