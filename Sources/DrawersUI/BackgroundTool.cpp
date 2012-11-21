@@ -24,7 +24,8 @@ DrawerTool *createBackgroundTool(ZoomableView* zv, LayerTreeView *view, NewDrawe
 BackgroundTool::BackgroundTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
 	DrawerTool("BackgroundTool",zv, view, drw)
 {
-	drawer = ((RootDrawer *)drw->getRootDrawer())->getBackgroundDrawer();
+	if ( drw)
+		drawer = ((RootDrawer *)drw->getRootDrawer())->getBackgroundDrawer();
 }
 
 BackgroundTool::~BackgroundTool() {

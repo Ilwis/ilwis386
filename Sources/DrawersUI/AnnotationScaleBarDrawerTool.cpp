@@ -40,10 +40,11 @@ AnnotationScaleBarDrawerTool::~AnnotationScaleBarDrawerTool() {
 }
 
 void AnnotationScaleBarDrawerTool::clear() {
-	ComplexDrawer *annotations = (ComplexDrawer *)(drawer->getRootDrawer()->getDrawer("AnnotationDrawers"));
-	if ( annotations && scaleDrawer)
-		annotations->removeDrawer(scaleDrawer->getId());
-
+	if ( drawer) {
+		ComplexDrawer *annotations = (ComplexDrawer *)(drawer->getRootDrawer()->getDrawer("AnnotationDrawers"));
+		if ( annotations && scaleDrawer)
+			annotations->removeDrawer(scaleDrawer->getId());
+	}
 }
 
 bool AnnotationScaleBarDrawerTool::isToolUseableFor(ILWIS::DrawerTool *tl) { 
