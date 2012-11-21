@@ -107,7 +107,7 @@ protected:
 	PolygonMapPtr& ptr;  // the SegmentMapPtr of which this is a member
 	const FileName& fnObj; // fnObj from ptr (for convenience)
 	ObjectTime timStore; // time of last change in data
-    geos::index::quadtree::Quadtree *spatialIndex;
+    QuadTree *spatialIndex;
 	
 private:
 	void StoreRing(File& binaryFile, const LineString *ls);

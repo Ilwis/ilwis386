@@ -1,14 +1,7 @@
 #pragma once
 
 #include <Geos.h>
-
-namespace geos {
-	namespace index {
-		namespace quadtree{
-		class Quadtree;
-		}
-	}
-}
+#include "Engine\Base\Algorithm\QuadTree.h"
 
 class Mask;
 class DomainValueRangeStruct;
@@ -16,7 +9,7 @@ class DomainValueRangeStruct;
 class _export Feature {
 public:
 	enum FeatureType{ftPOINT=1, ftSEGMENT=2, ftPOLYGON=4, ftUNKNOWN=0};
-	Feature(geos::index::quadtree::Quadtree *tree);
+	Feature(QuadTree *tree);
 
 
 	virtual String sValue(const DomainValueRangeStruct& dvs, short iWidth=-1, short iDec=-1) const = 0;
@@ -39,7 +32,8 @@ public:
 protected:
 	CCriticalSection csAccess;
 	CoordBounds cb;
-	geos::index::quadtree::Quadtree *spatialIndex;
+	//geos::index::quadtree::Quadtree *spatialIndex;
+	QuadTree *spatialIndex;
 
 private:
 	bool deleted;

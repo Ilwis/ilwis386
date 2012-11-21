@@ -4,7 +4,7 @@
 #include <geos/index/quadtree/Quadtree.h>
 #include <geos/geom/Envelope.h>
 
-Feature::Feature(geos::index::quadtree::Quadtree *tree) {
+Feature::Feature(QuadTree *tree) {
 	deleted = false;
 	GUID gd;
 	CoCreateGuid(&gd);

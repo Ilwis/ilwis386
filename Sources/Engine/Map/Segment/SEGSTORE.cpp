@@ -51,7 +51,6 @@
 #include "Engine\Table\NewTableStore.h"
 #include "Engine\Table\TableStoreIlwis3.h"
 #include "geos\operation\distance\DistanceOp.h"
-#include <geos/index/quadtree/Quadtree.h>
 #include <geos/geom/Envelope.h>
 #include "Engine\Table\Rec.h"
 #include "Engine\Map\Point\ilwPoint.h"
@@ -69,7 +68,10 @@ SegmentMapStore::SegmentMapStore(const FileName& fn, SegmentMapPtr& p, bool fCre
 {
   ILWISSingleLock sl(&ptr.csAccess, TRUE, SOURCE_LOCATION);
 	String sDummy;
-  spatialIndex = new geos::index::quadtree::Quadtree();
+	long sz;
+	ptr.ReadElement("SegmentMapStore", "Segments", sz);
+	int bucketSize = max(25L, (long)(sqrt((double)sz) / 3));
+	spatialIndex = new QuadTree(p.cb(), bucketSize);
   ILWIS::Version::BinaryVersion fvFormatVersion;
   ptr.ReadElement("SegmentMapStore", "Format", (int &)fvFormatVersion);
   if (fCreate ) 
@@ -519,9 +521,9 @@ Coord SegmentMapStore::crdCoord(Coord crd, ILWIS::Segment** seg, long& iNr) cons
 	ILWIS::LPoint pnt(0,crd, 1);
 	double minDist = -1.0;
 	ILWIS::Segment *closestSeg = NULL;
-	vector<void *> segs;
-	geos::geom::Envelope env(crd.x - ptr.rProximity(), crd.x + ptr.rProximity(), crd.y - ptr.rProximity(), crd.y + ptr.rProximity());
-	spatialIndex->query(&env,segs);
+	vector<Geometry *> segs;
+	CoordBounds bounds(crd.x - ptr.rProximity(), crd.y - ptr.rProximity(), crd.x + ptr.rProximity(), crd.y + ptr.rProximity());
+	spatialIndex->query(bounds,segs);
 	for(int i = 0; i < segs.size(); ++i) {
 		ILWIS::Segment *s = (ILWIS::Segment *)segs.at(i);
 		if ( !s || s->fValid()==false)
@@ -565,11 +567,11 @@ Coord SegmentMapStore::crdPoint(Coord crd, ILWIS::Segment** seg, long& iNr,
 	ILWIS::LPoint pnt(0,crd, 1);
 	double minDist = -1.0;
 	ILWIS::Segment *closestSeg = NULL;
-	vector<void *> segs;
+	vector<Geometry *> segs;
 	if ( rPrx == rUNDEF)
 		rPrx = ptr.rProximity();
-	geos::geom::Envelope env(crd.x - rPrx, crd.x + rPrx, crd.y - rPrx, crd.y + rPrx);
-	spatialIndex->query(&env,segs);
+	CoordBounds bounds(crd.x - rPrx, crd.y - rPrx, crd.x + rPrx, crd.y + rPrx);
+	spatialIndex->query(bounds,segs);
 	for(int i = 0; i < segs.size(); ++i) {
 		ILWIS::Segment *s = (ILWIS::Segment *)segs.at(i);
 		if ( !s || s->fValid()==false)
@@ -748,7 +750,7 @@ bool SegmentMapStore::removeFeature(const String& id, const vector<int>& selecte
 		ILWIS::Segment *seg = CSEGMENT(*cur);
 		if ( seg->getGuid() == id  ) {
 			if ( selectedCoords.size() == 0 || selectedCoords.size() == seg->getNumPoints() || seg->getNumPoints() - selectedCoords.size() < 2) {
-				spatialIndex->remove(seg->getEnvelopeInternal(),seg);
+				spatialIndex->remove(seg);
 				delete seg;
 				geometries->erase(cur);
 				return true;
@@ -776,11 +778,10 @@ bool SegmentMapStore::removeFeature(const String& id, const vector<int>& selecte
 }
 
 vector<Feature *> SegmentMapStore::getFeatures(const CoordBounds& cb, bool complete) const {
-	vector<void *> segs;
+	vector<Geometry *> segs;
 	vector<Feature *> features;
 
-	geos::geom::Envelope env(cb.MinX(), cb.MaxX(), cb.MinY(), cb.MaxY());
-	spatialIndex->query(&env,segs);
+	spatialIndex->query(cb,segs);
 	for(int i = 0; i < segs.size(); ++i) {
 		ILWIS::Segment *s = (ILWIS::Segment *)segs.at(i);
 		if ( s && s->fValid()) {

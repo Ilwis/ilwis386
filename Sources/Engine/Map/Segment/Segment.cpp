@@ -48,19 +48,19 @@
 #include "Engine\Base\mask.h"
 #include "Engine\Base\AssertD.h"
 #include "Engine\Domain\DomainUniqueID.h"
-#include <geos/index/quadtree/Quadtree.h>
 #include <geos/geom/Envelope.h>
 
 #define EPS10 1.e-10
 
 using namespace ILWIS;
 
-ILWIS::Segment::Segment(geos::index::quadtree::Quadtree *tree, geos::geom::LineString *line) :
+ILWIS::Segment::Segment(QuadTree *tree, geos::geom::LineString *line) :
 	geos::geom::LineString(NULL, new GeometryFactory(new PrecisionModel())), Feature(tree)
 {
   if ( line != NULL)
 	  PutCoords(line->getCoordinates());
   ILWISSingleLock sl(&csAccess, TRUE, SOURCE_LOCATION);
+  //spatialIndex->insert(this);
   fAcceptDeleted = false;
 }
 
@@ -138,19 +138,19 @@ double ILWIS::Segment::rAzim(bool fEnd) const  // azimuth at begin or end
 }
 
 void ILWIS::Segment::PutCoords(CoordinateSequence* sq) {
-	spatialIndex->remove(getEnvelopeInternal(),this);
+	spatialIndex->remove(this);
 	ILWISSingleLock sl(const_cast<CCriticalSection *>(&csAccess), TRUE, SOURCE_LOCATION);
 	points.release();
 	//CoordinateArraySequence *sss = new CoordinateArraySequence();
 	points = CoordinateSequence::AutoPtr(sq);
 	envelope = computeEnvelopeInternal();
-	spatialIndex->insert(getEnvelopeInternal(), this);
+	spatialIndex->insert(this);
 }
 
 void ILWIS::Segment::PutCoords(long iNr, const CoordBuf& crdBuf) 
 {
     ILWISSingleLock sl(const_cast<CCriticalSection *>(&csAccess), TRUE, SOURCE_LOCATION);
-	spatialIndex->remove(getEnvelopeInternal(),this);
+	spatialIndex->remove(this);
 	cb = CoordBounds();
 	points.release();
 	vector<Coordinate> *crds = new vector<Coordinate>();
@@ -160,7 +160,7 @@ void ILWIS::Segment::PutCoords(long iNr, const CoordBuf& crdBuf)
 	}
 	points =  CoordinateSequence::AutoPtr(new CoordinateArraySequence(crds));
 	envelope = computeEnvelopeInternal();
- 	spatialIndex->insert(getEnvelopeInternal(), this);
+ 	spatialIndex->insert(this);
 }
 
 void ILWIS::Segment::Clip(const CoordBounds& cbClip,
@@ -574,7 +574,7 @@ void ILWIS::Segment::getBoundaries(vector<geos::geom::CoordinateSequence*>& boun
 }
 
 //-----[LSEGMENT]-----------------------------------------------------------------------
-ILWIS::LSegment::LSegment(geos::index::quadtree::Quadtree *tree, geos::geom::LineString *line) : ILWIS::Segment(tree, line){
+ILWIS::LSegment::LSegment(QuadTree *tree, geos::geom::LineString *line) : ILWIS::Segment(tree, line){
 
 }
 
@@ -649,7 +649,7 @@ void ILWIS::LSegment::segSplit(long iAfter, Coord crdAt, ILWIS::Segment **seg)
 }
 
 //---[RSEGMENT]---------------------------------------------------------
-ILWIS::RSegment::RSegment(geos::index::quadtree::Quadtree *tree, geos::geom::LineString *line) : ILWIS::Segment(tree, line){
+ILWIS::RSegment::RSegment(QuadTree *tree, geos::geom::LineString *line) : ILWIS::Segment(tree, line){
 }
 
 Geometry *ILWIS::RSegment::clone() const {

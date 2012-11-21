@@ -51,20 +51,12 @@ struct LayerInfo;
 class  SegmentEditor;
 struct poltype;
 
-namespace geos {
-	namespace index {
-		namespace quadtree{
-		class Quadtree;
-		}
-	}
-}
-
 namespace ILWIS {
 class _export Polygon : public geos::geom::Polygon, public Feature
 {
 public:
-	Polygon(geos::index::quadtree::Quadtree *tree);
-	Polygon(geos::index::quadtree::Quadtree *tree, geos::geom::Polygon *pol);
+	Polygon(QuadTree *tree);
+	Polygon(QuadTree *tree, geos::geom::Polygon *pol);
 	void				addBoundary(LinearRing *ring);
 	void				addHole(LinearRing * ring);
 	//CoordBounds			cbBounds() const; // bounding rectangle
@@ -89,7 +81,7 @@ private:
 
 class LPolygon : public ILWIS::Polygon {
 public:
-	LPolygon(geos::index::quadtree::Quadtree *tree, geos::geom::Polygon *pol=NULL);
+	LPolygon(QuadTree *tree, geos::geom::Polygon *pol=NULL);
 	virtual long	iValue()const;
 	virtual double	rValue() const;
 	virtual String	sValue(const DomainValueRangeStruct& dvrs, short iWidth=-1, short iDec=-1) const;
@@ -103,7 +95,7 @@ private:
 
 class RPolygon : public ILWIS::Polygon {
 public:
-	RPolygon(geos::index::quadtree::Quadtree *tree, geos::geom::Polygon *pol=NULL);
+	RPolygon(QuadTree *tree, geos::geom::Polygon *pol=NULL);
 	virtual long	iValue()const;
 	virtual double	rValue() const;
 	virtual String	sValue(const DomainValueRangeStruct& dvrs, short iWidth=-1, short iDec=-1) const;

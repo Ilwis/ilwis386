@@ -59,13 +59,14 @@ PolygonMapStore::PolygonMapStore(PolygonMapPtr& p, const FileName& fn) :
 	iStatusFlags(0)
 {
 	ptr.ReadElement("PolygonMapStore", "Polygons", ptr._iPol);
-    spatialIndex = new geos::index::quadtree::Quadtree();
+	int bucketSize = max(25L, (long)(sqrt((double)ptr._iPol) / 3));
+	spatialIndex = new QuadTree(p.cb(), bucketSize);
 }
 
 PolygonMapStore::PolygonMapStore(const FileName& fn, PolygonMapPtr& p, bool fCreate)
 : MultiPolygon(  new vector<Geometry *>(), new GeometryFactory()), fnObj(p.fnObj), ptr(p), iStatusFlags(0)
 {
-	spatialIndex = new geos::index::quadtree::Quadtree();
+	spatialIndex = new QuadTree(p.cb());
 	ptr._iPol = 0;
 	ptr._iPolDeleted = 0;
 	//}
@@ -96,6 +97,7 @@ void PolygonMapStore::CalcBounds() {
 			ptr.cbOuter = CoordBounds(cMin,cMax);
 			ptr.fChanged = true;
 		}
+		spatialIndex->setBounds(ptr.cbOuter);
 	}
 }
 

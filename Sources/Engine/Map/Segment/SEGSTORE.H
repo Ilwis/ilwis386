@@ -114,7 +114,7 @@ protected:
 	SegmentMapPtr& ptr;  // the SegmentMapPtr of which this is a member
 	void SetCoordSystem(const CoordSystem& cs);	
 	ObjectTime timStore; // time of last change in data
-	geos::index::quadtree::Quadtree *spatialIndex;
+	QuadTree *spatialIndex;
 	
 private:
 	void Truncate(); // remove all contents, make empty

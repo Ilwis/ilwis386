@@ -42,7 +42,6 @@
 #include "Engine\Base\Algorithm\Clipline.h"
 #include "Engine\Map\Point\ilwPoint.h"
 #include "geos\algorithm\InteriorPointArea.h"
-#include <geos/index/quadtree/Quadtree.h>
 #include <geos/geom/Envelope.h>
 #include "Headers\Hs\polygon.hs"
 
@@ -51,11 +50,11 @@
 
 //------------------------------------------------------------
 
-ILWIS::Polygon::Polygon(geos::index::quadtree::Quadtree *tree) : geos::geom::Polygon(NULL,new vector<Geometry *>(),new GeometryFactory(new PrecisionModel())), Feature(tree)
+ILWIS::Polygon::Polygon(QuadTree *tree) : geos::geom::Polygon(NULL,new vector<Geometry *>(),new GeometryFactory(new PrecisionModel())), Feature(tree)
 {
 }
 
-ILWIS::Polygon::Polygon(geos::index::quadtree::Quadtree *tree,geos::geom::Polygon *pol) :  
+ILWIS::Polygon::Polygon(QuadTree *tree,geos::geom::Polygon *pol) :  
 geos::geom::Polygon(NULL,new vector<Geometry *>(),new GeometryFactory(new PrecisionModel())), Feature(tree)
 {
 	if ( pol != NULL) {
@@ -190,7 +189,7 @@ void ILWIS::Polygon::getBoundaries(vector<CoordinateSequence*>& boundaries) cons
 
 
 //--------[ILWIS::LPolygon]--------------------------------------------------------
-ILWIS::LPolygon::LPolygon(geos::index::quadtree::Quadtree *tree, geos::geom::Polygon *pol) : ILWIS::Polygon(tree, pol), value(0) {
+ILWIS::LPolygon::LPolygon(QuadTree *tree, geos::geom::Polygon *pol) : ILWIS::Polygon(tree, pol), value(0) {
 }
 
 Geometry * ILWIS::LPolygon::clone() const{
@@ -252,7 +251,7 @@ String ILWIS::LPolygon::sValue(const DomainValueRangeStruct& dvrs, short iWidth,
 }
 
 //---[ILWIS::RPolygon]-------------------------------------------------
-ILWIS::RPolygon::RPolygon(geos::index::quadtree::Quadtree *tree, geos::geom::Polygon *pol) : ILWIS::Polygon(tree, pol), value(0) {
+ILWIS::RPolygon::RPolygon(QuadTree *tree, geos::geom::Polygon *pol) : ILWIS::Polygon(tree, pol), value(0) {
 }
 void ILWIS::RPolygon::PutVal(long iRaw)
 {

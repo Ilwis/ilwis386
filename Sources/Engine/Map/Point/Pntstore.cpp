@@ -61,7 +61,10 @@ PointMapStore::PointMapStore(const FileName& fn, PointMapPtr& p, bool fDoNotLoad
 : MultiPoint(NULL, new GeometryFactory()),
 fnObj(p.fnObj), ptr(p)
 {
-	spatialIndex = new geos::index::quadtree::Quadtree();
+	long sz;
+	ptr.ReadElement("PointMap", "Points", sz);
+	int bucketSize = max(25L, (long)(sqrt((double)sz) / 3));
+	spatialIndex = new QuadTree(p.cb(), bucketSize);
 	if ( fDoNotLoad ) // loading and constructing will be done elsewhere (foreignformat)
 		return;
 
@@ -120,7 +123,7 @@ fnObj(p.fnObj), ptr(p)
 PointMapStore::PointMapStore(const FileName& fn, PointMapPtr& p, long iPnts)
 : MultiPoint(NULL, new GeometryFactory()), fnObj(p.fnObj), ptr(p)
 {
-	spatialIndex = new geos::index::quadtree::Quadtree();
+	spatialIndex = new QuadTree(p.cb());
 	geometries = new vector<Geometry *>();
 	for(int i=0; i<iPnts; ++i) 
 		pntNew();
@@ -631,10 +634,9 @@ Geometry *PointMapStore::getFeatureById(const String& id) const {
 }
 
 vector<Feature *> PointMapStore::getFeatures(const CoordBounds& cb, bool complete) const {
-	geos::geom::Envelope env(cb.cMin, cb.cMax);
-	vector<void *> v;
+	vector<Geometry *> v;
 	vector<Feature *> features;
-	spatialIndex->query(&env,v);
+	spatialIndex->query(cb,v);
 	for(int i=0; i < v.size(); ++i) {
 		Geometry *g = (Geometry *)v[i];
 		CoordinateSequence *seq = g->getCoordinates();
