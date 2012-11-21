@@ -58,6 +58,8 @@ namespace ILWIS {
 		bool isValid() const;
 		void setValid(bool yesno);
 		virtual Feature *getFeature() const {return 0;};
+		bool isManaged() const { return managed;}
+		void setDrawerParameters(DrawerParameters *);
 
 		CCriticalSection cs;
 	protected:
@@ -75,6 +77,7 @@ namespace ILWIS {
 		int specialOptions;
 		bool isSupportingDrawer;
 		bool valid;
+		bool managed;
 
 		SimpleDrawer(DrawerParameters *context, const String& ty);
 		SimpleDrawer();

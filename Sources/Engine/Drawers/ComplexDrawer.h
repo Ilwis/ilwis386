@@ -87,6 +87,8 @@ class _export ComplexDrawer : public NewDrawer {
 		bool isValid() const;
 		void setValid(bool yesno) ;
 		virtual void select(bool yesno);
+		bool isManaged() const { return managed ; }
+		void setDrawerParameters(DrawerParameters *);
 
 	protected:
 		vector<NewDrawer *> drawers;
@@ -114,6 +116,7 @@ class _export ComplexDrawer : public NewDrawer {
 		int specialOptions;
 		bool dirty;
 		bool selectable;
+		bool managed; // this drawer is managed by the memory manager and should never be deleted by itself
 		int totalDrawerCount;
 		Color selectionColor;
 

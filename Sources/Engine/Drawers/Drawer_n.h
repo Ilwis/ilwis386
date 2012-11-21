@@ -7,6 +7,7 @@
 #include "Engine\Drawers\SVGElements.h"
 #include "Engine\Drawers\SVGLoader.h"
 #include "Engine\Base\System\Engine.h"
+#include "Engine\Base\System\MemoryManager.h"
 
 class LayerTreeView;
 class LayerTreeItem;
@@ -94,6 +95,8 @@ namespace ILWIS {
 		virtual bool isSelectable() const { return false;}
 		virtual void setSelectable(bool yesno ) {}
 		virtual void select(bool yesno) {};
+		virtual bool isManaged() const = 0;
+		virtual void setDrawerParameters(DrawerParameters *) = 0;
 
 		static NewDrawer *getDrawer(const String& type, const String& subType, ILWIS::DrawerParameters *parms) ;
 		static NewDrawer *getDrawer(const String& type, PreparationParameters *pp=0, DrawerParameters *parms=0) ;
@@ -106,9 +109,10 @@ namespace ILWIS {
 	};
 
 	struct DrawerParameters {
-		DrawerParameters(RootDrawer *c, NewDrawer *p) : rootDrawer(c), parent(p) {}
+		DrawerParameters(RootDrawer *c, NewDrawer *p, bool m=false) : rootDrawer(c), parent(p), managed(m) {}
 		RootDrawer *rootDrawer;
 		NewDrawer *parent;
+		bool managed;
 	};
 
 	typedef void(ILWIS::NewDrawer::*DisplayOptionItemFunc)(CWnd *parent);

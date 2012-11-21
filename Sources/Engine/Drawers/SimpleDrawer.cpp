@@ -15,11 +15,16 @@ SimpleDrawer::SimpleDrawer() {
 
 SimpleDrawer::SimpleDrawer(DrawerParameters *parms, const String& ty) : type(ty), rootDrawer(parms ? parms->rootDrawer : 0){
 	init();
+	setDrawerParameters(parms);
+
+}
+
+void SimpleDrawer::setDrawerParameters(DrawerParameters *parms){
 	if ( parms) {
 		parentDrawer = parms->parent;
 		rootDrawer = parms->rootDrawer;
+		managed = parms->managed;
 	}
-
 }
 
 
@@ -42,6 +47,7 @@ void SimpleDrawer::init() {
 	fActive = true;
 	isSupportingDrawer = false;
 	valid = true;
+	managed = 0;
 }
 
 String SimpleDrawer::getType() const {

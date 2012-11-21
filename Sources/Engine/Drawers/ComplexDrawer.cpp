@@ -7,23 +7,17 @@
 
 using namespace ILWIS;
 
-ComplexDrawer::ComplexDrawer() : parentDrawer(0) {
+ComplexDrawer::ComplexDrawer() : parentDrawer(0), managed(0) {
 	init();
 }
 
 ComplexDrawer::ComplexDrawer(DrawerParameters *parms, const String& ty) : type(ty),parentDrawer(0){
-	if ( parms) {
-		parentDrawer = parms->parent;
-		rootDrawer = parms->rootDrawer;
-	}
+	setDrawerParameters(parms);
 	init();
 }
 
 ComplexDrawer::ComplexDrawer(DrawerParameters *parms) : type("Container"), parentDrawer(0){
-	if ( parms) {
-		parentDrawer = parms->parent;
-		rootDrawer = parms->rootDrawer;
-	}
+	setDrawerParameters(parms);
 	init();
 }
 
@@ -51,6 +45,14 @@ void ComplexDrawer::init() {
 	selectable = false;
 }
 
+void ComplexDrawer::setDrawerParameters(DrawerParameters *parms){
+	if ( parms) {
+		parentDrawer = parms->parent;
+		rootDrawer = parms->rootDrawer;
+		managed = parms->managed;
+	}
+}
+
 String ComplexDrawer::getType() const {
 	return type;
 }
@@ -73,7 +75,8 @@ void ComplexDrawer::clear() {
 		NewDrawer *drw = (*cur).second;
 		if ( !drw->isSimple())
 			((ComplexDrawer *)drw)->clear();
-		delete drw;
+		if ( !drw->isManaged())
+			delete drw;
 	}
 	drawers.clear();
 	postDrawers.clear();
@@ -255,6 +258,8 @@ int ComplexDrawer::getDrawerCount(int types) const{
 }
 
 NewDrawer * ComplexDrawer::getDrawer(int index, int type) const{
+	//if ( drawers.size() == 0)
+	//	return 0;
 	if ( type == dtMAIN) {
 		if ( index < drawers.size()) {
 			return drawers.at(index);
