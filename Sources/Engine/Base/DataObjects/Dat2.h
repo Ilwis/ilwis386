@@ -178,7 +178,10 @@ struct CoordBounds
 {
   CoordBounds(): cMin(1e30,1e30,1e30), cMax(-1e30,-1e30,-1e30) {area=rUNDEF;}
   CoordBounds(Coord c1, Coord c2) : cMin(c1), cMax(c2) { Check(); area=rUNDEF; }
-	_export CoordBounds(const CoordBuf& cBuf);
+  _export CoordBounds(const CoordBuf& cBuf);
+  CoordBounds(const geos::geom::Envelope *env) : cMin(Coord(env->getMinX(), env->getMinY())), cMax(Coord(env->getMaxX(), env->getMaxY())){
+  }
+  CoordBounds(double minx, double miny, double maxx, double maxy) : cMin(Coord(minx, miny)), cMax(Coord(maxx, maxy)) {}
   bool fUndef() const
     { return cMin.x > cMax.x || cMin.y > cMax.y || cMin.fUndef() || cMax.fUndef(); }
   void _export Check();    // make sure that cMin < cMax both with x and y
