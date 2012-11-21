@@ -193,6 +193,8 @@ void Tranquilizer::SetTitle(const String& sTitl)
 		return;
 	cs.Lock();
 	sTitle = sTitl;
+	if ( reportWindow == 0)
+		Start();
 	cs.Unlock();
 	if (reportWindow != 0 && reportWindow->GetSafeHwnd() != NULL)
 	{
@@ -206,6 +208,8 @@ void Tranquilizer::SetText(const String& sText)
   if( fServerMode())
 		return;
   cs.Lock();
+  if ( reportWindow == 0)
+		Start();
   sTranqText = sText;
   iVal = iUNDEF;	
   cs.Unlock();
