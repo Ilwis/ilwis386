@@ -78,17 +78,23 @@ String URL::getProtocol() const {
 	return sUrl.sHead("://");
 }
 
-FileName URL::toFileName2() const {
+FileName URL::toFileName2(const String& serverRoot, const String& localRoot) const {
 	if ( getProtocol() == "file") {
 		String tail = sUrl.sTail("://");
 		if ( tail.substr(0,9) == "localhost") {
 			tail = tail.sTail("localhost/");
 		}
-		String drive = tail[1];
-		String rest = tail.substr(3,tail.size() - 2);
-		String name("%S:%S", drive, rest);
-		FileName fn(name);
-		return fn;
+		if ( tail[0] == '/') { // rooted url
+			String drive = tail[1];
+			String rest = tail.substr(3,tail.size() - 2);
+			String name("%S:%S", drive, rest);
+			FileName fn(name);
+		} else { // server based filename,
+			String relPath = tail.substr(serverRoot.size() - 7,tail.size() - (serverRoot.size() - 7));
+
+			return FileName(localRoot + relPath);
+			
+		}
 	}
 	return FileName();
 }

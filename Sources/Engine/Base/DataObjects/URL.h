@@ -49,7 +49,7 @@ public:
 	String getPath() const;
 	String getQuery() const;
 	FileName toFileName(bool root=false) const;
-	FileName toFileName2() const;
+	FileName toFileName2(const String& serverRoot="", const String& localPath="") const;
 	String getQueryValue(const String& key) const;
 	void setQueryValue(const String& key, const String& value);
 	int getPort() const;
