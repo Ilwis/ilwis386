@@ -250,6 +250,14 @@ void ZDataScaling::apply() {
 	RangeReal rr = drw->getZMaker()->getRange();
 	drw->getZMaker()->setOffset(zoffset + rr.rLo());
 	SetDrawer *adrw = dynamic_cast<SetDrawer *>(drw);
+	ComplexDrawer * annotations = (ComplexDrawer *)drw->getRootDrawer()->getDrawer(800, ComplexDrawer::dtPOST);
+	if ( annotations) {
+		NewDrawer * grid = annotations->getDrawer(200, ComplexDrawer::dtPOST);
+		if ( grid) {
+			PreparationParameters pp(NewDrawer::ptRENDER);
+			grid->prepare(&pp);
+		}
+	}
 	if ( adrw) {
 		rr = adrw->getZMaker()->getRange();
 		for(int i = 0 ; i < adrw->getDrawerCount(); ++i) {
