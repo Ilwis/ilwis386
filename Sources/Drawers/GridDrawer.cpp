@@ -47,7 +47,6 @@ bool GridDrawer::draw( const CoordBounds& cbArea) const{
 	if ( !isActive() || !isValid())
 		return false;
 	ILWISSingleLock lock(csDraw, TRUE);
-	TRACE("ENter draw\n");
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 
@@ -68,7 +67,6 @@ bool GridDrawer::draw( const CoordBounds& cbArea) const{
 	if ( getRootDrawer()->is3D())
 		glPopMatrix();
 	glDisable(GL_BLEND);
-		TRACE("Leaving draw\n");
 	return true;
 }
 
@@ -108,7 +106,6 @@ bool GridDrawer::drawPlane(const CoordBounds& cbArea) const{
 void GridDrawer::prepare(PreparationParameters *pp) {
 	if (  (pp->type & RootDrawer::ptGEOMETRY) || (pp->type & NewDrawer::ptRESTORE) || (pp->type & NewDrawer::ptRENDER)){ 
 		ILWISSingleLock lock(csDraw, TRUE);
-	TRACE("ENter prp\n");
 		String sVal;
 		Coord c, cMin, cMax;
 		Color clr;
@@ -146,7 +143,6 @@ void GridDrawer::prepare(PreparationParameters *pp) {
 				prepareCube(rDist, cMax, cMin);
 		}
 		getZMaker()->setThreeDPossible(true);
-		TRACE("leave prp\n");
 	}
 	if ( pp->type & NewDrawer::ptRENDER) {
 		for(int i=0; i < drawers.size(); ++i) {
