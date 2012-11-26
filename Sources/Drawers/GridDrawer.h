@@ -61,6 +61,7 @@ namespace ILWIS{
 		vector< Coord * >   planeQuads;
 		vector<double> planeDistances;
 		CoordBounds bounds;
+		CCriticalSection *csDraw;
 	};
 
 	class GridLine: public LineDrawer {
