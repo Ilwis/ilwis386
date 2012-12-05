@@ -919,17 +919,12 @@ TimeProfileForm::TimeProfileForm(CWnd* mw, SpaceTimePathDrawer *stp, ProfileGrap
 	AfxGetApp()->PostThreadMessage(ILW_ADDDATAWINDOW, (WPARAM)m_hWnd, 0);
 }
 
-void TimeProfileForm::shutdown(int iReturn) 
-{
-	AfxGetApp()->PostThreadMessage(ILW_REMOVEDATAWINDOW, (WPARAM)m_hWnd, 0);
-	FormBaseWnd::shutdown(iReturn);
-}
-
 TimeProfileForm::~TimeProfileForm()
 {
 	pgw->SetFunctions(0, 0);
 	if (m_functions)
 		delete [] m_functions;
+	AfxGetApp()->PostThreadMessage(ILW_REMOVEDATAWINDOW, (WPARAM)m_hWnd, 0);
 }
 
 int TimeProfileForm::CallBackAnchorChangedInGraph(Event*)

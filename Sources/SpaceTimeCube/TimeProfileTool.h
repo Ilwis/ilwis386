@@ -119,7 +119,6 @@ namespace ILWIS {
 	  virtual ~TimeProfileForm();
 	protected:
 		afx_msg LONG OnSelectFeatures(UINT, LONG lParam);
-		virtual void shutdown(int iReturn=IDCANCEL);
 	private:
 		void ComputeGraphs();
 		int CallBackAnchorChangedInGraph(Event*);
