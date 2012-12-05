@@ -23,7 +23,7 @@ QuadTree::insert(Geometry* item)
 	const Envelope *env = item->getEnvelopeInternal();
 	CoordBounds cb(Coord(env->getMinX(), env->getMinY()), Coord(env->getMaxX(), env->getMaxY()));
 	if (!bounds.fContains(cb))
-		throw std::runtime_error("Trying to insert an item into QuadTree, but it is not contained inside it.");
+		return;
 
 	root->insert(item);
 }
