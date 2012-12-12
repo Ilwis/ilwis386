@@ -913,17 +913,17 @@ void MapStore::SetSize(RowCol rc)
     mpsb->rcSize = rc;
 }
 
-void MapStore::KeepOpen(bool f)
+void MapStore::KeepOpen(bool f, bool force)
 {
 //  BaseMapPtr::KeepOpen(f);
   if (0 != mpsb)
-    mpsb->KeepOpen(f);
+    mpsb->KeepOpen(f, force);
 }
 
-void MapStoreBase::KeepOpen(bool f)
+void MapStoreBase::KeepOpen(bool f, bool force)
 {
   if (file)
-    file->KeepOpen(f);
+    file->KeepOpen(f, force);
 }
 
 void MapStoreBase::PutVal(RowCol rc, double val)
