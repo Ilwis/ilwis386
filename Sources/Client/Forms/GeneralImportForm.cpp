@@ -37,6 +37,8 @@
 #pragma warning( disable : 4786 )
 
 #include "Client\Headers\formelementspch.h"
+#include "Client\FormElements\fldlist.h"
+#include "Client\FormElements\FieldStringList.h"
 #include "Engine\Base\File\Directory.h"
 #include "Engine\Base\DataObjects\URL.h"
 #include "Engine\Base\System\LOGGER.H"
@@ -70,7 +72,7 @@ void FieldImportPage::create()
 }
 
 GeneralImportForm::GeneralImportForm(CWnd* parent)
-		: curPage(NULL), fInitial(true), fUseAs(false), FormWithDest(parent, "Import"), fMatch(true)
+		: curPage(NULL), fInitial(true), fUseAs(false), FormWithDest(parent, "Import"), fMatch(true), isWfs(false)
 {
 	addModules();
 	FieldGroup *fg = new FieldGroup(root);
@@ -181,6 +183,10 @@ int GeneralImportForm::SetDefaultOutputName(Event *dv) {
 		Split(path,parts,"/");
 		if ( path.size() > 0)
 			name = parts[parts.size() - 1];
+		String service = url.getQueryValue("service");
+		if (service == "wfs") {
+			isWfs = true;
+		}
 	} /*else {
 		int index = name.find_last_of(".");
 		if ( index !=  string::npos) {
@@ -235,9 +241,29 @@ FileName GeneralImportForm::SetExtension(const FileName& fn) {
 	return fnO;
 }
 
+class LayerForm : public FormWithDest {
+public:
+	LayerForm(CWnd *par, const vector<String>& layers) : FormWithDest(par, TR("Layer Selection")){
+		new FieldStringList(root,&layer, layers);
+	}
+	String getLayer() const {
+		return layer;
+	}
+private:
+	vector<String> layers;
+	String layer;
+};
 int GeneralImportForm::ObjectSelection(Event *ev) {
 
 	String sExt = currentFormat.ext;
+	if ( isWfs) {
+		vector<String> layers;
+		LayerForm form(this->wnd(), layers);
+		if ( form.DoModal() == IDOK) {
+			layer = form.getLayer();
+		}
+		return 1;
+	}
 	if ( sExt.find_first_of("/") != string::npos) {
 		Array<String> parts;
 		Split(sExt,parts,"/");
@@ -412,15 +438,15 @@ int GeneralImportForm::exec() {
 			else if ( URL::isUrl(inFile)) {
 				openCmd = String("open %S -output=%S -method=%S",inFile, SetExtension(FileName(outFile)).sFullPathQuoted(), currentFormat.method);
 			}else {
-				if ( currentFormat.command == "")
+				if ( currentFormat.command.find("import") == currentFormat.command.end())
 					openCmd = String("open %S -output=%S -method=%S",FileName(inFile).sFullPathQuoted(), SetExtension(FileName(outFile)).sFullPathQuoted(), currentFormat.method);
 				else {
-					openCmd = String("%S %S %S %S", currentFormat.command, currentFormat.name.sQuote(),FileName(inFile).sFullPathQuoted(),FileName(outFile).sFullPathQuoted()); 
+					openCmd = String("%S %S %S %S", currentFormat.command["import"], currentFormat.name.sQuote(),FileName(inFile).sFullPathQuoted(),FileName(outFile).sFullPathQuoted()); 
 				}
 			}
 		}
 		openCmd += extraOptions;
-		if ( !fUseAs && currentFormat.command == "")
+		if ( !fUseAs && currentFormat.command.find("import") == currentFormat.command.end())
 			openCmd += " -import";
 		
 		//if ( !containsWildcards)
@@ -428,6 +454,14 @@ int GeneralImportForm::exec() {
 		//else
 			//Script::Exec(openCmd);
 
+	}
+	if (!b) {
+		if( !URL::isUrl(sInput) || layer == "")
+			return 0;
+		URL url(sInput);
+		if ( isWfs) {
+			IlwWinApp()->Execute("wfsimportlayer");
+		}
 	}
 	return 0;
 }
@@ -524,27 +558,9 @@ void GeneralImportForm::addModules() {
 	}
 }
 
-//void GeneralImportForm::addFolder(const String& dir,vector<GetImportOptionForms>& options) {
-//	CFileFind finder;
-//	String pattern = dir + "\\*.*";
-//	BOOL fFound = finder.FindFile(pattern.c_str());
-//	while(fFound) {
-//		fFound = finder.FindNextFile();
-//		if (!finder.IsDirectory())
-//		{
-//			FileName fnNew (finder.GetFilePath());
-//			if ( fnNew.sExt == ".dll" || fnNew.sExt == ".DLL")
-//				addModule(fnNew,options);
-//		} else {
-//			FileName fnNew (finder.GetFilePath());
-//			if ( fnNew.sFile != "." && fnNew.sFile != ".." && fnNew.sFile != "")
-//				addFolder(String(fnNew.sFullPath()),options);
-//		}
-//	}
-//}
-
 void GeneralImportForm::AddOldStyleIlwisImports() {
 	readImportDef();
+
 	ImportDriver id;
 	id.driverName = "ILWIS";
 	for(int i = 0; i < oldStyleImports.size(); ++i) {

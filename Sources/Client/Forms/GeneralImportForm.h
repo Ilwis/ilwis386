@@ -81,6 +81,7 @@ private:
 	bool fMatch;
 	Array<ImportItem> oldStyleImports;
 	String extraOptions;
+	bool isWfs;
 
 	FieldString *fsInput;
 	FieldString *fsOutput;
@@ -107,6 +108,7 @@ private:
 	int exec();
 	FileName SetExtension(const FileName& fn);
 	int similarNames(Event *ev);
+	String layer;
 };
 
 
