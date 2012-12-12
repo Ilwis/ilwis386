@@ -81,7 +81,8 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 		long v = feature->iValue();
 		setSpecialDrawingOptions(NewDrawer::sdoSELECTED,false);
 		if ( bmpptr->fTblAtt()) {
-			setTableSelection(bmpptr->tblAtt()->dm()->fnObj,v, p);
+			if ( bmpptr->tblAtt().fValid()) // incase of missing/ corrput data
+				setTableSelection(bmpptr->tblAtt()->dm()->fnObj,v, p);
 		}
 	/*	if ( p->rowSelect.raws.size() > 0) {
 			if ( bmpptr->fTblAtt()) {

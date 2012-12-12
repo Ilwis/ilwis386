@@ -223,7 +223,11 @@ void FeatureLayerDrawer::select(const CRect& rect, vector<long> & selectedRaws, 
 		featureMap.clear();
 		for(int index = 0; index < getDrawerCount(); ++index) {
 			SimpleDrawer *dr = (SimpleDrawer*)getDrawer(index);
-			featureMap[dr->getFeature()->iValue()] = dr;
+			if ( dr) {
+				long v = dr->getFeature()->iValue();
+				if ( v != iUNDEF)
+					featureMap[v] = dr;
+			}
 		}
 	}
 
