@@ -270,6 +270,21 @@ bool TableAsLister::fOK(const FileName& fn, const String&)
   return ObjectInfo::fTable(fn); 
 }
 
+bool MapValueRangeLister::fOK(const FileName& fn, const String&) {
+	if (fn.sExt != ".mpr")
+		return false;
+
+	if (! valuerange.fValid())
+		return false;
+
+	ValueRange range;
+	ObjectInfo::ReadElement("BaseMap","Range",fn, range);
+
+	if ( !range.fValid())
+		return false;
+	return valuerange->fContains(range);
+}
+
 bool DomainLister::fOK(const FileName& fn, const String&)
 {
   if ((fn.sExt != ".dom") && (fn.sExt != ".csy")) 
@@ -303,6 +318,7 @@ bool DomainLister::fOK(const FileName& fn, const String&)
 	}
   return false;
 }
+
 
 bool DomainAllExtLister::fOK(const FileName& fn, const String&)
 {

@@ -160,6 +160,16 @@ private:
   long dmTypes;
 };
 
+class _export MapValueRangeLister: public ObjectExtensionLister
+{
+public:
+  MapValueRangeLister(const ValueRange& vr)
+  : ObjectExtensionLister(0, ".mpr"), valuerange(vr) {}
+  virtual bool fOK(const FileName&, const String& sExtra="");
+private:
+  ValueRange valuerange;
+};
+
 class _export DomainAllExtLister: public ObjectExtensionLister
 {
 public:
