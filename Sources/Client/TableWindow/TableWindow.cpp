@@ -120,6 +120,7 @@ BEGIN_MESSAGE_MAP(TableWindow, DataWindow)
 	ON_COMMAND(ID_GOTORECORDNEXT, OnGotoRecordNext)
 	ON_COMMAND(ID_GOTORECORDFIRST, OnGotoRecordFirst)
 	ON_COMMAND(ID_GOTORECORDLAST, OnGotoRecordLast)
+
 	ON_WM_ACTIVATE()
 	ON_MESSAGE(MESSAGE_SELECT_ROW,OnSelectFeatures)
 	//}}AFX_MSG_MAP
@@ -224,6 +225,12 @@ int TableWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
   add(ID_SHOWRECORDVIEW);
 	add(ID_SHOWADDINFO);
   add(ID_CONFMATRIX);
+  addBreak;
+  add(ID_VIEW_SELECTED_ONLY);
+  menSub.CreateMenu();
+	addSub(ID_VIEW_ALL_RECORDS);
+  addSubMenu(ID_VIEW_MAP_RECORDS_ONLY);
+
   addBreak;
   add(ID_COMMANDLINE);
   add(ID_STATPANE);
