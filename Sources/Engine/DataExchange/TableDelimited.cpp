@@ -330,7 +330,7 @@ void TableDelimited::GetFormatType(FileName fnObj, TableExternalFormat::InputFor
 			iCols = 0;
 			break;
 	}
-	iSkip = min(iSpaceHeader, iCommaHeader);
+//	iSkip = min(iSpaceHeader, iCommaHeader);
 }
 
 // Scan the delimited table:
@@ -353,6 +353,7 @@ void TableDelimited::Scan(FileName fnObj, int &iSkipLines, TableExternalFormat::
 	vector<FldInfo> scanInfo;
 	int iRecs = 0;
 	int iLine = 0;
+	FieldValues header;
 	while( !InputFile.fEof() && !(fHintOnly && iLine > 10))
 	{
 		String sLine;
@@ -360,6 +361,9 @@ void TableDelimited::Scan(FileName fnObj, int &iSkipLines, TableExternalFormat::
 		iLine++;
 		if ( iSkip > 0 )
 		{
+			if (iLine == 1) {
+				ParseLine(sLine, header, eDel);
+			}
 			iSkip--;
 			continue;
 		}
@@ -383,6 +387,8 @@ void TableDelimited::Scan(FileName fnObj, int &iSkipLines, TableExternalFormat::
 	{
 		ClmInfo& ci = columnInfo[i];
 		ci.iNrRecs = iRecs;
+		if (iSkipLines > 0)
+			ci.sColumnName = header[i];
 		if (fUseColInfo && i < scanInfo.size())
 			ci.Strings = scanInfo[i].Strings;
 		ci.vcStrings.resize(ci.Strings.size());
