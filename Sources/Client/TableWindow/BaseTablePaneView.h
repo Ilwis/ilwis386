@@ -98,9 +98,10 @@ public:
 	virtual bool fAllowMoveCol() const;
 	virtual void update() {}
 	virtual void updateSelection() {}
-	void selectFeatures(const RowSelectInfo& inf);
+	virtual void selectFeatures(const RowSelectInfo& inf);
 	const TableSelection& sel() const;
 	void setSelection(const MinMax& mm);
+	void setViewSelectedRecords(bool yesno);
 protected:
 	int iCharWidth;
 	int iButtonWidth;  // nr of chars in the row button, to be set by derived class
@@ -141,6 +142,7 @@ protected:
 	void CalcColsForColumnPages(int iColPage, int& iFirstCol, int& iLastCol, int iLeftColWidth, 
 		bool fLeftMostColOnAllPages, int iCharW, int iPageWidth);
 	int iFmtTbl; // special clip format for tables
+	bool viewSelectedRecords;
 private:
 	long iRec1, iCol1;
 	int iHght;
@@ -213,6 +215,8 @@ protected:
 	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 	afx_msg LRESULT OnGotoField(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnSetFocus(CWnd* pNewWnd);	
+	void OnUpdateViewSelectedOnly(CCmdUI* pCmdUI);
+	void OnViewSelectedOnly();
 
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
