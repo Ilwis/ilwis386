@@ -34,277 +34,8 @@
 
  Created on: 2007-02-8
  ***************************************************************/
-/*-----------------------------------------------
-   $Log: /ILWIS 3.0/ApplicationForms/ImportAsciiTableWizard.cpp $
- * 
- * 67    18-04-05 10:15 Retsios
- * [bug=6391]
- * The filename of the output table is altered (if needed) so that it
- * always works.
- * 
- * 66    10-03-03 16:35 Retsios
- * Clear columns array when user chooses a new table - solves bug#6396
- * 
- * 65    3/06/03 12:39p Martin
- * last quoting ptoblem (yeah right). This time also for databases
- * 
- * 64    3/05/03 8:27a Martin
- * another quoting problem
- * 
- * 63    2/27/03 12:33p Martin
- * format for ilwis branch of imports could not change after a default was
- * choosen because a piece of comment was commented including the
- * assignment of the format.
- * 
- * 62    26-02-03 16:21 Willem
- * - Added: The output wizard page now also checks if the output directory
- * is read/only
- * 
- * 61    2/06/03 12:05p Martin
- * default output dir is now the cur dir, not the dir where the input file
- * is located. This is inline with the map import and forstall problems
- * with people who try to import things from cd roms.
- * 
- * 60    2/06/03 9:05a Martin
- * if the file extension is not db, mdb, xls the default will siwtch to
- * use ILWIS import. I do not skip this page because it is legal (and
- * sometimes possible) that for example a dbf file has not a dbf
- * extension. Here you still have the chance to switch
- * 
- * 59    11/26/02 10:41a Martin
- * prevented the use of illegal columns names
- * 
- * 58    11/25/02 11:56a Martin
- * added support for excel in the wizard
- * 
- * 57    5-07-02 19:20 Koolhoven
- * prevent warnings with Visual Studio .Net
- * 
- * 56    20-02-02 17:48 Willem
- * Default output name now uses correct extension for new (unique) name,
- * avoiding the "__1" postfix the first time
- * 
- * 55    20-02-02 14:51 Retsios
- * StoreData() was forgotten for the "skip lines". Callback added to do
- * the job.
- * 
- * 54    12/12/01 1:08p Martin
- * output name of ado expression can have only one .tbt
- * 
- * 53    12/07/01 10:33a Martin
- * changed title of page
- * 
- * 52    12/05/01 9:20a Martin
- * now a proper check if a filename exists. files without extension where
- * not correctly checked
- * 
- * 51    12/04/01 9:44a Martin
- * sql queries seem not to be able ti handle paths. now use sFileExt to g
- * et the correct name. Disbaled network databases
- * 
- * 52    11/30/01 3:51p Martin
- * strip \n \r from sql queries. seems not to work correctly
- * 
- * 51    11/30/01 11:53a Martin
- * sql queries seem not to be able ti handle paths. now use sFileExt to
- * get the correct name. Disbaled network databases
- * 
- * 50    11/21/01 12:44p Martin
- * changed order in the choose method page
- * 
- * 49    11/21/01 10:30a Martin
- * Open from recordset is not very happy with paths with spaces in it. So
- * the curdir is first set then the open is done and then the curdir is
- * setback
- * 
- * 48    11/21/01 9:55a Martin
- * added extra htp numbers for pages of the wizard
- * 
- * 47    11/20/01 4:46p Martin
- * last page setwizardnext function returns -1 and not 0; prevent extra
- * step.
- * error is directly shown and not thrown. prevents com errors
- * 
- * 46    11/20/01 9:08a Martin
- * output names through the ADO track now have a name based on the table
- * and not the database and it is unique
- * 
- * 45    11/20/01 8:39a Martin
- * error for choosing an invalid column as table domain is now shown only
- * once
- * 
- * 44    11/19/01 4:34p Martin
- * now uses a function to check if a file is dbf
- * 
- * 43    11/19/01 3:44p Martin
- * added browse button for output and solved some alignment problemsd
- * 
- * 42    11/19/01 9:47a Martin
- * useas checkbox does not show if it is not an ADO type import
- * 
- * 41    11/19/01 8:56a Martin
- * changed the the text string in the input page
- * 
- * 40    11/12/01 1:00p Martin
- * WChars added as type of the possible columns to select a domain from
- * 
- * 39    11/12/01 12:27p Martin
- * forgot to quote the output filename when creating the expression
- * 
- * 38    11/12/01 12:18p Martin
- * added error when no connection could be established
- * 
- * 37    10/31/01 9:13a Martin
- * too much copy and paste. An index was wrongly checked for the
- * DBTableSelector because that code was copied from somewhere else
- * 
- * 36    10/17/01 4:07p Martin
- * changed the string for useas and reversed the flag
- * 
- * 35    10/05/01 10:56a Martin
- * after change in the InitScan the else branche of dbf was incorrect,
- * should return immediately
- * 
- * 34    10/05/01 10:15a Martin
- * changed strings for the import ADO table part
- * 
- * 33    10/04/01 11:35a Martin
- * support for file based databases (like access)
- * 
- * 32    10/04/01 9:01a Martin
- * added some COM error handling. Error should not happen but it did so
- * the error handling was needed
- * 
- * 31    9/27/01 11:17a Martin
- * wrong name was used if a column was wished for a tabledomain
- * 
- * 30    9/24/01 10:00a Martin
- * added flag for use-as
- * 
- * 29    9/21/01 10:15a Martin
- * many changes to add tables of a full database to the wizard
- * 
- * 28    8/28/01 4:21p Martin
- * added suport for ADO tables
- * 
- * 27    5/22/01 12:54 Willem
- * The combo box for the selection of the table domain column is now
- * maintained properly. The selection is now preserved correctly
- * 
- * 26    18-04-01 14:33 Koolhoven
- * given the pages of the import table wizard seperate htp numbers
- * 
- * 25    17-04-01 11:48 Koolhoven
- * added htp for import table wizard
- * 
- * 24    21/03/01 13:59 Willem
- * After a column number change the Next button status (enabled/disabled)
- * is now also updated
- * 
- * 23    13/03/01 14:14 Willem
- * - Added extra remark message when column width is not correct (Fixed
- * format only)
- * - FillSelector() now only tries to access existing column information
- * 
- * 22    12/03/01 17:27 Willem
- * - Simplified code for ColumnSpecify page somewhat
- * - Removed maximum column check
- * - Initialized all page members
- * - The fields are now aligned vertically instead of horizontally
- * 
- * 21    13/02/01 10:40 Willem
- * Added extra check for array bounds
- * 
- * 20    19/01/01 11:41 Willem
- * - Added a remark field for display of warning messages
- * - Empty column name or empty domain name now disable the next button
- * and also display an appropriate message
- * 
- * 19    6-12-00 12:40 Koolhoven
- * Table Wizard now has a Table Icon
- * 
- * 18    29/11/00 13:44 Willem
- * - The key column is now passed properly to the command line
- * - The list of columns to be used for table domain is now limited to
- * DomainID or DomainClass columns
- * 
- * 17    23/11/00 17:27 Willem
- * For Ilwis 1.4 import the lines to skip is now properly set to 1 in the
- * "edit column details" page
- * 
- * 16    23/11/00 15:48 Willem
- * The output table name is now by default set on the input name (without
- * extension)
- * 
- * 15    21/11/00 16:22 Willem
- * The command line creation added a right paranthesis ")" to much to the
- * end of the column info, causing too few columns to be imported
- * 
- * 14    21/11/00 12:11 Willem
- * Replace the "Key Column" button with selection of a column for the
- * table domain
- * 
- * 13    20/11/00 13:08 Willem
- * - The file selection page now displays a message on the form when a
- * file is binary; also the next button becomes disabled
- * - The file list now only lists non-Ilwis files
- * 
- * 12    10-11-00 17:51 Koolhoven
- * added try/catch block in NameChange()
- * 
- * 11    25/10/00 18:10 Willem
- * - Removed obsolete code
- * - Moved activation code from constructor to member functions
- * - Adjusted callback function behaviour to handle the additional input
- * page
- * 
- * 10    24/10/00 17:53 Willem
- * - Removed Define Column Width wizard page (now included in Column
- * defintion page
- * - Class/ID domains are now created when Finish is clicked and input
- * table has been fully scanned
- * 
- * 9     19/10/00 10:55 Willem
- * Import wizard now performs a full scan when a key column is specified
- * 
- * 8     13/10/00 14:53 Willem
- * - Added input selector page, for use of the wizard from the command
- * line
- * - Rearrange the scanning of the import table 
- * 
- * 7     30/06/00 15:44 Willem
- * - Table wizard is now language independent
- * - The comamnd line generated now properly quotes long file names
- * - Added callbacks to protect against incomplete information
- * A few smaller changes
- * 
- * 6     22/06/00 15:47 Willem
- * Added pushbutton to toggle key column
- * 
- * 5     21/06/00 18:15 Willem
- * Improved version of the import table wizard
- * - better column selection handling
- * - scan is done each time the format selection is changed
- * 
- * 4     31/05/00 17:34 Willem
- * Work in progress:
- * - Added new functionality. 
- * - The Columlister inplace editors are OK
- * 
- * 3     24/05/00 9:11 Willem
- * Added the object output name as parameter to the wizard
- * 
- * 2     19/05/00 14:40 Willem
- * Added Column display to import ascii table wizard
- * 
- * 1     18/05/00 14:00 Willem
- * Working skeleton wizard for Import Ascii Tables
 
-   ImportAsciiTableWizard.cpp
-   by Willem Nieuwenhuis, 16/5/00
-   ILWIS Department ITC
-  -----------------------------------------------*/
-
+  
 #pragma warning( disable : 4786 )
 
 #include "Client\Headers\formelementspch.h"
@@ -896,7 +627,7 @@ public:
 
 		m_fiCols = new FieldInt(root, TR("Nr. of &Columns"), &m_iCols, ValueRange(1, 9999), true);  // use with spin control
 		m_fiCols->SetCallBack((NotifyProc)&SpecifyColumnsDetailsPage::ColCountChange);
-		m_fiSkip = new FieldInt(root, TR("Nr. of &Lines to skip"), m_piSkip, ValueRange(0, 9999), true);  // use with spin control
+		m_fiSkip = new FieldInt(root, TR("Nr. of &Header lines"), m_piSkip, ValueRange(0, 9999), true);  // use with spin control
 		m_fiSkip->SetCallBack((NotifyProc)&SpecifyColumnsDetailsPage::SkipLinesChange);
 		String s('x', 60);
 		m_stRemark = new StaticText(root, s);
@@ -1078,7 +809,26 @@ public:
 	}
 	int SkipLinesChange(Event*)
 	{
-		m_fiSkip->StoreData();
+	m_fiSkip->StoreData();
+		m_atw->m_iSkipLines = *m_piSkip;
+
+		vector<ClmInfo> vci;
+		m_atw->ReScan(vci);
+		for (int i = 0; i < fclColumn->iNrCols(); ++i)
+		{
+			ClmInfo& ci = fclColumn->ciColumn(i);
+			ci.sColumnName = vci[i].sColumnName;
+			ci.fKeyAllowed = vci[i].fKeyAllowed;  // only thing needed here
+			ci.Strings.swap(vci[i].Strings);      // retain the scanned strings
+			if (i == m_iKey && !ci.fKeyAllowed)
+				m_iKey = -1;
+		}
+		m_atw->m_fFullScanExecuted = true;
+
+		CheckValidColumnInfo();
+
+		Invalidate();
+
 		return 0;
 	}
 	void KeyCheck()
