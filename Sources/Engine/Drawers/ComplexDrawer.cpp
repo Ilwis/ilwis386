@@ -632,7 +632,8 @@ void ComplexDrawer::setValid(bool yesno) {
 void ComplexDrawer::select(bool yesno) {
 	for(int index = 0; index < getDrawerCount(); ++index) {
 		NewDrawer *dr = getDrawer(index);
-		dr->select(yesno);
+		if ( dr)
+			dr->select(yesno);
 	}
 }
 
