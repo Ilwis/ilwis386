@@ -101,6 +101,7 @@ public:
 	virtual void OnDraw(CDC* pDC);      // overridden to draw this view
 	virtual void OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint);
 	virtual void updateSelection();
+	void selectFeatures(const RowSelectInfo& inf);
 	//}}AFX_VIRTUAL
 
 // Implementation
@@ -109,6 +110,7 @@ protected:
 	void GotoRecord(long iRec);
 	virtual bool fAllowPaste() const;
 	void CreateColPix(TableDoc* td)	;
+	void setSelectionOtherViews(const vector<long>& raws, const Table& tbl);
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;

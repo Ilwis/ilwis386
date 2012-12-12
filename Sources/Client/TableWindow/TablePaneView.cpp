@@ -450,18 +450,41 @@ void TablePaneView::updateSelection()
 		return;
 	vector<long> raws;
 	if ( selection.fValid() ) {
+		Table tbl( GetDocument()->obj()->fnObj);
 		for(int r = selection.minRow(); r <= selection.maxRow(); ++r) {
+			if ( !selection.fContainsRow(r))
+				continue;
 			long iRec = tvw()->iRec(r);
 			if (iRec > tvw()->iRecs())
 				continue;
 			Ilwis::Record rec = tvw()->rec(iRec);
 			raws.push_back(rec.iRec());
 		}
-		Table tbl( GetDocument()->obj()->fnObj);
 		IlwWinApp()->SendUpdateTableSelection(raws, tbl->dm()->fnObj, long(this));
+		if ( viewSelectedRecords) {
+			setSelectionOtherViews(raws, tbl);
+		} else {
+			vector<long> dummy;
+			setSelectionOtherViews(dummy, tbl);
+
+		}
 	}
 }
 
+void TablePaneView::setSelectionOtherViews(const vector<long>& raws, const Table& tbl) {
+	POSITION pos = GetDocument()->GetFirstViewPosition();
+	while (0 != pos) {
+		CView* vw = GetDocument()->GetNextView(pos);
+		BaseTablePaneView* btpv = dynamic_cast<BaseTablePaneView*>(vw);
+		if (btpv && btpv != this) {
+			RowSelectInfo inf;
+			inf.fn = tbl->fnObj;
+			inf.raws = raws;
+			inf.sender = 0;
+			return btpv->selectFeatures(inf);
+		}
+	}
+}
 void TablePaneView::OnColButtonPressed(int iCol)
 {
 	deleteField();
@@ -1077,4 +1100,26 @@ void TablePaneView::OnSelectFeaturesByColumn() {
 		}
 		IlwWinApp()->SendUpdateTableSelection(raws,GetDocument()->table()->dm()->fnObj, 0);
 	}
+}
+
+void TablePaneView::selectFeatures(const RowSelectInfo& inf) {
+	if ( inf.sender == (long) this)
+		return;
+
+	selection.reset();
+	vector<long> rows;
+	for(int i=0; i < inf.raws.size(); ++i) {
+		long raw = inf.raws[i];
+		if ( raw > 0) {
+			Table tbl = GetDocument()->table();
+			if ( tbl->dm()->pdsrt()) {
+				raw = tbl->dm()->pdsrt()->iOrd(raw);
+			}
+			rows.push_back(raw - 1); // raws start at 1, rows dont
+		}
+	}
+	if ( viewSelectedRecords == false)
+		selection.selectRows(rows);
+	Invalidate();
+
 }
