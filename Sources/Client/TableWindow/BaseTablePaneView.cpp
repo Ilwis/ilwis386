@@ -85,6 +85,8 @@ BEGIN_MESSAGE_MAP(BaseTablePaneView, CView)
 	ON_WM_KILLFOCUS()
 	ON_MESSAGE(ILW_GOTOFIELD, OnGotoField)
 	ON_COMMAND(ID_FILE_PRINT,	OnFilePrint)
+	ON_COMMAND(ID_VIEW_SELECTED_ONLY, OnViewSelectedOnly)
+	ON_UPDATE_COMMAND_UI(ID_VIEW_SELECTED_ONLY, OnUpdateViewSelectedOnly)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -102,7 +104,7 @@ BaseTablePaneView::BaseTablePaneView()
 , fULButtonDown(false), fColButtonDown(false), fRowButtonDown(false)
 , fFieldDown(false), fSelecting(false)    
 , fShowHeading(true), fHeaderOnAllPages(true), fLeftMostColOnAllPages(true)
-, m_PrintFont(NULL), m_PrintFontBold(NULL), fHasFocus(false)
+, m_PrintFont(NULL), m_PrintFontBold(NULL), fHasFocus(false),viewSelectedRecords(false)
 {
 	iFmtTbl = RegisterClipboardFormat("IlwisTable");
 
@@ -332,6 +334,8 @@ void BaseTablePaneView::OnDraw(CDC* cdc)
 		if (!fShowHeading)
 			p.y -= iHeight();
 		for (long r = iFirstVisibleRow(); r <= iRows(); ++r) {
+			if ( viewSelectedRecords && !selection.fContainsRow(r))
+				continue;
 			p.y += iHeight();
 			String s = sRowButton(r);
 			zPoint pnt = p;
@@ -393,6 +397,8 @@ void BaseTablePaneView::OnDraw(CDC* cdc)
 					p.y -= iHeight();
 				for (long r = iFirstVisibleRow(); r <= iRows(); ++r) 
 				{
+					if ( viewSelectedRecords && !selection.fContainsRow(r))
+						continue;
 					p.y += iHeight();
 					if (selection.fContains(RowCol(r,(long)c))) {
 						if (fHasFocus) {
@@ -484,6 +490,9 @@ void BaseTablePaneView::ColRow(zPoint p, int& iCol, int& iRow)
 	iCol = -1;
 	while (iColPix[iCol+1] < p.x) ++iCol;
 	while (iCol > 0 && iColPix[iCol] == iColPix[iCol+1]) --iCol;
+	if ( viewSelectedRecords) {
+		iRow = selection.findRow(iRow);
+	}
 }
 
 long BaseTablePaneView::iFirstRec() const
@@ -1280,25 +1289,29 @@ void BaseTablePaneView::OnLButtonDown(UINT nFlags, CPoint point)
 		String s;
 		if (iRow <= 0) {
 			if (iCol < 0) {
-				selection.selectBlock(RowCol(1L,0L), RowCol(iRowMoving - 1L, iCol - 1L));
+				if ( viewSelectedRecords == false)
+					selection.selectBlock(RowCol(1L,0L), RowCol(iRowMoving - 1L, iCol - 1L));
 				iRowMoving = 0;
 				iColMoving = 0;
 				s = TR("Select a block");
 			}
 			else {
-				selection.selectBlock(RowCol(1L,iColMoving), RowCol(iRows(), iColMoving)); 
+				if ( viewSelectedRecords == false)
+					selection.selectBlock(RowCol(1L,iColMoving), RowCol(iRows(), iColMoving)); 
 				iRowMoving = -1;
 				s = TR("Select a block of columns");
 			}
 		}
 		else {
 			if (iCol < 0) {
-				selection.selectBlock(RowCol(iRowMoving,0L), RowCol(iRowMoving, iCols() - 1));
+				if ( viewSelectedRecords == false)
+					selection.selectBlock(RowCol(iRowMoving,0L), RowCol(iRowMoving, iCols() - 1));
 				iColMoving = -1;
 				s = TR("Select a block of records");
 			}
 			else {
-				selection.selectBlock(RowCol(iRowMoving, iColMoving), RowCol(iRowMoving, iColMoving));
+				if ( viewSelectedRecords == false)
+					selection.selectBlock(RowCol(iRowMoving, iColMoving), RowCol(iRowMoving, iColMoving));
 				s = TR("Select a block");
 			}
 		}
@@ -1373,7 +1386,8 @@ void BaseTablePaneView::OnLButtonUp(UINT nFlags, CPoint point)
 	else if (fSelecting) {
 		fSelecting = false;
 	}
-	updateSelection();
+	if ( viewSelectedRecords == false)
+		updateSelection();
 }
 
 void BaseTablePaneView::deleteField()
@@ -2057,7 +2071,8 @@ void BaseTablePaneView::selectFeatures(const RowSelectInfo& inf) {
 		if ( row > 0)
 			rows.push_back(row - 1); 
 	}
-	selection.selectRows(rows);
+	if ( viewSelectedRecords == false)
+		selection.selectRows(rows);
 	Invalidate();
 
 }
@@ -2070,4 +2085,29 @@ void BaseTablePaneView::setSelection(const MinMax& mm){
 	selection.selectBlock(mm.rcMin, mm.rcMax);
 }
 
+void BaseTablePaneView::OnUpdateViewSelectedOnly(CCmdUI* pCmdUI)
+{
+	pCmdUI->SetCheck(viewSelectedRecords);
+}
 
+void BaseTablePaneView::OnViewSelectedOnly()
+{
+	bool undef = selection.mm().fUndef();
+	viewSelectedRecords = !viewSelectedRecords && !undef; // when there is no selection you will by default view all
+	POSITION pos = GetDocument()->GetFirstViewPosition();
+	while (0 != pos) {
+		CView* vw = GetDocument()->GetNextView(pos);
+		BaseTablePaneView* btpv = dynamic_cast<BaseTablePaneView*>(vw);
+		if (btpv && btpv != this) {
+			updateSelection();
+			//btpv->setViewSelectedRecords(viewSelectedRecords);
+		}
+	}
+	Invalidate();
+
+}
+
+void BaseTablePaneView::setViewSelectedRecords(bool yesno){
+	viewSelectedRecords = yesno;
+	Invalidate();
+}
