@@ -20,11 +20,11 @@ namespace ILWIS {
 		void OnMouseMove(UINT nFlags, CPoint point);
 		void OnLButtonDown(UINT nFlags, CPoint point);
 		void OnLButtonUp(UINT nFlags, CPoint point);
+		void OnEscape();
 		virtual void Stop();
 	protected:
 		void setSelectable(void *v, HTREEITEM);
 		void FeatureAreaSelected(CRect rect);
-		void OnEscape();
 		bool fCtrl;
 		bool fShift;
 		BaseMapPtr *bmapptr;
