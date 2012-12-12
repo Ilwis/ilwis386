@@ -993,7 +993,7 @@ BOOL MapPaneView::OnDrop(COleDataObject* pDataObject, DROPEFFECT dropEffect, CPo
 		}
 		GlobalUnlock(hDrop);
 	}
-	int pressed = GetKeyState(VK_CONTROL);
+	int pressed = GetKeyState(VK_CONTROL) & 0x8000;
 	bool asAnimation = pressed != 0;
 	GlobalFree(hnd);
 	// if send by SendMessage() prevent deadlock
@@ -1307,6 +1307,7 @@ void MapPaneView::SaveFeatures(const set<Feature *>& features, const String& inF
 			Feature *f = pmFnOut->newFeature(point);
 			f->PutVal(point->rValue());
 		}
+		pmFnOut->SetAttributeTable(pmIn->tblAtt());
 		pmFnOut->Store();
 	}
 	if ( IOTYPE(fnIn) == IlwisObject::iotSEGMENTMAP) {
@@ -1317,6 +1318,7 @@ void MapPaneView::SaveFeatures(const set<Feature *>& features, const String& inF
 			Feature *f = smFnOut->newFeature(seg);
 			f->PutVal(seg->rValue());
 		}
+		smFnOut->SetAttributeTable(smIn->tblAtt());
 		smFnOut->Store();
 	}
 	if ( IOTYPE(fnIn) == IlwisObject::iotPOLYGONMAP) {
@@ -1327,6 +1329,7 @@ void MapPaneView::SaveFeatures(const set<Feature *>& features, const String& inF
 			Feature *f = pmFnOut->newFeature(pol);
 			f->PutVal(pol->rValue());
 		}
+		pmFnOut->SetAttributeTable(pmIn->tblAtt());
 		pmFnOut->Store();
 	}
 }
