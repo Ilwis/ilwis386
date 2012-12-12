@@ -115,6 +115,7 @@ public:
 	void _export         GetVal(long iKey, BinMemBlock&) const;
 	void _export         PutVal(long iKey, const BinMemBlock&);
 	void _export         CalcMinMax();
+	void _export		 CalcMinMaxSelection(const vector<long>& rows, RangeReal& rrMinMax, double& sum, double& stdev, double& avg) ;
 	void _export Replace(const String& sExpression);
 	void _export         BreakDependency(); // only keeps calculated result, if nothing has been calculated it calculates first
 	void                 CreateColumnStore();
