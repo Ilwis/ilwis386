@@ -14,6 +14,7 @@ public:
 	TableSelection();
 	void setSize(const RowCol& tblSize);
 	bool fContains(const RowCol& rc) const;
+	bool fContainsRow(long row) const;
 	void selectBlock(const RowCol& bottom, const RowCol& top);
 	void selectRows(const vector<long>& selrows);
 	bool fValid() const;
@@ -28,6 +29,8 @@ public:
 	void reset();
 	MinMax mm() const;
 	TableSelection& operator+=(const TableSelection& sel2);
+	const vector<bool>& getRows() const { return  rows; }
+	long findRow(long row) const;
 private:
 	MinMax boundary; // this is the maximum extent of the selection; it doesnt need to be continous
 	vector<bool> rows;

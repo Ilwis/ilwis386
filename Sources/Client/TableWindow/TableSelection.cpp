@@ -17,6 +17,10 @@ bool TableSelection::fContains(const RowCol& rc) const {
 	return rows[rc.Row - 1] && cols[rc.Col];
 }
 
+bool TableSelection::fContainsRow(long row) const{
+	return rows[row - 1];
+}
+
 void TableSelection::selectRows(const vector<long>& selrows) {
 	long maxrow = -1;
 	long minrow = 1000000000;
@@ -174,5 +178,18 @@ TableSelection& TableSelection::operator+=(const TableSelection& sel) {
 	for(long y = 0; y < rows.size(); ++y)
 		rows[y] = sel.rows[y] || rows[y];	
 	return *this;
+}
+
+long TableSelection::findRow(long r) const{
+	int count = 0;
+	for(int i = 0; i < rows.size(); ++i) {
+		if ( rows[i]) {
+			if ( r == count)
+				return i;
+			++count;
+		}
+
+	}
+	return -1;
 }
 
