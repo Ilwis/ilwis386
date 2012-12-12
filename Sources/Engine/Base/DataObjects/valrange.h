@@ -111,6 +111,7 @@ public:
                                 { return !fEqual(vr); }
     virtual bool      fEqual(const ValueRangePtr& vr) const;
     virtual void      AdjustRangeToStep();
+	bool			_export fContains(const ValueRange& vr, bool includeStep=true);
 	virtual double _export getOffset() const ;
 
 protected:

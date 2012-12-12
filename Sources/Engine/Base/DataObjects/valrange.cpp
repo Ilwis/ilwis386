@@ -254,6 +254,17 @@ bool ValueRangePtr::fRealValues() const
   return false;
 }
 
+bool ValueRangePtr::fContains(const ValueRange& vr, bool includeStep) {
+	if ( !vr.fValid())
+		return false;
+	RangeReal rr = vr->rrMinMax();
+	if ( rrMinMax().fContains(rr.rLo()) && rrMinMax().fContains(rr.rHi())) {
+		if ( !includeStep)
+			return true;
+		return vr->rStep() == rStep();
+	}
+	return false;
+}
 
 bool ValueRangePtr::fEqual(const ValueRangePtr&) const
 {
