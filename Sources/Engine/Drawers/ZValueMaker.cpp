@@ -166,10 +166,10 @@ double ZValueMaker::getValue(const Coord& crd, Feature *f ){
 		return spatialsourcemap->cb().width() * 0.01;
 	double value = 0;
 	if (sourceType == stySELF && f && type != IlwisObject::iotRASMAP) {
-		//if (!datasourcemap->dvrs().fRawAvailable())
+		if (!datasourcemap->dvrs().fRawAvailable())
 			value =  f->rValue();
-		//else
-		//	value = datasourcemap->dvrs().rValue(f->rValue());
+		else
+			value = datasourcemap->dvrs().rValue(f->rValue());
 	}
 	if (sourceType == styZCoord && f && type != IlwisObject::iotRASMAP) {
 			value =  crd.z;
