@@ -123,7 +123,7 @@ public:
     { return (Write(s.length(),s.c_str()) + Write(2, "\r\n")); }
   // Write String s to file and appends cr/lf. Only for ascii files.
 
-  void KeepOpen(bool f) {};  // to keep file open all the time (true: increase count, false: decrease count)
+  void KeepOpen(bool f, bool force = false) { if ( force) this->Close();}  // to keep file open all the time (true: increase count, false: decrease count)
   bool fKeepOpen() ;  // returns  keep file open flag
  // void ReOpenForWriting();
   void Flush();   // flushes internal buffers to file
