@@ -61,7 +61,9 @@ public:
   virtual String sDescrRowButton(long iRow) const;
   virtual String sField(int iCol, long iRow) const;
   virtual String sDescrField(int iCol, long iRow) const;
+  void selectFeatures(const RowSelectInfo& inf);
 protected:
+	vector<long> selectedInMainTable;
 	//{{AFX_MSG(TablePaneView)
 	afx_msg void OnUpdateProp(CCmdUI* pCmdUI);
   afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
