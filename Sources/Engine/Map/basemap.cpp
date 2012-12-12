@@ -484,7 +484,7 @@ Table BaseMapPtr::tblAttCopy(const FileName& fn) const
 }
 */
 
-void BaseMapPtr::KeepOpen(bool f)
+void BaseMapPtr::KeepOpen(bool f, bool force)
 {
   fKeepOpen = f;
 }

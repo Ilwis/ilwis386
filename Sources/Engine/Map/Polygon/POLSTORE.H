@@ -78,7 +78,7 @@ public:
 	void      CalcLengthAndAreaAndBounds(long iPol);
 
 	void         GetDataFiles(Array<FileName>& afnDat, Array<String>* asSection=0, Array<String>* asEntry=0) const;
-	void         KeepOpen(bool f =true);
+	void         KeepOpen(bool f =true, bool force = false);
 	//void         Flush();
 	//bool         fConvertTo(const DomainValueRangeStruct& dvrs, const Column& col);
 	void         Updated();

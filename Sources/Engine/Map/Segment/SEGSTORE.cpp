@@ -673,7 +673,7 @@ bool SegmentMapStore::fSegExist(const CoordinateSequence *crdBufNew,
   return false;
 }
 
-void SegmentMapStore::KeepOpen(bool f)
+void SegmentMapStore::KeepOpen(bool f, bool force)
 {
 }
 

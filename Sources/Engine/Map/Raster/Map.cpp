@@ -1467,12 +1467,12 @@ void MapPtr::GetObjectDependencies(Array<FileName>& afnObjDep)
   ObjectDependency::Read(fnObj, afnObjDep);
 }
 
-void MapPtr::KeepOpen(bool f)
+void MapPtr::KeepOpen(bool f, bool force)
 {
   ILWISSingleLock sl(&csAccess, TRUE, SOURCE_LOCATION);
-  BaseMapPtr::KeepOpen(f);
+  BaseMapPtr::KeepOpen(f, force);
   if (0 != pms)
-    pms->KeepOpen(f);
+    pms->KeepOpen(f, force);
 }
 
 void Map::Export(const FileName& fn) 

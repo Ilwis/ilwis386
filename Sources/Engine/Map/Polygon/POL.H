@@ -147,7 +147,7 @@ public:
 	virtual void  Rename(const FileName& fnNew);
 	virtual void  GetObjectDependencies(Array<FileName>& afnObjDep);
 	virtual bool  fConvertTo(const DomainValueRangeStruct& dvrs, const Column& col);
-	virtual void  KeepOpen(bool f=true);
+	virtual void  KeepOpen(bool f=true, bool force = false);
 
 	// next group is moved from PolygonMapStore
 	Feature   *newFeature(geos::geom::Geometry *p=NULL);

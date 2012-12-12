@@ -91,7 +91,7 @@ public:
     virtual void  		SetValueRange(const ValueRange&); // dangerous function!
     virtual void  		SetCoordSystem(const CoordSystem&); // dangerous function!
     void          		SetCoordBounds(const CoordBounds&); // dangerous function!
-    virtual void  		KeepOpen(bool f =true);
+    virtual void  		KeepOpen(bool f =true, bool force = false);
     virtual bool  		fConvertTo(const DomainValueRangeStruct& dvrs);
     virtual bool  		fConvertTo(const Column& col);
     virtual bool         		fConvertTo(const DomainValueRangeStruct& dvrs, const Column& col);

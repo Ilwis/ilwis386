@@ -614,12 +614,12 @@ void SegmentMapPtr::GetObjectDependencies(Array<FileName>& afnObjDep)
   ObjectDependency::Read(fnObj, afnObjDep);
 }
 
-void SegmentMapPtr::KeepOpen(bool f)
+void SegmentMapPtr::KeepOpen(bool f, bool force)
 {
   ILWISSingleLock sl(&csAccess, TRUE, SOURCE_LOCATION);
-  BaseMapPtr::KeepOpen(f);
+  BaseMapPtr::KeepOpen(f,force);
   if (0 != pms)
-    pms->KeepOpen(f);
+    pms->KeepOpen(f, force);
 }
 
 void SegmentMapPtr::Export(const FileName& fn) const

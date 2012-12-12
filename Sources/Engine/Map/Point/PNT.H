@@ -94,7 +94,7 @@ public:
 	virtual void  GetObjectDependencies(Array<FileName>& afnObjDep);
 	virtual bool  fConvertTo(const DomainValueRangeStruct& dvrs, const Column& col);
 	void  SetDomainValueRangeStruct(const DomainValueRangeStruct& dvrs);
-	virtual void  KeepOpen(bool f=true);
+	virtual void  KeepOpen(bool f=true, bool force = false);
 	// next group is moved from PointMapStore to this level (they work on member pms):
 	void PutRaw(long iRec, long iRaw);
 	void PutVal(long iRec, double rValue);

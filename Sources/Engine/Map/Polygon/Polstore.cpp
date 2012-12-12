@@ -356,7 +356,7 @@ void PolygonMapStore::GetDataFiles(Array<FileName>& afnDat, Array<String>* asSec
 	}
 }
 
-void PolygonMapStore::KeepOpen(bool f)
+void PolygonMapStore::KeepOpen(bool f, bool force)
 {
 }
 

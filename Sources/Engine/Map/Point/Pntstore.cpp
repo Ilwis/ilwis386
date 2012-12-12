@@ -503,7 +503,7 @@ void PointMapStore::GetDataFiles(Array<FileName>& afnDat, Array<String>* asSecti
 	}
 }
 
-void PointMapStore::KeepOpen(bool f)
+void PointMapStore::KeepOpen(bool f, bool force)
 {
 	// points are stored in table in memory
 }
@@ -621,6 +621,7 @@ bool PointMapStore::removeFeature(const String& id, const vector<int>& selectedC
 	for(vector<Geometry *>::iterator cur = geometries->begin(); cur != geometries->end(); ++cur) {
 		ILWIS::Point *pnt = CPOINT(*cur);
 		if ( pnt->getGuid() == id) {
+			spatialIndex->remove(pnt);
 			delete pnt;
 			geometries->erase(cur);
 			return true;

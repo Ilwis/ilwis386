@@ -618,12 +618,12 @@ void PolygonMapPtr::GetObjectDependencies(Array<FileName>& afnObjDep)
 	ObjectDependency::Read(fnObj, afnObjDep);
 }
 
-void PolygonMapPtr::KeepOpen(bool f)
+void PolygonMapPtr::KeepOpen(bool f, bool force)
 {
 	ILWISSingleLock sl(&csAccess, TRUE, SOURCE_LOCATION);
-	BaseMapPtr::KeepOpen(f);
+	BaseMapPtr::KeepOpen(f, force);
 	if (0 != pms)
-		pms->KeepOpen(f);
+		pms->KeepOpen(f, force);
 }
 
 void PolygonMapPtr::Export(const FileName& fn) const

@@ -143,7 +143,7 @@ public:
 	virtual void _export Rename(const FileName& fnNew);
 	virtual void _export GetObjectDependencies(Array<FileName>& afnObjDep);
 	virtual bool _export fConvertTo(const DomainValueRangeStruct& dvrs, const Column& col);
-	virtual void _export KeepOpen(bool f=true);
+	virtual void _export KeepOpen(bool f=true, bool force = false);
 	void _export Replace(const String& sExpression);
 	// next group are reimplemented (from IlwisObjectPtr):
 	virtual void _export GetDataFiles(Array<FileName>& afnDat, Array<String>* asSection=0, Array<String>* asEntry=0) const;

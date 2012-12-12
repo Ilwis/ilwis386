@@ -90,7 +90,7 @@ protected:
 	virtual void PutPatchVal(RowCol rc, const LongPatch&) =0;
 	virtual void PutPatchVal(RowCol rc, const RealPatch&) =0;
 	virtual void Store() {};
-	void KeepOpen(bool f =true);
+	void KeepOpen(bool f =true, bool force = false);
 	void SetErase(bool f =true);
 	virtual StoreType st() const = 0;
 	virtual String sType() const = 0;
@@ -203,7 +203,7 @@ public:
     { mpsb->PutPatchVal(rc, pt); }
 	virtual void CreatePyramidLayers();
 	void _export Flush();
-	void _export KeepOpen(bool f =true);
+	void _export KeepOpen(bool f =true, bool force = false);
 	void _export SetErase(bool f=true);
 	void _export FillWithUndef();
 	void _export Updated();

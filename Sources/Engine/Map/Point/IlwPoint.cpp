@@ -46,11 +46,14 @@ CoordinateSequence* ILWIS::Point::create(const Coord& c) {
 }
 
 void ILWIS::Point::setCoord(const Coord& c) {
+	if ( spatialIndex)
+		spatialIndex->remove(this);
 	const Coordinate *c1 = getCoordinate();
 	Coordinate *crd = const_cast<Coordinate *>(c1);
 	crd->x = c.x;
 	crd->y = c.y;
 	crd->z = c.z;
+	spatialIndex->insert(this);
 }
 
 bool ILWIS::Point::fValid() const {
