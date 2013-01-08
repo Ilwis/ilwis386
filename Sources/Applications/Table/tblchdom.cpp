@@ -321,6 +321,9 @@ bool TableChangeDomain::fFreezing()
       {
         Column colOld = tblSource->col(c);
         Column colNew = ptr.col(c);
+		if ( !colNew.fValid())
+			continue;
+
         if (colOld->fValues()) {
           double rVal = colOld->sValue(iOffsetOld+i).rVal();
           if (rVal==rUNDEF) continue;
