@@ -74,6 +74,7 @@ BEGIN_MESSAGE_MAP(PixelInfoView, BaseTablePaneView)
 	ON_WM_CONTEXTMENU()
 	ON_WM_LBUTTONDBLCLK()
 	ON_WM_KILLFOCUS()
+	ON_COMMAND(ID_COPY, OnCopy)
 END_MESSAGE_MAP()
 
 
@@ -318,7 +319,6 @@ void PixelInfoView::OnContextMenu(CWnd* pWnd, CPoint point)
 	}  
 	CMenu men;
 	men.CreatePopupMenu();
-	add(ID_COPY );
 	add(ID_ADDMAPS);
 	add(ID_ADDCSYS);
 	add(ID_ADDGRF);
@@ -387,6 +387,10 @@ void PixelInfoView::update() {
 	}
 }
 
+void PixelInfoView::OnCopy()
+{
+	BaseTablePaneView::OnEditCopy();
+}
 //--------------------------------------------------------------------
 PixInfoField::PixInfoField(PixelInfoView* pane, int col, long row)
 : BaseTblField(pane,col,row, pane->GetDocument()->getItem(row)->fnObj())

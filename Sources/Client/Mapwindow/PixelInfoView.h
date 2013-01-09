@@ -55,6 +55,7 @@ public:
 	virtual String sRowButton(long iRow) const;
 	virtual void OnInitialUpdate();
 	int getSelectedRow() const;
+	void OnCopy();
 protected:
 	virtual String sField(int iCol, long iRow) const;
 	virtual String sDescrULButton() const; // upper left button
