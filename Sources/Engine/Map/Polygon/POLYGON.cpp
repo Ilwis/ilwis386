@@ -81,7 +81,7 @@ void ILWIS::Polygon::addHole(LinearRing * ring) {
 	for(int i = 0; i < holes->size(); ++i) {
 		LinearRing *r = (LinearRing *)holes->at(i);
 		if ( r->equalsExact(ring))
-			throw ErrorObject("Adding duplicate hole to polygon");
+			continue;
 	}
 	holes->push_back(ring);
 }

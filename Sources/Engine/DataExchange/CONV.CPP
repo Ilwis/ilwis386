@@ -256,8 +256,8 @@ void Import(const String& sExpr)
 	short iParms = IlwisObjectPtr::iParseParm(sExpr, as);
 	try
 	{
-		if (iParms < 2)
-			throw ErrorObject(String(SCVErrIncorrectParam_S.c_str(), sExpr.sTrimSpaces()));
+		//if (iParms < 2)
+		//	throw ErrorObject(String(SCVErrIncorrectParam_S.c_str(), sExpr.sTrimSpaces()));
 
 		FileName fn = FileName(as[1]);
 		Directory dir(fn); 
