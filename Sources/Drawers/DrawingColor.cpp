@@ -64,7 +64,8 @@ iMultColors(0),
 gamma(0),
 mcd(0),
 index(ind),
-tresholdColor(Color(255,0,0))
+tresholdColor(Color(255,0,0)),
+colorSetIndex(0)
 {
 	BaseMap bmap;
 	if ( dr->isSet()) {
@@ -165,7 +166,7 @@ Color DrawingColor::clrRaw(long iRaw, NewDrawer::DrawMethod drm) const
 	case 1: iStep = 15; break;
 	case 2: iStep = 31; break;
 			}
-			cRet = clrPrimary(1+iRaw%iStep);
+			cRet = clrPrimary(1+iRaw%iStep, colorSetIndex);
 		}  
 		break;
 	case NewDrawer::drmIMAGE: {
@@ -184,7 +185,7 @@ Color DrawingColor::clrRaw(long iRaw, NewDrawer::DrawMethod drm) const
 		cRet = Color(iRaw,iVal,iVal);
 		setTransparency(iRaw, cRet);
 		setTresholdColors(iRaw, cRet);
-	  } break;
+							  } break;
 	case NewDrawer::drmCOLOR:
 		cRet = Color(iRaw);
 		break;
@@ -427,9 +428,9 @@ void DrawingColor::InitClrRandom()
 	}
 }
 
-Color DrawingColor::clrPrimary(int iNr) 
+Color DrawingColor::clrPrimary(int iNr, int set) 
 {
-	return Representation::clrPrimary(iNr);
+	return Representation::clrPrimary(iNr, set);
 
 }
 
@@ -459,9 +460,27 @@ void DrawingColor::setTresholdRange(const RangeReal& rr){
 
 String DrawingColor::store(const FileName& fnView, const String& parentSection) const{
 	ObjectInfo::WriteElement(parentSection.c_str(),"TransparencyValues",fnView, transpValues);
+	ObjectInfo::WriteElement(parentSection.c_str(),"IdColorSet",fnView, colorSetIndex);
+	ObjectInfo::WriteElement(parentSection.c_str(),"IdColorNumbers",fnView, iMultColors);
 	return parentSection;
 }
 
 void DrawingColor::load(const FileName& fnView, const String& parentSection){
 	ObjectInfo::ReadElement(parentSection.c_str(),"TransparencyValues",fnView, transpValues);
+	ObjectInfo::ReadElement(parentSection.c_str(),"IdColorSet",fnView, colorSetIndex);
+	ObjectInfo::ReadElement(parentSection.c_str(),"IdColorNumbers",fnView, iMultColors);
+}
+
+void DrawingColor::setMultiColors(int index){
+	if ( index < 3)
+		iMultColors = index;
+}
+int DrawingColor::multiColors() const{
+	return iMultColors;
+}
+void DrawingColor::setColorSet(int index){
+	colorSetIndex = index;
+}
+int DrawingColor::colorSet() const{
+	return colorSetIndex;
 }

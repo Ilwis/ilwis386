@@ -278,6 +278,7 @@ void LayerDrawer::load(const FileName& fnView, const String& parentSection){
 		attColumn = ((SpatialDataDrawer *)getParentDrawer())->getBaseMap()->tblAtt()->col(colname);
 	}
 	ObjectInfo::ReadElement(parentSection.c_str(),"UseAttributes",fnView, useAttColumn);
+	drawColor = new DrawingColor(this, 0);
 	if ( drawColor) {
 		drawColor->load(fnView, parentSection);
 	}
@@ -336,3 +337,4 @@ vector<long> * LayerDrawer::getSelectedRaws()
 {
 	return &selectedRaws;
 }
+

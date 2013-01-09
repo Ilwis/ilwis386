@@ -27,7 +27,7 @@ public:
 	void clrVal(const double * buf, long * bufOut, long iLen) const;
 	void clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer::DrawMethod drm) const;
 	Color clrRandom(int iRaw) const;
-	static Color clrPrimary(int iNr);
+	static Color clrPrimary(int iNr, int set=0);
 	void setDataColumn(const Column& c);
 	void setTransparentValues(const RangeReal& rr);
 	Color getTresholdColor() const;
@@ -37,6 +37,10 @@ public:
 	RangeReal getTransparentValues() const;
 	String store(const FileName& fnView, const String& parenSection) const;
 	void load(const FileName& fnView, const String& parenSection);
+	void setMultiColors(int index) ;
+	int multiColors() const;
+	void setColorSet(int index);
+	int colorSet() const;
 
 private:
 	void InitClrRandom();
@@ -51,6 +55,7 @@ private:
 	Color clr1;
 	Color clr2;
 	int iMultColors;
+	int colorSetIndex;
 	double gamma;
 	IlwisData dataValues;
 	int index;
