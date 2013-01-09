@@ -160,7 +160,7 @@ vector<GLuint> SpaceTimePathDrawer::getEnabledObjectIDs(vector<GLuint> & objectI
 				if (raw != iUNDEF) {
 					raw = getAtttributeColumn()->iRaw(raw);
 					if (find(disabledRaws.begin(), disabledRaws.end(), raw) != disabledRaws.end())
-						break;
+						continue;
 				}
 			}
 			newObjectIDs.push_back(objectID);
