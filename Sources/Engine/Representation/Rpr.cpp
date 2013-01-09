@@ -58,6 +58,9 @@ RepresentationProperties::RepresentationProperties() {
 	symbolSize = 100.0;
 
 }
+
+map< int, vector<Color> > Representation::colorSets;
+
 Representation::Representation()
 : IlwisObject(listRpr)
 {}
@@ -491,41 +494,79 @@ void RepresentationPtr::GetObjectStructure(ObjectStructure& os)
 void RepresentationPtr::getProperties(long iRaw, RepresentationProperties *props) {
 }
 
-Color Representation::clrPrimary(int iNr) 
+void Representation::loadColorSets(const String& folder) {
+	String pathToColorSet;
+	if ( folder == "") {
+		String ilwDir = getEngine()->getContext()->sIlwDir();
+		pathToColorSet = ilwDir + "\\System\\*.ics";
+	} else
+		pathToColorSet = folder;
+
+	CFileFind finder;
+	BOOL fFound = finder.FindFile(pathToColorSet.c_str());
+
+	while(fFound) {
+		fFound = finder.FindNextFile();
+		if (finder.IsDirectory())
+		{
+			FileName fnFolder(finder.GetFilePath());
+			if ( fnFolder.sFile != "." && fnFolder.sFile != ".." && fnFolder.sFile != "")
+				loadColorSets(fnFolder.sFullPath());
+		}
+		else {
+			FileName fnCS(finder.GetFilePath());
+			parseFile(fnCS);
+		}
+	}
+}
+
+void Representation::parseFile(const FileName& fn) {
+	ifstream file(fn.sPhysicalPath().c_str());
+	if ( file.is_open()) {
+		int i = 0;
+		int index = iUNDEF;
+		while(!file.eof()) {
+			String line;
+			file >> line;
+			if ( line.size() < 7)
+				continue;
+			String head = line.sHead("=");
+			String tail=line.sTail("=");
+			if ( head == "index") {
+				index = tail.iVal();
+				if (index == iUNDEF)
+					throw ErrorObject(TR(String("Illegal color definition in %S", fn.sRelative())));
+				continue;
+			}
+
+
+			Array<String> parts;
+			Split(tail, parts,",");
+			Color clr;
+			if ( parts.size() == 4) {
+				clr = Color(parts[0].iVal(), parts[1].iVal(),parts[2].iVal(),parts[3].iVal());
+			}else {
+				clr = Color(0,0,0,0);
+			}
+			colorSets[index].push_back(clr);
+			++i;
+		}
+		if ( i != 32) {
+			throw ErrorObject(TR(String("Illegal color definition in %S", fn.sRelative())));
+		}
+	}
+}
+Color Representation::clrPrimary(int iNr, int set) 
 {
-	switch (iNr%32) {
-	case  0: return Color(  0,  0,  0);
-	case  1: return Color(255,  0,  0);
-	case  2: return Color(255,255,  0);
-	case  3: return Color(  0,  0,255);
-	case  4: return Color(255,  0,255);
-	case  5: return Color(  0,255,255);
-	case  6: return Color(  0,255,  0);
-	case  7: return Color(128,128,128);
-	case  8: return Color(224,224,224);  // was white 255,255,255
-	case  9: return Color(128,  0,  0);
-	case 10: return Color(128,128,  0);
-	case 11: return Color(  0,  0,128);
-	case 12: return Color(128,  0,128);
-	case 13: return Color(  0,128,128);
-	case 14: return Color(  0,128,  0);
-	case 15: return Color(255,128,  0);
-	case 16: return Color(191,  0,  0);
-	case 17: return Color(191,191,  0);
-	case 18: return Color(  0,  0,191);
-	case 19: return Color(191,  0,191);
-	case 20: return Color(  0,191,191);
-	case 21: return Color(  0,191,  0);
-	case 22: return Color(191,191,191);
-	case 23: return Color(192,220,192);
-	case 24: return Color( 63,  0,  0);
-	case 25: return Color( 63, 63,  0);
-	case 26: return Color(  0,  0, 63);
-	case 27: return Color( 63,  0, 63);
-	case 28: return Color(  0, 63, 63);
-	case 29: return Color(  0, 63,  0);
-	case 30: return Color( 63, 63, 63);
-	case 31: return Color(127, 63,  0);
-	}  
-	return Color();
+	if ( colorSets.size() == 0) {
+		loadColorSets();
+	}
+	int index = iNr % 32;
+	map< int, vector<Color> >::const_iterator iter = colorSets.find(set);
+	if ( iter != colorSets.end())
+		return (*iter).second[index];
+	if ( colorSets.size() == 0)
+		throw ErrorObject(TR(String("missing color definition for id domain")));
+
+	return colorSets[0][index];
 }

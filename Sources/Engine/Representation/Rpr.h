@@ -145,10 +145,13 @@ public:
     static Domain               dmGet(const FileName& fn);
     static bool                 fHasDomainValue(const FileName& fn); 
     static bool                 fHasSameDomain(const FileName& fn, const Domain& dmCompare); 
-	static Color				_export clrPrimary(int iNr) ;
+	static Color				_export clrPrimary(int iNr, int set=0) ;
 
 private:
+	static void loadColorSets(const String& folder="");
+	static void parseFile(const FileName& fn);
     static IlwisObjectPtrList   listRpr;
+	static map< int, vector<Color> > colorSets;
 };
 
 #endif // ILWRPR_H
