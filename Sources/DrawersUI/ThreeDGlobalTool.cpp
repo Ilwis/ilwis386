@@ -53,6 +53,7 @@ void ThreeDGlobalTool::setthreeD(void *v, HTREEITEM) {
 	((RootDrawer *)drawer)->prepare(&pp);
 
 	//make3D(value,tv);
+	getDocument()->mpvGetView()->ShowScrollBar(SB_BOTH, !value);
 	getDocument()->mpvGetView()->Invalidate();
 }
 
