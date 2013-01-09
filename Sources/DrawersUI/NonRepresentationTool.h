@@ -15,6 +15,7 @@ public:
 	String getMenuString() const;
 protected:
 	void displayOptionSingleColor();
+	void displayOptionMultiColor();
 
 
 };
@@ -26,6 +27,20 @@ public:
 private:
 	FieldColor *fc;
 	Color c;
+
+};
+
+class SetMultipleColorForm : public DisplayOptionsForm {
+public:
+	SetMultipleColorForm(CWnd *wPar, FeatureLayerDrawer *dr);
+	void apply();
+private:
+	void loadColorSets(const String& folder);
+	FieldOneSelectString *fo;
+	RadioGroup *rg;
+	int colors;
+	long choice;
+	vector<String> sets;
 
 };
 
