@@ -78,6 +78,7 @@
 */
 
 #include "Headers\toolspch.h"
+#include "Engine\Base\System\Engine.h"
 #include "Engine\DataExchange\Convloc.h"
 #include "Engine\Base\DataObjects\ilwisobj.h"
 
@@ -107,9 +108,15 @@ void ImpExp::ExpRas(const FileName& fnObject, const FileName& fnFile, const Stri
 		ExportASCII(fnObject, FileName(fnFile, ".asc"));
 	else if (fCIStrEqual(sExtFormat, "ArcInfoNAS"))
 		ExportNAS(fnObject, FileName(fnFile, ".asc"));
+	else if (fCIStrEqual(_sMethod, "gdal")) {
+		String ilwDir = getEngine()->getContext()->sIlwDir();
+		String gdal = ilwDir + "\\gdal_translate.exe";
+		String sCmd("!%S -of %S %S %S", gdal, sExtFormat, fnObject.sFullPath(), fnFile.sFullPath());
+		getEngine()->Execute(sCmd);
+	}
 	else
 	{
-		throw ErrorImportExport(SCVErrUnknownConversion);
+		throw ErrorImportExport(TR("Unknow conversion"));
 	}
 }
 
