@@ -1150,8 +1150,8 @@ void Catalog::SortColumn(int i)
 	CListCtrl& lvCtrl = GetListCtrl();
 	int iCurSel = lvCtrl.GetNextItem(-1, LVNI_FOCUSED);
 
-	if ( viIndex.size() <= iCurSel)
-		return;
+	//if ( viIndex.size() <= iCurSel)
+	//	return;
 
 	int iCurInd = iCurSel >= 0 ? viIndex[iCurSel] : -1;
 
