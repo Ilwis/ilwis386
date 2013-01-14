@@ -59,6 +59,14 @@ RepresentationProperties::RepresentationProperties() {
 
 }
 
+RepresentationProperties::RepresentationProperties(const RepresentationProperties& p){
+	linewidth = p.linewidth;
+	lineType = p.lineType;
+	itemTransparency = p.itemTransparency;
+	symbolType = p.symbolType;
+	symbolSize = p.symbolSize;
+}
+
 map< int, vector<Color> > Representation::colorSets;
 
 Representation::Representation()

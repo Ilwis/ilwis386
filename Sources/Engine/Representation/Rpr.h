@@ -48,6 +48,7 @@ class RepresentationValue;
 
 struct _export RepresentationProperties {
 	RepresentationProperties();
+	RepresentationProperties(const RepresentationProperties& p);
 	double linewidth;
 	int lineType;
 	double itemTransparency;
