@@ -812,18 +812,8 @@ public:
 	m_fiSkip->StoreData();
 		m_atw->m_iSkipLines = *m_piSkip;
 
-		vector<ClmInfo> vci;
-		m_atw->ReScan(vci);
-		for (int i = 0; i < fclColumn->iNrCols(); ++i)
-		{
-			ClmInfo& ci = fclColumn->ciColumn(i);
-			ci.sColumnName = vci[i].sColumnName;
-			ci.fKeyAllowed = vci[i].fKeyAllowed;  // only thing needed here
-			ci.Strings.swap(vci[i].Strings);      // retain the scanned strings
-			if (i == m_iKey && !ci.fKeyAllowed)
-				m_iKey = -1;
-		}
-		m_atw->m_fFullScanExecuted = true;
+		m_atw->m_fFullScanExecuted = false;
+		m_atw->ReScan(m_atw->m_colInfo);
 
 		CheckValidColumnInfo();
 
@@ -1163,10 +1153,10 @@ void AsciiTableWizard::ReScan(vector<ClmInfo> &vci)
 	for (unsigned int i = 0; i < vci.size(); ++i)
 		fFull = fFull || vci[i].fKey;
 
-	fFull = fFull && !m_fFullScanExecuted;
+	fFull = fFull || !m_fFullScanExecuted;
 
 	int iSpecFields = 0;
-	bool fUseColInfo = vci.size() > 0;
+	bool fUseColInfo = (vci.size() > 0) && !fFull;
 	switch (m_iActiveFormat)
 	{
 		case TableExternalFormat::ifDBF:
