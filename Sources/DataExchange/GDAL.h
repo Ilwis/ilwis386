@@ -209,7 +209,7 @@ struct FormatInfo
 
 class GeometryFiller {
 public:
-	virtual void fillFeature(OGRGeometryH hGeom, int& rec);
+	virtual void fillFeature(OGRGeometryH hGeom, int& rec, bool isMulti=false);
 protected:
 	GeometryFiller(GDALCFunctions& _funcs, BaseMap& _bmp) : bmp(_bmp), funcs(_funcs) {}
 	virtual void fillGeometry(OGRGeometryH hGeom, int& rec) {};
@@ -236,7 +236,7 @@ private:
 class PolygonFiller : public GeometryFiller {
 public:
 	PolygonFiller(GDALCFunctions& _funcs, BaseMap& _bmp) : GeometryFiller(_funcs, _bmp) {}
-	virtual void fillFeature(OGRGeometryH hGeom, int& rec);
+	virtual void fillFeature(OGRGeometryH hGeom, int& rec, bool isMulti=false);
 private:
 	void fillPolygon(int count, int rec, OGRGeometryH hGeometry);
 	LinearRing *getRing(OGRGeometryH hGeom);

@@ -1591,7 +1591,7 @@ void GDALFormat::getImportFormats(vector<ImportFormat>& formats) {
 			frm.ext = "*.*";
 			if ( name == "ESRI Shapefile")
 				frm.ext = "shp";
-			frm.command = "gdalogrimport";
+			frm.command["import"] = "gdalogrimport";
 			formats.push_back(frm);
 		}
 	}
@@ -1600,6 +1600,7 @@ void GDALFormat::getImportFormats(vector<ImportFormat>& formats) {
 
 void GDALFormat::ogr(const String& name, const String& source, const String& target){
 	OGRDataSourceH hDS = funcs.ogrOpen( source.sUnQuote().c_str(), FALSE, NULL );	
+	//OGRDataSourceH hDS = funcs.ogrOpen( "WFS:http://www.cartociudad.es/wfs-vial/services", FALSE, NULL );	
 	if ( hDS) {
 		String error;
 		int layerCount = funcs.ogrGetLayerCount(hDS);
@@ -1856,7 +1857,7 @@ CoordBounds GDALFormat::getLayerCoordBounds(OGRLayerH hLayer) {
 }
 
 //-----------------------------------------------------
-void GeometryFiller::fillFeature(OGRGeometryH hGeometry, int& rec) {
+void GeometryFiller::fillFeature(OGRGeometryH hGeometry, int& rec, bool isMulti) {
 	if ( hGeometry) {
 		fillGeometry(hGeometry, rec);
 		long count = funcs.ogrGetSubGeometryCount(hGeometry);
@@ -1897,19 +1898,20 @@ void SegmentFiller::fillGeometry(OGRGeometryH hGeom, int& rec) {
 	s->PutVal((long)rec++);
 }
 
-void PolygonFiller::fillFeature(OGRGeometryH hGeometry, int& rec) {
+void PolygonFiller::fillFeature(OGRGeometryH hGeometry, int& rec, bool isMulti) {
 	try {
 		if ( hGeometry) {
 			long count = funcs.ogrGetSubGeometryCount(hGeometry);
 			OGRwkbGeometryType tp = funcs.ogrGetGeometryType(hGeometry);
 			if ( tp == wkbPolygon){
 				fillPolygon(count, rec, hGeometry);
-				++rec;
+				if ( isMulti == false) // for multis de raw remains the same (same record).
+					++rec;
 			}
 			else {
 				for(int i = 0; i < count; ++i) {
 					OGRGeometryH hSubGeometry = funcs.ogrGetSubGeometry(hGeometry, i);
-					fillFeature(hSubGeometry, rec);
+					fillFeature(hSubGeometry, rec, count > 1);
 				}
 			}
 		}
@@ -1929,7 +1931,6 @@ void PolygonFiller::fillPolygon(int count, int rec, OGRGeometryH hGeometry) {
 				const CoordinateSequence * seq = ring->getCoordinates();
 				bool isCC = geos::algorithm::CGAlgorithms::isCCW(seq);
 				delete seq;
-				//if ( !isCC || first) {
 				if ( first) {
 					p = CPOLYGON(bmp->newFeature());
 					p->PutVal((long)rec);
