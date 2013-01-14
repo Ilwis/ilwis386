@@ -105,13 +105,13 @@ void  SetSingleColorForm::apply() {
 }
 //-------------------------------------------------------------
 SetMultipleColorForm::SetMultipleColorForm(CWnd *wPar, FeatureLayerDrawer *dr) : 
-	DisplayOptionsForm(dr, wPar,String("Color sets")),
+	DisplayOptionsForm(dr, wPar,String("Color Scheme")),
 	choice(1)
 {
 	loadColorSets("");
 	choice = ((FeatureLayerDrawer *)drw)->getDrawingColor()->colorSet();
 	colors = ((FeatureLayerDrawer *)drw)->getDrawingColor()->multiColors();
-	fo = new FieldOneSelectString(root, "Color sets", &choice, sets);
+	fo = new FieldOneSelectString(root, "Color Schemes", &choice, sets);
 	rg = new RadioGroup(root,"Size color set",&colors);
 	new RadioButton(rg,"8");
 	new RadioButton(rg,"16");
