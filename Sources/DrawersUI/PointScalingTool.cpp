@@ -145,6 +145,7 @@ void PointScalingForm::apply(){
 	PreparationParameters pp(NewDrawer::ptRENDER, 0);
 	//FileName fn(name);
 	RepresentationProperties rprop;
+	rprop.symbolType = props->symbol;
 	pp.props = &rprop;
 	drw->prepare(&pp);
 
