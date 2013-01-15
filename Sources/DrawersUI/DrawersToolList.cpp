@@ -168,7 +168,7 @@ extern "C" _export void moduleInit(ILWIS::Module *module) {
 }
 
 extern "C" _export ILWIS::Module *getModuleInfo(const FileName& fnModule) {
-	ILWIS::Module *module = new ILWIS::Module("DrawersUI", "IlwisDrawersUI.dll",ILWIS::Module::mi38,"1.0");
+	ILWIS::Module *module = new ILWIS::Module("DrawersUI", "IlwisDrawersUI.dll",ILWIS::Module::mi38,"1.2");
 	module->addMethod(ILWIS::Module::ifDrawerTools, (void *)createDrawerTool);
 	module->addMethod(ILWIS::Module::ifInitUI, (void *)moduleInit);
 
