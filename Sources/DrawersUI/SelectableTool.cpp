@@ -17,6 +17,7 @@
 #include "Engine\Drawers\DrawerContext.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Drawers\LayerDrawer.h"
+#include "Drawers\RasterLayerDrawer.h"
 #include "SelectableTool.h"
 #include "LayerDrawerTool.h"
 #include "DrawersUI\SetDrawerTool.h"
@@ -46,6 +47,9 @@ bool SelectableTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	if ( !ldrwt )
 		return false;
 	LayerDrawer *layerDrawer = dynamic_cast<LayerDrawer *>(getDrawer());
+	RasterLayerDrawer *rldr = dynamic_cast<RasterLayerDrawer *>(layerDrawer);
+	if ( rldr) // raster layers dont have selectable features
+		return false;
 	SpatialDataDrawer *datadrw = dynamic_cast<SpatialDataDrawer *>(layerDrawer->getParentDrawer());
 	if ( datadrw) {
 		bmapptr = datadrw->getBaseMap();
