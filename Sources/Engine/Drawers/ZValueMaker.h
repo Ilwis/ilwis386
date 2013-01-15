@@ -7,7 +7,7 @@ namespace ILWIS {
 class _export ZValueMaker {
 public:
 	enum ZValueTypeScaling{zvsNONE, zvsLINEAR, zvsLOGARITHMIC};
-	enum SourceType{styNONE,stySELF,styZCoord, styMAP,styMAPLIST, styTABLE};
+	enum SourceType{styNONE,styFEATURE,styZCoord, styMAP,styMAPLIST, styTABLE};
 	ZValueMaker(NewDrawer *drw);
 	void setSpatialSource(const BaseMap& mp, const CoordBounds& cb);
 	void setDataSourceMap(const BaseMap& mp);

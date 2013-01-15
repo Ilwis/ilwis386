@@ -33,7 +33,13 @@ void ZValueMaker::setDataSourceMap(const BaseMap& mp){
 	}
 
 	if ( sourceType == styNONE) // first set the source type before being able to make changes here
-		sourceType = spatialsourcemap == datasourcemap ? stySELF : styMAP;
+	{
+		IlwisObject::iotIlwisObjectType type = IOTYPE(mp->fnObj);
+		if ( type == IlwisObject::iotRASMAP || type == IlwisObject::iotMAPLIST )
+			sourceType = styMAP;
+		else 
+			sourceType = styFEATURE;
+	}
 	offset = 0;
 	isSameCsy = spatialsourcemap->cs() == datasourcemap->cs();
 	zscale = DEFAULT_SCALE;
@@ -165,7 +171,7 @@ double ZValueMaker::getValue(const Coord& crd, Feature *f ){
 	if (!threeDPossible && spatialsourcemap.fValid())
 		return spatialsourcemap->cb().width() * 0.01;
 	double value = 0;
-	if (sourceType == stySELF && f && type != IlwisObject::iotRASMAP) {
+	if (sourceType == styFEATURE && f && type != IlwisObject::iotRASMAP) {
 		if (!datasourcemap->dvrs().fRawAvailable())
 			value =  f->rValue();
 		else
@@ -175,7 +181,7 @@ double ZValueMaker::getValue(const Coord& crd, Feature *f ){
 			value =  crd.z;
 	}
 
-	if (sourceType == stySELF && type == IlwisObject::iotRASMAP){
+	if (sourceType == styFEATURE && type == IlwisObject::iotRASMAP){
 		value = spatialsourcemap->rValue(crd);
 	}
 	if ( type == IlwisObject::iotRASMAP && datasourcemap.fValid()) {
@@ -209,7 +215,7 @@ double ZValueMaker::scaleValue(double value) {
 
 BaseMapPtr * ZValueMaker::getSourceRasterMap() const { // we return the pointer to avoid copy constructors
 	if (type == IlwisObject::iotRASMAP) {
-		if (sourceType == stySELF) {
+		if (sourceType == styFEATURE) {
 			if (spatialsourcemap.fValid())
 				return spatialsourcemap.ptr();
 			else
