@@ -18,7 +18,7 @@ PreTimeOffsetDrawer::~PreTimeOffsetDrawer() {
 }
 
 void PreTimeOffsetDrawer::prepare(PreparationParameters *pp) {
-	if ((pp->type & RootDrawer::ptGEOMETRY) || (pp->type & NewDrawer::ptRESTORE)) { 
+	if ((pp->type & RootDrawer::ptGEOMETRY) || (pp->type & NewDrawer::ptRESTORE) || (pp->type & NewDrawer::pt3D)) { 
 		cube = rootDrawer->getMapCoordBounds();
 		if (cube.width() > cube.height()) {
 			double deltay = cube.width() - cube.height();
