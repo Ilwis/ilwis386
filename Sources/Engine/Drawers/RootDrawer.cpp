@@ -579,14 +579,13 @@ void RootDrawer::setCoordBoundsZoom(const CoordBounds& cbIn) {
 		if ( abs(factCur - factIn) > 0.01 ) {
 			if ( factCur < 1.0) {
 				double newHeight = cbIn.width() / factCur;
-				cb = CoordBounds(cbIn.cMin, Coord(cbIn.cMax.x, cbIn.cMin.y + newHeight));
+				cb = CoordBounds(cbIn.cMin, Coord(cbIn.cMax.x, cbIn.cMin.y + newHeight, cbIn.cMax.z));
 			} else {
 				double newWidth = cb.height() * factCur;
-				cb = CoordBounds(cbIn.cMin, Coord(cbIn.cMin.x + newWidth, cbIn.cMax.y));
+				cb = CoordBounds(cbIn.cMin, Coord(cbIn.cMin.x + newWidth, cbIn.cMax.y, cbIn.cMax.z));
 			}
 		}
 	}
-
 
 	cbZoom = cb;
 	setViewPoint(cbZoom.middle());
