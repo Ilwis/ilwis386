@@ -73,5 +73,6 @@ namespace ILWIS {
 		OpenGLText * font;
 		OpenGLText * mediumFont;
 		CubeProperties properties;
+		CCriticalSection * csFont;
 	};
 }

@@ -19,6 +19,7 @@ CubeDrawer::CubeDrawer(DrawerParameters *parms)
 , sTimePosText(0)
 , font(0)
 , mediumFont(0)
+, csFont(new CCriticalSection())
 {
 	id = name = "CubeDrawer";
 	setTransparency(1); // opaque
@@ -26,14 +27,24 @@ CubeDrawer::CubeDrawer(DrawerParameters *parms)
 
 CubeDrawer::~CubeDrawer() {
 	if (font) {
+		csFont->Lock();
 		delete font;
 		delete mediumFont;
+		csFont->Unlock();
 	}
+	delete csFont;
 }
 
 void CubeDrawer::prepare(PreparationParameters *pp) {
-	if ((pp->type & RootDrawer::ptGEOMETRY) || (pp->type & NewDrawer::ptRESTORE)) { 
-		if (font == 0) {
+	if ((pp->type & RootDrawer::ptGEOMETRY) || (pp->type & NewDrawer::ptRESTORE) || (pp->type & NewDrawer::pt3D)) {
+		if ((font != 0) && (pp->type & NewDrawer::pt3D)) {
+			csFont->Lock();
+			delete font;
+			delete mediumFont;
+			font = new OpenGLText(rootDrawer, "arial.ttf", 28, true, 0, 0, true);
+			mediumFont = new OpenGLText(rootDrawer, "arial.ttf", 15, true, 0, 0, true);
+			csFont->Unlock();
+		} else if (font == 0) {
 			font = new OpenGLText(rootDrawer, "arial.ttf", 28, true, 0, 0, true);
 			mediumFont = new OpenGLText(rootDrawer, "arial.ttf", 15, true, 0, 0, true);
 		}
@@ -118,12 +129,14 @@ bool CubeDrawer::draw(const CoordBounds& cbArea) const{
 		glColor4f(clr.redP(), clr.greenP(), clr.blueP(), clr.alphaP());
 		drawTicMarks();
 	}
+	csFont->Lock();
 	if (properties["labels"].visible)
 		drawLabels();
 	if (properties["coordinates"].visible) {
 		drawCoords();
 		drawTimes();
 	}
+	csFont->Unlock();
 
 	glPopMatrix();
 
