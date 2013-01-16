@@ -207,6 +207,10 @@
 			Name="Header Files"
 			>
 			<File
+				RelativePath="..\..\Sources\SpaceTimeCube\ColumnTreeCtrl.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\SpaceTimeCube\CubeDrawer.h"
 				>
 			</File>
@@ -216,6 +220,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\SpaceTimeCube\GroupableDrawer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\SpaceTimeCube\ParallelCoordinatePlotTool.h"
 				>
 			</File>
 			<File
@@ -287,6 +295,10 @@
 			Name="Source Files"
 			>
 			<File
+				RelativePath="..\..\Sources\SpaceTimeCube\ColumnTreeCtrl.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\SpaceTimeCube\CubeDrawer.cpp"
 				>
 			</File>
@@ -300,6 +312,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\SpaceTimeCube\GroupableDrawer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\SpaceTimeCube\ParallelCoordinatePlotTool.cpp"
 				>
 			</File>
 			<File

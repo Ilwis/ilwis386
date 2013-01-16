@@ -24,6 +24,7 @@
 #include "CubeElementsTool.h"
 #include "PathScalingTool.h"
 #include "TimeProfileTool.h"
+#include "ParallelCoordinatePlotTool.h"
 
 using namespace ILWIS;
 
@@ -35,6 +36,7 @@ DrawerToolInfoVector *createDrawerTool() {
 	infos->push_back(new DrawerToolInfo("TimeZoomTool",createTimeZoomTool));
 	infos->push_back(new DrawerToolInfo("PathScalingTool",createPathScalingTool));
 	infos->push_back(new DrawerToolInfo("TimeProfileTool",createTimeProfileTool));
+	infos->push_back(new DrawerToolInfo("ParallelCoordinatePlotTool",createParallelCoordinatePlotTool));
 	return infos;
 }
 
