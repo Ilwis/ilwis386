@@ -673,15 +673,52 @@ bool SpaceTimeDrawer::draw( const CoordBounds& cbArea) const {
 	else
 	{
 		*displayList = glGenLists(2);
-
 		glNewList(*displayList, GL_COMPILE_AND_EXECUTE);
+
+		CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
+		CoordBounds cbBaseMap = basemap->cb();
+		bool fZoomed = cbBaseMap.MinX() < cbMap.MinX() || cbBaseMap.MinY() < cbMap.MinY() || cbBaseMap.MaxX() > cbMap.MaxX() || cbBaseMap.MaxY() > cbMap.MaxY();
+
+		if (fZoomed) {
+			double pathScale = properties->exaggeration * cbMap.width() / 50;
+			double clip_plane0[]={-1.0, 0.0, 0.0, cbMap.cMax.x + pathScale};
+			double clip_plane1[]={1.0, 0.0, 0.0, -cbMap.cMin.x - pathScale};
+			double clip_plane2[]={0.0, -1.0, 0.0, cbMap.cMax.y + pathScale};
+			double clip_plane3[]={0.0, 1.0, 0.0, -cbMap.cMin.y - pathScale};
+			glClipPlane(GL_CLIP_PLANE0,clip_plane0);
+			glClipPlane(GL_CLIP_PLANE1,clip_plane1);
+			glClipPlane(GL_CLIP_PLANE2,clip_plane2);
+			glClipPlane(GL_CLIP_PLANE3,clip_plane3);
+			glEnable(GL_CLIP_PLANE0);
+			glEnable(GL_CLIP_PLANE1);
+			glEnable(GL_CLIP_PLANE2);
+			glEnable(GL_CLIP_PLANE3);
+		}
 		drawObjects(steps, (GetHatchFunc)&SpaceTimeDrawer::getHatch);
+		if (fZoomed) {
+			glDisable(GL_CLIP_PLANE0);
+			glDisable(GL_CLIP_PLANE1);
+			glDisable(GL_CLIP_PLANE2);
+			glDisable(GL_CLIP_PLANE3);
+		}
 		glEndList();
 
 		if (*fHatching) {
 			glBindTexture(GL_TEXTURE_2D, texture[1]);
 			glNewList(*displayList + 1, GL_COMPILE_AND_EXECUTE);
+			if (fZoomed) {
+				glEnable(GL_CLIP_PLANE0);
+				glEnable(GL_CLIP_PLANE1);
+				glEnable(GL_CLIP_PLANE2);
+				glEnable(GL_CLIP_PLANE3);
+			}
 			drawObjects(steps, (GetHatchFunc)&SpaceTimeDrawer::getHatchInverse);
+			if (fZoomed) {
+				glDisable(GL_CLIP_PLANE0);
+				glDisable(GL_CLIP_PLANE1);
+				glDisable(GL_CLIP_PLANE2);
+				glDisable(GL_CLIP_PLANE3);
+			}
 			glEndList();
 		}
 	}
