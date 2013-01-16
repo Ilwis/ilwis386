@@ -548,28 +548,28 @@ void TablePaneView::OnEditClear()
 	TableDoc* td = GetDocument();
 	if (0 == td)
 		return;
-	if (selection.minRow() < 0) {
+	if (selection.maxRow() - selection.minRow() + 1 == iRows()) {
 		long cMin = selection.minCol();
 		if (cMin < 0) cMin = 0;
 		for (long c = selection.maxCol(); c >= cMin; --c)
-			if (!td->fDelColumn(c))
+			if (selection.fContains(RowCol(1L,(long)c)) && !td->fDelColumn(c))
 				break;
 		td->UpdateAllViews(0);
 		td->tvw->Updated();
 	}
-	else if (0 != td->tvw->dm()->pdnone() && selection.minCol() < 0) {
+	else if ((0 != td->tvw->dm()->pdnone()) && (selection.maxCol() - selection.minCol() + 1 == iCols())) {
 		int iRet = MessageBox(TR("Delete selected rows").c_str(), TR("Delete Rows").c_str(),
 			MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2);
 		if (IDYES == iRet) 
 		{
 			long iMin = selection.minRow();
 			if (iMin < 0) iMin = 0;
-			long iMax = selection.maxRow();
-			long iNr = iMax - iMin + 1;
-			if (iNr > 0) {
+			{
 				CWaitCursor cur;
-				td->tvw->DeleteRec(iMin, iNr);
-			}	
+				for (long r = selection.maxRow(); r >= iMin; --r)
+					if (selection.fContains(RowCol(r, 0L)))
+						td->tvw->DeleteRec(r, 1L);
+			}
 			td->UpdateAllViews(0);
 			td->tvw->Updated();
 		}
@@ -584,12 +584,15 @@ void TablePaneView::OnEditClear()
 			MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2);
 		if (IDYES == iRet) {
 			CWaitCursor cur;
-			long iMaxRow = selection.maxRow();
+			long iMinRow = selection.minRow();
 			for (long c = iMinCol; c <= iMaxCol; ++c) {
+				if (!selection.fContains(RowCol(iMinRow, c)))
+					continue;
 				Column col = td->tvw->cv(c);
 				if (col.fValid() && !col->fDataReadOnly()) {
-					for (long r = selection.minRow(); r <= iMaxRow; ++r)
-						td->tvw->PutVal((short)c,r,sUNDEF);
+					for (long r = selection.maxRow(); r >= iMinRow; --r)
+						if (selection.fContains(RowCol(r, c)))
+							td->tvw->PutVal((short)c,r,sUNDEF);
 					col->Updated();
 				}
 			}    
