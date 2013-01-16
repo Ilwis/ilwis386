@@ -11,6 +11,7 @@
 #include "Drawers\FeatureLayerDrawer.h"
 #include "SpaceTimeCubeTool.h"
 #include "TimeBounds.h"
+#include "PreTimeOffsetDrawer.h"
 
 DrawerTool *createTimeZoomTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) {
 	return new TimeZoomTool(zv, view, drw);
@@ -45,13 +46,16 @@ HTREEITEM TimeZoomTool::configure( HTREEITEM parentItem) {
 	//ILWIS::Time tMin = stc->getTimeBoundsZoom()->tMin();
 	//ILWIS::Time tMax = stc->getTimeBoundsZoom()->tMax();
 	//String text("TimeZoom (%S,%S)", tMin.toString(), tMax.toString());
-	String text("TimeZoom");
+	String text("Spatio-Temporal Zoom");
 	htiNode = insertItem(text,"Valuerange", item);
+	cbFullExtent = drawer->getRootDrawer()->getMapCoordBounds();
 
 	return htiNode;
 }
 
 void TimeZoomTool::displayOptionTimeZoom() {
+	if (drawer->getRootDrawer()->getMapCoordBounds().width() > cbFullExtent.width() || drawer->getRootDrawer()->getMapCoordBounds().height() > cbFullExtent.height())
+		cbFullExtent = drawer->getRootDrawer()->getMapCoordBounds();
 	CRect rect;
 	bool fRestorePosition = false;
 	if (timeZoomForm) {
@@ -61,7 +65,7 @@ void TimeZoomTool::displayOptionTimeZoom() {
 		timeZoomForm = 0;
 	}
 	if (stc->fUseSpaceTimeCube() && stc->getTimeBoundsFullExtent()->fValid()) {
-		timeZoomForm = new TimeZoomForm(tree, (ComplexDrawer *)drawer, htiNode, stc, *this);
+		timeZoomForm = new TimeZoomForm(tree, (ComplexDrawer *)drawer, htiNode, stc, cbFullExtent, *this);
 		if (fRestorePosition)
 			timeZoomForm->SetWindowPos(tree, rect.left, rect.top, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOREPOSITION);
 	}
@@ -78,17 +82,24 @@ String TimeZoomTool::getMenuString() const {
 
 
 //---------------------------------------------------
-TimeZoomForm::TimeZoomForm(CWnd *wPar, ComplexDrawer *dr, HTREEITEM hti, SpaceTimeCube * _stc, TimeZoomTool & _timeZoomTool)
-: DisplayOptionsForm(dr,wPar,"Time Zoom")
+TimeZoomForm::TimeZoomForm(CWnd *wPar, ComplexDrawer *dr, HTREEITEM hti, SpaceTimeCube * _stc, CoordBounds & _cbFullExtent, TimeZoomTool & _timeZoomTool)
+: DisplayOptionsForm(dr,wPar,"Spatio-Temporal Zoom")
 , maxSlider(1000)
 , htiTimeZoom(hti)
 , stc(_stc)
+, cbFullExtent(_cbFullExtent)
 , timeZoomTool(_timeZoomTool)
 , fInCallback(false)
 {
 	tMin = stc->getTimeBoundsFullExtent()->tMin();
 	tMax = 	stc->getTimeBoundsFullExtent()->tMax();
+	zoom = 1.0;
+	prevZoom = 1.0;
+	xPos = cbFullExtent.MinX() + cbFullExtent.width() / 2.0;
+	yPos = cbFullExtent.MinY() + cbFullExtent.height() / 2.0;
 	calcSliderFromMinMax();
+	calcSliderFromZoom();
+	calcSliderFromPos();
 
 	String sFromTime = tMin.toString();
 	String sToTime = tMax.toString();
@@ -119,6 +130,27 @@ TimeZoomForm::TimeZoomForm(CWnd *wPar, ComplexDrawer *dr, HTREEITEM hti, SpaceTi
 	sliderTo->SetCallBack((NotifyProc)&TimeZoomForm::sliderToCallBack);
 	sliderTo->setContinuous(true);
 	sliderTo->Align(ftTo, AL_AFTER);
+
+	StaticText * stZoom = new StaticText(root, "Zoom");
+	stZoom->Align(ftTo, AL_UNDER);
+	sliderZoom = new FieldIntSlider(root, &iZoom, ValueRange(1, maxSlider), TBS_HORZ); // TBS_VERT|TBS_AUTOTICKS|TBS_RIGHT);
+	sliderZoom->SetCallBack((NotifyProc)&TimeZoomForm::sliderZoomCallBack);
+	sliderZoom->setContinuous(true);
+	sliderZoom->Align(sliderTo, AL_UNDER);
+
+	StaticText * stXPos = new StaticText(root, "X-Center");
+	stXPos->Align(stZoom, AL_UNDER);
+	sliderXPos = new FieldIntSlider(root, &iXPos, ValueRange(0, maxSlider), TBS_HORZ); // TBS_VERT|TBS_AUTOTICKS|TBS_RIGHT);
+	sliderXPos->SetCallBack((NotifyProc)&TimeZoomForm::sliderPosCallBack);
+	sliderXPos->setContinuous(true);
+	sliderXPos->Align(sliderZoom, AL_UNDER);
+
+	StaticText * stYPos = new StaticText(root, "Y-Center");
+	stYPos->Align(stXPos, AL_UNDER);
+	sliderYPos = new FieldIntSlider(root, &iYPos, ValueRange(0, maxSlider), TBS_HORZ); // TBS_VERT|TBS_AUTOTICKS|TBS_RIGHT);
+	sliderYPos->SetCallBack((NotifyProc)&TimeZoomForm::sliderPosCallBack);
+	sliderYPos->setContinuous(true);
+	sliderYPos->Align(sliderXPos, AL_UNDER);
 	create();
 	fsFrom->SetReadOnly(true);
 	fsTo->SetReadOnly(true);
@@ -138,6 +170,24 @@ void TimeZoomForm::calcMinMaxFromSlider() {
 	ILWIS::Time tWidth = tMax - tMin;
 	tMin = tMin + (ILWIS::Time)(timeZoomFrom * tWidth / maxSlider);
 	tMax = tMax - (ILWIS::Time)((maxSlider - timeZoomTo) * tWidth / maxSlider);
+}
+
+void TimeZoomForm::calcSliderFromZoom() {
+	iZoom = zoom * maxSlider;
+}
+
+void TimeZoomForm::calcZoomFromSlider() {
+	zoom = iZoom / maxSlider;
+}
+
+void TimeZoomForm::calcSliderFromPos() {
+	iXPos = (xPos - cbFullExtent.MinX()) * maxSlider / cbFullExtent.width();
+	iYPos = (yPos - cbFullExtent.MinY()) * maxSlider / cbFullExtent.height();
+}
+
+void TimeZoomForm::calcPosFromSlider() {
+	xPos = cbFullExtent.MinX() + (double)(iXPos * cbFullExtent.width() / maxSlider);
+	yPos = cbFullExtent.MinY() + (double)(iYPos * cbFullExtent.height() / maxSlider);
 }
 
 int TimeZoomForm::sliderFromCallBack(Event *ev) {
@@ -192,6 +242,32 @@ int TimeZoomForm::sliderToCallBack(Event *ev) {
 	return 1;
 }
 
+int TimeZoomForm::sliderZoomCallBack(Event *ev) {
+	if (fInCallback)
+		return 1;
+	fInCallback = true;
+	sliderZoom->StoreData();
+	calcZoomFromSlider();
+
+	SetNewValues();
+	fInCallback = false;
+	return 1;
+}
+
+int TimeZoomForm::sliderPosCallBack(Event *ev) {
+	if (fInCallback)
+		return 1;
+	fInCallback = true;
+	sliderXPos->StoreData();
+	sliderYPos->StoreData();
+
+	calcPosFromSlider();
+
+	SetNewValues();
+	fInCallback = false;
+	return 1;
+}
+
 void TimeZoomForm::apply() {
 	if (initial || fInCallback)
 		return;
@@ -233,6 +309,20 @@ void TimeZoomForm::apply() {
 void TimeZoomForm::SetNewValues()
 {
 	*(stc->getTimeBoundsZoom()) = TimeBounds(tMin, tMax);
+	double xWidth = zoom * cbFullExtent.width() / 2.0;
+	double yWidth = zoom * cbFullExtent.height() / 2.0;
+	CoordBounds cbMap (Coord(xPos - xWidth, yPos - yWidth), Coord(xPos + xWidth, yPos + yWidth));
+	drw->getRootDrawer()->setCoordBoundsMap(cbMap);
+	double rotX, rotY, rotZ, transX, transY, transZ;
+	drw->getRootDrawer()->getRotationAngles(rotX, rotY, rotZ);
+	drw->getRootDrawer()->getTranslate(transX, transY, transZ);
+	double zoom3D = drw->getRootDrawer()->getZoom3D();
+	drw->getRootDrawer()->setCoordBoundsView(cbMap,true);
+	// restore (because the setCoordBoundsView changed it all)
+	drw->getRootDrawer()->setRotationAngles(rotX, rotY, rotZ);
+	drw->getRootDrawer()->setTranslate(transX * zoom / prevZoom, transY * zoom / prevZoom, transZ * zoom / prevZoom);
+	drw->getRootDrawer()->setZoom3D(zoom3D);
+	prevZoom = zoom;
 
 	String text("TimeZoom (%S,%S)", tMin.toString(), tMax.toString());
 	TreeItem titem;
@@ -241,11 +331,23 @@ void TimeZoomForm::SetNewValues()
 	strcpy(titem.item.pszText,text.c_str());
 	view->GetTreeCtrl().SetItem(&titem.item);
 
-	//LayerDrawer *ldr = dynamic_cast<LayerDrawer *>(cdrw);
 	PreparationParameters pp(NewDrawer::pt3D, 0);
 	drw->getRootDrawer()->prepare(&pp);
+	preparePreTimeOffsetDrawers(drw->getRootDrawer(), &pp);
 
 	updateMapView();
+}
+
+// predrawers are never prepared again, only the root-drawer's pre/post drawers are prepared (flaw?) .. we are forced to re-prepare the PreTimeOffsetDrawers here
+void TimeZoomForm::preparePreTimeOffsetDrawers(ComplexDrawer * drw, PreparationParameters * pp) {
+	PreTimeOffsetDrawer *predrw = dynamic_cast<PreTimeOffsetDrawer*>(drw->getDrawer(0, ComplexDrawer::dtPRE));
+	if (predrw != 0)
+		predrw->prepare(pp);
+	for (int i = 0; i < drw->getDrawerCount(); ++i) {
+		ComplexDrawer *childDrw = dynamic_cast<ComplexDrawer*>(drw->getDrawer(i));
+		if (childDrw != 0)
+			preparePreTimeOffsetDrawers(childDrw, pp);
+	}
 }
 
 void TimeZoomForm::OnOK() {
