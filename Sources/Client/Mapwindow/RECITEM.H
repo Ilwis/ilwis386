@@ -101,6 +101,7 @@ public:
   virtual void setAssociatedDrawerTool(ILWIS::DrawerTool *drawr, const String& targetName);
   ILWIS::DrawerTool *getAssociatedTool() const { return associatedDrawerTool; }
   virtual void remove(const FileName& fn);
+  virtual void setIndex(const FileName& fn, int index) {}
 protected:
   void updateView(const IlwisObject& obj);
   CoordWithCoordSystem cwcs;
@@ -152,13 +153,15 @@ public:
 	RecItemAnimation(RecItem* parent, const MapList& mapl, ILWIS::ComplexDrawer *drawr);
     RecItemAnimation(RecItem* parent, const ObjectCollection& col, ILWIS::ComplexDrawer *drawr);
     virtual FileName fnObj() ;
-  //virtual void setAssociatedDrawerTool(ILWIS::DrawerTool *drawr, const String& targetName);
+	void setIndex(const FileName& fn, int index);
+	const String& sValue(int iWidth);
 protected:
   virtual String sName() ;
   const BaseMap& map() ;
 private:
 	ILWIS::ComplexDrawer *animationDrawer;
   MapList mpl;
+  int activeIndex;
   ObjectCollection collection;
 };
 

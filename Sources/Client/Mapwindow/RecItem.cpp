@@ -471,7 +471,7 @@ RecItemRasterMap::RecItemRasterMap(RecItem* parent, Map mp)
 
 //-------------------------------------------------------------------------------
 RecItemAnimation::RecItemAnimation(RecItem* parent, const MapList& mapl, ILWIS::ComplexDrawer *drawr)
-: RecItemMap(parent,mapl[0]),mpl(mapl),animationDrawer(drawr)
+: RecItemMap(parent,mapl[0]),mpl(mapl),animationDrawer(drawr), activeIndex(0)
 {
 	Table tbl = _map->tblAtt();
 	if (tbl.fValid()) {
@@ -493,10 +493,15 @@ RecItemAnimation::RecItemAnimation(RecItem* parent, const ObjectCollection& col,
 }
 
 const BaseMap& RecItemAnimation::map() {
+	//if ( mpl.fValid())
+	//	_map = mpl[animationDrawer->getCurrentIndex()];
+	//else if ( collection.fValid()) {
+	//	_map = BaseMap(collection->fnObject(animationDrawer->getCurrentIndex()));
+	//}
 	if ( mpl.fValid())
-		_map = mpl[animationDrawer->getCurrentIndex()];
+		_map = mpl[activeIndex];
 	else if ( collection.fValid()) {
-		_map = BaseMap(collection->fnObject(animationDrawer->getCurrentIndex()));
+		_map = BaseMap(collection->fnObject(activeIndex));
 	}
 	return _map;
 }
@@ -504,6 +509,18 @@ const BaseMap& RecItemAnimation::map() {
 FileName RecItemAnimation::fnObj() 
 {
 	return map()->fnObj;
+}
+
+void RecItemAnimation::setIndex(const FileName& fn, int index) {
+	FileName fnObj = mpl.fValid() ? mpl->fnObj : collection->fnObj;
+	if ( fn == fnObj) {
+		activeIndex = index;
+	}
+}
+
+const String& RecItemAnimation::sValue(int iWidth){
+	fValid = false;
+	return RecItemMap::sValue(iWidth);
 }
 
 String RecItemAnimation::sName() 
