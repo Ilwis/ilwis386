@@ -1060,7 +1060,7 @@ BOOL MapCompositionDoc::OnOpenObjectCollection(const ObjectCollection& list, Ope
 	rootDrawer->setCoordinateSystem(bmp->cs());
 	rootDrawer->addCoordBounds(bmp->cs(), list->cb(), false);
 	drawer->getZMaker()->setSpatialSource(bmp, rootDrawer->getMapCoordBounds());
-	drawer->getZMaker()->setDataSourceMap(bmp);
+	//drawer->getZMaker()->setDataSourceMap(bmp);
 	addToPixelInfo(list, drawer);
 	ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,bmp->cs());
 	drawer->prepare(&pp);
