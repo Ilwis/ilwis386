@@ -39,6 +39,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Client\Headers\formelementspch.h"
+#include "Headers\messages.h" 
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\ilwis.h"
 #include "Engine\Base\DataObjects\ObjectCollection.h"
@@ -69,6 +70,7 @@
 BEGIN_MESSAGE_MAP( PixelInfoBar, CSizingControlBar )
 	ON_WM_SIZE()
 	ON_MESSAGE(ILW_UPDATE, OnUpdate)
+	ON_MESSAGE(ILWM_UPDATE_ANIM, OnUpdateAnim)
 	ON_WM_DESTROY()
 	ON_BN_CLICKED(CONT_CB_ID, contCheck)
 END_MESSAGE_MAP()
@@ -105,6 +107,12 @@ void PixelInfoBar::OnInitialUpdate() {
 
 	PixelInfoDoc* pid = (PixelInfoDoc*)pixview->GetDocument();
 	continousCheck.SetCheck(pid->fMouseCont ? TRUE : FALSE);
+}
+
+LRESULT PixelInfoBar::OnUpdateAnim(WPARAM wParam, LPARAM lParam)
+{
+	PixelInfoDoc* pid = (PixelInfoDoc*)pixview->GetDocument();
+	return pid->OnUpdateAnim(wParam, lParam);
 }
 
 LRESULT PixelInfoBar::OnUpdate(WPARAM wParam, LPARAM lParam)
