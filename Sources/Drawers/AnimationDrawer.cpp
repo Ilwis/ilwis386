@@ -148,6 +148,9 @@ bool AnimationDrawer::timerPerIndex() {
 	getDrawer(activeMaps[cindex])->setActive(false);
 	getDrawer(activeMaps[nindex])->setActive(true);
 	mapIndex = nindex;
+	IlwisObjectPtr *obj = getObject();
+	if ( obj) 
+		getEngine()->SendMessage(ILWM_UPDATE_ANIM,(WPARAM)&(obj->fnObj), mapIndex); 
 	for(int i=0; i < slaves.size(); ++i) {
 		SlaveProperties& props = slaves.at(i);
 		if ( props.threshold > 1.0){
