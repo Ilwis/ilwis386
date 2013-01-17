@@ -58,7 +58,6 @@ BOOL AnimationPropertySheet::OnInitDialog()
 }
 
 LRESULT AnimationPropertySheet::command(WPARAM wp, LPARAM lp) {
-	ILWISSingleLock lock(&cs, TRUE, SOURCE_LOCATION);
 	if ( (int)wp & pRun) {
 		FormBasePropertyPage *page = (FormBasePropertyPage *)GetPage(0);
 		page->DataChanged((Event*)1);
@@ -91,8 +90,9 @@ LRESULT AnimationPropertySheet::command(WPARAM wp, LPARAM lp) {
 AnimationProperties* AnimationPropertySheet::findAnimationProps(AnimationDrawer * drw) {
 	ILWISSingleLock lock(&cs, TRUE, SOURCE_LOCATION);
 	for(int i =0; i < animations.size(); ++i) {
-		if ( animations[i].drawer->getId() == drw->getId())
+		if ( animations[i].drawer->getId() == drw->getId()) {
 			return &animations[i];
+		}
 	}
 	return 0;
 }
@@ -100,8 +100,9 @@ AnimationProperties* AnimationPropertySheet::findAnimationProps(AnimationDrawer 
 void AnimationPropertySheet::addAnimation(const AnimationProperties& props) {
 	ILWISSingleLock lock(&cs, TRUE, SOURCE_LOCATION);
 	for(int i =0; i < animations.size(); ++i) {
-		if ( animations[i].drawer->getId() == props.drawer->getId())
+		if ( animations[i].drawer->getId() == props.drawer->getId()) {
 			return;
+		}
 	}
 	animations.push_back(props);
 	props.drawer->manager = this;
@@ -129,8 +130,9 @@ void AnimationPropertySheet::removeAnimation(AnimationDrawer * drw) {
 
 AnimationProperties *AnimationPropertySheet::getActiveAnimation(){
 	ILWISSingleLock lock(&cs, TRUE, SOURCE_LOCATION);
-	if ( activeIndex >= 0)
+	if ( activeIndex >= 0) {
 		return &(animations[activeIndex]);
+	}
 	else {
 		if ( animations.size() > 0) {
 			activeIndex = 0;
@@ -142,8 +144,9 @@ AnimationProperties *AnimationPropertySheet::getActiveAnimation(){
 
 AnimationProperties *AnimationPropertySheet::getAnimation(int i) {
 	ILWISSingleLock lock(&cs, TRUE, SOURCE_LOCATION);
-	if ( i < animations.size())
+	if ( i < animations.size()) {
 		return &animations[i];
+	}
 	return 0;
 }
 
@@ -551,7 +554,7 @@ BEGIN_MESSAGE_MAP(AnimationProgress, FormBasePropertyPage)
 	ON_MESSAGE(ID_CLEAN_FORM, OnCleanForm)
 END_MESSAGE_MAP()
 
-AnimationProgress::AnimationProgress(AnimationPropertySheet& sheet) : FormBasePropertyPage(TR("Progress Control").c_str()), propsheet(sheet), form(0)
+AnimationProgress::AnimationProgress(AnimationPropertySheet& sheet) : FormBasePropertyPage(TR("Threshold Marking").c_str()), propsheet(sheet), form(0)
 {
 	fgMaster = new FieldGroup(root, true);
 
