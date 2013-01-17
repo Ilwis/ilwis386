@@ -59,6 +59,8 @@ private:
 	void OnInitialUpdate();
 	CButton continousCheck;
 	LRESULT OnUpdate(WPARAM wParam, LPARAM lParam);
+	LRESULT OnUpdateAnim(WPARAM wParam, LPARAM lParam);
+
 	COleDropTarget* odt;
 	bool fDragging;
 };
