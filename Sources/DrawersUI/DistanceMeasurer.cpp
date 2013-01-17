@@ -197,27 +197,30 @@ String DistanceMeasurer::getMenuString() const{
 }
 
 
-void DistanceMeasurer::InfoReport()
+void DistanceMeasurer::InfoReport(CPoint point)
 {
 	double rDist = rDistance();
 	double rSphDist = rSphericalDistance(rDefaultEarthRadius);
 	bool fLatLon = fLatLonCoords();
 	String sMsg;
 	if (rDist == rUNDEF && rSphDist == rUNDEF) {
-		//tree->GetDocument()->mpvGetView()->info->text(pEnd, "");
+		tree->GetDocument()->mpvGetView()->info->text(point, "");
 	}
 	else {
 		if (!fLatLon)
 			sMsg = String("%.2f m", rDist);
 		else
 			sMsg = String("%.2f m", rSphDist);
-		// tree->GetDocument()->mpvGetView()->info->text(p, sMsg);
+		point.x += 25;
+		tree->GetDocument()->mpvGetView()->info->text(point, sMsg);
 	}
 }
 
 void DistanceMeasurer::Report()
 {
 	double rDist = rDistance();
+	if (rDist == 0 || rDist == rUNDEF)
+		return;
 	double rDir = rAzim();
 	double rRadi = rDefaultEarthRadius;
 	if(csy->pcsViaLatLon())
@@ -247,8 +250,9 @@ void DistanceMeasurer::Report()
 		}
 		if(fLatLonCoords() || fProjectedCoords())
 		{	
-			double rScaleF, rMeridConv;
-			if(fEllipsoidalCoords() && (rEllDist < 800000)) { //above 800km ellips dist unreliable
+			double rScaleF = rUNDEF;
+			double rMeridConv;
+			if(fEllipsoidalCoords() && (rEllDist != rUNDEF) && (rEllDist < 800000)) { //above 800km ellips dist unreliable
 				sMsg &= String("\n\n%S: %.2f m", 
 					TR("Ellipsoidal Distance"), rEllDist);
 				sMsg &= String("\n%S: %.2f °",	TR("Ellipsoidal Azimuth"), rEllAzim);
@@ -257,7 +261,7 @@ void DistanceMeasurer::Report()
 				if (rMeridConv > M_PI_2)
 					rMeridConv = rMeridConv - M_PI * 2;
 			}
-			else {
+			else if (rSphDist != rUNDEF) {
 				if 	(rSphDist < 1000)
 					sMsg &= String("\n\n%S: %.2f m", TR("Spherical Distance"), rSphDist);
 				else 
@@ -270,9 +274,12 @@ void DistanceMeasurer::Report()
 					rMeridConv = rMeridConv - M_PI * 2;
 			}
 			if(!fLatLonCoords()) {
-				sMsg &= String("\n\n%S: %.10f", TR("Scale Factor"), rScaleF);
+				if (rScaleF !=  rUNDEF)
+					sMsg &= String("\n\n%S: %.10f", TR("Scale Factor"), rScaleF);
 				//sMsg &= String("\n%S: %.3f °", TR("Meridian Convergence"), rMeridConv);
-				sMsg &= String("\n%S: %.3f °", TR("Meridian Convergence"), rSphericalMeridConv(rRadi));
+				rMeridConv = rSphericalMeridConv(rRadi);
+				if (rMeridConv != rUNDEF)
+					sMsg &= String("\n%S: %.3f °", TR("Meridian Convergence"), rSphericalMeridConv(rRadi));
 			}
 		}
 	}
@@ -344,13 +351,10 @@ void DistanceMeasurer::OnMouseMove(UINT nFlags, CPoint point)
 		return;
 
 	if (fDown) {
-		tree->GetDocument()->mpvGetView()->info->ShowWindow(SW_HIDE);
-		drawLine();
 		Coord c1 = tree->GetDocument()->rootDrawer->screenToWorld(RowCol(point.y, point.x));
 		coords[coords.size() - 1] = c1;
 		setCoords();
-		drawLine();
-		InfoReport();
+		InfoReport(point);
 	}
 }
 
@@ -449,7 +453,15 @@ double DistanceMeasurer::rSphericalDistance(const double rRadius)
 		return rUNDEF;
 
 	Distance dist(csy, Distance::distSPHERE, rRadius);
-	return dist.rDistance(cStart(), cEnd());
+	double rD = 0;
+	for(int i=1; i < coords.size(); ++i) {
+		double d = dist.rDistance(coords[i-1], coords[i]);
+		if (d != rUNDEF)
+			rD += d;
+		else
+			return rUNDEF;
+	}
+	return rD;
 }
 
 double DistanceMeasurer::rSphericalAzim(const double rRadius)
@@ -510,25 +522,35 @@ double DistanceMeasurer::rSphericalMeridConv(const double rRadius)
 
 double DistanceMeasurer::rEllipsoidDistance(const CoordSystem& cs) 
 {
-	double rD;
 	if (cStart().fUndef())
 		return rUNDEF;
 
 	if (cEnd().fUndef())
 		return rUNDEF;
-	LatLon llStart, llEnd;
+
 	if (!fLatLonCoords() && !fProjectedCoords()) 
 		return rUNDEF;
-	else {
-		llStart = csy->llConv(cStart());
-		llEnd  = csy->llConv(cEnd());
-	}
-	if (llStart.fUndef() || llEnd.fUndef())
+
+	if (!fEllipsoidalCoords())
 		return rUNDEF;
-	if (fEllipsoidalCoords()) {
-		CoordSystemViaLatLon* pcsvll= cs->pcsViaLatLon();
-		rD = pcsvll->ell.rEllipsoidalDistance(llStart, llEnd);
-	}
+
+	CoordSystemViaLatLon* pcsvll= cs->pcsViaLatLon();
+	if (pcsvll == 0)
+		return rUNDEF;
+
+	double rD = 0;
+	for (int i = 1; i < coords.size(); ++i) {
+		LatLon llStart = csy->llConv(coords[i-1]);
+		LatLon llEnd = csy->llConv(coords[i]);
+		if (llStart.fUndef() || llEnd.fUndef())
+			return rUNDEF;
+		double d = pcsvll->ell.rEllipsoidalDistance(llStart, llEnd);
+		if (d != rUNDEF)
+			rD += d;
+		else
+			return rUNDEF;
+	}	
+
 	return rD;
 }
 

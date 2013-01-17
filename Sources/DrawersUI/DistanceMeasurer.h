@@ -63,7 +63,7 @@ namespace ILWIS {
 		void setcheckTool(void *w, HTREEITEM ) ;
 		void setUseEllipse(void *w, HTREEITEM ) ;
 		void drawLine();
-		void InfoReport();
+		void InfoReport(CPoint point);
 		void Report();
 		double rDistance();
 		double rAzim();
