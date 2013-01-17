@@ -138,6 +138,7 @@ public:
 	CDocument          *OpenDocumentFile(LPCTSTR lpszFileName, const String& sLayers);
 	CDocument          *OpenDocumentAsSMCE(LPCTSTR lpszFileName);
 	void _export       SendUpdateCoordMessages(int, CoordWithCoordSystem*);
+	void _export       SendUpdateAnimMessages(const FileName& fnAnim, int index);
 	CatalogDocument    *dirDoc();
 	void               SetCatalogDocument(CatalogDocument *doc);
 	CImageList         ilSmall, ilLarge;
@@ -195,6 +196,7 @@ public:
 	afx_msg void OnUpdateMapReferencing(CCmdUI* pCmdUI);
 	afx_msg void OnOperationCmd(UINT nID);
 	afx_msg void OnHelpSebs();
+	
 	//}}AFX_MSG
 	// members
 	int iOpeningDoc; 

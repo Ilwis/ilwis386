@@ -254,6 +254,7 @@ BEGIN_MESSAGE_MAP( IlwisWinApp, CWinApp )
 	ON_COMMAND(ID_FILE_DIGREF, OnMapReferencing)
 	ON_UPDATE_COMMAND_UI(ID_FILE_DIGREF, OnUpdateMapReferencing)
 	ON_COMMAND_RANGE(ID_OPERATION0, ID_OPERATION0+499, OnOperationCmd)
+
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -2034,6 +2035,28 @@ void IlwisWinApp::SendUpdateCoordMessages(int cm, CoordWithCoordSystem* cwcs)
 	for_each(lhWindows.begin(), lhWindows.end(), SendUpdateCoordMessage(cm,cwcs));
 	if (cm & cmMOUSECLICK || cm >= cmDIGICLICK1)
 		thrDdeServer->PostThreadMessage(ILW_UPDATE,(WPARAM)cm,(LPARAM)(void*)cwcs);
+}
+
+class SendUpdateAnimMessage
+{
+	FileName fnAnim;
+	int currentIndex;
+
+public:
+	SendUpdateAnimMessage(const FileName& _fnAnim, int index)
+		: fnAnim(_fnAnim), currentIndex(index) {}
+	void operator()(HWND hWnd)
+	{ 
+		if (IsWindowVisible(hWnd))
+			SendMessage(hWnd,ILWM_UPDATE_ANIM,(WPARAM)&fnAnim,(LPARAM)currentIndex); 
+	}
+};
+
+
+
+void IlwisWinApp::SendUpdateAnimMessages(const FileName& fnAnim, int index)
+{
+	for_each(lhWindows.begin(), lhWindows.end(), SendUpdateAnimMessage(fnAnim,index));
 }
 
 void IlwisWinApp::RemoveSearchPath(const FileName& fn)
