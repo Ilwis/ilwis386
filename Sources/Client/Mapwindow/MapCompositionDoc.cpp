@@ -1696,6 +1696,7 @@ NewDrawer* MapCompositionDoc::drAppend(const MapList& maplist,IlwisDocument::Ope
 		Map mp = maplist[maplist->iLower()];
 		rootDrawer->setCoordinateSystem(mp->cs());
 		rootDrawer->addCoordBounds(mp->cs(), mp->cb(), false);
+		addToPixelInfo(maplist, (ComplexDrawer *)drawer);
 		ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
 		drawer->prepare(&pp);
 		rootDrawer->addDrawer(drawer);
