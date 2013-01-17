@@ -38,6 +38,7 @@ Created on: 2007-02-8
 //
 
 #include "Client\Headers\formelementspch.h"
+#include "Headers\messages.h" 
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\ilwis.h"
 #include "Engine\Base\DataObjects\ObjectCollection.h"
@@ -240,6 +241,20 @@ void PixelInfoDoc::Update()
 	UpdateAllViews(0);
 }
 
+LRESULT PixelInfoDoc::OnUpdateAnim(WPARAM wParam, LPARAM lParam){
+
+	CWnd *wnd = wndGetActiveView();
+	FileName *fn = (FileName *)(void *)(wParam);
+	if (!fn)
+		return 1;
+	int index = (int)lParam;
+	for(int i = 0; i < riArray.size(); ++i) {
+		riArray[i]->setIndex(*fn, index);
+	}
+	UpdateAllViews(0);
+
+	return 1;
+}
 LRESULT PixelInfoDoc::OnUpdate(WPARAM wParam, LPARAM lParam)
 {
 	CoordMessage cm = (CoordMessage) wParam;

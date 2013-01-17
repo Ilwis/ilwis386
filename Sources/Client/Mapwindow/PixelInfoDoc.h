@@ -70,6 +70,7 @@ public:
 	void setEditFeature(Feature *f);
 	Feature *getEditFeature();
 	void setAssociatedDrawerTool(ILWIS::DrawerTool *drw, const String& targetName);
+	LRESULT OnUpdateAnim(WPARAM wParam, LPARAM lParam);
 protected:
 	virtual BOOL OnNewDocument();
 	virtual void OnCloseDocument();
