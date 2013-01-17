@@ -38,6 +38,7 @@
 //
 
 #include "Client\Headers\formelementspch.h"
+#include "Headers\messages.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Client\ilwis.h"
 #include "Engine\Base\DataObjects\ObjectCollection.h"
@@ -159,6 +160,8 @@ LRESULT PixelInfoWindow::OnUpdate(WPARAM wParam, LPARAM lParam)
 	PixelInfoDoc* pid = (PixelInfoDoc*)GetActiveDocument();
 	return pid->OnUpdate(wParam, lParam);
 }
+
+
 
 void PixelInfoWindow::InitSettings()
 {

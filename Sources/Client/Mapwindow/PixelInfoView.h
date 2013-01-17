@@ -60,7 +60,8 @@ protected:
 	virtual String sField(int iCol, long iRow) const;
 	virtual String sDescrULButton() const; // upper left button
 	virtual void OnULButtonPressed();  // upper left button
-	virtual void OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint);
+	virtual void OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint);\
+	LRESULT OnUpdateAnim(WPARAM wParam, LPARAM lParam);
 	virtual DROPEFFECT OnDragEnter(COleDataObject* pDataObject, DWORD dwKeyState, CPoint point);
 	virtual void OnDragLeave();
 	virtual DROPEFFECT OnDragOver(COleDataObject* pDataObject, DWORD dwKeyState, CPoint point);

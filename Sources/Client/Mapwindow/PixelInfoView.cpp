@@ -181,6 +181,10 @@ void PixelInfoView::OnInitialUpdate()
 	odt->Register(this);
 	BaseTablePaneView::OnInitialUpdate();
 }
+LRESULT PixelInfoView::OnUpdateAnim(WPARAM wParam, LPARAM lParam){
+
+	return 1;
+}
 
 void PixelInfoView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 {
