@@ -113,6 +113,7 @@ void FeatureLayerDrawer::prepare(PreparationParameters *parms){
 void FeatureLayerDrawer::prepareChildDrawers(PreparationParameters *parms) {
 	FeatureDataDrawer *mapDrawer = (FeatureDataDrawer *)parentDrawer;
 	BaseMapPtr *bmp = mapDrawer->getBaseMap();
+	Representation rpr = bmp->dm()->rpr();
 	vector<Feature *> features;
 	bool isAnimation = mapDrawer->getType() == "AnimationDrawer";
 	if ( isAnimation ) {
@@ -128,7 +129,7 @@ void FeatureLayerDrawer::prepareChildDrawers(PreparationParameters *parms) {
 				parms->props = &props;
 				Feature *feature = features.at(i);
 				if ( feature && feature->fValid() ){
-					bmp->dm()->rpr()->getProperties(feature->rValue(), parms->props);
+					rpr->getProperties(feature->rValue(), parms->props);
 				}
 			}
 			RepresentationProperties rprop;
