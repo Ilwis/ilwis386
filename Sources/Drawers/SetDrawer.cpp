@@ -210,7 +210,7 @@ void SetDrawer::addLayerDrawer(int index, const BaseMap& basem,PreparationParame
 	rsd->setName(name);
 	rsd->setRepresentation(basem->dm()->rpr()); //  default choice
 	rsd->getZMaker()->setSpatialSource(basem, getRootDrawer()->getMapCoordBounds());
-	rsd->getZMaker()->setDataSourceMap(basem);
+	//rsd->getZMaker()->setDataSourceMap(basem);
 	rsd->addDataSource((void *)&basem);
 	rsd->prepare(&fp);
 	if (!post) {
