@@ -53,6 +53,7 @@ namespace ILWIS {
 		Palette * SetPaletteOwner();
 		void SetPalette(Palette * palette);
 		Representation getRepresentation() const;
+		String getInfo(const Coord& c) const;
 		
 	protected:
 		virtual void setData() const;

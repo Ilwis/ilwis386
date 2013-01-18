@@ -7,6 +7,7 @@
 #include "Engine\Drawers\RootDrawer.h"
 #include "Drawers\DrawingColor.h" 
 #include "Drawers\LayerDrawer.h"
+#include "Engine\Domain\Dmvalue.h"
 #include "Drawers\RasterLayerDrawer.h"
 #include "Engine\Drawers\ZValueMaker.h"
 #include "Engine\Representation\Rprclass.h"
@@ -545,6 +546,26 @@ String RasterLayerDrawer::store(const FileName& fnView, const String& parentSect
 void RasterLayerDrawer::load(const FileName& fnView, const String& parentSection){
 	String currentSection = parentSection;
 	LayerDrawer::load(fnView, currentSection);
+}
+
+String RasterLayerDrawer::getInfo(const Coord& c) const {
+	if ( !hasInfo() || !isActive())
+		return "";
+	Coord crd = c;
+	if (rastermap->cs() != rootDrawer->getCoordinateSystem())
+	{
+		crd = rastermap->cs()->cConv(rootDrawer->getCoordinateSystem(), c);
+	}
+	String infos = rastermap->sValue(crd);
+	String info;
+	String s = infos.sTrimSpaces();
+	if ( s == "?")
+		return "";
+	DomainValue* dv = rastermap->dm()->pdv();
+	if (0 != dv && dv->fUnit())
+		s = String("%S %S", s, dv->sUnit());
+	
+	return s;
 }
 
 
