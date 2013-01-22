@@ -195,12 +195,14 @@ LegendAppearance::LegendAppearance(CWnd *wPar, AnnotationLegendDrawer *dr) : Dis
 	FieldGroup *fg1 = new FieldGroup(root);
 	scale = dr->getScale();
 	title = dr->getTitle();
+	fscale = dr->getFontScale();
 	cbColor = new CheckBox(fg1,TR("Background color"),&useBgColor);
 	fc = new FieldColor(cbColor,"",&bgColor);
 	fc->Align(cbColor, AL_AFTER);
 	cbBoundary = new CheckBox(root,TR("Draw Boundary"),&drawBoundary);
 	cbBoundary->Align(cbColor, AL_UNDER);
 	fldScale =  new FieldReal(root,TR("Scale"),&scale,RangeReal(0.1,10.));
+	fontScale =  new FieldReal(root,TR("Font Scale"),&fscale,RangeReal(0.1,10.));
 	fldTitle = new FieldString(root,TR("Title"), &title);
 	if ( dr->getDomain()->pdc()) {
 		vector<FLVColumnInfo> cols;
@@ -232,10 +234,13 @@ void LegendAppearance::apply() {
 	cbColor->StoreData();
 	fc->StoreData();
 	fldScale->StoreData();
+	fontScale->StoreData();
 	fldTitle->StoreData();
 	vector<int> rows;
-	if ( fview)
+	if ( fview){
+		fview->StoreData();
 		fview->getSelectedRowNumbers(rows);
+	}
 	cbBoundary->StoreData();
 
 	AnnotationLegendDrawer *andrw = (AnnotationLegendDrawer *)drw;
@@ -244,6 +249,7 @@ void LegendAppearance::apply() {
 	andrw->setDrawBorder(drawBoundary);
 	andrw->setScale(scale);
 	andrw->setTitle(title);
+	andrw->setFontScale(fscale);
 	if ( andrw->getDomain()->pdc()) {
 		vector<int> rws;
 		for(int i=0; i < rows.size(); ++i){
@@ -251,7 +257,6 @@ void LegendAppearance::apply() {
 			long ip = andrw->getDomain()->pdc()->iOrd(rows[i]);
 			rws.push_back(iRaw);	
 		}
-
 		((AnnotationClassLegendDrawer *)andrw)->setActiveClasses(rws);
 	}
 

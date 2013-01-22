@@ -52,9 +52,11 @@ namespace ILWIS {
 		FieldListView *fview;
 		CheckBox *cbColor, *cbBoundary;
 		FieldReal *fldScale;
+		FieldReal *fontScale;
 		FieldString *fldTitle;
 		double scale;
 		String title;
+		double fscale;
 		//vector<long> raws;
 	};
 
