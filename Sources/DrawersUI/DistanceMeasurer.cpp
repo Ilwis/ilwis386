@@ -92,6 +92,8 @@ MeasurerLine::~MeasurerLine() {
 
 
 bool MeasurerLine::draw( const CoordBounds& cbArea) const{
+	if (!isActive())
+		return false;
 	glClearColor(1.0,1.0,1.0,0.0);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	if (useMeasureLine) {
@@ -99,9 +101,16 @@ bool MeasurerLine::draw( const CoordBounds& cbArea) const{
 		LineDrawer::draw(cbArea);
 		glDisable(GL_BLEND);
 	} else { // things that LineDrawer::draw would otherwise do
-		double transp = getTransparency();
-		glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(),transp );
-		glLineWidth(1);
+
+		//glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(),transp );
+		//glLineWidth(1);
+	}
+	double transp = getTransparency(); 
+	glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(),transp );
+	glLineWidth(lproperties.thickness);
+	if (lproperties.linestyle != 0xFFFF) {
+			glEnable (GL_LINE_STIPPLE);
+			glLineStipple(1,lproperties.linestyle);
 	}
 	if ( useEquidistantCircle && rDist > 0 ) {
 		const int sections = 50;
@@ -245,6 +254,8 @@ DistanceMeasurer::~DistanceMeasurer()
 	view->changeStateTool(getId(), false);
 	if (csprStereographic)
 		delete csprStereographic;
+	if ( line)
+		drawer->getRootDrawer()->removeDrawer(line->getId(), true);
 }
 
 bool DistanceMeasurer::isToolUseableFor(ILWIS::DrawerTool *tool){
@@ -252,9 +263,25 @@ bool DistanceMeasurer::isToolUseableFor(ILWIS::DrawerTool *tool){
 }
 
 HTREEITEM DistanceMeasurer::configure( HTREEITEM parentItem){
+
+	DrawerParameters dp(drawer->getRootDrawer(), drawer);
+	if ( line)
+		delete line;
+	line = new MeasurerLine(&dp, this);
+	line->setActive(false);
+	drawer->getRootDrawer()->addPostDrawer(729,line);
+ 
+
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
 	item->setCheckAction(this,0, (DTSetCheckFunc)&DistanceMeasurer::setcheckTool);
 	htiNode = insertItem(TR("Distance Measurer"),"Measurer",item,0);
+
+	DrawerTool *dt = DrawerTool::createTool("LineStyleTool", getDocument()->mpvGetView(),tree,line);
+	if ( dt) {
+		addTool(dt);
+		dt->configure(htiNode);
+	}
+
 	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	item->setCheckAction(this,0, (DTSetCheckFunc)&DistanceMeasurer::setUseMeasureLine);
 	insertItem(TR("Measure Line"),"Circle",item,1);
@@ -284,6 +311,9 @@ HTREEITEM DistanceMeasurer::configure( HTREEITEM parentItem){
 	return htiNode;
 }
 
+//void DistanceMeasurer::lineStyle() {
+//}
+
 void DistanceMeasurer::setUseMeasureLine(void *w, HTREEITEM ) {
 	useMeasureLine = *(bool *)w;
 }
@@ -306,15 +336,13 @@ void DistanceMeasurer::setcheckTool(void *w, HTREEITEM ) {
 	MapPaneView *view = tree->GetDocument()->mpvGetView();
 	if ( yesno) {
 		view->noTool();
-		line  = 0;
 		if (!view->addTool(this, getId()))
 			view->changeStateTool(getId(), true);
 		SetCursor(zCursor("MeasureCursor"));
 	}
 	else {
-		if ( line) {
-			drawer->getRootDrawer()->removeDrawer(line->getId(), true);
-			line = 0;
+		if ( line->isActive()) {
+			line->setActive(false);
 		}
 		view->changeStateTool(getId(), false);
 	}
@@ -322,9 +350,8 @@ void DistanceMeasurer::setcheckTool(void *w, HTREEITEM ) {
 
 void DistanceMeasurer::Stop()
 {
-	if ( line) {
-		drawer->getRootDrawer()->removeDrawer(line->getId(), true);
-		line = 0;
+	if ( line->isActive()) {
+		line->setActive(false);
 	}
 
 	if (tree->m_hWnd)
@@ -489,7 +516,7 @@ void DistanceMeasurer::setCoords() {
 
 void DistanceMeasurer::OnMouseMove(UINT nFlags, CPoint point)
 {
-	if ( !line)
+	if ( !line->isActive())
 		return;
 
 	if (fDown) {
@@ -503,10 +530,8 @@ void DistanceMeasurer::OnMouseMove(UINT nFlags, CPoint point)
 
 void DistanceMeasurer::OnLButtonDown(UINT nFlags, CPoint point)
 {
-	if ( !line) {
-		DrawerParameters dp(drawer->getRootDrawer(), drawer);
-		line = new MeasurerLine(&dp, this);
-		drawer->getRootDrawer()->addPostDrawer(729,line);
+	if ( !line->isActive()) {
+		line->setActive(true);
 		Coord c1 = tree->GetDocument()->rootDrawer->screenToWorld(RowCol(point.y, point.x));
 		coords.push_back(c1);
 		Coord c2 = tree->GetDocument()->rootDrawer->screenToWorld(RowCol(point.y, point.x));
@@ -520,7 +545,7 @@ void DistanceMeasurer::OnLButtonDown(UINT nFlags, CPoint point)
 
 void DistanceMeasurer::OnLButtonUp(UINT nFlags, CPoint point)
 {
-	if ( line) {
+	if ( line->isActive()) {
 		tree->GetDocument()->mpvGetView()->info->text(point,"");
 
 		short state = ::GetKeyState(VK_CONTROL);
@@ -530,8 +555,7 @@ void DistanceMeasurer::OnLButtonUp(UINT nFlags, CPoint point)
 			setCoords();
 			fDown = false;
 			Report();
-			drawer->getRootDrawer()->removeDrawer(line->getId(), true);
-			line = 0;
+			line->setActive(false);
 			coords.clear();
 			tree->GetDocument()->mpvGetView()->setBitmapRedraw(false);
 		}
