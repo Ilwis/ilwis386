@@ -71,12 +71,18 @@ Created on: 2007-02-8
 #include "DrawersUI\GlobalTool.h"
 #include "Engine\Drawers\ZValueMaker.h"
 
+#include "Engine\SpatialReference\Csproj.h"
+
 using namespace ILWIS;
 
-MeasurerLine::MeasurerLine(DrawerParameters *parms) : 
+MeasurerLine::MeasurerLine(DrawerParameters *parms, DistanceMeasurer * _dm) : 
 LineDrawer(parms,"MeasurerLine")
+, dm(_dm)
 {
-	useEllipse = false;
+	useMeasureLine = true;
+	useMeasureCurve = false;
+	useEquidistantCircle = false;
+	useEquidistantEllipse = false;
 	rDist = rUNDEF;
 	setSupportingDrawer(true);
 }
@@ -88,12 +94,18 @@ MeasurerLine::~MeasurerLine() {
 bool MeasurerLine::draw( const CoordBounds& cbArea) const{
 	glClearColor(1.0,1.0,1.0,0.0);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_BLEND);
-	LineDrawer::draw(cbArea);
-	glDisable(GL_BLEND);
-	if ( useEllipse && rDist > 0 ) {
-		int sections = 50;
-		double twoPi =  2.0 * M_PI;
+	if (useMeasureLine) {
+		glEnable(GL_BLEND);
+		LineDrawer::draw(cbArea);
+		glDisable(GL_BLEND);
+	} else { // things that LineDrawer::draw would otherwise do
+		double transp = getTransparency();
+		glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(),transp );
+		glLineWidth(1);
+	}
+	if ( useEquidistantCircle && rDist > 0 ) {
+		const int sections = 50;
+		const double twoPi =  2.0 * M_PI;
 		double rx = rDist;
 		double ry = rDist;
 		double lcx = center.x;
@@ -107,6 +119,95 @@ bool MeasurerLine::draw( const CoordBounds& cbArea) const{
 			glVertex3d(crd.x, crd.y, z0);
 		}
 		glEnd();
+	}
+
+	if (useMeasureCurve || useEquidistantEllipse) {
+		if (dm->cStart().fUndef() || dm->cEnd().fUndef())
+			return true;
+		if (!dm->fLatLonCoords() && !dm->fProjectedCoords()) 
+			return true;
+		LatLon llStart = dm->csy->llConv(dm->cStart());
+		LatLon llEnd = dm->csy->llConv(dm->cEnd());
+		if (llStart.fUndef() || llEnd.fUndef())
+			return true;
+
+		// Stereographic projection centered at first-clicked point of Distance tool  --------
+		dm->csprStereographic->prj->Param(pvLON0, llStart.Lon);
+		dm->csprStereographic->prj->Param(pvLAT0, llStart.Lat);
+		dm->csprStereographic->prj->Prepare();
+		Coord crdEnd = dm->csprStereographic->cConv(llEnd);
+		double rRadius = sqrt(crdEnd.x * crdEnd.x + crdEnd.y * crdEnd.y);
+		if (rRadius <= 0)
+			return true;
+
+		const double twoPi =  2.0 * M_PI;
+		const int sections = 50;
+		bool is3D = getRootDrawer()->is3D();// && zvmkr->getThreeDPossible();
+		double z0 = rootDrawer->getZMaker()->getZ0(is3D) ;
+		z0 += z0; // supprting drawer, lies on top of the actual layerdrawer
+
+		CoordSystemProjection * csys = rootDrawer->getCoordinateSystem()->pcsProjection();
+
+		bool IsLatLonSys = rootDrawer->getCoordinateSystem()->pcsLatLon() != 0;
+		bool IsProjectedSys = csys != 0;
+
+		if (useMeasureCurve) {
+
+			////-------------------------------------------------------------------------------------
+			////  drawing of the ''great elliptic'' curve (from Stereogr straight-line reprojected)
+
+			glBegin(GL_LINE_STRIP);
+			if (IsLatLonSys) {
+				for(int i = 0; i <= sections; ++i) { // make $section number of small curve-pieces
+					double rParamStep = (double)i / sections;
+					Coord crdStereoRadiusCurve (rParamStep*crdEnd.x , rParamStep*crdEnd.y);
+					LatLon llReprojRadiusCurve = dm->csprStereographic->llConv(crdStereoRadiusCurve);
+					Coord crdLonLatRadiusCurve = rootDrawer->glConv(Coord(llReprojRadiusCurve.Lon, llReprojRadiusCurve.Lat));
+					glVertex3d(crdLonLatRadiusCurve.x, crdLonLatRadiusCurve.y, z0);
+				}
+			}
+
+			else if (IsProjectedSys) {
+				for(int i = 0; i <= sections; ++i) { // make $section number of small circle-arcs
+					double rParamStep = (double)i / sections;
+					Coord crdStereoRadiusCurve (rParamStep*crdEnd.x , rParamStep*crdEnd.y);
+					LatLon llReprojRadiusCurve = dm->csprStereographic->llConv(crdStereoRadiusCurve);
+					Coord crdActualProjRadiusCurve = csys->cConv(llReprojRadiusCurve);
+					crdActualProjRadiusCurve = rootDrawer->glConv(crdActualProjRadiusCurve);
+					glVertex3d(crdActualProjRadiusCurve.x, crdActualProjRadiusCurve.y, z0);
+				}
+			}
+			glEnd();
+		}
+
+		if ( useEquidistantEllipse ) {
+
+			////-------------------------------------------------------------------------------------
+			////  drawing of the ''equidistant locus'' curve (from Stereogr circle reprojected)
+
+			glBegin(GL_LINE_LOOP);
+			if (IsLatLonSys) {
+				for(int i = 0; i <= sections; ++i) { // make $section number of small circle-arcs
+					double rParamAngle = i *  twoPi / sections;
+					Coord crdStereo = Coord(rRadius * cos(rParamAngle), rRadius * sin(rParamAngle));
+					LatLon llReproj = dm->csprStereographic->llConv(crdStereo);
+					Coord crdLonLat = rootDrawer->glConv(Coord(llReproj.Lon, llReproj.Lat));
+					glVertex3d(crdLonLat.x, crdLonLat.y, z0);
+				}
+			}
+
+			else if (IsProjectedSys) {
+				for(int i = 0; i <= sections; ++i) { // make $section number of small circle-arcs
+					double rParamAngle = i *  twoPi / sections;
+					Coord crdStereo = Coord(rRadius * cos(rParamAngle), rRadius * sin(rParamAngle));
+					LatLon llReproj = dm->csprStereographic->llConv(crdStereo);
+					Coord crdActualProj = csys->cConv(llReproj);
+					crdActualProj = rootDrawer->glConv(crdActualProj);
+					glVertex3d(crdActualProj.x, crdActualProj.y, z0);
+				}
+			}
+			glEnd();
+		}
 	}
 
 	return true;
@@ -125,11 +226,15 @@ const double rDefaultEarthRadius = 6371007.1809185;
 
 DistanceMeasurer::DistanceMeasurer(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw)
 : DrawerTool(TR("DistanceMeasurer"),zv, view, drw)
+, csprStereographic(0)
 {
 	csy = view->GetDocument()->rootDrawer->getCoordinateSystem();
 	fDown = FALSE;
 	line = 0;
-	useEllipse = false;
+	useMeasureLine = true;
+	useMeasureCurve = false;
+	useEquidistantCircle = false;
+	useEquidistantEllipse = false;
 	stay = true;
 	needsMouseFocus = true;
 }
@@ -138,6 +243,8 @@ DistanceMeasurer::~DistanceMeasurer()
 {
 	MapPaneView *view = tree->GetDocument()->mpvGetView();
 	view->changeStateTool(getId(), false);
+	if (csprStereographic)
+		delete csprStereographic;
 }
 
 bool DistanceMeasurer::isToolUseableFor(ILWIS::DrawerTool *tool){
@@ -149,16 +256,48 @@ HTREEITEM DistanceMeasurer::configure( HTREEITEM parentItem){
 	item->setCheckAction(this,0, (DTSetCheckFunc)&DistanceMeasurer::setcheckTool);
 	htiNode = insertItem(TR("Distance Measurer"),"Measurer",item,0);
 	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
-	item->setCheckAction(this,0, (DTSetCheckFunc)&DistanceMeasurer::setUseEllipse);
-	insertItem(TR("Equidistance display"),"Circle",item,0);
+	item->setCheckAction(this,0, (DTSetCheckFunc)&DistanceMeasurer::setUseMeasureLine);
+	insertItem(TR("Measure Line"),"Circle",item,1);
+	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
+	item->setCheckAction(this,0, (DTSetCheckFunc)&DistanceMeasurer::setUseMeasureCurve);
+	insertItem(TR("Measure Curve"),"Circle",item,0);
+	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
+	item->setCheckAction(this,0, (DTSetCheckFunc)&DistanceMeasurer::setUseEquidistantCircle);
+	insertItem(TR("Equidistance Circle"),"Circle",item,0);
+	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
+	item->setCheckAction(this,0, (DTSetCheckFunc)&DistanceMeasurer::setUseEquidistantEllipse);
+	insertItem(TR("Equidistance Ellipse"),"Circle",item,0);
+	if (!csprStereographic) {
+		csprStereographic = new CoordSystemProjection("StereographicLocal.csy", 1);
+		csprStereographic->datum = new MolodenskyDatum("WGS 1984","");
+		csprStereographic->ell = csprStereographic->datum->ell;
 
+		Projection prj = Projection(String("StereoGraphic"), csprStereographic->ell);
+		prj->Param(pvX0, 0.0);
+		prj->Param(pvY0, 0.0);
+		prj->Param(pvLON0, 0.0);
+		prj->Param(pvLAT0, 0.0);
+		prj->Prepare();
+		csprStereographic->prj = prj;
+	}
 
-	
 	return htiNode;
 }
 
-void DistanceMeasurer::setUseEllipse(void *w, HTREEITEM ) {
-	useEllipse = *(bool *)w;
+void DistanceMeasurer::setUseMeasureLine(void *w, HTREEITEM ) {
+	useMeasureLine = *(bool *)w;
+}
+
+void DistanceMeasurer::setUseMeasureCurve(void *w, HTREEITEM ) {
+	useMeasureCurve = *(bool *)w;
+}
+
+void DistanceMeasurer::setUseEquidistantCircle(void *w, HTREEITEM ) {
+	useEquidistantCircle = *(bool *)w;
+}
+
+void DistanceMeasurer::setUseEquidistantEllipse(void *w, HTREEITEM ) {
+	useEquidistantEllipse = *(bool *)w;
 }
 
 void DistanceMeasurer::setcheckTool(void *w, HTREEITEM ) {
@@ -342,7 +481,10 @@ void DistanceMeasurer::setCoords() {
 	line->addCoords(tree->GetDocument()->rootDrawer->glConv(coords), 1);
 	line->setDistance(rDistance());
 	line->setCenter(cStart());
-	line->useEllipse = useEllipse;
+	line->useMeasureLine = useMeasureLine;
+	line->useMeasureCurve = useMeasureCurve;
+	line->useEquidistantCircle = useEquidistantCircle;
+	line->useEquidistantEllipse = useEquidistantEllipse;
 }
 
 void DistanceMeasurer::OnMouseMove(UINT nFlags, CPoint point)
@@ -362,7 +504,7 @@ void DistanceMeasurer::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	if ( !line) {
 		DrawerParameters dp(drawer->getRootDrawer(), drawer);
-		line = new MeasurerLine(&dp);
+		line = new MeasurerLine(&dp, this);
 		drawer->getRootDrawer()->addPostDrawer(729,line);
 		Coord c1 = tree->GetDocument()->rootDrawer->screenToWorld(RowCol(point.y, point.x));
 		coords.push_back(c1);

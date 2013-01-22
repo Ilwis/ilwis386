@@ -44,6 +44,7 @@ namespace ILWIS {
 
 	class DistanceMeasurer : public DrawerTool
 	{
+		friend class MeasurerLine;
 	public:
 		DistanceMeasurer(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw);           
 
@@ -61,7 +62,10 @@ namespace ILWIS {
 		Coord cStart();
 		Coord cEnd();
 		void setcheckTool(void *w, HTREEITEM ) ;
-		void setUseEllipse(void *w, HTREEITEM ) ;
+		void setUseMeasureLine(void *w, HTREEITEM ) ;
+		void setUseMeasureCurve(void *w, HTREEITEM ) ;
+		void setUseEquidistantCircle(void *w, HTREEITEM ) ;
+		void setUseEquidistantEllipse(void *w, HTREEITEM ) ;
 		void drawLine();
 		void InfoReport(CPoint point);
 		void Report();
@@ -78,27 +82,33 @@ namespace ILWIS {
 		double rEllipsoidAzimuth(const CoordSystem& cs);
 		bool fDown;
 		void setCoords();
-		// zPoint pStart, pEnd;
-		//Coord cStart, cEnd;
 		vector<Coord> coords;
 		MeasurerLine *line;
-		bool useEllipse;;
+		bool useMeasureLine;
+		bool useMeasureCurve;
+		bool useEquidistantCircle;
+		bool useEquidistantEllipse;
+		CoordSystemProjection * csprStereographic;
 	};
 
 	class MeasurerLine : public LineDrawer {
 		friend class DistanceMeasurer;
 
 	public:
-		MeasurerLine(ILWIS::DrawerParameters *parms);
+		MeasurerLine(ILWIS::DrawerParameters *parms, DistanceMeasurer * _dm);
 		~MeasurerLine();
 		virtual bool draw( const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *);
 		void setDistance(double r) {rDist = r;}
 		void setCenter(const Coord& crd) { center = crd; }
 	private:
-		bool useEllipse;
+		bool useMeasureLine;
+		bool useMeasureCurve;
+		bool useEquidistantCircle;
+		bool useEquidistantEllipse;
 		double rDist;
 		Coord center;
+		DistanceMeasurer * dm;
 	};
 
 }
