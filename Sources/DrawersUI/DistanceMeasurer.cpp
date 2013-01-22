@@ -496,6 +496,7 @@ void DistanceMeasurer::OnMouseMove(UINT nFlags, CPoint point)
 		Coord c1 = tree->GetDocument()->rootDrawer->screenToWorld(RowCol(point.y, point.x));
 		coords[coords.size() - 1] = c1;
 		setCoords();
+		drawLine();
 		InfoReport(point);
 	}
 }
