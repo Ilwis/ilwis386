@@ -196,16 +196,19 @@ unsigned int ParallelCoordinateGraphWindow::iPointOnLine(CPoint c, int ax, int a
 
 double ParallelCoordinateGraphWindow::rGetFx(long iRaw, ColInfo & colInfo)
 {
-	if (colInfo.fValue) {
+	double rWidth = colInfo.rrMinMax.rWidth();
+	if (rWidth == 0)
+		return 0;
+	else if (colInfo.fValue) {
 		double rValue = colInfo.column->rValue(iRaw); // test on rUNDEF
 		if (rValue == rUNDEF)
 			rValue = colInfo.rrMinMax.rLo();
-		return (rValue - colInfo.rrMinMax.rLo()) / colInfo.rrMinMax.rWidth();
+		return (rValue - colInfo.rrMinMax.rLo()) / rWidth;
 	} else {
 		long iValue = colInfo.column->iRaw(iRaw); // test on iUNDEF
 		if (iValue == iUNDEF)
 			iValue = colInfo.rrMinMax.rLo();
-		return (iValue - colInfo.rrMinMax.rLo()) / colInfo.rrMinMax.rWidth();
+		return (iValue - colInfo.rrMinMax.rLo()) / rWidth;
 	}
 }
 
