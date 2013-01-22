@@ -188,6 +188,7 @@ public:
 protected:
 	void RecenterZoomHorz(CoordBounds & cbZoom, const CoordBounds & cbMap);
 	void RecenterZoomVert(CoordBounds & cbZoom, const CoordBounds & cbMap);
+	bool fTranslated; // keep track if the user has used the "pan" in 3D, to decide if we should pop-up a RMB-menu
 
 	DECLARE_DYNCREATE(ZoomableView)
 	DECLARE_MESSAGE_MAP()

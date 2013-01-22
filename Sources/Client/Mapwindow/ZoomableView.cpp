@@ -95,6 +95,7 @@ ZoomableView::ZoomableView()
 	, iXsize(0), iYsize(0)
 	, iXmin(0), iXmax(0)
 	, iYmin(0), iYmax(0)
+	, fTranslated(false)
 {
 	_rScale = rUNDEF;
 	fAdjustSize = false;
@@ -232,7 +233,8 @@ BOOL ZoomableView::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT*
 			if (mcd->rootDrawer->is3D()) {
 				if ((mode != cNone) || (iActiveTool == ID_PANAREA)) {
 					viewTranslate(point, message);
-					return TRUE; // prevent context-menu !!
+					if (fTranslated)
+						return TRUE; // prevent context-menu if user rotated in 3D!!
 				}
 			} else {
 				if (tools.size() > 0)
@@ -301,6 +303,7 @@ void ZoomableView::viewTranslate(const CPoint& pnt, UINT message) {
 		beginMovePoint = pnt;
 		mode = cTranslate;
 		SetCapture();
+		fTranslated = false;
 	}
 	else if ( message == WM_RBUTTONUP){
 		beginMovePoint = CPoint(iUNDEF,iUNDEF);
@@ -313,6 +316,7 @@ void ZoomableView::viewTranslate(const CPoint& pnt, UINT message) {
 		double deltay = beginMovePoint.y - pnt.y;
 		if ( deltax == 0 && deltay == 0)
 			return;
+		fTranslated = true;
 		deltax = deltax / rct.Width();
 		deltay = deltay / rct.Height();
 		CoordBounds cb = doc->rootDrawer->getCoordBoundsZoom();
