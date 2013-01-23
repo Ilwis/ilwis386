@@ -284,16 +284,16 @@ HTREEITEM DistanceMeasurer::configure( HTREEITEM parentItem){
 
 	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	item->setCheckAction(this,0, (DTSetCheckFunc)&DistanceMeasurer::setUseMeasureLine);
-	insertItem(TR("Measure Line"),"Circle",item,1);
+	insertItem(TR("Shortest Line on Map"),"Circle",item,1);
 	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	item->setCheckAction(this,0, (DTSetCheckFunc)&DistanceMeasurer::setUseMeasureCurve);
-	insertItem(TR("Measure Curve"),"Circle",item,0);
+	insertItem(TR("Shortest Curve on Globe"),"Circle",item,0);
 	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	item->setCheckAction(this,0, (DTSetCheckFunc)&DistanceMeasurer::setUseEquidistantCircle);
-	insertItem(TR("Equidistance Circle"),"Circle",item,0);
+	insertItem(TR("Equidistant Points on Map"),"Circle",item,0);
 	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	item->setCheckAction(this,0, (DTSetCheckFunc)&DistanceMeasurer::setUseEquidistantEllipse);
-	insertItem(TR("Equidistance Ellipse"),"Circle",item,0);
+	insertItem(TR("Equidistant Points on Globe"),"Circle",item,0);
 	if (!csprStereographic) {
 		csprStereographic = new CoordSystemProjection("StereographicLocal.csy", 1);
 		csprStereographic->datum = new MolodenskyDatum("WGS 1984","");
