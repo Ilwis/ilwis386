@@ -233,8 +233,10 @@ BOOL ZoomableView::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT*
 			if (mcd->rootDrawer->is3D()) {
 				if ((mode != cNone) || (iActiveTool == ID_PANAREA)) {
 					viewTranslate(point, message);
-					if (fTranslated)
+					if (fTranslated) {
+						fTranslated = false;
 						return TRUE; // prevent context-menu if user rotated in 3D!!
+					}
 				}
 			} else {
 				if (tools.size() > 0)
