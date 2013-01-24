@@ -86,7 +86,8 @@ bgColor(Color(255,255,255)),
 useBackground(false),
 columns(1),
 includeName(true),
-texts(0)
+texts(0),
+fontScale(1)
 {
 }
 
@@ -148,6 +149,14 @@ void AnnotationLegendDrawer::setBox(const CoordBounds& cb) {
 	cbBox = cb;
 }
 
+double AnnotationLegendDrawer::getFontScale() const{
+	return fontScale;
+}
+void AnnotationLegendDrawer::setFontScale(double v){
+	if ( v > 0)
+		fontScale = v;
+}
+
 void AnnotationLegendDrawer::prepare(PreparationParameters *pp) {
 	AnnotationDrawer::prepare(pp);
 	if ( pp->type & NewDrawer::ptGEOMETRY) {
@@ -157,7 +166,7 @@ void AnnotationLegendDrawer::prepare(PreparationParameters *pp) {
 			removeDrawer(texts->getId(), true);
 		}
 		texts = (ILWIS::TextLayerDrawer *)NewDrawer::getDrawer("TextLayerDrawer", "ilwis38",&dp);
-		texts->setFont(new OpenGLText(getRootDrawer(),"arial.ttf",15,true));
+		texts->setFont(new OpenGLText(getRootDrawer(),"arial.ttf",12 * fontScale,true));
 		addPostDrawer(100,texts);
 		LayerDrawer *ldr = dynamic_cast<LayerDrawer *>(getParentDrawer());
 		if ( ldr) {
@@ -176,6 +185,8 @@ void AnnotationLegendDrawer::prepare(PreparationParameters *pp) {
 			txtdr = (ILWIS::TextDrawer *)NewDrawer::getDrawer("TextDrawer","ilwis38",&dp);
 			texts->addPostDrawer(101,txtdr);
 		}
+		//texts->setFont(new OpenGLText(getRootDrawer(),"arial.ttf",12 * fontScale,true));
+		texts->getFont()->setHeight(12 * fontScale);
 		if ( title == "")
 			title = fnName.sFile;
 		txtdr->setText(title);
@@ -410,12 +421,12 @@ bool AnnotationClassLegendDrawer::draw( const CoordBounds& cbArea) const{
 		glEnd();
 		cbCell.MinY() += shifty;
 		cbCell.MaxY() += shifty;
-		//if ( (i + 1) % split == 0) {
-		//	cbCell.MinY() = cbBox.MinY();
-		//	cbCell.MaxY() = cbBox.MinY() + yy;
-		//	cbCell.MinX() += cellWidth + maxw;
-		//	cbCell.MaxX() += cellWidth + maxw;
-		//}
+		if ( (i) % split == 0) {
+			cbCell.MinY() = 0;
+			cbCell.MaxY() = yy;
+			cbCell.MinX() += cellWidth + maxw;
+			cbCell.MaxX() += cellWidth + maxw;
+		}
 	}
 
 
@@ -480,6 +491,7 @@ bool AnnotationValueLegendDrawer::draw( const CoordBounds& cbArea) const{
 	glPushMatrix();
 	glTranslated(cbBox.MinX(), cbBox.MinY(), z);
 	glScaled(scale, scale, 1);
+	double w = cbBox.width();
 	CoordBounds cbInner = CoordBounds(Coord(0,0), Coord(cbBox.width(), cbBox.height()));
 
 	AnnotationLegendDrawer::draw(cbInner);
@@ -532,7 +544,7 @@ void AnnotationValueLegendDrawer::drawVertical(CoordBounds& cbInner, const Range
 	double endx = startx + cbInner.width();
 	double rStep = rr.rWidth() / 100.0;
 	double rV = rr.rLo() + 0.5 * rStep;
-	setText(values,0,Coord(endx + cbBox.width() / 15.0, starty  + cbInner.height() / 100.0,z));
+	setText(values,0,Coord(endx + cbInner.width() / 3, starty  + cbInner.height() / 100.0,z));
 	for(int i=0; i < 100; ++i) {
 		Color clr = dc.clrVal(rV);
 		glColor4f(clr.redP(),clr.greenP(), clr.blueP(), getTransparency() );
@@ -544,11 +556,11 @@ void AnnotationValueLegendDrawer::drawVertical(CoordBounds& cbInner, const Range
 		glVertex3d(endx,starty,z);
 		glEnd();
 		if ( count < values.size()  && values[count].rVal() <= rV) { 
-			setText(values, count, Coord(endx * 1.15 + cbInner.width() / 15.0, starty,z));
+			setText(values, count, Coord(endx + cbInner.width() / 3, starty,z));
 			glColor4f(0,0, 0, getTransparency() );
 			glBegin(GL_LINE_STRIP);
 			glVertex3d(endx,endy,z);
-			glVertex3d(endx + cbInner.width() / 20.0,endy,z);
+			glVertex3d(endx + cbInner.width() / 10.0,endy,z);
 			glEnd();
 			++count;
 		}
@@ -557,7 +569,7 @@ void AnnotationValueLegendDrawer::drawVertical(CoordBounds& cbInner, const Range
 	}
 	TextDrawer *txt = (TextDrawer *)texts->getDrawer( values.size()-1);
 	double h = txt->getHeight() * 0.9;
-	setText(values,values.size()-1,Coord(cbInner.MinX() + cbInner.width() + cbInner.width() / 15.0, cbInner.height () - h/2.0,z));
+	setText(values,values.size()-1,Coord(endx + cbInner.width() / 3, cbInner.height () - h/2.0,z));
 }
 
 void AnnotationValueLegendDrawer::drawHorizontal(CoordBounds& cbInner, const RangeReal& rr, double z, const vector<String>& values) const{
@@ -633,13 +645,15 @@ vector<String> AnnotationValueLegendDrawer::makeRange(ComplexDrawer *dr) const{
 	} else
 		rmd = roundRange(rr.rLo(), rr.rHi(), rStep);
 
-
+	int dec = -1;
+	if ( rmd.rWidth() > 10)
+		dec = 0;
 	for (double v = rmd.rLo(); v <= rmd.rHi(); v += rStep) {
-		String sName = dvs.sValue(v);
+		String sName = dvs.sValue(v, -1, dec);
 		if ( fImage && v + rStep > 255) {
 			sName = "255";
 		}
-		values.push_back(sName);
+		values.push_back(sName.sTrimSpaces());
 
 	}	
 	return values;

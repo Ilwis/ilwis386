@@ -54,6 +54,8 @@ public:
 	void setNoOfColumns(int n) ;
 	bool getIncludeName() const;
 	void setInlcudeName(bool yesno);
+	double getFontScale() const;
+	void setFontScale(double v);
 
 protected:
 	bool draw( const CoordBounds& cbArea) const;
@@ -73,6 +75,7 @@ protected:
 	int columns;
 	bool includeName;
 	FileName fnName;
+	double fontScale;
 };
 
 struct RawInfo {
