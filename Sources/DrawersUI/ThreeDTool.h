@@ -37,6 +37,7 @@ private:
 	RadioButton *rbTable;
 	RadioButton *rbMaplist;
 	RadioButton *zCoord;
+	RadioButton *rfeature;
 
 	String colName;
 	Table  attTable;
