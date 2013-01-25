@@ -105,6 +105,7 @@ TrackProfileTool::TrackProfileTool(ZoomableView* zv, LayerTreeView *view, NewDra
 }
 
 TrackProfileTool::~TrackProfileTool() {
+	drawer->getRootDrawer()->setTopDrawer(0);
 	if ( line)
 		drawer->getRootDrawer()->removeDrawer(line->getId(), true);
 	if (point)
@@ -281,6 +282,8 @@ void TrackProfileTool::OnLButtonUp(UINT nFlags, CPoint pnt)
 		coords.push_back(c1);
 		Coord c2 = tree->GetDocument()->rootDrawer->screenToWorld(RowCol(pnt.y, pnt.x));
 		coords.push_back(c2);
+		drawer->getRootDrawer()->removeDrawer(line->getId(), false);
+		tree->GetDocument()->rootDrawer->setTopDrawer(line);
 		tree->GetDocument()->mpvGetView()->setBitmapRedraw(true);
 		fDown = true;
 		setCoords();
@@ -291,7 +294,9 @@ void TrackProfileTool::OnLButtonUp(UINT nFlags, CPoint pnt)
 		} else {
 			setCoords();
 			fDown = false;
+			tree->GetDocument()->rootDrawer->setTopDrawer(0);
 			tree->GetDocument()->mpvGetView()->setBitmapRedraw(false);
+			drawer->getRootDrawer()->addPostDrawer(730,line);
 			graphForm->setTrack(coords);
 			graphForm->ShowWindow(SW_SHOW);
 		}

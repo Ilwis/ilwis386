@@ -94,7 +94,7 @@ AreaSelector::~AreaSelector()
 	if (fDown)
 		DrawRect();
 	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(mpv->GetDocument());
-	mcd->rootDrawer->setSelectionDrawer(0);
+	mcd->rootDrawer->setTopDrawer(0);
 	delete selectionDrawer;
 }
 
@@ -115,15 +115,15 @@ void AreaSelector::OnLButtonDown(UINT nFlags, CPoint point)
 	pEnd = pStart;
 	fDown = true;
 
+	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(mpv->GetDocument());
 	if ( selectionDrawer == NULL)  {
-		MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(mpv->GetDocument());
 		ILWIS::DrawerParameters sp(mcd->rootDrawer, mcd->rootDrawer);
 		selectionDrawer = (ILWIS::SelectionRectangle *)NewDrawer::getDrawer("SelectionRectangle", "Ilwis38", &sp);
-		mcd->rootDrawer->setSelectionDrawer(selectionDrawer);
-		//mcd->rootDrawer->setBitmapRedraw(true);
-		mcd->mpvGetView()->setBitmapRedraw(true);
-		selectionDrawer->setColor(clr);
 	}
+
+	mcd->rootDrawer->setTopDrawer(selectionDrawer);
+	mcd->mpvGetView()->setBitmapRedraw(true);
+	selectionDrawer->setColor(clr);
 	mpv->SetCapture();
 	DrawRect();
 }
@@ -134,13 +134,9 @@ void AreaSelector::OnLButtonUp(UINT nFlags, CPoint point)
 	DrawRect();
 	fDown = false;
 
-	if (selectionDrawer != 0) {
-		MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(mpv->GetDocument());
-		mcd->rootDrawer->setSelectionDrawer(0);
-		delete selectionDrawer;
-		selectionDrawer = NULL;
-		mcd->mpvGetView()->setBitmapRedraw(false);
-	}
+	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(mpv->GetDocument());
+	mcd->rootDrawer->setTopDrawer(0);
+	mcd->mpvGetView()->setBitmapRedraw(false);
 
 	(cmt->*np)(rect());
 	ReleaseCapture();

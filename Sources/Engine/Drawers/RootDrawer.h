@@ -8,7 +8,6 @@ class MapCompositionDoc;
 
 namespace ILWIS {
 	class DrawerContext;
-	class SelectionRectangle;
 
 	class _export RootDrawer : public ComplexDrawer {
 	public:
@@ -50,7 +49,7 @@ namespace ILWIS {
 		DrawerContext *getDrawerContext() { return drawercontext; }
 		DrawerContext *getDrawerContext() const { return drawercontext; }
 		void setDrawerContext(DrawerContext * context) {drawercontext = context;};
-		void setSelectionDrawer(SelectionRectangle *selDraw);
+		void setTopDrawer(NewDrawer *newDrawer);
 		int getZIndex() const;
 		void setZIndex(int);
 		void setupDraw() const;
@@ -65,7 +64,6 @@ namespace ILWIS {
 		Coord getViewPoint() const;
 		Coord getEyePoint() const;
 		double getFakeZ() const;
-		void setBitmapRedraw(bool yesno);
 		void setRotationAngles(double rx, double ry, double rz);
 		void getRotationAngles(double& rx, double& ry, double& rz);
 		void setTranslate(double tx, double ty, double tz);
@@ -102,7 +100,7 @@ namespace ILWIS {
 		double rotX, rotY, rotZ;
 		double translateX, translateY, translateZ;
 		double zoom3D;
-		SelectionRectangle *selectionDrawer;
+		NewDrawer *topDrawer;
 		ILWIS::DrawerContext *drawercontext;
 		NewDrawer *backgroundDrawer; 
 		bool initRestore;

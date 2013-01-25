@@ -4,7 +4,6 @@
 #include "Engine\Drawers\DrawerContext.h"
 #include "Engine\Drawers\RootDrawer.h"
 #include "Engine\Drawers\SpatialDataDrawer.h"
-#include "Engine\Drawers\SelectionRectangle.h"
 #include "Engine\Drawers\ZValueMaker.h"
 
 using namespace ILWIS;
@@ -29,7 +28,7 @@ RootDrawer::RootDrawer()
 	threeD = false;
 	windowAspectRatio = 0;
 	mapAspectRatio = 0;
-	selectionDrawer = 0;
+	topDrawer = 0;
 	rotX = rotZ = 0;
 	rotY = 45.0;
 	translateX = translateY = translateZ = 0;
@@ -144,19 +143,8 @@ Therefore all calls to RootDrawer::draw must be preceded by a call to DrawerCont
 */
 
 bool RootDrawer::draw( const CoordBounds& cb) const{
-	if ( selectionDrawer) {
-		glPushMatrix(); // GL_MODELVIEW
-		glMatrixMode(GL_PROJECTION);
-		glPushMatrix();
-		glLoadIdentity();
-		glOrtho(0,pixArea.Col,pixArea.Row,0,-1,1);
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-		selectionDrawer->draw();
-		glMatrixMode(GL_PROJECTION);
-		glPopMatrix(); // maintain the original state for incidental gluUnProject calls
-		glMatrixMode(GL_MODELVIEW);
-		glPopMatrix();
+	if ( topDrawer ) {
+		topDrawer->draw();
 	}
 	else {
 		// Setup
@@ -737,9 +725,9 @@ void RootDrawer::debug() {
 }
 
 
-void RootDrawer::setSelectionDrawer(SelectionRectangle *selDraw) {
-	// selection drawer is owned by the areaselector, dont delete it here
-	selectionDrawer = selDraw;
+void RootDrawer::setTopDrawer(NewDrawer *newDrawer) {
+	// topDrawer is owned by the corresponding tool, dont delete it here
+	topDrawer = newDrawer;
 }
 
 

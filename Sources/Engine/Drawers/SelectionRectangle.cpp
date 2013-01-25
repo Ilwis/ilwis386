@@ -21,6 +21,15 @@ SelectionRectangle::~SelectionRectangle() {
 }
 
 bool SelectionRectangle::draw( const CoordBounds& cb) const{
+	glPushMatrix(); // GL_MODELVIEW
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	RowCol pixArea (getRootDrawer()->getViewPort());
+	glOrtho(0,pixArea.Col,pixArea.Row,0,-1,1);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 	double z = 0;
@@ -43,6 +52,11 @@ bool SelectionRectangle::draw( const CoordBounds& cb) const{
 	glVertex3d(rectangle.left, rectangle.top, z);
 	glEnd();
 	glDisable(GL_BLEND);
+
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix(); // maintain the original state for incidental gluUnProject calls
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
 
 	return true;
 }
