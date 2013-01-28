@@ -23,7 +23,9 @@ class HistogramRasterToolForm : public DisplayOptionsForm {
 	void apply(); 
 private:
 	Color color;
+	int spread;
 	FieldColor *fcolor;
+	FieldInt *fspread;
 
 };
 }

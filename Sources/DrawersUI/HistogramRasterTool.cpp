@@ -51,7 +51,7 @@ HTREEITEM HistogramRasterTool::configure( HTREEITEM parentItem){
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&HistogramRasterTool::displayOptionHisto);
 	item->setCheckAction(this, 0,(DTSetCheckFunc)&HistogramRasterTool::setHisto);
-	htiNode = insertItem("Histogram","Valuerange", item,0); 
+	htiNode = insertItem("Histogram","histo16", item,0); 
 	DrawerTool::configure(htiNode);
 	isConfigured = true;
 	return htiNode;
@@ -111,8 +111,11 @@ HistogramRasterToolForm::HistogramRasterToolForm(CWnd *wPar, NewDrawer *dr) :
 	MapCompositionDoc *mdoc = view->GetDocument();
 	HistogramGraphView *hview = mdoc->getHistoView(bm->fnObj);
 	color = hview->getTresholdColor();
+	spread = hview->getSpread() * 100;
+
 
 	fcolor = new FieldColor(root,TR("Color"), &color);
+	fspread = new FieldInt(root,TR("Spread"), &spread,ValueRange(1,100));
 
 	create();
 }
@@ -120,6 +123,7 @@ HistogramRasterToolForm::HistogramRasterToolForm(CWnd *wPar, NewDrawer *dr) :
 
 void  HistogramRasterToolForm::apply() {
 	fcolor->StoreData();
+	fspread->StoreData();
 	RasterLayerDrawer *rdrw = dynamic_cast<RasterLayerDrawer *>(drw);
 	RasterDataDrawer *datadrw = dynamic_cast<RasterDataDrawer *>(rdrw->getParentDrawer());
 	BaseMapPtr *bm = datadrw->getBaseMap();
@@ -129,6 +133,7 @@ void  HistogramRasterToolForm::apply() {
 
 	datadrw->setTresholdColor(color);
 	hview->setTresholdColor(color);
+	hview->setSpread(spread / 100.0);
 	
 	PreparationParameters pp(NewDrawer::ptRENDER, 0);
 	datadrw->prepareChildDrawers(&pp);
