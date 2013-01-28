@@ -30,6 +30,7 @@ public:
 	MinMax mm() const;
 	TableSelection& operator+=(const TableSelection& sel2);
 	const vector<bool>& getRows() const { return  rows; }
+	const vector<bool>& getCols() const { return  cols; }
 	long findRow(long row) const;
 private:
 	MinMax boundary; // this is the maximum extent of the selection; it doesnt need to be continous

@@ -42,7 +42,12 @@ void TableSelection::selectRows(const vector<long>& selrows) {
 
 void TableSelection::selectBlock(const RowCol& bottom, const RowCol& top) {
 
-	if ( top.Col >= cols.size() || (top.Row - 1) >= rows.size()) 
+	if ( bottom.Row == 1 && top.Row == 0 && bottom.Col != iUNDEF) { // special case. empty table with rows, used for copying
+		boundary = MinMax(RowCol(0L,bottom.Col), RowCol(0L,bottom.Col));
+		cols[bottom.Col] = true;
+		return;
+
+	} else if ( top.Col >= cols.size() || (top.Row - 1) >= rows.size()) 
 		return;
 
 	boundary = MinMax(bottom, top);
