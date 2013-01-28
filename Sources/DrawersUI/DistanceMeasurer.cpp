@@ -100,10 +100,6 @@ bool MeasurerLine::draw( const CoordBounds& cbArea) const{
 		glEnable(GL_BLEND);
 		LineDrawer::draw(cbArea);
 		glDisable(GL_BLEND);
-	} else { // things that LineDrawer::draw would otherwise do
-
-		//glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(),transp );
-		//glLineWidth(1);
 	}
 	double transp = getTransparency(); 
 	glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(),transp );
@@ -219,6 +215,9 @@ bool MeasurerLine::draw( const CoordBounds& cbArea) const{
 		}
 	}
 
+	glDisable (GL_LINE_STIPPLE);
+	glLineWidth(1);
+
 	return true;
 }
 
@@ -254,8 +253,9 @@ DistanceMeasurer::~DistanceMeasurer()
 	view->changeStateTool(getId(), false);
 	if (csprStereographic)
 		delete csprStereographic;
-	if ( line)
-		drawer->getRootDrawer()->removeDrawer(line->getId(), true);
+
+	drawer->getRootDrawer()->setTopDrawer(0);
+	delete line;
 }
 
 bool DistanceMeasurer::isToolUseableFor(ILWIS::DrawerTool *tool){
@@ -269,8 +269,6 @@ HTREEITEM DistanceMeasurer::configure( HTREEITEM parentItem){
 		delete line;
 	line = new MeasurerLine(&dp, this);
 	line->setActive(false);
-	drawer->getRootDrawer()->addPostDrawer(729,line);
- 
 
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
 	item->setCheckAction(this,0, (DTSetCheckFunc)&DistanceMeasurer::setcheckTool);
@@ -536,6 +534,7 @@ void DistanceMeasurer::OnLButtonDown(UINT nFlags, CPoint point)
 		coords.push_back(c1);
 		Coord c2 = tree->GetDocument()->rootDrawer->screenToWorld(RowCol(point.y, point.x));
 		coords.push_back(c2);
+		tree->GetDocument()->rootDrawer->setTopDrawer(line);
 		tree->GetDocument()->mpvGetView()->setBitmapRedraw(true);
 		fDown = true;
 		setCoords();
@@ -557,6 +556,7 @@ void DistanceMeasurer::OnLButtonUp(UINT nFlags, CPoint point)
 			Report();
 			line->setActive(false);
 			coords.clear();
+			tree->GetDocument()->rootDrawer->setTopDrawer(0);
 			tree->GetDocument()->mpvGetView()->setBitmapRedraw(false);
 		}
 	}
