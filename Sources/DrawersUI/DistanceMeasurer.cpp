@@ -284,10 +284,10 @@ HTREEITEM DistanceMeasurer::configure( HTREEITEM parentItem){
 
 	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	item->setCheckAction(this,0, (DTSetCheckFunc)&DistanceMeasurer::setUseMeasureLine);
-	insertItem(TR("Measure Line"),"line",item,1);
+	insertItem(TR("Measurer Line"),"line",item,1);
 	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	item->setCheckAction(this,0, (DTSetCheckFunc)&DistanceMeasurer::setUseMeasureCurve);
-	insertItem(TR("Measure Curve"),"curve",item,0);
+	insertItem(TR("Measurer Curve"),"curve",item,0);
 	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	item->setCheckAction(this,0, (DTSetCheckFunc)&DistanceMeasurer::setUseEquidistantCircle);
 	insertItem(TR("Equidistance Circle"),"Circle",item,0);
