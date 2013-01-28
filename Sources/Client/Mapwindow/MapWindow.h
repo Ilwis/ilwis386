@@ -104,7 +104,7 @@ protected:
 	virtual ~MapWindow();
   //CSplitterWnd wndSplitter;
   CMenu menDataLayer, menEditLayer, menPropLayer, 
-        menRprLayer, menAttLayer, menDomLayer;
+        menRprLayer, menAttLayer, menDomLayer, menHistograms;
 	HMENU hMenFile, hMenEdit;
 	GeneralBar gbOverview;
 	CommandBar *commBar;

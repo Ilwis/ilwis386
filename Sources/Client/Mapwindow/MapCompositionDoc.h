@@ -59,6 +59,11 @@ class StereoPair;
 class PixelInfoDoc;
 class ObjectCollection;
 struct RowSelectInfo;
+class HistogramGraphView;
+
+namespace ILWIS {
+class DrawerTool;
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // MapCompositionDoc document
@@ -121,6 +126,8 @@ public:
 	void setSelectedDrawer(NewDrawer *drw) { selectedDrawer = drw; }
 	void addToPixelInfo(const IlwisObject& bm, ComplexDrawer *drw);
 	PixelInfoDoc *pixInfoDoc;
+	HistogramGraphView *getHistoView(const FileName& fn);
+	void ShowHistogram(const FileName& fn, bool show=true, DrawerTool *tool=0);
 
 protected:
 	MapView mpv;
@@ -140,6 +147,7 @@ private:
 	ILWIS::NewDrawer *createBaseMapDrawer(const BaseMap& bmp, const String& type, const String& subtype, OpenType ot, int);
 	BOOL OnOpenObjectCollection(const ObjectCollection& list, OpenType ot, const String& subtype="ilwis38", int os=IlwisWinApp::osNormal);
 	static UINT selectFeaturesInThread(LPVOID pParam);
+
 
 private:
 	afx_msg void OnExtCoord();
@@ -169,14 +177,15 @@ private:
 	afx_msg void OnUpdateDomainLayer(CCmdUI* pCmdUI);	
 	afx_msg void OnUpdateRprLayer(CCmdUI* pCmdUI);	
 	afx_msg void OnUpdatePropLayer(CCmdUI* pCmdUI);	
+	void OnUpdateHistoLayer(CCmdUI* pCmdUI);
+	void OnHistoLayer(UINT nID);
 
 	afx_msg void OnBackgroundColor();
-	afx_msg void OnShowHistogram();
 	afx_msg void OnUpdateShowHistogram(CCmdUI* pCmdUI);	
 private:
 	int iListState; // with every change increases
 	double rDfltScale;
-	GeneralBar* gbHist;
+	map<String, GeneralBar*> gbHist;
 	bool fInCmdMsg;
 	FileName fnView;
 	NewDrawer *selectedDrawer;
@@ -189,6 +198,8 @@ private:
 	DECLARE_DYNCREATE(MapCompositionDoc)
 	DECLARE_MESSAGE_MAP()
 };
+
+typedef map<String, GeneralBar*>::iterator HistIter;
 
 
 

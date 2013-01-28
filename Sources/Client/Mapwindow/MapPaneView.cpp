@@ -1336,8 +1336,6 @@ void MapPaneView::SaveFeatures(const set<Feature *>& features, const String& inF
 
 void MapPaneView::OnCreateSubMap()
 {
-	throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
-
 	MapCompositionDoc* mcd = GetDocument();
 	for (int i = 0; i < mcd->rootDrawer->getDrawerCount(); ++i) 
 	{

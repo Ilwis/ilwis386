@@ -179,7 +179,9 @@ int MapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	add(ID_SCALE1);
 	addBreak;
 	add(ID_REDRAW);
-	add(ID_SHOWHISTOGRAM);
+	menHistograms.CreateMenu();
+	menPopup.AppendMenu(MF_POPUP, (UINT)menHistograms.GetSafeHmenu(), sMen(ID_SHOWHISTOGRAM)); 
+	//add(ID_SHOWHISTOGRAM);
 	addBreak;
 	menSub.CreateMenu();
 	addSub(ID_EXTPERC);
@@ -367,9 +369,9 @@ void MapWindow::OnInitMenu(CMenu* pMenu)
 	MapCompositionDoc* mcd = mpv->GetDocument();  
 	if (0 == mcd) 
 		return;
-	//mcd->menLayers(menDataLayer, ID_LAYFIRST);
+	 mcd->menLayers(menHistograms, ID_HISTOLAYER);
 	//mcd->menLayers(menEditLayer, ID_EDITLAYER);
-	//mcd->menLayers(menPropLayer, ID_PROPLAYER);
+	mcd->menLayers(menPropLayer, ID_PROPLAYER);
 	//mcd->menLayers(menRprLayer, ID_RPRLAYER);
 	//mcd->menLayers(menDomLayer, ID_DOMLAYER);
 	DrawMenuBar();

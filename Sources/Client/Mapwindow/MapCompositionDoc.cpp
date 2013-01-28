@@ -88,8 +88,7 @@ Created on: 2007-02-8
 #include "Engine\SpatialReference\GRCTP.H"
 #include "Engine\SpatialReference\csctp.h"
 #include "Engine\Map\txtann.h"
-//#include "Client\Mapwindow\Drawers\BitmapDrawer.h"
-//#include "Client\Mapwindow\Drawers\MetaFileDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Client\Editors\Utils\GeneralBar.h"
 #include "Client\TableWindow\HistogramGraphView.h"
 #include "Client\TableWindow\HistogramRGBGraphView.h"
@@ -138,25 +137,27 @@ BEGIN_MESSAGE_MAP(MapCompositionDoc, CatalogDocument)
 	ON_COMMAND(ID_FILE_OPEN, OnOpen)
 	ON_COMMAND(ID_COPYSCALEBARLINK, OnCopyScaleBarLink)
 	ON_COMMAND(ID_OPENPIXELINFO, OnOpenPixelInfo)
-	ON_COMMAND(ID_SHOWHISTOGRAM, OnShowHistogram)
-	ON_UPDATE_COMMAND_UI(ID_SHOWHISTOGRAM, OnUpdateShowHistogram)
+	//ON_COMMAND(ID_SHOWHISTOGRAM, OnShowHistogram)
+	//ON_UPDATE_COMMAND_UI(ID_SHOWHISTOGRAM, OnUpdateShowHistogram)
 
 	//ON_COMMAND_RANGE(ID_LAYFIRST, ID_LAYFIRST+900, OnDataLayer)
 	ON_COMMAND_RANGE(ID_DOMLAYER, ID_DOMLAYER+900, OnDomainLayer)
 	ON_COMMAND_RANGE(ID_RPRLAYER, ID_RPRLAYER+900, OnRprLayer)
 	ON_COMMAND_RANGE(ID_EDITLAYER, ID_EDITLAYER+900, OnEditLayer)
 	ON_COMMAND_RANGE(ID_PROPLAYER, ID_PROPLAYER+900, OnPropLayer)
+	ON_COMMAND_RANGE(ID_HISTOLAYER, ID_HISTOLAYER+900, OnHistoLayer)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_LAYFIRST, ID_LAYFIRST+900, OnUpdateDataLayer)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_DOMLAYER, ID_DOMLAYER+900, OnUpdateDomainLayer)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_RPRLAYER, ID_RPRLAYER+900, OnUpdateRprLayer)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_EDITLAYER, ID_EDITLAYER+900, OnUpdateEditLayer)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_PROPLAYER, ID_PROPLAYER+900, OnUpdatePropLayer)
+	ON_UPDATE_COMMAND_UI_RANGE(ID_HISTOLAYER, ID_HISTOLAYER+900, OnUpdateHistoLayer)
 END_MESSAGE_MAP()
 
 
 MapCompositionDoc::MapCompositionDoc()
-: gbHist(0)
-, m_fAbortSelectionThread(false)
+: 
+ m_fAbortSelectionThread(false)
 , m_selectionThread(0)
 {
 	iListState = 0;
@@ -185,8 +186,9 @@ MapCompositionDoc::~MapCompositionDoc()
 
 void MapCompositionDoc::DeleteContents()
 {
-	delete gbHist;
-	gbHist = 0;
+	for(HistIter cur = gbHist.begin(); cur != gbHist.end(); ++cur)
+		delete (*cur).second;
+
 }
 
 BOOL MapCompositionDoc::OnNewDocument()
@@ -931,20 +933,34 @@ void MapCompositionDoc::OnUpdateRprLayer(CCmdUI* pCmdUI)
 
 void MapCompositionDoc::OnPropLayer(UINT nID)	
 {
-	//list<Drawer*>::iterator iter = dl.begin();
-	//int i, id;
-	//for (i = 1, id = ID_PROPLAYER;
-	//	iter != dl.end(); 
-	//	++iter, ++i, ++id)
-	//{  
-	//	if (id == nID) {
-	//		Drawer* dr = *iter;
-	//		dr->Prop();
-	//		return;
-	//	}
-	//}
+
+	for(int i =0,id = ID_PROPLAYER; i < rootDrawer->getDrawerCount(); ++i,++id)
+	{  
+		if (id == nID) {
+			SpatialDataDrawer *mapdrawer = dynamic_cast<SpatialDataDrawer *>(rootDrawer->getDrawer(i));
+			if ( mapdrawer) {
+				IlwWinApp()->Execute("prop " + mapdrawer->getBaseMap()->fnObj.sFullPathQuoted());
+			}
+			return;
+		}
+	}
 }
 
+void MapCompositionDoc::OnHistoLayer(UINT nID){
+	for(int i =0,id = ID_HISTOLAYER; i < rootDrawer->getDrawerCount(); ++i,++id)
+	{  
+		if (id == nID) {
+			SpatialDataDrawer *mapdrawer = dynamic_cast<SpatialDataDrawer *>(rootDrawer->getDrawer(i));
+			if ( mapdrawer) {
+				ShowHistogram(mapdrawer->getBaseMap()->fnObj);
+			}
+			return;
+		}
+	}
+}
+
+void MapCompositionDoc::OnUpdateHistoLayer(CCmdUI* pCmdUI)	{
+}
 void MapCompositionDoc::OnUpdatePropLayer(CCmdUI* pCmdUI)	
 {
 	//list<Drawer*>::iterator iter = dl.begin();
@@ -1888,15 +1904,30 @@ void MapCompositionDoc::SetCoordSystem(const CoordSystem& cs)
 }
 
 
+HistogramGraphView *MapCompositionDoc::getHistoView(const FileName& fn){
+	HistIter iter = gbHist.find(fn.sPhysicalPath());
+	if (iter != gbHist.end()) {
+		return static_cast<HistogramGraphView *>((*iter).second->view);
+	}
+	return 0;
 
-void MapCompositionDoc::OnShowHistogram()
+}
+void MapCompositionDoc::ShowHistogram(const FileName& fn, bool show, DrawerTool *tool)
 {
-	if (gbHist) {
-		BOOL fShown = gbHist->IsWindowVisible();
-		delete gbHist;
-		gbHist = 0;
+	HistIter iter = gbHist.find(fn.sPhysicalPath());
+	if (iter != gbHist.end() || show == false) {
+		BOOL fShown = (*iter).second->IsWindowVisible();
+		//(*iter).second->SendMessage(WM_CLOSE);
+		HistogramGraphDoc* hgd = (HistogramGraphDoc*)(*iter).second->view->GetDocument();
+		hgd->RemoveView((*iter).second->view);
+		delete (*iter).second;
+		gbHist.erase(iter);
+		mpvGetView()->GetParentFrame()->RecalcLayout();
+
 		if (fShown)
 			return;
+
+
 	}
 	CWnd* wnd = wndGetActiveView();
 	CFrameWnd* fw = wnd->GetTopLevelFrame();
@@ -1910,36 +1941,41 @@ void MapCompositionDoc::OnShowHistogram()
 		{
 			throw ErrorObject("THis must be moved");  // HistogramRGBGraphView may not remain here
 			HistogramRGBGraphView* hgv = new HistogramRGBGraphView(md);
-			gbHist = new GeneralBar;
-			gbHist->view = hgv;
-			gbHist->Create(fw, (dynamic_cast<FrameWindow*>(fw))->iNewBarID());
-			hgv->Create(gbHist);
+			GeneralBar *gb = new GeneralBar;
+			gb->view = hgv;
+			gb->Create(fw, (dynamic_cast<FrameWindow*>(fw))->iNewBarID());
+			hgv->Create(gb);
 			AddView(hgv);
 			hgv->OnInitialUpdate();
 			String sTitle(TR("Histogram of %S").c_str(), md->getName());
-			gbHist->SetWindowText(sTitle.c_str());
-			fw->FloatControlBar(gbHist,CPoint(100,100));
-			fw->ShowControlBar(gbHist,TRUE,FALSE);
+			gb->SetWindowText(sTitle.c_str());
+			fw->FloatControlBar(gb,CPoint(100,100));
+			fw->ShowControlBar(gb,TRUE,FALSE);
+			gbHist[fn.sPhysicalPath()] = gb;
+
 			return;
 		}
 		if (md->getType() == "RasterDataDrawer" ) // && md->dm()->pdv()) 
 		{
+			if ( md->getBaseMap()->fnObj != fn)
+				continue;
 			HistogramGraphDoc* hgd = new HistogramGraphDoc;
-			Map mp;
-			mp.SetPointer(md->getBaseMap());
+			Map mp(fn);
 			TableHistogramInfo thi(mp);
 			hgd->OnOpenDocument(thi.tbl());
-			HistogramGraphView* hgv = new HistogramGraphView;
-			gbHist = new GeneralBar;
-			gbHist->view = hgv;
-			gbHist->Create(fw, (dynamic_cast<FrameWindow*>(fw))->iNewBarID());
-			hgv->Create(gbHist);
+			HistogramGraphView* hgv = new HistogramGraphView(md, this, tool);
+			GeneralBar *gb = new GeneralBar;
+			gb->view = hgv;
+			gb->Create(fw, (dynamic_cast<FrameWindow*>(fw))->iNewBarID());
+			hgv->Create(gb);
 			hgd->AddView(hgv);
 			hgv->OnInitialUpdate();
-			String sTitle(TR("Histogram of %S").c_str(), md->getName());
-			gbHist->SetWindowText(sTitle.c_str());
-			fw->FloatControlBar(gbHist,CPoint(100,100));
-			fw->ShowControlBar(gbHist,TRUE,FALSE);
+			fw->DockControlBar(gb, AFX_IDW_DOCKBAR_TOP);
+			String sTitle(TR("Histogram of %S").c_str(), mp->sName());
+			gb->SetWindowText(sTitle.c_str());
+			//fw->FloatControlBar(gb,CPoint(100,100));
+			fw->ShowControlBar(gb,TRUE,FALSE);
+			gbHist[fn.sPhysicalPath()] = gb;
 			return;
 		}
 	}
@@ -1947,26 +1983,26 @@ void MapCompositionDoc::OnShowHistogram()
 
 void MapCompositionDoc::OnUpdateShowHistogram(CCmdUI* pCmdUI)	
 {
-	BOOL fShown = false;
-	if (gbHist) 
-		fShown = gbHist->IsWindowVisible();
-	bool fPossible = false;
-	CWnd* wnd = wndGetActiveView();
-	CFrameWnd* fw = wnd->GetTopLevelFrame();
-	if (fw) {
-		for (int i = 0; i < rootDrawer->getDrawerCount(); ++i) 
-		{
-			NewDrawer* dr = rootDrawer->getDrawer(i);
-			SpatialDataDrawer* md = dynamic_cast<SpatialDataDrawer*>(dr);
-			if (md && (md->getBaseMap()->dm()->pdv() || md->getBaseMap()->dm()->pdsrt())) 
-			{
-				fPossible = true;
-				break;
-			}
-		}
-	}
-	pCmdUI->SetCheck(fShown);
-	pCmdUI->Enable(fPossible||fShown);
+	//BOOL fShown = false;
+	//if (gbHist) 
+	//	fShown = gbHist->IsWindowVisible();
+	//bool fPossible = false;
+	//CWnd* wnd = wndGetActiveView();
+	//CFrameWnd* fw = wnd->GetTopLevelFrame();
+	//if (fw) {
+	//	for (int i = 0; i < rootDrawer->getDrawerCount(); ++i) 
+	//	{
+	//		NewDrawer* dr = rootDrawer->getDrawer(i);
+	//		SpatialDataDrawer* md = dynamic_cast<SpatialDataDrawer*>(dr);
+	//		if (md && (md->getBaseMap()->dm()->pdv() || md->getBaseMap()->dm()->pdsrt())) 
+	//		{
+	//			fPossible = true;
+	//			break;
+	//		}
+	//	}
+	//}
+	//pCmdUI->SetCheck(fShown);
+	//pCmdUI->Enable(fPossible||fShown);
 }
 
 BOOL MapCompositionDoc::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo) 
@@ -1977,8 +2013,8 @@ BOOL MapCompositionDoc::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDL
 		return TRUE;
 	fInCmdMsg = true;
 	BOOL fReturn = FALSE;
-	if (gbHist && IsWindow(gbHist->m_hWnd) && gbHist->IsWindowVisible())
-		fReturn = gbHist->view->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
+	//if (gbHist && IsWindow(gbHist->m_hWnd) && gbHist->IsWindowVisible())
+	//	fReturn = gbHist->view->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
 	fInCmdMsg = false;
 	return fReturn;
 }
