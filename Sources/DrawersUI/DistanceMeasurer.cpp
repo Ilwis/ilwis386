@@ -100,6 +100,10 @@ bool MeasurerLine::draw( const CoordBounds& cbArea) const{
 		glEnable(GL_BLEND);
 		LineDrawer::draw(cbArea);
 		glDisable(GL_BLEND);
+	} else { // things that LineDrawer::draw would otherwise do
+
+		//glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(),transp );
+		//glLineWidth(1);
 	}
 	double transp = getTransparency(); 
 	glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(),transp );
@@ -215,9 +219,6 @@ bool MeasurerLine::draw( const CoordBounds& cbArea) const{
 		}
 	}
 
-	glDisable (GL_LINE_STIPPLE);
-	glLineWidth(1);
-
 	return true;
 }
 
@@ -253,9 +254,8 @@ DistanceMeasurer::~DistanceMeasurer()
 	view->changeStateTool(getId(), false);
 	if (csprStereographic)
 		delete csprStereographic;
-
-	drawer->getRootDrawer()->setTopDrawer(0);
-	delete line;
+	if ( line)
+		drawer->getRootDrawer()->removeDrawer(line->getId(), true);
 }
 
 bool DistanceMeasurer::isToolUseableFor(ILWIS::DrawerTool *tool){
@@ -269,6 +269,8 @@ HTREEITEM DistanceMeasurer::configure( HTREEITEM parentItem){
 		delete line;
 	line = new MeasurerLine(&dp, this);
 	line->setActive(false);
+	drawer->getRootDrawer()->addPostDrawer(729,line);
+ 
 
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
 	item->setCheckAction(this,0, (DTSetCheckFunc)&DistanceMeasurer::setcheckTool);
@@ -282,16 +284,16 @@ HTREEITEM DistanceMeasurer::configure( HTREEITEM parentItem){
 
 	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	item->setCheckAction(this,0, (DTSetCheckFunc)&DistanceMeasurer::setUseMeasureLine);
-	insertItem(TR("Shortest Line on Map"),"Circle",item,1);
+	insertItem(TR("Measure Line"),"line",item,1);
 	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	item->setCheckAction(this,0, (DTSetCheckFunc)&DistanceMeasurer::setUseMeasureCurve);
-	insertItem(TR("Shortest Curve on Globe"),"Circle",item,0);
+	insertItem(TR("Measure Curve"),"curve",item,0);
 	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	item->setCheckAction(this,0, (DTSetCheckFunc)&DistanceMeasurer::setUseEquidistantCircle);
-	insertItem(TR("Equidistant Points on Map"),"Circle",item,0);
+	insertItem(TR("Equidistance Circle"),"Circle",item,0);
 	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	item->setCheckAction(this,0, (DTSetCheckFunc)&DistanceMeasurer::setUseEquidistantEllipse);
-	insertItem(TR("Equidistant Points on Globe"),"Circle",item,0);
+	insertItem(TR("Equidistance Ellipse"),"ellipse",item,0);
 	if (!csprStereographic) {
 		csprStereographic = new CoordSystemProjection("StereographicLocal.csy", 1);
 		csprStereographic->datum = new MolodenskyDatum("WGS 1984","");
@@ -534,7 +536,6 @@ void DistanceMeasurer::OnLButtonDown(UINT nFlags, CPoint point)
 		coords.push_back(c1);
 		Coord c2 = tree->GetDocument()->rootDrawer->screenToWorld(RowCol(point.y, point.x));
 		coords.push_back(c2);
-		tree->GetDocument()->rootDrawer->setTopDrawer(line);
 		tree->GetDocument()->mpvGetView()->setBitmapRedraw(true);
 		fDown = true;
 		setCoords();
@@ -556,7 +557,6 @@ void DistanceMeasurer::OnLButtonUp(UINT nFlags, CPoint point)
 			Report();
 			line->setActive(false);
 			coords.clear();
-			tree->GetDocument()->rootDrawer->setTopDrawer(0);
 			tree->GetDocument()->mpvGetView()->setBitmapRedraw(false);
 		}
 	}
