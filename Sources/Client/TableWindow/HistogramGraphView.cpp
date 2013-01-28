@@ -41,11 +41,19 @@
 #include "Client\Headers\formelementspch.h"
 #include "Client\ilwis.h"
 #include "Client\Base\IlwisDocument.h"
+#include "Client\Mapwindow\MapWindow.h"
+#include "Client\Mapwindow\MapPaneView.h"
+#include "Client\Mapwindow\MapCompositionDoc.h"
+#include "Client\Mapwindow\MapPaneViewTool.h"
+#include "Client\Mapwindow\Drawers\DrawerTool.h"
 #include "Client\TableWindow\HistogramDoc.h"
 #include "Client\TableWindow\HistogramGraphView.h"
 #include "Client\GraphWindow\GraphDrawer.h"
 #include "Client\GraphWindow\GraphLayer.h"
 #include "Client\GraphWindow\GraphAxis.h"
+#include "Engine\Drawers\ComplexDrawer.h"
+#include "Engine\Drawers\SimpleDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Engine\Table\tblview.h"
 #include "Headers\messages.h"
 
@@ -55,18 +63,29 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
+using namespace ILWIS;
+
 IMPLEMENT_DYNCREATE(HistogramGraphView, GraphPaneView)
 
 BEGIN_MESSAGE_MAP(HistogramGraphView, GraphPaneView)
   ON_MESSAGE(ILWM_VIEWSETTINGS, OnViewSettings)
+  	ON_WM_MOUSEMOVE()
+	ON_WM_LBUTTONDOWN()
+	ON_WM_LBUTTONUP()
 END_MESSAGE_MAP()
 
-HistogramGraphView::HistogramGraphView()
+HistogramGraphView::HistogramGraphView() : drawer(0), mcd(0), moveMode(false), tool(0), color(RGB(25,0,0)), spread(0.01)
+{
+}
+
+HistogramGraphView::HistogramGraphView(SpatialDataDrawer *drw, MapCompositionDoc *doc, DrawerTool *_tool) : drawer(drw), mcd(doc), moveMode(false), tool(_tool),color(RGB(255,0,0)), spread(0.01)
 {
 }
 
 HistogramGraphView::~HistogramGraphView()
 {
+	if (tool)
+		tool->update();
 }
 
 void HistogramGraphView::OnInitialUpdate()
@@ -87,5 +106,64 @@ LRESULT HistogramGraphView::OnViewSettings(WPARAM wP, LPARAM lP)
     doc->RemoveView(this);
 	}
 	return TRUE;
+}
+
+void HistogramGraphView::OnLButtonDown(UINT nFlags, CPoint point) 
+{
+	GraphPaneView::OnLButtonDown(nFlags, point);
+	moveMode = true;
+	setRasterSelection(point);
+
+
+}
+
+void HistogramGraphView::OnLButtonUp(UINT nFlags, CPoint point) 
+{
+	GraphPaneView::OnLButtonUp(nFlags, point);
+	moveMode = false;
+}
+
+void HistogramGraphView::OnMouseMove(UINT nFlags, CPoint point) 
+{
+  GraphPaneView::OnMouseMove(nFlags, point);
+  setRasterSelection(point);
+ 
+}
+
+void HistogramGraphView::setRasterSelection(CPoint point) {
+	if ( drawer && moveMode) {
+		String s = grdrw->sText(point);
+		String head = s.sHead(",");
+		//String tail = s.sTail(",").sTrimSpaces();
+		double v = head.rVal();
+		if ( v == rUNDEF)
+			return;
+		if ( drawer->getBaseMap()) {
+			RangeReal rr = drawer->getBaseMap()->rrMinMax();
+			drawer->setTresholdColor(color);
+			drawer->setTresholdRange(RangeReal(v - rr.rWidth()*spread, v + rr.rWidth()*spread),false);
+
+			PreparationParameters pp(NewDrawer::ptRENDER, 0);
+			drawer->prepareChildDrawers(&pp);
+			mcd->mpvGetView()->Invalidate();
+		}
+
+	}
+}
+
+void HistogramGraphView::setTresholdColor(const Color& clr) {
+	color = clr;
+}
+
+Color HistogramGraphView::getTresholdColor() const{
+	return color;
+}
+
+void HistogramGraphView::setSpread(double v) {
+	spread = v;
+}
+
+double HistogramGraphView::getSpread() const{
+	return spread;
 }
 
