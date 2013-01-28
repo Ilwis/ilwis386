@@ -60,16 +60,39 @@
 #define IMPEXP __declspec(dllimport)
 #endif
 
+class MapCompositionDoc;
+
+namespace ILWIS {
+class SpatialDataDrawer;
+class DrawerTool;
+}
+
 class IMPEXP HistogramGraphView: public GraphPaneView  
 {
 public:
 	HistogramGraphView();
+	HistogramGraphView(ILWIS::SpatialDataDrawer *drw,MapCompositionDoc *doc, ILWIS::DrawerTool *_tool);
 	virtual ~HistogramGraphView();
 	virtual void OnInitialUpdate();
+	void OnLButtonDown(UINT nFlags, CPoint point);
+	void OnMouseMove(UINT nFlags, CPoint point) ;
+	void OnLButtonUp(UINT nFlags, CPoint point) ;
+	void setTresholdColor(const Color& clr);
+	Color getTresholdColor() const;
+	void setSpread(double v);
+	double getSpread() const;
 protected:
   LRESULT OnViewSettings(WPARAM wP, LPARAM lP);
+  void setRasterSelection(CPoint point);
 	DECLARE_DYNCREATE(HistogramGraphView)
 	DECLARE_MESSAGE_MAP()
+
+	ILWIS::SpatialDataDrawer *drawer;
+	MapCompositionDoc *mcd;
+	ILWIS::DrawerTool *tool;
+	bool moveMode;
+	Color color;
+	double spread;
 };
 
 #endif // !defined(AFX_HISTOGRAMGRAPHVIEW_H__B2FEEFC5_A6FE_11D3_B824_00A0C9D5342F__INCLUDED_)
