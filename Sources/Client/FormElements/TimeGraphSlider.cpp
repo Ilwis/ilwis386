@@ -57,7 +57,7 @@ void TimeGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 		if ( !col.fValid())
 			useDefault = true;
 	}
-	RangeReal rr = !useDefault ? col->rrMinMax() : RangeReal(0.0, 1.0);
+	RangeReal rr = !useDefault ? col->vr()->rrMinMax() : RangeReal(0.0, 1.0);
 	CRect crct;
 	GetClientRect(crct);
 	Color c(GetSysColor(COLOR_3DFACE));
