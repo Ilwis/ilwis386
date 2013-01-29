@@ -65,7 +65,8 @@ gamma(0),
 mcd(0),
 index(ind),
 tresholdColor(Color(255,0,0)),
-colorSetIndex(0)
+colorSetIndex(0),
+useSingleValueForTreshold(false)
 {
 	BaseMap bmap;
 	if ( dr->isSet()) {
@@ -206,6 +207,7 @@ Color DrawingColor::clrRaw(long iRaw, NewDrawer::DrawMethod drm) const
 void DrawingColor::clrVal(const double * buf, long * bufOut, long iLen) const
 {
 	Representation rpr = drw->getRepresentation();
+	bool done = false;
 	if (!rpr.fValid())
 		return;
 	if (drw->isStretched()) {
@@ -214,11 +216,13 @@ void DrawingColor::clrVal(const double * buf, long * bufOut, long iLen) const
 		case LayerDrawer::smLINEAR:
 			{
 				RangeReal rr = getStretchRangeReal();
+				
 				for (long i = 0; i < iLen; ++i) {
 					double v = buf[i];
 					Color clr = rpr->clr(v, rr);
 					setTransparency(v, clr);
-					setTresholdColors(v, clr);
+					if (!done)
+						done = setTresholdColors(v, clr);
 					bufOut[i] = clr.iVal();
 				}
 			} break;
@@ -230,7 +234,8 @@ void DrawingColor::clrVal(const double * buf, long * bufOut, long iLen) const
 				for (long i = 0; i < iLen; ++i) {
 					Color clr = rpr->clr(log(buf[i] - rr.rLo()));
 					setTransparency(buf[i], clr);
-					setTresholdColors(buf[i], clr);
+					if (!done)
+						done = setTresholdColors(buf[i], clr);
 					bufOut[i] = clr.iVal();
 				}
 			} break;
@@ -242,7 +247,8 @@ void DrawingColor::clrVal(const double * buf, long * bufOut, long iLen) const
 			long v = buf[i];
 			Color clr = rpr->clr(buf[i], rr);
 			setTransparency(v, clr);
-			setTresholdColors(v, clr);
+			if (!done)
+				done = setTresholdColors(v, clr);
 			bufOut[i] = clr.iVal();
 		}
 	}
@@ -251,7 +257,8 @@ void DrawingColor::clrVal(const double * buf, long * bufOut, long iLen) const
 			double v = buf[i];
 			Color clr = rpr->clr(v);
 			setTransparency(v, clr);
-			setTresholdColors(v, clr);
+			if (!done)
+				done = setTresholdColors(v, clr);
 			bufOut[i] = clr.iVal();
 		}
 	}
@@ -265,12 +272,20 @@ inline void DrawingColor::setTransparency(double v, Color& clr) const{
 	}
 }
 
-inline void DrawingColor::setTresholdColors(double v, Color& clr) const{
+inline bool DrawingColor::setTresholdColors(double v, Color& clr) const{
 	if ( tresholdValues.fValid()) {
-		if ( tresholdValues.fContains(v)) {
-			clr = tresholdColor;
+		if ( !useSingleValueForTreshold) {
+			if ( tresholdValues.fContains(v)) {
+				clr = tresholdColor;
+			}
+		} else {
+			if ( v >= tresholdValues.rHi()) {
+				clr = tresholdColor;
+				return true;
+			}
 		}
 	}
+	return false;
 }
 
 
@@ -454,8 +469,9 @@ RangeReal DrawingColor::getTresholdRange() const{
 	return tresholdValues;
 }
 
-void DrawingColor::setTresholdRange(const RangeReal& rr){
+void DrawingColor::setTresholdRange(const RangeReal& rr, bool single){
 	tresholdValues = rr;
+	useSingleValueForTreshold = single;
 }
 
 String DrawingColor::store(const FileName& fnView, const String& parentSection) const{
