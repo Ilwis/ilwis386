@@ -91,6 +91,7 @@ namespace ILWIS {
 		void setMode(LineSetEditor2::States state) ;
 		void OnLButtonUp(UINT nFlags, CPoint point);
 		void OnLButtonDown(UINT nFlags, CPoint point);
+		void OnLButtonDblClk(UINT nFlags, CPoint point);
 		bool OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 		void OnMouseMove(UINT nFlags, CPoint point);
 		void checkUndefined(void *v, HTREEITEM it);

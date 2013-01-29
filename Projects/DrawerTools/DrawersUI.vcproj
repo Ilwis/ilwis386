@@ -288,6 +288,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\DrawersUI\FeatureTextTool.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\DrawersUI\FSWindow.cpp"
 				>
 			</File>
@@ -530,6 +534,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\DrawersUI\FeatureSetEditor2.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\FeatureTextTool.h"
 				>
 			</File>
 			<File

@@ -391,6 +391,9 @@ bool LineSetEditor2::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	return true;
 }
 
+void LineSetEditor2::OnLButtonDblClk(UINT nFlags, CPoint point){
+	return ;
+}
 void LineSetEditor2::OnLButtonDown(UINT nFlags, CPoint point){
 	editorState = editorState & ~ ( msLMOUSEUP | msMOUSEMOVE);
 	editorState |= msLMOUSEDOWN;
@@ -543,7 +546,10 @@ void LineSetEditor2::insertVertex(bool endEdit) {
 			Coord c = seq->getAt(k++);
 			if ( cbSnap.fValid() && cbSnap.fContains(c) && !pci.snapPoint.fUndef()) {
 				c = pci.snapPoint;
-				copyv->back() = c; // last point during an edit are always douvble as the mouse moves one of the points away from this location
+				if ( copyv->size() != 0)
+					copyv->back() = c; // last point during an edit are always douvble as the mouse moves one of the points away from this location
+				else
+					copyv->push_back(c);
 				pci.snapPoint = Coord(); // it has played its role invalidate it
 			}
 			copyv->push_back(c);

@@ -91,7 +91,7 @@
 #include "DrawersUI\AnnotationScaleBarDrawerTool.h"
 #include "SelectableTool.h"
 #include "DrawersUI\HistogramRasterTool.h"
-
+#include "FeatureTextTool.h"
 
 using namespace ILWIS;
 
@@ -147,6 +147,7 @@ DrawerToolInfoVector *createDrawerTool() {
 	infos->push_back(new DrawerToolInfo("AnnotationBorderTool",createAnnotationBorderTool));
 	infos->push_back(new DrawerToolInfo("SelectableTool",createSelectableTool));
 	infos->push_back(new DrawerToolInfo("HistogramRasterTool",createHistogramRasterTool));
+	infos->push_back(new DrawerToolInfo("FeatureTextTool",createFeatureTextTool));
 
 	return infos;
 }

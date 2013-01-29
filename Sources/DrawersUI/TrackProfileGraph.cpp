@@ -333,7 +333,8 @@ void TrackProfileGraph::setTrack(const vector<Coord>& crds){
 					track.push_back(LocInfo(c3,totDist + d));
 			}
 			else {
-				track[track.size() - 1].marker = true;
+				if ( track.size() > 0)
+					track[track.size() - 1].marker = true;
 				notDone = false;
 			}
 			++cnt;

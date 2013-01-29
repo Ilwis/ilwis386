@@ -541,9 +541,11 @@ void FeatureSetEditor::OnUpdateMode(CCmdUI* pCmdUI)
 void FeatureSetEditor::removeSelectedFeatures() {
 	for(SFMIter cur = selectedFeatures.begin(); cur != selectedFeatures.end(); ++cur) {
 		SelectedFeature *sfeature = (*cur).second;
-		bmapptr->removeFeature(sfeature->feature->getGuid(), sfeature->selectedCoords);
+		String oldGuid = sfeature->feature->getGuid();
+		bmapptr->removeFeature(oldGuid, sfeature->selectedCoords);
+		sfeature->feature = 0;
 		bool removed = false;
-		if ( sfeature->feature->getGuid() == currentGuid) {
+		if ( oldGuid == currentGuid) {
 			if ( sfeature->selectedCoords.size() == 0 || sfeature->selectedCoords.size() == sfeature->coords.size()) {
 				((ComplexDrawer *)drawer)->removeDrawer(sfeature->drawers[0]->getId());
 				currentGuid = sUNDEF;
