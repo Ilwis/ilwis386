@@ -47,6 +47,7 @@ void OpenGLText::calcScale() {
 }
 
 void OpenGLText::prepare(ILWIS::PreparationParameters *pp) {
+	ILWISSingleLock sl(&csAccess, TRUE,SOURCE_LOCATION);
 	if ( pp->type & ILWIS::NewDrawer::ptOFFSCREENSTART) {
 		tempFont = font;
 		createFont();
@@ -62,6 +63,7 @@ void OpenGLText::prepare(ILWIS::PreparationParameters *pp) {
 }
 
 void OpenGLText::renderText(const Coordinate& c, const String& text) {
+	ILWISSingleLock sl(&csAccess, TRUE,SOURCE_LOCATION);
 	glPushMatrix();
 	if ( !fixedSize && tempFont == 0) { // tempfont == 0 means we are copying, don't mess with font scaling now. it's ok
 		calcScale();
@@ -99,7 +101,15 @@ double OpenGLText::getHeight() const{
 	return 0;
 }
 
+void OpenGLText::setHeight(int h){
+	ILWISSingleLock sl(&csAccess, TRUE,SOURCE_LOCATION);
+	fontHeight = h ;
+	font->FaceSize(fontHeight);
+
+}
+
 CoordBounds OpenGLText::getTextExtent(const String& txt) const {
+	ILWISSingleLock sl(&csAccess, TRUE,SOURCE_LOCATION);
 	if ( font) {
 		//float x1,x2,y1,y2,z1,z2;
 		//font->BBox(txt.c_str(), x1,y1,z1,x2,y2,z2);

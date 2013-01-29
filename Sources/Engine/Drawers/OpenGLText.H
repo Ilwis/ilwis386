@@ -19,6 +19,8 @@ public:
 	CoordBounds getTextExtent(const String& txt) const;
 	void createFont();
 	void prepare(ILWIS::PreparationParameters *pp);
+	void setHeight(int h);
+
 private:
 	void calcScale();
 	FTFont *font;
@@ -32,6 +34,7 @@ private:
 	double scale;
 	String name;
 	ILWIS::RootDrawer *rootdrawer;
+	mutable CCriticalSection csAccess;
 
 
 };
