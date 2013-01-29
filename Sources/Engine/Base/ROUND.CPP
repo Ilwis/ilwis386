@@ -112,13 +112,13 @@ double niceOne(double v) {
 RangeReal roundRange(double rmin, double rmax, double& step) {
 //	double  minpow = rmin == 0 ? 0 : (int)log10(rmin);
 //	double maxpow = rmax == 0 ? 0 : (int)log10(rmax);
-	double tickLimits []  = {0,0.1,0.2,0.25,0.3,0.4,0.5,0.6,0.7,0.75,0.8,0.9,1.0};
+	double tickLimits []  = {0,0.1,0.2,0.25,0.5,1.0};
 	double range = rmax - rmin;
 	//long d =  abs(log10(range)) + 1;
 	long d =  log10(range) + 1;
 	step = range / pow(10.0,abs(d));
 	int i = 0;
-	while(i < 13) {
+	while(i < 6) {
 		if ( step < tickLimits[i]) {
 			step = tickLimits[i];
 			break;

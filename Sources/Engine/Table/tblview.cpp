@@ -731,6 +731,9 @@ void TableView::DeleteRec(long iStartRec, long iRecords)
 long TableView::iRecNew(long iRecords)
 {
 	long iRet = tbl->iRecNew(iRecords);
+	if ( iRet <= 0)
+		return 0;
+
 	if (iRecords) {
 		Updated();
 		tbl->Updated();

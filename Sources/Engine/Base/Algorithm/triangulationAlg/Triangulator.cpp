@@ -87,7 +87,6 @@ MapPolygonTriangulator::MapPolygonTriangulator() : Triangulator() {
 void MapPolygonTriangulator::getTriangulation(ILWIS::Polygon *polygon, vector<vector<Coord> >& triangleStrips) {
 	gpc_vertex_list exteriorBoundary;
 	vector<gpc_vertex_list> holes;
-
 	const LineString *ring = polygon->getExteriorRing();
 	exteriorBoundary.num_vertices = ring->getNumPoints() - 1;
 	exteriorBoundary.vertex = makeVertexList(ring);
@@ -97,14 +96,14 @@ void MapPolygonTriangulator::getTriangulation(ILWIS::Polygon *polygon, vector<ve
 		holes[i].num_vertices = ring->getNumPoints() - 1;
 		holes[i].vertex = makeVertexList(ring);
 	}
-	prepareList(exteriorBoundary, holes,triangleStrips);
+	prepareList(exteriorBoundary, holes,triangleStrips, polygon->iValue());
 	for(int i = 0; i < holes.size(); ++i) {
 		delete [] holes[i].vertex	;
 	}
 	delete [] exteriorBoundary.vertex;
 }
 
-void MapPolygonTriangulator::prepareList(gpc_vertex_list& exteriorBoundary, vector<gpc_vertex_list>& holes, vector<vector<Coord> >& triangleStrips) {
+void MapPolygonTriangulator::prepareList(gpc_vertex_list& exteriorBoundary, vector<gpc_vertex_list>& holes, vector<vector<Coord> >& triangleStrips, long iRaw) {
 
 	triangleStrips.clear();
 	gpc_polygon polygon;
@@ -126,6 +125,10 @@ void MapPolygonTriangulator::prepareList(gpc_vertex_list& exteriorBoundary, vect
 	long count = 2;
 	//count += tristrip.num_strips;
 	for(int i = 0; i < tristrip.num_strips; ++i) {
+		if ( iRaw == 5935) {
+			TRACE(String("%d\n", i).c_str());
+		}
+
 		gpc_vertex_list list = tristrip.strip[i];
 		int n = list.num_vertices;
 		count += n * 2 * 3 + 1;

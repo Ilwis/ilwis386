@@ -22,7 +22,7 @@ public:
 
 	void getTriangulation(ILWIS::Polygon *polygon,	vector<vector<Coord> >& triangleStrips);
 	void getTriangulation(long *buffer, long* count, const CoordSystem& csData, const RootDrawer* rootDrawer, vector<vector<Coord> >& triangleStrips);
-	virtual void prepareList(gpc_vertex_list& exteriorBoundary, vector<gpc_vertex_list>& holes,	vector<vector<Coord> >& triangleStrips);
+	virtual void prepareList(gpc_vertex_list& exteriorBoundary, vector<gpc_vertex_list>& holes,	vector<vector<Coord> >& triangleStrips, long iRaw);
 	long writeTriangleData(ofstream& file);
 
 private:

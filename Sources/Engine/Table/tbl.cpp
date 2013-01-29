@@ -1,39 +1,39 @@
 /***************************************************************
- ILWIS integrates image, vector and thematic data in one unique 
- and powerful package on the desktop. ILWIS delivers a wide 
- range of feautures including import/export, digitizing, editing, 
- analysis and display of data as well as production of 
- quality mapsinformation about the sensor mounting platform
- 
- Exclusive rights of use by 52°North Initiative for Geospatial 
- Open Source Software GmbH 2007, Germany
+ILWIS integrates image, vector and thematic data in one unique 
+and powerful package on the desktop. ILWIS delivers a wide 
+range of feautures including import/export, digitizing, editing, 
+analysis and display of data as well as production of 
+quality mapsinformation about the sensor mounting platform
 
- Copyright (C) 2007 by 52°North Initiative for Geospatial
- Open Source Software GmbH
+Exclusive rights of use by 52°North Initiative for Geospatial 
+Open Source Software GmbH 2007, Germany
 
- Author: Jan Hendrikse, Willem Nieuwenhuis,Wim Koolhoven 
- Bas Restsios, Martin Schouwenburg, Lichun Wang, Jelle Wind 
+Copyright (C) 2007 by 52°North Initiative for Geospatial
+Open Source Software GmbH
 
- Contact: Martin Schouwenburg; schouwenburg@itc.nl; 
- tel +31-534874371
+Author: Jan Hendrikse, Willem Nieuwenhuis,Wim Koolhoven 
+Bas Restsios, Martin Schouwenburg, Lichun Wang, Jelle Wind 
 
- This program is free software; you can redistribute it and/or
- modify it under the terms of the GNU General Public License
- version 2 as published by the Free Software Foundation.
+Contact: Martin Schouwenburg; schouwenburg@itc.nl; 
+tel +31-534874371
 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU General Public License for more details.
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+version 2 as published by the Free Software Foundation.
 
- You should have received a copy of the GNU General Public License
- along with this program (see gnu-gpl v2.txt); if not, write to
- the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- Boston, MA 02111-1307, USA or visit the web page of the Free
- Software Foundation, http://www.fsf.org.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
 
- Created on: 2007-02-8
- ***************************************************************/
+You should have received a copy of the GNU General Public License
+along with this program (see gnu-gpl v2.txt); if not, write to
+the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+Boston, MA 02111-1307, USA or visit the web page of the Free
+Software Foundation, http://www.fsf.org.
+
+Created on: 2007-02-8
+***************************************************************/
 
 
 #include "Engine\Base\DataObjects\valrange.h"
@@ -71,10 +71,10 @@ static Column colUNDEF;
 
 FileName Table::fnFromExpression(const String& sExpr)
 {
-  FileName fnTbl(sExpr, ".tbt", false);
-  if (File::fExist(fnTbl)) 
-    return fnTbl;
-  return FileName();
+	FileName fnTbl(sExpr, ".tbt", false);
+	if (File::fExist(fnTbl)) 
+		return fnTbl;
+	return FileName();
 }
 
 Table::Table()
@@ -85,15 +85,15 @@ Table::Table()
 Table::Table(const FileName& fn)
 : IlwisObject(listTbl)//, pGet(fn))
 {
-  String sSecPrf = Table::sSectionPrefix(fn.sExt);
-  if (fCIStrEqual(sSecPrf.sLeft(3), fn.sExt.sRight(3)))
-    sSecPrf = String();
-  MutexFileName mut(fn, sSecPrf);
-  TablePtr* p = Table::pGet(fn);
-  if (p) // if already open return it
-    SetPointer(p);
-  else {
-    SetPointer(TablePtr::create(fn, sSecPrf));
+	String sSecPrf = Table::sSectionPrefix(fn.sExt);
+	if (fCIStrEqual(sSecPrf.sLeft(3), fn.sExt.sRight(3)))
+		sSecPrf = String();
+	MutexFileName mut(fn, sSecPrf);
+	TablePtr* p = Table::pGet(fn);
+	if (p) // if already open return it
+		SetPointer(p);
+	else {
+		SetPointer(TablePtr::create(fn, sSecPrf));
 		if (ptr())
 			ptr()->Load();
 	}
@@ -102,14 +102,14 @@ Table::Table(const FileName& fn)
 Table::Table(const FileName& fn, const Domain& dm)
 : IlwisObject(listTbl)
 {
-  SetPointer(new TablePtr(fn, FileName(fn, ".TB#"), dm, String()));
+	SetPointer(new TablePtr(fn, FileName(fn, ".TB#"), dm, String()));
 }
 
 Table::Table(const FileName& fn, const String& sExpression)
 : IlwisObject(listTbl)
 {
 	bool fLoadColumns;
-  MutexFileName mut(fn);
+	MutexFileName mut(fn);
 	SetPointer(TablePtr::create(fn, sExpression, fLoadColumns));
 	if (fLoadColumns)
 		ptr()->Load();
@@ -118,7 +118,7 @@ Table::Table(const FileName& fn, const String& sExpression)
 Table::Table(const String& sExpression)
 : IlwisObject(listTbl)
 {
-  bool fLoadColumns;
+	bool fLoadColumns;
 	FileName fn = fnFromExpression(sExpression); 
 	if (fn.fValid()) {
 		String sSecPrf = Table::sSectionPrefix(fn.sExt);
@@ -143,14 +143,14 @@ Table::Table(const String& sExpression)
 Table::Table(const String& sExpression, const String& sPath)
 : IlwisObject(listTbl)
 {
-  bool fLoadColumns;
-  FileName fn = fnFromExpression(sExpression); 
-  if (fn.fValid()) {
-    fn.Dir(sPath);
-    String sSecPrf = Table::sSectionPrefix(fn.sExt);
-    if (fCIStrEqual(sSecPrf.sLeft(3), fn.sExt.sRight(3)))
-      sSecPrf = String();
-    MutexFileName mut(fn);
+	bool fLoadColumns;
+	FileName fn = fnFromExpression(sExpression); 
+	if (fn.fValid()) {
+		fn.Dir(sPath);
+		String sSecPrf = Table::sSectionPrefix(fn.sExt);
+		if (fCIStrEqual(sSecPrf.sLeft(3), fn.sExt.sRight(3)))
+			sSecPrf = String();
+		MutexFileName mut(fn);
 		TablePtr* p = Table::pGet(fn);
 		if (p) // if already open return it
 			SetPointer(p);
@@ -158,12 +158,12 @@ Table::Table(const String& sExpression, const String& sPath)
 			SetPointer(TablePtr::create(fn, sSecPrf));
 			ptr()->Load();
 		}
-  }
-  else {
-    SetPointer(TablePtr::create(FileName::fnPathOnly(sPath), sExpression, fLoadColumns));
-    if (fLoadColumns)
-      ptr()->Load();
-  }
+	}
+	else {
+		SetPointer(TablePtr::create(FileName::fnPathOnly(sPath), sExpression, fLoadColumns));
+		if (fLoadColumns)
+			ptr()->Load();
+	}
 }
 
 Table::Table(const Table& tbl)
@@ -173,86 +173,86 @@ Table::Table(const Table& tbl)
 
 String Table::sSectionPrefix(const String& sExt)
 {
-  if (fCIStrEqual(sExt, ".dom"))
-    return "dom:";
-  else if (fCIStrEqual(sExt,".rpr"))
-    return "rpr:";
-  else if (fCIStrEqual(sExt, ".grf"))
-    return "grf:";
-  return String();
+	if (fCIStrEqual(sExt, ".dom"))
+		return "dom:";
+	else if (fCIStrEqual(sExt,".rpr"))
+		return "rpr:";
+	else if (fCIStrEqual(sExt, ".grf"))
+		return "grf:";
+	return String();
 }
 
 void Table::Export(const FileName& fn) const
 {
-  if (!ptr())
-    return;
-  FileName fnExport = fn;
-  if (fnExport.sExt.length() == 0)
-    fnExport.sExt = ".tbl";
-  if (fnExport == ptr()->fnObj)
-    NotCreatedError(fnExport);
-  ptr()->Export(fnExport);
+	if (!ptr())
+		return;
+	FileName fnExport = fn;
+	if (fnExport.sExt.length() == 0)
+		fnExport.sExt = ".tbl";
+	if (fnExport == ptr()->fnObj)
+		NotCreatedError(fnExport);
+	ptr()->Export(fnExport);
 }
 
 void TablePtr::Export(const FileName& fn)
 {
-  if (!fCalculated())
-    Calc();
-  if (!fCalculated())
-    return;
-  pts->Export(fn);
+	if (!fCalculated())
+		Calc();
+	if (!fCalculated())
+		return;
+	pts->Export(fn);
 }
 
 TablePtr* Table::pGet(const FileName& fn)
 {
-  if (!fn.fValid())
-    return 0;
-  String sSecPrf = Table::sSectionPrefix(fn.sExt);
-  if (fCIStrEqual(sSecPrf.sLeft(3), fn.sExt.sRight(3)))
-    sSecPrf = String();
-  ILWISSingleLock sl(&listTbl.csAccess, TRUE, SOURCE_LOCATION);
+	if (!fn.fValid())
+		return 0;
+	String sSecPrf = Table::sSectionPrefix(fn.sExt);
+	if (fCIStrEqual(sSecPrf.sLeft(3), fn.sExt.sRight(3)))
+		sSecPrf = String();
+	ILWISSingleLock sl(&listTbl.csAccess, TRUE, SOURCE_LOCATION);
 
-  for (DLIterCP<IlwisObjectPtr> iter(&listTbl); iter.fValid(); ++iter) {
-    TablePtr* tb = static_cast<TablePtr*>(iter());
-    if ((0 != tb) &&
-        (fn == tb->fnObj) &&
-        fCIStrEqual(tb->sSectionPrefix, sSecPrf))
-      return tb;
-  }
-  return 0;
+	for (DLIterCP<IlwisObjectPtr> iter(&listTbl); iter.fValid(); ++iter) {
+		TablePtr* tb = static_cast<TablePtr*>(iter());
+		if ((0 != tb) &&
+			(fn == tb->fnObj) &&
+			fCIStrEqual(tb->sSectionPrefix, sSecPrf))
+			return tb;
+	}
+	return 0;
 }
 
 TablePtr* TablePtr::create(const FileName& fn, const String& sSecPrf)
 {
-  if (!File::fExist(fn))
-    NotFoundError(fn);
+	if (!File::fExist(fn))
+		NotFoundError(fn);
 
-  MutexFileName mut(fn, sSecPrf);
-  TablePtr* p = Table::pGet(fn);
-  if (p) // if already open return it
-    return p;
-  String sType;
-  ObjectInfo::ReadElement(String("%STable", sSecPrf).c_str(), "Type", fn, sType);
+	MutexFileName mut(fn, sSecPrf);
+	TablePtr* p = Table::pGet(fn);
+	if (p) // if already open return it
+		return p;
+	String sType;
+	ObjectInfo::ReadElement(String("%STable", sSecPrf).c_str(), "Type", fn, sType);
 	if ("" == sType)
 		return 0;
-  if (fCIStrEqual("Table2Dim", sType))
-    return new Table2DimPtr(fn);
-  return new TablePtr(fn, sSecPrf);
+	if (fCIStrEqual("Table2Dim", sType))
+		return new Table2DimPtr(fn);
+	return new TablePtr(fn, sSecPrf);
 }
 
 String TablePtr::sType() const
 {
-  if (0 != ptv)
-    return ptv->sType();
-  else if (fDependent()) {
-    // read from obj def file if available
-    String s;
-    if (0 != ReadElement("TableVirtual", "DependentType", s))
-      return s;
-    return "Dependent Table";
-  }
-  else
-    return "Table";
+	if (0 != ptv)
+		return ptv->sType();
+	else if (fDependent()) {
+		// read from obj def file if available
+		String s;
+		if (0 != ReadElement("TableVirtual", "DependentType", s))
+			return s;
+		return "Dependent Table";
+	}
+	else
+		return "Table";
 }
 
 TablePtr* TablePtr::create(const FileName& fn, const String& sExpression, bool& fLoadColumns)
@@ -261,13 +261,13 @@ TablePtr* TablePtr::create(const FileName& fn, const String& sExpression, bool& 
 	String sFormat = IlwisObjectPtr::sParseFunc(sExpression).sTrimSpaces();
 	if ( fCIStrEqual(sFormat , "table"))
 		return ImportTable(fn, sExpression);
-	
+
 	if (fn.sFile.length() == 0)
 	{
 		// no file name, this means that:
 		// case 1: sExpression contains table name
 		// case 2: sExpression contains any other virtual table
-		
+
 		// check if sExpression is an existing table on disk
 		FileName fnTbl(sExpression, ".tbt", false);
 		if (File::fExist(fnTbl)) { // case 1
@@ -292,14 +292,14 @@ TablePtr* TablePtr::create(const FileName& fn, const String& sExpression, bool& 
 		TablePtr* p = Table::pGet(filnam);
 		if (p) // if already open then can't create it
 			NotCreatedError(filnam);
-		
+
 		if (((fCIStrEqual(filnam.sExt,".his"))
 			|| (fCIStrEqual(filnam.sExt,".hsp"))
 			|| (fCIStrEqual(filnam.sExt,".hsa"))
 			|| (fCIStrEqual(filnam.sExt,".hss")))
 			&& ObjectInfo::fUpToDate(filnam)) {
-			fLoadColumns = true;
-			return new TablePtr(filnam, String(), false);
+				fLoadColumns = true;
+				return new TablePtr(filnam, String(), false);
 		}
 	}
 	// If we arrived here, 'filnam' does not exist, or it exists and is not up-to-date
@@ -341,7 +341,7 @@ TablePtr* TablePtr::create(const FileName& fn, const String& sExpression, bool& 
 			File::Remove(FileName(filnam, ".ba~", true).sShortName().c_str());
 		else // TablePtr creation failed; restore the backup that we have
 			File(FileName(filnam, ".ba~", true).sShortName()).Rename(filnam.sShortName());
-		
+
 	return p;
 }
 
@@ -359,7 +359,7 @@ TablePtr::TablePtr(const FileName& fn, const String& sSecPrf, bool fCreate)
 		return;
 	if (!File::fExist(fn))
 		NotFoundError(fn);
-	
+
 	Domain dom;
 	ReadElement(sSection("Table").c_str(), "Domain", dom);
 	if (!dom.fValid())
@@ -427,18 +427,18 @@ void TablePtr::Load()
 	}
 	CheckNrRecs();
 	{ Table t;
-		t.SetPointer(this);
-		bool fCalculated = false;
-		for (long i=0; i< iCols(); ++i) {
-			Column cl = col(i);
-			if (cl.fValid())
-				if (!cl->fCalculated()) {
-					cl->Calc();
-					fCalculated = true;
-				}
-		}
-		iRef++; // otherwise is 'this' deleted in destructor of Table t
-		fChanged = false; // 16/6/00 Wim: prevent Store() in destructor of t
+	t.SetPointer(this);
+	bool fCalculated = false;
+	for (long i=0; i< iCols(); ++i) {
+		Column cl = col(i);
+		if (cl.fValid())
+			if (!cl->fCalculated()) {
+				cl->Calc();
+				fCalculated = true;
+			}
+	}
+	iRef++; // otherwise is 'this' deleted in destructor of Table t
+	fChanged = false; // 16/6/00 Wim: prevent Store() in destructor of t
 	}
 	iRef--; // see iRef++
 }
@@ -446,163 +446,163 @@ void TablePtr::Load()
 TablePtr::TablePtr(const FileName& fn, const FileName& _fnDat, const Domain& dm, const String& sSecPrf)
 : IlwisObjectPtr(fn, true, ".tbt"), pts(0), ptv(0), fnDat(_fnDat)
 {
-  sSectionPrefix = sSecPrf;
-  if (fCIStrEqual(sSectionPrefix.sLeft(3), fn.sExt.sRight(3)))
-    sSectionPrefix = String();
-  SetDomain(dm);
-  _iCols = 0;
+	sSectionPrefix = sSecPrf;
+	if (fCIStrEqual(sSectionPrefix.sLeft(3), fn.sExt.sRight(3)))
+		sSectionPrefix = String();
+	SetDomain(dm);
+	_iCols = 0;
 
-  pts = new TableBinary(fn, *this, fnDat);
+	pts = new TableBinary(fn, *this, fnDat);
 }
 
 TablePtr::TablePtr(const FileName& fn, const Domain& dm,  ParmList& pm, const String& sSecPrf)
 : IlwisObjectPtr(fn, true, ".tbt"), pts(0), ptv(0)
 {
-  sSectionPrefix = sSecPrf;
-  SetDomain(dm);
-  _iCols = 0;
-  pts = new TableForeign(fn, *this, pm);
+	sSectionPrefix = sSecPrf;
+	SetDomain(dm);
+	_iCols = 0;
+	pts = new TableForeign(fn, *this, pm);
 }
 
 TablePtr::TablePtr(const FileName& fn, const FileName& _fnDat, long iRecs, const String& sSecPrf)
 : IlwisObjectPtr(fn, true, ".tbt"), pts(0), ptv(0), fnDat(_fnDat)
 {
-  sSectionPrefix = sSecPrf;
-  if (fCIStrEqual(sSectionPrefix.sLeft(3), fn.sExt.sRight(3)))
-    sSectionPrefix = String();
-  SetDomain(Domain("string"));
-  _iCols = 0;
-  _iRecs = iRecs;
-  _iOffset = 1;
-  pts = new TableBinary(fn, *this, fnDat);
+	sSectionPrefix = sSecPrf;
+	if (fCIStrEqual(sSectionPrefix.sLeft(3), fn.sExt.sRight(3)))
+		sSectionPrefix = String();
+	SetDomain(Domain("string"));
+	_iCols = 0;
+	_iRecs = iRecs;
+	_iOffset = 1;
+	pts = new TableBinary(fn, *this, fnDat);
 }
 
 void TablePtr::BreakDependency()
 {
-  if (!fCalculated())
-    Calc();
-  if (!fCalculated())
-    return; 
-  ILWISSingleLock sl(&csAccess, TRUE, SOURCE_LOCATION);
-  delete ptv;
-  ptv = 0;
-  fChanged = true;
+	if (!fCalculated())
+		Calc();
+	if (!fCalculated())
+		return; 
+	ILWISSingleLock sl(&csAccess, TRUE, SOURCE_LOCATION);
+	delete ptv;
+	ptv = 0;
+	fChanged = true;
 
-  ObjectInfo::WriteElement("Table", "Type", fnObj, "TableStore");
-  Store();
+	ObjectInfo::WriteElement("Table", "Type", fnObj, "TableStore");
+	Store();
 }
 
 
 TablePtr::~TablePtr()
 {
-  if (0 != pts) {
-    delete pts;
-    pts = 0;
-  }  
-  if (0 != ptv) {
-    delete ptv;
-    ptv = 0;
-  }  
+	if (0 != pts) {
+		delete pts;
+		pts = 0;
+	}  
+	if (0 != ptv) {
+		delete ptv;
+		ptv = 0;
+	}  
 }
 
 void TablePtr::Store()
 {
-  ILWISSingleLock sl(&csAccess, TRUE, SOURCE_LOCATION);
-  if ((0 != ptv) && (sDescription == ""))
-    sDescription = ptv->sExpression();
-  if (fnObj.sFile.length() == 0)  // empty file name
-    return;
-  if (fCIStrEqual(fnObj.sExt, ".tbt") || fCIStrEqual(fnObj.sExt, ".his") || fCIStrEqual(fnObj.sExt, ".hsa") 
-      || fCIStrEqual(fnObj.sExt, ".hss") || fCIStrEqual(fnObj.sExt, ".hsp")
-      || fCIStrEqual(fnObj.sExt, ".ta2")) {
-    IlwisObjectPtr::Store();
-    WriteElement("Ilwis", "Type", "Table");
-  }
-  else
-    WriteBaseInfo(sSection("Table").c_str());  
-  WriteElement(sSection("Table").c_str(), "Domain", dm());
-  WriteElement(sSection("Table").c_str(), "Columns", (long)iCols());
-  WriteElement(sSection("Table").c_str(), "Records", iRecs());
-  if (dm()->pdnone())
-    if (iOffset() != 1)
-      WriteElement(sSection("Table").c_str(), "Offset", iOffset());
-  if (0 != pts)
-    pts->Store();
-  else
-    TableStore::UnStore(fnObj);
-  if (0 != ptv)
-    ptv->Store();
-  String s;
-  if (0 == ReadElement(sSection("Table").c_str(), "Type", s))
-    WriteElement(sSection("Table").c_str(), "Type", "TableStore");
+	ILWISSingleLock sl(&csAccess, TRUE, SOURCE_LOCATION);
+	if ((0 != ptv) && (sDescription == ""))
+		sDescription = ptv->sExpression();
+	if (fnObj.sFile.length() == 0)  // empty file name
+		return;
+	if (fCIStrEqual(fnObj.sExt, ".tbt") || fCIStrEqual(fnObj.sExt, ".his") || fCIStrEqual(fnObj.sExt, ".hsa") 
+		|| fCIStrEqual(fnObj.sExt, ".hss") || fCIStrEqual(fnObj.sExt, ".hsp")
+		|| fCIStrEqual(fnObj.sExt, ".ta2")) {
+			IlwisObjectPtr::Store();
+			WriteElement("Ilwis", "Type", "Table");
+	}
+	else
+		WriteBaseInfo(sSection("Table").c_str());  
+	WriteElement(sSection("Table").c_str(), "Domain", dm());
+	WriteElement(sSection("Table").c_str(), "Columns", (long)iCols());
+	WriteElement(sSection("Table").c_str(), "Records", iRecs());
+	if (dm()->pdnone())
+		if (iOffset() != 1)
+			WriteElement(sSection("Table").c_str(), "Offset", iOffset());
+	if (0 != pts)
+		pts->Store();
+	else
+		TableStore::UnStore(fnObj);
+	if (0 != ptv)
+		ptv->Store();
+	String s;
+	if (0 == ReadElement(sSection("Table").c_str(), "Type", s))
+		WriteElement(sSection("Table").c_str(), "Type", "TableStore");
 	fChanged = false;
 }
 
 void TablePtr::SetDomain(const Domain& dom)
 {
-  ILWISSingleLock sl(&csAccess, TRUE, SOURCE_LOCATION);
-  _dm = dom;
-  _iRecs = 0;
-  _iOffset = 1;
-  DomainSort* ds = dynamic_cast<DomainSort*>(dm().ptr());
-  if (ds) {
-    _iRecs = ds->iSize();
-  }
-  else {
-    DomainValueInt* dvi = dm()->pdvi();
-    if (dvi) {
-      RangeInt ri = dvi->riMinMax();
-      _iOffset = dvi->iRaw(ri.iLo());
-      _iRecs = ri.iHi() - ri.iLo() + 1;
-    }
-    else {
-      DomainImage* di = dm()->pdi();
-      if (di) {
-        _iOffset = 0;
-        _iRecs = 256;
-      }
-      else {
-        DomainPicture* dp = dm()->pdp();
-        if (dp) {
-          _iOffset = 0;
-          _iRecs = dp->iColors();
-        }
-        else {
-          DomainBit* db = dynamic_cast<DomainBit*>(dm().ptr());
-          if (db) {
-            _iOffset = 0;
-            _iRecs = 2;
-          }
-          else {
-            DomainBool* db = dynamic_cast<DomainBool*>(dm().ptr());
-            if (db) {
-              _iOffset = 0;
-              _iRecs = 2;
-            }
-            else {
-              if (!dm()->pds() && !dm()->pdnone())
-                InvalidTypeError(fnObj, "Domain", typeid(*(dm().ptr())).name());
-            }
-          }
-        }
-      }
-    }
-  }
+	ILWISSingleLock sl(&csAccess, TRUE, SOURCE_LOCATION);
+	_dm = dom;
+	_iRecs = 0;
+	_iOffset = 1;
+	DomainSort* ds = dynamic_cast<DomainSort*>(dm().ptr());
+	if (ds) {
+		_iRecs = ds->iSize();
+	}
+	else {
+		DomainValueInt* dvi = dm()->pdvi();
+		if (dvi) {
+			RangeInt ri = dvi->riMinMax();
+			_iOffset = dvi->iRaw(ri.iLo());
+			_iRecs = ri.iHi() - ri.iLo() + 1;
+		}
+		else {
+			DomainImage* di = dm()->pdi();
+			if (di) {
+				_iOffset = 0;
+				_iRecs = 256;
+			}
+			else {
+				DomainPicture* dp = dm()->pdp();
+				if (dp) {
+					_iOffset = 0;
+					_iRecs = dp->iColors();
+				}
+				else {
+					DomainBit* db = dynamic_cast<DomainBit*>(dm().ptr());
+					if (db) {
+						_iOffset = 0;
+						_iRecs = 2;
+					}
+					else {
+						DomainBool* db = dynamic_cast<DomainBool*>(dm().ptr());
+						if (db) {
+							_iOffset = 0;
+							_iRecs = 2;
+						}
+						else {
+							if (!dm()->pds() && !dm()->pdnone())
+								InvalidTypeError(fnObj, "Domain", typeid(*(dm().ptr())).name());
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 void TablePtr::CheckNrRecs()
 {
-  ILWISSingleLock sl(&csAccess, TRUE, SOURCE_LOCATION);
-  DomainSort* ds = dm()->pdsrt();
-  if (ds) {
-    long iNrNew = ds->iSize() - iRecs();
-    if (iNrNew > 0) {
-      iRecNew(0); // synchronizing if needed
-      iNrNew = ds->iSize() - iRecs();
-      if (iNrNew > 0)
-        iRecNew(iNrNew);
-    }
-  }
+	ILWISSingleLock sl(&csAccess, TRUE, SOURCE_LOCATION);
+	DomainSort* ds = dm()->pdsrt();
+	if (ds) {
+		long iNrNew = ds->iSize() - iRecs();
+		if (iNrNew > 0) {
+			iRecNew(0); // synchronizing if needed
+			iNrNew = ds->iSize() - iRecs();
+			if (iNrNew > 0)
+				iRecNew(iNrNew);
+		}
+	}
 }
 
 long TablePtr::iNettoRecs() const
@@ -616,220 +616,222 @@ long TablePtr::iNettoRecs() const
 
 bool TablePtr::fDataReadOnly()
 {
-  ILWISSingleLock sl(&csAccess, TRUE, SOURCE_LOCATION);
-  if (fReadOnly())
-    return true;
-  if (0 == pts)
-    Load();
-  if (0 == pts)
-    return true;
-  if (!pts->fWriteAvailable()) // e.g. TableCommaDelimited
-    return true;
-  // it should be able to add columns to dependent tables
-  return false;
+	ILWISSingleLock sl(&csAccess, TRUE, SOURCE_LOCATION);
+	if (fReadOnly())
+		return true;
+	if (0 == pts)
+		Load();
+	if (0 == pts)
+		return true;
+	if (!pts->fWriteAvailable()) // e.g. TableCommaDelimited
+		return true;
+	// it should be able to add columns to dependent tables
+	return false;
 }
 
 void TablePtr::Changed(const FileName& fnTbl, bool fChanged)
 {
-  TablePtr* ptr = Table::pGet(fnTbl);
-  if (0 != ptr)
-    ptr->Updated();
+	TablePtr* ptr = Table::pGet(fnTbl);
+	if (0 != ptr)
+		ptr->Updated();
 }
 
 void TablePtr::Updated()
 {
-  IlwisObjectPtr::Updated();
+	IlwisObjectPtr::Updated();
 }
 
 void Table::EnlargeTables(const DomainPtr* dm)
 {
-  ILWISSingleLock sl(&listTbl.csAccess, TRUE);
-  for (DLIterP<IlwisObjectPtr> iter(&listTbl); iter.fValid(); ++iter) {
-    TablePtr* ptr = static_cast<TablePtr*>(iter());
-    if (dm == ptr->dm().ptr())
-      ptr->CheckNrRecs();
-  }
+	ILWISSingleLock sl(&listTbl.csAccess, TRUE);
+	for (DLIterP<IlwisObjectPtr> iter(&listTbl); iter.fValid(); ++iter) {
+		TablePtr* ptr = static_cast<TablePtr*>(iter());
+		if (dm == ptr->dm().ptr())
+			ptr->CheckNrRecs();
+	}
 }
 
 
 const Column& TablePtr::colNew(const String& sName, const DomainValueRangeStruct& dvs)
 {
-  ILWISSingleLock sl(&csAccess, TRUE, SOURCE_LOCATION);
-  if (0 != pts && dvs.dm().fValid())
-    return pts->colNew(sName, dvs);
-  return colUNDEF;
+	ILWISSingleLock sl(&csAccess, TRUE, SOURCE_LOCATION);
+	if (0 != pts && dvs.dm().fValid())
+		return pts->colNew(sName, dvs);
+	return colUNDEF;
 }
 
 const Column& TablePtr::colNew(const String& sName, const Domain& dm, const ValueRange& vr)
 {
-  ILWISSingleLock sl(&csAccess, TRUE, SOURCE_LOCATION);
-  return colNew(sName, DomainValueRangeStruct(dm, vr));
+	ILWISSingleLock sl(&csAccess, TRUE, SOURCE_LOCATION);
+	return colNew(sName, DomainValueRangeStruct(dm, vr));
 }
 
 long TablePtr::iCol(const String& sName) const
 {
-  ILWISSingleLock sl(const_cast<CCriticalSection*>(&csAccess), TRUE, SOURCE_LOCATION);
-  if (0 != pts)
-    return pts->iCol(sName);
-  return -1;
+	ILWISSingleLock sl(const_cast<CCriticalSection*>(&csAccess), TRUE, SOURCE_LOCATION);
+	if (0 != pts)
+		return pts->iCol(sName);
+	return -1;
 }
 
 const Column& TablePtr::col(int c) const
 {
-  ILWISSingleLock sl(const_cast<CCriticalSection*>(&csAccess), TRUE, SOURCE_LOCATION);
-  if (0 != pts)
-    return pts->col(c);
-  return colUNDEF;
+	ILWISSingleLock sl(const_cast<CCriticalSection*>(&csAccess), TRUE, SOURCE_LOCATION);
+	if (0 != pts)
+		return pts->col(c);
+	return colUNDEF;
 }
 
 const Column& TablePtr::col(const String& sName) const
 {
-  ILWISSingleLock sl(const_cast<CCriticalSection*>(&csAccess), TRUE, SOURCE_LOCATION);
-  if (0 != pts)
-    return pts->col(sName);
-  return colUNDEF;
+	ILWISSingleLock sl(const_cast<CCriticalSection*>(&csAccess), TRUE, SOURCE_LOCATION);
+	if (0 != pts)
+		return pts->col(sName);
+	return colUNDEF;
 }
 
 const Column& TablePtr::AddCol(const Column& col)
 {
-  ILWISSingleLock sl(&csAccess, TRUE, SOURCE_LOCATION);
-  if (0 != pts)
-    return pts->AddCol(col);
-  return colUNDEF;
+	ILWISSingleLock sl(&csAccess, TRUE, SOURCE_LOCATION);
+	if (0 != pts)
+		return pts->AddCol(col);
+	return colUNDEF;
 }
 
 void TablePtr::RemoveCol(Column& col)
 {
-  ILWISSingleLock sl(&csAccess, TRUE, SOURCE_LOCATION);
-  if (0 != pts)
-    pts->RemoveCol(col);
+	ILWISSingleLock sl(&csAccess, TRUE, SOURCE_LOCATION);
+	if (0 != pts)
+		pts->RemoveCol(col);
 }
 
 void TablePtr::DeleteRec(long iStartRec, long iRecords)
 {
-  ILWISSingleLock sl(&csAccess, TRUE, SOURCE_LOCATION);
-  if (0 != pts)
-    pts->DeleteRec(iStartRec, iRecords);
-  else if (iRecords > 0)
-    _iRecs -= iRecords;
+	ILWISSingleLock sl(&csAccess, TRUE, SOURCE_LOCATION);
+	if (0 != pts)
+		pts->DeleteRec(iStartRec, iRecords);
+	else if (iRecords > 0)
+		_iRecs -= iRecords;
 }
 
 long TablePtr::iRecNew(long iRecords)
 {
-  ILWISSingleLock sl(&csAccess, TRUE, SOURCE_LOCATION);
-  if (0 != pts)
-    return pts->iRecNew(iRecords);
-  long rec = iRecs() + iOffset();
-  _iRecs += iRecords;
-  return rec;
+	if ( iRecords <= 0)
+		return 0;
+	ILWISSingleLock sl(&csAccess, TRUE, SOURCE_LOCATION);
+	if (0 != pts)
+		return pts->iRecNew(iRecords);
+	long rec = iRecs() + iOffset();
+	_iRecs += iRecords;
+	return rec;
 }
 
 DomainInfo TablePtr::dminf() const
 {
-  return DomainInfo(fnObj, sSection("Table").c_str());
+	return DomainInfo(fnObj, sSection("Table").c_str());
 }
 
 void TablePtr::Rename(const FileName& fnNew)
 {
-  IlwisObjectPtr::Rename(fnNew);
+	IlwisObjectPtr::Rename(fnNew);
 }
 
 void TablePtr::GetDataFiles(Array<FileName>& afnDat, Array<String>* asSection, Array<String>* asEntry) const
 {
-  ILWISSingleLock sl(const_cast<CCriticalSection*>(&csAccess), TRUE, SOURCE_LOCATION);
-  IlwisObjectPtr::GetDataFiles(afnDat, asSection, asEntry);
-  if (0 != pts)
-    pts->GetDataFiles(afnDat, asSection, asEntry);
+	ILWISSingleLock sl(const_cast<CCriticalSection*>(&csAccess), TRUE, SOURCE_LOCATION);
+	IlwisObjectPtr::GetDataFiles(afnDat, asSection, asEntry);
+	if (0 != pts)
+		pts->GetDataFiles(afnDat, asSection, asEntry);
 }
 
 void TablePtr::GetObjectDependencies(Array<FileName>& afnObjDep)
 {
-  ILWISSingleLock sl(&csAccess, TRUE, SOURCE_LOCATION);
-  ObjectDependency::Read(fnObj, afnObjDep);
-  if (0 != pts)
-    pts->GetObjectDependencies(afnObjDep);
+	ILWISSingleLock sl(&csAccess, TRUE, SOURCE_LOCATION);
+	ObjectDependency::Read(fnObj, afnObjDep);
+	if (0 != pts)
+		pts->GetObjectDependencies(afnObjDep);
 }
 
 String TablePtr::sSection(const String& sSect) const
 {
-  String s = sSectionPrefix;
-  s &= sSect;
-  return s;
+	String s = sSectionPrefix;
+	s &= sSect;
+	return s;
 }
 
 String TablePtr::sSection(const char* sSect) const
 {
-  String s(sSect);
-  return sSection(s);
+	String s(sSect);
+	return sSection(s);
 }
 
 bool TablePtr::fDependent() const
 {
-  ILWISSingleLock sl(const_cast<CCriticalSection*>(&csAccess), TRUE, SOURCE_LOCATION);
-  if (0 != ptv)
-    return true;
-  String s;
-  ObjectInfo::ReadElement("Table", "Type", fnObj, s);
-  return fCIStrEqual(s, "TableVirtual");
+	ILWISSingleLock sl(const_cast<CCriticalSection*>(&csAccess), TRUE, SOURCE_LOCATION);
+	if (0 != ptv)
+		return true;
+	String s;
+	ObjectInfo::ReadElement("Table", "Type", fnObj, s);
+	return fCIStrEqual(s, "TableVirtual");
 }
 
 String TablePtr::sExpression() const
 {
-  ILWISSingleLock sl(const_cast<CCriticalSection*>(&csAccess), TRUE, SOURCE_LOCATION);
-  if (0 != ptv)
-    return ptv->sExpression();
-  String s;
-  s = IlwisObjectPtr::sExpression();
-  if (s.length() == 0) // for downward compatibility with 2.02
-    ObjectInfo::ReadElement("TableVirtual", "Expression", fnObj, s);
-  return s;
+	ILWISSingleLock sl(const_cast<CCriticalSection*>(&csAccess), TRUE, SOURCE_LOCATION);
+	if (0 != ptv)
+		return ptv->sExpression();
+	String s;
+	s = IlwisObjectPtr::sExpression();
+	if (s.length() == 0) // for downward compatibility with 2.02
+		ObjectInfo::ReadElement("TableVirtual", "Expression", fnObj, s);
+	return s;
 }
 
 bool TablePtr::fCalculated() const
 // returns true if a calculated result exists
 {
-  if (!fDependent())
-    return IlwisObjectPtr::fCalculated();
-  ILWISSingleLock sl(const_cast<CCriticalSection*>(&csCalc), TRUE);
-  return 0 != pts;
+	if (!fDependent())
+		return IlwisObjectPtr::fCalculated();
+	ILWISSingleLock sl(const_cast<CCriticalSection*>(&csCalc), TRUE);
+	return 0 != pts;
 } 
 
 bool TablePtr::fDefOnlyPossible() const
 // returns true if data can be retrieved without complete calculation (on the fly)
 {
-  if (!fDependent())
-    return IlwisObjectPtr::fDefOnlyPossible();
-  bool f;
-  if (0 != ObjectInfo::ReadElement("TableVirtual", "DefOnlyPossible", fnObj, f))
-    return f;
-  return false;
+	if (!fDependent())
+		return IlwisObjectPtr::fDefOnlyPossible();
+	bool f;
+	if (0 != ObjectInfo::ReadElement("TableVirtual", "DefOnlyPossible", fnObj, f))
+		return f;
+	return false;
 }
 
 void TablePtr::Calc(bool fMakeUpToDate)
 // calculates the result     
 {
-  ILWISSingleLock sl(&csCalc, TRUE, SOURCE_LOCATION);
-  OpenTableVirtual();
-  if (fMakeUpToDate)
-    if (!objdep.fUpdateAll())
-      return;
-  if (0 != ptv)
-    ptv->Freeze();
+	ILWISSingleLock sl(&csCalc, TRUE, SOURCE_LOCATION);
+	OpenTableVirtual();
+	if (fMakeUpToDate)
+		if (!objdep.fUpdateAll())
+			return;
+	if (0 != ptv)
+		ptv->Freeze();
 }
 
 
 void TablePtr::DeleteCalc()
 // deletes calculated  result     
 {
-  if (0 == pts)
-    return;
-  ILWISSingleLock sl(&csCalc, TRUE, SOURCE_LOCATION);
-  OpenTableVirtual();
-  if (0 != ptv) {
-    ptv->UnFreeze();
-    _iCols = 0;
-    _iRecs = 0;
-  }
+	if (0 == pts)
+		return;
+	ILWISSingleLock sl(&csCalc, TRUE, SOURCE_LOCATION);
+	OpenTableVirtual();
+	if (0 != ptv) {
+		ptv->UnFreeze();
+		_iCols = 0;
+		_iRecs = 0;
+	}
 }
 
 void TablePtr::OpenTableVirtual()
@@ -856,31 +858,31 @@ void TablePtr::OpenTableVirtual()
 
 void TablePtr::Replace(const String& sExpr)
 {
-  ILWISSingleLock sl(&csAccess, TRUE, SOURCE_LOCATION);
-  if (0 != ptv)
-    delete ptv;
-  ptv = 0;
-  ptv = TableVirtual::create(fnObj, *this, sExpr);
-  Updated();
-  ptv->UnFreeze();
+	ILWISSingleLock sl(&csAccess, TRUE, SOURCE_LOCATION);
+	if (0 != ptv)
+		delete ptv;
+	ptv = 0;
+	ptv = TableVirtual::create(fnObj, *this, sExpr);
+	Updated();
+	ptv->UnFreeze();
 }
 
 void TablePtr::CreateTableStore()
 {
-  ILWISSingleLock sl(&csAccess, TRUE, SOURCE_LOCATION);
-  if (0 != ptv)
-    ptv->CreateTableStore();
+	ILWISSingleLock sl(&csAccess, TRUE, SOURCE_LOCATION);
+	if (0 != ptv)
+		ptv->CreateTableStore();
 }
 
 Table2DimPtr* TablePtr::pt2d() const
 {
-  return dynamic_cast<Table2DimPtr*>
-    (const_cast<TablePtr*>(this));
+	return dynamic_cast<Table2DimPtr*>
+		(const_cast<TablePtr*>(this));
 }
 
 struct FileNameAndString {
-  FileName *fn;
-  String * s;
+	FileName *fn;
+	String * s;
 };
 
 
@@ -892,7 +894,7 @@ TablePtr* TablePtr::ImportTable(const FileName& fnTable, const String& sExpressi
 	{
 		FileName fnObj = fnTable;
 		Array<String> as;
- 		IlwisObjectPtr::iParseParm(sExpression, as);
+		IlwisObjectPtr::iParseParm(sExpression, as);
 		vector<ClmInfo> columnInfo;
 		String sErrMsg;
 		String sTableDomain("none");
@@ -906,29 +908,29 @@ TablePtr* TablePtr::ImportTable(const FileName& fnTable, const String& sExpressi
 		FileName fnIn(as[0]);
 		if (!File::fExist(fnIn))
 			throw ErrorObject(String(TR("Import table '%S' not found").c_str(), fnIn.sRelative()));
-		
+
 		FileName fnBinary(fnObj);
 		fnBinary.sExt = ".tb#";
-		
+
 		TableExternalFormat::InputFormat eFormat = TableExternalFormat::ifGetFormat(as[1]);
 
 		int iSpecFields = 0; // count the fields with a type specifier (Ilwis 1.4)
 		switch ( eFormat )
 		{
-			case TableExternalFormat::ifDBF:
-				TableDBF::Scan(fnIn, columnInfo);
-				break;
-			case TableExternalFormat::ifIlwis14:
-				TableIlwis14::Scan(fnIn, iSkip, iSpecFields, columnInfo);
-				break;
-			case TableExternalFormat::ifSpace:
-			case TableExternalFormat::ifComma:
-			case TableExternalFormat::ifFixed:
-				if ( iNrArg < 4 )
-					TableDelimited::Scan(fnIn, iSkip, eFormat, columnInfo);
-				break;
-			default:
-				throw ErrorObject(String("%S", TR("Unknown input type")));
+		case TableExternalFormat::ifDBF:
+			TableDBF::Scan(fnIn, columnInfo);
+			break;
+		case TableExternalFormat::ifIlwis14:
+			TableIlwis14::Scan(fnIn, iSkip, iSpecFields, columnInfo);
+			break;
+		case TableExternalFormat::ifSpace:
+		case TableExternalFormat::ifComma:
+		case TableExternalFormat::ifFixed:
+			if ( iNrArg < 4 )
+				TableDelimited::Scan(fnIn, iSkip, eFormat, columnInfo);
+			break;
+		default:
+			throw ErrorObject(String("%S", TR("Unknown input type")));
 		}
 
 		if ( fCIStrEqual("UseAs", as[2]))
@@ -954,11 +956,11 @@ TablePtr* TablePtr::ImportTable(const FileName& fnTable, const String& sExpressi
 			throw ErrorObject(TR("Skip lines must be a positive number"));
 
 
-   		if (iNrArg > iArgCnt )
+		if (iNrArg > iArgCnt )
 			sTableDomain = as[iArgCnt] != "" ? as[iArgCnt] : "none";
 
 		++iArgCnt;
-		
+
 		int iColumn = 0;
 		int iNrKeys = 0;
 
@@ -1008,13 +1010,13 @@ TablePtr* TablePtr::ImportTable(const FileName& fnTable, const String& sExpressi
 					sDomain = sDom.substr(0, iWhere);
 					sDom = sDom.substr(iWhere, sDom.size());
 					Split(sDom,asParts,"{:,}"); // for value: `{`min:max[:precision]`}`
-					                            // for class/ID: `{`<Class | ID | Extend | Key>* `}`
+					// for class/ID: `{`<Class | ID | Extend | Key>* `}`
 				}
 				else
 					sDomain = sDom;
 			}				
 
-//--------------------------
+			//--------------------------
 			if (sDom.length() == 0 || sDomain.length() == 0)
 			{
 				String sErr = String(TR("Empty domain specified for column %d. ").c_str(), iColumn + 1);
@@ -1062,37 +1064,37 @@ TablePtr* TablePtr::ImportTable(const FileName& fnTable, const String& sExpressi
 
 				for(unsigned int i=0; i< asParts.iSize(); ++i)
 				{
-						String sEntry = asParts[i].sTrimSpaces();
-						if ( fCIStrEqual(sEntry , "Class") )
-						{
-							cinf.dtDomainType = dmtCLASS;
-							continue;
-						}
-						if ( fCIStrEqual(sEntry , "ID") )
-						{
-							cinf.dtDomainType = dmtID;
-							continue;
-						}
-						if ( fCIStrEqual(sEntry , "Extend") )
-						{
-							cinf.fExtend = true;
-							continue;
-						}
-						if ( fCIStrEqual(sEntry , "Key") )
-						{ 
-							if ( iNrKeys != 0)
-								throw ErrorObject(TR("Only one key column per table may be used"));
-							++iNrKeys;
-							cinf.fKey = true;
-							sTableDomain="none";
-							continue;
-						}
-						else
-							throw ErrorObject(String(TR("Unexpected word ' %S 'found").c_str(), asParts[i]));
+					String sEntry = asParts[i].sTrimSpaces();
+					if ( fCIStrEqual(sEntry , "Class") )
+					{
+						cinf.dtDomainType = dmtCLASS;
+						continue;
+					}
+					if ( fCIStrEqual(sEntry , "ID") )
+					{
+						cinf.dtDomainType = dmtID;
+						continue;
+					}
+					if ( fCIStrEqual(sEntry , "Extend") )
+					{
+						cinf.fExtend = true;
+						continue;
+					}
+					if ( fCIStrEqual(sEntry , "Key") )
+					{ 
+						if ( iNrKeys != 0)
+							throw ErrorObject(TR("Only one key column per table may be used"));
+						++iNrKeys;
+						cinf.fKey = true;
+						sTableDomain="none";
+						continue;
+					}
+					else
+						throw ErrorObject(String(TR("Unexpected word ' %S 'found").c_str(), asParts[i]));
 				}
 			}
-							
-//--------------------------
+
+			//--------------------------
 
 			if ( eFormat < TableExternalFormat::ifDBF )
 				columnInfo.push_back(cinf);
@@ -1104,8 +1106,8 @@ TablePtr* TablePtr::ImportTable(const FileName& fnTable, const String& sExpressi
 				cinf.iNrRecs = columnInfo[iColumn].iNrRecs;
 				columnInfo[iColumn] = cinf;
 			}
-				
-  			iArgCnt++;
+
+			iArgCnt++;
 			iColumn++;
 
 		} 
@@ -1113,22 +1115,22 @@ TablePtr* TablePtr::ImportTable(const FileName& fnTable, const String& sExpressi
 			fnObj.sExt = ".tbt";
 		TablePtr *p = new TablePtr(fnObj, String(), true);
 
- 		Domain dmTbl = Domain (sTableDomain);
+		Domain dmTbl = Domain (sTableDomain);
 		p->SetDomain(dmTbl);
 
 		switch (eFormat )
 		{
-			case TableExternalFormat::ifComma:
-			case TableExternalFormat::ifSpace:
-			case TableExternalFormat::ifFixed:
-				ts = new TableAsciiDelimited (fnIn, fnObj, *p, fnBinary, iSkip, eFormat, columnInfo);
-				break;
-			case TableExternalFormat::ifIlwis14:    
-				ts = new TableIlwis14(fnIn, fnObj, *p, fnBinary, iSkip, columnInfo);
-				break;
-			case TableExternalFormat::ifDBF:
-				ts = new TableDBF(fnIn, fnObj, *p, fnBinary, columnInfo);
-				break;
+		case TableExternalFormat::ifComma:
+		case TableExternalFormat::ifSpace:
+		case TableExternalFormat::ifFixed:
+			ts = new TableAsciiDelimited (fnIn, fnObj, *p, fnBinary, iSkip, eFormat, columnInfo);
+			break;
+		case TableExternalFormat::ifIlwis14:    
+			ts = new TableIlwis14(fnIn, fnObj, *p, fnBinary, iSkip, columnInfo);
+			break;
+		case TableExternalFormat::ifDBF:
+			ts = new TableDBF(fnIn, fnObj, *p, fnBinary, columnInfo);
+			break;
 		}
 		if (fUseAs) 
 		{
@@ -1141,7 +1143,7 @@ TablePtr* TablePtr::ImportTable(const FileName& fnTable, const String& sExpressi
 			ts->Store();
 			ts->StoreAsBinary(fnBinary);
 			p->pts = new TableBinary(fnBinary, *p);
-  			delete ts;
+			delete ts;
 		}
 		return p;
 	}
@@ -1193,15 +1195,15 @@ void TablePtr::DoNotUpdate()
 	IlwisObjectPtr::DoNotUpdate();
 	if ( pts )
 		pts->DoNotUpdate();
-	
+
 }
 
 void TablePtr::LoadData()
 {
-    if ( pts )
-    {
-        pts->LoadBinary();
-    }        
+	if ( pts )
+	{
+		pts->LoadBinary();
+	}        
 }
 
 void TablePtr::Loaded(bool fValue)
