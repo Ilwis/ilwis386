@@ -15,6 +15,8 @@
 #include "drawers\pointdrawer.h"
 #include "drawers\PointFeatureDrawer.h"
 #include "Engine\Representation\Rprclass.h"
+#include "Engine\Drawers\OpenGLText.h"
+#include "Engine\Drawers\TextDrawer.h"
 #include "Engine\Drawers\ZValueMaker.h"
 
 using namespace ILWIS;
@@ -35,6 +37,7 @@ PointFeatureDrawer::PointFeatureDrawer() : PointDrawer(0,"PointFeatureDrawer") {
 }
 
 PointFeatureDrawer::PointFeatureDrawer(DrawerParameters *parms) : PointDrawer(parms,"PointFeatureDrawer") {
+
 }
 
 PointFeatureDrawer::PointFeatureDrawer(DrawerParameters *parms, const String& name) : PointDrawer(parms,name) {
@@ -45,6 +48,10 @@ void PointFeatureDrawer::addDataSource(void *f, int options) {
 }
 
 bool PointFeatureDrawer::draw( const CoordBounds& cbArea) const{
+
+	if ( label) {
+		label->setCoord(feature->centroid());
+	}
 
 	return PointDrawer::draw( cbArea);
 }
@@ -84,16 +91,6 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 			if ( bmpptr->tblAtt().fValid()) // incase of missing/ corrput data
 				setTableSelection(bmpptr->tblAtt()->dm()->fnObj,v, p);
 		}
-	/*	if ( p->rowSelect.raws.size() > 0) {
-			if ( bmpptr->fTblAtt()) {
-
-				if ( bmpptr->tblAtt()->fnObj == p->rowSelect.fn) {
-					if ( find(p->rowSelect.raws.begin(), p->rowSelect.raws.end(), (long)v) != p->rowSelect.raws.end()) {
-						setSpecialDrawingOptions(NewDrawer::sdoSELECTED,true);
-					}
-				}
-			}
-		}*/
 		Representation rpr = fdr->getRepresentation();
 		if ( rpr->prc()) {
 			properties.scale = rpr->prc()->iSymbolSize(feature->iValue()) / 100;

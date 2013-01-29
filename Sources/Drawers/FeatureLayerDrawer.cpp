@@ -16,6 +16,8 @@
 #include "Engine\Map\Feature.h"
 #include "Drawers\FeatureLayerDrawer.h"
 #include "Engine\Drawers\ZValueMaker.h"
+#include "Engine\Drawers\OpenGLText.h"
+#include "Engine\Drawers\TextDrawer.h"
 #include "Engine\Drawers\DrawerContext.h"
 #include "Headers\Hs\Drwforms.hs"
 
@@ -67,12 +69,21 @@ void FeatureLayerDrawer::prepare(PreparationParameters *parms){
 	vector<Feature *> features;
 	if ( parms->type & RootDrawer::ptGEOMETRY || parms->type & NewDrawer::ptRESTORE){
 		bool isAnimation = mapDrawer->getType() == "AnimationDrawer";
+	
+		clear();
+
+		ILWIS::DrawerParameters dp(getRootDrawer(), this);
+		TextLayerDrawer *textLayer = (ILWIS::TextLayerDrawer *)NewDrawer::getDrawer("TextLayerDrawer", "ilwis38",&dp);
+		if (textLayer) {
+			addPostDrawer(223,textLayer);
+			textLayer->setFont(new OpenGLText(getRootDrawer(),"arial.ttf",12 ,false));
+			textLayer->setActive(false);
+		}
 		if ( isAnimation ) {
 			getFeatures(features);
 		} else {
 			mapDrawer->getFeatures(features, parms->index);
 		}
-		clear();
 		drawers.resize( features.size());
 		for(int i=0; i<drawers.size(); ++i)
 			drawers.at(i) = 0;
@@ -88,7 +99,12 @@ void FeatureLayerDrawer::prepare(PreparationParameters *parms){
 				pdrw->addDataSource(feature);
 				PreparationParameters fp((int)parms->type, mapDrawer->getBaseMap()->cs());
 				pdrw->prepare(&fp);
-				
+
+				DrawerParameters dp2(getRootDrawer(),textLayer);
+				TextDrawer *txtdr =(ILWIS::TextDrawer *)NewDrawer::getDrawer("TextDrawer","ilwis38",&dp2);
+				textLayer->addDrawer(txtdr);
+				pdrw->setLabelDrawer(txtdr);
+
 				if ( feature->rValue() == rUNDEF)
 					pdrw->setActive(false);
 				setDrawer(i, pdrw);
@@ -114,6 +130,7 @@ void FeatureLayerDrawer::prepareChildDrawers(PreparationParameters *parms) {
 	FeatureDataDrawer *mapDrawer = (FeatureDataDrawer *)parentDrawer;
 	BaseMapPtr *bmp = mapDrawer->getBaseMap();
 	Representation rpr = bmp->dm()->rpr();
+	Table attTbl = bmp->tblAtt();
 	vector<Feature *> features;
 	bool isAnimation = mapDrawer->getType() == "AnimationDrawer";
 	if ( isAnimation ) {
@@ -123,20 +140,32 @@ void FeatureLayerDrawer::prepareChildDrawers(PreparationParameters *parms) {
 	}
 	for(int i = 0; i < drawers.size(); ++i) {
 		NewDrawer *pdrw = drawers.at(i);
+
 		RepresentationProperties props;
 		if ( pdrw) {
-			if ( bmp && bmp->dm().fValid() && bmp->dm()->rpr().fValid()) {
-				parms->props = &props;
+			if ( bmp && bmp->dm().fValid()) {
 				Feature *feature = features.at(i);
-				if ( feature && feature->fValid() ){
-					rpr->getProperties(feature->rValue(), parms->props);
+				if ( labelAttribute == "" || attTbl.fValid() == false ) {
+					pdrw->getLabelDrawer()->setText(feature->sValue(bmp->dvrs()));
+				} else if ( attTbl.fValid()){
+					Column col= attTbl->col(labelAttribute);
+					if ( col.fValid()) {
+						String sV = col->sValue(feature->iValue());
+						pdrw->getLabelDrawer()->setText(sV);
+					}
 				}
+				if (bmp->dm()->rpr().fValid()) {
+					parms->props = &props;
+					if ( feature && feature->fValid() ){
+						rpr->getProperties(feature->rValue(), parms->props);
+					}
+				}
+				RepresentationProperties rprop;
+				if ( parms->props == 0) {
+					parms->props = &rprop;
+				}
+				pdrw->prepare(parms);
 			}
-			RepresentationProperties rprop;
-			if ( parms->props == 0) {
-				parms->props = &rprop;
-			}
-			pdrw->prepare(parms);
 		}
 	}
 }
@@ -286,6 +315,13 @@ void FeatureLayerDrawer::select(const CRect& rect, vector<long> & selectedRaws, 
 			selectedRaws.swap(tmp);
 		}
 	}
+}
+
+void FeatureLayerDrawer::setLabelAttribute(const String& col){
+	labelAttribute = col;
+}
+String FeatureLayerDrawer::getLabelAttribute() const{
+	return labelAttribute;
 }
 
 

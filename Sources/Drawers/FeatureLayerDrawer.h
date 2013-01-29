@@ -34,6 +34,8 @@ namespace ILWIS{
 				managedDrawers = new MemoryManager<T>();
 			return (MemoryManager<T> *)managedDrawers;
 		}
+		void setLabelAttribute(const String& col);
+		String getLabelAttribute() const;
 
 	protected:
 		String store(const FileName& fnView, const String& parenSection) const;
@@ -44,8 +46,9 @@ namespace ILWIS{
 		bool useMask;
 		Color singleColor;
 		BaseMap fbasemap;
+		String labelAttribute; // column;
 		map<long, SimpleDrawer*> featureMap;
 		void *managedDrawers;
-	
+
 	};
 }

@@ -12,6 +12,8 @@
 #include "Engine\Drawers\SVGLoader.h"
 #include "Engine\Drawers\SVGElements.h"
 #include "Engine\Drawers\SVGPath.h"
+#include "Engine\Drawers\OpenGLText.h"
+#include "Engine\Drawers\TextDrawer.h"
 #include "Engine\Drawers\ZValueMaker.h"
 
 using namespace ILWIS;
@@ -104,6 +106,15 @@ bool PointDrawer::draw( const CoordBounds& cbArea) const {
 	double fx = cNorm.x;
 	double fy = cNorm.y;
 	double fz = is3D ? cNorm.z * zscale : z0;
+
+	if ( label && label->getParentDrawer()->isActive()) {
+		Coord c = label->coord();
+		double xshift = cbZoom.width() / 250.0;
+		double yshift = cbZoom.height() / 250.0;
+		c += Coord(xshift,yshift);
+		c.z = fz;
+		label->setCoord(c);
+	}
 
 	double symbolScale = cbZoom.width() / 200;
 	CoordBounds cb(Coord(fx - symbolScale, fy - symbolScale,fz), Coord(fx + symbolScale, fy + symbolScale,fz));

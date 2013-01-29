@@ -7,6 +7,7 @@ ILWIS::NewDrawer *createPointDrawer(ILWIS::DrawerParameters *parms);
 namespace ILWIS{
 
 class IVGElement;
+class TextDrawer;
 
 struct _export PointProperties : public GeneralDrawerProperties {
 public:
@@ -19,7 +20,8 @@ public:
 		stretchScale(1.0), scaleMode(sNONE),
 		useDirection(false),
 		angle(0),
-		exaggeration(10.0)
+		exaggeration(10.0),
+		labelColumn(sUNDEF)
 		{}
 
 	PointProperties(PointProperties *lp) { set(lp);}
@@ -56,6 +58,8 @@ public:
 	Scaling scaleMode;
 	bool useDirection;
 	double angle;
+	String labelColumn;
+
 
 	String store(const FileName& fnView, const String& parenSection) const;
 	void load(const FileName& fnView, const String& parenSection);

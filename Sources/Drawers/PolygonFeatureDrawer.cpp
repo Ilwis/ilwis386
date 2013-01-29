@@ -22,6 +22,8 @@
 #include "Engine\Drawers\ZValueMaker.h"
 #include "Engine\Drawers\SVGLoader.h"
 #include "Engine\Drawers\SVGElements.h"
+#include "Engine\Drawers\OpenGLText.h"
+#include "Engine\Drawers\TextDrawer.h"
 #include "Engine\Representation\Rprclass.h"
 #include "Engine\Drawers\SVGPath.h"
 
@@ -61,6 +63,12 @@ PolygonFeatureDrawer::~PolygonFeatureDrawer() {
 }
 
 bool PolygonFeatureDrawer::draw( const CoordBounds& cbArea) const {
+	if ( label) {
+		Coord c = feature->centroid();
+		CoordBounds cb = label->getTextExtent();
+		c.x = c.x - cb.width() / 2;
+		label->setCoord(c);
+	}
 	return PolygonDrawer::draw( cbArea);
 }
 
@@ -151,14 +159,6 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 						backgroundColor = colorUNDEF;
 				}
 			}
-			//if ( p->props && p->props->hatchName != sUNDEF) {
-			//	const SVGLoader *loader = NewDrawer::getSvgLoader();
-			//	SVGLoader::const_iterator cur = loader->find(p->props->hatchName);
-			//	if ( cur == loader->end() || (*cur).second->getType() == IVGElement::ivgPOINT)
-			//		return;
-
-			//	hatch = (*cur).second->getHatch();
-			//} 
 
 			for(int j =0 ; j < p->filteredRaws.size(); ++j) {
 				int raw = p->filteredRaws[j];

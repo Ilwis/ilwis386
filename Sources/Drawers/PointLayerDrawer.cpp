@@ -13,6 +13,8 @@
 #include "Drawers\PointLayerDrawer.h"
 #include "Drawers\PointDrawer.h"
 #include "Drawers\PointFeatureDrawer.h"
+#include "Engine\Drawers\OpenGLText.h"
+#include "Engine\Drawers\TextDrawer.h"
 #include "Headers\Hs\Drwforms.hs"
 
 using namespace ILWIS;

@@ -6,6 +6,8 @@
 #include "drawers\linedrawer.h"
 #include "drawers\polygondrawer.h"
 #include "Engine\Drawers\ComplexDrawer.h"
+#include "Engine\Drawers\OpenGLText.h"
+#include "Engine\Drawers\TextDrawer.h"
 #include "Engine\Drawers\ZValueMaker.h"
 
 
@@ -58,6 +60,15 @@ bool PolygonDrawer::draw( const CoordBounds& cbArea) const{
 		glPushMatrix();
 		glScaled(1,1,zscale);
 		glTranslated(0,0,zoffset);
+	}
+
+	if ( label && label->getParentDrawer()->isActive()) {
+		Coord c = label->coord();
+		//double xshift = cbZoom.width() / 250.0;
+		//double yshift = cbZoom.height() / 250.0;
+		//c += Coord(xshift,yshift);
+		c.z = z0;
+		label->setCoord(c);
 	}
 	double tr = (1.0 - drawColor.transparencyP()) * getTransparency() * areaTransparency;
 	glColor4f(drawColor.redP(),drawColor.greenP(), drawColor.blueP(), tr);
