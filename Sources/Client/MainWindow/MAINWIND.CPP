@@ -129,6 +129,7 @@ BEGIN_MESSAGE_MAP( MainWindow, CMDIFrameWnd )
 	ON_COMMAND(ID_FILE_OPENASTBL, OnOpenAsTable)		 
 	ON_COMMAND(ID_FILE_PREFERENCES, OnPreferences)
 	ON_COMMAND(ID_IMPORT, OnImport)
+	ON_MESSAGE(ILWM_UPDATE_ANIM, OnSendUpdateAnimMessages)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -1202,6 +1203,13 @@ LRESULT MainWindow::OnCloseCollection(WPARAM iFileName, LPARAM iL)
 void MainWindow::OnImport()   
 {
 	GeneralImportForm *frm = new GeneralImportForm(this);
+}
+
+LRESULT MainWindow::OnSendUpdateAnimMessages(WPARAM p1, LPARAM p2) {
+	FileName *fn = (FileName *)(void *)p1;
+	IlwWinApp()->SendUpdateAnimMessages(*fn, (int) p2);
+
+	return 1;
 }
 
 #ifdef _DEBUG

@@ -109,6 +109,7 @@ protected:
 	LONG OnExecute(UINT, LONG);
 	LONG OnCommandUI(UINT, LONG);
 	LRESULT OnSetCommandLine(WPARAM wPar, LPARAM);
+	LRESULT OnSendUpdateAnimMessages(WPARAM p1, LPARAM p2);
 	//{{AFX_MSG(MainWindow)
 	afx_msg void OnDestroy();
 	afx_msg void OnClose();
