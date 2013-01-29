@@ -11,6 +11,7 @@
 #include "Drawers\RasterDataDrawer.h"
 #include "Engine\Drawers\ZValueMaker.h"
 #include "Drawers\RasterLayerDrawer.h"
+#include "drawers\DrawingColor.h"
 
 using namespace ILWIS;
 
@@ -98,4 +99,24 @@ void RasterDataDrawer::addDataSource(void *bmap, int options){
 bool RasterDataDrawer::draw(int drawerIndex , const CoordBounds& cbArea) const{
 	SpatialDataDrawer::draw( cbArea);
 	return true;
+}
+
+void RasterDataDrawer::setTresholdColor(const Color&clr){
+	for(int i=0; i < drawers.size(); ++i) {
+		RasterLayerDrawer *rsd = dynamic_cast<RasterLayerDrawer *> (drawers[i]);
+		if ( rsd) {
+			rsd->getDrawingColor()->setTresholdColor(clr);
+			return;
+		}
+	}
+}
+
+void RasterDataDrawer::setTresholdRange(const RangeReal& rr, bool single){
+		for(int i=0; i < drawers.size(); ++i) {
+		RasterLayerDrawer *rsd = dynamic_cast<RasterLayerDrawer *> (drawers[i]);
+		if ( rsd) {
+			rsd->getDrawingColor()->setTresholdRange(rr, single);
+			return;
+		}
+	}
 }
