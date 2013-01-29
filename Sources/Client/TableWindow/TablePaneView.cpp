@@ -641,8 +641,7 @@ void TablePaneView::OnEditPaste()
 				sTextBegin = s+1;
 		}
 	}
-
-	if (td->tvw->dm()->pdnone() && selection.fValid()) {
+	if ( td->tvw->dm()->pdnone() && td->tvw->iRecs() == 0 && selection.minCol() != iUNDEF){
 		s = sTextBegin;
 		long iAdd = 0;
 		while (s) {
@@ -652,7 +651,34 @@ void TablePaneView::OnEditPaste()
 				++iAdd;
 			}
 		}
-		td->tvw->iRecNew(iAdd);
+		int dif = iAdd - selection.getRows().size();
+		td->tvw->iRecNew(dif);
+		long colIndex = 0;
+		for(colIndex = 0; colIndex < selection.getCols().size(); ++colIndex) {
+			if ( selection.getCols()[colIndex]) {
+				break;
+			}
+		}
+		if ( colIndex == selection.getCols().size())
+			return;
+
+		selection.setSize(RowCol(iAdd,selection.getCols().size()));
+		selection.selectBlock(RowCol(0L,colIndex), RowCol(iAdd,colIndex));
+		selection.setMinCol(colIndex);
+		selection.setMaxCol(colIndex);
+	}
+	else if (td->tvw->dm()->pdnone() && selection.fValid()) {
+		s = sTextBegin;
+		long iAdd = 0;
+		while (s) {
+			s = strchr(s,'\n');
+			if (s) {
+				++s;
+				++iAdd;
+			}
+		}
+		int dif = iAdd - selection.getRows().size();
+		td->tvw->iRecNew(dif);
 		selection.selectBlock(RowCol(iRows() + td->tvw->iOffset(), 0L), RowCol(iRows() - 1L + td->tvw->iOffset(), iCols()));
 	}
 	str = sTextBegin;
@@ -1078,7 +1104,7 @@ bool TablePaneView::fAllowPaste() const
 		return true;
 	if (tvw()->dm()->pdnone() && selection.fValid()) 
 		return true;
-	return false;
+	return true;
 }
 
 
