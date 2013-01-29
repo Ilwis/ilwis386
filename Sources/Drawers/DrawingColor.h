@@ -33,7 +33,7 @@ public:
 	Color getTresholdColor() const;
 	void setTresholdColor(const Color&clr);
 	RangeReal getTresholdRange() const;
-	void setTresholdRange(const RangeReal& tr);
+	void setTresholdRange(const RangeReal& tr, bool s=false);
 	RangeReal getTransparentValues() const;
 	String store(const FileName& fnView, const String& parenSection) const;
 	void load(const FileName& fnView, const String& parenSection);
@@ -46,7 +46,7 @@ private:
 	void InitClrRandom();
 	RangeReal getStretchRangeReal() const;
 	inline void setTransparency(double v, Color& clr) const;
-	inline void setTresholdColors(double v, Color& clr) const;
+	inline bool setTresholdColors(double v, Color& clr) const;
 
 	LayerDrawer *drw;
 	SetDrawer *setDrawer;
@@ -63,5 +63,6 @@ private:
 	RangeReal transpValues;
 	RangeReal tresholdValues;
 	Color tresholdColor;
+	bool useSingleValueForTreshold;
 };
 }
