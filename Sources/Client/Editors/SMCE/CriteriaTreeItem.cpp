@@ -182,7 +182,7 @@ public:
 		, m_liReservedLabels(liReservedLabels)
 	{
 		fs = new FieldString(root, TR("Name: "), sName);
-		fs->SetWidth(60);
+		fs->SetWidth(300);
 		fs->SetCallBack((NotifyProc)&FactorPropertyForm::CallBackFunc);
 
 		SetMenHelpTopic("ilwismen\\smce_window_insert_factor.htm");
@@ -212,7 +212,7 @@ public:
 		, m_liReservedLabels(liReservedLabels)
   {
 		fs = new FieldString(root, TR("Name: "), sName);
-		fs->SetWidth(60);
+		fs->SetWidth(300);
 		fs->SetCallBack((NotifyProc)&ConstraintPropertyForm::CallBackFunc);
 
 		/* // map/score determined via menu option
@@ -249,7 +249,7 @@ public:
 		, m_liReservedLabels(liReservedLabels)
 	{
 		fs = new FieldString(root, TR("Name: "), m_sName);
-		fs->SetWidth(60);
+		fs->SetWidth(300);
 		fs->SetCallBack((NotifyProc)&GroupPropertyForm::CallBackFunc);
 		
 		SetMenHelpTopic("ilwismen\\smce_window_insert_group.htm");
