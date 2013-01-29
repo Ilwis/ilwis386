@@ -48,6 +48,7 @@ void SimpleDrawer::init() {
 	isSupportingDrawer = false;
 	valid = true;
 	managed = 0;
+	label = 0;
 }
 
 String SimpleDrawer::getType() const {
@@ -64,6 +65,14 @@ void SimpleDrawer::setSubType(const String & sSubType) {
 
 String SimpleDrawer::getId() const{
 	return id;
+}
+
+void SimpleDrawer::setLabelDrawer(TextDrawer *txtdr){
+	label = txtdr;
+}
+
+TextDrawer *SimpleDrawer::getLabelDrawer() const{
+	return label;
 }
 
 void SimpleDrawer::prepare(PreparationParameters *parms){

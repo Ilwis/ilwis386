@@ -19,6 +19,8 @@ public:
 	OpenGLText *getFont() const;
 	void setFont(OpenGLText *f);
 	//HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent);
+	void setFontScale(double f);
+	double getFontScale() const;
 private:
 	void displayOptionsText(CWnd *parent);
 	Color clrText;
@@ -28,6 +30,7 @@ private:
 	short iFStyle;
 	short iWidth;
 	OpenGLText *font;
+	double fontScale;
 };
 
 
@@ -44,6 +47,7 @@ public:
 	double getHeight() const;
 	String getText() const { return text; }
 	CoordBounds getTextExtent() const;
+	Coord coord() const { return c; }
 private:
 	String text;
 	Coordinate c;

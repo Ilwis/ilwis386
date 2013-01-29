@@ -87,20 +87,13 @@ void ILWIS::Polygon::addHole(LinearRing * ring) {
 }
 
 
-//CoordBounds ILWIS::Polygon::cbBounds() const // bounding rectangle
-//{
-//	ILWISSingleLock sl(const_cast<CCriticalSection *>(&csAccess), TRUE);
-//	Geometry *geom = getEnvelope();
-//	CoordinateSequence *seq = geom->getCoordinates();
-//	CoordBounds cb;
-//	for(int i = 0; i < seq->size(); ++i) {
-//		Coord crd(seq->getAt(i));
-//		cb += crd;
-//	}
-//	delete seq;
-//	return cb;	
-//}
+Coord ILWIS::Polygon::centroid() const {
+	Coord c;
+	if ( getCentroid(c))
+		return c;
 
+	return crdUNDEF;
+}
 double ILWIS::Polygon::rArea() const {
 	return getArea();
 }

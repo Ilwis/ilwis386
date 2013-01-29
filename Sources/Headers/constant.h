@@ -382,6 +382,7 @@
 #define ID_RPRLAYER    15000
 #define ID_ATTLAYER    16000
 #define ID_DOMLAYER    17000
+#define ID_HISTOLAYER 18000
 #define ID_EDITGRF     1600
 #define ID_EDITANN     1601
 #define ID_EDITCSY     1602

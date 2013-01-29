@@ -26,6 +26,7 @@ public:
 	String getGuid() const;
 	bool EnvelopeIntersectsWith(Geometry *g2, bool useMargine=false);
 	CoordBounds Feature::cbBounds() const;
+	virtual Coord centroid() const { return cbBounds().middle(); }
 	virtual long nearSection(const Coord& crd, double delta, double& dis) { return iUNDEF;}
 	virtual void Feature::getBoundaries(vector<CoordinateSequence*>& boundaries) const = 0;
 

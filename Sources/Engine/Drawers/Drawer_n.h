@@ -32,6 +32,7 @@ namespace ILWIS {
 	struct PreparationParameters;
 	struct DrawerParameters;
 	class NewDrawer;
+	class TextDrawer;
 	struct GeneralDrawerProperties { // placeholder , others derive from this
 	};
 
@@ -42,7 +43,7 @@ namespace ILWIS {
 		enum PreparationType{ptNONE=0,ptRENDER=1,ptGEOMETRY=2,ptINITOPENGL=4,ptUI=8,pt3D=16,ptANIMATION=32,ptRESTORE=64,ptOFFSCREENSTART=128,ptOFFSCREENEND=256,ptREDRAW=512,ptNEWCSY=1024,ptALL=4294967295};
 		enum DataSourceMergeOptions{dsmEXTENDCB=1};
 		enum UICode{ucNONE=0, ucNOREPRESENTATION=2, ucNOINFO=4, ucNOMASK=8, ucNOMULTICOLOR=16,ucNOTRANSPARENCY=32, ucALL=4294967295};
-		enum SpecialDrawingOptions{sdoNone=0, sdoExtrusion=1, sdoSymbolLineNode=2, sdoYMarker=4, sdoFilled=8, sdoSELECTED=16, sdoTOCHILDEREN=32, sdoFootPrint=64, sdoOpen=128};
+		enum SpecialDrawingOptions{sdoNone=0, sdoExtrusion=1, sdoSymbolLineNode=2, sdoYMarker=4, sdoFilled=8, sdoSELECTED=16, sdoTOCHILDEREN=32, sdoFootPrint=64, sdoOpen=128, sdoUseLabels=256};
 		enum LineDspType { ldtNone,
                    ldtSingle, ldtDouble, ldtTriple,
                    ldtDot, ldtDash, ldtDashDot, ldtDashDotDot,
@@ -97,6 +98,8 @@ namespace ILWIS {
 		virtual void select(bool yesno) {};
 		virtual bool isManaged() const = 0;
 		virtual void setDrawerParameters(DrawerParameters *) = 0;
+		virtual void setLabelDrawer(TextDrawer *txtdr) {};
+		virtual TextDrawer *getLabelDrawer() const { return 0;}
 
 		static NewDrawer *getDrawer(const String& type, const String& subType, ILWIS::DrawerParameters *parms) ;
 		static NewDrawer *getDrawer(const String& type, PreparationParameters *pp=0, DrawerParameters *parms=0) ;

@@ -70,6 +70,7 @@ public:
 	Coord				crdFindPointInPol2() const; // a 100% certain point not ending up in holes or similar
 	virtual				FeatureType getType() const;
 	virtual	void		getBoundaries(vector<CoordinateSequence*>& boundaries) const;
+	virtual Coord centroid() const;
 
 protected:
 	String				sName(short iWidth=0, short iDec=-1) const;

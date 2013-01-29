@@ -60,6 +60,8 @@ namespace ILWIS {
 		virtual Feature *getFeature() const {return 0;};
 		bool isManaged() const { return managed;}
 		void setDrawerParameters(DrawerParameters *);
+		void setLabelDrawer(TextDrawer *txtdr);
+		TextDrawer *getLabelDrawer() const;
 
 		CCriticalSection cs;
 	protected:
@@ -78,6 +80,7 @@ namespace ILWIS {
 		bool isSupportingDrawer;
 		bool valid;
 		bool managed;
+		TextDrawer *label; // TextDrawer isnt owned by this drawer
 
 		SimpleDrawer(DrawerParameters *context, const String& ty);
 		SimpleDrawer();

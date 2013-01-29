@@ -15,6 +15,7 @@ public:
 	~OpenGLText();
 	void renderText(const Coordinate& c, const String& text);
 	void setColor(const Color & clr);
+	Color getColor() const;
 	double getHeight() const;
 	CoordBounds getTextExtent(const String& txt) const;
 	void createFont();

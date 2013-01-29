@@ -95,6 +95,10 @@ void OpenGLText::setColor(const Color & clr) {
 	color = clr;
 }
 
+Color OpenGLText::getColor() const {
+	return color;
+}
+
 double OpenGLText::getHeight() const{
 	if ( fontHeight != iUNDEF)
 		return fontHeight * scale;

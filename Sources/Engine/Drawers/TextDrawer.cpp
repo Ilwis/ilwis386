@@ -8,6 +8,7 @@
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Engine\Map\Raster\Map.h"
 #include "Engine\Representation\Rprclass.h"
+#include "Engine\Drawers\ZValueMaker.h"
 
 using namespace ILWIS;
 
@@ -22,7 +23,8 @@ TextLayerDrawer::TextLayerDrawer(DrawerParameters *parms) :
 	sFaceName("Arial"),
 	iFWeight(FW_BOLD),
 	iFStyle(0),
-	iWidth(0)
+	iWidth(0),
+	fontScale(1)
 {
 }
 
@@ -30,7 +32,7 @@ TextLayerDrawer::~TextLayerDrawer() {
 	delete font;
 }
 
-void  TextLayerDrawer::prepare(PreparationParameters *pp){ 
+void  TextLayerDrawer::prepare(PreparationParameters *pp){
 	ComplexDrawer::prepare(pp);
 	if ( font)
 		font->prepare(pp);
@@ -93,7 +95,14 @@ void TextLayerDrawer::displayOptionsText(CWnd *parent) {
     }
 }
 
+void TextLayerDrawer::setFontScale(double f){
+	fontScale = f;
+	getFont()->setHeight(12 * fontScale);
+}
 
+double TextLayerDrawer::getFontScale() const{
+	return fontScale;
+}
 //---------------------------------------------------
 
 ILWIS::NewDrawer *createTextDrawer(DrawerParameters *parms) {
@@ -111,8 +120,8 @@ void  TextDrawer::prepare(PreparationParameters *pp){
 }
 
 bool TextDrawer::draw( const CoordBounds& cbArea) const{
-	TextLayerDrawer *set = (TextLayerDrawer *)parentDrawer;
-	if ( set->getFont()) {
+	TextLayerDrawer *set = dynamic_cast<TextLayerDrawer *>(parentDrawer);
+	if ( set && set->getFont()) {
 		set->getFont()->renderText(c, text);
 	}
 	return true;
@@ -150,3 +159,4 @@ CoordBounds TextDrawer::getTextExtent() const{
 	return CoordBounds();
 
 }
+
