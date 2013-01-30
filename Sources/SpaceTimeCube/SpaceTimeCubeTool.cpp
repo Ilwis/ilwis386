@@ -27,6 +27,10 @@
 #include "CubeElementsTool.h"
 #include "Client\Base\datawind.h"
 #include "CubeDrawer.h"
+#include "SpaceTimeElementsDrawer.h"
+#include "Drawers\LayerDrawer.h"
+#include "Drawers\FeatureLayerDrawer.h"
+#include "SpaceTimeDrawer.h"
 
 LayerData::LayerData(NewDrawer *drw)
 : drawerId(drw->getId())
@@ -317,8 +321,10 @@ void SpaceTimeCube::refreshDrawerList() {
 		if (drawer == 0)
 			continue; // skip it .. drawer was probably removed from the layers
 		NewDrawer * childDrawer = drawer->getDrawer(0);
-		if (childDrawer != 0)
+		if (childDrawer != 0) {
+			DeleteDrawerTools(tree->getRootTool(), childDrawer);
 			drawer->removeDrawer(childDrawer->getId()); // remove the old drawer
+		}
 		PreparationParameters pp(NewDrawer::ptALL);
 		String sPlotOption = layerList[i].sPlotOption();
 		if (useSpaceTimeCube && sPlotOption != "<regular>")
@@ -341,6 +347,12 @@ void SpaceTimeCube::refreshDrawerList() {
 			DrawerParameters dp(rootDrawer, rootDrawer);
 			PreparationParameters pp(NewDrawer::ptALL);
 			AddTimeOffsetDrawers((ComplexDrawer*)drawer->getDrawer(0), &timeShift, dp, pp);
+
+			SpaceTimeElementsDrawer * spaceTimeElementsDrawer = (SpaceTimeElementsDrawer *)NewDrawer::getDrawer("SpaceTimeElementsDrawer", "Cube", &dp);
+			spaceTimeElementsDrawer->prepare(&pp);
+			AddTimeOffsetDrawers(spaceTimeElementsDrawer, &timeOffset, dp, pp); // should we prevent letting this function add to ownDrawerIDs?
+			spaceTimeElementsDrawer->SetSpaceTimeDrawer((SpaceTimeDrawer*)(drawer->getDrawer(0)));
+			((SpaceTimeDrawer*)(drawer->getDrawer(0)))->SetAdditionalElementsDrawer(spaceTimeElementsDrawer);
 		}
 		SortableDrawer * sortableDrawer = dynamic_cast<SortableDrawer*>(((ComplexDrawer*)drawer)->getDrawer(0));
 		if (sortableDrawer) {
@@ -464,6 +476,16 @@ bool SpaceTimeCube::replaceTreeItem(NewDrawer * oldDrw, SpatialDataDrawer * newD
 		return true;
 	} else
 		return false;
+}
+
+void SpaceTimeCube::DeleteDrawerTools(DrawerTool * tool, NewDrawer * drawer)
+{
+	if (tool->getDrawer() == drawer)
+		tool->removeTool(0);
+	else {
+		for (int i = 0; i < tool->getToolCount(); ++i)
+			DeleteDrawerTools(tool->getTool(i), drawer);
+	}
 }
 
 HTREEITEM SpaceTimeCube::findTreeItem(NewDrawer* drwFind)

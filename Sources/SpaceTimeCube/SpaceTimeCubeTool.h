@@ -103,6 +103,7 @@ namespace ILWIS {
 		void update();
 		void replaceDrawer(NewDrawer * oldDrw, NewDrawer * newDrw);
 		bool replaceTreeItem(NewDrawer * oldDrw, SpatialDataDrawer * newDrw, int index);
+		void DeleteDrawerTools(DrawerTool * tool, NewDrawer * drawer);
 		void AddTimeOffsetDrawers(ComplexDrawer * drw, double * timeOffsetVariable, DrawerParameters & dp, PreparationParameters & pp);
 		MapCompositionDoc * getDocument() const;
 		HTREEITEM findTreeItem(NewDrawer* drwFind);
