@@ -190,6 +190,7 @@ int  SetStretchValueForm::check(Event *) {
 		PreparationParameters pp(NewDrawer::ptRENDER, 0);
 		setdr->prepareChildDrawers(&pp);
 	}
+	view->Invalidate();
 	updateMapView();
 	inRace = false;
 	return 1;
