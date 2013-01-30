@@ -12,6 +12,7 @@ class _export StationsDrawer : public SpaceTimeDrawer {
 
 		StationsDrawer(DrawerParameters *parms);
 		virtual ~StationsDrawer();
+		virtual void drawFootprint() const;
 
 	protected:
 		String store(const FileName& fnView, const String& parentSection) const;

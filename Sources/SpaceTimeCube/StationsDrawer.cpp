@@ -251,6 +251,9 @@ void StationsDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc) con
 	glPopName();
 }
 
+void StationsDrawer::drawFootprint() const
+{
+}
 
 //-----------------------------------------------------------------
 

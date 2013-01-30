@@ -11,6 +11,7 @@
 #include "Drawers\FeatureLayerDrawer.h"
 #include "Drawers\DrawingColor.h" 
 #include "SpaceTimeDrawer.h"
+#include "SpaceTimeElementsDrawer.h"
 #include "Drawers\PointDrawer.h"
 #include "Drawers\PointFeatureDrawer.h"
 #include "Engine\Representation\Rprclass.h"
@@ -23,6 +24,7 @@ SpaceTimeDrawer::SpaceTimeDrawer(DrawerParameters *parms, const String& name)
 , prevUseAttColumn(false)
 , subDisplayLists(new map<long, GLuint>())
 , nrSteps(-1)
+, spaceTimeElementsDrawer(0)
 {
 	displayList = new GLuint;
 	*displayList = 0;
@@ -47,16 +49,32 @@ SpaceTimeDrawer::~SpaceTimeDrawer() {
 	if (*displayList != 0) // which OpenGL context?
 		glDeleteLists(*displayList, 2);
 	delete displayList;
+	delete fRefreshDisplayList;
 	if (texture[0] != 0)
 		glDeleteTextures(2, texture);
 	delete [] texture;
 	delete fRefreshTexture;
 	delete fHatching;
+	delete spaceTimeElementsDrawer;
 }
 
 NewDrawer *SpaceTimeDrawer::createElementDrawer(PreparationParameters *pp, ILWIS::DrawerParameters* parms) const{
 	return NewDrawer::getDrawer("PointFeatureDrawer", pp,parms);
+}
 
+void SpaceTimeDrawer::SetAdditionalElementsDrawer(SpaceTimeElementsDrawer * _spaceTimeElementsDrawer)
+{
+	spaceTimeElementsDrawer = _spaceTimeElementsDrawer;
+}
+
+SpaceTimeElementsDrawer * SpaceTimeDrawer::getAdditionalElementsDrawer()
+{
+	return spaceTimeElementsDrawer;
+}
+
+BaseMapPtr *SpaceTimeDrawer::getBasemap()
+{
+	return basemap;
 }
 
 void SpaceTimeDrawer::prepareChildDrawers(PreparationParameters *pp){
@@ -160,6 +178,9 @@ void SpaceTimeDrawer::prepare(PreparationParameters *parms){
 			*fRefreshDisplayList = true;
 		}
 	}
+	if (spaceTimeElementsDrawer)
+		spaceTimeElementsDrawer->prepare(parms);
+
 	clock_t end = clock();
 	double duration = 1000.0 * (double)(end - start) / CLOCKS_PER_SEC;
 	TRACE("Space Time Drawer Prepared in %2.2f seconds;\n", duration/1000);
@@ -481,6 +502,8 @@ bool SpaceTimeDrawer::draw( const CoordBounds& cbArea) const {
 			*displayList = 0;
 		}
 		*fRefreshDisplayList = false;
+		if (spaceTimeElementsDrawer)
+			spaceTimeElementsDrawer->RefreshDisplayList();
 	}
 
 	if (*fRefreshTexture) {
@@ -668,6 +691,7 @@ bool SpaceTimeDrawer::draw( const CoordBounds& cbArea) const {
 		if (*fHatching) {
 			glBindTexture(GL_TEXTURE_2D, texture[1]);
 			glCallList(*displayList + 1);
+			glBindTexture(GL_TEXTURE_2D, texture[0]);
 		}
 	}
 	else
@@ -720,6 +744,7 @@ bool SpaceTimeDrawer::draw( const CoordBounds& cbArea) const {
 				glDisable(GL_CLIP_PLANE3);
 			}
 			glEndList();
+			glBindTexture(GL_TEXTURE_2D, texture[0]);
 		}
 	}
 
@@ -733,7 +758,6 @@ bool SpaceTimeDrawer::draw( const CoordBounds& cbArea) const {
 		glDisable(GL_NORMALIZE);
 	}
 
-
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
 	glDisable(GL_TEXTURE_2D);
@@ -744,6 +768,9 @@ bool SpaceTimeDrawer::draw( const CoordBounds& cbArea) const {
 	glDisable(GL_BLEND);
 
 	drawPostDrawers(cbArea);
+
+	if (spaceTimeElementsDrawer)
+		spaceTimeElementsDrawer->draw(cbArea);
 
 	csDraw->Unlock();
 

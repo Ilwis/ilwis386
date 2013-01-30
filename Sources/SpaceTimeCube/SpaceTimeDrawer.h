@@ -7,6 +7,8 @@ namespace ILWIS {
 
 typedef void (FeatureLayerDrawer::*GetHatchFunc)(RepresentationClass * prc, long iRaw, const byte* &hatch) const;
 
+class SpaceTimeElementsDrawer;
+
 class _export SpaceTimeDrawer : public FeatureLayerDrawer, public TemporalDrawer, public SizableDrawer {
 	public:
 		enum Scaling{sNONE, sLOGARITHMIC, sLINEAR};
@@ -22,6 +24,10 @@ class _export SpaceTimeDrawer : public FeatureLayerDrawer, public TemporalDrawer
 		virtual void setRepresentation(const Representation& rp);
 		void SetNrSteps(int steps);
 		int iNrSteps();
+		void SetAdditionalElementsDrawer(SpaceTimeElementsDrawer * _spaceTimeElementsDrawer);
+		SpaceTimeElementsDrawer * getAdditionalElementsDrawer();
+		BaseMapPtr *getBasemap();
+		virtual void drawFootprint() const = 0;
 
 	protected:
 		String store(const FileName& fnView, const String& parentSection) const;
@@ -54,6 +60,7 @@ class _export SpaceTimeDrawer : public FeatureLayerDrawer, public TemporalDrawer
 		vector<GLuint> selectedObjectIDs;
 		map<long, GLuint> *subDisplayLists;
 		bool *fHatching;
+		SpaceTimeElementsDrawer * spaceTimeElementsDrawer;
 	private:
 		Column prevAttColumn;
 		bool prevUseAttColumn;

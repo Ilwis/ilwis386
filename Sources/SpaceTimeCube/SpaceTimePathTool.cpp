@@ -5,12 +5,14 @@
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\MapWindow\Drawers\DrawerTool.h"
 #include "Client\Mapwindow\LayerTreeItem.h" 
+#include "SpaceTimeElementsDrawer.h"
+#include "Client\FormElements\fldcolor.h"
 #include "SpaceTimePathTool.h"
 #include "DrawersUI\LayerDrawerTool.h"
 #include "Drawers\LayerDrawer.h"
 #include "Drawers\FeatureLayerDrawer.h"
 #include "SpaceTimeDrawer.h"
-
+#include "Client\Mapwindow\MapPaneView.h"
 
 DrawerTool *createSpaceTimePathTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) {
 	return new SpaceTimePathTool(zv, view, drw);
@@ -38,23 +40,115 @@ bool SpaceTimePathTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 HTREEITEM SpaceTimePathTool::configure( HTREEITEM parentItem) {
 	if ( !active)
 		return parentItem;
-	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
+
+	htiNode = insertItem(parentItem, TR("Elements"),"Transparent");
+
+	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&SpaceTimePathTool::displayOptionEdges);
 	SpaceTimeDrawer *pdrw = dynamic_cast<SpaceTimeDrawer *>(drawer);
 	String transp("Edges (%d)", pdrw->iNrSteps());
-	htiNode = insertItem(transp,"Circle", item);
+	insertItem(transp,"Circle", item);
+
+	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
+	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&SpaceTimePathTool::changeFootprint);
+	item->setCheckAction(this,0,(DTSetCheckFunc)&SpaceTimePathTool::setFootprintVisibility);
+	insertItem(TR("Footprint"),"Axis",item,0);
+
+	// implement XT, XY, YT lines first, then uncomment the following
+	/*
+	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
+	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&SpaceTimePathTool::changeXT);
+	item->setCheckAction(this,0,(DTSetCheckFunc)&SpaceTimePathTool::setXTVisibility);
+	insertItem(TR("XT Reference Lines"),"Axis",item,0);
+
+	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
+	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&SpaceTimePathTool::changeXY);
+	item->setCheckAction(this,0,(DTSetCheckFunc)&SpaceTimePathTool::setXYVisibility);
+	insertItem(TR("XY Reference Lines"),"Axis",item,0);
+
+	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
+	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&SpaceTimePathTool::changeYT);
+	item->setCheckAction(this,0,(DTSetCheckFunc)&SpaceTimePathTool::setYTVisibility);
+	insertItem(TR("YT Reference Lines"),"Axis",item,0);
+	*/
 
 	return htiNode;
 }
 
 void SpaceTimePathTool::displayOptionEdges() {
-	new EdgesForm(tree, (ComplexDrawer *)drawer, htiNode);
+	new EdgesForm(tree, (ComplexDrawer *)drawer, tree->GetTreeCtrl().GetNextItem(htiNode, TVGN_CHILD));
 }
 
 String SpaceTimePathTool::getMenuString() const {
 	return TR("SpaceTimePathTool");
 }
 
+void SpaceTimePathTool::setVisibility(const String& element, bool value) {
+	SpaceTimeDrawer * stdrw = (SpaceTimeDrawer*)drawer;
+	SpaceTimeElementsDrawer * eldrw = stdrw->getAdditionalElementsDrawer();
+	PathElementProperties *prop = (PathElementProperties *)(eldrw->getProperties());
+	if (prop) {
+		(*prop)[element].visible = value;
+	}
+	mpvGetView()->Invalidate();
+}
+
+void SpaceTimePathTool::elementForm(const String& element) {
+	SpaceTimeDrawer * stdrw = (SpaceTimeDrawer*)drawer;
+	SpaceTimeElementsDrawer * eldrw = stdrw->getAdditionalElementsDrawer();
+	PathElementProperties *prop = (PathElementProperties *)(eldrw->getProperties());
+	if ( prop)
+		new SpaceTimeElementsForm(tree,(ComplexDrawer *)drawer, htiNode,prop->elements[element]);
+}
+
+void SpaceTimePathTool::setFootprintVisibility(void *value, HTREEITEM) {
+	if (!value)
+		return;
+
+	bool v = *(bool *)value;
+	setVisibility("footprint",v);
+}
+
+void SpaceTimePathTool::setXTVisibility(void *value, HTREEITEM) {
+	if (!value)
+		return;
+
+	bool v = *(bool *)value;
+	setVisibility("xt",v);
+}
+
+
+void SpaceTimePathTool::setXYVisibility(void *value, HTREEITEM) {
+	if (!value)
+		return;
+
+	bool v = *(bool *)value;
+	setVisibility("xy",v);
+}
+
+void SpaceTimePathTool::setYTVisibility(void *value, HTREEITEM) {
+	if (!value)
+		return;
+
+	bool v = *(bool *)value;
+	setVisibility("yt",v);
+}
+
+void SpaceTimePathTool::changeFootprint() {
+	elementForm("footprint");
+}
+
+void SpaceTimePathTool::changeXT() {
+	elementForm("xt");
+}
+
+void SpaceTimePathTool::changeXY() {
+	elementForm("xy");
+}
+
+void SpaceTimePathTool::changeYT() {
+	elementForm("yt");
+}
 
 //---------------------------------------------------
 EdgesForm::EdgesForm(CWnd *wPar, ComplexDrawer *dr, HTREEITEM hti) : 
@@ -94,5 +188,36 @@ void  EdgesForm::apply() {
 	cdrw->prepare(&pp);
 
 	updateMapView();
-
 }
+
+//---------------------------------------------------
+SpaceTimeElementsForm::SpaceTimeElementsForm(CWnd *wPar, ComplexDrawer *dr, HTREEITEM htiTr, PathElement& elem) : 
+DisplayOptionsForm(dr,wPar,elem.label), slider(0), fc(0), element(elem)
+{
+	if ( element.color != colorUNDEF) {
+		fc = new FieldColor(root,TR("Color"),&(element.color));
+	}
+	if ( element.transparency != rUNDEF) {
+		slider = new FieldIntSliderEx(root,"Transparency(0-100)", &transparency,ValueRange(0,100),true);
+		slider->SetCallBack((NotifyProc)&SpaceTimeElementsForm::setTransparency);
+		slider->setContinuous(true);
+	}
+	create();
+}
+
+int SpaceTimeElementsForm::setTransparency(Event *ev) {
+	apply();
+	return 1;
+}
+
+void  SpaceTimeElementsForm::apply() {
+	if ( slider) {
+		slider->StoreData();
+		element.transparency = (double)transparency/100.0;
+	}
+	if ( fc)
+		fc->StoreData();
+
+	updateMapView();
+}
+

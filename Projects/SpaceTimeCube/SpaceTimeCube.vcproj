@@ -255,6 +255,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\SpaceTimeCube\SpaceTimeElementsDrawer.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\SpaceTimeCube\SpaceTimePathDrawer.h"
 				>
 			</File>
@@ -344,6 +348,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\SpaceTimeCube\SpaceTimeDrawer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\SpaceTimeCube\SpaceTimeElementsDrawer.cpp"
 				>
 			</File>
 			<File

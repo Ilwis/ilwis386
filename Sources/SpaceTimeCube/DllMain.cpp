@@ -14,6 +14,7 @@
 
 #include "TimePositionBar.h"
 #include "SpaceTimeCubeTool.h"
+#include "SpaceTimeElementsDrawer.h"
 #include "SpaceTimePathTool.h"
 #include "SpaceTimePathDrawer.h"
 #include "StationsDrawer.h"
@@ -47,6 +48,7 @@ DrawerInfoVector *createDrawer() {
 	infos->push_back(new DrawerInfo("CubeDrawer","Cube",createCubeDrawer));
 	infos->push_back(new DrawerInfo("PreTimeOffsetDrawer","Cube",createPreTimeOffsetDrawer));
 	infos->push_back(new DrawerInfo("PostTimeOffsetDrawer","Cube",createPostTimeOffsetDrawer));
+	infos->push_back(new DrawerInfo("SpaceTimeElementsDrawer","Cube",createSpaceTimeElementsDrawer));
 	return infos;
 }
 
