@@ -100,12 +100,22 @@ void LegendTool::addValueItems(bool force) {
 			vrr = roundRange(vrr.rLo(), vrr.rHi(), step);
 	} 
 
-	for (double v = vrr.rHi(); v >= vrr.rLo(); v -= step) {
+	double domstep = dvrs.rStep();
+	bool isInteger = abs(domstep - (int)domstep) < 0.0000001;
+	int count = vrr.rWidth() / step;
+	for (double v = vrr.rHi(); v >= vrr.rLo(); v -= step, --count) {
 		String sName = dvrs.sValue(v);
-		if ( fImage && v + step > 255) {
-			v = 255;
+
+		double value = v;
+		if ( count == 0) {
+			int w = isInteger ? 0: -1;
+			sName = dvrs.sValue(vrr.rLo(),w,w);
+			value = vrr.rLo();
 		}
-		LegendValueLayerTreeItem *it = new LegendValueLayerTreeItem(tree, htiNode, drawer, dvrs, v);
+		if ( fImage && value + step > 255) {
+			value = 255;
+		}
+		LegendValueLayerTreeItem *it = new LegendValueLayerTreeItem(tree, htiNode, drawer, dvrs, value);
 		insertItem(sName,"",it);
 		//tree->GetTreeCtrl().SetItemData(hti, (DWORD_PTR));		
 	}
