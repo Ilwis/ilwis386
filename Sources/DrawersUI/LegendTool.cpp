@@ -53,43 +53,59 @@ HTREEITEM LegendTool::configure( HTREEITEM parentItem){
 
 	String sName = TR("Legend");
 	int iImgLeg = IlwWinApp()->iImage("legend");
-	htiNode = tree->GetTreeCtrl().InsertItem(sName.c_str(), iImgLeg, iImgLeg, parentItem);
+	//htiNode = tree->GetTreeCtrl().InsertItem(sName.c_str(), iImgLeg, iImgLeg, parentItem);
 
+	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
+	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&LegendTool::displayOptionLegend);
+	htiNode = insertItem("legend","Legend", item); 
 	update();
+	DrawerTool::configure(htiNode);
 	tree->GetTreeCtrl().Expand(htiNode, TVE_EXPAND);
-	
+		
 	return htiNode;
 }
 
-void LegendTool::insertLegendItemsValue(const Representation& rpr, const DomainValueRangeStruct& dvs){
+void LegendTool::displayOptionLegend() {
+	new LegendValueForm(tree, (LayerDrawer *)drawer, this, vrr,step );
+}
+
+void LegendTool::insertLegendItemsValue(const Representation& rpr){
 	if ( htiNode) {
 		tree->DeleteAllItems(htiNode, true);
 	}
-	tree->GetTreeCtrl().SetItemData(htiNode, (DWORD_PTR)new ObjectLayerTreeItem(tree, rpr.pointer()));
+	//tree->GetTreeCtrl().SetItemData(htiNode, (DWORD_PTR)new ObjectLayerTreeItem(tree, rpr.pointer()));
 	RangeReal rr;
 	LayerDrawer *ldrw = dynamic_cast<LayerDrawer *>(drawer);
 	SetDrawer *sdrw = dynamic_cast<SetDrawer *>(drawer);
 	if ( sdrw) {
-		rr = sdrw->getStretchRangeReal();
+		vrr = sdrw->getStretchRangeReal();
 	} else {
-		rr = ldrw->getStretchRangeReal(true);
+		vrr = ldrw->getStretchRangeReal(true);
 	}
 
-	double rStep = dvs.rStep();
-	RangeReal rmd;
-	bool fImage = dvs.dm()->pdi();
-	if ( fImage) {
-		rmd = RangeReal(0,255);
-		rStep = 30;
-	} else
-		rmd = roundRange(rr.rLo(), rr.rHi(), rStep);
+	step = dvrs.rStep();
 
-	for (double v = rmd.rHi(); v >= rmd.rLo(); v -= rStep) {
-		String sName = dvs.sValue(v);
-		if ( fImage && v + rStep > 255) {
+	addValueItems();
+
+}
+
+void LegendTool::addValueItems(bool force) {
+	bool fImage = false;
+	if (!force) {
+		bool fImage = dvrs.dm()->pdi() || (( vrr.rLo() == 1 || vrr.rLo() == 0) && vrr.rHi() == 255);
+		if ( fImage) {
+			vrr = RangeReal(0,255);
+			step = 30;
+		} else
+			vrr = roundRange(vrr.rLo(), vrr.rHi(), step);
+	} 
+
+	for (double v = vrr.rHi(); v >= vrr.rLo(); v -= step) {
+		String sName = dvrs.sValue(v);
+		if ( fImage && v + step > 255) {
 			v = 255;
 		}
-		LegendValueLayerTreeItem *it = new LegendValueLayerTreeItem(tree, htiNode, drawer, dvs, v);
+		LegendValueLayerTreeItem *it = new LegendValueLayerTreeItem(tree, htiNode, drawer, dvrs, v);
 		insertItem(sName,"",it);
 		//tree->GetTreeCtrl().SetItemData(hti, (DWORD_PTR));		
 	}
@@ -134,7 +150,7 @@ void LegendTool::update() {
 	if ( !mapDrawer)
 		mapDrawer = dynamic_cast<SpatialDataDrawer *>(drawer->getParentDrawer());
 
-	DomainValueRangeStruct dvs = mapDrawer->getBaseMap()->dvrs();
+	dvrs = mapDrawer->getBaseMap()->dvrs();
 	LayerDrawer *layerDrawer = dynamic_cast<LayerDrawer *>(drawer);
 	SetDrawer *adrw = dynamic_cast<SetDrawer *>(drawer);
 	if ( adrw) {
@@ -149,11 +165,11 @@ void LegendTool::update() {
 	}
 
 	if ( layerDrawer->useAttributeColumn() && layerDrawer->getAtttributeColumn().fValid()) {
-		dvs = layerDrawer->getAtttributeColumn()->dvrs();
+		dvrs = layerDrawer->getAtttributeColumn()->dvrs();
 	}
 	Representation rpr = layerDrawer->getRepresentation();
 	if ( rpr->prg() || rpr->prv())
-		insertLegendItemsValue(rpr, dvs);
+		insertLegendItemsValue(rpr);
 	else if ( rpr->prc()) {
 		insertLegendItemsClass(rpr);
 	}
@@ -209,7 +225,29 @@ void  LineRprForm::apply() {
   updateMapView();
 }
 
+//--------------------------------------------------
+LegendValueForm::LegendValueForm(CWnd *wPar, LayerDrawer *dr, LegendTool *tl, RangeReal& rnge, double& step) : 
+DisplayOptionsForm(dr,wPar,TR("Value Representation")), range(rnge),rstep(step), tool(tl)
+{
+	rmin = range.rLo();
+	rmax = range.rHi();
+	fmin = new FieldReal(root,"Min",&rmin);
+	fmax = new FieldReal(root,"Max", &rmax);
+	fmax->Align(fmin, AL_UNDER);
+	fstep = new FieldReal(root,"Step",&rstep);
+  create();
+}
 
+void LegendValueForm::apply() {
+	fmin->StoreData();
+	fmax->StoreData();
+	fstep->StoreData();
+	range.rHi() = rmax;
+	range.rLo() = rmin;
+	view->DeleteAllItems(tool->getTreeItem(), true);
+	tool->addValueItems(true);
+	
+}
 //---------------------------------------------------
 PolRprForm::PolRprForm(CWnd *wPar, LayerDrawer *dr, RepresentationClass* rc, long raw) : 
 DisplayOptionsForm(dr,wPar,TR("Polygon Representation")),rcl(rc), iRaw(raw)
