@@ -81,7 +81,7 @@ String PointDirectionTool::getMenuString() const {
 
 //---------------------------------------------------
 PointDirectionForm::PointDirectionForm(CWnd *wPar, PointLayerDrawer *dr, const Table& _tbl):
-DisplayOptionsForm(dr,wPar,TR("Scaling")), tbl(_tbl), fcColumn(0), clockwise(true)
+DisplayOptionsForm(dr,wPar,TR("Rotation")), tbl(_tbl), fcColumn(0), clockwise(true)
 {
 	SpatialDataDrawer *spdrw = (SpatialDataDrawer *)(dr->getParentDrawer());
 	BaseMapPtr *bmptr = spdrw->getBaseMap();
