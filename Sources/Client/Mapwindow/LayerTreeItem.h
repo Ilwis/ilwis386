@@ -186,7 +186,7 @@ protected:
 class _export LegendValueLayerTreeItem: public DisplayOptionTreeItem
 {
 public:
-	LegendValueLayerTreeItem(LayerTreeView*, HTREEITEM parent, NewDrawer*, DomainValueRangeStruct _dvrs, double rValue);
+	LegendValueLayerTreeItem(LayerTreeView*, HTREEITEM parent, NewDrawer*, DomainValueRangeStruct _dvrs, double v);
 	virtual ~LegendValueLayerTreeItem();
 	virtual void OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult);
 private:

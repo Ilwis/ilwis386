@@ -469,6 +469,7 @@ void LegendClassLayerTreeItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 		return;
 	case CDDS_ITEMPOSTPAINT:
 		{
+
 			CDC cdc;
 			cdc.Attach(lptvcd->nmcd.hdc);
 			CRect rect = lptvcd->nmcd.rc;
@@ -542,6 +543,8 @@ void LegendValueLayerTreeItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 		return;
 	case CDDS_ITEMPOSTPAINT:
 		{
+			double domstep = dvrs.rStep();
+			int w =  abs(domstep - (int)domstep) < 0.0000001 ? 0 : -1;
 			CDC cdc;
 			cdc.Attach(lptvcd->nmcd.hdc);
 			CRect rect = lptvcd->nmcd.rc;
@@ -568,7 +571,7 @@ void LegendValueLayerTreeItem::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 			int iWidth = 1.5 * iHeight;
 			rect.right = rect.left + iWidth;
 			((ComplexDrawer *)dr)->drawLegendItem(&cdc, rect, rVal);
-			String sText = dvrs.sValue(rVal,0);
+			String sText = dvrs.sValue(rVal,w,w);
 			DomainValue* dv = dvrs.dm()->pdv();
 			if (dv->fUnit())
 				sText = String("%S %S", sText, dv->sUnit());
