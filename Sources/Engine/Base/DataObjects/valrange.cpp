@@ -732,9 +732,6 @@ void ValueRangeReal::init(double rRaw0)
     _iWidth = iBeforeDec + _iDec;
     if (_iDec > 0)
       _iWidth++;
-	if ( _iWidth == 3){
-		TRACE("STOP\n");
-	}
     if (_iWidth > 12)
       _iWidth = 12;
 /*
