@@ -92,7 +92,9 @@ void LegendTool::insertLegendItemsValue(const Representation& rpr){
 void LegendTool::addValueItems(bool force) {
 	bool fImage = false;
 	if (!force) {
-		bool fImage = dvrs.dm()->pdi() || (( vrr.rLo() == 1 || vrr.rLo() == 0) && vrr.rHi() == 255);
+		bool fminLimit = vrr.rLo() == 1 || vrr.rLo() == 0;
+		bool fhilimit = vrr.rHi() == 255;
+		fImage = dvrs.dm()->pdi() || (  fminLimit && fhilimit );
 		if ( fImage) {
 			vrr = RangeReal(0,255);
 			step = 30;
@@ -103,17 +105,23 @@ void LegendTool::addValueItems(bool force) {
 	double domstep = dvrs.rStep();
 	bool isInteger = abs(domstep - (int)domstep) < 0.0000001;
 	int count = vrr.rWidth() / step;
+	vector<double> values;
+	for (double v = vrr.rLo(); v <= vrr.rHi(); v += step) {
+		if ( fImage && v + step > 255) {
+			values.push_back(255);
+		} else {
+			values.push_back(v);
+		}
+	}
+
 	for (double v = vrr.rHi(); v >= vrr.rLo(); v -= step, --count) {
 		String sName = dvrs.sValue(v);
 
-		double value = v;
+		double value = values[count];
 		if ( count == 0) {
 			int w = isInteger ? 0: -1;
 			sName = dvrs.sValue(vrr.rLo(),w,w);
 			value = vrr.rLo();
-		}
-		if ( fImage && value + step > 255) {
-			value = 255;
 		}
 		LegendValueLayerTreeItem *it = new LegendValueLayerTreeItem(tree, htiNode, drawer, dvrs, value);
 		insertItem(sName,"",it);
