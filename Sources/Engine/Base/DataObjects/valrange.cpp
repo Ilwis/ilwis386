@@ -726,12 +726,15 @@ void ValueRangeReal::init(double rRaw0)
     short iBeforeDec = 1;
     double rMax = max(fabs(rLo()), fabs(rHi()));
     if (rMax != 0)
-      iBeforeDec = floor(log10(rMax)) + 1;
+      iBeforeDec = floor(max(0,log10(rMax))) + 1;
     if (rLo() < 0)
       iBeforeDec++;
     _iWidth = iBeforeDec + _iDec;
     if (_iDec > 0)
       _iWidth++;
+	if ( _iWidth == 3){
+		TRACE("STOP\n");
+	}
     if (_iWidth > 12)
       _iWidth = 12;
 /*
