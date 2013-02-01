@@ -43,9 +43,13 @@ bool HTrackMarker::draw( const CoordBounds& cbArea) const{
 	glClearColor(1.0,1.0,1.0,0.0);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
+	glDisable(GL_DEPTH_TEST);
 	PointDrawer::draw(cbArea);
 	glDisable(GL_BLEND);
-
+	if (getRootDrawer()->is3D())
+		glEnable(GL_DEPTH_TEST);
+	else
+		glDisable(GL_DEPTH_TEST);
 	return true;
 }
 
@@ -69,7 +73,12 @@ bool HTrackLine::draw( const CoordBounds& cbArea) const{
 	glClearColor(1.0,1.0,1.0,0.0);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
+	glDisable(GL_DEPTH_TEST);
 	LineDrawer::draw(cbArea);
+	if (getRootDrawer()->is3D())
+		glEnable(GL_DEPTH_TEST);
+	else
+		glDisable(GL_DEPTH_TEST);
 	return true;
 }
 

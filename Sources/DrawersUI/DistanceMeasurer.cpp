@@ -96,6 +96,7 @@ bool MeasurerLine::draw( const CoordBounds& cbArea) const{
 		return false;
 	glClearColor(1.0,1.0,1.0,0.0);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glDisable(GL_DEPTH_TEST);
 	if (useMeasureLine) {
 		glEnable(GL_BLEND);
 		LineDrawer::draw(cbArea);
@@ -217,6 +218,11 @@ bool MeasurerLine::draw( const CoordBounds& cbArea) const{
 
 	glDisable (GL_LINE_STIPPLE);
 	glLineWidth(1);
+
+	if (getRootDrawer()->is3D())
+		glEnable(GL_DEPTH_TEST);
+	else
+		glDisable(GL_DEPTH_TEST);
 
 	return true;
 }

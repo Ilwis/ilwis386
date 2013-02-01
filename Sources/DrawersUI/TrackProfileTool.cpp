@@ -44,6 +44,7 @@ bool TrackMarker::draw( const CoordBounds& cbArea) const{
 	glClearColor(1.0,1.0,1.0,0.0);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
+	glDisable(GL_DEPTH_TEST);
 	PointProperties *pprops = (PointProperties *)( const_cast<TrackMarker *>(this)->getProperties());
 	if ( pprops && line) {
 		LineProperties *lprops = (LineProperties *)line->getProperties();
@@ -52,7 +53,10 @@ bool TrackMarker::draw( const CoordBounds& cbArea) const{
 	}
 	PointDrawer::draw(cbArea);
 	glDisable(GL_BLEND);
-
+	if (getRootDrawer()->is3D())
+		glEnable(GL_DEPTH_TEST);
+	else
+		glDisable(GL_DEPTH_TEST);
 	return true;
 }
 
@@ -77,7 +81,12 @@ bool TrackLine::draw( const CoordBounds& cbArea) const{
 	glClearColor(1.0,1.0,1.0,0.0);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
+	glDisable(GL_DEPTH_TEST);
 	LineDrawer::draw(cbArea);
+	if (getRootDrawer()->is3D())
+		glEnable(GL_DEPTH_TEST);
+	else
+		glDisable(GL_DEPTH_TEST);
 	return true;
 }
 
