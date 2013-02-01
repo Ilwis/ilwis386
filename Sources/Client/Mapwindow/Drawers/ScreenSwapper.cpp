@@ -31,7 +31,9 @@ void ScreenSwapper::swapBufferToScreen(const CRect& rct){
 	csBitmap.Lock();
 	if (swapBitmap!=NULL) {
 		glPixelTransferf(GL_MAP_COLOR, false);
+		glDepthMask(false);
 		glDrawPixels(rct.Width(), rct.Height(),GL_RGBA,GL_FLOAT, swapBitmap);
+		glDepthMask(true);
 		GLenum ret =  glGetError();
 	}
 	csBitmap.Unlock();
