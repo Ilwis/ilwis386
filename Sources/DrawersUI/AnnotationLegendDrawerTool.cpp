@@ -1,4 +1,5 @@
 #include "Client\Headers\formelementspch.h"
+#include "Engine\Base\Round.h"
 #include "Client\FormElements\fldcolor.h"
 #include "Client\FormElements\FieldListView.h"
 #include "Client\FormElements\FieldIntSlider.h"
@@ -76,7 +77,7 @@ void AnnotationLegendDrawerTool::setPosition() {
 
 void AnnotationLegendDrawerTool::setAppearance() {
 	if ( legend)
-		new LegendAppearance(tree, legend);
+		new LegendAppearance(tree, legend,(ComplexDrawer *)drawer);
 }
 
 
@@ -186,7 +187,8 @@ int LegendPosition::setPosition(Event *ev) {
 }
 
 //-------------------------------------------------------------------------------
-LegendAppearance::LegendAppearance(CWnd *wPar, AnnotationLegendDrawer *dr) : DisplayOptionsForm(dr,wPar,TR("Appearance of Legend")) , fview(0)
+LegendAppearance::LegendAppearance(CWnd *wPar, AnnotationLegendDrawer *dr, ComplexDrawer *lyr) : 
+DisplayOptionsForm(dr,wPar,TR("Appearance of Legend")) , layer(lyr), fview(0),fmin(0), fmax(0), fstep(0)
 {
 	useBgColor = dr->getUseBackBackground();
 	bgColor = dr->getBackgroundColor();
@@ -209,6 +211,24 @@ LegendAppearance::LegendAppearance(CWnd *wPar, AnnotationLegendDrawer *dr) : Dis
 		cols.push_back(FLVColumnInfo("Name", 150));
 		fview = new FieldListView(root,cols,LVS_EX_GRIDLINES);
 		fview->Align(st, AL_AFTER);
+	} else {
+		SpatialDataDrawer *mapDrawer = dynamic_cast<SpatialDataDrawer *>(layer); // case animation drawer
+		if ( !mapDrawer)
+			mapDrawer = dynamic_cast<SpatialDataDrawer *>(layer->getParentDrawer());
+		dvrs = mapDrawer->getBaseMap()->dvrs();
+		AnnotationValueLegendDrawer * vdr = (AnnotationValueLegendDrawer *)dr;
+		RangeReal vrr = vdr->getRange();
+		rstep = vdr->getStep();
+		if ( rstep == rUNDEF) {
+			vrr = roundRange(vrr.rLo(), vrr.rHi(), rstep);
+		}
+		rmin = vrr.rLo();
+		rmax = vrr.rHi();
+
+		fmin = new FieldReal(root,"Min",&rmin);
+		fmax = new FieldReal(root,"Max", &rmax);
+		fmax->Align(fmin, AL_UNDER);
+		fstep = new FieldReal(root,"Step",&rstep);
 	}
 	create();
 	if ( dr->getDomain()->pdc()) {
@@ -239,6 +259,10 @@ void LegendAppearance::apply() {
 	if ( fview){
 		fview->StoreData();
 		fview->getSelectedRowNumbers(rows);
+	} else {
+		fstep->StoreData();
+		fmax->StoreData();
+		fmin->StoreData();
 	}
 	cbBoundary->StoreData();
 
@@ -257,6 +281,10 @@ void LegendAppearance::apply() {
 			rws.push_back(iRaw);	
 		}
 		((AnnotationClassLegendDrawer *)andrw)->setActiveClasses(rws);
+	} else {
+		AnnotationValueLegendDrawer * vdr = (AnnotationValueLegendDrawer *)drw;
+		vdr->setRange( RangeReal(rmin, rmax));
+		vdr->setStep(rstep);
 	}
 
 

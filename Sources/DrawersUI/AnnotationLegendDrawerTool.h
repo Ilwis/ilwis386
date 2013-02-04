@@ -42,12 +42,13 @@ namespace ILWIS {
 
 	class LegendAppearance : public DisplayOptionsForm {
 	public:
-		LegendAppearance(CWnd *wPar, AnnotationLegendDrawer *dr);
+		LegendAppearance(CWnd *wPar, AnnotationLegendDrawer *dr, ComplexDrawer *cdrw);
 	private:
 		void apply();
 		bool useBgColor;
 		Color bgColor;
 		bool drawBoundary;
+		ComplexDrawer *layer;
 		FieldColor *fc;
 		FieldListView *fview;
 		CheckBox *cbColor, *cbBoundary;
@@ -58,6 +59,12 @@ namespace ILWIS {
 		String title;
 		double fscale;
 		//vector<long> raws;
+
+		double rmin,rmax;
+		double rstep;
+		RangeReal range;
+		DomainValueRangeStruct dvrs;
+		FieldReal *fstep, *fmax, *fmin;
 	};
 
 }
