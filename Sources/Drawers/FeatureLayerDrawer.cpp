@@ -146,12 +146,12 @@ void FeatureLayerDrawer::prepareChildDrawers(PreparationParameters *parms) {
 			if ( bmp && bmp->dm().fValid()) {
 				Feature *feature = features.at(i);
 				if ( labelAttribute == "" || attTbl.fValid() == false ) {
-					pdrw->getLabelDrawer()->setText(feature->sValue(bmp->dvrs()));
+					pdrw->getLabelDrawer()->setText(feature->sValue(bmp->dvrs()).sTrimSpaces());
 				} else if ( attTbl.fValid()){
 					Column col= attTbl->col(labelAttribute);
 					if ( col.fValid()) {
 						String sV = col->sValue(feature->iValue());
-						pdrw->getLabelDrawer()->setText(sV);
+						pdrw->getLabelDrawer()->setText(sV.sTrimSpaces());
 					}
 				}
 				if (bmp->dm()->rpr().fValid()) {
