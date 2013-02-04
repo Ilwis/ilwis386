@@ -275,11 +275,11 @@ void BaseView::SetMenuState(unsigned int iCommand, unsigned int iFlags)
 
 	if ( iFlags & MF_CHECKED )
 		menu->CheckMenuItem(iCommand, MF_BYCOMMAND | MF_CHECKED);
-	if ( iFlags & MF_UNCHECKED )
+	else
 		menu->CheckMenuItem(iCommand, MF_BYCOMMAND | MF_UNCHECKED);
 	if ( iFlags & MF_DISABLED )
 		menu->EnableMenuItem(iCommand, MF_BYCOMMAND | MF_DISABLED);
-	if ( iFlags & MF_ENABLED )
+	else
 		menu->EnableMenuItem(iCommand, MF_BYCOMMAND | MF_ENABLED);
 	if ( iFlags & MF_GRAYED )
 		menu->EnableMenuItem(iCommand, MF_BYCOMMAND | MF_GRAYED);
