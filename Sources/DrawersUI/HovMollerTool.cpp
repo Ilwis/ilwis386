@@ -93,7 +93,7 @@ DrawerTool *createHovMollerTool(ZoomableView* zv, LayerTreeView *view, NewDrawer
 
 
 HovMollerTool::HovMollerTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
-	DrawerTool("HovMollerTool",zv, view, drw)
+	DrawerTool("HovMoellerTool",zv, view, drw)
 {
 	active = false;
 	graphForm = false;
@@ -142,7 +142,7 @@ HTREEITEM HovMollerTool::configure( HTREEITEM parentItem) {
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
 	item->setDoubleCickAction(this,(DTDoubleClickActionFunc)&HovMollerTool::displayOptionAddList);
 	item->setCheckAction(this,0, (DTSetCheckFunc)&HovMollerTool::setcheckTool);
-	htiNode = insertItem(TR("HovMoller Diagram"),"Track",item,0);
+	htiNode = insertItem(TR("HovMoeller Diagram"),"Track",item,0);
 
 	DrawerTool *dt = DrawerTool::createTool("LineStyleTool", getDocument()->mpvGetView(),tree, line);
 	if ( dt) {
@@ -188,7 +188,7 @@ void HovMollerTool::setcheckTool(void *w, HTREEITEM item) {
 }
 
 String HovMollerTool::getMenuString() const {
-	return TR("Hovemoller Diagram");
+	return TR("Hovemoeller Diagram");
 }
 
 void HovMollerTool::displayOptionAddList() {
