@@ -104,6 +104,10 @@ protected:
 class _export AnnotationValueLegendDrawer : public AnnotationLegendDrawer{
 public:
 	AnnotationValueLegendDrawer(DrawerParameters *parms);
+	RangeReal getRange() const;
+	void setRange(RangeReal& range);
+	double getStep() const;
+	void setStep(double s);
 protected:
 	bool draw( const CoordBounds& cbArea) const;
 	void prepare(PreparationParameters *pp);
@@ -114,6 +118,8 @@ protected:
 	void load(const FileName& fnView, const String& parenSection);
 
 	int noTicks;
+	double rstep;
+	RangeReal vrr;
 };
 
 class _export AnnotationBorderDrawer : public AnnotationDrawer {

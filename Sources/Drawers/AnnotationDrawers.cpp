@@ -2,7 +2,9 @@
 #include "Engine\Map\basemap.h"
 #include "Engine\Map\Point\ilwPoint.h"
 #include "Engine\Drawers\ComplexDrawer.h"
-#include "Engine\Drawers\SimpleDrawer.h" 
+#include "Engine\Drawers\SimpleDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h" 
+#include "Drawers\SetDrawer.h" 
 #include "Engine\Representation\Rpr.h"
 #include "Engine\Spatialreference\gr.h"
 #include "Engine\Domain\Dmvalue.h"
@@ -454,7 +456,8 @@ ILWIS::NewDrawer *createAnnotationValueLegendDrawer(DrawerParameters *parms) {
 
 AnnotationValueLegendDrawer::AnnotationValueLegendDrawer(DrawerParameters *parms) : 
 AnnotationLegendDrawer(parms,"AnnotationValueLegendDrawer"),
-noTicks(5)
+noTicks(5),
+rstep(rUNDEF)
 {
 }
 
@@ -466,6 +469,13 @@ void AnnotationValueLegendDrawer::prepare(PreparationParameters *pp) {
 			TextDrawer *txt = (ILWIS::TextDrawer *)NewDrawer::getDrawer("TextDrawer","ilwis38",&dp);
 			txt->setActive(false);
 			texts->addDrawer(txt);
+		}
+		LayerDrawer *ldrw = dynamic_cast<LayerDrawer *>(getParentDrawer());
+		SetDrawer *sdrw = dynamic_cast<SetDrawer *>(getParentDrawer());
+		if ( sdrw) {
+			vrr = sdrw->getStretchRangeReal();
+		} else {
+			vrr = ldrw->getStretchRangeReal(true);
 		}
 	}
 	if ( pp->type & NewDrawer::ptOFFSCREENSTART || pp->type & NewDrawer::ptOFFSCREENEND) {
@@ -544,6 +554,10 @@ void AnnotationValueLegendDrawer::drawVertical(CoordBounds& cbInner, const Range
 	double endx = startx + cbInner.width();
 	double rStep = rr.rWidth() / 100.0;
 	double rV = rr.rLo() + 0.5 * rStep;
+	for(int i=0; i < texts->getDrawerCount(); ++i){
+		if ( texts->getDrawer(i))
+			texts->getDrawer(i)->setActive(false);
+	}
 	setText(values,0,Coord(endx + cbInner.width() / 3, starty  + cbInner.height() / 100.0,z));
 	for(int i=0; i < 100; ++i) {
 		Color clr = dc.clrVal(rV);
@@ -635,28 +649,54 @@ vector<String> AnnotationValueLegendDrawer::makeRange(ComplexDrawer *dr) const{
 			dvs = mapDrawer->getAtttributeColumn()->dvrs();
 		}
 	}
-	RangeReal rr = mapDrawer->getStretchRangeReal(true);
-	double rStep = 1.0;
 	RangeReal rmd;
-	bool fImage = dvs.dm()->pdi();
+	double step = 1.0;
+	bool fImage = dvs.dm()->pdi() || (( vrr.rLo() == 0 || vrr.rLo() == 1) && vrr.rHi() == 255);
 	if ( fImage) {
-		rmd = RangeReal(0,255);
-		rStep = 30;
-	} else
-		rmd = roundRange(rr.rLo(), rr.rHi(), rStep);
+		if ( rstep == rUNDEF) {
+			step = 30;
+			rmd = RangeReal(0,255);
+			fImage = true;
+		} else {
+			fImage = false; // we overruled the defaults so nio assumptions anymore
+		}
+	} else{
+		if ( rstep == rUNDEF)
+			rmd = roundRange(vrr.rLo(), vrr.rHi(), step);
+		else {
+			rmd = vrr;
+			step = rstep;
+		}
+	}
 
 	int dec = -1;
 	if ( rmd.rWidth() > 10)
 		dec = 0;
-	for (double v = rmd.rLo(); v <= rmd.rHi(); v += rStep) {
+	if ( (rmd.rWidth() / step) > 19) {
+		step = rmd.rWidth() / 10;
+	}
+	for (double v = rmd.rLo(); v <= rmd.rHi(); v += step) {
 		String sName = dvs.sValue(v, -1, dec);
-		if ( fImage && v + rStep > 255) {
+		if ( fImage && v + step > 255) {
 			sName = "255";
 		}
 		values.push_back(sName.sTrimSpaces());
 
 	}	
 	return values;
+}
+
+RangeReal AnnotationValueLegendDrawer::getRange() const{
+	return vrr;
+}
+void AnnotationValueLegendDrawer::setRange(RangeReal& range){
+	vrr = range;
+}
+double AnnotationValueLegendDrawer::getStep() const{
+	return rstep;
+}
+void AnnotationValueLegendDrawer::setStep(double s){
+	rstep = s;
 }
 
 void AnnotationValueLegendDrawer::load(const FileName& fnView, const String& parentSection){
@@ -825,6 +865,7 @@ Coordinate ptBorderX(RootDrawer * rootDrawer, AnnotationBorderDrawer::Side side,
 			r = rFindNull(ValFinder(rootDrawer,crdCenter,false,true,cb.MaxX()), crdCenter.y);
 			return Coordinate(cb.MaxX(), r);
 	}
+	return crdUNDEF;
 }
 
 Coordinate ptBorderY(RootDrawer * rootDrawer, AnnotationBorderDrawer::Side side, double rY)
@@ -851,6 +892,7 @@ Coordinate ptBorderY(RootDrawer * rootDrawer, AnnotationBorderDrawer::Side side,
 			r = rFindNull(ValFinder(rootDrawer,crdCenter,true,true,cb.MaxX()), crdCenter.x);
 			return Coordinate(cb.MaxX(), r);
 	}
+	return crdUNDEF;
 }
 
 void AnnotationBorderDrawer::setText(double border, AnnotationBorderDrawer::Side side, double z) const{
