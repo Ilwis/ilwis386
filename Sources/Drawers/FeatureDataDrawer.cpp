@@ -81,7 +81,7 @@ void FeatureDataDrawer::addLayerDrawer(const BaseMap& basemap,PreparationParamet
 		fsd->setName(name);
 	fsd->setRepresentation(basemap->dm()->rpr()); //  default choice
 	fsd->getZMaker()->setSpatialSource(basemap, getRootDrawer()->getMapCoordBounds());
-	fsd->getZMaker()->setDataSourceMap(basemap);
+	//fsd->getZMaker()->setDataSourceMap(basemap);
 	BaseMap bmp(basemap);
 	fsd->addDataSource(&bmp);
 	fsd->prepare(&fp);
