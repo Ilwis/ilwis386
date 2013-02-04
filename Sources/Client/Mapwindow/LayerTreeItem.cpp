@@ -728,11 +728,10 @@ void DisplayOptionTree::OnContextMenu(CWnd* pWnd, CPoint pos){
 			if ( hti){
 				UINT state = men.GetMenuState(iCmd,MF_BYCOMMAND);
 				// it still has the state it had so invert the logic
-				if ( state == MF_UNCHECKED) {
-					tool->setActiveMode(true);
-				} else if ( state == MF_CHECKED){
+				if ( state & MF_CHECKED)
 					tool->setActiveMode(false);
-				}
+				else
+					tool->setActiveMode(true);
 				tool->prepare();
 			}
 		}
