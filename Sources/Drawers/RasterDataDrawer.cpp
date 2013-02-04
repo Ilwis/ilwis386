@@ -84,7 +84,7 @@ void RasterDataDrawer::addLayerDrawer(const BaseMap& basemap,PreparationParamete
 	rsd->setName(name);
 	rsd->setRepresentation(basemap->dm()->rpr()); //  default choice
 	rsd->getZMaker()->setSpatialSource(basemap, getRootDrawer()->getMapCoordBounds());
-	rsd->getZMaker()->setDataSourceMap(basemap);
+	//rsd->getZMaker()->setDataSourceMap(basemap);
 	rsd->addDataSource(mpl.fValid() ? (void *)&mpl : (void *)&basemap);  // color composte or normal
 	if (rsd->getDrawMethod() == drmNOTSET)
 		rsd->setDrawMethod(drmINIT);
