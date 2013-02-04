@@ -74,7 +74,6 @@ void LegendTool::insertLegendItemsValue(const Representation& rpr){
 		tree->DeleteAllItems(htiNode, true);
 	}
 	//tree->GetTreeCtrl().SetItemData(htiNode, (DWORD_PTR)new ObjectLayerTreeItem(tree, rpr.pointer()));
-	RangeReal rr;
 	LayerDrawer *ldrw = dynamic_cast<LayerDrawer *>(drawer);
 	SetDrawer *sdrw = dynamic_cast<SetDrawer *>(drawer);
 	if ( sdrw) {
