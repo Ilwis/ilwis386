@@ -288,16 +288,16 @@ HTREEITEM DistanceMeasurer::configure( HTREEITEM parentItem){
 
 	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	item->setCheckAction(this,0, (DTSetCheckFunc)&DistanceMeasurer::setUseMeasureLine);
-	insertItem(TR("Measurer Line"),"line",item,1);
+	insertItem(TR("Line on Map"),"line",item,1); // Measure Line / Shortest Line on Map / Line / Line on Map
 	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	item->setCheckAction(this,0, (DTSetCheckFunc)&DistanceMeasurer::setUseMeasureCurve);
-	insertItem(TR("Measurer Curve"),"curve",item,0);
+	insertItem(TR("Line on Globe"),"curve",item,0); // Measurer Curve / Shortest Curve on Globe / Shortest Line on Globe / Geodesic Line / Great Circle Distance / Line on Globe
 	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	item->setCheckAction(this,0, (DTSetCheckFunc)&DistanceMeasurer::setUseEquidistantCircle);
-	insertItem(TR("Equidistance Circle"),"Circle",item,0);
+	insertItem(TR("Circle on Map"),"Circle",item,0); // Equidistance Circle / Equidistant Points on Map / Equidistant Curve on Map / Map Equidistant / Circle on Map
 	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	item->setCheckAction(this,0, (DTSetCheckFunc)&DistanceMeasurer::setUseEquidistantEllipse);
-	insertItem(TR("Equidistance Ellipse"),"ellipse",item,0);
+	insertItem(TR("Circle on Globe"),"ellipse",item,0); // Equidistance Ellipse / Equidistant Points on Globe / Equidistant Curve on Globe / Globe Equidistant / Circle on Globe
 	if (!csprStereographic) {
 		csprStereographic = new CoordSystemProjection("StereographicLocal.csy", 1);
 		csprStereographic->datum = new MolodenskyDatum("WGS 1984","");
