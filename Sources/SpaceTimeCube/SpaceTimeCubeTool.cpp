@@ -320,19 +320,32 @@ void SpaceTimeCube::refreshDrawerList() {
 		SpatialDataDrawer * drawer = (SpatialDataDrawer*)(rootDrawer->getDrawer(layerList[i].getDrawerId()));
 		if (drawer == 0)
 			continue; // skip it .. drawer was probably removed from the layers
+		String sPlotOption = layerList[i].sPlotOption();
+		if (!useSpaceTimeCube)
+			sPlotOption = "<regular>";
 		NewDrawer * childDrawer = drawer->getDrawer(0);
 		if (childDrawer != 0) {
-			DeleteDrawerTools(tree->getRootTool(), childDrawer);
-			drawer->removeDrawer(childDrawer->getId()); // remove the old drawer
+			String type = childDrawer->getType();
+			bool fChangeType = ((type == "PointLayerDrawer") && (sPlotOption != "<regular>"));
+			fChangeType |= ((type == "SpaceTimePathDrawer") && (sPlotOption != "<stp>"));
+			fChangeType |= ((type == "StationsDrawer") && (sPlotOption != "<stations>"));
+			if (fChangeType) {
+				DeleteDrawerTools(tree->getRootTool(), childDrawer);
+				drawer->removeDrawer(childDrawer->getId()); // remove the old drawer
+				childDrawer = 0;
+			}
+		}
+		if (childDrawer == 0) {
+			PreparationParameters pp(NewDrawer::ptALL);
+			String sPlotOption = layerList[i].sPlotOption();
+			if (sPlotOption != "<regular>")
+				pp.subType = "Cube:" + sPlotOption;
+			else
+				pp.subType = "ilwis38";
+			drawer->prepare(&pp);
+			replaceTreeItem(drawer, (SpatialDataDrawer*)drawer, rootDrawer->getDrawerIndex(drawer));
 		}
 		PreparationParameters pp(NewDrawer::ptALL);
-		String sPlotOption = layerList[i].sPlotOption();
-		if (useSpaceTimeCube && sPlotOption != "<regular>")
-			pp.subType = "Cube:" + sPlotOption;
-		else
-			pp.subType = "ilwis38";
-		drawer->prepare(&pp);
-		replaceTreeItem(drawer, (SpatialDataDrawer*)drawer, rootDrawer->getDrawerIndex(drawer));
 		TemporalDrawer * temporalDrawer = dynamic_cast<TemporalDrawer*>(((ComplexDrawer*)drawer)->getDrawer(0));
 		if (temporalDrawer) {
 			temporalDrawer->SetTimeBounds(timeBoundsZoom);
