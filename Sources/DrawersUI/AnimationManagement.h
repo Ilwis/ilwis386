@@ -14,6 +14,16 @@ class CGLToMovie;
 namespace ILWIS {
 
 	struct AnimationProperties;
+	class AnimationDrawer;
+	class AnimationBar;
+
+	struct AnimationProperties {
+		AnimationProperties() : drawer(0), mdoc(0), animBar(0) {}
+		AnimationProperties(const AnimationProperties& p) : drawer(p.drawer), mdoc(p.mdoc), animBar(p.animBar) {}
+		AnimationDrawer *drawer;
+		MapCompositionDoc *mdoc;
+		AnimationBar *animBar;
+	};
 
 	class AnimationBar : public CToolBar
 	{
@@ -21,12 +31,13 @@ namespace ILWIS {
 		AnimationBar();
 		virtual ~AnimationBar();
 		virtual void OnUpdateCmdUI(CFrameWnd*, BOOL);
-		void Create(CWnd* pParent); 
-		void updateTime(const AnimationProperties* props );
-		String setTimeString(const AnimationProperties* props);
+		void Create(CWnd* pParent,const AnimationProperties& anim); 
+		void updateTime(/*const AnimationProperties* props*/ );
+		String setTimeString(/*const AnimationProperties* props*/);
 		HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 		void setMarked(bool yesno);
 		LRESULT OnChangeColor(WPARAM wp, LPARAM lp) ;
+		LRESULT OnUpdateAnimMessages(WPARAM p1, LPARAM p2);
 	protected:
 		afx_msg void OnSetFocus();
 		afx_msg void OnKillFocus();
@@ -36,17 +47,12 @@ namespace ILWIS {
 		bool fActive;
 		bool isMarked;
 		CBrush red;
+		AnimationProperties animation;
 
 		DECLARE_MESSAGE_MAP()
 	};
 
-	struct AnimationProperties {
-		AnimationProperties() : drawer(0), mdoc(0), animBar(0) {}
-		AnimationProperties(const AnimationProperties& p) : drawer(p.drawer), mdoc(p.mdoc), animBar(p.animBar) {}
-		AnimationDrawer *drawer;
-		MapCompositionDoc *mdoc;
-		AnimationBar *animBar;
-	};
+
 
 	class AnimationPropertySheet : public CPropertySheet
 	{

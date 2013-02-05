@@ -1,6 +1,7 @@
 #include "Client\Headers\formelementspch.h"
 #include "Client\FormElements\fldcolor.h"
 #include "Headers\messages.h"
+#include "Headers\constant.h"
 #include "Client\FormElements\selector.h"
 #include "Client\FormElements\fldonesl.h"
 #include "Client\FormElements\fldcol.h"
@@ -73,10 +74,10 @@ LRESULT AnimationPropertySheet::command(WPARAM wp, LPARAM lp) {
 	if ( (int)wp & pTimedEvent) {
 		FormBasePropertyPage *page = (FormBasePropertyPage *)GetPage(2);
 		page->DataChanged((Event*)2);
-		AnimationProperties *prop = getActiveAnimation();
+		/*AnimationProperties *prop = getActiveAnimation();
 		if ( prop) {
 			prop->animBar->updateTime(prop);
-		}
+		}*/
 		AnimationRun *pageRun = dynamic_cast<AnimationRun *>(GetPage(0));
 		pageRun->timed();
 	}
@@ -119,6 +120,7 @@ void AnimationPropertySheet::removeAnimation(AnimationDrawer * drw) {
 				activeIndex = -1;
 			FormBasePropertyPage *page = (FormBasePropertyPage *)GetPage(2);
 			page->DataChanged((Event *)3);
+			//animations[i].animBar->stop();
 			animations[i].drawer->manager = 0;
 			animations.erase(animations.begin() + i);
 			page = (FormBasePropertyPage *)GetPage(0);
@@ -992,6 +994,7 @@ BEGIN_MESSAGE_MAP(AnimationBar, CToolBar)
 	ON_EN_KILLFOCUS(ID_AnimationBar,OnKillFocus)
 	ON_WM_CTLCOLOR()
 	ON_MESSAGE(ID_NOTIFY_ME, OnChangeColor)
+	ON_MESSAGE(ILWM_UPDATE_ANIM,OnUpdateAnimMessages)
 END_MESSAGE_MAP()
 
 AnimationBar::AnimationBar() 
@@ -1010,9 +1013,20 @@ AnimationBar::AnimationBar()
 	fnt.CreateFontIndirect(&logFont);
 }
 
+
 LRESULT AnimationBar::OnChangeColor(WPARAM wp, LPARAM lp) {
 	isMarked = wp;
 	ed.Invalidate();
+
+	return 1;
+}
+
+LRESULT AnimationBar::OnUpdateAnimMessages(WPARAM p1, LPARAM p2) {
+	if ( !p1)
+		return 1;
+
+	FileName fn = *(FileName *)(void *)(p1);
+	updateTime();
 
 	return 1;
 }
@@ -1033,9 +1047,11 @@ HBRUSH AnimationBar::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 
 AnimationBar::~AnimationBar()
 {
+AfxGetApp()->PostThreadMessage(ILW_REMOVEDATAWINDOW, (WPARAM)m_hWnd, 0);
+
 }
 
-void AnimationBar::Create(CWnd* pParent)
+void AnimationBar::Create(CWnd* pParent,const AnimationProperties& props)
 {
 	int iWidth = 180;
 
@@ -1064,6 +1080,9 @@ void AnimationBar::Create(CWnd* pParent)
 	SetBarStyle(GetBarStyle()|CBRS_GRIPPER|CBRS_BORDER_3D);
 
 	SetWindowText(TR("Animation").c_str());
+	animation = props;
+
+	AfxGetApp()->PostThreadMessage(ILW_ADDDATAWINDOW, (WPARAM)m_hWnd, 0);
 }
 
 void AnimationBar::OnUpdateCmdUI(CFrameWnd* pParent, BOOL)
@@ -1094,29 +1113,29 @@ void AnimationBar::OnKillFocus()
 }
 
 
-void AnimationBar::updateTime(const AnimationProperties* props) // called by AnimationBarEdit
+void AnimationBar::updateTime(/*const AnimationProperties* props*/) // called by AnimationBarEdit
 {
-	if ( props->drawer->getUseTime()) {
-		String tmstring = setTimeString(props);
+	if ( animation.drawer->getUseTime()) {
+		String tmstring = setTimeString();
 		if ( ed.GetSafeHwnd())
 			ed.SetWindowText(String("%S",tmstring).c_str());
 	}
 	else {
 		if ( ed.GetSafeHwnd())
-			ed.SetWindowText(String("index : %d",props->drawer->getCurrentIndex()).c_str());
+			ed.SetWindowText(String("index : %d",animation.drawer->getCurrentIndex()).c_str());
 	}
 }
 
-String AnimationBar::setTimeString(const AnimationProperties* props) {
+String AnimationBar::setTimeString(/*const AnimationProperties* props*/) {
 
-	int ind = props->drawer->getMapIndex();
+	int ind = animation.drawer->getMapIndex();
 	String timestring;
-	IlwisObject *source = (IlwisObject *)props->drawer->getDataSource();
+	IlwisObject *source = (IlwisObject *)animation.drawer->getDataSource();
 	MapList mpl((*source)->fnObj);
 	if ( mpl->fTblAtt()) {
-		Column timeCol = mpl->tblAtt()->col(props->drawer->getTimeColumn());
+		Column timeCol = mpl->tblAtt()->col(animation.drawer->getTimeColumn());
 		if ( timeCol.fValid()) {
-			Duration timestep = props->drawer->getTimeStep();
+			Duration timestep = animation.drawer->getTimeStep();
 			double steps = 1000.0 / REAL_TIME_INTERVAL;
 			//double currentTime = mpl->tblAtt()->col(colTime)->rrMinMax().rLo() +  timestep * (double)index / steps;
 			double currentTime = timeCol->rValue(ind);
