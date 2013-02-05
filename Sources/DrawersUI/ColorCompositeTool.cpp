@@ -132,6 +132,9 @@ ccTool(_ccTool)
 	fm1 = new FieldOneSelectString(root,TR("Red"),&v1,names);
 	fm2 = new FieldOneSelectString(root,TR("Blue"),&v2,names);
 	fm3 = new FieldOneSelectString(root,TR("Green"),&v3, names);
+	fm1->SetComboWidth(120);
+	fm2->SetComboWidth(120);
+	fm3->SetComboWidth(120);
 	FieldGroup *fg = new FieldGroup(root, true);
 	cb = new CheckBox(fg,TR("Exception Color"),&exception);
 	cb->SetCallBack((NotifyProc)&SetBandsForm::setExc);
