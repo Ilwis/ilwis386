@@ -98,6 +98,7 @@ bool PointDrawer::draw( const CoordBounds& cbArea) const {
 	ComplexDrawer *cdrw = (ComplexDrawer *)getParentDrawer();
 	ZValueMaker *zvmkr = cdrw->getZMaker();
 	bool is3D = getRootDrawer()->is3D();// && zvmkr->getThreeDPossible();
+	bool is3DPossible = cdrw->getZMaker()->getThreeDPossible() && !isSupportingDrawer;
 	double z0 = cdrw->getZMaker()->getZ0(is3D);
 
 	double zscale = zvmkr->getZScale();
@@ -105,7 +106,7 @@ bool PointDrawer::draw( const CoordBounds& cbArea) const {
 
 	double fx = cNorm.x;
 	double fy = cNorm.y;
-	double fz = is3D ? cNorm.z * zscale : z0;
+	double fz = (is3D && is3DPossible) ? cNorm.z * zscale : z0;
 
 	if ( label && label->getParentDrawer()->isActive()) {
 		Coord c = label->coord();
