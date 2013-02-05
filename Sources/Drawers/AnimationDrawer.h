@@ -48,6 +48,7 @@ namespace ILWIS{
 		void removeSlave(AnimationDrawer *drw);
 		int getOffset() const;
 		void setOffset(int off);
+		void setTresholdColor(const Color&clr);
 
 		static int timerIdCounter;
 		CWnd *manager; // basically a UI element, but is sufficiently abstract in thios form to be acceptable; no outisde linage needed.

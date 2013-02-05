@@ -153,11 +153,12 @@ bool AnimationDrawer::timerPerIndex() {
 		getEngine()->SendMessage(ILWM_UPDATE_ANIM,(WPARAM)&(obj->fnObj), mapIndex); 
 	for(int i=0; i < slaves.size(); ++i) {
 		SlaveProperties& props = slaves.at(i);
-		if ( props.threshold > 1.0){
+		props.threshold += props.slaveStep;
+		if ( props.threshold >= 1.0){
 			props.slave->timedEvent(SLAVE_TIMER_ID);
 			props.threshold -= 1.0;
 		}
-		props.threshold += props.slaveStep;
+
 
 	}
 	return true;
@@ -249,6 +250,14 @@ void AnimationDrawer::setMapIndex(int ind) {
 	int nmaps = activeMaps.size();
 	mapIndex = (ind)  % nmaps;
 	getDrawer(activeMaps[mapIndex])->setActive(true);
+	for(int i =0; i < slaves.size(); ++i) {
+		AnimationDrawer *slave = slaves[i].slave;
+		if ( slave) {
+			slave->setMapIndex(ind);
+		}
+	}
+	currentIndex = activeMaps[mapIndex];
+	getEngine()->SendMessage(ILWM_UPDATE_ANIM,(WPARAM)&(obj->fnObj), mapIndex); 
 }
 
 
@@ -323,3 +332,12 @@ String AnimationDrawer::store(const FileName& fnView, const String& parentSectio
 	return currentSection;
 }
 
+void AnimationDrawer::setTresholdColor(const Color&clr){
+	for(int i=0; i < drawers.size(); ++i) {
+		RasterLayerDrawer *rsd = dynamic_cast<RasterLayerDrawer *> (drawers[i]);
+		if ( rsd) {
+			rsd->getDrawingColor()->setTresholdColor(clr);
+			return;
+		}
+	}
+}
