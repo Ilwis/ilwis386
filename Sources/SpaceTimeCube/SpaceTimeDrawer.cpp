@@ -64,6 +64,8 @@ NewDrawer *SpaceTimeDrawer::createElementDrawer(PreparationParameters *pp, ILWIS
 
 void SpaceTimeDrawer::SetAdditionalElementsDrawer(SpaceTimeElementsDrawer * _spaceTimeElementsDrawer)
 {
+	if (spaceTimeElementsDrawer)
+		delete spaceTimeElementsDrawer;
 	spaceTimeElementsDrawer = _spaceTimeElementsDrawer;
 }
 
