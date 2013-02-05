@@ -196,7 +196,7 @@ void AnnotationLegendDrawer::prepare(PreparationParameters *pp) {
 
 }
 
-bool AnnotationLegendDrawer::draw( const CoordBounds& cbInner) const{
+bool AnnotationLegendDrawer::draw( const CoordBounds& cbArea) const{
 	bool is3D = getRootDrawer()->is3D(); 
 
 	//double z0 = cdrw->getZMaker()->getZ0(getRootDrawer()->is3D());
@@ -205,6 +205,7 @@ bool AnnotationLegendDrawer::draw( const CoordBounds& cbInner) const{
 		z0 +=  z0;
 
 	double z = is3D ? z0 : 0;
+	CoordBounds cbInner = cbArea;
 	CoordBounds cbFar;
 	if ( includeName) {
 		TextDrawer *txtdr = (TextDrawer *)texts->getDrawer(101,ComplexDrawer::dtPOST);
@@ -215,6 +216,10 @@ bool AnnotationLegendDrawer::draw( const CoordBounds& cbInner) const{
 		}
 	}
 	CoordBounds cbBoxed = cbInner;
+	if ( !cbFar.fUndef()) {
+		cbBoxed += Coord(cbFar.width(), cbFar.height());
+		cbBoxed.MaxY() += cbFar.height() * 2;
+	}
 	cbBoxed *= 1.05;
 	if ( useBackground) {
 		glColor4d(bgColor.redP(), bgColor.greenP(), bgColor.blueP(), getTransparency());
@@ -378,8 +383,9 @@ bool AnnotationClassLegendDrawer::draw( const CoordBounds& cbArea) const{
 	glTranslated(cbBox.MinX(), cbBox.MinY(), z);
 	glScaled(scale, scale, 1);
 
-	AnnotationLegendDrawer::draw(cbArea);
-	drawPreDrawers(cbArea);
+	CoordBounds cbInner = CoordBounds(Coord(0,0), Coord(cbBox.width(), cbBox.height()));
+	AnnotationLegendDrawer::draw(cbInner);
+	drawPreDrawers(cbInner);
 	double yy = cbBox.height() / (raws.size() * 1.1);
 	double hh = cbBox.height();
 	yy *= (double)columns;
