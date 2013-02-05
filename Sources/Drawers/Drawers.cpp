@@ -75,7 +75,7 @@ DrawerInfoVector *createDrawer() {
 }
 
 extern "C" _export ILWIS::Module *getModuleInfo(const FileName& fnModule) {
-	ILWIS::Module *module = new ILWIS::Module("Drawers", fnModule,ILWIS::Module::mi38,"1.2");
+	ILWIS::Module *module = new ILWIS::Module("Drawers", fnModule,ILWIS::Module::mi38,"1.3");
 	module->addMethod(ILWIS::Module::ifDrawers, (void *)createDrawer);  
 
 	return module;
