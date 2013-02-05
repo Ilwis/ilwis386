@@ -59,7 +59,7 @@ HTREEITEM AnimationTool::configure( HTREEITEM parentItem) {
 		if ( props.animBar == 0) {
 			props.animBar = new AnimationBar();
 			MapWindow *parent = (MapWindow *)props.mdoc->mpvGetView()->GetParent();
-			props.animBar->Create(parent);
+			props.animBar->Create(parent,props);
 			CRect rect;
 			parent->bbDataWindow.GetWindowRect(&rect);
 			rect.OffsetRect(1,0);
