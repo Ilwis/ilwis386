@@ -152,6 +152,30 @@ void ColorCompositeDrawer::setExceptionColor(const Color& clr){
 	}
 }
 
+String ColorCompositeDrawer::getInfo(const Coord& c) const {
+	if ( !hasInfo() || !isActive())
+		return "";
+	Coord crd = c;
+	Map rastermap = mpl[0];
+	if (rastermap->cs() != rootDrawer->getCoordinateSystem())
+	{
+		crd = rastermap->cs()->cConv(rootDrawer->getCoordinateSystem(), c);
+	}
+	String infos;
+	for(int i = 0; i < 3; ++i) {
+		rastermap =  mpl[data->ccMaps[i].index];
+		String info = rastermap->sValue(crd);
+		info=info.sTrimSpaces();
+		if ( infos!="")
+			infos += "," ; 
+		infos += info;
+	}
+	infos = "(" + infos + ")";
+
+	return infos;
+}
+
+
 
 
 

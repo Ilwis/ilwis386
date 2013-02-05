@@ -54,6 +54,7 @@ namespace ILWIS {
 		void setExceptionColor(const Color& clr);
 		MapList getMapList() const;
 		void setDrawMethod(DrawMethod method) ;
+		String getInfo(const Coord& c) const;
 		
 	protected:
 		virtual void setData() const;
