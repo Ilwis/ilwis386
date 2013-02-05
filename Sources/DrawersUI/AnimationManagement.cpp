@@ -436,12 +436,11 @@ initial(true)
 	st2->Align(stMaster, AL_UNDER);
 
 	foSlave1 = new FieldOneSelect(fgMaster,&choiceSlave1);
-	foSlave1->SetWidth(60);
+	foSlave1->SetWidth(100);
 	foSlave1->Align(st2, AL_AFTER);
 	setTimerPerIndex(st2);
 	setTimerPerTime(st2);
-	new FieldBlank(root);
-	PushButton *pb = new PushButton(root,TR("Synchronize"),(NotifyProc)&AnimationSynchronization::synchronize);
+
 	create();
 }
 
@@ -454,6 +453,10 @@ void AnimationSynchronization::setTimerPerIndex(FormEntry *anchor) {
 	FieldReal *fiSlaveStep = new FieldReal(fgSlaveIndex, TR("Step"),&step1,ValueRange(0.01,100));
 	fiSlaveStep->Align(fiSlave1I, AL_AFTER);
 	fiSlaveStep->SetWidth(10);
+	fgSlaveIndex->SetIndependentPos();
+	FieldBlank *fb = new FieldBlank(fgSlaveIndex);
+	fb->Align(fiSlave1I, AL_UNDER);
+	PushButton *pb = new PushButton(fgSlaveIndex,TR("Synchronize"),(NotifyProc)&AnimationSynchronization::synchronize);
 }
 
 void AnimationSynchronization::setTimerPerTime(FormEntry *anchor) {
