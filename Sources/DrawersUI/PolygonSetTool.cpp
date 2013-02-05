@@ -71,6 +71,7 @@ HTREEITEM PolygonSetTool::configure( HTREEITEM parentItem) {
 			pdrw = (PolygonLayerDrawer *)drw->getDrawer(i, ComplexDrawer::dtPOLYGONLAYER);
 		}
 	}
+	htiNode = parentItem;
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
 	item->setCheckAction(this, 0, (DTSetCheckFunc)&PolygonSetTool::setActiveBoundaries);
 	HTREEITEM itemBoundaries = insertItem("Boundaries",".mps",item,(int)pdrw->getShowBoundaries());
