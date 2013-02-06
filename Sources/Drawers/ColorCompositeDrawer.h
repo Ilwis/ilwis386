@@ -57,6 +57,9 @@ namespace ILWIS {
 		String getInfo(const Coord& c) const;
 		
 	protected:
+		String store(const FileName& fnView, const String& parentSection) const;
+		void load(const FileName& fnView, const String& parentSection);
+
 		virtual void setData() const;
 		virtual GeoRef gr() const;
 		MapList mpl;

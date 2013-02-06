@@ -175,6 +175,33 @@ String ColorCompositeDrawer::getInfo(const Coord& c) const {
 	return infos;
 }
 
+String ColorCompositeDrawer::store(const FileName& fnView, const String& parentSection) const{
+	String currentSection = "ColorCompositeDrawer::" + parentSection;
+	RasterLayerDrawer::store(fnView, currentSection);
+	ObjectInfo::WriteElement(currentSection.c_str(),"MapList",fnView,  mpl->fnObj);
+	for(int i = 0; i < 3; ++i) {
+		String band("Band%d", i);
+		long index = data->ccMaps[i].index;
+		ObjectInfo::WriteElement(currentSection.c_str(),band.c_str(),fnView,  index);
+	}
+
+	return currentSection;
+}
+
+void ColorCompositeDrawer::load(const FileName& fnView, const String& parentSection){
+	String currentSection = parentSection;
+	RasterLayerDrawer::load(fnView, currentSection);
+	FileName fnObj;
+	ObjectInfo::ReadElement(currentSection.c_str(),"MapList",fnView,  fnObj);
+	mpl = MapList(fnObj);
+	for(int i = 0; i < 3; ++i) {
+		String band("Band%d", i);
+		long index;
+		ObjectInfo::ReadElement(currentSection.c_str(),band.c_str(),fnView,  index);
+		data->ccMaps[i].index = index;
+	}
+}
+
 
 
 
