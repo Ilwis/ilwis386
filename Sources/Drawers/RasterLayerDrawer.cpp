@@ -537,7 +537,7 @@ Representation RasterLayerDrawer::getRepresentation() const { // avoiding copy c
 }
 
 String RasterLayerDrawer::store(const FileName& fnView, const String& parentSection) const{
-	String currentSection = "RasterLayerDrawer::" + parentSection;
+	String currentSection = parentSection;
 	LayerDrawer::store(fnView, currentSection);
 
 	return currentSection;
