@@ -30,7 +30,7 @@ RasterDataDrawer::~RasterDataDrawer(){
 
 void RasterDataDrawer::prepare(PreparationParameters *pp){
 	SpatialDataDrawer::prepare(pp);
-	if ( pp->type & RootDrawer::ptGEOMETRY || pp->type & RootDrawer::ptRESTORE ) {
+	if ( pp->type & RootDrawer::ptGEOMETRY ) {
 		if ( !(pp->type & NewDrawer::ptANIMATION))
 			clear();
 		BaseMapPtr *bmptr = getBaseMap();
@@ -66,7 +66,15 @@ void RasterDataDrawer::prepare(PreparationParameters *pp){
 				rsd->SetPaletteOwner(); // this set has the only available palette
 				addLayerDrawer(basemap,pp,rsd);
 		}
-	} 
+	}
+	if ( pp->type & RootDrawer::ptRESTORE) {
+		BaseMapPtr *bmptr = getBaseMap();
+		BaseMap basemap;
+		basemap.SetPointer(bmptr);
+		NewDrawer *rsd = getDrawer(0);
+		if ( rsd )
+			rsd->addDataSource(mpl.fValid() ? (void *)&mpl : (void *)&basemap);  // color composte or normal
+	}
 	if ( pp->type & RootDrawer::ptRENDER || pp->type & RootDrawer::ptRESTORE) {
 		for(int i = 0; i < drawers.size(); ++i) {
 			RasterDataDrawer *rsd = (RasterDataDrawer *)drawers.at(i);
