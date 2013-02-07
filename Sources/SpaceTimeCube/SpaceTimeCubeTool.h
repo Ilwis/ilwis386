@@ -51,7 +51,9 @@ namespace ILWIS {
 		Column & getSortColumn() {return sortColumn;};
 		Column & getGroupColumn() {return groupColumn;};
 		Column & getSizeColumn() {return sizeColumn;};
+		void updateFromLayer();
 	private:
+		const NewDrawer *drawer;
 		String drawerId;
 		String plotOption;
 		bool fSort;
@@ -90,7 +92,7 @@ namespace ILWIS {
 		virtual ~SpaceTimeCube();
 		void setUseSpaceTimeCube(bool yesno);
 		bool fUseSpaceTimeCube();
-		void refreshDrawerList();
+		void refreshDrawerList(bool fFromForm);
 		void setFormAutoDeleted();
 		void startLayerOptionsForm();
 		bool showingLayerOptionsForm();
@@ -100,7 +102,7 @@ namespace ILWIS {
 		void loadMapview();
 	private:
 		static map<ZoomableView*, SpaceTimeCube*> spaceTimeCubes;
-		void update();
+		void update(bool fFillForm);
 		void replaceDrawer(NewDrawer * oldDrw, NewDrawer * newDrw);
 		bool replaceTreeItem(NewDrawer * oldDrw, SpatialDataDrawer * newDrw, int index);
 		void DeleteDrawerTools(DrawerTool * tool, NewDrawer * drawer);

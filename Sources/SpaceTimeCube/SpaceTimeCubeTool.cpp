@@ -42,6 +42,7 @@ LayerData::LayerData(NewDrawer *drw)
 , fTime2(false)
 , fFeatureMap(false)
 , fPointMap(false)
+, drawer(drw)
 {
 	if ( drw->getType() == "FeatureDataDrawer") {
 		BaseMapPtr *bmp = ((FeatureDataDrawer *)drw)->getBaseMap();
@@ -154,6 +155,16 @@ void LayerData::setSizeColumn(String sColName) {
 	m_rrSizeMinMax = sizeColumn->rrMinMax();
 }
 
+void LayerData::updateFromLayer() {
+	if (hasSize()) {
+		SizableDrawer * sizableDrawer = dynamic_cast<SizableDrawer*>(((ComplexDrawer*)drawer)->getDrawer(0));
+		if (sizableDrawer) {
+			fSize = sizableDrawer->fGetUseSize();
+			sizeColumn = sizableDrawer->getSizeAttribute();
+		}
+	}
+}
+
 //------------------------------------------------------
 
 map<ZoomableView*, SpaceTimeCube*> SpaceTimeCube::spaceTimeCubes;
@@ -240,7 +251,7 @@ void SpaceTimeCube::loadMapview() {
 	ownDrawerIDs.push_back("CubeDrawer");
 }
 
-void SpaceTimeCube::update() {
+void SpaceTimeCube::update(bool fFillForm) {
 	vector<LayerData> newLayerList;
 	for(int i = 0 ; i < rootDrawer->getDrawerCount(); ++i) {
 		NewDrawer *drw = rootDrawer->getDrawer(i);
@@ -249,6 +260,8 @@ void SpaceTimeCube::update() {
 			// if it is in the old list, copy it
 			for (; j < layerList.size(); ++j) {
 				if (layerList[j].getDrawerId() == drw->getId()) {
+					if (fFillForm)
+						layerList[j].updateFromLayer();
 					newLayerList.push_back(layerList[j]);
 					break;
 				}
@@ -272,10 +285,10 @@ void SpaceTimeCube::setUseSpaceTimeCube(bool yesno) {
 		timePosBar->SetTime(timePos);
 		timePosBar->SetTimePosText(&sTimePosText);
 		mpv->GetParentFrame()->DockControlBar(timePosBar, AFX_IDW_DOCKBAR_LEFT);
-		refreshDrawerList();
+		refreshDrawerList(false);
 	}
 	else {
-		refreshDrawerList();
+		refreshDrawerList(false);
 		delete timePosBar;
 		timePosBar = 0;
 		mpv->dwParent()->RecalcLayout();
@@ -291,7 +304,7 @@ MapCompositionDoc *SpaceTimeCube::getDocument() const {
 	return (MapCompositionDoc *)mpv->GetDocument();
 }
 
-void SpaceTimeCube::refreshDrawerList() {
+void SpaceTimeCube::refreshDrawerList(bool fFromForm) {
 	CoordBounds cbZoom = rootDrawer->getCoordBoundsZoom(); // backup values
 	double rotX, rotY, rotZ, transX, transY, transZ;
 	rootDrawer->getRotationAngles(rotX, rotY, rotZ);
@@ -310,7 +323,7 @@ void SpaceTimeCube::refreshDrawerList() {
 
 	ownDrawerIDs.clear();
 
-	update();		
+	update(false);		
 
 	timeBoundsFullExtent->Reset();
 	sizeStretch = RangeReal();
@@ -383,13 +396,24 @@ void SpaceTimeCube::refreshDrawerList() {
 		}
 		SizableDrawer * sizableDrawer = dynamic_cast<SizableDrawer*>(((ComplexDrawer*)drawer)->getDrawer(0));
 		if (sizableDrawer) {
-			sizableDrawer->SetSizeStretch(&sizeStretch);
 			RangeReal rrMinMax (layerList[i].rrSizeMinMax());
 			sizeStretch += rrMinMax;
-			if (layerList[i].fUseSize())
-				sizableDrawer->SetSizeAttribute(layerList[i].getSizeColumn());
-			else
-				sizableDrawer->SetNoSize();
+			if (fFromForm) {
+				bool fFormSizePropertiesChanged = (layerList[i].fUseSize() && !sizableDrawer->fGetUseSize());
+				fFormSizePropertiesChanged |= (!layerList[i].fUseSize() && sizableDrawer->fGetUseSize());
+				if (layerList[i].fUseSize()) {
+					fFormSizePropertiesChanged |= (layerList[i].getSizeColumn().fValid() && !sizableDrawer->getSizeAttribute().fValid());
+					fFormSizePropertiesChanged |= (!layerList[i].getSizeColumn().fValid() && sizableDrawer->getSizeAttribute().fValid());
+					fFormSizePropertiesChanged |= (layerList[i].getSizeColumn().fValid() && sizableDrawer->getSizeAttribute().fValid() && (layerList[i].getSizeColumn() != sizableDrawer->getSizeAttribute()));
+				}
+				if (fFormSizePropertiesChanged) {
+					if (layerList[i].fUseSize())
+						sizableDrawer->SetSizeAttribute(layerList[i].getSizeColumn());
+					else
+						sizableDrawer->SetNoSize();
+					sizableDrawer->SetSizeStretch(&sizeStretch);
+				}
+			}
 		}
 		pp = PreparationParameters (NewDrawer::pt3D); // re-prepare otherwise sort/nosort etc has no effect
 		drawer->prepare(&pp);
@@ -526,7 +550,7 @@ HTREEITEM SpaceTimeCube::findTreeItem(NewDrawer* drwFind)
 
 void SpaceTimeCube::startLayerOptionsForm()
 {
-	update();
+	update(true);
 	CRect rect;
 	bool fRestorePosition = false;
 	if (layerOptionsForm) {
@@ -815,7 +839,7 @@ void LayerOptionsForm::apply() {
 		layerData.setPlotOption(vsPlotMethod[i]);
 	}
 
-	spaceTimeCube.refreshDrawerList();
+	spaceTimeCube.refreshDrawerList(true);
 
 	//PreparationParameters pp(NewDrawer::ptGEOMETRY, 0);
 	//drw->prepareChildDrawers(&pp);
@@ -882,7 +906,7 @@ HTREEITEM SpaceTimeCubeTool::configure( HTREEITEM parentItem) {
 	htiNode =  insertItem(TR("SpaceTimeCube"),"SpaceTimeCube",item,stc->fUseSpaceTimeCube());
 	DrawerTool::configure(htiNode);
 	if (stc->fUseSpaceTimeCube()) {
-		stc->refreshDrawerList();
+		stc->refreshDrawerList(false);
 		addTools();		
 	}
 	if (stc->showingLayerOptionsForm())
