@@ -2,10 +2,12 @@
 
 class FieldColor;
 class FieldListView;
+class FieldRealSliderEx;
 
 ILWIS::DrawerTool *createAnnotationLegendDrawerTool(ZoomableView* zv, LayerTreeView *view, ILWIS::NewDrawer *drw);
 namespace ILWIS {
 	class AnnotationLegendDrawer;
+	class AnnotationDrawer;
 
 	class AnnotationLegendDrawerTool : public DrawerTool {
 	public:
@@ -16,10 +18,13 @@ namespace ILWIS {
 		String getMenuString() const;
 		void clear();
 	protected:
+		static int count;
+		AnnotationDrawer *findAnnotation() const;
 		void setPosition();
 		void setAppearance();
 		void makeActive(void *v, HTREEITEM );
 		AnnotationLegendDrawer *legend;
+		FileName associatedFile;
 	};
 
 	class LegendPosition : public DisplayOptionsForm2 {
@@ -30,12 +35,12 @@ namespace ILWIS {
 		int setPosition(Event *ev) ;
 		int setOrientation(Event *ev);
 		
-		FieldIntSliderEx *sliderV;
-		FieldIntSliderEx *sliderH;
+		FieldRealSliderEx *sliderV;
+		FieldRealSliderEx *sliderH;
 		FieldIntSliderEx *sliderS;
 		RadioGroup *rg;
 		FieldInt *fiColumns;
-		int x,y;
+		double x,y;
 		int orientation;
 		int cols;
 	};

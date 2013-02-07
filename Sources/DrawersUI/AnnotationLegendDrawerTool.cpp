@@ -3,6 +3,7 @@
 #include "Client\FormElements\fldcolor.h"
 #include "Client\FormElements\FieldListView.h"
 #include "Client\FormElements\FieldIntSlider.h"
+#include "Client\FormElements\FieldRealSlider.h"
 #include "Engine\Drawers\RootDrawer.h"
 #include "Engine\Drawers\ComplexDrawer.h"
 #include "Engine\Drawers\SimpleDrawer.h" 
@@ -25,6 +26,8 @@
 
 using namespace ILWIS;
 
+int AnnotationLegendDrawerTool::count = 0;
+
 DrawerTool *createAnnotationLegendDrawerTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) {
 	return new AnnotationLegendDrawerTool(zv, view, drw);
 }
@@ -32,6 +35,16 @@ DrawerTool *createAnnotationLegendDrawerTool(ZoomableView* zv, LayerTreeView *vi
 AnnotationLegendDrawerTool::AnnotationLegendDrawerTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
 	DrawerTool(TR("AnnotationLegendDrawerTool"), zv, view, drw), legend(0)
 {
+	LayerDrawer *ldrw = dynamic_cast<LayerDrawer *>(drawer);
+	if ( ldrw) {
+		SpatialDataDrawer *sddrw = dynamic_cast<SpatialDataDrawer *>(ldrw->getParentDrawer());
+		if ( sddrw) {
+			IlwisObjectPtr *obj = sddrw->getObject();
+			if ( obj) {
+				associatedFile = obj->fnObj;
+			}
+		}
+	}
 }
 
 AnnotationLegendDrawerTool::~AnnotationLegendDrawerTool() {
@@ -63,6 +76,7 @@ HTREEITEM AnnotationLegendDrawerTool::configure( HTREEITEM parentItem) {
 	insertItem(TR("Appearance"),"Appearance",item);
 
 	DrawerTool::configure(htiNode);
+
 	return htiNode;
 }
 
@@ -80,7 +94,19 @@ void AnnotationLegendDrawerTool::setAppearance() {
 		new LegendAppearance(tree, legend,(ComplexDrawer *)drawer);
 }
 
-
+AnnotationDrawer *AnnotationLegendDrawerTool::findAnnotation() const{
+	AnnotationDrawers *annotations = (AnnotationDrawers *)(drawer->getRootDrawer()->getDrawer("AnnotationDrawers"));
+	if ( annotations) {
+		vector<NewDrawer *> allDrawers;
+		annotations->getDrawers(allDrawers);
+		for(int i = 0; i < allDrawers.size(); ++i) {
+			AnnotationDrawer *adrw = dynamic_cast<AnnotationDrawer *>(allDrawers[i]);
+			if ( adrw && adrw->associaltedFile() == associatedFile)
+				return adrw;
+		}
+	}
+	return 0;
+}
 void AnnotationLegendDrawerTool::makeActive(void *v, HTREEITEM ) {
 	bool act = *(bool *)v;
 	if ( legend) {
@@ -90,6 +116,12 @@ void AnnotationLegendDrawerTool::makeActive(void *v, HTREEITEM ) {
 	}
 	else {
 		if ( act) {
+			legend = dynamic_cast<AnnotationLegendDrawer *>(findAnnotation());
+			if ( legend) {
+
+				return;
+			}
+
 			PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER);
 			LayerDrawer *ldr = dynamic_cast<LayerDrawer *>(drawer);
 			SetDrawer *sdr = dynamic_cast<SetDrawer *>(drawer);
@@ -109,8 +141,11 @@ void AnnotationLegendDrawerTool::makeActive(void *v, HTREEITEM ) {
 			if ( legend) {
 				legend->prepare(&pp);
 				ComplexDrawer *annotations = (ComplexDrawer *)(drawer->getRootDrawer()->getDrawer("AnnotationDrawers"));
-				if ( annotations)
-					annotations->addPostDrawer(400, legend);
+				if ( annotations) {
+					annotations->addPostDrawer(400 + count, legend);
+					++count;
+					count = min(499,count);
+				}
 			}
 		}
 	}
@@ -125,10 +160,10 @@ LegendPosition::LegendPosition(CWnd *wPar, AnnotationLegendDrawer *dr) :
 	CoordBounds cbZoom = drw->getRootDrawer()->getCoordBoundsZoom();
 	CoordBounds cbBox = dr->getBox();
 	cols = dr->noOfColumns();
-	x = 100 * ( cbBox.MinX() - cbZoom.MinX() ) / cbZoom.width();
-	y = 100 * ( cbBox.MinY() - cbZoom.MinY()) / cbZoom.height();
-	sliderH = new FieldIntSliderEx(root,TR("X position"), &x,ValueRange(0,100),true);
-	sliderV = new FieldIntSliderEx(root,TR("Y position"), &y,ValueRange(0,100),true);
+	x = 100.0 * ( cbBox.MinX() - cbZoom.MinX() ) / cbZoom.width();
+	y = 100.0 * ( cbBox.MinY() - cbZoom.MinY()) / cbZoom.height();
+	sliderH = new FieldRealSliderEx(root,TR("X position"), &x,ValueRange(0,100),true);
+	sliderV = new FieldRealSliderEx(root,TR("Y position"), &y,ValueRange(0,100),true);
 	sliderV->Align(sliderH, AL_UNDER);
 	sliderH->SetCallBack((NotifyProc)&LegendPosition::setPosition);
 	sliderH->setContinuous(true);
