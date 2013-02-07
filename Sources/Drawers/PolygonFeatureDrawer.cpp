@@ -147,12 +147,14 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 				String hatchName = rpr->prc()->sHatch(fvalue);
 				if ( hatchName != sUNDEF) {
 					const SVGLoader *loader = NewDrawer::getSvgLoader();
-					SVGLoader::const_iterator cur = loader->find(p->props->hatchName);
-					if ( cur == loader->end() || (*cur).second->getType() == IVGElement::ivgPOINT)
-						return;
+					if ( p->props) {
+						SVGLoader::const_iterator cur = loader->find(p->props->hatchName);
+						if ( cur == loader->end() || (*cur).second->getType() == IVGElement::ivgPOINT)
+							return;
 
-					hatch = (*cur).second->getHatch();
-					hatchInverse = (*cur).second->getHatchInverse();
+						hatch = (*cur).second->getHatch();
+						hatchInverse = (*cur).second->getHatchInverse();
+					}
 					backgroundColor = rpr->prc()->clrSecondRaw(fvalue);
 					long transparent = Color(-2); // in the old days this was the transparent value
 					if (backgroundColor.iVal() == transparent) 
