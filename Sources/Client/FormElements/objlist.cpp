@@ -414,7 +414,7 @@ bool RepresentationLister::fOK(const FileName& fn, const String&)
 				if (!File::fExist(fnDom))  //  - No!, try the system dir
 					fnDom.Dir(IlwWinApp()->Context()->sStdDir());
 			}
-			return (fnDom == dm->fnObj);
+			return true; //(fnDom == dm->fnObj);
 		}  
 	}
 	else if (dm->pdp())

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="IlwisClient"
 	ProjectGUID="{12042408-86EA-4501-8797-F358A5447A86}"
 	RootNamespace="IlwisClient"
@@ -601,11 +601,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Client\Resources\amesd.ico"
+				RelativePath=".\amesd.ico"
 				>
 			</File>
 			<File
-				RelativePath=".\amesd.ico"
+				RelativePath="..\..\Sources\Client\Resources\amesd.ico"
 				>
 			</File>
 			<File
@@ -825,6 +825,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Client\Resources\curve.ico"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Client\Resources\CUT.BMP"
 				>
 			</File>
@@ -985,6 +989,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Client\Resources\ellipse.ico"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Client\Resources\end.ico"
 				>
 			</File>
@@ -993,11 +1001,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\esa.ico"
+				RelativePath="..\..\Sources\Client\Resources\esa.ico"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Client\Resources\esa.ico"
+				RelativePath=".\esa.ico"
 				>
 			</File>
 			<File
@@ -1129,11 +1137,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Client\Resources\GNC.ico"
+				RelativePath=".\GNC.ico"
 				>
 			</File>
 			<File
-				RelativePath=".\GNC.ico"
+				RelativePath="..\..\Sources\Client\Resources\GNC.ico"
 				>
 			</File>
 			<File
@@ -1174,6 +1182,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\HIS.ICO"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\hisicon1.ico"
 				>
 			</File>
 			<File
@@ -1314,6 +1326,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\legend.ico"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\line.ico"
 				>
 			</File>
 			<File
@@ -1694,6 +1710,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\selectaoi.ico"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\Resources\SelectArea.bmp"
 				>
 			</File>
 			<File
@@ -5370,10 +5390,6 @@
 				</File>
 			</Filter>
 		</Filter>
-		<File
-			RelativePath="..\..\Sources\Client\Resources\SelectArea.bmp"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>
