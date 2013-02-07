@@ -213,9 +213,13 @@ String RootDrawer::store(const FileName& fnView, const String parenSection) cons
 	//ObjectInfo::WriteElement("RootDrawer","AspectRatio",fnView, getAspectRatio());
 	ObjectInfo::WriteElement("RootDrawer","EyePoint",fnView, getEyePoint());
 	ObjectInfo::WriteElement("RootDrawer","ViewPoint",fnView, getViewPoint());
+	ObjectInfo::WriteElement("RootDrawer","ViewPort",fnView, pixArea);
 	ObjectInfo::WriteElement("RootDrawer","XRotation",fnView, rotX);
 	ObjectInfo::WriteElement("RootDrawer","YRotation",fnView, rotY);
 	ObjectInfo::WriteElement("RootDrawer","ZRotation",fnView, rotZ);
+	ObjectInfo::WriteElement("RootDrawer","XTranslation",fnView, translateX);
+	ObjectInfo::WriteElement("RootDrawer","YTranslation",fnView, translateY);
+	ObjectInfo::WriteElement("RootDrawer","ZTranslation",fnView, translateZ);
 	ObjectInfo::WriteElement("RootDrawer","Zoom3D",fnView, zoom3D);
 	ObjectInfo::WriteElement("RootDrawer","Is3D",fnView, threeD);
 
@@ -243,13 +247,17 @@ void RootDrawer::load(const FileName& fnView, const String parenSection){
 	setViewPort(viewPort);
 	setCoordBoundsMap(cbM);
 	setCoordBoundsView(cbV, true);
-	setCoordBoundsZoom(cbZ);
+	//setCoordBoundsZoom(cbZ);
+	cbZoom = cbZ;
 
 	ComplexDrawer::load(fnView,"RootDrawer");
 
 	ObjectInfo::ReadElement("RootDrawer","XRotation",fnView, rotX); 
 	ObjectInfo::ReadElement("RootDrawer","YRotation",fnView, rotY);
 	ObjectInfo::ReadElement("RootDrawer","ZRotation",fnView, rotZ);
+	ObjectInfo::ReadElement("RootDrawer","XTranslation",fnView, translateX);
+	ObjectInfo::ReadElement("RootDrawer","YTranslation",fnView, translateY);
+	ObjectInfo::ReadElement("RootDrawer","ZTranslation",fnView, translateZ);
 	ObjectInfo::ReadElement("RootDrawer","Zoom3D",fnView, zoom3D);
 
 	setEyePoint(eyePoint);
