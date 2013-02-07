@@ -25,11 +25,14 @@ class PointScalingForm : public DisplayOptionsForm {
 private:
 	int ColValCallBack(Event*);
 
+	bool fDisableCallBacks;
+
 	FieldColumn *fcColumn;
 	FieldRangeReal *frr;
 	FieldRangeReal *fri;
 	FieldReal *fmscale;
 
+	bool fStretch;
 	int stretchModel;
 	int scaleModel;
 	String sCol;

@@ -81,9 +81,16 @@ String PointScalingTool::getMenuString() const {
 
 //---------------------------------------------------
 PointScalingForm::PointScalingForm(CWnd *wPar, FeatureLayerDrawer *dr, const Table& _tbl):
-DisplayOptionsForm(dr,wPar,TR("Scaling")), tbl(_tbl), fcColumn(0), rrScale(RangeReal(0.1,10)), scaleModel(0), stretchModel(0)
+DisplayOptionsForm(dr,wPar,TR("Scaling")), tbl(_tbl), fcColumn(0), rrScale(RangeReal(0.1,10)), fStretch(false), scaleModel(0), stretchModel(0), fDisableCallBacks(true)
 {
 	props = (PointProperties *)dr->getProperties();
+	fStretch = (props->scaleMode != PointProperties::sNONE);
+	stretchModel = (props->scaleMode == PointProperties::sLOGARITHMIC) ? 1 : 0;
+	scaleModel = (props->radiusArea == PointProperties::sAREA) ? 1 : 0;
+
+	fmscale = new FieldReal(root,TR("Scale Exaggeration"),&(props->exaggeration)); 
+	CheckBox * cbStretch = new CheckBox(root, TR("&Stretch"), &fStretch);
+
 	if ( tbl.fValid()) {
 		if ( !props->stretchRange.fValid()) {
 			for(int i=0 ; i < tbl->iCols(); ++i) {
@@ -94,37 +101,34 @@ DisplayOptionsForm(dr,wPar,TR("Scaling")), tbl(_tbl), fcColumn(0), rrScale(Range
 				}
 			}
 		}
-		fcColumn = new FieldColumn(root, TR("Attribute Column"), tbl, &(props->stretchColumn), dmVALUE);
+		fcColumn = new FieldColumn(cbStretch, TR("Attribute Column"), tbl, &(props->stretchColumn), dmVALUE);
+		fcColumn->Align(cbStretch, AL_UNDER);
 		fcColumn->SetCallBack((NotifyProc)&PointScalingForm::ColValCallBack);
 	}
 
-	if (props->scaleMode == PointProperties::sLINEAR)
-		stretchModel = 0;
-	else if (props->scaleMode == PointProperties::sLOGARITHMIC)
-		stretchModel = 1;
+    frr = new FieldRangeReal(cbStretch, TR("&Range"), &(props->stretchRange));
+	if (fcColumn != 0)
+		frr->Align(fcColumn, AL_UNDER);
 	else
-		stretchModel = 2;
-
-    frr = new FieldRangeReal(root, TR("&Stretch"), &(props->stretchRange));
-	fmscale = new FieldReal(root,TR("Scale Exaggeration"),&(props->exaggeration)); 
-   
-
-	RadioGroup* rgLinLog = new RadioGroup(root, "", &stretchModel, true);
-    rgLinLog->Align(fmscale, AL_UNDER);
+		frr->Align(cbStretch, AL_UNDER);   
+	RadioGroup* rgLinLog = new RadioGroup(cbStretch, "", &stretchModel, true);
+	rgLinLog->Align(frr, AL_UNDER);
     rgLinLog->SetIndependentPos();
     new RadioButton(rgLinLog, TR("&Linear"));
     new RadioButton(rgLinLog, TR("Lo&garithmic"));
-	new RadioButton(rgLinLog, TR("None"));
-    RadioGroup* rgRadiusArea = new RadioGroup(root, "", &scaleModel, true);
+    RadioGroup* rgRadiusArea = new RadioGroup(cbStretch, "", &scaleModel, true);
+	rgRadiusArea->Align(rgLinLog, AL_UNDER);
     rgRadiusArea->SetIndependentPos();
     new RadioButton(rgRadiusArea, TR("&Radius"));
     new RadioButton(rgRadiusArea, TR("&Area"));
 
 	create();
+
+	fDisableCallBacks = false;
 }
 
 int PointScalingForm::ColValCallBack(Event*) {
-	if ( !fcColumn)
+	if ( fDisableCallBacks || !fcColumn)
 		return -1;
 
     fcColumn->StoreData();
@@ -132,18 +136,26 @@ int PointScalingForm::ColValCallBack(Event*) {
 	if ( col.fValid())
 		frr->SetVal(col->rrMinMax());
     return 1;
-  }
+}
+
 void PointScalingForm::apply(){
 	root->StoreData();
 	fmscale->StoreData();
-	if ( stretchModel == 0) {
+	if (!fStretch)
+		props->scaleMode = PointProperties::sNONE;
+	else if ( stretchModel == 0)
 		props->scaleMode = PointProperties::sLINEAR;
-	} else if (stretchModel == 1)
+	else if (stretchModel == 1)
 		props->scaleMode = PointProperties::sLOGARITHMIC;
 	else
 		props->scaleMode = PointProperties::sNONE;
+	if (scaleModel == 0)
+		props->radiusArea = PointProperties::sRADIUS;
+	else if (scaleModel == 1)
+		props->radiusArea = PointProperties::sAREA;
+	else
+		props->radiusArea = PointProperties::sRADIUS;
 	PreparationParameters pp(NewDrawer::ptRENDER, 0);
-	//FileName fn(name);
 	RepresentationProperties rprop;
 	rprop.symbolType = props->symbol;
 	pp.props = &rprop;
