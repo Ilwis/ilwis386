@@ -75,6 +75,8 @@ Created on: 2007-02-8
 #include "Client\TableWindow\TableDoc.h"
 #include "Client\TableWindow\BaseTablePaneView.h"
 #include "Client\TableWindow\TablePaneView.h"
+#include "Client\TableWindow\HistogramDoc.h"
+#include "Client\TableWindow\HistogramGraphView.h"
 #include "Client\Editors\Utils\sizecbar.h"
 #include "Client\Editors\Georef\GeoRefEditorTableView.h"
 #include "Client\Editors\Georef\GeoRefEditorTableBar.h"
@@ -167,6 +169,7 @@ BEGIN_MESSAGE_MAP(MapPaneView, SimpleMapPaneView)
 	ON_UPDATE_COMMAND_UI(ID_SAVE_SELECTION, OnUpdateSaveSelection)
 	ON_MESSAGE(ILWM_OPENMAP,OnOpenMap)
 	ON_WM_KEYDOWN()
+	ON_MESSAGE(ILWM_UPDATE_ANIM, OnSendUpdateAnimMessages)
 END_MESSAGE_MAP()
 
 const int iMINSIZE = 50;
@@ -183,6 +186,7 @@ MapPaneView::~MapPaneView()
 {
 	delete odt;
 	delete recBar;
+	AfxGetApp()->PostThreadMessage(ILW_REMOVEDATAWINDOW, (WPARAM)m_hWnd, 0);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -202,10 +206,9 @@ void MapPaneView::OnInitialUpdate()
 	MapCompositionDoc* mcd = GetDocument();
 	createPixInfoBar();
 	double rSc = mcd->rPrefScale();
-	if (rSc > 0)
-		PostMessage(WM_COMMAND, ID_DEFAULTSCALE, 0);
-	else
-		PostMessage(WM_COMMAND, ID_ENTIREMAP, 0);
+	PostMessage(WM_COMMAND, ID_DEFAULTSCALE, 0);
+
+	AfxGetApp()->PostThreadMessage(ILW_ADDDATAWINDOW, (WPARAM)m_hWnd, 0);
 }
 
 MapWindow* MapPaneView::mwParent()
@@ -261,6 +264,7 @@ void MapPaneView::OnEntireMap()
 
 	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(GetDocument());
 	if ( mcd) {
+		mcd->rootDrawer->setCoordBoundsView(mcd->rootDrawer->getMapCoordBounds(),true);
 		mcd->rootDrawer->setCoordBoundsView(mcd->rootDrawer->getMapCoordBounds(),true);
 		setScrollBars();
 		fStarting = false;
@@ -1402,3 +1406,41 @@ void MapPaneView::OnTimer(UINT timerID) {
 	doc->ltvGetView()->getRootTool()->timedEvent(timerID);
 }
 
+LRESULT MapPaneView::OnSendUpdateAnimMessages(WPARAM p1, LPARAM p2) {
+	if ( !p1)
+		return 1;
+
+	FileName fn = *(FileName *)(void *)(p1);
+	MapCompositionDoc *doc = GetDocument();
+	MapList mpl(fn);
+	if (!mpl.fValid())
+		return 1;
+
+	Map mp = mpl[p2];
+	Map mpCurrent = mpl[p2 == 0 ? mpl->iSize() - 1 : p2-1];
+	HistogramGraphView *hview = doc->getHistoView(mpCurrent->fnObj);
+	if ( !hview)
+		return 1;
+
+	HistogramGraphDoc* hgd = (HistogramGraphDoc*)hview->GetDocument();
+	if (!hgd)
+		return 1;
+	//for(int i=0; i < doc->rootDrawer->getDrawerCount(); ++i) {
+	//	NewDrawer* dr = rootDrawer->getDrawer(i);
+	//	SpatialDataDrawer* md = dynamic_cast<SpatialDataDrawer*>(dr);
+	//	if (!md)
+	//		continue;
+
+	//	if (md->getType() == "AnimationDrawer") {
+
+	//	}
+	//}
+
+	TableHistogramInfo thi(mp);
+	hgd->OnOpenDocument(thi.tbl());
+	doc->replaceHistFile(mpCurrent->fnObj, mp->fnObj);
+	hview->OnInitialUpdate();
+	hview->Invalidate();
+
+	return 1;
+}
