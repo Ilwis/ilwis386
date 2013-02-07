@@ -85,7 +85,7 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 				setActive(raw > 0);
 			}
 		}
-		long v = feature->iValue();
+		double v = feature->rValue();
 		setSpecialDrawingOptions(NewDrawer::sdoSELECTED,false);
 		if ( bmpptr->fTblAtt()) {
 			if ( bmpptr->tblAtt().fValid()) // incase of missing/ corrput data
@@ -95,6 +95,7 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 		if ( rpr->prc()) {
 			properties.scale = rpr->prc()->iSymbolSize(feature->iValue()) / 100;
 		}
+		properties.stretchScale = 1.0 + properties.exaggeration;
 		if ( properties.scaleMode != PointProperties::sNONE && v != rUNDEF ) {
 			if ( bmpptr->fTblAtt() || bmpptr->dm()->pdv()) {
 				properties.exaggeration = properties.exaggeration * p->props->symbolSize / 100.0;
@@ -116,15 +117,21 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 					setActive(true);
 				}
 
-				if ( properties.scaleMode == PointProperties::sLINEAR) {
-					double scale = max(1.0, 1.0 + properties.exaggeration * (v - rr.rLo()) / rr.rWidth());
-					properties.stretchScale = scale;
+				if (properties.scaleMode == PointProperties::sLOGARITHMIC) {
+					rr.rLo() = (rr.rLo() < 1e-10) ? 0 : log(rr.rLo());
+					rr.rHi() = (rr.rHi() < 1e-10) ? 0 : log(rr.rHi());
 				}
-				else if (properties.scaleMode == PointProperties::sLOGARITHMIC) {
-					double scale = max(1.0,1.0 + properties.exaggeration * log(1.0 + (v - rr.rLo()) / rr.rWidth()));
-					properties.stretchScale = scale;
-
-				}
+				if (rr.rHi() <= rr.rLo())
+					rr.rHi() = rr.rLo() + 1;
+				v = (v - rr.rLo()) / rr.rWidth();
+				if (v < 0)
+					v = 0;
+				else if (v > 1)
+					v = 1;
+				if (properties.radiusArea == PointProperties::sAREA)
+					v = sqrt(v);
+				double scale = max(1.0, 1.0 + properties.exaggeration * v);
+				properties.stretchScale = scale;
 			}
 		}
 	}
