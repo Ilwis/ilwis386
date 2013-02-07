@@ -1505,7 +1505,7 @@ void MapCompositionDoc::OnAddLayer()
 {
 	String sName;
 	long choice = 0;
-	bool extendBounds = true;
+	bool extendBounds = false;
 	AddLayerForm frm(wndGetActiveView(), &sName, &choice, &extendBounds);
 	bool fOk = frm.fOkClicked();
 	if (fOk) {
@@ -1912,7 +1912,17 @@ HistogramGraphView *MapCompositionDoc::getHistoView(const FileName& fn){
 	return 0;
 
 }
-void MapCompositionDoc::ShowHistogram(const FileName& fn, bool show, DrawerTool *tool)
+
+void MapCompositionDoc::replaceHistFile(const FileName& fnOld, const FileName& fnNew){
+	HistIter iter = gbHist.find(fnOld.sPhysicalPath());
+	if (iter != gbHist.end()) {
+		GeneralBar *bar = static_cast<GeneralBar *>((*iter).second);
+		gbHist.erase(iter);
+		gbHist[fnNew.sPhysicalPath()] = bar;
+	}	
+}
+
+void MapCompositionDoc::ShowHistogram(const FileName& fn, bool show, DrawerTool *tool, int index)
 {
 	HistIter iter = gbHist.find(fn.sPhysicalPath());
 	if (iter != gbHist.end() || show == false) {
@@ -1937,6 +1947,8 @@ void MapCompositionDoc::ShowHistogram(const FileName& fn, bool show, DrawerTool 
 	{
 		NewDrawer* dr = rootDrawer->getDrawer(i);
 		SpatialDataDrawer* md = dynamic_cast<SpatialDataDrawer*>(dr);
+		if (!md)
+			continue;
 		if (md->getType() == "ColorCompositeDrawer") 
 		{
 			throw ErrorObject("THis must be moved");  // HistogramRGBGraphView may not remain here
@@ -1955,7 +1967,7 @@ void MapCompositionDoc::ShowHistogram(const FileName& fn, bool show, DrawerTool 
 
 			return;
 		}
-		if (md->getType() == "RasterDataDrawer" ) // && md->dm()->pdv()) 
+		if (md->getType() == "RasterDataDrawer" || md->getType() == "AnimationDrawer") // && md->dm()->pdv()) 
 		{
 			if ( md->getBaseMap()->fnObj != fn)
 				continue;
@@ -1970,6 +1982,7 @@ void MapCompositionDoc::ShowHistogram(const FileName& fn, bool show, DrawerTool 
 			hgv->Create(gb);
 			hgd->AddView(hgv);
 			hgv->OnInitialUpdate();
+			IlwWinApp()->PostThreadMessage(ILW_ADDDATAWINDOW, (WPARAM)hgv->m_hWnd, 0);
 			fw->DockControlBar(gb, AFX_IDW_DOCKBAR_TOP);
 			String sTitle(TR("Histogram of %S").c_str(), mp->sName());
 			gb->SetWindowText(sTitle.c_str());

@@ -127,7 +127,8 @@ public:
 	void addToPixelInfo(const IlwisObject& bm, ComplexDrawer *drw);
 	PixelInfoDoc *pixInfoDoc;
 	HistogramGraphView *getHistoView(const FileName& fn);
-	void ShowHistogram(const FileName& fn, bool show=true, DrawerTool *tool=0);
+	void replaceHistFile(const FileName& fnOld, const FileName& fnNew);
+	void ShowHistogram(const FileName& fn, bool show=true, DrawerTool *tool=0, int index = 0);
 
 protected:
 	MapView mpv;
