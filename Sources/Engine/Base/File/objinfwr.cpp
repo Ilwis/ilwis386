@@ -181,7 +181,11 @@ bool ObjectInfo::WriteElement(const char* sSection, const char* sEntry,
 bool ObjectInfo::WriteElement(const char* sSection, const char* sEntry,
 							  const FileName& fnObj, const Coord& crd)
 {
-	return WriteElement(sSection, sEntry, fnObj, String("%lg %lg", crd.x, crd.y));
+	if ( crd.z == rUNDEF)
+		return WriteElement(sSection, sEntry, fnObj, String("%lg %lg", crd.x, crd.y));
+	else
+		return WriteElement(sSection, sEntry, fnObj, String("%lg %lg %lg", crd.x, crd.y, crd.z));
+
 }
 
 bool ObjectInfo::WriteElement(const char* sSection, const char* sEntry,

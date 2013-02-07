@@ -302,7 +302,10 @@ int ObjectInfo::ReadElement(const char* sSection, const char* sEntry,
 	int iRet;
 	String s;
 	iRet = ReadElement(sSection, sEntry, fnObj, s);
-	sscanf(s.sVal(), "%lg %lg", &crd.x, &crd.y);
+	int n = sscanf(s.sVal(), "%lg %lg %lg", &crd.x, &crd.y, &crd.z);
+	if ( n == 2)
+		crd.z =  rUNDEF;
+
 	return iRet;
 }
 
