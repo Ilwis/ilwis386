@@ -379,6 +379,7 @@ String PointProperties::store(const FileName& fnView, const String& parentSectio
 	ObjectInfo::WriteElement(parentSection.c_str(),"IgnoreColor",fnView, ignoreColor);
 	ObjectInfo::WriteElement(parentSection.c_str(),"Scale",fnView, scale);
 	ObjectInfo::WriteElement(parentSection.c_str(),"ScaleMode",fnView, scaleMode);
+	ObjectInfo::WriteElement(parentSection.c_str(),"RadiusArea",fnView, radiusArea);
 	ObjectInfo::WriteElement(parentSection.c_str(),"UseDirection",fnView, (long)useDirection);
 	ObjectInfo::WriteElement(parentSection.c_str(),"StretchScale",fnView, stretchScale);
 	ObjectInfo::WriteElement(parentSection.c_str(),"StretchRange",fnView, stretchRange);
@@ -399,6 +400,8 @@ void PointProperties::load(const FileName& fnView, const String& parentSection){
 	long m;
 	ObjectInfo::ReadElement(parentSection.c_str(),"ScaleMode",fnView, m);
 	scaleMode = (Scaling)m;
+	ObjectInfo::ReadElement(parentSection.c_str(),"RadiusArea",fnView, m);
+	radiusArea = (RadiusArea)m;
 	ObjectInfo::ReadElement(parentSection.c_str(),"UseDirection",fnView, useDirection);
 	ObjectInfo::ReadElement(parentSection.c_str(),"StretchScale",fnView, stretchScale);
 	ObjectInfo::ReadElement(parentSection.c_str(),"StretchRange",fnView, stretchRange);

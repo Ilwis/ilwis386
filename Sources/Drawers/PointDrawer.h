@@ -12,15 +12,16 @@ class TextDrawer;
 struct _export PointProperties : public GeneralDrawerProperties {
 public:
 	enum Scaling{sNONE, sLOGARITHMIC, sLINEAR};
+	enum RadiusArea{sRADIUS, sAREA};
 
 	PointProperties(double t=0, const String& sym = "open-rectangle", Color clr=colorUNDEF) : 
 		thickness(t),drawColor(clr), 
 		ignoreColor(false),scale(1.0), 
 		threeDOrientation(false), 
-		stretchScale(1.0), scaleMode(sNONE),
+		stretchScale(1.0), scaleMode(sNONE), radiusArea(sRADIUS),
 		useDirection(false),
 		angle(0),
-		exaggeration(10.0),
+		exaggeration(1.0),
 		labelColumn(sUNDEF)
 		{}
 
@@ -35,6 +36,7 @@ public:
 		stretchRange = lp->stretchRange;
 		stretchColumn = lp->stretchColumn;
 		scaleMode = lp->scaleMode;
+		radiusArea = lp->radiusArea;
 		useDirection = lp->useDirection;
 		angle = (angle != 0 && lp->useDirection) ? angle : lp->angle;
 		exaggeration = lp->exaggeration;
@@ -56,6 +58,7 @@ public:
 	RangeReal stretchRange;
 	String stretchColumn;
 	Scaling scaleMode;
+	RadiusArea radiusArea;
 	bool useDirection;
 	double angle;
 	String labelColumn;
