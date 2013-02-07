@@ -1133,9 +1133,6 @@ void BaseTablePaneView::OnMouseMove(UINT nFlags, CPoint point)
 					rDiff = rectBlock(selDiff);
 					InvalidateRect(&rDiff);
 				}
-				if (iRec == 2 && iCol == 2) {
-					TRACE("STOP");
-				}
 				selection = selNew;
 			}
 		} // fSelecting

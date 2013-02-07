@@ -81,6 +81,7 @@ public:
 	Color getTresholdColor() const;
 	void setSpread(double v);
 	double getSpread() const;
+	//void setSpatialDrawer(SpatialDataDrawer *drw);
 protected:
   LRESULT OnViewSettings(WPARAM wP, LPARAM lP);
   void setRasterSelection(CPoint point);

@@ -80,6 +80,9 @@ BOOL HistogramGraphDoc::OnOpenDocument(const Table& table)
   if (!colPix.fValid())
     return FALSE;
 
+  if ( grdr)
+	  delete grdr;
+
   grdr = cgd = new CartesianGraphDrawer(0); 
 
   ColumnGraphLayer* gl = new ColumnGraphLayer(cgd, tbl, colX, colPix);

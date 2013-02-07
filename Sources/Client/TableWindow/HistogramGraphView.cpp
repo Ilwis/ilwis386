@@ -167,3 +167,7 @@ double HistogramGraphView::getSpread() const{
 	return spread;
 }
 
+//void HistogramGraphView::setSpatialDrawer(SpatialDataDrawer *drw){
+//	drawer = drw;
+//}
+
