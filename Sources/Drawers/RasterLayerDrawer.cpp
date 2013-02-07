@@ -107,7 +107,7 @@ void RasterLayerDrawer::prepare(PreparationParameters *pp){
 		textureHeap->RepresentationChanged();
 		fLinear = (!getRootDrawer()->fConvNeeded(csy)) && gr()->fLinear();
 	}
-	if ((pp->type & pt3D) || ((pp->type & ptGEOMETRY || pp->type & ptRESTORE) && demTriangulator != 0)) {
+	if ((pp->type & pt3D) || ((pp->type & ptGEOMETRY || pp->type & ptRESTORE))){ // && demTriangulator != 0)) {
 		ZValueMaker * zMaker = getZMaker();
 		bool is3DPossible = zMaker->getThreeDPossible();
 		if (demTriangulator != 0) {
