@@ -49,9 +49,9 @@ void AnnotationDrawers::prepare(PreparationParameters *pp) {
 }
 
 //---------------------------------------------------------
-AnnotationDrawer::AnnotationDrawer(DrawerParameters *parms, const String& name) : ComplexDrawer(parms,name), scale(1.0) 
+AnnotationDrawer::AnnotationDrawer(DrawerParameters *parms, const String& name) : ComplexDrawer(parms,name), scale(1.0), dataDrawer(0) 
 {
-	LayerDrawer *drw =  dynamic_cast<LayerDrawer *>(parms->parent);
+	ComplexDrawer *drw =  dynamic_cast<ComplexDrawer *>(parms->parent);
 	if ( drw)
 		dataDrawer = drw;
 }
@@ -70,11 +70,7 @@ String AnnotationDrawer::store(const FileName& fnView, const String& currentSect
 	ComplexDrawer::store(fnView, currentSection);
 	ObjectInfo::WriteElement(currentSection.c_str(),"Scale",fnView, scale);
 	ObjectInfo::WriteElement(currentSection.c_str(),"Title",fnView, title);
-	if ( dataDrawer) {
-		SpatialDataDrawer *spdr = (SpatialDataDrawer *)(dataDrawer->getParentDrawer());
-		BaseMapPtr *bmp = spdr->getBaseMap();
-		ObjectInfo::WriteElement(currentSection.c_str(),"DrawerSource",fnView, bmp->fnObj);
-	}
+
 
 	return currentSection;
 }
@@ -83,22 +79,6 @@ void AnnotationDrawer::load(const FileName& fnView, const String& currentSection
 	ComplexDrawer::load(fnView, currentSection);
 	ObjectInfo::ReadElement(currentSection.c_str(),"Scale",fnView, scale);
 	ObjectInfo::ReadElement(currentSection.c_str(),"Title",fnView, title);
-	FileName fnObj;
-	ObjectInfo::ReadElement(currentSection.c_str(),"DrawerSource",fnView, fnObj);
-	if ( fnObj.fValid()) {
-		for(int i = 0; i < rootDrawer->getDrawerCount(); ++i) {
-			SpatialDataDrawer *spdr = dynamic_cast<SpatialDataDrawer *>(rootDrawer->getDrawer(i));
-			if ( spdr && !spdr->isSet()) {
-				if ( spdr->getObject()->fnObj == fnObj) {
-					LayerDrawer *ldr = dynamic_cast<LayerDrawer *>(spdr->getDrawer(0));
-					if ( ldr)
-						dataDrawer = ldr;
-
-				}
-			}
-		}
-	}
-
 }
 
 double AnnotationDrawer::getScale() const {
@@ -220,8 +200,9 @@ void AnnotationLegendDrawer::prepare(PreparationParameters *pp) {
 		SpatialDataDrawer *spdr = (SpatialDataDrawer *)(dataDrawer->getParentDrawer());
 		BaseMapPtr *bmp = spdr->getBaseMap();
 		objType = IOTYPE(bmp->fnObj);
-
-		dm = dataDrawer->useAttributeColumn() ? dataDrawer->getAtttributeColumn()->dm() :  bmp->dm();
+		
+		LayerDrawer *ldr = dynamic_cast<LayerDrawer *>(dataDrawer);
+		dm = ldr->useAttributeColumn() ? ldr->getAtttributeColumn()->dm() :  bmp->dm();
 		fnName = bmp->fnObj;
 	}
 	if ( pp->type & NewDrawer::ptRENDER || (pp->type & NewDrawer::ptRESTORE)) {
@@ -316,6 +297,11 @@ void AnnotationLegendDrawer::setText(const vector<String>& v, int count, const C
 
 String AnnotationLegendDrawer::store(const FileName& fnView, const String& currentSection) const{
 	AnnotationDrawer::store(fnView, currentSection);
+	if ( dataDrawer) {
+		SpatialDataDrawer *spdr = (SpatialDataDrawer *)(dataDrawer->getParentDrawer());
+		BaseMapPtr *bmp = spdr->getBaseMap();
+		ObjectInfo::WriteElement(currentSection.c_str(),"DrawerSource",fnView, bmp->fnObj);
+	}
 	ObjectInfo::WriteElement(currentSection.c_str(),"Location",fnView, cbBox);
 	ObjectInfo::WriteElement(currentSection.c_str(),"OutsideBox",fnView, drawOutsideBox);
 	ObjectInfo::WriteElement(currentSection.c_str(),"Vertical",fnView, vertical);
@@ -332,6 +318,22 @@ String AnnotationLegendDrawer::store(const FileName& fnView, const String& curre
 void AnnotationLegendDrawer::load(const FileName& fnView, const String& parentSection){
 	String currentSection = parentSection;
 	AnnotationDrawer::load(fnView, currentSection);
+	FileName fnObj;
+	ObjectInfo::ReadElement(currentSection.c_str(),"DrawerSource",fnView, fnObj);
+	if ( fnObj.fValid()) {
+		for(int i = 0; i < rootDrawer->getDrawerCount(); ++i) {
+			SpatialDataDrawer *spdr = dynamic_cast<SpatialDataDrawer *>(rootDrawer->getDrawer(i));
+			if ( spdr && !spdr->isSet()) {
+				if ( spdr->getObject()->fnObj == fnObj) {
+					LayerDrawer *ldr = dynamic_cast<LayerDrawer *>(spdr->getDrawer(0));
+					if ( ldr)
+						dataDrawer = ldr;
+
+				}
+			}
+		}
+	}
+
 	ObjectInfo::ReadElement(currentSection.c_str(),"Location",fnView, cbBox);
 	ObjectInfo::ReadElement(currentSection.c_str(),"OutsideBox",fnView, drawOutsideBox);
 	ObjectInfo::ReadElement(currentSection.c_str(),"Vertical",fnView, vertical);
@@ -744,8 +746,9 @@ vector<String> AnnotationValueLegendDrawer::makeRange() const{
 	SpatialDataDrawer *mapDrawer = dynamic_cast<SpatialDataDrawer *>(dataDrawer->getParentDrawer()); // case animation drawer
 	if (mapDrawer){
 		dvs = mapDrawer->getBaseMap()->dvrs();
-		if ( dataDrawer->useAttributeColumn() && dataDrawer->getAtttributeColumn().fValid()) {
-			dvs = dataDrawer->getAtttributeColumn()->dvrs();
+		LayerDrawer *ldr = dynamic_cast<LayerDrawer *>(dataDrawer);
+		if ( ldr && ldr->useAttributeColumn() && ldr->getAtttributeColumn().fValid()) {
+			dvs = ldr->getAtttributeColumn()->dvrs();
 		}
 	}else{
 		//dvs = mapDrawer->getBaseMap()->dvrs();
@@ -1053,24 +1056,37 @@ void AnnotationBorderDrawer::setNumberOfDigits(int num){
 }
 
 String AnnotationBorderDrawer::store(const FileName& fnView, const String& parentSection) const{
-	AnnotationDrawer::store(fnView, parentSection);
-	ObjectInfo::WriteElement(getType().c_str(),"Steps",fnView, step);
-	ObjectInfo::WriteElement(getType().c_str(),"Neatline",fnView, neatLine);
-	ObjectInfo::WriteElement(getType().c_str(),"digits",fnView, numDigits);
+	String currentSection = "AnnotationBorderDrawer::" + parentSection;
+	AnnotationDrawer::store(fnView, currentSection);
+	ObjectInfo::WriteElement(currentSection.c_str(),"Steps",fnView, step);
+	ObjectInfo::WriteElement(currentSection.c_str(),"Neatline",fnView, neatLine);
+	ObjectInfo::WriteElement(currentSection.c_str(),"digits",fnView, numDigits);
 
-	return parentSection;
+	return currentSection;
 }
 
 void AnnotationBorderDrawer::load(const FileName& fnView, const String& parentSection){
-		AnnotationDrawer::load(fnView, parentSection);
-		ObjectInfo::ReadElement(getType().c_str(),"Steps",fnView, step);
-		ObjectInfo::ReadElement(getType().c_str(),"Neatline",fnView, neatLine);
-		ObjectInfo::ReadElement(getType().c_str(),"digits",fnView, numDigits);	
+		String currentSection = parentSection;
+		AnnotationDrawer::load(fnView, currentSection);
+
+		ComplexDrawer *annotations = (ComplexDrawer *)getParentDrawer();
+
+		vector<NewDrawer *> allDrawers;
+		annotations->getDrawers(allDrawers);
+		for(int i = 0; i < allDrawers.size(); ++i) {
+			GridDrawer *gdrw = dynamic_cast<GridDrawer *>(allDrawers[i]);
+			if ( gdrw)
+				dataDrawer = gdrw; 
+		}
+
+		ObjectInfo::ReadElement(currentSection.c_str(),"Steps",fnView, step);
+		ObjectInfo::ReadElement(currentSection.c_str(),"Neatline",fnView, neatLine);
+		ObjectInfo::ReadElement(currentSection.c_str(),"digits",fnView, numDigits);	
 }
 
 void AnnotationBorderDrawer::prepare(PreparationParameters *pp){
 	AnnotationDrawer::prepare(pp);
-	if (  pp->type & RootDrawer::ptGEOMETRY){
+	if (  pp->type & RootDrawer::ptGEOMETRY || pp->type & RootDrawer::ptRESTORE){
 		calcLocations();
 		isLatLon = getRootDrawer()->getCoordinateSystem()->pcsLatLon() != 0;
 		if ( !borderBox) {
@@ -1122,7 +1138,7 @@ void AnnotationBorderDrawer::calcLocations() {
 	CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
 	Coord cMin = getRootDrawer()->glToWorld(cbMap.cMin);
 	Coord cMax = getRootDrawer()->glToWorld(cbMap.cMax);
-	GridDrawer *gdr = dynamic_cast<GridDrawer *>(getParentDrawer());
+	GridDrawer *gdr = dynamic_cast<GridDrawer *>(dataDrawer);
 	if ( !gdr)
 		return;
 	double rDistance = gdr->getGridSpacing();
@@ -1178,7 +1194,7 @@ size(rUNDEF), ticks(3), texts(0),unit("meters")
 
 void AnnotationScaleBarDrawer::prepare(PreparationParameters *pp){
 	AnnotationDrawer::prepare(pp);
-	if (  pp->type & RootDrawer::ptGEOMETRY){
+	if (  pp->type & RootDrawer::ptGEOMETRY || pp->type & RootDrawer::ptRESTORE){
 		if (!texts) {
 			DrawerParameters dp(getRootDrawer(),this);
 			texts = (ILWIS::TextLayerDrawer *)NewDrawer::getDrawer("TextLayerDrawer", "ilwis38",&dp);
@@ -1262,23 +1278,25 @@ void AnnotationScaleBarDrawer::setSize(double w){
 }
 
 String AnnotationScaleBarDrawer::store(const FileName& fnView, const String& parentSection) const{
-	AnnotationDrawer::store(fnView, parentSection);
-	ObjectInfo::WriteElement(getType().c_str(),"Size",fnView, size);
-	ObjectInfo::WriteElement(getType().c_str(),"Begin",fnView, begin);
-	ObjectInfo::WriteElement(getType().c_str(),"Height",fnView, height);
-	ObjectInfo::WriteElement(getType().c_str(),"Ticks",fnView, ticks);
-	ObjectInfo::WriteElement(getType().c_str(),"Unit",fnView, unit);
+	String currentSection = "AnnotationBorderDrawer::" + parentSection;
+	AnnotationDrawer::store(fnView, currentSection);
+	ObjectInfo::WriteElement(currentSection.c_str(),"Size",fnView, size);
+	ObjectInfo::WriteElement(currentSection.c_str(),"Begin",fnView, begin);
+	ObjectInfo::WriteElement(currentSection.c_str(),"Height",fnView, height);
+	ObjectInfo::WriteElement(currentSection.c_str(),"Ticks",fnView, ticks);
+	ObjectInfo::WriteElement(currentSection.c_str(),"Unit",fnView, unit);
 
-	return parentSection;
+	return currentSection;
 }
 
 void AnnotationScaleBarDrawer::load(const FileName& fnView, const String& parentSection){
+		String currentSection = parentSection;
 		AnnotationDrawer::load(fnView, parentSection);
-		ObjectInfo::ReadElement(getType().c_str(),"Size",fnView, size);
-		ObjectInfo::ReadElement(getType().c_str(),"Begin",fnView, begin);
-		ObjectInfo::ReadElement(getType().c_str(),"Height",fnView, height);
-		ObjectInfo::ReadElement(getType().c_str(),"Ticks",fnView, ticks);
-		ObjectInfo::ReadElement(getType().c_str(),"Unit",fnView, unit);
+		ObjectInfo::ReadElement(currentSection.c_str(),"Size",fnView, size);
+		ObjectInfo::ReadElement(currentSection.c_str(),"Begin",fnView, begin);
+		ObjectInfo::ReadElement(currentSection.c_str(),"Height",fnView, height);
+		ObjectInfo::ReadElement(currentSection.c_str(),"Ticks",fnView, ticks);
+		ObjectInfo::ReadElement(currentSection.c_str(),"Unit",fnView, unit);
 }
 
 String AnnotationScaleBarDrawer::getUnit() const{

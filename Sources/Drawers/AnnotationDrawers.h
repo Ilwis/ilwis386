@@ -36,7 +36,7 @@ protected:
 	void setParent(NewDrawer *drw);
 	double scale;
 	String title;
-	LayerDrawer *dataDrawer;
+	ComplexDrawer *dataDrawer;
 };
 
 class _export AnnotationLegendDrawer : public AnnotationDrawer{
