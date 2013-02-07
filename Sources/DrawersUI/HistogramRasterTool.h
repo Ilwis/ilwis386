@@ -13,6 +13,7 @@ public:
 	String getMenuString() const;
 	void update();
 private:
+	BaseMapPtr *get(int i=0) const;
 	void displayOptionHisto();
 	void setHisto(void *v, HTREEITEM);
 };

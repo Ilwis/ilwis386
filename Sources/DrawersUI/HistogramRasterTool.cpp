@@ -19,10 +19,13 @@
 #include "Drawers\LayerDrawer.h"
 #include "Drawers\RasterLayerDrawer.h"
 #include "Drawers\SetDrawer.h"
+#include "Drawers\AnimationDrawer.h"
 #include "Drawers\RasterDataDrawer.h"
 #include "DrawersUI\LayerDrawerTool.h"
 #include "DrawersUI\HistogramRasterTool.h"
 #include "DrawersUI\LayerDrawerTool.h"
+#include "SetDrawerTool.h"
+#include "AnimationTool.h"
 #include "Headers\Hs\Drwforms.hs"
 
 
@@ -40,26 +43,46 @@ HTREEITEM HistogramRasterTool::configure( HTREEITEM parentItem){
 	if ( isConfigured)
 		return htiNode;
 
-	MapCompositionDoc *mdoc = tree->GetDocument();
-	RasterLayerDrawer *rdrw = dynamic_cast<RasterLayerDrawer *>(getDrawer());
-	RasterDataDrawer *datadrw = dynamic_cast<RasterDataDrawer *>(rdrw->getParentDrawer());
-	BaseMapPtr *bm = datadrw->getBaseMap();
-	HistogramGraphView *hview = mdoc->getHistoView(bm->fnObj);
+
+	HistogramGraphView *hview = tree->GetDocument()->getHistoView(get()->fnObj);
 
 
-	SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)drawer->getParentDrawer();
+	//SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)drawer->getParentDrawer();
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&HistogramRasterTool::displayOptionHisto);
 	item->setCheckAction(this, 0,(DTSetCheckFunc)&HistogramRasterTool::setHisto);
 	htiNode = insertItem("Histogram","histo16", item,0); 
 	DrawerTool::configure(htiNode);
 	isConfigured = true;
+	setActive(false);
 	return htiNode;
 }
 
 
-
+BaseMapPtr *HistogramRasterTool::get(int i) const{
+	MapCompositionDoc *mdoc = tree->GetDocument();
+	RasterLayerDrawer *rdrw = dynamic_cast<RasterLayerDrawer *>(getDrawer());
+	AnimationDrawer *adrw = dynamic_cast<AnimationDrawer *>(getDrawer());
+	BaseMapPtr *bm = 0;
+	if ( rdrw) {
+		RasterDataDrawer *datadrw = dynamic_cast<RasterDataDrawer *>(rdrw->getParentDrawer());
+		bm = datadrw->getBaseMap();
+	} else {
+		IlwisObjectPtr *ptr = adrw->getObject();
+		MapListPtr *mptr = (MapListPtr *)ptr;
+		bm = mptr->map(i).ptr();
+	}
+	return bm;
+}
 void HistogramRasterTool::displayOptionHisto() {
+	MapCompositionDoc *mdoc = tree->GetDocument();
+	BaseMapPtr *bm = get();
+	if ( !bm)
+		return ;
+	HistogramGraphView *hview = mdoc->getHistoView(bm->fnObj);
+	if ( !hview)
+		return;
+
 	new HistogramRasterToolForm(tree, drawer);
 }
 
@@ -71,9 +94,9 @@ void HistogramRasterTool::update() {
 void HistogramRasterTool::setHisto(void *v, HTREEITEM) {
 	bool use = *(bool *)v;
 	MapCompositionDoc *mdoc = tree->GetDocument();
-	RasterLayerDrawer *rdrw = dynamic_cast<RasterLayerDrawer *>(getDrawer());
-	RasterDataDrawer *datadrw = dynamic_cast<RasterDataDrawer *>(rdrw->getParentDrawer());
-	BaseMapPtr *bm = datadrw->getBaseMap();
+	BaseMapPtr *bm = get();
+	if ( !bm)
+		return ;
 	HistogramGraphView *hview = mdoc->getHistoView(bm->fnObj);
 	if ( use) {
 		if ( !hview){
@@ -86,15 +109,29 @@ void HistogramRasterTool::setHisto(void *v, HTREEITEM) {
 
 bool HistogramRasterTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	LayerDrawerTool *layerDrawerTool = dynamic_cast<LayerDrawerTool *>(tool);
-	if ( !layerDrawerTool )
+	AnimationTool *animationTool = dynamic_cast<AnimationTool *>(tool);
+	if ( !layerDrawerTool && !animationTool)
 		return false;
-	RasterLayerDrawer *rdrw = dynamic_cast<RasterLayerDrawer *>(tool->getDrawer());
-	if (!rdrw)
-		return false;
-	RangeReal rr = rdrw->getStretchRangeReal();
-	if ( rr.fValid())
-		parentTool = tool;
-	return rr.fValid();
+	parentTool = tool;
+	if ( layerDrawerTool) {
+		RasterLayerDrawer *rdrw = dynamic_cast<RasterLayerDrawer *>(tool->getDrawer());
+		if (!rdrw)
+			return false;
+		RangeReal rr = rdrw->getStretchRangeReal();
+		if ( rr.fValid())
+		return rr.fValid();
+	} else {
+		AnimationDrawer *adrw = dynamic_cast<AnimationDrawer *>(animationTool->getDrawer());
+		IlwisObjectPtr *ptr = adrw->getObject();
+		if ( IOTYPE(ptr->fnObj) == IlwisObject::iotMAPLIST) {
+			MapListPtr *mptr = (MapListPtr *)ptr;
+			RangeReal rr = mptr->getRange();
+			return rr.fValid();
+		}
+
+	}
+	return false;
+
 }
 
 String HistogramRasterTool::getMenuString() const {
