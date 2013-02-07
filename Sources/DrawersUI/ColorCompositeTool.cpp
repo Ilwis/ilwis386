@@ -135,32 +135,32 @@ ccTool(_ccTool)
 	fm1->SetComboWidth(120);
 	fm2->SetComboWidth(120);
 	fm3->SetComboWidth(120);
-	FieldGroup *fg = new FieldGroup(root, true);
-	cb = new CheckBox(fg,TR("Exception Color"),&exception);
-	cb->SetCallBack((NotifyProc)&SetBandsForm::setExc);
-	cb->SetIndependentPos();
-	fi1 = new FieldInt(cb,"",&e1);
-	fi1->Align(cb, AL_AFTER);
-	fi2 = new FieldInt(cb,"",&e2);
-	fi2->Align(fi1, AL_AFTER);
-	fi3 = new FieldInt(cb,"",&e3);
-	fi3->Align(fi2, AL_AFTER);
-	cb->Hide();
+	//FieldGroup *fg = new FieldGroup(root, true);
+	//cb = new CheckBox(fg,TR("Exception Color"),&exception);
+	//cb->SetCallBack((NotifyProc)&SetBandsForm::setExc);
+	//cb->SetIndependentPos();
+	//fi1 = new FieldInt(cb,"",&e1);
+	//fi1->Align(cb, AL_AFTER);
+	//fi2 = new FieldInt(cb,"",&e2);
+	//fi2->Align(fi1, AL_AFTER);
+	//fi3 = new FieldInt(cb,"",&e3);
+	//fi3->Align(fi2, AL_AFTER);
+	//cb->Hide();
 
 
 	create();
 }
 
 int SetBandsForm::setExc(Event *ev) {
-	cb->StoreData();
+	//cb->StoreData();
 	if ( exception) {
 		ColorCompositeDrawer *rdr = (ColorCompositeDrawer *)drw;
 		Color clr = rdr->getExceptionColor();
 		if ( clr == colorUNDEF)
 			clr = Color(0,0,0);
-		fi1->SetVal(clr.red());
-		fi2->SetVal(clr.green());
-		fi3->SetVal(clr.blue());
+		//fi1->SetVal(clr.red());
+		//fi2->SetVal(clr.green());
+		//fi3->SetVal(clr.blue());
 	}
 	return 1;
 }
@@ -169,16 +169,16 @@ void  SetBandsForm::apply() {
 	fm1->StoreData();
 	fm2->StoreData();
 	fm3->StoreData();
-	cb->StoreData();
-	fi1->StoreData();
-	fi2->StoreData();
-	fi3->StoreData();
+	//cb->StoreData();
+	//fi1->StoreData();
+	//fi2->StoreData();
+	//fi3->StoreData();
 	ColorCompositeDrawer *rdr = (ColorCompositeDrawer *)drw;
 	rdr->setColorCompositeBand(0,v1);
 	rdr->setColorCompositeBand(1,v2);
 	rdr->setColorCompositeBand(2,v3);
-	if ( exception)
-		rdr->setExceptionColor(Color(e1,e2,e3));
+	//if ( exception)
+	//	rdr->setExceptionColor(Color(e1,e2,e3));
 	view->DeleteAllItems(ccTool->getTreeItem(), true);
 	ccTool->addBands();
 
