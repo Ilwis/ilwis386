@@ -17,6 +17,7 @@ public:
 	AnnotationDrawers(DrawerParameters *parms);
 	void prepare(PreparationParameters *pp);
 
+
 protected:
 
 };
@@ -28,11 +29,14 @@ public:
 	void setScale(double s);
 	void setTitle(const String& t);
 	String getTitle() const;
+	FileName associaltedFile() const;
 protected:
 	String store(const FileName& fnView, const String& parenSection) const;
 	void load(const FileName& fnView, const String& parenSection);
+	void setParent(NewDrawer *drw);
 	double scale;
 	String title;
+	LayerDrawer *dataDrawer;
 };
 
 class _export AnnotationLegendDrawer : public AnnotationDrawer{
@@ -79,6 +83,7 @@ protected:
 };
 
 struct RawInfo {
+	RawInfo() : raw(iUNDEF){}
 	RawInfo(int r, const Color& c) : raw(r), clr(c) {}
 	int raw;
 	Color clr;
@@ -111,7 +116,7 @@ public:
 protected:
 	bool draw( const CoordBounds& cbArea) const;
 	void prepare(PreparationParameters *pp);
-	vector<String> makeRange(ComplexDrawer *dr) const;
+	vector<String> makeRange() const;
 	void drawVertical(CoordBounds& cbInner, const RangeReal& rr, double z, const vector<String>& values) const;
 	void drawHorizontal(CoordBounds& cbInner, const RangeReal& rr, double z, const vector<String>& values) const;
 	String store(const FileName& fnView, const String& parenSection) const;

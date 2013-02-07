@@ -35,6 +35,7 @@ ILWIS::NewDrawer *createAnnotationDrawers(DrawerParameters *parms) {
 
 AnnotationDrawers::AnnotationDrawers(DrawerParameters *parms) : ComplexDrawer(parms, "AnnotationDrawers"){
 	id = "AnnotationDrawers";
+
 }
 
 void AnnotationDrawers::prepare(PreparationParameters *pp) {
@@ -50,16 +51,54 @@ void AnnotationDrawers::prepare(PreparationParameters *pp) {
 //---------------------------------------------------------
 AnnotationDrawer::AnnotationDrawer(DrawerParameters *parms, const String& name) : ComplexDrawer(parms,name), scale(1.0) 
 {
+	LayerDrawer *drw =  dynamic_cast<LayerDrawer *>(parms->parent);
+	if ( drw)
+		dataDrawer = drw;
 }
 
-String AnnotationDrawer::store(const FileName& fnView, const String& parentSection) const{
-	ComplexDrawer::store(fnView, parentSection);
+FileName AnnotationDrawer::associaltedFile() const {
+	LayerDrawer *ldrw = dynamic_cast<LayerDrawer *>(dataDrawer);
+	if ( ldrw) {
+		SpatialDataDrawer *sddrw = dynamic_cast<SpatialDataDrawer *>(ldrw->getParentDrawer());
+		if ( sddrw) {
+			return sddrw->getObject()->fnObj;	
+		}
+	}
+	return FileName();
+}
+String AnnotationDrawer::store(const FileName& fnView, const String& currentSection) const{
+	ComplexDrawer::store(fnView, currentSection);
+	ObjectInfo::WriteElement(currentSection.c_str(),"Scale",fnView, scale);
+	ObjectInfo::WriteElement(currentSection.c_str(),"Title",fnView, title);
+	if ( dataDrawer) {
+		SpatialDataDrawer *spdr = (SpatialDataDrawer *)(dataDrawer->getParentDrawer());
+		BaseMapPtr *bmp = spdr->getBaseMap();
+		ObjectInfo::WriteElement(currentSection.c_str(),"DrawerSource",fnView, bmp->fnObj);
+	}
 
-	return parentSection;
+	return currentSection;
 }
 
-void AnnotationDrawer::load(const FileName& fnView, const String& parentSection){
-	ComplexDrawer::load(fnView, parentSection);
+void AnnotationDrawer::load(const FileName& fnView, const String& currentSection){
+	ComplexDrawer::load(fnView, currentSection);
+	ObjectInfo::ReadElement(currentSection.c_str(),"Scale",fnView, scale);
+	ObjectInfo::ReadElement(currentSection.c_str(),"Title",fnView, title);
+	FileName fnObj;
+	ObjectInfo::ReadElement(currentSection.c_str(),"DrawerSource",fnView, fnObj);
+	if ( fnObj.fValid()) {
+		for(int i = 0; i < rootDrawer->getDrawerCount(); ++i) {
+			SpatialDataDrawer *spdr = dynamic_cast<SpatialDataDrawer *>(rootDrawer->getDrawer(i));
+			if ( spdr && !spdr->isSet()) {
+				if ( spdr->getObject()->fnObj == fnObj) {
+					LayerDrawer *ldr = dynamic_cast<LayerDrawer *>(spdr->getDrawer(0));
+					if ( ldr)
+						dataDrawer = ldr;
+
+				}
+			}
+		}
+	}
+
 }
 
 double AnnotationDrawer::getScale() const {
@@ -76,6 +115,10 @@ void AnnotationDrawer::setTitle(const String& t){
 
 String AnnotationDrawer::getTitle() const{
 	return title;
+}
+
+void AnnotationDrawer::setParent(NewDrawer *drw){
+	parentDrawer = drw;
 }
 
 
@@ -95,18 +138,21 @@ fontScale(1)
 
 void AnnotationLegendDrawer::setOrientation(bool yesno) {
 	vertical = yesno;
+	CoordBounds cb = getRootDrawer()->getCoordBoundsZoom();
 	if (vertical) {
-		CoordBounds cb = getRootDrawer()->getCoordBoundsZoom();
-		cbBox.MinX() = cb.MinX() + cb.width()/ 50;
-		cbBox.MinY() = cb.MinY() + cb.height()/ 50;
+		if ( !cbBox.fValid() ) {
+			cbBox.MinX() = cb.MinX() + cb.width()/ 50;
+			cbBox.MinY() = cb.MinY() + cb.height()/ 50;
+		}
 		double w = cb.width() / 10.0;
 		double h = cb.height() / 3.0;
 		cbBox.MaxX() = cbBox.MinX() + w * columns;
 		cbBox.MaxY() = cbBox.MinY() + h / columns;
 	} else {
-		CoordBounds cb = getRootDrawer()->getCoordBoundsZoom();
-		cbBox.MinX() = cb.MinX() + cb.width()/ 50;
-		cbBox.MinY() = cb.MinY() + cb.height()/ 40;
+		if ( !cbBox.fValid() ) {
+			cbBox.MinX() = cb.MinX() + cb.width()/ 50;
+			cbBox.MinY() = cb.MinY() + cb.height()/ 40;
+		}
 		double w = cb.width() / 3.0;
 		double h = cb.height() / 10.0;
 		cbBox.MaxX() = cbBox.MinX() + w;
@@ -161,8 +207,9 @@ void AnnotationLegendDrawer::setFontScale(double v){
 
 void AnnotationLegendDrawer::prepare(PreparationParameters *pp) {
 	AnnotationDrawer::prepare(pp);
-	if ( pp->type & NewDrawer::ptGEOMETRY) {
-		setOrientation(vertical);
+	if ( (pp->type & NewDrawer::ptGEOMETRY) || (pp->type & NewDrawer::ptRESTORE)) {
+		if ( pp->type & NewDrawer::ptGEOMETRY)
+			setOrientation(vertical);
 		DrawerParameters dp(getRootDrawer(), this);
 		if ( texts != 0) {
 			removeDrawer(texts->getId(), true);
@@ -170,17 +217,14 @@ void AnnotationLegendDrawer::prepare(PreparationParameters *pp) {
 		texts = (ILWIS::TextLayerDrawer *)NewDrawer::getDrawer("TextLayerDrawer", "ilwis38",&dp);
 		texts->setFont(new OpenGLText(getRootDrawer(),"arial.ttf",12 * fontScale,true));
 		addPostDrawer(100,texts);
-		LayerDrawer *ldr = dynamic_cast<LayerDrawer *>(getParentDrawer());
-		if ( ldr) {
-			SpatialDataDrawer *spdr = (SpatialDataDrawer *)(getParentDrawer()->getParentDrawer());
-			BaseMapPtr *bmp = spdr->getBaseMap();
-			objType = IOTYPE(bmp->fnObj);
+		SpatialDataDrawer *spdr = (SpatialDataDrawer *)(dataDrawer->getParentDrawer());
+		BaseMapPtr *bmp = spdr->getBaseMap();
+		objType = IOTYPE(bmp->fnObj);
 
-			dm = ldr->useAttributeColumn() ? ldr->getAtttributeColumn()->dm() :  bmp->dm();
-			fnName = bmp->fnObj;
-		}
+		dm = dataDrawer->useAttributeColumn() ? dataDrawer->getAtttributeColumn()->dm() :  bmp->dm();
+		fnName = bmp->fnObj;
 	}
-	if ( pp->type & NewDrawer::ptRENDER) {
+	if ( pp->type & NewDrawer::ptRENDER || (pp->type & NewDrawer::ptRESTORE)) {
 		DrawerParameters dp(getRootDrawer(), texts);
 		TextDrawer *txtdr = (TextDrawer *)texts->getDrawer(101,ComplexDrawer::dtPOST);
 		if ( !txtdr) {
@@ -270,14 +314,33 @@ void AnnotationLegendDrawer::setText(const vector<String>& v, int count, const C
 }
 
 
-String AnnotationLegendDrawer::store(const FileName& fnView, const String& parentSection) const{
-	AnnotationDrawer::store(fnView, parentSection);
+String AnnotationLegendDrawer::store(const FileName& fnView, const String& currentSection) const{
+	AnnotationDrawer::store(fnView, currentSection);
+	ObjectInfo::WriteElement(currentSection.c_str(),"Location",fnView, cbBox);
+	ObjectInfo::WriteElement(currentSection.c_str(),"OutsideBox",fnView, drawOutsideBox);
+	ObjectInfo::WriteElement(currentSection.c_str(),"Vertical",fnView, vertical);
+	ObjectInfo::WriteElement(currentSection.c_str(),"UseBackground",fnView, useBackground);
+	ObjectInfo::WriteElement(currentSection.c_str(),"BackGroundColor",fnView, bgColor);
+	ObjectInfo::WriteElement(currentSection.c_str(),"Columns",fnView, columns);
+	ObjectInfo::WriteElement(currentSection.c_str(),"UseTitle",fnView, includeName);
+	ObjectInfo::WriteElement(currentSection.c_str(),"FontScale",fnView, fontScale);
+	lproperties.store(fnView,currentSection);
 
-	return parentSection;
+	return currentSection;
 }
 
 void AnnotationLegendDrawer::load(const FileName& fnView, const String& parentSection){
-	AnnotationDrawer::load(fnView, parentSection);
+	String currentSection = parentSection;
+	AnnotationDrawer::load(fnView, currentSection);
+	ObjectInfo::ReadElement(currentSection.c_str(),"Location",fnView, cbBox);
+	ObjectInfo::ReadElement(currentSection.c_str(),"OutsideBox",fnView, drawOutsideBox);
+	ObjectInfo::ReadElement(currentSection.c_str(),"Vertical",fnView, vertical);
+	ObjectInfo::ReadElement(currentSection.c_str(),"UseBackground",fnView, useBackground);
+	ObjectInfo::ReadElement(currentSection.c_str(),"BackGroundColor",fnView, bgColor);
+	ObjectInfo::ReadElement(currentSection.c_str(),"Columns",fnView, columns);
+	ObjectInfo::ReadElement(currentSection.c_str(),"UseTitle",fnView, includeName);
+	ObjectInfo::ReadElement(currentSection.c_str(),"FontScale",fnView, fontScale);
+	lproperties.load(fnView,currentSection);
 }
 
 bool AnnotationLegendDrawer::getUseBackBackground() const {
@@ -308,7 +371,7 @@ AnnotationClassLegendDrawer::AnnotationClassLegendDrawer(DrawerParameters *parms
 
 void AnnotationClassLegendDrawer::setActiveClasses(const vector<int>& rws) {
 	raws.clear();
-	DrawingColor dc((LayerDrawer *)getParentDrawer());
+	DrawingColor dc(dataDrawer);
 	for(int i=0; i < texts->getDrawerCount(); ++i) {
 		texts->getDrawer(i)->setActive(false);
 	}
@@ -334,11 +397,22 @@ void AnnotationClassLegendDrawer::getActiveClasses(vector<int>& rws) const {
 
 void AnnotationClassLegendDrawer::prepare(PreparationParameters *pp) {
 	AnnotationLegendDrawer::prepare(pp);
+	if ( pp->type & NewDrawer::ptRESTORE) {
+		DrawingColor dc(dataDrawer);
+		DrawerParameters dp(getRootDrawer(), texts);
+		for(int i=0; i < raws.size(); ++i) {
+			raws[i].clr = dc.clrRaw(raws[i].raw,NewDrawer::drmRPR);
+			String txt = dm->pdc()->sValueByRaw(raws[i].raw);
+			TextDrawer *txtdr =(ILWIS::TextDrawer *)NewDrawer::getDrawer("TextDrawer","ilwis38",&dp);
+			txtdr->setText(txt);
+			texts->addDrawer(txtdr);
+		}
+	}
 	if ( pp->type & NewDrawer::ptGEOMETRY) {
 		columns = 1;
 		maxw = 0;
 		cellWidth = 0;
-		DrawingColor dc((LayerDrawer *)getParentDrawer());
+		DrawingColor dc(dataDrawer);
 		DrawerParameters dp(getRootDrawer(), texts);
 		raws.clear();
 		for(int i = 0 ; i < dm->pdc()->iSize() ; ++i) {
@@ -446,14 +520,37 @@ bool AnnotationClassLegendDrawer::draw( const CoordBounds& cbArea) const{
 }
 
 String AnnotationClassLegendDrawer::store(const FileName& fnView, const String& parentSection) const{
-	AnnotationLegendDrawer::store(fnView, parentSection);
+	
+	String currentSection = "AnnotationClassLegendDrawer::" + parentSection;
+	AnnotationLegendDrawer::store(fnView, currentSection);
+	ObjectInfo::WriteElement(currentSection.c_str(),"CellWidth",fnView, cellWidth);
+	ObjectInfo::WriteElement(currentSection.c_str(),"MaxWidth",fnView, maxw);
+	String seq;
+	for(int i=0; i<raws.size(); ++i) {
+		if ( seq =="") {
+			seq = String("%d", raws[i].raw);
+		} else
+			seq += ","+ String("%d", raws[i].raw);
+	}
+	ObjectInfo::WriteElement(currentSection.c_str(),"Raws",fnView, seq);
 
 
-	return parentSection;
+	return currentSection;
 }
 
 void AnnotationClassLegendDrawer::load(const FileName& fnView, const String& parentSection){
-	AnnotationLegendDrawer::load(fnView, parentSection);
+	String currentSection = parentSection;
+	AnnotationLegendDrawer::load(fnView, currentSection);
+	ObjectInfo::ReadElement(currentSection.c_str(),"CellWidth",fnView, cellWidth);
+	ObjectInfo::ReadElement(currentSection.c_str(),"MaxWidth",fnView, maxw);
+	String seq;
+	ObjectInfo::ReadElement(currentSection.c_str(),"Raws",fnView, seq);
+	Array<String> parts;
+	Split(seq, parts, ",");
+	raws.resize(parts.size());
+	for(int i = 0; i<raws.size(); ++i) {
+		raws[i].raw = parts[i].iVal();
+	}
 }
 //-------------------------------------------------------
 ILWIS::NewDrawer *createAnnotationValueLegendDrawer(DrawerParameters *parms) {
@@ -469,13 +566,15 @@ rstep(rUNDEF)
 
 void AnnotationValueLegendDrawer::prepare(PreparationParameters *pp) {
 	AnnotationLegendDrawer::prepare(pp);
-	if ( pp->type & NewDrawer::ptGEOMETRY) {
+	if ( (pp->type & NewDrawer::ptGEOMETRY) || (pp->type & NewDrawer::ptRESTORE)) {
 		for(int i=0; i < 20 ; ++i) {
 			DrawerParameters dp(getRootDrawer(), texts);
 			TextDrawer *txt = (ILWIS::TextDrawer *)NewDrawer::getDrawer("TextDrawer","ilwis38",&dp);
 			txt->setActive(false);
 			texts->addDrawer(txt);
 		}
+	}
+	if ( pp->type & NewDrawer::ptGEOMETRY) {
 		LayerDrawer *ldrw = dynamic_cast<LayerDrawer *>(getParentDrawer());
 		SetDrawer *sdrw = dynamic_cast<SetDrawer *>(getParentDrawer());
 		if ( sdrw) {
@@ -504,9 +603,13 @@ bool AnnotationValueLegendDrawer::draw( const CoordBounds& cbArea) const{
 
 	double z = is3D ? z0 : 0;
 
+
 	glPushMatrix();
 	glTranslated(cbBox.MinX(), cbBox.MinY(), z);
 	glScaled(scale, scale, 1);
+
+
+
 	double w = cbBox.width();
 	CoordBounds cbInner = CoordBounds(Coord(0,0), Coord(cbBox.width(), cbBox.height()));
 
@@ -519,7 +622,7 @@ bool AnnotationValueLegendDrawer::draw( const CoordBounds& cbArea) const{
 
 
 	double noOfRect = 100.0;
-	vector<String> values = makeRange((ComplexDrawer *)getParentDrawer());
+	vector<String> values = makeRange();
 	RangeReal rr(values[0].rVal(), values[values.size()- 1].rVal());
 	if ( vertical) {
 		drawVertical(cbInner, rr, z, values);
@@ -543,8 +646,6 @@ bool AnnotationValueLegendDrawer::draw( const CoordBounds& cbArea) const{
 
 
 	drawPostDrawers(cbArea);
-
-
 	glPopMatrix();
 
 	return true;
@@ -553,7 +654,7 @@ bool AnnotationValueLegendDrawer::draw( const CoordBounds& cbArea) const{
 
 void AnnotationValueLegendDrawer::drawVertical(CoordBounds& cbInner, const RangeReal& rr, double z, const vector<String>& values) const{
 	int count = 1;
-	DrawingColor dc((ComplexDrawer *)getParentDrawer());
+	DrawingColor dc(dataDrawer);
 	cbInner.MaxX() = cbInner.MinX() + cbInner.width() / 3;
 	double startx = cbInner.MinX();
 	double starty = cbInner.MinY();
@@ -595,13 +696,18 @@ void AnnotationValueLegendDrawer::drawVertical(CoordBounds& cbInner, const Range
 void AnnotationValueLegendDrawer::drawHorizontal(CoordBounds& cbInner, const RangeReal& rr, double z, const vector<String>& values) const{
 	int count = 1;
 	double shifty = 5.0;
-	DrawingColor dc((LayerDrawer *)getParentDrawer());
+	DrawingColor dc(dataDrawer);
 	cbInner.MinY() = cbInner.MaxY() - cbBox.height() / 2;
 	double startx = cbInner.MinX();
 	double starty = cbInner.MaxY();
 	double endy = starty - cbInner.height();
 	double rStep = rr.rWidth() / 100.0;
 	double rV = rr.rLo() + 0.5 * rStep;
+
+	for(int i=0; i < texts->getDrawerCount(); ++i){
+		if ( texts->getDrawer(i))
+			texts->getDrawer(i)->setActive(false);
+	}
 	setText(values,0,Coord(startx, endy - cbBox.height() / shifty,z));
 	for(int i=0; i < 100; ++i) {
 		Color clr = dc.clrVal(rV);
@@ -632,28 +738,20 @@ void AnnotationValueLegendDrawer::drawHorizontal(CoordBounds& cbInner, const Ran
 	setText(values,values.size()-1,Coord(cbInner.MaxX() - cbTxt.width() / 2.0, cbInner.MaxY( ) - cbInner.height() - cbBox.height() / shifty,z));
 }
 
-String AnnotationValueLegendDrawer::store(const FileName& fnView, const String& parentSection) const{
-	AnnotationLegendDrawer::store(fnView, parentSection);
-
-	return parentSection;
-}
-
-vector<String> AnnotationValueLegendDrawer::makeRange(ComplexDrawer *dr) const{
+vector<String> AnnotationValueLegendDrawer::makeRange() const{
 	vector<String> values;
 	DomainValueRangeStruct dvs;
-	SpatialDataDrawer *mapDrawer = dynamic_cast<SpatialDataDrawer *>(dr->getParentDrawer()); // case animation drawer
+	SpatialDataDrawer *mapDrawer = dynamic_cast<SpatialDataDrawer *>(dataDrawer->getParentDrawer()); // case animation drawer
 	if (mapDrawer){
-		LayerDrawer *ldr = (LayerDrawer *)(dr);
 		dvs = mapDrawer->getBaseMap()->dvrs();
-		if ( ldr->useAttributeColumn() && ldr->getAtttributeColumn().fValid()) {
-			dvs = ldr->getAtttributeColumn()->dvrs();
+		if ( dataDrawer->useAttributeColumn() && dataDrawer->getAtttributeColumn().fValid()) {
+			dvs = dataDrawer->getAtttributeColumn()->dvrs();
 		}
 	}else{
-		mapDrawer = dynamic_cast<SpatialDataDrawer *>(dr);
-		dvs = mapDrawer->getBaseMap()->dvrs();
-		if ( mapDrawer->useAttributeTable() && mapDrawer->getAtttributeColumn().fValid()) {
-			dvs = mapDrawer->getAtttributeColumn()->dvrs();
-		}
+		//dvs = mapDrawer->getBaseMap()->dvrs();
+		//if ( mapDrawer->useAttributeTable() && mapDrawer->getAtttributeColumn().fValid()) {
+		//	dvs = mapDrawer->getAtttributeColumn()->dvrs();
+		//}
 	}
 	RangeReal rmd;
 	double step = 1.0;
@@ -706,7 +804,21 @@ void AnnotationValueLegendDrawer::setStep(double s){
 }
 
 void AnnotationValueLegendDrawer::load(const FileName& fnView, const String& parentSection){
-	AnnotationLegendDrawer::load(fnView, parentSection);
+	String currentSection = parentSection;
+	AnnotationLegendDrawer::load(fnView, currentSection);
+	ObjectInfo::ReadElement(currentSection.c_str(),"LegendSteps",fnView, rstep);
+	ObjectInfo::ReadElement(currentSection.c_str(),"LegendRange",fnView, vrr);
+}
+
+String AnnotationValueLegendDrawer::store(const FileName& fnView, const String& parentSection) const{
+	String currentSection = "LegendValueDrawer::" + parentSection;
+	AnnotationLegendDrawer::store(fnView, currentSection);
+	ObjectInfo::WriteElement(currentSection.c_str(),"LegendSteps",fnView, rstep);
+	ObjectInfo::WriteElement(currentSection.c_str(),"LegendRange",fnView, vrr);
+
+	return currentSection;
+
+
 }
 //----------------------------------------------------------
 ILWIS::NewDrawer *createAnnotationBorderDrawer(DrawerParameters *parms) {
