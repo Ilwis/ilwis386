@@ -14,6 +14,8 @@ public:
 	void SetSizeAttribute(const Column & col);
 	void SetNoSize();
 	const double getSizeValue(Feature * f) const;
+	const Column & getSizeAttribute();
+	const bool fGetUseSize() const;
 
 protected:
 	String storeSizable(const FileName& fnView, const String& parentSection) const;

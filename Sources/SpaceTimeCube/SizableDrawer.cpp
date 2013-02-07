@@ -39,6 +39,16 @@ void SizableDrawer::SetSizeAttribute(const Column & col)
 		properties->scaleMode = PointProperties::sNONE;
 }
 
+const Column & SizableDrawer::getSizeAttribute()
+{
+	return colSize;
+}
+
+const bool SizableDrawer::fGetUseSize() const
+{
+	return properties->scaleMode != PointProperties::sNONE;
+}
+
 void SizableDrawer::SetNoSize()
 {
 	properties->scaleMode = PointProperties::sNONE;
@@ -46,11 +56,22 @@ void SizableDrawer::SetNoSize()
 
 const double SizableDrawer::getSizeValue(Feature * f) const
 {
-	if ( properties->scaleMode == PointProperties::sLINEAR)
-		return properties->exaggeration * (colSize->rValue(f->iValue()) - sizeStretch->rLo()) / sizeStretch->rWidth();
-	else if (properties->scaleMode == PointProperties::sLOGARITHMIC)
-		return properties->exaggeration * log(1.0 + (colSize->rValue(f->iValue()) - sizeStretch->rLo()) / sizeStretch->rWidth());
-	else
+	if (properties->scaleMode != PointProperties::sNONE) {
+		if (properties->scaleMode == PointProperties::sLOGARITHMIC) {
+			sizeStretch->rLo() = (sizeStretch->rLo() < 1e-10) ? 0 : log(sizeStretch->rLo());
+			sizeStretch->rHi() = (sizeStretch->rHi() < 1e-10) ? 0 : log(sizeStretch->rHi());
+		}
+		if (sizeStretch->rHi() <= sizeStretch->rLo())
+			sizeStretch->rHi() = sizeStretch->rLo() + 1;
+		double v = (colSize->rValue(f->iValue()) - sizeStretch->rLo()) / sizeStretch->rWidth();
+		if (v < 0)
+			v = 0;
+		else if (v > 1)
+			v = 1;
+		if (properties->radiusArea == PointProperties::sAREA)
+			v = sqrt(v);
+		return properties->exaggeration * v;
+	} else
 		return properties->exaggeration;
 }
 
