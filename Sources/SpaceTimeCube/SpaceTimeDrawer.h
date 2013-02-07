@@ -11,7 +11,6 @@ class SpaceTimeElementsDrawer;
 
 class _export SpaceTimeDrawer : public FeatureLayerDrawer, public TemporalDrawer, public SizableDrawer {
 	public:
-		enum Scaling{sNONE, sLOGARITHMIC, sLINEAR};
 		ILWIS::NewDrawer *createSpaceTimeDrawer(DrawerParameters *parms);
 
 		SpaceTimeDrawer(DrawerParameters *parms, const String& name);
