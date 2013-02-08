@@ -43,9 +43,9 @@ void SpaceTimeElementsDrawer::SetSpaceTimeDrawer(SpaceTimeDrawer * _spaceTimeDra
 
 void SpaceTimeElementsDrawer::prepare(PreparationParameters *parms) {
 	ComplexDrawer::prepare(parms);
-	if ((parms->type & RootDrawer::ptGEOMETRY) || (parms->type & NewDrawer::pt3D))
+	if ((parms->type & RootDrawer::ptGEOMETRY) || (parms->type & NewDrawer::pt3D) || (parms->type & NewDrawer::ptRESTORE))
 		*fRefreshDisplayList = true;
-	if ( parms->type & NewDrawer::ptRENDER || parms->type & NewDrawer::ptRESTORE) {
+	if ( parms->type & NewDrawer::ptRENDER) {
 		if ( parms->props )
 			*fRefreshDisplayList = true;
 	}
@@ -57,6 +57,19 @@ void SpaceTimeElementsDrawer::RefreshDisplayList() const {
 
 GeneralDrawerProperties *SpaceTimeElementsDrawer::getProperties(){
 	return &properties;
+}
+
+String SpaceTimeElementsDrawer::store(const FileName& fnView, const String& parentSection) const {
+	String currentSection = parentSection + "::" + getType();
+	ComplexDrawer::store(fnView, currentSection);
+	properties.store(fnView, currentSection);
+	return currentSection;
+}
+
+void SpaceTimeElementsDrawer::load(const FileName& fnView, const String& currentSection){
+	String drawerSection = currentSection + "::" + getType();
+	ComplexDrawer::load(fnView, drawerSection);
+	properties.load(fnView, drawerSection);
 }
 
 bool SpaceTimeElementsDrawer::draw(const CoordBounds& cbArea) const{

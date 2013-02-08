@@ -57,6 +57,8 @@ namespace ILWIS {
 		void SetSpaceTimeDrawer(SpaceTimeDrawer * _spaceTimeDrawer);
 		void RefreshDisplayList() const;
 		GeneralDrawerProperties *getProperties();
+		String store(const FileName& fnView, const String& parentSection) const;
+		void load(const FileName& fnView, const String& parentSection);
 	protected:
 		bool * fFootprintComputed;
 		GLuint * displayList;
