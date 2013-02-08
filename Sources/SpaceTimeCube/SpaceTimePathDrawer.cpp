@@ -22,7 +22,7 @@ ILWIS::NewDrawer *createSpaceTimePathDrawer(DrawerParameters *parms) {
 }
 
 SpaceTimePathDrawer::SpaceTimePathDrawer(DrawerParameters *parms)
-: SpaceTimeDrawer(parms,"SpaceTimePathDrawer")
+: SpaceTimeDrawer(parms,"PointLayerDrawer")
 , objectStartIndexes(new vector<long>())
 {
 }
@@ -314,9 +314,10 @@ void SpaceTimePathDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc
 					float rsTail = fUseAttributeColumn ? (((fValueMap ? attributeColumn->rValue(feature->iValue()) : attributeColumn->iRaw(feature->iValue())) - minMapVal) / width) : ((feature->rValue() - minMapVal) / width);
 					double rTail = pathScale * getSizeValue(feature);
 
-					if (fCutPath)
+					if (fCutPath) {
 						fCutPath = false;
-					else
+						head = Coord(); // no plotting of connectionCoords in next loop
+					} else
 					{
 						if (!headPrevious.fUndef())
 						{
