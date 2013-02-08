@@ -12,6 +12,8 @@ public:
 	void SetNoSort();
 	const double getSortValue(Feature * f) const;
 	const String getSortString(Feature * f) const;
+	const Column & getSortAttribute() const;
+	const bool fGetUseSort() const;
 
 protected:
 	String storeSortable(const FileName& fnView, const String& parentSection) const;

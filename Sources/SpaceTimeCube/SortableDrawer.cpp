@@ -23,6 +23,16 @@ void SortableDrawer::SetSortAttribute(const Column & col)
 	}
 }
 
+const Column & SortableDrawer::getSortAttribute() const
+{
+	return colSort;
+}
+
+const bool SortableDrawer::fGetUseSort() const
+{
+	return fUseSort;
+}
+
 void SortableDrawer::SetNoSort()
 {
 	fUseSort = false;
