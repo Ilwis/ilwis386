@@ -80,6 +80,7 @@ LayerData::LayerData(NewDrawer *drw)
 				m_rrSizeMinMax = sizeColumn->rrMinMax();
 			}
 		}
+		updateFromLayer();
 	} else
 		fFeatureMap = false;
 }
@@ -156,11 +157,35 @@ void LayerData::setSizeColumn(String sColName) {
 }
 
 void LayerData::updateFromLayer() {
-	if (hasSize()) {
-		SizableDrawer * sizableDrawer = dynamic_cast<SizableDrawer*>(((ComplexDrawer*)drawer)->getDrawer(0));
-		if (sizableDrawer) {
-			fSize = sizableDrawer->fGetUseSize();
-			sizeColumn = sizableDrawer->getSizeAttribute();
+	if (drawer != 0) {
+		NewDrawer * childDrawer = ((ComplexDrawer*)drawer)->getDrawer(0);
+		if (childDrawer != 0) {
+			String subType = childDrawer->getSubType();
+			if (fCIStrEqual(subType.sLeft(5), "Cube:")) {
+				plotOption = subType.sSub(5, subType.length() - 5);
+				if (hasSort()) {
+					SortableDrawer * sortableDrawer = dynamic_cast<SortableDrawer*>(childDrawer);
+					if (sortableDrawer) {
+						fSort = sortableDrawer->fGetUseSort();
+						sortColumn = sortableDrawer->getSortAttribute();
+					}
+				}
+				if (hasGroup()) {
+					GroupableDrawer * groupableDrawer = dynamic_cast<GroupableDrawer*>(childDrawer);
+					if (groupableDrawer) {
+						fGroup = groupableDrawer->fGetUseGroup();
+						groupColumn = groupableDrawer->getGroupAttribute();
+					}
+				}
+				if (hasSize()) {
+					SizableDrawer * sizableDrawer = dynamic_cast<SizableDrawer*>(childDrawer);
+					if (sizableDrawer) {
+						fSize = sizableDrawer->fGetUseSize();
+						sizeColumn = sizableDrawer->getSizeAttribute();
+					}
+				}
+			} else
+				plotOption = "<regular>";
 		}
 	}
 }
@@ -246,9 +271,7 @@ vector<String> gatherOwnIDs(ComplexDrawer * drw) {
 }
 
 void SpaceTimeCube::loadMapview() {
-	useSpaceTimeCube = true;
 	ownDrawerIDs = gatherOwnIDs(rootDrawer);
-	ownDrawerIDs.push_back("CubeDrawer");
 }
 
 void SpaceTimeCube::update(bool fFillForm) {
@@ -338,10 +361,10 @@ void SpaceTimeCube::refreshDrawerList(bool fFromForm) {
 			sPlotOption = "<regular>";
 		NewDrawer * childDrawer = drawer->getDrawer(0);
 		if (childDrawer != 0) {
-			String type = childDrawer->getType();
-			bool fChangeType = ((type == "PointLayerDrawer") && (sPlotOption != "<regular>"));
-			fChangeType |= ((type == "SpaceTimePathDrawer") && (sPlotOption != "<stp>"));
-			fChangeType |= ((type == "StationsDrawer") && (sPlotOption != "<stations>"));
+			String subType = childDrawer->getSubType();
+			bool fChangeType = (fCIStrEqual(subType, "ilwis38") && (sPlotOption != "<regular>"));
+			fChangeType |= ((subType == "Cube:<stp>") && (sPlotOption != "<stp>"));
+			fChangeType |= ((subType == "Cube:<stations>") && (sPlotOption != "<stations>"));
 			if (fChangeType) {
 				DeleteDrawerTools(tree->getRootTool(), childDrawer);
 				drawer->removeDrawer(childDrawer->getId()); // remove the old drawer
@@ -374,11 +397,11 @@ void SpaceTimeCube::refreshDrawerList(bool fFromForm) {
 			PreparationParameters pp(NewDrawer::ptALL);
 			AddTimeOffsetDrawers((ComplexDrawer*)drawer->getDrawer(0), &timeShift, dp, pp);
 
-			SpaceTimeElementsDrawer * spaceTimeElementsDrawer = (SpaceTimeElementsDrawer *)NewDrawer::getDrawer("SpaceTimeElementsDrawer", "Cube", &dp);
-			spaceTimeElementsDrawer->prepare(&pp);
-			AddTimeOffsetDrawers(spaceTimeElementsDrawer, &timeOffset, dp, pp); // should we prevent letting this function add to ownDrawerIDs?
-			spaceTimeElementsDrawer->SetSpaceTimeDrawer((SpaceTimeDrawer*)(drawer->getDrawer(0)));
-			((SpaceTimeDrawer*)(drawer->getDrawer(0)))->SetAdditionalElementsDrawer(spaceTimeElementsDrawer);
+			SpaceTimeElementsDrawer * spaceTimeElementsDrawer = ((SpaceTimeDrawer*)(drawer->getDrawer(0)))->getAdditionalElementsDrawer();
+			if (spaceTimeElementsDrawer) {
+				spaceTimeElementsDrawer->clear();
+				AddTimeOffsetDrawers(spaceTimeElementsDrawer, &timeOffset, dp, pp); // should we prevent letting this function add to ownDrawerIDs?
+			}
 		}
 		SortableDrawer * sortableDrawer = dynamic_cast<SortableDrawer*>(((ComplexDrawer*)drawer)->getDrawer(0));
 		if (sortableDrawer) {
@@ -447,14 +470,20 @@ void SpaceTimeCube::refreshDrawerList(bool fFromForm) {
 
 		*timeBoundsZoom = *timeBoundsFullExtent;
 
-		CubeDrawer * cube = dynamic_cast<CubeDrawer*>(NewDrawer::getDrawer("CubeDrawer", "Cube", &dp));
-		rootDrawer->insertDrawer(0, cube);
-		ownDrawerIDs.push_back(cube->getId());
-		TemporalDrawer * temporalDrawer = dynamic_cast<TemporalDrawer*>(cube);
-		temporalDrawer->SetTimeBounds(timeBoundsZoom);
-		cube->SetTimePosVariables(&timePos, &sTimePosText); // before prepare!! (so that "prepare" can take care of these variables as well)
-		cube->prepare(&pp);
+		CubeDrawer * cube = (CubeDrawer*)(rootDrawer->getDrawer("CubeDrawer"));
+		if (cube == 0) {
+			cube = (CubeDrawer*)(NewDrawer::getDrawer("CubeDrawer", "Cube", &dp));
+			rootDrawer->insertDrawer(0, cube);
+			TemporalDrawer * temporalDrawer = dynamic_cast<TemporalDrawer*>(cube);
+			temporalDrawer->SetTimeBounds(timeBoundsZoom);
+			cube->SetTimePosVariables(&timePos, &sTimePosText); // before prepare!! (so that "prepare" can take care of these variables as well)
+			cube->prepare(&pp);
+		}
 		AddTimeOffsetDrawers(cube, &timeShift, dp, pp);
+	} else {
+		CubeDrawer * cube = (CubeDrawer*)(rootDrawer->getDrawer("CubeDrawer"));
+		if (cube != 0)
+			rootDrawer->removeDrawer(cube->getId());
 	}
 
 	// disable the background drawer in Space Time Cube mode
