@@ -88,8 +88,10 @@ void TimeSliderCtrl::SetTimePosText(String * _sTimePosText)
 
 void TimeSliderCtrl::VScroll(UINT nSBCode, UINT nPos)
 {
-	if (nSBCode == TB_THUMBTRACK)
+	if (nSBCode == TB_THUMBTRACK || nSBCode == TB_THUMBPOSITION)
 		SendTimeMessage((sliderRange - nPos) / (double)sliderRange, fShift, long(this));
+	else
+		SendTimeMessage((sliderRange - GetPos()) / (double)sliderRange, fShift, long(this));
 }
 
 void TimeSliderCtrl::SetTime(double timePerc, bool fShiftDown, long sender)
