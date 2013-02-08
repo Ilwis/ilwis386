@@ -23,7 +23,6 @@ class _export SpaceTimeDrawer : public FeatureLayerDrawer, public TemporalDrawer
 		virtual void setRepresentation(const Representation& rp);
 		void SetNrSteps(int steps);
 		int iNrSteps();
-		void SetAdditionalElementsDrawer(SpaceTimeElementsDrawer * _spaceTimeElementsDrawer);
 		SpaceTimeElementsDrawer * getAdditionalElementsDrawer();
 		BaseMapPtr *getBasemap();
 		virtual void drawFootprint() const = 0;

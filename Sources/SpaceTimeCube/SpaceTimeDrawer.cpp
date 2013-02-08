@@ -37,6 +37,9 @@ SpaceTimeDrawer::SpaceTimeDrawer(DrawerParameters *parms, const String& name)
 	fHatching = new bool;
 	*fHatching = false;
 	csDraw = new CCriticalSection ();
+	DrawerParameters dp(rootDrawer, rootDrawer);
+	spaceTimeElementsDrawer = (SpaceTimeElementsDrawer *)NewDrawer::getDrawer("SpaceTimeElementsDrawer", "Cube", &dp);
+	spaceTimeElementsDrawer->SetSpaceTimeDrawer(this);
 }
 
 SpaceTimeDrawer::~SpaceTimeDrawer() {
@@ -60,13 +63,6 @@ SpaceTimeDrawer::~SpaceTimeDrawer() {
 
 NewDrawer *SpaceTimeDrawer::createElementDrawer(PreparationParameters *pp, ILWIS::DrawerParameters* parms) const{
 	return NewDrawer::getDrawer("PointFeatureDrawer", pp,parms);
-}
-
-void SpaceTimeDrawer::SetAdditionalElementsDrawer(SpaceTimeElementsDrawer * _spaceTimeElementsDrawer)
-{
-	if (spaceTimeElementsDrawer)
-		delete spaceTimeElementsDrawer;
-	spaceTimeElementsDrawer = _spaceTimeElementsDrawer;
 }
 
 SpaceTimeElementsDrawer * SpaceTimeDrawer::getAdditionalElementsDrawer()
@@ -193,6 +189,8 @@ String SpaceTimeDrawer::store(const FileName& fnView, const String& parentSectio
 	ObjectInfo::WriteElement(parentSection.c_str(), "NrEdges", fnView, nrSteps);
 	storeTemporal(fnView, parentSection);
 	storeSizable(fnView, parentSection);
+	if (spaceTimeElementsDrawer)
+		spaceTimeElementsDrawer->store(fnView, parentSection);
 	return parentSection;
 }
 
@@ -201,6 +199,8 @@ void SpaceTimeDrawer::load(const FileName& fnView, const String& currentSection)
 	ObjectInfo::ReadElement(currentSection.c_str(), "NrEdges", fnView, nrSteps);
 	loadTemporal(fnView, currentSection);
 	loadSizable(fnView, currentSection);
+	if (spaceTimeElementsDrawer)
+		spaceTimeElementsDrawer->load(fnView, currentSection);
 }
 
 RangeReal SpaceTimeDrawer::getValueRange(Column attributeColumn) const {
