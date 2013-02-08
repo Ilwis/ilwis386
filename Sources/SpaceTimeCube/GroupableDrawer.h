@@ -13,6 +13,7 @@ public:
 	const String getGroupValue(Feature * f) const;
 	const String getGroupValue(long iRaw) const;
 	const bool fGetUseGroup() const;
+	const Column & getGroupAttribute() const;
 
 protected:
 	String storeGroupable(const FileName& fnView, const String& parentSection) const;

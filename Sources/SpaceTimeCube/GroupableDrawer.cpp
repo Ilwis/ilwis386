@@ -20,6 +20,11 @@ void GroupableDrawer::SetGroupAttribute(const Column & col)
 		colGroup = col;
 }
 
+const Column & GroupableDrawer::getGroupAttribute() const
+{
+	return colGroup;
+}
+
 void GroupableDrawer::SetNoGroup()
 {
 	fUseGroup = false;
