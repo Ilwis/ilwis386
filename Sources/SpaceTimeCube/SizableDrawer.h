@@ -14,7 +14,7 @@ public:
 	void SetSizeAttribute(const Column & col);
 	void SetNoSize();
 	const double getSizeValue(Feature * f) const;
-	const Column & getSizeAttribute();
+	const Column & getSizeAttribute() const;
 	const bool fGetUseSize() const;
 
 protected:
