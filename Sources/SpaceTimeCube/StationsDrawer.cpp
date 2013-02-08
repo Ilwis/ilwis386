@@ -22,7 +22,7 @@ ILWIS::NewDrawer *createStationsDrawer(DrawerParameters *parms) {
 }
 
 StationsDrawer::StationsDrawer(DrawerParameters *parms)
-: SpaceTimeDrawer(parms,"StationsDrawer")
+: SpaceTimeDrawer(parms,"PointLayerDrawer")
 {
 }
 
