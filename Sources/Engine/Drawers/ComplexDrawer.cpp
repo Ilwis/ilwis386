@@ -484,7 +484,7 @@ String ComplexDrawer::store(const FileName& fnView, const String& parentSection)
 	int count = 0;
 	for(DrawerIter_C cur = preDrawers.begin(); cur != preDrawers.end(); ++cur) {
 		String order = String("%03d", (*cur).first.sHead("|").iVal());
-		String currentSection("%S%03d",parentSection,order);
+		String currentSection("%S%S",parentSection,order);
 		NewDrawer *drw = (*cur).second;
 		if ( !drw->isSimple() ) {
 			String section = drw->store(fnView, currentSection);
@@ -542,8 +542,9 @@ void ComplexDrawer::load(const FileName& fnView, const String& parentSection){
 	String drawerSection;
 	ObjectInfo::ReadElement(parentSection.c_str(),"PreDrawerCount",fnView, count);
 	for(int i = 0; i < count ; ++i) {
+		String section("PreDrawer%03d",i);
+		ObjectInfo::ReadElement(parentSection.c_str(),section.c_str(),fnView, drawerSection);
 		ObjectInfo::ReadElement(drawerSection.c_str(),"Order",fnView, order);
-		ObjectInfo::ReadElement(parentSection.c_str(),String("PreDrawer%03d",order).c_str(),fnView, drawerSection);
 		addPreDrawer(order,loadDrawer(fnView, drawerSection ));
 	}
 
