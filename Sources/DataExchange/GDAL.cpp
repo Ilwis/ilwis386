@@ -102,6 +102,7 @@ struct gdaldata{
 };
 
 UINT OgrInThread(void * data) {
+	try{
 	gdaldata *d = (gdaldata *)data;
 	getEngine()->InitThreadLocalVars();
 	GDALFormat frmt;
@@ -110,6 +111,14 @@ UINT OgrInThread(void * data) {
 	frmt.ogr(parms.sGet(0), parms.sGet(1), parms.sGet(2));
 	delete d;
 	getEngine()->RemoveThreadLocalVars();
+
+	}	catch (std::exception& err) {
+		getEngine()->RemoveThreadLocalVars();
+		const char *txt = err.what();
+		String mes("%s, probably invalid or corrupt data", txt);
+		ErrorObject errObj(mes);
+		throw errObj;
+	}
 
 	return 1;
 }

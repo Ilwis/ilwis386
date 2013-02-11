@@ -26,6 +26,7 @@
 #include "DataExchange\PostGisMaps.h"
 #include "Engine\DataExchange\ForeignFormatMap.h"
 #include "DataExchange\OpenStreetMapFormat.h"
+#include "DataExchange\WFS.h"
 
 
 extern "C" _export void getForeignFormatInfo(map<String, ForeignFormatFuncs> *funcs) {
@@ -38,6 +39,7 @@ extern "C" _export void getForeignFormatInfo(map<String, ForeignFormatFuncs> *fu
 
 	getEngine()->getContext()->ComHandler()->AddCommand("gdalogrimport",ogrgdal);
 	getEngine()->getContext()->ComHandler()->AddCommand("gdalrasterimport",rastergdal);
+	getEngine()->getContext()->ComHandler()->AddCommand("wfsimportlayer",wfsimportlayer);
 }
 
 extern "C" _export void getImportDriverList(vector<ImportDriver>& drivers) {
@@ -63,5 +65,17 @@ extern "C" _export void getImportDriverList(vector<ImportDriver>& drivers) {
 	ADOTable ado;
 	ado.getImportFormats(adoDriver.formats);
 	drivers.push_back(adoDriver);
+
+	ImportDriver ogc;
+	ogc.driverName = "OGC";
+	ImportFormat wfs;
+	wfs.method = "WFS";
+	wfs.shortName = "WFS";
+	wfs.name = "Web Feature Service";
+	wfs.type = (int)ImportFormat::ifPoint + (int)ImportFormat::ifSegment + (int)ImportFormat::ifPolygon;
+	ogc.formats.push_back(wfs);
+
+	drivers.push_back(ogc);
+
 
 }
