@@ -191,6 +191,7 @@ IlwisObject::~IlwisObject()
 
 IlwisObject IlwisObject::obj(const FileName& fil)
 {
+	try{
 	if (File::fIllegalName(fil.sFile))
 		IllegalNameError(fil.sFile);
 	
@@ -265,6 +266,13 @@ IlwisObject IlwisObject::obj(const FileName& fil)
 		return CriteriaTreeObject(fn);
 	else
 		return IlwisObject();
+	}
+	catch (std::exception& err) {
+		const char *txt = err.what();
+		String mes("%s, probably invalid or corrupt data", txt);
+		ErrorObject errObj(mes);
+		throw errObj;
+	}
 }
 
 IlwisObject IlwisObject::objInvalid()
