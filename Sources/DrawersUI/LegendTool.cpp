@@ -314,7 +314,7 @@ void  PolRprForm::apply() {
   }
   PreparationParameters pp(NewDrawer::ptRENDER, 0);
   RepresentationProperties props;
-  pp.props = &props;
+  pp.props = props;
   drw->prepare(&pp);
   view->Invalidate();
   updateMapView();
@@ -354,6 +354,8 @@ void  PointRprForm::apply() {
   FileName fn(symbol);
   rcl->PutSymbolType(iRaw, fn.sFile);
   PreparationParameters pp(NewDrawer::ptRENDER, 0);
+ // pp.props.symbolType = fn.sFile;
+  //pp.props.symbolSize = scale * 100.0;
   drw->prepare(&pp);
   view->Invalidate();
   updateMapView();

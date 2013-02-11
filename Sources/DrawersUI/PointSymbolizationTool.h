@@ -24,10 +24,11 @@ class PointSymbolizationForm : public DisplayOptionsForm {
 	PointSymbolizationForm(CWnd *wPar, PointLayerDrawer *dr);
 	void apply(); 
 private:
-	vector<string> names;
+	vector<String> names;
 	String name;
 	long selection;
 	long t3dOr;
+	double scale;
 	FieldOneSelectString *fselect;
 	FieldDataType *fdSelect;
 	FieldReal *fiThick;

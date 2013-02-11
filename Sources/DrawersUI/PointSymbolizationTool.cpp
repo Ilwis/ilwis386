@@ -73,19 +73,28 @@ PointSymbolizationForm::PointSymbolizationForm(CWnd *wPar, PointLayerDrawer *dr)
 DisplayOptionsForm(dr,wPar,TR("Symbolization")), selection(0)
 {
 	ILWIS::SVGLoader *loader = NewDrawer::getSvgLoader();
+	SpatialDataDrawer *sdr = dynamic_cast<SpatialDataDrawer *>(dr->getParentDrawer());
+	if ( sdr) {
+		BaseMapPtr *bmp = sdr->getBaseMap();
+		if ( bmp->dm()->pdc())
+			names.push_back("default");
+	}
 	for(map<String, IVGElement *>::iterator cur = loader->begin(); cur != loader->end(); ++cur) {
-		String name = (*cur).first;
-		name = name.sHead("|");
-		names.push_back(name);
+		if ( (*cur).second->getType() == IVGElement::ivgPOINT) {
+			String name = (*cur).first;
+			name = name.sHead("|");
+			names.push_back(name);
+		}
 	}
 	String base = getEngine()->getContext()->sIlwDir();
 	base += "Resources\\Symbols\\";
 	props = (PointProperties *)dr->getProperties();
 	name = props->symbol == "" ? "open-rectangle" : props->symbol;
-	fdSelect = new FieldDataType(root,TR("Symbols"),&name,".ivg",false,0,FileName(base),false);
-	// fselect = new FieldOneSelectString(root,TR("Symbols"),&selection, names);
+	scale = props->scale / 100.0;
+	//fdSelect = new FieldDataType(root,TR("Symbols"),&name,".ivg",false,0,FileName(base),false);
+	fselect = new FieldOneSelectString(root,TR("Symbols"),&selection, names);
 	fiThick = new FieldReal(root,TR("Line thickness"),&(props->thickness));
-	frScale = new FieldReal(root,TR("Symbol scale"),&(props->scale),ValueRange(RangeReal(0.1,100.0),0.1));
+	frScale = new FieldReal(root,TR("Symbol scale"),&scale,ValueRange(RangeReal(0.1,100.0),0.1));
 	frRot = new FieldReal(root,TR("Symbol rotation"),&(props->angle),ValueRange(RangeReal(0.0,360.0),0.1));
 	t3dOr = props->threeDOrientation ? 1 : 0;
 	f3d = new CheckBox(root,TR("3D orientation"),&t3dOr);
@@ -93,7 +102,7 @@ DisplayOptionsForm(dr,wPar,TR("Symbolization")), selection(0)
 }
 
 void PointSymbolizationForm::apply(){
-	fdSelect->StoreData();
+	fselect->StoreData();
 	fiThick->StoreData();
 	frScale->StoreData();
 	f3d->StoreData();
@@ -102,6 +111,7 @@ void PointSymbolizationForm::apply(){
 	SetDrawer *setDrw = dynamic_cast<SetDrawer *>(drw);
 	//String symbol = names[selection];
 	SVGLoader *loader = NewDrawer::getSvgLoader();
+	name = names[selection];
 	SVGLoader::const_iterator cur = loader->find(name);
 	if ( cur == loader->end()) {
 		loader->getSVGSymbol(name);
@@ -123,9 +133,10 @@ void PointSymbolizationForm::apply(){
 		props->threeDOrientation = t3dOr != 0;
 		PreparationParameters pp(NewDrawer::ptRENDER, 0);
 		RepresentationProperties rprop;
-		rprop.symbolSize = props->scale * 100;
+		rprop.symbolSize = props->scale = scale * 100;
 		rprop.symbolType = props->symbol;
-		pp.props = &rprop;
+		rprop.useRpr = props->symbol == "default";
+		pp.props = rprop;
 		drw->prepare(&pp);
 	}
 

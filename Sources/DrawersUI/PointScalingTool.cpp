@@ -158,7 +158,7 @@ void PointScalingForm::apply(){
 	PreparationParameters pp(NewDrawer::ptRENDER, 0);
 	RepresentationProperties rprop;
 	rprop.symbolType = props->symbol;
-	pp.props = &rprop;
+	pp.props = rprop;
 	drw->prepare(&pp);
 
 	updateMapView();
