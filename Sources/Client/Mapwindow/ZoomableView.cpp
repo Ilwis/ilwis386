@@ -134,11 +134,14 @@ void ZoomableView::OnInitialUpdate()
 	beginMovePoint.x = iUNDEF;
 	if ( fScrollBarsVisible )
 	{
-	  SetScrollInfo(SB_VERT, &si);
+		SetScrollInfo(SB_VERT, &si);
 		SetScrollInfo(SB_HORZ, &si);
-	}		
+	}
 	// now set them on the correct position
 	setScrollBars();
+	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(GetDocument());
+	if ( mcd)
+		ShowScrollBar(SB_BOTH, !mcd->rootDrawer->is3D());
 }
 
 void ZoomableView::OnDraw(CDC* cdc)
@@ -802,7 +805,6 @@ void ZoomableView::setScrollBars()
 		si.nPage = SCROLL_SIZE / ypages;
 		si.nPos = yfrac * SCROLL_SIZE;
 		SetScrollInfo(SB_VERT, &si);
-
 	}
 }
 
