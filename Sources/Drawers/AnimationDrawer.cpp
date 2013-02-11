@@ -63,7 +63,7 @@ String AnimationDrawer::description() const {
 
 void AnimationDrawer::prepare(PreparationParameters *pp){
 	SetDrawer::prepare(pp);
-	if ( pp->type & NewDrawer::ptGEOMETRY ) {
+	if ( pp->type & NewDrawer::ptGEOMETRY || pp->type & NewDrawer::ptRESTORE) {
 		if ( getDrawerCount() > 0) {
 			for(int i=0; i < getDrawerCount(); ++i)
 				getDrawer(i)->setActive(i == 0 ? true : false);
@@ -319,6 +319,7 @@ void AnimationDrawer::load(const FileName& fnView, const String& parentSection){
 	ObjectInfo::ReadElement(currentSection.c_str(),"UseTime",fnView, useTime);
 	ObjectInfo::ReadElement(currentSection.c_str(),"TimeColumn",fnView, colTime);
 	ObjectInfo::ReadElement(currentSection.c_str(),"Offset",fnView, offset);
+	ObjectInfo::ReadElement(currentSection.c_str(),"MapIndex",fnView, mapIndex);
 }
 
 String AnimationDrawer::store(const FileName& fnView, const String& parentSection) const{
@@ -328,6 +329,7 @@ String AnimationDrawer::store(const FileName& fnView, const String& parentSectio
 	ObjectInfo::WriteElement(currentSection.c_str(),"UseTime",fnView, useTime);
 	ObjectInfo::WriteElement(currentSection.c_str(),"TimeColumn",fnView, colTime);
 	ObjectInfo::WriteElement(currentSection.c_str(),"Offset",fnView, offset);
+	ObjectInfo::WriteElement(currentSection.c_str(),"MapIndex",fnView, mapIndex);
 
 	return currentSection;
 }
