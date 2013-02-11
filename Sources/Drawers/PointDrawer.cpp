@@ -34,21 +34,35 @@ PointDrawer::PointDrawer(DrawerParameters *parms, const String& name) : SimpleDr
 PointDrawer::~PointDrawer() {
 }
 
+void PointDrawer::setGeneralProperties(GeneralDrawerProperties *prop){
+	properties.set((PointProperties *)prop);
+}
+
 void PointDrawer::prepare(PreparationParameters *p){
 	SimpleDrawer::prepare(p);
 	if ( p->type & NewDrawer::ptRENDER || p->type & NewDrawer::ptRESTORE) {
-		if ( p && p->props ) {
-			properties.symbol = p->props->symbolType;
-			properties.scale = p->props->symbolSize / 100.0;
+		if ( p ) {
+			properties.symbol = p->props.symbolType;
+			properties.scale = p->props.symbolSize / 100.0;
 		}
+		const SVGLoader *loader = NewDrawer::getSvgLoader();
 		if ( properties.symbol != ""){
-			const SVGLoader *loader = NewDrawer::getSvgLoader();
 			SVGLoader::const_iterator cur = loader->find(properties.symbol);
-			if ( cur == loader->end() || (*cur).second->getType() == IVGElement::ivgHATCH)
-				return;
-
-			element = (*cur).second;
+			bool isEnd = cur == loader->end();
+			if ( isEnd == false) {
+				bool isHatch = (*cur).second->getType() == IVGElement::ivgHATCH;
+				if (isEnd || isHatch)
+					return;
+		
+				element = (*cur).second;
+			} else { // fall back to default
+				SVGLoader::const_iterator iter = loader->find(DEFAULT_POINT_SYMBOL_TYPE);
+				element = (*iter).second;
+			}
 			calcSize();
+		} else {
+			SVGLoader::const_iterator iter = loader->find(DEFAULT_POINT_SYMBOL_TYPE);
+			element = (*iter).second;
 		}
 	}
 }

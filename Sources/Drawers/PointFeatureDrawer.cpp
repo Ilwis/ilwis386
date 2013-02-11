@@ -57,7 +57,7 @@ bool PointFeatureDrawer::draw( const CoordBounds& cbArea) const{
 }
 
 void PointFeatureDrawer::prepare(PreparationParameters *p){
-	PointDrawer::prepare(p);
+
 	FeatureLayerDrawer *fdr = dynamic_cast<FeatureLayerDrawer *>(parentDrawer);
 	BaseMapPtr *bmpptr = ((SpatialDataDrawer *)fdr->getParentDrawer())->getBaseMap();
 	if ( p->type & ptGEOMETRY | p->type & ptRESTORE) {
@@ -93,12 +93,16 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 		}
 		Representation rpr = fdr->getRepresentation();
 		if ( rpr->prc()) {
-			properties.scale = rpr->prc()->iSymbolSize(feature->iValue()) / 100;
+			if ( p->props.useRpr) {
+				properties.scale = rpr->prc()->iSymbolSize(feature->iValue());
+				properties.symbol = rpr->prc()->sSymbolType(feature->iValue());
+				properties.drawColor = rpr->prc()->clrSymbol(feature->iValue());
+			}
 		}
 		properties.stretchScale = 1.0 + properties.exaggeration;
 		if ( properties.scaleMode != PointProperties::sNONE && v != rUNDEF ) {
 			if ( bmpptr->fTblAtt() || bmpptr->dm()->pdv()) {
-				properties.exaggeration = properties.exaggeration * p->props->symbolSize / 100.0;
+				properties.exaggeration = properties.exaggeration * p->props.symbolSize / 100.0;
 				RangeReal rr = properties.stretchRange;
 				if ( properties.stretchColumn != "") {
 					Table tbl = bmpptr->tblAtt();
@@ -135,6 +139,9 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 			}
 		}
 	}
+	p->props.symbolType = properties.symbol;
+	p->props.symbolSize = properties.scale;
+	PointDrawer::prepare(p);
 }
 
 Feature *PointFeatureDrawer::getFeature() const {

@@ -98,10 +98,9 @@ void LineFeatureDrawer::prepare(PreparationParameters *p){
 		lproperties.linestyle = lparent->linestyle;
 		bool isDmSort = dmt == dmtCLASS || dmt == dmtID || dmt == dmtUNIQUEID;
 		lproperties.thickness = lparent->thickness;
-		if ( p->props && p->props->linewidth != rUNDEF)
-			lproperties.thickness = max(lproperties.thickness, p->props->linewidth);
-		if ( p->props )
-			lproperties.linestyle = LineDrawer::openGLLineStyle(p->props->lineType);
+		if ( p->props.linewidth != rUNDEF)
+			lproperties.thickness = max(lproperties.thickness, p->props.linewidth);
+		lproperties.linestyle = LineDrawer::openGLLineStyle(p->props.lineType);
 		if (( isDmSort && feature->rValue() == 0) || feature->rValue() == rUNDEF) // 0 == undef for classes
 			lproperties.linestyle = 0xF0F0;
 

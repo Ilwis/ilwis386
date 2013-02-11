@@ -13,6 +13,7 @@ namespace ILWIS{
 	friend class SetSingleColorForm;
 
 	public:
+		enum RenderMode{rmRPR, rmUSER, rmDONTCARE};
 		ILWIS::NewDrawer *createFeatureLayerDrawer(DrawerParameters *parms);
 
 		FeatureLayerDrawer(DrawerParameters *parms, const String& name);
@@ -44,6 +45,8 @@ namespace ILWIS{
 
 		String mask;
 		bool useMask;
+		RenderMode renderMode;
+		bool initFromView;
 		Color singleColor;
 		BaseMap fbasemap;
 		String labelAttribute; // column;

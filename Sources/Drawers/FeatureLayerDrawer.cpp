@@ -27,7 +27,9 @@ FeatureLayerDrawer::FeatureLayerDrawer(DrawerParameters *parms, const String& na
 	LayerDrawer(parms,name),
 	singleColor(Color(0,176,20)),
 	useMask(false),
-	managedDrawers(0)
+	managedDrawers(0),
+	renderMode(rmDONTCARE),
+	initFromView(false)
 {
 	setDrawMethod(drmNOTSET); // default
 	setInfo(true);
@@ -59,6 +61,15 @@ void FeatureLayerDrawer::getFeatures(vector<Feature *>& features) const {
 void FeatureLayerDrawer::prepare(PreparationParameters *parms){
 	/*if ( !isActive() && !isValid())
 		return;*/
+	if ( initFromView && parms->props.useRpr == true && renderMode == rmUSER) {
+		parms->props.useRpr = false;
+	}
+	else if (  parms->props.useRpr == true) {
+		renderMode = rmRPR;
+	} else if  ( parms->props.useRpr == false) {
+		renderMode = rmUSER;
+	}
+	initFromView = false;
 
 	clock_t start = clock();
 	LayerDrawer::prepare(parms);
@@ -154,15 +165,13 @@ void FeatureLayerDrawer::prepareChildDrawers(PreparationParameters *parms) {
 						pdrw->getLabelDrawer()->setText(sV.sTrimSpaces());
 					}
 				}
-				if (bmp->dm()->rpr().fValid()) {
-					parms->props = &props;
-					if ( feature && feature->fValid() ){
-						rpr->getProperties(feature->rValue(), parms->props);
+				if ( parms->props.useRpr) {
+					if (bmp->dm()->rpr().fValid()) {
+						parms->props = props;
+						if ( feature && feature->fValid()){
+							rpr->getProperties(feature->rValue(), parms->props);
+						}
 					}
-				}
-				RepresentationProperties rprop;
-				if ( parms->props == 0) {
-					parms->props = &rprop;
 				}
 				pdrw->prepare(parms);
 			}
@@ -190,13 +199,17 @@ Color FeatureLayerDrawer::getSingleColor() const {
 String FeatureLayerDrawer::store(const FileName& fnView, const String& parentSection) const{
 	LayerDrawer::store(fnView, parentSection);
 	ObjectInfo::WriteElement(parentSection.c_str(),"SingleColor",fnView, singleColor);
+	ObjectInfo::WriteElement(parentSection.c_str(),"RenderMode",fnView, (long)renderMode);
 	return parentSection;
 }
 
 void FeatureLayerDrawer::load(const FileName& fnView, const String& parentSection){
 	LayerDrawer::load(fnView, parentSection);
 	ObjectInfo::ReadElement(parentSection.c_str(),"SingleColor",fnView, singleColor);
-
+	long rm;
+	ObjectInfo::ReadElement(parentSection.c_str(),"RenderMode",fnView, rm);
+	renderMode = (RenderMode)rm;
+	initFromView = true;
 }
 
 String FeatureLayerDrawer::getInfo(const Coord& c) const {

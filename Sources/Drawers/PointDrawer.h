@@ -16,13 +16,15 @@ public:
 
 	PointProperties(double t=0, const String& sym = "open-rectangle", Color clr=colorUNDEF) : 
 		thickness(t),drawColor(clr), 
-		ignoreColor(false),scale(1.0), 
+		ignoreColor(false), 
 		threeDOrientation(false), 
 		stretchScale(1.0), scaleMode(sNONE), radiusArea(sRADIUS),
 		useDirection(false),
 		angle(0),
 		exaggeration(1.0),
-		labelColumn(sUNDEF)
+		labelColumn(sUNDEF),
+		scale(100.0),
+		symbol(DEFAULT_POINT_SYMBOL_TYPE)
 		{}
 
 	PointProperties(PointProperties *lp) { set(lp);}
@@ -78,6 +80,7 @@ class _export PointDrawer : public SimpleDrawer {
 		void setCoord(const Coord& crd);
 		GeneralDrawerProperties *getProperties();
 		virtual void select(bool yesno);
+		void setGeneralProperties(GeneralDrawerProperties *);
 	protected:
 		PointDrawer(DrawerParameters *parms, const String& name);
 		void calcSize();

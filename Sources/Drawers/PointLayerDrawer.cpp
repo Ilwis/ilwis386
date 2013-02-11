@@ -27,7 +27,6 @@ PointLayerDrawer::PointLayerDrawer(DrawerParameters *parms) :
 	FeatureLayerDrawer(parms,"PointLayerDrawer")
 {
 	properties = new PointProperties();
-	properties->scale = 0;
 }
 
 PointLayerDrawer::~PointLayerDrawer() {
@@ -35,7 +34,10 @@ PointLayerDrawer::~PointLayerDrawer() {
 }
 
 NewDrawer *PointLayerDrawer::createElementDrawer(PreparationParameters *pp, ILWIS::DrawerParameters* parms) const{
-	return NewDrawer::getDrawer("PointFeatureDrawer", pp,parms);
+	NewDrawer *drw =  NewDrawer::getDrawer("PointFeatureDrawer", pp,parms);
+	drw->setGeneralProperties((GeneralDrawerProperties *)properties);
+
+	return drw;
 
 }
 
