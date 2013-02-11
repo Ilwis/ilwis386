@@ -310,6 +310,7 @@ BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPathName, int os)
 
 BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPath, ParmList& pm, int os) 
 {
+	try{
 	FileName fn(pm.sGet("output") != "" ? pm.sGet("output") : lpszPath);
 	String sC = pm.sCmd();
 	state = IlwisWinApp::osNormal;
@@ -339,6 +340,16 @@ BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPath, ParmList& pm, int os)
 	if (!IlwisDocument::OnOpenDocument(fn.sRelative().c_str()))
 		return FALSE;
 	Map map(fn);
+	} 
+	catch (std::exception& err) {
+		const char *txt = err.what();
+		String mes("%s, probably invalid or corrupt data", txt);
+		ErrorObject errObj(mes);
+		errObj.Show();
+	}
+	catch (ErrorObject& err) {
+		err.Show();
+	}
 	return OnOpenDocument(lpszPath, state);
 }
 
@@ -482,6 +493,12 @@ BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPathName, OpenType ot, int os
 			return OnOpenStereoPair(stp, ot);
 		}
 		//else if
+	}
+	catch (std::exception& err) {
+		const char *txt = err.what();
+		String mes("%s, probably invalid or corrupt data", txt);
+		ErrorObject errObj(mes);
+		errObj.Show();
 	}
 	catch (ErrorObject& err) {
 		err.Show();
