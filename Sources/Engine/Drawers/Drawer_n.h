@@ -91,6 +91,7 @@ namespace ILWIS {
 		virtual bool inEditMode() const = 0;
 		virtual void drawLegendItem(CDC *dc, const CRect& rct, double rVal) const = 0;
 		virtual GeneralDrawerProperties *getProperties() = 0;
+		virtual void setGeneralProperties(GeneralDrawerProperties *) = 0;
 		virtual bool isValid() const = 0;
 		virtual void setValid(bool yesno) = 0;
 		virtual bool isSelectable() const { return false;}
@@ -130,8 +131,8 @@ namespace ILWIS {
 				props = parms->props;
 				rowSelect = parms->rowSelect;
 			}
-			PreparationParameters(int t=1,CDC *_dc = 0,int m=10) : type(t),dc(_dc), zOrder(-1),index(0),contextMode(m),props(0) {} 
-		PreparationParameters(int t, const CoordSystem& cs) : type(t), csy(cs),dc(0),zOrder(-1),index(0),contextMode(10), props(0)  {}
+			PreparationParameters(int t=1,CDC *_dc = 0,int m=10) : type(t),dc(_dc), zOrder(-1),index(0),contextMode(m) {} 
+		PreparationParameters(int t, const CoordSystem& cs) : type(t), csy(cs),dc(0),zOrder(-1),index(0),contextMode(10)  {}
 		int type;
 		CDC *dc;
 		int contextMode;
@@ -141,7 +142,7 @@ namespace ILWIS {
 		int zOrder;
 		int index;
 		String displayOptions;
-		RepresentationProperties *props;
+		RepresentationProperties props;
 		RowSelectInfo rowSelect;
 	};
 

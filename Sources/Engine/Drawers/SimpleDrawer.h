@@ -62,6 +62,7 @@ namespace ILWIS {
 		void setDrawerParameters(DrawerParameters *);
 		void setLabelDrawer(TextDrawer *txtdr);
 		TextDrawer *getLabelDrawer() const;
+		void setGeneralProperties(GeneralDrawerProperties *) {}
 
 		CCriticalSection cs;
 	protected:
