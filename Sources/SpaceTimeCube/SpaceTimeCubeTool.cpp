@@ -373,7 +373,6 @@ void SpaceTimeCube::refreshDrawerList(bool fFromForm) {
 		}
 		if (childDrawer == 0) {
 			PreparationParameters pp(NewDrawer::ptALL);
-			String sPlotOption = layerList[i].sPlotOption();
 			if (sPlotOption != "<regular>")
 				pp.subType = "Cube:" + sPlotOption;
 			else
@@ -474,11 +473,11 @@ void SpaceTimeCube::refreshDrawerList(bool fFromForm) {
 		if (cube == 0) {
 			cube = (CubeDrawer*)(NewDrawer::getDrawer("CubeDrawer", "Cube", &dp));
 			rootDrawer->insertDrawer(0, cube);
-			TemporalDrawer * temporalDrawer = dynamic_cast<TemporalDrawer*>(cube);
-			temporalDrawer->SetTimeBounds(timeBoundsZoom);
-			cube->SetTimePosVariables(&timePos, &sTimePosText); // before prepare!! (so that "prepare" can take care of these variables as well)
-			cube->prepare(&pp);
 		}
+		TemporalDrawer * temporalDrawer = dynamic_cast<TemporalDrawer*>(cube);
+		temporalDrawer->SetTimeBounds(timeBoundsZoom);
+		cube->SetTimePosVariables(&timePos, &sTimePosText); // before prepare!! (so that "prepare" can take care of these variables as well)
+		cube->prepare(&pp);
 		AddTimeOffsetDrawers(cube, &timeShift, dp, pp);
 	} else {
 		CubeDrawer * cube = (CubeDrawer*)(rootDrawer->getDrawer("CubeDrawer"));
