@@ -197,13 +197,13 @@ void AnnotationLegendDrawer::prepare(PreparationParameters *pp) {
 		texts = (ILWIS::TextLayerDrawer *)NewDrawer::getDrawer("TextLayerDrawer", "ilwis38",&dp);
 		texts->setFont(new OpenGLText(getRootDrawer(),"arial.ttf",12 * fontScale,true));
 		addPostDrawer(100,texts);
-		SpatialDataDrawer *spdr = (SpatialDataDrawer *)(dataDrawer->getParentDrawer());
-		BaseMapPtr *bmp = spdr->getBaseMap();
+		SpatialDataDrawer *spdr = dataDrawer->isSet() ? static_cast<SpatialDataDrawer *>(dataDrawer) : static_cast<SpatialDataDrawer *>(dataDrawer->getParentDrawer());
+		LayerDrawer *ldr = dataDrawer->isSet() ? dynamic_cast<LayerDrawer *>(dataDrawer->getDrawer(0)) : dynamic_cast<LayerDrawer *>(dataDrawer);
+	
+		BaseMapPtr *bmp = spdr->getBaseMap(0);
 		objType = IOTYPE(bmp->fnObj);
-		
-		LayerDrawer *ldr = dynamic_cast<LayerDrawer *>(dataDrawer);
 		dm = ldr->useAttributeColumn() ? ldr->getAtttributeColumn()->dm() :  bmp->dm();
-		fnName = bmp->fnObj;
+		fnName = spdr->getObject()->fnObj.sFile;
 	}
 	if ( pp->type & NewDrawer::ptRENDER || (pp->type & NewDrawer::ptRESTORE)) {
 		DrawerParameters dp(getRootDrawer(), texts);
@@ -399,8 +399,12 @@ void AnnotationClassLegendDrawer::getActiveClasses(vector<int>& rws) const {
 
 void AnnotationClassLegendDrawer::prepare(PreparationParameters *pp) {
 	AnnotationLegendDrawer::prepare(pp);
+	LayerDrawer *ldr = dataDrawer->isSet() ? 
+			dynamic_cast<LayerDrawer *>(dataDrawer->getDrawer(0)) : 
+			dynamic_cast<LayerDrawer *>(dataDrawer);
 	if ( pp->type & NewDrawer::ptRESTORE) {
-		DrawingColor dc(dataDrawer);
+
+		DrawingColor dc(ldr);
 		DrawerParameters dp(getRootDrawer(), texts);
 		for(int i=0; i < raws.size(); ++i) {
 			raws[i].clr = dc.clrRaw(raws[i].raw,NewDrawer::drmRPR);
@@ -414,7 +418,7 @@ void AnnotationClassLegendDrawer::prepare(PreparationParameters *pp) {
 		columns = 1;
 		maxw = 0;
 		cellWidth = 0;
-		DrawingColor dc(dataDrawer);
+		DrawingColor dc(ldr);
 		DrawerParameters dp(getRootDrawer(), texts);
 		raws.clear();
 		for(int i = 0 ; i < dm->pdc()->iSize() ; ++i) {
@@ -743,18 +747,17 @@ void AnnotationValueLegendDrawer::drawHorizontal(CoordBounds& cbInner, const Ran
 vector<String> AnnotationValueLegendDrawer::makeRange() const{
 	vector<String> values;
 	DomainValueRangeStruct dvs;
-	SpatialDataDrawer *mapDrawer = dynamic_cast<SpatialDataDrawer *>(dataDrawer->getParentDrawer()); // case animation drawer
-	if (mapDrawer){
-		dvs = mapDrawer->getBaseMap()->dvrs();
-		LayerDrawer *ldr = dynamic_cast<LayerDrawer *>(dataDrawer);
-		if ( ldr && ldr->useAttributeColumn() && ldr->getAtttributeColumn().fValid()) {
-			dvs = ldr->getAtttributeColumn()->dvrs();
-		}
-	}else{
-		//dvs = mapDrawer->getBaseMap()->dvrs();
-		//if ( mapDrawer->useAttributeTable() && mapDrawer->getAtttributeColumn().fValid()) {
-		//	dvs = mapDrawer->getAtttributeColumn()->dvrs();
-		//}
+	SpatialDataDrawer *spdr = dataDrawer->isSet() ? 
+		static_cast<SpatialDataDrawer *>(dataDrawer) : 
+		static_cast<SpatialDataDrawer *>(dataDrawer->getParentDrawer());
+
+	LayerDrawer *ldr = dataDrawer->isSet() ? 
+		dynamic_cast<LayerDrawer *>(dataDrawer->getDrawer(0)) : 
+		dynamic_cast<LayerDrawer *>(dataDrawer);
+
+	dvs = spdr->getBaseMap()->dvrs();
+	if ( ldr && ldr->useAttributeColumn() && ldr->getAtttributeColumn().fValid()) {
+		dvs = ldr->getAtttributeColumn()->dvrs();
 	}
 	RangeReal rmd;
 	double step = 1.0;
