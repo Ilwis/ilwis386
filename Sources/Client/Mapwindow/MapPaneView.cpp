@@ -170,6 +170,7 @@ BEGIN_MESSAGE_MAP(MapPaneView, SimpleMapPaneView)
 	ON_MESSAGE(ILWM_OPENMAP,OnOpenMap)
 	ON_WM_KEYDOWN()
 	ON_MESSAGE(ILWM_UPDATE_ANIM, OnSendUpdateAnimMessages)
+	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 const int iMINSIZE = 50;
@@ -186,6 +187,10 @@ MapPaneView::~MapPaneView()
 {
 	delete odt;
 	delete recBar;
+}
+
+void MapPaneView::OnDestroy()
+{
 	AfxGetApp()->PostThreadMessage(ILW_REMOVEDATAWINDOW, (WPARAM)m_hWnd, 0);
 }
 
@@ -264,7 +269,6 @@ void MapPaneView::OnEntireMap()
 
 	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(GetDocument());
 	if ( mcd) {
-		mcd->rootDrawer->setCoordBoundsView(mcd->rootDrawer->getMapCoordBounds(),true);
 		mcd->rootDrawer->setCoordBoundsView(mcd->rootDrawer->getMapCoordBounds(),true);
 		setScrollBars();
 		fStarting = false;

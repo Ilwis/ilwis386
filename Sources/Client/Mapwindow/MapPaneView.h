@@ -131,6 +131,7 @@ protected:
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnUpdateSaveSelection(CCmdUI* pCmdUI);
 	afx_msg void OnSaveSelection();
+	afx_msg void OnDestroy();
 	afx_msg LRESULT OnSendUpdateAnimMessages(WPARAM p1, LPARAM p2);
 	afx_msg 
 	void OnShowRecordView();
