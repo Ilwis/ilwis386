@@ -486,7 +486,7 @@ String ComplexDrawer::store(const FileName& fnView, const String& parentSection)
 		String order = String("%03d", (*cur).first.sHead("|").iVal());
 		String currentSection("%S%S",parentSection,order);
 		NewDrawer *drw = (*cur).second;
-		if ( !drw->isSimple() ) {
+		if ( drw && !drw->isSimple() ) {
 			String section = drw->store(fnView, currentSection);
 			ObjectInfo::WriteElement(section.c_str(),"Order",fnView, order);
 			ObjectInfo::WriteElement(parentSection.c_str(),String("PreDrawer%03d",count++).c_str(),fnView, section);
@@ -498,7 +498,7 @@ String ComplexDrawer::store(const FileName& fnView, const String& parentSection)
 	for(int index = 0; index < drCount; ++index) {
 		String currentSection("%S%03d",parentSection,index);
 		NewDrawer *drw = drawers[index];
-		if ( !drw->isSimple() ) {
+		if ( drw && !drw->isSimple() ) {
 			String section = drw->store(fnView, currentSection);
 			ObjectInfo::WriteElement(parentSection.c_str(),String("Drawer%03d",count++).c_str(),fnView, section);
 		}
@@ -510,7 +510,7 @@ String ComplexDrawer::store(const FileName& fnView, const String& parentSection)
 		String order = String("%03d", (*cur).first.sHead("|").iVal());
 		String currentSection("%S%S",parentSection,order);
 		NewDrawer *drw = (*cur).second;
-		if ( !drw->isSimple() ) {
+		if ( drw && !drw->isSimple() ) {
 			String section = drw->store(fnView, currentSection);
 			ObjectInfo::WriteElement(section.c_str(),"Order",fnView, order);
 			ObjectInfo::WriteElement(parentSection.c_str(),String("PostDrawer%03d",count++).c_str(),fnView, section);

@@ -89,6 +89,7 @@ class _export ComplexDrawer : public NewDrawer {
 		virtual void select(bool yesno);
 		bool isManaged() const { return managed ; }
 		void setDrawerParameters(DrawerParameters *);
+		void setGeneralProperties(GeneralDrawerProperties *) {}
 
 	protected:
 		vector<NewDrawer *> drawers;
