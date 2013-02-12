@@ -75,7 +75,7 @@ public:
 	double rLineWidth(long iRaw) const;
 	double rLineDist(long iRaw) const;
 	static const double rDefaultLineWidth;
-	void getProperties(long iRaw, RepresentationProperties *props);
+	void getProperties(long iRaw, RepresentationProperties& props);
 protected:
 	Column colColor, colPattern,
 		colSmbType, colSmbSize, colSmbWidth, colSmbClr, colSmbFC,

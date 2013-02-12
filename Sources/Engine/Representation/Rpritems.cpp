@@ -309,13 +309,13 @@ double RepresentationItems::rLineDist(long iRaw) const
   return 5;
 }
 
-void RepresentationItems::getProperties(long iRaw, RepresentationProperties *props) {
-	props->linewidth = rLineWidth(iRaw);
-	props->lineType = iLine(iRaw); 
-	props->itemTransparency = rTransparencyItem(iRaw);
-	props->symbolSize = iSymbolSize(iRaw);
-	props->symbolType = sSymbolType(iRaw);
-	props->hatchName = sHatch(iRaw);
+void RepresentationItems::getProperties(long iRaw, RepresentationProperties& props) {
+	props.linewidth = rLineWidth(iRaw);
+	props.lineType = iLine(iRaw); 
+	props.itemTransparency = rTransparencyItem(iRaw);
+	props.symbolSize = iSymbolSize(iRaw);
+	props.symbolType = sSymbolType(iRaw);
+	props.hatchName = sHatch(iRaw);
 }
 
 

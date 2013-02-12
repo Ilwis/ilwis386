@@ -51,11 +51,12 @@
 IlwisObjectPtrList Representation::listRpr;
 
 RepresentationProperties::RepresentationProperties() {
-	linewidth = rUNDEF;
+	linewidth = 1;
 	lineType = ILWIS::NewDrawer::ldtSingle;
 	itemTransparency = 1.0;
 	symbolType = DEFAULT_POINT_SYMBOL_TYPE;
 	symbolSize = 100.0;
+	useRpr = true;
 
 }
 
@@ -65,6 +66,18 @@ RepresentationProperties::RepresentationProperties(const RepresentationPropertie
 	itemTransparency = p.itemTransparency;
 	symbolType = p.symbolType;
 	symbolSize = p.symbolSize;
+	useRpr = p.useRpr;
+}
+
+RepresentationProperties& RepresentationProperties::operator=(const RepresentationProperties& p){
+	linewidth = p.linewidth;
+	lineType = p.lineType;
+	itemTransparency = p.itemTransparency;
+	symbolType = p.symbolType;
+	symbolSize = p.symbolSize;
+	useRpr = p.useRpr;
+
+	return *this;
 }
 
 map< int, vector<Color> > Representation::colorSets;
@@ -499,7 +512,7 @@ void RepresentationPtr::GetObjectStructure(ObjectStructure& os)
 		os.AddFile(fnObj, "Representation", "Domain", ".dom");
 }
 
-void RepresentationPtr::getProperties(long iRaw, RepresentationProperties *props) {
+void RepresentationPtr::getProperties(long iRaw, RepresentationProperties& props) {
 }
 
 void Representation::loadColorSets(const String& folder) {
