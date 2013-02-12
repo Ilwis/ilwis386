@@ -53,7 +53,7 @@ DrawerInfoVector *createDrawer() {
 }
 
 extern "C" _export ILWIS::Module *getModuleInfo(const FileName& fnModule) {
-	ILWIS::Module *module = new ILWIS::Module("SpaceTimeCube", fnModule,ILWIS::Module::mi38,"1.0");
+	ILWIS::Module *module = new ILWIS::Module("SpaceTimeCube", fnModule,ILWIS::Module::mi38,"1.3");
 	module->addMethod(ILWIS::Module::ifDrawerTools, (void *)createDrawerTool);
 	module->addMethod(ILWIS::Module::ifDrawers, (void *)createDrawer);  
 	return module;
