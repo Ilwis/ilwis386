@@ -839,6 +839,10 @@ borderBox(0), xborder(0.06), yborder(0.03), neatLine(true), step(1), numDigits(2
 	id = "AnnotationBorderDrawer";
 }
 
+AnnotationBorderDrawer::~AnnotationBorderDrawer() {
+	delete borderBox;
+}
+
 bool AnnotationBorderDrawer::draw( const CoordBounds& cbArea) const{
 	if ( !isActive() && !isValid())
 		return false;
@@ -866,7 +870,15 @@ bool AnnotationBorderDrawer::draw( const CoordBounds& cbArea) const{
 	cbTemp.cMax.y = cbZoom.cMax.y - cbZoom.height() * yborder;
 	if ( cbMap.cMax.y < cbTemp.cMax.y )
 		cbTemp.cMax.y = cbMap.cMax.y;
+
+	Extension ext = getRootDrawer()->extension();
+	cbTemp.MinX() += cbTemp.width() * ext.left / 100;
+	cbTemp.MaxX() -= cbTemp.width() * ext.right / 100;
+	cbTemp.MinY() += cbTemp.height() * ext.top / 100;
+	cbTemp.MaxY() -= cbTemp.height() * ext.bottom / 100;
+
 	const_cast<AnnotationBorderDrawer *>(this)->cbCorner = cbTemp;
+
 
 	borderBox->setBox(cbZoom, CoordBounds(cbCorner.cMin, cbCorner.cMax));
 
@@ -1139,6 +1151,11 @@ void AnnotationBorderDrawer::calcLocations() {
 	ypos.clear();
 	xpos.clear();
 	CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
+	Extension ext = getRootDrawer()->extension();
+	cbMap.MinX() += cbMap.width() * ext.left /100;
+	cbMap.MaxX() -= cbMap.width() * ext.right /100;
+	cbMap.MinY() += cbMap.height() *ext.top /100;
+	cbMap.MaxY() -= cbMap.height() *ext.bottom /100;
 	Coord cMin = getRootDrawer()->glToWorld(cbMap.cMin);
 	Coord cMax = getRootDrawer()->glToWorld(cbMap.cMax);
 	GridDrawer *gdr = dynamic_cast<GridDrawer *>(dataDrawer);

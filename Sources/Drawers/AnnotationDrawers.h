@@ -132,6 +132,7 @@ public:
 	enum Side{sLEFT, sRIGHT, sTOP, sBOTTOM};
 
 	AnnotationBorderDrawer(DrawerParameters *parms);
+	~AnnotationBorderDrawer();
 	void prepare(PreparationParameters *pp) ;
 	bool hasNeatLine() const;
 	int getStep() const;
