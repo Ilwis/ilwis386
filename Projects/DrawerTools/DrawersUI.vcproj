@@ -455,6 +455,10 @@
 				RelativePath="..\..\Sources\DrawersUI\ValueSlicer.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\WhitespaceTool.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -694,6 +698,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\DrawersUI\ValueSlicer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\WhitespaceTool.h"
 				>
 			</File>
 		</Filter>
