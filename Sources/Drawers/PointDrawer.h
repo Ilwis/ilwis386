@@ -45,6 +45,24 @@ public:
 		scale = lp->scale;
 	}
 
+	bool operator!=(const PointProperties& pp) {
+		return thickness != pp.thickness ||
+		symbol != pp.symbol ||
+		scale != pp.scale ||
+		exaggeration != pp.exaggeration ||
+		drawColor != pp.drawColor ||
+		ignoreColor != pp.ignoreColor || 
+		threeDOrientation != pp.threeDOrientation ||
+		stretchScale != pp.stretchScale ||
+		stretchRange != pp.stretchRange ||
+		stretchColumn != pp.stretchColumn ||
+		scaleMode != pp.scaleMode ||
+		radiusArea != pp.radiusArea ||
+		useDirection != pp.useDirection ||
+		angle != pp.angle ||
+		labelColumn != pp.labelColumn;
+	}
+
 	double scaling() const {
 		return scale * stretchScale;
 	}
