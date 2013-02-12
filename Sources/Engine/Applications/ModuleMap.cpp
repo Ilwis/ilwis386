@@ -79,7 +79,7 @@ void ModuleMap::addModule(const FileName& fnModule, bool retry) {
 	try{
 		String sName = fnModule.sFile + fnModule.sExt;
 		sName = sName.toLower();
-		if ( sName == "cygpng12.dll" || sName == "cygz.dll") // these two are problematic and will be skipped, not ILWIS anyway
+		if ( sName == "cygpng12.dll" || sName == "cygz.dll" || sName == "cygwin1.dll") // these two are problematic and will be skipped, not ILWIS anyway
 			return;
 		HMODULE hm = LoadLibrary(fnModule.sFullPath().c_str());
 		if ( hm != NULL ) {
