@@ -109,8 +109,14 @@ fnObj(p.fnObj), ptr(p)
 		Coord crd;
 		int crdCol = tbl.index("Coordinate");
 		int vCol = tbl.index("Name");
+		Tranquilizer trq;
+		trq.SetTitle("Loading point map");
 		for (long i = 0; i < iNr; ++i) 
 		{
+			if ( i % 1000 == 0) {
+				if (trq.fUpdate(i, iNr))
+					return;
+			}
 			double v;
 			tbl.get(i,crdCol,crd);
 			tbl.get(i, vCol, v);
