@@ -26,6 +26,7 @@ SpaceTimeDrawer::SpaceTimeDrawer(DrawerParameters *parms, const String& name)
 , nrSteps(-1)
 , spaceTimeElementsDrawer(0)
 {
+	ppcopy = new PointProperties();
 	displayList = new GLuint;
 	*displayList = 0;
 	fRefreshDisplayList = new bool;
@@ -59,6 +60,7 @@ SpaceTimeDrawer::~SpaceTimeDrawer() {
 	delete fRefreshTexture;
 	delete fHatching;
 	delete spaceTimeElementsDrawer;
+	delete ppcopy;
 }
 
 NewDrawer *SpaceTimeDrawer::createElementDrawer(PreparationParameters *pp, ILWIS::DrawerParameters* parms) const{
@@ -163,7 +165,8 @@ void SpaceTimeDrawer::prepare(PreparationParameters *parms){
 
 		*fRefreshTexture = true;
 
-		if ( parms && parms->props ) {
+		if ( *properties != *ppcopy ) {
+			*ppcopy = *properties;
 			if ( properties->scaleMode != PointProperties::sNONE && properties->stretchColumn != "" && basemap->fTblAtt()) {
 				Table attTable = basemap->tblAtt();
 				Column col = attTable->col(properties->stretchColumn);

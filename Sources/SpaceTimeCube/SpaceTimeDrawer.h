@@ -64,5 +64,6 @@ class _export SpaceTimeDrawer : public FeatureLayerDrawer, public TemporalDrawer
 		bool prevUseAttColumn;
 		int nrSteps;
 		CCriticalSection * csDraw;
+		PointProperties *ppcopy;
 	};
 }

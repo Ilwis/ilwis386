@@ -46,8 +46,6 @@ void SpaceTimeElementsDrawer::prepare(PreparationParameters *parms) {
 	if ((parms->type & RootDrawer::ptGEOMETRY) || (parms->type & NewDrawer::pt3D) || (parms->type & NewDrawer::ptRESTORE))
 		*fRefreshDisplayList = true;
 	if ( parms->type & NewDrawer::ptRENDER) {
-		if ( parms->props )
-			*fRefreshDisplayList = true;
 	}
 }
 
