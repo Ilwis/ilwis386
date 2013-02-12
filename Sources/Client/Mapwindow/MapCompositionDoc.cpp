@@ -683,14 +683,21 @@ void MapCompositionDoc::OnExtPerc()
 		CoordBounds cb = rootDrawer->getMapCoordBounds();
 		double ty,by;
 		bool isNorthOriented = cb.MinY() > cb.MaxY();
-		double lx = cb.MinX() - cb.width() * rLeft / 100.0;
-		double rx = cb.MaxX() + cb.width() * rRight / 100.0;
+		double dlx = cb.width() * rLeft / 100.0;
+		double drx = cb.width() * rRight / 100.0;
+		double dty, dby; 
+		double lx = cb.MinX() - dlx;
+		double rx = cb.MaxX() + drx;
 		if ( isNorthOriented) {
-			ty = cb.MinY() - cb.height() * rTop / 100.0;
-			by = cb.MaxY() + cb.height() * rBottom / 100.0;
+			dby = cb.height() * rBottom / 100.0;
+			dty = cb.height() * rTop / 100.0;
+			ty = cb.MinY() - dty;
+			by = cb.MaxY() + dby;
 		} else {
-			ty = cb.MinY() - cb.height() * rBottom / 100.0;
-			by = cb.MaxY() + cb.height() * rTop / 100.0;
+			dby = cb.height() * rTop / 100.0;
+			dty = cb.height() * rBottom / 100.0;
+			ty = cb.MinY() - dty;
+			by = cb.MaxY() + dby;
 		}
 		cb = CoordBounds(Coord(lx,ty), Coord(rx,by));
 		rootDrawer->addCoordBounds(rootDrawer->getCoordinateSystem(),cb);
