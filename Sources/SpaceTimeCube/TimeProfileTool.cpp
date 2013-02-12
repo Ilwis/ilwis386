@@ -877,6 +877,7 @@ void ProfileGraphFunction::SetAnchor(DoublePoint pAnchor)
 BEGIN_MESSAGE_MAP(TimeProfileForm, FormBaseWnd)
 	//{{AFX_MSG_MAP(TimeProfileForm)
 	ON_MESSAGE(MESSAGE_SELECT_ROW, OnSelectFeatures)
+	ON_WM_DESTROY()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -924,6 +925,10 @@ TimeProfileForm::~TimeProfileForm()
 	pgw->SetFunctions(0, 0);
 	if (m_functions)
 		delete [] m_functions;
+
+}
+
+void TimeProfileForm::OnDestroy() {
 	AfxGetApp()->PostThreadMessage(ILW_REMOVEDATAWINDOW, (WPARAM)m_hWnd, 0);
 }
 

@@ -120,6 +120,7 @@ namespace ILWIS {
 	protected:
 		afx_msg LONG OnSelectFeatures(UINT, LONG lParam);
 	private:
+		void OnDestroy();
 		void ComputeGraphs();
 		int CallBackAnchorChangedInGraph(Event*);
 		int CallBackSegmentMapChanged(Event*);
