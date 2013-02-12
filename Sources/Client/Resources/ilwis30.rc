@@ -306,6 +306,7 @@ HISICON16               ICON                    "hisicon1.ico"
 Ellipse                 ICON                    "ellipse.ico"
 Line                    ICON                    "line.ico"
 Curve                   ICON                    "curve.ico"
+whitespace              ICON                    "whitespace.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //

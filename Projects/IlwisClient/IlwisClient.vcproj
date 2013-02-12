@@ -1001,11 +1001,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Client\Resources\esa.ico"
+				RelativePath=".\esa.ico"
 				>
 			</File>
 			<File
-				RelativePath=".\esa.ico"
+				RelativePath="..\..\Sources\Client\Resources\esa.ico"
 				>
 			</File>
 			<File
@@ -1137,11 +1137,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\GNC.ico"
+				RelativePath="..\..\Sources\Client\Resources\GNC.ico"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Client\Resources\GNC.ico"
+				RelativePath=".\GNC.ico"
 				>
 			</File>
 			<File
@@ -1234,6 +1234,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\Client\Resources\ILWAUX.ICO"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\Client\ilwis.CPP"
 				>
 			</File>
 			<File
@@ -2049,6 +2053,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\Client\Resources\whitespace.ico"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\Client\Resources\Within.ico"
 				>
 			</File>
@@ -2076,10 +2084,6 @@
 		<Filter
 			Name="Source Files"
 			>
-			<File
-				RelativePath="..\..\Sources\Client\ilwis.CPP"
-				>
-			</File>
 			<File
 				RelativePath="..\..\Sources\Client\ilwis.h"
 				>
