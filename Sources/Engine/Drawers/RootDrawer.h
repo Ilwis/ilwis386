@@ -7,6 +7,12 @@ class MapCompositionDoc;
 
 
 namespace ILWIS {
+	struct Extension{
+		Extension() : left(0), right(0), top(0), bottom(0){}
+		Extension(double l, double r, double t, double b) : left(l), right(r), top(t), bottom(b) {}
+
+		double left,right,top,bottom;
+	};
 	class DrawerContext;
 
 	class _export RootDrawer : public ComplexDrawer {
@@ -54,6 +60,8 @@ namespace ILWIS {
 		void setZIndex(int);
 		void setupDraw() const;
 		NewDrawer *getBackgroundDrawer() const { return backgroundDrawer; }
+		Extension extension() const;
+		void setExtension(const Extension& ext);
 		
 
 		//void clear();
@@ -87,6 +95,7 @@ namespace ILWIS {
 		CoordBounds cbView;
 		CoordBounds cbZoom;
 		CoordBounds cbMap;
+		Extension ext;
 		CoordSystem cs;
 		GeoRef gr;
 		bool fUseGeoRef;

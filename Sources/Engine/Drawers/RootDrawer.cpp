@@ -36,6 +36,7 @@ RootDrawer::RootDrawer()
 	rootDrawer = this;
 	initRestore = false;
 	info = true;
+	ext = Extension(0,0,0,0);
 
 }
 
@@ -846,6 +847,14 @@ void RootDrawer::SetSpecularColor()
 {
 	GLfloat	specularLight[] = {1, 1, 1, 1.0f};
 	glLightfv(GL_LIGHT0, GL_SPECULAR, specularLight);
+}
+
+Extension RootDrawer::extension() const{
+	return ext;
+}
+
+void RootDrawer::setExtension(const Extension& _ext){
+	ext = _ext;
 }
 
 
