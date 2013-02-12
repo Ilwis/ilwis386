@@ -1237,10 +1237,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Client\ilwis.CPP"
-				>
-			</File>
-			<File
 				RelativePath="..\..\Sources\Client\Resources\ilwis.ico"
 				>
 			</File>
@@ -2084,6 +2080,10 @@
 		<Filter
 			Name="Source Files"
 			>
+			<File
+				RelativePath="..\..\Sources\Client\ilwis.CPP"
+				>
+			</File>
 			<File
 				RelativePath="..\..\Sources\Client\ilwis.h"
 				>
