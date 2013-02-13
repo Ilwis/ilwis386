@@ -71,6 +71,7 @@ namespace ILWIS {
 		int getActiveIndex() const;
 		void OnSysCommand(UINT nID, LPARAM p);
 		void OnClose();
+		void OnDestroy();
 		LRESULT command(WPARAM, LPARAM);
 	
 	private:
