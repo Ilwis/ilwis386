@@ -840,7 +840,7 @@ borderBox(0), xborder(0.06), yborder(0.03), neatLine(true), step(1), numDigits(2
 }
 
 AnnotationBorderDrawer::~AnnotationBorderDrawer() {
-	delete borderBox;
+	//delete borderBox;
 }
 
 bool AnnotationBorderDrawer::draw( const CoordBounds& cbArea) const{
