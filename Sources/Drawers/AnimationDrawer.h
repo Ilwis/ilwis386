@@ -49,6 +49,7 @@ namespace ILWIS{
 		int getOffset() const;
 		void setOffset(int off);
 		void setTresholdColor(const Color&clr);
+		void setTresholdRange(const RangeReal& rr, bool single);
 
 		static int timerIdCounter;
 		CWnd *manager; // basically a UI element, but is sufficiently abstract in thios form to be acceptable; no outisde linage needed.

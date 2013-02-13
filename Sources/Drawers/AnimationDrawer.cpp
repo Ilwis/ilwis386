@@ -343,3 +343,13 @@ void AnimationDrawer::setTresholdColor(const Color&clr){
 		}
 	}
 }
+
+void AnimationDrawer::setTresholdRange(const RangeReal& rr, bool single){
+	for(int i=0; i < drawers.size(); ++i) {
+		RasterLayerDrawer *rsd = dynamic_cast<RasterLayerDrawer *> (drawers[i]);
+		if ( rsd) {
+			rsd->getDrawingColor()->setTresholdRange(rr, single);
+			return;
+		}
+	}
+}
