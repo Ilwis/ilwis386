@@ -202,6 +202,12 @@ BOOL WinThread::InitInstance()
 		}
 		return TRUE;
 	}
+	catch (std::exception& err) {
+		const char *txt = err.what();
+		String mes("%s, unknown cause", txt);
+		ErrorObject errObj(mes);
+		errObj.Show();
+	}
 	catch (ErrorObject& err) {
 		err.Show();
 	}

@@ -85,6 +85,7 @@ LRESULT BaseCommandHandlerUI::doCommand(CWnd *parent, String sCom, String sParm)
 }
 
 LRESULT BaseCommandHandlerUI::Execute(const String& sCmd, CWnd *parent) {
+	try{
 	String sCom = sCmd.sHead(" ").toLower();
 	size_t iSize = min(sCom.size() + 1, sCmd.size());
 	String sParm = sCmd.substr(iSize); // iSize cannot be larger than sCmd.size()
@@ -101,6 +102,20 @@ LRESULT BaseCommandHandlerUI::Execute(const String& sCmd, CWnd *parent) {
 	}
 	
 	return result;
+	} catch (std::exception& err) {
+		const char *txt = err.what();
+		String mes("%s", txt);
+		ErrorObject errObj(mes);
+		errObj.Show();
+	}catch (ErrorObject& err) {
+		err.Show();
+	}catch(CException* err) 
+	{
+		MessageBeep(MB_ICONHAND);
+		err->ReportError(MB_OK|MB_ICONHAND|MB_TOPMOST);
+		err->Delete();
+	}
+	return 0;
 
 }
 
