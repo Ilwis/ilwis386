@@ -1946,10 +1946,13 @@ void MapCompositionDoc::replaceHistFile(const FileName& fnOld, const FileName& f
 	}	
 }
 
-void MapCompositionDoc::ShowHistogram(const FileName& fn, bool show, DrawerTool *tool, int index)
+void MapCompositionDoc::ShowHistogram(const FileName& fn, bool show, const RangeReal& rrX,const RangeReal& rrY, DrawerTool *tool, int index)
 {
 	HistIter iter = gbHist.find(fn.sPhysicalPath());
-	if (iter != gbHist.end() || show == false) {
+	//if ( iter == gbHist.end()) {
+	//	TRACE("STOP");
+	//}
+	if (iter != gbHist.end() && show == false) {
 		BOOL fShown = (*iter).second->IsWindowVisible();
 		//(*iter).second->SendMessage(WM_CLOSE);
 		HistogramGraphDoc* hgd = (HistogramGraphDoc*)(*iter).second->view->GetDocument();
@@ -1957,7 +1960,6 @@ void MapCompositionDoc::ShowHistogram(const FileName& fn, bool show, DrawerTool 
 		delete (*iter).second;
 		gbHist.erase(iter);
 		mpvGetView()->GetParentFrame()->RecalcLayout();
-
 		if (fShown)
 			return;
 
@@ -1998,6 +2000,10 @@ void MapCompositionDoc::ShowHistogram(const FileName& fn, bool show, DrawerTool 
 			HistogramGraphDoc* hgd = new HistogramGraphDoc;
 			Map mp(fn);
 			TableHistogramInfo thi(mp);
+			if ( rrX.fValid())
+				hgd->setOverruleRangeX(rrX);
+			if ( rrY.fValid())
+				hgd->setOverruleRangeY(rrY);
 			hgd->OnOpenDocument(thi.tbl());
 			HistogramGraphView* hgv = new HistogramGraphView(md, this, tool);
 			GeneralBar *gb = new GeneralBar;

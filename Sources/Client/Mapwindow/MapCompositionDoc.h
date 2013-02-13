@@ -128,7 +128,7 @@ public:
 	PixelInfoDoc *pixInfoDoc;
 	HistogramGraphView *getHistoView(const FileName& fn);
 	void replaceHistFile(const FileName& fnOld, const FileName& fnNew);
-	void ShowHistogram(const FileName& fn, bool show=true, DrawerTool *tool=0, int index = 0);
+	void ShowHistogram(const FileName& fn, bool show=true, const RangeReal& rrX=RangeReal(),const RangeReal& rrY=RangeReal(), DrawerTool *tool=0, int index = 0);
 
 protected:
 	MapView mpv;
