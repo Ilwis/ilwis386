@@ -137,6 +137,7 @@ void BaseCommandHandler::AddCommand(const String& sCmd, CommandFunc cf, MetaData
 
 LRESULT BaseCommandHandler::fExecute(const String& sCmd)
 {
+	try{
 	String cc = sCmd;
 	String head = cc.sHead(" "); 
 	String sCom = head.toLower();
@@ -162,6 +163,20 @@ LRESULT BaseCommandHandler::fExecute(const String& sCmd)
 		return true;
 	}
 	return false;
+	} 	catch (std::exception& err) {
+		const char *txt = err.what();
+		String mes("%s", txt);
+		ErrorObject errObj(mes);
+		errObj.Show();
+	}catch (ErrorObject& err) {
+		err.Show();
+	}catch(CException* err) 
+	{
+		MessageBeep(MB_ICONHAND);
+		err->ReportError(MB_OK|MB_ICONHAND|MB_TOPMOST);
+		err->Delete();
+	}
+	return 0;
 }
 
 void BaseCommandHandler::CmdExit(const String& s)
