@@ -29,5 +29,8 @@ class _export SpaceTimePathDrawer : public SpaceTimeDrawer, public SortableDrawe
 		virtual void getRaws(GLuint objectID, vector<long> & raws) const;
 		vector<Feature *> features;
 		vector<long> *objectStartIndexes;
+	private:
+		const double textureOffset;
+		const double textureRange;
 	};
 }

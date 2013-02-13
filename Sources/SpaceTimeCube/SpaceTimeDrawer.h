@@ -9,6 +9,8 @@ typedef void (FeatureLayerDrawer::*GetHatchFunc)(RepresentationClass * prc, long
 
 class SpaceTimeElementsDrawer;
 
+#define PALETTE_TEXTURE_SIZE 256
+
 class _export SpaceTimeDrawer : public FeatureLayerDrawer, public TemporalDrawer, public SizableDrawer {
 	public:
 		ILWIS::NewDrawer *createSpaceTimeDrawer(DrawerParameters *parms);

@@ -24,5 +24,7 @@ class _export StationsDrawer : public SpaceTimeDrawer {
 		virtual Feature * getFeature(GLuint objectID) const;
 		virtual void getRaws(GLuint objectID, vector<long> & raws) const;
 	private:
+		const double textureOffset;
+		const double textureRange;
 	};
 }

@@ -585,7 +585,7 @@ bool SpaceTimeDrawer::draw( const CoordBounds& cbArea) const {
 		boolean oldVal;
 		glGetBooleanv(GL_MAP_COLOR, &oldVal);
 		glPixelTransferf(GL_MAP_COLOR, false);
-		const int iTextureSize = 256;
+		const int iTextureSize = PALETTE_TEXTURE_SIZE;
 		long texture_data [iTextureSize * 2];
 		if (drm == drmSINGLE) {
 			for (int i = 0; i < iTextureSize; ++i) {

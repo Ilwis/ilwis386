@@ -23,6 +23,8 @@ ILWIS::NewDrawer *createStationsDrawer(DrawerParameters *parms) {
 
 StationsDrawer::StationsDrawer(DrawerParameters *parms)
 : SpaceTimeDrawer(parms,"PointLayerDrawer")
+, textureOffset(1.0/((double)PALETTE_TEXTURE_SIZE * 2.0))
+, textureRange((double)PALETTE_TEXTURE_SIZE / ((double)PALETTE_TEXTURE_SIZE + 1.0))
 {
 }
 
@@ -152,9 +154,9 @@ void StationsDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc) con
 					crd.z = z * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
 					crd = getRootDrawer()->glConv(csy, crd);
 					if (fUseAttributeColumn)
-						glTexCoord2f(((fValueMap ? attributeColumn->rValue(feature->iValue()) : attributeColumn->iRaw(feature->iValue())) - minMapVal) / width, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
+						glTexCoord2f(textureOffset + textureRange * ((fValueMap ? attributeColumn->rValue(feature->iValue()) : attributeColumn->iRaw(feature->iValue())) - minMapVal) / width, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
 					else
-						glTexCoord2f((feature->rValue() - minMapVal) / width, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
+						glTexCoord2f(textureOffset + textureRange * (feature->rValue() - minMapVal) / width, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
 					if (fTimeAttribute2) {
 						glVertex3f(crd.x, crd.y, crd.z);
 						double z2 = getTimeValue2(feature) * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
@@ -201,7 +203,7 @@ void StationsDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc) con
 							z2 = z1 + delta;
 							z1 -= delta;
 						}
-						float rsPnt = fUseAttributeColumn ? (((fValueMap ? attributeColumn->rValue(feature->iValue()) : attributeColumn->iRaw(feature->iValue())) - minMapVal) / width) : ((feature->rValue() - minMapVal) / width);
+						float rsPnt = textureOffset + textureRange * (fUseAttributeColumn ? (((fValueMap ? attributeColumn->rValue(feature->iValue()) : attributeColumn->iRaw(feature->iValue())) - minMapVal) / width) : ((feature->rValue() - minMapVal) / width));
 						double rPnt = pathScale * getSizeValue(feature);
 
 						if (prc) {
