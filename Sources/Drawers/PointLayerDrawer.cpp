@@ -49,6 +49,9 @@ void PointLayerDrawer::prepare(PreparationParameters *parm){
 	DomainSort *dmsrt = 0;
 	Column rotColumn;
 	RangeReal rr;
+	if ( (parm->type & NewDrawer::ptGEOMETRY) != 0){
+		properties->scale = 0; // force default sizing of points
+	}
 	if ( tbl.fValid() || bmptr->dm()->pdv()) {
 		if ( rotationInfo.rotationColumn != "")
 			rotColumn = tbl->col(rotationInfo.rotationColumn);
@@ -72,11 +75,11 @@ void PointLayerDrawer::prepare(PreparationParameters *parm){
 			PointProperties *props = (PointProperties *)ld->getProperties();
 			if ( properties->scale == 0) {
 					if ( drawers.size() < 25)
-						properties->scale = 1.0;
+						properties->scale = 100;
 					else if ( drawers.size() < 100)
-						properties->scale = 0.6;
+						properties->scale = 60;
 					else
-						properties->scale = 0.4;
+						properties->scale = 40;
 			}
 			props->set(properties);
 
