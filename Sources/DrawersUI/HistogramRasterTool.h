@@ -16,6 +16,9 @@ private:
 	BaseMapPtr *get(int i=0) const;
 	void displayOptionHisto();
 	void setHisto(void *v, HTREEITEM);
+	RangeReal rangeUsedX;
+	RangeReal rangeUsedY;
+
 };
 
 class HistogramRasterToolForm : public DisplayOptionsForm {

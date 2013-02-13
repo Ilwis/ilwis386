@@ -58,6 +58,10 @@ BOOL AnimationPropertySheet::OnInitDialog()
 	return CPropertySheet::OnInitDialog();
 }
 
+void AnimationPropertySheet::OnDestroy() {
+	AfxGetApp()->PostThreadMessage(ILW_REMOVEDATAWINDOW, (WPARAM)m_hWnd, 0);
+}
+
 LRESULT AnimationPropertySheet::command(WPARAM wp, LPARAM lp) {
 	if ( (int)wp & pRun) {
 		FormBasePropertyPage *page = (FormBasePropertyPage *)GetPage(0);
@@ -1050,7 +1054,6 @@ HBRUSH AnimationBar::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 
 AnimationBar::~AnimationBar()
 {
-AfxGetApp()->PostThreadMessage(ILW_REMOVEDATAWINDOW, (WPARAM)m_hWnd, 0);
 
 }
 
