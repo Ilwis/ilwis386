@@ -59,7 +59,7 @@ BOOL AnimationPropertySheet::OnInitDialog()
 }
 
 void AnimationPropertySheet::OnDestroy() {
-	AfxGetApp()->PostThreadMessage(ILW_REMOVEDATAWINDOW, (WPARAM)m_hWnd, 0);
+	AfxGetApp()->PostThreadMessage(ILW_REMOVEDATAWINDOW, (WPARAM)m_hWnd, 1);
 }
 
 LRESULT AnimationPropertySheet::command(WPARAM wp, LPARAM lp) {
@@ -1088,7 +1088,7 @@ void AnimationBar::Create(CWnd* pParent,const AnimationProperties& props)
 	SetWindowText(TR("Animation").c_str());
 	animation = props;
 
-	AfxGetApp()->PostThreadMessage(ILW_ADDDATAWINDOW, (WPARAM)m_hWnd, 0);
+	AfxGetApp()->PostThreadMessage(ILW_ADDDATAWINDOW, (WPARAM)m_hWnd, 1);
 }
 
 void AnimationBar::OnUpdateCmdUI(CFrameWnd* pParent, BOOL)
