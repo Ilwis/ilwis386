@@ -81,10 +81,14 @@ void OpenGLText::renderText(const Coordinate& c, const String& text) {
 		glRotatef(rotX,0,0,1); // Undo the rotation of RootDrawer
 		glRotatef(rotY,1,0,0);
 		FTPoint pStart(0, 0, 0);
-		FTPoint pEnd =  font->Render(text.c_str(),text.size(), pStart);
+		wchar_t wtext[512];
+		mbstowcs(wtext, text.c_str(), 512);
+		FTPoint pEnd =  font->Render(wtext,-1, pStart);
 	} else {
 		FTPoint pStart(horizontalShift + c.x / scale, verticalShift + c.y / scale, c.z);
-		FTPoint pEnd =  font->Render(text.c_str(),text.size(), pStart);
+		wchar_t wtext[512];
+		mbstowcs(wtext, text.c_str(), 512);
+		FTPoint pEnd =  font->Render(wtext,-1, pStart);
 	}
 	glDisable(GL_BLEND);
 	glDisable(GL_POLYGON_SMOOTH);
