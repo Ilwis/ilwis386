@@ -49,9 +49,13 @@ void PointFeatureDrawer::addDataSource(void *f, int options) {
 
 bool PointFeatureDrawer::draw( const CoordBounds& cbArea) const{
 
-	if ( label) {
-		label->setCoord(feature->centroid());
-	}
+		if ( label) {
+			Coord crdLabel = cNorm;
+			const CoordBounds& cbZoom = getRootDrawer()->getCoordBoundsZoom();
+			crdLabel.x += cbZoom.width() / 200.0;
+			//crdLabel.y += cbZoom.height() / 100.0;
+			label->setCoord(crdLabel);
+		}
 
 	return PointDrawer::draw( cbArea);
 }
@@ -137,6 +141,13 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 				double scale = max(1.0, 1.0 + properties.exaggeration * v);
 				properties.stretchScale = scale;
 			}
+		}
+		if ( label) {
+			const CoordBounds& cbZoom = getRootDrawer()->getCoordBoundsZoom();
+			Coord crdLabel = cNorm;
+			//crdLabel.x += cbZoom.width() / 800.0;
+			//crdLabel.y += cbZoom.height() / 800.0;
+			label->setCoord(crdLabel);
 		}
 	}
 	p->props.symbolType = properties.symbol;

@@ -65,6 +65,10 @@ PolygonFeatureDrawer::~PolygonFeatureDrawer() {
 bool PolygonFeatureDrawer::draw( const CoordBounds& cbArea) const {
 	if ( label) {
 		Coord c = feature->centroid();
+		PolygonLayerDrawer *polygonLayer = static_cast<PolygonLayerDrawer *>(parentDrawer);
+		BaseMapPtr *bmpptr = ((SpatialDataDrawer *)polygonLayer->getParentDrawer())->getBaseMap();
+	    CoordSystem csy = polygonLayer->getCoordSystem();
+		c = getRootDrawer()->glConv(csy,c);
 		CoordBounds cb = label->getTextExtent();
 		c.x = c.x - cb.width() / 2;
 		label->setCoord(c);
