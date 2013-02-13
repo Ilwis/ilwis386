@@ -81,6 +81,7 @@ public:
 	Color getTresholdColor() const;
 	void setSpread(double v);
 	double getSpread() const;
+	void setThresholdRange();
 	//void setSpatialDrawer(SpatialDataDrawer *drw);
 protected:
   LRESULT OnViewSettings(WPARAM wP, LPARAM lP);
@@ -94,6 +95,7 @@ protected:
 	bool moveMode;
 	Color color;
 	double spread;
+	double lastValue;
 };
 
 #endif // !defined(AFX_HISTOGRAMGRAPHVIEW_H__B2FEEFC5_A6FE_11D3_B824_00A0C9D5342F__INCLUDED_)

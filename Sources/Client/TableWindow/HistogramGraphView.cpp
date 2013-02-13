@@ -55,6 +55,7 @@
 #include "Engine\Drawers\SimpleDrawer.h"
 #include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Engine\Table\tblview.h"
+#include "Client\Mapwindow\InfoLine.h"
 #include "Headers\messages.h"
 
 #ifdef _DEBUG
@@ -120,6 +121,7 @@ void HistogramGraphView::OnLButtonDown(UINT nFlags, CPoint point)
 void HistogramGraphView::OnLButtonUp(UINT nFlags, CPoint point) 
 {
 	GraphPaneView::OnLButtonUp(nFlags, point);
+	info->text(point, "");
 	moveMode = false;
 }
 
@@ -127,7 +129,25 @@ void HistogramGraphView::OnMouseMove(UINT nFlags, CPoint point)
 {
   GraphPaneView::OnMouseMove(nFlags, point);
   setRasterSelection(point);
- 
+
+}
+
+void HistogramGraphView::setThresholdRange() {
+	if (!drawer)
+		return;
+	RangeReal rr;
+	if ( drawer->getType() == "AnimationDrawer") {
+		MapListPtr *mlptr = static_cast<MapListPtr *>(drawer->getObject());
+		rr = mlptr->getRange();
+	}else {
+		rr = drawer->getBaseMap()->rrMinMax();
+	}
+	drawer->setTresholdColor(color);
+	drawer->setTresholdRange(RangeReal(lastValue - rr.rWidth()*spread, lastValue + rr.rWidth()*spread),false);
+
+	PreparationParameters pp(NewDrawer::ptRENDER, 0);
+	drawer->prepareChildDrawers(&pp);
+	mcd->mpvGetView()->Invalidate();
 }
 
 void HistogramGraphView::setRasterSelection(CPoint point) {
@@ -139,13 +159,9 @@ void HistogramGraphView::setRasterSelection(CPoint point) {
 		if ( v == rUNDEF)
 			return;
 		if ( drawer->getBaseMap()) {
-			RangeReal rr = drawer->getBaseMap()->rrMinMax();
-			drawer->setTresholdColor(color);
-			drawer->setTresholdRange(RangeReal(v - rr.rWidth()*spread, v + rr.rWidth()*spread),false);
+			lastValue = v;
+			setThresholdRange();
 
-			PreparationParameters pp(NewDrawer::ptRENDER, 0);
-			drawer->prepareChildDrawers(&pp);
-			mcd->mpvGetView()->Invalidate();
 		}
 
 	}

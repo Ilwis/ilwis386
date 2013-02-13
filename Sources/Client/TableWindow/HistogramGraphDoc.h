@@ -63,6 +63,11 @@ public:
 	HistogramGraphDoc();
 	virtual ~HistogramGraphDoc();
   BOOL OnOpenDocument(const Table& table);
+  void setOverruleRangeX( const RangeReal& rr);
+  void setOverruleRangeY( const RangeReal& rr);
+private:
+	RangeReal overruleRangeX;
+	RangeReal overruleRangeY;
 };
 
 #endif // !defined(AFX_HISTOGRAMGRAPHDOC_H__665A106F_FD5D_4137_9C50_B3EF1A93EE08__INCLUDED_)

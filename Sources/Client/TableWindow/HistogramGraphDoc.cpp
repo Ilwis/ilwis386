@@ -119,7 +119,7 @@ BOOL HistogramGraphDoc::OnOpenDocument(const Table& table)
 		cgd->gaxX->dvrsData = colX->dvrs();
 		if (colX->fValues()) 
 		{
-			RangeReal rr = colX->rrMinMax();
+			RangeReal rr = overruleRangeX.fValid() ? overruleRangeX :  colX->rrMinMax();
 			double rWidth = rr.rWidth();
 			rr.rHi() += rWidth * 0.03;
 			if (rr.rLo() >= 0 && rr.rLo() < rWidth * 0.3)
@@ -140,7 +140,7 @@ BOOL HistogramGraphDoc::OnOpenDocument(const Table& table)
 	cgd->gaxYLeft->dvrsData = colPix->dvrs();
  	cgd->gaxYRight->Set(ValueRange(0,100));
   cgd->gaxYRight->dvrsData = ValueRange(0,100);
-	RangeReal rr = colPix->rrMinMax();
+  RangeReal rr = overruleRangeY.fValid() ? overruleRangeY : colPix->rrMinMax();
 	double rWidth = rr.rWidth();
 	rr.rHi() += rWidth * 0.03;
 	rr.rLo() = 0;
@@ -150,4 +150,12 @@ BOOL HistogramGraphDoc::OnOpenDocument(const Table& table)
   grdr->sTitle = "";
   grdr->grleg->fShow = false;
   return TRUE;
+}
+
+void HistogramGraphDoc::setOverruleRangeX( const RangeReal& rr){
+	overruleRangeX = rr;
+}
+
+void HistogramGraphDoc::setOverruleRangeY( const RangeReal& rr){
+	overruleRangeY = rr;
 }
