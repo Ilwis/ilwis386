@@ -244,6 +244,7 @@ private:
 	ILWISSingleLock lockMWCreated;
 	map<sfFontType, CFont*> StandardFonts;
 	list<HWND> lhWindows;
+	list<HWND> lhNonDataWindows;
 	map<String,BaseMapEditorCreate> meditors;
 	IlwisDocTemplate *dtPixelInfo;
 	CMultiDocTemplate *dtDirectory;

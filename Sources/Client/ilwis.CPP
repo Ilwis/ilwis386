@@ -1985,16 +1985,23 @@ void IlwisWinApp::OnTest()
 	//MessageBox(0, fwd.sDummy.sVal(), "Test", MB_OK);
 }
 
-void IlwisWinApp::OnAddDataWindow(WPARAM wParam, LPARAM)
+void IlwisWinApp::OnAddDataWindow(WPARAM wParam, LPARAM lp)
 {
 	HWND hnd = (HWND) wParam;
-	lhWindows.push_back(hnd);
+	if ( lp == 0) {
+		lhWindows.push_back(hnd);
+	} else {
+		lhNonDataWindows.push_back(hnd);
+	}
 }
 
-void IlwisWinApp::OnRemoveDataWindow(WPARAM wParam, LPARAM)
+void IlwisWinApp::OnRemoveDataWindow(WPARAM wParam, LPARAM lp)
 {
 	HWND hnd = (HWND) wParam;
-	lhWindows.remove(hnd);
+	if ( lp == 0)
+		lhWindows.remove(hnd);
+	else
+		lhNonDataWindows.remove(hnd);
 }
 
 inline void SendCloseMsg(HWND hWnd) 
@@ -2038,6 +2045,7 @@ public:
 void IlwisWinApp::SendUpdateCoordMessages(int cm, CoordWithCoordSystem* cwcs)
 {
 	for_each(lhWindows.begin(), lhWindows.end(), SendUpdateCoordMessage(cm,cwcs));
+	for_each(lhNonDataWindows.begin(), lhNonDataWindows.end(), SendUpdateCoordMessage(cm,cwcs));
 	if (cm & cmMOUSECLICK || cm >= cmDIGICLICK1)
 		thrDdeServer->PostThreadMessage(ILW_UPDATE,(WPARAM)cm,(LPARAM)(void*)cwcs);
 }
@@ -2062,6 +2070,7 @@ public:
 void IlwisWinApp::SendUpdateAnimMessages(const FileName& fnAnim, int index)
 {
 	for_each(lhWindows.begin(), lhWindows.end(), SendUpdateAnimMessage(fnAnim,index));
+	for_each(lhNonDataWindows.begin(), lhNonDataWindows.end(), SendUpdateAnimMessage(fnAnim,index));
 }
 
 void IlwisWinApp::RemoveSearchPath(const FileName& fn)
