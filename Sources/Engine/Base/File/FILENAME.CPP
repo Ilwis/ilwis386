@@ -698,9 +698,11 @@ String FileName::sRelative(bool fExt, const String& sDirRelative) const
   String sPth = sPath();
   String sStdDir = getEngine()->getContext()->sStdDir();
   sStdDir &= '\\';
-	if (sPth != "")
-		if (!fCIStrEqual(sPth, sDirComp) && !fCIStrEqual(sPth, sStdDir))
+  String basemaps = sStdDir + "Basemaps\\";
+  if (sPth != ""){
+		if (!fCIStrEqual(sPth, sDirComp) && !fCIStrEqual(sPth, sStdDir) && !fCIStrEqual(sPth, basemaps))
 			return sFullPath(fExt);
+  }
   if (fExt) {
     String sBuf = sFile;
     sBuf &= sExt;

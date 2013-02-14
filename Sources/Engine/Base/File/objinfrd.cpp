@@ -168,9 +168,13 @@ int ObjectInfo::ReadElement(const char* sSection, const char* sEntry,
 		if ((filnam.sExt.length() != 0) && (sNam.strchrQuoted(':') == 0))
 		{
 			// first check in system directory
-			filnam.Dir(getEngine()->getContext()->sStdDir());
-			if (!File::fExist(filnam))
-				filnam = fnRead;  // restore actual filename read from ODF
+			String sysDir = getEngine()->getContext()->sStdDir();
+			filnam.Dir(sysDir);
+			if (!File::fExist(filnam)){
+				filnam.Dir(sysDir + "\\Basemaps");
+				if (!File::fExist(filnam))
+					filnam = fnRead; 
+			}// restore actual filename read from ODF
 		}
 		fn = filnam;
 	}
