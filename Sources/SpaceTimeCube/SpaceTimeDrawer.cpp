@@ -87,7 +87,7 @@ void SpaceTimeDrawer::prepare(PreparationParameters *parms){
 	clock_t start = clock();
 	LayerDrawer::prepare(parms);
 	FeatureDataDrawer *mapDrawer = (FeatureDataDrawer *)parentDrawer;
-	if ( (parms->type & RootDrawer::ptGEOMETRY) || (parms->type & NewDrawer::pt3D)) {
+	if ( (parms->type & RootDrawer::ptGEOMETRY) || (parms->type & NewDrawer::pt3D) || (parms->type & NewDrawer::ptRESTORE)) {
 		bool isAnimation = mapDrawer->getType() == "AnimationDrawer";
 		if ( isAnimation ) {
 			basemap = fbasemap.ptr();
