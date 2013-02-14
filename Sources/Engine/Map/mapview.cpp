@@ -127,41 +127,59 @@ void MapViewPtr::GetDataFiles(Array<FileName>& afnDat, Array<String>* asSection,
 	}
 }
 
+void MapViewPtr::GetObjectStructureLayer(ObjectStructure& os, const String& layer) {
+	bool fLeaveFiles = os.fRetrieveContentsContainer();
+	int count = iReadElement(layer.c_str(),"PreDrawerCount");
+	for(int i = 0; i < count; ++i) {
+		String section("PreDrawer%03d", i);
+		String player;
+		ReadElement(layer.c_str(),section.c_str(), player);
+		GetObjectStructureLayer(os, player);
+	}
+	FileName fnObject;
+	os.AddFile(fnObj,layer,"Object","",!fLeaveFiles);
+	os.AddFile(fnObj,layer,"Spatialsourcemap","", !fLeaveFiles);
+
+	count = iReadElement(layer.c_str(),"DrawerCount");
+	for(int i = 0; i < count; ++i) {
+		String section("Drawer%03d", i);
+		String player;
+		ReadElement(layer.c_str(),section.c_str(), player);
+		GetObjectStructureLayer(os, player);
+	}
+
+	count = iReadElement(layer.c_str(),"PostDrawerCount");
+	for(int i = 0; i < count; ++i) {
+		String section("PostDrawer%03d", i);
+		String player;
+		ReadElement(layer.c_str(),section.c_str(), player);
+		GetObjectStructureLayer(os, player);
+	}
+
+
+
+
+
+}
+
 void MapViewPtr::GetObjectStructure(ObjectStructure& os)
 {
 	IlwisObjectPtr::GetObjectStructure(os);
 	if ( os.fGetAssociatedFiles() )
 	{	
-		int iLayers = iReadElement("MapView", "Layers");
-		bool fLeaveFiles = os.fRetrieveContentsContainer() ? false : true;
-		os.AddFile(fnObj,"MapView", "CoordSystem" ,"", fLeaveFiles );				
-		os.AddFile(fnObj,"MapView", "GeoRef" ,"", fLeaveFiles );						
-		for (int i = 1; i <= iLayers; ++i) 
+		int iLayers = iReadElement("RootDrawer", "DrawerCount");
+		//os.AddFile(fnObj,"MapView", "CoordSystem" ,"", fLeaveFiles );				
+		//os.AddFile(fnObj,"MapView", "GeoRef" ,"", fLeaveFiles );						
+		for (int i = 0; i < iLayers; ++i) 
 		{
-			String sSection("Layer%i", i);
-			String sType;
+			String sSection("Drawer%03d", i);
+			String sLayer;
 			FileName fnData;
-			ReadElement(sSection.c_str(), "Type", sType);
-			if ("MetafileDrawer" == sType || "BitmapDrawer" == sType) 
+			ReadElement("RootDrawer", sSection.c_str(), sLayer);
+			GetObjectStructureLayer(os, sLayer);
+			
+	/*		if ( ReadElement(sLayer.c_str(), "Map" , fnData) != 0 )
 			{
-				ReadElement(sSection.c_str(), "Data", fnData);
-				os.AddFile(fnObj, sSection.c_str(), "Data", "", fLeaveFiles);
-			}
-			else if (sType == "AnnotationTextDrawer")
-			{
-				// AnnotationText must be detected by its drawer, because in an
-				// ATX layer sometimes the map from which it is created is mentioned
-				String sLayer("Layer%d", i);
-				ReadElement(sSection.c_str(), "AnnotationText", fnData);
-				os.AddFile(fnObj, sLayer, "AnnotationText", "" , fLeaveFiles );
-			}
-			else
-			{
-				// The following code allows a drawer to have all maptypes at the same time (one of each)
-				// Currently a drawer at most has one, but this may change in the future
-				String sLayer("Layer%d", i);
-				if ( ReadElement(sSection.c_str(), "Map" , fnData) != 0 )
-				{
 					os.AddFile(fnObj,sLayer, "Map", "" , fLeaveFiles );
 					os.AddFile(fnObj,sLayer, "MapList", "", fLeaveFiles);
 					os.AddFile(fnObj,sLayer, "Representation", ".rpr", fLeaveFiles);
@@ -174,7 +192,7 @@ void MapViewPtr::GetObjectStructure(ObjectStructure& os)
 					os.AddFile(fnObj,sLayer, "PointMap", "" , fLeaveFiles );
 				if ( ReadElement(sSection.c_str(), "Texture Map", fnData ) != 0 )
 					os.AddFile(fnObj, sLayer, "Texture Map", "", fLeaveFiles);
-			}				
+			}		*/	
 		}
 	}
 }

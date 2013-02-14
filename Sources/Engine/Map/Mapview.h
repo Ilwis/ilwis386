@@ -81,6 +81,7 @@ class DATEXPORT MapViewPtr : public IlwisObjectPtr
     public:
         virtual ~MapViewPtr();
         virtual void        GetObjectDependencies(Array<FileName>& afnObjDep);
+		virtual void		GetObjectStructureLayer(ObjectStructure& os, const String& layer);
         virtual void        GetDataFiles(Array<FileName>& afnDat, Array<String>* asSection=0, Array<String>* asEntry=0) const;
 				virtual void _export GetObjectStructure(ObjectStructure& os);
         virtual void        Store();
