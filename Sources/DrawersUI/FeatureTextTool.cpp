@@ -39,7 +39,7 @@ DrawerTool *createFeatureTextTool(ZoomableView* zv, LayerTreeView *view, NewDraw
 FeatureTextTool::FeatureTextTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
 	DrawerTool("FeatureTextTool", zv, view, drw)
 {
-		active = false;
+		active = true;
 }
 
 FeatureTextTool::~FeatureTextTool() {
