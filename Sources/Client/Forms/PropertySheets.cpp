@@ -3178,15 +3178,17 @@ void ContainsPropPage::CollectContainedFiles()
 	else if (sExt == ".mpv")
 	{
 		MapView mpv(m_obj->fnObj);
-		Array<String> as;
-		mpv->DependencyNames(as);
-		for (int i = 0; i < as.iSize(); ++i)
+		int iLayers = mpv->iReadElement("RootDrawer", "DrawerCount");
+		for (int i = 0; i < iLayers; ++i) 
 		{
-			FileName fn = as[i];
-			if (fCIStrEqual(".grf", fn.sExt) || fCIStrEqual(".csy", fn.sExt))
-				continue;
+			String key("Drawer%03d", i);
+			String sLayer;
+			FileName fnData;
+			mpv->ReadElement("RootDrawer", key.c_str(),sLayer);
+			FileName data;
+			mpv->ReadElement(sLayer.c_str(),"Object", data);
+			m_as.push_back(data.sRelative());
 
-			m_as.push_back(fn.sRelative());
 		}
 	}
 	else if (sExt == ".ilo")
