@@ -87,7 +87,7 @@ void FeatureLayerDrawer::prepare(PreparationParameters *parms){
 		if ( parms->type & RootDrawer::ptGEOMETRY || textLayer == 0) {
 			clear();
 			ILWIS::DrawerParameters dp(getRootDrawer(), this);
-			TextLayerDrawer *textLayer = (ILWIS::TextLayerDrawer *)NewDrawer::getDrawer("TextLayerDrawer", "ilwis38",&dp);
+			textLayer = (ILWIS::TextLayerDrawer *)NewDrawer::getDrawer("TextLayerDrawer", "ilwis38",&dp);
 			if (textLayer) {
 				addPostDrawer(223,textLayer);
 				textLayer->setActive(false);
