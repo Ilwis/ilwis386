@@ -2757,6 +2757,12 @@ LRESULT Cmdtimefromcolumns(CWnd *parent, const String& dummy){
 TimeColumnFromOtherColsForm::TimeColumnFromOtherColsForm(CWnd *parent) : TableForm(parent, "Create time column")
 {
 	useYear = useMonth = useDay = useHour = useMonth = useMinutes = useSeconds = useStringColumn = false;
+	year = String("%d", (int)ILWIS::Time::now().get(ILWIS::Time::tpYEAR));
+	month = "1";
+	day = "1";
+	hour = "0";
+	minutes = "0";
+	seconds = "0";
 	view = getView(parent);
 	templ = "YYYY/MM/DD hh/mm/ss";
 
