@@ -137,6 +137,7 @@ extern "C" _export InfoUIVector* getCommandInfoUI(ILWIS::Module *module) {
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("bursawolf","", Cmdbursawolf,TR("&Spatial Reference Operations.&Coordinates.Bursa-Wolf"),TR("Bursa-Wolf parameters"),".csy",".csy",-1,""));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("maplistgraph","",Cmdmaplistgraph,TR("&Statistics.&MapList.&MapList Graph"),TR("MapList Graph"),".grh",".mpl",0000,TR("Show a z-graph of a map list")));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("clmjoin","",Cmdjoin,"","",".grh",".mpl",0000,"Joins column(s) into a table", false));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("colman","",CmdColMan,"","",".grh",".tbt",0000,"Column management", false));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("clmaggregate","",Cmdclmaggregate,"","",".grh",".mpl",0000,"Calculate the aggregate of a column", false));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("clmsemivariogram","",Cmdclmsemivar,"","",".grh",".mpl",0000,"Calculate the semivariogram of a column", false));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("clmstatistics","",Cmdclmstatistiscs,"","",".grh",".mpl",0000,"Calculate the statistics of a column", false));
@@ -155,13 +156,14 @@ extern "C" _export InfoUIVector* getCommandInfoUI(ILWIS::Module *module) {
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("timecolumn","",Cmdtimecolumn,TR("&Table Operations..&Create time column"),TR("Create time column from otther columns"),"ExeTbl16IcoL",".col",0,TR("Create time column from otther columns")));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("timefromcolumns","",Cmdtimefromcolumns,"","",".grh",".mpl",0,TR("Create time column from maplist name information")));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("frmnetworkdistance","",CmdNetworkDistance,TR("&Table Operations..&Network Distance"),TR("Network Distance of Point Maps"),"ExeTbl16IcoL",".ta2",4702,TR("Compute Network Distance of two point maps")));
+
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("updateallcolumns","",CmdUpdateAllColumns,"","",".grh",".mpl",0000,"", false));
 
 return infosui;
 }
 
 extern "C" _export ILWIS::Module *getModuleInfo(const FileName& fnModule) {
-	ILWIS::Module *module = new ILWIS::Module("Rastermap and table applications UI", fnModule,ILWIS::Module::mi37,"1.3");
+	ILWIS::Module *module = new ILWIS::Module("Rastermap and table applications UI", fnModule,ILWIS::Module::mi37,"1.4");
 	module->addMethod(ILWIS::Module::ifgetCommandInfoUI, (void *)getCommandInfoUI);  
 
 	return module;
