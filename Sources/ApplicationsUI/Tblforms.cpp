@@ -48,6 +48,7 @@ Software Foundation, http://www.fsf.org.
 #include "Client\TableWindow\TableDoc.h"
 #include "Engine\Table\tblview.h"
 #include "ApplicationsUI\Tblforms.h"
+#include "Client\TableWindow\COLMAN.H"
 //#include "dsp/propinff.h"
 #include "Headers\Hs\JoinWizard.hs"
 #include "Headers\Hs\Table.hs"
@@ -581,6 +582,18 @@ LRESULT CmdUpdateAllColumns(CWnd *parent, const String& s)
 	return -1;
 }
 
+LRESULT CmdColMan(CWnd *parent, const String& s)
+{
+	CFrameWnd *frame = (CFrameWnd *)parent;
+	CDocument* doc = frame->GetActiveDocument();
+	TableDoc *tbldoc = dynamic_cast<TableDoc*>(doc);
+	TableView *tvw = const_cast<TableView *>(tbldoc->view());
+
+	ColumnManageForm frm(tbldoc, tvw);
+	tbldoc->UpdateAllViews(0);
+
+	return 1;
+}
 
 LRESULT Cmdclmsort(CWnd *parent, const String& s)
 {
