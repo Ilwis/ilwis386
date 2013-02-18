@@ -401,9 +401,11 @@ void TableChangeDomain::CheckColumn(const Column& col, bool fAgg)
   {
     long iRaw = col->iRaw(i);
     for (long j = 0; j < i; ++j)
-      if ((iRaw == col->iRaw(j)) && (iRaw != iUNDEF))
+		if ((iRaw == col->iRaw(j)) && (iRaw != iUNDEF)){
+			String s = col->dm()->sValueByRaw(iRaw);
         ThrowIncompatibleDomainError(TR("Column contains duplicates"),
                         col->fnObj);
+		}
   }
 }
 
