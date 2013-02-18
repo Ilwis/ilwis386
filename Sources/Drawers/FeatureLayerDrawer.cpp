@@ -81,15 +81,22 @@ void FeatureLayerDrawer::prepare(PreparationParameters *parms){
 	if ( parms->type & RootDrawer::ptGEOMETRY || parms->type & NewDrawer::ptRESTORE){
 		bool isAnimation = mapDrawer->getType() == "AnimationDrawer";
 	
-		clear();
 
-		ILWIS::DrawerParameters dp(getRootDrawer(), this);
-		TextLayerDrawer *textLayer = (ILWIS::TextLayerDrawer *)NewDrawer::getDrawer("TextLayerDrawer", "ilwis38",&dp);
-		if (textLayer) {
-			addPostDrawer(223,textLayer);
-			textLayer->setFont(new OpenGLText(getRootDrawer(),"arial.ttf",12 ,false));
-			textLayer->setActive(false);
+
+		TextLayerDrawer *textLayer = dynamic_cast<TextLayerDrawer *>(getDrawer(223, dtPOST));
+		if ( parms->type & RootDrawer::ptGEOMETRY || textLayer == 0) {
+			clear();
+			ILWIS::DrawerParameters dp(getRootDrawer(), this);
+			TextLayerDrawer *textLayer = (ILWIS::TextLayerDrawer *)NewDrawer::getDrawer("TextLayerDrawer", "ilwis38",&dp);
+			if (textLayer) {
+				addPostDrawer(223,textLayer);
+				textLayer->setActive(false);
+
+			}
 		}
+		textLayer->setFont(new OpenGLText(getRootDrawer(),"arial.ttf",12 * textLayer->getFontScale() ,false));
+
+
 		if ( isAnimation ) {
 			getFeatures(features);
 		} else {
@@ -200,12 +207,14 @@ String FeatureLayerDrawer::store(const FileName& fnView, const String& parentSec
 	LayerDrawer::store(fnView, parentSection);
 	ObjectInfo::WriteElement(parentSection.c_str(),"SingleColor",fnView, singleColor);
 	ObjectInfo::WriteElement(parentSection.c_str(),"RenderMode",fnView, (long)renderMode);
+	ObjectInfo::WriteElement(parentSection.c_str(),"LabelAttribute",fnView, labelAttribute);
 	return parentSection;
 }
 
 void FeatureLayerDrawer::load(const FileName& fnView, const String& parentSection){
 	LayerDrawer::load(fnView, parentSection);
 	ObjectInfo::ReadElement(parentSection.c_str(),"SingleColor",fnView, singleColor);
+	ObjectInfo::ReadElement(parentSection.c_str(),"LabelAttribute",fnView, labelAttribute);
 	long rm;
 	ObjectInfo::ReadElement(parentSection.c_str(),"RenderMode",fnView, rm);
 	renderMode = (RenderMode)rm;
