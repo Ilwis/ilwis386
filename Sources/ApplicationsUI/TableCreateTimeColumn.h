@@ -16,8 +16,8 @@ private:
 	int day1, day2;
 	int hour1, hour2;
 	int minutes1, minutes2;
-	int decade1,decade2;
-	bool fyear, fmonth, fday, fminute,fhour,fdecade;
+	int dekad1,dekad2;
+	bool fyear, fmonth, fday, fminute,fhour,fdekad;
 	String tablename;
 	CheckBox *cbDecade, *cbHour, *cbMinute, *cbDay, *cbMnth;
 	FieldInt *fiDay1, *fiDay2,*fiHour1, *fiHour2, *fiMinute1, *fiMinute2, *fiMonth1, *fiMonth2,*fiDecade1,*fiDecade2;

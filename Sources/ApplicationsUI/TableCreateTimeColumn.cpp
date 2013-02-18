@@ -10,11 +10,11 @@ LRESULT Cmdtimecolumn(CWnd *wnd, const String& s)
 }
 
 TableCreateTimeColumnForm::TableCreateTimeColumnForm(CWnd* wPar, const String& parm) : FormWithDest(wPar, TR("Parse maplist names for time information")){
-	year1 = year2 = baseyear = month1 = month2 = day1 = day2 = hour1 = hour2 = minutes1 = minutes2 = decade1 = decade2 = -1;
-	fyear = fmonth = fday = fminute = fhour = fdecade = false;
+	year1 = year2 = baseyear = month1 = month2 = day1 = day2 = hour1 = hour2 = minutes1 = minutes2 = dekad1 = dekad2 = -1;
+	fyear = fmonth = fday = fminute = fhour = fdekad = false;
 	FieldMapList * fmlist = new FieldMapList(root,TR("Maplist"),&maplist);
 	fmlist->SetIndependentPos();
-	new StaticText(root,TR("Character positions"),true);
+	new StaticText(root,TR("Character positions(0 based index)"),true);
 	StaticText *st = new StaticText(root,TR("Year"));
 	FieldInt *fiYear1 = new FieldInt(root,TR("start"), &year1);
 	fiYear1->Align(st, AL_AFTER);
@@ -51,12 +51,12 @@ TableCreateTimeColumnForm::TableCreateTimeColumnForm(CWnd* wPar, const String& p
 	fiMinute2 = new FieldInt(cbMinute, TR("end"), &minutes2);
 	fiMinute2->Align(fiMinute1, AL_AFTER);
 
-	cbDecade = new CheckBox(root, TR("Decade"),&fdecade);
+	cbDecade = new CheckBox(root, TR("Dekad"),&fdekad);
 	cbDecade->SetCallBack((NotifyProc)&TableCreateTimeColumnForm::selectCB);
 	cbDecade->Align(cbMinute, AL_UNDER);
-	fiDecade1 = new FieldInt(cbDecade, TR("start"), &decade1);
+	fiDecade1 = new FieldInt(cbDecade, TR("start"), &dekad1);
 	fiDecade1->Align(cbDecade, AL_AFTER);
-	fiDecade2 = new FieldInt(cbDecade, TR("end"), &decade2);
+	fiDecade2 = new FieldInt(cbDecade, TR("end"), &dekad2);
 	fiDecade2->Align(fiDecade1, AL_AFTER);
 
 	FieldBlank *fb = new FieldBlank(root);
@@ -70,7 +70,7 @@ int TableCreateTimeColumnForm::selectCB(Event *) {
 	cbDecade->StoreData();
 	cbDay->StoreData();
 	cbMinute->StoreData();
-	if ( fdecade) {
+	if ( fdekad) {
 		cbDay->SetVal(false);
 		cbMinute->SetVal(false);
 		fiDay1->Hide();
@@ -117,9 +117,9 @@ int TableCreateTimeColumnForm::exec() {
 		format += ";";
 		format += String("minute=%d:%d",minutes1, minutes2);
 	}
-	if ( fdecade) {
+	if ( fdekad) {
 		format += ";";
-		format += String("decade=%d:%d",decade1, decade2);
+		format += String("dekad=%d:%d",dekad1, dekad2);
 	}
 	String expr("%S:=TableCreateTimeColumn(%S,'%S')",tablename,maplist,format);
 	getEngine()->Execute(expr);
