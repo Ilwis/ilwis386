@@ -103,6 +103,32 @@ void TextLayerDrawer::setFontScale(double f){
 double TextLayerDrawer::getFontScale() const{
 	return fontScale;
 }
+
+String TextLayerDrawer::store(const FileName& fnView, const String& parentSection) const{
+	String currentSection = parentSection;
+	ComplexDrawer::store(fnView, currentSection);
+	ObjectInfo::WriteElement(currentSection.c_str(),"ColotText",fnView, clrText);
+	ObjectInfo::WriteElement(currentSection.c_str(),"FaceName",fnView, sFaceName);
+	ObjectInfo::WriteElement(currentSection.c_str(),"Height",fnView, iFHeight);
+	ObjectInfo::WriteElement(currentSection.c_str(),"Weight",fnView, iFWeight);
+	ObjectInfo::WriteElement(currentSection.c_str(),"Style",fnView, iFStyle);
+	ObjectInfo::WriteElement(currentSection.c_str(),"Width",fnView, iWidth);
+	ObjectInfo::WriteElement(currentSection.c_str(),"Scale",fnView, fontScale);
+	
+	return currentSection;
+
+}
+void TextLayerDrawer::load(const FileName& fnView, const String& parentSection){
+	String currentSection = parentSection;
+	ComplexDrawer::store(fnView, currentSection);
+	ObjectInfo::ReadElement(currentSection.c_str(),"ColotText",fnView, clrText);
+	ObjectInfo::ReadElement(currentSection.c_str(),"FaceName",fnView, sFaceName);
+	ObjectInfo::ReadElement(currentSection.c_str(),"Height",fnView, iFHeight);
+	ObjectInfo::ReadElement(currentSection.c_str(),"Weight",fnView, iFWeight);
+	ObjectInfo::ReadElement(currentSection.c_str(),"Style",fnView, iFStyle);
+	ObjectInfo::ReadElement(currentSection.c_str(),"Width",fnView, iWidth);
+	ObjectInfo::ReadElement(currentSection.c_str(),"Scale",fnView, fontScale);
+}
 //---------------------------------------------------
 
 ILWIS::NewDrawer *createTextDrawer(DrawerParameters *parms) {
