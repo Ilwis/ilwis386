@@ -163,6 +163,8 @@ OneSelectEdit::OneSelectEdit(FormEntry* fe, FormBase* parent, zPoint pos,
   val = v;
   parent->setNotify(this,(NotifyProc)&OneSelectEdit::WindowPosChanging, WM_WINDOWPOSCHANGING);
   parent->setNotify(this,(NotifyProc)&OneSelectEdit::DrawItem, WM_DRAWITEM);
+  if ( val && *val >= 0)
+	SetCurSel(*val);
 //create();
 }
 
@@ -339,6 +341,7 @@ void FieldOneSelectString::SetVal(int iVal)
 {
 	if (foss->ose)
 		foss->ose->SetCurSel(iVal);
+	foss->localIndex = iVal;
 }
 
 void FieldOneSelectString::SetVal(const String& sVal)

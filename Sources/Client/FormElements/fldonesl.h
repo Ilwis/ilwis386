@@ -104,9 +104,11 @@ public:
   void SetFocus();
   void StoreData();
   void SetVal(const String& sVal);
+  long localIndex;
+protected:
+
 private:
   const vector<String>& vs;
-  long localIndex;
   String *txt;
 };
 
