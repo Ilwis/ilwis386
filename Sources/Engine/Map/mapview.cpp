@@ -139,6 +139,8 @@ void MapViewPtr::GetObjectStructureLayer(ObjectStructure& os, const String& laye
 	FileName fnObject;
 	os.AddFile(fnObj,layer,"Object","",!fLeaveFiles);
 	os.AddFile(fnObj,layer,"Spatialsourcemap","", !fLeaveFiles);
+	os.AddFile(fnObj,layer,"Datasourcemap","", !fLeaveFiles);
+	os.AddFile(fnObj,layer,"Table","", !fLeaveFiles);
 
 	count = iReadElement(layer.c_str(),"DrawerCount");
 	for(int i = 0; i < count; ++i) {
