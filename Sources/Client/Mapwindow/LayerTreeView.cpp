@@ -173,6 +173,9 @@ void LayerTreeView::NextNode(HTREEITEM hItem, const String& name) {
 	TreeItem titem;
 
 	if ( getItem(hItem, TVIF_TEXT | TVIF_HANDLE,titem)) {
+		if ( titem.item.pszText == 0) {
+			return;
+		}
 		String part("%S|%s", name, titem.item.pszText);
 		nodes[part] = NodeInfo(hItem);
 		collectStructure(hItem,part);
