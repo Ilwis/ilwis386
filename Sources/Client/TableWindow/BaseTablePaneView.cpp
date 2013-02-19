@@ -1556,7 +1556,10 @@ void BaseTablePaneView::OnInitialUpdate()
 	CFont* fnt = IlwWinApp()->GetFont(IlwisWinApp::sfTABLE);
 	CFont* fntOld = cdc.SelectObject(fnt);
 	TEXTMETRIC tm;
-	cdc.GetTextMetrics(&tm);
+	BOOL b = cdc.GetTextMetrics(&tm);
+	if (!b)
+		return;
+
 	iHght = tm.tmHeight - 1;
 	if (tm.tmExternalLeading == 0)
 		iHght += 1;
