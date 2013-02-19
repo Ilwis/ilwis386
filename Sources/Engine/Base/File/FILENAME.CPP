@@ -535,6 +535,56 @@ void FileName::Dir(const String& s)
   }
 }
 
+bool FileName::fExist(bool checkSystemToo) const 
+{
+
+	bool ok = _access(sPhysicalPath().c_str(), 0)==0 ; 
+	if ( !ok && checkSystemToo) {
+		String sStdDir = getEngine()->getContext()->sStdDir() + "\\System\\";
+		String sysFile = sStdDir + sFile + sExt;
+		if((ok = (_access(sysFile.c_str(), 0)!=0))) {
+			sysFile = sStdDir + "\\System\\Basemaps\\" + sFile + sExt;
+			return _access(sysFile.c_str(), 0)==0;
+		}
+	}
+	return ok;
+}
+
+bool FileName::makePath(bool checkSystemToo)  
+{
+
+	bool ok = _access(sPhysicalPath().c_str(), 0)==0 ; 
+	if ( !ok) {
+		if ( sDrive == "" && sDir == "") {
+			String curdir = getEngine()->sGetCurDir();
+			String file = curdir + "\\" + sFile + sExt;
+			ok = _access(file.c_str(), 0)==0;
+			if ( ok) {
+				*this = FileName(file);
+				return ok;
+			}
+		}
+		if ( checkSystemToo) {
+			String sStdDir = getEngine()->getContext()->sStdDir();
+			String sysFile = sStdDir + "\\"+ sFile + sExt;
+			if((ok = (_access(sysFile.c_str(), 0)!=0))) {
+				sysFile = sStdDir + "\\Basemaps\\" + sFile + sExt;
+				ok =  _access(sysFile.c_str(), 0)==0;
+				if (ok) {
+					FileName fnTemp(sysFile);
+					*this = fnTemp;
+					return ok;
+				}
+			} else {
+				FileName fnTemp(sysFile);
+				*this = fnTemp;
+				return true;
+			}
+		}
+	}
+	return ok;
+}
+
 bool FileName::fValid() const
 {
 	String s = sFullPath();

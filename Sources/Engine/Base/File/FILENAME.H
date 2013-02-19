@@ -118,7 +118,8 @@ public:
 //  friend bool operator != (const FileName& fnA, const FileName& fnB) 
 //    { return !(fnA == fnB); }
 
-	bool fExist() const { return _access(sPhysicalPath().c_str(), 0)==0 ; }
+	bool _export fExist(bool checkSystemToo=false) const;
+	bool _export makePath(bool checkSystemToo) ; 
 	bool _export fValid() const;
 
 	static FileName _export fnUnique(const FileName& fnTemplate);
