@@ -88,6 +88,16 @@ void* SpatialDataDrawer::getDataSource() const {
 	return 0;
 }
 
+RangeReal SpatialDataDrawer::getRange() const{
+	if ( bm.fValid())
+		return bm->rrMinMax();
+	else if ( oc.fValid())
+		return oc->getRange();
+	else if ( mpl.fValid())
+		return mpl->getRange();
+	return RangeReal();
+}
+
 void SpatialDataDrawer::addDataSource(void *bmap,int options) 
 {
 	IlwisObject *optr = (IlwisObject *)bmap;

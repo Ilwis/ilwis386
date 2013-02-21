@@ -31,6 +31,7 @@ class _export SpatialDataDrawer : public ComplexDrawer {
 		bool useAttributeTable() const;
 		void setUseAttributeTable(bool yesno);
 		RangeReal getStretchRangeReal(int index = 0) const;
+		RangeReal getRange() const;
 		bool useInternalDomain() const;
 		virtual String description() const;
 		virtual String iconName(const String& subtype="?") const;
