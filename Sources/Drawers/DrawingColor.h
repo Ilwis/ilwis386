@@ -14,7 +14,7 @@ namespace ILWIS {
 		void setColumn(const Column& col);
 		DomainValueRangeStruct dvrs() const;
 		Domain dm() const;
-		double rValByRaw(int raw) const;
+		double rValByRaw(int raw, const RangeReal& range = RangeReal()) const;
 	private:
 		BaseMap bmap;
 		Column col;
@@ -62,6 +62,7 @@ private:
 	IlwisObject::iotIlwisObjectType type;
 	RangeReal transpValues;
 	RangeReal tresholdValues;
+	RangeReal rangeData;
 	Color tresholdColor;
 	bool useSingleValueForTreshold;
 };

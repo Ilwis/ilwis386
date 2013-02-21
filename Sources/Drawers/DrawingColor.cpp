@@ -39,7 +39,7 @@ Domain IlwisData::dm() const{
 	return bmap->dm();
 }
 
-double IlwisData::rValByRaw(int raw) const{
+double IlwisData::rValByRaw(int raw, const RangeReal& range) const{
 	if ( col.fValid()) {
 		if ( col->dm()->pdv())
 			return col->rValue(raw);
@@ -54,6 +54,11 @@ double IlwisData::rValByRaw(int raw) const{
 	if ( dm()->pdsrt())
 		return raw;
 
+	if ( range.fValid()) {
+		double step = dvrs().rStep();
+		double v = ( raw + dvrs().vr()->getOffset()) * step;
+		return v;
+	}
 	return bmap->dvrs().rValue(raw);
 }
 
@@ -71,6 +76,7 @@ useSingleValueForTreshold(false)
 	BaseMap bmap;
 	if ( dr->isSet()) {
 		setDrawer = (SetDrawer *)dr;
+		rangeData = setDrawer->getRange();
 		bmap.SetPointer(setDrawer->getBaseMap(index));
 		drw = (LayerDrawer *)setDrawer->getDrawer(ind);
 
@@ -79,6 +85,7 @@ useSingleValueForTreshold(false)
 		SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)drw->getParentDrawer();
 		setDrawer = dynamic_cast<SetDrawer *>(mapDrawer);
 		bmap.SetPointer(mapDrawer->getBaseMap(index));
+		rangeData = mapDrawer->getRange();
 	}
 
 	dataValues.setBaseMap(bmap);
@@ -304,7 +311,7 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 						RangeReal rr = getStretchRangeReal();
 						DomainValueRangeStruct dvrs = dataValues.dvrs();
 						for (long i = 0; i < iLen; ++i) {
-							double v = dataValues.rValByRaw(buf[i]);
+							double v = dataValues.rValByRaw(buf[i], rangeData);
 							Color clr = rpr->clr(v, rr);
 							setTransparency(v, clr);
 							setTresholdColors(v, clr);

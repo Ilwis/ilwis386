@@ -42,7 +42,7 @@ String CollectionDrawer::description() const {
 void CollectionDrawer::addDataSource(void *col, int options){
 	ObjectCollection *oc = (ObjectCollection *)col;
 	if ((*oc)->getStatusFor(ObjectCollection::csALLBASEMAP | ObjectCollection::csSAMEDOMAIN) == false)
-		throw ErrorObject(TR("Object collection not valid to function as drawing layer"));
+		throw ErrorObject(TR("Not valid as a drawing layer. There might be incompatible objects in the collection"));
 	SetDrawer::addDataSource(col, options);
 }
 
