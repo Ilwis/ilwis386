@@ -327,10 +327,13 @@ DisplayOptionsForm2(dr,wPar,TR("Hovmoller Diagram"),fbsBUTTONSUNDER | fbsNOCANCE
 	if ( t->source.getSource().fValid())
 		name = t->source.getSource()->fnObj.sFullPath();
 	graph = new HovMollerGraphEntry(root,t);
+	graph->SetIndependentPos();
 	fm = new FieldDataType(root,TR("MapList"),&name, ".mpl",true);
+	//fm->SetFieldWidth(100);
 	fm->SetCallBack((NotifyProc)&HovMollerGraphFrom::setSource);
 	fcTime = new FieldColumn(root, TR("Time column"),tbl,&columnName,dmTIME);
 	fcTime->SetCallBack((NotifyProc)&HovMollerGraphFrom::setTimeColumn);
+	//fcTime->SetFieldWidth(100);
 	SetCallBack((NotifyProc)&HovMollerGraphFrom::init);
 	create();
 	ShowWindow(SW_HIDE);

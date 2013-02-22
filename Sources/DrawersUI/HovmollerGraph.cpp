@@ -119,11 +119,14 @@ void HovMollerGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 		moveRect.bottom = rctInner.top + yoff;
 		for(int x=0; x < track.size(); ++x) {
 			Color clr;
+			if ( x == track.size() - 1) {
+			TRACE("left %d right %d xmin %d xmax %d\n", moveRect.left, moveRect.right, rctInner.left, rctInner.right);
+			}
 			double v = values[m][x];
 			if ( v != rUNDEF)
 				clr = drc->clrVal(v);
 			else
-				clr = RGB(0,0,0);
+				clr = RGB(255,255,255);
 
 			CPen pen(PS_SOLID, 1,clr);
 			SelectObject(lpDIS->hDC,pen);
@@ -131,8 +134,8 @@ void HovMollerGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 			SelectObject(lpDIS->hDC, brush);
 			dc->Rectangle(&moveRect);
 			xoff += xStep;
-			moveRect.left = rctInner.left + xoff - xStep;
-			moveRect.right = rctInner.left + xoff;
+			moveRect.left = rctInner.left + xoff ;
+			moveRect.right = rctInner.left + xoff + xStep;
 			CPen penTick(PS_SOLID,1,RGB(0,0,0));
 			SelectObject(lpDIS->hDC,penTick);
 			int frac = 100 * (double) x / track.size();
@@ -169,11 +172,11 @@ void HovMollerGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 void HovMollerGraph::setTextDataBlock(CDC *dc){
 	String sValue, sTime,sLocX, sLocY;
 	sValue = sTime = sLocX = sLocY = ":";
-	String sIndex = yIndex >= 0 ? String("%d",yIndex) : "";
+	String sIndex = yIndex >= 0 ? String("%d",values.size() - yIndex) : "";
 	if ( xIndex >= 0 && yIndex >= 0) {
 		String st;
 		if ( timeColumn.fValid()) {
-			ILWIS::Time time(timeColumn->rValue(yIndex));
+			ILWIS::Time time(timeColumn->rValue(yIndex - 1));
 			st = time.toString(true,ILWIS::Time::mDATE);
 		} else
 			st = "?";
@@ -182,7 +185,7 @@ void HovMollerGraph::setTextDataBlock(CDC *dc){
 		LatLon ll = fldGraph->mpl[0]->cs()->llConv(trackCrd[xIndex]);
 		sLocY += ll.sLat(10);
 		sLocX += ll.sLon(10);
-		sValue = String("%S%f",sValue, values[yIndex -1 ][xIndex]);
+		sValue = String("%S%f",sValue, values[values.size() - yIndex][xIndex]);
 
 	}
 	dc->TextOut(rctInner.right + 8,rctInner.top, "Latitude");
@@ -228,8 +231,13 @@ void HovMollerGraph::OnLButtonUp(UINT nFlags, CPoint point) {
 	double fractx = (double)(point.x - rctInner.left) / rctInner.Width();
 	double fracty = (double)(rctInner.bottom - point.y)/ rctInner.Height();
 	if ( fractx >= 0 && fractx <= 1.0 && fracty >=0 && fracty <= 1.0) {
-		xIndex = track.size() * fractx;
-		yIndex = fldGraph->mpl->iSize() * fracty + 1;
+		double dx = track.size() * fractx;
+		double dy = fldGraph->mpl->iSize() * fracty + 1.0;
+		xIndex = dx;
+		yIndex = dy;
+		TRACE("%d %d %f %f\n",xIndex, yIndex, dx, dy);
+		//xIndex = std::max(xIndex, 0);
+		//xIndex = std::min(
 		Invalidate();
 	}
 
@@ -255,6 +263,7 @@ void HovMollerGraph::setTrack(const vector<Coord>& crds){
 	double rD = 0;
 	track.clear();
 	values.clear();
+	trackCrd.clear();
 	for(int i = 1; i < crds.size(); ++i) {
 		rD += rDist(crds[i-1], crds[i]);
 	}
@@ -270,6 +279,9 @@ void HovMollerGraph::setTrack(const vector<Coord>& crds){
 		bool notDone = true;
 		double cnt = 1;
 		double d;
+		RowCol rc = mp->gr()->rcConv(c1);
+		track.push_back(rc);
+		trackCrd.push_back(c1);
 
 		while(notDone) {
 			Coord c3(c1.x + cos(angle) * step * cnt, c1.y + sin(angle) * step * cnt);
@@ -286,6 +298,9 @@ void HovMollerGraph::setTrack(const vector<Coord>& crds){
 			}
 			++cnt;
 		}
+		rc = mp->gr()->rcConv(c2);
+		track.push_back(rc);
+		trackCrd.push_back(c2);
 	}
 	values.resize(fldGraph->mpl->iSize());
 	for(int j =0; j < values.size(); ++j) {
