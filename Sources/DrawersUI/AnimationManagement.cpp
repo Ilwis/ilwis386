@@ -549,7 +549,9 @@ int AnimationSynchronization::synchronize(Event*) {
 		int oldTimerId = slaveDrawer->drawer->getTimerId();
 		slaveDrawer->mdoc->mpvGetView()->KillTimer(oldTimerId);
 		slaveDrawer->drawer->setTimerId(SLAVE_TIMER_ID);
-		SlaveProperties props(slaveDrawer->drawer,offset1,step1);
+		double sizeSlave = slaveDrawer->drawer->getActiveMaps().size();
+		double sizeMaster = masterDrawer->drawer->getActiveMaps().size();
+		SlaveProperties props(slaveDrawer->drawer,offset1, sizeSlave/ sizeMaster);
 		masterDrawer->drawer->addSlave(props);
 		slaveDrawer->drawer->setOffset(props.slaveOffset);
 	}
