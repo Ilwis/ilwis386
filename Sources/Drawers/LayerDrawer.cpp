@@ -27,7 +27,8 @@ LayerDrawer::LayerDrawer(DrawerParameters *parms, const String& name) :
 	stretchMethod(smLINEAR),
 	drawColor(0),
 	extrTransparency(0.2),
-	useAttColumn(false)
+	useAttColumn(false),
+	useRpr(true)
 	
 {
 	setInfo(true);

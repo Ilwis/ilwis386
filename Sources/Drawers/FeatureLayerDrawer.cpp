@@ -61,12 +61,12 @@ void FeatureLayerDrawer::getFeatures(vector<Feature *>& features) const {
 void FeatureLayerDrawer::prepare(PreparationParameters *parms){
 	/*if ( !isActive() && !isValid())
 		return;*/
-	if ( initFromView && parms->props.useRpr == true && renderMode == rmUSER) {
-		parms->props.useRpr = false;
+	if ( initFromView && useRpr == true && renderMode == rmUSER) {
+		useRpr = false;
 	}
-	else if (  parms->props.useRpr == true) {
+	else if (  useRpr == true) {
 		renderMode = rmRPR;
-	} else if  ( parms->props.useRpr == false) {
+	} else if  ( useRpr == false) {
 		renderMode = rmUSER;
 	}
 	initFromView = false;
@@ -172,7 +172,7 @@ void FeatureLayerDrawer::prepareChildDrawers(PreparationParameters *parms) {
 						pdrw->getLabelDrawer()->setText(sV.sTrimSpaces());
 					}
 				}
-				if ( parms->props.useRpr) {
+				if ( useRpr) {
 					if (bmp->dm()->rpr().fValid()) {
 						parms->props = props;
 						if ( feature && feature->fValid()){

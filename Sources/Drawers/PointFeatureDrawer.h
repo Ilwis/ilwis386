@@ -16,6 +16,7 @@ class _export PointFeatureDrawer : public PointDrawer {
 	protected:
 		PointFeatureDrawer(DrawerParameters *parms, const String& name);
 		Feature *feature;
+		long getRaw() const;
 		CoordBounds cb;
 	};
 }

@@ -5,6 +5,7 @@
 #include "Engine\Map\Point\ilwPoint.h"
 #include "Engine\Spatialreference\gr.h"
 #include "Engine\Map\Raster\Map.h"
+#include "Engine\Domain\Dmsort.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Engine\Drawers\RootDrawer.h"
 #include "Engine\Drawers\SpatialDataDrawer.h"
@@ -60,6 +61,25 @@ bool PointFeatureDrawer::draw( const CoordBounds& cbArea) const{
 	return PointDrawer::draw( cbArea);
 }
 
+long PointFeatureDrawer::getRaw() const{
+	FeatureLayerDrawer *fdr = dynamic_cast<FeatureLayerDrawer *>(parentDrawer);
+	long raw = feature->iValue();
+	if ( fdr->useAttributeColumn()) {
+		Column col = fdr->getAtttributeColumn();
+		if ( col->dm()->pdv())
+			return col->rValue(raw);
+		else if ( col->dm()->pdsrt()) {
+			String sV = col->sValue(raw);
+			long r = col->dm()->pdsrt()->iRaw(sV);
+			return r;
+		}
+	}
+	BaseMapPtr *bmpptr = ((SpatialDataDrawer *)fdr->getParentDrawer())->getBaseMap();
+	if ( bmpptr->dm()->pdsrt())
+		return raw;
+
+	return bmpptr->dvrs().rValue(raw);
+}
 void PointFeatureDrawer::prepare(PreparationParameters *p){
 
 	FeatureLayerDrawer *fdr = dynamic_cast<FeatureLayerDrawer *>(parentDrawer);
@@ -97,10 +117,10 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 		}
 		Representation rpr = fdr->getRepresentation();
 		if ( rpr->prc()) {
-			if ( p->props.useRpr) {
-				properties.scale = rpr->prc()->iSymbolSize(feature->iValue());
-				properties.symbol = rpr->prc()->sSymbolType(feature->iValue());
-				properties.drawColor = rpr->prc()->clrSymbol(feature->iValue());
+			if ( fdr->useRepresentation()) {
+				properties.scale = rpr->prc()->iSymbolSize(getRaw());
+				properties.symbol = rpr->prc()->sSymbolType(getRaw());
+				properties.drawColor = rpr->prc()->clrSymbol(getRaw());
 			}
 		}
 		properties.stretchScale = 1.0 + properties.exaggeration;

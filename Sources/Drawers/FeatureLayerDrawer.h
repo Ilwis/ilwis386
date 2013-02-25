@@ -38,6 +38,7 @@ namespace ILWIS{
 		void setLabelAttribute(const String& col);
 		String getLabelAttribute() const;
 
+
 	protected:
 		String store(const FileName& fnView, const String& parenSection) const;
 		void load(const FileName& fnView, const String& parenSection);
@@ -52,6 +53,7 @@ namespace ILWIS{
 		String labelAttribute; // column;
 		map<long, SimpleDrawer*> featureMap;
 		void *managedDrawers;
+
 
 	};
 }

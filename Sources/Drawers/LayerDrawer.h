@@ -44,6 +44,8 @@ class _export LayerDrawer : public ComplexDrawer {
 		virtual void setSelectable(bool yesno );
 		virtual void select(const CRect& rect, vector<long> & selectedRaws, SelectionMode selectionMode) {};
 		vector<long> * getSelectedRaws();
+		bool useRepresentation() { return useRpr; }
+		void setUseRpr(bool yesno) { useRpr = yesno; }
 					
 	protected:
 		String store(const FileName& fnView, const String& parenSection) const;
@@ -62,6 +64,7 @@ class _export LayerDrawer : public ComplexDrawer {
 		StretchMethod stretchMethod;
 		double extrTransparency;
 		vector<long> selectedRaws;
+		bool useRpr;
 	};
 
 
