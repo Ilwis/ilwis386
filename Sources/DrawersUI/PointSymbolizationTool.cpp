@@ -135,7 +135,7 @@ void PointSymbolizationForm::apply(){
 		RepresentationProperties rprop;
 		rprop.symbolSize = props->scale = scale * 100;
 		rprop.symbolType = props->symbol;
-		rprop.useRpr = props->symbol == "default";
+		((PointLayerDrawer *)drw)->setUseRpr(props->symbol == "default");
 		pp.props = rprop;
 		drw->prepare(&pp);
 	}

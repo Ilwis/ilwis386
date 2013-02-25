@@ -354,6 +354,7 @@ void  PointRprForm::apply() {
   FileName fn(symbol);
   rcl->PutSymbolType(iRaw, fn.sFile);
   PreparationParameters pp(NewDrawer::ptRENDER, 0);
+  ((LayerDrawer *)drw)->setUseRpr(true);
  // pp.props.symbolType = fn.sFile;
   //pp.props.symbolSize = scale * 100.0;
   drw->prepare(&pp);

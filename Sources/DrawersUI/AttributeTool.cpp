@@ -111,7 +111,8 @@ void AttributeTool::setcheckattr(void *value, HTREEITEM item) {
 		layerDrawer->getDrawingColor()->setDataColumn(Column());
 		layerDrawer->setRepresentation(bmp->dm()->rpr());
 	}
-	PreparationParameters pp(NewDrawer::ptRENDER, 0);
+	bool userpr = ((LayerDrawer *)drawer)->useRepresentation();
+	PreparationParameters pp(NewDrawer::ptRENDER, 0,10);
 	((LayerDrawer *)drawer)->prepareChildDrawers(&pp);
 
 	if ( colorTool) {
@@ -142,7 +143,8 @@ void AttributeTool::setcheckAttributeTable(void *w, HTREEITEM ) {
 	}
 	update();
 
-	PreparationParameters pp(NewDrawer::ptRENDER, 0);
+	bool userpr = ((LayerDrawer *)drawer)->useRepresentation();
+	PreparationParameters pp(NewDrawer::ptRENDER, 0,10);
 	layerDrawer->prepareChildDrawers(&pp);
 	layerDrawer->getRootDrawer()->getDrawerContext()->doDraw();
 }
