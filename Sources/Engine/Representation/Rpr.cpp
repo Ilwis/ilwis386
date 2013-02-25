@@ -56,8 +56,6 @@ RepresentationProperties::RepresentationProperties() {
 	itemTransparency = 1.0;
 	symbolType = DEFAULT_POINT_SYMBOL_TYPE;
 	symbolSize = 100.0;
-	useRpr = true;
-
 }
 
 RepresentationProperties::RepresentationProperties(const RepresentationProperties& p){
@@ -66,7 +64,6 @@ RepresentationProperties::RepresentationProperties(const RepresentationPropertie
 	itemTransparency = p.itemTransparency;
 	symbolType = p.symbolType;
 	symbolSize = p.symbolSize;
-	useRpr = p.useRpr;
 }
 
 RepresentationProperties& RepresentationProperties::operator=(const RepresentationProperties& p){
@@ -75,7 +72,6 @@ RepresentationProperties& RepresentationProperties::operator=(const Representati
 	itemTransparency = p.itemTransparency;
 	symbolType = p.symbolType;
 	symbolSize = p.symbolSize;
-	useRpr = p.useRpr;
 
 	return *this;
 }

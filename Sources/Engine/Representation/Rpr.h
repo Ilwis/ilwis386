@@ -56,7 +56,6 @@ struct _export RepresentationProperties {
 	String symbolType;
 	double symbolSize;
 	String hatchName;
-	bool useRpr;
 };
 
 class RepresentationPtr: public IlwisObjectPtr
