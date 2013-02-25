@@ -258,6 +258,7 @@ String LayerDrawer::store(const FileName& fnView, const String& parentSection) c
 		ObjectInfo::WriteElement(parentSection.c_str(),"AttributeColumn",fnView, attColumn->sName());
 	ObjectInfo::WriteElement(parentSection.c_str(),"UseAttributes",fnView, useAttColumn);
 	ObjectInfo::WriteElement(parentSection.c_str(),"ExtrusionTransparency",fnView, extrTransparency);
+	ObjectInfo::WriteElement(parentSection.c_str(),"UseRpr",fnView, useRpr);
 	if ( drawColor) {
 		drawColor->store(fnView, parentSection);
 	}
@@ -275,6 +276,7 @@ void LayerDrawer::load(const FileName& fnView, const String& parentSection){
 	stretchMethod = (StretchMethod)method;
 	String colname;
 	ObjectInfo::ReadElement(parentSection.c_str(),"AttributeColumn",fnView, colname);
+	ObjectInfo::ReadElement(parentSection.c_str(),"UseRpr",fnView, useRpr);
 	if ( colname != "") {
 		attColumn = ((SpatialDataDrawer *)getParentDrawer())->getBaseMap()->tblAtt()->col(colname);
 	}
