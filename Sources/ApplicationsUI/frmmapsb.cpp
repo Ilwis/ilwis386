@@ -876,8 +876,8 @@ int FormMapSubMap::MapCallBack(Event*)
 		{
 			crd1 = mp->gr()->cConv(RowCol(iFirstLine, iFirstCol));
 			crd2 = mp->gr()->cConv(RowCol(iLastLine, iLastCol));
-			iCols = iLastCol - iFirstCol;
-			iLines = iLastLine - iFirstLine;
+			iCols = abs(iLastCol - iFirstCol);
+			iLines = abs(iLastLine - iFirstLine);
 		}			
 		UpdateSize();  // update the fields
 
