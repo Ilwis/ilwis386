@@ -131,7 +131,8 @@ namespace ILWIS {
 				props = parms->props;
 				rowSelect = parms->rowSelect;
 			}
-			PreparationParameters(int t=1,CDC *_dc = 0,int m=10) : type(t),dc(_dc), zOrder(-1),index(0),contextMode(m) {} 
+		PreparationParameters(int t=1,CDC *_dc = 0,int m=10) : type(t),dc(_dc), zOrder(-1),index(0),contextMode(m) 
+		{ } 
 		PreparationParameters(int t, const CoordSystem& cs) : type(t), csy(cs),dc(0),zOrder(-1),index(0),contextMode(10)  {}
 		int type;
 		CDC *dc;
