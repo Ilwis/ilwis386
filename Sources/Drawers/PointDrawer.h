@@ -99,6 +99,7 @@ class _export PointDrawer : public SimpleDrawer {
 		GeneralDrawerProperties *getProperties();
 		virtual void select(bool yesno);
 		void setGeneralProperties(GeneralDrawerProperties *);
+		CoordBounds getBounds() const { return CoordBounds(cNorm, cNorm); }
 	protected:
 		PointDrawer(DrawerParameters *parms, const String& name);
 		void calcSize();

@@ -31,6 +31,7 @@ class _export PolygonDrawer : public SimpleDrawer {
 		void setLineColor(const Color& clr);
 		virtual void select(bool yesno);
 		GeneralDrawerProperties *getProperties();
+		CoordBounds getBounds() const { return cb; }
 
 	protected:
 		virtual void setSpecialDrawingOptions(int option, bool add, const vector<int>& coords=vector<int>()) ;

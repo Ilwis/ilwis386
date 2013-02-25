@@ -31,6 +31,7 @@ namespace ILWIS{
 		virtual void select(bool yesno);
 		static int openGLLineStyle(int linestyle, double sz=1.0);
 		static int ilwisLineStyle(int linestyle, double sz=1.0);
+		CoordBounds getBounds() const { return cb; }
 
 	protected:
 		LineDrawer(DrawerParameters *parms, const String& name);
