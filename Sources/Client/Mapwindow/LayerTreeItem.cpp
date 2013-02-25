@@ -54,6 +54,7 @@ Created on: 2007-02-8
 #include "Client\FormElements\fldrpr.h"
 #include "Client\FormElements\fldcolor.h"
 #include "Engine\Drawers\drawer_n.h"
+#include "Engine\Drawers\simpledrawer.h"
 #include "Engine\Domain\DmSort.h"
 #include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
@@ -167,6 +168,7 @@ void DrawerLayerTreeItem::OnContextMenu(CWnd* w, CPoint p)
 	if (mapdrw) {
 		pmadd(ID_PROPLAYER);
 		pmadd(ID_ZOOM_TO_LAYER);
+		pmadd(ID_ZOOM_TO_SELECTED);
 	}
 	pmadd(ID_REMOVELAYER);
 	int iCmd = men.TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON|TPM_NONOTIFY|TPM_RETURNCMD, p.x, p.y, w);
@@ -196,6 +198,45 @@ void DrawerLayerTreeItem::OnContextMenu(CWnd* w, CPoint p)
 			CoordBounds cbConv = mapdrw->getRootDrawer()->getCoordinateSystem()->cbConv(mptr->cs(),cb);
 			mapdrw->getRootDrawer()->setCoordBoundsZoom(cbConv);
 			ltv->GetDocument()->mpvGetView()->Invalidate();
+
+		}
+		break;
+	case ID_ZOOM_TO_SELECTED:
+		{
+			ComplexDrawer *cdrw = dynamic_cast<ComplexDrawer *>(mapdrw->getDrawer(0));
+			if ( !cdrw)
+				return;
+			CoordBounds cbSelected;
+			for(int i = 0; i < cdrw->getDrawerCount(); ++i) {
+				SimpleDrawer *sdrw = static_cast<SimpleDrawer *>(cdrw->getDrawer(i));
+				if (!sdrw)
+					continue;
+				if ( sdrw->getSpecialDrawingOption(NewDrawer::sdoSELECTED) != 0) {
+					cbSelected += sdrw->getBounds();
+				}
+			}
+			if ( cbSelected.fValid()) {
+				RowCol rc = mapdrw->getRootDrawer()->getViewPort();
+				double fac = (double)rc.Col / rc.Row;
+				double xmin, xmax, ymin, ymax;
+				if ( cbSelected.width() > cbSelected.height()){
+					xmin = cbSelected.cMin.x;
+					xmax = cbSelected.cMax.x;
+					ymin = cbSelected.middle().y -  cbSelected.width() * 1.0 / (2 * fac);
+					ymax = cbSelected.middle().y + cbSelected.width() * 1.0 / (2 * fac);
+				} else if ( cbSelected.width() > cbSelected.height()){
+					xmin = cbSelected.cMin.x;
+					xmax = xmin + cbSelected.height() * fac;
+					ymin = cbSelected.cMin.y;
+					ymax = cbSelected.cMax.y;
+				}
+				cbSelected = CoordBounds(Coord(xmin,ymin), Coord( xmax, ymax));
+					
+				cbSelected *= 1.1;
+				CoordBounds cbConv = mapdrw->getRootDrawer()->getCoordinateSystem()->cbConv(mptr->cs(),cbSelected);
+				cdrw->getRootDrawer()->setCoordBoundsZoom(cbConv);
+				ltv->GetDocument()->mpvGetView()->Invalidate();
+			}
 
 		}
 		break;
