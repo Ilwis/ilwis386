@@ -63,6 +63,7 @@ namespace ILWIS {
 		void setLabelDrawer(TextDrawer *txtdr);
 		TextDrawer *getLabelDrawer() const;
 		void setGeneralProperties(GeneralDrawerProperties *) {}
+		virtual CoordBounds getBounds() const  { return CoordBounds(); }
 
 		CCriticalSection cs;
 	protected:
