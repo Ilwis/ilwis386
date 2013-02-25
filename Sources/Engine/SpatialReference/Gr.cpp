@@ -330,12 +330,9 @@ String GeoRefPtr::sName(bool fExt, const String& sDirRelative) const
 GeoRefPtr* GeoRefPtr::create(const FileName& fn)
 {
   FileName filnam = fn;
-  if (!File::fExist(filnam)) { // check std dir
-    filnam.Dir(getEngine()->getContext()->sStdDir());
-    if (!File::fExist(filnam))
-      NotFoundError(fn);
-      //throw ErrorNotFound(fn);
-  }
+  if (!filnam.makePath(true))
+	  NotFoundError(fn);
+
   String sType;
   GeoRefPtr* p = GeoRef::pGet(fn);
   if (p) // if already open return it

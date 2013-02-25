@@ -135,11 +135,8 @@ CoordSystemPtr* CoordSystemPtr::create(const FileName& fn)
 {
   FileName filnam = fn;
   filnam.sExt = ".csy";
-  if (!File::fExist(filnam)) { // check std dir
-    filnam.Dir(getEngine()->getContext()->sStdDir());
-    if (!File::fExist(filnam))
-      NotFoundError(fn);
-  }
+  if (!filnam.makePath(true))
+	  NotFoundError(fn);
   CoordSystemPtr* p = CoordSystem::pGet(filnam);
   if (p) // if already open return it
     return p;
