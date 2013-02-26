@@ -86,10 +86,12 @@ void LineLayerDrawer::prepare(PreparationParameters *parm){
 			if ( ld) {
 				bool setBoxes = (specialOptions & NewDrawer::sdoSymbolLineNode) != 0;
 				ld->setSpecialDrawingOptions(NewDrawer::sdoSymbolLineNode, setBoxes );
-				LineProperties *props = (LineProperties *)ld->getProperties();
-				props->linestyle = lproperties.linestyle;
-				if (!lproperties.ignoreColor)
-					props->drawColor = lproperties.drawColor;
+				if ( !useRpr) {
+					LineProperties *props = (LineProperties *)ld->getProperties();
+					props->linestyle = lproperties.linestyle;
+					if (!lproperties.ignoreColor)
+						props->drawColor = lproperties.drawColor;
+				}
 			} else {
 				getEngine()->getLogger()->LogLine(TR("Empty drawer in list"), Logger::lmERROR);
 			}

@@ -6,6 +6,8 @@
 #include "Engine\Drawers\SimpleDrawer.h" 
 #include "Engine\Spatialreference\gr.h"
 #include "Engine\Map\Raster\Map.h"
+#include "Engine\Domain\Dmsort.h"
+#include "Engine\Representation\Rprclass.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Engine\Drawers\RootDrawer.h"
 #include "Engine\Drawers\SpatialDataDrawer.h"
@@ -60,6 +62,25 @@ void LineFeatureDrawer::addDataSource(void *f, int options) {
 	}
 }
 
+long LineFeatureDrawer::getRaw() const{
+	FeatureLayerDrawer *fdr = dynamic_cast<FeatureLayerDrawer *>(parentDrawer);
+	long raw = feature->iValue();
+	if ( fdr->useAttributeColumn()) {
+		Column col = fdr->getAtttributeColumn();
+		if ( col->dm()->pdv())
+			return col->rValue(raw);
+		else if ( col->dm()->pdsrt()) {
+			String sV = col->sValue(raw);
+			long r = col->dm()->pdsrt()->iRaw(sV);
+			return r;
+		}
+	}
+	BaseMapPtr *bmpptr = ((SpatialDataDrawer *)fdr->getParentDrawer())->getBaseMap();
+	if ( bmpptr->dm()->pdsrt())
+		return raw;
+
+	return bmpptr->dvrs().rValue(raw);
+}
 
 void LineFeatureDrawer::prepare(PreparationParameters *p){
 	LineDrawer::prepare(p);
@@ -108,6 +129,15 @@ void LineFeatureDrawer::prepare(PreparationParameters *p){
 			lproperties.drawColor = (fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod()));
 		else
 			lproperties.drawColor = (fdr->getDrawingColor()->clrVal(feature->rValue()));
+
+		Representation rpr = fdr->getRepresentation();
+		if ( rpr->prc()) {
+			if ( fdr->useRepresentation()) {
+				lproperties.thickness = rpr->prc()->rLineWidth(getRaw());
+				lproperties.linestyle = LineDrawer::openGLLineStyle(rpr->prc()->iLine(feature->iValue()));
+				lproperties.drawColor = rpr->prc()->clrRaw(getRaw());
+			}
+		}
 
 		BaseMapPtr *bmpptr = ((SpatialDataDrawer *)fdr->getParentDrawer())->getBaseMap();
 		if ( bmpptr->fTblAtt()) {

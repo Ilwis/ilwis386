@@ -18,6 +18,7 @@ class _export LineFeatureDrawer : public LineDrawer {
 		virtual Feature *getFeature() const;
 		void* getDataSource() const;
 	protected:
+		long getRaw() const;
 		LineFeatureDrawer(DrawerParameters *parms, const String& name);
 		Feature *feature;
 		DomainType dmt;
