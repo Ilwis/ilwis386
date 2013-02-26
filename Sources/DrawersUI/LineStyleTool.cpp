@@ -163,10 +163,16 @@ void  LineStyleForm::apply() {
 			if ( !lprops->ignoreColor)
 				fc->StoreData();
 			lprops->linestyle = LineDrawer::openGLLineStyle(style);
+			LayerDrawer *lyerdrw = dynamic_cast<LayerDrawer *>(drw);
+			if (lyerdrw)
+				lyerdrw->setUseRpr(false);
 			drw->prepareChildDrawers(&pp);
 		}
 	} else {
 		lprops->linestyle = LineDrawer::openGLLineStyle(style);
+		LayerDrawer *lyerdrw = dynamic_cast<LayerDrawer *>(drw);
+		if (lyerdrw)
+				lyerdrw->setUseRpr(false);
 		drw->prepare(&pp);
 	}
 	updateMapView();

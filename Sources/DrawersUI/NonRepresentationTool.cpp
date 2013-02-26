@@ -98,7 +98,9 @@ SetSingleColorForm::SetSingleColorForm(CWnd *wPar, FeatureLayerDrawer *dr) :
 void  SetSingleColorForm::apply() {
 	fc->StoreData();
 	((FeatureLayerDrawer *)drw)->setSingleColor(c);
-	//((FeatureLayerDrawer *)drw)->colorItem->setColor(c);
+	LayerDrawer *lyerdrw = dynamic_cast<LayerDrawer *>(drw);
+	if (lyerdrw)
+		lyerdrw->setUseRpr(false);
 	PreparationParameters parm(NewDrawer::ptRENDER, 0);
 	drw->prepareChildDrawers(&parm);
 	updateMapView();
@@ -166,6 +168,9 @@ void  SetMultipleColorForm::apply() {
 	rg->StoreData();
 	((FeatureLayerDrawer *)drw)->getDrawingColor()->setColorSet(choice);
 	((FeatureLayerDrawer *)drw)->getDrawingColor()->setMultiColors(colors);
+	LayerDrawer *lyerdrw = dynamic_cast<LayerDrawer *>(drw);
+	if (lyerdrw)
+		lyerdrw->setUseRpr(false);
 	PreparationParameters parm(NewDrawer::ptRENDER, 0);
 	drw->prepareChildDrawers(&parm);
 	updateMapView();

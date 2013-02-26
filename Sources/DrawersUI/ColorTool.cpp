@@ -72,12 +72,17 @@ void ColorTool::setcheckRpr(void *value, HTREEITEM item) {
 		sdrw = (LayerDrawer *)adrw->getDrawer(0);
 	}
 	Representation rpr = sdrw->getRepresentation();
-	if ( method == "Representation")
+	if ( method == "Representation") {
 		sdrw->setDrawMethod(NewDrawer::drmRPR);
-	else if ( method == "Single Color")
+		sdrw->setUseRpr(true);
+	}
+	else if ( method == "Single Color"){
 		sdrw->setDrawMethod(NewDrawer::drmSINGLE);
+		sdrw->setUseRpr(false);
+	}
 	else if ( method == "Multiple Colors"){
 		sdrw->setDrawMethod(NewDrawer::drmMULTIPLE);
+		sdrw->setUseRpr(false);
 	}
 	if ( adrw) {
 		PreparationParameters pp(NewDrawer::ptRENDER, 0);
