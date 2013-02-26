@@ -236,6 +236,7 @@ void  LineRprForm::apply() {
   line.ResizeSymbol(3.0);
   line.clrLine() = col;
   line.Store(rcl, iRaw);
+    ((LayerDrawer *)drw)->setUseRpr(true);
   PreparationParameters pp(NewDrawer::ptRENDER, 0);
   drw->prepare(&pp);
 
@@ -312,6 +313,7 @@ void  PolRprForm::apply() {
 	rcl->PutHatchingName(iRaw, fn.sFile);
 	rcl->Updated();
   }
+    ((LayerDrawer *)drw)->setUseRpr(true);
   PreparationParameters pp(NewDrawer::ptRENDER, 0);
   RepresentationProperties props;
   pp.props = props;
