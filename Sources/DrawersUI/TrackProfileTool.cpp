@@ -1,4 +1,5 @@
 #include "Client\Headers\formelementspch.h"
+#include "Client\FormElements\flddat.h"
 #include "Engine\Drawers\RootDrawer.h"
 #include "Engine\Drawers\ComplexDrawer.h"
 #include "Engine\Drawers\SpatialDataDrawer.h"
@@ -20,6 +21,8 @@
 #include "Engine\Drawers\ComplexDrawer.h" 
 #include "drawers\linedrawer.h"
 #include "drawers\pointdrawer.h"
+#include "Engine\SpatialReference\Coordsys.h"
+#include "Engine\Map\Segment\Seg.h"
 #include "Client\FormElements\FieldListView.h"
 #include "TrackProfileGraph.h"
 #include "DrawersUI\TrackProfileTool.h"
@@ -122,6 +125,9 @@ TrackProfileTool::~TrackProfileTool() {
 	for(int i=0; i < sources.size(); ++i) 
 		delete sources[i];
 	sources.clear();
+	if ( graphForm) {
+		graphForm->wnd()->PostMessage(WM_CLOSE);
+	}
 }
 
 void TrackProfileTool::clear() {
@@ -250,6 +256,12 @@ void TrackProfileTool::addSource(const FileName& fn) {
 
 void TrackProfileTool::setCoords() {
 	line->addCoords(coords, 1);
+}
+
+void TrackProfileTool::setCoords(const vector<Coord>& crds) {
+	coords = crds;
+	line->addCoords(coords, 1);
+	mpvGetView()->Invalidate();
 }
 
 void TrackProfileTool::OnMouseMove(UINT nFlags, CPoint pnt)
@@ -419,7 +431,7 @@ int ChooseTrackProfileForm::addSource(Event *ev) {
 
 //========================================================================
 TrackProfileGraphFrom::TrackProfileGraphFrom(CWnd *wPar, LayerDrawer *dr,TrackProfileTool *t) :
-DisplayOptionsForm2(dr,wPar,TR("Track Profile Graph"),fbsBUTTONSUNDER | fbsSHOWALWAYS | fbsNOCANCELBUTTON|fbsHIDEONCLOSE), graph(0)
+DisplayOptionsForm2(dr,wPar,TR("Track Profile Graph"),fbsBUTTONSUNDER | fbsSHOWALWAYS | fbsNOCANCELBUTTON|fbsHIDEONCLOSE), graph(0), tool(t)
 {
 	vector<FLVColumnInfo> v;
 	v.push_back(FLVColumnInfo("Source", 220));
@@ -427,15 +439,123 @@ DisplayOptionsForm2(dr,wPar,TR("Track Profile Graph"),fbsBUTTONSUNDER | fbsSHOWA
 	v.push_back(FLVColumnInfo("Value range", 80));
 	v.push_back(FLVColumnInfo("Value", 60));
 	graph = new TrackProfileGraphEntry(root,t);
-	graph->setListView(new FieldListView(root,v));
+	FieldListView *view = new FieldListView(root,v);
+	graph->setListView(view);
+	FieldGroup *grbuttons = new FieldGroup(root);
+	PushButton *pb1 = new PushButton(grbuttons,TR("Load track"),(NotifyProc)&TrackProfileGraphFrom::loadTrack);
+	PushButton *pb2 = new PushButton(grbuttons,TR("Save track"), (NotifyProc)&TrackProfileGraphFrom::saveTrack);
+	PushButton *pb3 = new PushButton(grbuttons,TR("Open track as Table"), (NotifyProc)&TrackProfileGraphFrom::openAsTable);
+	pb2->Align(pb1, AL_AFTER);
+	pb3->Align(pb2, AL_AFTER);
+	grbuttons->SetIndependentPos();
 	create();
 	ShowWindow(SW_HIDE);
 }
 
 
+int TrackProfileGraphFrom::openAsTable(Event *ev){
+	if ( graph) {
+		graph->openAsTable();
+	}
+	return 1;
+}
+
+class LoadTrackForm: public FormWithDest
+{
+public:
+	LoadTrackForm(CWnd* parent, String* sName)
+		: FormWithDest(parent, TR("Load track"))
+	{
+		new FieldDataTypeLarge(root, sName, ".mps");
+		//      SetMenHelpTopic(htpOpenSegmentMap);
+		create();
+	}
+};
+int TrackProfileGraphFrom::loadTrack(Event *ev) {
+
+	String sMap;
+	LoadTrackForm frm(this, &sMap);
+	if (!frm.fOkClicked()) 
+		return 1;
+
+	if ( sMap == "") 
+		return 1;
+
+	FileName fnSeg(sMap);
+	SegmentMap smp(fnSeg);
+
+	if ( !smp.fValid())
+		return 1;
+
+	if (smp->iFeatures() != 1) {
+		throw ErrorObject(TR("Track segmentmap may only contain 1 segment"));
+	}
+
+	Segment *seg = CSEGMENT(smp->getFeature(0));
+	if (!seg)
+		return 1;
+
+	const CoordinateSequence *seq = seg->getCoordinatesRO();
+	vector<Coord> coords;
+	for(int j = 0; j < seq->size(); ++j) {
+		Coord c = seq->getAt(j);
+		Coord crd = drw->getRootDrawer()->getCoordinateSystem()->cConv(smp->cs(),c);
+		coords.push_back(crd);
+	}
+	setTrack(coords);
+	tool->setCoords(coords);
+
+	return 1;
+}
+
+class SegmentMapNameForm : public FormWithDest {
+public:
+	SegmentMapNameForm(CWnd *par,String *name) : FormWithDest(par,TR("Save as Segmentmap"),fbsSHOWALWAYS | fbsMODAL) {
+		new FieldString(root,TR("Segmentmap name"),name);
+		//create();
+	}
+
+	int exec() {
+		FormWithDest::exec();
+		return 1;
+	}
+};
+int TrackProfileGraphFrom::saveTrack(Event *ev) {
+	if ( trackCoords.size() == 0)
+		return 0;
+
+	SpatialDataDrawer *spdrw = dynamic_cast<SpatialDataDrawer *>(drw->getParentDrawer());
+	if(!spdrw)
+		return 0;
+
+	BaseMapPtr *bmp = spdrw->getBaseMap();
+	if ( !bmp)
+		return 0;
+	String fname("Profile_Track");
+	if ( SegmentMapNameForm(this, &fname).DoModal() == IDOK) {
+		FileName fnSeg(fname,".mps");
+		Domain dom(fnSeg, 1, dmtUNIQUEID, "Seg");
+		CoordSystem csy = bmp->cs();
+		CoordBounds bnds = bmp->cb();
+		SegmentMap smp(fnSeg,csy,bnds, DomainValueRangeStruct(dom));
+		Segment *seg = CSEGMENT(smp->newFeature());
+		CoordinateSequence *sq = new CoordinateArraySequence();
+		for(int i=0; i < trackCoords.size(); ++i) {
+			sq->add(trackCoords[i]);
+		}
+		seg->PutCoords(sq);
+		seg->PutVal(1L);
+	}
+
+	return 1;
+}
+
 void TrackProfileGraphFrom::setTrack(const vector<Coord>& crds) {
-	if ( graph)
+	if ( graph) {
+		trackCoords.clear();
+		trackCoords = crds;
 		graph->setTrack(crds);
+	}
 }
 
 void TrackProfileGraphFrom::addSource(const IlwisObject& bmp) {

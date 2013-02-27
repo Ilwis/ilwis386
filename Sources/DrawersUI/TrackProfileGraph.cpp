@@ -446,7 +446,7 @@ currentIndex(iUNDEF),
 tool(t)
 {
 	psn->iMinWidth = psn->iWidth = CSGRPAH_SIZE;
-	psn->iMinHeight = psn->iHeight = 120;
+	psn->iMinHeight = psn->iHeight = 150;
 	SetIndependentPos();
 }
 
@@ -518,12 +518,16 @@ void TrackProfileGraphEntry::setTrack(const vector<Coord>& crds){
 void TrackProfileGraphEntry::setListView(FieldListView *v) {
 	listview = v;
 	v->psn->iMinWidth = v->psn->iWidth = CSGRPAH_SIZE;
-	v->psn->iMinHeight = v->psn->iHeight = 100;
+	v->psn->iMinHeight = v->psn->iHeight = 70;
 }
 
 void TrackProfileGraphEntry::update() {
 	listview->update();
 	graph->Invalidate();
+}
+
+void TrackProfileGraphEntry::openAsTable() {
+	graph->saveAsTbl();
 }
 
 

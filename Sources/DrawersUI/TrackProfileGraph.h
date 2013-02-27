@@ -68,6 +68,7 @@ public:
 	void setIndex(int sourceIndex, double value, const Coord& crd);
 	ILWIS::TrackProfileTool *tool;
 	void update();
+	void openAsTable();
 
 
 private:

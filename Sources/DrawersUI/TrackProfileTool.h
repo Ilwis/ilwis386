@@ -42,6 +42,7 @@ private:
 		void OnLButtonDown(UINT nFlags, CPoint point);
 		void setMarker(const Coord& crd);
 		void timedEvent(UINT timerid);
+		void setCoords(const vector<Coord>& crds);
 		vector<TrackDataSource *> sources;
 	protected:
 		TrackProfileGraphFrom *graphForm;
@@ -97,8 +98,13 @@ private:
 		void reset();
 		void addSource(const IlwisObject& bmp) ;
 		void update();
+		int saveTrack(Event *ev);
+		int loadTrack(Event *ev);
+		int openAsTable(Event *ev);
 	private:
 		TrackProfileGraphEntry *graph;
+		vector<Coord> trackCoords;
+		TrackProfileTool *tool;
 
 	};
 
