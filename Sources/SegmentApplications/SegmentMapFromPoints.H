@@ -61,7 +61,7 @@ public:
   void Init();
 private:
 	void makeOrder(vector<long>& order) const;
-	double getValue(int rec) const;
+	double getGroupByValue(int rec) const;
 	void addSegment(CoordinateSequence* seq);
   PointMap pmIn;
   Column colIdent;

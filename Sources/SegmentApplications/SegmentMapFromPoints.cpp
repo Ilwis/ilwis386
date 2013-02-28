@@ -167,16 +167,14 @@ void SegmentMapFromPoints::Init()
 }
 
 // offset of rec == 1 !!
-double SegmentMapFromPoints::getValue(int rec) const{
+double SegmentMapFromPoints::getGroupByValue(int rec) const{
 	if ( colIdent.fValid()) {
 		if ( colIdent->fUseReals()) {
 			return colIdent->rValue(rec);
 		} else
 			return colIdent->iRaw(rec);
 	} else
-		return pmIn->rValue(rec - 1);
-
-	return rUNDEF;
+		return 0; // when there is nothing to group-by, just return a fixed value
 }
 
 void  SegmentMapFromPoints::makeOrder(vector<long>& order) const{
@@ -208,30 +206,34 @@ bool SegmentMapFromPoints::fFreezing()
 	trq.SetText(String(TR("Calculating '%S'").c_str(), sName(true, fnObj.sPath())));
 	ILWIS::Segment *seg = 0;
 	CoordinateSequence *seq = 0;
-	double vOld = rUNDEF;
+	double rPreviousGroupBy = rUNDEF;
 	vector<long> order;
 	makeOrder(order);
 	for(int rec= 0; rec < order.size(); ++rec) {
 		trq.fUpdate(rec, order.size());
-		double v = getValue(order[rec]);
-		if ( v == iUNDEF || v == rUNDEF)
+		double rGroupBy = getGroupByValue(order[rec]);
+		if ( rGroupBy == iUNDEF || rGroupBy == rUNDEF)
 			continue;
-		if ( v != vOld || vOld == rUNDEF) {
-			dm()->pdsrt()->pdUniqueID()->iAdd();
+		if ( rGroupBy != rPreviousGroupBy || rPreviousGroupBy == rUNDEF) {
 			if ( seq) {
 				if ( seq->size() > 1) {
+					dm()->pdsrt()->pdUniqueID()->iAdd();
 					addSegment(seq);
 				} else
 					delete seq;
 			}
 			seq = new CoordinateArraySequence();
-			vOld = v;
+			rPreviousGroupBy = rGroupBy;
 		}
 		Coord crd = pmIn->cValue(order[rec] - 1);
 		seq->add(crd,false);
 	}
 	if ( seq) {
-		addSegment(seq);
+		if (seq->size() > 1) {
+			dm()->pdsrt()->pdUniqueID()->iAdd();
+			addSegment(seq);
+		} else
+			delete seq;
 	}
 
 	trq.fUpdate(0, 0);
