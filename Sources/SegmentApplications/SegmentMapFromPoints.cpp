@@ -166,6 +166,7 @@ void SegmentMapFromPoints::Init()
 
 }
 
+// offset of rec == 1 !!
 double SegmentMapFromPoints::getValue(int rec) const{
 	if ( colIdent.fValid()) {
 		if ( colIdent->fUseReals()) {
@@ -173,7 +174,7 @@ double SegmentMapFromPoints::getValue(int rec) const{
 		} else
 			return colIdent->iRaw(rec);
 	} else
-		return pmIn->rValue(rec);
+		return pmIn->rValue(rec - 1);
 
 	return rUNDEF;
 }
@@ -181,7 +182,7 @@ double SegmentMapFromPoints::getValue(int rec) const{
 void  SegmentMapFromPoints::makeOrder(vector<long>& order) const{
 	if ( colOrder.fValid()) {
 		map<long, long> orderMap;
-		for(int i = 1; i <= colOrder->iRecs(); ++i) {
+		for(long i = 1; i <= colOrder->iRecs(); ++i) {
 			long ord = colOrder->iValue(i);
 			if ( ord != iUNDEF)
 				orderMap[ord] = i;
@@ -191,7 +192,7 @@ void  SegmentMapFromPoints::makeOrder(vector<long>& order) const{
 			order.push_back((*iter).second);
 		}
 	} else {
-		for(int i = 1; i < pmIn->iFeatures(); ++i)
+		for(long i = 1; i <= pmIn->iFeatures(); ++i)
 			order.push_back(i);
 	}
 }
@@ -224,10 +225,10 @@ bool SegmentMapFromPoints::fFreezing()
 					delete seq;
 			}
 			seq = new CoordinateArraySequence();
+			vOld = v;
 		}
-		Coord crd = pmIn->cValue(order[rec]);
+		Coord crd = pmIn->cValue(order[rec] - 1);
 		seq->add(crd,false);
-		vOld = v;
 	}
 	if ( seq) {
 		addSegment(seq);
