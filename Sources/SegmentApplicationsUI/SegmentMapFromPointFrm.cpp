@@ -47,6 +47,7 @@ LRESULT CmdSegmentMapFromPointFrm(CWnd *wnd, const String& s)
 FormSegmentMapFromPointFrm::FormSegmentMapFromPointFrm(CWnd* mw, const char* sPar)
 : FormSegmentMapCreate(mw, TR("Create a Segment map of a pointmap"))
 {
+	fInit = true; // prevent callback, it is called multiple times, and with big pointmaps it takes hours
 	hasIdentityColumn = hasOrderColumn = false;
 	if (sPar)
 	{
@@ -80,24 +81,26 @@ FormSegmentMapFromPointFrm::FormSegmentMapFromPointFrm(CWnd* mw, const char* sPa
     initSegmentMapOut(false);
 	String sFill('x', 60);
 	create();
+	fInit = false;
+	changeColumns(0); // call once to fill the columns, when the form was started with a valid pointmap
 }
 
 int FormSegmentMapFromPointFrm::changeColumns(Event *ev) {
-	fdMap->StoreData();
-	PointMap pm(sInMap1);
-	if ( pm.fValid()) {
-		if ( pm->fTblAtt()) {
-			attTable = pm->tblAtt();
-			fcIdent->FillWithColumns(&attTable);
-			fcOrder->FillWithColumns(&attTable);
-
+	if (!fInit) {
+		fdMap->StoreData();
+		if (sInMap1.length() > 0) {
+			FileName fn (sInMap1);
+			PointMap pm(fn);
+			if ( pm.fValid()) {
+				if ( pm->fTblAtt()) {
+					attTable = pm->tblAtt();
+					fcIdent->FillWithColumns(&attTable);
+					fcOrder->FillWithColumns(&attTable);
+				}
+			}
 		}
 	}
 	return 1;
-}
-
-FormEntry *FormSegmentMapFromPointFrm::CheckData() {
-	return NULL;
 }
 
 int FormSegmentMapFromPointFrm::exec()

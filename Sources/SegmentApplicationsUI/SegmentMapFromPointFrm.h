@@ -50,7 +50,6 @@ protected:
 
 private:  
 	int exec();
-	FormEntry *CheckData();
 
 	CheckBox *cbIdent, *cbOrder;
 	FieldColumn *fcIdent, *fcOrder;
@@ -61,6 +60,7 @@ private:
 	Table attTable;
 	String sInMap1;
 	String identCol, orderCol;
+	bool fInit;
 
 };
 
