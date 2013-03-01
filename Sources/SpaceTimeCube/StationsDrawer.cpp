@@ -128,8 +128,8 @@ void StationsDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc) con
 	double width = rrMinMax.rWidth();
 	double minMapVal = rrMinMax.rLo();
 	long numberOfFeatures = basemap->iFeatures();
-	double cubeBottom = 0;
-	double cubeTop = timeBounds->tMax() - timeBounds->tMin();
+	double cubeBottom = -0.000001; // inaccuracy of time
+	double cubeTop = 0.000001 + timeBounds->tMax() - timeBounds->tMin();
 	*fHatching = false; // in case of a classmap, if any of the attributes uses hatching, we set fHatching to true
 	double delta = cube.altitude() / 200;
 	glInitNames();
