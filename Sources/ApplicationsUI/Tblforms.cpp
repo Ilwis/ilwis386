@@ -2756,53 +2756,136 @@ LRESULT Cmdtimefromcolumns(CWnd *parent, const String& dummy){
 
 TimeColumnFromOtherColsForm::TimeColumnFromOtherColsForm(CWnd *parent) : TableForm(parent, "Create time column")
 {
-	useYear = useMonth = useDay = useHour = useMonth = useMinutes = useSeconds = useStringColumn = false;
+	useYear = useMonth = useDay = useHours = useMonth = useMinutes = useSeconds = false;
 	year = String("%d", (int)ILWIS::Time::now().get(ILWIS::Time::tpYEAR));
 	month = "1";
 	day = "1";
-	hour = "0";
+	hours = "0";
 	minutes = "0";
 	seconds = "0";
 	view = getView(parent);
 	templ = "YYYY/MM/DD hh/mm/ss";
+	m_iNumberString = 0;
+
+	time_t ltime;
+	struct tm today;
+	time( &ltime );
+	_localtime64_s( &today, &ltime );
+	m_iYear = today.tm_year + 1900;
+	m_iMonth = today.tm_mon + 1;
+	m_iDay = today.tm_mday;
+	m_iHours = today.tm_hour;
+	m_iMinutes = today.tm_min;
+	m_rSeconds = 0;
 
 	FieldGroup *fg = new FieldGroup(root);
-	CheckBox *cb1 = new CheckBox(fg,TR("Year"),&useYear);
-	FieldColumn *fc = new FieldColumn(cb1,"",view, &year,dmVALUE);
-	fc->Align(cb1, AL_AFTER);
-	CheckBox *cb2 = new CheckBox(fg,TR("Month"),&useMonth);
-	cb2->Align(cb1, AL_UNDER);
-	fc = new FieldColumn(cb2,"",view, &month,dmVALUE);
-	fc->Align(cb2, AL_AFTER);
-	CheckBox *cb3 = new CheckBox(fg,TR("Day"),&useDay);
-	cb3->Align(cb2, AL_UNDER);
-	fc = new FieldColumn(cb3,"",view, &day,dmVALUE);
-	fc->Align(cb3, AL_AFTER);
-	CheckBox *cb4 = new CheckBox(fg,TR("Hours"),&useHour);
-	cb4->Align(cb3, AL_UNDER);
-	fc = new FieldColumn(cb4,"",view, &hour,dmVALUE);
-	fc->Align(cb4, AL_AFTER);
-	CheckBox *cb5 = new CheckBox(fg,TR("Minutes"),&useMinutes);
-	cb5->Align(cb4, AL_UNDER);
-	fc = new FieldColumn(cb5,"",view, &minutes,dmVALUE);
-	fc->Align(cb5, AL_AFTER);
-	CheckBox *cb6 = new CheckBox(fg,TR("Seconds"),&useSeconds);
-	cb6->Align(cb5, AL_UNDER);
-	fc = new FieldColumn(cb6,"",view, &seconds,dmVALUE);
-	fc->Align(cb6, AL_AFTER);
-	CheckBox *cb7 = new CheckBox(fg,TR("String(time) column"),&useStringColumn);
-	cb7->Align(cb6, AL_UNDER);
-	fc = new FieldColumn(cb7,"",view, &stringColumn,dmSTRING);
-	fc->Align(cb7, AL_AFTER);
-	FieldString *fs = new FieldString(cb7,"Template",&templ);
+	RadioGroup * rgNumbersString = new RadioGroup(fg, "", &m_iNumberString);
+	RadioButton * rbNumbers = new RadioButton(rgNumbersString, TR("Numerical Columns"));
+	RadioButton * rbString = new RadioButton(rgNumbersString, TR("String (time) column"));
+	FieldGroup * fgNumbers = new FieldGroup(rbNumbers);
+	FieldGroup * fgString = new FieldGroup(rbString);
+	fgNumbers->Align(rbString, AL_UNDER);
+	fgString->Align(rbString, AL_UNDER);
+
+	m_cbYear = new CheckBox(fgNumbers,TR("Year"),&useYear);
+	m_cbYear->SetCallBack((NotifyProc)&TimeColumnFromOtherColsForm::ColumnCheck);
+	FieldColumn *fc = new FieldColumn(m_cbYear,"",view, &year,dmVALUE);
+	fc->Align(m_cbYear, AL_AFTER);
+	m_fldYear = new FieldInt(fgNumbers, "", &m_iYear, ValueRange(0, 3000)); 
+	m_fldYear->Align(m_cbYear,AL_AFTER);
+
+
+	m_cbMonth = new CheckBox(fgNumbers,TR("Month"),&useMonth);
+	m_cbMonth->SetCallBack((NotifyProc)&TimeColumnFromOtherColsForm::ColumnCheck);
+	m_cbMonth->Align(m_cbYear, AL_UNDER);
+	fc = new FieldColumn(m_cbMonth,"",view, &month,dmVALUE);
+	fc->Align(m_cbMonth, AL_AFTER);
+	m_fldMonth = new FieldInt(fgNumbers, "", &m_iMonth, ValueRange(1, 12)); 
+	m_fldMonth->Align(m_cbMonth,AL_AFTER);
+
+	m_cbDay = new CheckBox(fgNumbers,TR("Day"),&useDay);
+	m_cbDay->SetCallBack((NotifyProc)&TimeColumnFromOtherColsForm::ColumnCheck);
+	m_cbDay->Align(m_cbMonth, AL_UNDER);
+	fc = new FieldColumn(m_cbDay,"",view, &day,dmVALUE);
+	fc->Align(m_cbDay, AL_AFTER);
+	m_fldDay = new FieldInt(fgNumbers, "", &m_iDay, ValueRange(1, 31)); 
+	m_fldDay->Align(m_cbDay,AL_AFTER);
+
+	m_cbHours = new CheckBox(fgNumbers,TR("Hours"),&useHours);
+	m_cbHours->SetCallBack((NotifyProc)&TimeColumnFromOtherColsForm::ColumnCheck);
+	m_cbHours->Align(m_cbDay, AL_UNDER);
+	fc = new FieldColumn(m_cbHours,"",view, &hours,dmVALUE);
+	fc->Align(m_cbHours, AL_AFTER);
+	m_fldHours = new FieldInt(fgNumbers, "", &m_iHours, ValueRange(0, 23)); 
+	m_fldHours->Align(m_cbHours,AL_AFTER);
+
+	m_cbMinutes = new CheckBox(fgNumbers,TR("Minutes"),&useMinutes);
+	m_cbMinutes->SetCallBack((NotifyProc)&TimeColumnFromOtherColsForm::ColumnCheck);
+	m_cbMinutes->Align(m_cbHours, AL_UNDER);
+	fc = new FieldColumn(m_cbMinutes,"",view, &minutes,dmVALUE);
+	fc->Align(m_cbMinutes, AL_AFTER);
+	m_fldMinutes = new FieldInt(fgNumbers, "", &m_iMinutes, ValueRange(0, 59)); 
+	m_fldMinutes->Align(m_cbMinutes,AL_AFTER);
+
+	m_cbSeconds = new CheckBox(fgNumbers,TR("Seconds"),&useSeconds);
+	m_cbSeconds->SetCallBack((NotifyProc)&TimeColumnFromOtherColsForm::ColumnCheck);
+	m_cbSeconds->Align(m_cbMinutes, AL_UNDER);
+	fc = new FieldColumn(m_cbSeconds,"",view, &seconds,dmVALUE);
+	fc->Align(m_cbSeconds, AL_AFTER);
+	m_fldSeconds = new FieldReal(fgNumbers, "", &m_rSeconds, ValueRange(0, 60, 0.0001)); 
+	m_fldSeconds->Align(m_cbSeconds,AL_AFTER);
+
+	fc = new FieldColumn(fgString,"Column",view, &stringColumn,dmSTRING);
+	FieldString *fs = new FieldString(fgString,"Template",&templ);
 	fs->SetWidth(100);
-	fs->Align(cb7, AL_UNDER,10);
+	fs->Align(fc, AL_UNDER,5);
 	fg->SetIndependentPos();
 
 	fs =  new FieldString(root, TR("&Output Column"), &output, Domain("time"), false);
 	fs->Align(fg, AL_UNDER);
 
 	create();
+}
+
+int TimeColumnFromOtherColsForm::ColumnCheck(Event *)
+{
+	m_cbYear->StoreData();
+	if (useYear)
+		m_fldYear->Hide(); 
+	else
+		m_fldYear->Show();
+
+	m_cbMonth->StoreData();
+	if (useMonth)
+		m_fldMonth->Hide(); 
+	else
+		m_fldMonth->Show();
+
+	m_cbDay->StoreData();
+	if (useDay)
+		m_fldDay->Hide(); 
+	else
+		m_fldDay->Show();
+
+	m_cbHours->StoreData();
+	if (useHours)
+		m_fldHours->Hide(); 
+	else
+		m_fldHours->Show();
+
+	m_cbMinutes->StoreData();
+	if (useMinutes)
+		m_fldMinutes->Hide(); 
+	else
+		m_fldMinutes->Show();
+
+	m_cbSeconds->StoreData();
+	if (useSeconds)
+		m_fldSeconds->Hide(); 
+	else
+		m_fldSeconds->Show();
+
+	return 1;
 }
 
 FormEntry *TimeColumnFromOtherColsForm::CheckData() {
@@ -2812,30 +2895,36 @@ int TimeColumnFromOtherColsForm::exec() {
 	FormWithDest::exec();
 
 	String expr("%S = ColumnTimeFromColumns(",output);
-	if ( !useStringColumn) {
-		if ( useYear) {
+	if ( m_iNumberString == 0 ) {
+		if ( useYear)
 			expr += year;
-		}
+		else if (m_iYear != iUNDEF)
+			expr += String("%d", m_iYear);
 		expr += ",";
-		if ( useMonth) {
+		if ( useMonth)
 			expr += month;
-		}
+		else if (m_iMonth != iUNDEF)
+			expr += String("%d", m_iMonth);
 		expr += ",";
-		if ( useDay) {
+		if ( useDay)
 			expr += day;
-		}
+		else if (m_iDay != iUNDEF)
+			expr += String("%d", m_iDay);
 		expr += ",";
-		if ( useHour) {
-			expr += hour;
-		}
+		if ( useHours)
+			expr += hours;
+		else if (m_iHours != iUNDEF)
+			expr += String("%d", m_iHours);
 		expr += ",";
-		if ( useMinutes) {
+		if ( useMinutes)
 			expr += minutes;
-		}
+		else if (m_iMinutes != iUNDEF)
+			expr += String("%d", m_iMinutes);
 		expr += ",";
-		if ( useSeconds) {
+		if ( useSeconds)
 			expr += seconds;
-		}
+		else if (m_rSeconds != rUNDEF)
+			expr += String("%lf", m_rSeconds);
 	} else {
 		expr += stringColumn + "," + templ.sQuote(true);
 	}

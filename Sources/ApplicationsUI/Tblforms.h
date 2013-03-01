@@ -408,6 +408,7 @@ public:
 	int exec();
 private:
 	FormEntry *CheckData();
+	int ColumnCheck(Event*);
 
 	int source;
 	String year;
@@ -416,17 +417,34 @@ private:
 	bool useMonth;
 	String day;
 	bool useDay;
-	String hour;
-	bool useHour;
+	String hours;
+	bool useHours;
 	String minutes;
 	bool useMinutes;
 	String seconds;
 	bool useSeconds;
 	String stringColumn;
-	bool useStringColumn;
 	String output;
 	String templ;
-
+	int m_iNumberString;
+	int m_iYear;
+	int m_iMonth;
+	int m_iDay;
+	int m_iHours;
+	int m_iMinutes;
+	double m_rSeconds;
+	CheckBox * m_cbYear;
+	CheckBox * m_cbMonth;
+	CheckBox * m_cbDay;
+	CheckBox * m_cbHours;
+	CheckBox * m_cbMinutes;
+	CheckBox * m_cbSeconds;
+	FieldInt * m_fldYear;
+	FieldInt * m_fldMonth;
+	FieldInt * m_fldDay;
+	FieldInt * m_fldHours;
+	FieldInt * m_fldMinutes;
+	FieldReal * m_fldSeconds;
 };
 
 #endif // TBLFORMS_H
