@@ -199,59 +199,67 @@ void ILWIS::TimeParser::parse(const String& string, int& year, int& month, int& 
 
 //----------------------------------
 
-ILWIS::Time::Time(int yr, int mnth, int dy, int hr, int min, double sec)
+ILWIS::Time::Time(int year, int month, int day, int hour, int minutes, double seconds)
 {
 	valid = true;
 	julianday = rUNDEF;
 
-	int year = yr;
-	int month;
-	if ( mnth >= 1 && mnth <= 12)
-		month = mnth;
-	else
+	if ( seconds >= 0.0) {
+		if (seconds >= 60.0) {
+			minutes += (int)(seconds / 60);
+			seconds -= 60 * (int)(seconds / 60);
+		}
+	} else {
+		valid = false;
+	}
+
+	if ( minutes >= 0 && valid) {
+		if (minutes >= 60) {
+			hour += minutes / 60;
+			minutes = minutes % 60;
+		}
+	} else
 		valid = false;
 
-	int day;
-	if ( dy >= 1 && dy <= 31 && valid) {
-		if ( month == 2) {
-			if ( dy <= 29 && isLeapYear(yr)) {
-				day = dy;
-			} else if( dy <= 28 && !isLeapYear(yr))
-				day = dy;
-			else
-				valid = false;
-		}else {
-			if ( month < 8 && (month + 1) % 2 == 0 && dy <= 31)
-				day = dy;
-			else if ( month >= 8 && month % 2 == 0 && dy <= 31)
-				day = dy;
-			else if ( dy <= 30)
-				day = dy;
-			else
+	if ( hour >= 0 && valid) {
+		if (hour >= 24) {
+			day += hour / 24;
+			hour = hour % 24;
+		}
+	} else
+		valid = false;
+
+	if ( day >= 1 && valid) {
+		bool fDone = false;
+		while (!fDone && valid) {
+			int daysInMonth;
+			if ( month % 12 == 2) {
+				if (isLeapYear(year))
+					daysInMonth = 29;
+				else
+					daysInMonth = 28;
+			} else {
+				if (((month - 1) % 12 < 7 && month % 2 == 1) || ((month - 1) % 12 >= 7 && month % 2 == 0))
+					daysInMonth = 31;
+				else
+					daysInMonth = 30;
+			}
+			if (day > daysInMonth) {
+				day -= daysInMonth;
+				++month;
+			} else
+				fDone = true;
+			if (month >= 1) {
+				if ( month > 12) {
+					year += (month - 1) / 12;
+					month = 1 + ((month - 1) % 12);
+				}
+			} else
 				valid = false;
 		}
 	} else
 		valid = false;
 
-	int hour;
-	if ( hr >= 0 && hr <= 23 && valid) 
-		hour = hr;
-	else
-		valid = false;
-
-	int minutes;
-	if ( min >= 0 && min <= 59 && valid)
-		minutes = min;
-	else
-		valid = false;
-
-	double seconds;
-	if ( sec >= 0.0 && sec < 60.0  && valid) {
-		seconds = sec;
-	}
-	else {
-		valid = false;
-	}
 	if ( valid)
 		julianday = gregorianToJulian(year, month, day,hour,minutes,seconds);
 	else
@@ -319,6 +327,7 @@ time_t ILWIS::Time::toTime_t() const{
 	time.tm_hour = hour;
 	time.tm_min = minutes;
 	time.tm_sec = round(seconds);
+	time.tm_isdst = -1; // -1 == auto-compute
 	return mktime(&time);
 }
 
@@ -798,6 +807,7 @@ String ILWIS::Time::toString(bool local, ILWIS::Time::Mode mode) const{
 	time.tm_hour = hour;
 	time.tm_min = minutes;
 	time.tm_sec = round(seconds);
+	time.tm_isdst = -1; // -1 == auto-compute
 	time_t t = mktime(&time);
 	if ( local) {
 		struct tm timeinfo;
