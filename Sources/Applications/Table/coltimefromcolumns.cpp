@@ -50,7 +50,7 @@ Last change:  JEL  15 May 97    4:00 pm
 #include "Engine\Domain\DomainTime.h"
 
 
-const char* ColumnTimeFromColumns::sSyntax() { return "ColumnCum(col)\ncum(col)\nlumnCum(col,sortcol)\ncum(col,sortcol)"; }
+const char* ColumnTimeFromColumns::sSyntax() { return "ColumnTimeFromColumns(year,month,day,hours,minutes,seconds)\nColumnTimeFromColumns(string,template)"; }
 
 IlwisObjectPtr * createColumnTimeFromColumns(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms ) {
 	if ( sExpr != "") {
@@ -163,7 +163,13 @@ void ColumnTimeFromColumns::Replace(const String& sExpr)
 	//fFrozen = false;
 }
 
-
+bool ColumnTimeFromColumns::isNumber(String & str)
+{
+	bool fRet = true;
+	for (int i = 0; i < str.size(); ++i)
+		fRet = fRet && ((str[i] >= '0' && str[i] <= '9') || (str[i] == '.'));
+	return fRet;
+}
 
 bool ColumnTimeFromColumns::fFreezing()
 {
@@ -188,23 +194,49 @@ bool ColumnTimeFromColumns::fFreezing()
 				rmin = min((double)ti, rmin);
 		}
 	}else {
+		int dyear = -4713, dmonth=1, dday=1, dhours=0, dminutes=0;
+		double dseconds = 0;
 		Column colYear, colMonth, colDays, colHours, colMinutes, colSeconds;
-		if ( year != "")
-			colYear = tbl->col(year);
-		if ( month != "")
-			colMonth = tbl->col(month);
-		if ( day != "")
-			colDays = tbl->col(day);
-		if ( hour != "")
-			colHours = tbl->col(hour);
-		if ( minutes != "")
-			colMinutes = tbl->col(minutes);
-		if ( seconds != "")
-			colSeconds = tbl->col(seconds);
+		if ( year != "" ) {
+			if (isNumber(year))
+				dyear = year.rVal();
+			else
+				colYear = tbl->col(year);
+		}
+		if ( month != "" ) {
+			if (isNumber(month))
+				dmonth = month.rVal();
+			else
+				colMonth = tbl->col(month);
+		}
+		if ( day != "" ) {
+			if (isNumber(day))
+				dday = day.rVal();
+			else
+				colDays = tbl->col(day);
+		}
+		if ( hour != "" ) {
+			if (isNumber(hour))
+				dhours = hour.rVal();
+			else
+				colHours = tbl->col(hour);
+		}
+		if ( minutes != "" ) {
+			if (isNumber(minutes))
+				dminutes = minutes.rVal();
+			else
+				colMinutes = tbl->col(minutes);
+		}
+		if ( seconds != "" ) {
+			if (isNumber(seconds))
+				dseconds = seconds.rVal();
+			else
+				colSeconds = tbl->col(seconds);
+		}
 
 		for(int i=1; i <= iRecs(); ++i) {
-			int tyear = -4713, tmonth=1, tday=1,thours=0, tminutes=0;
-			double tseconds=0;
+			int tyear = dyear, tmonth=dmonth, tday=dday,thours=dhours, tminutes=dminutes;
+			double tseconds=dseconds;
 			if ( colYear.fValid())
 				tyear = colYear->rValue(i);
 			if ( colMonth.fValid())
@@ -217,9 +249,6 @@ bool ColumnTimeFromColumns::fFreezing()
 				tminutes = colMinutes->rValue(i);
 			if ( colSeconds.fValid())
 				tseconds = colSeconds->rValue(i);
-			if ( tmonth > 12 || tday > 31 || thours > 23){
-				throw ErrorObject(TR("Invalid values in data columns"));
-			}
 			ILWIS::Time ti(tyear, tmonth,tday, thours, tminutes, tseconds);
 			times.push_back(ti);
 			rmax = max((double)ti,rmax);
@@ -228,7 +257,7 @@ bool ColumnTimeFromColumns::fFreezing()
 
 		}
 		step = 1;
-		if ( colMinutes.fValid() || colSeconds.fValid() || colHours.fValid())
+		if ( colMinutes.fValid() || colSeconds.fValid() || colHours.fValid()) // || isNumber(hour) || isNumber(minutes) || isNumber(seconds)
 			step = 0;
 	}
 	Domain dm;

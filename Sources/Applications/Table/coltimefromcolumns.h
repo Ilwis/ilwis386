@@ -67,6 +67,7 @@ private:
   ColumnTimeFromColumns(const Table& tbl, const String& sColName, ColumnPtr& p, const DomainValueRangeStruct& dvs,
                    const Column& colInp, const Column& colSort = Column());
   virtual void Replace(const String& sExpression);
+  bool isNumber(String & str);
 	String year;
 	String month;
 	String day;
