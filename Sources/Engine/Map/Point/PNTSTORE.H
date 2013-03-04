@@ -107,9 +107,10 @@ protected:
   //Table tbl;
   //Column colVal, colCoord;
   void SetCoordSystem(const CoordSystem& cs);
-  void SetPoint(const Coord& crd, double v, bool usesReal);
+  void SetPoint(const Coord& crd, double v, bool usesReal, long index=iUNDEF);
   bool fErase;
   QuadTree *spatialIndex;
+  GeometryFactory *geomfactory;
 };
 
 #endif

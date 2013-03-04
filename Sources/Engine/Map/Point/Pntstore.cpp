@@ -59,7 +59,7 @@ using namespace ILWIS;
 
 PointMapStore::PointMapStore(const FileName& fn, PointMapPtr& p, bool fDoNotLoad)
 : MultiPoint(NULL, new GeometryFactory()),
-fnObj(p.fnObj), ptr(p)
+fnObj(p.fnObj), ptr(p), geomfactory(0)
 {
 	long sz;
 	ptr.ReadElement("PointMap", "Points", sz);
@@ -111,6 +111,9 @@ fnObj(p.fnObj), ptr(p)
 		int vCol = tbl.index("Name");
 		Tranquilizer trq;
 		trq.SetTitle("Loading point map");
+		bool usereal = tbl.fUsesReals(vCol);
+
+		geometries->resize(iNr);
 		for (long i = 0; i < iNr; ++i) 
 		{
 			if ( i % 1000 == 0) {
@@ -120,7 +123,8 @@ fnObj(p.fnObj), ptr(p)
 			double v;
 			tbl.get(i,crdCol,crd);
 			tbl.get(i, vCol, v);
-			SetPoint(crd, v, tbl.fUsesReals(vCol));
+			SetPoint(crd, v, usereal,i);
+	
 		}
 	}
 
@@ -147,13 +151,23 @@ Feature *PointMapStore::pntNew(geos::geom::Geometry *pnt) {
 	return p;
 }
 
-void PointMapStore::SetPoint(const Coord& crd, double v, bool usesReal) {
+void PointMapStore::SetPoint(const Coord& crd, double v, bool usesReal,long index) {
+	if ( geomfactory == 0)
+		geomfactory = new GeometryFactory((PrecisionModel *)0);
+
 	if ( usesReal) {
-		ILWIS::RPoint *p = new ILWIS::RPoint(spatialIndex,crd, v);
-		geometries->push_back(p);
+		ILWIS::RPoint *p = new ILWIS::RPoint(spatialIndex,crd, v, geomfactory);
+		if ( index < geometries->size() || index < 0)
+			geometries->at(index) = p;
+		else
+			geometries->push_back(p);
 	} else {
-		ILWIS::LPoint *p = new ILWIS::LPoint(spatialIndex,crd, v);
-		geometries->push_back(p);
+		ILWIS::LPoint *p = new ILWIS::LPoint(spatialIndex,crd, v, geomfactory);
+		if ( index < geometries->size() || index < 0) {
+			geometries->at(index) = p;
+		}
+		else
+			geometries->push_back(p);
 	} 
 }
 
@@ -455,7 +469,7 @@ long PointMapStore::iAdd(long iRecs)
 
 long PointMapStore::iAddRaw(const Coord& c, long iRaw)
 {
-	ILWIS::LPoint *p = new ILWIS::LPoint(spatialIndex, c, iRaw);
+	ILWIS::LPoint *p = new ILWIS::LPoint(spatialIndex, c, iRaw,0);
 	geometries->push_back(p);
 	Updated();
 	return geometries->size();
@@ -467,10 +481,10 @@ long PointMapStore::iAddVal(const Coord& c, const String& s)
 	//	return iUNDEF;
 	ILWIS::Point *p;
 	if ( ptr.dvrs().fUseReals()) {
-		p = new ILWIS::RPoint(spatialIndex,c, s.rVal());
+		p = new ILWIS::RPoint(spatialIndex,c, s.rVal(),0);
 	} else {
 		long iRaw = ptr.dvrs().iRaw(s);
-		p = new ILWIS::LPoint(spatialIndex,c, iRaw);
+		p = new ILWIS::LPoint(spatialIndex,c, iRaw,0);
 	}
 	geometries->push_back(p);
 	Updated();
@@ -483,10 +497,10 @@ long PointMapStore::iAddVal(const Coord& c, double rValue)
 		return iUNDEF;
 	ILWIS::Point *p;
 	if ( ptr.dvrs().fUseReals()) {
-		p = new ILWIS::RPoint(spatialIndex,c, rValue);
+		p = new ILWIS::RPoint(spatialIndex,c, rValue,0);
 	} else {
 		long iRaw = ptr.dvrs().iRaw(rValue);
-		p = new ILWIS::LPoint(spatialIndex,c, iRaw);
+		p = new ILWIS::LPoint(spatialIndex,c, iRaw,0);
 	}
 	geometries->push_back(p);
 	return geometries->size();

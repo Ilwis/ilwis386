@@ -9,6 +9,9 @@ namespace geos {
 		class QuadTree;
 		}
 	}
+	namespace geom{
+		class GeometryFactory;
+	}
 }
 class Mask;
 
@@ -17,7 +20,7 @@ namespace ILWIS {
 	class _export Point : public geos::geom::Point, public Feature {
 public:
 	Point(QuadTree *tree,const geos::geom::Point *pnt=NULL);
-	Point(QuadTree *tree, const Coord& crd);
+	Point(QuadTree *tree, const Coord& crdnew ,GeometryFactory *);
 	Point(QuadTree *tree, CoordinateSequence *seq);
 	~Point();
 	static CoordinateSequence* create(const Coord& c);
@@ -31,7 +34,7 @@ public:
 class _export LPoint : public Point {
 public:
 	LPoint(QuadTree *tree, geos::geom::Point *pnt=NULL);
-	LPoint(QuadTree *tree, const Coord& crd, long v);
+	LPoint(QuadTree *tree, const Coord& crd, long v, GeometryFactory *);
 	LPoint(QuadTree *tree, CoordinateSequence *seq, long v);
 	~LPoint();
 	String sValue(const DomainValueRangeStruct& dvs, short iWidth=-1, short iDec=-1) const;
@@ -50,7 +53,7 @@ public:
 class _export RPoint : public Point {
 public:
 	RPoint(QuadTree *tree, geos::geom::Point *pnt=NULL);
-	RPoint(QuadTree *tree, const Coord& crd, double v);
+	RPoint(QuadTree *tree, const Coord& crd, double v, GeometryFactory *);
 	~RPoint();
 	String sValue(const DomainValueRangeStruct& dvs, short iWidth=-1, short iDec=-1) const;
 	double rValue() const;
