@@ -204,8 +204,8 @@ void SpaceTimePathDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc
 	double width = rrMinMax.rWidth();
 	double minMapVal = rrMinMax.rLo();
 	long numberOfFeatures = features.size();
-	double cubeBottom = -0.000001; // inacurracy of "time"
-	double cubeTop = 0.000001 + timeBounds->tMax() - timeBounds->tMin();
+	double cubeBottom = -0.0000000005; // inaccuracy of "time"
+	double cubeTop = 0.000000001 + timeBounds->tMax() - timeBounds->tMin();
 	*fHatching = false; // in case of a classmap, if any of the attributes uses hatching, we set fHatching to true
 	GLuint objectID = 0;
 	objectStartIndexes->clear();
@@ -421,8 +421,8 @@ void SpaceTimePathDrawer::drawFootprint() const
 	double width = rrMinMax.rWidth();
 	double minMapVal = rrMinMax.rLo();
 	long numberOfFeatures = features.size();
-	double cubeBottom = -0.000001; // inaccuracy of time
-	double cubeTop = 0.000001 + timeBounds->tMax() - timeBounds->tMin();
+	double cubeBottom = -0.0000000005; // inaccuracy of time
+	double cubeTop = 0.000000001 + timeBounds->tMax() - timeBounds->tMin();
 	GLuint objectID = 0;
 	glCallList((*subDisplayLists)[objectID]);
 	glBegin(GL_LINE_STRIP);
