@@ -50,6 +50,11 @@ HTREEITEM SpaceTimePathTool::configure( HTREEITEM parentItem) {
 	insertItem(transp,"Circle", item);
 
 	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
+	//item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&SpaceTimePathTool::changeSpaceTimePath);
+	item->setCheckAction(this,0,(DTSetCheckFunc)&SpaceTimePathTool::setSpaceTimePathVisibility);
+	insertItem(TR("Space Time Path"),"Axis",item,1);
+
+	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&SpaceTimePathTool::changeFootprint);
 	item->setCheckAction(this,0,(DTSetCheckFunc)&SpaceTimePathTool::setFootprintVisibility);
 	insertItem(TR("Footprint"),"Axis",item,0);
@@ -99,6 +104,14 @@ void SpaceTimePathTool::elementForm(const String& element) {
 	PathElementProperties *prop = (PathElementProperties *)(eldrw->getProperties());
 	if ( prop)
 		new SpaceTimeElementsForm(tree,(ComplexDrawer *)drawer, htiNode,prop->elements[element]);
+}
+
+void SpaceTimePathTool::setSpaceTimePathVisibility(void *value, HTREEITEM) {
+	if (!value)
+		return;
+
+	bool v = *(bool *)value;
+	setVisibility("spacetimepath",v);
 }
 
 void SpaceTimePathTool::setFootprintVisibility(void *value, HTREEITEM) {

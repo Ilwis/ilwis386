@@ -90,7 +90,6 @@ bool SpaceTimeElementsDrawer::draw(const CoordBounds& cbArea) const{
 	drawPreDrawers(cbArea);
 
 	// Following 3 lines needed for transparency to work
-	glClearColor(1.0,1.0,1.0,0.0);
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 	glAlphaFunc(GL_GREATER, 0);
@@ -165,6 +164,7 @@ bool SpaceTimeElementsDrawer::draw(const CoordBounds& cbArea) const{
 // #######################################################################################################
 
 PathElementProperties::PathElementProperties() : GeneralDrawerProperties() {
+	elements["spacetimepath"] = PathElement("Space Time Path", colorUNDEF,0.0, true);
 	elements["footprint"] = PathElement("Footprint", colorUNDEF,0.0, false);
 	elements["xt"] = PathElement("XT", Color(255,0,0),0.0, false);
 	elements["xy"] = PathElement("XY", Color(255,0,0),0.0, false);
