@@ -817,7 +817,7 @@ bool ProjectionPtr::fEqual(const IlwisObjectPtr& ptr) const
 	if (0 == proj)
 		return false;
 
-	if (typeid(this) != typeid(&ptr))
+	if (typeid(*this) != typeid(ptr))
 		return false;
 
   if (proj->rParam(pvX0) != rParam(pvX0)) return false;
