@@ -247,8 +247,6 @@ bool ValueSlicer::moveValue(int index, double v) {
 	const double delta = fldslicer->valrange->rrMinMax().rWidth() * SMALL_FACTOR;
 	if (v > (fldslicer->bounds[index - 1] + 2 * delta) && v < (fldslicer->bounds[index + 1] - 2 * delta)) {
 		fldslicer->bounds[index] = v;
-		//int shift = index % 2;
-		//shift = 1;
 		if ( index > 0)
 			fldslicer->rprgrad->SetLimitValue(index*3 - 2, v - delta);
 		fldslicer->rprgrad->SetLimitValue(index*3 - 1, v);
