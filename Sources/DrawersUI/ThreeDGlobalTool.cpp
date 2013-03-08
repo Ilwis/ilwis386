@@ -12,6 +12,7 @@
 #include "Engine\Drawers\DrawerContext.h"
 #include "DrawersUI\ThreeDGlobalTool.h"
 #include "DrawersUI\GlobalTool.h"
+#include "Headers\constant.h"
 //#include "Drawers\StretchTool.h"
 
 DrawerTool *createThreeDGlobalTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) {
@@ -53,8 +54,11 @@ void ThreeDGlobalTool::setthreeD(void *v, HTREEITEM) {
 	((RootDrawer *)drawer)->prepare(&pp);
 
 	//make3D(value,tv);
-	getDocument()->mpvGetView()->ShowScrollBar(SB_BOTH, !value);
-	getDocument()->mpvGetView()->Invalidate();
+	MapPaneView *view = getDocument()->mpvGetView();
+	if (value)
+		view->noTool(ID_ZOOMIN);
+	view->ShowScrollBar(SB_BOTH, !value);
+	view->Invalidate();
 }
 
 //---------------------------------------------------
