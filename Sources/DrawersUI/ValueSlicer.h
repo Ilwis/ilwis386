@@ -26,11 +26,12 @@ public:
 private:
 	void drawRprBase(LPDRAWITEMSTRUCT lpDIS, const CRect rct);
 	void drawRpr(LPDRAWITEMSTRUCT lpDIS, const CRect rct);
-	void moveValue(int index, double v);
+	bool moveValue(int index, double v);
 	ValueSlicerSlider *fldslicer;
 	vector<int> ylimits;
 	CPoint activePoint;
 	Representation rprBase;
+	int iDragIndex;
 };
 
 class _export ValueSlicerSlider : public FormEntry {

@@ -31,7 +31,9 @@ END_MESSAGE_MAP()
 #define UNDEFPOINT 100000
 #define SMALL_FACTOR 0.005
 
-ValueSlicer::ValueSlicer(ValueSlicerSlider *f, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID) : BaseZapp(f) 
+ValueSlicer::ValueSlicer(ValueSlicerSlider *f, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID)
+: BaseZapp(f)
+, iDragIndex(iUNDEF)
 {
 	fldslicer = f;
 	if (!CStatic::Create(0,dwStyle | SS_OWNERDRAW | SS_NOTIFY, rect, pParentWnd, nID))
@@ -44,16 +46,16 @@ ValueSlicer::ValueSlicer(ValueSlicerSlider *f, DWORD dwStyle, const RECT& rect, 
 void ValueSlicer::drawRprBase(LPDRAWITEMSTRUCT lpDIS, const CRect rct) {
 	Gdiplus::Graphics *graphics = new Gdiplus::Graphics(lpDIS->hDC);
 	RepresentationGradual *rpg = rprBase->prg();
+	const double delta = fldslicer->valrange->rrMinMax().rWidth() * SMALL_FACTOR;
 	double yscale = (double)rct.Height() / ((rpg->iLimits() - 1.0) * rpg->iGetStretchSteps());
 	double y = 0;
-	for(int i = 1; i < rpg->iLimits(); ++i) {
-		
+	for(int i = 1; i < rpg->iLimits(); ++i) {		
 		double v1 = rpg->rGetLimitValue(i-1);
 		double v2 = rpg->rGetLimitValue(i);
 		double rStep = (v2 - v1) / rpg->iGetStretchSteps();
 		for(int j=0; j < rpg->iGetStretchSteps(); ++j) {
 			double cv = v1 + j * rStep;
-			Color c = rpg->clr(cv + rStep);
+			Color c = rpg->clr(cv + rStep - delta);
 			Gdiplus::SolidBrush brush(Gdiplus::Color(255 - c.transparency(), c.red(), c.green(), c.blue()));
 			int yup = rct.bottom - y - yscale;
 			int ydown = rct.bottom - y;
@@ -67,19 +69,19 @@ void ValueSlicer::drawRprBase(LPDRAWITEMSTRUCT lpDIS, const CRect rct) {
 void ValueSlicer::drawRpr(LPDRAWITEMSTRUCT lpDIS, const CRect rct) {
 	Gdiplus::Graphics *graphics = new Gdiplus::Graphics(lpDIS->hDC);
 	RepresentationGradual *rpg = fldslicer->rprgrad;
+	const double delta = fldslicer->valrange->rrMinMax().rWidth() * SMALL_FACTOR;
 	double yscale = (double)rct.Height() / ((rpg->iLimits() - 1.0) * rpg->iGetStretchSteps());
 	double y = 0;
-	for(int i = 1; i < fldslicer->bounds.size(); ++i) {
-		
+	for(int i = 1; i < fldslicer->bounds.size(); ++i) {		
 		double v1 = fldslicer->bounds[i-1];
-		double v2 =fldslicer->bounds[i];
+		double v2 = fldslicer->bounds[i];
 		double rStep = (v2 - v1) / rpg->iGetStretchSteps();
 		double f = (v2 - v1) / fldslicer->valrange->rrMinMax().rWidth(); // fldslicer->bounds[fldslicer->bounds.size() - 1];
-		double yStep = rct.Height() * f/  rpg->iGetStretchSteps();
+		double yStep = rct.Height() * f / rpg->iGetStretchSteps();
 		int transp = fldslicer->transparency[i-1];
 		for(int j=0; j < rpg->iGetStretchSteps(); ++j) {
 			double cv = v1 + j * rStep;
-			Color c = rpg->clr(cv + rStep, fldslicer->valrange->rrMinMax());
+			Color c = rpg->clr(cv + rStep - delta, fldslicer->valrange->rrMinMax());
 			Gdiplus::SolidBrush brush(Gdiplus::Color(255 - transp, c.red(), c.green(), c.blue()));
 			int yup = rct.bottom - y - yStep;
 			int ydown = rct.bottom - y;
@@ -135,15 +137,6 @@ void ValueSlicer::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	}
 
 	delete graphics;
-
-	
-}
-
-void ValueSlicer::OnLButtonUp(UINT nFlags, CPoint point) {
-	activePoint = CPoint(UNDEFPOINT, UNDEFPOINT);
-	Invalidate();
-	fProcess(MouseLBUpEvent(nFlags,point)); 
-
 }
 
 CRect ValueSlicer::makeDrawRect() {
@@ -151,66 +144,12 @@ CRect ValueSlicer::makeDrawRect() {
 	GetClientRect(rct);
 	return CRect(rct.left, rct.top +10,rct.left + rct.Width() / 2, rct.bottom - 10);
 }
-void ValueSlicer::OnMouseMove(UINT nFlags, CPoint point) {
-	if ( activePoint.x != UNDEFPOINT) {
-		CRect rct = makeDrawRect();
-		double fract = (double)( point.y - rct.top) / rct.Height();
-		double v = ( 1.0 - fract) * fldslicer->valrange->rrMinMax().rWidth() + fldslicer->valrange->rrMinMax().rLo();
-		int index = 0;
-		for(; index < ylimits.size(); ++index) {
-			int delta = abs(ylimits[index] - point.y);
-			int tolerance = (double)rct.Height() * 0.04; // NB this hit value is a bit processor dependent
 
-			if (  delta < tolerance) {
-				break;
-			}
-		}
-		if ( index >= ylimits.size() - 1)
-			return;
-		moveValue(index, v);
-	    activePoint.y = point.y;
-		updateRepresentations();
-
-	}
-
-}
-
-void ValueSlicer::moveValue(int index, double v) {
-	fldslicer->bounds[index] = v;
-	double delta = fldslicer->valrange->rrMinMax().rWidth() * SMALL_FACTOR;
-	int shift = index % 2;
-	if ( index > 0)
-		fldslicer->rprgrad->SetLimitValue(index*2 - shift, v - delta);
-	fldslicer->rprgrad->SetLimitValue(index*2 - shift + 1 , v);
-	fldslicer->rprgrad->SetLimitValue(index*2 - shift + 2, v + delta);
-}
-
-void ValueSlicer::updateRepresentations() {
-	ILWIS::SpatialDataDrawer *parentDrw = (ILWIS::SpatialDataDrawer *)fldslicer->drawer->getParentDrawer();
-	for(int i =0; i < parentDrw->getDrawerCount(); ++i) {
-		ILWIS::LayerDrawer *setdrw;
-		if ( rprBase.fValid()){
-			setdrw = (ILWIS::LayerDrawer *)parentDrw->getDrawer(i);
-			setdrw = (ILWIS::LayerDrawer *)setdrw->getDrawer(RSELECTDRAWER,ComplexDrawer::dtPOST);
-		}
-		else
-			setdrw = (ILWIS::LayerDrawer *)parentDrw->getDrawer(i);
-		if (!setdrw)
-			return;
-
-		Representation rpr;
-		rpr.SetPointer(fldslicer->rprgrad);
-		setdrw->setRepresentation(rpr);
-		PreparationParameters pp(NewDrawer::ptRENDER, 0);
-		setdrw->prepareChildDrawers(&pp);
-	}
-	Invalidate();
-	fldslicer->drawer->getRootDrawer()->getDrawerContext()->doDraw();
-}
 void ValueSlicer::OnLButtonDown(UINT nFlags, CPoint point) {
 	CRect rct = makeDrawRect();
 	fldslicer->selectedIndex = -1;
 	activePoint = CPoint(UNDEFPOINT,UNDEFPOINT);
+	iDragIndex = iUNDEF;
 	double fract = (double)( point.y - rct.top) / rct.Height();
 	double v = ( 1.0 - fract) * fldslicer->valrange->rrMinMax().rWidth() + fldslicer->valrange->rrMinMax().rLo();
 	for(int i = 0; i < fldslicer->bounds.size(); ++i) {
@@ -219,13 +158,49 @@ void ValueSlicer::OnLButtonDown(UINT nFlags, CPoint point) {
 		if ( limitVal >= v ) {
 			fldslicer->selectedIndex = i - 1;
 		}
-		if ( delta < abs(fldslicer->valrange->rrMinMax().rWidth() * 0.02)) {
+		if ( delta < abs(fldslicer->valrange->rrMinMax().rWidth() * 0.04)) {
 			double yscale = rct.Height() / fldslicer->valrange->rrMinMax().rWidth();
 			activePoint = CPoint(point.x, rct.bottom - yscale * fldslicer->bounds[i]); 
 		}
 		if ( fldslicer->selectedIndex != -1)
 			break;
 	}
+}
+
+void ValueSlicer::OnMouseMove(UINT nFlags, CPoint point) {
+	if ( activePoint.x != UNDEFPOINT) {
+		CRect rct = makeDrawRect();
+		double fract = (double)( point.y - rct.top) / rct.Height();
+		double v = ( 1.0 - fract) * fldslicer->valrange->rrMinMax().rWidth() + fldslicer->valrange->rrMinMax().rLo();
+		int index = 0;
+		if (iDragIndex != iUNDEF)
+			index = iDragIndex;
+		else {
+			for(; index < ylimits.size(); ++index) {
+				int delta = abs(ylimits[index] - point.y);
+				int tolerance = (double)rct.Height() * 0.04; // NB this hit value is a bit processor dependent
+				if (  delta < tolerance) {
+					iDragIndex = index;
+					SetCapture();
+					break;
+				}
+			}
+		}
+		if ( index >= ylimits.size() - 1)
+			return;
+		if (moveValue(index, v)) {
+			activePoint.y = point.y;
+			updateRepresentations();
+		}
+	}
+}
+
+void ValueSlicer::OnLButtonUp(UINT nFlags, CPoint point) {
+	activePoint = CPoint(UNDEFPOINT, UNDEFPOINT);
+	iDragIndex = iUNDEF;
+	ReleaseCapture();
+	Invalidate();
+	fProcess(MouseLBUpEvent(nFlags,point)); 
 }
 
 void ValueSlicer::OnLButtonDblClk(UINT nFlags, CPoint point) {
@@ -266,6 +241,44 @@ void ValueSlicer::OnLButtonDblClk(UINT nFlags, CPoint point) {
 		updateRepresentations();
 		fldslicer->rprgrad->Store();
 	}
+}
+
+bool ValueSlicer::moveValue(int index, double v) {
+	const double delta = fldslicer->valrange->rrMinMax().rWidth() * SMALL_FACTOR;
+	if (v > (fldslicer->bounds[index - 1] + 2 * delta) && v < (fldslicer->bounds[index + 1] - 2 * delta)) {
+		fldslicer->bounds[index] = v;
+		//int shift = index % 2;
+		//shift = 1;
+		if ( index > 0)
+			fldslicer->rprgrad->SetLimitValue(index*3 - 2, v - delta);
+		fldslicer->rprgrad->SetLimitValue(index*3 - 1, v);
+		fldslicer->rprgrad->SetLimitValue(index*3, v + delta);
+		return true;
+	} else
+		return false;
+}
+
+void ValueSlicer::updateRepresentations() {
+	ILWIS::SpatialDataDrawer *parentDrw = (ILWIS::SpatialDataDrawer *)fldslicer->drawer->getParentDrawer();
+	for(int i =0; i < parentDrw->getDrawerCount(); ++i) {
+		ILWIS::LayerDrawer *setdrw;
+		if ( rprBase.fValid()){
+			setdrw = (ILWIS::LayerDrawer *)parentDrw->getDrawer(i);
+			setdrw = (ILWIS::LayerDrawer *)setdrw->getDrawer(RSELECTDRAWER,ComplexDrawer::dtPOST);
+		}
+		else
+			setdrw = (ILWIS::LayerDrawer *)parentDrw->getDrawer(i);
+		if (!setdrw)
+			return;
+
+		Representation rpr;
+		rpr.SetPointer(fldslicer->rprgrad);
+		setdrw->setRepresentation(rpr);
+		PreparationParameters pp(NewDrawer::ptRENDER, 0);
+		setdrw->prepareChildDrawers(&pp);
+	}
+	Invalidate();
+	fldslicer->drawer->getRootDrawer()->getDrawerContext()->doDraw();
 }
 
 void ValueSlicer::setRprBase(const Representation& rprB) {
