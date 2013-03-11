@@ -352,7 +352,7 @@ vector<GLuint> SpaceTimeDrawer::getSelectedObjectIDs(const CRect& rect) const
 			}
 			glMatrixMode(GL_MODELVIEW);
 			CoordBounds cbArea;
-			drawPreDrawers(cbArea);
+			drawPreDrawers(drl3DOPAQUE, cbArea);
 			glPushMatrix();
 			if (!rootDrawer->is3D())
 				glScaled(1,1,0);
@@ -365,7 +365,7 @@ vector<GLuint> SpaceTimeDrawer::getSelectedObjectIDs(const CRect& rect) const
 			glMatrixMode(GL_PROJECTION);
 			glPopMatrix();
 			glMatrixMode(GL_MODELVIEW);
-			drawPostDrawers(cbArea);
+			drawPostDrawers(drl3DOPAQUE, cbArea);
 			int nrObjects = glRenderMode(GL_RENDER);
 			vector<std::pair<GLuint, GLuint>> sortedObjectIDs;
 			for (int i = 0; i < nrObjects; ++i) {
@@ -507,13 +507,17 @@ void SpaceTimeDrawer::getHatchInverse(RepresentationClass * prc, long iRaw, cons
 	}
 }
 
-bool SpaceTimeDrawer::draw( const CoordBounds& cbArea) const {
+bool SpaceTimeDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const {
 	bool fSpaceTimeDrawer = true;
 	bool fFootprintDrawer = true;
 	
 	if (spaceTimeElementsDrawer) {
 		fSpaceTimeDrawer = (*((PathElementProperties*)spaceTimeElementsDrawer->getProperties()))["spacetimepath"].visible;
 		fFootprintDrawer = (*((PathElementProperties*)spaceTimeElementsDrawer->getProperties()))["footprint"].visible;
+	}
+	if (fSpaceTimeDrawer) {
+		if ((drawLoop == drl3DOPAQUE && transparency != 1.0) || (drawLoop == drl3DTRANSPARENT && transparency == 1.0))
+			fSpaceTimeDrawer = false;
 	}
 
 	csDraw->Lock(); // apparently this draw became so "heavy" that we need a lock to prevent the destructor from kicking in while drawing
@@ -535,7 +539,7 @@ bool SpaceTimeDrawer::draw( const CoordBounds& cbArea) const {
 		*fRefreshTexture = false;
 	}
 
-	drawPreDrawers(cbArea);
+	drawPreDrawers(drawLoop, cbArea);
 
 	// Following 3 lines needed for transparency to work
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
@@ -789,10 +793,10 @@ bool SpaceTimeDrawer::draw( const CoordBounds& cbArea) const {
 	glDisable(GL_ALPHA_TEST);
 	glDisable(GL_BLEND);
 
-	drawPostDrawers(cbArea);
+	drawPostDrawers(drawLoop, cbArea);
 
 	if (fFootprintDrawer && spaceTimeElementsDrawer)
-		spaceTimeElementsDrawer->draw(cbArea);
+		spaceTimeElementsDrawer->draw(drawLoop, cbArea);
 
 	csDraw->Unlock();
 

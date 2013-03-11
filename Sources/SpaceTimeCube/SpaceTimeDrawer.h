@@ -21,7 +21,7 @@ class _export SpaceTimeDrawer : public FeatureLayerDrawer, public TemporalDrawer
 		virtual void prepare(PreparationParameters *parms);
 		virtual void prepareChildDrawers(PreparationParameters *pp);
 		GeneralDrawerProperties *getProperties();
-		bool draw( const CoordBounds& cbArea) const;
+		bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const;
 		virtual void setRepresentation(const Representation& rp);
 		void SetNrSteps(int steps);
 		int iNrSteps();

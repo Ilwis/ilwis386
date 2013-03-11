@@ -52,7 +52,7 @@ namespace ILWIS {
 
 		SpaceTimeElementsDrawer(DrawerParameters *parms);
 		virtual ~SpaceTimeElementsDrawer();
-		bool draw( const CoordBounds& cbArea=CoordBounds()) const;
+		bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *parms);
 		void SetSpaceTimeDrawer(SpaceTimeDrawer * _spaceTimeDrawer);
 		void RefreshDisplayList() const;

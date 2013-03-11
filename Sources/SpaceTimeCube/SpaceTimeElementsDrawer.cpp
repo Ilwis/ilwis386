@@ -70,7 +70,7 @@ void SpaceTimeElementsDrawer::load(const FileName& fnView, const String& current
 	properties.load(fnView, drawerSection);
 }
 
-bool SpaceTimeElementsDrawer::draw(const CoordBounds& cbArea) const{
+bool SpaceTimeElementsDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 	if ( !isActive() || !isValid())
 		return false;
 
@@ -78,6 +78,8 @@ bool SpaceTimeElementsDrawer::draw(const CoordBounds& cbArea) const{
 		return false;
 
 	double alpha = 1.0 - properties["footprint"].transparency;
+	if ((drawLoop == drl3DOPAQUE && alpha != 1.0) || (drawLoop == drl3DTRANSPARENT && alpha == 1.0))
+		return false;
 
 	if (*fRefreshDisplayList) {
 		if (*displayList != 0) {
@@ -87,7 +89,7 @@ bool SpaceTimeElementsDrawer::draw(const CoordBounds& cbArea) const{
 		*fRefreshDisplayList = false;
 	}
 
-	drawPreDrawers(cbArea);
+	drawPreDrawers(drawLoop, cbArea);
 
 	// Following 3 lines needed for transparency to work
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
@@ -157,7 +159,7 @@ bool SpaceTimeElementsDrawer::draw(const CoordBounds& cbArea) const{
 	glDisable(GL_ALPHA_TEST);
 	glDisable(GL_BLEND);
 
-	drawPostDrawers(cbArea);
+	drawPostDrawers(drawLoop, cbArea);
 	return true;
 }
 
