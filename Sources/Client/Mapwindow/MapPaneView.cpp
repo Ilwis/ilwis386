@@ -858,7 +858,6 @@ BOOL MapPaneView::EditCopy(CRect mRect, int nReduceResCount)
 	}
 
 	contextMem->TakeContext();
-	//glClearColor(1,1,1,0.0); // override glClearColor of initOpenGL() to a more logical choice for Copy/Paste
 	GetDocument()->rootDrawer->draw();
 	glFinish();	// Finish all OpenGL commands
 	contextMem->ReleaseContext();

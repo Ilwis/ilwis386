@@ -179,7 +179,6 @@ void DistanceMeasurer::drawLine()
 	cdc.SetROP2(iROP);*/
 	Coord pStart = mpv->GetDocument()->rootDrawer->glConv(cStart);
 	Coord pEnd = mpv->GetDocument()->rootDrawer->glConv(cEnd);
-	glClearColor(1.0,1.0,1.0,0.0);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 	glColor3d(1,1,1);

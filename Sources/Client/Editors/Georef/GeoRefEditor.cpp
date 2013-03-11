@@ -394,7 +394,7 @@ int GeoRefEditor::draw(volatile bool* fDrawStop)
 		textDrawer->addDataSource(&s);
 		textDrawer->setCoord(Coordinate(pnt.x, -pnt.y, 0));
 		font->setColor(clr);
-		textDrawer->draw();
+		textDrawer->draw(ILWIS::NewDrawer::drl2D);
 	}
 	if (efmf) {
 		efmf->draw();
