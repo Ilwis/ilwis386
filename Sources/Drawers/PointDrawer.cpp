@@ -94,7 +94,7 @@ void PointDrawer::calcSize() {
 		height = cbZoom.width() / 100.0;
 }
 
-bool PointDrawer::draw( const CoordBounds& cbArea) const {
+bool PointDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const {
 	if ( !isActive() || !isValid())
 		return false;
 
@@ -158,50 +158,50 @@ bool PointDrawer::draw( const CoordBounds& cbArea) const {
 		switch((*cur)->type) {
 			case IVGAttributes::sCIRCLE:
 			case IVGAttributes::sELLIPSE:
-				drawEllipse((*cur), 0);
+				drawEllipse((*cur), 0, drawLoop);
 				break;
 			case IVGAttributes::sRECTANGLE:
-				drawRectangle((*cur), 0);
+				drawRectangle((*cur), 0, drawLoop);
 				break;
 			case IVGAttributes::sPOLYGON:
-				drawPolygon((*cur), 0);
+				drawPolygon((*cur), 0, drawLoop);
 				break;
 			case IVGAttributes::sLINE:
 			case IVGAttributes::sPOLYLINE:
-				drawLine((*cur), 0);
+				drawLine((*cur), 0, drawLoop);
 				break;
 			case IVGAttributes::sPATH:
-				drawPath((*cur),0);
+				drawPath((*cur),0, drawLoop);
 				break;			
 		};
 	}
 	glPopMatrix();
 
 	if ( specialOptions & NewDrawer::sdoSELECTED) {
-		CoordBounds cbSelect = cb;
+		if ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE)) {
+			CoordBounds cbSelect = cb;
 			cbSelect *= 1.2;
-		glColor4d(1, 0, 0, 1);
-		glBegin(GL_QUADS);						
-		glVertex3f( cbSelect.MinX(), cbSelect.MinY(),fz);	
-		glVertex3f( cbSelect.MinX(),cbSelect.MaxY(),fz);	
-		glVertex3f( cbSelect.MaxX(), cbSelect.MaxY(),fz);
-		glVertex3f( cbSelect.MaxX(), cbSelect.MinY(),fz);
-		glEnd();
-
+			glColor4d(1, 0, 0, 1);
+			glBegin(GL_QUADS);						
+			glVertex3f( cbSelect.MinX(), cbSelect.MinY(),fz);	
+			glVertex3f( cbSelect.MinX(),cbSelect.MaxY(),fz);	
+			glVertex3f( cbSelect.MaxX(), cbSelect.MaxY(),fz);
+			glVertex3f( cbSelect.MaxX(), cbSelect.MinY(),fz);
+			glEnd();
+		}
 	}
 
 	if ( is3D) {
 		if ( extrusion) {
-			glBegin(GL_LINE_STRIP) ;
-			glVertex3d(cNorm.x,cNorm.y,0);
-			glVertex3d(cNorm.x, cNorm.y,fz*zvmkr->getZScale());
-			glEnd();
+			double transp = getTransparency() * element->at(element->size() - 1)->opacity; // transparency of extrusion is the transparency of the last element
+			if ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE && transp == 1.0) || (drawLoop == drl3DTRANSPARENT && transp != 1.0)) {
+				glBegin(GL_LINE_STRIP) ;
+				glVertex3d(cNorm.x,cNorm.y,0);
+				glVertex3d(cNorm.x, cNorm.y,fz*zvmkr->getZScale());
+				glEnd();
+			}
 		}
-
 	}
-
-
-
 
 	return true;
 }
@@ -230,7 +230,10 @@ void PointDrawer::transform(const IVGAttributes* attributes) const{
 	}
 }
 
-void PointDrawer::drawRectangle(const IVGAttributes* attributes, double z) const {
+void PointDrawer::drawRectangle(const IVGAttributes* attributes, double z, const DrawLoop drawLoop) const {
+	double transp = getTransparency() * attributes->opacity;
+	if ((drawLoop == drl3DOPAQUE && transp != 1.0) || (drawLoop == drl3DTRANSPARENT && transp == 1.0))
+		return;
 
 	double hw = attributes->rwidth != 0 ? attributes->rwidth : width;
 	double hh = attributes->rheight != 0 ? attributes->rheight : height;
@@ -241,8 +244,6 @@ void PointDrawer::drawRectangle(const IVGAttributes* attributes, double z) const
 		transform(attributes);
 	}
 
-	double transp = getTransparency() * attributes->opacity;
-	double filltransp = transp ;
 	Color fcolor = attributes->fillColor;
 	if ( fcolor == colorUSERDEF)
 		fcolor = properties.drawColor;
@@ -273,7 +274,11 @@ void PointDrawer::drawRectangle(const IVGAttributes* attributes, double z) const
 	}
 }
 
-void PointDrawer::drawEllipse(const IVGAttributes* attributes, double z) const{
+void PointDrawer::drawEllipse(const IVGAttributes* attributes, double z, const DrawLoop drawLoop) const{
+	double transp = attributes->opacity * getTransparency();
+	if ((drawLoop == drl3DOPAQUE && transp != 1.0) || (drawLoop == drl3DTRANSPARENT && transp == 1.0))
+		return;
+
 	double rx = attributes->rx > 0 ? attributes->rx : width / 2;
 	double ry = attributes->ry >0 ? attributes->ry : height / 2;
 	double lcx = attributes->points[0].x;
@@ -281,7 +286,6 @@ void PointDrawer::drawEllipse(const IVGAttributes* attributes, double z) const{
 	double r = min(rx,ry);
 
 	Color fcolor = attributes->fillColor.fEqual(colorUSERDEF) ? properties.drawColor : attributes->fillColor;
-	double transp = attributes->opacity * getTransparency();
 
 	int sections = 20; //number of triangles to use to estimate a circle
 	// (a higher number yields a more perfect circle)
@@ -311,9 +315,11 @@ void PointDrawer::drawEllipse(const IVGAttributes* attributes, double z) const{
 	glEnd();
 }
 
-void PointDrawer::drawLine(const IVGAttributes* attributes, double z) const{
-	Color scolor = attributes->strokeColor.fEqual(colorUSERDEF) ? properties.drawColor :  attributes->strokeColor;
+void PointDrawer::drawLine(const IVGAttributes* attributes, double z, const DrawLoop drawLoop) const{
 	double transp = attributes->opacity * getTransparency();
+	if ((drawLoop == drl3DOPAQUE && transp != 1.0) || (drawLoop == drl3DTRANSPARENT && transp == 1.0))
+		return;
+	Color scolor = attributes->strokeColor.fEqual(colorUSERDEF) ? properties.drawColor :  attributes->strokeColor;
 	glColor4d(scolor.redP(), scolor.greenP(), scolor.blueP(), transp);
 
 	glLineWidth(properties.thickness!= 0 ? properties.thickness : attributes->strokewidth);
@@ -327,10 +333,12 @@ void PointDrawer::drawLine(const IVGAttributes* attributes, double z) const{
 
 }
 
-void PointDrawer::drawPolygon(const IVGAttributes* attributes, double z) const{
+void PointDrawer::drawPolygon(const IVGAttributes* attributes, double z, const DrawLoop drawLoop) const{
+	double transp = attributes->opacity * getTransparency();
+	if ((drawLoop == drl3DOPAQUE && transp != 1.0) || (drawLoop == drl3DTRANSPARENT && transp == 1.0))
+		return;
 
 	Color fcolor = attributes->fillColor.fEqual(colorUSERDEF) ? properties.drawColor : attributes->fillColor;
-	double transp = attributes->opacity * getTransparency();
 	if ( fcolor != colorUNDEF) {
 		glColor4f(fcolor.redP(),fcolor.greenP(), fcolor.blueP(), transp);
 		for(int i=0; i < attributes->triangleStrips.size(); ++i){
@@ -356,13 +364,15 @@ void PointDrawer::drawPolygon(const IVGAttributes* attributes, double z) const{
 
 }
 
-void PointDrawer::drawPath(const IVGAttributes* attributes, double z) const{
+void PointDrawer::drawPath(const IVGAttributes* attributes, double z, const DrawLoop drawLoop) const{
+	double transp = attributes->opacity * getTransparency();
+	if ((drawLoop == drl3DOPAQUE && transp != 1.0) || (drawLoop == drl3DTRANSPARENT && transp == 1.0))
+		return;
 
 	if ( attributes->isPolygon()) {
-		drawPolygon(attributes, z);
+		drawPolygon(attributes, z, drawLoop);
 	}
 	Color fcolor = attributes->fillColor.fEqual(colorUSERDEF) ? properties.drawColor : attributes->fillColor;
-	double transp = attributes->opacity * getTransparency();
 	glColor4f(fcolor.redP(),fcolor.greenP(), fcolor.blueP(), transp);
 	const SVGPath& path = (const SVGPath&) attributes;
 	for(int i = 0; i < path.noOfElements(); ++i) {

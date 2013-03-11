@@ -19,7 +19,7 @@ class _export PolygonDrawer : public SimpleDrawer {
 	public:
 		PolygonDrawer(ILWIS::DrawerParameters *parms);
 		~PolygonDrawer();
-		virtual bool draw( const CoordBounds& cbArea=CoordBounds()) const;
+		virtual bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *);
 		void setDrawColor(const Color& col);
 		LineDrawer *getBoundaryDrawer();

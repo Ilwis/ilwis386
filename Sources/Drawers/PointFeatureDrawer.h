@@ -8,7 +8,7 @@ class _export PointFeatureDrawer : public PointDrawer {
 		public:
 		PointFeatureDrawer(ILWIS::DrawerParameters *parms);
 		PointFeatureDrawer();
-		virtual bool draw( const CoordBounds& cbArea=CoordBounds()) const;
+		virtual bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *);
 		void addDataSource(void *f,int options=0);
 		virtual Feature *getFeature() const;

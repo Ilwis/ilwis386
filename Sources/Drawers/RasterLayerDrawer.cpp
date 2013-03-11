@@ -238,44 +238,77 @@ void RasterLayerDrawer::addDataSource(void *bmap, int options){
 		rastermap.SetPointer(obj->pointer());
 }
 
-bool RasterLayerDrawer::draw( const CoordBounds& cbArea) const {
+bool RasterLayerDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const {
 
 	//LayerDrawer::draw(cbArea);
-	drawPreDrawers(cbArea);
+	drawPreDrawers(drawLoop, cbArea);
 
 	if (!data->init)
 		init();
 	if (textureHeap->fValid())
 	{
-		glClearColor(1.0,1.0,1.0,0.0);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA); 
-		glColor4f(1, 1, 1, transparency);
-
-		textureHeap->ClearQueuedTextures();
-
-		bool is3D = getRootDrawer()->is3D(); 
-		if (is3D) {
-			ZValueMaker *zmaker = getZMaker();
-			double zscale = zmaker->getZScale();
-			double zoffset = zmaker->getOffset();
-			double z0 = getRootDrawer()->getZMaker()->getZ0(is3D);
-			glPushMatrix();
-			glScaled(1,1,zscale);
-			glTranslated(0,0,zoffset + z0);
+		// in 2D this draws one-pass
+		// in 3D, the worst case is to draw 2-pass, one for the opaque pixels and one for the transparent pixels
+		// this can be improved if we know beforehand that there are no opaque pixels at all (e.g. when 0.0 < transparency < 1.0), or no transparent pixels at all
+		bool fDraw = true;
+		if (drawLoop == drl2D) {
+			if (transparency == 0.0) // whole image invisible
+				fDraw = false;
+			else if (fUsePalette && (palette->rGetMaxAlpha() == 0.0)) // whole image invisible
+				fDraw = false;
+		} else if (drawLoop == drl3DOPAQUE) {
+			if (transparency < 1.0) // transparency everywhere; draw entire image in transparent pass
+				fDraw = false;
+			else if (fUsePalette && (palette->rGetMaxAlpha() < 1.0)) // transparency everywhere; draw entire image in transparent pass
+				fDraw = false;
+			else { // image has opaque pixels (it might also have transparent pixels)
+				glAlphaFunc(GL_EQUAL, 1); // draw only the opaque pixels
+				glEnable(GL_ALPHA_TEST);
+			}
+		} else if (drawLoop == drl3DTRANSPARENT) {
+			if ((transparency == 1.0) && !(fUsePalette && palette->fHasTransparentValues())) // only opaque pixels
+				fDraw = false;
+			else if (transparency == 0.0) // whole image invisible
+				fDraw = false;
+			else if (fUsePalette && (palette->rGetMaxAlpha() == 0.0)) // whole image invisible
+				fDraw = false;
+			else { // image has pixels with alpha > 0 and alpha < 1 (it might also have pixels with alpha == 1)
+				glAlphaFunc(GL_LESS, 1); // draw only the pixels with alpha < 1
+				glEnable(GL_ALPHA_TEST);
+			}
 		}
-		glEnable(GL_TEXTURE_2D);
-		glMatrixMode(GL_TEXTURE);
-		glPushMatrix();
-		DisplayImagePortion(0, 0, data->width, data->height);
-		glPopMatrix();
-		glMatrixMode(GL_MODELVIEW);
-		glDisable(GL_TEXTURE_2D);
-		if (is3D)
+		if (fDraw) {
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+			glColor4f(1, 1, 1, transparency);
+
+			textureHeap->ClearQueuedTextures();
+
+			bool is3D = getRootDrawer()->is3D(); 
+			if (is3D) {
+				ZValueMaker *zmaker = getZMaker();
+				double zscale = zmaker->getZScale();
+				double zoffset = zmaker->getOffset();
+				double z0 = getRootDrawer()->getZMaker()->getZ0(is3D);
+				glPushMatrix();
+				glScaled(1,1,zscale);
+				glTranslated(0,0,zoffset + z0);
+			}
+			glEnable(GL_TEXTURE_2D);
+			glMatrixMode(GL_TEXTURE);
+			glPushMatrix();
+			DisplayImagePortion(0, 0, data->width, data->height);
 			glPopMatrix();
-		glDisable(GL_BLEND);
+			glMatrixMode(GL_MODELVIEW);
+			glDisable(GL_TEXTURE_2D);
+			if (is3D)
+				glPopMatrix();
+			if (drawLoop == drl3DOPAQUE || drawLoop == drl3DTRANSPARENT)
+				glDisable(GL_ALPHA_TEST);
+			glDisable(GL_BLEND);
+		}
 	}
-	drawPostDrawers(cbArea);
+	drawPostDrawers(drawLoop, cbArea);
 
 	return true;
 }

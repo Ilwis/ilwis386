@@ -11,7 +11,7 @@ class _export PolygonFeatureDrawer : public PolygonDrawer {
 		PolygonFeatureDrawer(ILWIS::DrawerParameters *parms);
 		PolygonFeatureDrawer();
 		~PolygonFeatureDrawer();
-		virtual bool draw( const CoordBounds& cbArea=CoordBounds()) const;
+		virtual bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *);
 		void addDataSource(void *f,int options=0);
 		virtual Feature *getFeature() const;

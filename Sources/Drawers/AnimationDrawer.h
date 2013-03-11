@@ -24,7 +24,7 @@ namespace ILWIS{
 		AnimationDrawer(DrawerParameters *parms);
 		virtual ~AnimationDrawer();
 		virtual void prepare(PreparationParameters *pp);
-		bool draw(int drawerIndex , const CoordBounds& cbArea) const;
+		bool draw(int drawerIndex, const DrawLoop drawLoop, const CoordBounds& cbArea) const;
 		void timedEvent(UINT _timerid);
 		vector<int>& getActiveMaps() { return activeMaps;}
 		void animationDefaultView();

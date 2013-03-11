@@ -11,7 +11,7 @@ class _export PolygonLayerDrawer : public FeatureLayerDrawer {
 	public:
 		ILWIS::NewDrawer *createPolygonLayerDrawer(DrawerParameters *parms);
 		NewDrawer *createElementDrawer(PreparationParameters *pp, ILWIS::DrawerParameters* parms) const;
-		bool draw( const CoordBounds& cbArea) const;
+		bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const;
 
 		PolygonLayerDrawer(DrawerParameters *parms);
 		virtual ~PolygonLayerDrawer();

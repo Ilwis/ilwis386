@@ -71,9 +71,26 @@ void RasterDataDrawer::prepare(PreparationParameters *pp){
 		BaseMapPtr *bmptr = getBaseMap();
 		BaseMap basemap;
 		basemap.SetPointer(bmptr);
-		NewDrawer *rsd = getDrawer(0);
-		if ( rsd )
+		RasterLayerDrawer *rsd = (RasterLayerDrawer*)getDrawer(0);
+		if ( rsd ) {
 			rsd->addDataSource(mpl.fValid() ? (void *)&mpl : (void *)&basemap);  // color composte or normal
+			RangeReal rrMinMax (0, 255);
+			Domain dm = basemap->dm();
+			if (dm.fValid() && (dm->pdbit() || dm->pdbool()))
+				rrMinMax = RangeReal(1,2);
+			else if ( basemap->dm()->pdv()) {
+				rrMinMax = basemap->rrMinMax(BaseMapPtr::mmmCALCULATE); // not mmmSAMPLED here, to get a more accurate result, otherwise there's a high chance of artifacts since the sampling is only done on this one band
+				if (rrMinMax.rLo() > rrMinMax.rHi())
+					rrMinMax = basemap->vr()->rrMinMax();
+			} else {
+				if (  rsd->useAttributeColumn() && rsd->getAtttributeColumn()->dm()->pdv()) {
+
+					rrMinMax = rsd->getAtttributeColumn()->vr()->rrMinMax();
+				}
+			}
+			rsd->setMinMax(rrMinMax);
+			rsd->SetPaletteOwner(); // this set has the only available palette
+		}
 	}
 	if ( pp->type & RootDrawer::ptRENDER || pp->type & RootDrawer::ptRESTORE) {
 		for(int i = 0; i < drawers.size(); ++i) {
@@ -104,8 +121,8 @@ void RasterDataDrawer::addDataSource(void *bmap, int options){
 	SpatialDataDrawer::addDataSource(bmap, options);
 }
 
-bool RasterDataDrawer::draw(int drawerIndex , const CoordBounds& cbArea) const{
-	SpatialDataDrawer::draw( cbArea);
+bool RasterDataDrawer::draw(int drawerIndex, const DrawLoop drawLoop, const CoordBounds& cbArea) const{
+	SpatialDataDrawer::draw(drawLoop, cbArea);
 	return true;
 }
 

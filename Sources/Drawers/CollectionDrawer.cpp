@@ -53,9 +53,9 @@ void CollectionDrawer::prepare(PreparationParameters *pp){
 }
 
 
-bool CollectionDrawer::draw(int drawerIndex , const CoordBounds& cbArea) const{
+bool CollectionDrawer::draw(int drawerIndex, const DrawLoop drawLoop, const CoordBounds& cbArea) const{
     ILWISSingleLock sl(const_cast<CCriticalSection *>(&csAccess), TRUE,SOURCE_LOCATION);
-	SetDrawer::draw( drawerIndex, cbArea);
+	SetDrawer::draw( drawerIndex, drawLoop, cbArea);
 	return true;
 }
 

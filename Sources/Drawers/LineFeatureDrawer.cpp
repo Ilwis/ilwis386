@@ -50,8 +50,8 @@ LineFeatureDrawer::LineFeatureDrawer(DrawerParameters *parms, const String& name
 LineFeatureDrawer::~LineFeatureDrawer() {
 }
 
-bool LineFeatureDrawer::draw( const CoordBounds& cbArea) const {
-	return LineDrawer::draw( cbArea);
+bool LineFeatureDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const {
+	return LineDrawer::draw(drawLoop, cbArea);
 }
 
 void LineFeatureDrawer::addDataSource(void *f, int options) {

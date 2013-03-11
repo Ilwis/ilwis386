@@ -30,12 +30,13 @@ void  CanvasBackgroundDrawer::prepare(PreparationParameters *pp){
 
 }
 
-bool CanvasBackgroundDrawer::draw( const CoordBounds& cb) const{
+bool CanvasBackgroundDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cb) const{
+	if ((drawLoop == drl3DOPAQUE && transparency != 1.0) || (drawLoop == drl3DTRANSPARENT && transparency == 1.0))
+		return false;
 
 	if (!isActive() || !isValid())
 		return false;
 
-	glClearColor(1.0,1.0,1.0,0.0);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 	CoordBounds cbView = getRootDrawer()->getCoordBoundsView();

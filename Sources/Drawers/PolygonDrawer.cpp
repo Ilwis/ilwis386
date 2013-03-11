@@ -33,7 +33,7 @@ PolygonDrawer::~PolygonDrawer() {
 	delete boundary;
 }
 
-bool PolygonDrawer::draw( const CoordBounds& cbArea) const{
+bool PolygonDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 	if (triangleStrips.size() == 0 || !fActive)
 		return false;
 	CoordBounds cbZoom = getRootDrawer()->getCoordBoundsZoom();
@@ -45,55 +45,34 @@ bool PolygonDrawer::draw( const CoordBounds& cbArea) const{
 
 	glShadeModel(GL_FLAT);
 
-	bool is3D = getRootDrawer()->is3D();
-	ComplexDrawer *cdrw = (ComplexDrawer *)getParentDrawer();
-	double zscale = cdrw->getZMaker()->getZScale();
-	double zoffset = cdrw->getZMaker()->getOffset();
-	double z0 = cdrw->getZMaker()->getZ0(is3D);
+	double alpha = (1.0 - drawColor.transparencyP()) * getTransparency() * areaTransparency;
+	if ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE && alpha == 1.0) || (drawLoop == drl3DTRANSPARENT && alpha != 1.0)) {
+		bool is3D = getRootDrawer()->is3D();
+		ComplexDrawer *cdrw = (ComplexDrawer *)getParentDrawer();
+		double zscale = cdrw->getZMaker()->getZScale();
+		double zoffset = cdrw->getZMaker()->getOffset();
+		double z0 = cdrw->getZMaker()->getZ0(is3D);
 
- 	if ( hatch) {
-		glEnable(GL_POLYGON_STIPPLE);          	// Enable POLYGON STIPPLE
-		glPolygonStipple(hatch); 
-	}
-
-	if ( is3D) {
-		glPushMatrix();
-		glScaled(1,1,zscale);
-		glTranslated(0,0,zoffset);
-	}
-
-	if ( label && label->getParentDrawer()->isActive()) {
-		Coord c = label->coord();
-		//double xshift = cbZoom.width() / 250.0;
-		//double yshift = cbZoom.height() / 250.0;
-		//c += Coord(xshift,yshift);
-		c.z = z0;
-		label->setCoord(c);
-	}
-	double tr = (1.0 - drawColor.transparencyP()) * getTransparency() * areaTransparency;
-	glColor4f(drawColor.redP(),drawColor.greenP(), drawColor.blueP(), tr);
-	if ( asQuad && showArea) {
-		glBegin(GL_QUADS);
-		glVertex3d(cb.cMin.x, cb.cMin.y, 0);
-		glVertex3d(cb.cMin.x, cb.cMax.y, 0);
-		glVertex3d(cb.cMax.x, cb.cMax.y, 0);
-		glVertex3d(cb.cMax.x, cb.cMin.y, 0);
-		glEnd();
-	} else {
-	for(int i=0; i < triangleStrips.size() && showArea; ++i){
-			glBegin(GL_TRIANGLE_STRIP);
-			//glBegin(GL_LINE_STRIP);
-			for(int j=0; j < triangleStrips.at(i).size(); ++j) {
-				Coord c = triangleStrips.at(i).at(j);
-				double z = cdrw->getZMaker()->getThreeDPossible() & is3D ? c.z : z0;
-				glVertex3d(c.x,c.y,z);
-			}
-			glEnd();
+ 		if ( hatch) {
+			glEnable(GL_POLYGON_STIPPLE);          	// Enable POLYGON STIPPLE
+			glPolygonStipple(hatch); 
 		}
-	}
- 	if ( hatch && backgroundColor != colorUNDEF ) {
-		glPolygonStipple(hatchInverse); 
-		glColor4f(backgroundColor.redP(),backgroundColor.greenP(), backgroundColor.blueP(), tr);
+
+		if ( is3D) {
+			glPushMatrix();
+			glScaled(1,1,zscale);
+			glTranslated(0,0,zoffset);
+		}
+
+		if ( label && label->getParentDrawer()->isActive()) {
+			Coord c = label->coord();
+			//double xshift = cbZoom.width() / 250.0;
+			//double yshift = cbZoom.height() / 250.0;
+			//c += Coord(xshift,yshift);
+			c.z = z0;
+			label->setCoord(c);
+		}
+		glColor4f(drawColor.redP(),drawColor.greenP(), drawColor.blueP(), alpha);
 		if ( asQuad && showArea) {
 			glBegin(GL_QUADS);
 			glVertex3d(cb.cMin.x, cb.cMin.y, 0);
@@ -113,16 +92,39 @@ bool PolygonDrawer::draw( const CoordBounds& cbArea) const{
 				glEnd();
 			}
 		}
-	}
-	if ( is3D) {
-		glPopMatrix();
-	}
-	if ( hatch) {
-		glDisable(GL_POLYGON_STIPPLE);
+ 		if ( hatch && backgroundColor != colorUNDEF ) {
+			glPolygonStipple(hatchInverse); 
+			glColor4f(backgroundColor.redP(),backgroundColor.greenP(), backgroundColor.blueP(), alpha);
+			if ( asQuad && showArea) {
+				glBegin(GL_QUADS);
+				glVertex3d(cb.cMin.x, cb.cMin.y, 0);
+				glVertex3d(cb.cMin.x, cb.cMax.y, 0);
+				glVertex3d(cb.cMax.x, cb.cMax.y, 0);
+				glVertex3d(cb.cMax.x, cb.cMin.y, 0);
+				glEnd();
+			} else {
+			for(int i=0; i < triangleStrips.size() && showArea; ++i){
+					glBegin(GL_TRIANGLE_STRIP);
+					//glBegin(GL_LINE_STRIP);
+					for(int j=0; j < triangleStrips.at(i).size(); ++j) {
+						Coord c = triangleStrips.at(i).at(j);
+						double z = cdrw->getZMaker()->getThreeDPossible() & is3D ? c.z : z0;
+						glVertex3d(c.x,c.y,z);
+					}
+					glEnd();
+				}
+			}
+		}
+		if ( is3D) {
+			glPopMatrix();
+		}
+		if ( hatch) {
+			glDisable(GL_POLYGON_STIPPLE);
+		}
 	}
 
 	if ( boundary && showBoundary && (!asQuad || !showArea)) {
-		boundary->draw( cbArea);
+		boundary->draw(drawLoop, cbArea);
 	}
 	return true;
 }

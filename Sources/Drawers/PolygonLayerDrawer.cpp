@@ -47,8 +47,8 @@ NewDrawer *PolygonLayerDrawer::createElementDrawer(PreparationParameters *pp, IL
 
 }
 
-bool PolygonLayerDrawer::draw( const CoordBounds& cbArea) const {
-	FeatureLayerDrawer::draw(cbArea);
+bool PolygonLayerDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const {
+	FeatureLayerDrawer::draw(drawLoop, cbArea);
 	getRootDrawer()->setZIndex(1 + getRootDrawer()->getZIndex()); // extra offset because of the boundary layer;
 	return true;
 }

@@ -28,7 +28,7 @@ class _export LayerDrawer : public ComplexDrawer {
 		String iconName(const String& subtype="?") const ;
 		String getInfo(const Coord& crd) const;
 		static unsigned long test_count;
-		bool draw( const CoordBounds& cbArea) const;
+		bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const;
 		//void updateLegendItem();
 		Column getAtttributeColumn() const;
 		void setAttributeColumn(const Column& col );

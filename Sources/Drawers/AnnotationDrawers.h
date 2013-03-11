@@ -62,7 +62,7 @@ public:
 	void setFontScale(double v);
 
 protected:
-	bool draw( const CoordBounds& cbArea) const;
+	bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const;
 	void setText(const vector<String>& v, int count, const Coord& c) const;
 	String store(const FileName& fnView, const String& parenSection) const;
 	void load(const FileName& fnView, const String& parenSection);
@@ -97,7 +97,7 @@ public:
 	void getActiveClasses(vector<int>& rws) const;
 protected:
 	void prepare(PreparationParameters *pp) ;
-	bool draw( const CoordBounds& cbArea) const;
+	bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const;
 	String store(const FileName& fnView, const String& parenSection) const;
 	void load(const FileName& fnView, const String& parenSection);
 	vector<RawInfo> raws;
@@ -114,7 +114,7 @@ public:
 	double getStep() const;
 	void setStep(double s);
 protected:
-	bool draw( const CoordBounds& cbArea) const;
+	bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const;
 	void prepare(PreparationParameters *pp);
 	vector<String> makeRange() const;
 	void drawVertical(CoordBounds& cbInner, const RangeReal& rr, double z, const vector<String>& values) const;
@@ -141,7 +141,7 @@ public:
 	int getNumberOfDigits() const;
 	void setNumberOfDigits(int num);
 private:
-	bool draw( const CoordBounds& cbArea) const;
+	bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const;
 	String store(const FileName& fnView, const String& parenSection) const;
 	void load(const FileName& fnView, const String& parenSection);
 	void calcLocations();
@@ -177,7 +177,7 @@ public:
 	void setTicks(int t);
 
 private:
-	bool draw( const CoordBounds& cbArea) const;
+	bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const;
 	String store(const FileName& fnView, const String& parenSection) const;
 	void load(const FileName& fnView, const String& parenSection);
 

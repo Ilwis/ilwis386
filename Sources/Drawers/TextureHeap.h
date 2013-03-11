@@ -27,9 +27,11 @@ namespace ILWIS {
 		Palette();
 		virtual ~Palette();
 		void SetData(const BaseMap & mp, const LayerDrawer * rsd, const unsigned int iPaletteSize, const RangeReal & rrMinMaxMap);
-		bool fValid();
+		const bool fValid() const;
 		void MakeCurrent() const;
 		void Refresh();
+		const float rGetMaxAlpha() const;
+		const bool fHasTransparentValues() const;
 	private:
 		float * palette_reds;
 		float * palette_greens;
@@ -39,6 +41,8 @@ namespace ILWIS {
 		unsigned int iPaletteSize;
 		RangeReal rrMinMaxMap;
 		const LayerDrawer * rsd;
+		float rMaxAlpha;
+		bool fHasTransparent;
 	};
 
 	class TextureHeap  

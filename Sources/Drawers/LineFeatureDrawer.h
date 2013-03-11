@@ -11,7 +11,7 @@ class _export LineFeatureDrawer : public LineDrawer {
 		LineFeatureDrawer(ILWIS::DrawerParameters *parms);
 		LineFeatureDrawer();
 		~LineFeatureDrawer();
-		virtual bool draw( const CoordBounds& cbArea=CoordBounds()) const;
+		virtual bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *);
 		void setDataSource(void *f);
 		void addDataSource(void *f,int options=0);

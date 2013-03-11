@@ -92,7 +92,7 @@ class _export PointDrawer : public SimpleDrawer {
 	public:
 		PointDrawer(ILWIS::DrawerParameters *parms);
 		~PointDrawer();
-		virtual bool draw( const CoordBounds& cbArea=CoordBounds()) const;
+		virtual bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *);
 		void shareVertices(vector<Coord *>& coords);
 		void setCoord(const Coord& crd);
@@ -104,11 +104,11 @@ class _export PointDrawer : public SimpleDrawer {
 		PointDrawer(DrawerParameters *parms, const String& name);
 		void calcSize();
 
-		void drawRectangle(const IVGAttributes* attributes, double z) const;
-		void drawEllipse(const IVGAttributes* attributes, double z) const;
-		void drawLine(const IVGAttributes* attributes, double z) const;
-		void drawPolygon(const IVGAttributes* attributes, double z) const;
-		void drawPath(const IVGAttributes* attributes, double z) const;
+		void drawRectangle(const IVGAttributes* attributes, double z, const DrawLoop drawLoop) const;
+		void drawEllipse(const IVGAttributes* attributes, double z, const DrawLoop drawLoop) const;
+		void drawLine(const IVGAttributes* attributes, double z, const DrawLoop drawLoop) const;
+		void drawPolygon(const IVGAttributes* attributes, double z, const DrawLoop drawLoop) const;
+		void drawPath(const IVGAttributes* attributes, double z, const DrawLoop drawLoop) const;
 		void transform(const IVGAttributes* attributes) const;
 
 		Coord cNorm;

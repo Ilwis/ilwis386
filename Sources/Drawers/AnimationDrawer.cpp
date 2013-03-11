@@ -96,8 +96,8 @@ void AnimationDrawer::addDataSource(void *data, int options){
 	}
 }
 
-bool AnimationDrawer::draw(int drawerIndex , const CoordBounds& cbArea) const{
-	SetDrawer::draw( drawerIndex, cbArea);
+bool AnimationDrawer::draw(int drawerIndex, const DrawLoop drawLoop, const CoordBounds& cbArea) const{
+	SetDrawer::draw(drawerIndex, drawLoop, cbArea);
 	return true;
 }
 

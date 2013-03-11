@@ -10,7 +10,7 @@ namespace ILWIS{
 		virtual ~SetDrawer();
 		virtual void prepare(PreparationParameters *pp);
 		void addDataSource(void *bmap, int options=0);
-		bool draw(int drawerIndex , const CoordBounds& cbArea) const;
+		bool draw(int drawerIndex, const DrawLoop drawLoop, const CoordBounds& cbArea) const;
 		String description() const;
 		void updateLegendItem();
 		void setTransparency(double v);

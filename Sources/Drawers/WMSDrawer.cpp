@@ -68,51 +68,52 @@ void WMSDrawer::init() const
 	data->init = true;
 }
 
-bool WMSDrawer::draw( const CoordBounds& cbArea) const {
-	drawPreDrawers(cbArea);
+bool WMSDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const {
+	drawPreDrawers(drawLoop, cbArea);
 
 	if (!data->init)
 		init();
 	if (textureHeap->fValid())
 	{
-		glClearColor(1.0,1.0,1.0,0.0);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA); 
-		glColor4f(1, 1, 1, transparency);
+		if ((drawLoop == drl2D && transparency != 0.0) || (drawLoop == drl3DOPAQUE && transparency == 1.0) || (drawLoop == drl3DTRANSPARENT && transparency != 1.0 && transparency != 0.0)) { // no palette used, so we dont need to test on Palette's alphaminmax
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA); 
+			glColor4f(1, 1, 1, transparency);
 
-		textureHeap->ClearQueuedTextures();
+			textureHeap->ClearQueuedTextures();
 
-		bool is3D = getRootDrawer()->is3D(); 
-		if (is3D) {
-			ZValueMaker *zmaker = getZMaker();
-			double zscale = zmaker->getZScale();
-			double zoffset = zmaker->getOffset();
-			double z0 = getRootDrawer()->getZMaker()->getZ0(is3D);
+			bool is3D = getRootDrawer()->is3D(); 
+			if (is3D) {
+				ZValueMaker *zmaker = getZMaker();
+				double zscale = zmaker->getZScale();
+				double zoffset = zmaker->getOffset();
+				double z0 = getRootDrawer()->getZMaker()->getZ0(is3D);
+				glPushMatrix();
+				glScaled(1,1,zscale);
+				glTranslated(0,0,zoffset + z0);
+			}
+			glEnable(GL_TEXTURE_2D);
+			glMatrixMode(GL_TEXTURE);
 			glPushMatrix();
-			glScaled(1,1,zscale);
-			glTranslated(0,0,zoffset + z0);
-		}
-		glEnable(GL_TEXTURE_2D);
-		glMatrixMode(GL_TEXTURE);
-		glPushMatrix();
-		CoordBounds cb (wmsData->cbFullExtent);
-		if (cb.width() > cb.height()) {
-			double deltay = cb.width() - cb.height();
-			cb.cMax.y = cb.cMax.y + deltay;
-		} else {
-			double deltax = cb.height() - cb.width();
-			cb.cMax.x = cb.cMax.x + deltax;
-		}
-		DisplayImagePortion(cb);
-		glPopMatrix();
-		glMatrixMode(GL_MODELVIEW);
-		glDisable(GL_TEXTURE_2D);
-		if (is3D)
+			CoordBounds cb (wmsData->cbFullExtent);
+			if (cb.width() > cb.height()) {
+				double deltay = cb.width() - cb.height();
+				cb.cMax.y = cb.cMax.y + deltay;
+			} else {
+				double deltax = cb.height() - cb.width();
+				cb.cMax.x = cb.cMax.x + deltax;
+			}
+			DisplayImagePortion(cb);
 			glPopMatrix();
-		glDisable(GL_BLEND);
+			glMatrixMode(GL_MODELVIEW);
+			glDisable(GL_TEXTURE_2D);
+			if (is3D)
+				glPopMatrix();
+			glDisable(GL_BLEND);
+		}
 	}
 
-	drawPostDrawers(cbArea);
+	drawPostDrawers(drawLoop, cbArea);
 
 	return true;
 }

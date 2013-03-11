@@ -16,7 +16,7 @@ namespace ILWIS{
 
 		GridDrawer(DrawerParameters *parms);
 		virtual ~GridDrawer();
-		bool draw( const CoordBounds& cbArea=CoordBounds()) const;
+		bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *pp);
 		bool is3DGrd() const { return threeDGrid; }
 		int getMode() const;
@@ -68,7 +68,7 @@ namespace ILWIS{
 	public:
 		GridLine(DrawerParameters *parms);
 		virtual ~GridLine();
-		bool draw( const CoordBounds& cbArea=CoordBounds()) const;
+		bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *pp);
 		void addDataSource(void *c, int options = 0);
 	private:

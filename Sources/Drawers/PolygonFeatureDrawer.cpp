@@ -62,7 +62,7 @@ PolygonFeatureDrawer::~PolygonFeatureDrawer() {
 	delete tri;
 }
 
-bool PolygonFeatureDrawer::draw( const CoordBounds& cbArea) const {
+bool PolygonFeatureDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const {
 	if ( label) {
 		Coord c = feature->centroid();
 		PolygonLayerDrawer *polygonLayer = static_cast<PolygonLayerDrawer *>(parentDrawer);
@@ -73,7 +73,7 @@ bool PolygonFeatureDrawer::draw( const CoordBounds& cbArea) const {
 		c.x = c.x - cb.width() / 2;
 		label->setCoord(c);
 	}
-	return PolygonDrawer::draw( cbArea);
+	return PolygonDrawer::draw(drawLoop, cbArea);
 }
 
 void PolygonFeatureDrawer::addDataSource(void *f, int options) {

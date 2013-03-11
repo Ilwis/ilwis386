@@ -37,6 +37,8 @@ Palette::Palette()
 , palette_greens(0)
 , palette_blues(0)
 , palette_alphas(0)
+, rMaxAlpha(0)
+, fHasTransparent(false)
 {
 }
 
@@ -84,7 +86,7 @@ void Palette::SetData(const BaseMap & mp, const LayerDrawer * rsd, const unsigne
 	}
 }
 
-bool Palette::fValid()
+const bool Palette::fValid() const
 {
 	return iPaletteSize > 2; // a vaild palette has at least colors for mapMin, mapMax and UNDEF.
 }
@@ -123,17 +125,35 @@ void Palette::Refresh()
 			delete [] buf;
 		}
 
+		rMaxAlpha = 0;
+		fHasTransparent = false;
+
 		for (int i = 0; i < nrMapValues; ++i) {
 			Color col(bufColor[i]);
 			palette_reds[i] = col.redP();
 			palette_greens[i] = col.greenP();
 			palette_blues[i] = col.blueP();
-			palette_alphas[i] = col.alphaP();
+			float alpha = col.alphaP();
+			palette_alphas[i] = alpha;
+			rMaxAlpha = max(rMaxAlpha, alpha);
+			fHasTransparent = fHasTransparent || (alpha > 0.0 && alpha < 1.0);
 		}
 
 		delete [] bufColor;
+	} else {
+		rMaxAlpha = 0;
+		fHasTransparent = false;
 	}
 }
+
+const float Palette::rGetMaxAlpha() const {
+	return rMaxAlpha;
+}
+
+const bool Palette::fHasTransparentValues() const {
+	return fHasTransparent;
+}
+
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

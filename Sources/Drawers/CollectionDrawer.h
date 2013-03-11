@@ -11,7 +11,7 @@ namespace ILWIS{
 		CollectionDrawer(DrawerParameters *parms, const String& title);
 		virtual ~CollectionDrawer();
 		virtual void prepare(PreparationParameters *pp);
-		bool draw(int drawerIndex , const CoordBounds& cbArea) const;
+		bool draw(int drawerIndex, const DrawLoop drawLoop, const CoordBounds& cbArea) const;
 		String description() const;
 		RangeReal getRange() const { return rrMinMax; }
 		void addDataSource(void *bmap, int options=0);

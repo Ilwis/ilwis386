@@ -47,7 +47,7 @@ namespace ILWIS {
 		virtual void prepareChildDrawers(PreparationParameters *pp);
 		virtual void setDrawMethod(DrawMethod method);
 		void addDataSource(void *bmap, int options=0);
-		bool draw( const CoordBounds& cbArea) const;
+		bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const;
 		void setThreaded(bool yesno);
 		void setMinMax(const RangeReal & rrMinMax);
 		Palette * SetPaletteOwner();

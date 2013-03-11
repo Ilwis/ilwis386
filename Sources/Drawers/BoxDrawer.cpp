@@ -45,13 +45,14 @@ void BoxDrawer::setBox(const CoordBounds& cbOuter, const CoordBounds& cbInner) {
 
 }
 
-bool BoxDrawer::draw( const CoordBounds& cbArea) const{
+bool BoxDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
+	if ((drawLoop == drl3DOPAQUE && drawColor.alpha() < 255) || (drawLoop == drl3DTRANSPARENT && drawColor.alpha() == 255))
+		return false;
 	if (boxes.size() == 0)
 		return false;
 	bool is3D = getRootDrawer()->is3D() ;
 	double z0 = ((ComplexDrawer *)parentDrawer)->getZMaker()->getZ0(getRootDrawer()->is3D());
 	double z = is3D ? z0 : 0;
-	glClearColor(1.0,1.0,1.0,0.0);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 

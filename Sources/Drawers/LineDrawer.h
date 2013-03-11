@@ -23,7 +23,7 @@ namespace ILWIS{
 	public:
 		LineDrawer(ILWIS::DrawerParameters *parms);
 		~LineDrawer();
-		virtual bool draw( const CoordBounds& cbArea=CoordBounds()) const;
+		virtual bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *);
 		void setSpecialDrawingOptions(int option, bool add, const vector<int>& coords=vector<int>());
 		virtual void addCoords(const vector<Coord>& v,int options=0);
@@ -38,7 +38,7 @@ namespace ILWIS{
 		bool findSelectedPoint(const Coord& c) const;
 		void clear();
 		void shareVertices(vector<Coord *>& coords);
-		void drawSelectedFeature(CoordinateSequence *points, const CoordBounds& cbZoom, bool is3D) const;
+		void drawSelectedFeature(CoordinateSequence *points, const DrawLoop drawLoop, const CoordBounds& cbZoom, bool is3D) const;
 
 		vector<CoordinateSequence *> lines;
 		vector<int> selectedCoords;

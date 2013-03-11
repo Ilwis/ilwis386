@@ -55,7 +55,7 @@ void LineDrawer::addCoords(const vector<Coord>& v,int options) {
 	lines.push_back(seq);
 }
 
-bool LineDrawer::draw( const CoordBounds& cbArea) const{
+bool LineDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 	if ( !isActive() && !isValid())
 		return false;
 
@@ -93,33 +93,35 @@ bool LineDrawer::draw( const CoordBounds& cbArea) const{
 	for(int j = 0; j < lines.size(); ++j) {
 		CoordinateSequence *points = lines.at(j);
 		if ( specialOptions & NewDrawer::sdoSELECTED || selectedCoords.size() > 0) {
-				drawSelectedFeature(points, cbZoom, is3D);
+			drawSelectedFeature(points, drawLoop, cbZoom, is3D);
+			glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(),transp );
 		}
-		glBegin(GL_LINE_STRIP);
-		for(int i=0; i<points->size(); ++i) {
-			Coordinate c = points->getAt(i);
-			double z = is3D && is3DPossible ? c.z : z0;
-			glVertex3d( c.x, c.y, z);
-		}
-		glEnd();
-		if ( specialOptions & NewDrawer::sdoSymbolLineNode) {
-			double symbolScale = cbZoom.width() / 250;
+		if ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE && transp == 1.0) || (drawLoop == drl3DTRANSPARENT && transp != 1.0)) {
+			glBegin(GL_LINE_STRIP);
 			for(int i=0; i<points->size(); ++i) {
 				Coordinate c = points->getAt(i);
 				double z = is3D && is3DPossible ? c.z : z0;
-				glBegin(GL_LINE_STRIP);						
-				glVertex3f( c.x - symbolScale, c.y - symbolScale,z);	
-				glVertex3f( c.x - symbolScale, c.y + symbolScale,z);	
-				glVertex3f( c.x + symbolScale, c.y + symbolScale,z);
-				glVertex3f( c.x + symbolScale, c.y - symbolScale,z);
-				glVertex3f( c.x - symbolScale, c.y - symbolScale,z);
-				glEnd();
+				glVertex3d( c.x, c.y, z);
 			}
+			glEnd();
+			if ( specialOptions & NewDrawer::sdoSymbolLineNode) {
+				double symbolScale = cbZoom.width() / 250;
+				for(int i=0; i<points->size(); ++i) {
+					Coordinate c = points->getAt(i);
+					double z = is3D && is3DPossible ? c.z : z0;
+					glBegin(GL_LINE_STRIP);						
+					glVertex3f( c.x - symbolScale, c.y - symbolScale,z);	
+					glVertex3f( c.x - symbolScale, c.y + symbolScale,z);	
+					glVertex3f( c.x + symbolScale, c.y + symbolScale,z);
+					glVertex3f( c.x + symbolScale, c.y - symbolScale,z);
+					glVertex3f( c.x - symbolScale, c.y - symbolScale,z);
+					glEnd();
+				}
 
+			}
 		}
-		if ( is3D) {
-			if ( (specialOptions & NewDrawer::sdoExtrusion) != 0) {
-				glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(), transp);
+		if ( is3D ) {
+			if (((specialOptions & NewDrawer::sdoExtrusion) != 0) && ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE && extrTransparency == 1.0) || (drawLoop == drl3DTRANSPARENT && extrTransparency != 1.0))) {
 				Coord cOld;
 				Coord cStart = points->getAt(0);
 				for(int i=0; i<points->size(); ++i) {
@@ -127,9 +129,8 @@ bool LineDrawer::draw( const CoordBounds& cbArea) const{
 					if ( !cOld.fUndef()) {
 						glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(), extrTransparency);
 						drawExtrusion(cOld, c, z0 - zoffset, specialOptions);
-						glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(), extrTransparency);
-								}
-						cOld = c;
+					}
+					cOld = c;
 				}
 			}
 		}
@@ -142,21 +143,24 @@ bool LineDrawer::draw( const CoordBounds& cbArea) const{
 	return true;
 }
 
-void LineDrawer::drawSelectedFeature(CoordinateSequence *points, const CoordBounds& cbZoom, bool is3D) const{
+void LineDrawer::drawSelectedFeature(CoordinateSequence *points, const DrawLoop drawLoop, const CoordBounds& cbZoom, bool is3D) const{
 	Color clr =  parentDrawer->isSimple() ? Color(1,0,0) : ((ComplexDrawer *)parentDrawer)->getSelectionColor();
-	glColor4d(clr.redP(), clr.greenP(), clr.blueP(), 1);
-	glLineWidth(lproperties.thickness * 1.2 + 3);
-	glBegin(GL_LINE_STRIP);
-	for(int i=0; i<points->size(); ++i) {
-		Coordinate c = points->getAt(i);
-		double z = is3D ? c.z : 0;
-		glVertex3d( c.x, c.y, z);
+	if ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE)) {
+		glColor4d(clr.redP(), clr.greenP(), clr.blueP(), 1);
+		glLineWidth(lproperties.thickness * 1.2 + 3);
+		glBegin(GL_LINE_STRIP);
+		for(int i=0; i<points->size(); ++i) {
+			Coordinate c = points->getAt(i);
+			double z = is3D ? c.z : 0;
+			glVertex3d( c.x, c.y, z);
+		}
+		glEnd();
 	}
-	glEnd();
 
 	glLineWidth(lproperties.thickness);
 	double symbolScale = cbZoom.width() / 250;
-	glColor4d(clr.redP(), clr.greenP(), clr.blueP(), 0.5);
+	if ((drawLoop == drl2D) || (drawLoop == drl3DTRANSPARENT)) {
+		glColor4d(clr.redP(), clr.greenP(), clr.blueP(), 0.5);
 		for(int i=0; i < selectedCoords.size(); ++i) {
 			Coordinate c = points->getAt(selectedCoords.at(i));
 			double fz = is3D ? c.z : 0;;
@@ -167,29 +171,14 @@ void LineDrawer::drawSelectedFeature(CoordinateSequence *points, const CoordBoun
 				glVertex3f( c.x + symbolScale, c.y - symbolScale,fz);
 			glEnd();
 		}
-	glColor4d(clr.redP(), clr.greenP(), clr.blueP(), 1);
-	if (parentDrawer->inEditMode()) {
-		for(int i=0; i<points->size(); ++i) {
-			Coordinate c = points->getAt(i);
-			double fz = is3D ? c.z : 0;;
-			glBegin(GL_LINE_STRIP);						
-			glVertex3f( c.x - symbolScale, c.y - symbolScale,fz);	
-			glVertex3f( c.x - symbolScale, c.y + symbolScale,fz);	
-			glVertex3f( c.x + symbolScale, c.y + symbolScale,fz);
-			glVertex3f( c.x + symbolScale, c.y - symbolScale,fz);
-			glVertex3f( c.x - symbolScale, c.y - symbolScale,fz);
-			glVertex3f( c.x + symbolScale, c.y + symbolScale,fz);
-			glVertex3f( c.x + symbolScale, c.y - symbolScale,fz);
-			glVertex3f( c.x - symbolScale, c.y + symbolScale,fz);	
-			glEnd();
-		}
 	}
-	glColor4d(0,0,0,1);
-	if ( parentDrawer->inEditMode()) {
-		for(int i=0; i < selectedCoords.size(); ++i) {
-			Coordinate c = points->getAt(selectedCoords.at(i));
-			double fz = is3D ? c.z : 0;;
-			glBegin(GL_LINE_STRIP);						
+	if ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE)) {
+		glColor4d(clr.redP(), clr.greenP(), clr.blueP(), 1);
+		if (parentDrawer->inEditMode()) {
+			for(int i=0; i<points->size(); ++i) {
+				Coordinate c = points->getAt(i);
+				double fz = is3D ? c.z : 0;;
+				glBegin(GL_LINE_STRIP);						
 				glVertex3f( c.x - symbolScale, c.y - symbolScale,fz);	
 				glVertex3f( c.x - symbolScale, c.y + symbolScale,fz);	
 				glVertex3f( c.x + symbolScale, c.y + symbolScale,fz);
@@ -198,10 +187,27 @@ void LineDrawer::drawSelectedFeature(CoordinateSequence *points, const CoordBoun
 				glVertex3f( c.x + symbolScale, c.y + symbolScale,fz);
 				glVertex3f( c.x + symbolScale, c.y - symbolScale,fz);
 				glVertex3f( c.x - symbolScale, c.y + symbolScale,fz);	
-			glEnd();
+				glEnd();
+			}
+		}
+		glColor4d(0,0,0,1);
+		if ( parentDrawer->inEditMode()) {
+			for(int i=0; i < selectedCoords.size(); ++i) {
+				Coordinate c = points->getAt(selectedCoords.at(i));
+				double fz = is3D ? c.z : 0;;
+				glBegin(GL_LINE_STRIP);						
+					glVertex3f( c.x - symbolScale, c.y - symbolScale,fz);	
+					glVertex3f( c.x - symbolScale, c.y + symbolScale,fz);	
+					glVertex3f( c.x + symbolScale, c.y + symbolScale,fz);
+					glVertex3f( c.x + symbolScale, c.y - symbolScale,fz);
+					glVertex3f( c.x - symbolScale, c.y - symbolScale,fz);
+					glVertex3f( c.x + symbolScale, c.y + symbolScale,fz);
+					glVertex3f( c.x + symbolScale, c.y - symbolScale,fz);
+					glVertex3f( c.x - symbolScale, c.y + symbolScale,fz);	
+				glEnd();
+			}
 		}
 	}
-	glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(), getTransparency());
 }
 
 void LineDrawer::prepare(PreparationParameters *p){

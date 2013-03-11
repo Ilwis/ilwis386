@@ -81,15 +81,14 @@ void LayerDrawer::prepare(PreparationParameters *parm){
 	setDrawMethod(drm);
 }
 
-bool LayerDrawer::draw( const CoordBounds& cbArea) const{
-	glClearColor(1.0,1.0,1.0,0.0);
+bool LayerDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 	//if ( getRootDrawer()->is3D() ) {
 	//	getRootDrawer()->init3D();
 	//}
 	getZMaker()->setZOrder(getRootDrawer()->getZIndex(),getRootDrawer()->getFakeZ());
-	ComplexDrawer::draw( cbArea);
+	ComplexDrawer::draw(drawLoop, cbArea);
 	glDisable(GL_BLEND);
 	return true;
 }

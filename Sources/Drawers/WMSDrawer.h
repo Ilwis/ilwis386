@@ -13,7 +13,7 @@ namespace ILWIS {
 	public:
 		WMSDrawer(DrawerParameters *parms);
 		virtual ~WMSDrawer();
-		virtual bool draw( const CoordBounds& cbArea) const;
+		virtual bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const;
 	protected:
 		void DisplayImagePortion(CoordBounds &cb) const;
 		void DisplayTexture(CoordBounds & cb) const;

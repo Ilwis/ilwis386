@@ -48,7 +48,7 @@ void PointFeatureDrawer::addDataSource(void *f, int options) {
 	 feature = (Feature *)f;
 }
 
-bool PointFeatureDrawer::draw( const CoordBounds& cbArea) const{
+bool PointFeatureDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 
 		if ( label) {
 			Coord crdLabel = cNorm;
@@ -58,7 +58,7 @@ bool PointFeatureDrawer::draw( const CoordBounds& cbArea) const{
 			label->setCoord(crdLabel);
 		}
 
-	return PointDrawer::draw( cbArea);
+	return PointDrawer::draw(drawLoop, cbArea);
 }
 
 long PointFeatureDrawer::getRaw() const{

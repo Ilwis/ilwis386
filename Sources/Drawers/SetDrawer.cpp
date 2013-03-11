@@ -255,9 +255,9 @@ void SetDrawer::drawLegendItem(CDC *dc, const CRect& rct, double rVal) const{
 }
 
 
-bool SetDrawer::draw(int drawerIndex , const CoordBounds& cbArea) const{
+bool SetDrawer::draw(int drawerIndex, const DrawLoop drawLoop, const CoordBounds& cbArea) const{
     ILWISSingleLock sl(const_cast<CCriticalSection *>(&csAccess), TRUE,SOURCE_LOCATION);
-	SpatialDataDrawer::draw( cbArea);
+	SpatialDataDrawer::draw(drawLoop, cbArea);
 	return true;
 }
 

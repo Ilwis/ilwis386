@@ -15,7 +15,7 @@ namespace ILWIS{
 
 		GraticuleDrawer(DrawerParameters *parms);
 		virtual ~GraticuleDrawer();
-		bool draw( const CoordBounds& cbArea=CoordBounds()) const;
+		bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *pp);
 		void setGridSpacing(double v);
 		double getGridSpacing() const{ return rDist;}
@@ -43,7 +43,7 @@ namespace ILWIS{
 	public:
 		GraticuleLine(DrawerParameters *parms);
 		virtual ~GraticuleLine();
-		bool draw( const CoordBounds& cbArea=CoordBounds()) const;
+		bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *pp);
 		void addDataSource(void *c, int options = 0);
 	private:

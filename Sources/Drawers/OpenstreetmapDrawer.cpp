@@ -63,66 +63,67 @@ void OpenstreetmapDrawer::init() const
 	data->init = true;
 }
 
-bool OpenstreetmapDrawer::draw( const CoordBounds& cbArea) const {
-	drawPreDrawers(cbArea);
+bool OpenstreetmapDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const {
+	drawPreDrawers(drawLoop, cbArea);
 	CoordBounds cb = getRootDrawer()->getCoordBoundsZoom();
 	rastermap->gr()->pgOSM()->setLocatBounds(getRootDrawer()->getCoordinateSystem(), cb);
 	if (!data->init)
 		init();
-	if (textureHeap->fValid())
-	{
-		glClearColor(1.0,1.0,1.0,0.0);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA); 
-		glColor4f(1, 1, 1, transparency);
+	if ((drawLoop == drl2D && transparency != 0.0) || (drawLoop == drl3DOPAQUE && transparency == 1.0) || (drawLoop == drl3DTRANSPARENT && transparency != 1.0 && transparency != 0.0)) { // no palette used, so we dont need to test on Palette's alphaminmax
+		if (textureHeap->fValid())
+		{
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA); 
+			glColor4f(1, 1, 1, transparency);
 
-		textureHeap->ClearQueuedTextures();
+			textureHeap->ClearQueuedTextures();
 
-		bool is3D = getRootDrawer()->is3D(); 
-		if (is3D) {
-			ZValueMaker *zmaker = getZMaker();
-			double zscale = zmaker->getZScale();
-			double zoffset = zmaker->getOffset();
-			double z0 = getRootDrawer()->getZMaker()->getZ0(is3D);
+			bool is3D = getRootDrawer()->is3D(); 
+			if (is3D) {
+				ZValueMaker *zmaker = getZMaker();
+				double zscale = zmaker->getZScale();
+				double zoffset = zmaker->getOffset();
+				double z0 = getRootDrawer()->getZMaker()->getZ0(is3D);
+				glPushMatrix();
+				glScaled(1,1,zscale);
+				glTranslated(0,0,zoffset + z0);
+			}
+			glEnable(GL_TEXTURE_2D);
+			glMatrixMode(GL_TEXTURE);
 			glPushMatrix();
-			glScaled(1,1,zscale);
-			glTranslated(0,0,zoffset + z0);
-		}
-		glEnable(GL_TEXTURE_2D);
-		glMatrixMode(GL_TEXTURE);
-		glPushMatrix();
 
-		CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
+			CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
 
-		Coord c1 (cbMap.cMin);
-		Coord c2 (cbMap.cMax.x, cbMap.cMin.y);
-		Coord c3 (cbMap.cMax);
-		Coord c4 (cbMap.cMin.x, cbMap.cMax.y);
-		double clip_plane0[]={-1.0, 0.0, 0.0, cbMap.cMax.x};
-		double clip_plane1[]={1.0, 0.0, 0.0, -cbMap.cMin.x};
-		double clip_plane2[]={0.0, -1.0, 0.0, cbMap.cMax.y};
-		double clip_plane3[]={0.0, 1.0, 0.0, -cbMap.cMin.y};
-		glClipPlane(GL_CLIP_PLANE0,clip_plane0);
-		glClipPlane(GL_CLIP_PLANE1,clip_plane1);
-		glClipPlane(GL_CLIP_PLANE2,clip_plane2);
-		glClipPlane(GL_CLIP_PLANE3,clip_plane3);
-		CoordBounds cb1(Coord(-20037508.34, -20037508.34), Coord(0, 0));
-		CoordBounds cb2(Coord(0, 0), Coord(20037508.34, 20037508.34));
-		CoordBounds cb3(Coord(-20037508.34, 0), Coord(0, 20037508.34));
-		CoordBounds cb4(Coord(0, -20037508.34), Coord(20037508.34, 0));
-		DisplayImagePortion(cb1, 1);
-		DisplayImagePortion(cb2, 1);
-		DisplayImagePortion(cb3, 1);
-		DisplayImagePortion(cb4, 1);
-		glPopMatrix();
-		glMatrixMode(GL_MODELVIEW);
-		glDisable(GL_TEXTURE_2D);
-		if (is3D)
+			Coord c1 (cbMap.cMin);
+			Coord c2 (cbMap.cMax.x, cbMap.cMin.y);
+			Coord c3 (cbMap.cMax);
+			Coord c4 (cbMap.cMin.x, cbMap.cMax.y);
+			double clip_plane0[]={-1.0, 0.0, 0.0, cbMap.cMax.x};
+			double clip_plane1[]={1.0, 0.0, 0.0, -cbMap.cMin.x};
+			double clip_plane2[]={0.0, -1.0, 0.0, cbMap.cMax.y};
+			double clip_plane3[]={0.0, 1.0, 0.0, -cbMap.cMin.y};
+			glClipPlane(GL_CLIP_PLANE0,clip_plane0);
+			glClipPlane(GL_CLIP_PLANE1,clip_plane1);
+			glClipPlane(GL_CLIP_PLANE2,clip_plane2);
+			glClipPlane(GL_CLIP_PLANE3,clip_plane3);
+			CoordBounds cb1(Coord(-20037508.34, -20037508.34), Coord(0, 0));
+			CoordBounds cb2(Coord(0, 0), Coord(20037508.34, 20037508.34));
+			CoordBounds cb3(Coord(-20037508.34, 0), Coord(0, 20037508.34));
+			CoordBounds cb4(Coord(0, -20037508.34), Coord(20037508.34, 0));
+			DisplayImagePortion(cb1, 1);
+			DisplayImagePortion(cb2, 1);
+			DisplayImagePortion(cb3, 1);
+			DisplayImagePortion(cb4, 1);
 			glPopMatrix();
-		glDisable(GL_BLEND);
+			glMatrixMode(GL_MODELVIEW);
+			glDisable(GL_TEXTURE_2D);
+			if (is3D)
+				glPopMatrix();
+			glDisable(GL_BLEND);
+		}
 	}
 
-	drawPostDrawers(cbArea);
+	drawPostDrawers(drawLoop, cbArea);
 
 	return true;
 }

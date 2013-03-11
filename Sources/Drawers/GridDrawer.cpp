@@ -43,7 +43,7 @@ GridDrawer::~GridDrawer() {
 }
 
 
-bool GridDrawer::draw( const CoordBounds& cbArea) const{
+bool GridDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 	if ( !isActive() || !isValid())
 		return false;
 	ILWISSingleLock lock(csDraw, TRUE);
@@ -60,8 +60,8 @@ bool GridDrawer::draw( const CoordBounds& cbArea) const{
 		double z0 = getRootDrawer()->getZMaker()->getZ0(true);
 		glTranslated(0,0,z0);
 	}
-	ComplexDrawer::draw( cbArea);
-	if ( mode & mPLANE) {
+	ComplexDrawer::draw(drawLoop, cbArea);
+	if ( mode & mPLANE && ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE && transparency == 1.0) || (drawLoop == drl3DTRANSPARENT && transparency != 1.0))) {
 		drawPlane(cbArea);
 	}
 	if ( getRootDrawer()->is3D())
@@ -492,8 +492,8 @@ GridLine::GridLine(DrawerParameters *parms) : LineDrawer(parms,"GridLine"){
 GridLine::~GridLine(){
 }
 
-bool GridLine::draw( const CoordBounds& cbArea) const{
-	return LineDrawer::draw( cbArea);
+bool GridLine::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
+	return LineDrawer::draw(drawLoop, cbArea);
 }
 
 void GridLine::prepare(PreparationParameters *pp){

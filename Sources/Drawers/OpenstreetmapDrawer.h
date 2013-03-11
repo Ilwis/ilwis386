@@ -13,7 +13,7 @@ namespace ILWIS {
 	public:
 		OpenstreetmapDrawer(DrawerParameters *parms);
 		virtual ~OpenstreetmapDrawer();
-		virtual bool draw( const CoordBounds& cbArea) const;
+		virtual bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const;
 	protected:
 		void DisplayImagePortion(CoordBounds &cb, unsigned int zoomLevel) const;
 		void DisplayTexture(CoordBounds & cb) const;

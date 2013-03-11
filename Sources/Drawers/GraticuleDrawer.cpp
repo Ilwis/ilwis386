@@ -36,7 +36,7 @@ GraticuleDrawer::~GraticuleDrawer() {
 }
 
 
-bool GraticuleDrawer::draw( const CoordBounds& cbArea) const{
+bool GraticuleDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 	if ( !isActive() || !isValid())
 		return false;
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -46,7 +46,7 @@ bool GraticuleDrawer::draw( const CoordBounds& cbArea) const{
 		double z0 = getRootDrawer()->getZMaker()->getZ0(true);
 		glTranslated(0,0,z0);
 	}
-	ComplexDrawer::draw( cbArea);
+	ComplexDrawer::draw(drawLoop, cbArea);
 	if ( getRootDrawer()->is3D())
 		glPopMatrix();
 	glDisable(GL_BLEND);
@@ -276,8 +276,8 @@ GraticuleLine::GraticuleLine(DrawerParameters *parms) : LineDrawer(parms,"Gratic
 GraticuleLine::~GraticuleLine(){
 }
 
-bool GraticuleLine::draw( const CoordBounds& cbArea) const{
-	return LineDrawer::draw( cbArea);
+bool GraticuleLine::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
+	return LineDrawer::draw(drawLoop, cbArea);
 }
 
 void GraticuleLine::prepare(PreparationParameters *pp){
