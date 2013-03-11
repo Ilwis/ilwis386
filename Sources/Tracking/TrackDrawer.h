@@ -26,7 +26,7 @@ class TrackSetDrawer : public ComplexDrawer {
 		void prepare(PreparationParameters *parm);
 		bool isToolUseableFor(NewDrawer *drw);
 		virtual void addDataSource(void *,int options=0);
-		bool draw(const CoordBounds& cb=CoordBounds()) const;
+		bool draw(const DrawLoop drawLoop, const CoordBounds& cb=CoordBounds()) const;
 		void getTrack(vector<Coord>& crds) const;
 		long getTrackLength() const;
 

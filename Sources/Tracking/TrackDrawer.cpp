@@ -82,8 +82,8 @@ void TrackSetDrawer::load(const FileName& fnView, const String& parentSection){
 	trackerDrawProperties.pproperties.load(fnView, currentSection);
 }
 
-bool TrackSetDrawer::draw(const CoordBounds& cb) const {
-	return ComplexDrawer::draw(cb);
+bool TrackSetDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cb) const {
+	return ComplexDrawer::draw(drawLoop, cb);
 }
 
 
