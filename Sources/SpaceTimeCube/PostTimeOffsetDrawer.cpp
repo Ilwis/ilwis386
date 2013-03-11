@@ -19,7 +19,7 @@ PostTimeOffsetDrawer::~PostTimeOffsetDrawer() {
 void PostTimeOffsetDrawer::prepare(PreparationParameters *pp) {
 }
 
-bool PostTimeOffsetDrawer::draw(const CoordBounds& cbArea) const{
+bool PostTimeOffsetDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 	if ( !isActive() || !isValid())
 		return false;
 	glPopMatrix();

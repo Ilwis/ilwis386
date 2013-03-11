@@ -40,7 +40,7 @@ void PreTimeOffsetDrawer::SetTimeOffsetVariable(double * _timeOffset) {
 	timeOffset = _timeOffset;
 }
 
-bool PreTimeOffsetDrawer::draw(const CoordBounds& cbArea) const{
+bool PreTimeOffsetDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 	if ( !isActive() || !isValid() || timeOffset == 0)
 		return false;
 	glPushMatrix();

@@ -12,7 +12,7 @@ namespace ILWIS {
 
 		PostTimeOffsetDrawer(DrawerParameters *parms);
 		virtual ~PostTimeOffsetDrawer();
-		bool draw( const CoordBounds& cbArea=CoordBounds()) const;
+		bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *pp);
 	};
 }

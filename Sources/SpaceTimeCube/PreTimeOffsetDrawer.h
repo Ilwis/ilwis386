@@ -13,7 +13,7 @@ namespace ILWIS {
 
 		PreTimeOffsetDrawer(DrawerParameters *parms);
 		virtual ~PreTimeOffsetDrawer();
-		bool draw( const CoordBounds& cbArea=CoordBounds()) const;
+		bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *pp);
 		void SetTimeOffsetVariable(double * _timeOffset);
 	protected:
