@@ -791,6 +791,12 @@ void InternFuncDesc::CreateInternFuncs(Array<InternFuncDesc*>& fdl)
   fdl &= new InternFuncDesc("time",  (InternalFunc)time_so, 0,
                             RealDomain,  (FuncCheckDomains)fStringCompatibleDomains,
                             1, vtVALUE, vtSTRING );
+  fdl &= new InternFuncDesc("time2string",  (InternalFunc)time2string_so, 0,
+                            StringDomain,  (FuncCheckDomains)(FuncCheckDomains)fValueDomains,
+                            1, vtSTRING, vtVALUE );
+  fdl &= new InternFuncDesc("duration",  (InternalFunc)duration_so, 0,
+                            RealDomain,  (FuncCheckDomains)fStringCompatibleDomains,
+                            1, vtVALUE, vtSTRING );
 
   fdl &= new InternFuncDesc(operPLUS,   (InternalFunc)add2_so, 0,
                             AddDomains, (FuncCheckDomains)fValueDomains,

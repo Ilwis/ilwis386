@@ -142,10 +142,46 @@ void isundefraw_so(StackObject* soRes, const StackObject* so)
   }
 }
 
+void time2string_so(StackObject* soRes, const StackObject* so)
+{
+	RealBuf buf;
+	StringBuf bufRes;
+	so->GetVal(buf);
+	bufRes.Size(soRes->iSize());
+	for (short i=0; i<soRes->iSize(); i++) {
+		if (buf[i] == rUNDEF || buf[i] == iUNDEF || buf[i] == shUNDEF){
+			bufRes[i] = "?";
+		}
+		else{
+			ILWIS::Time t(buf[i]);
+			bufRes[i] = t.toString();
+		}
+	}
+	soRes->PutVal(bufRes);
+}
+
 void time_so(StackObject* soRes, const StackObject* so)
 {
 	StringBuf buf;
-	LongBuf bufRes;
+	RealBuf bufRes;
+	so->GetVal(buf);
+	bufRes.Size(soRes->iSize());
+	for (short i=0; i<soRes->iSize(); i++) {
+		if (buf[i] == sUNDEF){
+			bufRes[i] = 0;
+		}
+		else{
+			bufRes[i] = (double)ILWIS::Time(buf[i]);
+			//soRes->dvs.SetDomain(Domain("d:\\Data\\ILWIS\\at2.dom"));
+		}
+	}
+	soRes->PutVal(bufRes);
+}
+
+void duration_so(StackObject* soRes, const StackObject* so)
+{
+	StringBuf buf;
+	RealBuf bufRes;
 	so->GetVal(buf);
 	bufRes.Size(soRes->iSize());
 	for (short i=0; i<soRes->iSize(); i++) {

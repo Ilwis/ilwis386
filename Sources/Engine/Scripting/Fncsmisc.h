@@ -46,6 +46,10 @@ void ifnotundef3_so(StackObject* soRes, const StackObject* so0, const StackObjec
 
 void time_so(StackObject* soRes, const StackObject* so);
 
+void time2string_so(StackObject* soRes, const StackObject* so);
+
+void duration_so(StackObject* soRes, const StackObject* so);
+
 void length_so(StackObject* soRes, const StackObject* so);
 
 void substr_so(StackObject* soRes, const StackObject* so0, const StackObject* so1, const StackObject* so2);
