@@ -130,10 +130,10 @@ void SimpleDrawer::drawExtrusion(const Coord& c1, const Coord& c2, double z, int
 		glEnd();
 	} else if ( option & NewDrawer::sdoFootPrint) {
 		//double z0 = ((ComplexDrawer *)getParentDrawer())->getZMaker()->getZ0(getRootDrawer()->is3D());
-			glBegin(GL_LINE_STRIP);
-				glVertex3f( c1.x, c1.y, z);	
-				glVertex3f( c2.x, c2.y, z);
-			glEnd();
+		glBegin(GL_LINE_STRIP);
+			glVertex3f( c1.x, c1.y, z);	
+			glVertex3f( c2.x, c2.y, z);
+		glEnd();
 	}
 }
 

@@ -22,7 +22,7 @@ namespace ILWIS {
 		virtual void prepare(PreparationParameters *pp);
 		String addDrawer(NewDrawer *drw, bool overrule=true);
 		void addCoordBounds(const CoordSystem& _cs, const CoordBounds& cb, bool overrule=true);
-		bool draw( const CoordBounds& cb=CoordBounds()) const;
+		bool draw(const CoordBounds& cb=CoordBounds()) const;
 		void timedEvent(UINT timerID);
 		String store(const FileName& fnView, const String parenSection) const;
 		void load(const FileName& fnView, const String parenSection);

@@ -145,10 +145,12 @@ void  TextDrawer::prepare(PreparationParameters *pp){
 	SimpleDrawer::prepare(pp);
 }
 
-bool TextDrawer::draw( const CoordBounds& cbArea) const{
+bool TextDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 	TextLayerDrawer *set = dynamic_cast<TextLayerDrawer *>(parentDrawer);
-	if ( set && set->getFont()) {
-		set->getFont()->renderText(c, text);
+	if (set) {
+		OpenGLText * font = set->getFont();
+		if ( (font != 0) && ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE && font->getColor().alpha() == 255) || (drawLoop == drl3DTRANSPARENT && font->getColor().alpha() != 255)))
+			font->renderText(c, text);
 	}
 	return true;
 }

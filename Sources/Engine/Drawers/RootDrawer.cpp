@@ -143,9 +143,9 @@ Note: calls to RootDrawer::draw are meaningless without an OpenGL context in the
 Therefore all calls to RootDrawer::draw must be preceded by a call to DrawerContext::TakeContext and followed by a call to ReleaseContext
 */
 
-bool RootDrawer::draw( const CoordBounds& cb) const{
+bool RootDrawer::draw(const CoordBounds& cb) const{
 	if ( topDrawer ) {
-		topDrawer->draw();
+		topDrawer->draw(drl2D);
 	}
 	else {
 		// Setup
@@ -177,16 +177,28 @@ bool RootDrawer::draw( const CoordBounds& cb) const{
 		}
 
 		// Draw
-		const_cast<RootDrawer *>(this)->setZIndex(0);
-		// due to the way how transparency works in opengl the backgroundrawer has to be drawn at different moments depending on is3D or not)
-		if (!is3D())
-			backgroundDrawer->draw(cb);
-		ComplexDrawer::draw( cb);
-		if (is3D())
-			backgroundDrawer->draw(cb);
+		glClearColor(1.0,1.0,1.0,0.0);
+		if (is3D()) {
+			// see http://www.opengl.org/archives/resources/faq/technical/transparency.htm
+			// "When using depth buffering in an application, you need to be careful about the order in which you render primitives. Fully opaque primitives need to be rendered first, followed by partially opaque primitives in back-to-front order. If you don't render primitives in this order, the primitives, which would otherwise be visible through a partially opaque primitive, might lose the depth test entirely."
+			// The lines below is as good as it gets for now, dividing the drawers in a opaque and a transparent group, and drawing the opaques first.
+			// We work around the lack of a "back to front order" (which is too costly to compute) by disabling depth-buffer-writing in the transparent stage (so transparent items will never obstruct eachother).
+			// In theory the performance impact should be minimal, as almost all draw() calls only react to one of the two calls below, making the two calls complementary (with currently only one exception, which is when drawing a raster with both opaque and transparent pixels).
+			const_cast<RootDrawer *>(this)->setZIndex(0);
+			backgroundDrawer->draw(drl3DOPAQUE, cb);
+			ComplexDrawer::draw(drl3DOPAQUE, cb);
+			const_cast<RootDrawer *>(this)->setZIndex(0);
+			glDepthMask(GL_FALSE);
+			backgroundDrawer->draw(drl3DTRANSPARENT, cb);
+			ComplexDrawer::draw(drl3DTRANSPARENT, cb);
+			glDepthMask(GL_TRUE);
+		} else {
+			const_cast<RootDrawer *>(this)->setZIndex(0);
+			backgroundDrawer->draw(drl2D, cb);
+			ComplexDrawer::draw(drl2D, cb);
+		}
 	}
 	return true;
-
 }
 
 int RootDrawer::getZIndex() const {

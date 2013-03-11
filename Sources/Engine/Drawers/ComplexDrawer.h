@@ -25,7 +25,7 @@ class _export ComplexDrawer : public NewDrawer {
 		virtual void setSubType(const String & sSubType);
 		RootDrawer *getRootDrawer();
 		RootDrawer *getRootDrawer() const;
-		bool draw( const CoordBounds& cb=CoordBounds()) const;
+		bool draw(const DrawLoop drawLoop, const CoordBounds& cb=CoordBounds()) const;
 		void prepare(PreparationParameters *);
 		virtual void prepareChildDrawers(PreparationParameters *);
 		int getDrawerCount(int types=dtMAIN) const;
@@ -130,8 +130,8 @@ class _export ComplexDrawer : public NewDrawer {
 		void displayOptionTransparency(CWnd *parent) ;
 		void setInfoMode(void *v,LayerTreeView *tv);
 		NewDrawer *loadDrawer(const FileName& fnView, const String& drawerSection);
-		bool drawPreDrawers(const CoordBounds& cb) const;
-		bool drawPostDrawers(const CoordBounds& cb) const;
+		bool drawPreDrawers(const DrawLoop drawLoop, const CoordBounds& cb) const;
+		bool drawPostDrawers(const DrawLoop drawLoop, const CoordBounds& cb) const;
 	private:
 		void init();
 	} ;

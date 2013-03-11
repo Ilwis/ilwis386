@@ -41,7 +41,7 @@ public:
 	TextDrawer(DrawerParameters *parms);
 	~TextDrawer();
 	virtual void prepare(PreparationParameters *pp);
-	bool draw( const CoordBounds& cbArea=CoordBounds() ) const;
+	bool draw( const DrawLoop drawLoop, const CoordBounds& cbArea=CoordBounds() ) const;
 	void addDataSource(void *);
 	void setCoord(const Coord& crd);
 	void setText(const String& txt) { text = txt;}

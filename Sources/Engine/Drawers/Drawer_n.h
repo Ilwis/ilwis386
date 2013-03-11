@@ -40,6 +40,7 @@ namespace ILWIS {
 	public:
 		enum DrawMethod	{ drmNOTSET, drmINIT, drmRPR, drmSINGLE, drmMULTIPLE, drmIMAGE,	drmCOLOR, drmBOOL, drmBYATTRIBUTE, drmARROW, drmGRAPH };
 		enum DrawColors { drcLIGHT, drcNORMAL, drcDARK, drcGREY };
+		enum DrawLoop { drl2D, drl3DOPAQUE, drl3DTRANSPARENT };
 		enum PreparationType{ptNONE=0,ptRENDER=1,ptGEOMETRY=2,ptINITOPENGL=4,ptUI=8,pt3D=16,ptANIMATION=32,ptRESTORE=64,ptOFFSCREENSTART=128,ptOFFSCREENEND=256,ptREDRAW=512,ptNEWCSY=1024,ptALL=4294967295};
 		enum DataSourceMergeOptions{dsmEXTENDCB=1};
 		enum UICode{ucNONE=0, ucNOREPRESENTATION=2, ucNOINFO=4, ucNOMASK=8, ucNOMULTICOLOR=16,ucNOTRANSPARENCY=32, ucALL=4294967295};
@@ -52,7 +53,7 @@ namespace ILWIS {
 		enum DataSourceOption{dsoNONE=0, dsoEXTENDBOUNDS=1};
 
 		virtual ~NewDrawer() {}
-		virtual bool draw( const CoordBounds& cb=CoordBounds()) const = 0;
+		virtual bool draw( const DrawLoop, const CoordBounds& cb=CoordBounds()) const = 0;
 		virtual void prepare(PreparationParameters *) =0;
 		virtual String getType() const =0;
 		virtual String getSubType() const =0;

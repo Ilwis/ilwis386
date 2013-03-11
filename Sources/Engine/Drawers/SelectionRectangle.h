@@ -13,7 +13,7 @@ namespace ILWIS {
 	public:
 		SelectionRectangle(DrawerParameters *parms);
 		virtual ~SelectionRectangle();
-		virtual bool draw( const CoordBounds& cbArea=CoordBounds()) const;
+		virtual bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea=CoordBounds()) const;
 		virtual void prepare(PreparationType t=ptALL,CDC *dc = 0);
 		void setRectangle(const CRect & rct);
 		void setColor(const Color& clr);

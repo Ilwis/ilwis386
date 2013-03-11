@@ -16,7 +16,7 @@ namespace ILWIS {
 		String getType() const;
 		virtual String getSubType() const;
 		virtual void setSubType(const String & sSubType);
-		bool draw( const CoordBounds& cb=CoordBounds()) const = 0;
+		bool draw(const DrawLoop drawLoop, const CoordBounds& cb=CoordBounds()) const = 0;
 		void prepare(PreparationParameters *);
 		virtual void addDataSource(void *,int options=0) {};
 		virtual void removeDataSource(void *){}

@@ -118,7 +118,7 @@ void ComplexDrawer::addPreDrawer(int order, NewDrawer *drw) {
 	drawersById[drw->getId()] = drw;
 }
 
-bool ComplexDrawer::drawPreDrawers(const CoordBounds& cb) const{
+bool ComplexDrawer::drawPreDrawers(const DrawLoop drawLoop, const CoordBounds& cb) const{
 	if (!isActive())
 		return false;
 
@@ -126,30 +126,30 @@ bool ComplexDrawer::drawPreDrawers(const CoordBounds& cb) const{
 		for(map<String,NewDrawer *>::const_iterator cur = preDrawers.begin(); cur != preDrawers.end(); ++cur) {
 			NewDrawer *drw = (*cur).second;
 			if ( drw)
-				drw->draw( cb);
+				drw->draw(drawLoop, cb);
 		}
 	}
 	return true;
 }
 
 
-bool ComplexDrawer::draw( const CoordBounds& cb) const{
+bool ComplexDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cb) const{
 	if (!isActive())
 		return false;
 	getRootDrawer()->setZIndex(1 + getRootDrawer()->getZIndex());
-	drawPreDrawers(cb);
+	drawPreDrawers(drawLoop, cb);
 	
 
-	double total = 0;
+	//double total = 0;
 	//clock_t start = clock();
 	for(int i=0; i < drawers.size(); ++i) {
 		NewDrawer *drw = drawers[i];
 		if (  drw && drw->isActive()) {
-			drw->draw( cb);
+			drw->draw(drawLoop, cb);
 		}
 	}
 
-	drawPostDrawers(cb);
+	drawPostDrawers(drawLoop, cb);
 
 /*	clock_t end = clock();
 		total =  1000 *(double)(end - start) / CLOCKS_PER_SEC;
@@ -158,7 +158,7 @@ bool ComplexDrawer::draw( const CoordBounds& cb) const{
 	return true;
 }
 
-bool ComplexDrawer::drawPostDrawers(const CoordBounds& cb) const{
+bool ComplexDrawer::drawPostDrawers(const DrawLoop drawLoop, const CoordBounds& cb) const{
 	if (!isActive())
 		return false;
 
@@ -166,7 +166,7 @@ bool ComplexDrawer::drawPostDrawers(const CoordBounds& cb) const{
 		for(map<String,NewDrawer *>::const_iterator cur = postDrawers.begin(); cur != postDrawers.end(); ++cur) {
 			NewDrawer *drw = (*cur).second;
 			if ( drw)
-				drw->draw( cb);
+				drw->draw(drawLoop, cb);
 		}
 	}
 	return true;

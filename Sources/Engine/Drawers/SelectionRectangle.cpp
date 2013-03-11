@@ -20,7 +20,9 @@ clr(Color(0,100,255))
 SelectionRectangle::~SelectionRectangle() {
 }
 
-bool SelectionRectangle::draw( const CoordBounds& cb) const{
+bool SelectionRectangle::draw(const DrawLoop drawLoop, const CoordBounds& cb) const{
+	if (drawLoop == drl3DTRANSPARENT)
+		return true;
 	glPushMatrix(); // GL_MODELVIEW
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
