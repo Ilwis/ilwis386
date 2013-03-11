@@ -104,11 +104,11 @@ void CubeDrawer::SetTimePosVariables(double * _timePos, String * _sTimePosText) 
 	sTimePosText = _sTimePosText;
 }
 
-bool CubeDrawer::draw(const CoordBounds& cbArea) const{
+bool CubeDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 	if ( !isActive() || !isValid())
 		return false;
 
-	drawPreDrawers(cbArea);
+	drawPreDrawers(drawLoop, cbArea);
 
 	glPushMatrix();
 	glTranslated(cube.cMin.x + cube.width() / 2.0, cube.cMin.y + cube.height() / 2.0, cube.cMin.z + cube.altitude() / 2.0);
@@ -120,27 +120,39 @@ bool CubeDrawer::draw(const CoordBounds& cbArea) const{
 	if (properties["cube"].visible) {
 		Color clr = properties["cube"].color;
 		clr.m_transparency = properties["cube"].transparency * 255;
-		glColor4f(clr.redP(), clr.greenP(), clr.blueP(), clr.alphaP());
-		drawCube();
+		if ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE && clr.alpha() == 255) || (drawLoop == drl3DTRANSPARENT && clr.alpha() != 255)) {
+			glColor4f(clr.redP(), clr.greenP(), clr.blueP(), clr.alphaP());
+			drawCube();
+		}
 	}
 	if (properties["ticks"].visible) {
 		Color clr = properties["ticks"].color;
 		clr.m_transparency = properties["ticks"].transparency * 255;
-		glColor4f(clr.redP(), clr.greenP(), clr.blueP(), clr.alphaP());
-		drawTicMarks();
+		if ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE && clr.alpha() == 255) || (drawLoop == drl3DTRANSPARENT && clr.alpha() != 255)) {
+			glColor4f(clr.redP(), clr.greenP(), clr.blueP(), clr.alphaP());
+			drawTicMarks();
+		}
 	}
 	csFont->Lock();
-	if (properties["labels"].visible)
-		drawLabels();
+	if (properties["labels"].visible) {
+		Color clr = properties["labels"].color;
+		clr.m_transparency = properties["labels"].transparency * 255;
+		if ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE && clr.alpha() == 255) || (drawLoop == drl3DTRANSPARENT && clr.alpha() != 255))
+			drawLabels(clr);
+	}
 	if (properties["coordinates"].visible) {
-		drawCoords();
-		drawTimes();
+		Color clr = properties["coordinates"].color;
+		clr.m_transparency = properties["coordinates"].transparency * 255;
+		if ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE && clr.alpha() == 255) || (drawLoop == drl3DTRANSPARENT && clr.alpha() != 255)) {
+			drawCoords(clr);
+			drawTimes(clr);
+		}
 	}
 	csFont->Unlock();
 
 	glPopMatrix();
 
-	drawPostDrawers(cbArea);
+	drawPostDrawers(drawLoop, cbArea);
 	return true;
 }
 
@@ -222,18 +234,14 @@ void CubeDrawer::drawTicMarks() const {
 	}
 }
 
-void CubeDrawer::drawLabels() const {
-	Color clr = properties["labels"].color;
-	clr.m_transparency = properties["labels"].transparency * 255;
+void CubeDrawer::drawLabels(const Color & clr) const {
 	font->setColor(clr);
 	renderText(font,Coordinate(0.0, -1.1, -1.1), "X");
 	renderText(font,Coordinate(-1.1, 0.0, -1.1), "Y");
 	renderText(font,Coordinate(-1.1, -1.1, 0.0), "T");
 }
 
-void CubeDrawer::drawCoords() const {
-	Color clr = properties["coordinates"].color;
-	clr.m_transparency = properties["coordinates"].transparency * 255;
+void CubeDrawer::drawCoords(const Color & clr) const {
 	mediumFont->setColor(clr);
 	renderText(mediumFont,Coordinate(-0.9, -1.1, -1.1), sxMin);
 	renderText(mediumFont,Coordinate(0.9, -1.1, -1.1), sxMax);
@@ -247,9 +255,7 @@ void CubeDrawer::drawCoords() const {
 	//renderText(mediumFont,Coordinate(-1.0,1.0,-1.05), String("(%S, %S)", syMin, sxMax));
 }
 
-void CubeDrawer::drawTimes() const {
-	Color clr = properties["coordinates"].color;
-	clr.m_transparency = properties["coordinates"].transparency * 255;
+void CubeDrawer::drawTimes(const Color & clr) const {
 	mediumFont->setColor(clr);
 	renderText(mediumFont,Coordinate(-1.1, -1.1, -0.9), stMin);
 	renderText(mediumFont,Coordinate(-1.1, -1.1, 0.9), stMax);

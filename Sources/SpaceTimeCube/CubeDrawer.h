@@ -53,16 +53,16 @@ namespace ILWIS {
 
 		CubeDrawer(DrawerParameters *parms);
 		virtual ~CubeDrawer();
-		bool draw( const CoordBounds& cbArea=CoordBounds()) const;
+		bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *pp);
 		GeneralDrawerProperties *getProperties();
 		void SetTimePosVariables(double * _timePos, String * _sTimePosText);
 	protected:
 		void drawCube() const;
 		void drawTicMarks() const;
-		void drawLabels() const;
-		void drawCoords() const;
-		void drawTimes() const;
+		void drawLabels(const Color & clr) const;
+		void drawCoords(const Color & clr) const;
+		void drawTimes(const Color & clr) const;
 		void renderText(OpenGLText *font, const Coordinate & c, const String & text, bool center=false) const;
 		String store(const FileName& fnView, const String& parentSection) const;
 		void load(const FileName& fnView, const String& currentSection);
