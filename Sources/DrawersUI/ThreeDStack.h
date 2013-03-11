@@ -41,7 +41,7 @@ namespace ILWIS {
 	public:
 		Cursor3DDrawer(ILWIS::DrawerParameters *parms);
 		~Cursor3DDrawer();
-		virtual bool draw( const CoordBounds& cbArea=CoordBounds()) const;
+		virtual bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *);
 		private:
 	};

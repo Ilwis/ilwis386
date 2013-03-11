@@ -97,7 +97,7 @@ namespace ILWIS {
 	public:
 		MeasurerLine(ILWIS::DrawerParameters *parms, DistanceMeasurer * _dm);
 		~MeasurerLine();
-		virtual bool draw( const CoordBounds& cbArea=CoordBounds()) const;
+		virtual bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *);
 		void setDistance(double r) {rDist = r;}
 		void setCenter(const Coord& crd) { center = crd; }

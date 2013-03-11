@@ -91,15 +91,14 @@ MeasurerLine::~MeasurerLine() {
 }
 
 
-bool MeasurerLine::draw( const CoordBounds& cbArea) const{
+bool MeasurerLine::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 	if (!isActive())
 		return false;
-	glClearColor(1.0,1.0,1.0,0.0);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDisable(GL_DEPTH_TEST);
 	if (useMeasureLine) {
 		glEnable(GL_BLEND);
-		LineDrawer::draw(cbArea);
+		LineDrawer::draw(drawLoop, cbArea);
 		glDisable(GL_BLEND);
 	}
 	double transp = getTransparency(); 
@@ -458,7 +457,6 @@ void DistanceMeasurer::Report()
 
 void DistanceMeasurer::drawLine()
 {
-	//glClearColor(1.0,1.0,1.0,0.0);
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//glEnable(GL_BLEND);
 	//glColor3d(1,1,1);

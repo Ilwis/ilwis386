@@ -62,7 +62,7 @@ private:
 	public:
 		TrackMarker(ILWIS::DrawerParameters *parms,TrackLine *_line);
 		~TrackMarker();
-		virtual bool draw( const CoordBounds& cbArea=CoordBounds()) const;
+		virtual bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *);
 		private:
 			TrackLine *line;
@@ -72,7 +72,7 @@ private:
 	public:
 		TrackLine(ILWIS::DrawerParameters *parms);
 		~TrackLine();
-		virtual bool draw( const CoordBounds& cbArea=CoordBounds()) const;
+		virtual bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *);
 	private:
 	};

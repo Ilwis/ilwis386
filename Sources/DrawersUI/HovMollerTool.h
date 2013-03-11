@@ -54,7 +54,7 @@ private:
 	public:
 		HTrackLine(ILWIS::DrawerParameters *parms);
 		~HTrackLine();
-		virtual bool draw( const CoordBounds& cbArea=CoordBounds()) const;
+		virtual bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *);
 	private:
 	};
@@ -63,7 +63,7 @@ private:
 	public:
 		HTrackMarker(ILWIS::DrawerParameters *parms);
 		~HTrackMarker();
-		virtual bool draw( const CoordBounds& cbArea=CoordBounds()) const;
+		virtual bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *);
 		private:
 	};

@@ -35,11 +35,10 @@ Cursor3DDrawer::~Cursor3DDrawer() {
 }
 
 
-bool Cursor3DDrawer::draw( const CoordBounds& cbArea) const{
-	glClearColor(1.0,1.0,1.0,0.0);
+bool Cursor3DDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
-	PointDrawer::draw(cbArea);
+	PointDrawer::draw(drawLoop, cbArea);
 	glDisable(GL_BLEND);
 
 	return true;
