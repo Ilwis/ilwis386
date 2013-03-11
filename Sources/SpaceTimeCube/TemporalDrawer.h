@@ -5,7 +5,7 @@
 
 namespace ILWIS {
 
-class TemporalDrawer {
+class _export TemporalDrawer {
 public:
 	TemporalDrawer();
 	virtual ~TemporalDrawer();

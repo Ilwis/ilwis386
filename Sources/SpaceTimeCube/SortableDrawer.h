@@ -4,7 +4,7 @@
 
 namespace ILWIS {
 
-class SortableDrawer {
+class _export SortableDrawer {
 public:
 	SortableDrawer();
 	virtual ~SortableDrawer();

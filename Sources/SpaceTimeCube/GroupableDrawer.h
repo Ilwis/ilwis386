@@ -4,7 +4,7 @@
 
 namespace ILWIS {
 
-class GroupableDrawer {
+class _export GroupableDrawer {
 public:
 	GroupableDrawer();
 	virtual ~GroupableDrawer();

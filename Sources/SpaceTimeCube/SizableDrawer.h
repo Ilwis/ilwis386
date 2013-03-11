@@ -6,7 +6,7 @@ namespace ILWIS {
 
 struct PointProperties;
 
-class SizableDrawer {
+class _export SizableDrawer {
 public:
 	SizableDrawer();
 	virtual ~SizableDrawer();
