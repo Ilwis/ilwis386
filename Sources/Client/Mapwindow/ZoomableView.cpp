@@ -657,24 +657,29 @@ void ZoomableView::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 
 BOOL ZoomableView::OnMouseWheel(UINT nFlags, short zDelta, CPoint point) 
 {
-	bool fControl = nFlags & MK_CONTROL ? true : false;
 	bool fShift = nFlags & MK_SHIFT ? true : false;
 	MapCompositionDoc *mcd = (MapCompositionDoc *)GetDocument();
-	fControl = fControl || (mcd->rootDrawer->is3D() && iActiveTool == ID_PANAREA);
-	
-	if (!fControl)
-		if (!fShift)
-			vertPageMove(zDelta > 0 ? -1 : 1);
-		else
-			horzPageMove(zDelta > 0 ? -1 : 1);
-	else
+
+	if (mcd->rootDrawer->is3D()) {
 		if (!fShift) {
 			ScreenToClient(&point);
 			if ( zDelta > 0)
 				ZoomInPnt(point);
 			else
 				ZoomOutPnt(point);
+		} else {
+			ScreenToClient(&point);
+			if ( zDelta > 0)
+				ZoomOutPnt(point);
+			else
+				ZoomInPnt(point);
 		}
+	} else {
+		if (!fShift)
+			vertPageMove(zDelta > 0 ? -1 : 1);
+		else
+			horzPageMove(zDelta > 0 ? -1 : 1);
+	}
 	
 	return TRUE;
 }
