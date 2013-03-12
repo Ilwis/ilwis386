@@ -57,8 +57,8 @@
 #include "Engine\Base\DataObjects\ObjectStructure.h"
 
 #include "Client\Mapwindow\MapPaneView.h" // for MapPaneView
+#include "Engine\Drawers\SpatialDataDrawer.h"
 
-#include "Engine\Map\Segment\Seg.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // CriteriaTreeDoc
@@ -597,72 +597,13 @@ void CriteriaTreeDoc::Serialize(CArchive& ar)
 	}
 }
 
-// Lister that will accept any vector map, and for raster maps anyone with a georef that "fits"
+// Lister that will accept any new style (ILWIS 3.8 and higher) MapView
 
-class BaseMapListerGeoRef: public ObjectExtLister
+class MapViewLister: public ObjectExtLister
 {
 public:
-	BaseMapListerGeoRef(const FileName& fnGeoRef, bool fAccMapList = false)
-		: ObjectExtLister(".mpr.mps.mpa.mpp.mpl"), fnGrf(fnGeoRef)
-		, fAcceptMapList(fAccMapList)
-	{}
-	virtual bool fOK(const FileName& fnMap, const String& sColName)
-	{
-		// Reject any object that is not a Map or MapList
-		if (! (fCIStrEqual(fnMap.sExt , ".mpr") ||
-					 fCIStrEqual(fnMap.sExt , ".mps") ||
-					 fCIStrEqual(fnMap.sExt , ".mpa") ||
-					 fCIStrEqual(fnMap.sExt , ".mpp") ||
-					 fCIStrEqual(fnMap.sExt , ".mpl")) )  // allow MapList bands
-			return false;
-
-		bool fCheckObjectSelf = sCHECK_OBJECT_ONLY == sColName;
-		// fCheckObjectSelf == true means the user clicked (selected) an item
-		// fCheckObjectSelf == false means the tree is filling/expanding
-
-		if (!fAcceptMapList && fCheckObjectSelf && fCIStrEqual(fnMap.sExt, ".mpl"))
-			return false; // selection of maplist itself isn't allowed - force selection of one map
-
-		FileName fnBand = fnMap;
-		if (fCIStrEqual(fnMap.sExt , ".mpl") && fnBand.sSectionPostFix.length() == 0)
-		{
-			long iBands = 0;
-			ObjectInfo::ReadElement("MapList", "Maps", fnMap, iBands);
-			if (iBands == 0)
-				return false;
-
-			// Select the first band in the maplist as Map to check the domain
-			long iOffset = 0;  // Initialize to get rid of warning
-			ObjectInfo::ReadElement("MapList", "Offset", fnMap, iOffset);  // Offset is read properly
-			String sKey = String("Map%li", iOffset);
-			ObjectInfo::ReadElement("MapList", sKey.c_str(), fnMap, fnBand);
-		}
-		
-		// fnBand contains the map to be checked
-
-		FileName fnGeoRef;
-		if (ObjectInfo::ReadElement("Map", "GeoRef", fnBand, fnGeoRef))
-		{
-			if (fnGeoRef.fExist())
-				return (fnGrf == fnGeoRef);
-			else
-				return true; // Maps with only vector layers are always accepted
-		}
-		else
-			return true; // Maps with only vector layers are always accepted
-	}
-private:
-	const FileName fnGrf;
-	bool fAcceptMapList;
-};
-
-// Lister that will accept any mapview with a georef that "fits"
-
-class MapViewListerGeoRef: public ObjectExtLister
-{
-public:
-	MapViewListerGeoRef(const FileName& fnGeoRef)
-		: ObjectExtLister(".mpv"), fnGrf(fnGeoRef)
+	MapViewLister()
+	: ObjectExtLister(".mpv")
 	{}
 	virtual bool fOK(const FileName& fnMapView, const String&)
 	{
@@ -670,48 +611,25 @@ public:
 		if (! (fCIStrEqual(fnMapView.sExt , ".mpv")))
 			return false;
 
-		bool fRasterLayerFound = false;
-		int iLayers;
-		if (ObjectInfo::ReadElement("MapView", "Layers", fnMapView, iLayers))
-		{
-			int iCurrentLayer = 1;
-			while (!fRasterLayerFound && (iCurrentLayer <= iLayers))
-			{
-				String sType;
-				String sSection("Layer%i", iCurrentLayer);
-				if (ObjectInfo::ReadElement(sSection.c_str(), "Type", fnMapView, sType))
-					if ("MapDrawer" == sType)
-						fRasterLayerFound = true;
-				++iCurrentLayer;
-			}
-
-			if (fRasterLayerFound)
-			{
-				FileName fnGeoRef;
-				if (ObjectInfo::ReadElement("MapView", "GeoRef", fnMapView, fnGeoRef))
-				{
-					if (fnGeoRef.fExist())
-						return (fnGrf == fnGeoRef);
-					else
-						return true; // MapViews with only vector layers are always accepted
-				}
-				else
-					return true; // MapViews with only vector layers are always accepted
-			}
-			else
-				return true; // MapViews with only vector layers are always accepted
-		}
-		else
-			return false; // invalid MapView (no layers defined)
+		String sType;
+		if (ObjectInfo::ReadElement("Ilwis", "Type", fnMapView, sType)) {
+			if (sType == "MapView") {
+				int iDrawerCount;
+				if (ObjectInfo::ReadElement("RootDrawer", "DrawerCount", fnMapView, iDrawerCount)) {
+					return iDrawerCount > 0;
+				} else
+					return false; // invalid MapView (old style MapView, or no layers defined)
+			} else
+				return false; // not a MapView
+		} else
+			return false; // not an ILWIS file
 	}
-private:
-	const FileName fnGrf;
 };
 
 class OverlayMapsForm: public FormWithDest
 {
 public:
-  OverlayMapsForm(CWnd* wPar, int& iOption, String& sOverlayMap, String& sMapViewTemplate, FileName fnGrf)
+  OverlayMapsForm(CWnd* wPar, int& iOption, String& sOverlayMap, String& sMapViewTemplate)
     : FormWithDest(wPar, TR("Map Display Overlay Options"))
 	{
 		iImg = IlwWinApp()->iImage(".mpv");
@@ -725,8 +643,8 @@ public:
 			sOverlayMap = "";
 		if (!FileName(sMapViewTemplate).fExist())
 			sMapViewTemplate = "";
-		new FieldDataType(rb2, "", &sOverlayMap, new BaseMapListerGeoRef(fnGrf), true);
-		new FieldDataType(rb3, "", &sMapViewTemplate, new MapViewListerGeoRef(fnGrf), true);
+		new FieldDataType(rb2, "", &sOverlayMap, ".mpr.mps.mpa.mpp.mpl", true);
+		new FieldDataType(rb3, "", &sMapViewTemplate, new MapViewLister(), true);
 
 		create();
 	}
@@ -734,23 +652,20 @@ public:
 
 void CriteriaTreeDoc::OnOverlayMaps()
 {
-	if (0 != ptrGrf() && ptrGrf()->fValid())
+	String sOverlayMap = m_fnOverlayMap.sFullPathQuoted();
+	String sOverlayMapViewTemplate = m_fnOverlayMapViewTemplate.sFullPathQuoted();
+	OverlayMapsForm frm (wndGetActiveView(), m_iOverlayMapsOption, sOverlayMap, sOverlayMapViewTemplate);
+	if (frm.fOkClicked())
 	{
-		String sOverlayMap = m_fnOverlayMap.sFullPathQuoted();
-		String sOverlayMapViewTemplate = m_fnOverlayMapViewTemplate.sFullPathQuoted();
-		OverlayMapsForm frm (wndGetActiveView(), m_iOverlayMapsOption, sOverlayMap, sOverlayMapViewTemplate, ptrGrf()->ptr()->fnObj);
-		if (frm.fOkClicked())
-		{
-			m_fnOverlayMap = sOverlayMap;
-			m_fnOverlayMapViewTemplate = sOverlayMapViewTemplate;
-			SetModifiedFlag();
-		}
+		m_fnOverlayMap = sOverlayMap;
+		m_fnOverlayMapViewTemplate = sOverlayMapViewTemplate;
+		SetModifiedFlag();
 	}
 }
 
 void CriteriaTreeDoc::OnUpdateOverlayMaps(CCmdUI* pCmdUI)
 {
-	pCmdUI->Enable(0 != ptrGrf() && ptrGrf()->fValid());
+	pCmdUI->Enable(true);
 }
 
 // class MapCompositionDocEx extends MapCompositionDoc with one function to apply an external MapView as a template
@@ -763,47 +678,57 @@ class MapCompositionDocEx: public MapCompositionDoc
 public:
 	void ApplyMapViewTemplate(const MapView& mapview)
 	{
-		//try {
-		//	if (!mapview.fValid())
-		//		return;
-			throw ErrorObject("TO DO");
-		//	int iLayers = mapview->iReadElement("MapView", "Layers");
-		//	int iStartLayer = 1;
-		//	String sType;
-		//	// skip first layer if MapView has > 1 layer and the first is a raster map layer
-		//	if (iLayers > 1)
-		//	{
-		//		mapview->ReadElement("Layer1", "Type", sType);
-		//		if ("MapDrawer" == sType)
-		//			++iStartLayer;
-		//	}
-		//	for (int i = iStartLayer; i <= iLayers; ++i) {
-		//		String sSection("Layer%i", i);
-		//		mapview->ReadElement(sSection.c_str(), "Type", sType);
-		//		NewDrawer* dw = drDrawer(mapview, sSection.c_str());
-		//		if (0 == dw) // protection against faulty .mpv files
-		//			continue;
-		//		if ("MapDrawer" == sType)
-		//		{
-		//			if (fRaster)
-		//				dl.push_back(dw);
-		//			else
-		//				dl.push_front(dw);
-		//			fRaster = true;
-		//			FileName fnMap;
-		//			mapview->ReadElement(sSection.c_str(), "Map", fnMap);
-		//			Map rasmap(fnMap);
-		//			if (rasmap->gr() != georef) 
-		//				SetGeoRef(rasmap->gr());
-		//		}
-		//		else
-		//			dl.push_back(dw);
-		//	}
-		//}
-		//catch (ErrorObject& err) 
-		//{
-		//	err.Show();
-		//}
+		try {
+			mpv = mapview;
+			if (!mpv.fValid())
+				return;
+
+			if (!mpv->fCalculated()) {
+				int iPrior = AfxGetThread()->GetThreadPriority();
+				AfxGetThread()->SetThreadPriority(THREAD_PRIORITY_LOWEST);
+				mpv->Calc();
+				AfxGetThread()->SetThreadPriority(iPrior);
+			}
+			//if (!mpv->fCalculated())
+			//	return FALSE;
+			// (allow flexibility - a mapview could always be opened .. )
+
+			if (mpv->sDescription.length()) 
+			{
+				FileName fn = mpv->fnObj;
+				String s = fn.sFile;
+				s &= ": ";
+				s &= mpv->sDescription;
+				CDocument::SetTitle(s.sVal());
+			}
+			// backup
+			CoordSystem csy = rootDrawer->getCoordinateSystem();
+			CoordBounds cbMap = rootDrawer->getMapCoordBounds();
+			CoordBounds cbZoom = rootDrawer->getCoordBoundsZoom();
+			CoordBounds cbView = rootDrawer->getCoordBoundsView();
+
+			FileName fn = mpv->fnObj;
+			rootDrawer->load(fn,"");
+			rootDrawer->setCoordinateSystem(csy, true);
+			rootDrawer->setCoordBoundsMap(cbMap);
+			rootDrawer->setCoordBoundsView(cbView);
+			rootDrawer->setCoordBoundsZoom(cbZoom);
+
+			ILWIS::PreparationParameters pp(NewDrawer::ptRESTORE,0);
+			rootDrawer->prepare(&pp);
+			for(int i=0; i < rootDrawer->getDrawerCount(); ++i) {
+				SpatialDataDrawer *spdrw = dynamic_cast<SpatialDataDrawer *>(rootDrawer->getDrawer(i));
+				if ( spdrw) {
+					BaseMapPtr *bmptr = spdrw->getBaseMap();
+					BaseMap bmp(bmptr->fnObj);
+					addToPixelInfo(bmp, spdrw);
+				}
+			}
+		}
+		catch (ErrorObject& err) 
+		{
+			err.Show();
+		}
 	}
 };
 
@@ -869,6 +794,8 @@ public:
 			~OpeningDoc()
 			{ IlwWinApp()->iOpeningDoc--; }
 		} od;
+
+		m_pMainWnd = NULL; // ensure this window is not always on-top-of the ILWIS main window
 	
 		IlwWinApp()->Context()->InitThreadLocalVars();
 		
@@ -896,10 +823,9 @@ public:
 					dr->setActive(false);
 				}
 			}
-			throw ErrorObject("TO DO");
 			//for (list<Drawer*>::iterator it = mcdex->dl.begin(); it != mcdex->dl.end(); ++it)
 			//{
-			//	SpatialDataDrawer* smd = dynamic_cast<SpatialDataDrawer*>(*it);
+			//	SegmentMapDrawer* smd = dynamic_cast<SegmentMapDrawer*>(*it);
 			//	if (smd)
 			//	{
 			//		ValueRange vr = m_vstrvrCustomValueRanges[smd->basemap()->fnObj.sFileExt()];
@@ -926,6 +852,8 @@ public:
 				if (smw)
 					smw->SetGeoRef(m_grf);
 			}
+
+			pFrame->PostMessage(WM_COMMAND, ID_ENTIREMAP, 0);
 
 			return TRUE;
 		}

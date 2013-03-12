@@ -47,11 +47,10 @@
 #include "Client\Mapwindow\OverviewMapPaneView.h"
 #include "Client\Mapwindow\MapPaneView.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
+#include "Client\MainWindow\CommandCombo.h"
 
 #include "Client\FormElements\flddom.h"
 #include "Client\FormElements\fentdms.h"
-//#include "ApplicationsUI\frmpolap.h"
-//#include "ApplicationsUI\frmmapap.h"
 
 #include "Client\ilwis.h" // for IlwWinApp
 
@@ -96,28 +95,19 @@ afx_msg int SmceMapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	men.CreateMenu();
 
 	menPopup.CreateMenu();
-//  add(ID_FILE_OPEN);
 		menSub.CreateMenu();
 		addSub(ID_CREATESEGMAP);
 		addSub(ID_CREATEPNTMAP);
 		addSub(ID_CT_SEGMENT_TO_POLYGON);
 		addSub(ID_CT_POLYGON_TO_RASTER);
-//			addSub(ID_CREATERASMAP);
-//			addSub(ID_CREATESMS);
-//			addSub(ID_CREATEGRF);
-//			addSub(ID_CREATECSY);
-//			addSub(ID_CREATEANNTEXT);
-//			addSub(ID_CREATESUBMAP)
 
 	addSubMenu(ID_FILE_CREATE);
 	add(ID_SAVEVIEW);
 	add(ID_SAVEVIEWAS);
-	add(ID_CREATE_LAYOUT);
 	addBreak;
 	menPropLayer.CreateMenu();
 	menPopup.AppendMenu(MF_POPUP, (UINT)menPropLayer.GetSafeHmenu(), sMen(ID_PROPLAYER)); 	
-//  add(ID_OPENGENMAP);
-	//add(ID_OPENPIXELINFO);
+
 	addBreak;
 	add(ID_EXIT);
 	hMenFile = menPopup.GetSafeHmenu();
@@ -127,39 +117,8 @@ afx_msg int SmceMapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	add(ID_COPY );
 	add(ID_PASTE);
 	addBreak;
-	menEditLayer.CreateMenu();
-	menPopup.AppendMenu(MF_POPUP, (UINT)menEditLayer.GetSafeHmenu(), sMen(ID_EDITLAYER)); 	
-//			menSub.CreateMenu();
-//			addSub(ID_PIXELEDIT);
-//			addSub(ID_POINTEDIT);
-//			addSub(ID_SEGEDIT);
-//			addSub(ID_POLEDIT);
-//		addSubMenu(ID_EDITOR);
-//		addBreak;
-	menRprLayer.CreateMenu();
-//		menPopup.AppendMenu(MF_POPUP, (UINT)menRprLayer.GetSafeHmenu(), sMen(ID_RPRLAYER)); 	
-	menDomLayer.CreateMenu();
-// 		menPopup.AppendMenu(MF_POPUP, (UINT)menDomLayer.GetSafeHmenu(), sMen(ID_DOMLAYER)); 	
-//		add(ID_EDITGRF);
-//		add(ID_EDITCSY);
-	hMenEdit = menPopup.GetSafeHmenu();
-	addMenu(ID_MEN_EDIT);
-
-	menPopup.CreateMenu();
 	add(ID_ADDLAYER);
-//		add(ID_ADD_GRID);
-//		add(ID_ADD_GRATICULE);
 	add(ID_REMOVELAYER);
-	menDataLayer.CreateMenu();
-	menPopup.AppendMenu(MF_POPUP, (UINT)menDataLayer.GetSafeHmenu(), sMen(ID_LAYEROPTIONS)); 	
-	addBreak;
-	add(ID_BGCOLOR);
-//			menSub.CreateMenu();
-//			addSub(ID_MAPDBLCLKRECORD);
-//			addSub(ID_MAPDBLCLKRPR);
-//			addSub(ID_MAPDBLCLKACTION);
-//		addSubMenu(ID_MAPDBLCLK);
-
 	addMenu(ID_MEN_LAYERS);
 
 	menPopup.CreateMenu();
@@ -167,22 +126,22 @@ afx_msg int SmceMapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	add(ID_NORMAL);
 	add(ID_ZOOMIN);
 	add(ID_ZOOMOUT);
+	add(ID_FULLSCREEN);
 	add(ID_PANAREA);
 	add(ID_SCALE1);
 	addBreak;
 	add(ID_REDRAW);
-	add(ID_MEASUREDIST);
-	add(ID_SHOWHISTOGRAM);
+	menHistograms.CreateMenu();
+	menPopup.AppendMenu(MF_POPUP, (UINT)menHistograms.GetSafeHmenu(), sMen(ID_SHOWHISTOGRAM)); 
 	addBreak;
 		menSub.CreateMenu();
 		addSub(ID_EXTPERC);
 		addSub(ID_EXTCOORD);
 	addSubMenu(ID_EXTEND);
-	add(ID_COORDSYSTEM);
 	addBreak;
 	add(ID_ADJUSTSIZE);
 	add(ID_LAYERMANAGE);
-	add(ID_OVERVIEW);
+	add(ID_METRIC_COORD);
 	add(ID_SCALECONTROL);
 	add(ID_SHOWRECORDVIEW);
 	add(ID_BUTTONBAR);
@@ -211,41 +170,28 @@ afx_msg int SmceMapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	bbDataWindow.Create(this, "map.but", "", 100);
 	// prevent docking right/left because e.g. Tiepointeditors enhance buttonbar
 	bbDataWindow.EnableDocking(CBRS_ALIGN_TOP|CBRS_ALIGN_BOTTOM);
-
 	DockControlBar(&bbDataWindow, AFX_IDW_DOCKBAR_TOP);
-
-	//barScale.Create(this);
-	RecalcLayout();
-	CRect rect;
-	bbDataWindow.GetWindowRect(&rect);
-	rect.OffsetRect(1,0);
-	//DockControlBar(&barScale,AFX_IDW_DOCKBAR_TOP,rect);
 
 	ltb.Create(this, 124, CSize(150,200));
 	ltb.SetWindowText(TR("Layer Management").c_str());
 	ltb.EnableDocking(CBRS_ALIGN_LEFT|CBRS_ALIGN_RIGHT);
 	ltb.view = new LayerTreeView;
 	ltb.view->Create(NULL, NULL, AFX_WS_DEFAULT_VIEW|TVS_HASLINES|TVS_LINESATROOT|TVS_HASBUTTONS,
-			CRect(0,0,0,0), &ltb, 100, 0);
-
-	// half of the requested height will be assigned
-	gbOverview.Create(this, 125, CSize(150,300));
-	gbOverview.m_szFloat = CSize(150,150);
-	gbOverview.EnableDocking(CBRS_ALIGN_LEFT|CBRS_ALIGN_RIGHT);
-	gbOverview.view = new OverviewMapPaneView;
-	gbOverview.view->Create(NULL,NULL,AFX_WS_DEFAULT_VIEW,CRect(0,0,0,0),&gbOverview,100.0);
-	gbOverview.SetWindowText(TR("Overview window").c_str());
+		CRect(0,0,0,0), &ltb, 100, 0);
 
 	if (0 == pFirstView) 
 		pFirstView = dynamic_cast<CView*>(GetDescendantWindow(AFX_IDW_PANE_FIRST, TRUE));
 	pFirstView->GetDocument()->AddView(ltb.view);
-	pFirstView->GetDocument()->AddView(gbOverview.view);
-
 	DockControlBar(&ltb,AFX_IDW_DOCKBAR_LEFT);
+	
+	commBar = new CommandBar();
+	commBar->Create(this, ID_COMMANDBAR, CommandCombo::cbMain);
+	DockControlBar(commBar);
+
 	RecalcLayout();
+	CRect rect;
 	ltb.GetWindowRect(&rect);
 	rect.OffsetRect(0,1);
-	DockControlBar(&gbOverview,AFX_IDW_DOCKBAR_LEFT,rect);
 
 	return 0;
 }
@@ -258,9 +204,8 @@ void SmceMapWindow::OnSegmentToPolygon()
 	String sMostRecentPointMap (fnGetMostRecentMap(".mpp").sRelativeQuoted());
 	if (sMostRecentPointMap.length() > 0)
 		sMostRecentPointMap = " " + sMostRecentPointMap;
-	String sParms("%S%S", sMostRecentSegmentMap, sMostRecentPointMap);
+	String sParms("segpol %S%S", sMostRecentSegmentMap, sMostRecentPointMap);
 
-	//new FormPolygonMapFromSegment(this, sParms.c_str());
 	IlwWinApp()->ExecuteUI(sParms, this);
 }
 
@@ -272,9 +217,8 @@ void SmceMapWindow::OnPolygonToRaster()
 	String sGeoRef;
 	if (m_grf.fValid())
 		sGeoRef = " " + m_grf->fnObj.sRelativeQuoted();
-	String sParms("%S%S", sMostRecentPolygonMap, sGeoRef);
+	String sParms("polras %S%S", sMostRecentPolygonMap, sGeoRef);
 
-//	new FormRasPolygon(this, sParms.c_str());
 	IlwWinApp()->ExecuteUI(sParms, this);
 }
 
