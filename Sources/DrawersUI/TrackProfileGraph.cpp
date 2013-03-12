@@ -125,6 +125,10 @@ Domain TrackProfileGraph::getDomain(int i) const{
 }
 
 RangeReal TrackProfileGraph::getRange(int i) const {
+	RangeReal rr = fldGraph->tool->sources[i]->getRange();
+	if ( rr.fValid())
+		return rr;
+
 	if ( i == 0) {
 		ILWIS::CollectionDrawer *cdr = dynamic_cast<ILWIS::CollectionDrawer *>(fldGraph->tool->getDrawer());
 		if ( cdr) {
@@ -216,6 +220,7 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 				values[m].push_back(GraphInfo(i,v,track[i].crd));
 
 				int y = v == rUNDEF ? rct.bottom : y0 - ( v - rr.rLo()) * yscale;
+				y = min(y, rct.bottom);
 				if ( i == 0)
 					dc->MoveTo(rx,y);
 				else 
@@ -450,6 +455,15 @@ tool(t)
 	SetIndependentPos();
 }
 
+void TrackProfileGraphEntry::setOverruleRange(int col, int row, const String& value) {
+	RangeReal rr(value);
+	if ( rr.fValid()) {
+		if ( col < tool->sources.size() ) {
+			tool->sources[col]->setRange(rr);
+			graph->Invalidate();
+		}
+	}
+}
 void TrackProfileGraphEntry::create()
 {
 	zPoint pntFld = zPoint(psn->iPosX,psn->iPosY);

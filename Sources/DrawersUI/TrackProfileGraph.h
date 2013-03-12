@@ -67,6 +67,7 @@ public:
 	RangeReal getRange(long i);
 	void setIndex(int sourceIndex, double value, const Coord& crd);
 	ILWIS::TrackProfileTool *tool;
+	void setOverruleRange(int col, int row, const String& value);
 	void update();
 	void openAsTable();
 

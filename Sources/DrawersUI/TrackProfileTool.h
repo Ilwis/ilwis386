@@ -17,12 +17,17 @@ public:
 	IlwisObject getSource() const;
 	void updateIndex(long ind);
 	Domain domain() const;
+	RangeReal getRange() const;
+	void setRange(const RangeReal& rng) ;
 private:
+	RangeReal setDefaultRange(NewDrawer *drw);
+	ILWIS::LayerDrawer *getLayerDrawer(ILWIS::NewDrawer *ndr) const;
 	long currentIndex;
 	BaseMap bmp;
 	MapList mpl;
 	ObjectCollection oc;
 	Domain dm;
+	RangeReal overruleRange;
 	IlwisObject::iotIlwisObjectType type;
 };
 

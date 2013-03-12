@@ -25,6 +25,8 @@
 #include "Engine\Map\Segment\Seg.h"
 #include "Client\FormElements\FieldListView.h"
 #include "TrackProfileGraph.h"
+#include "Drawers\CollectionDrawer.h"
+#include "Engine\Domain\DmValue.h"
 #include "DrawersUI\TrackProfileTool.h"
 #include "headers\constant.h"
 
@@ -123,7 +125,7 @@ TrackProfileTool::~TrackProfileTool() {
 	for(int i=0; i < sources.size(); ++i) 
 		delete sources[i];
 	sources.clear();
-	if ( graphForm) {
+	if ( graphForm && graphForm->m_hWnd != 0) {
 		graphForm->wnd()->PostMessage(WM_CLOSE);
 	}
 }
@@ -374,6 +376,25 @@ void TrackDataSource::addSource(const IlwisObject& obj) {
 	}
 }
 
+ILWIS::LayerDrawer *TrackDataSource::getLayerDrawer(ILWIS::NewDrawer *ndr) const{
+
+	ILWIS::ComplexDrawer *cdr = (ILWIS::ComplexDrawer *)ndr;
+	ILWIS::LayerDrawer *ldr = 0;
+	if ( !cdr->isSet()) {
+		ldr = (ILWIS::LayerDrawer *)cdr;
+
+	} else {
+		ILWIS::SetDrawer *spdr = (ILWIS::SetDrawer *)ndr;
+		int activeIndex = spdr->getCurrentIndex();
+		if ( activeIndex != iUNDEF)
+			ldr = (ILWIS::LayerDrawer *)spdr->getDrawer(activeIndex);
+
+	}
+	return ldr;
+}
+
+
+
 BaseMap TrackDataSource::getMap(const Coord& crd) const{
 	if ( bmp.fValid())
 		return bmp;
@@ -398,6 +419,14 @@ IlwisObject TrackDataSource::getSource() const{
 	if ( oc.fValid())
 		return oc;
 	return IlwisObject();
+}
+
+RangeReal TrackDataSource::getRange() const{
+	return overruleRange;
+}
+
+void TrackDataSource::setRange(const RangeReal& rng) {
+	overruleRange = rng;
 }
 
 void TrackDataSource::updateIndex(long ind){
@@ -434,7 +463,7 @@ DisplayOptionsForm2(dr,wPar,TR("Track Profile Graph"),fbsBUTTONSUNDER | fbsSHOWA
 	vector<FLVColumnInfo> v;
 	v.push_back(FLVColumnInfo("Source", 220));
 	v.push_back(FLVColumnInfo("Distance", 70));
-	v.push_back(FLVColumnInfo("Value range", 80));
+	v.push_back(FLVColumnInfo("Value range", 80,true));
 	v.push_back(FLVColumnInfo("Value", 60));
 	graph = new TrackProfileGraphEntry(root,t);
 	FieldListView *view = new FieldListView(root,v);
@@ -448,6 +477,7 @@ DisplayOptionsForm2(dr,wPar,TR("Track Profile Graph"),fbsBUTTONSUNDER | fbsSHOWA
 	grbuttons->SetIndependentPos();
 	create();
 	ShowWindow(SW_HIDE);
+	view->setItemChangedCallback(graph, (NotifyItemChangedProc)&TrackProfileGraphEntry::setOverruleRange); 
 }
 
 
