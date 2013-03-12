@@ -2036,7 +2036,7 @@ void EffectGroup::GenerateContourMaps()
 							trq.fText(String(TR("Creating Map %S").c_str(), sOutputMapName));
 							trq.fUpdate(i * iNrIsoLines + j, iNrOutputMaps * (iNrIsoLines + 1));
 							FileName fnOutputMapName (sOutputMapName.sQuote(), ".mps");
-							String sExpression ("SegmentMapFromRasValueBnd(%S,%lg,%lg,%lg,8,NoSmooth)", vfnMaps[i].sFullPathQuoted(), rCurrentIsoLine + rFineIsoLineInterval, rCurrentIsoLine + rIsoLineInterval, rFineIsoLineInterval); // skip first iso line, which is already in the general contour map
+							String sExpression ("SegmentMapFromRasValueBnd(%S,%lg,%lg,%lg,8,NoSmooth,0)", vfnMaps[i].sFullPathQuoted(), rCurrentIsoLine + rFineIsoLineInterval, rCurrentIsoLine + rIsoLineInterval, rFineIsoLineInterval); // skip first iso line, which is already in the general contour map
 							SegmentMap segmp (fnOutputMapName, sExpression);
 							if (segmp.fValid() && frm.fShow()) // prevent boom if we generated an invalid expression
 								segmp->Calc();
@@ -2050,7 +2050,7 @@ void EffectGroup::GenerateContourMaps()
 					else
 						trq.fUpdate(i, iNrOutputMaps);
 					FileName fnOutputMapName (sOutputMapName.sQuote(), ".mps");
-					String sExpression ("SegmentMapFromRasValueBnd(%S,%lg,%lg,%lg,8,NoSmooth)", vfnMaps[i].sFullPathQuoted(), rrMinMax.rLo(), rrMinMax.rHi(), rIsoLineInterval);
+					String sExpression ("SegmentMapFromRasValueBnd(%S,%lg,%lg,%lg,8,NoSmooth,0)", vfnMaps[i].sFullPathQuoted(), rrMinMax.rLo(), rrMinMax.rHi(), rIsoLineInterval);
 					SegmentMap segmp (fnOutputMapName, sExpression);
 					if (segmp.fValid() && frm.fShow()) // prevent boom if we generated an invalid expression
 					{
