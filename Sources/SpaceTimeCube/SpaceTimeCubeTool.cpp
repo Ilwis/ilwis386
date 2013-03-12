@@ -395,6 +395,7 @@ void SpaceTimeCube::refreshDrawerList(bool fFromForm) {
 			DrawerParameters dp(rootDrawer, rootDrawer);
 			PreparationParameters pp(NewDrawer::ptALL);
 			AddTimeOffsetDrawers((ComplexDrawer*)drawer->getDrawer(0), &timeShift, dp, pp);
+			((SpaceTimeDrawer*)(drawer->getDrawer(0)))->SetTimePosVariable(&timePos);
 
 			SpaceTimeElementsDrawer * spaceTimeElementsDrawer = ((SpaceTimeDrawer*)(drawer->getDrawer(0)))->getAdditionalElementsDrawer();
 			if (spaceTimeElementsDrawer) {

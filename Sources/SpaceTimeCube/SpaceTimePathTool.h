@@ -19,6 +19,8 @@ namespace ILWIS {
 		void changeYT();
 		void setSpaceTimePathVisibility(void *value, HTREEITEM);
 		void setFootprintVisibility(void *value, HTREEITEM);
+		void setClipTPlus(void *value, HTREEITEM);
+		void setClipTMinus(void *value, HTREEITEM);
 		void setXTVisibility(void *value, HTREEITEM);
 		void setXYVisibility(void *value, HTREEITEM);
 		void setYTVisibility(void *value, HTREEITEM);

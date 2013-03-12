@@ -16,6 +16,7 @@
 #include "Drawers\PointFeatureDrawer.h"
 #include "Engine\Representation\Rprclass.h"
 #include "Engine\Drawers\DrawerContext.h"
+#include "Engine\Drawers\ZValueMaker.h"
 
 using namespace ILWIS;
 
@@ -25,6 +26,9 @@ SpaceTimeDrawer::SpaceTimeDrawer(DrawerParameters *parms, const String& name)
 , subDisplayLists(new map<long, GLuint>())
 , nrSteps(-1)
 , spaceTimeElementsDrawer(0)
+, timePos(0)
+, fClipTPlus(false)
+, fClipTMinus(false)
 {
 	ppcopy = new PointProperties();
 	displayList = new GLuint;
@@ -313,6 +317,14 @@ struct sort_pair_first_value {
     } 
 }; 
 
+void SpaceTimeDrawer::SetClipTPlus(bool fClip) {
+	fClipTPlus = fClip;
+}
+
+void SpaceTimeDrawer::SetClipTMinus(bool fClip) {
+	fClipTMinus = fClip;
+}
+
 vector<GLuint> SpaceTimeDrawer::getSelectedObjectIDs(const CRect& rect) const
 {
 	vector<GLuint> selectedObjectIDs;
@@ -505,6 +517,10 @@ void SpaceTimeDrawer::getHatchInverse(RepresentationClass * prc, long iRaw, cons
 		if ( cur != loader->end() && (*cur).second->getType() == IVGElement::ivgHATCH)
 			hatchInverse = (*cur).second->getHatchInverse();
 	}
+}
+
+void SpaceTimeDrawer::SetTimePosVariable(double * _timePos) {
+	timePos = _timePos;
 }
 
 bool SpaceTimeDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const {
@@ -711,6 +727,18 @@ bool SpaceTimeDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) c
 		glBindTexture(GL_TEXTURE_2D, texture[0]);
 
 	if (fSpaceTimeDrawer) {
+		if (fClipTPlus) {
+			bool is3D = getRootDrawer()->is3D(); 
+			double z0 = getRootDrawer()->getZMaker()->getZ0(is3D) + getRootDrawer()->getFakeZ(); // one more step, so that it is visible
+			double clip_plane4[]={0.0, 0.0, -1.0, z0 + cube.altitude() * *timePos};
+			glClipPlane(GL_CLIP_PLANE4,clip_plane4);
+			glEnable(GL_CLIP_PLANE4);
+		}
+		if (fClipTMinus) {
+			double clip_plane5[]={0.0, 0.0, 1.0, -cube.altitude() * *timePos};
+			glClipPlane(GL_CLIP_PLANE5,clip_plane5);
+			glEnable(GL_CLIP_PLANE5);
+		}
 		if (*displayList != 0) {
 			glCallList(*displayList);
 			if (*fHatching) {
@@ -771,6 +799,12 @@ bool SpaceTimeDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) c
 				glEndList();
 				glBindTexture(GL_TEXTURE_2D, texture[0]);
 			}
+		}
+		if (fClipTPlus) {
+			glDisable(GL_CLIP_PLANE4);
+		}
+		if (fClipTMinus) {
+			glDisable(GL_CLIP_PLANE5);
 		}
 	}
 

@@ -27,6 +27,9 @@ class _export SpaceTimeDrawer : public FeatureLayerDrawer, public TemporalDrawer
 		int iNrSteps();
 		SpaceTimeElementsDrawer * getAdditionalElementsDrawer();
 		BaseMapPtr *getBasemap();
+		void SetTimePosVariable(double * _timePos);
+		void SetClipTPlus(bool fClip);
+		void SetClipTMinus(bool fClip);
 		virtual void drawFootprint() const = 0;
 
 	protected:
@@ -65,7 +68,10 @@ class _export SpaceTimeDrawer : public FeatureLayerDrawer, public TemporalDrawer
 		Column prevAttColumn;
 		bool prevUseAttColumn;
 		int nrSteps;
+		double * timePos;
 		CCriticalSection * csDraw;
 		PointProperties *ppcopy;
+		bool fClipTPlus;
+		bool fClipTMinus;
 	};
 }
