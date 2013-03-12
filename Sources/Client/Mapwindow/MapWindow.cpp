@@ -165,8 +165,6 @@ int MapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	addBreak;
 	add(ID_ADDLAYER);
 	add(ID_REMOVELAYER);
-	addBreak;
-
 	addMenu(ID_MEN_LAYERS);
 
 	menPopup.CreateMenu();
@@ -174,8 +172,8 @@ int MapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	add(ID_NORMAL);
 	add(ID_ZOOMIN);
 	add(ID_ZOOMOUT);
-	add(ID_FULLSCREEN)
-		add(ID_PANAREA);
+	add(ID_FULLSCREEN);
+	add(ID_PANAREA);
 	add(ID_SCALE1);
 	addBreak;
 	add(ID_REDRAW);
