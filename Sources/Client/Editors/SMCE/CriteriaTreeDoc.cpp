@@ -817,11 +817,10 @@ public:
 
 			for (unsigned int i = 0; i < m_vfnInvisibleMaps.size(); ++i) // these maps should be added as layers, but switched off.
 			{
-				ILWIS::NewDrawer* dr = mcdex->drAppend(m_vfnInvisibleMaps[i]);
-				if (dr)	// could be null
-				{
+				mcdex->drAppend(m_vfnInvisibleMaps[i]);
+				ILWIS::NewDrawer* dr = mcdex->rootDrawer->getDrawer(mcdex->rootDrawer->getDrawerCount() - 1); // the drawer just added
+				if (dr)
 					dr->setActive(false);
-				}
 			}
 			//for (list<Drawer*>::iterator it = mcdex->dl.begin(); it != mcdex->dl.end(); ++it)
 			//{
