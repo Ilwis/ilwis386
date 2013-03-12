@@ -1027,11 +1027,14 @@ ILWIS::NewDrawer *MapCompositionDoc::createBaseMapDrawer(const BaseMap& bmp, con
 	drawer->prepare(&pp);
 	rootDrawer->addDrawer(drawer, fOverruleBounds);
 	addToPixelInfo(bmp, (ComplexDrawer *)drawer);
-	FrameWindow * frame = mpvGetView()->getFrameWindow();
-	if ( frame) {
-		MapStatusBar *sbar = dynamic_cast<MapStatusBar*>(frame->status);
-		if ( sbar) {
-			sbar->SetActiveDrawer(drawer);
+	MapPaneView * mpv = mpvGetView();
+	if (mpv) {
+		FrameWindow * frame = mpv->getFrameWindow();
+		if ( frame) {
+			MapStatusBar *sbar = dynamic_cast<MapStatusBar*>(frame->status);
+			if ( sbar) {
+				sbar->SetActiveDrawer(drawer);
+			}
 		}
 	}
 	String sysFile = bmp->fnObj.sFullName();
@@ -1791,7 +1794,9 @@ NewDrawer* MapCompositionDoc::drAppend(const BaseMap& mp,IlwisDocument::OpenType
 		}
 		ChangeState();
 		//UpdateAllViews(0,3);
-		mpvGetView()->Invalidate();
+		MapPaneView * mpv = mpvGetView();
+		if (mpv)
+			mpv->Invalidate();
 	}    
 	return 0;
 }
