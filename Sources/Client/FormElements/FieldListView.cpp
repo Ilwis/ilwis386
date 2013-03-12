@@ -37,6 +37,7 @@
 #include "Headers\stdafx.h"
 #include "Client\Headers\formelementspch.h"
 #include "Engine\DataExchange\TableExternalFormat.h"
+#include "Client\Editors\Utils\InPlaceEdit.h"
 #include "Client\FormElements\FieldListView.h"
 #include "Client\ilwis.h"
 #include <vector>
@@ -45,10 +46,14 @@ BEGIN_MESSAGE_MAP(FLVColumnListCtrl, CListCtrl)
 	//{{AFX_MSG_MAP(FLVColumnListCtrl)
 	ON_NOTIFY_REFLECT(LVN_ITEMCHANGED, OnItemchangedList)
 	ON_NOTIFY_REFLECT(LVN_GETDISPINFO,    OnGetDispInfo)
+	ON_NOTIFY_REFLECT(LVN_BEGINLABELEDIT, OnBeginLabelEdit)
+	ON_NOTIFY_REFLECT(LVN_ENDLABELEDIT,	  OnEndLabelEdit)
+	ON_NOTIFY_REFLECT(NM_CLICK,           OnClick)
+	ON_NOTIFY_REFLECT(NM_DBLCLK,          OnDoubleClick)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-FLVColumnListCtrl::FLVColumnListCtrl(FormEntry *par) : BaseZapp(par)
+FLVColumnListCtrl::FLVColumnListCtrl(FormEntry *par) : BaseZapp(par), caller(0), function(0)
 {
 
 }
@@ -84,6 +89,72 @@ void FLVColumnListCtrl::OnGetDispInfo(NMHDR* pNMHDR, LRESULT* pResult)
 	*pResult = 0;
 }
 
+void FLVColumnListCtrl::OnClick(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	*pResult = 0;
+
+	LPNMLISTVIEW pNMLV = (LPNMLISTVIEW)pNMHDR;
+
+	m_iSubItem = pNMLV->iSubItem;
+	m_iItem = pNMLV->iItem;
+}
+
+void FLVColumnListCtrl::OnDoubleClick(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	*pResult = 0;
+	
+	OnBeginLabelEdit(pNMHDR, pResult);
+}
+
+void FLVColumnListCtrl::OnBeginLabelEdit(NMHDR* pNMHDR, LRESULT* pResult) 
+{
+
+	*pResult = 0;
+
+	if (m_iSubItem == -1)
+		return;
+	if ( parentFormEntry->m_colInfo[m_iSubItem].edit == false)
+		return;
+
+
+	CRect rcSubItem;
+	GetSubItemRect(m_iItem, m_iSubItem, LVIR_LABEL, rcSubItem);
+	int margin = 2;
+	if (m_iSubItem > 0)
+		rcSubItem.left += 2; // columns other than column 0 are indented 2 pixels extra!
+	rcSubItem.top -= margin;
+	rcSubItem.bottom += margin;
+
+	String sLabelText = String(GetItemText(m_iItem, m_iSubItem));
+
+	// Create the InPlaceEdit; there is no need to delete it afterwards, it will destroy itself
+	DWORD style = WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL;
+	m_Edit = new InPlaceEdit(m_iItem, m_iSubItem, sLabelText.c_str());
+	m_Edit->Create(style, rcSubItem, this, 3949);
+}
+
+void FLVColumnListCtrl::OnEndLabelEdit(NMHDR* pNMHDR, LRESULT* pResult) {
+	if (m_iSubItem == -1)
+		return;
+	if ( parentFormEntry->m_colInfo[m_iSubItem].edit == false)
+		return;
+
+	if ( m_Edit) {
+		CString text;
+		m_Edit->GetWindowText(text);
+		String s(text);
+		parentFormEntry->setItemText(m_iItem, m_iSubItem,text);
+		if ( caller && function) {
+			(caller->*function)(m_iItem, m_iSubItem, text);
+		}
+	}
+}
+
+void FLVColumnListCtrl::setItemChangedCallback(CCmdTarget *call, NotifyItemChangedProc proc){
+	caller = call;
+	function = proc;
+}
+
 
 FieldListView::FieldListView(FormEntry* feParent, const vector<FLVColumnInfo> &colInfo, long _extraStyles)
 : FormEntry(feParent, 0, true), extraStyles(_extraStyles), m_clctrl(0)
@@ -109,6 +180,11 @@ FieldListView::~FieldListView()
 int FieldListView::iNrCols()
 {
 	return m_colInfo.size();
+}
+
+void FieldListView::setItemChangedCallback(CCmdTarget *call, NotifyItemChangedProc proc){
+	if ( m_clctrl)
+		m_clctrl->setItemChangedCallback(call, proc);
 }
 
 void FieldListView::create()
@@ -170,6 +246,11 @@ char *FieldListView::item(int row, int col) {
 	if ( row < data.size())
 		return data[row][col].sVal();
 	return 0;
+}
+
+void FieldListView::setItemText(int row, int col, const String& txt) {
+	if ( row < data.size())
+		data[row][col] = txt;
 }
 
 void FieldListView::BuildColumns()

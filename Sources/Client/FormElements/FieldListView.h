@@ -42,28 +42,44 @@
 
 class FieldListView;
 
+typedef void (CCmdTarget::*NotifyItemChangedProc)(int col, int row, const String& value);
+
 struct _export FLVColumnInfo {
-	FLVColumnInfo(String name, int w) : columnName(name), width(w) {}
+	FLVColumnInfo(String name, int w, bool editable=false) : columnName(name), width(w), edit(editable) {}
 	String columnName;
 	int width;
+	bool edit;
 };
 
 class _export FLVColumnListCtrl: public CListCtrl, public BaseZapp {
 public:
 	FLVColumnListCtrl(FormEntry *par);
 	void SetParent(FieldListView *view);
+	void setItemChangedCallback(CCmdTarget *call, NotifyItemChangedProc proc); 
 
 private:
 	FieldListView *parentFormEntry;
 	afx_msg void OnGetDispInfo(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnBeginLabelEdit(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnEndLabelEdit(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnClick(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnDoubleClick(NMHDR* pNMHDR, LRESULT* pResult);
 	void OnItemchangedList(NMHDR* pNMHDR, LRESULT* pResult);
+
 	String tempString;
+	int  m_iItem;
+	int  m_iSubItem;
+	InPlaceEdit *m_Edit;
+
+	CCmdTarget *caller;
+	NotifyItemChangedProc function;
 
 	DECLARE_MESSAGE_MAP();
 };
 
 class _export FieldListView : public FormEntry
 {
+	friend class FLVColumnListCtrl;
 public:
 	FieldListView(FormEntry* feParent, const vector<FLVColumnInfo>& m_colInfo, long _extraStyles = 0);
 	virtual ~FieldListView();
@@ -77,12 +93,14 @@ public:
 	int iNrCols();
 	 void show(int);
 	 char *item(int row, int col);
+	 void setItemText(int row, int col, const String& txt);
 	 void AddData(const vector<String>& v);
 	 void setData(int row, const vector<String>& v);
 	 void update();
 	 void getSelectedRowNumbers(vector<int>& rowNumbers) const;
 	 void setSelectedRows(vector<int>& rowNumbers);
 	 void clear();
+	 void setItemChangedCallback(CCmdTarget *call, NotifyItemChangedProc proc);
 
 	//void ToggleAsKey(int iItem);
 	//void ToggleSelectedAsKey();
