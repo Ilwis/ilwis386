@@ -143,6 +143,7 @@ protected:
 		bool fLeftMostColOnAllPages, int iCharW, int iPageWidth);
 	int iFmtTbl; // special clip format for tables
 	bool viewSelectedRecords;
+	void scrollToSelection();
 private:
 	long iRec1, iCol1;
 	int iHght;

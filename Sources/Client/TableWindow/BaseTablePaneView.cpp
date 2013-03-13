@@ -1286,14 +1286,14 @@ void BaseTablePaneView::OnLButtonDown(UINT nFlags, CPoint point)
 		String s;
 		if (iRow <= 0) {
 			if (iCol < 0) {
-				if ( viewSelectedRecords == false)
+				if ( !viewSelectedRecords)
 					selection.selectBlock(RowCol(1L,0L), RowCol(iRowMoving - 1L, iCol - 1L));
 				iRowMoving = 0;
 				iColMoving = 0;
 				s = TR("Select a block");
 			}
 			else {
-				if ( viewSelectedRecords == false)
+				if ( !viewSelectedRecords)
 					selection.selectBlock(RowCol(1L,iColMoving), RowCol(iRows(), iColMoving)); 
 				iRowMoving = -1;
 				s = TR("Select a block of columns");
@@ -1301,13 +1301,13 @@ void BaseTablePaneView::OnLButtonDown(UINT nFlags, CPoint point)
 		}
 		else {
 			if (iCol < 0) {
-				if ( viewSelectedRecords == false)
+				if ( !viewSelectedRecords)
 					selection.selectBlock(RowCol(iRowMoving,0L), RowCol(iRowMoving, iCols() - 1));
 				iColMoving = -1;
 				s = TR("Select a block of records");
 			}
 			else {
-				if ( viewSelectedRecords == false)
+				if ( !viewSelectedRecords)
 					selection.selectBlock(RowCol(iRowMoving, iColMoving), RowCol(iRowMoving, iColMoving));
 				s = TR("Select a block");
 			}
@@ -1383,7 +1383,7 @@ void BaseTablePaneView::OnLButtonUp(UINT nFlags, CPoint point)
 	else if (fSelecting) {
 		fSelecting = false;
 	}
-	if ( viewSelectedRecords == false)
+	if ( !viewSelectedRecords)
 		updateSelection();
 }
 
@@ -2071,10 +2071,9 @@ void BaseTablePaneView::selectFeatures(const RowSelectInfo& inf) {
 		if ( row > 0)
 			rows.push_back(row - 1); 
 	}
-	if ( viewSelectedRecords == false)
+	if (!viewSelectedRecords)
 		selection.selectRows(rows);
 	Invalidate();
-
 }
 
 const TableSelection& BaseTablePaneView::sel() const{
@@ -2092,8 +2091,7 @@ void BaseTablePaneView::OnUpdateViewSelectedOnly(CCmdUI* pCmdUI)
 
 void BaseTablePaneView::OnViewSelectedOnly()
 {
-	bool undef = selection.mm().fUndef();
-	viewSelectedRecords = !viewSelectedRecords && !undef; // when there is no selection you will by default view all
+	viewSelectedRecords = !viewSelectedRecords;
 	POSITION pos = GetDocument()->GetFirstViewPosition();
 	while (0 != pos) {
 		CView* vw = GetDocument()->GetNextView(pos);
@@ -2110,4 +2108,20 @@ void BaseTablePaneView::OnViewSelectedOnly()
 void BaseTablePaneView::setViewSelectedRecords(bool yesno){
 	viewSelectedRecords = yesno;
 	Invalidate();
+}
+
+void BaseTablePaneView::scrollToSelection() { // ensure the selection is visible; if we're too high, scroll down, if we're too low, scroll up
+	if (!viewSelectedRecords && !selection.mm().fUndef()) {
+		long minRow = selection.minRow();
+		long maxRow = selection.maxRow();
+		if (minRow < iFirstVisibleRow()) {
+			iRec1 = minRow - 1;
+			SetScrollBars();
+		} else if (maxRow > iLastVisibleRow()) {
+			iRec1 += maxRow - iLastVisibleRow();
+			if (minRow < iFirstVisibleRow())
+				iRec1 = minRow - 1;
+			SetScrollBars();
+		}
+	}
 }
