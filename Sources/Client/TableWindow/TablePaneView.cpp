@@ -1144,11 +1144,11 @@ void TablePaneView::selectFeatures(const RowSelectInfo& inf) {
 			if ( tbl->dm()->pdsrt()) {
 				raw = tbl->dm()->pdsrt()->iOrd(raw);
 			}
-			rows.push_back(raw - 1); // raws start at 1, rows dont
+			long row = tvw()->iRow(raw);
+			rows.push_back(row - 1); // iRow() starts at 1, rows[] start at 0
 		}
 	}
-	if ( viewSelectedRecords == false)
-		selection.selectRows(rows);
+	selection.selectRows(rows);
+	scrollToSelection();
 	Invalidate();
-
 }
