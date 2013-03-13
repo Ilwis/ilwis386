@@ -22,22 +22,25 @@ bool TableSelection::fContainsRow(long row) const{
 }
 
 void TableSelection::selectRows(const vector<long>& selrows) {
-	long maxrow = -1;
-	long minrow = 1000000000;
+	if (selrows.size() > 0) {
+		long maxrow = -1;
+		long minrow = 1000000000;
 
-	for(long x = 0; x < cols.size(); ++x) {
-		cols[x] = true;
-	}
-
-	for(int i = 0 ; i < selrows.size(); ++i) {
-		long row = selrows[i];
-		if ( row < rows.size() && row != iUNDEF) {
-			rows[row] = true;
-			maxrow = max(row + 1, maxrow);
-			minrow = min(row + 1, minrow);
+		for(long x = 0; x < cols.size(); ++x) {
+			cols[x] = true;
 		}
-	}
-	boundary = MinMax(RowCol(minrow,0L), RowCol(maxrow, cols.size() -1L));
+
+		for(int i = 0 ; i < selrows.size(); ++i) {
+			long row = selrows[i];
+			if ( row < rows.size() && row != iUNDEF) {
+				rows[row] = true;
+				maxrow = max(row + 1, maxrow);
+				minrow = min(row + 1, minrow);
+			}
+		}
+		boundary = MinMax(RowCol(minrow,0L), RowCol(maxrow, cols.size() -1L));
+	} else
+		reset();
 }
 
 void TableSelection::selectBlock(const RowCol& bottom, const RowCol& top) {
