@@ -120,6 +120,8 @@ void TableSummaryPaneView::InitColPix(CDC* cdc)
 
 void TableSummaryPaneView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint) 
 {
+	if (lHint == uhPRESORT || lHint == uhPOSTSORT)
+		return;
 	if (iColWidth)
 		delete [] iColWidth;
 	if (iColPix)

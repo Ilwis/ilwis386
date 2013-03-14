@@ -173,6 +173,8 @@ void GeoRefEditorTableView::OnEditClear()
 void GeoRefEditorTableView::OnUpdate(CView* vwSender, LPARAM lHint, CObject* pHint)
 {
 	TablePaneView::OnUpdate(vwSender, lHint, pHint);
+	if (lHint == uhPRESORT || lHint == uhPOSTSORT)
+		return;
 	gre->Calc();
 }
 

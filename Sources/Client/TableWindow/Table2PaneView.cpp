@@ -224,6 +224,8 @@ String Table2PaneView::sDescrField(int iCol, long iRow) const
 
 void Table2PaneView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint) 
 {
+  if (lHint == uhPRESORT || lHint == uhPOSTSORT)
+    return;
   if (iColWidth)
     delete [] iColWidth;
   if (iColPix)

@@ -188,6 +188,8 @@ LRESULT PixelInfoView::OnUpdateAnim(WPARAM wParam, LPARAM lParam){
 
 void PixelInfoView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 {
+	if (lHint == uhPRESORT || lHint == uhPOSTSORT)
+		return;
 	BaseTablePaneView::OnUpdate(pSender, lHint, pHint);
 }
 
