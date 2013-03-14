@@ -378,8 +378,8 @@ void RasterLayerDrawer::DisplayImagePortion(unsigned int imageOffsetX, unsigned 
 
 	// split the visible portion of the image into a number of patches, depending on the accuracy needed
 
-	boolean xSplit = false;
-	boolean ySplit = false;
+	bool xSplit = false;
+	bool ySplit = false;
 
 	if ((imageSizeX > 1) && (imageSizeX / zoomFactor > data->maxTextureSize)) // imageSizeX / zoomFactor is the required pixels of the patch in the x-direction
 		xSplit = true;

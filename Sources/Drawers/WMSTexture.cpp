@@ -60,7 +60,7 @@ void WMSTexture::CreateTexture(DrawerContext * drawerContext, bool fInThread, vo
 	// The following are shared OpenGL variables .. if ever they need to change from the default of 0, restore them to the original value
 	//glPixelStorei( GL_UNPACK_SKIP_PIXELS, 0);
 	//glPixelStorei( GL_UNPACK_SKIP_ROWS, 0);
-	boolean oldVal;
+	GLboolean oldVal;
 	glGetBooleanv(GL_MAP_COLOR, &oldVal);
 	glPixelTransferf(GL_MAP_COLOR, false);
 	glTexImage2D( GL_TEXTURE_2D, 0, 4, textureSize, textureSize, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture_data);
@@ -84,7 +84,7 @@ void WMSTexture::ReCreateTexture(DrawerContext * drawerContext, bool fInThread, 
 	if (fInThread)
 		drawerContext->TakeContext();
 	glBindTexture( GL_TEXTURE_2D, texture );
-	boolean oldVal;
+	GLboolean oldVal;
 	glGetBooleanv(GL_MAP_COLOR, &oldVal);
 	glPixelTransferf(GL_MAP_COLOR, false);
 	glTexImage2D( GL_TEXTURE_2D, 0, 4, textureSize, textureSize, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture_data);

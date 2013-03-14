@@ -214,7 +214,7 @@ void OpenstreetmapDrawer::DisplayImagePortion(CoordBounds& cb, unsigned int zoom
 
 	// split the visible portion of the image into a number of patches, depending on the accuracy needed
 
-	boolean split = false;
+	bool split = false;
 	if (max(screenPixelsX1, screenPixelsX2) > data->maxTextureSize)
 		split = true;
 	if (max(screenPixelsY1, screenPixelsY2) > data->maxTextureSize)

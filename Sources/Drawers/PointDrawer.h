@@ -73,7 +73,7 @@ public:
 	double exaggeration; // for stretched point maps
 	Color drawColor;
 	bool ignoreColor;
-	boolean threeDOrientation;
+	bool threeDOrientation;
 	double stretchScale;
 	RangeReal stretchRange;
 	String stretchColumn;

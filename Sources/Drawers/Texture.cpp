@@ -94,7 +94,7 @@ void Texture::CreateTexture(DrawerContext * drawerContext, bool fInThread, volat
 	// The following are shared OpenGL variables .. if ever they need to change from the default of 0, restore them to the original value
 	//glPixelStorei( GL_UNPACK_SKIP_PIXELS, 0);
 	//glPixelStorei( GL_UNPACK_SKIP_ROWS, 0);
-	boolean oldVal;
+	GLboolean oldVal;
 	glGetBooleanv(GL_MAP_COLOR, &oldVal);
 	glPixelTransferf(GL_MAP_COLOR, palette != 0);
 	if (palette != 0) {
@@ -132,7 +132,7 @@ void Texture::ReCreateTexture(DrawerContext * drawerContext, bool fInThread, vol
 	if (fInThread)
 		drawerContext->TakeContext();
 	glBindTexture( GL_TEXTURE_2D, texture );
-	boolean oldVal;
+	GLboolean oldVal;
 	glGetBooleanv(GL_MAP_COLOR, &oldVal);
 	glPixelTransferf(GL_MAP_COLOR, palette != 0);
 	if (palette != 0) {
@@ -167,7 +167,7 @@ void Texture::BindMe(DrawerContext * drawerContext)
 	glScaled(imgWidth2 / (double)sizeX, imgHeight2 / (double)sizeY, 1);
 	glTranslated(-s, -t, 0);
 	if (palette != 0 && fRepresentationChanged) {
-		boolean oldVal;
+		GLboolean oldVal;
 		glGetBooleanv(GL_MAP_COLOR, &oldVal);
 		glPixelTransferf(GL_MAP_COLOR, true);
 		if (!drawerContext->isActivePalette(palette)) {

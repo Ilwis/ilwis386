@@ -57,7 +57,7 @@ void CCTexture::CreateTexture(DrawerContext * drawerContext, bool fInThread, vol
 	// The following are shared OpenGL variables .. if ever they need to change from the default of 0, restore them to the original value
 	//glPixelStorei( GL_UNPACK_SKIP_PIXELS, 0);
 	//glPixelStorei( GL_UNPACK_SKIP_ROWS, 0);
-	boolean oldVal;
+	GLboolean oldVal;
 	glGetBooleanv(GL_MAP_COLOR, &oldVal);
 	glPixelTransferf(GL_MAP_COLOR, 0);
 	RangeReal rrFromR = data->ccMaps[0].rr;
@@ -135,7 +135,7 @@ void CCTexture::ReCreateTexture(DrawerContext * drawerContext, bool fInThread, v
 		drawerContext->TakeContext();
 	glBindTexture( GL_TEXTURE_2D, texture );
 	fRepresentationChanged = false;
-	boolean oldVal;
+	GLboolean oldVal;
 	glGetBooleanv(GL_MAP_COLOR, &oldVal);
 	glPixelTransferf(GL_MAP_COLOR, 0);
 	RangeReal rrFromR = data->ccMaps[0].rr;
@@ -417,7 +417,7 @@ void CCTexture::BindMe(DrawerContext * drawerContext)
 	glTranslated(-s, -t, 0);
 	if (fRepresentationChanged) {
 		fRepresentationChanged = false;
-		boolean oldVal;
+		GLboolean oldVal;
 		glGetBooleanv(GL_MAP_COLOR, &oldVal);
 		glPixelTransferf(GL_MAP_COLOR, false);
 

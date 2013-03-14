@@ -617,7 +617,7 @@ bool SpaceTimeDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) c
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
-		boolean oldVal;
+		GLboolean oldVal;
 		glGetBooleanv(GL_MAP_COLOR, &oldVal);
 		glPixelTransferf(GL_MAP_COLOR, false);
 		const int iTextureSize = PALETTE_TEXTURE_SIZE;
