@@ -723,6 +723,8 @@ void BaseTablePaneView::SetScrollBars()
 
 void BaseTablePaneView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint) 
 {
+	if (lHint == uhPRESORT || lHint == uhPOSTSORT)
+		return;
 	SetScrollBars();
 	if (lHint == uhNOBUTTONS) {
 		CRect rect;
@@ -2101,12 +2103,21 @@ void BaseTablePaneView::OnViewSelectedOnly()
 			//btpv->setViewSelectedRecords(viewSelectedRecords);
 		}
 	}
+	if (!viewSelectedRecords)
+		scrollToSelection();
 	Invalidate();
 
 }
 
 void BaseTablePaneView::setViewSelectedRecords(bool yesno){
-	viewSelectedRecords = yesno;
+	if (yesno)
+		viewSelectedRecords = true;
+	else {
+		bool fChanged = viewSelectedRecords != yesno;
+		viewSelectedRecords = false;
+		if (fChanged)
+			scrollToSelection();
+	}
 	Invalidate();
 }
 
