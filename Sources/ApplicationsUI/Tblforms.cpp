@@ -63,6 +63,7 @@ Software Foundation, http://www.fsf.org.
 #include "Engine\SpatialReference\Distance.h"
 #include "Engine\Base\Algorithm\Lstsqrs.h"
 #include "Headers\messages.h"
+#include "Client\TableWindow\BaseTablePaneView.h"
 #include <set>
 
 TableForm::TableForm(CWnd* parent, const String& sTitle) : FormWithDest(parent, sTitle) {
@@ -613,10 +614,12 @@ LRESULT Cmdclmsort(CWnd *parent, const String& s)
 	if (sCol.length() > 0) { //  take this column
 		cv = tvw->cv(sCol);
 		if (cv.fValid()) {
+			tbldoc->UpdateAllViews(0, BaseTablePaneView::uhPRESORT); // hint pre-sort for TablePaneView: convert selected rows to raws and remember them
 			int iKey = tvw->iCol(sCol);
 			tvw->SetSortOrder(so); // SetKey does the sorting
 			CWaitCursor wc;
 			tvw->SetKey(iKey);  
+			tbldoc->UpdateAllViews(0, BaseTablePaneView::uhPOSTSORT); // hint post-sort for TablePaneView: convert raws back to a selection of rows
 			tbldoc->UpdateAllViews(0);
 			return -1;
 		}
@@ -631,12 +634,14 @@ LRESULT Cmdclmsort(CWnd *parent, const String& s)
 		}
 		ColSortOnForm frm(parent, &iSort, &sCol, (int*)&so);
 		if (frm.fOkClicked()) {
+			tbldoc->UpdateAllViews(0, BaseTablePaneView::uhPRESORT); // hint pre-sort for TablePaneView: convert selected rows to raws and remember them
 			int iKey = -1;
 			if (iSort)
 				iKey = tvw->iCol(sCol);
 			tvw->SetSortOrder(so); // SetKey does the sorting
 			CWaitCursor wc;
-			tvw->SetKey(iKey);  
+			tvw->SetKey(iKey);
+			tbldoc->UpdateAllViews(0, BaseTablePaneView::uhPOSTSORT); // hint post-sort for TablePaneView: convert raws back to a selection of rows
 			tbldoc->UpdateAllViews(0);
 		}
 	}

@@ -83,7 +83,7 @@ public:
 	int iLastVisibleColumn() const;
 	int iSelectedColumn() const;
 	int iSelectedRow() const;
-	enum UpdateHint { uhALL = 0, uhNOBUTTONS = 1 /* update columns only */ };
+	enum UpdateHint { uhALL = 0, uhNOBUTTONS = 1 /* update columns only */, uhPRESORT = 2, uhPOSTSORT = 3 };
 	afx_msg virtual void OnKillFocus(CWnd* pNewWnd);
 protected:
 	void deleteField();

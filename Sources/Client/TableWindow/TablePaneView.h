@@ -133,6 +133,7 @@ protected:
 	afx_msg void OnProp();
 	afx_msg void OnSelectFeaturesByColumn();
 	afx_msg void OnUpdateProp(CCmdUI* pCmdUI);
+	vector<long> selectedRaws; // only to use when sort column/order changes
 
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()

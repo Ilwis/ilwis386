@@ -322,12 +322,32 @@ String TablePaneView::sDescrField(int iCol, long iRow) const
 
 void TablePaneView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint) 
 {
-	TableDoc* td = GetDocument();
-	if (0 == td)
-		return;	
-	CreateColPix(td);
-	iButtonWidth = max(4, td->table()->dm()->iWidth()); 
-	BaseTablePaneView::OnUpdate(pSender, lHint, pHint);
+	if (lHint == uhPRESORT) { // backup selection rows to raw values before sorting
+		const vector<bool>& rows = selection.getRows();
+		for (int i = 0; i < rows.size(); ++i) {
+			if (rows[i]) {
+				long raw = tvw()->iRec(i + 1);
+				selectedRaws.push_back(raw);
+			}
+		}
+		selection.reset();
+	} else if (lHint == uhPOSTSORT) { // restore raw values to rows in selection after sorting
+		vector<long> rows;
+		for(int i=0; i < selectedRaws.size(); ++i) {
+			long row = tvw()->iRow(selectedRaws[i]);
+			rows.push_back(row - 1); // iRow() starts at 1, rows[] start at 0
+		}
+		selection.selectRows(rows);
+		selectedRaws.clear();
+		scrollToSelection();
+	} else {
+		TableDoc* td = GetDocument();
+		if (0 == td)
+			return;	
+		CreateColPix(td);
+		iButtonWidth = max(4, td->table()->dm()->iWidth()); 
+		BaseTablePaneView::OnUpdate(pSender, lHint, pHint);
+	}
 }
 
 void TablePaneView::CreateColPix(TableDoc* td)
