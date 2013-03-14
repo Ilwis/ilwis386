@@ -341,13 +341,15 @@ void RasterLayerDrawer::DisplayImagePortion(unsigned int imageOffsetX, unsigned 
 	gr()->RowCol2Coord(imageOffsetY + imageSizeY, imageOffsetX + imageSizeX, b3);
 	gr()->RowCol2Coord(imageOffsetY + imageSizeY, imageOffsetX, b4);
 	Coord c1, c2, c3, c4;
-	glFeedbackBuffer(2, GL_2D, feedbackBuffer);
-	glRenderMode(GL_FEEDBACK);
-	glBegin (GL_QUADS);
 	c1 = getRootDrawer()->glConv(csy, b1);
 	c2 = getRootDrawer()->glConv(csy, b2);
 	c3 = getRootDrawer()->glConv(csy, b3);
 	c4 = getRootDrawer()->glConv(csy, b4);
+	if (c1.fUndef() || c2.fUndef() || c3.fUndef() || c4.fUndef())
+		return;
+	glFeedbackBuffer(2, GL_2D, feedbackBuffer);
+	glRenderMode(GL_FEEDBACK);
+	glBegin (GL_QUADS);
 	glVertex3d(c1.x, c1.y, 0.0);
 	glVertex3d(c2.x, c2.y, 0.0);
 	glVertex3d(c3.x, c3.y, 0.0);

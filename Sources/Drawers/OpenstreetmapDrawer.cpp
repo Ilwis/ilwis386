@@ -147,9 +147,6 @@ void OpenstreetmapDrawer::DisplayImagePortion(CoordBounds& cb, unsigned int zoom
 	Coord b3 (cb.cMax.x, cb.cMin.y);
 	Coord b2 (cb.cMax);
 	Coord b1 (cb.cMin.x, cb.cMax.y);
-	glFeedbackBuffer(2, GL_2D, feedbackBuffer);
-	glRenderMode(GL_FEEDBACK);
-	glBegin (GL_QUADS);
 	Coord c1 (getRootDrawer()->glConv(csy, b1));
 	Coord c2 (getRootDrawer()->glConv(csy, b2));
 	Coord c3 (getRootDrawer()->glConv(csy, b3));
@@ -160,12 +157,20 @@ void OpenstreetmapDrawer::DisplayImagePortion(CoordBounds& cb, unsigned int zoom
 	if (abs (c3.x - c4.x) < 0.01)
 		c4.x = -c4.x;
 	*/
-	glVertex3d(c1.x, c1.y, 0.0);
-	glVertex3d(c2.x, c2.y, 0.0);
-	glVertex3d(c3.x, c3.y, 0.0);
-	glVertex3d(c4.x, c4.y, 0.0);
-	glEnd();
-	if (0 == glRenderMode(GL_RENDER) && zoomLevel < 18) {
+	bool fTryAlternativeComputation = (c1.fUndef() || c2.fUndef() || c3.fUndef() || c4.fUndef());
+	if (!fTryAlternativeComputation) {
+		glFeedbackBuffer(2, GL_2D, feedbackBuffer);
+		glRenderMode(GL_FEEDBACK);
+		glBegin (GL_QUADS);
+		glVertex3d(c1.x, c1.y, 0.0);
+		glVertex3d(c2.x, c2.y, 0.0);
+		glVertex3d(c3.x, c3.y, 0.0);
+		glVertex3d(c4.x, c4.y, 0.0);
+		glEnd();
+		if (0 == glRenderMode(GL_RENDER) && zoomLevel < 18)
+			fTryAlternativeComputation = true;
+	}
+	if (fTryAlternativeComputation) {
 		CoordBounds cbViewport = getRootDrawer()->getCoordBoundsZoom();
 		Coord c4 (cbViewport.cMin);
 		Coord c3 (cbViewport.cMax.x, cbViewport.cMin.y);

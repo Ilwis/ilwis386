@@ -137,13 +137,15 @@ void WMSDrawer::DisplayImagePortion(CoordBounds& cb) const {
 	Coord b3 (cb.cMax.x, cb.cMin.y);
 	Coord b2 (cb.cMax);
 	Coord b1 (cb.cMin.x, cb.cMax.y);
-	glFeedbackBuffer(2, GL_2D, feedbackBuffer);
-	glRenderMode(GL_FEEDBACK);
-	glBegin (GL_QUADS);
 	Coord c1 (getRootDrawer()->glConv(csy, b1));
 	Coord c2 (getRootDrawer()->glConv(csy, b2));
 	Coord c3 (getRootDrawer()->glConv(csy, b3));
 	Coord c4 (getRootDrawer()->glConv(csy, b4));
+	if (c1.fUndef() || c2.fUndef() || c3.fUndef() || c4.fUndef())
+		return;
+	glFeedbackBuffer(2, GL_2D, feedbackBuffer);
+	glRenderMode(GL_FEEDBACK);
+	glBegin (GL_QUADS);
 	glVertex3d(c1.x, c1.y, 0.0);
 	glVertex3d(c2.x, c2.y, 0.0);
 	glVertex3d(c3.x, c3.y, 0.0);
