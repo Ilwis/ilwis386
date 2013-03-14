@@ -262,7 +262,7 @@ bool RasterLayerDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea)
 			else if (fUsePalette && (palette->rGetMaxAlpha() < 1.0)) // transparency everywhere; draw entire image in transparent pass
 				fDraw = false;
 			else { // image has opaque pixels (it might also have transparent pixels)
-				glAlphaFunc(GL_EQUAL, 1); // draw only the opaque pixels
+				glAlphaFunc(GL_GEQUAL, 0.9999999f); // draw only the opaque pixels, should be glAlphaFunc(GL_EQUAL, 1) but there is a precision limitation in OpenGL, due to which it does not display anything
 				glEnable(GL_ALPHA_TEST);
 			}
 		} else if (drawLoop == drl3DTRANSPARENT) {
@@ -273,7 +273,7 @@ bool RasterLayerDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea)
 			else if (fUsePalette && (palette->rGetMaxAlpha() == 0.0)) // whole image invisible
 				fDraw = false;
 			else { // image has pixels with alpha > 0 and alpha < 1 (it might also have pixels with alpha == 1)
-				glAlphaFunc(GL_LESS, 1); // draw only the pixels with alpha < 1
+				glAlphaFunc(GL_LESS, 0.9999999f); // draw only the pixels with alpha < 1 (same reason as earlier, we cant compare to 1.0f because the alphatest will pass always)
 				glEnable(GL_ALPHA_TEST);
 			}
 		}
