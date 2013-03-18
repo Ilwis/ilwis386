@@ -88,7 +88,7 @@ class FormGeneralPreferences : public FormWithDest
 		void                     GeneralPage(IlwisSettings& settings);
 		void                     PointEdMapPage();
 		void                     SegmentEdMapPage();
-		void                     AdvancedPage();
+		void                     AdvancedPage(IlwisSettings& settings);
 		void                     TableWindowPage(IlwisSettings& settings);
 		FieldPage*               GetPage(const String& sName);
 		void                     GetSystemRpr(IlwisSettings& settings);
@@ -145,6 +145,7 @@ class FormGeneralPreferences : public FormWithDest
 		String					 language;
 		bool					 useAltLayout;
 		bool					 debugLog;
+		bool					 fSoftwareRendering;
 };
 
 typedef vector<FormGeneralPreferences::Page>::iterator PageIter;

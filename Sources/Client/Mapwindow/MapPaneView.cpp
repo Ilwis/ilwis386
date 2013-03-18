@@ -823,7 +823,10 @@ BOOL MapPaneView::EditCopy(CRect mRect, int nReduceResCount)
 
 	// Make hMemDC the current OpenGL rendering context.
 	DrawerContext * contextMem = new ILWIS::DrawerContext();
-	contextMem->initOpenGL(hMemDC, 0, DrawerContext::mDRAWTOBITMAP);
+	int contextMode = DrawerContext::mDRAWTOBITMAP;
+	if (fSoftwareRendering)
+		contextMode |= DrawerContext::mSOFTWARERENDERER;
+	contextMem->initOpenGL(hMemDC, 0, contextMode);
 	GetDocument()->rootDrawer->setDrawerContext(contextMem);
 	GetDocument()->rootDrawer->setViewPort(RowCol(nYRes,nXRes));
 

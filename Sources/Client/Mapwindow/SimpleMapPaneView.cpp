@@ -80,6 +80,7 @@ Created on: 2007-02-8
 #include "Engine\Drawers\DrawerContext.h"
 #include "Client\Mapwindow\OverviewMapPaneView.h"
 #include "Client\Mapwindow\PanTool.h"
+#include "Engine\Base\System\RegistrySettings.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -120,6 +121,8 @@ SimpleMapPaneView::SimpleMapPaneView()
 	fDrawStop = false;
 	fStarting = true; // prevent too early start
 	fDrawAlsoWhenLoading = false;
+	IlwisSettings settings("DefaultSettings");
+	fSoftwareRendering = settings.fValue("SoftwareRendering", false);
 
 	hmodMsimg32 = LoadLibrary("msimg32.dll");
 	swapper = new ScreenSwapper();
@@ -246,6 +249,8 @@ void SimpleMapPaneView::OnDraw(CDC* cdc)
 		pDC = GetDC();
 		MapCompositionDoc* mcd = GetDocument();
 		PreparationParameters pp(NewDrawer::ptINITOPENGL, pDC);
+		if (fSoftwareRendering)
+			pp.contextMode |= DrawerContext::mSOFTWARERENDERER;
 		mcd->rootDrawer->prepare(&pp);
 	}
 	RequestRedraw();

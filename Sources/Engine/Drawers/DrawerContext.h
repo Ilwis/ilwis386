@@ -7,7 +7,7 @@ namespace ILWIS {
 	class Palette;
 	class _export DrawerContext {
 	public:
-		enum Mode{mNONE=0,mFORCEINIT=1, mDRAWTOWINDOW=2, mDRAWTOBITMAP=4, mUSEDOUBLEBUFFER=8};
+		enum Mode{mNONE=0,mFORCEINIT=1, mDRAWTOWINDOW=2, mDRAWTOBITMAP=4, mUSEDOUBLEBUFFER=8, mSOFTWARERENDERER=16};
 		~DrawerContext();
 		DrawerContext();
 		bool initOpenGL(HDC hdc, CWnd * wnd, int m = (mDRAWTOWINDOW | mUSEDOUBLEBUFFER));

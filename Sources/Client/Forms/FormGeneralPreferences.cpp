@@ -137,7 +137,7 @@ FormGeneralPreferences::FormGeneralPreferences() :
 
    GeneralPage(settings);
 
-	AdvancedPage();
+	AdvancedPage(settings);
 
   SetMenHelpTopic("ilwismen\\main_window_preferences.htm");
 	create();
@@ -586,9 +586,11 @@ void FormGeneralPreferences::DirectoryPage(IlwisSettings& settings)
 }
 
 
-void FormGeneralPreferences::AdvancedPage()
+void FormGeneralPreferences::AdvancedPage(IlwisSettings& settings)
 {
-	FieldPage *page = GetPage(TR("Advanced"));	
+	FieldPage *page = GetPage(TR("Advanced"));
+
+	fSoftwareRendering = settings.fValue("SoftwareRendering", false);
 
   FieldGroup *grp = new FieldGroup(page);
 	new StaticText(grp, TR("Restore Defaults"), true);
@@ -598,6 +600,7 @@ void FormGeneralPreferences::AdvancedPage()
 	new FieldBlank(page, 0.25);	
 	new PushButton(page, TR("Restore defaults"), (NotifyProc)&FormGeneralPreferences::RestoreDefaults);
 	new CheckBox(page,TR("Use debug logging"),&debugLog);
+	new CheckBox(page,TR("Use Software Rendering (Compatibility mode)"),&fSoftwareRendering);
 }
 
 int FormGeneralPreferences::RestoreDefaults(Event *)
@@ -860,6 +863,7 @@ int FormGeneralPreferences::exec()
 	settings.SetValue("FilterDblClkAction", sFltAction);
 	settings.SetValue("StereoPairDblClkAction", sStpAction);
 	settings.SetValue("ShowAsTableCL", fShowAsTableCL);
+	settings.SetValue("SoftwareRendering", fSoftwareRendering);
 	const_cast<ActionPairList *>(IlwWinApp()->apl())->ChangeActionPair(".mpl", "", "", sMplAction, "");
 	const_cast<ActionPairList *>(IlwWinApp()->apl())->ChangeActionPair(".fil", "", "", sFltAction, "");
 	const_cast<ActionPairList *>(IlwWinApp()->apl())->ChangeActionPair(".stp", "", "", sStpAction, "");

@@ -38,8 +38,46 @@ bool DrawerContext::initOpenGL(HDC hdc, CWnd * wnd, int m) {
 	pfd.cColorBits = 24;
 	pfd.cDepthBits = 16;
 	pfd.iLayerType = PFD_MAIN_PLANE;
-	int iFormat = ChoosePixelFormat( hdc, &pfd );
-	SetPixelFormat( hdc, iFormat, &pfd );
+	if (mode & mSOFTWARERENDERER) {
+		PIXELFORMATDESCRIPTOR pfd2 = pfd;
+		int iNr = DescribePixelFormat( hdc, 1, sizeof(PIXELFORMATDESCRIPTOR), &pfd2);
+		pfd2 = pfd;
+		int iFormat = ChoosePixelFormat( hdc, &pfd2 ); // check what is the reference format we have to compete against; this is most likely a hardware accelerated format
+		int bestColorBits = 0;
+		int bestDepthBits = 0;
+		for (int i = 1; i <= iNr; ++i) {
+			pfd2 = pfd;
+			DescribePixelFormat( hdc, i, sizeof(PIXELFORMATDESCRIPTOR), &pfd2 );
+			if ((pfd2.dwFlags & PFD_GENERIC_FORMAT) && !(pfd.dwFlags & PFD_GENERIC_ACCELERATED) && (pfd2.dwFlags & PFD_SUPPORT_OPENGL) && (pfd2.iPixelType == PFD_TYPE_RGBA) && (pfd2.cColorBits >= 8) && (pfd2.cDepthBits >= 8) && (pfd2.iLayerType == PFD_MAIN_PLANE)) {
+				if (m & mDRAWTOWINDOW) {
+					if (!(pfd2.dwFlags & PFD_DRAW_TO_WINDOW))
+						continue;
+				}
+				if (m & mUSEDOUBLEBUFFER) {
+					if (!(pfd2.dwFlags & PFD_DOUBLEBUFFER))
+						continue;
+				}
+				if (m & mDRAWTOBITMAP) {
+					if (!(pfd2.dwFlags & PFD_DRAW_TO_BITMAP))
+						continue;
+				}
+				if (pfd2.cColorBits > bestColorBits) {
+					bestColorBits = pfd2.cColorBits;
+					bestDepthBits = pfd2.cDepthBits;
+					iFormat = i;
+				} else if (pfd2.cColorBits == bestColorBits && pfd2.cDepthBits > bestDepthBits) {
+					bestDepthBits = pfd2.cDepthBits;
+					iFormat = i;
+				}
+			}
+		}
+		pfd2 = pfd;
+		DescribePixelFormat( hdc, iFormat, sizeof(PIXELFORMATDESCRIPTOR), &pfd2 );
+		SetPixelFormat( hdc, iFormat, &pfd2 );
+	} else {
+		int iFormat = ChoosePixelFormat( hdc, &pfd );
+		SetPixelFormat( hdc, iFormat, &pfd );
+	}
 
 	m_hdc = hdc;
 	m_hrc = wglCreateContext( m_hdc );    
