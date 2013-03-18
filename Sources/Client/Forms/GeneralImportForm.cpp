@@ -610,7 +610,7 @@ void GeneralImportForm::AddOldStyleIlwisImports() {
 	ilwTable.ext = "*";
 	ilwTable.method = "IlwisTable";
 	ilwTable.shortName = "CSV";
-	ilwTable.name = "Comma delimeted";
+	ilwTable.name = "Comma delimited";
 	ilwTable.type = ImportFormat::ifTable;
 	ilwTable.useasSuported = false;
 	ilwTable.ui = new AsciiTableWizard(wnd());;
@@ -618,8 +618,8 @@ void GeneralImportForm::AddOldStyleIlwisImports() {
 
 	ilwTable.ext = "*";
 	ilwTable.method = "IlwisTable";
-	ilwTable.shortName = "Space delimeted";
-	ilwTable.name = "Space delimeted";
+	ilwTable.shortName = "Space delimited";
+	ilwTable.name = "Space delimited";
 	ilwTable.type = ImportFormat::ifTable;
 	ilwTable.useasSuported = false;
 	ilwTable.ui = new AsciiTableWizard(wnd());;

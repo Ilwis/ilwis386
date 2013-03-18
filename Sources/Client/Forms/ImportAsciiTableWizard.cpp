@@ -1027,7 +1027,7 @@ void AsciiTableWizard::SetFormat(ImportFormat impf) {
 		m_ifTable = TableExternalFormat::ifIlwis14;
 	else if ( impf.shortName == "CSV")
 		m_ifTable = TableExternalFormat::ifComma;
-	else if ( impf.shortName == "Space delimeted")
+	else if ( impf.shortName == "Space delimited")
 		m_ifTable = TableExternalFormat::ifSpace;
 	else if ( impf.shortName == "Fixed format")
 		m_ifTable = TableExternalFormat::ifFixed;
