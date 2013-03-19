@@ -1353,10 +1353,17 @@ void MapPaneView::OnCreateSubMap()
 		SpatialDataDrawer *mpdr = dynamic_cast<SpatialDataDrawer *>(drw);
 		BaseMapPtr *mptr = mpdr->getBaseMap();
 		IlwisObject::iotIlwisObjectType type = IlwisObject::iotObjectType(mptr->fnObj);
-		MinMax mm = mmVisibleMapArea();
+		CoordBounds cb  = mcd->rootDrawer->getCoordBoundsZoom();
 		if ( mpdr && mpdr->isActive() &&  type == IlwisObject::iotRASMAP)
 		{
-			String sCommand("subras %S %d %d %d %d", mptr->fnObj.sRelativeQuoted(),mm.rcMin.Row, mm.rcMin.Col, mm.rcMax.Row, mm.rcMax.Col);
+			CoordBounds cbRas = mptr->cs()->cbConv(mcd->rootDrawer->getCoordinateSystem(), cb);
+			RowCol rcTop = ((MapPtr *)mptr)->gr()->rcConv(cbRas.cMin);
+			RowCol rcBottom = ((MapPtr *)mptr)->gr()->rcConv(cbRas.cMax);
+			RowCol rc1(min(rcTop.Row, rcBottom.Row), min(rcTop.Col, rcBottom.Col));
+			RowCol rc2(max(rcTop.Row, rcBottom.Row), max(rcTop.Col, rcBottom.Col));
+
+
+			String sCommand("subras %S %d %d %d %d", mptr->fnObj.sRelativeQuoted(),rc1.Row, rc1.Col, rc2.Row, rc2.Col);
 
 			//FormMapSubMap *frm = new FormMapSubMap(this, sCommand.c_str());
 			IlwWinApp()->ExecuteUI(sCommand, this);
@@ -1364,10 +1371,8 @@ void MapPaneView::OnCreateSubMap()
 		if ( type == IlwisObject::iotPOINTMAP || type == IlwisObject::iotSEGMENTMAP)
 		{
 			MapCompositionDoc *mcd = GetDocument();
-			//GeoRef grf = mcd->georef;
-			//Coord cMin = grf->cConv(mm.rcMin);
-			//Coord cMax = grf->cConv(mm.rcMax);
-			Coord cMin, cMax;
+			CoordBounds cbF = mptr->cs()->cbConv(mcd->rootDrawer->getCoordinateSystem(), cb);
+			Coord cMin = cbF.cMin, cMax = cbF.cMax;
 			String sCommand = mptr->fnObj.sRelativeQuoted() + " " + String("%f", cMin.x) + " " + String("%f", cMin.y) + " " +
 				String("%f", cMax.x) + " " + String("%f", cMax.y);
 
