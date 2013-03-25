@@ -103,102 +103,101 @@ bool PointDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const
 	const CoordBounds& cbZoom = getRootDrawer()->getCoordBoundsZoom();
 	if ( !cbZoom.fContains(cNorm))
 			return false;
-	if ( element == 0)
-		throw ErrorObject(TR("Unknow symbol used"));
+	if ( element != 0 ) {
+		bool extrusion = getSpecialDrawingOption(NewDrawer::sdoExtrusion);
+		bool filledExtr = getSpecialDrawingOption(NewDrawer::sdoFilled);
 
-	bool extrusion = getSpecialDrawingOption(NewDrawer::sdoExtrusion);
-	bool filledExtr = getSpecialDrawingOption(NewDrawer::sdoFilled);
+		ComplexDrawer *cdrw = (ComplexDrawer *)getParentDrawer();
+		ZValueMaker *zvmkr = cdrw->getZMaker();
+		bool is3D = getRootDrawer()->is3D();// && zvmkr->getThreeDPossible();
+		bool is3DPossible = cdrw->getZMaker()->getThreeDPossible() && !isSupportingDrawer;
+		double z0 = cdrw->getZMaker()->getZ0(is3D);
 
-	ComplexDrawer *cdrw = (ComplexDrawer *)getParentDrawer();
-	ZValueMaker *zvmkr = cdrw->getZMaker();
-	bool is3D = getRootDrawer()->is3D();// && zvmkr->getThreeDPossible();
-	bool is3DPossible = cdrw->getZMaker()->getThreeDPossible() && !isSupportingDrawer;
-	double z0 = cdrw->getZMaker()->getZ0(is3D);
+		double zscale = zvmkr->getZScale();
+		double zoffset = zvmkr->getOffset();
 
-	double zscale = zvmkr->getZScale();
-	double zoffset = zvmkr->getOffset();
+		double fx = cNorm.x;
+		double fy = cNorm.y;
+		double fz = (is3D && is3DPossible) ? cNorm.z * zscale : z0;
 
-	double fx = cNorm.x;
-	double fy = cNorm.y;
-	double fz = (is3D && is3DPossible) ? cNorm.z * zscale : z0;
-
-	if ( label && label->getParentDrawer()->isActive()) {
-		Coord c = label->coord();
-		double xshift = cbZoom.width() / 250.0;
-		double yshift = cbZoom.height() / 250.0;
-		c += Coord(xshift,yshift);
-		c.z = fz;
-		label->setCoord(c);
-	}
-
-	double symbolScale = cbZoom.width() / 200;
-	CoordBounds cb(Coord(fx - symbolScale, fy - symbolScale,fz), Coord(fx + symbolScale, fy + symbolScale,fz));
-	CoordBounds localCb = element->getCb();
-	double f = localCb.width() > 0 ? localCb.height() / localCb.width()  : 1.0;
-
-	double xscale = cb.width() / width;
-	double yscale = f * cb.height() / height;
-	//double zscale = yscale;
-
-
-	glPushMatrix();
-	glTranslated(fx,fy,fz + zoffset);
-	glScaled(xscale * properties.scaling() * element->getDefaultScale(), yscale *  properties.scaling() * element->getDefaultScale(), zscale );
-	Coord cMid = localCb.middle();
-	glScaled(1.0,-1.0,1.0); // opengl uses other oriented coordinate system then svg. have to mirror it.
-	//glTranslated(-cMid.x, -cMid.y,0);
-	glRotated(properties.angle,0,0,100);
-	if ( properties.threeDOrientation){
-		glTranslated(0,0,symbolScale);
-		glRotated(-90,100,0,0);
-	} 
-
-
-	for(vector<IVGAttributes *>::const_iterator cur = element->begin(); cur != element->end(); ++cur) {
-		switch((*cur)->type) {
-			case IVGAttributes::sCIRCLE:
-			case IVGAttributes::sELLIPSE:
-				drawEllipse((*cur), 0, drawLoop);
-				break;
-			case IVGAttributes::sRECTANGLE:
-				drawRectangle((*cur), 0, drawLoop);
-				break;
-			case IVGAttributes::sPOLYGON:
-				drawPolygon((*cur), 0, drawLoop);
-				break;
-			case IVGAttributes::sLINE:
-			case IVGAttributes::sPOLYLINE:
-				drawLine((*cur), 0, drawLoop);
-				break;
-			case IVGAttributes::sPATH:
-				drawPath((*cur),0, drawLoop);
-				break;			
-		};
-	}
-	glPopMatrix();
-
-	if ( specialOptions & NewDrawer::sdoSELECTED) {
-		if ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE)) {
-			CoordBounds cbSelect = cb;
-			cbSelect *= 1.2;
-			glColor4d(1, 0, 0, 1);
-			glBegin(GL_QUADS);						
-			glVertex3f( cbSelect.MinX(), cbSelect.MinY(),fz);	
-			glVertex3f( cbSelect.MinX(),cbSelect.MaxY(),fz);	
-			glVertex3f( cbSelect.MaxX(), cbSelect.MaxY(),fz);
-			glVertex3f( cbSelect.MaxX(), cbSelect.MinY(),fz);
-			glEnd();
+		if ( label && label->getParentDrawer()->isActive()) {
+			Coord c = label->coord();
+			double xshift = cbZoom.width() / 250.0;
+			double yshift = cbZoom.height() / 250.0;
+			c += Coord(xshift,yshift);
+			c.z = fz;
+			label->setCoord(c);
 		}
-	}
 
-	if ( is3D) {
-		if ( extrusion) {
-			double transp = getTransparency() * element->at(element->size() - 1)->opacity; // transparency of extrusion is the transparency of the last element
-			if ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE && transp == 1.0) || (drawLoop == drl3DTRANSPARENT && transp != 1.0)) {
-				glBegin(GL_LINE_STRIP) ;
-				glVertex3d(cNorm.x,cNorm.y,0);
-				glVertex3d(cNorm.x, cNorm.y,fz*zvmkr->getZScale());
+		double symbolScale = cbZoom.width() / 200;
+		CoordBounds cb(Coord(fx - symbolScale, fy - symbolScale,fz), Coord(fx + symbolScale, fy + symbolScale,fz));
+		CoordBounds localCb = element->getCb();
+		double f = localCb.width() > 0 ? localCb.height() / localCb.width()  : 1.0;
+
+		double xscale = cb.width() / width;
+		double yscale = f * cb.height() / height;
+		//double zscale = yscale;
+
+
+		glPushMatrix();
+		glTranslated(fx,fy,fz + zoffset);
+		glScaled(xscale * properties.scaling() * element->getDefaultScale(), yscale *  properties.scaling() * element->getDefaultScale(), zscale );
+		Coord cMid = localCb.middle();
+		glScaled(1.0,-1.0,1.0); // opengl uses other oriented coordinate system then svg. have to mirror it.
+		//glTranslated(-cMid.x, -cMid.y,0);
+		glRotated(properties.angle,0,0,100);
+		if ( properties.threeDOrientation){
+			glTranslated(0,0,symbolScale);
+			glRotated(-90,100,0,0);
+		} 
+
+
+		for(vector<IVGAttributes *>::const_iterator cur = element->begin(); cur != element->end(); ++cur) {
+			switch((*cur)->type) {
+				case IVGAttributes::sCIRCLE:
+				case IVGAttributes::sELLIPSE:
+					drawEllipse((*cur), 0, drawLoop);
+					break;
+				case IVGAttributes::sRECTANGLE:
+					drawRectangle((*cur), 0, drawLoop);
+					break;
+				case IVGAttributes::sPOLYGON:
+					drawPolygon((*cur), 0, drawLoop);
+					break;
+				case IVGAttributes::sLINE:
+				case IVGAttributes::sPOLYLINE:
+					drawLine((*cur), 0, drawLoop);
+					break;
+				case IVGAttributes::sPATH:
+					drawPath((*cur),0, drawLoop);
+					break;			
+			};
+		}
+		glPopMatrix();
+
+		if ( specialOptions & NewDrawer::sdoSELECTED) {
+			if ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE)) {
+				CoordBounds cbSelect = cb;
+				cbSelect *= 1.2;
+				glColor4d(1, 0, 0, 1);
+				glBegin(GL_QUADS);						
+				glVertex3f( cbSelect.MinX(), cbSelect.MinY(),fz);	
+				glVertex3f( cbSelect.MinX(),cbSelect.MaxY(),fz);	
+				glVertex3f( cbSelect.MaxX(), cbSelect.MaxY(),fz);
+				glVertex3f( cbSelect.MaxX(), cbSelect.MinY(),fz);
 				glEnd();
+			}
+		}
+
+		if ( is3D) {
+			if ( extrusion) {
+				double transp = getTransparency() * element->at(element->size() - 1)->opacity; // transparency of extrusion is the transparency of the last element
+				if ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE && transp == 1.0) || (drawLoop == drl3DTRANSPARENT && transp != 1.0)) {
+					glBegin(GL_LINE_STRIP) ;
+					glVertex3d(cNorm.x,cNorm.y,0);
+					glVertex3d(cNorm.x, cNorm.y,fz*zvmkr->getZScale());
+					glEnd();
+				}
 			}
 		}
 	}
