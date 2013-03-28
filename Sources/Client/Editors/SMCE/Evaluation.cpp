@@ -1115,6 +1115,30 @@ Evaluation::eActionTP PairwiseComparison::ShowForm(CWnd* wPar, list <String> *li
 	return fChangeMethod?iOTHERMETHOD:iCANCEL;
 }
 
+OwnerDrawListBoxWithToolTip::OwnerDrawListBoxWithToolTip(FormEntry *f, DWORD iStyle, const CRect& rct, CWnd *parent, int id)
+: OwnerDrawListBox(f, iStyle, rct, parent, id)
+{
+}
+
+int OwnerDrawListBoxWithToolTip::OnToolHitTest( CPoint point, TOOLINFO* pTI ) const
+{
+    BOOL fOutside;
+    UINT itemId = ItemFromPoint(point, fOutside);
+    if ( fOutside ) 
+        return -1;
+
+    GetItemRect(itemId, &(pTI->rect));
+	pTI->uFlags = 0;
+    pTI->hwnd = m_hWnd;
+    pTI->uId = itemId;
+	CString tooltipTxt;
+    GetText(itemId, tooltipTxt);
+
+	pTI->lpszText = (LPSTR)malloc(tooltipTxt.GetLength() + 1);
+	lstrcpy(pTI->lpszText, (LPCTSTR)tooltipTxt); //pTI->lpszText = LPSTR_TEXTCALLBACK; //Will trigger a TTN_NEEDTEXT message
+    return itemId;
+}
+
 //////////////////////////////////////////////////////////////////////////
 // Implementation of local StringArraySelector, needed for RankOrdering
 //////////////////////////////////////////////////////////////////////////
@@ -1140,11 +1164,16 @@ void StringArraySelector::SetOther(StringArraySelector * sasOther)
 
 void StringArraySelector::create()
 {
-	BaseSelector::create();
+	zPoint pntFld = zPoint(psn->iPosX,psn->iPosY);
+	zDimension dimFld = zDimension(psn->iWidth,psn->iMinHeight);
+	lb = new OwnerDrawListBoxWithToolTip(this, LBS_OWNERDRAWFIXED |  LBS_NOTIFY | style | LBS_DISABLENOSCROLL | WS_VSCROLL | WS_BORDER | WS_TABSTOP, CRect(pntFld, dimFld), frm()->wnd() , Id());
+	lb->SetFont(frm()->fnt);
+	CreateChildren();
   // lb->setNotify(this, (NotifyProc)&StringArraySelector::Selected, Notify(LBN_SELCHANGE));
 	lb->setNotify(this,(NotifyProc)&StringArraySelector::mouseButtonDown, WM_LBUTTONDOWN);
 	lb->setNotify(this,(NotifyProc)&StringArraySelector::mouseButtonUp, WM_LBUTTONUP);
 	lb->setNotify(this,(NotifyProc)&StringArraySelector::mouseMove, WM_MOUSEMOVE);
+	lb->EnableToolTips();
 
 	Fill();
 }

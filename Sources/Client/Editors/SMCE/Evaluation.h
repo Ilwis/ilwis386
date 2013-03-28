@@ -173,6 +173,13 @@ private:
 	double rRankSumPower;
 };
 
+class OwnerDrawListBoxWithToolTip : public OwnerDrawListBox
+{
+public:
+	OwnerDrawListBoxWithToolTip(FormEntry *f, DWORD iStyle, const CRect& rct, CWnd *parent, int id);
+	virtual int OnToolHitTest( CPoint point, TOOLINFO* pTI ) const;
+};
+
 class StringArraySelector : public BaseSelector
 {
 public:
