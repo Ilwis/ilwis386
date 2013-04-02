@@ -518,7 +518,7 @@ bool fOk(const SegmentMapStore* sm, bool& fFirst, ILWIS::Segment* s)
 
 Coord SegmentMapStore::crdCoord(Coord crd, ILWIS::Segment** seg, long& iNr) const // existing coordinate
 {
-	ILWIS::LPoint pnt(0,crd, 1);
+	ILWIS::LPoint pnt(0,crd, 1,0);
 	double minDist = -1.0;
 	ILWIS::Segment *closestSeg = NULL;
 	vector<Geometry *> segs;
@@ -542,7 +542,7 @@ Coord SegmentMapStore::crdCoord(Coord crd, ILWIS::Segment** seg, long& iNr) cons
 	if ( closestSeg != NULL) {
 		CoordinateSequence *seq = closestSeg->getCoordinates();
 		for(int j = 0; j < seq->size(); ++j) {
-			ILWIS::LPoint pntLine(0,seq->getAt(j),1);
+			ILWIS::LPoint pntLine(0,seq->getAt(j),1,0);
 			geos::operation::distance::DistanceOp dop(&pntLine,&pnt);
 			double dist = dop.distance();
 			if ( dist < minDistInternal || minDistInternal == -1.0) {
@@ -564,7 +564,7 @@ Coord SegmentMapStore::crdCoord(Coord crd, ILWIS::Segment** seg, long& iNr) cons
 Coord SegmentMapStore::crdPoint(Coord crd, ILWIS::Segment** seg, long& iNr,
                            double rPrx) const // somewhere on a segment
 {
-	ILWIS::LPoint pnt(0,crd, 1);
+	ILWIS::LPoint pnt(0,crd, 1,0);
 	double minDist = -1.0;
 	ILWIS::Segment *closestSeg = NULL;
 	vector<Geometry *> segs;

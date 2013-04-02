@@ -119,7 +119,7 @@ bool ILWIS::Polygon::fInMask(const DomainValueRangeStruct& dvrs, const Mask& mas
 
 bool ILWIS::Polygon::fContains(Coord crd) const
 {
-	ILWIS::LPoint pnt(0, crd,iUNDEF);
+	ILWIS::LPoint pnt(0, crd,iUNDEF,0);
 	return contains(&pnt);
 }
 
