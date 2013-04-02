@@ -794,6 +794,8 @@ protected:
 	 */
 	Geometry(const GeometryFactory *factory);
 
+	const GeometryFactory *factory;
+
 private:
 
 
@@ -815,7 +817,7 @@ private:
 	//
 	/// Externally owned
 	///
-	const GeometryFactory *factory;
+
 
 	static const GeometryFactory* INTERNAL_GEOMETRY_FACTORY;
 
