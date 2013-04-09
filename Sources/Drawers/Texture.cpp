@@ -410,9 +410,9 @@ bool Texture::DrawTexture(long offsetX, long offsetY, long texSizeX, long texSiz
 
 void Texture::PutLineData(const RealBuf& bufOriginal, const IntBuf& bufData, const int iLine, const long texSizeX, char * outbuf)
 {
-	long iLen = bufData.iSize();
-	double * ptrBufOriginal = bufOriginal.buf();
-	short * ptrBufData = bufData.buf();
+	const long iLen = bufData.iSize();
+	const double * ptrBufOriginal = bufOriginal.buf();
+	const short * ptrBufData = bufData.buf();
 	char *c = &outbuf[iLine * texSizeX * 2];
 	memcpy(c, ptrBufData, iLen * 2);
 	if ( transpValue == rUNDEF) {
@@ -432,9 +432,9 @@ void Texture::PutLineData(const RealBuf& bufOriginal, const IntBuf& bufData, con
 
 void Texture::PutLineData(const LongBuf& bufOriginal, const IntBuf& bufData, const int iLine, const long texSizeX, char * outbuf)
 {
-	long iLen = bufData.iSize();
-	long * ptrBufOriginal = bufOriginal.buf();
-	short * ptrBufData = bufData.buf();
+	const long iLen = bufData.iSize();
+	const long * ptrBufOriginal = bufOriginal.buf();
+	const short * ptrBufData = bufData.buf();
 	char *c = &outbuf[iLine * texSizeX * 2];
 	memcpy(c, ptrBufData, iLen * 2);
 	if ( transpValue == rUNDEF) {
@@ -454,26 +454,26 @@ void Texture::PutLineData(const LongBuf& bufOriginal, const IntBuf& bufData, con
 
 void Texture::StretchLine(const RealBuf& buf, IntBuf& bufData)
 {
-	int iLen = buf.iSize();
-	double * ptrBuf = buf.buf();
+	const int iLen = buf.iSize();
+	const double * ptrBuf = buf.buf();
 	short * ptrBufData = bufData.buf();
-	double width = rrMinMaxMap.rWidth();
-	double minMapVal = rrMinMaxMap.rLo();
-	int nrMapValues = iPaletteSize - 1;
+	const double width = rrMinMaxMap.rWidth();
+	const double minMapVal = rrMinMaxMap.rLo();
+	const int nrMapValues = iPaletteSize - 1;
 	for (int i = 0; i < iLen; ++i)
-		ptrBufData[i] = (ptrBuf[i] - minMapVal) * (nrMapValues - 1) / width; // reserve last index for UNDEF
+		ptrBufData[i] = round((ptrBuf[i] - minMapVal) * (nrMapValues - 1) / width); // reserve last index for UNDEF
 }
 
 void Texture::StretchLine(const LongBuf& buf, IntBuf& bufData)
 {
-	int iLen = buf.iSize();
-	long * ptrBuf = buf.buf();
+	const int iLen = buf.iSize();
+	const long * ptrBuf = buf.buf();
 	short * ptrBufData = bufData.buf();
-	double width = rrMinMaxMap.rWidth();
-	double minMapVal = rrMinMaxMap.rLo();
-	int nrMapValues = iPaletteSize - 1;
+	const double width = rrMinMaxMap.rWidth();
+	const double minMapVal = rrMinMaxMap.rLo();
+	const int nrMapValues = iPaletteSize - 1;
 	for (int i = 0; i < iLen; ++i)
-		ptrBufData[i] = (ptrBuf[i] - minMapVal) * (nrMapValues - 1) / width; // reserve last index for UNDEF
+		ptrBufData[i] = round((ptrBuf[i] - minMapVal) * (nrMapValues - 1) / width); // reserve last index for UNDEF
 }
 
 bool Texture::DrawTexturePaletted(long offsetX, long offsetY, long texSizeX, long texSizeY, unsigned int zoomFactor, char * outbuf, volatile bool* fDrawStop)
