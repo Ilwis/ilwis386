@@ -145,9 +145,10 @@ void GeoRefStereoMate::Coord2RowCol(const Coord& crd, double& rRow, double& rCol
             crdDTM = csDTM->cConv(cs(), crd);
 	double rZ = mapDTM->rValue(crdDTM);
   if (rZ == rUNDEF || abs(rZ) > 1e6 || rZ > rrMMDTM.rHi() || rZ < rrMMDTM.rLo()){
-    rRow = rUNDEF;
-    rCol = rUNDEF;
-    return;
+    //rRow = rUNDEF;
+    //rCol = rUNDEF;
+    //return;
+	  rZ = 0;
   }
 	grSourceMap->Coord2RowCol(crd, rRowTemp, rColTemp);
   rRow = rRowTemp;
@@ -202,8 +203,9 @@ void GeoRefStereoMate::RowCol2Coord(double rRow, double rCol, Coord& crd) const
             crdDTM = csDTM->cConv(cs(), cSource);
 			rH[i] = mapDTM->rValue(crdDTM);
 			if (rH[i] == rUNDEF) {
-				crd = crdUNDEF;
-				return;
+				//crd = crdUNDEF;
+				//break;
+				rH[i] = 0;
 			}  
 			rD[i] = rW[i] - rH[i];
 			if (abs(rD[i]) < rHeightAccuracy) {
