@@ -254,6 +254,8 @@ void IVGElement::parseNode(const pugi::xml_node& node,IVGAttributes* attributes)
 			}
 			attributes->rwidth = attributes->bounds.width();
 			attributes->rheight = attributes->bounds.height();
+		} else if (attributes->type == IVGAttributes::sCIRCLE || attributes->type == IVGAttributes::sELLIPSE) {
+			attributes->bounds = CoordBounds(Coord(attributes->points[0].x - attributes->rx, attributes->points[0].y - attributes->ry), Coord(attributes->points[0].x + attributes->rx, attributes->points[0].y + attributes->ry));
 		} else {
 			attributes->bounds = CoordBounds(Coord(0,0), Coord(attributes->rwidth,attributes->rheight)); 
 		}
