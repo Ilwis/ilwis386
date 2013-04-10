@@ -15,6 +15,7 @@
 #include "Engine\Drawers\OpenGLText.h"
 #include "Engine\Drawers\TextDrawer.h"
 #include "Engine\Drawers\ZValueMaker.h"
+#include "Engine\Drawers\DrawerContext.h"
 
 using namespace ILWIS;
 
@@ -136,42 +137,195 @@ bool PointDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const
 
 		double xscale = cb.width() / width;
 		double yscale = f * cb.height() / height;
-		//double zscale = yscale;
-
 
 		glPushMatrix();
 		glTranslated(fx,fy,fz + zoffset);
-		glScaled(xscale * properties.scaling() * element->getDefaultScale(), yscale *  properties.scaling() * element->getDefaultScale(), zscale );
-		Coord cMid = localCb.middle();
-		glScaled(1.0,-1.0,1.0); // opengl uses other oriented coordinate system then svg. have to mirror it.
-		//glTranslated(-cMid.x, -cMid.y,0);
+		glScaled(xscale * properties.scaling() * element->getDefaultScale(), -yscale * properties.scaling() * element->getDefaultScale(), zscale ); // opengl's coordinate system is mirrored vertcally compared to svg
 		glRotated(properties.angle,0,0,100);
 		if ( properties.threeDOrientation){
 			glTranslated(0,0,symbolScale);
 			glRotated(-90,100,0,0);
-		} 
+		}
 
+		map<IVGAttributes*, GLuint> & SVGSymbolDisplayListAreas = getRootDrawer()->getDrawerContext()->getSVGSymbolDisplayListAreas();
+		map<IVGAttributes*, GLuint> & SVGSymbolDisplayListContours = getRootDrawer()->getDrawerContext()->getSVGSymbolDisplayListContours();		
 
 		for(vector<IVGAttributes *>::const_iterator cur = element->begin(); cur != element->end(); ++cur) {
+
+			double transp = (*cur)->opacity * getTransparency();
+			if ((drawLoop == drl3DOPAQUE && transp != 1.0) || (drawLoop == drl3DTRANSPARENT && transp == 1.0))
+				continue;
+
+			GLuint & displayListArea = SVGSymbolDisplayListAreas[*cur];
+			GLuint & displayListContour = SVGSymbolDisplayListContours[*cur];
+
+			glLineWidth(properties.thickness!= 0 ? properties.thickness : (*cur)->strokewidth);
+			Color fcolor = (*cur)->fillColor.fEqual(colorUSERDEF) ? properties.drawColor : (*cur)->fillColor;
+			Color scolor = (*cur)->strokeColor.fEqual(colorUSERDEF) ? properties.drawColor : (*cur)->strokeColor;
 			switch((*cur)->type) {
 				case IVGAttributes::sCIRCLE:
 				case IVGAttributes::sELLIPSE:
-					drawEllipse((*cur), 0, drawLoop);
+					{
+						glPushMatrix();
+						double rx = (*cur)->rx > 0 ? (*cur)->rx : width / 2.0;
+						double ry = (*cur)->ry > 0 ? (*cur)->ry : height / 2.0;
+						double lcx = (*cur)->points[0].x;
+						double lcy = (*cur)->points[0].y;
+						glTranslated(lcx, lcy, 0);
+						if ( (*cur)->type == IVGAttributes::sCIRCLE) {
+							double r = min(rx, ry);
+							glScaled(r, r, 0);
+						} else
+							glScaled(rx, ry, 0);
+
+						if (fcolor != colorUNDEF) {
+							glColor4d(fcolor.redP(), fcolor.greenP(), fcolor.blueP(), transp);
+							if (displayListArea != 0)
+								glCallList(displayListArea);
+							else {
+								displayListArea = glGenLists(1);
+								glNewList(displayListArea, GL_COMPILE_AND_EXECUTE);
+								drawCircleArea(*cur);
+								glEndList();
+							}
+						}
+						if (scolor != colorUNDEF) {
+							glColor4d(scolor.redP(), scolor.greenP(), scolor.blueP(), transp);
+							if (displayListContour != 0)
+								glCallList(displayListContour);
+							else {
+								displayListContour = glGenLists(1);
+								glNewList(displayListContour, GL_COMPILE_AND_EXECUTE);
+								drawCircleBoundaries(*cur);
+								glEndList();
+							}
+						}
+
+						glPopMatrix();
+					}
 					break;
 				case IVGAttributes::sRECTANGLE:
-					drawRectangle((*cur), 0, drawLoop);
+					{
+						glPushMatrix();
+
+						if ( (*cur)->transformations.size() > 0) // is rectangle the only itemtype that can have transformations??
+							transform((*cur));
+
+						double hw = ((*cur)->rwidth != 0 ? (*cur)->rwidth : width) / 2.0;
+						double hh = ((*cur)->rheight != 0 ? (*cur)->rheight : height) / 2.0;
+						Coord center = (*cur)->bounds.middle();
+						glTranslated(center.x, center.y, 0);
+						glScaled(hw, hh, 0);
+
+						if (fcolor != colorUNDEF) {
+							glColor4d(fcolor.redP(), fcolor.greenP(), fcolor.blueP(), transp);
+							if (displayListArea != 0)
+								glCallList(displayListArea);
+							else {
+								displayListArea = glGenLists(1);
+								glNewList(displayListArea, GL_COMPILE_AND_EXECUTE);
+								drawRectangleArea(*cur);
+								glEndList();
+							}
+						}
+						if (scolor != colorUNDEF) {
+							glColor4d(scolor.redP(), scolor.greenP(), scolor.blueP(), transp);
+							if (displayListContour != 0)
+								glCallList(displayListContour);
+							else {
+								displayListContour = glGenLists(1);
+								glNewList(displayListContour, GL_COMPILE_AND_EXECUTE);
+								drawRectangleBoundaries(*cur);
+								glEndList();
+							}
+						}
+
+						glPopMatrix();
+					}
 					break;
 				case IVGAttributes::sPOLYGON:
-					drawPolygon((*cur), 0, drawLoop);
+					{
+						if (fcolor != colorUNDEF) {
+							glColor4f(fcolor.redP(),fcolor.greenP(), fcolor.blueP(), transp);
+							if (displayListArea != 0)
+								glCallList(displayListArea);
+							else {
+								displayListArea = glGenLists(1);
+								glNewList(displayListArea, GL_COMPILE_AND_EXECUTE);
+								drawPolygonArea(*cur);
+								glEndList();
+							}
+						}
+						if (scolor != colorUNDEF) {
+							glColor4f(scolor.redP(),scolor.greenP(), scolor.blueP(), transp);
+							if (displayListContour != 0)
+								glCallList(displayListContour);
+							else {
+								displayListContour = glGenLists(1);
+								glNewList(displayListContour, GL_COMPILE_AND_EXECUTE);
+								drawPolygonBoundaries(*cur);
+								glEndList();
+							}
+						}
+					}
 					break;
 				case IVGAttributes::sLINE:
 				case IVGAttributes::sPOLYLINE:
-					drawLine((*cur), 0, drawLoop);
+					{
+						if (scolor != colorUNDEF) {
+							glColor4d(scolor.redP(), scolor.greenP(), scolor.blueP(), transp);
+							if (displayListContour != 0)
+								glCallList(displayListContour);
+							else {
+								displayListContour = glGenLists(1);
+								glNewList(displayListContour, GL_COMPILE_AND_EXECUTE);
+								drawLine(*cur);
+								glEndList();
+							}
+						}
+					}
 					break;
 				case IVGAttributes::sPATH:
-					drawPath((*cur),0, drawLoop);
+					{
+						if ((*cur)->isPolygon()) {
+							if (fcolor != colorUNDEF) {
+								glColor4f(fcolor.redP(),fcolor.greenP(), fcolor.blueP(), transp);
+								if (displayListArea != 0)
+									glCallList(displayListArea);
+								else {
+									displayListArea = glGenLists(1);
+									glNewList(displayListArea, GL_COMPILE_AND_EXECUTE);
+									drawPolygonArea(*cur);
+									glEndList();
+								}
+							}
+							if (scolor != colorUNDEF) {
+								glColor4f(scolor.redP(),scolor.greenP(), scolor.blueP(), transp);
+								if (displayListContour != 0)
+									glCallList(displayListContour);
+								else {
+									displayListContour = glGenLists(1);
+									glNewList(displayListContour, GL_COMPILE_AND_EXECUTE);
+									drawPolygonBoundaries(*cur);
+									drawPath(*cur);
+									glEndList();
+								}
+							}
+						}
+						else if (scolor != colorUNDEF) {
+							glColor4f(scolor.redP(),scolor.greenP(), scolor.blueP(), transp); // was fcolor, but probably wrong
+							if (displayListContour != 0)
+								glCallList(displayListContour);
+							else {
+								displayListContour = glGenLists(1);
+								glNewList(displayListContour, GL_COMPILE_AND_EXECUTE);
+								drawPath((*cur));
+								glEndList();
+							}
+						}
+					}
 					break;			
-			};
+			}
 		}
 		glPopMatrix();
 
@@ -229,158 +383,80 @@ void PointDrawer::transform(const IVGAttributes* attributes) const{
 	}
 }
 
-void PointDrawer::drawRectangle(const IVGAttributes* attributes, double z, const DrawLoop drawLoop) const {
-	double transp = getTransparency() * attributes->opacity;
-	if ((drawLoop == drl3DOPAQUE && transp != 1.0) || (drawLoop == drl3DTRANSPARENT && transp == 1.0))
-		return;
+void PointDrawer::drawRectangleArea(const IVGAttributes* attributes) const {
+	glBegin(GL_QUADS);						
+	glVertex3f( -1.0, -1.0, 0.0);	
+	glVertex3f( -1.0,  1.0, 0.0);	
+	glVertex3f(  1.0,  1.0, 0.0);
+	glVertex3f(  1.0, -1.0, 0.0);	
+	glEnd();
+}
 
-	double hw = attributes->rwidth != 0 ? attributes->rwidth : width;
-	double hh = attributes->rheight != 0 ? attributes->rheight : height;
-	hw /= 2.0;
-	hh /= 2.0;
-	if ( attributes->transformations.size() > 0) {
-		glPushMatrix();
-		transform(attributes);
-	}
-
-	Color fcolor = attributes->fillColor;
-	if ( fcolor == colorUSERDEF)
-		fcolor = properties.drawColor;
-
-	Coord center = attributes->bounds.middle();
-	if ( !fcolor.fEqual(colorUNDEF)) {
-		glColor4d(fcolor.redP(), fcolor.greenP(), fcolor.blueP(), transp);
-		glBegin(GL_QUADS);						
-		glVertex3f( center.x - hw, center.y - hw, z);	
-		glVertex3f( center.x - hw,  center.y + hw,z);	
-		glVertex3f( center.x + hw,  center.y + hw,z);
-		glVertex3f( center.x + hw,  center.y - hw,z);
-		glEnd();
-	}
-	glLineWidth(properties.thickness!= 0 ? properties.thickness : attributes->strokewidth);
-	Color scolor = attributes->strokeColor.fEqual(colorUSERDEF) ? properties.drawColor :  attributes->strokeColor;
-	glColor4d(scolor.redP(), scolor.greenP(), scolor.blueP(), transp);
+void PointDrawer::drawRectangleBoundaries(const IVGAttributes* attributes) const {
 	glBegin(GL_LINE_STRIP);						
-		glVertex3f( center.x - hw, center.y - hw, z);	
-		glVertex3f( center.x - hw,  center.y + hw,z);	
-		glVertex3f( center.x + hw,  center.y + hw,z);
-		glVertex3f( center.x + hw,  center.y - hw,z);
-		glVertex3f( center.x - hw, center.y - hw, z);	
+	glVertex3f( -1.0, -1.0, 0.0);	
+	glVertex3f( -1.0,  1.0, 0.0);	
+	glVertex3f(  1.0,  1.0, 0.0);
+	glVertex3f(  1.0, -1.0, 0.0);
+	glVertex3f( -1.0, -1.0, 0.0);	
 	glEnd();
-
-	if ( attributes->transformations.size() > 0) {
-		glPopMatrix();
-	}
 }
 
-void PointDrawer::drawEllipse(const IVGAttributes* attributes, double z, const DrawLoop drawLoop) const{
-	double transp = attributes->opacity * getTransparency();
-	if ((drawLoop == drl3DOPAQUE && transp != 1.0) || (drawLoop == drl3DTRANSPARENT && transp == 1.0))
-		return;
+void PointDrawer::drawCircleArea(const IVGAttributes* attributes) const {
+	const int sections = 20; //number of triangles to use to estimate a circle (a higher number yields a more perfect circle)
+	const double twoPi =  2.0 * M_PI;
 
-	double rx = attributes->rx > 0 ? attributes->rx : width / 2;
-	double ry = attributes->ry >0 ? attributes->ry : height / 2;
-	double lcx = attributes->points[0].x;
-	double lcy = attributes->points[0].y;
-	double r = min(rx,ry);
+	glBegin(GL_TRIANGLE_FAN);
+	glVertex3d(0, 0, 0); // origin
+	for(int i = 0; i <= sections;i++) // make $section number of circles
+		glVertex3d(cos(i *  twoPi / sections), sin(i * twoPi / sections), 0);
+	glEnd();
+}
 
-	Color fcolor = attributes->fillColor.fEqual(colorUSERDEF) ? properties.drawColor : attributes->fillColor;
+void PointDrawer::drawCircleBoundaries(const IVGAttributes* attributes) const {
+	const int sections = 20; //number of triangles to use to estimate a circle (a higher number yields a more perfect circle)
+	const double twoPi =  2.0 * M_PI;
 
-	int sections = 20; //number of triangles to use to estimate a circle
-	// (a higher number yields a more perfect circle)
-	double twoPi =  2.0 * M_PI;
-	if ( attributes->type == IVGAttributes::sCIRCLE)
-		rx = ry = r;
-	
-	if ( fcolor != colorUNDEF) {
-		glColor4d(fcolor.redP(), fcolor.greenP(), fcolor.blueP(), transp);
-		glBegin(GL_TRIANGLE_FAN);
-		glVertex3d(lcx, lcy, z); // origin
-		for(int i = 0; i <= sections;i++) { // make $section number of circles
-			glVertex3d(lcx + rx * cos(i *  twoPi / sections), 
-				lcy + ry* sin(i * twoPi / sections), z);
-		}
-		glEnd();
-	}
-
-	Color scolor = attributes->strokeColor.fEqual(colorUSERDEF) ? properties.drawColor :  attributes->strokeColor;
-	glColor4d(scolor.redP(), scolor.greenP(), scolor.blueP(), transp);
-	glLineWidth(properties.thickness!= 0 ? properties.thickness : attributes->strokewidth);
 	glBegin(GL_LINE_LOOP);
-	for(int i = 0; i <= sections;i++) { // make $section number of circles
-		glVertex3d(lcx + rx * cos(i *  twoPi / sections), 
-			lcy + ry* sin(i * twoPi / sections), z);
-	}
+	for(int i = 0; i <= sections;i++) // make $section number of circles
+		glVertex3d(cos(i *  twoPi / sections), sin(i * twoPi / sections), 0.0);
 	glEnd();
 }
 
-void PointDrawer::drawLine(const IVGAttributes* attributes, double z, const DrawLoop drawLoop) const{
-	double transp = attributes->opacity * getTransparency();
-	if ((drawLoop == drl3DOPAQUE && transp != 1.0) || (drawLoop == drl3DTRANSPARENT && transp == 1.0))
-		return;
-	Color scolor = attributes->strokeColor.fEqual(colorUSERDEF) ? properties.drawColor :  attributes->strokeColor;
-	glColor4d(scolor.redP(), scolor.greenP(), scolor.blueP(), transp);
-
-	glLineWidth(properties.thickness!= 0 ? properties.thickness : attributes->strokewidth);
+void PointDrawer::drawLine(const IVGAttributes* attributes) const {
 	glBegin(GL_LINE_STRIP);
 	for(int i=0; i < attributes->points.size(); ++i) {
-		//glVertex3d(attributes->points[i].x - cMid.x, attributes->points[i].y - cMid.y, z);
-			glVertex3d(attributes->points[i].x , attributes->points[i].y , z);
+		glVertex3d(attributes->points[i].x , attributes->points[i].y, 0.0);
 	}
-
-    glEnd();
-
+	glEnd();
 }
 
-void PointDrawer::drawPolygon(const IVGAttributes* attributes, double z, const DrawLoop drawLoop) const{
-	double transp = attributes->opacity * getTransparency();
-	if ((drawLoop == drl3DOPAQUE && transp != 1.0) || (drawLoop == drl3DTRANSPARENT && transp == 1.0))
-		return;
-
-	Color fcolor = attributes->fillColor.fEqual(colorUSERDEF) ? properties.drawColor : attributes->fillColor;
-	if ( fcolor != colorUNDEF) {
-		glColor4f(fcolor.redP(),fcolor.greenP(), fcolor.blueP(), transp);
-		for(int i=0; i < attributes->triangleStrips.size(); ++i){
-			glBegin(GL_TRIANGLE_STRIP);
-			for(int j=0; j < attributes->triangleStrips.at(i).size(); ++j) {
-				Coord c = attributes->triangleStrips.at(i).at(j);
-				glVertex3d(c.x,c.y,z);
-			}
-			glEnd();
-		}
-	}
-	if ( attributes->strokeColor.fEqual(colorUNDEF)) {
-		Color scolor = attributes->strokeColor;
-		glLineWidth(properties.thickness != 0 ? properties.thickness : attributes->strokewidth);
-		glColor4f(scolor.redP(),scolor.greenP(), scolor.blueP(), transp);
-		glBegin(GL_LINE_STRIP);
-		for(int i=0; i < attributes->points.size(); ++i) {
-			glVertex3d(attributes->points[i].x , attributes->points[i].y , z);
+void PointDrawer::drawPolygonArea(const IVGAttributes* attributes) const {
+	for(int i=0; i < attributes->triangleStrips.size(); ++i){
+		glBegin(GL_TRIANGLE_STRIP);
+		for(int j=0; j < attributes->triangleStrips.at(i).size(); ++j) {
+			Coord c = attributes->triangleStrips.at(i).at(j);
+			glVertex3d(c.x,c.y,0.0);
 		}
 		glEnd();
 	}
-
-
 }
 
-void PointDrawer::drawPath(const IVGAttributes* attributes, double z, const DrawLoop drawLoop) const{
-	double transp = attributes->opacity * getTransparency();
-	if ((drawLoop == drl3DOPAQUE && transp != 1.0) || (drawLoop == drl3DTRANSPARENT && transp == 1.0))
-		return;
+void PointDrawer::drawPolygonBoundaries(const IVGAttributes* attributes) const {
+	glBegin(GL_LINE_STRIP);
+	for(int i=0; i < attributes->points.size(); ++i)
+		glVertex3d(attributes->points[i].x , attributes->points[i].y , 0.0);
+	glEnd();
+}
 
-	if ( attributes->isPolygon()) {
-		drawPolygon(attributes, z, drawLoop);
-	}
-	Color fcolor = attributes->fillColor.fEqual(colorUSERDEF) ? properties.drawColor : attributes->fillColor;
-	glColor4f(fcolor.redP(),fcolor.greenP(), fcolor.blueP(), transp);
+void PointDrawer::drawPath(const IVGAttributes* attributes) const{
 	const SVGPath& path = (const SVGPath&) attributes;
 	for(int i = 0; i < path.noOfElements(); ++i) {
 		PathElement el = path.getElement(i);
 		if ( el.type == PathElement::eLINE) {
 			glBegin(GL_LINE_STRIP);
-			for(int j = el.start; j <= el.end; ++j) {
-				glVertex3d(attributes->points[j].x, attributes->points[j].y, z);
-			}
+			for(int j = el.start; j <= el.end; ++j)
+				glVertex3d(attributes->points[j].x, attributes->points[j].y, 0.0);
 			glEnd();
 		}
 	}

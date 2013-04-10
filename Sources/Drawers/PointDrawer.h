@@ -14,7 +14,7 @@ public:
 	enum Scaling{sNONE, sLOGARITHMIC, sLINEAR};
 	enum RadiusArea{sRADIUS, sAREA};
 
-	PointProperties(double t=0, const String& sym = "open-rectangle", Color clr=colorUNDEF) : 
+	PointProperties(double t=0, const String& sym = DEFAULT_POINT_SYMBOL_TYPE, Color clr=colorUNDEF) : 
 		thickness(t),drawColor(clr), 
 		ignoreColor(false), 
 		threeDOrientation(false), 
@@ -104,11 +104,14 @@ class _export PointDrawer : public SimpleDrawer {
 		PointDrawer(DrawerParameters *parms, const String& name);
 		void calcSize();
 
-		void drawRectangle(const IVGAttributes* attributes, double z, const DrawLoop drawLoop) const;
-		void drawEllipse(const IVGAttributes* attributes, double z, const DrawLoop drawLoop) const;
-		void drawLine(const IVGAttributes* attributes, double z, const DrawLoop drawLoop) const;
-		void drawPolygon(const IVGAttributes* attributes, double z, const DrawLoop drawLoop) const;
-		void drawPath(const IVGAttributes* attributes, double z, const DrawLoop drawLoop) const;
+		void drawRectangleArea(const IVGAttributes* attributes) const;
+		void drawRectangleBoundaries(const IVGAttributes* attributes) const;
+		void drawCircleArea(const IVGAttributes* attributes) const;
+		void drawCircleBoundaries(const IVGAttributes* attributes) const;
+		void drawLine(const IVGAttributes* attributes) const;
+		void drawPolygonArea(const IVGAttributes* attributes) const;
+		void drawPolygonBoundaries(const IVGAttributes* attributes) const;
+		void drawPath(const IVGAttributes* attributes) const;
 		void transform(const IVGAttributes* attributes) const;
 
 		Coord cNorm;

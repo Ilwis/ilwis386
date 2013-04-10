@@ -128,6 +128,17 @@ DrawerContext::~DrawerContext() {
 
 void DrawerContext::clear() {
 	csOpenglContext.Lock();
+	wglMakeCurrent(m_hdc, m_hrc);
+
+	for (map<IVGAttributes*, GLuint>::iterator it = SVGSymbolDisplayListAreas.begin(); it != SVGSymbolDisplayListAreas.end(); ++it) {
+		if (it->second != 0)
+			glDeleteLists(it->second, 1);
+	}
+
+	for (map<IVGAttributes*, GLuint>::iterator it = SVGSymbolDisplayListContours.begin(); it != SVGSymbolDisplayListContours.end(); ++it) {
+		if (it->second != 0)
+			glDeleteLists(it->second, 1);
+	}
 
 	::wglMakeCurrent(NULL,  NULL);
 
