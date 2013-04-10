@@ -14,7 +14,7 @@ class LayerTreeItem;
 class SetChecks;
 class DisplayOptionTreeItem;
 
-#define DEFAULT_POINT_SYMBOL_TYPE "open-rectangle"
+#define DEFAULT_POINT_SYMBOL_TYPE "open-circle"
 
 namespace ILWIS {
 	class RootDrawer;

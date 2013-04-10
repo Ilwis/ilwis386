@@ -89,7 +89,7 @@ DisplayOptionsForm(dr,wPar,TR("Symbolization")), selection(0)
 	String base = getEngine()->getContext()->sIlwDir();
 	base += "Resources\\Symbols\\";
 	props = (PointProperties *)dr->getProperties();
-	name = props->symbol == "" ? "open-rectangle" : props->symbol;
+	name = props->symbol == "" ? DEFAULT_POINT_SYMBOL_TYPE : props->symbol;
 	scale = props->scale / 100.0;
 	//fdSelect = new FieldDataType(root,TR("Symbols"),&name,".ivg",false,0,FileName(base),false);
 	fselect = new FieldOneSelectString(root,TR("Symbols"),&selection, names);
