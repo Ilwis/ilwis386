@@ -37,7 +37,7 @@ class _export SpatialDataDrawer : public ComplexDrawer {
 		virtual String iconName(const String& subtype="?") const;
 		virtual CoordBounds cb();
 		IlwisObjectPtr *getSourceSupportObject(IlwisObject::iotIlwisObjectType type);
-		set<Feature *> getSelectedFeatures() const;
+		vector<Feature *> getSelectedFeatures() const;
 		virtual void setTresholdColor(const Color&clr) {}
 		virtual void setTresholdRange(const RangeReal& tr, bool single=false) {}
 

@@ -327,8 +327,8 @@ IlwisObjectPtr *SpatialDataDrawer::getSourceSupportObject(IlwisObject::iotIlwisO
 	return 0;
 }
 
-set<Feature *> SpatialDataDrawer::getSelectedFeatures() const {
-	set<Feature *> features;
+vector<Feature *> SpatialDataDrawer::getSelectedFeatures() const {
+	vector<Feature *> features;
 	for(int i = 0; i < getDrawerCount(); ++i) {
 		NewDrawer *drw = getDrawer(i, dtPOLYGONLAYER | dtSEGMENTLAYER | dtPOINTLAYER);
 		ComplexDrawer *cdrw = (ComplexDrawer *)drw;
@@ -338,7 +338,7 @@ set<Feature *> SpatialDataDrawer::getSelectedFeatures() const {
 				continue;
 			if ( sdrw->getSpecialDrawingOption() & sdoSELECTED) {
 				Feature *f = (Feature *)sdrw->getDataSource();
-				features.insert(f);
+				features.push_back(f);
 			}
 
 		}

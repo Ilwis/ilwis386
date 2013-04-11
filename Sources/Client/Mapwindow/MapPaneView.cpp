@@ -1240,7 +1240,7 @@ void MapPaneView::OnUpdateSaveSelection(CCmdUI* pCmdUI) {
 void MapPaneView::OnSaveSelection() {
 	class SaveSelectionForm : public FormWithDest {
 	public:
-		SaveSelectionForm(CWnd *parent, RootDrawer *rootdrw, set<Feature*>& feat, String& selectedF, String& out ) :
+		SaveSelectionForm(CWnd *parent, RootDrawer *rootdrw, vector<Feature*>& feat, String& selectedF, String& out ) :
 			FormWithDest(parent, TR("Save Layer selection")), 
 				features(feat),
 				outname(out),
@@ -1283,13 +1283,13 @@ void MapPaneView::OnSaveSelection() {
 		long selected;
 		String &outname;
 		String &selectedFile;
-		set<Feature *> &features;
+		vector<Feature *> &features;
 
 	};
 
 	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(GetDocument());
 	if ( mcd) {
-		set<Feature *> features;
+		vector<Feature *> features;
 		String outname;
 		String selectedFile;
 		SaveSelectionForm frm(this,mcd->rootDrawer, features, selectedFile, outname);
@@ -1301,18 +1301,18 @@ void MapPaneView::OnSaveSelection() {
 	}
 }
 
-void MapPaneView::SaveFeatures(const set<Feature *>& features, const String& inFile, const String& outFile) const{
+void MapPaneView::SaveFeatures(const vector<Feature *>& features, const String& inFile, const String& outFile) const{
 	FileName fnIn(inFile);
 	FileName fnOut(outFile);
 	CoordBounds bnds;
-	for(set<Feature *>::const_iterator iter = features.begin(); iter != features.end(); ++iter) {
+	for(vector<Feature *>::const_iterator iter = features.begin(); iter != features.end(); ++iter) {
 		bnds += (*iter)->cbBounds();
 	}
 	bnds *= 1.1;
 	if ( IOTYPE(fnIn) == IlwisObject::iotPOINTMAP) {
 		PointMap pmIn(fnIn);
 		PointMap pmFnOut(fnOut,pmIn->cs(), bnds, pmIn->dvrs());
-		for(set<Feature *>::const_iterator iter = features.begin(); iter != features.end(); ++iter) {
+		for(vector<Feature *>::const_iterator iter = features.begin(); iter != features.end(); ++iter) {
 			ILWIS::Point *point = CPOINT(*iter);
 			Feature *f = pmFnOut->newFeature(point);
 			f->PutVal(point->rValue());
@@ -1323,7 +1323,7 @@ void MapPaneView::SaveFeatures(const set<Feature *>& features, const String& inF
 	if ( IOTYPE(fnIn) == IlwisObject::iotSEGMENTMAP) {
 		SegmentMap smIn(fnIn);
 		SegmentMap smFnOut(fnOut,smIn->cs(), bnds, smIn->dvrs());
-		for(set<Feature *>::const_iterator iter = features.begin(); iter != features.end(); ++iter) {
+		for(vector<Feature *>::const_iterator iter = features.begin(); iter != features.end(); ++iter) {
 			ILWIS::Segment *seg = CSEGMENT(*iter);
 			Feature *f = smFnOut->newFeature(seg);
 			f->PutVal(seg->rValue());
@@ -1334,7 +1334,7 @@ void MapPaneView::SaveFeatures(const set<Feature *>& features, const String& inF
 	if ( IOTYPE(fnIn) == IlwisObject::iotPOLYGONMAP) {
 		PolygonMap pmIn(fnIn);
 		PolygonMap pmFnOut(fnOut,pmIn->cs(), bnds, pmIn->dvrs());
-		for(set<Feature *>::const_iterator iter = features.begin(); iter != features.end(); ++iter) {
+		for(vector<Feature *>::const_iterator iter = features.begin(); iter != features.end(); ++iter) {
 			ILWIS::Polygon *pol = CPOLYGON(*iter);
 			Feature *f = pmFnOut->newFeature(pol);
 			f->PutVal(pol->rValue());

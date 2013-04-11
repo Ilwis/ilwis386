@@ -138,7 +138,7 @@ protected:
 	void OnUpdateShowRecordView(CCmdUI* pCmdUI);
 
 private:
-	void SaveFeatures(const set<Feature *>& features, const String& inFile, const String& outFile) const;
+	void SaveFeatures(const vector<Feature *>& features, const String& inFile, const String& outFile) const;
 
 	enum DoubleClickAction { dcaRECORD, dcaRPR, dcaACTION };
 	DoubleClickAction dca;
