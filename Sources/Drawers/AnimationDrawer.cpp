@@ -169,6 +169,9 @@ bool AnimationDrawer::activeOnTime(const Column& col, double currentTime) {
 		getDrawer(activeMaps[mapIndex])->setActive(false);
 		++mapIndex;
 		getDrawer(activeMaps[mapIndex])->setActive(true);
+		IlwisObjectPtr *obj = getObject();
+		if ( obj) 
+			getEngine()->SendMessage(ILWM_UPDATE_ANIM,(WPARAM)&(obj->fnObj), mapIndex); 
 		return true;
 	} else {
 		if (loop && mapIndex >= activeMaps.size() -1 && currentTime >= col->rValue(col->iRecs() - 1)) {
