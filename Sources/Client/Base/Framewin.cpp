@@ -316,7 +316,12 @@ void FrameWindow::UpdateFrameTitleForDocument(LPCTSTR lpszDocName)
 			lstrcpy(szText, lpszDocName);
 			lstrcat(szText, _T(" - "));
 		}
-		lstrcat(szText, m_strTitle);
+		std::string s(m_strTitle);
+		if ( s.size() > 75) {
+			s = s.substr(0,75);
+			s += "...";
+		}
+		lstrcat(szText, s.c_str());
 	}
 	else
 	{
@@ -325,7 +330,14 @@ void FrameWindow::UpdateFrameTitleForDocument(LPCTSTR lpszDocName)
 		if (lpszDocName != NULL)
 		{
 			lstrcat(szText, _T(" - "));
-			lstrcat(szText, lpszDocName);
+			std::string s(szText);
+			std::string s1(lpszDocName);
+			if ( s1.size() > 75) {
+				s1 = s.substr(0,75);
+				s1 += "...";
+				s += s1;
+			}
+			lstrcat(szText, s.c_str());
 		}
 	}
 
