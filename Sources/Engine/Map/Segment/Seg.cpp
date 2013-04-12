@@ -508,7 +508,7 @@ ILWIS::Segment *SegmentMapPtr::getFeature(const String& s)
   return NULL;
 }
 
-Geometry *SegmentMapPtr::getFeatureById(const String& id) const {
+Geometry *SegmentMapPtr::getFeatureById(FeatureID id) const {
   ILWISSingleLock sl(const_cast<CCriticalSection*>(&csAccess), TRUE, SOURCE_LOCATION);
   if ( pms) {
 	  pms->getFeatureById(id);
@@ -934,7 +934,7 @@ vector<Geometry *> SegmentMapPtr::getFeatures(Coord crd, double rPrx) {
 	return segs;
 }
 
-bool SegmentMapPtr::removeFeature(const String& id, const vector<int>& selectedCoords) {
+bool SegmentMapPtr::removeFeature(FeatureID id, const vector<int>& selectedCoords) {
 	if ( 0 != pms)
 		return pms->removeFeature(id, selectedCoords);
 	return false;

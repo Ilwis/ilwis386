@@ -126,8 +126,8 @@ public:
 	virtual void    SetCoordSystem(const CoordSystem&); // dangerous function!
 	Feature *newFeature(geos::geom::Geometry *g=NULL);
 	virtual vector<Geometry *> getFeatures(Coord crd, double rPrx=rUNDEF);
-	bool removeFeature(const String& id, const vector<int>& selectedCoords=vector<int>());
-	Geometry *getFeatureById(const String& id) const;
+	bool removeFeature(FeatureID id, const vector<int>& selectedCoords=vector<int>());
+	Geometry *getFeatureById(FeatureID id) const;
 	vector<Feature *> getFeatures(const CoordBounds& cb, bool complete=true) const;
 	RangeReal getZRange(bool force=false) ;
 private:  

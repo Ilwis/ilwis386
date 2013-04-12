@@ -74,8 +74,8 @@ public:
 	//ILWIS::Segment*     newFeature(long iSegNr);
 	Feature*		    newFeature(geos::geom::Geometry *line = NULL);
 	Geometry			*getTransformedFeature(long iRec, const CoordSystem& csy) const	;
-	bool				removeFeature(const String& id, const vector<int>& selectedCoords=vector<int>());
-	Geometry			*getFeatureById(const String& id) const;
+	bool				removeFeature(FeatureID id, const vector<int>& selectedCoords=vector<int>());
+	Geometry			*getFeatureById(FeatureID id) const;
 
 	//long                 iNode(Coord) const; // 3.0
 	//Coord                crdNode(Coord) const;

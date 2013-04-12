@@ -739,11 +739,11 @@ void SegmentMapStore::Pack()
   ptr.Updated();
 }
 
-Geometry *SegmentMapStore::getFeatureById(const String& id) const {
+Geometry *SegmentMapStore::getFeatureById(FeatureID id) const {
 	return BaseMapPtr::getFeatureById(geometries, id);
 }
 
-bool SegmentMapStore::removeFeature(const String& id, const vector<int>& selectedCoords) {
+bool SegmentMapStore::removeFeature(FeatureID id, const vector<int>& selectedCoords) {
 	if ( geometries->size() == 0)
 		return true;
 	for(vector<Geometry *>::iterator cur = geometries->begin(); cur != geometries->end(); ++cur) {

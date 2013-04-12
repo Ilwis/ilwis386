@@ -177,7 +177,7 @@ void PolygonMapStore::Updated()
 	timStore = ptr.objtime;
 }
 
-Geometry *PolygonMapStore::getFeatureById(const String& id) const {
+Geometry *PolygonMapStore::getFeatureById(FeatureID id) const {
 	return BaseMapPtr::getFeatureById(geometries, id);
 }
 
@@ -425,7 +425,7 @@ void PolygonMapStore::addPolygon(ILWIS::Polygon *pol) {
 	ptr._iPol = geometries->size();
 }
 
-bool PolygonMapStore::removeFeature(const String& id, const vector<int>& selectedCoords) {
+bool PolygonMapStore::removeFeature(FeatureID id, const vector<int>& selectedCoords) {
 	for(vector<Geometry *>::iterator cur = geometries->begin(); cur != geometries->end(); ++cur) {
 		ILWIS::Polygon *pol = CPOLYGON(*cur);
 		if ( pol->getGuid() == id  ) {

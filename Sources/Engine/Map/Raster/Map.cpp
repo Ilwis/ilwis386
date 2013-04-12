@@ -1701,27 +1701,30 @@ void MapPtr::DeleteCalc()
 
 void MapPtr::OpenMapVirtual()
 {
-  if (0 != pmv) // already there
-    return;
-  if (!fDependent())
-    return;
-  try {
-    pmv = MapVirtual::create(fnObj, *this);
-    objdep = ObjectDependency(fnObj);
-    String s;
-    if (0 == ReadElement("IlwisObjectVirtual", (char*)0, s)) {
-      // for downward compatibility with 2.02 :
-      SetDomainChangeable(pmv->fDomainChangeable());
-      SetValueRangeChangeable(pmv->fValueRangeChangeable());
-      SetGeoRefChangeable(pmv->fGeoRefChangeable());
-      SetExpressionChangeable(pmv->fExpressionChangeable());
-    }
-  }
-  catch (const ErrorObject& err) {
-    err.Show();
-    pmv = 0;
-    objdep = ObjectDependency();
-  }
+	if (0 != pmv) // already there
+		return;
+	if (!fDependent())
+		return;
+	try {
+		pmv = MapVirtual::create(fnObj, *this);
+		objdep = ObjectDependency(fnObj);
+		String s;
+		if (0 == ReadElement("IlwisObjectVirtual", (char*)0, s)) {
+			// for downward compatibility with 2.02 :
+			if ( pmv == 0) {
+				throw ErrorObject(TR("Invalid dependent object, aborting operation"));
+			}
+			SetDomainChangeable(pmv->fDomainChangeable());
+			SetValueRangeChangeable(pmv->fValueRangeChangeable());
+			SetGeoRefChangeable(pmv->fGeoRefChangeable());
+			SetExpressionChangeable(pmv->fExpressionChangeable());
+		}
+	}
+	catch (const ErrorObject& err) {
+		err.Show();
+		pmv = 0;
+		objdep = ObjectDependency();
+	}
 }
 
 void MapPtr::Replace(const String& sExpr)

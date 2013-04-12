@@ -96,8 +96,8 @@ public:
   virtual Geometry *getFeature(long i) const;
   Feature *pntNew(geos::geom::Geometry *pnt=NULL);
   virtual vector<Geometry *> getFeatures(Coord crd, double rPrx=rUNDEF);
-  bool removeFeature(const String& id, const vector<int>& selectedCoords=vector<int>());
-  Geometry	*getFeatureById(const String& id) const;
+  bool removeFeature(FeatureID id, const vector<int>& selectedCoords=vector<int>());
+  Geometry	*getFeatureById(FeatureID id) const;
   vector<Feature *> getFeatures(const CoordBounds& cb, bool complete=true) const;
 
 protected:

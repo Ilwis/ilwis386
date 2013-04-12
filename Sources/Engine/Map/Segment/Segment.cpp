@@ -151,7 +151,7 @@ void ILWIS::Segment::PutCoords(long iNr, const CoordBuf& crdBuf)
 {
     ILWISSingleLock sl(const_cast<CCriticalSection *>(&csAccess), TRUE, SOURCE_LOCATION);
 	spatialIndex->remove(this);
-	cb = CoordBounds();
+	envelope = computeEnvelopeInternal();
 	points.release();
 	vector<Coordinate> *crds = new vector<Coordinate>();
 	crds->resize(iNr);

@@ -172,8 +172,8 @@ public:
 	Geometry		*getFeature(long i) const;
 	Geometry		*getTransformedFeature(long iRec, const CoordSystem& csy) const	;
 	virtual vector<Geometry *> getFeatures(Coord crd, double rPrx=rUNDEF);
-	Geometry *getFeatureById(const String& id) const;
-	bool removeFeature(const String& id, const vector<int>& selectedCoords=vector<int>());
+	Geometry *getFeatureById(FeatureID id) const;
+	bool removeFeature(FeatureID id, const vector<int>& selectedCoords=vector<int>());
 	bool            fSatisfyCondition(const ILWIS::Segment& seg) const;
 	
 	void     SetAlfa(const CoordBounds& cb);

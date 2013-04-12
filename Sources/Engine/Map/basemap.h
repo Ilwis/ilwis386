@@ -53,6 +53,8 @@
 class Column;
 class Feature;
 
+typedef unsigned long FeatureID;
+
 class _export BaseMapPtr: public IlwisObjectPtr
 {
 friend class BaseMap;
@@ -138,12 +140,12 @@ public:
 	bool  fDataReadOnly() const;
 	virtual long  iFeatures() const { return iUNDEF; } ;
 	virtual Geometry *getFeature(long i) const { return NULL;}
-	virtual Geometry *getFeatureById(const String& id) const{ return NULL; }
+	virtual Geometry *getFeatureById(FeatureID id) const{ return NULL; }
 	virtual vector<Geometry *> getFeatures(Coord crd, double rPrx=rUNDEF) { return vector<Geometry *>(); }
 	virtual vector<Feature *> getFeatures(const CoordBounds& cb, bool complete=true) const { return vector<Feature *>(); }
 	Geometry *getTransformedFeature(long iRec, const CoordSystem& csy) const	{ return NULL;}
 	virtual Feature *newFeature(geos::geom::Geometry *pnt=NULL) { return NULL; }
-	virtual bool removeFeature(const String& id, const vector<int>& selectedCoords=vector<int>()) { return true;}
+	virtual bool removeFeature(FeatureID id, const vector<int>& selectedCoords=vector<int>()) { return true;}
 	void  setHistrogramSize(long n);
 	long  getHistogramSize() const;
 	bool use3DCoordinates() const;
@@ -157,7 +159,7 @@ protected:
 	
 	virtual void         CalcMinMax();
 	virtual RangeReal    rrMinMaxSampled() { return rrMinMax(mmmCALCULATE);} // overrule this when sampling makes sense
-	static Geometry *getFeatureById(const vector<Geometry *> *geoms, const String& id) ;
+	static Geometry *getFeatureById(const vector<Geometry *> *geoms, FeatureID id) ;
 	
     RangeReal            _rrMinMax;  // for DomainValueReal
     RangeReal            _rrPerc1;

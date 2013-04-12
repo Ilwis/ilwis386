@@ -637,7 +637,7 @@ vector<Geometry *> PointMapStore::getFeatures(Coord crd, double rPrx) {
 
 }
 
-bool PointMapStore::removeFeature(const String& id, const vector<int>& selectedCoords) {
+bool PointMapStore::removeFeature(FeatureID id, const vector<int>& selectedCoords) {
 	for(vector<Geometry *>::iterator cur = geometries->begin(); cur != geometries->end(); ++cur) {
 		ILWIS::Point *pnt = CPOINT(*cur);
 		if ( pnt->getGuid() == id) {
@@ -650,7 +650,7 @@ bool PointMapStore::removeFeature(const String& id, const vector<int>& selectedC
 	return false;
 }
 
-Geometry *PointMapStore::getFeatureById(const String& id) const {
+Geometry *PointMapStore::getFeatureById(FeatureID id) const {
 	return BaseMapPtr::getFeatureById(geometries, id);
 }
 

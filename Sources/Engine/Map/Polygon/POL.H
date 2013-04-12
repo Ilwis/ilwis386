@@ -140,9 +140,9 @@ public:
 	virtual vector<Geometry *> getFeatures(Coord crd, double rPrx=rUNDEF);
 	Geometry   *getFeature(const String&) const;
 	Geometry   *getFeature(long) const;
-	Geometry *getFeatureById(const String& id) const;
+	Geometry *getFeatureById(FeatureID id) const;
 	Geometry	*getTransformedFeature(long iRec, const CoordSystem& csy) const;
-	bool removeFeature(const String& id, const vector<int>& selectedCoords=vector<int>());
+	bool removeFeature(FeatureID id, const vector<int>& selectedCoords=vector<int>());
 	
 	virtual void  CalcMinMax();
 	virtual void  Rename(const FileName& fnNew);

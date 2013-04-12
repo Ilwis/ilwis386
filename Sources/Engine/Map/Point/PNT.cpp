@@ -853,13 +853,13 @@ vector<Geometry *> PointMapPtr::getFeatures(Coord crd, double rPrx) {
 }
 
 
-bool PointMapPtr::removeFeature(const String& id, const vector<int>& selectedCoords) {
+bool PointMapPtr::removeFeature(FeatureID id, const vector<int>& selectedCoords) {
 	if ( 0 != pms)
 		return pms->removeFeature(id, selectedCoords);
 	return false;
 }
 
-Geometry *PointMapPtr::getFeatureById(const String& id) const {
+Geometry *PointMapPtr::getFeatureById(FeatureID id) const {
   ILWISSingleLock sl(const_cast<CCriticalSection*>(&csAccess), TRUE, SOURCE_LOCATION);
   if ( pms) {
 	  pms->getFeatureById(id);

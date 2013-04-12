@@ -3,6 +3,8 @@
 #include <Geos.h>
 #include "Engine\Base\Algorithm\QuadTree.h"
 
+typedef unsigned long FeatureID;
+
 class Mask;
 class DomainValueRangeStruct;
 
@@ -23,7 +25,7 @@ public:
 	virtual FeatureType getType() const=0;
 	void Delete(bool yesno=false);
 	bool fDeleted() const;
-	String getGuid() const;
+	FeatureID getGuid() const;
 	bool EnvelopeIntersectsWith(Geometry *g2, bool useMargine=false);
 	CoordBounds Feature::cbBounds() const;
 	virtual Coord centroid() const { return cbBounds().middle(); }
@@ -32,12 +34,13 @@ public:
 
 protected:
 	CCriticalSection csAccess;
-	CoordBounds cb;
+	//CoordBounds cb;
 	//geos::index::quadtree::Quadtree *spatialIndex;
 	QuadTree *spatialIndex;
 
 private:
 	bool deleted;
-	String guid;
+	FeatureID guid;
+	static FeatureID baseid;
 };
 

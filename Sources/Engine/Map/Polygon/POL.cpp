@@ -477,7 +477,7 @@ vector<ILWIS::Polygon *> PolygonMapPtr::pol(const Coord& crd) const
 	return vector<ILWIS::Polygon *>();
 }
 
-Geometry *PolygonMapPtr::getFeatureById(const String& id) const {
+Geometry *PolygonMapPtr::getFeatureById(FeatureID id) const {
 	ILWISSingleLock sl(const_cast<CCriticalSection*>(&csAccess), TRUE, SOURCE_LOCATION);
 	if ( pms) {
 		pms->getFeatureById(id);
@@ -851,7 +851,7 @@ vector<Geometry *> PolygonMapPtr::getFeatures(Coord crd, double rPrx) {
 }
 
 
-bool PolygonMapPtr::removeFeature(const String& id, const vector<int>& selectedCoords) {
+bool PolygonMapPtr::removeFeature(FeatureID id, const vector<int>& selectedCoords) {
 	if ( 0 != pms)
 		return pms->removeFeature(id, selectedCoords);
 	return false;
