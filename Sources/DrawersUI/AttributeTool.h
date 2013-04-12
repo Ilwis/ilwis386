@@ -20,6 +20,7 @@ protected:
 	void displayOptionAttColumn();
 
 	SetChecks *attrCheck;
+	HTREEITEM lasthit;
 };
 
 	class ChooseAttributeColumnForm : public DisplayOptionsForm {

@@ -18,6 +18,7 @@
 #include "DrawersUI\SetDrawerTool.h"
 #include "Engine\Drawers\DrawerContext.h"
 #include "DrawersUI\AttributeTool.h"
+#include "DrawersUI\StretchTool.h"
 #include "DrawersUI\LayerDrawerTool.h"
 
 
@@ -78,6 +79,7 @@ HTREEITEM AttributeTool::configure( HTREEITEM parentItem) {
 			}
 		}
 	}
+	lasthit = 0;
 	return htiNode;
 }
 
@@ -97,6 +99,7 @@ void AttributeTool::setcheckattr(void *value, HTREEITEM item) {
 	int n = 0;
 	DrawerTool *parentTool = getParentTool();
 	DrawerTool *colorTool = parentTool->findChildToolByType("ColorTool");
+	DrawerTool *stretchTool = parentTool->findChildToolByType("StretchTool");
 	if ( attColumn.fValid()) {
 		layerDrawer->setUseAttributeColumn(true);
 		layerDrawer->setUseAttributeColumn(true);
@@ -124,6 +127,21 @@ void AttributeTool::setcheckattr(void *value, HTREEITEM item) {
 		int count = 0;
 		while((childTool = colorTool->getTool(count++))) {
 			childTool->configure(colorTool->getTreeItem());
+		}
+	}
+	if ( attColumn.fValid()) {
+		if (!stretchTool && attColumn->dm()->pdv()) {
+			stretchTool = new StretchTool(mpvGetView(),tree,drawer);
+		}
+		if ( stretchTool && hit != lasthit) {
+			if ( lasthit) {
+				stretchTool->removeTool(0); // all
+				stretchTool->clear();
+				tree->DeleteAllItems(lasthit,true);
+			}
+			lasthit = hit;
+			parentTool->addTool(stretchTool);
+			stretchTool->configure(item);
 		}
 	}
 
