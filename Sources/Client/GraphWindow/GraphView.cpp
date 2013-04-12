@@ -170,7 +170,8 @@ void GraphView::OnInitialUpdate()
 {
 	if (0 != grdrw)
 	  grdrw->Init();
-  info = new InfoLine(this);
+	if (!info)
+	  info = new InfoLine(this);
   PostMessage(WM_COMMAND, ID_GRPH_FITINWINDOW, 0);
 }
 
