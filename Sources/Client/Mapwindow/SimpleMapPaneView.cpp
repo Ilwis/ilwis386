@@ -114,7 +114,7 @@ void SimpleMapPaneView::MoveMouse(short xInc, short yInc)
 const int RepresentationClass::iSIZE_FACTOR=3; // MapWindow to Layout ratio; never make this 0; currently only int ratio supported
 
 SimpleMapPaneView::SimpleMapPaneView()
-: info(0), edit(0), dcView(0), cwcsButtonDown(Coord()), fwPar(0), bmView(0), hBmOld(0), pDC(0), drawThread(0), fStopDrawThread(false), fDrawRequest(false), fResizing(false)
+: info(0), edit(0), cwcsButtonDown(Coord()), fwPar(0), pDC(0), drawThread(0), fStopDrawThread(false), fDrawRequest(false), fResizing(false)
 {
 	fDirty = false;
 	fRedrawing = false;
@@ -124,16 +124,7 @@ SimpleMapPaneView::SimpleMapPaneView()
 	IlwisSettings settings("DefaultSettings");
 	fSoftwareRendering = settings.fValue("SoftwareRendering", false);
 
-	hmodMsimg32 = LoadLibrary("msimg32.dll");
 	swapper = new ScreenSwapper();
-	if (hmodMsimg32 <= 0)
-	{
-		hmodMsimg32 = 0;
-		alphablendfunc = 0;
-	}
-	else {
-		alphablendfunc = (AlphaBlendFunc)GetProcAddress(hmodMsimg32, "AlphaBlend");
-	}
 }
 
 SimpleMapPaneView::~SimpleMapPaneView()
@@ -152,31 +143,6 @@ SimpleMapPaneView::~SimpleMapPaneView()
 	delete info;
 	delete edit;
 	delete pib;
-	if (dcView)
-	{
-		// First attempt to clean up GDI and memory .. according to the "official" way
-		CBitmap * bm = dcView->SelectObject(CBitmap::FromHandle(hBmOld));
-		if (bm) // If a bitmap popped out, clean it up !! don't clean up selected objs !!
-		{
-			bmView->DeleteObject();
-			delete bmView;
-			bmView = 0; // intentional, for test below
-		}
-		dcView->DeleteDC();
-		delete dcView;
-	}
-	// Note: When SimpleMapPaneView was named MapPaneView, and under Windows 98, the code above
-	// seemed to work well. Now (SimpleMapPaneView and Windows 2000) the behavior seems different,
-	// so either Windows 2000 garbage-collects the GDI and the SelectObject above is not needed,
-	// or the CDC is gone, which means the SelectObject should happen earlier at a moment that
-	// the CDC still exists, or the TempGDIObject bmOld is invalid and SelectObject doesn't work.
-	// Hence here (and also at RedrawInThread) the 2nd attempt to finalize cleaning up GDI and memory
-	if (bmView) // means code above failed, so we stil have some cleanup to do
-	{
-		bmView->DeleteObject(); // encapsulating dc is gone, so this should be ok now
-		delete bmView;
-	}
-	FreeLibrary(hmodMsimg32);
 }
 
 MapCompositionDoc* SimpleMapPaneView::GetDocument()

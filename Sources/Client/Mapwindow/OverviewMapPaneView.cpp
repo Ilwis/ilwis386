@@ -97,7 +97,7 @@ void OverviewMapPaneView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
   SimpleMapPaneView::OnUpdate(pSender, lHint, pHint);
   if (6 == lHint)
     return;
-	if (lHint == 5 && 0 != dcView) // setdirty report from mappaneview
+	if (lHint == 5) // setdirty report from mappaneview
 		Invalidate(); 
   else
     UpdateSelf();

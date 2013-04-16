@@ -115,7 +115,6 @@ protected:
 	bool fDrawAlsoWhenLoading; 
 	PixelInfoBar *pib;
 	CoordWithCoordSystem cwcsButtonDown;
-	CDC* dcView; // dcView is our own CDC and should be cleaned up at next cycle
 	Editor *edit;
 	bool useMetricCoords;
 	bool fSoftwareRendering;
@@ -137,13 +136,6 @@ private:
 #endif
 	FrameWindow* fwPar;
 	CCriticalSection csDcView;
-	CBitmap* bmView; // bmView contains our own bm and should be cleaned up at next cycle
-	HBITMAP hBmOld; // The old bitmap that popped out of SelectObject and after reinserting
-	// frees our own bm from GDI. Note that we prefer a handle and not a
-	// CBitmap* because the handles are permanent and the TempGDIObjects not
-	HMODULE hmodMsimg32;
-	typedef BOOL (WINAPI *AlphaBlendFunc)(HDC,int,int,int,int,HDC,int,int,int,int,BLENDFUNCTION);
-	AlphaBlendFunc alphablendfunc;
 	CDC * pDC;
 	ILWIS::ScreenSwapper *swapper;
 
