@@ -66,13 +66,12 @@ namespace ILWIS {
 		void OnLButtonDown(UINT nFlags, CPoint point);
 		void OnLButtonUp(UINT nFlags, CPoint point);
 		void SetTimePosText(String * _sTimePosText);
-		virtual void SetTime(double timePerc, bool fShiftDown, long sender);
+		virtual void SetTime(double timePerc, long sender);
 	private:
 		void ShowInfoText();
 		void HideInfoText();
 		InfoLine* info;
 		bool fDragging;
-		bool fShift;
 		String * sTimePosText;
 
 		DECLARE_MESSAGE_MAP();

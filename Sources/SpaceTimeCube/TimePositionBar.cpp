@@ -61,7 +61,6 @@ TimeSliderCtrl::TimeSliderCtrl()
 : CSliderCtrl()
 , info(0)
 , fDragging(false)
-, fShift(false)
 , sTimePosText(0)
 {
 }
@@ -89,12 +88,12 @@ void TimeSliderCtrl::SetTimePosText(String * _sTimePosText)
 void TimeSliderCtrl::VScroll(UINT nSBCode, UINT nPos)
 {
 	if (nSBCode == TB_THUMBTRACK || nSBCode == TB_THUMBPOSITION)
-		SendTimeMessage((sliderRange - nPos) / (double)sliderRange, fShift, long(this));
+		SendTimeMessage((sliderRange - nPos) / (double)sliderRange, long(this));
 	else
-		SendTimeMessage((sliderRange - GetPos()) / (double)sliderRange, fShift, long(this));
+		SendTimeMessage((sliderRange - GetPos()) / (double)sliderRange, long(this));
 }
 
-void TimeSliderCtrl::SetTime(double timePerc, bool fShiftDown, long sender)
+void TimeSliderCtrl::SetTime(double timePerc, long sender)
 {
 	if (sender == (long) this)
 		return;
@@ -122,7 +121,6 @@ void TimeSliderCtrl::OnMouseMove(UINT nFlags, CPoint point)
 {
 	if (fDragging)
 		ShowInfoText();
-	fShift = (nFlags & MK_SHIFT);
 	CSliderCtrl::OnMouseMove(nFlags, point);
 }
 
@@ -130,7 +128,6 @@ void TimeSliderCtrl::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	fDragging = true;
 	ShowInfoText();
-	fShift = (nFlags & MK_SHIFT);
 	CSliderCtrl::OnLButtonDown(nFlags, point);
 }
 
@@ -138,7 +135,6 @@ void TimeSliderCtrl::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	fDragging = false;
 	HideInfoText();
-	fShift = (nFlags & MK_SHIFT);
 	CSliderCtrl::OnLButtonUp(nFlags, point);
 }
 
@@ -191,7 +187,7 @@ void TimePositionBar::OnSize(UINT nType, int cx, int cy)
 
 void TimePositionBar::SetTime(double timePerc)
 {
-	slider.SetTime(timePerc, false, 0);
+	slider.SetTime(timePerc, 0);
 }
 
 void TimePositionBar::SetTimePosText(String * _sTimePosText)

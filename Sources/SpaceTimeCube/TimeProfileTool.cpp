@@ -159,14 +159,14 @@ void ProfileGraphWindow::Drag(CPoint point)
 		mousePos = point;
 		CRect functionPlotRect (GetFunctionPlotRect());
 		if (mousePos.y >= functionPlotRect.top && mousePos.y <= functionPlotRect.bottom)
-			SendTimeMessage((functionPlotRect.bottom - mousePos.y) / (double)functionPlotRect.Height(), false, long(this));
+			SendTimeMessage((functionPlotRect.bottom - mousePos.y) / (double)functionPlotRect.Height(), long(this));
 		SelectionChanged();
 		fDrawAxes = true;
 		SetDirty();
 	}
 }
 
-void ProfileGraphWindow::SetTime(double timePerc, bool fShiftDown, long sender)
+void ProfileGraphWindow::SetTime(double timePerc, long sender)
 {
 	if (sender == (long) this)
 		return;

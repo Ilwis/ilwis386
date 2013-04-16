@@ -23,9 +23,9 @@ TimeProvider::TimeProvider()
 {
 }
 
-void TimeProvider::SendTimeMessage(double timePerc, bool fShiftDown, long sender)
+void TimeProvider::SendTimeMessage(double timePerc, long sender)
 {
 	list<TimeListener*> & timeListeners = TimeListener::getTimeListeners();
 	for (list<TimeListener*>::iterator it = timeListeners.begin(); it != timeListeners.end(); ++it)
-		(*it)->SetTime(timePerc, fShiftDown, sender);
+		(*it)->SetTime(timePerc, sender);
 }

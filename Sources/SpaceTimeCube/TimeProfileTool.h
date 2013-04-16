@@ -38,7 +38,7 @@ namespace ILWIS {
 		void SetGrid(bool gridXN, bool gridXT, bool gridYT);
 		void SelectFeatures(RowSelectInfo & inf);
 		virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
-		virtual void SetTime(double timePerc, bool fShiftDown, long sender);
+		virtual void SetTime(double timePerc, long sender);
 
 	protected:
 		virtual void DrawFunction(CDC* pDC, const SimpleFunction * pFunc);

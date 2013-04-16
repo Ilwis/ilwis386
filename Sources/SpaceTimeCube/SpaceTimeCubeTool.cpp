@@ -602,7 +602,8 @@ bool SpaceTimeCube::showingLayerOptionsForm()
 	return layerOptionsForm != 0;
 }
 
-void SpaceTimeCube::SetTime(double timePerc, bool fShiftDown, long sender) {
+void SpaceTimeCube::SetTime(double timePerc, long sender) {
+	bool fShiftDown = GetKeyState(VK_SHIFT) & 0x8000 ? true : false;
 	if (fShiftDown)
 		timeShift += timePos - timePerc;
 	else 

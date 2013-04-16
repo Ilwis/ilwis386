@@ -11,7 +11,7 @@ public:
 	TimeListener();
 	~TimeListener();
 	static list<TimeListener*> & getTimeListeners();
-	virtual void SetTime(double timePerc, bool fShiftDown, long sender) = 0;
+	virtual void SetTime(double timePerc, long sender) = 0;
 private:
 	static list<TimeListener*> timeListeners;
 };
@@ -19,7 +19,7 @@ private:
 class TimeProvider {
 public:
 	TimeProvider();
-	void SendTimeMessage(double timePerc, bool fShiftDown, long sender);
+	void SendTimeMessage(double timePerc, long sender);
 };
 
 }

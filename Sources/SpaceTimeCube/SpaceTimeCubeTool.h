@@ -96,7 +96,7 @@ namespace ILWIS {
 		void setFormAutoDeleted();
 		void startLayerOptionsForm();
 		bool showingLayerOptionsForm();
-		virtual void SetTime(double timePerc, bool fShiftDown, long sender);
+		virtual void SetTime(double timePerc, long sender);
 		TimeBounds * getTimeBoundsZoom() const;
 		const TimeBounds * getTimeBoundsFullExtent() const;
 		void loadMapview();
