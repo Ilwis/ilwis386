@@ -78,8 +78,10 @@ bool PolygonFeatureDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbAr
 
 void PolygonFeatureDrawer::addDataSource(void *f, int options) {
 	feature = (Feature *)f;
-	if ( boundary)
+	if ( boundary){
 		boundary->addDataSource(feature);
+		cb = feature->cbBounds();
+	}
 }
 
 Feature *PolygonFeatureDrawer::getFeature() const {
