@@ -479,6 +479,9 @@ void Texture::StretchLine(const LongBuf& buf, IntBuf& bufData)
 bool Texture::DrawTexturePaletted(long offsetX, long offsetY, long texSizeX, long texSizeY, unsigned int zoomFactor, char * outbuf, volatile bool* fDrawStop)
 {
 	RowCol rcSize = mp->rcSize();
+	if ( rcSize.fUndef())
+		return false;
+
 	long imageWidth = rcSize.Col;
 	long imageHeight = rcSize.Row;
 	long sizeX = texSizeX;
