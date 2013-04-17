@@ -8,7 +8,7 @@ FeatureID Feature::baseid = 0;
 
 #undef max // max macro is interfering; disabled in this file
 
-Feature::Feature(QuadTree *tree) {
+Feature::Feature(QuadTree *tree) : geom(0) {
 	deleted = false;
 	spatialIndex = tree;
 	guid = ++baseid;
@@ -44,15 +44,12 @@ bool Feature::EnvelopeIntersectsWith(Geometry *g2, bool useMargine) {
 
 CoordBounds Feature::cbBounds() const // bounding rectangle
 {
-	//ILWISSingleLock sl(const_cast<CCriticalSection *>(&csAccess), TRUE);
-	//if ( cb.fUndef()) {
-	//	const Geometry *geometry = dynamic_cast<const geos::geom::Geometry *>(this);
-	//	const Envelope *geom = geometry->getEnvelopeInternal();
-	//	const_cast<Feature *>(this)->cb = CoordBounds(Coord(geom->getMinX(), geom->getMinY()), Coord(geom->getMaxX(), geom->getMaxY()));
-
-	//}
-	const Geometry *geometry = dynamic_cast<const geos::geom::Geometry *>(this);
-	return CoordBounds((Envelope *)geometry->getEnvelope());	
+	if ( geom == 0) {
+		Feature *f = const_cast<Feature *>(this);
+		const_cast<Feature *>(this)->geom = dynamic_cast<geos::geom::Geometry *>(f);
+	}
+	const Envelope *env = (const Envelope *)geom->getEnvelopeInternal();
+	return CoordBounds(env);	
 }
 
 
