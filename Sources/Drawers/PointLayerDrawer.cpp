@@ -98,7 +98,7 @@ void PointLayerDrawer::prepare(PreparationParameters *parm){
 				double v;
 				if ( rotColumn.fValid()) {
 					long iKey = dmsrt->iKey(dmsrt->iOrd(iRaw));
-					double v = rotColumn->rValue(iKey);
+					v = rotColumn->rValue(iKey);
 				} else
 					v =  bmptr->dvrs().rValue(iRaw);
 
