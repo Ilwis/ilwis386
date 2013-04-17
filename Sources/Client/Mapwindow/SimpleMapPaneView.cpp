@@ -272,7 +272,7 @@ void SimpleMapPaneView::Draw()
 {
 	fDrawRequest = false;
 	MapCompositionDoc* mcd = GetDocument();
-	mcd->rootDrawer->draw();
+	mcd->rootDrawer->draw(mcd->rootDrawer->getCoordBoundsZoom());
 	// draw editor
 	if (edit)
 		edit->draw(&fDrawStop);
