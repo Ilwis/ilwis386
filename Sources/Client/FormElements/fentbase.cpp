@@ -116,7 +116,7 @@ FormEntry::FormEntry(FormBase* _frm_) :
         _npChanged(0),
         _cb(0),
 				bsStyle(bsNONE),
-				_enabled(true)
+				_enabled(true), stopCascade(false)
 
 {
     _id = 100;
@@ -130,7 +130,8 @@ FormEntry::FormEntry(FormEntry* p, Parm *prm, bool fAutoAlign) :
         _par(p),
         _fShow(false),
 		_enabled(true),
-		bsStyle(bsNONE)
+		bsStyle(bsNONE),
+		stopCascade(false)
 {
   FormEntry* feParPos = _par;
   while (feParPos->fRadioButton() || feParPos->fCheckBox())

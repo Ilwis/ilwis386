@@ -1229,6 +1229,13 @@ String FieldRealSimple::sGetText()
     return (String)de->text();
 }
 
+String FieldRealSimple::sRawGetText() const
+{
+	if ( de != 0)
+		return (String)de->getRawString();
+	return "";
+}
+
 void FieldRealSimple::SetVal(double rVal)
 {
   bool fChanged = (_rVal != rVal);

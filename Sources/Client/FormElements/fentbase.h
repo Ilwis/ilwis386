@@ -141,6 +141,7 @@ protected:
   CallBackHandler*        _cb;
   bool                    _fShow;                     // true: show children; false: hide
   bool					  _enabled;
+  bool					  stopCascade;
 
 private:
     FormEntry(FormBase*);                               // constructor for the creation of

@@ -1137,8 +1137,22 @@ return FormEntry::CheckData();
 
 void FieldCoord::StoreData()
 {
-	frX->StoreData();
-	frY->StoreData();
+	String s = frX->sRawGetText();
+	if ( s.iPos(',') != -1) {
+		if ( stopCascade)
+			return;
+		stopCascade = true;
+		String sx = s.sHead(",");
+		String sy = s.sTail(",");
+
+		frX->SetVal(sx.rVal());
+		frY->SetVal(sy.rVal());
+		stopCascade=false;
+
+	} else {
+		frX->StoreData();
+		frY->StoreData();
+	}
 	if ( is3D)
 		frZ->StoreData();
 	if (_crd != 0) 
