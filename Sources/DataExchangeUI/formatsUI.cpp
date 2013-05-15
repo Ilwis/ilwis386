@@ -35,6 +35,9 @@ extern "C" _export void getImportOptionForms(CWnd *parent, vector<ImportDriver>&
 		if ( driver.driverName == "Aster") {
 			driver.formats[0].ui = new AsterOptions(parent);
 		}
+		if ( driver.driverName == "OGC") {
+			driver.formats[0].ui = new WFSOptions(parent);
+		}
 		if ( driver.driverName == "ADO") {
 			for(int j = 0; j < driver.formats.size(); ++j) {
 				ImportFormat& fmt = driver.formats[j];

@@ -35,6 +35,7 @@
  Created on: 2007-02-8
  ***************************************************************/
 
+#include "Headers\messages.h"
 #include "Headers\toolspch.h"
 #include "Engine\SpatialReference\Coordsys.h"
 #include "Engine\Table\Col.h"
@@ -49,44 +50,30 @@
 #include "Engine\Base\DataObjects\valrange.h"
 #include "Engine\Domain\Dmvalue.h"
 #include "Engine\Base\System\Engine.h"
+#include "Engine\DataExchange\gdalproxy.h"
+#include <cstdlib> 
+#include <time.h>
 #include "wfs.h"
+#include "Log.h"
+#include "Engine/Base/XML/pugixml.hpp"
+#include "ConnectorWFS.h"
 
 struct wfsdata{
 	String cmd;
 	String dir;
 };
 
+
+
+
 void importWFS(const String& cmd, const String& dir) {
-	//Domain dom(fnPnt, 100, dmtUNIQUEID, "Pnt");
 
-	//PointMap mp(FileName("aap"),csy,CoordBounds(8686,l3403403,696796,3330), DomainValueRangeStruct(dm);
-	//ILWIS::Point *f = CPOINT(mp->newFeature());
-	//
-	//Table table("somename", dm);
-	//Column col = table->colNew("ppp",Domain("value"),ValueRange(0,100));
-	//col->SetOwnedByTable(true);
+	//initialize();
+	//FOR NOW WE ASUME THAT "dir" COINTAINS THE ADDRRESS OF THE LAYER WE WANT TO RETRIEVE******************************************
 
-	//table->rec(100);
-
-	//col->PutVal(4, 33);
-
-	//PolygonMap polm();
-	//ILWIS::Polygon *pol = CPOLYGON(polm->newFeature());
-
-
-	//CoordinateArraySequence *seq = new CoordinateArraySequence();
-	//for(int i = 0; i < count; ++i) {
-	//	double x,y,z;
-	//	//funcs.ogrGetPoints(hGeom, i,&x,&y,&z);
-	//	Coord c(x,y,z);
-	//	seq->add(c,false);
-	//}
-	//if ( seq->size() < 3 || seq->front() != seq->back())
-	//	return 0;
-	//LinearRing *ring =  new LinearRing(seq, new GeometryFactory());
-
- //   pol->addBoundary(ring);
-	//pol->addHole(ring);
+	//Create a connector object to handle the "bridge" between the service and ILWIS an the log.
+	const std::string str_url = cmd; //"http://localhost:8080/geoserver/ows?";
+	ConnectorWFS *conn = new ConnectorWFS(str_url); //Create object in the heap
 }
 
 UINT WfsThread(void * data) {
@@ -111,3 +98,6 @@ void wfsimportlayer(const String& cmd) {
 		AfxBeginThread(WfsThread, (LPVOID)d);
 	} 
 }
+
+
+
