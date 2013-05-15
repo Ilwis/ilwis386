@@ -53,6 +53,7 @@ class FormExtraImportOptions : public FormWithDest {
 public:
 	FormExtraImportOptions(CWnd* parent, const String& title) : FormWithDest(parent, title) {}
 	virtual String sGetExtraOptionsPart(const String& currentExp) = 0;
+	virtual void setInput(const String& inp) {};
 };
 
 class GeneralImportForm : public FormWithDest {

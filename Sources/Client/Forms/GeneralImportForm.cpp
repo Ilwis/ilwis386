@@ -340,9 +340,11 @@ int GeneralImportForm::Fill(Event*)
 
 int GeneralImportForm::moreOptions(Event *) {
 	if ( currentFormat.ui != NULL) {
+		fsInput->StoreData();
 		sInput = fsInput->sVal();
 		if ( currentFormat.method != "IlwisTable" && currentFormat.method != "ADO") {
 			FormExtraImportOptions *frm = (FormExtraImportOptions *)currentFormat.ui;
+			frm->setInput(sInput);
 			frm->create();
 			if ( frm->fOkClicked()) {
 				extraOptions = frm->sGetExtraOptionsPart(extraOptions);
@@ -456,12 +458,9 @@ int GeneralImportForm::exec() {
 
 	}
 	if (!b) {
-		if( !URL::isUrl(sInput) || layer == "")
+		if( !URL::isUrl(sInput) || extraOptions == "")
 			return 0;
-		URL url(sInput);
-		if ( isWfs) {
-			IlwWinApp()->Execute("wfsimportlayer");
-		}
+		IlwWinApp()->Execute(extraOptions);
 	}
 	return 0;
 }
