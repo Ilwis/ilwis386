@@ -475,7 +475,7 @@ void FrameWindow::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
 			OnShowFloatingControlBars(false);
 			break;
 		case WA_CLICKACTIVE:
-			TRACE("Click");
+			//TRACE("Click");
 		case WA_ACTIVE:
 			//TRACE("Activate window\n");
 			OnShowFloatingControlBars(true);
