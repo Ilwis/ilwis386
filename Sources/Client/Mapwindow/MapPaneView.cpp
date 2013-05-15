@@ -160,6 +160,7 @@ BEGIN_MESSAGE_MAP(MapPaneView, SimpleMapPaneView)
 	ON_COMMAND(ID_CREATECSY, OnCreateCoordSys)
 	ON_COMMAND(ID_CREATESMS, OnCreateSampleSet)
 	ON_COMMAND(ID_CREATESUBMAP, OnCreateSubMap)
+	ON_COMMAND(ID_COPY_COORD, OnCopyCoord)
 	ON_MESSAGE(ILWM_VIEWSETTINGS, OnViewSettings)
 	ON_COMMAND_RANGE(ID_MAPDBLCLKRECORD, ID_MAPDBLCLKACTION, OnSetDoubleClickAction)
 	ON_UPDATE_COMMAND_UI_RANGE(ID_MAPDBLCLKRECORD, ID_MAPDBLCLKACTION, OnUpdateDoubleClickAction)
@@ -332,18 +333,19 @@ void MapPaneView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 
 
 #define sMen(ID) ILWSF("men",ID).c_str()
-#define add(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
+#define addMenu(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 void MapPaneView::OnContextMenu(CWnd* pWnd, CPoint point) 
 {
 	if (edit && edit->OnContextMenu(pWnd, point))
 		return;
 	CMenu men;
 	men.CreatePopupMenu();
-	add(ID_NORMAL);
-	add(ID_ZOOMIN);
-	add(ID_ZOOMOUT);
-	add(ID_PANAREA);
-	add(ID_ENTIREMAP);
+	addMenu(ID_NORMAL);
+	addMenu(ID_ZOOMIN);
+	addMenu(ID_ZOOMOUT);
+	addMenu(ID_PANAREA);
+	addMenu(ID_ENTIREMAP);
+	addMenu(ID_COPY_COORD);
 
 	// grey out options if not available without coding anything anew
 	CCmdUI cmdUIstate;
@@ -358,8 +360,53 @@ void MapPaneView::OnContextMenu(CWnd* pWnd, CPoint point)
 		cmdUIstate.DoUpdate(this, 0);
 	}
 
-	men.TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON, point.x, point.y, pWnd);
+	//men.TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON, point.x, point.y, pWnd);
+	switch (men.TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON|TPM_RETURNCMD, point.x, point.y, this)){
+		case ID_COPY_COORD:
+			{
+					MapCompositionDoc* mcd = GetDocument();
+					POINT p = point;
+					ScreenToClient(&p);
+					Coord cRowCol (mcd->rootDrawer->screenToOpenGL(RowCol(p.y,p.x)));
+					if ( cRowCol.fUndef())
+						return ;
+					Coord c (mcd->rootDrawer->glToWorld(cRowCol));
+					String s("%f,%f", c.x, c.y);
+					zClipboard clip(this);
+					clip.add((char *)s.c_str());
+			/*		OpenClipboard();
+					EmptyClipboard();	
+					HGLOBAL hg=GlobalAlloc(GMEM_MOVEABLE,s.size()+1);
+					if (!hg){
+						CloseClipboard();
+						return;
+					}
+					memcpy(GlobalLock(hg),s.c_str(),s.size()+1);
+					GlobalUnlock(hg);
+					SetClipboardData(CF_TEXT,hg);
+					CloseClipboard();
+					GlobalFree(hg);*/
+			}
+			break;
+		case ID_NORMAL:
+			OnNoTool();
+			break;
+		case ID_ZOOMIN:
+			OnZoomIn();
+			break;
+		case ID_ZOOMOUT:
+			OnZoomOut();
+			break;
+		case ID_PANAREA:
+			OnPanArea();
+			break;
+		case ID_ENTIREMAP:
+			OnEntireMap();
+			break;
+	}
 }
+
+#undef addMenu
 
 void MapPaneView::ShowRecord(const Ilwis::Record& rec)
 {
@@ -1454,4 +1501,8 @@ LRESULT MapPaneView::OnSendUpdateAnimMessages(WPARAM p1, LPARAM p2) {
 	hview->Invalidate();
 
 	return 1;
+}
+
+void MapPaneView::OnCopyCoord() {
+
 }
