@@ -78,11 +78,15 @@ bool ZappEdit::checkData()
 
 void ZappEdit::text(const String& sVal)
 {
+	  if ( this->GetSafeHwnd() == 0)
+	  return ;
   SetWindowText(sVal.c_str());
 }
 
 String ZappEdit::text()
-{
+{ 
+  if ( this->GetSafeHwnd() == 0)
+	  return "";
   CString str;
   GetWindowText(str);
   return String(str);
@@ -248,6 +252,7 @@ afx_msg void zFormattedEdit::OnChar( UINT nChar, UINT nRepCnt, UINT nFlags )
 	zRange r(selectionRange());
 	CString sCur;
 	GetWindowText(sCur);
+	rawString = sCur;
 	String cur(sCur.GetBuffer(sCur.GetLength() + 1));
 	zFormatter::zFormatterStat fmtAction= format->addChars(cur, &c, 1, r);
 	if (fmtAction == zFormatter::zFmtStatReplace) 
@@ -278,14 +283,19 @@ afx_msg LRESULT zFormattedEdit::OnPaste(WPARAM , LPARAM )
 	char *sText = clip.getText(); 
 	if (0 == sText)
 		return 0;
-  String sTxt(sText);
-	pasteStr(sTxt);
+	CString s(sText);
+    rawString = s;
+	String txt = s;
+	pasteStr(txt);
 	delete [] sText;
   
   return 1;
 }
 
-     
+String	zFormattedEdit::getRawString() const {
+	return rawString;
+}
+
 int zFormattedEdit::pasteStr(String &s) 
 {
 	zRange r(selectionRange());
