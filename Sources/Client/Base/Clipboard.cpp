@@ -50,12 +50,14 @@ void zClipboard::add(char *s, UINT uFormat)
     {
 		char *a;
 		HANDLE h;
-		h=GlobalAlloc(GMEM_MOVEABLE|GMEM_ZEROINIT,strlen(s)+2);
+		EmptyClipboard();
+		h=GlobalAlloc(GMEM_MOVEABLE|GMEM_ZEROINIT,strlen(s)+1);
 		a=(char*)GlobalLock(h);
 		strcpy(a,s);
 		GlobalUnlock(h);
 		SetClipboardData(uFormat,h);
 		CloseClipboard();
+		//GlobalFree(h);
 	}
 }
 
@@ -75,6 +77,7 @@ char* zClipboard::getText(UINT uFormat)
 	hClipTextMem = GetClipboardData(uFormat);
 	char *retChar = new char[(unsigned int)GlobalSize(hClipTextMem)];
 	LPSTR clipT =(char*) GlobalLock(hClipTextMem);
+	CString ss(clipT);
 	lstrcpy((LPSTR) retChar, clipT);
 	GlobalUnlock(hClipTextMem);
 	CloseClipboard();
