@@ -1315,3 +1315,12 @@ double MapListPtr::getStep() const{
 		return ma[0]->dvrs().rStep();
 	return 1;
 }
+
+void MapListPtr::rValue(const Coord& crd, vector<double>& values){
+	if ( values.size() != ma.size())
+		values.resize(ma.size());
+
+	for(int i =0; i < ma.size(); ++i) {
+		values[i] = ma.at(i)->rValue(crd);
+	}
+}

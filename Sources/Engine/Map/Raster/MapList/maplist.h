@@ -67,6 +67,7 @@ public:
 	void _export SetGeoRef(const GeoRef&); // set georef of all maps, dangerous function!
 	const Map&                  map(long iBandNr) const
 	                                { return ma[iBandNr]; }
+	void _export 				rValue(const Coord& crd,vector<double>& values);
 	virtual void                Store();
 	virtual String              sName(bool fExt = false, const String& sDirRelative = "") const;
 	RealMatrix _export         *mtVarCov(bool fForce=false);
