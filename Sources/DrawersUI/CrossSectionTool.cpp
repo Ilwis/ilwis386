@@ -247,8 +247,22 @@ DisplayOptionsForm2(dr,wPar,TR("Cross section Graph"),fbsBUTTONSUNDER | fbsSHOWA
 	v.push_back(FLVColumnInfo("Value", 60));
 	graph = new CrossSectionGraphEntry(root, sources,dr->getRootDrawer()->getCoordinateSystem());
 	graph->setListView(new FieldListView(root,v));
+	FieldGroup *fg = new FieldGroup(root,true);
+	PushButton *pb1 = new PushButton(fg,TR("Save as Table"), (NotifyProc)&CrossSectionGraphFrom::saveAsTable);
+	PushButton *pb2 = new PushButton(fg,TR("Save as Spectrum"), (NotifyProc)&CrossSectionGraphFrom::saveAsSpectrum);
+	pb2->Align(pb1, AL_AFTER);
 	create();
 	ShowWindow(SW_HIDE);
+}
+
+int CrossSectionGraphFrom::saveAsTable(Event *ev) {
+	graph->graph()->saveAsTbl();
+	return 1;
+}
+
+int CrossSectionGraphFrom::saveAsSpectrum(Event *ev) {
+	graph->graph()->saveAsSpectrum();
+	return 1;
 }
 
 void CrossSectionGraphFrom::addSourceSet(const IlwisObject& obj) {

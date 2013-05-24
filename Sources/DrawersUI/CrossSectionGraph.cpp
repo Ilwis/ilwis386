@@ -1,4 +1,5 @@
 #include "Client\Headers\formelementspch.h"
+#include <iomanip>
 #include "Client\ilwis.h"
 #include "Engine\Base\DataObjects\ObjectCollection.h"
 #include "Client\FormElements\FieldListView.h"
@@ -45,6 +46,90 @@ void CrossSectionGraph::OnContextMenu(CWnd* pWnd, CPoint point)
 	}
 }
 
+class SpectrumForm : public FormWithDest {
+public:
+	SpectrumForm(CWnd *par,String *name, int *method, bool aggregate) : FormWithDest(par,TR("Save as Spectrum"),fbsSHOWALWAYS | fbsMODAL) {
+		FieldString *fs = new FieldString(root,TR("spectrum name"),name);
+		fs->SetWidth(100);
+		fs->SetIndependentPos();
+		RadioGroup *rg = new RadioGroup(root,TR("Aggregate method"), method,true);
+		new RadioButton(rg,TR("Average"));
+		new RadioButton(rg,TR("Min"));
+		new RadioButton(rg,TR("Max"));
+	}
+
+	int exec() {
+		FormWithDest::exec();
+		return 1;
+	}
+};
+void CrossSectionGraph::saveAsSpectrum(){
+	if ( fldGraph->sources.size() != 1)
+		throw ErrorObject(TR("Spectrum only works with one data source"));
+	if ( IOTYPE(fldGraph->sources[0]->fnObj) != IlwisObject::iotMAPLIST)
+		throw ErrorObject(TR("Spectrum only works with map lists"));
+
+	String name = fldGraph->sources[0]->fnObj.sFile;
+
+	int method = 0;
+	int nmaps = getNumberOfMaps(0);
+	MapList mpl(fldGraph->sources[0]->fnObj);
+	if ( SpectrumForm(this, &name, &method,true).DoModal() == IDOK) {
+		vector<double> values(nmaps);
+		vector< vector<double> >  allValues(nmaps);
+		for(int i=0;i < nmaps ; ++i)
+			allValues[i].resize(fldGraph->crdSelect.size());
+
+		for(int i = 0; i < fldGraph->crdSelect.size(); ++i) {
+			for(long j = 0; j < nmaps; ++j) {
+				BaseMap bmp;
+				if ( mpl.fValid()) {
+					bmp = mpl[j];
+				} 
+				if ( bmp.fValid()) {
+					Coord crd = fldGraph->crdSelect[i];
+					if ( bmp->cs() != fldGraph->csy)
+						crd = bmp->cs()->cConv(fldGraph->csy, crd);
+					double v = bmp->rValue(crd,0);
+					allValues[j][i] = v;
+				}
+			}
+		}
+		vector<double> finalResult(allValues.size());
+		for(int i =0; i < allValues.size(); ++i) {
+			double result = rUNDEF;
+			int count = 0;
+			for(int j=0; j < allValues[i].size(); ++j) {
+				double v = allValues[i][j];
+				if ( v == rUNDEF)
+					continue;
+				switch(method) {
+					case 0:
+						result = result != rUNDEF ? result + v : v; break;
+					case 1:
+						result = rMIN(result, v); break;
+					case 2:
+						result = rMAX(result, v); break;
+				}
+				++count;
+			}
+			if ( method == 0) {
+				if ( count != 0)
+					result /= count;
+			}
+			if ( result == rUNDEF)
+				throw ErrorObject("Undefined values in spectrum detected; Choose different probe points");
+			finalResult[i] = result;
+		}
+		String path = IlwWinApp()->sGetCurDir() + name + ".spec";
+		ofstream outfile(path.c_str(),std::ofstream::out);
+		for(int i = 0; i < finalResult.size(); ++i) 
+			outfile << "band" << i << "=" << std::setprecision(5) << finalResult[i] << "\n";
+		outfile.close();
+	}
+
+}
+
 class TableNameForm : public FormWithDest {
 public:
 	TableNameForm(CWnd *par,String *name) : FormWithDest(par,TR("Open as table"),fbsSHOWALWAYS | fbsMODAL) {
@@ -82,7 +167,7 @@ void CrossSectionGraph::saveAsTbl() {
 		tbl->iRecNew(nMaps);
 		int shift = 0;
 		for(int i = 0; i < fldGraph->crdSelect.size(); ++i) {
-				for(int m =0; m < fldGraph->sources.size(); ++m) {
+			for(int m =0; m < fldGraph->sources.size(); ++m) {
 				int count = 0;
 				Column colValue;
 				IlwisObject obj = fldGraph->sources[m];
@@ -420,13 +505,13 @@ RangeReal CrossSectionGraphEntry::getRange(long i) {
 			MapList mpl(obj->fnObj);
 			RangeReal rr = mpl->getRange();
 			DomainValue *pdv =  mpl[i]->dm()->pdv();
-			if ( pdv ) {
+		/*	if ( pdv ) {
 				if ( !pdv->fSystemObject()) {
 					RangeReal rr1 = pdv->rrMinMax();
 					if ( rr.rWidth() < 1e8)
 						rr = rr1;
 				}
-			}
+			}*/
 			ranges.push_back(rr);
 		}
 

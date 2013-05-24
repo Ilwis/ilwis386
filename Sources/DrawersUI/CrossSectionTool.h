@@ -49,6 +49,8 @@ class ProbeMarkers;
 		void setSelectCoord(const Coord& crd);
 		void addSourceSet(const IlwisObject& obj);
 		void reset();
+		int saveAsTable(Event *ev);
+		int saveAsSpectrum(Event *ev);
 	private:
 		CrossSectionGraphEntry *graph;
 

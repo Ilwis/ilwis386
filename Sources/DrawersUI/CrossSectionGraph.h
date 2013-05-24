@@ -13,12 +13,13 @@ public:
    void setIndex(int index);
 	void PreSubclassWindow() ;
 	void OnContextMenu(CWnd* pWnd, CPoint point) ;
+		void saveAsTbl();
+		void saveAsSpectrum();
 
    DECLARE_MESSAGE_MAP();
 private:
 	BaseMap getBaseMap(long i, long m);
 	int getNumberOfMaps(long i);
-	void saveAsTbl();
 	CrossSectionGraphEntry *fldGraph;
 	vector<vector<vector<double> > >values;
 	CToolTipCtrl* toolTip;
@@ -37,6 +38,7 @@ public:
 	void fillList();
 	void update();
 	void reset();
+	CrossSectionGraph *graph() {return crossSectionGraph;}
 
 private:
 	bool isUnique(const FileName& fn);
