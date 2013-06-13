@@ -287,7 +287,8 @@ DisplayOptionsForm(dr,wPar,TR("Polygon Representation")),rcl(rc), iRaw(raw)
   if ( hatching == sUNDEF)
 	  hatching = "none";
   new FieldDataType(root,TR("Hatching"),&hatching,".ivh",false,0,FileName(base),false);
-  new FieldColor(root,"Hatching Background Color",&col2);
+  FieldColor *fc = new FieldColor(root,"Hatching Background Color",&col2, true);
+  fc->SetBevelStyle(FormEntry::bsLOWERED);
 
   FieldIntSliderEx *slider = new FieldIntSliderEx(root,"Transparency(0-100)", &transparency,ValueRange(0,100),true);
   slider->SetCallBack((NotifyProc)&PolRprForm::setTransparency);
