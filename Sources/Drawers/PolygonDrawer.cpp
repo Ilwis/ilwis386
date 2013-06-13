@@ -94,7 +94,8 @@ bool PolygonDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) con
 		}
  		if ( hatch && backgroundColor != colorUNDEF ) {
 			glPolygonStipple(hatchInverse); 
-			glColor4f(backgroundColor.redP(),backgroundColor.greenP(), backgroundColor.blueP(), alpha);
+			double alphaBG = (1.0 - backgroundColor.transparencyP()) * getTransparency() * areaTransparency;
+			glColor4f(backgroundColor.redP(),backgroundColor.greenP(), backgroundColor.blueP(), alphaBG);
 			if ( asQuad && showArea) {
 				glBegin(GL_QUADS);
 				glVertex3d(cb.cMin.x, cb.cMin.y, 0);
