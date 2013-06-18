@@ -782,56 +782,113 @@ void MapPaneView::OnUpdatePaste(CCmdUI* pCmdUI)
 
 void MapPaneView::OnCopy()
 {
-	CRect	mRect;			// Position of this window's client area
-
-	BeginWaitCursor();
+	class ClipboardCopyForm: public FormWithDest
+	{
+	public:
+		ClipboardCopyForm(CWnd* wParent, int* iDPI, int* _iXSize, int* _iYSize)
+		: FormWithDest(wParent, TR("Copy image to clipboard"))
+		, iXSize(_iXSize)
+		, iYSize(_iYSize)
+		, fLock(true)
+		, fInCallBack(false)
+		{
+			if (*iXSize > 0 && *iYSize > 0)
+				rRatio = (*iYSize) / (double)(*iXSize);
+			else
+				rRatio = 1;
+			ValueRange vri(1, 9999999, 1);
+			cbLock = new CheckBox(root, TR("Lock aspect ratio"), &fLock);
+			cbLock->SetCallBack((NotifyProc)&ClipboardCopyForm::LockChanged);
+			cbLock->SetIndependentPos();
+			fiXSize = new FieldInt(root, TR("X-pixels"), iXSize, vri);
+			fiXSize->SetCallBack((NotifyProc)&ClipboardCopyForm::XSizeChanged);
+			fiYSize = new FieldInt(root, TR("Y-pixels"), iYSize, vri);
+			fiYSize->Align(fiXSize, AL_AFTER);
+			fiYSize->SetCallBack((NotifyProc)&ClipboardCopyForm::YSizeChanged);
+			ValueRange vrdpi(1, 153600, 1);
+			FieldInt * fiDPI = new FieldInt(root, TR("DPI"), iDPI, vrdpi);
+			fiDPI->Align(fiXSize, AL_UNDER);
+			//fiDPI->SetIndependentPos();
+			create();
+		}
+	private:
+		int XSizeChanged(Event *) {
+			if (fInCallBack)
+				return 0;
+			fInCallBack = true;
+			if (fLock) {
+				fiXSize->StoreData();
+				*iYSize = round(rRatio * *iXSize);
+				fiYSize->SetVal(*iYSize);
+			}
+			fInCallBack = false;
+			return 0;
+		}
+		int YSizeChanged(Event *) {
+			if (fInCallBack)
+				return 0;
+			fInCallBack = true;
+			if (fLock) {
+				fiYSize->StoreData();
+				*iXSize = round(*iYSize / rRatio);
+				fiXSize->SetVal(*iXSize);
+			}
+			fInCallBack = false;
+			return 0;
+		}
+		int LockChanged(Event *) {
+			cbLock->StoreData();
+			return 0;
+		}
+		double rRatio;
+		int * iXSize;
+		int * iYSize;
+		bool fLock;
+		FieldInt * fiXSize;
+		FieldInt * fiYSize;
+		CheckBox * cbLock;
+		bool fInCallBack;
+	};
 
 	// Get the Views size (client area!)
+	CRect	mRect;			// Position of this window's client area
 	GetClientRect(&mRect);
+	ASSERT(mRect.left == 0);
+	ASSERT(mRect.top == 0);
 
-	SetRedraw(FALSE);
 	int nReduceResCount = 0;
-	while (!EditCopy(mRect, nReduceResCount++))
-	{
-		// retry again with reduced resolution
-		if (nReduceResCount >= 10)
-			break;
+	int iDPI = 300;
+	double fac = iDPI/72.;		// 72 DPI (screen) --> <user selected> DPI (clipboard)
+	int nXRes = int(mRect.right * fac); // initial values, proposed to the user
+	int nYRes = int(mRect.bottom * fac);
+	ClipboardCopyForm frm (0, &iDPI, &nXRes, &nYRes);
+	if (frm.fOkClicked()) {
+		BeginWaitCursor();
+		SetRedraw(FALSE);
+		fac = iDPI/72.;
+		while (!EditCopy(nXRes, nYRes, fac))
+		{
+			// retry again with reduced resolution
+			++nReduceResCount;
+			if (nReduceResCount >= 10)
+				break;
+			nXRes /= 2;
+			nYRes /= 2;
+		}
+		SetRedraw(TRUE);
+		RedrawWindow(NULL, NULL, RDW_INVALIDATE | RDW_NOERASE);
+		EndWaitCursor();
 	}
-	SetRedraw(TRUE);
-	RedrawWindow(NULL, NULL, RDW_INVALIDATE | RDW_NOERASE);
-
-	EndWaitCursor();
 }
 
-BOOL MapPaneView::EditCopy(CRect mRect, int nReduceResCount)
+BOOL MapPaneView::EditCopy(int nXRes, int nYRes, double fac)
 {
-	RECT	rect;
 	HDC		hMemDC, hTmpDC;
-
 	BITMAPINFO	bitmapInfo;
 	HBITMAP		hDib;
 	LPVOID		pBitmapBits;
-	double		fac = 300/72.;		// 72 DPI (screen) --> <user selected> DPI (clipboard)
-	int			nXRes, nYRes;
 	BOOL		bSuccess = FALSE;
 
-	for (int k = nReduceResCount; k > 0; k--)
-		fac /= 2.;
-
-	rect = mRect;
-	ASSERT(rect.left == 0);
-	ASSERT(rect.top == 0);
-	rect.right = int(rect.right*fac);
-	rect.bottom = int(rect.bottom*fac);
-
-	if (mRect.Width() == 0 || mRect.Height() == 0)
-	{
-		// Get the Views size (client area!)
-		GetClientRect(&mRect);
-	}
-
-	nXRes = rect.right;
-	nYRes = rect.bottom;
 //	ScaleFont(fac);
 
 	//nXRes = (nXRes + (sizeof(DWORD)-1)) & ~(sizeof(DWORD)-1);	// aligning width to 4 bytes (sizeof(DWORD)) avoids 
