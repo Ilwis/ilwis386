@@ -116,6 +116,7 @@ private:
 	int m_iOverlayMapsOption;
 	FileName m_fnOverlayMap;
 	FileName m_fnOverlayMapViewTemplate;
+	bool m_fUseMapViewGeometry;
 };
 
 #endif // !defined(AFX_CRITERIATREEDOC_H__70252949_50FF_4D7A_967D_9CC51410FB03__INCLUDED_)

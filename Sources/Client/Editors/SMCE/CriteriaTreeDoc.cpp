@@ -550,6 +550,7 @@ void CriteriaTreeDoc::Serialize(CArchive& ar)
 		ObjectInfo::WriteElement("Display", "Mode", en, m_iOverlayMapsOption);
 		ObjectInfo::WriteElement("Display", "Map", en, m_fnOverlayMap);
 		ObjectInfo::WriteElement("Display", "MapView", en, m_fnOverlayMapViewTemplate);
+		ObjectInfo::WriteElement("Display", "UseMapViewGeometry", en, m_fUseMapViewGeometry);
 		ObjectInfo::WriteElement("Alternatives", "Total", en, (int)m_vsAlternatives.size());
 		for (unsigned int i=0; i<m_vsAlternatives.size(); ++i)
 			ObjectInfo::WriteElement("Alternatives", String("Alternative%d", i).c_str(), en, m_vsAlternatives[i]);
@@ -575,12 +576,16 @@ void CriteriaTreeDoc::Serialize(CArchive& ar)
 			if ((!m_fnOverlayMap.fExist()) && (m_iOverlayMapsOption == 1))
 				m_iOverlayMapsOption = 0;
 		}
-		if (!ObjectInfo::ReadElement("Display", "MapView", en, m_fnOverlayMapViewTemplate))
+		if (!ObjectInfo::ReadElement("Display", "MapView", en, m_fnOverlayMapViewTemplate)) {
 			m_fnOverlayMapViewTemplate = FileName();
-		else
-		{
-			if ((!m_fnOverlayMapViewTemplate.fExist()) && (m_iOverlayMapsOption == 2))
+			m_fUseMapViewGeometry = false;
+		} else {
+			if (!ObjectInfo::ReadElement("Display", "UseMapViewGeometry", en, m_fUseMapViewGeometry))
+				m_fUseMapViewGeometry = false;
+			if ((!m_fnOverlayMapViewTemplate.fExist()) && (m_iOverlayMapsOption == 2)) {
 				m_iOverlayMapsOption = 0;
+				m_fUseMapViewGeometry = false;
+			}
 		}
 		int iSize;
 		if (!ObjectInfo::ReadElement("Alternatives", "Total", en, iSize))
@@ -629,7 +634,7 @@ public:
 class OverlayMapsForm: public FormWithDest
 {
 public:
-  OverlayMapsForm(CWnd* wPar, int& iOption, String& sOverlayMap, String& sMapViewTemplate)
+  OverlayMapsForm(CWnd* wPar, int& iOption, String& sOverlayMap, String& sMapViewTemplate, bool& fUseMapViewGeometry)
     : FormWithDest(wPar, TR("Map Display Overlay Options"))
 	{
 		iImg = IlwWinApp()->iImage(".mpv");
@@ -641,10 +646,14 @@ public:
 
 		if (!FileName(sOverlayMap).fExist())
 			sOverlayMap = "";
-		if (!FileName(sMapViewTemplate).fExist())
+		if (!FileName(sMapViewTemplate).fExist()) {
 			sMapViewTemplate = "";
+			fUseMapViewGeometry = false;
+		}
 		new FieldDataType(rb2, "", &sOverlayMap, ".mpr.mps.mpa.mpp.mpl", true);
 		new FieldDataType(rb3, "", &sMapViewTemplate, new MapViewLister(), true);
+		CheckBox * cbGeometry = new CheckBox(rb3, TR("Use the Geometry of the MapView"), &fUseMapViewGeometry);
+		cbGeometry->Align(rb3, AL_UNDER);
 
 		create();
 	}
@@ -654,11 +663,13 @@ void CriteriaTreeDoc::OnOverlayMaps()
 {
 	String sOverlayMap = m_fnOverlayMap.sFullPathQuoted();
 	String sOverlayMapViewTemplate = m_fnOverlayMapViewTemplate.sFullPathQuoted();
-	OverlayMapsForm frm (wndGetActiveView(), m_iOverlayMapsOption, sOverlayMap, sOverlayMapViewTemplate);
+	bool fUseMapViewGeometry = m_fUseMapViewGeometry;
+	OverlayMapsForm frm (wndGetActiveView(), m_iOverlayMapsOption, sOverlayMap, sOverlayMapViewTemplate, fUseMapViewGeometry);
 	if (frm.fOkClicked())
 	{
 		m_fnOverlayMap = sOverlayMap;
 		m_fnOverlayMapViewTemplate = sOverlayMapViewTemplate;
+		m_fUseMapViewGeometry = fUseMapViewGeometry;
 		SetModifiedFlag();
 	}
 }
@@ -676,7 +687,7 @@ void CriteriaTreeDoc::OnUpdateOverlayMaps(CCmdUI* pCmdUI)
 class MapCompositionDocEx: public MapCompositionDoc
 {
 public:
-	void ApplyMapViewTemplate(const MapView& mapview)
+	void ApplyMapViewTemplate(const MapView& mapview, const bool fUseMapViewGeometry)
 	{
 		try {
 			mpv = mapview;
@@ -709,10 +720,12 @@ public:
 
 			FileName fn = mpv->fnObj;
 			rootDrawer->load(fn,"");
-			rootDrawer->setCoordinateSystem(csy, true);
-			rootDrawer->setCoordBoundsMap(cbMap);
-			rootDrawer->setCoordBoundsView(cbView);
-			rootDrawer->setCoordBoundsZoom(cbZoom);
+			if (!fUseMapViewGeometry) {
+				rootDrawer->setCoordinateSystem(csy, true);
+				rootDrawer->setCoordBoundsMap(cbMap);
+				rootDrawer->setCoordBoundsView(cbView);
+				rootDrawer->setCoordBoundsZoom(cbZoom);
+			}
 
 			ILWIS::PreparationParameters pp(NewDrawer::ptRESTORE,0);
 			rootDrawer->prepare(&pp);
@@ -742,6 +755,7 @@ public:
 	MapViewThread()
 	: m_fUseMapViewTemplate (false)
 	, m_fSmceMapWindow (false)
+	, m_fUseMapViewGeometry(false)
 	{
 		dtSmceMapWindow = new IlwisDocTemplate(
 			".mpr.mps.mpa.mpp.mpl.mpv", 
@@ -772,12 +786,13 @@ public:
 		}
 	}
 
-	void SetTemplateMapView(FileName fn)
+	void SetTemplateMapView(FileName fn, bool fUseMapViewGeometry)
 	{
 		if (fn.fExist())
 		{
 			m_fUseMapViewTemplate = true;
 			m_fnMapViewTemplate = fn;
+			m_fUseMapViewGeometry = fUseMapViewGeometry;
 		}
 	}
 
@@ -813,7 +828,7 @@ public:
 			}
 
 			if (m_fUseMapViewTemplate)
-				mcdex->ApplyMapViewTemplate(m_fnMapViewTemplate);
+				mcdex->ApplyMapViewTemplate(m_fnMapViewTemplate, m_fUseMapViewGeometry);
 
 			for (unsigned int i = 0; i < m_vfnInvisibleMaps.size(); ++i) // these maps should be added as layers, but switched off.
 			{
@@ -852,7 +867,8 @@ public:
 					smw->SetGeoRef(m_grf);
 			}
 
-			pFrame->PostMessage(WM_COMMAND, ID_ENTIREMAP, 0);
+			if (!m_fUseMapViewGeometry)
+				pFrame->PostMessage(WM_COMMAND, ID_ENTIREMAP, 0);
 
 			return TRUE;
 		}
@@ -876,6 +892,7 @@ private:
 	bool m_fUseMapViewTemplate;
 	bool m_fSmceMapWindow;
 	FileName m_fnMapViewTemplate;
+	bool m_fUseMapViewGeometry;
 	GeoRef m_grf;
 	IlwisDocTemplate *dtSmceMapWindow;
 };
@@ -908,7 +925,7 @@ void CriteriaTreeDoc::ShowMap(FileName fnMap)
 			if (mvt)
 			{
 				mvt->AddLayer(fnMap);
-				mvt->SetTemplateMapView(m_fnOverlayMapViewTemplate);
+				mvt->SetTemplateMapView(m_fnOverlayMapViewTemplate, m_fUseMapViewGeometry);
 				mvt->CreateThread(0, 0);
 			}
 			break;
@@ -960,7 +977,7 @@ void CriteriaTreeDoc::ShowContourMapCombination(vector<FileName> vfnContourMaps,
 				for (unsigned int i = 1; i < vfnContourMaps.size(); ++i)
 					mvt->AddLayer(vfnContourMaps[i], false, vvrCustomValueRanges[i]);
 				mvt->AddLayer(fnInfoMap, false);
-				mvt->SetTemplateMapView(m_fnOverlayMapViewTemplate);
+				mvt->SetTemplateMapView(m_fnOverlayMapViewTemplate, m_fUseMapViewGeometry);
 				if (ptrGrf())
 					mvt->SetGeoRef(*ptrGrf());
 				mvt->CreateThread(0, 0);
