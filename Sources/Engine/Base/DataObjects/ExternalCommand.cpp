@@ -39,6 +39,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "Headers\toolspch.h"
+#include "Engine\Base\System\Engine.h"
 #include "Engine\Base\DataObjects\ExternalCommand.h"
 #include "Headers\Hs\Mainwind.hs"
 
@@ -313,7 +314,12 @@ void ExternalCommand::Execute(bool fBlockWhileExecuting)
 			FreeConsole(); // It is not stated anywhere in MSDN that this is too early and handles get invalid.
 										 // With this we prevent seeing two consoles, of which one is not used.
 	}
+	si.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
+	si.wShowWindow = SW_HIDE;
 
+	String path = getEngine()->getContext()->sIlwDir();
+	path += "Resources\\gdal_data";
+	SetEnvironmentVariable("GDAL_DATA", path.c_str());
 	PROCESS_INFORMATION pi; // output of CreateProcess
 	ZeroMemory( &pi, sizeof(pi) );
 
@@ -323,7 +329,7 @@ void ExternalCommand::Execute(bool fBlockWhileExecuting)
 			NULL,             // Process handle not inheritable. 
 			NULL,             // Thread handle not inheritable. 
 			fCustomHandles ? TRUE : FALSE,     // Set handle inheritance to TRUE/FALSE.
-			CREATE_NEW_CONSOLE,                // Let the external command have its own console so that Ctrl+C does not break the calling process. 
+			CREATE_NO_WINDOW ,                // Let the external command have its own console so that Ctrl+C does not break the calling process. 
 			NULL,             // Use parent's environment block. 
 			NULL,             // Use parent's starting directory. 
 			&si,              // Pointer to STARTUPINFO structure.
