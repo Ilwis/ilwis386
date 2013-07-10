@@ -49,6 +49,8 @@ LRESULT Cmdalbedo(CWnd *wnd, const String& s);
 LRESULT Cmdsmac(CWnd *wnd, const String& s);
 LRESULT Cmdwatervapour(CWnd *wnd, const String& s);
 LRESULT Cmdmapradiance2reflectance(CWnd *wnd, const String& s);
+LRESULT Cmdsoilmoisture(CWnd *wnd, const String& s);
+LRESULT Cmdsoilmoisture_ascat_l2(CWnd *wnd, const String& s);
 
 class FormMapSebs : public FormMapCreate  
 {
@@ -521,6 +523,19 @@ private:
 	
   String m_sMapSand;
   String m_sMapClay;
+  String m_sMapFc;
+  String m_sMapLc;
+  String m_sAscatDir;
+};
+
+class FormMapSoilMoisture_l2 : public FormMapCreate  
+{
+public:
+  _export FormMapSoilMoisture_l2(CWnd* mw, const char* sPar);
+private:  
+  int exec();
+
+  String m_sMapLc;
   String m_sAscatDir;
 };
 

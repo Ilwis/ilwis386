@@ -61,7 +61,7 @@ LRESULT Cmdmapeto(CWnd *wnd, const String& s)
 {
 	new FormMapETo(wnd, s.c_str());
 	return -1;
-}
+} 
 
 FormMapETo::FormMapETo(CWnd* mw, const char* sPar)
 :FormMapCreate(mw, TR("Reference ETo"))
@@ -2337,6 +2337,12 @@ int FormMapWaterVapour::SensorOnChange(Event *)
 	return 1;
 }
 
+LRESULT Cmdsoilmoisture(CWnd *wnd, const String& s)
+{
+	new FormMapSoilMoisture(wnd, s.c_str());
+	return -1;
+}
+
 FormMapSoilMoisture::FormMapSoilMoisture(CWnd* mw, const char* sPar)
 :FormMapCreate(mw, "Estimation of Soil Moisture")
 {
@@ -2359,6 +2365,9 @@ FormMapSoilMoisture::FormMapSoilMoisture(CWnd* mw, const char* sPar)
 		}
 		FieldMap *fldSand = new FieldMap(root, "Fraction of sand", &m_sMapSand, new MapListerDomainType(".mpr", dmVALUE, false));
 		FieldMap *fldClay = new FieldMap(root, "Fraction of clay", &m_sMapClay, new MapListerDomainType(".mpr", dmVALUE, false));
+		FieldMap *fldFc = new FieldMap(root, "Leaf area index", &m_sMapFc, new MapListerDomainType(".mpr", dmVALUE, false));
+		FieldMap *fldLc = new FieldMap(root, "Land cover", &m_sMapLc, new MapListerDomainType(".mpr", dmIDENT, false));
+		
 		m_sAscatDir = IlwWinApp()->sGetCurDir();
 		FormEntry* fb = new FieldBrowseDir(root, "Directory for Ascat data", "", &m_sAscatDir);
 		fb->SetWidth(100);
@@ -2380,13 +2389,71 @@ int FormMapSoilMoisture::exec()
   m_sMapSand = fnMapSand.sRelativeQuoted(false,fn.sPath());
   FileName fnMapClay(m_sMapClay);
   m_sMapClay = fnMapClay.sRelativeQuoted(false,fn.sPath());
-  
-  String sExpr = String("MapSoilMoistureFromAscat(%S,%S,%S)",
+  FileName fnMapFc(m_sMapFc);
+  m_sMapFc = fnMapFc.sRelativeQuoted(false,fn.sPath());
+  FileName fnMapLc(m_sMapLc);
+  m_sMapLc = fnMapLc.sRelativeQuoted(false,fn.sPath());
+  String sExpr = String("MapSoilMoistureFromAscat(%S,%S,%S,%S,%S)",
 						m_sMapSand,
 						m_sMapClay,
+						m_sMapFc,
+						m_sMapLc,
 						m_sAscatDir
 						);
 
+  execMapOut(sExpr);  
+  return 0;
+}
+
+LRESULT Cmdsoilmoisture_ascat_l2(CWnd *wnd, const String& s)
+{
+	new FormMapSoilMoisture_l2(wnd, s.c_str());
+	return -1;
+}
+
+FormMapSoilMoisture_l2::FormMapSoilMoisture_l2(CWnd* mw, const char* sPar)
+:FormMapCreate(mw, "ASCAT Level 2 Soil Moisture Products")
+{
+		if (sPar) {
+			TextInput inp(sPar);
+			TokenizerBase tokenizer(&inp);
+			String sVal;
+				for (;;) {
+					Token tok = tokenizer.tokGet();
+					sVal = tok.sVal();
+					if (sVal == "")
+						break;
+					FileName fn(sVal);
+					if (fn.sExt == ".mpr" || fn.sExt == "") 
+						if (m_sMapLc == "")
+							m_sMapLc = fn.sFullNameQuoted(true);
+						else
+							sOutMap = fn.sFullName(false);
+			}
+		}
+		FieldMap *fldLc = new FieldMap(root, "Land Cover ", &m_sMapLc, new MapListerDomainType(".mpr", dmIDENT, false));
+		m_sAscatDir = IlwWinApp()->sGetCurDir();
+		FormEntry* fb = new FieldBrowseDir(root, "Directory for ASCAT L2 data", "", &m_sAscatDir);
+		fb->SetWidth(100);
+		
+		FieldBlank *fb1 = new FieldBlank(root, 0); // Used to force proper alignment
+		fb1->Align(fb, AL_UNDER);
+		initMapOut(false, false);
+		//SetAppHelpTopic(htpFillSinks);
+		create();
+}
+
+
+int FormMapSoilMoisture_l2::exec() 
+{
+  FormMapCreate::exec();
+  FileName fn(sOutMap);
+  FileName fnMapLc(m_sMapLc);
+  m_sMapLc = fnMapLc.sRelativeQuoted(false,fn.sPath());
+  String sExpr = String("MapSoilMoistureFromAscat_l2(%S,%S)",
+						m_sMapLc,
+						m_sAscatDir
+						);
   execMapOut(sExpr);  
   return 0;
 }
