@@ -137,6 +137,8 @@ bool TableCreateTimeColumn::fFreezing()
 		Map mp = mplInput[mplInput->iLower() + i];
 		String name = mp->sName();
 		int year=iUNDEF,month=iUNDEF,day=iUNDEF,hour=iUNDEF,minute=iUNDEF;
+		ILWIS::Time t = ILWIS::Time::now();
+		year = t.get(ILWIS::Time::tpYEAR); //  default
 		for(std::map<String,String>::iterator cur=timeParts.begin(); cur != timeParts.end(); ++cur) {
 			String part = (*cur).first;
 			if (  part == "year") {
@@ -147,7 +149,11 @@ bool TableCreateTimeColumn::fFreezing()
 				int end = parts[1].iVal();
 				if ( parts.size() == 3)
 					base = parts[2].iVal();
-				year = name.sSub(start, end - start + 1 ).iVal();
+				int nyear = name.sSub(start, end - start + 1 ).iVal();
+				if ( nyear != iUNDEF) {
+					year = nyear;
+				}
+
 				if ( base != iUNDEF) {
 					if ( oldYear > year && year < 100) {
 						offset = 100;
@@ -163,6 +169,8 @@ bool TableCreateTimeColumn::fFreezing()
 				int start = parts[0].iVal();
 				int end = parts[1].iVal();
 				month = name.sSub(start, end - start + 1).iVal();
+				if ( month == iUNDEF)
+					throw ErrorObject(TR("Invalid indexes for determining time"));
 			}
 			if ( part == "day") {
 				Array<String> parts;
@@ -170,6 +178,8 @@ bool TableCreateTimeColumn::fFreezing()
 				int start = parts[0].iVal();
 				int end = parts[1].iVal();
 				day = name.sSub(start, end - start + 1).iVal();
+				if ( day == iUNDEF)
+					throw ErrorObject(TR("Invalid indexes for determining time"));
 			}
 			if ( part == "hour") {
 				Array<String> parts;
@@ -177,6 +187,8 @@ bool TableCreateTimeColumn::fFreezing()
 				int start = parts[0].iVal();
 				int end = parts[1].iVal();
 				hour = name.sSub(start, end - start + 1).iVal();
+				if ( hour == iUNDEF)
+					throw ErrorObject(TR("Invalid indexes for determining time"));
 			}
 			if ( part == "minute") {
 				Array<String> parts;
@@ -184,13 +196,19 @@ bool TableCreateTimeColumn::fFreezing()
 				int start = parts[0].iVal();
 				int end = parts[1].iVal();
 				minute = name.sSub(start, end - start + 1).iVal();
+				if ( minute == iUNDEF)
+					throw ErrorObject(TR("Invalid indexes for determining time"));
 			}
-			if ( part == "decade") {
+			if ( part == "dekad") {
 				Array<String> parts;
 				Split((*cur).second, parts,":");
 				int start = parts[0].iVal();
 				int end = parts[1].iVal();
-				day = 10 * name.sSub(start, end - start + 1).iVal();
+				int dek = name.sSub(start, end - start + 1).iVal();
+				if ( dek == iUNDEF)
+					throw ErrorObject(TR("Invalid indexes for determining time"));
+				day = ((dek - 1) % 3) * 10 + 1;
+				month = 1 + (dek - 1) / 3;
 			}
 		}
 		if ( month == 2 && day > 28)
