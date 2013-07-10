@@ -120,6 +120,7 @@ void FeatureLayerDrawer::prepare(PreparationParameters *parms){
 
 				DrawerParameters dp2(getRootDrawer(),textLayer);
 				TextDrawer *txtdr =(ILWIS::TextDrawer *)NewDrawer::getDrawer("TextDrawer","ilwis38",&dp2);
+//				textLayer->setActive(labelAttribute != "");
 				textLayer->addDrawer(txtdr);
 				pdrw->setLabelDrawer(txtdr);
 
