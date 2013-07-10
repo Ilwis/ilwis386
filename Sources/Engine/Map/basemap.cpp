@@ -370,6 +370,7 @@ void BaseMapPtr::SetCoordBounds(const CoordBounds& cb)
     return;
   cbOuter = cb;
   fChanged = true;
+  rProx = rProxDefault();
 }
 
 void BaseMapPtr::SetDomainValueRangeStruct(const DomainValueRangeStruct& dvrs)
