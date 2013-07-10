@@ -34,13 +34,12 @@ public:
 
 protected:
 	CCriticalSection csAccess;
-	//CoordBounds cb;
-	//geos::index::quadtree::Quadtree *spatialIndex;
 	QuadTree *spatialIndex;
 
 private:
 	bool deleted;
 	FeatureID guid;
+	Geometry *geom;
 	static FeatureID baseid;
 };
 

@@ -31,8 +31,10 @@ FeatureID Feature::getGuid() const {
 }
 
 bool Feature::EnvelopeIntersectsWith(Geometry *g2, bool useMargine) {
-	Geometry *g1 = dynamic_cast<Geometry *>(this);
-	const geos::geom::Envelope *env1 = g1->getEnvelopeInternal();
+	if ( geom == 0) {
+		geom = dynamic_cast<geos::geom::Geometry *>(this);
+	}
+	const geos::geom::Envelope *env1 = geom->getEnvelopeInternal();
 	if ( useMargine) {
 		geos::geom::Envelope env2(g2->getEnvelopeInternal()->toString());
 		env2.expandBy(0.05 * env2.getWidth());
