@@ -86,6 +86,7 @@ class _export ObjectLister
   friend class _export NameEdit;
 public:
   ObjectLister(NameEdit* nameedit=0): ne(nameedit) {}
+  ObjectLister(const FileName& fn): ne(0), fnPath(fn) {}
   virtual ~ObjectLister() {}
   void FillDir();
   virtual bool fOK(const FileName&, const String& sExtra="") { return false;}
@@ -93,19 +94,25 @@ public:
 	virtual String sFileExt();
 	virtual String sDefaultSelectedValue(const FileName& fn);
 	virtual bool fHasChildren(const FileName& fn); // used in ObjectTreeCtrl to decide whether a '+' should be displayed before the item
+	void setPath(const FileName& fn) { fnPath = fn;}
+	vector<String> GetNames() const { return names; }
 protected:
   NameEdit* ne;
+  vector<String> names;
+  FileName fnPath;
 };
 
 class _export ObjectExtensionLister: public ObjectLister
 {
 public:
   ObjectExtensionLister(NameEdit*, const String& sExtensions);
+  ObjectExtensionLister(const FileName& fn, const String& sExtensions);
   virtual ~ObjectExtensionLister();
   virtual bool fOK(const FileName&, const String& sExtra="");
   virtual void AddObjects();
   void AddObjects(const String& sExt);
 	virtual String sFileExt();
+
 private:
   Array<String*> asExt;
 };
@@ -118,8 +125,10 @@ public:
   virtual ~ObjectExtLister();
   virtual void AddObjects();
 	virtual String sFileExt();
+    void setBaseDir(const String& bd);
 protected:
   String sExt;
+  String baseDir;
 };
 
 class _export TableLister: public ObjectExtensionLister

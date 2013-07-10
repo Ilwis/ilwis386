@@ -53,8 +53,8 @@
 class _export DatFileLister: public ObjectExtLister
 {
 public:
-	DatFileLister(String sExtensions)
-		: ObjectExtLister(sExtensions) {}
+	DatFileLister(String sExtensions, const String& base="")
+		: ObjectExtLister(sExtensions) { setBaseDir(base);}
 
 	virtual bool fOK(const FileName&, const String& sExtra = "");
 };

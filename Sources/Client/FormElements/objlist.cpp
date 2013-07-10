@@ -1,43 +1,43 @@
 /***************************************************************
- ILWIS integrates image, vector and thematic data in one unique 
- and powerful package on the desktop. ILWIS delivers a wide 
- range of feautures including import/export, digitizing, editing, 
- analysis and display of data as well as production of 
- quality mapsinformation about the sensor mounting platform
- 
- Exclusive rights of use by 52°North Initiative for Geospatial 
- Open Source Software GmbH 2007, Germany
+ILWIS integrates image, vector and thematic data in one unique 
+and powerful package on the desktop. ILWIS delivers a wide 
+range of feautures including import/export, digitizing, editing, 
+analysis and display of data as well as production of 
+quality mapsinformation about the sensor mounting platform
 
- Copyright (C) 2007 by 52°North Initiative for Geospatial
- Open Source Software GmbH
+Exclusive rights of use by 52°North Initiative for Geospatial 
+Open Source Software GmbH 2007, Germany
 
- Author: Jan Hendrikse, Willem Nieuwenhuis,Wim Koolhoven 
- Bas Restsios, Martin Schouwenburg, Lichun Wang, Jelle Wind 
+Copyright (C) 2007 by 52°North Initiative for Geospatial
+Open Source Software GmbH
 
- Contact: Martin Schouwenburg; schouwenburg@itc.nl; 
- tel +31-534874371
+Author: Jan Hendrikse, Willem Nieuwenhuis,Wim Koolhoven 
+Bas Restsios, Martin Schouwenburg, Lichun Wang, Jelle Wind 
 
- This program is free software; you can redistribute it and/or
- modify it under the terms of the GNU General Public License
- version 2 as published by the Free Software Foundation.
+Contact: Martin Schouwenburg; schouwenburg@itc.nl; 
+tel +31-534874371
 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU General Public License for more details.
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+version 2 as published by the Free Software Foundation.
 
- You should have received a copy of the GNU General Public License
- along with this program (see gnu-gpl v2.txt); if not, write to
- the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- Boston, MA 02111-1307, USA or visit the web page of the Free
- Software Foundation, http://www.fsf.org.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
 
- Created on: 2007-02-8
- ***************************************************************/
+You should have received a copy of the GNU General Public License
+along with this program (see gnu-gpl v2.txt); if not, write to
+the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+Boston, MA 02111-1307, USA or visit the web page of the Free
+Software Foundation, http://www.fsf.org.
+
+Created on: 2007-02-8
+***************************************************************/
 /* ObjectLister
-   by Wim Koolhoven
-   (c) Computer Department ITC
-	Last change:  WK   16 Feb 98    5:15 pm
+by Wim Koolhoven
+(c) Computer Department ITC
+Last change:  WK   16 Feb 98    5:15 pm
 */
 #include "Client\Headers\formelementspch.h"
 #include "Client\FormElements\nameedit.h"
@@ -56,26 +56,26 @@ String ObjectLister::sDefaultSelectedValue(const FileName& fn)
 
 void ObjectLister::FillDir()
 {
-  String sCurDir = IlwWinApp()->sGetCurDir();
-  if (ne) {
-    String sDir = ne->sPath();
+	String sCurDir = IlwWinApp()->sGetCurDir();
+	if (ne) {
+		String sDir = ne->sPath();
 
-    SetCurrentDirectory(sDir.sVal());
-    IlwWinApp()->SetCurDir(sDir);
-  }
-  HCURSOR hCur = SetCursor(LoadCursor(NULL, IDC_WAIT));
+		SetCurrentDirectory(sDir.sVal());
+		IlwWinApp()->SetCurDir(sDir);
+	}
+	HCURSOR hCur = SetCursor(LoadCursor(NULL, IDC_WAIT));
 	if (ne)
 	{
 		ne->ResetContent();
 		ne->ResetObjectTreeCtrl();
 	}
 
-  AddObjects();
-// ObjectTreeCtrl should be the only method to change
-// the directory, so exclude here
-//  ne->addDir(DRIVES|DIRS|ONLY,"*.*");
-  SetCursor(hCur);	    
-  IlwWinApp()->SetCurDir(sCurDir);
+	AddObjects();
+	// ObjectTreeCtrl should be the only method to change
+	// the directory, so exclude here
+	//  ne->addDir(DRIVES|DIRS|ONLY,"*.*");
+	SetCursor(hCur);	    
+	IlwWinApp()->SetCurDir(sCurDir);
 }
 
 bool ObjectLister::fHasChildren(const FileName& fn)
@@ -86,34 +86,49 @@ bool ObjectLister::fHasChildren(const FileName& fn)
 ObjectExtensionLister::ObjectExtensionLister(NameEdit* ne, const String& sExtensions)
 : ObjectLister(ne)
 {
-  int iNrExt = 0;
-  for (int i=0; i < sExtensions.length(); i++) {
-    if (sExtensions[i] == '.') {
-      iNrExt++;
-      asExt &= new String();
-    }
-    (*asExt[iNrExt - 1]) &= sExtensions[i];
-  }
-  for (int i=0; i < iNrExt; i++)
-    asExt[i]->toLower();
+	int iNrExt = 0;
+	for (int i=0; i < sExtensions.length(); i++) {
+		if (sExtensions[i] == '.') {
+			iNrExt++;
+			asExt &= new String();
+		}
+		(*asExt[iNrExt - 1]) &= sExtensions[i];
+	}
+	for (int i=0; i < iNrExt; i++)
+		asExt[i]->toLower();
+}
+
+ObjectExtensionLister::ObjectExtensionLister(const FileName& fn, const String& sExtensions)
+: ObjectLister(fn)
+{
+	int iNrExt = 0;
+	for (int i=0; i < sExtensions.length(); i++) {
+		if (sExtensions[i] == '.') {
+			iNrExt++;
+			asExt &= new String();
+		}
+		(*asExt[iNrExt - 1]) &= sExtensions[i];
+	}
+	for (int i=0; i < iNrExt; i++)
+		asExt[i]->toLower();
 }
 
 ObjectExtensionLister::~ObjectExtensionLister()
 {
-  for (int i = 0; i < asExt.iSize(); i++)
-    delete asExt[i];
+	for (int i = 0; i < asExt.iSize(); i++)
+		delete asExt[i];
 }
 
 void ObjectExtensionLister::AddObjects()
 {
-  for (int i=0; i < asExt.iSize(); i++) 
-    AddObjects(*asExt[i]);
+	for (int i=0; i < asExt.iSize(); i++) 
+		AddObjects(*asExt[i]);
 }
 
 String ObjectExtensionLister::sFileExt()
 {
 	String sResult;
-  for (int i=0; i < asExt.iSize(); i++) 
+	for (int i=0; i < asExt.iSize(); i++) 
 		sResult &= *(asExt[i]);
 
 	return sResult;
@@ -121,35 +136,19 @@ String ObjectExtensionLister::sFileExt()
 
 void ObjectExtensionLister::AddObjects(const String& sExt)
 {
-  String sMask;
-	sMask = ne->sPath();
+	String sMask;
+	if ( ne){
+		//sMask = ne->sPath();
+		fnPath = ne->sPath();
+	} 
+	sMask = fnPath.sPhysicalPath();
 	sMask &= "\\*";
-  sMask &= sExt;
+	sMask &= sExt;
 
-  CFileFind finder;
-  BOOL fFound = finder.FindFile(sMask.c_str());
+	CFileFind finder;
+	BOOL fFound = finder.FindFile(sMask.c_str());
 	while (fFound) 
 	{
-		fFound = finder.FindNextFile();
-		if (finder.IsHidden())
-			continue;
-		if (finder.IsDirectory()) 
-			continue;
-    String s = finder.GetFilePath(); 
-		FileName fn(s); 
-		if (!fOK(fn))
-			continue;
-		ne->AddString(finder.GetFileName());
-	}
-
-	sMask = IlwWinApp()->Context()->sStdDir();
-  sMask &= "\\*";
-  sMask &= sExt;
-
-	finder.Close();
-	fFound = finder.FindFile(sMask.c_str());
-	while (fFound) 
-  {
 		fFound = finder.FindNextFile();
 		if (finder.IsHidden())
 			continue;
@@ -159,8 +158,32 @@ void ObjectExtensionLister::AddObjects(const String& sExt)
 		FileName fn(s); 
 		if (!fOK(fn))
 			continue;
-		ne->AddString(finder.GetFileName());
-  }
+		if ( ne)
+			ne->AddString(finder.GetFileName());
+		names.push_back(finder.GetFileName());
+	}
+
+	sMask = IlwWinApp()->Context()->sStdDir();
+	sMask &= "\\*";
+	sMask &= sExt;
+
+	finder.Close();
+	fFound = finder.FindFile(sMask.c_str());
+	while (fFound) 
+	{
+		fFound = finder.FindNextFile();
+		if (finder.IsHidden())
+			continue;
+		if (finder.IsDirectory()) 
+			continue;
+		String s = finder.GetFilePath(); 
+		FileName fn(s); 
+		if (!fOK(fn))
+			continue;
+		if ( ne)
+			ne->AddString(finder.GetFileName());
+		names.push_back(finder.GetFileName());
+	}
 }
 
 bool ObjectExtensionLister::fOK(const FileName& fn, const String&)
@@ -177,7 +200,7 @@ bool ObjectExtensionLister::fOK(const FileName& fn, const String&)
 		for (int i = 0; i < asExt.iSize(); ++i)
 			if (fCIStrEqual(".mpr", *asExt[i]))
 				return true;
-			
+
 	return false;
 }
 
@@ -190,38 +213,51 @@ String ObjectExtLister::sFileExt()
 	return sExt;
 }
 
+void ObjectExtLister::setBaseDir(const String& bd){
+	baseDir = bd;
+}
+
 void ObjectExtLister::AddObjects()
 {
-  HANDLE findHandle;
-  WIN32_FIND_DATA findData;
-  String sMask = "*";
-  sMask &= sExt;
-  if ((findHandle = FindFirstFile(sMask.sVal(),&findData)) != INVALID_HANDLE_VALUE) 
-  {
-    do {
-      String s(findData.cFileName);
-//      s.toLower();
-      FileName fn(s);
-      if (fOK(fn))
-        ne->AddString(s.sVal());
-    } while (FindNextFile(findHandle, &findData)==TRUE);
-  }
+	HANDLE findHandle;
+	WIN32_FIND_DATA findData;
+	String sMask = "*";
+	sMask &= sExt;
+	if ( baseDir != "")
+		sMask = baseDir + "\\" + sMask;
+
+	if ((findHandle = FindFirstFile(sMask.sVal(),&findData)) != INVALID_HANDLE_VALUE) 
+	{
+		do {
+			String s(findData.cFileName);
+			//      s.toLower();
+			FileName fn(s);
+			if (fOK(fn)){
+				if ( ne)
+					ne->AddString(s.sVal());
+				names.push_back(fn.sPhysicalPath());
+			}
+		} while (FindNextFile(findHandle, &findData)==TRUE);
+	}
 	FindClose(findHandle);
-  String sStdDir = IlwWinApp()->Context()->svl()->sGet("IlwStdDir");
-  sMask = sStdDir;
-  sMask &= "\\*";
-  sMask &= sExt;
-  if ((findHandle = FindFirstFile(sMask.sVal(),&findData)) != INVALID_HANDLE_VALUE)
-  {
-    do {
-      String s(findData.cFileName);
-//      s.toLower();
-      FileName fn(s);
-      fn.Dir(sStdDir);
-      if (fOK(fn))
-        ne->AddString(s.sVal());
-    } while (FindNextFile(findHandle, &findData)==TRUE);
-  }
+	String sStdDir = IlwWinApp()->Context()->svl()->sGet("IlwStdDir");
+	sMask = sStdDir;
+	sMask &= "\\*";
+	sMask &= sExt;
+	if ((findHandle = FindFirstFile(sMask.sVal(),&findData)) != INVALID_HANDLE_VALUE)
+	{
+		do {
+			String s(findData.cFileName);
+			//      s.toLower();
+			FileName fn(s);
+			fn.Dir(sStdDir);
+			if (fOK(fn)){
+				if ( ne)
+					ne->AddString(s.sVal());
+				names.push_back(fn.sPhysicalPath());
+			}
+		} while (FindNextFile(findHandle, &findData)==TRUE);
+	}
 	FindClose(findHandle);
 }
 
@@ -267,7 +303,7 @@ bool TableListerDomainType::fOK(const FileName& fn, const String&)
 
 bool TableAsLister::fOK(const FileName& fn, const String&)
 {
-  return ObjectInfo::fTable(fn); 
+	return ObjectInfo::fTable(fn); 
 }
 
 bool MapValueRangeLister::fOK(const FileName& fn, const String&) {
@@ -287,28 +323,28 @@ bool MapValueRangeLister::fOK(const FileName& fn, const String&) {
 
 bool DomainLister::fOK(const FileName& fn, const String&)
 {
-  if ((fn.sExt != ".dom") && (fn.sExt != ".csy")) 
+	if ((fn.sExt != ".dom") && (fn.sExt != ".csy")) 
 		if (!ObjectInfo::fDomain(fn))
 			return false;
-  if (0 == dmTypes)
-    return true;  
+	if (0 == dmTypes)
+		return true;  
 	if (fn.sExt == ".csy" && (dmTypes & dmCOORD))
 		return true;
-  String sType;
-  ObjectInfo::ReadElement("Domain", "Type", fn, sType);
-  if ((dmTypes & dmCLASS) && (fCIStrEqual("DomainClass" , sType))) return true;
-  if ((dmTypes & dmIDENT) && (fCIStrEqual("DomainIdentifier" , sType))) return true;
-  if (((dmTypes & dmCLASS) || (dmTypes & dmGROUP)) && (fCIStrEqual("DomainGroup" , sType))) return true;
-  if ((dmTypes & dmVALUE) && (fCIStrEqual("DomainValue" , sType))) return true;
-  if ((dmTypes & dmIMAGE) && (fCIStrEqual("DomainImage" , sType))) return true;
-  if ((dmTypes & dmNONE)  && (fCIStrEqual("DomainNone" , sType))) return true;
-  if ((dmTypes & dmPICT)  && (fCIStrEqual("DomainPicture" , sType))) return true;
-  if ((dmTypes & dmCOLOR) && (fCIStrEqual("DomainColor" , sType))) return true;
-  if ((dmTypes & dmBOOL)  && (fCIStrEqual("DomainBool" , sType))) return true;
-  if ((dmTypes & dmBIT)   && (fCIStrEqual("DomainBit" , sType))) return true;
-  if ((dmTypes & dmSTRING) && (fCIStrEqual("DomainString" , sType))) return true;
-  if ((dmTypes & dmTIME) && (fCIStrEqual("DomainTime" , sType))) return true;
-  if (((dmTypes & dmIDENT) || (dmTypes & dmUNIQUEID)) && (fCIStrEqual("DomainUniqueId", sType))) 
+	String sType;
+	ObjectInfo::ReadElement("Domain", "Type", fn, sType);
+	if ((dmTypes & dmCLASS) && (fCIStrEqual("DomainClass" , sType))) return true;
+	if ((dmTypes & dmIDENT) && (fCIStrEqual("DomainIdentifier" , sType))) return true;
+	if (((dmTypes & dmCLASS) || (dmTypes & dmGROUP)) && (fCIStrEqual("DomainGroup" , sType))) return true;
+	if ((dmTypes & dmVALUE) && (fCIStrEqual("DomainValue" , sType))) return true;
+	if ((dmTypes & dmIMAGE) && (fCIStrEqual("DomainImage" , sType))) return true;
+	if ((dmTypes & dmNONE)  && (fCIStrEqual("DomainNone" , sType))) return true;
+	if ((dmTypes & dmPICT)  && (fCIStrEqual("DomainPicture" , sType))) return true;
+	if ((dmTypes & dmCOLOR) && (fCIStrEqual("DomainColor" , sType))) return true;
+	if ((dmTypes & dmBOOL)  && (fCIStrEqual("DomainBool" , sType))) return true;
+	if ((dmTypes & dmBIT)   && (fCIStrEqual("DomainBit" , sType))) return true;
+	if ((dmTypes & dmSTRING) && (fCIStrEqual("DomainString" , sType))) return true;
+	if ((dmTypes & dmTIME) && (fCIStrEqual("DomainTime" , sType))) return true;
+	if (((dmTypes & dmIDENT) || (dmTypes & dmUNIQUEID)) && (fCIStrEqual("DomainUniqueId", sType))) 
 	{
 		// new UniqueID is created by selecting uniqueid.dom, this should only be possible if asking for it explicitly
 		if (fn.sExt == ".dom" && !(dmTypes & dmUNIQUEID)) 
@@ -316,35 +352,35 @@ bool DomainLister::fOK(const FileName& fn, const String&)
 		else
 			return true;
 	}
-  return false;
+	return false;
 }
 
 
 bool DomainAllExtLister::fOK(const FileName& fn, const String&)
 {
- 	if (fn.sExt == ".csy" && (dmTypes & dmCOORD))
+	if (fn.sExt == ".csy" && (dmTypes & dmCOORD))
 		return true;
-  if (fn.sExt != ".dom") {
-    if (!ObjectInfo::fDomain(fn))
-      return false;
-  }
-  if (0 == dmTypes)
-    return true;  
-  String sType;
-  ObjectInfo::ReadElement("Domain", "Type", fn, sType);
-  if ((dmTypes & dmCLASS) && (fCIStrEqual("DomainClass" , sType))) return true;
-  if ((dmTypes & dmIDENT) && (fCIStrEqual("DomainIdentifier" , sType))) return true;
-  if (((dmTypes & dmCLASS) || (dmTypes & dmGROUP)) && (fCIStrEqual("DomainGroup", sType))) return true;
-  if ((dmTypes & dmVALUE) && (fCIStrEqual("DomainValue" , sType))) return true;
-  if ((dmTypes & dmIMAGE) && (fCIStrEqual("DomainImage" , sType))) return true;
-  if ((dmTypes & dmNONE)  && (fCIStrEqual("DomainNone" , sType))) return true;
-  if ((dmTypes & dmPICT)  && (fCIStrEqual("DomainPicture" , sType))) return true;
-  if ((dmTypes & dmCOLOR) && (fCIStrEqual("DomainColor" , sType))) return true;
-  if ((dmTypes & dmBOOL)  && (fCIStrEqual("DomainBool" , sType))) return true;
-  if ((dmTypes & dmBIT)   && (fCIStrEqual("DomainBit" , sType))) return true;
-  if ((dmTypes & dmSTRING) && (fCIStrEqual("DomainString" , sType))) return true;
-  if ((dmTypes & dmTIME) && (fCIStrEqual("DomainTime" , sType))) return true;
-  if (((dmTypes & dmIDENT) || (dmTypes & dmUNIQUEID)) && (fCIStrEqual("DomainUniqueId", sType))) 
+	if (fn.sExt != ".dom") {
+		if (!ObjectInfo::fDomain(fn))
+			return false;
+	}
+	if (0 == dmTypes)
+		return true;  
+	String sType;
+	ObjectInfo::ReadElement("Domain", "Type", fn, sType);
+	if ((dmTypes & dmCLASS) && (fCIStrEqual("DomainClass" , sType))) return true;
+	if ((dmTypes & dmIDENT) && (fCIStrEqual("DomainIdentifier" , sType))) return true;
+	if (((dmTypes & dmCLASS) || (dmTypes & dmGROUP)) && (fCIStrEqual("DomainGroup", sType))) return true;
+	if ((dmTypes & dmVALUE) && (fCIStrEqual("DomainValue" , sType))) return true;
+	if ((dmTypes & dmIMAGE) && (fCIStrEqual("DomainImage" , sType))) return true;
+	if ((dmTypes & dmNONE)  && (fCIStrEqual("DomainNone" , sType))) return true;
+	if ((dmTypes & dmPICT)  && (fCIStrEqual("DomainPicture" , sType))) return true;
+	if ((dmTypes & dmCOLOR) && (fCIStrEqual("DomainColor" , sType))) return true;
+	if ((dmTypes & dmBOOL)  && (fCIStrEqual("DomainBool" , sType))) return true;
+	if ((dmTypes & dmBIT)   && (fCIStrEqual("DomainBit" , sType))) return true;
+	if ((dmTypes & dmSTRING) && (fCIStrEqual("DomainString" , sType))) return true;
+	if ((dmTypes & dmTIME) && (fCIStrEqual("DomainTime" , sType))) return true;
+	if (((dmTypes & dmIDENT) || (dmTypes & dmUNIQUEID)) && (fCIStrEqual("DomainUniqueId", sType))) 
 	{
 		// new UniqueID is created by selecting uniqueid.dom, this should only be possible if asking for it explicitly
 		if (fn.sExt == ".dom" && !(dmTypes & dmUNIQUEID)) 
@@ -353,7 +389,7 @@ bool DomainAllExtLister::fOK(const FileName& fn, const String&)
 			return true;
 	}
 
-  return false;
+	return false;
 }
 
 bool RepresentationLister::fOK(const FileName& fn, const String&)
@@ -437,10 +473,10 @@ bool RepresentationLister::fOK(const FileName& fn, const String&)
 
 void RepresentationLister::SetDomain(const Domain& dom)
 {
-  if (dom.fValid() && dm.fValid() && dm == dom)
-    return;
-  dm = dom;
-  FillDir();
+	if (dom.fValid() && dm.fValid() && dm == dom)
+		return;
+	dm = dom;
+	FillDir();
 }
 
 bool RepresentationAllExtLister::fOK(const FileName& fn, const String&)
@@ -578,16 +614,16 @@ bool GeoRefLister::fOK(const FileName& fn, const String&)
 
 bool FilterLister::fOK(const FileName& fn, const String&)
 {
-  if (!fCIStrEqual(fn.sExt , ".fil")) 
+	if (!fCIStrEqual(fn.sExt , ".fil")) 
 		return false;
-  String sType;
-  ObjectInfo::ReadElement("Filter", "Type", fn, sType);
-  if ((filTypes & filLINEAR) && (fCIStrEqual("FilterLinear" , sType))) return true;
-  if ((filTypes & filRANK) && (fCIStrEqual("FilterRankOrder" , sType))) return true;
-  if ((filTypes & filMAJORITY) && (fCIStrEqual("FilterMajority" , sType))) return true;
-  if ((filTypes & filRADAR) && (fCIStrEqual("FilterRadar" , sType))) return true;
-  if ((filTypes & filBINARY) && (fCIStrEqual("FilterBinary" , sType))) return true;
-  return false;
+	String sType;
+	ObjectInfo::ReadElement("Filter", "Type", fn, sType);
+	if ((filTypes & filLINEAR) && (fCIStrEqual("FilterLinear" , sType))) return true;
+	if ((filTypes & filRANK) && (fCIStrEqual("FilterRankOrder" , sType))) return true;
+	if ((filTypes & filMAJORITY) && (fCIStrEqual("FilterMajority" , sType))) return true;
+	if ((filTypes & filRADAR) && (fCIStrEqual("FilterRadar" , sType))) return true;
+	if ((filTypes & filBINARY) && (fCIStrEqual("FilterBinary" , sType))) return true;
+	return false;
 }
 
 // The sColName parameter is used to check columns, except when
@@ -600,10 +636,10 @@ bool MapListerDomainType::fOK(const FileName& fnMap, const String& sColName)
 
 	// Reject any object that is not a Map or MapList
 	if (! (fCIStrEqual(fnMap.sExt , ".mpr") ||
-	       fCIStrEqual(fnMap.sExt , ".mps") ||
-	       fCIStrEqual(fnMap.sExt , ".mpa") ||
-	       fCIStrEqual(fnMap.sExt , ".mpp") ||
-	       fCIStrEqual(fnMap.sExt , ".mpl")) )  // allow MapList bands
+		fCIStrEqual(fnMap.sExt , ".mps") ||
+		fCIStrEqual(fnMap.sExt , ".mpa") ||
+		fCIStrEqual(fnMap.sExt , ".mpp") ||
+		fCIStrEqual(fnMap.sExt , ".mpl")) )  // allow MapList bands
 		return false;
 
 	FileName fnBand = fnMap;
@@ -634,7 +670,7 @@ bool MapListerDomainType::fOK(const FileName& fnMap, const String& sColName)
 	}		
 	if (fCheckObjectSelf && !fUseAttribColumns) // special condition, in case an illegal map has been selected with legal columns
 		return fAcceptDomain(fnDom);
-	
+
 	return fAcceptDomain(fnDom) || fAcceptAttributeTable(fnBand);
 }
 
@@ -652,13 +688,13 @@ bool MapListerDomainType::fAcceptColumn(const FileName& fnAttrib, const String& 
 String MapListerDomainType::sDefaultSelectedValue(const FileName& fn)
 {
 	BaseMap mp;
-  if (".mpl" == fn.sExt)
-  {
-    MapList mpl(fn);
-    mp = mpl[mpl->iLower()];
-  }
-  else
-    mp = BaseMap(fn);
+	if (".mpl" == fn.sExt)
+	{
+		MapList mpl(fn);
+		mp = mpl[mpl->iLower()];
+	}
+	else
+		mp = BaseMap(fn);
 	Domain dm = mp->dm();
 	if (fAcceptDomain(dm->fnObj))
 		return fn.sShortName(true);
@@ -709,29 +745,29 @@ bool MapListerDomainType::fAcceptAttributeTable(const FileName& fn)
 bool MapListerDomainType::fAcceptDomain(FileName fnDom)
 {
 	if (fnDom.sExt.length() == 0)
-    fnDom.sExt = ".dom";
-  if (!File::fExist(fnDom)) {
-    fnDom.Dir(IlwWinApp()->Context()->sStdDir());
-    if (!File::fExist(fnDom)) 
-      return false;
-  }
+		fnDom.sExt = ".dom";
+	if (!File::fExist(fnDom)) {
+		fnDom.Dir(IlwWinApp()->Context()->sStdDir());
+		if (!File::fExist(fnDom)) 
+			return false;
+	}
 	if (0 == dmTypes)
 		return true;
-  String sType;
-  ObjectInfo::ReadElement("Domain", "Type", fnDom, sType);
-  if ((dmTypes & dmCLASS) && (fCIStrEqual("DomainClass" , sType))) return true;
-  if ((dmTypes & dmIDENT) && (fCIStrEqual("DomainIdentifier" , sType))) return true;
-  if (((dmTypes & dmCLASS) || (dmTypes & dmGROUP)) && (fCIStrEqual("DomainGroup" , sType))) return true;
-  if ((dmTypes & dmVALUE) && (fCIStrEqual("DomainValue" , sType))) return true;
-  if ((dmTypes & dmIMAGE) && (fCIStrEqual("DomainImage" , sType))) return true;
-  if ((dmTypes & dmNONE)  && (fCIStrEqual("DomainNone" , sType))) return true;
-  if ((dmTypes & dmPICT)  && (fCIStrEqual("DomainPicture" , sType))) return true;
-  if ((dmTypes & dmCOLOR) && (fCIStrEqual("DomainColor" , sType))) return true;
-  if ((dmTypes & dmBOOL)  && (fCIStrEqual("DomainBool" , sType))) return true;
-  if ((dmTypes & dmBIT)   && (fCIStrEqual("DomainBit" , sType))) return true;
-  if ((dmTypes & dmUNIQUEID) && (fCIStrEqual("DomainUniqueID" , sType))) return true;
-  if ((dmTypes & dmSTRING) && (fCIStrEqual("DomainString" , sType))) return true;
-  return false;
+	String sType;
+	ObjectInfo::ReadElement("Domain", "Type", fnDom, sType);
+	if ((dmTypes & dmCLASS) && (fCIStrEqual("DomainClass" , sType))) return true;
+	if ((dmTypes & dmIDENT) && (fCIStrEqual("DomainIdentifier" , sType))) return true;
+	if (((dmTypes & dmCLASS) || (dmTypes & dmGROUP)) && (fCIStrEqual("DomainGroup" , sType))) return true;
+	if ((dmTypes & dmVALUE) && (fCIStrEqual("DomainValue" , sType))) return true;
+	if ((dmTypes & dmIMAGE) && (fCIStrEqual("DomainImage" , sType))) return true;
+	if ((dmTypes & dmNONE)  && (fCIStrEqual("DomainNone" , sType))) return true;
+	if ((dmTypes & dmPICT)  && (fCIStrEqual("DomainPicture" , sType))) return true;
+	if ((dmTypes & dmCOLOR) && (fCIStrEqual("DomainColor" , sType))) return true;
+	if ((dmTypes & dmBOOL)  && (fCIStrEqual("DomainBool" , sType))) return true;
+	if ((dmTypes & dmBIT)   && (fCIStrEqual("DomainBit" , sType))) return true;
+	if ((dmTypes & dmUNIQUEID) && (fCIStrEqual("DomainUniqueID" , sType))) return true;
+	if ((dmTypes & dmSTRING) && (fCIStrEqual("DomainString" , sType))) return true;
+	return false;
 }
 
 ///////////////////////////////////////////////////////////////
@@ -744,10 +780,10 @@ bool MapListerDomainTypeAndGeoRef::fOK(const FileName& fnMap, const String& sCol
 
 	// Reject any object that is not a Map or MapList
 	if (! (fCIStrEqual(fnMap.sExt , ".mpr") ||
-	       fCIStrEqual(fnMap.sExt , ".mps") ||
-	       fCIStrEqual(fnMap.sExt , ".mpa") ||
-	       fCIStrEqual(fnMap.sExt , ".mpp") ||
-	       fCIStrEqual(fnMap.sExt , ".mpl")) )  // allow MapList bands
+		fCIStrEqual(fnMap.sExt , ".mps") ||
+		fCIStrEqual(fnMap.sExt , ".mpa") ||
+		fCIStrEqual(fnMap.sExt , ".mpp") ||
+		fCIStrEqual(fnMap.sExt , ".mpl")) )  // allow MapList bands
 		return false;
 
 	FileName fnBand = fnMap;
@@ -768,7 +804,7 @@ bool MapListerDomainTypeAndGeoRef::fOK(const FileName& fnMap, const String& sCol
 	// fnBand is now a Map or a band in a maplist
 	FileName fnGeoRef;
 	ObjectInfo::ReadElement("Map", "GeoRef", fnBand, fnGeoRef);
-	
+
 	return (fnGrf == fnGeoRef);
 }
 ///////////////////////////////////////////////////////////////
@@ -777,10 +813,10 @@ bool MapListerGeoRef::fOK(const FileName& fnMap, const String&)
 {
 	// Reject any object that is not a Map or MapList
 	if (! (fCIStrEqual(fnMap.sExt , ".mpr") ||
-	       fCIStrEqual(fnMap.sExt , ".mps") ||
-	       fCIStrEqual(fnMap.sExt , ".mpa") ||
-	       fCIStrEqual(fnMap.sExt , ".mpp") ||
-	       fCIStrEqual(fnMap.sExt , ".mpl")) )  // allow MapList bands
+		fCIStrEqual(fnMap.sExt , ".mps") ||
+		fCIStrEqual(fnMap.sExt , ".mpa") ||
+		fCIStrEqual(fnMap.sExt , ".mpp") ||
+		fCIStrEqual(fnMap.sExt , ".mpl")) )  // allow MapList bands
 		return false;
 
 	FileName fnBand = fnMap;
@@ -801,7 +837,7 @@ bool MapListerGeoRef::fOK(const FileName& fnMap, const String&)
 	// fnBand is now a Map or a band in a maplist
 	FileName fnGeoRef;
 	ObjectInfo::ReadElement("Map", "GeoRef", fnBand, fnGeoRef);
-	
+
 	return (fnGrf == fnGeoRef);
 }
 
@@ -809,12 +845,12 @@ bool MapListerDomainName::fOK(const FileName& fnMap, const String&)
 {
 	// Reject any object that is not a Map or MapList
 	if (! (fCIStrEqual(fnMap.sExt , ".mpr") ||
-	       fCIStrEqual(fnMap.sExt , ".mpl")) )  // allow MapList bands
+		fCIStrEqual(fnMap.sExt , ".mpl")) )  // allow MapList bands
 		return false;
 
 	FileName fnDomain;
 	ObjectInfo::ReadElement("BaseMap", "Domain", fnMap, fnDomain);
-	
+
 	return (fnDom == fnDomain);
 }
 
@@ -823,19 +859,19 @@ bool MapListerDomainAndGeoRef::fOK(const FileName& fnMap, const String& sColName
 {
 	// Reject any object that is not a Map
 	if (! (fCIStrEqual(fnMap.sExt , ".mpr") ||
-	       fCIStrEqual(fnMap.sExt , ".mps") ||
-	       fCIStrEqual(fnMap.sExt , ".mpa") ||
-	       fCIStrEqual(fnMap.sExt , ".mpp")) )
+		fCIStrEqual(fnMap.sExt , ".mps") ||
+		fCIStrEqual(fnMap.sExt , ".mpa") ||
+		fCIStrEqual(fnMap.sExt , ".mpp")) )
 		return false;
 
 	bool fCheckObjectSelf = sCHECK_OBJECT_ONLY == sColName;
 	// fCheckObjectSelf == true means the user clicked (selected) an item
 	// fCheckObjectSelf == false means the tree is filling/expanding
-	
+
 	FileName fnDom;
 	ObjectInfo::ReadElement("BaseMap", "Domain", fnMap, fnDom);
 	if (fnDom.sExt.length() == 0)
-    fnDom.sExt = ".dom";
+		fnDom.sExt = ".dom";
 	fnDom = IlwisObjectPtr::fnCheckPath(fnDom);
 
 	// Accept any domain when the MapListerDomainAndGeoRef is created with
@@ -848,9 +884,9 @@ bool MapListerDomainAndGeoRef::fOK(const FileName& fnMap, const String& sColName
 			FileName fnAttrib = ObjectInfo::fnAttributeTable(fnMap);
 			if (!fAcceptColumn(fnAttrib, sColName))
 				return false;
-				// otherwise "true" as far as the domain is concerned, continue checking the georef
-				// perhaps all this should be solved by deriving from BaseMapListerDomain and calling
-				// its fOK
+			// otherwise "true" as far as the domain is concerned, continue checking the georef
+			// perhaps all this should be solved by deriving from BaseMapListerDomain and calling
+			// its fOK
 		}
 		else
 		{
@@ -864,12 +900,12 @@ bool MapListerDomainAndGeoRef::fOK(const FileName& fnMap, const String& sColName
 				if (fCheckObjectSelf)
 				{
 					if (!fAcceptDomain(fnDom)) // user clicked - refuse map selection if domain isn't suitable
-					return false;
+						return false;
 				}
 				else
 				{
 					if (!(fAcceptDomain(fnDom) || fAcceptAttributeTable(fnMap))) // fill table - include map if attribtable contains suitable col
-					return false; 
+						return false; 
 				}
 			}
 		}
@@ -932,12 +968,12 @@ bool MapListerDomainAndGeoRef::fAcceptAttributeTable(const FileName& fn)
 bool MapListerDomainAndGeoRef::fAcceptDomain(FileName fnDom)
 {
 	if (fnDom.sExt.length() == 0)
-    fnDom.sExt = ".dom";
-  if (!File::fExist(fnDom)) {
-    fnDom.Dir(IlwWinApp()->Context()->sStdDir());
-    if (!File::fExist(fnDom)) 
-      return false;
-  }
+		fnDom.sExt = ".dom";
+	if (!File::fExist(fnDom)) {
+		fnDom.Dir(IlwWinApp()->Context()->sStdDir());
+		if (!File::fExist(fnDom)) 
+			return false;
+	}
 	return (m_fnDom == fnDom);
 }
 
@@ -945,10 +981,10 @@ bool BaseMapListerDomain::fOK(const FileName& fnMap, const String& sColName)
 {
 	// Reject any object that is not a Map or MapList
 	if (! (fCIStrEqual(fnMap.sExt , ".mpr") ||
-	       fCIStrEqual(fnMap.sExt , ".mps") ||
-	       fCIStrEqual(fnMap.sExt , ".mpa") ||
-	       fCIStrEqual(fnMap.sExt , ".mpp") ||
-	       fCIStrEqual(fnMap.sExt , ".mpl")) )  // allow MapList bands
+		fCIStrEqual(fnMap.sExt , ".mps") ||
+		fCIStrEqual(fnMap.sExt , ".mpa") ||
+		fCIStrEqual(fnMap.sExt , ".mpp") ||
+		fCIStrEqual(fnMap.sExt , ".mpl")) )  // allow MapList bands
 		return false;
 
 	bool fCheckObjectSelf = sCHECK_OBJECT_ONLY == sColName;
@@ -1025,38 +1061,38 @@ bool BaseMapListerDomain::fAcceptAttributeTable(const FileName& fn)
 bool BaseMapListerDomain::fAcceptDomain(FileName fnDom)
 {
 	if (fnDom.sExt.length() == 0)
-    fnDom.sExt = ".dom";
-  if (!File::fExist(fnDom)) {
-    fnDom.Dir(IlwWinApp()->Context()->sStdDir());
-    if (!File::fExist(fnDom)) 
-      return false;
-  }
+		fnDom.sExt = ".dom";
+	if (!File::fExist(fnDom)) {
+		fnDom.Dir(IlwWinApp()->Context()->sStdDir());
+		if (!File::fExist(fnDom)) 
+			return false;
+	}
 	return (m_fnDom == fnDom);
 }
 
 bool CoordSystemLister::fOK(const FileName& fn, const String&)
 {
-  if (!fCIStrEqual(fn.sExt , ".csy")) 
+	if (!fCIStrEqual(fn.sExt , ".csy")) 
 		return false;
-  String sType;
-  ObjectInfo::ReadElement("CoordSystem", "Type", fn, sType);
-  if ((csTypes & csBOUNDSONLY) && (fCIStrEqual("BoundsOnly" , sType))) return true;
-  if ((csTypes & csPROJ) && (fCIStrEqual("Projection" , sType) || "" == sType)) return true;
-  if ((csTypes & csLATLON) && (fCIStrEqual("LatLon" , sType))) return true;
-  if ((csTypes & csFORMULA) && (fCIStrEqual("Formula" , sType))) return true;
-  if ((csTypes & csTIEPOINTS) && (fCIStrEqual("TiePoints" , sType))) return true;
-  if ((csTypes & csORTHOPHOTO) && (fCIStrEqual("OrthoPhoto" , sType))) return true;
-  if ((csTypes & csDIRECTLINEAR) && (fCIStrEqual("DirectLinear" , sType))) return true;
-  return false;
+	String sType;
+	ObjectInfo::ReadElement("CoordSystem", "Type", fn, sType);
+	if ((csTypes & csBOUNDSONLY) && (fCIStrEqual("BoundsOnly" , sType))) return true;
+	if ((csTypes & csPROJ) && (fCIStrEqual("Projection" , sType) || "" == sType)) return true;
+	if ((csTypes & csLATLON) && (fCIStrEqual("LatLon" , sType))) return true;
+	if ((csTypes & csFORMULA) && (fCIStrEqual("Formula" , sType))) return true;
+	if ((csTypes & csTIEPOINTS) && (fCIStrEqual("TiePoints" , sType))) return true;
+	if ((csTypes & csORTHOPHOTO) && (fCIStrEqual("OrthoPhoto" , sType))) return true;
+	if ((csTypes & csDIRECTLINEAR) && (fCIStrEqual("DirectLinear" , sType))) return true;
+	return false;
 }
 
 bool GraphLister::fOK(const FileName& fn, const String&)
 {
-  if (!fCIStrEqual(fn.sExt , ".grh")) 
+	if (!fCIStrEqual(fn.sExt , ".grh")) 
 		return false;
-  String sType;
-  ObjectInfo::ReadElement("Graph", "Type", fn, sType);
-  if ((grTypes & grhGRAPH) && (fCIStrEqual("StandardGraph", sType))) return true;
-  if ((grTypes & grhROSEDIAGRAM) && (fCIStrEqual("RoseDiagram", sType))) return true;
-  return false;
+	String sType;
+	ObjectInfo::ReadElement("Graph", "Type", fn, sType);
+	if ((grTypes & grhGRAPH) && (fCIStrEqual("StandardGraph", sType))) return true;
+	if ((grTypes & grhROSEDIAGRAM) && (fCIStrEqual("RoseDiagram", sType))) return true;
+	return false;
 }
