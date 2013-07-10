@@ -120,7 +120,7 @@ String TextLayerDrawer::store(const FileName& fnView, const String& parentSectio
 }
 void TextLayerDrawer::load(const FileName& fnView, const String& parentSection){
 	String currentSection = parentSection;
-	ComplexDrawer::store(fnView, currentSection);
+	ComplexDrawer::load(fnView, currentSection);
 	ObjectInfo::ReadElement(currentSection.c_str(),"ColotText",fnView, clrText);
 	ObjectInfo::ReadElement(currentSection.c_str(),"FaceName",fnView, sFaceName);
 	ObjectInfo::ReadElement(currentSection.c_str(),"Height",fnView, iFHeight);
