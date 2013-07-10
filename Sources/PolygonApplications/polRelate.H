@@ -68,7 +68,7 @@ private:
 	BaseMap bmp;
 	String rt;
 	bool fNegation;
-	set<String> addedPols;
+	set<FeatureID> addedPols;
 };
 
 
