@@ -244,9 +244,11 @@ public:
 	afx_msg HBRUSH           CtlColor(CDC *p, UINT nCtlColor );
 	void                     SetTextColor(Color clr);
   void                     SetBackGroundColor(Color clr);
+  String					getRawString() const;
     
 protected:
 	afx_msg BOOL OnEraseBkgnd( CDC* pDC );
+	String rawString;
 
 	zFormatter *format;
   Color  textColor;
