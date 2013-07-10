@@ -177,5 +177,7 @@ void GeoRefCornersWMS::SetRetrieveProc(ForeignFormat* context, RetrieveImageProc
 }
 
 bool GeoRefCornersWMS::retrieveImage() {
-	return (wmsFormat->*retrieveImageProc)();
+	if (wmsFormat)
+		return (wmsFormat->*retrieveImageProc)();
+	return false;
 }
