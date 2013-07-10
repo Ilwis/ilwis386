@@ -75,6 +75,7 @@ template <class T> class Array : public vector<T>
 public:
   Array() { Reset(); }
   Array(int iSize) : vector<T>(iSize) {}
+  Array(const std::vector<T>& vec) : vector<T>(vec) {}
   void Reset() { resize(0); }
   void Resize(int iSize) { resize(iSize); }
   void Insert(int iStart, int iSize) { insert(begin()+iStart,iSize, T()); }
