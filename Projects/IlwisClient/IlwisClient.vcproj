@@ -3543,6 +3543,10 @@
 					RelativePath="..\..\Sources\Client\FormElements\TreeSelector.cpp"
 					>
 				</File>
+				<File
+					RelativePath="..\..\Sources\Client\FormElements\WPSObjectSelector.h"
+					>
+				</File>
 				<Filter
 					Name="headers"
 					>
@@ -3832,6 +3836,10 @@
 					</File>
 					<File
 						RelativePath="..\..\Sources\Client\FormElements\TreeSelector.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\FormElements\WPSObjectSelector.cpp"
 						>
 					</File>
 				</Filter>
@@ -5394,6 +5402,10 @@
 				</File>
 			</Filter>
 		</Filter>
+		<File
+			RelativePath="..\..\Sources\Client\Resources\driveremote.ico"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
