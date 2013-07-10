@@ -479,7 +479,7 @@ int ObjectInfo::ReadElement(const char* sSection, const char* sEntry,
 	}
 	else 
 	{
-		throw ErrorObject(WhatError(String(TR("Empty or no '%s=' entry found in section '%s'").c_str(), sEntry, sSection), errOPEN), fnObj); //.Show();
+		//throw ErrorObject(WhatError(String(TR("Empty or no '%s=' entry found in section '%s'").c_str(), sEntry, sSection), errOPEN), fnObj); //.Show();
 		DomainInfo dinf(fnObj, sSection);
 		dm = dinf.dmUnknown();
 	}  
