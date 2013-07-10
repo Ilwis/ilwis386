@@ -1,39 +1,39 @@
 /***************************************************************
- ILWIS integrates image, vector and thematic data in one unique 
- and powerful package on the desktop. ILWIS delivers a wide 
- range of feautures including import/export, digitizing, editing, 
- analysis and display of data as well as production of 
- quality mapsinformation about the sensor mounting platform
- 
- Exclusive rights of use by 52°North Initiative for Geospatial 
- Open Source Software GmbH 2007, Germany
+ILWIS integrates image, vector and thematic data in one unique 
+and powerful package on the desktop. ILWIS delivers a wide 
+range of feautures including import/export, digitizing, editing, 
+analysis and display of data as well as production of 
+quality mapsinformation about the sensor mounting platform
 
- Copyright (C) 2007 by 52°North Initiative for Geospatial
- Open Source Software GmbH
+Exclusive rights of use by 52°North Initiative for Geospatial 
+Open Source Software GmbH 2007, Germany
 
- Author: Jan Hendrikse, Willem Nieuwenhuis,Wim Koolhoven 
- Bas Restsios, Martin Schouwenburg, Lichun Wang, Jelle Wind 
+Copyright (C) 2007 by 52°North Initiative for Geospatial
+Open Source Software GmbH
 
- Contact: Martin Schouwenburg; schouwenburg@itc.nl; 
- tel +31-534874371
+Author: Jan Hendrikse, Willem Nieuwenhuis,Wim Koolhoven 
+Bas Restsios, Martin Schouwenburg, Lichun Wang, Jelle Wind 
 
- This program is free software; you can redistribute it and/or
- modify it under the terms of the GNU General Public License
- version 2 as published by the Free Software Foundation.
+Contact: Martin Schouwenburg; schouwenburg@itc.nl; 
+tel +31-534874371
 
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU General Public License for more details.
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+version 2 as published by the Free Software Foundation.
 
- You should have received a copy of the GNU General Public License
- along with this program (see gnu-gpl v2.txt); if not, write to
- the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- Boston, MA 02111-1307, USA or visit the web page of the Free
- Software Foundation, http://www.fsf.org.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
 
- Created on: 2007-02-8
- ***************************************************************/
+You should have received a copy of the GNU General Public License
+along with this program (see gnu-gpl v2.txt); if not, write to
+the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+Boston, MA 02111-1307, USA or visit the web page of the Free
+Software Foundation, http://www.fsf.org.
+
+Created on: 2007-02-8
+***************************************************************/
 #include "Engine\Map\Raster\MapList\maplist.h"
 #include "Engine\Applications\MAPVIRT.H"
 #include "Engine\Domain\dm.h"
@@ -90,15 +90,15 @@ MapList::MapList(const String& sExpression, const String& sPath)
 }
 
 MapList::MapList(const FileName& fn,
-                 const Array<FileName>& fnaMaps)
-: IlwisObject(listMapList, new MapListPtr(fn, fnaMaps))
+				 const Array<FileName>& fnaMaps)
+				 : IlwisObject(listMapList, new MapListPtr(fn, fnaMaps))
 {
 }
 
 MapList::MapList(const FileName& fn,
-                 const DomainValueRangeStruct& dvsMap, const GeoRef& gr, 
-                 const RowCol& rc, long iNrBands, const String& sBandPreFix)
-: IlwisObject(listMapList, new MapListPtr(fn, dvsMap, gr, rc, iNrBands, sBandPreFix))
+				 const DomainValueRangeStruct& dvsMap, const GeoRef& gr, 
+				 const RowCol& rc, long iNrBands, const String& sBandPreFix)
+				 : IlwisObject(listMapList, new MapListPtr(fn, dvsMap, gr, rc, iNrBands, sBandPreFix))
 {
 }
 
@@ -138,7 +138,7 @@ bool fImportMapList(const FileName& fnMpl, const Array<String>& as)
 			sErr = String(TR("Too little parameters, at least %i needed").c_str(), 6);
 			throw ErrorObject(sErr);
 		}
-		
+
 		// The import general raster generates a string with full quoting, that is
 		// the extension is included. Therefore the string unquote is needed here.
 		String sInput = as[0].sUnQuote();
@@ -255,17 +255,18 @@ bool fImportMapList(const FileName& fnMpl, const Array<String>& as)
 			String sDescr;
 			if ((iParms > 11) && (as[11].length() > 0))
 				sDescr = as[11];
-			
+
 			ImportWithHeader(fnInp, fnMpl, iHeaderSize, iBands, iCols,
 				irps, iNrBytesPerPixel, irfs, fUseAs, fByteSwap, fCreateMPR, sDescr);
-			
+
 		}
 		else {
-		// invalid format
-		sErr = String(TR("Incorrect raster import format: %S").c_str(), as[1]);
-		throw ErrorObject(sErr);
+			// invalid format
+			sErr = String(TR("Incorrect raster import format: %S").c_str(), as[1]);
+			throw ErrorObject(sErr);
 		}
 	}
+
 	catch (const ErrorObject& err) {
 		err.Show();
 		return false;
@@ -330,7 +331,7 @@ MapListPtr* MapListPtr::create(const FileName& fn, const String& sExpression)
 
 MapListPtr::~MapListPtr()
 {
-  delete pmlv;
+	delete pmlv;
 }
 
 MapListPtr::MapListPtr(const FileName& fn)
@@ -351,10 +352,12 @@ MapListPtr::MapListPtr(const FileName& fn)
 		err.Show();
 	}
 	ReadElement("MapList","Range", range);
+
+
 	int iMaps = iReadElement("MapList", "Maps");
-    // Corrupted ODF can have no key for the number of maps, so check
-    if (iMaps == iUNDEF)
-        iMaps = 0;
+	// Corrupted ODF can have no key for the number of maps, so check
+	if (iMaps == iUNDEF)
+		iMaps = 0;
 
 	iOffset = 0;
 	long iOff = iReadElement("MapList", "Offset");
@@ -378,57 +381,61 @@ MapListPtr::MapListPtr(const FileName& fn)
 			ma.Remove(i, 1);
 			i--;
 		}  
-		try {
-			CheckDomains(); // only for non-removed maps
-		}
-		catch (const ErrorObject& err) {
-			err.Show();
-		}  
-		// retrieve Georef
-		ReadElement("MapList", "GeoRef", _gr);
-		ReadElement("MapList", "Size", _rcSize);
-		if (iSize() == 0)
-			return;
-		try {
-			CheckGeoRefs();
-		}
-		catch (const ErrorObject& err) {
-			err.Show();
-		}
-		if (_rcSize == rcUNDEF)
-			_rcSize = map(iLower())->rcSize();
-		if (0 == ReadElement("MultiBandStat", "CalcStatTime", tmCalcStat))
+	try {
+		CheckDomains(); // only for non-removed maps
+	}
+	catch (const ErrorObject& err) {
+		err.Show();
+	}  
+	// retrieve Georef
+	ReadElement("MapList", "GeoRef", _gr);
+	ReadElement("MapList", "Size", _rcSize);
+	if (iSize() == 0)
+		return;
+	try {
+		CheckGeoRefs();
+	}
+	catch (const ErrorObject& err) {
+		err.Show();
+	}
+	if (_rcSize == rcUNDEF)
+		_rcSize = map(iLower())->rcSize();
+	if (0 == ReadElement("MultiBandStat", "CalcStatTime", tmCalcStat))
+		tmCalcStat = 0;
+	if (tmCalcStat != 0) {
+		// retrieve multi band stats
+		ReadElement("MultiBandStat", "VarCov", _mtVarCov);
+		ReadElement("MultiBandStat", "Correlation", _mtCorr);
+		if ((_mtVarCov.iRows() != iSize()) || (_mtVarCov.iCols() != iSize()))
 			tmCalcStat = 0;
-		if (tmCalcStat != 0) {
-			// retrieve multi band stats
-			ReadElement("MultiBandStat", "VarCov", _mtVarCov);
-			ReadElement("MultiBandStat", "Correlation", _mtCorr);
-			if ((_mtVarCov.iRows() != iSize()) || (_mtVarCov.iCols() != iSize()))
-				tmCalcStat = 0;
-			if ((_mtCorr.iRows() != iSize()) || (_mtCorr.iCols() != iSize()))
-				tmCalcStat = 0;
-		}
-		if (tmCalcStat != 0) {
-			RealMatrix matVec;
-			ReadElement("MultiBandStat", "Mean", matVec);
-			_vecMean = CVector(iSize());
+		if ((_mtCorr.iRows() != iSize()) || (_mtCorr.iCols() != iSize()))
+			tmCalcStat = 0;
+	}
+	if (tmCalcStat != 0) {
+		RealMatrix matVec;
+		ReadElement("MultiBandStat", "Mean", matVec);
+		_vecMean = CVector(iSize());
+		if (matVec.iRows() != iSize())
+			tmCalcStat = 0;
+		else {
+			for (i=0; i < matVec.iRows(); i++) 
+				_vecMean(i) = matVec(i, 0);
+			_vecStd = CVector(iSize());
+			ReadElement("MultiBandStat", "StandardDev", matVec);
 			if (matVec.iRows() != iSize())
 				tmCalcStat = 0;
-			else {
+			else
 				for (i=0; i < matVec.iRows(); i++) 
-					_vecMean(i) = matVec(i, 0);
-				_vecStd = CVector(iSize());
-				ReadElement("MultiBandStat", "StandardDev", matVec);
-				if (matVec.iRows() != iSize())
-					tmCalcStat = 0;
-				else
-					for (i=0; i < matVec.iRows(); i++) 
-						_vecStd(i) = matVec(i, 0);
-			}  
+					_vecStd(i) = matVec(i, 0);
 		}  
-		ReadElement("MapList", "BandPreFix", _sBandPreFix);
-		fChanged = false;
-		objtime = tim;
+	}  
+	ReadElement("MapList", "BandPreFix", _sBandPreFix);
+	fChanged = false;
+	objtime = tim;
+	if ( !range.fValid()){
+		range = getRange();
+		fChanged = true;
+	}
 }
 
 MapListPtr::MapListPtr(const FileName& fn, const Array<FileName>& fnaMaps)
@@ -446,7 +453,7 @@ MapListPtr::MapListPtr(const FileName& fn, const Array<FileName>& fnaMaps)
 		ObjectInfo::WriteAdditionOfFileToCollection(fnaMaps[i], fnObj);
 	}
 	CheckDomains();
-	
+
 	// get georef from first map
 	_gr = map(iLower())->gr();
 	if (gr()->fGeoRefNone())
@@ -477,7 +484,7 @@ MapListPtr::MapListPtr(const FileName& fn, const Array<Map>& aMaps)
 		ObjectInfo::WriteAdditionOfFileToCollection(map(i)->fnObj, fnObj);
 	}
 	CheckDomains();
-	
+
 	// get georef from first map
 	_gr = map(iLower())->gr();
 	if (gr()->fGeoRefNone())
@@ -494,10 +501,10 @@ MapListPtr::MapListPtr(const FileName& fn, const Array<Map>& aMaps)
 }
 
 MapListPtr::MapListPtr(const FileName& fn,
-	const DomainValueRangeStruct& dvsMap, const GeoRef& grMap, const RowCol& rc, 
-	long iNrBands, const String& sBandPref)
-: IlwisObjectPtr(FileName(fn, ".mpl"),true, ".mpl")
-, pmlv(0)
+					   const DomainValueRangeStruct& dvsMap, const GeoRef& grMap, const RowCol& rc, 
+					   long iNrBands, const String& sBandPref)
+					   : IlwisObjectPtr(FileName(fn, ".mpl"),true, ".mpl")
+					   , pmlv(0)
 {
 	_sBandPreFix = sBandPref;
 	iOffset = 1;
@@ -614,13 +621,13 @@ void MapListPtr::CheckGeoRefs() const
 		for (int i = iLower()+1; i <= iUpper(); i++) 
 			if (ma[i]->rcSize()!= rcSize())
 				throw ErrorIncompatibleMapSize(ma[iLower()]->sName(true, fnObj.sPath()), ma[i]->sName(true, fnObj.sPath()),
-						sTypeName(), errMapList+4);
+				sTypeName(), errMapList+4);
 	}
 	else
 		for (int i = iLower()+1; i <= iUpper(); i++) 
 			if (ma[i]->gr()!= grf)
 				throw ErrorIncompatibleGeorefs(grf->sName(true, fnObj.sPath()), 
-						ma[i]->gr()->sName(true, fnObj.sPath()), sTypeName(), errMapList+5);
+				ma[i]->gr()->sName(true, fnObj.sPath()), sTypeName(), errMapList+5);
 }
 
 RealMatrix* MapListPtr::mtVarCov(bool fForce)
@@ -632,7 +639,7 @@ RealMatrix* MapListPtr::mtVarCov(bool fForce)
 		if (tm > tmMaps)
 			tmMaps = tm;
 	}
-	
+
 	if (fForce || tmCalcStat < tmMaps)
 		CalculateStats();
 
@@ -648,7 +655,7 @@ RealMatrix* MapListPtr::mtCorr(bool fForce)
 		if (tm > tmMaps)
 			tmMaps = tm;
 	}
-	
+
 	if (fForce || tmCalcStat < tmMaps)
 		CalculateStats();
 
@@ -690,7 +697,7 @@ void MapListPtr::CalculateStats()
 	}
 	CalcCorr();
 	tmCalcStat = ObjectTime::timCurr();
-	
+
 	// to check OIF calculation, can be removed in final version
 	Array<String> asBands;
 	IntArray aiBnd1, aiBnd2, aiBnd3;
@@ -703,10 +710,10 @@ void MapListPtr::CalculateStats()
 }
 
 #define DeleteBuf()                      \
-	{                                    \
-		for (int n = 0; n < iMaps; ++n)  \
-		delete mapBuf[n];                \
-	}
+{                                    \
+	for (int n = 0; n < iMaps; ++n)  \
+	delete mapBuf[n];                \
+}
 
 bool MapListPtr::fCalcRealVarCov()
 {
@@ -721,11 +728,11 @@ bool MapListPtr::fCalcRealVarCov()
 	RealMatrix matSumX(iMaps), 
 		matSumY(iMaps), 
 		matSumXY(iMaps);
-	
+
 	_mtVarCov = RealMatrix(iMaps);
 	_vecMean = CVector(iMaps);
 	_vecStd = CVector(iMaps);
-	
+
 	// Buffer initialisation for storage of Map.GetLine()
 	Array<RealBuf*> mapBuf(iMaps);
 	for (nr = 0; nr < iMaps; ++nr)
@@ -734,7 +741,7 @@ bool MapListPtr::fCalcRealVarCov()
 	trq.SetTitle(TR("Calculate varcov matrix"));
 	trq.SetText(TR("Calculating"));
 	trq.Start();
-	
+
 	for (r = 0; r < iRows; ++r) {
 		if (trq.fUpdate(r, iRows)) {
 			DeleteBuf();
@@ -763,12 +770,12 @@ bool MapListPtr::fCalcRealVarCov()
 			if (j >= i)
 				_mtVarCov(i, j) =
 				(matNnij(i, j) > 1 ?
-					matSumXY(i, j) / (matNnij(i, j) - 1) -
-					matSumX(i, j) / matNnij(i, j) *
-					matSumY(i, j) / matNnij(i, j) *
-					matNnij(i, j) / (matNnij(i, j) - 1)
-					: 0.0);
-			
+				matSumXY(i, j) / (matNnij(i, j) - 1) -
+				matSumX(i, j) / matNnij(i, j) *
+				matSumY(i, j) / matNnij(i, j) *
+				matNnij(i, j) / (matNnij(i, j) - 1)
+				: 0.0);
+
 			else
 				_mtVarCov(i, j) = _mtVarCov(j, i);
 		}
@@ -798,11 +805,11 @@ bool MapListPtr::fCalcLongVarCov()
 		matSumX(iMaps),
 		matSumY(iMaps);
 	RealMatrix matSumXY(iMaps);
-	
+
 	_mtVarCov = RealMatrix(iMaps);
 	_vecMean = CVector(iMaps);
 	_vecStd = CVector(iMaps);
-	
+
 	// Buffer initialisation for storage of Map.GetLine()
 	Array<LongBuf*> mapBuf(iMaps);
 	for (nr = 0; nr < iMaps; ++nr)
@@ -811,7 +818,7 @@ bool MapListPtr::fCalcLongVarCov()
 	trq.SetTitle(TR("Calculate varcov matrix"));
 	trq.SetText(TR("Calculating"));
 	trq.Start();
-	
+
 	for (r = 0; r < iRows; ++r) {
 		for (nr = 0; nr < iMaps; ++nr) {
 			if (trq.fUpdate(r, iRows)) {
@@ -838,12 +845,12 @@ bool MapListPtr::fCalcLongVarCov()
 		for (j = 0; j < iMaps; ++j) {
 			if (j >= i)
 				_mtVarCov(i, j) =
-					(matNnij(i, j) > 1 ?
-					matSumXY(i, j) / (matNnij(i, j) - 1) -
-					(double)matSumX(i, j) / matNnij(i, j) *
-					matSumY(i, j) / matNnij(i, j) *
-					matNnij(i, j) / (matNnij(i, j) - 1)
-					: 0.0);
+				(matNnij(i, j) > 1 ?
+				matSumXY(i, j) / (matNnij(i, j) - 1) -
+				(double)matSumX(i, j) / matNnij(i, j) *
+				matSumY(i, j) / matNnij(i, j) *
+				matNnij(i, j) / (matNnij(i, j) - 1)
+				: 0.0);
 			else
 				_mtVarCov(i, j) = _mtVarCov(j, i);
 		}
@@ -926,19 +933,19 @@ void MapListPtr::GetOIFList(Array<String>& asBands, IntArray& aiBnd1, IntArray& 
 				aOIF[n].b3 = k;
 				n++;
 			}
-	::QuickSort(0, iComb-1, fLessOIF, SwapOIF, (void*)aOIF);
-	for (int i=0; i < iComb; ++i)
-	{
-		asBands[i] = String("%3i:  %-8S %-8S %-8S   (%6.2f)", i+1,
-			map(aOIF[iComb-i-1].b1)->fnObj.sFile,
-			map(aOIF[iComb-i-1].b2)->fnObj.sFile,
-			map(aOIF[iComb-i-1].b3)->fnObj.sFile,
-			aOIF[iComb-i-1].rOIF);
-		aiBnd1[i] = aOIF[iComb-i-1].b1;
-		aiBnd2[i] = aOIF[iComb-i-1].b2;
-		aiBnd3[i] = aOIF[iComb-i-1].b3;
-	}
-	delete [] aOIF;
+			::QuickSort(0, iComb-1, fLessOIF, SwapOIF, (void*)aOIF);
+			for (int i=0; i < iComb; ++i)
+			{
+				asBands[i] = String("%3i:  %-8S %-8S %-8S   (%6.2f)", i+1,
+					map(aOIF[iComb-i-1].b1)->fnObj.sFile,
+					map(aOIF[iComb-i-1].b2)->fnObj.sFile,
+					map(aOIF[iComb-i-1].b3)->fnObj.sFile,
+					aOIF[iComb-i-1].rOIF);
+				aiBnd1[i] = aOIF[iComb-i-1].b1;
+				aiBnd2[i] = aOIF[iComb-i-1].b2;
+				aiBnd3[i] = aOIF[iComb-i-1].b3;
+			}
+			delete [] aOIF;
 }
 
 void MapListPtr::Rename(const FileName& fnNew)
@@ -1025,13 +1032,13 @@ void MapListPtr::AddMap(const Map& mp)
 		ma &= mp;
 	ObjectInfo::WriteAdditionOfFileToCollection(mp->fnObj, fnObj);
 	range = RangeReal();
-		Updated();
+	Updated();
 }
 
 bool MapListPtr::fOK(const Map& mp)
 {
 	if (iSize() == 0 ) return true;
-		return ma[iLower()]->dm() == mp->dm() && gr() == mp->gr();
+	return ma[iLower()]->dm() == mp->dm() && gr() == mp->gr();
 }
 
 void MapListPtr::RemoveMap(const FileName& fn)
@@ -1097,7 +1104,7 @@ void MapListPtr::GetObjectStructure(ObjectStructure& os)
 		}
 	}
 	else if (os.caGetCommandAction() != ObjectStructure::caCOPY &&
-			 os.caGetCommandAction() != ObjectStructure::caDELETE)
+		os.caGetCommandAction() != ObjectStructure::caDELETE)
 	{
 		if ( os.fRetrieveContentsContainer()) {
 			for (int i = iLower(); i <= iUpper(); i++)
@@ -1171,7 +1178,7 @@ void MapListPtr::BreakDependency()
 	delete pmlv;
 	pmlv = 0;
 	fChanged = true;
-	
+
 	ObjectInfo::WriteElement("MapList", "Type", fnObj, (char*)0);
 	Store();
 }
