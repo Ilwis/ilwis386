@@ -124,6 +124,8 @@ CoordSystem GdalProxy::getCoordSystem(const FileName& fnBase, int epsg) {
 			projName = "Stereographic";
 		if ( projName == "Lambert_Conformal_Conic_2SP")
 			projName = "Lambert Conformal Conic";
+		if ( projName == "Polar_Stereographic")
+			projName = "StereoPolar";
 		replace(projName.begin(), projName.end(),'_',' ');
 
 		String spheroid = getEngine()->gdal->getAttribute(handle,"SPHEROID",0);
@@ -151,6 +153,8 @@ CoordSystem GdalProxy::getCoordSystem(const FileName& fnBase, int epsg) {
 		double lattOfOrigin = getEngine()->gdal->getProjParam(handle, "latitude_of_origin",rUNDEF,&err);
 		double stParal1 = getEngine()->gdal->getProjParam(handle, "standard_parallel_1",rUNDEF,&err);
 		double stParal2 = getEngine()->gdal->getProjParam(handle, "standard_parallel_2",rUNDEF,&err);
+		if ( projName == "StereoPolar" && easting == 2000000.) // one of those exceptions
+			projName = "UPS";
 		csp->prj = Projection(projName,csp->ell);
 		if ( easting != rUNDEF)
 			csp->prj->Param(pvX0,easting);
