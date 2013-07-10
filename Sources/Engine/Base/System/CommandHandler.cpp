@@ -3249,6 +3249,13 @@ void CommandHandler::CmdAddToMapList(const String& sN) {
 	Array<String> parts;
 	Split(sTail,parts," ");
 	Array<FileName> maps;
+	{
+		// add list of existing bands; and make sure the object goes out of scope
+		MapList mpl_org(fnMpl);
+		for (int i = mpl_org->iLower(); i < mpl_org->iUpper(); ++i)
+			maps.push_back(mpl_org->map(i)->fnObj);
+	}
+
 	for(int i=0; i < parts.size(); ++i) {
 		FilenameIter fi(parts[i]);
 		while(fi.fValid())
