@@ -307,6 +307,7 @@ Ellipse                 ICON                    "ellipse.ico"
 Line                    ICON                    "line.ico"
 Curve                   ICON                    "curve.ico"
 whitespace              ICON                    "whitespace.ico"
+DriveRemote             ICON                    "driveremote.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -576,8 +577,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 3,8,3,0
- PRODUCTVERSION 3,8,3,0
+ FILEVERSION 3,8,4,0
+ PRODUCTVERSION 3,8,4,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -594,12 +595,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "52N"
             VALUE "FileDescription", "Ilwis38"
-            VALUE "FileVersion", "3, 8, 3, 0"
+            VALUE "FileVersion", "3, 8, 4, 0"
             VALUE "InternalName", "Ilwis38"
             VALUE "LegalCopyright", "Copyright © 2007 52N"
             VALUE "OriginalFilename", "Ilwis.exe"
             VALUE "ProductName", "52N Ilwis38"
-            VALUE "ProductVersion", "3, 8, 3, 0"
+            VALUE "ProductVersion", "3, 8, 4, 0"
         END
     END
     BLOCK "VarFileInfo"
