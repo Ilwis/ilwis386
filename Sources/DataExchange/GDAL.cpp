@@ -1912,7 +1912,7 @@ void PolygonFiller::fillFeature(OGRGeometryH hGeometry, int& rec, bool isMulti) 
 		if ( hGeometry) {
 			long count = funcs.ogrGetSubGeometryCount(hGeometry);
 			OGRwkbGeometryType tp = funcs.ogrGetGeometryType(hGeometry);
-			if ( tp == wkbPolygon){
+			if ( tp == wkbPolygon || tp == wkbPolygon25D ){
 				fillPolygon(count, rec, hGeometry);
 				if ( isMulti == false) // for multis de raw remains the same (same record).
 					++rec;
