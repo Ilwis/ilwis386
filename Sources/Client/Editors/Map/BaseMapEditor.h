@@ -14,7 +14,7 @@ struct SelectedFeature {
 	vector<ILWIS::NewDrawer *> drawers;
 };
 
-typedef map<String, SelectedFeature *> SFMap;
+typedef map<FeatureID, SelectedFeature *> SFMap;
 typedef SFMap::iterator SFMIter;
 typedef SFMap::const_iterator SFMCIter;
 class PixelInfoDoc;
