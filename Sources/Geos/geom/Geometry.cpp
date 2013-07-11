@@ -301,7 +301,9 @@ Geometry::getEnvelope() const
 const Envelope *
 Geometry::getEnvelopeInternal() const
 {
-	if (!envelope.get()) {
+	if (!envelope.get() ) {
+		envelope = computeEnvelopeInternal();
+	} else if ( envelope->getMaxX() < envelope->getMinX()){
 		envelope = computeEnvelopeInternal();
 	}
 	return envelope.get();
