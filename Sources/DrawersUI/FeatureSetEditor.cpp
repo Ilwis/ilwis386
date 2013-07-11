@@ -63,7 +63,7 @@ using namespace ILWIS;
 FeatureSetEditor::FeatureSetEditor(const String& tp,  ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
 	BaseMapEditor(tp,zv, view, drw),
 	currentCoordIndex(iUNDEF),
-	currentGuid(sUNDEF),
+	currentGuid(0),
 	mode(BaseMapEditor::mUNKNOWN),
 	LayerDrawer((ComplexDrawer *)drw),
 	bmapptr(0),
@@ -187,7 +187,7 @@ void FeatureSetEditor::clear() {
 	}
 	selectedFeatures.clear();
 	currentCoordIndex = iUNDEF;
-	currentGuid = sUNDEF;
+	currentGuid = 0;
 }
 
 // adds a vertex and the feature it belongs to to a set of selected features(maybe empty).
@@ -246,7 +246,7 @@ bool FeatureSetEditor::selectMove(UINT nFlags, CPoint point) {
 
 	Coord crd = mdoc->rootDrawer->screenToWorld(RowCol(point.y, point.x));
 	vector<Geometry *> geometries = bmapptr->getFeatures(crd);
-	if ( geometries.size() > 0 || currentGuid != "") {
+	if ( geometries.size() > 0 || currentGuid != 0) {
 		if ( geometries.size() > 0) {
 			Feature *f = CFEATURE(geometries[0]);
 			currentGuid = f->getGuid();
@@ -406,7 +406,7 @@ void FeatureSetEditor::OnMouseMove(UINT nFlags, CPoint point){
 		return ;
 
 	Coord crd = mdoc->rootDrawer->screenToWorld(RowCol(point.y, point.x));
-	if ( currentCoordIndex != iUNDEF && currentGuid != sUNDEF) {
+	if ( currentCoordIndex != iUNDEF && currentGuid != 0) {
 		SelectedFeature *sf = selectedFeatures[currentGuid];
 		if ( sf && currentCoordIndex < sf->coords.size()) {
 			Coord cDelta(*(sf->coords[currentCoordIndex]));
@@ -541,14 +541,14 @@ void FeatureSetEditor::OnUpdateMode(CCmdUI* pCmdUI)
 void FeatureSetEditor::removeSelectedFeatures() {
 	for(SFMIter cur = selectedFeatures.begin(); cur != selectedFeatures.end(); ++cur) {
 		SelectedFeature *sfeature = (*cur).second;
-		String oldGuid = sfeature->feature->getGuid();
+		FeatureID oldGuid = sfeature->feature->getGuid();
 		bmapptr->removeFeature(oldGuid, sfeature->selectedCoords);
 		sfeature->feature = 0;
 		bool removed = false;
 		if ( oldGuid == currentGuid) {
 			if ( sfeature->selectedCoords.size() == 0 || sfeature->selectedCoords.size() == sfeature->coords.size()) {
 				((ComplexDrawer *)drawer)->removeDrawer(sfeature->drawers[0]->getId());
-				currentGuid = sUNDEF;
+				currentGuid = 0;
 				removed = true;
 			}
 		}

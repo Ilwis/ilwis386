@@ -22,7 +22,7 @@ namespace ILWIS {
 	struct UndoItem {
 		UndoItem() : seq(0),  value(iUNDEF), state(0), created(false) {}
 		~UndoItem();
-		String oldFeatureId;
+		FeatureID oldFeatureId;
 		String oldDrawerId;
 		long value;
 		CoordinateSequence *seq;

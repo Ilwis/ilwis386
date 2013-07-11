@@ -55,7 +55,7 @@ namespace ILWIS{
 		BaseMapPtr *bmapptr;
 		SFMap selectedFeatures;
 		int currentCoordIndex;
-		String currentGuid;
+		FeatureID currentGuid;
 		zCursor curActive;
 		HMENU hmenFile, hmenEdit;
 		int mode;
