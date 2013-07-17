@@ -315,10 +315,17 @@ void PointMapFromTable::Init()
   CoordBounds cb;
   for (long i = 0; i < _iPoints; ++i)
     cb += cValue(i);
-  double rExtraWidth = 1 + cb.width() / 20;
+  double rExtraWidth;
+  double rExtraHeight;
+  if (cs().fValid() && cs()->pcsLatLon()) {
+	  rExtraWidth = 1.0 / 111000.0 + cb.width() / 20; // add 1 meter ... in degrees
+	  rExtraHeight = 1.0 / 111000.0 + cb.height() / 20;
+  } else {
+	  rExtraWidth = 1 + cb.width() / 20;
+	  rExtraHeight = 1 + cb.height() / 20;
+  }
   cb.MinX() -= rExtraWidth;
   cb.MaxX() += rExtraWidth;
-  double rExtraHeight = 1 + cb.height() / 20;
   cb.MinY() -= rExtraHeight;
   cb.MaxY() += rExtraHeight;
   SetCoordBounds(cb);
