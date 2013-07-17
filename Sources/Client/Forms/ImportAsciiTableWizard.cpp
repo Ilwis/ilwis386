@@ -1251,7 +1251,7 @@ String AsciiTableWizard::sBuildExpression()
 		if (ci.sColumnName.find("-") != string::npos || ci.sColumnName.find("+") != string::npos || ci.sColumnName.find("(") != string::npos ||
 			  ci.sColumnName.find(")") != string::npos || ci.sColumnName.find("=") != string::npos || ci.sColumnName.find("/") != string::npos)
 			throw ErrorObject(TR("Table contains column names that can not be used in ILWIS"));
-		sColInfo &= String(",%S(", ci.sColumnName);
+		sColInfo &= String(",%S(", ci.sColumnName.sQuote());
 		if (ci.dtDomainType != dmtSTRING && ci.fCreate == false)
 			sColInfo &= ci.fnDomain.sRelativeQuoted(true);
 		else if (ci.dtDomainType != dmtSTRING && ci.fCreate == true)
