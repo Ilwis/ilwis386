@@ -121,7 +121,7 @@ void CalculateDatumParms::UpdateDatum()
 
 bool CalculateDatumParms::fGetCoordAndConvToLL(PtMapDomCsy& pmdc, CoordSystemProjection *cspr, long i, LatLon& ll)
 {
-  Coord cTmp = pmdc.pm->cValue(i);
+  Coord cTmp = pmdc.pm->cValue(i - 1); // i starts at 1, pointmap features start counting at 0
 	CoordBounds cb = pmdc.pm->cb();
 	if (!cb.fContains(cTmp))
 		return false;
