@@ -179,7 +179,11 @@ MolodenskyDatum::MolodenskyDatum(const String& sN, const String& sA)
 : Datum(sN, sA)
 {
 	ILWIS::QueryResults results;
-	String query("Select dx,dy,dz,ellipsoid,description from Datums where name='%S'",sName());
+	String query;
+	if (sArea.length() > 0)
+		query = String("Select dx,dy,dz,ellipsoid,description from Datums where name='%S' and area='%S'",sName(),sArea);
+	else
+		query = String("Select dx,dy,dz,ellipsoid,description from Datums where name='%S'",sName());
 	getEngine()->pdb()->executeQuery(query, results);
     if ( results.size() > 0) {
 		dx = results.get("dx",0).rVal();
@@ -187,7 +191,8 @@ MolodenskyDatum::MolodenskyDatum(const String& sN, const String& sA)
 		dz = results.get("dz",0).rVal();
 		ell = Ellipsoid(results.get("ellipsoid",0));
 		sDescription = results.get("description", 0);
-
+		if (0 != dx || 0 != dy || 0 != dz) 
+			sDescription &= String(" SHIFTS:%.2f,%.2f,%.2f",dx,dy,dz);
 	} else
 		throw ErrorObject(String(TR("Datum %S could not not be found in the ILWIS definitions").c_str(),sName()));
 
