@@ -47,7 +47,7 @@ class PostgreSQLTables : public ForeignFormat
 public:
 	PostgreSQLTables() ;	
 	//PostgreSQLTables(const FileName& fn, ParmList& pm);
-	PostgreSQLTables(const FileName& fn, ParmList& pm);
+	PostgreSQLTables(const FileName& fn, const Domain & dm, ParmList& pm);
 	~PostgreSQLTables();
 
 	static String _export sFormatPostGreSQL(const FileName& fnForeign);

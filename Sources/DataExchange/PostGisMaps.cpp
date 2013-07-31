@@ -89,7 +89,8 @@ ForeignFormat *CreateImportObjectPostGis(const FileName& fnObj, ParmList& pm) //
 			delete ff;
 		}	
 	}
-	return new PostGisMaps(fnObj,pm);
+	Domain dmAttrTable (fnObj, 0, dmtUNIQUEID, "id");
+	return new PostGisMaps(fnObj, dmAttrTable, pm);
 }
 
 PostGisMaps::PostGisMaps() :
@@ -97,14 +98,14 @@ PostGisMaps::PostGisMaps() :
 {
 
 }
-PostGisMaps::PostGisMaps(const FileName& fn, ParmList& pm) :
-	PostgreSQLTables(fn, pm)
+PostGisMaps::PostGisMaps(const FileName& fn, const Domain & dmAttrTable, ParmList& pm) :
+	PostgreSQLTables(fn, dmAttrTable, pm)
 {
 	IlwisObject::iotIlwisObjectType type = IlwisObject::iotObjectType(fn);
 	if ( type == IlwisObject::iotPOINTMAP ||  type == IlwisObject::iotSEGMENTMAP ||  type == IlwisObject::iotPOLYGONMAP) {
 		geometryColumn = fn.sFile.sTail("_");
-		sQuery = "Select * From " + tableName;
 		tableName = fn.sFile.sHead("_");
+		sQuery = "Select * From " + tableName;
 		PostGreSQL db(sConnectionString.c_str());
    	    String query("Select srid from geometry_columns where f_geometry_column='%S'", geometryColumn);
 		db.getNTResult(query.c_str());
@@ -206,6 +207,8 @@ void PostGisMaps::createFeatureColumns(TablePtr* tbl) {
 		if ( AssociatedMapType() == ForeignFormat::mtSegmentMap) {
 			Domain dmcrdbuf("CoordBuf");
 			Column col = tbl->colNew("SegmentValue", *dmKey);
+			col->SetOwnedByTable();
+			col->SetLoadingForeignData(true);
 			col = tbl->colNew("Coords", dmcrdbuf);
 			col->SetOwnedByTable();
 			col->SetLoadingForeignData(true);
@@ -241,7 +244,7 @@ void PostGisMaps::FillRecords(PostGreSQL& db, TablePtr* tbl, int iNumRecords, co
 			Column col = tbl->col("Coords");
 			PutData(col,iRec + 1, v, &crb);
 			col = tbl->col("SegmentValue");
-			PutData(col,iRec, (*dmKey)->pdsrt()->sValue(iRec + 1));
+			PutData(col,iRec + 1, (*dmKey)->pdsrt()->sValue(iRec + 1));
 			tbl->col("MinCoords")->PutVal(iRec + 1, crb.cMin);
 			tbl->col("MaxCoords")->PutVal(iRec + 1, crb.cMax);
 			tbl->col("Deleted")->PutVal(iRec + 1, (long)false);
@@ -282,8 +285,6 @@ void PostGisMaps::LoadTable(TablePtr *tbl)
 
 void PostGisMaps::PutData(Column& col, long iRec, const String& data, CoordBounds *crdBuf)
 {
-	if ( iRec >= 0)
-		PostgreSQLTables::PutData(col, iRec, data);
 	DomainType dmt = col->dm()->dmt();
 	switch(dmt)
 	{
@@ -293,7 +294,7 @@ void PostGisMaps::PutData(Column& col, long iRec, const String& data, CoordBound
 			double x = res.sHead(" ").rVal();
 			double y = res.sTail(" ").rVal();
 			Coord crd(x,y);
-			if ( iRec >= 0)
+			if ( iRec >= 1)
 				col->PutVal(iRec, crd);
 			(*crdBuf) += crd;
 			break;
@@ -303,18 +304,24 @@ void PostGisMaps::PutData(Column& col, long iRec, const String& data, CoordBound
 			String res = data.sSub(11, data.size() - 12);
 			Array<String> parts;
 			Split(res, parts,",");
-			CoordBuf cbuf(parts.size());
+			vector<Coordinate> *coords = new vector<Coordinate>();
 			for(int	i = 0; i < parts.size(); ++i) {
 				double x = parts[i].sHead(" ").rVal();
 				double y = parts[i].sTail(" ").rVal();
 				Coord crd(x,y);
-				cbuf[i] = crd;
-				if ( iRec >= 0)
-					col->PutVal(iRec, cbuf, cbuf.iSize());
+				coords->push_back(crd);
 				(*crdBuf) += crd;
 			}
+			if ( iRec >= 1)
+				col->PutVal(iRec, new CoordinateArraySequence(coords), coords->size());
+			else
+				delete coords;
 		}
 	default:
+		{
+			if ( iRec >= 1)
+				PostgreSQLTables::PutData(col, iRec, data);
+		}
 		break;
 	}				
 }
@@ -339,7 +346,7 @@ bool PostGisMaps::fMatchType(const String& sFileName, const String& sType)
 
 LayerInfo PostGisMaps::GetLayerInfo(ParmList& parms) {
 	LayerInfo info;
-	FileName fn(fnTable,".mpp");
+	FileName fn(fnTable);
 	PostGreSQL db(sConnectionString.c_str());
 
 	String type = mtLoadType == mtPointMap ? "point" : "linestring";
@@ -368,13 +375,15 @@ LayerInfo PostGisMaps::GetLayerInfo(ParmList& parms) {
 		    p2 = new Parm("method","POSTGRES");		
 		else if ( p->sOpt() == "table")
 			p2 = new Parm("table",tableName);
+		else if ( p->sOpt() == "query")
+			p2 = new Parm("query", String("Select * FROM %S", tableName));
 		else
 			p2 = new Parm(p->sOpt(), p->sVal());
 
 		pmAttribTable.Add(p2);
 	}
 	pmAttribTable.Add(new Parm("key",fnTable.sFullPath()));
-	PostgreSQLTables pgt(fnAttr,pmAttribTable);
+	PostgreSQLTables pgt(fnAttr, *dmKey, pmAttribTable);
 
 	info.tbl = TableForeign::CreateDataBaseTable(fn, parms);
 	info.tbl->iRecNew(info.iShapes);
@@ -391,7 +400,7 @@ LayerInfo PostGisMaps::GetLayerInfo(ParmList& parms) {
 		}
 		if ( mtLoadType == mtSegmentMap) {
 			Column col = info.tbl->col("Coords");
-			PutData(col,-1, res, &crdbuf);	
+			PutData(col, -1, res, &crdbuf);	
 		}
 			
 		

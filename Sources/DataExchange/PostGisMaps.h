@@ -46,7 +46,7 @@ class PostGisMaps : public PostgreSQLTables
 {
 public:
 	PostGisMaps() ;	
-	PostGisMaps(const FileName& fn, ParmList& pm);
+	PostGisMaps(const FileName& fn, const Domain & dmAttrTable, ParmList& pm);
 	~PostGisMaps();
 
 	static String _export sFormatPostGis(const FileName& fnForeign);

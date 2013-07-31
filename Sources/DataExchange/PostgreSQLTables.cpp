@@ -91,7 +91,8 @@ ForeignFormat *CreateImportObjectPostGres(const FileName& fnObj, ParmList& pm) /
 		}	
 	}
 
-	return new PostgreSQLTables(fnObj, pm);
+	FileName fnDom(pm.sGet("output") != "" ? pm.sGet("output") : fnObj.sFullPathQuoted());
+	return new PostgreSQLTables(fnObj, Domain(fnDom,0, dmtUNIQUEID,"id"), pm);
 }
 
 PostgreSQLTables::PostgreSQLTables() :
@@ -103,7 +104,7 @@ PostgreSQLTables::PostgreSQLTables() :
 //	String sCol = pm.sGet("collection");
 //}
 
-PostgreSQLTables::PostgreSQLTables(const FileName& fn, ParmList& pm)
+PostgreSQLTables::PostgreSQLTables(const FileName& fn, const Domain & dm, ParmList& pm)
 {
 	int currentSize = pm.iSize();
 	String collection = pm.sGet("collection");
@@ -133,7 +134,7 @@ PostgreSQLTables::PostgreSQLTables(const FileName& fn, ParmList& pm)
 						
 		Table tbl;
 		FileName fnTbl(pm.sGet("output") != "" ? pm.sGet("output") : fn.sFullPathQuoted());
-		tbl.SetPointer(new TablePtr(fnTbl, Domain(fnTbl,0, dmtUNIQUEID,"id"), pm));
+		tbl.SetPointer(new TablePtr(fnTbl, dm, pm));
 
 		if ( !pm.fExist("import")) {
 			tbl->SetUseAs(true);
@@ -351,15 +352,14 @@ void PostgreSQLTables::CreateColumns(PostGreSQL& db, TablePtr* tbl, int iNumColu
 			DomainValueRangeStruct dvsColumn = dmTranslateDataTypeToIlwis(vDataTypes[iCol], fReadOnly, sName, tbl);					
 			if ((!(dvsColumn.dm().fValid())) || (dvsColumn.dm()->pdnone() == 0) )
 			{
-				if ( columns[mtLoadType][iCol].fValid())
+				if ( psgrToIlwMapping[sName].fValid())
 					continue;
-				columns[mtLoadType][iCol] = tbl->colNew(sName, dvsColumn);
-				if (columns[mtLoadType][iCol].fValid())
+				psgrToIlwMapping[sName] = tbl->colNew(sName, dvsColumn);
+				if (psgrToIlwMapping[sName].fValid())
 				{
 					sarForeignCols.insert(sName);
-					columns[mtLoadType][iCol]->SetReadOnly(fReadOnly);
-					columns[mtLoadType][iCol]->SetOwnedByTable(false);
-					psgrToIlwMapping[sName] = columns[mtLoadType][iCol]; 
+					psgrToIlwMapping[sName]->SetReadOnly(fReadOnly);
+					psgrToIlwMapping[sName]->SetOwnedByTable(false);
 				}
 			}
 		}
@@ -371,20 +371,21 @@ void PostgreSQLTables::FillRecords(PostGreSQL& db, TablePtr* tbl, int iNumRecord
 	tbl->dm()->pdUniqueID()->Resize(iNumRecords);
 	for(int iCol = 0; iCol < iNumColumns; ++iCol) //  put data in the column
 	{
-		if ( columns[mtLoadType][iCol].fValid() )
+		String colName = db.getFieldName(iCol);
+		Column col = psgrToIlwMapping[colName];
+		if ( col.fValid() )
 		{
-			columns[mtLoadType][iCol]->SetLoadingForeignData(true);				
+			col->SetLoadingForeignData(true);				
 			for( long iRec = 0; iRec < iNumRecords; ++iRec) // put data in the field
 			{
 				String type = vDataTypes[iCol];
 				char *v = db.getValue(iRec, iCol);
 				String val(v);
 				val = val.sTrimSpaces();
-				String colName = db.getFieldName(iCol);
-				Column col = psgrToIlwMapping[colName];
+				
 				PutData(col, iRec + 1, val);
 			}
-			columns[mtLoadType][iCol]->SetLoadingForeignData(false);
+			col->SetLoadingForeignData(false);
 		}
 	}
 }
@@ -394,12 +395,12 @@ void PostgreSQLTables::LoadTable(TablePtr *tbl)
 {
 	PostGreSQL db(sConnectionString.c_str());
 
-	String schemaQuery("SELECT column_name, data_type FROM INFORMATION_SCHEMA.Columns WHERE table_schema = 'public' and table_name='%S'", tableName);
+	String schemaQuery("SELECT column_name, data_type FROM INFORMATION_SCHEMA.Columns WHERE table_schema = 'public' and table_name='%S' ORDER BY ordinal_position", tableName);
 	db.getNTResult(schemaQuery.c_str());
 
 	
 	
-	int iNumColumns = db.getNumberOf(PostGreSQL::COLUMN);
+	int iNumColumns = db.getNumberOf(PostGreSQL::ROW); // this was a schema query, every row of the result describes a column of table 'tableName'
 	vector<String> vDataTypes;
 	//columns[mtLoadType].resize(iNumColumns);
 	vDataTypes.resize(iNumColumns);
