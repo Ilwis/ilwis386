@@ -169,6 +169,7 @@ void  ForeignCollection::CreateVectorMap(const FileName& fn, LayerInfo li) {
 	}
 	if ( IlwisObject::iotObjectType(fn) == IlwisObject::iotSEGMENTMAP) {
 		SegmentMap sm(fn, li);
+		sm->SetUseAs(true);
 		sm->Store();
 	}
 }
