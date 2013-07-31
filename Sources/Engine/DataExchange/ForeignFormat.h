@@ -166,7 +166,7 @@ class ForeignFormat
 protected:
 		bool fForeignFileTimeChanged(const FileName& fnObj);
 		
-		Column                   columns[7][8];
+		//Column                   columns[7][8]; // GeoGateway was using this
 		String                   sForeignInput;
 		FileName				 fnOutputName;
 		set<String>              AddedFiles;		
