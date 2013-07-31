@@ -64,9 +64,17 @@ PointMapStoreForeign::PointMapStoreForeign(const FileName& fn, PointMapPtr& p, L
 	Column colCrd = tbl->col("Coordinate");
 	Column colValue = tbl->col("Name");
 	
-	for (long i = 0; i < iNr; ++i) 
-	{
-		SetPoint(colCrd->cValue(i),  colValue->rValue(i), colValue->dvrs().fUseReals());
+	if (colValue->dvrs().fValues()) {
+		if (colValue->dvrs().fUseReals()) {
+			for (long i = 1; i <= iNr; ++i)
+				SetPoint(colCrd->cValue(i),  colValue->rValue(i), true);
+		} else {
+			for (long i = 1; i <= iNr; ++i)
+				SetPoint(colCrd->cValue(i),  colValue->iValue(i), false);
+		}
+	} else {
+		for (long i = 1; i <= iNr; ++i)
+			SetPoint(colCrd->cValue(i),  colValue->iRaw(i), false);
 	}
 }
 

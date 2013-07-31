@@ -58,6 +58,38 @@ SegmentMapStoreForeign::SegmentMapStoreForeign(const FileName& fn, SegmentMapPtr
 		else
 			timStore = l;
 		bool fPolygons = fn.sExt == ".mpa" ? true : false;
+
+		Table tbl = inf.tbl;
+		long iNr = tbl->iRecs();;
+		Column colCrd = tbl->col("Coords");
+		Column colValue = tbl->col("SegmentValue");
+		
+		Tranquilizer trq("Loading data");
+		bool fValues = colValue->dvrs().fValues();
+		bool fUseReals = fValues && colValue->dvrs().fUseReals(); // ptr.dvrs().fRealValues();
+		for(long i = 1; i <= iNr; ++i) {
+			ILWIS::Segment *seg;
+			if (fUseReals){
+				seg = new ILWIS::RSegment(spatialIndex);
+			} else {
+				seg = new ILWIS::LSegment(spatialIndex);
+			}
+			double value;
+			if (fValues) {
+				if (fUseReals)
+					value = colValue->rValue(i);
+				else
+					value = colValue->iValue(i);
+			} else
+				value = colValue->iRaw(i);
+			CoordinateSequence *seq = colCrd->iGetValue(i);
+			seg->PutCoords(seq);
+			seg->PutVal(value);
+			geometries->push_back(seg);
+			if ( i % 100 == 0) {
+				trq.fUpdate(i, iNr); 
+			}
+		}
 }	
 void SegmentMapStoreForeign::Store()
 {
