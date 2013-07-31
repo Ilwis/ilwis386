@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="IlwisDataExchange"
 	ProjectGUID="{B3067711-75E4-4789-BF21-3D6316371994}"
 	RootNamespace="IlwisDataExchange"
@@ -241,6 +241,18 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\DataExchange\PostGisMaps.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DataExchange\PostgreSQL.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DataExchange\PostgreSQLTables.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\DataExchange\WFS.cpp"
 				>
 			</File>
@@ -284,6 +296,18 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\DataExchange\OpenStreetMapFormat.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DataExchange\PostGisMaps.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DataExchange\PostgreSQL.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DataExchange\PostgreSQLTables.h"
 				>
 			</File>
 			<File
