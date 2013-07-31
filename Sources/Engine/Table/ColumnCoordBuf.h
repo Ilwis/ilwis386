@@ -46,7 +46,7 @@ class ColumnCoordBuf : public ColumnBinary
 		~ColumnCoordBuf();
 
 		void _export PutVal(long iRec, const CoordinateSequence *seq, long iSize);
-		CoordinateArraySequence  _export *iGetValue(long iRec) const;
+		CoordinateArraySequence  _export *iGetValue(long iRec, bool fResize = false) const;
 		Coord _export crdBegin(long irec) const;
 		Coord _export crdEnd(long irec) const;
 		int _export iNumberOfCrds(long iRec) const;

@@ -81,7 +81,7 @@ void ColumnCoordBuf::PutVal(long iRec, const CoordinateSequence *seq, long iSize
 	}
 }
 
-CoordinateArraySequence *ColumnCoordBuf::iGetValue(long iRec) const
+CoordinateArraySequence *ColumnCoordBuf::iGetValue(long iRec, bool fResize) const
 {
 	const BinMemBlock& bmb = bmbGetVal(iRec);
 	DomainCoordBuf *pcrd = this->dm()->pdmcb();
@@ -93,7 +93,7 @@ CoordinateArraySequence *ColumnCoordBuf::iGetValue(long iRec) const
 			c.x = *(((double *)bmb.ptr()) + i);
 			c.y = *(((double *)bmb.ptr()) + i + 1);
 			c.z = *(((double *)bmb.ptr()) + i + 2);
-			MessageBox(0,"Huh?","",MB_OK);
+			//MessageBox(0,"Huh?","",MB_OK);
 			coords->push_back(c);
 		}
 	} else {
