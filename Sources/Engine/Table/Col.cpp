@@ -1733,10 +1733,10 @@ void ColumnPtr::PutVal(long iKey, const Coord& cVal)
 		pcs->PutVal(iKey, cVal);
 }
 
-void ColumnPtr::PutVal(long iKey, const CoordBuf& crdBuf, long iSz)
+void ColumnPtr::PutVal(long iKey, const CoordinateSequence *seq, long iSz)
 {
 	if (0 != pcs)
-		pcs->PutVal(iKey, crdBuf, iSz);
+		pcs->PutVal(iKey, seq, iSz);
 }
 
 void ColumnPtr::PutVal(long iKey, const String& sVal)

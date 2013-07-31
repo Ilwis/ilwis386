@@ -98,7 +98,7 @@ public:
 	void _export         PutVal(long iKey, double rVal);
 	void _export         PutVal(long iKey, const Coord& cVal);
 	void _export         PutVal(long iKey, const String& sVal);
-	void _export         PutVal(long iKey, const CoordBuf& crdBuf, long iSz);
+	void _export         PutVal(long iKey, const CoordinateSequence *seq, long iSz);
 	void _export         PutBufRaw(const ByteBuf&, long iKey=0, long iNr=0);
 	void _export         PutBufRaw(const IntBuf& , long iKey=0, long iNr=0);
 	void _export         PutBufRaw(const LongBuf&, long iKey=0, long iNr=0);
