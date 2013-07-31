@@ -157,13 +157,13 @@ void PointMapStore::SetPoint(const Coord& crd, double v, bool usesReal,long inde
 
 	if ( usesReal) {
 		ILWIS::RPoint *p = new ILWIS::RPoint(spatialIndex,crd, v, geomfactory);
-		if ( index < geometries->size() || index < 0)
+		if ( index >= 0 && index < geometries->size())
 			geometries->at(index) = p;
 		else
 			geometries->push_back(p);
 	} else {
-		ILWIS::LPoint *p = new ILWIS::LPoint(spatialIndex,crd, v, geomfactory);
-		if ( index < geometries->size() || index < 0) {
+		ILWIS::LPoint *p = new ILWIS::LPoint(spatialIndex,crd, longConv(v), geomfactory);
+		if ( index >= 0 && index < geometries->size()) {
 			geometries->at(index) = p;
 		}
 		else
