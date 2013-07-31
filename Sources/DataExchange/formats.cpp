@@ -35,7 +35,8 @@ extern "C" _export void getForeignFormatInfo(map<String, ForeignFormatFuncs> *fu
 	(*funcs)["WMS"] = ForeignFormatFuncs(CreateImportObjectWMS, CreateQueryObjectWMS);
 	(*funcs)["GDAL"] = ForeignFormatFuncs(CreateImportObjectGDAL, CreateQueryObjectGDAL);
 	(*funcs)["Openstreetmap"] = ForeignFormatFuncs(CreateImportObjectOpenStreetMap, CreateQueryObjectOpenStreetMap);
-	//(*funcs)["POSTGRESQL"] = ForeignFormatFuncs(CreateImportObjectPostGres, CreateQueryObjectPostGres);
+	(*funcs)["POSTGRESQL"] = ForeignFormatFuncs(CreateImportObjectPostGres, CreateQueryObjectPostGres);
+	(*funcs)["POSTGIS"] = ForeignFormatFuncs(CreateImportObjectPostGis, CreateQueryObjectPostGis);
 
 	getEngine()->getContext()->ComHandler()->AddCommand("gdalogrimport",ogrgdal);
 	getEngine()->getContext()->ComHandler()->AddCommand("gdalrasterimport",rastergdal);
@@ -48,13 +49,13 @@ extern "C" _export void getImportDriverList(vector<ImportDriver>& drivers) {
 	GDALFormat gdal;
 	gdal.getImportFormats(gdalDriver.formats);
 	drivers.push_back(gdalDriver);
-	//ImportDriver postgresDriver;
-	//postgresDriver.driverName= "Postgres";
-	//PostgreSQLTables postgres;
-	//postgres.getImportFormats(postgresDriver.formats);
-	///*PostGisMaps postgis;
-	//postgis.getImportFormats(postgresDriver.formats);*/
-	//drivers.push_back(postgresDriver);
+	ImportDriver postgresDriver;
+	postgresDriver.driverName= "Postgres";
+	PostgreSQLTables postgres;
+	postgres.getImportFormats(postgresDriver.formats);
+	PostGisMaps postgis;
+	postgis.getImportFormats(postgresDriver.formats);
+	drivers.push_back(postgresDriver);
 	ImportDriver asterDriver;
 	asterDriver.driverName= "Aster";
 	ASTERFormat aster;
