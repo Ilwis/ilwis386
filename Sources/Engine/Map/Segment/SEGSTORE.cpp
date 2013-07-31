@@ -187,7 +187,7 @@ void SegmentMapStore::Store()
 	if (iSegDeleted() >= 0)
 		ptr.WriteElement("SegmentMapStore", "DeletedSegments", iSegDeleted());
 	ptr.WriteElement("SegmentMapStore", "Coordinates", iCrd());
-	if (!ptr.fReadOnly()) {
+	if (!ptr.fReadOnly() && !ptr.fUseAs()) {
 		Table tblSegment;
 		tblSegment.SetPointer(new TablePtr(ptr.fnObj, FileName(ptr.fnObj.sFullPath(), ".mps#"), Domain("none"), ""));
 		Domain dmcrd;
