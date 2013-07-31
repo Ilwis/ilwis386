@@ -460,7 +460,22 @@ int GeneralImportForm::exec() {
 	if (!b) {
 		if( !URL::isUrl(sInput) || extraOptions == "")
 			return 0;
-		IlwWinApp()->Execute(extraOptions);
+		if (extraOptions.find("wfsimportlayer") == 0)
+			IlwWinApp()->Execute(extraOptions);
+		else {
+			String outFile = sOutput;
+			if ( outFile == "[Output name matches input]") {
+				int lastslash = sInput.find_last_of('/');
+				outFile = sInput.substr(lastslash + 1);
+				FileName fnOut(outFile);
+				outFile = SetExtension(fnOut).sRelative();
+			} 
+			openCmd = String("open %S -output=%S -method=%S",sInput, SetExtension(FileName(outFile)).sFullPathQuoted(), currentFormat.method);
+			openCmd += extraOptions;
+			if ( !fUseAs && currentFormat.command.find("import") == currentFormat.command.end())
+				openCmd += " -import";
+			getEngine()->Execute(openCmd);
+		}
 	}
 	return 0;
 }
