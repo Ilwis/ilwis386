@@ -413,12 +413,12 @@ CoordinateSequence *ColumnStore::iGetValue(long iKey, bool fResize) const
 	return csb->iGetValue(iKey);
 }
 
-void ColumnStore::PutVal(long iKey, const CoordBuf& cb, long iSz)
+void ColumnStore::PutVal(long iKey, const CoordinateSequence *seq, long iSz)
 {
   ILWISSingleLock sl(&ptr.csAccess, TRUE, SOURCE_LOCATION);
   if (!fLoaded)
     ptr.ptrTbl->LoadData();
-	csb->PutVal(iKey, cb, iSz);
+	csb->PutVal(iKey, seq, iSz);
 }
 
 void ColumnStore::Store()
@@ -486,7 +486,7 @@ void ColumnStoreBase::PutVal(long, const Coord&)
 {
 }
 
-void ColumnStoreBase::PutVal(long, const CoordBuf&, long )
+void ColumnStoreBase::PutVal(long, const CoordinateSequence *seq, long )
 {
 }
 

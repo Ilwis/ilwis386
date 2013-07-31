@@ -112,7 +112,7 @@ public:
   virtual void PutVal(long iKey, double rVal);
   virtual void PutVal(long iKey, const Coord& cVal);
   virtual void PutVal(long iKey, const String& sVal);
-	virtual void PutVal(long iKey, const CoordBuf& Buf, long iSz);
+	virtual void PutVal(long iKey, const CoordinateSequence *seq, long iSz);
   virtual void PutBufRaw(const ByteBuf&, long iKey=0, long iNr=0);
   virtual void PutBufRaw(const IntBuf& , long iKey=0, long iNr=0);
   virtual void PutBufRaw(const LongBuf&, long iKey=0, long iNr=0);
@@ -158,7 +158,7 @@ public:
   void GetBufVal(StringBuf& buf, long iKey=0, long iNr=0, short iWid=0, short iDec=-1) const;
   void GetBufVal(CoordBuf& buf, long iKey, long iNr) const;
   void _export PutRaw(long iKey, long iRaw);
-	void PutVal(long iKey, const CoordBuf& cb, long iSz);
+	void PutVal(long iKey, const CoordinateSequence *seq, long iSz);
   void PutVal(long iKey, long iVal);
   void _export PutVal(long iKey, double rVal);
   void PutVal(long iKey, const Coord& cVal);
