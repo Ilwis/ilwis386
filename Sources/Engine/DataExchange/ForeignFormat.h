@@ -186,5 +186,15 @@ private:
 		static map<String, list<String> > mapFormatParts;		
 };
 
+class FFBlobUtils
+{
+public:
+	static void ReadBuf(char ** b, long & nr);
+	static void ReadBuf(char ** b, vector<LinearRing*> & rings);
+	static void _export SplitOnString(const String& str, Array<String>& as, const String sDelim);
+	static void _export WriteBuf(char **start, char **pos, long & iBufSize, const long nr);
+	static void _export WriteBuf(char **start, char **pos, long & iBufSize, const Array<String> & coords, CoordBounds *cb);
+};
+
 #endif
 

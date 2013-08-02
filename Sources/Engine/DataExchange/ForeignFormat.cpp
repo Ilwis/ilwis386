@@ -389,5 +389,122 @@ void ForeignFormat::ReadParameters(const FileName& fnObj, ParmList& pm)
 	pm.Add(new Parm("import", sMethod));
 }
 
+/*
+ reads a long integer, that was written by WriteBuf
+ b == the start of the memory block to be read, IN/OUT parameter: after completion b points to the next byte that was not yet read, or to the end of the buffer
+ nr == the long integer number that was read, OUT parameter:  the existing number is overwritten
+*/
+
+void FFBlobUtils::ReadBuf(char ** b, long & nr)
+{
+	nr = *(long*)(*b);
+	*b += sizeof(long);
+}
+
+/*
+ reads a vector of LinearRing* from "b", that was written by WriteBuf
+ b == the start of the memory block to be read, IN/OUT parameter: after completion b points to the next byte that was not yet read, or to the end of the buffer
+ rings == the LinearRing* vector that was read: IN/OUT parameter:  the rings read are appended to the existing vector
+*/
+
+void FFBlobUtils::ReadBuf(char ** b, vector<LinearRing*> & rings)
+{
+	long nrRings;
+	ReadBuf(b, nrRings);
+	for (long i = 0; i < nrRings; ++i) {
+		long nrCoords;
+		ReadBuf(b, nrCoords);
+		vector<Coordinate> *coords = new vector<Coordinate>();
+		for (long j = 0; j < nrCoords; ++j) {
+			Coordinate c;
+			c.x = ((double*)(*b))[j * 2];
+			c.y = ((double*)(*b))[j * 2 + 1];
+			coords->push_back(c);
+		}
+		*b += 2 * sizeof(double) * nrCoords;
+		if (coords->size() > 0 && coords->at(coords->size() - 1) != coords->at(0)) // geos only accepts closed sequences to construct a LinearRing
+			coords->push_back(coords->at(0));
+		CoordinateSequence *seq = new CoordinateArraySequence(coords);
+		LinearRing * ring = new LinearRing(seq, new GeometryFactory());
+		rings.push_back(ring);
+	}
+}
+
+/*
+ counterpart of String::Split and String::SplitOn
+ splits "str" based on "sDelim" and divides the parts into "as"
+ unlike String::Split and String::SplitOn, SplitOnString only splits when all the characters in "sDelim" are encountered, in the same sequence
+ the sequence sDelim will not be part of the strings in "as"
+*/
+
+void FFBlobUtils::SplitOnString(const String& str, Array<String>& as, const String sDelim)
+{
+	int iPlace = str.find(sDelim);
+	if (iPlace == -1 || iPlace + sDelim.size() > str.size()) {
+		as &= str;
+	} else {
+		as &= str.substr(0, iPlace);
+		SplitOnString(str.substr(iPlace+sDelim.size()), as, sDelim);
+	}
+}
+
+/*
+ Grows the memory block pointed to by "start" by 4 bytes and appends "nr" to the block
+ start == the start of the entire buffer (it may be re-allocated), IN/OUT parameter
+ pos == the current write-position, which is the end of the buffer (memory has to be allocated for the next write, before a byte is written), IN/OUT parameter: after completion pos has advanced by 4 bytes
+ iBufSize == the buffer-size (since there is no other mechanism to have the size of malloc-ed blocks), IN/OUT parameter
+ nr == the "long" integer to be written (4 bytes), IN parameter
+*/
+
+void FFBlobUtils::WriteBuf(char **start, char **pos, long & iBufSize, const long nr)
+{
+	if (*start == 0) {
+		iBufSize = sizeof(long);
+		*start = (char*)malloc(iBufSize);
+		*pos = *start;
+	} else {
+		iBufSize += sizeof(long);
+		char * oldstart = *start;
+		long delta = *pos - *start;
+		*start = (char*)realloc(*start, iBufSize);
+		*pos = *start + delta;
+	}
+	*(long*)(*pos) = nr;
+	*pos += sizeof(long);
+}
+
+/*
+ Grows the memory block pointed to by "start" by coords.size() * 2 * sizeof(double) bytes and appends the coordinates as x,y IEEE doubles to the block
+ start == the start of the entire buffer (it may be re-allocated), IN/OUT parameter
+ pos == the current write-position, which is the end of the buffer (memory has to be allocated for the next write, before a byte is written), IN/OUT parameter: after completion pos has advanced by coords.size() * 2 * sizeof(double) bytes
+ iBufSize == the buffer-size (since there is no other mechanism to have the size of malloc-ed blocks), IN/OUT parameter
+ coords == the coordinate array (as strings to be parsed! x and y are space-separated!) to be written as x, y doubles in the memory block, IN parameter
+ cb == the coordbounds that is to be "extended" by every coordinate that is encountered in "coords", IN/OUT parameter
+*/
+
+void FFBlobUtils::WriteBuf(char **start, char **pos, long & iBufSize, const Array<String> & coords, CoordBounds *cb)
+{
+	if (*start == 0) {
+		iBufSize = 2 * sizeof(double) * coords.size();
+		*start = (char*)malloc(iBufSize);
+		*pos = *start;
+	} else {
+		iBufSize += 2 * sizeof(double) * coords.size();
+		char * oldstart = *start;
+		long delta = *pos - *start;
+		*start = (char*)realloc(*start, iBufSize);
+		*pos = *start + delta;
+	}
+
+	for (long i = 0; i < coords.size(); ++i) {
+		double x = coords[i].sHead(" ").rVal();
+		double y = coords[i].sTail(" ").rVal();
+		((double*)(*pos))[2 * i] = x;
+		((double*)(*pos))[2 * i + 1] = y;
+		(*cb) += Coord(x,y);
+	}
+
+	*pos += 2 * sizeof(double) * coords.size();
+}
 
 //----------------------------------------------------------------------------------------
