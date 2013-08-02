@@ -79,12 +79,6 @@ PolygonMapStoreForeign::PolygonMapStoreForeign(const FileName& fn, PolygonMapPtr
 		bool fValues = colValue->dvrs().fValues();
 		bool fUseReals = fValues && colValue->dvrs().fUseReals(); // ptr.dvrs().fRealValues();
 		for(long i = 1; i <= iNr; ++i) {
-			ILWIS::Polygon *pol;
-			if (fUseReals){
-				pol = new ILWIS::RPolygon(spatialIndex);
-			} else {
-				pol = new ILWIS::LPolygon(spatialIndex);
-			}
 			double value;
 			if (fValues) {
 				if (fUseReals)
@@ -100,9 +94,11 @@ PolygonMapStoreForeign::PolygonMapStoreForeign(const FileName& fn, PolygonMapPtr
 				long iNrPolygons;
 				FFBlobUtils::ReadBuf(&b, iNrPolygons);
 				for (long j = 0; j < iNrPolygons; ++j) {
-					if (j >= 1) {
-						TRACE("Warning: multipolygon encountered consisting of %d polygons; not yet supported\n", iNrPolygons);
-						break;
+					ILWIS::Polygon *pol;
+					if (fUseReals){
+						pol = new ILWIS::RPolygon(spatialIndex);
+					} else {
+						pol = new ILWIS::LPolygon(spatialIndex);
 					}
 					vector<LinearRing*> rings;
 					FFBlobUtils::ReadBuf(&b, rings);
@@ -112,10 +108,10 @@ PolygonMapStoreForeign::PolygonMapStoreForeign(const FileName& fn, PolygonMapPtr
 						else
 							pol->addHole(rings[k]);
 					}
+					pol->PutVal(value);
+					addPolygon(pol);
 				}
 			}
-			pol->PutVal(value);
-			geometries->push_back(pol);
 			if ( i % 100 == 0) {
 				trq.fUpdate(i, iNr); 
 			}
