@@ -57,7 +57,6 @@ SegmentMapStoreForeign::SegmentMapStoreForeign(const FileName& fn, SegmentMapPtr
 			timStore = l;
 		else
 			timStore = l;
-		bool fPolygons = fn.sExt == ".mpa" ? true : false;
 
 		Table tbl = inf.tbl;
 		long iNr = tbl->iRecs();;
