@@ -62,6 +62,7 @@
 #include "Engine\SpatialReference\Cslatlon.h"
 #include "Engine\Map\basemap.h"
 #include "Engine\Base\DataObjects\URL.h"
+#include "Engine\Table\Colbinar.h"
 #include "Headers\Hs\IMPEXP.hs"
 //#include "temp\msado15.tlh"
 
@@ -175,10 +176,10 @@ void PostGisMaps::PutDataInCollection(ForeignCollectionPtr* collection, ParmList
 				String sMap;
 				if (type == "st_point" || type == "st_multipoint") 
 					sMap = String("%S.mpp", name);
-				else if (type == "st_linestring" || type == "st_linestring")
+				else if (type == "st_linestring" || type == "st_multilinestring")
 					sMap = String("%S.mps", name);
-				//else if (type == "st_polygon" || type == "st_multipolygon")
-				//	sMap = String("%S.mpa", name);
+				else if (type == "st_polygon" || type == "st_multipolygon")
+					sMap = String("%S.mpa", name);
 				if ( sMap != "")
 					collection->Add(sMap);
 			}
@@ -202,14 +203,29 @@ void PostGisMaps::createFeatureColumns(TablePtr* tbl) {
 			col = tbl->colNew("Coordinate", dmcrd, ValueRange());
 			col->SetOwnedByTable();
 			col->SetLoadingForeignData(true);
-		}
-
-		if ( AssociatedMapType() == ForeignFormat::mtSegmentMap) {
+		} else if ( AssociatedMapType() == ForeignFormat::mtSegmentMap) {
 			Domain dmcrdbuf("CoordBuf");
 			Column col = tbl->colNew("SegmentValue", *dmKey);
 			col->SetOwnedByTable();
 			col->SetLoadingForeignData(true);
 			col = tbl->colNew("Coords", dmcrdbuf);
+			col->SetOwnedByTable();
+			col->SetLoadingForeignData(true);
+			col = tbl->colNew("MinCoords", dmcrd, ValueRange());
+			col->SetOwnedByTable();
+			col->SetLoadingForeignData(true);
+			col = tbl->colNew("MaxCoords", dmcrd, ValueRange());
+			col->SetOwnedByTable();
+			col->SetLoadingForeignData(true);
+			col = tbl->colNew("Deleted", Domain("bool"));
+			col->SetOwnedByTable();
+			col->SetLoadingForeignData(true);
+		} else if ( AssociatedMapType() == ForeignFormat::mtPolygonMap) {
+			Domain dmbin("Binary");
+			Column col = tbl->colNew("PolygonValue", *dmKey);
+			col->SetOwnedByTable();
+			col->SetLoadingForeignData(true);
+			col = tbl->colNew("Coords", dmbin);
 			col->SetOwnedByTable();
 			col->SetLoadingForeignData(true);
 			col = tbl->colNew("MinCoords", dmcrd, ValueRange());
@@ -232,23 +248,29 @@ void PostGisMaps::CreateColumns(PostGreSQL& db, TablePtr* tbl, int iNumColumns, 
 
 void PostGisMaps::FillRecords(PostGreSQL& db, TablePtr* tbl, int iNumRecords, const vector<String>& vDataTypes) {
 	for(int iRec = 0; iRec < iNumRecords; ++iRec) {
-		CoordBounds crb;
+		CoordBounds cb;
 		String v(db.getValue(iRec, 0));
 		if ( mtLoadType == mtPointMap) {
 			Column col = tbl->col("Coordinate");
-			PutData(col, iRec + 1, v, &crb);
+			PutData(col, iRec + 1, v, &cb);
 			col = tbl->col("Name");
 			PutData(col, iRec + 1, (*dmKey)->pdsrt()->sValue(iRec + 1));
-		}
-		if ( mtLoadType == mtSegmentMap) {
+		} else if ( mtLoadType == mtSegmentMap) {
 			Column col = tbl->col("Coords");
-			PutData(col,iRec + 1, v, &crb);
+			PutData(col,iRec + 1, v, &cb);
 			col = tbl->col("SegmentValue");
 			PutData(col,iRec + 1, (*dmKey)->pdsrt()->sValue(iRec + 1));
-			tbl->col("MinCoords")->PutVal(iRec + 1, crb.cMin);
-			tbl->col("MaxCoords")->PutVal(iRec + 1, crb.cMax);
+			tbl->col("MinCoords")->PutVal(iRec + 1, cb.cMin);
+			tbl->col("MaxCoords")->PutVal(iRec + 1, cb.cMax);
 			tbl->col("Deleted")->PutVal(iRec + 1, (long)false);
-			
+		} else if ( mtLoadType == mtPolygonMap) {
+			Column col = tbl->col("Coords");
+			PutData(col,iRec + 1, v, &cb);
+			col = tbl->col("PolygonValue");
+			PutData(col,iRec + 1, (*dmKey)->pdsrt()->sValue(iRec + 1));
+			tbl->col("MinCoords")->PutVal(iRec + 1, cb.cMin);
+			tbl->col("MaxCoords")->PutVal(iRec + 1, cb.cMax);
+			tbl->col("Deleted")->PutVal(iRec + 1, (long)false);
 		}
 	}
 }
@@ -258,22 +280,31 @@ void PostGisMaps::LoadTable(TablePtr *tbl)
 {
 	PostGreSQL db(sConnectionString.c_str());
 
-	String type = mtLoadType == mtPointMap ? "point" : "linestring";
-	String geometryQuery("Select st_astext(%S) from %S where lower(ST_GeometryType(%S)) like '%%%S'",geometryColumn,tableName,geometryColumn,type);
-	db.getNTResult(geometryQuery.c_str());
+	String type;
+	switch(mtLoadType) {
+		case mtPointMap:
+			type = "point";
+			break;
+		case mtSegmentMap:
+			type = "linestring";
+			break;
+		case mtPolygonMap:
+			type = "polygon";
+			break;
+		default:
+			type = "point";
+	}
 
-	
+	String geometryQuery("Select st_astext(%S) from %S where lower(ST_GeometryType(%S)) like '%%%S'",geometryColumn,tableName,geometryColumn,type);
+	db.getNTResult(geometryQuery.c_str());	
 	
 	int iNumColumns = db.getNumberOf(PostGreSQL::COLUMN);
 	vector<String> vDataTypes;
-	//columns[mtLoadType].resize(iNumColumns);
 	vDataTypes.resize(iNumColumns);
 	int iKeyColumn=iUNDEF;
 	if ( dmKey == NULL)
 		dmKey = new Domain(fnTable);
 	CreateColumns(db, tbl, iNumColumns, iKeyColumn, vDataTypes);
-
-//	db.getNTResult(sQuery.c_str());
 	int iNumRecords = db.getNumberOf(PostGreSQL::ROW);
 	if ( tbl->iRecs() == 0) // true for new tables
 	{
@@ -283,40 +314,118 @@ void PostGisMaps::LoadTable(TablePtr *tbl)
 	FillRecords(db, tbl, iNumRecords, vDataTypes);
 }
 
-void PostGisMaps::PutData(Column& col, long iRec, const String& data, CoordBounds *crdBuf)
+void PostGisMaps::PutData(Column& col, long iRec, const String& data, CoordBounds *cb)
 {
 	DomainType dmt = col->dm()->dmt();
 	switch(dmt)
 	{
 	case dmtCOORD:
 		{
-			String res = data.sSub(6, data.size() - 7);
+			String res = data;
+			bool fMulti = false;
+			if (res.sLeft(5) == "MULTI") {
+				res = res.sSub(5, res.size() - 5); // remove MULTI
+				fMulti = true;
+			}
+			if (res.sLeft(5) == "POINT") {
+				if (fMulti)
+					res = res.sSub(7, res.size() - 9); // remove POINT(( and ))
+				else
+					res = res.sSub(6, res.size() - 7); // remove POINT( and )
+			}
+			if (fMulti)
+				res = res.sSub(0, res.iPos(String("),("))); // no true multipoint support yet
 			double x = res.sHead(" ").rVal();
 			double y = res.sTail(" ").rVal();
 			Coord crd(x,y);
 			if ( iRec >= 1)
 				col->PutVal(iRec, crd);
-			(*crdBuf) += crd;
+			(*cb) += crd;
 			break;
 		}
 	case dmtCOORDBUF:
 		{
-			String res = data.sSub(11, data.size() - 12);
+			String res = data;
+			bool fMulti = false;
+			if (res.sLeft(5) == "MULTI") {
+				res = res.sSub(5, res.size() - 5); // remove MULTI
+				fMulti = true;
+			}
+			if (res.sLeft(10) == "LINESTRING") {
+				if (fMulti)
+					res = res.sSub(12, res.size() - 14); // remove LINESTRING(( and ))
+				else
+					res = res.sSub(11, res.size() - 12); // remove LINESTRING( and )
+			}
+			if (fMulti)
+				res = res.sSub(0, res.iPos(String("),("))); // no true multilinestring support yet
 			Array<String> parts;
-			Split(res, parts,",");
+			Split(res, parts, ",");
 			vector<Coordinate> *coords = new vector<Coordinate>();
 			for(int	i = 0; i < parts.size(); ++i) {
 				double x = parts[i].sHead(" ").rVal();
 				double y = parts[i].sTail(" ").rVal();
 				Coord crd(x,y);
 				coords->push_back(crd);
-				(*crdBuf) += crd;
+				(*cb) += crd;
 			}
 			if ( iRec >= 1)
 				col->PutVal(iRec, new CoordinateArraySequence(coords), coords->size());
 			else
 				delete coords;
 		}
+		break;
+	case dmtBINARY:
+		{
+			String res = data;
+			bool fMulti = false;
+			if (res.sLeft(5) == "MULTI") {
+				res = res.sSub(5, res.size() - 5); // remove MULTI
+				fMulti = true;
+			}
+			if (res.sLeft(7) == "POLYGON") {
+				if (fMulti)
+					res = res.sSub(10, res.size() - 13); // remove POLYGON((( and )))
+				else
+					res = res.sSub(9, res.size() - 11); // remove POLYGON(( and ))
+			}
+			long iBufSize = 0;
+			char * b = 0;
+			char * p = b;
+			if (fMulti) {
+				Array<String> polygons;
+				FFBlobUtils::SplitOnString(res, polygons, ")),((");
+				FFBlobUtils::WriteBuf(&b, &p, iBufSize, polygons.size());
+				for (long i = 0; i < polygons.size(); ++i) {
+					Array<String> rings;
+					FFBlobUtils::SplitOnString(polygons[i], rings, "),(");
+					FFBlobUtils::WriteBuf(&b, &p, iBufSize, rings.size());
+					for(long j = 0; j < rings.size(); ++j) {
+						Array<String> coords;
+						Split(rings[j], coords, ",");
+						FFBlobUtils::WriteBuf(&b, &p, iBufSize, coords.size());
+						FFBlobUtils::WriteBuf(&b, &p, iBufSize, coords, cb);
+					}
+				}
+			} else {
+				FFBlobUtils::WriteBuf(&b, &p, iBufSize, 1);
+				Array<String> rings;
+				FFBlobUtils::SplitOnString(res, rings, "),(");
+				FFBlobUtils::WriteBuf(&b, &p, iBufSize, rings.size());
+				for(long j = 0; j < rings.size(); ++j) {
+					Array<String> coords;
+					Split(rings[j], coords, ",");
+					FFBlobUtils::WriteBuf(&b, &p, iBufSize, coords.size());
+					FFBlobUtils::WriteBuf(&b, &p, iBufSize, coords, cb);
+				}
+			}
+			if (iRec >= 1) {
+				BinMemBlock bmb(iBufSize, (void*)b);
+				col->PutVal(iRec, bmb);
+			}
+			delete [] b; // unfortunately BinMemBlock doesn't take over the buffer, it performs a memcpy
+		}
+		break;
 	default:
 		{
 			if ( iRec >= 1)
@@ -329,7 +438,6 @@ void PostGisMaps::PutData(Column& col, long iRec, const String& data, CoordBound
 void PostGisMaps::PutCoordField(const String& sColumn, long iRecord, Coord cValue){
 	double x = cValue.x;
 	double y = cValue.y;
-
 }
 
 // function will test if a type passed from a doctemplate matches the object type of the filename
@@ -342,14 +450,25 @@ bool PostGisMaps::fMatchType(const String& sFileName, const String& sType)
 		return sType == "ILWIS Tables";
 }
 
-
-
 LayerInfo PostGisMaps::GetLayerInfo(ParmList& parms) {
 	LayerInfo info;
 	FileName fn(fnTable);
 	PostGreSQL db(sConnectionString.c_str());
 
-	String type = mtLoadType == mtPointMap ? "point" : "linestring";
+	String type;
+	switch(mtLoadType) {
+		case mtPointMap:
+			type = "point";
+			break;
+		case mtSegmentMap:
+			type = "linestring";
+			break;
+		case mtPolygonMap:
+			type = "polygon";
+			break;
+		default:
+			type = "point";
+	}
 	String query = parms.sGet("query").sUnQuote().c_str();
 	String geometryQuery("Select *,st_astext(%S) as _coords_ from %S where lower(ST_GeometryType(%S)) like'%%%S'",geometryColumn,tableName,geometryColumn,type);
 	if (query != "")
@@ -390,23 +509,23 @@ LayerInfo PostGisMaps::GetLayerInfo(ParmList& parms) {
 	info.tblattr = Table(fnAttr);
 
 	createFeatureColumns(info.tbl.ptr());
-	CoordBounds crdbuf;
+	CoordBounds cb;
 	for(int i = 0; i < info.iShapes; ++i) {
 		int iRaw = i ; //(*dmKey)->iRaw(id);
 		String res(db.getValue(i, "_coords_"));
 		if ( mtLoadType == mtPointMap) {
 			Column col = info.tbl->col("Coordinate");
-			PutData(col, -1, res, &crdbuf);
-		}
-		if ( mtLoadType == mtSegmentMap) {
+			PutData(col, -1, res, &cb);
+		} else if ( mtLoadType == mtSegmentMap) {
 			Column col = info.tbl->col("Coords");
-			PutData(col, -1, res, &crdbuf);	
+			PutData(col, -1, res, &cb);	
+		} else if ( mtLoadType == mtPolygonMap) {
+			Column col = info.tbl->col("Coords");
+			PutData(col, -1, res, &cb);	
 		}
-			
-		
 	}
 
-	info.cbActual = info.cbMap = crdbuf;
+	info.cbActual = info.cbMap = cb;
 	info.fnObj = fn;
 	info.csy = csy;
 	return info;
@@ -421,7 +540,6 @@ void PostGisMaps::IterateLayer(vector<LayerInfo>& objects, bool fCreate)
 	objects[mtLoadType].tbl.SetPointer(new TablePtr(objects[mtLoadType].fnObj, "",false));
 	objects[mtLoadType].tbl->Load();
 	objects[mtLoadType].tbl->Loaded(true);
-
 }
 
 typedef OGRErr (__stdcall *OSRImportFromEPSGFunc)( OGRSpatialReferenceH, int );
@@ -460,7 +578,6 @@ CoordSystem PostGisMaps::getCoordSystem(const FileName& fnBase, const String& sr
 	String datumName(getAttr(handle, "Datum",0));
 	//map<String, ProjectionConversionFunctions>::iterator where = mpCsyConvers.find(projectionName);
 
-
 	FileName fnCsy(fnBase, ".csy");
 	if ( _access(fnCsy.sRelative().c_str(),0) == 0)
 		return CoordSystem(fnCsy);
@@ -493,5 +610,4 @@ void PostGisMaps::getImportFormats(vector<ImportFormat>& formats) {
 	frm.useasSuported = true;
 	frm.ui = NULL;
 	formats.push_back(frm);
-
 }
