@@ -166,11 +166,14 @@ void  ForeignCollection::CreateVectorMap(const FileName& fn, LayerInfo li) {
 		PointMap pmp(fn, li);
 		pmp->SetUseAs(true);
 		pmp->Store();
-	}
-	if ( IlwisObject::iotObjectType(fn) == IlwisObject::iotSEGMENTMAP) {
+	} else if ( IlwisObject::iotObjectType(fn) == IlwisObject::iotSEGMENTMAP) {
 		SegmentMap sm(fn, li);
 		sm->SetUseAs(true);
 		sm->Store();
+	} else if ( IlwisObject::iotObjectType(fn) == IlwisObject::iotPOLYGONMAP) {
+		PolygonMap pm(fn, li);
+		pm->SetUseAs(true);
+		pm->Store();
 	}
 }
 
