@@ -67,6 +67,7 @@ void ColumnCoordBuf::PutVal(long iRec, const CoordinateSequence *seq, long iSize
 			b[2*i+2] = z;
 		}
 		BinMemBlock bmb(iSize * 24, (void*)b);
+		delete [] b; // unfortunately BinMemBlock doesn't take over the buffer, it performs a memcpy
 	    ColumnBinary::PutVal(iRec, bmb);
 	}else {
 		b = new double[iSize * 2];
@@ -77,6 +78,7 @@ void ColumnCoordBuf::PutVal(long iRec, const CoordinateSequence *seq, long iSize
 			b[2*i+1] = y;
 		}
 		BinMemBlock bmb(iSize * 16, (void*)b);
+		delete [] b; // unfortunately BinMemBlock doesn't take over the buffer, it performs a memcpy
 	    ColumnBinary::PutVal(iRec, bmb);
 	}
 }
