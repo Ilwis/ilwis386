@@ -42,8 +42,9 @@
 #include "Engine\Map\Polygon\POLSTORE.H"
 #include "Engine\DataExchange\ForeignFormat.h"
 #include "Engine\DataExchange\PolygonMapStoreForeign.h"
+#include "Engine\Table\Colbinar.h"
 
-PolygonMapStoreForeign::PolygonMapStoreForeign(const FileName& fn, PolygonMapPtr& p,LayerInfo li) :
+PolygonMapStoreForeign::PolygonMapStoreForeign(const FileName& fn, PolygonMapPtr& p,LayerInfo inf) :
 	PolygonMapStore(p, fn)
 {
  /* if ( li.tbl.fValid())		
@@ -57,6 +58,68 @@ PolygonMapStoreForeign::PolygonMapStoreForeign(const FileName& fn, PolygonMapPtr
 		else
 			timStore = l;
 	}	*/	
+
+		if ( inf.sExpr == "import")
+			p.setVersionBinary(ILWIS::Version::bvFORMAT30);
+		else
+			p.setVersionBinary(ILWIS::Version::bvFORMATFOREIGN);
+		
+		long l;
+		if (0 == ptr.ReadElement("PolygonMapStore", "StoreTime", l))
+			timStore = l;
+		else
+			timStore = l;
+
+		Table tbl = inf.tbl;
+		long iNr = tbl->iRecs();;
+		Column colCrd = tbl->col("Coords");
+		Column colValue = tbl->col("PolygonValue");
+		
+		Tranquilizer trq("Loading data");
+		bool fValues = colValue->dvrs().fValues();
+		bool fUseReals = fValues && colValue->dvrs().fUseReals(); // ptr.dvrs().fRealValues();
+		for(long i = 1; i <= iNr; ++i) {
+			ILWIS::Polygon *pol;
+			if (fUseReals){
+				pol = new ILWIS::RPolygon(spatialIndex);
+			} else {
+				pol = new ILWIS::LPolygon(spatialIndex);
+			}
+			double value;
+			if (fValues) {
+				if (fUseReals)
+					value = colValue->rValue(i);
+				else
+					value = colValue->iValue(i);
+			} else
+				value = colValue->iRaw(i);
+			BinMemBlock bmb;
+			colCrd->GetVal(i, bmb);
+			char * b = (char*)bmb.ptr();
+			if (b != 0) {
+				long iNrPolygons;
+				FFBlobUtils::ReadBuf(&b, iNrPolygons);
+				for (long j = 0; j < iNrPolygons; ++j) {
+					if (j >= 1) {
+						TRACE("Warning: multipolygon encountered consisting of %d polygons; not yet supported\n", iNrPolygons);
+						break;
+					}
+					vector<LinearRing*> rings;
+					FFBlobUtils::ReadBuf(&b, rings);
+					for (long k = 0; k < rings.size(); ++k) {
+						if (k == 0)
+							pol->addBoundary(rings[0]);
+						else
+							pol->addHole(rings[k]);
+					}
+				}
+			}
+			pol->PutVal(value);
+			geometries->push_back(pol);
+			if ( i % 100 == 0) {
+				trq.fUpdate(i, iNr); 
+			}
+		}
 }
 
 PolygonMapStoreForeign::~PolygonMapStoreForeign()
@@ -65,7 +128,14 @@ PolygonMapStoreForeign::~PolygonMapStoreForeign()
 
 void PolygonMapStoreForeign::Store()
 {
-	PolygonMapStore::Store();
+	if (ptr.fUseAs()) {
+		ptr.WriteElement("PolygonMapStore","Format",ptr.getVersionBinary());
+		ptr.WriteElement("PolygonMap", "Type", "PolygonMapStore");
+
+		ptr.WriteElement("PolygonMapStore", "Polygons", iPol());
+
+	} else
+		PolygonMapStore::Store();
 	ptr.WriteElement("PolygonMap", "Topology", "false");
 	if ( ptr.fUseAs() )
 	{

@@ -39,7 +39,7 @@
 class PolygonMapStoreForeign : public PolygonMapStore
 {
 	public:
-		PolygonMapStoreForeign(const FileName& fnPM, PolygonMapPtr& p, LayerInfo li);
+		PolygonMapStoreForeign(const FileName& fnPM, PolygonMapPtr& p, LayerInfo inf);
 		~PolygonMapStoreForeign();
 
 		virtual void Store();
