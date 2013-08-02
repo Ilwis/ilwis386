@@ -70,7 +70,7 @@ protected:
 	void						 FillRecords(PostGreSQL& db, TablePtr* tbl, int iNumRecords,const vector<String>& vDataTypes);
 	CoordSystem					 getCoordSystem(const FileName& fnBase, const String& srsName);
 	void						 createFeatureColumns(TablePtr* tbl);
-	void                         PutData(Column& col, long iRec, const String& data, CoordBounds *crdbuf=NULL);
+	void                         PutData(Column& col, long iRec, const String& data, CoordBounds *cb=NULL);
 	void                         CreateKeyDomain(const String& sKeyDomain);
 	String						 geometryColumn;
 	CoordSystem					 csy;
