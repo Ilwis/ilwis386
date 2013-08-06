@@ -74,6 +74,10 @@ protected:
 	void                         CreateKeyDomain(const String& sKeyDomain);
 	String						 geometryColumn;
 	CoordSystem					 csy;
+private:
+	static void                  replaceString(string &str, const string &search, const string &replace);
+	static String                merge(String table, String column);
+	static void                  split(String fileName, String & table, String & column);
 };
 
 #endif

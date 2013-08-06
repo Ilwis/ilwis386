@@ -99,14 +99,40 @@ PostGisMaps::PostGisMaps() :
 {
 
 }
+
+void PostGisMaps::replaceString(string &str, const string &search, const string &replace ) {
+    for( size_t pos = 0; ; pos += replace.length() ) {
+        pos = str.find( search, pos );
+        if( pos == string::npos )
+			break;
+        str.erase( pos, search.length() ); // Replace by erasing and inserting
+        str.insert( pos, replace );
+    }
+}
+
+String PostGisMaps::merge(String table, String column) {
+	replaceString(table, "_", "-_");
+	replaceString(column, "_", "-_");
+	return table + "_" + column;
+}
+
+void PostGisMaps::split(String fileName, String & table, String & column) {
+	int iPos = fileName.find("_");
+	while (iPos > 0 && fileName[iPos - 1] == '-')
+		iPos = fileName.find("_", iPos + 1);
+	table = fileName.substr(0, iPos);
+	column = fileName.substr(iPos + 1);
+	replaceString(table, "-_", "_");
+	replaceString(column, "-_", "_");
+}
+
 PostGisMaps::PostGisMaps(const FileName& fn, const Domain & dmAttrTable, ParmList& pm) :
 	PostgreSQLTables(fn, dmAttrTable, pm)
 {
 	IlwisObject::iotIlwisObjectType type = IlwisObject::iotObjectType(fn);
 	if ( type == IlwisObject::iotPOINTMAP ||  type == IlwisObject::iotSEGMENTMAP ||  type == IlwisObject::iotPOLYGONMAP) {
-		geometryColumn = fn.sFile.sTail("_");
-		tableName = fn.sFile.sHead("_");
-		sQuery = "Select * From " + tableName;
+		split(fn.sFile, tableName, geometryColumn);
+		sQuery = "Select * From " + tableName;		
 		PostGreSQL db(sConnectionString.c_str());
    	    String query("Select srid from geometry_columns where f_geometry_column='%S'", geometryColumn);
 		db.getNTResult(query.c_str());
@@ -171,7 +197,7 @@ void PostGisMaps::PutDataInCollection(ForeignCollectionPtr* collection, ParmList
 		if (db2.getNumberOf(PostGreSQL::ROW) > 0) {
 			for(int j = 0; j < db2.getNumberOf(PostGreSQL::ROW); ++j) {
 				String type = String(db2.getValue(j,0)).toLower();
-				String name = tname + "_" + cname;
+				String name = merge(tname, cname);
 				name.sTrimSpaces();
 				String sMap;
 				if (type == "st_point" || type == "st_multipoint") 
