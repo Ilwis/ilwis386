@@ -434,10 +434,15 @@ switch(dmt)
 		break;
 	case dmtIMAGE:			
 	case dmtVALUE:
-	case dmtBOOL:
 		{
 		double rV = data.rVal();
 		col->PutVal(iRec, rV);				
+		}
+		break;
+	case dmtBOOL:
+		{
+		bool fV = data.fVal();
+		col->PutVal(iRec, (long)fV);				
 		}
 		break;
 	default:
