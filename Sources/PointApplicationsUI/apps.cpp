@@ -52,6 +52,7 @@ Last change:  WK   17 Sep 98    2:14 pm
 #include "pointApplicationsUI\pointMapSymDifference.h"
 #include "PointApplicationsUI\frmPointInSegment.h"
 #include "PointApplicationsUI\frmpointrelate.h"
+#include "PointApplicationsUI\FormPointMapCross.h"
 #include "Client\ilwis.h"
 #include "Headers\Hs\Applications.hs"
 
@@ -76,6 +77,7 @@ extern "C" _export InfoUIVector* getCommandInfoUI(ILWIS::Module *module) {
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("symdiffpnt","",Cmdpointmapsymetricdifference,TR("P&oint Operations..&Symetric Difference"),TR("Symetric Difference of Points"),"ExePnt16IcoL",".mpp.mps",0,TR("Create a new Point map by the symetric difference of the Points of two Point maps")));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("segmiddlepnt","",Cmdpointinsegment,TR("P&oint Operations..&Point in Segment"),TR("Find a point in a segment"),"ExePnt16IcoL",".mps",0,TR("Create a pointmap with points that are in the middle of segments")));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("relatepnt","",Cmdpointmaprelate,TR("P&oint Operations..&Relate"),TR("Spatial Relation"),"ExePnt16IcoL",".mpp",0,TR("Create a point map out of spatial relation(s) with other feature maps")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("pointcross","",Cmdpointmapcross,TR("P&oint Operations..&Cross"),TR("Pointmap Cross"),"ExePnt16IcoL",".mpp",0,TR("Adds the values of positions of the points in the maplists to the attribute table")));
 
 	return infosui;
 }
