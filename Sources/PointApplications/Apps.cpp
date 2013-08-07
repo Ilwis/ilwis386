@@ -19,6 +19,8 @@
 #include "PointApplications\pntIntersect.H"
 #include "PointApplications\pntRelate.H"
 #include "PointApplications\PointMapFromSeg.H"
+#include "Engine\Map\Raster\MapList\maplist.h"
+#include "PointApplications\PointMapCross.H"
 
 
 //extern "C" _export vector<CommandInfo *>* getCommandInfo());
@@ -46,6 +48,7 @@ InfoVector* getCommandInfo() {
 	infos->push_back(CommandMap::newCommandInfo(createPointMapPointInSegment,"PointMapPointInSegment"));
 	infos->push_back(CommandMap::newCommandInfo(createPointMapRelate,"PointMapRelate"));
 	infos->push_back(CommandMap::newCommandInfo(createPointMapFromSeg,"PointMapFromSeg"));
+	infos->push_back(CommandMap::newCommandInfo(createPointMapCross,"PointMapCross"));
 
 	return infos;
 }
