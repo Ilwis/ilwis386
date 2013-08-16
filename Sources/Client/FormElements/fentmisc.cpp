@@ -1138,7 +1138,7 @@ return FormEntry::CheckData();
 void FieldCoord::StoreData()
 {
 	String s = frX->sRawGetText();
-	if ( s.iPos(',') != -1) {
+	if ( s.iPos(',') != shUNDEF) {
 		if ( stopCascade)
 			return;
 		stopCascade = true;
