@@ -152,6 +152,31 @@ PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, Pa
 		split(fn.sFile, tableName, geometryColumn);
 		LayerInfo inf;
 
+		if (fn.fExist()) {
+			String sType;
+			ObjectInfo::ReadElement("BaseMap", "Type", fn, sType);
+			if (fCIStrEqual(sType, "Map")) {
+				mtLoadType = mtRasterMap;
+				String srid;
+				int x_pixels_tile;
+				int y_pixels_tile;
+				double nodata_value;
+				String pixel_type;
+				StoreType stPostgres;
+				ObjectInfo::ReadElement("Map", "GeoRef", fn, inf.grf);
+				ObjectInfo::ReadElement("BaseMap", "CoordSystem", fn, csy);
+				ObjectInfo::ReadElement("ForeignFormat", "srid", fn, srid);
+				ObjectInfo::ReadElement("ForeignFormat", "x_pixels_tile", fn, x_pixels_tile);
+				ObjectInfo::ReadElement("ForeignFormat", "y_pixels_tile", fn, y_pixels_tile);
+				ObjectInfo::ReadElement("ForeignFormat", "nodata_value", fn, nodata_value);
+				ObjectInfo::ReadElement("ForeignFormat", "pixel_type", fn, pixel_type);
+				SetStoreType(pixel_type, inf, stPostgres);
+				rasterTiles = new PostGisRasterTileset(sConnectionString, schema, tableName, geometryColumn, inf.grf, srid, x_pixels_tile, y_pixels_tile, nodata_value, stPostgres);
+
+				return;
+			}
+		}
+
 		// GetRasterInfo
 		PostGreSQL db(sConnectionString.c_str());
    	    String query("Select srid, scale_x, scale_y, blocksize_x, blocksize_y, st_astext(extent), num_bands, pixel_types, nodata_values from raster_columns where r_table_schema='%S' and r_raster_column='%S'", schema, geometryColumn);
@@ -203,80 +228,16 @@ PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, Pa
 			Split(nodata_values, bands, ",");
 			double nodata_value = bands[iBand].rVal();
 
-			int bits_per_pixel = -1;
-			int data_type = -1;
-			bool signed_byte = false;
 			StoreType stPostgres;
-
-			if (pixel_type == "1BB") {
-				bits_per_pixel = 1;
-				data_type = GDT_Byte;
-				inf.dvrsMap = DomainValueRangeStruct(0,255);
-				stPostgres = stBIT;
-			} else if (pixel_type == "2BUI") {
-				bits_per_pixel = 2;
-				data_type = GDT_Byte;
-				inf.dvrsMap = DomainValueRangeStruct(0,255);
-				stPostgres = stBYTE;
-			} else if (pixel_type == "4BUI") {
-				bits_per_pixel = 4;
-				data_type = GDT_Byte;
-				inf.dvrsMap = DomainValueRangeStruct(0,255);
-				stPostgres = stBYTE;
-			} else if (pixel_type == "8BUI") {
-				bits_per_pixel = 8;
-				data_type = GDT_Byte;
-				inf.dvrsMap = DomainValueRangeStruct(Domain("image"));
-				stPostgres = stBYTE;
-			} else if (pixel_type == "8BSI") {
-				bits_per_pixel = 8;
-				data_type = GDT_Byte;
-				inf.dvrsMap = DomainValueRangeStruct(-128,127);
-				stPostgres = stBYTE;
-
-				/**
-				* To indicate the unsigned byte values between 128 and 255
-				* should be interpreted as being values between -128 and -1 for
-				* applications that recognize the SIGNEDBYTE type.
-				**/
-				signed_byte = true;
-			} else if (pixel_type == "16BSI") {
-				bits_per_pixel = 16;
-				data_type = GDT_Int16;
-				inf.dvrsMap = DomainValueRangeStruct(-SHRT_MAX + 2, SHRT_MAX -2 );
-				stPostgres = stINT;
-			} else if (pixel_type == "16BUI") {
-				bits_per_pixel = 16;
-				data_type = GDT_UInt16;
-				inf.dvrsMap = DomainValueRangeStruct(0, 65535 - 2);
-				stPostgres = stINT;
-			} else if (pixel_type == "32BSI") {
-				bits_per_pixel = 32;
-				data_type = GDT_Int32;
-				inf.dvrsMap = DomainValueRangeStruct(-LONG_MAX + 2, LONG_MAX -2 );
-				stPostgres = stLONG;
-			} else if (pixel_type == "32BUI") {
-				bits_per_pixel = 32;
-				data_type = GDT_UInt32;
-				inf.dvrsMap = DomainValueRangeStruct(0, LONG_MAX -2 );
-				stPostgres = stLONG;
-			} else if (pixel_type == "32BF") {
-				bits_per_pixel = 32;
-				data_type = GDT_Float32;
-				inf.dvrsMap = DomainValueRangeStruct(-1e100, 1e100, 0.0); // preferrably float instead of double
-				stPostgres = stFLOAT;
-			} else if (pixel_type == "64BF") {
-				bits_per_pixel = 64;
-				data_type = GDT_Float64;
-				inf.dvrsMap = DomainValueRangeStruct(-1e100, 1e100, 0.0);
-				stPostgres = stREAL;
-			} else {
-				bits_per_pixel = -1;
-				data_type = GDT_Unknown;
-				inf.dvrsMap = DomainValueRangeStruct(-1e100, 1e100, 0.0);
-			}
+			SetStoreType(pixel_type, inf, stPostgres);
 
 			rasterTiles = new PostGisRasterTileset(sConnectionString, schema, tableName, geometryColumn, inf.grf, srid, x_pixels_tile, y_pixels_tile, nodata_value, stPostgres);
+
+			ObjectInfo::WriteElement("ForeignFormat", "srid", fn, srid);
+			ObjectInfo::WriteElement("ForeignFormat", "x_pixels_tile", fn, x_pixels_tile);
+			ObjectInfo::WriteElement("ForeignFormat", "y_pixels_tile", fn, y_pixels_tile);
+			ObjectInfo::WriteElement("ForeignFormat", "nodata_value", fn, nodata_value);
+			ObjectInfo::WriteElement("ForeignFormat", "pixel_type", fn, pixel_type);
 		}
 
 		inf.fnObj = fn;
@@ -330,6 +291,46 @@ PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, Pa
 			mtLoadType = mtRasterMap; break;
 		default:
 			mtLoadType = mtUnknown;
+	}
+}
+
+void PostGisMaps::SetStoreType(String pixel_type, LayerInfo & inf, StoreType & stPostgres)
+{
+	if (pixel_type == "1BB") {
+		inf.dvrsMap = DomainValueRangeStruct(0,255);
+		stPostgres = stBIT;
+	} else if (pixel_type == "2BUI") {
+		inf.dvrsMap = DomainValueRangeStruct(0,255);
+		stPostgres = stBYTE;
+	} else if (pixel_type == "4BUI") {
+		inf.dvrsMap = DomainValueRangeStruct(0,255);
+		stPostgres = stBYTE;
+	} else if (pixel_type == "8BUI") {
+		inf.dvrsMap = DomainValueRangeStruct(Domain("image"));
+		stPostgres = stBYTE;
+	} else if (pixel_type == "8BSI") {
+		inf.dvrsMap = DomainValueRangeStruct(-128,127);
+		stPostgres = stBYTE; // signed: values between 128 and 255 should be interpreted as values between -128 and -1 
+	} else if (pixel_type == "16BSI") {
+		inf.dvrsMap = DomainValueRangeStruct(-SHRT_MAX + 2, SHRT_MAX -2 );
+		stPostgres = stINT;
+	} else if (pixel_type == "16BUI") {
+		inf.dvrsMap = DomainValueRangeStruct(0, 65535 - 2);
+		stPostgres = stINT;
+	} else if (pixel_type == "32BSI") {
+		inf.dvrsMap = DomainValueRangeStruct(-LONG_MAX + 2, LONG_MAX -2 );
+		stPostgres = stLONG;
+	} else if (pixel_type == "32BUI") {
+		inf.dvrsMap = DomainValueRangeStruct(0, LONG_MAX -2 );
+		stPostgres = stLONG;
+	} else if (pixel_type == "32BF") {
+		inf.dvrsMap = DomainValueRangeStruct(-1e100, 1e100, 0.0); // preferrably float instead of double
+		stPostgres = stFLOAT;
+	} else if (pixel_type == "64BF") {
+		inf.dvrsMap = DomainValueRangeStruct(-1e100, 1e100, 0.0);
+		stPostgres = stREAL;
+	} else {
+		inf.dvrsMap = DomainValueRangeStruct(-1e100, 1e100, 0.0);
 	}
 }
 

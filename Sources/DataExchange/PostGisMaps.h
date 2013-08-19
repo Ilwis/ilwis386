@@ -113,6 +113,7 @@ protected:
 	CoordSystem					 csy;
 	PostGisRasterTileset*		 rasterTiles;
 private:
+	static void					 SetStoreType(String pixel_type, LayerInfo & inf, StoreType & stPostgres);
 	static void                  replaceString(string &str, const string &search, const string &replace);
 	static String                merge(String table, String column);
 	static void                  split(String fileName, String & table, String & column);
