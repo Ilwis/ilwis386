@@ -232,8 +232,7 @@ BOOL RoseDiagramDoc::OnNewDocument()
 	}
   
   rdd->agl.push_back(rdl);
-  throw ErrorObject(String("TO DO %s %s", __LINE__, __FILE__));
-	//rdl->color	= BaseDrawer::clrPrimary(rdd->agl.iSize());
+  rdl->color = Representation::clrPrimary(rdd->agl.iSize());
 
   UpdateAllViews(0);
 	SetModifiedFlag();
@@ -294,8 +293,7 @@ void RoseDiagramDoc::OnAddGraph()
 
   RoseDiagramLayer* rdl = new RoseDiagramLayer(rdd, tbl, colX, colY);
 	rdd->agl.push_back(rdl);
-	throw ErrorObject(String("TO DO %s %s", __LINE__, __FILE__));
-	//rdl->line.clrLine() = rdl->color = BaseDrawer::clrPrimary(rdd->agl.iSize());
+	rdl->line.clrLine() = rdl->color = Representation::clrPrimary(rdd->agl.iSize());
   // config layer ??
 	SetModifiedFlag();
   UpdateAllViews(0);
