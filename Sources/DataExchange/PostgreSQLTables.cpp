@@ -92,7 +92,7 @@ ForeignFormat *CreateImportObjectPostGres(const FileName& fnObj, ParmList& pm) /
 	}
 
 	FileName fnDom(pm.sGet("output") != "" ? pm.sGet("output") : fnObj.sFullPathQuoted());
-	return new PostgreSQLTables(fnObj, Domain(fnDom,0, dmtUNIQUEID,"id"), pm);
+	return new PostgreSQLTables(fnObj, fnDom, pm);
 }
 
 PostgreSQLTables::PostgreSQLTables() :
@@ -104,7 +104,7 @@ PostgreSQLTables::PostgreSQLTables() :
 //	String sCol = pm.sGet("collection");
 //}
 
-PostgreSQLTables::PostgreSQLTables(const FileName& fn, const Domain & dm, ParmList& pm)
+PostgreSQLTables::PostgreSQLTables(const FileName& fn, const FileName & fnDom, ParmList& pm)
 {
 	int currentSize = pm.iSize();
 	String collection = pm.sGet("collection");
@@ -113,6 +113,7 @@ PostgreSQLTables::PostgreSQLTables(const FileName& fn, const Domain & dm, ParmLi
 	tableName = pm.sGet("table");
 	username = pm.sGet("username");
 	password = pm.sGet("password");
+	schema = pm.sGet("schema");
 	host = pm.sGet("host");
 	port = pm.sGet("port");
 	sQuery = pm.sGet("query");
@@ -134,6 +135,7 @@ PostgreSQLTables::PostgreSQLTables(const FileName& fn, const Domain & dm, ParmLi
 						
 		Table tbl;
 		FileName fnTbl(pm.sGet("output") != "" ? pm.sGet("output") : fn.sFullPathQuoted());
+		Domain dm (fnDom,0, dmtUNIQUEID,"id");
 		tbl.SetPointer(new TablePtr(fnTbl, dm, pm));
 
 		if ( !pm.fExist("import")) {
@@ -169,12 +171,13 @@ String PostgreSQLTables::sCreateConnectionString(const ForeignCollection& coll, 
 		database = parts[2].substr(8, parts[2].find_last_of("'") - 8);
 		username = parts[3].substr(6, parts[3].find_last_of("'") - 6);
 		password = parts[4].substr(10, parts[4].find_last_of("'") - 10);
+		coll->ReadElement("ForeignFormat","Schema",schema);
 		pm.Add(new Parm("host", host));
 		pm.Add(new Parm("port", port));
 		pm.Add(new Parm("database", database));
 		pm.Add(new Parm("username", username));
 		pm.Add(new Parm("password", password));
-
+		pm.Add(new Parm("schema", schema));
 	}
 	if ( database == "") {
 		String collName = pm.sGet("collection");
@@ -263,6 +266,8 @@ void PostgreSQLTables::Store(IlwisObject obj) {
 		String out = encrypt(obj->fnObj,password);
 		obj->WriteElement("ForeignFormat","Password",out);
 	}
+	if ( schema!= "")
+		obj->WriteElement("ForeignFormat","Schema",schema);
 	if( sQuery != "")
 		obj->WriteElement("ForeignFormat","Query",sQuery);
 	if( database != "")
@@ -287,6 +292,8 @@ void PostgreSQLTables::ReadParameters(const FileName& fnObj, ParmList& pm) {
 	ObjectInfo::ReadElement("ForeignFormat","Password",fnObj,pw);
 	password = decrypt(fnObj,pw);
 	pm.Add(new Parm("password",password));
+	ObjectInfo::ReadElement("ForeignFormat","Schema",fnObj,schema);
+	pm.Add(new Parm("schema",schema));
 	ObjectInfo::ReadElement("ForeignFormat","Query",fnObj,sQuery);
 	pm.Add(new Parm("query",sQuery));
 	ObjectInfo::ReadElement("ForeignFormat","Database",fnObj,database);
@@ -312,7 +319,7 @@ PostgreSQLTables::~PostgreSQLTables()
 void PostgreSQLTables::PutDataInCollection(ForeignCollectionPtr* collection, ParmList& pm)
 {
 	PostGreSQL db(sConnectionString.c_str());
-	db.getNTResult("SELECT table_name, table_schema FROM INFORMATION_SCHEMA.Columns	WHERE table_schema = 'public'");
+	db.getNTResult(String("SELECT table_name, table_schema FROM INFORMATION_SCHEMA.Columns WHERE table_schema = '%S'", schema).c_str());
 	int rows = db.getNumberOf(PostGreSQL::ROW);
 	if ( rows <= 0)
 		throw ErrorObject("Meta data of the database is invalid or incomplete");
@@ -395,10 +402,8 @@ void PostgreSQLTables::LoadTable(TablePtr *tbl)
 {
 	PostGreSQL db(sConnectionString.c_str());
 
-	String schemaQuery("SELECT column_name, data_type FROM INFORMATION_SCHEMA.Columns WHERE table_schema = 'public' and table_name='%S' ORDER BY ordinal_position", tableName);
+	String schemaQuery("SELECT column_name, data_type FROM INFORMATION_SCHEMA.Columns WHERE table_schema = '%S' and table_name='%S' ORDER BY ordinal_position", schema, tableName);
 	db.getNTResult(schemaQuery.c_str());
-
-	
 	
 	int iNumColumns = db.getNumberOf(PostGreSQL::ROW); // this was a schema query, every row of the result describes a column of table 'tableName'
 	vector<String> vDataTypes;

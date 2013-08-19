@@ -10,8 +10,10 @@ public:
 private:
 	FieldString *fsUserName;
 	FieldString *fsPassword;
+	FieldString *fsSchema;
 	String userName;
 	String passWord;
+	String schema;
 };
 
 class AsterOptions : public FormExtraImportOptions {
