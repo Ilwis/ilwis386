@@ -60,6 +60,7 @@
 #include "Engine\SpatialReference\Coordsys.h"
 #include "Engine\SpatialReference\Csproj.h"
 #include "Engine\SpatialReference\Cslatlon.h"
+#include "Engine\SpatialReference\Grcornrs.h"
 #include "Engine\Map\basemap.h"
 #include "Engine\Base\DataObjects\URL.h"
 #include "Engine\Table\Colbinar.h"
@@ -90,12 +91,12 @@ ForeignFormat *CreateImportObjectPostGis(const FileName& fnObj, ParmList& pm) //
 			delete ff;
 		}	
 	}
-	Domain dmAttrTable (fnObj, 0, dmtUNIQUEID, "id");
-	return new PostGisMaps(fnObj, dmAttrTable, pm);
+	return new PostGisMaps(fnObj, fnObj, pm);
 }
 
 PostGisMaps::PostGisMaps() :
 	PostgreSQLTables()
+	, rasterTiles(0)
 {
 
 }
@@ -126,15 +127,16 @@ void PostGisMaps::split(String fileName, String & table, String & column) {
 	replaceString(column, "-_", "_");
 }
 
-PostGisMaps::PostGisMaps(const FileName& fn, const Domain & dmAttrTable, ParmList& pm) :
-	PostgreSQLTables(fn, dmAttrTable, pm)
+PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, ParmList& pm) :
+	PostgreSQLTables(fn, fnDomAttrTable, pm)
+	, rasterTiles(0)
 {
 	IlwisObject::iotIlwisObjectType type = IlwisObject::iotObjectType(fn);
 	if ( type == IlwisObject::iotPOINTMAP ||  type == IlwisObject::iotSEGMENTMAP ||  type == IlwisObject::iotPOLYGONMAP) {
 		split(fn.sFile, tableName, geometryColumn);
 		sQuery = "Select * From " + tableName;		
 		PostGreSQL db(sConnectionString.c_str());
-   	    String query("Select srid from geometry_columns where f_geometry_column='%S'", geometryColumn);
+   	    String query("Select srid from geometry_columns where f_table_schema='%S' and f_geometry_column='%S'", schema, geometryColumn);
 		db.getNTResult(query.c_str());
 		ForeignCollection fc(pm.sGet("collection"));
 		if(db.getNumberOf(PostGreSQL::ROW) > 0) {
@@ -146,6 +148,176 @@ PostGisMaps::PostGisMaps(const FileName& fn, const Domain & dmAttrTable, ParmLis
 		}
 		ObjectInfo::WriteElement("ForeignFormat","Table",fn,tableName);
 		ObjectInfo::WriteElement("ForeignFormat","Query",fn,sQuery);
+	} else if ( type == IlwisObject::iotRASMAP) {
+		split(fn.sFile, tableName, geometryColumn);
+		LayerInfo inf;
+
+		// GetRasterInfo
+		PostGreSQL db(sConnectionString.c_str());
+   	    String query("Select srid, scale_x, scale_y, blocksize_x, blocksize_y, st_astext(extent), num_bands, pixel_types, nodata_values from raster_columns where r_table_schema='%S' and r_raster_column='%S'", schema, geometryColumn);
+		db.getNTResult(query.c_str());
+		if(db.getNumberOf(PostGreSQL::ROW) > 0) {
+			// CoordinateSystem
+			String srid(db.getValue(0, 0));
+			csy = getCoordSystem( FileName(geometryColumn), String("EPSG:%S",srid));
+			inf.csy = csy;
+			
+			// GeoReference
+			double x_pixel_size = String(db.getValue(0, 1)).rVal();
+			double y_pixel_size = String(db.getValue(0, 2)).rVal();
+			int x_pixels_tile = String(db.getValue(0, 3)).iVal();
+			int y_pixels_tile = String(db.getValue(0, 4)).iVal();
+			String extent(db.getValue(0, 5));
+			if (extent.sLeft(7) == "POLYGON") {
+				extent = extent.sSub(9, extent.size() - 11); // remove POLYGON(( and ))
+				Array<String> coords;
+				Split(extent, coords, ",");
+				CoordBounds cb; // for now this is suitable only for "GeoRefCorners"
+				for(int	i = 0; i < coords.size(); ++i) {
+					double x = coords[i].sHead(" ").rVal();
+					double y = coords[i].sTail(" ").rVal();					
+					cb += Coord(x,y);
+				}
+				if (cb.fValid()) {
+					GeoRef gr;
+					FileName fnGrf(FileName::fnUnique(FileName(fn, ".grf")));
+					x_pixels = round(abs(cb.width() / x_pixel_size));
+					int y_pixels = round(abs(cb.height() / y_pixel_size));
+					gr.SetPointer(new GeoRefCorners(fnGrf, csy, RowCol(y_pixels, x_pixels), true, cb.cMin, cb.cMax));		
+					inf.cbActual = inf.cbMap = cb;
+					inf.grf = gr;
+				}
+			}
+
+			// Domain
+			int nrBands = String(db.getValue(0, 6)).iVal();
+			String pixel_types(db.getValue(0, 7));
+			String nodata_values(db.getValue(0, 8));
+			int iBand = 0; // first band
+			pixel_types = pixel_types.sSub(1, pixel_types.size() - 2); // remove { and }
+			nodata_values = nodata_values.sSub(1, nodata_values.size() - 2); // remove { and }
+			Array<String> bands;
+			Split(pixel_types, bands, ",");
+			String pixel_type = bands[iBand];
+			bands.clear();
+			Split(nodata_values, bands, ",");
+			double nodata_value = bands[iBand].rVal();
+
+			int bits_per_pixel = -1;
+			int data_type = -1;
+			bool signed_byte = false;
+			StoreType stPostgres;
+
+			if (pixel_type == "1BB") {
+				bits_per_pixel = 1;
+				data_type = GDT_Byte;
+				inf.dvrsMap = DomainValueRangeStruct(0,255);
+				stPostgres = stBIT;
+			} else if (pixel_type == "2BUI") {
+				bits_per_pixel = 2;
+				data_type = GDT_Byte;
+				inf.dvrsMap = DomainValueRangeStruct(0,255);
+				stPostgres = stBYTE;
+			} else if (pixel_type == "4BUI") {
+				bits_per_pixel = 4;
+				data_type = GDT_Byte;
+				inf.dvrsMap = DomainValueRangeStruct(0,255);
+				stPostgres = stBYTE;
+			} else if (pixel_type == "8BUI") {
+				bits_per_pixel = 8;
+				data_type = GDT_Byte;
+				inf.dvrsMap = DomainValueRangeStruct(Domain("image"));
+				stPostgres = stBYTE;
+			} else if (pixel_type == "8BSI") {
+				bits_per_pixel = 8;
+				data_type = GDT_Byte;
+				inf.dvrsMap = DomainValueRangeStruct(-128,127);
+				stPostgres = stBYTE;
+
+				/**
+				* To indicate the unsigned byte values between 128 and 255
+				* should be interpreted as being values between -128 and -1 for
+				* applications that recognize the SIGNEDBYTE type.
+				**/
+				signed_byte = true;
+			} else if (pixel_type == "16BSI") {
+				bits_per_pixel = 16;
+				data_type = GDT_Int16;
+				inf.dvrsMap = DomainValueRangeStruct(-SHRT_MAX + 2, SHRT_MAX -2 );
+				stPostgres = stINT;
+			} else if (pixel_type == "16BUI") {
+				bits_per_pixel = 16;
+				data_type = GDT_UInt16;
+				inf.dvrsMap = DomainValueRangeStruct(0, 65535 - 2);
+				stPostgres = stINT;
+			} else if (pixel_type == "32BSI") {
+				bits_per_pixel = 32;
+				data_type = GDT_Int32;
+				inf.dvrsMap = DomainValueRangeStruct(-LONG_MAX + 2, LONG_MAX -2 );
+				stPostgres = stLONG;
+			} else if (pixel_type == "32BUI") {
+				bits_per_pixel = 32;
+				data_type = GDT_UInt32;
+				inf.dvrsMap = DomainValueRangeStruct(0, LONG_MAX -2 );
+				stPostgres = stLONG;
+			} else if (pixel_type == "32BF") {
+				bits_per_pixel = 32;
+				data_type = GDT_Float32;
+				inf.dvrsMap = DomainValueRangeStruct(-1e100, 1e100, 0.0); // preferrably float instead of double
+				stPostgres = stFLOAT;
+			} else if (pixel_type == "64BF") {
+				bits_per_pixel = 64;
+				data_type = GDT_Float64;
+				inf.dvrsMap = DomainValueRangeStruct(-1e100, 1e100, 0.0);
+				stPostgres = stREAL;
+			} else {
+				bits_per_pixel = -1;
+				data_type = GDT_Unknown;
+				inf.dvrsMap = DomainValueRangeStruct(-1e100, 1e100, 0.0);
+			}
+
+			rasterTiles = new PostGisRasterTileset(sConnectionString, schema, tableName, geometryColumn, inf.grf, srid, x_pixels_tile, y_pixels_tile, nodata_value, stPostgres);
+		}
+
+		inf.fnObj = fn;
+		
+		// end GetRasterInfo
+
+		Map map = Map(fn, inf);	
+		if (!pm.fExist("import"))
+			map->SetUseAs(true);
+		else
+			map->SetUseAs(false);
+
+		if (inf.dvrsMap.fValues()) {
+			query = String("SELECT ST_SummaryStats('%S', '%S')", tableName, geometryColumn);
+			db.getNTResult(query.c_str());
+			if(db.getNumberOf(PostGreSQL::ROW) > 0) {
+				String res (db.getValue(0, 0));
+				res = res.sSub(1, res.size() - 2); // remove ( and )
+				Array<String> parts;
+				Split(res, parts, ",");
+				if (inf.dvrsMap.fRealValues()) {
+					double rMin = parts[4].rVal();
+					double rMax = parts[5].rVal();
+					map->SetMinMax(RangeReal(rMin, rMax));
+				}
+				else {
+					long iMin = parts[4].iVal();
+					long iMax = parts[5].iVal();
+					map->SetMinMax(RangeInt(iMin, iMax));
+				}
+			}
+		}
+
+		map->Store();
+		map->gr()->Store();
+		Store(map);
+		ForeignCollection fc(pm.sGet("collection"));
+		if (fc.fValid()) {
+			fc->Add(map->gr());
+			fc->Add(map->cs());
+		}
 	}
 	switch(type) {
 		case IlwisObject::iotPOINTMAP:
@@ -154,6 +326,8 @@ PostGisMaps::PostGisMaps(const FileName& fn, const Domain & dmAttrTable, ParmLis
 			mtLoadType = mtSegmentMap; break;
 		case IlwisObject::iotPOLYGONMAP:
 			mtLoadType = mtPolygonMap; break;
+		case IlwisObject::iotRASMAP:
+			mtLoadType = mtRasterMap; break;
 		default:
 			mtLoadType = mtUnknown;
 	}
@@ -176,16 +350,20 @@ PostGisMaps::~PostGisMaps()
 {
 	delete dmKey;
 	dmKey = NULL;
+	if (rasterTiles) {
+		delete rasterTiles;
+		rasterTiles = 0;
+	}
 }
 
 // fills a database collection with appropriate tables
 void PostGisMaps::PutDataInCollection(ForeignCollectionPtr* collection, ParmList& pm)
 {
 	PostGreSQL db(sConnectionString.c_str());
-	db.getNTResult("SELECT table_name,column_name FROM INFORMATION_SCHEMA.Columns WHERE table_schema = 'public' and udt_name='geometry'");
+	db.getNTResult(String("SELECT table_name,column_name FROM INFORMATION_SCHEMA.Columns WHERE table_schema = '%S' and udt_name='geometry'", schema).c_str());
 	int rows = db.getNumberOf(PostGreSQL::ROW);
-	if ( rows <= 0)
-		throw ErrorObject("Meta data of the database is invalid or incomplete");
+	//if ( rows <= 0)
+	//	throw ErrorObject("Meta data of the database is invalid or incomplete"); // not incomplete; just no 'geometry' columns found
 
 	for(int i = 0; i < rows; ++i)
 	{
@@ -211,6 +389,19 @@ void PostGisMaps::PutDataInCollection(ForeignCollectionPtr* collection, ParmList
 			}
 		}
 	}
+	db.getNTResult(String("SELECT table_name,column_name FROM INFORMATION_SCHEMA.Columns WHERE table_schema = '%S' and udt_name='raster'", schema).c_str());
+	rows = db.getNumberOf(PostGreSQL::ROW);
+	for (int i = 0; i < rows; ++i)
+	{
+		String tname(db.getValue(i, "table_name"));
+		String cname(db.getValue(i, "column_name"));
+		String name = merge(tname, cname);
+		name.sTrimSpaces();
+		String sMap = String("%S.mpr", name);
+		if(sMap != "")
+			collection->Add(sMap);
+	}
+
 	Store(IlwisObject::obj(collection->fnObj));
 }
 
@@ -528,7 +719,7 @@ LayerInfo PostGisMaps::GetLayerInfo(ParmList& parms) {
 		pmAttribTable.Add(p2);
 	}
 	pmAttribTable.Add(new Parm("key",fnTable.sFullPath()));
-	PostgreSQLTables pgt(fnAttr, *dmKey, pmAttribTable);
+	PostgreSQLTables pgt(fnAttr, dmKey->ptr()->fnObj, pmAttribTable);
 
 	info.tbl = TableForeign::CreateDataBaseTable(fn, parms);
 	info.tbl->iRecNew(info.iShapes);
@@ -598,33 +789,36 @@ CoordSystem PostGisMaps::getCoordSystem(const FileName& fnBase, const String& sr
 	//char *pepsg = (char *)epsg;
 	int epsg = srsName.sTail(":").iVal();
 	OGRErr err = importepsg( handle, epsg);
-	if ( err != OGRERR_NONE )
-		throw ErrorObject(String("The SRS %S could not be used", srsName));
-
-	String datumName(getAttr(handle, "Datum",0));
-	//map<String, ProjectionConversionFunctions>::iterator where = mpCsyConvers.find(projectionName);
-
-	FileName fnCsy(fnBase, ".csy");
-	if ( _access(fnCsy.sRelative().c_str(),0) == 0)
-		return CoordSystem(fnCsy);
-
-	CoordSystemViaLatLon *csv=NULL;
-	if ( isProjected(handle)) {
-		CoordSystemProjection *csp =  new CoordSystemProjection(fnCsy, 1);
-		String dn = Datum::WKTToILWISName(datumName);
-		if ( dn == "")
-			throw ErrorObject("Datum can't be transformed to an ILWIS known datum");
-		csp->datum = new MolodenskyDatum(dn,"");
-		csv = csp;
+	if ( err != OGRERR_NONE ) {
+		// throw ErrorObject(String("The SRS %S could not be used", srsName));
+		return CoordSystem("unknown");
 	} else {
-		csv = new CoordSystemLatLon(fnCsy, 1);
-		csv->datum = new MolodenskyDatum("WGS 1984","");
+
+		String datumName(getAttr(handle, "Datum",0));
+		//map<String, ProjectionConversionFunctions>::iterator where = mpCsyConvers.find(projectionName);
+
+		FileName fnCsy(fnBase, ".csy");
+		if ( _access(fnCsy.sRelative().c_str(),0) == 0)
+			return CoordSystem(fnCsy);
+
+		CoordSystemViaLatLon *csv=NULL;
+		if ( isProjected(handle)) {
+			CoordSystemProjection *csp =  new CoordSystemProjection(fnCsy, 1);
+			String dn = Datum::WKTToILWISName(datumName);
+			if ( dn == "")
+				throw ErrorObject("Datum can't be transformed to an ILWIS known datum");
+			csp->datum = new MolodenskyDatum(dn,"");
+			csv = csp;
+		} else {
+			csv = new CoordSystemLatLon(fnCsy, 1);
+			csv->datum = new MolodenskyDatum("WGS 1984","");
+		}
+
+		CoordSystem csy;
+		csy.SetPointer(csv);
+
+		return csy;
 	}
-
-	CoordSystem csy;
-	csy.SetPointer(csv);
-
-	return csy;
 }
 
 void PostGisMaps::getImportFormats(vector<ImportFormat>& formats) {
@@ -636,4 +830,255 @@ void PostGisMaps::getImportFormats(vector<ImportFormat>& formats) {
 	frm.useasSuported = true;
 	frm.ui = NULL;
 	formats.push_back(frm);
+}
+
+void PostGisMaps::GetLineRaw(long iLine, ByteBuf& buf, long iFrom, long iNum) const
+{
+}
+
+void PostGisMaps::GetLineRaw(long iLine, IntBuf& buf, long iFrom, long iNum) const
+{
+}
+
+void PostGisMaps::GetLineRaw(long iLine, LongBuf& buf, long iFrom, long iNum) const
+{
+}
+
+void PostGisMaps::GetLineVal(long iLine, LongBuf& buf, long iFrom, long iNum) const
+{
+	rasterTiles->GetLineVal(iLine, buf, iFrom, iNum);
+}
+
+void PostGisMaps::GetLineVal(long iLine, RealBuf& buf, long iFrom, long iNum) const
+{
+	rasterTiles->GetLineVal(iLine, buf, iFrom, iNum);
+}
+
+long PostGisMaps::iRaw(RowCol) const
+{
+	return iUNDEF;
+}
+
+long PostGisMaps::iValue(RowCol rc) const
+{
+	LongBuf buf (x_pixels);
+	rasterTiles->GetLineVal(rc.Row, buf, 0, x_pixels);
+	return buf[rc.Col];
+}
+
+double PostGisMaps::rValue(RowCol rc) const
+{
+	RealBuf buf (x_pixels);
+	rasterTiles->GetLineVal(rc.Row, buf, 0, x_pixels);
+	return buf[rc.Col];
+}
+
+PostGisRasterTileset::PostGisRasterTileset(String sConnectionString, String _schema, String _tableName, String _geometryColumn, const GeoRef & _gr, String _srid, int _x_pixels_tile, int _y_pixels_tile, double _nodata_value, StoreType _stPostgres)
+: db(new PostGreSQL (sConnectionString.c_str()))
+, schema(_schema)
+, tableName(_tableName)
+, geometryColumn(_geometryColumn)
+, gr(_gr)
+, srid(_srid)
+, x_pixels_tile(_x_pixels_tile)
+, y_pixels_tile(_y_pixels_tile)
+, iNumTiles(0)
+, iTop(-1)
+, iBottom(-1)
+, iLeft(-1)
+, iRight(-1)
+, headerSize(61)
+, bandHeaderSize(1)
+, nodata_value(_nodata_value)
+, stPostgres(_stPostgres)
+{
+}
+
+PostGisRasterTileset::~PostGisRasterTileset()
+{
+	if (db)
+		delete db;
+}
+
+void PostGisRasterTileset::GetLineVal(long iLine, LongBuf& buf, long iFrom, long iNum)
+{
+	if (iNumTiles == 0 || iLine < iTop || iLine > iBottom || iFrom < iLeft || iFrom + iNum - 1 > iRight)
+		RenewTiles(iLine, iFrom, iNum);
+
+	long nodata_val = round(nodata_value);
+
+	long * ptrBuf = buf.buf();
+	iLine = iLine % y_pixels_tile;
+	int iStartTile = (iFrom > iLeft) ? (iFrom - iLeft) / x_pixels_tile : 0;
+	int iEndTile = (iFrom + iNum - 1 < iRight) ? (iNumTiles - (iRight - iNum - iFrom + 1) / x_pixels_tile) : iNumTiles;
+	unsigned int pos = 0;
+	for (int i = iStartTile; i < iEndTile; ++i) {
+		int jMin = ((i == iStartTile) && (iFrom > iLeft)) ? ((iFrom - iLeft) % x_pixels_tile) : 0;
+		int jMax = ((i == (iEndTile - 1)) && (iFrom + iNum - 1 < iRight)) ? (x_pixels_tile - (iRight - iNum - iFrom + 1) % x_pixels_tile) : x_pixels_tile;
+		char * tileHex = db->getValue(i, 0);
+		tileHex += 2 * (headerSize + bandHeaderSize);
+		switch(stPostgres) {
+			case stBIT:
+				break;
+			case stBYTE:
+				nodata_val = hex2dec(tileHex);
+				tileHex += 2;
+				for (int j = jMin; j < jMax; ++j) {
+					char b = hex2dec(&tileHex[2 * iLine * x_pixels_tile + 2 * j]);
+					ptrBuf[pos++] = b;
+				}
+				break;
+			case stINT:
+				tileHex += 2 * sizeof(short);
+				{
+					short hl;
+					char * c = (char*)(&hl);
+					for (int j = jMin; j < jMax; ++j) {
+						c[0] = hex2dec(&tileHex[4 * iLine * x_pixels_tile + 4 * j]);
+						c[1] = hex2dec(&tileHex[4 * iLine * x_pixels_tile + 4 * j + 2]);
+						ptrBuf[pos++] = hl;
+					}
+				}
+				break;
+			case stLONG:
+				tileHex += 2 * sizeof(long);
+				{
+					long hl;
+					char * c = (char*)(&hl);
+					for (int j = jMin; j < jMax; ++j) {
+						c[0] = hex2dec(&tileHex[8 * iLine * x_pixels_tile + 8 * j]);
+						c[1] = hex2dec(&tileHex[8 * iLine * x_pixels_tile + 8 * j + 2]);
+						c[2] = hex2dec(&tileHex[8 * iLine * x_pixels_tile + 8 * j + 4]);
+						c[3] = hex2dec(&tileHex[8 * iLine * x_pixels_tile + 8 * j + 6]);
+						ptrBuf[pos++] = hl;
+					}
+				}
+				break;
+			case stFLOAT:
+				tileHex += 2 * sizeof(float);
+				{
+					float f;
+					char * c = (char*)(&f);
+					for (int j = jMin; j < jMax; ++j) {
+						c[0] = hex2dec(&tileHex[8 * iLine * x_pixels_tile + 8 * j]);
+						c[1] = hex2dec(&tileHex[8 * iLine * x_pixels_tile + 8 * j + 2]);
+						c[2] = hex2dec(&tileHex[8 * iLine * x_pixels_tile + 8 * j + 4]);
+						c[3] = hex2dec(&tileHex[8 * iLine * x_pixels_tile + 8 * j + 6]);
+						ptrBuf[pos++] = round(f);
+					}
+				}
+				break;
+			case stREAL:
+				tileHex += 2 * sizeof(double);
+				break;
+		}
+	}
+	for (int i = 0; i < iNum; ++i) {
+		if(ptrBuf[i] == nodata_val)
+			ptrBuf[i] = iUNDEF;
+	}
+}
+
+void PostGisRasterTileset::GetLineVal(long iLine, RealBuf& buf, long iFrom, long iNum)
+{
+	if (iNumTiles == 0 || iLine < iTop || iLine > iBottom || iFrom < iLeft || iFrom + iNum - 1 > iRight)
+		RenewTiles(iLine, iFrom, iNum);
+
+	double nodata_val = nodata_value;
+
+	double * ptrBuf = buf.buf();
+	iLine = iLine % y_pixels_tile;
+	int iStartTile = (iFrom > iLeft) ? (iFrom - iLeft) / x_pixels_tile : 0;
+	int iEndTile = (iFrom + iNum - 1 < iRight) ? (iNumTiles - (iRight - iNum - iFrom + 1) / x_pixels_tile) : iNumTiles;
+	unsigned int pos = 0;
+	for (int i = iStartTile; i < iEndTile; ++i) {
+		int jMin = ((i == iStartTile) && (iFrom > iLeft)) ? ((iFrom - iLeft) % x_pixels_tile) : 0;
+		int jMax = ((i == (iEndTile - 1)) && (iFrom + iNum - 1 < iRight)) ? (x_pixels_tile - (iRight - iNum - iFrom + 1) % x_pixels_tile) : x_pixels_tile;
+		char * tileHex = db->getValue(i, 0);
+		tileHex += 2 * (headerSize + bandHeaderSize);
+		switch(stPostgres) {
+			case stBIT:
+				break;
+			case stBYTE:
+				tileHex += 2;
+				for (int j = jMin; j < jMax; ++j) {
+					char b = hex2dec(&tileHex[2 * iLine * x_pixels_tile + 2 * j]);
+					ptrBuf[pos++] = b;
+				}
+				break;
+			case stINT:
+				tileHex += 2 * sizeof(short);
+				{
+					short hl;
+					char * c = (char*)(&hl);
+					for (int j = jMin; j < jMax; ++j) {
+						c[0] = hex2dec(&tileHex[4 * iLine * x_pixels_tile + 4 * j]);
+						c[1] = hex2dec(&tileHex[4 * iLine * x_pixels_tile + 4 * j + 2]);
+						ptrBuf[pos++] = hl;
+					}
+				}
+				break;
+			case stLONG:
+				tileHex += 2 * sizeof(long);
+				{
+					long hl;
+					char * c = (char*)(&hl);
+					for (int j = jMin; j < jMax; ++j) {
+						c[0] = hex2dec(&tileHex[8 * iLine * x_pixels_tile + 8 * j]);
+						c[1] = hex2dec(&tileHex[8 * iLine * x_pixels_tile + 8 * j + 2]);
+						c[2] = hex2dec(&tileHex[8 * iLine * x_pixels_tile + 8 * j + 4]);
+						c[3] = hex2dec(&tileHex[8 * iLine * x_pixels_tile + 8 * j + 6]);
+						ptrBuf[pos++] = hl;
+					}
+				}
+				break;
+			case stFLOAT:
+				tileHex += 2 * sizeof(float);
+				{
+					float f;
+					char * c = (char*)(&f);
+					for (int j = jMin; j < jMax; ++j) {
+						c[0] = hex2dec(&tileHex[8 * iLine * x_pixels_tile + 8 * j]);
+						c[1] = hex2dec(&tileHex[8 * iLine * x_pixels_tile + 8 * j + 2]);
+						c[2] = hex2dec(&tileHex[8 * iLine * x_pixels_tile + 8 * j + 4]);
+						c[3] = hex2dec(&tileHex[8 * iLine * x_pixels_tile + 8 * j + 6]);
+						ptrBuf[pos++] = f;
+					}
+				}
+				break;
+			case stREAL:
+				tileHex += 2 * sizeof(double);
+				break;
+		}
+	}
+	for (int i = 0; i < iNum; ++i) {
+		if(ptrBuf[i] == nodata_val)
+			ptrBuf[i] = rUNDEF;
+	}
+}
+
+char PostGisRasterTileset::hex2dec(char * str)
+{
+	char h = str[0];
+	char l = str[1];
+	char h1 = (h <= '9') ? (h - '0') : (h - 'A' + 10);
+	char l1 = (l <= '9') ? (l - '0') : (l - 'A' + 10);
+	char hl = (h1 << 4) | l1;
+	return hl;
+}
+
+void PostGisRasterTileset::RenewTiles(long iLine, long iFrom, long iNum)
+{
+	Coord crd1;
+	Coord crd2;
+	gr->RowCol2Coord(iLine + 0.5, iFrom + 0.5, crd1);
+	gr->RowCol2Coord(iLine + 0.5, iFrom + iNum - 1.5, crd2);
+	//String str("SELECT %S FROM %S.%S WHERE ST_Intersects(%S, ST_GeomFromEWKT('SRID=%S;POLYGON((%.18f %.18f,%.18f %.18f,%.18f %.18f,%.18f %.18f,%.18f %.18f))')) order by ST_UpperLeftX(%S)", geometryColumn, schema, tableName, geometryColumn, srid, crd1.x, crd1.y, crd2.x, crd1.y, crd2.x, crd2.y, crd1.x, crd2.y, crd1.x, crd1.y, geometryColumn);
+	String str("SELECT %S FROM %S.%S WHERE ST_Intersects(%S, ST_GeomFromEWKT('SRID=%S;LINESTRING(%.18f %.18f,%.18f %.18f)')) order by ST_UpperLeftX(%S)", geometryColumn, schema, tableName, geometryColumn, srid, crd1.x, crd1.y, crd2.x, crd2.y, geometryColumn);
+	db->getNTResult(str.c_str());
+	iNumTiles = db->getNumberOf(PostGreSQL::ROW);
+	iLeft = iFrom - iFrom % x_pixels_tile;
+	iRight = iLeft + iNumTiles * x_pixels_tile - 1;
+	iTop = iLine - iLine % y_pixels_tile;
+	iBottom = iTop + y_pixels_tile - 1;
 }

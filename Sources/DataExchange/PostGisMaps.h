@@ -42,11 +42,40 @@ class DataBaseCollection;
 ForeignFormat *CreateQueryObjectPostGis() ;//create query object
 ForeignFormat *CreateImportObjectPostGis(const FileName& fnObj, ParmList& pm); //create import object
 
+class PostGisRasterTileset
+{
+public:
+	PostGisRasterTileset(String sConnectionString, String schema, String tableName, String geometryColumn, const GeoRef & gr, String srid, int x_pixels_tile, int y_pixels_tile, double nodata_value, StoreType stPostgres);
+	~PostGisRasterTileset();
+	void GetLineVal(long iLine, LongBuf& buf, long iFrom, long iNum);
+	void GetLineVal(long iLine, RealBuf& buf, long iFrom, long iNum);
+	void RenewTiles(long iLine, long iFrom, long iNum);
+private:
+	char hex2dec(char * str);
+	const GeoRef gr;
+	const String srid;
+	PostGreSQL * db;
+	int iNumTiles;
+	long iTop;
+	long iBottom;
+	long iLeft;
+	long iRight;
+	const int x_pixels_tile;
+	const int y_pixels_tile;
+	const String schema;
+	const String tableName;
+	const String geometryColumn;
+	const int headerSize;
+	const int bandHeaderSize;
+	const double nodata_value;
+	const StoreType stPostgres;
+};
+
 class PostGisMaps : public PostgreSQLTables
 {
 public:
 	PostGisMaps() ;	
-	PostGisMaps(const FileName& fn, const Domain & dmAttrTable, ParmList& pm);
+	PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, ParmList& pm);
 	~PostGisMaps();
 
 	static String _export sFormatPostGis(const FileName& fnForeign);
@@ -56,7 +85,15 @@ public:
 	virtual bool _export         fMatchType(const String& sFileName, const String& sType) ;	
 	void virtual _export         LoadTable(TablePtr* tbl) ;
 	virtual void _export         PutDataInCollection(ForeignCollectionPtr* collection, ParmList& pm);	
-	virtual void _export         PutCoordField(const String& sColumn, long iRecord, Coord cValue) ;										
+	virtual void _export         PutCoordField(const String& sColumn, long iRecord, Coord cValue);
+	virtual void _export         GetLineRaw(long iLine, ByteBuf&, long iFrom, long iNum) const;
+	virtual void _export         GetLineRaw(long iLine, IntBuf&,  long iFrom, long iNum) const;
+	virtual void _export         GetLineRaw(long iLine, LongBuf&, long iFrom, long iNum) const;
+	virtual void _export         GetLineVal(long iLine, LongBuf&, long iFrom, long iNum) const;
+	virtual void _export         GetLineVal(long iLine, RealBuf&, long iFrom, long iNum) const;
+	virtual	long                 iRaw(RowCol) const;
+	virtual	long                 iValue(RowCol) const;
+	virtual	double               rValue(RowCol) const;
 	_export LayerInfo			 GetLayerInfo(ParmList& parms);
 	_export void				 IterateLayer(vector<LayerInfo>& objects, bool fCreate);
 	void						 Store(IlwisObject obj);
@@ -74,10 +111,12 @@ protected:
 	void                         CreateKeyDomain(const String& sKeyDomain);
 	String						 geometryColumn;
 	CoordSystem					 csy;
+	PostGisRasterTileset*		 rasterTiles;
 private:
 	static void                  replaceString(string &str, const string &search, const string &replace);
 	static String                merge(String table, String column);
 	static void                  split(String fileName, String & table, String & column);
+	int                          x_pixels;
 };
 
 #endif
