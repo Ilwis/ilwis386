@@ -123,6 +123,8 @@ GeneralImportForm::GeneralImportForm(CWnd* parent)
 			int type = (*cur2).type;
 			if ( type == ImportFormat::ifRaster)
 				leaf = driverName + "#raster#" + (*cur2).name;
+			else if ((type & ImportFormat::ifRaster) && ((type & ImportFormat::ifPoint) || (type & ImportFormat::ifSegment) || (type & ImportFormat::ifPolygon)))
+				leaf = driverName + "#raster,vector#" + (*cur2).name;
 			else if ( type > 2 && type < ImportFormat::ifUnknown)
 				leaf = driverName + "#vector#" + (*cur2).name;
 			else if ( type == ImportFormat::ifTable)
@@ -513,6 +515,8 @@ long GeneralImportForm::getTypeMask(const String& type) {
 		return ImportFormat::ifRaster;
 	} else if ( type == "vector") {
 		return ImportFormat::ifPoint | ImportFormat::ifPolygon | ImportFormat::ifSegment;
+	} else if ( type == "raster,vector") {
+		return ImportFormat::ifRaster | ImportFormat::ifPoint | ImportFormat::ifPolygon | ImportFormat::ifSegment;
 	} else if ( type == "point") {
 		return ImportFormat::ifPoint;
 	}else if ( type == "polygon") {
