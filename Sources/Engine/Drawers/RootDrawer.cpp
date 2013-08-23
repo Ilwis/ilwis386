@@ -37,7 +37,7 @@ RootDrawer::RootDrawer()
 	initRestore = false;
 	info = true;
 	ext = Extension(0,0,0,0);
-
+	skyColor = Color(255,255,255);
 }
 
 RootDrawer::~RootDrawer() {
@@ -177,7 +177,7 @@ bool RootDrawer::draw(const CoordBounds& cb) const{
 		}
 
 		// Draw
-		glClearColor(1.0,1.0,1.0,0.0);
+		glClearColor(skyColor.redP(),skyColor.greenP(),skyColor.blueP(),0.0);
 		if (is3D()) {
 			// see http://www.opengl.org/archives/resources/faq/technical/transparency.htm
 			// "When using depth buffering in an application, you need to be careful about the order in which you render primitives. Fully opaque primitives need to be rendered first, followed by partially opaque primitives in back-to-front order. If you don't render primitives in this order, the primitives, which would otherwise be visible through a partially opaque primitive, might lose the depth test entirely."
@@ -780,6 +780,10 @@ double RootDrawer::getZoom3D() const{
 
 void RootDrawer::setZoom3D(double v){
 	zoom3D = v;
+}
+
+void RootDrawer::SetSkyColor(Color & clr) {
+	skyColor = clr;
 }
 
 void RootDrawer::initLight() {

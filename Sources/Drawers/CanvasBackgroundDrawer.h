@@ -7,7 +7,7 @@ class FieldColor;
 namespace ILWIS {
 class _export CanvasBackgroundDrawer : public ComplexDrawer {
 public:
-	enum ColorLocation{clINSIDE2D, clOUTSIDE2D,clINSIDE3D, clOUTSIDE3D};
+	enum ColorLocation{clINSIDE2D, clOUTSIDE2D,clINSIDE3D, clOUTSIDE3D, clSKY3D};
 	CanvasBackgroundDrawer(DrawerParameters *parms);
 	virtual ~CanvasBackgroundDrawer();
 	virtual void prepare(PreparationParameters *pp);
@@ -27,6 +27,7 @@ private:
 	Color outside2D;
 	Color inside3D;
 	Color outside3D;
+	Color sky3D;
 };
 
 

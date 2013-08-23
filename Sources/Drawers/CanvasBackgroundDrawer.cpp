@@ -21,6 +21,7 @@ CanvasBackgroundDrawer::CanvasBackgroundDrawer(DrawerParameters *parms) : Comple
 	inside2D = Color(255,255,255);
 	outside3D = Color(235,242,235);
 	inside3D = Color(245,245,245);
+	sky3D = Color(255,255,255);
 }
 
 CanvasBackgroundDrawer::~CanvasBackgroundDrawer() {
@@ -87,6 +88,7 @@ String CanvasBackgroundDrawer::store(const FileName& fnView, const String& paren
 	ObjectInfo::WriteElement(getType().c_str(),"InSideColor3D",fnView, inside3D);
 	ObjectInfo::WriteElement(getType().c_str(),"OutSideColor2D",fnView, outside2D);
 	ObjectInfo::WriteElement(getType().c_str(),"OutSideColor3D",fnView, outside3D);
+	ObjectInfo::WriteElement(getType().c_str(),"SkyColor3D",fnView, sky3D);
 	return getType();
 }
 
@@ -96,6 +98,8 @@ void CanvasBackgroundDrawer::load(const FileName& fnView, const String& parentSe
 	ObjectInfo::ReadElement(getType().c_str(),"InSideColor3D",fnView, inside3D);
 	ObjectInfo::ReadElement(getType().c_str(),"OutSideColor2D",fnView, outside2D);
 	ObjectInfo::ReadElement(getType().c_str(),"OutSideColor3D",fnView, outside3D);
+	if (ObjectInfo::ReadElement(getType().c_str(),"SkyColor3D",fnView, sky3D))
+		getRootDrawer()->SetSkyColor(sky3D);
 }
 
 Color& CanvasBackgroundDrawer::getColor(ColorLocation cl){
@@ -108,6 +112,8 @@ Color& CanvasBackgroundDrawer::getColor(ColorLocation cl){
 			return inside3D;
 		case clOUTSIDE3D:
 			return outside3D;
+		case clSKY3D:
+			return sky3D;
 	}
 	return inside2D;
 }

@@ -15,8 +15,7 @@ namespace ILWIS {
 		void makeActive(void *v, HTREEITEM);
 		void displayOptionOutsideColor();
 		void displayOptionInsideColor();
-
-
+		void displayOptionSkyColor();
 	};
 
 	class SetColorForm : public DisplayOptionsForm {

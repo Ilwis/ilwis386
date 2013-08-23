@@ -78,6 +78,7 @@ namespace ILWIS {
 		void getTranslate(double& tx, double& ty, double& tz);
 		double getZoom3D() const;
 		void setZoom3D(double v);
+		void SetSkyColor(Color & clr);
 
 	private:
 		void setEyePoint();
@@ -113,5 +114,6 @@ namespace ILWIS {
 		ILWIS::DrawerContext *drawercontext;
 		NewDrawer *backgroundDrawer; 
 		bool initRestore;
+		Color skyColor;
 	};
 }

@@ -55,6 +55,11 @@ HTREEITEM BackgroundTool::configure( HTREEITEM parentItem) {
 	insertItem("Inside map","SingleColor",item);
 	item->setColor(is3D ? cbdr->getColor(CanvasBackgroundDrawer::clINSIDE3D) :  cbdr->getColor(CanvasBackgroundDrawer::clINSIDE2D));
 
+	item = new DisplayOptionColorItem("3D Sky", tree,htiNode,drawer);
+	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&BackgroundTool::displayOptionSkyColor);
+	insertItem("3D Sky","SingleColor",item);
+	item->setColor(cbdr->getColor(CanvasBackgroundDrawer::clSKY3D));
+
 	DrawerTool *dt = DrawerTool::createTool("TransparencyTool", getDocument()->mpvGetView(),tree,drawer);
 	if ( dt) {
 		addTool(dt);
@@ -86,6 +91,12 @@ void BackgroundTool::displayOptionInsideColor() {
 	new SetColorForm("Inside map", tree, (CanvasBackgroundDrawer *)drawer, clr);
 }
 
+void BackgroundTool::displayOptionSkyColor() {
+	CanvasBackgroundDrawer *cbdr = (CanvasBackgroundDrawer *)drawer;
+	Color& clr = cbdr->getColor(CanvasBackgroundDrawer::clSKY3D);
+	new SetColorForm("3D Sky color", tree, (CanvasBackgroundDrawer *)drawer, clr);
+}
+
 String BackgroundTool::getMenuString() const {
 	return TR("Background");
 }
@@ -101,6 +112,7 @@ SetColorForm::SetColorForm(const String& title, CWnd *wPar, CanvasBackgroundDraw
 void  SetColorForm::apply() {
 	fc->StoreData();
 	clr = c;
+	drw->getRootDrawer()->SetSkyColor(c);
 	updateMapView();
 }
 
