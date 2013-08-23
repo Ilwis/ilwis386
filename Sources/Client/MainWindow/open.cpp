@@ -84,6 +84,28 @@ LRESULT OpenImplicitObject(ParmList& pm) {
 	return 1;
 }
 
+LRESULT OpenImplicitObjectCollection(ParmList& pm) {
+
+	FileName fnRoot(sRootName(pm.sGet(0))); // parse the name te retrieve the name of the container
+	if ( pm.fExist("quiet")){
+		pm.Remove("quiet");
+		pm.Add(new Parm("nothreads", true));
+	}
+	if ( fnRoot.fExist()) {// it must exist, else we can not use it to get extra information from it
+		FileName fnTemp(pm.sGet(0));
+		if ( fnTemp.sFile != "")
+		{
+			FileName fnOut(fnTemp.sFile.sQuote(), fnTemp.sExt); // name of the file to be produced
+			if ( IlwisObject::iotObjectType(fnRoot) != IlwisObject::iotANY) //  the container was an ILWIS container
+				pm.Add(new Parm("parentcollection", fnRoot.sRelativeQuoted()));
+			pm.Add(new Parm("database", "")); // trick OpenDocumentFile() to prevent it from adding a filename as a databasename
+			IlwWinApp()->OpenDocumentFile(fnOut.sFullPath().c_str(), pm); // create it
+			IlwWinApp()->OpenDocumentFile(fnOut.sFullNameQuoted().c_str(), IlwisDocument::otNORMAL); // open it
+		}
+	}
+	return 1;
+}
+
 LRESULT OpenForeignLocation(ParmList& pm) {
 	
 	FileName fnRoot(sRootName(pm.sGet(0))); // parse the name te retrieve the name of the container
@@ -193,7 +215,10 @@ LRESULT Cmdopen(CWnd *parent, const String& sCmd){
 		return OpenForeignDataFile(pm);
 	}
 	if ( !File::fExist(fnFile) && IlwisObject::iotObjectType(fnFile) != IlwisObject::iotANY) {
-		return OpenImplicitObject(pm);
+		if (IlwisObject::iotObjectType(fnFile) != IlwisObject::iotOBJECTCOLLECTION)
+			return OpenImplicitObject(pm);
+		else
+			return OpenImplicitObjectCollection(pm);
 	}
 	if ( !File::fExist(fnFile) && IlwisObject::iotObjectType(fnFile) == IlwisObject::iotANY) {
 		return OpenForeignLocation(pm);
