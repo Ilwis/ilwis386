@@ -83,6 +83,9 @@ protected:
 	String						 expandSentence(const String& p);
 	String						 encrypt(const FileName& fn, const String& sentence);
 	String						 decrypt(const FileName& fn, const String& sentence);
+	static String				 merge(String left, String right, String delimiter);
+	static void					 split(String fileName, String & left, String & right, String delimiter);
+	static void					 replaceString(string &str, const string &search, const string &replace);
 	String                       sQuery;
 	String                       sConnectionString;
 	set<String>                  sarForeignCols; // original column names, for efficiency reason they are stored.

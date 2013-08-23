@@ -107,7 +107,7 @@ PostgreSQLTables::PostgreSQLTables() :
 PostgreSQLTables::PostgreSQLTables(const FileName& fn, const FileName & fnDom, ParmList& pm)
 {
 	int currentSize = pm.iSize();
-	String collection = pm.sGet("collection");
+	String collection = pm.fExist("parentcollection") ? pm.sGet("parentcollection") : pm.sGet("collection"); // always the parent-collection should be opened here (when opening maps/tables this works, but when opening an .ioc that is inside another .ioc, the calling function-chain gets confused and returns the .ioc to be opened)
 	ForeignCollection db(FileName(collection.c_str()));
 	sConnectionString = sCreateConnectionString(db, pm);
 	tableName = pm.sGet("table");
@@ -118,7 +118,7 @@ PostgreSQLTables::PostgreSQLTables(const FileName& fn, const FileName & fnDom, P
 	port = pm.sGet("port");
 	sQuery = pm.sGet("query");
 	if ( sQuery == "" && tableName != "") // query
-			sQuery = String("Select * FROM %S", tableName);		
+			sQuery = String("Select * FROM %S.%S", schema, tableName);		
 
 	fnTable =FileName(pm.sGet(0).sTail("\\"));
 	if ( fnTable.sFile == "")
@@ -131,7 +131,7 @@ PostgreSQLTables::PostgreSQLTables(const FileName& fn, const FileName & fnDom, P
 			pm.Add(new Parm("table", tableName));
 		}
 		if ( sQuery == "" && tableName != "") // query
-			sQuery = String("Select * FROM %S", tableName);	
+			sQuery = String("Select * FROM %S.%S", schema, tableName);	
 						
 		Table tbl;
 		FileName fnTbl(pm.sGet("output") != "" ? pm.sGet("output") : fn.sFullPathQuoted());
@@ -156,6 +156,11 @@ PostgreSQLTables::PostgreSQLTables(const FileName& fn, const FileName & fnDom, P
 		if ( tbl.fValid())
 			tbl->setFormat(IlwisObjectPtr::fvFORMATFOREIGN);
 	}*/
+	IlwisObject::iotIlwisObjectType type = IlwisObject::iotObjectType(fn);
+	if ( type == IlwisObject::iotOBJECTCOLLECTION && schema == "") {
+		String parentCollectionName;
+		split(fn.sFile, parentCollectionName, schema, ".");
+	}
 }
 
 String PostgreSQLTables::sCreateConnectionString(const ForeignCollection& coll, ParmList& pm) {
@@ -174,13 +179,15 @@ String PostgreSQLTables::sCreateConnectionString(const ForeignCollection& coll, 
 		coll->ReadElement("ForeignFormat","Schema",schema);
 		pm.Add(new Parm("host", host));
 		pm.Add(new Parm("port", port));
+		if (pm.fExist("database"))
+			pm.Remove("database");
 		pm.Add(new Parm("database", database));
 		pm.Add(new Parm("username", username));
 		pm.Add(new Parm("password", password));
 		pm.Add(new Parm("schema", schema));
 	}
 	if ( database == "") {
-		String collName = pm.sGet("collection");
+		String collName = pm.fExist("parentcollection") ? pm.sGet("parentcollection") : pm.sGet("collection");
 		database = FileName(collName).sFile;
 	}
 	String host = pm.sGet("host");
@@ -212,6 +219,7 @@ String PostgreSQLTables::encrypt(const FileName& fn, const String& sentence) {
 	return sOut;
 }
 
+// same as PostgresDataBaseCatalog::decrypt
 String PostgreSQLTables::decrypt(const FileName& fn, const String& sentence) {
 	int sz = sentence.size()/2;
 	char in[1024];
@@ -257,6 +265,37 @@ String PostgreSQLTables::expandSentence(const String& p) {
 	return pw;
 }
 
+void PostgreSQLTables::replaceString(string &str, const string &search, const string &replace ) {
+    for( size_t pos = 0; ; pos += replace.length() ) {
+        pos = str.find( search, pos );
+        if( pos == string::npos )
+			break;
+        str.erase( pos, search.length() ); // Replace by erasing and inserting
+        str.insert( pos, replace );
+    }
+}
+
+String PostgreSQLTables::merge(String left, String right, String delimiter) {
+	replaceString(left, delimiter, "-" + delimiter);
+	replaceString(right, delimiter, "-" + delimiter);
+	return left + delimiter + right;
+}
+
+void PostgreSQLTables::split(String fileName, String & left, String & right, String delimiter) {
+	int iPos = fileName.find(delimiter);
+	while (iPos > 0 && fileName[iPos - 1] == '-')
+		iPos = fileName.find(delimiter, iPos + 1);
+	if (iPos > 0) {
+		left = fileName.substr(0, iPos);
+		right = fileName.substr(iPos + 1);
+	} else {
+		left = fileName;
+		right = "";
+	}
+	replaceString(left, "-" + delimiter, delimiter);
+	replaceString(right, "-" + delimiter, delimiter);
+}
+
 void PostgreSQLTables::Store(IlwisObject obj) {
 	ForeignFormat::Store(obj);
 	obj->WriteElement("ForeignFormat","Method","POSTGRESQL");
@@ -297,7 +336,9 @@ void PostgreSQLTables::ReadParameters(const FileName& fnObj, ParmList& pm) {
 	ObjectInfo::ReadElement("ForeignFormat","Query",fnObj,sQuery);
 	pm.Add(new Parm("query",sQuery));
 	ObjectInfo::ReadElement("ForeignFormat","Database",fnObj,database);
-	pm.Add(new Parm("database",database));
+	if (pm.fExist("database"))
+		pm.Remove("database");
+	pm.Add(new Parm("database", database));
 	String cs;
 	ObjectInfo::ReadElement("ForeignFormat","ConnectionString",fnObj,cs);
 	sConnectionString = decrypt(fnObj,cs);
@@ -319,17 +360,27 @@ PostgreSQLTables::~PostgreSQLTables()
 void PostgreSQLTables::PutDataInCollection(ForeignCollectionPtr* collection, ParmList& pm)
 {
 	PostGreSQL db(sConnectionString.c_str());
-	db.getNTResult(String("SELECT table_name, table_schema FROM INFORMATION_SCHEMA.Columns WHERE table_schema = '%S'", schema).c_str());
-	int rows = db.getNumberOf(PostGreSQL::ROW);
-	if ( rows <= 0)
-		throw ErrorObject("Meta data of the database is invalid or incomplete");
+	if (schema == "") {
+		db.getNTResult(String("SELECT distinct table_schema FROM INFORMATION_SCHEMA.Columns").c_str());
+		int rows = db.getNumberOf(PostGreSQL::ROW);
+		for (int i = 0; i < rows; ++i) {
+			String schemaName (db.getValue(i, 0));
+			String fileName (merge(collection->fnObj.sFile, schemaName, "."));
+			collection->Add(FileName("'" + fileName + "'", ".ioc"));
+		}
+	} else {
+		db.getNTResult(String("SELECT table_name FROM INFORMATION_SCHEMA.Columns WHERE table_schema = '%S'", schema).c_str());
+		int rows = db.getNumberOf(PostGreSQL::ROW);
+		if ( rows <= 0)
+			throw ErrorObject("Meta data of the database is invalid or incomplete");
 
-	for(int i = 0; i < rows; ++i)
-	{
-		String name(db.getValue(i, "table_name"));
-		name.sTrimSpaces();
-		String sTable("%S.tbt", name);
-		collection->Add(sTable);
+		for(int i = 0; i < rows; ++i)
+		{
+			String name(db.getValue(i, "table_name"));
+			name.sTrimSpaces();
+			String sTable("%S.tbt", name);
+			collection->Add(sTable);
+		}
 	}
 	Store(IlwisObject::obj(collection->fnObj));
 }
@@ -519,11 +570,17 @@ void PostgreSQLTables::PutStringField(const String& sColumn, long iRecord, const
 
 bool PostgreSQLTables::fIsCollection(const String& sForeignObject) const 
 { 
-	URL url(sForeignObject);
-	String sPath = url.getPath();
-	Array<String> parts;
-	Split(sPath,parts,"/");
-	return parts.size() == 2;
+	if (URL::isUrl(sForeignObject)) {
+		URL url(sForeignObject);
+		String sPath = url.getPath();
+		Array<String> parts;
+		Split(sPath,parts,"/");
+		return (parts.size() == 2);
+	} else {
+		FileName fn (sForeignObject);
+		IlwisObject::iotIlwisObjectType iot = IlwisObject::iotObjectType(fn);
+		return (iot == IlwisObject::iotOBJECTCOLLECTION);
+	}
 }
 
 // function will test if a type passed from a doctemplate matches the object type of the filename
@@ -531,7 +588,7 @@ bool PostgreSQLTables::fMatchType(const String& sFileName, const String& sType)
 {
 	// Templates object type name
 	if ( fIsCollection(sFileName))
-		return sType == "ILWIS DataBase Collections";
+		return sType == "ILWIS Postgres DataBase Collections";
 	else
 		return sType == "ILWIS Tables";
 }
